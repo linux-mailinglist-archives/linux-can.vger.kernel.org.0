@@ -2,74 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CC576C356
-	for <lists+linux-can@lfdr.de>; Wed,  2 Aug 2023 05:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E47476C8DD
+	for <lists+linux-can@lfdr.de>; Wed,  2 Aug 2023 10:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjHBDJk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Aug 2023 23:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53752 "EHLO
+        id S229482AbjHBI7a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Aug 2023 04:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbjHBDJj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Aug 2023 23:09:39 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF2BAC;
-        Tue,  1 Aug 2023 20:09:38 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RFxk05NsRzVjxs;
-        Wed,  2 Aug 2023 11:07:52 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 2 Aug
- 2023 11:09:36 +0800
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <u.kleine-koenig@pengutronix.de>, <chi.minghao@zte.com.cn>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH net-next] can: c_can: Do not check for 0 return after calling platform_get_irq()
-Date:   Wed, 2 Aug 2023 11:09:00 +0800
-Message-ID: <20230802030900.2271322-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S232351AbjHBI73 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Aug 2023 04:59:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6AE2706
+        for <linux-can@vger.kernel.org>; Wed,  2 Aug 2023 01:59:28 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qR7hK-0008Pm-Tm; Wed, 02 Aug 2023 10:59:14 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 504E72015ED;
+        Wed,  2 Aug 2023 08:59:11 +0000 (UTC)
+Date:   Wed, 2 Aug 2023 10:59:10 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Ruan Jinjie <ruanjinjie@huawei.com>
+Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, u.kleine-koenig@pengutronix.de,
+        chi.minghao@zte.com.cn, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] can: c_can: Do not check for 0 return after
+ calling platform_get_irq()
+Message-ID: <20230802-spinout-promotion-e14916d50552-mkl@pengutronix.de>
+References: <20230802030900.2271322-1-ruanjinjie@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xwupzmv4yljpv5ed"
+Content-Disposition: inline
+In-Reply-To: <20230802030900.2271322-1-ruanjinjie@huawei.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-It is not possible for platform_get_irq() to return 0. Use the
-return value from platform_get_irq().
 
-Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
----
- drivers/net/can/c_can/c_can_platform.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--xwupzmv4yljpv5ed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/can/c_can/c_can_platform.c b/drivers/net/can/c_can/c_can_platform.c
-index 925930b6c4ca..f44ba2600415 100644
---- a/drivers/net/can/c_can/c_can_platform.c
-+++ b/drivers/net/can/c_can/c_can_platform.c
-@@ -285,8 +285,8 @@ static int c_can_plat_probe(struct platform_device *pdev)
- 
- 	/* get the platform data */
- 	irq = platform_get_irq(pdev, 0);
--	if (irq <= 0) {
--		ret = -ENODEV;
-+	if (irq < 0) {
-+		ret = irq;
- 		goto exit;
- 	}
- 
--- 
-2.34.1
+On 02.08.2023 11:09:00, Ruan Jinjie wrote:
+> It is not possible for platform_get_irq() to return 0. Use the
+> return value from platform_get_irq().
+>=20
+> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
 
+Applied to linux-can-next/testing.
+
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--xwupzmv4yljpv5ed
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmTKGtwACgkQvlAcSiqK
+BOjo0QgAtDaOOqU4hazlfvl1pRySHn+vey+XbSU+zsoFnQNE6KFJx88DOnMwgeje
+sBRNKJzO6vuwDaqopDSlkRNnM0tie27AWgMn/C+eeYqYAB/Y1rkOSccTWd+dHFZH
+SVf5ZK9Tb4W2mKbejfR7yqeUQ1Vx87jwF/JUlUNuZDzgCGN+G5Ac0e2P7xSGmqt9
+MVwIaE0h2MmZYlmK84yqE5YDEKrEx5/7I+vX3vbF/N1Ub3dDSMo6foa/WCCh6Gkv
+MPuUclUmhvewvwpU1iRlS8EWuyETwrnQKi1MoWlONnrIsyZBqGDvzIMLGtFC2Wvv
+4TTwguKokFNL7HTHMDqhMHbT8k7fsw==
+=Mw80
+-----END PGP SIGNATURE-----
+
+--xwupzmv4yljpv5ed--
