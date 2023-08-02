@@ -2,95 +2,66 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E47476C8DD
-	for <lists+linux-can@lfdr.de>; Wed,  2 Aug 2023 10:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7107A76CF48
+	for <lists+linux-can@lfdr.de>; Wed,  2 Aug 2023 15:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjHBI7a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Aug 2023 04:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
+        id S231795AbjHBN4M (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Aug 2023 09:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbjHBI73 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Aug 2023 04:59:29 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6AE2706
-        for <linux-can@vger.kernel.org>; Wed,  2 Aug 2023 01:59:28 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qR7hK-0008Pm-Tm; Wed, 02 Aug 2023 10:59:14 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
+        with ESMTP id S230392AbjHBN4L (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Aug 2023 09:56:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287462114;
+        Wed,  2 Aug 2023 06:56:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 504E72015ED;
-        Wed,  2 Aug 2023 08:59:11 +0000 (UTC)
-Date:   Wed, 2 Aug 2023 10:59:10 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Ruan Jinjie <ruanjinjie@huawei.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, u.kleine-koenig@pengutronix.de,
-        chi.minghao@zte.com.cn, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next] can: c_can: Do not check for 0 return after
- calling platform_get_irq()
-Message-ID: <20230802-spinout-promotion-e14916d50552-mkl@pengutronix.de>
-References: <20230802030900.2271322-1-ruanjinjie@huawei.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9F49619AB;
+        Wed,  2 Aug 2023 13:56:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97436C433C8;
+        Wed,  2 Aug 2023 13:56:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690984569;
+        bh=yazmUit565hUeHAtinXm9td8iAqacyHbn0It+r4iReA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WBrNvdlSvI0RZYhXvNe737obQUaTAslGfSsNrj8jlkkBdnfchImM9Ku3gJmK5/M1/
+         xsLkffTf5rSWFH5DsaBWJh16L+AAjcgqbukl7rWf+cYoLDWW+ongELmSAhCnEa45hJ
+         ZlNaYfc4RmCnrnV0kRMANvaLmv1ka//qxqk6WaJPD8DKRUXUj04BfKvOIruQhyLB7J
+         hJt2nqkTvrypasF41m1EjKiGGFNgE6WOfUSczT7nRvxR67qUifvs34L3C6rauRnPIU
+         aAJu7WS4A/9LokqKh9Lm0jAPvhzAEqGWdf1bVS10cMnj7Gdgokml005NRuEtqgik1b
+         pF+ilz7BINo9w==
+Date:   Wed, 2 Aug 2023 15:56:04 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] can: esd_usb: Add support for esd CAN-USB/3
+Message-ID: <ZMpgdM4mindkDys0@kernel.org>
+References: <20230728150857.2374886-1-frank.jungclaus@esd.eu>
+ <20230728150857.2374886-2-frank.jungclaus@esd.eu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xwupzmv4yljpv5ed"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230802030900.2271322-1-ruanjinjie@huawei.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230728150857.2374886-2-frank.jungclaus@esd.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Fri, Jul 28, 2023 at 05:08:57PM +0200, Frank Jungclaus wrote:
+> Add support for esd CAN-USB/3 and CAN FD to esd_usb.c.
+> 
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
 
---xwupzmv4yljpv5ed
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-On 02.08.2023 11:09:00, Ruan Jinjie wrote:
-> It is not possible for platform_get_irq() to return 0. Use the
-> return value from platform_get_irq().
->=20
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
-
-Applied to linux-can-next/testing.
-
-Thanks,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---xwupzmv4yljpv5ed
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmTKGtwACgkQvlAcSiqK
-BOjo0QgAtDaOOqU4hazlfvl1pRySHn+vey+XbSU+zsoFnQNE6KFJx88DOnMwgeje
-sBRNKJzO6vuwDaqopDSlkRNnM0tie27AWgMn/C+eeYqYAB/Y1rkOSccTWd+dHFZH
-SVf5ZK9Tb4W2mKbejfR7yqeUQ1Vx87jwF/JUlUNuZDzgCGN+G5Ac0e2P7xSGmqt9
-MVwIaE0h2MmZYlmK84yqE5YDEKrEx5/7I+vX3vbF/N1Ub3dDSMo6foa/WCCh6Gkv
-MPuUclUmhvewvwpU1iRlS8EWuyETwrnQKi1MoWlONnrIsyZBqGDvzIMLGtFC2Wvv
-4TTwguKokFNL7HTHMDqhMHbT8k7fsw==
-=Mw80
------END PGP SIGNATURE-----
-
---xwupzmv4yljpv5ed--
