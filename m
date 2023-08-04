@@ -2,107 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F5476E2D5
-	for <lists+linux-can@lfdr.de>; Thu,  3 Aug 2023 10:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6597976FB5C
+	for <lists+linux-can@lfdr.de>; Fri,  4 Aug 2023 09:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234420AbjHCIVS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 3 Aug 2023 04:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
+        id S231282AbjHDHu0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Aug 2023 03:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234434AbjHCIUv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 3 Aug 2023 04:20:51 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CCA5BA6
-        for <linux-can@vger.kernel.org>; Thu,  3 Aug 2023 01:15:54 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qRTUi-0002GF-Bh; Thu, 03 Aug 2023 10:15:40 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
+        with ESMTP id S229882AbjHDHuZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Aug 2023 03:50:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A66421E
+        for <linux-can@vger.kernel.org>; Fri,  4 Aug 2023 00:50:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 073C22022D2;
-        Thu,  3 Aug 2023 08:15:39 +0000 (UTC)
-Date:   Thu, 3 Aug 2023 10:15:38 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     haibo.chen@nxp.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        wg@grandegger.com, kernel@pengutronix.de, linux-imx@nxp.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, devicetree@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] arm64: dts: imx93: add the Flex-CAN stop mode by
- GPR
-Message-ID: <20230803-pureness-lilly-a285e530cc6c-mkl@pengutronix.de>
-References: <20230726112458.3524165-1-haibo.chen@nxp.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07D5C61F5A
+        for <linux-can@vger.kernel.org>; Fri,  4 Aug 2023 07:50:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 61747C433C9;
+        Fri,  4 Aug 2023 07:50:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691135423;
+        bh=OH3gniLFnPYrsPir9qBAOn8UQ6Wk+SDu8xHH9xs5YNE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mxBIU+xf7MQLWpD13qDK8PrbNkDuHRAQDJJbyj/VMv0eajyIrF0uE8n5GN/LkFpGG
+         KMXUw0CndD295pjg+2sI2JPNPM5mpxYlLv+PoPM0aAahOk0bhli35H9dwucCovkVBT
+         SjtSs+xGz0X7hw4sqoaaJpnb8vujDEZjZE7DNoVpeTyJEYCpoR3ZDcUJVnqy5VPc7H
+         BRxRpof3Xvp9ldrbrRe1OMyhNhIXvWeoOmP5rS0M0NEC0TF7Qk7kknfonmZSdQe1Xe
+         5e5yjVV6f0l4pW6SLV7p55XFuBGQawirlRUtad3rX+RD5FUuY7lxy8eBFWrUlrpFJe
+         aZqK2yEhyZEUA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3C6A0C41620;
+        Fri,  4 Aug 2023 07:50:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p2d3wquopx5arobx"
-Content-Disposition: inline
-In-Reply-To: <20230726112458.3524165-1-haibo.chen@nxp.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 1/9] can: flexcan: fix the return value handle for
+ platform_get_irq()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <169113542324.10721.6590687568774577784.git-patchwork-notify@kernel.org>
+Date:   Fri, 04 Aug 2023 07:50:23 +0000
+References: <20230803080830.1386442-2-mkl@pengutronix.de>
+In-Reply-To: <20230803080830.1386442-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        ruanjinjie@huawei.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello:
 
---p2d3wquopx5arobx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series was applied to netdev/net-next.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-On 26.07.2023 19:24:57, haibo.chen@nxp.com wrote:
-> From: Haibo Chen <haibo.chen@nxp.com>
->=20
-> imx93 A0 chip use the internal q-channel handshake signal in LPCG
-> and CCM to automatically handle the Flex-CAN stop mode. But this
-> method meet issue when do the system PM stress test. IC can't fix
-> it easily. So in the new imx93 A1 chip, IC drop this method, and
-> involve back the old way=EF=BC=8Cuse the GPR method to trigger the Flex-C=
-AN
-> stop mode signal. Now NXP claim to drop imx93 A0, and only support
-> imx93 A1. So here add the stop mode through GPR.
->=20
-> This patch also fix a typo for aonmix_ns_gpr.
->=20
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+On Thu,  3 Aug 2023 10:08:22 +0200 you wrote:
+> From: Ruan Jinjie <ruanjinjie@huawei.com>
+> 
+> There is no possible for platform_get_irq() to return 0
+> and the return value of platform_get_irq() is more sensible
+> to show the error reason.
+> 
+> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+> Link: https://lore.kernel.org/all/20230731075252.359965-1-ruanjinjie@huawei.com
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> [...]
 
-Added both to linux-can/testing.
+Here is the summary with links:
+  - [net-next,1/9] can: flexcan: fix the return value handle for platform_get_irq()
+    https://git.kernel.org/netdev/net-next/c/53b8d2be4d71
+  - [net-next,2/9] dt-bindings: can: tcan4x5x: Add tcan4552 and tcan4553 variants
+    https://git.kernel.org/netdev/net-next/c/e332873dc7e2
+  - [net-next,3/9] can: tcan4x5x: Remove reserved register 0x814 from writable table
+    https://git.kernel.org/netdev/net-next/c/fbe534f7bf21
+  - [net-next,4/9] can: tcan4x5x: Check size of mram configuration
+    https://git.kernel.org/netdev/net-next/c/c1b17ea7dd7c
+  - [net-next,5/9] can: tcan4x5x: Rename ID registers to match datasheet
+    https://git.kernel.org/netdev/net-next/c/0d6f3b25ac2f
+  - [net-next,6/9] can: tcan4x5x: Add support for tcan4552/4553
+    https://git.kernel.org/netdev/net-next/c/142c6dc6d9d7
+  - [net-next,7/9] can: tcan4x5x: Add error messages in probe
+    https://git.kernel.org/netdev/net-next/c/35e7aaab3e00
+  - [net-next,8/9] can: c_can: Do not check for 0 return after calling platform_get_irq()
+    https://git.kernel.org/netdev/net-next/c/db31e6f170f3
+  - [net-next,9/9] can: esd_usb: Add support for esd CAN-USB/3
+    (no matching commit)
 
-Thanks,
-Marc
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---p2d3wquopx5arobx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmTLYicACgkQvlAcSiqK
-BOiFPQf/VRYql3MNa/WmqW7jg6JhR4TiarD2pBqlpTAr2ED/rAmmxS09s08TD6l0
-rYL18J0Q3Q9qWfAvyiNtKUA5wg4/Z11D4ZghrynDlNF+D7kK8hLaNzCGQRhtviMd
-0cbZZVTq8q+2ZsREdKZij4hmGGTFVp0aBX+KSOjLaMR3GjcuusL8qjAqzaWSiRIz
-FNkH72i5nic+vC5rUtt+fo03NO4LtA2QPLxV8anU3puahX0X8gVNYnUdcrR+JYJp
-qZAMPVcj/DMmKbivTqvfNYLUBj8jS3acMwDpdX+bvcz5abb3EaZFwqwgxxG5Xz4E
-7vCvEJRahX3WgKLB9p6OsEMT2Cjtvw==
-=619W
------END PGP SIGNATURE-----
-
---p2d3wquopx5arobx--
