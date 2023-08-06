@@ -2,34 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAE47713C4
-	for <lists+linux-can@lfdr.de>; Sun,  6 Aug 2023 08:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C53B771490
+	for <lists+linux-can@lfdr.de>; Sun,  6 Aug 2023 13:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjHFGfr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 6 Aug 2023 02:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S229959AbjHFLmd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 6 Aug 2023 07:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjHFGfq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 6 Aug 2023 02:35:46 -0400
-Received: from out-126.mta1.migadu.com (out-126.mta1.migadu.com [IPv6:2001:41d0:203:375::7e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0311FE0
-        for <linux-can@vger.kernel.org>; Sat,  5 Aug 2023 23:35:43 -0700 (PDT)
-Date:   Sun, 6 Aug 2023 16:33:45 +1000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jookia.org; s=key1;
-        t=1691303741;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5QcmFk87OSOnLQz2aC/rzCVz9SI5NqtxQgcc/xuSFnA=;
-        b=LO2GkUBlLmae2f6NePMseHTBEkOx1tEX3Yh/67CHOPK6ihrmJRjULSCAwvj14677WkG0qT
-        7COuiuLJW7wr4nYYQa+EzPAzxWSUxZ7vga+KLjBqeqkm0pttUvzjLNMUgzghEmohDlhhei
-        YdJxam8rOiLsBK8F5Rt7wAPHwc3zQYeicMhrWYj+/04OMt+2YzWvs+v8vP1900mSbuNMUa
-        F4mt7aFnA/RuP2aAi8FI26v7Havt2VjuUy73zzQrgyY6JWvsWCAT5TX9IZjc7VLorDKy3f
-        /YgmTjXbgrgtHZy87OmgUAOxHnEFQZ965CsSdbYcurOl89yc4rtzvg8NPK0VIA==
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   John Watts <contact@jookia.org>
-To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+        with ESMTP id S229530AbjHFLmc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 6 Aug 2023 07:42:32 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC84FE50;
+        Sun,  6 Aug 2023 04:42:31 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5232bb5e47bso1148006a12.2;
+        Sun, 06 Aug 2023 04:42:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691322150; x=1691926950;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HumppwNUn3TA8YpQ0fQzm7WpQytFg98rX1E8vNluGYU=;
+        b=COX4FRzPg5Df7S7scGkL1a1jxSkgE4lsLMpzoAKRInM2N2donpYwiXDjSi/uGQQJdm
+         wnKu5zkOi4+z2eDvgysSiv8+wnzUSluY4wQ5tf23SqJnRh34l9MsjY0f81HXTwdimI/K
+         GW8UQJRJil0ochVBGECpvNlVOUpC2TpR46BNRdtqybtoE/quddDakVx+BSAAn7/1Sdlz
+         XZkfNvlLlGjfuEjcvAlf6iTnTjcI9tIHvIk9iB2wzLyKG0GKDLCon/LnZE/cu205nyvc
+         ZpUbvtf3cSHF9m1L8NZHvlpkWXujyLx4Z8+cLnkrtFr4Tat+wekNAvvveNMSRtuJZOmO
+         bM3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691322150; x=1691926950;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HumppwNUn3TA8YpQ0fQzm7WpQytFg98rX1E8vNluGYU=;
+        b=ER4NSspLt7vKD+ld0Sjxtbdvp8KRIQ3s53joN+bw8EhxGVMvYNBCFV87QuDN14qGOu
+         z1S6yWVxH1SYYLT4Jnv2pw3UNbLvmTdIHs0wyaJcwx0e48stW/CExIUjm/LKAi6r3qUX
+         tWa4F7BrTAT7iC0XAlbsoroUBr+wgDXW4vInK2qrFuwRrLtouCrgEspl/TXELCfuWxt9
+         vjcVdEyDABJRq7k7///mmMUC18BDMJ+MgKRpYCsythHmDUXGf3tOlJIu/MVMD6VAI3Vv
+         vTCJvy4kNaiSrXdtyLcfW/CLD4MNDpb4piADbPnondLb0iX88SBNjPJprZ+vjotJJTIg
+         O6fA==
+X-Gm-Message-State: AOJu0YzQVfCqg6mx2Fp1tKpbyc5ts3qxlBPMdcKeBJ36bBIeWUkglVBZ
+        q6LhhLbq3Te6JbbWkK5xOSU=
+X-Google-Smtp-Source: AGHT+IEEg3PkfDxHcETaO7LHnXNw+qJwjWb90KaZ3707q9E0qH0cZ2HLszMui/vhh35dCWWOEYUkRQ==
+X-Received: by 2002:a50:fc12:0:b0:522:c0ea:15d with SMTP id i18-20020a50fc12000000b00522c0ea015dmr4929062edr.41.1691322150093;
+        Sun, 06 Aug 2023 04:42:30 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id d2-20020a056402516200b0052275deb475sm3787539ede.23.2023.08.06.04.42.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Aug 2023 04:42:29 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     John Watts <contact@jookia.org>
 Cc:     Maksim Kiselev <bigunclemax@gmail.com>, aou@eecs.berkeley.edu,
         conor+dt@kernel.org, davem@davemloft.net,
         devicetree@vger.kernel.org, edumazet@google.com,
@@ -40,48 +61,54 @@ Cc:     Maksim Kiselev <bigunclemax@gmail.com>, aou@eecs.berkeley.edu,
         netdev@vger.kernel.org, pabeni@redhat.com, palmer@dabbelt.com,
         paul.walmsley@sifive.com, robh+dt@kernel.org, samuel@sholland.org,
         wens@csie.org, wg@grandegger.com
-Subject: Re: [PATCH v2 2/4] riscv: dts: allwinner: d1: Add CAN controller
- nodes
-Message-ID: <ZM8-yfRVscYjxp2p@titan>
+Subject: Re: [PATCH v2 2/4] riscv: dts: allwinner: d1: Add CAN controller nodes
+Date:   Sun, 06 Aug 2023 13:42:28 +0200
+Message-ID: <4848155.31r3eYUQgx@jernej-laptop>
+In-Reply-To: <ZM8-yfRVscYjxp2p@titan>
 References: <20230721221552.1973203-4-contact@jookia.org>
- <20230805164052.669184-1-bigunclemax@gmail.com>
- <ZM5-Ke-59o0R5AtY@titan>
- <2690764.mvXUDI8C0e@jernej-laptop>
+ <2690764.mvXUDI8C0e@jernej-laptop> <ZM8-yfRVscYjxp2p@titan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2690764.mvXUDI8C0e@jernej-laptop>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, Aug 05, 2023 at 07:49:51PM +0200, Jernej Škrabec wrote:
-> Dne sobota, 05. avgust 2023 ob 18:51:53 CEST je John Watts napisal(a):
-> > On Sat, Aug 05, 2023 at 07:40:52PM +0300, Maksim Kiselev wrote:
-> > > Hi John, Jernej
-> > > Should we also keep a pinctrl nodes itself in alphabetical order?
-> > > I mean placing a CAN nodes before `clk_pg11_pin` node?
-> > > Looks like the other nodes sorted in this way...
-> > 
-> > Good catch. Now that you mention it, the device tree nodes are sorted
-> > by memory order too! These should be after i2c3.
-> > 
-> > It looks like I might need to do a patch to re-order those too.
-> 
-> It would be better if DT patches are dropped from netdev tree and then post 
-> new versions.
-> 
-> Best regards,
-> Jernej
+Dne nedelja, 06. avgust 2023 ob 08:33:45 CEST je John Watts napisal(a):
+> On Sat, Aug 05, 2023 at 07:49:51PM +0200, Jernej =C5=A0krabec wrote:
+> > Dne sobota, 05. avgust 2023 ob 18:51:53 CEST je John Watts napisal(a):
+> > > On Sat, Aug 05, 2023 at 07:40:52PM +0300, Maksim Kiselev wrote:
+> > > > Hi John, Jernej
+> > > > Should we also keep a pinctrl nodes itself in alphabetical order?
+> > > > I mean placing a CAN nodes before `clk_pg11_pin` node?
+> > > > Looks like the other nodes sorted in this way...
+> > >=20
+> > > Good catch. Now that you mention it, the device tree nodes are sorted
+> > > by memory order too! These should be after i2c3.
+> > >=20
+> > > It looks like I might need to do a patch to re-order those too.
+> >=20
+> > It would be better if DT patches are dropped from netdev tree and then
+> > post
+> > new versions.
+> >=20
+> > Best regards,
+> > Jernej
+>=20
+> Agreed. Is there a way to request that? Or will the maintainer just read
+> this?
 
-Agreed. Is there a way to request that? Or will the maintainer just read this?
+Hopefully it will.
 
-John.
+Best regards,
+Jernej
+
+
+
+
