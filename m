@@ -2,76 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D8877305C
-	for <lists+linux-can@lfdr.de>; Mon,  7 Aug 2023 22:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31C7773E8D
+	for <lists+linux-can@lfdr.de>; Tue,  8 Aug 2023 18:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjHGUfa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 7 Aug 2023 16:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
+        id S229952AbjHHQcS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Aug 2023 12:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjHGUf3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Aug 2023 16:35:29 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3CB10EC
-        for <linux-can@vger.kernel.org>; Mon,  7 Aug 2023 13:35:28 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-586b78aa26eso32462027b3.1
-        for <linux-can@vger.kernel.org>; Mon, 07 Aug 2023 13:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691440527; x=1692045327;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
-        b=WGuPu7g6E23RXr1v5LnKJEwl5/NhLHAEmhF1044iAo3zlPa7q/dCiC92JtWaTvN7LN
-         bVXSSjM+IWwdQf1AGsnUhtt0TLD2CCmfvj8Sjsh3wWo6GyC8KlsMejMvV9iNlMpUx9m1
-         e/eijDs1mEJFLO2TJBkN14g3t0J7/HRjYHt6jGqkdngI9wph52Q3ogRxNMdKAtzxeg25
-         XcWL+ONayv2a0pAGg3swXgiokEXA9gilyRGOhIKTk6x9SVYmEuPxsePgRyIfDvwxlOgo
-         +P+p48B+fjlmlUQjs4uiEbdAC7avrSnparZrobMq0G7U0aWx0KuTlGpL6KaJ4cD3tzP0
-         zoPA==
+        with ESMTP id S232919AbjHHQbB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Aug 2023 12:31:01 -0400
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C924413950
+        for <linux-can@vger.kernel.org>; Tue,  8 Aug 2023 08:51:39 -0700 (PDT)
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6bb31e13a13so10350034a34.1
+        for <linux-can@vger.kernel.org>; Tue, 08 Aug 2023 08:51:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691440527; x=1692045327;
-        h=to:subject:message-id:date:from:sender:mime-version
+        d=1e100.net; s=20221208; t=1691509861; x=1692114661;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
-        b=WE5V8f11RsqjKeP65pQYFSYfHEkIOpFd+zcpqDoAiIql7vDV0Bur4KeVq4sdrVhaui
-         f34lR68qkvNaOJ51LJPvn5nnKmSbRFW/hUY/hetA3uT30DTgPKj5mrwUaM9MBTFBJuIR
-         uGEtJgCJmjjqh9xwymgDXB7Ocalo0DFotzYV4gNB4GMaEf3e9DSctluFrC+aszNdNrwU
-         SWQi2fDK/NC171r99Jc3TMppQt7lsMsdKg3LQweGH856CGNzhVEPYxdaEOV6lIIlToC9
-         WvmDv0CRjYZRtZlzpAZNTYyn7Zv/kCX+8ECHfyIBzf95RqJrc+NvanwP83cXAmrvqoe0
-         M6bA==
-X-Gm-Message-State: AOJu0Yx9vvtHXkBg6GY+WWpKcSCAZQ7wQC+QQNd/czKhgzx7k1JkjxVg
-        YGHOKVHqHK22b3hVldf3ziF0OHdny+HcVvpVUyI=
-X-Google-Smtp-Source: AGHT+IH6RhdoplRqECcY8mUnEMQB3kKUONmBVdu9pLDcOmWR/5QFK305l7kYojCsuoKgbwfz4sV69GprXYw/1zMEwFI=
-X-Received: by 2002:a0d:dfd8:0:b0:56c:e706:2e04 with SMTP id
- i207-20020a0ddfd8000000b0056ce7062e04mr12209481ywe.0.1691440527025; Mon, 07
- Aug 2023 13:35:27 -0700 (PDT)
+        bh=try7kLiqOvWBbDWNv3AsjzJNZ1pHNvllo2yNmM+PfCo=;
+        b=fdadulK4vJRVRz9B6U67CZthbN9RzJ6ZCyYuHEeHsTsSnJHv6qERMbepPb54gQhQ5T
+         +EESVqyyoGFaGl388k/iWIl3MLa1APlLqq3LP/CEQNlkggYA4He1d/OGDWdmMgRSLI7F
+         e+2LJ6EvhpN1ZijexlsIGrg2rungfJlbJJMSz6F7kmNsBex51kF2SjzRSvKNNnAA4/cE
+         zbSpovn2ecjvfEhe2+fZ4mX7gHDz9nXVKlr7czIfqSV1uqVG3CxcLfgp2kHLsLezbnD+
+         gSSHEkTBxIo6rH71o1wNh1rkNA5Kg7isD6sw7ACpHuJnluAyOhvqEr8aPdSq7mG/ZYoD
+         4XRw==
+X-Gm-Message-State: AOJu0Yzs3htsPNV77pgiuFy4AoK1lrjaE1l271C1t9h5mizMAQm3bxLj
+        LhqckE2Xa10kY3AL5DwgKMsEOXf4WQpEd1zSFHvgU7yXiHWX
+X-Google-Smtp-Source: AGHT+IHVxzz7rv3Yc6Ex9nVZyfccRlIl4YuPHqh33kxidSRG2ZsY/cJC8dt7jVr/W6xkY4FX1aCJajbFNScBQQQ0cLLlU2M2U+jQ
 MIME-Version: 1.0
-Sender: lw466553@gmail.com
-Received: by 2002:a05:7108:160f:b0:326:a9e:5940 with HTTP; Mon, 7 Aug 2023
- 13:35:26 -0700 (PDT)
-From:   Dr Lisa Williams <lw4666555@gmail.com>
-Date:   Mon, 7 Aug 2023 13:35:26 -0700
-X-Google-Sender-Auth: 0G1lXpJv-q7nK9NDmCu4G39nQek
-Message-ID: <CAPHeqezXrZjPmETqsqybz9ND0xuLHy7Yn1jh0fx-tfjmjnpqCg@mail.gmail.com>
-Subject: Hi,
-To:     undisclosed-recipients:;
+X-Received: by 2002:a05:6870:c794:b0:1ba:7bf5:67cd with SMTP id
+ dy20-20020a056870c79400b001ba7bf567cdmr16115130oab.11.1691502890465; Tue, 08
+ Aug 2023 06:54:50 -0700 (PDT)
+Date:   Tue, 08 Aug 2023 06:54:50 -0700
+In-Reply-To: <0000000000009393ba059691c6a3@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ec3e1f060269b476@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in j1939_session_get_by_addr
+From:   syzbot <syzbot+d9536adc269404a984f8@syzkaller.appspotmail.com>
+To:     Jose.Abreu@synopsys.com, arvid.brodin@alten.se,
+        davem@davemloft.net, dvyukov@google.com,
+        ilias.apalodimas@linaro.org, joabreu@synopsys.com,
+        jose.abreu@synopsys.com, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        nogikh@google.com, robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com, tonymarislogistics@yandex.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+This bug is marked as fixed by commit:
+can: j1939: transport: make sure the aborted session will be
 
-My name is Dr. Lisa Williams, from the United States, currently living
-in the United Kingdom.
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-I hope you consider my friend request. I will share some of my photos
-and more details about me when I get your reply.
+#syz fix: exact-commit-title
 
-With love
-Lisa
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
+
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=d9536adc269404a984f8
+
+---
+[1] I expect the commit to be present in:
+
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+4. main branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+
+The full list of 9 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
