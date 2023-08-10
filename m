@@ -2,160 +2,246 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DA57774A2
-	for <lists+linux-can@lfdr.de>; Thu, 10 Aug 2023 11:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00467775CF
+	for <lists+linux-can@lfdr.de>; Thu, 10 Aug 2023 12:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235111AbjHJJdf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Aug 2023 05:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        id S234670AbjHJKaZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Aug 2023 06:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235122AbjHJJdW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Aug 2023 05:33:22 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C31D2D66
-        for <linux-can@vger.kernel.org>; Thu, 10 Aug 2023 02:33:00 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5236c9ff275so876732a12.1
-        for <linux-can@vger.kernel.org>; Thu, 10 Aug 2023 02:33:00 -0700 (PDT)
+        with ESMTP id S233670AbjHJKaY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Aug 2023 06:30:24 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8378183;
+        Thu, 10 Aug 2023 03:30:23 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fe1489ced6so1113675e87.0;
+        Thu, 10 Aug 2023 03:30:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1691659972; x=1692264772;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rb0rfZaZQTOJ9RosZEXBpg0Z1lQ7lbBcT+HB1fvjTT8=;
-        b=j1hNz2mlXMpJkSQMmOO6lLf1l50U5/dhUMjMeyvKuDEQWGtT2wpDhQy8CDQ1UTANAq
-         mNgcsQ8SJP2mKxF/y0CkzJFBHcXSGcxBJuzIbG4C3zQHw8GJTJD6XFM/H6Cpe9AsTO9m
-         u6HzWSdNpul1pLFtlst+jG61wu0BdzbSC6KT/HHTIirtIPrHubh+LeleL5o4fSe8Hlnt
-         w06qmLLcg87+EQ8VaMZX9HRHGRPTMe9D7LZREHvdhx6hsz3l3kFYoJO7V+JbEVOvFpoH
-         O1qAoo9VN//nhMDD6fK1n5vX/p10NWcyFEy4pbrJ2zg5zfhkmow3w4ozGLJPPNOvm73C
-         kp2A==
+        d=gmail.com; s=20221208; t=1691663422; x=1692268222;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CRzl5nclzSE8hR4x9ZVgXPrQ5iiewuXgP2wU5BbYhG0=;
+        b=RBZanUwVFFXs1CRlsPWTD1D4rm2iN8WnvSdWQcm0eWFng4V+8snaze27DhZdpgd4ql
+         LiAAA84oogziTrjzAYDplxwlOL+RUshSgz5D9g1xNtRVZ+YTt8SEekOhYSScCcjmvQBx
+         nFDVyk5Eya1Eca3Ogiexf66I+S57NXp/C4j3YNdwSVfJ7n7rD5ItvmgEIG+BUpK2g30i
+         v9Sbj8UDpaX2IYGvxwxrB5baM+875Zoo6S8mD4FwiLVFzzrkkmAyTt2UdIplwaErP6tF
+         hZnVcytuHZiN13jh3ArDdaowG6WW3/d2z0u3lJza8KSn+Rsuz6/5YvT9JS6wU8KO4xip
+         n8uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691659972; x=1692264772;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rb0rfZaZQTOJ9RosZEXBpg0Z1lQ7lbBcT+HB1fvjTT8=;
-        b=TXWJ7oDKGJkdxC5WphW2Y8fbzXr+cLI571qrARUheEwXjDzQAVod/VrYrfUQS68Utn
-         n3+5+MrD2XkfMHMd4GcGuerJbd/wJy3zzTPS8Dj7opp50Z+1ivIxRm6OVHEAMlA/Bj4v
-         7nyRLDdVggpdwzXqfln+6BnVUXZXrrRi6UEKXAhFfIuCWhs3qL5oF98IPSK7mm51ky5l
-         yVPhZDovknPIGNlpvIIUuxyQf67QvxjFKgwJT4olyXsSIpoxh7RXNTUZgGacK7TW7f9t
-         CP+AAkFACQ1KbU++uZnG8bWdMm6NawSCADI33HxfL6JH5Yqg+PmngfbhQl2UPK2emad6
-         M1Rg==
-X-Gm-Message-State: AOJu0YyV+IhkxvPmQ2ckBKhClhUgchdZQn5cKJLNVaGV8ywSxCXuo3mk
-        IwIHAYU109KWSr11Kfep39md4w==
-X-Google-Smtp-Source: AGHT+IEHlYdFQPucZN7ly1WkptrPpgjmpsdinQYlUi2ctGN2pqdQAaHrmqx/Lt/CxlAhk9fNyirRVQ==
-X-Received: by 2002:a17:906:76ca:b0:99c:bb4d:f5a0 with SMTP id q10-20020a17090676ca00b0099cbb4df5a0mr1590701ejn.14.1691659972393;
-        Thu, 10 Aug 2023 02:32:52 -0700 (PDT)
-Received: from blmsp ([2001:4090:a245:81da:7521:a3aa:9abb:fac5])
-        by smtp.gmail.com with ESMTPSA id l18-20020a1709065a9200b00991e2b5a27dsm685380ejq.37.2023.08.10.02.32.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 02:32:51 -0700 (PDT)
-Date:   Thu, 10 Aug 2023 11:32:50 +0200
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Simon Horman <simon.horman@corigine.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Julien Panis <jpanis@baylibre.com>
-Subject: Re: [PATCH v5 00/12] can: m_can: Optimizations for m_can/tcan part 2
-Message-ID: <20230810093250.fxzxss7cfmazsrd7@blmsp>
-References: <20230718075708.958094-1-msp@baylibre.com>
+        d=1e100.net; s=20221208; t=1691663422; x=1692268222;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CRzl5nclzSE8hR4x9ZVgXPrQ5iiewuXgP2wU5BbYhG0=;
+        b=VAmo+4mYrvap4PtMSxMjkkIRF5C/925/LGVfBVvHk32uxUC4dCnkdwtMub/PY8skK8
+         vhKcsin6e2ZmS6l9wzVnNB66atytg0+6HhZ+MnBLYISVS9Gvp8i8hquhIewGCVIg7X4K
+         XgYHCPZhXK5qDt17xAMj4SIaRmZagXP8VfmG1s6cnSCwFqBvuXB1/jrnX7J5K/2mezGd
+         nTdiSNoQVqBYxMhXooUrLEbQPkqabkIaevqYk//2NWYhdFVMMO9vUiP/oJA2YpRt6vJ2
+         OMl0BLGT23Wy8H1avso000VfO+pD1Nao7/MZOlm5PT143RvwDSQusqTZp7XTMn5aWEpe
+         w47A==
+X-Gm-Message-State: AOJu0Yy/yF0P/Ww9RfvaCaxr2/qNKpO/lBKoiGGk/9pODYASVCFTi2ly
+        jqhSz0IkBijfitWL8RDOQzzqPLbLPfBsIAE0WNU=
+X-Google-Smtp-Source: AGHT+IFF5T/KYxxDfL/io4fonk+A+iEVXXLlCbBtzsEf41My95uCty3JM29JO4VXWW0h5riEia+ThqYWu8HJZjYDFDA=
+X-Received: by 2002:a05:6512:5c6:b0:4fb:8939:d95c with SMTP id
+ o6-20020a05651205c600b004fb8939d95cmr1358995lfo.30.1691663421398; Thu, 10 Aug
+ 2023 03:30:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230718075708.958094-1-msp@baylibre.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Yikebaer Aizezi <yikebaer61@gmail.com>
+Date:   Thu, 10 Aug 2023 18:30:10 +0800
+Message-ID: <CALcu4raN3=04gp5=f=sDMtTuTG0VZpunwqSVd8MNVcnfPe+t4w@mail.gmail.com>
+Subject: possible deadlock in raw_setsockopt
+To:     socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org,
+        "pabeni@redhat.com" <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+Hello,
 
-did you have some time to review this series? Anything I should rework?
+When using Healer to fuzz the Linux-6.5-rc3,  the following crash
+was triggered.
 
-Thanks,
-Markus
+HEAD commit: 6eaae198076080886b9e7d57f4ae06fa782f90ef (tag: v6.5-rc3)
+git tree: upstream
+console output:
+https://drive.google.com/file/d/1d9rLH0SYwNhTm2datRKbVpET1irbx_tA/view?usp=drive_link
+kernel config: https://drive.google.com/file/d/1OQIne-cVGeH6R4nqGGm6Igm3DnsozLhJ/view?usp=drive_link
+C reproducer: https://drive.google.com/file/d/1iewyTDtNLkXAJSMnREXKNYcUwfN1mAqA/view?usp=drive_link
+Syzlang reproducer:
+https://drive.google.com/file/d/17p1lUipZkXyl9xE0_Qanerbg75W6ER5y/view?usp=drive_link
 
-On Tue, Jul 18, 2023 at 09:56:56AM +0200, Markus Schneider-Pargmann wrote:
-> Hi Marc, Simon and everyone,
-> 
-> v5 got a rebase on v6.5 with some small style fixes as pointed out in v4.
-> 
-> It is tested on tcan455x but I don't have hardware with mcan on the SoC
-> myself so any testing is appreciated.
-> 
-> The series implements many small and bigger throughput improvements and
-> adds rx/tx coalescing at the end.
-> 
-> Based on v6.5-rc1. Also available at
-> https://gitlab.baylibre.com/msp8/linux/-/tree/topic/mcan-optimization/v6.5?ref_type=heads
-> 
-> Best,
-> Markus
-> 
-> Changes in v5:
-> - Add back parenthesis in m_can_set_coalesce(). This will make
->   checkpatch unhappy but gcc happy.
-> - Remove unused fifo_header variable in m_can_tx_handler().
-> - Rebased to v6.5-rc1
-> 
-> Changes in v4:
-> - Create and use struct m_can_fifo_element in m_can_tx_handler
-> - Fix memcpy_and_pad to copy the full buffer
-> - Fixed a few checkpatch warnings
-> - Change putidx to be unsigned
-> - Print hard_xmit error only once when TX FIFO is full
-> 
-> Changes in v3:
-> - Remove parenthesis in error messages
-> - Use memcpy_and_pad for buffer copy in 'can: m_can: Write transmit
->   header and data in one transaction'.
-> - Replace spin_lock with spin_lock_irqsave. I got a report of a
->   interrupt that was calling start_xmit just after the netqueue was
->   woken up before the locked region was exited. spin_lock_irqsave should
->   fix this. I attached the full stack at the end of the mail if someone
->   wants to know.
-> - Rebased to v6.3-rc1.
-> - Removed tcan4x5x patches from this series.
-> 
-> Changes in v2:
-> - Rebased on v6.2-rc5
-> - Fixed missing/broken accounting for non peripheral m_can devices.
-> 
-> previous versions:
-> v1 - https://lore.kernel.org/lkml/20221221152537.751564-1-msp@baylibre.com
-> v2 - https://lore.kernel.org/lkml/20230125195059.630377-1-msp@baylibre.com
-> v3 - https://lore.kernel.org/lkml/20230315110546.2518305-1-msp@baylibre.com/
-> v4 - https://lore.kernel.org/lkml/20230621092350.3130866-1-msp@baylibre.com/
-> 
-> Markus Schneider-Pargmann (12):
->   can: m_can: Write transmit header and data in one transaction
->   can: m_can: Implement receive coalescing
->   can: m_can: Implement transmit coalescing
->   can: m_can: Add rx coalescing ethtool support
->   can: m_can: Add tx coalescing ethtool support
->   can: m_can: Use u32 for putidx
->   can: m_can: Cache tx putidx
->   can: m_can: Use the workqueue as queue
->   can: m_can: Introduce a tx_fifo_in_flight counter
->   can: m_can: Use tx_fifo_in_flight for netif_queue control
->   can: m_can: Implement BQL
->   can: m_can: Implement transmit submission coalescing
-> 
->  drivers/net/can/m_can/m_can.c | 517 +++++++++++++++++++++++++---------
->  drivers/net/can/m_can/m_can.h |  35 ++-
->  2 files changed, 418 insertions(+), 134 deletions(-)
-> 
-> 
-> base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-> -- 
-> 2.40.1
-> 
+If you fix this issue, please add the following tag to the commit:
+Reported-by: Yikebaer Aizezi <yikebaer61@gmail.com>
+
+WARNING: possible circular locking dependency detected
+6.5.0-rc3 #1 Not tainted
+------------------------------------------------------
+syz-executor/13006 is trying to acquire lock:
+ffff88801ca69130 (sk_lock-AF_CAN){+.+.}-{0:0}, at: lock_sock
+home/smyl/linux-image/linux-6.5-rc3/./include/net/sock.h:1708 [inline]
+ffff88801ca69130 (sk_lock-AF_CAN){+.+.}-{0:0}, at:
+raw_setsockopt+0x3b6/0x1050
+home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:607
+
+but task is already holding lock:
+ffffffff8cdca268 (rtnl_mutex){+.+.}-{3:3}, at:
+raw_setsockopt+0x3ac/0x1050
+home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:606
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (rtnl_mutex){+.+.}-{3:3}:
+       __mutex_lock_common
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/mutex.c:603
+[inline]
+       __mutex_lock+0x14f/0x1440
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/mutex.c:747
+       raw_release+0x1bd/0x940
+home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:391
+       __sock_release+0xcd/0x290
+home/smyl/linux-image/linux-6.5-rc3/net/socket.c:654
+       sock_close+0x18/0x20
+home/smyl/linux-image/linux-6.5-rc3/net/socket.c:1386
+       __fput+0x391/0x9d0
+home/smyl/linux-image/linux-6.5-rc3/fs/file_table.c:384
+       task_work_run+0x153/0x230
+home/smyl/linux-image/linux-6.5-rc3/kernel/task_work.c:179
+       resume_user_mode_work
+home/smyl/linux-image/linux-6.5-rc3/./include/linux/resume_user_mode.h:49
+[inline]
+       exit_to_user_mode_loop
+home/smyl/linux-image/linux-6.5-rc3/kernel/entry/common.c:171 [inline]
+       exit_to_user_mode_prepare+0x210/0x240
+home/smyl/linux-image/linux-6.5-rc3/kernel/entry/common.c:204
+       __syscall_exit_to_user_mode_work
+home/smyl/linux-image/linux-6.5-rc3/kernel/entry/common.c:286 [inline]
+       syscall_exit_to_user_mode+0x19/0x50
+home/smyl/linux-image/linux-6.5-rc3/kernel/entry/common.c:297
+       do_syscall_64+0x42/0xb0
+home/smyl/linux-image/linux-6.5-rc3/arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (sk_lock-AF_CAN){+.+.}-{0:0}:
+       check_prev_add
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3142
+[inline]
+       check_prevs_add
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3261
+[inline]
+       validate_chain
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3876
+[inline]
+       __lock_acquire+0x2ecd/0x5b90
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5144
+       lock_acquire
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5761
+[inline]
+       lock_acquire+0x1ad/0x520
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5726
+       lock_sock_nested+0x34/0xe0
+home/smyl/linux-image/linux-6.5-rc3/net/core/sock.c:3492
+       lock_sock
+home/smyl/linux-image/linux-6.5-rc3/./include/net/sock.h:1708 [inline]
+       raw_setsockopt+0x3b6/0x1050
+home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:607
+       __sys_setsockopt+0x252/0x510
+home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2263
+       __do_sys_setsockopt
+home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2274 [inline]
+       __se_sys_setsockopt
+home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2271 [inline]
+       __x64_sys_setsockopt+0xb9/0x150
+home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2271
+       do_syscall_x64
+home/smyl/linux-image/linux-6.5-rc3/arch/x86/entry/common.c:50
+[inline]
+       do_syscall_64+0x35/0xb0
+home/smyl/linux-image/linux-6.5-rc3/arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(rtnl_mutex);
+                               lock(sk_lock-AF_CAN);
+                               lock(rtnl_mutex);
+  lock(sk_lock-AF_CAN);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor/13006:
+ #0: ffffffff8cdca268 (rtnl_mutex){+.+.}-{3:3}, at:
+raw_setsockopt+0x3ac/0x1050
+home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:606
+
+stack backtrace:
+CPU: 0 PID: 13006 Comm: syz-executor Not tainted 6.5.0-rc3 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack home/smyl/linux-image/linux-6.5-rc3/lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x92/0xf0
+home/smyl/linux-image/linux-6.5-rc3/lib/dump_stack.c:106
+ check_noncircular+0x2ef/0x3d0
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:2195
+ check_prev_add
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3142
+[inline]
+ check_prevs_add
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3261
+[inline]
+ validate_chain
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3876
+[inline]
+ __lock_acquire+0x2ecd/0x5b90
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5144
+ lock_acquire home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5761
+[inline]
+ lock_acquire+0x1ad/0x520
+home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5726
+ lock_sock_nested+0x34/0xe0
+home/smyl/linux-image/linux-6.5-rc3/net/core/sock.c:3492
+ lock_sock home/smyl/linux-image/linux-6.5-rc3/./include/net/sock.h:1708
+[inline]
+ raw_setsockopt+0x3b6/0x1050
+home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:607
+ __sys_setsockopt+0x252/0x510
+home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2263
+ __do_sys_setsockopt
+home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2274 [inline]
+ __se_sys_setsockopt
+home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2271 [inline]
+ __x64_sys_setsockopt+0xb9/0x150
+home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2271
+ do_syscall_x64
+home/smyl/linux-image/linux-6.5-rc3/arch/x86/entry/common.c:50
+[inline]
+ do_syscall_64+0x35/0xb0
+home/smyl/linux-image/linux-6.5-rc3/arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x47959d
+Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 b4 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f1c93598068 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 000000000059c0a0 RCX: 000000000047959d
+RDX: 0000000000000002 RSI: 0000000000000065 RDI: 0000000000000003
+RBP: 000000000059c0a0 R08: 0000000000000004 R09: 0000000000000000
+R10: 00000000200001c0 R11: 0000000000000246 R12: 000000000059c0ac
+R13: 000000000000000b R14: 0000000000437250 R15: 00007f1c93578000
+ </TASK>
