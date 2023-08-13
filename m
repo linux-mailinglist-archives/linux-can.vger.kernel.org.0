@@ -2,298 +2,201 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44FE77A042
-	for <lists+linux-can@lfdr.de>; Sat, 12 Aug 2023 16:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F0B77A62C
+	for <lists+linux-can@lfdr.de>; Sun, 13 Aug 2023 13:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236717AbjHLOIX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 12 Aug 2023 10:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
+        id S230267AbjHMLXo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 13 Aug 2023 07:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjHLOIW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 12 Aug 2023 10:08:22 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E000510E4;
-        Sat, 12 Aug 2023 07:08:24 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fe45da0a89so4625460e87.1;
-        Sat, 12 Aug 2023 07:08:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691849303; x=1692454103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lvsoikQWEB5Xn0/N76cOc5eFdD0OPbNTdNyqAWmArTU=;
-        b=U2+9azpW5oMrmNE3l3mihbWW8Xyzz8tXfm9isLao5gk7inRoXHaPacB6YLrc9MCRDv
-         2GUFjHDFiFaB3VsKP9KLqXyLFOCzwtW6dmnY6FvALwLGyFVzetqOFEeGVBEdaM6CSFDS
-         7MCeBkVnVUSu2HbtFkBJSt+0vGPzJFW6a6M13VwpuMq/IdBpe9uWI/4XDDc1R1/65VTl
-         ZZG0qB16K8rcvY0sFcyfTnqe5m1VVo8v9QJCiwmUs7kH86YNOhNbwLDCmZyPKTa1btFo
-         H/PkyOXcR2nseszSvCIVFfVaKeR0QcLI6ATqb8ijOi93nsiBWXLhro2/snF/GK+eSvyd
-         STMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691849303; x=1692454103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lvsoikQWEB5Xn0/N76cOc5eFdD0OPbNTdNyqAWmArTU=;
-        b=arTJR24xyzqsTkx/AMxAUOEg9qiHgWbJZIWgiDCoIqCchyIvt0Q9VCRZT+1ck1B7lj
-         aPCENzf23wrmZPwVJ1qwCVcdzxgM0eLetzbcbaFzZE9PJ7N+chq33oR1j0gZwaiSMvLM
-         6HxRn/Z1B58vU6Ce/h/8+wGmW6xG+UbprQrLkV1WkVV3S9VErhW7O+6tkTCA15sFqZMI
-         xtAGK6ZVi1hFtt2ZEr/ohmVVaT6D1wQ9OYrbSZl6VUgf0FWv8XCpVhEgapX8i8pZmJbp
-         JMm6LyLJQn4F1Cmj/atAeiSV2Cl7IyXqJzkgtM/fMRefPx/fyx63/V9ywA7uQLj1bbY3
-         4SjQ==
-X-Gm-Message-State: AOJu0YzWEYjE/MfFhdyOBAJBLpeBLFMmthHotS9AeVGsNMTihnhfOkFa
-        hRiMzIWCKWDiZxzLTYNKY4IlGkoDgTxJm9X7AOY=
-X-Google-Smtp-Source: AGHT+IFW1C6CLj0BI8HxzToq2WIbUYUHyZbWv7lBYxBVd+mJKCuU7Bs1Hq2EVAgmLigxZ9NJFfSzng9imggKHKNu8Dc=
-X-Received: by 2002:a05:6512:398d:b0:4f7:6404:4638 with SMTP id
- j13-20020a056512398d00b004f764044638mr1740427lfu.17.1691849302450; Sat, 12
- Aug 2023 07:08:22 -0700 (PDT)
+        with ESMTP id S230250AbjHMLXm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Aug 2023 07:23:42 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF85D10E4
+        for <linux-can@vger.kernel.org>; Sun, 13 Aug 2023 04:23:41 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id CBB5D240103
+        for <linux-can@vger.kernel.org>; Sun, 13 Aug 2023 13:23:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1691925819; bh=+M8MabNBfA5Kys7XJ+x9X1blVITp0OaBEOIjjfS4P5Q=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:
+         Content-Transfer-Encoding:From;
+        b=Gm4dlOq3R2DKWeU44ycl2fnUXTb7mqgs49Ysq/5otVdSKf/E0yOgE3BcP9Q/K+rze
+         rFyrTQnuhe7Su6ehUgm05+c8J7TXNDqQBLRevbIIn7KdlvfbLO7TyTXvk72jFjnPPL
+         upMkQJObYyWS6a9Q8bCkh11GU9NiNYA9VNlEUHcGOAYkC4GipgSWXdXPrS4MNXgwGb
+         AxdNCoXtZOK5r4tWu/LUqyYZFUJAcAD5yc9m9VK/MUGQxKveZlAZgk0uyGs5zni5Pp
+         d+5ek9g20hsjTHCFGk3IR9r7q+EHcoGjCx/23gTkr3c8D71msPiZ1mVpTlTY/Emyby
+         xbcoL01k6/3kA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4RNwBw52jZz9rxF;
+        Sun, 13 Aug 2023 13:23:36 +0200 (CEST)
+Message-ID: <2d8a4d46-f1e4-4e2a-819d-6c28ad37273f@posteo.net>
+Date:   Sun, 13 Aug 2023 11:23:35 +0000
 MIME-Version: 1.0
-References: <CALcu4raN3=04gp5=f=sDMtTuTG0VZpunwqSVd8MNVcnfPe+t4w@mail.gmail.com>
- <8e578867-5223-e96a-41e3-5d6d27af1727@hartkopp.net>
-In-Reply-To: <8e578867-5223-e96a-41e3-5d6d27af1727@hartkopp.net>
-From:   Yikebaer Aizezi <yikebaer61@gmail.com>
-Date:   Sat, 12 Aug 2023 22:08:10 +0800
-Message-ID: <CALcu4ra8A1xMT2pgiF3Xope=RVTj+5L7KXstK+WwNtNSgqKAWA@mail.gmail.com>
-Subject: Re: possible deadlock in raw_setsockopt
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, "pabeni@redhat.com" <pabeni@redhat.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: can: isotp: epoll breaks isotp_sendmsg
+Content-Language: en-US
+To:     Michal Sojka <michal.sojka@cvut.cz>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Dae R. Jeong" <threeearcat@gmail.com>,
+        Hillf Danton <hdanton@sina.com>
+References: <11328958-453f-447f-9af8-3b5824dfb041@munic.io>
+ <87cz1czihl.fsf@steelpick.2x.cz>
+From:   Lukas Magel <lukas.magel@posteo.net>
+In-Reply-To: <87cz1czihl.fsf@steelpick.2x.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Thanks, I'll check it out.
+Hi Maxime, hi Michal,
 
-Oliver Hartkopp <socketcan@hartkopp.net> =E4=BA=8E2023=E5=B9=B48=E6=9C=8812=
-=E6=97=A5=E5=91=A8=E5=85=AD 19:44=E5=86=99=E9=81=93=EF=BC=9A
+On 01.07.23 00:35, Michal Sojka wrote:
+> Hi Maxime,
 >
-> Hello,
+> On Fri, Jun 30 2023, Maxime Jayat wrote:
+>> Hi,
+>>
+>> There is something not clear happening with the non-blocking behavior
+>> of ISO-TP sockets in the TX path, but more importantly, using epoll now
+>> completely breaks isotp_sendmsg.
+>> I believe it is related to
+>> 79e19fa79c ("can: isotp: isotp_ops: fix poll() to not report false 
+>> EPOLLOUT events"),
+>> but actually is probably deeper than that.
+>>
+>> I don't completely understand what is exactly going on, so I am sharing
+>> the problem I face:
+>>
+>> With an ISO-TP socket in non-blocking mode, using epoll seems to make
+>> isotp_sendmsg always return -EAGAIN.
+> That's definitely not expected behavior. I tested the patch only with
+> poll, hoping that epoll would behave the same.
 >
-> it seems to be the common pattern to use
+> [...]
+
+
+I am writing to report that we have been witnessing a behavior very similar
+to what you describe. ISO-TP send breaks with EAGAIN if a poll (for a read)
+occurs at the same time.
+
+Our Python stack uses two threads to do concurrent, blocking reads & writes
+from and to the ISO-TP socket. The socket has a timeout of 0.1s to facilitate
+shutdown when requested by the application. Notably, the blocking semantics
+are handled by CPython, i.e. the underlying kernel socket is non-blocking.
+CPython polls until the requested operation (read or write) can be executed
+or the timeout occurs.
+
+What happens during execution is that the socket is continuously being
+polled by the read thread, i.e. so->wait is always filled with one task.
+This process repeats until the socket receives a frame from the bus and the
+poll returns successsfully. The app reads the data from the socket and
+sends a response. Since the send occurs in a different thread, the reader
+thread will have already returned to its poll loop and to populating
+so->wait. When the send occurs, isotp_sendmsg checks so->wait for sleepers
+and returns EAGAIN because the socket is non-blocking although there is no
+concurrent send operation. This dance continues until the timeout occurs for
+either the read or the write operation. If the write times out first, a
+timeout error causes the Python app to break. If the read times out first,
+there is a race that the write goes through or the reader puts in
+another poll.
+
+This behavior can be seen rather nicely in strace:
+110580 poll([{fd=5, events=POLLIN}], 1, 100) = 0 (Timeout)
+110580 poll([{fd=5, events=POLLIN}], 1, 100) = 0 (Timeout)
+110580 poll([{fd=5, events=POLLIN}], 1, 100) = 1 ([{fd=5, revents=POLLIN}])
+110580 recvfrom(5, ">\0", 4095, 0, NULL, NULL) = 2
+110580 poll([{fd=5, events=POLLIN}], 1, 100 <unfinished ...>
+110569 poll([{fd=5, events=POLLOUT}], 1, 100) = 1 ([{fd=5, revents=POLLOUT}])
+110569 sendto(5, "~\0", 2, 0, NULL, 0)  = -1 EAGAIN (Resource temporarily unavailable)
+110569 poll([{fd=5, events=POLLOUT}], 1, 100) = 1 ([{fd=5, revents=POLLOUT}])
+110569 sendto(5, "~\0", 2, 0, NULL, 0)  = -1 EAGAIN (Resource temporarily unavailable)
+110569 poll([{fd=5, events=POLLOUT}], 1, 100) = 1 ([{fd=5, revents=POLLOUT}])
+110569 sendto(5, "~\0", 2, 0, NULL, 0)  = -1 EAGAIN (Resource temporarily unavailable)
+[....]
+110569 poll([{fd=5, events=POLLOUT}], 1, 6) = 1 ([{fd=5, revents=POLLOUT}])
+110569 sendto(5, "~\0", 2, 0, NULL, 0)  = -1 EAGAIN (Resource temporarily unavailable)
+110569 poll([{fd=5, events=POLLOUT}], 1, 6 <unfinished ...>
+110580 <... poll resumed>)              = 0 (Timeout)
+110569 <... poll resumed>)              = 1 ([{fd=5, revents=POLLOUT}])
+110580 poll([{fd=5, events=POLLIN}], 1, 100 <unfinished ...>
+110569 sendto(5, "~\0", 2, 0, NULL, 0)  = -1 EAGAIN (Resource temporarily unavailable)
+110569 poll([{fd=5, events=POLLOUT}], 1, 5) = 1 ([{fd=5, revents=POLLOUT}])
+110569 sendto(5, "~\0", 2, 0, NULL, 0)  = -1 EAGAIN (Resource temporarily unavailable)
+
+I believe this is consistent to the behavior you're witnessing with epoll
+because epoll also places a sleeper in so->wait that is left in the queue
+until the epoll descriptor is closed.
+
+
 >
-> rtnl_lock();
-> lock_sock(sk);
+>> By reverting 79e19fa79c, I get better results but still incorrect:
+> [...]
 >
-> (..)
+>> It is then possible to write on the socket but the write is blocking,
+>> which is not the expected behavior for a non-blocking socket.
+> Yes, incorrect behavior was why we made the commit in question, however
+> we saw write() returning -EAGAIN when it shouldn't.
 >
-> release_lock(sk);
-> rtnl_unlock();
+>> I don't know how to solve the problem. To me, using wq_has_sleeper seems 
+>> weird.
+> Agreed. I've never tried to understand how synchronization works here.
+> Hopefully, Oliver knows more.
 >
-> And the referenced code here
-> home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:607
-> already follows this pattern.
+>> The implementation of isotp_poll feels weird too (calling both 
+>> datagram_poll and
+>> poll_wait?). But I am not sure what would be the correct
+>> implementation.
+> I understand it as follows (which might be wrong - someone, please
+> correct me), isotp_poll() should register the file with all waitqueues
+> it can wait on. so->wait is one and sock->sq.wait (used by
+> datagram_poll) is another. The former is definitely used for TX, the
+> latter is probably used because skb_recv_datagram() is called for RX.
+> But so->wait is also used for RX and there might proabbly be be some
+> inconsistency between those.
+
+
+AFAIK, it is correct behavior for isotp_poll to register all wait queues
+with the poller.
+
+Before 79e19fa79c, I assume datagram_poll always returned
+EPOLLOUT because its corresponding send buffer is unused and empty. This
+return value can be incorrect if so->tx.state is not IDLE and a send would
+block. With the patch, this behavior is now suppressed. I believe that
+the inconsistency could have rather been introduced with:
+can: isotp: fix race between isotp_sendsmg() and isotp_release() 0517374
+
+With this patch, the behavior of isotp_sendmsg was changed to only check
+so->wait for sleepers instead of consulting so->tx.state to see if the
+socket is busy. Since the wait queue can also have sleepers only interested
+in read operations, I believe the return value is not a valid indicator
+of send readiness. Additionally, in this state, the behavior in isotp_sendmsg
+is inconsistent with isotp_poll. I will try to test next week if reverting this
+part of the patch could fix the race condition.
+
+
 >
-> A wrong locking has been introduced in
+>> My actual use-case is in Async Rust using tokio.
+> Our initial motivation was also Rust and tokio however than I did
+> testing only with simple C programs. I'm definitely interested in having
+> this working.
 >
-> ee8b94c8510c ("can: raw: fix receiver memory leak")
->
-> which has been fixed in
->
-> 11c9027c983e ("can: raw: fix lockdep issue in raw_release()")
->
-> Your selected linux-6.5-rc3 tree has the above problem but it is fixed
-> in Linus' latest tree now.
+> I'll try to look at this in more detail during the weekend. It's too
+> late for me today.
 >
 > Best regards,
-> Oliver
+> -Michal
 >
-> On 10.08.23 12:30, Yikebaer Aizezi wrote:
-> > Hello,
-> >
-> > When using Healer to fuzz the Linux-6.5-rc3,  the following crash
-> > was triggered.
-> >
-> > HEAD commit: 6eaae198076080886b9e7d57f4ae06fa782f90ef (tag: v6.5-rc3)
-> > git tree: upstream
-> > console output:
-> > https://drive.google.com/file/d/1d9rLH0SYwNhTm2datRKbVpET1irbx_tA/view?=
-usp=3Ddrive_link
-> > kernel config: https://drive.google.com/file/d/1OQIne-cVGeH6R4nqGGm6Igm=
-3DnsozLhJ/view?usp=3Ddrive_link
-> > C reproducer: https://drive.google.com/file/d/1iewyTDtNLkXAJSMnREXKNYcU=
-wfN1mAqA/view?usp=3Ddrive_link
-> > Syzlang reproducer:
-> > https://drive.google.com/file/d/17p1lUipZkXyl9xE0_Qanerbg75W6ER5y/view?=
-usp=3Ddrive_link
-> >
-> > If you fix this issue, please add the following tag to the commit:
-> > Reported-by: Yikebaer Aizezi <yikebaer61@gmail.com>
-> >
-> > WARNING: possible circular locking dependency detected
-> > 6.5.0-rc3 #1 Not tainted
-> > ------------------------------------------------------
-> > syz-executor/13006 is trying to acquire lock:
-> > ffff88801ca69130 (sk_lock-AF_CAN){+.+.}-{0:0}, at: lock_sock
-> > home/smyl/linux-image/linux-6.5-rc3/./include/net/sock.h:1708 [inline]
-> > ffff88801ca69130 (sk_lock-AF_CAN){+.+.}-{0:0}, at:
-> > raw_setsockopt+0x3b6/0x1050
-> > home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:607
-> >
-> > but task is already holding lock:
-> > ffffffff8cdca268 (rtnl_mutex){+.+.}-{3:3}, at:
-> > raw_setsockopt+0x3ac/0x1050
-> > home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:606
-> >
-> > which lock already depends on the new lock.
-> >
-> >
-> > the existing dependency chain (in reverse order) is:
-> >
-> > -> #1 (rtnl_mutex){+.+.}-{3:3}:
-> >         __mutex_lock_common
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/mutex.c:603
-> > [inline]
-> >         __mutex_lock+0x14f/0x1440
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/mutex.c:747
-> >         raw_release+0x1bd/0x940
-> > home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:391
-> >         __sock_release+0xcd/0x290
-> > home/smyl/linux-image/linux-6.5-rc3/net/socket.c:654
-> >         sock_close+0x18/0x20
-> > home/smyl/linux-image/linux-6.5-rc3/net/socket.c:1386
-> >         __fput+0x391/0x9d0
-> > home/smyl/linux-image/linux-6.5-rc3/fs/file_table.c:384
-> >         task_work_run+0x153/0x230
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/task_work.c:179
-> >         resume_user_mode_work
-> > home/smyl/linux-image/linux-6.5-rc3/./include/linux/resume_user_mode.h:=
-49
-> > [inline]
-> >         exit_to_user_mode_loop
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/entry/common.c:171 [inline]
-> >         exit_to_user_mode_prepare+0x210/0x240
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/entry/common.c:204
-> >         __syscall_exit_to_user_mode_work
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/entry/common.c:286 [inline]
-> >         syscall_exit_to_user_mode+0x19/0x50
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/entry/common.c:297
-> >         do_syscall_64+0x42/0xb0
-> > home/smyl/linux-image/linux-6.5-rc3/arch/x86/entry/common.c:86
-> >         entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >
-> > -> #0 (sk_lock-AF_CAN){+.+.}-{0:0}:
-> >         check_prev_add
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3142
-> > [inline]
-> >         check_prevs_add
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3261
-> > [inline]
-> >         validate_chain
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3876
-> > [inline]
-> >         __lock_acquire+0x2ecd/0x5b90
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5144
-> >         lock_acquire
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5761
-> > [inline]
-> >         lock_acquire+0x1ad/0x520
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5726
-> >         lock_sock_nested+0x34/0xe0
-> > home/smyl/linux-image/linux-6.5-rc3/net/core/sock.c:3492
-> >         lock_sock
-> > home/smyl/linux-image/linux-6.5-rc3/./include/net/sock.h:1708 [inline]
-> >         raw_setsockopt+0x3b6/0x1050
-> > home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:607
-> >         __sys_setsockopt+0x252/0x510
-> > home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2263
-> >         __do_sys_setsockopt
-> > home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2274 [inline]
-> >         __se_sys_setsockopt
-> > home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2271 [inline]
-> >         __x64_sys_setsockopt+0xb9/0x150
-> > home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2271
-> >         do_syscall_x64
-> > home/smyl/linux-image/linux-6.5-rc3/arch/x86/entry/common.c:50
-> > [inline]
-> >         do_syscall_64+0x35/0xb0
-> > home/smyl/linux-image/linux-6.5-rc3/arch/x86/entry/common.c:80
-> >         entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >
-> > other info that might help us debug this:
-> >
-> >   Possible unsafe locking scenario:
-> >
-> >         CPU0                    CPU1
-> >         ----                    ----
-> >    lock(rtnl_mutex);
-> >                                 lock(sk_lock-AF_CAN);
-> >                                 lock(rtnl_mutex);
-> >    lock(sk_lock-AF_CAN);
-> >
-> >   *** DEADLOCK ***
-> >
-> > 1 lock held by syz-executor/13006:
-> >   #0: ffffffff8cdca268 (rtnl_mutex){+.+.}-{3:3}, at:
-> > raw_setsockopt+0x3ac/0x1050
-> > home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:606
-> >
-> > stack backtrace:
-> > CPU: 0 PID: 13006 Comm: syz-executor Not tainted 6.5.0-rc3 #1
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> > rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-> > Call Trace:
-> >   <TASK>
-> >   __dump_stack home/smyl/linux-image/linux-6.5-rc3/lib/dump_stack.c:88 =
-[inline]
-> >   dump_stack_lvl+0x92/0xf0
-> > home/smyl/linux-image/linux-6.5-rc3/lib/dump_stack.c:106
-> >   check_noncircular+0x2ef/0x3d0
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:2195
-> >   check_prev_add
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3142
-> > [inline]
-> >   check_prevs_add
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3261
-> > [inline]
-> >   validate_chain
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:3876
-> > [inline]
-> >   __lock_acquire+0x2ecd/0x5b90
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5144
-> >   lock_acquire home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockd=
-ep.c:5761
-> > [inline]
-> >   lock_acquire+0x1ad/0x520
-> > home/smyl/linux-image/linux-6.5-rc3/kernel/locking/lockdep.c:5726
-> >   lock_sock_nested+0x34/0xe0
-> > home/smyl/linux-image/linux-6.5-rc3/net/core/sock.c:3492
-> >   lock_sock home/smyl/linux-image/linux-6.5-rc3/./include/net/sock.h:17=
-08
-> > [inline]
-> >   raw_setsockopt+0x3b6/0x1050
-> > home/smyl/linux-image/linux-6.5-rc3/net/can/raw.c:607
-> >   __sys_setsockopt+0x252/0x510
-> > home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2263
-> >   __do_sys_setsockopt
-> > home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2274 [inline]
-> >   __se_sys_setsockopt
-> > home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2271 [inline]
-> >   __x64_sys_setsockopt+0xb9/0x150
-> > home/smyl/linux-image/linux-6.5-rc3/net/socket.c:2271
-> >   do_syscall_x64
-> > home/smyl/linux-image/linux-6.5-rc3/arch/x86/entry/common.c:50
-> > [inline]
-> >   do_syscall_64+0x35/0xb0
-> > home/smyl/linux-image/linux-6.5-rc3/arch/x86/entry/common.c:80
-> >   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x47959d
-> > Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-> > 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-> > 01 f0 ff ff 73 01 c3 48 c7 c1 b4 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f1c93598068 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-> > RAX: ffffffffffffffda RBX: 000000000059c0a0 RCX: 000000000047959d
-> > RDX: 0000000000000002 RSI: 0000000000000065 RDI: 0000000000000003
-> > RBP: 000000000059c0a0 R08: 0000000000000004 R09: 0000000000000000
-> > R10: 00000000200001c0 R11: 0000000000000246 R12: 000000000059c0ac
-> > R13: 000000000000000b R14: 0000000000437250 R15: 00007f1c93578000
-> >   </TASK>
-> >
+Regards,
+Lukas
+
