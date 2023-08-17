@@ -2,63 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D20B77F416
-	for <lists+linux-can@lfdr.de>; Thu, 17 Aug 2023 12:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B567877F45D
+	for <lists+linux-can@lfdr.de>; Thu, 17 Aug 2023 12:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349633AbjHQKKp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 17 Aug 2023 06:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
+        id S1349939AbjHQKiN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 17 Aug 2023 06:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349949AbjHQKKe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Aug 2023 06:10:34 -0400
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660442D5A;
-        Thu, 17 Aug 2023 03:10:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-        s=default2211; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-        References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=D/VeZqbHWVUYZkOsppXhQk3Rq5983G47lAe3d6GP5/Y=; b=ijuMRbSXPWk0dieiYbCyGXWNIL
-        dGd8m59gWWh962Bz+Iq+ns8th5Y9WWFdjbn733vcSfoe2zeNOXok+YnrFfKUaoK0WgSgC7O9n6M/x
-        9se5Zd7JLzz4RCtbbC+q3C9xY93mgAyN14Mup6sA5kUBgbPZR2No1v/+kCSbTfRuRU6Jr1viigG1v
-        E0yoj+0x3d7dEtFLpIvGC7AlTCOYpBELRNruEzAwRWNzHTzhug/d/VAdkqs6ZFYgBiwHhA2gmi/7Z
-        DiCb2Xovv7KVN8OIUtrfhPVX7P0io41Az1m2X5/cfZ5TvSR0irIiYUG12IDN0gUiYCmZe8hnP0sE3
-        Jn8Q4UkA==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <martin@geanix.com>)
-        id 1qWZxV-0009wm-LE; Thu, 17 Aug 2023 12:10:29 +0200
-Received: from [185.17.218.86] (helo=zen..)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <martin@geanix.com>)
-        id 1qWZxV-000TfR-3z; Thu, 17 Aug 2023 12:10:29 +0200
-From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
-Subject: [PATCH 2/2] can: m_can: support setting hw filters
-Date:   Thu, 17 Aug 2023 12:10:14 +0200
-Message-ID: <20230817101014.3484715-3-martin@geanix.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230817101014.3484715-1-martin@geanix.com>
-References: <20230817101014.3484715-1-martin@geanix.com>
+        with ESMTP id S1349230AbjHQKho (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Aug 2023 06:37:44 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04082D54
+        for <linux-can@vger.kernel.org>; Thu, 17 Aug 2023 03:37:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1692268660; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=op+n2TWT+J4VshZyHkfYBCluImdckD/HJrbih5cU5owUQWUC/+rE2/eLyWmq/BnwPG
+    5Ho6fpQ6T46baF8oJid90bvCG3IF3ux8d9stpvv7t2ST47oAPfGgQleB51tqvCYt37B7
+    jHn31sd5un5a8u+wG6fldxHHBU6u+Cv8QeRsS/zaLBEF0p55ZyvlSm6+P2ApQS+m+JsU
+    OHbpbZFZ7zArBvehS5eF0HwxifkAg11Ya8dhxCe0WX0R59/LiUepqBAlm5nlCXjxtnPT
+    Vrz6TF5RgFq/jJnkIOASaS8Bkf1166UojQsuCVxJvUQJz+ZkDF/SuBipzxPW/jQLU2W0
+    th5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1692268660;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=T6wmv62SAjspoMHf0pymLYfxr9Dp7kUk6XfMWmT+SLY=;
+    b=TnXU+U/sWkwuzRrPrIQvRDv98PHXTC45JLUb1MaabfH5LzvQSUFgsjtyI9gGVzIFAz
+    dMAfmO6NwfPEM/IuIreGPaKrIkH9ZwHo0UyBqqYADQPjx93JEspTcyePZtPSwsxvQKA3
+    wQI0ufnP37XMbPMu4QgZT8qh0EJ6kvZxukQbkrTzNFrmf5LuoEjQxk5zm3FJSLEUXa5n
+    xH3Hp40uQCakb0dmdrc9H7+jFyZMOsbIIafNTYKxSD3lx8fYC6qh+p/JCjQ6sfaTzvNv
+    2MqjcIMniPhjhrXaJCR7S6FBXmGV/GBb6Q2fBdtPNXQIeQFkCdVxl9t0ughVQiBs6xWi
+    1L4g==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1692268660;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=T6wmv62SAjspoMHf0pymLYfxr9Dp7kUk6XfMWmT+SLY=;
+    b=XyApfnqMdUSF/9as1/Y6O7VWeApjMaoykqJ4CjSCea03YAFRXaMIPjGfBXj2pUNah+
+    kWagGaetg51z/FPUcA4staxg9UpBblNMridJIZvVOzzp01W5u5hKcS3goKxdbs+kbNC7
+    p28a1v4nA3qdplsAh2Io6QsUeC1/T5cPM+VcxiaDROGEsvQtzCEHYCgiLjhPA6xrAaWk
+    qO/lOsDSN5dmHXAafAu1QKXYI9EljZTtuQu/4njWfyEWjiFRG5+v0nqM/8Htax5TCExJ
+    Iq2EY00sEioTvrtWopH219ZPYHNyhwAOOEDAzs50ArKrmvzSMIUtM+fin1lCoysPXtqc
+    POHA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1692268660;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=T6wmv62SAjspoMHf0pymLYfxr9Dp7kUk6XfMWmT+SLY=;
+    b=cw46CsO7iAlYwxn+IVwwMDrrYxudR0DDzW764tAitMR9uXkm7C6Fx3kbgoHMWzf7ve
+    4X2IuqBXBt1w5j510QDw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USMYaUuUukOkrxOplwYxvBXmGP/"
+Received: from [IPV6:2a00:6020:4a8e:5000:249a:c3ef:f70:1edd]
+    by smtp.strato.de (RZmta 49.6.6 AUTH)
+    with ESMTPSA id Ka8a06z7HAbd2AR
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 17 Aug 2023 12:37:39 +0200 (CEST)
+Message-ID: <038d5958-1c6a-7103-c846-68961cad9491@hartkopp.net>
+Date:   Thu, 17 Aug 2023 12:37:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 0/2] can: per-device hardware filter support
+To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>
+References: <20230817101014.3484715-1-martin@geanix.com>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20230817101014.3484715-1-martin@geanix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: martin@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.8/27003/Thu Aug 17 09:42:42 2023)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,201 +87,56 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Implement the validate_hw_filter() callback to allow setting hardware
-filter for m_can-based devices, and configure the filters when starting
-the device.
+Hello Martin,
 
-The m_can chip requires separate configuration for standard and extended
-ID filters, so the implementation considers filters with an ID or a mask
-larger than 0x7ff to be an extended ID. Users needing to filter on the
-lower 11 bits on extended message IDs can do so by passing an ID greater
-than 0x7ff, while masking in the lower 11 bits only.
+I reduced the recipient list as this is a CAN-only feature discussion 
+which is not relevant for putting all the netdev maintainers into the 
+loop now.
 
-The number of allowed filters depends on the MRAM configuration. See
-`sidf_elems` and `xidf_elems` elements in the bosch,mram-cfg device tree
-binding for further information.
+Nice that you picked up the idea for hardware filtering.
 
-Signed-off-by: Martin Hundebøll <martin@geanix.com>
----
- drivers/net/can/m_can/m_can.c | 137 +++++++++++++++++++++++++++++++++-
- 1 file changed, 133 insertions(+), 4 deletions(-)
+On 2023-08-17 12:10, Martin Hundebøll wrote:
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 16ecc11c7f62..7c8110076256 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -223,6 +223,52 @@ enum m_can_reg {
- #define ILE_EINT1	BIT(1)
- #define ILE_EINT0	BIT(0)
- 
-+/* Standard ID message filters (SIDF) */
-+#define SIDF_SFT_MASK		GENMASK(31, 30)
-+#define SIDF_SFEC_MASK		GENMASK(29, 27)
-+#define SIDF_SFID1_MASK		GENMASK(26, 16)
-+#define SIDF_SFID2_MASK		GENMASK(10, 0)
-+
-+/* Extended ID message filters (XIDF) */
-+#define XIDF_EFT_MASK		GENMASK_ULL(63, 62)
-+#define XIDF_EFID2_MASK		GENMASK_ULL(60, 32)
-+#define XIDF_EFEC_MASK		GENMASK_ULL(31, 29)
-+#define XIDF_EFID1_MASK		GENMASK_ULL(28, 0)
-+
-+/* Standard Filter Type */
-+#define SFT_RANGE	0x0
-+#define SFT_DUAL	0x1
-+#define SFT_CLASSIC	0x2
-+#define SFT_DISABLED	0x3
-+
-+/* Standard Filter Element Configuration */
-+#define SFEC_DISABLE	0x0
-+#define SFEC_RXF0	0x1
-+#define SFEC_RXF1	0x2
-+#define SFEC_REJECT	0x3
-+#define SFEC_PRIO	0x4
-+#define SFEC_PRIO_RXF0	0x5
-+#define SFEC_PRIO_RXF1	0x6
-+#define SFEC_DEBUG	0x7
-+
-+/* Global Filter Configuration Field */
-+#define GFC_ANFS	GENMASK(5, 4)
-+#define GFC_ANFE	GENMASK(3, 2)
-+#define GFC_RRFS	BIT(1)
-+#define GFC_RRFE	BIT(0)
-+
-+#define ANFS_ACCEPT_RXF0	0x0
-+#define ANFS_ACCEPT_RXF1	0x1
-+#define ANFS_REJECT		0x2
-+
-+/* Standard ID Filter Configuration */
-+#define SIDFC_LSS	GENMASK(23, 16)
-+#define SIDFC_FLSSA	GENMASK(15, 0)
-+
-+/* Extended ID Filter Configuration */
-+#define XIDFC_LSE	GENMASK(22, 16)
-+#define XIDFC_FLSAE	GENMASK(15, 0)
-+
- /* Rx FIFO 0/1 Configuration (RXF0C/RXF1C) */
- #define RXFC_FWM_MASK	GENMASK(30, 24)
- #define RXFC_FS_MASK	GENMASK(22, 16)
-@@ -382,6 +428,56 @@ static inline bool m_can_tx_fifo_full(struct m_can_classdev *cdev)
- 	return _m_can_tx_fifo_full(m_can_read(cdev, M_CAN_TXFQS));
- }
- 
-+static int m_can_validate_hw_filter(struct net_device *dev,
-+				    struct can_filter *hwf,
-+				    unsigned int hwf_cnt)
-+{
-+	struct m_can_classdev *cdev = netdev_priv(dev);
-+	size_t sff_filter_cnt = 0;
-+	size_t eff_filter_cnt = 0;
-+	int i;
-+
-+	for (i = 0; i < hwf_cnt; i++)
-+		if (hwf[i].can_id <= CAN_SFF_MASK || hwf[i].can_mask <= CAN_SFF_MASK)
-+			sff_filter_cnt++;
-+		else
-+			eff_filter_cnt++;
-+
-+	if (sff_filter_cnt > cdev->mcfg[MRAM_SIDF].num)
-+		return -EINVAL;
-+
-+	if (eff_filter_cnt > cdev->mcfg[MRAM_XIDF].num)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int m_can_sid_filter_write(struct m_can_classdev *cdev,
-+				  struct can_filter *filter,
-+				  size_t index)
-+{
-+	u32 addr_offset = cdev->mcfg[MRAM_SIDF].off + SIDF_ELEMENT_SIZE * index;
-+	u32 sidf = FIELD_PREP(SIDF_SFT_MASK, SFT_CLASSIC) |
-+		   FIELD_PREP(SIDF_SFEC_MASK, SFEC_RXF0) |
-+		   FIELD_PREP(SIDF_SFID1_MASK, filter->can_id) |
-+		   FIELD_PREP(SIDF_SFID2_MASK, filter->can_mask);
-+
-+	return cdev->ops->write_fifo(cdev, addr_offset, &sidf, sizeof(sidf));
-+}
-+
-+static int m_can_xid_filter_write(struct m_can_classdev *cdev,
-+				  struct can_filter *filter,
-+				  size_t index)
-+{
-+	u32 addr_offset = cdev->mcfg[MRAM_XIDF].off + XIDF_ELEMENT_SIZE * index;
-+	u64 xidf = FIELD_PREP(XIDF_EFT_MASK, SFT_CLASSIC) |
-+		   FIELD_PREP(XIDF_EFEC_MASK, SFEC_RXF0) |
-+		   FIELD_PREP(XIDF_EFID1_MASK, filter->can_id) |
-+		   FIELD_PREP(XIDF_EFID2_MASK, filter->can_mask);
-+
-+	return cdev->ops->write_fifo(cdev, addr_offset, &xidf, sizeof(xidf));
-+}
-+
- static void m_can_config_endisable(struct m_can_classdev *cdev, bool enable)
- {
- 	u32 cccr = m_can_read(cdev, M_CAN_CCCR);
-@@ -1266,8 +1362,10 @@ static int m_can_chip_config(struct net_device *dev)
- {
- 	struct m_can_classdev *cdev = netdev_priv(dev);
- 	u32 interrupts = IR_ALL_INT;
--	u32 cccr, test;
--	int err;
-+	size_t sff_filter_cnt = 0;
-+	size_t eff_filter_cnt = 0;
-+	u32 cccr, test, anfs;
-+	int err, i;
- 
- 	err = m_can_init_ram(cdev);
- 	if (err) {
-@@ -1288,8 +1386,38 @@ static int m_can_chip_config(struct net_device *dev)
- 		    FIELD_PREP(RXESC_F1DS_MASK, RXESC_64B) |
- 		    FIELD_PREP(RXESC_F0DS_MASK, RXESC_64B));
- 
--	/* Accept Non-matching Frames Into FIFO 0 */
--	m_can_write(cdev, M_CAN_GFC, 0x0);
-+	/* Configure HW filters and count standard vs extended id filters */
-+	for (i = 0; i < cdev->can.hw_filter_cnt; i++) {
-+		struct can_filter *filter = &cdev->can.hw_filter[i];
-+
-+		if (filter->can_id <= CAN_SFF_MASK ||
-+		    filter->can_mask <= CAN_SFF_MASK)
-+			err = m_can_sid_filter_write(cdev, filter,
-+						     sff_filter_cnt++);
-+		else
-+			err = m_can_xid_filter_write(cdev, filter,
-+						     eff_filter_cnt++);
-+
-+		if (err)
-+			return err;
-+	}
-+
-+	/* Configure offset to and number of standard id filters in MRAM */
-+	m_can_write(cdev, M_CAN_SIDFC,
-+		    FIELD_PREP(SIDFC_FLSSA, cdev->mcfg[MRAM_SIDF].off) |
-+		    FIELD_PREP(SIDFC_LSS, sff_filter_cnt));
-+	/* Configure offset to and number of extended id filters in MRAM */
-+	m_can_write(cdev, M_CAN_XIDFC,
-+		    FIELD_PREP(XIDFC_FLSAE, cdev->mcfg[MRAM_XIDF].off) |
-+		    FIELD_PREP(XIDFC_LSE, sff_filter_cnt));
-+
-+	/* If any filter is configured, the Global Filter Configuration is set
-+	 * to reject non-matching frames.
-+	 */
-+	anfs = cdev->can.hw_filter_cnt ? ANFS_REJECT : ANFS_ACCEPT_RXF0;
-+	m_can_write(cdev, M_CAN_GFC,
-+		    FIELD_PREP(GFC_ANFS, anfs) | FIELD_PREP(GFC_ANFE, anfs));
-+
- 
- 	if (cdev->version == 30) {
- 		/* only support one Tx Buffer currently */
-@@ -1524,6 +1652,7 @@ static int m_can_dev_setup(struct m_can_classdev *cdev)
- 	/* Shared properties of all M_CAN versions */
- 	cdev->version = m_can_version;
- 	cdev->can.do_set_mode = m_can_set_mode;
-+	cdev->can.validate_hw_filter = m_can_validate_hw_filter;
- 	cdev->can.do_get_berr_counter = m_can_get_berr_counter;
- 
- 	/* Set M_CAN supported operations */
--- 
-2.41.0
+> Based on the prior discussions on hardware filtering in CAN devices[0],
+> I've implemented such support in the m_can driver.
+> 
+> The first patch is almost entirely identical to Oliver Hartkopp's patch
+> from 2018[1] - I've just rebased it to v6.6 and fixed a checkpatch
+> warning. Not sure what to do about the "Not-Signed-off-by" tag though?
 
+The patch was just for the discussion we had in 2018 and I wanted to 
+make sure this RFC stuff does not go upstream at that point. So 
+preserving myself as author would still be ok ;-)
+
+> The second patch is new. I've tested it with a tcan4550 device together
+> with Oliver's proof-of-concept change in iproute2[2].
+> 
+> Has anyone tried this approach with other devices, e.g. sja1000 ?
+
+Yes, I remember implementing some code for the SJA1000 - but never 
+posted it on the CAN-ML. Maybe I still have that code somewhere o_O
+
+But it is nice to see, that you got it working with the M_CAN IP core!
+
+Best regards,
+Oliver
+
+> 
+> Thanks,
+> Martin
+> 
+> [0] https://lore.kernel.org/linux-can/6B05F8DE-7FF3-4065-9828-530BB9C91D1B@vanille.de/T/
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/commit/?h=can-hw-filter&id=87128f7a953ef2eef5f2d2a02ce354350e2c4f7f
+> [2] https://marc.info/?l=linux-can&m=151949929522529
+> 
+> Martin Hundebøll (2):
+>    can: netlink: support setting hardware filters
+>    can: m_can: support setting hw filters
+> 
+>   drivers/net/can/dev/dev.c        |   3 +
+>   drivers/net/can/dev/netlink.c    |  33 ++++++++
+>   drivers/net/can/m_can/m_can.c    | 137 ++++++++++++++++++++++++++++++-
+>   include/linux/can/dev.h          |   5 ++
+>   include/uapi/linux/can/netlink.h |   1 +
+>   5 files changed, 175 insertions(+), 4 deletions(-)
+> 
