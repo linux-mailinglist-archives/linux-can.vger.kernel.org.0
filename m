@@ -2,115 +2,140 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E8178172A
-	for <lists+linux-can@lfdr.de>; Sat, 19 Aug 2023 05:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DA47817CD
+	for <lists+linux-can@lfdr.de>; Sat, 19 Aug 2023 09:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245194AbjHSDXs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 18 Aug 2023 23:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38550 "EHLO
+        id S1343808AbjHSHDS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 19 Aug 2023 03:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244849AbjHSDXl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Aug 2023 23:23:41 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC522701
-        for <linux-can@vger.kernel.org>; Fri, 18 Aug 2023 20:23:40 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-34b01711a15so57705ab.0
-        for <linux-can@vger.kernel.org>; Fri, 18 Aug 2023 20:23:40 -0700 (PDT)
+        with ESMTP id S1343818AbjHSHDB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Aug 2023 03:03:01 -0400
+Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF72422B
+        for <linux-can@vger.kernel.org>; Sat, 19 Aug 2023 00:02:57 -0700 (PDT)
+Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-58d9ba95c78so18146577b3.1
+        for <linux-can@vger.kernel.org>; Sat, 19 Aug 2023 00:02:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692415419; x=1693020219;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RE56BA+fjk8/z3qvl6qq/GPKLP13SHW87kDx4EuRSw0=;
-        b=3I1rU9H9rqRgHY2QkBBZcK4ymBmaj+bqn5e86MzshNOSE1kSP21V44AlgsQZWFjaXA
-         im90AOesezLS3/sNC2niPKyHBxBzIss7jAXPl1KbFWMj6SrOydboDUuob0+PJlNPUf/O
-         1NPQpdWnIZSd1+2Oh1iNnnxyQOXKE0KjUAGu3RIT5M9iuXn5a4qguwOUtxwXMyKV9OLO
-         wMq4MHEDItBf+BcHkpx6DYpMu3W68yFM4iAy/OB9ddQKbfpehPB2dtXLWEG1CrMTuhXz
-         EMlFulCd6HbMIZBaAsiFNpn2BDe6WWba+MiwI160LXuFuUfymARJWUavRDFk9y+6IInY
-         Crzw==
+        d=gmail.com; s=20221208; t=1692428576; x=1693033376;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
+        b=MUn6TsJ49QsJA4igR3yMrdu/XsOuj8hKh7h6eVdj/4Q6ak4DnVptLCIKMxoaE1lx82
+         BxwzjkQUKGArD5gK4285su7I1sDB3qAK0HSAdokXHiNeRenFsT5dKLZZVD83rG1rnoeS
+         VdXWoxIFxTFlZ65TKthmVXAt9fOId6PSQJki87wVoyeAFbKQrlj5j4smx8DIxP/w0ZWJ
+         TRln+T7V97cC+Lha+e87zGu5qdfzMw4YK01R7iyxmdvnMREZiOau3xyPwKBLzOkfFV8d
+         16kMFJpKMWwV0JdyrqeYRq0aUvKFPGskV1RZVJY1R5FX4jJ5AOT83v5lCI7JlEhO9IN8
+         hMmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692415419; x=1693020219;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RE56BA+fjk8/z3qvl6qq/GPKLP13SHW87kDx4EuRSw0=;
-        b=f3hhUWQ00jN7z5otiTkcp8u0WAxQn+6zPyhX02JLX8BkpXA8cz51I4j4zf2B+VMPd8
-         fp4bGVwcXk0T3cbJhB8ex370gW2YzZgt378mo/PFpOr6F+iijSKSf6wJAcY2ZcpuUjpv
-         QNlzmRrZa44YoRYhrMUpFUtUCSmHBhDZ3WtSNGlwMTp5SNQyPiG2rJXK9VzfWbt9h3As
-         5WqH/fl+qMviQsu3c/QXGzMOZif7V12vJb3XKzVXDO4/QYTbok0Nl8MUByhTXzKcu1kd
-         T86yhN5dpsZjC7Ok2i/p/ZyVbhljEl9ZpjsCEOD+LHy3Hhvl4yQIeG5+NOHX6lDbccXb
-         ndLg==
-X-Gm-Message-State: AOJu0YwraTf/FoXhlGsb7BnyFXRoCWiK3Jt0Og2p+SZJOzaZbstq2AaZ
-        RSsE9x+C/U/waVs0aSHuGT512ScYbFcorudtTNnF+Lc7Awr5OqBGSTo=
-X-Google-Smtp-Source: AGHT+IFR47N9u0TH7mIkOMfDcOzMPWv0Z04MxXtBy1b6R3HfQI1/EJLUTf5amDGAYHVzNsjmpVkg9j/lxgBUg0qnvaQ=
-X-Received: by 2002:a92:c542:0:b0:346:676f:3517 with SMTP id
- a2-20020a92c542000000b00346676f3517mr367257ilj.11.1692415419206; Fri, 18 Aug
- 2023 20:23:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692428576; x=1693033376;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
+        b=A5IMFYh/tLq4h6cdXSyPpBiSDRG+xWA30KmAD3dorikpolJsIerm4OvyEYLj/YoN3C
+         raAtsmcNl353YK+nlqaoqVsYd7qBnKhcVMVfGWPlYc3CyjvcvfaREyVAbolwnHkB5AA9
+         Pc/h3swvj+QyWSuwFvTOwrwZQIRKR0bFpXB9ERvK0fTbz9UG49oXFmNdFzbhjsdUQpAy
+         RCKf67WQoEG5pZ03GLojIozY4iKshH2g7X3JFSF0JYk639pqSZrt03pGQphLfYoFU3Hn
+         Zva4UtAGx/aTYmdDJc+ld6Pp9pzuTBIYAsZ7xZYkM2XZDzPo5tBII1ptJtV3vJsDvVKo
+         UIkQ==
+X-Gm-Message-State: AOJu0YxtzvhQr/ZUSn+WjRuZG9Lxsipu0RqrUSVfjqMh/kWJ7+TN1cfQ
+        57uuBdZ36CJo63hdnIZHwHXNFtpNObcj9/c3SZw=
+X-Google-Smtp-Source: AGHT+IHBFHux9W7amy752XAKQ4G+pXj9K8KLABgekYkKVjTaNiUovhqWPJjy5q7mdLIzANUAVG24gzrYlmHT6Kjn7Kk=
+X-Received: by 2002:a81:8782:0:b0:589:a9fc:ffcd with SMTP id
+ x124-20020a818782000000b00589a9fcffcdmr1407212ywf.20.1692428576106; Sat, 19
+ Aug 2023 00:02:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230819012602.239550-1-kuba@kernel.org>
-In-Reply-To: <20230819012602.239550-1-kuba@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Sat, 19 Aug 2023 05:23:28 +0200
-Message-ID: <CANn89i+DzusGJEZQYXe+z_zDzj7deYvWrxG7G=9L3Q+r1P0h9g@mail.gmail.com>
-Subject: Re: [PATCH net] net: validate veth and vxcan peer ifindexes
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzbot+5ba06978f34abb058571@syzkaller.appspotmail.com,
-        wg@grandegger.com, mkl@pengutronix.de, idosch@nvidia.com,
-        lucien.xin@gmail.com, xemul@parallels.com, socketcan@hartkopp.net,
-        linux-can@vger.kernel.org
+Reply-To: razumkoykhailo@gmail.com
+Sender: mrtombaba@gmail.com
+Received: by 2002:a05:7000:5395:b0:4f4:2174:eed4 with HTTP; Sat, 19 Aug 2023
+ 00:02:55 -0700 (PDT)
+From:   "Mr.Razum Khailo" <razumkoykhailo@gmail.com>
+Date:   Sat, 19 Aug 2023 00:02:55 -0700
+X-Google-Sender-Auth: TD1SbUwALQWUaG93zNo0ky4SaO8
+Message-ID: <CADXgghn2t3mU_VvtZDjHwnbadg2QnVcJ30yFd0kN8SL6NDhY1g@mail.gmail.com>
+Subject: Greetings from Ukraine,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        MILLION_USD,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
+        *      DNSWL was blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [2607:f8b0:4864:20:0:0:0:1143 listed in]
+        [list.dnswl.org]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [razumkoykhailo[at]gmail.com]
+        *  2.0 MILLION_USD BODY: Talks about millions of dollars
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.4 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, Aug 19, 2023 at 3:26=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> veth and vxcan need to make sure the ifindexes of the peer
-> are not negative, core does not validate this.
->
-> Using iproute2 with user-space-level checking removed:
->
-> Before:
->
->   # ./ip link add index 10 type veth peer index -1
->   # ip link show
->   1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mod=
-e DEFAULT group default qlen 1000
->     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
->   2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel st=
-ate UP mode DEFAULT group default qlen 1000
->     link/ether 52:54:00:74:b2:03 brd ff:ff:ff:ff:ff:ff
->   10: veth1@veth0: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state=
- DOWN mode DEFAULT group default qlen 1000
->     link/ether 8a:90:ff:57:6d:5d brd ff:ff:ff:ff:ff:ff
->   -1: veth0@veth1: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state=
- DOWN mode DEFAULT group default qlen 1000
->     link/ether ae:ed:18:e6:fa:7f brd ff:ff:ff:ff:ff:ff
->
-> Now:
->
->   $ ./ip link add index 10 type veth peer index -1
->   Error: ifindex can't be negative.
->
-> This problem surfaced in net-next because an explicit WARN()
-> was added, the root cause is older.
->
-> Fixes: e6f8f1a739b6 ("veth: Allow to create peer link with given ifindex"=
-)
-> Fixes: a8f820a380a2 ("can: add Virtual CAN Tunnel driver (vxcan)")
-> Reported-by: syzbot+5ba06978f34abb058571@syzkaller.appspotmail.com
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-SGTM, I was not sure how to fix this myself ;)
-
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+R3JlZXRpbmdzwqBmcm9twqBVa3JhaW5lLA0KDQpNci7CoFJhenVta292wqBNeWtoYWlsbyzCoGFu
+wqBlbnRyZXByZW5ldXLCoGJ1c2luZXNzbWFuwqBmcm9twqBPZGVzc2ENClVrcmFpbmUuwqBXaXRo
+aW7CoGHCoHllYXLCoHBsdXPCoHNvbWXCoG1vbnRoc8Kgbm93LMKgbW9yZcKgdGhhbsKgOC4ywqBt
+aWxsaW9uDQpwZW9wbGXCoGFyb3VuZMKgdGhlwqBjaXRpZXPCoG9mwqBtecKgY291bnRyecKgVWty
+YWluZcKgaGF2ZcKgYmVlbsKgZXZhY3VhdGVkwqB0bw0KYcKgc2FmZcKgbG9jYXRpb27CoGFuZMKg
+b3V0wqBvZsKgdGhlwqBjb3VudHJ5LMKgbW9zdMKgZXNwZWNpYWxsecKgY2hpbGRyZW7CoHdpdGgN
+CnRoZWlywqBwYXJlbnRzLMKgbnVyc2luZ8KgbW90aGVyc8KgYW5kwqBwcmVnbmFudMKgd29tZW4s
+wqBhbmTCoHRob3NlwqB3aG/CoGhhdmUNCmJlZW7CoHNlcmlvdXNsecKgd291bmRlZMKgYW5kwqBu
+ZWVkwqB1cmdlbnTCoG1lZGljYWzCoGF0dGVudGlvbi7CoEnCoHdhc8KgYW1vbmcNCnRob3NlwqB0
+aGF0wqB3ZXJlwqBhYmxlwqB0b8KgZXZhY3VhdGXCoHRvwqBvdXLCoG5laWdoYm91cmluZ8KgY291
+bnRyaWVzwqBhbmTCoEnigJltDQpub3fCoGluwqB0aGXCoHJlZnVnZWXCoGNhbXDCoG9mwqBUZXLC
+oEFwZWzCoEdyb25pbmdlbsKgaW7CoHRoZcKgTmV0aGVybGFuZHMuDQoNCknCoG5lZWTCoGHCoGZv
+cmVpZ27CoHBhcnRuZXLCoHRvwqBlbmFibGXCoG1lwqB0b8KgdHJhbnNwb3J0wqBtecKgaW52ZXN0
+bWVudA0KY2FwaXRhbMKgYW5kwqB0aGVuwqByZWxvY2F0ZcKgd2l0aMKgbXnCoGZhbWlseSzCoGhv
+bmVzdGx5wqBpwqB3aXNowqBJwqB3aWxsDQpkaXNjdXNzwqBtb3JlwqBhbmTCoGdldMKgYWxvbmcu
+wqBJwqBuZWVkwqBhwqBwYXJ0bmVywqBiZWNhdXNlwqBtecKgaW52ZXN0bWVudA0KY2FwaXRhbMKg
+aXPCoGluwqBtecKgaW50ZXJuYXRpb25hbMKgYWNjb3VudC7CoEnigJltwqBpbnRlcmVzdGVkwqBp
+bsKgYnV5aW5nDQpwcm9wZXJ0aWVzLMKgaG91c2VzLMKgYnVpbGRpbmfCoHJlYWzCoGVzdGF0ZXMs
+wqBtecKgY2FwaXRhbMKgZm9ywqBpbnZlc3RtZW50DQppc8KgKCQzMMKgTWlsbGlvbsKgVVNEKcKg
+LsKgVGhlwqBmaW5hbmNpYWzCoGluc3RpdHV0aW9uc8KgaW7CoG15wqBjb3VudHJ5DQpVa3JhaW5l
+wqBhcmXCoGFsbMKgc2hvdMKgZG93bsKgZHVlwqB0b8KgdGhlwqBjcmlzaXPCoG9mwqB0aGlzwqB3
+YXLCoG9uwqBVa3JhaW5lDQpzb2lswqBiecKgdGhlwqBSdXNzaWFuwqBmb3JjZXMuwqBNZWFud2hp
+bGUswqBpZsKgdGhlcmXCoGlzwqBhbnnCoHByb2ZpdGFibGUNCmludmVzdG1lbnTCoHRoYXTCoHlv
+dcKgaGF2ZcKgc2/CoG11Y2jCoGV4cGVyaWVuY2XCoGluwqB5b3VywqBjb3VudHJ5LMKgdGhlbsKg
+d2UNCmNhbsKgam9pbsKgdG9nZXRoZXLCoGFzwqBwYXJ0bmVyc8Kgc2luY2XCoEnigJltwqBhwqBm
+b3JlaWduZXIuDQoNCknCoGNhbWXCoGFjcm9zc8KgeW91csKgZS1tYWlswqBjb250YWN0wqB0aHJv
+dWdowqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLCoGFzc2lzdGFu
+Y2XCoGFuZMKgScKgZGVjaWRlZMKgdG/CoGNvbnRhY3TCoHlvdcKgZGlyZWN0bHnCoHRvwqBhc2vC
+oHlvdcKgaWYNCnlvdcKga25vd8KgYW55wqBsdWNyYXRpdmXCoGJ1c2luZXNzwqBpbnZlc3RtZW50
+wqBpbsKgeW91csKgY291bnRyecKgacKgY2FuDQppbnZlc3TCoG15wqBtb25lecKgc2luY2XCoG15
+wqBjb3VudHJ5wqBVa3JhaW5lwqBzZWN1cml0ecKgYW5kwqBlY29ub21pYw0KaW5kZXBlbmRlbnTC
+oGhhc8KgbG9zdMKgdG/CoHRoZcKgZ3JlYXRlc3TCoGxvd2VywqBsZXZlbCzCoGFuZMKgb3VywqBj
+dWx0dXJlwqBoYXMNCmxvc3TCoGluY2x1ZGluZ8Kgb3VywqBoYXBwaW5lc3PCoGhhc8KgYmVlbsKg
+dGFrZW7CoGF3YXnCoGZyb23CoHVzLsKgT3VywqBjb3VudHJ5DQpoYXPCoGJlZW7CoG9uwqBmaXJl
+wqBmb3LCoG1vcmXCoHRoYW7CoGHCoHllYXLCoG5vdy4NCg0KSWbCoHlvdcKgYXJlwqBjYXBhYmxl
+wqBvZsKgaGFuZGxpbmfCoHRoaXPCoGJ1c2luZXNzwqBwYXJ0bmVyc2hpcCzCoGNvbnRhY3TCoG1l
+DQpmb3LCoG1vcmXCoGRldGFpbHMswqBJwqB3aWxswqBhcHByZWNpYXRlwqBpdMKgaWbCoHlvdcKg
+Y2FuwqBjb250YWN0wqBtZQ0KaW1tZWRpYXRlbHkuwqBZb3XCoG1hecKgYXPCoHdlbGzCoHRlbGzC
+oG1lwqBhwqBsaXR0bGXCoG1vcmXCoGFib3V0wqB5b3Vyc2VsZi4NCkNvbnRhY3TCoG1lwqB1cmdl
+bnRsecKgdG/CoGVuYWJsZcKgdXPCoHRvwqBwcm9jZWVkwqB3aXRowqB0aGXCoGJ1c2luZXNzLsKg
+ScKgd2lsbA0KYmXCoHdhaXRpbmfCoGZvcsKgeW91csKgcmVzcG9uc2UuwqBNecKgc2luY2VyZcKg
+YXBvbG9naWVzwqBmb3LCoHRoZQ0KaW5jb252ZW5pZW5jZS4NCg0KDQpUaGFua8KgeW91IQ0KDQpN
+ci4gUmF6dW1rb3bCoE15a2hhaWxvLg0K
