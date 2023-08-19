@@ -2,57 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5CF7819A9
-	for <lists+linux-can@lfdr.de>; Sat, 19 Aug 2023 15:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B34C7819B3
+	for <lists+linux-can@lfdr.de>; Sat, 19 Aug 2023 15:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232438AbjHSNLp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 19 Aug 2023 09:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37254 "EHLO
+        id S232754AbjHSN3r (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 19 Aug 2023 09:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232709AbjHSNLp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Aug 2023 09:11:45 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003A51CABC;
-        Sat, 19 Aug 2023 06:10:48 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-26b56cc7896so1091538a91.3;
-        Sat, 19 Aug 2023 06:10:48 -0700 (PDT)
+        with ESMTP id S232603AbjHSN3q (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Aug 2023 09:29:46 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1074212761;
+        Sat, 19 Aug 2023 06:29:31 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-56546b45f30so1429895a12.3;
+        Sat, 19 Aug 2023 06:29:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692450648; x=1693055448;
+        d=gmail.com; s=20221208; t=1692451770; x=1693056570;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1e+/XnsKbjswDuOJErNhCCCCiL5iSSWZ7RF7mQ7/+3w=;
-        b=dwid1HtELpcOUIDba9rowZithC342CaX+0ngTuoCeNcueWxXGFhoWXugu7R4ecOTrC
-         I+wpq1K4TlPwvXLxFp0FL+Jx2nhNrnQEEPH2gRsIlEomRiDDMB9gbyNxudIc+ZRIZkYB
-         Wu9dJW491DFNgAWornGvxBIeDQuarRvCYe96XBUCuxy0q87R4/NGT5cbbgbS1sPCybAW
-         eNpTlNirDvufASE2ol3xIdQfreVVxmzuIAToa1evJG21qld3oNtSbCWRZ/x0XRTU1yG6
-         0VofgmdvBMsdxKjzpRRE2PnbiIiLzWXYbbbmDV64y8ZBXxO7mKYVLTwuBxOaxSqflQQM
-         9QQg==
+        bh=FBvCJLgdbds9yMG1zJ/sZSFWfzBUh6K/ALsYYt3rpTY=;
+        b=S7Nv72YLp9CPkp/wEe8NG7NKHXcVilBVMZ4dz320VCIx00S8MKYiTkgyxP8rvrJOai
+         uid1Q72FceFzV4cCOHVaLG2Fptdjk19Ggc9uTK3BvEdA4zX9uMbIMr6+5HJKIx0qfzt+
+         Pt0LT4u2RAmk7X3dFdLrepbYdgtOk2WxOfrCHUEh5ByZt+mUSbDdh3G6/d1+njMYmMFo
+         q5qeHq7wdpwzh/3hevJA6Qg5R00+3HYfEprGP2wKOayB40qHh0q4EjdAJ4UGeNajWSwr
+         DA7Et1/HfoHrzXFX9Wz3H134eksl/JzCegrn859sPVmRbrgBWiCmjqpnTa0qzTmIK+6I
+         2LFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692450648; x=1693055448;
+        d=1e100.net; s=20221208; t=1692451770; x=1693056570;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1e+/XnsKbjswDuOJErNhCCCCiL5iSSWZ7RF7mQ7/+3w=;
-        b=RqcxFsBQDgiKObc75lFu4GAK6+EJ+A4o9x62FDYNmyWht95Au8U8J8m5krTChXDJFr
-         DQ3dQCz+h9aKgqT7kO+Ocuqgbjh/MP6sgnBwGpRfg3anCzJp4GF5BETbh4kbytqrW8IJ
-         otTWDkPYhPFjnGcnH+ci1pQpFQuQm7WfMKkdrJYcm8SySYj3pX4g73o0mo2GES1FP0LJ
-         qItc0F4ip66wxc3TyEmPwL+3HyvH4SWA5ON+wQR0wCxpM5hIwc+lYaVkjKDaao8oiH4A
-         8YCWVxMGKztWvmDsPoSYzLl+SPb6l4diR0rPcYiNeHmb7hj6XjB3AUixOztsAIylLJUG
-         gWzA==
-X-Gm-Message-State: AOJu0Yw48ilyojxvBcO5qKXjCrF5t15fHcSvz9I5mSbF3XGVj9WMEwZB
-        6BQvt6qrsINYZCcEmA9Ykv2JgRoejU39A92/dt8=
-X-Google-Smtp-Source: AGHT+IEi7ryax+7gcMZllWjyl1lEZYP/Sxe6jDorLDrYSUoJSuj5qN0WtumtQ6/fR+4XZPf4+VbMKLip+gBwMC4uYcY=
-X-Received: by 2002:a17:90a:f98a:b0:268:2d92:55d3 with SMTP id
- cq10-20020a17090af98a00b002682d9255d3mr1120669pjb.39.1692450647831; Sat, 19
- Aug 2023 06:10:47 -0700 (PDT)
+        bh=FBvCJLgdbds9yMG1zJ/sZSFWfzBUh6K/ALsYYt3rpTY=;
+        b=OYkCCCq6IK4zX5zTM+Tvp327h4jm89SL9ltTgr09DKCb+QkVx5I8ADDSxrL1lg/4Yn
+         wHELdnjAQjvq75AJenYD/yTkMKIqtDfB9zQ35IaD3H/0Cm/Zbg5BR6W4v95j5B5HaqT+
+         fmaQOJm30i2XKIxwXop7r8N/+jZ2Rl2zb1L0b/+zHihQnnofSJcMSOJ4MuD8DWyTKMEm
+         n0GpX4gbqveIcsIvNyFETC6m3b8bPm/m6QACEEJ4xzsUq4VG1Jwprir4iTWDR7lkbzk7
+         AgFpYWBcq7xKUrWSxkghkPUg2kwd56keTEQ6b2/QJ/OuJzBYVJkZUr3urB8Y4sYUDwi7
+         AOrQ==
+X-Gm-Message-State: AOJu0YyxDiMj4xGhe5eiu+2F+3t5JqKGG8o7WmQ/SlB3hDLyTw3hyPTa
+        GIQ8YDp2CxjuW6eH6XUfw5+lwzIkUsBy7OKMI1g=
+X-Google-Smtp-Source: AGHT+IGPAyLCY1zvg2b23YnGGAM6I9p5N/1WAnaqwnxts/NroHHI/nabZDMaNf5oWv1Xvg2pPgdB/A0cdEMcDxq5ZXw=
+X-Received: by 2002:a17:90a:9ac:b0:268:60d9:92cc with SMTP id
+ 41-20020a17090a09ac00b0026860d992ccmr1708534pjo.43.1692451770416; Sat, 19 Aug
+ 2023 06:29:30 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230817101014.3484715-1-martin@geanix.com> <20230817101014.3484715-2-martin@geanix.com>
- <20230817094529.68ae1083@kernel.org>
-In-Reply-To: <20230817094529.68ae1083@kernel.org>
+ <20230817094529.68ae1083@kernel.org> <CAMZ6RqLvbp8EStaSRFQUimhUMpn75=3pkQZYspnP1gYRsspv-g@mail.gmail.com>
+In-Reply-To: <CAMZ6RqLvbp8EStaSRFQUimhUMpn75=3pkQZYspnP1gYRsspv-g@mail.gmail.com>
 From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Sat, 19 Aug 2023 22:10:36 +0900
-Message-ID: <CAMZ6RqLvbp8EStaSRFQUimhUMpn75=3pkQZYspnP1gYRsspv-g@mail.gmail.com>
+Date:   Sat, 19 Aug 2023 22:29:19 +0900
+Message-ID: <CAMZ6RqLmNJ0zL9XO9zGCu=CbUHgm68M42fwqkSKk-rSAosCWzg@mail.gmail.com>
 Subject: Re: [PATCH 1/2] can: netlink: support setting hardware filters
 To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     =?UTF-8?Q?Martin_Hundeb=C3=B8ll?= <martin@geanix.com>,
@@ -77,31 +77,39 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat. 19 Aug. 2023, 01:19, Jakub Kicinski <kuba@kernel.org> wrote:
+On Sat. 19 Aug. 2023 at 22:10, Vincent Mailhol
+<vincent.mailhol@gmail.com> wrote:
+> On Sat. 19 Aug. 2023, 01:19, Jakub Kicinski <kuba@kernel.org> wrote:
+> >
+> > On Thu, 17 Aug 2023 12:10:13 +0200 Martin Hundeb=C3=B8ll wrote:
+> > > +             int len =3D nla_len(data[IFLA_CAN_HW_FILTER]);
+> > > +             int num_filter =3D len / sizeof(struct can_filter);
+> > > +             struct can_filter *filter =3D nla_data(data[IFLA_CAN_HW=
+_FILTER]);
+> >
+> > This will prevent you from ever extending struct can_filter in
+> > a backward-compatible fashion, right? I obviously know very little
+> > about CAN but are you confident a more bespoke API to manipulate
+> > filters individually and allow extensibility is not warranted?
 >
-> On Thu, 17 Aug 2023 12:10:13 +0200 Martin Hundeb=C3=B8ll wrote:
-> > +             int len =3D nla_len(data[IFLA_CAN_HW_FILTER]);
-> > +             int num_filter =3D len / sizeof(struct can_filter);
-> > +             struct can_filter *filter =3D nla_data(data[IFLA_CAN_HW_F=
-ILTER]);
+> I follow Jakub's point of view.
 >
-> This will prevent you from ever extending struct can_filter in
-> a backward-compatible fashion, right? I obviously know very little
-> about CAN but are you confident a more bespoke API to manipulate
-> filters individually and allow extensibility is not warranted?
+> The current struct can_filter is not sound. Some devices such as the
+> ES582.1 supports filtering of the CAN frame based on the flags (i.e.
+> SFF/EFF, RTR, FDF).
 
-I follow Jakub's point of view.
+I wrote too fast. The EFF and RTR flags are contained in the canid_t,
+so the current struct can_filter is able to handle these two flags.
+But it remains true that the CAN-FD flags (FDF and BRS) are currently
+not handled. Not to mention that more flags will come with the
+upcoming CAN XL.
 
-The current struct can_filter is not sound. Some devices such as the
-ES582.1 supports filtering of the CAN frame based on the flags (i.e.
-SFF/EFF, RTR, FDF).
-
-I think that each of the fields of the filter should have its own NLA
-declaration with the whole thing wrapped within a NLA_NESTED_ARRAY.
-
-I also think that there should then be a method to report the precise
-filtering capabilities of the hardware.
-
-
-Yours sincerely,
-Vincent Mailhol
+> I think that each of the fields of the filter should have its own NLA
+> declaration with the whole thing wrapped within a NLA_NESTED_ARRAY.
+>
+> I also think that there should then be a method to report the precise
+> filtering capabilities of the hardware.
+>
+>
+> Yours sincerely,
+> Vincent Mailhol
