@@ -2,145 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0EE783B52
-	for <lists+linux-can@lfdr.de>; Tue, 22 Aug 2023 10:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F27783E08
+	for <lists+linux-can@lfdr.de>; Tue, 22 Aug 2023 12:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233633AbjHVIAm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Aug 2023 04:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S233311AbjHVKjp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Aug 2023 06:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233699AbjHVH7v (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Aug 2023 03:59:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0DB1A2
-        for <linux-can@vger.kernel.org>; Tue, 22 Aug 2023 00:59:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B134C64EB0
-        for <linux-can@vger.kernel.org>; Tue, 22 Aug 2023 07:59:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C35CC433C7;
-        Tue, 22 Aug 2023 07:59:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692691181;
-        bh=SIsiuIU9ZP05+InPbnClNy/GxeTVu4Y9+V4DyLFGsRI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T/53yu+Yeaz1aQwZmbNeYM1tgaUnroLLAPX5BmrOnm7AxyO5uioCwFFJRZp97EtbI
-         Scw/OWtNO5itjojzC9DypTT/OX10tbcC9QDfhuYy+c3MN8OT9ojJeBEEF2RVzNQFdb
-         ADIasjL635pScDjoI3G74Q9c6Bro0RJNhy3OyMesVZpkxKs8hjtZZ0w17W6Ro8sEy7
-         QdVGxonhw9u1bnCqLHBHvO4c6ShwHqigCZ0EsmmgYi6S407FdWj+0/6GhZnOXHzu2p
-         aWh0zZgApti/2aplTWcjforLz2gJFODBYmfGnNUw/i80sK98VO6zGBSfMcNt5F2T26
-         ybjzK51Eam36A==
-Date:   Tue, 22 Aug 2023 09:59:38 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
-        edumazet@google.com, mkl@pengutronix.de,
-        Ziyang Xuan <william.xuanziyang@huawei.com>
-Subject: Re: [NET 2/2] can: raw: add missing refcount for memory leak fix
-Message-ID: <20230822075938.GV2711035@kernel.org>
-References: <20230821144547.6658-1-socketcan@hartkopp.net>
- <20230821144547.6658-3-socketcan@hartkopp.net>
+        with ESMTP id S231791AbjHVKjp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Aug 2023 06:39:45 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CFDFB;
+        Tue, 22 Aug 2023 03:39:42 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id BD2B2320092E;
+        Tue, 22 Aug 2023 06:39:33 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 22 Aug 2023 06:39:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1692700773; x=1692787173; bh=TYcehPDeyWrpL
+        ZI5nP9k0xeqXJO/gx+RoM3vlGRe1m0=; b=vxFbAE0yutGX+jZWygqwFfC9EQ3z/
+        CqINau8nxSRe0lN/K161c5bu3rDwH+4jaxorjkcUrp/Qqgl1P8WGj2q0EiEE9Pi7
+        hoYHiPNJh9KcL5Z+7mAgFh9VYj6fljpMxXSy2GpRyMERKZavPUop8gmcdz8qkwjT
+        8JhniTUCSeB54rNgo+S/Ya2NSzWGngky5cwBxlQGNd3M3gm9lLJxkNR+Ku461nGw
+        cDhfkB0AeZ5PVKYNkH3+YBjqmM4dm01cqhLAePed6H+x/whs4rqZqWBxiAOdNAb8
+        1EAWlqs2AqQES93sqBfXpHiMBMc6dJKTBD/LT6xICvU+DMCkROfqJDxNg==
+X-ME-Sender: <xms:ZJDkZHpzk1vzxcQeNTxuKacqQhN2HvVwdj1KdTTgpv_QEHiz8ZDTtA>
+    <xme:ZJDkZBrj9f8bS7sqwrJpUxhJ7vg6ZHje6obW5oBMYfwxeMayjc4tC9t2iVGDOYsBc
+    kS6EJTHk-ylk6k>
+X-ME-Received: <xmr:ZJDkZENmE8WuAl3Qv4_b2pjbB9nuSkbHwuf7PwRTIfV9yGKrpFpclzm8klDSYEzo3ov3rqr79_DfWg28GCXCeTpQP99Ffw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddvuddgfedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    ertddttddvnecuhfhrohhmpefkughoucfutghhihhmmhgvlhcuoehiughoshgthhesihgu
+    ohhstghhrdhorhhgqeenucggtffrrghtthgvrhhnpedvudefveekheeugeeftddvveefgf
+    duieefudeifefgleekheegleegjeejgeeghfenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:ZJDkZK4oyvtDv9vONxzsmVhYbmthUoMPMlZYdulCyAfbXOmdOrU11w>
+    <xmx:ZJDkZG5qS3a8raM6n88JfT9EerGmQzR4TPDfZODap8DF60tlQj86Lw>
+    <xmx:ZJDkZCjBCSJ8C4jEQ9yL4t4htrhvsF7lwQ17K-DjqT1AQfeblGL3nw>
+    <xmx:ZZDkZDx0OaoUA68RJ2LcgVXo_KwYYqRjbhMU3vOnTciviT5dVQI_Zg>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 22 Aug 2023 06:39:31 -0400 (EDT)
+Date:   Tue, 22 Aug 2023 13:39:27 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+        pabeni@redhat.com,
+        syzbot+5ba06978f34abb058571@syzkaller.appspotmail.com,
+        wg@grandegger.com, mkl@pengutronix.de, idosch@nvidia.com,
+        lucien.xin@gmail.com, xemul@parallels.com, socketcan@hartkopp.net,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH net] net: validate veth and vxcan peer ifindexes
+Message-ID: <ZOSQX1iXMzNOOhXP@shredder>
+References: <20230819012602.239550-1-kuba@kernel.org>
+ <ZOI6bf86B1fVb1sF@shredder>
+ <20230821104844.19dd4563@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230821144547.6658-3-socketcan@hartkopp.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230821104844.19dd4563@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Aug 21, 2023 at 04:45:47PM +0200, Oliver Hartkopp wrote:
-> Commit ee8b94c8510c ("can: raw: fix receiver memory leak") introduced
-> a new reference to the CAN netdevice that has assigned CAN filters.
-> But this new ro->dev reference did not maintain its own refcount which
-> lead to another KASAN use-after-free splat found by Eric Dumazet.
+On Mon, Aug 21, 2023 at 10:48:44AM -0700, Jakub Kicinski wrote:
+> On Sun, 20 Aug 2023 19:08:13 +0300 Ido Schimmel wrote:
+> > There is another report here [1] with a reproducer [2]. Even with this
+> > patch, the reproducer can still trigger the warning on net-next. Don't
+> > we also need to reject a negative ifindex in the ancillary header? At
+> > least with the following diff the warning does not trigger anymore:
 > 
-> This patch ensures a proper refcount for the CAN nedevice.
-> 
-> Fixes: ee8b94c8510c ("can: raw: fix receiver memory leak")
-> Reported-by: Eric Dumazet <edumazet@google.com>
-> Cc: Ziyang Xuan <william.xuanziyang@huawei.com>
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> Yeah, definitely, please go ahead and submit.
 
-...
+Sure, will submit tomorrow morning.
 
-> @@ -443,44 +448,56 @@ static int raw_bind(struct socket *sock, struct sockaddr *uaddr, int len)
->  		if (!dev) {
->  			err = -ENODEV;
->  			goto out;
->  		}
->  		if (dev->type != ARPHRD_CAN) {
-> -			dev_put(dev);
->  			err = -ENODEV;
-> -			goto out;
-> +			goto out_put_dev;
->  		}
-> +
->  		if (!(dev->flags & IFF_UP))
->  			notify_enetdown = 1;
->  
->  		ifindex = dev->ifindex;
->  
->  		/* filters set by default/setsockopt */
->  		err = raw_enable_allfilters(sock_net(sk), dev, sk);
-> -		dev_put(dev);
-> +		if (err)
-> +			goto out_put_dev;
-> +
->  	} else {
->  		ifindex = 0;
->  
->  		/* filters set by default/setsockopt */
->  		err = raw_enable_allfilters(sock_net(sk), NULL, sk);
->  	}
->  
->  	if (!err) {
->  		if (ro->bound) {
->  			/* unregister old filters */
-> -			if (ro->dev)
-> +			if (ro->dev) {
->  				raw_disable_allfilters(dev_net(ro->dev),
->  						       ro->dev, sk);
-> -			else
-> +				/* drop reference to old ro->dev */
-> +				netdev_put(ro->dev, &ro->dev_tracker);
-> +			} else {
->  				raw_disable_allfilters(sock_net(sk), NULL, sk);
-> +			}
->  		}
->  		ro->ifindex = ifindex;
->  		ro->bound = 1;
-> +		/* bind() ok -> hold a reference for new ro->dev */
->  		ro->dev = dev;
-> +		if (ro->dev)
-> +			netdev_hold(ro->dev, &ro->dev_tracker, GFP_KERNEL);
->  	}
->  
-> - out:
-> +out_put_dev:
-> +	/* remove potential reference from dev_get_by_index() */
-> +	if (dev)
-> +		dev_put(dev);
+> Is "ancillary header" used more commonly as a term? in gnel we usually
+> call this thing "user header" or "fixed header".
 
-Hi Oliver,
-
-this is possibly not worth a respin, but there is no need to check if dev
-is NULL before calling dev_put(), dev_put() will effectively be a no-op
-with a NULL argument.
-
-> +out:
->  	release_sock(sk);
->  	rtnl_unlock();
->  
->  	if (notify_enetdown) {
->  		sk->sk_err = ENETDOWN;
-> -- 
-> 2.39.2
-> 
-> 
+I honestly don't know. IIRC I saw David using the term a few years ago
+and decided to adopt it.
