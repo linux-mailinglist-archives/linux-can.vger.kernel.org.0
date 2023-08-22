@@ -2,70 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B006782FA6
-	for <lists+linux-can@lfdr.de>; Mon, 21 Aug 2023 19:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7E97837B7
+	for <lists+linux-can@lfdr.de>; Tue, 22 Aug 2023 03:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234846AbjHURsu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 21 Aug 2023 13:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
+        id S232180AbjHVB7P convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Mon, 21 Aug 2023 21:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236229AbjHURss (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Aug 2023 13:48:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1AD113
-        for <linux-can@vger.kernel.org>; Mon, 21 Aug 2023 10:48:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12AB261350
-        for <linux-can@vger.kernel.org>; Mon, 21 Aug 2023 17:48:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB59C433C7;
-        Mon, 21 Aug 2023 17:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692640126;
-        bh=XZDt43brnFTJkb8ScLQNvWMVfoRbXfvHIPbaNmZldAg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=F6yDjvDCIsPvanRvMO9iP5ovPq8w7hv8wc9g7fkg0xbVHYVnJTD+KMBrgLS5lVWTH
-         znqU9oXtTt+NfkBsSq3y+2AVLdXvIXqBp8iUwB8HR7x9mGi1TzhwCmBK3cO4B6HRS7
-         E+T4PJXm1v6bhzzbs2O8uPBHaaYEsESUeE3HavF4sXHAK+uXw2x3xnbETG/N8SvJ6q
-         Q5t5YU8mIqIVHWRS7D/eySV230GwrXA7iSEAJRHtL4Xd47ecpMG1JbybOQOPHIDqJ1
-         bQOyBOmoxbwMBvek8X5nOA2ptpja3emOax+vjUvWswoTL+nsoaIETxXarARXgyEoxJ
-         yVcQH2bSjL8rQ==
-Date:   Mon, 21 Aug 2023 10:48:44 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-        pabeni@redhat.com,
-        syzbot+5ba06978f34abb058571@syzkaller.appspotmail.com,
-        wg@grandegger.com, mkl@pengutronix.de, idosch@nvidia.com,
-        lucien.xin@gmail.com, xemul@parallels.com, socketcan@hartkopp.net,
-        linux-can@vger.kernel.org
-Subject: Re: [PATCH net] net: validate veth and vxcan peer ifindexes
-Message-ID: <20230821104844.19dd4563@kernel.org>
-In-Reply-To: <ZOI6bf86B1fVb1sF@shredder>
-References: <20230819012602.239550-1-kuba@kernel.org>
-        <ZOI6bf86B1fVb1sF@shredder>
+        with ESMTP id S232231AbjHVB7N (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Aug 2023 21:59:13 -0400
+Received: from mail.bioind.com (unknown [212.199.63.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B069119F
+        for <linux-can@vger.kernel.org>; Mon, 21 Aug 2023 18:58:57 -0700 (PDT)
+Received: from [94.156.102.149] (94.156.102.149) by mail.bioind.com
+ (192.168.20.202) with Microsoft SMTP Server (TLS) id 14.3.408.0; Tue, 22 Aug
+ 2023 04:57:39 +0300
+Reply-To: <domakye20@gmail.com>
+From:   Dominique Ahkye <info@bioind.com>
+To:     <linux-can@vger.kernel.org>
+Subject: Update/Info
+Date:   Mon, 21 Aug 2023 18:57:39 -0700
+Message-ID: <20230821185739.902A137A8B3F4923@bioind.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [94.156.102.149]
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [94.156.102.149 listed in zen.spamhaus.org]
+        *  1.5 RCVD_IN_SORBS_WEB RBL: SORBS: sender is an abusable web server
+        *      [94.156.102.149 listed in dnsbl.sorbs.net]
+        *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
+        *      DNSWL was blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [212.199.63.46 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [domakye20[at]gmail.com]
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sun, 20 Aug 2023 19:08:13 +0300 Ido Schimmel wrote:
-> There is another report here [1] with a reproducer [2]. Even with this
-> patch, the reproducer can still trigger the warning on net-next. Don't
-> we also need to reject a negative ifindex in the ancillary header? At
-> least with the following diff the warning does not trigger anymore:
+Hello,
+I have a deal I would like to share with you. Email me for 
+details.
+Regards
+Dominique
+eMail:dominikaleksei@yahoo.com
 
-Yeah, definitely, please go ahead and submit.
-
-Is "ancillary header" used more commonly as a term? in gnel we usually
-call this thing "user header" or "fixed header".
