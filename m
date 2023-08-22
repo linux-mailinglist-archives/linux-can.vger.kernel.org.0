@@ -2,189 +2,139 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D65783E36
-	for <lists+linux-can@lfdr.de>; Tue, 22 Aug 2023 12:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EE47840D1
+	for <lists+linux-can@lfdr.de>; Tue, 22 Aug 2023 14:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233895AbjHVKqR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Aug 2023 06:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
+        id S233571AbjHVMag convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Tue, 22 Aug 2023 08:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233928AbjHVKqR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Aug 2023 06:46:17 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2061.outbound.protection.outlook.com [40.107.102.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A895CCD;
-        Tue, 22 Aug 2023 03:46:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O7RE4LXterH/mhWrs9noXKOD/A84/MAg5V4M5ehCEtwoW4fYinTb6Ch3kNUfrxzvNBODiqGSmXjxlErfA7wv+a7qCM/dVTUMTP6kdYhC4VgkynxS1aRzYSbFZZZ+0eUfJo2sfJ4/Vr03hH/hUT3vxJWXvxUzMGbE0actvw8FfM5Uls698xdTew2IZ+bcFGk0cXzjFEsgXG0aYUeNPnEoequk1KJW7CapdeT2URWM7T4G2u4bQF8M8v07sMv3qJ2HKbuxOAGDWv4KhNmc1kfTYwjRwsvc1NAVE8RZEiW1LeE1A63NJmelhonj+zhPKGdamooVoV0Gw4a4hXYnTGybKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oIBS4hqvqg1D+srj+7KC+ddOxjvmaFyfZLp3JtIB1JU=;
- b=FIesdRcXrftv860LcCSpKX6gooZiDChZEmGXT3RF0KvF9G3EpCMM26RDFxujw3d4KAAiLOFd/x+AeKDDhM35lpsppritK8juip4a52VnSGVvOZAKvhIp4IwJgRPZ6++5QByhImQ6btfeWAcMZ+1zVYaY5AkKyWy/vSSBlo3SV4ohvwizNXoc1yadaD1r5+0xFs9Cqb2IAdfdNwTmA4VdwzBz2yzFJsFYhZldq8L0sti5jf3SPgnpk9QoC9SfaJ0fvRxykqcnc2d5GibKCkgtASz5Rhif8cph1GRQ/X487FTwAGxnDvqFH/UYkfZH7yyqWlC0Za+IL8+ilU/lvT0vyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=grandegger.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oIBS4hqvqg1D+srj+7KC+ddOxjvmaFyfZLp3JtIB1JU=;
- b=OB450imWkkk3n0L/ZdoYO8T5Al884D2dtIzPJdbJurNseK/shuImhSWbD7vqIKi71Qte7lfi423+AbeTuHDzyQeFbeA3oBLVxKGe2UNcCY0yT2/2uAdziQLeNf8NS8t8+Kl24TOHJtV4nxDEHdWIEeO0GlooK5OJUKD8ZHD+0Dw=
-Received: from CY5PR15CA0105.namprd15.prod.outlook.com (2603:10b6:930:7::13)
- by SJ2PR12MB8011.namprd12.prod.outlook.com (2603:10b6:a03:4c8::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Tue, 22 Aug
- 2023 10:46:04 +0000
-Received: from CY4PEPF0000E9D6.namprd05.prod.outlook.com
- (2603:10b6:930:7:cafe::f2) by CY5PR15CA0105.outlook.office365.com
- (2603:10b6:930:7::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20 via Frontend
- Transport; Tue, 22 Aug 2023 10:46:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000E9D6.mail.protection.outlook.com (10.167.241.80) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6699.14 via Frontend Transport; Tue, 22 Aug 2023 10:46:03 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 22 Aug
- 2023 05:46:03 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 22 Aug
- 2023 05:46:02 -0500
-Received: from xhdsgoud40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
- Transport; Tue, 22 Aug 2023 05:45:58 -0500
-From:   Srinivas Goud <srinivas.goud@amd.com>
-To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <p.zabel@pengutronix.de>
-CC:     <git@amd.com>, <michal.simek@amd.com>, <linux-can@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <gcnu.goud@gmail.com>,
-        Srinivas Goud <srinivas.goud@amd.com>
-Subject: [PATCH v2 3/3] can: xilinx_can: Add ethtool stats interface for ECC errors
-Date:   Tue, 22 Aug 2023 16:15:36 +0530
-Message-ID: <1692701136-1422086-4-git-send-email-srinivas.goud@amd.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1692701136-1422086-1-git-send-email-srinivas.goud@amd.com>
-References: <1692701136-1422086-1-git-send-email-srinivas.goud@amd.com>
+        with ESMTP id S235216AbjHVMaf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Aug 2023 08:30:35 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC40CC6;
+        Tue, 22 Aug 2023 05:30:32 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-591ba8bd094so28226167b3.3;
+        Tue, 22 Aug 2023 05:30:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692707431; x=1693312231;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AEdxVNTi234IeBu9/mHN8tlhC03wKCbKIUsue9+Lnac=;
+        b=ibiEjVl3q8Sus6COOoABXoT5Xb+E2o5i/m8mb+yD51DbXhf3VzrJbEA+B6ZBdJOWhb
+         1huPvhsqdulKrl2IBp+obISA+hl0qhiSFFn5roFz+JeLAU2xxroNCsSxx45GYNveUBvA
+         hTpH8uhwfoI2Bre5MzNWsLKEA5KG6PvCQX/k+WvPK6Ms5pXLxXMTE5gDCW4b5al7lB6S
+         ZBXJM2sKCyZBbM2LeZnU5yH5w9mTU7rpFs3nGNkiWchPs28zNmYGQihgOQZsQUz7+5HK
+         eFQpiMEfiHk/dduGbxkdttYj7R05YS8UOkEc6NC8r4zRqk7xtPgpqo2Kfx5mIhfwTTfD
+         Bkrw==
+X-Gm-Message-State: AOJu0YxVZRutOUUcX1aykPa/HBlXySnI7u+vppnrBs8Z8maPscu2lOrU
+        Ad5rz7Doy/agnaT6F19gyZeCdM2wKeC7pQ==
+X-Google-Smtp-Source: AGHT+IGR1mTIG39kiVb88hgmT+rATK+lNwQdkqjIs2Y/klit0w1NFXKOX5CHShvHXXkplckJOS6hbA==
+X-Received: by 2002:a81:8886:0:b0:58e:2827:4d93 with SMTP id y128-20020a818886000000b0058e28274d93mr11496109ywf.38.1692707431041;
+        Tue, 22 Aug 2023 05:30:31 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id m139-20020a0dca91000000b0058c55d40765sm301305ywd.106.2023.08.22.05.30.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Aug 2023 05:30:28 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5922b96c5fcso17915057b3.0;
+        Tue, 22 Aug 2023 05:30:28 -0700 (PDT)
+X-Received: by 2002:a25:bcc7:0:b0:d52:f4d7:5587 with SMTP id
+ l7-20020a25bcc7000000b00d52f4d75587mr9783496ybm.31.1692707427833; Tue, 22 Aug
+ 2023 05:30:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D6:EE_|SJ2PR12MB8011:EE_
-X-MS-Office365-Filtering-Correlation-Id: d893352a-dbbb-4e01-aa55-08dba2fcfb9e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q5AKvmDQUfcGJ5+2AKDo5ize/YJbaqNnwMqXacLRfevOGByM9io6aFQIuYbUeJN3OKWdCcbYkIDYrf5OGkiYh4SWd2v8GvILqkcua9uo5jyj8nZOY+xP0BwDGbW8Nqmllx0hDkXso066Rai97L87moMJRv4D0tvDh729mcjHcC858Ey+S8GEZGvVgSzG0uDEx4oZDLY52Wwqszw9qo7AxfSmToxNxS39hg98EAPxEuqt8mxxywpKI5n8s2rchiixQJfraVuB194i/GxQIcEwVW7o2ZlIFaBRY5kconDq0HvrfVCAxOLGjQVk3gHwND9MfwgjGWSv1/v6ngm1n/WMYl1IHKERNGy71GYCZVZKZG6cJJtpTZg1plVE1gP+LRwq4ZCz0fsQEEV01YVC9LeTZ/LwZSRVSQDMtwpVLcshdyQSJpiErAANqq1qwZgBsh8bVxBYFZX7WwQXNio/yypxW/CwXlOaEG/43vO7TNsg3zj3awTMWzV+IvgsdMRGfXPYGzw77a4pQF4xKbw1w6FTYoej/PvVTiIcsJMJTBo61PwaDDSEb+IoL3jwqs9f/rSjbnl4SvoTgg2ikggIHUe88rmp6aimop657x5o7spWEh0ktsoegeUWfOOySP5DU8ZA9Y1S5E4vQkPl9WD/DnykhiP2r0suhsT9irSknp8gAhO5U+JdrqcF3eK0T/WHlPZlF1kxwyO5V1QkOrkLIe+8Xu41LYPJaKKaiHdLQcCGxkQ6rGA5FwhgUem5cgcSvpjxtIv6o0K1xzwHlRDR+/gdcXHg1pNuMT0L2xnUB0lovPI=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(346002)(136003)(396003)(376002)(82310400011)(451199024)(1800799009)(186009)(40470700004)(46966006)(36840700001)(356005)(40460700003)(921005)(316002)(478600001)(70206006)(47076005)(36860700001)(426003)(336012)(26005)(6666004)(2906002)(44832011)(4326008)(2616005)(83380400001)(5660300002)(8936002)(8676002)(7416002)(110136005)(70586007)(41300700001)(54906003)(82740400003)(36756003)(86362001)(81166007)(40480700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2023 10:46:03.9057
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d893352a-dbbb-4e01-aa55-08dba2fcfb9e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D6.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8011
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+References: <20230721221552.1973203-2-contact@jookia.org> <20230721221552.1973203-6-contact@jookia.org>
+In-Reply-To: <20230721221552.1973203-6-contact@jookia.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 22 Aug 2023 14:30:16 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV2m54UAH0X2dG7stEg=grFihrdsz4+o7=_DpBMhjTbkw@mail.gmail.com>
+Message-ID: <CAMuHMdV2m54UAH0X2dG7stEg=grFihrdsz4+o7=_DpBMhjTbkw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] can: sun4i_can: Add support for the Allwinner D1
+To:     John Watts <contact@jookia.org>
+Cc:     linux-sunxi@lists.linux.dev,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add ethtool stats interface for reading FIFO 1bit/2bit
-ECC errors information.
+Hi John,
 
-Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
----
- drivers/net/can/xilinx_can.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+On Sat, Jul 22, 2023 at 12:18 AM John Watts <contact@jookia.org> wrote:
+> The controllers present in the D1 are extremely similar to the R40
+> and require the same reset quirks, but An extra quirk is needed to support
+> receiving packets.
+>
+> Signed-off-by: John Watts <contact@jookia.org>
 
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index 798b32b..50e0c9d 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -219,6 +219,7 @@ struct xcan_devtype_data {
-  * @transceiver:		Optional pointer to associated CAN transceiver
-  * @rstc:			Pointer to reset control
-  * @ecc_enable:			ECC enable flag
-+ * @stats_lock:			Lock for synchronizing hardware stats
-  * @ecc_2bit_rxfifo_cnt:	RXFIFO 2bit ECC count
-  * @ecc_1bit_rxfifo_cnt:	RXFIFO 1bit ECC count
-  * @ecc_2bit_txolfifo_cnt:	TXOLFIFO 2bit ECC count
-@@ -245,6 +246,7 @@ struct xcan_priv {
- 	struct phy *transceiver;
- 	struct reset_control *rstc;
- 	bool ecc_enable;
-+	spinlock_t stats_lock; /* Lock for synchronizing hardware stats */
- 	u64 ecc_2bit_rxfifo_cnt;
- 	u64 ecc_1bit_rxfifo_cnt;
- 	u64 ecc_2bit_txolfifo_cnt;
-@@ -1164,6 +1166,9 @@ static void xcan_err_interrupt(struct net_device *ndev, u32 isr)
- 
- 	if (priv->ecc_enable) {
- 		u32 reg_ecc;
-+		unsigned long flags;
-+
-+		spin_lock_irqsave(&priv->stats_lock, flags);
- 
- 		reg_ecc = priv->read_reg(priv, XCAN_RXFIFO_ECC_OFFSET);
- 		if (isr & XCAN_IXR_E2BERX_MASK) {
-@@ -1212,6 +1217,8 @@ static void xcan_err_interrupt(struct net_device *ndev, u32 isr)
- 		 */
- 		priv->write_reg(priv, XCAN_ECC_CFG_OFFSET, XCAN_ECC_CFG_REECRX_MASK |
- 				XCAN_ECC_CFG_REECTXOL_MASK | XCAN_ECC_CFG_REECTXTL_MASK);
-+
-+		spin_unlock_irqrestore(&priv->stats_lock, flags);
- 	}
- 
- 	if (cf.can_id) {
-@@ -1639,6 +1646,23 @@ static int xcan_get_auto_tdcv(const struct net_device *ndev, u32 *tdcv)
- 	return 0;
- }
- 
-+static void ethtool_get_ethtool_stats(struct net_device *ndev,
-+				      struct ethtool_stats *stats, u64 *data)
-+{
-+	struct xcan_priv *priv = netdev_priv(ndev);
-+	unsigned long flags;
-+	int i = 0;
-+
-+	spin_lock_irqsave(&priv->stats_lock, flags);
-+	data[i++] = priv->ecc_2bit_rxfifo_cnt;
-+	data[i++] = priv->ecc_1bit_rxfifo_cnt;
-+	data[i++] = priv->ecc_2bit_txolfifo_cnt;
-+	data[i++] = priv->ecc_1bit_txolfifo_cnt;
-+	data[i++] = priv->ecc_2bit_txtlfifo_cnt;
-+	data[i++] = priv->ecc_1bit_txtlfifo_cnt;
-+	spin_unlock_irqrestore(&priv->stats_lock, flags);
-+}
-+
- static const struct net_device_ops xcan_netdev_ops = {
- 	.ndo_open	= xcan_open,
- 	.ndo_stop	= xcan_close,
-@@ -1648,6 +1672,7 @@ static const struct net_device_ops xcan_netdev_ops = {
- 
- static const struct ethtool_ops xcan_ethtool_ops = {
- 	.get_ts_info = ethtool_op_get_ts_info,
-+	.get_ethtool_stats = ethtool_get_ethtool_stats,
- };
- 
- /**
+Thanks for your patch, which is now commit 8abb95250ae6af2d ("can:
+sun4i_can: Add support for the Allwinner D1") in linux-can-next/master.
+
+> --- a/drivers/net/can/Kconfig
+> +++ b/drivers/net/can/Kconfig
+> @@ -185,10 +185,10 @@ config CAN_SLCAN
+>
+>  config CAN_SUN4I
+>         tristate "Allwinner A10 CAN controller"
+> -       depends on MACH_SUN4I || MACH_SUN7I || COMPILE_TEST
+> +       depends on MACH_SUN4I || MACH_SUN7I || RISCV || COMPILE_TEST
+
+This makes this question pop up when configuring a kernel for any RISC-V
+platform, not just for Allwinner RISC-V platforms.
+
+In comparison, drivers/clk/sunxi-ng/Kconfig does have some
+
+    depends on MACH_SUN<foo>I || RISCV || COMPILE_TEST
+
+but these are gated by ARCH_SUNXI at the top of the file.
+
+I'm not sure what's the best way to fix this:
+  - Replace RISCV by ARCH_SUNXI?
+    This would expose it on more ARM sun<foo>i platforms, making the
+    MACH_SUN4I || MACH_SUN7I superfluous?
+  - Replace RISCV by RISCV && ARCH_SUNXI?
+
+Thanks for your comments!
+
+>         help
+>           Say Y here if you want to use CAN controller found on Allwinner
+> -         A10/A20 SoCs.
+> +         A10/A20/D1 SoCs.
+>
+>           To compile this driver as a module, choose M here: the module will
+>           be called sun4i_can.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.1.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
