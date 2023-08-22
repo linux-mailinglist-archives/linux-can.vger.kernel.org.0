@@ -2,139 +2,145 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08EE47840D1
-	for <lists+linux-can@lfdr.de>; Tue, 22 Aug 2023 14:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E367847D2
+	for <lists+linux-can@lfdr.de>; Tue, 22 Aug 2023 18:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233571AbjHVMag convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 22 Aug 2023 08:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
+        id S237871AbjHVQhc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Aug 2023 12:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235216AbjHVMaf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Aug 2023 08:30:35 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC40CC6;
-        Tue, 22 Aug 2023 05:30:32 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-591ba8bd094so28226167b3.3;
-        Tue, 22 Aug 2023 05:30:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692707431; x=1693312231;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AEdxVNTi234IeBu9/mHN8tlhC03wKCbKIUsue9+Lnac=;
-        b=ibiEjVl3q8Sus6COOoABXoT5Xb+E2o5i/m8mb+yD51DbXhf3VzrJbEA+B6ZBdJOWhb
-         1huPvhsqdulKrl2IBp+obISA+hl0qhiSFFn5roFz+JeLAU2xxroNCsSxx45GYNveUBvA
-         hTpH8uhwfoI2Bre5MzNWsLKEA5KG6PvCQX/k+WvPK6Ms5pXLxXMTE5gDCW4b5al7lB6S
-         ZBXJM2sKCyZBbM2LeZnU5yH5w9mTU7rpFs3nGNkiWchPs28zNmYGQihgOQZsQUz7+5HK
-         eFQpiMEfiHk/dduGbxkdttYj7R05YS8UOkEc6NC8r4zRqk7xtPgpqo2Kfx5mIhfwTTfD
-         Bkrw==
-X-Gm-Message-State: AOJu0YxVZRutOUUcX1aykPa/HBlXySnI7u+vppnrBs8Z8maPscu2lOrU
-        Ad5rz7Doy/agnaT6F19gyZeCdM2wKeC7pQ==
-X-Google-Smtp-Source: AGHT+IGR1mTIG39kiVb88hgmT+rATK+lNwQdkqjIs2Y/klit0w1NFXKOX5CHShvHXXkplckJOS6hbA==
-X-Received: by 2002:a81:8886:0:b0:58e:2827:4d93 with SMTP id y128-20020a818886000000b0058e28274d93mr11496109ywf.38.1692707431041;
-        Tue, 22 Aug 2023 05:30:31 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id m139-20020a0dca91000000b0058c55d40765sm301305ywd.106.2023.08.22.05.30.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Aug 2023 05:30:28 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5922b96c5fcso17915057b3.0;
-        Tue, 22 Aug 2023 05:30:28 -0700 (PDT)
-X-Received: by 2002:a25:bcc7:0:b0:d52:f4d7:5587 with SMTP id
- l7-20020a25bcc7000000b00d52f4d75587mr9783496ybm.31.1692707427833; Tue, 22 Aug
- 2023 05:30:27 -0700 (PDT)
+        with ESMTP id S237801AbjHVQhb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Aug 2023 12:37:31 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E9319A;
+        Tue, 22 Aug 2023 09:37:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1692722240; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=VrMPXu126qA1zWg4T1cHKT67k4Mrm+mLMeWmykui9qpSLhbudlToJMAydjo0zrcsH8
+    0CWua1x9ZQVCniasSw8s8VaV1/gXMCM5B0zZhdke1wxyXcGI1Wo3QbRHgWaKx4evO76J
+    w8oZwFjLRNmQpNGudeYFFzw1px7fD9AP/3PZZV96jMhNREYm2TDrPZK98V0lEuekFRiB
+    AsGrB4TmBWZo4dZDLPpzveS9RQ9sp7EJ5qYOAs5eorIo4r8XDaWWqZVur8Ms2IdjEeq3
+    l+bY6Huy0OR+6eks7NhzggfnHnek9L/hdzWli3E1OK1aO+m4mwmCvActl3uCHz3EHxYz
+    983g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1692722240;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=3UwJzMbkLFZw0nZ0onj9BUDO1u+iqWdju5iLoQEeJmA=;
+    b=ps3in1mETE8GmhYcqIeypfXdTHD3fBRM0tVLqmmj3bUBwIiLJVXfkeksxudMrzfAky
+    bFpL7XjNIQbpChGniPyf4iGnY8C6e1H64wsrJSKfM6IcnS6kJdY0mpNuCP03XDDsGXOa
+    pfITe6VHuz0FSkCHDnyGI3snZlUQpT8/IEqmgR1ZI91VMsumEyU3WLWIlsTE4Gb+jbGz
+    JQIe+vPyaH/bA66CyQnT5SGZzea0GbC/Z5F8lAx6aEOZdz/t95CxnPFK1S5s/htRp6xm
+    TDVNXfq3E+AXvihXMsKPjmCfhHVbd8DY7lTXoht2jTMoXjXa7XnFBCncNWNEIJJGQ71t
+    Nknw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1692722240;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=3UwJzMbkLFZw0nZ0onj9BUDO1u+iqWdju5iLoQEeJmA=;
+    b=PgouducNIKqjoEDrVlxhxebFSFBhQpj1IYN05CYgdfet3ODykxU559rLGi30v/EyUu
+    8uh9LHUTkhXITXOQ5Q04AFi5NV690++Hy+BJENSXA0Jmemt8z1CXvwkxSU7W47LlcKo2
+    +ktARgzEPV0D2kqS/xzHxbf/cutXICOQeurKWoo47349muDmJCj4r0AdqKwnwY6mwbaG
+    FPmxmmpk23h1rbs5bI0pWfzkFI9QibNb294zUaDNNYLU4RpoDtWEyQV3BGn77h2und52
+    QbgkSVUEIycVXg/VBtQmFTc5BlNSDwvBczZizL8NMbgmvKmGD60j3t8nPASA51Q3NJaN
+    82lg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1692722240;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=3UwJzMbkLFZw0nZ0onj9BUDO1u+iqWdju5iLoQEeJmA=;
+    b=3mGb9sYCCWhaTkmznNezAs5xfK2/JM3XiM2Wh4OCzDT0D9NwPsEqx2gVDWs/Qra1jV
+    /bSzEasiFELCb67o1aCA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq1USEbMhpqw=="
+Received: from [IPV6:2a00:6020:4a8e:5004::923]
+    by smtp.strato.de (RZmta 49.8.1 AUTH)
+    with ESMTPSA id K723f1z7MGbJ3h5
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 22 Aug 2023 18:37:19 +0200 (CEST)
+Message-ID: <04fd32bc-b1c4-b9c3-3f8b-7987704a1f85@hartkopp.net>
+Date:   Tue, 22 Aug 2023 18:37:14 +0200
 MIME-Version: 1.0
-References: <20230721221552.1973203-2-contact@jookia.org> <20230721221552.1973203-6-contact@jookia.org>
-In-Reply-To: <20230721221552.1973203-6-contact@jookia.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Aug 2023 14:30:16 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV2m54UAH0X2dG7stEg=grFihrdsz4+o7=_DpBMhjTbkw@mail.gmail.com>
-Message-ID: <CAMuHMdV2m54UAH0X2dG7stEg=grFihrdsz4+o7=_DpBMhjTbkw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] can: sun4i_can: Add support for the Allwinner D1
-To:     John Watts <contact@jookia.org>
-Cc:     linux-sunxi@lists.linux.dev,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: can: isotp: epoll breaks isotp_sendmsg
+To:     Lukas Magel <lukas.magel@posteo.net>,
+        Michal Sojka <michal.sojka@cvut.cz>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Dae R. Jeong" <threeearcat@gmail.com>,
+        Hillf Danton <hdanton@sina.com>
+References: <11328958-453f-447f-9af8-3b5824dfb041@munic.io>
+ <87cz1czihl.fsf@steelpick.2x.cz>
+ <2d8a4d46-f1e4-4e2a-819d-6c28ad37273f@posteo.net>
+ <577b6372-47b0-4009-b83c-706f9bc7abe7@posteo.net>
+ <f39ae7f2-6216-e5b4-1f4d-e01bdee7cf7c@hartkopp.net>
+ <f4221e5e-8fee-4ed6-af54-46b8ac0e5c03@posteo.net>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <f4221e5e-8fee-4ed6-af54-46b8ac0e5c03@posteo.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi John,
+Hi Lukas,
 
-On Sat, Jul 22, 2023 at 12:18 AM John Watts <contact@jookia.org> wrote:
-> The controllers present in the D1 are extremely similar to the R40
-> and require the same reset quirks, but An extra quirk is needed to support
-> receiving packets.
->
-> Signed-off-by: John Watts <contact@jookia.org>
+On 22.08.23 08:51, Lukas Magel wrote:
 
-Thanks for your patch, which is now commit 8abb95250ae6af2d ("can:
-sun4i_can: Add support for the Allwinner D1") in linux-can-next/master.
+>>> @Oliver I adjusted the exit path for the case where the initial wait is
+>>> interrupted to return immediately instead of jumping to err_event_drop.
+>>> Could you please check if you would agree with this change?
+>> The code has really won with your change! Thanks!
+>>
+>> But as you already assumed I have a problem with the handling of the
+>> cleanup when a signal interrupts the wait_event_interruptible() statement.
+>>
+>> I think it should still be:
+>>
+>> /* wait for complete transmission of current pdu */
+>> err = wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
+>> if (err)
+>>           goto err_event_drop;
+>>
+>> as we need to make sure that the state machine is set to defined values
+>> and states for the next isotp_sendmsg() attempt.
+>>
+>> Best regards,
+>> Oliver
+> 
+> 
+> Thank you for the feedback! Can you elaborate why the state needs to be
+> reset here? For me, the loop is basically a "let's wait until we win
+> arbitration for the tx.state", which means that the task is allowed
+> to send. I'm imagining an application that has two threads, both sending
+> at the same time (because maybe they don't care about reading). So one
+> would always be waiting in the loop until the send operation of the other
+> has concluded. My motivation for not going to err_event_drop was that if
+> one thread was interrupted in its wait_event_interruptible, why would we
+> need to change tx.state that is currently being occupied by the other
+> thread? The thread waiting in the loop has not done any state manipulation
+> of the socket.
 
-> --- a/drivers/net/can/Kconfig
-> +++ b/drivers/net/can/Kconfig
-> @@ -185,10 +185,10 @@ config CAN_SLCAN
->
->  config CAN_SUN4I
->         tristate "Allwinner A10 CAN controller"
-> -       depends on MACH_SUN4I || MACH_SUN7I || COMPILE_TEST
-> +       depends on MACH_SUN4I || MACH_SUN7I || RISCV || COMPILE_TEST
+Please don't only look at the isotp_sendmsg() function but the other 
+possibilities e.g. from timeouts.
 
-This makes this question pop up when configuring a kernel for any RISC-V
-platform, not just for Allwinner RISC-V platforms.
+Look for the documentation from the commit 051737439eaee. This patch has 
+been added recently as it was needed.
 
-In comparison, drivers/clk/sunxi-ng/Kconfig does have some
-
-    depends on MACH_SUN<foo>I || RISCV || COMPILE_TEST
-
-but these are gated by ARCH_SUNXI at the top of the file.
-
-I'm not sure what's the best way to fix this:
-  - Replace RISCV by ARCH_SUNXI?
-    This would expose it on more ARM sun<foo>i platforms, making the
-    MACH_SUN4I || MACH_SUN7I superfluous?
-  - Replace RISCV by RISCV && ARCH_SUNXI?
-
-Thanks for your comments!
-
->         help
->           Say Y here if you want to use CAN controller found on Allwinner
-> -         A10/A20 SoCs.
-> +         A10/A20/D1 SoCs.
->
->           To compile this driver as a module, choose M here: the module will
->           be called sun4i_can.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Oliver
