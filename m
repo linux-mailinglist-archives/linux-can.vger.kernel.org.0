@@ -2,46 +2,72 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DEB6787ECB
-	for <lists+linux-can@lfdr.de>; Fri, 25 Aug 2023 05:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FDF788037
+	for <lists+linux-can@lfdr.de>; Fri, 25 Aug 2023 08:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240451AbjHYD4j convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Thu, 24 Aug 2023 23:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S242340AbjHYGrm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 25 Aug 2023 02:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235067AbjHYD4U (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Aug 2023 23:56:20 -0400
-Received: from mail.bioind.com (unknown [212.199.63.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F041B1FD0
-        for <linux-can@vger.kernel.org>; Thu, 24 Aug 2023 20:56:16 -0700 (PDT)
-Received: from [94.156.102.149] (94.156.102.149) by mail.bioind.com
- (192.168.20.202) with Microsoft SMTP Server (TLS) id 14.3.408.0; Fri, 25 Aug
- 2023 06:54:54 +0300
-Reply-To: <domakye20@gmail.com>
-From:   Dominique Ahkye <info@bioind.com>
-To:     <linux-can@vger.kernel.org>
-Subject: Moving forward
-Date:   Thu, 24 Aug 2023 20:54:54 -0700
-Message-ID: <20230824205454.AF90F4DD5B50F3A3@bioind.com>
+        with ESMTP id S236416AbjHYGrL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Aug 2023 02:47:11 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF68CE;
+        Thu, 24 Aug 2023 23:47:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R571e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VqW2QpI_1692946019;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VqW2QpI_1692946019)
+          by smtp.aliyun-inc.com;
+          Fri, 25 Aug 2023 14:47:05 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     socketcan@hartkopp.net
+Cc:     mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] can: raw: Remove NULL check before dev_{put, hold}
+Date:   Fri, 25 Aug 2023 14:46:56 +0800
+Message-Id: <20230825064656.87751-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [94.156.102.149]
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
-I have a deal I would like to share with you. Email me for 
-details.
-Regards
-Dominique
-eMail:domakye20@gmail.com
+The call netdev_{put, hold} of dev_{put, hold} will check NULL, so there
+is no need to check before using dev_{put, hold}, remove it to silence
+the warning:
+
+./net/can/raw.c:497:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=6231
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ net/can/raw.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/net/can/raw.c b/net/can/raw.c
+index d50c3f3d892f..ff7797c37018 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -493,8 +493,7 @@ static int raw_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+ 
+ out_put_dev:
+ 	/* remove potential reference from dev_get_by_index() */
+-	if (dev)
+-		dev_put(dev);
++	dev_put(dev);
+ out:
+ 	release_sock(sk);
+ 	rtnl_unlock();
+-- 
+2.20.1.7.g153144c
 
