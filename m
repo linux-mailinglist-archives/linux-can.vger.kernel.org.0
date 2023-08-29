@@ -2,118 +2,66 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8BB78B4AF
-	for <lists+linux-can@lfdr.de>; Mon, 28 Aug 2023 17:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FCC78BFF7
+	for <lists+linux-can@lfdr.de>; Tue, 29 Aug 2023 10:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjH1PnY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Aug 2023 11:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
+        id S232083AbjH2IMF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 29 Aug 2023 04:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbjH1PnQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Aug 2023 11:43:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2919D;
-        Mon, 28 Aug 2023 08:43:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36CB9641E8;
-        Mon, 28 Aug 2023 15:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5C5C433CA;
-        Mon, 28 Aug 2023 15:43:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693237392;
-        bh=l8mBaaM0TYGsK1UM6qYwETDaYnQ3tF3yQqXH6gOzhUY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZvZr7SMb2mlcEp9LwRjxXi9L36v182tEh1ALZPEzGhL1DI1Ps5MvKmIpbEz4ziNv0
-         Zq+dRtBIiuJd+n05fYVBQ6fW2sAYKSWgz3juJa/cap98jplL2aBtVMzNTnHIjF8iGR
-         wNTLz5GuLPU8J+SA69h+y7vtsxYyRh+v1VpdNKLJlHyNqFrHKLIDfNp26e7/Xjx9/7
-         xYAWGSGNOVN5fQvpY7qm29DYJfMTsAiUmeuMbeZWAu9iwwohsTj9x5DsgNwhdhS0h3
-         y2PsKJM11T8bYUNwu9xjCeYBDaeDWHHR1zEWw0m856BxiKMICiErNGNocG2oRLI+9b
-         DK1mrVWJXcCBg==
-Received: (nullmailer pid 607773 invoked by uid 1000);
-        Mon, 28 Aug 2023 15:43:09 -0000
-Date:   Mon, 28 Aug 2023 10:43:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Srinivas Goud <srinivas.goud@amd.com>
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        p.zabel@pengutronix.de, git@amd.com, michal.simek@amd.com,
-        linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, appana.durga.rao@xilinx.com,
-        naga.sureshkumar.relli@xilinx.com
-Subject: Re: [PATCH v3 1/3] dt-bindings: can: xilinx_can: Add ECC property
- 'xlnx,has-ecc'
-Message-ID: <20230828154309.GA604444-robh@kernel.org>
-References: <1693234725-3615719-1-git-send-email-srinivas.goud@amd.com>
- <1693234725-3615719-2-git-send-email-srinivas.goud@amd.com>
+        with ESMTP id S234049AbjH2IMD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Aug 2023 04:12:03 -0400
+Received: from mail.bizcodes.pl (mail.bizcodes.pl [151.80.57.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223049E
+        for <linux-can@vger.kernel.org>; Tue, 29 Aug 2023 01:12:01 -0700 (PDT)
+Received: by mail.bizcodes.pl (Postfix, from userid 1002)
+        id F112CA2944; Tue, 29 Aug 2023 08:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bizcodes.pl; s=mail;
+        t=1693296662; bh=5QPMt7jNntM5ZbstM20BWsHIeLbmRE8lVU4Iu89IleQ=;
+        h=Date:From:To:Subject:From;
+        b=c2pZix/rqaw08QzipRbaF8rp9Zx9h9+tzNMekHqZTGcKr5mp91eZAmEji79WFbpH9
+         vo7cMR1uWjngnKe/0qmapHKmDaHBBXiLn+PAv1RAVNsKZ1/XsfqwwWvmcWtp7QpUUt
+         G9AlPffo4icrBlWlZC1XAQPvzaqjD6ieiQjauixTAQ9P/qq9wnR1KZxlVVp5jBaS3h
+         IrxKCcHIcZ458/TAYOxb8fU6c6PhwgBfNtcDeQOEQ/rQpkvs6QpU2c6WGSmbrv4dtE
+         sNzYvpATUZa5DxtfITVjNHEToUhGAlQgVtTsAdFdgv7G2UyVCb2sUEYnQWgoQr4B41
+         QkkkvhwL2XI6g==
+Received: by mail.bizcodes.pl for <linux-can@vger.kernel.org>; Tue, 29 Aug 2023 08:10:24 GMT
+Message-ID: <20230829064500-0.1.bc.1duko.0.onp5sw00ug@bizcodes.pl>
+Date:   Tue, 29 Aug 2023 08:10:24 GMT
+From:   "Marcin Chruszcz" <marcin.chruszcz@bizcodes.pl>
+To:     <linux-can@vger.kernel.org>
+Subject: Prezentacja
+X-Mailer: mail.bizcodes.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1693234725-3615719-2-git-send-email-srinivas.goud@amd.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Aug 28, 2023 at 08:28:43PM +0530, Srinivas Goud wrote:
-> ECC feature added to Tx and Rx FIFOs for Xilinx AXI CAN Controller.
-> Part of this feature configuration and counter registers added in
-> IP for 1bit/2bit ECC errors.
-> 
-> xlnx,has-ecc is optional property and added to Xilinx AXI CAN Controller
-> node if ECC block enabled in the HW
-> 
-> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
-> ---
-> Changes in v3:
-> Update commit description
-> 
-> Changes in v2:
-> None
+Dzie=C5=84 dobry!
 
-Doesn't apply, dependency?
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
+=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
+zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
 
-> 
->  Documentation/devicetree/bindings/net/can/xilinx,can.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/xilinx,can.yaml b/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
-> index 64d57c3..c842610 100644
-> --- a/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
-> @@ -49,6 +49,10 @@ properties:
->    resets:
->      maxItems: 1
->  
-> +  xlnx,has-ecc:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: CAN Tx and Rx fifo ECC enable flag (AXI CAN)
+Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
+=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
+dostaw.
 
-has ECC or enable ECC?
+Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
+nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
+ co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
 
-> +
->  required:
->    - compatible
->    - reg
-> @@ -137,6 +141,7 @@ examples:
->          interrupts = <GIC_SPI 59 IRQ_TYPE_EDGE_RISING>;
->          tx-fifo-depth = <0x40>;
->          rx-fifo-depth = <0x40>;
-> +        xlnx,has-ecc
+Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
+=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
+zania w Pa=C5=84stwa firmie.
 
-Obviously not tested.
 
->      };
->  
->    - |
-> -- 
-> 2.1.1
-> 
+Pozdrawiam
+Marcin Chruszcz
