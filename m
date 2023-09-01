@@ -2,72 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F4078FC1D
-	for <lists+linux-can@lfdr.de>; Fri,  1 Sep 2023 13:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B447900B3
+	for <lists+linux-can@lfdr.de>; Fri,  1 Sep 2023 18:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349106AbjIALMb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 1 Sep 2023 07:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
+        id S1345439AbjIAQZX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 1 Sep 2023 12:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349105AbjIALMb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 1 Sep 2023 07:12:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B9A107;
-        Fri,  1 Sep 2023 04:12:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S1345362AbjIAQZW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 1 Sep 2023 12:25:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E0D10D4;
+        Fri,  1 Sep 2023 09:25:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 33DEA1F45E;
-        Fri,  1 Sep 2023 11:12:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1693566746; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qA31knuQGMKkbCxHuD0KfED2+pMUYgwjt4x2MR5OHvg=;
-        b=PmuL+DrcX/I0nP6KDLqTkG2hxCE2ya7cfJQ14v+Zs4z0NbZq3PE5Q9hUH1SUHuPW5Fc1MV
-        mro+IfBzU9SiAaBkr4spg4gG2Wi8XwgKdOBdyORGzt+qZWepas9L4bRlWsafUFmPzuEGqn
-        R6SvCDAivyU/swutJsRtn8YOStFEgNw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1693566746;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qA31knuQGMKkbCxHuD0KfED2+pMUYgwjt4x2MR5OHvg=;
-        b=JbgbSDYMWUj67nUAINKeTK9jn5EPAnq9LswZOWtmT+4wLoAtMzdie2O2tu4THXqn8dCpGG
-        GZkdUfowyo6uVqDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB5E913582;
-        Fri,  1 Sep 2023 11:12:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BpbvLxnH8WSFeAAAMHmgww
-        (envelope-from <dkirjanov@suse.de>); Fri, 01 Sep 2023 11:12:25 +0000
-Message-ID: <4d953daf-f426-e2fe-ca27-6da30fddaa40@suse.de>
-Date:   Fri, 1 Sep 2023 14:12:25 +0300
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39797B82519;
+        Fri,  1 Sep 2023 16:25:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B7CDFC43391;
+        Fri,  1 Sep 2023 16:25:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693585515;
+        bh=V8XH4cIvHWrSs/u5pfHFkWBm7960Sk/XsLtEUa1DSQA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BzksYAGVttU96YQgR8k5uPURSLS9LxrDL3vCUmVWVd45VRtBL/9kKNPEEGelVZhxc
+         Oc/b4siJEVLM1MxOshBWjoNsfwpV/l5oYYAlrdYh8JJWyRWPW55lIZtKj1rUPixmP5
+         I3QIn7BAV56Jw4ujVvpUR+GqHQH9eU8LgHFpqAQaE1eK8kCFgQhtHk0hJH7B8A18Ci
+         GqfEXh5Qx6Iw6MmoeBeILSTb9jQuOVFf8FUDPolZBe9kvmn8N7D6b0q6Dtuj8cKbPS
+         GQIybfMcQcwTtqXXSwbdaiTR3re0BpZE9MKbAdCwWZeu5iafX9qtUdTXs61O4Md7MD
+         pMwVI/9NU8lZQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A1CF0E4509E;
+        Fri,  1 Sep 2023 16:25:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH] can: etas_es58x: Add check for alloc_can_err_skb
-Content-Language: en-US
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, mailhol.vincent@wanadoo.fr,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/4] Add support for Allwinner D1 CAN controllers
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <169358551565.8276.3801944999733958707.git-patchwork-notify@kernel.org>
+Date:   Fri, 01 Sep 2023 16:25:15 +0000
+References: <20230721221552.1973203-2-contact@jookia.org>
+In-Reply-To: <20230721221552.1973203-2-contact@jookia.org>
+To:     John Watts <contact@jookia.org>
+Cc:     linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
         wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        arunachalam.santhanam@in.bosch.com
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230901082755.27104-1-jiasheng@iscas.ac.cn>
-From:   Denis Kirjanov <dkirjanov@suse.de>
-In-Reply-To: <20230901082755.27104-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, wens@csie.org, jernej.skrabec@gmail.com,
+        samuel@sholland.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,31 +64,34 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello:
 
+This series was applied to riscv/linux.git (fixes)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-On 9/1/23 11:27, Jiasheng Jiang wrote:
-> Add check for the return value of alloc_can_err_skb in order to
-> avoid NULL pointer dereference.
+On Sat, 22 Jul 2023 08:15:49 +1000 you wrote:
+> This patch series adds support for the Allwinner D1 CAN controllers.
+> It requires adding a new device tree compatible and driver support to
+> work around some hardware quirks.
 > 
-> Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/net/can/usb/etas_es58x/es58x_core.c | 2 ++
->  1 file changed, 2 insertions(+)
+> This has been tested on the Mango Pi MQ Dual running a T113 and a Lichee
+> Panel 86 running a D1.
 > 
-> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-> index 0c7f7505632c..d694cb22d9f4 100644
-> --- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-> @@ -680,6 +680,8 @@ int es58x_rx_err_msg(struct net_device *netdev, enum es58x_err error,
->  	}
->  
->  	skb = alloc_can_err_skb(netdev, &cf);
-> +	if (!skb)
-> +		return -ENOMEM;
+> [...]
 
-Should you adjust the stats for dropped packets as well?
+Here is the summary with links:
+  - [v2,1/4] dt-bindings: net: can: Add support for Allwinner D1 CAN controller
+    (no matching commit)
+  - [v2,2/4] riscv: dts: allwinner: d1: Add CAN controller nodes
+    https://git.kernel.org/riscv/c/6ea1ad888f59
+  - [v2,3/4] can: sun4i_can: Add acceptance register quirk
+    (no matching commit)
+  - [v2,4/4] can: sun4i_can: Add support for the Allwinner D1
+    (no matching commit)
 
->  
->  	switch (error) {
->  	case ES58X_ERR_OK:	/* 0: No error */
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
