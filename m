@@ -2,202 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F50791A8B
-	for <lists+linux-can@lfdr.de>; Mon,  4 Sep 2023 17:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8538E792999
+	for <lists+linux-can@lfdr.de>; Tue,  5 Sep 2023 18:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353244AbjIDPXP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Sep 2023 11:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S1352356AbjIEQ1V (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 5 Sep 2023 12:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238082AbjIDPXN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Sep 2023 11:23:13 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7D41726
-        for <linux-can@vger.kernel.org>; Mon,  4 Sep 2023 08:22:46 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qdBPB-00058K-P3; Mon, 04 Sep 2023 17:22:21 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 97AFF218726;
-        Mon,  4 Sep 2023 15:22:20 +0000 (UTC)
-Date:   Mon, 4 Sep 2023 17:22:20 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Goud <srinivas.goud@amd.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        p.zabel@pengutronix.de, git@amd.com, michal.simek@amd.com,
-        linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, appana.durga.rao@xilinx.com,
-        naga.sureshkumar.relli@xilinx.com
-Subject: Re: [PATCH v4 3/3] can: xilinx_can: Add ethtool stats interface for
- ECC errors
-Message-ID: <20230904-unbiased-putt-a1a2919b02c7-mkl@pengutronix.de>
-References: <1693557645-2728466-1-git-send-email-srinivas.goud@amd.com>
- <1693557645-2728466-4-git-send-email-srinivas.goud@amd.com>
+        with ESMTP id S1354059AbjIEJd3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Sep 2023 05:33:29 -0400
+X-Greylist: delayed 4135 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 02:33:26 PDT
+Received: from mail.equinoxrise.pl (mail.equinoxrise.pl [217.61.112.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE251A7
+        for <linux-can@vger.kernel.org>; Tue,  5 Sep 2023 02:33:26 -0700 (PDT)
+Received: by mail.equinoxrise.pl (Postfix, from userid 1002)
+        id 8703C8368B; Mon,  4 Sep 2023 09:41:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=equinoxrise.pl;
+        s=mail; t=1693813307;
+        bh=v6OgBfK5dN7P5dQ0wCu59rOfZaiqziJeLNblJ8dOcGI=;
+        h=Date:From:To:Subject:From;
+        b=EL/kuzXzXpDShSjGHEQ2TXP/kdBDaEMKIDElnJQCKOCqBgy5wG9kBlSB/ud8rrbM2
+         UdltsFC+Lf+KQD5WC+eJ4R/wlwYRlNOq6+wODj/0Jpz3opID/yjVrhcrx21V3rAh/3
+         ou16dbsVyYAVqEoNFdCrTXuJcOSriWNIuegjf2O6xFy3u170aI5hn7H6dVsdwfSUMe
+         8RB0m/ZKJiyTCfNYzhCehxEKTDU4opA71foAerbZ59nkTShn5vuYtwfu0uLQHi08pw
+         DX9QewiAdDqZLrWQz3ZOgHJ+D5KcN1ModSowbDALzNKcNBya6f3z/dOcfWAYqBhSsM
+         /NxPIFXsE5cIA==
+Received: by mail.equinoxrise.pl for <linux-can@vger.kernel.org>; Mon,  4 Sep 2023 07:40:34 GMT
+Message-ID: <20230904084500-0.1.7.qo9.0.u873cljacl@equinoxrise.pl>
+Date:   Mon,  4 Sep 2023 07:40:34 GMT
+From:   "Mateusz Talaga" <mateusz.talaga@equinoxrise.pl>
+To:     <linux-can@vger.kernel.org>
+Subject: Prezentacja
+X-Mailer: mail.equinoxrise.pl
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f5dk3iq2kvsfzpmv"
-Content-Disposition: inline
-In-Reply-To: <1693557645-2728466-4-git-send-email-srinivas.goud@amd.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Dzie=C5=84 dobry!
 
---f5dk3iq2kvsfzpmv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
+=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
+zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
 
-On 01.09.2023 14:10:45, Srinivas Goud wrote:
-> Add ethtool stats interface for reading FIFO 1bit/2bit
-> ECC errors information.
->=20
-> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
-> ---
-> Changes in v4:
-> None
->=20
-> Changes in v3:
-> None
->=20
-> Changes in v2:
-> Add ethtool stats interface
->=20
->  drivers/net/can/xilinx_can.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->=20
-> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-> index 798b32b..50e0c9d 100644
-> --- a/drivers/net/can/xilinx_can.c
-> +++ b/drivers/net/can/xilinx_can.c
-> @@ -219,6 +219,7 @@ struct xcan_devtype_data {
->   * @transceiver:		Optional pointer to associated CAN transceiver
->   * @rstc:			Pointer to reset control
->   * @ecc_enable:			ECC enable flag
-> + * @stats_lock:			Lock for synchronizing hardware stats
+Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
+=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
+dostaw.
 
-To be precise: The lock is about the access of the 64 bit variables not
-about the hardware access:
-"Lock for accessing the "ecc_*bit_*fifo_cnt" stats"
+Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
+nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
+ co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
 
->   * @ecc_2bit_rxfifo_cnt:	RXFIFO 2bit ECC count
->   * @ecc_1bit_rxfifo_cnt:	RXFIFO 1bit ECC count
->   * @ecc_2bit_txolfifo_cnt:	TXOLFIFO 2bit ECC count
-> @@ -245,6 +246,7 @@ struct xcan_priv {
->  	struct phy *transceiver;
->  	struct reset_control *rstc;
->  	bool ecc_enable;
-> +	spinlock_t stats_lock; /* Lock for synchronizing hardware stats */
->  	u64 ecc_2bit_rxfifo_cnt;
->  	u64 ecc_1bit_rxfifo_cnt;
->  	u64 ecc_2bit_txolfifo_cnt;
-> @@ -1164,6 +1166,9 @@ static void xcan_err_interrupt(struct net_device *n=
-dev, u32 isr)
-> =20
->  	if (priv->ecc_enable) {
->  		u32 reg_ecc;
-> +		unsigned long flags;
+Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
+=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
+zania w Pa=C5=84stwa firmie.
 
-nitpick: move the flags before the reg_ecc.
 
-> +
-> +		spin_lock_irqsave(&priv->stats_lock, flags);
-> =20
->  		reg_ecc =3D priv->read_reg(priv, XCAN_RXFIFO_ECC_OFFSET);
->  		if (isr & XCAN_IXR_E2BERX_MASK) {
-> @@ -1212,6 +1217,8 @@ static void xcan_err_interrupt(struct net_device *n=
-dev, u32 isr)
->  		 */
->  		priv->write_reg(priv, XCAN_ECC_CFG_OFFSET, XCAN_ECC_CFG_REECRX_MASK |
->  				XCAN_ECC_CFG_REECTXOL_MASK | XCAN_ECC_CFG_REECTXTL_MASK);
-> +
-> +		spin_unlock_irqrestore(&priv->stats_lock, flags);
->  	}
-> =20
->  	if (cf.can_id) {
-> @@ -1639,6 +1646,23 @@ static int xcan_get_auto_tdcv(const struct net_dev=
-ice *ndev, u32 *tdcv)
->  	return 0;
->  }
-> =20
-> +static void ethtool_get_ethtool_stats(struct net_device *ndev,
-> +				      struct ethtool_stats *stats, u64 *data)
-> +{
-> +	struct xcan_priv *priv =3D netdev_priv(ndev);
-> +	unsigned long flags;
-> +	int i =3D 0;
-> +
-> +	spin_lock_irqsave(&priv->stats_lock, flags);
-> +	data[i++] =3D priv->ecc_2bit_rxfifo_cnt;
-> +	data[i++] =3D priv->ecc_1bit_rxfifo_cnt;
-> +	data[i++] =3D priv->ecc_2bit_txolfifo_cnt;
-> +	data[i++] =3D priv->ecc_1bit_txolfifo_cnt;
-> +	data[i++] =3D priv->ecc_2bit_txtlfifo_cnt;
-> +	data[i++] =3D priv->ecc_1bit_txtlfifo_cnt;
-> +	spin_unlock_irqrestore(&priv->stats_lock, flags);
-> +}
-> +
->  static const struct net_device_ops xcan_netdev_ops =3D {
->  	.ndo_open	=3D xcan_open,
->  	.ndo_stop	=3D xcan_close,
-> @@ -1648,6 +1672,7 @@ static const struct net_device_ops xcan_netdev_ops =
-=3D {
-> =20
->  static const struct ethtool_ops xcan_ethtool_ops =3D {
->  	.get_ts_info =3D ethtool_op_get_ts_info,
-> +	.get_ethtool_stats =3D ethtool_get_ethtool_stats,
-
-You also should implement .get_strings and .get_sset_count. Have you
-tested your patch with "ethtool -S can0"?
-
->  };
-> =20
->  /**
-> --=20
-> 2.1.1
->=20
->=20
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---f5dk3iq2kvsfzpmv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmT19ikACgkQvlAcSiqK
-BOjKKwf/XqBeS89ieZVoVrZnmkm/eKWi/h6aE4Oueilc6bRGc0NImrOHvmfFNfad
-ZZ/uNxK8Na5EafNjeI/Blh4H1Pk1KsxuK3wrb8YmrrajrZZwbIhQF+/wRMHW+ops
-CY34A+HZN/dsMseSLORDKTrvexxI0iKqbdLfnBwvVh0gAfEIxsUPzqWp+/Qz9DeW
-b2CHj8te4m7Ovk/KMjlJuipZWwkgjSL6d5D++Z8uTjQWHm0yNvCeCA6CpRTDdkwY
-Ckbb6qDi1I5h37X9JCtOOOgl1TQBaDZeGl6eBGuJDtIUNawL5naLDcPe4BoKyul1
-Xu4th/hAOGXGYrhclCMIjjT4rUAwfg==
-=FRQF
------END PGP SIGNATURE-----
-
---f5dk3iq2kvsfzpmv--
+Pozdrawiam
+Mateusz Talaga
