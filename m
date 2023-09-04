@@ -2,175 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD637914CF
-	for <lists+linux-can@lfdr.de>; Mon,  4 Sep 2023 11:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7124791599
+	for <lists+linux-can@lfdr.de>; Mon,  4 Sep 2023 12:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241098AbjIDJeu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Sep 2023 05:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        id S1348634AbjIDKRx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Sep 2023 06:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbjIDJeu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Sep 2023 05:34:50 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECA7C6
-        for <linux-can@vger.kernel.org>; Mon,  4 Sep 2023 02:34:45 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9a5e1812378so189304266b.2
-        for <linux-can@vger.kernel.org>; Mon, 04 Sep 2023 02:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1693820083; x=1694424883; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T4VZstNDexYspt5bnA8VRpCNwoCeT6mBX258YaBCK68=;
-        b=eLwaHo6xC2KK/LYcggRdxgrLelJ1Q6tmxLAPifSkq1IeE+U1dt9q2M7zw+psHxqtx+
-         e5kBIkwa/h3693RL0luZzHMZxKoZdQYUxFq8YiYEpRhbfxPwB67T8ksv1xxsQUP2FMPE
-         qwzIjPMOpq0N1VXEGqhXG8LqmOlsyG6pLm7LIcOAkJCUxm48XG1PNaRv3K5Bo4fR7HNn
-         l5X/3Ol+jBUV22zNQuKflqHQnGNJzwALoYMqgF9erJmVgxjmYx5pwbNJCcRmwBu0RKyA
-         ck2eTd2uiqdVCjiTL6nF3237/MyBJ+1fANKTENu5aNxYSV2FYq+lZYGQb+6hSk9lKCIg
-         tEgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693820083; x=1694424883;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T4VZstNDexYspt5bnA8VRpCNwoCeT6mBX258YaBCK68=;
-        b=EjSHW/75QD0LSMKYOioK9J1p2/zQVnQYEn2c+uklYVoI2ijjUTJydeB6NHhc/VSbE/
-         Bg7YfHhtyCTixmAoSwujHaqyIAD7fMwXrtS/HwE/B/De3SsmTDMd9vY3BYlN7jHPEj7H
-         /MRy7q50MyiJI4+pA7eOm3Nd48F8yTDm5xvNlAu0Nqvj/l9kljhkIPaQ03lZ/0+OYghC
-         1EOVUH2W0yuVbc+63uKPugy7iNdtqZ3lgOMZFuGeeoa0ldiLsggpFeqZeGdaCiCJINQu
-         DTPeG51Zk6uouXMlCKDPWsYW4kxdLnix4NOpfGPenPztE4+DsDG4fPdX2bX2RPWBAGfG
-         Caag==
-X-Gm-Message-State: AOJu0YxOVF2qMepo0LLIqdAJnqlI638NicOfITf+v1Qk+VcOvM0zsGdn
-        eQERGZC88Wq0iYd/GeKlmnSU/A==
-X-Google-Smtp-Source: AGHT+IFwo5SBQC7kCzaUBXWFt09wwIK7lljg5WDdeP5eo0N1dPWYn+VMAcp5e/Ia/8cWHU9hUh8fPw==
-X-Received: by 2002:a17:906:3054:b0:9a1:ad87:1354 with SMTP id d20-20020a170906305400b009a1ad871354mr6827041ejd.34.1693820083487;
-        Mon, 04 Sep 2023 02:34:43 -0700 (PDT)
-Received: from blmsp ([2001:4090:a245:8020:2b3e:29eb:352d:d92e])
-        by smtp.gmail.com with ESMTPSA id fx4-20020a170906b74400b009887f4e0291sm5867179ejb.27.2023.09.04.02.34.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Sep 2023 02:34:43 -0700 (PDT)
-Date:   Mon, 4 Sep 2023 11:34:42 +0200
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Martin =?utf-8?Q?Hundeb=C3=B8ll?= <martin@geanix.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Simon Horman <simon.horman@corigine.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Julien Panis <jpanis@baylibre.com>
-Subject: Re: [PATCH v5 00/12] can: m_can: Optimizations for m_can/tcan part 2
-Message-ID: <20230904093442.cu6d5b6gm5ngfli6@blmsp>
-References: <20230718075708.958094-1-msp@baylibre.com>
- <108a41e492dcfa4a7c59e44aac7dfb502e595962.camel@geanix.com>
+        with ESMTP id S232168AbjIDKRw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Sep 2023 06:17:52 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Sep 2023 03:17:44 PDT
+Received: from mx-8.mail.web4u.cz (smtp7.web4u.cz [81.91.87.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C6CCD3;
+        Mon,  4 Sep 2023 03:17:44 -0700 (PDT)
+Received: from mx-8.mail.web4u.cz (localhost [127.0.0.1])
+        by mx-8.mail.web4u.cz (Postfix) with ESMTP id E00411FF76C;
+        Mon,  4 Sep 2023 12:00:03 +0200 (CEST)
+Received: from baree.pikron.com (unknown [78.102.109.231])
+        (Authenticated sender: ppisa@pikron.com)
+        by mx-8.mail.web4u.cz (Postfix) with ESMTPA id C96701FF1C9;
+        Mon,  4 Sep 2023 12:00:02 +0200 (CEST)
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        Lizhi Hou <lizhi.hou@amd.com>, Rob Herring <robh@kernel.org>
+Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Subject: [PATCH] of: overlay: Fix of_overlay_fdt_apply prototype when !CONFIG_OF_OVERLAY
+Date:   Mon,  4 Sep 2023 12:00:02 +0200
+Message-Id: <20230904100002.7913-1-pisa@cmp.felk.cvut.cz>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <108a41e492dcfa4a7c59e44aac7dfb502e595962.camel@geanix.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-W4U-Auth: 9133a192d60015118c58877a0c2c4b7bfee0d0a3
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 08:51:48AM +0200, Martin Hundebøll wrote:
-> On Tue, 2023-07-18 at 09:56 +0200, Markus Schneider-Pargmann wrote:
-> > Hi Marc, Simon and everyone,
-> > 
-> > v5 got a rebase on v6.5 with some small style fixes as pointed out in
-> > v4.
-> > 
-> > It is tested on tcan455x but I don't have hardware with mcan on the
-> > SoC
-> > myself so any testing is appreciated.
-> > 
-> > The series implements many small and bigger throughput improvements
-> > and
-> > adds rx/tx coalescing at the end.
-> > 
-> > Based on v6.5-rc1. Also available at
-> > https://gitlab.baylibre.com/msp8/linux/-/tree/topic/mcan-optimization/v6.5?ref_type=heads
-> 
-> For the whole series:
-> Tested-by: Martin Hundebøll <martin@geanix.com>
+The of_overlay_fdt_apply has been changed but when CONFIG_OF_OVERLAY
+support is not configured then old stub prototype is declared
+by of.h header.
 
-Thank you Martin!
+Signed-off-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+---
+ include/linux/of.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Best,
-Markus
+diff --git a/include/linux/of.h b/include/linux/of.h
+index ed679819c279..6a9ddf20e79a 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -1676,8 +1676,8 @@ int of_overlay_notifier_unregister(struct notifier_block *nb);
+ 
+ #else
+ 
+-static inline int of_overlay_fdt_apply(void *overlay_fdt, u32 overlay_fdt_size,
+-				       int *ovcs_id)
++static inline int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
++				       int *ovcs_id, struct device_node *target_base)
+ {
+ 	return -ENOTSUPP;
+ }
+-- 
+2.39.2
 
-> 
-> Thanks,
-> Martin
-> 
-> > Changes in v5:
-> > - Add back parenthesis in m_can_set_coalesce(). This will make
-> >   checkpatch unhappy but gcc happy.
-> > - Remove unused fifo_header variable in m_can_tx_handler().
-> > - Rebased to v6.5-rc1
-> > 
-> > Changes in v4:
-> > - Create and use struct m_can_fifo_element in m_can_tx_handler
-> > - Fix memcpy_and_pad to copy the full buffer
-> > - Fixed a few checkpatch warnings
-> > - Change putidx to be unsigned
-> > - Print hard_xmit error only once when TX FIFO is full
-> > 
-> > Changes in v3:
-> > - Remove parenthesis in error messages
-> > - Use memcpy_and_pad for buffer copy in 'can: m_can: Write transmit
-> >   header and data in one transaction'.
-> > - Replace spin_lock with spin_lock_irqsave. I got a report of a
-> >   interrupt that was calling start_xmit just after the netqueue was
-> >   woken up before the locked region was exited. spin_lock_irqsave
-> > should
-> >   fix this. I attached the full stack at the end of the mail if
-> > someone
-> >   wants to know.
-> > - Rebased to v6.3-rc1.
-> > - Removed tcan4x5x patches from this series.
-> > 
-> > Changes in v2:
-> > - Rebased on v6.2-rc5
-> > - Fixed missing/broken accounting for non peripheral m_can devices.
-> > 
-> > previous versions:
-> > v1 -
-> > https://lore.kernel.org/lkml/20221221152537.751564-1-msp@baylibre.com
-> > v2 -
-> > https://lore.kernel.org/lkml/20230125195059.630377-1-msp@baylibre.com
-> > v3 -
-> > https://lore.kernel.org/lkml/20230315110546.2518305-1-msp@baylibre.com/
-> > v4 -
-> > https://lore.kernel.org/lkml/20230621092350.3130866-1-msp@baylibre.com/
-> > 
-> > Markus Schneider-Pargmann (12):
-> >   can: m_can: Write transmit header and data in one transaction
-> >   can: m_can: Implement receive coalescing
-> >   can: m_can: Implement transmit coalescing
-> >   can: m_can: Add rx coalescing ethtool support
-> >   can: m_can: Add tx coalescing ethtool support
-> >   can: m_can: Use u32 for putidx
-> >   can: m_can: Cache tx putidx
-> >   can: m_can: Use the workqueue as queue
-> >   can: m_can: Introduce a tx_fifo_in_flight counter
-> >   can: m_can: Use tx_fifo_in_flight for netif_queue control
-> >   can: m_can: Implement BQL
-> >   can: m_can: Implement transmit submission coalescing
-> > 
-> >  drivers/net/can/m_can/m_can.c | 517 +++++++++++++++++++++++++-------
-> > --
-> >  drivers/net/can/m_can/m_can.h |  35 ++-
-> >  2 files changed, 418 insertions(+), 134 deletions(-)
-> > 
-> > 
-> > base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-> 
