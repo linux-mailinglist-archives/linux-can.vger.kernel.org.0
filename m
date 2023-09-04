@@ -2,44 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC22B791636
-	for <lists+linux-can@lfdr.de>; Mon,  4 Sep 2023 13:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE7C791A0F
+	for <lists+linux-can@lfdr.de>; Mon,  4 Sep 2023 16:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233572AbjIDLY2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Sep 2023 07:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
+        id S232117AbjIDOxX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Sep 2023 10:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352797AbjIDLYZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Sep 2023 07:24:25 -0400
+        with ESMTP id S229473AbjIDOxX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Sep 2023 10:53:23 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171D8EC
-        for <linux-can@vger.kernel.org>; Mon,  4 Sep 2023 04:24:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FC9CC5
+        for <linux-can@vger.kernel.org>; Mon,  4 Sep 2023 07:53:19 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qd7QZ-0003VO-GV; Mon, 04 Sep 2023 13:07:31 +0200
+        id 1qdAwc-0007kU-4G; Mon, 04 Sep 2023 16:52:50 +0200
 Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 14BC8218474;
-        Mon,  4 Sep 2023 11:07:31 +0000 (UTC)
-Date:   Mon, 4 Sep 2023 13:07:30 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4D3C92186D5;
+        Mon,  4 Sep 2023 14:52:48 +0000 (UTC)
+Date:   Mon, 4 Sep 2023 16:52:47 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        Lizhi Hou <lizhi.hou@amd.com>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH] of: overlay: Fix of_overlay_fdt_apply prototype when
- !CONFIG_OF_OVERLAY
-Message-ID: <20230904-kebab-ladle-cb9db3ecf58f-mkl@pengutronix.de>
-References: <20230904100002.7913-1-pisa@cmp.felk.cvut.cz>
+To:     Srinivas Goud <srinivas.goud@amd.com>
+Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        p.zabel@pengutronix.de, git@amd.com, michal.simek@amd.com,
+        linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, appana.durga.rao@xilinx.com,
+        naga.sureshkumar.relli@xilinx.com
+Subject: Re: [PATCH v4 1/3] dt-bindings: can: xilinx_can: Add ECC property
+ 'xlnx,has-ecc'
+Message-ID: <20230904-crystal-jokester-a76c1506c442-mkl@pengutronix.de>
+References: <1693557645-2728466-1-git-send-email-srinivas.goud@amd.com>
+ <1693557645-2728466-2-git-send-email-srinivas.goud@amd.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qgiehgcd3yqtpsgd"
+        protocol="application/pgp-signature"; boundary="nin2tevzwjvssdyh"
 Content-Disposition: inline
-In-Reply-To: <20230904100002.7913-1-pisa@cmp.felk.cvut.cz>
+In-Reply-To: <1693557645-2728466-2-git-send-email-srinivas.goud@amd.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
@@ -54,52 +61,52 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---qgiehgcd3yqtpsgd
+--nin2tevzwjvssdyh
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 04.09.2023 12:00:02, Pavel Pisa wrote:
-> The of_overlay_fdt_apply has been changed but when CONFIG_OF_OVERLAY
-> support is not configured then old stub prototype is declared
-> by of.h header.
+On 01.09.2023 14:10:43, Srinivas Goud wrote:
+> ECC feature added to Tx and Rx FIFOs for Xilinx AXI CAN Controller.
+> Part of this feature configuration and counter registers added in
+> IP for 1bit/2bit ECC errors.
 >=20
-> Signed-off-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+> xlnx,has-ecc is optional property and added to Xilinx AXI CAN Controller
+> node if ECC block enabled in the HW
+>=20
+> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
+> ---
+> Changes in v4:
+> Fix binding check warning
+> Update property description=20
+>=20
+> Changes in v3:
+> Update commit description
+>=20
+> Changes in v2:
+> None
+>=20
+>  Documentation/devicetree/bindings/net/can/xilinx,can.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/net/can/xilinx,can.yaml b/=
+Documentation/devicetree/bindings/net/can/xilinx,can.yaml
+> index 64d57c3..50a2671 100644
+> --- a/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
+> @@ -49,6 +49,10 @@ properties:
+>    resets:
+>      maxItems: 1
+> =20
+> +  xlnx,has-ecc:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: CAN Tx and Rx fifo has ECC (AXI CAN)
 
-You please add:
-
-Fixes: 47284862bfc7 ("of: overlay: Extend of_overlay_fdt_apply() to specify=
- the target node")
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Are there 2 FIFOs? If so I'd phrase it this way:
+"CAN TX and RX FIFOs have ECC support (AXI CAN)" - or -
+"CAN TX and RX FIFOs support ECC"
 
 Marc
-
-> ---
->  include/linux/of.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/include/linux/of.h b/include/linux/of.h
-> index ed679819c279..6a9ddf20e79a 100644
-> --- a/include/linux/of.h
-> +++ b/include/linux/of.h
-> @@ -1676,8 +1676,8 @@ int of_overlay_notifier_unregister(struct notifier_=
-block *nb);
-> =20
->  #else
-> =20
-> -static inline int of_overlay_fdt_apply(void *overlay_fdt, u32 overlay_fd=
-t_size,
-> -				       int *ovcs_id)
-> +static inline int of_overlay_fdt_apply(const void *overlay_fdt, u32 over=
-lay_fdt_size,
-> +				       int *ovcs_id, struct device_node *target_base)
->  {
->  	return -ENOTSUPP;
->  }
-> --=20
-> 2.39.2
->=20
->=20
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde          |
@@ -107,19 +114,19 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---qgiehgcd3yqtpsgd
+--nin2tevzwjvssdyh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmT1um8ACgkQvlAcSiqK
-BOhpRQf+JHbOWDt//XdSpUm6e9wqWIYBNXaKGbsGV3+zyr2n0ZU07Pb2Ipm7c+bn
-AFcFDnJaoUm0/b9OwdMicJJU0Vb7kif7+LAgsEVdUVVLQmc0feje8PeZGji274ga
-04rYU92BYBziyoeZlhLc9X9iiv7V4aKHZgApsvrb5Mf1tN0BVRX4QzrMZfauxuR0
-+Uh9S6qqXOgGb9uEo9bwL7SZ507dDWdYeOjmUdO8qJVJPzHPvOYzLM2/aWmwCrTw
-GT3MB1jMQa/a3/w1FMUzcw6pzqRIB9Vlv88ULeHYytFggZx5p+U5z/7WL8OedQbQ
-5nMOlo04DX9QYB3fQJl7UVo2RPmkUg==
-=lL2s
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmT17z0ACgkQvlAcSiqK
+BOgWQQf+My4CPC2KjO558oJv4n5uvbTZcmM8qAT2RFDMOB+Kny4bi4yvygdF6ysD
+sBj/FRevD9HgawxAHO7f99cCSdwg+DLex4Ya9wJ4Lu/SnebAP9WQxCx6esvnYdEa
+tsGQqEQqBPn6RsuK9fcmeiIX9kNg9EWstA5e6LclXusSrkdpYGMiF1seeUEzxDK7
+IBxfHm6I9n/HqOg92PJrhtOo4DFMAC0FXm35yqxTXidRW91CdpbECLJcRcnxhc2x
+jco+vaxeVylUUkzLhxcfX5+7dcOAQ8bwQeWYg0tREThMxrUbfeMvOxgCJ802pHZK
+XZroGNCv/NZ2s30019lKTfyPyalaRA==
+=NA90
 -----END PGP SIGNATURE-----
 
---qgiehgcd3yqtpsgd--
+--nin2tevzwjvssdyh--
