@@ -2,98 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB9979C70B
-	for <lists+linux-can@lfdr.de>; Tue, 12 Sep 2023 08:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AB379CC05
+	for <lists+linux-can@lfdr.de>; Tue, 12 Sep 2023 11:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjILGh7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 12 Sep 2023 02:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S232513AbjILJih (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Sep 2023 05:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjILGh6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Sep 2023 02:37:58 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1944DE78
-        for <linux-can@vger.kernel.org>; Mon, 11 Sep 2023 23:37:55 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        with ESMTP id S232599AbjILJif (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Sep 2023 05:38:35 -0400
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403641BE
+        for <linux-can@vger.kernel.org>; Tue, 12 Sep 2023 02:38:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+        s=default2211; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+        Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References;
+        bh=6pCekj0zEjPFzNNYE2j9g939WyU4ejIqBrnnyI0eMEQ=; b=pWe2U0dfjxYHfLq1INtePnIjT+
+        G7Q0fCDbubQjyzuNvNNObu4l5B5usv3Sd2ZzGSKaZqqA6aUDsNwynSOlX7NpT642Pxo/YVK8PGRmf
+        Yy93bK8s/ZXpGOuMYQGCLocyftavECGrWieKca9iM2D6ntLZejoRXDq7F8Q4UE9iZadPTkRi/mQOT
+        vr2GgIxIumyghalj+3rpisrnPvmDtI+AdQmMi9zxh1qidMj8xbsx4XIIDZCXxG9HpGc2gLSM/DyW3
+        dgofaDHfe1PYqqCTTBk0fuX+i+PX8G3J8HvgFVZ+YdL8xs4A5QdpRrq9FnhTvnaRPTSUQlZxazq0w
+        Zxuy3IJw==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <martin@geanix.com>)
+        id 1qfzqk-00041E-O1; Tue, 12 Sep 2023 11:38:26 +0200
+Received: from [185.17.218.86] (helo=zen..)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qfx1k-0006PS-HP; Tue, 12 Sep 2023 08:37:36 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C06B721E7FC;
-        Tue, 12 Sep 2023 06:37:34 +0000 (UTC)
-Date:   Tue, 12 Sep 2023 08:37:32 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Goud <srinivas.goud@amd.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        p.zabel@pengutronix.de, git@amd.com, michal.simek@amd.com,
-        linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, appana.durga.rao@xilinx.com,
-        naga.sureshkumar.relli@xilinx.com
-Subject: Re: [PATCH v4 3/3] can: xilinx_can: Add ethtool stats interface for
- ECC errors
-Message-ID: <20230912-drowsily-smoking-8c8f48c10f29-mkl@pengutronix.de>
-References: <1693557645-2728466-1-git-send-email-srinivas.goud@amd.com>
- <1693557645-2728466-4-git-send-email-srinivas.goud@amd.com>
+        (envelope-from <martin@geanix.com>)
+        id 1qfzqk-000PsR-EU; Tue, 12 Sep 2023 11:38:26 +0200
+From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+To:     linux-can@vger.kernel.org
+Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 1/2] can: m_can: allow keeping the transceiver running in suspend
+Date:   Tue, 12 Sep 2023 11:38:03 +0200
+Message-ID: <20230912093807.1383720-1-martin@geanix.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l5vvd2wtknntl2aj"
-Content-Disposition: inline
-In-Reply-To: <1693557645-2728466-4-git-send-email-srinivas.goud@amd.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: martin@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.8/27029/Tue Sep 12 09:38:51 2023)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Add a flag to the suspend class function that leaves the chip in a
+running state with rx interrupt enabled, so that m_can device driver can
+configure and use the interrupt as a wakeup source.
 
---l5vvd2wtknntl2aj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Martin Hundebøll <martin@geanix.com>
+---
+ drivers/net/can/m_can/m_can.c          | 13 +++++++++++--
+ drivers/net/can/m_can/m_can.h          |  2 +-
+ drivers/net/can/m_can/m_can_platform.c |  2 +-
+ 3 files changed, 13 insertions(+), 4 deletions(-)
 
-On 01.09.2023 14:10:45, Srinivas Goud wrote:
-> Add ethtool stats interface for reading FIFO 1bit/2bit
-> ECC errors information.
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 16ecc11c7f62..21ac826170f9 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -2113,7 +2113,7 @@ void m_can_class_unregister(struct m_can_classdev *cdev)
+ }
+ EXPORT_SYMBOL_GPL(m_can_class_unregister);
+ 
+-int m_can_class_suspend(struct device *dev)
++int m_can_class_suspend(struct device *dev, bool is_wake_source)
+ {
+ 	struct m_can_classdev *cdev = dev_get_drvdata(dev);
+ 	struct net_device *ndev = cdev->net;
+@@ -2121,7 +2121,16 @@ int m_can_class_suspend(struct device *dev)
+ 	if (netif_running(ndev)) {
+ 		netif_stop_queue(ndev);
+ 		netif_device_detach(ndev);
+-		m_can_stop(ndev);
++
++		/*
++		 * leave the chip running with rx interrupt enabled if it used
++		 * as a wake-up source.
++		 */
++		if (is_wake_source)
++			m_can_write(cdev, M_CAN_IE, IR_RF0N);
++		else
++			m_can_stop(ndev);
++
+ 		m_can_clk_stop(cdev);
+ 	}
+ 
+diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+index 520e14277dff..542e8daad578 100644
+--- a/drivers/net/can/m_can/m_can.h
++++ b/drivers/net/can/m_can/m_can.h
+@@ -105,6 +105,6 @@ int m_can_class_get_clocks(struct m_can_classdev *cdev);
+ int m_can_init_ram(struct m_can_classdev *priv);
+ int m_can_check_mram_cfg(struct m_can_classdev *cdev, u32 mram_max_size);
+ 
+-int m_can_class_suspend(struct device *dev);
++int m_can_class_suspend(struct device *dev, bool is_wake_source);
+ int m_can_class_resume(struct device *dev);
+ #endif	/* _CAN_M_H_ */
+diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+index cdb28d6a092c..bbf6a245a3e0 100644
+--- a/drivers/net/can/m_can/m_can_platform.c
++++ b/drivers/net/can/m_can/m_can_platform.c
+@@ -169,7 +169,7 @@ static int m_can_plat_probe(struct platform_device *pdev)
+ 
+ static __maybe_unused int m_can_suspend(struct device *dev)
+ {
+-	return m_can_class_suspend(dev);
++	return m_can_class_suspend(dev, false);
+ }
+ 
+ static __maybe_unused int m_can_resume(struct device *dev)
+-- 
+2.42.0
 
-I just figured out, that there is an u64 stats helper:
-
-https://elixir.bootlin.com/linux/latest/source/include/linux/u64_stats_sync=
-=2Eh
-
-Please make use of this one.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---l5vvd2wtknntl2aj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUABykACgkQvlAcSiqK
-BOhREwf/eDuGUyy6bTBn0WZUOknRwaFJNz/q/sdZBpFZUL469b0U2LZGsh09KyH2
-OLhRHxHumjIpt+sBBBt5EReH9SJm8BceatVSHwr0oucOKiHEhJZGeHHXpa64DhVu
-6e29Td5MQH4qiv6UTwkIBvzhIoi0TdfFDmLDkcGC9svoZYNgvpW1Cq2UlljE1K/C
-7NEFFyNGemCLdAM4rCALm8Jf4RonIqj3Sme6suyKXAkfyGqmYeY89aHqSsS07i1E
-1NhHVGaHWBK4jvOolh5ImLjc4u/bgyy1LbugIeHCSqr1CX8ik8bp3wf601gZEIhQ
-8Fjkq5g/f7r7hT5zySaGRiBDJqN40w==
-=39w6
------END PGP SIGNATURE-----
-
---l5vvd2wtknntl2aj--
