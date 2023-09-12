@@ -2,59 +2,98 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992C579B6BF
-	for <lists+linux-can@lfdr.de>; Tue, 12 Sep 2023 02:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB9979C70B
+	for <lists+linux-can@lfdr.de>; Tue, 12 Sep 2023 08:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241581AbjIKVRg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Sep 2023 17:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
+        id S230096AbjILGh7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Sep 2023 02:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237153AbjIKMGj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Sep 2023 08:06:39 -0400
-Received: from sanan-e.com (unknown [218.107.219.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9B89F2;
-        Mon, 11 Sep 2023 05:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sanan-e.com; s=dkim; h=Received:Content-Type:MIME-Version:
-        Content-Transfer-Encoding:Content-Description:Subject:To:From:
-        Date:Reply-To:Message-Id; bh=qcS40TKk7lDEkm1RQbO1KTL2NSc/wnLNi62
-        pjzED0xE=; b=TTO2mCGYYf1qUosdClbJlX4e/lip1qeym3nezRYw0TVt2epAVlX
-        UfiZ14ATKYqdmFZU8tBzump56U3Nlrn5lpv+wgdvYNLfuQVjh2a6eblPuEwoayif
-        5GIGzyNMyG4RNBz6Ej5O27aszk76IDuagD3XKL7oe+ELdIK4L6Q/h1tE=
-Received: from [156.96.56.92] (unknown [128.14.67.204])
-        by MailDR (Coremail) with SMTP id AQAAfwDXhQrc__5keLCbAA--.1977S91;
-        Mon, 11 Sep 2023 20:05:30 +0800 (CST)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S230041AbjILGh6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Sep 2023 02:37:58 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1944DE78
+        for <linux-can@vger.kernel.org>; Mon, 11 Sep 2023 23:37:55 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qfx1k-0006PS-HP; Tue, 12 Sep 2023 08:37:36 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C06B721E7FC;
+        Tue, 12 Sep 2023 06:37:34 +0000 (UTC)
+Date:   Tue, 12 Sep 2023 08:37:32 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Srinivas Goud <srinivas.goud@amd.com>
+Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        p.zabel@pengutronix.de, git@amd.com, michal.simek@amd.com,
+        linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, appana.durga.rao@xilinx.com,
+        naga.sureshkumar.relli@xilinx.com
+Subject: Re: [PATCH v4 3/3] can: xilinx_can: Add ethtool stats interface for
+ ECC errors
+Message-ID: <20230912-drowsily-smoking-8c8f48c10f29-mkl@pengutronix.de>
+References: <1693557645-2728466-1-git-send-email-srinivas.goud@amd.com>
+ <1693557645-2728466-4-git-send-email-srinivas.goud@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Help
-To:     Recipients <olena@sanan-e.com>
-From:   olena@sanan-e.com
-Date:   Mon, 11 Sep 2023 05:05:15 -0700
-Reply-To: olenasheve73@gmail.com
-X-CM-TRANSID: AQAAfwDXhQrc__5keLCbAA--.1977S91
-Message-Id: <64FF02A9.475669.70031@sanan-e.com>
-Authentication-Results: MailDR; spf=neutral smtp.mail=olena@sanan-e.co
-        m;
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRUUUUUUUUU
-        =
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l5vvd2wtknntl2aj"
+Content-Disposition: inline
+In-Reply-To: <1693557645-2728466-4-git-send-email-srinivas.goud@amd.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
-I am a Ukrainian, I have funds for investment, can you please help me reloc=
-ate and invest in your country? Thank you as i possibly wait to hear from y=
-ou, =
 
-Olena.
+--l5vvd2wtknntl2aj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On 01.09.2023 14:10:45, Srinivas Goud wrote:
+> Add ethtool stats interface for reading FIFO 1bit/2bit
+> ECC errors information.
+
+I just figured out, that there is an u64 stats helper:
+
+https://elixir.bootlin.com/linux/latest/source/include/linux/u64_stats_sync=
+=2Eh
+
+Please make use of this one.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--l5vvd2wtknntl2aj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUABykACgkQvlAcSiqK
+BOhREwf/eDuGUyy6bTBn0WZUOknRwaFJNz/q/sdZBpFZUL469b0U2LZGsh09KyH2
+OLhRHxHumjIpt+sBBBt5EReH9SJm8BceatVSHwr0oucOKiHEhJZGeHHXpa64DhVu
+6e29Td5MQH4qiv6UTwkIBvzhIoi0TdfFDmLDkcGC9svoZYNgvpW1Cq2UlljE1K/C
+7NEFFyNGemCLdAM4rCALm8Jf4RonIqj3Sme6suyKXAkfyGqmYeY89aHqSsS07i1E
+1NhHVGaHWBK4jvOolh5ImLjc4u/bgyy1LbugIeHCSqr1CX8ik8bp3wf601gZEIhQ
+8Fjkq5g/f7r7hT5zySaGRiBDJqN40w==
+=39w6
+-----END PGP SIGNATURE-----
+
+--l5vvd2wtknntl2aj--
