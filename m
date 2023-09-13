@@ -2,67 +2,168 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7369079E158
-	for <lists+linux-can@lfdr.de>; Wed, 13 Sep 2023 10:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB9179EAED
+	for <lists+linux-can@lfdr.de>; Wed, 13 Sep 2023 16:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238745AbjIMIAq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Sep 2023 04:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
+        id S232183AbjIMOXB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 13 Sep 2023 10:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238751AbjIMIAm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Sep 2023 04:00:42 -0400
-Received: from mail.venturelinkbiz.com (mail.venturelinkbiz.com [51.195.119.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C192C19A4
-        for <linux-can@vger.kernel.org>; Wed, 13 Sep 2023 01:00:35 -0700 (PDT)
-Received: by mail.venturelinkbiz.com (Postfix, from userid 1002)
-        id 8CF6E462ED; Wed, 13 Sep 2023 08:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=venturelinkbiz.com;
-        s=mail; t=1694592033;
-        bh=JBV4b8UUo1MSngn/QBoedt1Dv52bT8rWeq4R22MtJMs=;
-        h=Date:From:To:Subject:From;
-        b=YkFzKk5WalgAOn1HVJ+fgw3XRtbDbXL37t6B97gBD4M0eTPHGnaf81NQFqsvyvdXr
-         RI1csyueZ7fUTfkPiWGz7wZgMHXGJ8l4iyU6WS842V2+ywfse+2aJ1su8/l9LKaOvP
-         f8JC42PBQ/LUSP0fK31kBZx+F4T1q6SXfy9DKtZR9XBUtNbITc06L8+RpKwgUKBJtJ
-         QyatQLJUyUElGarzHYhNZ6LT2hlCwh2i8Txo4iZm245NxgOkj6OQsNM5w+HJe5tRAa
-         MfDtvcnRig6M+XuA/7j0qwu45ulmjxGt3m4gr1J9ZAsEJ3mAfImzO18jIeFuYoJt2T
-         5rTz59cstBZcw==
-Received: by mail.venturelinkbiz.com for <linux-can@vger.kernel.org>; Wed, 13 Sep 2023 08:00:32 GMT
-Message-ID: <20230913064500-0.1.2d.6fgr.0.c7ihhglbh2@venturelinkbiz.com>
-Date:   Wed, 13 Sep 2023 08:00:32 GMT
-From:   "Michal Rmoutil" <michal.rmoutil@venturelinkbiz.com>
-To:     <linux-can@vger.kernel.org>
-Subject: =?UTF-8?Q?Efektivn=C3=AD_sledov=C3=A1n=C3=AD_a_optimalizace_v=C3=BDroby_pro_va=C5=A1i_spole=C4=8Dnost?=
-X-Mailer: mail.venturelinkbiz.com
+        with ESMTP id S230467AbjIMOXB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Sep 2023 10:23:01 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A7D98
+        for <linux-can@vger.kernel.org>; Wed, 13 Sep 2023 07:22:57 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qgQlX-0003r1-Vd; Wed, 13 Sep 2023 16:22:51 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qgQlW-0065sq-Rj; Wed, 13 Sep 2023 16:22:50 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 88AE921FB9A;
+        Wed, 13 Sep 2023 14:22:50 +0000 (UTC)
+Date:   Wed, 13 Sep 2023 16:22:50 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Martin =?utf-8?Q?Hundeb=C3=B8ll?= <martin@geanix.com>
+Cc:     linux-can@vger.kernel.org,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Subject: Re: [PATCH 1/2] can: m_can: allow keeping the transceiver running in
+ suspend
+Message-ID: <20230913-ageless-chump-67dfb3da0f42-mkl@pengutronix.de>
+References: <20230912093807.1383720-1-martin@geanix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r7ptotzekm6qckt5"
+Content-Disposition: inline
+In-Reply-To: <20230912093807.1383720-1-martin@geanix.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dobr=C3=A9 r=C3=A1no,
 
-m=C3=A1te mo=C5=BEnost sledovat stav ka=C5=BEd=C3=A9ho stroje a v=C3=BDro=
-bn=C3=ADho procesu z kancel=C3=A1=C5=99e, konferen=C4=8Dn=C3=AD m=C3=ADst=
-nosti nebo dokonce z domova =C4=8Di na cest=C3=A1ch =E2=80=93 na va=C5=A1=
-em telefonu?
+--r7ptotzekm6qckt5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Poskytujeme rychle implementovateln=C3=BD a snadno pou=C5=BEiteln=C3=BD n=
-=C3=A1stroj, kter=C3=BD zachyt=C3=AD i n=C4=9Bkolikasekundov=C3=BD mikrop=
-rostoj a okam=C5=BEit=C4=9B p=C5=99epo=C4=8D=C3=ADt=C3=A1 vyu=C5=BEit=C3=AD=
- stroje v kontextu dan=C3=A9 v=C3=BDrobn=C3=AD zak=C3=A1zky.
+On 12.09.2023 11:38:03, Martin Hundeb=C3=B8ll wrote:
+> Add a flag to the suspend class function that leaves the chip in a
+> running state with rx interrupt enabled, so that m_can device driver can
+> configure and use the interrupt as a wakeup source.
+>=20
+> Signed-off-by: Martin Hundeb=C3=B8ll <martin@geanix.com>
+> ---
+>  drivers/net/can/m_can/m_can.c          | 13 +++++++++++--
+>  drivers/net/can/m_can/m_can.h          |  2 +-
+>  drivers/net/can/m_can/m_can_platform.c |  2 +-
+>  3 files changed, 13 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> index 16ecc11c7f62..21ac826170f9 100644
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -2113,7 +2113,7 @@ void m_can_class_unregister(struct m_can_classdev *=
+cdev)
+>  }
+>  EXPORT_SYMBOL_GPL(m_can_class_unregister);
+> =20
+> -int m_can_class_suspend(struct device *dev)
+> +int m_can_class_suspend(struct device *dev, bool is_wake_source)
 
-Kdykoli vid=C3=ADte stav objedn=C3=A1vky a jste informov=C3=A1ni o p=C5=99=
-=C3=ADpadn=C3=A9m sn=C3=AD=C5=BEen=C3=AD efektivity. Syst=C3=A9m s=C3=A1m=
- analyzuje data a p=C5=99ipravuje cenn=C3=A9 reporty, co=C5=BE oper=C3=A1=
-tor=C5=AFm umo=C5=BE=C5=88uje soust=C5=99edit se na v=C3=BDrobn=C3=AD c=C3=
-=ADl.
+Please change all users of m_can_class_suspend().
 
-C=C3=ADl je jednoduch=C3=BD: jeden pohled =E2=80=93 cel=C3=A1 tov=C3=A1rn=
-a. =C4=8Cek=C3=A1m na odpov=C4=9B=C4=8F, jestli vid=C3=ADte mo=C5=BEnost =
-vyu=C5=BEit=C3=AD takov=C3=A9ho n=C3=A1stroje ve va=C5=A1=C3=AD firm=C4=9B=
-=2E
+>  {
+>  	struct m_can_classdev *cdev =3D dev_get_drvdata(dev);
+>  	struct net_device *ndev =3D cdev->net;
+> @@ -2121,7 +2121,16 @@ int m_can_class_suspend(struct device *dev)
+>  	if (netif_running(ndev)) {
+>  		netif_stop_queue(ndev);
+>  		netif_device_detach(ndev);
+> -		m_can_stop(ndev);
+> +
+> +		/*
+> +		 * leave the chip running with rx interrupt enabled if it used
+> +		 * as a wake-up source.
+> +		 */
 
+networking block comments don't use an empty /* line, use /* Comment...
 
-Pozdravy
-Michal Rmoutil
+> +		if (is_wake_source)
+> +			m_can_write(cdev, M_CAN_IE, IR_RF0N);
+> +		else
+> +			m_can_stop(ndev);
+> +
+>  		m_can_clk_stop(cdev);
+>  	}
+> =20
+> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+> index 520e14277dff..542e8daad578 100644
+> --- a/drivers/net/can/m_can/m_can.h
+> +++ b/drivers/net/can/m_can/m_can.h
+> @@ -105,6 +105,6 @@ int m_can_class_get_clocks(struct m_can_classdev *cde=
+v);
+>  int m_can_init_ram(struct m_can_classdev *priv);
+>  int m_can_check_mram_cfg(struct m_can_classdev *cdev, u32 mram_max_size);
+> =20
+> -int m_can_class_suspend(struct device *dev);
+> +int m_can_class_suspend(struct device *dev, bool is_wake_source);
+>  int m_can_class_resume(struct device *dev);
+>  #endif	/* _CAN_M_H_ */
+> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_c=
+an/m_can_platform.c
+> index cdb28d6a092c..bbf6a245a3e0 100644
+> --- a/drivers/net/can/m_can/m_can_platform.c
+> +++ b/drivers/net/can/m_can/m_can_platform.c
+> @@ -169,7 +169,7 @@ static int m_can_plat_probe(struct platform_device *p=
+dev)
+> =20
+>  static __maybe_unused int m_can_suspend(struct device *dev)
+>  {
+> -	return m_can_class_suspend(dev);
+> +	return m_can_class_suspend(dev, false);
+>  }
+> =20
+>  static __maybe_unused int m_can_resume(struct device *dev)
+> --=20
+> 2.42.0
+>=20
+>=20
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--r7ptotzekm6qckt5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUBxbcACgkQvlAcSiqK
+BOivCAgAkdSRT58oSnfRqq5pdKIZtUKiDPyGmbfXKIm4RuBDTWmX4eT8IkHgnrCJ
+r/HI/0UwWo3MVIxYhgp2qEHiSNFkRPcBKZkP9gtOBhkosjOBdKRGZ8tmZ0TOOGT1
+3X/fZUtJ1xqFv5hRx/nKZb6m/9DAXYMs1c/ROVoc94ioOrmHGAgXW7ATnWSkrlwp
+81KlfxCywZaL0RCnKNmgeL5Ab1q/SPCbjkv19rFuYmXFXnRgals8M9GQkJyDAZm0
+1otM+r2StzSIGoLbWWRrsxnKIlJV7j59aaol3+FfJ8k+M3HMqKUtuDoEVKwH/6z3
+bq40Cyzh0bRnGhi7yWq1xTK/m8VAFw==
+=GaeU
+-----END PGP SIGNATURE-----
+
+--r7ptotzekm6qckt5--
