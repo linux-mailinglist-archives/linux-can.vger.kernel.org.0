@@ -2,102 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B36B7A15B7
-	for <lists+linux-can@lfdr.de>; Fri, 15 Sep 2023 07:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6907A17F2
+	for <lists+linux-can@lfdr.de>; Fri, 15 Sep 2023 10:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbjIOFsj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 15 Sep 2023 01:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S232791AbjIOIFb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 15 Sep 2023 04:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjIOFsj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Sep 2023 01:48:39 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ADF2716
-        for <linux-can@vger.kernel.org>; Thu, 14 Sep 2023 22:48:24 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-68fc292de9dso1332320b3a.0
-        for <linux-can@vger.kernel.org>; Thu, 14 Sep 2023 22:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1694756904; x=1695361704; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5wvuYGMb69gw0ryjEx45T+Ib9bEdJbUfO1MAucMghFI=;
-        b=cI9zg0WDHM4EoOc19Z/5L8O+ynkUb4sISfW1MaOKj5ByPuneomZqJYdfI3AtI9FxOf
-         qG52IYbkDId1Ei90doFDuuqKmvaq9sChMoiq+6UnPLxA7bRMSzhHf9fx2Q7jYFATFNtA
-         EjPaCxoyXmKQx5rT095JTZJ1SgRjJiOsKFozzjqMUH+/qUyQCRj8pLLXCfiewoUtY65B
-         OTGkltfiDbUxRZGREfsrSvTUoAj9pWCHclPCqFky+gm+t09PPqBOmQ/1VsrCOcBFbDaZ
-         pNOvA37XohTlNLKT3KdSuozDtbeASrjK47WCsKBS33p++rqjaDVM7ATgImJcC6IcsbeO
-         zfNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694756904; x=1695361704;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5wvuYGMb69gw0ryjEx45T+Ib9bEdJbUfO1MAucMghFI=;
-        b=mCJlGI5PHh0p5aHmwPLmAitaTxNh8CGK99EZJnh1/EPsXjx2+0K4bHRjYkZhjvbft6
-         u9Pd978j1bgSswHePlrNvA6BkfoXPo0IzHEzTy2EAlAPnN8JUbSqz2eyrRU3TRHifqmy
-         EnrcV1uwY3EfuA0D1j2k18rec8osGaMgqyQjJwecmDramVYUC+3OCcx2dMZ1fAXlYSPd
-         yFb2inLjfxc/kth+hF5uyIHdK0/uQqGC6nePc8rwNYjgA5d+Fq87Fbv+GlfjxpoGJHmf
-         4cWQgzcOHZbN2zqsZk3EMVwuioQJqViiFeNmiGmzfYaXVSiN7XfdIls7Qo8+o3pMi+Zn
-         10Ww==
-X-Gm-Message-State: AOJu0YzBrNrTzEsX9JhV17KoMeeH9o9iNtPQrdtYRscXciZ01CDviAj3
-        u/d5LclBWLTobaLireMOjbo=
-X-Google-Smtp-Source: AGHT+IEH1SbgLgbAe8PjKBkF2+EEKFERWQH+zw357MFjxj5hfoG5GqjNC1feQhg0N1H6fHJuDMtXNA==
-X-Received: by 2002:a05:6a00:b91:b0:68f:b769:9182 with SMTP id g17-20020a056a000b9100b0068fb7699182mr6657155pfj.9.1694756903883;
-        Thu, 14 Sep 2023 22:48:23 -0700 (PDT)
-Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
-        by smtp.gmail.com with ESMTPSA id s3-20020aa78d43000000b0068c62a45be6sm2268742pfe.179.2023.09.14.22.48.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 22:48:23 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v2 2/2] can: etas_es58x: add missing a blank line after declaration
-Date:   Fri, 15 Sep 2023 14:48:15 +0900
-Message-Id: <20230915054815.3130251-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230915054815.3130251-1-mailhol.vincent@wanadoo.fr>
-References: <20230914112954.3067242-1-mailhol.vincent@wanadoo.fr>
- <20230915054815.3130251-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S232809AbjIOIF3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Sep 2023 04:05:29 -0400
+Received: from mail.arnisdale.pl (mail.arnisdale.pl [151.80.133.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD761BCF
+        for <linux-can@vger.kernel.org>; Fri, 15 Sep 2023 01:05:23 -0700 (PDT)
+Received: by mail.arnisdale.pl (Postfix, from userid 1002)
+        id 4CD2E2A47A; Fri, 15 Sep 2023 08:01:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=arnisdale.pl; s=mail;
+        t=1694764881; bh=6DhEsVYOGxxfetVY3oiVeew+7Cm34ArcvgDq2WQYIRw=;
+        h=Date:From:To:Subject:From;
+        b=txNwxXsyCX0EP5nlfg+7xL5lqFuZVuic/nDDdOK7TeWVtSslD+mkkHKae8968pm8K
+         axGH2LKfsEQbxQHFDL5WxKlRxaNFGV+NLKOw+OBQFd6QRreKHBscy4eHsPru4/ad3a
+         ymbkWL6yTTepLd+DqVV8MNBjtEJyGr6sHvmB4///HN7R2N/N9aJDuAHh6kX//UASnI
+         QrxFtbdWMoojg0+uomNbLui22c6XzZPM2yYpnGhWPb41AMCK4uX1CmwxBhvoxGK3fw
+         8T0ElSXF1xmmAru1pKDb7pSnQ3VReQI8gb5L4gED6yDSz0ghIyWXCF5LqKb3SL1zbS
+         lz/D39i6Q4URA==
+Received: by mail.arnisdale.pl for <linux-can@vger.kernel.org>; Fri, 15 Sep 2023 08:00:37 GMT
+Message-ID: <20230915064502-0.1.6y.1y4ar.0.mp1oppydln@arnisdale.pl>
+Date:   Fri, 15 Sep 2023 08:00:37 GMT
+From:   "Maciej Telka" <maciej.telka@arnisdale.pl>
+To:     <linux-can@vger.kernel.org>
+Subject: =?UTF-8?Q?Prosz=C4=99_o_kontakt?=
+X-Mailer: mail.arnisdale.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Fix below checkpatch warning:
+Dzie=C5=84 dobry,
 
-  WARNING: Missing a blank line after declarations
-  #2233: FILE: drivers/net/can/usb/etas_es58x/es58x_core.c:2233:
-  +		int ret = es58x_init_netdev(es58x_dev, ch_idx);
-  +		if (ret) {
+Czy jest mo=C5=BCliwo=C5=9B=C4=87 nawi=C4=85zania wsp=C3=B3=C5=82pracy z =
+Pa=C5=84stwem?
 
-Fixes: d8f26fd689dd ("can: etas_es58x: remove es58x_get_product_info()")
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/usb/etas_es58x/es58x_core.c | 1 +
- 1 file changed, 1 insertion(+)
+Z ch=C4=99ci=C4=85 porozmawiam z osob=C4=85 zajmuj=C4=85c=C4=85 si=C4=99 =
+dzia=C5=82aniami zwi=C4=85zanymi ze sprzeda=C5=BC=C4=85.
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index 0c7f7505632c..5e3a72b7c469 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -2230,6 +2230,7 @@ static int es58x_probe(struct usb_interface *intf,
- 
- 	for (ch_idx = 0; ch_idx < es58x_dev->num_can_ch; ch_idx++) {
- 		int ret = es58x_init_netdev(es58x_dev, ch_idx);
-+
- 		if (ret) {
- 			es58x_free_netdevs(es58x_dev);
- 			return ret;
--- 
-2.25.1
+Pomagamy skutecznie pozyskiwa=C4=87 nowych klient=C3=B3w.
 
+Zapraszam do kontaktu.
+
+
+Pozdrawiam serdecznie
+Maciej Telka
