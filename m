@@ -2,39 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4077A62E4
+	by mail.lfdr.de (Postfix) with ESMTP id BA2CF7A62E5
 	for <lists+linux-can@lfdr.de>; Tue, 19 Sep 2023 14:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbjISM3R (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S229988AbjISM3R (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Tue, 19 Sep 2023 08:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbjISM3Q (ORCPT
+        with ESMTP id S231501AbjISM3Q (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Tue, 19 Sep 2023 08:29:16 -0400
 Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6ECF2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3E7E3
         for <linux-can@vger.kernel.org>; Tue, 19 Sep 2023 05:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
         s=default2211; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-        Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References;
-        bh=vN6i8leG3BbFYpMDvEA4U0PebMVy5yCn0hB2uGupVuk=; b=B3/PQG8Dp1YdH2aK/EGrjyle2o
-        4HMfFFXsARo6ziDsvQxsVup3Q4PbHvq0yGYUOuxcGmu8PzZrHwfKYaKuU5hYjyQuBGHuC9aQsXXrP
-        CBnQwdBlMBaWJ87ZzwDIMFN5UX1mskaKbxEujXR4xbGGrkN7OBwxxeUypHOXg2VsRK+17pWz3o6Di
-        RyVxk1eIrTN+6YtXi8z6Xl3A9jlH2iQx9yO41akZLGoxw2LmNdJmCjZbgwXogTKJ2Tf+e2zM9tXHz
-        GFG0qBe6Z99DEh1o3vfz6U6rb24uL2SvEnAUX1riku0x0QXpj2+bsE7YA+fvjz1ZP89Y0PJi0Silq
-        vHzmucpw==;
+        References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=AAxzke1vXCmIlWvAD6yVp1aVST7MODkE1kU8X26rQV8=; b=lxIXFuBmhNndVydtgrQvx0mhKJ
+        7EyCOw9rHigKAjXWcean8Fk5Ze25cBpA33A2H1YyJiU+T/rUqXF+8Opclbi8UWDlvZjNtxOUsiKm1
+        lYXnY8U2B4xU8UDtKNq4JiJj4LzQRUINWMw2czZXEfUB0l6825hF8119Jrpxav558SApzd/APbQ2Z
+        zypkLvcVVQEApqgS1xtA3+HZKantZ04RNHzdw4FQNJmYV9MvMBTjylFM45sKYb4ftO95GbSWLzsiF
+        GyMYAuzCEZKo0A7aVnr/h0wCM0FAwuW39x63lPNhOjbncm3I1drwl8A8SwK1G+yH1Q5oM3zHbB3AU
+        iO239/WQ==;
 Received: from sslproxy03.your-server.de ([88.198.220.132])
         by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <martin@geanix.com>)
-        id 1qiZqb-00033f-9I; Tue, 19 Sep 2023 14:28:57 +0200
+        id 1qiZqb-00033g-Hc; Tue, 19 Sep 2023 14:28:57 +0200
 Received: from [185.17.218.86] (helo=zen..)
         by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <martin@geanix.com>)
-        id 1qiZqa-000GHn-Ng; Tue, 19 Sep 2023 14:28:56 +0200
+        id 1qiZqa-000GHn-Tw; Tue, 19 Sep 2023 14:28:56 +0200
 From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
 To:     linux-can@vger.kernel.org
 Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
@@ -43,10 +43,12 @@ Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Dong Aisheng <b29396@freescale.com>,
         Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH v2 1/2] can: m_can: allow keeping the transceiver running in suspend
-Date:   Tue, 19 Sep 2023 14:28:32 +0200
-Message-ID: <20230919122841.3803289-1-martin@geanix.com>
+Subject: [PATCH v2 2/2] can: tcan4x5x: support resuming from rx interrupt signal
+Date:   Tue, 19 Sep 2023 14:28:33 +0200
+Message-ID: <20230919122841.3803289-2-martin@geanix.com>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230919122841.3803289-1-martin@geanix.com>
+References: <20230919122841.3803289-1-martin@geanix.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -61,134 +63,82 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add a flag to the suspend class function that leaves the chip in a
-running state with rx interrupt enabled, so that m_can device driver can
-configure and use the interrupt as a wakeup source.
+Implement the "wakeup-source" device tree property, so the chip is left
+running when suspending, and its rx interrupt is used as a wakeup source
+to resume operation.
 
 Signed-off-by: Martin Hundebøll <martin@geanix.com>
 ---
 
-Changes since v1:
- * Fixed comment formatting
- * Updated m_can_class_{suspend,resume} calls in m_can_pci.c too
- * Skipped calling m_can_start() when resuming a wake-source device
+Change since v1:
+ * Added `static` keyword to dev_pm_ops sturcture
 
- drivers/net/can/m_can/m_can.c          | 26 +++++++++++++++++++-------
- drivers/net/can/m_can/m_can.h          |  4 ++--
- drivers/net/can/m_can/m_can_pci.c      |  4 ++--
- drivers/net/can/m_can/m_can_platform.c |  4 ++--
- 4 files changed, 25 insertions(+), 13 deletions(-)
+ drivers/net/can/m_can/tcan4x5x-core.c | 34 ++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 16ecc11c7f62..ec345f6fd6b0 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -2113,7 +2113,7 @@ void m_can_class_unregister(struct m_can_classdev *cdev)
- }
- EXPORT_SYMBOL_GPL(m_can_class_unregister);
- 
--int m_can_class_suspend(struct device *dev)
-+int m_can_class_suspend(struct device *dev, bool is_wake_source)
- {
- 	struct m_can_classdev *cdev = dev_get_drvdata(dev);
- 	struct net_device *ndev = cdev->net;
-@@ -2121,7 +2121,15 @@ int m_can_class_suspend(struct device *dev)
- 	if (netif_running(ndev)) {
- 		netif_stop_queue(ndev);
- 		netif_device_detach(ndev);
--		m_can_stop(ndev);
-+
-+		/* leave the chip running with rx interrupt enabled if it used
-+		 * as a wake-up source.
-+		 */
-+		if (is_wake_source)
-+			m_can_write(cdev, M_CAN_IE, IR_RF0N);
-+		else
-+			m_can_stop(ndev);
-+
- 		m_can_clk_stop(cdev);
+diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+index 8a4143809d33..ccb279af22bb 100644
+--- a/drivers/net/can/m_can/tcan4x5x-core.c
++++ b/drivers/net/can/m_can/tcan4x5x-core.c
+@@ -459,6 +459,9 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
+ 		goto out_power;
  	}
  
-@@ -2133,7 +2141,7 @@ int m_can_class_suspend(struct device *dev)
++	if (device_property_read_bool(&spi->dev, "wakeup-source"))
++		device_init_wakeup(&spi->dev, true);
++
+ 	ret = m_can_class_register(mcan_class);
+ 	if (ret) {
+ 		dev_err(&spi->dev, "Failed registering m_can device %pe\n",
+@@ -487,6 +490,31 @@ static void tcan4x5x_can_remove(struct spi_device *spi)
+ 	m_can_class_free_dev(priv->cdev.net);
  }
- EXPORT_SYMBOL_GPL(m_can_class_suspend);
  
--int m_can_class_resume(struct device *dev)
-+int m_can_class_resume(struct device *dev, bool is_wake_source)
- {
- 	struct m_can_classdev *cdev = dev_get_drvdata(dev);
- 	struct net_device *ndev = cdev->net;
-@@ -2148,11 +2156,15 @@ int m_can_class_resume(struct device *dev)
- 		ret = m_can_clk_start(cdev);
- 		if (ret)
- 			return ret;
--		ret  = m_can_start(ndev);
--		if (ret) {
--			m_can_clk_stop(cdev);
- 
--			return ret;
-+		if (is_wake_source) {
-+			m_can_write(cdev, M_CAN_IE, cdev->active_interrupts);
-+		} else {
-+			ret  = m_can_start(ndev);
-+			if (ret) {
-+				m_can_clk_stop(cdev);
-+				return ret;
-+			}
- 		}
- 
- 		netif_device_attach(ndev);
-diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index 520e14277dff..5d86bcf66e83 100644
---- a/drivers/net/can/m_can/m_can.h
-+++ b/drivers/net/can/m_can/m_can.h
-@@ -105,6 +105,6 @@ int m_can_class_get_clocks(struct m_can_classdev *cdev);
- int m_can_init_ram(struct m_can_classdev *priv);
- int m_can_check_mram_cfg(struct m_can_classdev *cdev, u32 mram_max_size);
- 
--int m_can_class_suspend(struct device *dev);
--int m_can_class_resume(struct device *dev);
-+int m_can_class_suspend(struct device *dev, bool is_wake_source);
-+int m_can_class_resume(struct device *dev, bool is_wake_source);
- #endif	/* _CAN_M_H_ */
-diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/m_can_pci.c
-index f2219aa2824b..7ffbe06d96d0 100644
---- a/drivers/net/can/m_can/m_can_pci.c
-+++ b/drivers/net/can/m_can/m_can_pci.c
-@@ -169,12 +169,12 @@ static void m_can_pci_remove(struct pci_dev *pci)
- 
- static __maybe_unused int m_can_pci_suspend(struct device *dev)
- {
--	return m_can_class_suspend(dev);
++static int __maybe_unused tcan4x5x_suspend(struct device *dev)
++{
++	struct spi_device *spi = to_spi_device(dev);
++
++	if (device_may_wakeup(dev)) {
++		enable_irq_wake(spi->irq);
++
++		return m_can_class_suspend(dev, true);
++	}
++
 +	return m_can_class_suspend(dev, false);
- }
++}
++
++static int __maybe_unused tcan4x5x_resume(struct device *dev)
++{
++	struct spi_device *spi = to_spi_device(dev);
++	bool wake_source = device_may_wakeup(dev);
++	int ret = m_can_class_resume(dev, wake_source);
++
++	if (wake_source)
++		disable_irq_wake(spi->irq);
++
++	return ret;
++}
++
+ static const struct of_device_id tcan4x5x_of_match[] = {
+ 	{
+ 		.compatible = "ti,tcan4x5x",
+@@ -505,11 +533,15 @@ static const struct spi_device_id tcan4x5x_id_table[] = {
+ };
+ MODULE_DEVICE_TABLE(spi, tcan4x5x_id_table);
  
- static __maybe_unused int m_can_pci_resume(struct device *dev)
- {
--	return m_can_class_resume(dev);
-+	return m_can_class_resume(dev, false);
- }
- 
- static SIMPLE_DEV_PM_OPS(m_can_pci_pm_ops,
-diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
-index cdb28d6a092c..e49bef50d52c 100644
---- a/drivers/net/can/m_can/m_can_platform.c
-+++ b/drivers/net/can/m_can/m_can_platform.c
-@@ -169,12 +169,12 @@ static int m_can_plat_probe(struct platform_device *pdev)
- 
- static __maybe_unused int m_can_suspend(struct device *dev)
- {
--	return m_can_class_suspend(dev);
-+	return m_can_class_suspend(dev, false);
- }
- 
- static __maybe_unused int m_can_resume(struct device *dev)
- {
--	return m_can_class_resume(dev);
-+	return m_can_class_resume(dev, false);
- }
- 
- static void m_can_plat_remove(struct platform_device *pdev)
++static const struct dev_pm_ops tcan4x5x_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(tcan4x5x_suspend, tcan4x5x_resume)
++};
++
+ static struct spi_driver tcan4x5x_can_driver = {
+ 	.driver = {
+ 		.name = KBUILD_MODNAME,
+ 		.of_match_table = tcan4x5x_of_match,
+-		.pm = NULL,
++		.pm = &tcan4x5x_pm_ops,
+ 	},
+ 	.id_table = tcan4x5x_id_table,
+ 	.probe = tcan4x5x_can_probe,
 -- 
 2.42.0
 
