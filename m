@@ -2,72 +2,71 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBBF7B1C98
-	for <lists+linux-can@lfdr.de>; Thu, 28 Sep 2023 14:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D777B2F13
+	for <lists+linux-can@lfdr.de>; Fri, 29 Sep 2023 11:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbjI1Mgd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 28 Sep 2023 08:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S231774AbjI2JUb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 29 Sep 2023 05:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232514AbjI1MgZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 28 Sep 2023 08:36:25 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751E2139
-        for <linux-can@vger.kernel.org>; Thu, 28 Sep 2023 05:36:24 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D90D4C433C8;
-        Thu, 28 Sep 2023 12:36:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695904584;
-        bh=IFrcf1HPc0zyK3iLaNG9gOuBji+30hPiT2IlRSdShVg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SmmsEIeoEjtbXkbPElRqp9gu3YYdGTtyOl6LSOrsqPNKvrJFBRvd4hunEGDSG6ofF
-         ovLsJsACNdNoUM4hd6kEo9as/IwAqEZguEWwjdD6NwPRcTMTh+p6xqSvR4RIvgJgu+
-         YmjfMwTxsHXWApRPheJwSj8gVnxWb1CeGP6xT59uHhTjqji5ALA12XRlmJ+pBNfi5g
-         oOPIT6PW5FOMaMZhmhxwhMNd4QU9BAyiKGefbOXgW/CyHLHiQFByktsIztcvENhPAK
-         mwBfGB3UiLqiOg4YWK0090U7eqQduQWo92OJ/J82nX/Ki0ClHfZvG3bsLx2pzrH2Jq
-         dPtXVfiCHHfBA==
-Date:   Thu, 28 Sep 2023 14:35:56 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org,
-        =?utf-8?B?SsOpcsOpbWll?= Dautheribes 
-        <jeremie.dautheribes@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        sylvain.girard@se.com, pascal.eberhard@se.com
-Subject: Re: [PATCH net-next] can: sja1000: Fix comment
-Message-ID: <20230928123556.GH24230@kernel.org>
-References: <20230922155130.592187-1-miquel.raynal@bootlin.com>
+        with ESMTP id S232814AbjI2JUa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 29 Sep 2023 05:20:30 -0400
+X-Greylist: delayed 4933 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 29 Sep 2023 02:20:21 PDT
+Received: from mail.sumselprov.go.id (mail.sumselprov.go.id [103.239.165.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6227C19F
+        for <linux-can@vger.kernel.org>; Fri, 29 Sep 2023 02:20:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.sumselprov.go.id (Postfix) with ESMTP id B35FC2B8E1FE
+        for <linux-can@vger.kernel.org>; Thu, 28 Sep 2023 08:23:22 +0700 (WIB)
+Received: from mail.sumselprov.go.id ([127.0.0.1])
+        by localhost (mail.sumselprov.go.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 2KSu5GyEv5-A for <linux-can@vger.kernel.org>;
+        Thu, 28 Sep 2023 08:23:22 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.sumselprov.go.id (Postfix) with ESMTP id 9B2FE2B741B2
+        for <linux-can@vger.kernel.org>; Wed, 27 Sep 2023 21:35:55 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.sumselprov.go.id 9B2FE2B741B2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sumselprov.go.id;
+        s=87C938AA-CD07-11EB-B656-F72C64C7F45D; t=1695825355;
+        bh=TQIC8H1FyvMdaazyy+EWfYr8oP4lgBPm3boqxV1pWH0=;
+        h=From:To:Date:Message-ID:MIME-Version;
+        b=VGAr3MFbqvpwJEFfZt9rgWbCty+NzamyQM7szc+zJG329c1qHLbliLFvGF0NOCgRu
+         BSMPwrV0WVokSzXr1A5ATnQUVAJseKyJAGd4YMSg8m6mViWAgZhC/IMBjbvPL0jeVS
+         I2jzNG1lj27aW8YwKYz6W5lYz9CjeGkJBwxtUHJeRw68O12nOUzI1AeIHIBI/M5jl/
+         xRuaibT3dTXquu3tH1j44cI5HQ0HLX+JsYMyNnovnEyK6uWxDdp98O+m0+io4pT7qN
+         oWlhGq2JZ0vIto+kMucSRu9/C60mWyH4qUun1Y/pMWoDoxHwnpQj0Ft1nMW5+QimgL
+         0L1P+uQrtvaHg==
+X-Virus-Scanned: amavisd-new at sumselprov.go.id
+Received: from mail.sumselprov.go.id ([127.0.0.1])
+        by localhost (mail.sumselprov.go.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id KN3pw68e-285 for <linux-can@vger.kernel.org>;
+        Wed, 27 Sep 2023 21:35:48 +0700 (WIB)
+Received: from [185.216.71.226] (unknown [185.216.71.226])
+        by mail.sumselprov.go.id (Postfix) with ESMTPSA id DEB652B52ADF
+        for <linux-can@vger.kernel.org>; Wed, 27 Sep 2023 06:44:53 +0700 (WIB)
+Reply-To: dominiqueahkye4@gmail.com
+From:   Dominique Ahkye <satudata@sumselprov.go.id>
+To:     linux-can@vger.kernel.org
+Subject: Work Related
+Date:   26 Sep 2023 16:44:51 -0700
+Message-ID: <20230926164451.42C78350D7ED0343@sumselprov.go.id>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230922155130.592187-1-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL,
+        RCVD_IN_SORBS_WEB,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Sep 22, 2023 at 05:51:30PM +0200, Miquel Raynal wrote:
-> There is likely a copy-paste error here, as the exact same comment
-> appears below in this function, one time calling set_reset_mode(), the
-> other set_normal_mode().
-> 
-> Fixes: 429da1cc841b ("can: Driver for the SJA1000 CAN controller")
-
-I'm not sure this warrants a fixes tag, which implies backporting,
-but in any case the tag is correct.
-
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-The above comment notwithstanding, this seems correct to me.
-
-Reviewed-by: Simon Horman <horms@kernel.org>
+Hello,
+My email is about a business proposal we can both be involved in=20
+together.  Reply for further details please.
+Dominique Ahkye
