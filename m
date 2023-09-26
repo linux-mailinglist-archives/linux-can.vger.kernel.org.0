@@ -2,39 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3157AE408
-	for <lists+linux-can@lfdr.de>; Tue, 26 Sep 2023 05:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 032CD7AE4DE
+	for <lists+linux-can@lfdr.de>; Tue, 26 Sep 2023 07:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjIZDUR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Sep 2023 23:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S229684AbjIZFJl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 26 Sep 2023 01:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjIZDUQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Sep 2023 23:20:16 -0400
-X-Greylist: delayed 2862 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Sep 2023 20:20:08 PDT
+        with ESMTP id S230346AbjIZFJk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 26 Sep 2023 01:09:40 -0400
 Received: from mail.iszf.irk.ru (mx.iszf.irk.ru [84.237.20.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E7C89F;
-        Mon, 25 Sep 2023 20:20:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55075AF;
+        Mon, 25 Sep 2023 22:09:34 -0700 (PDT)
 Received: from mail.iszf.irk.ru (unknown [10.0.0.3])
-        by mail.iszf.irk.ru (Postfix) with ESMTP id 66C29673C1;
-        Tue, 26 Sep 2023 09:59:27 +0800 (IRKT)
+        by mail.iszf.irk.ru (Postfix) with ESMTP id A60AA67595;
+        Tue, 26 Sep 2023 11:22:10 +0800 (IRKT)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 26 Sep 2023 02:59:27 +0100
+Date:   Tue, 26 Sep 2023 04:22:10 +0100
 From:   Roweel Hambrick <tseg@iszf.irk.ru>
 To:     undisclosed-recipients:;
 Subject: Re
-Reply-To: rowellhambrick019@gmail.com
-Mail-Reply-To: rowellhambrick019@gmail.com
-Message-ID: <d59cd1ec399504e4ad5adc9727d841dd@mail.iszf.irk.ru>
+Reply-To: rowellhambrick7@gmail.com
+Mail-Reply-To: rowellhambrick7@gmail.com
+Message-ID: <f52d5767b8682c3d4afce75df013da1b@mail.iszf.irk.ru>
 X-Sender: tseg@iszf.irk.ru
 User-Agent: Roundcube Webmail/1.1.4
 X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_99,BAYES_999,
         FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,ODD_FREEM_REPTO,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
         *      DNSWL was blocked.  See
         *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
@@ -46,9 +45,12 @@ X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query
         *      [score: 1.0000]
         *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
         *      digit
-        *      [rowellhambrick019[at]gmail.com]
+        *      [rowellhambrick7[at]gmail.com]
         * -0.0 SPF_PASS SPF: sender matches SPF record
         *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 RCVD_IN_MSPIKE_L3 RBL: Low reputation (-3)
+        *      [84.237.20.139 listed in bl.mailspike.net]
+        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blocklisted
         *  1.0 ODD_FREEM_REPTO Has unusual reply-to header
         *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
 X-Spam-Level: *******
@@ -58,4 +60,4 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Did you get my last mail
+I have a deal for you
