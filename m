@@ -2,212 +2,136 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C80B7B09C1
-	for <lists+linux-can@lfdr.de>; Wed, 27 Sep 2023 18:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872247B0A43
+	for <lists+linux-can@lfdr.de>; Wed, 27 Sep 2023 18:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjI0QPQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Sep 2023 12:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
+        id S231754AbjI0Qcp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Sep 2023 12:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbjI0QPO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Sep 2023 12:15:14 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E534AF3
-        for <linux-can@vger.kernel.org>; Wed, 27 Sep 2023 09:15:09 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qlXBj-0003ta-P5; Wed, 27 Sep 2023 18:14:59 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qlXBh-009Ngb-Oy; Wed, 27 Sep 2023 18:14:57 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.96)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qlXBh-000LXL-2H;
-        Wed, 27 Sep 2023 18:14:57 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Robin van der Gracht <robin@protonic.nl>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Sili Luo <rootlab@huawei.com>, stable@vger.kernel.org,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] can: j1939: Fix UAF in j1939_sk_match_filter during setsockopt(SO_J1939_FILTER)
-Date:   Wed, 27 Sep 2023 18:14:56 +0200
-Message-Id: <20230927161456.82772-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S231847AbjI0Qcm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Sep 2023 12:32:42 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC39DE;
+        Wed, 27 Sep 2023 09:32:39 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 21C3D40003;
+        Wed, 27 Sep 2023 16:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1695832356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzRiLFiE96j5NL7WdLRQOP7BxkPSHo+tKBTr1xJAHQs=;
+        b=oVxsmLmr1QcdLdX+GqOgV/9cSAzUpOwHqs/oQQJYOOLPeVFM2D93hSjArz7bqsQPidvP8c
+        a1Mx0bFN3pN4lWyGVeQHKU925Wqamzm42rzaRFs9i1sxEuA96JxWqRUow37WCXsdAzfU5n
+        TxxmWw2A3gxWR1H1sjfeifeygp6EjmqAsDSIOkgr0HwoM4HWuW+rtiM9iyaAZGNDDL6rHX
+        OrOMDGc1krienB8n9H9Ybwv61rcd7kwIrSks5nDDhKWrlCUMUMODwxoZtRO2lwO6BhBiXJ
+        VTpv+6h9tI336phloScM1/ieYlRKVywqiyfUH1XI3tvBGO+9D127OIOdcW10bw==
+Date:   Wed, 27 Sep 2023 18:32:30 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org,
+        =?UTF-8?B?SsOpcsOpbWll?= Dautheribes 
+        <jeremie.dautheribes@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        sylvain.girard@se.com, pascal.eberhard@se.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH net] can: sja1000: Always restart the Tx queue after an
+ overrun
+Message-ID: <20230927183214.39c2986b@xps-13>
+In-Reply-To: <20230927-mystified-speak-d6aff435e38d-mkl@pengutronix.de>
+References: <20230922154727.591672-1-miquel.raynal@bootlin.com>
+        <20230927-fantasize-refuse-7fef75242672-mkl@pengutronix.de>
+        <20230927-mystified-speak-d6aff435e38d-mkl@pengutronix.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Lock jsk->sk to prevent UAF when setsockopt(..., SO_J1939_FILTER, ...)
-modifies jsk->filters while receiving packets.
+Hi Marc,
 
-Following trace was seen on affected system:
- ==================================================================
- BUG: KASAN: slab-use-after-free in j1939_sk_recv_match_one+0x1af/0x2d0 [can_j1939]
- Read of size 4 at addr ffff888012144014 by task j1939/350
+mkl@pengutronix.de wrote on Wed, 27 Sep 2023 11:33:32 +0200:
 
- CPU: 0 PID: 350 Comm: j1939 Tainted: G        W  OE      6.5.0-rc5 #1
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
- Call Trace:
-  print_report+0xd3/0x620
-  ? kasan_complete_mode_report_info+0x7d/0x200
-  ? j1939_sk_recv_match_one+0x1af/0x2d0 [can_j1939]
-  kasan_report+0xc2/0x100
-  ? j1939_sk_recv_match_one+0x1af/0x2d0 [can_j1939]
-  __asan_load4+0x84/0xb0
-  j1939_sk_recv_match_one+0x1af/0x2d0 [can_j1939]
-  j1939_sk_recv+0x20b/0x320 [can_j1939]
-  ? __kasan_check_write+0x18/0x20
-  ? __pfx_j1939_sk_recv+0x10/0x10 [can_j1939]
-  ? j1939_simple_recv+0x69/0x280 [can_j1939]
-  ? j1939_ac_recv+0x5e/0x310 [can_j1939]
-  j1939_can_recv+0x43f/0x580 [can_j1939]
-  ? __pfx_j1939_can_recv+0x10/0x10 [can_j1939]
-  ? raw_rcv+0x42/0x3c0 [can_raw]
-  ? __pfx_j1939_can_recv+0x10/0x10 [can_j1939]
-  can_rcv_filter+0x11f/0x350 [can]
-  can_receive+0x12f/0x190 [can]
-  ? __pfx_can_rcv+0x10/0x10 [can]
-  can_rcv+0xdd/0x130 [can]
-  ? __pfx_can_rcv+0x10/0x10 [can]
-  __netif_receive_skb_one_core+0x13d/0x150
-  ? __pfx___netif_receive_skb_one_core+0x10/0x10
-  ? __kasan_check_write+0x18/0x20
-  ? _raw_spin_lock_irq+0x8c/0xe0
-  __netif_receive_skb+0x23/0xb0
-  process_backlog+0x107/0x260
-  __napi_poll+0x69/0x310
-  net_rx_action+0x2a1/0x580
-  ? __pfx_net_rx_action+0x10/0x10
-  ? __pfx__raw_spin_lock+0x10/0x10
-  ? handle_irq_event+0x7d/0xa0
-  __do_softirq+0xf3/0x3f8
-  do_softirq+0x53/0x80
-  </IRQ>
-  <TASK>
-  __local_bh_enable_ip+0x6e/0x70
-  netif_rx+0x16b/0x180
-  can_send+0x32b/0x520 [can]
-  ? __pfx_can_send+0x10/0x10 [can]
-  ? __check_object_size+0x299/0x410
-  raw_sendmsg+0x572/0x6d0 [can_raw]
-  ? __pfx_raw_sendmsg+0x10/0x10 [can_raw]
-  ? apparmor_socket_sendmsg+0x2f/0x40
-  ? __pfx_raw_sendmsg+0x10/0x10 [can_raw]
-  sock_sendmsg+0xef/0x100
-  sock_write_iter+0x162/0x220
-  ? __pfx_sock_write_iter+0x10/0x10
-  ? __rtnl_unlock+0x47/0x80
-  ? security_file_permission+0x54/0x320
-  vfs_write+0x6ba/0x750
-  ? __pfx_vfs_write+0x10/0x10
-  ? __fget_light+0x1ca/0x1f0
-  ? __rcu_read_unlock+0x5b/0x280
-  ksys_write+0x143/0x170
-  ? __pfx_ksys_write+0x10/0x10
-  ? __kasan_check_read+0x15/0x20
-  ? fpregs_assert_state_consistent+0x62/0x70
-  __x64_sys_write+0x47/0x60
-  do_syscall_64+0x60/0x90
-  ? do_syscall_64+0x6d/0x90
-  ? irqentry_exit+0x3f/0x50
-  ? exc_page_fault+0x79/0xf0
-  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+> On 27.09.2023 11:30:16, Marc Kleine-Budde wrote:
+> > On 22.09.2023 17:47:27, Miquel Raynal wrote: =20
+> > > Upstream commit 717c6ec241b5 ("can: sja1000: Prevent overrun stalls w=
+ith
+> > > a soft reset on Renesas SoCs") fixes an issue with Renesas own SJA1000
+> > > CAN controller reception: the Rx buffer is only 5 messages long, so w=
+hen
+> > > the bus loaded (eg. a message every 50us), overrun may easily
+> > > happen. Upon an overrun situation, due to a possible internal crossta=
+lk
+> > > situation, the controller enters a frozen state which only can be
+> > > unlocked with a soft reset (experimentally). The solution was to offl=
+oad
+> > > a call to sja1000_start() in a threaded handler. This needs to happen=
+ in
+> > > process context as this operation requires to sleep. sja1000_start()
+> > > basically enters "reset mode", performs a proper software reset and
+> > > returns back into "normal mode".
+> > >=20
+> > > Since this fix was introduced, we no longer observe any stalls in
+> > > reception. However it was sporadically observed that the transmit path
+> > > would now freeze. Further investigation blamed the fix mentioned abov=
+e,
+> > > and especially the reset operation. Reproducing the reset in a loop
+> > > helped identifying what could possibly go wrong. The sja1000 is a sin=
+gle
+> > > Tx queue device, which leverages the netdev helpers to process one Tx
+> > > message at a time. The logic is: the queue is stopped, the message se=
+nt
+> > > to the transceiver, once properly transmitted the controller sets a
+> > > status bit which triggers an interrupt, in the interrupt handler the
+> > > transmission status is checked and the queue woken up. Unfortunately,=
+ if
+> > > an overrun happens, we might perform the soft reset precisely between
+> > > the transmission of the buffer to the transceiver and the advent of t=
+he
+> > > transmission status bit. We would then stop the transmission operation
+> > > without re-enabling the queue, leading to all further transmissions to
+> > > be ignored.
+> > >=20
+> > > The reset interrupt can only happen while the device is "open", and
+> > > after a reset we anyway want to resume normal operations, no matter i=
+f a
+> > > packet to transmit got dropped in the process, so we shall wake up the
+> > > queue. Restarting the device and waking-up the queue is exactly what
+> > > sja1000_set_mode(CAN_MODE_START) does. In order to be consistent about
+> > > the queue state, we must acquire a lock both in the reset handler and=
+ in
+> > > the transmit path to ensure serialization of both operations. As the
+> > > reset handler might still be called after the transmission of a frame=
+ to
+> > > the transceiver but before it actually gets transmitted, we must ensu=
+re
+> > > we don't leak the skb, so we free it (the behavior is consistent, no
+> > > matter if there was an skb on the stack or not). =20
+> >=20
+> > Can you make use of netif_tx_disable() and netif_wake_queue() in
+> > sja1000_reset_interrupt() instead of the lock? =20
+>=20
+> ...or netif_tx_lock()/netif_tx_unlock().
 
- Allocated by task 348:
-  kasan_save_stack+0x2a/0x50
-  kasan_set_track+0x29/0x40
-  kasan_save_alloc_info+0x1f/0x30
-  __kasan_kmalloc+0xb5/0xc0
-  __kmalloc_node_track_caller+0x67/0x160
-  j1939_sk_setsockopt+0x284/0x450 [can_j1939]
-  __sys_setsockopt+0x15c/0x2f0
-  __x64_sys_setsockopt+0x6b/0x80
-  do_syscall_64+0x60/0x90
-  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+As that's also a spinlock behind I guess it would fit. A quick look
+does not seem to show any specific constraint in using it, so let's go
+for it.
 
- Freed by task 349:
-  kasan_save_stack+0x2a/0x50
-  kasan_set_track+0x29/0x40
-  kasan_save_free_info+0x2f/0x50
-  __kasan_slab_free+0x12e/0x1c0
-  __kmem_cache_free+0x1b9/0x380
-  kfree+0x7a/0x120
-  j1939_sk_setsockopt+0x3b2/0x450 [can_j1939]
-  __sys_setsockopt+0x15c/0x2f0
-  __x64_sys_setsockopt+0x6b/0x80
-  do_syscall_64+0x60/0x90
-  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-
-Fixes: 9d71dd0c70099 ("can: add support of SAE J1939 protocol")
-Reported-by: Sili Luo <rootlab@huawei.com>
-Suggested-by: Sili Luo <rootlab@huawei.com>
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: stable@vger.kernel.org
----
- net/can/j1939/socket.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index b28c976f52a0..2ce24bf78c72 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -262,12 +262,17 @@ static bool j1939_sk_match_dst(struct j1939_sock *jsk,
- static bool j1939_sk_match_filter(struct j1939_sock *jsk,
- 				  const struct j1939_sk_buff_cb *skcb)
- {
--	const struct j1939_filter *f = jsk->filters;
--	int nfilter = jsk->nfilters;
-+	const struct j1939_filter *f;
-+	int nfilter;
-+
-+	lock_sock(&jsk->sk);
-+
-+	f = jsk->filters;
-+	nfilter = jsk->nfilters;
- 
- 	if (!nfilter)
- 		/* receive all when no filters are assigned */
--		return true;
-+		goto filter_match_found;
- 
- 	for (; nfilter; ++f, --nfilter) {
- 		if ((skcb->addr.pgn & f->pgn_mask) != f->pgn)
-@@ -276,9 +281,15 @@ static bool j1939_sk_match_filter(struct j1939_sock *jsk,
- 			continue;
- 		if ((skcb->addr.src_name & f->name_mask) != f->name)
- 			continue;
--		return true;
-+		goto filter_match_found;
- 	}
-+
-+	release_sock(&jsk->sk);
- 	return false;
-+
-+filter_match_found:
-+	release_sock(&jsk->sk);
-+	return true;
- }
- 
- static bool j1939_sk_recv_match_one(struct j1939_sock *jsk,
--- 
-2.39.2
-
+Thanks,
+Miqu=C3=A8l
