@@ -2,56 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9907AFB6B
-	for <lists+linux-can@lfdr.de>; Wed, 27 Sep 2023 08:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C221E7AFDF0
+	for <lists+linux-can@lfdr.de>; Wed, 27 Sep 2023 10:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbjI0Gxv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Sep 2023 02:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
+        id S230215AbjI0IOW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Sep 2023 04:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjI0Gxu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Sep 2023 02:53:50 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2B1EB
-        for <linux-can@vger.kernel.org>; Tue, 26 Sep 2023 23:53:48 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qlOQb-0003Cp-64; Wed, 27 Sep 2023 08:53:45 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qlOQa-009HSj-4B; Wed, 27 Sep 2023 08:53:44 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BA90B229708;
-        Wed, 27 Sep 2023 06:53:43 +0000 (UTC)
-Date:   Wed, 27 Sep 2023 08:53:43 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Eric Stahl <ericstahl@limntech.com>
-Cc:     linux-can@vger.kernel.org, marm@hms-networks.de,
-        Vincent Mailhol <vincent.mailhol@gmail.com>,
-        socketcan@hms-networks.de, Florian Ferg <flfe@hms-networks.de>,
-        Peter Seiderer <ps.report@gmx.net>
-Subject: Re: IXXAT CAN-IB2XX drivers
-Message-ID: <20230927-rely-slicer-d36eabd3b04f-mkl@pengutronix.de>
-References: <20bd5abf-5d0f-86a5-4774-a8ba33d6ca1b@limntech.com>
+        with ESMTP id S230299AbjI0IN7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Sep 2023 04:13:59 -0400
+Received: from mail.commercesolutions.pl (unknown [162.19.155.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199662701
+        for <linux-can@vger.kernel.org>; Wed, 27 Sep 2023 01:11:52 -0700 (PDT)
+Received: by mail.commercesolutions.pl (Postfix, from userid 1002)
+        id 6A16A24144; Wed, 27 Sep 2023 08:11:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=commercesolutions.pl;
+        s=mail; t=1695802282;
+        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
+        h=Date:From:To:Subject:From;
+        b=aOzxF6B9x3VHOhIOcBZu7DbVDfPaF2q7EBdAG8ZPQX35/iqKQsl4vKcbTxcUEfkIZ
+         Z8ZV+/KBSFtbcc7QueMy4gFIuF1JPEOa3HiXcw9FEuriQDseo2uyPsahaMGOqxmRlx
+         OIYn9GADPuaNakOF2ZbZK2KPE09Mp/reXUlzbDsLN5ZUiLUq5QPaz4yAT8xTd9FGxI
+         0RH5uxCsZ2br8adJ+FiZ4MOd3y5oi6Domm8QggNoFOVVT5B+FEb8razGruETsXYqII
+         03i8Z/X6j8dUT6rsVgkxtPL2W4ukakgUyA3wF0R+KqQAP4UVtrYfmftNfZxXY9FieP
+         eYkYb6rlUB1zA==
+Received: by mail.commercesolutions.pl for <linux-can@vger.kernel.org>; Wed, 27 Sep 2023 08:11:00 GMT
+Message-ID: <20230927064500-0.1.8x.1px2t.0.ai7rnq7eeu@commercesolutions.pl>
+Date:   Wed, 27 Sep 2023 08:11:00 GMT
+From:   "Kamil Tralewski" <kamil.tralewski@commercesolutions.pl>
+To:     <linux-can@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.commercesolutions.pl
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mmtlf2hqeethvljn"
-Content-Disposition: inline
-In-Reply-To: <20bd5abf-5d0f-86a5-4774-a8ba33d6ca1b@limntech.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,56 +45,18 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
---mmtlf2hqeethvljn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-On 26.09.2023 23:10:52, Eric Stahl wrote:
-> I was beginning to familiarize myself with the ix_active_can drivers
-> for IXXAT CAN-IB2XX pci/pcie boards in an attempt to get IXXAT
-> pci/pcie drivers into the kernel. I noticed that the device driver
-> distributed by HMS
-> (https://www.ixxat.com/docs/librariesprovider8/ixxat-english-new/pc-can-i=
-nterfaces/linux-drivers/socketcan-linux.tgz)
-> appears to be using the IFI CAN/CANFD core. There already appears to
-> be a kernel driver (ifi_canfd_plat_driver) that leverages the IFI
-> CAN/CANFD core. Should I continue to try to get the ix_active_can
-> drivers into the kernel or should I try to leverage the existing
-> ifi_canfd_plat_driver? If I should leverage the ifi_canfd_plat_driver,
-> what approach should I take to get it compatible with the IXXAT
-> pci/pcie cards?
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-I think it's best reusing the existing driver.
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-You can split the existing ifi_canfd_plat_probe() into a generic (i.e.
-ifi_canfd_probe()) and a platform driver specific part. The PCIe and the
-platform driver will alloc_candev() and fill out the bare minimum of
-that structure and the call into the generic ifi_canfd_probe().
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---mmtlf2hqeethvljn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUT0XQACgkQvlAcSiqK
-BOhhtQgAjbunCeF3OIsHacwT1qXdNh7sIroR4jMnvd2crmZGMe0AAF7YwhEmoSyr
-/idER0kVB3z6LIfGi0hzCjgaHkoadI2/CkcqGuZj34aTLPhQYU5b6V30iVD0m0FY
-ikfI4L+4Ga+zGhAyvaOwu2ApS4Gd69Xj0UYzAJ5w4pxPFsTwHnhvRr3xfTF1rqEf
-rSo+IhSXBAbOkAjPyZKM+uIsm1mqtG2ojXcJqJsmTsp1ieWm6iArihorz74qdIBe
-2IAhtWO/WRUzQzf+CcwT/5uLsygBleVYVHDzX6yWxZZvZRb5gwIja+PxanxGJ0YL
-+sJ2aPCSvVw6XkwBgzwPrnPaItwf9A==
-=yjGs
------END PGP SIGNATURE-----
-
---mmtlf2hqeethvljn--
+Pozdrawiam
+Kamil Tralewski
