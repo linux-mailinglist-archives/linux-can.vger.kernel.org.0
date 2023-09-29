@@ -2,53 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FCD7B348F
-	for <lists+linux-can@lfdr.de>; Fri, 29 Sep 2023 16:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F147B348D
+	for <lists+linux-can@lfdr.de>; Fri, 29 Sep 2023 16:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbjI2ONo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 29 Sep 2023 10:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S233239AbjI2ONn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 29 Sep 2023 10:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233396AbjI2ONb (ORCPT
+        with ESMTP id S233397AbjI2ONb (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Fri, 29 Sep 2023 10:13:31 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED9ECD4
-        for <linux-can@vger.kernel.org>; Fri, 29 Sep 2023 07:13:23 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-405417465aaso134989595e9.1
-        for <linux-can@vger.kernel.org>; Fri, 29 Sep 2023 07:13:23 -0700 (PDT)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C518CE2
+        for <linux-can@vger.kernel.org>; Fri, 29 Sep 2023 07:13:24 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-4066241289bso1832925e9.0
+        for <linux-can@vger.kernel.org>; Fri, 29 Sep 2023 07:13:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1695996801; x=1696601601; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1695996803; x=1696601603; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j2zHWwvcVZnmnLgXt7QMbcfSPEZ0TtF4vjzI06Pfh/I=;
-        b=HhotOffd7AeTtSLdQvpb3C1ojWtYjgyjId8wQjqpSL8XfBLwRBP1LG3eFNnS8NdUHq
-         LeG2nBVbzJQSPaymUwNcUCwBYpCDcjiVaAMXvNlhmMQz6AfXb9F/nCPUQUBolykAVftG
-         vCEklQf9nFTz2g+9NQJJmUJNln6IRKwCv64QcLAnRPuNBGztY3h21gA2NCwv4dPlqIU4
-         rMXc5s5EARwoKLq24AL1ZQrHfSGx6UcKvIr1OvuKzfZCFfopsrK7FC5gWTKP1YO7D/nO
-         gWEq3lZV2tJ6ADk8GaJlTQCFvdnPj0yWPrlyO6OJV4bu6/oEvrAS3gXMUSGV50IptOTf
-         M0Lw==
+        bh=FE3oDEDqgLswKU+5J4LYo4ANf4rALFlCrjxbNb+GIJc=;
+        b=dddfecjHbtjdyMuiCHR2wAJaPoXVEawvmWfVX5TEdwIVMnIzfDYAlmb8agqWEzjQtU
+         MrP9YPNxXSqxM5rBoHG4BVz+eeVahrxvuFT7aKGteU2XbQOYlBM1TUVKafYLyWUSrIG+
+         CnxIjWqO+AmjOwH+SvCzDo9SVZrduDDITwawMknpvWbVRlO1GbsuGKagpeiBtU4iqRaI
+         3+/HqwH8NIetuYcu3HuWuOW/Q9XBJN56Y9P6/w3+S6d2oRs8qiTcUQhOB6zTguKlkfwv
+         zsnn+s0MhCdpabW+SQOGrtIEm1+aSFYWDyiyaTtO9KG3BRGC4+wLv1S+bsWrjVAQ5rDX
+         iyGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695996801; x=1696601601;
+        d=1e100.net; s=20230601; t=1695996803; x=1696601603;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j2zHWwvcVZnmnLgXt7QMbcfSPEZ0TtF4vjzI06Pfh/I=;
-        b=RrA1zihq2vXNghwDVIpM/qqfjJPzFGyoG0+PiJk01lEwgKcIFH6QJ+Y1CbPLVf3R9+
-         8wmIOJLOxZuvvk7WiywxdhEhvn+7q8tQ6yeJzZi+Kkud0Dqy1NtFSOtUz0Tbsn60sy09
-         uvVya9i7Vsj3WnqQIgSk5yY05c4c7JBtQdAigbvjLQpZljxq0+xqRaj+gHUMZKvbjaCe
-         Yjt0rVgn+KAz+PiTMqdCMDfrJdE1vj99PbiTJpl1SNHEFeuwFUMJ8Znidb7OYGuiyQnx
-         hJM5Bm6sF8130taIu3mlb6L75AaKh2xfKOfhd7BP1z88edhYPGoaeeoxvvIA1IerGXnN
-         ICuw==
-X-Gm-Message-State: AOJu0YwATX27EFOnpVn0JQr1yH5nTPIiCMXNRLt7EPrIBI8jf3VH/qTS
-        AYnPl0or2G0voPwSBh0lILADTQ==
-X-Google-Smtp-Source: AGHT+IF9FAh1b9XW3QzLoJSs0Q6e6S6cOLgwoxM1/Skus7DJNO1UD+KawmjUzB9HGjBOGoEKCIAmhw==
-X-Received: by 2002:a7b:c409:0:b0:406:3f62:e583 with SMTP id k9-20020a7bc409000000b004063f62e583mr4053531wmi.40.1695996801725;
-        Fri, 29 Sep 2023 07:13:21 -0700 (PDT)
+        bh=FE3oDEDqgLswKU+5J4LYo4ANf4rALFlCrjxbNb+GIJc=;
+        b=P8X38e5k4p+c7LvkVdRhgjcg5pmxR7gs5VvzFfCLUd9psjoZpFNfjdpSTPfEW65mvU
+         yOl5W8lPtFEiwXTUmkiMkQoYMI57CZGK4+1jUkj5qfhYncTyR9aInMrB1taOU2eu4P3z
+         e8qgSxmq24oPZ/Od8qq0G9ilK9+8sW7GGQzWkz3FMl/jRMTHGIYE6wPDPWNcY+ggtn5D
+         9+z5GR1a4xviqnVa/A7RONgPHQHd6sWdm0+obBXsEXfYoSl5aH1h4DIRFHEj3p3u2y2P
+         3u3X+RbH7sgFo+rAcY9REu9enxyGR3qEkEixl2w9axe5R6NyVq40/yhV5XakUEXLuJbu
+         FhbA==
+X-Gm-Message-State: AOJu0Yw6zGsurKz43dduQ+0MAlscAZ8kvFvHsRkIpUD2yhQTaw0W1TmA
+        D5WPFODfhtip30eqdZtcMP4r/w==
+X-Google-Smtp-Source: AGHT+IFATDLmqS6Xu8RD3l1grxpJ5bki/q3AWXgm3nILIPPayIRPsMVCzHUhvFiGFQSQ/DWP1eemeg==
+X-Received: by 2002:a7b:ca53:0:b0:405:3b1f:968b with SMTP id m19-20020a7bca53000000b004053b1f968bmr4056008wml.21.1695996802803;
+        Fri, 29 Sep 2023 07:13:22 -0700 (PDT)
 Received: from blmsp.fritz.box ([2001:4091:a246:8222:dbda:9cd9:39cc:f174])
-        by smtp.gmail.com with ESMTPSA id t25-20020a7bc3d9000000b00405391f485fsm1513068wmj.41.2023.09.29.07.13.20
+        by smtp.gmail.com with ESMTPSA id t25-20020a7bc3d9000000b00405391f485fsm1513068wmj.41.2023.09.29.07.13.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 07:13:21 -0700 (PDT)
+        Fri, 29 Sep 2023 07:13:22 -0700 (PDT)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
@@ -62,9 +62,9 @@ Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Julien Panis <jpanis@baylibre.com>, Judith Mendez <jm@ti.com>,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v6 10/14] can: m_can: Use the workqueue as queue
-Date:   Fri, 29 Sep 2023 16:13:00 +0200
-Message-Id: <20230929141304.3934380-11-msp@baylibre.com>
+Subject: [PATCH v6 11/14] can: m_can: Introduce a tx_fifo_in_flight counter
+Date:   Fri, 29 Sep 2023 16:13:01 +0200
+Message-Id: <20230929141304.3934380-12-msp@baylibre.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230929141304.3934380-1-msp@baylibre.com>
 References: <20230929141304.3934380-1-msp@baylibre.com>
@@ -79,251 +79,147 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The current implementation uses the workqueue for peripheral chips to
-submit work. Only a single work item is queued and used at any time.
+Keep track of the number of transmits in flight.
 
-To be able to keep more than one transmit in flight at a time, prepare
-the workqueue to support multiple transmits at the same time.
-
-Each work item now has a separate storage for a skb and a pointer to
-cdev. This assures that each workitem can be processed individually.
-
-The workqueue is replaced by an ordered workqueue which makes sure that
-only a single worker processes the items queued on the workqueue. Also
-items are ordered by the order they were enqueued. This removes most of
-the concurrency the workqueue normally offers. It is not necessary for
-this driver.
-
-The cleanup functions have to be adopted a bit to handle this new
-mechanism.
+This patch prepares the driver to control the network interface queue
+based on this counter. By itself this counter be
+implemented with an atomic, but as we need to do other things in the
+critical sections later I am using a spinlock instead.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 Reviewed-by: Simon Horman <simon.horman@corigine.com>
 ---
- drivers/net/can/m_can/m_can.c | 109 ++++++++++++++++++++--------------
- drivers/net/can/m_can/m_can.h |  14 ++++-
- 2 files changed, 75 insertions(+), 48 deletions(-)
+ drivers/net/can/m_can/m_can.c | 41 ++++++++++++++++++++++++++++++++++-
+ drivers/net/can/m_can/m_can.h |  4 ++++
+ 2 files changed, 44 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 645ce0c9fd01..1c3dc5e347b5 100644
+index 1c3dc5e347b5..3ecd071abacb 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -484,17 +484,16 @@ static void m_can_clean(struct net_device *net)
+@@ -483,6 +483,7 @@ static u32 m_can_get_timestamp(struct m_can_classdev *cdev)
+ static void m_can_clean(struct net_device *net)
  {
  	struct m_can_classdev *cdev = netdev_priv(net);
++	unsigned long irqflags;
  
--	if (cdev->tx_skb) {
--		u32 putidx = 0;
-+	for (int i = 0; i != cdev->tx_fifo_size; ++i) {
-+		if (!cdev->tx_ops[i].skb)
-+			continue;
+ 	for (int i = 0; i != cdev->tx_fifo_size; ++i) {
+ 		if (!cdev->tx_ops[i].skb)
+@@ -494,6 +495,10 @@ static void m_can_clean(struct net_device *net)
  
- 		net->stats.tx_errors++;
--		if (cdev->version > 30)
--			putidx = FIELD_GET(TXFQS_TFQPI_MASK,
--					   m_can_read(cdev, M_CAN_TXFQS));
--
--		can_free_echo_skb(cdev->net, putidx, NULL);
--		cdev->tx_skb = NULL;
-+		cdev->tx_ops[i].skb = NULL;
- 	}
+ 	for (int i = 0; i != cdev->can.echo_skb_max; ++i)
+ 		can_free_echo_skb(cdev->net, i, NULL);
 +
-+	for (int i = 0; i != cdev->can.echo_skb_max; ++i)
-+		can_free_echo_skb(cdev->net, i, NULL);
++	spin_lock_irqsave(&cdev->tx_handling_spinlock, irqflags);
++	cdev->tx_fifo_in_flight = 0;
++	spin_unlock_irqrestore(&cdev->tx_handling_spinlock, irqflags);
  }
  
  /* For peripherals, pass skb to rx-offload, which will push skb from
-@@ -1684,8 +1683,9 @@ static int m_can_close(struct net_device *dev)
- 	m_can_clk_stop(cdev);
- 	free_irq(dev->irq, dev);
- 
-+	m_can_clean(dev);
-+
- 	if (cdev->is_peripheral) {
--		cdev->tx_skb = NULL;
- 		destroy_workqueue(cdev->tx_wq);
- 		cdev->tx_wq = NULL;
- 		can_rx_offload_disable(&cdev->offload);
-@@ -1712,20 +1712,18 @@ static int m_can_next_echo_skb_occupied(struct net_device *dev, u32 putidx)
- 	return !!cdev->can.echo_skb[next_idx];
+@@ -1064,6 +1069,24 @@ static void m_can_tx_update_stats(struct m_can_classdev *cdev,
+ 	stats->tx_packets++;
  }
  
--static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
-+static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
-+				    struct sk_buff *skb)
- {
--	struct canfd_frame *cf = (struct canfd_frame *)cdev->tx_skb->data;
-+	struct canfd_frame *cf = (struct canfd_frame *)skb->data;
- 	u8 len_padded = DIV_ROUND_UP(cf->len, 4);
- 	struct m_can_fifo_element fifo_element;
- 	struct net_device *dev = cdev->net;
--	struct sk_buff *skb = cdev->tx_skb;
- 	u32 cccr, fdflags;
- 	u32 txfqs;
- 	int err;
- 	u32 putidx;
- 
--	cdev->tx_skb = NULL;
--
- 	/* Generate ID field for TX buffer Element */
- 	/* Common to all supported M_CAN versions */
- 	if (cf->can_id & CAN_EFF_FLAG) {
-@@ -1849,10 +1847,36 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
- 
- static void m_can_tx_work_queue(struct work_struct *ws)
- {
--	struct m_can_classdev *cdev = container_of(ws, struct m_can_classdev,
--						   tx_work);
-+	struct m_can_tx_op *op = container_of(ws, struct m_can_tx_op, work);
-+	struct m_can_classdev *cdev = op->cdev;
-+	struct sk_buff *skb = op->skb;
- 
--	m_can_tx_handler(cdev);
-+	op->skb = NULL;
-+	m_can_tx_handler(cdev, skb);
++static void m_can_finish_tx(struct m_can_classdev *cdev, int transmitted)
++{
++	unsigned long irqflags;
++
++	spin_lock_irqsave(&cdev->tx_handling_spinlock, irqflags);
++	cdev->tx_fifo_in_flight -= transmitted;
++	spin_unlock_irqrestore(&cdev->tx_handling_spinlock, irqflags);
 +}
 +
-+static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb)
++static void m_can_start_tx(struct m_can_classdev *cdev)
 +{
-+	cdev->tx_ops[cdev->next_tx_op].skb = skb;
-+	queue_work(cdev->tx_wq, &cdev->tx_ops[cdev->next_tx_op].work);
++	unsigned long irqflags;
 +
-+	++cdev->next_tx_op;
-+	if (cdev->next_tx_op >= cdev->tx_fifo_size)
-+		cdev->next_tx_op = 0;
++	spin_lock_irqsave(&cdev->tx_handling_spinlock, irqflags);
++	++cdev->tx_fifo_in_flight;
++	spin_unlock_irqrestore(&cdev->tx_handling_spinlock, irqflags);
 +}
 +
-+static netdev_tx_t m_can_start_peripheral_xmit(struct m_can_classdev *cdev,
-+					       struct sk_buff *skb)
-+{
-+	if (cdev->can.state == CAN_STATE_BUS_OFF) {
-+		m_can_clean(cdev->net);
-+		return NETDEV_TX_OK;
-+	}
+ static int m_can_echo_tx_event(struct net_device *dev)
+ {
+ 	u32 txe_count = 0;
+@@ -1073,6 +1096,7 @@ static int m_can_echo_tx_event(struct net_device *dev)
+ 	int i = 0;
+ 	int err = 0;
+ 	unsigned int msg_mark;
++	int processed = 0;
+ 
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+ 
+@@ -1102,12 +1126,15 @@ static int m_can_echo_tx_event(struct net_device *dev)
+ 
+ 		/* update stats */
+ 		m_can_tx_update_stats(cdev, msg_mark, timestamp);
++		++processed;
+ 	}
+ 
+ 	if (ack_fgi != -1)
+ 		m_can_write(cdev, M_CAN_TXEFA, FIELD_PREP(TXEFA_EFAI_MASK,
+ 							  ack_fgi));
+ 
++	m_can_finish_tx(cdev, processed);
 +
-+	netif_stop_queue(cdev->net);
-+	m_can_tx_queue_skb(cdev, skb);
-+
-+	return NETDEV_TX_OK;
+ 	return err;
  }
  
+@@ -1189,6 +1216,7 @@ static irqreturn_t m_can_isr(int irq, void *dev_id)
+ 				timestamp = m_can_get_timestamp(cdev);
+ 			m_can_tx_update_stats(cdev, 0, timestamp);
+ 			netif_wake_queue(dev);
++			m_can_finish_tx(cdev, 1);
+ 		}
+ 	} else  {
+ 		if (ir & (IR_TEFN | IR_TEFW)) {
+@@ -1874,11 +1902,22 @@ static netdev_tx_t m_can_start_peripheral_xmit(struct m_can_classdev *cdev,
+ 	}
+ 
+ 	netif_stop_queue(cdev->net);
++
++	m_can_start_tx(cdev);
++
+ 	m_can_tx_queue_skb(cdev, skb);
+ 
+ 	return NETDEV_TX_OK;
+ }
+ 
++static netdev_tx_t m_can_start_fast_xmit(struct m_can_classdev *cdev,
++					 struct sk_buff *skb)
++{
++	m_can_start_tx(cdev);
++
++	return m_can_tx_handler(cdev, skb);
++}
++
  static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
-@@ -1863,30 +1887,10 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
- 	if (can_dev_dropped_skb(dev, skb))
- 		return NETDEV_TX_OK;
- 
--	if (cdev->is_peripheral) {
--		if (cdev->tx_skb) {
--			netdev_err(dev, "hard_xmit called while tx busy\n");
--			return NETDEV_TX_BUSY;
--		}
--
--		if (cdev->can.state == CAN_STATE_BUS_OFF) {
--			m_can_clean(dev);
--		} else {
--			/* Need to stop the queue to avoid numerous requests
--			 * from being sent.  Suggested improvement is to create
--			 * a queueing mechanism that will queue the skbs and
--			 * process them in order.
--			 */
--			cdev->tx_skb = skb;
--			netif_stop_queue(cdev->net);
--			queue_work(cdev->tx_wq, &cdev->tx_work);
--		}
--	} else {
--		cdev->tx_skb = skb;
--		return m_can_tx_handler(cdev);
--	}
--
--	return NETDEV_TX_OK;
-+	if (cdev->is_peripheral)
-+		return m_can_start_peripheral_xmit(cdev, skb);
-+	else
-+		return m_can_tx_handler(cdev, skb);
+ 				    struct net_device *dev)
+ {
+@@ -1890,7 +1929,7 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
+ 	if (cdev->is_peripheral)
+ 		return m_can_start_peripheral_xmit(cdev, skb);
+ 	else
+-		return m_can_tx_handler(cdev, skb);
++		return m_can_start_fast_xmit(cdev, skb);
  }
  
  static enum hrtimer_restart hrtimer_callback(struct hrtimer *timer)
-@@ -1926,15 +1930,17 @@ static int m_can_open(struct net_device *dev)
- 
- 	/* register interrupt handler */
- 	if (cdev->is_peripheral) {
--		cdev->tx_skb = NULL;
--		cdev->tx_wq = alloc_workqueue("mcan_wq",
--					      WQ_FREEZABLE | WQ_MEM_RECLAIM, 0);
-+		cdev->tx_wq = alloc_ordered_workqueue("mcan_wq",
-+						      WQ_FREEZABLE | WQ_MEM_RECLAIM);
- 		if (!cdev->tx_wq) {
- 			err = -ENOMEM;
- 			goto out_wq_fail;
- 		}
- 
--		INIT_WORK(&cdev->tx_work, m_can_tx_work_queue);
-+		for (int i = 0; i != cdev->tx_fifo_size; ++i) {
-+			cdev->tx_ops[i].cdev = cdev;
-+			INIT_WORK(&cdev->tx_ops[i].work, m_can_tx_work_queue);
-+		}
- 
- 		err = request_threaded_irq(dev->irq, NULL, m_can_isr,
- 					   IRQF_ONESHOT,
-@@ -2227,6 +2233,19 @@ int m_can_class_register(struct m_can_classdev *cdev)
- {
- 	int ret;
- 
-+	cdev->tx_fifo_size = max(1, min(cdev->mcfg[MRAM_TXB].num,
-+					cdev->mcfg[MRAM_TXE].num));
-+	if (cdev->is_peripheral) {
-+		cdev->tx_ops =
-+			devm_kzalloc(cdev->dev,
-+				     cdev->tx_fifo_size * sizeof(*cdev->tx_ops),
-+				     GFP_KERNEL);
-+		if (!cdev->tx_ops) {
-+			dev_err(cdev->dev, "Failed to allocate tx_ops for workqueue\n");
-+			return -ENOMEM;
-+		}
-+	}
-+
- 	if (cdev->pm_clock_support) {
- 		ret = m_can_clk_start(cdev);
- 		if (ret)
 diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index 0de42fc5ef1e..be1d2119bd53 100644
+index be1d2119bd53..76b1ce1b7c1b 100644
 --- a/drivers/net/can/m_can/m_can.h
 +++ b/drivers/net/can/m_can/m_can.h
-@@ -70,6 +70,12 @@ struct m_can_ops {
- 	int (*init)(struct m_can_classdev *cdev);
- };
- 
-+struct m_can_tx_op {
-+	struct m_can_classdev *cdev;
-+	struct work_struct work;
-+	struct sk_buff *skb;
-+};
-+
- struct m_can_classdev {
- 	struct can_priv can;
- 	struct can_rx_offload offload;
-@@ -80,8 +86,6 @@ struct m_can_classdev {
- 	struct clk *cclk;
- 
- 	struct workqueue_struct *tx_wq;
--	struct work_struct tx_work;
--	struct sk_buff *tx_skb;
- 	struct phy *transceiver;
- 
- 	ktime_t irq_timer_wait;
-@@ -102,7 +106,11 @@ struct m_can_classdev {
- 	u32 tx_coalesce_usecs_irq;
- 
+@@ -108,6 +108,10 @@ struct m_can_classdev {
  	// Store this internally to avoid fetch delays on peripheral chips
--	int tx_fifo_putidx;
-+	u32 tx_fifo_putidx;
+ 	u32 tx_fifo_putidx;
+ 
++	/* Protects shared state between start_xmit and m_can_isr */
++	spinlock_t tx_handling_spinlock;
++	int tx_fifo_in_flight;
 +
-+	struct m_can_tx_op *tx_ops;
-+	int tx_fifo_size;
-+	int next_tx_op;
- 
- 	struct mram_cfg mcfg[MRAM_CFG_NUM];
- 
+ 	struct m_can_tx_op *tx_ops;
+ 	int tx_fifo_size;
+ 	int next_tx_op;
 -- 
 2.40.1
 
