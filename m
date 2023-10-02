@@ -2,198 +2,139 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA367B567B
-	for <lists+linux-can@lfdr.de>; Mon,  2 Oct 2023 17:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C1B7B5791
+	for <lists+linux-can@lfdr.de>; Mon,  2 Oct 2023 18:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237962AbjJBPKx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Oct 2023 11:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
+        id S238376AbjJBQCP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Oct 2023 12:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238000AbjJBPKu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Oct 2023 11:10:50 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F3E101;
-        Mon,  2 Oct 2023 08:10:46 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-406609df1a6so27712595e9.3;
-        Mon, 02 Oct 2023 08:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696259445; x=1696864245; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6gyQNJ2XnyFpWZfsSOVQ7NTvT9jbamCtiO1RkGRSocs=;
-        b=XnyeWFthWXTSam4+atm+D83C2M/AzlPk+tLjIWfQfx4QLv3obgmIrtDzk+MZ+CeN1q
-         TXKmfqUKInmzJQOZMqx9sFEb+CcY5Si9qicB8ubXo9Kp5RlP+M+x3W16RK0bj1SnoYGV
-         qiwgtd0xKVxBdbe7fUoXcAcrz/R4mIv9Mp9i2o2wDBLgLgIDtj6noqoFQqs+qff6Jlft
-         balwX4hrk1r1Abnifj18pKtnKlZjz1eSXVjBK7rRgBqICDWps2zt0gCDVm0LmQ5KYmXZ
-         u6g13onr3BuMc4hO4f3Jo2SUOYPH1BMM9kS2TpDeG/Inz9JJBb3rDvhbxhZjh98wAiZz
-         GOiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696259445; x=1696864245;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6gyQNJ2XnyFpWZfsSOVQ7NTvT9jbamCtiO1RkGRSocs=;
-        b=PNK/LszHaQF7HPhpgkhSqAQ5HmhDTc1gEZ7/ffa0Wzvpmqg00YkHcbDmxBGfpBG/UE
-         1a1/pTXph0xm8dMXQ4H0ONCZ5ni1ORldKqyZaqRQirn3+RqKxq0sv2wSUfmeXGVwBFSb
-         ujCkwp4KT/+qlmoD2uaIt9ayZt3vpF10TPojhOBgkhEVV/SNkLXIfYH39BEAmMUwzuLR
-         91IXNMQNIQmgcbfYu38lQ5tzcCmGOr6xqgEsskzpMHXTaxxPdUJcpjBfGxj2JzTmV76t
-         5VznNo+uRO+mEsUGt8OCL7pPDu8qpHeHJNjKBDmleXGWeKkq3kP4YJ86yfhoCseRPVYs
-         yqRw==
-X-Gm-Message-State: AOJu0Ywu8n/i/OnrRZXiE3puan5SzsGfpEZWZcKXGofKrzxuLbuGzMth
-        6r1M8hPaVAKaoIQrP+T6VfM=
-X-Google-Smtp-Source: AGHT+IHc5YiZnwUBsMAS0VclvrmwyD0ekRYikQ7eali40Cd+T9SQe91Rx4Z4tqTKa7Zvq69Zs0IYGQ==
-X-Received: by 2002:a7b:c397:0:b0:3fe:3004:1ffd with SMTP id s23-20020a7bc397000000b003fe30041ffdmr10304452wmj.4.1696259444747;
-        Mon, 02 Oct 2023 08:10:44 -0700 (PDT)
-Received: from localhost.localdomain (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
-        by smtp.googlemail.com with ESMTPSA id t15-20020a1c770f000000b00406408dc788sm7421565wmi.44.2023.10.02.08.10.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Oct 2023 08:10:44 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
+        with ESMTP id S238422AbjJBQCP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Oct 2023 12:02:15 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCA3E5;
+        Mon,  2 Oct 2023 09:02:10 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 71297240004;
+        Mon,  2 Oct 2023 16:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1696262529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VceR3KZ7j/tRvYYnO2ZWLO0nUF4+UHbP0i80WdJuN3s=;
+        b=GG7WmlMedaqR7tTwyF8niW1i9CBEBj8f9xTfUhkr5VmpSgNCSFds5MecI5Do43C6eh+1+R
+        4AxOUX/PR4z5S7TdSXep3QcIn65x4OdUN/4IieMjidzIoLhxqcZedu9PreEVub1HhDLJlJ
+        Iwm2HQN7uHnZtJDNGSZsJeqnQF1I02VM8A2d+LFYyl1CvL5Dfs/PG7Og0Zdji0LF+og27/
+        ZPVXGcI2aemCouo8ZAiTnNrKJVoJ9yh8jhBoS9wcUh8WmGLYPj/pMksmaFFBT/vQCgG/si
+        ZYt9Dy83BO2wA66j3E50/t02VT4cP8CVQCDKFU2vuMdCySYwL0btG3Om8v/inw==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>,
-        Shailend Chand <shailend@google.com>,
-        Douglas Miller <dougmill@linux.ibm.com>,
-        Nick Child <nnac123@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Haren Myneni <haren@linux.ibm.com>,
-        Rick Lindsley <ricklind@linux.ibm.com>,
-        Dany Madden <danymadden@us.ibm.com>,
-        Thomas Falcon <tlfalcon@linux.ibm.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Kalle Valo <kvalo@kernel.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-        Intel Corporation <linuxwwan@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
-        Liu Haijun <haijun.liu@mediatek.com>,
-        M Chetan Kumar <m.chetan.kumar@linux.intel.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Yuanjun Gong <ruc_gongyuanjun@163.com>,
-        Wei Fang <wei.fang@nxp.com>, Alex Elder <elder@linaro.org>,
-        Simon Horman <horms@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bailey Forrest <bcf@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Junfeng Guo <junfeng.guo@intel.com>,
-        Ziwei Xiao <ziweixiao@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rushil Gupta <rushilg@google.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Yuri Karpov <YKarpov@ispras.ru>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Zheng Zengkai <zhengzengkai@huawei.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Lee Jones <lee@kernel.org>, Dawei Li <set_pte_at@outlook.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Benjamin Berg <benjamin.berg@intel.com>,
-        Anjaneyulu <pagadala.yesu.anjaneyulu@intel.com>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org
-Subject: [net-next PATCH 4/4] netdev: use napi_schedule bool instead of napi_schedule_prep/__napi_schedule
-Date:   Mon,  2 Oct 2023 17:10:23 +0200
-Message-Id: <20231002151023.4054-4-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231002151023.4054-1-ansuelsmth@gmail.com>
-References: <20231002151023.4054-1-ansuelsmth@gmail.com>
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org,
+        =?UTF-8?q?J=C3=A9r=C3=A9mie=20Dautheribes?= 
+        <jeremie.dautheribes@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        sylvain.girard@se.com, pascal.eberhard@se.com,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v3] can: sja1000: Always restart the Tx queue after an overrun
+Date:   Mon,  2 Oct 2023 18:02:06 +0200
+Message-Id: <20231002160206.190953-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-GND-Sasl: miquel.raynal@bootlin.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Replace if condition of napi_schedule_prep/__napi_schedule and use bool
-from napi_schedule directly where possible.
+Upstream commit 717c6ec241b5 ("can: sja1000: Prevent overrun stalls with
+a soft reset on Renesas SoCs") fixes an issue with Renesas own SJA1000
+CAN controller reception: the Rx buffer is only 5 messages long, so when
+the bus loaded (eg. a message every 50us), overrun may easily
+happen. Upon an overrun situation, due to a possible internal crosstalk
+situation, the controller enters a frozen state which only can be
+unlocked with a soft reset (experimentally). The solution was to offload
+a call to sja1000_start() in a threaded handler. This needs to happen in
+process context as this operation requires to sleep. sja1000_start()
+basically enters "reset mode", performs a proper software reset and
+returns back into "normal mode".
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Since this fix was introduced, we no longer observe any stalls in
+reception. However it was sporadically observed that the transmit path
+would now freeze. Further investigation blamed the fix mentioned above,
+and especially the reset operation. Reproducing the reset in a loop
+helped identifying what could possibly go wrong. The sja1000 is a single
+Tx queue device, which leverages the netdev helpers to process one Tx
+message at a time. The logic is: the queue is stopped, the message sent
+to the transceiver, once properly transmitted the controller sets a
+status bit which triggers an interrupt, in the interrupt handler the
+transmission status is checked and the queue woken up. Unfortunately, if
+an overrun happens, we might perform the soft reset precisely between
+the transmission of the buffer to the transceiver and the advent of the
+transmission status bit. We would then stop the transmission operation
+without re-enabling the queue, leading to all further transmissions to
+be ignored.
+
+The reset interrupt can only happen while the device is "open", and
+after a reset we anyway want to resume normal operations, no matter if a
+packet to transmit got dropped in the process, so we shall wake up the
+queue. Restarting the device and waking-up the queue is exactly what
+sja1000_set_mode(CAN_MODE_START) does. In order to be consistent about
+the queue state, we must acquire a lock both in the reset handler and in
+the transmit path to ensure serialization of both operations. It turns
+out, a lock is already held when entering the transmit path, so we can
+just acquire/release it as well with the regular net helpers inside the
+threaded interrupt handler and this way we should be safe. As the
+reset handler might still be called after the transmission of a frame to
+the transceiver but before it actually gets transmitted, we must ensure
+we don't leak the skb, so we free it (the behavior is consistent, no
+matter if there was an skb on the stack or not).
+
+Fixes: 717c6ec241b5 ("can: sja1000: Prevent overrun stalls with a soft reset on Renesas SoCs")
+Cc: stable@vger.kernel.org
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/net/ethernet/atheros/atlx/atl1.c     | 4 +---
- drivers/net/ethernet/toshiba/tc35815.c       | 4 +---
- drivers/net/wireless/intel/iwlwifi/pcie/rx.c | 4 +---
- 3 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/atheros/atlx/atl1.c b/drivers/net/ethernet/atheros/atlx/atl1.c
-index 02aa6fd8ebc2..a9014d7932db 100644
---- a/drivers/net/ethernet/atheros/atlx/atl1.c
-+++ b/drivers/net/ethernet/atheros/atlx/atl1.c
-@@ -2446,7 +2446,7 @@ static int atl1_rings_clean(struct napi_struct *napi, int budget)
+Changes in v3:
+* Fix new implementation by just acquiring the tx lock when required.
+
+Changes in v2:
+* As Marc sugested, use netif_tx_{,un}lock() instead of our own
+  spin_lock.
+
+ drivers/net/can/sja1000/sja1000.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/sja1000/sja1000.c b/drivers/net/can/sja1000/sja1000.c
+index ae47fc72aa96..9531684d47cd 100644
+--- a/drivers/net/can/sja1000/sja1000.c
++++ b/drivers/net/can/sja1000/sja1000.c
+@@ -396,7 +396,13 @@ static irqreturn_t sja1000_reset_interrupt(int irq, void *dev_id)
+ 	struct net_device *dev = (struct net_device *)dev_id;
  
- static inline int atl1_sched_rings_clean(struct atl1_adapter* adapter)
- {
--	if (!napi_schedule_prep(&adapter->napi))
-+	if (!napi_schedule(&adapter->napi))
- 		/* It is possible in case even the RX/TX ints are disabled via IMR
- 		 * register the ISR bits are set anyway (but do not produce IRQ).
- 		 * To handle such situation the napi functions used to check is
-@@ -2454,8 +2454,6 @@ static inline int atl1_sched_rings_clean(struct atl1_adapter* adapter)
- 		 */
- 		return 0;
+ 	netdev_dbg(dev, "performing a soft reset upon overrun\n");
+-	sja1000_start(dev);
++
++	netif_tx_lock(dev);
++
++	can_free_echo_skb(dev, 0);
++	sja1000_set_mode(dev, CAN_MODE_START);
++
++	netif_tx_unlock(dev);
  
--	__napi_schedule(&adapter->napi);
--
- 	/*
- 	 * Disable RX/TX ints via IMR register if it is
- 	 * allowed. NAPI handler must reenable them in same
-diff --git a/drivers/net/ethernet/toshiba/tc35815.c b/drivers/net/ethernet/toshiba/tc35815.c
-index 14cf6ecf6d0d..a8b8a0e13f9a 100644
---- a/drivers/net/ethernet/toshiba/tc35815.c
-+++ b/drivers/net/ethernet/toshiba/tc35815.c
-@@ -1436,9 +1436,7 @@ static irqreturn_t tc35815_interrupt(int irq, void *dev_id)
- 	if (!(dmactl & DMA_IntMask)) {
- 		/* disable interrupts */
- 		tc_writel(dmactl | DMA_IntMask, &tr->DMA_Ctl);
--		if (napi_schedule_prep(&lp->napi))
--			__napi_schedule(&lp->napi);
--		else {
-+		if (!napi_schedule(&lp->napi)) {
- 			printk(KERN_ERR "%s: interrupt taken in poll\n",
- 			       dev->name);
- 			BUG();
-diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/rx.c b/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
-index 23b5a0adcbd6..146bc7bd14fb 100644
---- a/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
-+++ b/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
-@@ -1660,9 +1660,7 @@ irqreturn_t iwl_pcie_irq_rx_msix_handler(int irq, void *dev_id)
- 	IWL_DEBUG_ISR(trans, "[%d] Got interrupt\n", entry->entry);
- 
- 	local_bh_disable();
--	if (napi_schedule_prep(&rxq->napi))
--		__napi_schedule(&rxq->napi);
--	else
-+	if (!napi_schedule(&rxq->napi))
- 		iwl_pcie_clear_irq(trans, entry->entry);
- 	local_bh_enable();
- 
+ 	return IRQ_HANDLED;
+ }
 -- 
-2.40.1
+2.34.1
 
