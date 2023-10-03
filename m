@@ -2,63 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813C77B6052
-	for <lists+linux-can@lfdr.de>; Tue,  3 Oct 2023 07:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27547B6289
+	for <lists+linux-can@lfdr.de>; Tue,  3 Oct 2023 09:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjJCFWE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Oct 2023 01:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
+        id S230323AbjJCHeI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Oct 2023 03:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjJCFWD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Oct 2023 01:22:03 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A44B0
-        for <linux-can@vger.kernel.org>; Mon,  2 Oct 2023 22:21:59 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-536ef8a7dcdso8159a12.0
-        for <linux-can@vger.kernel.org>; Mon, 02 Oct 2023 22:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696310518; x=1696915318; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XqpR6B8+nR6pcymfGZfMhsWiKXO7OC+lMbowiW4LVxc=;
-        b=UaBLzEzVytEjZbXxfZJ/yKqhK1RZp492+FSmCuOa7ivIYhUjuF8hhU9LAqmzdU4w6t
-         ul2WUkeUtwkfafuUvtV5ho6mCBWCD1BhiuFT3QHzF9AgAZincFasUEejf8VNCz3bzWlf
-         GcEipmR4Vx/LRl/d6L2tGAtJhsSmlAtgXdQ+lecGw4omrkwjLD213+u2cjhh74VBEOOo
-         QIO1M7y3isPpmNsFx+OBLYxufeYEl8tgPqr0eoUNHY5EkFk9sRSqyWRRUootS4hdLrMg
-         dMK2ipfmJzdEbgC5gFllURR7gNvSbIldfQxtXeVgoX8FZYliPEHedY71EL84X+SlgOTP
-         vjjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696310518; x=1696915318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XqpR6B8+nR6pcymfGZfMhsWiKXO7OC+lMbowiW4LVxc=;
-        b=Ma5Fa0XumLF006Ub9+0pDidy2oG69vtUtIjHOEzkvMeoc1ByytNDD5CPRYiiyB7L2m
-         jzGu72IxYARL6lYu36EnvZgApeLpBwjoGcNH3G/8GYsz2su4EJekYdfek1ZZn3FncfrX
-         1e3ntX9DiNtof3gpC9n/DzGkRVZc6WfJhLTFB7tweFrpX/hzwkduFFkwLF2hnhDU30/H
-         jfCLYvWzwhNKgBLTFaTXpcLeHIhCbMKrw6dE3ezaCHLKXLcgVUSX8DJUCLoq0jcy9ZRs
-         yfPZi7smx2WSI/j4L4gAS9+9t9Yzsa6opv7sz4erVVYMp4SDOHXINyKoYe/5CBGVhHJq
-         H75A==
-X-Gm-Message-State: AOJu0Yy8sB714nm3TWfhZp2Mq0gThJfxPhXBkz25aY9bDJFmGMXe4O95
-        8pwMXFF1SZhHdFg69FXU2IL8rrOB5eY4as9b5OAgRA==
-X-Google-Smtp-Source: AGHT+IFKI0HKrYVLDl5vmsJpfAS1RFLGp2hw35YvLJzj9lzKha+Fza93n9nqgIQgLugkI+eoDblKihBS9oaXtRjP+8s=
-X-Received: by 2002:a50:d4d7:0:b0:538:1d3b:172f with SMTP id
- e23-20020a50d4d7000000b005381d3b172fmr49263edj.3.1696310517644; Mon, 02 Oct
- 2023 22:21:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231002151023.4054-1-ansuelsmth@gmail.com> <20231002151023.4054-2-ansuelsmth@gmail.com>
-In-Reply-To: <20231002151023.4054-2-ansuelsmth@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 3 Oct 2023 07:21:46 +0200
-Message-ID: <CANn89i+eSWYuE=wE1TPJFtAS1OCfFYytC_nAjDWkizxmR9e6JQ@mail.gmail.com>
-Subject: Re: [net-next PATCH 2/4] netdev: make napi_schedule return bool on
- NAPI successful schedule
+        with ESMTP id S230072AbjJCHeH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Oct 2023 03:34:07 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970C583
+        for <linux-can@vger.kernel.org>; Tue,  3 Oct 2023 00:34:04 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qnZub-0003ZK-PJ; Tue, 03 Oct 2023 09:33:45 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qnZuX-00Aidd-0Z; Tue, 03 Oct 2023 09:33:41 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9626922CA40;
+        Tue,  3 Oct 2023 07:16:33 +0000 (UTC)
+Date:   Tue, 3 Oct 2023 09:16:33 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Christian Marangi <ansuelsmth@gmail.com>
 Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Chris Snook <chris.snook@gmail.com>,
@@ -101,7 +80,7 @@ Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
         Ziwei Xiao <ziweixiao@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Rushil Gupta <rushilg@google.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, Yuri Karpov <YKarpov@ispras.ru>,
         Zhengchao Shao <shaozhengchao@huawei.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -117,12 +96,22 @@ Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, ath10k@lists.infradead.org,
         linux-wireless@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Subject: Re: [net-next PATCH 3/4] netdev: replace napi_reschedule with
+ napi_schedule
+Message-ID: <20231003-living-seltzer-172ea6aec629-mkl@pengutronix.de>
+References: <20231002151023.4054-1-ansuelsmth@gmail.com>
+ <20231002151023.4054-3-ansuelsmth@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rxxtlje5djnxwkyg"
+Content-Disposition: inline
+In-Reply-To: <20231002151023.4054-3-ansuelsmth@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,19 +119,50 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Oct 2, 2023 at 5:10=E2=80=AFPM Christian Marangi <ansuelsmth@gmail.=
-com> wrote:
->
-> Change napi_schedule to return a bool on NAPI successful schedule. This
-> might be useful for some driver to do additional step after a NAPI ahs
 
-This might be useful for some drivers to do additional steps after a
-NAPI has been scheduled.
+--rxxtlje5djnxwkyg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> been scheduled.
->
+On 02.10.2023 17:10:22, Christian Marangi wrote:
+> Now that napi_schedule return a bool, we can drop napi_reschedule that
+> does the same exact function. The function comes from a very old commit
+> bfe13f54f502 ("ibm_emac: Convert to use napi_struct independent of struct
+> net_device") and the purpose is actually deprecated in favour of
+> different logic.
+>=20
+> Convert every user of napi_reschedule to napi_schedule.
+>=20
 > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  drivers/infiniband/ulp/ipoib/ipoib_ib.c                |  4 ++--
+>  drivers/net/can/dev/rx-offload.c                       |  2 +-
 
-Yeah, I guess you forgot to mention I suggested this patch ...
+Acked-by: Marc Kleine-Budde # for can/dev/rx-offload.c
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--rxxtlje5djnxwkyg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUbv84ACgkQvlAcSiqK
+BOjnFwf+OhxcXa9c83Acv0LbbO4tgmF/CI9y5Gz59aFevokQHG/8d2f2USWDkqPB
+r/Yi54VuZtFU1I6dV9XVQtndbXcoPbhBYFOrdNFJtYbXU405HTkgVrKM3LEv8Num
+vuyP5J6+IPisIYReCl6jAlWMNbZmiQHVdI4dyV/I0R3W0VDSBcDd8vxouQrT+iNb
+wqTBUCgjHnea7OhI3S+CDi7692mmk8RC5Jbhxb0rr+i49Dx6gtpmCUb8QmB94TDT
+Rn5auDyJLh0+Wcg+eDdnNvKjNBS7v//BDSY+asVFVwlQ3/aMqVBXlKStFwHQa33O
+P/Y7vHxUVvIeimQmBn2zif8iFQjF3Q==
+=qf69
+-----END PGP SIGNATURE-----
+
+--rxxtlje5djnxwkyg--
