@@ -2,42 +2,62 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27547B6289
-	for <lists+linux-can@lfdr.de>; Tue,  3 Oct 2023 09:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB547B6655
+	for <lists+linux-can@lfdr.de>; Tue,  3 Oct 2023 12:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjJCHeI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Oct 2023 03:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
+        id S231565AbjJCK0A (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Oct 2023 06:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjJCHeH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Oct 2023 03:34:07 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970C583
-        for <linux-can@vger.kernel.org>; Tue,  3 Oct 2023 00:34:04 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qnZub-0003ZK-PJ; Tue, 03 Oct 2023 09:33:45 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qnZuX-00Aidd-0Z; Tue, 03 Oct 2023 09:33:41 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9626922CA40;
-        Tue,  3 Oct 2023 07:16:33 +0000 (UTC)
-Date:   Tue, 3 Oct 2023 09:16:33 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Christian Marangi <ansuelsmth@gmail.com>
+        with ESMTP id S230357AbjJCKZ7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Oct 2023 06:25:59 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4705E93;
+        Tue,  3 Oct 2023 03:25:53 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-4056ce55e7eso7003175e9.2;
+        Tue, 03 Oct 2023 03:25:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696328752; x=1696933552; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UJbPLQ2sJq+JdJneKcIjpXN6+YXEeaAlp1ihUjhH9nY=;
+        b=A7F3bBFdpPsQz7EQyx3/2fObKls0vOph42CX8RNLRUQBTmVcw+tlF/q3XV30rO2I4C
+         qstUjIoqORbGcH+JnU7HoaAAlESmt+9t0/hXG5BWACFv7A0yUTHJNtuE+7vxJHkATLmA
+         6o2heFj0DWure4XXSPqVy7YFhze1Zeb4HaBj/31JzF3BsW4YxH12tawI52YtHNhJcLhd
+         TMxecwej8EpO1cqsm41nTeU8bQk4AmiN+uewWyFG016DsGEI4tGtg66g+d9ikEluF9Eq
+         /rb3QRt3vH9T3yb9Nqtlvx7G5cBXvTVb7M6rMPyLCr9cVTL5GjNWw0aIW8n4s1hsopzF
+         kAXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696328752; x=1696933552;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UJbPLQ2sJq+JdJneKcIjpXN6+YXEeaAlp1ihUjhH9nY=;
+        b=XeyftuBb66/Sn3YhC13i9f+DgS3l97EqZs5cNCVbFRMCLtn81kY/8FHS9yUCNKcy9T
+         I6pjcwUOJHFMItGxG0fYn5NQ/4OLCUjs9PRPMBZdmmlbiHs7Z2+UQiHpwHMognTuP2SL
+         tkgs9W2FAnACVE3gSC6HD7sZVP2qsg/NPtlThAbIkwFPKYQo3ayVLSPd0a+6+jgZz7mE
+         NT5lBV1h+xPGQd3t74cxwkxdaez/UCH2x2l15Q/HbTmS3Gp0jFHAxXoCnzflDlMyYokC
+         jKp/l/THKIlzGDtOEdovrVTKjnKfAGN91yRVjhggZAsE47UtgdpuWwkiA6lkFHNAgGD3
+         Z6Jg==
+X-Gm-Message-State: AOJu0YwFzrLWKiYk/5rsONKK0kiHW59T5VYVrz3CqPYowPyagqa5NGeJ
+        1521Tmn3jKUcEcIPAAuV1w0=
+X-Google-Smtp-Source: AGHT+IH4PtfHldj0VvMZI/On+6s7VpV7CIQtUMLRVRfnUnG2AW04zeibvBdNxyG/QoznL6yrZAPK7w==
+X-Received: by 2002:a1c:7c0b:0:b0:405:3885:490a with SMTP id x11-20020a1c7c0b000000b004053885490amr12474883wmc.0.1696328751231;
+        Tue, 03 Oct 2023 03:25:51 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
+        by smtp.gmail.com with ESMTPSA id 17-20020a05600c021100b004063cced50bsm945150wmi.23.2023.10.03.03.25.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Oct 2023 03:25:50 -0700 (PDT)
+Message-ID: <651bec2e.050a0220.f5ddb.3810@mx.google.com>
+X-Google-Original-Message-ID: <ZRvsKwrdSOI43YWZ@Ansuel-xps.>
+Date:   Tue, 3 Oct 2023 12:25:47 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>
 Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Chris Snook <chris.snook@gmail.com>,
@@ -80,7 +100,7 @@ Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
         Ziwei Xiao <ziweixiao@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Rushil Gupta <rushilg@google.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>, Yuri Karpov <YKarpov@ispras.ru>,
         Zhengchao Shao <shaozhengchao@huawei.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -96,21 +116,18 @@ Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, ath10k@lists.infradead.org,
         linux-wireless@vger.kernel.org
-Subject: Re: [net-next PATCH 3/4] netdev: replace napi_reschedule with
- napi_schedule
-Message-ID: <20231003-living-seltzer-172ea6aec629-mkl@pengutronix.de>
+Subject: Re: [net-next PATCH 2/4] netdev: make napi_schedule return bool on
+ NAPI successful schedule
 References: <20231002151023.4054-1-ansuelsmth@gmail.com>
- <20231002151023.4054-3-ansuelsmth@gmail.com>
+ <20231002151023.4054-2-ansuelsmth@gmail.com>
+ <CANn89i+eSWYuE=wE1TPJFtAS1OCfFYytC_nAjDWkizxmR9e6JQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rxxtlje5djnxwkyg"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231002151023.4054-3-ansuelsmth@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANn89i+eSWYuE=wE1TPJFtAS1OCfFYytC_nAjDWkizxmR9e6JQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -119,50 +136,26 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Tue, Oct 03, 2023 at 07:21:46AM +0200, Eric Dumazet wrote:
+> On Mon, Oct 2, 2023 at 5:10 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
+> >
+> > Change napi_schedule to return a bool on NAPI successful schedule. This
+> > might be useful for some driver to do additional step after a NAPI ahs
+> 
+> This might be useful for some drivers to do additional steps after a
+> NAPI has been scheduled.
+> 
+> > been scheduled.
+> >
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> 
+> Yeah, I guess you forgot to mention I suggested this patch ...
+> 
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
 
---rxxtlje5djnxwkyg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes sorry, totally forgot to add this here. I already have the patch for the
+other driver (but it's dependant on this so I'm waiting) and I forgot to
+add the tag also for this piece.
 
-On 02.10.2023 17:10:22, Christian Marangi wrote:
-> Now that napi_schedule return a bool, we can drop napi_reschedule that
-> does the same exact function. The function comes from a very old commit
-> bfe13f54f502 ("ibm_emac: Convert to use napi_struct independent of struct
-> net_device") and the purpose is actually deprecated in favour of
-> different logic.
->=20
-> Convert every user of napi_reschedule to napi_schedule.
->=20
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  drivers/infiniband/ulp/ipoib/ipoib_ib.c                |  4 ++--
->  drivers/net/can/dev/rx-offload.c                       |  2 +-
-
-Acked-by: Marc Kleine-Budde # for can/dev/rx-offload.c
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---rxxtlje5djnxwkyg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUbv84ACgkQvlAcSiqK
-BOjnFwf+OhxcXa9c83Acv0LbbO4tgmF/CI9y5Gz59aFevokQHG/8d2f2USWDkqPB
-r/Yi54VuZtFU1I6dV9XVQtndbXcoPbhBYFOrdNFJtYbXU405HTkgVrKM3LEv8Num
-vuyP5J6+IPisIYReCl6jAlWMNbZmiQHVdI4dyV/I0R3W0VDSBcDd8vxouQrT+iNb
-wqTBUCgjHnea7OhI3S+CDi7692mmk8RC5Jbhxb0rr+i49Dx6gtpmCUb8QmB94TDT
-Rn5auDyJLh0+Wcg+eDdnNvKjNBS7v//BDSY+asVFVwlQ3/aMqVBXlKStFwHQa33O
-P/Y7vHxUVvIeimQmBn2zif8iFQjF3Q==
-=qf69
------END PGP SIGNATURE-----
-
---rxxtlje5djnxwkyg--
+-- 
+	Ansuel
