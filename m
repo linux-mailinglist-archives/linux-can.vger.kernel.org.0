@@ -2,105 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774C47B7D15
-	for <lists+linux-can@lfdr.de>; Wed,  4 Oct 2023 12:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A94C7B7D78
+	for <lists+linux-can@lfdr.de>; Wed,  4 Oct 2023 12:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242090AbjJDK0L (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Oct 2023 06:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
+        id S232814AbjJDKoc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Oct 2023 06:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232895AbjJDK0K (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Oct 2023 06:26:10 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FA2A1
-        for <linux-can@vger.kernel.org>; Wed,  4 Oct 2023 03:26:07 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qnz4n-0007NJ-8z; Wed, 04 Oct 2023 12:25:57 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qnz4m-00B0Xz-M8; Wed, 04 Oct 2023 12:25:56 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4E5AE22ED1E;
-        Wed,  4 Oct 2023 10:25:56 +0000 (UTC)
-Date:   Wed, 4 Oct 2023 12:25:55 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     socketcan@hartkopp.net, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] can: raw: Remove NULL check before dev_{put, hold}
-Message-ID: <20231004-shield-accurate-6b875651801b-mkl@pengutronix.de>
-References: <20230825064656.87751-1-jiapeng.chong@linux.alibaba.com>
+        with ESMTP id S232982AbjJDKob (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Oct 2023 06:44:31 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AA8A1
+        for <linux-can@vger.kernel.org>; Wed,  4 Oct 2023 03:44:28 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6c67060fdfaso1365576a34.2
+        for <linux-can@vger.kernel.org>; Wed, 04 Oct 2023 03:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696416268; x=1697021068; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jMkN0ypp9ItNe9lJgTzN5f0pLKiSXjwTvNbrl5/EmoU=;
+        b=Z9fSooVhQ5kIPNdhX4SS4d0+U2OskJYLdFsua5ZZBPDi4nOD3Wj3ITSLuwXo3JxkgR
+         GkP43QCs8+UzG/pIjmmWSry1LaRC7rKao7Xod4ichBp3Th7B2iHOIlvCQj8ImM1w5E5C
+         nSvbkxLVCO7SnmUbQ82rFGR0eJYrjTbxYOcqGb817q2eq/L/pT3tfGSR+hvwKHlsbZ1t
+         Wh2mPn6Z9oXgjyPrFon1824pmtusMMG1evnKB0Y5StnM2LYnchxzaR0sPbAkvZGk2zBX
+         cvCjXEmW+zZWQ+qecmwq+NkrzFrceLR3LPSM4p8I56BohXrabnQ3zgYm5FHy1JjQfa/V
+         KpPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696416268; x=1697021068;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jMkN0ypp9ItNe9lJgTzN5f0pLKiSXjwTvNbrl5/EmoU=;
+        b=eOMK1kZaI/ePKq1Udmd7G5ra8JNrlZtRxkV1Rh9Ns+CEXMKY6vMopoGylKVZcTzX6z
+         1eFSixzg40NfOlgrxvb/cSNS+Yi+daYVGlifZrLyZujVr9TBA+sBbyPY92+nDPcBqySF
+         j+JBBXGsDiJ4PtfZnvKfHp0spJ9sQiq7IvnB8524Cv9QnyCH9Mft3rZCk/gpmXiCVKYb
+         JTwApydg4KZwGTb3C7cnGVDA9DWrkD4eOossx9qXE0wKNQlnzAijalwX1bjil3Se03U0
+         rdFVc+tAHFPphguCcisKQRj9opRKi0TgUb4eASQJzFwQDMos3H8BgYyWesRE54xvMYc/
+         5UOw==
+X-Gm-Message-State: AOJu0Yz3XKpA6tpHrf7qATNHV/VoNW+nDhylZl1Haa1xLIiZjs8OoyJn
+        6WXkeyrkXutQr+pZCawiuzNEm919Sdr2zOi0xESKWEr+UF4=
+X-Google-Smtp-Source: AGHT+IFE/2KVNYrQibebn+tHnBegw1hxkp+d+8NrSa7uBLnyDSYaGrAJzvR4i8Z25GgkkPv93BHTerZh2dNY0zEY7uM=
+X-Received: by 2002:a05:6358:4298:b0:143:8af4:229e with SMTP id
+ s24-20020a056358429800b001438af4229emr2006870rwc.9.1696416268159; Wed, 04 Oct
+ 2023 03:44:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7n5eokfyo5pa3sfp"
-Content-Disposition: inline
-In-Reply-To: <20230825064656.87751-1-jiapeng.chong@linux.alibaba.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20231004-can-dev-fix-can-restart-v1-0-2e52899eaaf5@pengutronix.de>
+ <20231004-can-dev-fix-can-restart-v1-4-2e52899eaaf5@pengutronix.de>
+In-Reply-To: <20231004-can-dev-fix-can-restart-v1-4-2e52899eaaf5@pengutronix.de>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Wed, 4 Oct 2023 19:44:15 +0900
+Message-ID: <CAMZ6Rq+=iaRCroX7kQT5f-+qq5iBv3kFX_sytV8BmF0BcrtX2g@mail.gmail.com>
+Subject: Re: [PATCH 4/5] can: dev: can_restart(): update debug and error messages
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Wed. 4 Oct. 2023, 18:18, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> Update the debug message from "restarted" to "Attempting restart", as
+> it is actually printed _before_ restarting the CAN device, and that
+> restart may fail.
+>
+> Also update the error message from printing the error number to
+> printing symbolic error names.
+>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  drivers/net/can/dev/dev.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+> index 9014256c486a..8e4054e2abcc 100644
+> --- a/drivers/net/can/dev/dev.c
+> +++ b/drivers/net/can/dev/dev.c
+> @@ -147,14 +147,14 @@ static void can_restart(struct net_device *dev)
+>                 netif_rx(skb);
+>         }
+>
+> -       netdev_dbg(dev, "restarted\n");
+> +       netdev_dbg(dev, "Attempting restart\n");
+>         priv->can_stats.restarts++;
+>
+>         /* Now restart the device */
+>         netif_carrier_on(dev);
+>         err = priv->do_set_mode(dev, CAN_MODE_START);
+>         if (err) {
+> -               netdev_err(dev, "Error %d during restart", err);
+> +               netdev_err(dev, "Restart failed, error %pe\n", ERR_PTR(err));
+>                 netif_carrier_off(dev);
+>         }
 
---7n5eokfyo5pa3sfp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 25.08.2023 14:46:56, Jiapeng Chong wrote:
-> The call netdev_{put, hold} of dev_{put, hold} will check NULL, so there
-> is no need to check before using dev_{put, hold}, remove it to silence
-> the warning:
->=20
-> ./net/can/raw.c:497:2-9: WARNING: NULL check before dev_{put, hold} funct=
-ions is not needed.
->=20
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D6231
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Nitpick: I would rather remove the first message and print the
+affirmative: "restarted"
 
-Applied to linux-can-next/testing.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---7n5eokfyo5pa3sfp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUdPbEACgkQvlAcSiqK
-BOhaJAf8CJS4q8gjgzgbvGEY1oFdsFx5AOdvsIgFL4F3pg+7AjMNRXIX+CyDnGlf
-8tmSvh/3670c5pL8EN5ptuvlUVlJDVOhiH4/28FCC+7zkoWRtEOu4U6v4Uz2onGB
-d2FSb0cx7ifFIjrr6IOsBa67lPO5GD2AXXED8uyiE42K6cWYnpVqS6t48YDle5j2
-u76Q97bvL2TGI1sh3FWKtrsSpgYKcRiKDW9BxodrQrboRqeUMyqfq5OMnn76bc0r
-EyPe0zGVVE2peGfAWhdN1IC/5u7kuhPoB8WdymLnM99pSGeMVrPcvZ+vufB/hM3K
-UnMXGbHpmSlZ18a4oJZuyYTQJaSQnQ==
-=nayZ
------END PGP SIGNATURE-----
-
---7n5eokfyo5pa3sfp--
+        if (err) {
+                netdev_err(dev, "Restart failed, error %pe\n", ERR_PTR(err));
+                netif_carrier_off(dev);
+        } else {
+                netdev_dbg(dev, "Restarted\n");
+        }
