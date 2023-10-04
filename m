@@ -2,112 +2,132 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A94C7B7D78
-	for <lists+linux-can@lfdr.de>; Wed,  4 Oct 2023 12:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19617B7D8B
+	for <lists+linux-can@lfdr.de>; Wed,  4 Oct 2023 12:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbjJDKoc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Oct 2023 06:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
+        id S233041AbjJDKvO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Oct 2023 06:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbjJDKob (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Oct 2023 06:44:31 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AA8A1
-        for <linux-can@vger.kernel.org>; Wed,  4 Oct 2023 03:44:28 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6c67060fdfaso1365576a34.2
-        for <linux-can@vger.kernel.org>; Wed, 04 Oct 2023 03:44:28 -0700 (PDT)
+        with ESMTP id S232814AbjJDKvO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Oct 2023 06:51:14 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671BBBD
+        for <linux-can@vger.kernel.org>; Wed,  4 Oct 2023 03:51:09 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-279294d94acso634274a91.0
+        for <linux-can@vger.kernel.org>; Wed, 04 Oct 2023 03:51:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696416268; x=1697021068; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1696416669; x=1697021469; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jMkN0ypp9ItNe9lJgTzN5f0pLKiSXjwTvNbrl5/EmoU=;
-        b=Z9fSooVhQ5kIPNdhX4SS4d0+U2OskJYLdFsua5ZZBPDi4nOD3Wj3ITSLuwXo3JxkgR
-         GkP43QCs8+UzG/pIjmmWSry1LaRC7rKao7Xod4ichBp3Th7B2iHOIlvCQj8ImM1w5E5C
-         nSvbkxLVCO7SnmUbQ82rFGR0eJYrjTbxYOcqGb817q2eq/L/pT3tfGSR+hvwKHlsbZ1t
-         Wh2mPn6Z9oXgjyPrFon1824pmtusMMG1evnKB0Y5StnM2LYnchxzaR0sPbAkvZGk2zBX
-         cvCjXEmW+zZWQ+qecmwq+NkrzFrceLR3LPSM4p8I56BohXrabnQ3zgYm5FHy1JjQfa/V
-         KpPw==
+        bh=WwpZGn0NVSOuCUHXbthrrnVfjoYA2AAv/0Qv9r+wq/4=;
+        b=Im9fAwxigCatVzrCphoO6sIpplx8hwGyiAr08yjC32RBxSJPx9qJ0CADXL5zWDmbZH
+         Wp2HKvCqx8qn3sV3NWrb6SXuL+cr9epJz47X57HhNIk6FhK/u39wXY7+SawL0zffPIZV
+         GUvjfRAKPWccywXTTt0mF9qtkJz3HLIDVl0Ofu9cGRGuMvjkwCWJcwUEzyuN2U62XX66
+         aP2UjgEqQt2akO6+EdJ7r90GMfNkIWsPO4v9cr4o98lOVlFdMz80b8Ig44GG/jB8tOd/
+         TiR4R5uEzC234BFb0uV0RCIQNc8rqn/D13Jb/P5VDHxhwpkQo4vHZwbGJKFIbQMiFTNH
+         ZUAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696416268; x=1697021068;
+        d=1e100.net; s=20230601; t=1696416669; x=1697021469;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jMkN0ypp9ItNe9lJgTzN5f0pLKiSXjwTvNbrl5/EmoU=;
-        b=eOMK1kZaI/ePKq1Udmd7G5ra8JNrlZtRxkV1Rh9Ns+CEXMKY6vMopoGylKVZcTzX6z
-         1eFSixzg40NfOlgrxvb/cSNS+Yi+daYVGlifZrLyZujVr9TBA+sBbyPY92+nDPcBqySF
-         j+JBBXGsDiJ4PtfZnvKfHp0spJ9sQiq7IvnB8524Cv9QnyCH9Mft3rZCk/gpmXiCVKYb
-         JTwApydg4KZwGTb3C7cnGVDA9DWrkD4eOossx9qXE0wKNQlnzAijalwX1bjil3Se03U0
-         rdFVc+tAHFPphguCcisKQRj9opRKi0TgUb4eASQJzFwQDMos3H8BgYyWesRE54xvMYc/
-         5UOw==
-X-Gm-Message-State: AOJu0Yz3XKpA6tpHrf7qATNHV/VoNW+nDhylZl1Haa1xLIiZjs8OoyJn
-        6WXkeyrkXutQr+pZCawiuzNEm919Sdr2zOi0xESKWEr+UF4=
-X-Google-Smtp-Source: AGHT+IFE/2KVNYrQibebn+tHnBegw1hxkp+d+8NrSa7uBLnyDSYaGrAJzvR4i8Z25GgkkPv93BHTerZh2dNY0zEY7uM=
-X-Received: by 2002:a05:6358:4298:b0:143:8af4:229e with SMTP id
- s24-20020a056358429800b001438af4229emr2006870rwc.9.1696416268159; Wed, 04 Oct
- 2023 03:44:28 -0700 (PDT)
+        bh=WwpZGn0NVSOuCUHXbthrrnVfjoYA2AAv/0Qv9r+wq/4=;
+        b=B9tlvHSx70DCP621IuIvpEclICObE0JlU3uJB08QDVCxk4mFAQtaUkJbW65dBNdAEM
+         3wEgHlAtomxFYndExJS7gSVTJtQYAmJDzQtcWMmCinqYGb8tm8a+PJTMex2ncVdl8kym
+         xU07xPkehOhYV2TLPdbCTRY/WfMRAv3d7kMIzfh49/sssYiddErw38u5RTV1uha3THc4
+         LOhDeG8xpnOYTCE2GZk/LHbsapfZYQ0RUJWFdVuvTbSLr+BoYE9aHTrCYEQHNz9uR5D0
+         WMMdv04JvBUlqYpJCmJiG/3ljkJHqdJj4/4WGBBQz4KB+k/C3X3F2E24VIQ7/BcGc/uD
+         rGTw==
+X-Gm-Message-State: AOJu0YxgUR+n7/LeyG6QwFWqkjfz84YVZ1OtCnoxP7RMw6MhHZ26sIc5
+        C1bCye52eWwD6o1VbfgQzvt/yyvQ1p06MxG02zsMtxz4oVg=
+X-Google-Smtp-Source: AGHT+IFtAcE2RtpHSLOcPUkjvI1uPVuvypS2AlndBqxZ6FfFlnYcijGqME/Nlb/+lJEPRiQ9+in1iqgUcjpWCtzGlSM=
+X-Received: by 2002:a17:90b:1d04:b0:268:808:8e82 with SMTP id
+ on4-20020a17090b1d0400b0026808088e82mr2944252pjb.1.1696416668724; Wed, 04 Oct
+ 2023 03:51:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231004-can-dev-fix-can-restart-v1-0-2e52899eaaf5@pengutronix.de>
- <20231004-can-dev-fix-can-restart-v1-4-2e52899eaaf5@pengutronix.de>
-In-Reply-To: <20231004-can-dev-fix-can-restart-v1-4-2e52899eaaf5@pengutronix.de>
+References: <20231004-at91_can-rx_offload-v1-0-c32bf99097db@pengutronix.de> <20231004-at91_can-rx_offload-v1-1-c32bf99097db@pengutronix.de>
+In-Reply-To: <20231004-at91_can-rx_offload-v1-1-c32bf99097db@pengutronix.de>
 From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Wed, 4 Oct 2023 19:44:15 +0900
-Message-ID: <CAMZ6Rq+=iaRCroX7kQT5f-+qq5iBv3kFX_sytV8BmF0BcrtX2g@mail.gmail.com>
-Subject: Re: [PATCH 4/5] can: dev: can_restart(): update debug and error messages
+Date:   Wed, 4 Oct 2023 19:50:55 +0900
+Message-ID: <CAMZ6RqL7EUeYeBB3XUvZeL=bMNzSOPSEoTB7R5D8CTLFz1n+Mg@mail.gmail.com>
+Subject: Re: [PATCH 01/27] can: dev: add can_state_get_by_berr_counter() to
+ return the CAN state based on the current error counters
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 4 Oct. 2023, 18:18, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+On Wed. 4 Oct. 2023, 18:24, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> Some CAN controllers do not have a register that contains the current
+> CAN state, but only a register that contains the error counters.
 >
-> Update the debug message from "restarted" to "Attempting restart", as
-> it is actually printed _before_ restarting the CAN device, and that
-> restart may fail.
->
-> Also update the error message from printing the error number to
-> printing symbolic error names.
+> Introduce a new function can_state_get_by_berr_counter() that returns
+> the current TX and RX state depending on the provided CAN bit error
+> counters.
 >
 > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 > ---
->  drivers/net/can/dev/dev.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/net/can/dev/dev.c | 22 ++++++++++++++++++++++
+>  include/linux/can/dev.h   |  4 ++++
+>  2 files changed, 26 insertions(+)
 >
 > diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-> index 9014256c486a..8e4054e2abcc 100644
+> index 7f9334a8af50..6242424fadbc 100644
 > --- a/drivers/net/can/dev/dev.c
 > +++ b/drivers/net/can/dev/dev.c
-> @@ -147,14 +147,14 @@ static void can_restart(struct net_device *dev)
->                 netif_rx(skb);
->         }
+> @@ -90,6 +90,28 @@ const char *can_get_state_str(const enum can_state state)
+>  }
+>  EXPORT_SYMBOL_GPL(can_get_state_str);
 >
-> -       netdev_dbg(dev, "restarted\n");
-> +       netdev_dbg(dev, "Attempting restart\n");
->         priv->can_stats.restarts++;
+> +static enum can_state can_state_err_to_state(u16 err)
+> +{
+> +       if (err < 96)
+> +               return CAN_STATE_ERROR_ACTIVE;
+> +       if (err < 128)
+> +               return CAN_STATE_ERROR_WARNING;
+> +       if (err < 256)
+> +               return CAN_STATE_ERROR_PASSIVE;
+
+Please use the macros from include/uapi/linux/can/error.h.
+
+  https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can/error.h#L130
+
+> +       return CAN_STATE_BUS_OFF;
+> +}
+> +
+> +void can_state_get_by_berr_counter(const struct net_device *dev,
+> +                                  const struct can_berr_counter *bec,
+> +                                  enum can_state *tx_state,
+> +                                  enum can_state *rx_state)
+> +{
+> +       *tx_state = can_state_err_to_state(bec->txerr);
+> +       *rx_state = can_state_err_to_state(bec->rxerr);
+> +}
+> +EXPORT_SYMBOL_GPL(can_state_get_by_berr_counter);
+> +
+>  void can_change_state(struct net_device *dev, struct can_frame *cf,
+>                       enum can_state tx_state, enum can_state rx_state)
+>  {
+> diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+> index 982ba245eb41..1b92aed49363 100644
+> --- a/include/linux/can/dev.h
+> +++ b/include/linux/can/dev.h
+> @@ -195,6 +195,10 @@ int can_restart_now(struct net_device *dev);
+>  void can_bus_off(struct net_device *dev);
 >
->         /* Now restart the device */
->         netif_carrier_on(dev);
->         err = priv->do_set_mode(dev, CAN_MODE_START);
->         if (err) {
-> -               netdev_err(dev, "Error %d during restart", err);
-> +               netdev_err(dev, "Restart failed, error %pe\n", ERR_PTR(err));
->                 netif_carrier_off(dev);
->         }
-
-
-Nitpick: I would rather remove the first message and print the
-affirmative: "restarted"
-
-        if (err) {
-                netdev_err(dev, "Restart failed, error %pe\n", ERR_PTR(err));
-                netif_carrier_off(dev);
-        } else {
-                netdev_dbg(dev, "Restarted\n");
-        }
+>  const char *can_get_state_str(const enum can_state state);
+> +void can_state_get_by_berr_counter(const struct net_device *dev,
+> +                                  const struct can_berr_counter *bec,
+> +                                  enum can_state *tx_state,
+> +                                  enum can_state *rx_state);
+>  void can_change_state(struct net_device *dev, struct can_frame *cf,
+>                       enum can_state tx_state, enum can_state rx_state);
