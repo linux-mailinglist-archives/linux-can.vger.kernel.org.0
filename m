@@ -2,58 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830947B7FEB
-	for <lists+linux-can@lfdr.de>; Wed,  4 Oct 2023 14:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F577B8025
+	for <lists+linux-can@lfdr.de>; Wed,  4 Oct 2023 15:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbjJDMz7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Oct 2023 08:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
+        id S242325AbjJDNDW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Oct 2023 09:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbjJDMz7 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Oct 2023 08:55:59 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F9798
-        for <linux-can@vger.kernel.org>; Wed,  4 Oct 2023 05:55:55 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3af609c3e74so1369326b6e.2
-        for <linux-can@vger.kernel.org>; Wed, 04 Oct 2023 05:55:55 -0700 (PDT)
+        with ESMTP id S242548AbjJDNDU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Oct 2023 09:03:20 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CECA6
+        for <linux-can@vger.kernel.org>; Wed,  4 Oct 2023 06:03:15 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1c5ff5f858dso15919425ad.2
+        for <linux-can@vger.kernel.org>; Wed, 04 Oct 2023 06:03:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696424154; x=1697028954; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1696424595; x=1697029395; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7g2/ODcqRPH7pItUmz913l3o7kNCbMFo3/Rt07DHkdM=;
-        b=nQ9Vf7G8P+a5NkZDjavO1aAvMqYa8goFfYcTbnfh/3fLbgv1bfDXlrJWvhhnt/lLSU
-         hoAeZLBKPRvub2+EKzCUYB+A4gio4acUTnLmjIEVBOWyAaLvrQTrRzVIDptZil58M8pW
-         jmCRlg+ADmpFHNQiyNXtTN8BYV+QnSiWQjyi3TyCfPcOv7qkRMGQGJLN91zC9Hq+7AJf
-         i8AkgVDYfyUmv5PDVOuBc/yUnTagp9UMqZ7XtlQu5FxCtPyR/gHGeSQtD4qaKO0pZTDf
-         kNvv13RnHR2LU1/7dz7sqCaWEEEk3N6CmCOFCtBFG5rRqAz2KHES/SmtBKYDA0yZSeO4
-         oFKQ==
+        bh=Z0AzAv3iah44ZPLGU3aaVCRRinyf8D1qXCSSS+WP0fE=;
+        b=NlfokEOE6JjQqf7S+shWQf5tldQR7domcNYylZA9t+bRABB0hMLQKfHf64W51TZ1qT
+         y2w16xlZuwjTudLFscwJQP9s5WUGVFwRZBj/TTRV6EAphZHVZWberT0TJ9MsWHFd+3Fv
+         1erLXxEnnWxm2Ivqe5rYcEIXG7bnxle082CwkUkZ9me92DmoUnOlj22ui1OlCHqbjHqM
+         w7ZGDwho9XKmmqLqBm4ksur0JBG5myIyLcsV5ke1dUm0IgQ84BhxwzrvidJ0Wmyg0FDS
+         A+b10kEuHT43SM0Anj7hhP2X+yb7X5b1ohyOLhlS/hvp0PwN141DRVZ1U7adZqMQBSn0
+         jJTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696424154; x=1697028954;
+        d=1e100.net; s=20230601; t=1696424595; x=1697029395;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7g2/ODcqRPH7pItUmz913l3o7kNCbMFo3/Rt07DHkdM=;
-        b=Yyyjb3+/ZdnYEbXobaLxvPUdo/5aE9nRFYZvwKB0mL5eiXimf8nGsNntCGhUlAFv2B
-         lUNm1hRCQpwkoJ4y9Bdpy3mrW3A3ERrXgZz27ZWJ9Y3QCi/qBHhS/Gna9FqF86iiFMRp
-         HYdVnTfTypOPMGLg6rhqZh4lQ19TJV30n6gCanIIpAPoWnoE6kaf2xUTp6I0VwnINXMU
-         1fGb4KneaWjFGnvhjtvsOcWjAyU6q3tpBomNJDjXb/pgZm7czcj2PMduJcWDp0tRwJ5i
-         NdemjEklqkkAAN59K8qpzUsn2Jf+Gjz9Fy2YXvQ+JJ1UZfl2UigTg8E2xP0L463mWMyn
-         jusw==
-X-Gm-Message-State: AOJu0YzAtAdT92F4eYc3lqRUWG0S0mFMjU9wuBXGwDO75FYxGwGnIugr
-        43YkjjbP4zdAWdS1ctq+/8sA9OvhuqnlR9Lc5USeBXL1f4U=
-X-Google-Smtp-Source: AGHT+IF8yyMgKCmHfpVw7i+6aIUCOy7g72UICD0LI1Qmnj8s0Ma2gW6+A7ZSNmOD84Pql3Rp4heGT8KaA9DVdb+MWyo=
-X-Received: by 2002:a05:6358:1ca:b0:135:57d0:d171 with SMTP id
- e10-20020a05635801ca00b0013557d0d171mr2134808rwa.15.1696424154422; Wed, 04
- Oct 2023 05:55:54 -0700 (PDT)
+        bh=Z0AzAv3iah44ZPLGU3aaVCRRinyf8D1qXCSSS+WP0fE=;
+        b=lcs946INQ+3Mmdtzfq1g596iia/hF6RwxIU6ZkcXhrTBYtPBZeztQmSEOnNiMLVh1m
+         Dm+EI294ca70auVsFQiqHZuJy6SOsNvNwNdtKqvFGBIgbxD24xKI0Jecjjt/DV5wo9OR
+         bGOG53eVyq/i/6r5JPof5t9fNaA0qS0uHJusRTOIiW4nPlovaJm7PSQfGZOLuTY8GfuF
+         cLkct8bwx/+aBoUeQ4GEW5ks/6metL1xdlHTW9vBFPD3k+BqkWGej/9aMZUD15Jcadaw
+         RVuvLY3xDX5EuTohRjiOnjvCwlWFd5r7lvWHnvoHl9BPEW3oP280FYmp8fINpbjqruil
+         2+jw==
+X-Gm-Message-State: AOJu0YwYXl9cv7Gfn//w3zIwazFEZcejkCUfKV8YhSg+6R4DykGfpH7S
+        kSU52p5Zas78oi1q7RIfVksiiQEe++GdMYmKAlacU7+8lTo=
+X-Google-Smtp-Source: AGHT+IESWEOcPoeOBaTmQ9GVSlBuR/L2zoB9rq7o6SKsKMpP4EoZ3Mjn/NBOZ0VwFZoF59k7pm/zMAl4GL8uv0EF6ys=
+X-Received: by 2002:a17:90a:ad09:b0:268:2500:b17e with SMTP id
+ r9-20020a17090aad0900b002682500b17emr2124541pjq.23.1696424594576; Wed, 04 Oct
+ 2023 06:03:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231004-at91_can-rx_offload-v1-0-c32bf99097db@pengutronix.de> <20231004-at91_can-rx_offload-v1-27-c32bf99097db@pengutronix.de>
-In-Reply-To: <20231004-at91_can-rx_offload-v1-27-c32bf99097db@pengutronix.de>
+References: <20231004-can-dev-fix-can-restart-v1-0-2e52899eaaf5@pengutronix.de>
+ <20231004-can-dev-fix-can-restart-v1-4-2e52899eaaf5@pengutronix.de>
+ <CAMZ6Rq+=iaRCroX7kQT5f-+qq5iBv3kFX_sytV8BmF0BcrtX2g@mail.gmail.com>
+ <20231004-unengaged-monkhood-a2031eac6013-mkl@pengutronix.de> <20231004-goes-pulse-0ed144520edd-mkl@pengutronix.de>
+In-Reply-To: <20231004-goes-pulse-0ed144520edd-mkl@pengutronix.de>
 From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Wed, 4 Oct 2023 21:55:41 +0900
-Message-ID: <CAMZ6RqLoyCOsTuYCryr++yZw036cF2VyEbxawQSKvM-54aaHuA@mail.gmail.com>
-Subject: Re: [PATCH 27/27] can: at91_can: switch to rx-offload implementation
+Date:   Wed, 4 Oct 2023 22:03:01 +0900
+Message-ID: <CAMZ6RqLebgso6rRbYgeSwp5YaeoUs3gSSDH6Wta=aAOweM3kRQ@mail.gmail.com>
+Subject: Re: [PATCH 4/5] can: dev: can_restart(): update debug and error messages
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de
+Cc:     linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -65,305 +68,35 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 4 Oct. 2023 at 18:24, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> The current at91_can driver uses NAPI to handle RX'ed CAN frames, the
-> RX IRQ is disabled an a NAPI poll is scheduled. Then in at91_poll_rx()
-                     ^^
+On Wed. 4 Oct. 2023 at 21:05, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 04.10.2023 13:33:59, Marc Kleine-Budde wrote:
+> > On 04.10.2023 19:44:15, Vincent Mailhol wrote:
+> > > On Wed. 4 Oct. 2023, 18:18, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> > > >
+> > > > Update the debug message from "restarted" to "Attempting restart", as
+> > > > it is actually printed _before_ restarting the CAN device, and that
+> > > > restart may fail.
+> > > >
+> > > > Also update the error message from printing the error number to
+> > > > printing symbolic error names.
+> > > >
+> > > > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > > > ---
+> > > >  drivers/net/can/dev/dev.c | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+> > > > index 9014256c486a..8e4054e2abcc 100644
+> > > > --- a/drivers/net/can/dev/dev.c
+> > > > +++ b/drivers/net/can/dev/dev.c
+> > > > @@ -147,14 +147,14 @@ static void can_restart(struct net_device *dev)
+> > > >                 netif_rx(skb);
+> > > >         }
+> > > >
+> > > > -       netdev_dbg(dev, "restarted\n");
+> > > > +       netdev_dbg(dev, "Attempting restart\n");
+> > > >         priv->can_stats.restarts++;
+>
+> What about that counter? Also move it into the no-error case?
 
-and
-
-> the RX'ed CAN frames are tried to read in order from the device.
->
-> This approach has 2 drawbacks:
->
-> - Under high system load it might take too long from the initial RX
->   IRQ to the NAPI poll function to run. This causes RX buffer
->   overflows.
-> - The algorithm to read the CAN frames in order is not bullet proof
->   and may fail under certain use cases/system loads.
->
-> The rx-offload helper fixes these problems by reading the RX'ed CAN
-> frames in the interrupt handler and adding it a list sorted by RX
-                                               ^
-
-adding it *to* a list?
-
-> timestamp. This list of RX'ed SKBs is then passed to the networking
-> stack via NAPI.
->
-> Convert the RX path to rx-offload, pass all CAN error frames with
-> can_rx_offload_queue_timestamp().
->
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  drivers/net/can/Kconfig    |   1 +
->  drivers/net/can/at91_can.c | 340 +++++++++++++--------------------------------
->  2 files changed, 100 insertions(+), 241 deletions(-)
->
-> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-> index 649453a3c858..8d6fc0852bf7 100644
-> --- a/drivers/net/can/Kconfig
-> +++ b/drivers/net/can/Kconfig
-> @@ -89,6 +89,7 @@ config CAN_RX_OFFLOAD
->  config CAN_AT91
->         tristate "Atmel AT91 onchip CAN controller"
->         depends on (ARCH_AT91 || COMPILE_TEST) && HAS_IOMEM
-> +       select CAN_RX_OFFLOAD
->         help
->           This is a driver for the SoC CAN controller in Atmel's AT91SAM9263
->           and AT91SAM9X5 processors.
-> diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
-> index ca62aa027e5f..33fb1e5edea5 100644
-> --- a/drivers/net/can/at91_can.c
-> +++ b/drivers/net/can/at91_can.c
-> @@ -3,7 +3,7 @@
->   * at91_can.c - CAN network driver for AT91 SoC CAN controller
->   *
->   * (C) 2007 by Hans J. Koch <hjk@hansjkoch.de>
-> - * (C) 2008, 2009, 2010, 2011 by Marc Kleine-Budde <kernel@pengutronix.de>
-> + * (C) 2008, 2009, 2010, 2011, 2023 by Marc Kleine-Budde <kernel@pengutronix.de>
->   */
->
->  #include <linux/bitfield.h>
-> @@ -26,6 +26,7 @@
->
->  #include <linux/can/dev.h>
->  #include <linux/can/error.h>
-> +#include <linux/can/rx-offload.h>
->
->  #define AT91_MB_MASK(i) ((1 << (i)) - 1)
->
-> @@ -142,7 +143,6 @@ enum at91_devtype {
->
->  struct at91_devtype_data {
->         unsigned int rx_first;
-> -       unsigned int rx_split;
->         unsigned int rx_last;
->         unsigned int tx_shift;
->         enum at91_devtype type;
-> @@ -150,14 +150,13 @@ struct at91_devtype_data {
->
->  struct at91_priv {
->         struct can_priv can;            /* must be the first member! */
-> -       struct napi_struct napi;
-> +       struct can_rx_offload offload;
->         struct phy *transceiver;
->
->         void __iomem *reg_base;
->
->         unsigned int tx_head;
->         unsigned int tx_tail;
-> -       unsigned int rx_next;
->         struct at91_devtype_data devtype_data;
->
->         struct clk *clk;
-> @@ -166,9 +165,13 @@ struct at91_priv {
->         canid_t mb0_id;
->  };
->
-> +static inline struct at91_priv *rx_offload_to_priv(struct can_rx_offload *offload)
-> +{
-> +       return container_of(offload, struct at91_priv, offload);
-> +}
-> +
->  static const struct at91_devtype_data at91_at91sam9263_data = {
->         .rx_first = 1,
-> -       .rx_split = 8,
->         .rx_last = 11,
->         .tx_shift = 2,
->         .type = AT91_DEVTYPE_SAM9263,
-> @@ -176,7 +179,6 @@ static const struct at91_devtype_data at91_at91sam9263_data = {
->
->  static const struct at91_devtype_data at91_at91sam9x5_data = {
->         .rx_first = 0,
-> -       .rx_split = 4,
->         .rx_last = 5,
->         .tx_shift = 1,
->         .type = AT91_DEVTYPE_SAM9X5,
-> @@ -213,27 +215,6 @@ static inline unsigned int get_mb_rx_last(const struct at91_priv *priv)
->         return priv->devtype_data.rx_last;
->  }
->
-> -static inline unsigned int get_mb_rx_split(const struct at91_priv *priv)
-> -{
-> -       return priv->devtype_data.rx_split;
-> -}
-> -
-> -static inline unsigned int get_mb_rx_num(const struct at91_priv *priv)
-> -{
-> -       return get_mb_rx_last(priv) - get_mb_rx_first(priv) + 1;
-> -}
-> -
-> -static inline unsigned int get_mb_rx_low_last(const struct at91_priv *priv)
-> -{
-> -       return get_mb_rx_split(priv) - 1;
-> -}
-> -
-> -static inline unsigned int get_mb_rx_low_mask(const struct at91_priv *priv)
-> -{
-> -       return AT91_MB_MASK(get_mb_rx_split(priv)) &
-> -               ~AT91_MB_MASK(get_mb_rx_first(priv));
-> -}
-> -
->  static inline unsigned int get_mb_tx_shift(const struct at91_priv *priv)
->  {
->         return priv->devtype_data.tx_shift;
-> @@ -374,9 +355,8 @@ static void at91_setup_mailboxes(struct net_device *dev)
->         for (i = get_mb_tx_first(priv); i <= get_mb_tx_last(priv); i++)
->                 set_mb_mode_prio(priv, i, AT91_MB_MODE_TX, 0);
->
-> -       /* Reset tx and rx helper pointers */
-> +       /* Reset tx helper pointers */
->         priv->tx_head = priv->tx_tail = 0;
-> -       priv->rx_next = get_mb_rx_first(priv);
->  }
->
->  static int at91_set_bittiming(struct net_device *dev)
-> @@ -548,34 +528,6 @@ static netdev_tx_t at91_start_xmit(struct sk_buff *skb, struct net_device *dev)
->         return NETDEV_TX_OK;
->  }
->
-> -/**
-> - * at91_activate_rx_low - activate lower rx mailboxes
-> - * @priv: a91 context
-> - *
-> - * Reenables the lower mailboxes for reception of new CAN messages
-> - */
-> -static inline void at91_activate_rx_low(const struct at91_priv *priv)
-> -{
-> -       u32 mask = get_mb_rx_low_mask(priv);
-> -
-> -       at91_write(priv, AT91_TCR, mask);
-> -}
-> -
-> -/**
-> - * at91_activate_rx_mb - reactive single rx mailbox
-> - * @priv: a91 context
-> - * @mb: mailbox to reactivate
-> - *
-> - * Reenables given mailbox for reception of new CAN messages
-> - */
-> -static inline void at91_activate_rx_mb(const struct at91_priv *priv,
-> -                                      unsigned int mb)
-> -{
-> -       u32 mask = 1 << mb;
-> -
-> -       at91_write(priv, AT91_TCR, mask);
-> -}
-> -
->  static inline u32 at91_get_timestamp(const struct at91_priv *priv)
->  {
->         return at91_read(priv, AT91_TIM);
-> @@ -600,37 +552,60 @@ static void at91_rx_overflow_err(struct net_device *dev)
->  {
->         struct net_device_stats *stats = &dev->stats;
->         struct sk_buff *skb;
-> +       struct at91_priv *priv = netdev_priv(dev);
->         struct can_frame *cf;
-> +       u32 timestamp;
-> +       int err;
->
->         netdev_dbg(dev, "RX buffer overflow\n");
->         stats->rx_over_errors++;
->         stats->rx_errors++;
->
-> -       skb = alloc_can_err_skb(dev, &cf);
-> +       skb = at91_alloc_can_err_skb(dev, &cf, &timestamp);
->         if (unlikely(!skb))
->                 return;
->
->         cf->can_id |= CAN_ERR_CRTL;
->         cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
->
-> -       netif_receive_skb(skb);
-> +       err = can_rx_offload_queue_timestamp(&priv->offload, skb, timestamp);
-> +       if (err)
-> +               stats->rx_fifo_errors++;
->  }
->
->  /**
-> - * at91_read_mb - read CAN msg from mailbox (lowlevel impl)
-> - * @dev: net device
-> + * at91_mailbox_read - read CAN msg from mailbox
-> + * @offload: rx-offload
->   * @mb: mailbox number to read from
-> - * @cf: can frame where to store message
-> + * @timestamp: pointer to 32 bit timestamp
-> + * @drop: true indicated mailbox to mark as read and drop frame
->   *
-> - * Reads a CAN message from the given mailbox and stores data into
-> - * given can frame. "mb" and "cf" must be valid.
-> + * Reads a CAN message from the given mailbox if not empty.
->   */
-> -static void at91_read_mb(struct net_device *dev, unsigned int mb,
-> -                        struct can_frame *cf)
-> +static struct sk_buff *at91_mailbox_read(struct can_rx_offload *offload,
-> +                                        unsigned int mb, u32 *timestamp,
-> +                                        bool drop)
->  {
-> -       const struct at91_priv *priv = netdev_priv(dev);
-> +       const struct at91_priv *priv = rx_offload_to_priv(offload);
-> +       struct can_frame *cf;
-> +       struct sk_buff *skb;
->         u32 reg_msr, reg_mid;
->
-> +       reg_msr = at91_read(priv, AT91_MSR(mb));
-> +       if (!(reg_msr & AT91_MSR_MRDY))
-> +               return NULL;
-> +
-> +       if (unlikely(drop)) {
-> +               skb = ERR_PTR(-ENOBUFS);
-> +               goto mark_as_read;
-> +       }
-> +
-> +       skb = alloc_can_skb(offload->dev, &cf);
-> +       if (unlikely(!skb)) {
-> +               skb = ERR_PTR(-ENOMEM);
-> +               goto mark_as_read;
-> +       }
-> +
->         reg_mid = at91_read(priv, AT91_MID(mb));
->         if (reg_mid & AT91_MID_MIDE)
->                 cf->can_id = FIELD_GET(AT91_MID_MIDVA_MASK | AT91_MID_MIDVB_MASK, reg_mid) |
-> @@ -638,7 +613,9 @@ static void at91_read_mb(struct net_device *dev, unsigned int mb,
->         else
->                 cf->can_id = FIELD_GET(AT91_MID_MIDVA_MASK, reg_mid);
->
-> -       reg_msr = at91_read(priv, AT91_MSR(mb));
-> +       /* extend timstamp to full 32 bit */
-                    ^^^^^^^^
-
-timestamp
-
-> +       *timestamp = FIELD_GET(AT91_MSR_MTIMESTAMP_MASK, reg_msr) << 16;
-
-If I understand correctly, you only use the hardware timestamp for the
-napi but you do not report it to the userland.
-
-Not a criticism of this series, but it seems to me that it would be
-easy to add one follow-up patch that would populate
-skb_shared_hwtstamps->hwtstamp and update ethtool_ops->get_ts_info in
-order to report those hardware timestamps to the user.
-
->         cf->len = can_cc_dlc2len(FIELD_GET(AT91_MSR_MDLC_MASK, reg_msr));
->
->         if (reg_msr & AT91_MSR_MRTR) {
-> @@ -652,151 +629,12 @@ static void at91_read_mb(struct net_device *dev, unsigned int mb,
->         at91_write(priv, AT91_MID(mb), AT91_MID_MIDE);
->
->         if (unlikely(mb == get_mb_rx_last(priv) && reg_msr & AT91_MSR_MMI))
-> -               at91_rx_overflow_err(dev);
-> -}
-> +               at91_rx_overflow_err(offload->dev);
-
-(...)
-
-This concludes my "review" of this series. Because I was scrolling
-through it and not doing anything thorough, I will not be giving my
-review-by tag even if there is a follow-up v2. That said, aside from
-my comment on patch 01/27 and the random typo nitpick, nothing seemed
-off.
-
-
-Yours sincerely,
-Vincent Mailhol
+Indeed. It makes sense to only increment if the restart actually occurred.
