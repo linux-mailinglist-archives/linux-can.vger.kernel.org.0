@@ -2,147 +2,368 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B60F7B7EA4
-	for <lists+linux-can@lfdr.de>; Wed,  4 Oct 2023 14:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830947B7FEB
+	for <lists+linux-can@lfdr.de>; Wed,  4 Oct 2023 14:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232919AbjJDMFp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Oct 2023 08:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
+        id S233003AbjJDMz7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Oct 2023 08:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbjJDMFo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Oct 2023 08:05:44 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15037A1
-        for <linux-can@vger.kernel.org>; Wed,  4 Oct 2023 05:05:41 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qo0dH-0004YV-JF; Wed, 04 Oct 2023 14:05:39 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qo0dG-00B1Hz-Un; Wed, 04 Oct 2023 14:05:38 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A254922EE32;
-        Wed,  4 Oct 2023 12:05:38 +0000 (UTC)
-Date:   Wed, 4 Oct 2023 14:05:38 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc:     linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
-Subject: Re: [PATCH 4/5] can: dev: can_restart(): update debug and error
- messages
-Message-ID: <20231004-goes-pulse-0ed144520edd-mkl@pengutronix.de>
-References: <20231004-can-dev-fix-can-restart-v1-0-2e52899eaaf5@pengutronix.de>
- <20231004-can-dev-fix-can-restart-v1-4-2e52899eaaf5@pengutronix.de>
- <CAMZ6Rq+=iaRCroX7kQT5f-+qq5iBv3kFX_sytV8BmF0BcrtX2g@mail.gmail.com>
- <20231004-unengaged-monkhood-a2031eac6013-mkl@pengutronix.de>
+        with ESMTP id S233027AbjJDMz7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Oct 2023 08:55:59 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F9798
+        for <linux-can@vger.kernel.org>; Wed,  4 Oct 2023 05:55:55 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3af609c3e74so1369326b6e.2
+        for <linux-can@vger.kernel.org>; Wed, 04 Oct 2023 05:55:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696424154; x=1697028954; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7g2/ODcqRPH7pItUmz913l3o7kNCbMFo3/Rt07DHkdM=;
+        b=nQ9Vf7G8P+a5NkZDjavO1aAvMqYa8goFfYcTbnfh/3fLbgv1bfDXlrJWvhhnt/lLSU
+         hoAeZLBKPRvub2+EKzCUYB+A4gio4acUTnLmjIEVBOWyAaLvrQTrRzVIDptZil58M8pW
+         jmCRlg+ADmpFHNQiyNXtTN8BYV+QnSiWQjyi3TyCfPcOv7qkRMGQGJLN91zC9Hq+7AJf
+         i8AkgVDYfyUmv5PDVOuBc/yUnTagp9UMqZ7XtlQu5FxCtPyR/gHGeSQtD4qaKO0pZTDf
+         kNvv13RnHR2LU1/7dz7sqCaWEEEk3N6CmCOFCtBFG5rRqAz2KHES/SmtBKYDA0yZSeO4
+         oFKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696424154; x=1697028954;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7g2/ODcqRPH7pItUmz913l3o7kNCbMFo3/Rt07DHkdM=;
+        b=Yyyjb3+/ZdnYEbXobaLxvPUdo/5aE9nRFYZvwKB0mL5eiXimf8nGsNntCGhUlAFv2B
+         lUNm1hRCQpwkoJ4y9Bdpy3mrW3A3ERrXgZz27ZWJ9Y3QCi/qBHhS/Gna9FqF86iiFMRp
+         HYdVnTfTypOPMGLg6rhqZh4lQ19TJV30n6gCanIIpAPoWnoE6kaf2xUTp6I0VwnINXMU
+         1fGb4KneaWjFGnvhjtvsOcWjAyU6q3tpBomNJDjXb/pgZm7czcj2PMduJcWDp0tRwJ5i
+         NdemjEklqkkAAN59K8qpzUsn2Jf+Gjz9Fy2YXvQ+JJ1UZfl2UigTg8E2xP0L463mWMyn
+         jusw==
+X-Gm-Message-State: AOJu0YzAtAdT92F4eYc3lqRUWG0S0mFMjU9wuBXGwDO75FYxGwGnIugr
+        43YkjjbP4zdAWdS1ctq+/8sA9OvhuqnlR9Lc5USeBXL1f4U=
+X-Google-Smtp-Source: AGHT+IF8yyMgKCmHfpVw7i+6aIUCOy7g72UICD0LI1Qmnj8s0Ma2gW6+A7ZSNmOD84Pql3Rp4heGT8KaA9DVdb+MWyo=
+X-Received: by 2002:a05:6358:1ca:b0:135:57d0:d171 with SMTP id
+ e10-20020a05635801ca00b0013557d0d171mr2134808rwa.15.1696424154422; Wed, 04
+ Oct 2023 05:55:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2sxhl5xs5pw7puje"
-Content-Disposition: inline
-In-Reply-To: <20231004-unengaged-monkhood-a2031eac6013-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20231004-at91_can-rx_offload-v1-0-c32bf99097db@pengutronix.de> <20231004-at91_can-rx_offload-v1-27-c32bf99097db@pengutronix.de>
+In-Reply-To: <20231004-at91_can-rx_offload-v1-27-c32bf99097db@pengutronix.de>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Wed, 4 Oct 2023 21:55:41 +0900
+Message-ID: <CAMZ6RqLoyCOsTuYCryr++yZw036cF2VyEbxawQSKvM-54aaHuA@mail.gmail.com>
+Subject: Re: [PATCH 27/27] can: at91_can: switch to rx-offload implementation
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Wed. 4 Oct. 2023 at 18:24, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> The current at91_can driver uses NAPI to handle RX'ed CAN frames, the
+> RX IRQ is disabled an a NAPI poll is scheduled. Then in at91_poll_rx()
+                     ^^
 
---2sxhl5xs5pw7puje
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+and
 
-On 04.10.2023 13:33:59, Marc Kleine-Budde wrote:
-> On 04.10.2023 19:44:15, Vincent Mailhol wrote:
-> > On Wed. 4 Oct. 2023, 18:18, Marc Kleine-Budde <mkl@pengutronix.de> wrot=
-e:
-> > >
-> > > Update the debug message from "restarted" to "Attempting restart", as
-> > > it is actually printed _before_ restarting the CAN device, and that
-> > > restart may fail.
-> > >
-> > > Also update the error message from printing the error number to
-> > > printing symbolic error names.
-> > >
-> > > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> > > ---
-> > >  drivers/net/can/dev/dev.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-> > > index 9014256c486a..8e4054e2abcc 100644
-> > > --- a/drivers/net/can/dev/dev.c
-> > > +++ b/drivers/net/can/dev/dev.c
-> > > @@ -147,14 +147,14 @@ static void can_restart(struct net_device *dev)
-> > >                 netif_rx(skb);
-> > >         }
-> > >
-> > > -       netdev_dbg(dev, "restarted\n");
-> > > +       netdev_dbg(dev, "Attempting restart\n");
-> > >         priv->can_stats.restarts++;
+> the RX'ed CAN frames are tried to read in order from the device.
+>
+> This approach has 2 drawbacks:
+>
+> - Under high system load it might take too long from the initial RX
+>   IRQ to the NAPI poll function to run. This causes RX buffer
+>   overflows.
+> - The algorithm to read the CAN frames in order is not bullet proof
+>   and may fail under certain use cases/system loads.
+>
+> The rx-offload helper fixes these problems by reading the RX'ed CAN
+> frames in the interrupt handler and adding it a list sorted by RX
+                                               ^
 
-What about that counter? Also move it into the no-error case?
+adding it *to* a list?
 
-Marc
+> timestamp. This list of RX'ed SKBs is then passed to the networking
+> stack via NAPI.
+>
+> Convert the RX path to rx-offload, pass all CAN error frames with
+> can_rx_offload_queue_timestamp().
+>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  drivers/net/can/Kconfig    |   1 +
+>  drivers/net/can/at91_can.c | 340 +++++++++++++--------------------------------
+>  2 files changed, 100 insertions(+), 241 deletions(-)
+>
+> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+> index 649453a3c858..8d6fc0852bf7 100644
+> --- a/drivers/net/can/Kconfig
+> +++ b/drivers/net/can/Kconfig
+> @@ -89,6 +89,7 @@ config CAN_RX_OFFLOAD
+>  config CAN_AT91
+>         tristate "Atmel AT91 onchip CAN controller"
+>         depends on (ARCH_AT91 || COMPILE_TEST) && HAS_IOMEM
+> +       select CAN_RX_OFFLOAD
+>         help
+>           This is a driver for the SoC CAN controller in Atmel's AT91SAM9263
+>           and AT91SAM9X5 processors.
+> diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
+> index ca62aa027e5f..33fb1e5edea5 100644
+> --- a/drivers/net/can/at91_can.c
+> +++ b/drivers/net/can/at91_can.c
+> @@ -3,7 +3,7 @@
+>   * at91_can.c - CAN network driver for AT91 SoC CAN controller
+>   *
+>   * (C) 2007 by Hans J. Koch <hjk@hansjkoch.de>
+> - * (C) 2008, 2009, 2010, 2011 by Marc Kleine-Budde <kernel@pengutronix.de>
+> + * (C) 2008, 2009, 2010, 2011, 2023 by Marc Kleine-Budde <kernel@pengutronix.de>
+>   */
+>
+>  #include <linux/bitfield.h>
+> @@ -26,6 +26,7 @@
+>
+>  #include <linux/can/dev.h>
+>  #include <linux/can/error.h>
+> +#include <linux/can/rx-offload.h>
+>
+>  #define AT91_MB_MASK(i) ((1 << (i)) - 1)
+>
+> @@ -142,7 +143,6 @@ enum at91_devtype {
+>
+>  struct at91_devtype_data {
+>         unsigned int rx_first;
+> -       unsigned int rx_split;
+>         unsigned int rx_last;
+>         unsigned int tx_shift;
+>         enum at91_devtype type;
+> @@ -150,14 +150,13 @@ struct at91_devtype_data {
+>
+>  struct at91_priv {
+>         struct can_priv can;            /* must be the first member! */
+> -       struct napi_struct napi;
+> +       struct can_rx_offload offload;
+>         struct phy *transceiver;
+>
+>         void __iomem *reg_base;
+>
+>         unsigned int tx_head;
+>         unsigned int tx_tail;
+> -       unsigned int rx_next;
+>         struct at91_devtype_data devtype_data;
+>
+>         struct clk *clk;
+> @@ -166,9 +165,13 @@ struct at91_priv {
+>         canid_t mb0_id;
+>  };
+>
+> +static inline struct at91_priv *rx_offload_to_priv(struct can_rx_offload *offload)
+> +{
+> +       return container_of(offload, struct at91_priv, offload);
+> +}
+> +
+>  static const struct at91_devtype_data at91_at91sam9263_data = {
+>         .rx_first = 1,
+> -       .rx_split = 8,
+>         .rx_last = 11,
+>         .tx_shift = 2,
+>         .type = AT91_DEVTYPE_SAM9263,
+> @@ -176,7 +179,6 @@ static const struct at91_devtype_data at91_at91sam9263_data = {
+>
+>  static const struct at91_devtype_data at91_at91sam9x5_data = {
+>         .rx_first = 0,
+> -       .rx_split = 4,
+>         .rx_last = 5,
+>         .tx_shift = 1,
+>         .type = AT91_DEVTYPE_SAM9X5,
+> @@ -213,27 +215,6 @@ static inline unsigned int get_mb_rx_last(const struct at91_priv *priv)
+>         return priv->devtype_data.rx_last;
+>  }
+>
+> -static inline unsigned int get_mb_rx_split(const struct at91_priv *priv)
+> -{
+> -       return priv->devtype_data.rx_split;
+> -}
+> -
+> -static inline unsigned int get_mb_rx_num(const struct at91_priv *priv)
+> -{
+> -       return get_mb_rx_last(priv) - get_mb_rx_first(priv) + 1;
+> -}
+> -
+> -static inline unsigned int get_mb_rx_low_last(const struct at91_priv *priv)
+> -{
+> -       return get_mb_rx_split(priv) - 1;
+> -}
+> -
+> -static inline unsigned int get_mb_rx_low_mask(const struct at91_priv *priv)
+> -{
+> -       return AT91_MB_MASK(get_mb_rx_split(priv)) &
+> -               ~AT91_MB_MASK(get_mb_rx_first(priv));
+> -}
+> -
+>  static inline unsigned int get_mb_tx_shift(const struct at91_priv *priv)
+>  {
+>         return priv->devtype_data.tx_shift;
+> @@ -374,9 +355,8 @@ static void at91_setup_mailboxes(struct net_device *dev)
+>         for (i = get_mb_tx_first(priv); i <= get_mb_tx_last(priv); i++)
+>                 set_mb_mode_prio(priv, i, AT91_MB_MODE_TX, 0);
+>
+> -       /* Reset tx and rx helper pointers */
+> +       /* Reset tx helper pointers */
+>         priv->tx_head = priv->tx_tail = 0;
+> -       priv->rx_next = get_mb_rx_first(priv);
+>  }
+>
+>  static int at91_set_bittiming(struct net_device *dev)
+> @@ -548,34 +528,6 @@ static netdev_tx_t at91_start_xmit(struct sk_buff *skb, struct net_device *dev)
+>         return NETDEV_TX_OK;
+>  }
+>
+> -/**
+> - * at91_activate_rx_low - activate lower rx mailboxes
+> - * @priv: a91 context
+> - *
+> - * Reenables the lower mailboxes for reception of new CAN messages
+> - */
+> -static inline void at91_activate_rx_low(const struct at91_priv *priv)
+> -{
+> -       u32 mask = get_mb_rx_low_mask(priv);
+> -
+> -       at91_write(priv, AT91_TCR, mask);
+> -}
+> -
+> -/**
+> - * at91_activate_rx_mb - reactive single rx mailbox
+> - * @priv: a91 context
+> - * @mb: mailbox to reactivate
+> - *
+> - * Reenables given mailbox for reception of new CAN messages
+> - */
+> -static inline void at91_activate_rx_mb(const struct at91_priv *priv,
+> -                                      unsigned int mb)
+> -{
+> -       u32 mask = 1 << mb;
+> -
+> -       at91_write(priv, AT91_TCR, mask);
+> -}
+> -
+>  static inline u32 at91_get_timestamp(const struct at91_priv *priv)
+>  {
+>         return at91_read(priv, AT91_TIM);
+> @@ -600,37 +552,60 @@ static void at91_rx_overflow_err(struct net_device *dev)
+>  {
+>         struct net_device_stats *stats = &dev->stats;
+>         struct sk_buff *skb;
+> +       struct at91_priv *priv = netdev_priv(dev);
+>         struct can_frame *cf;
+> +       u32 timestamp;
+> +       int err;
+>
+>         netdev_dbg(dev, "RX buffer overflow\n");
+>         stats->rx_over_errors++;
+>         stats->rx_errors++;
+>
+> -       skb = alloc_can_err_skb(dev, &cf);
+> +       skb = at91_alloc_can_err_skb(dev, &cf, &timestamp);
+>         if (unlikely(!skb))
+>                 return;
+>
+>         cf->can_id |= CAN_ERR_CRTL;
+>         cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
+>
+> -       netif_receive_skb(skb);
+> +       err = can_rx_offload_queue_timestamp(&priv->offload, skb, timestamp);
+> +       if (err)
+> +               stats->rx_fifo_errors++;
+>  }
+>
+>  /**
+> - * at91_read_mb - read CAN msg from mailbox (lowlevel impl)
+> - * @dev: net device
+> + * at91_mailbox_read - read CAN msg from mailbox
+> + * @offload: rx-offload
+>   * @mb: mailbox number to read from
+> - * @cf: can frame where to store message
+> + * @timestamp: pointer to 32 bit timestamp
+> + * @drop: true indicated mailbox to mark as read and drop frame
+>   *
+> - * Reads a CAN message from the given mailbox and stores data into
+> - * given can frame. "mb" and "cf" must be valid.
+> + * Reads a CAN message from the given mailbox if not empty.
+>   */
+> -static void at91_read_mb(struct net_device *dev, unsigned int mb,
+> -                        struct can_frame *cf)
+> +static struct sk_buff *at91_mailbox_read(struct can_rx_offload *offload,
+> +                                        unsigned int mb, u32 *timestamp,
+> +                                        bool drop)
+>  {
+> -       const struct at91_priv *priv = netdev_priv(dev);
+> +       const struct at91_priv *priv = rx_offload_to_priv(offload);
+> +       struct can_frame *cf;
+> +       struct sk_buff *skb;
+>         u32 reg_msr, reg_mid;
+>
+> +       reg_msr = at91_read(priv, AT91_MSR(mb));
+> +       if (!(reg_msr & AT91_MSR_MRDY))
+> +               return NULL;
+> +
+> +       if (unlikely(drop)) {
+> +               skb = ERR_PTR(-ENOBUFS);
+> +               goto mark_as_read;
+> +       }
+> +
+> +       skb = alloc_can_skb(offload->dev, &cf);
+> +       if (unlikely(!skb)) {
+> +               skb = ERR_PTR(-ENOMEM);
+> +               goto mark_as_read;
+> +       }
+> +
+>         reg_mid = at91_read(priv, AT91_MID(mb));
+>         if (reg_mid & AT91_MID_MIDE)
+>                 cf->can_id = FIELD_GET(AT91_MID_MIDVA_MASK | AT91_MID_MIDVB_MASK, reg_mid) |
+> @@ -638,7 +613,9 @@ static void at91_read_mb(struct net_device *dev, unsigned int mb,
+>         else
+>                 cf->can_id = FIELD_GET(AT91_MID_MIDVA_MASK, reg_mid);
+>
+> -       reg_msr = at91_read(priv, AT91_MSR(mb));
+> +       /* extend timstamp to full 32 bit */
+                    ^^^^^^^^
 
-> > >
-> > >         /* Now restart the device */
-> > >         netif_carrier_on(dev);
-> > >         err =3D priv->do_set_mode(dev, CAN_MODE_START);
-> > >         if (err) {
-> > > -               netdev_err(dev, "Error %d during restart", err);
-> > > +               netdev_err(dev, "Restart failed, error %pe\n", ERR_PT=
-R(err));
-> > >                 netif_carrier_off(dev);
-> > >         }
-> >=20
-> >=20
-> > Nitpick: I would rather remove the first message and print the
-> > affirmative: "restarted"
-> >=20
-> >         if (err) {
-> >                 netdev_err(dev, "Restart failed, error %pe\n", ERR_PTR(=
-err));
-> >                 netif_carrier_off(dev);
-> >         } else {
-> >                 netdev_dbg(dev, "Restarted\n");
-> >         }
+timestamp
 
-Marc
+> +       *timestamp = FIELD_GET(AT91_MSR_MTIMESTAMP_MASK, reg_msr) << 16;
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+If I understand correctly, you only use the hardware timestamp for the
+napi but you do not report it to the userland.
 
---2sxhl5xs5pw7puje
-Content-Type: application/pgp-signature; name="signature.asc"
+Not a criticism of this series, but it seems to me that it would be
+easy to add one follow-up patch that would populate
+skb_shared_hwtstamps->hwtstamp and update ethtool_ops->get_ts_info in
+order to report those hardware timestamps to the user.
 
------BEGIN PGP SIGNATURE-----
+>         cf->len = can_cc_dlc2len(FIELD_GET(AT91_MSR_MDLC_MASK, reg_msr));
+>
+>         if (reg_msr & AT91_MSR_MRTR) {
+> @@ -652,151 +629,12 @@ static void at91_read_mb(struct net_device *dev, unsigned int mb,
+>         at91_write(priv, AT91_MID(mb), AT91_MID_MIDE);
+>
+>         if (unlikely(mb == get_mb_rx_last(priv) && reg_msr & AT91_MSR_MMI))
+> -               at91_rx_overflow_err(dev);
+> -}
+> +               at91_rx_overflow_err(offload->dev);
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUdVQ8ACgkQvlAcSiqK
-BOjVKAgAsESKaG2pAbt3m46EgzbFzZmvLD+S1i4xKUQLFV+RxNcNPtgti5VVnHdo
-+BvyENcNC3/eL8gjzB5NDnFP7gg7P2pXC2KvMqcVhmLUkkNvSkVACcd7TE+cnHoc
-rySXU0cQmI7ZOXcwkCC9Rhuk7C2U/GoZ7RabnQxxEPSSaOrQfEpd2OqH1VRf1wec
-5sh6H8mhOdM1TpITA3yYcP5BMfbwiOBpM+De3i7dDSONMa52SFYa/BSTh/t87AtF
-UaV8GFBdPYGMuQvhRYcDr47JSvJvggvRY5toVf64Jy2m274VMUvK4PLvqCIpi2Dc
-U/WttlBm4ltGPXBgCsNelugR4bhqqA==
-=tw9k
------END PGP SIGNATURE-----
+(...)
 
---2sxhl5xs5pw7puje--
+This concludes my "review" of this series. Because I was scrolling
+through it and not doing anything thorough, I will not be giving my
+review-by tag even if there is a follow-up v2. That said, aside from
+my comment on patch 01/27 and the random typo nitpick, nothing seemed
+off.
+
+
+Yours sincerely,
+Vincent Mailhol
