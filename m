@@ -2,64 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E047BA6C7
-	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 18:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCA57BA502
+	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 18:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjJEQlm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Oct 2023 12:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S240696AbjJEQNb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Oct 2023 12:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbjJEQkO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 12:40:14 -0400
+        with ESMTP id S240933AbjJEQMR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 12:12:17 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0C67EDB
-        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 00:50:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6445D7EE1
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 00:50:20 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoJ7i-0001G8-08
+        id 1qoJ7i-0001GO-LF
         for linux-can@vger.kernel.org; Thu, 05 Oct 2023 09:50:18 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoJ7f-00BDMO-KL
+        id 1qoJ7f-00BDMT-Lp
         for linux-can@vger.kernel.org; Thu, 05 Oct 2023 09:50:15 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 5740822F7CA
+        by bjornoya.blackshift.org (Postfix) with SMTP id 611E722F7CC
         for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 07:50:15 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id A545F22F7AF;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id B87B622F7B2;
         Thu,  5 Oct 2023 07:50:14 +0000 (UTC)
 Received: from [192.168.178.131] (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id e1a72088;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 07494788;
         Thu, 5 Oct 2023 07:50:12 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Date:   Thu, 05 Oct 2023 09:49:42 +0200
-Subject: [PATCH v2 14/27] can: at91_can: at91_chip_start(): don't disable
- IRQs twice
+Date:   Thu, 05 Oct 2023 09:49:43 +0200
+Subject: [PATCH v2 15/27] can: at91_can: at91_open(): forward
+ request_irq()'s return value in case or an error
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231005-at91_can-rx_offload-v2-14-9987d53600e0@pengutronix.de>
+Message-Id: <20231005-at91_can-rx_offload-v2-15-9987d53600e0@pengutronix.de>
 References: <20231005-at91_can-rx_offload-v2-0-9987d53600e0@pengutronix.de>
 In-Reply-To: <20231005-at91_can-rx_offload-v2-0-9987d53600e0@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
 X-Mailer: b4 0.13-dev-0438c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=814; i=mkl@pengutronix.de;
- h=from:subject:message-id; bh=gSd9/BJPdoW7J7vcURY0RIS4mTLqWcq6uhvw1HGLVbw=;
- b=owEBbQGS/pANAwAKAb5QHEoqigToAcsmYgBlHmqfuCkeI2CxE/LD4PgGihIXLN5tpFu6f1BQJ
- oOKDK/45dyJATMEAAEKAB0WIQQOzYG9qPI0qV/1MlC+UBxKKooE6AUCZR5qnwAKCRC+UBxKKooE
- 6NA5B/0RPFIfCB7tbbn5PXI33AG9ulfu3wN28sD5YwWQNiGmC87oGVrVTl0iw3mOQ/pwe/Bj+Qa
- rK2LirpfPS02dnLix/2NvJ/4RDxwzXjzJ1xbKY+K+PGICYVxfVp5RZfxV40oSvIZtTM0flX+dUT
- wm0gYMAjuvKun8dGdwxj4WHigkfUvI8FFxMroyQZOgglgXh2Qgkcn2nSXmlW1yAw9mZkrLD7I9k
- O/Z8kgEmALCLTxf6tUOWiiEMLDjkA/pnhpzEuKqdcdDMq1Zxc9HNePJ0OeWU7I4sr3PLX/8u1j+
- ubvsEaIbmGqZthl4HV2eMpDTtC5tctNdvm2h1Gsqv48WmsHg
+X-Developer-Signature: v=1; a=openpgp-sha256; l=793; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=aqbLw7kITs523ujBA8asWQX2amR6GnSn46QEBpKo/cM=;
+ b=owEBbQGS/pANAwAKAb5QHEoqigToAcsmYgBlHmqgzed6xC9EBfU/asKQiMjS20+jRx6Ao0oIg
+ R9BM8qExWGJATMEAAEKAB0WIQQOzYG9qPI0qV/1MlC+UBxKKooE6AUCZR5qoAAKCRC+UBxKKooE
+ 6ELsB/wOrhKcwUJkmG9LlqoW3J/yOFQTC84lcOQNcU1LfGdFMA8DT/SgOdzcLuVXn852k78bpSZ
+ WmESixh/Xjyd3DS1u7FGvruHtYS0JnJCzW7VP7xiibgo7w3+ACTuDSA9Pe20eHQ98hqCu5Fy4ap
+ LUHZY/l4rZXRjaDJgLYoRnqVlw50NbPuKz8j+R6jjI2QwPwkfMRx4Z2NeIIPGvR9hjuH47VF/19
+ oXR4nJJEtG/kMaabU4iOmHeoQr7wVcLGfhTpcr0kbbn/cIpshSXuIEKWL1ZzX9/bmRSN+MvchM3
+ ILIOigw0XoX8Wv3SLArWy0dZe2Dm57S1YFNnOgV+iJbCKURJ
 X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
  fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -75,29 +75,32 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In at91_chip_start() first all IRQs are disabled, they do not have to
-be disabled again at the end of the function before the requested IRQs
-are enabled.
-
-Remove the 2nd disable of all IRQs at the end of the function.
+If request_irq() fails, forward the return value.
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/at91_can.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/net/can/at91_can.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
-index f92d8a75d1b1..3f3c6f2107a8 100644
+index 3f3c6f2107a8..bfe414581fa1 100644
 --- a/drivers/net/can/at91_can.c
 +++ b/drivers/net/can/at91_can.c
-@@ -438,7 +438,6 @@ static void at91_chip_start(struct net_device *dev)
+@@ -1128,11 +1128,10 @@ static int at91_open(struct net_device *dev)
+ 		goto out;
  
- 	/* Enable interrupts */
- 	reg_ier = get_irq_mb_rx(priv) | AT91_IRQ_ERRP | AT91_IRQ_ERR_FRAME;
--	at91_write(priv, AT91_IDR, AT91_IRQ_ALL);
- 	at91_write(priv, AT91_IER, reg_ier);
- }
+ 	/* register interrupt handler */
+-	if (request_irq(dev->irq, at91_irq, IRQF_SHARED,
+-			dev->name, dev)) {
+-		err = -EAGAIN;
++	err = request_irq(dev->irq, at91_irq, IRQF_SHARED,
++			  dev->name, dev);
++	if (err)
+ 		goto out_close;
+-	}
  
+ 	/* start chip and queuing */
+ 	at91_chip_start(dev);
 
 -- 
 2.40.1
