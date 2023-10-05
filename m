@@ -2,64 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE6C7B9E02
-	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 16:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FD77B9E2B
+	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 16:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbjJEN5W (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Oct 2023 09:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
+        id S232065AbjJEN5T (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Oct 2023 09:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234074AbjJENzV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 09:55:21 -0400
+        with ESMTP id S230112AbjJENzS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 09:55:18 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2603E7ED7
-        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 00:50:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234757EEA
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 00:50:21 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoJ7h-0001FD-AY
-        for linux-can@vger.kernel.org; Thu, 05 Oct 2023 09:50:17 +0200
+        id 1qoJ7j-0001Kd-A4
+        for linux-can@vger.kernel.org; Thu, 05 Oct 2023 09:50:19 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoJ7f-00BDLS-3V
-        for linux-can@vger.kernel.org; Thu, 05 Oct 2023 09:50:15 +0200
+        id 1qoJ7g-00BDNq-Iw
+        for linux-can@vger.kernel.org; Thu, 05 Oct 2023 09:50:16 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id C38DE22F7B4
-        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 07:50:14 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 48A4222F7EC
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 07:50:16 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 1A5EB22F797;
-        Thu,  5 Oct 2023 07:50:14 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 90F7822F7D4;
+        Thu,  5 Oct 2023 07:50:15 +0000 (UTC)
 Received: from [192.168.178.131] (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id aea83067;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c87b9b8d;
         Thu, 5 Oct 2023 07:50:12 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Date:   Thu, 05 Oct 2023 09:49:36 +0200
-Subject: [PATCH v2 08/27] can: at91_can: MSR Register: convert to
- FIELD_PREP()
+Date:   Thu, 05 Oct 2023 09:49:51 +0200
+Subject: [PATCH v2 23/27] can: at91_can: at91_irq_err_line(): take reg_sr
+ into account for bus off
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231005-at91_can-rx_offload-v2-8-9987d53600e0@pengutronix.de>
+Message-Id: <20231005-at91_can-rx_offload-v2-23-9987d53600e0@pengutronix.de>
 References: <20231005-at91_can-rx_offload-v2-0-9987d53600e0@pengutronix.de>
 In-Reply-To: <20231005-at91_can-rx_offload-v2-0-9987d53600e0@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
 X-Mailer: b4 0.13-dev-0438c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1105; i=mkl@pengutronix.de;
- h=from:subject:message-id; bh=ZJk1Bd3+kEog0vHryLFsqyXkcRZW9vy9GYj/6CUyduU=;
- b=owGbwMvMwMW4L0DGS6uL5QXjabUkhlS5rGlzVlfr2ujGcrtKuO9aah/0wf6iuW9eaWLLlPCXg
- qW5HSadjMYsDIxcDLJiiix8Zxv3rvhksjL+q1EAzCBWJpApDFycAjARKUb2/zndCUYR5zgfbLTn
- qrX+wP15tWBUoMuJAyxWcWbd7cJTe1Q2n9wVkfRJod7v+Mri6mkvtxaZvX4X3/Ky9778mqMdldn
- 9l5ZfN9+2P10vxndik5JwgDr7g1cr80/qnjzp5n73T/LWhxMt9WdHxSrGe8tMtLy+jG+y5mbhxr
- rd+7S2VnnOSfES2Po52D/x4cXliX53z72Q/adk9G/pHO/w3fFXRAxsMrbyiVoUvDGNlrzKvFRSM
- Th7p6TxOV7lqOB1DJwK271yeHeafj3aNNtWzKH5mzu7aPJGT/N3t/W+lHTouZhv3FhfxTPV59/i
- C2uz1A++MYt1XMG341gx+1/+zwy8nhV62599iVbcZ8AGAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2820; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=zgfoSThHFFtm5JgJ/2vr2LqaSw1lapiP8CL75Id9TCM=;
+ b=owEBbQGS/pANAwAKAb5QHEoqigToAcsmYgBlHmqtJNe0uq9FDi8bcvMZaQUzwK1RFpiHpCc1v
+ T5wcAobCN6JATMEAAEKAB0WIQQOzYG9qPI0qV/1MlC+UBxKKooE6AUCZR5qrQAKCRC+UBxKKooE
+ 6EgqCACxIYvoZXO2V2orf4mCEckFpJDuvAio1MBrZ9MpG7ZUhIRKuNGL2B0GeTMcNrMiSaCRo3V
+ sGkIxBYLgVvmPznyW+E7Z9GeRF6KGdHPutRfV9l6K0A5UXaFoFhoGL2fdWw49tCh9IMkdbeK5FI
+ Psnxxgl2+DkoPgmb+8EpR6D29i1xSd+5DBBEmX/FaZ69G3g3BtkklanoZ2aQCyECFkAeOJoynvN
+ G0bU6fcszZjVEZXWf9TSAdKw09qlMk4o8rIXS+/hG8w3XsUDSt2ROKwXU+6PFAY64Gu6MTDd4ja
+ zKB9PcDmCBhH5bQHj7GkyeLszxTboHy81ESh27/by1LJPzt4
 X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
  fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -75,35 +75,81 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use FIELD_PREP() to access the individual fields of the MSR register.
+The at91 CAN controller automatically recovers from bus-off after 128
+occurrences of 11 consecutive recessive bits.
+
+After an auto-recovered bus-off, the error counters no longer reflect
+this fact. On the sam9263 the state bits in the SR register show the
+current state (based on the current error counters), while on sam9x5
+and newer SoCs these bits are latched.
+
+Take any latched bus-off information from the SR register into account
+when calculating the CAN new state, to start the standard CAN bus off
+handling.
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/at91_can.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/can/at91_can.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
-index ec028fe833f0..41dd2ea239b9 100644
+index 68b611d0fa6c..fbe58a1a1989 100644
 --- a/drivers/net/can/at91_can.c
 +++ b/drivers/net/can/at91_can.c
-@@ -83,6 +83,8 @@ enum at91_reg {
- #define AT91_MID_MIDVA_MASK GENMASK(28, 18)
- #define AT91_MID_MIDE BIT(29)
+@@ -437,6 +437,11 @@ static void at91_chip_start(struct net_device *dev)
  
-+#define AT91_MSR_MTIMESTAMP_MASK GENMASK(15, 0)
-+#define AT91_MSR_MDLC_MASK GENMASK(19, 16)
- #define AT91_MSR_MRTR BIT(20)
- #define AT91_MSR_MABT BIT(22)
- #define AT91_MSR_MRDY BIT(23)
-@@ -599,7 +601,7 @@ static void at91_read_mb(struct net_device *dev, unsigned int mb,
- 		cf->can_id = FIELD_GET(AT91_MID_MIDVA_MASK, reg_mid);
+ 	priv->can.state = CAN_STATE_ERROR_ACTIVE;
  
- 	reg_msr = at91_read(priv, AT91_MSR(mb));
--	cf->len = can_cc_dlc2len((reg_msr >> 16) & 0xf);
-+	cf->len = can_cc_dlc2len(FIELD_GET(AT91_MSR_MDLC_MASK, reg_msr));
++	/* Dummy read to clear latched line error interrupts on
++	 * sam9x5 and newer SoCs.
++	 */
++	at91_read(priv, AT91_SR);
++
+ 	/* Enable interrupts */
+ 	reg_ier = get_irq_mb_rx(priv) | AT91_IRQ_ERRP | AT91_IRQ_ERR_FRAME;
+ 	at91_write(priv, AT91_IER, reg_ier);
+@@ -932,7 +937,7 @@ static void at91_irq_err_state(struct net_device *dev,
+ 	at91_write(priv, AT91_IER, reg_ier);
+ }
  
- 	if (reg_msr & AT91_MSR_MRTR) {
- 		cf->can_id |= CAN_RTR_FLAG;
+-static void at91_irq_err_line(struct net_device *dev)
++static void at91_irq_err_line(struct net_device *dev, const u32 reg_sr)
+ {
+ 	enum can_state new_state, rx_state, tx_state;
+ 	struct at91_priv *priv = netdev_priv(dev);
+@@ -942,6 +947,23 @@ static void at91_irq_err_line(struct net_device *dev)
+ 
+ 	at91_get_berr_counter(dev, &bec);
+ 	can_state_get_by_berr_counter(dev, &bec, &tx_state, &rx_state);
++
++	/* The chip automatically recovers from bus-off after 128
++	 * occurrences of 11 consecutive recessive bits.
++	 *
++	 * After an auto-recovered bus-off, the error counters no
++	 * longer reflect this fact. On the sam9263 the state bits in
++	 * the SR register show the current state (based on the
++	 * current error counters), while on sam9x5 and newer SoCs
++	 * these bits are latched.
++	 *
++	 * Take any latched bus-off information from the SR register
++	 * into account when calculating the CAN new state, to start
++	 * the standard CAN bus off handling.
++	 */
++	if (reg_sr & AT91_IRQ_BOFF)
++		rx_state = CAN_STATE_BUS_OFF;
++
+ 	new_state = max(tx_state, rx_state);
+ 
+ 	/* state hasn't changed */
+@@ -1050,7 +1072,7 @@ static irqreturn_t at91_irq(int irq, void *dev_id)
+ 	if (reg_sr & get_irq_mb_tx(priv))
+ 		at91_irq_tx(dev, reg_sr);
+ 
+-	at91_irq_err_line(dev);
++	at91_irq_err_line(dev, reg_sr);
+ 
+ 	/* Frame Error Interrupt */
+ 	if (reg_sr & AT91_IRQ_ERR_FRAME)
 
 -- 
 2.40.1
