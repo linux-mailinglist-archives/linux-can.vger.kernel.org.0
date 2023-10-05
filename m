@@ -2,116 +2,136 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEDF7BA053
-	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 16:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783BB7B9FD4
+	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 16:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235579AbjJEOfp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Oct 2023 10:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S232840AbjJEOaM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Oct 2023 10:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235387AbjJEOeQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 10:34:16 -0400
+        with ESMTP id S234138AbjJEO2c (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 10:28:32 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438158697
-        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 01:10:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE85221D1F
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 02:46:46 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoJRY-0007TQ-8T; Thu, 05 Oct 2023 10:10:48 +0200
+        id 1qoKwP-0002uo-Fe
+        for linux-can@vger.kernel.org; Thu, 05 Oct 2023 11:46:45 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoJRW-00BDt4-Vq; Thu, 05 Oct 2023 10:10:47 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
+        id 1qoKwP-00BEc8-0M
+        for linux-can@vger.kernel.org; Thu, 05 Oct 2023 11:46:45 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id B712122F946
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 09:46:44 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 96E5722F885;
-        Thu,  5 Oct 2023 08:10:46 +0000 (UTC)
-Date:   Thu, 5 Oct 2023 10:10:46 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id B79B722F933;
+        Thu,  5 Oct 2023 09:46:43 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 5f4e7e12;
+        Thu, 5 Oct 2023 09:46:43 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] can: peak_pci: replace deprecated strncpy with strscpy
-Message-ID: <20231005-protract-trough-04a747b5dae2-mkl@pengutronix.de>
-References: <20231005-strncpy-drivers-net-can-sja1000-peak_pci-c-v1-1-c36e1702cd56@google.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/7] pull-request: can 2023-10-05
+Date:   Thu,  5 Oct 2023 11:46:32 +0200
+Message-Id: <20231005094639.387019-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yfy7e5plv3snihai"
-Content-Disposition: inline
-In-Reply-To: <20231005-strncpy-drivers-net-can-sja1000-peak_pci-c-v1-1-c36e1702cd56@google.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello netdev-team,
 
---yfy7e5plv3snihai
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 7 patches for net/master.
 
-On 05.10.2023 00:05:35, Justin Stitt wrote:
-> `strncpy` is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
->=20
-> NUL-padding is not required since card is already zero-initialized:
-> |       card =3D kzalloc(sizeof(*card), GFP_KERNEL);
->=20
-> A suitable replacement is `strscpy` [2] due to the fact that it
-> guarantees NUL-termination on the destination buffer without
-> unnecessarily NUL-padding.
->=20
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strn=
-cpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.h=
-tml [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+The first patch is by Oleksij Rempel and fixes a UAF in the CAN J1939
+protocol.
 
-applied to linux-can-next/testing.
+Lukas Magel's patch for the CAN ISO-TP protocol fixes the TX state
+detection and wait behavior.
+
+John Watts contributes a patch to only show the sun4i_can Kconfig
+option on ARCH_SUNXI.
+
+A patch by Miquel Raynal fixes the soft-reset workaround for Renesas
+SoCs in the sja1000 driver.
+
+Markus Schneider-Pargmann's patch for the tcan4x5x m_can glue driver
+fixes the id2 register for the tcan4553.
+
+2 patches by Haibo Chen fix the flexcan stop mode for the imx93 SoC.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+---
 
---yfy7e5plv3snihai
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit d0f95894fda7d4f895b29c1097f92d7fee278cb2:
 
------BEGIN PGP SIGNATURE-----
+  netlink: annotate data-races around sk->sk_err (2023-10-04 17:32:54 -0700)
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUeb4MACgkQvlAcSiqK
-BOi/9AgAsHPVzlJglzleNQFMFyxaqGkZkwgc5tOD3xnbqtN9QtO26R+8Aoq7BBSz
-Sh/g6gASRMZ+SLHQRN+kREceexYQE9Yj9/LQ5btjEEQDvtqCH18wFbKs8UPUrTM6
-OVxPY2nABTwkAlPHflfFqZMj8e04Dj5xzINkzL5Y/zJb0EjQkW//vArdwsoN1MaZ
-Xl416b4G1VEvnRiL1r72stKahrdcatuVGeFiX3h/MaK9dxEh9TTDfbRBy4as9ffL
-ce5iKQRJRC2Cdwz1e59lQNS1Swk+uBuE70TNJmMD7+0oI6DG2HCulCIsPGoHxvii
-gpVabP87ZEiCOeIynVbyyJeYAxNsSA==
-=Ov1N
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---yfy7e5plv3snihai--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.6-20231005
+
+for you to fetch changes up to 9cf31160064431b035cd2f4cc4fb984c4f18ac8e:
+
+  Merge patch series "arm64: dts: imx93: add the Flex-CAN stop mode by GPR" (2023-10-05 11:41:03 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.6-20231005
+
+----------------------------------------------------------------
+Haibo Chen (2):
+      arm64: dts: imx93: add the Flex-CAN stop mode by GPR
+      can: flexcan: remove the auto stop mode for IMX93
+
+John Watts (1):
+      can: sun4i_can: Only show Kconfig if ARCH_SUNXI is set
+
+Lukas Magel (1):
+      can: isotp: isotp_sendmsg(): fix TX state detection and wait behavior
+
+Marc Kleine-Budde (1):
+      Merge patch series "arm64: dts: imx93: add the Flex-CAN stop mode by GPR"
+
+Markus Schneider-Pargmann (1):
+      can: tcan4x5x: Fix id2_register for tcan4553
+
+Miquel Raynal (1):
+      can: sja1000: Always restart the Tx queue after an overrun
+
+Oleksij Rempel (1):
+      can: j1939: Fix UAF in j1939_sk_match_filter during setsockopt(SO_J1939_FILTER)
+
+ arch/arm64/boot/dts/freescale/imx93.dtsi |  4 ++-
+ drivers/net/can/Kconfig                  |  2 +-
+ drivers/net/can/flexcan/flexcan-core.c   | 46 +++++++++-----------------------
+ drivers/net/can/flexcan/flexcan.h        |  2 --
+ drivers/net/can/m_can/tcan4x5x-core.c    |  2 +-
+ drivers/net/can/sja1000/sja1000.c        |  8 +++++-
+ net/can/isotp.c                          | 19 ++++++-------
+ net/can/j1939/socket.c                   | 19 ++++++++++---
+ 8 files changed, 48 insertions(+), 54 deletions(-)
+
+
