@@ -2,127 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F72F7BA61D
-	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 18:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2677BA6E9
+	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 18:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233997AbjJEQ1n (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Oct 2023 12:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S232464AbjJEQnU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Oct 2023 12:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243474AbjJEQWx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 12:22:53 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7703E3C29
-        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 09:16:40 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so15989a12.0
-        for <linux-can@vger.kernel.org>; Thu, 05 Oct 2023 09:16:39 -0700 (PDT)
+        with ESMTP id S234554AbjJEQl7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 12:41:59 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5655AD3A
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 09:30:45 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2799b7280d1so888881a91.1
+        for <linux-can@vger.kernel.org>; Thu, 05 Oct 2023 09:30:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696522598; x=1697127398; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LaaqTDoZqbafDQ3l5zFKWxmU6cOLxM0ZIJSzVNTzttI=;
-        b=pBanUm71ICytkySd7ssQu81m990I3+BLnwYzRiL6TltMvvKuykTTF08MNB5w6+x1Z4
-         tET1HrckbF7IhqBt138j/ON0Cdqqm/yOWYnSQtXBiLQW3RRKk703v+ajvZmZFkpWXLzv
-         5GFaukBKBOSzg7JcaupQTAK6Kkh+8pmMxDAvJlurz9DdkMEo+1NzvnpsBk5r0c7rERYX
-         VwEVZsACBLEN9c6CuEhEWhjaQe/eaIlbgJ0GhlUWqdpRPDPAg8EGycEvju1ld9xa6eRy
-         Ev24pZiVRJqgtwLbJS9hHZ+3qiiisFEuurJYJzFhV5Kr/CQNBtgkQvp7J3BIYJNoKTB0
-         QoUA==
+        d=gmail.com; s=20230601; t=1696523391; x=1697128191; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=78u/4AcH37Ns3ez0KXHw64klEWNy2+xiSAb6r9kIN0U=;
+        b=RPEGlzUWrGrHZF957UMiOtmg6ay5cOaW74n2SBOaJ7LTAEd3fPL39swXiEvMh8zSNe
+         hFWdHeE1ueeTYnumoAWaLWrm6Fj76x4dAjWgo8o1RhGD0sb4GLrkSt+tBSbmVTX9baNA
+         wgExePaSSaVixLmkd0x/LcEMuMZlVLG4n0nC7fTOk/W1iIbwYyn4um/xMq+/AbTXwb3A
+         qHf5L92zvadLeMp7oL70YXaN0EqY0KjpuQbylciKqycIMaeVyRoEfmBgv8ntUGg29c5w
+         vtKAxEwuWpvc5GZXOMiJ+pKiSnrjGyblyiFuFLPcWbwc3zJoOEeiXX32UilnBo6nOb+4
+         jFzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696522598; x=1697127398;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LaaqTDoZqbafDQ3l5zFKWxmU6cOLxM0ZIJSzVNTzttI=;
-        b=rtF7SCCulhOFPNgM/rHpQWMQ1jsa6S6PumT6GhYv4jMf4/muFcfCwPbTapka4Q+X9o
-         Rf+zc3hF2WhvhcrZBouOHpnrlHpOnnswna/FlesIsA4e23Bq9jVfWx8NbQaAfTPQ5+a0
-         nSxU5/9SqFDwVCdFQom1HgmKUZLjBo4MdYKZ+K/6m51dDscIKoEYt/YCxPQbXGIT5+E9
-         dnPKFSKwF8WcKVcy2rF22WehReAXLrbXndERMMFf90jLkjFdQC5rhcRVhzgnYHARAac9
-         27Th08KEEtGKKxVw8DxLKWxRaCT1v0+0hCMIMCklTa0ctQvEEwKHNRCwRcyH67yXnNQY
-         X7Qg==
-X-Gm-Message-State: AOJu0Yxa4rSVDmOlrYBSHyA5L00LuLSt4Suw0FW39YER+9mW4IFqlBPW
-        iDxnrkW6ScKrl/D8l7TzXO8FdlqIK+WvP/WuCcpAxQ==
-X-Google-Smtp-Source: AGHT+IF0jOJDhaZhmEhxxLATvP2gGYnCETDcm8l2Y4huhZvHpOvz7u8otUILcV3a8DA5O+J6BhBCfMIuLNxeTSP/Dy0=
-X-Received: by 2002:a50:8d5a:0:b0:538:2941:ad10 with SMTP id
- t26-20020a508d5a000000b005382941ad10mr73466edt.5.1696522598066; Thu, 05 Oct
- 2023 09:16:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696523391; x=1697128191;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=78u/4AcH37Ns3ez0KXHw64klEWNy2+xiSAb6r9kIN0U=;
+        b=n0FosRNTPKxHVxeDrVMbUcfUmSICaeLnNH0SmYf2zCrowekM1eTNc2iLbVv24wMCw9
+         76nuy4Z3ZRb6J2XL+jE+Tgur1d0PdOXyY8aBugxh3f1rtpfiJwM7lBWHTVLmF2YdTcOp
+         ThQIKk04p15w0e4IYxwLebP5oVHkF0G3CCY5QpzsoTbz/exyaJ++DxoKeKlk+PLjztAH
+         WjpFyn/5jIs0AoSm+U6ClwONTi/6jP9169HDY7yDLQ+AjoP+1JKhf1pqhjpH2NMwpsGN
+         B+sHlVauv1GA3upFUQWGlLZUdPclGk50H6X8pj8htk1t62wOtQ/E8BVvqCxXWYkRrwqI
+         tdLA==
+X-Gm-Message-State: AOJu0Yxj8K0pDktqT1eqS+0M9qneo7D8FQyE2EH4MTebmHzkiwzFXgSb
+        p3BXLUu4vfPTzYvWhAv/Ys/3LCpz1FOrxY+4H5k=
+X-Google-Smtp-Source: AGHT+IEWpZUMzJfV7+IQSij4Egv6wiIqJ3+YU74pjI9gcD21+29cWl17GxsUOz7HlKqo5n7tnEQgEytQXHYYkW3sx24=
+X-Received: by 2002:a17:90b:4f44:b0:26d:5cd0:979f with SMTP id
+ pj4-20020a17090b4f4400b0026d5cd0979fmr5604674pjb.43.1696523390625; Thu, 05
+ Oct 2023 09:29:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231003145150.2498-1-ansuelsmth@gmail.com> <20231003145150.2498-4-ansuelsmth@gmail.com>
-In-Reply-To: <20231003145150.2498-4-ansuelsmth@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 5 Oct 2023 18:16:26 +0200
-Message-ID: <CANn89iLtYZJPOQE7OkAbEdmhT8qjzAJ+27poa__3c8Nf0M6u_w@mail.gmail.com>
-Subject: Re: [net-next PATCH v2 4/4] netdev: use napi_schedule bool instead of napi_schedule_prep/__napi_schedule
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>,
-        Shailend Chand <shailend@google.com>,
-        Douglas Miller <dougmill@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nick Child <nnac123@linux.ibm.com>,
-        Haren Myneni <haren@linux.ibm.com>,
-        Rick Lindsley <ricklind@linux.ibm.com>,
-        Dany Madden <danymadden@us.ibm.com>,
-        Thomas Falcon <tlfalcon@linux.ibm.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Kalle Valo <kvalo@kernel.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-        Intel Corporation <linuxwwan@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
-        Liu Haijun <haijun.liu@mediatek.com>,
-        M Chetan Kumar <m.chetan.kumar@linux.intel.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Yuanjun Gong <ruc_gongyuanjun@163.com>,
-        Simon Horman <horms@kernel.org>, Rob Herring <robh@kernel.org>,
-        Ziwei Xiao <ziweixiao@google.com>,
-        Rushil Gupta <rushilg@google.com>,
-        Coco Li <lixiaoyan@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Junfeng Guo <junfeng.guo@intel.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Wei Fang <wei.fang@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Yuri Karpov <YKarpov@ispras.ru>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Zheng Zengkai <zhengzengkai@huawei.com>,
-        Lee Jones <lee@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Dawei Li <set_pte_at@outlook.com>,
-        Anjaneyulu <pagadala.yesu.anjaneyulu@intel.com>,
-        Benjamin Berg <benjamin.berg@intel.com>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org
+References: <20231004-at91_can-rx_offload-v1-0-c32bf99097db@pengutronix.de>
+ <20231004-at91_can-rx_offload-v1-27-c32bf99097db@pengutronix.de>
+ <CAMZ6RqLoyCOsTuYCryr++yZw036cF2VyEbxawQSKvM-54aaHuA@mail.gmail.com> <20231005-overfull-chirping-9900063427f4-mkl@pengutronix.de>
+In-Reply-To: <20231005-overfull-chirping-9900063427f4-mkl@pengutronix.de>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Fri, 6 Oct 2023 01:29:38 +0900
+Message-ID: <CAMZ6Rq+v=DqZ1+T+tyN0n5hQRd0Av2APW8OWpEFbKXQsS8itpQ@mail.gmail.com>
+Subject: Re: [PATCH 27/27] can: at91_can: switch to rx-offload implementation
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,99 +67,45 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Oct 3, 2023 at 8:36=E2=80=AFPM Christian Marangi <ansuelsmth@gmail.=
-com> wrote:
->
-> Replace if condition of napi_schedule_prep/__napi_schedule and use bool
-> from napi_schedule directly where possible.
->
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  drivers/net/ethernet/atheros/atlx/atl1.c     | 4 +---
->  drivers/net/ethernet/toshiba/tc35815.c       | 4 +---
->  drivers/net/wireless/intel/iwlwifi/pcie/rx.c | 4 +---
->  3 files changed, 3 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/net/ethernet/atheros/atlx/atl1.c b/drivers/net/ether=
-net/atheros/atlx/atl1.c
-> index 02aa6fd8ebc2..a9014d7932db 100644
-> --- a/drivers/net/ethernet/atheros/atlx/atl1.c
-> +++ b/drivers/net/ethernet/atheros/atlx/atl1.c
-> @@ -2446,7 +2446,7 @@ static int atl1_rings_clean(struct napi_struct *nap=
-i, int budget)
->
->  static inline int atl1_sched_rings_clean(struct atl1_adapter* adapter)
->  {
-> -       if (!napi_schedule_prep(&adapter->napi))
-> +       if (!napi_schedule(&adapter->napi))
->                 /* It is possible in case even the RX/TX ints are disable=
-d via IMR
->                  * register the ISR bits are set anyway (but do not produ=
-ce IRQ).
->                  * To handle such situation the napi functions used to ch=
-eck is
-> @@ -2454,8 +2454,6 @@ static inline int atl1_sched_rings_clean(struct atl=
-1_adapter* adapter)
->                  */
->                 return 0;
->
-> -       __napi_schedule(&adapter->napi);
-> -
->         /*
->          * Disable RX/TX ints via IMR register if it is
->          * allowed. NAPI handler must reenable them in same
-> diff --git a/drivers/net/ethernet/toshiba/tc35815.c b/drivers/net/etherne=
-t/toshiba/tc35815.c
-> index 14cf6ecf6d0d..a8b8a0e13f9a 100644
-> --- a/drivers/net/ethernet/toshiba/tc35815.c
-> +++ b/drivers/net/ethernet/toshiba/tc35815.c
-> @@ -1436,9 +1436,7 @@ static irqreturn_t tc35815_interrupt(int irq, void =
-*dev_id)
->         if (!(dmactl & DMA_IntMask)) {
->                 /* disable interrupts */
->                 tc_writel(dmactl | DMA_IntMask, &tr->DMA_Ctl);
-> -               if (napi_schedule_prep(&lp->napi))
-> -                       __napi_schedule(&lp->napi);
-> -               else {
-> +               if (!napi_schedule(&lp->napi)) {
->                         printk(KERN_ERR "%s: interrupt taken in poll\n",
->                                dev->name);
->                         BUG();
+On Thu. 5 Oct. 2023 at 16:28, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 04.10.2023 21:55:41, Vincent Mailhol wrote:
 
-Hmmm... could you also remove this BUG() ? I think this code path can be ta=
-ken
-if some applications are using busy polling.
+(...)
 
-Or simply rewrite this with the traditional
-
-if (napi_schedule_prep(&lp->napi)) {
-   /* disable interrupts */
-   tc_writel(dmactl | DMA_IntMask, &tr->DMA_Ctl);
-    __napi_schedule(&lp->napi);
-}
-
-
-
-> diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/rx.c b/drivers/net/w=
-ireless/intel/iwlwifi/pcie/rx.c
-> index 23b5a0adcbd6..146bc7bd14fb 100644
-> --- a/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
-> +++ b/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
-> @@ -1660,9 +1660,7 @@ irqreturn_t iwl_pcie_irq_rx_msix_handler(int irq, v=
-oid *dev_id)
->         IWL_DEBUG_ISR(trans, "[%d] Got interrupt\n", entry->entry);
+> > If I understand correctly, you only use the hardware timestamp for the
+> > napi but you do not report it to the userland.
 >
->         local_bh_disable();
-> -       if (napi_schedule_prep(&rxq->napi))
-> -               __napi_schedule(&rxq->napi);
-> -       else
-> +       if (!napi_schedule(&rxq->napi))
->                 iwl_pcie_clear_irq(trans, entry->entry);
-
-Same remark here about twisted logic.
-
->         local_bh_enable();
+> ACK
 >
-> --
-> 2.40.1
+> > Not a criticism of this series, but it seems to me that it would be
+> > easy to add one follow-up patch that would populate
+> > skb_shared_hwtstamps->hwtstamp and update ethtool_ops->get_ts_info in
+> > order to report those hardware timestamps to the user.
 >
+> Yes. I have proof-of-concept patches for it laying around, but I want to
+> get this mainline first. One limitation of the hardware is that the
+> timer is only 16 bits wide and runs on CAN clock, which means a maximum
+> of 1MHz. This causes the timer to overflow every 64ms, which in turn
+> requires a worker every 30ms or so.
+
+ACK.
+
+> For this reason, I want hardware TS
+> to be configurable and this is not yet implemented. Also $CUSTOMER
+> doesn't need HW timestamps :)
+
+Actually, this is already available in the kernel. You just need to
+implement the SIOCSHWTSTAMP and SIOCGHWTSTAMP ioctl in
+net_device_ops->ndo_eth_ioctl().
+
+More details in:
+
+  https://git.kernel.org/torvalds/c/90f942c5a6d7
+
+The caveat is in the userland: the can-utils currently do not follow
+the conventions. It does not send those ioctls and instead expects
+hardware timestamps to be unconditionally always on.
+But at least, it should work with tcpdump or any other generic packet
+capture utilities which follow the kernel conventions.
+
+(...)
