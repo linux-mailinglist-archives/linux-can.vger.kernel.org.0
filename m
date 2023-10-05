@@ -2,64 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B18A7B9F91
-	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 16:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9E87B9FCE
+	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 16:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233962AbjJEOZy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Oct 2023 10:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
+        id S233471AbjJEO3l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Oct 2023 10:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbjJEOXw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 10:23:52 -0400
+        with ESMTP id S233645AbjJEO2N (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 10:28:13 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25AB7ED4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19177ED5
         for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 00:50:17 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoJ7g-0001F6-6O
+        id 1qoJ7g-0001F9-5u
         for linux-can@vger.kernel.org; Thu, 05 Oct 2023 09:50:16 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoJ7e-00BDLD-T0
+        id 1qoJ7e-00BDLC-SV
         for linux-can@vger.kernel.org; Thu, 05 Oct 2023 09:50:14 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 9B93F22F7AD
+        by bjornoya.blackshift.org (Postfix) with SMTP id 98E5122F7AC
         for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 07:50:14 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id C2F8D22F78E;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id D2FEA22F790;
         Thu,  5 Oct 2023 07:50:13 +0000 (UTC)
 Received: from [192.168.178.131] (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 8ec655b8;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id e77d50b4;
         Thu, 5 Oct 2023 07:50:12 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Date:   Thu, 05 Oct 2023 09:49:33 +0200
-Subject: [PATCH v2 05/27] can: at91_can: ECR register: convert to
- FIELD_GET()
+Date:   Thu, 05 Oct 2023 09:49:34 +0200
+Subject: [PATCH v2 06/27] can: at91_can: MMR registers: convert to
+ FIELD_PREP()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231005-at91_can-rx_offload-v2-5-9987d53600e0@pengutronix.de>
+Message-Id: <20231005-at91_can-rx_offload-v2-6-9987d53600e0@pengutronix.de>
 References: <20231005-at91_can-rx_offload-v2-0-9987d53600e0@pengutronix.de>
 In-Reply-To: <20231005-at91_can-rx_offload-v2-0-9987d53600e0@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
 X-Mailer: b4 0.13-dev-0438c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1065; i=mkl@pengutronix.de;
- h=from:subject:message-id; bh=BA2SOOF1nVKGgmWh3hzGUZuUN9VEBhwEqRDuhASmkYM=;
- b=owEBbQGS/pANAwAKAb5QHEoqigToAcsmYgBlHmqS9wh2OqIgMSVoiVKOMztrCUVNqqSR6IRMD
- TyReoUpymCJATMEAAEKAB0WIQQOzYG9qPI0qV/1MlC+UBxKKooE6AUCZR5qkgAKCRC+UBxKKooE
- 6NpHB/44OMh1lM87ay50f8QG1LPCsVKdXvXxWlghsqIDd23YVD99VN1LUlA+8HKIFCD/FoPrydY
- z9BtdY1oKbLBxiPX18gjrANO12qeJ95h85k3i1rYg3z3LHhLZOdJJRi9/58krJVuILoxj1zJduW
- NmqdalkLNL5jBG1lDq4v1/DD282EMPfehmIlXJGMSe20FimF7iA8XK1bAVnqUMn4dkhhpjwIHoZ
- jc25FFoI8EcoagmrpsCSk7/ATO7U4UPDzDSZ0nWnDpZWuNegsP99alTv8j/bAyIKNqFGhVo7jwc
- 45poQO6E+dIiHHEb3xmlQpzAh5Oc8kw5JPD57hcXQWEgQQJ+
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1329; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=7/jKnhI3sCWYBeiuIIcpdIDnbPlZSqT0w4BNmU8ydxA=;
+ b=owEBbQGS/pANAwAKAb5QHEoqigToAcsmYgBlHmqTJAS7YrhD9LnnlhHvHQ/yqZPlZsjjo5WUr
+ apLgUTRoeuJATMEAAEKAB0WIQQOzYG9qPI0qV/1MlC+UBxKKooE6AUCZR5qkwAKCRC+UBxKKooE
+ 6K2nB/400jZZYXo8xbIeLyAjby0I6nLkY1bEshXX1pvs5tjAvFgG5o8Oz68pdwXdlkPM42RWPPn
+ 03dWZNpWesmjfrXwUnEdvzVKH9SaJvqVSWhgRttqITGr86b0a8U1BufqHCi8riBBVs4jizd5vlO
+ /Ru1ydnEJhmlSSbv55SkjiA982vkmxm4Xe3xVle7ASwJV9SQeENCHbGY/3HNt9XYKeVYJUqZJc+
+ m6vp21O5wundQ+Z9TnPYlcVOoEe0anGBRt0IRY3xpLPKvpi88t1X4/+6+yBo5rNJBj1kjtpomHN
+ tlFGN3AjXbBRdMialL3HGUsxqPMXhMtow/thIiVeOhhUX8C8
 X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
  fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -75,38 +75,43 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use FIELD_GET() to access the individual fields of the ECR register.
+Use FIELD_PREP() to access the individual fields of the MMR register.
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/at91_can.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/net/can/at91_can.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
-index 79eb78b9f8ae..7597da543348 100644
+index 7597da543348..16a62f649418 100644
 --- a/drivers/net/can/at91_can.c
 +++ b/drivers/net/can/at91_can.c
-@@ -72,6 +72,9 @@ enum at91_reg {
- #define AT91_BR_BRP_MASK GENMASK(22, 16)
- #define AT91_BR_SMP BIT(24)
+@@ -75,7 +75,9 @@ enum at91_reg {
+ #define AT91_ECR_REC_MASK GENMASK(8, 0)
+ #define AT91_ECR_TEC_MASK GENMASK(23, 16)
  
-+#define AT91_ECR_REC_MASK GENMASK(8, 0)
-+#define AT91_ECR_TEC_MASK GENMASK(23, 16)
-+
- #define AT91_MMR_PRIO_SHIFT (16)
+-#define AT91_MMR_PRIO_SHIFT (16)
++#define AT91_MMR_MTIMEMARK_MASK GENMASK(15, 0)
++#define AT91_MMR_PRIOR_MASK GENMASK(19, 16)
++#define AT91_MMR_MOT_MASK GENMASK(26, 24)
  
  #define AT91_MID_MIDE BIT(29)
-@@ -385,8 +388,8 @@ static int at91_get_berr_counter(const struct net_device *dev,
- 	const struct at91_priv *priv = netdev_priv(dev);
- 	u32 reg_ecr = at91_read(priv, AT91_ECR);
  
--	bec->rxerr = reg_ecr & 0xff;
--	bec->txerr = reg_ecr >> 16;
-+	bec->rxerr = FIELD_GET(AT91_ECR_REC_MASK, reg_ecr);
-+	bec->txerr = FIELD_GET(AT91_ECR_TEC_MASK, reg_ecr);
+@@ -299,9 +301,12 @@ static inline void at91_write(const struct at91_priv *priv, enum at91_reg reg,
  
- 	return 0;
+ static inline void set_mb_mode_prio(const struct at91_priv *priv,
+ 				    unsigned int mb, enum at91_mb_mode mode,
+-				    int prio)
++				    u8 prio)
+ {
+-	at91_write(priv, AT91_MMR(mb), (mode << 24) | (prio << 16));
++	const u32 reg_mmr = FIELD_PREP(AT91_MMR_MOT_MASK, mode) |
++		FIELD_PREP(AT91_MMR_PRIOR_MASK, prio);
++
++	at91_write(priv, AT91_MMR(mb), reg_mmr);
  }
+ 
+ static inline void set_mb_mode(const struct at91_priv *priv, unsigned int mb,
 
 -- 
 2.40.1
