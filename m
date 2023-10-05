@@ -2,98 +2,113 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E0D7B9E5B
-	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 16:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D877BA02F
+	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 16:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjJEOEt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Oct 2023 10:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
+        id S231329AbjJEOfL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Oct 2023 10:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjJEODn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 10:03:43 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDD2126
-        for <linux-can@vger.kernel.org>; Wed,  4 Oct 2023 19:58:43 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1c724577e1fso3734445ad.0
-        for <linux-can@vger.kernel.org>; Wed, 04 Oct 2023 19:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1696474723; x=1697079523; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0kNnoNX+VycKJxCFVsIPAbCtAe5boObmTDcjKlCDp2k=;
-        b=i4L/3Aj8ygTjSUp9/p9XDWPSBBKIRjWIC5psTSo5nX3ZwidzXnhiCBlczgVVI2zjpZ
-         9XWh+QJWSXuMiPpDWrlgZpJl/Z8tuZxCXx3YMi3JB62A4zXJlhkRATn11k3SCHNFLDbf
-         Tk89LjB5wR/1YdxTpbiNiRU0F/Rvj9JM4j2NY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696474723; x=1697079523;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0kNnoNX+VycKJxCFVsIPAbCtAe5boObmTDcjKlCDp2k=;
-        b=p0JzyWco7x9QdlB9XHDNRF/n7zaW/dCE5WB3ASAb4OvkjlX4uf80Ur0Nt/a122vihF
-         RE4osmNFx8UqXMRBfnXo1WrE0HfuDHjAWukxhL80uoi2g2ukptFTOVRn3yeSwIW6tuIk
-         dyS7SaXGRXUiXlpiuZXcz0UXSnxHqDX0E7Se/OE/SgR392B557jWEVfLQPrvvQagMK4d
-         BmXLxK5e38O09RJHtKzGtLmha+uKaKSWHY/eR4PckFnl7L9/QkZahN65Vt1BRRS7nsij
-         /8G+qUqDg6h7sx63Qt1FBIhPM9Z7GvxSsYtZ05QkJDmmcYnYJapTtpPNzrXW8e2zbSmq
-         XFJw==
-X-Gm-Message-State: AOJu0Ywmw2ADMK2rGgM4qy/Th3t+7KPBDYNWB1gR1Dsr3QVhSM6q95+X
-        HvOurEK0hbASuxVyjzomYCDMAA==
-X-Google-Smtp-Source: AGHT+IEuvtkB5cCQbgCWYrRd54NAG8rv4yhh7aSFHMbN97v3p48aULxm0ARxKFDY+QpqB2XuHsjBOg==
-X-Received: by 2002:a17:903:1cc:b0:1c7:2661:91e1 with SMTP id e12-20020a17090301cc00b001c7266191e1mr3864559plh.15.1696474722969;
-        Wed, 04 Oct 2023 19:58:42 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170902eaca00b001b8a85489a3sm313410pld.262.2023.10.04.19.58.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Oct 2023 19:58:42 -0700 (PDT)
-Date:   Wed, 4 Oct 2023 19:58:39 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] can: peak_pci: replace deprecated strncpy with strscpy
-Message-ID: <202310041958.12F8A261A@keescook>
-References: <20231005-strncpy-drivers-net-can-sja1000-peak_pci-c-v1-1-c36e1702cd56@google.com>
+        with ESMTP id S234120AbjJEOdw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 10:33:52 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C67E7EC3
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 00:48:33 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qoJ5z-0000ZJ-TM
+        for linux-can@vger.kernel.org; Thu, 05 Oct 2023 09:48:31 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qoJ5z-00BDIj-G2
+        for linux-can@vger.kernel.org; Thu, 05 Oct 2023 09:48:31 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 37E7022F75D
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 07:48:31 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 6577022F74E;
+        Thu,  5 Oct 2023 07:48:30 +0000 (UTC)
+Received: from [192.168.178.131] (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ee22b864;
+        Thu, 5 Oct 2023 07:48:29 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH v2 0/5] can: dev: fix can_restart() and replace BUG_ON() by
+ error handling
+Date:   Thu, 05 Oct 2023 09:48:17 +0200
+Message-Id: <20231005-can-dev-fix-can-restart-v2-0-91b5c1fd922c@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231005-strncpy-drivers-net-can-sja1000-peak_pci-c-v1-1-c36e1702cd56@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEJqHmUC/4WNTQ6CMBCFr2Jm7ZhSxIAr72FYVHjAbAqZ1gZDu
+ LuVC7h738v72ShABYHup40USYLMPoM9n6ibnB/B0mcma2xZGHPlznnukXiQ9dCKEJ1GBob65Up
+ UuIFye1HkyLH8bDNPEuKsn+MoFT/3/2Yq2LBFZeumgXND9Vjgx3fU2ct66UHtvu9fs1r31cMAA
+ AA=
+To:     linux-can@vger.kernel.org
+Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.13-dev-0438c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1484; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=N4EVa4edcOEn7DA9EVzG3jC6ZX1ud0WXtk2qTMbRaiE=;
+ b=owEBbQGS/pANAwAKAb5QHEoqigToAcsmYgBlHmpE6X278U5Q5pAtkiYqcOMLlhD/a7iH1xAc3
+ EsacIDzLAqJATMEAAEKAB0WIQQOzYG9qPI0qV/1MlC+UBxKKooE6AUCZR5qRAAKCRC+UBxKKooE
+ 6OOjB/9Vbcn6JB7bi0VmZvSj54w06Q2U/nHmrsbTF3fmM1qv3iflVg+dW5AO2OCzDqCA931GgAq
+ /dM0JDpCqnO4w/uSHLTaUOpMAqVu70TDYuMBG6Vvt7gu1v663Urfz+WboAq/jtquQM7o1uW7V5G
+ /59k4wsz6K0ehEzHrF0Uhbj4ydJsVkELPttNW2JJK4CCBjt8xN1YPEWs+0ksEtQcSnXHFyafHAQ
+ xJS/eU5OIX13fGggmpPcpe4fPm3PmxRMHJ6LhNepfAjvs5F/dP/KEQeWpgze1W2XPF9narCFA0x
+ 6R7vLZqu0W8PQrFCH0Tr1awkXaho0Tqb9qcqexE3zaQIt1TI
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 12:05:35AM +0000, Justin Stitt wrote:
-> `strncpy` is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
-> 
-> NUL-padding is not required since card is already zero-initialized:
-> |       card = kzalloc(sizeof(*card), GFP_KERNEL);
-> 
-> A suitable replacement is `strscpy` [2] due to the fact that it
-> guarantees NUL-termination on the destination buffer without
-> unnecessarily NUL-padding.
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+There are 2 BUG_ON() in the CAN dev helpers. During the update/test of
+the at91_can driver to rx-offload the one in can_restart() was
+triggered, due to a race condition in can_restart() and a hardware
+limitation of the at91_can IP core.
 
-Yup, this looks like a standard direct replacement.
+This series fixes the race condition, replaces BUG_ON() with an error
+message, and does some cleanup. Finally, the BUG_ON() in
+can_put_echo_skb() is also replaced with error handling.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+Changes in v2:
+- 4/5: move "Restarted" debug message and stats after successful restart (Thanks Vincent)
+- Link to v1: https://lore.kernel.org/all/20231004-can-dev-fix-can-restart-v1-0-2e52899eaaf5@pengutronix.de
 
+---
+Marc Kleine-Budde (5):
+      can: dev: can_restart(): don't crash kernel if carrier is OK
+      can: dev: can_restart(): fix race condition between controller restart and netif_carrier_on()
+      can: dev: can_restart(): reverse logic to remove need for goto
+      can: dev: can_restart(): update debug and error messages
+      can: dev: can_put_echo_skb(): don't crash kernel if can_priv::echo_skb is accessed out of bounds
+
+ drivers/net/can/dev/dev.c | 29 ++++++++++++++---------------
+ drivers/net/can/dev/skb.c |  6 +++++-
+ 2 files changed, 19 insertions(+), 16 deletions(-)
+---
+base-commit: 93e7eca853ca0087b129433630ddd89288d2b8b4
+change-id: 20231004-can-dev-fix-can-restart-eef8ba3e5e6e
+
+Best regards,
 -- 
-Kees Cook
+Marc Kleine-Budde <mkl@pengutronix.de>
+
+
