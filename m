@@ -2,125 +2,170 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1802C7BAA4F
-	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 21:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CE57BAAE1
+	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 21:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjJETkg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Oct 2023 15:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
+        id S231714AbjJET61 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Oct 2023 15:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbjJETkf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 15:40:35 -0400
+        with ESMTP id S231668AbjJET6V (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 15:58:21 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFD6EA
-        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 12:40:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34259EA
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 12:58:17 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoUD2-0000OL-7v; Thu, 05 Oct 2023 21:40:32 +0200
+        id 1qoUUB-0004dG-P2
+        for linux-can@vger.kernel.org; Thu, 05 Oct 2023 21:58:15 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoUD1-00BLAV-RE; Thu, 05 Oct 2023 21:40:31 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
+        id 1qoUUB-00BLCv-9I
+        for linux-can@vger.kernel.org; Thu, 05 Oct 2023 21:58:15 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id F098922FF75
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 19:58:14 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 89F5922FF53;
-        Thu,  5 Oct 2023 19:40:31 +0000 (UTC)
-Date:   Thu, 5 Oct 2023 21:40:31 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 024E322FF5F;
+        Thu,  5 Oct 2023 19:58:14 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 28c759e5;
+        Thu, 5 Oct 2023 19:58:13 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 27/27] can: at91_can: switch to rx-offload implementation
-Message-ID: <20231005-huntress-urban-6d4b7bba5031-mkl@pengutronix.de>
-References: <20231004-at91_can-rx_offload-v1-0-c32bf99097db@pengutronix.de>
- <20231004-at91_can-rx_offload-v1-27-c32bf99097db@pengutronix.de>
- <CAMZ6RqLoyCOsTuYCryr++yZw036cF2VyEbxawQSKvM-54aaHuA@mail.gmail.com>
- <20231005-overfull-chirping-9900063427f4-mkl@pengutronix.de>
- <CAMZ6Rq+v=DqZ1+T+tyN0n5hQRd0Av2APW8OWpEFbKXQsS8itpQ@mail.gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/37] pull-request: can-next 2023-10-05
+Date:   Thu,  5 Oct 2023 21:57:35 +0200
+Message-Id: <20231005195812.549776-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2hw6wtk4qmxzdc2l"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq+v=DqZ1+T+tyN0n5hQRd0Av2APW8OWpEFbKXQsS8itpQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello netdev-team,
 
---2hw6wtk4qmxzdc2l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 37 patches for net-next/master.
 
-On 06.10.2023 01:29:38, Vincent Mailhol wrote:
-> > Yes. I have proof-of-concept patches for it laying around, but I want to
-> > get this mainline first. One limitation of the hardware is that the
-> > timer is only 16 bits wide and runs on CAN clock, which means a maximum
-> > of 1MHz. This causes the timer to overflow every 64ms, which in turn
-> > requires a worker every 30ms or so.
->=20
-> ACK.
->=20
-> > For this reason, I want hardware TS
-> > to be configurable and this is not yet implemented. Also $CUSTOMER
-> > doesn't need HW timestamps :)
->=20
-> Actually, this is already available in the kernel. You just need to
-> implement the SIOCSHWTSTAMP and SIOCGHWTSTAMP ioctl in
-> net_device_ops->ndo_eth_ioctl().
->=20
-> More details in:
->=20
->   https://git.kernel.org/torvalds/c/90f942c5a6d7
+The first patch is by Miquel Raynal and fixes a comment in the sja1000
+driver.
 
-Oh nice, thanks for the pointer. I was talking about the implementation
-in the driver, though.
+Vincent Mailhol contributes 2 patches that fix W=1 compiler warnings
+in the etas_es58x driver.
 
-> The caveat is in the userland: the can-utils currently do not follow
-> the conventions. It does not send those ioctls and instead expects
-> hardware timestamps to be unconditionally always on.
-> But at least, it should work with tcpdump or any other generic packet
-> capture utilities which follow the kernel conventions.
+Jiapeng Chong's patch removes an unneeded NULL pointer check before
+dev_put() in the CAN raw protocol.
 
-IIRC tcpdump has a command line option to switch on HW timestamping. And
-there is the command line tool hwstamp_ctl that you can use.
+A patch by Justin Stittreplaces a strncpy() by strscpy() in the
+peak_pci sja1000 driver.
+
+The next 5 patches are by me and fix the can_restart() handler and
+replace BUG_ON()s in the CAN dev helpers with proper error handling.
+
+The last 27 patches are also by me and target the at91_can driver.
+First a new helper function is introduced, the at91_can driver is
+cleaned up and updated to use the rx-offload helper.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+---
 
---2hw6wtk4qmxzdc2l
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 473267a4911f2469722c74ca58087d951072f72a:
 
------BEGIN PGP SIGNATURE-----
+  net: add sysctl to disable rfc4862 5.5.3e lifetime handling (2023-10-03 15:51:04 -0700)
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUfESwACgkQvlAcSiqK
-BOi7Cgf/TCO4qAZc6ZbxflLf/dwR+dVZ4Ijb8BwRy3XjTsVCoquGdu6M2GVp2vWM
-2PMMk0F1pODZTT8RgEWhnZPpQmErGK2kjvtF6CNjRGYhcvmPAmgoyCmShi1nD8I7
-2flEUgYV70xsAjfZI8WDooM4EZUZL1J4Rf54kBLCMM2fBEsinRuiigtyjU7V+Bao
-BtRaMZwNrLcPPXr9Lu46h2teXm4sv31BI3P3uwWjjVPndHWcD+3EprzlyHBJ9VZY
-UqhqAgXWN2OJg0mcI06maDkLmygtGVmfky74Dlu8N4E2E4FTeEkX2WEdVB0PhMey
-PrezXaMrIuWpqzbDndWJ5FJjB9dyNg==
-=VR7c
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---2hw6wtk4qmxzdc2l--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-6.7-20231005
+
+for you to fetch changes up to bf176313c62ec4f97daa893888aa4fde86749cb2:
+
+  Merge patch series "can: at91: add can_state_get_by_berr_counter() helper, cleanup and convert to rx_offload" (2023-10-05 21:48:09 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-6.7-20231005
+
+----------------------------------------------------------------
+Jiapeng Chong (1):
+      can: raw: Remove NULL check before dev_{put, hold}
+
+Justin Stitt (1):
+      can: peak_pci: replace deprecated strncpy with strscpy
+
+Marc Kleine-Budde (35):
+      Merge patch series "can: etas_es58x: clean-up of new GCC W=1 and old checkpatch warnings"
+      can: dev: can_restart(): don't crash kernel if carrier is OK
+      can: dev: can_restart(): fix race condition between controller restart and netif_carrier_on()
+      can: dev: can_restart(): reverse logic to remove need for goto
+      can: dev: can_restart(): move debug message and stats after successful restart
+      can: dev: can_put_echo_skb(): don't crash kernel if can_priv::echo_skb is accessed out of bounds
+      Merge patch series "can: dev: fix can_restart() and replace BUG_ON() by error handling"
+      can: dev: add can_state_get_by_berr_counter() to return the CAN state based on the current error counters
+      can: at91_can: use a consistent indention
+      can: at91_can: at91_irq_tx(): remove one level of indention
+      can: at91_can: BR register: convert to FIELD_PREP()
+      can: at91_can: ECR register: convert to FIELD_GET()
+      can: at91_can: MMR registers: convert to FIELD_PREP()
+      can: at91_can: MID registers: convert access to FIELD_PREP(), FIELD_GET()
+      can: at91_can: MSR Register: convert to FIELD_PREP()
+      can: at91_can: MCR Register: convert to FIELD_PREP()
+      can: at91_can: add more register definitions
+      can: at91_can: at91_setup_mailboxes(): update comments
+      can: at91_can: rename struct at91_priv::{tx_next,tx_echo} to {tx_head,tx_tail}
+      can: at91_can: at91_set_bittiming(): demote register output to debug level
+      can: at91_can: at91_chip_start(): don't disable IRQs twice
+      can: at91_can: at91_open(): forward request_irq()'s return value in case or an error
+      can: at91_can: add CAN transceiver support
+      can: at91_can: at91_poll_err(): fold in at91_poll_err_frame()
+      can: at91_can: at91_poll_err(): increase stats even if no quota left or OOM
+      can: at91_can: at91_irq_err_frame(): call directly from IRQ handler
+      can: at91_can: at91_irq_err_frame(): move next to at91_irq_err()
+      can: at91_can: at91_irq_err(): rename to at91_irq_err_line()
+      can: at91_can: at91_irq_err_line(): make use of can_state_get_by_berr_counter()
+      can: at91_can: at91_irq_err_line(): take reg_sr into account for bus off
+      can: at91_can: at91_irq_err_line(): make use of can_change_state() and can_bus_off()
+      can: at91_can: at91_irq_err_line(): send error counters with state change
+      can: at91_can: at91_alloc_can_err_skb() introduce new function
+      can: at91_can: switch to rx-offload implementation
+      Merge patch series "can: at91: add can_state_get_by_berr_counter() helper, cleanup and convert to rx_offload"
+
+Miquel Raynal (1):
+      can: sja1000: Fix comment
+
+Vincent Mailhol (2):
+      can: etas_es58x: rework the version check logic to silence -Wformat-truncation
+      can: etas_es58x: add missing a blank line after declaration
+
+ drivers/net/can/Kconfig                        |   1 +
+ drivers/net/can/at91_can.c                     | 998 ++++++++++---------------
+ drivers/net/can/dev/dev.c                      |  51 +-
+ drivers/net/can/dev/skb.c                      |   6 +-
+ drivers/net/can/sja1000/peak_pci.c             |   2 +-
+ drivers/net/can/sja1000/sja1000.c              |   2 +-
+ drivers/net/can/usb/etas_es58x/es58x_core.c    |   1 +
+ drivers/net/can/usb/etas_es58x/es58x_core.h    |   6 +-
+ drivers/net/can/usb/etas_es58x/es58x_devlink.c |  57 +-
+ include/linux/can/dev.h                        |   4 +
+ net/can/raw.c                                  |   3 +-
+ 11 files changed, 497 insertions(+), 634 deletions(-)
+
+
