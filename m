@@ -2,50 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1977BAA46
-	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 21:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1802C7BAA4F
+	for <lists+linux-can@lfdr.de>; Thu,  5 Oct 2023 21:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjJETgg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Oct 2023 15:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
+        id S229573AbjJETkg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Oct 2023 15:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjJETgf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 15:36:35 -0400
+        with ESMTP id S230425AbjJETkf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Oct 2023 15:40:35 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0967598
-        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 12:36:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFD6EA
+        for <linux-can@vger.kernel.org>; Thu,  5 Oct 2023 12:40:33 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoU9A-0007rU-H3; Thu, 05 Oct 2023 21:36:32 +0200
+        id 1qoUD2-0000OL-7v; Thu, 05 Oct 2023 21:40:32 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qoU9A-00BLA6-3R; Thu, 05 Oct 2023 21:36:32 +0200
+        id 1qoUD1-00BLAV-RE; Thu, 05 Oct 2023 21:40:31 +0200
 Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C60B322FF49;
-        Thu,  5 Oct 2023 19:36:31 +0000 (UTC)
-Date:   Thu, 5 Oct 2023 21:36:31 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 89F5922FF53;
+        Thu,  5 Oct 2023 19:40:31 +0000 (UTC)
+Date:   Thu, 5 Oct 2023 21:40:31 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Vincent Mailhol <vincent.mailhol@gmail.com>
 Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v2 4/5] can: dev: can_restart(): update debug and error
- messages
-Message-ID: <20231005-outbound-version-af7535241af3-mkl@pengutronix.de>
-References: <20231005-can-dev-fix-can-restart-v2-0-91b5c1fd922c@pengutronix.de>
- <20231005-can-dev-fix-can-restart-v2-4-91b5c1fd922c@pengutronix.de>
- <CAMZ6RqKN+Ce5-iAcxrGjjMSU9FacU=CirUh+02PPNdEV7kOSQg@mail.gmail.com>
+Subject: Re: [PATCH 27/27] can: at91_can: switch to rx-offload implementation
+Message-ID: <20231005-huntress-urban-6d4b7bba5031-mkl@pengutronix.de>
+References: <20231004-at91_can-rx_offload-v1-0-c32bf99097db@pengutronix.de>
+ <20231004-at91_can-rx_offload-v1-27-c32bf99097db@pengutronix.de>
+ <CAMZ6RqLoyCOsTuYCryr++yZw036cF2VyEbxawQSKvM-54aaHuA@mail.gmail.com>
+ <20231005-overfull-chirping-9900063427f4-mkl@pengutronix.de>
+ <CAMZ6Rq+v=DqZ1+T+tyN0n5hQRd0Av2APW8OWpEFbKXQsS8itpQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="x7vtzzcn4wzfee5j"
+        protocol="application/pgp-signature"; boundary="2hw6wtk4qmxzdc2l"
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqKN+Ce5-iAcxrGjjMSU9FacU=CirUh+02PPNdEV7kOSQg@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+v=DqZ1+T+tyN0n5hQRd0Av2APW8OWpEFbKXQsS8itpQ@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
@@ -60,26 +61,45 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---x7vtzzcn4wzfee5j
+--2hw6wtk4qmxzdc2l
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 06.10.2023 01:06:11, Vincent Mailhol wrote:
-> On Thu. 5 Oct. 2023 at 23:31, Marc Kleine-Budde <mkl@pengutronix.de> wrot=
-e:
-> > Move the debug message "restarted" _after_ the successful restart of
-> > the CAN device, because the restart may fail.
+On 06.10.2023 01:29:38, Vincent Mailhol wrote:
+> > Yes. I have proof-of-concept patches for it laying around, but I want to
+> > get this mainline first. One limitation of the hardware is that the
+> > timer is only 16 bits wide and runs on CAN clock, which means a maximum
+> > of 1MHz. This causes the timer to overflow every 64ms, which in turn
+> > requires a worker every 30ms or so.
 >=20
-> You forgot to mention in the commit description that the restarts++
-> also gets moved.
+> ACK.
 >=20
-> (and I would not mind if you just fix it while applying instead of
-> sending a v3).
+> > For this reason, I want hardware TS
+> > to be configurable and this is not yet implemented. Also $CUSTOMER
+> > doesn't need HW timestamps :)
+>=20
+> Actually, this is already available in the kernel. You just need to
+> implement the SIOCSHWTSTAMP and SIOCGHWTSTAMP ioctl in
+> net_device_ops->ndo_eth_ioctl().
+>=20
+> More details in:
+>=20
+>   https://git.kernel.org/torvalds/c/90f942c5a6d7
 
-fixed while applying :)
+Oh nice, thanks for the pointer. I was talking about the implementation
+in the driver, though.
 
-Thanks,
+> The caveat is in the userland: the can-utils currently do not follow
+> the conventions. It does not send those ioctls and instead expects
+> hardware timestamps to be unconditionally always on.
+> But at least, it should work with tcpdump or any other generic packet
+> capture utilities which follow the kernel conventions.
+
+IIRC tcpdump has a command line option to switch on HW timestamping. And
+there is the command line tool hwstamp_ctl that you can use.
+
+regards,
 Marc
 
 --=20
@@ -88,19 +108,19 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---x7vtzzcn4wzfee5j
+--2hw6wtk4qmxzdc2l
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUfEDwACgkQvlAcSiqK
-BOgZzwf+LQvOc3nnz6ySYZADi/BNEB7jI8P52xtAFiTT42dQ++tGaYvz/Jm5X3yc
-87QuT3wnoY3FYbuL5Aks17Q5N9inYO/tgu/pu0BYgHWfj5mKgCeoHBldK2OJ93ux
-YSlmAPeoWX7Zm/PS1e44hkJqagyufQvyepRG8AjAvx+MTw3h/NJ70iUKk77ayV+q
-Ut4UMBtZCrvldBAdb4uto8QeGUtmsVStppy7eEI/JoW/g9al82YNjAOZX93uSASq
-lLEUJxWHkZj0foHcsq1Gs2wiMSOfJ3GDZcJfXfxFdnrPRP8HL+RZm6ggrx3T691n
-c+3OntPWrAF4UIQ2yIbF7i45BG1LFQ==
-=4ezB
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmUfESwACgkQvlAcSiqK
+BOi7Cgf/TCO4qAZc6ZbxflLf/dwR+dVZ4Ijb8BwRy3XjTsVCoquGdu6M2GVp2vWM
+2PMMk0F1pODZTT8RgEWhnZPpQmErGK2kjvtF6CNjRGYhcvmPAmgoyCmShi1nD8I7
+2flEUgYV70xsAjfZI8WDooM4EZUZL1J4Rf54kBLCMM2fBEsinRuiigtyjU7V+Bao
+BtRaMZwNrLcPPXr9Lu46h2teXm4sv31BI3P3uwWjjVPndHWcD+3EprzlyHBJ9VZY
+UqhqAgXWN2OJg0mcI06maDkLmygtGVmfky74Dlu8N4E2E4FTeEkX2WEdVB0PhMey
+PrezXaMrIuWpqzbDndWJ5FJjB9dyNg==
+=VR7c
 -----END PGP SIGNATURE-----
 
---x7vtzzcn4wzfee5j--
+--2hw6wtk4qmxzdc2l--
