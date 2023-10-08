@@ -2,154 +2,179 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EB67BC27F
-	for <lists+linux-can@lfdr.de>; Sat,  7 Oct 2023 00:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0637BCCD7
+	for <lists+linux-can@lfdr.de>; Sun,  8 Oct 2023 09:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbjJFWue (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Oct 2023 18:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        id S230391AbjJHHAt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 8 Oct 2023 03:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233726AbjJFWud (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Oct 2023 18:50:33 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8349C
-        for <linux-can@vger.kernel.org>; Fri,  6 Oct 2023 15:50:32 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D4A7CC433C7;
-        Fri,  6 Oct 2023 22:50:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696632631;
-        bh=1W7LbC0VrmW+4Ij5Fwh4nvGR2N+V+ItCCtOVdUA66Ek=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=D3EbFBXy+9YePGzyXBvrgCKxhgku/zgz5yR7nLP+OgJowhFn7mLTfMgj7xxkjw+6l
-         w233DVg/yMbhdgfUh22CW6B3vJ0moOvzYYA4e+0qvkBEnnLgNCEbNpJLyPxyrvf7Q0
-         7zADh6AGdhBEhZaF191RA7qRTAI1gJblgFlqM/7RA3qD6Ru6JtQB+oq3/OnQpyNkOs
-         gR04lz9SVunsMp2O8W29AVN+r9foMZFasyMpBaFIOg1swBEOAVdMfpXTQD5UgI9sJl
-         xl8AQLtyDZCbbWf3R6nBguYF7h5f8TVRVWMqmnrmE0juWX1I6+LdUPd7ud0VOYGlXZ
-         RwHvsY0boni/g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A8FEAC595CB;
-        Fri,  6 Oct 2023 22:50:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229697AbjJHHAr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 8 Oct 2023 03:00:47 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C758DB
+        for <linux-can@vger.kernel.org>; Sun,  8 Oct 2023 00:00:44 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-534694a9f26so5413a12.1
+        for <linux-can@vger.kernel.org>; Sun, 08 Oct 2023 00:00:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1696748442; x=1697353242; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mH8rgsD0Hcv//mdO9CGjCjg749l4skH04u5NpNfXSJo=;
+        b=BShKJaRtusNijZZ57Kaaydm5cxCfHocp+nOGciKvqb++6Z9nyuOD/uC/kwsqizh687
+         mFCJJDc0urQQh8PUEZpRDB/57VWp8QQL0APQ1smHc1IlmJKuQB/El5qROWmyM0VacBco
+         0A9gWDEdTwWZUHz6i8escGbPUk+91X8GZVCK4ScPcGUG7Z5Hvknlv82uujz3OWIz09xc
+         zuxWkk0Rgyg0O67zeZyl1tZBwYl653Ub4NuaRjZptmkgBr/R3t3EIsSz82C3x0SZm5j7
+         I2qJPEGGMPOdJtEZnHrvaxoj7eYt8xYe/WVxl0ptpTU3+tNzNcTzagg0FQubKas09fM9
+         WWNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696748442; x=1697353242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mH8rgsD0Hcv//mdO9CGjCjg749l4skH04u5NpNfXSJo=;
+        b=kS/qZA2cMtDRGUJw20VRQcvmEA+7MesQoJmlYMa/ludFVCLxaKc/aVVgzHPxWawZ6w
+         UP14HADCj97dsL1/LZuy4v9RKxCIEXVtpuXruWCny+d4Gpx+YOl00UzFnuD3qWRTpz5d
+         TOv2CNLTBZrBG80FNYUXCVUTZxxaN3/7+xV53AlFSpf29QnIU0HaQyTK72mcIhhHiNE/
+         IL239+GLnVoRWVg/GRdHw8EQFRCGWUzoj4HGHOIf1G9pnAIdR4VC2YU943bbRN/3l/LJ
+         +Q+9YdC73MM/mqta8pKVYLCgkrrogsirKV+/DxPc4+dB17fqqKBRKQZJvqbs6RpZfej4
+         +qGA==
+X-Gm-Message-State: AOJu0YxapqIv4av6fWHCtJ50yrbk2HEYozAMR3vSWaqQ2y7rd5U1O9n7
+        Dgym5pawaHhORxUd6TSNMQc5dg+rSOWepMVNoa4VgA==
+X-Google-Smtp-Source: AGHT+IEsm3Yaeezo31ko5A6vpc3J66AXEC7Qr6Rm72BDJiSgp93BqqzS34935wa+NNU03Xl/ZB6KCTMLkH8SD9/RjuM=
+X-Received: by 2002:a50:9fa4:0:b0:538:5f9e:f0fc with SMTP id
+ c33-20020a509fa4000000b005385f9ef0fcmr307070edf.0.1696748442128; Sun, 08 Oct
+ 2023 00:00:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 01/37] can: sja1000: Fix comment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <169663263167.25368.18212634780361201001.git-patchwork-notify@kernel.org>
-Date:   Fri, 06 Oct 2023 22:50:31 +0000
-References: <20231005195812.549776-2-mkl@pengutronix.de>
-In-Reply-To: <20231005195812.549776-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        miquel.raynal@bootlin.com, horms@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20231003145150.2498-1-ansuelsmth@gmail.com> <20231003145150.2498-3-ansuelsmth@gmail.com>
+ <CANn89iK226C-pHUJm7HKMyEtMycGC=KCA2M6kw2KJaUj0cCT6w@mail.gmail.com>
+ <20231005093253.2e25533a@kernel.org> <CANn89iJQ50AdXP2C1YB2pGjE02WCJ-QCsZqE1yGXtcGsfLA0Jw@mail.gmail.com>
+ <65205789.5d0a0220.7e49b.ccb0@mx.google.com>
+In-Reply-To: <65205789.5d0a0220.7e49b.ccb0@mx.google.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sun, 8 Oct 2023 09:00:29 +0200
+Message-ID: <CANn89i+ntByi2709y10PN6cgri-b0EWxPSNXdu_Nf2nOvJ45FQ@mail.gmail.com>
+Subject: Re: [net-next PATCH v2 3/4] netdev: replace napi_reschedule with napi_schedule
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Praveen Kaligineedi <pkaligineedi@google.com>,
+        Shailend Chand <shailend@google.com>,
+        Douglas Miller <dougmill@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nick Child <nnac123@linux.ibm.com>,
+        Haren Myneni <haren@linux.ibm.com>,
+        Rick Lindsley <ricklind@linux.ibm.com>,
+        Dany Madden <danymadden@us.ibm.com>,
+        Thomas Falcon <tlfalcon@linux.ibm.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Kalle Valo <kvalo@kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+        Intel Corporation <linuxwwan@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
+        Liu Haijun <haijun.liu@mediatek.com>,
+        M Chetan Kumar <m.chetan.kumar@linux.intel.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Yuanjun Gong <ruc_gongyuanjun@163.com>,
+        Simon Horman <horms@kernel.org>, Rob Herring <robh@kernel.org>,
+        Ziwei Xiao <ziweixiao@google.com>,
+        Rushil Gupta <rushilg@google.com>,
+        Coco Li <lixiaoyan@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Junfeng Guo <junfeng.guo@intel.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Wei Fang <wei.fang@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yuri Karpov <YKarpov@ispras.ru>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Zheng Zengkai <zhengzengkai@huawei.com>,
+        Lee Jones <lee@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Dawei Li <set_pte_at@outlook.com>,
+        Anjaneyulu <pagadala.yesu.anjaneyulu@intel.com>,
+        Benjamin Berg <benjamin.berg@intel.com>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL,WEIRD_QUOTING
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+On Fri, Oct 6, 2023 at 8:52=E2=80=AFPM Christian Marangi <ansuelsmth@gmail.=
+com> wrote:
+>
+> On Thu, Oct 05, 2023 at 06:41:03PM +0200, Eric Dumazet wrote:
+> > On Thu, Oct 5, 2023 at 6:32=E2=80=AFPM Jakub Kicinski <kuba@kernel.org>=
+ wrote:
+> > >
+> > > On Thu, 5 Oct 2023 18:11:56 +0200 Eric Dumazet wrote:
+> > > > OK, but I suspect some users of napi_reschedule() might not be race=
+-free...
+> > >
+> > > What's the race you're thinking of?
+> >
+> > This sort of thing... the race is in fl_starving() though...
+> >
+> > diff --git a/drivers/net/ethernet/chelsio/cxgb4/sge.c
+> > b/drivers/net/ethernet/chelsio/cxgb4/sge.c
+> > index 98dd78551d89..b5ff2e1a9975 100644
+> > --- a/drivers/net/ethernet/chelsio/cxgb4/sge.c
+> > +++ b/drivers/net/ethernet/chelsio/cxgb4/sge.c
+> > @@ -4261,7 +4261,7 @@ static void sge_rx_timer_cb(struct timer_list *t)
+> >
+> >                         if (fl_starving(adap, fl)) {
+> >                                 rxq =3D container_of(fl, struct sge_eth=
+_rxq, fl);
+> > -                               if (napi_reschedule(&rxq->rspq.napi))
+> > +                               if (napi_schedule(&rxq->rspq.napi))
+> >                                         fl->starving++;
+> >                                 else
+> >                                         set_bit(id, s->starving_fl);
+>
+> Ehhh problem is that this is a simple rename so if any race is present,
+> it's already there and not caused by this rename :(
+>
+> Don't know maybe this is out of scope and should be investigated with a
+> bug report?
+>
+> Maybe this should be changed to prep/__schedule to prevent any kind of
+> race? But doing so doesn't prevent any kind of ""starving""?
+>
 
-This series was applied to netdev/net-next.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+I gave a "Reviewed-by: Eric Dumazet <edumazet@google.com>", meaning
+your patch was ok for me.
 
-On Thu,  5 Oct 2023 21:57:36 +0200 you wrote:
-> From: Miquel Raynal <miquel.raynal@bootlin.com>
-> 
-> There is likely a copy-paste error here, as the exact same comment
-> appears below in this function, one time calling set_reset_mode(), the
-> other set_normal_mode().
-> 
-> Fixes: 429da1cc841b ("can: Driver for the SJA1000 CAN controller")
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> Reviewed-by: Simon Horman <horms@kernel.org>
-> Link: https://lore.kernel.org/all/20230922155130.592187-1-miquel.raynal@bootlin.com
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,01/37] can: sja1000: Fix comment
-    https://git.kernel.org/netdev/net-next/c/e36c56bf77d5
-  - [net-next,02/37] can: etas_es58x: rework the version check logic to silence -Wformat-truncation
-    https://git.kernel.org/netdev/net-next/c/107e6f6fe6f3
-  - [net-next,03/37] can: etas_es58x: add missing a blank line after declaration
-    https://git.kernel.org/netdev/net-next/c/4f8005092caf
-  - [net-next,04/37] can: raw: Remove NULL check before dev_{put, hold}
-    https://git.kernel.org/netdev/net-next/c/dd8bb80308c4
-  - [net-next,05/37] can: peak_pci: replace deprecated strncpy with strscpy
-    https://git.kernel.org/netdev/net-next/c/3b9333493b5f
-  - [net-next,06/37] can: dev: can_restart(): don't crash kernel if carrier is OK
-    https://git.kernel.org/netdev/net-next/c/fe5c9940dfd8
-  - [net-next,07/37] can: dev: can_restart(): fix race condition between controller restart and netif_carrier_on()
-    https://git.kernel.org/netdev/net-next/c/6841cab8c450
-  - [net-next,08/37] can: dev: can_restart(): reverse logic to remove need for goto
-    https://git.kernel.org/netdev/net-next/c/8f3ec204d340
-  - [net-next,09/37] can: dev: can_restart(): move debug message and stats after successful restart
-    https://git.kernel.org/netdev/net-next/c/f0e0c809c0be
-  - [net-next,10/37] can: dev: can_put_echo_skb(): don't crash kernel if can_priv::echo_skb is accessed out of bounds
-    https://git.kernel.org/netdev/net-next/c/6411959c10fe
-  - [net-next,11/37] can: dev: add can_state_get_by_berr_counter() to return the CAN state based on the current error counters
-    https://git.kernel.org/netdev/net-next/c/9beebc2b5d00
-  - [net-next,12/37] can: at91_can: use a consistent indention
-    https://git.kernel.org/netdev/net-next/c/e26ccc4658c1
-  - [net-next,13/37] can: at91_can: at91_irq_tx(): remove one level of indention
-    https://git.kernel.org/netdev/net-next/c/18c987147483
-  - [net-next,14/37] can: at91_can: BR register: convert to FIELD_PREP()
-    https://git.kernel.org/netdev/net-next/c/bd7854e83900
-  - [net-next,15/37] can: at91_can: ECR register: convert to FIELD_GET()
-    https://git.kernel.org/netdev/net-next/c/abe1348753b3
-  - [net-next,16/37] can: at91_can: MMR registers: convert to FIELD_PREP()
-    https://git.kernel.org/netdev/net-next/c/53558ac133c0
-  - [net-next,17/37] can: at91_can: MID registers: convert access to FIELD_PREP(), FIELD_GET()
-    https://git.kernel.org/netdev/net-next/c/90aa9a250cf2
-  - [net-next,18/37] can: at91_can: MSR Register: convert to FIELD_PREP()
-    https://git.kernel.org/netdev/net-next/c/bdfff1433cd6
-  - [net-next,19/37] can: at91_can: MCR Register: convert to FIELD_PREP()
-    https://git.kernel.org/netdev/net-next/c/5e9c5bcc017d
-  - [net-next,20/37] can: at91_can: add more register definitions
-    https://git.kernel.org/netdev/net-next/c/63446dc70316
-  - [net-next,21/37] can: at91_can: at91_setup_mailboxes(): update comments
-    https://git.kernel.org/netdev/net-next/c/2b08e5217a1d
-  - [net-next,22/37] can: at91_can: rename struct at91_priv::{tx_next,tx_echo} to {tx_head,tx_tail}
-    https://git.kernel.org/netdev/net-next/c/2f1a01a82fca
-  - [net-next,23/37] can: at91_can: at91_set_bittiming(): demote register output to debug level
-    https://git.kernel.org/netdev/net-next/c/ccd7cd07051f
-  - [net-next,24/37] can: at91_can: at91_chip_start(): don't disable IRQs twice
-    https://git.kernel.org/netdev/net-next/c/8227088cb3c2
-  - [net-next,25/37] can: at91_can: at91_open(): forward request_irq()'s return value in case or an error
-    https://git.kernel.org/netdev/net-next/c/99f4ff41bbb0
-  - [net-next,26/37] can: at91_can: add CAN transceiver support
-    https://git.kernel.org/netdev/net-next/c/3ecc09856afb
-  - [net-next,27/37] can: at91_can: at91_poll_err(): fold in at91_poll_err_frame()
-    https://git.kernel.org/netdev/net-next/c/864c6f07d3c4
-  - [net-next,28/37] can: at91_can: at91_poll_err(): increase stats even if no quota left or OOM
-    https://git.kernel.org/netdev/net-next/c/aa3f5d935cbb
-  - [net-next,29/37] can: at91_can: at91_irq_err_frame(): call directly from IRQ handler
-    https://git.kernel.org/netdev/net-next/c/d3f4cf05402b
-  - [net-next,30/37] can: at91_can: at91_irq_err_frame(): move next to at91_irq_err()
-    https://git.kernel.org/netdev/net-next/c/e0c9db91d60b
-  - [net-next,31/37] can: at91_can: at91_irq_err(): rename to at91_irq_err_line()
-    https://git.kernel.org/netdev/net-next/c/efad777c3e97
-  - [net-next,32/37] can: at91_can: at91_irq_err_line(): make use of can_state_get_by_berr_counter()
-    https://git.kernel.org/netdev/net-next/c/910f179aa0de
-  - [net-next,33/37] can: at91_can: at91_irq_err_line(): take reg_sr into account for bus off
-    https://git.kernel.org/netdev/net-next/c/f13e86993d85
-  - [net-next,34/37] can: at91_can: at91_irq_err_line(): make use of can_change_state() and can_bus_off()
-    https://git.kernel.org/netdev/net-next/c/9df2faf947bc
-  - [net-next,35/37] can: at91_can: at91_irq_err_line(): send error counters with state change
-    https://git.kernel.org/netdev/net-next/c/3db6154e44db
-  - [net-next,36/37] can: at91_can: at91_alloc_can_err_skb() introduce new function
-    https://git.kernel.org/netdev/net-next/c/dd94a2f1f2f8
-  - [net-next,37/37] can: at91_can: switch to rx-offload implementation
-    https://git.kernel.org/netdev/net-next/c/137f59d5dab4
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+My remark was orthogonal, I am not asking you to act on it ;)
