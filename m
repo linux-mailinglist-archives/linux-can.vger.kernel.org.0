@@ -2,61 +2,124 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFD67BD87F
-	for <lists+linux-can@lfdr.de>; Mon,  9 Oct 2023 12:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139F97BE02D
+	for <lists+linux-can@lfdr.de>; Mon,  9 Oct 2023 15:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345727AbjJIK1N (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Oct 2023 06:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
+        id S1377236AbjJINiJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Oct 2023 09:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345696AbjJIK1M (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Oct 2023 06:27:12 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EDDC5
-        for <linux-can@vger.kernel.org>; Mon,  9 Oct 2023 03:27:10 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qpnTh-0001nD-5H
-        for linux-can@vger.kernel.org; Mon, 09 Oct 2023 12:27:09 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qpnTg-000OKX-Oe
-        for linux-can@vger.kernel.org; Mon, 09 Oct 2023 12:27:08 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id BFA2D232663
-        for <linux-can@vger.kernel.org>; Mon,  9 Oct 2023 08:53:00 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id B1D4A232608;
-        Mon,  9 Oct 2023 08:52:58 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id e1a006ee;
-        Mon, 9 Oct 2023 08:52:57 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Haibo Chen <haibo.chen@nxp.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 5/6] can: flexcan: remove the auto stop mode for IMX93
-Date:   Mon,  9 Oct 2023 10:50:07 +0200
-Message-ID: <20231009085256.693378-6-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231009085256.693378-1-mkl@pengutronix.de>
-References: <20231009085256.693378-1-mkl@pengutronix.de>
+        with ESMTP id S1377238AbjJINiI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Oct 2023 09:38:08 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4925B6;
+        Mon,  9 Oct 2023 06:38:05 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-317c3ac7339so4129354f8f.0;
+        Mon, 09 Oct 2023 06:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696858684; x=1697463484; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u6KCxFngvX9I/hwQrj7ymkXhwkpFmhe1Y7OW2VCan1I=;
+        b=ZYO3nvCbTBqkAi4X2pYJ6OWeQ9hxhUZ92YkkB2YHdsDfujYkaf/OVX+SB/KGZu3JUD
+         b+1p6MDssuzcdK6PnVNVrO5hQXe/0jDSw4uj5ZQscR5LhF6sHoeXvW5UbRFF/7zGqk8f
+         A1ncNhRzXR0lZ4gRZ5eDaFyYXTaiGYhXraQ1IEG+OOqowovcSemCcDSZvD6wRKhi1uqC
+         i/ACFeUTKaZkYGHtEbMopT0joim5rrT4oDkOS/7F1zqGToT0xME09xq4pgb6Bv0L977w
+         4J5HBnLnhZ8P01uNFlZcin31dASH/S2D9fx5P2vu9AZk0jowOrXSa7NYmzLoWZX0ybD7
+         MGkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696858684; x=1697463484;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u6KCxFngvX9I/hwQrj7ymkXhwkpFmhe1Y7OW2VCan1I=;
+        b=PuMlZScRtdFPBrOHgax2x6Z+z+dhn5pB0TeUH4aHMVzn9KdnN/7YVAmNTm+x/leiI+
+         UDIofIbqiP2x9rooVG1O7Un7E3259s3qW3sTTI95qpw4Du37kCKwiTIQtYfMeIPEr3qP
+         +qaHBsdKyBg9fZIaZypW7DJgH5IKevV6GvZ4dNLUrMJLa+U22j91B81DLFbUWPHUkDTq
+         DE0sTyleCBsbgoWsrQ5zoi/tBGNaCz0B0w56rc0LuxpkRUaCowLica/tP0HHGBsy2yd3
+         3OPAAf8y5dwCtHPBzQIncH0lwT8Ne4ghkgaf3J1Vgz4WxlF7EgRzJz6uYmbNJ8n73ccJ
+         q9Ww==
+X-Gm-Message-State: AOJu0Yw5tsozulMudCfC0HN+OkQP93q70n9fajuv71geHT2ksKeC3d2a
+        z6+uNmxe0nS4O09k3RohLpg=
+X-Google-Smtp-Source: AGHT+IEMzVE5102E/rR+PKbFb4Y1qJpv3S+lyAIEK40sgvEz//IRItxHur9Z7ZsOHs5xcO/iYCxqbg==
+X-Received: by 2002:adf:f78d:0:b0:320:926:26d5 with SMTP id q13-20020adff78d000000b00320092626d5mr13881386wrp.30.1696858683739;
+        Mon, 09 Oct 2023 06:38:03 -0700 (PDT)
+Received: from localhost.localdomain (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
+        by smtp.googlemail.com with ESMTPSA id t4-20020a0560001a4400b0032763287473sm9746160wry.75.2023.10.09.06.38.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 06:38:03 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Praveen Kaligineedi <pkaligineedi@google.com>,
+        Shailend Chand <shailend@google.com>,
+        Douglas Miller <dougmill@linux.ibm.com>,
+        Nick Child <nnac123@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Haren Myneni <haren@linux.ibm.com>,
+        Rick Lindsley <ricklind@linux.ibm.com>,
+        Dany Madden <danymadden@us.ibm.com>,
+        Thomas Falcon <tlfalcon@linux.ibm.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Kalle Valo <kvalo@kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+        Intel Corporation <linuxwwan@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
+        Liu Haijun <haijun.liu@mediatek.com>,
+        M Chetan Kumar <m.chetan.kumar@linux.intel.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Yuanjun Gong <ruc_gongyuanjun@163.com>,
+        Alex Elder <elder@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Simon Horman <horms@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bailey Forrest <bcf@google.com>,
+        Junfeng Guo <junfeng.guo@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Ziwei Xiao <ziweixiao@google.com>,
+        Rushil Gupta <rushilg@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yuri Karpov <YKarpov@ispras.ru>, Andrew Lunn <andrew@lunn.ch>,
+        Zheng Zengkai <zhengzengkai@huawei.com>,
+        Dawei Li <set_pte_at@outlook.com>,
+        Anjaneyulu <pagadala.yesu.anjaneyulu@intel.com>,
+        Benjamin Berg <benjamin.berg@intel.com>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org
+Subject: [net-next v3 1/5] netdev: replace simple napi_schedule_prep/__napi_schedule to napi_schedule
+Date:   Mon,  9 Oct 2023 15:37:50 +0200
+Message-Id: <20231009133754.9834-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,144 +127,50 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+Replace drivers that still use napi_schedule_prep/__napi_schedule
+with napi_schedule helper as it does the same exact check and call.
 
-IMX93 A0 chip involve the internal q-channel handshake in LPCG and
-CCM to automatically handle the Flex-CAN IPG STOP signal. Only after
-FLEX-CAN enter stop mode then can support the self-wakeup feature.
-But meet issue when do the continue system PM stress test. When config
-the CAN as wakeup source, the first time after system suspend, any data
-on CAN bus can wakeup the system, this is as expect. But the second time
-when system suspend, data on CAN bus can't wakeup the system. If continue
-this test, we find in odd time system enter suspend, CAN can wakeup the
-system, but in even number system enter suspend, CAN can't wakeup the
-system. IC find a bug in the auto stop mode logic, and can't fix it easily.
-So for the new imx93 A1, IC drop the auto stop mode and involve the
-GPR to support stop mode (used before). IC define a bit in GPR which can
-trigger the IPG STOP signal to Flex-CAN, let it go into stop mode.
-And NXP claim to drop IMX93 A0, and only support IMX93 A1. So this patch
-remove the auto stop mode, and add flag FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR
-to imx93.
-
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Link: https://lore.kernel.org/all/20230726112458.3524165-2-haibo.chen@nxp.com
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 ---
- drivers/net/can/flexcan/flexcan-core.c | 46 ++++++++------------------
- drivers/net/can/flexcan/flexcan.h      |  2 --
- 2 files changed, 13 insertions(+), 35 deletions(-)
+Changes v3:
+- Add Reviewed-by tag
+Changes v2:
+- Add missing semicolon
+---
+ drivers/net/ethernet/ni/nixge.c     | 3 +--
+ drivers/net/ethernet/wiznet/w5100.c | 4 ++--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
-index add39e922b89..d15f85a40c1e 100644
---- a/drivers/net/can/flexcan/flexcan-core.c
-+++ b/drivers/net/can/flexcan/flexcan-core.c
-@@ -348,7 +348,7 @@ static struct flexcan_devtype_data fsl_imx8mp_devtype_data = {
- static struct flexcan_devtype_data fsl_imx93_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
- 		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_RX_MAILBOX |
--		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_AUTO_STOP_MODE |
-+		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR |
- 		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SUPPORT_ECC |
- 		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
- 		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR,
-@@ -544,11 +544,6 @@ static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
- 	} else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR) {
- 		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
- 				   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
--	} else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE) {
--		/* For the auto stop mode, software do nothing, hardware will cover
--		 * all the operation automatically after system go into low power mode.
--		 */
--		return 0;
+diff --git a/drivers/net/ethernet/ni/nixge.c b/drivers/net/ethernet/ni/nixge.c
+index 97f4798f4b42..f71a4f8bbb89 100644
+--- a/drivers/net/ethernet/ni/nixge.c
++++ b/drivers/net/ethernet/ni/nixge.c
+@@ -755,8 +755,7 @@ static irqreturn_t nixge_rx_irq(int irq, void *_ndev)
+ 		cr &= ~(XAXIDMA_IRQ_IOC_MASK | XAXIDMA_IRQ_DELAY_MASK);
+ 		nixge_dma_write_reg(priv, XAXIDMA_RX_CR_OFFSET, cr);
+ 
+-		if (napi_schedule_prep(&priv->napi))
+-			__napi_schedule(&priv->napi);
++		napi_schedule(&priv->napi);
+ 		goto out;
+ 	}
+ 	if (!(status & XAXIDMA_IRQ_ALL_MASK)) {
+diff --git a/drivers/net/ethernet/wiznet/w5100.c b/drivers/net/ethernet/wiznet/w5100.c
+index 341ee2f249fd..b26fd15c25ae 100644
+--- a/drivers/net/ethernet/wiznet/w5100.c
++++ b/drivers/net/ethernet/wiznet/w5100.c
+@@ -930,8 +930,8 @@ static irqreturn_t w5100_interrupt(int irq, void *ndev_instance)
+ 
+ 		if (priv->ops->may_sleep)
+ 			queue_work(priv->xfer_wq, &priv->rx_work);
+-		else if (napi_schedule_prep(&priv->napi))
+-			__napi_schedule(&priv->napi);
++		else
++			napi_schedule(&priv->napi);
  	}
  
- 	return flexcan_low_power_enter_ack(priv);
-@@ -574,12 +569,6 @@ static inline int flexcan_exit_stop_mode(struct flexcan_priv *priv)
- 	reg_mcr &= ~FLEXCAN_MCR_SLF_WAK;
- 	priv->write(reg_mcr, &regs->mcr);
- 
--	/* For the auto stop mode, hardware will exist stop mode
--	 * automatically after system go out of low power mode.
--	 */
--	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)
--		return 0;
--
- 	return flexcan_low_power_exit_ack(priv);
- }
- 
-@@ -1994,13 +1983,18 @@ static int flexcan_setup_stop_mode(struct platform_device *pdev)
- 		ret = flexcan_setup_stop_mode_scfw(pdev);
- 	else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR)
- 		ret = flexcan_setup_stop_mode_gpr(pdev);
--	else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)
--		ret = 0;
- 	else
- 		/* return 0 directly if doesn't support stop mode feature */
- 		return 0;
- 
--	if (ret)
-+	/* If ret is -EINVAL, this means SoC claim to support stop mode, but
-+	 * dts file lack the stop mode property definition. For this case,
-+	 * directly return 0, this will skip the wakeup capable setting and
-+	 * will not block the driver probe.
-+	 */
-+	if (ret == -EINVAL)
-+		return 0;
-+	else if (ret)
- 		return ret;
- 
- 	device_set_wakeup_capable(&pdev->dev, true);
-@@ -2320,16 +2314,8 @@ static int __maybe_unused flexcan_noirq_suspend(struct device *device)
- 	if (netif_running(dev)) {
- 		int err;
- 
--		if (device_may_wakeup(device)) {
-+		if (device_may_wakeup(device))
- 			flexcan_enable_wakeup_irq(priv, true);
--			/* For auto stop mode, need to keep the clock on before
--			 * system go into low power mode. After system go into
--			 * low power mode, hardware will config the flexcan into
--			 * stop mode, and gate off the clock automatically.
--			 */
--			if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)
--				return 0;
--		}
- 
- 		err = pm_runtime_force_suspend(device);
- 		if (err)
-@@ -2347,15 +2333,9 @@ static int __maybe_unused flexcan_noirq_resume(struct device *device)
- 	if (netif_running(dev)) {
- 		int err;
- 
--		/* For the wakeup in auto stop mode, no need to gate on the
--		 * clock here, hardware will do this automatically.
--		 */
--		if (!(device_may_wakeup(device) &&
--		      priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)) {
--			err = pm_runtime_force_resume(device);
--			if (err)
--				return err;
--		}
-+		err = pm_runtime_force_resume(device);
-+		if (err)
-+			return err;
- 
- 		if (device_may_wakeup(device))
- 			flexcan_enable_wakeup_irq(priv, false);
-diff --git a/drivers/net/can/flexcan/flexcan.h b/drivers/net/can/flexcan/flexcan.h
-index 91402977780b..025c3417031f 100644
---- a/drivers/net/can/flexcan/flexcan.h
-+++ b/drivers/net/can/flexcan/flexcan.h
-@@ -68,8 +68,6 @@
- #define FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR BIT(15)
- /* Device supports RX via FIFO */
- #define FLEXCAN_QUIRK_SUPPORT_RX_FIFO BIT(16)
--/* auto enter stop mode to support wakeup */
--#define FLEXCAN_QUIRK_AUTO_STOP_MODE BIT(17)
- 
- struct flexcan_devtype_data {
- 	u32 quirks;		/* quirks needed for different IP cores */
+ 	return IRQ_HANDLED;
 -- 
-2.42.0
-
+2.40.1
 
