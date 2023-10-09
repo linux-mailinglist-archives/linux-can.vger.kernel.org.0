@@ -2,50 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 443037BD740
-	for <lists+linux-can@lfdr.de>; Mon,  9 Oct 2023 11:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A987BD73F
+	for <lists+linux-can@lfdr.de>; Mon,  9 Oct 2023 11:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345967AbjJIJjX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Oct 2023 05:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
+        id S1345952AbjJIJjV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Oct 2023 05:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345928AbjJIJjV (ORCPT
+        with ESMTP id S1345951AbjJIJjV (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 9 Oct 2023 05:39:21 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC9BA2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA540C6
         for <linux-can@vger.kernel.org>; Mon,  9 Oct 2023 02:39:19 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qpmjN-0000bx-WA
+        id 1qpmjO-0000cU-Ao
         for linux-can@vger.kernel.org; Mon, 09 Oct 2023 11:39:18 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qpmjN-000Ne7-9K
+        id 1qpmjN-000NeR-GY
         for linux-can@vger.kernel.org; Mon, 09 Oct 2023 11:39:17 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 130A5232644
-        for <linux-can@vger.kernel.org>; Mon,  9 Oct 2023 08:53:00 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 477C723266B
+        for <linux-can@vger.kernel.org>; Mon,  9 Oct 2023 08:53:01 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 96CA7232604;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id CF2A923260D;
         Mon,  9 Oct 2023 08:52:58 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 4171086b;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2cc6b211;
         Mon, 9 Oct 2023 08:52:57 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Miquel Raynal <miquel.raynal@bootlin.com>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 4/6] can: sja1000: Always restart the Tx queue after an overrun
-Date:   Mon,  9 Oct 2023 10:50:06 +0200
-Message-ID: <20231009085256.693378-5-mkl@pengutronix.de>
+        kernel@pengutronix.de,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Simon Horman <horms@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH net 6/6] can: tcan4x5x: Fix id2_register for tcan4553
+Date:   Mon,  9 Oct 2023 10:50:08 +0200
+Message-ID: <20231009085256.693378-7-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231009085256.693378-1-mkl@pengutronix.de>
 References: <20231009085256.693378-1-mkl@pengutronix.de>
@@ -64,80 +67,34 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Markus Schneider-Pargmann <msp@baylibre.com>
 
-Upstream commit 717c6ec241b5 ("can: sja1000: Prevent overrun stalls with
-a soft reset on Renesas SoCs") fixes an issue with Renesas own SJA1000
-CAN controller reception: the Rx buffer is only 5 messages long, so when
-the bus loaded (eg. a message every 50us), overrun may easily
-happen. Upon an overrun situation, due to a possible internal crosstalk
-situation, the controller enters a frozen state which only can be
-unlocked with a soft reset (experimentally). The solution was to offload
-a call to sja1000_start() in a threaded handler. This needs to happen in
-process context as this operation requires to sleep. sja1000_start()
-basically enters "reset mode", performs a proper software reset and
-returns back into "normal mode".
+Fix id2_register content for tcan4553. This slipped through my testing.
 
-Since this fix was introduced, we no longer observe any stalls in
-reception. However it was sporadically observed that the transmit path
-would now freeze. Further investigation blamed the fix mentioned above,
-and especially the reset operation. Reproducing the reset in a loop
-helped identifying what could possibly go wrong. The sja1000 is a single
-Tx queue device, which leverages the netdev helpers to process one Tx
-message at a time. The logic is: the queue is stopped, the message sent
-to the transceiver, once properly transmitted the controller sets a
-status bit which triggers an interrupt, in the interrupt handler the
-transmission status is checked and the queue woken up. Unfortunately, if
-an overrun happens, we might perform the soft reset precisely between
-the transmission of the buffer to the transceiver and the advent of the
-transmission status bit. We would then stop the transmission operation
-without re-enabling the queue, leading to all further transmissions to
-be ignored.
-
-The reset interrupt can only happen while the device is "open", and
-after a reset we anyway want to resume normal operations, no matter if a
-packet to transmit got dropped in the process, so we shall wake up the
-queue. Restarting the device and waking-up the queue is exactly what
-sja1000_set_mode(CAN_MODE_START) does. In order to be consistent about
-the queue state, we must acquire a lock both in the reset handler and in
-the transmit path to ensure serialization of both operations. It turns
-out, a lock is already held when entering the transmit path, so we can
-just acquire/release it as well with the regular net helpers inside the
-threaded interrupt handler and this way we should be safe. As the
-reset handler might still be called after the transmission of a frame to
-the transceiver but before it actually gets transmitted, we must ensure
-we don't leak the skb, so we free it (the behavior is consistent, no
-matter if there was an skb on the stack or not).
-
-Fixes: 717c6ec241b5 ("can: sja1000: Prevent overrun stalls with a soft reset on Renesas SoCs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/all/20231002160206.190953-1-miquel.raynal@bootlin.com
-[mkl: fixed call to can_free_echo_skb()]
+Reported-by: Sean Anderson <sean.anderson@seco.com>
+Closes: https://lore.kernel.org/lkml/a94e6fc8-4f08-7877-2ba0-29b9c2780136@seco.com/
+Fixes: 142c6dc6d9d7 ("can: tcan4x5x: Add support for tcan4552/4553")
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Reviewed-by: Simon Horman <horms@kernel.org>
+Link: https://lore.kernel.org/all/20230919095401.1312259-1-msp@baylibre.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/sja1000/sja1000.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/net/can/m_can/tcan4x5x-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/sja1000/sja1000.c b/drivers/net/can/sja1000/sja1000.c
-index 0ada0e160e93..743c2eb62b87 100644
---- a/drivers/net/can/sja1000/sja1000.c
-+++ b/drivers/net/can/sja1000/sja1000.c
-@@ -392,7 +392,13 @@ static irqreturn_t sja1000_reset_interrupt(int irq, void *dev_id)
- 	struct net_device *dev = (struct net_device *)dev_id;
- 
- 	netdev_dbg(dev, "performing a soft reset upon overrun\n");
--	sja1000_start(dev);
-+
-+	netif_tx_lock(dev);
-+
-+	can_free_echo_skb(dev, 0, NULL);
-+	sja1000_set_mode(dev, CAN_MODE_START);
-+
-+	netif_tx_unlock(dev);
- 
- 	return IRQ_HANDLED;
- }
+diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+index 8a4143809d33..ae8c42f5debd 100644
+--- a/drivers/net/can/m_can/tcan4x5x-core.c
++++ b/drivers/net/can/m_can/tcan4x5x-core.c
+@@ -125,7 +125,7 @@ static const struct tcan4x5x_version_info tcan4x5x_versions[] = {
+ 	},
+ 	[TCAN4553] = {
+ 		.name = "4553",
+-		.id2_register = 0x32353534,
++		.id2_register = 0x33353534,
+ 	},
+ 	/* generic version with no id2_register at the end */
+ 	[TCAN4X5X] = {
 -- 
 2.42.0
 
