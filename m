@@ -2,52 +2,131 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7717BE818
-	for <lists+linux-can@lfdr.de>; Mon,  9 Oct 2023 19:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CDE7BF4EF
+	for <lists+linux-can@lfdr.de>; Tue, 10 Oct 2023 09:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377432AbjJIRbs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Oct 2023 13:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S1442615AbjJJHym (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Oct 2023 03:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377880AbjJIRbr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Oct 2023 13:31:47 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB419E;
-        Mon,  9 Oct 2023 10:31:45 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23FB0C433C8;
-        Mon,  9 Oct 2023 17:31:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696872705;
-        bh=OhjQeQRnExrpooqKh3gh9c6wU+rd8LzpqzmrgKzmc1o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kKZXKZ6G5xb7CpuYYHYWBpSUVmVlufI1wRkUJBTC7MaTrnX9pu4RW64/9fhopzTyU
-         N/kqKCVUtoospBJ9FMM3D4arIyg6JcahLl+0PiJQ2JPJhA6eKVUf0o6X8dC21t+zbM
-         1Na/83qcJeyJvDxGYHgl0K86pmV8qxGHn89x1kwIRp5thPEBueG8dGKVGIH66LO+uR
-         mRKR10lUSWIEJ/7WhjQDx3VSvFvSpGIo0vvhOB/vT9UAEf6BLqVEELVVb+xUDuWdR8
-         Pc5FM+8A5D2Ov9o751mQme1EzDwf3CpIt4UqhAeNtzMm8SexP38NZOTdaHVDgcKFdS
-         SnMK4KehDfC8w==
-Received: (nullmailer pid 2511395 invoked by uid 1000);
-        Mon, 09 Oct 2023 17:31:43 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S1442619AbjJJHyi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Oct 2023 03:54:38 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0EBA4;
+        Tue, 10 Oct 2023 00:54:37 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-405497850dbso49741515e9.0;
+        Tue, 10 Oct 2023 00:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696924476; x=1697529276; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iwwM7auPgZJMU7dH/X5o56/hwua6iH2A1QFl6/0EOd0=;
+        b=V6xfKpPBZTbS6eVz4iMpEXFUchDmqhSn0Cwyc05jiqi3vR+WJlu8pppJilTXDdPlph
+         PRxCD+95LLdqprM9L1zKPOhVed3FZHHu1oWgnQg3WkR0M4yReUcuvDRnv9JQBNeoGckW
+         Trxpvnb4FViHX7Ws50B1yqA7K7dNiR25T8QMYuTcw46j5kkULb8f+PiyMBHUbqGScWbb
+         IonN3Fuh3o4WZgOBRyGGm+B9Z+Cj+go1Bm9XMqfETtq+st9KexgWqleHNIMzyAx6kjYg
+         PoLoq+UqBNbtRvLOkVQTSpyXjbrokXX0trbGwxFfttb9WUziBJ0lPLN6NeHtIfi9xQhg
+         toxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696924476; x=1697529276;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iwwM7auPgZJMU7dH/X5o56/hwua6iH2A1QFl6/0EOd0=;
+        b=CxsH1TWc3e06dq6V0BkWtT6qZOjCbTU0dGwcEVsPhw7KncaukXjg3PuTdBexUE0qK0
+         DXrPwcPibKKRFOuqIpbnhV4Emr9/S/L5Swr9hX00dRhzRacW9P9dBOar5vz5vQzsuVsv
+         xGZtL2450/dF6HW6e4B03HEk2rO7uENJv2lP87LsKI7617r6szi4AaFXjyMESx+YQO2J
+         GoYAJpJYUYJolOorlTioQTpEtU4ETQ7rPnvXIQHWG2qFmGTVdPsqksUwobh8fNPvHkQ9
+         znp017v7yGsNzt5QrgZaZOOO9PPa93tfcbqFUzx3/6sENdHllkMAQReU/NnlnvvVoiKV
+         knjw==
+X-Gm-Message-State: AOJu0YzD0SP6pFdT8kBmlaolcwJLo3aPHrLWbC1LWs0fufkCwPaa10sA
+        u/lRZ/lCna9ymacsAFMfAvI=
+X-Google-Smtp-Source: AGHT+IFoXHF3xhB1R1QbXfa6gtatnLXym3Q5nnEunh6zFeATAVA0tqJjWKSQ447yVOYMirHfwQlOJg==
+X-Received: by 2002:a5d:500b:0:b0:319:8a66:f695 with SMTP id e11-20020a5d500b000000b003198a66f695mr13345455wrt.55.1696924475419;
+        Tue, 10 Oct 2023 00:54:35 -0700 (PDT)
+Received: from [192.168.0.101] ([77.126.80.27])
+        by smtp.gmail.com with ESMTPSA id z3-20020a056000110300b0031c6581d55esm11802488wrw.91.2023.10.10.00.54.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Oct 2023 00:54:35 -0700 (PDT)
+Message-ID: <f288a1cd-0e15-4301-8522-d46840dd2d93@gmail.com>
+Date:   Tue, 10 Oct 2023 10:54:26 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [net-next v3 3/5] netdev: replace napi_reschedule with
+ napi_schedule
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Michal Simek <michal.simek@amd.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH net-next] net: can: Use device_get_match_data()
-Date:   Mon,  9 Oct 2023 12:29:02 -0500
-Message-ID: <20231009172923.2457844-7-robh@kernel.org>
-X-Mailer: git-send-email 2.42.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        Chris Snook <chris.snook@gmail.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Praveen Kaligineedi <pkaligineedi@google.com>,
+        Shailend Chand <shailend@google.com>,
+        Douglas Miller <dougmill@linux.ibm.com>,
+        Nick Child <nnac123@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Haren Myneni <haren@linux.ibm.com>,
+        Rick Lindsley <ricklind@linux.ibm.com>,
+        Dany Madden <danymadden@us.ibm.com>,
+        Thomas Falcon <tlfalcon@linux.ibm.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Kalle Valo <kvalo@kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+        Intel Corporation <linuxwwan@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
+        Liu Haijun <haijun.liu@mediatek.com>,
+        M Chetan Kumar <m.chetan.kumar@linux.intel.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Yuanjun Gong <ruc_gongyuanjun@163.com>,
+        Alex Elder <elder@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Simon Horman <horms@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bailey Forrest <bcf@google.com>,
+        Junfeng Guo <junfeng.guo@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Ziwei Xiao <ziweixiao@google.com>,
+        Rushil Gupta <rushilg@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yuri Karpov <YKarpov@ispras.ru>, Andrew Lunn <andrew@lunn.ch>,
+        Zheng Zengkai <zhengzengkai@huawei.com>,
+        Dawei Li <set_pte_at@outlook.com>,
+        Anjaneyulu <pagadala.yesu.anjaneyulu@intel.com>,
+        Benjamin Berg <benjamin.berg@intel.com>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org
+References: <20231009133754.9834-1-ansuelsmth@gmail.com>
+ <20231009133754.9834-3-ansuelsmth@gmail.com>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20231009133754.9834-3-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,163 +135,66 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use preferred device_get_match_data() instead of of_match_device() to
-get the driver match data. With this, adjust the includes to explicitly
-include the correct headers.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/net/can/c_can/c_can_platform.c | 9 +++------
- drivers/net/can/flexcan/flexcan-core.c | 9 +++------
- drivers/net/can/mscan/mpc5xxx_can.c    | 8 ++++----
- drivers/net/can/xilinx_can.c           | 7 ++-----
- 4 files changed, 12 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/can/c_can/c_can_platform.c b/drivers/net/can/c_can/c_can_platform.c
-index f44ba2600415..caa781018b09 100644
---- a/drivers/net/can/c_can/c_can_platform.c
-+++ b/drivers/net/can/c_can/c_can_platform.c
-@@ -30,9 +30,9 @@
- #include <linux/io.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-+#include <linux/property.h>
- #include <linux/clk.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/mfd/syscon.h>
- #include <linux/regmap.h>
- 
-@@ -259,17 +259,14 @@ static int c_can_plat_probe(struct platform_device *pdev)
- 	void __iomem *addr;
- 	struct net_device *dev;
- 	struct c_can_priv *priv;
--	const struct of_device_id *match;
- 	struct resource *mem;
- 	int irq;
- 	struct clk *clk;
- 	const struct c_can_driver_data *drvdata;
- 	struct device_node *np = pdev->dev.of_node;
- 
--	match = of_match_device(c_can_of_table, &pdev->dev);
--	if (match) {
--		drvdata = match->data;
--	} else if (pdev->id_entry->driver_data) {
-+	drvdata = device_get_match_data(&pdev->dev);
-+	if (!drvdata && pdev->id_entry->driver_data) {
- 		drvdata = (struct c_can_driver_data *)
- 			platform_get_device_id(pdev)->driver_data;
- 	} else {
-diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
-index add39e922b89..b9dd9597fc97 100644
---- a/drivers/net/can/flexcan/flexcan-core.c
-+++ b/drivers/net/can/flexcan/flexcan-core.c
-@@ -23,11 +23,11 @@
- #include <linux/module.h>
- #include <linux/netdevice.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/can/platform/flexcan.h>
- #include <linux/pm_runtime.h>
-+#include <linux/property.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- 
-@@ -2040,7 +2040,6 @@ MODULE_DEVICE_TABLE(platform, flexcan_id_table);
- 
- static int flexcan_probe(struct platform_device *pdev)
- {
--	const struct of_device_id *of_id;
- 	const struct flexcan_devtype_data *devtype_data;
- 	struct net_device *dev;
- 	struct flexcan_priv *priv;
-@@ -2096,10 +2095,8 @@ static int flexcan_probe(struct platform_device *pdev)
- 	if (IS_ERR(regs))
- 		return PTR_ERR(regs);
- 
--	of_id = of_match_device(flexcan_of_match, &pdev->dev);
--	if (of_id)
--		devtype_data = of_id->data;
--	else if (platform_get_device_id(pdev)->driver_data)
-+	devtype_data = device_get_match_data(&pdev->dev);
-+	if (!devtype_data && pdev->id_entry->driver_data)
- 		devtype_data = (struct flexcan_devtype_data *)
- 			platform_get_device_id(pdev)->driver_data;
- 	else
-diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
-index 4837df6efa92..5b3d69c3b6b6 100644
---- a/drivers/net/can/mscan/mpc5xxx_can.c
-+++ b/drivers/net/can/mscan/mpc5xxx_can.c
-@@ -12,8 +12,10 @@
- #include <linux/module.h>
- #include <linux/interrupt.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/netdevice.h>
- #include <linux/can/dev.h>
-+#include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_irq.h>
- #include <linux/of_platform.h>
-@@ -290,7 +292,7 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
- 	int irq, mscan_clksrc = 0;
- 	int err = -ENOMEM;
- 
--	data = of_device_get_match_data(&ofdev->dev);
-+	data = device_get_match_data(&ofdev->dev);
- 	if (!data)
- 		return -EINVAL;
- 
-@@ -351,13 +353,11 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
- 
- static void mpc5xxx_can_remove(struct platform_device *ofdev)
- {
--	const struct of_device_id *match;
- 	const struct mpc5xxx_can_data *data;
- 	struct net_device *dev = platform_get_drvdata(ofdev);
- 	struct mscan_priv *priv = netdev_priv(dev);
- 
--	match = of_match_device(mpc5xxx_can_table, &ofdev->dev);
--	data = match ? match->data : NULL;
-+	data = device_get_match_data(&ofdev->dev);
- 
- 	unregister_mscandev(dev);
- 	if (data && data->put_clock)
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index abe58f103043..f17fd43d03c0 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -20,8 +20,8 @@
- #include <linux/module.h>
- #include <linux/netdevice.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/skbuff.h>
- #include <linux/spinlock.h>
- #include <linux/string.h>
-@@ -1726,7 +1726,6 @@ static int xcan_probe(struct platform_device *pdev)
- 	struct net_device *ndev;
- 	struct xcan_priv *priv;
- 	struct phy *transceiver;
--	const struct of_device_id *of_id;
- 	const struct xcan_devtype_data *devtype = &xcan_axi_data;
- 	void __iomem *addr;
- 	int ret;
-@@ -1741,9 +1740,7 @@ static int xcan_probe(struct platform_device *pdev)
- 		goto err;
- 	}
- 
--	of_id = of_match_device(xcan_of_match, &pdev->dev);
--	if (of_id && of_id->data)
--		devtype = of_id->data;
-+	devtype = device_get_match_data(&pdev->dev);
- 
- 	hw_tx_max_property = devtype->flags & XCAN_FLAG_TX_MAILBOXES ?
- 			     "tx-mailbox-count" : "tx-fifo-depth";
--- 
-2.42.0
+On 09/10/2023 16:37, Christian Marangi wrote:
+> Now that napi_schedule return a bool, we can drop napi_reschedule that
+> does the same exact function. The function comes from a very old commit
+> bfe13f54f502 ("ibm_emac: Convert to use napi_struct independent of struct
+> net_device") and the purpose is actually deprecated in favour of
+> different logic.
+> 
+> Convert every user of napi_reschedule to napi_schedule.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Acked-by: Jeff Johnson <quic_jjohnson@quicinc.com> # ath10k
+> Acked-by: Nick Child <nnac123@linux.ibm.com> # ibm
+> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for can/dev/rx-offload.c
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
+> ---
+> Changes v3:
+> - Add Reviewed-by tag
+> Changes v2:
+> - Add ack tag
+> ---
+>   drivers/infiniband/ulp/ipoib/ipoib_ib.c                |  4 ++--
+>   drivers/net/can/dev/rx-offload.c                       |  2 +-
+>   drivers/net/ethernet/chelsio/cxgb4/sge.c               |  2 +-
+>   drivers/net/ethernet/chelsio/cxgb4vf/sge.c             |  2 +-
+>   drivers/net/ethernet/ezchip/nps_enet.c                 |  2 +-
+>   drivers/net/ethernet/google/gve/gve_main.c             |  2 +-
+>   drivers/net/ethernet/ibm/ehea/ehea_main.c              |  2 +-
+>   drivers/net/ethernet/ibm/emac/mal.c                    |  2 +-
+>   drivers/net/ethernet/ibm/ibmveth.c                     |  2 +-
+>   drivers/net/ethernet/ibm/ibmvnic.c                     |  2 +-
+>   drivers/net/ethernet/mellanox/mlx4/en_rx.c             |  2 +-
+>   drivers/net/ethernet/ni/nixge.c                        |  2 +-
+>   drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c |  2 +-
+>   drivers/net/ethernet/xscale/ixp4xx_eth.c               |  4 ++--
+>   drivers/net/fjes/fjes_main.c                           |  2 +-
+>   drivers/net/wan/ixp4xx_hss.c                           |  4 ++--
+>   drivers/net/wireless/ath/ath10k/pci.c                  |  2 +-
+>   drivers/net/wwan/t7xx/t7xx_hif_dpmaif_rx.c             |  2 +-
+>   include/linux/netdevice.h                              | 10 ----------
+>   19 files changed, 21 insertions(+), 31 deletions(-)
+> 
+
+...
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
+> index 332472fe4990..a09b6e05337d 100644
+> --- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
+> +++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
+> @@ -400,7 +400,7 @@ void mlx4_en_recover_from_oom(struct mlx4_en_priv *priv)
+>   	for (ring = 0; ring < priv->rx_ring_num; ring++) {
+>   		if (mlx4_en_is_ring_empty(priv->rx_ring[ring])) {
+>   			local_bh_disable();
+> -			napi_reschedule(&priv->rx_cq[ring]->napi);
+> +			napi_schedule(&priv->rx_cq[ring]->napi);
+>   			local_bh_enable();
+>   		}
+>   	}
+
+For mlx4 part:
+Acked-by: Tariq Toukan <tariqt@nvidia.com>
 
