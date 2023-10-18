@@ -2,141 +2,200 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156617CD889
-	for <lists+linux-can@lfdr.de>; Wed, 18 Oct 2023 11:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850817CDEB7
+	for <lists+linux-can@lfdr.de>; Wed, 18 Oct 2023 16:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjJRJvE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 Oct 2023 05:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S1344926AbjJRONG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 Oct 2023 10:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjJRJvD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Oct 2023 05:51:03 -0400
-Received: from smtpx.fel.cvut.cz (smtpx.feld.cvut.cz [147.32.210.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43A6F7;
-        Wed, 18 Oct 2023 02:50:59 -0700 (PDT)
-Received: from localhost (styx2022 [192.168.200.17])
-        by smtpx.fel.cvut.cz (Postfix) with ESMTP id 6F249433F8;
-        Wed, 18 Oct 2023 11:50:57 +0200 (CEST)
-X-Virus-Scanned: IMAP STYX AMAVIS
-Authentication-Results: styx2022.feld.cvut.cz (amavisd-new);
-        dkim=pass (2048-bit key) header.d=fel.cvut.cz
-Received: from smtpx.fel.cvut.cz ([192.168.200.2])
-        by localhost (styx2022.feld.cvut.cz [192.168.200.17]) (amavisd-new, port 10060)
-        with ESMTP id yeVaz1NCRDon; Wed, 18 Oct 2023 11:50:55 +0200 (CEST)
-Received: from k135-p197.felk.cvut.cz (unknown [147.32.86.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pisa)
-        by smtpx.fel.cvut.cz (Postfix) with ESMTPSA id E37064357C;
-        Wed, 18 Oct 2023 11:50:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
-        s=felmail; t=1697622655;
-        bh=qTZDMjf/40RpDBlOk6biXIHCUslQNCwjZp5SL/wPv/A=;
-        h=From:To:Subject:Date:Cc:References:In-Reply-To:From;
-        b=MtD6/lI14PUO+Aewa9ZbU3BF+S50AjPTxjcpSBozLI0pmX3VcKdXRNbBaOKAQTUam
-         HlaG4Lo+oxCh1tP40mhndj6VQxyJwhQ4jCWkAssCTPz9Osk8Kcd+W4XOxyTDd96dj9
-         MWYHmW1EDllc6KUOqo5s6kwScy1kwU73qExMRmOyfLiXOgF/RegN38EUJK7cb7J6F9
-         Ik5+Oa7r75Js5H3qTmx9x6cKi7MpcD3gc96gt5DVw76wvgeaLlhwqvrm5e0UOQqL0s
-         sxyuuH8K+T9R5+SC/Z/6ya74qggse/zJgtlpNgOz7Fi8zdbC6eE5V10PiAAsv1eCMv
-         nKoCZVdFa+5JQ==
-From:   Pavel Pisa <pisa@fel.cvut.cz>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: Outstanding latency increase in kernel CAN gateway caught by CANlatester daily builds at 2023-10-02
-Date:   Wed, 18 Oct 2023 11:50:56 +0200
-User-Agent: KMail/1.9.10
-Cc:     linux-can@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        =?utf-8?q?Mat=C4=9Bj_Vasilevski?= <matej.vasilevski@gmail.com>,
-        Pavel Hronek <hronepa1@fel.cvut.cz>,
-        =?utf-8?q?Ji=C5=99=C3=AD_Nov=C3=A1k?= <jnovak@fel.cvut.cz>,
-        Carsten Emde <c.emde@osadl.org>,
-        Jan Altenberg <Jan.Altenberg@osadl.org>
-References: <202310021040.49367.pisa@fel.cvut.cz> <383f33ac-3254-4277-a9a9-8f7104851d49@hartkopp.net>
-In-Reply-To: <383f33ac-3254-4277-a9a9-8f7104851d49@hartkopp.net>
-X-KMail-QuotePrefix: > 
+        with ESMTP id S1344918AbjJROMj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Oct 2023 10:12:39 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AED137;
+        Wed, 18 Oct 2023 07:12:36 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D57C433C9;
+        Wed, 18 Oct 2023 14:12:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697638356;
+        bh=JWEf90H0pNK8AbCNDAoueXopIud5IbmnlbfDPhWUca8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=K2Q4ehWB7BiYfpahWyJAJXl2DvDD7qPyM5BnKVSIllqj0/HCCKtTdX/vcsFb8Dnav
+         hiwHnm2uNHppKlNnPlswtGgp+1j+JjSzDuCzvWEJjDiDfNL4pvVn9JkyKeKQ3u0QY4
+         mwpIdA0zRvZR1FnFTHhu814UkQm3VY+Gfoy8c9PM4hxQvjrjYPp0HYCZiHodYM8VPB
+         krQS638mL24BLi9W+03CcY3kvwM2sK1EAXgzvwPnitIpb1ovBDPnGgqu0UNr6CPGCb
+         G8aEMn8fYOLheE/3w//aqaUI7q7uwm40s8/6VKE1FAjwwlYBafUcSnheVkq75bcVHp
+         NQLUlqwAnw3yA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Haibo Chen <haibo.chen@nxp.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>, wg@grandegger.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mailhol.vincent@wanadoo.fr,
+        socketcan@hartkopp.net, ruanjinjie@huawei.com,
+        u.kleine-koenig@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.5 16/31] can: flexcan: remove the auto stop mode for IMX93
+Date:   Wed, 18 Oct 2023 10:11:33 -0400
+Message-Id: <20231018141151.1334501-16-sashal@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20231018141151.1334501-1-sashal@kernel.org>
+References: <20231018141151.1334501-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202310181150.56364.pisa@fel.cvut.cz>
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.5.7
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Oliver,
+From: Haibo Chen <haibo.chen@nxp.com>
 
-On Saturday 14 of October 2023 12:57:53 Oliver Hartkopp wrote:
-> Hello Pavel,
->
-> is there any news on this latency issue?
->
-> I've not seen any can-gw related changes between 6.2 and 6.6.
->
-> The only change for linux/net/can/gw.c is this patch:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?
->id=2a30b2bd01c23a7eeace3a3f82c2817227099805
+[ Upstream commit 63ead535570f13d0e06fda3f2d020c8f5394e998 ]
 
-I am keeping eye on the results daily and it seems that run
+IMX93 A0 chip involve the internal q-channel handshake in LPCG and
+CCM to automatically handle the Flex-CAN IPG STOP signal. Only after
+FLEX-CAN enter stop mode then can support the self-wakeup feature.
+But meet issue when do the continue system PM stress test. When config
+the CAN as wakeup source, the first time after system suspend, any data
+on CAN bus can wakeup the system, this is as expect. But the second time
+when system suspend, data on CAN bus can't wakeup the system. If continue
+this test, we find in odd time system enter suspend, CAN can wakeup the
+system, but in even number system enter suspend, CAN can't wakeup the
+system. IC find a bug in the auto stop mode logic, and can't fix it easily.
+So for the new imx93 A1, IC drop the auto stop mode and involve the
+GPR to support stop mode (used before). IC define a bit in GPR which can
+trigger the IPG STOP signal to Flex-CAN, let it go into stop mode.
+And NXP claim to drop IMX93 A0, and only support IMX93 A1. So this patch
+remove the auto stop mode, and add flag FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR
+to imx93.
 
-run-231002-045216-hist+6.6.0-rc3-rt5-ge31516c1e553+flood-kern-prio-fd-load
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+Link: https://lore.kernel.org/all/20230726112458.3524165-2-haibo.chen@nxp.com
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/can/flexcan/flexcan-core.c | 46 ++++++++------------------
+ drivers/net/can/flexcan/flexcan.h      |  2 --
+ 2 files changed, 13 insertions(+), 35 deletions(-)
 
-https://canbus.pages.fel.cvut.cz/can-latester/inspect.html?kernel=rt&load=1&flood=1&fd=1&prio=1&kern=1
+diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
+index ff0fc18baf133..d8be69f4a0c3f 100644
+--- a/drivers/net/can/flexcan/flexcan-core.c
++++ b/drivers/net/can/flexcan/flexcan-core.c
+@@ -348,7 +348,7 @@ static struct flexcan_devtype_data fsl_imx8mp_devtype_data = {
+ static struct flexcan_devtype_data fsl_imx93_devtype_data = {
+ 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
+ 		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_RX_MAILBOX |
+-		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_AUTO_STOP_MODE |
++		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR |
+ 		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SUPPORT_ECC |
+ 		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
+ 		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR,
+@@ -544,11 +544,6 @@ static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
+ 	} else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR) {
+ 		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+ 				   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
+-	} else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE) {
+-		/* For the auto stop mode, software do nothing, hardware will cover
+-		 * all the operation automatically after system go into low power mode.
+-		 */
+-		return 0;
+ 	}
+ 
+ 	return flexcan_low_power_enter_ack(priv);
+@@ -574,12 +569,6 @@ static inline int flexcan_exit_stop_mode(struct flexcan_priv *priv)
+ 	reg_mcr &= ~FLEXCAN_MCR_SLF_WAK;
+ 	priv->write(reg_mcr, &regs->mcr);
+ 
+-	/* For the auto stop mode, hardware will exist stop mode
+-	 * automatically after system go out of low power mode.
+-	 */
+-	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)
+-		return 0;
+-
+ 	return flexcan_low_power_exit_ack(priv);
+ }
+ 
+@@ -1994,13 +1983,18 @@ static int flexcan_setup_stop_mode(struct platform_device *pdev)
+ 		ret = flexcan_setup_stop_mode_scfw(pdev);
+ 	else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR)
+ 		ret = flexcan_setup_stop_mode_gpr(pdev);
+-	else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)
+-		ret = 0;
+ 	else
+ 		/* return 0 directly if doesn't support stop mode feature */
+ 		return 0;
+ 
+-	if (ret)
++	/* If ret is -EINVAL, this means SoC claim to support stop mode, but
++	 * dts file lack the stop mode property definition. For this case,
++	 * directly return 0, this will skip the wakeup capable setting and
++	 * will not block the driver probe.
++	 */
++	if (ret == -EINVAL)
++		return 0;
++	else if (ret)
+ 		return ret;
+ 
+ 	device_set_wakeup_capable(&pdev->dev, true);
+@@ -2320,16 +2314,8 @@ static int __maybe_unused flexcan_noirq_suspend(struct device *device)
+ 	if (netif_running(dev)) {
+ 		int err;
+ 
+-		if (device_may_wakeup(device)) {
++		if (device_may_wakeup(device))
+ 			flexcan_enable_wakeup_irq(priv, true);
+-			/* For auto stop mode, need to keep the clock on before
+-			 * system go into low power mode. After system go into
+-			 * low power mode, hardware will config the flexcan into
+-			 * stop mode, and gate off the clock automatically.
+-			 */
+-			if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)
+-				return 0;
+-		}
+ 
+ 		err = pm_runtime_force_suspend(device);
+ 		if (err)
+@@ -2347,15 +2333,9 @@ static int __maybe_unused flexcan_noirq_resume(struct device *device)
+ 	if (netif_running(dev)) {
+ 		int err;
+ 
+-		/* For the wakeup in auto stop mode, no need to gate on the
+-		 * clock here, hardware will do this automatically.
+-		 */
+-		if (!(device_may_wakeup(device) &&
+-		      priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)) {
+-			err = pm_runtime_force_resume(device);
+-			if (err)
+-				return err;
+-		}
++		err = pm_runtime_force_resume(device);
++		if (err)
++			return err;
+ 
+ 		if (device_may_wakeup(device))
+ 			flexcan_enable_wakeup_irq(priv, false);
+diff --git a/drivers/net/can/flexcan/flexcan.h b/drivers/net/can/flexcan/flexcan.h
+index 91402977780b2..025c3417031f4 100644
+--- a/drivers/net/can/flexcan/flexcan.h
++++ b/drivers/net/can/flexcan/flexcan.h
+@@ -68,8 +68,6 @@
+ #define FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR BIT(15)
+ /* Device supports RX via FIFO */
+ #define FLEXCAN_QUIRK_SUPPORT_RX_FIFO BIT(16)
+-/* auto enter stop mode to support wakeup */
+-#define FLEXCAN_QUIRK_AUTO_STOP_MODE BIT(17)
+ 
+ struct flexcan_devtype_data {
+ 	u32 quirks;		/* quirks needed for different IP cores */
+-- 
+2.40.1
 
-is really outlayer. At the end it is single one, I have
-interpretted the graph incorrectly because so much outstanding
-value at the end looked as flat increase covering two consecutive
-runs.
-
-So the kernel GW average and maximas follow previous trend
-after this single peak. So the peak could be related to some
-transitional state in RT development causing some problem
-with priorities etc., or can be result of some other problems
-in the whole setup. I am analyzing some problems with
-lost messages in some cases of RT runs which seems
-to be related more to some problem in testing system,
-setup before run, FPGA reload etc. which cause bus error
-or something similar with initial suspicion on monitoring
-side problem. But I do not have conclusion yet.
-
-Published runs are complete with no message lost
-and statistic/trends seems to be without significant
-change from start of the measurement in May.
-The change/increase of trends before May has well understood
-reason, we have updated stress testing, include more sources
-and tuned priorities for user GW etc...
-In alonger term perspective, initial setup testing data from
-April should/will be removed/masked from public data to not
-provide false assumptions. We probably start new series
-when 2024 year starts. We will see how data capacity
-and viewing will work work and slower as data set is extended.
-
-If I notice some significant change in more consecutive runs,
-I try to check it and send information.
-In the fact, we have caught one real problem in RT
-already.
-
-Best wishes,
-
-                Pavel
---
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    social:     https://social.kernel.org/ppisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    RISC-V education: https://comparch.edu.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
