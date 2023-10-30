@@ -2,63 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DE87DB8FD
-	for <lists+linux-can@lfdr.de>; Mon, 30 Oct 2023 12:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FC37DB8FF
+	for <lists+linux-can@lfdr.de>; Mon, 30 Oct 2023 12:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbjJ3Lbe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 30 Oct 2023 07:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
+        id S232531AbjJ3Lb6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 30 Oct 2023 07:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbjJ3Lbe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 30 Oct 2023 07:31:34 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7BEA6
-        for <linux-can@vger.kernel.org>; Mon, 30 Oct 2023 04:31:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1698665462; cv=none;
+        with ESMTP id S232281AbjJ3Lb6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 30 Oct 2023 07:31:58 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C49B3;
+        Mon, 30 Oct 2023 04:31:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1698665479; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=YdWdy1IJFIhtaQyPJobCBVIjBPKC0ruK9vqdNDF+VQ81YFIB+WAUBTq0CdSEXoeJf4
-    vUdysy35k9vjuo/7KGzv/1A4EYO+DsYX17+0pzgCXB8aLUop4cVjl9VU1Qp4eD+c+C9O
-    /0WipXo5FqjGZYEy2tO8Azv9FFu3KyX7XLtAasnSwsw8DoeGWuUrdxuwQjnFOUjn2dmZ
-    9u2h9cNRz7j03hBfKjsPO1GiS7muMlQAzB86vEq3mbMCDt5m4eS+dxX+tDq+pPtKriMb
-    MUWUOr5PzYtlLQJfAWYcxcCBf7/s2boPX1owvG1D+5Z5KIzcMqHHsESxWuRsCBYI+0W4
-    /4cQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1698665462;
+    b=k5+b/HCcjE8elogpySG1LNb3UKqUGpmjzvNGFsjf+CWvAHf5JDCQQ4OLrtFD6as3W0
+    6WRbADb+JS2If723hmrZUejQ3jd7UQr8kPXp4kgwHPNL2kbrOwMvvZEGcrP3KQs15xYm
+    DiPB2u3ehKwxSkArp1St7+auHvE33UwSO0xpoJVxx+WEuV0WSYSizK94bHjn3UpKdThe
+    cLgcWv/C+lZFCl8pGH2P+AyTLBFxXLJ1w1XQ1E0x6Y4MSKay05HsTFmCLZD0yXPcTTGj
+    rLY6URLPMw1aS6RSYDbyXPdl40KlE8hj2jM4XWcAXkzUn2NPFAbAo20OiUNP6fxJAAb4
+    w+TA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1698665479;
     s=strato-dkim-0002; d=strato.com;
     h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=aSrD28lmhj+RxARThzat964rxCSHCRAisNP1Dxcf7ZY=;
-    b=Ci0ISk3JXEj8ye4m5bZKQBbXwn+tqth5lOX0vDUCt/iN4ZfcQOo9e75ilBY/6QkfSX
-    7hkAZsRHBbXmgC1w0LPewzMb0zP87o0Kgi6LvJNtL1+u9XisuI/Y6KvVDcDCd59M7XUU
-    vcR7WBzlcoZhasw1heCtMcYLyNjYIhzHdb73WGz3QLDcsR7Mlu5O8p9Q4WWjFuBcXrsU
-    77ryU3QOZxjQoVMT+mNsWQX8ZNZytJHQRdEimVPK0IIXltgxB9Rg0FmWmKuNdtx4Z4zq
-    taBH/sadGsZhij8ZnmteXsvYAU8a4PCapy9Zr1D0rmfJGUrfBMzBPHDv0/jpOXjAaObn
-    XZvQ==
+    bh=hoyJ5z52lrFHD3Ua4V6zru3XqKG16a4pn4E+P/cW/GU=;
+    b=j/rIq/QJJg2lKMeLhobRrsFzGvqfEy7fro4MmoWxYCz1LSOXNfo1w50msp1PFcQaJe
+    lTONU6HVu7d53lrgxKYDuyMOA9fhYgB0nWK9RDF37SYpW6C6gGs6jsl+W3mwyvLQjALQ
+    urbU6hXakZBgfb0wrOESkFBUCUu54PqxEcAdsuZEwdjib9YbtBPAP83k6IoESy2eSfUD
+    TwXJLAiJ2IWcgZOgEWvbWxcBE7F3qqYWknm2y0v8rVnabOtQeEC2tQjXaHyKBfDYmfAZ
+    wuBxv0zY3eYcBfu7hVGI2wALqDM93+FG/wThiY8mUsHOSLLlY16NWgWGtBN9WcMLAuVC
+    iefg==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1698665462;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1698665479;
     s=strato-dkim-0002; d=hartkopp.net;
     h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=aSrD28lmhj+RxARThzat964rxCSHCRAisNP1Dxcf7ZY=;
-    b=cDIQmC85i2/SFvdzxrV1RtNXXDA/Ehm07tmhlCqVDF1TJCWkYWiubZ2DoTR4bg/q1c
-    MN0bgOROISAZ5PCjTAnZz4m+I+VxOmgmUCH7Yd5LhlFUOvG0NLp5NxSSzymtvPVOAA8b
-    Io9nfoT15Y5Rd2uwAbeQN0+5GmN4QHyLoE++eJgy2nMw5Mibr8AsssNMJBH0j42dly2L
-    PzLDGq+bchexQ44wre7iCYqgTAr0RMIQGNLDLqJgxEHmbrnsWaMoJOvBrTWHzw6HXm/h
-    B7RW4DYR0u7lYLyLQdIQ1AOJXwUfrq/tqGpv1PcV+ASaGAAhirhKfLDCOzC4EEAxZf+j
-    +dJA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1698665462;
+    bh=hoyJ5z52lrFHD3Ua4V6zru3XqKG16a4pn4E+P/cW/GU=;
+    b=Fh+5u890LnqJkiRgYFGsjY++go+HrH6TGxz19rZRxI7nLH78Xwopd8c32T1Q+poEZE
+    meZPF+pbQFb2P5X8KYhZ6apGCoGp55EWMrnsxql1FWJgFv1HDMZM+OYNIWPMpZI2Nb/o
+    DWCeUILY7zGPQXlKd77nem6txMENUPGaRq+eERuuu9RPPEuCZxcflWoBNQFpzys1N43A
+    vxJKAb4Y/hqYu8B/gUWYO/Jow0TxmNC8wvh00zVvGdKjl5jyDZ4ffvvhxSEm+WmNh9lb
+    DUlJZn3zHQ/LB6GUKDE7GrHdGoaLyrZUNdf+79xROCIjCkOyqMRWuI5Xx12a67AUpp58
+    Ss3Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1698665479;
     s=strato-dkim-0003; d=hartkopp.net;
     h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=aSrD28lmhj+RxARThzat964rxCSHCRAisNP1Dxcf7ZY=;
-    b=KA5AUNmNOkgb5BFwFUDsoqoYu81wrDeF9nmMxMntyv9Oxa2dkvQqS/m5ISwR/pMjio
-    2bDG2NrXbif3JxKxGVCA==
+    bh=hoyJ5z52lrFHD3Ua4V6zru3XqKG16a4pn4E+P/cW/GU=;
+    b=FCIB6EzyvnlUZB+f9/hSGtgRwhgdH9vgodHothAr2a1QhkxDbsDRcWyF/WURDsYirE
+    iLqy09ntvK/XwWATkYAg==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejuVITM8sik0"
 Received: from lenov17.lan
     by smtp.strato.de (RZmta 49.9.1 DYNA|AUTH)
-    with ESMTPSA id Kda39bz9UBV1DJ4
+    with ESMTPSA id Kda39bz9UBVIDJ8
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Mon, 30 Oct 2023 12:31:01 +0100 (CET)
+    Mon, 30 Oct 2023 12:31:18 +0100 (CET)
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
 To:     gregkh@linuxfoundation.org, stable@vger.kernel.org,
         sashal@kernel.org
@@ -66,16 +66,16 @@ Cc:     linux-can@vger.kernel.org, lukas.magel@posteo.net,
         patches@lists.linux.dev, maxime.jayat@mobile-devices.fr,
         mkl@pengutronix.de, michal.sojka@cvut.cz,
         Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH] can: isotp: upgrade 5.10 LTS to latest 6.6 mainline code base
-Date:   Mon, 30 Oct 2023 12:30:27 +0100
-Message-Id: <20231030113027.3387-1-socketcan@hartkopp.net>
+Subject: [PATCH] can: isotp: upgrade 5.15 LTS to latest 6.6 mainline code base
+Date:   Mon, 30 Oct 2023 12:31:10 +0100
+Message-Id: <20231030113110.3404-1-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,10 +88,9 @@ not report false EPOLLOUT events") introduced a new regression where the
 fix could potentially introduce new side effects.
 
 To reduce the risk of other unmet dependencies and missing fixes and checks
-the latest mainline code base is ported back to the 5.10 LTS tree.
+the latest mainline code base is ported back to the 5.15 LTS tree.
 
-To meet the former Linux 5.10 API these commits have been reverted:
-e3ae2365efc1 ("net: sock: introduce sk_error_report")
+To meet the former Linux 5.15 API these commits have been reverted:
 f4b41f062c42 ("net: remove noblock parameter from skb_recv_datagram()")
 96a7457a14d9 ("can: skb: unify skb CAN frame identification helpers")
 dc97391e6610 ("sock: Remove ->sendpage*() in favour of sendmsg(MSG_SPLICE_PAGES)")
@@ -108,8 +107,8 @@ And various sanity checks, fixes and improved return values.
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
  include/uapi/linux/can/isotp.h |  25 +-
- net/can/isotp.c                | 495 ++++++++++++++++++++++-----------
- 2 files changed, 347 insertions(+), 173 deletions(-)
+ net/can/isotp.c                | 487 ++++++++++++++++++++++-----------
+ 2 files changed, 342 insertions(+), 170 deletions(-)
 
 diff --git a/include/uapi/linux/can/isotp.h b/include/uapi/linux/can/isotp.h
 index 590f8aea2b6d..439c982f7e81 100644
@@ -152,7 +151,7 @@ index 590f8aea2b6d..439c982f7e81 100644
  #define CAN_ISOTP_DEFAULT_FLAGS		0
  #define CAN_ISOTP_DEFAULT_EXT_ADDRESS	0x00
 diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 16ebc187af1c..f30eb5ca307e 100644
+index 4dccf7b4b88d..89fa1ae825a2 100644
 --- a/net/can/isotp.c
 +++ b/net/can/isotp.c
 @@ -12,11 +12,10 @@
@@ -280,21 +279,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  	struct isotp_sock *so = container_of(hrtimer, struct isotp_sock,
  					     rxtimer);
  	struct sock *sk = &so->sk;
-@@ -226,23 +255,24 @@ static int isotp_send_fc(struct sock *sk, int ae, u8 flowstatus)
- 
- 	ncf->flags = so->ll.tx_flags;
- 
- 	can_send_ret = can_send(nskb, 1);
- 	if (can_send_ret)
--		pr_notice_once("can-isotp: %s: can_send_ret %d\n",
--			       __func__, can_send_ret);
-+		pr_notice_once("can-isotp: %s: can_send_ret %pe\n",
-+			       __func__, ERR_PTR(can_send_ret));
- 
- 	dev_put(dev);
- 
- 	/* reset blocksize counter */
- 	so->rx.bs = 0;
+@@ -238,11 +267,12 @@ static int isotp_send_fc(struct sock *sk, int ae, u8 flowstatus)
  
  	/* reset last CF frame rx timestamp for rx stmin enforcement */
  	so->lastrxcf_tstamp = ktime_set(0, 0);
@@ -461,7 +446,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  		cf->data[ae + 1] = 0;
  		cf->data[ae + 2] = (u8)(so->tx.len >> 24) & 0xFFU;
  		cf->data[ae + 3] = (u8)(so->tx.len >> 16) & 0xFFU;
-@@ -744,159 +844,146 @@ static void isotp_create_fframe(struct canfd_frame *cf, struct isotp_sock *so,
+@@ -744,161 +844,146 @@ static void isotp_create_fframe(struct canfd_frame *cf, struct isotp_sock *so,
  	/* add first data bytes depending on ae */
  	for (i = ae + ff_pci_sz; i < so->tx.ll_dl; i++)
  		cf->data[i] = so->tx.buf[so->tx.idx++];
@@ -500,7 +485,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
 -		/* report 'communication error on send' */
 -		sk->sk_err = ECOMM;
 -		if (!sock_flag(sk, SOCK_DEAD))
--			sk->sk_error_report(sk);
+-			sk_error_report(sk);
 +	/* local echo skb with consecutive frame has been consumed */
 +	so->cfecho = 0;
  
@@ -517,7 +502,9 @@ index 16ebc187af1c..f30eb5ca307e 100644
 -		dev = dev_get_by_index(sock_net(sk), so->ifindex);
 -		if (!dev)
 -			break;
--
++		return;
++	}
+ 
 -isotp_tx_burst:
 -		skb = alloc_skb(so->ll.mtu + sizeof(struct can_skb_priv),
 -				GFP_ATOMIC);
@@ -525,12 +512,6 @@ index 16ebc187af1c..f30eb5ca307e 100644
 -			dev_put(dev);
 -			break;
 -		}
-+		return;
-+	}
- 
--		can_skb_reserve(skb);
--		can_skb_prv(skb)->ifindex = dev->ifindex;
--		can_skb_prv(skb)->skbcnt = 0;
 +	if (so->txfc.bs && so->tx.bs >= so->txfc.bs) {
 +		/* stop and wait for FC with timeout */
 +		so->tx.state = ISOTP_WAIT_FC;
@@ -539,8 +520,9 @@ index 16ebc187af1c..f30eb5ca307e 100644
 +		return;
 +	}
  
--		cf = (struct canfd_frame *)skb->data;
--		skb_put_zero(skb, so->ll.mtu);
+-		can_skb_reserve(skb);
+-		can_skb_prv(skb)->ifindex = dev->ifindex;
+-		can_skb_prv(skb)->skbcnt = 0;
 +	/* no gap between data frames needed => use burst mode */
 +	if (!so->tx_gap) {
 +		/* enable echo timeout handling */
@@ -550,40 +532,45 @@ index 16ebc187af1c..f30eb5ca307e 100644
 +		return;
 +	}
  
--		/* create consecutive frame */
--		isotp_fill_dataframe(cf, so, ae, 0);
+-		cf = (struct canfd_frame *)skb->data;
+-		skb_put_zero(skb, so->ll.mtu);
 +	/* start timer to send next consecutive frame with correct delay */
 +	hrtimer_start(&so->txfrtimer, so->tx_gap, HRTIMER_MODE_REL_SOFT);
 +}
  
--		/* place consecutive frame N_PCI in appropriate index */
--		cf->data[ae] = N_PCI_CF | so->tx.sn++;
--		so->tx.sn %= 16;
--		so->tx.bs++;
+-		/* create consecutive frame */
+-		isotp_fill_dataframe(cf, so, ae, 0);
 +static enum hrtimer_restart isotp_tx_timer_handler(struct hrtimer *hrtimer)
 +{
 +	struct isotp_sock *so = container_of(hrtimer, struct isotp_sock,
 +					     txtimer);
 +	struct sock *sk = &so->sk;
  
--		cf->flags = so->ll.tx_flags;
+-		/* place consecutive frame N_PCI in appropriate index */
+-		cf->data[ae] = N_PCI_CF | so->tx.sn++;
+-		so->tx.sn %= 16;
+-		so->tx.bs++;
 +	/* don't handle timeouts in IDLE or SHUTDOWN state */
 +	if (so->tx.state == ISOTP_IDLE || so->tx.state == ISOTP_SHUTDOWN)
 +		return HRTIMER_NORESTART;
  
--		skb->dev = dev;
--		can_skb_set_owner(skb, sk);
+-		cf->flags = so->ll.tx_flags;
 +	/* we did not get any flow control or echo frame in time */
  
--		can_send_ret = can_send(skb, 1);
--		if (can_send_ret)
--			pr_notice_once("can-isotp: %s: can_send_ret %d\n",
--				       __func__, can_send_ret);
+-		skb->dev = dev;
+-		can_skb_set_owner(skb, sk);
 +	/* report 'communication error on send' */
 +	sk->sk_err = ECOMM;
 +	if (!sock_flag(sk, SOCK_DEAD))
-+		sk->sk_error_report(sk);
++		sk_error_report(sk);
  
+-		can_send_ret = can_send(skb, 1);
+-		if (can_send_ret) {
+-			pr_notice_once("can-isotp: %s: can_send_ret %pe\n",
+-				       __func__, ERR_PTR(can_send_ret));
+-			if (can_send_ret == -ENOBUFS)
+-				pr_notice_once("can-isotp: tx queue is full, increasing txqueuelen may prevent this error\n");
+-		}
 -		if (so->tx.idx >= so->tx.len) {
 -			/* we are done */
 -			so->tx.state = ISOTP_IDLE;
@@ -705,7 +692,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  		goto err_out_drop;
  	}
  
-@@ -925,10 +1012,14 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+@@ -927,10 +1012,14 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
  	so->tx.idx = 0;
  
  	cf = (struct canfd_frame *)skb->data;
@@ -720,7 +707,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  		/* The message size generally fits into a SingleFrame - good.
  		 *
  		 * SF_DL ESC offset optimization:
-@@ -950,62 +1041,86 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+@@ -952,26 +1041,44 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
  		if (off)
  			cf->data[SF_PCI_SZ4 + ae] = size;
  		else
@@ -775,13 +762,10 @@ index 16ebc187af1c..f30eb5ca307e 100644
  
  	skb->dev = dev;
  	skb->sk = sk;
- 	err = can_send(skb, 1);
- 	dev_put(dev);
+@@ -980,34 +1087,40 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
  	if (err) {
--		pr_notice_once("can-isotp: %s: can_send_ret %d\n",
--			       __func__, err);
-+		pr_notice_once("can-isotp: %s: can_send_ret %pe\n",
-+			       __func__, ERR_PTR(err));
+ 		pr_notice_once("can-isotp: %s: can_send_ret %pe\n",
+ 			       __func__, ERR_PTR(err));
  
  		/* no transmission -> no timeout monitoring */
 -		if (hrtimer_sec)
@@ -827,7 +811,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  }
  
  static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
-@@ -1065,11 +1180,17 @@ static int isotp_release(struct socket *sock)
+@@ -1067,11 +1180,17 @@ static int isotp_release(struct socket *sock)
  
  	so = isotp_sk(sk);
  	net = sock_net(sk);
@@ -846,7 +830,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  	while (isotp_busy_notifier == so) {
  		spin_unlock(&isotp_notifier_lock);
  		schedule_timeout_uninterruptible(1);
-@@ -1079,31 +1200,43 @@ static int isotp_release(struct socket *sock)
+@@ -1081,31 +1200,43 @@ static int isotp_release(struct socket *sock)
  	spin_unlock(&isotp_notifier_lock);
  
  	lock_sock(sk);
@@ -894,7 +878,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  
  	release_sock(sk);
  	sock_put(sk);
-@@ -1117,30 +1250,42 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+@@ -1119,30 +1250,42 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
  	struct sock *sk = sock->sk;
  	struct isotp_sock *so = isotp_sk(sk);
  	struct net *net = sock_net(sk);
@@ -946,7 +930,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  		return -ENODEV;
  
  	lock_sock(sk);
-@@ -1148,16 +1293,12 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+@@ -1150,16 +1293,12 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
  	if (so->bound) {
  		err = -EINVAL;
  		goto out;
@@ -965,7 +949,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  	}
  
  	dev = dev_get_by_index(net, addr->can_ifindex);
-@@ -1178,14 +1319,21 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+@@ -1180,14 +1319,21 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
  	if (!(dev->flags & IFF_UP))
  		notify_enetdown = 1;
  
@@ -988,7 +972,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  	/* switch to new settings */
  	so->ifindex = ifindex;
  	so->rxid = rx_id;
-@@ -1242,10 +1390,19 @@ static int isotp_setsockopt_locked(struct socket *sock, int level, int optname,
+@@ -1244,10 +1390,19 @@ static int isotp_setsockopt_locked(struct socket *sock, int level, int optname,
  
  		/* no separate rx_ext_address is given => use ext_address */
  		if (!(so->opt.flags & CAN_ISOTP_RX_EXT_ADDR))
@@ -1008,7 +992,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  			if (so->opt.frame_txtime == CAN_ISOTP_FRAME_TXTIME_ZERO)
  				so->frame_txtime = 0;
  			else
-@@ -1392,14 +1549,20 @@ static void isotp_notify(struct isotp_sock *so, unsigned long msg,
+@@ -1394,14 +1549,20 @@ static void isotp_notify(struct isotp_sock *so, unsigned long msg,
  
  	switch (msg) {
  	case NETDEV_UNREGISTER:
@@ -1033,7 +1017,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  		so->bound  = 0;
  		release_sock(sk);
  
-@@ -1464,14 +1627,21 @@ static int isotp_init(struct sock *sk)
+@@ -1466,14 +1627,21 @@ static int isotp_init(struct sock *sk)
  	so->tx.ll_dl = so->ll.tx_dl;
  
  	so->rx.state = ISOTP_IDLE;
@@ -1055,7 +1039,7 @@ index 16ebc187af1c..f30eb5ca307e 100644
  	spin_lock_init(&so->rx_lock);
  
  	spin_lock(&isotp_notifier_lock);
-@@ -1544,15 +1714,18 @@ static struct notifier_block canisotp_notifier = {
+@@ -1546,11 +1714,14 @@ static struct notifier_block canisotp_notifier = {
  
  static __init int isotp_module_init(void)
  {
@@ -1069,13 +1053,8 @@ index 16ebc187af1c..f30eb5ca307e 100644
  
  	err = can_proto_register(&isotp_can_proto);
  	if (err < 0)
--		pr_err("can: registration of isotp protocol failed\n");
-+		pr_err("can: registration of isotp protocol failed %pe\n", ERR_PTR(err));
+ 		pr_err("can: registration of isotp protocol failed %pe\n", ERR_PTR(err));
  	else
- 		register_netdevice_notifier(&canisotp_notifier);
- 
- 	return err;
- }
 -- 
 2.34.1
 
