@@ -2,63 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 222847DC9A0
-	for <lists+linux-can@lfdr.de>; Tue, 31 Oct 2023 10:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 898257DC99C
+	for <lists+linux-can@lfdr.de>; Tue, 31 Oct 2023 10:30:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343916AbjJaJa5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 31 Oct 2023 05:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
+        id S1343911AbjJaJay (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 31 Oct 2023 05:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343919AbjJaJaz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 31 Oct 2023 05:30:55 -0400
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [81.169.146.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AAAC2;
-        Tue, 31 Oct 2023 02:30:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1698744632; cv=none;
+        with ESMTP id S1343917AbjJaJaw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 31 Oct 2023 05:30:52 -0400
+Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [81.169.146.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3898DB7;
+        Tue, 31 Oct 2023 02:30:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1698744633; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=EmQx1zC6EcbTmXFRJPlmCS6PaJzHk13emPMkW6fcvRxNRQ5oAEfhbADOIGemL2ZfGk
-    Gt6kJxFFvNhrrJAwaVSyGmGtMJsDSNa3X05dRBHdBGmp3lmRR9SAQruwr48FJiMooqe4
-    5fAxH4vD97nyNTh7ZClC7Xyxrvumh795iEtIBul/ifPOVUS5SZ5OT0KpqHvSeq01N88b
-    Kaf6fT8+/PL8iAZaf5B4hxwKwfXPsjVFOTwiJF7d5ADqE6Z3LeAUGTSBrv+Y0WRfQu+a
-    7aOyQxl237QuoZYH3YRTUHMU35yyrjXXeRWtj+w9vLGvEN2J1RYYekeIO0vtO4gZEAWO
-    0m9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1698744632;
+    b=ki1WecRyHZq1BaXVz48SBh00kGu9Uu4LvI/O2i9AdB+M3fuBYqPdCvYrARe9HnOW74
+    0ETO3MC4LQjvzo5Kb4bSfwdKlpHpkAVI8ic8n59+YgksHQ7QSHc/ATJDR6LxaIRsKbdH
+    QbaeRCAuzkTpcQktAfl2Cc91xoIo4qD+8xaOlxTn+pFFaP9QmxjEy3mfP/S5Pk99kvan
+    NV+nFhEEYHe/+7M3QYNixXe3mcOPMxKGfkg6jEWmCcgpWW1C37i7XJNUMk0ObmEYXp+1
+    iVUeeqcsSILLqV8J+zaNtO25Y5Sv+0dXPkXNf5Lzf1siOtvXeuamIo7UOgrnlA4kxPh5
+    UIpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1698744633;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=aj88NU5p18dAF/7YWtzTK8+v3lQ/lDk4YoM++cx8mew=;
-    b=PFAAOoRQ5P9DyQ/OyWUiWHXGfiBxb8jivNPAUTmfCoPZXiW6XrpGWwaJ1VT0bLbzCz
-    B8vXBvtclOImNVWZT2kwE67VBwWVsRwFXm6ThdEqkgNZU1/u5/+kpt53ceYyUwiV79QE
-    DfmW30BCpAA0+1vMX19Ji6lUtgsevx6ybXc1IuDj2omHe6DREWVSQFDomorXeQlmwkfA
-    EH2YdBNtyFlNnBfXG70ySnPHjn+cg5FFteBwEqu0s7HAsq5rWF8b2miPIPzfrVrBjvqF
-    Iw3/7+4mg3bpkPYalEsyJNcgm/ul6maaWfYZr3R29+p6CgmJVjPVve1ZqsziSjGTOdcp
-    WYkw==
+    bh=fWDmKNduZW32ZnQUBctI2DiGvAEE01WL3BcUXhWh/LI=;
+    b=JR7mWFc7Aq41wQ38+1c7NKHdMNL0hQE30q+GFo+l3c4qWI8ojFZmArw/Nxq6e0OgLc
+    WDhMRompTaCBbBmLfu+7/LXQXFebohpmTpe6UIxUqfC4iE2qV7qT9V90iB4NgMoBs3co
+    TV/DDKAaMysrsIP0Ir7R4OY41+Adt7EIayv2e/ct+hY3Eo7U5NGTI9CgKWC0xPVdBQI6
+    +rhW8P9oNeQzv8vPRKQ+8nySL82cbLPSF9AW5r116EvOtUr5w4xPXYQDBua6mO6DX+YI
+    kCI8PzzaBlM0W56Y2UC/MCHNWfnwoM1PWqT7VhSckd3Xk9aJULjIsAZHLWnzRj7QpjAK
+    YClQ==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo03
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1698744632;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1698744633;
     s=strato-dkim-0002; d=hartkopp.net;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=aj88NU5p18dAF/7YWtzTK8+v3lQ/lDk4YoM++cx8mew=;
-    b=S76HubovhIPZzSQ2lnJOEr9tWI8sl1RGQ5iy9GvsBROfGH3XkAWGM4k8HjLGKzCes7
-    wqpMkA3Y0uvMonuiDep8++JxKXAHosUNkv82h7SuNwupaMJoKQpLyoSiHZLp0pLkoPcU
-    TBx5hb5kQH2SG9B1XXpEQEz8Z/ARb3D1Q0fVrm7H9tQzz46iFbRgpmhfF3qvER6MpC5h
-    Hp28c4cgc34H6yoW3mgGIwHLGXGec71GzSl9O8IE11DbmhcfSFY5H6p2sJwPho0Nnsel
-    qcLyc2OXRz6ZFQlUUaZpJFajOMDdo0Pt+/pV/W7KVXivCepyHiMeyVeuBtom1RUrU/FE
-    u6nA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1698744632;
+    bh=fWDmKNduZW32ZnQUBctI2DiGvAEE01WL3BcUXhWh/LI=;
+    b=fzeHofjJVJdIDzpjHfkwYb5bNmx3aMcy+KbJU+L7FflX3Slu1TbfyI1P4uQLYbbCWX
+    oBE9u/u9Zk/nYQtz8mHEEBdPgEsVfvC9tkkuAQGPFevDX8py/7Z4zF8hm/2ddTbLb/Tr
+    yGCqakP1zKhXIAyymMquwnDq8ulxTkJeUvl2RL9TGUHkQ9W7jhmR7IQHogtGq1J3ayZw
+    xNh+zdNF9UcnhX5FGoyMDCCo9tCbQ4AK1qhRRqaYJ59rMZU0cdbgV61ZNaHrQSXyDd3P
+    aPvJEIK1G/C3q+OdNJwPruVc+hnZ6dUcarPvQxtj6I0f6D/PM7kQRQGMydbeEakwie86
+    gBmA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1698744633;
     s=strato-dkim-0003; d=hartkopp.net;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=aj88NU5p18dAF/7YWtzTK8+v3lQ/lDk4YoM++cx8mew=;
-    b=rUZZDv0d4LnYTOdbKGF7Z0/EG6ADsRcH20SKuz2gTECzHfhfni18wMfJXSPdniZgE0
-    KqW5yYHIGv94NEag/6Dg==
+    bh=fWDmKNduZW32ZnQUBctI2DiGvAEE01WL3BcUXhWh/LI=;
+    b=f6q3VlM0A3MennfyKt88Z0SBbh+d8KbGUaU9tN7ea7Q/eWU+dFcZnjQLe3ZE1NI9wA
+    Lb+OZEW2nzOIXLMCONDA==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejuVITM8sik0"
 Received: from lenov17.lan
     by smtp.strato.de (RZmta 49.9.1 DYNA|AUTH)
-    with ESMTPSA id Kda39bz9V9UWFha
+    with ESMTPSA id Kda39bz9V9UWFhb
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Tue, 31 Oct 2023 10:30:32 +0100 (CET)
@@ -68,67 +68,60 @@ To:     gregkh@linuxfoundation.org, stable@vger.kernel.org,
 Cc:     linux-can@vger.kernel.org, lukas.magel@posteo.net,
         patches@lists.linux.dev, maxime.jayat@mobile-devices.fr,
         mkl@pengutronix.de, michal.sojka@cvut.cz,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        syzbot+5aed6c3aaba661f5b917@syzkaller.appspotmail.com
-Subject: [PATCH stable 5.15 3/7] can: isotp: check CAN address family in isotp_bind()
-Date:   Tue, 31 Oct 2023 10:30:21 +0100
-Message-Id: <20231031093025.2699-4-socketcan@hartkopp.net>
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH stable 5.15 4/7] can: isotp: handle wait_event_interruptible() return values
+Date:   Tue, 31 Oct 2023 10:30:22 +0100
+Message-Id: <20231031093025.2699-5-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231031093025.2699-1-socketcan@hartkopp.net>
 References: <20231031093025.2699-1-socketcan@hartkopp.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-commit c6adf659a8ba85913e16a571d5a9bcd17d3d1234 upstream
+commit 823b2e42720f96f277940c37ea438b7c5ead51a4 upstream
 
-Add missing check to block non-AF_CAN binds.
+When wait_event_interruptible() has been interrupted by a signal the
+tx.state value might not be ISOTP_IDLE. Force the state machines
+into idle state to inhibit the timer handlers to continue working.
 
-Syzbot created some code which matched the right sockaddr struct size
-but used AF_XDP (0x2C) instead of AF_CAN (0x1D) in the address family
-field:
-
-bind$xdp(r2, &(0x7f0000000540)={0x2c, 0x0, r4, 0x0, r2}, 0x10)
-                                ^^^^
-This has no funtional impact but the userspace should be notified about
-the wrong address family field content.
-
-Link: https://syzkaller.appspot.com/text?tag=CrashLog&x=11ff9d8c480000
-Reported-by: syzbot+5aed6c3aaba661f5b917@syzkaller.appspotmail.com
+Fixes: 866337865f37 ("can: isotp: fix tx state handling for echo tx processing")
+Cc: stable@vger.kernel.org
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Link: https://lore.kernel.org/all/20230104201844.13168-1-socketcan@hartkopp.net
+Link: https://lore.kernel.org/all/20230112192347.1944-1-socketcan@hartkopp.net
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- net/can/isotp.c | 3 +++
- 1 file changed, 3 insertions(+)
+ net/can/isotp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/net/can/isotp.c b/net/can/isotp.c
-index b5fdf30a6996..82e56f3dd2c6 100644
+index 82e56f3dd2c6..683010c71a8a 100644
 --- a/net/can/isotp.c
 +++ b/net/can/isotp.c
-@@ -1127,10 +1127,13 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 	int do_rx_reg = 1;
+@@ -1069,10 +1069,14 @@ static int isotp_release(struct socket *sock)
+ 	net = sock_net(sk);
  
- 	if (len < ISOTP_MIN_NAMELEN)
- 		return -EINVAL;
+ 	/* wait for complete transmission of current pdu */
+ 	wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
  
-+	if (addr->can_family != AF_CAN)
-+		return -EINVAL;
++	/* force state machines to be idle also when a signal occurred */
++	so->tx.state = ISOTP_IDLE;
++	so->rx.state = ISOTP_IDLE;
 +
- 	/* sanitize tx/rx CAN identifiers */
- 	tx_id = addr->can_addr.tp.tx_id;
- 	if (tx_id & CAN_EFF_FLAG)
- 		tx_id &= (CAN_EFF_FLAG | CAN_EFF_MASK);
- 	else
+ 	spin_lock(&isotp_notifier_lock);
+ 	while (isotp_busy_notifier == so) {
+ 		spin_unlock(&isotp_notifier_lock);
+ 		schedule_timeout_uninterruptible(1);
+ 		spin_lock(&isotp_notifier_lock);
 -- 
 2.34.1
 
