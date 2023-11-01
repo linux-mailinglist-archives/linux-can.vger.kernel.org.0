@@ -2,92 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72EB7DD3D6
-	for <lists+linux-can@lfdr.de>; Tue, 31 Oct 2023 18:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5487DDF1A
+	for <lists+linux-can@lfdr.de>; Wed,  1 Nov 2023 11:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbjJaREY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 31 Oct 2023 13:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
+        id S234937AbjKAKNf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 1 Nov 2023 06:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344126AbjJaRD5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 31 Oct 2023 13:03:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6718D386F;
-        Tue, 31 Oct 2023 09:52:51 -0700 (PDT)
-Date:   Tue, 31 Oct 2023 17:52:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1698771167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aAD4PZZPRqR2qqqz8EHQ+Hmek2C4MZMfqNDCeCXy6SU=;
-        b=xICgJ7CKCPP612P/GeGfpN7jEdqws8T9RkJ5uBAsvulrBrYFMRnTyjjb0KmmXf/beQw/IT
-        zBym7HVItEc55tJ/UFv0ACD3UNdpV/tCxHgpi7LHAUv4l5L+5yI11v2GQctUM0Vhu8sJen
-        hmqRnvBzszDs9QME3/Cp/aV9g4S5F9fbOQuO6MANPi2H1rIpNQOzdhuBEdbGJBBbL9e1Ea
-        Fz/8eG7oFPAyFkYb4k0hEqlR7+hAmZsyFFbpWWSFnLWEIcruogq2uPRpVgIrgcFOeusJyz
-        eOG2+RLIQo2QjDW1onheqOtT76r6FAOXEtv3tPF7BdsIwdN5+7RodzCLEY4kBQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1698771167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aAD4PZZPRqR2qqqz8EHQ+Hmek2C4MZMfqNDCeCXy6SU=;
-        b=iK28zELFzCeYTkCb2gCtc0jpeTewvtKn2reWTzzJxY/VQxP9ZdPySwiv/alRNwHNnCXfvu
-        nltW1oFCxqmJDrBg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [RFC] Questionable RCU/BH usage in cgw_create_job().
-Message-ID: <20231031165245.-pTSiGsg@linutronix.de>
-References: <20231031112349.y0aLoBrz@linutronix.de>
- <ba5d5420-a3ef-4368-ba36-3a84ed1458cf@hartkopp.net>
+        with ESMTP id S233426AbjKAKNd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 1 Nov 2023 06:13:33 -0400
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com [209.85.160.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4459E101
+        for <linux-can@vger.kernel.org>; Wed,  1 Nov 2023 03:13:27 -0700 (PDT)
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1ef4f8d294eso8942565fac.1
+        for <linux-can@vger.kernel.org>; Wed, 01 Nov 2023 03:13:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698833606; x=1699438406;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lLsI5q2P0bI6Z53/HYlR53dp0RSt+UIwzXIoVPhwdTg=;
+        b=uYmrXpdYrqrUlPFo2ArxBlVxk4s7mA4wjESfOsdQBMmRs5ikQQeMl9aocT1ej3Vaac
+         XPSaQmR9F2U0lS1fwIspZ3TgV4QQjomUI/GQDrp6D7TSSh8bG2ztKd7tVvdWuFLD1V0N
+         YzQ3KPIG78qKmMaF5wA5OzX7v6Ryp3sv7JwiJUBJmBeaJjZKvn4YYnrXZ8vrVUPw8VnO
+         QqnOkHAn8qoN+G2YWqrk8K0d3eVYnPHW7zziM+A2vNK3+xDJt8uPLvK8iQpuiMamF1Jo
+         fOGZePlXJ1q1IvdI6mCSyuTo7OdTvJOGE5rpV31ecA8sT5A25lJJmPsNvQEnx8ReUCN7
+         k2ug==
+X-Gm-Message-State: AOJu0Yxu0tf/ijkySkm36TADd6b5cxAZnauWIKmc6rrrsc6umm0mBpFT
+        /qdFuRFHclgJqkwGcL2feKJ+YEFuP5ovVMPi2OPmZku0C/auYR0=
+X-Google-Smtp-Source: AGHT+IEVMc7SZssl3rVvtvN+sivqx/RIShePRer5RPfCA8+xqQsJNVYR3waRzqWcWHqzpdO7LR8ALweFKStDR8s9OtE15O1nruwQ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ba5d5420-a3ef-4368-ba36-3a84ed1458cf@hartkopp.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6870:8094:b0:1ef:9ee0:3378 with SMTP id
+ q20-20020a056870809400b001ef9ee03378mr5648844oab.0.1698833605134; Wed, 01 Nov
+ 2023 03:13:25 -0700 (PDT)
+Date:   Wed, 01 Nov 2023 03:13:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000091116d06091485b2@google.com>
+Subject: [syzbot] Monthly can report (Nov 2023)
+From:   syzbot <syzbot+list7367dbc4668559b00896@syzkaller.appspotmail.com>
+To:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mkl@pengutronix.de, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2023-10-31 17:14:01 [+0100], Oliver Hartkopp wrote:
-> Hi Sebastian,
-Hi Oliver,
+Hello can maintainers/developers,
 
-> The content of gwj->mod can be overwritten with new modification rules at
-> runtime. But this update (with memcpy) has to take place when there is no
-> incoming network traffic.
+This is a 31-day syzbot report for the can subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/can
 
-This is my assumption. But "no incoming network traffic" is not ensured,
-right?
+During the period, 0 new issues were detected and 0 were fixed.
+In total, 8 issues are still open and 47 have been fixed so far.
 
-> > If not, my suggestion would be replacing the bh-off, memcpy part with:
-> > |		old_mod = rcu_replace_pointer(gwj->mod, new_mod, true);
-> > |		kfree_rcu_mightsleep(old_mod);
-> > 
-> > and doing the needed pointer replacement with for struct cgw_job::mod
-> > and RCU annotation.
-> 
-> Replacing a pointer does not copy any data to the cf_mod structure, right?
+Some of the still happening issues:
 
-Yes. The cf_mod data structure is embedded into cgw_job. So it would
-have to become a pointer. Then cgw_create_job() would create a new
-cf_mod via cgw_parse_attr() but it would be a new allocated structure
-instead on stack like it is now. And then in the existing case you would
-do the swap. Otherwise (non-existing, brand new) it becomes part of the
-new created cgw_job.
+Ref Crashes Repro Title
+<1> 281     Yes   possible deadlock in j1939_sk_queue_drop_all
+                  https://syzkaller.appspot.com/bug?extid=3bd970a1887812621b4c
+<2> 152     No    KMSAN: uninit-value in bpf_prog_run_generic_xdp
+                  https://syzkaller.appspot.com/bug?extid=0e6ddb1ef80986bdfe64
+<3> 61      Yes   possible deadlock in j1939_session_activate
+                  https://syzkaller.appspot.com/bug?extid=f32cbede7fd867ce0d56
+<4> 7       Yes   possible deadlock in j1939_sk_errqueue (2)
+                  https://syzkaller.appspot.com/bug?extid=1591462f226d9cbf0564
 
-The point is to replace/ update cf_mod at runtime while following RCU
-rules so always either new or the old object is observed. Never an
-intermediate step.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> Best regards,
-> Oliver
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-Sebastian
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
