@@ -2,147 +2,81 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B91E7E06FC
-	for <lists+linux-can@lfdr.de>; Fri,  3 Nov 2023 17:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA2A7E1724
+	for <lists+linux-can@lfdr.de>; Sun,  5 Nov 2023 23:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345473AbjKCQsu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 3 Nov 2023 12:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S229812AbjKEWAO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 5 Nov 2023 17:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344556AbjKCQsu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 3 Nov 2023 12:48:50 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2DAFB;
-        Fri,  3 Nov 2023 09:48:44 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F4CC433C8;
-        Fri,  3 Nov 2023 16:48:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699030123;
-        bh=7Ih4odCRaefU12RaYZiOnOpNLIUANhMxlXFENUxtaxo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=imMWQOD9bogm99VgUKiYSIrLlDGzZLxEJt6a1qEXWkCt5vg2kO/FVn2qbUG3AoAhc
-         BrnChn+vvhc0qJQDgmI1CO2ROMTR+Ucxc/93c/5hkG1dTC5GVooiqaSi1d+beazNr5
-         LOvUCcZL5ImQbVefaIU5Qwsrj15KCrSI1x3Q77Q13VXiaM5cMWT6Pdl6ZmyS45sDM9
-         TnvHg9mtX411C9eSphbojOXibjsHqHR4t0gWmeqyLp3X8cpHJ8K61+tRGYiEKkjsKO
-         fOO9pgLm1gUV3zKcQGMCbnfxkNUAHdiuYxtiJ50CDHVjG3IAjYb5XnMt1tgq2PMPFx
-         qN7vQNXb7pvsw==
-Date:   Fri, 3 Nov 2023 16:48:39 +0000
-From:   Simon Horman <horms@kernel.org>
-To:     Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v8 2/2] can: esd: add support for esd GmbH PCIe/402 CAN
- interface family
-Message-ID: <20231103164839.GA714036@kernel.org>
-References: <20231025141635.1459606-1-stefan.maetje@esd.eu>
- <20231025141635.1459606-3-stefan.maetje@esd.eu>
+        with ESMTP id S229893AbjKEWAM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 5 Nov 2023 17:00:12 -0500
+X-Greylist: delayed 5206 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Nov 2023 14:00:09 PST
+Received: from SMTP-HCRC-200.brggroup.vn (unknown [42.112.212.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47265CC;
+        Sun,  5 Nov 2023 14:00:09 -0800 (PST)
+Received: from SMTP-HCRC-200.brggroup.vn (localhost [127.0.0.1])
+        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTP id 353F2191B1;
+        Mon,  6 Nov 2023 01:57:43 +0700 (+07)
+Received: from zimbra.hcrc.vn (unknown [192.168.200.66])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTPS id 2E86C18FE9;
+        Mon,  6 Nov 2023 01:57:43 +0700 (+07)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.hcrc.vn (Postfix) with ESMTP id C0FC41B8204A;
+        Mon,  6 Nov 2023 01:57:44 +0700 (+07)
+Received: from zimbra.hcrc.vn ([127.0.0.1])
+        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id HXeOkkoOtXGA; Mon,  6 Nov 2023 01:57:44 +0700 (+07)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.hcrc.vn (Postfix) with ESMTP id 9243C1B8250F;
+        Mon,  6 Nov 2023 01:57:44 +0700 (+07)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.hcrc.vn 9243C1B8250F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hcrc.vn;
+        s=64D43D38-C7D6-11ED-8EFE-0027945F1BFA; t=1699210664;
+        bh=WOZURJ77pkiMUL2pPLC14ifVPRvyTQIBEQmxuN1ezAA=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=V9mjfwKUtdjR/jzW3G5p+y9g7SfCCZDedHAHYeULWSd/YVmozbltabuxy6pDIoSz+
+         Xu1qlDmupV05CnxCgAldowCTtuc3ZCQyCy/Zi2q0PZ8yEQqgDG07N0b0IA9UJB2PS0
+         mTlR2SW97CCiJcJCq2jgNlO1kMOO/Caa9J3n70spwbTXCwz/MuLoH348RVZB4umxLE
+         lXopzof8ZGh4HkZwJv5tO7Ry9KSYuD794cXRNAPbEFU/VH00AbVmmhJ/+NB1Z2oaag
+         PmEvYDNNc3sYLe2E7JbPISAs/CwPCQYIy8FXbC+7Qq7JrnUcREVB9z43eLhcydONc0
+         OceqeDScJVIZw==
+X-Virus-Scanned: amavisd-new at hcrc.vn
+Received: from zimbra.hcrc.vn ([127.0.0.1])
+        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Eck96ab-IFEO; Mon,  6 Nov 2023 01:57:44 +0700 (+07)
+Received: from [192.168.1.152] (unknown [51.179.100.52])
+        by zimbra.hcrc.vn (Postfix) with ESMTPSA id 3EA3B1B8204A;
+        Mon,  6 Nov 2023 01:57:37 +0700 (+07)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231025141635.1459606-3-stefan.maetje@esd.eu>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?b?4oKsIDEwMC4wMDAuMDAwPw==?=
+To:     Recipients <ch.31hamnghi@hcrc.vn>
+From:   ch.31hamnghi@hcrc.vn
+Date:   Sun, 05 Nov 2023 19:57:27 +0100
+Reply-To: joliushk@gmail.com
+Message-Id: <20231105185738.3EA3B1B8204A@zimbra.hcrc.vn>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Oct 25, 2023 at 04:16:35PM +0200, Stefan Mätje wrote:
-> This patch adds support for the PCI based PCIe/402 CAN interface family
-> from esd GmbH that is available with various form factors
-> (https://esd.eu/en/products/402-series-can-interfaces).
-> 
-> All boards utilize a FPGA based CAN controller solution developed
-> by esd (esdACC). For more information on the esdACC see
-> https://esd.eu/en/products/esdacc.
-> 
-> This driver detects all available CAN interface board variants of
-> the family but atm. operates the CAN-FD capable devices in
-> Classic-CAN mode only! A later patch will introduce the CAN-FD
-> functionality in this driver.
-> 
-> Co-developed-by: Thomas Körper <thomas.koerper@esd.eu>
-> Signed-off-by: Thomas Körper <thomas.koerper@esd.eu>
-> Signed-off-by: Stefan Mätje <stefan.maetje@esd.eu>
+Goededag,
+Ik ben mevrouw Joanna Liu en een medewerker van Citi Bank Hong Kong.
+Kan ik =E2=82=AC 100.000.000 aan u overmaken? Kan ik je vertrouwen
 
-...
 
-> +static int pci402_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
-> +{
-> +	struct pci402_card *card = NULL;
-> +	int err;
-> +
-> +	err = pci_enable_device(pdev);
-> +	if (err)
-> +		return err;
-> +
-> +	card = devm_kzalloc(&pdev->dev, sizeof(*card), GFP_KERNEL);
-> +	if (!card)
+Ik wacht op jullie reacties
+Met vriendelijke groeten
+mevrouw Joanna Liu
 
-Hi Thomas and Stefan,
-
-If this condition is met then the function will return err,
-but err is set to 0. Perhaps it should be set to an error value here?
-
-Flagged by Smatch.
-
-> +		goto failure_disable_pci;
-> +
-> +	pci_set_drvdata(pdev, card);
-> +
-> +	err = pci_request_regions(pdev, pci_name(pdev));
-> +	if (err)
-> +		goto failure_disable_pci;
-> +
-> +	card->addr = pci_iomap(pdev, PCI402_BAR, PCI402_IO_LEN_TOTAL);
-> +	if (!card->addr) {
-> +		err = -ENOMEM;
-> +		goto failure_release_regions;
-> +	}
-> +
-> +	err = pci402_init_card(pdev);
-> +	if (err)
-> +		goto failure_unmap;
-> +
-> +	err = pci402_init_dma(pdev);
-> +	if (err)
-> +		goto failure_unmap;
-> +
-> +	err = pci402_init_interrupt(pdev);
-> +	if (err)
-> +		goto failure_finish_dma;
-> +
-> +	err = pci402_init_cores(pdev);
-> +	if (err)
-> +		goto failure_finish_interrupt;
-> +
-> +	return 0;
-> +
-> +failure_finish_interrupt:
-> +	pci402_finish_interrupt(pdev);
-> +
-> +failure_finish_dma:
-> +	pci402_finish_dma(pdev);
-> +
-> +failure_unmap:
-> +	pci_iounmap(pdev, card->addr);
-> +
-> +failure_release_regions:
-> +	pci_release_regions(pdev);
-> +
-> +failure_disable_pci:
-> +	pci_disable_device(pdev);
-> +
-> +	return err;
-> +}
-
-...
