@@ -2,93 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991A97E26ED
-	for <lists+linux-can@lfdr.de>; Mon,  6 Nov 2023 15:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D33D27E2B8E
+	for <lists+linux-can@lfdr.de>; Mon,  6 Nov 2023 19:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjKFOfT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Nov 2023 09:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
+        id S230514AbjKFSCI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Nov 2023 13:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjKFOfS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Nov 2023 09:35:18 -0500
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6681BBD
-        for <linux-can@vger.kernel.org>; Mon,  6 Nov 2023 06:35:14 -0800 (PST)
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-3b3f5a58408so6376910b6e.1
-        for <linux-can@vger.kernel.org>; Mon, 06 Nov 2023 06:35:14 -0800 (PST)
+        with ESMTP id S229603AbjKFSCH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Nov 2023 13:02:07 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5586D45
+        for <linux-can@vger.kernel.org>; Mon,  6 Nov 2023 10:02:00 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-4083f613272so41714285e9.1
+        for <linux-can@vger.kernel.org>; Mon, 06 Nov 2023 10:02:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mobile-devices.fr; s=google; t=1699293719; x=1699898519; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:subject:to:content-language:user-agent
+         :mime-version:date:message-id:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PDm506CW1CfmWdc8ZEPy9UyaSh27+NblN2O42wc6Ric=;
+        b=n3XlSfI+EJkXgZ8IZLr47V57EQeA2XyjilPCsf8ZdWHCdAtHZ/kz0qhIfq/mdd4cfh
+         Z48kIXXUzlhf62FnfQ0aFuLaULB9+mksAfEJ2L2zqjQZh/+IC1uB7TVXS56UVHqFKERz
+         2FDKXZjwADB4PnbvRL75+s5XZGx8Mqj5f3LSw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699281313; x=1699886113;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l7LnU8RknCJWsPsqm7RXDpRlRmyk9PFdTymemdD1BB0=;
-        b=UCBZayKzhC2kZ7l5z4apbeR5AngmWqi+EUsE/z4+luP2Wyrc+4POY/MV/OEPe8NLiY
-         Uk76PtlHGlYEgNCYLfgxk2SzLUutkU1mwwt9Bg8KLIAsgUZX5U0sEuyqczVYAORvJnpe
-         +uC8gR5Kmq0GR1KL6VuMsJ96JMne+Z0MLpowOrNkyll8MFJQbHJv14X+xxyy6bMs3kXh
-         il5jKtDQIlziMR4nwYsCn1Ju0MZokZf+jiHvdFAaT0dYeGu58aiVsfjSlirh34u23gqa
-         9pI5GLZBZGZvPvV07D7FXN5/aCGcaXxdr9v1zTIrDC7E8ePmW/y0t7+RopwgEuT+xupI
-         UreA==
-X-Gm-Message-State: AOJu0YzcXMJzOIHAfZm6I6JFyWOFIaNBsi0I1VbxQvGa+c3gPrUyZeGv
-        KIBNNOB3UpARaHFWehwXAtEgv5LgBdNJc7nWlysc+x5ciEH2
-X-Google-Smtp-Source: AGHT+IG/iI7FGWxO+tIpvDf57ygCjJyDFzHjpMxa+/pfuXhy/dTLktmDyG1XISzkLZn+1eHOTDmwVx+MQOuQC26hlSzHq7GEN+jT
+        d=1e100.net; s=20230601; t=1699293719; x=1699898519;
+        h=content-transfer-encoding:cc:subject:to:content-language:user-agent
+         :mime-version:date:message-id:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PDm506CW1CfmWdc8ZEPy9UyaSh27+NblN2O42wc6Ric=;
+        b=vjR3mCOf8GO6QFGkgQCP9gm1EIdlrK+gpiptdOZUyzi9Hwg/PgIF3vxHZeIJkY1EsE
+         jhxkAZRPikQB/r5iPKp429OzIlo7YrX4iFP175rkIckSuQnZfiUQRPfrorewe5oAEJ9A
+         3jRt5BPTHxGRNmPVE8huxfJcXyQnb481I0QlnUqJK6Jl798YGxf/tc8PXMCdEZLGs9wH
+         XcoMbkb3xDraodu6siOaTPUSTXGkbUb14f85NPGDnqca8yUJX7qpDdK4+5ouPuJI0uyp
+         1GOuGEkDeLxNDzjX+cYSO+223lnLtxI40H7T4JosG8V5ee9AFJ8/MudVU+2GCULO9RHW
+         TQFQ==
+X-Gm-Message-State: AOJu0Yzwa/lu5rA2Hu9TnuaEHRN7jtaOPv6qmVt76HZ9FYAY3Taj2J21
+        UmDY+70GzyE6ur9mbh8ZgAM+wg==
+X-Google-Smtp-Source: AGHT+IEN04Uu8Xyw8RUlVXXHKf0i80rZNPf69h/WP9HYr9XT0vrLjOEwh1KX8/yJvOWvKUwZqfwCyw==
+X-Received: by 2002:a05:600c:4fd4:b0:405:3b92:2fed with SMTP id o20-20020a05600c4fd400b004053b922fedmr372167wmq.26.1699293719033;
+        Mon, 06 Nov 2023 10:01:59 -0800 (PST)
+Received: from [10.42.42.90] (static-css-cqn-143221.business.bouyguestelecom.com. [176.149.143.221])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b004097881d7a8sm10027857wmg.0.2023.11.06.10.01.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Nov 2023 10:01:58 -0800 (PST)
+From:   Maxime Jayat <maxime.jayat@mobile-devices.fr>
+X-Google-Original-From: Maxime Jayat <maxime.jayat@munic.io>
+Message-ID: <40579c18-63c0-43a4-8d4c-f3a6c1c0b417@munic.io>
+Date:   Mon, 6 Nov 2023 19:01:58 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:23c1:b0:3a9:d030:5023 with SMTP id
- bq1-20020a05680823c100b003a9d0305023mr12427060oib.3.1699281313820; Mon, 06
- Nov 2023 06:35:13 -0800 (PST)
-Date:   Mon, 06 Nov 2023 06:35:13 -0800
-In-Reply-To: <0000000000009393ba059691c6a3@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001579a706097cc3c9@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in j1939_session_get_by_addr
-From:   syzbot <syzbot+d9536adc269404a984f8@syzkaller.appspotmail.com>
-To:     Jose.Abreu@synopsys.com, arvid.brodin@alten.se,
-        davem@davemloft.net, dvyukov@google.com,
-        ilias.apalodimas@linaro.org, joabreu@synopsys.com,
-        jose.abreu@synopsys.com, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
-        nogikh@google.com, robin@protonic.nl, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com, tonymarislogistics@yandex.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_SORBS_WEB,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] can: netlink: Fix TDCO calculation using the old data
+ bittiming
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This bug is marked as fixed by commit:
-can: j1939: transport: make sure the aborted session will be deactivated only once
+The TDCO calculation was done using the currently applied data bittiming,
+instead of the newly computed data bittiming, which means that the TDCO
+had an invalid value unless setting the same data bittiming twice.
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
-
-#syz fix: exact-commit-title
-
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
-
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=d9536adc269404a984f8
-
+Fixes: d99755f71a80 ("can: netlink: add interface for CAN-FD Transmitter Delay Compensation (TDC)")
+Signed-off-by: Maxime Jayat <maxime.jayat@mobile-devices.fr>
 ---
-[1] I expect the commit to be present in:
+ drivers/net/can/dev/netlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+index 036d85ef07f5..dfdc039d92a6 100644
+--- a/drivers/net/can/dev/netlink.c
++++ b/drivers/net/can/dev/netlink.c
+@@ -346,7 +346,7 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 			/* Neither of TDC parameters nor TDC flags are
+ 			 * provided: do calculation
+ 			 */
+-			can_calc_tdco(&priv->tdc, priv->tdc_const, &priv->data_bittiming,
++			can_calc_tdco(&priv->tdc, priv->tdc_const, &dbt,
+ 				      &priv->ctrlmode, priv->ctrlmode_supported);
+ 		} /* else: both CAN_CTRLMODE_TDC_{AUTO,MANUAL} are explicitly
+ 		   * turned off. TDC is disabled: do nothing
+-- 
+2.34.1
 
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 9 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
