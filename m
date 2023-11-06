@@ -2,81 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA2A7E1724
-	for <lists+linux-can@lfdr.de>; Sun,  5 Nov 2023 23:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE657E1DD6
+	for <lists+linux-can@lfdr.de>; Mon,  6 Nov 2023 11:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjKEWAO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 5 Nov 2023 17:00:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
+        id S229671AbjKFKEO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Nov 2023 05:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjKEWAM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 5 Nov 2023 17:00:12 -0500
-X-Greylist: delayed 5206 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Nov 2023 14:00:09 PST
-Received: from SMTP-HCRC-200.brggroup.vn (unknown [42.112.212.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47265CC;
-        Sun,  5 Nov 2023 14:00:09 -0800 (PST)
-Received: from SMTP-HCRC-200.brggroup.vn (localhost [127.0.0.1])
-        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTP id 353F2191B1;
-        Mon,  6 Nov 2023 01:57:43 +0700 (+07)
-Received: from zimbra.hcrc.vn (unknown [192.168.200.66])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTPS id 2E86C18FE9;
-        Mon,  6 Nov 2023 01:57:43 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hcrc.vn (Postfix) with ESMTP id C0FC41B8204A;
-        Mon,  6 Nov 2023 01:57:44 +0700 (+07)
-Received: from zimbra.hcrc.vn ([127.0.0.1])
-        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id HXeOkkoOtXGA; Mon,  6 Nov 2023 01:57:44 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hcrc.vn (Postfix) with ESMTP id 9243C1B8250F;
-        Mon,  6 Nov 2023 01:57:44 +0700 (+07)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.hcrc.vn 9243C1B8250F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hcrc.vn;
-        s=64D43D38-C7D6-11ED-8EFE-0027945F1BFA; t=1699210664;
-        bh=WOZURJ77pkiMUL2pPLC14ifVPRvyTQIBEQmxuN1ezAA=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=V9mjfwKUtdjR/jzW3G5p+y9g7SfCCZDedHAHYeULWSd/YVmozbltabuxy6pDIoSz+
-         Xu1qlDmupV05CnxCgAldowCTtuc3ZCQyCy/Zi2q0PZ8yEQqgDG07N0b0IA9UJB2PS0
-         mTlR2SW97CCiJcJCq2jgNlO1kMOO/Caa9J3n70spwbTXCwz/MuLoH348RVZB4umxLE
-         lXopzof8ZGh4HkZwJv5tO7Ry9KSYuD794cXRNAPbEFU/VH00AbVmmhJ/+NB1Z2oaag
-         PmEvYDNNc3sYLe2E7JbPISAs/CwPCQYIy8FXbC+7Qq7JrnUcREVB9z43eLhcydONc0
-         OceqeDScJVIZw==
-X-Virus-Scanned: amavisd-new at hcrc.vn
-Received: from zimbra.hcrc.vn ([127.0.0.1])
-        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Eck96ab-IFEO; Mon,  6 Nov 2023 01:57:44 +0700 (+07)
-Received: from [192.168.1.152] (unknown [51.179.100.52])
-        by zimbra.hcrc.vn (Postfix) with ESMTPSA id 3EA3B1B8204A;
-        Mon,  6 Nov 2023 01:57:37 +0700 (+07)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229478AbjKFKEN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Nov 2023 05:04:13 -0500
+X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Nov 2023 02:04:10 PST
+Received: from rdns0.6r1mr34p3r.com (king1.pserver.space [31.192.237.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E24B8
+        for <linux-can@vger.kernel.org>; Mon,  6 Nov 2023 02:04:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=default; d=6r1mr34p3r.com;
+ h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:
+ Content-Transfer-Encoding; i=dont@6r1mr34p3r.com;
+ bh=ojFId5vMFp5gt42XMCxKfXzzdBVM4QC0zfjv2YMkei4=;
+ b=DHRULZk11QgjWNU06+ZtnsiBOW3OMDg99Z1qYWW9hue7LTkd5WfX5zyZIGgKqTqeozoK+dKNQMQx
+   TPjgGCY3PyvRHwE7TjX1kgvvlY4AaJeEqs3TmA/j7UYOhMg/m1p53qwf0DX76/Db0jZeKHZQH+e4
+   b2YMkVAkm8Luc8oS/x8=
+Reply-To: bozidar@mikolajgroup.com
+From:   Bozidar Damyan <dont@6r1mr34p3r.com>
+To:     linux-can@vger.kernel.org
+Subject: Inquiry from MikolajGroup Hungary
+Date:   6 Nov 2023 01:54:06 -0800
+Message-ID: <20231106015406.B4FF0BD24C06E1A7@6r1mr34p3r.com>
 MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?b?4oKsIDEwMC4wMDAuMDAwPw==?=
-To:     Recipients <ch.31hamnghi@hcrc.vn>
-From:   ch.31hamnghi@hcrc.vn
-Date:   Sun, 05 Nov 2023 19:57:27 +0100
-Reply-To: joliushk@gmail.com
-Message-Id: <20231105185738.3EA3B1B8204A@zimbra.hcrc.vn>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Goededag,
-Ik ben mevrouw Joanna Liu en een medewerker van Citi Bank Hong Kong.
-Kan ik =E2=82=AC 100.000.000 aan u overmaken? Kan ik je vertrouwen
+Greetings from MikolajGroup.
+
+We would like to know if you export to Hungary, as we need some=20
+of your products.
+
+Please review the attached drawings and specifications and quote
+with your best price and availability.
+
+We would appreciate your prompt attention to this request, as we
+are hoping to start our project as soon as possible.
+
+If you require any further information or have any questions,
+please do not hesitate to contact us.
 
 
-Ik wacht op jullie reacties
-Met vriendelijke groeten
-mevrouw Joanna Liu
-
+Best regards
+Bozidar Damyan
+Commercial Assistant
+Email: bozidar@mikolajgroup.com
+R=C3=A1k=C3=B3czi =C3=BAt 34. Balatonudvari, Veszpr=C3=A9m
+8242 Hungary.
