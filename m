@@ -1,119 +1,104 @@
-Return-Path: <linux-can+bounces-8-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-12-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48BC17E59ED
-	for <lists+linux-can@lfdr.de>; Wed,  8 Nov 2023 16:23:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7044F7E9CD3
+	for <lists+linux-can@lfdr.de>; Mon, 13 Nov 2023 14:15:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0272B28140B
-	for <lists+linux-can@lfdr.de>; Wed,  8 Nov 2023 15:23:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25637280DDA
+	for <lists+linux-can@lfdr.de>; Mon, 13 Nov 2023 13:15:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDE1B3033C;
-	Wed,  8 Nov 2023 15:23:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A34AA1F92C;
+	Mon, 13 Nov 2023 13:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s7Z5lHbG"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="j2mVapa+"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA4D3033A;
-	Wed,  8 Nov 2023 15:23:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CECEFC433C9;
-	Wed,  8 Nov 2023 15:23:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699456994;
-	bh=GYkmk8qCTCeJLO8tC4gkRcDTmGCJ6Fq6YovqQyNeMc4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s7Z5lHbGCP/2ulRL1hIUMwtIwLwQLo426JNTActtX+dc2/GhkZkUMYZfVli+LRf/i
-	 4O3RAcTPZtKBHHPXaH4CqHeuufwE9kAmmGkGRRuy7GHZfZ1icIjYEwVkqnTvGJ0GbT
-	 B/zoymBCtjuKGcu5TeTLuEEtpr8jj2UvHSoqEmxBPKYZvzl2zeqouvs6q8rxAd+WnH
-	 BPgFcecgSeez7WNBNfcUEn1wlZhuoYZFwGKntv120VOI8y8CVgRGoFEUY9i0Lo7BJl
-	 XGWKjB0K/iPP0liiDJSoyu7UXaxP9IZRj7p2qsXAc9c8sGWvLiSn1Zg59K4A5mpO+L
-	 4aQ2SNI9gV4zw==
-Date: Wed, 8 Nov 2023 10:23:11 -0500
-From: Simon Horman <horms@kernel.org>
-To: Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>
-Cc: "wg@grandegger.com" <wg@grandegger.com>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mkl@pengutronix.de" <mkl@pengutronix.de>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"edumazet@google.com" <edumazet@google.com>,
-	"pabeni@redhat.com" <pabeni@redhat.com>
-Subject: Re: [PATCH v8 2/2] can: esd: add support for esd GmbH PCIe/402 CAN
- interface family
-Message-ID: <20231108152311.GD173253@kernel.org>
-References: <20231025141635.1459606-1-stefan.maetje@esd.eu>
- <20231025141635.1459606-3-stefan.maetje@esd.eu>
- <20231103164839.GA714036@kernel.org>
- <1a1d0f4257cd980c58b6e2f83e2456dde5fe9441.camel@esd.eu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CECF21DFE6;
+	Mon, 13 Nov 2023 13:15:08 +0000 (UTC)
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1321724;
+	Mon, 13 Nov 2023 05:15:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=LXUE+NRJxfmQxSGL92CBp/7fv64YpQIfIHH8AJk7NIA=; b=j2mVapa+fuMRPKpx0I5LN6ok1E
+	V1TJQIk3FjGO5c1aaucbv1v/YqnSQ/Qsf5/T4WGM7lEKtOvkvMudCOTic37AQrPEq0mo0Gycqe5Wx
+	XB7NLNvZDFXpo77PWJUuJtjqMWEIl3nJpamgp5RdWsH3BUQxwle18CSB1GE3FHtA8WTWDx8V5T5v4
+	pWvADXzdY65XWmDiFVRShxWGB18E7Yj0KkbMHdPVuRGsMYFAJQgkvt5Ynpxu0ZP/gQij66TkDQ+s3
+	NuZQodpk45jCuHWtxjLPIQQ6v/emTDVHm22M7XKPMo0LMPt7RWoZ+joQHt1o1P/GkrmSNK3+3zImN
+	IRvDtCzA==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <martin@geanix.com>)
+	id 1r2WmF-0007GW-Gj; Mon, 13 Nov 2023 14:14:55 +0100
+Received: from [185.17.218.86] (helo=zen..)
+	by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <martin@geanix.com>)
+	id 1r2WmE-000XPJ-UJ; Mon, 13 Nov 2023 14:14:54 +0100
+From: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+To: linux-can@vger.kernel.org,
+	devicetree@vger.kernel.org
+Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+Subject: [PATCH v3 0/3] can: tcan4x5x: support resume upon rx can frame
+Date: Mon, 13 Nov 2023 14:14:49 +0100
+Message-ID: <20231113131452.214961-1-martin@geanix.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1a1d0f4257cd980c58b6e2f83e2456dde5fe9441.camel@esd.eu>
+X-Authenticated-Sender: martin@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27092/Mon Nov 13 09:38:20 2023)
 
-On Tue, Nov 07, 2023 at 01:27:34PM +0000, Stefan Mätje wrote:
-> Am Freitag, dem 03.11.2023 um 16:48 +0000 schrieb Simon Horman:
-> > On Wed, Oct 25, 2023 at 04:16:35PM +0200, Stefan Mätje wrote:
-> > > This patch adds support for the PCI based PCIe/402 CAN interface family
-> > > from esd GmbH that is available with various form factors
-> > > (https://esd.eu/en/products/402-series-can-interfaces).
-> > > 
-> > > All boards utilize a FPGA based CAN controller solution developed
-> > > by esd (esdACC). For more information on the esdACC see
-> > > https://esd.eu/en/products/esdacc.
-> > > 
-> > > This driver detects all available CAN interface board variants of
-> > > the family but atm. operates the CAN-FD capable devices in
-> > > Classic-CAN mode only! A later patch will introduce the CAN-FD
-> > > functionality in this driver.
-> > > 
-> > > Co-developed-by: Thomas Körper <thomas.koerper@esd.eu>
-> > > Signed-off-by: Thomas Körper <thomas.koerper@esd.eu>
-> > > Signed-off-by: Stefan Mätje <stefan.maetje@esd.eu>
-> > 
-> > ...
-> > 
-> > > +static int pci402_probe(struct pci_dev *pdev, const struct pci_device_id
-> > > *ent)
-> > > +{
-> > > +       struct pci402_card *card = NULL;
-> > > +       int err;
-> > > +
-> > > +       err = pci_enable_device(pdev);
-> > > +       if (err)
-> > > +               return err;
-> > > +
-> > > +       card = devm_kzalloc(&pdev->dev, sizeof(*card), GFP_KERNEL);
-> > > +       if (!card)
-> > 
-> > Hi Thomas and Stefan,
-> > 
-> > If this condition is met then the function will return err,
-> > but err is set to 0. Perhaps it should be set to an error value here?
-> > 
-> > Flagged by Smatch.
-> 
-> Hi Simon,
-> 
-> thank you for reviewing this. Looking at the code it is apparently wrong.
-> 
-> I was not aware of smatch. I got a copy and could reproduce the error report.
-> This will add another tool of static code analysis to my release routine.
-> 
-> An upgraded patch with a fix will follow.
+This is the third iteration of the previous submitted patches [0] and
+[1].
 
-Thanks Stefan, that sounds good to me on both counts.
+This revision replaces the "wake_source" function parameters to a flag
+in the class device structure, and adds a patch to document the
+"wakeup-source" device tree property.
 
-...
+Also, the previous revisions forgot to mention that the patches are
+based on Markus' coalescing patches[2]. Those implements caching of the
+enabled interrupts, which is handy when restoring the set of interrupts
+in the resume path.
+
+[0] https://lore.kernel.org/linux-can/20230912093807.1383720-1-martin@geanix.com/
+[1] https://lore.kernel.org/linux-can/20230919122841.3803289-1-martin@geanix.com/
+[2] https://lore.kernel.org/linux-can/20230929141304.3934380-1-msp@baylibre.com/
+
+Martin Hundebøll (3):
+  can: m_can: allow keeping the transceiver running in suspend
+  can: tcan4x5x: support resuming from rx interrupt signal
+  dt-bindings: can: tcan4x5x: Document the wakeup-source flag
+
+ .../devicetree/bindings/net/can/tcan4x5x.txt  |  3 ++
+ drivers/net/can/m_can/m_can.c                 | 22 ++++++++++---
+ drivers/net/can/m_can/m_can.h                 |  1 +
+ drivers/net/can/m_can/m_can_pci.c             |  1 +
+ drivers/net/can/m_can/m_can_platform.c        |  1 +
+ drivers/net/can/m_can/tcan4x5x-core.c         | 33 ++++++++++++++++++-
+ 6 files changed, 55 insertions(+), 6 deletions(-)
+
+-- 
+2.42.0
+
 
