@@ -1,200 +1,90 @@
-Return-Path: <linux-can+bounces-20-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-21-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C66CC7EADC7
-	for <lists+linux-can@lfdr.de>; Tue, 14 Nov 2023 11:16:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 827C47EBC6A
+	for <lists+linux-can@lfdr.de>; Wed, 15 Nov 2023 04:54:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 033931C20A80
-	for <lists+linux-can@lfdr.de>; Tue, 14 Nov 2023 10:16:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29DAC1F260A6
+	for <lists+linux-can@lfdr.de>; Wed, 15 Nov 2023 03:54:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EAD91863F;
-	Tue, 14 Nov 2023 10:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="1VLhXwj3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25707A55;
+	Wed, 15 Nov 2023 03:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-can@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DB316412
-	for <linux-can@vger.kernel.org>; Tue, 14 Nov 2023 10:16:05 +0000 (UTC)
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419E4D59
-	for <linux-can@vger.kernel.org>; Tue, 14 Nov 2023 02:16:02 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2c72e275d96so73003141fa.2
-        for <linux-can@vger.kernel.org>; Tue, 14 Nov 2023 02:16:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1699956960; x=1700561760; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=S66K1VSLqdDY4G6GRPiKeVmO5YV98+bwwbj3xy8sc9k=;
-        b=1VLhXwj3EOIruxOGDfwi8mkuNo8DbIUZ3e99bnBOXkKkB5GYKKcjnHn/0oHrNF1Uua
-         T4NPzbQT2MS4AuVz8rdMQ0nwnExhXM+JFcKz5NAoCP7VP8HkaKsphJbG4bMg4A4NdP5/
-         2hnS0GUjU4MsBpWLl3v63vfoRvVpqbIR3K/DFUukONZY4VHWUx5ffzcpCimC4EdVcoiQ
-         /xs2l+bvQ0WiHQFnOAh0/wsvpQUSBmGz5VVHm4gcxhYHY0nUefMdh5ka/X4Lq4y8iA8G
-         v1NbzzEp4OwURej0XOxm1qcrEYY7XuflA0CmEJKTuAtTz8LGtjEMc7CsBOpVLVrxO07/
-         55Gw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CD964C
+	for <linux-can@vger.kernel.org>; Wed, 15 Nov 2023 03:54:07 +0000 (UTC)
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79108C3
+	for <linux-can@vger.kernel.org>; Tue, 14 Nov 2023 19:54:06 -0800 (PST)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-5c1b9860846so1472167a12.2
+        for <linux-can@vger.kernel.org>; Tue, 14 Nov 2023 19:54:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699956960; x=1700561760;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1700020446; x=1700625246;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S66K1VSLqdDY4G6GRPiKeVmO5YV98+bwwbj3xy8sc9k=;
-        b=PsLKULa0pn07A3tovwMgtPbQuj/ixs041KAeKZPK3Pc3mEM81fear5zaeECXLRJbHC
-         sPuTZFj5/or5Qu3GYZrc2VJDff9BxaWxSb3FaqJdtcoGaaW8xQMiFvewLIV3Bavih37/
-         i35aH46EDLXKeQ6ck0+ErGr1xWSjyvM5EwJPwUTooIrxsnpMsrIaVvmcNjs28KsmYBSD
-         hTlzXkJu5g8wVAolcqE3SbQoYX1IrQGi7pCBgPik0jJRkyFiuma9PgDghGC3nMKgn1cr
-         Cl5cg0tWK4IKBWE/Au1xuou920FtW1pcB2FmAs4fcfcrikiyXaQPxW0p5/1WyhUm8+sL
-         1yHQ==
-X-Gm-Message-State: AOJu0YwufhGyTYLSMrZPK4h8cTS3M5sk8IojUS5XdLvp5jfT6gDNjWAF
-	9eAtcJyI3/xxhk3m8zcDB9La6w==
-X-Google-Smtp-Source: AGHT+IFpFePXPUj6r47XrvY+6vIyAtnVXiV3+sXFtpZsCWqUCGTVFu8vWiDXyJWPzaMTzGRi0imnzg==
-X-Received: by 2002:a2e:9d03:0:b0:2c5:2df8:d321 with SMTP id t3-20020a2e9d03000000b002c52df8d321mr1319633lji.36.1699956960430;
-        Tue, 14 Nov 2023 02:16:00 -0800 (PST)
-Received: from blmsp ([2001:4091:a246:821e:4988:9c5:5b9:1020])
-        by smtp.gmail.com with ESMTPSA id v14-20020a05600c470e00b0040a47091602sm13109300wmo.31.2023.11.14.02.15.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Nov 2023 02:16:00 -0800 (PST)
-Date: Tue, 14 Nov 2023 11:15:59 +0100
-From: Markus Schneider-Pargmann <msp@baylibre.com>
-To: Martin =?utf-8?Q?Hundeb=C3=B8ll?= <martin@geanix.com>
-Cc: linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-	Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH v3 2/3] can: tcan4x5x: support resuming from rx interrupt
- signal
-Message-ID: <20231114101559.5wqnhdmklarr3lgv@blmsp>
-References: <20231113131452.214961-1-martin@geanix.com>
- <20231113131452.214961-3-martin@geanix.com>
+        bh=l61plfqF5nHarfz7jpK6i+deFeBGlZF1Gciyjaej1pU=;
+        b=qMFdEUj3t9RddVByCz2zYJCqtCn3oAErujOJcO/dj/20gmUEBW2i7C3vnuZWKaca+M
+         b6EoJcvQ1rgkd8/u3msfHk1Th8NfbCJmaKbrU6Ot0y5PnDABTM8ymkHiTsCDyIQx4uKr
+         PWFgxKZtwqi1mAs2f+9y0tX1KLyZkVCX6MCeFtQZBAK7xRhDueM2Yh7tdIqZlYbTNjLX
+         J7GiX1geSbC2QATks0PVL4kj4VUiRha2gVsq6OFwXZnYntaRitU8/Q2Gaxnp3F1zHicL
+         S+JRhKQaP4IYl/LVspKTwX+V8rMDjcmRi21drcdCe8FSwjFaVeINXuM6C41RPm6pOD2M
+         Uofw==
+X-Gm-Message-State: AOJu0YwiO4wU14/juiGGwJiYMd+nHknVzqAz/vRzUNzmckeHte4kszpE
+	iC36Nygt6qFQsvev3iLH2Afyhq9D8V4+dKO64ZkVdh6dtMfD
+X-Google-Smtp-Source: AGHT+IF7oCUwCwgZD8xczyFHrZBrkFObiOTryGSeBv2U1eTP1+U0YLkF1/pd5Ws0MaLMfr04sNagBgqsvJlTEqQVYDltsdAuSXeY
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231113131452.214961-3-martin@geanix.com>
+X-Received: by 2002:a65:40c3:0:b0:5b9:63f2:e4cc with SMTP id
+ u3-20020a6540c3000000b005b963f2e4ccmr1080000pgp.2.1700020446008; Tue, 14 Nov
+ 2023 19:54:06 -0800 (PST)
+Date: Tue, 14 Nov 2023 19:54:05 -0800
+In-Reply-To: <0000000000008981d905ffa345de@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cb9c3d060a28dad8@google.com>
+Subject: Re: [syzbot] [can?] possible deadlock in j1939_sk_errqueue (2)
+From: syzbot <syzbot+1591462f226d9cbf0564@syzkaller.appspotmail.com>
+To: arnd@arndb.de, astrajoan@yahoo.com, bridge@lists.linux-foundation.org, 
+	davem@davemloft.net, dvyukov@google.com, edumazet@google.com, 
+	hdanton@sina.com, ivan.orlov0322@gmail.com, kernel@pengutronix.de, 
+	kuba@kernel.org, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux@rempel-privat.de, mkl@pengutronix.de, mudongliangabcd@gmail.com, 
+	netdev@vger.kernel.org, nikolay@nvidia.com, o.rempel@pengutronix.de, 
+	pabeni@redhat.com, robin@protonic.nl, roopa@nvidia.com, 
+	skhan@linuxfoundation.org, socketcan@hartkopp.net, stephen@networkplumber.org, 
+	syzkaller-bugs@googlegroups.com, syzkaller@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Martin,
+syzbot has bisected this issue to:
 
-On Mon, Nov 13, 2023 at 02:14:51PM +0100, Martin Hundebøll wrote:
-> Implement the "wakeup-source" device tree property, so the chip is left
-> running when suspending, and its rx interrupt is used as a wakeup source
-> to resume operation.
-> 
-> Signed-off-by: Martin Hundebøll <martin@geanix.com>
-> ---
-> 
-> Change in v3:
->  * Updated to use the property in struct m_can_classdev instead of
->    passing parameters to suspend/resume functions.
-> 
-> Change in v2:
->  * Added `static` keyword to dev_pm_ops sturcture
-> 
->  drivers/net/can/m_can/tcan4x5x-core.c | 34 +++++++++++++++++++++++++--
->  1 file changed, 32 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
-> index 870ab4aef610..0f4c2ac7e4f6 100644
-> --- a/drivers/net/can/m_can/tcan4x5x-core.c
-> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
-> @@ -411,7 +411,7 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
->  	priv->spi = spi;
->  
->  	mcan_class->pm_clock_support = 0;
-> -	mcan_class->pm_wake_source = 0;
-> +	mcan_class->pm_wake_source = device_property_read_bool(&spi->dev, "wakeup-source");
->  	mcan_class->can.clock.freq = freq;
->  	mcan_class->dev = &spi->dev;
->  	mcan_class->ops = &tcan4x5x_ops;
-> @@ -460,6 +460,9 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
->  		goto out_power;
->  	}
->  
-> +	if (mcan_class->pm_wake_source)
-> +		device_init_wakeup(&spi->dev, true);
-> +
+commit 2030043e616cab40f510299f09b636285e0a3678
+Author: Oleksij Rempel <o.rempel@pengutronix.de>
+Date:   Fri May 21 11:57:20 2021 +0000
 
-You are automatically enabling the device for wakeup here.
+    can: j1939: fix Use-after-Free, hold skb ref while in use
 
-What do you think about using ethtool's wake-on-lan settings to actually
-enable tcan as a wakeup source? So the devicetree would describe if the
-hardware is capable of wakeups and the software (ethtool) can be used by
-the user to decide if CAN wakeups should be enabled.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1438c947680000
+start commit:   1b907d050735 Merge tag '6.7-rc-smb3-client-fixes-part2' of..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1638c947680000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1238c947680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=88e7ba51eecd9cd6
+dashboard link: https://syzkaller.appspot.com/bug?extid=1591462f226d9cbf0564
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17fea8fb680000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1633dc70e80000
 
-I am currently working on something similar for m_can, where m_can can
-be the wakeup source from very deep sleep states. However I can't keep
-the wakeup source always enabled. So this is a kind of a conflict for me
-in this patch. Also I would need to use the wakeup-source flag in m_can
-device nodes as well.
+Reported-by: syzbot+1591462f226d9cbf0564@syzkaller.appspotmail.com
+Fixes: 2030043e616c ("can: j1939: fix Use-after-Free, hold skb ref while in use")
 
-I can share my work later as well, so we can find a good solution that
-works in both cases.
-
-Best,
-Markus
-
->  	ret = m_can_class_register(mcan_class);
->  	if (ret) {
->  		dev_err(&spi->dev, "Failed registering m_can device %pe\n",
-> @@ -488,6 +491,29 @@ static void tcan4x5x_can_remove(struct spi_device *spi)
->  	m_can_class_free_dev(priv->cdev.net);
->  }
->  
-> +static int __maybe_unused tcan4x5x_suspend(struct device *dev)
-> +{
-> +	struct m_can_classdev *cdev = dev_get_drvdata(dev);
-> +	struct spi_device *spi = to_spi_device(dev);
-> +
-> +	if (cdev->pm_wake_source)
-> +		enable_irq_wake(spi->irq);
-> +
-> +	return m_can_class_suspend(dev);
-> +}
-> +
-> +static int __maybe_unused tcan4x5x_resume(struct device *dev)
-> +{
-> +	struct m_can_classdev *cdev = dev_get_drvdata(dev);
-> +	struct spi_device *spi = to_spi_device(dev);
-> +	int ret = m_can_class_resume(dev);
-> +
-> +	if (cdev->pm_wake_source)
-> +		disable_irq_wake(spi->irq);
-> +
-> +	return ret;
-> +}
-> +
->  static const struct of_device_id tcan4x5x_of_match[] = {
->  	{
->  		.compatible = "ti,tcan4x5x",
-> @@ -506,11 +532,15 @@ static const struct spi_device_id tcan4x5x_id_table[] = {
->  };
->  MODULE_DEVICE_TABLE(spi, tcan4x5x_id_table);
->  
-> +static const struct dev_pm_ops tcan4x5x_pm_ops = {
-> +	SET_SYSTEM_SLEEP_PM_OPS(tcan4x5x_suspend, tcan4x5x_resume)
-> +};
-> +
->  static struct spi_driver tcan4x5x_can_driver = {
->  	.driver = {
->  		.name = KBUILD_MODNAME,
->  		.of_match_table = tcan4x5x_of_match,
-> -		.pm = NULL,
-> +		.pm = &tcan4x5x_pm_ops,
->  	},
->  	.id_table = tcan4x5x_id_table,
->  	.probe = tcan4x5x_can_probe,
-> -- 
-> 2.42.0
-> 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
