@@ -1,90 +1,220 @@
-Return-Path: <linux-can+bounces-21-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-22-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 827C47EBC6A
-	for <lists+linux-can@lfdr.de>; Wed, 15 Nov 2023 04:54:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 368EC7ED52E
+	for <lists+linux-can@lfdr.de>; Wed, 15 Nov 2023 22:01:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29DAC1F260A6
-	for <lists+linux-can@lfdr.de>; Wed, 15 Nov 2023 03:54:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2014280E8C
+	for <lists+linux-can@lfdr.de>; Wed, 15 Nov 2023 21:01:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25707A55;
-	Wed, 15 Nov 2023 03:54:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6D07381A5;
+	Wed, 15 Nov 2023 21:01:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-can@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CD964C
-	for <linux-can@vger.kernel.org>; Wed, 15 Nov 2023 03:54:07 +0000 (UTC)
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79108C3
-	for <linux-can@vger.kernel.org>; Tue, 14 Nov 2023 19:54:06 -0800 (PST)
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-5c1b9860846so1472167a12.2
-        for <linux-can@vger.kernel.org>; Tue, 14 Nov 2023 19:54:06 -0800 (PST)
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E4CD79;
+	Wed, 15 Nov 2023 13:01:34 -0800 (PST)
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5869914484fso66072eaf.0;
+        Wed, 15 Nov 2023 13:01:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700020446; x=1700625246;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l61plfqF5nHarfz7jpK6i+deFeBGlZF1Gciyjaej1pU=;
-        b=qMFdEUj3t9RddVByCz2zYJCqtCn3oAErujOJcO/dj/20gmUEBW2i7C3vnuZWKaca+M
-         b6EoJcvQ1rgkd8/u3msfHk1Th8NfbCJmaKbrU6Ot0y5PnDABTM8ymkHiTsCDyIQx4uKr
-         PWFgxKZtwqi1mAs2f+9y0tX1KLyZkVCX6MCeFtQZBAK7xRhDueM2Yh7tdIqZlYbTNjLX
-         J7GiX1geSbC2QATks0PVL4kj4VUiRha2gVsq6OFwXZnYntaRitU8/Q2Gaxnp3F1zHicL
-         S+JRhKQaP4IYl/LVspKTwX+V8rMDjcmRi21drcdCe8FSwjFaVeINXuM6C41RPm6pOD2M
-         Uofw==
-X-Gm-Message-State: AOJu0YwiO4wU14/juiGGwJiYMd+nHknVzqAz/vRzUNzmckeHte4kszpE
-	iC36Nygt6qFQsvev3iLH2Afyhq9D8V4+dKO64ZkVdh6dtMfD
-X-Google-Smtp-Source: AGHT+IF7oCUwCwgZD8xczyFHrZBrkFObiOTryGSeBv2U1eTP1+U0YLkF1/pd5Ws0MaLMfr04sNagBgqsvJlTEqQVYDltsdAuSXeY
+        d=1e100.net; s=20230601; t=1700082094; x=1700686894;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Duhiu363zZXggZ2tT9xIehHJIKV7YXtPT/E+W7lu59o=;
+        b=X+FOlwkhkepXg0QMxwUliO87bV2PrfEsIJyNdzTqkZqMwC7cfXK/Da1mJnu3qNNPet
+         nFKNHg6rwYanRYUH0oYYn9obP2NEBB/XtU4PPKrJ3E+ZOiaS7OGdJuoBeZ6/A74j1QaN
+         vK0Nlq+61ZzJTRP8uWmBSoM8xp9BdE+BOKcK1gfTcJqCmzW945NUyJ3meElF8jkIxAHL
+         Zkq7+g5az9QixsKACOWKZdY+uoWADHLUXG/RzfiNBCS1uayTjvKQuYi8q/AWmUwTWsfq
+         sIzkC55ZJ7p1ezxLnkjfpyxeoZVSjk9Mz6EIY7bSVcefPXuWIFunMbQPleXDCfqyEEYO
+         V2Sg==
+X-Gm-Message-State: AOJu0YzuoyGg7z6DLw3dTMBBgJnEaM3de9oa2okjn6mLtX9jrNIewBgE
+	lKUzDZQGzJvpwHZJQ5xn9Q==
+X-Google-Smtp-Source: AGHT+IFPPnhO39v8qSE2EKT/HxIVWh6OStRmuQ0hHy6sDMZSxY8Jttc7oJW7BQ2s36jYm/8+/W5SXQ==
+X-Received: by 2002:a4a:3457:0:b0:56c:d297:164c with SMTP id n23-20020a4a3457000000b0056cd297164cmr13317917oof.4.1700082094065;
+        Wed, 15 Nov 2023 13:01:34 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 123-20020a4a0081000000b00584078d1e17sm826254ooh.45.2023.11.15.13.01.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Nov 2023 13:01:33 -0800 (PST)
+Received: (nullmailer pid 3740022 invoked by uid 1000);
+	Wed, 15 Nov 2023 21:01:32 -0000
+From: Rob Herring <robh@kernel.org>
+To: Wolfgang Grandegger <wg@grandegger.com>, Marc Kleine-Budde <mkl@pengutronix.de>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>, Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>, Michal Simek <michal.simek@amd.com>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [RESEND PATCH] net: can: Use device_get_match_data()
+Date: Wed, 15 Nov 2023 15:01:28 -0600
+Message-ID: <20231115210129.3739377-1-robh@kernel.org>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a65:40c3:0:b0:5b9:63f2:e4cc with SMTP id
- u3-20020a6540c3000000b005b963f2e4ccmr1080000pgp.2.1700020446008; Tue, 14 Nov
- 2023 19:54:06 -0800 (PST)
-Date: Tue, 14 Nov 2023 19:54:05 -0800
-In-Reply-To: <0000000000008981d905ffa345de@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cb9c3d060a28dad8@google.com>
-Subject: Re: [syzbot] [can?] possible deadlock in j1939_sk_errqueue (2)
-From: syzbot <syzbot+1591462f226d9cbf0564@syzkaller.appspotmail.com>
-To: arnd@arndb.de, astrajoan@yahoo.com, bridge@lists.linux-foundation.org, 
-	davem@davemloft.net, dvyukov@google.com, edumazet@google.com, 
-	hdanton@sina.com, ivan.orlov0322@gmail.com, kernel@pengutronix.de, 
-	kuba@kernel.org, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux@rempel-privat.de, mkl@pengutronix.de, mudongliangabcd@gmail.com, 
-	netdev@vger.kernel.org, nikolay@nvidia.com, o.rempel@pengutronix.de, 
-	pabeni@redhat.com, robin@protonic.nl, roopa@nvidia.com, 
-	skhan@linuxfoundation.org, socketcan@hartkopp.net, stephen@networkplumber.org, 
-	syzkaller-bugs@googlegroups.com, syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-syzbot has bisected this issue to:
+Use preferred device_get_match_data() instead of of_match_device() to
+get the driver match data. With this, adjust the includes to explicitly
+include the correct headers.
 
-commit 2030043e616cab40f510299f09b636285e0a3678
-Author: Oleksij Rempel <o.rempel@pengutronix.de>
-Date:   Fri May 21 11:57:20 2021 +0000
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/net/can/c_can/c_can_platform.c | 9 +++------
+ drivers/net/can/flexcan/flexcan-core.c | 9 +++------
+ drivers/net/can/mscan/mpc5xxx_can.c    | 8 ++++----
+ drivers/net/can/xilinx_can.c           | 7 ++-----
+ 4 files changed, 12 insertions(+), 21 deletions(-)
 
-    can: j1939: fix Use-after-Free, hold skb ref while in use
+diff --git a/drivers/net/can/c_can/c_can_platform.c b/drivers/net/can/c_can/c_can_platform.c
+index f44ba2600415..caa781018b09 100644
+--- a/drivers/net/can/c_can/c_can_platform.c
++++ b/drivers/net/can/c_can/c_can_platform.c
+@@ -30,9 +30,9 @@
+ #include <linux/io.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
++#include <linux/property.h>
+ #include <linux/clk.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/regmap.h>
+ 
+@@ -259,17 +259,14 @@ static int c_can_plat_probe(struct platform_device *pdev)
+ 	void __iomem *addr;
+ 	struct net_device *dev;
+ 	struct c_can_priv *priv;
+-	const struct of_device_id *match;
+ 	struct resource *mem;
+ 	int irq;
+ 	struct clk *clk;
+ 	const struct c_can_driver_data *drvdata;
+ 	struct device_node *np = pdev->dev.of_node;
+ 
+-	match = of_match_device(c_can_of_table, &pdev->dev);
+-	if (match) {
+-		drvdata = match->data;
+-	} else if (pdev->id_entry->driver_data) {
++	drvdata = device_get_match_data(&pdev->dev);
++	if (!drvdata && pdev->id_entry->driver_data) {
+ 		drvdata = (struct c_can_driver_data *)
+ 			platform_get_device_id(pdev)->driver_data;
+ 	} else {
+diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
+index d15f85a40c1e..19ea7ebc04ab 100644
+--- a/drivers/net/can/flexcan/flexcan-core.c
++++ b/drivers/net/can/flexcan/flexcan-core.c
+@@ -23,11 +23,11 @@
+ #include <linux/module.h>
+ #include <linux/netdevice.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/platform_device.h>
+ #include <linux/can/platform/flexcan.h>
+ #include <linux/pm_runtime.h>
++#include <linux/property.h>
+ #include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
+ 
+@@ -2034,7 +2034,6 @@ MODULE_DEVICE_TABLE(platform, flexcan_id_table);
+ 
+ static int flexcan_probe(struct platform_device *pdev)
+ {
+-	const struct of_device_id *of_id;
+ 	const struct flexcan_devtype_data *devtype_data;
+ 	struct net_device *dev;
+ 	struct flexcan_priv *priv;
+@@ -2090,10 +2089,8 @@ static int flexcan_probe(struct platform_device *pdev)
+ 	if (IS_ERR(regs))
+ 		return PTR_ERR(regs);
+ 
+-	of_id = of_match_device(flexcan_of_match, &pdev->dev);
+-	if (of_id)
+-		devtype_data = of_id->data;
+-	else if (platform_get_device_id(pdev)->driver_data)
++	devtype_data = device_get_match_data(&pdev->dev);
++	if (!devtype_data && pdev->id_entry->driver_data)
+ 		devtype_data = (struct flexcan_devtype_data *)
+ 			platform_get_device_id(pdev)->driver_data;
+ 	else
+diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
+index 4837df6efa92..5b3d69c3b6b6 100644
+--- a/drivers/net/can/mscan/mpc5xxx_can.c
++++ b/drivers/net/can/mscan/mpc5xxx_can.c
+@@ -12,8 +12,10 @@
+ #include <linux/module.h>
+ #include <linux/interrupt.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/netdevice.h>
+ #include <linux/can/dev.h>
++#include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/of_platform.h>
+@@ -290,7 +292,7 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
+ 	int irq, mscan_clksrc = 0;
+ 	int err = -ENOMEM;
+ 
+-	data = of_device_get_match_data(&ofdev->dev);
++	data = device_get_match_data(&ofdev->dev);
+ 	if (!data)
+ 		return -EINVAL;
+ 
+@@ -351,13 +353,11 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
+ 
+ static void mpc5xxx_can_remove(struct platform_device *ofdev)
+ {
+-	const struct of_device_id *match;
+ 	const struct mpc5xxx_can_data *data;
+ 	struct net_device *dev = platform_get_drvdata(ofdev);
+ 	struct mscan_priv *priv = netdev_priv(dev);
+ 
+-	match = of_match_device(mpc5xxx_can_table, &ofdev->dev);
+-	data = match ? match->data : NULL;
++	data = device_get_match_data(&ofdev->dev);
+ 
+ 	unregister_mscandev(dev);
+ 	if (data && data->put_clock)
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index abe58f103043..f17fd43d03c0 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -20,8 +20,8 @@
+ #include <linux/module.h>
+ #include <linux/netdevice.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/skbuff.h>
+ #include <linux/spinlock.h>
+ #include <linux/string.h>
+@@ -1726,7 +1726,6 @@ static int xcan_probe(struct platform_device *pdev)
+ 	struct net_device *ndev;
+ 	struct xcan_priv *priv;
+ 	struct phy *transceiver;
+-	const struct of_device_id *of_id;
+ 	const struct xcan_devtype_data *devtype = &xcan_axi_data;
+ 	void __iomem *addr;
+ 	int ret;
+@@ -1741,9 +1740,7 @@ static int xcan_probe(struct platform_device *pdev)
+ 		goto err;
+ 	}
+ 
+-	of_id = of_match_device(xcan_of_match, &pdev->dev);
+-	if (of_id && of_id->data)
+-		devtype = of_id->data;
++	devtype = device_get_match_data(&pdev->dev);
+ 
+ 	hw_tx_max_property = devtype->flags & XCAN_FLAG_TX_MAILBOXES ?
+ 			     "tx-mailbox-count" : "tx-fifo-depth";
+-- 
+2.42.0
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1438c947680000
-start commit:   1b907d050735 Merge tag '6.7-rc-smb3-client-fixes-part2' of..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1638c947680000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1238c947680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=88e7ba51eecd9cd6
-dashboard link: https://syzkaller.appspot.com/bug?extid=1591462f226d9cbf0564
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17fea8fb680000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1633dc70e80000
-
-Reported-by: syzbot+1591462f226d9cbf0564@syzkaller.appspotmail.com
-Fixes: 2030043e616c ("can: j1939: fix Use-after-Free, hold skb ref while in use")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
