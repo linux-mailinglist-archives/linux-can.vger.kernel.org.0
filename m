@@ -1,70 +1,92 @@
-Return-Path: <linux-can+bounces-33-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-34-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 478EB7F1334
-	for <lists+linux-can@lfdr.de>; Mon, 20 Nov 2023 13:25:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E70D7F15CA
+	for <lists+linux-can@lfdr.de>; Mon, 20 Nov 2023 15:35:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC0F5B21127
-	for <lists+linux-can@lfdr.de>; Mon, 20 Nov 2023 12:25:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3003B219F2
+	for <lists+linux-can@lfdr.de>; Mon, 20 Nov 2023 14:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A7DE19BC0;
-	Mon, 20 Nov 2023 12:25:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61E761B277;
+	Mon, 20 Nov 2023 14:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-can@vger.kernel.org
-X-Greylist: delayed 1247 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Nov 2023 04:25:43 PST
-Received: from GHMG01.great-harvest.local (mail.great-harvest.com.hk [202.82.82.2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73DDE5
-	for <linux-can@vger.kernel.org>; Mon, 20 Nov 2023 04:25:43 -0800 (PST)
-X-AuditID: c0a80a26-927612400000462b-bc-655b2a435aa3
-Received: from [194.26.192.108] (194.26.192.108.powered.by.rdp.sh [194.26.192.108])
-	(using TLS with cipher DHE-RSA-AES256-SHA (256/256 bits))
-	(Client did not present a certificate)
-	by GHMG01.great-harvest.local (Symantec Messaging Gateway) with SMTP id 87.90.17963.34A2B556; Mon, 20 Nov 2023 17:43:32 +0800 (HKT)
-Content-Type: text/plain; charset="iso-8859-1"
-Message-ID: <87.90.17963.34A2B556@GHMG01.great-harvest.local>
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677C1139
+	for <linux-can@vger.kernel.org>; Mon, 20 Nov 2023 06:35:21 -0800 (PST)
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-5be39ccc2e9so5958606a12.3
+        for <linux-can@vger.kernel.org>; Mon, 20 Nov 2023 06:35:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700490921; x=1701095721;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l7LnU8RknCJWsPsqm7RXDpRlRmyk9PFdTymemdD1BB0=;
+        b=Cm18fdx8Py2eg+xSihQaYflFuxAiPsHo4aQ3+LD1/4Smri8hX0KaIklmFvQoCMUJ08
+         mCVu3goRZgyu0gi33ahSR35FbrJsnoLC54n1SBsLM0jpnieivXTWW7CYr2dql24ZXO6S
+         ULzV0r/2JifQdhCqEw8TGa5wKzTXi/oOHU7XRq7r3bZRmjFIbfN5TlpX50ysJ5CHCZLU
+         uZgxVHrOa5SOnFmf3o3PU6LEBUlLUYAu6zJRZ+r1kMwgMfUXe5CGMHCYVgmZdxrI0e5h
+         VUYkh+aJp2sZjt+os1RenwfA//6+5RvUawUxti0B0s+CFA9qTnIoMTHksqpjmAtXHZmy
+         WRtg==
+X-Gm-Message-State: AOJu0YwhT9aa0ujc3zN/5OfQCGqkcUP369yDh20gcegdL/AdSA3sOhb9
+	98ZHObJI5R3ytvgNqVT3Mdldfi/DDm/B7gPasWw1KRGVtIGa
+X-Google-Smtp-Source: AGHT+IEzo56JbmoqVwXpNg8mySCpYTtfjo3yW4Qe9XqQZVtkbrSYD8LRgMtcpz+jO1iIYLRpugHW71s2+YOd//5V4KN6QrJvxIwu
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Investment Expression of Interest (IEOI)
-To: linux-can@vger.kernel.org
-From: "Ramadan Ahmad" <Ahmadramcfa03@pobox.com>
-Date: Mon, 20 Nov 2023 10:43:30 +0100
-Reply-To: finance@almnadrinvestment.com
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFJMWRmVeSWpSXmKPExsVySOpAjq6LVnSqwaLZHBarvk9ldmD0+LxJ
-	LoAxissmJTUnsyy1SN8ugSvj5eYT7AUHmCvOzTrP3MD4jqmLkZNDQsBEYtHJeWxdjFwcQgL7
-	mCS2/VgOlmAW0JO4MXUKG4jNK2ArMWXaDEYIW1Di5MwnLBA12hLLFr5m7mLkALLVJL52lYCE
-	hQUMJZ4euQpWLiIgK7Fwwx12kBI2AX2JuZvyQMIsAqoSN9fdZAexhQTUJc5PvcI0gZFnFpLF
-	s5Asm4Vk2SyEZQsYWVYxSrl7+LobGOqlF6UmluhmJBaVpRaX6OXkJyfmbGIEBs+BFVxqOxg/
-	Tvqod4iRiYPxEKMEB7OSCO83oYhUId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwBAVLxQgLpiSWp
-	2ampBalFMFkmDk6pBqaKOiejC7HG6ksfWS3a94Cj/tXHG5FhQZ8fPQ1dyBD+yzGYKcmpYLlI
-	WTwzm1jkLGmHBWw5DvK7TYwiMhY5Fy8RUnG7Z955JFr0lc799v9Pa9fISWTIG9Vt6+9e/SEr
-	UIovUaLgrOiSiRof18sEL3l49LbDzcs/pLXv7MrYZBr8PEO0THHhu4jMFI/7NaauZx/0vXk3
-	5XOoWf1U0/S3Vmc/Bpd4p3e8kPEpNZI9+1J5l8bOfy4pkc92lE7olo/58f2HVfrbiRdEzyZX
-	i7exWrNzTnEW/7RjOUftrMM7Nokyf1VQjo2TfXPz97wPS3aqb0lPaX05+adhTo5B1Tzux9KJ
-	arLGhbsbVXceueYhrsRSnJFoqMVcVJwIAGHUZAqNAgAA
-X-Spam-Level: ***
+X-Received: by 2002:a65:6897:0:b0:5c2:1816:24c5 with SMTP id
+ e23-20020a656897000000b005c2181624c5mr1598710pgt.10.1700490920919; Mon, 20
+ Nov 2023 06:35:20 -0800 (PST)
+Date: Mon, 20 Nov 2023 06:35:20 -0800
+In-Reply-To: <0000000000009393ba059691c6a3@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000490858060a96651c@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in j1939_session_get_by_addr
+From: syzbot <syzbot+d9536adc269404a984f8@syzkaller.appspotmail.com>
+To: Jose.Abreu@synopsys.com, arvid.brodin@alten.se, davem@davemloft.net, 
+	dvyukov@google.com, ilias.apalodimas@linaro.org, joabreu@synopsys.com, 
+	jose.abreu@synopsys.com, kernel@pengutronix.de, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux@rempel-privat.de, mkl@pengutronix.de, 
+	netdev@vger.kernel.org, nogikh@google.com, robin@protonic.nl, 
+	socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com, 
+	tonymarislogistics@yandex.com
+Content-Type: text/plain; charset="UTF-8"
 
-Attn: linux-can@vger.kernel.org
-Date: 20-11-2023
-Subject: Investment Expression of Interest (IEOI)
+This bug is marked as fixed by commit:
+can: j1939: transport: make sure the aborted session will be deactivated only once
 
-Dear Sir,
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-Having been referred to your investment by my team, we would be honored to =
-review your available investment projects for onward referral to my princip=
-al investors who can allocate capital for the financing of it.
+#syz fix: exact-commit-title
 
-kindly advise at your convenience
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
 
-Best Regards,
-Ramadan Ahmad CFA
-Chartered Finance Investment Analyst
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=d9536adc269404a984f8
+
+---
+[1] I expect the commit to be present in:
+
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+4. main branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+
+The full list of 9 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
 
