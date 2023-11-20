@@ -1,146 +1,70 @@
-Return-Path: <linux-can+bounces-32-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-33-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 400ED7F0672
-	for <lists+linux-can@lfdr.de>; Sun, 19 Nov 2023 14:37:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 478EB7F1334
+	for <lists+linux-can@lfdr.de>; Mon, 20 Nov 2023 13:25:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D73CC280D1D
-	for <lists+linux-can@lfdr.de>; Sun, 19 Nov 2023 13:37:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC0F5B21127
+	for <lists+linux-can@lfdr.de>; Mon, 20 Nov 2023 12:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC2B5101C9;
-	Sun, 19 Nov 2023 13:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dojdJKck"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A7DE19BC0;
+	Mon, 20 Nov 2023 12:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862CEF4F5;
-	Sun, 19 Nov 2023 13:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C3CC433C7;
-	Sun, 19 Nov 2023 13:37:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700401055;
-	bh=2fexIX8Wllal1qs9XQNtQXc+WrSDQ3whn+AUI85d1mc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dojdJKck+Y9O7k5rdfKnG08U6mBKW0yzAyatUWilOu1QJjyvkXsuWEupI2hp8nn1d
-	 ILSIVbXXXSDURd9yDkvbJ0jpPPfPjIOdO1Z/b4D4TtOxXlmNJMyqpp1CBECnyE9DNk
-	 bP2vP8DWGH1UBmdR/uwJ+sIXZ5w/2r5Z4SkHKpot8tiGD4ENOiKvcPU97OXJJEt7MC
-	 F9yNEqTW239br5FnQaCc9w5P3fLB9MD8UGRG/QzDoZL2vJv/5hztp0EToBADUcUEF3
-	 PUrkZOBbVHyniVmoYuNqJorvnpFZWKS83ynooRCViqs62zkJ/21SAjzik9nHy7BtEc
-	 2s7NkQPGEHiNA==
-Date: Sun, 19 Nov 2023 13:37:28 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Srinivas Goud <srinivas.goud@amd.com>
-Cc: wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, p.zabel@pengutronix.de, git@amd.com,
-	michal.simek@xilinx.com, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	appana.durga.rao@xilinx.com, naga.sureshkumar.relli@xilinx.com
-Subject: Re: [PATCH v5 1/3] dt-bindings: can: xilinx_can: Add 'xlnx,has-ecc'
- optional property
-Message-ID: <20231119-dotted-feast-eb01cbebde42@spud>
-References: <1700213336-652-1-git-send-email-srinivas.goud@amd.com>
- <1700213336-652-2-git-send-email-srinivas.goud@amd.com>
+X-Greylist: delayed 1247 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Nov 2023 04:25:43 PST
+Received: from GHMG01.great-harvest.local (mail.great-harvest.com.hk [202.82.82.2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73DDE5
+	for <linux-can@vger.kernel.org>; Mon, 20 Nov 2023 04:25:43 -0800 (PST)
+X-AuditID: c0a80a26-927612400000462b-bc-655b2a435aa3
+Received: from [194.26.192.108] (194.26.192.108.powered.by.rdp.sh [194.26.192.108])
+	(using TLS with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(Client did not present a certificate)
+	by GHMG01.great-harvest.local (Symantec Messaging Gateway) with SMTP id 87.90.17963.34A2B556; Mon, 20 Nov 2023 17:43:32 +0800 (HKT)
+Content-Type: text/plain; charset="iso-8859-1"
+Message-ID: <87.90.17963.34A2B556@GHMG01.great-harvest.local>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="8WwOMIKNYsPT2CWN"
-Content-Disposition: inline
-In-Reply-To: <1700213336-652-2-git-send-email-srinivas.goud@amd.com>
-
-
---8WwOMIKNYsPT2CWN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Investment Expression of Interest (IEOI)
+To: linux-can@vger.kernel.org
+From: "Ramadan Ahmad" <Ahmadramcfa03@pobox.com>
+Date: Mon, 20 Nov 2023 10:43:30 +0100
+Reply-To: finance@almnadrinvestment.com
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFJMWRmVeSWpSXmKPExsVySOpAjq6LVnSqwaLZHBarvk9ldmD0+LxJ
+	LoAxissmJTUnsyy1SN8ugSvj5eYT7AUHmCvOzTrP3MD4jqmLkZNDQsBEYtHJeWxdjFwcQgL7
+	mCS2/VgOlmAW0JO4MXUKG4jNK2ArMWXaDEYIW1Di5MwnLBA12hLLFr5m7mLkALLVJL52lYCE
+	hQUMJZ4euQpWLiIgK7Fwwx12kBI2AX2JuZvyQMIsAqoSN9fdZAexhQTUJc5PvcI0gZFnFpLF
+	s5Asm4Vk2SyEZQsYWVYxSrl7+LobGOqlF6UmluhmJBaVpRaX6OXkJyfmbGIEBs+BFVxqOxg/
+	Tvqod4iRiYPxEKMEB7OSCO83oYhUId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwBAVLxQgLpiSWp
+	2ampBalFMFkmDk6pBqaKOiejC7HG6ksfWS3a94Cj/tXHG5FhQZ8fPQ1dyBD+yzGYKcmpYLlI
+	WTwzm1jkLGmHBWw5DvK7TYwiMhY5Fy8RUnG7Z955JFr0lc799v9Pa9fISWTIG9Vt6+9e/SEr
+	UIovUaLgrOiSiRof18sEL3l49LbDzcs/pLXv7MrYZBr8PEO0THHhu4jMFI/7NaauZx/0vXk3
+	5XOoWf1U0/S3Vmc/Bpd4p3e8kPEpNZI9+1J5l8bOfy4pkc92lE7olo/58f2HVfrbiRdEzyZX
+	i7exWrNzTnEW/7RjOUftrMM7Nokyf1VQjo2TfXPz97wPS3aqb0lPaX05+adhTo5B1Tzux9KJ
+	arLGhbsbVXceueYhrsRSnJFoqMVcVJwIAGHUZAqNAgAA
+X-Spam-Level: ***
 
-On Fri, Nov 17, 2023 at 02:58:54PM +0530, Srinivas Goud wrote:
-> ECC feature added to CAN TX_OL, TX_TL and RX FIFOs of
-> Xilinx AXI CAN Controller.
-> Part of this feature configuration and counter registers added in
+Attn: linux-can@vger.kernel.org
+Date: 20-11-2023
+Subject: Investment Expression of Interest (IEOI)
 
-"ECC is an IP configuration option where counter registers are added..."
-The sentence is hard to parse for the important bit of information - the
-justification for this being a property rather than based on compatible
-or autodetectable based on some IP version etc.
+Dear Sir,
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Having been referred to your investment by my team, we would be honored to =
+review your available investment projects for onward referral to my princip=
+al investors who can allocate capital for the financing of it.
 
-Cheers,
-Conor.
+kindly advise at your convenience
 
-> IP for 1bit/2bit ECC errors.
->=20
-> 'xlnx,has-ecc' is optional property and added to Xilinx AXI CAN Controller
-> node if ECC block enabled in the HW
->=20
-> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
-> ---
-> Changes in v5:
-> Update property description
->=20
-> Changes in v4:
-> Fix binding check warning
-> Update property description
->=20
-> Changes in v3:
-> Update commit description
-> =20
-> Changes in v2:
-> None
->=20
->  Documentation/devicetree/bindings/net/can/xilinx,can.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/net/can/xilinx,can.yaml b/=
-Documentation/devicetree/bindings/net/can/xilinx,can.yaml
-> index 64d57c3..8d4e5af 100644
-> --- a/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
-> @@ -49,6 +49,10 @@ properties:
->    resets:
->      maxItems: 1
-> =20
-> +  xlnx,has-ecc:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: CAN TX_OL, TX_TL and RX FIFOs have ECC support(AXI CAN)
-> +
->  required:
->    - compatible
->    - reg
-> @@ -137,6 +141,7 @@ examples:
->          interrupts =3D <GIC_SPI 59 IRQ_TYPE_EDGE_RISING>;
->          tx-fifo-depth =3D <0x40>;
->          rx-fifo-depth =3D <0x40>;
-> +        xlnx,has-ecc;
->      };
-> =20
->    - |
-> --=20
-> 2.1.1
->=20
-
---8WwOMIKNYsPT2CWN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZVoPmAAKCRB4tDGHoIJi
-0gIVAQCmItBnILexQiAoXNdAAsHy5rgfRr4rjnM34BOJAlWaNQEA92zmPiiA1wxS
-KxWwYSuiX1hAlANo8CLa5w7qWaHayQY=
-=jE3W
------END PGP SIGNATURE-----
-
---8WwOMIKNYsPT2CWN--
+Best Regards,
+Ramadan Ahmad CFA
+Chartered Finance Investment Analyst
 
