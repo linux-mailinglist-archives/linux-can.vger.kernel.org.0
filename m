@@ -1,132 +1,130 @@
-Return-Path: <linux-can+bounces-40-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-41-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6E7F7F3199
-	for <lists+linux-can@lfdr.de>; Tue, 21 Nov 2023 15:51:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5477E7F31D4
+	for <lists+linux-can@lfdr.de>; Tue, 21 Nov 2023 16:02:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB830B21D58
-	for <lists+linux-can@lfdr.de>; Tue, 21 Nov 2023 14:51:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84C921C2176E
+	for <lists+linux-can@lfdr.de>; Tue, 21 Nov 2023 15:02:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F59B2772A;
-	Tue, 21 Nov 2023 14:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1627955C1E;
+	Tue, 21 Nov 2023 15:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fZao+fKC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OTVFqrTp"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3B55392;
-	Tue, 21 Nov 2023 14:51:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF260C433D9;
-	Tue, 21 Nov 2023 14:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700578267;
-	bh=0Hzbhezg3LEYvk3jV45ChdxYUsSKEP9VDFl59KpQ+cU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fZao+fKCi30D2OU8mkp2CSBObry/17OOuVNUgwlfsTKUlut1qgNQY0AzOoujvrPE+
-	 OpfDJuhCJMtkMquBMoNPtcugiX2F2MbHjrxXPsHUsF/Q+HJRUDfGj6Icj8cBR81Owf
-	 i14mUHT+faWDLif9ZnKlpe0Ov1VZQpGWG+0dBbk1d6tTylKII4TwX4Ckw+0JpGV/JP
-	 HW4Gxe2YCDjZduQmG4nl7UsiDWS1rQRsSBRV8Crt3qEPfRIeRoz89HoIwE54fwi1k2
-	 sS17uQEWs3lmSd4xCWaQMVKn+4mxnSBtWm4B8znU5Nm/PMRy3o8z2FcsbZyvO21EVB
-	 a51o0Ev8BST+Q==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-507a5f2193bso5831580e87.1;
-        Tue, 21 Nov 2023 06:51:06 -0800 (PST)
-X-Gm-Message-State: AOJu0Yx6w5wNfrxxNuYEul6zhV0vv1rdECmR4HuagY2PULVBBqa156cs
-	wqeY4HTBHW65jrxY5rqdk5MDB4nbtEwOSyJLCQ==
-X-Google-Smtp-Source: AGHT+IHAgECyxRGZoAUk3nMcJ8/f2p6QZjyOKysSbNWX5YzA0p6881GhJQrwodpOCv5t41nc17DnYHwCQ59f76jZIn8=
-X-Received: by 2002:a05:6512:1106:b0:50a:7648:349f with SMTP id
- l6-20020a056512110600b0050a7648349fmr1142319lfg.10.1700578265105; Tue, 21 Nov
- 2023 06:51:05 -0800 (PST)
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D2610C;
+	Tue, 21 Nov 2023 07:02:46 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-5c194b111d6so4365472a12.0;
+        Tue, 21 Nov 2023 07:02:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700578966; x=1701183766; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NE81H57iTAMLIoJku/X+tUBOOe26MeLc/ZPIjayxX08=;
+        b=OTVFqrTpyyhsLP6qCtThANh4Td/Ki4H5MFxf9BrEn6CGJMLR6JL94XhcAAccBOKT6v
+         3o+ve5yG3Vb9C4+Yd0FRfgo9/MJo8yLnfyZ24LnXsj3dAe65kvM2hc8pUdmlRc1pDaTE
+         jOZfjCYAEkOUoMisfzQVV0SF+dQf2OJ2oFLMjRCFvJGMy8v73Nmz51Pbe5CgVFjEsAgN
+         xfr6ANEfoTM3p133wYHjAEw7TzsXfmkBzFlZzSEHhwsHBcH40EUqmPeKPGRywTIU+UGb
+         6zLVY3TZVWLt/2cKtbKPrtIlB4bqceMiXyJ9v2FWrVbGZiNuK9Yh9WR6GB1Jgzh2oRYR
+         SXJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700578966; x=1701183766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NE81H57iTAMLIoJku/X+tUBOOe26MeLc/ZPIjayxX08=;
+        b=iqms+1qyeVYABEUM/5vdiTQhARgh5pTQrK17GUaIwK5KHawrb+PevoIGb6Fd6azRNh
+         8m0BsllBFP2dS8plZh8ZMuh1pTDkHminGDy4bhcbZ0cp3yRWs6i/VT5h7GWI0USn6C/X
+         5GmA7ooBp3QVxm7edGgtyr2VDv5DK2hV/IBRmf2SUoHUaPia1WUkBSa9ynK4zl7/eiBj
+         Z+ilXGQXGK6FoMm+VhskMTXNIndOsBYOqsh4wdvJpdR65BBPkuMCZS8ZqbYOLNSSk+yj
+         Ux9KN2qmtNJs132Hs9FSjDuN+VF9fuWpN9C2y7jB2jCNcDGYPlqbWQQG0BWKPbs3S36p
+         tPWg==
+X-Gm-Message-State: AOJu0YxGryFav4VOXbYNssJHMIifXvV2DkggdTYApaNdVP7EXQJeV65g
+	TKEZinwmeR6mZx89lw2yrW1h1gcF5V4pLm99MKg=
+X-Google-Smtp-Source: AGHT+IHYEKGtBQb9kcBODuQ7JGPeu7bEDXrR+cb5gbSKKoTCL+Yh2YQGZU7xWkNVwL5gRCwehxoPaSuqFfOXULbTg9I=
+X-Received: by 2002:a17:90b:3504:b0:280:74fc:6545 with SMTP id
+ ls4-20020a17090b350400b0028074fc6545mr10534160pjb.24.1700578965690; Tue, 21
+ Nov 2023 07:02:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231115210129.3739377-1-robh@kernel.org> <20231116182923.GH109951@vergenet.net>
-In-Reply-To: <20231116182923.GH109951@vergenet.net>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 21 Nov 2023 07:50:52 -0700
-X-Gmail-Original-Message-ID: <CAL_JsqJp=H-O=nkL=f_G=stYOL=1FP=u8w8W+hNor5Zvt+6OrA@mail.gmail.com>
-Message-ID: <CAL_JsqJp=H-O=nkL=f_G=stYOL=1FP=u8w8W+hNor5Zvt+6OrA@mail.gmail.com>
-Subject: Re: [RESEND PATCH] net: can: Use device_get_match_data()
-To: Simon Horman <horms@kernel.org>
-Cc: Wolfgang Grandegger <wg@grandegger.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>, 
-	Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>, Michal Simek <michal.simek@amd.com>, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20231120175657.4070921-1-stefan.maetje@esd.eu> <20231120175657.4070921-2-stefan.maetje@esd.eu>
+In-Reply-To: <20231120175657.4070921-2-stefan.maetje@esd.eu>
+From: Vincent Mailhol <vincent.mailhol@gmail.com>
+Date: Wed, 22 Nov 2023 00:02:34 +0900
+Message-ID: <CAMZ6RqKBDfX3qnJ8pMnQ55JFDFgGCQEQhNVGPXJKiGNvvBWXdQ@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_=5BPATCH_v10_1=2F2=5D_MAINTAINERS=3A_add_Stefan_M=C3=A4tje_a?=
+	=?UTF-8?Q?s_maintainer_for_the_esd_electronics_GmbH_PCIe=2F402_CAN_drive?=
+	=?UTF-8?Q?rs?=
+To: =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 16, 2023 at 11:29=E2=80=AFAM Simon Horman <horms@kernel.org> wr=
-ote:
+On Tue. 21 Nov. 2023 at 02:57, Stefan M=C3=A4tje <stefan.maetje@esd.eu> wro=
+te:
+> Adding myself (Stefan M=C3=A4tje) as a maintainer for the upcoming driver=
+ of
+> the PCIe/402 interface card family.
 >
-> On Wed, Nov 15, 2023 at 03:01:28PM -0600, Rob Herring wrote:
-> > Use preferred device_get_match_data() instead of of_match_device() to
-> > get the driver match data. With this, adjust the includes to explicitly
-> > include the correct headers.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Stefan M=C3=A4tje <stefan.maetje@esd.eu>
+> ---
+>  MAINTAINERS | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >
-> ...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 03011d7ee087..7db1bd399822 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7753,6 +7753,13 @@ L:       linux-can@vger.kernel.org
+>  S:     Maintained
+>  F:     drivers/net/can/usb/esd_usb.c
 >
-> > diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.=
-c
-> > index abe58f103043..f17fd43d03c0 100644
-> > --- a/drivers/net/can/xilinx_can.c
-> > +++ b/drivers/net/can/xilinx_can.c
-> > @@ -20,8 +20,8 @@
-> >  #include <linux/module.h>
-> >  #include <linux/netdevice.h>
-> >  #include <linux/of.h>
-> > -#include <linux/of_device.h>
-> >  #include <linux/platform_device.h>
-> > +#include <linux/property.h>
-> >  #include <linux/skbuff.h>
-> >  #include <linux/spinlock.h>
-> >  #include <linux/string.h>
-> > @@ -1726,7 +1726,6 @@ static int xcan_probe(struct platform_device *pde=
-v)
-> >       struct net_device *ndev;
-> >       struct xcan_priv *priv;
-> >       struct phy *transceiver;
-> > -     const struct of_device_id *of_id;
-> >       const struct xcan_devtype_data *devtype =3D &xcan_axi_data;
->
-> Hi Rob,
->
-> Here devtype is initialised.
->
-> >       void __iomem *addr;
-> >       int ret;
-> > @@ -1741,9 +1740,7 @@ static int xcan_probe(struct platform_device *pde=
-v)
-> >               goto err;
-> >       }
-> >
-> > -     of_id =3D of_match_device(xcan_of_match, &pdev->dev);
-> > -     if (of_id && of_id->data)
-> > -             devtype =3D of_id->data;
->
-> And in the old code devtype was conditionally re-initialised here,
-> if a match with data was found.
->
-> But in the new code devtype is re-initialised unconditionally.
->
-> Possibly I am missing something obvious, but it seems that either this
-> should somehow be made conditional, or the initialisation to &xcan_axi_da=
-ta
-> should be dropped.
+> +ESD CAN NETWORK DRIVERS
+> +M:     Stefan M=C3=A4tje <stefan.maetje@esd.eu>
+> +R:     socketcan@esd.eu
+> +L:     linux-can@vger.kernel.org
+> +S:     Maintained
+> +F:     drivers/net/can/esd/
 
-of_match_device() would never fail because we only match with DT for
-this driver and if we didn't match, we wouldn't be in probe. So I'll
-drop the initialization.
+The MAINTAINERS file should be kept in alphabetical order.
 
-Rob
+So, maybe
+
+  ESD CAN NETWORK DRIVERS
+
+goes before
+
+  ESD CAN/USB DRIVERS
+
+?
+
+
+At least, looking at the existing,
+
+  ARM SUB-ARCHITECTURES
+
+is before:
+
+  ARM/ACTIONS SEMI ARCHITECTURE
+
+
+>  ET131X NETWORK DRIVER
+>  M:     Mark Einon <mark.einon@gmail.com>
+>  S:     Odd Fixes
+> --
+> 2.34.1
+>
+>
 
