@@ -1,171 +1,266 @@
-Return-Path: <linux-can+bounces-45-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-46-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AF337F4BBE
-	for <lists+linux-can@lfdr.de>; Wed, 22 Nov 2023 16:57:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF4297F4BCC
+	for <lists+linux-can@lfdr.de>; Wed, 22 Nov 2023 17:02:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 261B4281079
-	for <lists+linux-can@lfdr.de>; Wed, 22 Nov 2023 15:57:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D32501C20975
+	for <lists+linux-can@lfdr.de>; Wed, 22 Nov 2023 16:02:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B624E1A6;
-	Wed, 22 Nov 2023 15:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 561DA4F1F7;
+	Wed, 22 Nov 2023 16:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="bNFJ/vVm"
+	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="ciilTqVc"
 X-Original-To: linux-can@vger.kernel.org
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2133.outbound.protection.outlook.com [40.107.21.133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3AD109;
-	Wed, 22 Nov 2023 07:57:30 -0800 (PST)
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2125.outbound.protection.outlook.com [40.107.22.125])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBD5D8;
+	Wed, 22 Nov 2023 08:02:15 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hL7G69dX6MOEZ22lB/gmMsKGgfGiyDbQBkiCI1YBq99HrBGf0s6u+54Td9McmrZWoapeun4F1Z/DkOT6EdDmGk8BaOJdB2tMjFy/yyCzVEwcLkZeLOoPobIpGIqT346O2VG6q5nGuER9VUYNv1bJVOwKAVwmGbr1PJ5HYhLu0BspsNDFaBdWLBDfMFUI48sxaBdKqCzt80t1QkY77n5J+Eofc8c4Ehs1hdun7FbbXq/UboDyEM3XLvvT46JwNEktdTv+cZcult6o7fTYk9E6U5o+7GUnvGxwn/1SgIfjr1+12zbt9NeUcLIeNfCREjRe5Wfb0cPm3thhH++42f7wwQ==
+ b=CKc7hLB7Au1IYBeHqB9L/HAnSOM2rHQSUvYF/6X80OTFxu6a1XV5RhdKaP5FgfuubefdI2+KYpfR5Ngr+oy0Ej5xpmNgDAf3/QWM+k2RoU7QamKf6q+BugvQXLZAHsXKM13hYb3ltH8ZrhYz1efJbQey/jgUvYYnGwInqkw0P2DYchfUX8V+dIkGm9MqjM12wApzKMnydHd23YdFXnhwss8EBsWUdovnLjyY80JxM1tGppI4o48zZEhgA8iLtBohgxzD6e8+deNM9+A8rinGBCuHYKxXqUIjBstcV5agl/2ucz6vnLHz/UcTTGqX3cBf6QetmXIR99zcfyaiBwN5GQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9H5Du1adJsDoququfbD0ymwMsWw0MT+iFvc1/KrUOes=;
- b=OQxq+hJQcBpnHnw+JS6x6qoGeiMOTLVrNMf0h0NpccAGXTOW2XrePLO64dUaGm4Vpi3Nw/+ftYAgQim7RHfodVYjiyVSdSMtktC++Pneeu2hj94jmb621D05CH44uWTAubfjlh45aLrhjeH8aiJ/joFZF59BcHDZPB9nV/ZbTCnv2H1F53DN2Ax78iARiWTgEWhnOstcbdK0HGBD5LCRdsWLO+9t7I+wMbLFN+7FRxNPcZqfZTOkXDBlqxKm5v+arcGrUdy2SLLZQEdW3hiEnI980YI+TycYWjgdBMxlQdyazgB9WVYS/2l3DwnNg8CEcO6fYnDGIuu68hp37tsDbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=esd.eu; dmarc=pass action=none header.from=esd.eu; dkim=pass
- header.d=esd.eu; arc=none
+ bh=zsU9ILfuRC/5eWTiILi67PMBmVNgHMOPJcgIO8N/CbA=;
+ b=RjiA69hA9YWrUhK52XHBzuX1jaU+3QTQ5PhULk6//2D8S6+XdG34y+rk56av/cjkChh/UDxvfhls5D/HjOfM4FVAFrgk3DvcONzkLA+RIHddiKnDuXtacfF1W6COL5mFFziYQGC5aSEG/QDB5A64sBY6yACYXuAbrAhTb2y+Xre/qdZ7JJs58eo5jaAAooFT/pb2vDcMCG/ALvESCxpNI72yRgTmcJWc9rGiIar7VaSYPZDCdBeI9OUSryZ8bRcG8Y1yr4ZwdVJ85SKCGsOFGlXIir9ClGFr7DSyUIR6Mvu7eCxfqFDxCAAV3IldrS7QrTP5GOPX5ffD7am9CHOC/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 80.151.164.27) smtp.rcpttodomain=davemloft.net smtp.mailfrom=esd.eu;
+ dmarc=none action=none header.from=esd.eu; dkim=none (message not signed);
+ arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9H5Du1adJsDoququfbD0ymwMsWw0MT+iFvc1/KrUOes=;
- b=bNFJ/vVm+K22Etg1eiFq0kd+PqitMnxbwEECZNhGvZrKUBNmtStwfnu8iKeDnb/Ezcc2aJeZilhPd3Zsp5RMPr93yL/zAXCDHWukGkCEp2WwSIBhxYO+pOlTQbUxpNRvPHRWb+TjuRuO1MSJe7eAKKgZqVgjeMUB1PLBDhEdC94=
-Received: from AM6PR03MB4296.eurprd03.prod.outlook.com (2603:10a6:20b:3::16)
- by DBBPR03MB7065.eurprd03.prod.outlook.com (2603:10a6:10:1f5::12) with
+ bh=zsU9ILfuRC/5eWTiILi67PMBmVNgHMOPJcgIO8N/CbA=;
+ b=ciilTqVcoTRK4yHVdaYyElCBBMjua8cirW8k5UpH7GCrryKogw//KzGVAtC04wOyAJFjzj0GFQi4xRIbKzThh4yNqiGpsenMuigFPnUq5SefeVFHdZ92WAzjtPpwFlQPDIOhn0VE3AwCvr3PmnauyrZhOb0LJfUY5CgHsiFofsU=
+Received: from DU6P191CA0050.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:53e::13)
+ by PAVPR03MB9504.eurprd03.prod.outlook.com (2603:10a6:102:303::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.19; Wed, 22 Nov
- 2023 15:57:27 +0000
-Received: from AM6PR03MB4296.eurprd03.prod.outlook.com
- ([fe80::e4c5:63b9:dfd2:c12e]) by AM6PR03MB4296.eurprd03.prod.outlook.com
- ([fe80::e4c5:63b9:dfd2:c12e%6]) with mapi id 15.20.7025.017; Wed, 22 Nov 2023
- 15:57:27 +0000
-From: =?utf-8?B?U3RlZmFuIE3DpHRqZQ==?= <Stefan.Maetje@esd.eu>
-To: "vincent.mailhol@gmail.com" <vincent.mailhol@gmail.com>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, "wg@grandegger.com"
-	<wg@grandegger.com>, "kuba@kernel.org" <kuba@kernel.org>,
-	"mkl@pengutronix.de" <mkl@pengutronix.de>, "edumazet@google.com"
-	<edumazet@google.com>, "pabeni@redhat.com" <pabeni@redhat.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "davem@davemloft.net"
-	<davem@davemloft.net>
-Subject:
- =?utf-8?B?UmU6IFtQQVRDSCB2MTAgMS8yXSBNQUlOVEFJTkVSUzogYWRkIFN0ZWZhbiBN?=
- =?utf-8?B?w6R0amUgYXMgbWFpbnRhaW5lciBmb3IgdGhlIGVzZCBlbGVjdHJvbmljcyBH?=
- =?utf-8?Q?mbH_PCIe/402_CAN_drivers?=
-Thread-Topic:
- =?utf-8?B?W1BBVENIIHYxMCAxLzJdIE1BSU5UQUlORVJTOiBhZGQgU3RlZmFuIE3DpHRq?=
- =?utf-8?B?ZSBhcyBtYWludGFpbmVyIGZvciB0aGUgZXNkIGVsZWN0cm9uaWNzIEdtYkgg?=
- =?utf-8?Q?PCIe/402_CAN_drivers?=
-Thread-Index: AQHaG9sCMXhCEU847kOWn02IQavG47CE380AgAGhq4A=
-Date: Wed, 22 Nov 2023 15:57:27 +0000
-Message-ID: <3148df93275530977d74a51aeda0c3bf59b71625.camel@esd.eu>
-References: <20231120175657.4070921-1-stefan.maetje@esd.eu>
-	 <20231120175657.4070921-2-stefan.maetje@esd.eu>
-	 <CAMZ6RqKBDfX3qnJ8pMnQ55JFDFgGCQEQhNVGPXJKiGNvvBWXdQ@mail.gmail.com>
-In-Reply-To:
- <CAMZ6RqKBDfX3qnJ8pMnQ55JFDFgGCQEQhNVGPXJKiGNvvBWXdQ@mail.gmail.com>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
+ 2023 16:02:12 +0000
+Received: from DU6PEPF0000A7DE.eurprd02.prod.outlook.com
+ (2603:10a6:10:53e:cafe::d0) by DU6P191CA0050.outlook.office365.com
+ (2603:10a6:10:53e::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.28 via Frontend
+ Transport; Wed, 22 Nov 2023 16:02:12 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=esd.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR03MB4296:EE_|DBBPR03MB7065:EE_
-x-ms-office365-filtering-correlation-id: 957319fa-fda8-4f3c-47d0-08dbeb73b9fb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- 3kebE3NVWFz1BVKQmUSrhc4k/Tv69OBvEgCeh5iw4YHTZpv+WSwkR6wVtMtEakuGcOwoWN1ryUjk5npgDtC3C49gaIKYrb7lGLCjs8lMpeHgUhWn9bcB3X7ygR8L4M+9DQHuwfkSf+NKqsY/sgbOMqgTGCfrjieeKEAucVVL7ZRHkDMRczdkiJXmkU8tQXPTYzIVG14z1LVuWR4re+gc/ggzjX/x4Is88IFsiozgjReXgzvQD3nuWZWuADLiI+z5EQS0N3DspncPC5aA0nIQ8lW0bGYvSjVb4aypn9AMfMMI3hMe0ZOI0BCrzDN5CR2IeDNtq8gMaD6hJMSpzpOaxIriAIo4BqOKKgrmeMxoHaffmDp93p2PLf8qiXC+sf+JH3aNHAqqiq0VeDG9rhJ6vHz55z40jxsBanmMRJveVpX+ZptitBCbIK/omF6VBlvLlbADeLcO/uRIfceb+ik3cPQH9uKCDDEkK881ff61Y4dViQemsbYbBIMtEiCrtwPi0bxwgPW4adUjqY/XJALyqVMNUj5EpWbnr9w9fUrICoPWl6Vb46kpVO0YGUuJ78MPDRWvwTxTZ0zVBaGPVzNSwdxntSYqPwQoY7PV8scchq7pCuISiBAbIicEdzXlk32cxJb8UuzFytNIa2yTeUEMcQ==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR03MB4296.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(346002)(366004)(396003)(39840400004)(230922051799003)(451199024)(1800799012)(64100799003)(186009)(4326008)(71200400001)(6512007)(6506007)(26005)(6916009)(316002)(66556008)(76116006)(66946007)(66476007)(66446008)(64756008)(54906003)(91956017)(86362001)(6486002)(478600001)(36756003)(85182001)(66574015)(83380400001)(38100700002)(122000001)(85202003)(2616005)(8936002)(38070700009)(224303003)(2906002)(41300700001)(7416002)(5660300002)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?NWdDQ0dtMHkyK2ZEb0l3cytPKzk1V0xReDBoNG44eTBMOG9kc3VHeW4vV1h0?=
- =?utf-8?B?T0NRanRsZlpjQ2pTbmV6WXFTTGN3b29EeVQ3NzJJOHlRY3cxWWo3OUwraDBJ?=
- =?utf-8?B?MGphWVI2aWZIRm11bjIzNkpFeGVMQmRiN1F1bTJGSlcrbzRIZGw1QldsU3FD?=
- =?utf-8?B?ZlFHTncrVW1DUGVnNzMxenFYdDBvMElUUnd6S0ozajJicVJEdER6RXd3bkg2?=
- =?utf-8?B?YnJ6Tmc5d0o4cTk5NENGazNwRVBOa0t4eVluZEtwdGNDTi8yTFlpR3ZyTzll?=
- =?utf-8?B?YXRGRXFnVzR1RnpvTitIMzMrZ1RsbU1Ec25LalgzVGIwVDJKNVhod2szTzh1?=
- =?utf-8?B?bDhYQVg5by82S2h1OUdCZzlBK0t3Y0lmaEo5ZWYwTTBPYnE5VGVJc1R4akpr?=
- =?utf-8?B?NHJjNDZDR0NHSWNnK1hrZmcxTDFsblhRcXZ1SmFoMzhwVERwYUlMU0xNR1dq?=
- =?utf-8?B?akxtb1ljazZyNWlYcHNjUDhjTlVwZk4yOExKZG1vUzhLU21kaGlHL0J3OXlE?=
- =?utf-8?B?cVNJM3R6ZjY2aEdLUlRMZyt0OUZzOTAvZi9DQ1ppZEI3UTdjNTcvYjBLa09a?=
- =?utf-8?B?MlljMHRxcnBNR3dMSmdFSVZ6VEhnbDkzQUVlT1JRdUEyaS9uVnNuUVo4dWN5?=
- =?utf-8?B?a0RZcVRyalZaSFM0cmZFdWFva1lDdE84bE44UXJma2k5Y3ExYXYxSloxalJE?=
- =?utf-8?B?d2p0WGdGemhvV0NWbWZBUGlJNHk4WTB4ZUI4bXlhTjhHbk9qdGpicEVSVHRY?=
- =?utf-8?B?MFk3Y2hILzZBYUdqSjc1R0VpT2doM2RUQ3VEMW1MdFE1b2IycVhlaGQ3akYw?=
- =?utf-8?B?TWw2MEpaRjMzVGVUSDNyREYxUWx6bGpETEhoaWFYNWdvV3h4OTdkSk9ianpX?=
- =?utf-8?B?RXRaZXlPcVJvZUcxQ0hrQ3FKdlJaVEsyUWRGN0Fyd1cwaXJoclBJajhqUzFo?=
- =?utf-8?B?a1VHRWtUVnJ0TC9Fck5XMXdPT0h5WUkyemduVFlKL1hhd1ZkUE5xdjVlUlBq?=
- =?utf-8?B?MVVETi9KaE10MDRwSlppVjlKMExIcFdFRENkRDEzRWxKL1lvSTE0WTZPdm84?=
- =?utf-8?B?WFBLVTM3UWc2T1VlOTVlWldYNHp3MUh1WXhpNFlHc0lBckZocEF6KzlKcHJq?=
- =?utf-8?B?SWVYQmk2YzRFL3lwMmNLc2hYeHBITllUUTYwQkVCZnJGMDJNNkdpS1MwcVgw?=
- =?utf-8?B?M0FTcVBXb0FIL2NDbXAyVGw1aEJKcGZwUm4yeDZzMVppMkhSazJsSFh6UjVX?=
- =?utf-8?B?RDl2UU1nakI2ckNVMm5GQTFqS1FzeW0vN0RaMmVFbmdZVTBMMUFYemx3QmN0?=
- =?utf-8?B?N2pSSWV3VGFCYmRBZTcxMk1VKzYyZTJMSldTR0EyNUozY3ZvUXZNTGhkQXkx?=
- =?utf-8?B?V1lSL293VENNV2ZEV2ZsTzR0WDlRWGFBS2ZpNklTbmhJSE40SzY1blB2OVpN?=
- =?utf-8?B?ZlY0aEhGbnY1UXJ4UWc5RER2NFdFRlFvOFBkUDBkVU5yRE96aUpsTVFuSjdU?=
- =?utf-8?B?di94eFphRnhTTS9YK1VEdUw4c1BLUXBLVUZ3V2JkSzNuS0RYVk9uUEtWYmxN?=
- =?utf-8?B?VXV1blFCSDRPdUlVa0l6UTJYM1lDR0lZSVo2M0QvTkpSS05xRUZOR0g2ZWky?=
- =?utf-8?B?VDF6ZHVFM0dCcyt1VUtKYUxrN0FjYkhKL3FSR21qaUk3bk9PeFpWNEV3aXpz?=
- =?utf-8?B?OHVZRkhSTzBFN21McnF3QkZjMHVWc0U1YndSKzNqdW5QOTJoS1YxYWtVL2RT?=
- =?utf-8?B?YlpqT05FajI2ODR3TU1HMDdDYW1IZSttRThIM3E0ejBTNUlIWkxyUGNibDQ1?=
- =?utf-8?B?SDdxNVQvRDFYTTltQnQvdHNUaTE3MGJBWW5RRkxFMWhyQitWMVNuRkY2YWto?=
- =?utf-8?B?MnkvalJtMUoyYVZiS2h4RFErWG1mMnR0NEhTbEQ5TjQ2R2tTRmE1WlZKekF1?=
- =?utf-8?B?b3d4R2dzTW9KVGQ1Vzd2MGloWU5HUFFkMGlGZkxWNnd4VFhmcE5PN0dmTUY1?=
- =?utf-8?B?aVVxcnlZY2FhdE1PbkpwRGx4aktGUkNTTGFVTm9MWlJZYndPeDM4MXVHaXA4?=
- =?utf-8?B?U3dpKzNUbEovcHRIQmxkTnFOL3VMeXpOUlJSS2VHZHZDTzllSHJsbENsbFYz?=
- =?utf-8?B?SFc0TUVkc1ZuVDVHaGFIYWFJZzMweTBrbFNqUFlnS2gyTk9RdWtva2pocURX?=
- =?utf-8?B?Z0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <16864E9C9155B34FB2DCEFF9A6B4FFED@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
+ discourages use of 80.151.164.27 as permitted sender)
+Received: from esd-s7.esd (80.151.164.27) by
+ DU6PEPF0000A7DE.mail.protection.outlook.com (10.167.8.38) with Microsoft SMTP
+ Server id 15.20.7025.13 via Frontend Transport; Wed, 22 Nov 2023 16:02:11
+ +0000
+Received: from esd-s20.esd.local (jenkins.esd [10.0.0.190])
+	by esd-s7.esd (Postfix) with ESMTPS id 864CF7C16C5;
+	Wed, 22 Nov 2023 17:02:11 +0100 (CET)
+Received: by esd-s20.esd.local (Postfix, from userid 2044)
+	id 70DD32E2605; Wed, 22 Nov 2023 17:02:11 +0100 (CET)
+From: =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Wolfgang Grandegger <wg@grandegger.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH v11 0/2] can: esd: add support for esd GmbH PCIe/402 CAN interface
+Date: Wed, 22 Nov 2023 17:02:09 +0100
+Message-Id: <20231122160211.2110448-1-stefan.maetje@esd.eu>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU6PEPF0000A7DE:EE_|PAVPR03MB9504:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0958697e-dfad-4cb4-4d91-08dbeb74635f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	kC1Z6TJl3exUkWGbqJiIqo/avPJiDTQU1APMdRwXM3vKA9hps2gG36gu2kgMAp04hBdAvfz0mVSN1XgDLWOSGa6XlnW3toxR4n/zI8NfX0+a3oQ6BPMPsUxb5uS0W+2k2K3mDyRTB3SI5GZC+urxEfEMLodNgoAZ6imoca4WEsir7wvdfqOxUvA02q+l/KehuWQXm1O4ASyZpszwXZ9otZyf/d7Xdsw2ZGXtR+/8kWQtVQSJfijNO2w+8P1V6hpfEd/wNViSk/9Rzln7OyWvMWQsUiWS+M0fJMkmpRIl8Xnc4d7dQupJjJjUfo4lmyoqOmneFeqJgpwOcvUayTz/i+WAAcKbMj0Gt+tAfZTD14n/lwzwBevQ/fVgSst90s1882Z44hxNNvvVQVVjfAFnL4au1EsnFSuz8ElaRrg48IBL3Tt06+A7CyqE9egjGZpBqY/kQR7zc7hHoSXnKvOXzwwzerBjhpIgcXYKXRYOgstfrt48QQMPrO3xzlIeaD9Av9otT6NedPxS+UbEetY3bUxQTjINfB4RrZY7CxBThAiZ+G++DBfGhcRSNMMhfP6evvpOtr2q/f2kVZWzCAJE9DYlYez0o4pia1g5ZVauHxF3FwweJ3DvWz2n60C2ukug9I7VcOfaPA5IH+tLKz5On31ZYGTHn8LOclJ5+69Yv5qnBNl8m8AAh2SPeAhjqee2sv0yF+HtA7cFTlsSgUtoAhLj36axQNB9QhUSHM0YlpkNZBh+SjBHrX0xsPXXrGf0
+X-Forefront-Antispam-Report:
+	CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230031)(4636009)(136003)(346002)(376002)(39840400004)(396003)(230922051799003)(230273577357003)(230173577357003)(82310400011)(1800799012)(64100799003)(186009)(451199024)(36840700001)(46966006)(41300700001)(40480700001)(86362001)(8676002)(2906002)(5660300002)(83380400001)(81166007)(356005)(4326008)(36756003)(70586007)(42186006)(54906003)(316002)(966005)(8936002)(2616005)(478600001)(26005)(1076003)(6266002)(66574015)(336012)(36860700001)(47076005)(70206006);DIR:OUT;SFP:1102;
 X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB4296.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 957319fa-fda8-4f3c-47d0-08dbeb73b9fb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2023 15:57:27.6679
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2023 16:02:11.8043
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3MJtb2XufttRwiQNJBl90qeU7bbgiewVCIUYsHiIMt/DvfTdo0h0ifgpGPCpEGurRFccqpWQxvRsCzq9TFEDiw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR03MB7065
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0958697e-dfad-4cb4-4d91-08dbeb74635f
+X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU6PEPF0000A7DE.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR03MB9504
 
-QW0gTWl0dHdvY2gsIGRlbiAyMi4xMS4yMDIzLCAwMDowMiArMDkwMCBzY2hyaWViIFZpbmNlbnQg
-TWFpbGhvbDoNCj4gT24gVHVlLiAyMSBOb3YuIDIwMjMgYXQgMDI6NTcsIFN0ZWZhbiBNw6R0amUg
-PHN0ZWZhbi5tYWV0amVAZXNkLmV1PiB3cm90ZToNCj4gPiBBZGRpbmcgbXlzZWxmIChTdGVmYW4g
-TcOkdGplKSBhcyBhIG1haW50YWluZXIgZm9yIHRoZSB1cGNvbWluZyBkcml2ZXIgb2YNCj4gPiB0
-aGUgUENJZS80MDIgaW50ZXJmYWNlIGNhcmQgZmFtaWx5Lg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYt
-Ynk6IFN0ZWZhbiBNw6R0amUgPHN0ZWZhbi5tYWV0amVAZXNkLmV1Pg0KPiA+IC0tLQ0KPiA+ICBN
-QUlOVEFJTkVSUyB8IDcgKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25z
-KCspDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL01BSU5UQUlORVJTIGIvTUFJTlRBSU5FUlMNCj4g
-PiBpbmRleCAwMzAxMWQ3ZWUwODcuLjdkYjFiZDM5OTgyMiAxMDA2NDQNCj4gPiAtLS0gYS9NQUlO
-VEFJTkVSUw0KPiA+ICsrKyBiL01BSU5UQUlORVJTDQo+ID4gQEAgLTc3NTMsNiArNzc1MywxMyBA
-QCBMOiAgICAgICBsaW51eC1jYW5Admdlci5rZXJuZWwub3JnDQo+ID4gIFM6ICAgICBNYWludGFp
-bmVkDQo+ID4gIEY6ICAgICBkcml2ZXJzL25ldC9jYW4vdXNiL2VzZF91c2IuYw0KPiA+IA0KPiA+
-ICtFU0QgQ0FOIE5FVFdPUksgRFJJVkVSUw0KPiA+ICtNOiAgICAgU3RlZmFuIE3DpHRqZSA8c3Rl
-ZmFuLm1hZXRqZUBlc2QuZXU+DQo+ID4gK1I6ICAgICBzb2NrZXRjYW5AZXNkLmV1DQo+ID4gK0w6
-ICAgICBsaW51eC1jYW5Admdlci5rZXJuZWwub3JnDQo+ID4gK1M6ICAgICBNYWludGFpbmVkDQo+
-ID4gK0Y6ICAgICBkcml2ZXJzL25ldC9jYW4vZXNkLw0KPiANCj4gVGhlIE1BSU5UQUlORVJTIGZp
-bGUgc2hvdWxkIGJlIGtlcHQgaW4gYWxwaGFiZXRpY2FsIG9yZGVyLg0KPiANCj4gU28sIG1heWJl
-DQo+IA0KPiAgIEVTRCBDQU4gTkVUV09SSyBEUklWRVJTDQo+IA0KPiBnb2VzIGJlZm9yZQ0KPiAN
-Cj4gICBFU0QgQ0FOL1VTQiBEUklWRVJTDQo+IA0KPiA/DQoNCkknbGwgY2hhbmdlIHRoZSBvcmRl
-ci4NCg0KPiANCj4gDQo+IEF0IGxlYXN0LCBsb29raW5nIGF0IHRoZSBleGlzdGluZywNCj4gDQo+
-ICAgQVJNIFNVQi1BUkNISVRFQ1RVUkVTDQo+IA0KPiBpcyBiZWZvcmU6DQo+IA0KPiAgIEFSTS9B
-Q1RJT05TIFNFTUkgQVJDSElURUNUVVJFDQo+IA0KPiANCj4gPiAgRVQxMzFYIE5FVFdPUksgRFJJ
-VkVSDQo+ID4gIE06ICAgICBNYXJrIEVpbm9uIDxtYXJrLmVpbm9uQGdtYWlsLmNvbT4NCj4gPiAg
-UzogICAgIE9kZCBGaXhlcw0KPiA+IC0tDQo+ID4gMi4zNC4xDQo+ID4gDQo+ID4gDQo=
+The purpose of this patch is to introduce a new CAN driver to support
+the esd GmbH 402 family of CAN interface boards. The hardware design
+is based on a CAN controller implemented in a FPGA attached to a
+PCIe link.
+
+More information on these boards can be found following the links
+included in the commit message.
+
+This patch supports all boards but will operate the CAN-FD capable
+boards only in Classic-CAN mode. The CAN-FD support will be added
+when the initial patch has stabilized.
+
+The patch is reuses the previous work of my former colleague:
+Link: https://lore.kernel.org/linux-can/1426592308-23817-1-git-send-email-thomas.koerper@esd.eu/
+
+
+The patch is based on the linux-can-next main branch.
+
+Changed in v11:
+  No functional, only editorial changes due to feedback on v10.
+  - Make lifetime of macros used for hardware timestamp calculation
+    very short by #undef-ing them after use.
+  - Fixed insertion order of new entry in MAINTAINERS file.
+
+Changed in v10:
+  Most changes due to feedback by Vincent Mailhol
+  https://lore.kernel.org/linux-can/CAMZ6RqLOAC930GNOU+pWuoi6FgYwFOuFrSyAzVjvE2fuVgy8oA@mail.gmail.com/
+  - Add support for ethtool operations by using default operations 
+    provided by the can_dev module for drivers with hardware time
+    stamp support.
+  - Factor out core unregistration into pci402_unregister_core().
+  - Factor out getting next TX fifo index into acc_tx_fifo_next().
+  - Stop counting alloc_can_err_skb() failures in rx_dropped statistic.
+  - Add CAN_ERR_CNT flag in CAN error frames as needed.
+  - Rework function acc_reset_fpga(). To clear I^2C bus enable bit
+    is not necessary after FPGA reset.
+  - Simplify struct acc_bmmsg_rxtxdone layout.
+  - Additional non functional changes due to feedback by Vincent
+  - Some spelling corrections: ESDACC -> esdACC
+
+Changes in v9:
+  - Fix returning success error code in case of allocation failure in
+    pci402_probe().
+
+Changes in v8:
+  - Rebased to 6.6-rc2 on linux-can-next branch main
+
+Changes in v7:
+  - Numerous changes. Find the quoted with inline comments about changes
+    below after the changes list. Stuff that I don't understand and
+    where I have questions is marked with ????.
+    Unfortunately I will be AFK till 28th of November.
+
+Changes in v6:
+  - Fixed the statistic handling of RX overrun errors and increase 
+    net_device_stats::rx_errors instead of net_device_stats::rx_dropped.
+  - Added a patch to not increase rx statistics when generating a CAN
+    rx error message frame as suggested on the linux-can list.
+  - Added a patch to not not increase rx_bytes statistics for RTR frames
+    as suggested on the linux-can list.
+
+    The last two patches change the statistics handling from the previous
+    style used in other drivers to the newly suggested one.
+
+Changes in v5:
+  - Added the initialization for netdev::dev_port as it is implemented
+    for another CAN driver. See
+    https://lore.kernel.org/linux-can/20211026180553.1953189-1-mailhol.vincent@wanadoo.fr/
+
+Changes in v4:
+  - Fixed the build failure on ARCH=arm64 that was found by the Intel
+    kernel test robot. See
+    https://lore.kernel.org/linux-can/202109120608.7ZbQXkRh-lkp@intel.com/
+
+    Removed error monitoring code that used GCC's built-in compiler
+    functions for atomic access (__sync_* functions). GCC versions
+    after 9 (tested with "gcc-10 (Ubuntu 10.3.0-1ubuntu1~20.04)")
+    don't implement the intrinsic atomic as in-line code but call
+    "__aarch64_ldadd4_acq_rel" on arm64. This GCC support function
+    is not exported by the kernel and therefore the module build
+    post-processing fails.
+
+    Removed that code because the error monitoring never showed a
+    problem during the development this year.
+
+
+Changes in v3:
+  - Rework the bus-off restart logic in acc_set_mode() and
+    handle_core_msg_errstatechange() to call netif_wake_queue() from the
+    error active event.
+  - Changed pci402_init_card() to allocate a variable sized array of
+    struct acc_core using devm_kcalloc() instead of using a fixed size
+    array in struct pci402_card.
+  - Changed handle_core_msg_txabort() to release aborted TX frames in
+    TX FIFO order.
+  - Fixed the acc_close() function to abort all pending TX request in
+    esdACC controller.
+  - Fixed counting of transmit aborts in handle_core_msg_txabort().
+    It is now done like in can_flush_echo_skb().
+  - Fixed handle_core_msg_buserr() to create error frames including the
+    CAN RX and TX error counters that were missing.
+  - Fixed acc_set_bittiming() neither to touch LOM mode setting of
+    esdACC controller nor to enter or leave RESET mode.
+    The esdACC controller is going active on the CAN bus in acc_open()
+    and is going inactive (RESET mode) again in acc_close().
+  - Rely on the automatic release of memory fetched by devm_kzalloc().
+    But still use devm_irq_free() explicitely to make sure that the
+    interrupt handler is disconnected at that point.
+    This avoids a possible crash in non-MSI mode due to the IRQ
+    triggered by another device on the same PCI IRQ line.
+  - Changed to use DMA map API instead of pci_*_consistent compatibility
+    wrappers.
+  - Fixed stale email references and updated copyright information.
+  - Removed any traces of future CAN-FD support.
+
+
+Changes in v2:
+  - Avoid warning triggered by -Wshift-count-overflow on architectures
+    with 32-bit dma_addr_t.
+  - Fixed Makefile not to build the kernel module always. Doing this
+    renamed esd402_pci.c to esd_402_pci-core.c as recommended by Marc.
+
+previous versions:
+v1 - https://lore.kernel.org/linux-can/20210728203647.15240-1-Stefan.Maetje@esd.eu/
+v2 - https://lore.kernel.org/linux-can/20210730173805.3926-1-Stefan.Maetje@esd.eu/
+v3 - https://lore.kernel.org/linux-can/20210908164640.23243-1-stefan.maetje@esd.eu/
+v4 - https://lore.kernel.org/linux-can/20210916172152.5127-1-stefan.maetje@esd.eu/
+v5 - https://lore.kernel.org/linux-can/20211109155326.2608822-1-stefan.maetje@esd.eu/
+v6 - https://lore.kernel.org/linux-can/20211201220328.3079270-1-stefan.maetje@esd.eu/
+v7 - https://lore.kernel.org/linux-can/20221106224156.3619334-1-stefan.maetje@esd.eu/
+v8 - https://lore.kernel.org/linux-can/20231025141635.1459606-1-stefan.maetje@esd.eu/
+v9 - https://lore.kernel.org/linux-can/20231107184103.2802678-1-stefan.maetje@esd.eu/
+v10 - https://lore.kernel.org/linux-can/20231120175657.4070921-1-stefan.maetje@esd.eu/
+
+
+Stefan Mätje (2):
+  MAINTAINERS: add Stefan Mätje as maintainer for the esd electronics
+    GmbH PCIe/402 CAN drivers
+  can: esd: add support for esd GmbH PCIe/402 CAN interface family
+
+ MAINTAINERS                            |   7 +
+ drivers/net/can/Kconfig                |   1 +
+ drivers/net/can/Makefile               |   1 +
+ drivers/net/can/esd/Kconfig            |  12 +
+ drivers/net/can/esd/Makefile           |   7 +
+ drivers/net/can/esd/esd_402_pci-core.c | 514 +++++++++++++++++
+ drivers/net/can/esd/esdacc.c           | 764 +++++++++++++++++++++++++
+ drivers/net/can/esd/esdacc.h           | 356 ++++++++++++
+ 8 files changed, 1662 insertions(+)
+ create mode 100644 drivers/net/can/esd/Kconfig
+ create mode 100644 drivers/net/can/esd/Makefile
+ create mode 100644 drivers/net/can/esd/esd_402_pci-core.c
+ create mode 100644 drivers/net/can/esd/esdacc.c
+ create mode 100644 drivers/net/can/esd/esdacc.h
+
+
+base-commit: 93e7eca853ca0087b129433630ddd89288d2b8b4
+-- 
+2.34.1
+
 
