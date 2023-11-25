@@ -1,55 +1,47 @@
-Return-Path: <linux-can+bounces-57-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-58-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD3977F8C97
-	for <lists+linux-can@lfdr.de>; Sat, 25 Nov 2023 18:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A23C87F8CA9
+	for <lists+linux-can@lfdr.de>; Sat, 25 Nov 2023 18:14:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 143061C20BC9
-	for <lists+linux-can@lfdr.de>; Sat, 25 Nov 2023 17:05:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D84DE1C20AF2
+	for <lists+linux-can@lfdr.de>; Sat, 25 Nov 2023 17:14:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F31AB1384;
-	Sat, 25 Nov 2023 17:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB4EB29439;
+	Sat, 25 Nov 2023 17:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0895311F
-	for <linux-can@vger.kernel.org>; Sat, 25 Nov 2023 09:05:23 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E01B6
+	for <linux-can@vger.kernel.org>; Sat, 25 Nov 2023 09:14:52 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1r6w5W-0000xM-ND; Sat, 25 Nov 2023 18:05:02 +0100
+	id 1r6wEz-00031H-F5; Sat, 25 Nov 2023 18:14:49 +0100
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1r6w5U-00BWxZ-3K; Sat, 25 Nov 2023 18:05:00 +0100
+	id 1r6wEx-00BXMw-VX; Sat, 25 Nov 2023 18:14:48 +0100
 Received: from pengutronix.de (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 9834E2538FD;
-	Sat, 25 Nov 2023 17:04:59 +0000 (UTC)
-Date: Sat, 25 Nov 2023 18:04:59 +0100
+	by smtp.blackshift.org (Postfix) with ESMTPSA id A823D253914;
+	Sat, 25 Nov 2023 17:14:47 +0000 (UTC)
+Date: Sat, 25 Nov 2023 18:14:47 +0100
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Srinivas Goud <srinivas.goud@amd.com>
-Cc: wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	p.zabel@pengutronix.de, git@amd.com, michal.simek@xilinx.com,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, appana.durga.rao@xilinx.com,
-	naga.sureshkumar.relli@xilinx.com
-Subject: Re: [PATCH v6 3/3] can: xilinx_can: Add ethtool stats interface for
- ECC errors
-Message-ID: <20231125-distract-upstage-a18902149a63-mkl@pengutronix.de>
-References: <1700910933-23868-1-git-send-email-srinivas.goud@amd.com>
- <1700910933-23868-4-git-send-email-srinivas.goud@amd.com>
+To: Thomas.Kopp@microchip.com
+Cc: petter@ka-long.de, linux-can@vger.kernel.org
+Subject: Re: RE: mcp251xfd on NXP LX2160A
+Message-ID: <20231125-sample-slather-aea8764f0566-mkl@pengutronix.de>
+References: <20231120161106.AA49E5B00817@dd15738.kasserver.com>
+ <BL3PR11MB64847C895A0918D99E6A9EACFBB9A@BL3PR11MB6484.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -57,93 +49,59 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4jgdzz4e4cfbadnp"
+	protocol="application/pgp-signature"; boundary="auzhbkv4vu4mqaba"
 Content-Disposition: inline
-In-Reply-To: <1700910933-23868-4-git-send-email-srinivas.goud@amd.com>
+In-Reply-To: <BL3PR11MB64847C895A0918D99E6A9EACFBB9A@BL3PR11MB6484.namprd11.prod.outlook.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
---4jgdzz4e4cfbadnp
+--auzhbkv4vu4mqaba
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 25.11.2023 16:45:33, Srinivas Goud wrote:
-> Add ethtool stats interface for reading FIFO 1bit/2bit ECC errors informa=
-tion.
->=20
-> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
-> ---
-> Changes in v6:
-> None
->=20
-> Changes in v5:
-> Address review comments
-> Add get_strings and get_sset_count stats interface
-> Use u64 stats helper function
->=20
-> Changes in v4:
-> None
->=20
-> Changes in v3:
-> None
->=20
-> Changes in v2:
-> Add ethtool stats interface
->=20
->  drivers/net/can/xilinx_can.c | 54 ++++++++++++++++++++++++++++++++++++++=
-++++++
->  1 file changed, 54 insertions(+)
->=20
-> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-> index c8691a1..40c912b 100644
-> --- a/drivers/net/can/xilinx_can.c
-> +++ b/drivers/net/can/xilinx_can.c
-> @@ -228,6 +228,7 @@ struct xcan_devtype_data {
->   * @transceiver:		Optional pointer to associated CAN transceiver
->   * @rstc:			Pointer to reset control
->   * @ecc_enable:			ECC enable flag
-> + * @stats_lock:			Lock for synchronizing ECC errors stats
->   * @ecc_2bit_rxfifo_cnt:	RXFIFO 2bit ECC count
->   * @ecc_1bit_rxfifo_cnt:	RXFIFO 1bit ECC count
->   * @ecc_2bit_txolfifo_cnt:	TXOLFIFO 2bit ECC count
-> @@ -254,6 +255,7 @@ struct xcan_priv {
->  	struct phy *transceiver;
->  	struct reset_control *rstc;
->  	bool ecc_enable;
-> +	spinlock_t stats_lock; /* Lock for synchronizing ECC errors stats */
->  	u64_stats_t ecc_2bit_rxfifo_cnt;
->  	u64_stats_t ecc_1bit_rxfifo_cnt;
->  	u64_stats_t ecc_2bit_txolfifo_cnt;
-> @@ -347,6 +349,12 @@ static const struct can_tdc_const xcan_tdc_const_can=
-fd2 =3D {
->  	.tdcf_max =3D 0,
->  };
-> =20
-> +static const char xcan_priv_flags_strings[][ETH_GSTRING_LEN] =3D {
-> +	"err-ecc-rx-2-bit", "err-ecc-rx-1-bit",
-> +	"err-ecc-txol-2-bit", "err-ecc-txol-1-bit",
-> +	"err-ecc-txtl-2-bit", "err-ecc-txtl-1-bit",
-> +};
-> +
->  /**
->   * xcan_write_reg_le - Write a value to the device register little endian
->   * @priv:	Driver private data structure
-> @@ -1171,6 +1179,9 @@ static void xcan_err_interrupt(struct net_device *n=
-dev, u32 isr)
-> =20
->  	if (priv->ecc_enable && isr & XCAN_IXR_ECC_MASK) {
->  		u32 reg_rx_ecc, reg_txol_ecc, reg_txtl_ecc;
-> +		unsigned long flags;
-> +
-> +		spin_lock_irqsave(&priv->stats_lock, flags);
+On 23.11.2023 07:08:24, Thomas.Kopp@microchip.com wrote:
+> > [ 4493.557075] mcp251xfd spi1.2 can2: MCP2518FD rev0.0 (-RX_INT -PLL -
+> > MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD o:40.00MHz
+> > c:40.00MHz m:8.00MHz rs:8.00MHz es:0.00MHz rf:8.00MHz ef:0.00MHz)
+> > successfully initialized.
 
-The register access doesn't have to be protected by the spinlock, only
-when you touch priv->ecc_*cnt.
+> I can't remember encountering these format errors before. Do you have
+> access to a logic analyzer and can you spi during capture insmod +
+> interface up?
+>=20
+> Do you have anything else on the same SPI? Where's the 8 MHz coming
+> from? Did you limit this in your DT?
 
+The "m:8.00MHz" is the maximum SPI speed the driver gets from the SPI
+framework.
+
+> You could try with -CRC_REG -CRC_RX -CRC_TX to see if you're able to
+> communicate with the device (this is not suited for anything in
+> production though)
+
+Depending what you have in your DT, for a "microchip,mcp251xfd" it would
+be this patch:
+
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -46,8 +46,8 @@ static const struct mcp251xfd_devtype_data mcp251xfd_devt=
+ype_data_mcp251863 =3D {
+=20
+ /* Autodetect model, start with CRC enabled. */
+ static const struct mcp251xfd_devtype_data mcp251xfd_devtype_data_mcp251xf=
+d =3D {
+-        .quirks =3D MCP251XFD_QUIRK_CRC_REG | MCP251XFD_QUIRK_CRC_RX |
+-                MCP251XFD_QUIRK_CRC_TX | MCP251XFD_QUIRK_ECC,
++        .quirks =3D /* MCP251XFD_QUIRK_CRC_REG | MCP251XFD_QUIRK_CRC_RX | =
+*/
++                /* MCP251XFD_QUIRK_CRC_TX | */ MCP251XFD_QUIRK_ECC,
+         .model =3D MCP251XFD_MODEL_MCP251XFD,
+
+regards,
 Marc
 
 --=20
@@ -152,20 +110,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---4jgdzz4e4cfbadnp
+--auzhbkv4vu4mqaba
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmViKTgACgkQvlAcSiqK
-BOiREQgAtl7uFO/XnkgoCkRiMxHvAtvcVrUswBxeFAW76mVjE9V/Hg3V4LQ3vcPV
-Tzt+wM53Wd7FDXJMj6P8qaUrzC2PVrBeqqGb8RoPrEr6pSY/qf2Rj85OJG/xs8RT
-Z0zB4U87ccavRZ4ozzCiVDQ+3eAfQp8RbeUnBFKIQKCnZfVInzvUMG2l+gFTvLjg
-MtXCmOEIhlrFFWSDG1JeeIhXKXBBhGsUqe+sTDOytMlFPnR7h2SLZOsZ5NxgGqGX
-PNYkIMjfiiK57iJmPEo+/opqh7nTw4FFSRrGr9g9RmuveF3uCVLjqOHBLMf0lZTE
-14Pn5JTlqvNMrSOK/jZzgMFmsgCvxA==
-=5s7P
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmViK4QACgkQvlAcSiqK
+BOgZDwf/QFosRMPoWukwXzln/RpV45N2wy64Wl6a3r1a48uEVnlzESAzPOUNmA6E
+YvT916Nia7heKExHifr20GHSuLz/NWHLJsEG/8rpt6zX7knmYZew2lmmvzrxo+08
+qPsZl7eHUm4EXAnSRUOny3QEBcqSpN2uOULbv1Y5DEF9zIbAPcuBLXqt9UAm1hZJ
+/oxg8GUgqVfFgnWWk+lhDrNrGo1LcIEpupV7tFDCjDooEO/ZTXTQcwRYt3UCVeW1
+EqaeSV6qlF8DjS0YZaT23ArMs1+8S2XJGbtu3+k+e2ac7cDsHatVNOHCD6I+/dye
+d8jWrlsQ3SWXCyCh5u6vS3h6UKZnsg==
+=F9D2
 -----END PGP SIGNATURE-----
 
---4jgdzz4e4cfbadnp--
+--auzhbkv4vu4mqaba--
 
