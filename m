@@ -1,224 +1,160 @@
-Return-Path: <linux-can+bounces-52-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-53-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E40307F87E8
-	for <lists+linux-can@lfdr.de>; Sat, 25 Nov 2023 03:45:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 638D77F8A17
+	for <lists+linux-can@lfdr.de>; Sat, 25 Nov 2023 12:16:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6822BB2160E
-	for <lists+linux-can@lfdr.de>; Sat, 25 Nov 2023 02:45:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCD63281710
+	for <lists+linux-can@lfdr.de>; Sat, 25 Nov 2023 11:16:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A43DB17C7;
-	Sat, 25 Nov 2023 02:45:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFEE9CA4E;
+	Sat, 25 Nov 2023 11:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Seoz3Qz2"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pl1-f206.google.com (mail-pl1-f206.google.com [209.85.214.206])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198E919A6
-	for <linux-can@vger.kernel.org>; Fri, 24 Nov 2023 18:45:22 -0800 (PST)
-Received: by mail-pl1-f206.google.com with SMTP id d9443c01a7336-1cf8ea601c8so25314625ad.3
-        for <linux-can@vger.kernel.org>; Fri, 24 Nov 2023 18:45:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700880321; x=1701485121;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0vhGKlbf8um049+SfnQY02FwXu7vtzZ58JJDrZbPu1A=;
-        b=CPvcobvzN6rCQnksApcq4Sy+ftm7O9eKnQ+FIFVwJGoK7MipVutwBrreXCmbwjbgC+
-         a7f+5iKkJMwc5ZxOlHZ+fAwHm6cQ+9qaNEiwvH0IKalsAZjI66WExDx6EoDnNtjKTyuS
-         le6NACZAIA0Lt5qefqOs1+6Z2FTr9on7hn8b3CKD7p5PFhSOfW8K+mdqOZouwP86eMxC
-         4IJl/sge4B06Oo28NvmXWODxqd6dilfPojj6it5O3VSBdcbhrXTSWsLQZH+wSLn3Dquc
-         Pa/IFLCZ4AdTs012HC0MBc6dZEgkVp8RQjMe9yWmTLa30wzkZDIFjCg7NIf/1Xg7xMeF
-         AkAg==
-X-Gm-Message-State: AOJu0YyZhBGyNH+SnOvtZlp82ZT8N/2fvu/cdMlVKM59zLAo1KzZoBO9
-	1rpe2frlyYQQWFvUBkqfs8IPaT8JpPkIgBm6RCoqLKjVodge
-X-Google-Smtp-Source: AGHT+IFF+tdQ0IvQ09sdtpSQX+cOiRWTsmvFyfF9lEU7+E0eKL76FjEDaxdvZVR5smmM51SF+4RFC0QLWDTXavvMp8UMiv84+4bO
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2055.outbound.protection.outlook.com [40.107.92.55])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A85127;
+	Sat, 25 Nov 2023 03:16:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N5tOhrgZEELKhEdyq9gZ9tR1SaJ69cf2JWQKApNCVkLvOgL/3ael0hBk/095/ox1vetjMxOs9EcKZD0ZgfsXU3ZaidC+hEwHKtXN4WYX0MRKCzX3DQJuEaLvE7LLwMJjP8UXizyk/7tF44eWsucHi59sz6PR1jyscgxHrhsYqHkGFVMkKoWXQWwWO2ed0/Rye/L6KRdnMNjxT4B/CzRgK9FJAlxTRf9L/EFzwDAL9fyQnofGZZi7qKGcjRFf0eLmNfJ39VzmswLltEb/BZ4eyC8Iwb/mOpOAP6a1oxGOwkq7NjF6Q928IiaYs+xmEV0Dp3NLOF2U+MZFPIUwAhm/sw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hkHDGOZTkp5gZ4OBAd5yvPjRBrZOWac0U4thWag6mmM=;
+ b=cPzjyRqTrYcq5v2dApG+M2mtWtkjxccMNkV0T5dkaBq/+YY7puCuJSjjde5Zw8B4jXsC3nAIGCs7qx3aHQ8xPTYoDWhHOJNPfxXq20SO02wRdulNZ2eKLyU93NZkxjqCAOqWOpui8tav3mkWH0Zp8aJodxdqKHG/+Cb7fMvbOJSBE+ReR8gFjzeQQU9xsw3mc4vFah5HKZVkfBRLgp4lDMV2JZmE4eo8sLhx0UWXP/N3l4/wH9WIqhmbQx7xsP/QqhaGGcUaVSoaBaYt81ojzOTYZdIK3FM7w8Ex4PokT82mky+t4gyBQm5qMqbJHaPhAsR22Hdz5USOon6aDl+8qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=grandegger.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hkHDGOZTkp5gZ4OBAd5yvPjRBrZOWac0U4thWag6mmM=;
+ b=Seoz3Qz2t8HSNa+pSY0yMK3jbpv6qUG7EcI24TNkWa6TdhAsez5Gn6yBmH2PdK24MtDJW4pxqZyeiZ6fk2q5V8NUOSsPn45H3mPiJvLT/skc9t1xErEEs/fbtUn7Dw2OAIvzRDSH0JOrT8zZyQFAblatJPkZ9tYyGhtxPBr4wi8=
+Received: from SN4PR0501CA0131.namprd05.prod.outlook.com
+ (2603:10b6:803:42::48) by IA1PR12MB9031.namprd12.prod.outlook.com
+ (2603:10b6:208:3f9::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.25; Sat, 25 Nov
+ 2023 11:16:10 +0000
+Received: from SN1PEPF000252A1.namprd05.prod.outlook.com
+ (2603:10b6:803:42:cafe::af) by SN4PR0501CA0131.outlook.office365.com
+ (2603:10b6:803:42::48) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.16 via Frontend
+ Transport; Sat, 25 Nov 2023 11:16:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ SN1PEPF000252A1.mail.protection.outlook.com (10.167.242.8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7046.17 via Frontend Transport; Sat, 25 Nov 2023 11:16:09 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Sat, 25 Nov
+ 2023 05:15:48 -0600
+Received: from xhdvnc205.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.34 via Frontend
+ Transport; Sat, 25 Nov 2023 05:15:43 -0600
+From: Srinivas Goud <srinivas.goud@amd.com>
+To: <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
+	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<conor+dt@kernel.org>, <p.zabel@pengutronix.de>
+CC: <git@amd.com>, <michal.simek@xilinx.com>, <linux-can@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<appana.durga.rao@xilinx.com>, <naga.sureshkumar.relli@xilinx.com>, Srinivas
+ Goud <srgoud@xhdsgoud40.xilinx.com>
+Subject: [PATCH v6 0/3] can: xilinx_can: Add ECC feature support
+Date: Sat, 25 Nov 2023 16:45:30 +0530
+Message-ID: <1700910933-23868-1-git-send-email-srinivas.goud@amd.com>
+X-Mailer: git-send-email 2.1.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:d2d2:b0:1cf:9a43:d323 with SMTP id
- n18-20020a170902d2d200b001cf9a43d323mr972682plc.11.1700880321624; Fri, 24 Nov
- 2023 18:45:21 -0800 (PST)
-Date: Fri, 24 Nov 2023 18:45:21 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000060446d060af10f08@google.com>
-Subject: [syzbot] [can?] memory leak in j1939_netdev_start
-From: syzbot <syzbot+1d37bef05da87b99c5a6@syzkaller.appspotmail.com>
-To: davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de, 
-	kuba@kernel.org, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	mkl@pengutronix.de, netdev@vger.kernel.org, o.rempel@pengutronix.de, 
-	pabeni@redhat.com, robin@protonic.nl, socketcan@hartkopp.net, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF000252A1:EE_|IA1PR12MB9031:EE_
+X-MS-Office365-Filtering-Correlation-Id: d6bbbd35-057a-4064-2b21-08dbeda7ed44
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	NjcIhP+AJDRVD23BjQcpQeG4uJuulZVnB1s5ttOlZgiEtccCGfusCwPF8gv50eIe6rx65L9a40dsb2IfDatzCfJxPg3aZnMRvYv93lWZUDfDZnnKJD1zCReX710vUETBX5PYV2xnZicIPZMH2vGSRa10cLXjgNuTnhClZkT01RFwNxGvdloOV6QbnnY6hYYaxa4paYigMm05j5cjHGASwBGlqEOKXkc0raF+s5snSxGJ8AHodDm7z3eOt8Xa580TQrP77eZkHADwf40Yh+7BA9Siehb1uPsZkmECjsGMPqismMsHKDJj8mOALXMTFTL7INB4N8OZEQHbydbK/zB/iY7rJpL70yha79M9pi+pgFnWa+miUYQMvZmHwhlr9BrXrtjv6zSzePZ1On2w+lUplHtb6mNAVYkX+6c4Zl+RhWtKraL9DMf/5Kmpxq8pp99AOsAd0K+/bbEYh7Lr3Gk1P9dK7DvYsovGOxuwrI/sAeiBDjGiZDZ5UArGlnqO7kJkjmu1G7edWLUCiTNLPKYbtCWn5BlqtUQ2r1PmahOsWhcY9hHG89cEBsqsdrLrQqzzqC1ZJ/3MWRYE+jWzSqvjm03D+HNhcKvi3eYlCiXsAb5e2ML3eG63Dmu/kY3nxqRCjovcDYfc8Izcsm2raUJTE2LAclhmQwrqudVc6NIR7U1X1WZcrATX/fKzBU07PU0vUzSzhiiqvFGcX6vUg4iGNqJTFXYbPUbdonhOXg2mkaX/dRQdUhAr1RMO+qC4XQw22JaND1jIzt2f1NPxNQfDHQObtQEVCZatgQtrIqYtB/PswZmrJOlykeAjnwHrizDLmrRWhxv6X5tXW9ZVwhCmkw==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(396003)(39860400002)(346002)(136003)(230173577357003)(230922051799003)(230273577357003)(64100799003)(82310400011)(451199024)(1800799012)(186009)(40470700004)(46966006)(36840700001)(83380400001)(426003)(336012)(82740400003)(26005)(2616005)(44832011)(8936002)(8676002)(4326008)(86362001)(40480700001)(36860700001)(47076005)(81166007)(356005)(478600001)(40460700003)(6666004)(54906003)(70586007)(70206006)(316002)(110136005)(921008)(36756003)(41300700001)(2906002)(7416002)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2023 11:16:09.8421
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6bbbd35-057a-4064-2b21-08dbeda7ed44
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF000252A1.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9031
 
-Hello,
+From: Srinivas Goud <srgoud@xhdsgoud40.xilinx.com>
 
-syzbot found the following issue on:
+Add ECC feature support to Tx and Rx FIFOs for Xilinx CAN Controller.
+ECC is an IP configuration option where counter registers are added in
+IP for 1bit/2bit ECC errors count and reset.
+Also driver reports 1bit/2bit ECC errors for FIFOs based on ECC error
+interrupts.
 
-HEAD commit:    98b1cc82c4af Linux 6.7-rc2
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1286e3d4e80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f1b9d95ada516af
-dashboard link: https://syzkaller.appspot.com/bug?extid=1d37bef05da87b99c5a6
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11c8f8cce80000
+Add xlnx,has-ecc optional property for Xilinx AXI CAN controller
+to support ECC if the ECC block is enabled in the HW.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/6b6d520f592c/disk-98b1cc82.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c2cb6183fd56/vmlinux-98b1cc82.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/de520cfc8b93/bzImage-98b1cc82.xz
+Add ethtool stats interface for getting all the ECC errors information.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1d37bef05da87b99c5a6@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff88811f324000 (size 8192):
-  comm "syz-executor.7", pid 5245, jiffies 4294947603 (age 10.860s)
-  hex dump (first 32 bytes):
-    00 40 32 1f 81 88 ff ff 00 40 32 1f 81 88 ff ff  .@2......@2.....
-    00 00 00 00 00 00 00 00 00 80 0f 1b 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff816339bd>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
-    [<ffffffff816339bd>] slab_post_alloc_hook mm/slab.h:766 [inline]
-    [<ffffffff816339bd>] slab_alloc_node mm/slub.c:3478 [inline]
-    [<ffffffff816339bd>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
-    [<ffffffff8157e845>] kmalloc_trace+0x25/0x90 mm/slab_common.c:1098
-    [<ffffffff8453e829>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff8453e829>] kzalloc include/linux/slab.h:721 [inline]
-    [<ffffffff8453e829>] j1939_priv_create net/can/j1939/main.c:135 [inline]
-    [<ffffffff8453e829>] j1939_netdev_start+0x159/0x6f0 net/can/j1939/main.c:272
-    [<ffffffff8454046e>] j1939_sk_bind+0x21e/0x550 net/can/j1939/socket.c:485
-    [<ffffffff83ec4dac>] __sys_bind+0x11c/0x130 net/socket.c:1845
-    [<ffffffff83ec4ddc>] __do_sys_bind net/socket.c:1856 [inline]
-    [<ffffffff83ec4ddc>] __se_sys_bind net/socket.c:1854 [inline]
-    [<ffffffff83ec4ddc>] __x64_sys_bind+0x1c/0x20 net/socket.c:1854
-    [<ffffffff84b6bd8f>] do_syscall_x64 arch/x86/entry/common.c:51 [inline]
-    [<ffffffff84b6bd8f>] do_syscall_64+0x3f/0x110 arch/x86/entry/common.c:82
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
-BUG: memory leak
-unreferenced object 0xffff88811f0bf300 (size 240):
-  comm "softirq", pid 0, jiffies 4294947604 (age 10.850s)
-  hex dump (first 32 bytes):
-    68 74 bb 1d 81 88 ff ff 68 74 bb 1d 81 88 ff ff  ht......ht......
-    00 80 0f 1b 81 88 ff ff 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff81631427>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
-    [<ffffffff81631427>] slab_post_alloc_hook mm/slab.h:766 [inline]
-    [<ffffffff81631427>] slab_alloc_node mm/slub.c:3478 [inline]
-    [<ffffffff81631427>] kmem_cache_alloc_node+0x2c7/0x450 mm/slub.c:3523
-    [<ffffffff83ed869f>] __alloc_skb+0x1ef/0x230 net/core/skbuff.c:641
-    [<ffffffff845473ef>] alloc_skb include/linux/skbuff.h:1286 [inline]
-    [<ffffffff845473ef>] j1939_session_fresh_new net/can/j1939/transport.c:1535 [inline]
-    [<ffffffff845473ef>] j1939_xtp_rx_rts_session_new net/can/j1939/transport.c:1631 [inline]
-    [<ffffffff845473ef>] j1939_xtp_rx_rts+0x49f/0xa50 net/can/j1939/transport.c:1735
-    [<ffffffff84547ea5>] j1939_tp_cmd_recv net/can/j1939/transport.c:2057 [inline]
-    [<ffffffff84547ea5>] j1939_tp_recv+0x1b5/0x7f0 net/can/j1939/transport.c:2144
-    [<ffffffff8453e3f9>] j1939_can_recv+0x349/0x4e0 net/can/j1939/main.c:112
-    [<ffffffff8452eea4>] deliver net/can/af_can.c:572 [inline]
-    [<ffffffff8452eea4>] can_rcv_filter+0xd4/0x290 net/can/af_can.c:606
-    [<ffffffff8452f560>] can_receive+0xf0/0x140 net/can/af_can.c:663
-    [<ffffffff8452f6a0>] can_rcv+0xf0/0x130 net/can/af_can.c:687
-    [<ffffffff83f10bf6>] __netif_receive_skb_one_core+0x66/0x90 net/core/dev.c:5529
-    [<ffffffff83f10c6d>] __netif_receive_skb+0x1d/0x90 net/core/dev.c:5643
-    [<ffffffff83f10fcc>] process_backlog+0xbc/0x190 net/core/dev.c:5971
-    [<ffffffff83f1215e>] __napi_poll+0x3e/0x310 net/core/dev.c:6533
-    [<ffffffff83f12b78>] napi_poll net/core/dev.c:6602 [inline]
-    [<ffffffff83f12b78>] net_rx_action+0x3d8/0x510 net/core/dev.c:6735
-    [<ffffffff84b8974d>] __do_softirq+0xbd/0x2b0 kernel/softirq.c:553
-
-BUG: memory leak
-unreferenced object 0xffff88811f340000 (size 131072):
-  comm "softirq", pid 0, jiffies 4294947604 (age 10.850s)
-  hex dump (first 32 bytes):
-    0e 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8157e703>] __kmalloc_large_node+0xe3/0x170 mm/slab_common.c:1157
-    [<ffffffff8157ecbb>] __do_kmalloc_node mm/slab_common.c:995 [inline]
-    [<ffffffff8157ecbb>] __kmalloc_node_track_caller+0xbb/0x150 mm/slab_common.c:1027
-    [<ffffffff83ed49a6>] kmalloc_reserve+0x96/0x170 net/core/skbuff.c:582
-    [<ffffffff83ed8585>] __alloc_skb+0xd5/0x230 net/core/skbuff.c:651
-    [<ffffffff845473ef>] alloc_skb include/linux/skbuff.h:1286 [inline]
-    [<ffffffff845473ef>] j1939_session_fresh_new net/can/j1939/transport.c:1535 [inline]
-    [<ffffffff845473ef>] j1939_xtp_rx_rts_session_new net/can/j1939/transport.c:1631 [inline]
-    [<ffffffff845473ef>] j1939_xtp_rx_rts+0x49f/0xa50 net/can/j1939/transport.c:1735
-    [<ffffffff84547ea5>] j1939_tp_cmd_recv net/can/j1939/transport.c:2057 [inline]
-    [<ffffffff84547ea5>] j1939_tp_recv+0x1b5/0x7f0 net/can/j1939/transport.c:2144
-    [<ffffffff8453e3f9>] j1939_can_recv+0x349/0x4e0 net/can/j1939/main.c:112
-    [<ffffffff8452eea4>] deliver net/can/af_can.c:572 [inline]
-    [<ffffffff8452eea4>] can_rcv_filter+0xd4/0x290 net/can/af_can.c:606
-    [<ffffffff8452f560>] can_receive+0xf0/0x140 net/can/af_can.c:663
-    [<ffffffff8452f6a0>] can_rcv+0xf0/0x130 net/can/af_can.c:687
-    [<ffffffff83f10bf6>] __netif_receive_skb_one_core+0x66/0x90 net/core/dev.c:5529
-    [<ffffffff83f10c6d>] __netif_receive_skb+0x1d/0x90 net/core/dev.c:5643
-    [<ffffffff83f10fcc>] process_backlog+0xbc/0x190 net/core/dev.c:5971
-    [<ffffffff83f1215e>] __napi_poll+0x3e/0x310 net/core/dev.c:6533
-    [<ffffffff83f12b78>] napi_poll net/core/dev.c:6602 [inline]
-    [<ffffffff83f12b78>] net_rx_action+0x3d8/0x510 net/core/dev.c:6735
-    [<ffffffff84b8974d>] __do_softirq+0xbd/0x2b0 kernel/softirq.c:553
-
-BUG: memory leak
-unreferenced object 0xffff88811dbb7400 (size 512):
-  comm "softirq", pid 0, jiffies 4294947604 (age 10.850s)
-  hex dump (first 32 bytes):
-    00 40 32 1f 81 88 ff ff 28 50 32 1f 81 88 ff ff  .@2.....(P2.....
-    28 50 32 1f 81 88 ff ff 18 74 bb 1d 81 88 ff ff  (P2......t......
-  backtrace:
-    [<ffffffff816339bd>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
-    [<ffffffff816339bd>] slab_post_alloc_hook mm/slab.h:766 [inline]
-    [<ffffffff816339bd>] slab_alloc_node mm/slub.c:3478 [inline]
-    [<ffffffff816339bd>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
-    [<ffffffff8157e845>] kmalloc_trace+0x25/0x90 mm/slab_common.c:1098
-    [<ffffffff84542463>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff84542463>] kzalloc include/linux/slab.h:721 [inline]
-    [<ffffffff84542463>] j1939_session_new+0x53/0x140 net/can/j1939/transport.c:1494
-    [<ffffffff84547485>] j1939_session_fresh_new net/can/j1939/transport.c:1546 [inline]
-    [<ffffffff84547485>] j1939_xtp_rx_rts_session_new net/can/j1939/transport.c:1631 [inline]
-    [<ffffffff84547485>] j1939_xtp_rx_rts+0x535/0xa50 net/can/j1939/transport.c:1735
-    [<ffffffff84547ea5>] j1939_tp_cmd_recv net/can/j1939/transport.c:2057 [inline]
-    [<ffffffff84547ea5>] j1939_tp_recv+0x1b5/0x7f0 net/can/j1939/transport.c:2144
-    [<ffffffff8453e3f9>] j1939_can_recv+0x349/0x4e0 net/can/j1939/main.c:112
-    [<ffffffff8452eea4>] deliver net/can/af_can.c:572 [inline]
-    [<ffffffff8452eea4>] can_rcv_filter+0xd4/0x290 net/can/af_can.c:606
-    [<ffffffff8452f560>] can_receive+0xf0/0x140 net/can/af_can.c:663
-    [<ffffffff8452f6a0>] can_rcv+0xf0/0x130 net/can/af_can.c:687
-    [<ffffffff83f10bf6>] __netif_receive_skb_one_core+0x66/0x90 net/core/dev.c:5529
-    [<ffffffff83f10c6d>] __netif_receive_skb+0x1d/0x90 net/core/dev.c:5643
-    [<ffffffff83f10fcc>] process_backlog+0xbc/0x190 net/core/dev.c:5971
-    [<ffffffff83f1215e>] __napi_poll+0x3e/0x310 net/core/dev.c:6533
-    [<ffffffff83f12b78>] napi_poll net/core/dev.c:6602 [inline]
-    [<ffffffff83f12b78>] net_rx_action+0x3d8/0x510 net/core/dev.c:6735
-    [<ffffffff84b8974d>] __do_softirq+0xbd/0x2b0 kernel/softirq.c:553
-
-
+There is no public documentation for it available.
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+BRANCH: linux-can-next/master
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Changes in v6:
+Update commit description
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+Changes in v5:
+Fix review comments
+Change the sequence of updates the stats
+Add get_strings and get_sset_count stats interface
+Use u64 stats helper function
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Changes in v4:
+Fix DT binding check warning
+Update xlnx,has-ecc property description
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Changes in v3:
+Update mailing list
+Update commit description
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+Changes in v2:
+Address review comments
+Add ethtool stats interface
+Update commit description
 
-If you want to undo deduplication, reply with:
-#syz undup
+
+Srinivas Goud (3):
+  dt-bindings: can: xilinx_can: Add 'xlnx,has-ecc' optional property
+  can: xilinx_can: Add ECC support
+  can: xilinx_can: Add ethtool stats interface for ECC errors
+
+ .../devicetree/bindings/net/can/xilinx,can.yaml    |   5 +
+ drivers/net/can/xilinx_can.c                       | 159 ++++++++++++++++++++-
+ 2 files changed, 160 insertions(+), 4 deletions(-)
+
+-- 
+2.1.1
+
 
