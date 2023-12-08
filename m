@@ -1,76 +1,63 @@
-Return-Path: <linux-can+bounces-70-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-71-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5375880A9EF
-	for <lists+linux-can@lfdr.de>; Fri,  8 Dec 2023 18:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DA7880AA0D
+	for <lists+linux-can@lfdr.de>; Fri,  8 Dec 2023 18:08:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8507D1C2080C
-	for <lists+linux-can@lfdr.de>; Fri,  8 Dec 2023 17:00:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEFFC1C2084B
+	for <lists+linux-can@lfdr.de>; Fri,  8 Dec 2023 17:08:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F32D27473;
-	Fri,  8 Dec 2023 17:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E24A3381CA;
+	Fri,  8 Dec 2023 17:08:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="ZPjUlA30";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="DBLWt2yM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hd2pQG/b"
 X-Original-To: linux-can@vger.kernel.org
-X-Greylist: delayed 178 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 08 Dec 2023 09:00:44 PST
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.217])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71171D54
-	for <linux-can@vger.kernel.org>; Fri,  8 Dec 2023 09:00:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1702054664; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=gLKw9Nuqzz6qCPui3rc+BCSHoYAydteioAyOmJvBKAPnP3xNwTih7q/wK/2lAwZ+jM
-    EnBRSe4/9gXoho+x0+3BUYGVJHXCPSFe1mJwfHR2s5vAHGbhoxeKC0Tb4cpY53KsVpWA
-    dJQJqVKwNbispnBTIa+sYZDq964PpLcYjqBHfCgnEHDolh2Tuz+IHc5Xyp8GrQ80djuD
-    A562Pk1VEkjmx1OPPdsbBnyBKH/pEw/NOLUjZxIzu30y3XoXdK9bsEdXBgrCLEmF4HgH
-    eFXAGO43ycsYfncypBr0gCiQG/DE1V5ePp4+0mZ9qqo6fWz4crNqz9cgRpsSlHGMVDSV
-    t/NA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1702054664;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=BOoXAIXA9WlH3ldBAHL9M84eRIpG/ZBAuO006AtCXTc=;
-    b=S9wJQ3/lqYH5uz5h+a4w0pGAfSDx286/bLN9rVfBkzR0Ri1Yw7Q+QRO25HmiWRm7rc
-    7CHeknENDZ0SvzEykKul03uHYSN0BplIEp84Q9TdiSPYRDYKVfVebMC4IE3onmFCFU+c
-    GScErYtrdYSeutwkZ/fIk0ax/Wc7b3H1VVcLLAWxZGulmUOsGGXvGXRZAUcVt7f41GWN
-    mKwUmIn2LeqpijrsmMjZTQsMj7iVDCOSDZnLGoCsvTnQNKXWIAGHhzEPGLWphsk+wWY0
-    ox1vgFNIzperTbJD4jIl+gxB77BDnNQiOAZ1kjq7WTWgk6O8GZbkKZlc2FP7MRsw8S7a
-    Nw6A==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1702054664;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=BOoXAIXA9WlH3ldBAHL9M84eRIpG/ZBAuO006AtCXTc=;
-    b=ZPjUlA30GEW5VmO3M6PYUrZ21KQMX1yBJd/qCzzqyXWYXviPK4T4RA1fhBdnGR1bva
-    xhQg4gyBs5V9ROUML3P698OlP5iWoi30hixdmpnkXjKfCcVoXUytilX9gVk9+AmnXVJk
-    SFb5lbM6jcVxifmy3VRRMdlA5RtpwxyNugp6CLiZo8xASTsvblAmtdgsDE/sOda9Fm7y
-    eiAfIZabHXhmfCe/QP1PDmnAwP6Yi6s8vg3j2znwNFBPfG1iPqOvhr1+FOUkd7UNHtQx
-    H++YMigFwqQcOdkEixrYvDjUuZgXdX0lnUyZyP0lyWyp9uDb/hdzs3NyTQun9ijBOyqP
-    RsGQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1702054664;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=BOoXAIXA9WlH3ldBAHL9M84eRIpG/ZBAuO006AtCXTc=;
-    b=DBLWt2yMV4iRaSNCE2Irg4m7OOEJlFejFQ17i79nG5gHN7nfTWYcjhocZIZVO6DS23
-    E61euPZSpMz4FoRSrgCw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3VYpXsQi7qV3YmVcehrrd"
-Received: from blue.lan
-    by smtp.strato.de (RZmta 49.10.0 AUTH)
-    with ESMTPSA id Kf147azB8GvhD8S
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Fri, 8 Dec 2023 17:57:43 +0100 (CET)
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH] can: isotp: support dynamic flow control parameters
-Date: Fri,  8 Dec 2023 17:57:29 +0100
-Message-Id: <20231208165729.3011-1-socketcan@hartkopp.net>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B671422308;
+	Fri,  8 Dec 2023 17:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13DF3C433C8;
+	Fri,  8 Dec 2023 17:08:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702055286;
+	bh=L5ejtIWY2RbVcSXfTpmFdQcek5I6KvvEbrzWnLb3alk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Hd2pQG/brFeY0MUHlYGM1FA/ACwdZ/PKIvT+WUz0y/GwxcHFCcBSdORH7AFMk4J4Y
+	 8gya+/+u5Xo3nvNnn40z6avHkPojQ6P0N2bwg5UqUqlyhykXWG7kw6fkgkWzsvMjtb
+	 HCXsf8smx6RKwc62OCVNPWS7S9SeXA2gxjc9GriczeGD3ApV+r1mROSUxhbJt7lDjE
+	 Kxg9m5qgMeNAJnynzyeJFbHatdQwwUdnLatPsUNQB9jpBbAHRcmxg0GcMInl8vmweo
+	 BOu70JcQxbs3gMJWAD2Y7iS2DHrMFdH4rvNuYdOtRGWrgQfEHBV3H6HwkEAvM5BJ1R
+	 2T+4NSBIxfQTA==
+From: Conor Dooley <conor@kernel.org>
+To: linux-riscv@lists.infradead.org
+Cc: conor@kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org
+Subject: [PATCH v1 0/7] MPFS clock fixes required for correct CAN clock modeling
+Date: Fri,  8 Dec 2023 17:07:39 +0000
+Message-Id: <20231208-sizably-repressed-16651a4b70e7@spud>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -78,57 +65,66 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2342; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=g/+RSOF+MCs/BzYXcY1ALY/xOCAYFuZb4uSD23xQNkE=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKnFvtHrtsdemV8uxdOg7zQ1vf/tqs9cd2MF91un6K8We Kz61nhLRykLgxgHg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACaSas3IcLoxYObBk32GPQkX fRf1bqjc/mTNh5AFCWt4FrC9XK3TupiRocPw1fWLF80f/Vpa0K1X9CUxMMnvBcdM2aTLj+WDD2m u5AYA
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
 
-The ISO15765-2 standard supports to take the PDUs communication parameters
-blocksize (BS) and Separation Time minimum (STmin) either from the first
-received flow control (FC) "static" or from every received FC "dynamic".
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Add a new CAN_ISOTP_DYN_FC_PARMS flag to support dynamic FC parameters.
+While reviewing a CAN clock driver internally for MPFS [1], I realised
+that the modeling of the MSSPLL such that one one of its outputs could
+be used was not correct. The CAN controllers on MPFS take 2 input
+clocks - one that is the bus clock, acquired from the main MSSPLL and
+a second clock for the AHB interface to the result of the SoC.
+Currently the binding for the CAN controllers and the represetnation
+of the MSSPLL only allows for one of these clocks.
+Modify the binding and devicetree to expect two clocks and rework the
+main clock controller driver for MPFS such that it is capable of
+providing multiple outputs from the MSSPLL.
 
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- include/uapi/linux/can/isotp.h | 1 +
- net/can/isotp.c                | 5 +++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Cheers,
+Conor.
 
-diff --git a/include/uapi/linux/can/isotp.h b/include/uapi/linux/can/isotp.h
-index 439c982f7e81..6cde62371b6f 100644
---- a/include/uapi/linux/can/isotp.h
-+++ b/include/uapi/linux/can/isotp.h
-@@ -135,10 +135,11 @@ struct can_isotp_ll_options {
- #define CAN_ISOTP_FORCE_RXSTMIN	0x0100	/* ignore CFs depending on rx stmin */
- #define CAN_ISOTP_RX_EXT_ADDR	0x0200	/* different rx extended addressing */
- #define CAN_ISOTP_WAIT_TX_DONE	0x0400	/* wait for tx completion */
- #define CAN_ISOTP_SF_BROADCAST	0x0800	/* 1-to-N functional addressing */
- #define CAN_ISOTP_CF_BROADCAST	0x1000	/* 1-to-N transmission w/o FC */
-+#define CAN_ISOTP_DYN_FC_PARMS	0x2000	/* dynamic FC parameters BS/STmin */
- 
- /* protocol machine default values */
- 
- #define CAN_ISOTP_DEFAULT_FLAGS		0
- #define CAN_ISOTP_DEFAULT_EXT_ADDRESS	0x00
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index d1c6f206f429..25bac0fafc83 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -379,12 +379,13 @@ static int isotp_rcv_fc(struct isotp_sock *so, struct canfd_frame *cf, int ae)
- 		so->tx.state = ISOTP_IDLE;
- 		wake_up_interruptible(&so->wait);
- 		return 1;
- 	}
- 
--	/* get communication parameters only from the first FC frame */
--	if (so->tx.state == ISOTP_WAIT_FIRST_FC) {
-+	/* get static/dynamic communication params from first/every FC frame */
-+	if (so->tx.state == ISOTP_WAIT_FIRST_FC ||
-+	    so->opt.flags & CAN_ISOTP_DYN_FC_PARMS) {
- 		so->txfc.bs = cf->data[ae + 1];
- 		so->txfc.stmin = cf->data[ae + 2];
- 
- 		/* fix wrong STmin values according spec */
- 		if (so->txfc.stmin > 0x7F &&
+1 - Hopefully that'll show up on the lists soon, once we are happy with
+  it ourselves.
+
+CC: Conor Dooley <conor.dooley@microchip.com>
+CC: Daire McNamara <daire.mcnamara@microchip.com>
+CC: Wolfgang Grandegger <wg@grandegger.com>
+CC: Marc Kleine-Budde <mkl@pengutronix.de>
+CC: "David S. Miller" <davem@davemloft.net>
+CC: Eric Dumazet <edumazet@google.com>
+CC: Jakub Kicinski <kuba@kernel.org>
+CC: Paolo Abeni <pabeni@redhat.com>
+CC: Rob Herring <robh+dt@kernel.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC: Paul Walmsley <paul.walmsley@sifive.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: Albert Ou <aou@eecs.berkeley.edu>
+CC: Michael Turquette <mturquette@baylibre.com>
+CC: Stephen Boyd <sboyd@kernel.org>
+CC: linux-riscv@lists.infradead.org
+CC: linux-can@vger.kernel.org
+CC: netdev@vger.kernel.org
+CC: devicetree@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: linux-clk@vger.kernel.org
+
+Conor Dooley (7):
+  dt-bindings: clock: mpfs: add more MSSPLL output definitions
+  dt-bindings: can: mpfs: add missing required clock
+  clk: microchip: mpfs: split MSSPLL in two
+  clk: microchip: mpfs: setup for using other mss pll outputs
+  clk: microchip: mpfs: add missing MSSPLL outputs
+  clk: microchip: mpfs: convert MSSPLL outputs to clk_divider
+  riscv: dts: microchip: add missing CAN bus clocks
+
+ .../bindings/net/can/microchip,mpfs-can.yaml  |   7 +-
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       |   4 +-
+ drivers/clk/microchip/clk-mpfs.c              | 154 ++++++++++--------
+ .../dt-bindings/clock/microchip,mpfs-clock.h  |   5 +
+ 4 files changed, 99 insertions(+), 71 deletions(-)
+
 -- 
 2.39.2
 
