@@ -1,40 +1,41 @@
-Return-Path: <linux-can+bounces-90-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-91-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5770781125E
-	for <lists+linux-can@lfdr.de>; Wed, 13 Dec 2023 14:03:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB361812E94
+	for <lists+linux-can@lfdr.de>; Thu, 14 Dec 2023 12:31:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CDEEDB20C6B
-	for <lists+linux-can@lfdr.de>; Wed, 13 Dec 2023 13:03:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 367E61F21AD6
+	for <lists+linux-can@lfdr.de>; Thu, 14 Dec 2023 11:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CB452C1BD;
-	Wed, 13 Dec 2023 13:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pOAZ793f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85BE53FE22;
+	Thu, 14 Dec 2023 11:31:39 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3244E2C842;
-	Wed, 13 Dec 2023 13:02:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B73FFC433C8;
-	Wed, 13 Dec 2023 13:02:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702472575;
-	bh=SYhlR91tO42bA8AfGZXjJpENUJXvfJwI9ZrVd2yDl7o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pOAZ793fHzKh/HYPbFWxrP57xdIvDGz7zJAPafMIdiXo/gdClWfHHvXyABgyiaI3d
-	 IzjD7flCvOmUtRPQK/nwxFG4P+/wjewBRhds66wynKr/e/B9HcmsYwbGWOiDfrcGgF
-	 Mad+vti/3CHqhV9Mc8DmDCiHi5Llrhj8bBvRK8yG2/BfMYB5kldfx6AoNVi3LS5Yed
-	 voYZzMviyN03AtFIwzndO9A1hh6wyeIOadgNlhvE3YVLQFoRmcz/zTpvLmVk2qGecJ
-	 c2p65kbrZ/i6niLm0i+F8ERk9GXSfIiwFL6+xEZru50pieVHqYJCoculVkT2y+ID+D
-	 uMM7/fLCxbELQ==
-Date: Wed, 13 Dec 2023 13:02:49 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6900AB7
+	for <linux-can@vger.kernel.org>; Thu, 14 Dec 2023 03:31:36 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1rDjvo-0007MZ-Dp; Thu, 14 Dec 2023 12:31:08 +0100
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1rDjvm-00Fn0N-Dm; Thu, 14 Dec 2023 12:31:06 +0100
+Received: from pengutronix.de (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 5826D262EFD;
+	Thu, 14 Dec 2023 11:31:05 +0000 (UTC)
+Date: Thu, 14 Dec 2023 12:31:04 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Conor Dooley <conor@kernel.org>
 Cc: linux-riscv@lists.infradead.org,
 	Conor Dooley <conor.dooley@microchip.com>,
 	Daire McNamara <daire.mcnamara@microchip.com>,
@@ -53,79 +54,103 @@ Cc: linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
 Subject: Re: [PATCH RESEND v1 2/7] dt-bindings: can: mpfs: add missing
  required clock
-Message-ID: <20231213-waffle-grueling-3a5c3879395b@spud>
+Message-ID: <20231214-tinderbox-glitzy-60d1936ab85f-mkl@pengutronix.de>
 References: <20231208-reenter-ajar-b6223e5134b3@spud>
  <20231208-palpitate-passable-c79bacf2036c@spud>
  <20231212-unreeling-depose-8b6b2e032555-mkl@pengutronix.de>
+ <20231213-waffle-grueling-3a5c3879395b@spud>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="AuzXFLC6CIKr68l9"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="td3sd7zfsqtxdr4k"
 Content-Disposition: inline
-In-Reply-To: <20231212-unreeling-depose-8b6b2e032555-mkl@pengutronix.de>
+In-Reply-To: <20231213-waffle-grueling-3a5c3879395b@spud>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
---AuzXFLC6CIKr68l9
-Content-Type: text/plain; charset=us-ascii
+--td3sd7zfsqtxdr4k
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 12, 2023 at 09:49:41PM +0100, Marc Kleine-Budde wrote:
-> On 08.12.2023 17:12:24, Conor Dooley wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
+On 13.12.2023 13:02:49, Conor Dooley wrote:
+> On Tue, Dec 12, 2023 at 09:49:41PM +0100, Marc Kleine-Budde wrote:
+> > On 08.12.2023 17:12:24, Conor Dooley wrote:
+> > > From: Conor Dooley <conor.dooley@microchip.com>
+> > >=20
+> > > The CAN controller on PolarFire SoC has an AHB peripheral clock _and_=
+ a
+> > > CAN bus clock. The bus clock was omitted when the binding was written,
+> > > but is required for operation. Make up for lost time and add it.
+> > >=20
+> > > Cautionary tale in adding bindings without having implemented a real
+> > > user for them perhaps.
+> > >=20
+> > > Fixes: c878d518d7b6 ("dt-bindings: can: mpfs: document the mpfs CAN c=
+ontroller")
+> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > > ---
+> > >  .../devicetree/bindings/net/can/microchip,mpfs-can.yaml    | 7 +++++=
+--
+> > >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/net/can/microchip,mpfs=
+-can.yaml b/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.ya=
+ml
+> > > index 45aa3de7cf01..05f680f15b17 100644
+> > > --- a/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.ya=
+ml
+> > > +++ b/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.ya=
+ml
+> > > @@ -24,7 +24,10 @@ properties:
+> > >      maxItems: 1
+> > > =20
+> > >    clocks:
+> > > -    maxItems: 1
+> > > +    maxItems: 2
+> > > +    items:
+> > > +      - description: AHB peripheral clock
+> > > +      - description: CAN bus clock
 > >=20
-> > The CAN controller on PolarFire SoC has an AHB peripheral clock _and_ a
-> > CAN bus clock. The bus clock was omitted when the binding was written,
-> > but is required for operation. Make up for lost time and add it.
-> >=20
-> > Cautionary tale in adding bindings without having implemented a real
-> > user for them perhaps.
-> >=20
-> > Fixes: c878d518d7b6 ("dt-bindings: can: mpfs: document the mpfs CAN con=
-troller")
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  .../devicetree/bindings/net/can/microchip,mpfs-can.yaml    | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/net/can/microchip,mpfs-c=
-an.yaml b/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.yaml
-> > index 45aa3de7cf01..05f680f15b17 100644
-> > --- a/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.yaml
-> > +++ b/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.yaml
-> > @@ -24,7 +24,10 @@ properties:
-> >      maxItems: 1
-> > =20
-> >    clocks:
-> > -    maxItems: 1
-> > +    maxItems: 2
-> > +    items:
-> > +      - description: AHB peripheral clock
-> > +      - description: CAN bus clock
+> > Do we we want to have a "clock-names" property, as we need the clock
+> > rate of the CAN bus clock.
 >=20
-> Do we we want to have a "clock-names" property, as we need the clock
-> rate of the CAN bus clock.
+> We should not need the clock-names property to be able to get both of
+> the clocks. clk_bulk_get_all() for example should be usable here.
 
-We should not need the clock-names property to be able to get both of
-the clocks. clk_bulk_get_all() for example should be usable here.
+ACK, but we need the clock rate of CAN clock. Does this binding check
+that the CAN clock rate is the 2nd one?
 
-Cheers,
-Conor.
+regards,
+Marc
 
---AuzXFLC6CIKr68l9
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--td3sd7zfsqtxdr4k
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXmreQAKCRB4tDGHoIJi
-0pybAQCaXK2xUCp5W6797bY/KOydLDfzz6/zpgo3/ym1K/7tCgEAs+ZQmqrTvSuQ
-t2sr42Cf8RWYaRCGrwl6zg97g0jV0As=
-=jW/W
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmV653YACgkQvlAcSiqK
+BOhMmggApdGofXs7BcJbjT8hpDnLCGwmugpp0y3veU4Okm1P5NHwewyOaznIC4l7
+VKu8jX23jiHIWYz2czWfTtoPskoi2RCs5Hj4t1eoFYywF9BAAwHITK7KtsR9fuZ7
+XwdRZzjWHEh+I0BFmKv6GEpldjTZz269Nn47wy96FKErGKF2taHACZ97p5nqIwMz
+uB7dZtekAf4scC6jKLZYwUUl68YwktTMZWu9PkjfH3oLS+H2oXHxxzUg6mME5R/o
+2Nj92O17r0Md7j3QioEGIKNrr7dKubY0QPgZ+lP/ImoLgFDmAPC6tYlWR00kDf9b
+ho3kmb28TrV4g0HQA1ZMBrJX78JxlA==
+=M/Nz
 -----END PGP SIGNATURE-----
 
---AuzXFLC6CIKr68l9--
+--td3sd7zfsqtxdr4k--
 
