@@ -1,285 +1,357 @@
-Return-Path: <linux-can+bounces-98-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-99-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10E6D81A25E
-	for <lists+linux-can@lfdr.de>; Wed, 20 Dec 2023 16:27:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3350981B611
+	for <lists+linux-can@lfdr.de>; Thu, 21 Dec 2023 13:40:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 913E91F24845
-	for <lists+linux-can@lfdr.de>; Wed, 20 Dec 2023 15:27:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEE8E28823C
+	for <lists+linux-can@lfdr.de>; Thu, 21 Dec 2023 12:40:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5586E40BF2;
-	Wed, 20 Dec 2023 15:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B430F1DDE3;
+	Thu, 21 Dec 2023 12:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="aGFNgH3E"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="smRzk6YQ";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="I4ll3hXl"
 X-Original-To: linux-can@vger.kernel.org
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2124.outbound.protection.outlook.com [40.107.21.124])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A7A4123A;
-	Wed, 20 Dec 2023 15:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=esd.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esd.eu
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BxlExN//ELEqntbL4uspEETfBgGJeLJVFkjT5FWcB5vLFBveN9Y2u5Ga85aNyYf7j8wAYS0YbAm6/rw9jqx8u+84kT53FVU3BtaQ/lZjX9kfAqozMA/T/GOplJPleEceexl2ou4/zYxvfEWT0Y3qwamy/KYl/7dOGNnPFgbsFdMiM9ol0WpozCjHH68n8OWhqncEOe1P7lnni3E6jSDti854rNjkrIAA74QxAozhKd1w3HV3Rd9EeXA2ku2pscJ+VJ7gRwsR4VVEgE4MIcqqAfLOYelxsQDsRsLJpzm+jq0zhGNPSfRjtcIxmqS+fB505WAsiz5w0bY+N0JmOpo3gA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uy7v0flpFZZMX5RxX6ZlGjj/J1e/Qy0kZxfwRbaFcIQ=;
- b=Yjowq3DnOls1xbeogCS1ndPrOWy9rybDIhAI1NEDKOSUKwhI2RTpw7SBu9kMDqmUrqlkh+bjl5a63cSmRmpzkdSYX/wr4Is/GDrPM6UW8EdmL7i0TZ8k2COeNMNoAd52hwM2UAHuk5VDqJHATQT9P6psw+cVK6ZRcGhZGDLFZZuRIsNoLlSdt2Vq3DgicnUi2/NJBWU7fmfIiQqC/LqK+EPzUC6uod2Hmxg6HNuJrLTgzKzJJXbhGzK0BBFDoauS1B5Gspu3K/uw06FrTVH3TkZdcZPXZ0unyHAYWSQkMjG6RA7QCjJw4ogLsl0ClaIqnz4ZzwfWQTRSkgmkecZkpg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=esd.eu; dmarc=pass action=none header.from=esd.eu; dkim=pass
- header.d=esd.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uy7v0flpFZZMX5RxX6ZlGjj/J1e/Qy0kZxfwRbaFcIQ=;
- b=aGFNgH3EtsLKp+MGz1cwBEcR2SfKmkU10R/osOfs3Ra3SJWFFApm3qvLdH6wrmBrqLJ3ysULWwgVTvFqxdJuWHdakCLXA7fiT88tQPqS94aYVlaxW9yHutXavce0s7SpT/4efjs++O9JV1HT77b5NcgsSHNaQgZoYX+q4b60+QA=
-Received: from AM6PR03MB4296.eurprd03.prod.outlook.com (2603:10a6:20b:3::16)
- by DB9PR03MB8870.eurprd03.prod.outlook.com (2603:10a6:10:3de::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.38; Wed, 20 Dec
- 2023 15:25:57 +0000
-Received: from AM6PR03MB4296.eurprd03.prod.outlook.com
- ([fe80::e4c5:63b9:dfd2:c12e]) by AM6PR03MB4296.eurprd03.prod.outlook.com
- ([fe80::e4c5:63b9:dfd2:c12e%6]) with mapi id 15.20.7113.016; Wed, 20 Dec 2023
- 15:25:57 +0000
-From: =?utf-8?B?U3RlZmFuIE3DpHRqZQ==?= <Stefan.Maetje@esd.eu>
-To: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-	"mkl@pengutronix.de" <mkl@pengutronix.de>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-CC: "wg@grandegger.com" <wg@grandegger.com>, "edumazet@google.com"
-	<edumazet@google.com>, "davem@davemloft.net" <davem@davemloft.net>,
-	"kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>
-Subject: Re: [PATCH v11 0/2] can: esd: add support for esd GmbH PCIe/402 CAN
- interface
-Thread-Topic: [PATCH v11 0/2] can: esd: add support for esd GmbH PCIe/402 CAN
- interface
-Thread-Index: AQHaHV/MUchwCksNTkOeS+zv8AjBELCyducA
-Date: Wed, 20 Dec 2023 15:25:57 +0000
-Message-ID: <77d81c492c78a8ce1b51e71af5607917f6aebd5d.camel@esd.eu>
-References: <20231122160211.2110448-1-stefan.maetje@esd.eu>
-In-Reply-To: <20231122160211.2110448-1-stefan.maetje@esd.eu>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.36.5-0ubuntu1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=esd.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR03MB4296:EE_|DB9PR03MB8870:EE_
-x-ms-office365-filtering-correlation-id: 2c26d1f6-de80-42d8-4989-08dc016ff6d4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- /0dXJFHcZAiAo6yBtmRzoc6KaN9cKtXdVAYK8pJmNyPWOPcDi5/bPk8crXQt7k8aIvTWJE3LkO8HbOwfcqb38iH9ITuSc45SSnw7Xq5EykFWFJvT5Cdn0ipDYCWzjxLfQ1FP/gALREFT0qf4N9rlAoo3MHaZ32oQ7gruApITuK+z3CmHl6EKC4+R0C4UNiDQAEAchDIgNXBPcGbnK6jdRvTA5OR+3bVB4Ab0A5fzkoj9ZKHt1722ZcM6s10S6VNg2e7e6mIiFEClCiKT+2wtyYOr6SgEZhJ7d1PTjaKfDq8b1OheXd4uFCZyQ29jgGLB1ao+ZrefQ9lVkB3tjsB5FyeCDfZJjqfdN1ZrQgBXcE9db5YOO591IZmcrNTcmeWb6zQnjyCpeEW7WkhPnKTqQOub5rvo6ovp1KSgFnE7mNegv3b/ZgrW2/BbCXzJr84P0b2x2UGnbdkss9fkP0il6olny7ShAXKf/BnZRreNk8q7zeB2ElbMsvBvyUCsIpAPD4ecoo0DasxHHKGDkN80dLWnA1FnFJugTxsQH+XJf1UCwJYEdz2/xm939icij4SnWDLVBzSO5yKPm65L+yovGmHxwgK/J2HaSf9uVaom59JX58L1eETeNjpaO/UmkJr5jBruI9CT8VtZbC7eGZUl9w==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR03MB4296.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39840400004)(366004)(346002)(136003)(376002)(230173577357003)(230273577357003)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(6512007)(2616005)(66574015)(6506007)(26005)(71200400001)(38100700002)(122000001)(36756003)(38070700009)(86362001)(85202003)(85182001)(41300700001)(4326008)(8676002)(110136005)(8936002)(91956017)(5660300002)(83380400001)(2906002)(478600001)(76116006)(66556008)(64756008)(316002)(54906003)(66446008)(966005)(66946007)(6486002)(66476007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?K1k5Q0ZWdzZOaGlBRWxPbG9XRGhVZEhzditjdnl3RmVqdkY2Q203S2RXQzlV?=
- =?utf-8?B?UElicHRkQzZWQzlNWDE0ZHkzYXZ0TG85LzAvOVdhdUlNL1hFWHBYTkhOcktC?=
- =?utf-8?B?MmxaMHhnSG5JNWpPd2RmcjNrN040M3BhcGRIZHBWRHJ6Q05xTXVjaDlHSWc4?=
- =?utf-8?B?MXl3VWh1TVM5NklIbERwMEFQaWZUdlltMjJIb24vdElCLzFhR3Z0ay9FZ0pV?=
- =?utf-8?B?MGNXbVdhZ2NKVDErZnVBeGZIVGlTL0RKckd0SThRdUdBV1ZGSkN5Z2hoWHRK?=
- =?utf-8?B?bGx0dWsyR05hWTZRcHR3YzN1Z1M5NFpDTGd2WC9Fem80SGdSYjF1Wjk5T0Uv?=
- =?utf-8?B?VS9BMHlScU9mVlc5Kzd0OFpPaldMQ1VHc29sWVFHSEYveVgzT0Y4UU1ONzg3?=
- =?utf-8?B?VU9aNndmRmNKTThjN1gvVVFYUE5pWnREY2t5aXQwMzVJeERYZmhFR1dMV3Iy?=
- =?utf-8?B?SG9DRkxXcU9ZVzcrcXUyQTVMeldxSWVrejNtRTl2ZUFxbnlGamtEbDhncUNW?=
- =?utf-8?B?cUZNMjJKVVpYYTBwcWdEL21FRFFHaXp6a01OV2xDR2pMUldEd2VTaThlQUtZ?=
- =?utf-8?B?cnUwbFY3TFF4Z3FXQW1qUnEwZ24zeVZ0M3BSeVBTZElYMnFWbW5PeCtNVkVv?=
- =?utf-8?B?b1JaQytZeEpIYThhUGNkMDhHdmlpdzY1VE5tK3BNSFFJcVY3QzRybStBYXhC?=
- =?utf-8?B?SGFwbGwxczQrSEE1ZUNXSkJIQnpPNTYyK1E1RS9pSGxiaTc2WHJuSzRjMzlT?=
- =?utf-8?B?L21mSFJMRzdoekQzSlhyVzFQbHEvelBWdFFUQ2taYnpudFFBNnFsT1ZqUjd6?=
- =?utf-8?B?UW5sbXpnQ1djVFZtUmxmK2EzOERLbnBkalBJNlFzTzhRUjIyUWN4RlRsRGh5?=
- =?utf-8?B?cml0MThPUWlBSHZvK0Y0WmhWRUhzZ21MNUgrSjlkdlY2OFZKUHkwWkVsOVlp?=
- =?utf-8?B?cFF6YU5ZZVI0SERaTWgzZDdvSkFRdnBPaS9KTit1Y25udjB4S2JWQnJYVmdq?=
- =?utf-8?B?ZjJKL1Z2NDdHbHpQSGlpcWREdE5WRUMxVWNnc0liMW9sM2lmNHJVK1NvNWJ4?=
- =?utf-8?B?aVRCdFFtSXkrSEgya1l4eDlHU1N3Sm1KK3RScU1uYzA1WmNITHB1bnQ0YW5s?=
- =?utf-8?B?K0lmb0JCUHdlUm42amN2TEpUSUk1aXJNWWx1R0ZmRW13UTYvQS9kL2w1aW1Y?=
- =?utf-8?B?bGFXOWZIaDdMRlJVa1IrekRieDMyMVNMNUtsdFlidXE2WTBic3lVTEFWSXRq?=
- =?utf-8?B?Z0wzVzhrQnk5V3g0S3lnRGdiVGN5LzdqVGlyWU1wRFJLVmVyUDIyMlZlOUY3?=
- =?utf-8?B?V21SRXNqNUdad3JmcHJNSGZ0UkxuOHhobEpBd2xYeXl5bCtuTkpFdnovRXdH?=
- =?utf-8?B?VUNWZTRkenQwVWdMTGg3MmZMckhQN1kybStUUDJYdXBsTitmdm1CVEQ2bDhh?=
- =?utf-8?B?VG5kWEdoclJGNkFCS3RCSGdwUHgwTERQeHlpMFZpeEU1SDhzSU43UUdQWFRV?=
- =?utf-8?B?K3JvYldsOEc5SlY1VDlMamNiSjBPZFRvSkRPTk9mV0RJSzNuWDhhZ1orTDJl?=
- =?utf-8?B?ZHZDSzBncjFIcEJUd3R2M09aUDhiNkpxQWZ4VlR3R0pDUkpBKytMRlM0MFQz?=
- =?utf-8?B?WU5Ua3dNQzllUlBWQmxKc214N2ZzNDk2MCtpSldiaHhJaFc1TVE3cW4veUhS?=
- =?utf-8?B?UWRSNXFjMFB1elJ5ZFA5bmQ1YllTaWNvM2w1K0tLMXBDTkY5eW5FT1FHUnRD?=
- =?utf-8?B?a29ZdUpnVWdKR2U0T3BDMTlnY2d3d2lNcjFiVGlVNFJ2R3VaZnZlTzdwRTRz?=
- =?utf-8?B?dWhGWWJmRVl2UkMzR1FubUhwYU5GVTdEeWhZZWpobml3ZFlhS0NhSmZMMUw5?=
- =?utf-8?B?ckVJRDhWRUcyNnRBZW9hQ1BxR09YQ3poV2Z1NXR3aGxZaFdkYjNkcDY0TWhB?=
- =?utf-8?B?d2dpakNHNWdZT0RQZ2VKY3ZGbWFvN3hFbVU3NW1RdFpzWHNaeGxWY0lVdmJ0?=
- =?utf-8?B?a0IveUx6d3JVTVhhRXB0T1ptenpiRVJ3M3NPaXEwUVhvbytuKzVGa25zckRv?=
- =?utf-8?B?bUx5R1JSdDlMRHcyVlVRQW4ydkg3dndQQ3ZJeExiNEwvYXBST0xXYzR5d0s3?=
- =?utf-8?B?dnUrTUFMNkwvNW8yeVRwVW04TGtIQWM4Q3E0Tm5Ibk5icTc1Sm95VGFpdDNo?=
- =?utf-8?B?UFE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <555E9F595E9B234086F7C99BF8A5AE70@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEA76E585
+	for <linux-can@vger.kernel.org>; Thu, 21 Dec 2023 12:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1703162235; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=VI+TXqE4930tHu6fQeeRdxc0+8TEYhtWYVxLunrbqQJIy4I3leooefNoo9143q1QSc
+    LEqgcSqaUSg3+D/mcaegZI/vbBu39sPvGQAVD+4K2+HlkyMIxtt/o+0JTZGpo8iMuYWO
+    KGo4BQrCNvYs8hlbBpQktAc3MQoO+7WJywMesgcuLAlj1ewTKhN3eR9fE5FG7/W3RUCi
+    7wwulBoTSA4CU/GIhX03QB6B4rrNXA11QC1tF+euwRTJj6uL3C488UGCxzfvIFcVwz6U
+    VcDm1yD4XQcmWD0+gIY79rtTX86MYCifJ+fmiqCGC+gpYUKtE8np179qXTnyQflyJwLK
+    YVCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1703162235;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=2vAxVRfDF5nEdEqSto8hjRul3a4SCHjQ9iaFgeBvlkU=;
+    b=tmPlqn698Ht54afhcADWZ96zB9SKy4i3CoLel/BIyrkQnQsgDYUaN+bgKSXMzT1ATz
+    fntQaZDfM7rCc2fUKNjTuKGYqtnr6dEusygcp2tCAWgnvlmI9r+tKbROuw1koMMml5s6
+    +BPoG/izQPUNKsJ3W/oJPbSl6XYwiYPETEaCwUCnpw/BhW/57DbEfdSyRxHzIk9vx1jS
+    jkZlZj8+erTdhvVqKHm/iNhJgF7kq7ECnf3GXXDJwIQKRaAXGOsLmOnujLJTESIu9O+V
+    lU0u5QpUchYLnkjFzRIj1J0/SU1aOhUDqdcXp0LEMzs52VzOSkFAbhgKroTEguBNhDoG
+    I96g==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1703162235;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=2vAxVRfDF5nEdEqSto8hjRul3a4SCHjQ9iaFgeBvlkU=;
+    b=smRzk6YQXZFuMc3B4l0bqXvYny5R7OwAjYiu3BjFTioqWjs1PVHyaHD1rmI1uX+csX
+    U2+eFn6lgMJ/MMU+mUA8XGTD8xDz6SXWBw0sfDA5Taw4vEKZhbsT7ln2G3GBTwekIfq+
+    AHvoL5xYf6T7uN9fT4aPRopXUjY9qbUYfF6kZdtVENSzuv8sVvS9iZQUlqLAfSe4c6gB
+    MwGFsnV87Bd7s+t0R8d2+0d6PlYaaR17daGvcxPHcIlfcviDb/ctaO5Z+YFCNJKhKJyl
+    jdfhZS9SbIHgnEN0p4iZW6Q1qSrBTPiJm5OoTvFXPcX/fRFVRv7G27nAEnbfkZG8fVv5
+    0ZvQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1703162235;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=2vAxVRfDF5nEdEqSto8hjRul3a4SCHjQ9iaFgeBvlkU=;
+    b=I4ll3hXlg2KcC+MMrntyCXRbJ2EmvybEjiFmLf3fH6cHVeai4P7omndiWxa8UNOrmq
+    E/DLSFg5w/eIW3HAFWAQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3VYpXsQi7qVzYmRsVrJ/w58VQ8zHJI7gXbo7PY1fM"
+Received: from blue.lan
+    by smtp.strato.de (RZmta 49.10.0 AUTH)
+    with ESMTPSA id Kf147azBLCbFlFr
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Thu, 21 Dec 2023 13:37:15 +0100 (CET)
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+To: linux-can@vger.kernel.org
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [RFC PATCH] can: gw: fix RCU/BH usage in cgw_create_job()
+Date: Thu, 21 Dec 2023 13:37:03 +0100
+Message-Id: <20231221123703.8170-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB4296.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c26d1f6-de80-42d8-4989-08dc016ff6d4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2023 15:25:57.3481
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CrbLZ87GtCNbTgCFvsXWyYwLx07ktVJSX81we6eaRokFp6RFYPzag7A/+ot/21C911okK/lH7cNf0tOPGoCzrA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB8870
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 
-SGksDQoNCmFyZSB0aGVyZSBhbnkgY29tbWVudHMgb24gdGhpcyBwYXRjaCBiZXNpZGVzIHRoZSBv
-bmVzIGZyb20gVmluY2VudD8NCklzIHRoZXJlIGFueXRoaW5nIEkgY2FuIGRvIHRvIHBhdmUgdGhl
-IHBhdGggZm9yIHRoaXMgcGF0Y2g/DQoNCkJlc3QgcmVnYXJkcywNCiAgICBTdGVmYW4NCg0KQW0g
-TWl0dHdvY2gsIGRlbSAyMi4xMS4yMDIzIHVtIDE3OjAyICswMTAwIHNjaHJpZWIgU3RlZmFuIE3D
-pHRqZToNCj4gVGhlIHB1cnBvc2Ugb2YgdGhpcyBwYXRjaCBpcyB0byBpbnRyb2R1Y2UgYSBuZXcg
-Q0FOIGRyaXZlciB0byBzdXBwb3J0DQo+IHRoZSBlc2QgR21iSCA0MDIgZmFtaWx5IG9mIENBTiBp
-bnRlcmZhY2UgYm9hcmRzLiBUaGUgaGFyZHdhcmUgZGVzaWduDQo+IGlzIGJhc2VkIG9uIGEgQ0FO
-IGNvbnRyb2xsZXIgaW1wbGVtZW50ZWQgaW4gYSBGUEdBIGF0dGFjaGVkIHRvIGENCj4gUENJZSBs
-aW5rLg0KPiANCj4gTW9yZSBpbmZvcm1hdGlvbiBvbiB0aGVzZSBib2FyZHMgY2FuIGJlIGZvdW5k
-IGZvbGxvd2luZyB0aGUgbGlua3MNCj4gaW5jbHVkZWQgaW4gdGhlIGNvbW1pdCBtZXNzYWdlLg0K
-PiANCj4gVGhpcyBwYXRjaCBzdXBwb3J0cyBhbGwgYm9hcmRzIGJ1dCB3aWxsIG9wZXJhdGUgdGhl
-IENBTi1GRCBjYXBhYmxlDQo+IGJvYXJkcyBvbmx5IGluIENsYXNzaWMtQ0FOIG1vZGUuIFRoZSBD
-QU4tRkQgc3VwcG9ydCB3aWxsIGJlIGFkZGVkDQo+IHdoZW4gdGhlIGluaXRpYWwgcGF0Y2ggaGFz
-IHN0YWJpbGl6ZWQuDQo+IA0KPiBUaGUgcGF0Y2ggaXMgcmV1c2VzIHRoZSBwcmV2aW91cyB3b3Jr
-IG9mIG15IGZvcm1lciBjb2xsZWFndWU6DQo+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3Jn
-L2xpbnV4LWNhbi8xNDI2NTkyMzA4LTIzODE3LTEtZ2l0LXNlbmQtZW1haWwtdGhvbWFzLmtvZXJw
-ZXJAZXNkLmV1Lw0KPiANCj4gDQo+IFRoZSBwYXRjaCBpcyBiYXNlZCBvbiB0aGUgbGludXgtY2Fu
-LW5leHQgbWFpbiBicmFuY2guDQo+IA0KPiBDaGFuZ2VkIGluIHYxMToNCj4gICBObyBmdW5jdGlv
-bmFsLCBvbmx5IGVkaXRvcmlhbCBjaGFuZ2VzIGR1ZSB0byBmZWVkYmFjayBvbiB2MTAuDQo+ICAg
-LSBNYWtlIGxpZmV0aW1lIG9mIG1hY3JvcyB1c2VkIGZvciBoYXJkd2FyZSB0aW1lc3RhbXAgY2Fs
-Y3VsYXRpb24NCj4gICAgIHZlcnkgc2hvcnQgYnkgI3VuZGVmLWluZyB0aGVtIGFmdGVyIHVzZS4N
-Cj4gICAtIEZpeGVkIGluc2VydGlvbiBvcmRlciBvZiBuZXcgZW50cnkgaW4gTUFJTlRBSU5FUlMg
-ZmlsZS4NCj4gDQo+IENoYW5nZWQgaW4gdjEwOg0KPiAgIE1vc3QgY2hhbmdlcyBkdWUgdG8gZmVl
-ZGJhY2sgYnkgVmluY2VudCBNYWlsaG9sDQo+ICAgaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGlu
-dXgtY2FuL0NBTVo2UnFMT0FDOTMwR05PVStwV3VvaTZGZ1l3Rk91RnJTeUF6Vmp2RTJmdVZneThv
-QUBtYWlsLmdtYWlsLmNvbS8NCj4gICAtIEFkZCBzdXBwb3J0IGZvciBldGh0b29sIG9wZXJhdGlv
-bnMgYnkgdXNpbmcgZGVmYXVsdCBvcGVyYXRpb25zIA0KPiAgICAgcHJvdmlkZWQgYnkgdGhlIGNh
-bl9kZXYgbW9kdWxlIGZvciBkcml2ZXJzIHdpdGggaGFyZHdhcmUgdGltZQ0KPiAgICAgc3RhbXAg
-c3VwcG9ydC4NCj4gICAtIEZhY3RvciBvdXQgY29yZSB1bnJlZ2lzdHJhdGlvbiBpbnRvIHBjaTQw
-Ml91bnJlZ2lzdGVyX2NvcmUoKS4NCj4gICAtIEZhY3RvciBvdXQgZ2V0dGluZyBuZXh0IFRYIGZp
-Zm8gaW5kZXggaW50byBhY2NfdHhfZmlmb19uZXh0KCkuDQo+ICAgLSBTdG9wIGNvdW50aW5nIGFs
-bG9jX2Nhbl9lcnJfc2tiKCkgZmFpbHVyZXMgaW4gcnhfZHJvcHBlZCBzdGF0aXN0aWMuDQo+ICAg
-LSBBZGQgQ0FOX0VSUl9DTlQgZmxhZyBpbiBDQU4gZXJyb3IgZnJhbWVzIGFzIG5lZWRlZC4NCj4g
-ICAtIFJld29yayBmdW5jdGlvbiBhY2NfcmVzZXRfZnBnYSgpLiBUbyBjbGVhciBJXjJDIGJ1cyBl
-bmFibGUgYml0DQo+ICAgICBpcyBub3QgbmVjZXNzYXJ5IGFmdGVyIEZQR0EgcmVzZXQuDQo+ICAg
-LSBTaW1wbGlmeSBzdHJ1Y3QgYWNjX2JtbXNnX3J4dHhkb25lIGxheW91dC4NCj4gICAtIEFkZGl0
-aW9uYWwgbm9uIGZ1bmN0aW9uYWwgY2hhbmdlcyBkdWUgdG8gZmVlZGJhY2sgYnkgVmluY2VudA0K
-PiAgIC0gU29tZSBzcGVsbGluZyBjb3JyZWN0aW9uczogRVNEQUNDIC0+IGVzZEFDQw0KPiANCj4g
-Q2hhbmdlcyBpbiB2OToNCj4gICAtIEZpeCByZXR1cm5pbmcgc3VjY2VzcyBlcnJvciBjb2RlIGlu
-IGNhc2Ugb2YgYWxsb2NhdGlvbiBmYWlsdXJlIGluDQo+ICAgICBwY2k0MDJfcHJvYmUoKS4NCj4g
-DQo+IENoYW5nZXMgaW4gdjg6DQo+ICAgLSBSZWJhc2VkIHRvIDYuNi1yYzIgb24gbGludXgtY2Fu
-LW5leHQgYnJhbmNoIG1haW4NCj4gDQo+IENoYW5nZXMgaW4gdjc6DQo+ICAgLSBOdW1lcm91cyBj
-aGFuZ2VzLiBGaW5kIHRoZSBxdW90ZWQgd2l0aCBpbmxpbmUgY29tbWVudHMgYWJvdXQgY2hhbmdl
-cw0KPiAgICAgYmVsb3cgYWZ0ZXIgdGhlIGNoYW5nZXMgbGlzdC4gU3R1ZmYgdGhhdCBJIGRvbid0
-IHVuZGVyc3RhbmQgYW5kDQo+ICAgICB3aGVyZSBJIGhhdmUgcXVlc3Rpb25zIGlzIG1hcmtlZCB3
-aXRoID8/Pz8uDQo+ICAgICBVbmZvcnR1bmF0ZWx5IEkgd2lsbCBiZSBBRksgdGlsbCAyOHRoIG9m
-IE5vdmVtYmVyLg0KPiANCj4gQ2hhbmdlcyBpbiB2NjoNCj4gICAtIEZpeGVkIHRoZSBzdGF0aXN0
-aWMgaGFuZGxpbmcgb2YgUlggb3ZlcnJ1biBlcnJvcnMgYW5kIGluY3JlYXNlIA0KPiAgICAgbmV0
-X2RldmljZV9zdGF0czo6cnhfZXJyb3JzIGluc3RlYWQgb2YgbmV0X2RldmljZV9zdGF0czo6cnhf
-ZHJvcHBlZC4NCj4gICAtIEFkZGVkIGEgcGF0Y2ggdG8gbm90IGluY3JlYXNlIHJ4IHN0YXRpc3Rp
-Y3Mgd2hlbiBnZW5lcmF0aW5nIGEgQ0FODQo+ICAgICByeCBlcnJvciBtZXNzYWdlIGZyYW1lIGFz
-IHN1Z2dlc3RlZCBvbiB0aGUgbGludXgtY2FuIGxpc3QuDQo+ICAgLSBBZGRlZCBhIHBhdGNoIHRv
-IG5vdCBub3QgaW5jcmVhc2UgcnhfYnl0ZXMgc3RhdGlzdGljcyBmb3IgUlRSIGZyYW1lcw0KPiAg
-ICAgYXMgc3VnZ2VzdGVkIG9uIHRoZSBsaW51eC1jYW4gbGlzdC4NCj4gDQo+ICAgICBUaGUgbGFz
-dCB0d28gcGF0Y2hlcyBjaGFuZ2UgdGhlIHN0YXRpc3RpY3MgaGFuZGxpbmcgZnJvbSB0aGUgcHJl
-dmlvdXMNCj4gICAgIHN0eWxlIHVzZWQgaW4gb3RoZXIgZHJpdmVycyB0byB0aGUgbmV3bHkgc3Vn
-Z2VzdGVkIG9uZS4NCj4gDQo+IENoYW5nZXMgaW4gdjU6DQo+ICAgLSBBZGRlZCB0aGUgaW5pdGlh
-bGl6YXRpb24gZm9yIG5ldGRldjo6ZGV2X3BvcnQgYXMgaXQgaXMgaW1wbGVtZW50ZWQNCj4gICAg
-IGZvciBhbm90aGVyIENBTiBkcml2ZXIuIFNlZQ0KPiAgICAgaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
-cmcvbGludXgtY2FuLzIwMjExMDI2MTgwNTUzLjE5NTMxODktMS1tYWlsaG9sLnZpbmNlbnRAd2Fu
-YWRvby5mci8NCj4gDQo+IENoYW5nZXMgaW4gdjQ6DQo+ICAgLSBGaXhlZCB0aGUgYnVpbGQgZmFp
-bHVyZSBvbiBBUkNIPWFybTY0IHRoYXQgd2FzIGZvdW5kIGJ5IHRoZSBJbnRlbA0KPiAgICAga2Vy
-bmVsIHRlc3Qgcm9ib3QuIFNlZQ0KPiAgICAgaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgt
-Y2FuLzIwMjEwOTEyMDYwOC43WmJRWGtSaC1sa3BAaW50ZWwuY29tLw0KPiANCj4gICAgIFJlbW92
-ZWQgZXJyb3IgbW9uaXRvcmluZyBjb2RlIHRoYXQgdXNlZCBHQ0MncyBidWlsdC1pbiBjb21waWxl
-cg0KPiAgICAgZnVuY3Rpb25zIGZvciBhdG9taWMgYWNjZXNzIChfX3N5bmNfKiBmdW5jdGlvbnMp
-LiBHQ0MgdmVyc2lvbnMNCj4gICAgIGFmdGVyIDkgKHRlc3RlZCB3aXRoICJnY2MtMTAgKFVidW50
-dSAxMC4zLjAtMXVidW50dTF+MjAuMDQpIikNCj4gICAgIGRvbid0IGltcGxlbWVudCB0aGUgaW50
-cmluc2ljIGF0b21pYyBhcyBpbi1saW5lIGNvZGUgYnV0IGNhbGwNCj4gICAgICJfX2FhcmNoNjRf
-bGRhZGQ0X2FjcV9yZWwiIG9uIGFybTY0LiBUaGlzIEdDQyBzdXBwb3J0IGZ1bmN0aW9uDQo+ICAg
-ICBpcyBub3QgZXhwb3J0ZWQgYnkgdGhlIGtlcm5lbCBhbmQgdGhlcmVmb3JlIHRoZSBtb2R1bGUg
-YnVpbGQNCj4gICAgIHBvc3QtcHJvY2Vzc2luZyBmYWlscy4NCj4gDQo+ICAgICBSZW1vdmVkIHRo
-YXQgY29kZSBiZWNhdXNlIHRoZSBlcnJvciBtb25pdG9yaW5nIG5ldmVyIHNob3dlZCBhDQo+ICAg
-ICBwcm9ibGVtIGR1cmluZyB0aGUgZGV2ZWxvcG1lbnQgdGhpcyB5ZWFyLg0KPiANCj4gDQo+IENo
-YW5nZXMgaW4gdjM6DQo+ICAgLSBSZXdvcmsgdGhlIGJ1cy1vZmYgcmVzdGFydCBsb2dpYyBpbiBh
-Y2Nfc2V0X21vZGUoKSBhbmQNCj4gICAgIGhhbmRsZV9jb3JlX21zZ19lcnJzdGF0ZWNoYW5nZSgp
-IHRvIGNhbGwgbmV0aWZfd2FrZV9xdWV1ZSgpIGZyb20gdGhlDQo+ICAgICBlcnJvciBhY3RpdmUg
-ZXZlbnQuDQo+ICAgLSBDaGFuZ2VkIHBjaTQwMl9pbml0X2NhcmQoKSB0byBhbGxvY2F0ZSBhIHZh
-cmlhYmxlIHNpemVkIGFycmF5IG9mDQo+ICAgICBzdHJ1Y3QgYWNjX2NvcmUgdXNpbmcgZGV2bV9r
-Y2FsbG9jKCkgaW5zdGVhZCBvZiB1c2luZyBhIGZpeGVkIHNpemUNCj4gICAgIGFycmF5IGluIHN0
-cnVjdCBwY2k0MDJfY2FyZC4NCj4gICAtIENoYW5nZWQgaGFuZGxlX2NvcmVfbXNnX3R4YWJvcnQo
-KSB0byByZWxlYXNlIGFib3J0ZWQgVFggZnJhbWVzIGluDQo+ICAgICBUWCBGSUZPIG9yZGVyLg0K
-PiAgIC0gRml4ZWQgdGhlIGFjY19jbG9zZSgpIGZ1bmN0aW9uIHRvIGFib3J0IGFsbCBwZW5kaW5n
-IFRYIHJlcXVlc3QgaW4NCj4gICAgIGVzZEFDQyBjb250cm9sbGVyLg0KPiAgIC0gRml4ZWQgY291
-bnRpbmcgb2YgdHJhbnNtaXQgYWJvcnRzIGluIGhhbmRsZV9jb3JlX21zZ190eGFib3J0KCkuDQo+
-ICAgICBJdCBpcyBub3cgZG9uZSBsaWtlIGluIGNhbl9mbHVzaF9lY2hvX3NrYigpLg0KPiAgIC0g
-Rml4ZWQgaGFuZGxlX2NvcmVfbXNnX2J1c2VycigpIHRvIGNyZWF0ZSBlcnJvciBmcmFtZXMgaW5j
-bHVkaW5nIHRoZQ0KPiAgICAgQ0FOIFJYIGFuZCBUWCBlcnJvciBjb3VudGVycyB0aGF0IHdlcmUg
-bWlzc2luZy4NCj4gICAtIEZpeGVkIGFjY19zZXRfYml0dGltaW5nKCkgbmVpdGhlciB0byB0b3Vj
-aCBMT00gbW9kZSBzZXR0aW5nIG9mDQo+ICAgICBlc2RBQ0MgY29udHJvbGxlciBub3IgdG8gZW50
-ZXIgb3IgbGVhdmUgUkVTRVQgbW9kZS4NCj4gICAgIFRoZSBlc2RBQ0MgY29udHJvbGxlciBpcyBn
-b2luZyBhY3RpdmUgb24gdGhlIENBTiBidXMgaW4gYWNjX29wZW4oKQ0KPiAgICAgYW5kIGlzIGdv
-aW5nIGluYWN0aXZlIChSRVNFVCBtb2RlKSBhZ2FpbiBpbiBhY2NfY2xvc2UoKS4NCj4gICAtIFJl
-bHkgb24gdGhlIGF1dG9tYXRpYyByZWxlYXNlIG9mIG1lbW9yeSBmZXRjaGVkIGJ5IGRldm1fa3ph
-bGxvYygpLg0KPiAgICAgQnV0IHN0aWxsIHVzZSBkZXZtX2lycV9mcmVlKCkgZXhwbGljaXRlbHkg
-dG8gbWFrZSBzdXJlIHRoYXQgdGhlDQo+ICAgICBpbnRlcnJ1cHQgaGFuZGxlciBpcyBkaXNjb25u
-ZWN0ZWQgYXQgdGhhdCBwb2ludC4NCj4gICAgIFRoaXMgYXZvaWRzIGEgcG9zc2libGUgY3Jhc2gg
-aW4gbm9uLU1TSSBtb2RlIGR1ZSB0byB0aGUgSVJRDQo+ICAgICB0cmlnZ2VyZWQgYnkgYW5vdGhl
-ciBkZXZpY2Ugb24gdGhlIHNhbWUgUENJIElSUSBsaW5lLg0KPiAgIC0gQ2hhbmdlZCB0byB1c2Ug
-RE1BIG1hcCBBUEkgaW5zdGVhZCBvZiBwY2lfKl9jb25zaXN0ZW50IGNvbXBhdGliaWxpdHkNCj4g
-ICAgIHdyYXBwZXJzLg0KPiAgIC0gRml4ZWQgc3RhbGUgZW1haWwgcmVmZXJlbmNlcyBhbmQgdXBk
-YXRlZCBjb3B5cmlnaHQgaW5mb3JtYXRpb24uDQo+ICAgLSBSZW1vdmVkIGFueSB0cmFjZXMgb2Yg
-ZnV0dXJlIENBTi1GRCBzdXBwb3J0Lg0KPiANCj4gDQo+IENoYW5nZXMgaW4gdjI6DQo+ICAgLSBB
-dm9pZCB3YXJuaW5nIHRyaWdnZXJlZCBieSAtV3NoaWZ0LWNvdW50LW92ZXJmbG93IG9uIGFyY2hp
-dGVjdHVyZXMNCj4gICAgIHdpdGggMzItYml0IGRtYV9hZGRyX3QuDQo+ICAgLSBGaXhlZCBNYWtl
-ZmlsZSBub3QgdG8gYnVpbGQgdGhlIGtlcm5lbCBtb2R1bGUgYWx3YXlzLiBEb2luZyB0aGlzDQo+
-ICAgICByZW5hbWVkIGVzZDQwMl9wY2kuYyB0byBlc2RfNDAyX3BjaS1jb3JlLmMgYXMgcmVjb21t
-ZW5kZWQgYnkgTWFyYy4NCj4gDQo+IHByZXZpb3VzIHZlcnNpb25zOg0KPiB2MSAtIGh0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL2xpbnV4LWNhbi8yMDIxMDcyODIwMzY0Ny4xNTI0MC0xLVN0ZWZhbi5N
-YWV0amVAZXNkLmV1Lw0KPiB2MiAtIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWNhbi8y
-MDIxMDczMDE3MzgwNS4zOTI2LTEtU3RlZmFuLk1hZXRqZUBlc2QuZXUvDQo+IHYzIC0gaHR0cHM6
-Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtY2FuLzIwMjEwOTA4MTY0NjQwLjIzMjQzLTEtc3RlZmFu
-Lm1hZXRqZUBlc2QuZXUvDQo+IHY0IC0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtY2Fu
-LzIwMjEwOTE2MTcyMTUyLjUxMjctMS1zdGVmYW4ubWFldGplQGVzZC5ldS8NCj4gdjUgLSBodHRw
-czovL2xvcmUua2VybmVsLm9yZy9saW51eC1jYW4vMjAyMTExMDkxNTUzMjYuMjYwODgyMi0xLXN0
-ZWZhbi5tYWV0amVAZXNkLmV1Lw0KPiB2NiAtIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4
-LWNhbi8yMDIxMTIwMTIyMDMyOC4zMDc5MjcwLTEtc3RlZmFuLm1hZXRqZUBlc2QuZXUvDQo+IHY3
-IC0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtY2FuLzIwMjIxMTA2MjI0MTU2LjM2MTkz
-MzQtMS1zdGVmYW4ubWFldGplQGVzZC5ldS8NCj4gdjggLSBodHRwczovL2xvcmUua2VybmVsLm9y
-Zy9saW51eC1jYW4vMjAyMzEwMjUxNDE2MzUuMTQ1OTYwNi0xLXN0ZWZhbi5tYWV0amVAZXNkLmV1
-Lw0KPiB2OSAtIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWNhbi8yMDIzMTEwNzE4NDEw
-My4yODAyNjc4LTEtc3RlZmFuLm1hZXRqZUBlc2QuZXUvDQo+IHYxMCAtIGh0dHBzOi8vbG9yZS5r
-ZXJuZWwub3JnL2xpbnV4LWNhbi8yMDIzMTEyMDE3NTY1Ny40MDcwOTIxLTEtc3RlZmFuLm1hZXRq
-ZUBlc2QuZXUvDQo+IA0KPiANCj4gU3RlZmFuIE3DpHRqZSAoMik6DQo+ICAgTUFJTlRBSU5FUlM6
-IGFkZCBTdGVmYW4gTcOkdGplIGFzIG1haW50YWluZXIgZm9yIHRoZSBlc2QgZWxlY3Ryb25pY3MN
-Cj4gICAgIEdtYkggUENJZS80MDIgQ0FOIGRyaXZlcnMNCj4gICBjYW46IGVzZDogYWRkIHN1cHBv
-cnQgZm9yIGVzZCBHbWJIIFBDSWUvNDAyIENBTiBpbnRlcmZhY2UgZmFtaWx5DQo+IA0KPiAgTUFJ
-TlRBSU5FUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDcgKw0KPiAgZHJpdmVycy9u
-ZXQvY2FuL0tjb25maWcgICAgICAgICAgICAgICAgfCAgIDEgKw0KPiAgZHJpdmVycy9uZXQvY2Fu
-L01ha2VmaWxlICAgICAgICAgICAgICAgfCAgIDEgKw0KPiAgZHJpdmVycy9uZXQvY2FuL2VzZC9L
-Y29uZmlnICAgICAgICAgICAgfCAgMTIgKw0KPiAgZHJpdmVycy9uZXQvY2FuL2VzZC9NYWtlZmls
-ZSAgICAgICAgICAgfCAgIDcgKw0KPiAgZHJpdmVycy9uZXQvY2FuL2VzZC9lc2RfNDAyX3BjaS1j
-b3JlLmMgfCA1MTQgKysrKysrKysrKysrKysrKysNCj4gIGRyaXZlcnMvbmV0L2Nhbi9lc2QvZXNk
-YWNjLmMgICAgICAgICAgIHwgNzY0ICsrKysrKysrKysrKysrKysrKysrKysrKysNCj4gIGRyaXZl
-cnMvbmV0L2Nhbi9lc2QvZXNkYWNjLmggICAgICAgICAgIHwgMzU2ICsrKysrKysrKysrKw0KPiAg
-OCBmaWxlcyBjaGFuZ2VkLCAxNjYyIGluc2VydGlvbnMoKykNCj4gIGNyZWF0ZSBtb2RlIDEwMDY0
-NCBkcml2ZXJzL25ldC9jYW4vZXNkL0tjb25maWcNCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2
-ZXJzL25ldC9jYW4vZXNkL01ha2VmaWxlDQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9u
-ZXQvY2FuL2VzZC9lc2RfNDAyX3BjaS1jb3JlLmMNCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2
-ZXJzL25ldC9jYW4vZXNkL2VzZGFjYy5jDQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9u
-ZXQvY2FuL2VzZC9lc2RhY2MuaA0KPiANCj4gDQo+IGJhc2UtY29tbWl0OiA5M2U3ZWNhODUzY2Ew
-MDg3YjEyOTQzMzYzMGRkZDg5Mjg4ZDJiOGI0DQo=
+As reported by Sebastian Andrzej Siewior the use of local_bh_disable()
+is only feasible in uni processor systems to update the modification rules.
+The usual use-case to update the modification rules is to update the data
+of the modifications but not the modification types (AND/OR/XOR/SET) or
+the checksum functions itself.
+
+To omit additional memory allocations to maintain fast modification
+switching times, the modification description space is doubled at gw-job
+creation time so that only the reference to the active modification
+desciption is changed under rcu protection.
+
+Link: https://lore.kernel.org/linux-can/20231031112349.y0aLoBrz@linutronix.de/
+Fixes: dd895d7f21b2 ("can: cangw: introduce optional uid to reference created routing jobs")
+Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+ net/can/gw.c | 99 ++++++++++++++++++++++++++++------------------------
+ 1 file changed, 53 insertions(+), 46 deletions(-)
+
+diff --git a/net/can/gw.c b/net/can/gw.c
+index 37528826935e..6411f1c60f48 100644
+--- a/net/can/gw.c
++++ b/net/can/gw.c
+@@ -128,11 +128,13 @@ struct cgw_job {
+ 	struct hlist_node list;
+ 	struct rcu_head rcu;
+ 	u32 handled_frames;
+ 	u32 dropped_frames;
+ 	u32 deleted_frames;
+-	struct cf_mod mod;
++	struct cf_mod *mod;
++	struct cf_mod mod1;
++	struct cf_mod mod2;
+ 	union {
+ 		/* CAN frame data source */
+ 		struct net_device *dev;
+ 	} src;
+ 	union {
+@@ -504,11 +506,11 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
+ 	/* clone the given skb, which has not been done in can_rcv()
+ 	 *
+ 	 * When there is at least one modification function activated,
+ 	 * we need to copy the skb as we want to modify skb->data.
+ 	 */
+-	if (gwj->mod.modfunc[0])
++	if (gwj->mod->modfunc[0])
+ 		nskb = skb_copy(skb, GFP_ATOMIC);
+ 	else
+ 		nskb = skb_clone(skb, GFP_ATOMIC);
+ 
+ 	if (!nskb) {
+@@ -527,12 +529,12 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
+ 
+ 	/* pointer to modifiable CAN frame */
+ 	cf = (struct canfd_frame *)nskb->data;
+ 
+ 	/* perform preprocessed modification functions if there are any */
+-	while (modidx < MAX_MODFUNCTIONS && gwj->mod.modfunc[modidx])
+-		(*gwj->mod.modfunc[modidx++])(cf, &gwj->mod);
++	while (modidx < MAX_MODFUNCTIONS && gwj->mod->modfunc[modidx])
++		(*gwj->mod->modfunc[modidx++])(cf, gwj->mod);
+ 
+ 	/* Has the CAN frame been modified? */
+ 	if (modidx) {
+ 		/* get available space for the processed CAN frame type */
+ 		int max_len = nskb->len - offsetof(struct canfd_frame, data);
+@@ -544,15 +546,15 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
+ 			kfree_skb(nskb);
+ 			return;
+ 		}
+ 
+ 		/* check for checksum updates */
+-		if (gwj->mod.csumfunc.crc8)
+-			(*gwj->mod.csumfunc.crc8)(cf, &gwj->mod.csum.crc8);
++		if (gwj->mod->csumfunc.crc8)
++			(*gwj->mod->csumfunc.crc8)(cf, &gwj->mod->csum.crc8);
+ 
+-		if (gwj->mod.csumfunc.xor)
+-			(*gwj->mod.csumfunc.xor)(cf, &gwj->mod.csum.xor);
++		if (gwj->mod->csumfunc.xor)
++			(*gwj->mod->csumfunc.xor)(cf, &gwj->mod->csum.xor);
+ 	}
+ 
+ 	/* clear the skb timestamp if not configured the other way */
+ 	if (!(gwj->flags & CGW_FLAGS_CAN_SRC_TSTAMP))
+ 		nskb->tstamp = 0;
+@@ -651,83 +653,83 @@ static int cgw_put_job(struct sk_buff *skb, struct cgw_job *gwj, int type,
+ 	}
+ 
+ 	if (gwj->flags & CGW_FLAGS_CAN_FD) {
+ 		struct cgw_fdframe_mod mb;
+ 
+-		if (gwj->mod.modtype.and) {
+-			memcpy(&mb.cf, &gwj->mod.modframe.and, sizeof(mb.cf));
+-			mb.modtype = gwj->mod.modtype.and;
++		if (gwj->mod->modtype.and) {
++			memcpy(&mb.cf, &gwj->mod->modframe.and, sizeof(mb.cf));
++			mb.modtype = gwj->mod->modtype.and;
+ 			if (nla_put(skb, CGW_FDMOD_AND, sizeof(mb), &mb) < 0)
+ 				goto cancel;
+ 		}
+ 
+-		if (gwj->mod.modtype.or) {
+-			memcpy(&mb.cf, &gwj->mod.modframe.or, sizeof(mb.cf));
+-			mb.modtype = gwj->mod.modtype.or;
++		if (gwj->mod->modtype.or) {
++			memcpy(&mb.cf, &gwj->mod->modframe.or, sizeof(mb.cf));
++			mb.modtype = gwj->mod->modtype.or;
+ 			if (nla_put(skb, CGW_FDMOD_OR, sizeof(mb), &mb) < 0)
+ 				goto cancel;
+ 		}
+ 
+-		if (gwj->mod.modtype.xor) {
+-			memcpy(&mb.cf, &gwj->mod.modframe.xor, sizeof(mb.cf));
+-			mb.modtype = gwj->mod.modtype.xor;
++		if (gwj->mod->modtype.xor) {
++			memcpy(&mb.cf, &gwj->mod->modframe.xor, sizeof(mb.cf));
++			mb.modtype = gwj->mod->modtype.xor;
+ 			if (nla_put(skb, CGW_FDMOD_XOR, sizeof(mb), &mb) < 0)
+ 				goto cancel;
+ 		}
+ 
+-		if (gwj->mod.modtype.set) {
+-			memcpy(&mb.cf, &gwj->mod.modframe.set, sizeof(mb.cf));
+-			mb.modtype = gwj->mod.modtype.set;
++		if (gwj->mod->modtype.set) {
++			memcpy(&mb.cf, &gwj->mod->modframe.set, sizeof(mb.cf));
++			mb.modtype = gwj->mod->modtype.set;
+ 			if (nla_put(skb, CGW_FDMOD_SET, sizeof(mb), &mb) < 0)
+ 				goto cancel;
+ 		}
+ 	} else {
+ 		struct cgw_frame_mod mb;
+ 
+-		if (gwj->mod.modtype.and) {
+-			memcpy(&mb.cf, &gwj->mod.modframe.and, sizeof(mb.cf));
+-			mb.modtype = gwj->mod.modtype.and;
++		if (gwj->mod->modtype.and) {
++			memcpy(&mb.cf, &gwj->mod->modframe.and, sizeof(mb.cf));
++			mb.modtype = gwj->mod->modtype.and;
+ 			if (nla_put(skb, CGW_MOD_AND, sizeof(mb), &mb) < 0)
+ 				goto cancel;
+ 		}
+ 
+-		if (gwj->mod.modtype.or) {
+-			memcpy(&mb.cf, &gwj->mod.modframe.or, sizeof(mb.cf));
+-			mb.modtype = gwj->mod.modtype.or;
++		if (gwj->mod->modtype.or) {
++			memcpy(&mb.cf, &gwj->mod->modframe.or, sizeof(mb.cf));
++			mb.modtype = gwj->mod->modtype.or;
+ 			if (nla_put(skb, CGW_MOD_OR, sizeof(mb), &mb) < 0)
+ 				goto cancel;
+ 		}
+ 
+-		if (gwj->mod.modtype.xor) {
+-			memcpy(&mb.cf, &gwj->mod.modframe.xor, sizeof(mb.cf));
+-			mb.modtype = gwj->mod.modtype.xor;
++		if (gwj->mod->modtype.xor) {
++			memcpy(&mb.cf, &gwj->mod->modframe.xor, sizeof(mb.cf));
++			mb.modtype = gwj->mod->modtype.xor;
+ 			if (nla_put(skb, CGW_MOD_XOR, sizeof(mb), &mb) < 0)
+ 				goto cancel;
+ 		}
+ 
+-		if (gwj->mod.modtype.set) {
+-			memcpy(&mb.cf, &gwj->mod.modframe.set, sizeof(mb.cf));
+-			mb.modtype = gwj->mod.modtype.set;
++		if (gwj->mod->modtype.set) {
++			memcpy(&mb.cf, &gwj->mod->modframe.set, sizeof(mb.cf));
++			mb.modtype = gwj->mod->modtype.set;
+ 			if (nla_put(skb, CGW_MOD_SET, sizeof(mb), &mb) < 0)
+ 				goto cancel;
+ 		}
+ 	}
+ 
+-	if (gwj->mod.uid) {
+-		if (nla_put_u32(skb, CGW_MOD_UID, gwj->mod.uid) < 0)
++	if (gwj->mod->uid) {
++		if (nla_put_u32(skb, CGW_MOD_UID, gwj->mod->uid) < 0)
+ 			goto cancel;
+ 	}
+ 
+-	if (gwj->mod.csumfunc.crc8) {
++	if (gwj->mod->csumfunc.crc8) {
+ 		if (nla_put(skb, CGW_CS_CRC8, CGW_CS_CRC8_LEN,
+-			    &gwj->mod.csum.crc8) < 0)
++			    &gwj->mod->csum.crc8) < 0)
+ 			goto cancel;
+ 	}
+ 
+-	if (gwj->mod.csumfunc.xor) {
++	if (gwj->mod->csumfunc.xor) {
+ 		if (nla_put(skb, CGW_CS_XOR, CGW_CS_XOR_LEN,
+-			    &gwj->mod.csum.xor) < 0)
++			    &gwj->mod->csum.xor) < 0)
+ 			goto cancel;
+ 	}
+ 
+ 	if (gwj->gwtype == CGW_TYPE_CAN_CAN) {
+ 		if (gwj->ccgw.filter.can_id || gwj->ccgw.filter.can_mask) {
+@@ -1085,21 +1087,25 @@ static int cgw_create_job(struct sk_buff *skb,  struct nlmsghdr *nlh,
+ 	if (mod.uid) {
+ 		ASSERT_RTNL();
+ 
+ 		/* check for updating an existing job with identical uid */
+ 		hlist_for_each_entry(gwj, &net->can.cgw_list, list) {
+-			if (gwj->mod.uid != mod.uid)
++			if (gwj->mod->uid != mod.uid)
+ 				continue;
+ 
+ 			/* interfaces & filters must be identical */
+ 			if (memcmp(&gwj->ccgw, &ccgw, sizeof(ccgw)))
+ 				return -EINVAL;
+ 
+ 			/* update modifications with disabled softirq & quit */
+-			local_bh_disable();
+-			memcpy(&gwj->mod, &mod, sizeof(mod));
+-			local_bh_enable();
++			if (gwj->mod == &gwj->mod1) {
++				memcpy(&gwj->mod2, &mod, sizeof(mod));
++				rcu_replace_pointer(gwj->mod, &gwj->mod2, true);
++			} else {
++				memcpy(&gwj->mod1, &mod, sizeof(mod));
++				rcu_replace_pointer(gwj->mod, &gwj->mod1, true);
++			}
+ 			return 0;
+ 		}
+ 	}
+ 
+ 	/* ifindex == 0 is not allowed for job creation */
+@@ -1114,13 +1120,14 @@ static int cgw_create_job(struct sk_buff *skb,  struct nlmsghdr *nlh,
+ 	gwj->dropped_frames = 0;
+ 	gwj->deleted_frames = 0;
+ 	gwj->flags = r->flags;
+ 	gwj->gwtype = r->gwtype;
+ 	gwj->limit_hops = limhops;
++	gwj->mod = &gwj->mod1;
+ 
+ 	/* insert already parsed information */
+-	memcpy(&gwj->mod, &mod, sizeof(mod));
++	memcpy(gwj->mod, &mod, sizeof(mod));
+ 	memcpy(&gwj->ccgw, &ccgw, sizeof(ccgw));
+ 
+ 	err = -ENODEV;
+ 
+ 	gwj->src.dev = __dev_get_by_index(net, gwj->ccgw.src_idx);
+@@ -1219,16 +1226,16 @@ static int cgw_remove_job(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 
+ 		if (gwj->limit_hops != limhops)
+ 			continue;
+ 
+ 		/* we have a match when uid is enabled and identical */
+-		if (gwj->mod.uid || mod.uid) {
+-			if (gwj->mod.uid != mod.uid)
++		if (gwj->mod->uid || mod.uid) {
++			if (gwj->mod->uid != mod.uid)
+ 				continue;
+ 		} else {
+ 			/* no uid => check for identical modifications */
+-			if (memcmp(&gwj->mod, &mod, sizeof(mod)))
++			if (memcmp(gwj->mod, &mod, sizeof(mod)))
+ 				continue;
+ 		}
+ 
+ 		/* if (r->gwtype == CGW_TYPE_CAN_CAN) - is made sure here */
+ 		if (memcmp(&gwj->ccgw, &ccgw, sizeof(ccgw)))
+-- 
+2.39.2
+
 
