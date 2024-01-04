@@ -1,122 +1,89 @@
-Return-Path: <linux-can+bounces-104-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-105-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32AD382475A
-	for <lists+linux-can@lfdr.de>; Thu,  4 Jan 2024 18:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ABDAA824BF6
+	for <lists+linux-can@lfdr.de>; Fri,  5 Jan 2024 00:57:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30CFD1C21649
-	for <lists+linux-can@lfdr.de>; Thu,  4 Jan 2024 17:24:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2C671C221ED
+	for <lists+linux-can@lfdr.de>; Thu,  4 Jan 2024 23:57:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8152E2C197;
-	Thu,  4 Jan 2024 17:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nb5A7FTI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 776F12D605;
+	Thu,  4 Jan 2024 23:57:39 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6043D28E29;
-	Thu,  4 Jan 2024 17:19:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BEE7C433C7;
-	Thu,  4 Jan 2024 17:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704388785;
-	bh=IA55/z/VCfQyUlpRMsvuMO6NANKwsanr77HuZLv9tYw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nb5A7FTIbIDzsGHPUXsC9IN7PSV0Ts78G88LVHRqCQKnqpIKftq9dPEMz8Ziq7Sd1
-	 MB2jpVHGk5TvuYngc97lKbNFnpe+zARUqDyKCQcdh/1I6wcET5miHE09BKbOOiJWl6
-	 /KKH9bDm+n2vTpnx8TO1k4Q+h8JWC72FeZkthOJbc+2MIF4/Icl74dXcLUWh9HLxd4
-	 p1p6M6ioxXVc8KzB9JY9bG7u9C8Vzrtb2h4/tqOA4CUQb0ltmapo02Y+qsqbrdyCaH
-	 goH1VGel3TMoKi+bZj6fvjzE+Li2CA1xo/Hz5sncrUCBYAWHEkWMucILvtN8WrBGC3
-	 +9crPZ+ivOdHg==
-Date: Thu, 4 Jan 2024 17:19:40 +0000
-From: Simon Horman <horms@kernel.org>
-To: Bhavya Kapoor <b-kapoor@ti.com>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-can@vger.kernel.org, mailhol.vincent@wanadoo.fr,
-	rcsekar@samsung.com, pabeni@redhat.com, kuba@kernel.org,
-	edumazet@google.com, davem@davemloft.net, mkl@pengutronix.de,
-	wg@grandegger.com, vigneshr@ti.com, u-kumar1@ti.com
-Subject: Re: [PATCH] net: can: Add support for aliases in CAN
-Message-ID: <20240104171940.GI31813@kernel.org>
-References: <20240102102949.138607-1-b-kapoor@ti.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97182D60A;
+	Thu,  4 Jan 2024 23:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 9AC41206D8;
+	Fri,  5 Jan 2024 00:57:28 +0100 (CET)
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] can: m_can: remove redundant check for pm_clock_support
+Date: Fri,  5 Jan 2024 00:57:23 +0100
+Message-Id: <20240104235723.46931-1-francesco@dolcini.it>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240102102949.138607-1-b-kapoor@ti.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 02, 2024 at 03:59:49PM +0530, Bhavya Kapoor wrote:
-> When multiple CAN's are present, then names that are getting assigned
-> changes after every boot even after providing alias in the device tree.
-> Thus, Add support for implementing CAN aliasing so that names or
-> alias for CAN will now be provided from device tree.
-> 
-> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Hi Bhavya,
+m_can_clk_start() already skip starting the clock when
+clock support is disabled, remove the redundant check in
+m_can_class_register().
 
-some minor feedback from my side.
+This also solves the imbalance with m_can_clk_stop() that is called
+afterward in the same function before the return.
 
-...
+Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+---
+I spotted the issue while debugging some other part of the code,
+the patch is only compile-tested.
+---
+ drivers/net/can/m_can/m_can.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-> diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-> index 3a3be5cdfc1f..ed483c23ec79 100644
-> --- a/drivers/net/can/dev/dev.c
-> +++ b/drivers/net/can/dev/dev.c
-> @@ -247,12 +247,14 @@ void can_setup(struct net_device *dev)
->  
->  /* Allocate and setup space for the CAN network device */
->  struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
-> -				    unsigned int txqs, unsigned int rxqs)
-> +					unsigned int txqs, unsigned int rxqs,
-> +					struct device *candev)
->  {
->  	struct can_ml_priv *can_ml;
->  	struct net_device *dev;
->  	struct can_priv *priv;
-> -	int size;
-> +	int size, aliasid;
-> +	char devname[6] = "can%d";
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 16ecc11c7f62..bd1d1626684d 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -2056,11 +2056,9 @@ int m_can_class_register(struct m_can_classdev *cdev)
+ {
+ 	int ret;
+ 
+-	if (cdev->pm_clock_support) {
+-		ret = m_can_clk_start(cdev);
+-		if (ret)
+-			return ret;
+-	}
++	ret = m_can_clk_start(cdev);
++	if (ret)
++		return ret;
+ 
+ 	if (cdev->is_peripheral) {
+ 		ret = can_rx_offload_add_manual(cdev->net, &cdev->offload,
+-- 
+2.39.2
 
-nit: Please consider arranging local variables in Networking code
-     in reverse xmas tree order - longest line to shortest.
-
->  
->  	/* We put the driver's priv, the CAN mid layer priv and the
->  	 * echo skb into the netdevice's priv. The memory layout for
-> @@ -273,7 +275,14 @@ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
->  		size = ALIGN(size, sizeof(struct sk_buff *)) +
->  			echo_skb_max * sizeof(struct sk_buff *);
->  
-> -	dev = alloc_netdev_mqs(size, "can%d", NET_NAME_UNKNOWN, can_setup,
-> +	if (candev) {
-> +		aliasid = of_alias_get_id(candev->of_node, "can");
-> +		if (aliasid >= 0)
-> +			snprintf(devname, sizeof(devname), "%s%d", "can", aliasid);
-
-The size of devname is 6 bytes (can%d\0).
-This means that snprintf() will truncate devname if alias is greater than 99.
-Is this a concern?
-
-If so, perhaps devname could be declared to be IFNAMSIZ bytes long?
-
-Flagged by gcc-13 -Wformat-truncation
-
-> +	}
-> +	dev_dbg(candev, "Name of CAN assigned is : %s\n", devname);
-> +
-> +	dev = alloc_netdev_mqs(size, devname, NET_NAME_UNKNOWN, can_setup,
->  			       txqs, rxqs);
->  	if (!dev)
->  		return NULL;
-
-...
 
