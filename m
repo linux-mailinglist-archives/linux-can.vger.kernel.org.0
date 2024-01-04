@@ -1,51 +1,47 @@
-Return-Path: <linux-can+bounces-103-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-104-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D154821AC6
-	for <lists+linux-can@lfdr.de>; Tue,  2 Jan 2024 12:17:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32AD382475A
+	for <lists+linux-can@lfdr.de>; Thu,  4 Jan 2024 18:24:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6E6F283180
-	for <lists+linux-can@lfdr.de>; Tue,  2 Jan 2024 11:17:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30CFD1C21649
+	for <lists+linux-can@lfdr.de>; Thu,  4 Jan 2024 17:24:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5523BEAD3;
-	Tue,  2 Jan 2024 11:17:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8152E2C197;
+	Thu,  4 Jan 2024 17:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nb5A7FTI"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DD8EAC2
-	for <linux-can@vger.kernel.org>; Tue,  2 Jan 2024 11:17:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rKcm2-0004ep-4z; Tue, 02 Jan 2024 12:17:30 +0100
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rKclx-003AZc-Qa; Tue, 02 Jan 2024 12:17:26 +0100
-Received: from pengutronix.de (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 5A8D726C46C;
-	Tue,  2 Jan 2024 11:13:17 +0000 (UTC)
-Date: Tue, 2 Jan 2024 12:13:16 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6043D28E29;
+	Thu,  4 Jan 2024 17:19:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BEE7C433C7;
+	Thu,  4 Jan 2024 17:19:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704388785;
+	bh=IA55/z/VCfQyUlpRMsvuMO6NANKwsanr77HuZLv9tYw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nb5A7FTIbIDzsGHPUXsC9IN7PSV0Ts78G88LVHRqCQKnqpIKftq9dPEMz8Ziq7Sd1
+	 MB2jpVHGk5TvuYngc97lKbNFnpe+zARUqDyKCQcdh/1I6wcET5miHE09BKbOOiJWl6
+	 /KKH9bDm+n2vTpnx8TO1k4Q+h8JWC72FeZkthOJbc+2MIF4/Icl74dXcLUWh9HLxd4
+	 p1p6M6ioxXVc8KzB9JY9bG7u9C8Vzrtb2h4/tqOA4CUQb0ltmapo02Y+qsqbrdyCaH
+	 goH1VGel3TMoKi+bZj6fvjzE+Li2CA1xo/Hz5sncrUCBYAWHEkWMucILvtN8WrBGC3
+	 +9crPZ+ivOdHg==
+Date: Thu, 4 Jan 2024 17:19:40 +0000
+From: Simon Horman <horms@kernel.org>
 To: Bhavya Kapoor <b-kapoor@ti.com>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-can@vger.kernel.org, mailhol.vincent@wanadoo.fr, rcsekar@samsung.com, 
-	pabeni@redhat.com, kuba@kernel.org, edumazet@google.com, davem@davemloft.net, 
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-can@vger.kernel.org, mailhol.vincent@wanadoo.fr,
+	rcsekar@samsung.com, pabeni@redhat.com, kuba@kernel.org,
+	edumazet@google.com, davem@davemloft.net, mkl@pengutronix.de,
 	wg@grandegger.com, vigneshr@ti.com, u-kumar1@ti.com
 Subject: Re: [PATCH] net: can: Add support for aliases in CAN
-Message-ID: <20240102-chop-extending-b7dc1acaf5db-mkl@pengutronix.de>
+Message-ID: <20240104171940.GI31813@kernel.org>
 References: <20240102102949.138607-1-b-kapoor@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -53,53 +49,74 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="m5nbq46hdqsfnxbd"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20240102102949.138607-1-b-kapoor@ti.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-
---m5nbq46hdqsfnxbd
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 02.01.2024 15:59:49, Bhavya Kapoor wrote:
+On Tue, Jan 02, 2024 at 03:59:49PM +0530, Bhavya Kapoor wrote:
 > When multiple CAN's are present, then names that are getting assigned
 > changes after every boot even after providing alias in the device tree.
 > Thus, Add support for implementing CAN aliasing so that names or
 > alias for CAN will now be provided from device tree.
+> 
+> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
 
-NACK, please use udev or systemd-networkd to provide stable names for
-CAN interfaces.
+Hi Bhavya,
 
-regards,
-Marc
+some minor feedback from my side.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+...
 
---m5nbq46hdqsfnxbd
-Content-Type: application/pgp-signature; name="signature.asc"
+> diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+> index 3a3be5cdfc1f..ed483c23ec79 100644
+> --- a/drivers/net/can/dev/dev.c
+> +++ b/drivers/net/can/dev/dev.c
+> @@ -247,12 +247,14 @@ void can_setup(struct net_device *dev)
+>  
+>  /* Allocate and setup space for the CAN network device */
+>  struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+> -				    unsigned int txqs, unsigned int rxqs)
+> +					unsigned int txqs, unsigned int rxqs,
+> +					struct device *candev)
+>  {
+>  	struct can_ml_priv *can_ml;
+>  	struct net_device *dev;
+>  	struct can_priv *priv;
+> -	int size;
+> +	int size, aliasid;
+> +	char devname[6] = "can%d";
 
------BEGIN PGP SIGNATURE-----
+nit: Please consider arranging local variables in Networking code
+     in reverse xmas tree order - longest line to shortest.
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmWT78kACgkQvlAcSiqK
-BOgKOQf/STGvc4hJisrHiFj5JiEZJ6a53OTttGK5r8lbKV2Up6Jqblt5V70pkkV8
-ZSU8aM5wj8yw3XhOytAyBUYfKaTb/moFOLlbjxwBqUSOdRJBnMVvXryoBWP3s0cv
-DtpTuilEYQfB85zQxn5imigbOGwQqsHBDnjYVnxp2h9qyB6jyg4nc6zVV7OcphTQ
-sPR1nhOc4sPLXP286XDmnR20XF5JycyozJmrb6/XVkLhNlqhkY/t870Duh+l3OrH
-LPDt+Mf3GsA7x+wBTmGIfMFWtLHvgoyuqSWSPob1EbOUsC3g1UgEZb2aIC1m9fqn
-iQa/JSU3aPYkTYlHVyF2imctnAO/vg==
-=rxfF
------END PGP SIGNATURE-----
+>  
+>  	/* We put the driver's priv, the CAN mid layer priv and the
+>  	 * echo skb into the netdevice's priv. The memory layout for
+> @@ -273,7 +275,14 @@ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+>  		size = ALIGN(size, sizeof(struct sk_buff *)) +
+>  			echo_skb_max * sizeof(struct sk_buff *);
+>  
+> -	dev = alloc_netdev_mqs(size, "can%d", NET_NAME_UNKNOWN, can_setup,
+> +	if (candev) {
+> +		aliasid = of_alias_get_id(candev->of_node, "can");
+> +		if (aliasid >= 0)
+> +			snprintf(devname, sizeof(devname), "%s%d", "can", aliasid);
 
---m5nbq46hdqsfnxbd--
+The size of devname is 6 bytes (can%d\0).
+This means that snprintf() will truncate devname if alias is greater than 99.
+Is this a concern?
+
+If so, perhaps devname could be declared to be IFNAMSIZ bytes long?
+
+Flagged by gcc-13 -Wformat-truncation
+
+> +	}
+> +	dev_dbg(candev, "Name of CAN assigned is : %s\n", devname);
+> +
+> +	dev = alloc_netdev_mqs(size, devname, NET_NAME_UNKNOWN, can_setup,
+>  			       txqs, rxqs);
+>  	if (!dev)
+>  		return NULL;
+
+...
 
