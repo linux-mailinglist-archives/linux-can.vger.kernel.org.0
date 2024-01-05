@@ -1,89 +1,148 @@
-Return-Path: <linux-can+bounces-105-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-106-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABDAA824BF6
-	for <lists+linux-can@lfdr.de>; Fri,  5 Jan 2024 00:57:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44267824F1C
+	for <lists+linux-can@lfdr.de>; Fri,  5 Jan 2024 08:19:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2C671C221ED
-	for <lists+linux-can@lfdr.de>; Thu,  4 Jan 2024 23:57:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D92CA28563A
+	for <lists+linux-can@lfdr.de>; Fri,  5 Jan 2024 07:19:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 776F12D605;
-	Thu,  4 Jan 2024 23:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8AE11D68C;
+	Fri,  5 Jan 2024 07:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="V68hIClb"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97182D60A;
-	Thu,  4 Jan 2024 23:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 9AC41206D8;
-	Fri,  5 Jan 2024 00:57:28 +0100 (CET)
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] can: m_can: remove redundant check for pm_clock_support
-Date: Fri,  5 Jan 2024 00:57:23 +0100
-Message-Id: <20240104235723.46931-1-francesco@dolcini.it>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6CE1DDDC;
+	Fri,  5 Jan 2024 07:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4057JKiM065605;
+	Fri, 5 Jan 2024 01:19:20 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1704439160;
+	bh=nnbd4NNKlxIwd09RppD3PPXEsR2CI47y98ZUeI58Kjg=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=V68hIClb9NB4iTuZkakfWhO8/vk5DBlJFqTiIrE81l6Wq1Yqdz/8UMF4SZvLXzMFv
+	 OmpdS2yScv8n8DnYQY5SZmPYUtx/LYrdLkoBTvoYIvDPoBDjcIOkMuiZ76ARG64A1j
+	 tcbGQKQOEpVLh/pUZq4i3FKfgsjIKsIg2TwmtuFA=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4057JKaU013603
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 5 Jan 2024 01:19:20 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
+ Jan 2024 01:19:20 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 5 Jan 2024 01:19:20 -0600
+Received: from [10.249.132.18] ([10.249.132.18])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4057JF5I023483;
+	Fri, 5 Jan 2024 01:19:16 -0600
+Message-ID: <e08d7240-6b28-43c4-9ce4-95a041bfad25@ti.com>
+Date: Fri, 5 Jan 2024 12:49:14 +0530
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net: can: Add support for aliases in CAN
+Content-Language: en-US
+To: Simon Horman <horms@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <mailhol.vincent@wanadoo.fr>,
+        <rcsekar@samsung.com>, <pabeni@redhat.com>, <kuba@kernel.org>,
+        <edumazet@google.com>, <davem@davemloft.net>, <mkl@pengutronix.de>,
+        <wg@grandegger.com>, <vigneshr@ti.com>, <u-kumar1@ti.com>
+References: <20240102102949.138607-1-b-kapoor@ti.com>
+ <20240104171940.GI31813@kernel.org>
+From: Bhavya Kapoor <b-kapoor@ti.com>
+In-Reply-To: <20240104171940.GI31813@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-m_can_clk_start() already skip starting the clock when
-clock support is disabled, remove the redundant check in
-m_can_class_register().
+On 04/01/24 22:49, Simon Horman wrote:
+> On Tue, Jan 02, 2024 at 03:59:49PM +0530, Bhavya Kapoor wrote:
+>> When multiple CAN's are present, then names that are getting assigned
+>> changes after every boot even after providing alias in the device tree.
+>> Thus, Add support for implementing CAN aliasing so that names or
+>> alias for CAN will now be provided from device tree.
+>>
+>> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+> Hi Bhavya,
+>
+> some minor feedback from my side.
+>
+> ...
+>
+>> diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+>> index 3a3be5cdfc1f..ed483c23ec79 100644
+>> --- a/drivers/net/can/dev/dev.c
+>> +++ b/drivers/net/can/dev/dev.c
+>> @@ -247,12 +247,14 @@ void can_setup(struct net_device *dev)
+>>  
+>>  /* Allocate and setup space for the CAN network device */
+>>  struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+>> -				    unsigned int txqs, unsigned int rxqs)
+>> +					unsigned int txqs, unsigned int rxqs,
+>> +					struct device *candev)
+>>  {
+>>  	struct can_ml_priv *can_ml;
+>>  	struct net_device *dev;
+>>  	struct can_priv *priv;
+>> -	int size;
+>> +	int size, aliasid;
+>> +	char devname[6] = "can%d";
+> nit: Please consider arranging local variables in Networking code
+>      in reverse xmas tree order - longest line to shortest.
+Okay, i will keep this in mind from next time.
+>
+>>  
+>>  	/* We put the driver's priv, the CAN mid layer priv and the
+>>  	 * echo skb into the netdevice's priv. The memory layout for
+>> @@ -273,7 +275,14 @@ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+>>  		size = ALIGN(size, sizeof(struct sk_buff *)) +
+>>  			echo_skb_max * sizeof(struct sk_buff *);
+>>  
+>> -	dev = alloc_netdev_mqs(size, "can%d", NET_NAME_UNKNOWN, can_setup,
+>> +	if (candev) {
+>> +		aliasid = of_alias_get_id(candev->of_node, "can");
+>> +		if (aliasid >= 0)
+>> +			snprintf(devname, sizeof(devname), "%s%d", "can", aliasid);
+> The size of devname is 6 bytes (can%d\0).
+> This means that snprintf() will truncate devname if alias is greater than 99.
+> Is this a concern?
 
-This also solves the imbalance with m_can_clk_stop() that is called
-afterward in the same function before the return.
+When sequential naming will be done from can0 in aliases for can, 
 
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
----
-I spotted the issue while debugging some other part of the code,
-the patch is only compile-tested.
----
- drivers/net/can/m_can/m_can.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+considering that 99 is still a very large number and so 6 bytes for
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 16ecc11c7f62..bd1d1626684d 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -2056,11 +2056,9 @@ int m_can_class_register(struct m_can_classdev *cdev)
- {
- 	int ret;
- 
--	if (cdev->pm_clock_support) {
--		ret = m_can_clk_start(cdev);
--		if (ret)
--			return ret;
--	}
-+	ret = m_can_clk_start(cdev);
-+	if (ret)
-+		return ret;
- 
- 	if (cdev->is_peripheral) {
- 		ret = can_rx_offload_add_manual(cdev->net, &cdev->offload,
--- 
-2.39.2
+devname should suffice.
 
+Regards
+
+> If so, perhaps devname could be declared to be IFNAMSIZ bytes long?
+>
+> Flagged by gcc-13 -Wformat-truncation
+>
+>> +	}
+>> +	dev_dbg(candev, "Name of CAN assigned is : %s\n", devname);
+>> +
+>> +	dev = alloc_netdev_mqs(size, devname, NET_NAME_UNKNOWN, can_setup,
+>>  			       txqs, rxqs);
+>>  	if (!dev)
+>>  		return NULL;
+> ...
 
