@@ -1,64 +1,78 @@
-Return-Path: <linux-can+bounces-110-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-111-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 065AF826331
-	for <lists+linux-can@lfdr.de>; Sun,  7 Jan 2024 07:44:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A548E8263BE
+	for <lists+linux-can@lfdr.de>; Sun,  7 Jan 2024 11:24:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 176EB1C2106B
-	for <lists+linux-can@lfdr.de>; Sun,  7 Jan 2024 06:44:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D7F82823EC
+	for <lists+linux-can@lfdr.de>; Sun,  7 Jan 2024 10:24:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0632F125D7;
-	Sun,  7 Jan 2024 06:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 677FC12B7E;
+	Sun,  7 Jan 2024 10:24:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mkM8r+Q8"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="QJtWtmwO";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="EWmixXvk"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0F0125AF;
-	Sun,  7 Jan 2024 06:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-40e43e489e4so2908645e9.1;
-        Sat, 06 Jan 2024 22:44:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704609869; x=1705214669; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tgblN3HcigowbWqXBnPjGd+MmpbzJDJ5UWz+u8rMOAE=;
-        b=mkM8r+Q8frRdXMwdnhvlKLRLdjx/+ei9saaTq/sFQOiNbNfWkzBDPiNypptzojGwCL
-         i/pTANmi8Dic7mgIIhq+RhYoMRUo73HjaGVUXAgr5TuqNYL8USar7gi1CfCRRmLu319J
-         Sr7HD0di5rwlAXFxWV16W6OL42dSvzFwlMezc2MGTH5CQoRokux7t7Llc4VgndOfZV3E
-         dwt9cMqwBEY8bAWStcCkNE042p63UGMt8W8dB/viJTh+75h2q/xljei7Gsb9spgED1co
-         q687JhijZuw935l0AR9UT04LSi8FjPkKJ3wJguyqJxVirrKSepcHms/KM4/7hUQG0LE9
-         FOiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704609869; x=1705214669;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=tgblN3HcigowbWqXBnPjGd+MmpbzJDJ5UWz+u8rMOAE=;
-        b=OHJhegLI+9SR7DAgr+i0nWgCgcIM2S9gJ6hSsHMWzw7KGyTaNppxwN8IYcel8SZoa1
-         sIcGMFBq42qgXzIpdhJx22MEQ0aHvjEdYFvCgzPO6jsi23lDlR4sx05Qxfliispkxh8/
-         /LQ/yoPtDjjU6gYgCc+nEm6HjoZzCc8K8kNItLO//7pPdZu1xHPcgvx6MHK9UlJmwBJ5
-         etDwPy865jFgcRjRdX1imHdTXS2z307/n921W43Pmg00MnN2HdmLpThF9FdqnPQF0vhK
-         pakSKyrp392nWKUhQDjFhrEJssdSZ4vbQxiu7F+FB5vdBoMW3g2ieojwUMD3ALx7y8Kr
-         5Fcg==
-X-Gm-Message-State: AOJu0Yznt+LU6h2HFC0xOcsGAi7d99+W+twcfqoIToj1iDYgqJdKhboA
-	APIkb0gj8Q53JFKhjL9vgB8=
-X-Google-Smtp-Source: AGHT+IEAFQmvda4HBy3z9WBFN501KNJDs2F6x8J/2VqOwWvjD6vx5tJx6o7ebX8iB2b9zmKLZnAFEA==
-X-Received: by 2002:a7b:c2b2:0:b0:40d:8892:f372 with SMTP id c18-20020a7bc2b2000000b0040d8892f372mr976687wmk.57.1704609869195;
-        Sat, 06 Jan 2024 22:44:29 -0800 (PST)
-Received: from ?IPV6:2a04:ee41:81:c881:8dae:eb66:b750:3c50? ([2a04:ee41:81:c881:8dae:eb66:b750:3c50])
-        by smtp.gmail.com with ESMTPSA id z9-20020a170906714900b00a28479fcb8esm2699045ejj.103.2024.01.06.22.44.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Jan 2024 22:44:28 -0800 (PST)
-Message-ID: <1cf96afe-6a27-4fd5-975e-96122f72df2e@gmail.com>
-Date: Sun, 7 Jan 2024 07:44:27 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4875F12B84
+	for <linux-can@vger.kernel.org>; Sun,  7 Jan 2024 10:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1704622871; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Zd8vJuTmniBlvcvppOQBmhSjJEWqKy8xXMlNEbR6INmELB5MxAKxccrvWtS+NlLtDV
+    sy2+U0XvAvggoL1H2lBNh04xseyPlcWWn+6/fycb8Kp1pkBXtyavWByjpP165diYy1Vb
+    4ODdzDTVKota2JpTcTDHgfkSiQfb7nkrNRR1qQHF4Np26HKm5H2DtjyiI07Xrkm01Qct
+    uR9vmUBokJSt1bp0qMDGHrwe6q7SulHu+532c6OFzZJTIg2z3ThA7jPQ/6g2Zn/iecJM
+    GpdAvpVG4wVSrukh2S0xbKMGL6WnOcR3qqWGbr7xrHnTVPNiLWDBMl8xppTsKOxLyQMy
+    LilQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1704622871;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=oa91potUszGG8wiGAnwzdnjLCamLqUXB6HMtE1SKerU=;
+    b=jZl6A3zlP26OMAtnQwFXZOKZrl3Qho+Vr7X5eD/JFrHEoxBKw6Kpk4mlLHu7lW3Whz
+    xWEgcAWmK8cBJZ/mqk+fQCIycZ2eCEgq+wFQM6Y1RpOBLc7c5rLdYhz3fjVtSBfn0R81
+    MxWhZaApDkt1smaLJi4CLuyQNpmicGSrW+AQ1DGENVC+/goTHpMWVZ+p3apSRuEnednZ
+    1lBfVFPh8gndoDhJfu4dc9TuzLHEWbVN5I4u+gWZ6uxTWKxPm/m+GvNolG36VPVLBqNk
+    WgDUxVltT0YxTJBWvFfuD8c1GViZVppc6fRUOr3ZYZ42Ho97lvCGSaXYPCW5Mkatsxam
+    wAVg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1704622871;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=oa91potUszGG8wiGAnwzdnjLCamLqUXB6HMtE1SKerU=;
+    b=QJtWtmwOYJ6ATE1pyITSFg8YXA/nIlkn98P985bmSH1G4Gachhv9w3KViAnFjrrhLb
+    oDiy1/r/+a8oE+tceLh0qbxDs3MfH9g25TRugYI6/xpIi3f5K9OwcPyut4QX3jVEGZ9c
+    Ohx06iqllea5rePQoNBrKfP7/UQSCo7qHTu4/QXr8zYw089rjFHrs6AjxyfzdQnSB/iR
+    d+1BRwkAdgIuxf6pPL9MZJhSkSSW0ZtJJ3cqxAWAREzN4sxystIdkXP5ZNxEyXD1khBv
+    juHy5USH2eNy3vZNePHoBAKss6jdhjLKjBpXP0U6wgOs0OWKULV9WD8pk6CkOp/euyw3
+    eC+g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1704622871;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=oa91potUszGG8wiGAnwzdnjLCamLqUXB6HMtE1SKerU=;
+    b=EWmixXvkA2LzdwjJ8Cm/dbgT3v8kbxPPR8mLxyWgodV4WNZe5/ce2bua70aRCwBko0
+    jQs8hrr5fdIw/C1zC7Bg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFr0UTfNxrVWG2Lo6Qn47bseovr792l6A=="
+Received: from [IPV6:2a00:6020:4a8e:5010:abee:8cd8:5f9d:6194]
+    by smtp.strato.de (RZmta 49.10.0 AUTH)
+    with ESMTPSA id Kf147a007ALA9ou
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sun, 7 Jan 2024 11:21:10 +0100 (CET)
+Message-ID: <3c16cab8-b1ff-4091-9eb3-28c5051309e7@hartkopp.net>
+Date: Sun, 7 Jan 2024 11:21:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -66,192 +80,143 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] canxl: add virtual CAN network identifier support
 Content-Language: en-US
-From: Nicolas Maier <nicolas.maier.dev@gmail.com>
-Subject: [PATCH] can: bcm: add recvmsg flags for own, local and remote traffic
-To: socketcan@hartkopp.net, mkl@pengutronix.de, linux-can@vger.kernel.org
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc: linux-can@vger.kernel.org, mkl@pengutronix.de
+References: <20240106192836.4716-1-socketcan@hartkopp.net>
+ <CAMZ6Rq+S7mUWBXQEm2uHTKt31Z5JBj1LK2WNpN7pwujx5DhSzw@mail.gmail.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <CAMZ6Rq+S7mUWBXQEm2uHTKt31Z5JBj1LK2WNpN7pwujx5DhSzw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-CAN RAW sockets allow userspace to tell if a received CAN frame comes
-from the same socket, another socket on the same host, or another host.
-See commit 1e55659ce6dd ("can-raw: add msg_flags to distinguish local
-traffic"). However, this feature is missing in CAN BCM sockets.
+Hi Vincent,
 
-Add the same feature to CAN BCM sockets. When reading a received frame
-(opcode RX_CHANGED) using recvmsg, two flags in msg->msg_flags may be
-set following the previous convention (from CAN RAW), to distinguish
-between 'own', 'local' and 'remote' CAN traffic.
+thanks for your review!
 
-Update the documentation to reflect this change.
+On 07.01.24 07:28, Vincent MAILHOL wrote:
+> On Sun. 7 Jan. 2024 at 04:47, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
 
-Signed-off-by: Nicolas Maier <nicolas.maier.dev@gmail.com>
----
- Documentation/networking/can.rst | 34 ++++++++++++++------------
- net/can/bcm.c                    | 42 +++++++++++++++++++++++++++++---
- 2 files changed, 56 insertions(+), 20 deletions(-)
+>> values can be send, e.g. to replay full qualified CAN XL traffic.
+>                  ^^^^
+> sent
+ACK
 
-diff --git a/Documentation/networking/can.rst b/Documentation/networking/can.rst
-index d7e1ada905b2..62519d38c58b 100644
---- a/Documentation/networking/can.rst
-+++ b/Documentation/networking/can.rst
-@@ -444,6 +444,24 @@ definitions are specified for CAN specific MTUs in include/linux/can.h:
-   #define CANFD_MTU (sizeof(struct canfd_frame)) == 72  => CAN FD frame
- 
- 
-+Returned Message Flags
-+----------------------
-+
-+When using the system call recvmsg(2) on a RAW or a BCM socket, the
-+msg->msg_flags field may contain the following flags:
-+
-+MSG_DONTROUTE:
-+	set when the received frame was created on the local host.
-+
-+MSG_CONFIRM:
-+	set when the frame was sent via the socket it is received on.
-+	This flag can be interpreted as a 'transmission confirmation' when the
-+	CAN driver supports the echo of frames on driver level, see
-+	:ref:`socketcan-local-loopback1` and :ref:`socketcan-local-loopback2`.
-+	(Note: In order to receive such messages on a RAW socket,
-+	CAN_RAW_RECV_OWN_MSGS must be set.)
-+
-+
- .. _socketcan-raw-sockets:
- 
- RAW Protocol Sockets with can_filters (SOCK_RAW)
-@@ -693,22 +711,6 @@ where the CAN_INV_FILTER flag is set in order to notch single CAN IDs or
- CAN ID ranges from the incoming traffic.
- 
- 
--RAW Socket Returned Message Flags
--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--
--When using recvmsg() call, the msg->msg_flags may contain following flags:
--
--MSG_DONTROUTE:
--	set when the received frame was created on the local host.
--
--MSG_CONFIRM:
--	set when the frame was sent via the socket it is received on.
--	This flag can be interpreted as a 'transmission confirmation' when the
--	CAN driver supports the echo of frames on driver level, see
--	:ref:`socketcan-local-loopback1` and :ref:`socketcan-local-loopback2`.
--	In order to receive such messages, CAN_RAW_RECV_OWN_MSGS must be set.
--
--
- Broadcast Manager Protocol Sockets (SOCK_DGRAM)
- -----------------------------------------------
- 
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 9168114fc87f..32345e155006 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -72,9 +72,11 @@
- #define BCM_TIMER_SEC_MAX (400 * 24 * 60 * 60)
- 
- /* use of last_frames[index].flags */
-+#define RX_LOCAL   0x10 /* frame was created on the local host */
-+#define RX_OWN     0x20 /* frame was sent via the socket it was received on */
- #define RX_RECV    0x40 /* received data for this element */
- #define RX_THR     0x80 /* element not been sent due to throttle feature */
--#define BCM_CAN_FLAGS_MASK 0x3F /* to clean private flags after usage */
-+#define BCM_CAN_FLAGS_MASK 0x0F /* to clean private flags after usage */
- 
- /* get best masking value for can_rx_register() for a given single can_id */
- #define REGMASK(id) ((id & CAN_EFF_FLAG) ? \
-@@ -138,6 +140,19 @@ static LIST_HEAD(bcm_notifier_list);
- static DEFINE_SPINLOCK(bcm_notifier_lock);
- static struct bcm_sock *bcm_busy_notifier;
- 
-+/* Return pointer to store the extra msg flags for bcm_recvmsg().
-+ * We use the space of one unsigned int beyond the 'struct sockaddr_can'
-+ * in skb->cb.
-+ */
-+static inline unsigned int *bcm_flags(struct sk_buff *skb)
-+{
-+	sock_skb_cb_check_size(sizeof(struct sockaddr_can) +
-+			       sizeof(unsigned int));
-+
-+	/* return pointer after struct sockaddr_can */
-+	return (unsigned int *)(&((struct sockaddr_can *)skb->cb)[1]);
-+}
-+
- static inline struct bcm_sock *bcm_sk(const struct sock *sk)
- {
- 	return (struct bcm_sock *)sk;
-@@ -325,6 +340,7 @@ static void bcm_send_to_user(struct bcm_op *op, struct bcm_msg_head *head,
- 	struct sock *sk = op->sk;
- 	unsigned int datalen = head->nframes * op->cfsiz;
- 	int err;
-+	unsigned int *pflags;
- 
- 	skb = alloc_skb(sizeof(*head) + datalen, gfp_any());
- 	if (!skb)
-@@ -344,8 +360,16 @@ static void bcm_send_to_user(struct bcm_op *op, struct bcm_msg_head *head,
- 		 * relevant for updates that are generated by the
- 		 * BCM, where nframes is 1
- 		 */
--		if (head->nframes == 1)
-+		if (head->nframes == 1) {
-+			pflags = bcm_flags(skb);
-+			*pflags = 0;
-+			if (firstframe->flags & RX_LOCAL)
-+				*pflags |= MSG_DONTROUTE;
-+			if (firstframe->flags & RX_OWN)
-+				*pflags |= MSG_CONFIRM;
-+
- 			firstframe->flags &= BCM_CAN_FLAGS_MASK;
-+		}
- 	}
- 
- 	if (has_timestamp) {
-@@ -444,7 +468,7 @@ static void bcm_rx_changed(struct bcm_op *op, struct canfd_frame *data)
- 		op->frames_filtered = op->frames_abs = 0;
- 
- 	/* this element is not throttled anymore */
--	data->flags &= (BCM_CAN_FLAGS_MASK|RX_RECV);
-+	data->flags &= ~RX_THR;
- 
- 	memset(&head, 0, sizeof(head));
- 	head.opcode  = RX_CHANGED;
-@@ -642,7 +666,7 @@ static enum hrtimer_restart bcm_rx_thr_handler(struct hrtimer *hrtimer)
- static void bcm_rx_handler(struct sk_buff *skb, void *data)
- {
- 	struct bcm_op *op = (struct bcm_op *)data;
--	const struct canfd_frame *rxframe = (struct canfd_frame *)skb->data;
-+	struct canfd_frame *rxframe = (struct canfd_frame *)skb->data;
- 	unsigned int i;
- 
- 	if (op->can_id != rxframe->can_id)
-@@ -657,6 +681,13 @@ static void bcm_rx_handler(struct sk_buff *skb, void *data)
- 			return;
- 	}
- 
-+	/* add flags to distinguish between own/local/remote CAN traffic */
-+	if (skb->sk) {
-+		rxframe->flags |= RX_LOCAL;
-+		if (skb->sk == op->sk)
-+			rxframe->flags |= RX_OWN;
-+	}
-+
- 	/* disable timeout */
- 	hrtimer_cancel(&op->timer);
- 
-@@ -1675,6 +1706,9 @@ static int bcm_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 		memcpy(msg->msg_name, skb->cb, msg->msg_namelen);
- 	}
- 
-+	/* assign the flags that have been recorded in bcm_send_to_user() */
-+	msg->msg_flags |= *(bcm_flags(skb));
-+
- 	skb_free_datagram(sk, skb);
- 
- 	return size;
--- 
-2.34.1
+>> provided by the CAN_RAW sockets and kernel infrastruture.
+>                                               ^^^^^^^^^^^^^
+> infrastructure
+ACK
 
+>>   struct canxl_frame {
+>> -       canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
+>> +       canid_t prio;  /* 11 bit priority for arbitration / 8 bit VCID */
+> 
+> Isn't this a UAPI breaking change? Prior to this patch, the applications may do:
+> 
+>    canxl_frame.prio
+> 
+> to get the prio, but after this patch, applications are required to do:
+> 
+>    canxl_frame.prio & CANXL_PRIO_MASK
+> 
+
+Not really. I also thought about it but you *only* need to take care 
+about the VCID content when you have enabled it explicitly with the new 
+sockopt. Otherwise you will never see anything beyond the 32 bit prio.
+
+> in order to mask out the VCID (currently, there are no requirements
+> that canxl_frame.prio must be masked before use).
+> In the past, I was reluctant to acknowledge the introduction of CANXL
+> in the kernel prior to reading the ISO standard because I was afraid
+> of such UAPI stability issues. Now we have to deal with it.
+
+Yes, but that kind of extension would be backwards compatible.
+
+> What do you think of:
+> 
+>    struct canxl_frame {
+>    #if defined(__LITTLE_ENDIAN)
+>            __u16 prio;  /* 11 bit priority for arbitration */
+>            __u8 vcid; /* 8 bit VCID */
+>            __u8 __reserved; /* must be 0 */
+>           /* ... */
+>    #elif defined(__BIG_ENDIAN)
+>            __u8 __reserved; /* must be 0 */
+>            __u8 vcid; /* 8 bit VCID */
+>            __u16 prio;  /* 11 bit priority for arbitration */
+>    #else
+>    #error "Unknown endianness"
+>    #endif
+>    }
+> 
+> Here, canxl_frame.prio always gives a correct value without need for
+> CANXL_PRIO_MASK masking. The big/little endianness checks are needed
+> to maintain the ABI compatibility. Not yet tested, so forgive if there
+> is a mistake. Getting the endianness logic correct on a first try is
+> not easy.
+
+Yes, I tested such approach too (with little endian only) and it worked 
+great - and of course looked better in the code.
+
+> Also, the VCID can now be accessed through canxl_frame.vcid instead of
+> relying on some mask and shift logic.
+
+Right. That looked nice.
+
+> The drawback is that you lose the can_id type. For what I understand,
+> this is only used for filtering. If we absolutely need to maintain the
+> canid_t, then maybe:
+> 
+>    struct canxl_frame {
+>            union {
+>                    canid_t filter;
+>                    struct {
+>    #if defined(__LITTLE_ENDIAN)
+>                            __u16 prio;  /* 11 bit priority for arbitration */
+>                            __u8 vcid; /* 8 bit VCID */
+>                            __u8 __reserved; /* must be 0 */
+>    #elif defined(__BIG_ENDIAN)
+>                            __u8 __reserved; /* must be 0 */
+>                            __u8 vcid; /* 8 bit VCID */
+>                            __u16 prio;  /* 11 bit priority for arbitration */
+>    #else
+>    #error "Unknown endianness"
+>    #endif
+>                    };
+>            };
+>           /* ... */
+>    }
+> 
+> But I think it is better to drop it. If someone wants a canid_t, then
+> he or she can just cast the XL frame to either struct can_frame or
+> struct canfd_frame.
+> 
+> Though?
+
+My only concern is that it looks really ugly :-/
+
+The change of the prio element from u32 to u16 will also not harm anyone 
+as I assume to be the only person who's currently working with CAN XL 
+frames on virtual CAN interfaces:
+
+https://github.com/hartkopp?tab=repositories&q=can-cia
+
+I'll prepare a patch that picks up this suggestion of an __u16 prio etc.
+
+Maybe we can add some compile time checks to ensure the correct struct 
+layout for this case.
+
+> 
+>>          __u8    flags; /* additional flags for CAN XL */
+> 
+> If CANXL_VCID is set, can vcid be zero? If not, no need for a flag.
+> Just need to check if canxl_frame.vcid is not zero.
+> 
+
+This is probably indeed a leftover which can be removed with my latest 
+implementation. Will recheck.
+
+Many thanks,
+Oliver
 
