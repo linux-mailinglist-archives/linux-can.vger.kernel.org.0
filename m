@@ -1,81 +1,81 @@
-Return-Path: <linux-can+bounces-112-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-113-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D270E826541
-	for <lists+linux-can@lfdr.de>; Sun,  7 Jan 2024 18:06:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B456C826546
+	for <lists+linux-can@lfdr.de>; Sun,  7 Jan 2024 18:14:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DE0128128D
-	for <lists+linux-can@lfdr.de>; Sun,  7 Jan 2024 17:06:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C73501C20A1F
+	for <lists+linux-can@lfdr.de>; Sun,  7 Jan 2024 17:14:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD50013ADE;
-	Sun,  7 Jan 2024 17:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D1C013ACD;
+	Sun,  7 Jan 2024 17:14:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="iWbr/67Q";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="T8sLPDpR"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="sG024a2e";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="3OmXKUEP"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E1613AC8
-	for <linux-can@vger.kernel.org>; Sun,  7 Jan 2024 17:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C411513AC8
+	for <linux-can@vger.kernel.org>; Sun,  7 Jan 2024 17:14:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1704647193; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1704647647; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=MvXK/DTmz7EZenDBWyyZx1IjqRtfGaNWXvrQPopJkDJNBrmwznUv9+TS/siQVJ5Huy
-    CsIyEGDkrGiigRZXcaMtur9YizjbfkvSOUeLpc/ie/2JcT1F/xtzdaAnWq9iSvoQGyA6
-    TXgPwE2a9PiKafH7Ag05Ea4Jd5qNk3kzhQGXEN5ijtfVX3NqoPz2I/h2hhy7QBuu7n5I
-    PRVF57QzfP++L2G+Re0H8geG+k/86a4mJQhpotVyqJK/eJcEnbX73XJ+UaiZjNov1W0H
-    +OVTh+b3R4QoDno/lxENSTBg4v773rAvxFw+zybnK2dFnrAlLmrbRMO9huCnUwOrGvm8
-    7AXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1704647193;
+    b=ZdGaM8BMxl5nKf/ZAIY7vXfyU0o42hiVoLzEjP7VqZ3VIye9DpXwuaXeVLnuLmI6Sa
+    la7E4Y+Sk4a5s6nNphX22yXYqxxu+hb6nYCOhzcPDpXJ53hMqpUY8C46K8AjBY/aFLZH
+    dMTd/Tc4loPtzm5lWEzXjylbE8COfKedwpa004WSwohFS19racIi2T+0DzlrrMq9wmQH
+    grPA7x8oRpRmJlH9un75wjSxoQjYUMa3M66GCZ4tfM4aLdBNwY6bcA7NKKObEioyU5H9
+    F6sN2d208byfAFp6hD8Kjcot4fhFApj4xLFB5lECtTDLisNpUWGHTfhhHtQWroq+Fv5Q
+    gG3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1704647647;
     s=strato-dkim-0002; d=strato.com;
     h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=kFVHJEYHnXFZe02BC6Ptp6qPHxkX+IWqzdAW4FDNS/I=;
-    b=PNuZj862E7y2g+QOAk9nQxKxzzEAJoz2CsLoXgn1BmGGsSfgbHvemJj1NpHJWc0hqV
-    OEZRiW4v5dO4esy4dHIF8OtfY8ZXdXwIS+h/xQFvzKhAF9tCzs5kJGBr1UCWIBvjNako
-    6Dyqj2VOBPtiXYjX7ncthPJeID0vqEsQOyRZiMSZvGkSNP517tEr6idMK7tr55npguos
-    dnoPLZTjkJcqcInpEB+h/QEPvat/ikn0FrQkMqfuqlAjFqW5luqyE3JgNlDOWT76jFcA
-    HOswbb4PipMZxV8rM0NRG+nxhG4rzlINnnYoh7B7yA3mLbBFnmYtWLBs5gxFx0y9ff+z
-    sMsg==
+    bh=XVu3WDfJx2eZklz0Tp1uEMGbePzhel3voOgXsppB/wk=;
+    b=aByUVGCs+/syWYGlWfaGNt/nzoZ25fMrSRgWpo/5Seun7Ir6hoWHoWtI9WfpXRdeaY
+    JiebjNUEkNMHC/RUW1wQc7AOz/VkTST4EK1Ys4n3FjLVhUA6Cyr8eKIqVK8PjO8Uw//9
+    gUVbk5KTXZ8t2lKi9f5UEvDhgz9dSasAOboL9naUsD1mc56/WOwxTAgihW1T1vJhAoho
+    B83L4x5htk/QKJnNigP/Zn7ejvF8iuWufpSEq1SSFJuH87z6fQ/Hj5cnDDqZCG3lrqsK
+    kUyvbkUGz6TGEs/rR95l+mHMTjUqKEf8rtELqsbgEBeEvaLjH/wc86+WUqOCPbEJfyQl
+    mecg==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1704647193;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1704647647;
     s=strato-dkim-0002; d=hartkopp.net;
     h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=kFVHJEYHnXFZe02BC6Ptp6qPHxkX+IWqzdAW4FDNS/I=;
-    b=iWbr/67Q6sZMNjHQeXZJlKhQvgR/uJSwCMnlgjQUOyT4Munsf7DWQKR6cq7gXqr/9m
-    ZjcBDQpXQyAn6q1FXcDo9vS4N+oo1C6cMaFYiTCd6/Sr+2mRZjNyn0H8coE6e1PDWJ1h
-    3fMIYbZxinodKxGGo/9pIgUaB+HanXkdLjABsxVgAyG2o7kpKNy2c/YxBiFvNXX42gLP
-    Ad+Dti/2NuT1pbVmWXCCom+8sOYGzt2boUNa/oIVzinoFNKjsk+JZYknNBGrk0vhvuEN
-    LfgEQmPXq0didpl1EBZnFcg8rpaEnvo6Cpv2F8ncBDVLFedtmCW+B3xiVyWNcN4hY6NE
-    tSJg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1704647193;
+    bh=XVu3WDfJx2eZklz0Tp1uEMGbePzhel3voOgXsppB/wk=;
+    b=sG024a2eDwMOFJzFbLJgGDzJskIdRYyGJ2AyDKUAFZW6sQyFYcQrbyrQ6+xIV7DSkg
+    2wIsKvSmaa7t5awKHowD0Wx67v0ZzxSAbrZxauNj3TkrRzXWPQwnn0krZtclbsnL3d7k
+    GQAAb+u4oxYH4tGUJqVMF5FAp1G2XLCEkTbIsHwFtvOCPMAyxnJtNZpjP3Fz8PEmbxa7
+    cctYnQT9Zgxvuigj5C+UMKrGZLSRzCEmk+b7bhGwcDmMzkILB+B2wYfPHGxDEQxWtJ9f
+    mjoHn/etF5CYB5++aur/oC5eLpXGPWG++6qGi0WxQPQx2JBSSWEYznVHNnju+E9idrTv
+    7KTA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1704647647;
     s=strato-dkim-0003; d=hartkopp.net;
     h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=kFVHJEYHnXFZe02BC6Ptp6qPHxkX+IWqzdAW4FDNS/I=;
-    b=T8sLPDpRMQhvf6ifcAqv+iRcybK2btQTktuRm+f2d55jCFOrWQo953imCddCYgImpa
-    V5W6B/Gf3FWhjxFSZDAg==
+    bh=XVu3WDfJx2eZklz0Tp1uEMGbePzhel3voOgXsppB/wk=;
+    b=3OmXKUEPGM1HPEmCtaoICNL84A2h9DljAHLT3RMPZMR4/01CWdWadP9SiM4lcLo64a
+    ifQKrQG3R39kLTSvf5Dg==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3VYpXsQi7qVzYmRgXrMPw5ZIFlWgeHIL3lGNaaYL6"
 Received: from lenov17.lan
     by smtp.strato.de (RZmta 49.10.0 AUTH)
-    with ESMTPSA id Kf147a007H6XACX
+    with ESMTPSA id Kf147a007HE7ADL
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Sun, 7 Jan 2024 18:06:33 +0100 (CET)
+    Sun, 7 Jan 2024 18:14:07 +0100 (CET)
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 To: linux-can@vger.kernel.org
 Cc: mkl@pengutronix.de,
 	mailhol.vincent@wanadoo.fr,
 	Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH v2] canxl: add virtual CAN network identifier support
-Date: Sun,  7 Jan 2024 18:06:13 +0100
-Message-Id: <20240107170613.2055-1-socketcan@hartkopp.net>
+Subject: [PATCH v3] canxl: add virtual CAN network identifier support
+Date: Sun,  7 Jan 2024 18:14:01 +0100
+Message-Id: <20240107171401.2339-1-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -97,7 +97,7 @@ option CAN_RAW_XL_VCID_OPTS is introduced to define/access VCID content:
 - rx: apply VCID receive filter (value/mask) to be passed to the user space
 
 With the 'tx pass through' option CAN_RAW_XL_VCID_TX_PASS all valid VCID
-values can be send, e.g. to replay full qualified CAN XL traffic.
+values can be sent, e.g. to replay full qualified CAN XL traffic.
 
 The VCID value provided for the CAN_RAW_XL_VCID_TX_SET option will
 override the VCID value in the struct canxl_frame.vcid element defined
