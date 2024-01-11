@@ -1,199 +1,192 @@
-Return-Path: <linux-can+bounces-121-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-122-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CFFC8278A0
-	for <lists+linux-can@lfdr.de>; Mon,  8 Jan 2024 20:34:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 995EF82AE83
+	for <lists+linux-can@lfdr.de>; Thu, 11 Jan 2024 13:14:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B03D71F23E71
-	for <lists+linux-can@lfdr.de>; Mon,  8 Jan 2024 19:34:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF5D51C20A1D
+	for <lists+linux-can@lfdr.de>; Thu, 11 Jan 2024 12:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75A8B53815;
-	Mon,  8 Jan 2024 19:34:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D86F15AC1;
+	Thu, 11 Jan 2024 12:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="StdF7YxJ"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="VGEcKeEv";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="KooY5bOk"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89AD46533;
-	Mon,  8 Jan 2024 19:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.18] ([92.140.202.140])
-	by smtp.orange.fr with ESMTPA
-	id MvO7rxILJx8edMvO7reY5P; Mon, 08 Jan 2024 20:34:23 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1704742463;
-	bh=XIQMN8dYwQf2pqovuJTPQrW6UVnEhGAQOnLHxTnQdQk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=StdF7YxJG7QFddR6jpfM9LUHY2lbvt3R+VhZ479y87b3V/xqw5OlLcRIJ0dmVRJzt
-	 YgJScirWI+NmZ8rwHQSDnypoTNJxu2JIQV+N4wuhfUJFSZG0R8swTX0ssbuFxD61KL
-	 /wDdBl714aGa/kb7sIW1rinVn2jOpLsF+qxzjYyNr80o/jpbuAfToSt7jQ/hlMF5G5
-	 cgIwVlz04GOEIuX34O0GkDO0EK1tSNNQwOvBYKXVIe2dIonTVFcnsWi09OrGDxahtw
-	 s7lOceQQVgvf77LrAY0urhQjWvYfEa7XD1UF4Uy4QPdEawhzzSADQIgx8pWDm+KuXw
-	 HI5kdP6L9U0WQ==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 08 Jan 2024 20:34:23 +0100
-X-ME-IP: 92.140.202.140
-Message-ID: <a366f529-c901-4cd1-a1a6-c3958562cace@wanadoo.fr>
-Date: Mon, 8 Jan 2024 20:34:17 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CAC15AC0
+	for <linux-can@vger.kernel.org>; Thu, 11 Jan 2024 12:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Thu, 11 Jan 2024 13:14:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1704975244;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=u4yg9TrYsRIMPvqhNuQuEqDe3ZDGBlws/scU8ENbxbc=;
+	b=VGEcKeEvo19bv0i9M1tWTSlMnf2BhlCdAeqTmVpM/0yuIS2TxEruyQPxdRgs4m1VlrMQBH
+	bnD6xgxif/aCmsWffC4xQ7ALCUM3eJJWN7CYz9uDoQJlHNxfrHYYx4YGTaEdHmHnnaJ9qB
+	ePNcOi5BUiTHJX8cUPM3dvJ1s+DUfpTMa2UekpXjhGu/rqDYc6PRdYw3wsCJq6+Xic0vc0
+	jS3hIMVYJmB/L8a7vUVJ0IlL/mNXyvXt5QMpiVfUPjC6tIIbU1gRlrbdroix03+0oGm4Gf
+	M7GJJDKhsTwMrC3ZM3przgXeVZGElepacXPWfa8vgl9U3R/0bjwAuNJI8t12Gg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1704975244;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=u4yg9TrYsRIMPvqhNuQuEqDe3ZDGBlws/scU8ENbxbc=;
+	b=KooY5bOkgmWowcTOLrd2uqUCAQgcZ8bpjzQqrWsQWpOJvjFTrkK8PB9+rpjVVszBlwnKQM
+	W4oTfzxFrn2zKYBQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org, tglx@linutronix.de
+Subject: Re: [RFC PATCH] can: gw: fix RCU/BH usage in cgw_create_job()
+Message-ID: <20240111121402.xc9rmYfG@linutronix.de>
+References: <20231221123703.8170-1-socketcan@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] can: virtio: Initial virtio CAN driver.
-Content-Language: fr
-To: Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>,
- Wolfgang Grandegger <wg@grandegger.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Harald Mommer <harald.mommer@opensynergy.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>,
- linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, virtualization@lists.linux.dev
-References: <20240108131039.2234044-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240108131039.2234044-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20231221123703.8170-1-socketcan@hartkopp.net>
 
-Le 08/01/2024 à 14:10, Mikhail Golubev-Ciuchea a écrit :
-> From: Harald Mommer <harald.mommer@opensynergy.com>
-> 
-> - CAN Control
-> 
->    - "ip link set up can0" starts the virtual CAN controller,
->    - "ip link set up can0" stops the virtual CAN controller
-> 
-> - CAN RX
-> 
->    Receive CAN frames. CAN frames can be standard or extended, classic or
->    CAN FD. Classic CAN RTR frames are supported.
-> 
-> - CAN TX
-> 
->    Send CAN frames. CAN frames can be standard or extended, classic or
->    CAN FD. Classic CAN RTR frames are supported.
-> 
-> - CAN BusOff indication
-> 
->    CAN BusOff is handled by a bit in the configuration space.
-> 
-> Signed-off-by: Harald Mommer <Harald.Mommer@opensynergy.com>
-> Signed-off-by: Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>
-> Co-developed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>
-> ---
+On 2023-12-21 13:37:03 [+0100], Oliver Hartkopp wrote:
+> --- a/net/can/gw.c
+> +++ b/net/can/gw.c
+> @@ -128,11 +128,13 @@ struct cgw_job {
+>  	struct hlist_node list;
+>  	struct rcu_head rcu;
+>  	u32 handled_frames;
+>  	u32 dropped_frames;
+>  	u32 deleted_frames;
+> -	struct cf_mod mod;
+> +	struct cf_mod *mod;
+> +	struct cf_mod mod1;
+> +	struct cf_mod mod2;
 
-Hi,
-a few nits below, should there be a v6.
+I wouldn't put here mod1/2. That cf_mod struct has 736 bytes in my
+allmod build so it gains some weight. It also introduces a run-time
+problem, more on that later.
+Also *mod requires __rcu annotation.=20
 
+> @@ -504,11 +506,11 @@ static void can_can_gw_rcv(struct sk_buff *skb, voi=
+d *data)
+>  	/* clone the given skb, which has not been done in can_rcv()
+>  	 *
+>  	 * When there is at least one modification function activated,
+>  	 * we need to copy the skb as we want to modify skb->data.
+>  	 */
+> -	if (gwj->mod.modfunc[0])
+> +	if (gwj->mod->modfunc[0])
 
-> +static int virtio_can_alloc_tx_idx(struct virtio_can_priv *priv)
-> +{
-> +	int tx_idx;
-> +
-> +	tx_idx = ida_alloc_range(&priv->tx_putidx_ida, 0,
-> +				 priv->can.echo_skb_max - 1, GFP_KERNEL);
-> +	if (tx_idx >= 0)
-> +		atomic_add(1, &priv->tx_inflight);
+Almost. You need
+	struct cf_mod *mod;
+	=E2=80=A6
 
-atomic_inc() ?
+	rcu_read_lock();
+	mod =3D rcu_dereference(gwj->mod);
+	if (mod->modfunc[0])
+	=E2=80=A6
 
-> +
-> +	return tx_idx;
-> +}
-> +
-> +static void virtio_can_free_tx_idx(struct virtio_can_priv *priv,
-> +				   unsigned int idx)
-> +{
-> +	ida_free(&priv->tx_putidx_ida, idx);
-> +	atomic_sub(1, &priv->tx_inflight);
+	rcu_read_unlock();
+	/* no longer touching mod but I am leaving can_can_gw_rcv()
+	 * anyway */
 
-atomic_dec() ?
+>  		nskb =3D skb_copy(skb, GFP_ATOMIC);
+>  	else
+>  		nskb =3D skb_clone(skb, GFP_ATOMIC);
+> =20
+>  	if (!nskb) {
+> @@ -1085,21 +1087,25 @@ static int cgw_create_job(struct sk_buff *skb,  s=
+truct nlmsghdr *nlh,
+>  	if (mod.uid) {
+>  		ASSERT_RTNL();
+> =20
+>  		/* check for updating an existing job with identical uid */
+>  		hlist_for_each_entry(gwj, &net->can.cgw_list, list) {
+> -			if (gwj->mod.uid !=3D mod.uid)
+> +			if (gwj->mod->uid !=3D mod.uid)
+>  				continue;
+> =20
+>  			/* interfaces & filters must be identical */
+>  			if (memcmp(&gwj->ccgw, &ccgw, sizeof(ccgw)))
+>  				return -EINVAL;
+> =20
+>  			/* update modifications with disabled softirq & quit */
+> -			local_bh_disable();
+> -			memcpy(&gwj->mod, &mod, sizeof(mod));
+> -			local_bh_enable();
+> +			if (gwj->mod =3D=3D &gwj->mod1) {
+> +				memcpy(&gwj->mod2, &mod, sizeof(mod));
+> +				rcu_replace_pointer(gwj->mod, &gwj->mod2, true);
+> +			} else {
+> +				memcpy(&gwj->mod1, &mod, sizeof(mod));
+> +				rcu_replace_pointer(gwj->mod, &gwj->mod1, true);
+> +			}
 
-> +}
+Why are you afraid of doing
+	mod =3D kmalloc(sizeof(*mod), GFP_KERNEL);
 
-...
+before invoking cgw_parse_attr()?
 
-> +static int virtio_can_probe(struct virtio_device *vdev)
-> +{
-> +	struct virtio_can_priv *priv;
-> +	struct net_device *dev;
-> +	int err;
-> +
-> +	dev = alloc_candev(sizeof(struct virtio_can_priv),
-> +			   VIRTIO_CAN_ECHO_SKB_MAX);
-> +	if (!dev)
-> +		return -ENOMEM;
-> +
-> +	priv = netdev_priv(dev);
-> +
-> +	ida_init(&priv->tx_putidx_ida);
-> +
-> +	netif_napi_add(dev, &priv->napi, virtio_can_rx_poll);
-> +	netif_napi_add(dev, &priv->napi_tx, virtio_can_tx_poll);
-> +
-> +	SET_NETDEV_DEV(dev, &vdev->dev);
-> +
-> +	priv->dev = dev;
-> +	priv->vdev = vdev;
-> +	vdev->priv = priv;
-> +
-> +	priv->can.do_set_mode = virtio_can_set_mode;
-> +	/* Set Virtio CAN supported operations */
-> +	priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING;
-> +	if (virtio_has_feature(vdev, VIRTIO_CAN_F_CAN_FD)) {
-> +		err = can_set_static_ctrlmode(dev, CAN_CTRLMODE_FD);
-> +		if (err != 0)
-> +			goto on_failure;
-> +	}
-> +
-> +	/* Initialize virtqueues */
-> +	err = virtio_can_find_vqs(priv);
-> +	if (err != 0)
-> +		goto on_failure;
-> +
-> +	INIT_LIST_HEAD(&priv->tx_list);
-> +
-> +	spin_lock_init(&priv->tx_lock);
-> +	mutex_init(&priv->ctrl_lock);
-> +
-> +	init_completion(&priv->ctrl_done);
-> +
-> +	virtio_can_populate_vqs(vdev);
-> +
-> +	register_virtio_can_dev(dev);
+Let me try to sell this to you:
+- Your stack usage shrinks by 736 bytes (as per previous estimation)
+- If this is a new one, you attach the pointer to the struct cgw_job so
+  it is not lost.
+- If this is an update, you avoid memcpy() and use rcu_replace_pointer()
+  as it is intended.
 
-Check for error?
+The construct of yours has the problem that it does not wait until the
+RCU grace period completes. Meaning on first update mod1 is used, you
+switch over to mod2. On the second update mod2 is used and you switch
+back to mod1. There is no guarantee that all current users of mod ->
+mod1 are gone by the time you switch from mod2 back to mod1. This
+of course requires two updates (one after the other).
 
-CJ
+If you allocate the struct on entry (assuming the salesmen me was
+successful) you could use=20
 
-> +
-> +	napi_enable(&priv->napi);
-> +	napi_enable(&priv->napi_tx);
-> +
-> +	/* Request device going live */
-> +	virtio_device_ready(vdev); /* Optionally done by virtio_dev_probe() */
-> +
-> +	return 0;
-> +
-> +on_failure:
-> +	virtio_can_free_candev(dev);
-> +	return err;
-> +}
+	old_mod =3D rcu_replace_pointer(gwj->mod, new_mod, lockdep_rtnl_is_held());
 
-...
+to grab the about to be replaced cf_mod and once the replacement is
+over and at the end, kfree_rcu() on it or
+	kfree_rcu_mightsleep(old_mod);
 
+to safe a RCU head.
+
+>  			return 0;
+>  		}
+>  	}
+> =20
+>  	/* ifindex =3D=3D 0 is not allowed for job creation */
+> @@ -1219,16 +1226,16 @@ static int cgw_remove_job(struct sk_buff *skb, st=
+ruct nlmsghdr *nlh,
+> =20
+>  		if (gwj->limit_hops !=3D limhops)
+>  			continue;
+> =20
+>  		/* we have a match when uid is enabled and identical */
+> -		if (gwj->mod.uid || mod.uid) {
+> -			if (gwj->mod.uid !=3D mod.uid)
+> +		if (gwj->mod->uid || mod.uid) {
+> +			if (gwj->mod->uid !=3D mod.uid)
+>  				continue;
+
+Also here you must use rcu_dereference() for gwj->mod. Since all
+add/remove jobs happen under the RTNL lock you could use
+	rcu_dereference_protected(, lockdep_rtnl_is_held());
+
+Sebastian
 
