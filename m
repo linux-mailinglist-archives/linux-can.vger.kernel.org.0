@@ -1,217 +1,163 @@
-Return-Path: <linux-can+bounces-123-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-124-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 743FE82AEA4
-	for <lists+linux-can@lfdr.de>; Thu, 11 Jan 2024 13:23:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DD5682BF54
+	for <lists+linux-can@lfdr.de>; Fri, 12 Jan 2024 12:41:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 607771C20D46
-	for <lists+linux-can@lfdr.de>; Thu, 11 Jan 2024 12:23:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FBD81C23B1D
+	for <lists+linux-can@lfdr.de>; Fri, 12 Jan 2024 11:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76513156FA;
-	Thu, 11 Jan 2024 12:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7193367E92;
+	Fri, 12 Jan 2024 11:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XyoBtAcy"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA5915AC0
-	for <linux-can@vger.kernel.org>; Thu, 11 Jan 2024 12:23:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-360a85e5e82so12650025ab.0
-        for <linux-can@vger.kernel.org>; Thu, 11 Jan 2024 04:23:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704975807; x=1705580607;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C+Do2wLekHyOSCIJUK3h/DUjhFiTmTBs0NQIfxE6tXs=;
-        b=fJzQrvBaSSETwydtGhPxyiMzPz++Ige43QuaQTokZP1UXMLB7p9k30idY031ZXZp0y
-         yIK4YfyOBUv8kRt+NeXJHN9GyYs2fDQOi8Z54O4vIg0kbp9XPKPM3RxrzRi7K3nI/fsB
-         sIcQTepUyzvEvOpZwPQXFShZ+BGBq4y70E7+BktxMOO+Zym7JPI56ck1GgYwk1Yw819K
-         xkNtdDLCY6OEwAdmw/jCXS5uIxSEKxwDGyquG5O8IMcacX4cFMTtMqjgYyFDPJjZfDGF
-         3+9zX74IxFof6LRtTbeVQ2mvOtY6U4kyrzwHdB84nX8APXH4Z1mfhwblDeCPayCcmhUe
-         /9yg==
-X-Gm-Message-State: AOJu0Yz7djwj/YhJbXHnVRi/t9N2BkWrtDBeAcRdF9/93pbIeh1nVv3D
-	F5nQKJBxIvoPk5TJnSUeLNpYveTuFK1zaFzlOHOwlJRZ/8/s
-X-Google-Smtp-Source: AGHT+IEOL4YeE4wbgAcDOYdGqJ9PUjvQ4D6o/XE7rUpmKpy6r3CX4iz/JQLWeTrC8A4y69HqggnOTe+W/4Tn9uRXqjFw2QKY6yfQ
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2C81F18C;
+	Fri, 12 Jan 2024 11:40:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Yu5MXPhaprTFjkOvsdSf2thUFf0rgbI7scn6+/0J11/bijSd/TRplWlFLWudI23fUNIeofoBbRcorIT6o9OP5dtshG/Qcf9uci1U4C05E3IFkZU4Q1ApdstHX224PfLEaB07hDyoE1ubfiaqYSBU8rhYoJ+yvOO6xuZ5NWKv7iYr9eCUdZjPkMHBp+/23segwc1KH2hQL6y81sE9Dov6ix9E27wm4c4oc9nfD3dRKviRmJylg2yom57MtocLMWvRSZZAj+odpY+ugfu5e5a/PUdwwHc0FrJb++Xb2Br/OqhKDaGzYqdKLhEehascWKKOlFczWFVrsgx47m7atI7RzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4hkC+Z474aZw0nJ3LVLL6L0vb1RyXUgtJQ2KvgsZELo=;
+ b=UUEZfryj6l17E6j1iuyPu5pb4rFbBQj9S1ywxfOnYkm03JskWUr/4nD8EcWadKniOFLU9pp9z2e2S0zQA2s5LDOzMyWixKnhA/jB2Ka50AkOPgNWvOlEH02HGH6vEiXqZ2aBuaVN0WxGtt/FWyZutNivr7z1vCv37VpIiufo+56JDHYs6Vp4ZISp/HzBVGmjGRIa6FRl8WkZcof3NDBa8nMT+dnwT+bWDuC3AFLzGXPB0extVRLcHK3WTtmlBGau+dZyJbmuHpGIMV6th0QJO5pvGc+mWutgB3nE5HqgE5CQne123cEvnizhNdHHyJxOijokbbLckfl4D++uWita4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=grandegger.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4hkC+Z474aZw0nJ3LVLL6L0vb1RyXUgtJQ2KvgsZELo=;
+ b=XyoBtAcyZvoR0e4HKz5SbojFoFVmkVwIzhdIrGnpamGgD01z8GkUfcEYv4z9H/AZaH+UOb95oosLHInFf17Dxpa1Ys8lzJpP2BXDV+hpO4ZWVcXXOIQ/csnbAu/3RkYgjKEHMoHtl7SDQjT5SGmUHgN8S5VFlLoefROP1svBvps=
+Received: from MW4PR04CA0246.namprd04.prod.outlook.com (2603:10b6:303:88::11)
+ by MN2PR12MB4173.namprd12.prod.outlook.com (2603:10b6:208:1d8::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.23; Fri, 12 Jan
+ 2024 11:40:51 +0000
+Received: from CO1PEPF000044EE.namprd05.prod.outlook.com
+ (2603:10b6:303:88:cafe::ff) by MW4PR04CA0246.outlook.office365.com
+ (2603:10b6:303:88::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.21 via Frontend
+ Transport; Fri, 12 Jan 2024 11:40:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1PEPF000044EE.mail.protection.outlook.com (10.167.241.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7181.14 via Frontend Transport; Fri, 12 Jan 2024 11:40:50 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Fri, 12 Jan
+ 2024 05:40:49 -0600
+Received: from xhdvnc205.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.34 via Frontend
+ Transport; Fri, 12 Jan 2024 05:40:45 -0600
+From: Srinivas Goud <srinivas.goud@amd.com>
+To: <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
+	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<conor+dt@kernel.org>, <p.zabel@pengutronix.de>
+CC: <git@amd.com>, <michal.simek@xilinx.com>, <linux-can@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	Srinivas Goud <srinivas.goud@amd.com>
+Subject: [PATCH RESEND v7 0/3] can: xilinx_can: Add ECC feature support
+Date: Fri, 12 Jan 2024 17:07:30 +0530
+Message-ID: <1705059453-29099-1-git-send-email-srinivas.goud@amd.com>
+X-Mailer: git-send-email 2.1.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1ba4:b0:35f:affb:bd7b with SMTP id
- n4-20020a056e021ba400b0035faffbbd7bmr139929ili.2.1704975807167; Thu, 11 Jan
- 2024 04:23:27 -0800 (PST)
-Date: Thu, 11 Jan 2024 04:23:27 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005644b8060eaa9d6e@google.com>
-Subject: [syzbot] [can?] memory leak in can_create (2)
-From: syzbot <syzbot+521ac15269e89d8546e8@syzkaller.appspotmail.com>
-To: davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de, 
-	kuba@kernel.org, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	mkl@pengutronix.de, netdev@vger.kernel.org, o.rempel@pengutronix.de, 
-	pabeni@redhat.com, robin@protonic.nl, socketcan@hartkopp.net, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044EE:EE_|MN2PR12MB4173:EE_
+X-MS-Office365-Filtering-Correlation-Id: 69e7132d-e256-493d-5342-08dc136353e3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	cG4XOyzu2M2y84pq24W2LH/PUn8s0S+wkBZ/dg4Oa521wA9+SswaPyZXkTomL6j/HBhQ/OIVmbUhA4p8hJZCHnjZ4uBVWSXJ/LEzSZBC2GNTDH2NGqx8s5G4hBvNOhfo4/USHkKD2bsieoJ1Jq0XA5dlNPNAGXW20s3hBczF2rI4q13mZ+ODGuinzfbwN3MK6q8LeYwUxLuV4jMolGmn8bWro7LYnyr5Oz8Rp7lDBnXSVk4CohXsM7Xhm+OM3FCWQIocVUOJfJRxH1lbMKRcdGMmGRZg14tMtqVfJAoufDvapY7FM8Y2DnoWqbCJTevswczIUABKm/xuLbPrrwUg47MAJYTljZsu2ut05JTPuTbsrNhuSfQT6p1FWaKPlF2+e3PcalS/JxZ0qQ9YIEjdBVoNUpXwwtGC9LQqSFH6IttncfbXpwKrDf6fgMXJziluUdUyamrYJLEozBRBJWsYD1FLH4CC/lNfRYEMpxICewwNwsiTeJB5dzdX4A7sCrTDfG8Xh7Z7w1SowAYPNMCv4WRVd5PgALrw6jQNrvJESxf4Xmg6KRcYk9ICmLadodIR3XSTa8xeaFue+GPsyewGBwc8PbZwJIi3PPBefsYoeKQpGIhpXcb5efj3fr0GKIgFNstHSvsckcYXH7avDhVOFkm4oN+tLhfj7DeUYBmybf1CFN93en4oLktsvyDf72SX0JPT1zFEDFhp5wtbEcLrFpiCcYt8lRz8vzYyWEq4mZyhGrboHPV93BbtPTMkE3s3RTuS7alUDtYUnm1Y21cjEjBpTzkOIK9AFyi8S55wN9S45WXTf9O9/Q64ljebrYwnDcUIimkjZVWymr3T+DJ9mQ==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(346002)(396003)(136003)(39860400002)(230273577357003)(230173577357003)(230922051799003)(64100799003)(186009)(82310400011)(451199024)(1800799012)(46966006)(40470700004)(36840700001)(110136005)(40480700001)(40460700003)(2906002)(7416002)(5660300002)(44832011)(47076005)(6666004)(8676002)(8936002)(41300700001)(921011)(54906003)(316002)(70206006)(4326008)(70586007)(81166007)(356005)(86362001)(36860700001)(26005)(2616005)(82740400003)(478600001)(83380400001)(36756003)(336012)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2024 11:40:50.8458
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69e7132d-e256-493d-5342-08dc136353e3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000044EE.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4173
 
-Hello,
+Add ECC feature support to Tx and Rx FIFOs for Xilinx CAN Controller.
+ECC is an IP configuration option where counter registers are added in
+IP for 1bit/2bit ECC errors count and reset.
+Also driver reports 1bit/2bit ECC errors for FIFOs based on ECC error
+interrupts.
 
-syzbot found the following issue on:
+Add xlnx,has-ecc optional property for Xilinx AXI CAN controller
+to support ECC if the ECC block is enabled in the HW.
 
-HEAD commit:    52b1853b080a Merge tag 'i2c-for-6.7-final' of git://git.ke..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17315deee80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dcb7609da8da79e3
-dashboard link: https://syzkaller.appspot.com/bug?extid=521ac15269e89d8546e8
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14aa5a41e80000
+Add ethtool stats interface for getting all the ECC errors information.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0f9568a404dd/disk-52b1853b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e339a63284ed/vmlinux-52b1853b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8aae66c13215/bzImage-52b1853b.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+521ac15269e89d8546e8@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff88811f2c8400 (size 1024):
-  comm "syz-executor.6", pid 5653, jiffies 4295068840 (age 14.060s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    1d 00 07 41 00 00 00 00 00 00 00 00 00 00 00 00  ...A............
-  backtrace:
-    [<ffffffff8163470d>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
-    [<ffffffff8163470d>] slab_post_alloc_hook mm/slab.h:766 [inline]
-    [<ffffffff8163470d>] slab_alloc_node mm/slub.c:3478 [inline]
-    [<ffffffff8163470d>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
-    [<ffffffff8157f9db>] __do_kmalloc_node mm/slab_common.c:1006 [inline]
-    [<ffffffff8157f9db>] __kmalloc+0x4b/0x150 mm/slab_common.c:1020
-    [<ffffffff83eccc42>] kmalloc include/linux/slab.h:604 [inline]
-    [<ffffffff83eccc42>] sk_prot_alloc+0x112/0x1b0 net/core/sock.c:2082
-    [<ffffffff83ecffb6>] sk_alloc+0x36/0x2f0 net/core/sock.c:2135
-    [<ffffffff84535474>] can_create+0x194/0x320 net/can/af_can.c:158
-    [<ffffffff83ec53cf>] __sock_create+0x19f/0x2e0 net/socket.c:1571
-    [<ffffffff83ec8c58>] sock_create net/socket.c:1622 [inline]
-    [<ffffffff83ec8c58>] __sys_socket_create net/socket.c:1659 [inline]
-    [<ffffffff83ec8c58>] __sys_socket+0xb8/0x1a0 net/socket.c:1706
-    [<ffffffff83ec8d5b>] __do_sys_socket net/socket.c:1720 [inline]
-    [<ffffffff83ec8d5b>] __se_sys_socket net/socket.c:1718 [inline]
-    [<ffffffff83ec8d5b>] __x64_sys_socket+0x1b/0x20 net/socket.c:1718
-    [<ffffffff84b71e0f>] do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-    [<ffffffff84b71e0f>] do_syscall_64+0x3f/0x110 arch/x86/entry/common.c:83
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
-BUG: memory leak
-unreferenced object 0xffff888120161490 (size 16):
-  comm "syz-executor.6", pid 5653, jiffies 4295068840 (age 14.060s)
-  hex dump (first 16 bytes):
-    00 c3 87 00 81 88 ff ff 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8163470d>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
-    [<ffffffff8163470d>] slab_post_alloc_hook mm/slab.h:766 [inline]
-    [<ffffffff8163470d>] slab_alloc_node mm/slub.c:3478 [inline]
-    [<ffffffff8163470d>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
-    [<ffffffff8157f335>] kmalloc_trace+0x25/0x90 mm/slab_common.c:1098
-    [<ffffffff823a7a92>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff823a7a92>] kzalloc include/linux/slab.h:721 [inline]
-    [<ffffffff823a7a92>] apparmor_sk_alloc_security+0x52/0xd0 security/apparmor/lsm.c:997
-    [<ffffffff8236b887>] security_sk_alloc+0x47/0x80 security/security.c:4411
-    [<ffffffff83eccc5d>] sk_prot_alloc+0x12d/0x1b0 net/core/sock.c:2085
-    [<ffffffff83ecffb6>] sk_alloc+0x36/0x2f0 net/core/sock.c:2135
-    [<ffffffff84535474>] can_create+0x194/0x320 net/can/af_can.c:158
-    [<ffffffff83ec53cf>] __sock_create+0x19f/0x2e0 net/socket.c:1571
-    [<ffffffff83ec8c58>] sock_create net/socket.c:1622 [inline]
-    [<ffffffff83ec8c58>] __sys_socket_create net/socket.c:1659 [inline]
-    [<ffffffff83ec8c58>] __sys_socket+0xb8/0x1a0 net/socket.c:1706
-    [<ffffffff83ec8d5b>] __do_sys_socket net/socket.c:1720 [inline]
-    [<ffffffff83ec8d5b>] __se_sys_socket net/socket.c:1718 [inline]
-    [<ffffffff83ec8d5b>] __x64_sys_socket+0x1b/0x20 net/socket.c:1718
-    [<ffffffff84b71e0f>] do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-    [<ffffffff84b71e0f>] do_syscall_64+0x3f/0x110 arch/x86/entry/common.c:83
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
-BUG: memory leak
-unreferenced object 0xffff88811fbf2000 (size 8192):
-  comm "syz-executor.6", pid 5653, jiffies 4295068840 (age 14.060s)
-  hex dump (first 32 bytes):
-    00 20 bf 1f 81 88 ff ff 00 20 bf 1f 81 88 ff ff  . ....... ......
-    00 00 00 00 00 00 00 00 00 00 5f 1b 81 88 ff ff  .........._.....
-  backtrace:
-    [<ffffffff8163470d>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
-    [<ffffffff8163470d>] slab_post_alloc_hook mm/slab.h:766 [inline]
-    [<ffffffff8163470d>] slab_alloc_node mm/slub.c:3478 [inline]
-    [<ffffffff8163470d>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
-    [<ffffffff8157f335>] kmalloc_trace+0x25/0x90 mm/slab_common.c:1098
-    [<ffffffff845437c9>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff845437c9>] kzalloc include/linux/slab.h:721 [inline]
-    [<ffffffff845437c9>] j1939_priv_create net/can/j1939/main.c:135 [inline]
-    [<ffffffff845437c9>] j1939_netdev_start+0x159/0x6f0 net/can/j1939/main.c:272
-    [<ffffffff8454540e>] j1939_sk_bind+0x21e/0x550 net/can/j1939/socket.c:485
-    [<ffffffff83ec926c>] __sys_bind+0x11c/0x130 net/socket.c:1847
-    [<ffffffff83ec929c>] __do_sys_bind net/socket.c:1858 [inline]
-    [<ffffffff83ec929c>] __se_sys_bind net/socket.c:1856 [inline]
-    [<ffffffff83ec929c>] __x64_sys_bind+0x1c/0x20 net/socket.c:1856
-    [<ffffffff84b71e0f>] do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-    [<ffffffff84b71e0f>] do_syscall_64+0x3f/0x110 arch/x86/entry/common.c:83
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
-BUG: memory leak
-unreferenced object 0xffff888120daf700 (size 240):
-  comm "syz-executor.6", pid 5653, jiffies 4295068840 (age 14.060s)
-  hex dump (first 32 bytes):
-    68 aa 12 1e 81 88 ff ff 68 aa 12 1e 81 88 ff ff  h.......h.......
-    00 00 5f 1b 81 88 ff ff 00 84 2c 1f 81 88 ff ff  .._.......,.....
-  backtrace:
-    [<ffffffff81632177>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
-    [<ffffffff81632177>] slab_post_alloc_hook mm/slab.h:766 [inline]
-    [<ffffffff81632177>] slab_alloc_node mm/slub.c:3478 [inline]
-    [<ffffffff81632177>] kmem_cache_alloc_node+0x2c7/0x450 mm/slub.c:3523
-    [<ffffffff83edcb9f>] __alloc_skb+0x1ef/0x230 net/core/skbuff.c:641
-    [<ffffffff83ee6111>] alloc_skb include/linux/skbuff.h:1286 [inline]
-    [<ffffffff83ee6111>] alloc_skb_with_frags+0x71/0x3a0 net/core/skbuff.c:6334
-    [<ffffffff83ed0c4b>] sock_alloc_send_pskb+0x3ab/0x3e0 net/core/sock.c:2787
-    [<ffffffff84545de8>] sock_alloc_send_skb include/net/sock.h:1884 [inline]
-    [<ffffffff84545de8>] j1939_sk_alloc_skb net/can/j1939/socket.c:864 [inline]
-    [<ffffffff84545de8>] j1939_sk_send_loop net/can/j1939/socket.c:1128 [inline]
-    [<ffffffff84545de8>] j1939_sk_sendmsg+0x2f8/0x7f0 net/can/j1939/socket.c:1263
-    [<ffffffff83ec6c92>] sock_sendmsg_nosec net/socket.c:730 [inline]
-    [<ffffffff83ec6c92>] __sock_sendmsg+0x52/0xa0 net/socket.c:745
-    [<ffffffff83ec72f5>] ____sys_sendmsg+0x365/0x470 net/socket.c:2586
-    [<ffffffff83ecb019>] ___sys_sendmsg+0xc9/0x130 net/socket.c:2640
-    [<ffffffff83ecb1c6>] __sys_sendmsg+0xa6/0x120 net/socket.c:2669
-    [<ffffffff84b71e0f>] do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-    [<ffffffff84b71e0f>] do_syscall_64+0x3f/0x110 arch/x86/entry/common.c:83
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
-
+There is no public documentation for it available.
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+BRANCH: linux-can-next/master
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Changes in v7:
+Update with spinlock only for stats counters
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+Changes in v6:
+Update commit description
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Changes in v5:
+Fix review comments
+Change the sequence of updates the stats
+Add get_strings and get_sset_count stats interface
+Use u64 stats helper function
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Changes in v4:
+Fix DT binding check warning
+Update xlnx,has-ecc property description
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+Changes in v3:
+Update mailing list
+Update commit description
 
-If you want to undo deduplication, reply with:
-#syz undup
+Changes in v2:
+Address review comments
+Add ethtool stats interface
+Update commit description
+
+Srinivas Goud (3):
+  dt-bindings: can: xilinx_can: Add 'xlnx,has-ecc' optional property
+  can: xilinx_can: Add ECC support
+  can: xilinx_can: Add ethtool stats interface for ECC errors
+
+ .../devicetree/bindings/net/can/xilinx,can.yaml    |   5 +
+ drivers/net/can/xilinx_can.c                       | 159 ++++++++++++++++++++-
+ 2 files changed, 160 insertions(+), 4 deletions(-)
+
+-- 
+2.1.1
+
 
