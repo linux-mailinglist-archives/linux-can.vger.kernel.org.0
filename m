@@ -1,127 +1,107 @@
-Return-Path: <linux-can+bounces-130-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-131-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3518282C36A
-	for <lists+linux-can@lfdr.de>; Fri, 12 Jan 2024 17:18:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EBA182D0C2
+	for <lists+linux-can@lfdr.de>; Sun, 14 Jan 2024 14:21:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5F551F22A70
-	for <lists+linux-can@lfdr.de>; Fri, 12 Jan 2024 16:18:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF85F1F216F4
+	for <lists+linux-can@lfdr.de>; Sun, 14 Jan 2024 13:21:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86730745EE;
-	Fri, 12 Jan 2024 16:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 882452113;
+	Sun, 14 Jan 2024 13:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UflK5n/g"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A94745C5
-	for <linux-can@vger.kernel.org>; Fri, 12 Jan 2024 16:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rOKEA-0000I6-2s; Fri, 12 Jan 2024 17:17:50 +0100
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rOKE7-002Bnr-Ow; Fri, 12 Jan 2024 17:17:47 +0100
-Received: from pengutronix.de (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 7CBE82751CD;
-	Fri, 12 Jan 2024 15:43:16 +0000 (UTC)
-Date: Fri, 12 Jan 2024 16:43:16 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: "Kumar, Udit" <u-kumar1@ti.com>
-Cc: Bhavya Kapoor <b-kapoor@ti.com>, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-can@vger.kernel.org, mailhol.vincent@wanadoo.fr, 
-	rcsekar@samsung.com, pabeni@redhat.com, kuba@kernel.org, edumazet@google.com, 
-	davem@davemloft.net, wg@grandegger.com, vigneshr@ti.com
-Subject: Re: [PATCH] net: can: Add support for aliases in CAN
-Message-ID: <20240112-overreact-dwindling-2949267e8a02-mkl@pengutronix.de>
-References: <20240102102949.138607-1-b-kapoor@ti.com>
- <20240102-chop-extending-b7dc1acaf5db-mkl@pengutronix.de>
- <8dee1738-0bde-48fb-bd0e-b8d06b609677@ti.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090F12100;
+	Sun, 14 Jan 2024 13:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-40e78238db9so964145e9.3;
+        Sun, 14 Jan 2024 05:21:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705238497; x=1705843297; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GomAbZrLbBtM8vyboZCJURUxBp78Y509pQ6wuZF3DIE=;
+        b=UflK5n/geVxiNVCb4d5p0PzInLi2g50XB384VxOFQOI9etPvWECOoS6iYtIVpuF45m
+         3vYGl1JJnb+jDF53MYicDBqDM/WRmStS7fZk494qa2JxXPdodKkYm44K3cneDt9ik1pa
+         mrbnwU+nhtir8+DBtxYZEzPnHsOtBvktZ3M/dfHZM5xi7i4E0/5yyQFi0Bdv0i3yNWB/
+         mnup9l3RNCd3OlYs4GHyodFsYRo7vq8UYTBZh40o5m6WFyyAG6a8K53YNMhNDZI7h9xk
+         YvIKn8FiB+Gc+yH7PkcDy+/pPhHAa1XN9wzjYSirN04ynMGhY7NzyhLd/h0WOnBjhPTt
+         MHsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705238497; x=1705843297;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GomAbZrLbBtM8vyboZCJURUxBp78Y509pQ6wuZF3DIE=;
+        b=S/IT+NtHHK1hHsjfRG6mNGJL9H+jnE6Fn81mGB/9WJoYAHgXklrWBno+zXAyceLK1K
+         t/yD3Pc5NxgY1VjdDnU2mWVOEY16iOrSUTjMB9FJ8aKpAoyh6DsHP4S4IzTYs0u1CvEp
+         tHVqNctFzJScPDIhnSLCCJtXbS4XgmhLeVp97g0N77IjtrKGs/dpIK+0nImYHAm8nrsV
+         hItFR+//c3uQF4ivI1Qw5raqS7tC3BGymKuqm0VIrKTDSgR4w/6qXahNZ/kI3bWCgNAN
+         ZxNZgswpiML2E6k9kC/E23tKZUQ/9b+/QM3ACg7LMlnW5zXanqe5xD2wSjoqWDc3QQGu
+         C6MA==
+X-Gm-Message-State: AOJu0Yw2iVnFagsDbb57/Urs2AyQM4bTmc4FSdTJQKDpPmMwKBoTVAfy
+	Ej5XnAXPr26kpQrRjHOIrus=
+X-Google-Smtp-Source: AGHT+IHBKURrr+5ry2mYvwjRbWYEy0Fmj759JdqVweE4ix+TWDYp2mcDhJYO17mxIWWPnnvbZ+9b/A==
+X-Received: by 2002:a7b:cbc7:0:b0:40e:6707:b758 with SMTP id n7-20020a7bcbc7000000b0040e6707b758mr1596211wmi.178.1705238496862;
+        Sun, 14 Jan 2024 05:21:36 -0800 (PST)
+Received: from ?IPV6:2a04:ee41:81:c881:98da:8231:7230:735c? ([2a04:ee41:81:c881:98da:8231:7230:735c])
+        by smtp.gmail.com with ESMTPSA id m27-20020a1709060d9b00b00a2c7d34157asm3770152eji.180.2024.01.14.05.21.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Jan 2024 05:21:36 -0800 (PST)
+Message-ID: <a02e8fbb-8579-4cce-9868-73c8bbac4720@gmail.com>
+Date: Sun, 14 Jan 2024 14:21:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uxczuahqgymwfz6l"
-Content-Disposition: inline
-In-Reply-To: <8dee1738-0bde-48fb-bd0e-b8d06b609677@ti.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] can: bcm: add recvmsg flags for own, local and remote
+ traffic
+To: Oliver Hartkopp <socketcan@hartkopp.net>, mkl@pengutronix.de,
+ linux-can@vger.kernel.org
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1cf96afe-6a27-4fd5-975e-96122f72df2e@gmail.com>
+ <14e86ea6-e038-4702-957a-39af27bfc280@hartkopp.net>
+Content-Language: en-US
+From: Nicolas Maier <nicolas.maier.dev@gmail.com>
+In-Reply-To: <14e86ea6-e038-4702-957a-39af27bfc280@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+Hello,
 
---uxczuahqgymwfz6l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks a lot for the feedback!
 
-On 12.01.2024 20:53:32, Kumar, Udit wrote:
-> Hi Marc
->=20
-> On 1/2/2024 4:43 PM, Marc Kleine-Budde wrote:
-> > On 02.01.2024 15:59:49, Bhavya Kapoor wrote:
-> > > When multiple CAN's are present, then names that are getting assigned
-> > > changes after every boot even after providing alias in the device tre=
-e.
-> > > Thus, Add support for implementing CAN aliasing so that names or
-> > > alias for CAN will now be provided from device tree.
-> > NACK, please use udev or systemd-networkd to provide stable names for
-> > CAN interfaces.
->=20
-> Would you like to re-consider this NACK.
+On 08/01/2024 19:57, Oliver Hartkopp wrote:
 
-This is not a CAN device specific problem. If you want to change this,
-talk/convince the networking people.
+> But in the first place I'm interested to know what the use-case for this 
+> extension is.
 
-> From kernel side,
->=20
-> IMO if aliasing is set in device tree then kernel should provide consiste=
-nt
-> baseline names.
->=20
-> However, distributions may choose different or other stable naming,
->=20
-> Also, if some distribution want to rely on kernel naming they still can d=
-o.
+My goal with this extension is to be able to implement a reliable
+'CAN send' function in userspace which would check that the message has
+been correctly transmitted, or retry if no confirmation was received
+after a timeout (I am using a device which empties some TX buffer when
+recovering from the Bus-Off state, therefore some messages will be lost,
+which is why the reliability needs to be handled elsewhere). For this
+purpose, knowing the origin of a received message is needed.
 
-regards,
-Marc
+This was already possible with RAW sockets, and the goal here is to
+provide the same information when using BCM sockets.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Best regards,
+Nicolas
 
---uxczuahqgymwfz6l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmWhXhAACgkQvlAcSiqK
-BOjD0wgAriZqvA12Vu5nzdKCKAjSH8J55u83wid8H1TFwOTI44OzbAg0a6AakQua
-JRGAbYx0pivUuwNf8emVJ1FVJMxyPH1lMPwQep6ZYtTVqoWfhOFDWk2m14xBYTVj
-DguY9dlaK/uBU39GBDnk3b8dMd+l6QwSDJhymFTO5P5c87YLzVlpa4FkbSVE2Atz
-wQVQZdMzIUJK4FwFaymKkT2SjLsLb5kZPM8t80L7oknZruvsJKGEAm2KF9TJYnV0
-fjdBgfzdbdxFrJqJEd7YSOK5aN0mv2/gyb16rpGDYRsrWmBN2sffk4kIC1TmsSwS
-Do9pEjkihZ2wEpAShuxai2OdqVMBMQ==
-=709B
------END PGP SIGNATURE-----
-
---uxczuahqgymwfz6l--
 
