@@ -1,225 +1,168 @@
-Return-Path: <linux-can+bounces-139-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-140-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 362E483551A
-	for <lists+linux-can@lfdr.de>; Sun, 21 Jan 2024 11:16:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FCA8835DD1
+	for <lists+linux-can@lfdr.de>; Mon, 22 Jan 2024 10:14:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 859EB2823FB
-	for <lists+linux-can@lfdr.de>; Sun, 21 Jan 2024 10:16:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BA0D1C242B8
+	for <lists+linux-can@lfdr.de>; Mon, 22 Jan 2024 09:14:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 553C4364B7;
-	Sun, 21 Jan 2024 10:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5528039850;
+	Mon, 22 Jan 2024 09:13:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="lGLJkTYh";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="5bXckpJ1"
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="j8Jg5oz/"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2057.outbound.protection.outlook.com [40.107.249.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62790364B6
-	for <linux-can@vger.kernel.org>; Sun, 21 Jan 2024 10:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF803984B;
+	Mon, 22 Jan 2024 09:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705832197; cv=pass; b=jSVtzdCMS/+nOpxXmurkvqtQygmSlzIDYitSpJGOV6Er8y9fWSk2EjASdoxb/SuMjj2zNNPUkDH8BXGiBJb9zaoF1wb7RekOYG//qTCKN2OOmThg7LSWZRHJ1NgefYBDKnbxVhYCPJOR2qoC7NyDd2QRG4zaQ7s47tOo2KBddA0=
+	t=1705914810; cv=fail; b=fdgEi6JAr8nIZfRjiOgf6bOxBF8nlhmAYqCSnwbL3rPrxFO4N/yuCzoIkQ8TY8eUshmQ+GME2/CixX1B7RXrYEUio1AIFU1j81puTXK/T+c305D9SdzRBe5NthXGRNhfc348Z/qOC119k0n4Ra2+NgPHh04c/QREG6CB41ysVcE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705832197; c=relaxed/simple;
-	bh=U+P7ST2fR/nL2EGQgX5ZHixLCmnSP++nFzB2EZYpqAE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=kpwJTQthmLI2O1Od8GefXX0zxqv/vRj/kfSnVJfUX4CCz5ewQ05Ha7juH+nqbSih+4aFAO48gqKUXysWFo8lD4e7fOHAcBULQjyQuqRU2rThC17O8cYh57CaDtWfeIinOzFSSXryN+E4+dQpjfAyWHgmz+RDynw8Mp8nftRfa64=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=lGLJkTYh; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=5bXckpJ1; arc=pass smtp.client-ip=85.215.255.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1705832003; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=UA9yYrmNZt3XueFPGdq78UcNvtBybJskps4WgMKPeDoJNMPdXqz9+zNVArM/RpqXRe
-    sx8BsC2d1ffLZfADeKCFFH70sTncz+oFwnIQOFiZylPtkz9jW0QrIYFpId3cm02/DIPZ
-    Yt7XnSK5NBe/lZcomN5efCnb6pDI80RC+I9g+JU43oEDyxG8jB7NUkULRaebXuAt1kTY
-    RsRXt/NHPoXMmAeBUXpquojAhAh5jc4OgvAHADS29heHlVmkU2tOKBbrKWS4mtHNKtDa
-    pbFV+h5P3rK5I+rJQ9CZZejMslYpF49oMyhqmDwA1D7LLXodLysnHAtejCB89if52bhc
-    5cfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1705832003;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ZKqwIpeRhnfX8xE8U+R+UUsZORfRDZQA8Ved5JOpvrw=;
-    b=H2CNyZSUyKI+fvcfuRag0W//VYqY4qYKdlqWbZMPRfi6UG2eAhBE8v1YRTmU2wm1sK
-    QHvf8FCNZ5/lBCuLS4cgQJckl+zYSRWixP1GODo/TmY1mXbiKJeFKa/C2tuk9j1MBhq+
-    AbKoOFrEeHkeERpYHbBLyE3mD46aAm/PKwDue9eac8B0wmzsILO41J1KrvPkH4ipLP/Z
-    0MdgJLJZaKXUdr5JpLtV4nBapAJSZ4hodwwezYtadNc93r+akKsxFrhYkv5yvOEaoSAE
-    bAJNmM9iF0uPqzms0hqAwWqqf9t/GfR0eNRZDWpiBsHEi20/4RTKC+TbT5LC4rYVKK45
-    WAQg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1705832003;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ZKqwIpeRhnfX8xE8U+R+UUsZORfRDZQA8Ved5JOpvrw=;
-    b=lGLJkTYhF+bppw3v+BJMiKIyYrXxKYLtUWKxbX7oJotBMSfq/hY94qJO1QERlFs1OF
-    NELtv0RLllCZecEQsd/It0OkoELVs4it+nSQc9JyPoZJuQ0GCa6aE5fhR178MIbUgIJ8
-    yhTXKryaaRDA0c8/ASpIChi9l9KifA5lvlynkQkemODxhLq7/vdPfSJppGnVuhSRvR0L
-    aI79a4gkaEIhNXCFfywvAXWY+8OnrRWv8zO9wVTC3nFZPIaJpM1v/RJsaSO5fWuW4WH3
-    qAeiocWp4g16b0RFIjRxjDnNr0SdcCouCMzLwsYrCEEo0FsIPSuvXiJtzjXUF6NTyNj8
-    fcEg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1705832003;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ZKqwIpeRhnfX8xE8U+R+UUsZORfRDZQA8Ved5JOpvrw=;
-    b=5bXckpJ1ahKMDGEW1Z8+m2mcGUYA7IltlSBhCKn/1p52XP9eDZKmpb99vRSVcwpMO9
-    J1jJXBHjqzHY0ZI3cfAg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDdAnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::90c]
-    by smtp.strato.de (RZmta 49.10.2 AUTH)
-    with ESMTPSA id K7b2c200LADNcFK
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sun, 21 Jan 2024 11:13:23 +0100 (CET)
-Message-ID: <2c9f7052-c2bb-4d76-bf58-714103fc6d71@hartkopp.net>
-Date: Sun, 21 Jan 2024 11:13:23 +0100
+	s=arc-20240116; t=1705914810; c=relaxed/simple;
+	bh=Sx5ueojNCX/R4jNCvEuAgiFDhuL/ht3iFSgcC9pbFLk=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=MyDQLX/yAmZebSZ3OkaFTY9/lzyATtT/n+YmRjwh8PFXmj7WqAoLbuiLOylCROVrFKc2rdtxT+Ex6MzRJpeLvx94ooW6Jx9lnnvESZIyfomFev2a4keIJ4IqR+hJ9LfMVVK/T8AxwhJxnu1T1kemucUCnzBg3Na2zuAX95gTKBw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=j8Jg5oz/; arc=fail smtp.client-ip=40.107.249.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MapojS6/KajYjmvDuF/cbcSc1nDB5e0f4qhyUtyCmSQ4SFYjO0axRfyA+WpJgGaYaQ/fxdJDqBslxwg/zZbqSl2Oyk6o9PvFuib8mIhefjm48T4MZ1Y8PCIFx1EkTpPYSNujFWFZ0W2DdmJ1tzfq2Ijt6DIiwE/dSU8dlI+OVXQ2P8m6FHC5tBHn7YWtYHTGriV+raRBIlALje3Ebo9QuZ1gZJRgDfDoDrkCl8LuGZTK3Hnvluy79tEgGBObnaXHzSSicF+t8giGmN4nbWx4zj15PYrZJ6N2Mj5EErHS/tQl8mdzgxLDZ8rm7B1ryVugBhq8YwMi0e0jgd/k8H6oVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4OjG4AoWwuAMRUmAAaN3es7l0fJ7Pa2qkw1U/8hqRyA=;
+ b=REbdxf+5vb94eGm67waZmqu2R2HZ7bUApjuM8oxVUaJBnv/OYHta+9+ylrvdyatcVdqjLCLyBruKDPCHq0mf1CxForCXGtjdq5VlrZZSZcEqGwg9Dxd4eV1vwQB5740pRRjPZButJH8czp1XCNhsw3rdkX47032UIS+dsTMgE2XhIIUmaLxxdnoj0gNxMFfmZfkCwLobeMI3O1D7TPiVYEQoUbcKHz+YTegFt/gMY9ZKcaA8Xo7mfAp9MoxObjDU7HPxYjXeit4z3ONyuxexHgmF2pKEtMHhwN+RjadWCvjFiF5Jb00/dHU8lj3EGqQEihJwZajffyu6A6eLAl8Mug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4OjG4AoWwuAMRUmAAaN3es7l0fJ7Pa2qkw1U/8hqRyA=;
+ b=j8Jg5oz/lo2NAu6nxfV/lhAubB9mTUepcGrtdAyUE3uaCfsJG1txdabG+rI9JqWTZA4hbOxIDG1ZYO2++YsZRVhlLs463Go+OsJI1d1qHMacD32uTyC+ija2nTlRJsY+NJt1dACcL94UHF1kjz6SzcuicnMln7iKMsdgUoyqPGE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AS1PR04MB9333.eurprd04.prod.outlook.com (2603:10a6:20b:4df::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.32; Mon, 22 Jan
+ 2024 09:13:22 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::c499:8cef:9bb1:ced6]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::c499:8cef:9bb1:ced6%3]) with mapi id 15.20.7202.031; Mon, 22 Jan 2024
+ 09:13:22 +0000
+From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To: wg@grandegger.com,
+	mkl@pengutronix.de,
+	conor+dt@kernel.org,
+	davem@davemloft.net,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org
+Cc: edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH] dt-bindings: can: fsl,flexcan: add i.MX95 compatible string
+Date: Mon, 22 Jan 2024 17:17:38 +0800
+Message-Id: <20240122091738.2078746-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR06CA0009.apcprd06.prod.outlook.com
+ (2603:1096:4:186::17) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] canxl: add virtual CAN network identifier support
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc: linux-can@vger.kernel.org, mkl@pengutronix.de
-References: <20240107171401.2339-1-socketcan@hartkopp.net>
- <CAMZ6RqKoAyh_ow_rsPWMqe_jzQkAjvBitzHPY6-G4YhyEqw7ag@mail.gmail.com>
- <4a80e73c-0c53-406f-bb81-0ea552480b74@hartkopp.net>
-In-Reply-To: <4a80e73c-0c53-406f-bb81-0ea552480b74@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS1PR04MB9333:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5c34e138-fe73-456c-fd34-08dc1b2a6170
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	M6iDr4Tk11rYGg0uRAL8C81CAYO5JdHFzB7a5Ljsp+ZHk3gg/CpBsK6a6zRrykLpVwc8NLvOJ3I1iikMp4/eNA2jcuH5KyOnSalXIiL5D77otjTquueeyxzXqmxQiQxBszPFRRqkH0lZJs1CiuZn9QZA+7A5GDWFhLJ25wuxmdcnYoGyjW3/t7HgZmaMrPRwBv+TLG1HrP8TKPa48JSCmBAHCmkXgdYaOCTsuJiwK1/ZifbH40w7VbO41sCjbD5n1ZQl2dye8zOLtakuzoVCwpglPmNs/nwVyrQmNo1x7pXeyE+ziLu4z5kXJWzcUBh9zmquDVlaqXBz2v1TDNVkZjYv/LwTkOz99xUWqgVQuV6RpgNWVNG21ZoCrbUHljXkvII/tCNu9JyGPcIGyyEKEbCxX3EbpJ0v0DBzyHJyS/LX7ktY94VhWFM0roVGPIqtsrelfBvkEL3M/F3yOseIl5twKHTFCTFx/vLkM8R14b5+PQoDcm3wdeCBRDiyzNSXIvQC2xRF4S5fwR+w3mkszynafXkLgWxRhm7waL9g39+5q+L1cWDaNsPu6cizE4iViaUk8XMzvWQD8oxr3GNCiiVnPDXPcfsGjjixr7ak8zKAnjpAfZjety8segSNm2oi
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(136003)(376002)(396003)(39860400002)(230922051799003)(1800799012)(64100799003)(451199024)(186009)(1076003)(6512007)(6666004)(2616005)(26005)(6506007)(52116002)(7416002)(5660300002)(8676002)(4326008)(4744005)(8936002)(41300700001)(2906002)(478600001)(316002)(66476007)(66556008)(66946007)(6486002)(86362001)(38100700002)(38350700005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?65brI60ITT7+TSXQ91XZ3cXExBD693AiO42Z/QstFAKIQNOo0Fu8CRDjJTpQ?=
+ =?us-ascii?Q?ogE3vjpfW7r3XNo/LNpI93ZI1sAGSYQrRuox2/zYeposcpOn8kWxiDrGi0Gr?=
+ =?us-ascii?Q?xN2y61GEp86SByRBlqngcntS4tEaFTPTUg9A4bbW7Y6pcngrlJieCBv0bTv/?=
+ =?us-ascii?Q?bc62hzXlit2NgInni8taPoD8mW6qHJtqWIP0BtIsCQlO+VXF6LaRIUb2HzYg?=
+ =?us-ascii?Q?EKlXdSahRw7L2va3CFjKK0vvCf14I9geVVhaICvzbcRMLGtF7oF6kmbDpsZ6?=
+ =?us-ascii?Q?q2YVn7+ItxvOOs6RH74GKthAbPGq3bBCQvxOfoSqiH+bYMmfHEOTkzipcycU?=
+ =?us-ascii?Q?8JccUPYK7jvlvkZqt+hUaZhbJB5C8/lG5ZSl7UqkhecaILbD8BG84Gkt9bJx?=
+ =?us-ascii?Q?lx4HiJcFTbcN+wxQz2IvzDFojdNwsrXmD67YPB/3DWQlBBTyNY2YDxIiJKpQ?=
+ =?us-ascii?Q?EQNXa6cJzVUJiWbwvS1EY/PVPk9I06JoZhQvZa/BuXLGHScMt8ohtNVvv+V1?=
+ =?us-ascii?Q?/of/snmxs5hXo2wmeNpnhw/sda79ksMd3JbnRVZ6yicjr1PtFLYJIXgTnl0D?=
+ =?us-ascii?Q?9v+OJKPzGklqgQPg2+iooeKYEQ3IQhbTzjNXYYhYQp++54a32em0kHLhnPkX?=
+ =?us-ascii?Q?u7pyV2FLtzLbIdHh7XZd4eBGnuCUJhiS9z1cNm0LSBAgUVnYAxIYZk4c5Oq3?=
+ =?us-ascii?Q?TMZ2FQ77H2PlkH9HFE24wb9SacJcpclGFvjUxQWtC+KzQIHfKuF1WNQy/Z9j?=
+ =?us-ascii?Q?udgMf0AWqs+4t9/0SKVvLMjhxua7No+64XApJn5UAYijDJaEsCd6T3ZOBoPs?=
+ =?us-ascii?Q?V9VK55mtfLrQcna+TnSCUUOuYDdwEUKJgFb3x7v8QAQu1ghX2V13kwent5UX?=
+ =?us-ascii?Q?urh9ylPRg6txm823ZKlcJDZhaf47PtYPQN6vE/VzvWcVOkZuCNcR3f7EkAWI?=
+ =?us-ascii?Q?yuFf3nPi8gv7UABHR6vthW4XV25PiAkE4VaJStT30Dj5MKvjGNBkP5Qpg/G5?=
+ =?us-ascii?Q?BZYefYUfYDMsXgaJg/MYau/+f20uC1Mph4HgcmczLL2N9u2Xlx5M+GWDlSvU?=
+ =?us-ascii?Q?wb6XskD0JKry425T/7pyVAAnsqHTYspa9re3PHyhIUHqKzTrXBBimySCJ5Iy?=
+ =?us-ascii?Q?7WoNSsxuxFswIISdGe4z06QinfnKD+MH+pyTK+mfMlhY0p1UNoMEqhMmhBXm?=
+ =?us-ascii?Q?i3I04vllqhW35G6LCqD0xse1ePW9gg/+IQdFqDOGnbRk4aAO9ZBzBh0e3VyO?=
+ =?us-ascii?Q?HYJl1RhYxEqcA0fkD5hQtDCrXLuLeCpbnzV+ssAbcxRce4GwO3aStSJrhblA?=
+ =?us-ascii?Q?ZSA9yUc/yKZWQcj9i7Del/YxgAMpLKnGQuMql+cqUh41Sr5sb7kkCFOWUCE9?=
+ =?us-ascii?Q?RXkwqTAsDGAbFOlw+lCi4qBOix8k0bisU11jULQYeQXwlkun2k0JeA+aaFx/?=
+ =?us-ascii?Q?GPee2O76uRu2O7/fsnq2HJ5ldI+GRHjLlKXObUCajQSsfrfXOtyzFa7auM4c?=
+ =?us-ascii?Q?PYJfZed0q0MvLZRryx4JQo/KS/Wli43g0HVyuTfiYpkfNbylyFpScVs0F7QD?=
+ =?us-ascii?Q?Zzi+oq0HxwqSZoV/nzEY7xnndnT5Q1qeUnrKpJgU?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c34e138-fe73-456c-fd34-08dc1b2a6170
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2024 09:13:22.0437
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: owGUhEHR4LUx2KwLF5ElPxdDBmxtab6E+iwjGuClgIZ5+deptjAyBZ18wGtcnxJtLpsbJa5G6tZnDwhSi3lf+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9333
 
-Hi Vincent,
+From: Peng Fan <peng.fan@nxp.com>
 
-On 2024-01-08 09:26, Oliver Hartkopp wrote:
-> On 08.01.24 06:46, Vincent MAILHOL wrote:
-> 
->> I have not yet reviewed the net/can/raw.c part. It will take me more
->> time. I will do it later (we are the first day of the merge window, so
->> that leaves me time!)
-> 
-> The raw.c changes have become very easy to review since the introduction 
-> of the vcid element - no hurry ;-)
+Add i.MX95 flexcan which is compatible i.MX93 flexcan
 
-Some time has already passed now. Did you find some time to take a look 
-at the v4 patch?
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+ Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-https://lore.kernel.org/linux-can/20240108170644.1887-1-socketcan@hartkopp.net/
+diff --git a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+index 4162469c3c08..f197d9b516bb 100644
+--- a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
++++ b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+@@ -38,6 +38,9 @@ properties:
+               - fsl,imx6ul-flexcan
+               - fsl,imx6sx-flexcan
+           - const: fsl,imx6q-flexcan
++      - items:
++          - const: fsl,imx95-flexcan
++          - const: fsl,imx93-flexcan
+       - items:
+           - enum:
+               - fsl,ls1028ar1-flexcan
+-- 
+2.37.1
 
-Best regards,
-Oliver
-
->>
->> Question: do you think this should also go to stable?
->>
-> 
-> I would have no objections, but I'm not sure whether we can convince the 
-> stable maintainers to change the UAPI and slightly extend the ABI in 
-> stable kernels? Let's see.
-> 
->> More a matter of principle, but you should
->>
->>    #include <asm/byteorder.h>
->>
->> c.f. 
->> https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/ip.h#L22
-> 
-> Yes. I already prepared this change for the next patch cycle yesterday:
-> 
-> https://github.com/hartkopp/canxl-utils/commit/9ac1b75b59ccbf668fec4bd5c846542ad0073da0
-> 
->>> @@ -193,26 +193,39 @@ struct canfd_frame {
->>>   #define CANXL_XLF 0x80 /* mandatory CAN XL frame flag (must always 
->>> be set!) */
->>>   #define CANXL_SEC 0x01 /* Simple Extended Content 
->>> (security/segmentation) */
->>>
->>>   /**
->>>    * struct canxl_frame - CAN with e'X'tended frame 'L'ength frame 
->>> structure
->>> - * @prio:  11 bit arbitration priority with zero'ed CAN_*_FLAG flags
->>> - * @flags: additional flags for CAN XL
->>> - * @sdt:   SDU (service data unit) type
->>> - * @len:   frame payload length in byte (CANXL_MIN_DLEN .. 
->>> CANXL_MAX_DLEN)
->>> - * @af:    acceptance field
->>> - * @data:  CAN XL frame payload (CANXL_MIN_DLEN .. CANXL_MAX_DLEN byte)
->>> + * @prio:   11 bit arbitration priority with zero'ed CAN_*_FLAG flags
->>
->> Now that prio is a __u16, the CAN_*_FLAG flags fall outside prio width
->> (in __res0 as you mentioned below). So I would rather remove the
->> latter part of this sentence. You may instead specify that bits
->> outside of the CANXL_PRIO_MASK shall be zeroed.
-> 
-> Right. Will change that.
-> 
->>> + * @vcid:   virtual CAN network identifier
->>
->> Maybe say that this field is valid only if enabled through
->> CAN_RAW_XL_VCID_OPTS, else should be zero.
-> 
-> No. This is a data structure definition and not the CAN_RAW socket 
-> documentation. But it has definitely to be mentioned somewhere.
-> 
->>> - * @prio shares the same position as @can_id from struct can[fd]_frame.
->>> + * @prio shares the lower 16 bits of @can_id from struct can[fd]_frame.
->>> + * @__res0 holds the @can_id flags CAN_xxx_FLAG and has to be set to 
->>> zero
->>
->> Just realized now, but I would have personally preferred to merge
->> those two sentences within their respective field documentation. Just
->> feels odd to me to have the information on the prio and __res0 field
->> are scattered in two different locations. Well this is just a nitpick,
->> at the end, just choose which one seems good to you.
-> 
-> Ok. I always tried to get only one line for the element description. But 
-> this could be changed. No problem.
-> 
->>> +struct can_raw_vcid_options {
->>> +
->>> +       __u8 flags;             /* flags for vcid (filter) behaviour */
->>> +       __u8 tx_vcid;           /* VCID value set into 
->>> canxl_frame.prio */
->>> +       __u8 rx_vcid;           /* VCID value for VCID filter */
->>> +       __u8 rx_vcid_mask;      /* VCID mask for VCID filter */
->>> +
->>
->> Why the newlines before and after the struct members? This style is
->> not consistent with the other CAN headers.
-> 
-> Ok. Will remove them.
-> 
->>>          /* check for correct padding to be able to use the structs 
->>> similarly */
->>>          BUILD_BUG_ON(offsetof(struct can_frame, len) !=
->>>                       offsetof(struct canfd_frame, len) ||
->>> +                    offsetof(struct can_frame, len) !=
->>> +                    offsetof(struct canxl_frame, flags) ||
->>>                       offsetof(struct can_frame, data) !=
->>>                       offsetof(struct canfd_frame, data));
->>
->> Nitpick: I would expect to see the code structured in this order:
->> check Classical CAN first, then CAN-FD and finally CAN-XL. Not sure
->> why the CAN-XL is in the middle. If the only reason is to minimize the
->> patch diff, then no.
-> 
-> The reason is to check the offset to struct can_frame.len - so all these 
-> checks are sorted by the first element to be checked.
-> 
-> Thanks for the feedback!
-> 
-> Oliver
-> 
 
