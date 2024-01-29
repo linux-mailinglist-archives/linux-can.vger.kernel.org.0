@@ -1,47 +1,47 @@
-Return-Path: <linux-can+bounces-182-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-183-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA6CD840934
-	for <lists+linux-can@lfdr.de>; Mon, 29 Jan 2024 16:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BE17840A30
+	for <lists+linux-can@lfdr.de>; Mon, 29 Jan 2024 16:37:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A471D28B855
-	for <lists+linux-can@lfdr.de>; Mon, 29 Jan 2024 15:00:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBED1282E41
+	for <lists+linux-can@lfdr.de>; Mon, 29 Jan 2024 15:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1195154430;
-	Mon, 29 Jan 2024 14:59:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07B8915442D;
+	Mon, 29 Jan 2024 15:37:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GdHsffo5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sCzSPJNF"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69EB15442B;
-	Mon, 29 Jan 2024 14:59:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3B815442B;
+	Mon, 29 Jan 2024 15:37:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706540377; cv=none; b=rEdb6F1nhJD2GhyEJVX6Lgdth9OVsvo+curVEZzWf1ssl5m1RWviliWQoH9gUY7ENiPWt50PFDhNyPUb+taTadCAOgisg/4g33/WDNxjeMvIJBjRihFigc2xkzadwI7BKKvnc24IE5QP0u66QODgLsM9v0CsZhuIjGeexYqvfpk=
+	t=1706542634; cv=none; b=b/LPSTBU1DuV8rl29+NXc3ZGNSOv2+KFUPWEoHYRlBIam1H0Zrp0XxsFynpxOu0mrPl2W3yxR67RG6l4ANTg/mZk/T3upyvlKj1ydlhATtPrArWfEa9gRSrn4p2dsLII0OEc38j/fuNKW52iATwzZi12FSGAfwfXlhg6eYz6vtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706540377; c=relaxed/simple;
-	bh=3l8vvbKif7wVC7bMTkrcO4TBaNj6h0QNy/ZaLjauggs=;
+	s=arc-20240116; t=1706542634; c=relaxed/simple;
+	bh=l8Gerv/RnUXdqS32Hvg6dJnaeNoXsPQ5rKnHUXy1+3Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fjnoy9u8Zgpe8UUQWDseAVkDqojbByVcDg4M31t3bIbNUEPi4emu+hOfwKopA+HqdUkv6ZbhgBJ/VRbIRKsxjXLqwJ2kjNMuW0w87PLpAKzwkzqXktZFOv9GOwipsVuEs5CHjVVhgU55Ap+1ClQa0uXmiLgQOrRCYmUz90LDQRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GdHsffo5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB376C433F1;
-	Mon, 29 Jan 2024 14:59:33 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rqT8bZVId88yM4fQ3rpH/pZmeNRhsk2yH/vLIZTxTRC+JcjD3oSBLAVGbQxabwr6Q0Ra1MExIqNcvBeWkmv8+lUzPfhOB6+SV8C+oliWNMkL9N8dC2yZaAtq172qXUt+pKEXULpLDjpwbDcsJ2djUU647U6L1hxJa/Xqre3NbZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sCzSPJNF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DC7C433F1;
+	Mon, 29 Jan 2024 15:37:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706540377;
-	bh=3l8vvbKif7wVC7bMTkrcO4TBaNj6h0QNy/ZaLjauggs=;
+	s=k20201202; t=1706542634;
+	bh=l8Gerv/RnUXdqS32Hvg6dJnaeNoXsPQ5rKnHUXy1+3Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GdHsffo5LUizRilMlDjB1Uv2hRYUcIxYkrso2AOiHRmM0i3yI39QhMvvxkv3UQQdN
-	 RBsKGPDjuExrtQHT6Z1wAJadW+tSKB+hlfufpA9RunqHTE2pVfQGlG92hl65fbH+lL
-	 81wM8rhC2dvaJ9GR47tng6u1VMDeBXY4+52D859SzGMSaYobiIH8/aJjrQxmnHpwO4
-	 +lN63QzEjpsW/1TZK4uEsBGHH8/dazlH7OC7g77K26aDvm1kKSczNuzADp6WwcrjCj
-	 fQk2AxtQCTMe0XrJEjyV7nxbEraMsi1rXYoKHEGIy+SV8bln2uSby2RIYu7h+hiH4K
-	 8Kr7MZB9RWhEA==
-Date: Mon, 29 Jan 2024 14:59:31 +0000
+	b=sCzSPJNF1f+jY8xMHnlLtWyLXT1HI1n9Z4l5hknVao0Sj9ZK35v8ZQshRQKY/BcQh
+	 U/LfUyh8lv+z9SSWk3kI8YaLHmO+7bYfg+L2dUKlx6/eCn2T2wJond/WgS4SsVssIK
+	 snu2PTE8kFw76oRqBBHS45J3rBnMwFsZpkaSVFfjtE1C8gsMbo0Dlyigho3/J4REU6
+	 P8soMwsIBftAs5Gdwfqx8QWi64XaOVfBXJYqCtDfdLK0NXJPj5rgpa24gLKmRAqM1S
+	 MNY60Zf+1CYLoDlW1j6B9CoTcS0LTvRXnW3r7BSx6yH9Q/9wyqbVFzMsctmng9N1h2
+	 h9oqmmVm0apTA==
+Date: Mon, 29 Jan 2024 15:37:08 +0000
 From: Conor Dooley <conor@kernel.org>
 To: William Qiu <william.qiu@starfivetech.com>
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -59,11 +59,11 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH v1 1/4] dt-bindings: vendor-prefixes: Add cast vendor
- prefix
-Message-ID: <20240129-pavement-fondue-31f29ac2033c@spud>
+Subject: Re: [PATCH v1 2/4] dt-bindings: can: Add bindings for CAST CAN
+ Controller
+Message-ID: <20240129-garnet-polar-65afd461a1c6@spud>
 References: <20240129031239.17037-1-william.qiu@starfivetech.com>
- <20240129031239.17037-2-william.qiu@starfivetech.com>
+ <20240129031239.17037-3-william.qiu@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -71,63 +71,148 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="cogiGBIc/MCqykSX"
+	protocol="application/pgp-signature"; boundary="2qZLto2B8G05buYu"
 Content-Disposition: inline
-In-Reply-To: <20240129031239.17037-2-william.qiu@starfivetech.com>
+In-Reply-To: <20240129031239.17037-3-william.qiu@starfivetech.com>
 
 
---cogiGBIc/MCqykSX
+--2qZLto2B8G05buYu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 29, 2024 at 11:12:36AM +0800, William Qiu wrote:
-> Add prefix for Computer-Aided Software Technologies, Inc.
+Hey William,
+
+On Mon, Jan 29, 2024 at 11:12:37AM +0800, William Qiu wrote:
+> Add bindings for CAST CAN Controller
 >=20
 > Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> ---
+>  .../devicetree/bindings/net/can/cast,can.yaml | 95 +++++++++++++++++++
+>  1 file changed, 95 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/cast,can.ya=
+ml
+>=20
+> diff --git a/Documentation/devicetree/bindings/net/can/cast,can.yaml b/Do=
+cumentation/devicetree/bindings/net/can/cast,can.yaml
+> new file mode 100644
+> index 000000000000..ea52132d9b1c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/cast,can.yaml
+> @@ -0,0 +1,95 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/cast,can.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: CAST CAN controller
+> +
+> +maintainers:
+> +  - William Qiu <william.qiu@starfivetech.com>
+> +
+> +allOf:
+> +  - $ref: can-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: starfive,can
+> +    then:
+> +      required:
+> +        - starfive,syscon
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+If you've got property related stuff in the allOf, move it down after
+the property definitions.
+
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - cast,can
+> +      - cast,canfd
+
+I don't like these uber generic compatibles that have no users as a
+fallback. Allowing them in the binding only really discourages people
+=66rom creating device specific compatibles.
+Secondly, this is some purchased IP that I am sure has a versioning
+scheme and the compatibles that you have created do not reflect that.
+If they were being used as a fallback, I would request some versioning.
+That's not going to really work though since the canfd features on the
+jh7110 require setting u0_can_ctrl_can_fd_enable, so neither of these
+compatibles really has a use right now.
+
+> +      - starfive,can
+
+Just "starfive,can"? Can you please add device specific compatibles for
+the SoCs on which this is used?
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 3
+> +
+> +  clock-names:
+> +    items:
+> +      - const: apb_clk
+> +      - const: timer_clk
+> +      - const: can_clk
+
+Drop _clk, they're all clocks!
+
+> +
+> +  resets:
+> +    minItems: 3
+> +
+> +  reset-names:
+> +    items:
+> +      - const: rst_apb
+> +      - const: rst_core
+> +      - const: rst_timer
+
+Same here, drop rst_
+
+> +
+> +  starfive,syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      - items:
+> +          - description: phandle to System Register Controller syscon no=
+de
+> +          - description: offset of SYS_SYSCON_NE__SAIF__SYSCFG register =
+for CAN controller
+
+The docs I have call this register "SYS_SYSCONSAIF__SYSCFG". Did the
+names change since the TRM I have was written?
+
+> +          - description: shift of SYS_SYSCON_NE__SAIF__SYSCFG register f=
+or CAN controller
+> +          - description: mask of SYS_SYSCON_NE__SAIF__SYSCFG register fo=
+r CAN controller
+> +    description:
+> +      Should be four parameters, the phandle to System Register Controll=
+er
+> +      syscon node and the offset/shift/mask of SYS_SYSCON_NE__SAIF__SYSC=
+FG register
+> +      for CAN controller.
 
 Cheers,
 Conor.
 
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Doc=
-umentation/devicetree/bindings/vendor-prefixes.yaml
-> index 1a0dc04f1db4..b9c6ce99d24d 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -242,6 +242,8 @@ patternProperties:
->      description: Capella Microsystems, Inc
->    "^cascoda,.*":
->      description: Cascoda, Ltd.
-> +  "^cast,.*":
-> +    description: Computer-Aided Software Technologies, Inc.
->    "^catalyst,.*":
->      description: Catalyst Semiconductor, Inc.
->    "^cavium,.*":
-> --=20
-> 2.34.1
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
---cogiGBIc/MCqykSX
+--2qZLto2B8G05buYu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbe9UwAKCRB4tDGHoIJi
-0vnBAP4h9TeV8gpl0bK+1Wd48qmmmXDASj7WbF2vhDFdPDrdXgEArDrOKaRpACUE
-s0brDp0M/KU4k7zpGc/9tpYV64sqgg8=
-=vPXn
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbfGJAAKCRB4tDGHoIJi
+0naRAP9mnACAXbLoF5wZAI6lRZERQ91NOgTNtwrrOxfxsnoi6QEAuxoA1rFwLJSd
+w8okICO/nnTr5tVns55t5LOoIKk5wwA=
+=jD/W
 -----END PGP SIGNATURE-----
 
---cogiGBIc/MCqykSX--
+--2qZLto2B8G05buYu--
 
