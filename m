@@ -1,133 +1,110 @@
-Return-Path: <linux-can+bounces-200-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-201-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A19084B79F
-	for <lists+linux-can@lfdr.de>; Tue,  6 Feb 2024 15:19:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABE2C84B7FA
+	for <lists+linux-can@lfdr.de>; Tue,  6 Feb 2024 15:33:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A28B1F22AD5
-	for <lists+linux-can@lfdr.de>; Tue,  6 Feb 2024 14:19:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F30528C50B
+	for <lists+linux-can@lfdr.de>; Tue,  6 Feb 2024 14:33:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5C11131E56;
-	Tue,  6 Feb 2024 14:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7C28132499;
+	Tue,  6 Feb 2024 14:32:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W38Z4H0q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iaD+yq5Z"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBFB131E44;
-	Tue,  6 Feb 2024 14:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A021E88D;
+	Tue,  6 Feb 2024 14:32:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707229181; cv=none; b=ndKk16MNrPiw0vLWF4p7w8dXVoq6Js/SH34tPIGwd+xkDk4wT+ygkRSG7+HhA15GvGO6SdiufTQ+8o8dmSHH9ZdctA/RVaKMjNsIumBVyX0lbjDAwr/zSOzhoBI8Mpa/k86vHase6L88cs5fMzWUFRtT32yFs2xr+zF8BYOwoEE=
+	t=1707229957; cv=none; b=ZpWDl8wjQbh2qFKR5/rtGpGsw0h/fAOPAfBPfmp0kq2VtdwY/i9h6fVNq0sq7AZL3ekT4teETKYMhmogTFHGxjKFjQohczBPHn0qBbuqDsepnwioIVYxYa1MdyIWL2T/V/8EO9v48AEEqEMZamezo029jCeGOZ8Pco8JPY6RK3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707229181; c=relaxed/simple;
-	bh=1MnTEbxeUsGA7HMcn2eRPHhXYWih9ZllJehloa4wpsc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S52rviG5FewOV0w2x8v3Rpx0LCna1+d58BnHpcVAL3a8sKm5bsu3hdhjDCdFkPzJDImAExN4rvAE1bvvpJcp4fK+PInTayzuBQACEOeoXOV7gvr4a4i3nogcnqWqqF5yD1eK/jbRbyz7VzqEpzWD5qlqH5MVH91MLzQqNk9c3WQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W38Z4H0q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C92C433C7;
-	Tue,  6 Feb 2024 14:19:37 +0000 (UTC)
+	s=arc-20240116; t=1707229957; c=relaxed/simple;
+	bh=et5rRptvkGz54dS+7a+fsl6EJMUrV2qa3AEGOsdAEDo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=k7Ud7lfrYII2yhqU5O8ZGL6jiShDhrMDvpH1YIYPy5Ba/7vphniuCdBQ21s82P6TW02iwE7JnjrnR1BwdMHFPQepvGCCq+sQRg2ryW+ly/EGONnZmajAMABQ0CRhP3/K5kKBxihPnbMlh6jj5kYs1n7pOWwlS+0t3mcPKqOeeVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iaD+yq5Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A905EC433A6;
+	Tue,  6 Feb 2024 14:32:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707229181;
-	bh=1MnTEbxeUsGA7HMcn2eRPHhXYWih9ZllJehloa4wpsc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W38Z4H0qdYqSxhn84T7haOHArqaXgeHjfaoKy44OX19ZDhSftyULq0r/FMg70Ayyg
-	 e7xwz0dqu7rFdptm5oHyeXQbqIlKCTw2IHPb8ifn0IWhpuVUdjUtd1/vqHYHiskKus
-	 emdg0gItkGetPQPwjMbX3W3fHloS4plorEAOZb4jp8m6WWubTwO7C7KUNEfmuWtWJd
-	 zDY6/0HI6/GQqpBuO8do0WL0/4o+XXYwSsg8BKoJsCU5N+SjQ257MPnim1lXkUHSj8
-	 ZK/ph766zwqJpWxF6v4UD+bEzWaUrTNjU17rOna6yYGAL3WbiXN7oAf1vGxX8Vd7MR
-	 Shtxv60zYzbrg==
-Date: Tue, 6 Feb 2024 14:19:34 +0000
+	s=k20201202; t=1707229956;
+	bh=et5rRptvkGz54dS+7a+fsl6EJMUrV2qa3AEGOsdAEDo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=iaD+yq5ZruiFRajM7YMGHPc08vRN62xdbsOlWGbncKdXd9Y0kW5yIoUvSqxvqWU0G
+	 DtRmudIUIzt4M1k+hBzo4tebFxyJc2r8HJQXsTfp37p3XHJ8eyfRTEftjVhzf+9bnh
+	 C2vT11JrIiqflalCujkazoXl8IoRq4ZniS969b+YDKes9/YWlHm0fzPo0gjzvrolB8
+	 jUGR8zIMbBRT8y8AUbywGA5SNVzIaUdIrgQRNNQ1Pwewl5YgI228C/BsvE+O0oLoAJ
+	 qhyLVAl12LupY9z8VksULiRIz9LaRu4Iuqm+lHRYnTMsnB9T+4peTzZB8ybhw/+VVJ
+	 S/Gu/wBSSCbaQ==
 From: Conor Dooley <conor@kernel.org>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
+To: linux-riscv@lists.infradead.org,
+	Conor Dooley <conor@kernel.org>
 Cc: Conor Dooley <conor.dooley@microchip.com>,
-	linux-riscv@lists.infradead.org,
 	Daire McNamara <daire.mcnamara@microchip.com>,
 	Wolfgang Grandegger <wg@grandegger.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Albert Ou <aou@eecs.berkeley.edu>,
 	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 2/7] dt-bindings: can: mpfs: add missing required clock
-Message-ID: <20240206-parole-cinnamon-2fe369f6ca74@spud>
+	Stephen Boyd <sboyd@kernel.org>,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/7] MPFS clock fixes required for correct CAN clock modeling
+Date: Tue,  6 Feb 2024 14:27:31 +0000
+Message-ID: <20240206-cloud-subduing-cb42cc496621@spud>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240122-catty-roast-d3625dbb02fe@spud>
 References: <20240122-catty-roast-d3625dbb02fe@spud>
- <20240122-breeder-lying-0d3668d98886@spud>
- <20240122-surely-crimp-ba4a8c55106d-mkl@pengutronix.de>
- <20240122-cruelly-dainty-002081f0beb2@spud>
- <20240122-smokeless-ion-63e4148c22e5-mkl@pengutronix.de>
- <20240122-uncoated-cherub-a29cba1c0035@spud>
- <20240122-pogo-reputable-b1d06ae1f1f1-mkl@pengutronix.de>
- <20240130-narrow-lyricism-8b25baac7bb2@wendy>
- <20240130-fragrance-disinfect-22cc1911bf48-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="5oAuP6RxMdm00jg7"
-Content-Disposition: inline
-In-Reply-To: <20240130-fragrance-disinfect-22cc1911bf48-mkl@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=960; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=hnKnUQMm2IjOwpyCk+YzqyIAY3kVJ7l3mv8OoK5FHck=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKmHHC/9F6+WlmxxPu61ZmpR1NEDe7K/cHvbRwltUvp2b NtE53vMHaUsDGIcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZiI92pGhl+uiQFJX799K4hb 8n9Vztpd6zgE2KMPBn5Zu7bg9rM1YUkM/x09FapepGZnvi+/ujzZXafzgkfXOXtvnajnIaZxG2Y eYgAA
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
+From: Conor Dooley <conor.dooley@microchip.com>
 
---5oAuP6RxMdm00jg7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, 22 Jan 2024 12:19:48 +0000, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> While reviewing a CAN driver internally for MPFS [1], I realised
+> that the modeling of the MSSPLL such that only one of its outputs could
+> be used was not correct. The CAN controllers on MPFS take 2 input
+> clocks - one that is the bus clock, acquired from the main MSSPLL and
+> a second clock for the AHB interface to the result of the SoC.
+> Currently the binding for the CAN controllers and the represetnation
+> of the MSSPLL only allows for one of these clocks.
+> Modify the binding and devicetree to expect two clocks and rework the
+> main clock controller driver for MPFS such that it is capable of
+> providing multiple outputs from the MSSPLL.
+> 
+> [...]
 
-On Tue, Jan 30, 2024 at 02:01:09PM +0100, Marc Kleine-Budde wrote:
-> On 30.01.2024 12:11:44, Conor Dooley wrote:
-> > On Mon, Jan 22, 2024 at 04:31:32PM +0100, Marc Kleine-Budde wrote:
-> > > On 22.01.2024 14:56:09, Conor Dooley wrote:
-> >=20
-> > > > I think we already had this discussion on v1, where I said that the
-> > > > binding requires the clocks to be in that order, regardless of whet=
-her
-> > > > or not clock-names is provided. You feel more strongly about it tha=
-n I
-> > > > do, so I will add them when I get around to sending a v3.
-> > >=20
-> > > Yes, this discussion sounded very familiar to me, never mind. Keep it=
- as
-> > > is, and let's get this binding and the CAN driver upstream!
-> >=20
-> > BTW, I didn't see an ack on this nor do I see it in linux-next (yet).
-> > Are you expecting the patch to go with the rest via the clock tree,
-> > via the DT tree or will you be taking it with CAN stuff via netdev?
-> >=20
-> > I can resend this one patch with a netdev appropriate subject prefix
-> > if you like.
->=20
-> Feel free to take the whole series via the clock tree.
+And this one is applied to riscv-dt-for-next. I don't think sending this
+for the -rcs is needed as there's no impact until the CAN driver shows up.
 
-Okay, I've gone and applied all of the binding and driver patches to the
-branch we will send to Stephen. Thanks!
+[7/7] riscv: dts: microchip: add missing CAN bus clocks
+      https://git.kernel.org/conor/c/6c7353836a91
 
-
-
---5oAuP6RxMdm00jg7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZcI/9gAKCRB4tDGHoIJi
-0kHUAP0e+rt2LDSpTC952WOfj4vXNDY3wh2XgO1MsZQXw131LQEA1UPbV0N5gf+J
-ALoxbvkmhHo0E10iiUy+SgrU+qL5yAM=
-=rlvY
------END PGP SIGNATURE-----
-
---5oAuP6RxMdm00jg7--
+Thanks,
+Conor.
 
