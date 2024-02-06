@@ -1,130 +1,133 @@
-Return-Path: <linux-can+bounces-199-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-200-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B03138498A0
-	for <lists+linux-can@lfdr.de>; Mon,  5 Feb 2024 12:18:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A19084B79F
+	for <lists+linux-can@lfdr.de>; Tue,  6 Feb 2024 15:19:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BCFBB25E91
-	for <lists+linux-can@lfdr.de>; Mon,  5 Feb 2024 11:18:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A28B1F22AD5
+	for <lists+linux-can@lfdr.de>; Tue,  6 Feb 2024 14:19:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E9D18641;
-	Mon,  5 Feb 2024 11:18:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5C11131E56;
+	Tue,  6 Feb 2024 14:19:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lM4x2+kb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W38Z4H0q"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D8D8F6D
-	for <linux-can@vger.kernel.org>; Mon,  5 Feb 2024 11:18:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBFB131E44;
+	Tue,  6 Feb 2024 14:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707131882; cv=none; b=h68Qzg+NdUTopAaz0qwYm6PYfKWLaiUwC7bo5f+ND44geOoZdd8n1UkX6S+dB2oyqQeTxkDaUsSgCc6cViAFQVSSGyIJVHvt25HzOCW4PxLojzcQbq9RNf0n8I3aQY8iqz0WFxlNrz6DpBRBOEGQkypGlnNw+Oom0sgCmffTzok=
+	t=1707229181; cv=none; b=ndKk16MNrPiw0vLWF4p7w8dXVoq6Js/SH34tPIGwd+xkDk4wT+ygkRSG7+HhA15GvGO6SdiufTQ+8o8dmSHH9ZdctA/RVaKMjNsIumBVyX0lbjDAwr/zSOzhoBI8Mpa/k86vHase6L88cs5fMzWUFRtT32yFs2xr+zF8BYOwoEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707131882; c=relaxed/simple;
-	bh=CeO37g3sbvYjXy+qHSQY7uWXmSadX7wGrwV3ULOlk/0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tY/Q6ivYr/EKO7MRo53teXiWRg2U2L5fnitpH0OgvHeimhlX8uN9/hWcXpXtNkN9avtt80+MNGn6rS+H7semwyI0Nejyth5+z9shdGHkOGrmSIgPOsTyKthR5RoFUfFyaPjjftwQvkESYb3Xuhp8qVtZeiCCFXHU6l1BWYOldDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lM4x2+kb; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1d51ba18e1bso38846605ad.0
-        for <linux-can@vger.kernel.org>; Mon, 05 Feb 2024 03:17:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707131879; x=1707736679; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uwVzzw6q7T6rJMoizsqJwSZOFB3EjGWPnULEwJzCBOw=;
-        b=lM4x2+kbj9enqQqEPnqXhuzZyWV9273OgvMVs5Q3PuJkMfI03dhSnNycnSSeEri67E
-         TmR7M0tgTLRCsYavX5wd8OuGQXgarLiiQirnKnEWCD7Ii1xIaeYkxG+rWkWHx5FjmnMC
-         lix8bXVq2YATgxVmb9F+z/FsYuIF2CdnglLxdnCtChtB6z3ScNDODsU7xZ+L3XPrTgi/
-         7qm9BJ6D20uOX5SgRH0KXg+Qzf6cLOQc1paCgeuYMdgyS8Ypf/4e9tPhk5YCcQj+R7al
-         AyzDVbZ4TLt91PwegKn760VUW82x79kNkXOpI/kj8UcLXbeSsKFRZvSuq2BBRyP9r2wm
-         /56g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707131879; x=1707736679;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uwVzzw6q7T6rJMoizsqJwSZOFB3EjGWPnULEwJzCBOw=;
-        b=FfdjZ2Vyi2tH4zaGrDxNCHjf/PwCt6qe2waZpN+qiNj3GyAAWTic0yQ+Q4f9KoNjBl
-         VIa/r+X9Gg106QvF+oRJ1v7fDIxDp6ZqkCWx8VgthhWxYvc9lol8kZtg0G6Azz+jVAq5
-         EJQ1cnTLP9c9VSFL7coSavSmKZRmWle1r0Ywo8wezQv7THHbu7TipOzT2j0jJ+/ZlAWr
-         2hqtvF2A6kRZEbOTvgAV9azEJFRvs8/BtGBOEIsLQTyjyvqhYqBwLZeSs6wjH0VNPolN
-         bblbjDU9dB5waiyk0yAILBO0vAchdB7atetbC8m2DuO0tcrdwju/w3yjk/JJv9MnbEUu
-         lpOw==
-X-Gm-Message-State: AOJu0YwzxtfnxfiGM8I4B45xJ7l7ArLmZHcUDR9AW/wJwmOoy5MZ7AJV
-	K3PHl1dyjV8jg8UqhVSHPGsg2+gnDqmgOVy2G9BMFhC4pEtpYS9/3cZEGJaFpJc=
-X-Google-Smtp-Source: AGHT+IFFNbQ9mj5virwghiG7GyMw7KzkOLURG4v9ncOHFgxiabfmm3wY9ZoD5kw4/UP5zWFHuwUvvA==
-X-Received: by 2002:a05:6a21:1798:b0:19c:a996:da2f with SMTP id nx24-20020a056a21179800b0019ca996da2fmr10501679pzb.44.1707131878995;
-        Mon, 05 Feb 2024 03:17:58 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXQiCpVU6LCunZlfbhhSy6WZI09gB+t62eJk7R6rxY9w+/nXPU2IwfCRvyJ2OfTItEGx6owHIKTTD8v8IyrqwfISu+CKiX1ODZ4M0biUTN+axQMy0f+
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id q7-20020a056a00088700b006d638fd230bsm6574756pfj.93.2024.02.05.03.17.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Feb 2024 03:17:58 -0800 (PST)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To: linux-can@vger.kernel.org
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Wolfgang Grandegger <wg@grandegger.com>
-Subject: [PATCH 1/1] can: change can network drivers maintainer
-Date: Mon,  5 Feb 2024 20:15:02 +0900
-Message-ID: <20240205111743.920528-2-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240205111743.920528-1-mailhol.vincent@wanadoo.fr>
-References: <20240205111743.920528-1-mailhol.vincent@wanadoo.fr>
+	s=arc-20240116; t=1707229181; c=relaxed/simple;
+	bh=1MnTEbxeUsGA7HMcn2eRPHhXYWih9ZllJehloa4wpsc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S52rviG5FewOV0w2x8v3Rpx0LCna1+d58BnHpcVAL3a8sKm5bsu3hdhjDCdFkPzJDImAExN4rvAE1bvvpJcp4fK+PInTayzuBQACEOeoXOV7gvr4a4i3nogcnqWqqF5yD1eK/jbRbyz7VzqEpzWD5qlqH5MVH91MLzQqNk9c3WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W38Z4H0q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C92C433C7;
+	Tue,  6 Feb 2024 14:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707229181;
+	bh=1MnTEbxeUsGA7HMcn2eRPHhXYWih9ZllJehloa4wpsc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=W38Z4H0qdYqSxhn84T7haOHArqaXgeHjfaoKy44OX19ZDhSftyULq0r/FMg70Ayyg
+	 e7xwz0dqu7rFdptm5oHyeXQbqIlKCTw2IHPb8ifn0IWhpuVUdjUtd1/vqHYHiskKus
+	 emdg0gItkGetPQPwjMbX3W3fHloS4plorEAOZb4jp8m6WWubTwO7C7KUNEfmuWtWJd
+	 zDY6/0HI6/GQqpBuO8do0WL0/4o+XXYwSsg8BKoJsCU5N+SjQ257MPnim1lXkUHSj8
+	 ZK/ph766zwqJpWxF6v4UD+bEzWaUrTNjU17rOna6yYGAL3WbiXN7oAf1vGxX8Vd7MR
+	 Shtxv60zYzbrg==
+Date: Tue, 6 Feb 2024 14:19:34 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	linux-riscv@lists.infradead.org,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] dt-bindings: can: mpfs: add missing required clock
+Message-ID: <20240206-parole-cinnamon-2fe369f6ca74@spud>
+References: <20240122-catty-roast-d3625dbb02fe@spud>
+ <20240122-breeder-lying-0d3668d98886@spud>
+ <20240122-surely-crimp-ba4a8c55106d-mkl@pengutronix.de>
+ <20240122-cruelly-dainty-002081f0beb2@spud>
+ <20240122-smokeless-ion-63e4148c22e5-mkl@pengutronix.de>
+ <20240122-uncoated-cherub-a29cba1c0035@spud>
+ <20240122-pogo-reputable-b1d06ae1f1f1-mkl@pengutronix.de>
+ <20240130-narrow-lyricism-8b25baac7bb2@wendy>
+ <20240130-fragrance-disinfect-22cc1911bf48-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="5oAuP6RxMdm00jg7"
+Content-Disposition: inline
+In-Reply-To: <20240130-fragrance-disinfect-22cc1911bf48-mkl@pengutronix.de>
 
-Wolfgang has not been active on the linux-can mailing list other the
-last two years, his last activity being on November 2021 [1].
 
-In replacement, I would like to nominate myself (Vincent Mailhol) as
-the second maintainer of the CAN drivers subtree.
+--5oAuP6RxMdm00jg7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Wolfgang is already listed in the CREDITS since [2], so despite this
-removal, his legacy remains credited.
+On Tue, Jan 30, 2024 at 02:01:09PM +0100, Marc Kleine-Budde wrote:
+> On 30.01.2024 12:11:44, Conor Dooley wrote:
+> > On Mon, Jan 22, 2024 at 04:31:32PM +0100, Marc Kleine-Budde wrote:
+> > > On 22.01.2024 14:56:09, Conor Dooley wrote:
+> >=20
+> > > > I think we already had this discussion on v1, where I said that the
+> > > > binding requires the clocks to be in that order, regardless of whet=
+her
+> > > > or not clock-names is provided. You feel more strongly about it tha=
+n I
+> > > > do, so I will add them when I get around to sending a v3.
+> > >=20
+> > > Yes, this discussion sounded very familiar to me, never mind. Keep it=
+ as
+> > > is, and let's get this binding and the CAN driver upstream!
+> >=20
+> > BTW, I didn't see an ack on this nor do I see it in linux-next (yet).
+> > Are you expecting the patch to go with the rest via the clock tree,
+> > via the DT tree or will you be taking it with CAN stuff via netdev?
+> >=20
+> > I can resend this one patch with a netdev appropriate subject prefix
+> > if you like.
+>=20
+> Feel free to take the whole series via the clock tree.
 
-Thank you for all your contributions!
+Okay, I've gone and applied all of the binding and driver patches to the
+branch we will send to Stephen. Thanks!
 
-[1] https://lore.kernel.org/linux-can/?q=f%3AWolfgang+Grandegger
 
-[2] commit 4261a2043f1b ("can: Update MAINTAINERS and CREDITS file")
-Link: https://git.kernel.org/torvalds/c/4261a2043f1b
 
-CC: Marc Kleine-Budde <mkl@pengutronix.de>
-CC: Wolfgang Grandegger <wg@grandegger.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--5oAuP6RxMdm00jg7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 960512bec428..2d28862c9f0f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4629,8 +4629,8 @@ S:	Maintained
- F:	net/sched/sch_cake.c
- 
- CAN NETWORK DRIVERS
--M:	Wolfgang Grandegger <wg@grandegger.com>
- M:	Marc Kleine-Budde <mkl@pengutronix.de>
-+M:	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
- L:	linux-can@vger.kernel.org
- S:	Maintained
- W:	https://github.com/linux-can
--- 
-2.43.0
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZcI/9gAKCRB4tDGHoIJi
+0kHUAP0e+rt2LDSpTC952WOfj4vXNDY3wh2XgO1MsZQXw131LQEA1UPbV0N5gf+J
+ALoxbvkmhHo0E10iiUy+SgrU+qL5yAM=
+=rlvY
+-----END PGP SIGNATURE-----
+
+--5oAuP6RxMdm00jg7--
 
