@@ -1,73 +1,73 @@
-Return-Path: <linux-can+bounces-215-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-216-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 330BE84C791
-	for <lists+linux-can@lfdr.de>; Wed,  7 Feb 2024 10:37:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8295B84C797
+	for <lists+linux-can@lfdr.de>; Wed,  7 Feb 2024 10:37:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 583691C24AFA
-	for <lists+linux-can@lfdr.de>; Wed,  7 Feb 2024 09:37:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A70D31C249EF
+	for <lists+linux-can@lfdr.de>; Wed,  7 Feb 2024 09:37:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 460DB3F9FD;
-	Wed,  7 Feb 2024 09:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC7863F9C4;
+	Wed,  7 Feb 2024 09:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="XVhEHqRo"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="P+wfLnhe"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41A63C49E
-	for <linux-can@vger.kernel.org>; Wed,  7 Feb 2024 09:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC043F9D4
+	for <linux-can@vger.kernel.org>; Wed,  7 Feb 2024 09:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707298374; cv=none; b=nabJPn9BNR71vatomOMWopfZj9G/n14VbGJmVU2cUwb4lWyQmd8FPMj0t8dk8+3uA8o1YCTnUuflmH3gVap6sdcXUN90mfaeqpnqpGAmY1FiERAHkZa4wXCVK23AELk6Z/AjO/18ZeZc1Vf++L++cye2j9Db15FgPCONtjaJ3XY=
+	t=1707298375; cv=none; b=l3GoP1n+I/BMztlaVSyHdQAus/c6S0prmh70jjXY9smUlDk6zC7ZuhXvVcP7o91hotigCWKMvH6nzq6/5nBdnE2BWz3I9BhyAbvkwiHyCW5jg7tLH0EF+FnrkperMWnb4qDxAzJe9DQpfDfTG++18zCffGkIrwizRjGYh7kZfQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707298374; c=relaxed/simple;
-	bh=Q9lUXRT+YgSevzYrqV6NxERHNWcO3poNT0QEvQN9im4=;
+	s=arc-20240116; t=1707298375; c=relaxed/simple;
+	bh=IrjB9D7I+eQ6XxmJDoPLbOhDTNkYMgIUTaS/CiFBq2Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gPLrtOAngiFaR8KIMJ1c25TgYtKIXykt6TMauF7JDFtmjTf9TIG8Rsmh1/f9YiH+ptPurnxaTMgXjHR7yypB0/rsg8uqCF7mAx4Wp8Kt3t2hiKCNPJkp5CY7gR8eNPYauS1Q6bZMh/pKsNFB2gMRHwr5bb/kXqnd4eonigRGISI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=XVhEHqRo; arc=none smtp.client-ip=209.85.218.47
+	 MIME-Version; b=eb+kL0kjL50t2XiAzcWOAiSSQumajAUvcWPkLSF/hhAOlZvVbYRIdxibDJmQE1+4pC+3rWOxtzSQG7q6WeGyuvEPc67CT/2M60gj2MTLd8aaYHsB1ILgnKOUA3BxTjV6JFoeY0kZTU9Du0lUFO1EyX+1KYj5cKRwsp15ztzkZUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=P+wfLnhe; arc=none smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a34c5ca2537so55443066b.0
-        for <linux-can@vger.kernel.org>; Wed, 07 Feb 2024 01:32:51 -0800 (PST)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-51147d0abd1so474047e87.1
+        for <linux-can@vger.kernel.org>; Wed, 07 Feb 2024 01:32:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707298370; x=1707903170; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707298371; x=1707903171; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nVaBe1cRQbyg0PtGOEKAuifBPU0qmKGXvSAvyPB81Co=;
-        b=XVhEHqRokFGhyazZjpl8sYN3PnhS2Arz5dq40ibfcPysE5uXtFdQ1xio7KIPL+V5HT
-         YhUC/0D7Xe/XEpA7NwUwniVc5ZsXJgLygWr5uBN9GhfjVbdAz+IDzaf9WfUPVPkwP/t0
-         IbP+c0khhuyNSaNHIUczjo9hzWl63d2hD0f2TTtBcdSufJJQsJqUBWlAZvRZUVp/bJJA
-         Uh+M81UtoaVmTa2Sfetl1t/WZGZeg0OAj0yTTY+SfLsDBqKoGFOdmp9AXHcGyoO3kMJn
-         wjLhRU+cfGeZtQDoZ5uiH5fUXM9+Y0QUJ8UtTjTt3+6ev0hnsYXNTU3EMdy0LciT+3+Y
-         aiQw==
+        bh=vyrMc5jTp9SVMayJr+6E15Cmf/hoA9mjpzLhtoAYUfo=;
+        b=P+wfLnhebTEVJE9V4wRL4x856FoM9eLNlJ/mTzOyJbRZuzDBqiQIcYQtOmv5wERqeU
+         bzAWc2t0E+AHpW+7fl6CyGIOg+WdA6QfmdIAUw9iR3nFvOrzdRwZByMOKzt18YlWCEiD
+         XejWl5EhssTxklQsAS1TQuGGANBMgeswg+vcea7KSvOVPXXOxz6J9rWKyOKbaNMXbIfX
+         PqdcpcE4fJoNLV5bgLE7WqFSnT5UBlu/Dq+b6ZNAJIk8rRZ3StwBHAoO/rUER9vquylQ
+         uj2KEyIFp87Xq3xf8twaZlYnPP0ud1YVJRAcZ9cA9rVBIpJSlPv/8KMLMgw1CNLTmXzJ
+         U4KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707298370; x=1707903170;
+        d=1e100.net; s=20230601; t=1707298371; x=1707903171;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nVaBe1cRQbyg0PtGOEKAuifBPU0qmKGXvSAvyPB81Co=;
-        b=CEHIr7nlhfqsC/XPnBKiQaX4+95QwzKnI3bwogTGwAMmaKLY6oBHhT5OPWLs9Ed2Rs
-         mU+FVTBrVyJYE3plvOIXs5tlsnv8QChRWVEyKeW8dBzS317AmyeUbM38NMYK7gs+IWz6
-         EnsNHAtNE9Cs6xZx2LaQTWLaD9I/g7jojQ44Yjv30H7YRcbsPC2YmuzcTPHlS/dhsdbq
-         UkNKJ/Qa6WpCxaOYHc2KVKtvd3VGDHllagVO+0rZs2WVN3F0csJtlCSdLz2Yd5BBqQOS
-         UT53EifMUeS8+O30kUDFGgTdShhndranxCD5FoobVRFbdwcyOyzO769YpdHAtejVgbjS
-         JyNA==
-X-Gm-Message-State: AOJu0YySLY+o4kX7aDLr9qPyn4djicVqZ2bkcp4rgXMmONHdVSUZVAaE
-	tRcPWSiJ/nP7TgPPgPIYdJ+zuC4p1Aslvyk3+4GfVrOUdt7ILxE0dzATb2NEmncTtct6ypkhCp7
-	3
-X-Google-Smtp-Source: AGHT+IGy1JyOuH7oS6rgedIfObrDBJCWCY0rW7tixluP8Tc1jsjyPZE1yl/3maYdOdt39bD8rwhidQ==
-X-Received: by 2002:a17:906:23e9:b0:a31:4e96:f40a with SMTP id j9-20020a17090623e900b00a314e96f40amr3507030ejg.26.1707298370257;
-        Wed, 07 Feb 2024 01:32:50 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVONeauiJEfez5+TTvMZMiSlpAkGE4X/BdInaA2Rg4XFNQencIUAmJM9l1Xj6jpMZjbRyXouXjSK3iJzZPb4d/6HUVavCh87c7bZaoj5rH19mCxyzMM6b4ksVRhrSvaBjVyke2UxAO/M/OIP57Xj7ppTStGtAZLoMIRf3Afae5hOvkHhMs8EvOrloda+vw2QyfIldZYsStBy7kBf9zhYRfBcn4kMHJgLnccKRDSlX7Kvvcxa6Gen4vIBlutkfI1OCDOkf9PIKrc+gsTX4cPO2rgoAqGcVyZLwIXSvdM+xx3wNOTvHrVT2D1PXN6ll2DIcrs6ncTvCIF7oQfB0IAAJ4ApMdrn/RdgEvn2QRgtwkDxwndQygy4CjLzFDi5qxi0zO8FXZ59vMZ9C+5ODJWN+Aeh4TsQEoNl6iVMdmrMvcpLTRA/JWmCcJ8kzNB
+        bh=vyrMc5jTp9SVMayJr+6E15Cmf/hoA9mjpzLhtoAYUfo=;
+        b=kGZ0K1sM7NXhLoeAqJmNPkuFXNCHManz23Gem8/kb92drB1fnxUII0O1bP7AgXAJWX
+         jX2KbfD5x4mSUSI4fmoK771mzEpB6AnUxM/ViL2K3PSWPjL1KRUfbPIvxREiI7BPygWD
+         nLxwkjpsiBfXnQ3dvzh2XdYR5ntvpnfbwxBymaVXQ776RUBydu7nhE7KTnFe9Pt8OS9y
+         8ZSbvx7BZRiXlwwyknXbyVpUdAbM5i5q620MOqP9RKaL13g47PerPKVxwxII2cyc3TeU
+         sdWokAGKk9qxswn8WOI0TyXuTo0X7E804CLKDdG0Dna0gCsPCPdyVN5MSOPrwlTXIlPO
+         dYog==
+X-Forwarded-Encrypted: i=1; AJvYcCVwZtwg0Fs5SM1iDAhhFBvX77b5WEj/6+oPy85fqGYBXO6WE7RparCjBFYn/0PO11wM0vK8i2vcBb3FS2qkUMNiiorkAljhMgdl
+X-Gm-Message-State: AOJu0Yx4lyBT2nyd9aG6HO3Imi4jZMFeSkVeibbSP/Te/whm/euc/x6L
+	fC6soQr+sWw+gYHUsqOskpC/2CNnjBzJbjp3bRNty7htb2StrYZCoIBdFxiCb9M=
+X-Google-Smtp-Source: AGHT+IGlyySrxZb2xCUU3NVUNF0iGN9y5kNPNUw/zgDn+20t3kXSbkZ4pfjUGMlLN2CsKy2qSf3Pgw==
+X-Received: by 2002:a05:6512:370f:b0:511:6263:408d with SMTP id z15-20020a056512370f00b005116263408dmr1649723lfr.8.1707298371575;
+        Wed, 07 Feb 2024 01:32:51 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWOWcLOLQ9J24dPnoaG8IbJC8shp1vr4lGFMt2PWDagdz+m4NS4yWhB8snlw+CumAifFUDVrlUoZQ0Q4+v/UP8wiJ6vbRLHuHPZvpoKBiPo7MLcZwoYW/a8xXdRQPbBICXOLhHiDhjAKDcNhAYomPtmipfq0dp0x9lQsHUhw03WjeaN+twKE65+wW/cfKwFDEcvgkv7x+5NmYuerBB8W/4TQxB4mvQOjIbNqje/tX5CwShlEm60Trmie5idaae4N0K9/ORgEmZNgkWFPmOPiZVpQuulZXxE9HFO8P/xxfpt+03JWR/b4wsqM6PttqvDeLX/c1+CQ+3yuMESoZ6sxSdQGO11NTGeRppTUUFU5/+UYIjVL3SMg/hWxm8nZstXMw78Y11jXsQRmFQiwEPP8pwZdCLvXjCbBXMYvEFxCq47A4Bq6jvPqjBzBUvw
 Received: from blmsp.fritz.box ([2001:4091:a246:821e:6f3b:6b50:4762:8343])
-        by smtp.gmail.com with ESMTPSA id qo9-20020a170907874900b00a388e24f533sm122336ejc.148.2024.02.07.01.32.49
+        by smtp.gmail.com with ESMTPSA id qo9-20020a170907874900b00a388e24f533sm122336ejc.148.2024.02.07.01.32.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Feb 2024 01:32:49 -0800 (PST)
+        Wed, 07 Feb 2024 01:32:51 -0800 (PST)
 From: Markus Schneider-Pargmann <msp@baylibre.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
@@ -85,9 +85,9 @@ Cc: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
 	linux-kernel@vger.kernel.org,
 	Julien Panis <jpanis@baylibre.com>,
 	Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH 13/14] can: m_can: Implement BQL
-Date: Wed,  7 Feb 2024 10:32:19 +0100
-Message-ID: <20240207093220.2681425-14-msp@baylibre.com>
+Subject: [PATCH 14/14] can: m_can: Implement transmit submission coalescing
+Date: Wed,  7 Feb 2024 10:32:20 +0100
+Message-ID: <20240207093220.2681425-15-msp@baylibre.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240207093220.2681425-1-msp@baylibre.com>
 References: <20240207093220.2681425-1-msp@baylibre.com>
@@ -99,171 +99,181 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement byte queue limiting in preparation for the use of xmit_more().
+m_can supports submitting multiple transmits with one register write.
+This is an interesting option to reduce the number of SPI transfers for
+peripheral chips.
+
+The m_can_tx_op is extended with a bool that signals if it is the last
+transmission and the submit should be executed immediately.
+
+The worker then writes the skb to the FIFO and submits it only if the
+submit bool is set. If it isn't set, the worker will write the next skb
+which is waiting in the workqueue to the FIFO, etc.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 ---
- drivers/net/can/m_can/m_can.c | 50 +++++++++++++++++++++++++----------
- 1 file changed, 36 insertions(+), 14 deletions(-)
+ drivers/net/can/m_can/m_can.c | 56 ++++++++++++++++++++++++++++++++---
+ drivers/net/can/m_can/m_can.h |  6 ++++
+ 2 files changed, 58 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 20595b7141af..48968da69ae9 100644
+index 48968da69ae9..b7dbce4c342a 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -489,6 +489,8 @@ static void m_can_clean(struct net_device *net)
- 	for (int i = 0; i != cdev->can.echo_skb_max; ++i)
- 		can_free_echo_skb(cdev->net, i, NULL);
- 
-+	netdev_reset_queue(cdev->net);
-+
- 	spin_lock_irqsave(&cdev->tx_handling_spinlock, irqflags);
- 	cdev->tx_fifo_in_flight = 0;
- 	spin_unlock_irqrestore(&cdev->tx_handling_spinlock, irqflags);
-@@ -1043,29 +1045,34 @@ static int m_can_poll(struct napi_struct *napi, int quota)
-  * echo. timestamp is used for peripherals to ensure correct ordering
-  * by rx-offload, and is ignored for non-peripherals.
-  */
--static void m_can_tx_update_stats(struct m_can_classdev *cdev,
--				  unsigned int msg_mark,
--				  u32 timestamp)
-+static unsigned int m_can_tx_update_stats(struct m_can_classdev *cdev,
-+					  unsigned int msg_mark, u32 timestamp)
- {
- 	struct net_device *dev = cdev->net;
- 	struct net_device_stats *stats = &dev->stats;
-+	unsigned int frame_len;
- 
- 	if (cdev->is_peripheral)
- 		stats->tx_bytes +=
- 			can_rx_offload_get_echo_skb_queue_timestamp(&cdev->offload,
- 								    msg_mark,
- 								    timestamp,
--								    NULL);
-+								    &frame_len);
- 	else
--		stats->tx_bytes += can_get_echo_skb(dev, msg_mark, NULL);
-+		stats->tx_bytes += can_get_echo_skb(dev, msg_mark, &frame_len);
- 
- 	stats->tx_packets++;
-+
-+	return frame_len;
- }
- 
--static void m_can_finish_tx(struct m_can_classdev *cdev, int transmitted)
-+static void m_can_finish_tx(struct m_can_classdev *cdev, int transmitted,
-+			    unsigned int transmitted_frame_len)
- {
- 	unsigned long irqflags;
- 
-+	netdev_completed_queue(cdev->net, transmitted, transmitted_frame_len);
-+
- 	spin_lock_irqsave(&cdev->tx_handling_spinlock, irqflags);
- 	if (cdev->tx_fifo_in_flight >= cdev->tx_fifo_size && transmitted > 0)
- 		netif_wake_queue(cdev->net);
-@@ -1104,6 +1111,7 @@ static int m_can_echo_tx_event(struct net_device *dev)
- 	int err = 0;
- 	unsigned int msg_mark;
- 	int processed = 0;
-+	unsigned int processed_frame_len = 0;
- 
- 	struct m_can_classdev *cdev = netdev_priv(dev);
- 
-@@ -1132,7 +1140,9 @@ static int m_can_echo_tx_event(struct net_device *dev)
- 		fgi = (++fgi >= cdev->mcfg[MRAM_TXE].num ? 0 : fgi);
- 
- 		/* update stats */
--		m_can_tx_update_stats(cdev, msg_mark, timestamp);
-+		processed_frame_len += m_can_tx_update_stats(cdev, msg_mark,
-+							     timestamp);
-+
- 		++processed;
- 	}
- 
-@@ -1140,7 +1150,7 @@ static int m_can_echo_tx_event(struct net_device *dev)
- 		m_can_write(cdev, M_CAN_TXEFA, FIELD_PREP(TXEFA_EFAI_MASK,
- 							  ack_fgi));
- 
--	m_can_finish_tx(cdev, processed);
-+	m_can_finish_tx(cdev, processed, processed_frame_len);
- 
- 	return err;
- }
-@@ -1218,11 +1228,12 @@ static irqreturn_t m_can_isr(int irq, void *dev_id)
- 		if (ir & IR_TC) {
- 			/* Transmission Complete Interrupt*/
- 			u32 timestamp = 0;
-+			unsigned int frame_len;
- 
- 			if (cdev->is_peripheral)
- 				timestamp = m_can_get_timestamp(cdev);
--			m_can_tx_update_stats(cdev, 0, timestamp);
--			m_can_finish_tx(cdev, 1);
-+			frame_len = m_can_tx_update_stats(cdev, 0, timestamp);
-+			m_can_finish_tx(cdev, 1, frame_len);
- 		}
- 	} else  {
- 		if (ir & (IR_TEFN | IR_TEFW)) {
-@@ -1738,6 +1749,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
- 	u32 cccr, fdflags;
- 	int err;
- 	u32 putidx;
-+	unsigned int frame_len = can_skb_get_frame_len(skb);
- 
- 	/* Generate ID field for TX buffer Element */
- 	/* Common to all supported M_CAN versions */
-@@ -1783,7 +1795,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
- 		}
- 		m_can_write(cdev, M_CAN_TXBTIE, 0x1);
- 
--		can_put_echo_skb(skb, dev, 0, 0);
-+		can_put_echo_skb(skb, dev, 0, frame_len);
- 
- 		m_can_write(cdev, M_CAN_TXBAR, 0x1);
- 		/* End of xmit function for version 3.0.x */
-@@ -1821,7 +1833,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
- 		/* Push loopback echo.
- 		 * Will be looped back on TX interrupt based on message marker
- 		 */
--		can_put_echo_skb(skb, dev, putidx, 0);
-+		can_put_echo_skb(skb, dev, putidx, frame_len);
- 
- 		/* Enable TX FIFO element to start transfer  */
- 		m_can_write(cdev, M_CAN_TXBAR, (1 << putidx));
-@@ -1869,11 +1881,14 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
- 				    struct net_device *dev)
- {
- 	struct m_can_classdev *cdev = netdev_priv(dev);
-+	unsigned int frame_len;
- 	netdev_tx_t ret;
- 
- 	if (can_dev_dropped_skb(dev, skb))
- 		return NETDEV_TX_OK;
- 
-+	frame_len = can_skb_get_frame_len(skb);
-+
- 	if (cdev->can.state == CAN_STATE_BUS_OFF) {
- 		m_can_clean(cdev->net);
- 		return NETDEV_TX_OK;
-@@ -1883,10 +1898,17 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
- 	if (ret != NETDEV_TX_OK)
+@@ -1539,6 +1539,9 @@ static int m_can_start(struct net_device *dev)
+ 	if (ret)
  		return ret;
  
-+	netdev_sent_queue(dev, frame_len);
++	netdev_queue_set_dql_min_limit(netdev_get_tx_queue(cdev->net, 0),
++				       cdev->tx_max_coalesced_frames);
 +
- 	if (cdev->is_peripheral)
--		return m_can_start_peripheral_xmit(cdev, skb);
-+		ret = m_can_start_peripheral_xmit(cdev, skb);
- 	else
--		return m_can_tx_handler(cdev, skb);
-+		ret = m_can_tx_handler(cdev, skb);
-+
-+	if (ret != NETDEV_TX_OK)
-+		netdev_completed_queue(dev, 1, frame_len);
-+
-+	return ret;
+ 	cdev->can.state = CAN_STATE_ERROR_ACTIVE;
+ 
+ 	m_can_enable_all_interrupts(cdev);
+@@ -1835,8 +1838,13 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
+ 		 */
+ 		can_put_echo_skb(skb, dev, putidx, frame_len);
+ 
+-		/* Enable TX FIFO element to start transfer  */
+-		m_can_write(cdev, M_CAN_TXBAR, (1 << putidx));
++		if (cdev->is_peripheral) {
++			/* Delay enabling TX FIFO element */
++			cdev->tx_peripheral_submit |= BIT(putidx);
++		} else {
++			/* Enable TX FIFO element to start transfer  */
++			m_can_write(cdev, M_CAN_TXBAR, BIT(putidx));
++		}
+ 		cdev->tx_fifo_putidx = (++cdev->tx_fifo_putidx >= cdev->can.echo_skb_max ?
+ 					0 : cdev->tx_fifo_putidx);
+ 	}
+@@ -1849,6 +1857,17 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
+ 	return NETDEV_TX_BUSY;
  }
  
- static enum hrtimer_restart hrtimer_callback(struct hrtimer *timer)
++static void m_can_tx_submit(struct m_can_classdev *cdev)
++{
++	if (cdev->version == 30)
++		return;
++	if (!cdev->is_peripheral)
++		return;
++
++	m_can_write(cdev, M_CAN_TXBAR, cdev->tx_peripheral_submit);
++	cdev->tx_peripheral_submit = 0;
++}
++
+ static void m_can_tx_work_queue(struct work_struct *ws)
+ {
+ 	struct m_can_tx_op *op = container_of(ws, struct m_can_tx_op, work);
+@@ -1857,11 +1876,15 @@ static void m_can_tx_work_queue(struct work_struct *ws)
+ 
+ 	op->skb = NULL;
+ 	m_can_tx_handler(cdev, skb);
++	if (op->submit)
++		m_can_tx_submit(cdev);
+ }
+ 
+-static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb)
++static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb,
++			       bool submit)
+ {
+ 	cdev->tx_ops[cdev->next_tx_op].skb = skb;
++	cdev->tx_ops[cdev->next_tx_op].submit = submit;
+ 	queue_work(cdev->tx_wq, &cdev->tx_ops[cdev->next_tx_op].work);
+ 
+ 	++cdev->next_tx_op;
+@@ -1872,7 +1895,17 @@ static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb)
+ static netdev_tx_t m_can_start_peripheral_xmit(struct m_can_classdev *cdev,
+ 					       struct sk_buff *skb)
+ {
+-	m_can_tx_queue_skb(cdev, skb);
++	bool submit;
++
++	++cdev->nr_txs_without_submit;
++	if (cdev->nr_txs_without_submit >= cdev->tx_max_coalesced_frames ||
++	    !netdev_xmit_more()) {
++		cdev->nr_txs_without_submit = 0;
++		submit = true;
++	} else {
++		submit = false;
++	}
++	m_can_tx_queue_skb(cdev, skb, submit);
+ 
+ 	return NETDEV_TX_OK;
+ }
+@@ -2015,6 +2048,7 @@ static int m_can_get_coalesce(struct net_device *dev,
+ 
+ 	ec->rx_max_coalesced_frames_irq = cdev->rx_max_coalesced_frames_irq;
+ 	ec->rx_coalesce_usecs_irq = cdev->rx_coalesce_usecs_irq;
++	ec->tx_max_coalesced_frames = cdev->tx_max_coalesced_frames;
+ 	ec->tx_max_coalesced_frames_irq = cdev->tx_max_coalesced_frames_irq;
+ 	ec->tx_coalesce_usecs_irq = cdev->tx_coalesce_usecs_irq;
+ 
+@@ -2059,6 +2093,18 @@ static int m_can_set_coalesce(struct net_device *dev,
+ 		netdev_err(dev, "tx-frames-irq and tx-usecs-irq can only be set together\n");
+ 		return -EINVAL;
+ 	}
++	if (ec->tx_max_coalesced_frames > cdev->mcfg[MRAM_TXE].num) {
++		netdev_err(dev, "tx-frames %u greater than the TX event FIFO %u\n",
++			   ec->tx_max_coalesced_frames,
++			   cdev->mcfg[MRAM_TXE].num);
++		return -EINVAL;
++	}
++	if (ec->tx_max_coalesced_frames > cdev->mcfg[MRAM_TXB].num) {
++		netdev_err(dev, "tx-frames %u greater than the TX FIFO %u\n",
++			   ec->tx_max_coalesced_frames,
++			   cdev->mcfg[MRAM_TXB].num);
++		return -EINVAL;
++	}
+ 	if (ec->rx_coalesce_usecs_irq != 0 && ec->tx_coalesce_usecs_irq != 0 &&
+ 	    ec->rx_coalesce_usecs_irq != ec->tx_coalesce_usecs_irq) {
+ 		netdev_err(dev, "rx-usecs-irq %u needs to be equal to tx-usecs-irq %u if both are enabled\n",
+@@ -2069,6 +2115,7 @@ static int m_can_set_coalesce(struct net_device *dev,
+ 
+ 	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
+ 	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
++	cdev->tx_max_coalesced_frames = ec->tx_max_coalesced_frames;
+ 	cdev->tx_max_coalesced_frames_irq = ec->tx_max_coalesced_frames_irq;
+ 	cdev->tx_coalesce_usecs_irq = ec->tx_coalesce_usecs_irq;
+ 
+@@ -2086,6 +2133,7 @@ static const struct ethtool_ops m_can_ethtool_ops = {
+ 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS_IRQ |
+ 		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ |
+ 		ETHTOOL_COALESCE_TX_USECS_IRQ |
++		ETHTOOL_COALESCE_TX_MAX_FRAMES |
+ 		ETHTOOL_COALESCE_TX_MAX_FRAMES_IRQ,
+ 	.get_ts_info = ethtool_op_get_ts_info,
+ 	.get_coalesce = m_can_get_coalesce,
+diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+index 76b1ce1b7c1b..2986c4ce0b2f 100644
+--- a/drivers/net/can/m_can/m_can.h
++++ b/drivers/net/can/m_can/m_can.h
+@@ -74,6 +74,7 @@ struct m_can_tx_op {
+ 	struct m_can_classdev *cdev;
+ 	struct work_struct work;
+ 	struct sk_buff *skb;
++	bool submit;
+ };
+ 
+ struct m_can_classdev {
+@@ -102,6 +103,7 @@ struct m_can_classdev {
+ 	u32 active_interrupts;
+ 	u32 rx_max_coalesced_frames_irq;
+ 	u32 rx_coalesce_usecs_irq;
++	u32 tx_max_coalesced_frames;
+ 	u32 tx_max_coalesced_frames_irq;
+ 	u32 tx_coalesce_usecs_irq;
+ 
+@@ -116,6 +118,10 @@ struct m_can_classdev {
+ 	int tx_fifo_size;
+ 	int next_tx_op;
+ 
++	int nr_txs_without_submit;
++	/* bitfield of fifo elements that will be submitted together */
++	u32 tx_peripheral_submit;
++
+ 	struct mram_cfg mcfg[MRAM_CFG_NUM];
+ 
+ 	struct hrtimer hrtimer;
 -- 
 2.43.0
 
