@@ -1,136 +1,79 @@
-Return-Path: <linux-can+bounces-220-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-221-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3DA884FEC5
-	for <lists+linux-can@lfdr.de>; Fri,  9 Feb 2024 22:26:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C8388509CA
+	for <lists+linux-can@lfdr.de>; Sun, 11 Feb 2024 16:06:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84B0C1F24510
-	for <lists+linux-can@lfdr.de>; Fri,  9 Feb 2024 21:26:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC91B28240F
+	for <lists+linux-can@lfdr.de>; Sun, 11 Feb 2024 15:06:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9714017BD3;
-	Fri,  9 Feb 2024 21:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="UGt/T2PU";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="VtfA2zF7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1B95B5C1;
+	Sun, 11 Feb 2024 15:05:59 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-out.aladdin-rd.ru (mail-out.aladdin-rd.ru [91.199.251.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9659B168A3
-	for <linux-can@vger.kernel.org>; Fri,  9 Feb 2024 21:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.24
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707513954; cv=pass; b=My+IcVl1eCpCMXOjDGfugMKJio8cmo4rhzm0vm/G+o00kM0pDGw1vc//mDkzCijnkCEqlxaH8DrZWin7LY5COzw6gnHdlNWfrxW+6gI7pN2GhfMaeKyXDVkTpTnkp8Q0ON7HfgVkFCT/m3EpF9Ic22B5tSZ33ozUE0jIIr/MUy4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707513954; c=relaxed/simple;
-	bh=w0IZ4+qchJYuBI1C+GwADDLo7gpmB9f4z772LozsLEw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=R8IoSZwpXMBu005O1ml9Ge4pwm9yqVKu9ZtA+RQ1OPKFxve1+qqjSL3RkV0YdgNb1ENXbbrunYP7uU4xBDoPne+WQnXER85KUqmmBysYGV9MyTQg+JTkBJSbHvWikD2J+x8bFbkJdAqxhXIdhvsXeLULBODziu9BNdHJK8yQZHQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=UGt/T2PU; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=VtfA2zF7; arc=pass smtp.client-ip=85.215.255.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1707513943; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=KAR4p/2GaF4B4Pon/0rmpJi5NwqPrdgTMOdGHl45UgZhaUp5salB95bnV0DaaPYRuc
-    qD6eGtn8jpntBME85RRPlJtwCpLV8P187nHHqfp76mXZdd7SOfK7EjIs8kojB0osiLI1
-    BRTMG//Aycl3KNNoc7gH+MecWrBc1eVpTBrWSKQ9kX13gn8gOgD53zfrteNRfJGN/IQT
-    V5VADYqW7pEjxvfnIRkb9BCxPA4k9FpWHtglbESgi5IAlPv2LpaoYEk6RvEpcR9zQaRh
-    fsmCBCOQ52MvuIvMO1gDsFx5cqudqoyDqvqB46ZFQLNlW7pxTgWmtu1O7Qi/euVy3Eu2
-    GCZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1707513942;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=F0l1vSIcEFyZ3ouy9cjYSsfJIhaLkdkYRVvnCR9Gd9Q=;
-    b=cG4ELgrHPFWkX9zX8oMW2tap5mzBuQc9Us71k8+CVoLGcZi0vaQvlWAy6U1wH6Rygo
-    BO3WRYRkWPkbFsvkevnnKv+AywL5bNy18qdlRe9mU+AsXlOnwxQCD8FKS92Ig+muWkWE
-    yAeoFSmX6uU20DiT4nTAD9klvVbj99o5l8BrJHskWuTpTNPQUm4JoGU33VMzWuTm+yJL
-    Er/rzw3Xa9aHHm11nOuC0CHJnWqECNMkxjT8o3K9FubpPvx84SKd0vDrOKkUA0xp1njG
-    FWnlsmEesYArmaBCEK3CkDOFIg9n31R9HzsxWm71KT5FAUIyQkjpr9XCO3ePpDZMtHzf
-    deuw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1707513942;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=F0l1vSIcEFyZ3ouy9cjYSsfJIhaLkdkYRVvnCR9Gd9Q=;
-    b=UGt/T2PUl5NW8FdbPqU2JAMkJa4wQj3ZzQRLVAJUjD2/+TBdFfv30dDKRui6Pr4kWF
-    HMS//cV9j41MWRDBVd2B2qF6UzjC4OPeYqCjgyVZ2OCMumimFbDM9AzUllK36s75kuut
-    02tNeKNY48lyrSSc6vWVaP31pwb5b2dylz3Wkg6ouXpK28SDtwIF2X/5nK/6HILXsRAO
-    vq0n9LAgyVLreuynQf1adCGrWKb3I6uhU1SEUC7RZmNCReBRdW6NWRtlE5+hreRvBgca
-    FQjq2aV2UP5op3m/Ks0+FtRguMw8b4c6z5Con0jMDtv6WJYwzfgk3GXWXJU+e2F43H/4
-    TtYw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1707513942;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=F0l1vSIcEFyZ3ouy9cjYSsfJIhaLkdkYRVvnCR9Gd9Q=;
-    b=VtfA2zF7ryI8k5CX8lfBmQ/eZJNYMvY/s0EYdSp0jwkPgtw6IzRDEKqNPLJ6jJZJT/
-    Vg3j7jJZFt8PaTZpwTBg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFr0UTcNM/uBqAvRIc5TRGszsnoG9c84A=="
-Received: from [IPV6:2a00:6020:4a8e:5010:ba55:f47d:9668:fdfe]
-    by smtp.strato.de (RZmta 49.11.2 AUTH)
-    with ESMTPSA id K49f9c019LPglOn
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Fri, 9 Feb 2024 22:25:42 +0100 (CET)
-Message-ID: <465e5c3d-fe8a-4b01-99b4-c955f0bcaa15@hartkopp.net>
-Date: Fri, 9 Feb 2024 22:25:37 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409D75BAFE;
+	Sun, 11 Feb 2024 15:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.199.251.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707663958; cv=none; b=pcNGWLbo/l5qCn18GlqA3zFBp6xODZKYgErfuG4sopZZ/mzrIkeCxt/4MEL0a8ASgRIIy8vykHNgHbwV7R14j9UhkQhj7dwizb0UG6U4FksfeNFb3x+DRHvsXhgyZ8wsYXp0QeHWfDh0RoQQUR4RloUUxLt1UZjkVJU3whuO5/A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707663958; c=relaxed/simple;
+	bh=L2erQr5VOzvtZwSGbBtPRPaYAXK9HLpbI4kvy9KiY1c=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CoprA593RD82lJjfCjkuRn3eEoc2pWbInxT5eA7iHfxolgO/ich9SxPoix9je2v25A0h1uFeFelBVXNDWkxZjv35ICYLt5CPr9mEsEy4s/vlw+WD9Ql1ul/YjyfaGrXdS9pjlKIYMQMdPYB5QNb1RdzAZasrT5JcbbCv5EGzQY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aladdin.ru; spf=pass smtp.mailfrom=aladdin.ru; arc=none smtp.client-ip=91.199.251.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aladdin.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aladdin.ru
+From: Daniil Dulov <d.dulov@aladdin.ru>
+To: Wolfgang Grandegger <wg@grandegger.com>
+CC: Daniil Dulov <d.dulov@aladdin.ru>, Marc Kleine-Budde <mkl@pengutronix.de>,
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+	<linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
+Subject: [PATCH] can: softing: remove redundant NULL check
+Date: Sun, 11 Feb 2024 07:05:35 -0800
+Message-ID: <20240211150535.3529-1-d.dulov@aladdin.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Protocol recommendation for CAN(FD)-USB adapter
-To: "Dr. Michael 'Mickey' Lauer" <mickey@vanille.de>,
- linux-can@vger.kernel.org
-References: <0671FD01-F7C3-41C0-BD66-9E67150AB2C9@vanille.de>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <0671FD01-F7C3-41C0-BD66-9E67150AB2C9@vanille.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EXCH-2016-01.aladdin.ru (192.168.1.101) To
+ EXCH-2016-01.aladdin.ru (192.168.1.101)
 
-Hi Michael,
+In this case dev cannot be NULL, so remove redundant check.
 
-On 2024-02-09 18:28, Dr. Michael 'Mickey' Lauer wrote:
-> My team and I have designed and developed
-> a new CAN(FD) adapter based on ESP32S3 and MCP2518fd
-> primarily aimed at ECU firmware reprogramming,
-> but eventually also for the use as OBD2-adapter,
-> CAN-logger, etc.
-> 
-> The next incarnation will also have a
-> USB interface and I’m planning the necessary
-> changes for its firmware.
-> 
-> I would like it to be compatible with SocketCAN
-> out of the box — optimally without writing a
-> Linux driver, but rather reusing an existing one.
-> 
-> Which of the mainline SocketCAN drivers would you recommend
-> basing my USB protocol on? From a quick glance,
-> I’m leaning towards GS-USB, since this already
-> supports different hardware families.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Yes. I would also recommend the gsusb driver and the CandleLight 
-firmware project on the other side:
+Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
+Signed-off-by: Daniil Dulov <d.dulov@aladdin.ru>
+---
+ drivers/net/can/softing/softing_fw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://github.com/candle-usb/candleLight_fw
+diff --git a/drivers/net/can/softing/softing_fw.c b/drivers/net/can/softing/softing_fw.c
+index bad69a4abec1..5a3f9e4b0b62 100644
+--- a/drivers/net/can/softing/softing_fw.c
++++ b/drivers/net/can/softing/softing_fw.c
+@@ -436,7 +436,7 @@ int softing_startstop(struct net_device *dev, int up)
+ 		return ret;
+ 
+ 	bus_bitmask_start = 0;
+-	if (dev && up)
++	if (up)
+ 		/* prepare to start this bus as well */
+ 		bus_bitmask_start |= (1 << priv->index);
+ 	/* bring netdevs down */
+-- 
+2.25.1
 
-... where currently the CAN FD support is in the testing phase IIRC.
-
-Both the CAN(FD) adapter firmware and also the Linux kernel driver is 
-actively developed by Marc Kleine-Budde and others.
-
-Best regards,
-Oliver
 
