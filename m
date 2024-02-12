@@ -1,79 +1,82 @@
-Return-Path: <linux-can+bounces-221-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-222-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C8388509CA
-	for <lists+linux-can@lfdr.de>; Sun, 11 Feb 2024 16:06:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77AD585166D
+	for <lists+linux-can@lfdr.de>; Mon, 12 Feb 2024 15:05:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC91B28240F
-	for <lists+linux-can@lfdr.de>; Sun, 11 Feb 2024 15:06:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 252FD1F21D05
+	for <lists+linux-can@lfdr.de>; Mon, 12 Feb 2024 14:05:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1B95B5C1;
-	Sun, 11 Feb 2024 15:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A6C3BB46;
+	Mon, 12 Feb 2024 13:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E6wwG8Si"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-out.aladdin-rd.ru (mail-out.aladdin-rd.ru [91.199.251.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409D75BAFE;
-	Sun, 11 Feb 2024 15:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.199.251.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065093FB1B;
+	Mon, 12 Feb 2024 13:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707663958; cv=none; b=pcNGWLbo/l5qCn18GlqA3zFBp6xODZKYgErfuG4sopZZ/mzrIkeCxt/4MEL0a8ASgRIIy8vykHNgHbwV7R14j9UhkQhj7dwizb0UG6U4FksfeNFb3x+DRHvsXhgyZ8wsYXp0QeHWfDh0RoQQUR4RloUUxLt1UZjkVJU3whuO5/A=
+	t=1707746201; cv=none; b=E8BiIv0TjWpnqHb+aoWtMcY/bhRqdX8+J5McK9fMqTc0izF7B33h2Pz59DpgZvyxQFST36Lr5Yo8pQF5d8W2Vn2B0EwA8Rb/p7XVkhHCusUWYR9vyRfJgbERWmRP2Yno1dGMN/RmWeQYB0mW4onE/3OcnhxVQ7E5MH4IeyUNDZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707663958; c=relaxed/simple;
-	bh=L2erQr5VOzvtZwSGbBtPRPaYAXK9HLpbI4kvy9KiY1c=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CoprA593RD82lJjfCjkuRn3eEoc2pWbInxT5eA7iHfxolgO/ich9SxPoix9je2v25A0h1uFeFelBVXNDWkxZjv35ICYLt5CPr9mEsEy4s/vlw+WD9Ql1ul/YjyfaGrXdS9pjlKIYMQMdPYB5QNb1RdzAZasrT5JcbbCv5EGzQY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aladdin.ru; spf=pass smtp.mailfrom=aladdin.ru; arc=none smtp.client-ip=91.199.251.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aladdin.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aladdin.ru
-From: Daniil Dulov <d.dulov@aladdin.ru>
-To: Wolfgang Grandegger <wg@grandegger.com>
-CC: Daniil Dulov <d.dulov@aladdin.ru>, Marc Kleine-Budde <mkl@pengutronix.de>,
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-	<linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
-Subject: [PATCH] can: softing: remove redundant NULL check
-Date: Sun, 11 Feb 2024 07:05:35 -0800
-Message-ID: <20240211150535.3529-1-d.dulov@aladdin.ru>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1707746201; c=relaxed/simple;
+	bh=37nz859ShgHqVR08pnQOMTOWyjYey3mzmwOK5xjZt6A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rL6rK4Q62tqyM612A4P025KNIsScaKtnpgdlfOf0+Zc60XBYHpZ7O4NJKXI8MqcNcTGJ6VQrQugx/j28z89X+pdDhmIoypMepehCTDYC5KSW1x8ioO7VQlP6FP9dTqhh+Zl5de1tp3aDjKXOYv+uSeXeh+nwqiIUSkV0+tWBLLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E6wwG8Si; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E80BC43141;
+	Mon, 12 Feb 2024 13:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707746200;
+	bh=37nz859ShgHqVR08pnQOMTOWyjYey3mzmwOK5xjZt6A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E6wwG8SiO9KEsmYxyKA+RtvSFKaj8uzvlrDgEXud/C7+BzkFDle8rcHVvxj4UOLJM
+	 r16Z/8UyPRuihprgrjzo3fDDSq3W8mulu1HG+ohgcnKRPzz+rZ03d84ExbBT41gOLP
+	 E6mpuIaaMZz+7ebZBp9qEYu55bR/zl0XDrNNRpBwvVzPAHEQUhkt6JizQw+g+yA33q
+	 bxicgBJv7jCedZ92mLSpeX6WcCPulINec6tzbiDwFSqgJ43ByVo13Cp3/GYoLwj/E7
+	 RImIi4a+Jq4kdLxXgc/R2EbIVyHlLk38qQ2DFZm5e3tgdmYJp43KkfKUMuGJ+kTry4
+	 Ghk36Q5S+SZ7g==
+Date: Mon, 12 Feb 2024 07:56:38 -0600
+From: Rob Herring <robh@kernel.org>
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: davem@davemloft.net, edumazet@google.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, conor+dt@kernel.org,
+	Peng Fan <peng.fan@nxp.com>, kuba@kernel.org, wg@grandegger.com,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	pabeni@redhat.com, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, mkl@pengutronix.de
+Subject: Re: [PATCH] dt-bindings: can: fsl,flexcan: add i.MX95 compatible
+ string
+Message-ID: <170774608242.61707.8589020918845229336.robh@kernel.org>
+References: <20240122091738.2078746-1-peng.fan@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EXCH-2016-01.aladdin.ru (192.168.1.101) To
- EXCH-2016-01.aladdin.ru (192.168.1.101)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240122091738.2078746-1-peng.fan@oss.nxp.com>
 
-In this case dev cannot be NULL, so remove redundant check.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On Mon, 22 Jan 2024 17:17:38 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add i.MX95 flexcan which is compatible i.MX93 flexcan
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
-Signed-off-by: Daniil Dulov <d.dulov@aladdin.ru>
----
- drivers/net/can/softing/softing_fw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It seems this isn't getting applied to CAN tree, so I applied it.
 
-diff --git a/drivers/net/can/softing/softing_fw.c b/drivers/net/can/softing/softing_fw.c
-index bad69a4abec1..5a3f9e4b0b62 100644
---- a/drivers/net/can/softing/softing_fw.c
-+++ b/drivers/net/can/softing/softing_fw.c
-@@ -436,7 +436,7 @@ int softing_startstop(struct net_device *dev, int up)
- 		return ret;
- 
- 	bus_bitmask_start = 0;
--	if (dev && up)
-+	if (up)
- 		/* prepare to start this bus as well */
- 		bus_bitmask_start |= (1 << priv->index);
- 	/* bring netdevs down */
--- 
-2.25.1
-
+Rob
 
