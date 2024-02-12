@@ -1,149 +1,157 @@
-Return-Path: <linux-can+bounces-227-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-229-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D8A285187F
-	for <lists+linux-can@lfdr.de>; Mon, 12 Feb 2024 16:53:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DCCF8518B2
+	for <lists+linux-can@lfdr.de>; Mon, 12 Feb 2024 17:10:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CA491F22145
-	for <lists+linux-can@lfdr.de>; Mon, 12 Feb 2024 15:53:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FD861C20DB5
+	for <lists+linux-can@lfdr.de>; Mon, 12 Feb 2024 16:10:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68933CF52;
-	Mon, 12 Feb 2024 15:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7A73D0C1;
+	Mon, 12 Feb 2024 16:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="g66ieMNv";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="QouAC0dM"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F083C47A
-	for <linux-can@vger.kernel.org>; Mon, 12 Feb 2024 15:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707753219; cv=none; b=rqWvH1lTwalEVALz1iI0sPF+KzXC5v9nC3vaxeNqJSTHTdizAoQQZr9WBClFtEMUe3sY3YXAVsCxyzsWPWeImSNgHhQVKXI6lRdQhtXKIx29kCkPW/aVaViqOrdlDuzHcCMq4jjnZvdWDBztki6GM/m4bQCiGR7qsim1MhL9Hms=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707753219; c=relaxed/simple;
-	bh=OPpg1leJr3c7A8naWt0xeRIryHtQhLrehVbYfCXwf44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A7mvPjnikh7Wb6K9LQMsCgjF8JtOKWuIG85NvCVXYQ09R3PBDVGSbsUcSahHAJC5nlO/iyX0i+s0AcLJ3Avrcu69DxXAD/lM21mu+uRGHu0qxiQtY+ZCEESmQJyydpjPDuDI7X2ztLj/1a9nP2gAhJKszc1Rf7diotgRmrqJcaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rZYcg-0007IJ-7h; Mon, 12 Feb 2024 16:53:34 +0100
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rZYcf-000JdJ-PN; Mon, 12 Feb 2024 16:53:33 +0100
-Received: from pengutronix.de (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 7A06E28C6D0;
-	Mon, 12 Feb 2024 15:53:33 +0000 (UTC)
-Date: Mon, 12 Feb 2024 16:53:32 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Guy Harris <gharris@sonic.net>, 
-	Vincent Mailhol <vincent.mailhol@gmail.com>, linux-can@vger.kernel.org
-Subject: Re: [PATCH rework v1] canxl: add virtual CAN network identifier
- support
-Message-ID: <20240212-curry-aspire-408b56e4ef6f-mkl@pengutronix.de>
-References: <20240212151404.60828-1-socketcan@hartkopp.net>
- <4a3f3605-6a54-4ca0-9581-eff900e6b169@hartkopp.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464CC3CF79
+	for <linux-can@vger.kernel.org>; Mon, 12 Feb 2024 16:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707754226; cv=pass; b=i2bETBqwZOXHxOKrWhTFXocOUsjnSx4zGif2J9kBZEis0rvA+llFXvzrZ5L+nYsufZ3xq46DgSzGRkOHM9X5gPl0AgaApSONxu1bOtZ20r+0jPY4lpSTorCLj8Bzh8Fsk5qWf2GN/gOIoG15YZpLrjQgzFBCUwRO7IQmKF3Vo+A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707754226; c=relaxed/simple;
+	bh=ZXzLgfsA+0ZwQ+Z/me94iMubOQL7zpToUMJ/F5aiAeU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZxxsT3IXMCDkevfkkmYaXK4cH9FSJQQ2yXwAes9MgKQ60XPy0wMaALondYzef7+lZBjCHBRuw2eilvlooJ3YrsnkRWlpCY6fNjyiZ2xc6TAVCkUpiHxYt6UxGQJrDOlPGfUvGt7jKJc32fz9UyXBnlmmBhZg2lcVt9cRHPIfmbU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=g66ieMNv; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=QouAC0dM; arc=pass smtp.client-ip=85.215.255.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1707754220; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Zial/nrCL0NxUe2KWqgl9Y9ua+PoFyRfSTrOlIf+WOdejNl4kVTI4SgAbpOSYkaHYc
+    EgPfua7myMigBP8EU+iaroZANMO5Cua3cczRm6ApEcAhNprgWWPuUx0nPw4PkxTSXuGd
+    OC+vVBL0FshnX3X2xcdxKmM7aFxgaSNx+3XqylCqkKwXkqLVWE31mypIJfDV1mkPhw0A
+    NB0P+oo7jl9t1H5cuyUcfrAoVp0Tnh7xDhg0/nZdB0XQia/Wj1dbyYymrbPzJIOZxbcQ
+    IQJRo2zzSfxgFCP2k35LlKiIRp2Zk0qUn19tXTOAtr0YoN9KaKaQjabCToPa8ClQEeKh
+    3++g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1707754220;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=5Zzv3+OrchOKMSobEfAts+H92KwPpdE2OkqhsWj2ydU=;
+    b=hbqEAB6d10+sSNOgwntEffHfoJsAjTjYhqf92OflSgSm1KSQk8EqIQ8/zsbmeJDsP0
+    xoNq2CURyN+8V2s08/LEZ5pf9TdRXxQxbWB/b0u+cfClyM5a3pIhz7hL1IpxE/yfDZKW
+    E4G7I9EmqMo7fLLwmB+/zy4dv4csFbx92panHQp+7IFLTZxE9/7pFlK103TTJJ8WkCO1
+    MqGbYtNaBGr8e+Kf0pceIMllp2tMnZmK9vwNaFEd5+NzzIWPdwhTkMyf9KvbrBHzcZzf
+    tCkSN436VXxFLd3nzmaHGiRpiombSt5H1r8ral+tRVXX789eZjDQX6laA1rmQgsbHK32
+    u1hA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1707754220;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=5Zzv3+OrchOKMSobEfAts+H92KwPpdE2OkqhsWj2ydU=;
+    b=g66ieMNvmNgJ/AB7AhHX5sN00EMQduTx3RqwCvSCafh8F3J0ZCiBV4q8gW+MmoUXe+
+    f7wQEYUXRsOhXltbo8MlziQcJW1reb3l3EOsJHuCnacSYlbPYd0RPsgaS4MMvjvcpXeC
+    XIlIg/Qeimaid40sfH7E75JdkNtqfJsqXyK40z+tSzTCDhZFfBCTRbZQaaT3r7fyEjIf
+    Vs1wdBO+BbLMRjcL/uRZxKQLzCcBXp2TMWQAlTxLbt23wWx707zAew0tU7yK3wGruUwb
+    Tx6i4Whu8vd6WbYVEUn7MqfXAKYhwTzcvOqGlg3fpkd8kxmBmP5XWBrP6EbHN8eBF9DB
+    QdfA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1707754220;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=5Zzv3+OrchOKMSobEfAts+H92KwPpdE2OkqhsWj2ydU=;
+    b=QouAC0dMD2ILxLuyJ6FM68UdRpZ+hkcgbNBtAYjg7z4+dqgLB5F8JN9Db1wnF2OGvm
+    HkY8zJZJbc/d+CVX7iBA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFr0UTaZHwzdhXLrLeFZYH4OzH3Acp84Q=="
+Received: from [IPV6:2a00:6020:4a8e:5010:d1cb:da5c:d3c0:9ade]
+    by smtp.strato.de (RZmta 49.11.2 AUTH)
+    with ESMTPSA id K49f9c01CGAKpkk
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Mon, 12 Feb 2024 17:10:20 +0100 (CET)
+Message-ID: <81082bd5-069f-4686-aa6e-08744cf16ff4@hartkopp.net>
+Date: Mon, 12 Feb 2024 17:10:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hnw7qebdmzqjyzhy"
-Content-Disposition: inline
-In-Reply-To: <4a3f3605-6a54-4ca0-9581-eff900e6b169@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH rework v1] canxl: add virtual CAN network identifier
+ support
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Guy Harris <gharris@sonic.net>,
+ Vincent Mailhol <vincent.mailhol@gmail.com>, linux-can@vger.kernel.org
+References: <20240212151404.60828-1-socketcan@hartkopp.net>
+ <4a3f3605-6a54-4ca0-9581-eff900e6b169@hartkopp.net>
+ <20240212-curry-aspire-408b56e4ef6f-mkl@pengutronix.de>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20240212-curry-aspire-408b56e4ef6f-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---hnw7qebdmzqjyzhy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 12.02.2024 16:26:34, Oliver Hartkopp wrote:
-> I'm currently in discussion with Guy Harris who's working on the Linux-CAN
-> support in Wireshark.
->=20
-> We current have two approaches how to integrate the VCID into the struct
-> canxl_frame:
->=20
-> 1. Add the VCID at a specific 16 bit offset (above the 11 bit Prio ID)
-> 2. Create a endian-dependent data structure with a separate uint8 VCID
->=20
-> 1: https://lore.kernel.org/linux-can/20240212151404.60828-1-socketcan@har=
-tkopp.net/
-> 2: https://lore.kernel.org/linux-can/20240128183758.68401-1-socketcan@har=
-tkopp.net/
->=20
-> The endian-dependent data structure looks like this:
->=20
-> struct canxl_frame {
-> #if defined(__LITTLE_ENDIAN)
->         __u16 prio;   /* 11 bit priority for arbitration */
->         __u8  vcid;   /* virtual CAN network identifier */
->         __u8  __res0; /* reserved / padding must be set to zero */
-> #elif defined(__BIG_ENDIAN)
->         __u8  __res0; /* reserved / padding must be set to zero */
->         __u8  vcid;   /* virtual CAN network identifier */
->         __u16 prio;   /* 11 bit priority for arbitration */
-> #else
-> #error "Unknown endianness"
-> #endif
->         __u8  flags;  /* additional flags for CAN XL */
->         __u8  sdt;    /* SDU (service data unit) type */
->         __u16 len;    /* frame payload length in byte */
->         __u32 af;     /* acceptance field */
->         __u8  data[CANXL_MAX_DLEN];
-> };
->=20
-> @Guy: Besides the fact that suggestion 2 does not win a design prize I'm =
-not
-> sure whether solution 1 or 2 are better to maintain over lifetime.
->=20
-> Feedback about the two suggestions is highly appreciated.
+On 2024-02-12 16:53, Marc Kleine-Budde wrote:
+> On 12.02.2024 16:26:34, Oliver Hartkopp wrote:
+>> I'm currently in discussion with Guy Harris who's working on the Linux-CAN
+>> support in Wireshark.
+>>
+>> We current have two approaches how to integrate the VCID into the struct
+>> canxl_frame:
+>>
+>> 1. Add the VCID at a specific 16 bit offset (above the 11 bit Prio ID)
+>> 2. Create a endian-dependent data structure with a separate uint8 VCID
+>>
+>> 1: https://lore.kernel.org/linux-can/20240212151404.60828-1-socketcan@hartkopp.net/
+>> 2: https://lore.kernel.org/linux-can/20240128183758.68401-1-socketcan@hartkopp.net/
+>>
+>> The endian-dependent data structure looks like this:
+>>
+>> struct canxl_frame {
+>> #if defined(__LITTLE_ENDIAN)
+>>          __u16 prio;   /* 11 bit priority for arbitration */
+>>          __u8  vcid;   /* virtual CAN network identifier */
+>>          __u8  __res0; /* reserved / padding must be set to zero */
+>> #elif defined(__BIG_ENDIAN)
+>>          __u8  __res0; /* reserved / padding must be set to zero */
+>>          __u8  vcid;   /* virtual CAN network identifier */
+>>          __u16 prio;   /* 11 bit priority for arbitration */
+>> #else
+>> #error "Unknown endianness"
+>> #endif
+>>          __u8  flags;  /* additional flags for CAN XL */
+>>          __u8  sdt;    /* SDU (service data unit) type */
+>>          __u16 len;    /* frame payload length in byte */
+>>          __u32 af;     /* acceptance field */
+>>          __u8  data[CANXL_MAX_DLEN];
+>> };
+>>
+>> @Guy: Besides the fact that suggestion 2 does not win a design prize I'm not
+>> sure whether solution 1 or 2 are better to maintain over lifetime.
+>>
+>> Feedback about the two suggestions is highly appreciated.
+> 
+> Then I'll skip the virtual CAN network identifier support patches for
+> now.
 
-Then I'll skip the virtual CAN network identifier support patches for
-now.
+I assume the discussion to be resolved within a day or two.
 
-Marc
+Do you have a favorite patch?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---hnw7qebdmzqjyzhy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmXKPvoACgkQKDiiPnot
-vG/jsggAgQKS02W45ac41o13XAHzZ+uT9Ii5Axh5MudPVtTzKeN39RP4Z2YEHR1G
-5jIPsaJ2xOd6snI8HtoTZ5J8Gaty+f8FfBsRk0WzNCgHJUNW/tLZ+dS5tzTYL78c
-3X8JEBVDn65N1HpzPrajejK7K2z33lEX5Vr5rF3F1LPMyAxg5uhrFyTX1u5XDxKi
-pd/agbdCdOfQsaAA3GDbm+ddFfJeqFHN+JhC8a9qIEGLD9prj/xGR1E3oygC4y98
-G0Q79IjXZb4oz/pNaviC6dK/IO442dSWEAcux0yDYid+JiW0tTLp3TbEeBz+dmoC
-5iTX/cd4eo+KLpTFw88H6QJWah0UdA==
-=oQBb
------END PGP SIGNATURE-----
-
---hnw7qebdmzqjyzhy--
+Best regards,
+Oliver
 
