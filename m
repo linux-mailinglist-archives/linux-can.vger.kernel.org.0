@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-253-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-251-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4888F852F7F
-	for <lists+linux-can@lfdr.de>; Tue, 13 Feb 2024 12:35:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 619DB852F7E
+	for <lists+linux-can@lfdr.de>; Tue, 13 Feb 2024 12:35:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CEF51C22E74
-	for <lists+linux-can@lfdr.de>; Tue, 13 Feb 2024 11:35:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9D2B28A5F5
+	for <lists+linux-can@lfdr.de>; Tue, 13 Feb 2024 11:35:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 563903EA76;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3376A39AF0;
 	Tue, 13 Feb 2024 11:34:52 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C31374C1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4508E37167
 	for <linux-can@vger.kernel.org>; Tue, 13 Feb 2024 11:34:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707824091; cv=none; b=bG6HtIMXZ5XB+r9HYJgpWawFW/haLDp9d+czGMimojGFi4ZdrRSik9KJJp1ItQchZ3Bn0z4NLNKRPQY5t+s+8/rBMdLhh12I41IBfPfkLX1Sxt4FM/4s3PEQu4BFoWlJzUwpQ+sjLJBYS6bcW9KVON13RmvD7T4aarrBkaSeTZs=
+	t=1707824091; cv=none; b=NP8ftIPBAo02aOyqIBO35buQt77rupDFHtM0PlzLdwddrrK5x22/NOm+605+EYJqY/11VhMN1sPE2RfT3psvwR7QVA4luZzliICoqrMnOSudI90sEisy7PvgOMfL0uL9qPWW8FI+E6Vco/4j+vq0ICEEli9f7+HFMiuNyEjILr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1707824091; c=relaxed/simple;
-	bh=i8VqaOVKXfyrxmqYhfnzNAnD0IEF48YARXGfXA8TRXs=;
+	bh=t0Y8CpeDu5U5jiEMD7xzwE8k+1BsWw+TJB/4buolzTQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EyVB2Nx94hZw7d0ISgL5eDhCATDww1u9q4G+FN499KEvX46G3KqlmPGD0sr3xM1BclZpR/nZYHiuVB4x8kYPpi7UQhveEnMYGL7CcVJEnbqxbIk3WroWRydC0g0Qf5iVUFq7apb3+F1LJdYaFR3hB93HcYHXF405+ryUzqdrhO0=
+	 MIME-Version; b=DO1M0doPMTLafYXGUjfZ8MfJEkHRuYirlRD1BIqc2wVSGchnx5ss4lyKB5Dkqsf7ghmgAgsb+QO+R3ghVOLo+AapEVD9f9djdKue0Vx3Py3pWoAcvsrk6wlf8k5JDVI/8dYouOCAII0CKUtTviXFsQi3R7MZz+1T9x9/nu2hNhg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,26 +33,26 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1rZr3n-00019d-2r
-	for linux-can@vger.kernel.org; Tue, 13 Feb 2024 12:34:47 +0100
+	id 1rZr3m-00019X-SC
+	for linux-can@vger.kernel.org; Tue, 13 Feb 2024 12:34:46 +0100
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1rZr3j-000TV2-59
+	id 1rZr3i-000TUd-VP
 	for linux-can@vger.kernel.org; Tue, 13 Feb 2024 12:34:43 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id D47AC28D6AD
+	by bjornoya.blackshift.org (Postfix) with SMTP id 9F95A28D6A4
 	for <linux-can@vger.kernel.org>; Tue, 13 Feb 2024 11:34:42 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 2BA8828D645;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 5E6DD28D64C;
 	Tue, 13 Feb 2024 11:34:40 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 7eeda58a;
-	Tue, 13 Feb 2024 11:34:38 +0000 (UTC)
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2fc3bf79;
+	Tue, 13 Feb 2024 11:34:39 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -60,12 +60,11 @@ Cc: davem@davemloft.net,
 	linux-can@vger.kernel.org,
 	kernel@pengutronix.de,
 	Markus Schneider-Pargmann <msp@baylibre.com>,
-	Simon Horman <horms@kernel.org>,
 	Simon Horman <simon.horman@corigine.com>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 11/23] can: m_can: Add tx coalescing ethtool support
-Date: Tue, 13 Feb 2024 12:25:14 +0100
-Message-ID: <20240213113437.1884372-12-mkl@pengutronix.de>
+Subject: [PATCH net-next 12/23] can: m_can: Use u32 for putidx
+Date: Tue, 13 Feb 2024 12:25:15 +0100
+Message-ID: <20240213113437.1884372-13-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240213113437.1884372-1-mkl@pengutronix.de>
 References: <20240213113437.1884372-1-mkl@pengutronix.de>
@@ -83,90 +82,54 @@ X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 From: Markus Schneider-Pargmann <msp@baylibre.com>
 
-Add TX support to get/set functions for ethtool coalescing.
-tx-frames-irq and tx-usecs-irq can only be set/unset together.
-tx-frames-irq needs to be less than TXE and TXB.
-
-As rx and tx share the same timer, rx-usecs-irq and tx-usecs-irq can be
-enabled/disabled individually but they need to have the same value if
-enabled.
-
-Polling is excluded from TX irq coalescing.
+putidx is not an integer normally, it is an unsigned field used in
+hardware registers. Use a u32 for it.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-Reviewed-by: Simon Horman <horms@kernel.org>
 Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/all/20240207093220.2681425-8-msp@baylibre.com
+Link: https://lore.kernel.org/all/20240207093220.2681425-9-msp@baylibre.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/m_can/m_can.c | 38 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+ drivers/net/can/m_can/m_can.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 6dad1f569f82..b31df3e3ceeb 100644
+index b31df3e3ceeb..1b62613f195c 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -1986,6 +1986,8 @@ static int m_can_get_coalesce(struct net_device *dev,
+@@ -486,7 +486,7 @@ static void m_can_clean(struct net_device *net)
+ 	struct m_can_classdev *cdev = netdev_priv(net);
  
- 	ec->rx_max_coalesced_frames_irq = cdev->rx_max_coalesced_frames_irq;
- 	ec->rx_coalesce_usecs_irq = cdev->rx_coalesce_usecs_irq;
-+	ec->tx_max_coalesced_frames_irq = cdev->tx_max_coalesced_frames_irq;
-+	ec->tx_coalesce_usecs_irq = cdev->tx_coalesce_usecs_irq;
+ 	if (cdev->tx_skb) {
+-		int putidx = 0;
++		u32 putidx = 0;
  
- 	return 0;
- }
-@@ -2012,16 +2014,50 @@ static int m_can_set_coalesce(struct net_device *dev,
- 		netdev_err(dev, "rx-frames-irq and rx-usecs-irq can only be set together\n");
- 		return -EINVAL;
- 	}
-+	if (ec->tx_max_coalesced_frames_irq > cdev->mcfg[MRAM_TXE].num) {
-+		netdev_err(dev, "tx-frames-irq %u greater than the TX event FIFO %u\n",
-+			   ec->tx_max_coalesced_frames_irq,
-+			   cdev->mcfg[MRAM_TXE].num);
-+		return -EINVAL;
-+	}
-+	if (ec->tx_max_coalesced_frames_irq > cdev->mcfg[MRAM_TXB].num) {
-+		netdev_err(dev, "tx-frames-irq %u greater than the TX FIFO %u\n",
-+			   ec->tx_max_coalesced_frames_irq,
-+			   cdev->mcfg[MRAM_TXB].num);
-+		return -EINVAL;
-+	}
-+	if ((ec->tx_max_coalesced_frames_irq == 0) != (ec->tx_coalesce_usecs_irq == 0)) {
-+		netdev_err(dev, "tx-frames-irq and tx-usecs-irq can only be set together\n");
-+		return -EINVAL;
-+	}
-+	if (ec->rx_coalesce_usecs_irq != 0 && ec->tx_coalesce_usecs_irq != 0 &&
-+	    ec->rx_coalesce_usecs_irq != ec->tx_coalesce_usecs_irq) {
-+		netdev_err(dev, "rx-usecs-irq %u needs to be equal to tx-usecs-irq %u if both are enabled\n",
-+			   ec->rx_coalesce_usecs_irq,
-+			   ec->tx_coalesce_usecs_irq);
-+		return -EINVAL;
-+	}
- 
- 	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
- 	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
-+	cdev->tx_max_coalesced_frames_irq = ec->tx_max_coalesced_frames_irq;
-+	cdev->tx_coalesce_usecs_irq = ec->tx_coalesce_usecs_irq;
-+
-+	if (cdev->rx_coalesce_usecs_irq)
-+		cdev->irq_timer_wait =
-+			ns_to_ktime(cdev->rx_coalesce_usecs_irq * NSEC_PER_USEC);
-+	else
-+		cdev->irq_timer_wait =
-+			ns_to_ktime(cdev->tx_coalesce_usecs_irq * NSEC_PER_USEC);
- 
+ 		net->stats.tx_errors++;
+ 		if (cdev->version > 30)
+@@ -1695,12 +1695,12 @@ static int m_can_close(struct net_device *dev)
  	return 0;
  }
  
- static const struct ethtool_ops m_can_ethtool_ops = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS_IRQ |
--		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ,
-+		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ |
-+		ETHTOOL_COALESCE_TX_USECS_IRQ |
-+		ETHTOOL_COALESCE_TX_MAX_FRAMES_IRQ,
- 	.get_ts_info = ethtool_op_get_ts_info,
- 	.get_coalesce = m_can_get_coalesce,
- 	.set_coalesce = m_can_set_coalesce,
+-static int m_can_next_echo_skb_occupied(struct net_device *dev, int putidx)
++static int m_can_next_echo_skb_occupied(struct net_device *dev, u32 putidx)
+ {
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+ 	/*get wrap around for loopback skb index */
+ 	unsigned int wrap = cdev->can.echo_skb_max;
+-	int next_idx;
++	u32 next_idx;
+ 
+ 	/* calculate next index */
+ 	next_idx = (++putidx >= wrap ? 0 : putidx);
+@@ -1719,7 +1719,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 	u32 cccr, fdflags;
+ 	u32 txfqs;
+ 	int err;
+-	int putidx;
++	u32 putidx;
+ 
+ 	cdev->tx_skb = NULL;
+ 
 -- 
 2.43.0
 
