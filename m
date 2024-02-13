@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-257-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-266-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48802852F87
-	for <lists+linux-can@lfdr.de>; Tue, 13 Feb 2024 12:35:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D00D385301C
+	for <lists+linux-can@lfdr.de>; Tue, 13 Feb 2024 13:04:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8F451F2368A
-	for <lists+linux-can@lfdr.de>; Tue, 13 Feb 2024 11:35:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A444B20F25
+	for <lists+linux-can@lfdr.de>; Tue, 13 Feb 2024 12:04:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D989843AC8;
-	Tue, 13 Feb 2024 11:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE91C3A1CA;
+	Tue, 13 Feb 2024 12:04:22 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0975C38FB9
-	for <linux-can@vger.kernel.org>; Tue, 13 Feb 2024 11:34:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6D03A1B5
+	for <linux-can@vger.kernel.org>; Tue, 13 Feb 2024 12:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707824093; cv=none; b=RLO2/b+q7Ks4ptW0X6f4k00UtuvdW+fNt6ObfSLuOMiYiGnJwrZyOxRrP+MVpzQqaMBXqMthYnM0OrVAUlx2lbA0pC7LPoT1FhNzog/WMQjt7iKhoWrgbVzgTHfNOcI4ShXJUHYA4XcA3CONs/SitagMrziCcCPjhbig3xrKX2c=
+	t=1707825862; cv=none; b=X8s/xj/P199B02DvVNZG+yYed8D/a48KB1NciYHxEndyDVCg7nVOhbG5ExcbRoe5gir5kTu4mB3WErx9+ZeSQ97J9QiuU29/m14v2BlGm/S6j2H9Aw122Dlc50b9aZjrM4UdDIHP8CVox3uMfPYXnJLlWhdBvTlmCBjqGd4b6qA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707824093; c=relaxed/simple;
-	bh=PvV0Ohyc+SbJxCrpAOFZL6p/vesMLdOlDhWi1TlUcsM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GFsxQLhN4Fl64fpbpopwbDZBHX9+2eFIr+MX1RBMZJ9Hd5CfbEIg3uTsAe/lhS3PlPcmffatOoQ7YfpElBpKSEKk0ehbKEpZXimJCjz2bZsMR/Q9LH0+LpXcA3VXEVZe2+HVbWk5matVh1WnRnHVRn4Ub9PnpyDtTOcuks7jpfc=
+	s=arc-20240116; t=1707825862; c=relaxed/simple;
+	bh=ZTLBNtBHSXgDnD/RltSsgibaukz383VqhSTCssQQrw4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UyirtW+TImAkUvnq8kPcccNM30okfQJHxBgnZHPoN1t58OBuy86tgtWg8aXEhRhEbeteChghkYQHC3pcFwBHa7zKGcPrq/OgRdQB5Rmlej9KIvu/+6O8ER2rqybZvthGb2m9scTq3TyJLNIVrRuECyJE2n/cVBU98zQpuSd7Ol0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,78 +33,82 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1rZr3o-0001BL-D5
-	for linux-can@vger.kernel.org; Tue, 13 Feb 2024 12:34:48 +0100
+	id 1rZrWN-0005Hw-0q; Tue, 13 Feb 2024 13:04:19 +0100
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1rZr3k-000TXG-El
-	for linux-can@vger.kernel.org; Tue, 13 Feb 2024 12:34:44 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 1F9F728D6D6
-	for <linux-can@vger.kernel.org>; Tue, 13 Feb 2024 11:34:44 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	id 1rZrWM-000TyA-HV; Tue, 13 Feb 2024 13:04:18 +0100
+Received: from pengutronix.de (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 0681A28D688;
-	Tue, 13 Feb 2024 11:34:42 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3f03e662;
-	Tue, 13 Feb 2024 11:34:39 +0000 (UTC)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 375C528D822;
+	Tue, 13 Feb 2024 12:04:18 +0000 (UTC)
+Date: Tue, 13 Feb 2024 13:04:17 +0100
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-Subject: [PATCH net-next 23/23] MAINTAINERS: can: xilinx_can: remove Naga Sureshkumar Relli
-Date: Tue, 13 Feb 2024 12:25:26 +0100
-Message-ID: <20240213113437.1884372-24-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240213113437.1884372-1-mkl@pengutronix.de>
+To: Dave Taht <dave.taht@gmail.com>
+Cc: linux-can@vger.kernel.org, msp@baylibre.com
+Subject: Re: [PATCH net-next 17/23] can: m_can: Implement BQL
+Message-ID: <20240213-uphill-cussed-820d691c7d95-mkl@pengutronix.de>
 References: <20240213113437.1884372-1-mkl@pengutronix.de>
+ <20240213113437.1884372-18-mkl@pengutronix.de>
+ <CAA93jw4awX=pjLVh4u3ERboZw+gG1aaAaEc2Q4ixa5fpS7UNxg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lpdidm3jojz4quuu"
+Content-Disposition: inline
+In-Reply-To: <CAA93jw4awX=pjLVh4u3ERboZw+gG1aaAaEc2Q4ixa5fpS7UNxg@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Mails to naga.sureshkumar.relli@xilinx.com are bouncing due to a mail
-loop. Seems Naga Sureshkumar Relli has left the company.
 
-Remove Naga Sureshkumar Relli from the xilinx_can driver.
+--lpdidm3jojz4quuu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Cc: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-Link: https://lore.kernel.org/all/20240213-xilinx_can-v1-1-79820de803ea@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
+On 13.02.2024 06:45:04, Dave Taht wrote:
+> while I am delighted to see this, what is the observed benefit?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a5a17a463685..1da02866febe 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -24140,7 +24140,6 @@ F:	drivers/net/ethernet/xilinx/xilinx_axienet*
- 
- XILINX CAN DRIVER
- M:	Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
--R:	Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
- L:	linux-can@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/net/can/xilinx,can.yaml
--- 
-2.43.0
+Let's add Markus (the author of this patch) and the linux-can Mailing
+list on Cc. I haven't implemented this feature, but Markus has.
 
+IIRC BQL is mandatory for xmit_more(). And xmit_more() is used to batch
+more then one transfer from the host to the CAN controller. This brings
+a performance improvement on for tcan4x5x, which is connected via SPI.
+And SPI is a quite slow bus with lots of overhead (at least on Linux).
 
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--lpdidm3jojz4quuu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmXLWr4ACgkQKDiiPnot
+vG+vvwgAi6P9v0/XowkoC2G/PwqMTktiaJ6NLfVGjI29YXCQf0BCFt71ONJi1V6t
+MDlv+dOxAWaxfyvkpcpgTBZhLv8j2gWGaZ1cztoMRwqb1CA93fAYFZmg2p7vLNeF
+iWJSOFkgBGFzNBnx2GlZdBG+TiPwnN0Irj1sVZAzbg7Sf/hyiXNC1pBZswFN4TVP
+N3LSWKrE0WhY8+tD9Qn0beIEE7RQyXkxuGQ24JVWgN6Q+axX+a48dJhBkEFuZZQS
+Ob/R+ULnAUgIkAeyKtePZ9OfrKx1jNb4Yic5A5nx3x3iJVw0Bg2LKwaQmsx7e0qy
+N255BvPD36ZwQoXZnaIXRKqJz9zw2w==
+=SXDk
+-----END PGP SIGNATURE-----
+
+--lpdidm3jojz4quuu--
 
