@@ -1,116 +1,137 @@
-Return-Path: <linux-can+bounces-268-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-269-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 486EE854521
-	for <lists+linux-can@lfdr.de>; Wed, 14 Feb 2024 10:26:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE02A8546D7
+	for <lists+linux-can@lfdr.de>; Wed, 14 Feb 2024 11:10:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49B711C22B66
-	for <lists+linux-can@lfdr.de>; Wed, 14 Feb 2024 09:26:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE9521C2250B
+	for <lists+linux-can@lfdr.de>; Wed, 14 Feb 2024 10:10:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1DCD12B74;
-	Wed, 14 Feb 2024 09:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C383D168D0;
+	Wed, 14 Feb 2024 10:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="skAN+5S8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="roYX25YU"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4A4125DD
-	for <linux-can@vger.kernel.org>; Wed, 14 Feb 2024 09:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B88812B78;
+	Wed, 14 Feb 2024 10:10:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707902764; cv=none; b=tP5Xo1qsyAdbp9og+gpzKH5Y7msJKsCz64iYkjb2yqM+iOleYh0qx5zWa9kjnNZ7eOGlJCN0U25IUJR2q+wj3CftYn4sD1ddNpK7rnaERKZG7veVs7sncejZ5QfYvzORb48JhrNODfrJS2PS5nLILeT+WLSfajoB4ZmB2plMSTU=
+	t=1707905431; cv=none; b=UzycJsSgVNbaGCLTO7ab8Rq6s7T2UuBCkCcKq7ePqQIKvsO2gYPZvOUK4X/DWQYqkaBwTjYqceyCHbHuaQFMW0TkZnIj6pjM1PkRIvggqSbacdhAwQm7A+Gd8uwfuHlCB+7RxgfQOXl03gVJMk+JLVW5ZZpCmcOMQdOqlBjILuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707902764; c=relaxed/simple;
-	bh=xj9dXaeOIXA5BqZZhc5Y4+eZOBSkuMkXvEhH1aPuNYo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=noDRHWCqMZRxRXEuBSWhiiFbYIzVvJ4e4dIGHpq/VTaxRRW2fYv/RPGqXkOBwCgo/zQWVPHNx0HNnPOXfL2S/XqdA/tEC8zAIK8WTeFi2kvQHrIFQTdB8KZupDPZXaWviBJkYyKQtN8Uy30M4lUa6buhQAkQJE3hNsp95O/m3lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=skAN+5S8; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a2f79e79f0cso798448566b.2
-        for <linux-can@vger.kernel.org>; Wed, 14 Feb 2024 01:26:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707902758; x=1708507558; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FhxRs6SSjkibA7W5pC9FVX6HwhYeINzSzFuIy6CNJvo=;
-        b=skAN+5S8m9p+79WlYWdGKF7hpYwFyqUHWcm0ylGfj9Jgq2StGw0NPOP9SzObRcjAhC
-         Rk2hY1xp+5Ng+h9iO+89kfiB9lFyfy1Lo8C0s/qt6DOxJ+x5HEHGmJMQrc2qPdf4pwZZ
-         krQqp1qcBv2RtQIid/zUNjXb7NsC9Y0lOpaTMyodjdR2TDMl7u4fNsIjdfnMH7tcOpKq
-         F65iWcDPrsrOS300pT7XEL1WP8P+mm3DkNGg81AnwleSOVghGfuusYwTMhb7b9URaOhr
-         FWuw6Tdm49oDavGATt8ULit09WOb58xUu2dpaySrxMAPL2mq2m0WZaTiTKaAHlEB7ZOK
-         2Gkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707902758; x=1708507558;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FhxRs6SSjkibA7W5pC9FVX6HwhYeINzSzFuIy6CNJvo=;
-        b=WQFqJKV8q5icN4xzO0FgZmgXYjWiXGl34CXshnyyNDVeW4HD59RVPKQcP5hE20ELT9
-         2K11oZNXQx8r6cePyKTo5t3eh1HLin4yguldAqYu91BekiWAygJyuJLa6rZA4C36gjEB
-         HMTZriiv9uq6K1Wbd1KZscQcctOgAL0sTJLCcQIz/I8MP7lrornUvQzNgcv7Jn4mJl66
-         spyBaFnzaRywwcP+DOpe1QjGa2erG3bg98LgXqebsZ2GM8G19zOsaUdlVvjF5iZHmT3Q
-         84hw6i8nNf+L0tog5m9BsdoSBoIUjLlq4lbC1Dmj5sYszfouniXDNSvLnfZNtUxnyf/H
-         OuUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVYCii01qRmY8GXGzlqmHkB5Xj+b36GVqLEs84EYp2+pH6vWqP3+iyDQZJv2LsqQ3OQ9bfTH8aXJbNeqHDCMswJxdYuwVWaLEK4
-X-Gm-Message-State: AOJu0Yz98spp1JCcjaVvxQLzTtie4kca+WrMdCicQSx6Y6LXi0evX2PD
-	VEMZYG1RSiwGAfVfWqfuPAxwVeLV+xZ+AN+tgsSv1+4U+fz6/XDvu2bC/6by7ds=
-X-Google-Smtp-Source: AGHT+IFbZEP05mfaQf4n8yLVLtlI839TcHu6ebPxjrTjCWzpnc6cuBGhvvEuaKti+0azSexmMaRdww==
-X-Received: by 2002:a17:906:5a8a:b0:a3c:e99f:c08f with SMTP id l10-20020a1709065a8a00b00a3ce99fc08fmr1426951ejq.40.1707902758518;
-        Wed, 14 Feb 2024 01:25:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVLnb0HNi/cCNAzkyVRZEOCvecUYK6wndtUGIFSyZQuWP8byOSVlPR4x4GugMKhjiLCTCCkh/Os/MnaGfEleDnMvRMzl1y1pHlL
-Received: from blmsp ([2001:4091:a246:821e:6f3b:6b50:4762:8343])
-        by smtp.gmail.com with ESMTPSA id lg25-20020a170907181900b00a3d52fb111csm277721ejc.76.2024.02.14.01.25.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Feb 2024 01:25:57 -0800 (PST)
-Date: Wed, 14 Feb 2024 10:25:56 +0100
-From: Markus Schneider-Pargmann <msp@baylibre.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Dave Taht <dave.taht@gmail.com>, linux-can@vger.kernel.org
-Subject: Re: [PATCH net-next 17/23] can: m_can: Implement BQL
-Message-ID: <qtar3a55kqrkxgyon6xezhg7cx4rmh2epk55xqziioeezuqb35@ym42pclp6sxw>
-References: <20240213113437.1884372-1-mkl@pengutronix.de>
- <20240213113437.1884372-18-mkl@pengutronix.de>
- <CAA93jw4awX=pjLVh4u3ERboZw+gG1aaAaEc2Q4ixa5fpS7UNxg@mail.gmail.com>
- <20240213-uphill-cussed-820d691c7d95-mkl@pengutronix.de>
+	s=arc-20240116; t=1707905431; c=relaxed/simple;
+	bh=qw+WS0L5bKVv+OzJCiXM3h3B4z14rUGaeRbO1+omU/0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Mo7BmgpMbnYOueLv8KZ79vP7zRV0Mnq7umk7YwsDj5owLrobVViTDr4IFMBtUdz3J+2ScWk+wqEqwUlWJD042oXpRC3atUH1k8L6aD8dtO7SQJGmgtZlADeW0IY6rxbVswaHnMrNKnppNaIiw+yolTQZxKArhC9hF8zxZcnWLdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=roYX25YU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EDF9BC43390;
+	Wed, 14 Feb 2024 10:10:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707905431;
+	bh=qw+WS0L5bKVv+OzJCiXM3h3B4z14rUGaeRbO1+omU/0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=roYX25YU1kMTwKjQ6UaLF7G+bWr5QdJVkW1iG/VNEWL0FmCvZZsUkL88S2WCSdJSG
+	 tx08Bb+RPQJM+8DSqYYuogI0Kbi4g/fBuZP2QipzshnGgOByyS0rEPmUzz5WqeL8+s
+	 KzJFRurgAYQfLt5CpznjOiLc1Ae9SepBLiprp/SBkkNpSjGAdIRhc6heaEkGbX93kA
+	 qSvighpb/88aNhy94pteZe3j+4ciMGvwI+uI3t4HfApvL2abljLeKbDUnhONKlhjrH
+	 dZN09zuLsRHKgv+c0zti1Vsui2+/jZ7OuW7L5XsvK18MCyWUzUwoxLj7k2lsHgypdS
+	 ynimI5AyW1BQQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D7C89D84BCE;
+	Wed, 14 Feb 2024 10:10:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240213-uphill-cussed-820d691c7d95-mkl@pengutronix.de>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 01/23] can: bcm: add recvmsg flags for own,
+ local and remote traffic
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170790543087.15773.1428839431750417511.git-patchwork-notify@kernel.org>
+Date: Wed, 14 Feb 2024 10:10:30 +0000
+References: <20240213113437.1884372-2-mkl@pengutronix.de>
+In-Reply-To: <20240213113437.1884372-2-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ linux-can@vger.kernel.org, kernel@pengutronix.de,
+ nicolas.maier.dev@gmail.com, socketcan@hartkopp.net
 
-Hi,
+Hello:
 
-On Tue, Feb 13, 2024 at 01:04:17PM +0100, Marc Kleine-Budde wrote:
-> On 13.02.2024 06:45:04, Dave Taht wrote:
-> > while I am delighted to see this, what is the observed benefit?
+This series was applied to netdev/net-next.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
+
+On Tue, 13 Feb 2024 12:25:04 +0100 you wrote:
+> From: Nicolas Maier <nicolas.maier.dev@gmail.com>
 > 
-> Let's add Markus (the author of this patch) and the linux-can Mailing
-> list on Cc. I haven't implemented this feature, but Markus has.
+> CAN RAW sockets allow userspace to tell if a received CAN frame comes
+> from the same socket, another socket on the same host, or another host.
+> See commit 1e55659ce6dd ("can-raw: add msg_flags to distinguish local
+> traffic"). However, this feature is missing in CAN BCM sockets.
 > 
-> IIRC BQL is mandatory for xmit_more(). And xmit_more() is used to batch
-> more then one transfer from the host to the CAN controller. This brings
-> a performance improvement on for tcan4x5x, which is connected via SPI.
-> And SPI is a quite slow bus with lots of overhead (at least on Linux).
+> [...]
 
-Yes, exactly, it is in preparation of the next patch in this series
+Here is the summary with links:
+  - [net-next,01/23] can: bcm: add recvmsg flags for own, local and remote traffic
+    https://git.kernel.org/netdev/net-next/c/fec846fa7edd
+  - [net-next,02/23] can: isotp: support dynamic flow control parameters
+    https://git.kernel.org/netdev/net-next/c/e1aa35e16399
+  - [net-next,03/23] MAINTAINERS: add Stefan Mätje as maintainer for the esd electronics GmbH PCIe/402 CAN drivers
+    https://git.kernel.org/netdev/net-next/c/4dcd08b9676a
+  - [net-next,04/23] can: esd: add support for esd GmbH PCIe/402 CAN interface family
+    https://git.kernel.org/netdev/net-next/c/9721866f07e1
+  - [net-next,05/23] can: m_can: Start/Cancel polling timer together with interrupts
+    https://git.kernel.org/netdev/net-next/c/a163c5761019
+  - [net-next,06/23] can: m_can: Move hrtimer init to m_can_class_register
+    https://git.kernel.org/netdev/net-next/c/ba72f6c78b9b
+  - [net-next,07/23] can: m_can: Write transmit header and data in one transaction
+    https://git.kernel.org/netdev/net-next/c/4248ba9ea24f
+  - [net-next,08/23] can: m_can: Implement receive coalescing
+    https://git.kernel.org/netdev/net-next/c/07f25091ca02
+  - [net-next,09/23] can: m_can: Implement transmit coalescing
+    https://git.kernel.org/netdev/net-next/c/ec390d087617
+  - [net-next,10/23] can: m_can: Add rx coalescing ethtool support
+    https://git.kernel.org/netdev/net-next/c/9515223bd0bb
+  - [net-next,11/23] can: m_can: Add tx coalescing ethtool support
+    https://git.kernel.org/netdev/net-next/c/e55b963e4e94
+  - [net-next,12/23] can: m_can: Use u32 for putidx
+    https://git.kernel.org/netdev/net-next/c/14f0a0a4407e
+  - [net-next,13/23] can: m_can: Cache tx putidx
+    https://git.kernel.org/netdev/net-next/c/80c5bac02a82
+  - [net-next,14/23] can: m_can: Use the workqueue as queue
+    https://git.kernel.org/netdev/net-next/c/e668673ed399
+  - [net-next,15/23] can: m_can: Introduce a tx_fifo_in_flight counter
+    https://git.kernel.org/netdev/net-next/c/1fa80e23c150
+  - [net-next,16/23] can: m_can: Use tx_fifo_in_flight for netif_queue control
+    https://git.kernel.org/netdev/net-next/c/7508a10ca295
+  - [net-next,17/23] can: m_can: Implement BQL
+    https://git.kernel.org/netdev/net-next/c/251f913d19a8
+  - [net-next,18/23] can: m_can: Implement transmit submission coalescing
+    https://git.kernel.org/netdev/net-next/c/c306c3873de0
+  - [net-next,19/23] can: change can network drivers maintainer
+    https://git.kernel.org/netdev/net-next/c/7af9682d9eab
+  - [net-next,20/23] can: kvaser_pciefd: Add support for Kvaser M.2 PCIe 4xCAN
+    https://git.kernel.org/netdev/net-next/c/85216f56bde7
+  - [net-next,21/23] can: softing: remove redundant NULL check
+    https://git.kernel.org/netdev/net-next/c/383de5664c87
+  - [net-next,22/23] can: canxl: add virtual CAN network identifier support
+    https://git.kernel.org/netdev/net-next/c/c83c22ec1493
+  - [net-next,23/23] MAINTAINERS: can: xilinx_can: remove Naga Sureshkumar Relli
+    https://git.kernel.org/netdev/net-next/c/73b8f5015889
 
-    can: m_can: Implement transmit submission coalescing
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-In this patch I am using netdev_xmit_more() to see if we can batch a bit
-another transmit before submitting all transmits. For tcan4x5x this
-reduces the number of SPI transfers as the final submission of a
-transmit is a separate SPI register write.
-
-Best,
-Markus
 
 
