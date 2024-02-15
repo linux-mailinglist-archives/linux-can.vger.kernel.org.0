@@ -1,278 +1,103 @@
-Return-Path: <linux-can+bounces-276-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-272-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 389388560EC
-	for <lists+linux-can@lfdr.de>; Thu, 15 Feb 2024 12:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EECE8560E9
+	for <lists+linux-can@lfdr.de>; Thu, 15 Feb 2024 12:09:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CAEDFB28AC7
-	for <lists+linux-can@lfdr.de>; Thu, 15 Feb 2024 10:59:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79642B39C91
+	for <lists+linux-can@lfdr.de>; Thu, 15 Feb 2024 10:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0DC212CD97;
-	Thu, 15 Feb 2024 10:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E557412B175;
+	Thu, 15 Feb 2024 10:43:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sonic.net header.i=@sonic.net header.b="Wm/EtgiJ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from c.mail.sonic.net (c.mail.sonic.net [64.142.111.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D88212C7FE
-	for <linux-can@vger.kernel.org>; Thu, 15 Feb 2024 10:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179F4692FF
+	for <linux-can@vger.kernel.org>; Thu, 15 Feb 2024 10:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.142.111.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707993890; cv=none; b=Vc9nXxKQbZHzVH9dXo8+mr0AiY3+idQD3fjEY0SXe8D7aCNgEhHvK9xX0Qnf2NgVKkXOziu1DghqGSUfBNEoQkBuFrmSFH0j+akGBF4EmIL0xrRqWgxtHnNr2mZEoz8vf8wxSYV8fTA73eoYKq4LccAasC59RO6h/o7lwrK075k=
+	t=1707993801; cv=none; b=jWtvKKF3IyIrA2vq78atJwEFZtgdc7vmOQVDNIwIgLlqBnkz4ZpABHdpXXSw1TAGd4fvjLiiK74zp2OY6zJi9IS3YivYPyXxAdAu0LyKYecJxySrnSU18aLC6DBVajSLKYlZv1jjVaMJ9KTtqbMy7gglDEJ9q9OnGYBx1I16PRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707993890; c=relaxed/simple;
-	bh=28hFVFkX/qTX2YlQcdUVqHOYYKNFrN7C5rA97xrRDeU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VVk4al7avY0u603ux5nDfEDVB2rtEk0B/QCkFvb5rmLo2MmPctVe9d5W0NKwcDs4DQAJBWszJljiK1A6WgQn8aZT3lscVxkWLVO+KClpmFtV1TEkbaFnuZEo3if8LwbflWw7y0hzfU1JbL6SIoaN8Vr/2PSslw7Ma/2JKam746A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1raZET-0000pD-Ly
-	for linux-can@vger.kernel.org; Thu, 15 Feb 2024 11:44:45 +0100
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1raZES-000rm7-Hq
-	for linux-can@vger.kernel.org; Thu, 15 Feb 2024 11:44:44 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id DF2F928E570
-	for <linux-can@vger.kernel.org>; Wed, 14 Feb 2024 14:03:51 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 32D9528E541;
-	Wed, 14 Feb 2024 14:03:50 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2b0f11ca;
-	Wed, 14 Feb 2024 14:03:49 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Sili Luo <rootlab@huawei.com>,
-	stable@vger.kernel.org,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 2/3] can: j1939: Fix UAF in j1939_sk_match_filter during setsockopt(SO_J1939_FILTER)
-Date: Wed, 14 Feb 2024 14:59:06 +0100
-Message-ID: <20240214140348.2412776-3-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240214140348.2412776-1-mkl@pengutronix.de>
-References: <20240214140348.2412776-1-mkl@pengutronix.de>
+	s=arc-20240116; t=1707993801; c=relaxed/simple;
+	bh=GMkzGxjPNmHoPGKBQVj7Y4Ck9BwJCm2SvbkuG+pthBs=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=UeYZV7aQoz68FK1apiJ7/I8SvryoCpUWKz8d4EZMFChLrSTUfqIITko/I6Rb0mXgSm5QcdEO1WFmVRm2kdy6h4gaWEJZ5G2+jrlktu7+jQOgsWePgzWrLmBljgla0itB7agSaD828IwlE83lCxDqmZQQ6NbH4vd2FAFFj14cBnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sonic.net; spf=pass smtp.mailfrom=sonic.net; dkim=pass (2048-bit key) header.d=sonic.net header.i=@sonic.net header.b=Wm/EtgiJ; arc=none smtp.client-ip=64.142.111.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sonic.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sonic.net
+Received: from smtpclient.apple (173-228-4-48.dsl.dynamic.fusionbroadband.com [173.228.4.48])
+	(authenticated bits=0)
+	by c.mail.sonic.net (8.16.1/8.16.1) with ESMTPSA id 41FAhEns020826
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Thu, 15 Feb 2024 02:43:14 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sonic.net; s=net23;
+	t=1707993796; bh=GMkzGxjPNmHoPGKBQVj7Y4Ck9BwJCm2SvbkuG+pthBs=;
+	h=Mime-Version:Subject:From:Date:Message-Id:To:From:Subject;
+	b=Wm/EtgiJ/4sUZD3WVbVRDXVlRcVj59bvyH4utAoUg+WM6btAnfeTkkwxJVuAqSNx0
+	 h3W1hp88akXsKmONUjs06ObJkkkiqSqA0xmIkaJ8/r/zxTlIMa/730HdCSbZggTpiE
+	 syzq33k5QSp+7ShC/ogHGpQ4JWM5Cs5au7/77Zcb+S34IdX0LxxW2dm/9a0OzO/8FO
+	 FtSpFU10J4za2VEVXUYY4Hys6ZeeEXXFaHw4udPdeeL35OTSHkU+1RNqLdLCXs3Lxg
+	 DIjXpe1HiOZU/h/YAqbRCpMQipqKUXGO9RDl6JaBcx0KN2Sj32IXFCe6WxVxFhK+/g
+	 r6g2Vblugc89Q==
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6\))
+Subject: Re: [Wireshark-dev] SocketCAN Support is broken in latest
+ Wireshark-v4.3.0rc0-1430-g600de02805d0
+From: Guy Harris <gharris@sonic.net>
+In-Reply-To: <6f86c5ca-3442-4287-bc40-315054a7684d@hartkopp.net>
+Date: Thu, 15 Feb 2024 02:43:04 -0800
+Cc: Developer support list for Wireshark <wireshark-dev@wireshark.org>,
+        linux-can@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D27F6435-783D-4D84-B525-53B7FD58339F@sonic.net>
+References: <2dfbf765-5a0e-4b72-bbbb-2649bba7afd8@hartkopp.net>
+ <B237C266-B7A1-4F5A-85FA-F41FBC71D839@sonic.net>
+ <DDFFD43D-2CC3-482A-AFC0-B0EEDE5B7081@sonic.net>
+ <9C5FF793-DD38-4738-9421-C8C411E405D2@sonic.net>
+ <525f7e66-1b8a-4401-b6a5-c55462f12f4a@hartkopp.net>
+ <2CB7E192-7F5B-4651-B0B1-9C3788489B8C@sonic.net>
+ <550c630a-4fba-430e-a0b6-bacce3776f2f@hartkopp.net>
+ <B9FE825B-F804-4D09-BE01-1D5592D1077D@sonic.net>
+ <48514D53-9257-4613-9F10-09086D93C2A3@sonic.net>
+ <68889df4-1ac5-45c0-8820-737cbcc30c56@hartkopp.net>
+ <40ADC6AD-C4C3-4954-B58C-FCD227474C16@sonic.net>
+ <48b90be5-7dc8-46f5-a2fb-bc9b310da410@hartkopp.net>
+ <5D9B69B1-A6D2-429B-8862-5CB60415D7C0@sonic.net>
+ <aa3671e7-83ed-45ed-a843-d9ed238519c6@hartkopp.net>
+ <23C4EECD-622A-412A-B965-8E586D9360B2@sonic.net>
+ <05ae1eca-4bb6-40e4-88fc-791cc2051da8@hartkopp.net>
+ <4A92A0FA-D249-4445-867E-5B3838044AA2@sonic.net>
+ <6f86c5ca-3442-4287-bc40-315054a7684d@hartkopp.net>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+X-Mailer: Apple Mail (2.3731.700.6)
+X-Sonic-CAuth: UmFuZG9tSVbWB7ZzIKWbu8G+5a5tDZyiLi/+yys3IY2cM35spi7+D/rBh5pLWG4UoZvksybkd1fdoV/RiP5cKuNg7GvOxxvr
+X-Sonic-ID: C;+IpnBe/L7hGsECFnR+6Zsg== M;JomVBe/L7hGsECFnR+6Zsg==
+X-Spam-Flag: No
+X-Sonic-Spam-Details: -0.0/5.0 by cerberusd
 
-From: Oleksij Rempel <o.rempel@pengutronix.de>
+On Feb 15, 2024, at 12:01 AM, Oliver Hartkopp <socketcan@hartkopp.net> =
+wrote:
 
-Lock jsk->sk to prevent UAF when setsockopt(..., SO_J1939_FILTER, ...)
-modifies jsk->filters while receiving packets.
+> Marc created a pull-request for Linux mainline upstream (net-next) and =
+the CAN XL VCID support will now show up in Linux 6.9:
+>=20
+> =
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit=
+/?id=3Dc83c22ec1493c0b7cc77327bedbd387e295872b6
 
-Following trace was seen on affected system:
- ==================================================================
- BUG: KASAN: slab-use-after-free in j1939_sk_recv_match_one+0x1af/0x2d0 [can_j1939]
- Read of size 4 at addr ffff888012144014 by task j1939/350
-
- CPU: 0 PID: 350 Comm: j1939 Tainted: G        W  OE      6.5.0-rc5 #1
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
- Call Trace:
-  print_report+0xd3/0x620
-  ? kasan_complete_mode_report_info+0x7d/0x200
-  ? j1939_sk_recv_match_one+0x1af/0x2d0 [can_j1939]
-  kasan_report+0xc2/0x100
-  ? j1939_sk_recv_match_one+0x1af/0x2d0 [can_j1939]
-  __asan_load4+0x84/0xb0
-  j1939_sk_recv_match_one+0x1af/0x2d0 [can_j1939]
-  j1939_sk_recv+0x20b/0x320 [can_j1939]
-  ? __kasan_check_write+0x18/0x20
-  ? __pfx_j1939_sk_recv+0x10/0x10 [can_j1939]
-  ? j1939_simple_recv+0x69/0x280 [can_j1939]
-  ? j1939_ac_recv+0x5e/0x310 [can_j1939]
-  j1939_can_recv+0x43f/0x580 [can_j1939]
-  ? __pfx_j1939_can_recv+0x10/0x10 [can_j1939]
-  ? raw_rcv+0x42/0x3c0 [can_raw]
-  ? __pfx_j1939_can_recv+0x10/0x10 [can_j1939]
-  can_rcv_filter+0x11f/0x350 [can]
-  can_receive+0x12f/0x190 [can]
-  ? __pfx_can_rcv+0x10/0x10 [can]
-  can_rcv+0xdd/0x130 [can]
-  ? __pfx_can_rcv+0x10/0x10 [can]
-  __netif_receive_skb_one_core+0x13d/0x150
-  ? __pfx___netif_receive_skb_one_core+0x10/0x10
-  ? __kasan_check_write+0x18/0x20
-  ? _raw_spin_lock_irq+0x8c/0xe0
-  __netif_receive_skb+0x23/0xb0
-  process_backlog+0x107/0x260
-  __napi_poll+0x69/0x310
-  net_rx_action+0x2a1/0x580
-  ? __pfx_net_rx_action+0x10/0x10
-  ? __pfx__raw_spin_lock+0x10/0x10
-  ? handle_irq_event+0x7d/0xa0
-  __do_softirq+0xf3/0x3f8
-  do_softirq+0x53/0x80
-  </IRQ>
-  <TASK>
-  __local_bh_enable_ip+0x6e/0x70
-  netif_rx+0x16b/0x180
-  can_send+0x32b/0x520 [can]
-  ? __pfx_can_send+0x10/0x10 [can]
-  ? __check_object_size+0x299/0x410
-  raw_sendmsg+0x572/0x6d0 [can_raw]
-  ? __pfx_raw_sendmsg+0x10/0x10 [can_raw]
-  ? apparmor_socket_sendmsg+0x2f/0x40
-  ? __pfx_raw_sendmsg+0x10/0x10 [can_raw]
-  sock_sendmsg+0xef/0x100
-  sock_write_iter+0x162/0x220
-  ? __pfx_sock_write_iter+0x10/0x10
-  ? __rtnl_unlock+0x47/0x80
-  ? security_file_permission+0x54/0x320
-  vfs_write+0x6ba/0x750
-  ? __pfx_vfs_write+0x10/0x10
-  ? __fget_light+0x1ca/0x1f0
-  ? __rcu_read_unlock+0x5b/0x280
-  ksys_write+0x143/0x170
-  ? __pfx_ksys_write+0x10/0x10
-  ? __kasan_check_read+0x15/0x20
-  ? fpregs_assert_state_consistent+0x62/0x70
-  __x64_sys_write+0x47/0x60
-  do_syscall_64+0x60/0x90
-  ? do_syscall_64+0x6d/0x90
-  ? irqentry_exit+0x3f/0x50
-  ? exc_page_fault+0x79/0xf0
-  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-
- Allocated by task 348:
-  kasan_save_stack+0x2a/0x50
-  kasan_set_track+0x29/0x40
-  kasan_save_alloc_info+0x1f/0x30
-  __kasan_kmalloc+0xb5/0xc0
-  __kmalloc_node_track_caller+0x67/0x160
-  j1939_sk_setsockopt+0x284/0x450 [can_j1939]
-  __sys_setsockopt+0x15c/0x2f0
-  __x64_sys_setsockopt+0x6b/0x80
-  do_syscall_64+0x60/0x90
-  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-
- Freed by task 349:
-  kasan_save_stack+0x2a/0x50
-  kasan_set_track+0x29/0x40
-  kasan_save_free_info+0x2f/0x50
-  __kasan_slab_free+0x12e/0x1c0
-  __kmem_cache_free+0x1b9/0x380
-  kfree+0x7a/0x120
-  j1939_sk_setsockopt+0x3b2/0x450 [can_j1939]
-  __sys_setsockopt+0x15c/0x2f0
-  __x64_sys_setsockopt+0x6b/0x80
-  do_syscall_64+0x60/0x90
-  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-
-Fixes: 9d71dd0c70099 ("can: add support of SAE J1939 protocol")
-Reported-by: Sili Luo <rootlab@huawei.com>
-Suggested-by: Sili Luo <rootlab@huawei.com>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: stable@vger.kernel.org
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Link: https://lore.kernel.org/all/20231020133814.383996-1-o.rempel@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- net/can/j1939/j1939-priv.h |  1 +
- net/can/j1939/socket.c     | 22 ++++++++++++++++++----
- 2 files changed, 19 insertions(+), 4 deletions(-)
-
-diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
-index 74f15592d170..31a93cae5111 100644
---- a/net/can/j1939/j1939-priv.h
-+++ b/net/can/j1939/j1939-priv.h
-@@ -301,6 +301,7 @@ struct j1939_sock {
- 
- 	int ifindex;
- 	struct j1939_addr addr;
-+	spinlock_t filters_lock;
- 	struct j1939_filter *filters;
- 	int nfilters;
- 	pgn_t pgn_rx_filter;
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index 94cfc2315e54..305dd72c844c 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -262,12 +262,17 @@ static bool j1939_sk_match_dst(struct j1939_sock *jsk,
- static bool j1939_sk_match_filter(struct j1939_sock *jsk,
- 				  const struct j1939_sk_buff_cb *skcb)
- {
--	const struct j1939_filter *f = jsk->filters;
--	int nfilter = jsk->nfilters;
-+	const struct j1939_filter *f;
-+	int nfilter;
-+
-+	spin_lock_bh(&jsk->filters_lock);
-+
-+	f = jsk->filters;
-+	nfilter = jsk->nfilters;
- 
- 	if (!nfilter)
- 		/* receive all when no filters are assigned */
--		return true;
-+		goto filter_match_found;
- 
- 	for (; nfilter; ++f, --nfilter) {
- 		if ((skcb->addr.pgn & f->pgn_mask) != f->pgn)
-@@ -276,9 +281,15 @@ static bool j1939_sk_match_filter(struct j1939_sock *jsk,
- 			continue;
- 		if ((skcb->addr.src_name & f->name_mask) != f->name)
- 			continue;
--		return true;
-+		goto filter_match_found;
- 	}
-+
-+	spin_unlock_bh(&jsk->filters_lock);
- 	return false;
-+
-+filter_match_found:
-+	spin_unlock_bh(&jsk->filters_lock);
-+	return true;
- }
- 
- static bool j1939_sk_recv_match_one(struct j1939_sock *jsk,
-@@ -401,6 +412,7 @@ static int j1939_sk_init(struct sock *sk)
- 	atomic_set(&jsk->skb_pending, 0);
- 	spin_lock_init(&jsk->sk_session_queue_lock);
- 	INIT_LIST_HEAD(&jsk->sk_session_queue);
-+	spin_lock_init(&jsk->filters_lock);
- 
- 	/* j1939_sk_sock_destruct() depends on SOCK_RCU_FREE flag */
- 	sock_set_flag(sk, SOCK_RCU_FREE);
-@@ -703,9 +715,11 @@ static int j1939_sk_setsockopt(struct socket *sock, int level, int optname,
- 		}
- 
- 		lock_sock(&jsk->sk);
-+		spin_lock_bh(&jsk->filters_lock);
- 		ofilters = jsk->filters;
- 		jsk->filters = filters;
- 		jsk->nfilters = count;
-+		spin_unlock_bh(&jsk->filters_lock);
- 		release_sock(&jsk->sk);
- 		kfree(ofilters);
- 		return 0;
--- 
-2.43.0
-
+How does one request that the VCID information be provided on a =
+PF_PACKET socket (whether SOCK_RAW or SOCK_DGRAM)?
 
 
