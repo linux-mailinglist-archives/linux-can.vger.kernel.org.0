@@ -1,188 +1,90 @@
-Return-Path: <linux-can+bounces-284-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-285-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8CA285737D
-	for <lists+linux-can@lfdr.de>; Fri, 16 Feb 2024 02:38:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B02628576F0
+	for <lists+linux-can@lfdr.de>; Fri, 16 Feb 2024 08:45:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 167E4282BF0
-	for <lists+linux-can@lfdr.de>; Fri, 16 Feb 2024 01:38:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC8691C21A51
+	for <lists+linux-can@lfdr.de>; Fri, 16 Feb 2024 07:45:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78FAFBE5;
-	Fri, 16 Feb 2024 01:38:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 263A1168DA;
+	Fri, 16 Feb 2024 07:45:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GC2i4piO"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="Npyaki0t"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E040FBE9
-	for <linux-can@vger.kernel.org>; Fri, 16 Feb 2024 01:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B58D10962;
+	Fri, 16 Feb 2024 07:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708047482; cv=none; b=iRUN6UJLc9V8V4YCrAqj2w5jAo57e/b7nm1gSMELUkWoFp/KnbQ8VxNqNynt+tbLwZotEs3qIxU33/DM8engDnUFGscvxVW2VBdv3uFKK/zUlSDPMJffo2KdKsjM3R366m17M6RE8qNExoRyR8FxZRAWNSjFmLuNFj2UXmU/4Pk=
+	t=1708069546; cv=none; b=Y7enPDo6IsK7HlhaSIZ2innNepcv9BK+7NGWUAcY36SH+heTCkC1+xx+eUWDamUVYTKjeE/+iNGaOEBNYGaJsdCLg2B9N0yHZNJXzTnoUIj7Z5fFfJ8sbVrN18FP9K7Z9PAVUyAUYOiKqDV/uk2zzjsyjNOEMp7EFYl2oXtkIxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708047482; c=relaxed/simple;
-	bh=tDvB4cbSYafEGvBh1MhSfA+TvReQZIVYdgTxlFLMF/I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KwZLnnJhFx+UUzrRMAB9kW7f6oOKnh/ScOgC3HCvNTB7rIUFbnH3yp2BcATa3mpbEf92228hoEl5fkLNCgvanW5nfW3jk40mDIpri8b+l6icjFxNHRTCZSH6xlMS27g40H6Ev60TRP37GkUKgTgSZgw2ixVjgvenPH0zbfK3Ndo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GC2i4piO; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-296df89efd2so211665a91.0
-        for <linux-can@vger.kernel.org>; Thu, 15 Feb 2024 17:38:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708047480; x=1708652280; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/PqtbmtCI4E+mhoi05yD2aOO89O9jPfXSy8h1tKW6JQ=;
-        b=GC2i4piOOWAHDNbJ9ndV75CyUwx7NYZehN3sBKNJnCEbm4FRXIA3QPfc7I27z2MFH6
-         bAdxd90QWA8fqDLG9gKQxtj05PmFaiW65IovfFkO3mIWYF+43XWC2xJXmQX804Bws+4M
-         ngaYZuATE+W0UTVY16/KFSE15LXF/ECzkIWeOhT8MdkXechkNTBDJ7B7hYjHPOIBMHcb
-         6WfwiDqEnKfghJzJPYQwQNA+yc2eK4jdutR5IQmpUVL5hXIRza1C/wO2i3F5xE33x/E7
-         Gw5ahyLqdDcM/5yGF+FZ7496/Hf8cTBDCLP2CI6THdSTciwYyBEQjyjOk9z0P10eIecA
-         tTjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708047480; x=1708652280;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/PqtbmtCI4E+mhoi05yD2aOO89O9jPfXSy8h1tKW6JQ=;
-        b=d9IGPVJvHsNyaND8C5Y2h1VoYtuqlW9ix+suWK27lqnP3inIGRhOh2AhgrNlZepZw5
-         GnYOFbps+4Q9lVBxFoPwNZVlUIOwwVdVJq+Ts44BQsS748DU9bRMl02U8HI7CReyf6GJ
-         0s53ORKYQMiOGkJIOmJn2VPat5wXJdaIwxgo9fKlpoqgUOWDHCXp2vIsP20qCpoJ4IfP
-         z3YfTNDn3rx11U7pRA90SDXsEhWLI5a4oJPaeMIMLYoQ0qU+r2vhIDGh7lxRqqOMsTMR
-         hlg+s27Uy7kBeFWieuddTlzW/mmKDPEzdPziwio3yNA4h+mUdLEz7i0aDHb4gaRpjDXh
-         VOEw==
-X-Gm-Message-State: AOJu0Yy00yp8j5wdpWpQBGzmK0CLbKOqwawXE/FffumQ48iJrAZmCYL4
-	k3+qqAsqaUXBz8E+/zi//ZViX25nztIuz315BtLPzee20hG19vRbaTUkoKGm5lGnQ+t3vJvRiK7
-	dkhDb3B49mxJaAPx8+B2hnETRBhWdyIF/9A4=
-X-Google-Smtp-Source: AGHT+IE4oZIeWKx/D5J6d9Rh2x2Vb5LsFStKsc3SZkPpxxbG3Sio+uJppW4wgILuO91QGnlM9+wIf87p47liZ3k2xZ8=
-X-Received: by 2002:a17:90b:f89:b0:299:b81:86fd with SMTP id
- ft9-20020a17090b0f8900b002990b8186fdmr2907217pjb.44.1708047480283; Thu, 15
- Feb 2024 17:38:00 -0800 (PST)
+	s=arc-20240116; t=1708069546; c=relaxed/simple;
+	bh=H5Cn/kat7fnjZH35kMK0oH3YmXnUuv6zK85IWPk9t9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OZECBUTmpqwI1Xu6KaaID4wbExKJMlhTHNdY7no1Fvfe8qJMjeZBSao/IILHCyJpn9M1UDJTe31i34B1LI8khvn0F9L9d/BacXKZeJacBrnc6TNh6A528vhLsvGDzUtxhFYfUHESY30UlmuQZHqtAvDEsvSUn9bZqlZ448c/PzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=Npyaki0t; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id AFA77211F4;
+	Fri, 16 Feb 2024 08:45:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1708069533;
+	bh=Y4+Xtt/2QR/jaiCB77YYEz6l8UyC17iHPmEtlyWjDIE=; h=From:To:Subject;
+	b=Npyaki0tZpmnvQRONBP6sCJMD1vO+WcjHYJ2sv/Op1uU3jHx2gn97VetZ+LpW1nZH
+	 AN/grT1xX6iFVFpff8uUMWF0sBdCqFkbUIlSRU/QV2nU0tDbuFb+OOPogmStZRIh9p
+	 +0P/b7msCR7Le02Tcl6uStHn++6wEyuWr/9TMRsvh/ESAxo2QSKh0RdSMYCQrYxwm4
+	 xPGtuEfiqG58XZPvt4m5bHdazAyFBOg2JLLWwGYaNCnLb7lBUzndn6rwE3SUOaW49e
+	 JBLTb0EP50jJvgTq1v5LqKDh/66lZiHnfLb3h2j95pJHXmbJWlW42kT75zz9bJWEMx
+	 0+uWpqU8y9U1Q==
+Date: Fri, 16 Feb 2024 08:45:27 +0100
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: m_can: remove redundant check for pm_clock_support
+Message-ID: <20240216074527.GA5457@francesco-nb>
+References: <20240104235723.46931-1-francesco@dolcini.it>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240215152656.13883-1-s.grosjean@peak-system.com> <20240215152656.13883-3-s.grosjean@peak-system.com>
-In-Reply-To: <20240215152656.13883-3-s.grosjean@peak-system.com>
-From: Vincent Mailhol <vincent.mailhol@gmail.com>
-Date: Fri, 16 Feb 2024 10:37:48 +0900
-Message-ID: <CAMZ6RqL=qp9OHVny92Qt9wyY7eU=3dm2aQRChvCBkAfnj2jqng@mail.gmail.com>
-Subject: Re: [PATCH 3/3] can: peak_usb: fix potential kernel log flooding
-To: Stephane Grosjean <s.grosjean@peak-system.com>
-Cc: linux-can Mailing List <linux-can@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240104235723.46931-1-francesco@dolcini.it>
 
-Hi St=C3=A9phane,
+Hello Marc and Vincent,
 
-On Fri. 16 Feb. 2024 at 00:27, Stephane Grosjean
-<s.grosjean@peak-system.com> wrote:
-> In rare cases of very high bus load, the firmware can generate messages
-> warning that the receive cache capacity is about to be exceeded.
-> This modification prevents the driver from flooding the kernel log with
-> messages and memory dumps that are far too verbose in such cases,
-> by limiting their production to once per session.
->
-> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
-> ---
->  drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 36 ++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->
-> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can=
-/usb/peak_usb/pcan_usb_fd.c
-> index a1c339716776..d444ff0fa7cc 100644
-> --- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-> +++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-> @@ -70,6 +70,7 @@ struct pcan_usb_fd_if {
->  struct pcan_usb_fd_device {
->         struct peak_usb_device  dev;
->         struct can_berr_counter bec;
-> +       bool                    rx_cache_warn_handled;
->         struct pcan_usb_fd_if   *usb_if;
->         u8                      *cmd_buffer_addr;
->  };
-> @@ -667,6 +668,28 @@ static int pcan_usb_fd_decode_error(struct pcan_usb_=
-fd_if *usb_if,
->         return 0;
->  }
->
-> +/* Handle uCAN Rx cache warning messages.
-> + *
-> + * Such messages SHOULD NOT occur. If they do, then this might come from
-> + * massive PING host flooding that prevents PCAN-USB Pro FD HW v4 to han=
-dle
-> + * CAN traffic anymore. In this case, the driver itself manages the disp=
-lay of
-> + * the warning message.
-> + */
-> +static void pcan_usb_fd_handle_rx_cache_warn(struct peak_usb_device *dev=
-,
-> +                                            struct pucan_msg *rx_msg)
-> +{
-> +       struct pcan_usb_fd_device *pdev =3D
-> +                       container_of(dev, struct pcan_usb_fd_device, dev)=
-;
-> +
-> +       if (pdev->rx_cache_warn_handled)
-> +               return;
-> +
-> +       netdev_warn(dev->netdev,
-> +                   "Rx cache size warning! Possible loss of frames\n");
+On Fri, Jan 05, 2024 at 12:57:23AM +0100, Francesco Dolcini wrote:
+> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+> 
+> m_can_clk_start() already skip starting the clock when
+> clock support is disabled, remove the redundant check in
+> m_can_class_register().
+> 
+> This also solves the imbalance with m_can_clk_stop() that is called
+> afterward in the same function before the return.
+> 
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Did you consider using netdev_warn_once?
+Did you missed this? Or do you have some concern with it?
 
-  https://elixir.bootlin.com/linux/v6.7/source/include/net/net_debug.h#L46
+Francesco
 
-This seems to do pretty much what you want.
 
-FYI, the net_ratelimit() may also be helpful here:
-
-        if (net_ratelimit())
-                netdev_warn(...);
-
-> +       pdev->rx_cache_warn_handled =3D true;
-> +}
-> +
->  /* handle uCAN overrun message */
->  static int pcan_usb_fd_decode_overrun(struct pcan_usb_fd_if *usb_if,
->                                       struct pucan_msg *rx_msg)
-> @@ -768,6 +791,14 @@ static int pcan_usb_fd_decode_buf(struct peak_usb_de=
-vice *dev, struct urb *urb)
->                                 goto fail;
->                         break;
->
-> +               case PUCAN_MSG_CACHE_CRITICAL:
-> +                       pcan_usb_fd_handle_rx_cache_warn(dev, rx_msg);
-> +
-> +                       /* Rx cache warning means possible overrun cases =
-in
-> +                        * the device.
-> +                        */
-> +                       fallthrough;
-> +
->                 case PCAN_UFD_MSG_OVERRUN:
->                         err =3D pcan_usb_fd_decode_overrun(usb_if, rx_msg=
-);
->                         if (err < 0)
-> @@ -885,6 +916,11 @@ static int pcan_usb_fd_start(struct peak_usb_device =
-*dev)
->         pdev->bec.txerr =3D 0;
->         pdev->bec.rxerr =3D 0;
->
-> +       /* warn of a cache problem only once per session, to avoid floodi=
-ng
-> +        * the kernel log.
-> +        */
-> +       pdev->rx_cache_warn_handled =3D false;
-> +
->         return err;
->  }
 
