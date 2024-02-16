@@ -1,90 +1,127 @@
-Return-Path: <linux-can+bounces-285-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-286-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B02628576F0
-	for <lists+linux-can@lfdr.de>; Fri, 16 Feb 2024 08:45:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7871785771D
+	for <lists+linux-can@lfdr.de>; Fri, 16 Feb 2024 08:57:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC8691C21A51
-	for <lists+linux-can@lfdr.de>; Fri, 16 Feb 2024 07:45:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB1151C2230E
+	for <lists+linux-can@lfdr.de>; Fri, 16 Feb 2024 07:57:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 263A1168DA;
-	Fri, 16 Feb 2024 07:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="Npyaki0t"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 055E41B951;
+	Fri, 16 Feb 2024 07:56:17 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B58D10962;
-	Fri, 16 Feb 2024 07:45:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AED1B7E3
+	for <linux-can@vger.kernel.org>; Fri, 16 Feb 2024 07:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708069546; cv=none; b=Y7enPDo6IsK7HlhaSIZ2innNepcv9BK+7NGWUAcY36SH+heTCkC1+xx+eUWDamUVYTKjeE/+iNGaOEBNYGaJsdCLg2B9N0yHZNJXzTnoUIj7Z5fFfJ8sbVrN18FP9K7Z9PAVUyAUYOiKqDV/uk2zzjsyjNOEMp7EFYl2oXtkIxk=
+	t=1708070176; cv=none; b=c6F7K6yg3F0CwVUrtQ8n554p13s44qDYhQ71pe+5UWBvfHTioXnH+S92htr0vn7eit5K0RRM1emMeC5PmlznuCsI4nlUyj3qmoRYisxJEIDkMWXy3n/fKsxVrsbpzqPCguF09M73oqHH0p7BJ4XuN5kz7yxPS1PO8EvlyKpezSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708069546; c=relaxed/simple;
-	bh=H5Cn/kat7fnjZH35kMK0oH3YmXnUuv6zK85IWPk9t9I=;
+	s=arc-20240116; t=1708070176; c=relaxed/simple;
+	bh=7Pa9RjFBb172HlPrKPKDBn4IiTBiyGH+Iyana8ZOtJo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OZECBUTmpqwI1Xu6KaaID4wbExKJMlhTHNdY7no1Fvfe8qJMjeZBSao/IILHCyJpn9M1UDJTe31i34B1LI8khvn0F9L9d/BacXKZeJacBrnc6TNh6A528vhLsvGDzUtxhFYfUHESY30UlmuQZHqtAvDEsvSUn9bZqlZ448c/PzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=Npyaki0t; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id AFA77211F4;
-	Fri, 16 Feb 2024 08:45:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1708069533;
-	bh=Y4+Xtt/2QR/jaiCB77YYEz6l8UyC17iHPmEtlyWjDIE=; h=From:To:Subject;
-	b=Npyaki0tZpmnvQRONBP6sCJMD1vO+WcjHYJ2sv/Op1uU3jHx2gn97VetZ+LpW1nZH
-	 AN/grT1xX6iFVFpff8uUMWF0sBdCqFkbUIlSRU/QV2nU0tDbuFb+OOPogmStZRIh9p
-	 +0P/b7msCR7Le02Tcl6uStHn++6wEyuWr/9TMRsvh/ESAxo2QSKh0RdSMYCQrYxwm4
-	 xPGtuEfiqG58XZPvt4m5bHdazAyFBOg2JLLWwGYaNCnLb7lBUzndn6rwE3SUOaW49e
-	 JBLTb0EP50jJvgTq1v5LqKDh/66lZiHnfLb3h2j95pJHXmbJWlW42kT75zz9bJWEMx
-	 0+uWpqU8y9U1Q==
-Date: Fri, 16 Feb 2024 08:45:27 +0100
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=A1+cfjXbkASEDVun93TEd6M9oIb4mEjIfY0dLuuqxvKcSBBg6Ij7kVFLDXRqNBCmTRSk7GH5hrWWZ/X2Qj63ngGvaoPjViFmo67EKuDnjYzJabPNZn6IuEBmo7PNnFr9sKeEgg3LGjULw92/E+dlxYyVpVTngTKX5rrT5hPL+Zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1rat4l-0003T5-D9; Fri, 16 Feb 2024 08:56:03 +0100
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1rat4j-0012AD-TX; Fri, 16 Feb 2024 08:56:01 +0100
+Received: from pengutronix.de (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 7C63C29010B;
+	Fri, 16 Feb 2024 07:56:01 +0000 (UTC)
+Date: Fri, 16 Feb 2024 08:56:00 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Chandrasekar Ramakrishnan <rcsekar@samsung.com>, Wolfgang Grandegger <wg@grandegger.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Francesco Dolcini <francesco.dolcini@toradex.com>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] can: m_can: remove redundant check for pm_clock_support
-Message-ID: <20240216074527.GA5457@francesco-nb>
+Message-ID: <20240216-panning-sesame-2bc66afeeb6a-mkl@pengutronix.de>
 References: <20240104235723.46931-1-francesco@dolcini.it>
+ <20240216074527.GA5457@francesco-nb>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2pwjxutxb5pv4fzu"
 Content-Disposition: inline
-In-Reply-To: <20240104235723.46931-1-francesco@dolcini.it>
-
-Hello Marc and Vincent,
-
-On Fri, Jan 05, 2024 at 12:57:23AM +0100, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
-> 
-> m_can_clk_start() already skip starting the clock when
-> clock support is disabled, remove the redundant check in
-> m_can_class_register().
-> 
-> This also solves the imbalance with m_can_clk_stop() that is called
-> afterward in the same function before the return.
-> 
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-
-Did you missed this? Or do you have some concern with it?
-
-Francesco
+In-Reply-To: <20240216074527.GA5457@francesco-nb>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
+--2pwjxutxb5pv4fzu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 16.02.2024 08:45:27, Francesco Dolcini wrote:
+> Hello Marc and Vincent,
+>=20
+> On Fri, Jan 05, 2024 at 12:57:23AM +0100, Francesco Dolcini wrote:
+> > From: Francesco Dolcini <francesco.dolcini@toradex.com>
+> >=20
+> > m_can_clk_start() already skip starting the clock when
+> > clock support is disabled, remove the redundant check in
+> > m_can_class_register().
+> >=20
+> > This also solves the imbalance with m_can_clk_stop() that is called
+> > afterward in the same function before the return.
+> >=20
+> > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+>=20
+> Did you missed this? Or do you have some concern with it?
+
+Somehow missed it in the last PR, but already part of the next PR.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--2pwjxutxb5pv4fzu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmXPFQwACgkQKDiiPnot
+vG/iDwgAmM9nBdYvm5wqDwxWU8iSl2Bdq2PS3zvmB+7XOu1iYOQ8vV9XTMv5pHrL
+1GyKQSTbp0QZ/cVUOXzWa0PATlS9xKXetojJ6V2hFoN/9P0AHhkhVTU04dwsMyM4
+NNQDWV2ENdaeKWpThVB9Yatx07lIXl5XOtmPxEqIR3LR59h1EpL2ODLXUADUU4Zu
+NklAV0XUefT+TX3ckwq/14oZhVaUf+8rXWqUvAw4OpUENWwVqWdUamrZfBFfC9bw
+lWKITH27Fa51hfZOgyW1EmZC2Tmq5h/T5ONJP9UXk0J4VH178BS6IEBSbeoZFfgN
+FJAjp782wSr5d+UNawMUKyaiL+VDiw==
+=VaPV
+-----END PGP SIGNATURE-----
+
+--2pwjxutxb5pv4fzu--
 
