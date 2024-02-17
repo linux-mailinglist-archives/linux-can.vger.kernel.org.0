@@ -1,143 +1,132 @@
-Return-Path: <linux-can+bounces-297-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-298-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA2FD858661
-	for <lists+linux-can@lfdr.de>; Fri, 16 Feb 2024 20:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 705DD8590C9
+	for <lists+linux-can@lfdr.de>; Sat, 17 Feb 2024 17:11:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32832B24B4B
-	for <lists+linux-can@lfdr.de>; Fri, 16 Feb 2024 19:48:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10F71B21783
+	for <lists+linux-can@lfdr.de>; Sat, 17 Feb 2024 16:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59CC137C41;
-	Fri, 16 Feb 2024 19:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="VY15vxuq";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="cDmr2Ici"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F9E7CF1B;
+	Sat, 17 Feb 2024 16:10:58 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B763137C3B;
-	Fri, 16 Feb 2024 19:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708112896; cv=pass; b=sh4uKNqvDgzjXomB58VXpGcKJDAUwuVe10LCCO+B3977SzYA0D7TosizdLU2WgCdi1czd8IIKuApUbrCPNykk822Qre1BOzNh7OKANT280f7SbqpVIqGOq0ML9fDjt3Z+I1guT4bMneoC1TUWq6cEtZC/A3vyhWUaZ3jMLR1ZQw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708112896; c=relaxed/simple;
-	bh=XhOtdNnL6eEzH/sKAz15MgQet09Za2R2LkT+X2Dc7DE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fW/Nc4OuMyQLfrJFr84IhTj9bDv+3In7O/UJ8Ykq4RNjoxkZJgXhJrzzNOkHOMbs00rKPmyEA5N+XIXd4iMHQdUynVMeGugI9HBMCQI64ONmbrJOYL/Gd0RK8PwqYVrIAL8UqShBBs/DAIVZN1H9koht4rBSE61N/kYR3ekKy6o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=VY15vxuq; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=cDmr2Ici; arc=pass smtp.client-ip=85.215.255.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1708112869; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=KGkoHJFu2YAlYmriH2+xQyJ9nwsngEiqlNNCm1xKWUd/hVUtuwsDDRSoCsVRXXEjqP
-    c89EaBZg4ku2z/c7mQD4aiz8UsdKrAhV68tq50K5MfIGIb0UFkYXCbu99DOI48lx2iOQ
-    lFVspYW4wFrTAr16VzPWJjLeMK21CUfu7W3ZeKTpnd/h1tVPi6DHQVtIScOu3vEpOxbu
-    rCa+o0dCTquogTQ2hIhB5e2c+Vn8qXLchjHsyE3M1H0O/RTtv8d8r1lplO3e/bC2upfC
-    Zjzy87bkafLyv9PZ+i7d2gddL/xmYxUldb1H3m6/J6G6dOOZ4t/BNVke2sI0I4iUPjp8
-    ldeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1708112869;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9MVBjdTVYapRTGhwhTcOMWbNz5YT9tAdKc3x5vE1TuI=;
-    b=qmFwEJ/zZoHWbdR5b06JvaVwBXLCdP++GsVRXYM0dkxv5xT99zfw6IeUUNVzOkE0Vd
-    FJHSzm04HfzzfyU39DjhuKzbWsR6X4nsr/ZAK3+YW1UjB6aQpyRkY5UJ2Gsg1OLadj1e
-    2GRzp6InNsbwkV5BdzimIdImPiDAzyGyYWBV/5CXHh2rQrGmzx/G//TFJBUTWpEAaXm7
-    3HzMZM9at+LURFl72cs2jH7ynu8PUJckguYr53xQOMpa4nHdEU+NfGIsYVPYQV8dXVGX
-    2HXWuGgK+rSNOk0VDZ1KDipVgB9CU8fyfKMUhG7owZNr4lgcMgYlMFwe4TGPVH8c3QgG
-    DhaA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1708112869;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9MVBjdTVYapRTGhwhTcOMWbNz5YT9tAdKc3x5vE1TuI=;
-    b=VY15vxuqw0SNGfl/4aYQdwhegCPEipJcXkOG6X0zRmiFqFept7kSaDKl11TeUFC7Jn
-    Zox1bmsZUwvi7W7vi+F71ktHLhl9sFT3w42InTUdlr5tXaAw0TyF9WR7oNCHW6bVqHYo
-    y6uPXAi7Agd2Bp/vizSSlQdHSWuI5/Bs8sXTeLyOHnN3Vcg2njlDMBAMpXUy9APYGk9X
-    4NTTMzOptjWcoE2LQBK2Xib4v5kwwZZe5Msdj/m4nEw9CvD8co4jhm/JZp6HJy2pHfHT
-    5sRkoo0ksVEnkz84Bypj2iiF5qu2oqs4qhWdRfm5Lc2O5pHy2DX9dy62tXpjdt56o2s5
-    bCCQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1708112869;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9MVBjdTVYapRTGhwhTcOMWbNz5YT9tAdKc3x5vE1TuI=;
-    b=cDmr2Icii0xVmoHQ1vM/74ocO5tbT0UTzW/SouRaYASPAy0hso+p5O0B+z9XPTioJu
-    pWx1sqZR7yGn1U9FUdBQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFr0USEbHoO0g=="
-Received: from [IPV6:2a00:6020:4a8e:5010::923]
-    by smtp.strato.de (RZmta 49.11.2 AUTH)
-    with ESMTPSA id K49f9c01GJlm2Hx
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Fri, 16 Feb 2024 20:47:48 +0100 (CET)
-Message-ID: <12cd0fd0-be86-4af0-8d6b-85d3a81edd2a@hartkopp.net>
-Date: Fri, 16 Feb 2024 20:47:43 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7D57C0B6
+	for <linux-can@vger.kernel.org>; Sat, 17 Feb 2024 16:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708186258; cv=none; b=FvjBOJlkoIJbtW6jyLln2wSszOzie7ZYSY/JQHmSIl80TfMIdsuhEohwbPrfjtI6wnpDw3SJXEQ4q61j97UBYe0hHgmAC9n0o9Jwb/AdHMshrlja6ylEMZT48wZMoHiZLgfz31Z6UYmftAerinVa5eoNRclkf+aUKMnjGvPLe9g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708186258; c=relaxed/simple;
+	bh=dtPnk/i3lhV4M4UKJ8+8U12UYw1HsQV/qySAgUzZqW8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TXm8KsqBVGEFvCyaqfvuRkj9Ko1tttrg5irEViI/00R7YklG8Z6Qo4aRsAxbo0z39DGj/Om7r/8Cc6LPPgptgzWtwN2I8SuGMBOn7/E6ifU2YzC294L7r2N794JAkYc8ftR2Sz9dVgwm4D1uh1DxM7x2KKKM+wlDZTPZ0IPgPhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5dbcfa0eb5dso2739097a12.3
+        for <linux-can@vger.kernel.org>; Sat, 17 Feb 2024 08:10:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708186256; x=1708791056;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FMNuQZ/z3/d712MP4w6IH3KhpET28qVOOrspUot7Eq4=;
+        b=Isu0UZeywl8/OvPMGAf4VOyDuVi8jyXO/MMBKPrKIyBwxRztTqiq7D0DPCzN/UuLk3
+         hdAfTg8KTEHgcnBoQ6XNxv4XQz/LHkuS2c7m89QhxmmACr1aO8l04YZQrOH4IX6cUoTz
+         Hi14UnGVoGAH80Jl4cHXQHOIG06GWh1qoAMEgGi/O6evh6quiFB/XwJiJXU98BiFhxCH
+         QNyBlGD/7lJypTj+0FvlTytHRWUxsGxeE7tsEy1GE/pif1Rnfgqx9WWGQ0HlYhRXVOsa
+         08z7mNBASjZKHhINn49OA12IwcHg+0QtVtQymLx2A8WxV8jLHt3sWcr51niL/78KhIcU
+         y16w==
+X-Gm-Message-State: AOJu0YxoiswZ93HF6cFqXTU+BkY7uQ+VO6SfxvvV+3lYrIVqFy+RXl+y
+	81U5ZgBqw8CDykVfgxJPo0JgAL8m954ThvMsg3KeG4uy8Vk6NZAgbLC1BBYsSbe96NOBRYwTzZ5
+	HokgDMpnAal16481mQ2zD310Qmxc=
+X-Google-Smtp-Source: AGHT+IHAONbRvOSor9cKJNhRtMEEPpIsWdAErdMBc9sT1nfhrFZQXMWv3Yh3Bt9HTpdeSR05E1tXTnfR8SDTOAlvOWQ=
+X-Received: by 2002:a05:6a20:c288:b0:1a0:6dd9:ef76 with SMTP id
+ bs8-20020a056a20c28800b001a06dd9ef76mr6266242pzb.56.1708186255741; Sat, 17
+ Feb 2024 08:10:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] can: softing: remove redundant NULL check
-To: Simon Horman <horms@kernel.org>, Daniil Dulov <d.dulov@aladdin.ru>
-Cc: Wolfgang Grandegger <wg@grandegger.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- lvc-project@linuxtesting.org
-References: <20240211150535.3529-1-d.dulov@aladdin.ru>
- <20240216172701.GP40273@kernel.org>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20240216172701.GP40273@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240216135553.97845-1-s.grosjean@peak-system.com>
+In-Reply-To: <20240216135553.97845-1-s.grosjean@peak-system.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Sun, 18 Feb 2024 01:10:44 +0900
+Message-ID: <CAMZ6RqLknp_R+5_UgkMS20R_usP6+c7ywtzHKnQXo4AWroMgHQ@mail.gmail.com>
+Subject: Re: [PATCH v2] can: peak_usb: fix potential kernel log flooding
+To: Stephane Grosjean <s.grosjean@peak-system.com>
+Cc: linux-can Mailing List <linux-can@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Simon,
+On Fri. 16 Feb. 2024, 22:57, Stephane Grosjean
+<s.grosjean@peak-system.com> wrote:
+>
+> In rare cases of very high bus load, the firmware of the PEAK-System
+> PCAN-USB Pro FD HW v4 can generate messages warning that the receive cache
+> capacity is about to be exceeded. This modification prevents the driver
+> from flooding the kernel log with messages and memory dumps that are far
+> too verbose in such cases, by limiting their production to once for all.
+>
+> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
+> ---
+>  drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+> index a1c339716776..aa0b68c1ae81 100644
+> --- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+> +++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+> @@ -667,6 +667,19 @@ static int pcan_usb_fd_decode_error(struct pcan_usb_fd_if *usb_if,
+>         return 0;
+>  }
+>
+> +/* Handle uCAN Rx cache warning messages.
+> + *
+> + * Such messages SHOULD NOT occur. If they do, then this might come from
+> + * massive PING host flooding that prevents PCAN-USB Pro FD HW v4 to handle
+> + * CAN traffic anymore.
+> + */
+> +static void pcan_usb_fd_handle_rx_cache_warn(struct peak_usb_device *dev,
+> +                                            struct pucan_msg *rx_msg)
+                                                                 ^^^^^^
 
-I have a general question on the "Fixes:" tag in this patch:
+That rx_msg parameter is unused.
 
-On 16.02.24 18:27, Simon Horman wrote:
-> On Sun, Feb 11, 2024 at 07:05:35AM -0800, Daniil Dulov wrote:
->> In this case dev cannot be NULL, so remove redundant check.
->>
->> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->>
->> Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
+Do you think it is worth keeping that
+pcan_usb_fd_handle_rx_cache_warn() function? Wouldn't it be easier to
+directly call netdev_warn_once() from pcan_usb_fd_decode_buf()?
 
-IMHO this is simply an improvement which is done by all patches applied 
-to the kernel but it does not really "fix" anything from a functional 
-standpoint.
-
-Shouldn't we either invent a new tag or better leave it out to not 
-confuse the stable maintainers?
-
-Best regards,
-Oliver
-
->> Signed-off-by: Daniil Dulov <d.dulov@aladdin.ru>
-> 
-> Hi Daniil,
-> 
-> I am not sure that dev cannot be NULL.
-> But I do see that the code assumes it is not, and would crash if it is.
-> So I think that, functionally, your statement is correct.
-> 
-> 	priv = netdev_priv(dev);
-> 	card = priv->card;
-> 
-> Reviewed-by: Simon Horman <horms@kernel.org>
-> 
+> +{
+> +       netdev_warn_once(dev->netdev,
+> +                        "Rx cache size warning! Possible loss of frames\n");
+> +}
+> +
+>  /* handle uCAN overrun message */
+>  static int pcan_usb_fd_decode_overrun(struct pcan_usb_fd_if *usb_if,
+>                                       struct pucan_msg *rx_msg)
+> @@ -768,6 +781,14 @@ static int pcan_usb_fd_decode_buf(struct peak_usb_device *dev, struct urb *urb)
+>                                 goto fail;
+>                         break;
+>
+> +               case PUCAN_MSG_CACHE_CRITICAL:
+> +                       pcan_usb_fd_handle_rx_cache_warn(dev, rx_msg);
+> +
+> +                       /* Rx cache warning means possible overrun cases in
+> +                        * the device.
+> +                        */
+> +                       fallthrough;
+> +
+>                 case PCAN_UFD_MSG_OVERRUN:
+>                         err = pcan_usb_fd_decode_overrun(usb_if, rx_msg);
+>                         if (err < 0)
+> --
+> 2.34.1
 
