@@ -1,150 +1,126 @@
-Return-Path: <linux-can+bounces-303-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-304-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5399285A374
-	for <lists+linux-can@lfdr.de>; Mon, 19 Feb 2024 13:33:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BA6A85A97A
+	for <lists+linux-can@lfdr.de>; Mon, 19 Feb 2024 18:00:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8579C1C238EE
-	for <lists+linux-can@lfdr.de>; Mon, 19 Feb 2024 12:33:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6BA81C2398A
+	for <lists+linux-can@lfdr.de>; Mon, 19 Feb 2024 17:00:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842E22E83C;
-	Mon, 19 Feb 2024 12:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5B434439A;
+	Mon, 19 Feb 2024 17:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F5grmsz4"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C4F5240
-	for <linux-can@vger.kernel.org>; Mon, 19 Feb 2024 12:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B709D44388;
+	Mon, 19 Feb 2024 17:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708345909; cv=none; b=JaedibHv6sDxfcV9uwRiuswV2DGxJ4c+nFwp/I+da+o1L7bIk8BEXWMDTIUL5xCBbGQnP2GQWpXwFs0M+GzNhj5bJytVbuyIz1S3MprdmCJin49yl/ppy+Qb4yLdxPFPrh1Ony9/pKNQsLKZ81q+pEaSVzHVKtYZKpRjIacf5n4=
+	t=1708362043; cv=none; b=XiR3q7k5mez2ykKYF+/NF4T31CGHfpFSLBNowKrbRZ2LDWRa86KMI5lG41EaifaLAyd02V4mu345wvV9kw/YW8klIVeVZHyYel62VyUXywUoukdUNonfYn+jiSk9m97IiXVlxDM+F/+PjnA7DdrUlVjeDE/NQDvQkfUsAU3gHEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708345909; c=relaxed/simple;
-	bh=EiUjhERiyj7x7C6lPGGOAwXQnI7gT+xjch+oWZQ44JM=;
+	s=arc-20240116; t=1708362043; c=relaxed/simple;
+	bh=XPPEt6wCtblH7LoSRYodT/mgjuR30D08tbYVNR6SbwQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AFyE44V9moFL04lbphJYaGCOZqCmMSvAQowCTBoPT7VIuCl1c5tu5B6VV4swDnoTGdT6eBqlHYr+nBUOchAe6ag4w8UikAMXigYt5pQQ1QFjiDbiWcdHQjY0w0z/yz9txHdmnH5qbFIi9jSIBnv1kZ6OjmQIpWliKb0yI8hCUFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rc2oD-0008BB-CF; Mon, 19 Feb 2024 13:31:45 +0100
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rc2oC-001eAm-O0; Mon, 19 Feb 2024 13:31:44 +0100
-Received: from pengutronix.de (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 77B192924F5;
-	Mon, 19 Feb 2024 12:31:44 +0000 (UTC)
-Date: Mon, 19 Feb 2024 13:31:44 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc: Stephane Grosjean <s.grosjean@peak-system.com>, 
-	linux-can Mailing List <linux-can@vger.kernel.org>
-Subject: Re: [PATCH v2] can: peak_usb: fix potential kernel log flooding
-Message-ID: <20240219-marvelous-unkempt-ea6e6174d3f4-mkl@pengutronix.de>
-References: <20240216135553.97845-1-s.grosjean@peak-system.com>
- <CAMZ6RqLknp_R+5_UgkMS20R_usP6+c7ywtzHKnQXo4AWroMgHQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=gCjh62BZ6vTXG7SlF/Q7IRIUSEO9bDLz3jBaBWePNI5pxNOIOVRsyKhiA2HbkceYjQEmOsnHrmuu+cT+IZqVeIPlFe5U+yTtyzHjx2NerJdUcajbF9EWQuIMasrxCQ1NJn9kCYDkwtE9Ixx22q1D9mEBVAxFmkQO58AeyYmyuxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F5grmsz4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA21C433F1;
+	Mon, 19 Feb 2024 17:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708362043;
+	bh=XPPEt6wCtblH7LoSRYodT/mgjuR30D08tbYVNR6SbwQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F5grmsz4Yqu3H+DNp3b4VFSbkNje/wxgHQfyroU3XauDb5My9vZWR7kRhX1YM8RXv
+	 u4IeOeWPw9mnGnOqKIwUuz4Qb7Zcv9CUQzrJ20JJh7Rc89Xpf6xdgtcGMlvEa5BXW0
+	 aR8thf991KLEUKzTEg/gCo//DKZpRCng+1+6EUxTdGem4+jIyySUVtDa3TLE1hrhsV
+	 s3HyrKb+lS8ddbsRgvRUX7r5torKsMu5hjhnlEkYfunbJ9qPmgLwX4s6earMm85Uu3
+	 bO1IAzoSyoawecfmvM3/asqxJrKqBP85mykK49YH6WSstCu8LbXavXWQLvpEoUfWvf
+	 Q5GT21b3xKpeA==
+Date: Mon, 19 Feb 2024 17:00:38 +0000
+From: Simon Horman <horms@kernel.org>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: Daniil Dulov <d.dulov@aladdin.ru>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] can: softing: remove redundant NULL check
+Message-ID: <20240219170038.GH40273@kernel.org>
+References: <20240211150535.3529-1-d.dulov@aladdin.ru>
+ <20240216172701.GP40273@kernel.org>
+ <12cd0fd0-be86-4af0-8d6b-85d3a81edd2a@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="r6al3o2j4bldy4vj"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqLknp_R+5_UgkMS20R_usP6+c7ywtzHKnQXo4AWroMgHQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <12cd0fd0-be86-4af0-8d6b-85d3a81edd2a@hartkopp.net>
+
+On Fri, Feb 16, 2024 at 08:47:43PM +0100, Oliver Hartkopp wrote:
+> Hi Simon,
+> 
+> I have a general question on the "Fixes:" tag in this patch:
+> 
+> On 16.02.24 18:27, Simon Horman wrote:
+> > On Sun, Feb 11, 2024 at 07:05:35AM -0800, Daniil Dulov wrote:
+> > > In this case dev cannot be NULL, so remove redundant check.
+> > > 
+> > > Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> > > 
+> > > Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
+> 
+> IMHO this is simply an improvement which is done by all patches applied to
+> the kernel but it does not really "fix" anything from a functional
+> standpoint.
+> 
+> Shouldn't we either invent a new tag or better leave it out to not confuse
+> the stable maintainers?
+
+Hi Oliver,
+
+sorry for missing that in my review.
+
+Yes, I agree that this is probably not a fix, for which my
+rule of thumb is something that addresses a user-visible problem.
+So I agree it should not have a fixes tag.
+
+I would suggest that we can just change the text to something that
+has no tag. Something like:
+
+...
+
+Introduced by 03fd3cf5a179 ("can: add driver for Softing card")
+
+Signed-of-by: ...
 
 
---r6al3o2j4bldy4vj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 18.02.2024 01:10:44, Vincent MAILHOL wrote:
-> On Fri. 16 Feb. 2024, 22:57, Stephane Grosjean
-> <s.grosjean@peak-system.com> wrote:
-> >
-> > In rare cases of very high bus load, the firmware of the PEAK-System
-> > PCAN-USB Pro FD HW v4 can generate messages warning that the receive ca=
-che
-> > capacity is about to be exceeded. This modification prevents the driver
-> > from flooding the kernel log with messages and memory dumps that are far
-> > too verbose in such cases, by limiting their production to once for all.
-> >
-> > Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
-> > ---
-> >  drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> >
-> > diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/c=
-an/usb/peak_usb/pcan_usb_fd.c
-> > index a1c339716776..aa0b68c1ae81 100644
-> > --- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-> > +++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-> > @@ -667,6 +667,19 @@ static int pcan_usb_fd_decode_error(struct pcan_us=
-b_fd_if *usb_if,
-> >         return 0;
-> >  }
-> >
-> > +/* Handle uCAN Rx cache warning messages.
-> > + *
-> > + * Such messages SHOULD NOT occur. If they do, then this might come fr=
-om
-> > + * massive PING host flooding that prevents PCAN-USB Pro FD HW v4 to h=
-andle
-> > + * CAN traffic anymore.
-> > + */
-> > +static void pcan_usb_fd_handle_rx_cache_warn(struct peak_usb_device *d=
-ev,
-> > +                                            struct pucan_msg *rx_msg)
->                                                                  ^^^^^^
->=20
-> That rx_msg parameter is unused.
->=20
-> Do you think it is worth keeping that
-> pcan_usb_fd_handle_rx_cache_warn() function? Wouldn't it be easier to
-> directly call netdev_warn_once() from pcan_usb_fd_decode_buf()?
-
-+1
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---r6al3o2j4bldy4vj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmXTSi0ACgkQKDiiPnot
-vG8LoAf/RCCeGvYpks7QPrHK1pKa/UFD+iww36SjFTANrUW+2TScczhPt3sj2dyP
-xJ1FS6Px/KWXQmhlgWK/ugBLwZYjOl9X8UbMm/s/Fkh7HDOeiUxkhMChx8RsRdQ8
-HVZO+sIo3HdTCDsHYCsB4iX/zXGbFbaES34V+TJYftrzDxz8x/eH3NYTqM2Po98K
-xM78sDyEFW6Yp399I+nP7oXo376kAmX22tbMZkYg5VUjZkvFMT0DEztG9F0riX8D
-gOyUJIzwsgjxisgTB0Z355wVou4sFDHSZEGKGUy9i+2xKTttlm6kMJkj7qSpu2/O
-PsyQeUudyMypMHws9CJxEEsLbwrsxw==
-=a5rb
------END PGP SIGNATURE-----
-
---r6al3o2j4bldy4vj--
+> 
+> Best regards,
+> Oliver
+> 
+> > > Signed-off-by: Daniil Dulov <d.dulov@aladdin.ru>
+> > 
+> > Hi Daniil,
+> > 
+> > I am not sure that dev cannot be NULL.
+> > But I do see that the code assumes it is not, and would crash if it is.
+> > So I think that, functionally, your statement is correct.
+> > 
+> > 	priv = netdev_priv(dev);
+> > 	card = priv->card;
+> > 
+> > Reviewed-by: Simon Horman <horms@kernel.org>
+> > 
+> 
 
