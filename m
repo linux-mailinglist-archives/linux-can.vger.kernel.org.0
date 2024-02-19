@@ -1,87 +1,87 @@
-Return-Path: <linux-can+bounces-307-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-308-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDB5885AD09
-	for <lists+linux-can@lfdr.de>; Mon, 19 Feb 2024 21:23:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29A8585AD89
+	for <lists+linux-can@lfdr.de>; Mon, 19 Feb 2024 22:08:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 762221F25EB5
-	for <lists+linux-can@lfdr.de>; Mon, 19 Feb 2024 20:23:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2406287291
+	for <lists+linux-can@lfdr.de>; Mon, 19 Feb 2024 21:08:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE37252F8C;
-	Mon, 19 Feb 2024 20:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B50353E12;
+	Mon, 19 Feb 2024 21:07:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="WEn22rq1";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Z+T0K58g"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Ki5jJ4a0";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="hpGTBR9W"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9BF52F68;
-	Mon, 19 Feb 2024 20:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C442A2E835;
+	Mon, 19 Feb 2024 21:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.84
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708374202; cv=pass; b=JeUyBOkiTWU6j6/h32rD8/PFwdx99FhrpJ/9Wk/87PHM6CuntEgrVU5h44HQZ5cb97rgSaqZJ+FEHZKKcNKwuPpz+32Xqz2kjQCktoz9KEGwBlQ4ytA3dzVRJlo8KNcVvSBryJZXzlJO7IID8juBlJn+5ZgcjuLL8uaBd244RQc=
+	t=1708376871; cv=pass; b=XzmhyyLLOnpOC4fCHhDCca0Ndh7rAN6lchE5uEp7e2vQm7eX1zFu90SB/JoAzDCTsriEVKnn/RabjYDehE7j5wNKSHXJaJTkaWLuyvDjbxhkcKkeN53PFaUvoY61pQSJbenb+kwCWjIJ7j1WdkT4OUL8ak/3ZuCgSUDlUfnaC8Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708374202; c=relaxed/simple;
-	bh=ZuhFdCaK+/hgiNviU4bnJ7zFJnr9RLu0hrR9n4lzjH0=;
+	s=arc-20240116; t=1708376871; c=relaxed/simple;
+	bh=eNljqwevEksOUMlEebSE8qxQgsP5d/5/H18BupVK6+o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uyO90pXMRUQ6NYTuKTB8ZsrflQ1AQnXAAkvscOhZBQrJaCqOyJqDdkAEAOk7rMyEEUcOmYf+oLuRuA96wTQpXeH5jL9EMbDfcAHz/fHDrzx/MpbOJ7BRkueiPIWcSM3sJC/pnH2roxllDu1Zl5ldm0H1n88WHl0TbQv3x24LdV0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=WEn22rq1; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Z+T0K58g; arc=pass smtp.client-ip=85.215.255.52
+	 In-Reply-To:Content-Type; b=SA7JdWWPDe3dIZBnEQjGNziVVourjtuU0BHnPGjSL+91RoY602Pop7/rDLQSc3S/FI464lBPQ1j5kxkJganLcrpwj4OTbP/3puvQvIbh5cEINkjbG6KnAt16P2/iO5AL58sqU/AapRx4x8noX/xhXOVWIZmUWO6CSIVceWu2rJs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Ki5jJ4a0; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=hpGTBR9W; arc=pass smtp.client-ip=85.215.255.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1708374180; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1708375067; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=i2zrjEwGQoiH4Xfr25qGVanPOn9KQxxbzD01k1ejyo5gCIXevM6nC6gmnLpzFG5VHN
-    VpCEdCc9XI0NIDfzCrG5+09MMtN3++XsaKL1R85fkH3WxcdWD6t+GbiAz6Cy8FFRp+tB
-    DsJbQ+vOHZKILlvZ3ZYNfnabMZjkmOXkqiAFTDWeQuNSFFGGDRkq1N33K9/hhUyxl1Y4
-    2rKB5YrG2hsKf/Kha9VVRD0y1UMaQOcZ8lI5R4qg3nGJYD3AutPG42jombyS8WbdVGfn
-    wPhcUsaSOVOK+M6IHGodHheUGB0hSNN38/eAaWzZPxAZHUXd8hL2gZeDlq0NSzzRQwy4
-    eahw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1708374180;
+    b=RLoVMLhRCUjEZnzpW3aKBpfB2VpJwlSQuQFYGmFSmyOKvtye0tQjX13oiqK6acTNKZ
+    ARg0EctxXyRO3A/OqoQk8RwolS2Tpd4nG9CqsOoamSAKzW4Ya/Om1+/N5wD2Ta6mIDbp
+    kMcNa4tDkX54shueRnW3016MvLaxpXEDNW9Q+tg2jOypJ8ModkvXBt57P9L0K/oOz5/E
+    m3A2zZIeThrzGav1iC4qF9hXwL57U2nrdYsee0n9R17SqhZM/AdxhRoUlyQEVuMsfOas
+    Hpw5sQYiMXEqYXbNWSwFoQQsER0C61apF3cwgFejRn9slJnvMgwDO3gD4MG0t3nxRGD7
+    4AcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1708375067;
     s=strato-dkim-0002; d=strato.com;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=U/L0/LQ6ERPrB/20UgMbzGyW4YIbsTP70z/cZD3wTmU=;
-    b=P+yP8K+vbAHxbyrDeEvLF7dxpvEvHg9Bd+6f1cXAn2v1Uzp+lRhjtxXLX2za5h5MFg
-    uY7PjHxDYcONGMA6TRKqLnRfX+Urf3sL0aSI7OVeISmTWvymz3ZtrsBpQUCqWvdclQ7U
-    Kvplg48T/TZZAz6HJfSUnCT+Oa1pkFRaVwuNN+zhb+6scMMb9y659byOPPFGaI0lQlB9
-    G6WCXYAfz78fkz2hwKa531QzU9+U4bmyuxIkMRQ+M7mF0Eayg3LnsjuXwA4tAOsJR0hT
-    WlZmSNNoHI9OR9S7ePz2LfW+zulIj+jQ/s6SpiwHXEtGaj6Y65DAABmVtNnJdwt0bwMk
-    9g7A==
+    bh=Fv4HUwoYJ78Ao5yyDcK+Lz6h+c9zEeTZIGoLl7li1Rw=;
+    b=iIxqFJrFnfjERZhfAjhFKwzM7bCpXWkvPNHxMVYWR21X+ZdAT/kAxtkQ4deYzBH30W
+    ciMwYWyemRU0vLfCI23ZKlI3kIBniPQGZc1/BHDNBpdP0LDKyHDIHmKs5Cn1PVo3ViRj
+    db0tX/cbyZnBh4NjuxQyyLVXDVPqbPVjsN/dLvsDcSAQjTTDjP6bOKr+ktwDbyRYrtzP
+    ulcLhJok15ZjfuaQx86hoMlkf4fBP9ppmaPoNIy+tdKAKxmedJms0n1Fx6OpmKOd9sKE
+    v2n6z5UQ+iGzt04Ei/WVO7w8ZZtSvSrtnvXfOrPhxVWQrWiulgGQX6OhW0fZEjydINJs
+    xyfw==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1708374180;
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1708375067;
     s=strato-dkim-0002; d=hartkopp.net;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=U/L0/LQ6ERPrB/20UgMbzGyW4YIbsTP70z/cZD3wTmU=;
-    b=WEn22rq1coR8yA5/9x6v1fkpjv6hz9fBcrk45/Dz5J34Cs61X6DicS3NYnAUe0r+Du
-    AvZAeN3n81OfzuxZtQMBwaVMjdxblUuzmGhwptMODkImkMWyyiaNrxeWROY2588bNGw5
-    h/IM4hbzvNgy10hG5XjQQ1pWV0kj6MwWqMLRbGiWuUChTXMF+Ko5PumLm+AlBm0M7NuU
-    T5Z+j5vSGYf7XhSZ120mt4lAbkGEhCwB+17pF+fp0UCd5Q/uZRoxHuc12els8LYsQMOE
-    Kn3HOY7pDhjrABM/B2UiVtm3rDHLLHt0XxLEvw77VE1OXboXz80d+46sqFGGN+P74MsO
-    gLvg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1708374180;
+    bh=Fv4HUwoYJ78Ao5yyDcK+Lz6h+c9zEeTZIGoLl7li1Rw=;
+    b=Ki5jJ4a0ISlzbCYHqEjTRNXBFq1CXKzI/Padmw8s8rzprr5JAOab26Q86qI/7868Rk
+    lu0GmcOPWDvVXuNYRKkIkrO0ZskonOQ498yTWica2qgRuPV8R9A9dm9eRxSnqfT353RY
+    K566A8yiAkTC6MJ21ErjTt1zyf+6TJ1/YDHb9u15j/ZQT+o04sVnXrG8Oel1Q8sIxP2N
+    8y8AaRaM6WgOl4080G+kCj+x3z9XxEtn6PbS5nQANi8Bop6YNCimMmIOFk9CQbHnZZGA
+    USDsOiQRuw3WVMOKGtpHtIuU6p14gZUjmEA8qMZ8whdVIaX6TR55NAY7VDJUTMbtqBZ8
+    GwIg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1708375067;
     s=strato-dkim-0003; d=hartkopp.net;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=U/L0/LQ6ERPrB/20UgMbzGyW4YIbsTP70z/cZD3wTmU=;
-    b=Z+T0K58gmz4TiX/frKzvbtzsNkF+1WpbYxOVIhpsAXo2t74On1D8jFZZ7/Yyxob7HL
-    TEnK8YB871Gn99Cen3CQ==
+    bh=Fv4HUwoYJ78Ao5yyDcK+Lz6h+c9zEeTZIGoLl7li1Rw=;
+    b=hpGTBR9WEO3/nloOvwsmULD0/vv6szH/ypkVJ0Qtir7LqLyWjkXUHGlvHY0rxwFGIQ
+    k2emtWXlYz0tO6oTAGCw==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDdAnQ=="
 Received: from [IPV6:2a00:6020:4a8e:5000::90c]
     by smtp.strato.de (RZmta 49.11.2 AUTH)
-    with ESMTPSA id K49f9c01JKN086H
+    with ESMTPSA id K49f9c01JKbk876
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Mon, 19 Feb 2024 21:23:00 +0100 (CET)
-Message-ID: <a41ed65c-a916-424d-b4e7-9db65c015b50@hartkopp.net>
-Date: Mon, 19 Feb 2024 21:23:00 +0100
+    Mon, 19 Feb 2024 21:37:46 +0100 (CET)
+Message-ID: <e9f2c716-51d3-4c03-a447-9fed357669c5@hartkopp.net>
+Date: Mon, 19 Feb 2024 21:37:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -89,54 +89,70 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] can: raw: fix getsockopt() for new CAN_RAW_XL_VCID_OPTS
+Subject: Re: [PATCH] can: softing: remove redundant NULL check
 Content-Language: en-US
-To: linux-can@vger.kernel.org
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
- Simon Horman <horms@kernel.org>
-References: <20240219200021.12113-1-socketcan@hartkopp.net>
+To: Simon Horman <horms@kernel.org>
+Cc: Daniil Dulov <d.dulov@aladdin.ru>, Wolfgang Grandegger
+ <wg@grandegger.com>, Marc Kleine-Budde <mkl@pengutronix.de>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lvc-project@linuxtesting.org
+References: <20240211150535.3529-1-d.dulov@aladdin.ru>
+ <20240216172701.GP40273@kernel.org>
+ <12cd0fd0-be86-4af0-8d6b-85d3a81edd2a@hartkopp.net>
+ <20240219170038.GH40273@kernel.org>
 From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20240219200021.12113-1-socketcan@hartkopp.net>
+In-Reply-To: <20240219170038.GH40273@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Sorry. Of course it is a [PATCH net-next] where the referenced commit 
-has been applied.
+Hi Simon,
+
+On 2024-02-19 18:00, Simon Horman wrote:
+> On Fri, Feb 16, 2024 at 08:47:43PM +0100, Oliver Hartkopp wrote:
+>> Hi Simon,
+>>
+>> I have a general question on the "Fixes:" tag in this patch:
+>>
+>> On 16.02.24 18:27, Simon Horman wrote:
+>>> On Sun, Feb 11, 2024 at 07:05:35AM -0800, Daniil Dulov wrote:
+>>>> In this case dev cannot be NULL, so remove redundant check.
+>>>>
+>>>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>>>
+>>>> Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
+>>
+>> IMHO this is simply an improvement which is done by all patches applied to
+>> the kernel but it does not really "fix" anything from a functional
+>> standpoint.
+>>
+>> Shouldn't we either invent a new tag or better leave it out to not confuse
+>> the stable maintainers?
+> 
+> Hi Oliver,
+> 
+> sorry for missing that in my review.
+> 
+> Yes, I agree that this is probably not a fix, for which my
+> rule of thumb is something that addresses a user-visible problem.
+> So I agree it should not have a fixes tag.
+> 
+> I would suggest that we can just change the text to something that
+> has no tag. Something like:
+> 
+> ...
+> 
+> Introduced by 03fd3cf5a179 ("can: add driver for Softing card")
+> 
+
+Yes, but the "Introduced-by:" tag would be an optional tag for people 
+that like blaming others, right?
+
+IMHO we should think about completely removing the "Fixes:" tag, when it 
+has no user-visible effect that might be a candidate for stable kernels. 
+It is common improvement work. And it has been so for years.
 
 Best regards,
 Oliver
-
-On 2024-02-19 21:00, Oliver Hartkopp wrote:
-> The code for the CAN_RAW_XL_VCID_OPTS getsockopt() was incompletely adopted
-> from the CAN_RAW_FILTER getsockopt().
-> 
-> Add the missing put_user() and return statements.
-> 
-> Flagged by Smatch.
-> Fixes: c83c22ec1493 ("can: canxl: add virtual CAN network identifier support")
-> Reported-by: Simon Horman <horms@kernel.org>
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> ---
->   net/can/raw.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/can/raw.c b/net/can/raw.c
-> index cb8e6f788af8..897ffc17d850 100644
-> --- a/net/can/raw.c
-> +++ b/net/can/raw.c
-> @@ -833,11 +833,13 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
->   			if (len > sizeof(ro->raw_vcid_opts))
->   				len = sizeof(ro->raw_vcid_opts);
->   			if (copy_to_user(optval, &ro->raw_vcid_opts, len))
->   				err = -EFAULT;
->   		}
-> -		break;
-> +		if (!err)
-> +			err = put_user(len, optlen);
-> +		return err;
->   
->   	case CAN_RAW_JOIN_FILTERS:
->   		if (len > sizeof(int))
->   			len = sizeof(int);
->   		val = &ro->join_filters;
 
