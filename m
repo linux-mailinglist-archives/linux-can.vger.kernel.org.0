@@ -1,122 +1,111 @@
-Return-Path: <linux-can+bounces-334-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-335-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BE2D85BD68
-	for <lists+linux-can@lfdr.de>; Tue, 20 Feb 2024 14:41:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B17AA85BEF6
+	for <lists+linux-can@lfdr.de>; Tue, 20 Feb 2024 15:40:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15124B22ACA
-	for <lists+linux-can@lfdr.de>; Tue, 20 Feb 2024 13:41:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 473A728851F
+	for <lists+linux-can@lfdr.de>; Tue, 20 Feb 2024 14:40:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1870B6A340;
-	Tue, 20 Feb 2024 13:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E9D96A8D4;
+	Tue, 20 Feb 2024 14:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m5xi02OP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TRejuguQ"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03206A33A;
-	Tue, 20 Feb 2024 13:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1576E2D796;
+	Tue, 20 Feb 2024 14:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708436439; cv=none; b=BOBFT5YRHggYZsoegxpqyFY9oDZF7Nqf0m45PQwXjO8bV+/jXOYNpZ1qZ8GHzk62NChL+7aoHGMSBIpIkrvDZgySbGKNnc9CU0sATCgHdXyh4FMmlSswqjkuPY2tmWWkL49keRVkNK77XPKgLcXflsSSyqqgJugXlGJUi/yIHUo=
+	t=1708440029; cv=none; b=BKlnaRKuixBOhFyxoH0Y3s+Z/XbVbj+KwFVoVPwBa0cZVqnRRYo58GS9m3fSOJ8XrgXWz/wh1yamRHd+RaAupAFJn2QmA7qa1qZj3l9ys6G5qiV4bkyHiyik+MNAWlKeq7zKBfr9vpAyva2CYgnq+VlbcNDfnqh4QeuOVUdZjsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708436439; c=relaxed/simple;
-	bh=WmAdOGNAxzm/Hmb9VmLy8HxLcULwI+z1Va4VFS0tBBI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oicpMVJGFyybs/IPHBytiBzkXgez4oefOBPooAyvtb5WGxjmbfAxAmiP/yqmucXXPOdGbFH167XqOiHx7Sjmj5FmYZoq9CB0ghPeAHByiEfpVMlLQoMvHlJFaTBYeHUKVGKvRZwgGnzJFU37iaeOKBpUBrj7cFPA24RmRXuukoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m5xi02OP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31BD3C433C7;
-	Tue, 20 Feb 2024 13:40:36 +0000 (UTC)
+	s=arc-20240116; t=1708440029; c=relaxed/simple;
+	bh=btRj75p7biW7mHnfgkStXlULhZr7fFYXhb3zhAH7hRI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=po21brsRLx75CxsNMZLBU13Bs9Fk1rWpa9SgnS0RZrqRhmztSkZrNypPxdmniY+Z6n3VRTlK0IObDBvik4TcZy2M6ff8DlIFa3sLo8ToP9yTrkR8IaquT/gsy4pl5fp2+t/++6gXd0B3Zl8C549Vcv/DytIwAwJiUPJ3DC00GhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TRejuguQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7F76EC433F1;
+	Tue, 20 Feb 2024 14:40:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708436438;
-	bh=WmAdOGNAxzm/Hmb9VmLy8HxLcULwI+z1Va4VFS0tBBI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m5xi02OP7/jZ8fKGmbZluNIUF0zr4Lpb/grZBUa6ixhJrNljZdL25pObvUDvQ4jyU
-	 a9KiRZ/xYR7P9M76dX2yBYznM4skiS7KuvTedkz9rOFjzKQ3AUy7lTAOqaAtMIrFgq
-	 zY4EqWK/2R5+cYdVhoP/BEMayamVkBmWOFpw4QV1ODRwc+vVArcehRbBNLw7g1GS67
-	 NoMQo4PDST5ANBJL+pvxjfSmkd8XgonYr2eIOcO0zK9j3bHgfPRnB+Qxf6n3L76Z6u
-	 STp5OL2BEUSgWd/ob2UnOxszHynN9iG3ezXa5pQTQvlbXLhO6IqUAvVUJLQ8JoGs6X
-	 fMllqnLyBjTAw==
-Date: Tue, 20 Feb 2024 13:40:34 +0000
-From: Simon Horman <horms@kernel.org>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Daniil Dulov <d.dulov@aladdin.ru>,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] can: softing: remove redundant NULL check
-Message-ID: <20240220134034.GM40273@kernel.org>
-References: <20240211150535.3529-1-d.dulov@aladdin.ru>
- <20240216172701.GP40273@kernel.org>
- <12cd0fd0-be86-4af0-8d6b-85d3a81edd2a@hartkopp.net>
- <20240219170038.GH40273@kernel.org>
- <e9f2c716-51d3-4c03-a447-9fed357669c5@hartkopp.net>
+	s=k20201202; t=1708440028;
+	bh=btRj75p7biW7mHnfgkStXlULhZr7fFYXhb3zhAH7hRI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=TRejuguQcAvMn+qHtkf8c+qBO9ulWh5kily38joSgD/U8aNNBzoWXNH2NoBn7uu9H
+	 Hmb/OIfTVUJpMCn5CU5isL8wPYCAr3dgf4EWHwJvlUnbaqZmwO2XD9N1vmymtiGCQ2
+	 D19xJhM5RaSkh4tFLYNQ6GoqPLNJxyDtmsVcaMoqcJs4dLHy4KNZjdE6Er0psOXPCu
+	 pyDL+Y/BrL3M/uCIzFyF5eLWhM624qAIfMpmvUic3B1nW6PHaw/VgR6kVQrtHcNIcz
+	 cbuf3JfgQJ+dDz0AaC7BpcstpjsIqtn6w8Lh924Rz3tSaYBCi2EWo8zHy6pxVYKqQZ
+	 RMqZUjQE1Nw7w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 65F77D990CD;
+	Tue, 20 Feb 2024 14:40:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e9f2c716-51d3-4c03-a447-9fed357669c5@hartkopp.net>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 1/9] can: m_can: remove redundant check for
+ pm_clock_support
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170844002841.1951.6610004337773218582.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Feb 2024 14:40:28 +0000
+References: <20240220085130.2936533-2-mkl@pengutronix.de>
+In-Reply-To: <20240220085130.2936533-2-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ linux-can@vger.kernel.org, kernel@pengutronix.de,
+ francesco.dolcini@toradex.com, msp@baylibre.com
 
-On Mon, Feb 19, 2024 at 09:37:46PM +0100, Oliver Hartkopp wrote:
-> Hi Simon,
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
+
+On Tue, 20 Feb 2024 09:46:03 +0100 you wrote:
+> From: Francesco Dolcini <francesco.dolcini@toradex.com>
 > 
-> On 2024-02-19 18:00, Simon Horman wrote:
-> > On Fri, Feb 16, 2024 at 08:47:43PM +0100, Oliver Hartkopp wrote:
-> > > Hi Simon,
-> > > 
-> > > I have a general question on the "Fixes:" tag in this patch:
-> > > 
-> > > On 16.02.24 18:27, Simon Horman wrote:
-> > > > On Sun, Feb 11, 2024 at 07:05:35AM -0800, Daniil Dulov wrote:
-> > > > > In this case dev cannot be NULL, so remove redundant check.
-> > > > > 
-> > > > > Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> > > > > 
-> > > > > Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
-> > > 
-> > > IMHO this is simply an improvement which is done by all patches applied to
-> > > the kernel but it does not really "fix" anything from a functional
-> > > standpoint.
-> > > 
-> > > Shouldn't we either invent a new tag or better leave it out to not confuse
-> > > the stable maintainers?
-> > 
-> > Hi Oliver,
-> > 
-> > sorry for missing that in my review.
-> > 
-> > Yes, I agree that this is probably not a fix, for which my
-> > rule of thumb is something that addresses a user-visible problem.
-> > So I agree it should not have a fixes tag.
-> > 
-> > I would suggest that we can just change the text to something that
-> > has no tag. Something like:
-> > 
-> > ...
-> > 
-> > Introduced by 03fd3cf5a179 ("can: add driver for Softing card")
-> > 
+> m_can_clk_start() already skip starting the clock when
+> clock support is disabled, remove the redundant check in
+> m_can_class_register().
 > 
-> Yes, but the "Introduced-by:" tag would be an optional tag for people that
-> like blaming others, right?
+> This also solves the imbalance with m_can_clk_stop() that is called
+> afterward in the same function before the return.
+> 
+> [...]
 
-Yes, That does seem useful to me.
+Here is the summary with links:
+  - [net-next,1/9] can: m_can: remove redundant check for pm_clock_support
+    https://git.kernel.org/netdev/net-next/c/e517293fd72d
+  - [net-next,2/9] dt-bindings: can: tcan4x5x: Document the wakeup-source flag
+    https://git.kernel.org/netdev/net-next/c/b00cf4f62969
+  - [net-next,3/9] can: m_can: allow keeping the transceiver running in suspend
+    https://git.kernel.org/netdev/net-next/c/4a94d7e31cf5
+  - [net-next,4/9] can: tcan4x5x: support resuming from rx interrupt signal
+    https://git.kernel.org/netdev/net-next/c/b6b640c04446
+  - [net-next,5/9] dt-bindings: can: xilinx_can: Add 'xlnx,has-ecc' optional property
+    https://git.kernel.org/netdev/net-next/c/7075d733b8e4
+  - [net-next,6/9] can: xilinx_can: Add ECC support
+    https://git.kernel.org/netdev/net-next/c/8e6fbf7f66dc
+  - [net-next,7/9] can: xilinx_can: Add ethtool stats interface for ECC errors
+    https://git.kernel.org/netdev/net-next/c/e1d1698eb36c
+  - [net-next,8/9] can: raw: fix getsockopt() for new CAN_RAW_XL_VCID_OPTS
+    https://git.kernel.org/netdev/net-next/c/c8fba5d6df5e
+  - [net-next,9/9] can: raw: raw_getsockopt(): reduce scope of err
+    https://git.kernel.org/netdev/net-next/c/00bf80c437dc
 
-> IMHO we should think about completely removing the "Fixes:" tag, when it has
-> no user-visible effect that might be a candidate for stable kernels. It is
-> common improvement work. And it has been so for years.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Likewise, that does sound like a good idea to me.
+
 
