@@ -1,158 +1,118 @@
-Return-Path: <linux-can+bounces-308-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-309-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29A8585AD89
-	for <lists+linux-can@lfdr.de>; Mon, 19 Feb 2024 22:08:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC0EC85B3F1
+	for <lists+linux-can@lfdr.de>; Tue, 20 Feb 2024 08:26:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2406287291
-	for <lists+linux-can@lfdr.de>; Mon, 19 Feb 2024 21:08:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C9A2B22E6D
+	for <lists+linux-can@lfdr.de>; Tue, 20 Feb 2024 07:26:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B50353E12;
-	Mon, 19 Feb 2024 21:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Ki5jJ4a0";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="hpGTBR9W"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77AE45A4E2;
+	Tue, 20 Feb 2024 07:26:08 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C442A2E835;
-	Mon, 19 Feb 2024 21:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708376871; cv=pass; b=XzmhyyLLOnpOC4fCHhDCca0Ndh7rAN6lchE5uEp7e2vQm7eX1zFu90SB/JoAzDCTsriEVKnn/RabjYDehE7j5wNKSHXJaJTkaWLuyvDjbxhkcKkeN53PFaUvoY61pQSJbenb+kwCWjIJ7j1WdkT4OUL8ak/3ZuCgSUDlUfnaC8Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708376871; c=relaxed/simple;
-	bh=eNljqwevEksOUMlEebSE8qxQgsP5d/5/H18BupVK6+o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SA7JdWWPDe3dIZBnEQjGNziVVourjtuU0BHnPGjSL+91RoY602Pop7/rDLQSc3S/FI464lBPQ1j5kxkJganLcrpwj4OTbP/3puvQvIbh5cEINkjbG6KnAt16P2/iO5AL58sqU/AapRx4x8noX/xhXOVWIZmUWO6CSIVceWu2rJs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Ki5jJ4a0; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=hpGTBR9W; arc=pass smtp.client-ip=85.215.255.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1708375067; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=RLoVMLhRCUjEZnzpW3aKBpfB2VpJwlSQuQFYGmFSmyOKvtye0tQjX13oiqK6acTNKZ
-    ARg0EctxXyRO3A/OqoQk8RwolS2Tpd4nG9CqsOoamSAKzW4Ya/Om1+/N5wD2Ta6mIDbp
-    kMcNa4tDkX54shueRnW3016MvLaxpXEDNW9Q+tg2jOypJ8ModkvXBt57P9L0K/oOz5/E
-    m3A2zZIeThrzGav1iC4qF9hXwL57U2nrdYsee0n9R17SqhZM/AdxhRoUlyQEVuMsfOas
-    Hpw5sQYiMXEqYXbNWSwFoQQsER0C61apF3cwgFejRn9slJnvMgwDO3gD4MG0t3nxRGD7
-    4AcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1708375067;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=Fv4HUwoYJ78Ao5yyDcK+Lz6h+c9zEeTZIGoLl7li1Rw=;
-    b=iIxqFJrFnfjERZhfAjhFKwzM7bCpXWkvPNHxMVYWR21X+ZdAT/kAxtkQ4deYzBH30W
-    ciMwYWyemRU0vLfCI23ZKlI3kIBniPQGZc1/BHDNBpdP0LDKyHDIHmKs5Cn1PVo3ViRj
-    db0tX/cbyZnBh4NjuxQyyLVXDVPqbPVjsN/dLvsDcSAQjTTDjP6bOKr+ktwDbyRYrtzP
-    ulcLhJok15ZjfuaQx86hoMlkf4fBP9ppmaPoNIy+tdKAKxmedJms0n1Fx6OpmKOd9sKE
-    v2n6z5UQ+iGzt04Ei/WVO7w8ZZtSvSrtnvXfOrPhxVWQrWiulgGQX6OhW0fZEjydINJs
-    xyfw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1708375067;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=Fv4HUwoYJ78Ao5yyDcK+Lz6h+c9zEeTZIGoLl7li1Rw=;
-    b=Ki5jJ4a0ISlzbCYHqEjTRNXBFq1CXKzI/Padmw8s8rzprr5JAOab26Q86qI/7868Rk
-    lu0GmcOPWDvVXuNYRKkIkrO0ZskonOQ498yTWica2qgRuPV8R9A9dm9eRxSnqfT353RY
-    K566A8yiAkTC6MJ21ErjTt1zyf+6TJ1/YDHb9u15j/ZQT+o04sVnXrG8Oel1Q8sIxP2N
-    8y8AaRaM6WgOl4080G+kCj+x3z9XxEtn6PbS5nQANi8Bop6YNCimMmIOFk9CQbHnZZGA
-    USDsOiQRuw3WVMOKGtpHtIuU6p14gZUjmEA8qMZ8whdVIaX6TR55NAY7VDJUTMbtqBZ8
-    GwIg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1708375067;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=Fv4HUwoYJ78Ao5yyDcK+Lz6h+c9zEeTZIGoLl7li1Rw=;
-    b=hpGTBR9WEO3/nloOvwsmULD0/vv6szH/ypkVJ0Qtir7LqLyWjkXUHGlvHY0rxwFGIQ
-    k2emtWXlYz0tO6oTAGCw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDdAnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::90c]
-    by smtp.strato.de (RZmta 49.11.2 AUTH)
-    with ESMTPSA id K49f9c01JKbk876
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Mon, 19 Feb 2024 21:37:46 +0100 (CET)
-Message-ID: <e9f2c716-51d3-4c03-a447-9fed357669c5@hartkopp.net>
-Date: Mon, 19 Feb 2024 21:37:46 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4965B1F6
+	for <linux-can@vger.kernel.org>; Tue, 20 Feb 2024 07:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708413968; cv=none; b=gtrfmiAyoDqtHfg5iFctMXCWe5ciqaQIjJrnlUkq+tv5CsOOVaPoVMxq3R6/H3NLILFKr5FSp+/SQSrY/0fLNux5oGN8vNi5T1ltFWYX8DUA3WOYnz/RPqt1tE2B5M9OIN9DqGCm/hH0M3lR/jRlDClxq47CDgcmPONXdJzyGYc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708413968; c=relaxed/simple;
+	bh=o3N3eDsMuaK5IcqH5+y+rMqYvONftK7BFSBqKE+tDm4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UxSpiXgNHSwj0aDJRwVczkitzv3K+JnLmMFQF7B945nElIzymjhDj4gkBis1WZq7XL+IInoE1r3Rtu3E+yqoW2WL1yedvdu5NShegteDWdHvl3WCH37wCKxTr9NVqdR+fXnCF/NqwOn/6NE4POgqvmU4mPDe89uEZTpvCPESUT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1rcKVu-00062r-GZ; Tue, 20 Feb 2024 08:26:02 +0100
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1rcKVu-001nby-18; Tue, 20 Feb 2024 08:26:02 +0100
+Received: from pengutronix.de (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id AF930292DAD;
+	Tue, 20 Feb 2024 07:26:01 +0000 (UTC)
+Date: Tue, 20 Feb 2024 08:26:00 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH] can: raw: fix getsockopt() for new CAN_RAW_XL_VCID_OPTS
+Message-ID: <20240220-mobility-thigh-8ddfb02bfab9-mkl@pengutronix.de>
+References: <20240219200021.12113-1-socketcan@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] can: softing: remove redundant NULL check
-Content-Language: en-US
-To: Simon Horman <horms@kernel.org>
-Cc: Daniil Dulov <d.dulov@aladdin.ru>, Wolfgang Grandegger
- <wg@grandegger.com>, Marc Kleine-Budde <mkl@pengutronix.de>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- lvc-project@linuxtesting.org
-References: <20240211150535.3529-1-d.dulov@aladdin.ru>
- <20240216172701.GP40273@kernel.org>
- <12cd0fd0-be86-4af0-8d6b-85d3a81edd2a@hartkopp.net>
- <20240219170038.GH40273@kernel.org>
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20240219170038.GH40273@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="m5qz2zkyou5fcxqg"
+Content-Disposition: inline
+In-Reply-To: <20240219200021.12113-1-socketcan@hartkopp.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hi Simon,
 
-On 2024-02-19 18:00, Simon Horman wrote:
-> On Fri, Feb 16, 2024 at 08:47:43PM +0100, Oliver Hartkopp wrote:
->> Hi Simon,
->>
->> I have a general question on the "Fixes:" tag in this patch:
->>
->> On 16.02.24 18:27, Simon Horman wrote:
->>> On Sun, Feb 11, 2024 at 07:05:35AM -0800, Daniil Dulov wrote:
->>>> In this case dev cannot be NULL, so remove redundant check.
->>>>
->>>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->>>>
->>>> Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
->>
->> IMHO this is simply an improvement which is done by all patches applied to
->> the kernel but it does not really "fix" anything from a functional
->> standpoint.
->>
->> Shouldn't we either invent a new tag or better leave it out to not confuse
->> the stable maintainers?
-> 
-> Hi Oliver,
-> 
-> sorry for missing that in my review.
-> 
-> Yes, I agree that this is probably not a fix, for which my
-> rule of thumb is something that addresses a user-visible problem.
-> So I agree it should not have a fixes tag.
-> 
-> I would suggest that we can just change the text to something that
-> has no tag. Something like:
-> 
-> ...
-> 
-> Introduced by 03fd3cf5a179 ("can: add driver for Softing card")
-> 
+--m5qz2zkyou5fcxqg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, but the "Introduced-by:" tag would be an optional tag for people 
-that like blaming others, right?
+On 19.02.2024 21:00:21, Oliver Hartkopp wrote:
+> The code for the CAN_RAW_XL_VCID_OPTS getsockopt() was incompletely adopt=
+ed
+> from the CAN_RAW_FILTER getsockopt().
+>=20
+> Add the missing put_user() and return statements.
+>=20
+> Flagged by Smatch.
+> Fixes: c83c22ec1493 ("can: canxl: add virtual CAN network identifier supp=
+ort")
+> Reported-by: Simon Horman <horms@kernel.org>
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-IMHO we should think about completely removing the "Fixes:" tag, when it 
-has no user-visible effect that might be a candidate for stable kernels. 
-It is common improvement work. And it has been so for years.
+Applied to linux-can-next
 
-Best regards,
-Oliver
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--m5qz2zkyou5fcxqg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmXUVAYACgkQKDiiPnot
+vG/UVwf7BcUlf66S2Suv0hhwMBj8KbR/nEKfq/DGLANlFvETes4oLv69PVe5tYz6
+SRnRkZhHW2wSblLTEHBcwM1TJ6yqlI9v+uHBgXqAVMTKILGWMfnJAW7JuRWnWkRP
+MKSDjbyOTpJn1XspP7VvVfIPtUCyqeJRCHxwAe+qfzH6Ry//xzjrpas2RZ1RZDvM
+waKo7dFweUOPLlfWr8TJA57nnpFpZ5eHw+ka8Xla5SZAycankIutrhPA2G/fR2/X
+/FXFMuSCgRZsNPgSaqiA+P38rA0Op4dxu2Zun6jO/O2SzxsH2hTUiaYeGiG1G6Bx
+DVsN3Yjg8vcJMIoPSHL76R+iwCsooQ==
+=cavz
+-----END PGP SIGNATURE-----
+
+--m5qz2zkyou5fcxqg--
 
