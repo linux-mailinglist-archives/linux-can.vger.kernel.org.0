@@ -1,165 +1,142 @@
-Return-Path: <linux-can+bounces-315-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-316-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F84285B51B
-	for <lists+linux-can@lfdr.de>; Tue, 20 Feb 2024 09:28:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8194985B554
+	for <lists+linux-can@lfdr.de>; Tue, 20 Feb 2024 09:35:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D40F1C219E4
-	for <lists+linux-can@lfdr.de>; Tue, 20 Feb 2024 08:28:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EDA42804D9
+	for <lists+linux-can@lfdr.de>; Tue, 20 Feb 2024 08:35:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 923F15D473;
-	Tue, 20 Feb 2024 08:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 365615C5FD;
+	Tue, 20 Feb 2024 08:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lwhZ+sOm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CSX8GcFQ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057575D485;
-	Tue, 20 Feb 2024 08:27:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01715B1F1
+	for <linux-can@vger.kernel.org>; Tue, 20 Feb 2024 08:35:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708417639; cv=none; b=N7zOE0wDMvPTR4DN1pqSCdpIWc7DPXfUSS+9zESDCd7+DeW8hP53Cf1NlNNfsOA/bd1GieW/o4Dehj03vwLOVjHHYn0EO8wlErlE100QzNaZR8MvOR4IaFpUPfXJsZ2Qmd3SfK21z5lTp/gc9FawnRfgOzMm6MBNgsCpB3oE8RA=
+	t=1708418147; cv=none; b=oySxExcknnCtCbF7f8imOcQsm8CAq7GKFPu7qk182vn55CmsbpxWI2bbVAe/+TqnklrcNPlAsSWkwLQIeHPJWfnwDx0qnpUHBYR4YPpnxroxSB9snHPqnnXBeTgwj5ZjXoU4N0CYs3c/PYDWjwlAsmGlzQGF4oNO2sNI+qyvAdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708417639; c=relaxed/simple;
-	bh=xGkHwHgsNKCUyaW3yxpI0yGm3mNFmMcYeiiqH8O+1eE=;
+	s=arc-20240116; t=1708418147; c=relaxed/simple;
+	bh=6xYlLhQGBr9fcbX6DMGFqm1p9L+RPB5oxdWqbHFq030=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=li39PjG/NCc2qTI3DlE18qApv95gN6gZlLkfQcO5/p+nJRVWLJaEtSSubsayed3AvU8GGWbEY87UGNcb1WtHNrCjlSNTupKKuin1ZzV8Q/bB9e+OhYDjqS0D8AZYGxC+57Pk/qQGfqdvxw0FUPuVLv2SbxkgXG0bd07Jg6hZD0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lwhZ+sOm; arc=none smtp.client-ip=209.85.215.170
+	 To:Cc:Content-Type; b=CP7OdWuwTHwbjWIsRRXA1n+j5mQxAfs6zfjNgR8GYBqNYQJw6qlVYiHpF/iBFkYtzom7AKJ2PSHUYxwO3ateBXYL4sQ4Zrzzr8RUehkoUP+QDiDRZkKVqgQdM4gHwJpkQ+hl3S0uCiAyu1JnVeGLPQiRRSkosKcpP1MF5yx6fu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CSX8GcFQ; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d8b70b39efso3705730a12.0;
-        Tue, 20 Feb 2024 00:27:17 -0800 (PST)
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5c6bd3100fcso2713850a12.3
+        for <linux-can@vger.kernel.org>; Tue, 20 Feb 2024 00:35:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708417637; x=1709022437; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=h3mNF6ymvZU2rJqeUcClsvb+93q2IKPLnONC3Oy06ug=;
-        b=lwhZ+sOmXiY9sfYcJEOgESgb7e4R0JYXBO1quTnOp1FaBuCNhOGDzrMbYgpYcxBezy
-         gRmhXC9ZsASdHJJZxBey9YZxHvGN4RN2O2DACz7UKn/sImT+CxOE1qWDZI6eiTxVPxz8
-         fH1kVsFOTjfpWvjr6wgnflhk4UUdJJZFP6z9ls7YgYr2MRCOTgzY7lCda0+bUL7O2d9f
-         RD936q+wQVPVSVAZO1saXfPo1mqYuj6ybOFZZxC1lzjJ4gX4aXfr7G33F83nB+kvq66Q
-         VQ2LnVFYpRnlv/OcAUXV+lu+3kfUrcoSYHGI7Wkp+vTS1JxiGTQ04uYYuhAV4KQ+6gvk
-         HJ6w==
+        d=gmail.com; s=20230601; t=1708418145; x=1709022945; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DPH324QJzF4D7rLAELdXBne0AUGf13CF2WXP872CM6o=;
+        b=CSX8GcFQleqjzpAUWeGwjju6X6Bt9S01aia4vRJRr41wqKgQfmquJUUKUHprXp+n2n
+         o3qvrhZksgVeQphXLOnzZ4YTWJG1Fy5bnXGcimbXsMnSRtwogJvpxFAokPwuz7UyBmEC
+         JOEf1SnnUSm09fKu9Bb4mzRgnbnZmCZSrmmvZ5+OKQuPOrMn+WOkfq6YirjS326G5tyo
+         S2cb+veZg/NiKPIg3dA4NQtU6TXFLXHWFQ49ZxwJwpv0GMqd1DdhkaOmthmIHJ8GtU/7
+         VlyXcEX8Ch6lJhwDJZXfMpJSZcko4c2qf4LtvZTdVE5f9qnhbHGpmMvts3Mq1GfUwbXG
+         Uoqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708417637; x=1709022437;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h3mNF6ymvZU2rJqeUcClsvb+93q2IKPLnONC3Oy06ug=;
-        b=WEKEgpLMEieW/DKkPMFUNcn52LqOHnaB5HgfPVd6Gz934VLR+kUFOvFPRrHneiILut
-         i14HsXJFQ+aY3peyd3FESYK5o3F/JY99TQ8ZbXzIXzyPOwVBt6SQH4AJBP50mOBxGTP9
-         oqPmlO+Qc1x0XaJtbRoNCuuXoJBaO3Ye/nXo8pA1xBh5ND9IXeIH5I7vIeP+DmEGPZBw
-         luXwC68HzcD9STek0SJ3KyNjb4GTHQEjHgEe5P20SXPP/8mScZRJioSjSNfEHV8C3FiV
-         ul714MNcoIsMNufS7ahZwFdbWQWu/eVaSkhmJfiyKmGHyzHANwK/GgV7JblKW+7eN2Hl
-         Fp0w==
-X-Forwarded-Encrypted: i=1; AJvYcCWTfrS52+9MtWKPagTIVXu7sp4/bb4eRCNKAHuZzcZDKuKl64lLs7qMEghAyNxyOaByJmH/hXkGZ++TrSFAYpU5btWNvDVhD/1VabY8IVaciTPn3ytu4/YOhoHVLDWpikILsMkqEOTVTQRkd/Us4qnZrcn456TNnEjYyBilc1PK
-X-Gm-Message-State: AOJu0Yyb+ldMS65d5L58jn4kCfRhOqhbPH2Y+IHT34fEYZHSXOmM30Gx
-	n9Dx3/7n1oYy07E5S298ssvPnWVVqkc4cucoJglQxOCw5eECZJBExh8iEHKDYYysaWgFS1R/DEh
-	H06ZdTwXSuTViEtNiHmUwWAljdj8=
-X-Google-Smtp-Source: AGHT+IHEBObqHGdbcKe/0UUtdFdBYryuEqZdpxlQpp8rPZQgtgbdMaGQqBxDALoz+PiSbK1FlD2LuL7d66Nado/BRDA=
-X-Received: by 2002:a17:90a:de13:b0:299:4392:33e2 with SMTP id
- m19-20020a17090ade1300b00299439233e2mr6802188pjv.39.1708417636648; Tue, 20
- Feb 2024 00:27:16 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708418145; x=1709022945;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DPH324QJzF4D7rLAELdXBne0AUGf13CF2WXP872CM6o=;
+        b=nOhD16DA3eNrQ3jt63vi2vaFT1dYVMhIgA5otwphQMexarMpFizryJ1v/w7tpqt+1i
+         /yA13UaVDUr1xwn8WmwfM51W62h9/IvBkF9tVF4zD1eYM08xxlDo34ETLJndzkEQ3s8X
+         1KPejdxxSs1HeW0MEEExPBYvwqbkR8B+32+bnKuZfjTDbp8vGypQZL36jvB7+69M6BAz
+         OckLaISBPZxRxhI7kD0axsdL6j88wpgc2fmPEGTYV2BZOo6Dv9TyVuVrPxJim85Kp2lB
+         akR/+Cw91XASEST/llrzYWEXbf3qbjz+ak8CoQFG2DrEHo5R6BSHI513E8A6JL7n97V3
+         oAJA==
+X-Forwarded-Encrypted: i=1; AJvYcCXymb1LHSc0i4QxdZYb3Vsde9iJhEw398CueUsI9rZJlAmHdSMKn0k8PVRi1g/cRnupoXZIeu8yC8XTC9L9aCCwdmyW1PDekaQi
+X-Gm-Message-State: AOJu0Yym/M4amQVrv/7G1HL6b5+OVSO0uu7ze+gNHD0PDeM3BF1kXvAd
+	6CQsTu+Zh3KUUyEHxB7gfO+ztu3OVba2F0GxAe12aGJwys7/IW/hLmFlAkhtwQ7qPrVz9j6faih
+	3dopsXQAHuz8OJylC1lG2RxBI8I4=
+X-Google-Smtp-Source: AGHT+IG74wVtiyEuRWteZerL77QYGk7TGhTwEexSbl+02s9hLnJpOmvPp9360xv6i658s599zVkCbtuLBTKhNGHsTQY=
+X-Received: by 2002:a05:6a20:c90a:b0:19c:ad6b:e1c2 with SMTP id
+ gx10-20020a056a20c90a00b0019cad6be1c2mr15165045pzb.12.1708418144883; Tue, 20
+ Feb 2024 00:35:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240220-raw-setsockopt-v1-1-7d34cb1377fc@pengutronix.de>
-In-Reply-To: <20240220-raw-setsockopt-v1-1-7d34cb1377fc@pengutronix.de>
+References: <20240216-acclaim-impromptu-4474f57f9761-mkl@pengutronix.de>
+ <AEC70E89-BC6E-429A-B756-385ADC2B3E85@vanille.de> <20240219-contend-catfight-cd49fff06252-mkl@pengutronix.de>
+ <8609D943-B86B-4584-88A1-984BD39E25D3@vanille.de> <20240220-cottage-neatly-832a106bc879-mkl@pengutronix.de>
+In-Reply-To: <20240220-cottage-neatly-832a106bc879-mkl@pengutronix.de>
 From: Vincent Mailhol <vincent.mailhol@gmail.com>
-Date: Tue, 20 Feb 2024 17:27:05 +0900
-Message-ID: <CAMZ6RqKPUUrgfVpdu4y=mGUFjNTbfH7q46ZwcMwOn6zEwfHnZg@mail.gmail.com>
-Subject: Re: [PATCH] can: raw: raw_getsockopt(): reduce scope of err
+Date: Tue, 20 Feb 2024 17:35:32 +0900
+Message-ID: <CAMZ6Rq+fE7J=ndRAVRuBvpUNXS-5rDx1r5mZeEPTuKrtbjKYOA@mail.gmail.com>
+Subject: Re: Protocol recommendation for CAN(FD)-USB adapter
 To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Cc: "Dr. Michael 'Mickey' Lauer" <mickey@vanille.de>, Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue. 20 Feb. 2024 at 17:16, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> Reduce the scope of the variable "err" to the individual cases. This
-> is to avoid the mistake of setting "err" in the mistaken belief that
-> it will be evaluated later.
+On Tue. 20 Feb. 2024 at 17:10, Marc Kleine-Budde <mkl@pengutronix.de> wrote=
+:
 >
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-
-One nitpick to remove a newline, but aside from that:
-
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-(as usual, I do not mind if the nitpick gets resolved while applying).
-
-> ---
->  net/can/raw.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+> On 20.02.2024 08:49:26, Dr. Michael 'Mickey' Lauer wrote:
+> > Hi Marc,
+> >
+> > >>
+> > >> Sounds pretty cool. Our design is based on an ESP32-S3 though, so I
+> > >> have to duplicate that effort. Is there some kind of USB protocol
+> > >> definition for what gs-usb expects or do I need to learn that from t=
+he
+> > >> implementation?
+> > >
+> > > I've put together a very rough summary of the driver's side of view:
+> > >
+> > > https://gist.github.com/marckleinebudde/99f72d9db67accf08cc6efa367cfe=
+54b
+> > >
+> > > Feel free to update.
+> >
+> > Wow, that=E2=80=99s very kind of you!
 >
-> diff --git a/net/can/raw.c b/net/can/raw.c
-> index 897ffc17d850..2bb3eab98af0 100644
-> --- a/net/can/raw.c
-> +++ b/net/can/raw.c
-> @@ -756,7 +756,6 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
->         struct raw_sock *ro = raw_sk(sk);
->         int len;
->         void *val;
-> -       int err = 0;
+> :)
 >
->         if (level != SOL_CAN_RAW)
->                 return -EINVAL;
-> @@ -766,7 +765,9 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
->                 return -EINVAL;
+> > Later this year I=E2=80=99ll take this blueprint to implement the neces=
+sary
+> > changes in our firmware. I=E2=80=99ll enhance / update your summary
+> > as I=E2=80=99ll go.
 >
->         switch (optname) {
-> -       case CAN_RAW_FILTER:
-> +       case CAN_RAW_FILTER: {
-
-Aesthetically speaking, I do not like turning the cases into compound
-statement, but this removes a pitfall, so let go for it!
-
-> +               int err = 0;
-> +
->                 lock_sock(sk);
->                 if (ro->count > 0) {
->                         int fsize = ro->count * sizeof(struct can_filter);
-> @@ -791,7 +792,7 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
->                 if (!err)
->                         err = put_user(len, optlen);
->                 return err;
-> -
-> +       }
->         case CAN_RAW_ERR_FILTER:
->                 if (len > sizeof(can_err_mask_t))
->                         len = sizeof(can_err_mask_t);
-> @@ -822,7 +823,9 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
->                 val = &ro->xl_frames;
->                 break;
+> If you discover any odd points or areas for improvement in the USB
+> protocol, please let us know.
 >
-> -       case CAN_RAW_XL_VCID_OPTS:
-> +       case CAN_RAW_XL_VCID_OPTS: {
-> +               int err = 0;
-> +
->                 /* user space buffer to small for VCID opts? */
->                 if (len < sizeof(ro->raw_vcid_opts)) {
->                         /* return -ERANGE and needed space in optlen */
-> @@ -839,6 +842,7 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
->                         err = put_user(len, optlen);
->                 return err;
->
-> +       }
+> Currently, TX-complete sends the _entire_ structure back to the host,
+> which is quite an overhead, especially for CAN FD frames. We're working
+> on a "short-tx-complete" feature.
 
-Nitpick: to be aligned with the above, also remove the newline here
-(same as above):
+The es581.4 may be doing what you are looking for:
 
--
-+       }
+  - When sending a frame, the driver attaches a 32 bit index:
+https://elixir.bootlin.com/linux/v6.7/source/drivers/net/can/usb/etas_es58x=
+/es581_4.h#L78
+  - When receiving the TX completion message, the device just send
+back that index and a timestamp:
+https://elixir.bootlin.com/linux/v6.7/source/drivers/net/can/usb/etas_es58x=
+/es581_4.h#L97
 
->         case CAN_RAW_JOIN_FILTERS:
->                 if (len > sizeof(int))
->                         len = sizeof(int);
+The device is agnostic of what this index represents. The driver uses
+the index from the can_put_echo_skb() / can_get_echo_skb().
+
+(in addition the driver can handle bulk send and receive but that's
+another story).
+
+
+Yours sincerely,
+Vincent Mailhol
 
