@@ -1,160 +1,176 @@
-Return-Path: <linux-can+bounces-339-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-340-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FE0F85DA74
-	for <lists+linux-can@lfdr.de>; Wed, 21 Feb 2024 14:31:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCC3785DE2F
+	for <lists+linux-can@lfdr.de>; Wed, 21 Feb 2024 15:16:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F16C428623E
-	for <lists+linux-can@lfdr.de>; Wed, 21 Feb 2024 13:31:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F072C1C238D3
+	for <lists+linux-can@lfdr.de>; Wed, 21 Feb 2024 14:16:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7D2E7EF0C;
-	Wed, 21 Feb 2024 13:28:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A5E7D40E;
+	Wed, 21 Feb 2024 14:14:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="aZtIpTgr";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="BR7FjtBS"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A8D69D2E
-	for <linux-can@vger.kernel.org>; Wed, 21 Feb 2024 13:28:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708522095; cv=none; b=VDDE+b2D7BvudpIwT9wzGSrmmuIkr+heikO+6+HHYmWmL5Xgi2Je3HotJJj+3KY+XJVshrIj6UrNSWUuiPJYKHm+rvunmMHdYR7ruJMnWpiIBqn5R6w24O5YzoPvSzZ70W3rXsevV/67DwRPE1c2Br79tV4LXvSn3aWO1dXRVvY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708522095; c=relaxed/simple;
-	bh=03bjJnGFugjklFVd7F0yF0Of3vNbzH7KF4fjzEHz8I4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tgo7uNwV0oQh5au7c0xVixylB0LbE7LD3ZMlr3ITPPKCAbUGNrYeIjn2pdhxvgjfFlLvJN/Ydbsaa9oG50vldASesZxUJaWDYiDmaRyjyy+WuKF7PTZXo93v/DyPeI4vmKAR2eFcW/GlwkPxuKi4CCjGta7KlG3zGY7Zr2hxIyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rcmdv-0003dY-AO; Wed, 21 Feb 2024 14:28:11 +0100
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rcmdu-00238Z-HC; Wed, 21 Feb 2024 14:28:10 +0100
-Received: from pengutronix.de (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 32CBC294B12;
-	Wed, 21 Feb 2024 13:28:10 +0000 (UTC)
-Date: Wed, 21 Feb 2024 14:28:09 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-Cc: Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@opensynergy.com>, 
-	virtio-comment@lists.oasis-open.org, virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org, 
-	Harald Mommer <harald.mommer@opensynergy.com>
-Subject: Re: [virtio-dev] Re: [virtio-comment] [RFC PATCH v3] virtio-can:
- Device specification.
-Message-ID: <20240221-juggling-uproar-9518b4901f41-mkl@pengutronix.de>
-References: <20230609142243.199074-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
- <ebc57e36-d822-4264-a763-b530482b2669@opensynergy.com>
- <ZdXShopKyMYPTUva@fedora>
- <20240221-acts-decade-76d3d69e8e4d-mkl@pengutronix.de>
- <ZdX3xgM36iOVhr3V@fedora>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91F57F7D6;
+	Wed, 21 Feb 2024 14:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.166
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708524858; cv=pass; b=jPses5QL8bGMWcx7J9gkpGeDMn4DqeDkomRnchbjS5M+zaTPOGNPKKzjhA1nrdNwRjyoaiTzy9hcJUkoOjtDr1djmhsWGhYW4rt6rUt2M+7YLfBqOLyk320uAf0Rh5APkkhCDV5faW0+qiMDF2siWPp3hhncdsAWS3MhJxV8nxU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708524858; c=relaxed/simple;
+	bh=pi0QTeoqLUA5dmYDVYf3K6m8CWRUvmdoAUIzsn1wTAI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oTgNOtPpMbWd9nTr0P4qjog0xaG4jZLKspnywW0LlnFCRHLl7U4vGiE232q8GSUUwB+x0z4mqnw7S38GoxZAtK58QIad1ql3TUxSFX8/KFp3sjCbYCE/9P76JW9X6KnGezbnkcj8VSbfXi4ziqIqHmyFt5ZAFubk+hIGGwuJRV0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=aZtIpTgr; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=BR7FjtBS; arc=pass smtp.client-ip=81.169.146.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1708524847; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=eF7zpziyzn7qfFatPGrSLuoZKqHgAbED3q2DQWAh0F16lqhFhPmy7h1TO0yucGd4Ht
+    ch2KYFruI/2dhAF6qAIZSzG8ewmC6RK9u1kuHVZYqvFT7c8B+8yBts2GVgGP5rr60ul0
+    0lHFhjc7uj8nW1ykR1f9mvpjEWUpF+BQkLTDLcsjsmKr3zNGfNJNo4Yym8G0QSGD/x52
+    6DQkWPNnp3X4XDEWpCobcqrSOWLRKk3p7F52Pqa+HXb1nAwxOXNltyIqu38FGF/gZ+KC
+    RzGMSCZzrBTEuvw7cEeOmQMXuZ7gpbxANe3CAxCZ6kvVvoF62C7Td6MRVgewwEo+POHn
+    2fkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1708524847;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=pNmfUJlxupC7lu/MxHbYI/dHRvIwzgDi+MUm9/NBeeQ=;
+    b=XFG5G6PDSsXfZRQzW7IMDP/1N2t+tWxmi6b0FSEFn0Xd2HRPgy/Dx5jbI1HDCEOgNh
+    E5bHIwYX7Wrr5xSuhIDA86dxiKD8l20kY4aWEYBabDYZ7aCMCJ2MsUhfn/xZCGCnH6it
+    9H3p0YfDRCkj/tajRjfQt+Y6CQTVNawoZjipGHk34niVLdWxI4a9EjkGajKRErcvJX39
+    NUJv6Tw9lSMn2uQhMEKea0dUcxQ5Gnbp65jzZtadWSOgB30ha1T3cIegdLwA+RVQ7OYf
+    1VE44hxyz2vM6FX3Gzt/wtLE/tlZub0JIXQnqJkkdFND2N3SzZX7COB2cJsxKTc5fgMx
+    q8Tw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1708524847;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=pNmfUJlxupC7lu/MxHbYI/dHRvIwzgDi+MUm9/NBeeQ=;
+    b=aZtIpTgrrBR/wxkhlAsr0m3oKEFRuqe3XxDAv5nUabSD74row8W+B9fvaxDY/zbDfH
+    jiDF5zD1GAG7WAYzc2dC54arK9dBAKprsYg+4DfXp6UlDKjJGerJpBRy2bBiMflDyno4
+    D2ckHRe+gfkQeqxr0ehBuLM1CZojsrPMfaQekc9xQ7OI8hbXFOuw0FQ3CV7PwNKRZHJV
+    lnq5EdPdV1k1DK11+CjHd6IZRRdpjTlKAUV4EYG/YM6KoRaWNFvPkFOqENAYsrxDJXS/
+    8Xgl+PUs2hzfx7i5reNLPj1cj9KqlMd0YRkir5aD18Zjw8h0m1kiURTzbcYRhtCDqMRT
+    HFlg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1708524847;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=pNmfUJlxupC7lu/MxHbYI/dHRvIwzgDi+MUm9/NBeeQ=;
+    b=BR7FjtBSb695Dxo4QhwEk0KAqx83hUHhhtwes2uCKy3WZcxi0c1krj3P2fbQA2VGV0
+    /U2Tbu0uh5ZQopL8WFBg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFr0USEbHoO0g=="
+Received: from [IPV6:2a00:6020:4a8e:5010::923]
+    by smtp.strato.de (RZmta 49.11.2 AUTH)
+    with ESMTPSA id K49f9c01LEE7EFu
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Wed, 21 Feb 2024 15:14:07 +0100 (CET)
+Message-ID: <54afa5e8-fb5e-4d90-8897-8f3c5a684418@hartkopp.net>
+Date: Wed, 21 Feb 2024 15:14:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kvtavsos5g6wyacj"
-Content-Disposition: inline
-In-Reply-To: <ZdX3xgM36iOVhr3V@fedora>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] can: netlink: Fix TDCO calculation using the old data
+ bittiming
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+ Maxime Jayat <maxime.jayat@mobile-devices.fr>
+Cc: Wolfgang Grandegger <wg@grandegger.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <40579c18-63c0-43a4-8d4c-f3a6c1c0b417@munic.io>
+ <CAMZ6Rq+10m=yQ9Cc9gZQegwD=6iCU=s1r78+ogJ4PV0f5_s+tQ@mail.gmail.com>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <CAMZ6Rq+10m=yQ9Cc9gZQegwD=6iCU=s1r78+ogJ4PV0f5_s+tQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi all,
+
+I have an old PCAN USB adapter (Classical CAN) which uses the pcan_usb 
+driver and wanted to set a 50kbit/s bitrate:
+
+ip link set can0 up txqueuelen 500 type can bitrate 50000 sjw 4
+
+First it complained about the SJW having a higher value than some 
+phase-seg value which was 2.
+
+Error: sjw: 4 greater than phase-seg2: 2.
+
+I always thought the driver automatically adapts the SJW value to the 
+highest possible and SJW=4 could always be set. Did this change at a 
+certain point?
+
+Anyway, then I reduced the given SJW value and the ip command did not 
+give any error message.
+
+But finally there was not CAN traffic possible with my "always working 
+setup".
+
+I'm running 6.8.0-rc4-00433-g92a355464776 from Linus' tree.
+
+Reverting this patch fixed my issue.
+
+Best regards,
+Oliver
 
 
---kvtavsos5g6wyacj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 21.02.2024 14:16:54, Matias Ezequiel Vara Larsen wrote:
-> On Wed, Feb 21, 2024 at 01:49:31PM +0100, Marc Kleine-Budde wrote:
-> > On 21.02.2024 11:37:58, Matias Ezequiel Vara Larsen wrote:
-> > > > > +The length of the \field{sdu} is determined by the \field{length=
-}.
-> > > > > +
-> > > > > +The type of a CAN message identifier is determined by \field{fla=
-gs}. The
-> > > > > +3 most significant bits of \field{can_id} do not bear the inform=
-ation
-> > > > > +about the type of the CAN message identifier and are 0.
-> > > > > +
-> > > > > +The device MUST reject any CAN frame type for which support has =
-not been
-> > > > > +negotiated with VIRTIO_CAN_RESULT_NOT_OK in \field{result} and M=
-UST NOT
-> > > > > +schedule the message for transmission. A CAN frame with an undef=
-ined bit
-> > > > > +set in \field{flags} is treated like a CAN frame for which suppo=
-rt has
-> > > > > +not been negotiated.
-> > > > > +
-> > > > > +The device MUST reject any CAN frame for which \field{can_id} or
-> > > > > +\field{sdu} length are out of range or the CAN controller is in =
-an
-> > > > > +invalid state with VIRTIO_CAN_RESULT_NOT_OK in \field{result} an=
-d MUST
-> > > > > +NOT schedule the message for transmission.
-> > > > > +
-> > > I am not very familiar with CAN but how does the device figure out th=
-at
-> > > the can_id is out of range?
-> >=20
-> > In classical CAN we have the standard CAN frames, which have an 11 bit
-> > ID, and there are extended CAN frames, which have 29 bits ID. Extended
-> > frames are signaled with VIRTIO_CAN_FLAGS_EXTENDED set.
-> >=20
-> > So if a standard frame uses more than 11 Bits of CAN-ID, it's considered
-> > out of range.
-
-Another option would be an extended frame (VIRTIO_CAN_FLAGS_EXTENDED
-set) and using more than 29 bits.
-
-> Thanks Marc for the explanation. Do you think that it would be
-> worthwhile to add that to the spec at some point?
-
-Yes that makes sense as it clarifies what's meant by out of range for
-CAN-IDs, for the valid length a reference to
-\item[VIRTIO_CAN_F_CAN_CLASSIC (0)] and \item[VIRTIO_CAN_F_CAN_FD (1)]
-might be added.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---kvtavsos5g6wyacj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmXV+mYACgkQKDiiPnot
-vG+1gAf/bbPgj+CwAhBtLIyNrjsdOP99lOBPcCVZsU0cUwrKZPWaNzoCjqS/VGB3
-qaul/sD23a1RhOGYrL3e5xNZJTAOYW1BFNzoa8IvUKu6J7J3ccZ0inNV+I97XcBi
-fyMGpHIQRX/HuLVJYScH58/xbErWGnyDQbkR5YX4UhmfLfxH0Z2fCJcWXH5L1/on
-ELByICVhXNG5J2NF7O0jnROcH1S4mTJKwHLkZf0DQp2rP12jT86/yTkJKIBJeUse
-VN3WmkDJE6GAR50kZ4hFDChSBnMDvJSxN+dVFJhvdtTK8u0MXUjJ/ZUIb+yNPBVw
-KHODp0wB1BzP2AKYYm1l2/qJCMiI5Q==
-=l3gq
------END PGP SIGNATURE-----
-
---kvtavsos5g6wyacj--
+On 07.11.23 03:26, Vincent MAILHOL wrote:
+> On Tue. 7 Nov. 2023 at 03:02, Maxime Jayat
+> <maxime.jayat@mobile-devices.fr> wrote:
+>> The TDCO calculation was done using the currently applied data bittiming,
+>> instead of the newly computed data bittiming, which means that the TDCO
+>> had an invalid value unless setting the same data bittiming twice.
+> 
+> Nice catch!
+> 
+> Moving the can_calc_tdco() before the memcpy(&priv->data_bittiming,
+> &dbt, sizeof(dbt)) was one of the last changes I made. And the last
+> batch of tests did not catch that. Thanks for the patch!
+> 
+>> Fixes: d99755f71a80 ("can: netlink: add interface for CAN-FD Transmitter Delay Compensation (TDC)")
+>> Signed-off-by: Maxime Jayat <maxime.jayat@mobile-devices.fr>
+> 
+> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> 
+>> ---
+>>   drivers/net/can/dev/netlink.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+>> index 036d85ef07f5..dfdc039d92a6 100644
+>> --- a/drivers/net/can/dev/netlink.c
+>> +++ b/drivers/net/can/dev/netlink.c
+>> @@ -346,7 +346,7 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+>>                          /* Neither of TDC parameters nor TDC flags are
+>>                           * provided: do calculation
+>>                           */
+>> -                       can_calc_tdco(&priv->tdc, priv->tdc_const, &priv->data_bittiming,
+>> +                       can_calc_tdco(&priv->tdc, priv->tdc_const, &dbt,
+>>                                        &priv->ctrlmode, priv->ctrlmode_supported);
+>>                  } /* else: both CAN_CTRLMODE_TDC_{AUTO,MANUAL} are explicitly
+>>                     * turned off. TDC is disabled: do nothing
+>> --
+>> 2.34.1
+>>
+> 
 
