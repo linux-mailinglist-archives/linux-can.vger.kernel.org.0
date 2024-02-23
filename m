@@ -1,381 +1,173 @@
-Return-Path: <linux-can+bounces-345-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-346-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D42185F6F2
-	for <lists+linux-can@lfdr.de>; Thu, 22 Feb 2024 12:31:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C24F0860EAB
+	for <lists+linux-can@lfdr.de>; Fri, 23 Feb 2024 10:53:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18D09B23252
-	for <lists+linux-can@lfdr.de>; Thu, 22 Feb 2024 11:31:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37841B20E7B
+	for <lists+linux-can@lfdr.de>; Fri, 23 Feb 2024 09:53:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0517445C10;
-	Thu, 22 Feb 2024 11:30:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAFAF58AC3;
+	Fri, 23 Feb 2024 09:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q+lxRftN"
+	dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b="Jkn315AT"
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2106.outbound.protection.outlook.com [40.107.247.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CECA545BEF
-	for <linux-can@vger.kernel.org>; Thu, 22 Feb 2024 11:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708601446; cv=none; b=r6O/4VPIRu4A1meFk9nEFwHJU4WPxEg+PPxTLNQpsBBDN5O4htiQ41yGiJAaHJUK9e7/50jJb61ioZVbvp6OkbOxVtTQzAmsap2jW4jDqmaTdxP+SArqxtTuhZeQsfS2Y4SZS62bCf8xDfsMaz5lVVy/m5xwkVB7QSrqDf5mTkM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708601446; c=relaxed/simple;
-	bh=3h36aBxv2Xpsuz7mavIJ0AgTe0GQGbzyoAT6PJXcr44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mJekkHfCMcYc21TClqB96TdA4zhfSm6xTgROcOSQZE8OLbWD4fzKRLDEGju1OeRzh30li/lhvEGLkbnWBj+q6w7h9KmzIMCOjKjSXHkRhfSCOme55boTbuoA6XJfbioRRcT3BKf0ZkotTwlYRvdOYOPgVBsiaDYPobh/nCR34vY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q+lxRftN; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708601443;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rDzaL7dkQKTAnSLCd6E782i4+1z/ltyP67G/xrL3Euc=;
-	b=Q+lxRftNarz69VqunpmhDS1ObyUCZ/Ufq3DhaA4QWGfWQTD83U+n1yx7fr5M45ITo1wFTw
-	0sPqmPms4a2yavBvYKG4D85YrsnZJoqrJlHhemHB5HOUgeazr3l7vwEAvCiMJtiMwrG1d7
-	vBpAaawqwNf6b5mvjM2k4LhzNnss7JM=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-210-HCZCdKiQMeiJCj0GmmL7pg-1; Thu, 22 Feb 2024 06:30:42 -0500
-X-MC-Unique: HCZCdKiQMeiJCj0GmmL7pg-1
-Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2d23683df7fso38947951fa.1
-        for <linux-can@vger.kernel.org>; Thu, 22 Feb 2024 03:30:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708601440; x=1709206240;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rDzaL7dkQKTAnSLCd6E782i4+1z/ltyP67G/xrL3Euc=;
-        b=YYk1OOoGkK7ZdyuLGXLJ1NusHeph2Agry2z631YHBanOIbU6R3/lHVePPpA6itHqaa
-         w/+o3ojjHXtLHnLwfOKvQOtFb+R2UZQ+F+ykU6/tf9SU4nDnHwK0TmHan0bT3FgAT5on
-         usKMs3TUR36x5qrD/hutjwsIW0J3kR31OQbnDdSh8KHSC6J07zFJ+CAzrfuuuSeudkMS
-         1OxTKd85ilENtJPaltUnGnXa+e8XbjZuuGn1wAjAEY/73fiM3tJwjgk2iTrwpM0LB9mC
-         HIaf2FfSYC+jHkN5wlFGOlgFC62b5X2wb+n6VWnE2Tk4wLcgeFRFzV6QQLB/YpOMsbEs
-         y84Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWFZ55Mbduh7smQ0FnZz3uuXhWqGnU5HnwXa3ZJUSm8oGms9QC3QRTBz3KAf7tuPJxjL9YXxrpjj0bJsHn6/89yfBcPFScaZF7w
-X-Gm-Message-State: AOJu0YxGUlh0kAm0HtSm2DhkLAufpqaA5dyD85QotMlx17HXaXps0v95
-	kfQTtOEdX+WfnPjxAulsCc+b6l7hG9/SsCV6y2VPt1XjbZ8vsba+kaDetmeZMN3x9ET15te+qH/
-	ab6z4Pqvg4zXw6jBeVrOeCzUVPAVYUySMNAHI4ZOp81Eu3nzBGwv+OfLfCKNC+gsrcw==
-X-Received: by 2002:ac2:4c8a:0:b0:512:cc50:c3e0 with SMTP id d10-20020ac24c8a000000b00512cc50c3e0mr4715137lfl.52.1708601440450;
-        Thu, 22 Feb 2024 03:30:40 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEq+x1REUNVFGd5VtK6cp2OO6c7Y72w/I7ThXIZTRwmdgEx9QjIYZ6RBr5koxNjcRf88ZSbTQ==
-X-Received: by 2002:ac2:4c8a:0:b0:512:cc50:c3e0 with SMTP id d10-20020ac24c8a000000b00512cc50c3e0mr4715117lfl.52.1708601439922;
-        Thu, 22 Feb 2024 03:30:39 -0800 (PST)
-Received: from fedora ([2a01:e0a:257:8c60:80f1:cdf8:48d0:b0a1])
-        by smtp.gmail.com with ESMTPSA id l40-20020a05600c1d2800b0041276d96351sm5415049wms.3.2024.02.22.03.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Feb 2024 03:30:39 -0800 (PST)
-Date: Thu, 22 Feb 2024 12:30:37 +0100
-From: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-To: Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@opensynergy.com>
-Cc: virtio-comment@lists.oasis-open.org, virtio-dev@lists.oasis-open.org,
-	linux-can@vger.kernel.org,
-	Harald Mommer <harald.mommer@opensynergy.com>
-Subject: Re: [virtio-comment] [RFC PATCH v3] virtio-can: Device specification.
-Message-ID: <ZdcwXSoc0sxbjS1Z@fedora>
-References: <20230609142243.199074-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
- <ebc57e36-d822-4264-a763-b530482b2669@opensynergy.com>
- <ZdSYtPtn5UzKNhAi@fedora>
- <0874278c-9497-414e-b1e5-4ebdf5db6da7@opensynergy.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244641F93F
+	for <linux-can@vger.kernel.org>; Fri, 23 Feb 2024 09:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.106
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708681963; cv=fail; b=ZrQbYu1sq0q3lnh+wAXOONJo6TClJjXjg3mtbRPSmzc7mZryWtrjV9CkVzN8+uEwyPMgeXqR5AYVo1rBttrk6UwgYiGHdNct69Kb0dQi3bFYwmj7aY53vaxV2uXFzV409/WAab63xqBgQG3Xo0l1r6d9lI1YpVDZwJYhbjAwtIc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708681963; c=relaxed/simple;
+	bh=tojrwA4s7G8y60cgyJBiwhX/Vn0H6UbZLpsiGvGisk4=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=eOrqexbaunXSU9dZYq5rpUBNI3th+aB9q0QTao87Gf82K0s6ivfo+03bLwkboRDuSkh1CHr5t7lYgK+Nck+D36zStK25/yGHVO5LYYol8rofA93pBb3GzJ306X14BqCVZL8d0ulDcwgyB6OC1IC23haTa0DfkAIpiZCF95zC4mw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b=Jkn315AT; arc=fail smtp.client-ip=40.107.247.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvaser.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Oje9QC/PWM+favxN2Z6TgqI+1WLuImhzJWfiYn2ILqsjuasp+3KxgvhW8Si7Fnwu1oNlRdon2k3NRHVMabmcAVGv243pJbHT2Yy0QxTzTuk2s9Ettgf30udsYUqRKe5s32jAy5VDFF+mgsdGnKOTxEnTtpeuyXEMX94qcJxfkqYF5phhVBDyg1MvIBzqHO0P/y821z9ceiE3o+1Be7WTdqDPtEVUCK/fsauDDa1BVnLhMNHcW+CZnD7y0+74akgYlM3adR8L0kN7Ia8upHImICtMIo/cQHHzL2f4p82aUt+TqWmomy4JMjL0f3yZSLitgW4/y4a7cZ6RTN3yhdzfjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fSxZIGXsYxo8jqCRWomhR8QKd8xaQ+mnDBNnUGgh2tQ=;
+ b=VDVshztmxhctWMbow6Xf3fjcLYWWH2A7uODCO2w8jNpl8+vPu0K2DmGRNRx/gJsYg0M5cuQTsSxuM4TvSVUwP9FEVui9sjd8k1XXk1jq6vUMaNJIjgLorvE48Dvb2/+T3U5bVCwScbs3T3WvC+rdVV5Ixy4/0JQ7uC62vaGPEG7Y+EE3ivAc2A4+encYw13DTYiDBzwNtZ09aN+441GPYpXv1WITXFFM/xrTRFO9Yidu8SZNSr8+XFCa5hN2cx3g6d3KJPj4D9IPkd8L8imbbELPf8qA9vqFPO6LJf//kPGK4N2iqx7GCLx01lMwP7qFrQpyO1oyyyTqPUZ50aM+cw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kvaser.com; dmarc=pass action=none header.from=kvaser.com;
+ dkim=pass header.d=kvaser.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kvaser.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fSxZIGXsYxo8jqCRWomhR8QKd8xaQ+mnDBNnUGgh2tQ=;
+ b=Jkn315ATzKH1LR+ArMKtYh5PklnwTCoq85vdd3wHLGerQFD/5zZKOQUMiNJK68xLeXtL8PzPqPLxWMsQjCPDCAo4yFL0uGZZnh9WHdmI/SYunftscpf97ISabPsxonujQ8sv2p5f6bkN6cXD5YcaSVFY3cyX4fLJ4/Lmf2JoTtQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kvaser.com;
+Received: from AS8P193MB2014.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:40d::20)
+ by AM0P193MB0532.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:169::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.24; Fri, 23 Feb
+ 2024 09:52:37 +0000
+Received: from AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
+ ([fe80::8236:dccd:3358:876]) by AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
+ ([fe80::8236:dccd:3358:876%7]) with mapi id 15.20.7316.023; Fri, 23 Feb 2024
+ 09:52:37 +0000
+From: Jimmy Assarsson <extja@kvaser.com>
+To: linux-can@vger.kernel.org
+Cc: Jimmy Assarsson <jimmyassarsson@gmail.com>,
+	Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH] can: kvaser_usb: Add support for Leaf v3
+Date: Fri, 23 Feb 2024 10:52:17 +0100
+Message-ID: <20240223095217.43783-1-extja@kvaser.com>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MM0P280CA0094.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:9::35) To AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:40d::20)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0874278c-9497-414e-b1e5-4ebdf5db6da7@opensynergy.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8P193MB2014:EE_|AM0P193MB0532:EE_
+X-MS-Office365-Filtering-Correlation-Id: 56d7cf1f-b87c-4d58-a174-08dc34552a80
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	jtO4CYZpp54xXRlwIakB3NRdq4Xi34PyLTCDMO8S8QPPu0RItLp895cKypzyA1cnv6vcpxbCrTegkBzim0vpcdxnrPWuWcprklLRla72im3UAXPlQ5pDuyrvKSEmR67ip7yoDyhILC55uDEIkkuVcJGECyMRnjwKlzgOJA3SjcperC82u9RGvJ0jMQ9OmzrbApJbsrUqjXV6NHg74BTReoMm9c6Y4sIZCZi4Z3OnYSIbpG7n6a4wWOsqS4nYEGNRqlFfKhzCm8wo9OpQZ4TnLzYYnI50TuIoGhgu+NtcHhc4RX9WJ1iWVXRwBlF2HupflvrHHvBIY7h+W9cx9OYg49EU/WOELbIC8JF4aEcTh9Sra+t2yNGCQuPbHIbmYIwCKHTnbJWjffJ+6d8I6/MFCpEqBT3WYLXVM8k9A44WSwnDYMK+j2e7Ztsb5UZCvW9RvGPpsL6GPzB4LF90v/m/oi+KrjXXph7zOW/Q/4P8MY7q+EzTcVoLX2uwBtQurkih5evyuPfqX/JedxnsFZ3gqlpG1EA9U45yHwZHzckQJsM=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P193MB2014.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?+HJPmzKJt7QgwYz4UIY5NKORUB6VD9qFw7ho2LZw0DwJI+mbKIBgNgjNqz/H?=
+ =?us-ascii?Q?t7x1EaL7ZBHfsof4pDP/NLGu3DFkc8cOYT9H9oUgD1kzoayCwfmOG9znsYcw?=
+ =?us-ascii?Q?OHQae2tMFt1VcYW9camA7rFyIpMK6RnhID3CiZciJUHvhSO0bpcPG0OVr4Qh?=
+ =?us-ascii?Q?QTnE1fASYuhwPR3F4ci6g/zzMfL2+1hLIXlnh0kfR6M8Jruizp5laBdoXO8k?=
+ =?us-ascii?Q?tP8mMp82liMDdFZLpDpwwiPNKrlGLtDYzbL+Dima59Q3CR85lK/kXR38Dn3h?=
+ =?us-ascii?Q?rt8IQE9mBfAdmlSTBpjTIRiNs832L/OjNw1bIbr1Ms1xQlAPSXEU6H36U1tX?=
+ =?us-ascii?Q?uW5qxyzzOBTvJwUyP3UvOTKOZaUgg4dHNcOHpZmvQCqjvFo36yoeTnD4xSoX?=
+ =?us-ascii?Q?NUzoE88zaZfwYEPsP+tS1N7e1xAaO/GKkGrnwpmCnGoQu1YwOYZkuW3t93IL?=
+ =?us-ascii?Q?QAf+gtBByNbc+/JfdxqKwARXOxhREygq/elK+8aebwn8aocxiGHlc022FY9K?=
+ =?us-ascii?Q?pnPeO6AqopiEYTWJq4UO/xPyrj2mWSZq0NxvinWmHzITMXp4TIYWAUG+RujI?=
+ =?us-ascii?Q?J+XwQrV6wqffLI2XUghJb/Chd6WapIvnNPPUcigLzz6Ow6d1puaZiCqs/tAB?=
+ =?us-ascii?Q?kuFtYRpq5yrtkPwhptUvE6D8FnzQxRAP60eYitUnEtaDJIf+9n3VeJZLJAwP?=
+ =?us-ascii?Q?5cMHW+0/WtgBreSfMEt87n7cTIz226hjPWuNNqoh56SfUa+L0owiC+Owgnp9?=
+ =?us-ascii?Q?leaQNhSi/bPL25LDD6I/mmvGxFkp5UahQ9E3XvnWR18nkYrFKApfeVoIIRZD?=
+ =?us-ascii?Q?bkAb+7vKX7xtmuajZ1T5mF0BoQqoqvWaRUm81CaNx4Fbr0fRW7geRV0mmUfU?=
+ =?us-ascii?Q?o7hfsHgYVFX5q7gEMULEfjAJjHVfSjQnYJSp+scyDffjnYoHMaIETdGhL4zu?=
+ =?us-ascii?Q?/oM+SobXJJUeAjQ9Pk95hhupXZWJUIv5gXvtfL89Up77JGuNXOBCJUGAI1y6?=
+ =?us-ascii?Q?P8wiyJzj0p/4vvEJe/LqCR3Pr2Znwrei8wX3XH1REzjJtBel5Rw6w1q875Gl?=
+ =?us-ascii?Q?SbYQJTj7Y2pvLIPRTahE9d2kUiwKWi3mYPax8/EGIfrCucV8OL/w3SkXheiE?=
+ =?us-ascii?Q?bnMFJ8O396aVIXucVypgYyDTobDLjDukbKTElDRg9Ob6eo9fu0s4qyFY1fCV?=
+ =?us-ascii?Q?LmfFmdQxlOnmIpKDa5folvAQY5ztNTCyd2UWSU5EZ4mdIWnWQvBBDy7W53Nq?=
+ =?us-ascii?Q?W5hRbRlfo4AGcHrfMcJrMSW4brNa4rCJ8XetyJ71LaqQm4CbIv8rA0HQyv8G?=
+ =?us-ascii?Q?2I1DD4XWyLtz/WwaUNw9On2OD/c6T8wp6rPq90nskRukFeaUzulM4qaGvmUV?=
+ =?us-ascii?Q?O2TVlDOHVi/gCBbttjXBlMBsRM3doAxiweRqQS2zjB95KTSfJ33kf5069Nm5?=
+ =?us-ascii?Q?vg6652V3gGFhMD+N1rvS4E8ArqaDbNRM25AMvFz05t+hH5Uv/WuiMYUsDL8z?=
+ =?us-ascii?Q?kJCo4YwShd+9vggFSdghMxjjYQRjqMPs0oxzPtrKxcvDipr7PF5Bjvs7WPxs?=
+ =?us-ascii?Q?dCAp6vjxeajNt6RuidBlMdUqDaQc40npBJ6D7Uag?=
+X-OriginatorOrg: kvaser.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56d7cf1f-b87c-4d58-a174-08dc34552a80
+X-MS-Exchange-CrossTenant-AuthSource: AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2024 09:52:37.0675
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 73c42141-e364-4232-a80b-d96bd34367f3
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wSE94PtS/+WKqZVUKZ+Xr4smhEtxaa6Tc4SV7dHk683dbd+XRwhl/yPyJ3q0WvG+4m04LvsScsRpnmGaOB/X2A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0P193MB0532
 
-On Wed, Feb 21, 2024 at 04:42:18PM +0100, Mikhail Golubev-Ciuchea wrote:
-> Hi Matias,
-> 
-> On 2/20/24 13:19, Matias Ezequiel Vara Larsen wrote:
-> > Hello Mikail,
-> > 
-> > On Mon, Jan 08, 2024 at 06:18:50PM +0100, Mikhail Golubev-Ciuchea wrote:
-> > > Hi all!
-> > > 
-> > > I kindly request a vote.
-> > > 
-> > > Fixes: https://github.com/oasis-tcs/virtio-spec/issues/186
-> > > 
-> > > 
-> > > Best wishes,
-> > > Mikhail Golubev-Ciuchea
-> > > 
-> > > 
-> > > 
-> > > On 6/9/23 16:22, Mikhail Golubev-Ciuchea wrote:
-> > > > From: Harald Mommer <harald.mommer@opensynergy.com>
-> > > > 
-> > > > virtio-can is a virtual CAN device. It provides a way to give access to
-> > > > a CAN controller from a driver guest. The device is aimed to be used by
-> > > > driver guests running a HLOS as well as by driver guests running a
-> > > > typical RTOS as used in controller environments.
-> > > > 
-> > > > Signed-off-by: Harald Mommer <Harald.Mommer@opensynergy.com>
-> > > > Signed-off-by: Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>
-> > > > ---
-> > > > 
-> > > > RFC v3:
-> > > > * Add length fields in CAN RX and TX messages.
-> > > > * Replace bus off indication queue with a config space bit.
-> > > > * Clarify handling of unknown flag bits set in CAN frame.
-> > > > * Remove MISRA C suffixes in constants.
-> > > > * Reserve 16 bits in RX/TX messages for CAN XL priority.
-> > > > * Reserve 8 bits in RX/TX messages for CAN classic DLC.
-> > > > * Rework according to general virtio spec POV.
-> > > > * Implementation:
-> > > >     driver: https://lore.kernel.org/all/20230607145613.133203-1-Mikhail.Golubev-Ciuchea@opensynergy.com/
-> > > >     QEmu device: https://github.com/OpenSynergy/qemu/tree/virtio-can-spec-rfc-v3
-> > > > 
-> > > > RFC v2:
-> > > > * Add CAN classic feature flag.
-> > > > * Add feature flag VIRTIO_CAN_F_LATE_TX_ACK.
-> > > > * Add feature flag VIRTIO_CAN_F_RTR_FRAMES.
-> > > > * Reserve 32 bits in RX/TX messages.
-> > > > * Remove priorities of messages.
-> > > > 
-> > > >    conformance.tex                         |  12 +-
-> > > >    content.tex                             |   1 +
-> > > >    device-types/can/description.tex        | 249 ++++++++++++++++++++++++
-> > > >    device-types/can/device-conformance.tex |   8 +
-> > > >    device-types/can/driver-conformance.tex |   7 +
-> > > >    introduction.tex                        |   2 +
-> > > >    6 files changed, 275 insertions(+), 4 deletions(-)
-> > > >    create mode 100644 device-types/can/description.tex
-> > > >    create mode 100644 device-types/can/device-conformance.tex
-> > > >    create mode 100644 device-types/can/driver-conformance.tex
-> > > > 
-> > > > diff --git a/conformance.tex b/conformance.tex
-> > > > index 01ccd69..a07ef02 100644
-> > > > --- a/conformance.tex
-> > > > +++ b/conformance.tex
-> > > > @@ -32,8 +32,9 @@ \section{Conformance Targets}\label{sec:Conformance / Conformance Targets}
-> > > >    \ref{sec:Conformance / Driver Conformance / Memory Driver Conformance},
-> > > >    \ref{sec:Conformance / Driver Conformance / I2C Adapter Driver Conformance},
-> > > >    \ref{sec:Conformance / Driver Conformance / SCMI Driver Conformance},
-> > > > -\ref{sec:Conformance / Driver Conformance / GPIO Driver Conformance} or
-> > > > -\ref{sec:Conformance / Driver Conformance / PMEM Driver Conformance}.
-> > > > +\ref{sec:Conformance / Driver Conformance / GPIO Driver Conformance},
-> > > > +\ref{sec:Conformance / Driver Conformance / PMEM Driver Conformance} or
-> > > > +\ref{sec:Conformance / Driver Conformance / CAN Driver Conformance}.
-> > > >        \item Clause \ref{sec:Conformance / Legacy Interface: Transitional Device and Transitional Driver Conformance}.
-> > > >      \end{itemize}
-> > > > @@ -59,8 +60,9 @@ \section{Conformance Targets}\label{sec:Conformance / Conformance Targets}
-> > > >    \ref{sec:Conformance / Device Conformance / Memory Device Conformance},
-> > > >    \ref{sec:Conformance / Device Conformance / I2C Adapter Device Conformance},
-> > > >    \ref{sec:Conformance / Device Conformance / SCMI Device Conformance},
-> > > > -\ref{sec:Conformance / Device Conformance / GPIO Device Conformance} or
-> > > > -\ref{sec:Conformance / Device Conformance / PMEM Device Conformance}.
-> > > > +\ref{sec:Conformance / Device Conformance / GPIO Device Conformance},
-> > > > +\ref{sec:Conformance / Device Conformance / PMEM Device Conformance} or
-> > > > +\ref{sec:Conformance / Device Conformance / CAN Device Conformance}.
-> > > >        \item Clause \ref{sec:Conformance / Legacy Interface: Transitional Device and Transitional Driver Conformance}.
-> > > >      \end{itemize}
-> > > > @@ -152,6 +154,7 @@ \section{Conformance Targets}\label{sec:Conformance / Conformance Targets}
-> > > >    \input{device-types/scmi/driver-conformance.tex}
-> > > >    \input{device-types/gpio/driver-conformance.tex}
-> > > >    \input{device-types/pmem/driver-conformance.tex}
-> > > > +\input{device-types/can/driver-conformance.tex}
-> > > >    \conformance{\section}{Device Conformance}\label{sec:Conformance / Device Conformance}
-> > > > @@ -238,6 +241,7 @@ \section{Conformance Targets}\label{sec:Conformance / Conformance Targets}
-> > > >    \input{device-types/scmi/device-conformance.tex}
-> > > >    \input{device-types/gpio/device-conformance.tex}
-> > > >    \input{device-types/pmem/device-conformance.tex}
-> > > > +\input{device-types/can/device-conformance.tex}
-> > > >    \conformance{\section}{Legacy Interface: Transitional Device and Transitional Driver Conformance}\label{sec:Conformance / Legacy Interface: Transitional Device and Transitional Driver Conformance}
-> > > >    A conformant implementation MUST be either transitional or
-> > > > diff --git a/content.tex b/content.tex
-> > > > index d2ab9eb..8806b57 100644
-> > > > --- a/content.tex
-> > > > +++ b/content.tex
-> > > > @@ -765,6 +765,7 @@ \chapter{Device Types}\label{sec:Device Types}
-> > > >    \input{device-types/scmi/description.tex}
-> > > >    \input{device-types/gpio/description.tex}
-> > > >    \input{device-types/pmem/description.tex}
-> > > > +\input{device-types/can/description.tex}
-> > > >    \chapter{Reserved Feature Bits}\label{sec:Reserved Feature Bits}
-> > > > diff --git a/device-types/can/description.tex b/device-types/can/description.tex
-> > > > new file mode 100644
-> > > > index 0000000..2511d9c
-> > > > --- /dev/null
-> > > > +++ b/device-types/can/description.tex
-> > > > @@ -0,0 +1,249 @@
-> > > > +\section{CAN Device}\label{sec:Device Types / CAN Device}
-> > > > +
-> > > > +virtio-can is a virtio based CAN (Controller Area Network) controller.
-> > > > +It is used to give a virtual machine access to a CAN bus. The CAN bus
-> > > > +might either be a physical CAN bus or a virtual CAN bus between virtual
-> > > > +machines or a combination of both.
-> > > > +
-> > > > +\subsection{Device ID}\label{sec:Device Types / CAN Device / Device ID}
-> > > > +
-> > > > +36
-> > > > +
-> > > > +\subsection{Virtqueues}\label{sec:Device Types / CAN Device / Virtqueues}
-> > > > +
-> > > > +\begin{description}
-> > > > +\item[0] Txq
-> > > > +\item[1] Rxq
-> > > > +\item[2] Controlq
-> > > > +\end{description}
-> > > > +
-> > > > +The \field{Txq} is used to send CAN packets to the CAN bus.
-> > > > +
-> > > > +The \field{Rxq} is used to receive CAN packets from the CAN bus.
-> > > > +
-> > > > +The \field{Controlq} is used to control the state of the CAN controller.
-> > > > +
-> > > > +\subsection{Feature bits}{Device Types / CAN Device / Feature bits}
-> > > > +
-> > > > +Actual CAN controllers support Extended CAN IDs with 29 bits (CAN~2.0B)
-> > > > +as well as Standard CAN IDs with 11 bits (CAN~2.0A). The support of
-> > > > +CAN~2.0B Extended CAN IDs is considered as mandatory for this
-> > > > +specification.
-> > > > +
-> > > > +\begin{description}
-> > > > +
-> > > > +\item[VIRTIO_CAN_F_CAN_CLASSIC (0)]
-> > > > +
-> > > > +The device supports classic CAN frames with a maximum payload size of 8
-> > > > +bytes.
-> > > > +
-> > > > +\item[VIRTIO_CAN_F_CAN_FD (1)]
-> > > > +
-> > > > +The device supports CAN FD frames with a maximum payload size of 64
-> > > > +bytes.
-> > > > +
-> > > > +\item[VIRTIO_CAN_F_RTR_FRAMES (2)]
-> > > > +
-> > > > +The device supports RTR (remote transmission request) frames. RTR frames
-> > > > +are only supported with classic CAN.
-> > > > +
-> > > > +\item[VIRTIO_CAN_F_LATE_TX_ACK (3)]
-> > > > +
-> > > > +The virtio CAN device marks transmission requests from the \field{Txq}
-> > > > +as used after the CAN message has been transmitted on the CAN bus. If
-> > > > +this feature bit has not been negotiated, the device is allowed to mark
-> > > > +transmission requests already as used when the CAN message has been
-> > > > +scheduled for transmission but might not yet have been transmitted on
-> > > > +the CAN bus.
-> > > > +
-> > > > +\end{description}
-> > > > +
-> > > > +\subsubsection{Feature bit requirements}\label{sec:Device Types / CAN Device / Feature bits / Feature bit requirements}
-> > > > +
-> > > > +Some CAN feature bits require other CAN feature bits:
-> > > > +\begin{description}
-> > > > +\item[VIRTIO_CAN_F_RTR_FRAMES] Requires VIRTIO_CAN_F_CAN_CLASSIC.
-> > > > +\end{description}
-> > > > +
-> > > > +It is required that at least one of VIRTIO_CAN_F_CAN_CLASSIC and
-> > > > +VIRTIO_CAN_F_CAN_FD is negotiated.
-> > > > +
-> > > > +\subsection{Device configuration layout}\label{sec:Device Types / CAN Device / Device configuration layout}
-> > > > +
-> > > > +Device configuration fields are listed below, they are read-only for a
-> > > > +driver. The \field{status} always exists. A single read-only bit (for
-> > > > +the driver) is currently defined for \field{status}:
-> > > > +
-> > > > +\begin{lstlisting}
-> > > > +struct virtio_can_config {
-> > > > +#define VIRTIO_CAN_S_CTRL_BUSOFF (1 << 0)
-> > > > +        le16 status;
-> > > > +};
-> > > > +\end{lstlisting}
-> > > > +
-> > > > +The bit VIRTIO_CAN_S_CTRL_BUSOFF in \field{status} is used to indicate
-> > > > +the unsolicited CAN controller state change from started to stopped due
-> > > > +to a detected bus off condition.
-> > > > +
-> > > > +\drivernormative{\subsubsection}{Device Initialization}{Device Types / CAN Device / Device Operation / Initialization}
-> > > > +
-> > > > +The driver MUST populate the \field{Rxq} with empty device-writeable
-> > > > +buffers of at least the size of struct virtio_can_rx, see section
-> > > > +\ref{struct virtio_can_rx}.
-> > > > +
-> > > > +\subsection{Device Operation}\label{sec:Device Types / CAN Device / Device Operation}
-> > > > +
-> > > > +A device operation has an outcome which is described by one of the
-> > > > +following values:
-> > > > +
-> > > > +\begin{lstlisting}
-> > > > +#define VIRTIO_CAN_RESULT_OK     0
-> > > > +#define VIRTIO_CAN_RESULT_NOT_OK 1
-> > > > +\end{lstlisting}
-> > > > +
-> > > > +Other values are to be treated like VIRTIO_CAN_RESULT_NOT_OK.
-> > > > +
-> > > > +\subsubsection{Controller Mode}\label{sec:Device Types / CAN Device / Device Operation / Controller Mode}
-> > > > +
-> > > > +The general format of a request in the \field{Controlq} is
-> > > > +
-> > > > +\begin{lstlisting}
-> > > > +struct virtio_can_control_out {
-> > > > +#define VIRTIO_CAN_SET_CTRL_MODE_START  0x0201
-> > > > +#define VIRTIO_CAN_SET_CTRL_MODE_STOP   0x0202
-> > > > +        le16 msg_type;
-> > > > +};
-> > > > +\end{lstlisting}
-> > > > +
-> > > > +To participate in bus communication the CAN controller is started by
-> > > > +sending a VIRTIO_CAN_SET_CTRL_MODE_START control message, to stop
-> > > > +participating in bus communication it is stopped by sending a
-> > > > +VIRTIO_CAN_SET_CTRL_MODE_STOP control message. Both requests are
-> > > > +confirmed by the result of the operation.
-> > > > +
-> > > > +\begin{lstlisting}
-> > > > +struct virtio_can_control_in {
-> > > > +        u8 result;
-> > > > +};
-> > > > +\end{lstlisting}
-> > > > +
-> > > > +If the transition succeeded the \field{result} is VIRTIO_CAN_RESULT_OK
-> > > > +otherwise it is VIRTIO_CAN_RESULT_NOT_OK. If a status update is
-> > > > +necessary, the device updates the configuration \field{status} before
-> > > > +marking the request used. As the configuration \field{status} change is
-> > > > +caused by a request from the driver the device is allowed to omit the
-> > 
-> > Is this to indicate that when a driver requests a change, the device can
-> > omit notifying of the change? As I understand the specification, the
-> > device can omit the notification, but the change must still occur? Is it
-> > possible for the device to omit the change as well? What else could have
-> > triggered the status change if it wasn't the driver?
-> > 
-> > Thanks.
-> > 
-> 
-> The change request notification OK/NOT_OK for every mode transition request
-> is there in any case. In some cases the device would additionally notify the
-> driver about the controller status via 'virtio_can_config' in config space
-> (config space change notification mechanism), e.g. in case of a BusOff event
-> on the device side. Although, it is possible to omit the config space
-> notification e.g. when transitioning to stopped mode.
-> 
+Add support for Kvaser Leaf v3, based on the hydra platform.
 
-Thanks for the clarification. I think I got confused with the following
-sentence:
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+---
+ drivers/net/can/usb/Kconfig                      | 1 +
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 3 +++
+ 2 files changed, 4 insertions(+)
 
-`As the configuration status change is caused by a request from the
-driver the device is allowed to omit the configuration change
-notification here.`
-
-I think this could be rewritten as follows:
-
-`The device may omit the configuration change notification as the
-configuration status change is requested by the driver.`
-
-This change is, however, minor, so feel free to ignore it.
-
-Matias
+diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
+index d1450722cb3c..bd58c636d465 100644
+--- a/drivers/net/can/usb/Kconfig
++++ b/drivers/net/can/usb/Kconfig
+@@ -100,6 +100,7 @@ config CAN_KVASER_USB
+ 	    - Scania VCI2 (if you have the Kvaser logo on top)
+ 	    - Kvaser BlackBird v2
+ 	    - Kvaser Leaf Pro HS v2
++	    - Kvaser Leaf v3
+ 	    - Kvaser Hybrid CAN/LIN
+ 	    - Kvaser Hybrid 2xCAN/LIN
+ 	    - Kvaser Hybrid Pro CAN/LIN
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+index 71ef4db5c09f..8faf8a462c05 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -88,6 +88,7 @@
+ #define USB_USBCAN_PRO_4HS_PRODUCT_ID 0x0114
+ #define USB_HYBRID_CANLIN_PRODUCT_ID 0x0115
+ #define USB_HYBRID_PRO_CANLIN_PRODUCT_ID 0x0116
++#define USB_LEAF_V3_PRODUCT_ID 0x0117
+ 
+ static const struct kvaser_usb_driver_info kvaser_usb_driver_info_hydra = {
+ 	.quirks = KVASER_USB_QUIRK_HAS_HARDWARE_TIMESTAMP,
+@@ -235,6 +236,8 @@ static const struct usb_device_id kvaser_usb_table[] = {
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_PRO_CANLIN_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
++	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_V3_PRODUCT_ID),
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(usb, kvaser_usb_table);
+-- 
+2.43.1
 
 
