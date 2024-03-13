@@ -1,124 +1,115 @@
-Return-Path: <linux-can+bounces-375-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-376-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F35887A5F8
-	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 11:38:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12B6287A62B
+	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 11:56:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 198012828BC
-	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 10:38:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2ADD282E48
+	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 10:56:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B99B3D0D0;
-	Wed, 13 Mar 2024 10:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6183D3B3;
+	Wed, 13 Mar 2024 10:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1553wrsl"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82EB53CF72
-	for <linux-can@vger.kernel.org>; Wed, 13 Mar 2024 10:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9FF3F8E0
+	for <linux-can@vger.kernel.org>; Wed, 13 Mar 2024 10:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710326279; cv=none; b=WjMxCa725RNzqyQL4f5b1oC7cvwrr2EjyxYxQ/i1kmNxBesSXGiSKiUhzTelyd8GX4QdQI8iXOfBelO7meux7W9XNB8VBd7+LAr9XMqYKLR6EVIVQhuIBwwHZB9ffzWpwA/fcMGXLpWrA3/PKRh//3a3+HDqwL93khQLvUvWtIA=
+	t=1710327358; cv=none; b=J8wjtjQ/DSPERr/315/rMtRsQJVW6zXelQro+N5VAVTTBGoND5QPlWArMjBhSR1sicjRVmDWwzx6soBL6WNraGt5a6FcN5YrPENP6kicfT2ZB7laLnvnRzi9WvukXOfgO9DTprSwny7KbTEmMV2DCfG3GKFD6+8v25xyOQkcu6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710326279; c=relaxed/simple;
-	bh=0Crvk+O/NT+NwUth/g+9ObKAqtKIfm1Zjikec2AEkw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dRIWwD+djuJ4CjXA1b6NVIAwVY/Xkz4C52nwpc9qxY5MAS1NmkcJ5RPZt56thQgnzjIC49Fns52vF9b5oIC7azApyfjdhJgbWz3oRxgsnafktDxtiTgfTOYoqhxJpAnUA15moj9jZpAT2PutDHVHZ+nctOWMJEsx2g0cx8MzdPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rkLzU-0002kY-5D; Wed, 13 Mar 2024 11:37:44 +0100
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rkLzT-0065xh-AV; Wed, 13 Mar 2024 11:37:43 +0100
-Received: from pengutronix.de (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 671E12A4015;
-	Wed, 13 Mar 2024 10:35:02 +0000 (UTC)
-Date: Wed, 13 Mar 2024 11:35:01 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: 
-	"Linux regression tracking (Thorsten Leemhuis)" <regressions@leemhuis.info>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Daniel Smolik <smolik@mydatex.cz>, Linux regressions mailing list <regressions@lists.linux.dev>, 
-	linux-can@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Regressions can bus with MCP2515 on sama5d3 connected over SPI
- stop working on kernel > 5.4.271
-Message-ID: <20240313-polio-jinx-bc5fd5df7c06-mkl@pengutronix.de>
-References: <2ede8f49-41f8-4d9a-83e4-ea5d4d1677fe@mydatex.cz>
- <a2e64be0-e07d-4c55-aba7-87c7e4c876e0@leemhuis.info>
- <734cf096-3769-4610-b72f-394c31a8d942@mydatex.cz>
- <91d8a6b6-6186-4aa0-8462-56b4751854e9@leemhuis.info>
- <6918321b-038d-40b9-8149-d535bf9d3d52@mydatex.cz>
- <5f69d6ee-a07a-42a9-a238-7dbe1f82cc3f@mydatex.cz>
- <3e46d70b-196d-45c7-bfdf-869c78cdc81f@leemhuis.info>
+	s=arc-20240116; t=1710327358; c=relaxed/simple;
+	bh=lb/fxTau6774fMOnijhMJw5iOwqc/gtg8hNyEEqyOVg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=J5+M0vnRNNTu+KcnvjD4atYdveeCB05rw/d5zJYSXufni8IFMANem0KwdKPTZyFszrjLx8/r+mdmuFKpfJ1lU37xX0spm0lEN2vxJD0q4yAs1T0d5Ce0EIwrmKxff8MFwU74KB0fCGSipurtXk/EbS8ZR/ZPIeSuAc1uoX9p12U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1553wrsl; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5687ebddd8eso15359a12.0
+        for <linux-can@vger.kernel.org>; Wed, 13 Mar 2024 03:55:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710327355; x=1710932155; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OUbDfP+sLUXM48nDyVWIk/glEsJoVRqxJc+rC78QgaM=;
+        b=1553wrsl2b8c/TdPnqq4O2k03ALxVyO4IUt6Dsas092iycU1s8wjoHbp53r/CreTzQ
+         qieJ4qrhHKBWw7roD5eKjLh2LEYGOkx1PODcR66CQ98UKZ7XO26b+UW9ZLmQ1Bv9IHXm
+         63LWxaONTXcyTDXl353XWTTrXAuk/Vtwl6UB/i7hTkWeYaG1zkfkB2URkUVk/NVODlzG
+         GNyR8ReRUmW07OmJGtHINH0iaL5ugukvDMQf+u24CRXLZMMuN3xFrR0VkbN0Emz07POY
+         bTSLcRWhIezruy1QxP6U+JRzOJ8BKTcB13kGfN927GffC/egaMakzch3BdBvijwSCgnV
+         EN3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710327355; x=1710932155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OUbDfP+sLUXM48nDyVWIk/glEsJoVRqxJc+rC78QgaM=;
+        b=oDKjqRdlh3FIMUzdDvjlSyb6TU57+mRL7RZ3iPkUcOZVylMQZP5VdhV8EAYjxxuk8m
+         qorwwVmmtzh8b5/ScC3LvIxAfKs22+Lq23w5l+/MYJUTmsAQ8WdPv6MtM8rzfcE+bBH4
+         zXov2NtBr6UZ+LEAM3FGJZqdh9cgnJNPsgSs96Zjrs3AYCKdyf4NTq3yN+loYjwExT87
+         Ko9U52X1o+PpXvBGciEYbiPH90zX1eFbOkBgXalALWD0KWFizE6da6ROeTevdRl6NgQA
+         EtCqb8cdsJk2M5F8nPtXFlp1MYJcOtsVZDRDVHKxmU/qjpNj6UKjKqZkKGSF8pLr9PhF
+         vmxg==
+X-Forwarded-Encrypted: i=1; AJvYcCWDUeYJ9KZq7djZL2LMCyFkjVddMcLY67NeG7ZhrqKwoSE9nEfPTRD6j7EYICP/j+Q0adjQQLKCegPYqHvEwhy792wHh0BLgoV1
+X-Gm-Message-State: AOJu0YyG3WTlAhSLzDCVhC0PadxtCYfRWqvSYhUJoAob/QIkPxOfUJlp
+	jBgmww9OTDgex4FEKeALrhmyoKdqW9nREpsFZQJnU9EpZtf+61XRa2suISyfFFQQAANKgmwRR4h
+	f0L/z3Ps2yFZlmtZeC8Bw+rLoctI92WguC6dk
+X-Google-Smtp-Source: AGHT+IHrRNQakJc4w7wh8Shn67Mfj+lyANmSwpYj0TzUp00xofQNBBhIPzQSMsCSrME7frjeeFuK5ZbFKFpyMEgJV3k=
+X-Received: by 2002:aa7:cccd:0:b0:568:271a:8c0f with SMTP id
+ y13-20020aa7cccd000000b00568271a8c0fmr125966edt.7.1710327354472; Wed, 13 Mar
+ 2024 03:55:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="otfnytk53yd4iw6q"
-Content-Disposition: inline
-In-Reply-To: <3e46d70b-196d-45c7-bfdf-869c78cdc81f@leemhuis.info>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---otfnytk53yd4iw6q
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20240313094207.70334-1-dmantipov@yandex.ru> <CANn89iLCK10J_6=1xSDquYpToZ-YNG3TzjS60L-g5Cyng92gFw@mail.gmail.com>
+ <aa191780-c625-4e13-8dc0-6ea3760b6104@yandex.ru>
+In-Reply-To: <aa191780-c625-4e13-8dc0-6ea3760b6104@yandex.ru>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 13 Mar 2024 11:55:40 +0100
+Message-ID: <CANn89iJNBHnCPNovYE9tjQT1eN4DE-OFOhE9P86xX_F0HxWfrQ@mail.gmail.com>
+Subject: Re: [PATCH] can: gw: prefer kfree_rcu() over call_rcu() with cgw_job_free_rcu()
+To: Dmitry Antipov <dmantipov@yandex.ru>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On 13.03.2024 10:16:47, Linux regression tracking (Thorsten Leemhuis) wrote:
-> Hi! Mark and Manivannan, do you by chance have an idea what might be
-> wrong with Daniel's system or can point us in the direction of people
-> that might be able to help? See
-> https://lore.kernel.org/all/2ede8f49-41f8-4d9a-83e4-ea5d4d1677fe@mydatex.=
-cz/
-> for the initial report (but it is in the quote below, too).
+On Wed, Mar 13, 2024 at 11:28=E2=80=AFAM Dmitry Antipov <dmantipov@yandex.r=
+u> wrote:
+>
+> On 3/13/24 13:18, Eric Dumazet wrote:
+>
+> > kmem_cache_free() is not the same than kfree()
+> >
+> > Unless I have missed something in mm territory , your patch is not
+> > going to work.
+>
+> Hm... it seems that you're better to check include/linux/rcupdate.h
+> and the comment before kfree_rcu() definition in particular.
+>
 
-At the first glance the mcp251x.c changes between v5.4 and v5.5 look
-unrelated.
+Replacing call_rcu() + free()  by kfree_rcu() is what is documented.
 
-I try to find some time to setup bisecting on an imx6.
+Again, kfree() is different from kmem_cache_free().
 
-Marc
+kmem_cache_free(struct kmem_cache *s, void *x) has additional checks
+to make sure the object @x was allocated
+from the @s kmem_cache.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Look for SLAB_CONSISTENCY_CHECKS and CONFIG_SLAB_FREELIST_HARDENED
 
---otfnytk53yd4iw6q
-Content-Type: application/pgp-signature; name="signature.asc"
+Your patch is not 'trivial' as you think.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmXxgVIACgkQKDiiPnot
-vG+IeAf7Bhelumk2xhV4IKqc9flR1ST6KJhEvGywz0if2PM24w1u+zcZPwMbvs/0
-cEMJDpt52QdZ9Dzv7tutW8A45vp7g4YyGNS1WfSURw0/Hr41avRaSWyDMLU67W9M
-SNMI7tnGtE2AZ/rxWBiK+ZIx7PTLAnO9Oun5hbAKJCL17adIg3omBedMF2czvWQB
-BqbrgqmOA8tv3GJ456VZHCgmrjAxN9d8JHrlzNfHAKTn0YdUDMsdXQfVwNKQFA7s
-0K5PzTrgXkwBXJUOQsLDEJrlnD1REFrBVfhxbuE1XRVPOGsPWMOU9XWw1loWZrTb
-khCWcTc1WnzX9GoqhTWZQLbqm59JJg==
-=z8Cr
------END PGP SIGNATURE-----
-
---otfnytk53yd4iw6q--
+Otherwise, we will soon have dozen of patches submissions replacing
+kmem_cache_free() with kfree()
 
