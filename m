@@ -1,176 +1,125 @@
-Return-Path: <linux-can+bounces-371-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-372-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9362787A4BA
-	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 10:17:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6EAB87A545
+	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 10:52:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 072FFB21D58
-	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 09:17:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 554E71F21D01
+	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 09:52:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34123224E6;
-	Wed, 13 Mar 2024 09:16:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7B902E636;
+	Wed, 13 Mar 2024 09:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="lFfJfBl0"
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="LFI5StyS"
 X-Original-To: linux-can@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from forward206b.mail.yandex.net (forward206b.mail.yandex.net [178.154.239.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C25210F8;
-	Wed, 13 Mar 2024 09:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4281CF9C;
+	Wed, 13 Mar 2024 09:51:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710321418; cv=none; b=V3HgkYgYhaTNQOn4Z/OPvwEL+N/ctILkoqMXdvAWqH2taGS37voHX2OArnsm031vja2Mx477eikieEdr1bIZfaiCg8qHO2fOgpqeDGxfqOFl4QabJ0FFrrbPlYHXN9zLWEDyBGpOH7rF6K877KCgrkZmgsFIxH1zsTQ6+aQYX70=
+	t=1710323472; cv=none; b=HzFepLoJCQYuzVJovL4myc0DZXZ4/IEcPf2khykahocRT70arsnWOEzSAdnFjytJqbAam03/maLb0aVBH4UfUaNLFWGTIEa6C90H9hZ9oaP8JUx9LlChADxTrdfDde+U5qzrNMSQGJLvLtQAHc15YU/iLwYvOJs/0nT8uxV3YsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710321418; c=relaxed/simple;
-	bh=ByCbagcTebOW3qifvCBn2/PTAzLo4LTEj67iXwr3nrc=;
-	h=Message-ID:Date:MIME-Version:Subject:References:From:Cc:To:
-	 In-Reply-To:Content-Type; b=qAnPrcpBi7VnOR5AghvOymmpSZ55hoZxNADrFejEs5KUS5Vhkmtfcw1axoAIpgZzWgW6WKwzGxNrRaDG02Kp5L7YIwDOuz+gUSmPPqMD3PxpXeR+et1hi6brepdbr6/m+V/tWZEQAeR3FcCmMHPnhYynuETiYTVUqf3tfDh1vHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=lFfJfBl0; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:To:Reply-To:Cc:From:References:Subject:MIME-Version:Date:
-	Message-ID:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
-	Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
-	In-Reply-To:References; bh=QIi9/DjwhK5Nca9r9Q65/MotMONafCf0MSaMXkjEpqQ=;
-	t=1710321415; x=1710753415; b=lFfJfBl0eMMtZLlb424xJS9UysEnuYdchXRGPUhpITSnP0e
-	8jk2/NTZDF5qC+8yUKiBUIsAO110XGj8py8GVLSRuuEoxhH0vH8glXYnVpbnA6MfFv77IhvBeAJ8z
-	u2NhyltYWhLiYADUHX0ip4+u7hMYWgUYYDO8Rvnv3mOGR05/XPuB2r9yME9yFrT10yPmpTDWhLYkG
-	SlrTqrWmscSuxRbQ5cRtDcCSMDBhrBiiP8f7vori3s8wqepoXXrYPJw9pbyKCmMEbgi/m3l4CtBcl
-	xZXkB2E8JQSkA0LYE2bCP6UobA9yXUE7uEiaudvYAKVqwhbXm4Ivo/hr9BXjLYEA==;
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1rkKjA-0004TW-0c; Wed, 13 Mar 2024 10:16:48 +0100
-Message-ID: <3e46d70b-196d-45c7-bfdf-869c78cdc81f@leemhuis.info>
-Date: Wed, 13 Mar 2024 10:16:47 +0100
+	s=arc-20240116; t=1710323472; c=relaxed/simple;
+	bh=TAVuMOk8xlvmomXd4PqVinKGpsfWHwJ8/HlXJLO77fA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EMnAAxRm1RHDUVv89mwTDppHORHWEAGsHkyAcPLBAxXZPq6CG8zJCu1xi9XShjSUHAkILWJnQZzVqSlZ57WIxPsbeySpVm5QW2Yw7qUtG8hnfjAOs67uQReuij0n3cwUr7/8EyEolIWaqNFA9kKw5T3Q4gkJdL/shO6gLFzgVRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=LFI5StyS; arc=none smtp.client-ip=178.154.239.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
+Received: from forward100b.mail.yandex.net (forward100b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d100])
+	by forward206b.mail.yandex.net (Yandex) with ESMTPS id 2271D660E9;
+	Wed, 13 Mar 2024 12:43:36 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-37.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-37.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:291a:0:640:791e:0])
+	by forward100b.mail.yandex.net (Yandex) with ESMTPS id 3B15560020;
+	Wed, 13 Mar 2024 12:43:28 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-37.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id Qhj3uETpASw0-MDVzFfwE;
+	Wed, 13 Mar 2024 12:43:27 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+	t=1710323007; bh=xZLUKE7ja4TGTRIsC8isThMkYqx3sVWQgnkvSVCUdjk=;
+	h=Message-ID:Date:Cc:Subject:To:From;
+	b=LFI5StyS1ahARKOT1iSghUwe55XnTtuHDmTJsFLZHwzeHBLPz7o1lf6XxUfvmsAJl
+	 G83SfN+o81cm3DwBDOZzVDzNRWEEvuLsN/aRgiAZKANi148NIZDHFNEnYwW3zLhjgH
+	 GPPfGe+riuKcK/9T5NvGSgo0OXR0b3d6mwz3aU1E=
+Authentication-Results: mail-nwsmtp-smtp-production-main-37.myt.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From: Dmitry Antipov <dmantipov@yandex.ru>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Eric Dumazet <edumazet@google.com>,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Dmitry Antipov <dmantipov@yandex.ru>
+Subject: [PATCH] can: gw: prefer kfree_rcu() over call_rcu() with cgw_job_free_rcu()
+Date: Wed, 13 Mar 2024 12:42:07 +0300
+Message-ID: <20240313094207.70334-1-dmantipov@yandex.ru>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Regressions can bus with MCP2515 on sama5d3 connected over SPI
- stop working on kernel > 5.4.271
-Content-Language: en-US, de-DE
-References: <2ede8f49-41f8-4d9a-83e4-ea5d4d1677fe@mydatex.cz>
- <a2e64be0-e07d-4c55-aba7-87c7e4c876e0@leemhuis.info>
- <734cf096-3769-4610-b72f-394c31a8d942@mydatex.cz>
- <91d8a6b6-6186-4aa0-8462-56b4751854e9@leemhuis.info>
- <6918321b-038d-40b9-8149-d535bf9d3d52@mydatex.cz>
- <5f69d6ee-a07a-42a9-a238-7dbe1f82cc3f@mydatex.cz>
-From: "Linux regression tracking (Thorsten Leemhuis)"
- <regressions@leemhuis.info>
-Cc: Daniel Smolik <smolik@mydatex.cz>,
- Linux regressions mailing list <regressions@lists.linux.dev>,
- linux-can@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-In-Reply-To: <5f69d6ee-a07a-42a9-a238-7dbe1f82cc3f@mydatex.cz>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1710321415;f0b7d482;
-X-HE-SMSGID: 1rkKjA-0004TW-0c
 
-Hi! Mark and Manivannan, do you by chance have an idea what might be
-wrong with Daniel's system or can point us in the direction of people
-that might be able to help? See
-https://lore.kernel.org/all/2ede8f49-41f8-4d9a-83e4-ea5d4d1677fe@mydatex.cz/
-for the initial report (but it is in the quote below, too).
+Drop trivial free-only 'cgw_job_free_rcu()' RCU callback and
+switch to 'kfree_rcu()' in 'cgw_notifier()', 'cgw_remove_job()'
+and 'cgw_remove_all_jobs()'. Compile tested only.
 
-On 13.03.24 00:22, Daniel Smolik wrote:
-> I am not very familiar with bisecting :-(  I have found how to solve
-> another problem and compile 5.5.0 kernel. And now I know that latest
-> working is 5.4.271 and first not working is 5.5.0.
+Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
+---
+ net/can/gw.c | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
-Let's wait first if Mark and Manivannan might haven an idea. And in case
-you in the end have to bisect: please follow the guide I pointed to and
-tell me where you have the problem, as the guide (and an earlier mail,
-too!) tells you that you need to bisect from 5.4 to 5.5.
+diff --git a/net/can/gw.c b/net/can/gw.c
+index 37528826935e..ffb9870e2d01 100644
+--- a/net/can/gw.c
++++ b/net/can/gw.c
+@@ -577,13 +577,6 @@ static inline void cgw_unregister_filter(struct net *net, struct cgw_job *gwj)
+ 			  gwj->ccgw.filter.can_mask, can_can_gw_rcv, gwj);
+ }
+ 
+-static void cgw_job_free_rcu(struct rcu_head *rcu_head)
+-{
+-	struct cgw_job *gwj = container_of(rcu_head, struct cgw_job, rcu);
+-
+-	kmem_cache_free(cgw_cache, gwj);
+-}
+-
+ static int cgw_notifier(struct notifier_block *nb,
+ 			unsigned long msg, void *ptr)
+ {
+@@ -603,7 +596,7 @@ static int cgw_notifier(struct notifier_block *nb,
+ 			if (gwj->src.dev == dev || gwj->dst.dev == dev) {
+ 				hlist_del(&gwj->list);
+ 				cgw_unregister_filter(net, gwj);
+-				call_rcu(&gwj->rcu, cgw_job_free_rcu);
++				kfree_rcu(gwj, rcu);
+ 			}
+ 		}
+ 	}
+@@ -1168,7 +1161,7 @@ static void cgw_remove_all_jobs(struct net *net)
+ 	hlist_for_each_entry_safe(gwj, nx, &net->can.cgw_list, list) {
+ 		hlist_del(&gwj->list);
+ 		cgw_unregister_filter(net, gwj);
+-		call_rcu(&gwj->rcu, cgw_job_free_rcu);
++		kfree_rcu(gwj, rcu);
+ 	}
+ }
+ 
+@@ -1236,7 +1229,7 @@ static int cgw_remove_job(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 
+ 		hlist_del(&gwj->list);
+ 		cgw_unregister_filter(net, gwj);
+-		call_rcu(&gwj->rcu, cgw_job_free_rcu);
++		kfree_rcu(gwj, rcu);
+ 		err = 0;
+ 		break;
+ 	}
+-- 
+2.44.0
 
-Ciao, Thorsten
-
-> Dne 12. 03. 24 v 20:57 Daniel Smolik napsal(a):
->> Hi ,
->> 6.8  is affected   with this bug.  I try bisect the bug.
->>
->> Regards
->>             Dan
->>
->> Dne 12. 03. 24 v 11:39 Linux regression tracking (Thorsten Leemhuis)
->> napsal(a):
->>> On 12.03.24 11:27, Dan Smolik wrote:
->>>> Dne 12. 03. 24 v 11:19 Linux regression tracking (Thorsten Leemhuis)
->>>> napsal(a):
->>>>> On 11.03.24 22:55, Daniel Smolik wrote:
->>>>>> I have found problem with kernel > 5.4.271 (long term) on sama5d3.
->>>>>> When
->>>>>> I config can bus with:
->>>>>>
->>>>>> ip link set can0 type can bitrate 125000 triple-sampling on
->>>>>>
->>>>>> and type
->>>>>> ifconfig can0 up
->>>>>>
->>>>>> prompt never returns and cannot run eg. ip a (never returns) existing
->>>>>> ssh connection works but can´t do new one.
->>>>>>
->>>>>>
->>>>>>     I have my own daughter  board with can bus driver MCP2515
->>>>>> connected
->>>>>> over SPI bus. There is
->>>>>> snippet of my DTB:
->>>>>>
->>>>>>    can0: can@0 {
->>>>>>                                           compatible =
->>>>>> "microchip,mcp2515";
->>>>>>                                           reg = <0>;
->>>>>>                                           clocks = <&can0_osc_fixed>;
->>>>>>                                           interrupt-parent = <&pioD>;
->>>>>>                                           interrupts = <29
->>>>>> IRQ_TYPE_EDGE_RISING>;
->>>>>> spi-max-frequency = <10000000>;
->>>>>>                                       };
->>>>>>
->>>>>> with this all working  perfect  on long term kernels 4.19.  I try
->>>>>> switch
->>>>>> to newer kernel and latest I get working is 5.4.271. Kernel 5.5.0
->>>>>> -5.5.6 I can´t  compile and 5.5.14  is affected with bug.
->>>>> The two important question here are:
->>>>>
->>>>> * Is mainline (e.g. 6.8) affected as well? That determines if the
->>>>> regular developers or the stable team has to look into this.
->>>> I mean yes,  I tested 6.6.21 and is affected.   6.8 I can test today
->>>> afternoon.
->>> Yes, please test 6.8.
->>>
->>>>> * Could you bisect the problem (e.g. I assume between 5.4.271 and
->>>>> 5.4.272)? I'm working on a guide that explains this:
->>>>> https://www.leemhuis.info/files/misc/How%20to%20bisect%20a%20Linux%20kernel%20regression%20%e2%80%94%20The%20Linux%20Kernel%20documentation.html
->>>> Yes I try this but it looks like that latest good is 5.4.271 and first
->>>> bad us 5.5.0  but this kernel fail when building to arm platform. 
->>>> First
->>>> which I build for arm is 5.5.14.
->>>>
->>>> I try bisecting but when I can't build kernel what can I do ?
->>> Bisect between 5.4 and 5.5 and during the bisection use "git cherry-pick
->>> --no-commit <sha1sum>" to apply the fix(es) without committing them
->>> before you build; once the build is ready, use "git reset --hard" to
->>> reset things.
->>>
->>> But please check 6.8 first; if it is affected we can CC a few
->>> developers. If you are lucky they have an idea what might be wrong here
->>> and then no bisection might be needed.
->>>
->>> Ciao, Thorsten
->>
->>
-> 
-> 
-> 
 
