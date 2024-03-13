@@ -1,141 +1,95 @@
-Return-Path: <linux-can+bounces-381-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-382-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05A9D87A779
-	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 13:21:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26CDA87A77C
+	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 13:23:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E5692849A6
-	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 12:21:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 588431C22204
+	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 12:23:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A72DB3FE58;
-	Wed, 13 Mar 2024 12:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mydatex.cz header.i=@mydatex.cz header.b="rcarsqbj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2783405C7;
+	Wed, 13 Mar 2024 12:23:06 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from kali.sitour.cz (smtp.sitour.cz [77.48.244.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDD13FB1D;
-	Wed, 13 Mar 2024 12:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.244.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571243FE54
+	for <linux-can@vger.kernel.org>; Wed, 13 Mar 2024 12:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710332481; cv=none; b=Rxto2TTsTRvjsWHkmh+1doQZ5twkl8fhYlg3gJy09bNaeHe36IrQrqZ80caS/9v6rYe06GpwHJG+S9rHtJbm6hyV2eMOVl+gDPRHB/m52CXeGch98MU02BS084QkkGSKuPTfGe8/nSJdEXhoCeGUp8MfTn5Z7yUrKAauaNafT5g=
+	t=1710332586; cv=none; b=Ci1HceAkSU9K/2g95X+oR8Txw7x0D7OWO+4CiFBLPPaqXn539xtbfxGBunLDH0gaF2oShT+/aRwHzWgGWsm6doUxm29X/276wc/b4Ro8XzwQqLVbRXujRrdlSuTZvvbXJCNZn9qthwzAh0QtveqLni7GW6YGsRJLinr1BN4YbSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710332481; c=relaxed/simple;
-	bh=VRMs3YlMGzWkFkHR+xos6IbFeYsSgHzgyvhxQygfLR8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QGlbug/VxuoOq0gier8PiKcBdyRThOX/h7yk/xgHBsFY2M4JOCMWRiJOMFhQvwSnUAClA67Ucgqm93v8L2eTyJY7gaOY2nsE4nvVIKJY8FoDtS+Ai2qF57JPXHis93KchY+BhfzVqelIpOxEkw01KCRKuzhG2EzUMS/KrpeggqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mydatex.cz; spf=pass smtp.mailfrom=mydatex.cz; dkim=pass (2048-bit key) header.d=mydatex.cz header.i=@mydatex.cz header.b=rcarsqbj; arc=none smtp.client-ip=77.48.244.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mydatex.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mydatex.cz
-Received: from localhost (localhost [127.0.0.1])
-	by kali.sitour.cz (Postfix) with ESMTP id 11A9F4E0278;
-	Wed, 13 Mar 2024 13:21:15 +0100 (CET)
-X-Virus-Scanned: Debian amavis at sitour.cz
-Received: from kali.sitour.cz ([127.0.0.1])
- by localhost (sitour.cz [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hvwOGv36hJbW; Wed, 13 Mar 2024 13:21:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mydatex.cz; s=mydatex;
-	t=1710332472; bh=VRMs3YlMGzWkFkHR+xos6IbFeYsSgHzgyvhxQygfLR8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rcarsqbjFGnEeuI0dJPBVezMJYm5cDTgLMa5VJ9HRzoCMV3Y2c/BWyE9PR9siCvJx
-	 dK9xP+XDYLpU1QO+ZDBB0wQO5a5a7VzoW95OXJ+1xqGdOXZUQfSqfXITAio8Mcl22d
-	 Og19Z++wsipo2sLo/vo5YzxvYBi0okPv4eoV5sipkNeIYnaNEEmYrzU0AaieWuBVAm
-	 gSLyYM7GsBE4r9aCG1fKgTT0t5s/uCZjxqjZkWbvA0un1tEw01fPA8WHxKy36JMNTD
-	 2NgI+v+hE3y2fdWyug5ix8DJPu96cwf+5NOL9anZzY9rKx01ywBsMmdL/V67cwz8Ha
-	 in8oU9Z/4FyeQ==
-Received: from [192.168.3.13] (firma.mydatex.cz [84.242.99.246])
-	by kali.sitour.cz (Postfix) with ESMTPSA id 5B7A64E0276;
-	Wed, 13 Mar 2024 13:21:12 +0100 (CET)
-Message-ID: <ccb4d341-fe9e-4920-8fd5-7467aadd2ea6@mydatex.cz>
-Date: Wed, 13 Mar 2024 13:21:11 +0100
+	s=arc-20240116; t=1710332586; c=relaxed/simple;
+	bh=CMx0+K0+od6gAAfqGFuKrClz/7QMgfg21jkqF8+bk0U=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=FkT/WnIL275lclgX1JU1r82rgQXZmCac/U3iFuVY/BGyRQMvHwZwyYmXietxVHsZnpi/EJ3IZESdrEiBXzVSmffXhsY3FaAIAbqvsumUGwCQp3l7LyA0TV0htZiWmbQiaCpbpJPNgrZd7LRUyJzUA06Qkbpy6ekojPAcrqbUF6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7c88a694b46so593529039f.1
+        for <linux-can@vger.kernel.org>; Wed, 13 Mar 2024 05:23:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710332584; x=1710937384;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8/RQ7ulMJ/8EuK5QcToN/BsgCLIW1fJL8XxtmY+wQjs=;
+        b=QFJWqNxKecBlGzG+IbJ8oSf6D0hoWcjjzFHNlcFGp31vkxiqG6ywBvJftBES7FUjO+
+         qVnZIHgbRqFY/MdNBmXesUVFhNzCVpwSBhAes2hdxiNQ+/mNEV/6n+y1cgyMrrrM9SW9
+         wHa2pd8Rc/oRtlUogT7wO4msaEu7egreveAFoZ5QV/Sspp9JS4lOhbQB6U8DgTuR53Yu
+         TJPw6TraBxb77Wt5lGT9jk0jbc6N4625EFGZ8+ywIognJB5kiIaA1JS+hE7+sbv0CVAP
+         r7+qKZAJ1Kav/J7QUJnwKiN1FUjD1CbXxqdVApugCTJMUyG2YusDJCPuBnoZ7XbunCPv
+         FmuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUeHqNwqyyo5xng6Dz9y4GI9KQGRq8uLf7X5v1cceE4LLhHScMS4CfL6Ap/r+B5CDis7OcX9eFDdpIQevtlXhgKHN67bAzatMgc
+X-Gm-Message-State: AOJu0YyirRaOrCNsJRjaZpdqMhCDvqXnuEUUDDqwIhoYfRiScvD2bd1j
+	MQ/K0GBxIfj3UkCMjOgHU9BavMC3/qCLVknGKyqkdcIdN0W0/ZLqQzLd9AYkHKT7iT0y/3kz2fk
+	fpthgT+jPvTvdnsd5wEabgR+qpMeCBwf1URolT5sb2hgA3aDdHLeLHKc=
+X-Google-Smtp-Source: AGHT+IGVTtQ4uojG97WNJ0uwB0YBDq59+qtV5IZ/3cDnbc7YourhmR/GosPslCuD+dZwEelAMVRAygeYYtaFyq8wBk2Nc0aMcF63
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Regressions can bus with MCP2515 on sama5d3 connected over SPI
- stop working on kernel > 5.4.271
-Content-Language: cs-CZ, en-US
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: "Linux regression tracking (Thorsten Leemhuis)"
- <regressions@leemhuis.info>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Linux regressions mailing list <regressions@lists.linux.dev>,
- linux-can@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <2ede8f49-41f8-4d9a-83e4-ea5d4d1677fe@mydatex.cz>
- <a2e64be0-e07d-4c55-aba7-87c7e4c876e0@leemhuis.info>
- <734cf096-3769-4610-b72f-394c31a8d942@mydatex.cz>
- <91d8a6b6-6186-4aa0-8462-56b4751854e9@leemhuis.info>
- <6918321b-038d-40b9-8149-d535bf9d3d52@mydatex.cz>
- <5f69d6ee-a07a-42a9-a238-7dbe1f82cc3f@mydatex.cz>
- <3e46d70b-196d-45c7-bfdf-869c78cdc81f@leemhuis.info>
- <20240313-polio-jinx-bc5fd5df7c06-mkl@pengutronix.de>
- <b6c9b015-86bc-475b-a190-e35fa76c1ceb@mydatex.cz>
- <20240313-overload-eloquence-3e504ee0d00b-mkl@pengutronix.de>
-From: Daniel Smolik <smolik@mydatex.cz>
-In-Reply-To: <20240313-overload-eloquence-3e504ee0d00b-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6602:1693:b0:7c8:bd8e:a88 with SMTP id
+ s19-20020a056602169300b007c8bd8e0a88mr143010iow.4.1710332584607; Wed, 13 Mar
+ 2024 05:23:04 -0700 (PDT)
+Date: Wed, 13 Mar 2024 05:23:04 -0700
+In-Reply-To: <00000000000095640f05cb78af37@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002755ce061389d67b@google.com>
+Subject: Re: [syzbot] [can?] possible deadlock in j1939_sk_queue_drop_all
+From: syzbot <syzbot+3bd970a1887812621b4c@syzkaller.appspotmail.com>
+To: astrajoan@yahoo.com, davem@davemloft.net, edumazet@google.com, 
+	hdanton@sina.com, kernel@pengutronix.de, kuba@kernel.org, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org, 
+	o.rempel@pengutronix.de, pabeni@redhat.com, robin@protonic.nl, 
+	socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hm,
-that's what I was worried about.  Main problem is that I can't easy 
-compile kernel around version 5.5 because that always failed with this:
+syzbot suspects this issue was fixed by commit:
 
-   HOSTLD  scripts/dtc/dtc
-/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x20): multiple 
-definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first 
-defined here
-collect2: error: ld returned 1 exit status
-make[1]: *** [scripts/Makefile.host:116: scripts/dtc/dtc] Error 1
-make: *** [Makefile:1260: scripts_dtc] Error 2
-make: *** Waiting for unfinished jobs....
+commit 6cdedc18ba7b9dacc36466e27e3267d201948c8d
+Author: Ziqi Zhao <astrajoan@yahoo.com>
+Date:   Fri Jul 21 16:22:26 2023 +0000
 
-I solve this problem  copying  whole scripts dir from 5.5.14 where this 
-issue was solved.
-After this  git reset --hard and after this   git bisect good | bad.
+    can: j1939: prevent deadlock by changing j1939_socks_lock to rwlock
 
-Prepare with this:
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10e4d371180000
+start commit:   dd72f9c7e512 Merge tag 'spi-fix-v6-6-rc4' of git://git.ker..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=12abf4cc4f802b24
+dashboard link: https://syzkaller.appspot.com/bug?extid=3bd970a1887812621b4c
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17602089680000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13398a9d680000
 
-git clone -o mainline --no-checkout \
-   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git  linux/
-cd  linux/
-git remote add -t master stable \
-   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-git checkout --detach v5.4
+If the result looks correct, please mark the issue as fixed by replying with:
 
+#syz fix: can: j1939: prevent deadlock by changing j1939_socks_lock to rwlock
 
-git bisect start
-git bisect good v5.4
-git bisect bad v5.5
-
-On each iteration I do git reset --hard and copy sctipt direcotry.
-
-Regards
-                 Dan
-
-
-
-Dne 13. 03. 24 v 12:43 Marc Kleine-Budde napsal(a):
-> On 13.03.2024 12:22:25, Daniel Smolik wrote:
->> this is my first bisection please be lenient :-) Threse is a result:
->>
->> marvin@marvin:/usr/src/linux$ git bisect good
->> Bisecting: 0 revisions left to test after this (roughly 0 steps)
->> [52f96cd135b160d44db4cb62a5b614b3bca20fbc] net: stmmac: xgmac: Remove
->> uneeded computation for RFA/RFD
-> I think you still miss a bisection step.
->
-> The commit 52f96cd135b1 ("net: stmmac: xgmac: Remove uneeded computation
-> for RFA/RFD") is unrelated to CAN problem you described. It's in the
-> stmmac Ethernet driver.
->
-> Marc
->
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
