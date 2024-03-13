@@ -1,117 +1,115 @@
-Return-Path: <linux-can+bounces-385-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-386-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7440D87A900
-	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 15:04:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8927387B468
+	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 23:36:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AC09287F38
-	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 14:04:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83E8CB20B1C
+	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 22:36:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D30C46537;
-	Wed, 13 Mar 2024 14:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C805381A;
+	Wed, 13 Mar 2024 22:36:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IZF4dmw2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BYDuki+q"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8DF46525
-	for <linux-can@vger.kernel.org>; Wed, 13 Mar 2024 14:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534B14691;
+	Wed, 13 Mar 2024 22:36:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710338671; cv=none; b=PD8cJIY8m79wLDtUPJNB16t7tp7m3IQd4TXZz47kEs6TDqI6x0mloRhZUPDR/YB/pnJp6cZjO1wzkRCFvs7sOjvecnzquWY6rPXJVpvUvNoYOvvf4SaVO8PCCo9ASIYn/TpCXPKzG+8rt0j4ex4+JbdY0PmHHd7T6aW6ODuwlfo=
+	t=1710369404; cv=none; b=YWve5LGkTwT6tG0acb66htHsWmYi814v1goL7Y+AaKUYElW+YyR6SEnEb099iw1NpES8NDb08gI+OvIs2PahFKVAWyV5rQVdA6tYnIKiBdHnRpwtTo69rFyc8caqBOS5bXbQTbhbTHuoMoWMIpUnVDkIkwMuHT+7YaaqZRB/JF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710338671; c=relaxed/simple;
-	bh=nVScYI2aisvI7eCeLM50SdTmcOljhCXoI1HTbyQRCrA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xr+lOUgqjS9xKC/Rz/OwGnD/3hyQZ0Y88lgxqQJHMttPxgY+vqSFXmm0V6HKDmfOzeZ0RygUmEF4cimgBQEmnzz/lKxkQdG47Z8bbW7qzycB6XGRgOB5INA5qSlto52UUpyFSW8TYL2Yitgxe/PIej8OZz5ilch4gt8divw+cQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IZF4dmw2; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-568898e47e2so7063a12.0
-        for <linux-can@vger.kernel.org>; Wed, 13 Mar 2024 07:04:29 -0700 (PDT)
+	s=arc-20240116; t=1710369404; c=relaxed/simple;
+	bh=HoNiHyn2z/ceoZINAmLkTLotxgBXw6b3DpSALXSG1eE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wym1gbbS7U1Gqemd9s1BG26pqB09zSMrGX+zVNUH/K1zl2Dg5cRNMBO+8/GXe1ysKcUc8K4H5obdxwec/7uBMhetn1BoHeZ3TH5iwSKyLBE5PjqjEeEUd/eKMOyC2Hl4JX6Xbf/3Fn8gOGbHY+/Fc8pfnQU64Hzn9cIycLZlU2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BYDuki+q; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5685d46b199so503354a12.3;
+        Wed, 13 Mar 2024 15:36:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710338668; x=1710943468; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nVScYI2aisvI7eCeLM50SdTmcOljhCXoI1HTbyQRCrA=;
-        b=IZF4dmw2SXy+lIWVxXtuWdyvuSzxMVuM1ncPSDvG5C6CEI7HtIAxpd0pf2GfYDHJA8
-         GpLXSQAkE6/82GU6rM1hoTyoiCIFemhVpPMmNRNqwKXyughFC83d9YPgKzu8SM97ZhKb
-         OOCUgq9/TG6y1GcgLkw+Zq3GpVfq/TVngCBKBvTq/TYy4eh1wVWZ79xTIIjCny5+jWjI
-         6GOJ+UP0c6q/tm1j/nuCbHUvWC5or7gMU6+pabkcNyqnLrQTdkPzAdKdbkBw7DhaekBq
-         JBSLXeAokcsc4hq86xo9fFuHfi0Ss0V+m/qBgEh0xE0yP9cU9HGNKcgrS3uuWE2sfDWy
-         Ns/g==
+        d=gmail.com; s=20230601; t=1710369401; x=1710974201; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i1/rg6loiRVefnT/ad+BPRTM7wjwljQZZ0izBe/guu4=;
+        b=BYDuki+qzEz16KWhwZuMn9IVRsESp5VwOm/hSuSrqnCuvvuoqpyhBPrtwUhhEyYlry
+         i1MBh1X/OETIjRaRsl0wrQQFYZ98xw9ZccvD5ioLTZ/bK6RZ834IkTraryCJVETpWE42
+         4sw5KPz+NbDu7scfZg9FXGf2tWD76W7VK6biR+yMArbjNckVrxFeShtIRL2eTKGPbZ9I
+         sQ6a0AJgNfNLtwiYdap8kzYcx4QCXldEY4DElIJGR33s5u4bPoU7EQTdhUHme641aUcY
+         xAjHZ5naAzhiCkGSPpdtUshO5J366KRX+dVOBLa8A2MxsFOh8Z5Y2I+9pRIzjEv+tKCM
+         0rPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710338668; x=1710943468;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nVScYI2aisvI7eCeLM50SdTmcOljhCXoI1HTbyQRCrA=;
-        b=sX1o7GegCJluq9kVoy0G07tGMFHtO5egJpqcdTZVKH90ywMdcycqRf9KUp11lHlSij
-         SlW0nPHZeaSfLgjnDndfx64ATAqlbziFFLsdrdjBn4S1GF+uhgDkgb14CnhRuoY4+RsP
-         72AdZNozLajg1DfoXsYG3Lqk4YuLN7r09LyDTtJjbmbWgIY/0jv5DA4k7k6UGMOomWma
-         HbiQfI1zXtyPpDnaJ5XA55aT8sTwZqqj1be6PGpkEekf+O2lRfcfLw6VbG+UHxD6biCg
-         Fm0sJ0erk59/iCUAr8m0qxGAksyq+ADVQDQk68p8Eojut05reopEn+uUHfXZChx0zaXr
-         4hfA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/MnTOw/xNj8ZXIkhkGJY4q9aTFeSdJkBP7XngXrbjnbHeN77jn0NyFo1ueDCbmtMzm0EwfHGFkPH/iYkrWESez9Hb4bvtC8A7
-X-Gm-Message-State: AOJu0YyjJ4grYQRnk45FxxdQp/59GalKw5vHDb9ogOtHqW7Tf28USjOj
-	6ho0O0S7n9pnbgYCuDEoitx+ugVBlxVD6hlbXjr/uXKQU0wVMDd+F+onKzVa8tBSZQyu/jF1PGR
-	FBrluk3R6gzh5/NrKPhzUNEW5u2Sqn1tlC8ic
-X-Google-Smtp-Source: AGHT+IE+O495OjOqR1l5YxjBInBrXK/NL09v+Jc35RgVQkiXASq4swwL/GWHeXOQxifBQaKkwDm3VymAQFNmqfzD2U4=
-X-Received: by 2002:aa7:c88a:0:b0:568:551d:9e09 with SMTP id
- p10-20020aa7c88a000000b00568551d9e09mr210701eds.6.1710338667885; Wed, 13 Mar
- 2024 07:04:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710369401; x=1710974201;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i1/rg6loiRVefnT/ad+BPRTM7wjwljQZZ0izBe/guu4=;
+        b=i+r8Eo7h7zR7uz342deSdTeJGfk1MeXJoiDiKtir7xdS/pHnbMwYYHm5UudJTY4R08
+         dr8/07t13LsROrvFcyCQohJDGZ0/br6/NDiUDwv+gwxN3v8wGqh1aN5/7fHclDJwYW+q
+         4nIcS1LTYcC5gfwnaL1gtBSDzo3YefMrQbk3o7tgch2+77SN4+pBpQEGml5WPJqFjD6z
+         bmctMGH141+FJCyRhaJgxIKWSHZcfvJdJ1wAn+B36wRntP5VUymUe3nq1LSmItxXBQsU
+         +5FAMILZNbK0ZrS+wRiT5y3rUVMPaJIgrHf2yWAcEpT1LNsqzy0nJlFWE8fIRit7qZj/
+         jQXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVGc1LktP5BGJY8x7ryYOf3zH4PHqbbMeUMWEFMFwR4WEIwTFtOv3BW6O8RW20NRrQGFYrxA/kcU1NMaBr8QHw8AqJ6Jx6ziMNIPVDlio2BkPfe6dMCic7iQkpRpBzWYX6BsYDwJCZpGgaHlH0TmqJz0+WH6UWljLizn9yORQgk
+X-Gm-Message-State: AOJu0YzEQESzbS/6mlETRqDkE7ls8zT19d454LCLBK3T0KSLxWR7373k
+	PiILH38JLBvhYLTOhYVakEycNi+vNF6gOt3XIiJb2sjy1QZ7STGk
+X-Google-Smtp-Source: AGHT+IExQacc7OFEKg7kTWtl0PIi+BT2OE2qYBYhGday2AS1EvZCTPtJQ/90lGZfDHmQk1t4kSk3og==
+X-Received: by 2002:a17:907:d047:b0:a46:3aa2:d452 with SMTP id vb7-20020a170907d04700b00a463aa2d452mr6750954ejc.64.1710369401595;
+        Wed, 13 Mar 2024 15:36:41 -0700 (PDT)
+Received: from fedora.fritz.box (host-95-250-206-50.retail.telecomitalia.it. [95.250.206.50])
+        by smtp.gmail.com with ESMTPSA id dt22-20020a170906b79600b00a4669f6c2e2sm70366ejb.44.2024.03.13.15.36.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Mar 2024 15:36:41 -0700 (PDT)
+From: Francesco Valla <valla.francesco@gmail.com>
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: fabio@redaril.me,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Francesco Valla <valla.francesco@gmail.com>
+Subject: [RFC PATCH 0/1] Documentation: networking: document CAN ISO-TP
+Date: Wed, 13 Mar 2024 23:34:30 +0100
+Message-ID: <20240313223445.87170-1-valla.francesco@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240313094207.70334-1-dmantipov@yandex.ru> <CANn89iLCK10J_6=1xSDquYpToZ-YNG3TzjS60L-g5Cyng92gFw@mail.gmail.com>
- <aa191780-c625-4e13-8dc0-6ea3760b6104@yandex.ru> <CANn89iJNBHnCPNovYE9tjQT1eN4DE-OFOhE9P86xX_F0HxWfrQ@mail.gmail.com>
- <12d61b93-fd89-4557-8c0f-2a72437ded6f@yandex.ru>
-In-Reply-To: <12d61b93-fd89-4557-8c0f-2a72437ded6f@yandex.ru>
-From: Eric Dumazet <edumazet@google.com>
-Date: Wed, 13 Mar 2024 15:04:12 +0100
-Message-ID: <CANn89iKGayUU2cg+ibQeEqWhw-mD+b4x_k+fm7xjis52f8q82g@mail.gmail.com>
-Subject: Re: [PATCH] can: gw: prefer kfree_rcu() over call_rcu() with cgw_job_free_rcu()
-To: Dmitry Antipov <dmantipov@yandex.ru>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 13, 2024 at 3:01=E2=80=AFPM Dmitry Antipov <dmantipov@yandex.ru=
-> wrote:
->
-> On 3/13/24 13:55, Eric Dumazet wrote:
->
-> > kmem_cache_free(struct kmem_cache *s, void *x) has additional checks
-> > to make sure the object @x was allocated
-> > from the @s kmem_cache.
-> >
-> > Look for SLAB_CONSISTENCY_CHECKS and CONFIG_SLAB_FREELIST_HARDENED
->
-> Yes. Using kfree_rcu() bypasses these (optional) debugging/consistency
-> checks.
->
-> > Your patch is not 'trivial' as you think.
->
-> You're shifting from "not going to work" to "not trivial" so nicely.
+While the in-kernel ISO-TP stack is fully functional and easy to use, no
+documentation exists for it. This patch adds such documentation,
+containing the very basics of the protocol, the APIs and a basic
+example.
 
-You used the word "trivial" in the changelog, not me.
+Sending as RFC because my experience with the stack is as user and not
+as its developer, and also because it's my first kernel contribution.
 
->
-> > Otherwise, we will soon have dozen of patches submissions replacing
-> > kmem_cache_free() with kfree()
->
-> No. The question is about freeing on some (where the freeing callback
-> function is trivial) RCU-protected paths only.
->
+Thank you,
 
-I am saying no to this patch.
+Francesco
+
+Francesco Valla (1):
+  Documentation: networking: document CAN ISO-TP
+
+ Documentation/networking/index.rst |   1 +
+ Documentation/networking/isotp.rst | 347 +++++++++++++++++++++++++++++
+ 2 files changed, 348 insertions(+)
+ create mode 100644 Documentation/networking/isotp.rst
+
+-- 
+2.44.0
+
 
