@@ -1,474 +1,162 @@
-Return-Path: <linux-can+bounces-387-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-388-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 057FE87B46B
-	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 23:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EDC587BB34
+	for <lists+linux-can@lfdr.de>; Thu, 14 Mar 2024 11:25:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2921E1C21ABB
-	for <lists+linux-can@lfdr.de>; Wed, 13 Mar 2024 22:37:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D07A41C20BA9
+	for <lists+linux-can@lfdr.de>; Thu, 14 Mar 2024 10:25:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7D8B5D488;
-	Wed, 13 Mar 2024 22:36:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE4F6CDC1;
+	Thu, 14 Mar 2024 10:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gW//v944"
+	dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b="IT9CEqat"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2135.outbound.protection.outlook.com [40.107.22.135])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 611535D725;
-	Wed, 13 Mar 2024 22:36:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710369413; cv=none; b=A/MfwB9AkM5+pGJAE7ces9VNLXSFU1dSTP9veriPz2LYtL697mUIDRuwpVG6k7jZt2tKS5Q1XjIAV9+nqbla8xQUUbChZpAAgs6riRTIQosOPhs8tltIEadnvQF71B97CS0Q+ZsgkWt3/Tg8hJDvycR+nPAMT+o65fI+fssSkeA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710369413; c=relaxed/simple;
-	bh=9a7x6cEbvXeYZWZG12o7028Qm2LKkbmst7VP8IzH9tA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CQI47phkWVO4L2Ul9EkMHKODtovT2sLdr2LgDo0ogs5triMnZYVu80fjfkpU01SaWi6o0OOYoZFS5vQRDLdJ+mSKEnCeJfFOt975unnffpmpqaRZUO9GKAl11xgdHYLKMIFcAmOQhQzDQI5shpYeM933MlpDigqRRcJaUO4FDEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gW//v944; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a45bb2a9c20so31346366b.0;
-        Wed, 13 Mar 2024 15:36:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710369410; x=1710974210; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X8/7va6XpsEoIKAkhS4uOo4aTrZ7IpXRufdR477jfNg=;
-        b=gW//v944Hi2dXmHWNAVqQjlorvc+DXvHYuJ/zLrjE5dUOINWVYWBcvDbX47k5Bg0MC
-         GR/qf+EIdCMpCQJLNklRTR9m55BeV9i/vdjI8H0QLewQOKT915TZ98AAsUS8M/BL9fnr
-         WbRGnySrWmT8iixIG1VwvWrm5PhyWh5ZRtGaCpz69y1q+Mj2UsunDQTgdzmNVFytNkvh
-         ROvJ37FbOqxip+dLdgVHPG+0R8UARbpCZS/aL1oZAjLxSqkUy1iI5BPbvFAaaqPKuAjB
-         nIu/i5IuarGBfRLp7k6DSkSWabsBczkh2BY34esGtbBjhRLFVlpQStFevDf3suojxxcM
-         mQgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710369410; x=1710974210;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X8/7va6XpsEoIKAkhS4uOo4aTrZ7IpXRufdR477jfNg=;
-        b=LwdLHLk52oe/CI1U1lrQAVUb4RswK7mMb5+JhpmT7z0doP7RgP+gPmWq6+ReCasj1M
-         DKyhnTw6IYEgL27RSPqJkltrSAinebMlI7HfLtshJpKHOwMvJTpXd1F7pf+Dei6SyzW3
-         CKXDmc2PovYlPhhBL4C4m1pYf/aLJpAHTz3lYwUIj1EB3oFluANzIlyrJcqkdk5f2SNu
-         TthxM8uEiFg5yfJMh2k9sGQn7vQw90VnpICa+J0SlVZ5UAQL+FN8Yx1Pc0gsOTTSJAbJ
-         XsqSH7jTskx0nYRL7aI2KnmUBAorpoIGcH/M7WjzdgfEJ2Dkp4dMPPH2oKV2kzab6NIV
-         9hrw==
-X-Forwarded-Encrypted: i=1; AJvYcCV8y/YgNdlFxBL7tY6BoBQU/GPFX89eGu0EiRYO/JFAFIIJP1qbwAqNhUHqZXOke/wL8j6ds3XMihI/q1c4fn2RZSBhFhVyr/YOTz8po4038FCaOrqQX82iyL0QogeVFEQ3mGhexBctth+C394G5VdAha9xdQVFLktDHUz6/0LC
-X-Gm-Message-State: AOJu0YwQr5pvJcLP8xLEiF16GB+61JCV8MQLLKAO7WDFFJVx54XRC4jC
-	SlG5fkWPhQJtw5ux5FzfrgYHymLGc3MzBeDjrscWYc03uv4xFfLx3UfDb12Y7F7dIQ==
-X-Google-Smtp-Source: AGHT+IEg3DTdOePm5GIpCTJmspNkDFLTDxvR3/hB6iLclQvhsyOlr/zZvD1XtCApFIN6L1KieqU9EQ==
-X-Received: by 2002:a17:907:160c:b0:a46:4548:aba6 with SMTP id cw12-20020a170907160c00b00a464548aba6mr5503898ejd.56.1710369409430;
-        Wed, 13 Mar 2024 15:36:49 -0700 (PDT)
-Received: from fedora.fritz.box (host-95-250-206-50.retail.telecomitalia.it. [95.250.206.50])
-        by smtp.gmail.com with ESMTPSA id dt22-20020a170906b79600b00a4669f6c2e2sm70366ejb.44.2024.03.13.15.36.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Mar 2024 15:36:49 -0700 (PDT)
-From: Francesco Valla <valla.francesco@gmail.com>
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: fabio@redaril.me,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Francesco Valla <valla.francesco@gmail.com>
-Subject: [PATCH 1/1] Documentation: networking: document CAN ISO-TP
-Date: Wed, 13 Mar 2024 23:34:31 +0100
-Message-ID: <20240313223445.87170-2-valla.francesco@gmail.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240313223445.87170-1-valla.francesco@gmail.com>
-References: <20240313223445.87170-1-valla.francesco@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF6D5D463
+	for <linux-can@vger.kernel.org>; Thu, 14 Mar 2024 10:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.135
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710411925; cv=fail; b=KgoEWBWxpVqHV5ryyB3gi/Fcy0rR4qL8K6RRof8dh5eUqLyrASZxF0c3F1ZFIOlRXR+hWJ8qBbNa7Fkp6HR0kE3mGTbQD8w7TdVHkhHr5EtGZKXozLhPsA240a06mbPeGXHzF0edV5I7UbL1RoES0ez8MTdND7jlLQBvru5V73Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710411925; c=relaxed/simple;
+	bh=p/7teSUvFpLMGubDONhAOLy6LeqhdFKbSBElRPudtSw=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Q2qILbz/h0pYRIyWOrnPeMSFu6GyyM7mHJPTr7vquimsWZ7OBaf1wpuPstNSnQlrfzTAosTL3azknObmlgrqeCvGWIbMK+taoRBdY0rVj8fpJ03YFLfJ/9VKLEN4mOcvkHu5FWIq9UhW1tIXjUB2Bb0MFRNgRD7gdDDEKwcBEGE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b=IT9CEqat; arc=fail smtp.client-ip=40.107.22.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvaser.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bf0AP/axm3W0iurMLZ1zxhSxojnC+oBx1b3YusICh3Xx4IssCdbsTWp+maiQJ7a3FTzyqitJQHiYmHbFW4Lph3Ej9NBofh35d8OKtg0tTx6rwRRj1gOGQvk7sMKlaKtLQCq2wsJcsUL2XJrzqVe6z5HZjsoBcGkKTvpF4jlo7exHlrKY6XkQlS05m859rNM42K8tgs89st+AbWbA7aat2T1vI42SmT2dFGuPgPJHn0MYuEpOg19Fk7nPaQOkfVhHObYHs7NFc/YG16T4IBknaiktfaiDaklJr7/qLNu0SptJpgcE/Hsn9ClLtM7ann7akeuU9C+EshWG/qRy1/niGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p/7teSUvFpLMGubDONhAOLy6LeqhdFKbSBElRPudtSw=;
+ b=VNKJOrRAIjalb+MPW7/AQGz00vaYscHCy56D9u14Q503lBkfA5T5W5dFd4N6odi//ohzMftB6Gvts0lwz74DDnvxKVOSL10uuH72b8oIbOkQxbvA0fOteZKg1CGCEFVY5wuGdj92YOBgXxv639oBrqztpDt1A+3G8WlxlNnqXucDvC7jGj4IVGL2npurxtkF2OczPcVorH/mcatkJ1WKthfhSTIUeldWDVnNpPwVWGq+gDyIbudiEDteE2GFU5KjYCtQoH7ccysqqLL7i0irBPCe6sdED3kOMo3upJRsH1O73pL5Hc8Ly/c+OpAyYlxNyauFXcHMa4BAlqBhIu03hg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kvaser.com; dmarc=pass action=none header.from=kvaser.com;
+ dkim=pass header.d=kvaser.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kvaser.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p/7teSUvFpLMGubDONhAOLy6LeqhdFKbSBElRPudtSw=;
+ b=IT9CEqatinBgbS5W7SeJTgThZk5LoIKOIVM/sL9iGtalzQB+d6vAX2lQENYzy90EVnKWaUA3InlOwfIQaoPCM0katUte+27SDFKGRq9oRFrLC96osHaK0BegTGNrMFI/56WCQHcTsueWaLGDFRHwcTKuoWfWRGHhRNc9mjwV65Q=
+Received: from VI1P193MB0559.EURP193.PROD.OUTLOOK.COM (2603:10a6:800:144::17)
+ by PAXP193MB2217.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:22c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.21; Thu, 14 Mar
+ 2024 10:25:14 +0000
+Received: from VI1P193MB0559.EURP193.PROD.OUTLOOK.COM
+ ([fe80::2c3f:a538:fce3:55cf]) by VI1P193MB0559.EURP193.PROD.OUTLOOK.COM
+ ([fe80::2c3f:a538:fce3:55cf%4]) with mapi id 15.20.7386.020; Thu, 14 Mar 2024
+ 10:25:14 +0000
+From: =?utf-8?B?TWFydGluIEpvY2nEhw==?= <martin.jocic@kvaser.com>
+To: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+	"mkl@pengutronix.de" <mkl@pengutronix.de>, "mailhol.vincent@wanadoo.fr"
+	<mailhol.vincent@wanadoo.fr>
+CC: Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH] can: kvaser_pciefd: Add additional Xilinx interrupts
+Thread-Topic: [PATCH] can: kvaser_pciefd: Add additional Xilinx interrupts
+Thread-Index: AQHadfnn/OdQWoVGAkGj1Ih8PK6Qnw==
+Date: Thu, 14 Mar 2024 10:25:14 +0000
+Message-ID: <2ab3c0585c3baba272ede0487182a423a420134b.camel@kvaser.com>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kvaser.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1P193MB0559:EE_|PAXP193MB2217:EE_
+x-ms-office365-filtering-correlation-id: 4500a505-58d6-410e-ab58-08dc44110995
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ JCvocVqNRJEPpaxsnTSCTZVnogt8GBpOJ+ztOOVcCviwpFxQZmtuTKgXsCf0DdTVj9ogvATYuHpGC2FAoJKPXcy1ncucplbss5ezTe/nvqkZPb1b2lXxVdeZcFRRtvFZd/Fg6Fr6nua+Ra7dpbZrOVktzTXd2GHy/jt2r9B/JBXd8+MQgxCP7jTvzZg+INwJIyn3b9TkmJTaAs1/zQ0XQnp/142Btfistmr+FAGF1rsnyGFYD9JEThqdgUHTt/d1YOxI6gIZvpZo0MaSWLlDqdJpWSJJ511Mep14Tm5KDhP2+usYhSlhtfV0CcyI2RNCulrBXmstEAS8vky4mHUcBGtL2jDlL1NAPrJ+oJM38ThsuBiYn2exVZ0pqiezEmYQvRcfD5J6jm3NVGUaYgT6Hnw9HTAGGz9LgZHMBA7vLNfyUYLnQ9dLHqa0yiQJ9Ldy8x5D3eseI2iqqfgBuj6yk3EpWsHa/nSewbKUBpo80quyq5MoQ9cdSa7h58udOpkU3VFU/Qq4rAtZKrrkEhGNv2C0EWIGwmoZyt/mlCz9ZZ0MJiHw8i5nes7hFGyyFbgQ0cGRqVd/bLV4AtzXykFpKIDAXEeVRoDDuZ1E1ItgUnLp7mzNUlSnNmj4MOM/oFxvJlHe3eET4tJZggDmVmt9MvcUGZ/zktlf6/OEnnORQxI=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P193MB0559.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?L3FmYmtOVFJ6YmkxSld2TXd3MDl6TkZYYVVFa0hjVzRRckw0alg0UFZhaTUv?=
+ =?utf-8?B?QkNqTkIvRlRTeEY0RWhta0QvMmVoTW1wRk10YjVGNlhtMVgzRWRocTk1Y1Iy?=
+ =?utf-8?B?YjFTOU5EZmJMcGtSK2tHUWxGalpsUVgxcEgzSm43QjJMMWJiMmRFRUxkdlU2?=
+ =?utf-8?B?UnNrekVoZVRzUjR4RDE0dlBNR2Y1S1V1Z09KeG9QS2tqZDByKy93Y0JqZTVF?=
+ =?utf-8?B?Mm5iSlZnS0orYzJDWTYzVkJJUlUxYnJDL21RZDM1eDV6UGp3OUNKeGxGNHZ5?=
+ =?utf-8?B?bVRWSm9ibU53MUl0Ry9yUXFjbFk4d0M4aE82RTFMc0FWdGRQVW9vbk40UWQ2?=
+ =?utf-8?B?TFJ3b3hRODVNVjlKOVU1R004ZlVROCt1Q0ZIbmE3dE9mU0hhRHkyT2hZc2Zq?=
+ =?utf-8?B?ZXlZWmFKeXZKelBySmdydHNEczBRZmptQjg3YzAzSHlXcXQwdnBEblREMVJr?=
+ =?utf-8?B?WEt6WTBGTXBkSXVhZ3JvS3ZXTnhMYXlqUGhrRjVtT2ZzY1pkUjgxUDdZMVow?=
+ =?utf-8?B?Tk5qZCt6SVNYUllKZVZheGQxbTRRempEbXZiMFEzVW05TFhaOCtYdVV2OHNM?=
+ =?utf-8?B?Ym9ZSnkyOUFjdVpjR0Myb1NGVlUxUWZZMDVmQXVjaW8zdHJJZnVib3l0aU04?=
+ =?utf-8?B?bGx4TXg1YlV5ZVVxcjViNVJiVm96RW56K0VrckNGR0dZSlArYi9ZZHdtNUds?=
+ =?utf-8?B?WDBZbUdHVXJ4MFFlWDRTemlrTklpTTJRNnR1dDdwNHg2RFRoTTVZbzZ6Sk9v?=
+ =?utf-8?B?Z3IzRGlYcGRqeGxhTWZMMmltVVh6bDE4TytSbkJ6MjBMb0JielJzcjB3RTBn?=
+ =?utf-8?B?VlNzVEV2YmZSZ2F2ckZUb1JkY3pkckUyei94QzBrRUN4SVJBMmVaZnEwYmla?=
+ =?utf-8?B?MzFsYzZBNnNQZDhuNVlwT3d1emhjdDVPd1lCOVpwc0FtZUZUYno3SVczWnhO?=
+ =?utf-8?B?cUFnUFVWVGs4U3lKcUd4a2ZjUURqcGd5dE9mK1lLdUVvNUErL3c2eDJIK2gy?=
+ =?utf-8?B?czRvNnhJcGFFenFWcGdmZGx2cmplL0tGc3o0eDRTSU1oVUhMMWh2cGNnT0c3?=
+ =?utf-8?B?anBNcit6OGtyY00vWFUwSzBHclFQb0ROWXMzdDlWTnE5RHd1RVBUejRVQUU0?=
+ =?utf-8?B?eVFKZ0hzMEZNSXZyeDI0Um80OG80ZldOV2lOZXlMelZ1ME0zSHJrMDlmVlVp?=
+ =?utf-8?B?dWFZRDdsdzI4Ui83bjE3UGJ6ZmE0TmswNy8zbFdORWRUS0hFYTRuc3ltTFpC?=
+ =?utf-8?B?a3RZUU4wVUREMmdGdGtGNFJRNFd3enJUNHhQYTdMU0NBNWlMVVpjcXJzd0tW?=
+ =?utf-8?B?S0hTZ0Y2QVFqYzhlUEdnUkNCYytRQkhHSWFsMkZwMlliLzB0TXRwUUxjQWV1?=
+ =?utf-8?B?aHVMcUJuUCtkekVOaFE3cm9Qei9DSTU5WG92S3dlNzJjams2akQwMDkrc0F1?=
+ =?utf-8?B?T0ZidGlFVDBjWmFTK3hYMFRuRUJsVUE3dllqSzlXQUZHZ1RLOTFTVHVHYnhV?=
+ =?utf-8?B?c1dhRDM3MFRDMDVHN3NMbzA0RldNU20wd214R0R6SXoxOXFrUnZ6OGVRV21U?=
+ =?utf-8?B?QXdNYlgwLzE3K0JtenRTTmF4NE96YisyaDlMck1zWGxqRHEvU1YrSXVpQ2xN?=
+ =?utf-8?B?eGM5Y1d2VktrTDZCSHdwMnQvRkVSenVSM01kckJUSjk3amxJeTR5VUhVRVRk?=
+ =?utf-8?B?dU9Nd3JqTlI5TmtNeGJNUmtxSXlRYXNpSzBZRXlMMFE1aUdvSDU0YUVXT3Zq?=
+ =?utf-8?B?MTd3R3A4WnB3WnRVQitENzRtbW9CZUdKYmcxayt4MVdmNlNhV2VyV0dKY09t?=
+ =?utf-8?B?WFFoVUM5VWJmbDBlajZ2N0pZVXpYRDlLV3UycXo2TzNFdkdLeDVhdzN1dERz?=
+ =?utf-8?B?WlBseDVrMC9kL1l2bW54NDNUVFQzSEZXRGRCeWk2aWVNbW9DKzdvUDZVanRv?=
+ =?utf-8?B?WmFKU1FYaUJLOWc2MlQ3Q3N5SUtrK0JGL0JFQnYwcTV1c0w5YUg5L2g1S0po?=
+ =?utf-8?B?SEZoZnlyYVo5L0NyN1FGcTczTHN5WnJnU1M1UjdmV3VGbnZ1aXdBTXlwTmsx?=
+ =?utf-8?B?ZVZ6SGVXOXRzMnZXNWZ3ZHVSZjNYdGJYemNtbTRmK1pOdFFnOG10WEptczdk?=
+ =?utf-8?Q?wS72m7zH+Iz8N5LX5y0MEs/Mg?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7FA0442113E3FE4398D144ABCD0DBBD4@EURP193.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: kvaser.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1P193MB0559.EURP193.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4500a505-58d6-410e-ab58-08dc44110995
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Mar 2024 10:25:14.5255
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 73c42141-e364-4232-a80b-d96bd34367f3
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rQoyttM5hcFTVygU4fxV6JwOS/N0Kgy/YArMc7xWt4JpA5NSIBvzENUrvS1eBKBdw6e/PWvCMg7nk+lMAMGiKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXP193MB2217
 
-Document basic concepts, APIs and behaviour of the CAN ISO-TP (ISO
-15765-2) stack.
-
-Signed-off-by: Francesco Valla <valla.francesco@gmail.com>
----
- Documentation/networking/index.rst |   1 +
- Documentation/networking/isotp.rst | 347 +++++++++++++++++++++++++++++
- 2 files changed, 348 insertions(+)
- create mode 100644 Documentation/networking/isotp.rst
-
-diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 473d72c36d61..ba22acfae389 100644
---- a/Documentation/networking/index.rst
-+++ b/Documentation/networking/index.rst
-@@ -19,6 +19,7 @@ Contents:
-    caif/index
-    ethtool-netlink
-    ieee802154
-+   isotp
-    j1939
-    kapi
-    msg_zerocopy
-diff --git a/Documentation/networking/isotp.rst b/Documentation/networking/isotp.rst
-new file mode 100644
-index 000000000000..d0c49fd1f5c9
---- /dev/null
-+++ b/Documentation/networking/isotp.rst
-@@ -0,0 +1,347 @@
-+.. SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-+
-+====================
-+ISO-TP (ISO 15765-2) Transport Protocol
-+====================
-+
-+Overview
-+=========================
-+
-+ISO-TP, also known as ISO 15765-2 from the ISO standard it is defined in, is a
-+transport protocol specifically defined for diagnostic communication on CAN.
-+It is widely used in the automotive industry, for example as the transport
-+protocol for UDSonCAN (ISO 14229-3) or emission-related diagnostic services
-+(ISO 15031-5).
-+
-+ISO-TP can be used both on classical (2.0B) CAN and CAN-FD based networks.
-+It is also designed to be compatible with a CAN network using SAE J1939 as data
-+link layer (however, this is not a requirement).
-+
-+Addressing
-+----------
-+
-+In its simplest form, ISO-TP is based on two kinds of addresses for the nodes
-+connected to the same network:
-+
-+- a physical address, which identifies a single node and is used in 1-to-1
-+  communication
-+- a functional addess, which identifies a group of nodes and is used in 1-to-N
-+  communication
-+
-+In a so-called "normal" addressing scenario, both these addresses are
-+represented by a single byte and can be inserted inside the 29-bit version of
-+the CAN ID. However, in order to support larger networks, an "extended"
-+addressing scheme can be adopted; in this case, the first byte of the data
-+payload is used as an additional component of the address (both for the
-+physical and functional cases).
-+
-+Transport protocol and associated frame types
-+---------------------------------------------
-+
-+When transmitting data using the ISO-TP protocol, the payload can either fit
-+inside one single CAN message or not, also considering the overhead the protocol
-+is generating and the optional extended addressing. In the first case, the data
-+is transmitted at once using a so-called Single Frame (SF). In the second case,
-+ISO-TP defines a multi-frame protocol, in which the sender asks (through a First
-+Frame - FF) to the receiver the maximum supported size of a macro data block
-+(``blocksize``) and the minimum time time between the single CAN messages
-+composing such block (``stmin``). Once these informations have been received,
-+the sender starts to send frames containing fragments of the data payload
-+(called Consecutive Frames - CF), stopping after every ``blocksize``-sized block
-+to wait confirmation from the receiver (which should then send a Flow Control
-+frame - FC - to inform the sender about its availability to receive more data).
-+
-+Specifications used
-+-------------------
-+
-+* ISO 15765-2 : Road vehicles - Diagnostic communication over Controller Area
-+  Network (DoCAN). Part 2: Transport protocol and network layer services.
-+
-+How to Use ISO-TP
-+=================
-+
-+As with others CAN protocols, the ISO-TP stack support is built as a variant of
-+the SocketCAN communication, and thus uses the socket APIs.
-+
-+Creation and basic usage of an ISO-TP socket
-+--------------------------------------------
-+
-+To use the ISO-TP stack, ``#include <linux/can/isotp.h>`` shall be used. A
-+socket can then be created using the ``PF_CAN`` protocol family, the
-+``SOCK_DGRAM`` type (as the underlying protocol is datagram-based by design)
-+and the ``CAN_ISOTP`` protocol:
-+
-+.. code-block:: C
-+
-+    s = socket(PF_CAN, SOCK_DGRAM, CAN_ISOTP);
-+
-+After the socket has been successfully created, ``bind(2)`` shall be called to
-+bind the socket to the desired CAN interface, either:
-+
-+* specifying at least one RX or TX address, as part of the sockaddr supplied
-+  to the call itself, or
-+* after specifying broadcast flags through socket option (explained below)
-+
-+Once bound to an interface, the socket can be read from and written to using
-+the usual ``read(2)`` and ``write(2)`` system calls, as well as ``send(2)``,
-+``sendmsg(2)``, ``recv(2)`` and ``recvmsg(2)``.
-+Unlike raw SocketCAN sockets, only the data payload shall be specified in all
-+these calls, as the CAN header is automatically filled by the ISO-TP stack
-+using information supplied during socket creation. In the same way, the stack
-+will use the transport mechanism when required (i.e., when the size of the data
-+payload exceeds the MTU of the underlying CAN bus).
-+
-+The sockaddr structure used for SocketCAN has extensions for use with ISO-TP,
-+as specified below:
-+
-+.. code-block:: C
-+
-+    struct sockaddr_can {
-+        sa_family_t can_family;
-+        int         can_ifindex;
-+        union {
-+            struct { canid_t rx_id, tx_id; } tp;
-+        ...
-+        } can_addr;
-+    }
-+
-+* ``can_family`` and ``can_ifindex`` serve the same purpose as for other
-+  SocketCAN sockets.
-+
-+* ``can_addr.tp.rx_id`` specifies the receive (RX) CAN ID and will be used as
-+  a RX filter.
-+
-+* ``can_addr.tp.tx_id`` specifies the transmit (TX) CAN ID
-+
-+ISO-TP socket options
-+---------------------
-+
-+When creating an ISO-TP socket, reasonable defaults are set. Some options can
-+be modified with ``setsockopt(2)`` and/or read back with ``getsockopt(2)``.
-+
-+General options
-+~~~~~~~~~~~~~~~
-+
-+General socket options can be passed using the ``CAN_ISOTP_OPTS`` optname:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_options opts;
-+    ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_OPTS, &opts, sizeof(opts))
-+
-+where the ``can_isotp_options`` structure has the following contents:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_options {
-+        u32 flags;
-+        u32 frame_txtime;
-+        u8  ext_address;
-+        u8  txpad_content;
-+        u8  rxpad_content;
-+        u8  rx_ext_address;
-+    };
-+
-+* ``flags``: modifiers to be applied to the default behaviour of the ISO-TP
-+  stack. Following flags are available:
-+
-+  - ``CAN_ISOTP_LISTEN_MODE``: listen only (do not send FC frames)
-+  - ``CAN_ISOTP_EXTEND_ADDR``: enable extended addressing, using the byte
-+    specified in ``ext_address`` as additional address byte.
-+  - ``CAN_ISOTP_TX_PADDING``: enable padding for tranmsitted frames, using
-+    ``txpad_content`` as value for the padding bytes.
-+  - ``CAN_ISOTP_RX_PADDING``: enable padding for the received frames, using
-+    ``rxpad_content`` as value for the padding bytes.
-+  - ``CAN_ISOTP_CHK_PAD_LEN``: check for correct padding length on the received
-+    frames.
-+  - ``CAN_ISOTP_CHK_PAD_DATA``: check padding bytes on the received frames
-+    against ``rxpad_content``; if ``CAN_ISOTP_RX_PADDING`` is not specified,
-+    this flag is ignored.
-+  - ``CAN_ISOTP_HALF_DUPLEX``: force ISO-TP socket in half duples mode
-+    (that is, transport mechanism can only be incoming or outgoing at the same
-+    time, not both)
-+  - ``CAN_ISOTP_FORCE_TXSTMIN``: ignore stmin from received FC
-+  - ``CAN_ISOTP_FORCE_RXSTMIN``: ignore CFs depending on rx stmin
-+  - ``CAN_ISOTP_RX_EXT_ADDR``: use ``rx_ext_address`` instead of ``ext_address``
-+    as extended addressing byte on the reception path.
-+  - ``CAN_ISOTP_WAIT_TX_DONE``: wait until the frame is sent before returning
-+    from ``write(2)`` and ``send(2)`` calls (i.e., blocking write operations).
-+  - ``CAN_ISOTP_SF_BROADCAST``: use 1-to-N functional addressing (cannot be
-+    specified alongside ``CAN_ISOTP_CF_BROADCAST``)
-+  - ``CAN_ISOTP_CF_BROADCAST``: use 1-to-N transmission without flow control
-+    (cannot be specified alongside ``CAN_ISOTP_SF_BROADCAST``)
-+  - ``CAN_ISOTP_DYN_FC_PARMS``: enable dynamic update of flow control parameters
-+
-+* ``frame_txtime``: frame transmission time (defined as N_As/N_Ar inside the
-+  ISO standard); if ``0``, the default (or the last set value) is used.
-+  To set the transmission time to ``0``, the ``CAN_ISOTP_FRAME_TXTIME_ZERO``
-+  macro (equal to 0xFFFFFFFF) shall be used.
-+
-+* ``ext_address``: extended addressing byte, used if the
-+  ``CAN_ISOTP_EXTEND_ADDR`` flag is specified.
-+
-+* ``txpad_content``: byte used as padding value for transmitted frames
-+
-+* ``rxpad_content``: byte used as padding value for received frames
-+
-+* ``rx_ext_address``: extended addressing byte for the reception path, used if
-+  the ``CAN_ISOTP_RX_EXT_ADDR`` flag is specified.
-+
-+Flow Control options
-+~~~~~~~~~~~~~~~~~~~~
-+
-+Flow Control (FC) options can be passed using the ``CAN_ISOTP_RECV_FC`` optname:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_fc_options fc_opts;
-+    ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_RECV_FC, &fc_opts, sizeof(fc_opts));
-+
-+where the ``can_isotp_fc_options`` structure has the following contents:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_options {
-+        u8 bs;
-+        u8 stmin;
-+        u8 wftmax;
-+    };
-+
-+* ``bs``: blocksize provided in flow control frames.
-+
-+* ``stmin``: minimum separation time provided in flow control frames; can
-+  have the following values (others are reserved):
-+  - 0x00 - 0x7F : 0 - 127 ms
-+  - 0xF1 - 0xF9 : 100 us - 900 us
-+
-+* ``wftmax``: maximum number of wait frames provided in flow control frames.
-+
-+Link Layer options
-+~~~~~~~~~~~~~~~~~~
-+
-+Link Layer (LL) options can be passed using the ``CAN_ISOTP_LL_OPTS`` optname:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_ll_options ll_opts;
-+    ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_LL_OPTS, &ll_opts, sizeof(ll_opts));
-+
-+where the ``can_isotp_ll_options`` structure has the following contents:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_ll_options {
-+        u8 mtu;
-+        u8 tx_dl;
-+        u8 tx_flags;
-+    };
-+
-+* ``mtu``: generated and accepted CAN frame type, can be equal to ``CAN_MTU``
-+  for classical CAN frames or ``CANFD_MTU`` for CAN FD frames.
-+
-+* ``tx_dl``: maximum payload length for transmitted frames, can have one value
-+  among: 8, 12, 16, 20, 24, 32, 48, 64.
-+
-+* ``tx_flags``: flags set set into ``struct canfd_frame.flags`` at frame
-+  creation.
-+
-+Transmission stmin
-+~~~~~~~~~~~~~~~~~~
-+
-+The transmission minimum separaton time (stmin) can be forced using the
-+``CAN_ISOTP_TX_STMIN`` optname and providing an stmin value in microseconds as
-+a 32bit unsigned integer; this will overwrite the value sent by the receiver in
-+flow control frames:
-+
-+.. code-block:: C
-+
-+    uint32_t stmin;
-+    ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_TX_STMIN, &stmin, sizeof(stmin));
-+
-+Reception stmin
-+~~~~~~~~~~~~~~~
-+
-+The reception minimum separaton time (stmin) can be forced using the
-+``CAN_ISOTP_RX_STMIN`` optname and providing an stmin value in microseconds as
-+a 32bit unsigned integer; received Consecutive Frames (CF) which timestamps
-+differ less than this value will be ignored:
-+
-+.. code-block:: C
-+
-+    uint32_t stmin;
-+    ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_RX_STMIN, &stmin, sizeof(stmin));
-+
-+Multi-frame transport support
-+--------------------------
-+
-+The ISO-TP stack contained inside the Linux kernel supports the multi-frame
-+transport mechanism defined by the standard, with the following contraints:
-+
-+* the maximum size of a PDU is defined by a module parameter, with an hard
-+  limit imposed at build time
-+* when a transmission is in progress, subsequent calls to ``write(2)`` will
-+  block, while calls to ``send(2)`` will either block or fail depending on the
-+  presence of the ``MSG_DONTWAIT`` flag
-+* no support is present for sending "wait frames": wheter a PDU can be fully
-+  received or not is decided when the First Frame is received
-+
-+Errors
-+------
-+
-+Following errors are reported to userspace:
-+
-+RX path errors
-+~~~~~~~~~~~~~~
-+
-+============ =================================================================
-+-ETIMEDOUT   timeout of data reception
-+-EILSEQ      sequence number mismatch during a multi-frame reception
-+-EBADMSG     data reception with wrong padding
-+============ =================================================================
-+
-+TX path errors
-+~~~~~~~~~~~~~~
-+
-+========== =================================================================
-+-ECOMM     flow control reception timeout
-+-EMSGSIZE  flow control reception overflow
-+-EBADMSG   flow control reception with wrong layout/padding
-+========== =================================================================
-+
-+Examples
-+========
-+
-+Basic node example
-+------------------
-+
-+Following example implements a node using "normal" physical addressing, with
-+RX ID equal to 0x18DAF142 and a TX ID equal to 0x18DA42F1. All options are left
-+to their default.
-+
-+.. code-block:: C
-+
-+  int s;
-+  struct sockaddr_can addr;
-+  int ret;
-+
-+  s = socket(PF_CAN, SOCK_DGRAM, CAN_ISOTP);
-+  if (s < 0)
-+      exit(1);
-+
-+  addr.can_family = AF_CAN;
-+  addr.can_ifindex = if_nametoindex("can0");
-+  addr.tp.tx_id = 0x18DA42F1;
-+  addr.tp.rx_id = 0x18DAF142;
-+
-+  ret = bind(s, (struct sockaddr *)&addr, sizeof(addr));
-+  if (ret < 0)
-+      exit(1);
-+
-+  // Data can now be received using read(s, ...) and sent using write(s, ...)
-+
-+Additional examples
-+-------------------
-+
-+More complete (and complex) examples can be found inside the ``isotp*`` userland
-+tools, distributed as part of the ``can-utils`` utilities at:
-+https://github.com/linux-can/can-utils
--- 
-2.44.0
-
+U2luY2UgWGlsaW54LWJhc2VkIGFkYXB0ZXJzIG5vdyBzdXBwb3J0IHVwIHRvIGVpZ2h0IENBTiBj
+aGFubmVscywgdGhlIFRYDQppbnRlcnJ1cHQgbWFzayBhcnJheSBtdXN0IGhhdmUgZWlnaHQgZWxl
+bWVudHMuDQoNCkxpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWNhbi8yYjJjNzIw
+YTc4OGUxOTA0MjgzZTM1NGFiYjMyMGFkYjViNjMxZDI2LmNhbWVsQGt2YXNlci5jb20vDQoNClNp
+Z25lZC1vZmYtYnk6IE1hcnRpbiBKb2NpYyA8bWFydGluLmpvY2ljQGt2YXNlci5jb20+DQotLS0N
+CiBkcml2ZXJzL25ldC9jYW4va3Zhc2VyX3BjaWVmZC5jIHwgNCArKy0tDQogMSBmaWxlIGNoYW5n
+ZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvbmV0L2Nhbi9rdmFzZXJfcGNpZWZkLmMgYi9kcml2ZXJzL25ldC9jYW4va3Zhc2VyX3BjaWVm
+ZC5jDQppbmRleCA0MTZmMTA0ODBiNDAuLjJkNTJkN2FjOWY5MSAxMDA2NDQNCi0tLSBhL2RyaXZl
+cnMvbmV0L2Nhbi9rdmFzZXJfcGNpZWZkLmMNCisrKyBiL2RyaXZlcnMvbmV0L2Nhbi9rdmFzZXJf
+cGNpZWZkLmMNCkBAIC0zNjksOCArMzY5LDggQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBrdmFzZXJf
+cGNpZWZkX2lycV9tYXNrIGt2YXNlcl9wY2llZmRfc2YyX2lycV9tYXNrID0gew0KIA0KIHN0YXRp
+YyBjb25zdCBzdHJ1Y3Qga3Zhc2VyX3BjaWVmZF9pcnFfbWFzayBrdmFzZXJfcGNpZWZkX3hpbGlu
+eF9pcnFfbWFzayA9IHsNCiAJLmtjYW5fcngwID0gQklUKDQpLA0KLQkua2Nhbl90eCA9IHsgQklU
+KDE2KSwgQklUKDE3KSwgQklUKDE4KSwgQklUKDE5KSB9LA0KLQkuYWxsID0gR0VOTUFTSygxOSwg
+MTYpIHwgQklUKDQpLA0KKwkua2Nhbl90eCA9IHsgQklUKDE2KSwgQklUKDE3KSwgQklUKDE4KSwg
+QklUKDE5KSwgQklUKDIwKSwgQklUKDIxKSwgQklUKDIyKSwgQklUKDIzKSB9LA0KKwkuYWxsID0g
+R0VOTUFTSygyMywgMTYpIHwgQklUKDQpLA0KIH07DQogDQogc3RhdGljIGNvbnN0IHN0cnVjdCBr
+dmFzZXJfcGNpZWZkX2Rldl9vcHMga3Zhc2VyX3BjaWVmZF9hbHRlcmFfZGV2X29wcyA9IHsNCi0t
+IA0KMi40MC4xDQoNCg==
 
