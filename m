@@ -1,223 +1,95 @@
-Return-Path: <linux-can+bounces-394-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-395-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5811C87C863
-	for <lists+linux-can@lfdr.de>; Fri, 15 Mar 2024 05:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A90787C86D
+	for <lists+linux-can@lfdr.de>; Fri, 15 Mar 2024 06:08:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8157EB20ECC
-	for <lists+linux-can@lfdr.de>; Fri, 15 Mar 2024 04:55:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 795D0B221C5
+	for <lists+linux-can@lfdr.de>; Fri, 15 Mar 2024 05:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A81DDDDC;
-	Fri, 15 Mar 2024 04:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V3gGFGmj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FBDFBE8;
+	Fri, 15 Mar 2024 05:08:07 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E2EBDDBC;
-	Fri, 15 Mar 2024 04:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3742DF44
+	for <linux-can@vger.kernel.org>; Fri, 15 Mar 2024 05:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710478512; cv=none; b=Cj4UOkatwSbivggwUbleC9a2A3cISPezRtTt1BeT5AN4KlV7pnzFhnv/Yp8Uvqd7ZZrAiIyyaAB2+GMECzORlnINnnbtq65YG74D81hbbJ8ATASeM9AmuC+VbZD2aeBZBot1pb+cKIlMFVJ4NTxSZNFXAwdMXo2QmYUqMLxQDB8=
+	t=1710479287; cv=none; b=XuDcWJxNgx6idftW6cMtpv5txATWOrURbV2B6VjnbvPep9Djh7KxHpWfZRksM7lk1hr8bC351Z/sYaQ1VWDZuRlrq1SXbHIwBHO8GK/nyvMGYqx4KJzQ8ML09WDRpFjT9PpQNYRrPrOK+RlsROc7Q8zi8TAKZNk72v59cMKNJUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710478512; c=relaxed/simple;
-	bh=kuYqgS+eHSo2SJueMeRRReARRlujmtetW3lucMvyfZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n/5qmtcF/dgdhEzWlQxK31SxaZYHGmYJQtGx5iqYfGlPhtQwtEekrOuix6QEOmXDEqB+xrK98mnajSZd1UtS/11UY1M6q3ZhoDkBFrBb3vjBOL1yjktJbs/QC4lzLykBSOxZoFQ+U4qWJcBLGwwyn/uvvXtvgPl8J/CI0QHqnXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V3gGFGmj; arc=none smtp.client-ip=209.85.160.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-221830f6643so985593fac.2;
-        Thu, 14 Mar 2024 21:55:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710478509; x=1711083309; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sy55z1v7ImAqObG3bgHcOrhU0C2YzG0eTkBo+B+6A00=;
-        b=V3gGFGmjDXuN/fZ31CcXlsbGsB95ZIoxfh9ZZnlDI2jLMS5+P1k91lgbapI4UAizIT
-         Z5ehmDDn3a8WWA3puTY4hBwmVLWFlKu7X5lekeJtmbfRju0S9H1dbTKeIGWA+AlxgEfQ
-         GxOJcHE/5Hi8iExOO+egwK1UDv2W/l9kX7kwUeuKRUo93x6lPngqdD4P0J/r/hB8pNJZ
-         nrEBae+wSCgicjaY4nbt/DSWUNzJO4OUHk9O3JRcXUn3mhzbwoqP6L1IrQbo/yksHbKp
-         DbXQs7cusGO2Y3ZWyz7mxK19BAZyUjZIpry1bgP7gUSf1TC2aiB1nOGfazXvogswhCV2
-         HCjg==
+	s=arc-20240116; t=1710479287; c=relaxed/simple;
+	bh=NmDOUG811XfRB16igaZyw6LFbv7sSn2UAdDeMDEa6OA=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=MYevh5Xa6rIMqeaNV3sXh95TsxY2/vTAZNSjp0f1wwpMZaDU609YHEgM+U4Fo59BJjXXtEAtk9eJYvZlAwuL2mm2qldhpTz/NxT2cx61dCS8QsHr2v4X/TuVFX/SwCrXUma0YK2v5m1KjgW+SYlcoo5dd1il4aWnVgCWRkQrdbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7c8a8526f03so145778039f.0
+        for <linux-can@vger.kernel.org>; Thu, 14 Mar 2024 22:08:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710478509; x=1711083309;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sy55z1v7ImAqObG3bgHcOrhU0C2YzG0eTkBo+B+6A00=;
-        b=v9fRTBd4PIxf6ndOivfGPZ/aCVritf+dTvVl1RnoZhnNyUwfsrT/6mSSthdRS7/fF0
-         hyIJNyXWMpCBXCNbyXvFiXpioSjL612MnY3u+HUmhOpOsCFywHP/N+RrTiKiTBFgK9TY
-         Wzt1ufdHWkEYwIOwGytJd+B9TV5OMlzIcXe/ShhxurpfW6RfnhTaCivVhi+RT7KOK7YV
-         dcZllVzVYE8OSdh3/JmmiQDXOtDRMaw1Szw7Hkldt1XNWbCXfPrnS9/jsd0r2luyJ9LN
-         vtOfp3jCprdxGvjt16JQcnPtOBGRu1G7HrMdRNnAZm16jYVhfifvas1Vt9LPXTU9vh9v
-         kH1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXoKNLg2LK+dmybCC6UCR1DmSaW90BnOQTDF6ia2Wa6Gg0ZaAnKyqV4kkOd/epypXTqPXr/UA5bKuKn9lxkWEwJiglPIV8Iy+jqp+QkC6JNsiIyJeODTMO8VqjrGu2u1+85vjQge1K7RjWXePgh+4forIPrGZ6guE+f017fZkLo
-X-Gm-Message-State: AOJu0Yz3Z8Ekcg/Zi6EVUyL6XZUFTNa6LOVGMS3VUMgyWi0vrt+vZ10j
-	oXDynhd/nKL8nKxAJZPZrUSbswSzx/su+RPjpqs0uvW0mMpHsb9v
-X-Google-Smtp-Source: AGHT+IHQGOSAg7J2yoxD0cdm5ZSNxU0HW1POWrjnDpM6ueNExqd06UH5aJ7MTNdhahwEqiN0ktYkiQ==
-X-Received: by 2002:a05:6870:e40c:b0:220:9c43:527f with SMTP id n12-20020a056870e40c00b002209c43527fmr3997394oag.20.1710478509466;
-        Thu, 14 Mar 2024 21:55:09 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id i3-20020a056a00004300b006e56e5c09absm2495808pfk.14.2024.03.14.21.55.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Mar 2024 21:55:08 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id CEDBE1834EB84; Fri, 15 Mar 2024 11:55:04 +0700 (WIB)
-Date: Fri, 15 Mar 2024 11:55:04 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Francesco Valla <valla.francesco@gmail.com>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: fabio@redaril.me, Linux CAN <linux-can@vger.kernel.org>,
-	Linux Networking <netdev@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] Documentation: networking: document CAN ISO-TP
-Message-ID: <ZfPUqOVpF8u5738S@archie.me>
-References: <20240313223445.87170-1-valla.francesco@gmail.com>
- <20240313223445.87170-2-valla.francesco@gmail.com>
+        d=1e100.net; s=20230601; t=1710479285; x=1711084085;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JVU3SwTinQlrbnvG3eYIW9m6xS2x5pbAtn9qvd7kqLU=;
+        b=iaeXjD7LAb7OWFzzgwTi4AwsdqberdyJVIGsiMskpVKq5/ZR0YBaApN3kMKYPgp0YX
+         hpR7QwUhgLVVsjMQBZyplPivVSRf+w7xneEKp3Zn646LWjjyixTkDiDHuNaIcbVabhgy
+         4avVxkbGDfgXtW8xe++XE5HqLtGT0zSMXpZoiVwaGZfKdKG+97p9FR3Ttt+pjw9OyBZ5
+         yLtzGlykJAaSeJ+eF0LbSpzEuXsPYRLTINpfiT8wVtlBs4+8IvlR6A6SSMrA3QzTfUo3
+         1zoLWLGHOCD2EwRJU9BQyBsKfk96Uce/G0Ztcdlbj8/DOrVA2qpU4cAGmdiKQSgzo3vv
+         mL+w==
+X-Forwarded-Encrypted: i=1; AJvYcCXcg5JFU0Xq2J56aJ8LL/fKWmLDqrDrN6oVN15MxHXADJB1jox57MxE6C5X72H+eb56EzC/sPzNXe9eectvqj0xdasodfLsl0U4
+X-Gm-Message-State: AOJu0YyJcWvtlmmb5hgh7rTZ+SJc5uXyhX9gDmHiqRzQWJzkdCfC+JHG
+	XFhvxjAqOwK31ITMt3bKrmEUQ2qgFb0HH8hFfcyUQE8BJdQpdIUKqBXo3ngw1w4u0oM6D0iTXbq
+	2iOZZz13G7fVx3x0vDQ8KQABL2DYkYHjgWmiUQm4crEGlM/eByYr6r2U=
+X-Google-Smtp-Source: AGHT+IE4etLVdxE7NeSUJez8W2EAutCczB7gCGAguxf71D5ai0qlUnXy0kkyvk7dTFBA4qoM3k9rLzgTfGh9vvILeXfcxtJP6NXG
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cMqm9YFyElqZ6FQo"
-Content-Disposition: inline
-In-Reply-To: <20240313223445.87170-2-valla.francesco@gmail.com>
+X-Received: by 2002:a05:6e02:218b:b0:365:38db:a585 with SMTP id
+ j11-20020a056e02218b00b0036538dba585mr216452ila.1.1710479284985; Thu, 14 Mar
+ 2024 22:08:04 -0700 (PDT)
+Date: Thu, 14 Mar 2024 22:08:04 -0700
+In-Reply-To: <000000000000e8364c05ceefa4cf@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002d73880613abfe48@google.com>
+Subject: Re: [syzbot] [can?] possible deadlock in j1939_session_activate
+From: syzbot <syzbot+f32cbede7fd867ce0d56@syzkaller.appspotmail.com>
+To: astrajoan@yahoo.com, davem@davemloft.net, edumazet@google.com, 
+	hdanton@sina.com, kernel@pengutronix.de, kuba@kernel.org, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org, 
+	o.rempel@pengutronix.de, pabeni@redhat.com, robin@protonic.nl, 
+	socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com, wg@grandegger.com
+Content-Type: text/plain; charset="UTF-8"
 
+syzbot suspects this issue was fixed by commit:
 
---cMqm9YFyElqZ6FQo
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+commit 6cdedc18ba7b9dacc36466e27e3267d201948c8d
+Author: Ziqi Zhao <astrajoan@yahoo.com>
+Date:   Fri Jul 21 16:22:26 2023 +0000
 
-On Wed, Mar 13, 2024 at 11:34:31PM +0100, Francesco Valla wrote:
-> Document basic concepts, APIs and behaviour of the CAN ISO-TP (ISO
-> 15765-2) stack.
->=20
-> Signed-off-by: Francesco Valla <valla.francesco@gmail.com>
-> ---
->  Documentation/networking/index.rst |   1 +
->  Documentation/networking/isotp.rst | 347 +++++++++++++++++++++++++++++
->  2 files changed, 348 insertions(+)
->  create mode 100644 Documentation/networking/isotp.rst
->=20
-> diff --git a/Documentation/networking/index.rst b/Documentation/networkin=
-g/index.rst
-> index 473d72c36d61..ba22acfae389 100644
-> --- a/Documentation/networking/index.rst
-> +++ b/Documentation/networking/index.rst
-> @@ -19,6 +19,7 @@ Contents:
->     caif/index
->     ethtool-netlink
->     ieee802154
-> +   isotp
->     j1939
->     kapi
->     msg_zerocopy
-> diff --git a/Documentation/networking/isotp.rst b/Documentation/networkin=
-g/isotp.rst
-> new file mode 100644
-> index 000000000000..d0c49fd1f5c9
-> --- /dev/null
-> +++ b/Documentation/networking/isotp.rst
-> @@ -0,0 +1,347 @@
-> +.. SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +ISO-TP (ISO 15765-2) Transport Protocol
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +Overview
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> +
-<snipped>...
-> +Multi-frame transport support
-> +--------------------------
-> +
+    can: j1939: prevent deadlock by changing j1939_socks_lock to rwlock
 
-htmldocs build reports new warnings:
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10c1afc1180000
+start commit:   296455ade1fd Merge tag 'char-misc-6.8-rc1' of git://git.ke..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8e8eb82c088a8ac6
+dashboard link: https://syzkaller.appspot.com/bug?extid=f32cbede7fd867ce0d56
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11d7b3afe80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ba0a4fe80000
 
-/home/bagas/repo/linux-kernel/Documentation/networking/isotp.rst:3: WARNING=
-: Title overline too short.
+If the result looks correct, please mark the issue as fixed by replying with:
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-ISO-TP (ISO 15765-2) Transport Protocol
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-/home/bagas/repo/linux-kernel/Documentation/networking/isotp.rst:275: WARNI=
-NG: Title underline too short.
+#syz fix: can: j1939: prevent deadlock by changing j1939_socks_lock to rwlock
 
-Multi-frame transport support
---------------------------
-/home/bagas/repo/linux-kernel/Documentation/networking/isotp.rst:275: WARNI=
-NG: Title underline too short.
-
-Multi-frame transport support
---------------------------
-
-I have applied the fixup:
-
----- >8 ----
-diff --git a/Documentation/networking/isotp.rst b/Documentation/networking/=
-isotp.rst
-index d0c49fd1f5c976..a104322ddb6c5e 100644
---- a/Documentation/networking/isotp.rst
-+++ b/Documentation/networking/isotp.rst
-@@ -1,11 +1,11 @@
- .. SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-=20
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
- ISO-TP (ISO 15765-2) Transport Protocol
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
- Overview
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+=3D=3D=3D=3D=3D=3D=3D=3D
-=20
- ISO-TP, also known as ISO 15765-2 from the ISO standard it is defined in, =
-is a
- transport protocol specifically defined for diagnostic communication on CA=
-N.
-@@ -272,7 +272,7 @@ differ less than this value will be ignored:
-     ret =3D setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_RX_STMIN, &stmin, sizeo=
-f(stmin));
-=20
- Multi-frame transport support
----------------------------
-+-----------------------------
-=20
- The ISO-TP stack contained inside the Linux kernel supports the multi-frame
- transport mechanism defined by the standard, with the following contraints:
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---cMqm9YFyElqZ6FQo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZfPUpQAKCRD2uYlJVVFO
-o73wAQDERSr+/nrCFF3ABsynpWMhm0W49Hz7Mbnp35GWaUjHGgD+N3CBjHNmTE/6
-vqLdFN0v+CnC/+8xthT0YQAymMIqSQs=
-=Cxya
------END PGP SIGNATURE-----
-
---cMqm9YFyElqZ6FQo--
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
