@@ -1,84 +1,157 @@
-Return-Path: <linux-can+bounces-396-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-397-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3431C87CF01
-	for <lists+linux-can@lfdr.de>; Fri, 15 Mar 2024 15:34:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F10387D142
+	for <lists+linux-can@lfdr.de>; Fri, 15 Mar 2024 17:37:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C195B210B7
-	for <lists+linux-can@lfdr.de>; Fri, 15 Mar 2024 14:34:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB1751F21CCF
+	for <lists+linux-can@lfdr.de>; Fri, 15 Mar 2024 16:37:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A45E3BB32;
-	Fri, 15 Mar 2024 14:34:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE96A40BE6;
+	Fri, 15 Mar 2024 16:36:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQ2f//sK"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BABF33BB2D
-	for <linux-can@vger.kernel.org>; Fri, 15 Mar 2024 14:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA3312E71;
+	Fri, 15 Mar 2024 16:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710513284; cv=none; b=O21IXOPORwEt1irhEOLRuSGkvI6NpxuzacEdWO5fUOfcntqb83wQnerpbwNrG0sDOzlaehpDVZNwfZgM9xWFdZD1Wb3AFM9VDpewRi3UQMlPW/u6MHG4A7gGBEVc12npmjRGL1HTRISju2/3qcg8Ml5rGxbeEVsyjQjpSspRSGU=
+	t=1710520615; cv=none; b=tXSUqnhbgrYzWaqMFCDt+RlfP1aSu0Q61iVWQXYNtBHLRAvgABnqHz6HpYvsfg6GqJZp/SY4H8vRDdslIVD+27klLS5m433mXgazZp2TGZmndfBn9uIxmQ3AlQRyK9i5empWuY2AQ3TTtHurNzBE+WJR+gaIePR+o5Cml0OVsoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710513284; c=relaxed/simple;
-	bh=iPjtTXtGBNqqHtpmj/RD96a/h3FsCnTbifhUxkUft74=;
+	s=arc-20240116; t=1710520615; c=relaxed/simple;
+	bh=uC5VIfkv0Jum6Z0WXV3XmwmF8GY+xRPbShmLcmkydzI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bmb4Wr2xQNDQWZHeWvBZGSACTGaN5dnI0EMgop59NINajfoaU1xfPwdYC1qcsNVSdwIGP7GT2Kg60tRjk/Ujoh22GwPrbY+Jzfiqzqcwjujry3JAb1eNnIN60dalzzgw+Z/hzCJ53bhRGKtU3zALFopUhAEllbS06G1F5jVkPnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1rl8dV-0000qo-Tx; Fri, 15 Mar 2024 15:34:17 +0100
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1rl8dR-006WRK-BX; Fri, 15 Mar 2024 15:34:13 +0100
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1rl8dR-0013Tz-0o;
-	Fri, 15 Mar 2024 15:34:13 +0100
-Date: Fri, 15 Mar 2024 15:34:13 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: syzbot <syzbot+f32cbede7fd867ce0d56@syzkaller.appspotmail.com>
-Cc: astrajoan@yahoo.com, davem@davemloft.net, edumazet@google.com,
-	hdanton@sina.com, kernel@pengutronix.de, kuba@kernel.org,
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
-	pabeni@redhat.com, robin@protonic.nl, socketcan@hartkopp.net,
-	syzkaller-bugs@googlegroups.com, wg@grandegger.com
-Subject: Re: [syzbot] [can?] possible deadlock in j1939_session_activate
-Message-ID: <ZfRcZVCJZxnt1Jq-@pengutronix.de>
-References: <000000000000e8364c05ceefa4cf@google.com>
- <0000000000002d73880613abfe48@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ffBXqaK0kmpLIf9CAUFeU9s+KmmaM1iaIrXx1lxvQMoY3hxGUihrIaVLk1B2JDWvdX1MY/MVG8XQB1gyiqxNi0sEz/J0wT/B6v10vRjjINvubNGs/e3PdvHwjUHG0zvGjUmLes86t7R7uPmhS5aBluGErpRGrmD+4YVCVvU/LVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jQ2f//sK; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a36126ee41eso285615266b.2;
+        Fri, 15 Mar 2024 09:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710520612; x=1711125412; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3WAJd17tQUXzgE53aI6B1hdEipyJmkfxL6o6rwzYoy8=;
+        b=jQ2f//sKiyW1ELhBfa6alOtDJjXkJGJshSVQb/6GiC7t8tb2/+CIsJ0dHjzRHLxu5k
+         A7ieShZ2jFzsOFOK79bqfra0JoGKbS4IYorOUQK50dr9KvxPcWjj+AJ4VgHpTlgWbfsE
+         PQ1K+oqTZuerPnAX+ibhvAH9rVzC9hGZ16EwRU5Puy+vgM6dfhHc5D6zkOi4qY/k/Tv3
+         WsWJqqTD9UJLwLYOABOkPhba0RBDmRQb9i2Ps8bNv8BklYgPcWtdB8BPU/QjzB0netQX
+         2cVmRxcyqcywuGuAJ1By8rJ9EA5HnMI/KUA1NwsN3zb+9pr9jVeiT1E5ZW7XOMsYi4AX
+         8+Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710520612; x=1711125412;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3WAJd17tQUXzgE53aI6B1hdEipyJmkfxL6o6rwzYoy8=;
+        b=kGPP4+SF02M4VPtgspxUMHgF0ycWLO+hd6/ZYR+ZGmN149IsHxDYutgQflCLZP1zRv
+         gThoOjKDoQutO0q2isozjDGMdpStRvrA+/XNI0sxOMKcMHG1ahLcFPR1sAkGZeKXAysj
+         ONd822iZ3V4ybvjBxj+cfTvjJWnvoN0UD74yBFm9GPyCSglTN0JY8u4im6H2tyiFH9gQ
+         yk8l/cNsjCKvPvgoa91ZTNWISU7ohlcqqmd7A+Na3Tu1iIwqlVqZHrI8GSJPX6L74K8p
+         oPbQvIkwElqIv17pnSopkBJPBvGGig1UgGpzyP3foFASIErIEQ4B5fc0Z4CBVyhfyKbc
+         UTxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXB5qrisQvWL/YPDOh4V3unlgeu1WfvH0IrxWvtTYhrlquQGit7IEopxljVpiJqXh1emFlD7jqacz/cPJAlZFCA1xEP8C4XGaksCEqiGiep1gZ7VVLOKXilA2MxT6gRBWM/hujjBTTVCU4GRPS3A6/vXQYaA49CmPSP4uT+gXa3
+X-Gm-Message-State: AOJu0YxuERVCuUDhfK4l1xGKYeYJGVSgj4EhYW1Pgs4HjzX1jwe56Dxt
+	4HSmWTg2LWD3qT2B0T66omjphHqRO4WYLD/KTBo+Ba+w1sbMyTL9
+X-Google-Smtp-Source: AGHT+IGiLRMeewXTx7ynckmJWlfGqHD8aeux8y1eXng1121L4qb9aJWb8iMJ7SCHqwDWTPkdMjj+4g==
+X-Received: by 2002:a17:906:ba84:b0:a46:74d2:a0c3 with SMTP id cu4-20020a170906ba8400b00a4674d2a0c3mr4515276ejd.4.1710520612100;
+        Fri, 15 Mar 2024 09:36:52 -0700 (PDT)
+Received: from fedora (host-95-250-206-50.retail.telecomitalia.it. [95.250.206.50])
+        by smtp.gmail.com with ESMTPSA id s11-20020a170906bc4b00b00a4671d37717sm1758044ejv.52.2024.03.15.09.36.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Mar 2024 09:36:51 -0700 (PDT)
+Date: Fri, 15 Mar 2024 17:36:49 +0100
+From: Francesco Valla <valla.francesco@gmail.com>
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	fabio@redaril.me, Linux CAN <linux-can@vger.kernel.org>,
+	Linux Networking <netdev@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] Documentation: networking: document CAN ISO-TP
+Message-ID: <ZfR5IXA9tVHgBTva@fedora>
+References: <20240313223445.87170-1-valla.francesco@gmail.com>
+ <20240313223445.87170-2-valla.francesco@gmail.com>
+ <ZfPUqOVpF8u5738S@archie.me>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000002d73880613abfe48@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <ZfPUqOVpF8u5738S@archie.me>
 
-#syz fix: can: j1939: prevent deadlock by changing j1939_socks_lock to rwlock
+On Fri, Mar 15, 2024 at 11:55:04AM +0700, Bagas Sanjaya wrote:
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+<snip>
+> 
+> htmldocs build reports new warnings:
+> 
+> /home/bagas/repo/linux-kernel/Documentation/networking/isotp.rst:3: WARNING: Title overline too short.
+> 
+> ====================
+> ISO-TP (ISO 15765-2) Transport Protocol
+> ====================
+> /home/bagas/repo/linux-kernel/Documentation/networking/isotp.rst:275: WARNING: Title underline too short.
+> 
+> Multi-frame transport support
+> --------------------------
+> /home/bagas/repo/linux-kernel/Documentation/networking/isotp.rst:275: WARNING: Title underline too short.
+> 
+> Multi-frame transport support
+> --------------------------
+> 
+> I have applied the fixup:
+> 
+> ---- >8 ----
+> diff --git a/Documentation/networking/isotp.rst b/Documentation/networking/isotp.rst
+> index d0c49fd1f5c976..a104322ddb6c5e 100644
+> --- a/Documentation/networking/isotp.rst
+> +++ b/Documentation/networking/isotp.rst
+> @@ -1,11 +1,11 @@
+>  .. SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+>  
+> -====================
+> +=======================================
+>  ISO-TP (ISO 15765-2) Transport Protocol
+> -====================
+> +=======================================
+>  
+>  Overview
+> -=========================
+> +========
+>  
+>  ISO-TP, also known as ISO 15765-2 from the ISO standard it is defined in, is a
+>  transport protocol specifically defined for diagnostic communication on CAN.
+> @@ -272,7 +272,7 @@ differ less than this value will be ignored:
+>      ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_RX_STMIN, &stmin, sizeof(stmin));
+>  
+>  Multi-frame transport support
+> ---------------------------
+> +-----------------------------
+>  
+>  The ISO-TP stack contained inside the Linux kernel supports the multi-frame
+>  transport mechanism defined by the standard, with the following contraints:
+> 
+> Thanks.
+> 
+> -- 
+> An old man doll... just what I always wanted! - Clara
+
+Thank you! Fixes (along with some rework) will be applied to the v2.
+
+Regards,
+Francesco
+
 
