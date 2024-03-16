@@ -1,157 +1,180 @@
-Return-Path: <linux-can+bounces-397-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-398-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F10387D142
-	for <lists+linux-can@lfdr.de>; Fri, 15 Mar 2024 17:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DE5087DABE
+	for <lists+linux-can@lfdr.de>; Sat, 16 Mar 2024 17:19:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB1751F21CCF
-	for <lists+linux-can@lfdr.de>; Fri, 15 Mar 2024 16:37:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA1741F218CD
+	for <lists+linux-can@lfdr.de>; Sat, 16 Mar 2024 16:19:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE96A40BE6;
-	Fri, 15 Mar 2024 16:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQ2f//sK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F8F1BC41;
+	Sat, 16 Mar 2024 16:19:26 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA3312E71;
-	Fri, 15 Mar 2024 16:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F271B974
+	for <linux-can@vger.kernel.org>; Sat, 16 Mar 2024 16:19:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710520615; cv=none; b=tXSUqnhbgrYzWaqMFCDt+RlfP1aSu0Q61iVWQXYNtBHLRAvgABnqHz6HpYvsfg6GqJZp/SY4H8vRDdslIVD+27klLS5m433mXgazZp2TGZmndfBn9uIxmQ3AlQRyK9i5empWuY2AQ3TTtHurNzBE+WJR+gaIePR+o5Cml0OVsoM=
+	t=1710605966; cv=none; b=M1Yb4GuweE1Ki0VmTTNooBuxNC4HTBl5MUWJrquE4HegfFD6gZL5saMlmhDmH5Azd2nKJP5Va4vqma1zOxo+GANcuwr8VEHRuJsGML5Y8VC8HiVWCogP6kM3IdLN3o+uDG9wCc7JgetXvvf7lSXj72C+eKG/jxRUiCoFb9hc8zU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710520615; c=relaxed/simple;
-	bh=uC5VIfkv0Jum6Z0WXV3XmwmF8GY+xRPbShmLcmkydzI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ffBXqaK0kmpLIf9CAUFeU9s+KmmaM1iaIrXx1lxvQMoY3hxGUihrIaVLk1B2JDWvdX1MY/MVG8XQB1gyiqxNi0sEz/J0wT/B6v10vRjjINvubNGs/e3PdvHwjUHG0zvGjUmLes86t7R7uPmhS5aBluGErpRGrmD+4YVCVvU/LVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jQ2f//sK; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a36126ee41eso285615266b.2;
-        Fri, 15 Mar 2024 09:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710520612; x=1711125412; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3WAJd17tQUXzgE53aI6B1hdEipyJmkfxL6o6rwzYoy8=;
-        b=jQ2f//sKiyW1ELhBfa6alOtDJjXkJGJshSVQb/6GiC7t8tb2/+CIsJ0dHjzRHLxu5k
-         A7ieShZ2jFzsOFOK79bqfra0JoGKbS4IYorOUQK50dr9KvxPcWjj+AJ4VgHpTlgWbfsE
-         PQ1K+oqTZuerPnAX+ibhvAH9rVzC9hGZ16EwRU5Puy+vgM6dfhHc5D6zkOi4qY/k/Tv3
-         WsWJqqTD9UJLwLYOABOkPhba0RBDmRQb9i2Ps8bNv8BklYgPcWtdB8BPU/QjzB0netQX
-         2cVmRxcyqcywuGuAJ1By8rJ9EA5HnMI/KUA1NwsN3zb+9pr9jVeiT1E5ZW7XOMsYi4AX
-         8+Jw==
+	s=arc-20240116; t=1710605966; c=relaxed/simple;
+	bh=+FhPLa0Rk5KaNidia6MCMfaPjXpKlOVaJgiPKSVbdE0=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=AI42VOhG3DsuXZX1uQTxKPLDXsVROFMsMGMRkWIsYHSaSfpD/0nkdfX4Z0PD+QiUwrb1Hb4nBx0rm2lJgjRw92VigPPF2McOG9RP6zzOD80euQY2r/9oxyK6zzh/GVmjZ9BU/R5GgNuRKPJNKTbaM0rAXb8gQKg51hqhuLIDbeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7c85f86e4c7so257887339f.3
+        for <linux-can@vger.kernel.org>; Sat, 16 Mar 2024 09:19:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710520612; x=1711125412;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3WAJd17tQUXzgE53aI6B1hdEipyJmkfxL6o6rwzYoy8=;
-        b=kGPP4+SF02M4VPtgspxUMHgF0ycWLO+hd6/ZYR+ZGmN149IsHxDYutgQflCLZP1zRv
-         gThoOjKDoQutO0q2isozjDGMdpStRvrA+/XNI0sxOMKcMHG1ahLcFPR1sAkGZeKXAysj
-         ONd822iZ3V4ybvjBxj+cfTvjJWnvoN0UD74yBFm9GPyCSglTN0JY8u4im6H2tyiFH9gQ
-         yk8l/cNsjCKvPvgoa91ZTNWISU7ohlcqqmd7A+Na3Tu1iIwqlVqZHrI8GSJPX6L74K8p
-         oPbQvIkwElqIv17pnSopkBJPBvGGig1UgGpzyP3foFASIErIEQ4B5fc0Z4CBVyhfyKbc
-         UTxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXB5qrisQvWL/YPDOh4V3unlgeu1WfvH0IrxWvtTYhrlquQGit7IEopxljVpiJqXh1emFlD7jqacz/cPJAlZFCA1xEP8C4XGaksCEqiGiep1gZ7VVLOKXilA2MxT6gRBWM/hujjBTTVCU4GRPS3A6/vXQYaA49CmPSP4uT+gXa3
-X-Gm-Message-State: AOJu0YxuERVCuUDhfK4l1xGKYeYJGVSgj4EhYW1Pgs4HjzX1jwe56Dxt
-	4HSmWTg2LWD3qT2B0T66omjphHqRO4WYLD/KTBo+Ba+w1sbMyTL9
-X-Google-Smtp-Source: AGHT+IGiLRMeewXTx7ynckmJWlfGqHD8aeux8y1eXng1121L4qb9aJWb8iMJ7SCHqwDWTPkdMjj+4g==
-X-Received: by 2002:a17:906:ba84:b0:a46:74d2:a0c3 with SMTP id cu4-20020a170906ba8400b00a4674d2a0c3mr4515276ejd.4.1710520612100;
-        Fri, 15 Mar 2024 09:36:52 -0700 (PDT)
-Received: from fedora (host-95-250-206-50.retail.telecomitalia.it. [95.250.206.50])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170906bc4b00b00a4671d37717sm1758044ejv.52.2024.03.15.09.36.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Mar 2024 09:36:51 -0700 (PDT)
-Date: Fri, 15 Mar 2024 17:36:49 +0100
-From: Francesco Valla <valla.francesco@gmail.com>
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	fabio@redaril.me, Linux CAN <linux-can@vger.kernel.org>,
-	Linux Networking <netdev@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] Documentation: networking: document CAN ISO-TP
-Message-ID: <ZfR5IXA9tVHgBTva@fedora>
-References: <20240313223445.87170-1-valla.francesco@gmail.com>
- <20240313223445.87170-2-valla.francesco@gmail.com>
- <ZfPUqOVpF8u5738S@archie.me>
+        d=1e100.net; s=20230601; t=1710605964; x=1711210764;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uf6W3Zg2dvW4+JRL0J6TTi5aicDL8OJz3V+JIREMUJw=;
+        b=DORaBEanu0/8L++AmdiRQLN3WsPnOFrjDaG5Htbu3x+f7/lW1ELyQTqnzfWyoicGjc
+         Qv4laCMDe4UlY+R6nE9d1g4fQtmubKhF47XstDEdBrC71jtun1rTIanPLwBxhxfr2cTh
+         0EjE/RnqLvUA4RwTVAuYm+CQ7XCQWPmQV2HOoIbpAY84h/TUZAeXDlq7gsHUGVHld3cV
+         OzOm0B9tZWc5mDN0gw5qXHaerLPP6rmFjU89J0MI3N/JkFc/mlyEODoGlVoZ7G10c1Ko
+         PKnU2BXCl20DZnlc1NgZ5a9b9075R21eEBFgOazJ8wV/VQMQsV2aQ92sS1U6W/Xsngo1
+         PFgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVFznIIw41uFHMkjkL2SsY/ZNBCW0wyG4v0TGbquXvaYnuDkbRdUQCcaZpKycG9nF38ydI0BoVM7gnbh9j7smBjXwdxf5OXyRd1
+X-Gm-Message-State: AOJu0YzwOFjUxsir7IB92219hROej/OQUhs1F4lXFJ9tcXkFjgZ4H+a0
+	Gy51VgjmpSjI5A4zUrN8UKB24BcPRp7nXNRWWb0jWKzqVHysKBmSBwxKnMPRCJsNgxSO2YmBecL
+	mObGAxYeH2Uce4Zabd8GarCjjSgNRnGxVY9RLx+Z2N3H/kw7n4ADrjV8=
+X-Google-Smtp-Source: AGHT+IGikfW01z7K2y5JnZchZJvcVj4AYhPuOoEanssKaWL9kn3ExakVmnSjQwzwrsbu+j3WDvlTX9f5sleigmep3j/fhRfGZ0VW
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZfPUqOVpF8u5738S@archie.me>
+X-Received: by 2002:a05:6638:62a7:b0:476:f043:d34b with SMTP id
+ fh39-20020a05663862a700b00476f043d34bmr237781jab.0.1710605963997; Sat, 16 Mar
+ 2024 09:19:23 -0700 (PDT)
+Date: Sat, 16 Mar 2024 09:19:23 -0700
+In-Reply-To: <00000000000067f65105edbd295d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d5c35b0613c97c85@google.com>
+Subject: Re: [syzbot] [can?] [bpf?] KMSAN: uninit-value in bpf_prog_run_generic_xdp
+From: syzbot <syzbot+0e6ddb1ef80986bdfe64@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, ben-linux@fluff.org, bp@alien8.de, 
+	bpf@vger.kernel.org, daniel.sneddon@linux.intel.com, daniel@iogearbox.net, 
+	dave.hansen@linux.intel.com, glider@google.com, hpa@zytor.com, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, mingo@redhat.com, 
+	mkl@pengutronix.de, netdev@vger.kernel.org, pbonzini@redhat.com, 
+	sathyanarayanan.kuppuswamy@linux.intel.com, syzkaller-bugs@googlegroups.com, 
+	tglx@linutronix.de, x86@kernel.org, xrivendell7@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Mar 15, 2024 at 11:55:04AM +0700, Bagas Sanjaya wrote:
+syzbot has found a reproducer for the following issue on:
 
-<snip>
-> 
-> htmldocs build reports new warnings:
-> 
-> /home/bagas/repo/linux-kernel/Documentation/networking/isotp.rst:3: WARNING: Title overline too short.
-> 
-> ====================
-> ISO-TP (ISO 15765-2) Transport Protocol
-> ====================
-> /home/bagas/repo/linux-kernel/Documentation/networking/isotp.rst:275: WARNING: Title underline too short.
-> 
-> Multi-frame transport support
-> --------------------------
-> /home/bagas/repo/linux-kernel/Documentation/networking/isotp.rst:275: WARNING: Title underline too short.
-> 
-> Multi-frame transport support
-> --------------------------
-> 
-> I have applied the fixup:
-> 
-> ---- >8 ----
-> diff --git a/Documentation/networking/isotp.rst b/Documentation/networking/isotp.rst
-> index d0c49fd1f5c976..a104322ddb6c5e 100644
-> --- a/Documentation/networking/isotp.rst
-> +++ b/Documentation/networking/isotp.rst
-> @@ -1,11 +1,11 @@
->  .. SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
->  
-> -====================
-> +=======================================
->  ISO-TP (ISO 15765-2) Transport Protocol
-> -====================
-> +=======================================
->  
->  Overview
-> -=========================
-> +========
->  
->  ISO-TP, also known as ISO 15765-2 from the ISO standard it is defined in, is a
->  transport protocol specifically defined for diagnostic communication on CAN.
-> @@ -272,7 +272,7 @@ differ less than this value will be ignored:
->      ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_RX_STMIN, &stmin, sizeof(stmin));
->  
->  Multi-frame transport support
-> ---------------------------
-> +-----------------------------
->  
->  The ISO-TP stack contained inside the Linux kernel supports the multi-frame
->  transport mechanism defined by the standard, with the following contraints:
-> 
-> Thanks.
-> 
-> -- 
-> An old man doll... just what I always wanted! - Clara
+HEAD commit:    66a27abac311 Merge tag 'powerpc-6.9-1' of git://git.kernel..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14285ac9180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=48bb382b96e7eda7
+dashboard link: https://syzkaller.appspot.com/bug?extid=0e6ddb1ef80986bdfe64
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17ab51c9180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127d21f1180000
 
-Thank you! Fixes (along with some rework) will be applied to the v2.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/37968fa0451e/disk-66a27aba.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5b288c5c3088/vmlinux-66a27aba.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/792ddbf8146d/bzImage-66a27aba.xz
 
-Regards,
-Francesco
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0e6ddb1ef80986bdfe64@syzkaller.appspotmail.com
 
+=====================================================
+BUG: KMSAN: uninit-value in bpf_prog_run_generic_xdp+0x13a0/0x1ee0 net/core/dev.c:4876
+ bpf_prog_run_generic_xdp+0x13a0/0x1ee0 net/core/dev.c:4876
+ netif_receive_generic_xdp net/core/dev.c:4958 [inline]
+ do_xdp_generic+0xb68/0x1440 net/core/dev.c:5017
+ __netif_receive_skb_core+0x2533/0x6190 net/core/dev.c:5358
+ __netif_receive_skb_one_core net/core/dev.c:5536 [inline]
+ __netif_receive_skb+0xca/0xa00 net/core/dev.c:5652
+ process_backlog+0x480/0x8b0 net/core/dev.c:5981
+ __napi_poll+0xe7/0x980 net/core/dev.c:6632
+ napi_poll net/core/dev.c:6701 [inline]
+ net_rx_action+0x89d/0x1820 net/core/dev.c:6813
+ __do_softirq+0x1c0/0x7d7 kernel/softirq.c:554
+ invoke_softirq kernel/softirq.c:428 [inline]
+ __irq_exit_rcu kernel/softirq.c:633 [inline]
+ irq_exit_rcu+0x6a/0x130 kernel/softirq.c:645
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+ sysvec_apic_timer_interrupt+0x83/0x90 arch/x86/kernel/apic/apic.c:1043
+ asm_sysvec_apic_timer_interrupt+0x1f/0x30 arch/x86/include/asm/idtentry.h:702
+ __preempt_count_dec_and_test arch/x86/include/asm/preempt.h:94 [inline]
+ __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
+ _raw_spin_unlock_irqrestore+0x33/0x60 kernel/locking/spinlock.c:194
+ unlock_hrtimer_base kernel/time/hrtimer.c:1021 [inline]
+ hrtimer_start_range_ns+0x112c/0x11a0 kernel/time/hrtimer.c:1308
+ hrtimer_start include/linux/hrtimer.h:275 [inline]
+ j1939_tp_schedule_txtimer+0xc2/0x100 net/can/j1939/transport.c:702
+ j1939_sk_send_loop net/can/j1939/socket.c:1164 [inline]
+ j1939_sk_sendmsg+0x1a0e/0x2730 net/can/j1939/socket.c:1277
+ sock_sendmsg_nosec net/socket.c:730 [inline]
+ __sock_sendmsg+0x30f/0x380 net/socket.c:745
+ ____sys_sendmsg+0x877/0xb60 net/socket.c:2584
+ ___sys_sendmsg+0x28d/0x3c0 net/socket.c:2638
+ __sys_sendmsg net/socket.c:2667 [inline]
+ __do_sys_sendmsg net/socket.c:2676 [inline]
+ __se_sys_sendmsg net/socket.c:2674 [inline]
+ __x64_sys_sendmsg+0x307/0x4a0 net/socket.c:2674
+ do_syscall_64+0xd5/0x1f0
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+Uninit was stored to memory at:
+ pskb_expand_head+0x30f/0x19d0 net/core/skbuff.c:2253
+ netif_skb_check_for_xdp net/core/dev.c:4921 [inline]
+ netif_receive_generic_xdp net/core/dev.c:4952 [inline]
+ do_xdp_generic+0x931/0x1440 net/core/dev.c:5017
+ __netif_receive_skb_core+0x2533/0x6190 net/core/dev.c:5358
+ __netif_receive_skb_one_core net/core/dev.c:5536 [inline]
+ __netif_receive_skb+0xca/0xa00 net/core/dev.c:5652
+ process_backlog+0x480/0x8b0 net/core/dev.c:5981
+ __napi_poll+0xe7/0x980 net/core/dev.c:6632
+ napi_poll net/core/dev.c:6701 [inline]
+ net_rx_action+0x89d/0x1820 net/core/dev.c:6813
+ __do_softirq+0x1c0/0x7d7 kernel/softirq.c:554
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slub.c:3804 [inline]
+ slab_alloc_node mm/slub.c:3845 [inline]
+ kmem_cache_alloc_node+0x613/0xc50 mm/slub.c:3888
+ kmalloc_reserve+0x13d/0x4a0 net/core/skbuff.c:577
+ __alloc_skb+0x35b/0x7a0 net/core/skbuff.c:668
+ alloc_skb include/linux/skbuff.h:1318 [inline]
+ alloc_skb_with_frags+0xc8/0xbf0 net/core/skbuff.c:6504
+ sock_alloc_send_pskb+0xa81/0xbf0 net/core/sock.c:2795
+ sock_alloc_send_skb include/net/sock.h:1835 [inline]
+ j1939_sk_alloc_skb net/can/j1939/socket.c:878 [inline]
+ j1939_sk_send_loop net/can/j1939/socket.c:1142 [inline]
+ j1939_sk_sendmsg+0xc0a/0x2730 net/can/j1939/socket.c:1277
+ sock_sendmsg_nosec net/socket.c:730 [inline]
+ __sock_sendmsg+0x30f/0x380 net/socket.c:745
+ ____sys_sendmsg+0x877/0xb60 net/socket.c:2584
+ ___sys_sendmsg+0x28d/0x3c0 net/socket.c:2638
+ __sys_sendmsg net/socket.c:2667 [inline]
+ __do_sys_sendmsg net/socket.c:2676 [inline]
+ __se_sys_sendmsg net/socket.c:2674 [inline]
+ __x64_sys_sendmsg+0x307/0x4a0 net/socket.c:2674
+ do_syscall_64+0xd5/0x1f0
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+CPU: 0 PID: 5044 Comm: syz-executor640 Not tainted 6.8.0-syzkaller-11136-g66a27abac311 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+=====================================================
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
