@@ -1,43 +1,87 @@
-Return-Path: <linux-can+bounces-405-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-406-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25A8F87EDC7
-	for <lists+linux-can@lfdr.de>; Mon, 18 Mar 2024 17:45:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA2B487F047
+	for <lists+linux-can@lfdr.de>; Mon, 18 Mar 2024 20:15:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 238551C20EBD
-	for <lists+linux-can@lfdr.de>; Mon, 18 Mar 2024 16:45:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 862F5280F96
+	for <lists+linux-can@lfdr.de>; Mon, 18 Mar 2024 19:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D5B54BC5;
-	Mon, 18 Mar 2024 16:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34D7B55E63;
+	Mon, 18 Mar 2024 19:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="ERIdZPKr";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="4b6xLfQ6"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail601b.mxthunder.net (mail601b.mxthunder.net [209.41.68.211])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC4554BC4
-	for <linux-can@vger.kernel.org>; Mon, 18 Mar 2024 16:45:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.41.68.211
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710780329; cv=none; b=UES+FJssqbfCly5mFBsqg7ZK6+ZP7pR5ZcfEafpZr+wjDOl9lI/89EJMeb7pddQGWX7eF5/LJ8DqVWYnzs9kalEb+emKyqi0lWTaf1ijTVDVC7JH6hD2qYEMbuJpFsAgKgO9PuLZxTu5FAMItS52IvG3c2C70r2UXiKeTc5xW5w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710780329; c=relaxed/simple;
-	bh=zCl4YM4xkFLAYPEj/iGfr2LgiwN0Ouiy9LGVUbG8b9o=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAEE5645C
+	for <linux-can@vger.kernel.org>; Mon, 18 Mar 2024 19:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.22
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710789349; cv=pass; b=q2fznv2EOEzrx8Fy8cKvyMUS9SlYk76EJUp1q6pIEZeF/gzrNUIqGpMBtKBsMQAFIZ89fixpeUYHC7yHwQ3xOZwEYYzWrHW742E5A5Annj2/75ncigBCbd2VKIMByoSD1HtP0AAah9kPIpUbpT3c7y1JtaP3pl1/kQhFHz94tfQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710789349; c=relaxed/simple;
+	bh=FV77+wJzWK8BkyBMJGTudy5cNFoqNv0wxfgwLUYnp2c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n670yCDGWLOINN1qd8OFKL7oF+lOnv+PGTKWtSGWwleSVzWg36GVp++4cpSrqpXKrztwT6u3QwBS0mbtF/fzmchRFTOuL2WvLpuvwKNimTHHQwqfluoz4eOIAADq61FmAG3vB4wYT/G5aHgtkwf50fG0tYP2hd2Mvkfvuw3olyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wireshark.org; spf=pass smtp.mailfrom=wireshark.org; arc=none smtp.client-ip=209.41.68.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wireshark.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wireshark.org
-Received: from bolt101b.mxthunder.net (bolt101b.mxthunder.net [209.41.68.240])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by mail601b.mxthunder.net (Postfix) with ESMTPS id 4Tz0rY3J5SzGTFsD;
-	Mon, 18 Mar 2024 09:37:33 -0700 (PDT)
-X-MXT-TRACKING-KEY: 4Tz0rY0YDyz96NgW-101b
-Message-ID: <09952070-5182-4d63-bb2b-0cf6cfe2053d@wireshark.org>
-Date: Mon, 18 Mar 2024 09:37:32 -0700
+	 In-Reply-To:Content-Type; b=fgxbx5rdUjo5MoFO0dftEE9Y5oC19SUHJnqTdo8LGq/LeJK/danmaCPYZFO5lcDS88QopX+rJJiDI6ISeU/C+OXDp2ojvHUGtQG8L8k57zAWfX+c87tBCufJWWOwFHB/e7kzz6o7lyBvdQG97xtkouaG6JFp9mOB3XndaXCkbmk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=ERIdZPKr; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=4b6xLfQ6; arc=pass smtp.client-ip=85.215.255.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1710789338; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=XVHFSytETOWIkTMtITef6UpefUZIbLGYggNo8iBlVM9A9lTgEJWzuMYOvYGTneQrBx
+    +Tgu4xlE6wMc9qsyeGVzskyJ4aT1vXoqavZKvJ1BBUWHRiex/7Kceh7oFPWdzDl2VPlu
+    HxNYS075uCLMRwFNxdMBpqbS4yUc2PGWD03JWf8dQUlNhb8kpYYF06Spo8IzXr8S45eX
+    rBw0BEYDvH8GfvrfoEiwi1Ml0ICh1Maut2k28uwONvL4QHQ6wvtM4Fj+meu4m/zGdUK6
+    JBL0sLRl/zk/MZZrBc5pSuueOGhd6yK9u2x4f35mUwD7v79T5JWiESdOt26nzj/V9S7T
+    mLow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1710789338;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=s1MD1Cj1v0SHmTVc7T17Hh2jQdNQKe26OOKFVbhk47s=;
+    b=Lx2UNScA1LSA5kn9nuK4eyT8DNUUUw8FbRa7YlQgirZeMff6APd/daIL4uYbcq4mfK
+    R8DZ/RhGx5STiGgzB8jj9noCQHUpjVC9nOYh5yx+0vxpVgrnhDmkN0zTey3b85HMVV8N
+    gakq4BuXHjdZi1pS5rTA/q0yLZMCpI9+tfmR1YHDeqXZO9ga6m/A8O3uVsiW87BaDIaf
+    H7DzC+4FloRgJxSv9TJ94o/lrjfhbJwnUBQK1AALX0U0ENO7D2wTlWowHXWqy5Ouy5FP
+    gjDrLVNgOCdy6RewqnTQp/BIjsbelN9Pxxow4vrZU0coU9xsnul+1ntoGGDfuq86DIXF
+    SfsA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1710789338;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=s1MD1Cj1v0SHmTVc7T17Hh2jQdNQKe26OOKFVbhk47s=;
+    b=ERIdZPKrcPl63Wryg1PKQLP3jhNu6UL15eRGJm77BTid1ezjmOIA7ZkKwLxFEuPxGQ
+    3oq5lksWzQh6q7RYl76nbdlGYd+rLjKnAdJetodetGnYe5rmNwC4TYk699/TNPytT56y
+    CL2SqZfnzlyHy/xiIaRMFShenshc6TOSmig7Guc5hUBcMGNTdJdObjRm+RhHOeSP23LR
+    8nvROrLxKgEgL0GNJa8O7hvLoaj7WtBli6MP6WqeMxNP9dNRanl+ZIt1aamVdgfQwa+z
+    lCuv3bQKl7bdd2LNIuxO0ur5vkys3gC26/W8x3guw/OBKnrL6/EHC8OlT6P+QSR+mMYS
+    MNYw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1710789338;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=s1MD1Cj1v0SHmTVc7T17Hh2jQdNQKe26OOKFVbhk47s=;
+    b=4b6xLfQ68XpS4sV6HyROjOQNpXWKzoeNbzIwebPZqLFQzHPkBT1rlDhOJdCHEApWP4
+    8r3h5LhchNb/spadpUAw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDdAnQ=="
+Received: from [IPV6:2a00:6020:4a8e:5000::90c]
+    by smtp.strato.de (RZmta 50.2.2 AUTH)
+    with ESMTPSA id K0cc6102IJFcAEU
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Mon, 18 Mar 2024 20:15:38 +0100 (CET)
+Message-ID: <0860439d-7810-438b-b532-54b517e2a0cd@hartkopp.net>
+Date: Mon, 18 Mar 2024 20:15:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -46,85 +90,58 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [Wireshark-dev] [PATCH 0/4] Wireshark SocketCAN updates
-Content-Language: en-US
-To: Developer support list for Wireshark <wireshark-dev@wireshark.org>,
+To: Gerald Combs <gerald@wireshark.org>,
+ Developer support list for Wireshark <wireshark-dev@wireshark.org>,
  Guy Harris <gharris@sonic.net>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc: linux-can@vger.kernel.org
 References: <20240318104643.24098-1-socketcan@hartkopp.net>
-From: Gerald Combs <gerald@wireshark.org>
-Autocrypt: addr=gerald@wireshark.org; keydata=
- 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
-Organization: Wireshark Foundation
-In-Reply-To: <20240318104643.24098-1-socketcan@hartkopp.net>
+ <09952070-5182-4d63-bb2b-0cf6cfe2053d@wireshark.org>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <09952070-5182-4d63-bb2b-0cf6cfe2053d@wireshark.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-MXT-EXTENDED-ID: 4Tz0rY0YDyz96NgW-101b-72694-A-yyIEQq-500b
+Content-Transfer-Encoding: 8bit
 
-Thanks for your contribution! Can you submit a merge request at
+Hi Gerald,
 
-https://gitlab.com/wireshark/wireshark/ ?
+thanks for the pointer and the excellent documentation!!
+That was a 10 minutes job:
 
-Complete documentation on contributing code to Wireshark can be found in our Developer's Guide at
+https://gitlab.com/wireshark/wireshark/-/merge_requests/14886
 
-https://www.wireshark.org/docs/wsdg_html/#ChSrcContribute
+I assumed the Wireshark development process taking place on the mailing 
+list - but GitLab is even better. Happy review ;-)
 
-On 3/18/24 3:46 AM, Oliver Hartkopp via Wireshark-dev wrote:
-> This patchset simplifies the CAN packet type detection as it focusses
-> on the rules to distiguish the different CAN CC/FD/XL frames from the
-> Linux kernel API.
+Many thanks and best regards,
+Oliver
+
+On 2024-03-18 17:37, Gerald Combs wrote:
+> Thanks for your contribution! Can you submit a merge request at
 > 
-> Additionally some more content is shown in the dissector and the
-> CAN CiA 611-1 definitions have been cleaned up and extended by CiA.
+> https://gitlab.com/wireshark/wireshark/ ?
 > 
-> Oliver Hartkopp (4):
->    socketcan: simplify CAN packet type detection
->    socketcan: display CANFD_FDF and CANXL_XLF flag content
->    socketcan: display len8dlc content for Classical CAN
->    socketcan: update CAN CiA 611-1 definitions
+> Complete documentation on contributing code to Wireshark can be found in 
+> our Developer's Guide at
 > 
->   epan/dissectors/packet-socketcan.c | 86 ++++++++++--------------------
->   epan/dissectors/packet-socketcan.h | 17 +++---
->   2 files changed, 39 insertions(+), 64 deletions(-)
+> https://www.wireshark.org/docs/wsdg_html/#ChSrcContribute
 > 
-
+> On 3/18/24 3:46 AM, Oliver Hartkopp via Wireshark-dev wrote:
+>> This patchset simplifies the CAN packet type detection as it focusses
+>> on the rules to distiguish the different CAN CC/FD/XL frames from the
+>> Linux kernel API.
+>>
+>> Additionally some more content is shown in the dissector and the
+>> CAN CiA 611-1 definitions have been cleaned up and extended by CiA.
+>>
+>> Oliver Hartkopp (4):
+>>    socketcan: simplify CAN packet type detection
+>>    socketcan: display CANFD_FDF and CANXL_XLF flag content
+>>    socketcan: display len8dlc content for Classical CAN
+>>    socketcan: update CAN CiA 611-1 definitions
+>>
+>>   epan/dissectors/packet-socketcan.c | 86 ++++++++++--------------------
+>>   epan/dissectors/packet-socketcan.h | 17 +++---
+>>   2 files changed, 39 insertions(+), 64 deletions(-)
+>>
+> 
 
