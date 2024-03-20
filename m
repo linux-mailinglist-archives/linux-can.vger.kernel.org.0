@@ -1,104 +1,113 @@
-Return-Path: <linux-can+bounces-412-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-413-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF27C880F9D
-	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 11:26:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 116A18810D1
+	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 12:22:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE8561C22860
-	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 10:26:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C649B23002
+	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 11:22:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E043D0A3;
-	Wed, 20 Mar 2024 10:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z7rPQrVu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD5A3C460;
+	Wed, 20 Mar 2024 11:21:52 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8933C48D;
-	Wed, 20 Mar 2024 10:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0A03BBE0
+	for <linux-can@vger.kernel.org>; Wed, 20 Mar 2024 11:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710930375; cv=none; b=eMmF1n+Ov58csR6OTF7wy57N1GY9sgSlkP1L4z0D2qYUSAr5HQJpc5idXgv2ml/miW2rk0SSeYK+MTnvEZON9x1j1QFSed9CgtkYQcjXL7W4CBD7ovNlKLzbuySezA/cKX7qau5jpaS90O10HxAbyJSSfodlxiilZ2wqeCBhkyw=
+	t=1710933712; cv=none; b=LoXXpIs1zolVA3fFLXTfiRwWxz9cqfRi5CLDGc63eJQJfvWwyeEmevnaGrkvJ5aF9KjI2m+cnxsJizJelLcPBtqOA+Q90Qshr6jwTDCOfpsbuMaQh2HYnAy6IKW/9Kq7sXYSUpeQPV39bJjFSPTWgwKzeAPKAYWUyjapcSgvZhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710930375; c=relaxed/simple;
-	bh=gUSwp+UFy627gBWs5T8M7qin00rGZoYovIOZ7OXQATA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B6i/44d2Drocp0E+nJUWaTb57zcaS7tEm6S7KiDA80mryRQpWP/+mNwbqqaaIAwn4ts0H82LZKNH+GNHcRM5j44fQQtEnFHErABEt+CrpphGnlHiPnFS4+kfmwhRHvO04VDPEjea5BKj0QQLTxPabem7Q8jPDfPuwjB/XarhNKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z7rPQrVu; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710930373; x=1742466373;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gUSwp+UFy627gBWs5T8M7qin00rGZoYovIOZ7OXQATA=;
-  b=Z7rPQrVudXEHHGF/FD5LSa4XaBPKoCOhHzyikQQKJp4uccJKwS1NicMc
-   OW78+AEWmpyVmiJYiU+Y/qp7O2Drjtcc4nZI+rl3bPUVZb6LMazMCe+j3
-   1fdG+5qlWx8v/U9WwkKLIIW176QSbmJrjxKa76R3tBP1HUxtHjkDrvH7E
-   +r5vB+mb9wYwtjPrMznS0ltez2jEsMqz4de0ByW1cPhZ/g2r5KRZU1bbh
-   DkoBJWmQyasT7u8eVYEitVK+0w1VhpSY4XOS/+w8zyMQfoSHfqJc8Jbzi
-   FnYLw7SsVlsM8oxLbT1TnwR0JkUI5sc8Zc3r3W9WQSFIClyPXXKmrY0I4
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="23303653"
-X-IronPort-AV: E=Sophos;i="6.07,139,1708416000"; 
-   d="scan'208";a="23303653"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2024 03:26:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="914661997"
-X-IronPort-AV: E=Sophos;i="6.07,139,1708416000"; 
-   d="scan'208";a="914661997"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2024 03:26:10 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rmt95-0000000EXUK-3lml;
-	Wed, 20 Mar 2024 12:26:07 +0200
-Date: Wed, 20 Mar 2024 12:26:07 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next v1 1/1] can: mcp251x: Fix up includes
-Message-ID: <Zfq5v2lySrc7VKBS@smile.fi.intel.com>
-References: <20240318193410.178163-1-andriy.shevchenko@linux.intel.com>
- <20240319-chewing-aptitude-db56f0a3fc32-mkl@pengutronix.de>
+	s=arc-20240116; t=1710933712; c=relaxed/simple;
+	bh=56+XN9Gm3MPNwwzg6kROpfaR0TLddtGJb7+YQi6bQrE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VCXxT8soevVac1yWPvelAjxo63qBqzBUOjYlKqrNt/D9yWMVLi8TBst4wSrh/3um7v++2XFVh3xZGx2dAM6HcNhMYLs108QD2xO5tB9n+QlKpEhaFGVhCj4Mj7pwYvevjWXx6feTefmMvXSg3lZw62lJSTI4dhA2lqOg9Zr0akg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1rmu0y-0007lH-0k
+	for linux-can@vger.kernel.org; Wed, 20 Mar 2024 12:21:48 +0100
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1rmu0x-007SJ7-K5
+	for linux-can@vger.kernel.org; Wed, 20 Mar 2024 12:21:47 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 4AB532A8247
+	for <linux-can@vger.kernel.org>; Wed, 20 Mar 2024 11:21:47 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 66AF12A823F;
+	Wed, 20 Mar 2024 11:21:46 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id fffd2902;
+	Wed, 20 Mar 2024 11:21:45 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH net 0/1] pull-request: can 2024-03-20
+Date: Wed, 20 Mar 2024 11:50:25 +0100
+Message-ID: <20240320112144.582741-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240319-chewing-aptitude-db56f0a3fc32-mkl@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=utf8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On Tue, Mar 19, 2024 at 03:25:24PM +0100, Marc Kleine-Budde wrote:
-> On 18.03.2024 21:34:10, Andy Shevchenko wrote:
-> > This driver is including the legacy GPIO header <linux/gpio.h>
-> > but the only thing it is using from that header is the wrong
-> > define for GPIOF_DIR_OUT.
-> > 
-> > Fix it up by using GPIO_LINE_DIRECTION_* macros respectively.
+Hello netdev-team,
 
-> No need to resend, added to linux-can-next.
+this is a pull request of 1 patch for net/master.
 
-Thank you for taking care, although it doesn't cancel my question to
-the net subsystem flow in general.
+Martin Jocić contributes a fix for the kvaser_pciefd driver, so that
+up to 8 channels on the Xilinx-based adapters can be used. This issue
+has been introduced in net-next for v6.9.
 
--- 
-With Best Regards,
-Andy Shevchenko
+regards,
+Marc
 
+---
+
+The following changes since commit e54e09c05c00120cbe817bdb037088035be4bd79:
+
+  net: remove {revc,send}msg_copy_msghdr() from exports (2024-03-14 16:48:53 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.9-20240319
+
+for you to fetch changes up to af1752ecdc9c665b72fbe2cef9035a6cba34b473:
+
+  can: kvaser_pciefd: Add additional Xilinx interrupts (2024-03-19 15:26:01 +0100)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.9-20240319
+
+----------------------------------------------------------------
+Martin Jocić (1):
+      can: kvaser_pciefd: Add additional Xilinx interrupts
+
+ drivers/net/can/kvaser_pciefd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 
