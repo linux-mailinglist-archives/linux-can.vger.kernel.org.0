@@ -1,118 +1,146 @@
-Return-Path: <linux-can+bounces-414-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-415-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 350498810D3
-	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 12:22:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 185F9881977
+	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 23:35:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0A271F24A75
-	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 11:22:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A44D1C210C7
+	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 22:35:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AB403FB35;
-	Wed, 20 Mar 2024 11:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5C71EA71;
+	Wed, 20 Mar 2024 22:35:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TfC5lqXb"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6A23C46B
-	for <linux-can@vger.kernel.org>; Wed, 20 Mar 2024 11:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 232F312E52;
+	Wed, 20 Mar 2024 22:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710933713; cv=none; b=sCGBq02bWJ3l9Ec7NE1Drrxp/4TNUM/yxYANFHMyeEJWSBAUU1sIIuwiYCMm0fHN9udUqkztpP9OHGxEFcEP6gG71GGJ/HxPuM3tl/X2h7b51aWghrJUwtU8+2MW2AsInglLTAMBj5oL9Q28A54ex5DuFjpxKeE0iQP3TpzvMOQ=
+	t=1710974111; cv=none; b=mojlw9YvJiTXPlEAGUzN//kqvgs6uksa8q4HNk3hfEiV9LC/75igOkaQn5iu5mblbWjyFcS9d8DStg8UNdnWt8aU4E8QjhmL5BRsEbeXYvtNFQr5ftzs+Tsdg4tuYmry5KMc+mpqVvK0oO80hhKBy4a3DCbyyHWcodSPyFvLhDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710933713; c=relaxed/simple;
-	bh=sH5QCp/CT76MJiPwxEwgetpBKYN8GHSUPg2m6mYsgWw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=T8ID+k599tZJrpSt/R3BKw0iLQpOxEgdUp8JXMMXTzI29SrNr+i1Kc2RWqcciX3IcfxnSysfqM5b4YLp1PQb1vkemMpPf1WTzA54Fb1VOFrjEN0F3mJZfsY0u1Xh8h8LhiZl3RwBTTkwRg5gNclt8Ilz2ArRTTWTO28gDtw0/Oc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rmu0y-0007nD-LL
-	for linux-can@vger.kernel.org; Wed, 20 Mar 2024 12:21:48 +0100
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rmu0y-007SJO-8D
-	for linux-can@vger.kernel.org; Wed, 20 Mar 2024 12:21:48 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id E4C8E2A824B
-	for <linux-can@vger.kernel.org>; Wed, 20 Mar 2024 11:21:47 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 7BC0D2A8240;
-	Wed, 20 Mar 2024 11:21:46 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 5a515acc;
-	Wed, 20 Mar 2024 11:21:46 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	=?UTF-8?q?Martin=20Joci=C4=87?= <martin.jocic@kvaser.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net] can: kvaser_pciefd: Add additional Xilinx interrupts
-Date: Wed, 20 Mar 2024 11:50:26 +0100
-Message-ID: <20240320112144.582741-2-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240320112144.582741-1-mkl@pengutronix.de>
-References: <20240320112144.582741-1-mkl@pengutronix.de>
+	s=arc-20240116; t=1710974111; c=relaxed/simple;
+	bh=/fsBbXw03619bUqlEGeLUsRsq6EMtANrA9Jhs5wFcvQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eXKUH4oZKCwia1AvbMUvVx1aiuyNuHiwncIUsLSYfAncrhlI+1Q3Q4czbtc9hPKt64CHwk4z8XSIVeV4LaCoERgrJjJrSf2GTAFU7BLzaOtETF8whGfJH6yykQtUSIR/ivMfdqNVx/MZfTJZxT6clDkbaVJxKjMuiBOYeNbNN+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TfC5lqXb; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-51381021af1so623929e87.0;
+        Wed, 20 Mar 2024 15:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710974107; x=1711578907; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y6uLkytCveodnbEWWcUmeLnZpizFS2D2Bpb03TRInaE=;
+        b=TfC5lqXbdG75Cw1pRoBG1lxRBLQ4mCUhENBzaN593gWlGlAxL+kIGsij0FMpbRSo9M
+         JbbNvj4OqXNoTGtd3VEwmFeUizojmVC4J0fzeOC5UYMlFR+SE/EJSn3B4p4WpDMTye2d
+         HDh7xFinFC8rDlbJ2ALJO9P14tMsWEGxu7fVEQOb7Waw8LpxA0B7skQBxN5wF2sPd5S4
+         kgajKofxzxauzwppfc2QMD0B4WPlVQpK5v10iTigfoAU0fwHfjzlrJMp6XC0xxbKXS36
+         nsF/ppQgJRmJj2baKekZcnUePPN7F7v/qzcTK9UG/0sWutH6uI1YadaIBol1SnWrLFdC
+         T1Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710974107; x=1711578907;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y6uLkytCveodnbEWWcUmeLnZpizFS2D2Bpb03TRInaE=;
+        b=sDZaLdST2SUTPqMZIbYtGyaajklRZ4PiWtRnAsTkgXbx3ZO39sggIoKTO6tZNk6E3F
+         yajc5b+nWc4++IGfbbkG8G5qPM2SXwM5zlYOMkZ4RSZSg/quGI0QmWEbYYo758zCZ5gk
+         9xw7GGzXKgsOXbWZOcKYEY4E7jwtr/+83ef2ICUJFO1UHMUOG1jubtk0ZE+u7SEnYqhP
+         9/iuQKsGRsraKm3NSjHIgI3HQcNA0CIPTBiI5eTZ09DdbNwF1bpzfR29RZQHsSY6WeFl
+         40TT/uIewy7h2RIxw3bMHfHutKpRll12EDpYd8VI5iAO3VKodtlXgAo/qPK2uRkxNkQW
+         LeSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVEYfcav2a7ZswySdgvSlYHcCJriFaSxZAHlAss1hgiUlJN5MD3kQjIHa6VQWuev0TemXGcFrU/sGca9W5dJnhFAoXa0VsCbKZXSSAKtuPdgi9rKwlvFJ9X44nldCHv9yCBDOAgG57qFXHfsVsUePl0uOzHlWdx9f91f1meCdMj
+X-Gm-Message-State: AOJu0YwtoKXbbv63cFASMgjw6UlXrXgqWaz6gm5FdSJFJWf02KTUmIZM
+	GRXT0mhT5Mxm8lcOKeH8HaqOyURMHT1CCe0C6Bw79/6ndbkmkx6cExaHl/2qMetOdQ==
+X-Google-Smtp-Source: AGHT+IG5bitWH3Wn0hUC64Y2ptJDiGS2is9++uKcULphEyCayziP1oG59fDb4lRmo1n/NpFN50q/KQ==
+X-Received: by 2002:ac2:46d6:0:b0:513:d372:20e5 with SMTP id p22-20020ac246d6000000b00513d37220e5mr290631lfo.16.1710974107030;
+        Wed, 20 Mar 2024 15:35:07 -0700 (PDT)
+Received: from fedora (host-95-250-206-50.retail.telecomitalia.it. [95.250.206.50])
+        by smtp.gmail.com with ESMTPSA id an14-20020a17090656ce00b00a465b72a1f3sm5262273ejc.85.2024.03.20.15.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Mar 2024 15:35:06 -0700 (PDT)
+Date: Wed, 20 Mar 2024 23:35:05 +0100
+From: Francesco Valla <valla.francesco@gmail.com>
+To: Simon Horman <horms@kernel.org>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	fabio@redaril.me, linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] Documentation: networking: document CAN ISO-TP
+Message-ID: <ZftkmQfna3HIyYal@fedora>
+References: <20240313223445.87170-1-valla.francesco@gmail.com>
+ <20240313223445.87170-2-valla.francesco@gmail.com>
+ <20240319120625.GI185808@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240319120625.GI185808@kernel.org>
 
-From: Martin Jocić <martin.jocic@kvaser.com>
 
-Since Xilinx-based adapters now support up to eight CAN channels, the
-TX interrupt mask array must have eight elements.
+Hi Simon,
 
-Signed-off-by: Martin Jocic <martin.jocic@kvaser.com>
-Link: https://lore.kernel.org/all/2ab3c0585c3baba272ede0487182a423a420134b.camel@kvaser.com
-Fixes: 9b221ba452aa ("can: kvaser_pciefd: Add support for Kvaser PCIe 8xCAN")
-[mkl: replace Link by Fixes tag]
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/kvaser_pciefd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Tue, Mar 19, 2024 at 12:06:25PM +0000, Simon Horman wrote:
+> On Wed, Mar 13, 2024 at 11:34:31PM +0100, Francesco Valla wrote:
+> > Document basic concepts, APIs and behaviour of the CAN ISO-TP (ISO
+> > 15765-2) stack.
+> > 
+> > Signed-off-by: Francesco Valla <valla.francesco@gmail.com>
+> 
+> Hi Francesco,
+> 
+> As it looks like there will be a v2 of this patchset
+> please consider running checkpatch.pl --codespell
+> and addressing the warnings it reports.
+> 
 
-diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index f81b598147b3..7b5028b67cd5 100644
---- a/drivers/net/can/kvaser_pciefd.c
-+++ b/drivers/net/can/kvaser_pciefd.c
-@@ -370,8 +370,8 @@ static const struct kvaser_pciefd_irq_mask kvaser_pciefd_sf2_irq_mask = {
- 
- static const struct kvaser_pciefd_irq_mask kvaser_pciefd_xilinx_irq_mask = {
- 	.kcan_rx0 = BIT(4),
--	.kcan_tx = { BIT(16), BIT(17), BIT(18), BIT(19) },
--	.all = GENMASK(19, 16) | BIT(4),
-+	.kcan_tx = { BIT(16), BIT(17), BIT(18), BIT(19), BIT(20), BIT(21), BIT(22), BIT(23) },
-+	.all = GENMASK(23, 16) | BIT(4),
- };
- 
- static const struct kvaser_pciefd_dev_ops kvaser_pciefd_altera_dev_ops = {
+Will do before v2, thanks for the suggestion.
 
-base-commit: e54e09c05c00120cbe817bdb037088035be4bd79
--- 
-2.43.0
+> ...
+> 
+> > +Transport protocol and associated frame types
+> > +---------------------------------------------
+> > +
+> > +When transmitting data using the ISO-TP protocol, the payload can either fit
+> > +inside one single CAN message or not, also considering the overhead the protocol
+> > +is generating and the optional extended addressing. In the first case, the data
+> > +is transmitted at once using a so-called Single Frame (SF). In the second case,
+> > +ISO-TP defines a multi-frame protocol, in which the sender asks (through a First
+> > +Frame - FF) to the receiver the maximum supported size of a macro data block
+> > +(``blocksize``) and the minimum time time between the single CAN messages
+> > +composing such block (``stmin``). Once these informations have been received,
+> 
+> nit: Once this information has
 
+I never grasped the usage of "information" in English, which is not my
+first language. I'll make this correction here.
+
+> 
+> > +the sender starts to send frames containing fragments of the data payload
+> > +(called Consecutive Frames - CF), stopping after every ``blocksize``-sized block
+> > +to wait confirmation from the receiver (which should then send a Flow Control
+> > +frame - FC - to inform the sender about its availability to receive more data).
+> > +
+> 
+> ...
+
+Thanks for the review!
+
+Regards,
+Francesco
 
 
