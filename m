@@ -1,78 +1,77 @@
-Return-Path: <linux-can+bounces-411-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-412-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1903F880F9A
-	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 11:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BF27C880F9D
+	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 11:26:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 484991C21ED5
-	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 10:25:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE8561C22860
+	for <lists+linux-can@lfdr.de>; Wed, 20 Mar 2024 10:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB613CF7E;
-	Wed, 20 Mar 2024 10:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E043D0A3;
+	Wed, 20 Mar 2024 10:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O3ck4nie"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z7rPQrVu"
 X-Original-To: linux-can@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D54B920DCC;
-	Wed, 20 Mar 2024 10:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8933C48D;
+	Wed, 20 Mar 2024 10:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710930313; cv=none; b=Oh3GLLzWlfHFyYMIeMdUjvj5ez2uYiw+fqakZ8UIwf86SAwhKra1JjTcF12TqXk23YMG9zuvbsjMdaiRZ9Q5J5j7SBOv+/3S7k31oLGHpvk2U/5GfJMOX4n2JS3Bhdd/0Zl4B2YevT0u67wr+F0L7SUDgL/zNIh6BwE15+wkbdQ=
+	t=1710930375; cv=none; b=eMmF1n+Ov58csR6OTF7wy57N1GY9sgSlkP1L4z0D2qYUSAr5HQJpc5idXgv2ml/miW2rk0SSeYK+MTnvEZON9x1j1QFSed9CgtkYQcjXL7W4CBD7ovNlKLzbuySezA/cKX7qau5jpaS90O10HxAbyJSSfodlxiilZ2wqeCBhkyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710930313; c=relaxed/simple;
-	bh=uTcargHZKKJsnlZ8QYB+opWvxlRzkGKEhRBmIEMOosM=;
+	s=arc-20240116; t=1710930375; c=relaxed/simple;
+	bh=gUSwp+UFy627gBWs5T8M7qin00rGZoYovIOZ7OXQATA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GnuyaZVl0uXua4wjRgYbimE+g1YkAf9X3bEJzaBkiWJ4+JyKgxMI6r6tFzUCsEdZXf3BIe3LkzuXMCdvFOLFl75V1DGBMSSw7U8cezK7bGXZ7nrGYfgrY0eQedp2TqZiZFdyK4VdFZ+hqTUVQaq0QyDdWMjEIpIDhYFaj9N5T28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O3ck4nie; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=B6i/44d2Drocp0E+nJUWaTb57zcaS7tEm6S7KiDA80mryRQpWP/+mNwbqqaaIAwn4ts0H82LZKNH+GNHcRM5j44fQQtEnFHErABEt+CrpphGnlHiPnFS4+kfmwhRHvO04VDPEjea5BKj0QQLTxPabem7Q8jPDfPuwjB/XarhNKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z7rPQrVu; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710930311; x=1742466311;
+  t=1710930373; x=1742466373;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=uTcargHZKKJsnlZ8QYB+opWvxlRzkGKEhRBmIEMOosM=;
-  b=O3ck4nieOKRACVbB59zRZklqL9WqaUjX765FefxZDPDmITUdpGLwll3T
-   P+dj9/aDhUX7fCzB9XZpkEw3WF+M62J8GJMYxPuliVJN3/iD3mIfRGMuT
-   cQH47m9ts6GftbrUiUMqITSIqZrFUeybgarvMH8GcpkKYdadCYVDwAGKQ
-   9yE4j4Pww/nw74NjSA1GE1+ranKLOVR/nl0j3MaJnO+YOSG0EpYDCJvcD
-   EjQeRcGtmKvjIa7wI7y1obF2K+l0XhsCuVYpV5zVEEwslJiBXOxE2emSN
-   SOY9K0gslD1zLTzVWShAPTvKMgohzoaiyDKQQZ2Mx3C/VdTNcG3BtSbaG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="23303418"
+  bh=gUSwp+UFy627gBWs5T8M7qin00rGZoYovIOZ7OXQATA=;
+  b=Z7rPQrVudXEHHGF/FD5LSa4XaBPKoCOhHzyikQQKJp4uccJKwS1NicMc
+   OW78+AEWmpyVmiJYiU+Y/qp7O2Drjtcc4nZI+rl3bPUVZb6LMazMCe+j3
+   1fdG+5qlWx8v/U9WwkKLIIW176QSbmJrjxKa76R3tBP1HUxtHjkDrvH7E
+   +r5vB+mb9wYwtjPrMznS0ltez2jEsMqz4de0ByW1cPhZ/g2r5KRZU1bbh
+   DkoBJWmQyasT7u8eVYEitVK+0w1VhpSY4XOS/+w8zyMQfoSHfqJc8Jbzi
+   FnYLw7SsVlsM8oxLbT1TnwR0JkUI5sc8Zc3r3W9WQSFIClyPXXKmrY0I4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="23303653"
 X-IronPort-AV: E=Sophos;i="6.07,139,1708416000"; 
-   d="scan'208";a="23303418"
+   d="scan'208";a="23303653"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2024 03:25:11 -0700
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2024 03:26:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="914661971"
+X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="914661997"
 X-IronPort-AV: E=Sophos;i="6.07,139,1708416000"; 
-   d="scan'208";a="914661971"
+   d="scan'208";a="914661997"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2024 03:25:08 -0700
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2024 03:26:10 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.97)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rmt85-0000000EXTT-2jCU;
-	Wed, 20 Mar 2024 12:25:05 +0200
-Date: Wed, 20 Mar 2024 12:25:05 +0200
+	id 1rmt95-0000000EXUK-3lml;
+	Wed, 20 Mar 2024 12:26:07 +0200
+Date: Wed, 20 Mar 2024 12:26:07 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Jiri Pirko <jiri@resnulli.us>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
 Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Wolfgang Grandegger <wg@grandegger.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
 Subject: Re: [PATCH net-next v1 1/1] can: mcp251x: Fix up includes
-Message-ID: <Zfq5geYx0KslkORy@smile.fi.intel.com>
+Message-ID: <Zfq5v2lySrc7VKBS@smile.fi.intel.com>
 References: <20240318193410.178163-1-andriy.shevchenko@linux.intel.com>
- <ZfloDwb0XMI7KryR@nanopsycho>
+ <20240319-chewing-aptitude-db56f0a3fc32-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -81,27 +80,21 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZfloDwb0XMI7KryR@nanopsycho>
+In-Reply-To: <20240319-chewing-aptitude-db56f0a3fc32-mkl@pengutronix.de>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Mar 19, 2024 at 11:25:19AM +0100, Jiri Pirko wrote:
-> Mon, Mar 18, 2024 at 08:34:10PM CET, andriy.shevchenko@linux.intel.com wrote:
-> >This driver is including the legacy GPIO header <linux/gpio.h>
-> >but the only thing it is using from that header is the wrong
-> >define for GPIOF_DIR_OUT.
-> >
-> >Fix it up by using GPIO_LINE_DIRECTION_* macros respectively.
-> 
-> net-next is closed, send again next week.
+On Tue, Mar 19, 2024 at 03:25:24PM +0100, Marc Kleine-Budde wrote:
+> On 18.03.2024 21:34:10, Andy Shevchenko wrote:
+> > This driver is including the legacy GPIO header <linux/gpio.h>
+> > but the only thing it is using from that header is the wrong
+> > define for GPIOF_DIR_OUT.
+> > 
+> > Fix it up by using GPIO_LINE_DIRECTION_* macros respectively.
 
-Thank you for the reminder. I have a question though.
-Can net adapt to the existence of lore.kernel.org please?
+> No need to resend, added to linux-can-next.
 
-I mean it's not big deal to me to resend, but:
-1) it adds too much noise in already noisy mailing lists;
-2) it brings no value since we have lore.kernel.org archive;
-3) last but not least, it saves a lot of resources and becomes
-   environment friendly when we send _less_ emails.
+Thank you for taking care, although it doesn't cancel my question to
+the net subsystem flow in general.
 
 -- 
 With Best Regards,
