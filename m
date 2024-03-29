@@ -1,72 +1,83 @@
-Return-Path: <linux-can+bounces-418-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-419-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B74A88C21D
-	for <lists+linux-can@lfdr.de>; Tue, 26 Mar 2024 13:28:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB13F891F8A
+	for <lists+linux-can@lfdr.de>; Fri, 29 Mar 2024 16:06:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A060A1C36F4D
-	for <lists+linux-can@lfdr.de>; Tue, 26 Mar 2024 12:28:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8050328BE02
+	for <lists+linux-can@lfdr.de>; Fri, 29 Mar 2024 15:06:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E9F176058;
-	Tue, 26 Mar 2024 12:27:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96D8B143898;
+	Fri, 29 Mar 2024 13:35:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="fYwzi8qg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LfzpyN47"
 X-Original-To: linux-can@vger.kernel.org
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E43C75806;
-	Tue, 26 Mar 2024 12:27:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6416143889;
+	Fri, 29 Mar 2024 13:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711456071; cv=none; b=rnXlNp5M4VkQLffSVs4gyGuEauct18A8Tl31bCzHTdEBEci4ShcAMF5HgZeK24hD9pTfSQxUludMmxvGbCQN5Ihrx8LQDmtL2f9wqmUTciRAYbPoyUzQ+ZSbIMmiRU51OmeYOrGscLu0bschKh7FrM6vnIOLeXPdTm5LrACWFGw=
+	t=1711719323; cv=none; b=PF2Q+SwcX6sqVXG21xpDHE3y6qXDJfqANPy08YjwKYBWowOm+H/VnmqsAkfEeptIZ0vJ2HFMrTKAyWmUVKOHZ5KOX3RxeTS5kXx0Fk8JPwxxQK3IZxLV8PcB4dmLrIqRSqNG3x1DzW1i77xnuph77s1dDJv50FnQHIB1QzJ7n3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711456071; c=relaxed/simple;
-	bh=zzOEjUVQkWqnS4hwzn6x2JGH4Xxki8samoobK81+3iA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LcJnsV6w+0XyMoxHopwqptN1+Yzqs3br3+2Ay2fRxjPQ4ObEIEstxY02Nenp/7ULQ91U55RfvuRBoDsht1WjNLl+sRfCa1ldHghwLkppm7gBY7FMd4fGD7BktreRIX3/WXtnLzONgUxthdiQliNIOBJv1pbEQsySSLqhtmkAJZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=fYwzi8qg; arc=none smtp.client-ip=188.40.30.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-	s=default2211; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=KDIyZTlIle3JKNVn0YJbDqyvuC6ORc4/Rs9FG3+7Uiw=; b=fYwzi8qgs+EMhEPLUJk3bSuLI9
-	W4ITKhwVKPEBpcmYoJbIPCzT68ej2ldjp4s1qFKehqHzAlwyUKQJWn6neWKXcuvg2efN3ftxj0nT6
-	50XmEjnb7SKxdDKyHgkUfl+q73MhE5m0MzqlZxoDcxONNPBBqL9UGB3ibx/wLmxI1JxqVOASUpi+v
-	T/yExL4ekbfn8SlOHzTm74ysh06ILXCYh9k0f/nL1XGNEoLC03z8UM+VQoIUEfFb/naU3GiVHtjPo
-	Dg6pZnf5LOTXMvBBFENbWviT4wnwFh+Cj9WNh1zddw0Bq/cvpGn+TUKDSzbzBX3cJhENVjN3PPx1m
-	afCSvjQA==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <martin@geanix.com>)
-	id 1rp5u4-000J3B-LB; Tue, 26 Mar 2024 13:27:44 +0100
-Received: from [185.17.218.86] (helo=zen..)
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <martin@geanix.com>)
-	id 1rp5u3-000P6m-2s;
-	Tue, 26 Mar 2024 13:27:43 +0100
-From: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
-To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+	s=arc-20240116; t=1711719323; c=relaxed/simple;
+	bh=DeVjDjgAaNp8OqOKPW/Hx1Bpl4U8VaXR8t8x8PdRezU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FYU8N9ZdSHEj+lJDX4FYHNWXLrycSDpPiqp82zKgF4/9KoXqBq2EUY4RKn0jfs6P565kp/AaiEZvq/B9FWN75HCJvnHXu55cgH6SOoTYIJmKGlsWZ7Q5A+neEA45vZW0pfUZLgne6JkpAGBKwE3F9O23VmGKwCCkUZS2e5rRueM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LfzpyN47; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2d718efedb2so8822051fa.0;
+        Fri, 29 Mar 2024 06:35:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711719320; x=1712324120; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mdX+NaUvjLzoIWlasG6BkIYssuCP0CBEfyEvr+GPt+w=;
+        b=LfzpyN47VAREg1DyYbP8LBTJ1SyRR4RvjZsjLmSSgHur0ZnHFWoeY32uqiP9grvOVH
+         CXDCPKkde9bg02loPab3duGZ03BOzaIRP48bu09v/UlFGU/wQF4RHWob6Dw4EWKPYQwE
+         zdF3vvdUhvDWtx6JDZ55nqdm8UGMkTf2uIReVzJ4MMiwd4u/PJM4BiYpX/OF/YShKeqe
+         7PlYRB35bgNdQZ0sWDIrPJ9cavS1O9m4ujhtFHgzAOVSu0c2DWMGBByCgFgg2F89tOeA
+         s+09IjrgbgmznE9mtwQFeJZIgelcKeIvgvPB3vDxc5/qJ01+XXLdkikqh4CIEAkf97iu
+         fyQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711719320; x=1712324120;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mdX+NaUvjLzoIWlasG6BkIYssuCP0CBEfyEvr+GPt+w=;
+        b=oZnkGG+IXHFwg5RtVnSwd+NkXjOw3cGzH4Hm+pIco6XVeRb3Gjj2b3DuazjkF39gf8
+         lWX6o5anlWrKsM+GfCWSvNTJtQ1/n8z98Rbitb0ZooNc2wYRTwK2Xkiyas6zFJiYVdcK
+         e/TibAxmjR6hVAZuTc052/3Kxh0B8+lwSaV973LbGGYQA/OR7WyLfl5wioyDz8m8aRl3
+         gc93evvwxpZKUvFGAIFc6nJ8mCAkGv5HoLJeecPhNtg87eg5OVIxpq1lcmvnx3dryHUx
+         6YgTRzjn0kM14WwbNDBHHqadn4yL+Ra+SUaeLHpH9m57gfk4X/WLChHuzfztC4W+MnC1
+         kEZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWpSWMOxSEg1aswf+GXN+njgds86i3zXkZyKbl/aFGZeRHg1x6nBiqU/ftIVl/M0CBcgG8EPwLHCjvAz+68SabCVhhWePBoJpDqngeoVkeEbXTMZao7oh/I3InwFaa5OoyPTs/ZzJRU
+X-Gm-Message-State: AOJu0YwToGYAuv8D/zseyG1kzHX+REUMxYVSQgcauRMOD2XzedkQzOzo
+	TThAuSLJxP3L+jevJVUaxzZhMkiRhJV7xxsOxlwCCMz7WAuE0oXd
+X-Google-Smtp-Source: AGHT+IHGgNMuqJZbqwHOAPNjSebEC4PFHvtmvbXXV4nHS5eZLG9tn+9ib0eMqHefmU8r3oCefHTMcQ==
+X-Received: by 2002:ac2:4add:0:b0:513:d5ec:afb with SMTP id m29-20020ac24add000000b00513d5ec0afbmr1998626lfp.40.1711719319704;
+        Fri, 29 Mar 2024 06:35:19 -0700 (PDT)
+Received: from fedora.fritz.box (host-79-34-203-60.business.telecomitalia.it. [79.34.203.60])
+        by smtp.gmail.com with ESMTPSA id x16-20020a170906135000b00a46ee3c31afsm1921408ejb.154.2024.03.29.06.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Mar 2024 06:35:19 -0700 (PDT)
+From: Francesco Valla <valla.francesco@gmail.com>
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] can: m_can: don't enable transceiver when probing
-Date: Tue, 26 Mar 2024 13:26:38 +0100
-Message-ID: <20240326122640.706041-1-martin@geanix.com>
+	linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Simon Horman <horms@kernel.org>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	fabio@redaril.me,
+	Francesco Valla <valla.francesco@gmail.com>
+Subject: [PATCH v2 0/1] Documentation: networking: document ISO 15765-2:2016
+Date: Fri, 29 Mar 2024 14:34:40 +0100
+Message-ID: <20240329133458.323041-2-valla.francesco@gmail.com>
 X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -74,248 +85,34 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: martin@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27226/Tue Mar 26 09:37:28 2024)
 
-The m_can driver sets and clears the CCCR.INIT bit during probe (both
-when testing the NON-ISO bit, and when configuring the chip). After
-clearing the CCCR.INIT bit, the transceiver enters normal mode, where it
-affects the CAN bus (i.e. it ACKs frames). This can cause troubles when
-the m_can node is only used for monitoring the bus, as one cannot setup
-listen-only mode before the device is probed.
+While the in-kernel ISO 15765-2:2016 (ISO-TP) stack is fully functional and
+easy to use, no documentation exists for it.
 
-Rework the probe flow, so that the CCCR.INIT bit is only cleared when
-upping the device. First, the tcan4x5x driver is changed to stay in
-standby mode during/after probe. This in turn requires changes when
-setting bits in the CCCR register, as its CSR and CSA bits are always
-high in standby mode.
+This patch adds such documentation, containing the very basics of the protocol,
+the APIs and a basic example.
 
-Signed-off-by: Martin Hundebøll <martin@geanix.com>
+Thanks,
+Francesco
+
 ---
- drivers/net/can/m_can/m_can.c         | 129 ++++++++++++++------------
- drivers/net/can/m_can/tcan4x5x-core.c |  14 ++-
- 2 files changed, 79 insertions(+), 64 deletions(-)
+Changes in v2:
+ - rename (and re-title) documentation to to align it with KConfig option,
+   using ISO 15765-2:2016 instead of ISO-TP (the latter is still used for
+   brevity inside the document)
+ - address review comments
+ - solve warnings coming from checkpatch and make htmldocs
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 14b231c4d7ec..1ca245846fcd 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -379,38 +379,60 @@ m_can_txe_fifo_read(struct m_can_classdev *cdev, u32 fgi, u32 offset, u32 *val)
- 	return cdev->ops->read_fifo(cdev, addr_offset, val, 1);
- }
- 
--static void m_can_config_endisable(struct m_can_classdev *cdev, bool enable)
-+static bool m_can_cccr_wait_bits(struct m_can_classdev *cdev, u32 mask, u32 val)
- {
--	u32 cccr = m_can_read(cdev, M_CAN_CCCR);
--	u32 timeout = 10;
--	u32 val = 0;
--
--	/* Clear the Clock stop request if it was set */
--	if (cccr & CCCR_CSR)
--		cccr &= ~CCCR_CSR;
--
--	if (enable) {
--		/* enable m_can configuration */
--		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT);
--		udelay(5);
--		/* CCCR.CCE can only be set/reset while CCCR.INIT = '1' */
--		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT | CCCR_CCE);
--	} else {
--		m_can_write(cdev, M_CAN_CCCR, cccr & ~(CCCR_INIT | CCCR_CCE));
--	}
-+	u32 val_before = m_can_read(cdev, M_CAN_CCCR);
-+	u32 val_after = (val_before & ~mask) | val;
-+	size_t tries = 5;
-+
-+	if (!(mask & CCCR_INIT) && !(val_before & CCCR_INIT))
-+		dev_warn(cdev->dev,
-+			 "trying to configure device when in normal mode. Expect failures\n");
-+
-+	/* The chip should be in standby mode when changing the CCCR register,
-+	 * and some chips set the CSR and CSA bits when in standby. Furthermore,
-+	 * the CSR and CSA bits should be written as zeros, even when they read
-+	 * ones.
-+	 */
-+	val_after &= ~(CCCR_CSR | CCCR_CSA);
-+
-+	while (tries--) {
-+		u32 val_read;
-+
-+		/* Write the desired value in each try, as setting some bits in
-+		 * the CCCR register require other bits to be set first. E.g.
-+		 * setting the NISO bit requires setting the CCE bit first.
-+		 */
-+		m_can_write(cdev, M_CAN_CCCR, val_after);
-+
-+		val_read = m_can_read(cdev, M_CAN_CCCR) & ~(CCCR_CSR | CCCR_CSA);
- 
--	/* there's a delay for module initialization */
--	if (enable)
--		val = CCCR_INIT | CCCR_CCE;
--
--	while ((m_can_read(cdev, M_CAN_CCCR) & (CCCR_INIT | CCCR_CCE)) != val) {
--		if (timeout == 0) {
--			netdev_warn(cdev->net, "Failed to init module\n");
--			return;
--		}
--		timeout--;
--		udelay(1);
-+		if (val_read == val_after)
-+			return true;
-+
-+		usleep_range(1, 5);
- 	}
-+
-+	return false;
-+}
-+
-+static void m_can_config_enable(struct m_can_classdev *cdev)
-+{
-+	/* CCCR_INIT must be set in order to set CCCR_CCE, but access to
-+	 * configuration registers should only be enabled when in standby mode,
-+	 * where CCCR_INIT is always set.
-+	 */
-+	if (!m_can_cccr_wait_bits(cdev, CCCR_CCE, CCCR_CCE))
-+		netdev_err(cdev->net, "failed to enable configuration mode\n");
-+}
-+
-+static void m_can_config_disable(struct m_can_classdev *cdev)
-+{
-+	/* Only clear CCCR_CCE, since CCCR_INIT cannot be cleared while in
-+	 * standby mode
-+	 */
-+	if (!m_can_cccr_wait_bits(cdev, CCCR_CCE, 0))
-+		netdev_err(cdev->net, "failed to disable configuration registers\n");
- }
- 
- static void m_can_interrupt_enable(struct m_can_classdev *cdev, u32 interrupts)
-@@ -1403,7 +1425,7 @@ static int m_can_chip_config(struct net_device *dev)
- 	interrupts &= ~(IR_ARA | IR_ELO | IR_DRX | IR_TEFF | IR_TFE | IR_TCF |
- 			IR_HPM | IR_RF1F | IR_RF1W | IR_RF1N | IR_RF0F);
- 
--	m_can_config_endisable(cdev, true);
-+	m_can_config_enable(cdev);
- 
- 	/* RX Buffer/FIFO Element Size 64 bytes data field */
- 	m_can_write(cdev, M_CAN_RXESC,
-@@ -1521,7 +1543,7 @@ static int m_can_chip_config(struct net_device *dev)
- 		    FIELD_PREP(TSCC_TCP_MASK, 0xf) |
- 		    FIELD_PREP(TSCC_TSS_MASK, TSCC_TSS_INTERNAL));
- 
--	m_can_config_endisable(cdev, false);
-+	m_can_config_disable(cdev);
- 
- 	if (cdev->ops->init)
- 		cdev->ops->init(cdev);
-@@ -1544,12 +1566,15 @@ static int m_can_start(struct net_device *dev)
- 
- 	cdev->can.state = CAN_STATE_ERROR_ACTIVE;
- 
--	m_can_enable_all_interrupts(cdev);
--
- 	if (cdev->version > 30)
- 		cdev->tx_fifo_putidx = FIELD_GET(TXFQS_TFQPI_MASK,
- 						 m_can_read(cdev, M_CAN_TXFQS));
- 
-+	m_can_enable_all_interrupts(cdev);
-+
-+	if (!m_can_cccr_wait_bits(cdev, CCCR_INIT, 0))
-+		netdev_err(dev, "failed to enter normal mode\n");
-+
- 	return 0;
- }
- 
-@@ -1603,33 +1628,17 @@ static int m_can_check_core_release(struct m_can_classdev *cdev)
-  */
- static bool m_can_niso_supported(struct m_can_classdev *cdev)
- {
--	u32 cccr_reg, cccr_poll = 0;
--	int niso_timeout = -ETIMEDOUT;
--	int i;
-+	bool niso_supported;
- 
--	m_can_config_endisable(cdev, true);
--	cccr_reg = m_can_read(cdev, M_CAN_CCCR);
--	cccr_reg |= CCCR_NISO;
--	m_can_write(cdev, M_CAN_CCCR, cccr_reg);
-+	/* First try to set the NISO bit (which requires the CCE bit too. */
-+	niso_supported = m_can_cccr_wait_bits(cdev, CCCR_NISO | CCCR_CCE,
-+					      CCCR_NISO | CCCR_CCE);
- 
--	for (i = 0; i <= 10; i++) {
--		cccr_poll = m_can_read(cdev, M_CAN_CCCR);
--		if (cccr_poll == cccr_reg) {
--			niso_timeout = 0;
--			break;
--		}
-+	/* Then clear the two bits again. */
-+	if (!m_can_cccr_wait_bits(cdev, CCCR_NISO | CCCR_CCE, 0))
-+		dev_err(cdev->dev, "failed to revert the NON-ISO bit in CCCR\n");
- 
--		usleep_range(1, 5);
--	}
--
--	/* Clear NISO */
--	cccr_reg &= ~(CCCR_NISO);
--	m_can_write(cdev, M_CAN_CCCR, cccr_reg);
--
--	m_can_config_endisable(cdev, false);
--
--	/* return false if time out (-ETIMEDOUT), else return true */
--	return !niso_timeout;
-+	return niso_supported;
- }
- 
- static int m_can_dev_setup(struct m_can_classdev *cdev)
-@@ -1694,9 +1703,6 @@ static int m_can_dev_setup(struct m_can_classdev *cdev)
- 		return -EINVAL;
- 	}
- 
--	if (cdev->ops->init)
--		cdev->ops->init(cdev);
--
- 	return 0;
- }
- 
-@@ -1708,7 +1714,8 @@ static void m_can_stop(struct net_device *dev)
- 	m_can_disable_all_interrupts(cdev);
- 
- 	/* Set init mode to disengage from the network */
--	m_can_config_endisable(cdev, true);
-+	if (!m_can_cccr_wait_bits(cdev, CCCR_INIT, CCCR_INIT))
-+		netdev_err(dev, "failed to enter standby mode\n");
- 
- 	/* set the state as STOPPED */
- 	cdev->can.state = CAN_STATE_STOPPED;
-diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
-index a42600dac70d..c9937dc0d700 100644
---- a/drivers/net/can/m_can/tcan4x5x-core.c
-+++ b/drivers/net/can/m_can/tcan4x5x-core.c
-@@ -453,10 +453,18 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
- 		goto out_power;
- 	}
- 
--	ret = tcan4x5x_init(mcan_class);
-+	tcan4x5x_check_wake(priv);
-+
-+	ret = tcan4x5x_write_tcan_reg(mcan_class, TCAN4X5X_INT_EN, 0);
- 	if (ret) {
--		dev_err(&spi->dev, "tcan initialization failed %pe\n",
--			ERR_PTR(ret));
-+		dev_err(&spi->dev, "Disabling interrupts failed %pe\n", ERR_PTR(ret));
-+		goto out_power;
-+	}
-+
-+	ret = tcan4x5x_write_tcan_reg(mcan_class, TCAN4X5X_INT_FLAGS,
-+				      TCAN4X5X_CLEAR_ALL_INT);
-+	if (ret) {
-+		dev_err(&spi->dev, "Clearing interrupts failed %pe\n", ERR_PTR(ret));
- 		goto out_power;
- 	}
- 
+Francesco Valla (1):
+  Documentation: networking: document ISO 15765-2
+
+ Documentation/networking/index.rst      |   1 +
+ Documentation/networking/iso15765-2.rst | 357 ++++++++++++++++++++++++
+ MAINTAINERS                             |   1 +
+ 3 files changed, 359 insertions(+)
+ create mode 100644 Documentation/networking/iso15765-2.rst
+
 -- 
 2.44.0
 
