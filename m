@@ -1,494 +1,157 @@
-Return-Path: <linux-can+bounces-420-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-421-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA15C891F8D
-	for <lists+linux-can@lfdr.de>; Fri, 29 Mar 2024 16:06:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7185E8959C3
+	for <lists+linux-can@lfdr.de>; Tue,  2 Apr 2024 18:32:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 425311F31023
-	for <lists+linux-can@lfdr.de>; Fri, 29 Mar 2024 15:06:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27E95284BC0
+	for <lists+linux-can@lfdr.de>; Tue,  2 Apr 2024 16:32:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DEB143C6A;
-	Fri, 29 Mar 2024 13:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A7B1586C5;
+	Tue,  2 Apr 2024 16:32:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FkwTAtcp"
+	dkim=pass (2048-bit key) header.d=maxiluxsystems-com.20230601.gappssmtp.com header.i=@maxiluxsystems-com.20230601.gappssmtp.com header.b="D/GMsWf+"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739FD13849C;
-	Fri, 29 Mar 2024 13:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D94511581EF
+	for <linux-can@vger.kernel.org>; Tue,  2 Apr 2024 16:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711719325; cv=none; b=uQx6vcrOP0w5TNhTJ3v9FxBQ7SKIve0X/J04JTs0FrHZNbIYb4VkhTBKNhH570sHRgzxTiMgxhB60u+9z3fZfmLs3x1VEllnyilpC4fkR7DqJZqXv3MKLLh4ILrnnLRpskZP558q+8O21Ry9iPg/tIKnuRoWKwB5x2uEKOd+2Gs=
+	t=1712075524; cv=none; b=VERbc+7GflIPXH++djuvdp2EQL/y8HZ96sF1tz0LqsX6lCR4/iLd4TenZCglZZy05kjNy+MWvGA7+k+jVYpX1mIXswKpt26lw2MW39gDkSWShjlqNm4i5YXjQIHvjHHNYhc+s0mXl9dC+IMyAmdI7i2r3uRLtf7eqp9pNmmpycY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711719325; c=relaxed/simple;
-	bh=XqW0pz67SMVtuVHLzfJoSI0aZ0LQoUT1RkHvkS1BmGM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fTFFv81jwRW2RqkeKeIrT+71rE0zFJh0ikY+x1915ERdtzux4lNuFwhbuQP7Ls3gBm0qgJd4ZPp8PkKi2luygxQdutwfGofWy3WgBUjH4DNHnqVMqHqRtKbbNe6DmqTo1JjvQdyjQLYY3YJQ8csfS+dUH8dALNAH2inYiGBiczg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FkwTAtcp; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-515a81928a1so3170393e87.3;
-        Fri, 29 Mar 2024 06:35:23 -0700 (PDT)
+	s=arc-20240116; t=1712075524; c=relaxed/simple;
+	bh=ge2vhH25KAIh3hkTAi6yG2hZXUBEpPqAfyzxNqzv0cM=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ndC2fWQ9FErjHYpNn/HQ0dKkqMR5J1Ax1i+dwZtYr+W8eJXeletmxq2j872Ep0ATnVYBdZaRqBG8B4Ma68O8PbA5V4S7y7lWgaATM73Sq0tPB/u/I7ElNoREbLmYucPswmLVBaKSL/pOrgL57hLuFBH9IAPf5bKsKk/y/JUnIX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maxiluxsystems.com; spf=none smtp.mailfrom=maxiluxsystems.com; dkim=pass (2048-bit key) header.d=maxiluxsystems-com.20230601.gappssmtp.com header.i=@maxiluxsystems-com.20230601.gappssmtp.com header.b=D/GMsWf+; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maxiluxsystems.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=maxiluxsystems.com
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2a274955aacso406407a91.2
+        for <linux-can@vger.kernel.org>; Tue, 02 Apr 2024 09:32:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711719322; x=1712324122; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vtuRBjAJn4O48g7WcMLMBfcBBgKg57RH9Zv6FuGBosU=;
-        b=FkwTAtcp4VGarY7QdzVmD4V51nRRZpDg4Bcc4H8lntf94WONoPQhDAJFjgwLYavbHN
-         ZQvi+BqqRn8Yjut0GG/r+eJjwE4ci7uP8F3xekCQ+eZSd+bNogWCnSQdwdMkIJrGh/tl
-         T5+T3efwRxK17fJKeKb4LKrEgxqxG60IwXArGFLagp7GpyMn1yw3KIHpVjxzVLKCwd35
-         sr4/mZ85+lgB4j6Fm/F/vJ9NVEIs4eZo6VfvQOah+ZbV4ugnYrwMixCC8+ifEXkLzZHs
-         8Cx9dFihb2U4hWxcfPHa/wO9rAVX0nHbyDOi8Xu3eHRcg7I0AQBOfcgb8l1Gxna+qabH
-         3k/A==
+        d=maxiluxsystems-com.20230601.gappssmtp.com; s=20230601; t=1712075522; x=1712680322; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ge2vhH25KAIh3hkTAi6yG2hZXUBEpPqAfyzxNqzv0cM=;
+        b=D/GMsWf+zfQnhXIf/hXerFu2oSw5VbYSNO6O5hrLQgMY6Ldeul+iTKXVrABUCoL7Kh
+         jK30gux8IfdWf6tmVIiMnj13ivwmWZe4wZXfGv6H2ZVJFKDRjRwYqKAuIuI3IIugsuPx
+         /I9KCev055MkLT4L85lbGFZ8deJ7BLYPUpkCSS+FCmu5z3+/xu9ipgt2rEY5FpKEmU7y
+         wULp6XZNDTjoRAOl4JVZcFdTODtQwsGA7I8NB3DkyinyG/CyZrZASaCuEvY2sZ2WA05O
+         yOjBWTT8Rrt07QNZeaERDpUZcfFGtkQ9i3fjmYnx+0dOytf0skfUply4TQnrda2HL+YT
+         PkHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711719322; x=1712324122;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vtuRBjAJn4O48g7WcMLMBfcBBgKg57RH9Zv6FuGBosU=;
-        b=KQHZjb+hUuPGSbHCIviIkOjYLxJRnH2N7Qwopr1QfENwk//cBA20uPGkxyUpajDPfM
-         2+y+WhpJ2C7bOMEg8jH7N1bCXV5kmsPwz8O4qZZzdBQ/l9lRw6hjSnb1NbGfk7Eobtl7
-         JbMGMcYZp2xlKmpPsSd5DR6zVFWvAmdlfY35MnDlAqwHd0zvVtwmEPEs9DlClqYSZ7vn
-         c1JVPP8SNhF0Fc8O4TZbAOQuaseZs5KT9xrWO9wIXM+es7ztitM/P+UX3MmQCItN7Mqm
-         URjjLsO6OUdbkeRhiQMebvo/ISPzRe+o+Jw/t8Amd8NmPB5QEGEh4W1Y4aekvoLYGcMy
-         Itiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUUipPLlY6p0BdSeawltaTZfXy4esykjBv/JlbeoBXkteR+NiViK6Dxj13BaygDvKg9Yc5sVcdhNOWLNHKnqEvh/lOEFl8p9kFxJSY8KA/VRI2kerhnAwd3OXefygX/cR+hjpzQfsy4
-X-Gm-Message-State: AOJu0Yyz/GPjP1f1j2gpNbYElXVTGQdWuZfrLzvpqTshnVB4HeLVKmpw
-	1T82EbeXt5hLYgs2909bpPYNq/lJC/xyjBEKNJHhdX12p6uBw+Ni
-X-Google-Smtp-Source: AGHT+IGkoZWB1ddBYSrPQ24MclU2Azl1nk0k/RTzRnmLCuV7RjqC8U1owT3i0Y+pnFrrla50Cm+lDw==
-X-Received: by 2002:a19:8c5a:0:b0:515:c113:381c with SMTP id i26-20020a198c5a000000b00515c113381cmr2176867lfj.30.1711719321284;
-        Fri, 29 Mar 2024 06:35:21 -0700 (PDT)
-Received: from fedora.fritz.box (host-79-34-203-60.business.telecomitalia.it. [79.34.203.60])
-        by smtp.gmail.com with ESMTPSA id x16-20020a170906135000b00a46ee3c31afsm1921408ejb.154.2024.03.29.06.35.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Mar 2024 06:35:20 -0700 (PDT)
-From: Francesco Valla <valla.francesco@gmail.com>
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Simon Horman <horms@kernel.org>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	fabio@redaril.me,
-	Francesco Valla <valla.francesco@gmail.com>
-Subject: [PATCH v2 1/1] Documentation: networking: document ISO 15765-2:2016
-Date: Fri, 29 Mar 2024 14:34:41 +0100
-Message-ID: <20240329133458.323041-3-valla.francesco@gmail.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240329133458.323041-2-valla.francesco@gmail.com>
-References: <20240329133458.323041-2-valla.francesco@gmail.com>
+        d=1e100.net; s=20230601; t=1712075522; x=1712680322;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ge2vhH25KAIh3hkTAi6yG2hZXUBEpPqAfyzxNqzv0cM=;
+        b=C/GsRCYWQ+23L931Iz9kkiy0z4rfZzlofXN0DAqeRXPiff61MYzO+b4a6CqXmbYkMA
+         9BA5HWJYcecm/fGcmVvdJdw9aC8MZPEnEDdSmsfTBtibvT3/x8ErRuT+j0+jElMjgcG+
+         Al4/N7lOPQbWUkGCwPDJXH78fCMhLUU+pnTWoQAWZj/yuHG5Cnwr8aNNcVViElPWxOdG
+         8aVtY/o8xuTBN1f1bjEaYTK4LI+KyxmXOkIKsRYjZkAG71ivLvRj7QSPgs0M9DbkpXPb
+         cnL3o3EK6apAkVYmsSbxcKL0CDM097jIV8yFHpdkXkJFxsSR8JzOCDlEV68d14q0JYhw
+         ljwg==
+X-Gm-Message-State: AOJu0Yxd5HsdF3SnWQWck9D64X5OMq1Ii2fKj30IUcd3ProFk9tzgbQL
+	RrShQKheu4vFOg0P0W3BOTJ/xj1lGE5hzWuaTZCBGSnR/9aBX67VKEHZvKW/s9vA6ryErVvfYxk
+	rLKNqTIQkq5J29dOuXIHAsOqmjcdNkQXc0FYmkV9Qo8iE76ruPu0=
+X-Google-Smtp-Source: AGHT+IHv1NdIAzzt4wZTIkWzBGXuT8m+ytJCAtFPfwAPasoeZzRxw+8n0JXFxqNpnIzM7LIa4yfra/IMig3Mc/8sjkg=
+X-Received: by 2002:a17:90a:be05:b0:29f:f619:7c2f with SMTP id
+ a5-20020a17090abe0500b0029ff6197c2fmr9636262pjs.27.1712075521862; Tue, 02 Apr
+ 2024 09:32:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Torin Cooper-Bennun <tcbennun@maxiluxsystems.com>
+Date: Tue, 2 Apr 2024 17:31:50 +0100
+Message-ID: <CAALJrqi6HN_qXcOcYUnp9ihhGyLxmGid6gkR3Czj13YVLJt5sQ@mail.gmail.com>
+Subject: Rare mcp251xfd crash after CRC read error, in timestamp read routine
+To: linux-can <linux-can@vger.kernel.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Content-Type: multipart/mixed; boundary="0000000000004f69f906151fa542"
 
-Document basic concepts, APIs and behaviour of the ISO 15675-2:2016
-(ISO-TP) CAN stack.
+--0000000000004f69f906151fa542
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Francesco Valla <valla.francesco@gmail.com>
----
- Documentation/networking/index.rst      |   1 +
- Documentation/networking/iso15765-2.rst | 356 ++++++++++++++++++++++++
- MAINTAINERS                             |   1 +
- 3 files changed, 358 insertions(+)
- create mode 100644 Documentation/networking/iso15765-2.rst
+Hello Marc et al.,
 
-diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 473d72c36d61..bbd9bf537793 100644
---- a/Documentation/networking/index.rst
-+++ b/Documentation/networking/index.rst
-@@ -19,6 +19,7 @@ Contents:
-    caif/index
-    ethtool-netlink
-    ieee802154
-+   iso15765-2
-    j1939
-    kapi
-    msg_zerocopy
-diff --git a/Documentation/networking/iso15765-2.rst b/Documentation/networking/iso15765-2.rst
-new file mode 100644
-index 000000000000..bbed4d2ef1a8
---- /dev/null
-+++ b/Documentation/networking/iso15765-2.rst
-@@ -0,0 +1,356 @@
-+.. SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-+
-+=========================
-+ISO 15765-2:2016 (ISO-TP)
-+=========================
-+
-+Overview
-+========
-+
-+ISO 15765-2:2016, also known as ISO-TP, is a transport protocol specifically
-+defined for diagnostic communication on CAN. It is widely used in the automotive
-+industry, for example as the transport protocol for UDSonCAN (ISO 14229-3) or
-+emission-related diagnostic services (ISO 15031-5).
-+
-+ISO-TP can be used both on CAN CC (aka Classical CAN, CAN 2.0B) and CAN FD (CAN
-+with Flexible Datarate) based networks. It is also designed to be compatible
-+with a CAN network using SAE J1939 as data link layer (however, this is not a
-+requirement).
-+
-+Specifications used
-+-------------------
-+
-+* ISO 15765-2:2016 : Road vehicles - Diagnostic communication over Controller
-+  Area Network (DoCAN). Part 2: Transport protocol and network layer services.
-+
-+Addressing
-+----------
-+
-+In its simplest form, ISO-TP is based on two kinds of addressing modes for the
-+nodes connected to the same network:
-+
-+- physical addressing is implemented by two node-specific addresses (CAN
-+  identifiers) and is used in 1-to-1 communication
-+- functional addressing is implemented by one node-specific address (CAN
-+  identifier) and is used in 1-to-N communication
-+
-+In a so-called "normal" addressing scenario, both these addresses are
-+represented by a 29-bit CAN ID. However, in order to support larger networks,
-+an "extended" addressing scheme can be adopted: in this case, the first byte of
-+the data payload is used as an additional component of the address (both for
-+the physical and functional cases); two different CAN IDs are still required.
-+
-+Transport protocol and associated frame types
-+---------------------------------------------
-+
-+When transmitting data using the ISO-TP protocol, the payload can either fit
-+inside one single CAN message or not, also considering the overhead the protocol
-+is generating and the optional extended addressing. In the first case, the data
-+is transmitted at once using a so-called Single Frame (SF). In the second case,
-+ISO-TP defines a multi-frame protocol, in which the sender provides (through a
-+First Frame - FF) the PDU length which is to be transmitted and also asks for a
-+Flow Control (FC) frame, which provides the maximum supported size of a macro
-+data block (``blocksize``) and the minimum time between the single CAN messages
-+composing such block (``stmin``). Once this information has been received, the
-+sender starts to send frames containing fragments of the data payload (called
-+Consecutive Frames - CF), stopping after every ``blocksize``-sized block to wait
-+confirmation from the receiver (which should then send another Flow Control
-+frame to inform the sender about its availability to receive more data).
-+
-+How to Use ISO-TP
-+=================
-+
-+As with others CAN protocols, the ISO-TP stack support is built into the
-+Linux network subsystem for the CAN bus, aka. Linux-CAN or SocketCAN, and
-+thus follows the same socket API.
-+
-+Creation and basic usage of an ISO-TP socket
-+--------------------------------------------
-+
-+To use the ISO-TP stack, ``#include <linux/can/isotp.h>`` shall be used. A
-+socket can then be created using the ``PF_CAN`` protocol family, the
-+``SOCK_DGRAM`` type (as the underlying protocol is datagram-based by design)
-+and the ``CAN_ISOTP`` protocol:
-+
-+.. code-block:: C
-+
-+    s = socket(PF_CAN, SOCK_DGRAM, CAN_ISOTP);
-+
-+After the socket has been successfully created, ``bind(2)`` shall be called to
-+bind the socket to the desired CAN interface; to do so:
-+
-+* a TX CAN ID shall be specified as part of the sockaddr supplied to the call
-+  itself, and
-+* a RX CAN ID shall also specified, unless broadcast flags have been set
-+  through socket option (explained below)
-+
-+Once bound to an interface, the socket can be read from and written to using
-+the usual ``read(2)`` and ``write(2)`` system calls, as well as ``send(2)``,
-+``sendmsg(2)``, ``recv(2)`` and ``recvmsg(2)``.
-+Unlike the CAN_RAW socket API, only the data payload shall be specified in all
-+these calls, as the CAN header is automatically filled by the ISO-TP stack
-+using information supplied during socket creation. In the same way, the stack
-+will use the transport mechanism when required (i.e., when the size of the data
-+payload exceeds the MTU of the underlying CAN bus).
-+
-+The sockaddr structure used for SocketCAN has extensions for use with ISO-TP,
-+as specified below:
-+
-+.. code-block:: C
-+
-+    struct sockaddr_can {
-+        sa_family_t can_family;
-+        int         can_ifindex;
-+        union {
-+            struct { canid_t rx_id, tx_id; } tp;
-+        ...
-+        } can_addr;
-+    }
-+
-+* ``can_family`` and ``can_ifindex`` serve the same purpose as for other
-+  SocketCAN sockets.
-+
-+* ``can_addr.tp.rx_id`` specifies the receive (RX) CAN ID and will be used as
-+  a RX filter.
-+
-+* ``can_addr.tp.tx_id`` specifies the transmit (TX) CAN ID
-+
-+ISO-TP socket options
-+---------------------
-+
-+When creating an ISO-TP socket, reasonable defaults are set. Some options can
-+be modified with ``setsockopt(2)`` and/or read back with ``getsockopt(2)``.
-+
-+General options
-+~~~~~~~~~~~~~~~
-+
-+General socket options can be passed using the ``CAN_ISOTP_OPTS`` optname:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_options opts;
-+    ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_OPTS, &opts, sizeof(opts))
-+
-+where the ``can_isotp_options`` structure has the following contents:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_options {
-+        u32 flags;
-+        u32 frame_txtime;
-+        u8  ext_address;
-+        u8  txpad_content;
-+        u8  rxpad_content;
-+        u8  rx_ext_address;
-+    };
-+
-+* ``flags``: modifiers to be applied to the default behaviour of the ISO-TP
-+  stack. Following flags are available:
-+
-+  - ``CAN_ISOTP_LISTEN_MODE``: listen only (do not send FC frames); normally
-+    used as a testing feature.
-+  - ``CAN_ISOTP_EXTEND_ADDR``: enable extended addressing, using the byte
-+    specified in ``ext_address`` as additional address byte.
-+  - ``CAN_ISOTP_TX_PADDING``: enable padding for tranmsitted frames, using
-+    ``txpad_content`` as value for the padding bytes.
-+  - ``CAN_ISOTP_RX_PADDING``: enable padding for the received frames, using
-+    ``rxpad_content`` as value for the padding bytes.
-+  - ``CAN_ISOTP_CHK_PAD_LEN``: check for correct padding length on the received
-+    frames.
-+  - ``CAN_ISOTP_CHK_PAD_DATA``: check padding bytes on the received frames
-+    against ``rxpad_content``; if ``CAN_ISOTP_RX_PADDING`` is not specified,
-+    this flag is ignored.
-+  - ``CAN_ISOTP_HALF_DUPLEX``: force ISO-TP socket in half duples mode
-+    (that is, transport mechanism can only be incoming or outgoing at the same
-+    time, not both).
-+  - ``CAN_ISOTP_FORCE_TXSTMIN``: ignore stmin from received FC; normally
-+    used as a testing feature.
-+  - ``CAN_ISOTP_FORCE_RXSTMIN``: ignore CFs depending on rx stmin; normally
-+    used as a testing feature.
-+  - ``CAN_ISOTP_RX_EXT_ADDR``: use ``rx_ext_address`` instead of ``ext_address``
-+    as extended addressing byte on the reception path.
-+  - ``CAN_ISOTP_WAIT_TX_DONE``: wait until the frame is sent before returning
-+    from ``write(2)`` and ``send(2)`` calls (i.e., blocking write operations).
-+  - ``CAN_ISOTP_SF_BROADCAST``: use 1-to-N functional addressing (cannot be
-+    specified alongside ``CAN_ISOTP_CF_BROADCAST``).
-+  - ``CAN_ISOTP_CF_BROADCAST``: use 1-to-N transmission without flow control
-+    (cannot be specified alongside ``CAN_ISOTP_SF_BROADCAST``).
-+    NOTE: this is not covered by the ISO15765-2:2016 standard.
-+  - ``CAN_ISOTP_DYN_FC_PARMS``: enable dynamic update of flow control
-+    parameters.
-+
-+* ``frame_txtime``: frame transmission time (defined as N_As/N_Ar inside the
-+  ISO standard); if ``0``, the default (or the last set value) is used.
-+  To set the transmission time to ``0``, the ``CAN_ISOTP_FRAME_TXTIME_ZERO``
-+  macro (equal to 0xFFFFFFFF) shall be used.
-+
-+* ``ext_address``: extended addressing byte, used if the
-+  ``CAN_ISOTP_EXTEND_ADDR`` flag is specified.
-+
-+* ``txpad_content``: byte used as padding value for transmitted frames
-+
-+* ``rxpad_content``: byte used as padding value for received frames
-+
-+* ``rx_ext_address``: extended addressing byte for the reception path, used if
-+  the ``CAN_ISOTP_RX_EXT_ADDR`` flag is specified.
-+
-+Flow Control options
-+~~~~~~~~~~~~~~~~~~~~
-+
-+Flow Control (FC) options can be passed using the ``CAN_ISOTP_RECV_FC`` optname
-+to provide the communication parameters for receiving ISO-TP PDUs.
-+
-+.. code-block:: C
-+
-+    struct can_isotp_fc_options fc_opts;
-+    ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_RECV_FC, &fc_opts, sizeof(fc_opts));
-+
-+where the ``can_isotp_fc_options`` structure has the following contents:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_options {
-+        u8 bs;
-+        u8 stmin;
-+        u8 wftmax;
-+    };
-+
-+* ``bs``: blocksize provided in flow control frames.
-+
-+* ``stmin``: minimum separation time provided in flow control frames; can
-+  have the following values (others are reserved):
-+  - 0x00 - 0x7F : 0 - 127 ms
-+  - 0xF1 - 0xF9 : 100 us - 900 us
-+
-+* ``wftmax``: maximum number of wait frames provided in flow control frames.
-+
-+Link Layer options
-+~~~~~~~~~~~~~~~~~~
-+
-+Link Layer (LL) options can be passed using the ``CAN_ISOTP_LL_OPTS`` optname:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_ll_options ll_opts;
-+    ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_LL_OPTS, &ll_opts, sizeof(ll_opts));
-+
-+where the ``can_isotp_ll_options`` structure has the following contents:
-+
-+.. code-block:: C
-+
-+    struct can_isotp_ll_options {
-+        u8 mtu;
-+        u8 tx_dl;
-+        u8 tx_flags;
-+    };
-+
-+* ``mtu``: generated and accepted CAN frame type, can be equal to ``CAN_MTU``
-+  for classical CAN frames or ``CANFD_MTU`` for CAN FD frames.
-+
-+* ``tx_dl``: maximum payload length for transmitted frames, can have one value
-+  among: 8, 12, 16, 20, 24, 32, 48, 64. Values above 8 only apply to CAN FD
-+  traffic (i.e.: ``mtu = CANFD_MTU``).
-+
-+* ``tx_flags``: flags set into ``struct canfd_frame.flags`` at frame creation.
-+  Only applies to CAN FD traffic (i.e.: ``mtu = CANFD_MTU``).
-+
-+Transmission stmin
-+~~~~~~~~~~~~~~~~~~
-+
-+The transmission minimum separaton time (stmin) can be forced using the
-+``CAN_ISOTP_TX_STMIN`` optname and providing an stmin value in microseconds as
-+a 32bit unsigned integer; this will overwrite the value sent by the receiver in
-+flow control frames:
-+
-+.. code-block:: C
-+
-+    uint32_t stmin;
-+    ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_TX_STMIN, &stmin, sizeof(stmin));
-+
-+Reception stmin
-+~~~~~~~~~~~~~~~
-+
-+The reception minimum separaton time (stmin) can be forced using the
-+``CAN_ISOTP_RX_STMIN`` optname and providing an stmin value in microseconds as
-+a 32bit unsigned integer; received Consecutive Frames (CF) which timestamps
-+differ less than this value will be ignored:
-+
-+.. code-block:: C
-+
-+    uint32_t stmin;
-+    ret = setsockopt(s, SOL_CAN_ISOTP, CAN_ISOTP_RX_STMIN, &stmin, sizeof(stmin));
-+
-+Multi-frame transport support
-+-----------------------------
-+
-+The ISO-TP stack contained inside the Linux kernel supports the multi-frame
-+transport mechanism defined by the standard, with the following constraints:
-+
-+* the maximum size of a PDU is defined by a module parameter, with an hard
-+  limit imposed at build time
-+* when a transmission is in progress, subsequent calls to ``write(2)`` will
-+  block, while calls to ``send(2)`` will either block or fail depending on the
-+  presence of the ``MSG_DONTWAIT`` flag
-+* no support is present for sending "wait frames": whether a PDU can be fully
-+  received or not is decided when the First Frame is received
-+
-+Errors
-+------
-+
-+Following errors are reported to userspace:
-+
-+RX path errors
-+~~~~~~~~~~~~~~
-+
-+============ ===============================================================
-+-ETIMEDOUT   timeout of data reception
-+-EILSEQ      sequence number mismatch during a multi-frame reception
-+-EBADMSG     data reception with wrong padding
-+============ ===============================================================
-+
-+TX path errors
-+~~~~~~~~~~~~~~
-+
-+========== =================================================================
-+-ECOMM     flow control reception timeout
-+-EMSGSIZE  flow control reception overflow
-+-EBADMSG   flow control reception with wrong layout/padding
-+========== =================================================================
-+
-+Examples
-+========
-+
-+Basic node example
-+------------------
-+
-+Following example implements a node using "normal" physical addressing, with
-+RX ID equal to 0x18DAF142 and a TX ID equal to 0x18DA42F1. All options are left
-+to their default.
-+
-+.. code-block:: C
-+
-+  int s;
-+  struct sockaddr_can addr;
-+  int ret;
-+
-+  s = socket(PF_CAN, SOCK_DGRAM, CAN_ISOTP);
-+  if (s < 0)
-+      exit(1);
-+
-+  addr.can_family = AF_CAN;
-+  addr.can_ifindex = if_nametoindex("can0");
-+  addr.tp.tx_id = (0x18DA42F1 | CAN_EFF_FLAG);
-+  addr.tp.rx_id = (0x18DAF142 | CAN_EFF_FLAG);
-+
-+  ret = bind(s, (struct sockaddr *)&addr, sizeof(addr));
-+  if (ret < 0)
-+      exit(1);
-+
-+  // Data can now be received using read(s, ...) and sent using write(s, ...)
-+
-+Additional examples
-+-------------------
-+
-+More complete (and complex) examples can be found inside the ``isotp*`` userland
-+tools, distributed as part of the ``can-utils`` utilities at:
-+https://github.com/linux-can/can-utils
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6a233e1a3cf2..e0190b90d1a8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4695,6 +4695,7 @@ W:	https://github.com/linux-can
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git
- F:	Documentation/networking/can.rst
-+F:	Documentation/networking/iso15765-2.rst
- F:	include/linux/can/can-ml.h
- F:	include/linux/can/core.h
- F:	include/linux/can/skb.h
--- 
-2.44.0
+I have discovered a rare but annoying crash in mcp251xfd. I don't know how to
+replicate this directly, and the occurrence rate is very low (on the order of
+once per 1e7 frames or so).
 
+I cannot be too specific on our hardware, but we are running ARMv8, and the CAN
+chip is the MCP2518FD. The kernel version is 6.1.21.
+
+The crash always happens immediately following a CRC read error. I've attached
+a sample kernel log of the crash (hopefully correctly - I've not interacted
+with mailing lists for a while). So far, the call trace is always the same.
+
+To be clear, this is not after every CRC read error; those are several orders
+of magnitude more frequent than this crash.
+
+I've done a tiny bit of digging myself, but I'm not familiar with the
+territory. I guess something in the SPI dev struct is being set to NULL, while
+an SPI transaction is ongoing - but it surely must be related to the CRC read
+error and the timestamp read.
+
+Thanks for reading :)
+
+--0000000000004f69f906151fa542
+Content-Type: application/octet-stream; name="oops.log"
+Content-Disposition: attachment; filename="oops.log"
+Content-Transfer-Encoding: base64
+Content-ID: <f_luiliv0a0>
+X-Attachment-Id: f_luiliv0a0
+
+bWNwMjUxeGZkIHNwaTAuMCBjYW4wOiBDUkMgcmVhZCBlcnJvciBhdCBhZGRyZXNzIDB4MDAxMCAo
+bGVuZ3RoPTQsIGRhdGE9ODQgYmIgNDUgMWYsIENSQz0weDI1YzgpIHJldHJ5aW5nLgpVbmFibGUg
+dG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2UgYXQgdmlydHVhbCBhZGRy
+ZXNzIDAwMDAwMDAwMDAwMDAwMDgKTWVtIGFib3J0IGluZm86CiAgRVNSID0gMHgwMDAwMDAwMDk2
+MDAwMDA1CiAgRUMgPSAweDI1OiBEQUJUIChjdXJyZW50IEVMKSwgSUwgPSAzMiBiaXRzCiAgU0VU
+ID0gMCwgRm5WID0gMAogIEVBID0gMCwgUzFQVFcgPSAwCiAgRlNDID0gMHgwNTogbGV2ZWwgMSB0
+cmFuc2xhdGlvbiBmYXVsdApEYXRhIGFib3J0IGluZm86CiAgSVNWID0gMCwgSVNTID0gMHgwMDAw
+MDAwNQogIENNID0gMCwgV25SID0gMAp1c2VyIHBndGFibGU6IDRrIHBhZ2VzLCAzOS1iaXQgVkFz
+LCBwZ2RwPTAwMDAwMDAwNzI2YTIwMDAKWzAwMDAwMDAwMDAwMDAwMDhdIHBnZD0wMDAwMDAwMDAw
+MDAwMDAwLCBwNGQ9MDAwMDAwMDAwMDAwMDAwMCwgcHVkPTAwMDAwMDAwMDAwMDAwMDAKSW50ZXJu
+YWwgZXJyb3I6IE9vcHM6IDAwMDAwMDAwOTYwMDAwMDUgWyMxXSBQUkVFTVBUIFNNUApNb2R1bGVz
+IGxpbmtlZCBpbjogW1JFREFDVEVEXSBtY3AyNTF4ZmQgY2FuX2RldiBzcGlkZXYgW1JFREFDVEVE
+XQpDUFU6IDMgUElEOiAyNTA2ODkwIENvbW06IGt3b3JrZXIvMzoyIFRhaW50ZWQ6IEcgICAgICAg
+ICBDICAgICAgICAgNi4xLjIxLXY4KyAjMTY0MgpIYXJkd2FyZSBuYW1lOiBbUkVEQUNURURdCldv
+cmtxdWV1ZTogZXZlbnRzIG1jcDI1MXhmZF90aW1lc3RhbXBfd29yayBbbWNwMjUxeGZkXQpwc3Rh
+dGU6IDgwMDAwMGM1IChOemN2IGRhSUYgLVBBTiAtVUFPIC1UQ08gLURJVCAtU1NCUyBCVFlQRT0t
+LSkKcGMgOiBfcmF3X3NwaW5fbG9ja19pcnFzYXZlKzB4N2MvMHhjOApsciA6IF9yYXdfc3Bpbl9s
+b2NrX2lycXNhdmUrMHgzYy8weGM4CnNwIDogZmZmZmZmYzAwY2NjMzg0MAp4Mjk6IGZmZmZmZmMw
+MGNjYzM4NDAgeDI4OiBmZmZmZmY4MDQzODBlODAwIHgyNzogZmZmZmZmZWFiNzg0NDAwOAp4MjY6
+IGZmZmZmZmVhYjdiNTg4OTggeDI1OiAwMDAwMDA2N2FjMDY3ZWIwIHgyNDogZmZmZmZmYzAwY2Nj
+M2E2MAp4MjM6IGZmZmZmZmMwMGNjYzNiMzAgeDIyOiBmZmZmZmZjMDBjY2MzYjMwIHgyMTogZmZm
+ZmZmODA0MzgwZTgwMAp4MjA6IDAwMDAwMDAwMDAwMDAwMDAgeDE5OiAwMDAwMDAwMDAwMDAwMDA4
+IHgxODogMDAwMDAwMDAwMDAwMDAzMAp4MTc6IDNkNjg3NDY3NmU2NTZjMjggeDE2OiBmZmZmZmZl
+YWI2ZmRhOGY4IHgxNTogNzM3MzY1NzI2NDY0NjEyMAp4MTQ6IDc0NjEyMDcyNmY3MjcyNjUgeDEz
+OiAyZTY3NmU2OTc5NzI3NDY1IHgxMjogZmZmZmZmZWFiN2JlNzNiMAp4MTE6IDAwMDAwMDAwMDAw
+MDAwMDMgeDEwOiAwMDAwMDAwMDAwMDAwMDAxIHg5IDogZmZmZmZmZWFiNzM3MTc2NAp4OCA6IDAw
+MDAwMDAwMDAwMTdmZTggeDcgOiBmZmZmZmZjMDBjY2M0MDAwIHg2IDogZmZmZmZmYzAwY2NjMDAw
+MAp4NSA6IGZmZmZmZmMwMGNjYzQwMDAgeDQgOiBmZmZmZmZjMDBjY2MzODUwIHgzIDogMDAwMDAw
+MDAwMDAwMDAwMAp4MiA6IDAwMDAwMDAwMDAwMDAwMDEgeDEgOiAwMDAwMDAwMDAwMDAwMDAwIHgw
+IDogZmZmZmZmODA0YWFmODAwMApDYWxsIHRyYWNlOgogX3Jhd19zcGluX2xvY2tfaXJxc2F2ZSsw
+eDdjLzB4YzgKIGNvbXBsZXRlKzB4MmMvMHg4MAogc3BpX2NvbXBsZXRlKzB4MTgvMHgyOAogc3Bp
+X2ZpbmFsaXplX2N1cnJlbnRfbWVzc2FnZSsweDFhNC8weDJjOAogc3BpX3RyYW5zZmVyX29uZV9t
+ZXNzYWdlKzB4MzhjLzB4N2U4CiBfX3NwaV9wdW1wX3RyYW5zZmVyX21lc3NhZ2UrMHgyNDgvMHg2
+NDAKIF9fc3BpX3N5bmMrMHgyNzQvMHgzZDAKIHNwaV9zeW5jKzB4MzgvMHg2MAogbWNwMjUxeGZk
+X3JlZ21hcF9jcmNfcmVhZCsweDE1MC8weDJlMCBbbWNwMjUxeGZkXQogX3JlZ21hcF9yYXdfcmVh
+ZCsweGU0LzB4MmIwCiBfcmVnbWFwX2J1c19yZWFkKzB4NGMvMHg4OAogX3JlZ21hcF9yZWFkKzB4
+NzAvMHgxYTgKIHJlZ21hcF9yZWFkKzB4NTQvMHg4MAogbWNwMjUxeGZkX3RpbWVzdGFtcF9yZWFk
+KzB4NDgvMHg5MCBbbWNwMjUxeGZkXQogdGltZWNvdW50ZXJfcmVhZCsweDJjLzB4NzgKIG1jcDI1
+MXhmZF90aW1lc3RhbXBfd29yaysweDI0LzB4NTAgW21jcDI1MXhmZF0KIHByb2Nlc3Nfb25lX3dv
+cmsrMHgyMDgvMHg0ODAKIHdvcmtlcl90aHJlYWQrMHg1MC8weDQyOAoga3RocmVhZCsweGZjLzB4
+MTEwCiByZXRfZnJvbV9mb3JrKzB4MTAvMHgyMApDb2RlOiBkNjVmMDNjMCBkMjgwMDAwMSA1Mjgw
+MDAyMiBmOTgwMDI3MSAoODg1ZmZlNjApIAotLS1bIGVuZCB0cmFjZSAwMDAwMDAwMDAwMDAwMDAw
+IF0tLS0Kbm90ZToga3dvcmtlci8zOjJbMjUwNjg5MF0gZXhpdGVkIHdpdGggaXJxcyBkaXNhYmxl
+ZApub3RlOiBrd29ya2VyLzM6MlsyNTA2ODkwXSBleGl0ZWQgd2l0aCBwcmVlbXB0X2NvdW50IDEK
+Cg==
+--0000000000004f69f906151fa542--
 
