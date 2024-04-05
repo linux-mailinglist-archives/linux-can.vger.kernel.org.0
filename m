@@ -1,105 +1,117 @@
-Return-Path: <linux-can+bounces-422-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-424-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F7B4899BB9
-	for <lists+linux-can@lfdr.de>; Fri,  5 Apr 2024 13:19:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49A29899BC5
+	for <lists+linux-can@lfdr.de>; Fri,  5 Apr 2024 13:21:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7AF61B21AF7
-	for <lists+linux-can@lfdr.de>; Fri,  5 Apr 2024 11:18:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA8D81F22F6D
+	for <lists+linux-can@lfdr.de>; Fri,  5 Apr 2024 11:21:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BB7B16C44D;
-	Fri,  5 Apr 2024 11:18:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2962E16C458;
+	Fri,  5 Apr 2024 11:21:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MeKmT5pU"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gWENtA0a"
 X-Original-To: linux-can@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0937D2032D;
-	Fri,  5 Apr 2024 11:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B99316C44C;
+	Fri,  5 Apr 2024 11:21:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712315933; cv=none; b=h4RBwyV1031u0nogLQl3Tb0ZLMXf5jcCGq5D0UFZHhHpoGa5Zv9EqSdX3+Mot68tHzDUJyZzTzVXOlRoQrHX2mmbokLrXrzLuPd8Nf+DXoARR0IEvtbE/ocrW29qHjMv7OVH7uYEG9h28mS7+gTjhd8E42rmF7fUzAzi+5WUsu8=
+	t=1712316088; cv=none; b=q6hkNju1fBelQkjE04Wt0PnVD1BzK5h7RSAPiG8fSEa/no+hkzJ9/3e1Dbgip2L2SUrEY7CHuyuDf2aHWAXleQldqTyzUEI1d1YopzxH59mAznnu6ugeCei83lPDLyvmeTT5MhGn6/eQgk/YCTQPct1Zn/u5kdlf25yvTfzwR9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712315933; c=relaxed/simple;
-	bh=fHSjG8AZo0FX4nSlP+Ivgqsk4xVhRJKYEhULtlxYVso=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=V0TEO0JZ83UCDfvnGAX6nG2yOEq0hnxdancJlfBFGpcbRg6LanBfEvHIle9yumiXysGL1y0fdSDfG9olbpkyNO3hcRVHgiOdP48dn8T2BJg7nVun/ynDR8h2bS2v1lvVnxxdd0mAWxclUiKhPfT4LjEwaIQwGX1/q7bSI274sNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MeKmT5pU; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1712316088; c=relaxed/simple;
+	bh=uxdtZOYXhengGWwZXZonOk5LihR8NR7q33quXNXAvg8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=k4CLwg2dlFHkVK2bp17gPygLqpbYnebqyaVb7Q8LTMQoTR6+tkUOEcwUBDvyRdHaP7gCl6a+d+Z04GDTobJ9Mt/4KbhPP0ve8Um5/DeO/iBEAud7zcO83F+1ml6KbNxB6APSVnJzTtgvjIL6LAh/8jsZYFS7ldQxIjX8OF0vwbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gWENtA0a; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 435AVuWR000631;
-	Fri, 5 Apr 2024 11:18:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=y0LU6CIkPpNU6xA+PTZzNEpure5X6gej72qFqBV1D20=;
- b=MeKmT5pU6TT475aBEMiFdSZRMZDB2bfpJl6gv1Kgp1uu2pZevuhdhuONOn5o3eVIcw0U
- wQXza84urhA4aCoLNTnf1/L9YYD0jGDn5PGkVx0X/x9snQDu50iuv8jx4Uy/rD6O26OF
- 0TbD9GgmwBV+uEn2bZC50055yokSSntABPEknWRnDEvOz5u1Tj3fBdvNYalbTb01/6Lb
- yKmHG35Kwc6bW/gxlSUl+EI8Ik8dG6O/ki2yWOwN3C/gK2B1Vo6uBmXItcFW/eDriNXK
- P2kSiQLc2mCpKe2nkOxewJsgEeoVbML9KvKsDG4zz/nM7YlZ+Io++RnICTzP078/2ybk bA== 
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 435AWREs001013;
+	Fri, 5 Apr 2024 11:21:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=+/DZazVdDgz9vkr7XNWWsXj9bzeEYUkuwtMjHCy5u7c=;
+ b=gWENtA0axJNmBfu81NvsPNk0e3dPcFjIau8cBETrEGmPBf8jSq9OrvSNjA7rsOjoBM3e
+ 1HnsYznIWWun87rcCkIrLgnJRcHj6Zvtplw7chQkUyu1OuhZfTfdaidXbbugn1zG/Q1l
+ A3rTT+JKavD0e2Et5UtI8zqUH+7XsjDBuNtwgJZSAGc+gRmE5qpHzRh/K7blZNPIWnEN
+ TNn5b/oY1QtV8AoihW9g5p1c1q/b1YXVKBGeV24toHOluuq9cbXhoucd6/oHbtRhsh1a
+ cPH/YG23jMQSJDlcHA1dzTMSUi9uLhh0KSXcSw78hjOTlHvVCaMmqsenFXAdMgsEomsx kA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xaeakr8dg-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xaeakr8k5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 11:18:39 +0000
+	Fri, 05 Apr 2024 11:21:19 +0000
 Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 435BFZP2029550;
-	Fri, 5 Apr 2024 11:18:39 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xaeakr8db-1
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 435BLI8i005845;
+	Fri, 5 Apr 2024 11:21:18 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xaeakr8k0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 11:18:39 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4359r2Bi009100;
-	Fri, 5 Apr 2024 11:18:38 GMT
+	Fri, 05 Apr 2024 11:21:18 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4359nPSP003711;
+	Fri, 5 Apr 2024 11:21:17 GMT
 Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3x9epy22kd-1
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3x9epyj6ab-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 11:18:38 +0000
+	Fri, 05 Apr 2024 11:21:17 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 435BIWoG50266600
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 435BLDcE45416818
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 5 Apr 2024 11:18:34 GMT
+	Fri, 5 Apr 2024 11:21:15 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B0B692004F;
-	Fri,  5 Apr 2024 11:18:32 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id B0A1020043;
+	Fri,  5 Apr 2024 11:21:13 +0000 (GMT)
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 56D212005A;
-	Fri,  5 Apr 2024 11:18:32 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+	by IMSVA (Postfix) with ESMTP id A19982004D;
+	Fri,  5 Apr 2024 11:21:12 +0000 (GMT)
+Received: from [9.171.37.225] (unknown [9.171.37.225])
 	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  5 Apr 2024 11:18:32 +0000 (GMT)
+	Fri,  5 Apr 2024 11:21:12 +0000 (GMT)
+Message-ID: <2f6ca1375ac2ffdd2ac368e1d5c5221f6fbd427c.camel@linux.ibm.com>
+Subject: Re: [PATCH net-next 0/1] XYZ: Handle HAS_IOPORT dependencies
 From: Niklas Schnelle <schnelle@linux.ibm.com>
 To: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
+        Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
 Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Marc Kleine-Budde
+	 <mkl@pengutronix.de>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>, netdev@vger.kernel.org,
         linux-can@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-hams@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Subject: [PATCH net-next 1/1] net: handle HAS_IOPORT dependencies
-Date: Fri,  5 Apr 2024 13:18:31 +0200
-Message-Id: <20240405111831.3881080-2-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.40.1
+        linux-hams@vger.kernel.org, Arnd Bergmann
+	 <arnd@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org
+Date: Fri, 05 Apr 2024 13:21:12 +0200
 In-Reply-To: <20240405111831.3881080-1-schnelle@linux.ibm.com>
 References: <20240405111831.3881080-1-schnelle@linux.ibm.com>
+Autocrypt: addr=schnelle@linux.ibm.com; prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: MMRmpj8D8NKdYCsPaE6yic9FIbuFISZ1
+X-Proofpoint-GUID: P4v1SDgRl41l2tizrSWHrwjYBtTfzqfe
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RjhKE1gq53wuWnpSjOfs6S1Tu_sQCDJp
-X-Proofpoint-GUID: CptBld5yXKFHbap5VtUybL33TKqLcOoH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-04-05_10,2024-04-04_01,2023-05-22_02
@@ -109,339 +121,39 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malware
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2404010000 definitions=main-2404050081
 
-In a future patch HAS_IOPORT=n will disable inb()/outb() and friends at
-compile time. We thus need to add HAS_IOPORT as dependency for
-those drivers requiring them. For the DEFXX driver the use of I/O
-ports is optional and we only need to fence specific code paths. It also
-turns out that with HAS_IOPORT handled explicitly HAMRADIO does not need
-the !S390 dependency and successfully builds the bpqether driver.
+On Fri, 2024-04-05 at 13:18 +0200, Niklas Schnelle wrote:
+> Hi networking maintainers,
+>=20
+> This is a follow up in my ongoing effort of making inb()/outb() and
+> similar I/O port accessors compile-time optional. Previously I sent this
+> as a treewide series titled "treewide: Remove I/O port accessors for
+> HAS_IOPORT=3Dn" with the latest being its 5th version[0]. With a signific=
+ant
+> subset of patches merged I've changed over to per-subsystem series. These
+> series are stand alone and should be merged via the relevant tree such
+> that with all subsystems complete we can follow this up with the final
+> patch that will make the I/O port accessors compile-time optional.
+>=20
+> The current state of the full series with changes to the remaining subsys=
+tems
+> and the aforementioned final patch can be found for your convenience on my
+> git.kernel.org tree in the has_ioport branch[1]. As for compile-time vs r=
+untime
+> see Linus' reply to my first attempt[2].
+>=20
+> Thanks,
+> Niklas
+>=20
+> [0] https://lore.kernel.org/all/20230522105049.1467313-1-schnelle@linux.i=
+bm.com/
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/log/?h=
+=3Dhas_ioport
+> [2] https://lore.kernel.org/lkml/CAHk-=3Dwg80je=3DK7madF4e7WrRNp37e3qh6y1=
+0Svhdc7O8SZ_-8g@mail.gmail.com/
+>=20
+> Niklas Schnelle (1):
+>   net: handle HAS_IOPORT dependencies
+>=20
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Acked-by: Jakub Kicinski <kuba@kernel.org>
-Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
-Note: This patch does not depend any not-yet-mainline HAS_IOPORT changes
-and may be merged via subsystem specific trees at your earliest
-convenience.
-
- drivers/net/Kconfig                  | 2 +-
- drivers/net/arcnet/Kconfig           | 2 +-
- drivers/net/can/cc770/Kconfig        | 1 +
- drivers/net/can/sja1000/Kconfig      | 1 +
- drivers/net/ethernet/3com/Kconfig    | 4 ++--
- drivers/net/ethernet/8390/Kconfig    | 6 +++---
- drivers/net/ethernet/amd/Kconfig     | 4 ++--
- drivers/net/ethernet/fujitsu/Kconfig | 2 +-
- drivers/net/ethernet/intel/Kconfig   | 2 +-
- drivers/net/ethernet/sis/Kconfig     | 4 ++--
- drivers/net/ethernet/smsc/Kconfig    | 2 +-
- drivers/net/ethernet/ti/Kconfig      | 2 +-
- drivers/net/ethernet/via/Kconfig     | 1 +
- drivers/net/ethernet/xircom/Kconfig  | 2 +-
- drivers/net/fddi/defxx.c             | 2 +-
- drivers/net/hamradio/Kconfig         | 6 +++---
- drivers/net/wan/Kconfig              | 2 +-
- net/ax25/Kconfig                     | 2 +-
- 18 files changed, 25 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index 8ca0bc223b30..82a1e77ce57a 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -507,7 +507,7 @@ source "drivers/net/ipa/Kconfig"
- 
- config NET_SB1000
- 	tristate "General Instruments Surfboard 1000"
--	depends on PNP
-+	depends on ISA && PNP
- 	help
- 	  This is a driver for the General Instrument (also known as
- 	  NextLevel) SURFboard 1000 internal
-diff --git a/drivers/net/arcnet/Kconfig b/drivers/net/arcnet/Kconfig
-index a51b9dab6d3a..d1d07a1d4fbc 100644
---- a/drivers/net/arcnet/Kconfig
-+++ b/drivers/net/arcnet/Kconfig
-@@ -4,7 +4,7 @@
- #
- 
- menuconfig ARCNET
--	depends on NETDEVICES && (ISA || PCI || PCMCIA)
-+	depends on NETDEVICES && (ISA || PCI || PCMCIA) && HAS_IOPORT
- 	tristate "ARCnet support"
- 	help
- 	  If you have a network card of this type, say Y and check out the
-diff --git a/drivers/net/can/cc770/Kconfig b/drivers/net/can/cc770/Kconfig
-index 9ef1359319f0..467ef19de1c1 100644
---- a/drivers/net/can/cc770/Kconfig
-+++ b/drivers/net/can/cc770/Kconfig
-@@ -7,6 +7,7 @@ if CAN_CC770
- 
- config CAN_CC770_ISA
- 	tristate "ISA Bus based legacy CC770 driver"
-+	depends on ISA
- 	help
- 	  This driver adds legacy support for CC770 and AN82527 chips
- 	  connected to the ISA bus using I/O port, memory mapped or
-diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
-index 4b2f9cb17fc3..01168db4c106 100644
---- a/drivers/net/can/sja1000/Kconfig
-+++ b/drivers/net/can/sja1000/Kconfig
-@@ -87,6 +87,7 @@ config CAN_PLX_PCI
- 
- config CAN_SJA1000_ISA
- 	tristate "ISA Bus based legacy SJA1000 driver"
-+	depends on ISA
- 	help
- 	  This driver adds legacy support for SJA1000 chips connected to
- 	  the ISA bus using I/O port, memory mapped or indirect access.
-diff --git a/drivers/net/ethernet/3com/Kconfig b/drivers/net/ethernet/3com/Kconfig
-index 706bd59bf645..1fbab79e2be4 100644
---- a/drivers/net/ethernet/3com/Kconfig
-+++ b/drivers/net/ethernet/3com/Kconfig
-@@ -44,7 +44,7 @@ config 3C515
- 
- config PCMCIA_3C574
- 	tristate "3Com 3c574 PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach a 3Com 3c574 or compatible PCMCIA
- 	  (PC-card) Fast Ethernet card to your computer.
-@@ -54,7 +54,7 @@ config PCMCIA_3C574
- 
- config PCMCIA_3C589
- 	tristate "3Com 3c589 PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach a 3Com 3c589 or compatible PCMCIA
- 	  (PC-card) Ethernet card to your computer.
-diff --git a/drivers/net/ethernet/8390/Kconfig b/drivers/net/ethernet/8390/Kconfig
-index a4130e643342..345f250781c6 100644
---- a/drivers/net/ethernet/8390/Kconfig
-+++ b/drivers/net/ethernet/8390/Kconfig
-@@ -19,7 +19,7 @@ if NET_VENDOR_8390
- 
- config PCMCIA_AXNET
- 	tristate "Asix AX88190 PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach an Asix AX88190-based PCMCIA
- 	  (PC-card) Fast Ethernet card to your computer.  These cards are
-@@ -117,7 +117,7 @@ config NE2000
- 
- config NE2K_PCI
- 	tristate "PCI NE2000 and clones support (see help)"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select CRC32
- 	help
- 	  This driver is for NE2000 compatible PCI cards. It will not work
-@@ -146,7 +146,7 @@ config APNE
- 
- config PCMCIA_PCNET
- 	tristate "NE2000 compatible PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	select CRC32
- 	help
- 	  Say Y here if you intend to attach an NE2000 compatible PCMCIA
-diff --git a/drivers/net/ethernet/amd/Kconfig b/drivers/net/ethernet/amd/Kconfig
-index f8cc8925161c..b39c6f3e1eda 100644
---- a/drivers/net/ethernet/amd/Kconfig
-+++ b/drivers/net/ethernet/amd/Kconfig
-@@ -56,7 +56,7 @@ config LANCE
- 
- config PCNET32
- 	tristate "AMD PCnet32 PCI support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select CRC32
- 	select MII
- 	help
-@@ -122,7 +122,7 @@ config MVME147_NET
- 
- config PCMCIA_NMCLAN
- 	tristate "New Media PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach a New Media Ethernet or LiveWire
- 	  PCMCIA (PC-card) Ethernet card to your computer.
-diff --git a/drivers/net/ethernet/fujitsu/Kconfig b/drivers/net/ethernet/fujitsu/Kconfig
-index 0a1400cb410a..06a28bce5d27 100644
---- a/drivers/net/ethernet/fujitsu/Kconfig
-+++ b/drivers/net/ethernet/fujitsu/Kconfig
-@@ -18,7 +18,7 @@ if NET_VENDOR_FUJITSU
- 
- config PCMCIA_FMVJ18X
- 	tristate "Fujitsu FMV-J18x PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	select CRC32
- 	help
- 	  Say Y here if you intend to attach a Fujitsu FMV-J18x or compatible
-diff --git a/drivers/net/ethernet/intel/Kconfig b/drivers/net/ethernet/intel/Kconfig
-index 639fbb12bd35..6e7901e12699 100644
---- a/drivers/net/ethernet/intel/Kconfig
-+++ b/drivers/net/ethernet/intel/Kconfig
-@@ -41,7 +41,7 @@ config E100
- 
- config E1000
- 	tristate "Intel(R) PRO/1000 Gigabit Ethernet support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  This driver supports Intel(R) PRO/1000 gigabit ethernet family of
- 	  adapters.  For more information on how to identify your adapter, go
-diff --git a/drivers/net/ethernet/sis/Kconfig b/drivers/net/ethernet/sis/Kconfig
-index 775d76d9890e..7e498bdbca73 100644
---- a/drivers/net/ethernet/sis/Kconfig
-+++ b/drivers/net/ethernet/sis/Kconfig
-@@ -19,7 +19,7 @@ if NET_VENDOR_SIS
- 
- config SIS900
- 	tristate "SiS 900/7016 PCI Fast Ethernet Adapter support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select CRC32
- 	select MII
- 	help
-@@ -35,7 +35,7 @@ config SIS900
- 
- config SIS190
- 	tristate "SiS190/SiS191 gigabit ethernet support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select CRC32
- 	select MII
- 	help
-diff --git a/drivers/net/ethernet/smsc/Kconfig b/drivers/net/ethernet/smsc/Kconfig
-index 5f22a8a4d27b..13ce9086a9ca 100644
---- a/drivers/net/ethernet/smsc/Kconfig
-+++ b/drivers/net/ethernet/smsc/Kconfig
-@@ -54,7 +54,7 @@ config SMC91X
- 
- config PCMCIA_SMC91C92
- 	tristate "SMC 91Cxx PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	select CRC32
- 	select MII
- 	help
-diff --git a/drivers/net/ethernet/ti/Kconfig b/drivers/net/ethernet/ti/Kconfig
-index 1530d13984d4..cfe9bd6b1d62 100644
---- a/drivers/net/ethernet/ti/Kconfig
-+++ b/drivers/net/ethernet/ti/Kconfig
-@@ -167,7 +167,7 @@ config TI_KEYSTONE_NETCP_ETHSS
- 
- config TLAN
- 	tristate "TI ThunderLAN support"
--	depends on (PCI || EISA)
-+	depends on (PCI || EISA) && HAS_IOPORT
- 	help
- 	  If you have a PCI Ethernet network card based on the ThunderLAN chip
- 	  which is supported by this driver, say Y here.
-diff --git a/drivers/net/ethernet/via/Kconfig b/drivers/net/ethernet/via/Kconfig
-index da287ef65be7..00773f5e4d7e 100644
---- a/drivers/net/ethernet/via/Kconfig
-+++ b/drivers/net/ethernet/via/Kconfig
-@@ -20,6 +20,7 @@ config VIA_RHINE
- 	tristate "VIA Rhine support"
- 	depends on PCI || (OF_IRQ && GENERIC_PCI_IOMAP)
- 	depends on PCI || ARCH_VT8500 || COMPILE_TEST
-+	depends on HAS_IOPORT
- 	depends on HAS_DMA
- 	select CRC32
- 	select MII
-diff --git a/drivers/net/ethernet/xircom/Kconfig b/drivers/net/ethernet/xircom/Kconfig
-index 7497b9bea511..bfbdcf758afb 100644
---- a/drivers/net/ethernet/xircom/Kconfig
-+++ b/drivers/net/ethernet/xircom/Kconfig
-@@ -19,7 +19,7 @@ if NET_VENDOR_XIRCOM
- 
- config PCMCIA_XIRC2PS
- 	tristate "Xircom 16-bit PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach a Xircom 16-bit PCMCIA (PC-card)
- 	  Ethernet or Fast Ethernet card to your computer.
-diff --git a/drivers/net/fddi/defxx.c b/drivers/net/fddi/defxx.c
-index 1fef8a9b1a0f..0fbbb7286008 100644
---- a/drivers/net/fddi/defxx.c
-+++ b/drivers/net/fddi/defxx.c
-@@ -254,7 +254,7 @@ static const char version[] =
- #define DFX_BUS_TC(dev) 0
- #endif
- 
--#if defined(CONFIG_EISA) || defined(CONFIG_PCI)
-+#ifdef CONFIG_HAS_IOPORT
- #define dfx_use_mmio bp->mmio
- #else
- #define dfx_use_mmio true
-diff --git a/drivers/net/hamradio/Kconfig b/drivers/net/hamradio/Kconfig
-index 25b1f929c422..36a9aade9f33 100644
---- a/drivers/net/hamradio/Kconfig
-+++ b/drivers/net/hamradio/Kconfig
-@@ -83,7 +83,7 @@ config SCC_TRXECHO
- 
- config BAYCOM_SER_FDX
- 	tristate "BAYCOM ser12 fullduplex driver for AX.25"
--	depends on AX25 && !S390
-+	depends on AX25 && HAS_IOPORT
- 	select CRC_CCITT
- 	help
- 	  This is one of two drivers for Baycom style simple amateur radio
-@@ -103,7 +103,7 @@ config BAYCOM_SER_FDX
- 
- config BAYCOM_SER_HDX
- 	tristate "BAYCOM ser12 halfduplex driver for AX.25"
--	depends on AX25 && !S390
-+	depends on AX25 && HAS_IOPORT
- 	select CRC_CCITT
- 	help
- 	  This is one of two drivers for Baycom style simple amateur radio
-@@ -150,7 +150,7 @@ config BAYCOM_EPP
- 
- config YAM
- 	tristate "YAM driver for AX.25"
--	depends on AX25 && !S390
-+	depends on AX25 && HAS_IOPORT
- 	help
- 	  The YAM is a modem for packet radio which connects to the serial
- 	  port and includes some of the functions of a Terminal Node
-diff --git a/drivers/net/wan/Kconfig b/drivers/net/wan/Kconfig
-index 31ab2136cdf1..67be9857c86c 100644
---- a/drivers/net/wan/Kconfig
-+++ b/drivers/net/wan/Kconfig
-@@ -180,7 +180,7 @@ config C101
- 
- config FARSYNC
- 	tristate "FarSync T-Series support"
--	depends on HDLC && PCI
-+	depends on HDLC && PCI && HAS_IOPORT
- 	help
- 	  Support for the FarSync T-Series X.21 (and V.35/V.24) cards by
- 	  FarSite Communications Ltd.
-diff --git a/net/ax25/Kconfig b/net/ax25/Kconfig
-index fdb666607f10..e23a3dc14b93 100644
---- a/net/ax25/Kconfig
-+++ b/net/ax25/Kconfig
-@@ -4,7 +4,7 @@
- #
- 
- menuconfig HAMRADIO
--	depends on NET && !S390
-+	depends on NET
- 	bool "Amateur Radio support"
- 	help
- 	  If you want to connect your Linux box to an amateur radio, answer Y
--- 
-2.40.1
-
+Obviously the subject of the cover letter should start with "net:" ;-(
 
