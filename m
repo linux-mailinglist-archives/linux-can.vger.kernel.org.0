@@ -1,157 +1,158 @@
-Return-Path: <linux-can+bounces-421-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-423-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7185E8959C3
-	for <lists+linux-can@lfdr.de>; Tue,  2 Apr 2024 18:32:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75AFD899BBB
+	for <lists+linux-can@lfdr.de>; Fri,  5 Apr 2024 13:19:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27E95284BC0
-	for <lists+linux-can@lfdr.de>; Tue,  2 Apr 2024 16:32:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E07A21F22DA8
+	for <lists+linux-can@lfdr.de>; Fri,  5 Apr 2024 11:19:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A7B1586C5;
-	Tue,  2 Apr 2024 16:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB20A16C682;
+	Fri,  5 Apr 2024 11:18:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=maxiluxsystems-com.20230601.gappssmtp.com header.i=@maxiluxsystems-com.20230601.gappssmtp.com header.b="D/GMsWf+"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Dh7qfcB/"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D94511581EF
-	for <linux-can@vger.kernel.org>; Tue,  2 Apr 2024 16:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48FC16132B;
+	Fri,  5 Apr 2024 11:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712075524; cv=none; b=VERbc+7GflIPXH++djuvdp2EQL/y8HZ96sF1tz0LqsX6lCR4/iLd4TenZCglZZy05kjNy+MWvGA7+k+jVYpX1mIXswKpt26lw2MW39gDkSWShjlqNm4i5YXjQIHvjHHNYhc+s0mXl9dC+IMyAmdI7i2r3uRLtf7eqp9pNmmpycY=
+	t=1712315933; cv=none; b=R9rwZsrmZ21Sw9aaByF2mLaoFEnL/iJxUqiEPhxXZ+VKPVg3yOyLzKvYwahMLEwArmkLy5G2n8BN+VPycNlF+9uTLrgN0IStcWP7auDLIPF4u7Inz5V4d9avxHFFeMkMlSicqtKh3zw2MtroyNFWHccjL1QrQR7+0eGDzikiuoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712075524; c=relaxed/simple;
-	bh=ge2vhH25KAIh3hkTAi6yG2hZXUBEpPqAfyzxNqzv0cM=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ndC2fWQ9FErjHYpNn/HQ0dKkqMR5J1Ax1i+dwZtYr+W8eJXeletmxq2j872Ep0ATnVYBdZaRqBG8B4Ma68O8PbA5V4S7y7lWgaATM73Sq0tPB/u/I7ElNoREbLmYucPswmLVBaKSL/pOrgL57hLuFBH9IAPf5bKsKk/y/JUnIX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maxiluxsystems.com; spf=none smtp.mailfrom=maxiluxsystems.com; dkim=pass (2048-bit key) header.d=maxiluxsystems-com.20230601.gappssmtp.com header.i=@maxiluxsystems-com.20230601.gappssmtp.com header.b=D/GMsWf+; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maxiluxsystems.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=maxiluxsystems.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2a274955aacso406407a91.2
-        for <linux-can@vger.kernel.org>; Tue, 02 Apr 2024 09:32:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maxiluxsystems-com.20230601.gappssmtp.com; s=20230601; t=1712075522; x=1712680322; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ge2vhH25KAIh3hkTAi6yG2hZXUBEpPqAfyzxNqzv0cM=;
-        b=D/GMsWf+zfQnhXIf/hXerFu2oSw5VbYSNO6O5hrLQgMY6Ldeul+iTKXVrABUCoL7Kh
-         jK30gux8IfdWf6tmVIiMnj13ivwmWZe4wZXfGv6H2ZVJFKDRjRwYqKAuIuI3IIugsuPx
-         /I9KCev055MkLT4L85lbGFZ8deJ7BLYPUpkCSS+FCmu5z3+/xu9ipgt2rEY5FpKEmU7y
-         wULp6XZNDTjoRAOl4JVZcFdTODtQwsGA7I8NB3DkyinyG/CyZrZASaCuEvY2sZ2WA05O
-         yOjBWTT8Rrt07QNZeaERDpUZcfFGtkQ9i3fjmYnx+0dOytf0skfUply4TQnrda2HL+YT
-         PkHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712075522; x=1712680322;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ge2vhH25KAIh3hkTAi6yG2hZXUBEpPqAfyzxNqzv0cM=;
-        b=C/GsRCYWQ+23L931Iz9kkiy0z4rfZzlofXN0DAqeRXPiff61MYzO+b4a6CqXmbYkMA
-         9BA5HWJYcecm/fGcmVvdJdw9aC8MZPEnEDdSmsfTBtibvT3/x8ErRuT+j0+jElMjgcG+
-         Al4/N7lOPQbWUkGCwPDJXH78fCMhLUU+pnTWoQAWZj/yuHG5Cnwr8aNNcVViElPWxOdG
-         8aVtY/o8xuTBN1f1bjEaYTK4LI+KyxmXOkIKsRYjZkAG71ivLvRj7QSPgs0M9DbkpXPb
-         cnL3o3EK6apAkVYmsSbxcKL0CDM097jIV8yFHpdkXkJFxsSR8JzOCDlEV68d14q0JYhw
-         ljwg==
-X-Gm-Message-State: AOJu0Yxd5HsdF3SnWQWck9D64X5OMq1Ii2fKj30IUcd3ProFk9tzgbQL
-	RrShQKheu4vFOg0P0W3BOTJ/xj1lGE5hzWuaTZCBGSnR/9aBX67VKEHZvKW/s9vA6ryErVvfYxk
-	rLKNqTIQkq5J29dOuXIHAsOqmjcdNkQXc0FYmkV9Qo8iE76ruPu0=
-X-Google-Smtp-Source: AGHT+IHv1NdIAzzt4wZTIkWzBGXuT8m+ytJCAtFPfwAPasoeZzRxw+8n0JXFxqNpnIzM7LIa4yfra/IMig3Mc/8sjkg=
-X-Received: by 2002:a17:90a:be05:b0:29f:f619:7c2f with SMTP id
- a5-20020a17090abe0500b0029ff6197c2fmr9636262pjs.27.1712075521862; Tue, 02 Apr
- 2024 09:32:01 -0700 (PDT)
+	s=arc-20240116; t=1712315933; c=relaxed/simple;
+	bh=V4qI1rNN3XUit9jxdu8kEl95AIVtXhBHWOFJK5RuWBk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BMcmG3jSU6yKW3dsqZR6zr74V0MIcF3QwYeH78xB4ac79o5d72qmZVu9u86HGTzWoHsrgitm+DD2JPprYvgPLmQIdWzm5V3UbEsFlsgnSVNZNi8S4Fs4dXZAH7Khtj9CAs+Km4UI46LGvmFiWgqWFczqLcLGQpIZijCEYXnlUjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Dh7qfcB/; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 435BI1xN016084;
+	Fri, 5 Apr 2024 11:18:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=cHucxGpcDq5gHMAeVAbAeGgnEwEQpWc2GRkTuDwX2MA=;
+ b=Dh7qfcB/r9vlpYsgsKtoZxn56tWesqCOITExSN68uNmvnTDXIMuvV/z1WJPY9izDHIAt
+ CrE4KLoS29v8g64aiwhRfjc06TkP7AdepTkQwTT2FU9nX4GJpeh8XTNSLon+AimCxyuA
+ RsYomx9ptwlzg/jDTODT5ORg9fwGKLEjQSr91+YednMA3atRXEdvb8pjpnZcgYcZykek
+ NXe0hWqsuomSUnn850txwlnWTD4QWnSSLWDYYpfNATYjbst/vOIfULzsi078fVrgWrcP
+ VQ2QM2kYEi2FaLJsTWYNpGLHTlFMzaa7hXEbBuIDKID2QTO1sArT/66evEIVVR26TIX0 ug== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xag9yg01t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Apr 2024 11:18:39 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 435BIdbU016470;
+	Fri, 5 Apr 2024 11:18:39 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xag9yg01p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Apr 2024 11:18:39 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4359wUl2022293;
+	Fri, 5 Apr 2024 11:18:38 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3x9eq0j332-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Apr 2024 11:18:38 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 435BIW7T51380592
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 5 Apr 2024 11:18:34 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4D41C20040;
+	Fri,  5 Apr 2024 11:18:32 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EE80D20043;
+	Fri,  5 Apr 2024 11:18:31 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  5 Apr 2024 11:18:31 +0000 (GMT)
+From: Niklas Schnelle <schnelle@linux.ibm.com>
+To: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
+Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-hams@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        Niklas Schnelle <schnelle@linux.ibm.com>
+Subject: [PATCH net-next 0/1] XYZ: Handle HAS_IOPORT dependencies
+Date: Fri,  5 Apr 2024 13:18:30 +0200
+Message-Id: <20240405111831.3881080-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.40.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: U-EXTpSWl69qGr55-QgSSaHTocWLqoFZ
+X-Proofpoint-ORIG-GUID: XfocbBsB7bs3G4uNIVWawrONzM5V2USL
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Torin Cooper-Bennun <tcbennun@maxiluxsystems.com>
-Date: Tue, 2 Apr 2024 17:31:50 +0100
-Message-ID: <CAALJrqi6HN_qXcOcYUnp9ihhGyLxmGid6gkR3Czj13YVLJt5sQ@mail.gmail.com>
-Subject: Rare mcp251xfd crash after CRC read error, in timestamp read routine
-To: linux-can <linux-can@vger.kernel.org>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Content-Type: multipart/mixed; boundary="0000000000004f69f906151fa542"
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-05_10,2024-04-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ phishscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0 spamscore=0
+ impostorscore=0 adultscore=0 clxscore=1011 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2404050081
 
---0000000000004f69f906151fa542
-Content-Type: text/plain; charset="UTF-8"
+Hi networking maintainers,
 
-Hello Marc et al.,
+This is a follow up in my ongoing effort of making inb()/outb() and
+similar I/O port accessors compile-time optional. Previously I sent this
+as a treewide series titled "treewide: Remove I/O port accessors for
+HAS_IOPORT=n" with the latest being its 5th version[0]. With a significant
+subset of patches merged I've changed over to per-subsystem series. These
+series are stand alone and should be merged via the relevant tree such
+that with all subsystems complete we can follow this up with the final
+patch that will make the I/O port accessors compile-time optional.
 
-I have discovered a rare but annoying crash in mcp251xfd. I don't know how to
-replicate this directly, and the occurrence rate is very low (on the order of
-once per 1e7 frames or so).
+The current state of the full series with changes to the remaining subsystems
+and the aforementioned final patch can be found for your convenience on my
+git.kernel.org tree in the has_ioport branch[1]. As for compile-time vs runtime
+see Linus' reply to my first attempt[2].
 
-I cannot be too specific on our hardware, but we are running ARMv8, and the CAN
-chip is the MCP2518FD. The kernel version is 6.1.21.
+Thanks,
+Niklas
 
-The crash always happens immediately following a CRC read error. I've attached
-a sample kernel log of the crash (hopefully correctly - I've not interacted
-with mailing lists for a while). So far, the call trace is always the same.
+[0] https://lore.kernel.org/all/20230522105049.1467313-1-schnelle@linux.ibm.com/
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/log/?h=has_ioport
+[2] https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
 
-To be clear, this is not after every CRC read error; those are several orders
-of magnitude more frequent than this crash.
+Niklas Schnelle (1):
+  net: handle HAS_IOPORT dependencies
 
-I've done a tiny bit of digging myself, but I'm not familiar with the
-territory. I guess something in the SPI dev struct is being set to NULL, while
-an SPI transaction is ongoing - but it surely must be related to the CRC read
-error and the timestamp read.
+ drivers/net/Kconfig                  | 2 +-
+ drivers/net/arcnet/Kconfig           | 2 +-
+ drivers/net/can/cc770/Kconfig        | 1 +
+ drivers/net/can/sja1000/Kconfig      | 1 +
+ drivers/net/ethernet/3com/Kconfig    | 4 ++--
+ drivers/net/ethernet/8390/Kconfig    | 6 +++---
+ drivers/net/ethernet/amd/Kconfig     | 4 ++--
+ drivers/net/ethernet/fujitsu/Kconfig | 2 +-
+ drivers/net/ethernet/intel/Kconfig   | 2 +-
+ drivers/net/ethernet/sis/Kconfig     | 4 ++--
+ drivers/net/ethernet/smsc/Kconfig    | 2 +-
+ drivers/net/ethernet/ti/Kconfig      | 2 +-
+ drivers/net/ethernet/via/Kconfig     | 1 +
+ drivers/net/ethernet/xircom/Kconfig  | 2 +-
+ drivers/net/fddi/defxx.c             | 2 +-
+ drivers/net/hamradio/Kconfig         | 6 +++---
+ drivers/net/wan/Kconfig              | 2 +-
+ net/ax25/Kconfig                     | 2 +-
+ 18 files changed, 25 insertions(+), 22 deletions(-)
 
-Thanks for reading :)
+-- 
+2.40.1
 
---0000000000004f69f906151fa542
-Content-Type: application/octet-stream; name="oops.log"
-Content-Disposition: attachment; filename="oops.log"
-Content-Transfer-Encoding: base64
-Content-ID: <f_luiliv0a0>
-X-Attachment-Id: f_luiliv0a0
-
-bWNwMjUxeGZkIHNwaTAuMCBjYW4wOiBDUkMgcmVhZCBlcnJvciBhdCBhZGRyZXNzIDB4MDAxMCAo
-bGVuZ3RoPTQsIGRhdGE9ODQgYmIgNDUgMWYsIENSQz0weDI1YzgpIHJldHJ5aW5nLgpVbmFibGUg
-dG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2UgYXQgdmlydHVhbCBhZGRy
-ZXNzIDAwMDAwMDAwMDAwMDAwMDgKTWVtIGFib3J0IGluZm86CiAgRVNSID0gMHgwMDAwMDAwMDk2
-MDAwMDA1CiAgRUMgPSAweDI1OiBEQUJUIChjdXJyZW50IEVMKSwgSUwgPSAzMiBiaXRzCiAgU0VU
-ID0gMCwgRm5WID0gMAogIEVBID0gMCwgUzFQVFcgPSAwCiAgRlNDID0gMHgwNTogbGV2ZWwgMSB0
-cmFuc2xhdGlvbiBmYXVsdApEYXRhIGFib3J0IGluZm86CiAgSVNWID0gMCwgSVNTID0gMHgwMDAw
-MDAwNQogIENNID0gMCwgV25SID0gMAp1c2VyIHBndGFibGU6IDRrIHBhZ2VzLCAzOS1iaXQgVkFz
-LCBwZ2RwPTAwMDAwMDAwNzI2YTIwMDAKWzAwMDAwMDAwMDAwMDAwMDhdIHBnZD0wMDAwMDAwMDAw
-MDAwMDAwLCBwNGQ9MDAwMDAwMDAwMDAwMDAwMCwgcHVkPTAwMDAwMDAwMDAwMDAwMDAKSW50ZXJu
-YWwgZXJyb3I6IE9vcHM6IDAwMDAwMDAwOTYwMDAwMDUgWyMxXSBQUkVFTVBUIFNNUApNb2R1bGVz
-IGxpbmtlZCBpbjogW1JFREFDVEVEXSBtY3AyNTF4ZmQgY2FuX2RldiBzcGlkZXYgW1JFREFDVEVE
-XQpDUFU6IDMgUElEOiAyNTA2ODkwIENvbW06IGt3b3JrZXIvMzoyIFRhaW50ZWQ6IEcgICAgICAg
-ICBDICAgICAgICAgNi4xLjIxLXY4KyAjMTY0MgpIYXJkd2FyZSBuYW1lOiBbUkVEQUNURURdCldv
-cmtxdWV1ZTogZXZlbnRzIG1jcDI1MXhmZF90aW1lc3RhbXBfd29yayBbbWNwMjUxeGZkXQpwc3Rh
-dGU6IDgwMDAwMGM1IChOemN2IGRhSUYgLVBBTiAtVUFPIC1UQ08gLURJVCAtU1NCUyBCVFlQRT0t
-LSkKcGMgOiBfcmF3X3NwaW5fbG9ja19pcnFzYXZlKzB4N2MvMHhjOApsciA6IF9yYXdfc3Bpbl9s
-b2NrX2lycXNhdmUrMHgzYy8weGM4CnNwIDogZmZmZmZmYzAwY2NjMzg0MAp4Mjk6IGZmZmZmZmMw
-MGNjYzM4NDAgeDI4OiBmZmZmZmY4MDQzODBlODAwIHgyNzogZmZmZmZmZWFiNzg0NDAwOAp4MjY6
-IGZmZmZmZmVhYjdiNTg4OTggeDI1OiAwMDAwMDA2N2FjMDY3ZWIwIHgyNDogZmZmZmZmYzAwY2Nj
-M2E2MAp4MjM6IGZmZmZmZmMwMGNjYzNiMzAgeDIyOiBmZmZmZmZjMDBjY2MzYjMwIHgyMTogZmZm
-ZmZmODA0MzgwZTgwMAp4MjA6IDAwMDAwMDAwMDAwMDAwMDAgeDE5OiAwMDAwMDAwMDAwMDAwMDA4
-IHgxODogMDAwMDAwMDAwMDAwMDAzMAp4MTc6IDNkNjg3NDY3NmU2NTZjMjggeDE2OiBmZmZmZmZl
-YWI2ZmRhOGY4IHgxNTogNzM3MzY1NzI2NDY0NjEyMAp4MTQ6IDc0NjEyMDcyNmY3MjcyNjUgeDEz
-OiAyZTY3NmU2OTc5NzI3NDY1IHgxMjogZmZmZmZmZWFiN2JlNzNiMAp4MTE6IDAwMDAwMDAwMDAw
-MDAwMDMgeDEwOiAwMDAwMDAwMDAwMDAwMDAxIHg5IDogZmZmZmZmZWFiNzM3MTc2NAp4OCA6IDAw
-MDAwMDAwMDAwMTdmZTggeDcgOiBmZmZmZmZjMDBjY2M0MDAwIHg2IDogZmZmZmZmYzAwY2NjMDAw
-MAp4NSA6IGZmZmZmZmMwMGNjYzQwMDAgeDQgOiBmZmZmZmZjMDBjY2MzODUwIHgzIDogMDAwMDAw
-MDAwMDAwMDAwMAp4MiA6IDAwMDAwMDAwMDAwMDAwMDEgeDEgOiAwMDAwMDAwMDAwMDAwMDAwIHgw
-IDogZmZmZmZmODA0YWFmODAwMApDYWxsIHRyYWNlOgogX3Jhd19zcGluX2xvY2tfaXJxc2F2ZSsw
-eDdjLzB4YzgKIGNvbXBsZXRlKzB4MmMvMHg4MAogc3BpX2NvbXBsZXRlKzB4MTgvMHgyOAogc3Bp
-X2ZpbmFsaXplX2N1cnJlbnRfbWVzc2FnZSsweDFhNC8weDJjOAogc3BpX3RyYW5zZmVyX29uZV9t
-ZXNzYWdlKzB4MzhjLzB4N2U4CiBfX3NwaV9wdW1wX3RyYW5zZmVyX21lc3NhZ2UrMHgyNDgvMHg2
-NDAKIF9fc3BpX3N5bmMrMHgyNzQvMHgzZDAKIHNwaV9zeW5jKzB4MzgvMHg2MAogbWNwMjUxeGZk
-X3JlZ21hcF9jcmNfcmVhZCsweDE1MC8weDJlMCBbbWNwMjUxeGZkXQogX3JlZ21hcF9yYXdfcmVh
-ZCsweGU0LzB4MmIwCiBfcmVnbWFwX2J1c19yZWFkKzB4NGMvMHg4OAogX3JlZ21hcF9yZWFkKzB4
-NzAvMHgxYTgKIHJlZ21hcF9yZWFkKzB4NTQvMHg4MAogbWNwMjUxeGZkX3RpbWVzdGFtcF9yZWFk
-KzB4NDgvMHg5MCBbbWNwMjUxeGZkXQogdGltZWNvdW50ZXJfcmVhZCsweDJjLzB4NzgKIG1jcDI1
-MXhmZF90aW1lc3RhbXBfd29yaysweDI0LzB4NTAgW21jcDI1MXhmZF0KIHByb2Nlc3Nfb25lX3dv
-cmsrMHgyMDgvMHg0ODAKIHdvcmtlcl90aHJlYWQrMHg1MC8weDQyOAoga3RocmVhZCsweGZjLzB4
-MTEwCiByZXRfZnJvbV9mb3JrKzB4MTAvMHgyMApDb2RlOiBkNjVmMDNjMCBkMjgwMDAwMSA1Mjgw
-MDAyMiBmOTgwMDI3MSAoODg1ZmZlNjApIAotLS1bIGVuZCB0cmFjZSAwMDAwMDAwMDAwMDAwMDAw
-IF0tLS0Kbm90ZToga3dvcmtlci8zOjJbMjUwNjg5MF0gZXhpdGVkIHdpdGggaXJxcyBkaXNhYmxl
-ZApub3RlOiBrd29ya2VyLzM6MlsyNTA2ODkwXSBleGl0ZWQgd2l0aCBwcmVlbXB0X2NvdW50IDEK
-Cg==
---0000000000004f69f906151fa542--
 
