@@ -1,159 +1,367 @@
-Return-Path: <linux-can+bounces-424-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-425-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49A29899BC5
-	for <lists+linux-can@lfdr.de>; Fri,  5 Apr 2024 13:21:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5146789B2BC
+	for <lists+linux-can@lfdr.de>; Sun,  7 Apr 2024 17:48:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA8D81F22F6D
-	for <lists+linux-can@lfdr.de>; Fri,  5 Apr 2024 11:21:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A81881F2207E
+	for <lists+linux-can@lfdr.de>; Sun,  7 Apr 2024 15:48:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2962E16C458;
-	Fri,  5 Apr 2024 11:21:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E532C3A1B5;
+	Sun,  7 Apr 2024 15:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gWENtA0a"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bi0D92Gq"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B99316C44C;
-	Fri,  5 Apr 2024 11:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD392BAE2
+	for <linux-can@vger.kernel.org>; Sun,  7 Apr 2024 15:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712316088; cv=none; b=q6hkNju1fBelQkjE04Wt0PnVD1BzK5h7RSAPiG8fSEa/no+hkzJ9/3e1Dbgip2L2SUrEY7CHuyuDf2aHWAXleQldqTyzUEI1d1YopzxH59mAznnu6ugeCei83lPDLyvmeTT5MhGn6/eQgk/YCTQPct1Zn/u5kdlf25yvTfzwR9M=
+	t=1712504926; cv=none; b=Vp+UcSWmHPeC+XzIIrxYyFtoNPW1BXTOtC569ripbHyEdnG401gW6f3TSLKVn4unaG8KLOlHlZ/I+6BRW1xZLJsNdf9ezulEZz3H4PEwT8GtnsqyDbhMNFzcK3LPDx4mUaBnBWiC+i3YtKi+BBu3Bg0Hf7TH550sCEEWecG0svk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712316088; c=relaxed/simple;
-	bh=uxdtZOYXhengGWwZXZonOk5LihR8NR7q33quXNXAvg8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=k4CLwg2dlFHkVK2bp17gPygLqpbYnebqyaVb7Q8LTMQoTR6+tkUOEcwUBDvyRdHaP7gCl6a+d+Z04GDTobJ9Mt/4KbhPP0ve8Um5/DeO/iBEAud7zcO83F+1ml6KbNxB6APSVnJzTtgvjIL6LAh/8jsZYFS7ldQxIjX8OF0vwbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gWENtA0a; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 435AWREs001013;
-	Fri, 5 Apr 2024 11:21:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=+/DZazVdDgz9vkr7XNWWsXj9bzeEYUkuwtMjHCy5u7c=;
- b=gWENtA0axJNmBfu81NvsPNk0e3dPcFjIau8cBETrEGmPBf8jSq9OrvSNjA7rsOjoBM3e
- 1HnsYznIWWun87rcCkIrLgnJRcHj6Zvtplw7chQkUyu1OuhZfTfdaidXbbugn1zG/Q1l
- A3rTT+JKavD0e2Et5UtI8zqUH+7XsjDBuNtwgJZSAGc+gRmE5qpHzRh/K7blZNPIWnEN
- TNn5b/oY1QtV8AoihW9g5p1c1q/b1YXVKBGeV24toHOluuq9cbXhoucd6/oHbtRhsh1a
- cPH/YG23jMQSJDlcHA1dzTMSUi9uLhh0KSXcSw78hjOTlHvVCaMmqsenFXAdMgsEomsx kA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xaeakr8k5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 11:21:19 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 435BLI8i005845;
-	Fri, 5 Apr 2024 11:21:18 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xaeakr8k0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 11:21:18 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4359nPSP003711;
-	Fri, 5 Apr 2024 11:21:17 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3x9epyj6ab-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 11:21:17 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 435BLDcE45416818
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 5 Apr 2024 11:21:15 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B0A1020043;
-	Fri,  5 Apr 2024 11:21:13 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A19982004D;
-	Fri,  5 Apr 2024 11:21:12 +0000 (GMT)
-Received: from [9.171.37.225] (unknown [9.171.37.225])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  5 Apr 2024 11:21:12 +0000 (GMT)
-Message-ID: <2f6ca1375ac2ffdd2ac368e1d5c5221f6fbd427c.camel@linux.ibm.com>
-Subject: Re: [PATCH net-next 0/1] XYZ: Handle HAS_IOPORT dependencies
-From: Niklas Schnelle <schnelle@linux.ibm.com>
-To: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Marc Kleine-Budde
-	 <mkl@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-hams@vger.kernel.org, Arnd Bergmann
-	 <arnd@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org
-Date: Fri, 05 Apr 2024 13:21:12 +0200
-In-Reply-To: <20240405111831.3881080-1-schnelle@linux.ibm.com>
-References: <20240405111831.3881080-1-schnelle@linux.ibm.com>
-Autocrypt: addr=schnelle@linux.ibm.com; prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MMRmpj8D8NKdYCsPaE6yic9FIbuFISZ1
-X-Proofpoint-GUID: P4v1SDgRl41l2tizrSWHrwjYBtTfzqfe
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1712504926; c=relaxed/simple;
+	bh=xsKSQsmD8DRcseofyxU7B62U2HMohStQvAnbKX7H7rg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pb1NpQCpOkcUsH8DshKZMX0LWb+nbjV0JFaCQ9caiYZOKCHd2t5nNPPghXRGWUHisvEELbVay+pDR03qMNmGEbfks+V7rbEuauRSpxnOw+G9ED+muLJadfcafovJzMSDZP817azoBvpblUQFyL/eIUyiroBGThPpukLiuc53cFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bi0D92Gq; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4165d03308fso4108765e9.2
+        for <linux-can@vger.kernel.org>; Sun, 07 Apr 2024 08:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1712504921; x=1713109721; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=13Biiq60U+vj/01+PTs+edDKA38Buyqu8R2xZWb4IGE=;
+        b=bi0D92GqIxsaH9NAOygxOppSDkSS+A+N5R1udiaavk/8MRqTAtf18qjR6/3ZTiqEkR
+         SOHX38RX0z4nxPgFLaPFuPn7/TCnCR3mz80j4IT3Xiq5cZN8LCF4r2mgo86MWCtOLmrr
+         Q64TP4OA54BalqCKvkmAmw/AWg8fWQRnA/1rQX6oBaXCg3GJy7G76Xza+LTx1WQGvF7Q
+         +SFoiacX63pqmgKY5nWzuTswjl87xd1TQ1lPXrpFRHJNw35KqSQG16ix6ZyYeolSZp5/
+         PglgFt+eZCpGuo28Mt0fCCNmWRPd/ABzVpKxWhoWEKOD5UjIySZF+pPxFikdPgiI2qX+
+         MopQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712504921; x=1713109721;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=13Biiq60U+vj/01+PTs+edDKA38Buyqu8R2xZWb4IGE=;
+        b=R9vpYAprAODkrMztdBi8g0s99JIjvBGhrO89o8hGwEslWNVg8jhspte70i3u0wENGf
+         bYylY2UBlYZaYORmctsxzDN2tpkSsHSbWaH3sAGagIRgn/SnyKWThEe9THp/KSoFwdPX
+         88aPnkIwVt7erkdcNBb+zDbvvg5UVM61VTZz1Zs0Bl4Wo7lPl4AZyfJflLj7nz9fDSVe
+         QBWBUIcyUFGf4wv2mFphgY+S8fUm6vQFQaWsL0sHkBwbEZ/k7tyLfi4T9pLxn74b+TEL
+         N6tQISW/Z467/yh2ZyjuvlKJNteJZU3G9fas6LTNeForJOSi+tPA8jydIRWLpeYeTDJa
+         ojFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVh5rm4iOu4Va3MZB3P1pYzho4pb+4I86S/14++YI5421sZROibaqsZDD5ey6v3td2TWPvDygtUPKcO1Uzkm+hGJ2Ejd2JReyDr
+X-Gm-Message-State: AOJu0Yzk0PFqmhTSiA6IwaYQZED4KkdRXdk/wBrVWL0QzfSV9NVPVLnf
+	3gvj8QxgbXWZbsia2lDbVoA4vGxVhQezue/SBvbBv5gEWo2zGFnVYyWctVWXYHY=
+X-Google-Smtp-Source: AGHT+IEFuw+vcCBZWBBs4gGjpg00+lFoFhWEVuClSkf+L68MqdfkP5CyIDTAaTPSaSUfO15R/UeYZQ==
+X-Received: by 2002:a05:600c:4510:b0:415:6e23:28b5 with SMTP id t16-20020a05600c451000b004156e2328b5mr6366458wmo.32.1712504920481;
+        Sun, 07 Apr 2024 08:48:40 -0700 (PDT)
+Received: from blmsp ([2001:4091:a246:821e:6f3b:6b50:4762:8343])
+        by smtp.gmail.com with ESMTPSA id p15-20020a05600c358f00b004156b689edfsm10332396wmq.33.2024.04.07.08.48.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Apr 2024 08:48:40 -0700 (PDT)
+Date: Sun, 7 Apr 2024 17:48:39 +0200
+From: Markus Schneider-Pargmann <msp@baylibre.com>
+To: Martin =?utf-8?Q?Hundeb=C3=B8ll?= <martin@geanix.com>
+Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
+	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: m_can: don't enable transceiver when probing
+Message-ID: <zpgew4xinv5bpewthmwpx6igjw5fcajsj55q67k3q35meheywx@ookucxy5wco4>
+References: <20240326122640.706041-1-martin@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-05_10,2024-04-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 suspectscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
- mlxscore=0 impostorscore=0 phishscore=0 clxscore=1015 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404050081
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240326122640.706041-1-martin@geanix.com>
 
-On Fri, 2024-04-05 at 13:18 +0200, Niklas Schnelle wrote:
-> Hi networking maintainers,
->=20
-> This is a follow up in my ongoing effort of making inb()/outb() and
-> similar I/O port accessors compile-time optional. Previously I sent this
-> as a treewide series titled "treewide: Remove I/O port accessors for
-> HAS_IOPORT=3Dn" with the latest being its 5th version[0]. With a signific=
-ant
-> subset of patches merged I've changed over to per-subsystem series. These
-> series are stand alone and should be merged via the relevant tree such
-> that with all subsystems complete we can follow this up with the final
-> patch that will make the I/O port accessors compile-time optional.
->=20
-> The current state of the full series with changes to the remaining subsys=
-tems
-> and the aforementioned final patch can be found for your convenience on my
-> git.kernel.org tree in the has_ioport branch[1]. As for compile-time vs r=
-untime
-> see Linus' reply to my first attempt[2].
->=20
-> Thanks,
-> Niklas
->=20
-> [0] https://lore.kernel.org/all/20230522105049.1467313-1-schnelle@linux.i=
-bm.com/
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/log/?h=
-=3Dhas_ioport
-> [2] https://lore.kernel.org/lkml/CAHk-=3Dwg80je=3DK7madF4e7WrRNp37e3qh6y1=
-0Svhdc7O8SZ_-8g@mail.gmail.com/
->=20
-> Niklas Schnelle (1):
->   net: handle HAS_IOPORT dependencies
->=20
+Hi Martin,
 
-Obviously the subject of the cover letter should start with "net:" ;-(
+On Tue, Mar 26, 2024 at 01:26:38PM +0100, Martin Hundebøll wrote:
+> The m_can driver sets and clears the CCCR.INIT bit during probe (both
+> when testing the NON-ISO bit, and when configuring the chip). After
+> clearing the CCCR.INIT bit, the transceiver enters normal mode, where it
+> affects the CAN bus (i.e. it ACKs frames). This can cause troubles when
+> the m_can node is only used for monitoring the bus, as one cannot setup
+> listen-only mode before the device is probed.
+> 
+> Rework the probe flow, so that the CCCR.INIT bit is only cleared when
+> upping the device. First, the tcan4x5x driver is changed to stay in
+> standby mode during/after probe. This in turn requires changes when
+> setting bits in the CCCR register, as its CSR and CSA bits are always
+> high in standby mode.
+> 
+> Signed-off-by: Martin Hundebøll <martin@geanix.com>
+> ---
+>  drivers/net/can/m_can/m_can.c         | 129 ++++++++++++++------------
+>  drivers/net/can/m_can/tcan4x5x-core.c |  14 ++-
+>  2 files changed, 79 insertions(+), 64 deletions(-)
+> 
+> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> index 14b231c4d7ec..1ca245846fcd 100644
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -379,38 +379,60 @@ m_can_txe_fifo_read(struct m_can_classdev *cdev, u32 fgi, u32 offset, u32 *val)
+>  	return cdev->ops->read_fifo(cdev, addr_offset, val, 1);
+>  }
+>  
+> -static void m_can_config_endisable(struct m_can_classdev *cdev, bool enable)
+> +static bool m_can_cccr_wait_bits(struct m_can_classdev *cdev, u32 mask, u32 val)
+
+This function with its arguments reminds me of regmap_update_bits.
+m_can_cccr_wait_bits() doesn't sound like a write function IMHO. Maybe
+m_can_cccr_update_bits() would be more descriptive. I think the wait
+part is not important as it's a hardware detail.
+
+>  {
+> -	u32 cccr = m_can_read(cdev, M_CAN_CCCR);
+> -	u32 timeout = 10;
+> -	u32 val = 0;
+> -
+> -	/* Clear the Clock stop request if it was set */
+> -	if (cccr & CCCR_CSR)
+> -		cccr &= ~CCCR_CSR;
+> -
+> -	if (enable) {
+> -		/* enable m_can configuration */
+> -		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT);
+> -		udelay(5);
+> -		/* CCCR.CCE can only be set/reset while CCCR.INIT = '1' */
+> -		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT | CCCR_CCE);
+
+This old code is explicitly setting CCCR_INIT first and then continues
+to set CCE. Maybe it would be good to do the same thing in the new
+m_can_config_enable()? As far as I can see CCCR_INIT is never set
+explicitly before starting/stopping the device.
+
+> -	} else {
+> -		m_can_write(cdev, M_CAN_CCCR, cccr & ~(CCCR_INIT | CCCR_CCE));
+> -	}
+> +	u32 val_before = m_can_read(cdev, M_CAN_CCCR);
+> +	u32 val_after = (val_before & ~mask) | val;
+> +	size_t tries = 5;
+
+Why are you reducing the timeout/tries from 10 to 5 here?
+
+> +
+> +	if (!(mask & CCCR_INIT) && !(val_before & CCCR_INIT))
+> +		dev_warn(cdev->dev,
+> +			 "trying to configure device when in normal mode. Expect failures\n");
+> +
+> +	/* The chip should be in standby mode when changing the CCCR register,
+> +	 * and some chips set the CSR and CSA bits when in standby. Furthermore,
+> +	 * the CSR and CSA bits should be written as zeros, even when they read
+> +	 * ones.
+> +	 */
+> +	val_after &= ~(CCCR_CSR | CCCR_CSA);
+> +
+> +	while (tries--) {
+> +		u32 val_read;
+> +
+> +		/* Write the desired value in each try, as setting some bits in
+> +		 * the CCCR register require other bits to be set first. E.g.
+> +		 * setting the NISO bit requires setting the CCE bit first.
+> +		 */
+
+As you state in this comment, CCE has to be set before NISO. Why don't
+you do m_can_config_enable() test set NISO and then do
+m_can_config_disable()?
+
+> +		m_can_write(cdev, M_CAN_CCCR, val_after);
+> +
+> +		val_read = m_can_read(cdev, M_CAN_CCCR) & ~(CCCR_CSR | CCCR_CSA);
+>  
+> -	/* there's a delay for module initialization */
+> -	if (enable)
+> -		val = CCCR_INIT | CCCR_CCE;
+> -
+> -	while ((m_can_read(cdev, M_CAN_CCCR) & (CCCR_INIT | CCCR_CCE)) != val) {
+> -		if (timeout == 0) {
+> -			netdev_warn(cdev->net, "Failed to init module\n");
+> -			return;
+> -		}
+> -		timeout--;
+> -		udelay(1);
+> +		if (val_read == val_after)
+> +			return true;
+> +
+> +		usleep_range(1, 5);
+>  	}
+> +
+> +	return false;
+> +}
+> +
+> +static void m_can_config_enable(struct m_can_classdev *cdev)
+> +{
+> +	/* CCCR_INIT must be set in order to set CCCR_CCE, but access to
+> +	 * configuration registers should only be enabled when in standby mode,
+> +	 * where CCCR_INIT is always set.
+> +	 */
+> +	if (!m_can_cccr_wait_bits(cdev, CCCR_CCE, CCCR_CCE))
+> +		netdev_err(cdev->net, "failed to enable configuration mode\n");
+> +}
+> +
+> +static void m_can_config_disable(struct m_can_classdev *cdev)
+> +{
+> +	/* Only clear CCCR_CCE, since CCCR_INIT cannot be cleared while in
+> +	 * standby mode
+> +	 */
+> +	if (!m_can_cccr_wait_bits(cdev, CCCR_CCE, 0))
+> +		netdev_err(cdev->net, "failed to disable configuration registers\n");
+>  }
+>  
+>  static void m_can_interrupt_enable(struct m_can_classdev *cdev, u32 interrupts)
+> @@ -1403,7 +1425,7 @@ static int m_can_chip_config(struct net_device *dev)
+>  	interrupts &= ~(IR_ARA | IR_ELO | IR_DRX | IR_TEFF | IR_TFE | IR_TCF |
+>  			IR_HPM | IR_RF1F | IR_RF1W | IR_RF1N | IR_RF0F);
+>  
+> -	m_can_config_endisable(cdev, true);
+> +	m_can_config_enable(cdev);
+>  
+>  	/* RX Buffer/FIFO Element Size 64 bytes data field */
+>  	m_can_write(cdev, M_CAN_RXESC,
+> @@ -1521,7 +1543,7 @@ static int m_can_chip_config(struct net_device *dev)
+>  		    FIELD_PREP(TSCC_TCP_MASK, 0xf) |
+>  		    FIELD_PREP(TSCC_TSS_MASK, TSCC_TSS_INTERNAL));
+>  
+> -	m_can_config_endisable(cdev, false);
+> +	m_can_config_disable(cdev);
+>  
+>  	if (cdev->ops->init)
+>  		cdev->ops->init(cdev);
+> @@ -1544,12 +1566,15 @@ static int m_can_start(struct net_device *dev)
+>  
+>  	cdev->can.state = CAN_STATE_ERROR_ACTIVE;
+>  
+> -	m_can_enable_all_interrupts(cdev);
+> -
+>  	if (cdev->version > 30)
+>  		cdev->tx_fifo_putidx = FIELD_GET(TXFQS_TFQPI_MASK,
+>  						 m_can_read(cdev, M_CAN_TXFQS));
+>  
+> +	m_can_enable_all_interrupts(cdev);
+
+Why do you move m_can_enable_all_interrupts() down?
+
+> +
+> +	if (!m_can_cccr_wait_bits(cdev, CCCR_INIT, 0))
+> +		netdev_err(dev, "failed to enter normal mode\n");
+
+Is this a hard error? Should the start be aborted here?
+
+> +
+>  	return 0;
+>  }
+>  
+> @@ -1603,33 +1628,17 @@ static int m_can_check_core_release(struct m_can_classdev *cdev)
+>   */
+>  static bool m_can_niso_supported(struct m_can_classdev *cdev)
+>  {
+> -	u32 cccr_reg, cccr_poll = 0;
+> -	int niso_timeout = -ETIMEDOUT;
+> -	int i;
+> +	bool niso_supported;
+>  
+> -	m_can_config_endisable(cdev, true);
+> -	cccr_reg = m_can_read(cdev, M_CAN_CCCR);
+> -	cccr_reg |= CCCR_NISO;
+> -	m_can_write(cdev, M_CAN_CCCR, cccr_reg);
+> +	/* First try to set the NISO bit (which requires the CCE bit too. */
+> +	niso_supported = m_can_cccr_wait_bits(cdev, CCCR_NISO | CCCR_CCE,
+> +					      CCCR_NISO | CCCR_CCE);
+>  
+> -	for (i = 0; i <= 10; i++) {
+> -		cccr_poll = m_can_read(cdev, M_CAN_CCCR);
+> -		if (cccr_poll == cccr_reg) {
+> -			niso_timeout = 0;
+> -			break;
+> -		}
+> +	/* Then clear the two bits again. */
+> +	if (!m_can_cccr_wait_bits(cdev, CCCR_NISO | CCCR_CCE, 0))
+> +		dev_err(cdev->dev, "failed to revert the NON-ISO bit in CCCR\n");
+>  
+> -		usleep_range(1, 5);
+> -	}
+> -
+> -	/* Clear NISO */
+> -	cccr_reg &= ~(CCCR_NISO);
+> -	m_can_write(cdev, M_CAN_CCCR, cccr_reg);
+> -
+> -	m_can_config_endisable(cdev, false);
+> -
+> -	/* return false if time out (-ETIMEDOUT), else return true */
+> -	return !niso_timeout;
+> +	return niso_supported;
+>  }
+>  
+>  static int m_can_dev_setup(struct m_can_classdev *cdev)
+> @@ -1694,9 +1703,6 @@ static int m_can_dev_setup(struct m_can_classdev *cdev)
+>  		return -EINVAL;
+>  	}
+>  
+> -	if (cdev->ops->init)
+> -		cdev->ops->init(cdev);
+> -
+>  	return 0;
+>  }
+>  
+> @@ -1708,7 +1714,8 @@ static void m_can_stop(struct net_device *dev)
+>  	m_can_disable_all_interrupts(cdev);
+>  
+>  	/* Set init mode to disengage from the network */
+> -	m_can_config_endisable(cdev, true);
+> +	if (!m_can_cccr_wait_bits(cdev, CCCR_INIT, CCCR_INIT))
+> +		netdev_err(dev, "failed to enter standby mode\n");
+>  
+>  	/* set the state as STOPPED */
+>  	cdev->can.state = CAN_STATE_STOPPED;
+> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+> index a42600dac70d..c9937dc0d700 100644
+> --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> @@ -453,10 +453,18 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
+>  		goto out_power;
+>  	}
+>  
+> -	ret = tcan4x5x_init(mcan_class);
+> +	tcan4x5x_check_wake(priv);
+> +
+> +	ret = tcan4x5x_write_tcan_reg(mcan_class, TCAN4X5X_INT_EN, 0);
+>  	if (ret) {
+> -		dev_err(&spi->dev, "tcan initialization failed %pe\n",
+> -			ERR_PTR(ret));
+> +		dev_err(&spi->dev, "Disabling interrupts failed %pe\n", ERR_PTR(ret));
+> +		goto out_power;
+> +	}
+> +
+> +	ret = tcan4x5x_write_tcan_reg(mcan_class, TCAN4X5X_INT_FLAGS,
+> +				      TCAN4X5X_CLEAR_ALL_INT);
+
+Why don't you use tcan4x5x_clear_interrupts() here?
+
+Best,
+Markus
+
+> +	if (ret) {
+> +		dev_err(&spi->dev, "Clearing interrupts failed %pe\n", ERR_PTR(ret));
+>  		goto out_power;
+>  	}
+>  
+> -- 
+> 2.44.0
+> 
 
