@@ -1,107 +1,98 @@
-Return-Path: <linux-can+bounces-426-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-427-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C92E289BD6C
-	for <lists+linux-can@lfdr.de>; Mon,  8 Apr 2024 12:41:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3375589BDAA
+	for <lists+linux-can@lfdr.de>; Mon,  8 Apr 2024 13:00:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33987B20F8B
-	for <lists+linux-can@lfdr.de>; Mon,  8 Apr 2024 10:41:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C8D9B2118A
+	for <lists+linux-can@lfdr.de>; Mon,  8 Apr 2024 11:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 784495F865;
-	Mon,  8 Apr 2024 10:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACF26518F;
+	Mon,  8 Apr 2024 11:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rreDV8Pj"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B017D5F861
-	for <linux-can@vger.kernel.org>; Mon,  8 Apr 2024 10:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA29B60260;
+	Mon,  8 Apr 2024 11:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712572893; cv=none; b=gnSAftCLgL4QpzWXcpSJlNgq9NsBHYoW5imFB0OJiJZivRg8k5XnRWJruKv997tAp7PCSFQEEsFUevT6kcM8KoETJ+TnH9nr0b+PtQbZEHEgw+AOADt9g/pShOkpw+WWbATWUOVd9uzHp+/c2xaLnHgxrMhsqTd6qZOjcHwUGp8=
+	t=1712574035; cv=none; b=OsvWtkz17CuDomDUtz2l2wwPqpXwC1XsmYTs22Rgwv+IEz22BaMLD4NZieinv4ipi0kcLy6XE7rdw2l8o2tLgVVciWrP4hOmcdqf1dzIm/dLyHJgKPEK7k+1bNBwnJ66FDaSgNEE3mhrQFYQMlyL1lx3QpIMj3R7oFL3iCMpDrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712572893; c=relaxed/simple;
-	bh=Dkm+loHCWuR63H0BRigmjl6rI+ouRg/iOK5pg3HSZUc=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ixMWpRV/U1wDNsILlp8kh2I55qkQQxcuuXeHBE9M9/1PRtnzBfOsq3+bMWlPSvIM9pLxgPBMeByk0AkGBRDMFiWGldkcVFHfjFPaqmms6QfQWefindQjNi9OqkIbQkX/WrrBtkm8W0TbkBjDxcxJKGbVTtKRI5TMX2uwQMgIuy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rtmRL-0005WG-NW
-	for linux-can@vger.kernel.org; Mon, 08 Apr 2024 12:41:27 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rtmRL-00B5yM-AS
-	for linux-can@vger.kernel.org; Mon, 08 Apr 2024 12:41:27 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 06FBF2B3E42
-	for <linux-can@vger.kernel.org>; Mon,  8 Apr 2024 10:41:27 +0000 (UTC)
-Date: Mon, 8 Apr 2024 12:41:26 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: linux-can@vger.kernel.org
-Subject: Embedded World 2024
-Message-ID: <20240408-gusty-december-9ad3ad702781-mkl@pengutronix.de>
+	s=arc-20240116; t=1712574035; c=relaxed/simple;
+	bh=HbeOSTm2sxkRzI1ptMnZ92ADLHFoQ1xwvYsVAagxJzk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=bJn3GKWT6Jo8Bvs/FKlfnMrrOkp6N5Wav7oI5OhiGbf/UlctnPq4gi6z6XV5A4mDn7CKuTOaShmP7gGnU//Q63bVrtBQq6qOBAesGNrn1gaDHULGwY1nsrlrvXUtA4GbuX9VA3IYKou1DNh3ekodiO1czZP5+ep4REJK0A6BGV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rreDV8Pj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C54C5C43390;
+	Mon,  8 Apr 2024 11:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712574034;
+	bh=HbeOSTm2sxkRzI1ptMnZ92ADLHFoQ1xwvYsVAagxJzk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=rreDV8Pj2c/Nd3BUAreHDSJd5asr4Sc3WMhsr/GbgbVeAWp3Vfjs3Wz2tei+/JuP+
+	 NLhtLWlaO7L7Q6bneHxCxgVhqO6sXesDai8urXttN5GCs4hf6vjH1w5iHgoKSl4FdK
+	 nTc1wZeGp+bL/Fx1gWCLSwGYWyutnI+fmoqPvr2o8qJfCADacqqJYWbBi+QfDx5V7+
+	 JFT5+Ekone/JmiUS0hhYfGiCOfDKSCfhbi1eY3XTYhxYSWPnu9RXfjKv17U9DJDGv3
+	 KClK/ytowRhWWcnkZAdT4YcW7haUAuRkBnhx044TNGB1ClN6ho9A/pu6XQjrP+Pv9t
+	 oU6qjYkfVGFMQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A8C8FC54BD7;
+	Mon,  8 Apr 2024 11:00:34 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nhtyhzn2p6pysgij"
-Content-Disposition: inline
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/1] XYZ: Handle HAS_IOPORT dependencies
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171257403468.26748.18118428857352948104.git-patchwork-notify@kernel.org>
+Date: Mon, 08 Apr 2024 11:00:34 +0000
+References: <20240405111831.3881080-1-schnelle@linux.ibm.com>
+In-Reply-To: <20240405111831.3881080-1-schnelle@linux.ibm.com>
+To: Niklas Schnelle <schnelle@linux.ibm.com>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ m.grzeschik@pengutronix.de, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+ netdev@vger.kernel.org, linux-can@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-hams@vger.kernel.org,
+ arnd@kernel.org, hca@linux.ibm.com, linux-kernel@vger.kernel.org
+
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri,  5 Apr 2024 13:18:30 +0200 you wrote:
+> Hi networking maintainers,
+> 
+> This is a follow up in my ongoing effort of making inb()/outb() and
+> similar I/O port accessors compile-time optional. Previously I sent this
+> as a treewide series titled "treewide: Remove I/O port accessors for
+> HAS_IOPORT=n" with the latest being its 5th version[0]. With a significant
+> subset of patches merged I've changed over to per-subsystem series. These
+> series are stand alone and should be merged via the relevant tree such
+> that with all subsystems complete we can follow this up with the final
+> patch that will make the I/O port accessors compile-time optional.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/1] net: handle HAS_IOPORT dependencies
+    https://git.kernel.org/netdev/net-next/c/a29689e60ed3
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
---nhtyhzn2p6pysgij
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-pretty short notice, I know :). I will be at Embedded World in Nuremberg
-tomorrow, Tuesday 09.04.2024. Drop me a line if anyone wants to talk to
-me and/or have a beverage of your choice with me.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---nhtyhzn2p6pysgij
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmYTydMACgkQKDiiPnot
-vG++rAgAjSEviazs8wEKZdRLuBohi9R3iXymhZiLskdQWKliVBNvq/Ak1U7zuDY/
-9sKoATE/VPfi3ZOtwRBnYwVwPq8HK8ZJSlmrvDl8Fqk0GwCOzOE6tIOpCmBnkQKo
-N31YfVuc2JSoZGRZBk6/brtIsvps9J0P81+xP54r0HWaTjCozJsKZK2ZjFdawUpj
-3hwmsocVGSqb3THf64aiZ7oykMlBSQ6nDSnEgMjMG3CEYTL+rBz5dierv1SxlgzQ
-Fy6Jhpqs2BFP0SPATG8zL2e9K1ZA2oHe2Fyzeh+XxGTdtp6e+MbS6/m7HuZffGOB
-dO3ZrV9z9xc3MWbdM485oYdnZYqwqw==
-=3DlF
------END PGP SIGNATURE-----
-
---nhtyhzn2p6pysgij--
 
