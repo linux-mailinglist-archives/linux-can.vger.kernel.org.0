@@ -1,123 +1,86 @@
-Return-Path: <linux-can+bounces-428-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-429-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3406C8A34C9
-	for <lists+linux-can@lfdr.de>; Fri, 12 Apr 2024 19:33:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F17A8A3BCB
+	for <lists+linux-can@lfdr.de>; Sat, 13 Apr 2024 11:02:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F17A1C212AD
-	for <lists+linux-can@lfdr.de>; Fri, 12 Apr 2024 17:33:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27AAD282B33
+	for <lists+linux-can@lfdr.de>; Sat, 13 Apr 2024 09:02:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACC4314AD36;
-	Fri, 12 Apr 2024 17:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YDbqWkc1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2341D208B6;
+	Sat, 13 Apr 2024 09:02:04 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A945491F;
-	Fri, 12 Apr 2024 17:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3542110B;
+	Sat, 13 Apr 2024 09:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712943222; cv=none; b=vF/xNFizHAVWI0qj88m6V/xAm4UQpvlhrg6UU1DLyNiEipV0uzAp2CbTnvcrc51mwEok1hcsftwwRgoHyO9wf5z+Z6SZBfLbFuiJ7EjVqck2N8ypcdp7He1QFyNYMgLK56YLNffoyUM9gDOJJL5gI1e9VBBxzTsGs3lhyanA3a4=
+	t=1712998924; cv=none; b=E4BJhk8qShkCYp53HfigaJf7gp4UXRCyYJazgABN/UgTXxrcnL4uGpqhUwBtYYso6hEMlvbVDG5Pa1msu0wtL/ZNA44uMdJon0NcpS8O8GCvXyNu6tBawSILkwCD1Wpmb3AtZibHJATjHL9RYJiW+SHAvmQp3cwP1zkq8R/sgA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712943222; c=relaxed/simple;
-	bh=+Kb4STvNJ+pOq+Bbj0vo6MDVZVuYbMArjfmW9xuJGRM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V2aeP1KnFdBociHNc29FDYPL6LI3vDyhPYzN1i+Lp+f/NOWV4K9AI1CT9BQvQbMACADDv9xg9YrVSs8LS5pgcAT85X93dtkbkBxDurJ+lMvQSi0uz6Hqp1H4B161l0z5YN6L4ZDnpRQfdN05zPPE6vjJBZk6lPlZntqwsRlfen4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YDbqWkc1; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712943221; x=1744479221;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+Kb4STvNJ+pOq+Bbj0vo6MDVZVuYbMArjfmW9xuJGRM=;
-  b=YDbqWkc1C+vbY0lABkO1YMTeUx43Se7tvGWT6H+/sYc78H9yb777Qzmn
-   xHiiuirbns7h5AEjolHKYctOuNpwq1JCakZ3cQDy00jV5MXhoe/4kZjCx
-   n0ze3gdrcgSJIKtByuxIO2aPquYpSbhmDLG8aEx0LgePXURdcD+xFQf3+
-   Bt91Urs9pDh16D8GwtiUuIfYgH14tclZxoAsOp5gN+58obWgtlfix1BxY
-   UowbTeLXSUUEtyFktb/7ECqUHytJGQr8sV5APR2ErjoZr+vZ4J6zYZcyp
-   lHlB9pKUQWidjy4/Js9+ZliKRIb79ntM4BigZ1g1HH5yNQafotFaLr5Ws
-   w==;
-X-CSE-ConnectionGUID: wCycNY2DTS2Eetw2E0d61A==
-X-CSE-MsgGUID: gcps37+oT5a1Ab8HfOK8Eg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="8578640"
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="8578640"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 10:33:40 -0700
-X-CSE-ConnectionGUID: PepGGd6URwelQES4/NIPNQ==
-X-CSE-MsgGUID: 1KzlB0FzTxiRHI3zLn1afA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="21326063"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa006.fm.intel.com with ESMTP; 12 Apr 2024 10:33:38 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id C3039FF; Fri, 12 Apr 2024 20:33:36 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH net-next v1 1/1] can: mcp251x: Fix up includes
-Date: Fri, 12 Apr 2024 20:33:32 +0300
-Message-ID: <20240412173332.186685-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	s=arc-20240116; t=1712998924; c=relaxed/simple;
+	bh=OUSUxcE0sHG/pVSLfVF04gHERkRgIOisdfrwCbkj0CQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f73NlsXEMhJE/UUsqZUTVpVsq+ebwl0cY+DkxNP3aRTFe3U7GiX5ogCt4HVnknVQm79kSg8E0tkwOV0o7MjW+xrbkgFtjdOP58zWS74wecp0liJlAWhs2xyAPsB+uIVZGy6UEILYiXPZP/W03+1GC9eaL+InnhtXYjA05n/NDA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2a55a3d0b8eso1065432a91.1;
+        Sat, 13 Apr 2024 02:02:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712998922; x=1713603722;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OUSUxcE0sHG/pVSLfVF04gHERkRgIOisdfrwCbkj0CQ=;
+        b=O9Mfr1Ru3tlR+iivKoiqu70QVNub/h846IXvlwQqBF8Uo8Sd05SIBN/KHlnTwm1JjL
+         HZxO6hf9zEjWgg7OZd4ggM/pj0cjtr0i/unPgZFaG1RHTJraLZO7bims6+ASujKvzqiy
+         Q1xdQBO8hGQRWx0c0aPS85K1LMVl7ZqTKs2kiIN6Wbk6kvUBE5kloR2V0G3s9mLKpdo/
+         gaCN12tFtE+ed70Aiy1EKaCiQCMv14OtP5KmGrS8i/boWIlg3cu80Qd/qREum25x9OSQ
+         rhvbZ8/L0qA67cz5lv/z6XdP3kk2JyOaH/2aC3IqRAaDrFIREOtxS2ILrztIQV1QUOBb
+         xmQA==
+X-Forwarded-Encrypted: i=1; AJvYcCV6Qa0d8G9f41/oEIZ3cLtE3QoQHqlVf7oty+uwmA8DIzyZhv0bDULsY1FroGV26sPW6ogzcjFz0gjG4QLsv+awMAq7sJZBT6tr1W/VKubywrV4AlpdHtDdCUT94K36V1/Y/Ngm
+X-Gm-Message-State: AOJu0YzkWR8CvGP+4hofu5MrVEV63q3AycFsfRPNrQNmQDWaQa7rnycL
+	HQVIWwc5IgbBej3sy7rHecvB0vOF3zJ3y8exWQYBCAD2AjLG0bUYV6mjPZ442gG3EJQ/NkLn5O3
+	J1KM+HBl4fM00IpArAs2VZC8N8XU=
+X-Google-Smtp-Source: AGHT+IH/J5olMb8DBJhgw9hOvDiGOdu3AljEKe+ONFbnD+K9ygwPzFOJPEuNgbQGcLOi0TXUwGCieIHVXgWzWEuPveQ=
+X-Received: by 2002:a17:90a:d083:b0:2a6:19a5:1ae4 with SMTP id
+ k3-20020a17090ad08300b002a619a51ae4mr10615943pju.3.1712998921635; Sat, 13 Apr
+ 2024 02:02:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240412173332.186685-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240412173332.186685-1-andriy.shevchenko@linux.intel.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Sat, 13 Apr 2024 18:01:47 +0900
+Message-ID: <CAMZ6RqLWmjwsFPsVZtpDiWCW71wTao-oz9dDrqKUfrYTvtDxZw@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] can: mcp251x: Fix up includes
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-This driver is including the legacy GPIO header <linux/gpio.h>
-but the only thing it is using from that header is the wrong
-define for GPIOF_DIR_OUT.
+On Sat. 13 Apr. 2024 at 02:33, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> This driver is including the legacy GPIO header <linux/gpio.h>
+> but the only thing it is using from that header is the wrong
+> define for GPIOF_DIR_OUT.
+>
+> Fix it up by using GPIO_LINE_DIRECTION_* macros respectively.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Fix it up by using GPIO_LINE_DIRECTION_* macros respectively.
+Thank you for the patch.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/net/can/spi/mcp251x.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-index 79c4bab5f724..643974b3f329 100644
---- a/drivers/net/can/spi/mcp251x.c
-+++ b/drivers/net/can/spi/mcp251x.c
-@@ -28,7 +28,6 @@
- #include <linux/device.h>
- #include <linux/ethtool.h>
- #include <linux/freezer.h>
--#include <linux/gpio.h>
- #include <linux/gpio/driver.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-@@ -482,9 +481,9 @@ static int mcp251x_gpio_get_direction(struct gpio_chip *chip,
- 				      unsigned int offset)
- {
- 	if (mcp251x_gpio_is_input(offset))
--		return GPIOF_DIR_IN;
-+		return GPIO_LINE_DIRECTION_IN;
- 
--	return GPIOF_DIR_OUT;
-+	return GPIO_LINE_DIRECTION_OUT;
- }
- 
- static int mcp251x_gpio_get(struct gpio_chip *chip, unsigned int offset)
--- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
