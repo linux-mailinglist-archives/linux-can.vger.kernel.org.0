@@ -1,358 +1,266 @@
-Return-Path: <linux-can+bounces-433-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-434-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 307BE8A40A4
-	for <lists+linux-can@lfdr.de>; Sun, 14 Apr 2024 08:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A527C8A4509
+	for <lists+linux-can@lfdr.de>; Sun, 14 Apr 2024 22:22:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 995FF1F21639
-	for <lists+linux-can@lfdr.de>; Sun, 14 Apr 2024 06:27:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B1131F2126E
+	for <lists+linux-can@lfdr.de>; Sun, 14 Apr 2024 20:22:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B1991C6A3;
-	Sun, 14 Apr 2024 06:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5709135A59;
+	Sun, 14 Apr 2024 20:22:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="ZYVuZhhh";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="+nkF2OOL"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733B01BF27
-	for <linux-can@vger.kernel.org>; Sun, 14 Apr 2024 06:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713076056; cv=none; b=WBLy4flF15SG50YdOfSeAbPyTwzn8Ad4dcf9u4WNaKMucOOlaw0qUgM6rPGUlE5lp1FL1vC0btxW+7a+J1QR2fdLaY/tPy6fyh9NpuahatA0ZBD6lTRVf99YV/Un6inms3TS7nNwHhLxSqxm5f37TGbVWlVSGIm81iHOWtcaloM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713076056; c=relaxed/simple;
-	bh=mdzAcLlJ/Fl696CX7w7hYPiYG4H27UxIaLaCBToAeHw=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=WK/8TWY+B/tzlrA2oGFPiJ2QsKTTdFo/TPcGT9c7ahSEknFkIP5twj+FuEv3ZjrBlOOIauV8RB6pdGymgeidoNDc8f3+NXAYt8Tw9MT1wq8IbFWXfd284oU1H74waQUBMWLQCk3sYm6e9qY6jTTHpdjrf78POrbli+u4nLBI0OY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-36b1c0cc29cso1078765ab.0
-        for <linux-can@vger.kernel.org>; Sat, 13 Apr 2024 23:27:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713076053; x=1713680853;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JLg2GQWsZGkAR0+hnAq/u4FeIl+zdxISivDMgQEvFLE=;
-        b=RKIVI3+1cNePvg+PKBVOc5rQYl1EYDueucMuN58bqXsbw0T58ZKBUk+X4ItZwlDiXA
-         Kao1v4iQw4QEJGLEssQco0sn10NaSaW8AeXromk0ywDYClapMQxEcLESO49iKseuHexR
-         h+LwlZh/Gl7RB5m3loURvmYD1BdS6TDm8g44foqJB5kNV9EzXRpVeooMBBe2k70/pyY2
-         ZuShDA9KgUl0YsBwHY5xiVPARVHYpYq9lNpPtm28/kJHNEuKLCISgbQYS9P4YMhy+slp
-         3PjVdD9IG8yXFc3ZmlB+vg+lzpA6I8QCuxuVfytc4QA0EEre3xy37OXd1JSTQ/dvCpM3
-         CDag==
-X-Forwarded-Encrypted: i=1; AJvYcCUWHOAMVZLlsW1RtueytmUnPL9TFlNhfqSP80DBcHlu0KsMYyaWwIK0RnI3pjHj4w3BbsZlGgH3PGArgmGBqxNz1vfi3YfG2gxG
-X-Gm-Message-State: AOJu0YyjbYDUT6PACF/cPsoZwi07Dj9/NIX6vZnF4Id43k/DrOdEua8a
-	gA+VW7dxvCAkIaKRE+TCT2ghE+IJi05Zj2pf7XSnCkQDyGfNfELN/SP5V4vb009ShaIN8KaapqM
-	/GRawLk1QjfJb8zTpYBl3K2Le8z36XKMcMe9p9Cbrd7WN70OS9HtM8lw=
-X-Google-Smtp-Source: AGHT+IHuoVxI8ovshMQSE2etOluomFFVe6SnPJaGYGKRxmL7y9TTyj1ouM7y7eILlgyro3eUTtwmsDCWIaoltjLfSs8ZJ+kDr2dg
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8917B1D688;
+	Sun, 14 Apr 2024 20:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713126124; cv=pass; b=i30Crf8oSrQbu1fHPYyXTgaGgeR/keYvyWTtBBboZ617zCoV3QUUHtI87oSFiYFM00fVT4JLZgNxtfjvj/9DC2jjC3U1PsUlZ/nQNMH6J2ahu5vkl6ZREh+YXiBAOBX+ZrRqZ7BI7lHHpFYZ0KuzfOVrIa+3Hosi4O3qwzQH02Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713126124; c=relaxed/simple;
+	bh=vT8KOr3SvikJeMpg2ktjqGTrpiUSVOwI7Ulj4Tcu88w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H3zbjxtA/MGrvUSA0NLEden4UD8HV86HD7s8G9kjlLXnDYiyNbumdvsnlwIS/2ULaOSKq0j5s0/Q4o4zMoCfBZz0/r2Eec1yEq4MCSJgmnptux8OQYD8E5wqnDLQzDrn48p/plwdmdYtw/WhvP7lHykwOaqB0/QJfAcWVpsgt1E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=ZYVuZhhh; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=+nkF2OOL; arc=pass smtp.client-ip=85.215.255.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1713126101; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=nKKe3KUJgcml3yIeSAfS56G8gn/M7whEEmw5a5WE7fzwLxRAf4YgS3U8NaGBzH7EKN
+    SN9kbiTMgjzC3HdfxggzC2C+pa4fZhoalOouQUD3kp8xr6IUKFkF0OIRTn5QwBqcV4Pz
+    8S8DH7Tu870sSA+WqA15kFbfl7DUOq6JHzQriOqIzRtxWujt4beS0BpV09ip0z2wRjD4
+    2lNLFsrTTA+rGiGp3ZEVgu0cc5jR91gw8YAViIx4OMUwaD+f1eiehji4TnYMkGUbs5xU
+    HihvqqwdMTAJquFHn2bK4XonjIZADOExmrzz8qT2Mas8F2DGZcQBG9V63UnCDENsXtUg
+    JW2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1713126101;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=FFdZNeDIHKlI++tV+rJTXXExTAzAeIULgTQSTJmSCuU=;
+    b=d+2z78jmUpVbWERrzidNkDGiRCzxitPyZ2tpox3AwqsqC3JvEgUdNG5uCXBcM9wmAu
+    UgHUzNX1yYTKNUm+/tOcB9QZ/7LtSF/W5z7SUFj5GP3eqD/YyCpJslokiqq7on3KUfOj
+    JlX//bb2fygswKgToU5A0T8XcU9lxZwKOHCPaa0wiFT4i9rz1H3dXjcA8Ej0uRgbQwlv
+    axiISXyFHxFHb3rJUTirzl8MdzUSgItAVwS+6OQetwz8/2X5+Alo1VBaZCtH9kwu0dAs
+    vQIigU063HdD99I/JZdXaBnEod5JnJDh89QXyeOLAvv/yK3UjMO5R7rFp8+wjLghDKRK
+    lsuA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1713126101;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=FFdZNeDIHKlI++tV+rJTXXExTAzAeIULgTQSTJmSCuU=;
+    b=ZYVuZhhhuTXsfiqLhsPEg9wlcG8eThmmC3SBleBWs6PUuvW9kKG088eYLZb0T7bZDv
+    Ak+c4F8bikqsCZa3SUQxA0mHIX1w6+NtSM27rgwtEdQolFnQc48REWOGpwzW7cWr8x/I
+    +gHUrQYOgNgcshVn0/TdM8YkzkTsjKTaw7YdfZ9SmhXpERFqvGLxS8fSlgaihG78ocqt
+    0z0Z7+lrsvciLpvsV0Kw4uGfTq7a9sB3WSEY+/wl5YEVO8OKtAP86Zc1gVSRIC20zCRt
+    hPTW9mKqxNXClgLUadI/iW2eiNl3z7KoE3ATGPMVT4dvC7MZqmjbw/keLiY6Ht954K/3
+    Hx8Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1713126101;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=FFdZNeDIHKlI++tV+rJTXXExTAzAeIULgTQSTJmSCuU=;
+    b=+nkF2OOLy0dmy4fcPZ9weFhIxlK4A9ibM3sS5vJCEe69AFulTfGJgtlCP8ET/+uzb2
+    YOxnle5qTxrA0hgL48Cg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR+J8xpzl0="
+Received: from [192.168.60.177]
+    by smtp.strato.de (RZmta 50.3.2 DYNA|AUTH)
+    with ESMTPSA id K701d603EKLfKo9
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sun, 14 Apr 2024 22:21:41 +0200 (CEST)
+Message-ID: <64586257-3cf6-4c10-a30b-200b1ecc5e80@hartkopp.net>
+Date: Sun, 14 Apr 2024 22:21:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1545:b0:36a:1813:d85c with SMTP id
- j5-20020a056e02154500b0036a1813d85cmr499264ilu.4.1713076053764; Sat, 13 Apr
- 2024 23:27:33 -0700 (PDT)
-Date: Sat, 13 Apr 2024 23:27:33 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a87d17061608997e@google.com>
-Subject: [syzbot] [can?] KASAN: slab-use-after-free Read in j1939_xtp_rx_dat_one
-From: syzbot <syzbot+75ec36af46e2098f253c@syzkaller.appspotmail.com>
-To: davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de, 
-	kuba@kernel.org, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	mkl@pengutronix.de, netdev@vger.kernel.org, o.rempel@pengutronix.de, 
-	pabeni@redhat.com, robin@protonic.nl, socketcan@hartkopp.net, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    2c71fdf02a95 Merge tag 'drm-fixes-2024-04-09' of https://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1147924d180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=285be8dd6baeb438
-dashboard link: https://syzkaller.appspot.com/bug?extid=75ec36af46e2098f253c
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ae00cb180000
-
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-2c71fdf0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1d7474aaf31a/vmlinux-2c71fdf0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/895428c29966/bzImage-2c71fdf0.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+75ec36af46e2098f253c@syzkaller.appspotmail.com
-
-vcan0: j1939_xtp_rx_dat_one: 0xffff88802c9a1400: Data of RX-looped back packet (00 00 00 00 00 00 00) doesn't match TX data (00 63 67 72 6f 75 70)!
-==================================================================
-BUG: KASAN: slab-use-after-free in j1939_xtp_rx_dat_one+0xf2d/0xfb0 net/can/j1939/transport.c:1888
-Read of size 1 at addr ffff88803c35394e by task syz-executor.0/6638
-
-CPU: 1 PID: 6638 Comm: syz-executor.0 Not tainted 6.9.0-rc3-syzkaller-00023-g2c71fdf02a95 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:114
- print_address_description mm/kasan/report.c:377 [inline]
- print_report+0xc3/0x620 mm/kasan/report.c:488
- kasan_report+0xd9/0x110 mm/kasan/report.c:601
- j1939_xtp_rx_dat_one+0xf2d/0xfb0 net/can/j1939/transport.c:1888
- j1939_xtp_rx_dat net/can/j1939/transport.c:1940 [inline]
- j1939_tp_recv+0x7c5/0xf50 net/can/j1939/transport.c:2134
- j1939_can_recv+0x78f/0xa70 net/can/j1939/main.c:112
- deliver net/can/af_can.c:572 [inline]
- can_rcv_filter+0x2a8/0x900 net/can/af_can.c:606
- can_receive+0x320/0x5c0 net/can/af_can.c:663
- can_rcv+0x1e0/0x280 net/can/af_can.c:687
- __netif_receive_skb_one_core+0x1b1/0x1e0 net/core/dev.c:5538
- __netif_receive_skb+0x1d/0x160 net/core/dev.c:5652
- process_backlog+0x12f/0x6f0 net/core/dev.c:5981
- __napi_poll.constprop.0+0xb7/0x550 net/core/dev.c:6632
- napi_poll net/core/dev.c:6701 [inline]
- net_rx_action+0x9ad/0xf10 net/core/dev.c:6816
- __do_softirq+0x218/0x922 kernel/softirq.c:554
- invoke_softirq kernel/softirq.c:428 [inline]
- __irq_exit_rcu kernel/softirq.c:633 [inline]
- irq_exit_rcu+0xb9/0x120 kernel/softirq.c:645
- instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
- sysvec_apic_timer_interrupt+0x95/0xb0 arch/x86/kernel/apic/apic.c:1043
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
-RIP: 0010:preempt_count_add+0x1f/0x150 kernel/sched/core.c:5874
-Code: 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 48 c7 c0 a0 0a 6b 94 55 48 ba 00 00 00 00 00 fc ff df 48 89 c1 53 83 e0 07 89 fb <48> c1 e9 03 83 c0 03 65 01 3d 7b ee a5 7e 0f b6 14 11 38 d0 7c 08
-RSP: 0018:ffffc9000df47d10 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffffffff946b0aa0
-RDX: dffffc0000000000 RSI: ffffffff820230f6 RDI: 0000000000000001
-RBP: ffff88802a87fa60 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: ffff888024238350
-R13: ffff88802a87fa68 R14: 0000000000000000 R15: dffffc0000000000
- mnt_get_write_access+0x20/0x300 fs/namespace.c:352
- mnt_want_write+0x149/0x450 fs/namespace.c:410
- filename_create+0x10d/0x530 fs/namei.c:3885
- do_symlinkat+0xbf/0x310 fs/namei.c:4500
- __do_sys_symlinkat fs/namei.c:4523 [inline]
- __se_sys_symlinkat fs/namei.c:4520 [inline]
- __x64_sys_symlinkat+0x97/0xc0 fs/namei.c:4520
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcf/0x260 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f35bd27d5e7
-Code: 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 0a 01 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc8ec53158 EFLAGS: 00000202 ORIG_RAX: 000000000000010a
-RAX: ffffffffffffffda RBX: 00007ffc8ec53220 RCX: 00007f35bd27d5e7
-RDX: 00007f35bd2ca526 RSI: 00000000ffffff9c RDI: 00007ffc8ec53220
-RBP: 0000000000000001 R08: 0000000000000017 R09: 00007ffc8ec52ea7
-R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000001 R15: 0000000000000000
- </TASK>
-
-Allocated by task 6640:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- unpoison_slab_object mm/kasan/common.c:312 [inline]
- __kasan_slab_alloc+0x89/0x90 mm/kasan/common.c:338
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slub.c:3798 [inline]
- slab_alloc_node mm/slub.c:3845 [inline]
- kmem_cache_alloc_node+0x177/0x340 mm/slub.c:3888
- __alloc_skb+0x2b1/0x380 net/core/skbuff.c:658
- alloc_skb include/linux/skbuff.h:1313 [inline]
- alloc_skb_with_frags+0xe4/0x710 net/core/skbuff.c:6504
- sock_alloc_send_pskb+0x7f1/0x980 net/core/sock.c:2795
- sock_alloc_send_skb include/net/sock.h:1842 [inline]
- j1939_sk_alloc_skb net/can/j1939/socket.c:878 [inline]
- j1939_sk_send_loop net/can/j1939/socket.c:1142 [inline]
- j1939_sk_sendmsg+0x6d4/0x1370 net/can/j1939/socket.c:1277
- sock_sendmsg_nosec net/socket.c:730 [inline]
- __sock_sendmsg net/socket.c:745 [inline]
- sock_sendmsg+0x3cb/0x470 net/socket.c:768
- splice_to_socket+0xab2/0x1040 fs/splice.c:889
- do_splice_from fs/splice.c:941 [inline]
- direct_splice_actor+0x19b/0x6d0 fs/splice.c:1164
- splice_direct_to_actor+0x346/0xa40 fs/splice.c:1108
- do_splice_direct_actor fs/splice.c:1207 [inline]
- do_splice_direct+0x17e/0x250 fs/splice.c:1233
- do_sendfile+0xaa8/0xdb0 fs/read_write.c:1295
- __do_sys_sendfile64 fs/read_write.c:1362 [inline]
- __se_sys_sendfile64 fs/read_write.c:1348 [inline]
- __x64_sys_sendfile64+0x1da/0x220 fs/read_write.c:1348
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcf/0x260 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Freed by task 24:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- kasan_save_free_info+0x3b/0x60 mm/kasan/generic.c:579
- poison_slab_object mm/kasan/common.c:240 [inline]
- __kasan_slab_free+0x11d/0x1a0 mm/kasan/common.c:256
- kasan_slab_free include/linux/kasan.h:184 [inline]
- slab_free_hook mm/slub.c:2106 [inline]
- slab_free mm/slub.c:4280 [inline]
- kmem_cache_free+0x12e/0x380 mm/slub.c:4344
- kfree_skbmem+0x10e/0x200 net/core/skbuff.c:1159
- __kfree_skb net/core/skbuff.c:1217 [inline]
- kfree_skb_reason+0x13a/0x210 net/core/skbuff.c:1252
- kfree_skb include/linux/skbuff.h:1262 [inline]
- j1939_session_skb_drop_old net/can/j1939/transport.c:347 [inline]
- j1939_xtp_rx_cts_one net/can/j1939/transport.c:1445 [inline]
- j1939_xtp_rx_cts+0x619/0xf60 net/can/j1939/transport.c:1484
- j1939_tp_cmd_recv net/can/j1939/transport.c:2072 [inline]
- j1939_tp_recv+0x568/0xf50 net/can/j1939/transport.c:2144
- j1939_can_recv+0x78f/0xa70 net/can/j1939/main.c:112
- deliver net/can/af_can.c:572 [inline]
- can_rcv_filter+0x2a8/0x900 net/can/af_can.c:606
- can_receive+0x320/0x5c0 net/can/af_can.c:663
- can_rcv+0x1e0/0x280 net/can/af_can.c:687
- __netif_receive_skb_one_core+0x1b1/0x1e0 net/core/dev.c:5538
- __netif_receive_skb+0x1d/0x160 net/core/dev.c:5652
- process_backlog+0x12f/0x6f0 net/core/dev.c:5981
- __napi_poll.constprop.0+0xb7/0x550 net/core/dev.c:6632
- napi_poll net/core/dev.c:6701 [inline]
- net_rx_action+0x9ad/0xf10 net/core/dev.c:6816
- __do_softirq+0x218/0x922 kernel/softirq.c:554
-
-The buggy address belongs to the object at ffff88803c353900
- which belongs to the cache skbuff_head_cache of size 240
-The buggy address is located 78 bytes inside of
- freed 240-byte region [ffff88803c353900, ffff88803c3539f0)
-
-The buggy address belongs to the physical page:
-page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x3c352
-head: order:1 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-anon flags: 0xfff80000000840(slab|head|node=0|zone=1|lastcpupid=0xfff)
-page_type: 0xffffffff()
-raw: 00fff80000000840 ffff888019288780 0000000000000000 dead000000000001
-raw: 0000000000000000 0000000000190019 00000001ffffffff 0000000000000000
-head: 00fff80000000840 ffff888019288780 0000000000000000 dead000000000001
-head: 0000000000000000 0000000000190019 00000001ffffffff 0000000000000000
-head: 00fff80000000001 ffffea0000f0d481 ffffea0000f0d4c8 00000000ffffffff
-head: 0000000200000000 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0x152820(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_HARDWALL), pid 12, tgid 12 (kworker/u32:1), ts 292119497381, free_ts 291277043750
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x2d4/0x350 mm/page_alloc.c:1534
- prep_new_page mm/page_alloc.c:1541 [inline]
- get_page_from_freelist+0xa28/0x3780 mm/page_alloc.c:3317
- __alloc_pages+0x22b/0x2460 mm/page_alloc.c:4575
- __alloc_pages_node include/linux/gfp.h:238 [inline]
- alloc_pages_node include/linux/gfp.h:261 [inline]
- alloc_slab_page mm/slub.c:2175 [inline]
- allocate_slab mm/slub.c:2338 [inline]
- new_slab+0xcc/0x3a0 mm/slub.c:2391
- ___slab_alloc+0x66d/0x1790 mm/slub.c:3525
- __slab_alloc.constprop.0+0x56/0xb0 mm/slub.c:3610
- __slab_alloc_node mm/slub.c:3663 [inline]
- slab_alloc_node mm/slub.c:3835 [inline]
- kmem_cache_alloc+0x2e9/0x320 mm/slub.c:3852
- skb_clone+0x190/0x3f0 net/core/skbuff.c:2063
- can_send+0x56d/0xb40 net/can/af_can.c:260
- j1939_send_one+0x299/0x360 net/can/j1939/main.c:357
- j1939_tp_tx_dat net/can/j1939/transport.c:646 [inline]
- j1939_session_tx_dat net/can/j1939/transport.c:838 [inline]
- j1939_xtp_txnext_transmiter net/can/j1939/transport.c:900 [inline]
- j1939_tp_txtimer+0xa8f/0x29e0 net/can/j1939/transport.c:1160
- __run_hrtimer kernel/time/hrtimer.c:1692 [inline]
- __hrtimer_run_queues+0x20c/0xcc0 kernel/time/hrtimer.c:1756
- hrtimer_run_softirq+0x17d/0x350 kernel/time/hrtimer.c:1773
- __do_softirq+0x218/0x922 kernel/softirq.c:554
-page last free pid 4682 tgid 4682 stack trace:
- reset_page_owner include/linux/page_owner.h:25 [inline]
- free_pages_prepare mm/page_alloc.c:1141 [inline]
- free_unref_page_prepare+0x527/0xb10 mm/page_alloc.c:2347
- free_unref_page+0x33/0x3c0 mm/page_alloc.c:2487
- qlink_free mm/kasan/quarantine.c:163 [inline]
- qlist_free_all+0x4e/0x140 mm/kasan/quarantine.c:179
- kasan_quarantine_reduce+0x192/0x1e0 mm/kasan/quarantine.c:286
- __kasan_kmalloc+0x8a/0xb0 mm/kasan/common.c:378
- kasan_kmalloc include/linux/kasan.h:211 [inline]
- __do_kmalloc_node mm/slub.c:3966 [inline]
- __kmalloc+0x1f9/0x440 mm/slub.c:3979
- kmalloc include/linux/slab.h:632 [inline]
- kzalloc include/linux/slab.h:749 [inline]
- tomoyo_encode2+0x100/0x3e0 security/tomoyo/realpath.c:45
- tomoyo_encode+0x29/0x50 security/tomoyo/realpath.c:80
- tomoyo_realpath_from_path+0x19d/0x720 security/tomoyo/realpath.c:283
- tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_path_perm+0x273/0x450 security/tomoyo/file.c:822
- tomoyo_path_unlink+0x92/0xe0 security/tomoyo/tomoyo.c:162
- security_path_unlink+0x100/0x170 security/security.c:1857
- do_unlinkat+0x55b/0x750 fs/namei.c:4396
- __do_sys_unlink fs/namei.c:4447 [inline]
- __se_sys_unlink fs/namei.c:4445 [inline]
- __x64_sys_unlink+0xc7/0x110 fs/namei.c:4445
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcf/0x260 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Memory state around the buggy address:
- ffff88803c353800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88803c353880: fb fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc
->ffff88803c353900: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                              ^
- ffff88803c353980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc
- ffff88803c353a00: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
-==================================================================
-----------------
-Code disassembly (best guess):
-   0:	90                   	nop
-   1:	90                   	nop
-   2:	90                   	nop
-   3:	90                   	nop
-   4:	90                   	nop
-   5:	90                   	nop
-   6:	90                   	nop
-   7:	90                   	nop
-   8:	90                   	nop
-   9:	90                   	nop
-   a:	90                   	nop
-   b:	f3 0f 1e fa          	endbr64
-   f:	48 c7 c0 a0 0a 6b 94 	mov    $0xffffffff946b0aa0,%rax
-  16:	55                   	push   %rbp
-  17:	48 ba 00 00 00 00 00 	movabs $0xdffffc0000000000,%rdx
-  1e:	fc ff df
-  21:	48 89 c1             	mov    %rax,%rcx
-  24:	53                   	push   %rbx
-  25:	83 e0 07             	and    $0x7,%eax
-  28:	89 fb                	mov    %edi,%ebx
-* 2a:	48 c1 e9 03          	shr    $0x3,%rcx <-- trapping instruction
-  2e:	83 c0 03             	add    $0x3,%eax
-  31:	65 01 3d 7b ee a5 7e 	add    %edi,%gs:0x7ea5ee7b(%rip)        # 0x7ea5eeb3
-  38:	0f b6 14 11          	movzbl (%rcx,%rdx,1),%edx
-  3c:	38 d0                	cmp    %dl,%al
-  3e:	7c 08                	jl     0x48
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] Documentation: networking: document ISO
+ 15765-2:2016
+To: Vincent Mailhol <vincent.mailhol@gmail.com>
+Cc: Francesco Valla <valla.francesco@gmail.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Simon Horman <horms@kernel.org>, Bagas Sanjaya <bagasdotme@gmail.com>,
+ fabio@redaril.me
+References: <20240329133458.323041-2-valla.francesco@gmail.com>
+ <20240329133458.323041-3-valla.francesco@gmail.com>
+ <CAMZ6RqKLaYb+8EaeoFMHofcaBT5G2-qdqSb4do73xrgMvWMZaA@mail.gmail.com>
+ <9f5ad308-f2a0-47be-85f3-d152bc98099a@hartkopp.net>
+ <CAMZ6RqKGKcYd4hAM8AVV72t78H-Kt92NXowx6Q+YCw=AuSxKuw@mail.gmail.com>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <CAMZ6RqKGKcYd4hAM8AVV72t78H-Kt92NXowx6Q+YCw=AuSxKuw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+On 14.04.24 06:03, Vincent Mailhol wrote:
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+> 
+> This doesn't remove the fact that I think that this naming convention
+> is stupid because of the RAS syndrome, but I acknowledge that CAN CC
+> is now the official denomination and thus, that we should adopt it in
+> our documentation as well.
+> 
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+;-)
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+>>> Add a space between ISO and the number. Also, update the year:
+>>>
+>>>     ISO 15765-2:2024
+>>>
+>>
+>> Interesting! Didn't know there's already a new version.
+>>
+>> Will check this out whether we really support ISO 15765-2:2024 ...
+>>
+>> Do you have the standard at hand right now or should we leave this as
+>> ISO15765-2:2016 until we know?
+> 
+> I have access to the newer revisions. But I never really invested time
+> into reading that standard (neither the 2016 nor the 2024 versions).
+> 
+> Regardless, here is a verbatim extract from the Foreworld section of
+> ISO 15765-2:2024
+> 
+>    This fourth edition cancels and replaces the third edition (ISO
+>    15765-2:2016), which has been technically revised.
+> 
+>    The main changes are as follows:
+> 
+>      - restructured the document to achieve compatibility with OSI
+>        7-layers model;
+> 
+>      - introduced T_Data abstract service primitive interface to
+>        achieve compatibility with ISO 14229-2;
+> 
+>      - moved all transport layer protocol-related information to Clause 9;
+> 
+>      - clarification and editorial corrections
+> 
 
-If you want to undo deduplication, reply with:
-#syz undup
+Yes, I've checked the release notes on the ISO website too.
+This really looks like editorial stuff that has nothing to do with the 
+data protocol and its segmentation.
+
+>>>
+>>> Here, I would suggest the C99 designated field initialization:
+>>>
+>>>     struct sockaddr_can addr = {
+>>>             .can_family = AF_CAN;
+>>>             .can_ifindex = if_nametoindex("can0");
+>>>             .tp.tx_id = 0x18DA42F1 | CAN_EFF_FLAG;
+>>>             .tp.rx_id = 0x18DAF142 | CAN_EFF_FLAG;
+>>>     };
+> 
+> Typo in my previous message: the designated initializers are not
+> separated by colon ";" but by comma ",". So it should have been:
+> 
+>    struct sockaddr_can addr = {
+>          .can_family = AF_CAN,
+>          .can_ifindex = if_nametoindex("can0"),
+>          .tp.tx_id = 0x18DA42F1 | CAN_EFF_FLAG,
+>          .tp.rx_id = 0x18DAF142 | CAN_EFF_FLAG,
+>    };
+> 
+>>> Well, this is just a suggestion, feel free to reject it if you do not like it.
+>>
+>> At least I don't like it.
+>>
+>> These values are usually interactively given on the command line:
+>>
+>>   >            .can_ifindex = if_nametoindex("can0");
+>>   >            .tp.tx_id = 0x18DA42F1 | CAN_EFF_FLAG;
+>>   >            .tp.rx_id = 0x18DAF142 | CAN_EFF_FLAG;
+>>
+>> So have it in a static field initialization leads to a wrong path IMO.
+> 
+> There is no such limitation that C99 designated initializers should
+> only work with variables which have static storage duration. In my
+> suggested example, nothing is static.
+> 
+> I see this as the same thing as below example:
+> 
+>    int foo(void);
+> 
+>    int bar()
+>    {
+>            int i = foo();
+>    }
+> 
+>    int baz()
+>    {
+>            int i;
+> 
+>            i = foo();
+>    }
+> 
+> In bar(), the fact that the variable i is initialized at declaration
+> does not mean that it is static. In both examples, the variable i uses
+> automatic storage duration.
+> 
+> Here, my preference goes to bar(), but I recognize that baz() is also
+> perfectly fine. Replace the int type by the struct sockaddr_can type
+> and the scalar initialization by designated initializers and you
+> should see the connection.
+
+Oh, sorry. Maybe I expressed myself wrong.
+
+IMHO your way to work with an initializer is correct from the C standpoint.
+
+But I think this is pretty unusual for a code example when an 
+application programmer starts to work with ISO-TP.
+
+You usually get most of these values from the command line an fill the 
+struct _by hand_ - and not with a static initialization.
+
+That was my suggestion.
+
+> 
+> ** Different topic **
+> 
+> While replying on this, I encountered something which made me worry a bit:
+> 
+> The type of sockaddr_can.can_ifindex is a signed int:
+> 
+>    https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can.h#L243
+> 
+> But if_nametoindex() returns an unsigned int:
+> 
+>     https://man7.org/linux/man-pages/man3/if_nametoindex.3.html
+> 
+> Shouldn't sockaddr_can.can_ifindex also be declared as an unsigned int?
+> 
+
+The if_index derives from struct netdevice.if_index
+
+https://elixir.bootlin.com/linux/v6.8.6/source/include/linux/netdevice.h#L2158
+
+which is an int.
+
+I don't think this would have an effect in real world to change 
+sockaddr_can.can_ifindex to an unsigned int.
+
+I wonder if it is more critical to existing user space code to change it 
+to unsigned int or to leave it as-is ...
+
+Best regards,
+Oliver
 
