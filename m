@@ -1,88 +1,89 @@
-Return-Path: <linux-can+bounces-438-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-439-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63E0F8A7198
-	for <lists+linux-can@lfdr.de>; Tue, 16 Apr 2024 18:42:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50B768A71A1
+	for <lists+linux-can@lfdr.de>; Tue, 16 Apr 2024 18:46:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDCF71F21286
-	for <lists+linux-can@lfdr.de>; Tue, 16 Apr 2024 16:42:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81B3E1C21563
+	for <lists+linux-can@lfdr.de>; Tue, 16 Apr 2024 16:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE8639FCF;
-	Tue, 16 Apr 2024 16:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902FF43AA5;
+	Tue, 16 Apr 2024 16:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yp266Txg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mtU+x0LS"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4355037165;
-	Tue, 16 Apr 2024 16:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2FA10A22;
+	Tue, 16 Apr 2024 16:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713285773; cv=none; b=S4j8V3/W+5WvDijSuGxDXaQWFxD2aZ2CIELNI7yKtWLptIK6HBcbXagWPcAC4zyL7LF7HSu0Bfy7p9P+X6GYYl027oimIzIP49Ksa5KixEykwbFqjUFvsPuRm17t9TYwCBFj8HBzVQ9wpBV+93YGv+Ko450buJ0deLnhi5rSKJs=
+	t=1713285979; cv=none; b=qlZcB421E6q3o45TTO2ApKgAvKLebewtjMESCQRykRRIKjIxVXntPQ4tl3njq6D0uwD3XfMZkkxOlWCs0KFic1YziYSbfPnvwg8zGs/G5DggEI3ZuuX6o8fl1YQkZlm3YRcPgNvNoBmPqtUNmd1kQ6iJyUmOUUa2CG1mDykooNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713285773; c=relaxed/simple;
-	bh=CC0S305U35zIkJGtFTFCEqBoI2MVVEtglxslNlo1XDs=;
+	s=arc-20240116; t=1713285979; c=relaxed/simple;
+	bh=G1/i1XTJcrVySOoFIsF/bsn1GVKpIRHZ/G7KdMBY+nI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZGfZfVUB56pvJ2mtppa/4DloPGdTTV+tprDPaH5N3h69P/YxumdXAf+Z0RjYwn0D+tnewD/COozzIb7r8SzH7Hyg7K29uemKRKE1+OsEgaeoEfT0FIscLk4EQDix7ziW44c0EaMZ/K5NmfFOdj7hmmHi4eb5Jrga83MG9Rh0ndU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yp266Txg; arc=none smtp.client-ip=209.85.208.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=A8ohShF7zgs7iAR4WvZSSaJ4P4Uw1kAh0RawV/4fl73laCkLCKbTMezmgJQSkVCx2PiexNNv8ZaoYr9LFj8BBp/bh+8Hi0L4UAP49sHv5wqoA23pg1FGdzjrufC8Z9TFWXUN1yzbMlA5FzyF1ZF4ln7h/W9Gw1EmpYCmkkbGvzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mtU+x0LS; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5701f175201so764486a12.1;
-        Tue, 16 Apr 2024 09:42:52 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a450bedffdfso591772166b.3;
+        Tue, 16 Apr 2024 09:46:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713285770; x=1713890570; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713285976; x=1713890776; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2lUB89b6buZi5ejkVzKNCjr9hh4irgP4yDpViGhEGr8=;
-        b=Yp266TxgU3EpaDQbqVaN2YNENq7CVsLaX7JWQfFFqY7+yuuG8cjJgUay/g+KWbfZN/
-         wm/EVcu1SvB+HeLOUXeY8DlBtjj9WA+TW5TdISrIa2tpGdgrwwTO69NYgX+X+cW9Gaih
-         s1DjjtGTDyQSXV/QMdD6uNXMrRZsuF/blPqd+6s1SKC20KBraS+EI0yF97RznmLUkhc7
-         krf0bUzLYk84NfU/KU32eKk4lWfcaf3L5qiUmOVO80UiTO3tpdqbqjSauZ/schr1KKWJ
-         fU0qM9gSSKzCxSMFopw03c8TuFwOM14C48nNsCXMDS5VxgLXGjwlrPkckyJP8GKOo97I
-         FBfw==
+        bh=8KwfYv9s9CNReFqGmEgJ8O6Pxz+KGqIgs20E/Gs/Yew=;
+        b=mtU+x0LSQ2YlturUymwXYZnzX12e382XIr8VB7hDBLFGJ9RR4uQhpDX6HvGnarLJWt
+         NJhJkJaknNcRU0sEpL91rvauchWgpndCGbIqOI2rt6iAzKMDG/EToGzDCgIjSw9MCsNu
+         aCNbB7WYUiGQE88JQNKH6udtBAZounM8YL6Zj8JsG3DSReNN01BnYSkkP8L8w9z3cSS3
+         huV4fSsJSwWSF0FFjtjV+jSoVgMjBVe6TpfeQRVT3iXHRu5Qr64B0ALz7531EOBbfiKv
+         3Jg5FzTJNXwxYkNGVQp/k4EFEbFJX32OeMrveMzfiHfvplNLwUBKmJonmjAe8ml+Ffno
+         /WwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713285770; x=1713890570;
+        d=1e100.net; s=20230601; t=1713285976; x=1713890776;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2lUB89b6buZi5ejkVzKNCjr9hh4irgP4yDpViGhEGr8=;
-        b=ZQ18MPrlTEogNRmRyA5PImQL1fwa+bmOOHYx6IxV5cx3seAvzBVI+a4EbEM4lfuybu
-         QRV/s9MJ0+mWAFTHL93ZDEkw7gS0wXvF5i4a9qQQVE/sej/45wOubCV+HBNvGVIeYh1P
-         al1QVKUGrDlYwX/8b1gSQ/FKCS1IEQyPQkp0ni9WWp5DfXsr0Y1wx060UBCnYqwLudQp
-         9w+2hcNabMmPLw2BP7Sszr8H5iD1KRx1/okb3jyZFU11a4MPwQ2cUYa6YQPWWl7VMCbY
-         nxZq6N5ImWAg23ebXYh0M58ytFwh/RpuH6EYPa7wIuN29dFQmj1psGOM2pyP7Ttug4sC
-         FzoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWSLZ1mRONh4gDF/I8U3EPJT0Hp1nPo4CXQzY/Ql5OdEbzUPuv3ifL5TYJw11dMjt+mpr5IsoBDL3i6nQFc6/eQSPHvOd4JRptGj4o2PxkBKXMQwuWeFCZ6vcCbFO6xl5jiUmW0TDaE0g3qKVTSTHp6Oj73vi7s9uWbU97tF+Hg
-X-Gm-Message-State: AOJu0YyBUgX9jbNoHUowt7LxOqtQbT7ZD4Gye7hBPCS6QbqOBo1q2GGS
-	mKXg7qfp3aKF/p7bWXmB8/FkB0uBdFKhNMpUqdryYd1/2uIAt7ox
-X-Google-Smtp-Source: AGHT+IGg52/TIeKf7RA3jDSqi7tmSPAqi8YvPA2XIxhyiS1sZwhSt3bySdswPNKlfSTBSOxRMvLSjA==
-X-Received: by 2002:a50:9b1e:0:b0:56e:d54:6d63 with SMTP id o30-20020a509b1e000000b0056e0d546d63mr12897968edi.15.1713285770337;
-        Tue, 16 Apr 2024 09:42:50 -0700 (PDT)
+        bh=8KwfYv9s9CNReFqGmEgJ8O6Pxz+KGqIgs20E/Gs/Yew=;
+        b=v2jgXz4dfqYD9zWMNuM3E60NZB+dEjbRqtvvfNAYXHDYxjWz3FUrg7Pqf6uENRXyxQ
+         MsAuvHAJhtPH/tcCHiv3AzGI3PZX6cxJmtpIUwgypwMGxSqdVtfrkO9JgUnPn5Ko2yy+
+         7VRCHIZKFqiveP0Xr2OtIjorOI1kCWUaC8bND/GLV7DCeOs3VG2rHu79A78KVMp3O1jr
+         KlyaIOjZ2WBQLtDQS0jwGGRlM/3IBzMCsETGYoW/2Za1pZQyalBGJ4d/vpi5EnLJ+mul
+         GSN/r5O/QyT8PAb/7cxIWe6xsxYYWNNi1j64GUpm18vKATbz27+KRPf5+mw7Jk92HXPb
+         GigA==
+X-Forwarded-Encrypted: i=1; AJvYcCVy2kJRCXElA9LeopH216fPq1stnNDWk8k3DXYRioent40dg03Bvdz9a0vwPND3dxS3klOWQRFzu5ETJWzTnUA1nSYMQTisO4Kof71x3LzYWV7XPwF4gXw0R+frMqvFUmqzek5CffCt43ko5QQExYYwxaJy7eZ5h6OgyYed+TCA
+X-Gm-Message-State: AOJu0YyHWNjrqaGe1Ug5aqdlmV8Tfu+e9bya3aV9MG+218UutCwHY4Rw
+	vQ7m4TAw9bbj9ZylHM3u3HVv5g8Go/0m7VjZ1Lv0cj7RsoejMudDFT3Uox6W
+X-Google-Smtp-Source: AGHT+IGRIiQlbaJp1thbJmdm9VDlSSbedhwFf3PAEq68sJsXPkTF8SCv5gGIXIt4Wg4rMB/S33hAZA==
+X-Received: by 2002:a17:906:af8b:b0:a51:8d60:215a with SMTP id mj11-20020a170906af8b00b00a518d60215amr8125981ejb.27.1713285975999;
+        Tue, 16 Apr 2024 09:46:15 -0700 (PDT)
 Received: from fedora (host-79-27-41-113.retail.telecomitalia.it. [79.27.41.113])
-        by smtp.gmail.com with ESMTPSA id u12-20020a056402110c00b0056e51535a2esm6276502edv.82.2024.04.16.09.42.49
+        by smtp.gmail.com with ESMTPSA id bw26-20020a170906c1da00b00a52222f2b21sm6919666ejb.66.2024.04.16.09.46.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 09:42:50 -0700 (PDT)
-Date: Tue, 16 Apr 2024 18:42:48 +0200
+        Tue, 16 Apr 2024 09:46:15 -0700 (PDT)
+Date: Tue, 16 Apr 2024 18:46:13 +0200
 From: Francesco Valla <valla.francesco@gmail.com>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Vincent Mailhol <vincent.mailhol@gmail.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Simon Horman <horms@kernel.org>,
-	Bagas Sanjaya <bagasdotme@gmail.com>, fabio@redaril.me
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Linux CAN <linux-can@vger.kernel.org>,
+	Linux Networking <netdev@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Simon Horman <horms@kernel.org>, fabio@redaril.me,
+	Mao Zhu <zhumao001@208suo.com>, Xiang wangx <wangxiang@cdjrlc.com>,
+	Shaomin Deng <dengshaomin@cdjrlc.com>,
+	Charles Han <hanchunchao@inspur.com>
 Subject: Re: [PATCH v2 1/1] Documentation: networking: document ISO
  15765-2:2016
-Message-ID: <Zh6qiDwbEnaJtTvl@fedora>
+Message-ID: <Zh6rVbkheAcS-K3D@fedora>
 References: <20240329133458.323041-2-valla.francesco@gmail.com>
  <20240329133458.323041-3-valla.francesco@gmail.com>
- <CAMZ6RqKLaYb+8EaeoFMHofcaBT5G2-qdqSb4do73xrgMvWMZaA@mail.gmail.com>
- <9f5ad308-f2a0-47be-85f3-d152bc98099a@hartkopp.net>
- <CAMZ6RqKGKcYd4hAM8AVV72t78H-Kt92NXowx6Q+YCw=AuSxKuw@mail.gmail.com>
- <64586257-3cf6-4c10-a30b-200b1ecc5e80@hartkopp.net>
+ <Zhyabya8UyRG0ZY5@archie.me>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -91,76 +92,20 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <64586257-3cf6-4c10-a30b-200b1ecc5e80@hartkopp.net>
+In-Reply-To: <Zhyabya8UyRG0ZY5@archie.me>
 
-On Sun, Apr 14, 2024 at 10:21:33PM +0200, Oliver Hartkopp wrote:
-> 
-> 
-> On 14.04.24 06:03, Vincent Mailhol wrote:
-> 
-> > 
-> > This doesn't remove the fact that I think that this naming convention
-> > is stupid because of the RAS syndrome, but I acknowledge that CAN CC
-> > is now the official denomination and thus, that we should adopt it in
-> > our documentation as well.
-> > 
-> 
-> ;-)
-> 
->
+On Mon, Apr 15, 2024 at 10:09:35AM +0700, Bagas Sanjaya wrote:
 
-I honestly did not knwow the new CAN in Automation naming scheme. Will
-keep the CAN-CC here. Thanks!
+(...)
 
-> > > > Add a space between ISO and the number. Also, update the year:
-> > > > 
-> > > >     ISO 15765-2:2024
-> > > > 
-> > > 
-> > > Interesting! Didn't know there's already a new version.
-> > > 
-> > > Will check this out whether we really support ISO 15765-2:2024 ...
-> > > 
-> > > Do you have the standard at hand right now or should we leave this as
-> > > ISO15765-2:2016 until we know?
-> > 
-> > I have access to the newer revisions. But I never really invested time
-> > into reading that standard (neither the 2016 nor the 2024 versions).
-> > 
-> > Regardless, here is a verbatim extract from the Foreworld section of
-> > ISO 15765-2:2024
-> > 
-> >    This fourth edition cancels and replaces the third edition (ISO
-> >    15765-2:2016), which has been technically revised.
-> > 
-> >    The main changes are as follows:
-> > 
-> >      - restructured the document to achieve compatibility with OSI
-> >        7-layers model;
-> > 
-> >      - introduced T_Data abstract service primitive interface to
-> >        achieve compatibility with ISO 14229-2;
-> > 
-> >      - moved all transport layer protocol-related information to Clause 9;
-> > 
-> >      - clarification and editorial corrections
-> > 
 > 
-> Yes, I've checked the release notes on the ISO website too.
-> This really looks like editorial stuff that has nothing to do with the data
-> protocol and its segmentation.
+> Other than the ongoing review comments, the doc LGTM (no htmldocs warnings).
+> Thanks!
+> 
+> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 > 
 
-The :2016 suffix is cited both here and inside the Kconfig. We can:
-- keep the :2016 here and then update both the documentation and the
-  Kconfig once the standard has been checked
-- move to :2024 both here and inside the Kconfig
-- drop the :2016 from everywhere (leaving only ISO 15765) and move to
-  ISO 15765:2024 only inside the "Specifications used" paragraph
-
-What do you think? Shall the modifications to the Kconfig be done as part of
-this series?
-
+Thank you!
 
 Best regards,
 Francesco Valla
