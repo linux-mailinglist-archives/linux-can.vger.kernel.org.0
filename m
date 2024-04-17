@@ -1,167 +1,141 @@
-Return-Path: <linux-can+bounces-440-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-441-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E721C8A721C
-	for <lists+linux-can@lfdr.de>; Tue, 16 Apr 2024 19:19:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FC808A8510
+	for <lists+linux-can@lfdr.de>; Wed, 17 Apr 2024 15:44:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF3681C21263
-	for <lists+linux-can@lfdr.de>; Tue, 16 Apr 2024 17:19:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C95B42824CA
+	for <lists+linux-can@lfdr.de>; Wed, 17 Apr 2024 13:44:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E5EA132807;
-	Tue, 16 Apr 2024 17:19:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C13813F451;
+	Wed, 17 Apr 2024 13:44:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="tUGGNUz6";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="8Re553De"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="glXCo5oO";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="XtLLDOKl"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34938132493;
-	Tue, 16 Apr 2024 17:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.167
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713287975; cv=pass; b=IE7lbJZ2Whco3BD/o9BOKQq83b2bJSK834XvQEy7BcKyRc2I7ppFQWGBW66AzSV6AVZ0YUc5BIj4VBMTGwHgv0rUkBcsdihUV/YXvwRcpI/gL7iwVOUVCVfMFJTwfNOn6h4FehaczjanBaukBWD45tbQAgXDWcwv5aHaAQehhZs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713287975; c=relaxed/simple;
-	bh=Azr7ovdYaxV3PlnjjsIAyizZx7zMsRJjz5oo0vl5kMo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y9UTsn3PWuYzFd7UIWcZPj1au/HW2P7NOEEbhy8+g7GuhE8G+b0NpoTf2R13atz36ndQgUyn5jEt52OGeVwi1GQV3tM/Cg4Ct0m+QF288T9k1+BkLnU6PX9yIdsFrOuumBftEw+xAAiUeyVrbYnsp+oX74AlnSvPeO5A3VYaArI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=tUGGNUz6; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=8Re553De; arc=pass smtp.client-ip=81.169.146.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1713287950; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=VYjrR8FNDMNqQJZ1flH9Y/rD9hieKAIvH0HbpU+zeJcSUOQwEualufMNRhsx4lLnAO
-    6CCOQmtdF/I35BqaBGt14Bmftm/iMlvdPFVFrYDZta33tN7QomhLknSoV/l4b/G0o8DK
-    8+IIMvuiuKi+pogsUk8ilknWsYaG3YR57ySHlTU67Z15WLCXViYhAU6oZJgzZmB2rAgK
-    ElR4fpg84nG565p0RycMVYfqRV6NCP5Mk94vEJOUWC8SMCUUqQ/37v9372Dm/DLTMLXC
-    Ddnd8RsbN3/E1C+/bxGF6/8J21dMUbCqVHnPa7F+CS+5c0GRv70hSrF7QUCLymVZiSSj
-    UkJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1713287950;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=UZNazYxiaUPP62ZqofHCxP4mD8sMhtRghorMzgkk/Zs=;
-    b=gLXnXCttLlYyG60NJNPGm+Xp5Xbvu6Plo9XMZ5kbfpeGh9+GuZ1R3ew8e7JjZytxYy
-    +SK+wMNCCGs4kpeaZ/qMTd89bYuN0ip99NAP2jyQYpmWZ8pUg/B2Hc20K+xW9e0IsVX2
-    9orGlhI8ufrMfgVghLnVsIjyCyRi15U4iey+01KHrbYjwm2KET+idnTJlgbPuTnw7+9/
-    652S8wmKeaO/FYxCWEQaqfPconBNMa+WgYm223cvpvLXaXoPiUlU+RzbKzbJJhtiEY1P
-    r5aThUOIso3Gm8TA6wYMeoeFtGQGYrlbAqh5VDlhxR5+ALQaj7GbzQBmCucGduEPTf9Q
-    60lw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1713287950;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=UZNazYxiaUPP62ZqofHCxP4mD8sMhtRghorMzgkk/Zs=;
-    b=tUGGNUz6T13vFpz9+ezMtiFNIURaWR+iWcfWN6sUvBU9/es0JKhD2h50vlTjfOzVkR
-    kgrdh9wPcOAagKKdaAB2IQKUbAJeKgSHwcauz+9B4pNV2vIAGPVkOX1Eb4yCFP1jIZw0
-    DjGvAJNTsXROBng+mcMZfkmoxxRKTMklJeHVoP53iYGpLZJEvTfZ9tWy8jRlyZ7znjQ6
-    yxK+6Up7aKnW4p9VmGTNKoUFWBHRqgaSKB/fwrTK66j8IxVlXJJ0ww62GIb3hEkJvAt2
-    EluNeS3c9EOwwUU8Tvjsxx4LOUIkVvhVBok76DSALfS8lSzD8+8XplIGxpCdVUhtDenn
-    r9eQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1713287950;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=UZNazYxiaUPP62ZqofHCxP4mD8sMhtRghorMzgkk/Zs=;
-    b=8Re553DeDZ5GUPLWwSAt3vpX8+Zf9DSidpB8rfsjmi8ZORdySd5HY+9yrvECcDPNVa
-    lk9BQxcVpQ4XX0vQ73CA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFr0USEbHoO0g=="
-Received: from [IPV6:2a00:6020:4a8e:5010::923]
-    by smtp.strato.de (RZmta 50.3.2 AUTH)
-    with ESMTPSA id K701d603GHJ9TIN
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 16 Apr 2024 19:19:09 +0200 (CEST)
-Message-ID: <d4a55991-0ccc-4e8f-8acb-56077600c9e0@hartkopp.net>
-Date: Tue, 16 Apr 2024 19:19:03 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D3A63A;
+	Wed, 17 Apr 2024 13:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713361457; cv=none; b=AJuNKDLoUy9rvVN8ePCaQr3+JKIVyTEnqI55HfyRGxHQjq3oTQAw2hH1vcD4B/YrUeIzLqdPcrqgqciLlBrWy9ujm56DbucZnFEeFoPABtDIoTrp7Du/Sw4idrTdB+YT7ovFu39ipKymZlba1VeVK2OyFUxfCNtQyVaFE1Z2ygw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713361457; c=relaxed/simple;
+	bh=E4jdcpqlpHV649PBxrqAo3I4iZRovg0Rv/OBXC7xv2A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iUP1UaA5J9MhZ855nxAV3hHnjAARMorgBp8ujVC5aO3n7coXfj9PQayCDZsPGXlTONYluFN+O0scrSX2uDqEMVJz+JjUij/aSXNSm5nCfVTiJIHvoJNBZEI4IVsMuk+JAW22dK5ne+U0eHZfj6IRn8citdcYEeAoOo28Ke8LxJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=glXCo5oO; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=XtLLDOKl reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1713361453; x=1744897453;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=m3xYsRh6qs7oYoZ7K2b3HT0rgOW+vV21BP4CnhGFoSo=;
+  b=glXCo5oOJ7xb6y6mDb+ifZZavg3ekyEdpp4zyLtn5qa+O6BFC9wBW06Q
+   Rf6+Br0YyM0J5iU44VOyLHyW8EPXwS2EVork4sCkUo3aofCPs0PbBhgAn
+   MatU0XgdzvFDH3lrPGjVBmdXxwIdCLuV8b4FOUgyZpTAPzgauc28ofzSi
+   +BbrW4jispPlocc8uBUdvFFpPkFy7DdXoah5LH1yDOqp3DeurboH+RhCW
+   G17fuhsQ/Ht2Zr7SadWHf9OUSiZku4uJNeGTK7eJYbZ8N+PST8RAjoJ7H
+   tewtsG8KoHErasXlw+Juq4sBWn32JWbfiPXXvYGUKEFdDBM7KvoCkz2YH
+   g==;
+X-IronPort-AV: E=Sophos;i="6.07,209,1708383600"; 
+   d="scan'208";a="36469970"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 17 Apr 2024 15:44:09 +0200
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9FD6E1724AE;
+	Wed, 17 Apr 2024 15:44:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1713361445;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=m3xYsRh6qs7oYoZ7K2b3HT0rgOW+vV21BP4CnhGFoSo=;
+	b=XtLLDOKlUDRd9Ri93lSm2Ok1WDKmBfBEhWYNNdou4TR4ABN0UufAYxyMaw6QjMufA69br4
+	woEKVtr/IYrkXOwi2JlZynWNxJMJD60Jm7uHzxHGUyx9eWg2dS5Ke3QfM2ww6Da6k65f+p
+	E29p7r7itoPoljFchashf9yDcSFPM8frak7FoxBNf5F+kSfHb0xjOJPY6c9RZRIdAtAvgx
+	UkwMX2niFChYc5tz78yZPLzVc33VaidfqPyEWW0by58LLrOHIYZpuV5xt8vnlwADTR9+Bp
+	9SPdotPs6ylblVSOoDMzYeAC4tXWfMwMDlSY27HU99LCyp+PT7Rw0JmNi+PpDw==
+From: Gregor Herburger <gregor.herburger@ew.tq-group.com>
+Subject: [PATCH 0/4] can: mcp251xfd: add gpio functionality
+Date: Wed, 17 Apr 2024 15:43:53 +0200
+Message-Id: <20240417-mcp251xfd-gpio-feature-v1-0-bc0c61fd0c80@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] Documentation: networking: document ISO
- 15765-2:2016
-To: Francesco Valla <valla.francesco@gmail.com>,
- Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- Simon Horman <horms@kernel.org>, Bagas Sanjaya <bagasdotme@gmail.com>,
- fabio@redaril.me
-References: <20240329133458.323041-2-valla.francesco@gmail.com>
- <20240329133458.323041-3-valla.francesco@gmail.com>
- <CAMZ6RqKLaYb+8EaeoFMHofcaBT5G2-qdqSb4do73xrgMvWMZaA@mail.gmail.com>
- <9f5ad308-f2a0-47be-85f3-d152bc98099a@hartkopp.net>
- <CAMZ6RqKGKcYd4hAM8AVV72t78H-Kt92NXowx6Q+YCw=AuSxKuw@mail.gmail.com>
- <64586257-3cf6-4c10-a30b-200b1ecc5e80@hartkopp.net> <Zh6qiDwbEnaJtTvl@fedora>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <Zh6qiDwbEnaJtTvl@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABnSH2YC/x3MQQqAIBBA0avErBtI0aKuEi3UxppFJVoRSHdPW
+ r7F/xkSRaYEQ5Uh0s2Jj71A1BW41ewLIc/FIBupGiU63FyQWjx+xiXwgZ7MeUVC2RthfWuc1Qp
+ KHCJ5fv7xOL3vB8SEOixoAAAA
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Thomas Kopp <thomas.kopp@microchip.com>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux@ew.tq-group.com, gregor.herburger@ew.tq-group.com, 
+ alexander.stein@ew.tq-group.com
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1713361443; l=1700;
+ i=gregor.herburger@ew.tq-group.com; s=20230829; h=from:subject:message-id;
+ bh=E4jdcpqlpHV649PBxrqAo3I4iZRovg0Rv/OBXC7xv2A=;
+ b=Nl3dVSjF1oazke2Jn82kPOGpEMq/E3cQyke+iD3PQGE7zTOA7HrI/Ig+xz+6KAzQDelpiNLIV
+ UPpWjT8l+0bBbkQfP97ehIPhLGUCd7pQOXewMKyvX8JIfojWNbiR8J/
+X-Developer-Key: i=gregor.herburger@ew.tq-group.com; a=ed25519;
+ pk=+eRxwX7ikXwazcRjlOjj2/tbDmfVZdDLoW+xLZbQ4h4=
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Francesco and Vincent,
+Hi all,
 
-On 16.04.24 18:42, Francesco Valla wrote:
-> On Sun, Apr 14, 2024 at 10:21:33PM +0200, Oliver Hartkopp wrote:
->> On 14.04.24 06:03, Vincent Mailhol wrote:
+The mcp251xfd allows two pins to be configured as GPIOs. This series
+adds support for this feature.
 
->>> Regardless, here is a verbatim extract from the Foreworld section of
->>> ISO 15765-2:2024
->>>
->>>     This fourth edition cancels and replaces the third edition (ISO
->>>     15765-2:2016), which has been technically revised.
->>>
->>>     The main changes are as follows:
->>>
->>>       - restructured the document to achieve compatibility with OSI
->>>         7-layers model;
->>>
->>>       - introduced T_Data abstract service primitive interface to
->>>         achieve compatibility with ISO 14229-2;
->>>
->>>       - moved all transport layer protocol-related information to Clause 9;
->>>
->>>       - clarification and editorial corrections
->>>
->>
->> Yes, I've checked the release notes on the ISO website too.
->> This really looks like editorial stuff that has nothing to do with the data
->> protocol and its segmentation.
->>
-> 
-> The :2016 suffix is cited both here and inside the Kconfig. We can:
-> - keep the :2016 here and then update both the documentation and the
->    Kconfig once the standard has been checked
-> - move to :2024 both here and inside the Kconfig
-> - drop the :2016 from everywhere (leaving only ISO 15765) and move to
->    ISO 15765:2024 only inside the "Specifications used" paragraph
-> 
-> What do you think? Shall the modifications to the Kconfig be done as part of
-> this series?
+The GPIO functionality is controlled with the IOCON register which has
+an erratum. The second patch is to work around this erratum. I am not
+sure if the place for the check and workaround in
+mcp251xfd_regmap_crc_write is correct or if the check could be bypassed
+with a direct call to mcp251xfd_regmap_crc_gather_write. If you have a
+better suggestion where to add the check please let me know.
 
-So here is my completely new view on this version topic ... ;-D
+Patch 1 fixes a unwanted wakeup of the chip
+Patch 2 is the fix/workaround for the aforementioned erratum
+Patch 3 adds the gpio support
+Patch 4 updates dt-binding
 
-I would vote for ISO 15765-2:2016 in all places.
+---
+Gregor Herburger (4):
+      can: mcp251xfd: stop timestamp before sending chip to sleep
+      can: mcp251xfd: mcp251xfd_regmap_crc_write(): workaround for errata 5
+      can: mcp251xfd: add gpio functionality
+      dt-binding: can: mcp251xfd: add gpio-controller property
 
-The ISO 15765-2:2016 is the first ISO 15765-2 standard which supports 
-CAN FD and ISO 15765-2:2024 does not bring any functional change neither 
-to the standard nor to the implementation in the Linux kernel.
-
-For that reason ISO 15765-2:2016 is still correct and relevant (due to 
-the CAN FD support) and does not confuse the users whether the 2024 
-version has some completely new feature or is potentially incompatible 
-to the 2016 version.
+ .../bindings/net/can/microchip,mcp251xfd.yaml      |   2 +
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     | 139 ++++++++++++++++++++-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c   |  56 ++++++++-
+ .../net/can/spi/mcp251xfd/mcp251xfd-timestamp.c    |   5 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h          |   4 +
+ 5 files changed, 200 insertions(+), 6 deletions(-)
+---
+base-commit: 1fdad13606e104ff103ca19d2d660830cb36d43e
+change-id: 20240417-mcp251xfd-gpio-feature-29a1bf6acb54
 
 Best regards,
-Oliver
+-- 
+TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht München, HRB 105018
+Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
+https://www.tq-group.com/
+
 
