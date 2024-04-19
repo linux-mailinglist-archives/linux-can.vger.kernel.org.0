@@ -1,110 +1,160 @@
-Return-Path: <linux-can+bounces-448-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-449-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D9358A8788
-	for <lists+linux-can@lfdr.de>; Wed, 17 Apr 2024 17:26:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AF9B8AB372
+	for <lists+linux-can@lfdr.de>; Fri, 19 Apr 2024 18:36:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEE481F24F35
-	for <lists+linux-can@lfdr.de>; Wed, 17 Apr 2024 15:26:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1566B235AF
+	for <lists+linux-can@lfdr.de>; Fri, 19 Apr 2024 16:36:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04E301474C1;
-	Wed, 17 Apr 2024 15:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2430C1327E2;
+	Fri, 19 Apr 2024 16:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KJqty7dO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GDuXsERA"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44A513A265;
-	Wed, 17 Apr 2024 15:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBEF5131E27
+	for <linux-can@vger.kernel.org>; Fri, 19 Apr 2024 16:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713367575; cv=none; b=llgTF6/CY+dteC+LrZry//LfOgIbWtONsj9tiHLqsDgMb3ufNWtXB48jPcYG9bVs6PpkjdQ+97G8aGacVZIodFRQ43i9GTtmDEpUc5L850G2OqANp2cypGOjb4PD78msiy6b8Oh2DmDabrPNXNcr0FipVkQll4jcVO1nx/+rOmA=
+	t=1713544595; cv=none; b=FU012EarWjTwSZqkHIqhjMhmyN43WLTlL28HBwAwhGRcGUVfbwmLOR7J5Y01dDGARcJOyhnYo3RVDb9WKHb0PwI5GdNtDg9g7D00rLvvJqWi9qkyjSMP+/kKDuYT+J0ehRPFz3EncriiGrxnJV9FtAGj6U/05IZ8a5xuTsNOcHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713367575; c=relaxed/simple;
-	bh=66HHTs/2NdCUJhw/VTXrtHbgKW6feJo+E59Bk3vfng4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fxg1EcdPXfM96wTVVPSHYx50876ORcv7Ii9UEZ7eWtsdoFgX9OEHJ1s7D2LhO6Fsg0qCIRM+D4LIjUPltgci/U7VsE65Se/XA3WacsCb5TlKcI8lE8PUZNrYGsrKjNz3EsMAD3VbaCiVJc/z2sp3dz1yCI3H9WxylKPuJPyLfLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KJqty7dO; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5dcc4076c13so715639a12.0;
-        Wed, 17 Apr 2024 08:26:14 -0700 (PDT)
+	s=arc-20240116; t=1713544595; c=relaxed/simple;
+	bh=VJqWL28kx8On3nuV8espYdeI3/7H9SWapLP1/qFwGlc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PqUwmUcd5HDVxW0LWWbZzkVVUm232PRSStxnT8fv5iqbLy3Dy4wmtyYXeA/i6pSaCbPVUTVG8ks9uW0xJt8eHSYvH/RzaHM3q9YblEB55VtG7A+PCFg3wjvQx0iZzEzapjwxJzhnx4i6eoX2pno/4bEJ7F8isyrRwHpMHiwqvpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GDuXsERA; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6e46dcd8feaso1208325b3a.2
+        for <linux-can@vger.kernel.org>; Fri, 19 Apr 2024 09:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713367574; x=1713972374; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=66HHTs/2NdCUJhw/VTXrtHbgKW6feJo+E59Bk3vfng4=;
-        b=KJqty7dOuK6gfwV4RuK/L2iKQLS2Oob4rYvSRb5ovTrxKiK6EKjup5mjpjRMrFxeGA
-         0kKjDWgJtlOmo710B3T9udrc+WljSJtkDuxQhgEE8RINc7HBSJIYrsfyAreW9toa9/rK
-         a9RwGIqhqR8l0w0TijKEwLvUWIjNi1taod97Lnh4BDllM/Kn4FouKPWx/sPY9MxJMpSE
-         OJjxj0K4hezztm4lQgzK2tKfUMhjTMuhiyLb/sSqlXGo3n7ilgsrUnZ0mlhQ4P9q0A7e
-         879rwffmXj6UV6tG1s4kYYfYLzUzqRa44Wy2bHAdxVLFrqwKHsjxYyWk5yBlTwpGqlEI
-         kvAg==
+        d=linaro.org; s=google; t=1713544593; x=1714149393; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=nKU8IrsvXVH6vCCN8x56ibxhIaYffY3bOXpskGLRQtY=;
+        b=GDuXsERAePt2z0oGOlg0fqeAolGLJeHb5FCycRiXtQ/tvLo0aEKmb6cCV+0SNclA0i
+         dW28Ns4zL5veXerqREMwzgTiLxDUVUDeEkF7q5raV+ZygoQYduwk4m44P6Ri/7nW2Yb3
+         +QNAPHFPmh3PppBs/nxq9yf9MkNsIFNekq4XZY+cl7ZCO+FgHDzCGcgcOLDdb2UdRGMA
+         OzSUGFXi9Oq5CluV6l8KhlRWwC7CPHnWNy/SJ0jIvV9dp2kany4PHuT7PzJgKsAD+l9H
+         kQO50c+WIFnxY+TZHNaUA22uZquaG+LcAbCCt3nWrjPQptRrOdiXxbJDnfCV7yhlw+PN
+         A09Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713367574; x=1713972374;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=66HHTs/2NdCUJhw/VTXrtHbgKW6feJo+E59Bk3vfng4=;
-        b=D7k86VzsB5uO+sHXQxUfRyyhF5gN3Qb6AyPKIlVhMzDHmKG1w+ArvM/FZkOcgp79yM
-         N74k/vn5b8jnhbbXDoXy6qkYl7/OU8uL6PueYkMWFrTOITAtcgOIWKgMBXLCtk1Feh0l
-         QyFdnqTM7wfy5PLGC7g5THip+gXEfNz8fv0obbvc6WB92VC99Rb8aG+NeRA4IO4INq7V
-         yg5iX7qrC7hsnfGJtDzIf/6NNmn09tioUCYH85VMjNVOb1FGrIGFSAaBQlbbDa1/ABlR
-         FDeuZooaX8Ed9bp1HWkO21zQOKlHaob4oalmMeAfXNg9v6bxQLgkbOYZR2AndmKIDhRJ
-         gZsA==
-X-Forwarded-Encrypted: i=1; AJvYcCXl6thyoBX6NQllCYUPhSXmcQ7E/79+2BP7Io92hKsWtwkY7pN1Tu1UhjBaSjjB39IgnnQX7GjpdY3UBbuHb3N0OcUaQx2RyxcA2ZbIumArxbUlmutLMHVfUXPfueN3Q+IQTzx7hKZetCkIx7W2h1cU31kaoDuMz+iuh1g+Xdba
-X-Gm-Message-State: AOJu0YyFFnWTMsRBemnmA+lgDOdcrJu+GyYVCRZDNbR/o/gz8ZmnijmW
-	b9/bTQEPZLuf3jw5JfyeFimlcvhIvZixUAn2TiIHxaMSFZEvI2515QG7X1zZBPJp/Un+V1lv4wI
-	YX6djlHmf0i7UmBcil4CdApmLrJMoSw==
-X-Google-Smtp-Source: AGHT+IF4i0SrzyxsnPtLYiNicbYtOM4Q2ZIHhP8ToGBtaB2RlbVmAYmZGYXvLP2KLwY5nRo6rW5De+g0EbZ3thBOyqo=
-X-Received: by 2002:a17:90a:5289:b0:29b:c31:1fe1 with SMTP id
- w9-20020a17090a528900b0029b0c311fe1mr7822149pjh.10.1713367573788; Wed, 17 Apr
- 2024 08:26:13 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713544593; x=1714149393;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nKU8IrsvXVH6vCCN8x56ibxhIaYffY3bOXpskGLRQtY=;
+        b=NBF1FjnnuryvkAAYgiSXmEoTqoE8U1cgYGxOJ/nYC5fIJ2OJK0e6rlQxyx31UJLeWy
+         R5T9z46mVfdG147TooT7yVd4lXBAzwYYl/SZFbyxdM8ECxcu8viJGmNa0xYbFRSgY7uy
+         A8RRSa1e03AKOrf/4ZWDtrbvhi1C+QqjziMyreVyAATrwXfS6ooLSy0AWS5DNuUY/Z74
+         YPJ7LaVRwISNmkig8A/hbTYPL7R9rEq82dxxM2gsIJAxFfVWbK4ti4T/VF6E279ZyyfH
+         OcXlT1hUQHqVOtyj/3pEc2LPPSDGMCoYG9ad3iNRH+Bhw42B/N/ZGPcXaelP5X0h6+8c
+         v8Yg==
+X-Gm-Message-State: AOJu0Yz0siD5A+XxPCOMAviXxfD7Fq9RXl7l1OMBXYEPACxDjGfBhHuf
+	toon9wyZbD7FOwn5NYcZOlcHrG6+aXSupXtxn9I2gygbUPoJEMt4lvBivOe5Yww=
+X-Google-Smtp-Source: AGHT+IHcfbk2RThWHuPEMLnqz0LDobacqviydOp7ymiCFW0Jc7NhokVPbQQDyv1afQA8obc3s0RZ8Q==
+X-Received: by 2002:a05:6a20:2585:b0:1aa:5983:45e5 with SMTP id k5-20020a056a20258500b001aa598345e5mr3540637pzd.37.1713544593081;
+        Fri, 19 Apr 2024 09:36:33 -0700 (PDT)
+Received: from [172.20.9.36] ([209.37.221.130])
+        by smtp.gmail.com with ESMTPSA id v22-20020aa78516000000b006f03a06314esm3427918pfn.195.2024.04.19.09.36.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Apr 2024 09:36:32 -0700 (PDT)
+Message-ID: <78eb30a6-ef27-4ad1-93c1-2ebba77088cd@linaro.org>
+Date: Fri, 19 Apr 2024 18:36:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240329133458.323041-2-valla.francesco@gmail.com>
- <20240329133458.323041-3-valla.francesco@gmail.com> <CAMZ6RqKLaYb+8EaeoFMHofcaBT5G2-qdqSb4do73xrgMvWMZaA@mail.gmail.com>
- <Zh6m3jkRovDutKnZ@fedora>
-In-Reply-To: <Zh6m3jkRovDutKnZ@fedora>
-From: Vincent Mailhol <vincent.mailhol@gmail.com>
-Date: Thu, 18 Apr 2024 00:26:01 +0900
-Message-ID: <CAMZ6RqJF7P1rGMwejmF_FM25Xtjo+R+zEGkkWnh3=hiShB_piw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] Documentation: networking: document ISO 15765-2:2016
-To: Francesco Valla <valla.francesco@gmail.com>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Simon Horman <horms@kernel.org>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, fabio@redaril.me
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] dt-binding: can: mcp251xfd: add gpio-controller
+ property
+To: Gregor Herburger <gregor.herburger@ew.tq-group.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Thomas Kopp <thomas.kopp@microchip.com>,
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux@ew.tq-group.com, alexander.stein@ew.tq-group.com
+References: <20240417-mcp251xfd-gpio-feature-v1-0-bc0c61fd0c80@ew.tq-group.com>
+ <20240417-mcp251xfd-gpio-feature-v1-4-bc0c61fd0c80@ew.tq-group.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240417-mcp251xfd-gpio-feature-v1-4-bc0c61fd0c80@ew.tq-group.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed. 17 Apr. 2024 at 01:27, Francesco Valla
-<valla.francesco@gmail.com> wrote:
-> Hi Vincent,
->
-> thank you for the review!
+On 17/04/2024 15:43, Gregor Herburger wrote:
+> The mcp251xfd has two pins that can be used as gpio. Add gpio-controller
+> property to binding description.
+> 
 
-You are welcome.
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching.
 
-> I'll omit from this reply the issue about the standard to be referenced
-> and the CAN-CC naming (discussed in another thread also with Oliver).
->
-> About the typos and formatting observations: rst is not my native
-> language (I'm more on the Markdown side), I'll apply all the corrections
-> you suggested. Thank you.
->
-> Some other considerations follow.
+Also, please test the patch.
 
-Aside from the 2024 year bump on which I replied separately, I
-acknowledge all of these. Thanks.
+Best regards,
+Krzysztof
 
-Yours sincerely,
-Vincent Mailhol
 
