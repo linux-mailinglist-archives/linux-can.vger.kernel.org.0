@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-454-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-460-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C04F8AC4DF
-	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 09:12:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BDD58AC501
+	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 09:14:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41F4E1C20CE3
-	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 07:12:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22BC21F2216F
+	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 07:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06F864D595;
-	Mon, 22 Apr 2024 07:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD8E5102B;
+	Mon, 22 Apr 2024 07:12:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="QtDdTuSi"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="bJi0uusC"
 X-Original-To: linux-can@vger.kernel.org
 Received: from fritzc.com (mail.fritzc.com [213.160.72.247])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F721482F6;
-	Mon, 22 Apr 2024 07:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C16487BE;
+	Mon, 22 Apr 2024 07:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.72.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713769918; cv=none; b=N6s+GBOL4hUNQkFAieENZdXxoCD0z7MdKXc4Oivs/+LfO5o7ewS6LFU6Y1W7xypizFp/a+JRDg3Udj4TAomqh5WI9Oj14zLsLiH82h/Nc93Cj9s+WRl2uHOIC6ao7PJp7w3jIl3+mPqhaa3IJyyVXn5avDhHpHvyyg5qc5DvF3Y=
+	t=1713769946; cv=none; b=CFobBtJ+GZpH5+CYzWqX3lD9kIgcYVC4ceYG0O4i0LGXxeaDfbj/8YpxcYZVKEisz7LEx2f6KpbwW/FCSDU9J/w8DdsLmoEuh26BapcFakAELWCCAhfRv7fLZ+5eo3WKgfjFqf7Jqt5C4SAwb1QPKEPs86PzG556CYOYEdJw3a4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713769918; c=relaxed/simple;
-	bh=+LED3j9UryOnzM8qONYEGqaHQ70XD8TvZDjsh/8WL7Q=;
+	s=arc-20240116; t=1713769946; c=relaxed/simple;
+	bh=CTIrEa2rmGwqVNpfbry2rBHxc3B2ib4sFmkFx9XDrAQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=c2FZ4mNJRfqgw8XRCAoUEHLYr+osl3gUd+Nqr1pgnVb9WT9S6ocxgfXKIIgyNhUArmh/MRnokwv30gMH5Fih6MdEiBDrFZWm0Xhynr2+NNo1CU34WgpjFv/3HLGeidr3UjEsIw2e6DmAbMKRyl3J3vgEpHvgdl1bTCJ4cCN3d90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=QtDdTuSi; arc=none smtp.client-ip=213.160.72.247
+	 MIME-Version; b=G2opxCggaug5qkvZWjMwoJ3zCDyCJXdCev0ksJVQzYtFxTTBKSA+v2ecUZ4qKxh5eoLBVsb8nhLWRp5Uit+r9IGz0xqvOBnb+BiIOyHbEHjlw+lklWxm9mH+5H7WP+KpJwcoRi4p7CjBIJztTIcWYIm3WElMppaW8Hsy62P85eU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=bJi0uusC; arc=none smtp.client-ip=213.160.72.247
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hexdev.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
@@ -37,15 +37,15 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=4mGMEjjPGqNagIRfWqi116NhC2pHD+0tS99iQ53aUj4=; b=QtDdTuSiOyCuCyG3JNegCO8gE+
-	MZDn/L5mOZTMdp9DG8ws+4pkck15m5Guy0MQMx9snhnUhjyJJ4HubuzHrsd4AdYfjT9ySHNiywK60
-	YJNeErV7+ivAndLn7vWAXy0b/wmx/gR/9Ue3/OnKjQmywO/+u4jPvgG+KynSY3wBKN9Y=;
+	bh=8clKTwDXSLEjCrNz3ZWsEXXoYtAWWeGjOsCM1EwODUc=; b=bJi0uusC3FaLSBrscCWDlzp6QG
+	M0KRp3Xuid92xasazyJJdhDazfsFBZceEYxXSAbPNBR15SEalGj0DHPY1xv63mEUdKdBmlztBDoVo
+	AjKzqs6VhZZ9wtsioyH5OltS1hbavvvrvVCJ4bb1s/8UWdvdmpEqRZlcK6maVFPH12zY=;
 Received: from 127.0.0.1
 	by fritzc.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim latest)
 	(envelope-from <christoph.fritz@hexdev.de>)
-	id 1rynWo-001JRH-0s;
-	Mon, 22 Apr 2024 08:51:50 +0200
+	id 1rynWp-001JRH-1M;
+	Mon, 22 Apr 2024 08:51:51 +0200
 From: Christoph Fritz <christoph.fritz@hexdev.de>
 To: Oliver Hartkopp <socketcan@hartkopp.net>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -68,9 +68,9 @@ Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>,
 	devicetree@vger.kernel.org,
 	linux-input@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: [PATCH 08/11] can: bcm: Add LIN answer offloading for responder mode
-Date: Mon, 22 Apr 2024 08:51:11 +0200
-Message-Id: <20240422065114.3185505-9-christoph.fritz@hexdev.de>
+Subject: [PATCH 09/11] can: lin: Handle rx offload config frames
+Date: Mon, 22 Apr 2024 08:51:12 +0200
+Message-Id: <20240422065114.3185505-10-christoph.fritz@hexdev.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240422065114.3185505-1-christoph.fritz@hexdev.de>
 References: <20240422065114.3185505-1-christoph.fritz@hexdev.de>
@@ -82,144 +82,77 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Enhance CAN broadcast manager with RX_LIN_SETUP and RX_LIN_DELETE
-operations to setup automatic LIN frame responses in responder mode.
-
-Additionally, the patch introduces the LIN_EVENT_FRAME flag to
-setup event-triggered LIN frames.
+The CAN Broadcast Manager now has the capability to dispatch CANFD
+frames marked with the id LINBUS_RXOFFLOAD_ID. This patch introduces
+functionality to interpret these specific frames, enabling the
+configuration of RX offloading within the LIN driver.
 
 Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
 ---
- include/uapi/linux/can/bcm.h |  5 ++-
- net/can/bcm.c                | 74 +++++++++++++++++++++++++++++++++++-
- 2 files changed, 77 insertions(+), 2 deletions(-)
+ drivers/net/can/lin.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/include/uapi/linux/can/bcm.h b/include/uapi/linux/can/bcm.h
-index f1e45f533a72c..c46268a114078 100644
---- a/include/uapi/linux/can/bcm.h
-+++ b/include/uapi/linux/can/bcm.h
-@@ -86,7 +86,9 @@ enum {
- 	TX_EXPIRED,	/* notification on performed transmissions (count=0) */
- 	RX_STATUS,	/* reply to RX_READ request */
- 	RX_TIMEOUT,	/* cyclic message is absent */
--	RX_CHANGED	/* updated CAN frame (detected content change) */
-+	RX_CHANGED,	/* updated CAN frame (detected content change) */
-+	RX_LIN_SETUP,	/* create auto-response for LIN frame */
-+	RX_LIN_DELETE,  /* remove auto-response for LIN frame */
- };
- 
- #define SETTIMER            0x0001
-@@ -101,5 +103,6 @@ enum {
- #define TX_RESET_MULTI_IDX  0x0200
- #define RX_RTR_FRAME        0x0400
- #define CAN_FD_FRAME        0x0800
-+#define LIN_EVENT_FRAME     0x1000
- 
- #endif /* !_UAPI_CAN_BCM_H */
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 27d5fcf0eac9d..a717e594234d1 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -59,6 +59,7 @@
- #include <linux/can/bcm.h>
- #include <linux/slab.h>
- #include <net/sock.h>
-+#include <net/lin.h>
- #include <net/net_namespace.h>
- 
- /*
-@@ -1330,6 +1331,59 @@ static int bcm_tx_send(struct msghdr *msg, int ifindex, struct sock *sk,
- 	return cfsiz + MHSIZ;
+diff --git a/drivers/net/can/lin.c b/drivers/net/can/lin.c
+index a9b5d76708879..56492952c8588 100644
+--- a/drivers/net/can/lin.c
++++ b/drivers/net/can/lin.c
+@@ -177,6 +177,27 @@ static void lin_remove_sysfs_id_files(struct net_device *ndev)
+ 	}
  }
  
-+static int bcm_lin_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
-+			 int ifindex, struct sock *sk, int cfsiz, int is_active)
++static int lin_setup_rxoffload(struct lin_device *ldev,
++			       struct canfd_frame *cfd)
 +{
 +	struct lin_responder_answer answ;
-+	struct net_device *dev;
-+	struct sk_buff *skb;
-+	struct canfd_frame cf;
-+	netdevice_tracker tracker;
-+	size_t sz;
-+	int ret;
 +
-+	if (msg_head->nframes > 1)
++	if (!(cfd->flags & CANFD_FDF))
++		return -EMSGSIZE;
++
++	BUILD_BUG_ON(sizeof(struct lin_responder_answer) > sizeof(cfd->data));
++	memcpy(&answ, cfd->data, sizeof(struct lin_responder_answer));
++
++	answ.lf.checksum_mode = (cfd->can_id & LIN_ENHANCED_CKSUM_FLAG) ?
++			LINBUS_ENHANCED : LINBUS_CLASSIC;
++
++	if (answ.lf.lin_id > LIN_ID_MASK ||
++	    answ.event_associated_id > LIN_ID_MASK)
 +		return -EINVAL;
 +
-+	if (!(msg_head->flags & CAN_FD_FRAME))
-+		return -EINVAL;
-+
-+	ret = memcpy_from_msg(&cf, msg, cfsiz);
-+	if (ret < 0)
-+		return ret;
-+
-+	answ.lf.lin_id = cf.can_id & LIN_ID_MASK;
-+	answ.is_active = is_active;
-+	answ.is_event_frame = !!(msg_head->flags & LIN_EVENT_FRAME);
-+	answ.event_associated_id = msg_head->can_id;
-+	answ.lf.len = min(cf.len, LIN_MAX_DLEN);
-+	memcpy(answ.lf.data, cf.data, answ.lf.len);
-+	sz = min(sizeof(struct lin_responder_answer), sizeof(cf.data));
-+	cf.can_id |= LIN_RXOFFLOAD_DATA_FLAG;
-+	memcpy(cf.data, &answ, sz);
-+
-+	dev = netdev_get_by_index(sock_net(sk), ifindex, &tracker, GFP_KERNEL);
-+	if (!dev)
-+		return -ENODEV;
-+
-+	skb = alloc_skb(cfsiz + sizeof(struct can_skb_priv), gfp_any());
-+	if (!skb)
-+		goto lin_out;
-+
-+	can_skb_reserve(skb);
-+	can_skb_prv(skb)->ifindex = dev->ifindex;
-+	can_skb_prv(skb)->skbcnt = 0;
-+	skb_put_data(skb, &cf, cfsiz);
-+
-+	skb->dev = dev;
-+	can_skb_set_owner(skb, sk);
-+	ret = can_send(skb, 1); /* send with loopback */
-+
-+lin_out:
-+	netdev_put(dev, &tracker);
-+	return ret;
++	return ldev->ldev_ops->update_responder_answer(ldev, &answ);
 +}
 +
- /*
-  * bcm_sendmsg - process BCM commands (opcodes) from the userspace
-  */
-@@ -1429,12 +1483,30 @@ static int bcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ static void lin_tx_work_handler(struct work_struct *ws)
+ {
+ 	struct lin_device *ldev = container_of(ws, struct lin_device,
+@@ -184,10 +205,19 @@ static void lin_tx_work_handler(struct work_struct *ws)
+ 	struct net_device *ndev = ldev->ndev;
+ 	struct canfd_frame *cfd;
+ 	struct lin_frame lf;
++	int ret;
  
- 	case TX_SEND:
- 		/* we need exactly one CAN frame behind the msg head */
--		if ((msg_head.nframes != 1) || (size != cfsiz + MHSIZ))
-+		if (msg_head.nframes != 1 || size != cfsiz + MHSIZ)
- 			ret = -EINVAL;
- 		else
- 			ret = bcm_tx_send(msg, ifindex, sk, cfsiz);
- 		break;
+ 	ldev->tx_busy = true;
  
-+	case RX_LIN_SETUP:
-+		/* we need exactly one CAN frame behind the msg head */
-+		if (msg_head.nframes != 1 || size != cfsiz + MHSIZ)
-+			ret = -EINVAL;
-+		else
-+			ret = bcm_lin_setup(&msg_head, msg, ifindex, sk, cfsiz,
-+					    1);
-+		break;
+ 	cfd = (struct canfd_frame *)ldev->tx_skb->data;
 +
-+	case RX_LIN_DELETE:
-+		/* we need exactly one CAN frame behind the msg head */
-+		if (msg_head.nframes != 1 || size != cfsiz + MHSIZ)
-+			ret = -EINVAL;
-+		else
-+			ret = bcm_lin_setup(&msg_head, msg, ifindex, sk, cfsiz,
-+					    0);
-+		break;
++	if (cfd->can_id & LIN_RXOFFLOAD_DATA_FLAG) {
++		ret = lin_setup_rxoffload(ldev, cfd);
++		if (ret < 0)
++			netdev_err(ndev, "setting up rx failed %d\n", ret);
++		goto lin_tx_out;
++	}
 +
- 	default:
- 		ret = -EINVAL;
- 		break;
+ 	lf.checksum_mode = (cfd->can_id & LIN_ENHANCED_CKSUM_FLAG) ?
+ 			   LINBUS_ENHANCED : LINBUS_CLASSIC;
+ 	lf.lin_id = (u8)(cfd->can_id & LIN_ID_MASK);
+@@ -203,6 +233,8 @@ static void lin_tx_work_handler(struct work_struct *ws)
+ 
+ 	DEV_STATS_INC(ndev, tx_packets);
+ 	DEV_STATS_ADD(ndev, tx_bytes, lf.len);
++
++lin_tx_out:
+ 	ldev->tx_busy = false;
+ 	netif_wake_queue(ndev);
+ }
 -- 
 2.39.2
 
