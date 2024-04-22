@@ -1,196 +1,193 @@
-Return-Path: <linux-can+bounces-453-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-457-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0F2B8AC3E8
-	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 07:51:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D3F08AC4F1
+	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 09:13:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65AD31F21F4B
-	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 05:51:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7739A28205D
+	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 07:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EB5D18059;
-	Mon, 22 Apr 2024 05:50:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D6150269;
+	Mon, 22 Apr 2024 07:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TiHBGSr+"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="DdZz0iIY"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fritzc.com (mail.fritzc.com [213.160.72.247])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D781B964
-	for <linux-can@vger.kernel.org>; Mon, 22 Apr 2024 05:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68F75029E;
+	Mon, 22 Apr 2024 07:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.72.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713765042; cv=none; b=hyis7LaH+I2O/BhzytQbt8sX+cYuBjdlhqbRejQnaVCQl38Q986nWFOnP0nfx/bBgGQWKYJM0SkrUxW5aci4R0N0zZ1XyHKnceXac7CO8v1QxbQcBx9nz0vkkrjGGXUNP0C0GjGpotdg7lo2YLQCxgrNPldxZL1dBKIqUSZOjeo=
+	t=1713769931; cv=none; b=J1y9sRpKRhWe24nOYAB91PkJJfDxrErBeXdicDyzz26KxFL/Xfo0p+haJAmLBYyAVmt+fLADu0oTFFDG+IT5pg4qFzDChghIQs/uIs7Z08Uf4t5Zb4+P8Lfe9S04uWtfrUAYCoAlATcIs435siIqCpBoLneNQIPh43CYqCW9akM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713765042; c=relaxed/simple;
-	bh=85BbHvsuCYK7Ck+ERcQqw61e7bBjuLPidlASzc4zeog=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Of7jt08qwLVzpV8Cf/LseH0V6Ay9RyHzfSpgmPyNsoVrL5cTzqocYuXAKuJnoeYzoio28q+M8ixhSU9cw5vbt2D9uxi5vbbpq4wxNxxoXNtYZUaDWaK44jFwgz0zQ7F8Ls/yKS5KA9xukoEJL34R+u+npnMQG53f2dMgNkVrRqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TiHBGSr+; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2a2e5d86254so3427966a91.1
-        for <linux-can@vger.kernel.org>; Sun, 21 Apr 2024 22:50:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713765040; x=1714369840; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cWzfBS1MVum6cLnpBzkrrBYMfkXKfvOtZEdhxryLkOQ=;
-        b=TiHBGSr+OHJGf0VG2Hho7GFml3e3uGBajbgqArldeX3hhVWtnnMEjHjSQI+7OduvsG
-         lTKD0nI8W0Wa1ZDjC4zyR+wFpEdADjpqI0ZvzW359DhrXsrcZT2HvofjXf7O1LWapO4n
-         56GoLOew2dDB7QbkDrps95TtqyMB1zubtqqNyPKv9IdEByOXX+HzJ0FLuWavLHPcg+FA
-         gmweP5B+KemBPfU7NkBvOXWr4hh28dTMAHouW/WUse2DIqenMRvewCfu4YlE1JBNbT+x
-         H9uzg43KWqu/jSJW+DBEL0iggr/5R4oNxYdT/sMPbCGX6kH3sUAz3yHzt2x/qxLEzsJG
-         a5Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713765040; x=1714369840;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cWzfBS1MVum6cLnpBzkrrBYMfkXKfvOtZEdhxryLkOQ=;
-        b=YTHZYWMgUr6aEwvvgfElyXGeZvyOa4g3/NIV0FXjruM9cBTuY0e7zFds8ngo6Mq0nF
-         3ujFTInNlwKKat/i5NCikqgGbnYiJITY274TxmCybPxpON/lLRcK/VyVNv+FWyTjRac3
-         ueJbSdowMA6LDJmI+eN10uMTqQ3njLSZjLuPW8rGySmDX006qonBEfOrzYh7PL1Z30aT
-         fAEQLPhoFzUx7rAx/i3xEkg8MPiFQfEc1tVDfU1EtssNpuD6QDmkX5Me1dnMX5DS0jQc
-         tB+HPdTj6E1yD+e+lCaoy4QcclFoWUuZSuKR9MI1kbUwn4q2ZdR3oMndg3Vhibjl4ToF
-         xSnA==
-X-Gm-Message-State: AOJu0Yyb4bUgNaw3RRbHcC2rg/inWMpU/UY3qL3lvBPkd8SMFSoYCWaY
-	TJV2EdGVRi5REzWf/iywwbyLFFQKXS3bEaC6+thk/SyyxrHCxCbG0DlVVaJgsn0NLnvuv/vYKyO
-	QilKfA6MjMVd1g/QWIRK+vnEkktWzxFO7
-X-Google-Smtp-Source: AGHT+IFz5lUcJSfTMUN+qOzcyw84/u9vMDTFvT8VohteiaGWuwYGax0DgKCNfltHAohuwI6SUGbCb4gWYCYYG5ulUCQ=
-X-Received: by 2002:a17:90a:cf04:b0:2a7:329c:7976 with SMTP id
- h4-20020a17090acf0400b002a7329c7976mr12123047pju.8.1713765039809; Sun, 21 Apr
- 2024 22:50:39 -0700 (PDT)
+	s=arc-20240116; t=1713769931; c=relaxed/simple;
+	bh=hpSwpq8t85oJgWzBAb0sGwMKMZLQnDwXbtThMElaBjk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KJSE4fa7U4IuxTdBT9dZ1f17AKl9xWvfY70ObiVzWAr1EvUEj+EVnH7R4IBuorov1dGocUH76F7TLJuSjBqoGy0hLlHYgyVOrJVZVtFtzabZl2+bFEA6rr+YjfbA+O7s/r9hPW9zdQ7S39we8M0wPTgMvkR/pIq9NeMWcTRseEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=DdZz0iIY; arc=none smtp.client-ip=213.160.72.247
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hexdev.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
+	s=dkim; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:
+	To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=SF2ECz2nkc3iAx/gW3lWEA5oZJYY9ghIYAkmZKvVY/E=; b=DdZz0iIY61cgM89iG8hhc4U/c4
+	mhqwc4EVqseuKe+ULiMA6LSl6sb1C4prfUGYE7zdiZTN1VsrpLMQVjJi+N8vWXVxTcYdDfyk8APay
+	s+OkZDqeIWSkmnmvFaQJZte4EAu6BvupRWS3Uc2DcWyCOcaa1/0TKsVr0hOILvdm4SIM=;
+Received: from 127.0.0.1
+	by fritzc.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim latest)
+	(envelope-from <christoph.fritz@hexdev.de>)
+	id 1rynWe-001JRH-2R;
+	Mon, 22 Apr 2024 08:51:41 +0200
+From: Christoph Fritz <christoph.fritz@hexdev.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Subject: [PATCH 00/11] LIN Bus support for Linux
+Date: Mon, 22 Apr 2024 08:51:03 +0200
+Message-Id: <20240422065114.3185505-1-christoph.fritz@hexdev.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240420194746.4885-1-socketcan@hartkopp.net>
-In-Reply-To: <20240420194746.4885-1-socketcan@hartkopp.net>
-From: Vincent Mailhol <vincent.mailhol@gmail.com>
-Date: Mon, 22 Apr 2024 14:50:28 +0900
-Message-ID: <CAMZ6Rq+3LJKcU5+nQmZ95AyLMqQe=y4_tCsBbuZ_j2cSuz9+3A@mail.gmail.com>
-Subject: Re: [PATCH] can: isotp: remove ISO 15675-2 specification version
- where possible
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Sun. 21 Apr. 2024 at 04:48, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> With the new ISO 15765-2:2024 release the former documentation and comments
-> have to be reworked. This patch removes the ISO specification version/date
-> where possible.
+This series is introducing basic Local Interconnect Network (LIN) (ISO
+17987) [0] support to the Linux kernel, along with two drivers that make
+use of it: An advanced USB adapter and a lightweight serdev driver (for
+UARTs equipped with a LIN transceiver).
 
-The patch also renames "classical CAN" into "CAN CC", which is fine
-but maybe add one sentence in the patch description for that.
+The LIN bus is common in the automotive industry for connecting
+low-level devices like side mirrors, seats, ambient lights, etc.
 
-Aside from that nitpick, one comment (see below). Meanwhile, I am
-giving my acknowledgement in advance:
+The LIN bus is a lower-cost bus system with a subset of features of CAN.
+Its earlier specification (before ISO) is publicly accessible [1].
 
-Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+This series of patches follows up on a discussion initiated by an RFC
+patch series [2].
 
-Thank you.
+The core of this series is the first patch, which implements the CAN_LIN
+glue driver. It basically utilizes the CAN interface on one side and
+for device drivers on the other side it creates a rx() function and
+several callbacks.
 
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> ---
->  include/uapi/linux/can/isotp.h |  2 +-
->  net/can/Kconfig                | 11 +++++------
->  net/can/isotp.c                | 11 ++++++-----
->  3 files changed, 12 insertions(+), 12 deletions(-)
->
-> diff --git a/include/uapi/linux/can/isotp.h b/include/uapi/linux/can/isotp.h
-> index 6cde62371b6f..bd990917f7c4 100644
-> --- a/include/uapi/linux/can/isotp.h
-> +++ b/include/uapi/linux/can/isotp.h
-> @@ -1,10 +1,10 @@
->  /* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
->  /*
->   * linux/can/isotp.h
->   *
-> - * Definitions for isotp CAN sockets (ISO 15765-2:2016)
-> + * Definitions for ISO 15765-2 CAN transport protocol sockets
->   *
->   * Copyright (c) 2020 Volkswagen Group Electronic Research
->   * All rights reserved.
->   *
->   * Redistribution and use in source and binary forms, with or without
-> diff --git a/net/can/Kconfig b/net/can/Kconfig
-> index cb56be8e3862..af64a6f76458 100644
-> --- a/net/can/Kconfig
-> +++ b/net/can/Kconfig
-> @@ -54,20 +54,19 @@ config CAN_GW
->           by the netlink configuration interface known e.g. from iptables.
->
->  source "net/can/j1939/Kconfig"
->
->  config CAN_ISOTP
-> -       tristate "ISO 15765-2:2016 CAN transport protocol"
-> +       tristate "ISO 15765-2 CAN transport protocol"
->         help
->           CAN Transport Protocols offer support for segmented Point-to-Point
->           communication between CAN nodes via two defined CAN Identifiers.
-> +         This protocol driver implements segmented data transfers for CAN CC
-> +         (aka Classical CAN, CAN 2.0B) and CAN FD frame types which were
-> +         introduced with ISO 15765-2:2016.
->           As CAN frames can only transport a small amount of data bytes
-> -         (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
-> +         (max. 8 bytes for CAN CC and max. 64 bytes for CAN FD) this
->           segmentation is needed to transport longer Protocol Data Units (PDU)
->           as needed e.g. for vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN
->           traffic.
-> -         This protocol driver implements data transfers according to
-> -         ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
-> -         If you want to perform automotive vehicle diagnostic services (UDS),
-> -         say 'y'.
+This approach is non-invasive, as LIN frames (nearly identical to CAN
+frames) are just treated as a special case of CAN frames. This approach
+eliminates the need for a separate API for LIN, allowing the use of
+existing CAN tools, including the CAN broadcast manager.
 
-Not sure why that last sentence was removed. This is out of scope from
-this patch and I think this can be helpful for the audience not aware
-that UDS relies on ISO-TP. I suggest keeping that one.
+For the responder part of LIN, when a device responds to a controller
+request, it can reply on up to LIN its 64 possible IDs (0...63) with a
+maximum of 8 bytes payload.  The response must be sent relatively
+quickly, so offloading is used (which is used by most devices anyway).
+Devices that do not support offloading (like the lightweight serdev)
+handle the list of responses in the driver on a best-effort basis.
 
->
->  endif
-> diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index 25bac0fafc83..16046931542a 100644
-> --- a/net/can/isotp.c
-> +++ b/net/can/isotp.c
-> @@ -70,25 +70,26 @@
->  #include <linux/can/isotp.h>
->  #include <linux/slab.h>
->  #include <net/sock.h>
->  #include <net/net_namespace.h>
->
-> -MODULE_DESCRIPTION("PF_CAN isotp 15765-2:2016 protocol");
-> +MODULE_DESCRIPTION("PF_CAN ISO 15765-2 transport protocol");
->  MODULE_LICENSE("Dual BSD/GPL");
->  MODULE_AUTHOR("Oliver Hartkopp <socketcan@hartkopp.net>");
->  MODULE_ALIAS("can-proto-6");
->
->  #define ISOTP_MIN_NAMELEN CAN_REQUIRED_SIZE(struct sockaddr_can, can_addr.tp)
->
->  #define SINGLE_MASK(id) (((id) & CAN_EFF_FLAG) ? \
->                          (CAN_EFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG) : \
->                          (CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG))
->
-> -/* ISO 15765-2:2016 supports more than 4095 byte per ISO PDU as the FF_DL can
-> - * take full 32 bit values (4 Gbyte). We would need some good concept to handle
-> - * this between user space and kernel space. For now set the static buffer to
-> - * something about 8 kbyte to be able to test this new functionality.
-> +/* Since ISO 15765-2:2016 the CAN isotp protocol supports more than 4095
-> + * byte per ISO PDU as the FF_DL can take full 32 bit values (4 Gbyte).
-> + * We would need some good concept to handle this between user space and
-> + * kernel space. For now set the static buffer to something about 8 kbyte
-> + * to be able to test this new functionality.
->   */
->  #define DEFAULT_MAX_PDU_SIZE 8300
->
->  /* maximum PDU size before ISO 15765-2:2016 extension was 4095 */
->  #define MAX_12BIT_PDU_SIZE 4095
-> --
-> 2.39.2
->
->
+The CAN broadcast manager (bcm) makes a good interface for the LIN
+userland interface, bcm is therefore enhanced to handle the
+configuration of these offload RX frames, so that the device can handle
+the response on its own.  As a basic alternative, a sysfs file per LIN
+identifier gets also introduced.
+
+The USB device driver for the hexLIN [3] adapter uses the HID protocol
+and is located in the drivers/hid directory. Which is a bit uncommon for
+a CAN device, but this is a LIN device and mainly a hid driver (and all
+hid drivers go into drivers/hid).
+
+The other driver, the UART lin-serdev driver requires support for break
+detection, this is addressed by two serdev patches.
+
+The lin-serdev driver has been tested on an ARM SoC, on its uart
+(uart-pl011) an adapter board (hexLIN-tty [4]) has been used.  As a
+sidenote, in that tty serial driver (amba-pl011.c) it was necessary to
+disable DMA_ENGINE to accurately detect breaks [5].
+
+The functions for generating LIN-Breaks and checksums, originally from
+a line discipline driver named sllin [6], have been adopted into the
+lin-serdev driver.
+
+To make use of the LIN mode configuration (commander or responder)
+option, a patch for iproute2 [7] has been made.
+
+The lin-utils [8] provide userland tools for reference, testing, and
+evaluation. These utilities are currently separate but may potentially
+be integrated into can-utils in the future.
+
+[0]: https://en.wikipedia.org/wiki/Local_Interconnect_Network
+[1]: https://www.lin-cia.org/fileadmin/microsites/lin-cia.org/resources/documents/LIN_2.2A.pdf
+[2]: https://lwn.net/Articles/916049/
+[3]: https://hexdev.de/hexlin
+[4]: https://hexdev.de/hexlin#tty
+[5]: https://github.com/raspberrypi/linux/issues/5985
+[6]: https://github.com/lin-bus/linux-lin/blob/master/sllin/sllin.c
+[7]: https://github.com/ch-f/iproute2/tree/lin-feature
+[8]: https://github.com/ch-f/lin-utils
+
+Christoph Fritz (11):
+  can: Add LIN bus as CAN abstraction
+  HID: hexLIN: Add support for USB LIN bus adapter
+  tty: serdev: Add flag buffer aware receive_buf_fp()
+  tty: serdev: Add method to enable break flags
+  dt-bindings: net: can: Add serdev LIN bus dt bindings
+  can: Add support for serdev LIN adapters
+  can: lin: Add special frame id for rx offload config
+  can: bcm: Add LIN answer offloading for responder mode
+  can: lin: Handle rx offload config frames
+  can: lin: Support setting LIN mode
+  HID: hexLIN: Implement ability to update lin mode
+
+ .../bindings/net/can/linux,lin-serdev.yaml    |  29 +
+ drivers/hid/Kconfig                           |  19 +
+ drivers/hid/Makefile                          |   1 +
+ drivers/hid/hid-hexlin.c                      | 594 ++++++++++++++++++
+ drivers/hid/hid-ids.h                         |   1 +
+ drivers/hid/hid-quirks.c                      |   3 +
+ drivers/net/can/Kconfig                       |  26 +
+ drivers/net/can/Makefile                      |   2 +
+ drivers/net/can/lin-serdev.c                  | 467 ++++++++++++++
+ drivers/net/can/lin.c                         | 547 ++++++++++++++++
+ drivers/tty/serdev/core.c                     |  11 +
+ drivers/tty/serdev/serdev-ttyport.c           |  19 +-
+ include/linux/serdev.h                        |  19 +-
+ include/net/lin.h                             | 105 ++++
+ include/uapi/linux/can/bcm.h                  |   5 +-
+ include/uapi/linux/can/netlink.h              |   2 +
+ net/can/bcm.c                                 |  74 ++-
+ 17 files changed, 1918 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/linux,lin-serdev.yaml
+ create mode 100644 drivers/hid/hid-hexlin.c
+ create mode 100644 drivers/net/can/lin-serdev.c
+ create mode 100644 drivers/net/can/lin.c
+ create mode 100644 include/net/lin.h
+
+-- 
+2.39.2
+
 
