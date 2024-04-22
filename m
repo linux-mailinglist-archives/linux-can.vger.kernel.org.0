@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-463-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-458-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B829D8AC50F
-	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 09:15:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B21168AC4F6
+	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 09:14:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDE821C20CC7
-	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 07:15:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 520A01F22225
+	for <lists+linux-can@lfdr.de>; Mon, 22 Apr 2024 07:14:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8FF9524DC;
-	Mon, 22 Apr 2024 07:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A279F502A2;
+	Mon, 22 Apr 2024 07:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="Ns5G9nr6"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="i4Gumx5G"
 X-Original-To: linux-can@vger.kernel.org
 Received: from fritzc.com (mail.fritzc.com [213.160.72.247])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32AA84C622;
-	Mon, 22 Apr 2024 07:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4A54A99C;
+	Mon, 22 Apr 2024 07:12:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.72.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713769960; cv=none; b=HWIRR86MPIZHQbtpz9VuPiizCfaqbEyciSmLxudwzUyLTzfwQCxMqPo9E6vBGKZZCdebO4pIAbvb77P5dPYB6a3jWUmFKC9ZCjeIrexPia0Aha1ETmj1GZigVPpkJ4dWr+M4Iet74Hp2aC7IM3qjIFMY0xOiQ1w17fKEMa797gE=
+	t=1713769936; cv=none; b=rCqnQmzwAaIRV48/CkV6GYZCHcw38NeY1npcvXeYoybT5oJoaKGRIl6GETG9VypJJ9YvTu3lUjdO7/ykZVWqpbg5exMUfcC1PBYNeRRKLAhWWeloIo4IgC7F5Pm5OHQGqTCDUUY77cvcasKrVeh7LNrtXwTE5JA+FF1n0uPo5Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713769960; c=relaxed/simple;
-	bh=Tzx1/eWSRHcqk3KBn3lZQgePhYDOso/sqz5cAwscRmg=;
+	s=arc-20240116; t=1713769936; c=relaxed/simple;
+	bh=q9T1A6DKZWu+cEV4Ja19PHnmKkDeTZKLtPYNFzWJaPI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kqZPX5PYumN8VXtQxO9pX8rdRMz6Nx131qRrb1T+Z0dpBhQex1QnE+WOsM3ViBO0I/70prlS6rdIJq0YE8PUuYUwH81tClXbHfraa2xXF1pEHiLPAL0M/gcs2jzM7wE6EDpukI5OxxTSfbjuAxE0KvA8LAjPET176mV1arteFbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=Ns5G9nr6; arc=none smtp.client-ip=213.160.72.247
+	 MIME-Version; b=mWSN8apbZrmUT/5k0uo2Ki9dWA7hpozn3YtPNYKLmJoBDZQ+C6bsfK/pv3d5ADXOZw2vQLOqAAbzNRgszxp5iAdl/p9v+BTpgdJhvTtJH03srAZ/4L2hI71s3LHCcU8vm8vfHBhp6TPlag6vgTznntBMGJsncyjJC6HTVm8HO+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=i4Gumx5G; arc=none smtp.client-ip=213.160.72.247
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hexdev.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
@@ -37,15 +37,15 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=Snf7mJCYWthVKyp64Q4r3SmYiNCoko04PmFq7ktAJeo=; b=Ns5G9nr6tuR0ZRyMtEUHaDlD8r
-	TjmgkUCwbfIRJc/qBtQYSMI/vXXAuHIL7eLwHcyv+mzePj+Eb8uLBj6AtldGluvL8DDVTeGdOg5pF
-	nIm3JOgR4fqs7UxUre/BLU8/z5dgakmwCA7vIGcXyE9lLFwK19DY3XPT280h6G+zM3dc=;
+	bh=2eb78AFe5PYDmdbUW5Vdqx7jRBou5taMNU0tTn49tb4=; b=i4Gumx5G5Dp1JbdyRKxtGMbFYV
+	fJmeCpfc1pjT4vtPRRDonfbM5kWUPJVci8qlZbXlWRju1/LupUFudRzzXRa7ic/pGGCj7iFl3v+87
+	u32m4NnBRd9STH5IeEcHUHS3XwYpJinYd/oRcH5YEvkubWwGJp2oHSuXVNuhcI5lj/pU=;
 Received: from 127.0.0.1
 	by fritzc.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim latest)
 	(envelope-from <christoph.fritz@hexdev.de>)
-	id 1rynWk-001JRH-0P;
-	Mon, 22 Apr 2024 08:51:46 +0200
+	id 1rynWl-001JRH-0F;
+	Mon, 22 Apr 2024 08:51:47 +0200
 From: Christoph Fritz <christoph.fritz@hexdev.de>
 To: Oliver Hartkopp <socketcan@hartkopp.net>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -68,9 +68,9 @@ Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>,
 	devicetree@vger.kernel.org,
 	linux-input@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: [PATCH 04/11] tty: serdev: Add method to enable break flags
-Date: Mon, 22 Apr 2024 08:51:07 +0200
-Message-Id: <20240422065114.3185505-5-christoph.fritz@hexdev.de>
+Subject: [PATCH 05/11] dt-bindings: net: can: Add serdev LIN bus dt bindings
+Date: Mon, 22 Apr 2024 08:51:08 +0200
+Message-Id: <20240422065114.3185505-6-christoph.fritz@hexdev.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240422065114.3185505-1-christoph.fritz@hexdev.de>
 References: <20240422065114.3185505-1-christoph.fritz@hexdev.de>
@@ -82,96 +82,50 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The recently introduced callback function receive_buf_fp() brings flags
-buffer support. To allow signaling of TTY_BREAK flags, this patch
-introduces serdev_device_set_break_detection() and an implementation for
-ttyport. This enables serdev devices to configure their underlying tty
-port to signal or ignore break conditions.
+Add documentation of device tree bindings for serdev UART LIN-Bus
+devices equipped with LIN transceivers.
 
 Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
 ---
- drivers/tty/serdev/core.c           | 11 +++++++++++
- drivers/tty/serdev/serdev-ttyport.c | 17 +++++++++++++++++
- include/linux/serdev.h              |  2 ++
- 3 files changed, 30 insertions(+)
+ .../bindings/net/can/linux,lin-serdev.yaml    | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/linux,lin-serdev.yaml
 
-diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-index 613cb356b918d..23a1e76cb553b 100644
---- a/drivers/tty/serdev/core.c
-+++ b/drivers/tty/serdev/core.c
-@@ -339,6 +339,17 @@ unsigned int serdev_device_set_baudrate(struct serdev_device *serdev, unsigned i
- }
- EXPORT_SYMBOL_GPL(serdev_device_set_baudrate);
- 
-+void serdev_device_set_break_detection(struct serdev_device *serdev, bool enable)
-+{
-+	struct serdev_controller *ctrl = serdev->ctrl;
+diff --git a/Documentation/devicetree/bindings/net/can/linux,lin-serdev.yaml b/Documentation/devicetree/bindings/net/can/linux,lin-serdev.yaml
+new file mode 100644
+index 0000000000000..cb4e932ff249c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/can/linux,lin-serdev.yaml
+@@ -0,0 +1,29 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/can/linux,lin-serdev.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	if (!ctrl || !ctrl->ops->set_break_detection)
-+		return;
++title: Linux serdev LIN-Bus Support
 +
-+	ctrl->ops->set_break_detection(ctrl, enable);
-+}
-+EXPORT_SYMBOL_GPL(serdev_device_set_break_detection);
++description: |
++  LIN-Bus support for UART devices equipped with LIN transceivers,
++  utilizing the Serial Device Bus (serdev) interface.
 +
- void serdev_device_set_flow_control(struct serdev_device *serdev, bool enable)
- {
- 	struct serdev_controller *ctrl = serdev->ctrl;
-diff --git a/drivers/tty/serdev/serdev-ttyport.c b/drivers/tty/serdev/serdev-ttyport.c
-index bb47691afdb21..e928bf4175c6f 100644
---- a/drivers/tty/serdev/serdev-ttyport.c
-+++ b/drivers/tty/serdev/serdev-ttyport.c
-@@ -192,6 +192,22 @@ static void ttyport_set_flow_control(struct serdev_controller *ctrl, bool enable
- 	tty_set_termios(tty, &ktermios);
- }
- 
-+static void ttyport_set_break_detection(struct serdev_controller *ctrl, bool enable)
-+{
-+	struct serport *serport = serdev_controller_get_drvdata(ctrl);
-+	struct tty_struct *tty = serport->tty;
-+	struct ktermios ktermios = tty->termios;
++  For more details on an adapter, visit: https://hexdev.de/hexlin#tty
 +
-+	ktermios.c_iflag &= ~(IGNBRK | BRKINT);
++properties:
++  compatible:
++    const: linux,lin-serdev
 +
-+	if (enable)
-+		ktermios.c_iflag |= BRKINT;
-+	else
-+		ktermios.c_iflag |= IGNBRK;
++required:
++  - compatible
 +
-+	tty_set_termios(tty, &ktermios);
-+}
-+
- static int ttyport_set_parity(struct serdev_controller *ctrl,
- 			      enum serdev_parity parity)
- {
-@@ -263,6 +279,7 @@ static const struct serdev_controller_ops ctrl_ops = {
- 	.open = ttyport_open,
- 	.close = ttyport_close,
- 	.set_flow_control = ttyport_set_flow_control,
-+	.set_break_detection = ttyport_set_break_detection,
- 	.set_parity = ttyport_set_parity,
- 	.set_baudrate = ttyport_set_baudrate,
- 	.wait_until_sent = ttyport_wait_until_sent,
-diff --git a/include/linux/serdev.h b/include/linux/serdev.h
-index c6ef5a8988e07..d08aa7e16f9f8 100644
---- a/include/linux/serdev.h
-+++ b/include/linux/serdev.h
-@@ -94,6 +94,7 @@ struct serdev_controller_ops {
- 	int (*open)(struct serdev_controller *);
- 	void (*close)(struct serdev_controller *);
- 	void (*set_flow_control)(struct serdev_controller *, bool);
-+	void (*set_break_detection)(struct serdev_controller *, bool);
- 	int (*set_parity)(struct serdev_controller *, enum serdev_parity);
- 	unsigned int (*set_baudrate)(struct serdev_controller *, unsigned int);
- 	void (*wait_until_sent)(struct serdev_controller *, long);
-@@ -215,6 +216,7 @@ void serdev_device_close(struct serdev_device *);
- int devm_serdev_device_open(struct device *, struct serdev_device *);
- unsigned int serdev_device_set_baudrate(struct serdev_device *, unsigned int);
- void serdev_device_set_flow_control(struct serdev_device *, bool);
-+void serdev_device_set_break_detection(struct serdev_device *, bool);
- int serdev_device_write_buf(struct serdev_device *, const u8 *, size_t);
- void serdev_device_wait_until_sent(struct serdev_device *, long);
- int serdev_device_get_tiocm(struct serdev_device *);
++examples:
++  - |
++    &uart2 {
++      status = "okay";
++      linbus {
++        compatible = "linux,lin-serdev";
++      };
++    };
 -- 
 2.39.2
 
