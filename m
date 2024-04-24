@@ -1,142 +1,176 @@
-Return-Path: <linux-can+bounces-480-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-481-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 860168B0621
-	for <lists+linux-can@lfdr.de>; Wed, 24 Apr 2024 11:36:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BD178B07BA
+	for <lists+linux-can@lfdr.de>; Wed, 24 Apr 2024 12:54:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40B92284B41
-	for <lists+linux-can@lfdr.de>; Wed, 24 Apr 2024 09:36:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 491F1282AEF
+	for <lists+linux-can@lfdr.de>; Wed, 24 Apr 2024 10:54:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675F0282EE;
-	Wed, 24 Apr 2024 09:36:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A83CD1598E4;
+	Wed, 24 Apr 2024 10:54:26 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66367158D79
-	for <linux-can@vger.kernel.org>; Wed, 24 Apr 2024 09:36:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB99152E0B;
+	Wed, 24 Apr 2024 10:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713951386; cv=none; b=VfKlxwAlgX/DCntcpJziS5AGMeZmwzm/OjLKdfxHrXKkvN9+INBuaq/fHyivYFceplX2POxIdtQESbIFdDAKfcUcjDCJRdIYLuWBRDxalNjmiot5OoPrk/hU7grI0uxMZEg+r1kAHNiwMhO17M1zBZ4blXvk26hxcsWycn4kXyo=
+	t=1713956066; cv=none; b=miQXiQlZ5RHCr3MPbbiBplOhXD/C4YiZ6O//q+GERsJ8prV3CmZws1IKJ0HNHwgN5c3ql7zM//DJlSyxUStxDv5oTaYNZz5tLg2T2FdPnODS0w5afZjiP/QzRB7vdeZvCr/BWxvtl6krp3m0jgwN+zQzHdOkow/l9nMg2yLjfUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713951386; c=relaxed/simple;
-	bh=XYUSje7s+vIF31JkBL5OE6mbhV5TbJ4IkrpChsZMHWQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F6YxttywkMTBTeCuKAx+/s9zeicm4dGiIEkoL3MbNeBq2Zrug+rCQGFDw3I4EiVLDjG9Ayo2rENiaZ3eXQhB87MG03ZXZ97X2nyizVgnBFY9Ni4/CcEi7bkdAkqmAxbTIIwePAHra1y9Ol134oWNGnq3X9E0ToLQQ8cZm3hWdw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rzZ2o-0004t5-F1; Wed, 24 Apr 2024 11:36:02 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rzZ2m-00E3Pa-Ji; Wed, 24 Apr 2024 11:36:00 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 27E402BECD3;
-	Wed, 24 Apr 2024 09:36:00 +0000 (UTC)
-Date: Wed, 24 Apr 2024 11:35:59 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Gregor Herburger <gregor.herburger@ew.tq-group.com>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Thomas Kopp <thomas.kopp@microchip.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux@ew.tq-group.com, alexander.stein@ew.tq-group.com
-Subject: Re: [PATCH 3/4] can: mcp251xfd: add gpio functionality
-Message-ID: <20240424-notorious-roadrunner-of-will-0c55ce-mkl@pengutronix.de>
-References: <20240417-mcp251xfd-gpio-feature-v1-0-bc0c61fd0c80@ew.tq-group.com>
- <20240417-mcp251xfd-gpio-feature-v1-3-bc0c61fd0c80@ew.tq-group.com>
+	s=arc-20240116; t=1713956066; c=relaxed/simple;
+	bh=dTdKB9+IkBBoLgEPCcacEl7xptPU+1wETHC5RBLak14=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XBUcST1H/NrhCgKaMio34dBQ5E0+5v3/cb2Flwg8MsuF3Kx4FnzCqRLePzs85W2ImyIiXWw4RKL/ncZowvLQD78XbgLDGecTVDKZfhQY8sZ9MuZGrq/G9ymB/nJh4mo73o3OtwghmSyU7lI69OBbvaBWb82ONIJnNgjaQgeBYko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6ed112c64beso5853031b3a.1;
+        Wed, 24 Apr 2024 03:54:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713956064; x=1714560864;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sbRk+8O9BzuC/xDyoYPxAM90+rfheN7dqlzCKkmo9fI=;
+        b=fKmq+FGj9fRPPgTYSaw1imRarnZJN+CUe6bHGD/N7Var7038bDN4DX+jRY6y/e7OOA
+         Jtv8r0LkZmNmn0+K0EssPxFs7hJndLr4QM3aHWwLmhyev0b6IOTi2+QPMCuhBawBNUrR
+         O4yGvBiuKTh9U2VC3RczlfOSUH4aSe09ijpPjLKp4PAAm1LczrIM+shBERbIX8DKk4zF
+         57xQTNOOiM32oMpO/L0D8HkP1cdk1j64dpAL/beasZ49dCcIIv8FQDuvaa5wDfYVFoVs
+         pFs8DJ+b1LTr09SyyPdpufcNLKNmm5ni1fc4wygVF0Kew5PKk4/89pDAWAAC1yf35mJ9
+         fFMw==
+X-Forwarded-Encrypted: i=1; AJvYcCUIOV4soHI/Wc6YOz3P8PrBJHehC0UxRSd8UITAhbwk9FkFRW7WYdN+QWykKFVQXhVk5mlco3LJbNx3+yD+jVXYR3ykddyKCkW1F0NM7w3RXQqw5Yr3WW7oM23DmchD3n+x1/H6cKep8fevtgPJQNrfcZ2lmTCRyckuxZicYdhtMB9a6wFKcnKJw61ob45e7WW1gaIHpWMq4MGUCQ==
+X-Gm-Message-State: AOJu0Yz8ijjXmH9LoE4sm/QbbfD21N8RAOWfbyjDe+G1czAutgBID3s1
+	3luRL+WpaJ5EtYDSjmUFQcy3fc7HO5bBxtmgXGi/cGqlR9KVtu9cVM2PXutZj3oZQUUmD+NcEMx
+	TxieY/ECxk4GEnizRcO9jMbtclKY=
+X-Google-Smtp-Source: AGHT+IEPBBrIzHYPuawwbCDK5O95umbDiYxjntGXJscMNGrfD44AaArcqQZ2F8S4CSUjX7zpwGx4/+8Es4RQwo03Gzc=
+X-Received: by 2002:a05:6a00:ccd:b0:6eb:3d37:ce7a with SMTP id
+ b13-20020a056a000ccd00b006eb3d37ce7amr2675985pfv.21.1713956064157; Wed, 24
+ Apr 2024 03:54:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7mrp4odhvvzy4nqr"
-Content-Disposition: inline
-In-Reply-To: <20240417-mcp251xfd-gpio-feature-v1-3-bc0c61fd0c80@ew.tq-group.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20240417-mcp251xfd-gpio-feature-v1-0-bc0c61fd0c80@ew.tq-group.com>
+ <20240417-mcp251xfd-gpio-feature-v1-2-bc0c61fd0c80@ew.tq-group.com>
+In-Reply-To: <20240417-mcp251xfd-gpio-feature-v1-2-bc0c61fd0c80@ew.tq-group.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Wed, 24 Apr 2024 19:54:12 +0900
+Message-ID: <CAMZ6RqKYfFNGpKdwvu2ekuE5FDwiXgmH=Q3bA=QmDMKPLEzYsQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] can: mcp251xfd: mcp251xfd_regmap_crc_write():
+ workaround for errata 5
+To: Gregor Herburger <gregor.herburger@ew.tq-group.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Thomas Kopp <thomas.kopp@microchip.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux@ew.tq-group.com, alexander.stein@ew.tq-group.com
+Content-Type: text/plain; charset="UTF-8"
 
-
---7mrp4odhvvzy4nqr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 17.04.2024 15:43:56, Gregor Herburger wrote:
-> The mcp251xfd devices allow two pins to be configured as gpio. Add this
-> functionality to driver.
->=20
+On Wed. 17 Apr. 2024 at 22:45, Gregor Herburger
+<gregor.herburger@ew.tq-group.com> wrote:
+> According to Errata DS80000789E 5 writing IOCON register using one SPI
+> write command clears LAT0/LAT1.
+>
+> Errata Fix/Work Around suggests to write registers with single byte write
+> instructions. However, it seems that every write to the second byte
+> causes the overrite of LAT0/LAT1.
+>
+> Never write byte 2 of IOCON register to avoid clearing of LAT0/LAT1.
+>
 > Signed-off-by: Gregor Herburger <gregor.herburger@ew.tq-group.com>
 > ---
->  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c   | 138 +++++++++++++++++=
-+++++-
->  drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c |  21 +++-
->  drivers/net/can/spi/mcp251xfd/mcp251xfd.h        |   4 +
->  3 files changed, 159 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net=
-/can/spi/mcp251xfd/mcp251xfd-core.c
-> index eb699288c076..5ba9fd0af4b6 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+>  drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c | 35 +++++++++++++++++++++++-
+>  1 file changed, 34 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> index 92b7bc7f14b9..ab4e372baffb 100644
+> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> @@ -229,14 +229,47 @@ mcp251xfd_regmap_crc_gather_write(void *context,
+>         return spi_sync_transfer(spi, xfer, ARRAY_SIZE(xfer));
+>  }
+>
+> +static int
+> +mcp251xfd_regmap_crc_write_iocon(void *context, const void *data, size_t count)
+                                                                            ^^^^
+count is never used.
 
-[...]
-
-> +static int mcp251fdx_gpio_setup(struct mcp251xfd_priv *priv)
 > +{
-> +	struct gpio_chip *gc =3D &priv->gc;
+> +       const size_t data_offset = sizeof(__be16) +
+> +               mcp251xfd_regmap_crc.pad_bits / BITS_PER_BYTE;
+> +       u16 reg = *(u16 *)data;
+
+This line made me scratch my head a lot.
+
+When I see a void * parameter named data, I expect this to be a memory
+region. Here, if I got this correctly, data is just a pointer to a u16
+which represents the low bit of a register.
+
+So, if you are not passing an address to a memory region but just a
+single scalar, why the void *? Wouldn't it be better to just do:
+
+  mcp251xfd_regmap_crc_write_iocon(void *context, u16 reg)
+
+> +       /* Never write to bits 16..23 of IOCON register to avoid clearing of LAT0/LAT1
+> +        *
+> +        * According to Errata DS80000789E 5 writing IOCON register using one
+> +        * SPI write command clears LAT0/LAT1.
+> +        *
+> +        * Errata Fix/Work Around suggests to write registers with single byte
+> +        * write instructions. However, it seems that the byte at 0xe06(IOCON[23:16])
+> +        * is for read-only access and writing to it causes the cleraing of LAT0/LAT1.
+                                                                  ^^^^^^^^
+clearing
+
+> +        */
 > +
-> +	if (!device_property_present(&priv->spi->dev, "gpio-controller"))
-> +		return 0;
+> +       /* Write IOCON[15:0] */
+> +       mcp251xfd_regmap_crc_gather_write(context, &reg, 1,
+> +                                         data + data_offset, 2);
+> +       reg += 3;
+> +       /* Write IOCON[31:24] */
+> +       mcp251xfd_regmap_crc_gather_write(context, &reg, 1,
+> +                                         data + data_offset + 3, 1);
 > +
-> +	if (priv->rx_int)
-> +		return dev_err_probe(&priv->spi->dev, -EINVAL,
-> +				     "Can't configure gpio-controller with RX-INT!\n");
+> +       return 0;
+> +}
+> +
+>  static int
+>  mcp251xfd_regmap_crc_write(void *context,
+>                            const void *data, size_t count)
 
-Can you enhance the DT binding to reflect this?
+This also uses the const void* data, except that here, this is kind of
+forced by the prototype of the write() callback function from struct
+regmap_bus. Also, count is properly used.
 
-regards,
-Marc
+>  {
+>         const size_t data_offset = sizeof(__be16) +
+>                 mcp251xfd_regmap_crc.pad_bits / BITS_PER_BYTE;
+> +       u16 reg = *(u16 *)data;
+>
+> -       return mcp251xfd_regmap_crc_gather_write(context,
+> +       if (reg == MCP251XFD_REG_IOCON)
+> +               return mcp251xfd_regmap_crc_write_iocon(context,
+> +                                                data, count);
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+After changing the prototype of mcp251xfd_regmap_crc_write_iocon(),
+this would then become:
 
---7mrp4odhvvzy4nqr
-Content-Type: application/pgp-signature; name="signature.asc"
+                return mcp251xfd_regmap_crc_write_iocon(context, reg);
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmYo0nwACgkQKDiiPnot
-vG8jwwf8C78MKwbC/RCbrV/cNcA+Z+3H66miJLcSjDg7A0mLZEjmJGCd6sDt9swW
-9ZusbKULy3vRQh8aOIf7zLkU3CuJbigbqfJO8e33B9nhN5SOJ0huOFssog5M24LI
-8k+L6Q6/bAkcC0SPuvCP1F/2+o3gYyjciEzfENA1yTBtvHvXHiJfc8JVTUkxrjan
-pfeZmgA2+hPXQUEuoxO3FMIzeiTe8l80Dxmrn6CdJSIfJsfm+rPnSaKY+bNdU4o+
-GP2VPfEds8yew+72uP7XgXmeZNVlnbAngGp82f8NxmCtvjBlTHkrjFE6/6+ZiuYw
-T5U6eqYVSFiHHWztQV81KACO+XZOsA==
-=Gi+/
------END PGP SIGNATURE-----
-
---7mrp4odhvvzy4nqr--
+> +       else
+> +               return mcp251xfd_regmap_crc_gather_write(context,
+>                                                  data, data_offset,
+>                                                  data + data_offset,
+>                                                  count - data_offset);
 
