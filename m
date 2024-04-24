@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-479-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-480-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E2788B05D6
-	for <lists+linux-can@lfdr.de>; Wed, 24 Apr 2024 11:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 860168B0621
+	for <lists+linux-can@lfdr.de>; Wed, 24 Apr 2024 11:36:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBE7F28A4D0
-	for <lists+linux-can@lfdr.de>; Wed, 24 Apr 2024 09:16:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40B92284B41
+	for <lists+linux-can@lfdr.de>; Wed, 24 Apr 2024 09:36:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07D6F158D79;
-	Wed, 24 Apr 2024 09:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675F0282EE;
+	Wed, 24 Apr 2024 09:36:26 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE96158D70
-	for <linux-can@vger.kernel.org>; Wed, 24 Apr 2024 09:15:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66367158D79
+	for <linux-can@vger.kernel.org>; Wed, 24 Apr 2024 09:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713950158; cv=none; b=jg8Lowou1FMPQQxwLyJghFo+9wezIEEewFhCvPGygnxDG9/nxfZ3YyCm32DghqkX/VBZJMnUMfjK8358TWsIz8xHuM6nn8fpAXYDNYH2+Kpsq7+fHdE/twEjy6gJ0W/Sui2JfTOrhDbow0gX8g8EWxoNZHU9N0RyyxjXRnEFZwU=
+	t=1713951386; cv=none; b=VfKlxwAlgX/DCntcpJziS5AGMeZmwzm/OjLKdfxHrXKkvN9+INBuaq/fHyivYFceplX2POxIdtQESbIFdDAKfcUcjDCJRdIYLuWBRDxalNjmiot5OoPrk/hU7grI0uxMZEg+r1kAHNiwMhO17M1zBZ4blXvk26hxcsWycn4kXyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713950158; c=relaxed/simple;
-	bh=NUJHTVDyXWUBLS9fMjJ9yqahqHrA5hMzPCLeMYQT6pY=;
+	s=arc-20240116; t=1713951386; c=relaxed/simple;
+	bh=XYUSje7s+vIF31JkBL5OE6mbhV5TbJ4IkrpChsZMHWQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ACPiMq4xlbtLiWfFr7uK5pqQuYJlDodlbQ5ZUswlTu7HWh71M1rrTIjMC5dw+DI0noWVYFlwOxnURosVFB5YF/++kI54B2rIpvP8cIU3ENmPIy8Dd184/nk6lBr1ylY30B24YGikAdDcWjC+LvzAq6PY8TExmR/I9K3Zcdn4v4Y=
+	 Content-Type:Content-Disposition:In-Reply-To; b=F6YxttywkMTBTeCuKAx+/s9zeicm4dGiIEkoL3MbNeBq2Zrug+rCQGFDw3I4EiVLDjG9Ayo2rENiaZ3eXQhB87MG03ZXZ97X2nyizVgnBFY9Ni4/CcEi7bkdAkqmAxbTIIwePAHra1y9Ol134oWNGnq3X9E0ToLQQ8cZm3hWdw8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,20 +33,20 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1rzYj8-0001Uv-OK; Wed, 24 Apr 2024 11:15:42 +0200
+	id 1rzZ2o-0004t5-F1; Wed, 24 Apr 2024 11:36:02 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1rzYj8-00E3KS-4a; Wed, 24 Apr 2024 11:15:42 +0200
+	id 1rzZ2m-00E3Pa-Ji; Wed, 24 Apr 2024 11:36:00 +0200
 Received: from pengutronix.de (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id AFC012BECBE;
-	Wed, 24 Apr 2024 09:15:41 +0000 (UTC)
-Date: Wed, 24 Apr 2024 11:15:40 +0200
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 27E402BECD3;
+	Wed, 24 Apr 2024 09:36:00 +0000 (UTC)
+Date: Wed, 24 Apr 2024 11:35:59 +0200
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Gregor Herburger <gregor.herburger@ew.tq-group.com>
 Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
@@ -57,7 +57,7 @@ Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux@ew.tq-group.com, alexander.stein@ew.tq-group.com
 Subject: Re: [PATCH 3/4] can: mcp251xfd: add gpio functionality
-Message-ID: <20240424-convivial-flawless-sturgeon-976592-mkl@pengutronix.de>
+Message-ID: <20240424-notorious-roadrunner-of-will-0c55ce-mkl@pengutronix.de>
 References: <20240417-mcp251xfd-gpio-feature-v1-0-bc0c61fd0c80@ew.tq-group.com>
  <20240417-mcp251xfd-gpio-feature-v1-3-bc0c61fd0c80@ew.tq-group.com>
 Precedence: bulk
@@ -67,7 +67,7 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yiaol2clinc7dqpe"
+	protocol="application/pgp-signature"; boundary="7mrp4odhvvzy4nqr"
 Content-Disposition: inline
 In-Reply-To: <20240417-mcp251xfd-gpio-feature-v1-3-bc0c61fd0c80@ew.tq-group.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -76,7 +76,7 @@ X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expand
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
---yiaol2clinc7dqpe
+--7mrp4odhvvzy4nqr
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -111,61 +111,8 @@ On 17.04.2024 15:43:56, Gregor Herburger wrote:
 > +	if (priv->rx_int)
 > +		return dev_err_probe(&priv->spi->dev, -EINVAL,
 > +				     "Can't configure gpio-controller with RX-INT!\n");
-> +
-> +	gc->label =3D dev_name(&priv->spi->dev);
-> +	gc->parent =3D &priv->spi->dev;
-> +	gc->owner =3D THIS_MODULE;
-> +	gc->request =3D mcp251xfd_gpio_request;
-> +	gc->get_direction =3D mcp251xfd_gpio_get_direction;
-> +	gc->direction_output =3D mcp251xfd_gpio_direction_output;
-> +	gc->direction_input =3D mcp251xfd_gpio_direction_input;
-> +	gc->get =3D mcp251xfd_gpio_get;
-> +	gc->set =3D mcp251xfd_gpio_set;
 
-Please also implement the get_multiple and set_multiple callbacks.
-
-> +	gc->base =3D -1;
-> +	gc->can_sleep =3D true;
-> +	gc->ngpio =3D ARRAY_SIZE(mcp251xfd_gpio_names);
-> +	gc->names =3D mcp251xfd_gpio_names;
-> +
-> +	return devm_gpiochip_add_data(&priv->spi->dev, gc, priv);
-> +}
-> +
->  static int
->  mcp251xfd_register_get_dev_id(const struct mcp251xfd_priv *priv, u32 *de=
-v_id,
->  			      u32 *effective_speed_hz_slow,
-> @@ -2142,6 +2270,12 @@ static int mcp251xfd_probe(struct spi_device *spi)
-
-[...]
-
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/=
-spi/mcp251xfd/mcp251xfd.h
-> index 24510b3b8020..e2ab486862d8 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-> @@ -14,6 +14,7 @@
->  #include <linux/can/core.h>
->  #include <linux/can/dev.h>
->  #include <linux/can/rx-offload.h>
-> +#include <linux/gpio/driver.h>
-
-please keep the includes alphabetically sorted.
-
->  #include <linux/gpio/consumer.h>
->  #include <linux/kernel.h>
->  #include <linux/netdevice.h>
-> @@ -660,6 +661,9 @@ struct mcp251xfd_priv {
-> =20
->  	struct mcp251xfd_devtype_data devtype_data;
->  	struct can_berr_counter bec;
-> +#ifdef CONFIG_GPIOLIB
-> +	struct gpio_chip gc;
-> +#endif
->  };
-> =20
->  #define MCP251XFD_IS(_model) \
+Can you enhance the DT binding to reflect this?
 
 regards,
 Marc
@@ -176,20 +123,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---yiaol2clinc7dqpe
+--7mrp4odhvvzy4nqr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmYozbkACgkQKDiiPnot
-vG+JlQf/Z0y+ItFFGkL6UKJDn/wg8EonNLO7KkpG/pw9rOiZGFxGjyz6g6idzKx2
-u/wsIGYj0LzUxzxwLQqoNwlxmSfuiD7rtuhf+IuT2/6XZVy0FNlzrw32f2A+TsUm
-n0fAgKCTIVOlaoFIMaH9zn62M4A1PKffs4xYS4AvSWIGxUrNg5DJCPuZPl1vjujc
-FDrv2D+yqHaDCYsKTtL5PUjf5pm1Cq5UFMrpPM7rFQ4Oz77LV50rSGsqXhr5bB1M
-NjbIef/HNxJlFtOgVTV0a4LP3Y05yV2nTN73nSOfhWnHnmHg7j3kNsi0UVZ+RMho
-kdEUjwLD5cqAeHowEM+McBo47JriXg==
-=4O7L
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmYo0nwACgkQKDiiPnot
+vG8jwwf8C78MKwbC/RCbrV/cNcA+Z+3H66miJLcSjDg7A0mLZEjmJGCd6sDt9swW
+9ZusbKULy3vRQh8aOIf7zLkU3CuJbigbqfJO8e33B9nhN5SOJ0huOFssog5M24LI
+8k+L6Q6/bAkcC0SPuvCP1F/2+o3gYyjciEzfENA1yTBtvHvXHiJfc8JVTUkxrjan
+pfeZmgA2+hPXQUEuoxO3FMIzeiTe8l80Dxmrn6CdJSIfJsfm+rPnSaKY+bNdU4o+
+GP2VPfEds8yew+72uP7XgXmeZNVlnbAngGp82f8NxmCtvjBlTHkrjFE6/6+ZiuYw
+T5U6eqYVSFiHHWztQV81KACO+XZOsA==
+=Gi+/
 -----END PGP SIGNATURE-----
 
---yiaol2clinc7dqpe--
+--7mrp4odhvvzy4nqr--
 
