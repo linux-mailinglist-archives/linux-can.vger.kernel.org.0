@@ -1,147 +1,133 @@
-Return-Path: <linux-can+bounces-484-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-485-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF4758B0A4E
-	for <lists+linux-can@lfdr.de>; Wed, 24 Apr 2024 15:02:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B31038B1A3A
+	for <lists+linux-can@lfdr.de>; Thu, 25 Apr 2024 07:15:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6688A1F23C03
-	for <lists+linux-can@lfdr.de>; Wed, 24 Apr 2024 13:02:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D544A1C2135F
+	for <lists+linux-can@lfdr.de>; Thu, 25 Apr 2024 05:15:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19DB315ADBC;
-	Wed, 24 Apr 2024 13:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 069893A1BF;
+	Thu, 25 Apr 2024 05:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="PrmBRQtL";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="F+makd09"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E638915B133
-	for <linux-can@vger.kernel.org>; Wed, 24 Apr 2024 13:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BEB2B9DE;
+	Thu, 25 Apr 2024 05:15:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713963742; cv=none; b=Jbj5ureH3KFYYbporhUOFA1rn9UC9i71fN2BOfzkIRCaeCVaiNQd8SBm3UDr+SfYgkZwxfannyd1SXzZBwCwE6weckI0Q1P7QFbLc1gJ7+ms48Qcl6FLZL6epehZJ00YTGqJ0NtMSMa3KKEPP6kzmiTVESqKs45mA2tHG+Jw2nw=
+	t=1714022106; cv=none; b=LeSu7/Xbiql9sEO5XlGDX5NqiZi9TOYNkiiLRfgy8iMVy2Kq3aIXPyMXzR8QLhi/aP1WsuZN8YEHJ6mUVjA3bQfDmixyAoziPrQLWVXYypt/ydoop75zPDQ/2PBCMJBX5aHHQVv9jtzxcXFDpr9CdHgXQFXXYOXyrwconAXHY8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713963742; c=relaxed/simple;
-	bh=uqBPJXZAh04rqGXD0PZU8isT/gSoQ/wt3FrRsND6xQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TSi2FAOqesloyH9vnLrl2kNkUQ3QdHbuyEiqMBR3cQKWSdmGPeCMyaOM1OB7irBJ3pbLVk9D/1lTyRDZgBVakbfeY4NwzrUH/nMLcr6X9ohpy+8ksPSv0kIe4Tn9jTRt5q42fHGERK30B83++x6BYcRIN70IkVfH2AVoHTLvo+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rzcFy-0001oF-R5; Wed, 24 Apr 2024 15:01:50 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rzcFx-00E5DW-7Q; Wed, 24 Apr 2024 15:01:49 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id C21922BEECB;
-	Wed, 24 Apr 2024 13:01:48 +0000 (UTC)
-Date: Wed, 24 Apr 2024 15:01:48 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Gregor Herburger <gregor.herburger@ew.tq-group.com>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Thomas Kopp <thomas.kopp@microchip.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux@ew.tq-group.com, alexander.stein@ew.tq-group.com
-Subject: Re: [PATCH 3/4] can: mcp251xfd: add gpio functionality
-Message-ID: <20240424-furry-thankful-spoonbill-f81aef-mkl@pengutronix.de>
+	s=arc-20240116; t=1714022106; c=relaxed/simple;
+	bh=iW8ATjleso1uM6oVbDeQRVFxVXqLdoVu5uZ3W7y/49I=;
+	h=Subject:Date:From:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RBvrbRzW7FjFVeibUmwGGNrCRutVuHuuVvOitVQlVulVMoiHsbd4B4pz06gcSt+rZVnzR5BNJzpIyaEnZBlDXh6bj9KEm9KU7vbqUaPFZ8+/cKGE8zHF/wIDtkmh45yoYeNqMwoK8gbsk8tiu8g2RbCyQC5XenW1ymGNuD6jgbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=PrmBRQtL; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=F+makd09 reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1714022103; x=1745558103;
+  h=date:from:to:cc:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to:subject;
+  bh=BPkT8A48a6oXi458YKzL+nQT48iFaKKVvkLsK6sfIQ8=;
+  b=PrmBRQtLU18tGvtdRqNaPYzfIobbHNakJBzhgQMXr4AnfxDSPcouCN1U
+   cjnyJdqaRkLxIBZDJNb5yP0JFW7KJXOSyDYf8n3J82uTGbmDIr6WfMJoT
+   ntggT+DJP6TbH2zb80s3J6rY+ZMlKlCnJq278Bp4P0Nq69ehxKVKjwXkn
+   UEqEQuFnk/UzyZSUHW/7Oj2AE2e8Mrx3k5Tirl49Yangx9slVPpykY+Mb
+   qggJE4S21QzhkyNpWQS1T1nvZ0lM9P+NR5cS6twJZJJ819swwvysFo1pr
+   6OyYTBIkB5L+iKmwi8AyzPqSN/pJnzLd0mEErN/hJM66UU693ji4/iu4D
+   g==;
+X-IronPort-AV: E=Sophos;i="6.07,228,1708383600"; 
+   d="scan'208";a="36602262"
+Subject: Re: Re: [PATCH 1/4] can: mcp251xfd: stop timestamp before sending chip to
+ sleep
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 25 Apr 2024 07:14:59 +0200
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 55EDF16DDB5;
+	Thu, 25 Apr 2024 07:14:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1714022095;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=BPkT8A48a6oXi458YKzL+nQT48iFaKKVvkLsK6sfIQ8=;
+	b=F+makd09QV/2FCHjI+XH7QQZUn/V0xyGCU+yHRobL284y70ZbyQ4HJ5MCi1JEdH44/LEke
+	e+OMl0VqEthNKUerZuKQa7fg7kX2EU4Fzx5lxoAakMZmySpqwxF2NhknjCxmGJA0T8tQu6
+	UMlF1Vs5ufb8H7YV9zm+fqt41XfF65pQ1k9FEbJ0V4ZntBJEyH4YZTGYHYLQBI68QRWI5G
+	Nh1iRYig8X8WWc0t2Jsju9LeY6Q9Cu48ovC8XcxJgyL/TnkbPZUUNROfQeqccDpSqkHFet
+	OC25z7vGqXNoaIgi32ZhBi6vEW34TJJuvV7TPi8k2tlB8YyVdRipv1GP+jCdPg==
+Date: Thu, 25 Apr 2024 07:14:47 +0200
+From: Gregor Herburger <gregor.herburger@ew.tq-group.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Thomas Kopp <thomas.kopp@microchip.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux@ew.tq-group.com,
+	alexander.stein@ew.tq-group.com
+Message-ID: <Zinmx6c2ITl3jQQm@herburgerg-w2>
 References: <20240417-mcp251xfd-gpio-feature-v1-0-bc0c61fd0c80@ew.tq-group.com>
- <20240417-mcp251xfd-gpio-feature-v1-3-bc0c61fd0c80@ew.tq-group.com>
- <20240424-notorious-roadrunner-of-will-0c55ce-mkl@pengutronix.de>
+ <20240417-mcp251xfd-gpio-feature-v1-1-bc0c61fd0c80@ew.tq-group.com>
+ <20240424-fast-sandy-jackrabbit-d289a0-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hkahiuhwj5ncu3b7"
-Content-Disposition: inline
-In-Reply-To: <20240424-notorious-roadrunner-of-will-0c55ce-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---hkahiuhwj5ncu3b7
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240424-fast-sandy-jackrabbit-d289a0-mkl@pengutronix.de>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 24.04.2024 11:35:59, Marc Kleine-Budde wrote:
-> On 17.04.2024 15:43:56, Gregor Herburger wrote:
-> > The mcp251xfd devices allow two pins to be configured as gpio. Add this
-> > functionality to driver.
-> >=20
-> > Signed-off-by: Gregor Herburger <gregor.herburger@ew.tq-group.com>
-> > ---
-> >  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c   | 138 +++++++++++++++=
-+++++++-
-> >  drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c |  21 +++-
-> >  drivers/net/can/spi/mcp251xfd/mcp251xfd.h        |   4 +
-> >  3 files changed, 159 insertions(+), 4 deletions(-)
-> >=20
-> > diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/n=
-et/can/spi/mcp251xfd/mcp251xfd-core.c
-> > index eb699288c076..5ba9fd0af4b6 100644
-> > --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> > +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
->=20
-> [...]
->=20
-> > +static int mcp251fdx_gpio_setup(struct mcp251xfd_priv *priv)
-> > +{
-> > +	struct gpio_chip *gc =3D &priv->gc;
-> > +
-> > +	if (!device_property_present(&priv->spi->dev, "gpio-controller"))
-> > +		return 0;
-> > +
-> > +	if (priv->rx_int)
-> > +		return dev_err_probe(&priv->spi->dev, -EINVAL,
-> > +				     "Can't configure gpio-controller with RX-INT!\n");
->=20
-> Can you enhance the DT binding to reflect this?
+On Wed, Apr 24, 2024 at 10:24:58AM +0200, Marc Kleine-Budde wrote:
+> On 17.04.2024 15:43:54, Gregor Herburger wrote:
+> > MCP2518FD exits Low-Power Mode (LPM) when CS is asserted. When chip
+> > is send to sleep and the timestamp workqueue is not stopped chip is
+> > waked by SPI transfer of mcp251xfd_timestamp_read.
+> > 
+> > So before sending chip to sleep stop timestamp otherwise the
+> > mcp251xfd_timestamp_read callback would wake chip up.
+> > 
+> > Also there are error paths in mcp251xfd_chip_start where workqueue has
+> > not been initialized but mcp251xfd_chip_stop is called. So check for
+> > initialized func before canceling delayed_work.
+> 
+> Can you move the mcp251xfd_timestamp_init() (which starts the
+> timestamping worker) into mcp251xfd_chip_start() to keep things
+> symmetrical? I think then you don't need to check for "work->func" in
+> mcp251xfd_timestamp_stop().
+> 
+Hi Marc,
 
-Another option would be to check if RX-INT is configured in the
-mcp251xfd_gpio_request() callback and refuse to request GPIO1.
+I realise now I confused mcp251xfd_timestamp_init with
+mcp251xfd_chip_timestamp_init.
 
-regards,
-Marc
+The only call chip mcp251xfd_chip_stop without call to
+mcp251xfd_timestamp_stop is from mcp251xfd_handle_cerrif.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+So it should be sufficient to stop the worker there and the check for
+"work->func" can be also omitted.
 
---hkahiuhwj5ncu3b7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmYpArgACgkQKDiiPnot
-vG9Qrwf+MC3fxTpuFuYhxdeMKnLBe4GeqI7Ukdw7V+9BbV5GfiEdmvnxAE9QcGw7
-LawE07SY/9NKHUDacc+ymOIQUorFQglXuCFfw5lo4wGBPyamQRpypmSEnXguPuZ2
-dODWx90yCpwB2ZWi0yfMl3FhvxGXi7ZReTx453irHPXzEhxbL1aDEctXdc6o675G
-g7hQtz+r+bNeEXNazqpTPePMeRBF7eNyFT8NyLRLw1Zm7qeOCB72+VrhM8/sKUXM
-doOtEa2iQgX0pGFYMkW0LphSKJEvGDmUNGcsWAWQdhWgek21oZhTqmK8mbNj/cB8
-GmkrWvV4wDvFCveyv1S/+aORzjAuww==
-=nnGt
------END PGP SIGNATURE-----
-
---hkahiuhwj5ncu3b7--
+Best regards,
+Gregor
+-- 
+TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht München, HRB 105018
+Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
+https://www.tq-group.com/
 
