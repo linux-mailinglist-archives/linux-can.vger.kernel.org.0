@@ -1,146 +1,108 @@
-Return-Path: <linux-can+bounces-489-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-490-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7CA48B1E4D
-	for <lists+linux-can@lfdr.de>; Thu, 25 Apr 2024 11:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AADA8B224C
+	for <lists+linux-can@lfdr.de>; Thu, 25 Apr 2024 15:12:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C92A51C21576
-	for <lists+linux-can@lfdr.de>; Thu, 25 Apr 2024 09:45:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C8311C2031A
+	for <lists+linux-can@lfdr.de>; Thu, 25 Apr 2024 13:12:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D27284E19;
-	Thu, 25 Apr 2024 09:44:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 201B21494CA;
+	Thu, 25 Apr 2024 13:12:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="d0krcBJi";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="Nq8CLYD8"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="0GZa0gQU"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68D484DFB;
-	Thu, 25 Apr 2024 09:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5A5139D16;
+	Thu, 25 Apr 2024 13:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714038296; cv=none; b=NR+xtk2td+kreOpJziw0yV9jEiTlb9LmxspcALPX8yduU2wZ6SOJaPmZniuCWRZ3Sa92BVrys64BaQ2BnNXhlEKZm/rktmb6X3Q8NcWMLt7DjG/2cpjnr8Q2OmOp2uDHjb/rYkcwX5MTTn8074Zhl7YzhMsbY3ZWE8yG6dWkrUw=
+	t=1714050765; cv=none; b=nmqesciStK3SQKJ4Sq28OqGkqMgRMry4I8bGEliFNk/v3665k/o3veeDn5+P/+nFgMbYHGzWidL+l6X+dZuaSg3daw9w5PIJRIBYjVswWySFNPuis3xPpk5O9zUSXqx+AWPIOtI9hEhaBqkDlI1g6woEmWzREcAGwsfuMS7FzJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714038296; c=relaxed/simple;
-	bh=3DB11IKP/T9/3xhOrWwdKlbwGKlVUxdv7gsOBmdeDHI=;
-	h=Subject:Date:From:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JzVAEJY6opSqDj/GkcrW11mPFJ7IhK0cy5fiVWxRz1n/XeJL1jYPkPzr18AgBJ7OQ91pqJUywNf8akwaO+v7Sz3Zh9KXydX9RQpt3Nxw04TLwfvlzaCTFgTSeOC77q8oM++XN0iUtLcjOTfK4LnB/j6x+2qjYh8gJdKGLmUjMP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=d0krcBJi; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=Nq8CLYD8 reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1714038292; x=1745574292;
-  h=date:from:to:cc:message-id:references:mime-version:
-   content-transfer-encoding:in-reply-to:subject;
-  bh=HLlh2QL5TbXjyNAR69Yvmpo/xTGS9Lo12NgQNCZ06YQ=;
-  b=d0krcBJiCro8dwV/UsQ41hTNK00RhxCS9pxR/t7ur4wyBZ+SNfGTqVzW
-   77IMTjoM2UunbSDklUQeCOESuBSnZjdWRFFhz+d9nAZ2acsexxsdaz2Q8
-   qYBXxTFMTQDqS5eZ5JeccM0O5Kw/YHhoPnXFd4cLTJ9KUV7tC4n1NL8rI
-   wImJT8RfCrJmHE+cVywmIEmGzJncWd9dVEa9pwW/DRk98NUOQsM+UTD5y
-   ZsxY0vlxepmzu7vwsJ8L33B87fmKxyDJaLisBleyGsjLnkxyXcf+MZAOZ
-   GaAjsBkjmASW5boKxt74t7kgKT/0J0Nx+a8QWc93pG1VJuhhtSKx+ac7E
-   g==;
-X-IronPort-AV: E=Sophos;i="6.07,228,1708383600"; 
-   d="scan'208";a="36610690"
-Subject: Re: Re: [PATCH 1/4] can: mcp251xfd: stop timestamp before sending chip to
- sleep
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 25 Apr 2024 11:44:48 +0200
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BCAC516E686;
-	Thu, 25 Apr 2024 11:44:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1714038284;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=HLlh2QL5TbXjyNAR69Yvmpo/xTGS9Lo12NgQNCZ06YQ=;
-	b=Nq8CLYD8RZR4BApO/dYg4PxApypWD1JWXYNDBi/QoJZKiDwzuBjz23RL6l+nX4XByGNPHU
-	JTMkKfte6NNmdQYX8pu5+xfAhavNby5URmwXf5jTSeDp+nLjuJ7kK1X65VVJfvXSXVKPep
-	NyOPhpcMVH3GSF6xsvBdqxYhekw4348A+7ngA3vEUDkZ9xOe7/qQf1G3vTIlU9Lp+Qo9IQ
-	/9qHR5VCjjDvZPrM8bYobzMlAT1v1gMaJObL/fKP6O0wdFrlhe8MTlQ9XcoAKE2PGJjPEG
-	0IdG3KOk9DEhyoEOeN5yuaNa1rC46QDyoO6syTp1xZHQbBCm7s+GQWGnXBv5KQ==
-Date: Thu, 25 Apr 2024 11:44:36 +0200
-From: Gregor Herburger <gregor.herburger@ew.tq-group.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	s=arc-20240116; t=1714050765; c=relaxed/simple;
+	bh=SWbsN8gb0T+55zIEnnjHmugKc2Hefu/p5fPeAaJnVvQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=pOtXfDMnazh8+9QyrCn8gLWVSxfQQ7Y2tyhD3whZP1KvwKJdNN/XRrr2sm7kHBhi8ZqEcTmqgADFGME0dYQH9hrYbvvZJJ+VvpbrPLsgf3fKF0Eq04ng3TEJWAmlZpx2JvMfjz1LLgmhiW0/LXvl/uJFbOXvaFy6l8LzMDm2WKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=0GZa0gQU; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb (31-10-206-125.static.upc.ch [31.10.206.125])
+	by mail11.truemail.it (Postfix) with ESMTPA id 569331F9E9;
+	Thu, 25 Apr 2024 15:12:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1714050754;
+	bh=mjjqNnQB3Y3PmO3eF7RCQ6exiD5LgwcG2Ut4A6E+9WE=; h=From:To:Subject;
+	b=0GZa0gQUG+IjBubLquW3DLf34IruRGf2YYuTX+SKmE8vh0fYBcnrocw6OSc5Sgj1+
+	 cTtKdsqUymXImgTdD4XxFy/ZmzGypggh0t9/bOYSqAdamNlntUSwPqvBnI2ZR/+SEc
+	 PYJsRN6kuiCiPRfkD3Sr4uTkV3/IkzkWuuqT6Yy+IGiqrqmeKsy68rjY05WvBze+a1
+	 jX5Az0VNqfOXfHjj6AxQ+CKgxxtiU9fFRfBMjynmyI9X7WgeDT5TS+X5GaKS0PKf1q
+	 HXImYdeUeA3SKvuigNSUP6Y8ju+1ABoPe040XE75ZqFlNWYJM9MrDXSub6Uij1mJpi
+	 h9txzP/TXhung==
+Date: Thu, 25 Apr 2024 15:12:28 +0200
+From: Francesco Dolcini <francesco@dolcini.it>
+To: mkl@pengutronix.de
+Cc: Vitor Soares <ivitro@gmail.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	Thomas Kopp <thomas.kopp@microchip.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Wolfgang Grandegger <wg@grandegger.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
+	Vitor Soares <vitor.soares@toradex.com>, linux-can@vger.kernel.org,
 	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux@ew.tq-group.com,
-	alexander.stein@ew.tq-group.com
-Message-ID: <ZiomBNoSsXlYfKN2@herburgerg-w2>
-References: <20240417-mcp251xfd-gpio-feature-v1-0-bc0c61fd0c80@ew.tq-group.com>
- <20240417-mcp251xfd-gpio-feature-v1-1-bc0c61fd0c80@ew.tq-group.com>
- <20240424-adaptable-zircon-badger-1fefd9-mkl@pengutronix.de>
- <ZinnV+GA20LWGUOV@herburgerg-w2>
- <20240425-tall-quiet-wren-f00e44-mkl@pengutronix.de>
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3] can: mcp251xfd: fix infinite loop when xmit fails
+Message-ID: <20240425131228.GA15857@francesco-nb>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240425-tall-quiet-wren-f00e44-mkl@pengutronix.de>
-X-Last-TLS-Session-Version: TLSv1.3
+In-Reply-To: <20240311121143.306403-1-ivitro@gmail.com>
 
-On Thu, Apr 25, 2024 at 08:29:13AM +0200, Marc Kleine-Budde wrote:
-> On 25.04.2024 07:17:11, Gregor Herburger wrote:
-> > On Wed, Apr 24, 2024 at 01:54:54PM +0200, Marc Kleine-Budde wrote:
-> > > On 17.04.2024 15:43:54, Gregor Herburger wrote:
-> > > > MCP2518FD exits Low-Power Mode (LPM) when CS is asserted. When chip
-> > > > is send to sleep and the timestamp workqueue is not stopped chip is
-> > > > waked by SPI transfer of mcp251xfd_timestamp_read.
-> > > 
-> > > How does the Low-Power Mode affect the GPIO lines? Is there a difference
-> > > if the device is only in sleep mode?
-> > 
-> > The MCP251XFD_REG_IOCON is cleared when leaving Low-Power Mode. This is
-> > why I implemented regcache.
+Hello Mark,
+
+On Mon, Mar 11, 2024 at 12:11:43PM +0000, Vitor Soares wrote:
+> From: Vitor Soares <vitor.soares@toradex.com>
 > 
-> But that means you have to power the chip if a GPIO is requested. You
-> have to power up the chip in the request() callback and power it down in
-> the free() callback.
-
-Ah I see. Currently the GPIO rigister is cached and only written to the
-chip if the netdevice is set up. I think to have a more generic gpio controller
-the chip should wake up when the GPIO is requested. Also the chip should
-not go to sleep while GPIO is requested and netdevice is set down.
-
-> I've 2 patches laying around, one that moves the timestamp
-> init/start/stop into the chip_start/stop. And another one that moves the
-> soft reset and basic configuration of the chip into the runtime pm
-> functions. I have to make both patches compatible and send them to the
-> list. Feel free to pick them up and integrate them into your series.
-
-I will have a look at them.
+> When the mcp251xfd_start_xmit() function fails, the driver stops
+> processing messages, and the interrupt routine does not return,
+> running indefinitely even after killing the running application.
 > 
-> regards,
-> Marc
+> Error messages:
+> [  441.298819] mcp251xfd spi2.0 can0: ERROR in mcp251xfd_start_xmit: -16
+> [  441.306498] mcp251xfd spi2.0 can0: Transmit Event FIFO buffer not empty. (seq=0x000017c7, tef_tail=0x000017cf, tef_head=0x000017d0, tx_head=0x000017d3).
+> ... and repeat forever.
 > 
-> -- 
-> Pengutronix e.K.                 | Marc Kleine-Budde          |
-> Embedded Linux                   | https://www.pengutronix.de |
-> Vertretung Nürnberg              | Phone: +49-5121-206917-129 |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+> The issue can be triggered when multiple devices share the same
+> SPI interface. And there is concurrent access to the bus.
+> 
+> The problem occurs because tx_ring->head increments even if
+> mcp251xfd_start_xmit() fails. Consequently, the driver skips one
+> TX package while still expecting a response in
+> mcp251xfd_handle_tefif_one().
+> 
+> This patch resolves the issue by decreasing tx_ring->head if
+> mcp251xfd_start_xmit() fails. With the fix, if we trigger the issue and
+> the err = -EBUSY, the driver returns NETDEV_TX_BUSY. The network stack
+> retries to transmit the message.
+> Otherwise, it prints an error and discards the message.
+> 
+> Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Vitor Soares <vitor.soares@toradex.com>
 
-Best regards
-Gregor
--- 
-TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht München, HRB 105018
-Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
-https://www.tq-group.com/
+Any other feedback on this? Just reaching out to be that this does not
+fall through the cracks.
+
+Francesco
+
 
