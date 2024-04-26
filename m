@@ -1,181 +1,193 @@
-Return-Path: <linux-can+bounces-492-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-493-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E19668B3644
-	for <lists+linux-can@lfdr.de>; Fri, 26 Apr 2024 13:04:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8141B8B37DC
+	for <lists+linux-can@lfdr.de>; Fri, 26 Apr 2024 15:03:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98670283366
-	for <lists+linux-can@lfdr.de>; Fri, 26 Apr 2024 11:04:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D6ED1F23078
+	for <lists+linux-can@lfdr.de>; Fri, 26 Apr 2024 13:03:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3DA0144D1D;
-	Fri, 26 Apr 2024 11:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 335D91474DB;
+	Fri, 26 Apr 2024 13:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DIIMDk5u"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7471448E2
-	for <linux-can@vger.kernel.org>; Fri, 26 Apr 2024 11:04:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFBF13E88A
+	for <linux-can@vger.kernel.org>; Fri, 26 Apr 2024 13:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714129477; cv=none; b=btPP1ry+Wl1T0vKcWsu+uhxbLWjtHql0TooP8xwzZCWkNZcemG5eVR62lVrh2iPkm/aTvbxZblVxV1NDfXjT+A4PEGrjEQkDwPJEp/Rn40LDVciv8rD+5guVIZ9zGPM5vBJu+mRPzW0dwxp21+eaiwCSNQAWnZkZxAAJ/9oLzK4=
+	t=1714136534; cv=none; b=PAhE28UFZOtUxvskjm1TPl4hkPZs4XBbUZw1nbajcZLKo9BlT30QLSxuKkEKJwVLh4uRZAJouA7Oyk8xeYwEkL9MLcT7KLAdInjipE2I7ONcsA+TbJM6hFjO0vJSq0zsveuycWUmjXnuUlIOtGfmDJGc0cX/ap0k55a1SihuXus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714129477; c=relaxed/simple;
-	bh=sfsJoZxQSWFGO6YIL6j+F7W4VxJutQawHdKEFeIlViw=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=jXednFJzzKZcvoGKViEvcB33+Dzd7Qq7Kgf0QFd/5C7ecSvPXs553uRkdg/cgBz00LomVq0e0Wien4ffPXkkIZS5F6HggS7zBGQtU7xw21pOxZ5QpoQADo/5X45TPoaTy586ti4LGDSEiw64h25w2RAJGVnZv/b7PP68wikZHHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7da41da873bso223487439f.3
-        for <linux-can@vger.kernel.org>; Fri, 26 Apr 2024 04:04:36 -0700 (PDT)
+	s=arc-20240116; t=1714136534; c=relaxed/simple;
+	bh=4tx9L/jsbzaLonjVZvgP/YsEuiSsqChffRpSgDVgga0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R8ipwvWXUyWddJJTU/tPc5JVt7q+upUQ44NBzgCWeAtBwXgbVYpb0Aw8NBYllQHOVxAZG+5RFo1ljtYAkWMOoqjZ47g3I9RKCYj1dbpt7MS8AD5NfIPTZEDSKSB9DoY16FgUzVIz2qufUSO3P0+WyTP/AiYUXHmqaPvlTrI+wEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DIIMDk5u; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-57230faeb81so1394708a12.0
+        for <linux-can@vger.kernel.org>; Fri, 26 Apr 2024 06:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714136530; x=1714741330; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pabLm3qBrdibQD2ugwy0Rf8X7ueDzlshIa60bup3yyw=;
+        b=DIIMDk5ux0WPBgGavkMzXguWTNNNi4CFxGTa3whM/A8YNAV907w+D99wh6x53H/eB6
+         so2X+SMDG3cgvGjmLQCj6Vi93r583rQ55M+BSTic9vtMm/B7ce5vRw6dIKhgmEYayLgg
+         kaqChwTJvtCpfojf0OolfaWsS2JC/DWx5zcZ89Iofec9oyR75MztSfTcMth3G6lTwC87
+         od4RVAw4QRj7+jadMRRAOhZvp15rwTswHAkHeliUiNL9iG2jTh3m25ul79yGk/vWhd2z
+         +Kwc7dJLpQk+R8dUvg5C6v1AU815io1OK6U8LekXQP2+pFvuERCf48d2oYo9qPw2NEBE
+         BUsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714129475; x=1714734275;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=96T6G7j+muiVvyjfPfVvzJDF6bpN9IPMSCr5jHjhvOs=;
-        b=FFtlcUc7lb9IcMQCgwS0kZtbWQB/gP0LvN+j6Z0tt7v9ZrB+u3sFuWd38ug0zjXwrW
-         ztTvA0UJrA0eeoVbfYDEuX09d9SWn7ZPvzLnoeIz40xhA4rl41BO6tRG5qOWu+ws3RtY
-         kmQxkl0dTMAmMITcjSvf0hshh16WrP12DceK2PTRopNIUbxhLYj2b0vySYPmBzz5EQCD
-         dZp0BZ8Wdhipe+TQfPBqWh5X/BU0Qpmd9Dn9jyj0G3L1wYppJjAuPM5zYH+45leQtjEw
-         pnCYCQ3Fcvxf/MVuWValKdgKL2Oc9J0aYd/WwWWFX93nDpmcnFd2vaGrXRFHbpgtDvle
-         KC8A==
-X-Forwarded-Encrypted: i=1; AJvYcCW5q3nigiCVOAt1qKF+zvvDbx5YkLClKYw+yyUWkiznA6ptyc6cxc/e0KkoYn60Ump8/34gPXmXSGOzP8iKzfYBUeiZw+Jm2xJ9
-X-Gm-Message-State: AOJu0Yzc5P70oZBF2cB390c4XRY4kue0i3ejySm/R85bZ3GJgRjp1oan
-	nZEkeEG81Kxgg1U7vruiNyVe4C8Hg0GtVGPv4c4UF0QvrbSMtl73DIgit1Qf9a5c4J0YRzovMSF
-	y/pUYvDd/imB3/Ho4emEmFp5xm2lIP/WS294NCVwyP1Y/AMVbN+mojso=
-X-Google-Smtp-Source: AGHT+IGoQ4c4DdmeTiZMXV1mYTYQaKlTpqspTYrkcz9bVOL/1K8bYZn04qTheMtGMhqnGm642xOW5wuLD1KWvqM8J6lRBFh22ELf
+        d=1e100.net; s=20230601; t=1714136530; x=1714741330;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pabLm3qBrdibQD2ugwy0Rf8X7ueDzlshIa60bup3yyw=;
+        b=cmndUVtAAwYvi1MiSCv8ovFkLmzck1eCTW54N35aF7aXinGrlGCBrLFOgielJ0J8BB
+         fCYXZbhvBQ6RtiQMSvkP2vkwjs76/1qWbbYC4R1dTo6RxQDI7SuJf803JP6rqZQCuI9Y
+         ENNPFfYP2ZCiy3liWA0TZZE9yH2YP/nycOsavzlaaN1jT/FxrNn1we6bGHt1JVgMXROH
+         9fMTTreKssKPgQGXvu0p2g+1PXQxhc54TCGOEwOsQp+9kZ2++mDcleayNbeZuWsCANwp
+         /9J/w2rxJ2hepEeJrEYIDQpzQnKPoORUOPYn6mV6ptlxCZrY0Ei23mHJg4TxdxcazlhJ
+         Nhig==
+X-Gm-Message-State: AOJu0Yy4PN+LI+zWljoI2q7jE6CoEVN1EKj5fh2JuxaqE6zayF3T0BUn
+	mwiv6qd8QhVA6zCi6oiPJC+ysjzbEHaKPnMxg1qWYT3l9oDBqZuk
+X-Google-Smtp-Source: AGHT+IHLxWQp1NwwUGLZm21IWDT3j+ApgvuwD8VasqztNyCJCYhXm7rNiTGCDfjUgFrtZ88vAu/bwA==
+X-Received: by 2002:a50:cc81:0:b0:568:a655:49c6 with SMTP id q1-20020a50cc81000000b00568a65549c6mr2149601edi.8.1714136529967;
+        Fri, 26 Apr 2024 06:02:09 -0700 (PDT)
+Received: from fedora (host-79-27-41-113.retail.telecomitalia.it. [79.27.41.113])
+        by smtp.gmail.com with ESMTPSA id cx13-20020a05640222ad00b005725c9fd169sm404372edb.39.2024.04.26.06.02.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Apr 2024 06:02:09 -0700 (PDT)
+Date: Fri, 26 Apr 2024 15:02:07 +0200
+From: Francesco Valla <valla.francesco@gmail.com>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: isotp: remove ISO 15675-2 specification version
+ where possible
+Message-ID: <ZiulzzGIM9CXQMY-@fedora>
+References: <20240420194746.4885-1-socketcan@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:851e:b0:485:54ea:1d58 with SMTP id
- is30-20020a056638851e00b0048554ea1d58mr152555jab.5.1714129475614; Fri, 26 Apr
- 2024 04:04:35 -0700 (PDT)
-Date: Fri, 26 Apr 2024 04:04:35 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007e4a2e0616fdde23@google.com>
-Subject: [syzbot] [can?] KMSAN: kernel-infoleak in raw_recvmsg
-From: syzbot <syzbot+5681e40d297b30f5b513@syzkaller.appspotmail.com>
-To: davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de, 
-	kuba@kernel.org, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	mkl@pengutronix.de, netdev@vger.kernel.org, o.rempel@pengutronix.de, 
-	pabeni@redhat.com, robin@protonic.nl, socketcan@hartkopp.net, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240420194746.4885-1-socketcan@hartkopp.net>
 
 Hello,
 
-syzbot found the following issue on:
+just one small observation below. Other that that (FWIW):
 
-HEAD commit:    71b1543c83d6 Merge tag '6.9-rc5-ksmbd-fixes' of git://git...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1784bdd7180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=776c05250f36d55c
-dashboard link: https://syzkaller.appspot.com/bug?extid=5681e40d297b30f5b513
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b440d3180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14b00907180000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/14813ccfbcb3/disk-71b1543c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e7b88b42cf07/vmlinux-71b1543c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3a64a5abfbba/bzImage-71b1543c.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5681e40d297b30f5b513@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:114 [inline]
-BUG: KMSAN: kernel-infoleak in copy_to_user_iter lib/iov_iter.c:24 [inline]
-BUG: KMSAN: kernel-infoleak in iterate_ubuf include/linux/iov_iter.h:29 [inline]
-BUG: KMSAN: kernel-infoleak in iterate_and_advance2 include/linux/iov_iter.h:245 [inline]
-BUG: KMSAN: kernel-infoleak in iterate_and_advance include/linux/iov_iter.h:271 [inline]
-BUG: KMSAN: kernel-infoleak in _copy_to_iter+0x366/0x2520 lib/iov_iter.c:185
- instrument_copy_to_user include/linux/instrumented.h:114 [inline]
- copy_to_user_iter lib/iov_iter.c:24 [inline]
- iterate_ubuf include/linux/iov_iter.h:29 [inline]
- iterate_and_advance2 include/linux/iov_iter.h:245 [inline]
- iterate_and_advance include/linux/iov_iter.h:271 [inline]
- _copy_to_iter+0x366/0x2520 lib/iov_iter.c:185
- copy_to_iter include/linux/uio.h:196 [inline]
- memcpy_to_msg include/linux/skbuff.h:4113 [inline]
- raw_recvmsg+0x2b8/0x9e0 net/can/raw.c:1008
- sock_recvmsg_nosec net/socket.c:1046 [inline]
- sock_recvmsg+0x2c4/0x340 net/socket.c:1068
- ____sys_recvmsg+0x18a/0x620 net/socket.c:2803
- ___sys_recvmsg+0x223/0x840 net/socket.c:2845
- do_recvmmsg+0x4fc/0xfd0 net/socket.c:2939
- __sys_recvmmsg net/socket.c:3018 [inline]
- __do_sys_recvmmsg net/socket.c:3041 [inline]
- __se_sys_recvmmsg net/socket.c:3034 [inline]
- __x64_sys_recvmmsg+0x397/0x490 net/socket.c:3034
- x64_sys_call+0xf6c/0x3b50 arch/x86/include/generated/asm/syscalls_64.h:300
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Uninit was created at:
- slab_post_alloc_hook mm/slub.c:3804 [inline]
- slab_alloc_node mm/slub.c:3845 [inline]
- kmem_cache_alloc_node+0x613/0xc50 mm/slub.c:3888
- kmalloc_reserve+0x13d/0x4a0 net/core/skbuff.c:577
- __alloc_skb+0x35b/0x7a0 net/core/skbuff.c:668
- alloc_skb include/linux/skbuff.h:1313 [inline]
- alloc_skb_with_frags+0xc8/0xbf0 net/core/skbuff.c:6504
- sock_alloc_send_pskb+0xa81/0xbf0 net/core/sock.c:2795
- sock_alloc_send_skb include/net/sock.h:1842 [inline]
- j1939_sk_alloc_skb net/can/j1939/socket.c:878 [inline]
- j1939_sk_send_loop net/can/j1939/socket.c:1142 [inline]
- j1939_sk_sendmsg+0xc0a/0x2730 net/can/j1939/socket.c:1277
- sock_sendmsg_nosec net/socket.c:730 [inline]
- __sock_sendmsg+0x30f/0x380 net/socket.c:745
- ____sys_sendmsg+0x877/0xb60 net/socket.c:2584
- ___sys_sendmsg+0x28d/0x3c0 net/socket.c:2638
- __sys_sendmsg net/socket.c:2667 [inline]
- __do_sys_sendmsg net/socket.c:2676 [inline]
- __se_sys_sendmsg net/socket.c:2674 [inline]
- __x64_sys_sendmsg+0x307/0x4a0 net/socket.c:2674
- x64_sys_call+0xc4b/0x3b50 arch/x86/include/generated/asm/syscalls_64.h:47
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Bytes 12-15 of 16 are uninitialized
-Memory access of size 16 starts at ffff888120969690
-Data copied to user address 00000000200017c0
-
-CPU: 1 PID: 5050 Comm: syz-executor198 Not tainted 6.9.0-rc5-syzkaller-00031-g71b1543c83d6 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
-=====================================================
+Acked-by: Francesco Valla <valla.francesco@gmail.com>
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On Sat, Apr 20, 2024 at 09:47:46PM +0200, Oliver Hartkopp wrote:
+> With the new ISO 15765-2:2024 release the former documentation and comments
+> have to be reworked. This patch removes the ISO specification version/date
+> where possible.
+> 
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> ---
+>  include/uapi/linux/can/isotp.h |  2 +-
+>  net/can/Kconfig                | 11 +++++------
+>  net/can/isotp.c                | 11 ++++++-----
+>  3 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/include/uapi/linux/can/isotp.h b/include/uapi/linux/can/isotp.h
+> index 6cde62371b6f..bd990917f7c4 100644
+> --- a/include/uapi/linux/can/isotp.h
+> +++ b/include/uapi/linux/can/isotp.h
+> @@ -1,10 +1,10 @@
+>  /* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
+>  /*
+>   * linux/can/isotp.h
+>   *
+> - * Definitions for isotp CAN sockets (ISO 15765-2:2016)
+> + * Definitions for ISO 15765-2 CAN transport protocol sockets
+>   *
+>   * Copyright (c) 2020 Volkswagen Group Electronic Research
+>   * All rights reserved.
+>   *
+>   * Redistribution and use in source and binary forms, with or without
+> diff --git a/net/can/Kconfig b/net/can/Kconfig
+> index cb56be8e3862..af64a6f76458 100644
+> --- a/net/can/Kconfig
+> +++ b/net/can/Kconfig
+> @@ -54,20 +54,19 @@ config CAN_GW
+>  	  by the netlink configuration interface known e.g. from iptables.
+>  
+>  source "net/can/j1939/Kconfig"
+>  
+>  config CAN_ISOTP
+> -	tristate "ISO 15765-2:2016 CAN transport protocol"
+> +	tristate "ISO 15765-2 CAN transport protocol"
+>  	help
+>  	  CAN Transport Protocols offer support for segmented Point-to-Point
+>  	  communication between CAN nodes via two defined CAN Identifiers.
+> +	  This protocol driver implements segmented data transfers for CAN CC
+> +	  (aka Classical CAN, CAN 2.0B) and CAN FD frame types which were
+> +	  introduced with ISO 15765-2:2016.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ISO 15765-2 also supports CAN2.0A networks, so I'd drop CAN 2.0B here.
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+>  	  As CAN frames can only transport a small amount of data bytes
+> -	  (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
+> +	  (max. 8 bytes for CAN CC and max. 64 bytes for CAN FD) this
+>  	  segmentation is needed to transport longer Protocol Data Units (PDU)
+>  	  as needed e.g. for vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN
+>  	  traffic.
+> -	  This protocol driver implements data transfers according to
+> -	  ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
+> -	  If you want to perform automotive vehicle diagnostic services (UDS),
+> -	  say 'y'.
+>  
+>  endif
+> diff --git a/net/can/isotp.c b/net/can/isotp.c
+> index 25bac0fafc83..16046931542a 100644
+> --- a/net/can/isotp.c
+> +++ b/net/can/isotp.c
+> @@ -70,25 +70,26 @@
+>  #include <linux/can/isotp.h>
+>  #include <linux/slab.h>
+>  #include <net/sock.h>
+>  #include <net/net_namespace.h>
+>  
+> -MODULE_DESCRIPTION("PF_CAN isotp 15765-2:2016 protocol");
+> +MODULE_DESCRIPTION("PF_CAN ISO 15765-2 transport protocol");
+>  MODULE_LICENSE("Dual BSD/GPL");
+>  MODULE_AUTHOR("Oliver Hartkopp <socketcan@hartkopp.net>");
+>  MODULE_ALIAS("can-proto-6");
+>  
+>  #define ISOTP_MIN_NAMELEN CAN_REQUIRED_SIZE(struct sockaddr_can, can_addr.tp)
+>  
+>  #define SINGLE_MASK(id) (((id) & CAN_EFF_FLAG) ? \
+>  			 (CAN_EFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG) : \
+>  			 (CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG))
+>  
+> -/* ISO 15765-2:2016 supports more than 4095 byte per ISO PDU as the FF_DL can
+> - * take full 32 bit values (4 Gbyte). We would need some good concept to handle
+> - * this between user space and kernel space. For now set the static buffer to
+> - * something about 8 kbyte to be able to test this new functionality.
+> +/* Since ISO 15765-2:2016 the CAN isotp protocol supports more than 4095
+> + * byte per ISO PDU as the FF_DL can take full 32 bit values (4 Gbyte).
+> + * We would need some good concept to handle this between user space and
+> + * kernel space. For now set the static buffer to something about 8 kbyte
+> + * to be able to test this new functionality.
+>   */
+>  #define DEFAULT_MAX_PDU_SIZE 8300
+>  
+>  /* maximum PDU size before ISO 15765-2:2016 extension was 4095 */
+>  #define MAX_12BIT_PDU_SIZE 4095
+> -- 
+> 2.39.2
+> 
 
