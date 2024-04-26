@@ -1,450 +1,181 @@
-Return-Path: <linux-can+bounces-491-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-492-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 003B28B2A19
-	for <lists+linux-can@lfdr.de>; Thu, 25 Apr 2024 22:50:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E19668B3644
+	for <lists+linux-can@lfdr.de>; Fri, 26 Apr 2024 13:04:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 813E01F24154
-	for <lists+linux-can@lfdr.de>; Thu, 25 Apr 2024 20:50:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98670283366
+	for <lists+linux-can@lfdr.de>; Fri, 26 Apr 2024 11:04:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAFFA153809;
-	Thu, 25 Apr 2024 20:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="D6I+DXvK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3DA0144D1D;
+	Fri, 26 Apr 2024 11:04:37 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from fritzc.com (mail.fritzc.com [213.160.72.247])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A6737143;
-	Thu, 25 Apr 2024 20:50:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.72.247
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7471448E2
+	for <linux-can@vger.kernel.org>; Fri, 26 Apr 2024 11:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714078211; cv=none; b=Penixw2ZacX+pR3tRypPZKkMcyv7Nf+oweSDcQDRI4lrhEBvr2XFHyvxc7iCEZKG1Y5IdZrUrIDd06Wz9bKibzueJP3yzsKyQIjT7hEoCd3adC5W/Djgjng0LVcFxoLfmDHet6sLwykg+VE51YEySXMBbK22YlpzEqSaj4tY6rg=
+	t=1714129477; cv=none; b=btPP1ry+Wl1T0vKcWsu+uhxbLWjtHql0TooP8xwzZCWkNZcemG5eVR62lVrh2iPkm/aTvbxZblVxV1NDfXjT+A4PEGrjEQkDwPJEp/Rn40LDVciv8rD+5guVIZ9zGPM5vBJu+mRPzW0dwxp21+eaiwCSNQAWnZkZxAAJ/9oLzK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714078211; c=relaxed/simple;
-	bh=JlZ5SNw/c8lgIyAIwwqks3l+7NUsINRYRqt1oaRFElM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fFepNOfz2xk945j5o00hvuB8jdFEaxGxplrnoFwZw7zGz0ViHWMd0HLNeZZG9XiJrlE1eHwPbPxKp691sBDW3Q+QNKR8VwJXbBAu3RQFSIJgb6P07e40z/POm4H15Grwg6tZ0A0D8FWBZjTJHdSGMU8hs2IbvmHjpjbC3lvQ3B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=D6I+DXvK; arc=none smtp.client-ip=213.160.72.247
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hexdev.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
-	s=dkim; h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:Reply-To:From:Subject:Message-ID:Sender:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=3++3z5ylpnDhpBpGdZfltMNRCAtctEtUSEKoliPaLzY=; b=D6I+DXvKKRGuwPZDMb6VKmy4bC
-	j5tfqY470Lc3/nCQ7wW6qzi5cgyKnfljidykRQC+ZJZORWzXcILTnBzRP1LaVT7mnzovdJh5gRQkp
-	lXRlbCV7SyncU4Sss0JSPj/R0yKlgaHhzhAQmD5U+TN7yD4TDC6+VNp3re/VNALVMUVY=;
-Received: from 127.0.0.1
-	by fritzc.com with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim latest)
-	(envelope-from <christoph.fritz@hexdev.de>)
-	id 1s062M-001PQI-05;
-	Thu, 25 Apr 2024 22:49:46 +0200
-Message-ID: <97b22f7e79540fe228250414452c6049a255f310.camel@hexdev.de>
-Subject: Re: [PATCH 02/11] HID: hexLIN: Add support for USB LIN bus adapter
-From: Christoph Fritz <christoph.fritz@hexdev.de>
-Reply-To: christoph.fritz@hexdev.de
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Marc Kleine-Budde
- <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David
- S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor
- Dooley <conor+dt@kernel.org>, Jiri Kosina <jikos@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
- <jirislaby@kernel.org>, Andreas Lauser <andreas.lauser@mercedes-benz.com>,
- Jonathan Corbet <corbet@lwn.net>,  linux-can@vger.kernel.org,
- netdev@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-serial@vger.kernel.org
-Date: Thu, 25 Apr 2024 22:49:43 +0200
-In-Reply-To: <5w4fhdfplmaowyiu7i327pziniwqnftgpn3ei6uttuezwgfgql@xnxikjjv6fob>
-References: <20240422065114.3185505-1-christoph.fritz@hexdev.de>
-	 <20240422065114.3185505-3-christoph.fritz@hexdev.de>
-	 <5w4fhdfplmaowyiu7i327pziniwqnftgpn3ei6uttuezwgfgql@xnxikjjv6fob>
-Organization: hexDEV GmbH
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1714129477; c=relaxed/simple;
+	bh=sfsJoZxQSWFGO6YIL6j+F7W4VxJutQawHdKEFeIlViw=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=jXednFJzzKZcvoGKViEvcB33+Dzd7Qq7Kgf0QFd/5C7ecSvPXs553uRkdg/cgBz00LomVq0e0Wien4ffPXkkIZS5F6HggS7zBGQtU7xw21pOxZ5QpoQADo/5X45TPoaTy586ti4LGDSEiw64h25w2RAJGVnZv/b7PP68wikZHHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7da41da873bso223487439f.3
+        for <linux-can@vger.kernel.org>; Fri, 26 Apr 2024 04:04:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714129475; x=1714734275;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=96T6G7j+muiVvyjfPfVvzJDF6bpN9IPMSCr5jHjhvOs=;
+        b=FFtlcUc7lb9IcMQCgwS0kZtbWQB/gP0LvN+j6Z0tt7v9ZrB+u3sFuWd38ug0zjXwrW
+         ztTvA0UJrA0eeoVbfYDEuX09d9SWn7ZPvzLnoeIz40xhA4rl41BO6tRG5qOWu+ws3RtY
+         kmQxkl0dTMAmMITcjSvf0hshh16WrP12DceK2PTRopNIUbxhLYj2b0vySYPmBzz5EQCD
+         dZp0BZ8Wdhipe+TQfPBqWh5X/BU0Qpmd9Dn9jyj0G3L1wYppJjAuPM5zYH+45leQtjEw
+         pnCYCQ3Fcvxf/MVuWValKdgKL2Oc9J0aYd/WwWWFX93nDpmcnFd2vaGrXRFHbpgtDvle
+         KC8A==
+X-Forwarded-Encrypted: i=1; AJvYcCW5q3nigiCVOAt1qKF+zvvDbx5YkLClKYw+yyUWkiznA6ptyc6cxc/e0KkoYn60Ump8/34gPXmXSGOzP8iKzfYBUeiZw+Jm2xJ9
+X-Gm-Message-State: AOJu0Yzc5P70oZBF2cB390c4XRY4kue0i3ejySm/R85bZ3GJgRjp1oan
+	nZEkeEG81Kxgg1U7vruiNyVe4C8Hg0GtVGPv4c4UF0QvrbSMtl73DIgit1Qf9a5c4J0YRzovMSF
+	y/pUYvDd/imB3/Ho4emEmFp5xm2lIP/WS294NCVwyP1Y/AMVbN+mojso=
+X-Google-Smtp-Source: AGHT+IGoQ4c4DdmeTiZMXV1mYTYQaKlTpqspTYrkcz9bVOL/1K8bYZn04qTheMtGMhqnGm642xOW5wuLD1KWvqM8J6lRBFh22ELf
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6638:851e:b0:485:54ea:1d58 with SMTP id
+ is30-20020a056638851e00b0048554ea1d58mr152555jab.5.1714129475614; Fri, 26 Apr
+ 2024 04:04:35 -0700 (PDT)
+Date: Fri, 26 Apr 2024 04:04:35 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007e4a2e0616fdde23@google.com>
+Subject: [syzbot] [can?] KMSAN: kernel-infoleak in raw_recvmsg
+From: syzbot <syzbot+5681e40d297b30f5b513@syzkaller.appspotmail.com>
+To: davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de, 
+	kuba@kernel.org, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	mkl@pengutronix.de, netdev@vger.kernel.org, o.rempel@pengutronix.de, 
+	pabeni@redhat.com, robin@protonic.nl, socketcan@hartkopp.net, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Benjamin,
+Hello,
 
- thanks for your review, please see my answers below.
+syzbot found the following issue on:
 
-...
-> > +
-> > +static int hexlin_tx_req_status(struct hexlin_priv_data *priv,
-> > +				const void *out_report, int len)
-> > +{
-> > +	int ret;
-> > +	unsigned long t;
-> > +
-> > +	mutex_lock(&priv->tx_lock);
-> 
-> AFAICT, any operation using the device will use this function and
-> therefore this is enforcing a single user at the same time.
-> 
-> Is this a bus or a hw limitation?
+HEAD commit:    71b1543c83d6 Merge tag '6.9-rc5-ksmbd-fixes' of git://git...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1784bdd7180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=776c05250f36d55c
+dashboard link: https://syzkaller.appspot.com/bug?extid=5681e40d297b30f5b513
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b440d3180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14b00907180000
 
-It's a hw limitation.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/14813ccfbcb3/disk-71b1543c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e7b88b42cf07/vmlinux-71b1543c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3a64a5abfbba/bzImage-71b1543c.xz
 
-> > +
-> > +	reinit_completion(&priv->wait_in_report);
-> > +
-> > +	ret = hexlin_tx_report(priv, out_report, len);
-> > +	if (ret)
-> > +		goto tx_exit;
-> > +
-> > +	t = wait_for_completion_killable_timeout(&priv->wait_in_report,
-> > +						 msecs_to_jiffies(1000));
-> > +	if (!t)
-> > +		ret = -ETIMEDOUT;
-> > +
-> > +	if (priv->is_error)
-> > +		ret = -EINVAL;
-> > +
-> > +tx_exit:
-> > +	mutex_unlock(&priv->tx_lock);
-> > +
-> > +	return ret;
-> > +}
-...
-> > +static int hexlin_raw_event(struct hid_device *hdev,
-> > +			    struct hid_report *report, u8 *data, int sz)
-> > +{
-> > +	struct hexlin_priv_data *priv;
-> > +	int ret;
-> > +
-> > +	if (sz < 1 || sz > HEXLIN_PKGLEN_MAX)
-> > +		return -EREMOTEIO;
-> > +
-> > +	priv = hid_get_drvdata(hdev);
-> > +
-> > +	hid_dbg(hdev, "%s, size:%i, data[0]: 0x%02x\n", __func__, sz, data[0]);
-> > +
-> > +	priv->is_error = false;
-> > +
-> > +	switch (data[0]) {
-> > +	case HEXLIN_SUCCESS:
-> > +		if (sz != 1)
-> > +			return -EREMOTEIO;
-> 
-> Could we have some #define for all of these sizes (here and in all of
-> the other branches)?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5681e40d297b30f5b513@syzkaller.appspotmail.com
 
-OK
+=====================================================
+BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:114 [inline]
+BUG: KMSAN: kernel-infoleak in copy_to_user_iter lib/iov_iter.c:24 [inline]
+BUG: KMSAN: kernel-infoleak in iterate_ubuf include/linux/iov_iter.h:29 [inline]
+BUG: KMSAN: kernel-infoleak in iterate_and_advance2 include/linux/iov_iter.h:245 [inline]
+BUG: KMSAN: kernel-infoleak in iterate_and_advance include/linux/iov_iter.h:271 [inline]
+BUG: KMSAN: kernel-infoleak in _copy_to_iter+0x366/0x2520 lib/iov_iter.c:185
+ instrument_copy_to_user include/linux/instrumented.h:114 [inline]
+ copy_to_user_iter lib/iov_iter.c:24 [inline]
+ iterate_ubuf include/linux/iov_iter.h:29 [inline]
+ iterate_and_advance2 include/linux/iov_iter.h:245 [inline]
+ iterate_and_advance include/linux/iov_iter.h:271 [inline]
+ _copy_to_iter+0x366/0x2520 lib/iov_iter.c:185
+ copy_to_iter include/linux/uio.h:196 [inline]
+ memcpy_to_msg include/linux/skbuff.h:4113 [inline]
+ raw_recvmsg+0x2b8/0x9e0 net/can/raw.c:1008
+ sock_recvmsg_nosec net/socket.c:1046 [inline]
+ sock_recvmsg+0x2c4/0x340 net/socket.c:1068
+ ____sys_recvmsg+0x18a/0x620 net/socket.c:2803
+ ___sys_recvmsg+0x223/0x840 net/socket.c:2845
+ do_recvmmsg+0x4fc/0xfd0 net/socket.c:2939
+ __sys_recvmmsg net/socket.c:3018 [inline]
+ __do_sys_recvmmsg net/socket.c:3041 [inline]
+ __se_sys_recvmmsg net/socket.c:3034 [inline]
+ __x64_sys_recvmmsg+0x397/0x490 net/socket.c:3034
+ x64_sys_call+0xf6c/0x3b50 arch/x86/include/generated/asm/syscalls_64.h:300
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-> 
-> > +		hid_dbg(hdev, "HEXLIN_SUCCESS: 0x%02x\n", data[0]);
-> > +		complete(&priv->wait_in_report);
-> 
-> Shouldn't you ensure that you currently have a request pending?
-> This works as long as no-one opens the hidraw node (see my remark
-> below).
+Uninit was created at:
+ slab_post_alloc_hook mm/slub.c:3804 [inline]
+ slab_alloc_node mm/slub.c:3845 [inline]
+ kmem_cache_alloc_node+0x613/0xc50 mm/slub.c:3888
+ kmalloc_reserve+0x13d/0x4a0 net/core/skbuff.c:577
+ __alloc_skb+0x35b/0x7a0 net/core/skbuff.c:668
+ alloc_skb include/linux/skbuff.h:1313 [inline]
+ alloc_skb_with_frags+0xc8/0xbf0 net/core/skbuff.c:6504
+ sock_alloc_send_pskb+0xa81/0xbf0 net/core/sock.c:2795
+ sock_alloc_send_skb include/net/sock.h:1842 [inline]
+ j1939_sk_alloc_skb net/can/j1939/socket.c:878 [inline]
+ j1939_sk_send_loop net/can/j1939/socket.c:1142 [inline]
+ j1939_sk_sendmsg+0xc0a/0x2730 net/can/j1939/socket.c:1277
+ sock_sendmsg_nosec net/socket.c:730 [inline]
+ __sock_sendmsg+0x30f/0x380 net/socket.c:745
+ ____sys_sendmsg+0x877/0xb60 net/socket.c:2584
+ ___sys_sendmsg+0x28d/0x3c0 net/socket.c:2638
+ __sys_sendmsg net/socket.c:2667 [inline]
+ __do_sys_sendmsg net/socket.c:2676 [inline]
+ __se_sys_sendmsg net/socket.c:2674 [inline]
+ __x64_sys_sendmsg+0x307/0x4a0 net/socket.c:2674
+ x64_sys_call+0xc4b/0x3b50 arch/x86/include/generated/asm/syscalls_64.h:47
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-Thanks for the heads up, there is no need for hidraw.
+Bytes 12-15 of 16 are uninitialized
+Memory access of size 16 starts at ffff888120969690
+Data copied to user address 00000000200017c0
 
-> > +		break;
-> > +	case HEXLIN_FAIL:
-> > +		if (sz != 1)
-> > +			return -EREMOTEIO;
-> > +		hid_err(hdev, "HEXLIN_FAIL: 0x%02x\n", data[0]);
-> > +		priv->is_error = true;
-> > +		complete(&priv->wait_in_report);
-> > +		break;
-> > +	case HEXLIN_GET_VERSION:
-> > +		if (sz != 2)
-> > +			return -EREMOTEIO;
-> > +		priv->fw_version = data[1];
-> > +		complete(&priv->wait_in_report);
-> > +		break;
-> > +	case HEXLIN_GET_RESPONDER_ANSWER_ID:
-> > +		if (sz != 20)
-> > +			return -EREMOTEIO;
-> > +		BUILD_BUG_ON(sizeof(priv->rar) != 20);
-> 
-> magical constants again
-
-OK
-
-> 
-> > +		memcpy(&priv->rar, data, sizeof(priv->rar));
-> > +		complete(&priv->wait_in_report);
-> > +		break;
-> > +	case HEXLIN_GET_BAUDRATE:
-> > +		if (sz != 3)
-> > +			return -EREMOTEIO;
-> > +		BUILD_BUG_ON(sizeof(priv->baudrate) != 2);
-> > +		memcpy(&priv->baudrate, &data[1], sizeof(priv->baudrate));
-> > +		le16_to_cpus(priv->baudrate);
-> > +		complete(&priv->wait_in_report);
-> > +		break;
-> > +	/* following cases not initiated by us, so no complete() */
-> > +	case HEXLIN_FRAME:
-> > +		if (sz != 17) {
-> > +			hid_err_once(hdev, "frame size mismatch: %i\n", sz);
-> > +			return -EREMOTEIO;
-> > +		}
-> > +		ret = hexlin_queue_frames_insert(priv, &data[1], sz-1);
-> > +		if (ret) {
-> > +			hid_err(hdev, "failed to add frame: %i\n", ret);
-> > +			return ret;
-> > +		}
-> > +		break;
-> > +	case HEXLIN_ERROR:
-> > +		hid_err(hdev, "error from adapter\n");
-> > +		break;
-> > +	default:
-> > +		hid_err(hdev, "unknown event: 0x%02x\n", data[0]);
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int init_hw(struct hexlin_priv_data *priv)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = hexlin_reset_dev(priv);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = hexlin_get_version(priv);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	priv->baudrate = LIN_DEFAULT_BAUDRATE;
-> > +	ret = hexlin_set_baudrate(priv, priv->baudrate);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int hexlin_probe(struct hid_device *hdev,
-> > +			const struct hid_device_id *id)
-> > +{
-> > +	struct hexlin_priv_data *priv;
-> > +	int ret;
-> > +
-> > +	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
-> > +	if (!priv)
-> > +		return -ENOMEM;
-> > +
-> > +	priv->hid_dev = hdev;
-> > +	hid_set_drvdata(hdev, priv);
-> > +
-> > +	mutex_init(&priv->tx_lock);
-> > +
-> > +	ret = hid_parse(hdev);
-> > +	if (ret) {
-> > +		hid_err(hdev, "hid parse failed with %d\n", ret);
-> > +		goto fail_and_free;
-> > +	}
-> > +
-> > +	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
-> 
-> Are you sure you want HID_CONNECT_HIDRAW?
-> 
-> Given that your whole driver relies on the assumption that any command
-> sent to the device is guarded by the mutex, if one client opens the
-> hidraw node and starts sending commands behind your back you are
-> screwed...
-> 
-> Maybe use HID_CONNECT_DRIVER instead.
-
-HID_CONNECT_DRIVER it is
-
-> 
-> > +	if (ret) {
-> > +		hid_err(hdev, "hid hw start failed with %d\n", ret);
-> > +		goto fail_and_stop;
-> > +	}
-> > +
-> > +	ret = hid_hw_open(hdev);
-> > +	if (ret) {
-> > +		hid_err(hdev, "hid hw open failed with %d\n", ret);
-> > +		goto fail_and_close;
-> > +	}
-> > +
-> > +	init_completion(&priv->wait_in_report);
-> > +
-> > +	hid_device_io_start(hdev);
-> > +
-> > +	ret = init_hw(priv);
-> > +	if (ret)
-> > +		goto fail_and_close;
-> > +
-> > +	priv->ldev = register_lin(&hdev->dev, &hexlin_ldo);
-> > +	if (IS_ERR_OR_NULL(priv->ldev)) {
-> > +		ret = PTR_ERR(priv->ldev);
-> > +		goto fail_and_close;
-> > +	}
-> > +
-> > +	hid_info(hdev, "hexLIN (fw-version: %u) probed\n", priv->fw_version);
-> 
-> you are not calling hid_hw_close(hdev) here (on purpose I guess).
-> 
-> However, this prevents the device to enter any sleep mode as the kernel
-> will always consider it to be in use.
-> Is there some open/close mechanism in LIN or in CAN that can tell the
-> device that it needs to be opened or do we assume that the device needs
-> to be powered on all the time?
-
-One can bring the LIN device up and down, just like any other Ethernet
-or CAN device. So, for revision 2 of this patchset, I added open/stop
-handling. This allows for hid_hw_close(hdev) here and also makes
-remove() handling way easier. Thanks for the heads up.
-
-> 
-> > +
-> > +	return 0;
-> > +
-> > +fail_and_close:
-> > +	hid_hw_close(hdev);
-> > +fail_and_stop:
-> > +	hid_hw_stop(hdev);
-> > +fail_and_free:
-> > +	mutex_destroy(&priv->tx_lock);
-> > +	return ret;
-> > +}
-> > +
-> > +static void hexlin_remove(struct hid_device *hdev)
-> > +{
-> > +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
-> > +
-> > +	complete(&priv->wait_in_report);
-> 
-> what if you get one LIN request just now, between those 2 calls?
-> 
-> You should probably disable the ability to take the mutex before sending
-> the complete call above or you might still have the mutex taken here.
-> 
-> Also shouldn't you set priv->is_error = true before the complete?
-> 
-> > +	unregister_lin(priv->ldev);
-> > +	hid_hw_close(hdev);
-> > +	hid_hw_stop(hdev);
-> > +	mutex_destroy(&priv->tx_lock);
-> 
-> Given how the device works, I think it would be safer to do this in the
-> following order:
-> 
-> // prevent any incoming event (assuming hidraw is not available)
-> hid_hw_close(hdev);
-> // ensure the device is powered off
-> hid_hw_stop(hdev);
-> // mark any pending request as failed
-> priv->is_error = true;
-> // mark the device as unusable
-> priv->removed = true;
-> complete(&priv->wait_in_report);
-> // unregister
-> unregister_lin(priv->ldev);
-> // mutex is not used anymore
-> mutex_destroy(&priv->tx_lock);
-> 
-> (I might be wrong but this seems more sensible to me).
-> 
-> Actually, instead of having a priv->removed boolean, you could also take
-> and release the mutex before releasing it, this way you are sure to not
-> be in the critical code section. This should work because you are using
-> wait_for_completion_killable_timeout() and so after 1 s you are
-> guaranteed to exit the mutex.
-
-Thanks for the great explanation.
-
-> > +}
-> > +
-> > +static const struct hid_device_id hexlin_table[] = {
-> > +	{ HID_USB_DEVICE(USB_VENDOR_ID_MCS, USB_DEVICE_ID_MCS_HEXLIN) },
-> > +	{ }
-> > +};
-> > +
-> > +MODULE_DEVICE_TABLE(hid, hexlin_table);
-> > +
-> > +static struct hid_driver hexlin_driver = {
-> > +	.name = "hexLIN",
-> > +	.id_table = hexlin_table,
-> > +	.probe = hexlin_probe,
-> > +	.remove = hexlin_remove,
-> > +	.raw_event = hexlin_raw_event,
-> > +};
-> > +
-> > +static int __init hexlin_init(void)
-> > +{
-> > +	return hid_register_driver(&hexlin_driver);
-> > +}
-> > +
-> > +static void __exit hexlin_exit(void)
-> > +{
-> > +	hid_unregister_driver(&hexlin_driver);
-> > +}
-> > +
-> > +/*
-> > + * When compiled into the kernel, initialize after the hid bus.
-> > + */
-> > +late_initcall(hexlin_init);
-> > +module_exit(hexlin_exit);
-> > +
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_AUTHOR("Christoph Fritz <christoph.fritz@hexdev.de>");
-> > +MODULE_DESCRIPTION("LIN bus driver for hexLIN USB adapter");
-> > diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-> > index 8376fb5e2d0b4..157d234e1d400 100644
-> > --- a/drivers/hid/hid-ids.h
-> > +++ b/drivers/hid/hid-ids.h
-> > @@ -903,6 +903,7 @@
-> >  #define USB_DEVICE_ID_MCC_PMD1208LS	0x007a
-> >  
-> >  #define USB_VENDOR_ID_MCS		0x16d0
-> > +#define USB_DEVICE_ID_MCS_HEXLIN	0x0648
-> >  #define USB_DEVICE_ID_MCS_GAMEPADBLOCK	0x0bcc
-> >  
-> >  #define USB_VENDOR_MEGAWORLD		0x07b5
-> > diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-> > index e0bbf0c6345d6..328fcc61303f3 100644
-> > --- a/drivers/hid/hid-quirks.c
-> > +++ b/drivers/hid/hid-quirks.c
-> > @@ -436,6 +436,9 @@ static const struct hid_device_id hid_have_special_driver[] = {
-> >  	{ HID_USB_DEVICE(USB_VENDOR_ID_GYRATION, USB_DEVICE_ID_GYRATION_REMOTE_2) },
-> >  	{ HID_USB_DEVICE(USB_VENDOR_ID_GYRATION, USB_DEVICE_ID_GYRATION_REMOTE_3) },
-> >  #endif
-> > +#if IS_ENABLED(CONFIG_HID_HEXLIN)
-> > +	{ HID_USB_DEVICE(USB_VENDOR_ID_MCS, USB_DEVICE_ID_MCS_HEXLIN) },
-> 
-> Generally, the pattern for drivers in the HID subsystem is to rely on
-> the vendor name, not the product, in order to be able to extend it to
-> more than one product.
-> 
-> Is your vendor name MCS? Or Hexdev?
-> 
-> If so, the driver should likely be hid-hexdev.c...
-
-We got the PID from MCS online shop here:
-
-https://www.mcselec.com/index.php?page=shop.product_details&product_id=92&option=com_phpshop
-
-Our vendor name is hexDEV, but the USB VID is MCS, and the product name
-is hexLIN...
-
-So is 'hid-hexlin.c' or 'hid-hexdev-hexlin.c' okay or does it need to
-be named 'hid-mcs-hexlin.c' in spite MCS has nearly nothing to do with
-it?
+CPU: 1 PID: 5050 Comm: syz-executor198 Not tainted 6.9.0-rc5-syzkaller-00031-g71b1543c83d6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
+=====================================================
 
 
-Cheers
-  -- Christoph
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
