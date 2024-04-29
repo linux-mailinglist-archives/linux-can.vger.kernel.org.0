@@ -1,79 +1,84 @@
-Return-Path: <linux-can+bounces-507-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-508-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F28CB8B61D7
-	for <lists+linux-can@lfdr.de>; Mon, 29 Apr 2024 21:18:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 393CF8B6460
+	for <lists+linux-can@lfdr.de>; Mon, 29 Apr 2024 23:14:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD4772822ED
-	for <lists+linux-can@lfdr.de>; Mon, 29 Apr 2024 19:18:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A8A31C212C0
+	for <lists+linux-can@lfdr.de>; Mon, 29 Apr 2024 21:14:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6199513AA48;
-	Mon, 29 Apr 2024 19:18:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F91181337;
+	Mon, 29 Apr 2024 21:14:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j9lsIxCT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Loc7/Yiw"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C372212B73
-	for <linux-can@vger.kernel.org>; Mon, 29 Apr 2024 19:18:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF81A3C482;
+	Mon, 29 Apr 2024 21:14:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714418328; cv=none; b=DMCLCDx70EH9Jllo3P2Vq+yqAtGfUdwQTefjfCyZRovzi14YkNJ6TXdVCMwvmznkbpsVmIBmn89XqrKwofB2JomDhQgXUGbd0Y+G8hN/Sg4pDH7CSwgh7nBrkBFmXzI+lzKGjVFS9HTnkhtFVFHCY9O+SiHzQUyO6S+t/mViYZo=
+	t=1714425292; cv=none; b=E5CihwSefPWHHgG34RedLV3JsleDDNgugzh/kUn/nsT0aO0NxkTJYuImMS8vACLVVBD6rjRZVNo09p3o/DM7MUXvrwwkf+csl3OGKdRznE76KMA3TCNt98ANLapaBu8s5zvRe62HRegQI+E+HZjERcbCfKglDlfN82u/JgIAspE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714418328; c=relaxed/simple;
-	bh=ZNTz1i+5HzdFLNP/I1STBxLen6l+wTF3Nz1pHKLW1aQ=;
+	s=arc-20240116; t=1714425292; c=relaxed/simple;
+	bh=tiMvJprnoucEZ2mGwOGpl8nwGTZ2AMZh8ljot5HUHYw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zuqs/eEdtQg4U9qzWWZnhs9H2iP04KQvTT/WB2QiUDB/Ff+kw6hEULz0EBTlKiuhSfncELwKirIdco8uOQHmsvlDTwGN8fZ8oc+sNMzPBzwuT5ztownwKCdgkA35571AXbgnJKAEEmH2XQMHSvMj/m8CpoY/f4AA9JNzeBLAC34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j9lsIxCT; arc=none smtp.client-ip=209.85.167.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=honBJkeQVMokNTqYBhVWG60KmYGxWMkbsxaWc+wu7NIe7GCHZpmm2u/R2X5utdYWK7hI5Xkw54pix6IPN5o0AkqpLmlTPJtdSeNbLA36C1qPd6eBtFDriTH8dilTS8KVE1TcddI+AIajTFhdxwXhVe9yb/806k1TDJcxIwp53Hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Loc7/Yiw; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-518a56cdbcfso7688014e87.2
-        for <linux-can@vger.kernel.org>; Mon, 29 Apr 2024 12:18:46 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a556d22fa93so540426966b.3;
+        Mon, 29 Apr 2024 14:14:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714418325; x=1715023125; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1714425289; x=1715030089; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G3l9wwUs8KwYEkfZ49GfWDPuR+3lqBh98x9WfwgCI+A=;
-        b=j9lsIxCTZ8Cq8/VTPcUwK0lemy3rrawZNkWXBBS71/dQvG15J/jB9/EFbdq0ufuEJ+
-         lFDJqGyIFT5vRj5ecmdbi9kvCITnU68MxXOHf7DGdnxVTeSb45pK5BC4yaUHlXxY6sMa
-         CJbJZWiQRbDP5CEc+7VAP0Mrs2bm9PUbV6nijAZ73ApKV8gEkCMLD/7A0HSCm9/g8SWX
-         P5TzsFefemMdPaDTp5FzotjoFd2/g717QsWEccC2Dq2hd/dwOS0KC4HLzaryAVjb4e90
-         46sg5Tk0THXIZ1qb7xvakZlJoMsgOfC3s9PcZl9Pk6oynfIRWbiXKe1ouruRjc9/qZ9t
-         Gzlg==
+        bh=GInBtKS5qcKC98Fjt9JiRdmtAQLI0mcNnSpjf6/+G2Q=;
+        b=Loc7/YiwLtnwAjHAO3HzkeVUPdO9zyZj5Gdb6c3ppRPq/yE4WPdWOxuo5a5+mIX2jD
+         zHon350BJWCg+FcHjg+oJs9E6VS421AjfWRVG5l874M3LlaDQvHNTX88ZGwBRWMTmjiP
+         8J1GC0eQZoNL9Vosgi5v8xjszqgEcw72xzBcTeuXPCiyqPLJfhAHxLTd70nbz+FLjE2T
+         1AzBqvB8+udKh1IMI3nuqq50XneJzYtqVjyS/7tYFppzPAAiV+BXdHezoc4gNlI0JVdM
+         egFhvagezenz41QZCEtC1b9/kMjMPdpw/hcieRFY3Q2OJyYTJTHSg9QaHfks2UMPRAIL
+         UuUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714418325; x=1715023125;
+        d=1e100.net; s=20230601; t=1714425289; x=1715030089;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G3l9wwUs8KwYEkfZ49GfWDPuR+3lqBh98x9WfwgCI+A=;
-        b=SNZvMQ3I3OuasFtWPm/QQqrf9R2iHyIyraVsRozy175C4urICbibqOcaounvpIQZ9y
-         7lFvXymVozxDEhnJ8cy38iybTxhvSKK3HBS+kcwLI2BBIAlfty5L2DxcXCy9E9QhxCFr
-         ESSwOib45z3FMQRzznq+UlL2DPQMlu/lxyhHsESs+HWVZTEVMRphP05F37EKXps3EGYc
-         DbWBhxxK6ypWtf6DyZAhlwE70x0HRnzSex+o6VN5X/X4MFKosCpxmrNIBudoIOunoqyG
-         cRKQWdqqqps+wKy3673yupppMTw1+93OymDxtRxtoM5wwSmPUL7t1mNN6fevYNEKtGIB
-         B80w==
-X-Forwarded-Encrypted: i=1; AJvYcCXiTmSYhpZqjC39QN6eNgJN4tNXCa386rArdDXiTb+/43oXT+rDoTqdN3NCbD6BlfwEqMUfoXjjIokZqH8PqjON0huBpeX9epNI
-X-Gm-Message-State: AOJu0YwvV9MxAxbNuSvMicb5T3nL55cD36YSgKL+N7ywyevUSnbIYNi6
-	mRH5WkEbfqcvi5zUCi3+lbL/j00iOQBwTUM4KmIDzGrpwY0F8d83
-X-Google-Smtp-Source: AGHT+IEC058YEbp+pVLUfAwrH7yK7aTh5lGTE7/Fd1MGUG2j6TEglCmYNeSXAwxnA3jiW/bA0nZSZw==
-X-Received: by 2002:a05:6512:6c9:b0:51d:9291:6945 with SMTP id u9-20020a05651206c900b0051d92916945mr5031287lff.44.1714418324421;
-        Mon, 29 Apr 2024 12:18:44 -0700 (PDT)
+        bh=GInBtKS5qcKC98Fjt9JiRdmtAQLI0mcNnSpjf6/+G2Q=;
+        b=Tk4wotHF2ScbrQLCPtjNAddM1AdTnlUnJ7x11gAMVEsWZ2JMB8TeR2qK+4062djeP8
+         jdTcHFy+zkjuBs5zDdrkidnm54oDQZxR/UJEfIFO286wCfidRHTr8u5WgoXXv7RfsaFs
+         0JRK63pDnEJKuuwms50r4WbyA7UtqpJk12Wl9BBPhinlunrWRHguTy3U21fN8GNVQ9E1
+         G7ZZ7vNxX1ZpN8Iq2URgdr6IAuFjcp57st6Nx8bB8OUbOUkRNNYi/5VJ54M2M3voqY/y
+         eVtWHis8WlsoLuxEyJSolsJPu4jVAoHM3XG6O1nt2tkMtGLTfR7ol6j1Oyd1hGW4lQGa
+         k1fA==
+X-Forwarded-Encrypted: i=1; AJvYcCX+oPh37jZxwsnAvdYD5CfbyWxpnnpFYRaVhd7loyZSgbspny74crKXlQKnF8RrPQEsZJj+lLwEuyg5L7Hm+pLAQ7oiQFVWN2HZHxdsG/NOyMpDYnM1DQqquE0GWFlTZQOGukN7uy502GPwiUm4JZce8U7KrLxruhJY9Ip1q+D/
+X-Gm-Message-State: AOJu0YyFqp71BsKWzc9afXq9vCqTBT6Pp21S7c1FPsdwnNpTqKcppoKl
+	stuFSyoInrO0hsiNx2pXT2tnsvP16CuoX0MgfliheNVb8Cg/3oCF
+X-Google-Smtp-Source: AGHT+IHF6pToBPXo1Tqa6vaxgqz49Q6gw8+6m3MaTXwNMNGTW1Vb68P41g2q4nGT68Bk2JZLrqKs2A==
+X-Received: by 2002:a17:906:19d6:b0:a58:bd52:38e3 with SMTP id h22-20020a17090619d600b00a58bd5238e3mr525055ejd.57.1714425288919;
+        Mon, 29 Apr 2024 14:14:48 -0700 (PDT)
 Received: from fedora (host-95-248-171-25.retail.telecomitalia.it. [95.248.171.25])
-        by smtp.gmail.com with ESMTPSA id r20-20020a170906705400b00a555ef55ab5sm14182370ejj.218.2024.04.29.12.18.43
+        by smtp.gmail.com with ESMTPSA id m16-20020a1709061ed000b00a51c0c0cb86sm14286735ejj.22.2024.04.29.14.14.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 12:18:44 -0700 (PDT)
-Date: Mon, 29 Apr 2024 21:18:42 +0200
+        Mon, 29 Apr 2024 14:14:48 -0700 (PDT)
+Date: Mon, 29 Apr 2024 23:14:45 +0200
 From: Francesco Valla <valla.francesco@gmail.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Subject: Re: [PATCH v3 0/1] Documentation: networking: document ISO 15765-2
-Message-ID: <Zi_ycjkN9b95Rsx9@fedora>
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Simon Horman <horms@kernel.org>,
+	Bagas Sanjaya <bagasdotme@gmail.com>, fabio@redaril.me
+Subject: Re: [PATCH] Documentation: networking: document ISO 15765-2
+Message-ID: <ZjANxXyipBxBeCkY@fedora>
 References: <20240426151825.80120-1-valla.francesco@gmail.com>
- <20240429-mighty-starfish-of-speed-c76ddf-mkl@pengutronix.de>
+ <20240426151825.80120-2-valla.francesco@gmail.com>
+ <CAMZ6RqJ8x1=SeZRyR8PBCHzOy7qjB4xPs2Uk4mHLHOm_Usy91A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -82,30 +87,27 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240429-mighty-starfish-of-speed-c76ddf-mkl@pengutronix.de>
+In-Reply-To: <CAMZ6RqJ8x1=SeZRyR8PBCHzOy7qjB4xPs2Uk4mHLHOm_Usy91A@mail.gmail.com>
 
-On Mon, Apr 29, 2024 at 07:31:10PM +0200, Marc Kleine-Budde wrote:
-> On 26.04.2024 17:18:12, Francesco Valla wrote:
-> > While the in-kernel ISO 15765-2 (ISO-TP) stack is fully functional and
-> > easy to use, no documentation exists for it.
-> > 
-> > This patch adds such documentation, containing the very basics of the
-> > protocol, the APIs and a basic example.
+On Sat, Apr 27, 2024 at 10:39:11PM +0900, Vincent MAILHOL wrote:
+> On Sat. 27 Apr. 2024 at 00:23, Francesco Valla
+> <valla.francesco@gmail.com> wrote:
+> > Document basic concepts, APIs and behaviour of the ISO 15675-2 (ISO-TP)
+> > CAN stack.
+> >
+> > Signed-off-by: Francesco Valla <valla.francesco@gmail.com>
+> > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 > 
-> Applied to linux-can-next.
+> Two typos/grammar nitpicks (see below). I am giving my review tag in advance:
 > 
-> Thanks,
-> Marc
+> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 > 
+> Thank you!
+>
 
-Hello Marc,
+Hello Vincent,
 
-Is there still time for a v4? I have a couple of typos to be fixed plus
-an additional Reviewed-by. See:
-
-https://lore.kernel.org/linux-can/CAMZ6RqJ8x1=SeZRyR8PBCHzOy7qjB4xPs2Uk4mHLHOm_Usy91A@mail.gmail.com/
-
-Thank you
+thank you for the review!
 
 Regards,
 Francesco
