@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-518-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-519-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED90C8B95C2
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 09:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA4338B95C4
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 09:57:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E4181F2100C
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 07:57:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6967E1F20D3A
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 07:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C551383A9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 915973D3BD;
 	Thu,  2 May 2024 07:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="AmciRnk5"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="xoBTEJjv"
 X-Original-To: linux-can@vger.kernel.org
 Received: from fritzc.com (mail.fritzc.com [213.160.72.247])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3A724205;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF37D23775;
 	Thu,  2 May 2024 07:56:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.72.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714636609; cv=none; b=AVfW7Hy8cQ36mGMhD0FqVJAe+wUO91P8/EeX/mA0v9m2d598ildeT5CrGsO3B2Q3vH0w/OHNmBtO/c4D2dBNCyKMfZ2BUv57pyYkaEYx4zf3rXCL7Qn4sZjQJn0L4ijy4F6ghWQMo/5Mq2GG1rujmMh8f5Ll5NpjA25SqHr0xd0=
+	t=1714636609; cv=none; b=D5UFQQ6d5PjdED2hCQIBUNl+vY7CHZ04O9ekbchhuLdQdRUAMuPPvRQsjNhceF7jqH6J2LEMRE2Y731aXowY4ee2Cxeao40z33T1AJKNSOgKeGWU5Eb1uyY077Cv4UFADPgqfawh6BRxmoD9GPOtpnd9/RPLF883VJud7FfkFJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714636609; c=relaxed/simple;
-	bh=4mSUg0dh3ONONxNepx7MKYTY8kPRdKDrp/fIyordwS0=;
+	bh=KjK+ygnrZsuhjU+N9ZY0h772Kw/iSxchdX9Fp9lMvyU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pQIB9D94ItRRVhazjKPsNZ4Jd6liuSAjqlEbgUhLmz4xvtMQe+Giv0O7Ee/Jgc8k0gO+g8dEQHT5hzrZ3bnO+0gvy8avzr0zUQqm8oy3lCN5TzoxuzireWMOe6kPn2qG7DGRugCzMjwYQ5onvFuMssut/1ARE0fAPJqufcXoAxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=AmciRnk5; arc=none smtp.client-ip=213.160.72.247
+	 MIME-Version; b=Spu8M7IjLv4G8ta9nLkgt6GsW1ruGd6Oi/kx5BY0Nfy4iErTB76d7scSFCKvMaOiAtKmRJDYIHrof1xx4N/G8pzQFHvOyfnRQBBSM37wQnf4Yey8ge0RFWMo2MMdbtyr866oafMeA4aOJfLHNFRZm5E0VMzoG9NtAkL4JeH5vy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=xoBTEJjv; arc=none smtp.client-ip=213.160.72.247
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hexdev.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
@@ -37,15 +37,15 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=npF0MqK5tZrCWaggeYcAXIs08pbdbMEnO4T8qneLQ34=; b=AmciRnk5Zz+I491GdwgS09SOQ3
-	CZ+cUE1DeGmPOduchr04QHrRDZjT1SBsinayaXA0+JNDbABdvRPA/DnsqpPCGbvmgj7EH2bRprCHt
-	D39ia6BJE24npR52tWHgb/y0vxCll2xb1IMP7tozGRYjuj1j3Vz6aDzDHexoHFO8Qn/8=;
+	bh=ETncEe944ZpMNYFBQ9viLt3yvbXCLqJ9t/iaLRcdEi4=; b=xoBTEJjvm0H0EV+kfYfdn/xdhF
+	U/7CzF+rECZaVpwsYWBldA8DuZ9QxeC5+Wa6hfGySNRvbLZq2jNJExW2Tlkjhv/55dv0B0UYHYOep
+	dXBrpkixvuHcC0QYdsebn6dGOT/Obz3COtizSbpKybABj2Brd/hVPFTCbFADuz94wQ/k=;
 Received: from 127.0.0.1
 	by fritzc.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim latest)
 	(envelope-from <christoph.fritz@hexdev.de>)
-	id 1s2RIz-001Yg7-1D;
-	Thu, 02 May 2024 09:56:38 +0200
+	id 1s2RJ0-001Yg7-2g;
+	Thu, 02 May 2024 09:56:39 +0200
 From: Christoph Fritz <christoph.fritz@hexdev.de>
 To: Oliver Hartkopp <socketcan@hartkopp.net>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -71,9 +71,9 @@ Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>,
 	devicetree@vger.kernel.org,
 	linux-input@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: [PATCH v2 05/12] dt-bindings: vendor-prefixes: Add hexDEV
-Date: Thu,  2 May 2024 09:55:27 +0200
-Message-Id: <20240502075534.882628-6-christoph.fritz@hexdev.de>
+Subject: [PATCH v2 06/12] dt-bindings: net/can: Add serial (serdev) LIN adapter
+Date: Thu,  2 May 2024 09:55:28 +0200
+Message-Id: <20240502075534.882628-7-christoph.fritz@hexdev.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240502075534.882628-1-christoph.fritz@hexdev.de>
 References: <20240502075534.882628-1-christoph.fritz@hexdev.de>
@@ -85,26 +85,53 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add vendor prefix for hexDEV GmbH. Website: https://hexdev.de
+This patch adds dt-bindings for serial LIN bus adapters. These adapters are
+basically just LIN transceivers that get hard-wired with serial devices.
 
 Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/net/can/hexdev,lin-serdev.yaml   | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 08b241825f8b6..1a8cfc5c7350d 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -601,6 +601,8 @@ patternProperties:
-     description: Hardkernel Co., Ltd
-   "^hechuang,.*":
-     description: Shenzhen Hechuang Intelligent Co.
-+  "^hexdev,.*":
-+    description: hexDEV GmbH
-   "^hideep,.*":
-     description: HiDeep Inc.
-   "^himax,.*":
+diff --git a/Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml b/Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml
+new file mode 100644
+index 0000000000000..cbf9f63a2a49f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml
+@@ -0,0 +1,32 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/can/hexdev,lin-serdev.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Serial LIN Adapter
++
++description:
++  LIN transceiver, mostly hard-wired to a serial device, used for communication
++  on a LIN bus.
++  For more details on an adapter, visit <https://hexdev.de/hexlin#tty>.
++
++maintainers:
++  - Christoph Fritz <christoph.fritz@hexdev.de>
++
++properties:
++  compatible:
++    const: hexdev,lin-serdev
++
++required:
++  - compatible
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    serial {
++        linbus {
++            compatible = "linux,lin-serdev";
++        };
++    };
 -- 
 2.39.2
 
