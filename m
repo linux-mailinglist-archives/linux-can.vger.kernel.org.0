@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-534-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-535-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CEB38B993D
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 12:45:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB3058B999E
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 13:04:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB2AC1F2251B
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 10:45:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D52D2B21106
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 11:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E0D764CE1;
-	Thu,  2 May 2024 10:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C854F5FDA9;
+	Thu,  2 May 2024 11:04:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="DDqJ6uWX"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="w8Daq/DZ"
 X-Original-To: linux-can@vger.kernel.org
 Received: from fritzc.com (mail.fritzc.com [213.160.72.247])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00B75C60D;
-	Thu,  2 May 2024 10:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A20B58228;
+	Thu,  2 May 2024 11:03:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.72.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714646489; cv=none; b=p7NCMXWlmc5l0TFrYKn+wubv2Ejxjf2gB+Vibr7l3DcS6HmuslFNApJELT9tGHKnbQxVb2wPZaXZslUYqThG+JE2qigiOQgRv0/uEQJnyUjz/hzWxqa73qvQEsogUoK/38lNjYY9AyXnGfwuHfKHXl87keEKxZjvbaROgbhTt14=
+	t=1714647840; cv=none; b=q1F56w+w4iF8Di2jTjNtNGawUbLFCzHWvdyrQo5V+/CXTZgUfLuhOiPndAh4hXx6odZ7vOnP2mdBSkjMc/tAWUK9beF1sEgBg9XYnxwABRe2FX2ybDpvQ1MmT9Y7x6sqopQBDTJaj5vSgQQnrGWtkzBwSDlMNI0GB+yR9989yj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714646489; c=relaxed/simple;
-	bh=OqJ+yIymupM8os2NNtWYxIDzuic0X9q0L/FNYuyp6NQ=;
+	s=arc-20240116; t=1714647840; c=relaxed/simple;
+	bh=fBAaoFlZfEYbgWcR99nmTfqssQTQgju1ZEXTW9eeSuA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uLMzAxtLt+XgVp7LFnWf5hoRuWfyErgdq8swm6k7gHfjkR89a/h3/NHt3aCbf1SfVPE1PBNdB9ebzucGDriCB96KoLTxrFGONftbxkio4RiaF77sFvRHJr9A3j4dKCT/K1x45lPYu+tdLnEnMKsX/hHzvQqYyf0IZTqg3mJLIUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=DDqJ6uWX; arc=none smtp.client-ip=213.160.72.247
+	 Content-Type:MIME-Version; b=iQI3vas9qkDFJfRGSikZQw2Y5z51xB9e3ZsunS9aojhByCeAyFnrH8o0iACSeP+ntx05oXmTB7ZteG5FwHoWudAw/iXOQ+XLFesRwB63R+PB5QTuEN+zo9vF+fqhPnNadP1tr3/nfw9A6WdBmn8U/KT8dZAn/dBH8AHyu3JSNoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=w8Daq/DZ; arc=none smtp.client-ip=213.160.72.247
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hexdev.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
@@ -37,39 +37,39 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=4UUHAno7rypybrcQtRJnCbtjDnm2b3MTrzNRoHFFT+4=; b=DDqJ6uWXnxC+eCkZQ7gN9aIjkb
-	o+Ouhe7Rg91OXbK1/odgrwOFaA6dXxRBbs6uy+CzYzxCFJteto934oK/rKoev1Ntg9s9p+GYVVzIC
-	VfVAcwv8kpe+bOYZDEa5Jb6VBisVxPmFjJQH2n9IxGJJcuvjxi7NH887u+P62++5sogo=;
+	bh=xrJZEtQCkguErjBYfgKPVVDWS0LKbQlBAZ4XgRsohl4=; b=w8Daq/DZymap2DLm1CeW8Nw4I5
+	j+RVpAvi3xizokSsLbEw6qsCi2BiEen1O7JWqsLMoZjR4P8OX+LC554+ib4cTAeBLrLC0WZIwJnPf
+	cYvUWLR5yY88z44C/H4/D/JjkM8Y27hHNhfN1aYOWxCA0ibj/54xsTQrxABJ6g9NFbss=;
 Received: from 127.0.0.1
 	by fritzc.com with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim latest)
 	(envelope-from <christoph.fritz@hexdev.de>)
-	id 1s2TsE-001Z1U-1D;
-	Thu, 02 May 2024 12:41:11 +0200
-Message-ID: <2ab875b8216dd32d0d1e495a52a20c02a40e3e5d.camel@hexdev.de>
-Subject: Re: [PATCH v2 02/12] HID: hexLIN: Add support for USB LIN bus
+	id 1s2UE3-001Z33-21;
+	Thu, 02 May 2024 13:03:44 +0200
+Message-ID: <48c55b05dae4628d4e811178bfd5e855ac93ee77.camel@hexdev.de>
+Subject: Re: [PATCH v2 06/12] dt-bindings: net/can: Add serial (serdev) LIN
  adapter
 From: Christoph Fritz <christoph.fritz@hexdev.de>
 Reply-To: christoph.fritz@hexdev.de
-To: Jiri Slaby <jirislaby@kernel.org>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Marc Kleine-Budde
- <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David
- S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor
- Dooley <conor+dt@kernel.org>, Jiri Kosina <jikos@kernel.org>, Benjamin
- Tissoires <bentiss@kernel.org>,  Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Sebastian Reichel <sre@kernel.org>, Linus
- Walleij <linus.walleij@linaro.org>, Andreas Lauser
- <andreas.lauser@mercedes-benz.com>,  Jonathan Corbet <corbet@lwn.net>,
- Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org, 
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-input@vger.kernel.org,  linux-serial@vger.kernel.org
-Date: Thu, 02 May 2024 12:41:07 +0200
-In-Reply-To: <acf0251e-41b9-410d-a663-ff6c34d2bc3e@kernel.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Sebastian Reichel
+ <sre@kernel.org>,  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-serial@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>, 
+ Jiri Kosina <jikos@kernel.org>, Jiri Slaby <jirislaby@kernel.org>, Conor
+ Dooley <conor+dt@kernel.org>,  Andreas Lauser
+ <andreas.lauser@mercedes-benz.com>, Marc Kleine-Budde <mkl@pengutronix.de>,
+ Benjamin Tissoires <bentiss@kernel.org>, devicetree@vger.kernel.org, Eric
+ Dumazet <edumazet@google.com>, Jonathan Corbet <corbet@lwn.net>, Jakub
+ Kicinski <kuba@kernel.org>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+ Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org,  linux-input@vger.kernel.org, Pavel Pisa
+ <pisa@cmp.felk.cvut.cz>, Oliver Hartkopp <socketcan@hartkopp.net>, "David S
+ . Miller" <davem@davemloft.net>
+Date: Thu, 02 May 2024 13:03:42 +0200
+In-Reply-To: <171464227142.1356329.4931419696225319861.robh@kernel.org>
 References: <20240502075534.882628-1-christoph.fritz@hexdev.de>
-	 <20240502075534.882628-3-christoph.fritz@hexdev.de>
-	 <acf0251e-41b9-410d-a663-ff6c34d2bc3e@kernel.org>
+	 <20240502075534.882628-7-christoph.fritz@hexdev.de>
+	 <171464227142.1356329.4931419696225319861.robh@kernel.org>
 Organization: hexDEV GmbH
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.46.4-2 
@@ -81,159 +81,110 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Thu, 2024-05-02 at 10:30 +0200, Jiri Slaby wrote:
-> On 02. 05. 24, 9:55, Christoph Fritz wrote:
-> > This patch introduces driver support for the hexLIN USB LIN bus adapter,
-> > enabling LIN communication over USB for both controller and responder
-> > modes. The driver interfaces with the CAN_LIN framework for userland
-> > connectivity.
+On Thu, 2024-05-02 at 04:31 -0500, Rob Herring (Arm) wrote:
+> On Thu, 02 May 2024 09:55:28 +0200, Christoph Fritz wrote:
+> > This patch adds dt-bindings for serial LIN bus adapters. These adapters are
+> > basically just LIN transceivers that get hard-wired with serial devices.
 > > 
-> > For more details on the adapter, visit: https://hexdev.de/hexlin/
-> > 
-> > Tested-by: Andreas Lauser <andreas.lauser@mercedes-benz.com>
 > > Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
-> ...
-> > --- /dev/null
-> > +++ b/drivers/hid/hid-hexdev-hexlin.c
-> > @@ -0,0 +1,630 @@
-> ...
-> > +static int hexlin_stop(struct lin_device *ldev)
-> > +{
-> > +	struct hid_device *hdev = to_hid_device(ldev->dev);
-> > +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
-> > +
-> > +	hid_hw_close(hdev);
-> > +
-> > +	priv->is_error = true;
-> > +	complete(&priv->wait_in_report);
-> > +
-> > +	mutex_lock(&priv->tx_lock);
-> > +	mutex_unlock(&priv->tx_lock);
+> > ---
+> >  .../bindings/net/can/hexdev,lin-serdev.yaml   | 32 +++++++++++++++++++
+> >  1 file changed, 32 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml
+> > 
 > 
-> This is a weird way to implement a completion. It looks like you need 
-> another one.
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.example.dtb: /example-0/serial/linbus: failed to match any schema with compatible: ['linux,lin-serdev']
 
-They are not necessary, even more so when I can drop the
-mutex_destroy() below.
+Yes, that's obviously still false and will be fixed in v3.
 
 > 
-> > +	return 0;
-> > +}
-> ...> +static int hexlin_probe(struct hid_device *hdev,
-> > +			const struct hid_device_id *id)
-> > +{
-> > +	struct hexlin_priv_data *priv;
-> > +	int ret;
-> > +
-> > +	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
-> > +	if (!priv)
-> > +		return -ENOMEM;
-> > +
-> > +	priv->hid_dev = hdev;
-> > +	hid_set_drvdata(hdev, priv);
-> > +
-> > +	mutex_init(&priv->tx_lock);
-> > +
-> > +	ret = hid_parse(hdev);
-> > +	if (ret) {
-> > +		hid_err(hdev, "hid parse failed with %d\n", ret);
-> > +		goto fail_and_free;
-> > +	}
-> > +
-> > +	ret = hid_hw_start(hdev, HID_CONNECT_DRIVER);
-> > +	if (ret) {
-> > +		hid_err(hdev, "hid hw start failed with %d\n", ret);
-> > +		goto fail_and_stop;
-> > +	}
-> > +
-> > +	ret = hid_hw_open(hdev);
-> > +	if (ret) {
-> > +		hid_err(hdev, "hid hw open failed with %d\n", ret);
-> > +		goto fail_and_close;
-> > +	}
-> > +
-> > +	init_completion(&priv->wait_in_report);
-> > +
-> > +	hid_device_io_start(hdev);
-> > +
-> > +	ret = init_hw(priv);
-> > +	if (ret)
-> > +		goto fail_and_close;
-> > +
-> > +	priv->ldev = register_lin(&hdev->dev, &hexlin_ldo);
-> > +	if (IS_ERR_OR_NULL(priv->ldev)) {
-> > +		ret = PTR_ERR(priv->ldev);
-> > +		goto fail_and_close;
-> > +	}
-> > +
-> > +	hid_hw_close(hdev);
-> > +
-> > +	hid_info(hdev, "hexLIN (fw-version: %u) probed\n", priv->fw_version);
-> > +
-> > +	return 0;
-> > +
-> > +fail_and_close:
-> > +	hid_hw_close(hdev);
-> > +fail_and_stop:
-> > +	hid_hw_stop(hdev);
-> > +fail_and_free:
-> > +	mutex_destroy(&priv->tx_lock);
-> > +	return ret;
-> > +}
-> > +
-> > +static void hexlin_remove(struct hid_device *hdev)
-> > +{
-> > +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
-> > +
-> > +	unregister_lin(priv->ldev);
-> > +	hid_hw_stop(hdev);
-> > +	mutex_destroy(&priv->tx_lock);
+> doc reference errors (make refcheckdocs):
 > 
-> It is unusual to destroy a mutex. Why do you do that?
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240502075534.882628-7-christoph.fritz@hexdev.de
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
 > 
 
-Just for code clarity and it should help if someone wants to use
-CONFIG_DEBUG_MUTEXES.
+I'm wondering why my local run of dt_binding_check does not catch this:
 
-To be able to drop the lock/unlock from above, I could add the
-lock/unlock here or just drop the mutex_destroy() completely.
+$ pip3 install dtschema --upgrade
+Requirement already satisfied: dtschema in ./venv/lib/python3.11/site-packages (2024.4)
+Requirement already satisfied: ruamel.yaml>0.15.69 in ./venv/lib/python3.11/site-packages (from dtschema) (0.18.6)
+Requirement already satisfied: jsonschema<4.18,>=4.1.2 in ./venv/lib/python3.11/site-packages (from dtschema) (4.17.3)
+Requirement already satisfied: rfc3987 in ./venv/lib/python3.11/site-packages (from dtschema) (1.3.8)
+Requirement already satisfied: pylibfdt in ./venv/lib/python3.11/site-packages (from dtschema) (1.7.0.post1)
+Requirement already satisfied: attrs>=17.4.0 in ./venv/lib/python3.11/site-packages (from jsonschema<4.18,>=4.1.2->dtschema) (23.2.0)
+Requirement already satisfied: pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0 in ./venv/lib/python3.11/site-packages (from jsonschema<4.18,>=4.1.2->dtschema) (0.20.0)
+Requirement already satisfied: ruamel.yaml.clib>=0.2.7 in ./venv/lib/python3.11/site-packages (from ruamel.yaml>0.15.69->dtschema) (0.2.8)
 
-I'll just drop it in upcoming v3.
+$ git diff
+diff --git a/Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml b/Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml
+index c178eb9be1391..385cbe132258d 100644
+--- a/Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml
++++ b/Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml
+@@ -27,6 +27,6 @@ examples:
+   - |
+     serial {
+         linbus {
+-            compatible = "hexdev,lin-serdev";
++            compatible = "linux,lin-serdev";
+         };
+     };
 
-> > +}
-> ...
-> > +static int __init hexlin_init(void)
-> > +{
-> > +	return hid_register_driver(&hexlin_driver);
-> > +}
-> > +
-> > +static void __exit hexlin_exit(void)
-> > +{
-> > +	hid_unregister_driver(&hexlin_driver);
-> > +}
-> 
-> 
-> 
-> > +
-> > +/*
-> > + * When compiled into the kernel, initialize after the hid bus.
-> > + */
-> > +late_initcall(hexlin_init);
-> 
-> Hmm, why not module_init() then? (And module_hid_driver().)
+$ make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/dtc/dtc.o
+  HOSTCC  scripts/dtc/flattree.o
+  HOSTCC  scripts/dtc/fstree.o
+  HOSTCC  scripts/dtc/data.o
+  HOSTCC  scripts/dtc/livetree.o
+  HOSTCC  scripts/dtc/treesource.o
+  HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/util.o
+  LEX     scripts/dtc/dtc-lexer.lex.c
+  YACC    scripts/dtc/dtc-parser.tab.[ch]
+  HOSTCC  scripts/dtc/dtc-lexer.lex.o
+  HOSTCC  scripts/dtc/dtc-parser.tab.o
+  HOSTLD  scripts/dtc/dtc
+  HOSTCC  scripts/dtc/libfdt/fdt.o
+  HOSTCC  scripts/dtc/libfdt/fdt_ro.o
+  HOSTCC  scripts/dtc/libfdt/fdt_wip.o
+  HOSTCC  scripts/dtc/libfdt/fdt_sw.o
+  HOSTCC  scripts/dtc/libfdt/fdt_rw.o
+  HOSTCC  scripts/dtc/libfdt/fdt_strerror.o
+  HOSTCC  scripts/dtc/libfdt/fdt_empty_tree.o
+  HOSTCC  scripts/dtc/libfdt/fdt_addresses.o
+  HOSTCC  scripts/dtc/libfdt/fdt_overlay.o
+  HOSTCC  scripts/dtc/fdtoverlay.o
+  HOSTLD  scripts/dtc/fdtoverlay
+  LINT    Documentation/devicetree/bindings
+  CHKDT   Documentation/devicetree/bindings/processed-schema.json
+  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+/home/ch/linux/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml: ignoring, error in schema: properties: brcm,tperst-clk-ms: type
+/home/ch/linux/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml: ignoring, error in schema: properties: emcs205,max-state: description
+  DTEX    Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.example.dts
+  DTC_CHK Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.example.dtb
 
-Looking at the other hid drivers and testing with just
+Any ideas?
 
-module_hid_driver(hexlin_driver)
-
-works here fine for compiled into the kernel and as a module.
-
-> 
-> > +module_exit(hexlin_exit);
-> > +
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_AUTHOR("Christoph Fritz <christoph.fritz@hexdev.de>");
-> > +MODULE_DESCRIPTION("LIN bus driver for hexLIN USB adapter");
+I'm using a python venv here, maybe this is related?
 
 Thanks
   -- Christoph
