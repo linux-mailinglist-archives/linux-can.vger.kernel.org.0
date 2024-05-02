@@ -1,61 +1,61 @@
-Return-Path: <linux-can+bounces-528-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-529-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF9AF8B9673
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 10:30:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C9FA8B969F
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 10:44:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E83731C20EF4
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 08:30:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A16D91F2277F
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 08:44:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E641F61C;
-	Thu,  2 May 2024 08:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE3346544;
+	Thu,  2 May 2024 08:44:52 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B05E1F17B;
-	Thu,  2 May 2024 08:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634B146447;
+	Thu,  2 May 2024 08:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714638635; cv=none; b=Zd/XatN94UIY+9b1TQMVnpPNYKr+kbE/Z93ndAfmJ9Hen5v4gue68OPqUfl3B7LfYrLk6iEhRlp6jXwRXht0EUhR7W5no3EnHRk0w5/DTxrxGXidFndtRTYuL4qYAmBIYmYnD8J/VJ7E8wlEeNTzfWsZQWQm86T7CZDOf018/J8=
+	t=1714639492; cv=none; b=hKQrfl81ECkt9px9UfiB+mpfO3uxGvlHn9up4/dWXbD7vk5zD37itlTFu1F1VC+nyHlUfue63u6/j5s65KHOI37fAagw2mdpqDWMIsYjBUnsN/oUTUXW14LzI3K8MADFa+Rc2IW5oN/iwtCs5chNdhLmJBJ2EOFWAhKszzg5g0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714638635; c=relaxed/simple;
-	bh=JhvLdeIFoIVobHMRld9FPEDzk017zSxjlF1PyrnK4bw=;
+	s=arc-20240116; t=1714639492; c=relaxed/simple;
+	bh=+NLHBhZRBYI95WFHsn7dVOTxgbFKRVWzxhhF4X4AOvM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PlNAjh/kql4bKQxNNziLG6sl6i5+g1iAvCEdhzT8jQDKm3745AiksJlf1AWiiGdM2h18N9w9hbSskh8PT3wzItnRMQq4P4EAhTRfU3V8UHOeupy9RXuG5MGR2hjE4mXYHTpyXMhNYzZKgfeMUO3dzP0w1eNtGDLdxOZZN+ZY980=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.42
+	 In-Reply-To:Content-Type; b=hJwL1D3IddKAuNbc1dNiNPZ/qE0gHB/uS6LoXjl2rMSKAsuOiVoly5xQanxulYgamaMFhP6k5lIZ+cEHkaDCxXRQ3qLc3l+EEMfyLQOOyAOjs6pU9Tgzeh8sExZD7Jh5J7woD+098wK/+Omj9I+9Ky99fFbRdQjG71a5LYeX0h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5708d8beec6so9369707a12.0;
-        Thu, 02 May 2024 01:30:33 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a5878caeb9eso924482966b.1;
+        Thu, 02 May 2024 01:44:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714638632; x=1715243432;
+        d=1e100.net; s=20230601; t=1714639489; x=1715244289;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/nqDs8aP0Ox7FEuplQ3aDuJPLYaqPbB8MPDq15KMt80=;
-        b=KnFnEZTnxge0JcClWo9FIxRDdZryAwBCn2ECjBa6knwjpk3v6cdlj7qcUvQf/wQnsM
-         oD+CwsoL89FsS/5c9LkpcXsQVtr9/8IG8J6lBrbj+lQmzN1f1zthOzR9TuUex5FENzAi
-         FQ1nt0yyBZdow/yOLrNXh2C63nDMe+l8IQ0OKH1jiKmjW7YX2UfRzB4c0+InX0KbbJA1
-         LVel8akwiZc+8xan+YjuVMaQWdBq2RcYyq0WmboRXPj0XYN7rfRVSwlQV78fgLtToMBY
-         BcDH7treO99w9N2iB20nn/Lgp0AXtrD2nWXDUcfMT73zPIUiYrU/rgJT36wc+NpczrWv
-         uZEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUaQ1bS+qJAvC7wYntdtimizjgpe51KbsrYlhqCMsCXJLvD6P2Ekl/DQSlzgV80ychGFw3SukUdygpmqgxwdgtozmSTxJ5Cb1OfHHXJSSQNin+pq+jpg/mTOwfCMyyGARgLfyvNvhPIs9qUqyKUckAEDMI7dc8fZs5jdXE2fxZQgth7N2KzQ03AmmFo58HPSXSjnKq2/VfP+RVMtbxPGMO0eiB9RuNsDW+Q3p1YdyVxs+yJZux6//g9
-X-Gm-Message-State: AOJu0Yx44ahGYI4QO3vP8iCTtaA+OR4I9AKYp+pkhnTmSeoOY2M97CDp
-	YL7L3w6hIQlm6M/GL+W/m08Lw5DYeTMbg+cti2AvClaTvsKHUXL5
-X-Google-Smtp-Source: AGHT+IEETnj/81l1N+gAbN1FKpJVqKnmVUPZ1k8ir7VsptrXf1wp0M49h4+sRvcM5Outr3PjKIV7SQ==
-X-Received: by 2002:a50:9ee2:0:b0:56d:fb36:c388 with SMTP id a89-20020a509ee2000000b0056dfb36c388mr1429740edf.9.1714638631645;
-        Thu, 02 May 2024 01:30:31 -0700 (PDT)
+        bh=xyUR0PVRexJrQieSgPDu+6a93eOrFLP5eQgOtFYkWn8=;
+        b=ecsThdGuNOLYxc8lH3dYQ55JZ/L7tWzauZoEt1ebJpmzgXLGviz1AIUMbml/osslLN
+         Dk5KQlcnGHO8f0nbwx8/FXtdYKF6fAkD+ixb/KQnjbfoPl9eehzjuRL3YATZR7yh0BFb
+         KgH2hGAShJYSTgY1sh/zqzuhwl7Ns5EjOhGcGOj4x0tC9boF44HEMPTJW/5cyMg+gjPv
+         1sL8ETHFg+TfBlmUnfPgcg1JfUwYjfxN9X0uUsQHyLiiH0Dl52lz4xTD3ghyK8Uzpzlq
+         EUlIymIRxADrXEeJuDWGGwOhawuzR/qTciP0cWqEK7NKyFQ2O06a7RGr5qMnTEI+UBxO
+         7L0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW4wJSvC3ldYbQR7jBrvaKVegBqYLtjaa12U7W+dmXFIbFVU5QwY1GOn0mog7sYpPCJYhmQvJDPfjc1YxOhViCjmrYeHZWjkHj0krkn0/I5ML1MB/gL/N9W0RFUh7sYgp0plWH2EYFDIC1wikPvtUCxgXiLxdd4pkploTt2lI8i9lPFaAIbBCAMczfQSAHQqur2OhuOI/vb/FfO2a2a8HJVKVnLkrrOMvUYZd+srP59EIXfz/m0TDR1
+X-Gm-Message-State: AOJu0YxojFuaS3dbOZsi9nHnXKfy7pBdD7dB4DvsrL8YFEkYIE9AEEeO
+	ROtZrjYHy8uNSVA0FpfeAbLROLP3Bb+FWUYXK4h+FgLJOtJ0Eh+y
+X-Google-Smtp-Source: AGHT+IGEQIirZ0qBejPyDoJk4QL6GI0vA+1pbCVirhPev7LTDbO1LHmOhOOg/ZWB8jg0YyHzdfb4SA==
+X-Received: by 2002:a17:906:340f:b0:a58:e789:8eb7 with SMTP id c15-20020a170906340f00b00a58e7898eb7mr2958300ejb.74.1714639488468;
+        Thu, 02 May 2024 01:44:48 -0700 (PDT)
 Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:69? ([2a0b:e7c0:0:107::aaaa:69])
-        by smtp.gmail.com with ESMTPSA id q12-20020a50c34c000000b00572459a4ffesm275430edb.56.2024.05.02.01.30.29
+        by smtp.gmail.com with ESMTPSA id og20-20020a1709071dd400b00a5970e88670sm198140ejc.176.2024.05.02.01.44.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 May 2024 01:30:30 -0700 (PDT)
-Message-ID: <acf0251e-41b9-410d-a663-ff6c34d2bc3e@kernel.org>
-Date: Thu, 2 May 2024 10:30:29 +0200
+        Thu, 02 May 2024 01:44:47 -0700 (PDT)
+Message-ID: <6ae3c1af-4368-4a3e-bfb5-366080048dac@kernel.org>
+Date: Thu, 2 May 2024 10:44:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/12] HID: hexLIN: Add support for USB LIN bus adapter
+Subject: Re: [PATCH v2 07/12] can: Add support for serdev LIN adapters
 To: Christoph Fritz <christoph.fritz@hexdev.de>,
  Oliver Hartkopp <socketcan@hartkopp.net>,
  Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -82,7 +82,7 @@ Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>,
  devicetree@vger.kernel.org, linux-input@vger.kernel.org,
  linux-serial@vger.kernel.org
 References: <20240502075534.882628-1-christoph.fritz@hexdev.de>
- <20240502075534.882628-3-christoph.fritz@hexdev.de>
+ <20240502075534.882628-8-christoph.fritz@hexdev.de>
 Content-Language: en-US
 From: Jiri Slaby <jirislaby@kernel.org>
 Autocrypt: addr=jirislaby@kernel.org; keydata=
@@ -127,142 +127,166 @@ Autocrypt: addr=jirislaby@kernel.org; keydata=
  f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
  DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
  S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
-In-Reply-To: <20240502075534.882628-3-christoph.fritz@hexdev.de>
+In-Reply-To: <20240502075534.882628-8-christoph.fritz@hexdev.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 02. 05. 24, 9:55, Christoph Fritz wrote:
-> This patch introduces driver support for the hexLIN USB LIN bus adapter,
-> enabling LIN communication over USB for both controller and responder
-> modes. The driver interfaces with the CAN_LIN framework for userland
-> connectivity.
+> This commit introduces LIN-Bus support for UART devices equipped with
+> LIN transceivers, utilizing the Serial Device Bus (serdev) interface.
 > 
-> For more details on the adapter, visit: https://hexdev.de/hexlin/
-> 
-> Tested-by: Andreas Lauser <andreas.lauser@mercedes-benz.com>
-> Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
+> For more details on an adapter, visit: https://hexdev.de/hexlin#tty
 ...
 > --- /dev/null
-> +++ b/drivers/hid/hid-hexdev-hexlin.c
-> @@ -0,0 +1,630 @@
+> +++ b/drivers/net/can/lin-serdev.c
+> @@ -0,0 +1,514 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/* Copyright (C) 2024 hexDEV GmbH - https://hexdev.de */
+> +
+> +#include <linux/module.h>
+> +#include <linux/wait.h>
+> +#include <linux/init.h>
+> +#include <linux/errno.h>
+> +#include <linux/string.h>
+> +#include <linux/kernel.h>
+
+What do you need kernel.h for? You should explicitly require what you 
+need (you apparently do), so kernel.h should not be needed.
+
+> +#include <net/lin.h>
+> +#include <linux/of.h>
+> +#include <linux/serdev.h>
+> +#include <linux/slab.h>
+> +#include <linux/kfifo.h>
+> +#include <linux/workqueue.h>
+> +#include <linux/tty.h>
+
+Might be eaier to maintain if you sort them.
+
+> +#define LINSER_SAMPLES_PER_CHAR		10
+> +#define LINSER_TX_BUFFER_SIZE		11
+> +#define LINSER_RX_FIFO_SIZE		256
+> +#define LINSER_PARSE_BUFFER		24
+> +
+> +struct linser_rx {
+> +	u8 data;
+> +	u8 flag;
+> +};
+> +
+> +enum linser_rx_status {
+> +	NEED_MORE = -1,
+> +	MODE_OK = 0,
+> +	NEED_FORCE,
+> +};
+> +
+> +struct linser_priv {
+> +	struct lin_device *lin_dev;
+> +	struct serdev_device *serdev;
+> +	DECLARE_KFIFO_PTR(rx_fifo, struct linser_rx);
+> +	struct delayed_work rx_work;
+> +	ulong break_usleep_min;
+> +	ulong break_usleep_max;
+> +	ulong post_break_usleep_min;
+> +	ulong post_break_usleep_max;
+> +	ulong force_timeout_jfs;
+
+The same as for uint :)
+
+> +	struct lin_responder_answer respond_answ[LIN_NUM_IDS];
+> +	struct mutex resp_lock; /* protects respond_answ */
+> +	bool is_stopped;
+> +};
 ...
-> +static int hexlin_stop(struct lin_device *ldev)
+> +static void linser_derive_timings(struct linser_priv *priv, u16 bitrate)
 > +{
-> +	struct hid_device *hdev = to_hid_device(ldev->dev);
-> +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
+> +	unsigned long break_baud = (bitrate * 2) / 3;
+> +	unsigned long timeout_us;
 > +
-> +	hid_hw_close(hdev);
-> +
-> +	priv->is_error = true;
-> +	complete(&priv->wait_in_report);
-> +
-> +	mutex_lock(&priv->tx_lock);
-> +	mutex_unlock(&priv->tx_lock);
 
-This is a weird way to implement a completion. It looks like you need 
-another one.
+Are those 1000000UL USEC_PER_SEC?
 
-> +	return 0;
-> +}
-...> +static int hexlin_probe(struct hid_device *hdev,
-> +			const struct hid_device_id *id)
-> +{
-> +	struct hexlin_priv_data *priv;
-> +	int ret;
+> +	priv->break_usleep_min = (1000000UL * LINSER_SAMPLES_PER_CHAR) /
+> +				 break_baud;
+> +	priv->break_usleep_max = priv->break_usleep_min + 50;
+> +	priv->post_break_usleep_min = (1000000UL * 1 /* 1 bit */) / break_baud;
+> +	priv->post_break_usleep_max = priv->post_break_usleep_min + 30;
 > +
-> +	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->hid_dev = hdev;
-> +	hid_set_drvdata(hdev, priv);
-> +
-> +	mutex_init(&priv->tx_lock);
-> +
-> +	ret = hid_parse(hdev);
-> +	if (ret) {
-> +		hid_err(hdev, "hid parse failed with %d\n", ret);
-> +		goto fail_and_free;
-> +	}
-> +
-> +	ret = hid_hw_start(hdev, HID_CONNECT_DRIVER);
-> +	if (ret) {
-> +		hid_err(hdev, "hid hw start failed with %d\n", ret);
-> +		goto fail_and_stop;
-> +	}
-> +
-> +	ret = hid_hw_open(hdev);
-> +	if (ret) {
-> +		hid_err(hdev, "hid hw open failed with %d\n", ret);
-> +		goto fail_and_close;
-> +	}
-> +
-> +	init_completion(&priv->wait_in_report);
-> +
-> +	hid_device_io_start(hdev);
-> +
-> +	ret = init_hw(priv);
-> +	if (ret)
-> +		goto fail_and_close;
-> +
-> +	priv->ldev = register_lin(&hdev->dev, &hexlin_ldo);
-> +	if (IS_ERR_OR_NULL(priv->ldev)) {
-> +		ret = PTR_ERR(priv->ldev);
-> +		goto fail_and_close;
-> +	}
-> +
-> +	hid_hw_close(hdev);
-> +
-> +	hid_info(hdev, "hexLIN (fw-version: %u) probed\n", priv->fw_version);
-> +
-> +	return 0;
-> +
-> +fail_and_close:
-> +	hid_hw_close(hdev);
-> +fail_and_stop:
-> +	hid_hw_stop(hdev);
-> +fail_and_free:
-> +	mutex_destroy(&priv->tx_lock);
-> +	return ret;
-> +}
-> +
-> +static void hexlin_remove(struct hid_device *hdev)
-> +{
-> +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
-> +
-> +	unregister_lin(priv->ldev);
-> +	hid_hw_stop(hdev);
-> +	mutex_destroy(&priv->tx_lock);
-
-It is unusual to destroy a mutex. Why do you do that?
-
+> +	timeout_us = DIV_ROUND_CLOSEST(1000000UL * 256 /* bit */, bitrate);
+> +	priv->force_timeout_jfs = usecs_to_jiffies(timeout_us);
 > +}
 ...
-> +static int __init hexlin_init(void)
+> +static bool linser_tx_frame_as_responder(struct linser_priv *priv, u8 id)
 > +{
-> +	return hid_register_driver(&hexlin_driver);
+> +	struct lin_responder_answer *answ = &priv->respond_answ[id];
+> +	struct serdev_device *serdev = priv->serdev;
+> +	u8 buf[LINSER_TX_BUFFER_SIZE];
+> +	u8 checksum, count, n;
+> +	ssize_t write_len;
+> +
+> +	mutex_lock(&priv->resp_lock);
+> +
+> +	if (!answ->is_active)
+> +		goto unlock_and_exit_false;
+> +
+> +	if (answ->is_event_frame) {
+> +		struct lin_responder_answer *e_answ;
+> +
+> +		e_answ = &priv->respond_answ[answ->event_associated_id];
+> +		n = min(e_answ->lf.len, LIN_MAX_DLEN);
+> +		if (memcmp(answ->lf.data, e_answ->lf.data, n) != 0) {
+> +			memcpy(answ->lf.data, e_answ->lf.data, n);
+> +			checksum = lin_get_checksum(LIN_FORM_PID(answ->lf.lin_id),
+> +						    n, e_answ->lf.data,
+> +						    answ->lf.checksum_mode);
+> +			answ = e_answ;
+> +		} else {
+> +			goto unlock_and_exit_false;
+
+Can't you simply use guard(mutex) above and avoid the error-prone 
+gotos/cleanup completely?
+
+> +		}
+> +	} else {
+> +		checksum = answ->lf.checksum;
+> +	}
+> +
+> +	count = min(answ->lf.len, LIN_MAX_DLEN);
+> +	memcpy(&buf[0], answ->lf.data, count);
+> +	buf[count] = checksum;
+> +
+> +	mutex_unlock(&priv->resp_lock);
+> +
+> +	write_len = serdev_device_write(serdev, buf, count + 1, 0);
+> +	if (write_len < count + 1)
+> +		return false;
+> +
+> +	serdev_device_wait_until_sent(serdev, 0);
+> +
+> +	return true;
+> +
+> +unlock_and_exit_false:
+> +	mutex_unlock(&priv->resp_lock);
+> +	return false;
 > +}
 > +
-> +static void __exit hexlin_exit(void)
+> +static void linser_pop_fifo(struct linser_priv *priv, size_t n)
 > +{
-> +	hid_unregister_driver(&hexlin_driver);
+> +	struct serdev_device *serdev = priv->serdev;
+> +	struct linser_rx dummy;
+> +	size_t ret, i;
+> +
+> +	for (i = 0; i < n; i++) {
+> +		ret = kfifo_out(&priv->rx_fifo, &dummy, 1);
+
+Does kfifo_skip() not work for records? (I added it recently for serial.)
+
+> +		if (ret != 1) {
+> +			dev_err(&serdev->dev, "Failed to pop from FIFO\n");
+> +			break;
+> +		}
+> +	}
 > +}
 
-
-
-> +
-> +/*
-> + * When compiled into the kernel, initialize after the hid bus.
-> + */
-> +late_initcall(hexlin_init);
-
-Hmm, why not module_init() then? (And module_hid_driver().)
-
-> +module_exit(hexlin_exit);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Christoph Fritz <christoph.fritz@hexdev.de>");
-> +MODULE_DESCRIPTION("LIN bus driver for hexLIN USB adapter");
 
 thanks,
 -- 
