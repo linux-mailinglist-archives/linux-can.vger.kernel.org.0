@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-515-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-517-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2ED08B95B3
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 09:56:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DDB08B95BC
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 09:57:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CAEBFB20D14
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 07:56:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEEEA1C20981
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 07:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F274C24B5B;
-	Thu,  2 May 2024 07:56:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60C5237144;
+	Thu,  2 May 2024 07:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="ig7BB6RC"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="jwtCNtc9"
 X-Original-To: linux-can@vger.kernel.org
 Received: from fritzc.com (mail.fritzc.com [213.160.72.247])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C670200A0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6A22032D;
 	Thu,  2 May 2024 07:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.72.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714636607; cv=none; b=okU7JE7uYZBV4VDjMeiGIiqezvh0GIn9uGWX+2IdRmxaXX3F+Ph5GmCB4wG8SadSv3cSJjDiMic6vz6WT5UDkrPNwQt6JXey4GLxfG2uMQXt3GCFDOrYiFegy/36Z593c+J4VOpoY9mT0UYOQF5BXCypbbMm7M8fW3eUy5czdrQ=
+	t=1714636609; cv=none; b=N50dJ5EEZVfJwtF7IXGPxHiogoNI+WXtll3oNkpMCpCkojtWAmRAtvR1UoiYeq2Xy5E5N1d9sSilQzaT+iAKSYPYNaTVED8i5932LaTo/QXYqiOHK9eBIikVLiLUjQvrz1KebvoUtUr6A97FGXcx5yFsHOxhsJ8eOd6c4JeIcn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714636607; c=relaxed/simple;
-	bh=ZrFdSLcIMeL0Gw5YEaKUCGUEp/+XyImajt9Wq1/xfjE=;
+	s=arc-20240116; t=1714636609; c=relaxed/simple;
+	bh=Tzx1/eWSRHcqk3KBn3lZQgePhYDOso/sqz5cAwscRmg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Hv6kpB3aeLoAS4MIcMCJqW9TTkDwVOUelSYPK10lW9FREcsaft5+2OEemxgPSwth7/ehoI3I2J3yFDN+2C2YWU1oR7xAm9j/pdgXRQNMFOUNo4Axm7a4iW6GQgLyhTJ5Ia+FTGTatZ529uEpV2oO/9htXhMFzVW4VTtjuH2FQJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=ig7BB6RC; arc=none smtp.client-ip=213.160.72.247
+	 MIME-Version; b=WDwlh+45zfycAWrKSZkI6fclTlyCWSe6TPnYNasSHe9CSg8TZ0IQceQ3WblligTQJ29uLQhGZhSW2CYfOFb3NVYI7axQwi8oLOUA351UmHpxkyGwNgjRwOktjw0nVH7fUbl7k1sQWlibBEa6xe5sanrpPBy9G0PvJL7inw7Q3SE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=jwtCNtc9; arc=none smtp.client-ip=213.160.72.247
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hexdev.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
@@ -37,15 +37,15 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=ekCjuw1duvOWVggYCKKNCs0aIF99UZrHoS1CtHiTWfg=; b=ig7BB6RCwLMH866/CZi96QIftI
-	dcIdraX20HU3RrpL/n7DR1l1cNJypVYf0eToJqsGZbWr6+gsmO2S0rR1qf74SYOH7tQRGrqC/ttFT
-	svgoB9oC12687OxMmxGSPvG+7ASwW3Wxv+s2RAQNW/o6yr0YsbVKoyLGTqTnQXXGm6bU=;
+	bh=Snf7mJCYWthVKyp64Q4r3SmYiNCoko04PmFq7ktAJeo=; b=jwtCNtc97I012wkju8IW/6eHTb
+	h7mQJwxgL338t4QIUCBz2yZp4/kHG4RyfTVSvkYvTgDJNZnpXDYLNzf5tlGuxk+E4LzIVY5/PkvH3
+	Id/Juk+jnsBvfuWM+reBR2AsATdvEpchNNFZbDbdkzdl3rRy46wH0fdV0AeS5BtJoZjg=;
 Received: from 127.0.0.1
 	by fritzc.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim latest)
 	(envelope-from <christoph.fritz@hexdev.de>)
-	id 1s2RIx-001Yg7-0R;
-	Thu, 02 May 2024 09:56:35 +0200
+	id 1s2RIy-001Yg7-0s;
+	Thu, 02 May 2024 09:56:36 +0200
 From: Christoph Fritz <christoph.fritz@hexdev.de>
 To: Oliver Hartkopp <socketcan@hartkopp.net>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -71,9 +71,9 @@ Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>,
 	devicetree@vger.kernel.org,
 	linux-input@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: [PATCH v2 03/12] tty: serdev: Add flag buffer aware receive_buf_fp()
-Date: Thu,  2 May 2024 09:55:25 +0200
-Message-Id: <20240502075534.882628-4-christoph.fritz@hexdev.de>
+Subject: [PATCH v2 04/12] tty: serdev: Add method to enable break flags
+Date: Thu,  2 May 2024 09:55:26 +0200
+Message-Id: <20240502075534.882628-5-christoph.fritz@hexdev.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240502075534.882628-1-christoph.fritz@hexdev.de>
 References: <20240502075534.882628-1-christoph.fritz@hexdev.de>
@@ -85,81 +85,96 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch introduces an additional receive buffer callback variation
-besides the already existing receive_buf(). This new callback function
-also passes the flag buffer (TTY_NORMAL, TTY_BREAK, and friends).
-
-If defined, this function gets prioritized and called instead of the
-standard receive_buf().
-
-An alternative approach could have been to enhance the receive_buf()
-function and update all drivers that use it.
+The recently introduced callback function receive_buf_fp() brings flags
+buffer support. To allow signaling of TTY_BREAK flags, this patch
+introduces serdev_device_set_break_detection() and an implementation for
+ttyport. This enables serdev devices to configure their underlying tty
+port to signal or ignore break conditions.
 
 Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
 ---
- drivers/tty/serdev/serdev-ttyport.c |  2 +-
- include/linux/serdev.h              | 17 ++++++++++++++---
- 2 files changed, 15 insertions(+), 4 deletions(-)
+ drivers/tty/serdev/core.c           | 11 +++++++++++
+ drivers/tty/serdev/serdev-ttyport.c | 17 +++++++++++++++++
+ include/linux/serdev.h              |  2 ++
+ 3 files changed, 30 insertions(+)
 
+diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+index 613cb356b918d..23a1e76cb553b 100644
+--- a/drivers/tty/serdev/core.c
++++ b/drivers/tty/serdev/core.c
+@@ -339,6 +339,17 @@ unsigned int serdev_device_set_baudrate(struct serdev_device *serdev, unsigned i
+ }
+ EXPORT_SYMBOL_GPL(serdev_device_set_baudrate);
+ 
++void serdev_device_set_break_detection(struct serdev_device *serdev, bool enable)
++{
++	struct serdev_controller *ctrl = serdev->ctrl;
++
++	if (!ctrl || !ctrl->ops->set_break_detection)
++		return;
++
++	ctrl->ops->set_break_detection(ctrl, enable);
++}
++EXPORT_SYMBOL_GPL(serdev_device_set_break_detection);
++
+ void serdev_device_set_flow_control(struct serdev_device *serdev, bool enable)
+ {
+ 	struct serdev_controller *ctrl = serdev->ctrl;
 diff --git a/drivers/tty/serdev/serdev-ttyport.c b/drivers/tty/serdev/serdev-ttyport.c
-index 3d7ae7fa50186..bb47691afdb21 100644
+index bb47691afdb21..e928bf4175c6f 100644
 --- a/drivers/tty/serdev/serdev-ttyport.c
 +++ b/drivers/tty/serdev/serdev-ttyport.c
-@@ -32,7 +32,7 @@ static size_t ttyport_receive_buf(struct tty_port *port, const u8 *cp,
- 	if (!test_bit(SERPORT_ACTIVE, &serport->flags))
- 		return 0;
+@@ -192,6 +192,22 @@ static void ttyport_set_flow_control(struct serdev_controller *ctrl, bool enable
+ 	tty_set_termios(tty, &ktermios);
+ }
  
--	ret = serdev_controller_receive_buf(ctrl, cp, count);
-+	ret = serdev_controller_receive_buf(ctrl, cp, fp, count);
- 
- 	dev_WARN_ONCE(&ctrl->dev, ret > count,
- 				"receive_buf returns %zu (count = %zu)\n",
++static void ttyport_set_break_detection(struct serdev_controller *ctrl, bool enable)
++{
++	struct serport *serport = serdev_controller_get_drvdata(ctrl);
++	struct tty_struct *tty = serport->tty;
++	struct ktermios ktermios = tty->termios;
++
++	ktermios.c_iflag &= ~(IGNBRK | BRKINT);
++
++	if (enable)
++		ktermios.c_iflag |= BRKINT;
++	else
++		ktermios.c_iflag |= IGNBRK;
++
++	tty_set_termios(tty, &ktermios);
++}
++
+ static int ttyport_set_parity(struct serdev_controller *ctrl,
+ 			      enum serdev_parity parity)
+ {
+@@ -263,6 +279,7 @@ static const struct serdev_controller_ops ctrl_ops = {
+ 	.open = ttyport_open,
+ 	.close = ttyport_close,
+ 	.set_flow_control = ttyport_set_flow_control,
++	.set_break_detection = ttyport_set_break_detection,
+ 	.set_parity = ttyport_set_parity,
+ 	.set_baudrate = ttyport_set_baudrate,
+ 	.wait_until_sent = ttyport_wait_until_sent,
 diff --git a/include/linux/serdev.h b/include/linux/serdev.h
-index ff78efc1f60df..c6ef5a8988e07 100644
+index c6ef5a8988e07..d08aa7e16f9f8 100644
 --- a/include/linux/serdev.h
 +++ b/include/linux/serdev.h
-@@ -23,11 +23,17 @@ struct serdev_device;
-  * struct serdev_device_ops - Callback operations for a serdev device
-  * @receive_buf:	Function called with data received from device;
-  *			returns number of bytes accepted; may sleep.
-+ * @receive_buf_fp:	Function called with data and flag buffer received
-+ *			from device; If defined, this function gets called
-+ *			instead of @receive_buf;
-+ *			returns number of bytes accepted; may sleep.
-  * @write_wakeup:	Function called when ready to transmit more data; must
-  *			not sleep.
-  */
- struct serdev_device_ops {
- 	size_t (*receive_buf)(struct serdev_device *, const u8 *, size_t);
-+	ssize_t (*receive_buf_fp)(struct serdev_device *, const u8 *,
-+				  const u8 *, size_t);
- 	void (*write_wakeup)(struct serdev_device *);
- };
- 
-@@ -186,15 +192,20 @@ static inline void serdev_controller_write_wakeup(struct serdev_controller *ctrl
- }
- 
- static inline size_t serdev_controller_receive_buf(struct serdev_controller *ctrl,
--						   const u8 *data,
-+						   const u8 *data, const u8 *fp,
- 						   size_t count)
- {
- 	struct serdev_device *serdev = ctrl->serdev;
- 
--	if (!serdev || !serdev->ops->receive_buf)
-+	if (!serdev || !serdev->ops)
- 		return 0;
- 
--	return serdev->ops->receive_buf(serdev, data, count);
-+	if (serdev->ops->receive_buf_fp)
-+		return serdev->ops->receive_buf_fp(serdev, data, fp, count);
-+	else if (serdev->ops->receive_buf)
-+		return serdev->ops->receive_buf(serdev, data, count);
-+
-+	return 0;
- }
- 
- #if IS_ENABLED(CONFIG_SERIAL_DEV_BUS)
+@@ -94,6 +94,7 @@ struct serdev_controller_ops {
+ 	int (*open)(struct serdev_controller *);
+ 	void (*close)(struct serdev_controller *);
+ 	void (*set_flow_control)(struct serdev_controller *, bool);
++	void (*set_break_detection)(struct serdev_controller *, bool);
+ 	int (*set_parity)(struct serdev_controller *, enum serdev_parity);
+ 	unsigned int (*set_baudrate)(struct serdev_controller *, unsigned int);
+ 	void (*wait_until_sent)(struct serdev_controller *, long);
+@@ -215,6 +216,7 @@ void serdev_device_close(struct serdev_device *);
+ int devm_serdev_device_open(struct device *, struct serdev_device *);
+ unsigned int serdev_device_set_baudrate(struct serdev_device *, unsigned int);
+ void serdev_device_set_flow_control(struct serdev_device *, bool);
++void serdev_device_set_break_detection(struct serdev_device *, bool);
+ int serdev_device_write_buf(struct serdev_device *, const u8 *, size_t);
+ void serdev_device_wait_until_sent(struct serdev_device *, long);
+ int serdev_device_get_tiocm(struct serdev_device *);
 -- 
 2.39.2
 
