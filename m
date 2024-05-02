@@ -1,61 +1,48 @@
-Return-Path: <linux-can+bounces-529-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-530-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C9FA8B969F
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 10:44:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F10F8B96F1
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 10:56:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A16D91F2277F
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 08:44:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6757280A6C
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 08:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE3346544;
-	Thu,  2 May 2024 08:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3E147A7A;
+	Thu,  2 May 2024 08:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hknD2Fnu"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634B146447;
-	Thu,  2 May 2024 08:44:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222DB25634;
+	Thu,  2 May 2024 08:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714639492; cv=none; b=hKQrfl81ECkt9px9UfiB+mpfO3uxGvlHn9up4/dWXbD7vk5zD37itlTFu1F1VC+nyHlUfue63u6/j5s65KHOI37fAagw2mdpqDWMIsYjBUnsN/oUTUXW14LzI3K8MADFa+Rc2IW5oN/iwtCs5chNdhLmJBJ2EOFWAhKszzg5g0Q=
+	t=1714640187; cv=none; b=QA211F3gS3FunE4ZdcmHzeQdNVlqQgzqgSGlv4jnc7OzW9gjruB98Y/RLTzHWOc4dcircMpAsHqIglJnkHz1/bcwY8kYrJz+kKeNu9VbTJwSWh6ZGcE1X26LmoPWI11rYigLgCPBV3RWH/VgeaLzqqcYjCwcRHNZ3QKhIjEePg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714639492; c=relaxed/simple;
-	bh=+NLHBhZRBYI95WFHsn7dVOTxgbFKRVWzxhhF4X4AOvM=;
+	s=arc-20240116; t=1714640187; c=relaxed/simple;
+	bh=TulJkdXewEmRkua11secujdOUJAHH0C76MI59Dz08DM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hJwL1D3IddKAuNbc1dNiNPZ/qE0gHB/uS6LoXjl2rMSKAsuOiVoly5xQanxulYgamaMFhP6k5lIZ+cEHkaDCxXRQ3qLc3l+EEMfyLQOOyAOjs6pU9Tgzeh8sExZD7Jh5J7woD+098wK/+Omj9I+9Ky99fFbRdQjG71a5LYeX0h0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a5878caeb9eso924482966b.1;
-        Thu, 02 May 2024 01:44:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714639489; x=1715244289;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xyUR0PVRexJrQieSgPDu+6a93eOrFLP5eQgOtFYkWn8=;
-        b=ecsThdGuNOLYxc8lH3dYQ55JZ/L7tWzauZoEt1ebJpmzgXLGviz1AIUMbml/osslLN
-         Dk5KQlcnGHO8f0nbwx8/FXtdYKF6fAkD+ixb/KQnjbfoPl9eehzjuRL3YATZR7yh0BFb
-         KgH2hGAShJYSTgY1sh/zqzuhwl7Ns5EjOhGcGOj4x0tC9boF44HEMPTJW/5cyMg+gjPv
-         1sL8ETHFg+TfBlmUnfPgcg1JfUwYjfxN9X0uUsQHyLiiH0Dl52lz4xTD3ghyK8Uzpzlq
-         EUlIymIRxADrXEeJuDWGGwOhawuzR/qTciP0cWqEK7NKyFQ2O06a7RGr5qMnTEI+UBxO
-         7L0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW4wJSvC3ldYbQR7jBrvaKVegBqYLtjaa12U7W+dmXFIbFVU5QwY1GOn0mog7sYpPCJYhmQvJDPfjc1YxOhViCjmrYeHZWjkHj0krkn0/I5ML1MB/gL/N9W0RFUh7sYgp0plWH2EYFDIC1wikPvtUCxgXiLxdd4pkploTt2lI8i9lPFaAIbBCAMczfQSAHQqur2OhuOI/vb/FfO2a2a8HJVKVnLkrrOMvUYZd+srP59EIXfz/m0TDR1
-X-Gm-Message-State: AOJu0YxojFuaS3dbOZsi9nHnXKfy7pBdD7dB4DvsrL8YFEkYIE9AEEeO
-	ROtZrjYHy8uNSVA0FpfeAbLROLP3Bb+FWUYXK4h+FgLJOtJ0Eh+y
-X-Google-Smtp-Source: AGHT+IGEQIirZ0qBejPyDoJk4QL6GI0vA+1pbCVirhPev7LTDbO1LHmOhOOg/ZWB8jg0YyHzdfb4SA==
-X-Received: by 2002:a17:906:340f:b0:a58:e789:8eb7 with SMTP id c15-20020a170906340f00b00a58e7898eb7mr2958300ejb.74.1714639488468;
-        Thu, 02 May 2024 01:44:48 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:69? ([2a0b:e7c0:0:107::aaaa:69])
-        by smtp.gmail.com with ESMTPSA id og20-20020a1709071dd400b00a5970e88670sm198140ejc.176.2024.05.02.01.44.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 May 2024 01:44:47 -0700 (PDT)
-Message-ID: <6ae3c1af-4368-4a3e-bfb5-366080048dac@kernel.org>
-Date: Thu, 2 May 2024 10:44:46 +0200
+	 In-Reply-To:Content-Type; b=gQJzO53FLAexWTdQhChD79lmxVjJ+nYCapmU03C1NvM1WvJc+zkdHGR064D8T4YG89IcjjBUVU1lq0Iq9qafRgcOzPp0mLdjyQuuc64o4bQewxfxfQY5XhmzonyP+/LEF9DgE3Jt77HzSZXEZkLAOUye84uRYpwVjGYQp51aKzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hknD2Fnu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24070C4AF1B;
+	Thu,  2 May 2024 08:56:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714640186;
+	bh=TulJkdXewEmRkua11secujdOUJAHH0C76MI59Dz08DM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=hknD2FnuorNr2T3aQx1YEkVlB15GDKBYL7zA77V9onwrwCGZBFuECIysHG7gP/Uxm
+	 /h+mYD1eo/y74dnvA2/L5DRuY3t3pj1iAqte4xsk1M+kDi1ofkNn9NR6bS29mLLDHz
+	 mLE57PGIogfmI3I+ezP7ouVSq/Y/l0yOven3n3L3jTQS0E2uJ8RgVR9SvlZXgMdd0y
+	 FD1zpsnXoyTUxWljh1pRLA43BEGCyxAuGToY3BrYzN9b45Q3Ni64I1n7BFNwPiK2JO
+	 faJhr5bUjLdXBlIPEZbkCJrRAZeleFwm3TlOcw6eNy1flukqB9FiVDcupoHhICy+yO
+	 C+D8zE35NA7+Q==
+Message-ID: <a85bc6d9-451e-4225-8a14-79715f6d6872@kernel.org>
+Date: Thu, 2 May 2024 10:56:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -63,7 +50,7 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/12] can: Add support for serdev LIN adapters
+Subject: Re: [PATCH v2 05/12] dt-bindings: vendor-prefixes: Add hexDEV
 To: Christoph Fritz <christoph.fritz@hexdev.de>,
  Oliver Hartkopp <socketcan@hartkopp.net>,
  Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -75,222 +62,91 @@ To: Christoph Fritz <christoph.fritz@hexdev.de>,
  <conor+dt@kernel.org>, Jiri Kosina <jikos@kernel.org>,
  Benjamin Tissoires <bentiss@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sebastian Reichel <sre@kernel.org>, Linus Walleij <linus.walleij@linaro.org>
+ Jiri Slaby <jirislaby@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>
 Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>,
  Jonathan Corbet <corbet@lwn.net>, Pavel Pisa <pisa@cmp.felk.cvut.cz>,
  linux-can@vger.kernel.org, netdev@vger.kernel.org,
  devicetree@vger.kernel.org, linux-input@vger.kernel.org,
  linux-serial@vger.kernel.org
 References: <20240502075534.882628-1-christoph.fritz@hexdev.de>
- <20240502075534.882628-8-christoph.fritz@hexdev.de>
+ <20240502075534.882628-6-christoph.fritz@hexdev.de>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- xsFNBE6S54YBEACzzjLwDUbU5elY4GTg/NdotjA0jyyJtYI86wdKraekbNE0bC4zV+ryvH4j
- rrcDwGs6tFVrAHvdHeIdI07s1iIx5R/ndcHwt4fvI8CL5PzPmn5J+h0WERR5rFprRh6axhOk
- rSD5CwQl19fm4AJCS6A9GJtOoiLpWn2/IbogPc71jQVrupZYYx51rAaHZ0D2KYK/uhfc6neJ
- i0WqPlbtIlIrpvWxckucNu6ZwXjFY0f3qIRg3Vqh5QxPkojGsq9tXVFVLEkSVz6FoqCHrUTx
- wr+aw6qqQVgvT/McQtsI0S66uIkQjzPUrgAEtWUv76rM4ekqL9stHyvTGw0Fjsualwb0Gwdx
- ReTZzMgheAyoy/umIOKrSEpWouVoBt5FFSZUyjuDdlPPYyPav+hpI6ggmCTld3u2hyiHji2H
- cDpcLM2LMhlHBipu80s9anNeZhCANDhbC5E+NZmuwgzHBcan8WC7xsPXPaiZSIm7TKaVoOcL
- 9tE5aN3jQmIlrT7ZUX52Ff/hSdx/JKDP3YMNtt4B0cH6ejIjtqTd+Ge8sSttsnNM0CQUkXps
- w98jwz+Lxw/bKMr3NSnnFpUZaxwji3BC9vYyxKMAwNelBCHEgS/OAa3EJoTfuYOK6wT6nadm
- YqYjwYbZE5V/SwzMbpWu7Jwlvuwyfo5mh7w5iMfnZE+vHFwp/wARAQABzSFKaXJpIFNsYWJ5
- IDxqaXJpc2xhYnlAa2VybmVsLm9yZz7CwXcEEwEIACEFAlW3RUwCGwMFCwkIBwIGFQgJCgsC
- BBYCAwECHgECF4AACgkQvSWxBAa0cEnVTg//TQpdIAr8Tn0VAeUjdVIH9XCFw+cPSU+zMSCH
- eCZoA/N6gitEcnvHoFVVM7b3hK2HgoFUNbmYC0RdcSc80pOF5gCnACSP9XWHGWzeKCARRcQR
- 4s5YD8I4VV5hqXcKo2DFAtIOVbHDW+0okOzcecdasCakUTr7s2fXz97uuoc2gIBB7bmHUGAH
- XQXHvdnCLjDjR+eJN+zrtbqZKYSfj89s/ZHn5Slug6w8qOPT1sVNGG+eWPlc5s7XYhT9z66E
- l5C0rG35JE4PhC+tl7BaE5IwjJlBMHf/cMJxNHAYoQ1hWQCKOfMDQ6bsEr++kGUCbHkrEFwD
- UVA72iLnnnlZCMevwE4hc0zVhseWhPc/KMYObU1sDGqaCesRLkE3tiE7X2cikmj/qH0CoMWe
- gjnwnQ2qVJcaPSzJ4QITvchEQ+tbuVAyvn9H+9MkdT7b7b2OaqYsUP8rn/2k1Td5zknUz7iF
- oJ0Z9wPTl6tDfF8phaMIPISYrhceVOIoL+rWfaikhBulZTIT5ihieY9nQOw6vhOfWkYvv0Dl
- o4GRnb2ybPQpfEs7WtetOsUgiUbfljTgILFw3CsPW8JESOGQc0Pv8ieznIighqPPFz9g+zSu
- Ss/rpcsqag5n9rQp/H3WW5zKUpeYcKGaPDp/vSUovMcjp8USIhzBBrmI7UWAtuedG9prjqfO
- wU0ETpLnhgEQAM+cDWLL+Wvc9cLhA2OXZ/gMmu7NbYKjfth1UyOuBd5emIO+d4RfFM02XFTI
- t4MxwhAryhsKQQcA4iQNldkbyeviYrPKWjLTjRXT5cD2lpWzr+Jx7mX7InV5JOz1Qq+P+nJW
- YIBjUKhI03ux89p58CYil24Zpyn2F5cX7U+inY8lJIBwLPBnc9Z0An/DVnUOD+0wIcYVnZAK
- DiIXODkGqTg3fhZwbbi+KAhtHPFM2fGw2VTUf62IHzV+eBSnamzPOBc1XsJYKRo3FHNeLuS8
- f4wUe7bWb9O66PPFK/RkeqNX6akkFBf9VfrZ1rTEKAyJ2uqf1EI1olYnENk4+00IBa+BavGQ
- 8UW9dGW3nbPrfuOV5UUvbnsSQwj67pSdrBQqilr5N/5H9z7VCDQ0dhuJNtvDSlTf2iUFBqgk
- 3smln31PUYiVPrMP0V4ja0i9qtO/TB01rTfTyXTRtqz53qO5dGsYiliJO5aUmh8swVpotgK4
- /57h3zGsaXO9PGgnnAdqeKVITaFTLY1ISg+Ptb4KoliiOjrBMmQUSJVtkUXMrCMCeuPDGHo7
- 39Xc75lcHlGuM3yEB//htKjyprbLeLf1y4xPyTeeF5zg/0ztRZNKZicgEmxyUNBHHnBKHQxz
- 1j+mzH0HjZZtXjGu2KLJ18G07q0fpz2ZPk2D53Ww39VNI/J9ABEBAAHCwV8EGAECAAkFAk6S
- 54YCGwwACgkQvSWxBAa0cEk3tRAAgO+DFpbyIa4RlnfpcW17AfnpZi9VR5+zr496n2jH/1ld
- wRO/S+QNSA8qdABqMb9WI4BNaoANgcg0AS429Mq0taaWKkAjkkGAT7mD1Q5PiLr06Y/+Kzdr
- 90eUVneqM2TUQQbK+Kh7JwmGVrRGNqQrDk+gRNvKnGwFNeTkTKtJ0P8jYd7P1gZb9Fwj9YLx
- jhn/sVIhNmEBLBoI7PL+9fbILqJPHgAwW35rpnq4f/EYTykbk1sa13Tav6btJ+4QOgbcezWI
- wZ5w/JVfEJW9JXp3BFAVzRQ5nVrrLDAJZ8Y5ioWcm99JtSIIxXxt9FJaGc1Bgsi5K/+dyTKL
- wLMJgiBzbVx8G+fCJJ9YtlNOPWhbKPlrQ8+AY52Aagi9WNhe6XfJdh5g6ptiOILm330mkR4g
- W6nEgZVyIyTq3ekOuruftWL99qpP5zi+eNrMmLRQx9iecDNgFr342R9bTDlb1TLuRb+/tJ98
- f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
- DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
- S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
-In-Reply-To: <20240502075534.882628-8-christoph.fritz@hexdev.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240502075534.882628-6-christoph.fritz@hexdev.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 02. 05. 24, 9:55, Christoph Fritz wrote:
-> This commit introduces LIN-Bus support for UART devices equipped with
-> LIN transceivers, utilizing the Serial Device Bus (serdev) interface.
+On 02/05/2024 09:55, Christoph Fritz wrote:
+> Add vendor prefix for hexDEV GmbH. Website: https://hexdev.de
 > 
-> For more details on an adapter, visit: https://hexdev.de/hexlin#tty
-...
-> --- /dev/null
-> +++ b/drivers/net/can/lin-serdev.c
-> @@ -0,0 +1,514 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/* Copyright (C) 2024 hexDEV GmbH - https://hexdev.de */
-> +
-> +#include <linux/module.h>
-> +#include <linux/wait.h>
-> +#include <linux/init.h>
-> +#include <linux/errno.h>
-> +#include <linux/string.h>
-> +#include <linux/kernel.h>
+> Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
+> ---
 
-What do you need kernel.h for? You should explicitly require what you 
-need (you apparently do), so kernel.h should not be needed.
-
-> +#include <net/lin.h>
-> +#include <linux/of.h>
-> +#include <linux/serdev.h>
-> +#include <linux/slab.h>
-> +#include <linux/kfifo.h>
-> +#include <linux/workqueue.h>
-> +#include <linux/tty.h>
-
-Might be eaier to maintain if you sort them.
-
-> +#define LINSER_SAMPLES_PER_CHAR		10
-> +#define LINSER_TX_BUFFER_SIZE		11
-> +#define LINSER_RX_FIFO_SIZE		256
-> +#define LINSER_PARSE_BUFFER		24
-> +
-> +struct linser_rx {
-> +	u8 data;
-> +	u8 flag;
-> +};
-> +
-> +enum linser_rx_status {
-> +	NEED_MORE = -1,
-> +	MODE_OK = 0,
-> +	NEED_FORCE,
-> +};
-> +
-> +struct linser_priv {
-> +	struct lin_device *lin_dev;
-> +	struct serdev_device *serdev;
-> +	DECLARE_KFIFO_PTR(rx_fifo, struct linser_rx);
-> +	struct delayed_work rx_work;
-> +	ulong break_usleep_min;
-> +	ulong break_usleep_max;
-> +	ulong post_break_usleep_min;
-> +	ulong post_break_usleep_max;
-> +	ulong force_timeout_jfs;
-
-The same as for uint :)
-
-> +	struct lin_responder_answer respond_answ[LIN_NUM_IDS];
-> +	struct mutex resp_lock; /* protects respond_answ */
-> +	bool is_stopped;
-> +};
-...
-> +static void linser_derive_timings(struct linser_priv *priv, u16 bitrate)
-> +{
-> +	unsigned long break_baud = (bitrate * 2) / 3;
-> +	unsigned long timeout_us;
-> +
-
-Are those 1000000UL USEC_PER_SEC?
-
-> +	priv->break_usleep_min = (1000000UL * LINSER_SAMPLES_PER_CHAR) /
-> +				 break_baud;
-> +	priv->break_usleep_max = priv->break_usleep_min + 50;
-> +	priv->post_break_usleep_min = (1000000UL * 1 /* 1 bit */) / break_baud;
-> +	priv->post_break_usleep_max = priv->post_break_usleep_min + 30;
-> +
-> +	timeout_us = DIV_ROUND_CLOSEST(1000000UL * 256 /* bit */, bitrate);
-> +	priv->force_timeout_jfs = usecs_to_jiffies(timeout_us);
-> +}
-...
-> +static bool linser_tx_frame_as_responder(struct linser_priv *priv, u8 id)
-> +{
-> +	struct lin_responder_answer *answ = &priv->respond_answ[id];
-> +	struct serdev_device *serdev = priv->serdev;
-> +	u8 buf[LINSER_TX_BUFFER_SIZE];
-> +	u8 checksum, count, n;
-> +	ssize_t write_len;
-> +
-> +	mutex_lock(&priv->resp_lock);
-> +
-> +	if (!answ->is_active)
-> +		goto unlock_and_exit_false;
-> +
-> +	if (answ->is_event_frame) {
-> +		struct lin_responder_answer *e_answ;
-> +
-> +		e_answ = &priv->respond_answ[answ->event_associated_id];
-> +		n = min(e_answ->lf.len, LIN_MAX_DLEN);
-> +		if (memcmp(answ->lf.data, e_answ->lf.data, n) != 0) {
-> +			memcpy(answ->lf.data, e_answ->lf.data, n);
-> +			checksum = lin_get_checksum(LIN_FORM_PID(answ->lf.lin_id),
-> +						    n, e_answ->lf.data,
-> +						    answ->lf.checksum_mode);
-> +			answ = e_answ;
-> +		} else {
-> +			goto unlock_and_exit_false;
-
-Can't you simply use guard(mutex) above and avoid the error-prone 
-gotos/cleanup completely?
-
-> +		}
-> +	} else {
-> +		checksum = answ->lf.checksum;
-> +	}
-> +
-> +	count = min(answ->lf.len, LIN_MAX_DLEN);
-> +	memcpy(&buf[0], answ->lf.data, count);
-> +	buf[count] = checksum;
-> +
-> +	mutex_unlock(&priv->resp_lock);
-> +
-> +	write_len = serdev_device_write(serdev, buf, count + 1, 0);
-> +	if (write_len < count + 1)
-> +		return false;
-> +
-> +	serdev_device_wait_until_sent(serdev, 0);
-> +
-> +	return true;
-> +
-> +unlock_and_exit_false:
-> +	mutex_unlock(&priv->resp_lock);
-> +	return false;
-> +}
-> +
-> +static void linser_pop_fifo(struct linser_priv *priv, size_t n)
-> +{
-> +	struct serdev_device *serdev = priv->serdev;
-> +	struct linser_rx dummy;
-> +	size_t ret, i;
-> +
-> +	for (i = 0; i < n; i++) {
-> +		ret = kfifo_out(&priv->rx_fifo, &dummy, 1);
-
-Does kfifo_skip() not work for records? (I added it recently for serial.)
-
-> +		if (ret != 1) {
-> +			dev_err(&serdev->dev, "Failed to pop from FIFO\n");
-> +			break;
-> +		}
-> +	}
-> +}
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
-thanks,
--- 
-js
-suse labs
+
+---
+
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you know the process, you can skip it (please do
+not feel offended by me posting it here - no bad intentions intended).
+If you do not know the process, here is a short explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+
+Best regards,
+Krzysztof
 
 
