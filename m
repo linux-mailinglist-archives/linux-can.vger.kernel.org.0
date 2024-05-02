@@ -1,48 +1,48 @@
-Return-Path: <linux-can+bounces-530-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-531-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F10F8B96F1
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 10:56:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 339C98B970D
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 11:01:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6757280A6C
-	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 08:56:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F550B20F1D
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 09:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3E147A7A;
-	Thu,  2 May 2024 08:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18D9950291;
+	Thu,  2 May 2024 09:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hknD2Fnu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EpdCii1w"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222DB25634;
-	Thu,  2 May 2024 08:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D384647772;
+	Thu,  2 May 2024 09:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714640187; cv=none; b=QA211F3gS3FunE4ZdcmHzeQdNVlqQgzqgSGlv4jnc7OzW9gjruB98Y/RLTzHWOc4dcircMpAsHqIglJnkHz1/bcwY8kYrJz+kKeNu9VbTJwSWh6ZGcE1X26LmoPWI11rYigLgCPBV3RWH/VgeaLzqqcYjCwcRHNZ3QKhIjEePg0=
+	t=1714640489; cv=none; b=XLC+YmDvnaL/tlDdCB+EPoeeJurHRKdqJvPAHcgOX1P+06GnuS0cBqmgvapfooI6qwtalPCpa/508bEQTtW9/vd7SpPmV4Q9k+FxYYgCAG54GNMhZAuOaqjE/ts/YIadIQl+iaSBGCGIq5WEGSM9m6fuRxWWX/Uc3wiwmLlrdo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714640187; c=relaxed/simple;
-	bh=TulJkdXewEmRkua11secujdOUJAHH0C76MI59Dz08DM=;
+	s=arc-20240116; t=1714640489; c=relaxed/simple;
+	bh=x30V454GNv9VD+1ZTgjfWBiPNDBnn7aNwiLl+GMPeDc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gQJzO53FLAexWTdQhChD79lmxVjJ+nYCapmU03C1NvM1WvJc+zkdHGR064D8T4YG89IcjjBUVU1lq0Iq9qafRgcOzPp0mLdjyQuuc64o4bQewxfxfQY5XhmzonyP+/LEF9DgE3Jt77HzSZXEZkLAOUye84uRYpwVjGYQp51aKzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hknD2Fnu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24070C4AF1B;
-	Thu,  2 May 2024 08:56:18 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=epCaBKLU41+cT+m6o4HEEuIEZlmKD//4WhNzP7O6EkCh5l+v0L05H3UOXo/6lPTd4TjjOpzTXZTZ7COKiA9RnLv1puD3m4+BxFaawhmfNSTBOkCBHRqjNhSGRnw8eLlv41BVnBItMYJ756KkP550D9+cjBLjEuq5WXFJeKehI4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EpdCii1w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9448DC113CC;
+	Thu,  2 May 2024 09:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714640186;
-	bh=TulJkdXewEmRkua11secujdOUJAHH0C76MI59Dz08DM=;
+	s=k20201202; t=1714640488;
+	bh=x30V454GNv9VD+1ZTgjfWBiPNDBnn7aNwiLl+GMPeDc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hknD2FnuorNr2T3aQx1YEkVlB15GDKBYL7zA77V9onwrwCGZBFuECIysHG7gP/Uxm
-	 /h+mYD1eo/y74dnvA2/L5DRuY3t3pj1iAqte4xsk1M+kDi1ofkNn9NR6bS29mLLDHz
-	 mLE57PGIogfmI3I+ezP7ouVSq/Y/l0yOven3n3L3jTQS0E2uJ8RgVR9SvlZXgMdd0y
-	 FD1zpsnXoyTUxWljh1pRLA43BEGCyxAuGToY3BrYzN9b45Q3Ni64I1n7BFNwPiK2JO
-	 faJhr5bUjLdXBlIPEZbkCJrRAZeleFwm3TlOcw6eNy1flukqB9FiVDcupoHhICy+yO
-	 C+D8zE35NA7+Q==
-Message-ID: <a85bc6d9-451e-4225-8a14-79715f6d6872@kernel.org>
-Date: Thu, 2 May 2024 10:56:17 +0200
+	b=EpdCii1wnyZqRjAmOIyHSSDKE0OQcG4lTmm0PB3M57zSF4L4M6TXA95dU0xl5nD5m
+	 5mgb6iMVS5t5L8hC0zTbAdBlox5LQ+R8XPsts3ZAS2edtIk6tg8nD7uoE48jJD2e50
+	 IS+ZDPzeTYJ0OIe2R9hif6tW0ipPOOMOQspPr2B4iU8N0TfpMZy+T6zJB0WxNrXypj
+	 88kXJrMEJ2LB6GEEG+pdZ8aqSzzu1kpLy2RaYDM6IWdh0LlFpoYJTgRRS8prt9k7fG
+	 0cO5qadsQwNBnNzNnbo2IFWbDzBJbo2LlYcCEnU9gCZsgvfo7lbwQYExUQ10+Tfukh
+	 8iwhHhLjzlfAA==
+Message-ID: <3f76bc8e-deee-4684-aef7-36be193cf38c@kernel.org>
+Date: Thu, 2 May 2024 11:01:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 05/12] dt-bindings: vendor-prefixes: Add hexDEV
+Subject: Re: [PATCH v2 06/12] dt-bindings: net/can: Add serial (serdev) LIN
+ adapter
 To: Christoph Fritz <christoph.fritz@hexdev.de>,
  Oliver Hartkopp <socketcan@hartkopp.net>,
  Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -70,7 +71,7 @@ Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>,
  devicetree@vger.kernel.org, linux-input@vger.kernel.org,
  linux-serial@vger.kernel.org
 References: <20240502075534.882628-1-christoph.fritz@hexdev.de>
- <20240502075534.882628-6-christoph.fritz@hexdev.de>
+ <20240502075534.882628-7-christoph.fritz@hexdev.de>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -116,35 +117,36 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240502075534.882628-6-christoph.fritz@hexdev.de>
+In-Reply-To: <20240502075534.882628-7-christoph.fritz@hexdev.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/05/2024 09:55, Christoph Fritz wrote:
-> Add vendor prefix for hexDEV GmbH. Website: https://hexdev.de
+> This patch adds dt-bindings for serial LIN bus adapters. These adapters are
+
+Please do not use "This commit/patch/change", but imperative mood. See
+longer explanation here:
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
+> basically just LIN transceivers that get hard-wired with serial devices.
 > 
 > Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
-> ---
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+...
 
+> +maintainers:
+> +  - Christoph Fritz <christoph.fritz@hexdev.de>
+> +
+> +properties:
+> +  compatible:
+> +    const: hexdev,lin-serdev
+> +
+> +required:
+> +  - compatible
+> +
+> +unevaluatedProperties: false
 
-
----
-
-This is an automated instruction, just in case, because many review tags
-are being ignored. If you know the process, you can skip it (please do
-not feel offended by me posting it here - no bad intentions intended).
-If you do not know the process, here is a short explanation:
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+This must be additionalProperties: false.
 
 Best regards,
 Krzysztof
