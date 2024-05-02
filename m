@@ -1,333 +1,193 @@
-Return-Path: <linux-can+bounces-513-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-514-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FD4F8B8A32
-	for <lists+linux-can@lfdr.de>; Wed,  1 May 2024 14:42:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CC728B9437
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 07:27:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 438911C2199E
-	for <lists+linux-can@lfdr.de>; Wed,  1 May 2024 12:42:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E8FA1C21121
+	for <lists+linux-can@lfdr.de>; Thu,  2 May 2024 05:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF4951C30;
-	Wed,  1 May 2024 12:42:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B4BB1F95A;
+	Thu,  2 May 2024 05:27:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="kkafn2+E"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="UJCR0hkD"
 X-Original-To: linux-can@vger.kernel.org
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+Received: from fritzc.com (mail.fritzc.com [213.160.72.247])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D3C3FB3B;
-	Wed,  1 May 2024 12:42:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49ADA1CA81;
+	Thu,  2 May 2024 05:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.72.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714567361; cv=none; b=ETCqamoBl0ZV1dbsfmlKwSmfmeIgwX3ozHqymIuzUitqktVypdEK5Ct6JMnTu4/+5r5eDfYDVO+QgmUlqaLVNTkT6+HHlgRlW59QkJ22TsFtdRvfJwPGnXxlFN4L84B7pxTXBmySfdlc4lfKkO7ewIXOnHCRi+mTl7pcA5kV1xs=
+	t=1714627648; cv=none; b=iLcYAgyqKNARERkmNTbUyqIDaH+BuWG3/qBza3c+9n7Xaj/9enKurOEvBphOQ50cnP3gfPDv7te4CHpu0DZWzXi6PD7tMkslQ9yJp1sy35tlw+T3EDOPVQVmlKgJIp/v3UG+VH9MsWTRvkfiLns2QU9CUXfcDwAg7mAZw+zkg14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714567361; c=relaxed/simple;
-	bh=2mvWFwvnyhiO7gdd/5IqYXs8PhYFwr04k79cjJMP0R0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gO6aIh/0OMGWag/DH+W0YMV7nj9ATv7bN4e96OW+uU7mQxFF7myGzoh/yM51WSP+7QMqqHoFpXOM6IgWkSCpwoYzGoPn/EpH8wwlwZIcTp2eN1EnFzOSGLJ56dNrU1pFiL0SI15sImQl0as5tjpX0VFrmS6G4uvzuuT7MqOQE4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=kkafn2+E; arc=none smtp.client-ip=188.40.30.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-	s=default2211; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	s=arc-20240116; t=1714627648; c=relaxed/simple;
+	bh=ftHzH9qvJa3de0MGd82tHpZ8K22GEeMdMaS34WhIAiU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hbdwWQwKTsF4fTdG1OiijVO42PWmTK8b0MmHYNoZiY0/u2k5jHRsr1Z3dOC422mv6JJge7kyCvfiY1wQGnP5DzgAAvY8hSzNmL+FCY8oX9+O4lRV2WLDdbmjokS2i0HZgp6FS8eGjTq0D2qm/jlg9oqPNtNzC+9mQViPvCVIfJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=UJCR0hkD; arc=none smtp.client-ip=213.160.72.247
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hexdev.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
+	s=dkim; h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:Reply-To:From:Subject:Message-ID:Sender:Content-ID:
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=PsJ1bUtExedTmewh63dJJIGm2USLf/ue8T14sDod4hg=; b=kkafn2+EnftqzxAnWp5SbpbsHJ
-	0dIcHeBNGNGkLlTjpQWgpFvjtxlT7OnM/4ZByzc5Qh+N2c++VFIOlgYkkYx2R/7RSNliwkZDXUuWo
-	etJjyGLAYEn1xX7mw3bIGtaopjyLaGKu4Tghu/UOpN5/eKo+huol8gkIFAX/DGukqQnssIJeWgdl4
-	OMwiYYZqkqcGkoaOEQWdO8MfYLBEhD9FZVTecrrbTCYsUx/9IYtAXhtoH/XY08cCPRT8bEDR2bIX3
-	G7Zj44bBoipI08dvtE+6B1N2Fug8upm0vJMxw3mc6sRYEqh30//l3ZXH767rk+DF+2aI7jUXg1Fpk
-	cvwYMe5w==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <martin@geanix.com>)
-	id 1s29I5-00007M-D6; Wed, 01 May 2024 14:42:29 +0200
-Received: from [185.17.218.86] (helo=zen..)
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <martin@geanix.com>)
-	id 1s29I4-00Fdis-2R;
-	Wed, 01 May 2024 14:42:28 +0200
-From: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
-To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Markus Schneider-Pargmann <msp@baylibre.com>,
-	=?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] can: m_can: don't enable transceiver when probing
-Date: Wed,  1 May 2024 14:42:03 +0200
-Message-ID: <20240501124204.3545056-1-martin@geanix.com>
-X-Mailer: git-send-email 2.44.0
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=iw9sb5bPm/obi3rgls3+3/4K0A0MuMZb4NR+Kz+bqj0=; b=UJCR0hkDNdfxATyaw5BU3n50vf
+	LphM+CQi668+Gn1auChFaligiaHZoThnzPncO/8TioOmvKhqkIbAUNFTdT1TKvKfRy38ufnVVwoiR
+	JqIZea/fWsEufV4vr/rJVO7A54QkB8nM0dT8OVu7PSUMrMKyl2x5N6JeMPXdnkc8eb6A=;
+Received: from 127.0.0.1
+	by fritzc.com with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim latest)
+	(envelope-from <christoph.fritz@hexdev.de>)
+	id 1s2OyD-001YZ2-2d;
+	Thu, 02 May 2024 07:27:02 +0200
+Message-ID: <77d0b2c62aad02c7c6f291676673b672ab35528a.camel@hexdev.de>
+Subject: Re: [PATCH 05/11] dt-bindings: net: can: Add serdev LIN bus dt
+ bindings
+From: Christoph Fritz <christoph.fritz@hexdev.de>
+Reply-To: christoph.fritz@hexdev.de
+To: Krzysztof Kozlowski <krzk@kernel.org>, Oliver Hartkopp
+ <socketcan@hartkopp.net>, Marc Kleine-Budde <mkl@pengutronix.de>, Vincent
+ Mailhol <mailhol.vincent@wanadoo.fr>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
+ <bentiss@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri
+ Slaby <jirislaby@kernel.org>
+Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>, Jonathan Corbet
+	 <corbet@lwn.net>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-serial@vger.kernel.org
+Date: Thu, 02 May 2024 07:26:59 +0200
+In-Reply-To: <784d78a8-3809-4a53-a9f2-7d9682b82c58@kernel.org>
+References: <20240422065114.3185505-1-christoph.fritz@hexdev.de>
+	 <20240422065114.3185505-6-christoph.fritz@hexdev.de>
+	 <784d78a8-3809-4a53-a9f2-7d9682b82c58@kernel.org>
+Organization: hexDEV GmbH
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: martin@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27262/Wed May  1 10:22:56 2024)
+Content-Transfer-Encoding: 7bit
 
-The m_can driver sets and clears the CCCR.INIT bit during probe (both
-when testing the NON-ISO bit, and when configuring the chip). After
-clearing the CCCR.INIT bit, the transceiver enters normal mode, where it
-affects the CAN bus (i.e. it ACKs frames). This can cause troubles when
-the m_can node is only used for monitoring the bus, as one cannot setup
-listen-only mode before the device is probed.
+Hello Krzysztof,
 
-Rework the probe flow, so that the CCCR.INIT bit is only cleared when
-upping the device. First, the tcan4x5x driver is changed to stay in
-standby mode during/after probe. This in turn requires changes when
-setting bits in the CCCR register, as its CSR and CSA bits are always
-high in standby mode.
+ thanks for your feedback, please see my answers below.
 
-Signed-off-by: Martin Hundebøll <martin@geanix.com>
----
+On Mon, 2024-04-22 at 09:54 +0200, Krzysztof Kozlowski wrote:
+> On 22/04/2024 08:51, Christoph Fritz wrote:
+> > Add documentation of device tree bindings for serdev UART LIN-Bus
+> > devices equipped with LIN transceivers.
+> 
+> A nit, subject: drop second/last, redundant "dt bindings". The
+> "dt-bindings" prefix is already stating that these are bindings.
+> See also:
+> https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
 
-Changes since v1:
- * Implement Markus review comments:
-   - Rename m_can_cccr_wait_bits() to m_can_cccr_update_bits()
-   - Explicitly set CCCR_INIT bit in m_can_dev_setup()
-   - Revert to 5 timeouts/tries to 10
-   - Use m_can_config_{en|dis}able() in m_can_niso_supported()
-   - Revert move of call to m_can_enable_all_interrupts()
-   - Return -EBUSY on failure to enter normal mode
-   - Use tcan4x5x_clear_interrupts() in tcan4x5x_can_probe()
+OK
 
- drivers/net/can/m_can/m_can.c         | 131 +++++++++++++++-----------
- drivers/net/can/m_can/tcan4x5x-core.c |  13 ++-
- 2 files changed, 85 insertions(+), 59 deletions(-)
+> 
+> > 
+> > Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
+> > ---
+> >  .../bindings/net/can/linux,lin-serdev.yaml    | 29 +++++++++++++++++++
+> >  1 file changed, 29 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/net/can/linux,lin-serdev.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/can/linux,lin-serdev.yaml b/Documentation/devicetree/bindings/net/can/linux,lin-serdev.yaml
+> > new file mode 100644
+> > index 0000000000000..cb4e932ff249c
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/can/linux,lin-serdev.yaml
+> > @@ -0,0 +1,29 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/can/linux,lin-serdev.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Linux serdev LIN-Bus Support
+> 
+> This looks like Linux binding, but we expect here description of hardware.
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 14b231c4d7ec..7974aaa5d8cc 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -379,38 +379,60 @@ m_can_txe_fifo_read(struct m_can_classdev *cdev, u32 fgi, u32 offset, u32 *val)
- 	return cdev->ops->read_fifo(cdev, addr_offset, val, 1);
- }
- 
--static void m_can_config_endisable(struct m_can_classdev *cdev, bool enable)
-+static bool m_can_cccr_update_bits(struct m_can_classdev *cdev, u32 mask, u32 val)
- {
--	u32 cccr = m_can_read(cdev, M_CAN_CCCR);
--	u32 timeout = 10;
--	u32 val = 0;
--
--	/* Clear the Clock stop request if it was set */
--	if (cccr & CCCR_CSR)
--		cccr &= ~CCCR_CSR;
--
--	if (enable) {
--		/* enable m_can configuration */
--		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT);
--		udelay(5);
--		/* CCCR.CCE can only be set/reset while CCCR.INIT = '1' */
--		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT | CCCR_CCE);
--	} else {
--		m_can_write(cdev, M_CAN_CCCR, cccr & ~(CCCR_INIT | CCCR_CCE));
--	}
-+	u32 val_before = m_can_read(cdev, M_CAN_CCCR);
-+	u32 val_after = (val_before & ~mask) | val;
-+	size_t tries = 10;
-+
-+	if (!(mask & CCCR_INIT) && !(val_before & CCCR_INIT))
-+		dev_warn(cdev->dev,
-+			 "trying to configure device when in normal mode. Expect failures\n");
-+
-+	/* The chip should be in standby mode when changing the CCCR register,
-+	 * and some chips set the CSR and CSA bits when in standby. Furthermore,
-+	 * the CSR and CSA bits should be written as zeros, even when they read
-+	 * ones.
-+	 */
-+	val_after &= ~(CCCR_CSR | CCCR_CSA);
-+
-+	while (tries--) {
-+		u32 val_read;
-+
-+		/* Write the desired value in each try, as setting some bits in
-+		 * the CCCR register require other bits to be set first. E.g.
-+		 * setting the NISO bit requires setting the CCE bit first.
-+		 */
-+		m_can_write(cdev, M_CAN_CCCR, val_after);
-+
-+		val_read = m_can_read(cdev, M_CAN_CCCR) & ~(CCCR_CSR | CCCR_CSA);
- 
--	/* there's a delay for module initialization */
--	if (enable)
--		val = CCCR_INIT | CCCR_CCE;
--
--	while ((m_can_read(cdev, M_CAN_CCCR) & (CCCR_INIT | CCCR_CCE)) != val) {
--		if (timeout == 0) {
--			netdev_warn(cdev->net, "Failed to init module\n");
--			return;
--		}
--		timeout--;
--		udelay(1);
-+		if (val_read == val_after)
-+			return true;
-+
-+		usleep_range(1, 5);
- 	}
-+
-+	return false;
-+}
-+
-+static void m_can_config_enable(struct m_can_classdev *cdev)
-+{
-+	/* CCCR_INIT must be set in order to set CCCR_CCE, but access to
-+	 * configuration registers should only be enabled when in standby mode,
-+	 * where CCCR_INIT is always set.
-+	 */
-+	if (!m_can_cccr_update_bits(cdev, CCCR_CCE, CCCR_CCE))
-+		netdev_err(cdev->net, "failed to enable configuration mode\n");
-+}
-+
-+static void m_can_config_disable(struct m_can_classdev *cdev)
-+{
-+	/* Only clear CCCR_CCE, since CCCR_INIT cannot be cleared while in
-+	 * standby mode
-+	 */
-+	if (!m_can_cccr_update_bits(cdev, CCCR_CCE, 0))
-+		netdev_err(cdev->net, "failed to disable configuration registers\n");
- }
- 
- static void m_can_interrupt_enable(struct m_can_classdev *cdev, u32 interrupts)
-@@ -1403,7 +1425,7 @@ static int m_can_chip_config(struct net_device *dev)
- 	interrupts &= ~(IR_ARA | IR_ELO | IR_DRX | IR_TEFF | IR_TFE | IR_TCF |
- 			IR_HPM | IR_RF1F | IR_RF1W | IR_RF1N | IR_RF0F);
- 
--	m_can_config_endisable(cdev, true);
-+	m_can_config_enable(cdev);
- 
- 	/* RX Buffer/FIFO Element Size 64 bytes data field */
- 	m_can_write(cdev, M_CAN_RXESC,
-@@ -1521,7 +1543,7 @@ static int m_can_chip_config(struct net_device *dev)
- 		    FIELD_PREP(TSCC_TCP_MASK, 0xf) |
- 		    FIELD_PREP(TSCC_TSS_MASK, TSCC_TSS_INTERNAL));
- 
--	m_can_config_endisable(cdev, false);
-+	m_can_config_disable(cdev);
- 
- 	if (cdev->ops->init)
- 		cdev->ops->init(cdev);
-@@ -1550,6 +1572,11 @@ static int m_can_start(struct net_device *dev)
- 		cdev->tx_fifo_putidx = FIELD_GET(TXFQS_TFQPI_MASK,
- 						 m_can_read(cdev, M_CAN_TXFQS));
- 
-+	if (!m_can_cccr_update_bits(cdev, CCCR_INIT, 0)) {
-+		netdev_err(dev, "failed to enter normal mode\n");
-+		return -EBUSY;
-+	}
-+
- 	return 0;
- }
- 
-@@ -1603,33 +1630,20 @@ static int m_can_check_core_release(struct m_can_classdev *cdev)
-  */
- static bool m_can_niso_supported(struct m_can_classdev *cdev)
- {
--	u32 cccr_reg, cccr_poll = 0;
--	int niso_timeout = -ETIMEDOUT;
--	int i;
-+	bool niso_supported;
- 
--	m_can_config_endisable(cdev, true);
--	cccr_reg = m_can_read(cdev, M_CAN_CCCR);
--	cccr_reg |= CCCR_NISO;
--	m_can_write(cdev, M_CAN_CCCR, cccr_reg);
-+	m_can_config_enable(cdev);
- 
--	for (i = 0; i <= 10; i++) {
--		cccr_poll = m_can_read(cdev, M_CAN_CCCR);
--		if (cccr_poll == cccr_reg) {
--			niso_timeout = 0;
--			break;
--		}
-+	/* First try to set the NISO bit. */
-+	niso_supported = m_can_cccr_update_bits(cdev, CCCR_NISO, CCCR_NISO);
- 
--		usleep_range(1, 5);
--	}
-+	/* Then clear the it again. */
-+	if (!m_can_cccr_update_bits(cdev, CCCR_NISO, 0))
-+		dev_err(cdev->dev, "failed to revert the NON-ISO bit in CCCR\n");
- 
--	/* Clear NISO */
--	cccr_reg &= ~(CCCR_NISO);
--	m_can_write(cdev, M_CAN_CCCR, cccr_reg);
-+	m_can_config_disable(cdev);
- 
--	m_can_config_endisable(cdev, false);
--
--	/* return false if time out (-ETIMEDOUT), else return true */
--	return !niso_timeout;
-+	return niso_supported;
- }
- 
- static int m_can_dev_setup(struct m_can_classdev *cdev)
-@@ -1694,8 +1708,12 @@ static int m_can_dev_setup(struct m_can_classdev *cdev)
- 		return -EINVAL;
- 	}
- 
--	if (cdev->ops->init)
--		cdev->ops->init(cdev);
-+	/* Forcing standby mode should be redunant, as the chip should be in
-+	 * standby after a reset. Write the INIT bit anyways, should the chip
-+	 * be configured by previous stage.
-+	 */
-+	if (!m_can_cccr_update_bits(cdev, CCCR_INIT, CCCR_INIT))
-+		return -EBUSY;
- 
- 	return 0;
- }
-@@ -1708,7 +1726,8 @@ static void m_can_stop(struct net_device *dev)
- 	m_can_disable_all_interrupts(cdev);
- 
- 	/* Set init mode to disengage from the network */
--	m_can_config_endisable(cdev, true);
-+	if (!m_can_cccr_update_bits(cdev, CCCR_INIT, CCCR_INIT))
-+		netdev_err(dev, "failed to enter standby mode\n");
- 
- 	/* set the state as STOPPED */
- 	cdev->can.state = CAN_STATE_STOPPED;
-diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
-index a42600dac70d..d723206ac7c9 100644
---- a/drivers/net/can/m_can/tcan4x5x-core.c
-+++ b/drivers/net/can/m_can/tcan4x5x-core.c
-@@ -453,10 +453,17 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
- 		goto out_power;
- 	}
- 
--	ret = tcan4x5x_init(mcan_class);
-+	tcan4x5x_check_wake(priv);
-+
-+	ret = tcan4x5x_write_tcan_reg(mcan_class, TCAN4X5X_INT_EN, 0);
- 	if (ret) {
--		dev_err(&spi->dev, "tcan initialization failed %pe\n",
--			ERR_PTR(ret));
-+		dev_err(&spi->dev, "Disabling interrupts failed %pe\n", ERR_PTR(ret));
-+		goto out_power;
-+	}
-+
-+	ret = tcan4x5x_clear_interrupts(mcan_class);
-+	if (ret) {
-+		dev_err(&spi->dev, "Clearing interrupts failed %pe\n", ERR_PTR(ret));
- 		goto out_power;
- 	}
- 
--- 
-2.44.0
+OK
+
+
+> > +
+> > +description: |
+> > +  LIN-Bus support for UART devices equipped with LIN transceivers,
+> > +  utilizing the Serial Device Bus (serdev) interface.
+> 
+> serdev is Linux thingy, AFAIR. Please describe the hardware.
+
+OK, in v2 it will get changed to:
+
+"""
+LIN transceiver, mostly hard-wired to a serial device, used for
+communication on a LIN bus.
+"""
+
+> 
+> > +
+> > +  For more details on an adapter, visit: https://hexdev.de/hexlin#tty
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: linux,lin-serdev
+> 
+> Feels confusing. Your link describes real hardware, but you wrote
+> bindings for software construct.
+> 
+> If you add this to DT, then it is hard-wired on the board, right?
+
+Yes, it is hard-wired.
+
+>  If so, how this could be a software construct?
+
+It's not, but fairly generic, that's why I used 'linux,lin-serdev' as
+compatible string. In v2 I'll change it to 'hexdev,lin-serdev'.
+
+> > +
+> > +required:
+> > +  - compatible
+> > +
+> > +examples:
+> > +  - |
+> > +    &uart2 {
+> 
+> & does not make much sense here. I think you wanted it to be serial bus,
+> so serial.
+
+OK
+
+> 
+> > +      status = "okay";
+> 
+> Drop, it was not disabled anywhere.
+
+OK
+
+> 
+> 
+> > +      linbus {
+> > +        compatible = "linux,lin-serdev";
+> > +      };
+> > +    };
+
+Let me address these points, fix warnings from dt_binding_check and
+reroll in v2.
+
+Thanks
+  -- Christoph
 
 
