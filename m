@@ -1,47 +1,47 @@
-Return-Path: <linux-can+bounces-559-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-560-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9003A8BBB98
-	for <lists+linux-can@lfdr.de>; Sat,  4 May 2024 14:49:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BB278BBBA4
+	for <lists+linux-can@lfdr.de>; Sat,  4 May 2024 14:58:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D17EBB215BE
-	for <lists+linux-can@lfdr.de>; Sat,  4 May 2024 12:49:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27B631F21E71
+	for <lists+linux-can@lfdr.de>; Sat,  4 May 2024 12:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0153A22612;
-	Sat,  4 May 2024 12:49:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A3F22611;
+	Sat,  4 May 2024 12:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qHG9jkQM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qscErA/o"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE65457CAE;
-	Sat,  4 May 2024 12:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D9B1C695;
+	Sat,  4 May 2024 12:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714826953; cv=none; b=a7z0WlrR1Xh65IevCnivXG1s3YKANifmKN+lh1v6Xjqp98pdohwkWvMXG8tfsp2ywLFpNZrBE9mWIt+2oVRvpKv1M/ihyktZjuDsvQSKnKz9nJXNO+wc0BTbgNHdRP2E5FYZ/iCv3vMQCe+PVJj2hiMMPQy4Oo6CGogJEiYwM38=
+	t=1714827519; cv=none; b=oDm4mZZ6L6C1MOGwPgsi1oBkpKQfpdILPj2GXdxMG2WD+tgbM3dQK9ZhxpPQE5OmxBImt2RFuY3NKQnq+jwAYB0N4SCxKKhOoZafth7nG/lA3xwEHsST6UOZxnMxEdj1ChcumjCVfBmT2FKq/pGLpNeg8nG4T8U2Evc3kVmGFJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714826953; c=relaxed/simple;
-	bh=L9wv45Em8bE+QdzHN+ZzOr0q0nVv0NR8uv/oDTyGCBI=;
+	s=arc-20240116; t=1714827519; c=relaxed/simple;
+	bh=mtwrT6ZE9KkICl5n7f/pg932gWXUupz2bBQvgv+yS6s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FQqAFHLVvVZgety4BHDwKr+D/cf2ntOpCVb02k8jQVD9brWKxpopdM7Wd0ixpXHbE7L0i8EaZkItha4GYhZq9jVD/DNC81vBihPj+XUHjzKBaAk/90lJ7VobuoqA9qH1ayJTZ/mrBU18LbMRYO08CdbSWzFUQOcqaoAK3vEqJtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qHG9jkQM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A776BC072AA;
-	Sat,  4 May 2024 12:49:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=djtzClQOZIGmJO/lJN15yF6ZxGDdHXojq8B0fYitknfJqnJ8FfnerbaW4lwWFtXo/wwRpMyfe/BJhqoRPDlnD5VDHoEfKKfz0JUu3RllaSzhVIxPgA7o8lIDVP9Ci1g7GzqN0xYUuw2kyQTBfn3mCc50TlHNDauVi/341CWUH9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qscErA/o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD165C072AA;
+	Sat,  4 May 2024 12:58:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714826953;
-	bh=L9wv45Em8bE+QdzHN+ZzOr0q0nVv0NR8uv/oDTyGCBI=;
+	s=k20201202; t=1714827519;
+	bh=mtwrT6ZE9KkICl5n7f/pg932gWXUupz2bBQvgv+yS6s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qHG9jkQM8K0a//HPJ659OF/sg3x4Wuq71cSamSewKjSphBYxQhNPBXcWA1P+i7qHl
-	 RY/B0okoLc6T6pcYjk+qTZKk7mzb4FI5vJbRxVYRcNzDvz3FEj04kmnFoDz4sqxhg7
-	 ODAW9OYTvoWEUjhMXW9DDCqAresjetRTpLGJFQ3bBEJKFu81t2k298cClSkhhxy1mn
-	 U75M1GcEXK0TSE9VRsxj5tBorA8ZCjAZgo5AHgOTiWyn7bKfCkTCgHyq7UCBKNQeeO
-	 fQUeN5XxZEo8yjOwS/gSpF4KI1vzoX4gf2e2crVyxQkJ6Iaxg4OXU1NUtlhJesJl+a
-	 7+a15hFbojwjQ==
-Date: Sat, 4 May 2024 13:49:04 +0100
+	b=qscErA/oKnTA6CTMZpNEo5WtO76hv+bPuLHntXRxAxLx+1RG954gNta9DFFbeKtx8
+	 3Ooirkye4fNKbiLqOBIljZLXslA7YDecs7REaQboGgrEOqH6LCTAu0KYusxmDny5gH
+	 xC7TYCDOczc5+8S8pwnralh21o89tNlKbiurCnMVp9UDktcv0bUBBXReJRBID2+ZcV
+	 /K6EezNpeknKOfSqTUPvLQcaCYjIxgcSwOdiiIenyIQzHQS4/9lvssfL7PXByf36cU
+	 kAyzmKe5Q7BEULXhT24jfWixEhoD4bS+RWGy+2wLrC7kG4jdpMsnOKK6PvodzVYAqv
+	 sEA7fVq2Avpbg==
+Date: Sat, 4 May 2024 13:58:28 +0100
 From: Simon Horman <horms@kernel.org>
 To: Christoph Fritz <christoph.fritz@hexdev.de>
 Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
@@ -63,10 +63,10 @@ Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
 	Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
 	netdev@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-input@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 01/12] can: Add LIN bus as CAN abstraction
-Message-ID: <20240504124904.GJ3167983@kernel.org>
+Subject: Re: [PATCH v2 02/12] HID: hexLIN: Add support for USB LIN bus adapter
+Message-ID: <20240504125828.GK3167983@kernel.org>
 References: <20240502075534.882628-1-christoph.fritz@hexdev.de>
- <20240502075534.882628-2-christoph.fritz@hexdev.de>
+ <20240502075534.882628-3-christoph.fritz@hexdev.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -75,117 +75,158 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240502075534.882628-2-christoph.fritz@hexdev.de>
+In-Reply-To: <20240502075534.882628-3-christoph.fritz@hexdev.de>
 
-On Thu, May 02, 2024 at 09:55:23AM +0200, Christoph Fritz wrote:
-> This patch adds a LIN (local interconnect network) bus abstraction on
-> top of CAN.  It is a glue driver adapting CAN on one side while offering
-> LIN abstraction on the other side. So that upcoming LIN device drivers
-> can make use of it.
+On Thu, May 02, 2024 at 09:55:24AM +0200, Christoph Fritz wrote:
+> This patch introduces driver support for the hexLIN USB LIN bus adapter,
+> enabling LIN communication over USB for both controller and responder
+> modes. The driver interfaces with the CAN_LIN framework for userland
+> connectivity.
+> 
+> For more details on the adapter, visit: https://hexdev.de/hexlin/
 > 
 > Tested-by: Andreas Lauser <andreas.lauser@mercedes-benz.com>
 > Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
 
-...
-
-> diff --git a/drivers/net/can/lin.c b/drivers/net/can/lin.c
-
-...
-
-> +struct lin_device *register_lin(struct device *dev,
-> +				const struct lin_device_ops *ldops)
-> +{
-> +	struct net_device *ndev;
-> +	struct lin_device *ldev;
-> +	int ret;
-> +
-> +	if (!ldops || !ldops->ldo_tx || !ldops->update_bitrate  ||
-> +	    !ldops->ldo_open || !ldops->ldo_stop) {
-> +		netdev_err(ndev, "missing mandatory lin_device_ops\n");
-
 Hi Christoph,
 
-The line above uses ndev, but ndev is not initialised
-until a few lines further down.
+Some minor feedback from my side.
+
+...
+
+> diff --git a/drivers/hid/hid-hexdev-hexlin.c b/drivers/hid/hid-hexdev-hexlin.c
+
+...
+
+> +static int hexlin_queue_frames_insert(struct hexlin_priv_data *priv,
+> +				      const u8 *raw_data, int sz)
+> +{
+> +	struct hid_device *hdev = priv->hid_dev;
+> +	struct hexlin_frame hxf;
+> +	struct lin_frame lf;
+> +
+> +	if (sz != sizeof(struct hexlin_frame))
+> +		return -EREMOTEIO;
+> +
+> +	memcpy(&hxf, raw_data, sz);
+> +	le32_to_cpus(hxf.flags);
+> +
+> +	lf.len = hxf.len;
+> +	lf.lin_id = hxf.lin_id;
+> +	memcpy(lf.data, hxf.data, LIN_MAX_DLEN);
+> +	lf.checksum = hxf.checksum;
+> +	lf.checksum_mode = hxf.checksum_mode;
+> +
+> +	hid_dbg(hdev, "id:%02x, len:%u, data:%*ph, checksum:%02x (%s)\n",
+> +		   lf.lin_id, lf.len, lf.len, lf.data, lf.checksum,
+> +		   lf.checksum_mode ? "enhanced" : "classic");
+
+nit: The indentation above is not quite right.
+     It should align to inside the opening '(' like this.
+
+	hid_dbg(hdev, "id:%02x, len:%u, data:%*ph, checksum:%02x (%s)\n",
+		lf.lin_id, lf.len, lf.len, lf.data, lf.checksum,
+		lf.checksum_mode ? "enhanced" : "classic");
+
+Flagged by checkpatch.
+
+...
+
+> +static int hexlin_set_baudrate(struct hexlin_priv_data *priv, u16 baudrate)
+> +{
+> +	struct hexlin_baudrate_req req;
+> +	int ret;
+> +
+> +	if (baudrate < LIN_MIN_BAUDRATE || baudrate > LIN_MAX_BAUDRATE)
+> +		return -EINVAL;
+> +
+> +	req.cmd = HEXLIN_SET_BAUDRATE;
+> +	req.baudrate = cpu_to_le16(baudrate);
+
+The type of req.baudrate is u16, a host byte-order type.
+But it is being assigned a little endian value.
+This does not seem right.
 
 Flagged by Smatch.
 
-> +		return ERR_PTR(-EINVAL);
-> +	}
 > +
-> +	ndev = alloc_candev(sizeof(struct lin_device), 1);
-> +	if (!ndev)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ldev = netdev_priv(ndev);
-> +
-> +	ldev->ldev_ops = ldops;
-> +	ndev->netdev_ops = &lin_netdev_ops;
-> +	ndev->flags |= IFF_ECHO;
-> +	ndev->mtu = CANFD_MTU;
-> +	ldev->can.bittiming.bitrate = LIN_DEFAULT_BAUDRATE;
-> +	ldev->can.ctrlmode = CAN_CTRLMODE_LIN;
-> +	ldev->can.ctrlmode_supported = 0;
-> +	ldev->can.bitrate_const = lin_bitrate;
-> +	ldev->can.bitrate_const_cnt = ARRAY_SIZE(lin_bitrate);
-> +	ldev->can.do_set_bittiming = lin_set_bittiming;
-> +	ldev->ndev = ndev;
-> +	ldev->dev = dev;
-> +
-> +	SET_NETDEV_DEV(ndev, dev);
-> +
-> +	ret = lin_set_bittiming(ndev);
-> +	if (ret) {
-> +		netdev_err(ndev, "set bittiming failed\n");
-> +		goto exit_candev;
-> +	}
-> +
-> +	ret = register_candev(ndev);
+> +	ret = hexlin_tx_req_status(priv, &req,
+> +				   sizeof(struct hexlin_baudrate_req));
 > +	if (ret)
-> +		goto exit_candev;
+> +		hid_err(priv->hid_dev, "%s failed with %d\n", __func__, ret);
 > +
-> +	ldev->lin_ids_kobj = kobject_create_and_add("lin_ids", &ndev->dev.kobj);
-> +	if (!ldev->lin_ids_kobj) {
-> +		netdev_err(ndev, "Failed to create sysfs directory\n");
-> +		ret = -ENOMEM;
-> +		goto exit_unreg;
-> +	}
-> +
-> +	ret = lin_create_sysfs_id_files(ndev);
-> +	if (ret) {
-> +		netdev_err(ndev, "Failed to create sysfs entry: %d\n", ret);
-> +		goto exit_kobj_put;
-> +	}
-> +
-> +	/* Using workqueue as tx over USB/SPI/... may sleep */
-> +	ldev->wq = alloc_workqueue(dev_name(dev), WQ_FREEZABLE | WQ_MEM_RECLAIM,
-> +				   0);
-> +	if (!ldev->wq)
-> +		goto exit_rm_files;
-
-The goto above will result in: return ERR_PTR(ret)
-But ret is 0 here. Should it be set to a negative error value?
-
-Also flagged by Smatch.
-
-> +
-> +	INIT_WORK(&ldev->tx_work, lin_tx_work_handler);
-> +
-> +	netdev_info(ndev, "LIN initialized.\n");
-> +
-> +	return ldev;
-> +
-> +exit_rm_files:
-> +	lin_remove_sysfs_id_files(ndev);
-> +exit_kobj_put:
-> +	kobject_put(ldev->lin_ids_kobj);
-> +exit_unreg:
-> +	unregister_candev(ndev);
-> +exit_candev:
-> +	free_candev(ndev);
-> +	return ERR_PTR(ret);
+> +	return ret;
 > +}
-> +EXPORT_SYMBOL_GPL(register_lin);
+
+...
+
+> +static int hexlin_probe(struct hid_device *hdev,
+> +			const struct hid_device_id *id)
+> +{
+> +	struct hexlin_priv_data *priv;
+> +	int ret;
+> +
+> +	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->hid_dev = hdev;
+> +	hid_set_drvdata(hdev, priv);
+> +
+> +	mutex_init(&priv->tx_lock);
+> +
+> +	ret = hid_parse(hdev);
+> +	if (ret) {
+> +		hid_err(hdev, "hid parse failed with %d\n", ret);
+> +		goto fail_and_free;
+> +	}
+> +
+> +	ret = hid_hw_start(hdev, HID_CONNECT_DRIVER);
+> +	if (ret) {
+> +		hid_err(hdev, "hid hw start failed with %d\n", ret);
+> +		goto fail_and_stop;
+> +	}
+> +
+> +	ret = hid_hw_open(hdev);
+> +	if (ret) {
+> +		hid_err(hdev, "hid hw open failed with %d\n", ret);
+> +		goto fail_and_close;
+> +	}
+> +
+> +	init_completion(&priv->wait_in_report);
+> +
+> +	hid_device_io_start(hdev);
+> +
+> +	ret = init_hw(priv);
+> +	if (ret)
+> +		goto fail_and_close;
+> +
+> +	priv->ldev = register_lin(&hdev->dev, &hexlin_ldo);
+> +	if (IS_ERR_OR_NULL(priv->ldev)) {
+> +		ret = PTR_ERR(priv->ldev);
+> +		goto fail_and_close;
+
+Is it intentional that when priv->ldev is NULL here,
+the function will return 0?
+
+Flagged by Smatch.
+
+> +	}
+> +
+> +	hid_hw_close(hdev);
+> +
+> +	hid_info(hdev, "hexLIN (fw-version: %u) probed\n", priv->fw_version);
+> +
+> +	return 0;
+> +
+> +fail_and_close:
+> +	hid_hw_close(hdev);
+> +fail_and_stop:
+> +	hid_hw_stop(hdev);
+> +fail_and_free:
+> +	mutex_destroy(&priv->tx_lock);
+> +	return ret;
+> +}
 
 ...
 
