@@ -1,129 +1,113 @@
-Return-Path: <linux-can+bounces-562-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-563-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 096F18BBCEF
-	for <lists+linux-can@lfdr.de>; Sat,  4 May 2024 18:00:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 023998BC029
+	for <lists+linux-can@lfdr.de>; Sun,  5 May 2024 13:01:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3601B1C20E10
-	for <lists+linux-can@lfdr.de>; Sat,  4 May 2024 16:00:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A66F42818A8
+	for <lists+linux-can@lfdr.de>; Sun,  5 May 2024 11:01:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A74741741;
-	Sat,  4 May 2024 16:00:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hPvSedsp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7D7849C;
+	Sun,  5 May 2024 11:01:33 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C764023767;
-	Sat,  4 May 2024 16:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C43C5680
+	for <linux-can@vger.kernel.org>; Sun,  5 May 2024 11:01:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714838406; cv=none; b=Uzc7a0VAWhd6mNEv8txU7+Tc/CHwBKmhM9Z/RMcwOqYy9qn701XIfeNlFj1bAr2IhqlKQ1cQonGLt5Ju9CEe91e549rr0Quhypb+FC4JBwGA0wDBL+tsjyR9gSr+FF0m1bi15iujyFntsemzzs7GCqXAJT9YkPnPEhSYfY7OWBw=
+	t=1714906893; cv=none; b=GPf+FuSpEW/8DD0MVKk0pCrZSGyAoT7hsdH6pWlPz4bTNyGvaHMK6TLyof3kVbPoyieiz6oS1HZzrtofs1kLGU+eXWbLE5NIpT8XyGxAV4epzKAovIyNeCRRfkQO6zJ6M2jjqAncJAfuwPsx0mEA7lq4GhcMFjN27k1m/Zg6i40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714838406; c=relaxed/simple;
-	bh=2CfHE6U1TpkNccPPQ+ztJD0Glq/+yNTjt96lxseYs9w=;
+	s=arc-20240116; t=1714906893; c=relaxed/simple;
+	bh=/sq8W/RMqV5sJ5BxKF3BR/Rccp7w3Wrj4tY/YJgKiEU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AFC2ixPzORGB+yeuuNlVAqLTKB6Jg8QMGKhRWTUlVuCWv2Tn3X3632Gry+Pu8V1XpBw869a9Lw981YKLIem/7QLRYHnJxCMFYhKx6r2e3f0afWBAhwglkn7Dir0xfPIFgFqYIH86xpQczT+szFXkpfy340n92oqro5Au6y/hdLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hPvSedsp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D204C072AA;
-	Sat,  4 May 2024 16:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1714838405;
-	bh=2CfHE6U1TpkNccPPQ+ztJD0Glq/+yNTjt96lxseYs9w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hPvSedspztdtHSPN3XsMQ+YePzhvGV6PXZbpqNBYIQKQGzEhgcWZNr+okyglg99rQ
-	 0yEk8VpMdXRQp+bRoBPshGJKkBJSqqs6Rp8o4y26mTU8wBsCgnyuGVkEcjEOyi4wsW
-	 10UmPB7I7bt1NVTHNn/zWY6PsJR864PffTHSLVb4=
-Date: Sat, 4 May 2024 18:00:01 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Christoph Fritz <christoph.fritz@hexdev.de>
-Cc: Jiri Slaby <jirislaby@kernel.org>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Andreas Lauser <andreas.lauser@mercedes-benz.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v3 03/11] tty: serdev: Add flag buffer aware
- receive_buf_fp()
-Message-ID: <2024050410-gigolo-giddily-97b6@gregkh>
-References: <20240502182804.145926-1-christoph.fritz@hexdev.de>
- <20240502182804.145926-4-christoph.fritz@hexdev.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tXTx4wA/h5rGFgkS1ebaa66LEAhaMhizFHl4EqlLFKF8pi5fiMbvKHhUfDazWEQ4nhRWD/MmhP4/xVrxBKy0m+BQnIpPSJIm944LsFzXoP/E8PB3D06s+FTrQK9oz2t5sIneT4NJHT8OaDLUP6PMHdzIfoeBEagzSDjUUv0NhoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1s3ZcJ-00084C-9I; Sun, 05 May 2024 13:01:15 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1s3ZcF-00G42r-VK; Sun, 05 May 2024 13:01:12 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 8D06C2C9C81;
+	Sun,  5 May 2024 11:01:11 +0000 (UTC)
+Date: Sun, 5 May 2024 13:01:09 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v1 1/1] can: sja1000: plx_pci: Reuse predefined
+ CTI subvendor ID
+Message-ID: <20240505-micro-degu-of-memory-a8490f-mkl@pengutronix.de>
+References: <20240502123852.2631577-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="oajw5gtxeutevdc3"
 Content-Disposition: inline
-In-Reply-To: <20240502182804.145926-4-christoph.fritz@hexdev.de>
+In-Reply-To: <20240502123852.2631577-1-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On Thu, May 02, 2024 at 08:27:56PM +0200, Christoph Fritz wrote:
-> This patch introduces an additional receive buffer callback variation
-> besides the already existing receive_buf(). This new callback function
-> also passes the flag buffer (TTY_NORMAL, TTY_BREAK, and friends).
-> 
-> If defined, this function gets prioritized and called instead of the
-> standard receive_buf().
-> 
-> An alternative approach could have been to enhance the receive_buf()
-> function and update all drivers that use it.
 
-Please, let's do that instead of adding random letters at the end of a
-function pointer :)
+--oajw5gtxeutevdc3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
-> ---
->  drivers/tty/serdev/serdev-ttyport.c |  2 +-
->  include/linux/serdev.h              | 17 ++++++++++++++---
->  2 files changed, 15 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/tty/serdev/serdev-ttyport.c b/drivers/tty/serdev/serdev-ttyport.c
-> index 3d7ae7fa50186..bb47691afdb21 100644
-> --- a/drivers/tty/serdev/serdev-ttyport.c
-> +++ b/drivers/tty/serdev/serdev-ttyport.c
-> @@ -32,7 +32,7 @@ static size_t ttyport_receive_buf(struct tty_port *port, const u8 *cp,
->  	if (!test_bit(SERPORT_ACTIVE, &serport->flags))
->  		return 0;
->  
-> -	ret = serdev_controller_receive_buf(ctrl, cp, count);
-> +	ret = serdev_controller_receive_buf(ctrl, cp, fp, count);
->  
->  	dev_WARN_ONCE(&ctrl->dev, ret > count,
->  				"receive_buf returns %zu (count = %zu)\n",
-> diff --git a/include/linux/serdev.h b/include/linux/serdev.h
-> index ff78efc1f60df..c6ef5a8988e07 100644
-> --- a/include/linux/serdev.h
-> +++ b/include/linux/serdev.h
-> @@ -23,11 +23,17 @@ struct serdev_device;
->   * struct serdev_device_ops - Callback operations for a serdev device
->   * @receive_buf:	Function called with data received from device;
->   *			returns number of bytes accepted; may sleep.
-> + * @receive_buf_fp:	Function called with data and flag buffer received
-> + *			from device; If defined, this function gets called
-> + *			instead of @receive_buf;
-> + *			returns number of bytes accepted; may sleep.
+On 02.05.2024 15:38:52, Andy Shevchenko wrote:
+> There is predefined PCI_SUBVENDOR_ID_CONNECT_TECH, use it in the driver.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I don't remember waht "fp" means here, and you don't document it, so
-let's just have one recieve_buf() callback please.
+Applied to linx-can-next
 
-thanks,
+Thanks,
+Marc
 
-greg k-h
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--oajw5gtxeutevdc3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmY3ZvIACgkQKDiiPnot
+vG9c/Af/fTaOm84MFHU6/wh2K89RdBL6AfImnl2h9Cqm6yY2tYfdwEemADyIBSlU
+I32WQWfp4Jc3XqpCv1KdYKb84tz4Fhi5wlM+9IYaAKkrhIpaaR8s/aQ6L1LdSV9M
+zlLCrzj/7H3aZljYlK3GPIrvrUUqnzC1Zmj4ex/JBGFcGzROb250WgotPsRVlUWA
+ZAFxn5F1rCMmtIsrWseUx6SkjQUIiUqTxhTNZkGBTOHvqArJzPapOcIvRaoV4LsT
+MFte1B42C37JZ1QnnwrPjxRQgziAtLaqagmYrqmk30zn0+6zuEuVNS7/3ooqOS4G
+NxXIBImGV51zqtx30sYdMwhr+ujEvw==
+=1ldS
+-----END PGP SIGNATURE-----
+
+--oajw5gtxeutevdc3--
 
