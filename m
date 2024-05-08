@@ -1,181 +1,168 @@
-Return-Path: <linux-can+bounces-600-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-601-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA06B8BFE03
-	for <lists+linux-can@lfdr.de>; Wed,  8 May 2024 15:08:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD6A08C01C6
+	for <lists+linux-can@lfdr.de>; Wed,  8 May 2024 18:16:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F9B21F21E06
-	for <lists+linux-can@lfdr.de>; Wed,  8 May 2024 13:08:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18C341C21AFE
+	for <lists+linux-can@lfdr.de>; Wed,  8 May 2024 16:16:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3CD06A33F;
-	Wed,  8 May 2024 13:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA331292C3;
+	Wed,  8 May 2024 16:16:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jfcCtNYT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mb+hdOq5"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD77B26AFF;
-	Wed,  8 May 2024 13:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3571DFD8;
+	Wed,  8 May 2024 16:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715173712; cv=none; b=WMOx/B+9yYpTMQV8PcmMrnBNOFarUHMbOJuM2+BNPSbL8zWKPISdBmcyQA2lSYEHEc3Qz4aPWLqaDh8Dpvs1KoSaIw8WNxMm3a0SI24DN5Z8mdTP2xpKj92pPJrSlYYfspFIJ+7f4WDLK1yWY7oaWE3HSc+bcUk0m9LHz50lMV4=
+	t=1715184994; cv=none; b=LgEzfyuMbS6nlMV/o0J/yUg3632Gz24Mxj9ISCU7uq9eBMdAb9gnTf0HKIhHpWmR0MPzcyNnGh4LVUO6fHXcBSQGNCKf86gCuQ12h+/KH+UTdQB8/UFcDsO3m2HA5UMhSWOc3L2SmgxIOM78DwgflqbP+M3HKNb943BxrhMOv6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715173712; c=relaxed/simple;
-	bh=Nhek7t2kXbSnyS4ynbhye8pjdTcB5x58ll+RArMjhG4=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=IqOYgm185x3drXKw42ZvrL//8m89SGId8XBqkSkbRFX8lyr+8zNDJRZHJpP+Q081FITzBE0/86KC7456THMakYoawf4TmZIAA+fkjk4eUwrndL2kUlcxj+WEufLlKpg0MqEJuKzZv5LTjuSI4IfjYfp128tzg5M23Kq3q62TplQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jfcCtNYT; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715173711; x=1746709711;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=Nhek7t2kXbSnyS4ynbhye8pjdTcB5x58ll+RArMjhG4=;
-  b=jfcCtNYTHirOcv6y7VMtVHK9Zbk6Qo6r/cIpzvvYi6mbfw5G/uZOminI
-   UzJbnvTJa331N0/AsnXDBRiKcsiN1fozENd7elmIlPiMopy6ihkvK/09S
-   DewJFIlM5P0MfWtzbyhvD4EeJ7mHt24/QjIhoc/+iTdR63TUvgzNx1UVj
-   ExaIvxb15RedOpuSuey2R7HKG3wzeaH8wCEeGRGPBKqNbMjHTf17HDsIV
-   5KvSTE2NNOnC6Nx15+r2yXfzj1tfnc3L2fUkg/VXtN+8MhIwlk0fu/GFr
-   EQ7/7wjrL3OoYpsp+r/eWnIHhOvmpmVqUb/h3iAVKiqtHPTlCU4CVho40
-   A==;
-X-CSE-ConnectionGUID: 6LniEL/vR6q3cpvYYkh/FA==
-X-CSE-MsgGUID: hgUNPgKbTzSodfZyjqDoCQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="14837324"
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="14837324"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 06:08:28 -0700
-X-CSE-ConnectionGUID: gag7DJvuRZGkzb+94mIYag==
-X-CSE-MsgGUID: unnb3CkzTJ23HcfMHdTsww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="28858984"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.80])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 06:08:21 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 8 May 2024 16:08:15 +0300 (EEST)
+	s=arc-20240116; t=1715184994; c=relaxed/simple;
+	bh=7uXx6swrCcj63Q1Kq5orROu6Yte2GQluX/afoi/VjlM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pUUO66ArORYCZGqZyczkJnh88MSPhFXobdc3P2RMHOkpwH7FGXyWi3MPc3pH/SPUlgziLxNbqm9wl4Pl3y8lXJFN3JaUQGt6LfrhV50e4c8M0v4ULNZg2UBHUuhUrSXtY0JZysKDSciuwq93Tpm+sgxa+G/rzDBICSWQeq5tyYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mb+hdOq5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B670CC113CC;
+	Wed,  8 May 2024 16:16:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715184993;
+	bh=7uXx6swrCcj63Q1Kq5orROu6Yte2GQluX/afoi/VjlM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mb+hdOq53qmHC0tsnwHZjWvs0XBJkKZMEiwnPjJ2mn32qKcZZw4pY0Mo55+FJrmcS
+	 /XCsoVhGSe7MSvmWWAwogYlSP3eqAlzXIz9RSwbgfLmeNG7CLVhSPmpXxCzieRVYuZ
+	 cOufbq3pU4xhAFLiBblQ/ahAAQ693QQWfoRODWX7xcxLCInUUXMjUdvHgoz9yw0RMM
+	 RLtGgoM9mPdmuvYQoPD2BTDowiNH94T95q73biOqRbfHENAbkQ//ZjHtcbEpdr+UQd
+	 Vu7kDL3ejYOds/rA8GqKWvTaQTr4SnyOOM0fSjQODFHTymGa9w14L3TTHDG08v3EJe
+	 yoCD9p5pfLmbg==
+Date: Wed, 8 May 2024 17:16:25 +0100
+From: Conor Dooley <conor@kernel.org>
 To: Christoph Fritz <christoph.fritz@hexdev.de>
-cc: Oliver Hartkopp <socketcan@hartkopp.net>, 
-    Marc Kleine-Budde <mkl@pengutronix.de>, Jiri Slaby <jirislaby@kernel.org>, 
-    Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-    "David S . Miller" <davem@davemloft.net>, 
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-    Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-    Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-    Conor Dooley <conor+dt@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
-    Benjamin Tissoires <bentiss@kernel.org>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Sebastian Reichel <sre@kernel.org>, 
-    Linus Walleij <linus.walleij@linaro.org>, 
-    Andreas Lauser <andreas.lauser@mercedes-benz.com>, 
-    Jonathan Corbet <corbet@lwn.net>, Pavel Pisa <pisa@cmp.felk.cvut.cz>, 
-    linux-can@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
-    devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
-    linux-serial <linux-serial@vger.kernel.org>
-Subject: Re: [PATCH v3 01/11] can: Add LIN bus as CAN abstraction
-In-Reply-To: <e0f3d0716ed2f4281561f08bbcd3050dddcf1831.camel@hexdev.de>
-Message-ID: <4e8a50a0-f938-8aaf-fe4b-d18765407d4d@linux.intel.com>
-References: <20240502182804.145926-1-christoph.fritz@hexdev.de>  <20240502182804.145926-2-christoph.fritz@hexdev.de>  <61adf428-2205-1563-d0b6-fa843e08559d@linux.intel.com> <e0f3d0716ed2f4281561f08bbcd3050dddcf1831.camel@hexdev.de>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andreas Lauser <andreas.lauser@mercedes-benz.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v3 06/11] dt-bindings: net/can: Add serial (serdev) LIN
+ adapter
+Message-ID: <20240508-headwear-monorail-a425ac6fe8a8@spud>
+References: <20240502182804.145926-1-christoph.fritz@hexdev.de>
+ <20240502182804.145926-7-christoph.fritz@hexdev.de>
+ <20240503-fading-extruding-2105bbd8b479@spud>
+ <a5b894f8dc2ab0cf087a5b4972d7f752e6c17c16.camel@hexdev.de>
+ <20240506-jaws-cheesy-bf94885651c1@spud>
+ <f1173a7c-f18b-47cc-8873-30347489d1be@kernel.org>
+ <b716f34ce54dfed2595690d37c121d242a18ff64.camel@hexdev.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-1801532953-1715173426=:3164"
-Content-ID: <48adb666-4c9a-aa9a-24fb-3a1d33c5cc32@linux.intel.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="tlupBOI+4XnNwj6+"
+Content-Disposition: inline
+In-Reply-To: <b716f34ce54dfed2595690d37c121d242a18ff64.camel@hexdev.de>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323328-1801532953-1715173426=:3164
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <109eb976-de37-c302-06dc-7d4f63b0cbac@linux.intel.com>
+--tlupBOI+4XnNwj6+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 8 May 2024, Christoph Fritz wrote:
-
-> On Mon, 2024-05-06 at 19:24 +0300, Ilpo J=E4rvinen wrote:
-> > On Thu, 2 May 2024, Christoph Fritz wrote:
-> >=20
-> > > This patch adds a LIN (local interconnect network) bus abstraction on
-> > > top of CAN.  It is a glue driver adapting CAN on one side while offer=
-ing
-> > > LIN abstraction on the other side. So that upcoming LIN device driver=
-s
-> > > can make use of it.
-
-> > > +static int lin_create_sysfs_id_files(struct net_device *ndev)
-> > > +{
-> > > +=09struct lin_device *ldev =3D netdev_priv(ndev);
-> > > +=09struct kobj_attribute *attr;
-> > > +=09int ret;
-> > > +
-> > > +=09for (int id =3D 0; id < LIN_NUM_IDS; id++) {
-> > > +=09=09ldev->sysfs_entries[id].ldev =3D ldev;
-> > > +=09=09attr =3D &ldev->sysfs_entries[id].attr;
-> > > +=09=09attr->attr.name =3D kasprintf(GFP_KERNEL, "%02x", id);
-> > > +=09=09if (!attr->attr.name)
-> > > +=09=09=09return -ENOMEM;
-> > > +=09=09attr->attr.mode =3D 0644;
-> > > +=09=09attr->show =3D lin_identifier_show;
-> > > +=09=09attr->store =3D lin_identifier_store;
-> > > +
-> > > +=09=09sysfs_attr_init(&attr->attr);
-> > > +=09=09ret =3D sysfs_create_file(ldev->lin_ids_kobj, &attr->attr);
-> > > +=09=09if (ret) {
-> > > +=09=09=09kfree(attr->attr.name);
-> > > +=09=09=09return -ENOMEM;
-> > > +=09=09}
-> > > +=09}
-> > > +
-> > > +=09return 0;
-> > > +}
-> >=20
-> > Can you use .dev_groups instead ?
+On Wed, May 08, 2024 at 01:34:34PM +0200, Christoph Fritz wrote:
+> On Mon, 2024-05-06 at 20:50 +0200, Krzysztof Kozlowski wrote:
+> > On 06/05/2024 18:16, Conor Dooley wrote:
+> > > > > > +maintainers:
+> > > > > > +  - Christoph Fritz <christoph.fritz@hexdev.de>
+> > > > > > +
+> > > > > > +properties:
+> > > > > > +  compatible:
+> > > > > > +    const: hexdev,lin-serdev
+> > > > >=20
+> > > > > Maybe I've just missed something on earlier versions that I didn't
+> > > > > read, but the name of the device on the website you link is "hexL=
+IN",
+> > > > > so why is "lin-serdev" used here instead?
+> > > >=20
+> > > > The USB one is called hexLIN and has it's own HID driver.
+> > > >=20
+> > > > This serial LIN adapter doesn't really have a product name. Current=
+ly
+> > > > on our website it's generically called 'UART LIN Adapter'.
+> > > >=20
+> > > > This LIN adapter is basically just a LIN transceiver and very gener=
+ic,
+> > > > so that one could solder it to any single-board computer with an ua=
+rt.
+> > > >=20
+> > > > I think 'lin-serdev' for LIN and serial device fits great, also ser=
+dev
+> > > > is the name of the used kernel infrastructure (besides the LIN glue
+> > > > driver).
+> > > >=20
+> > > > If you still don't like it, I'm open to other names. What about
+> > > > "hexlin-uart" or "linser"?
+> > >
+> > > I dunno, I don't really care about it being called "hexlin,lin-serdev=
+",
+> > > all that much, I just found it confusing that the link in the descrip=
+tion
+> > > sent me to the ""Hello World" in LIN" section of your site. If it had
+> > > dropped me off at the "UART LIN adapter" section things woud've been =
+less
+> > > confusing.
 >=20
-> I'm not sure where to attach this in this glue code here. Should I do a
-> class_register() and add the .dev_groups there?
-
-I guess struct class would be correct direction but I'm not sure if it's=20
-viable in this case. It would avoid the need for custom sysfs setup code
-if it's workable.
-
-> > FWIW, this function doesn't do rollback when error occurs.
+> Hi Conor and Krzysztof,
 >=20
-> OK, this issue can be fixed in revision v4.
+> I guess this is a chromium oddity, because browsing to
 >=20
-> ...
-
-> > > diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/ca=
-n/netlink.h
-> > > index 02ec32d694742..51b0e2a7624e4 100644
-> > > --- a/include/uapi/linux/can/netlink.h
-> > > +++ b/include/uapi/linux/can/netlink.h
-> > > @@ -103,6 +103,7 @@ struct can_ctrlmode {
-> > >  #define CAN_CTRLMODE_CC_LEN8_DLC=090x100=09/* Classic CAN DLC option=
- */
-> > >  #define CAN_CTRLMODE_TDC_AUTO=09=090x200=09/* CAN transiver automati=
-cally calculates TDCV */
-> > >  #define CAN_CTRLMODE_TDC_MANUAL=09=090x400=09/* TDCV is manually set=
- up by user */
-> >=20
-> > BIT(x) is these days available also for uapi I think.
-> >=20
-> > > +#define CAN_CTRLMODE_LIN=09=090x800=09/* LIN bus mode */
+>  https://hexdev.de/hexlin#hexLINSER
 >=20
-> So, should I use just BIT(11) for the new define, or should I also
-> refactor the whole list while at it?
+> brings the user to another headline ("hexLIN" not "hexLINSER") as long
+> as headline "hexLINSER" can be also displayed.
+>=20
+> When using firefox, the top headline is hexLINSER as expected (at least
+> I do).
 
-Either is fine for me.
 
---=20
- i.
---8323328-1801532953-1715173426=:3164--
+Yeah, I think its actually chrome that I saw it originally, but that's
+probably irrelevant. After your re-org, in Chrome, if the window is small
+enough, I still only see the "3 Open Source Tool: hexLIN" stuff, but
+that's not an issue with the binding itself, so I won't hold things up
+on that basis.
+
+--tlupBOI+4XnNwj6+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjulWQAKCRB4tDGHoIJi
+0tMQAP9fMElMFGNJxdwBsOADn6kLSS6YLWaEOU+ouw82kF76MAEAptNwatRO9P4z
+xo6AX9qqibZldOB8BhC2XkjXXCc6BAo=
+=k3yE
+-----END PGP SIGNATURE-----
+
+--tlupBOI+4XnNwj6+--
 
