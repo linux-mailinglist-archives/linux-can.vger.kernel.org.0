@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-615-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-616-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AE218C13D2
-	for <lists+linux-can@lfdr.de>; Thu,  9 May 2024 19:20:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C2D88C13D3
+	for <lists+linux-can@lfdr.de>; Thu,  9 May 2024 19:20:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96EFAB22148
-	for <lists+linux-can@lfdr.de>; Thu,  9 May 2024 17:20:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53A5A281FBF
+	for <lists+linux-can@lfdr.de>; Thu,  9 May 2024 17:20:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D91E29CFD;
-	Thu,  9 May 2024 17:19:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1DC63B7A0;
+	Thu,  9 May 2024 17:19:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="u1Q3W2nT"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="DmlzDXeN"
 X-Original-To: linux-can@vger.kernel.org
 Received: from fritzc.com (mail.fritzc.com [213.160.72.247])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B7210A1D;
-	Thu,  9 May 2024 17:19:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD00512E73;
+	Thu,  9 May 2024 17:19:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.72.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715275177; cv=none; b=CfsxWZnYsw88Jg1q7k8/uIvxzEbJtv+l09gkEZMlZMTnI2hGxzMiz7flVsS4KXvD8FlmJZI3LRCYh0+aDyx+F7Tn7reekFykmW9+PKhWSiIqQENB93BvQgasnk75FBWYSRWtJEQxVDhIE2tkW25IFuUPd7oJQflTplZk/Y25Dyo=
+	t=1715275179; cv=none; b=A7sb079YjbT3QMnuv+fTpNUsjO+pODF/vtqww9j9WUKtqKLsX5fM9MgeKuQD7N/HT9NVJJkMYVva9YZXtuPqhJw2aGGlqF8bCNM7JZo/xrN5WtmcdZ7QifeOQLOPobMTsVBdOHYiLLzUNsKBAAibxiAeo91GP6CLq9sKKiFFFAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715275177; c=relaxed/simple;
-	bh=hbzdar6uDYp8LFv2vP4TCnUrxQbuGY4y4ZeT1MWWx4w=;
+	s=arc-20240116; t=1715275179; c=relaxed/simple;
+	bh=sMluPj+jC7yMLoz5EGyg5Bjoc4Ga76mBFeLDoKWv4ek=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EL8ZLOqjdWdOnvoqq1rvji64xGxnIEGcqxjnc0ibhAgl4YAkjPNyIDdx70SnZMdwwy6/Phaw1sgeNXTlKKDBcZzs9JybRHGSpMv6dDmKHpIHrDSE0y6Hy4T0hVAOx4MuEI0jZKx8/Fb8nSskOMFt90IHInso4fjq08eKEk+pOlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=u1Q3W2nT; arc=none smtp.client-ip=213.160.72.247
+	 MIME-Version; b=f/8FMIpTtwUCSAm45fsinuqAlBDnINPD5J7Jz4HxdHbYnrzCOzJ0JgsYhzf4qGMp9StpQ/QouCsW7mf4ztjVKiVGR0MOE56DH2DKZwnHPUtYyM1bOwQQaI0fg0eEraknEjUz16r0epNsMbHY5nGPSEEfUniNPLn70vikb/ZBYGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=DmlzDXeN; arc=none smtp.client-ip=213.160.72.247
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hexdev.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
@@ -37,15 +37,15 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=9vkV9UGg4DGedALEXnhKw20+Zc2Z65ZKqW42pkKLwb8=; b=u1Q3W2nTp/RnaCnXWXZWGC/ZVr
-	eM3yHKwPogtbXCKNr1J8BWguVHG8LxEAvtDeIPzSkixLWk1CmHUx+IXZbfvfzv8/iA07R2kl8PN0M
-	DnUycRxa0lZc5RoPSuL4bVY2OsUpxrZIOSBAw63a+te9cI3pQngtdD07fDoqKDu/zFok=;
+	bh=n03cPb38QYSs83+us38pW77fDCs4X3Pw+BwJ3PvVIWg=; b=DmlzDXeNnVz0F7KXqi5uWx+l4B
+	GhGlcLCrCldBQ5KlegwLUh/rrrDnGI9f/05SiNYTqR/De3c/NClkiD8cZ4OD89EEAfakp7dCoZIMN
+	SInTXd0zjz7cW6RKQSBsBFcJ1GEzrxQvq+QCls7IQHiGGXZJ1YGD+4o1CeWCzaEFVdzc=;
 Received: from 127.0.0.1
 	by fritzc.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim latest)
 	(envelope-from <christoph.fritz@hexdev.de>)
-	id 1s57QQ-001jf8-0h;
-	Thu, 09 May 2024 19:19:22 +0200
+	id 1s57QR-001jf8-0y;
+	Thu, 09 May 2024 19:19:23 +0200
 From: Christoph Fritz <christoph.fritz@hexdev.de>
 To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Jiri Slaby <jirislaby@kernel.org>,
@@ -73,9 +73,9 @@ Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>,
 	devicetree@vger.kernel.org,
 	linux-input@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: [PATCH v4 09/11] can: lin: Handle rx offload config frames
-Date: Thu,  9 May 2024 19:17:34 +0200
-Message-Id: <20240509171736.2048414-10-christoph.fritz@hexdev.de>
+Subject: [PATCH v4 10/11] can: lin: Support setting LIN mode
+Date: Thu,  9 May 2024 19:17:35 +0200
+Message-Id: <20240509171736.2048414-11-christoph.fritz@hexdev.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240509171736.2048414-1-christoph.fritz@hexdev.de>
 References: <20240509171736.2048414-1-christoph.fritz@hexdev.de>
@@ -87,64 +87,133 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The CAN Broadcast Manager now has the capability to dispatch CANFD
-frames marked with the id LINBUS_RXOFFLOAD_ID.
+A LIN node can work as commander or responder, so introduce a new
+control mode (CAN_CTRLMODE_LIN_COMMANDER) for configuration.
 
-Introduce functionality to interpret these specific frames, enabling the
-configuration of RX offloading within the LIN driver.
+This enables e.g. the userland tool ip from iproute2 to turn on
+commander mode when the device is being brought up.
 
 Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
 ---
- drivers/net/can/lin.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/net/can/lin.c            | 40 +++++++++++++++++++++++++++++++-
+ include/net/lin.h                |  7 ++++++
+ include/uapi/linux/can/netlink.h |  1 +
+ 3 files changed, 47 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/lin.c b/drivers/net/can/lin.c
-index a22768c17e3f8..f77abd7d7d21c 100644
+index f77abd7d7d21c..03ddf5d5a31b8 100644
 --- a/drivers/net/can/lin.c
 +++ b/drivers/net/can/lin.c
-@@ -185,6 +185,27 @@ static const struct attribute_group lin_sysfs_group = {
- 	.attrs = lin_sysfs_attrs,
- };
+@@ -262,11 +262,40 @@ static netdev_tx_t lin_start_xmit(struct sk_buff *skb,
+ 	return NETDEV_TX_OK;
+ }
  
-+static int lin_setup_rxoffload(struct lin_device *ldev,
-+			       struct canfd_frame *cfd)
++static int lin_update_mode(struct net_device *ndev)
 +{
-+	struct lin_responder_answer answ;
++	struct lin_device *ldev = netdev_priv(ndev);
++	u32 ctrlmode = ldev->can.ctrlmode;
++	enum lin_mode lm;
++	int ret = 0;
 +
-+	if (!(cfd->flags & CANFD_FDF))
-+		return -EINVAL;
-+
-+	BUILD_BUG_ON(sizeof(answ) > sizeof(cfd->data));
-+	memcpy(&answ, cfd->data, sizeof(answ));
-+
-+	answ.lf.checksum_mode = (cfd->can_id & LIN_ENHANCED_CKSUM_FLAG) ?
-+			LINBUS_ENHANCED : LINBUS_CLASSIC;
-+
-+	if (answ.lf.lin_id > LIN_ID_MASK ||
-+	    answ.event_associated_id > LIN_ID_MASK)
-+		return -EINVAL;
-+
-+	return ldev->ldev_ops->update_responder_answer(ldev, &answ);
-+}
-+
- static void lin_tx_work_handler(struct work_struct *ws)
- {
- 	struct lin_device *ldev = container_of(ws, struct lin_device,
-@@ -197,6 +218,14 @@ static void lin_tx_work_handler(struct work_struct *ws)
- 	ldev->tx_busy = true;
- 
- 	cfd = (struct canfd_frame *)ldev->tx_skb->data;
-+
-+	if (cfd->can_id & LIN_RXOFFLOAD_DATA_FLAG) {
-+		ret = lin_setup_rxoffload(ldev, cfd);
-+		if (ret < 0)
-+			netdev_err(ndev, "setting up rx failed %d\n", ret);
-+		goto lin_tx_out;
++	lm = (ctrlmode & CAN_CTRLMODE_LIN_COMMANDER) ? LINBUS_COMMANDER :
++						       LINBUS_RESPONDER;
++	if (ldev->lmode != lm) {
++		if (!ldev->ldev_ops->update_lin_mode) {
++			netdev_err(ndev, "setting lin mode unsupported\n");
++			return -EINVAL;
++		}
++		ret = ldev->ldev_ops->update_lin_mode(ldev, lm);
++		if (ret) {
++			netdev_err(ndev, "Failed to set lin mode: %d\n", ret);
++			return ret;
++		}
++		ldev->lmode = lm;
 +	}
 +
- 	lf.checksum_mode = (cfd->can_id & LIN_ENHANCED_CKSUM_FLAG) ?
- 			   LINBUS_ENHANCED : LINBUS_CLASSIC;
- 	lf.lin_id = cfd->can_id & LIN_ID_MASK;
++	return ret;
++}
++
+ static int lin_open(struct net_device *ndev)
+ {
+ 	struct lin_device *ldev = netdev_priv(ndev);
+ 	int ret;
+ 
++	ret = lin_update_mode(ndev);
++	if (ret)
++		return ret;
++
+ 	ldev->tx_busy = false;
+ 
+ 	ret = open_candev(ndev);
+@@ -443,7 +472,7 @@ struct lin_device *register_lin(struct device *dev,
+ 	ndev->sysfs_groups[0] = &lin_sysfs_group;
+ 	ldev->can.bittiming.bitrate = LIN_DEFAULT_BAUDRATE;
+ 	ldev->can.ctrlmode = CAN_CTRLMODE_LIN;
+-	ldev->can.ctrlmode_supported = 0;
++	ldev->can.ctrlmode_supported = CAN_CTRLMODE_LIN_COMMANDER;
+ 	ldev->can.bitrate_const = lin_bitrate;
+ 	ldev->can.bitrate_const_cnt = ARRAY_SIZE(lin_bitrate);
+ 	ldev->can.do_set_bittiming = lin_set_bittiming;
+@@ -458,6 +487,15 @@ struct lin_device *register_lin(struct device *dev,
+ 		goto exit_candev;
+ 	}
+ 
++	ldev->lmode = LINBUS_RESPONDER;
++	if (ldev->ldev_ops->update_lin_mode) {
++		ret = ldev->ldev_ops->update_lin_mode(ldev, ldev->lmode);
++		if (ret) {
++			netdev_err(ndev, "updating lin mode failed\n");
++			goto exit_candev;
++		}
++	}
++
+ 	ret = register_candev(ndev);
+ 	if (ret)
+ 		goto exit_candev;
+diff --git a/include/net/lin.h b/include/net/lin.h
+index 31bb0feefd188..63ac870a0ab6f 100644
+--- a/include/net/lin.h
++++ b/include/net/lin.h
+@@ -36,6 +36,11 @@ struct lin_attr {
+ 	struct lin_device *ldev;
+ };
+ 
++enum lin_mode {
++	LINBUS_RESPONDER = 0,
++	LINBUS_COMMANDER,
++};
++
+ struct lin_device {
+ 	struct can_priv can;  /* must be the first member */
+ 	struct net_device *ndev;
+@@ -45,6 +50,7 @@ struct lin_device {
+ 	struct work_struct tx_work;
+ 	bool tx_busy;
+ 	struct sk_buff *tx_skb;
++	enum lin_mode lmode;
+ };
+ 
+ enum lin_checksum_mode {
+@@ -71,6 +77,7 @@ struct lin_device_ops {
+ 	int (*ldo_open)(struct lin_device *ldev);
+ 	int (*ldo_stop)(struct lin_device *ldev);
+ 	int (*ldo_tx)(struct lin_device *ldev, const struct lin_frame *frame);
++	int (*update_lin_mode)(struct lin_device *ldev, enum lin_mode lm);
+ 	int (*update_bitrate)(struct lin_device *ldev, u16 bitrate);
+ 	int (*update_responder_answer)(struct lin_device *ldev,
+ 				       const struct lin_responder_answer *answ);
+diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
+index a37f56d86c5f2..cc390f6444d59 100644
+--- a/include/uapi/linux/can/netlink.h
++++ b/include/uapi/linux/can/netlink.h
+@@ -104,6 +104,7 @@ struct can_ctrlmode {
+ #define CAN_CTRLMODE_TDC_AUTO		0x200	/* CAN transiver automatically calculates TDCV */
+ #define CAN_CTRLMODE_TDC_MANUAL		0x400	/* TDCV is manually set up by user */
+ #define CAN_CTRLMODE_LIN		BIT(11)	/* LIN bus mode */
++#define CAN_CTRLMODE_LIN_COMMANDER	BIT(12)	/* LIN bus specific commander mode */
+ 
+ /*
+  * CAN device statistics
 -- 
 2.39.2
 
