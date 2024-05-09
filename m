@@ -1,138 +1,142 @@
-Return-Path: <linux-can+bounces-620-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-621-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9C068C13E9
-	for <lists+linux-can@lfdr.de>; Thu,  9 May 2024 19:21:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EB488C1485
+	for <lists+linux-can@lfdr.de>; Thu,  9 May 2024 20:09:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 961072825D0
-	for <lists+linux-can@lfdr.de>; Thu,  9 May 2024 17:21:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A2DBAB215E6
+	for <lists+linux-can@lfdr.de>; Thu,  9 May 2024 18:09:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B1C253E00;
-	Thu,  9 May 2024 17:19:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3389D71738;
+	Thu,  9 May 2024 18:09:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b="TGoe7vhl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pcWbs/r1"
 X-Original-To: linux-can@vger.kernel.org
-Received: from fritzc.com (mail.fritzc.com [213.160.72.247])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F33405E6;
-	Thu,  9 May 2024 17:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.72.247
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2FB4A21;
+	Thu,  9 May 2024 18:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715275183; cv=none; b=InSpsAunapvTFiD+BsfuIj+iX83eiSpZrveewGGXkqAkiJQqK3vh2WRN8rirG45aiUJd39U0LEycNn4Q/b2Vn5WXiRlIg/8eJNBApebhBYOyJcUTDXB0M/PaquWvFVFWqn7FDff45HekomkLxflG6N5oWDl2B8wuYSUrua/IBSc=
+	t=1715278185; cv=none; b=jqjUccbNx8kjy3idHsiIIaTnUNUHOb1GxXiTqu0PBAq7W8j/qU6szcj8ZlysYSzP+R2QbgHcDX2YNT8WyE4XPgsCeIHGudHIhRvJSglADpdpr87v+DKaTaM6uekf9UIFxPA3dH7mdERpe1QnNBKcCV7TijUkmw91+9OOdpUML38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715275183; c=relaxed/simple;
-	bh=ZNBkk0aVxeozKWnZIPacaJBiUOq1SU0PqpXC+vRKIgo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RTwnAWu12x6cDmBZ5ISiqiubrH+l+1vGe7FvkVjWYNEsbtHWuy70GtZYZ0TlyOOeKkSYk+2frrR/Lt1SMQsicZfk3PE5zwG2DlHIG0cVnwcw8TOgMESLrazP0pJwYJttf/sylKfgUx0f7Jv3Mv0gw7F1xi/dTeXSS5KPY5HHe78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de; spf=pass smtp.mailfrom=hexdev.de; dkim=pass (1024-bit key) header.d=fritzc.com header.i=@fritzc.com header.b=TGoe7vhl; arc=none smtp.client-ip=213.160.72.247
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hexdev.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hexdev.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
-	s=dkim; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=LKvHbOOcYtlKi3CDAlSJ+dKoq+VYqd8ks2SkT8czu3Q=; b=TGoe7vhlBbfSOv4krGbNumCiED
-	xYLlPDFuyJ/3Ijar13BImQhzlK81zmreOGC4UQPTIREN1MsxzSyem+se5PQwOYhmtInAlshWuI/8T
-	xxEEEDAyvCznqnQtn1NyTTfyy9YCvAj4nCSGI1BlyaX/tZ4QADRAA4XV4XV+I5xbb9BM=;
-Received: from 127.0.0.1
-	by fritzc.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim latest)
-	(envelope-from <christoph.fritz@hexdev.de>)
-	id 1s57QS-001jf8-1W;
-	Thu, 09 May 2024 19:19:25 +0200
-From: Christoph Fritz <christoph.fritz@hexdev.de>
-To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Simon Horman <horms@kernel.org>,
+	s=arc-20240116; t=1715278185; c=relaxed/simple;
+	bh=jwv2fzzjt0cfgGB3Brq3DaNH87PYRXNR2e6rGYGOafE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y82mLFY9ueoQfAwtLzvVH2zRHyVkivHPSbOCvb6AQUI1nBLoR6eBW5/wl20MZuxjA0SnHo92wzCfmjjQfL1szgPRdO4jp4thyC6Iuf8P065nFWOmf1leO9J87wd8Bm7M35y1yWj0fS09lo+ovsgLSwmgoRAL2Ha4B0zpOtgqT2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pcWbs/r1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B79C116B1;
+	Thu,  9 May 2024 18:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715278184;
+	bh=jwv2fzzjt0cfgGB3Brq3DaNH87PYRXNR2e6rGYGOafE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pcWbs/r1G654QjExkZzDw+Ye8SGuO5KNSoJXgb3ZcHmQu3x4E4I2S1EyboJZJ69Pm
+	 mQGtOZps9Mk4n5oD3NC0m6qaZEA2R4B3yV8ziliaYQKJuVPbeega5VLoJMM7bdEW8w
+	 QsO0dRoyLJXReH4e+Gr2o/o8rwX7eRPfNmNxtDhq2odx+5HXePP3adhAZMwihdufgm
+	 TJYZN9r45oB8RBk9LJ07YyNdaLx0jXiIe+uuIlXoZ3rnG7UWq+TcvufvwhgqAcdXUj
+	 IWIJQk7xiKk8ZMCAMycm8EUrbMdGg/3MJ+w5ZJHt/4Fmr2dZhqKHu/Lwo0Trc23XnT
+	 53sTqY3R2bs6Q==
+Date: Thu, 9 May 2024 19:09:37 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Christoph Fritz <christoph.fritz@hexdev.de>
+Cc: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Jiri Slaby <jirislaby@kernel.org>, Simon Horman <horms@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
 	Oliver Hartkopp <socketcan@hartkopp.net>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
 	"David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Jiri Kosina <jikos@kernel.org>,
 	Benjamin Tissoires <bentiss@kernel.org>,
 	Sebastian Reichel <sre@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>
-Cc: Andreas Lauser <andreas.lauser@mercedes-benz.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andreas Lauser <andreas.lauser@mercedes-benz.com>,
 	Jonathan Corbet <corbet@lwn.net>,
-	Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: [PATCH v4 11/11] HID: hexLIN: Implement ability to update lin mode
-Date: Thu,  9 May 2024 19:17:36 +0200
-Message-Id: <20240509171736.2048414-12-christoph.fritz@hexdev.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240509171736.2048414-1-christoph.fritz@hexdev.de>
+	Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v4 06/11] dt-bindings: net/can: Add serial LIN adapter
+ hexLINSER
+Message-ID: <20240509-kindred-cauterize-ced967ec9d73@spud>
 References: <20240509171736.2048414-1-christoph.fritz@hexdev.de>
+ <20240509171736.2048414-7-christoph.fritz@hexdev.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="36g1c/htqkz0JRR5"
+Content-Disposition: inline
+In-Reply-To: <20240509171736.2048414-7-christoph.fritz@hexdev.de>
 
-Enhance the hexLIN driver by implementing the newly introduced
-update_lin_mode() callback.  So that either commander or responder mode
-can be configured on this hardware.
 
-Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
----
- drivers/hid/hid-hexdev-hexlin.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+--36g1c/htqkz0JRR5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/hid/hid-hexdev-hexlin.c b/drivers/hid/hid-hexdev-hexlin.c
-index a9ed080b3e33e..48fcb1e5b6e41 100644
---- a/drivers/hid/hid-hexdev-hexlin.c
-+++ b/drivers/hid/hid-hexdev-hexlin.c
-@@ -164,6 +164,8 @@ HEXLIN_GET_CMD(get_baudrate, HEXLIN_GET_BAUDRATE)
- 	}
- 
- HEXLIN_VAL_CMD(send_break, HEXLIN_SEND_BREAK, hexlin_val8_req, u8)
-+HEXLIN_VAL_CMD(set_mode_controller, HEXLIN_SET_MODE_CONTROLLER, hexlin_val8_req,
-+	       bool)
- 
- static int hexlin_send_unconditional(struct hexlin_priv_data *priv,
- 				     const struct hexlin_frame *hxf)
-@@ -322,6 +324,14 @@ static int hexlin_ldo_tx(struct lin_device *ldev,
- 	return ret;
- }
- 
-+static int  hexlin_update_lin_mode(struct lin_device *ldev, enum lin_mode lm)
-+{
-+	struct hid_device *hdev = to_hid_device(ldev->dev);
-+	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
-+
-+	return hexlin_set_mode_controller(priv, lm == LINBUS_COMMANDER);
-+}
-+
- static int hexlin_update_bitrate(struct lin_device *ldev, u16 bitrate)
- {
- 	struct hid_device *hdev = to_hid_device(ldev->dev);
-@@ -393,6 +403,7 @@ static const struct lin_device_ops hexlin_ldo = {
- 	.ldo_open = hexlin_open,
- 	.ldo_stop = hexlin_stop,
- 	.ldo_tx = hexlin_ldo_tx,
-+	.update_lin_mode = hexlin_update_lin_mode,
- 	.update_bitrate = hexlin_update_bitrate,
- 	.get_responder_answer = hexlin_get_responder_answer,
- 	.update_responder_answer = hexlin_update_resp_answer,
--- 
-2.39.2
+On Thu, May 09, 2024 at 07:17:31PM +0200, Christoph Fritz wrote:
+> Add dt-bindings for hexDEV hexLINSER serial LIN adapters. These adapters
+> are basically just LIN transceivers that are mostly hard-wired to serial
+> devices.
+>=20
+> Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
+> ---
+>  .../bindings/net/can/hexdev,hex-linser.yaml   | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/hexdev,hex-=
+linser.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/net/can/hexdev,hex-linser.=
+yaml b/Documentation/devicetree/bindings/net/can/hexdev,hex-linser.yaml
+> new file mode 100644
+> index 0000000000000..42dce3348f73c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/hexdev,hex-linser.yaml
+> @@ -0,0 +1,32 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/hexdev,hex-linser.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: hexDEV hexLINSER serial LIN adapter
+> +
+> +description:
+> +  LIN transceiver, mostly hard-wired to a serial device, used for commun=
+ication
+> +  on a LIN bus.
+> +  For more details on the adapter, visit <https://hexdev.de/hexlin#hexLI=
+NSER>.
 
+I figured I should check in firefox this time, link works fine :)
+
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+--36g1c/htqkz0JRR5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZj0RYQAKCRB4tDGHoIJi
+0rn9AP9GeUrrcK2lOZklZKtI73PoesLELNp3iickgJOn7nnz3gEA2+jfFsbOdudy
+aNhI8GeBNvUtapOXQ7u6wpXTXsMdLgQ=
+=CoEI
+-----END PGP SIGNATURE-----
+
+--36g1c/htqkz0JRR5--
 
