@@ -1,65 +1,65 @@
-Return-Path: <linux-can+bounces-623-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-624-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3FDC8C259F
-	for <lists+linux-can@lfdr.de>; Fri, 10 May 2024 15:23:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 226EA8C2600
+	for <lists+linux-can@lfdr.de>; Fri, 10 May 2024 15:47:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF65AB215E6
-	for <lists+linux-can@lfdr.de>; Fri, 10 May 2024 13:23:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79443B21553
+	for <lists+linux-can@lfdr.de>; Fri, 10 May 2024 13:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C93D12BF34;
-	Fri, 10 May 2024 13:23:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35EBF12C498;
+	Fri, 10 May 2024 13:47:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cFu7UXHk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FgJ+Fvsf"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2889C129E7A;
-	Fri, 10 May 2024 13:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB3812C47D;
+	Fri, 10 May 2024 13:46:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715347434; cv=none; b=sdQijdRHzLF8gD1l811ICGZnrUX6SnGiNk+LqkeTmB3/GREaUU8nfdCpLovxIO0+lwen4uqzwhyhScwdDJuym/eN9jRoTcdidTOecZ+cjUH8Dom+MSBTimWO6UX/GuwAfI72UOGTKvxuSqwHsuboq5JlGHnyBPCjLMnWh1ajels=
+	t=1715348821; cv=none; b=UgqLP9JCQGZKIrcAISOYSJY6coMWw6Pkumk61iO0FkuUQ+Fk9PYAy6jCjg9fJxVGBpbYEgtoxx8kqC7htNsba+cvz/15otV/OImgWwrwUqDvKYdR6EYXhV4Jr7YCUR/JOKSWLGLLg5IclDZLn0UZyUJpNyGN/YeumG+ZfmbLBdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715347434; c=relaxed/simple;
-	bh=PlBI436FnWpe4qKXAqRWfFlRs/mzHj3G1n2wEn36HRE=;
+	s=arc-20240116; t=1715348821; c=relaxed/simple;
+	bh=kzq6xPktmwyI6cLzBt7/inx8gIMb7qmXJ8/lA7TcBBw=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=XCVhWQcEApILGrOFJZbXWVP+Pe7dfe6y8IB3vCAZ1JXSinMn/4/GGQIwpa0ARnOZ5JghLlmA/Bb84BCOoSnjT1oPwNOGMkzDK8hOfOX/5NJtiD9WzOMZPNc2KMqUBV3fCBNqGHB1n+cUjpVceEz7mYw3dEZuqFfEpAKFlY9uGrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cFu7UXHk; arc=none smtp.client-ip=192.198.163.8
+	 MIME-Version:Content-Type; b=lI5mouwWPrXSiVdH6FWUFc6gDiiLVRuzWAjZs96B6maJR/3peemxcY1l9wDNZjc8GeaZRstKlJu9kBcNZsKm4mmnIF1h8tnLIcuNbWl+t8VoWlirR1LWAANfmxssrXw3GqGOTF1tlk1oMGaQzVlnaVEZ6JM+PEW6mbsqIvN1Dk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FgJ+Fvsf; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715347433; x=1746883433;
+  t=1715348819; x=1746884819;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=PlBI436FnWpe4qKXAqRWfFlRs/mzHj3G1n2wEn36HRE=;
-  b=cFu7UXHkLSbkdEv4kfCirIQfReXEgHCkK9vPmpo2dyDyQpdsmsT1iABi
-   Qg32YXqRbQofQVmgeQiDeGfWJQTa3YAl1opKHGVuB0zg9GmoZuMh7qPzU
-   fqohuV7yxnRqhqGu0rHZ4RC7JTQhuvuO3LQng6lZgKyMB/aTI6nk6+Vt5
-   ujCKlOdZqdNLF0fUkjMHXvW2auxxtK/xhvdAu3adpkBM+loe2OeDp4gh4
-   qnvt0idgpLcVLfuJ9xQ2Ap1GozcgXim16WkmAgnEYxQNB239BcckcadH3
-   bzTYqRQYpKy+F3NL53O76TtUCG9XPpx70J39GNrNEBH7y25vkLKM+xXdI
-   A==;
-X-CSE-ConnectionGUID: OrgIZxajTc21rM27ykUMbA==
-X-CSE-MsgGUID: RFrEkhC7TGODWy9FTFU6Qw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="28837633"
+  bh=kzq6xPktmwyI6cLzBt7/inx8gIMb7qmXJ8/lA7TcBBw=;
+  b=FgJ+FvsfT9/akkco6KopBq6hrAaoN+cECyOkqrNCLVLZDbWzEUkM3iSK
+   QfOUJ+WGhHdWfkgE7T8PtlAtE8ZIhHjx3meDTF/ziLvBQj9E766NPkv6H
+   GrQrid1NXGlpcjKpBHzftN4ayF6kFy+kOLZkj+kbYr3YzL5FKabUrpmUG
+   4HYiwRUd6eN2e4reN0vhatjYLF4aGsWHGi3SPKnPsUdiXbOz6H0JVQS49
+   xlcUGJt7omKm4OLhnp0F2jgpudwaifw3P+AYEhYiNcLiFXhC9MwryieEA
+   32qHoHLln6+bUfjutxND5bx8ANwQ8rJW/36gvMP0fuxxj6SMI9ZA9+utb
+   Q==;
+X-CSE-ConnectionGUID: h20ejQKqSq6W0Q2pYG5vGQ==
+X-CSE-MsgGUID: H1SZdVr9QgOc4g9v0czJRw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="11466736"
 X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
-   d="scan'208";a="28837633"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 06:23:51 -0700
-X-CSE-ConnectionGUID: qEzO/3H4Rza6fW8NVSELCw==
-X-CSE-MsgGUID: iargzy86RuOkCUNjJ9TGdw==
+   d="scan'208";a="11466736"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 06:46:58 -0700
+X-CSE-ConnectionGUID: G9dndEvyRk+TW5n2reYINQ==
+X-CSE-MsgGUID: A5pMg1KXT6aHtSsvTUgLbw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
-   d="scan'208";a="29561624"
+   d="scan'208";a="34158748"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.85])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 06:23:44 -0700
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 06:46:47 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 10 May 2024 16:23:39 +0300 (EEST)
+Date: Fri, 10 May 2024 16:46:43 +0300 (EEST)
 To: Christoph Fritz <christoph.fritz@hexdev.de>
 cc: Jiri Slaby <jirislaby@kernel.org>, Simon Horman <horms@kernel.org>, 
     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -79,10 +79,10 @@ cc: Jiri Slaby <jirislaby@kernel.org>, Simon Horman <horms@kernel.org>,
     linux-can@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
     devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
     linux-serial <linux-serial@vger.kernel.org>
-Subject: Re: [PATCH v4 01/11] can: Add LIN bus as CAN abstraction
-In-Reply-To: <20240509171736.2048414-2-christoph.fritz@hexdev.de>
-Message-ID: <eab6bf12-38cd-028c-02d8-6dd11e7e1864@linux.intel.com>
-References: <20240509171736.2048414-1-christoph.fritz@hexdev.de> <20240509171736.2048414-2-christoph.fritz@hexdev.de>
+Subject: Re: [PATCH v4 02/11] HID: hexLIN: Add support for USB LIN adapter
+In-Reply-To: <20240509171736.2048414-3-christoph.fritz@hexdev.de>
+Message-ID: <4bf1a5e9-904c-584e-72df-71abc3f99bd2@linux.intel.com>
+References: <20240509171736.2048414-1-christoph.fritz@hexdev.de> <20240509171736.2048414-3-christoph.fritz@hexdev.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -93,660 +93,760 @@ Content-Type: text/plain; charset=US-ASCII
 
 On Thu, 9 May 2024, Christoph Fritz wrote:
 
-> Introduce a LIN (local interconnect network) abstraction on top of CAN.
-> This is a glue driver adapting CAN on one side while offering LIN
-> abstraction on the other side. So that upcoming LIN device drivers can
-> make use of it.
+> Introduce driver support for hexDEV hexLIN USB LIN adapter, enabling LIN
+> communication over USB for both controller and responder modes. The
+> driver interfaces with the CAN_LIN framework for userland connectivity.
+> 
+> For more details on the adapter, visit: https://hexdev.de/hexlin/
 > 
 > Tested-by: Andreas Lauser <andreas.lauser@mercedes-benz.com>
 > Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
 > ---
->  drivers/net/can/Kconfig          |  10 +
->  drivers/net/can/Makefile         |   1 +
->  drivers/net/can/lin.c            | 470 +++++++++++++++++++++++++++++++
->  include/net/lin.h                |  90 ++++++
->  include/uapi/linux/can/netlink.h |   1 +
->  5 files changed, 572 insertions(+)
->  create mode 100644 drivers/net/can/lin.c
->  create mode 100644 include/net/lin.h
+>  drivers/hid/Kconfig             |  19 +
+>  drivers/hid/Makefile            |   1 +
+>  drivers/hid/hid-hexdev-hexlin.c | 609 ++++++++++++++++++++++++++++++++
+>  drivers/hid/hid-ids.h           |   1 +
+>  drivers/hid/hid-quirks.c        |   3 +
+>  5 files changed, 633 insertions(+)
+>  create mode 100644 drivers/hid/hid-hexdev-hexlin.c
 > 
-> diff --git a/drivers/net/can/lin.c b/drivers/net/can/lin.c
+> diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+> index 08446c89eff6e..682e3ab5fdfe5 100644
+> --- a/drivers/hid/Kconfig
+> +++ b/drivers/hid/Kconfig
+> @@ -496,6 +496,25 @@ config HID_GYRATION
+>  	help
+>  	Support for Gyration remote control.
+>  
+> +config HID_MCS_HEXDEV
+> +	tristate "hexDEV LIN-BUS adapter support"
+> +	depends on HID && CAN_NETLINK && CAN_DEV
+> +	select CAN_LIN
+> +	help
+> +	  Support for hexDEV its hexLIN USB LIN bus adapter.
+> +
+> +	  Local Interconnect Network (LIN) to USB adapter for controller and
+> +	  responder usage.
+> +	  This device driver is using CAN_LIN for a userland connection on
+> +	  one side and USB HID for the actual hardware adapter on the other
+> +	  side.
+> +
+> +	  If you have such an adapter, say Y here and see
+> +	  <https://hexdev.de/hexlin>.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called hid-hexlin.
+> +
+>  config HID_ICADE
+>  	tristate "ION iCade arcade controller"
+>  	help
+> diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+> index ce71b53ea6c54..6af678f283548 100644
+> --- a/drivers/hid/Makefile
+> +++ b/drivers/hid/Makefile
+> @@ -59,6 +59,7 @@ obj-$(CONFIG_HID_GOOGLE_STADIA_FF)	+= hid-google-stadiaff.o
+>  obj-$(CONFIG_HID_VIVALDI)	+= hid-vivaldi.o
+>  obj-$(CONFIG_HID_GT683R)	+= hid-gt683r.o
+>  obj-$(CONFIG_HID_GYRATION)	+= hid-gyration.o
+> +obj-$(CONFIG_HID_MCS_HEXDEV)	+= hid-hexdev-hexlin.o
+>  obj-$(CONFIG_HID_HOLTEK)	+= hid-holtek-kbd.o
+>  obj-$(CONFIG_HID_HOLTEK)	+= hid-holtek-mouse.o
+>  obj-$(CONFIG_HID_HOLTEK)	+= hid-holtekff.o
+> diff --git a/drivers/hid/hid-hexdev-hexlin.c b/drivers/hid/hid-hexdev-hexlin.c
 > new file mode 100644
-> index 0000000000000..a22768c17e3f8
+> index 0000000000000..a9ed080b3e33e
 > --- /dev/null
-> +++ b/drivers/net/can/lin.c
-> @@ -0,0 +1,470 @@
+> +++ b/drivers/hid/hid-hexdev-hexlin.c
+> @@ -0,0 +1,609 @@
 > +// SPDX-License-Identifier: GPL-2.0+
-> +/* Copyright (C) 2024 hexDEV GmbH - https://hexdev.de */
+> +/*
+> + * LIN bus USB adapter driver https://hexdev.de/hexlin
+> + *
+> + * Copyright (C) 2024 hexDEV GmbH
+> + */
 > +
-> +#include <linux/can/core.h>
-> +#include <linux/can/dev.h>
-> +#include <linux/can/error.h>
+> +#include <linux/completion.h>
+> +#include <linux/hid.h>
 > +#include <linux/module.h>
-> +#include <linux/device.h>
-> +#include <linux/netdevice.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
+> +#include <linux/wait.h>
 > +#include <net/lin.h>
+> +#include "hid-ids.h"
 > +
-> +static const u8 lin_id_parity_tbl[] = {
-> +	0x80, 0xC0, 0x40, 0x00, 0xC0, 0x80, 0x00, 0x40,
-> +	0x00, 0x40, 0xC0, 0x80, 0x40, 0x00, 0x80, 0xC0,
-> +	0x40, 0x00, 0x80, 0xC0, 0x00, 0x40, 0xC0, 0x80,
-> +	0xC0, 0x80, 0x00, 0x40, 0x80, 0xC0, 0x40, 0x00,
-> +	0x00, 0x40, 0xC0, 0x80, 0x40, 0x00, 0x80, 0xC0,
-> +	0x80, 0xC0, 0x40, 0x00, 0xC0, 0x80, 0x00, 0x40,
-> +	0xC0, 0x80, 0x00, 0x40, 0x80, 0xC0, 0x40, 0x00,
-> +	0x40, 0x00, 0x80, 0xC0, 0x00, 0x40, 0xC0, 0x80,
+> +#define HEXLIN_PKGLEN_MAX	64
+> +#define HEXLIN_LEN_RETCODE	1
+> +
+> +enum {
+> +	/* answers */
+> +	HEXLIN_SUCCESS			= 0x01,
+> +	HEXLIN_FRAME			= 0x02,
+> +	HEXLIN_ERROR			= 0x03,
+> +	HEXLIN_FAIL			= 0x0F,
+> +	/* lin-responder */
+> +	HEXLIN_SET_MODE_RESPONDER	= 0x10,
+> +	HEXLIN_SET_RESPONDER_ANSWER_ID	= 0x11,
+> +	HEXLIN_GET_RESPONDER_ANSWER_ID	= 0x12,
+> +	/* lin-controller */
+> +	HEXLIN_SET_MODE_CONTROLLER	= 0x20,
+> +	HEXLIN_SEND_BREAK		= 0x21,
+> +	HEXLIN_SEND_UNCONDITIONAL_FRAME	= 0x22,
+> +	/* lin-div */
+> +	HEXLIN_SET_BAUDRATE		= 0x34,
+> +	HEXLIN_GET_BAUDRATE		= 0x35,
+> +	/* div */
+> +	HEXLIN_RESET			= 0xF0,
+> +	HEXLIN_GET_VERSION		= 0xF1,
 > +};
 > +
-> +u8 lin_get_id_parity(u8 id)
+> +struct hexlin_val8_req {
+> +	u8 cmd;
+> +	u8 v;
+> +} __packed;
+> +
+> +struct hexlin_baudrate_req {
+> +	u8 cmd;
+> +	__le16 baudrate;
+> +} __packed;
+> +
+> +struct hexlin_frame {
+> +	__le32 flags;
+> +	u8 len;
+> +	u8 lin_id;
+> +	u8 data[LIN_MAX_DLEN];
+> +	u8 checksum;
+> +	u8 checksum_mode;
+> +} __packed;
+> +
+> +struct hexlin_unconditional_req {
+> +	u8 cmd;
+> +	struct hexlin_frame frm;
+> +} __packed;
+> +
+> +struct hexlin_responder_answer {
+> +	u8 is_active;
+> +	u8 is_event_frame;
+> +	u8 event_associated_id;
+> +	struct hexlin_frame frm;
+> +} __packed;
+> +
+> +struct hexlin_responder_answer_req {
+> +	u8 cmd;
+> +	struct hexlin_responder_answer answ;
+> +} __packed;
+> +
+> +struct hexlin_priv_data {
+> +	struct hid_device *hid_dev;
+> +	struct lin_device *ldev;
+> +	u16 baudrate;
+> +	struct completion wait_in_report;
+> +	bool is_error;
+> +	struct mutex tx_lock;  /* protects hexlin_tx_report() */
+> +	struct hexlin_responder_answer answ;
+> +	u8 fw_version;
+> +};
+> +
+> +static int hexlin_tx_req_status(struct hexlin_priv_data *priv,
+> +				const void *out_report, int len)
 > +{
-> +	return lin_id_parity_tbl[id];
-> +}
-> +EXPORT_SYMBOL(lin_get_id_parity);
+> +	unsigned long t;
+> +	int n, ret = 0;
 > +
-> +static ssize_t lin_identifier_show(struct device *dev,
-> +				   struct device_attribute *attr, char *buf)
-> +{
-> +	struct lin_device *ldev = netdev_priv(to_net_dev(dev));
-> +	struct lin_responder_answer answ;
-> +	int k, count, ret;
-> +	long id;
-> +
-> +	if (!ldev->ldev_ops->get_responder_answer)
-> +		return -EOPNOTSUPP;
-> +
-> +	ret = kstrtol(attr->attr.name, 16, &id);
-> +	if (ret)
-> +		return ret;
-> +	if (id < 0 || id >= LIN_NUM_IDS)
+> +	mutex_lock(&priv->tx_lock);
 
-How can this happen?
+Use guard().
 
-Perhaps you can determine the id arithmetically from a pointer within an 
-array?
+In general btw, if you're instructed to change something, it's useful to 
+check your own patch series for similar cases as review pass is likely to 
+miss some or not even spend time to point out the same thing over and 
+over again. Then they are raised on the next review round which could have 
+been avoided.
 
-> +		return -EINVAL;
+> +	reinit_completion(&priv->wait_in_report);
 > +
-> +	count = sysfs_emit(buf, "%-6s %-11s %-9s %-9s %-2s %-24s %-6s\n",
-> +			   "state", "cksum-mode", "is_event", "event_id",
-> +			   "n", "data", "cksum");
-> +
-> +	ret = ldev->ldev_ops->get_responder_answer(ldev, id, &answ);
-> +	if (ret)
-> +		return ret;
-> +
-> +	count += sysfs_emit_at(buf, count, "%-6s %-11s %-9s %-9u %-2u ",
-> +			       answ.is_active ? "active" : "off",
-> +			       answ.lf.checksum_mode ? "enhanced" : "classic",
-> +			       answ.is_event_frame ? "yes" : "no",
-> +			       answ.event_associated_id,
-> +			       answ.lf.len);
-> +
-> +	for (k = 0; k < answ.lf.len; k++)
-> +		count += sysfs_emit_at(buf, count, "%02x ", answ.lf.data[k]);
-> +	for (; k < 8; k++)
-> +		count += sysfs_emit_at(buf, count, "   ");
-> +	if (answ.lf.len)
-> +		count += sysfs_emit_at(buf, count, " %02x", answ.lf.checksum);
-> +
-> +	count += sysfs_emit_at(buf, count, "\n");
-> +
-> +	return count;
-> +}
-> +
-> +static const char *parse_and_advance(const char *buf, long *result,
-> +				     unsigned int base)
-> +{
-> +	char num_str[5] = {0};
-> +	int num_len = 0;
-> +
-> +	while (*buf && isspace(*buf))
+> +	n = hid_hw_output_report(priv->hid_dev, (__u8 *) out_report, len);
 
-Missing #include for isspace().
+The usual is to not leave space between cast and what is being cast. I 
+know hid functions seem to use __u8 but that's intended for uapi and in 
+kernel, u8 should be used (somebody should eventually cleanup the hid 
+function types too).
 
-> +		buf++;
-> +	while (*buf && isalnum(*buf) && num_len < sizeof(num_str) - 1)
-> +		num_str[num_len++] = *buf++;
-
-This is likely broken when the number is too long because the next 
-number is not correctly parsed? I think you should bail out with an error 
-when a number is invalid (too long).
-
-> +	if (kstrtol(num_str, base, result))
-
-Missing #include for kstrtol() but see b.
-
-Do you care for signed numbers? If not use unsigned kstrtox variant and 
-typing.
-
-> +		return NULL;
-> +
-> +	return buf;
-> +}
-> +
-> +static ssize_t lin_identifier_store(struct device *dev,
-> +				    struct device_attribute *attr,
-> +				    const char *buf, size_t count)
-> +{
-> +	struct lin_device *ldev = netdev_priv(to_net_dev(dev));
-> +	struct lin_responder_answer answ = { 0 };
-> +	const char *ptr = buf;
-> +	int ret;
-> +	long v;
-> +
-> +	if (!ldev->ldev_ops->update_responder_answer)
-> +		return -EOPNOTSUPP;
-> +
-> +	ret = kstrtol(attr->attr.name, 16, &v);
-> +	if (ret)
-> +		return ret;
-> +	if (v < 0 || v >= LIN_NUM_IDS)
-> +		return -EINVAL;
-
-Can this happen?
-
-> +	answ.lf.lin_id = v;
-> +
-> +	ptr = parse_and_advance(ptr, &v, 2);
-> +	if (!ptr)
-> +		return -EINVAL;
-> +	answ.is_active = v != 0;
-> +
-> +	ptr = parse_and_advance(ptr, &v, 2);
-> +	if (!ptr)
-> +		return -EINVAL;
-> +	answ.lf.checksum_mode = v != 0;
-> +
-> +	ptr = parse_and_advance(ptr, &v, 2);
-> +	if (!ptr)
-> +		return -EINVAL;
-> +	answ.is_event_frame = v != 0;
-> +
-> +	ptr = parse_and_advance(ptr, &v, 16);
-> +	if (!ptr || v > LIN_ID_MASK)
-> +		return -EINVAL;
-> +	answ.event_associated_id = v;
-> +
-> +	ptr = parse_and_advance(ptr, &v, 16);
-> +	if (!ptr || v > LIN_MAX_DLEN)
-> +		return -EINVAL;
-> +	answ.lf.len = v;
-> +
-> +	for (int i = 0; i < answ.lf.len; i++) {
-> +		ptr = parse_and_advance(ptr, &v, 16);
-> +		if (!ptr)
-> +			return -EINVAL;
-> +		answ.lf.data[i] = v;
+> +	if (n < 0) {
+> +		mutex_unlock(&priv->tx_lock);
+> +		return n;
 > +	}
-> +	ret = ldev->ldev_ops->update_responder_answer(ldev, &answ);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-
-When adding sysfs entries, they should be documented under 
-Documentation/ABI/
-
-> +#define LID(_name) \
-> +	struct device_attribute linid_##_name = __ATTR(_name, 0644, \
-> +	lin_identifier_show, lin_identifier_store)
-> +
-> +LID(00); LID(01); LID(02); LID(03); LID(04); LID(05); LID(06); LID(07);
-> +LID(08); LID(09); LID(0a); LID(0b); LID(0c); LID(0d); LID(0e); LID(0f);
-> +LID(10); LID(11); LID(12); LID(13); LID(14); LID(15); LID(16); LID(17);
-> +LID(18); LID(19); LID(1a); LID(1b); LID(1c); LID(1d); LID(1e); LID(1f);
-> +LID(20); LID(21); LID(22); LID(23); LID(24); LID(25); LID(26); LID(27);
-> +LID(28); LID(29); LID(2a); LID(2b); LID(2c); LID(2d); LID(2e); LID(2f);
-> +LID(30); LID(31); LID(32); LID(33); LID(34); LID(35); LID(36); LID(37);
-> +LID(38); LID(39); LID(3a); LID(3b); LID(3c); LID(3d); LID(3e); LID(3f);
-> +
-> +static struct attribute *lin_sysfs_attrs[] = {
-> +	&linid_00.attr, &linid_01.attr, &linid_02.attr, &linid_03.attr,
-> +	&linid_04.attr, &linid_05.attr, &linid_06.attr, &linid_07.attr,
-> +	&linid_08.attr, &linid_09.attr, &linid_0a.attr, &linid_0b.attr,
-> +	&linid_0c.attr, &linid_0d.attr, &linid_0e.attr, &linid_0f.attr,
-> +	&linid_10.attr, &linid_11.attr, &linid_12.attr, &linid_13.attr,
-> +	&linid_14.attr, &linid_15.attr, &linid_16.attr, &linid_17.attr,
-> +	&linid_18.attr, &linid_19.attr, &linid_1a.attr, &linid_1b.attr,
-> +	&linid_1c.attr, &linid_1d.attr, &linid_1e.attr, &linid_1f.attr,
-> +	&linid_20.attr, &linid_21.attr, &linid_22.attr, &linid_23.attr,
-> +	&linid_24.attr, &linid_25.attr, &linid_26.attr, &linid_27.attr,
-> +	&linid_28.attr, &linid_29.attr, &linid_2a.attr, &linid_2b.attr,
-> +	&linid_2c.attr, &linid_2d.attr, &linid_2e.attr, &linid_2f.attr,
-> +	&linid_30.attr, &linid_31.attr, &linid_32.attr, &linid_33.attr,
-> +	&linid_34.attr, &linid_35.attr, &linid_36.attr, &linid_37.attr,
-> +	&linid_38.attr, &linid_39.attr, &linid_3a.attr, &linid_3b.attr,
-> +	&linid_3c.attr, &linid_3d.attr, &linid_3e.attr, &linid_3f.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group lin_sysfs_group = {
-> +	.name = "lin_ids",
-> +	.attrs = lin_sysfs_attrs,
-> +};
-> +
-> +static void lin_tx_work_handler(struct work_struct *ws)
-> +{
-> +	struct lin_device *ldev = container_of(ws, struct lin_device,
-> +					       tx_work);
-> +	struct net_device *ndev = ldev->ndev;
-> +	struct canfd_frame *cfd;
-> +	struct lin_frame lf;
-> +	int ret;
-> +
-> +	ldev->tx_busy = true;
-> +
-> +	cfd = (struct canfd_frame *)ldev->tx_skb->data;
-> +	lf.checksum_mode = (cfd->can_id & LIN_ENHANCED_CKSUM_FLAG) ?
-> +			   LINBUS_ENHANCED : LINBUS_CLASSIC;
-> +	lf.lin_id = cfd->can_id & LIN_ID_MASK;
-> +	lf.len = min(cfd->len, LIN_MAX_DLEN);
-
-I wonder if it is the correct approach to continue in this case? Something 
-is getting truncated here, right?
-
-> +	memcpy(lf.data, cfd->data, lf.len);
-> +
-> +	ret = ldev->ldev_ops->ldo_tx(ldev, &lf);
-> +	if (ret) {
-> +		DEV_STATS_INC(ndev, tx_dropped);
-> +		netdev_err_once(ndev, "transmission failure %d\n", ret);
-> +		goto lin_tx_out;
+> +	if (n != len) {
+> +		mutex_unlock(&priv->tx_lock);
+> +		return -EIO;
 > +	}
 > +
-> +	DEV_STATS_INC(ndev, tx_packets);
-> +	DEV_STATS_ADD(ndev, tx_bytes, lf.len);
+> +	t = wait_for_completion_killable_timeout(&priv->wait_in_report, HZ);
+> +	if (!t)
+> +		ret = -ETIMEDOUT;
 > +
-> +lin_tx_out:
-> +	ldev->tx_busy = false;
-> +	netif_wake_queue(ndev);
-> +}
-> +
-> +static netdev_tx_t lin_start_xmit(struct sk_buff *skb,
-> +				  struct net_device *ndev)
-> +{
-> +	struct lin_device *ldev = netdev_priv(ndev);
-> +
-> +	if (ldev->tx_busy)
+> +	if (priv->is_error)
+> +		ret = -EINVAL;
 
-I'm skeptical this could be correct without any concurrency control 
-related primitives.
+These can return directly when you use guard().
 
-> +		return NETDEV_TX_BUSY;
+> +	mutex_unlock(&priv->tx_lock);
 > +
-> +	netif_stop_queue(ndev);
-> +	ldev->tx_skb = skb;
-> +	queue_work(ldev->wq, &ldev->tx_work);
-> +
-> +	return NETDEV_TX_OK;
-> +}
-> +
-> +static int lin_open(struct net_device *ndev)
-> +{
-> +	struct lin_device *ldev = netdev_priv(ndev);
-> +	int ret;
-> +
-> +	ldev->tx_busy = false;
-> +
-> +	ret = open_candev(ndev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	netif_wake_queue(ndev);
-> +
-> +	ldev->can.state = CAN_STATE_ERROR_ACTIVE;
-> +	ndev->mtu = CANFD_MTU;
-> +
-> +	return ldev->ldev_ops->ldo_open(ldev);
-> +}
-> +
-> +static int lin_stop(struct net_device *ndev)
-> +{
-> +	struct lin_device *ldev = netdev_priv(ndev);
-> +
-> +	close_candev(ndev);
-> +
-> +	flush_work(&ldev->tx_work);
-> +
-> +	ldev->can.state = CAN_STATE_STOPPED;
-> +
-> +	return ldev->ldev_ops->ldo_stop(ldev);
-> +}
-> +
-> +static const struct net_device_ops lin_netdev_ops = {
-> +	.ndo_open = lin_open,
-> +	.ndo_stop = lin_stop,
-> +	.ndo_start_xmit = lin_start_xmit,
-> +	.ndo_change_mtu = can_change_mtu,
-> +};
-> +
-> +u8 lin_get_checksum(u8 pid, u8 n_of_bytes, const u8 *bytes,
-> +		    enum lin_checksum_mode cm)
-> +{
-> +	unsigned int csum = 0;
-> +	int i;
+> +	return ret;
 
-Use unsigned int for loop variables that are counting positive things.
-
-> +	if (cm == LINBUS_ENHANCED)
-> +		csum += pid;
-> +
-> +	for (i = 0; i < n_of_bytes; i++) {
-> +		csum += bytes[i];
-> +		if (csum > 255)
-> +			csum -= 255;
-> +	}
-> +
-> +	return (~csum & 0xff);
-
-Unnecessary parenthesis.
+return 0; + drop ret variable.
 
 > +}
-> +EXPORT_SYMBOL_GPL(lin_get_checksum);
 > +
-> +static int lin_bump_rx_err(struct lin_device *ldev, const struct lin_frame *lf)
-> +{
-> +	struct net_device *ndev = ldev->ndev;
-> +	struct can_frame cf = {0 };
+> +#define HEXLIN_GET_CMD(name, enum_cmd)					\
+> +	static int hexlin_##name(struct hexlin_priv_data *p)		\
+> +	{								\
+> +		u8 *req;						\
+> +		int ret;						\
+> +									\
+> +		req = kmalloc(sizeof(*req), GFP_KERNEL)	;		\
 
 Extra space.
 
-I think ... = {} is enough if you want to just to fully initialize it.
+Use:
 
-> +
-> +	if (lf->lin_id > LIN_ID_MASK) {
-> +		netdev_dbg(ndev, "id exceeds LIN max id\n");
-> +		cf.can_id = CAN_ERR_FLAG | CAN_ERR_PROT;
-> +		cf.data[3] = CAN_ERR_PROT_LOC_ID12_05;
+u8 *req __free(kfree) = kmalloc(sizeof(*req), GFP_KERNEL);
+
+> +		if (!req)						\
+> +			return -ENOMEM;					\
+> +									\
+> +		*req = enum_cmd;					\
+> +									\
+> +		ret = hexlin_tx_req_status(p, req, sizeof(*req));	\
+> +		if (ret)						\
+> +			hid_err(p->hid_dev, "%s failed, error: %d\n",	\
+> +				#name, ret);				\
+> +									\
+> +		kfree(req);						\
+
+Not needed after using __free().
+
+> +		return ret;						\
 > +	}
 > +
-> +	if (lf->len > LIN_MAX_DLEN) {
-> +		netdev_dbg(ndev, "frame exceeds number of bytes\n");
-> +		cf.can_id = CAN_ERR_FLAG | CAN_ERR_PROT;
-> +		cf.data[3] = CAN_ERR_PROT_LOC_DLC;
+> +HEXLIN_GET_CMD(get_version, HEXLIN_GET_VERSION)
+> +HEXLIN_GET_CMD(reset_dev, HEXLIN_RESET)
+> +HEXLIN_GET_CMD(get_baudrate, HEXLIN_GET_BAUDRATE)
+
+Could you convert the function in the macro into a helper function which 
+is just called by a simple function with the relevant parameters for 
+these 3 cases?
+
+> +#define HEXLIN_VAL_CMD(name, enum_cmd, struct_type, vtype)		\
+> +	static int hexlin_##name(struct hexlin_priv_data *p, vtype val)	\
+> +	{								\
+> +		struct struct_type *req;				\
+> +		int ret;						\
+> +									\
+> +		req = kmalloc(sizeof(*req), GFP_KERNEL)	;		\
+
+Extra space.
+
+Use __free().
+
+> +		if (!req)						\
+> +			return -ENOMEM;					\
+> +									\
+> +		req->cmd = enum_cmd;					\
+> +		req->v = val;						\
+> +									\
+> +		ret = hexlin_tx_req_status(p, req, sizeof(*req));	\
+> +		if (ret)						\
+> +			hid_err(p->hid_dev, "%s failed, error: %d\n",	\
+> +				#name, ret);				\
+> +									\
+> +		kfree(req);						\
+> +		return ret;						\
 > +	}
 > +
-> +	if (lf->len) {
-> +		u8 checksum = lin_get_checksum(LIN_FORM_PID(lf->lin_id),
-> +					       lf->len, lf->data,
-> +					       lf->checksum_mode);
+> +HEXLIN_VAL_CMD(send_break, HEXLIN_SEND_BREAK, hexlin_val8_req, u8)
 > +
-> +		if (checksum != lf->checksum) {
-> +			netdev_dbg(ndev, "expected cksm: 0x%02x got: 0x%02x\n",
-> +				   checksum, lf->checksum);
-> +			cf.can_id = CAN_ERR_FLAG | CAN_ERR_PROT;
-> +			cf.data[2] = CAN_ERR_PROT_FORM;
-> +		}
+> +static int hexlin_send_unconditional(struct hexlin_priv_data *priv,
+> +				     const struct hexlin_frame *hxf)
+> +{
+> +	struct hexlin_unconditional_req *req;
+> +	int ret;
+> +
+> +	if (hxf->lin_id > LIN_ID_MASK)
+> +		return -EINVAL;
+> +
+> +	req = kmalloc(sizeof(*req), GFP_KERNEL);
+> +	if (!req)
+> +		return -ENOMEM;
+> +
+> +	req->cmd = HEXLIN_SEND_UNCONDITIONAL_FRAME;
+> +	memcpy(&req->frm, hxf, sizeof(*hxf));
+> +
+> +	ret = hexlin_tx_req_status(priv, req, sizeof(*req));
+> +	if (ret)
+> +		hid_err(priv->hid_dev, "unconditional tx failed: %d\n", ret);
+> +
+> +	kfree(req);
+> +	return ret;
+> +}
+> +
+> +static int hexlin_set_baudrate(struct hexlin_priv_data *priv, u16 baudrate)
+> +{
+> +	struct hexlin_baudrate_req *req;
+> +	int ret;
+> +
+> +	if (baudrate < LIN_MIN_BAUDRATE || baudrate > LIN_MAX_BAUDRATE)
+> +		return -EINVAL;
+> +
+> +	req = kmalloc(sizeof(*req), GFP_KERNEL);
+
+Hmm... Why do you alloc this small structure (3 bytes?) with kmalloc() and 
+not just have it in stack as a local variable?
+
+> +	if (!req)
+> +		return -ENOMEM;
+> +
+> +	req->cmd = HEXLIN_SET_BAUDRATE;
+> +	req->baudrate = cpu_to_le16(baudrate);
+> +
+> +	ret = hexlin_tx_req_status(priv, req, sizeof(*req));
+> +	if (ret)
+> +		hid_err(priv->hid_dev, "set baudrate failed: %d\n", ret);
+> +
+> +	kfree(req);
+> +	return ret;
+> +}
+> +
+> +static int hexlin_get_responder_answer_id(struct hexlin_priv_data *priv, u8 id,
+> +					  struct hexlin_responder_answer *ransw)
+> +{
+> +	struct hexlin_val8_req *req;
+> +	int ret;
+> +
+> +	if (id > LIN_ID_MASK)
+> +		return -EINVAL;
+> +
+> +	req = kmalloc(sizeof(*req), GFP_KERNEL);
+
+Use a stack variable instead?
+
+> +	if (!req)
+> +		return -ENOMEM;
+> +
+> +	req->cmd = HEXLIN_GET_RESPONDER_ANSWER_ID;
+> +	req->v = id;
+> +
+> +	ret = hexlin_tx_req_status(priv, req, sizeof(*req));
+> +	if (ret) {
+> +		hid_err(priv->hid_dev, "get respond answer failed: %d\n", ret);
+> +		kfree(req);
+> +		return ret;
 > +	}
 > +
-> +	if (cf.can_id & CAN_ERR_FLAG) {
-> +		struct can_frame *err_cf;
-> +		struct sk_buff *skb = alloc_can_err_skb(ndev, &err_cf);
+> +	memcpy(ransw, &priv->answ, sizeof(priv->answ));
 > +
-> +		if (unlikely(!skb))
-> +			return -ENOMEM;
+> +	kfree(req);
+> +	return 0;
+> +}
 > +
-> +		err_cf->can_id |= cf.can_id;
-> +		memcpy(err_cf->data, cf.data, CAN_MAX_DLEN);
+> +static int hexlin_set_responder_answer_id(struct hexlin_priv_data *priv,
+> +					  const struct lin_responder_answer *answ)
+> +{
+> +	struct hexlin_responder_answer_req *req;
+> +	int ret;
 > +
-> +		netif_rx(skb);
+> +	if (answ->lf.lin_id > LIN_ID_MASK ||
+> +	    answ->event_associated_id > LIN_ID_MASK)
+> +		return -EINVAL;
 > +
-> +		return -EREMOTEIO;
-> +	}
+> +	req = kmalloc(sizeof(*req), GFP_KERNEL);
+> +	if (!req)
+> +		return -ENOMEM;
+> +
+> +	req->cmd = HEXLIN_SET_RESPONDER_ANSWER_ID;
+> +	req->answ.is_active = answ->is_active;
+> +	req->answ.is_event_frame = answ->is_event_frame;
+> +	req->answ.event_associated_id = answ->event_associated_id;
+> +	req->answ.frm.len = answ->lf.len;
+> +	req->answ.frm.lin_id = answ->lf.lin_id;
+> +	memcpy(req->answ.frm.data, answ->lf.data, LIN_MAX_DLEN);
+> +	req->answ.frm.checksum = answ->lf.checksum;
+> +	req->answ.frm.checksum_mode = answ->lf.checksum_mode;
+> +
+> +	ret = hexlin_tx_req_status(priv, req, sizeof(*req));
+> +	if (ret)
+> +		hid_err(priv->hid_dev, "set respond answer failed: %d\n", ret);
+> +
+> +	kfree(req);
+> +	return ret;
+> +}
+> +
+> +static int hexlin_open(struct lin_device *ldev)
+> +{
+> +	struct hid_device *hdev = to_hid_device(ldev->dev);
+> +
+> +	return hid_hw_open(hdev);
+> +}
+> +
+> +static int hexlin_stop(struct lin_device *ldev)
+> +{
+> +	struct hid_device *hdev = to_hid_device(ldev->dev);
+> +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
+> +
+> +	hid_hw_close(hdev);
+> +
+> +	priv->is_error = true;
+> +	complete(&priv->wait_in_report);
 > +
 > +	return 0;
 > +}
 > +
-> +int lin_rx(struct lin_device *ldev, const struct lin_frame *lf)
+> +static int hexlin_ldo_tx(struct lin_device *ldev,
+> +			 const struct lin_frame *lf)
 > +{
-> +	struct net_device *ndev = ldev->ndev;
-> +	struct can_frame *cf;
-> +	struct sk_buff *skb;
-> +	int ret;
+> +	struct hid_device *hdev = to_hid_device(ldev->dev);
+> +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
+> +	int ret = -EINVAL;
 > +
-> +	if (ldev->can.state == CAN_STATE_STOPPED)
-> +		return 0;
-> +
-> +	netdev_dbg(ndev, "id:%02x, len:%u, data:%*ph, checksum:%02x (%s)\n",
+> +	hid_dbg(hdev, "id:%02x, len:%u, data:%*ph, checksum:%02x (%s)\n",
 > +		   lf->lin_id, lf->len, lf->len, lf->data, lf->checksum,
 > +		   lf->checksum_mode ? "enhanced" : "classic");
 > +
-> +	ret = lin_bump_rx_err(ldev, lf);
-> +	if (ret) {
-> +		DEV_STATS_INC(ndev, rx_dropped);
+> +	if (lf->lin_id && lf->len == 0) {
+> +		ret = hexlin_send_break(priv, lf->lin_id);
+> +	} else if (lf->len <= LIN_MAX_DLEN) {
+> +		struct hexlin_frame hxf;
+> +
+> +		hxf.len = lf->len;
+> +		hxf.lin_id = lf->lin_id;
+> +		memcpy(&hxf.data, lf->data, LIN_MAX_DLEN);
+> +		hxf.checksum = lf->checksum;
+> +		hxf.checksum_mode = lf->checksum_mode;
+> +		ret = hexlin_send_unconditional(priv, &hxf);
+> +	} else {
+> +		hid_err(hdev, "unknown format\n");
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int hexlin_update_bitrate(struct lin_device *ldev, u16 bitrate)
+> +{
+> +	struct hid_device *hdev = to_hid_device(ldev->dev);
+> +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
+> +	int ret;
+> +
+> +	hid_dbg(hdev, "update bitrate to: %u\n", bitrate);
+> +
+> +	ret = hexlin_open(ldev);
+> +	if (ret)
 > +		return ret;
+> +
+> +	ret = hexlin_set_baudrate(priv, bitrate);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = hexlin_get_baudrate(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (priv->baudrate != bitrate) {
+> +		hid_err(hdev, "update bitrate failed\n");
+> +		return -EINVAL;
 > +	}
 > +
-> +	skb = alloc_can_skb(ndev, &cf);
-> +	if (unlikely(!skb)) {
-> +		DEV_STATS_INC(ndev, rx_dropped);
-> +		return -ENOMEM;
-> +	}
+> +	return ret;
+> +}
 > +
-> +	cf->can_id = lf->lin_id;
-> +	cf->len = min(lf->len, LIN_MAX_DLEN);
-> +	memcpy(cf->data, lf->data, cf->len);
+> +static int hexlin_get_responder_answer(struct lin_device *ldev, u8 id,
+> +				       struct lin_responder_answer *answ)
+> +{
+> +	struct hid_device *hdev = to_hid_device(ldev->dev);
+> +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
+> +	struct hexlin_responder_answer ransw;
+> +	int ret;
 > +
-> +	DEV_STATS_INC(ndev, rx_packets);
-> +	DEV_STATS_ADD(ndev, rx_bytes, cf->len);
+> +	if (answ == NULL)
+> +		return -EINVAL;
 > +
-> +	netif_receive_skb(skb);
+> +	ret = hexlin_get_responder_answer_id(priv, id, &ransw);
+> +	if (ret)
+> +		return ret;
+> +
+> +	answ->is_active = ransw.is_active;
+> +	answ->is_event_frame = ransw.is_event_frame;
+> +	answ->event_associated_id = ransw.event_associated_id;
+> +	answ->lf.len = ransw.frm.len;
+> +	answ->lf.lin_id = ransw.frm.lin_id;
+> +	memcpy(answ->lf.data, ransw.frm.data, LIN_MAX_DLEN);
+> +	answ->lf.checksum = ransw.frm.checksum;
+> +	answ->lf.checksum_mode = ransw.frm.checksum_mode;
 > +
 > +	return 0;
 > +}
-> +EXPORT_SYMBOL_GPL(lin_rx);
 > +
-> +static int lin_set_bittiming(struct net_device *ndev)
+> +static int hexlin_update_resp_answer(struct lin_device *ldev,
+> +				     const struct lin_responder_answer *answ)
 > +{
-> +	struct lin_device *ldev = netdev_priv(ndev);
-> +	unsigned int bitrate = ldev->can.bittiming.bitrate;
+> +	struct hid_device *hdev = to_hid_device(ldev->dev);
+> +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
 > +
-> +	return ldev->ldev_ops->update_bitrate(ldev, bitrate);
+> +	if (answ == NULL)
+> +		return -EINVAL;
+> +
+> +	return hexlin_set_responder_answer_id(priv, answ);
 > +}
 > +
-> +static const u32 lin_bitrate[] = { 1200, 2400, 4800, 9600, 19200 };
+> +static const struct lin_device_ops hexlin_ldo = {
+> +	.ldo_open = hexlin_open,
+> +	.ldo_stop = hexlin_stop,
+> +	.ldo_tx = hexlin_ldo_tx,
+> +	.update_bitrate = hexlin_update_bitrate,
+> +	.get_responder_answer = hexlin_get_responder_answer,
+> +	.update_responder_answer = hexlin_update_resp_answer,
+> +};
 > +
-> +struct lin_device *register_lin(struct device *dev,
-> +				const struct lin_device_ops *ldops)
+> +static int hexlin_queue_frames_insert(struct hexlin_priv_data *priv,
+> +				      const struct hexlin_frame *hxf)
 > +{
-> +	struct net_device *ndev;
-> +	struct lin_device *ldev;
+> +	struct hid_device *hdev = priv->hid_dev;
+> +	struct lin_frame lf;
+> +
+> +	lf.len = hxf->len;
+> +	lf.lin_id = hxf->lin_id;
+> +	memcpy(lf.data, hxf->data, LIN_MAX_DLEN);
+> +	lf.checksum = hxf->checksum;
+> +	lf.checksum_mode = hxf->checksum_mode;
+> +
+> +	hid_dbg(hdev, "id:%02x, len:%u, data:%*ph, chk:%02x (%s), flg:%08x\n",
+> +		lf.lin_id, lf.len, lf.len, lf.data, lf.checksum,
+> +		lf.checksum_mode ? "enhanced" : "classic", hxf->flags);
+> +
+> +	lin_rx(priv->ldev, &lf);
+> +
+> +	return 0;
+> +}
+> +
+> +static int hexlin_raw_event(struct hid_device *hdev,
+> +			    struct hid_report *report, u8 *data, int sz)
+> +{
+> +	struct hexlin_priv_data *priv;
+> +	struct hexlin_baudrate_req *br;
+> +	struct hexlin_responder_answer_req *rar;
+> +	struct hexlin_unconditional_req *hfr;
+> +	struct hexlin_val8_req *vr;
+> +
+> +	if (sz < 1 || sz > HEXLIN_PKGLEN_MAX)
+> +		return -EREMOTEIO;
+> +
+> +	priv = hid_get_drvdata(hdev);
+> +
+> +	hid_dbg(hdev, "%s, size:%i, data[0]: 0x%02x\n", __func__, sz, data[0]);
+> +
+> +	priv->is_error = false;
+> +
+> +	switch (data[0]) {
+> +	case HEXLIN_SUCCESS:
+> +		if (sz != HEXLIN_LEN_RETCODE)
+> +			return -EREMOTEIO;
+> +		hid_dbg(hdev, "HEXLIN_SUCCESS: 0x%02x\n", data[0]);
+> +		complete(&priv->wait_in_report);
+> +		break;
+> +	case HEXLIN_FAIL:
+> +		if (sz != HEXLIN_LEN_RETCODE)
+> +			return -EREMOTEIO;
+> +		hid_err(hdev, "HEXLIN_FAIL: 0x%02x\n", data[0]);
+> +		priv->is_error = true;
+> +		complete(&priv->wait_in_report);
+> +		break;
+> +	case HEXLIN_GET_VERSION:
+> +		if (sz != sizeof(*vr))
+> +			return -EREMOTEIO;
+> +		vr = (struct hexlin_val8_req *) data;
+> +		priv->fw_version = vr->v;
+> +		complete(&priv->wait_in_report);
+> +		break;
+> +	case HEXLIN_GET_RESPONDER_ANSWER_ID:
+> +		if (sz != sizeof(*rar))
+> +			return -EREMOTEIO;
+> +		rar = (struct hexlin_responder_answer_req *) data;
+> +		memcpy(&priv->answ, &rar->answ, sizeof(priv->answ));
+> +		complete(&priv->wait_in_report);
+> +		break;
+> +	case HEXLIN_GET_BAUDRATE:
+> +		if (sz != sizeof(*br))
+> +			return -EREMOTEIO;
+> +		br = (struct hexlin_baudrate_req *) data;
+> +		le16_to_cpus(br->baudrate);
+> +		priv->baudrate = br->baudrate;
+> +		complete(&priv->wait_in_report);
+> +		break;
+> +	/* following cases not initiated by us, so no complete() */
+> +	case HEXLIN_FRAME:
+> +		if (sz != sizeof(*hfr)) {
+> +			hid_err_once(hdev, "frame size mismatch: %i\n", sz);
+> +			return -EREMOTEIO;
+> +		}
+> +		hfr = (struct hexlin_unconditional_req *) data;
+> +		le32_to_cpus(hfr->frm.flags);
+
+I'm bit worried about this from endianness perspective. Perhaps there's 
+some struct reusing that shouldn't be happening because the same field 
+cannot be __le32 and u32 at the same time.
+
+> +		hexlin_queue_frames_insert(priv, &hfr->frm);
+> +		break;
+> +	case HEXLIN_ERROR:
+> +		hid_err(hdev, "error from adapter\n");
+> +		break;
+> +	default:
+> +		hid_err(hdev, "unknown event: 0x%02x\n", data[0]);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int init_hw(struct hexlin_priv_data *priv)
+> +{
 > +	int ret;
 > +
-> +	if (!ldops || !ldops->ldo_tx || !ldops->update_bitrate  ||
-
-Extra space.
-
-> +	    !ldops->ldo_open || !ldops->ldo_stop) {
-> +		dev_err(dev, "missing mandatory lin_device_ops\n");
-
-Is this a programming error? WARN_ON_ONCE() around the condition would be 
-warranted in that case.
-
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	ndev = alloc_candev(sizeof(struct lin_device), 1);
-> +	if (!ndev)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ldev = netdev_priv(ndev);
-> +
-> +	ldev->ldev_ops = ldops;
-> +	ndev->netdev_ops = &lin_netdev_ops;
-> +	ndev->flags |= IFF_ECHO;
-> +	ndev->mtu = CANFD_MTU;
-> +	ndev->sysfs_groups[0] = &lin_sysfs_group;
-> +	ldev->can.bittiming.bitrate = LIN_DEFAULT_BAUDRATE;
-> +	ldev->can.ctrlmode = CAN_CTRLMODE_LIN;
-> +	ldev->can.ctrlmode_supported = 0;
-> +	ldev->can.bitrate_const = lin_bitrate;
-> +	ldev->can.bitrate_const_cnt = ARRAY_SIZE(lin_bitrate);
-> +	ldev->can.do_set_bittiming = lin_set_bittiming;
-> +	ldev->ndev = ndev;
-> +	ldev->dev = dev;
-> +
-> +	SET_NETDEV_DEV(ndev, dev);
-> +
-> +	ret = lin_set_bittiming(ndev);
+> +	ret = hexlin_reset_dev(priv);
 > +	if (ret) {
-> +		netdev_err(ndev, "set bittiming failed\n");
-> +		goto exit_candev;
+> +		/* if first reset fails, try one more time */
+> +		ret = hexlin_reset_dev(priv);
+> +		if (ret)
+> +			return ret;
 > +	}
 > +
-> +	ret = register_candev(ndev);
+> +	ret = hexlin_get_version(priv);
 > +	if (ret)
-> +		goto exit_candev;
+> +		return ret;
 > +
-> +	/* Using workqueue as tx over USB/SPI/... may sleep */
-> +	ldev->wq = alloc_workqueue(dev_name(dev), WQ_FREEZABLE | WQ_MEM_RECLAIM,
-> +				   0);
-> +	if (!ldev->wq) {
-> +		ret = -ENOMEM;
-> +		goto exit_unreg;
+> +	priv->baudrate = LIN_DEFAULT_BAUDRATE;
+> +	ret = hexlin_set_baudrate(priv, priv->baudrate);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int hexlin_probe(struct hid_device *hdev,
+> +			const struct hid_device_id *id)
+> +{
+> +	struct hexlin_priv_data *priv;
+> +	int ret;
+> +
+> +	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->hid_dev = hdev;
+> +	hid_set_drvdata(hdev, priv);
+> +
+> +	mutex_init(&priv->tx_lock);
+> +
+> +	ret = hid_parse(hdev);
+> +	if (ret) {
+> +		hid_err(hdev, "hid parse failed with %d\n", ret);
+> +		goto fail_and_free;
 > +	}
 > +
-> +	INIT_WORK(&ldev->tx_work, lin_tx_work_handler);
+> +	ret = hid_hw_start(hdev, HID_CONNECT_DRIVER);
+> +	if (ret) {
+> +		hid_err(hdev, "hid hw start failed with %d\n", ret);
+> +		goto fail_and_stop;
+> +	}
 > +
-> +	netdev_info(ndev, "LIN initialized\n");
+> +	ret = hid_hw_open(hdev);
+> +	if (ret) {
+> +		hid_err(hdev, "hid hw open failed with %d\n", ret);
+> +		goto fail_and_close;
+> +	}
 > +
-> +	return ldev;
+> +	init_completion(&priv->wait_in_report);
 > +
-> +exit_unreg:
-> +	unregister_candev(ndev);
-> +exit_candev:
-> +	free_candev(ndev);
-> +	return ERR_PTR(ret);
+> +	hid_device_io_start(hdev);
+> +
+> +	ret = init_hw(priv);
+> +	if (ret)
+> +		goto fail_and_close;
+> +
+> +	priv->ldev = register_lin(&hdev->dev, &hexlin_ldo);
+> +	if (IS_ERR(priv->ldev)) {
+> +		ret = PTR_ERR(priv->ldev);
+> +		goto fail_and_close;
+> +	}
+> +
+> +	hid_hw_close(hdev);
+> +
+> +	hid_info(hdev, "hexLIN (fw-version: %u) probed\n", priv->fw_version);
+
+By custom, the success path in probe should not print anything so make 
+this dbg level message if the fw version information is valuable in some 
+debugging scenario.
+
+> +	return 0;
+> +
+> +fail_and_close:
+> +	hid_hw_close(hdev);
+> +fail_and_stop:
+> +	hid_hw_stop(hdev);
+> +fail_and_free:
+> +	mutex_destroy(&priv->tx_lock);
+> +	return ret;
 > +}
-> +EXPORT_SYMBOL_GPL(register_lin);
 > +
-> +void unregister_lin(struct lin_device *ldev)
+> +static void hexlin_remove(struct hid_device *hdev)
 > +{
-> +	struct net_device *ndev = ldev->ndev;
+> +	struct hexlin_priv_data *priv = hid_get_drvdata(hdev);
 > +
-> +	unregister_candev(ndev);
-> +	destroy_workqueue(ldev->wq);
-
-Why is the order different from that in register side?
-
-> +	free_candev(ndev);
+> +	unregister_lin(priv->ldev);
+> +	hid_hw_stop(hdev);
 > +}
-> +EXPORT_SYMBOL_GPL(unregister_lin);
+> +
+> +static const struct hid_device_id hexlin_table[] = {
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_MCS, USB_DEVICE_ID_MCS_HEXDEV_HEXLIN) },
+> +	{ }
+> +};
+> +
+> +MODULE_DEVICE_TABLE(hid, hexlin_table);
+> +
+> +static struct hid_driver hexlin_driver = {
+> +	.name = "hexLIN",
+> +	.id_table = hexlin_table,
+> +	.probe = hexlin_probe,
+> +	.remove = hexlin_remove,
+> +	.raw_event = hexlin_raw_event,
+> +};
+> +
+> +module_hid_driver(hexlin_driver);
 > +
 > +MODULE_LICENSE("GPL");
 > +MODULE_AUTHOR("Christoph Fritz <christoph.fritz@hexdev.de>");
-> +MODULE_DESCRIPTION("LIN bus to CAN glue driver");
-> diff --git a/include/net/lin.h b/include/net/lin.h
-> new file mode 100644
-> index 0000000000000..31bb0feefd188
-> --- /dev/null
-> +++ b/include/net/lin.h
-> @@ -0,0 +1,90 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +/* Copyright (C) 2024 hexDEV GmbH - https://hexdev.de */
-> +
-> +#ifndef _NET_LIN_H_
-> +#define _NET_LIN_H_
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/can/dev.h>
-> +#include <linux/device.h>
-> +
-> +#define LIN_NUM_IDS		64
-> +#define LIN_HEADER_SIZE		3
-> +#define LIN_MAX_DLEN		8
-> +
-> +#define LIN_MAX_BAUDRATE	20000
-> +#define LIN_MIN_BAUDRATE	1000
-> +#define LIN_DEFAULT_BAUDRATE	9600
-> +#define LIN_SYNC_BYTE		0x55
-> +
-> +#define LIN_ID_MASK		GENMASK(5, 0)
-> +/* special ID descriptions for LIN */
-> +#define LIN_RXOFFLOAD_DATA_FLAG	BIT(9)
-> +#define LIN_ENHANCED_CKSUM_FLAG	BIT(8)
-> +
-> +extern u8 lin_get_id_parity(u8 id);
-> +
-> +#define LIN_GET_ID(PID)		FIELD_GET(LIN_ID_MASK, PID)
-> +#define LIN_FORM_PID(ID)	(LIN_GET_ID(ID) | \
-> +					lin_get_id_parity(LIN_GET_ID(ID)))
-> +#define LIN_GET_PARITY(PID)	((PID) & ~LIN_ID_MASK)
-> +#define LIN_CHECK_PID(PID)	(LIN_GET_PARITY(PID) == \
-> +					LIN_GET_PARITY(LIN_FORM_PID(PID)))
-> +
-> +struct lin_attr {
-> +	struct kobj_attribute attr;
-> +	struct lin_device *ldev;
-> +};
-> +
-> +struct lin_device {
-> +	struct can_priv can;  /* must be the first member */
-> +	struct net_device *ndev;
-> +	struct device *dev;
-> +	const struct lin_device_ops *ldev_ops;
-> +	struct workqueue_struct *wq;
-> +	struct work_struct tx_work;
-> +	bool tx_busy;
-> +	struct sk_buff *tx_skb;
-> +};
-> +
-> +enum lin_checksum_mode {
-> +	LINBUS_CLASSIC = 0,
-> +	LINBUS_ENHANCED,
-> +};
-> +
-> +struct lin_frame {
-> +	u8 lin_id;
-> +	u8 len;
-> +	u8 data[LIN_MAX_DLEN];
-> +	u8 checksum;
-> +	enum lin_checksum_mode checksum_mode;
-> +};
-> +
-> +struct lin_responder_answer {
-> +	bool is_active;
-> +	bool is_event_frame;
-> +	u8 event_associated_id;
-> +	struct lin_frame lf;
-> +};
-> +
-> +struct lin_device_ops {
-> +	int (*ldo_open)(struct lin_device *ldev);
-> +	int (*ldo_stop)(struct lin_device *ldev);
-> +	int (*ldo_tx)(struct lin_device *ldev, const struct lin_frame *frame);
-> +	int (*update_bitrate)(struct lin_device *ldev, u16 bitrate);
-> +	int (*update_responder_answer)(struct lin_device *ldev,
-> +				       const struct lin_responder_answer *answ);
-> +	int (*get_responder_answer)(struct lin_device *ldev, u8 id,
-> +				    struct lin_responder_answer *answ);
-> +};
-> +
-> +int lin_rx(struct lin_device *ldev, const struct lin_frame *lf);
-> +
-> +u8 lin_get_checksum(u8 pid, u8 n_of_bytes, const u8 *bytes,
-> +		    enum lin_checksum_mode cm);
-> +
-> +struct lin_device *register_lin(struct device *dev,
-> +				const struct lin_device_ops *ldops);
-> +void unregister_lin(struct lin_device *ldev);
-> +
-> +#endif /* _NET_LIN_H_ */
-> diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
-> index 02ec32d694742..a37f56d86c5f2 100644
-> --- a/include/uapi/linux/can/netlink.h
-> +++ b/include/uapi/linux/can/netlink.h
-> @@ -103,6 +103,7 @@ struct can_ctrlmode {
->  #define CAN_CTRLMODE_CC_LEN8_DLC	0x100	/* Classic CAN DLC option */
->  #define CAN_CTRLMODE_TDC_AUTO		0x200	/* CAN transiver automatically calculates TDCV */
->  #define CAN_CTRLMODE_TDC_MANUAL		0x400	/* TDCV is manually set up by user */
-> +#define CAN_CTRLMODE_LIN		BIT(11)	/* LIN bus mode */
+> +MODULE_DESCRIPTION("LIN bus driver for hexLIN USB adapter");
+> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+> index 61d2a21affa26..c6fe6f99a0e80 100644
+> --- a/drivers/hid/hid-ids.h
+> +++ b/drivers/hid/hid-ids.h
+> @@ -907,6 +907,7 @@
 >  
->  /*
->   * CAN device statistics
+>  #define USB_VENDOR_ID_MCS		0x16d0
+>  #define USB_DEVICE_ID_MCS_GAMEPADBLOCK	0x0bcc
+> +#define USB_DEVICE_ID_MCS_HEXDEV_HEXLIN	0x0648
+>  
+>  #define USB_VENDOR_MEGAWORLD		0x07b5
+>  #define USB_DEVICE_ID_MEGAWORLD_GAMEPAD	0x0312
+> diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+> index e0bbf0c6345d6..d721110d0889b 100644
+> --- a/drivers/hid/hid-quirks.c
+> +++ b/drivers/hid/hid-quirks.c
+> @@ -436,6 +436,9 @@ static const struct hid_device_id hid_have_special_driver[] = {
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_GYRATION, USB_DEVICE_ID_GYRATION_REMOTE_2) },
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_GYRATION, USB_DEVICE_ID_GYRATION_REMOTE_3) },
+>  #endif
+> +#if IS_ENABLED(CONFIG_HID_MCS_HEXDEV)
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_MCS, USB_DEVICE_ID_MCS_HEXDEV_HEXLIN) },
+> +#endif
+>  #if IS_ENABLED(CONFIG_HID_HOLTEK)
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK, USB_DEVICE_ID_HOLTEK_ON_LINE_GRIP) },
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK_ALT, USB_DEVICE_ID_HOLTEK_ALT_KEYBOARD) },
 > 
 
 -- 
