@@ -1,133 +1,87 @@
-Return-Path: <linux-can+bounces-660-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-661-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E142D8CAEF4
-	for <lists+linux-can@lfdr.de>; Tue, 21 May 2024 15:07:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0FF88CB4C2
+	for <lists+linux-can@lfdr.de>; Tue, 21 May 2024 22:37:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F0DE1C21A0E
-	for <lists+linux-can@lfdr.de>; Tue, 21 May 2024 13:07:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4413B1F22A57
+	for <lists+linux-can@lfdr.de>; Tue, 21 May 2024 20:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 257537F7C7;
-	Tue, 21 May 2024 13:06:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 982D21487CE;
+	Tue, 21 May 2024 20:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="hAuFPgbN";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="Z/hUAcDu"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="bk0XI5tv"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5EB7B3F3;
-	Tue, 21 May 2024 13:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA248208D0;
+	Tue, 21 May 2024 20:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716296764; cv=none; b=aaEw/6d0V7MQiB4t5jVKjec6vyC68+kDlMK6+ZvMT02aagIDIbD366CLt3NUtcxRP0GgXDnpIr/ben1dEedr13bHRowg5dmaGW7/vHQxxtxvbHwIrf2aLHaYcuOnPvqZct9q4bXXqUOOubatpKB3AtHu0DZZe16KFkHjRL5aTmU=
+	t=1716323868; cv=none; b=e8tXNBvi6rKRTHIZfp4aYZibK6PJW/dGJhGCqj8kJKurqY29pHaL0hsJbqdw3SJML2X7UopvNoUD38UzabmOWRy6M3SFX97Ov2n/6ukK2pxCN3l+I1XH1npNTxyIZPc10I+MjtD4u/5NVF/afe/RaFrSXaX2BtPUbI13cB1O1n4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716296764; c=relaxed/simple;
-	bh=OdGZx35Xq/K2qo+2VemsbuBTb2vtHnLZgwqnHGj6dHs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GILLvq71Ax03dbdu45AocppqC/GhNGARUw+5NuGS6f22qCs9hslsz704tR54m+wvitWpUW79tZ0hR/GJ+4G60RrDIyqyL3xJnErCavRB+/QMZDSOLdOjxnGelmtweKPKwEYplqhfTFff2z//wG9vUs4kMqr/UZZTW9/ay7V3lU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=hAuFPgbN; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=Z/hUAcDu reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1716296762; x=1747832762;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=cyyRUEqHorrucwPwnV8fQCfXT5oEDfauIgMMG9jC7FM=;
-  b=hAuFPgbNbE6YxOzCaxidKU48CLM6k5JBbdVfJhpDvaPW6oUSStJDcZe9
-   IynwEwK1wKTW0cXqJuLGLaXXRe2oaxURPgzr7Y2XwzWf7UBGt0fJ2SYlj
-   yLRSKFIdq2+hsBJ5/ebv+cfY7miT4xbRtfRTKPCsL5xmdU2G0Jnb4U19g
-   4pV5ZTRWng4GvBpBoJG448x2xztwUG398VIaN8NPLu1FO6EvgZgNsOLyB
-   c1dulWIB3umG8broKycb4eV2Yapn6L+HotIH1QZsochv2XsYyCENOEx3f
-   lOfYyj5D0FuulxEHWMSn/wpdt/2+lEYJfp85qjqXkrDWEd/QJ+ZWeQnVw
-   Q==;
-X-CSE-ConnectionGUID: EzwhYIOMRsKrcBGmmEQETA==
-X-CSE-MsgGUID: sLkcEvnaQ2e3HC/gI/hpXA==
-X-IronPort-AV: E=Sophos;i="6.08,177,1712613600"; 
-   d="scan'208";a="36993994"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 21 May 2024 15:06:00 +0200
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4B2A9175C07;
-	Tue, 21 May 2024 15:05:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1716296756;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=cyyRUEqHorrucwPwnV8fQCfXT5oEDfauIgMMG9jC7FM=;
-	b=Z/hUAcDuc2Bbp1gD15KjQG8nmyP3JXEm7GkmbGTYEjj+OFm3AkjE/6QpHA4bAOkH5DxEok
-	BJVar5t6BbetcJboOylCuUoTE+imBIi0tcW64Y7l3SWCx7mcG6/o8LvS745VdRjKcdcDZ3
-	IKZWR/OX1bCeIqch1ykalhwPkq9k4kz2QVUmdzUvKs12gpbuLQQAc9DBrzcy1YhuLPumBS
-	sk3+jsjDnQfORPKnLStCsa3TTk9+GaWTn2ia2b07c2GVthB/7C+cs6teJ4tTKE4aA8QSpe
-	BMR1jQNTk1IHfhrYgNftyR00PLs18YeHMAuwpbhN8YzPVQy9E562qsomeCKNGQ==
-From: Gregor Herburger <gregor.herburger@ew.tq-group.com>
-Date: Tue, 21 May 2024 15:04:58 +0200
-Subject: [PATCH v3 8/8] dt-bindings: can: mcp251xfd: add gpio-controller
- property
+	s=arc-20240116; t=1716323868; c=relaxed/simple;
+	bh=B9ViOYqXgDpQjV19AK5VUQQ4TV/W0LZcZ1p/e/v3QyU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aTZqcmQBJ1+fXpZRHge+3YXpSDZGCQ6l6pt7p/QyVV0o2Pgp9/FeM7Z5bSTVdqNjIWI2E4uUy2BZ4fUOPcel6ZlmKQO2sKebjvALzN2WbUcs1H0yGsEHWNqTiMqiwzv1m+hW+U6aspEjQ5nxBXZ16Otq9B9BQM5mV/aW/aswjPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=bk0XI5tv; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=9NLbNUDlzC2jcO08AefJjvDOuFA0wNb9S8kYwaE3wt4=; b=bk0XI5tv5egsQIv1BwYpYtr4T4
+	62h+8SAf9m3BGEYEmvolS+Ux2TyeGE7hvRr8FslC7hEgdYQkkmzsWGi6JPeEI6OjFd5MZxwfuqg2r
+	75fvqdxUc765PwSoAXJ2yZ+0OALvTGlPTz+0J5/mw0uX/e7C954wnI9xFM2YlUFhBW4s=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1s9WEn-00Fmf6-2T; Tue, 21 May 2024 22:37:33 +0200
+Date: Tue, 21 May 2024 22:37:33 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Gregor Herburger <gregor.herburger@ew.tq-group.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Thomas Kopp <thomas.kopp@microchip.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux@ew.tq-group.com
+Subject: Re: [PATCH v3 7/8] can: mcp251xfd: add gpio functionality
+Message-ID: <e24b16a1-2a69-4aea-9ad0-135ed0a87547@lunn.ch>
+References: <20240521-mcp251xfd-gpio-feature-v3-0-7f829fefefc2@ew.tq-group.com>
+ <20240521-mcp251xfd-gpio-feature-v3-7-7f829fefefc2@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240521-mcp251xfd-gpio-feature-v3-8-7f829fefefc2@ew.tq-group.com>
-References: <20240521-mcp251xfd-gpio-feature-v3-0-7f829fefefc2@ew.tq-group.com>
-In-Reply-To: <20240521-mcp251xfd-gpio-feature-v3-0-7f829fefefc2@ew.tq-group.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- Thomas Kopp <thomas.kopp@microchip.com>, 
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- linux@ew.tq-group.com, gregor.herburger@ew.tq-group.com, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1716296697; l=932;
- i=gregor.herburger@ew.tq-group.com; s=20230829; h=from:subject:message-id;
- bh=OdGZx35Xq/K2qo+2VemsbuBTb2vtHnLZgwqnHGj6dHs=;
- b=3ius/kJSj1KX4cPP4zFqWQVMTg2McgvCYpq90oozVXbiamCIH9N9OBoo4+Ow7AkCmHxlBsdBS
- 3RTlKrKcGoEAeovzC+nIf2LTBjDZz0oI+vDq9fhGFCyUntw+jS2MICX
-X-Developer-Key: i=gregor.herburger@ew.tq-group.com; a=ed25519;
- pk=+eRxwX7ikXwazcRjlOjj2/tbDmfVZdDLoW+xLZbQ4h4=
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240521-mcp251xfd-gpio-feature-v3-7-7f829fefefc2@ew.tq-group.com>
 
-The mcp251xfd has two pins that can be used as gpio. Add gpio-controller
-property to binding description.
+On Tue, May 21, 2024 at 03:04:57PM +0200, Gregor Herburger wrote:
+> The mcp251xfd devices allow two pins to be configured as gpio. Add this
+> functionality to driver.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Gregor Herburger <gregor.herburger@ew.tq-group.com>
+I have a basic understanding of GPIO drivers, which is probably more
+than average for netdev reviewers. This code looks O.K. to me, but i
+would prefer you run it by the GPIO maintainers, since that is there
+domain of expertise. I don't think any are in Cc:
+
+    Andrew
+
 ---
- Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
-index 2a98b26630cb..e9605a75c45b 100644
---- a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
-+++ b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
-@@ -49,6 +49,11 @@ properties:
-       Must be half or less of "clocks" frequency.
-     maximum: 20000000
- 
-+  gpio-controller: true
-+
-+  "#gpio-cells":
-+    const: 2
-+
- required:
-   - compatible
-   - reg
-
--- 
-2.34.1
-
+pw-bot: cr
 
