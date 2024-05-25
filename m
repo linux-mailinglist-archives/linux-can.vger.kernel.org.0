@@ -1,146 +1,124 @@
-Return-Path: <linux-can+bounces-680-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-681-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5A7C8CE0C3
-	for <lists+linux-can@lfdr.de>; Fri, 24 May 2024 07:48:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D4C88CEFF1
+	for <lists+linux-can@lfdr.de>; Sat, 25 May 2024 17:52:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1998281FFF
-	for <lists+linux-can@lfdr.de>; Fri, 24 May 2024 05:48:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADD8B1C204D6
+	for <lists+linux-can@lfdr.de>; Sat, 25 May 2024 15:52:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81193EA7B;
-	Fri, 24 May 2024 05:48:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E07134BAA6;
+	Sat, 25 May 2024 15:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="tMGmaw6y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RyUxLVqb"
 X-Original-To: linux-can@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237C079C2;
-	Fri, 24 May 2024 05:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8AC85628;
+	Sat, 25 May 2024 15:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716529718; cv=none; b=h2JICjo5fW3Fr9ixRr9TL2qhOT3VyQ5U0GiXoJGqp3yLLxzxPeghsoek+rw3T4bdgOSAmJPWibMcUm/X7ngu3RGeIATRRlVBfAfwvpwbAZAEQtsMX9Jx1uvPV/HIS96xb08VQ0fGQNFSeCrrJSIDvOfqZhp49E1UELEaGFA0d44=
+	t=1716652342; cv=none; b=GqP8umVACdSKu3MPJjyLrnCWEWMSvzOXqaIc/BXyfO2DnewHMtvQxzJ5tX9juqrnLHT0D+pWugDf0wm3btK86S/+9loZeeThjBaWPg0tH3vMpKexBXSeioiPwsmUpwOVTrdr75c+VTlib6CHzn7SU65eoqXxJOk36WEUclNYprg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716529718; c=relaxed/simple;
-	bh=mR6c80AZRglI+5ltlZH/pd9F75W8YItn0ClVJ49BOWc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J+mzH3C0rqDThoWNMcvqRNKvauJ9yZTDYeUTNb77a4yuE+81G31b9vp30KV3JVf6yqwrfF7zzm7MJLhhfd+QkTkzdpzNz75pAC07QCc+LULga/Ie/hQSFnq7R8s1iU6zYTHtdUpQhCyj3Zmbql3aASPE29NWfNjvRcpZ6kL3d3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=tMGmaw6y; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 44O5m2rU105333;
-	Fri, 24 May 2024 00:48:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1716529682;
-	bh=ZYd1faE1iYTixFys7LnnH+BWOHbqOeJMu5f3vjfUKSQ=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=tMGmaw6yopSTiNhgEyMPCNLxz5ege8yP56UOZAkJeG9MATONCLB7e2q471oK1kTuJ
-	 0o+uRYNq9g2QMxdJCppToHAWpGqtk6gCuEUVcUmQ47W8tCN3C0Am/Ki1JPjfNWaFlK
-	 XnJZaqmDjOOVrWcA6C4hV19RgT7LWQ8/bFTPNFw0=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 44O5m2ip012660
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 24 May 2024 00:48:02 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 24
- May 2024 00:48:01 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 24 May 2024 00:48:01 -0500
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 44O5m1Gs090950;
-	Fri, 24 May 2024 00:48:01 -0500
-Date: Fri, 24 May 2024 00:48:01 -0500
-From: Nishanth Menon <nm@ti.com>
+	s=arc-20240116; t=1716652342; c=relaxed/simple;
+	bh=2qvfe4Hqy1g41g1MNI1wwUBi2pgt//ZFn04XX9hGjVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g45rkHv3gG9C5rsBnysurGx7I9C8cuQ21qGGjKG6+lZCk6UfdQu9TtP3mk1z/6mguk194rLzxkd8+bSCd/7iD6+TbZRvOqUPKYXrMD9avFs7PTvZFmpPLW/7gbr2bqI4FIaQQX/NYwJqsHcZSNMBuxvHBupAw3PcP9CqWUfun7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RyUxLVqb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0016C2BD11;
+	Sat, 25 May 2024 15:52:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716652342;
+	bh=2qvfe4Hqy1g41g1MNI1wwUBi2pgt//ZFn04XX9hGjVs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RyUxLVqbnr66RHDchWK1j9fcjgjOUbNBdfzUnplaSXjNXdIxRk2Kzz7x7q7tR31hg
+	 7llkAV+pzz6y2aUcVCT5qvl6J0Hb8NIqVAYK5yJ9StvuzBt/+lYo99oexZbtZnQWyK
+	 CIb/u9d/+yWhmdAtvYvxQaT3T9PZJKx7ZNqcgyW23HEnCM3VCYluXepj4aM0Y7O2SX
+	 kxHgr4zV2rQbEbSsHYBBos+TnUGTKrkCPupik65vrCjb7zIrmNlZ3KfrMaU2FeCLf/
+	 uNtNVxHYBXkgctSHG0QE+kAqqV5j219gk/M/v6W8aCzseDiP3z7M4QvI4dlQTfVXyS
+	 Ga6u+ge/bMyYw==
+Date: Sat, 25 May 2024 16:52:15 +0100
+From: Conor Dooley <conor@kernel.org>
 To: Markus Schneider-Pargmann <msp@baylibre.com>
-CC: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Marc Kleine-Budde
-	<mkl@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        "David S
- . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Vibhore Vardhan <vibhore@ti.com>, Kevin
- Hilman <khilman@baylibre.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        Martin
- =?utf-8?Q?Hundeb=C3=B8ll?= <martin@geanix.com>,
-        Simon Horman
-	<horms@kernel.org>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 7/7] arm64: dts: ti: k3-am62p-mcu: Mark mcu_mcan0/1 as
- wakeup-source
-Message-ID: <20240524054801.fhcjwtpdpic3tkpe@finlike>
+Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>, Vibhore Vardhan <vibhore@ti.com>,
+	Kevin Hilman <khilman@baylibre.com>, Dhruva Gole <d-gole@ti.com>,
+	Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>,
+	Simon Horman <horms@kernel.org>, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/7] dt-bindings: can: m_can: Add wakeup-source property
+Message-ID: <20240525-outdated-unopposed-857d30708413@spud>
 References: <20240523075347.1282395-1-msp@baylibre.com>
- <20240523075347.1282395-8-msp@baylibre.com>
+ <20240523075347.1282395-2-msp@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="nfBgOn45vCwmUCoC"
 Content-Disposition: inline
-In-Reply-To: <20240523075347.1282395-8-msp@baylibre.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20240523075347.1282395-2-msp@baylibre.com>
 
-On 09:53-20240523, Markus Schneider-Pargmann wrote:
-> From: Vibhore Vardhan <vibhore@ti.com>
-> 
-> mcu_mcan0 and mcu_mcan1 can be wakeup sources for the SoC. Mark them
-> accordingly in the devicetree. Based on the patch for AM62a.
-> 
-> Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
+
+--nfBgOn45vCwmUCoC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, May 23, 2024 at 09:53:41AM +0200, Markus Schneider-Pargmann wrote:
+> m_can can be a wakeup source on some devices. Especially on some of the
+> am62* SoCs pins, connected to m_can in the mcu, can be used to wakeup
+> the SoC.
+>=20
+> This property defines on which devices m_can can be used for wakeup.
+>=20
 > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 > ---
->  arch/arm64/boot/dts/ti/k3-am62p-mcu.dtsi | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62p-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62p-mcu.dtsi
-> index b973b550eb9d..e434b258e90c 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62p-mcu.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am62p-mcu.dtsi
-> @@ -162,6 +162,7 @@ mcu_mcan0: can@4e08000 {
->  		interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>,
->  			     <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
->  		interrupt-names = "int0", "int1";
-> +		wakeup-source;
->  		status = "disabled";
->  	};
->  
-> @@ -177,6 +178,7 @@ mcu_mcan1: can@4e18000 {
->  		interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>,
->  			     <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>;
->  		interrupt-names = "int0", "int1";
-> +		wakeup-source;
->  		status = "disabled";
->  	};
->  
-> -- 
-> 2.43.0
-> 
+>  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b=
+/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index f9ffb963d6b1..33f1688ca208 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -118,6 +118,10 @@ properties:
+>    phys:
+>      maxItems: 1
+> =20
+> +  wakeup-source:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: This device is capable to wakeup the SoC.
 
-Curious:
-https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html#supported-low-power-modes
-Does not seem to call out am62p. Is that an documentation oversight?
+It seems to me like patch 1 & 2 should be squashed, with "wakeup-source"
+depending on the correct pinctrl setup?
 
-what happens to j722s?
+--nfBgOn45vCwmUCoC
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZlIJLwAKCRB4tDGHoIJi
+0romAQCU+ufTErbUDP+o6575ok++8ihKyYxbBj8T5Nwl6VZJHAEA8xmFsrpPwQOV
+YAip06pvaKrUzD5redLLLU+5MWfopwk=
+=rATI
+-----END PGP SIGNATURE-----
+
+--nfBgOn45vCwmUCoC--
 
