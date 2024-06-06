@@ -1,64 +1,56 @@
-Return-Path: <linux-can+bounces-702-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-703-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55A318FE401
-	for <lists+linux-can@lfdr.de>; Thu,  6 Jun 2024 12:15:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C77C8FE4DF
+	for <lists+linux-can@lfdr.de>; Thu,  6 Jun 2024 13:05:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2A36283F47
-	for <lists+linux-can@lfdr.de>; Thu,  6 Jun 2024 10:15:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CD121C23C67
+	for <lists+linux-can@lfdr.de>; Thu,  6 Jun 2024 11:05:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8631C194ACB;
-	Thu,  6 Jun 2024 10:15:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEB0B194C9A;
+	Thu,  6 Jun 2024 11:05:12 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E1F1581E0;
-	Thu,  6 Jun 2024 10:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23ED61922CA;
+	Thu,  6 Jun 2024 11:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717668938; cv=none; b=DUlyrrTCBijLKe+1n8ObAzqqyR4Gc6FXEOO9QgfhM9D0zRD1yHX14x3G1UXlS5z5jpgafC4YuKrS4xtXLfEf3YiM51kwFBJraGdSBAcQVtMyjelb/hV+VFI6zWGtA36dThRuinPl7DW9jwmpX6eMJ4gwDDhAEstQjPqOlh53bis=
+	t=1717671912; cv=none; b=qbYb+sTHyW1+WmdaK32CajzPzbdyr8Rm7etCfPtvg45std+evCUTPxyONS25+Yd0hvWLoe2wL5Fi61H3bRkymelmjSY9t9mp0ZXprjYifyxG7EvRI6PPHM1cLxMRO2mWS5xpAS75GHjuWiuJBO0dzaFxFCJHZhHsqEqwgH9yeWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717668938; c=relaxed/simple;
-	bh=6GrNTeU6syeet0PG3KVv9gtHTFfZOQVvGuKL+LSpJzk=;
+	s=arc-20240116; t=1717671912; c=relaxed/simple;
+	bh=CtU6PkAiXt1tm2tia7A+TYEez2ihXxxskRZin6bEYZw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZPaIEOCA9yvYivju63XDxvhxY60n0aROvBiOshWQF2OebEqKHytKNOl3v0DLroo+na8/4Z+NL4eX2PI98gJLISzeImYjZ2hcXItzo26RyOh5cwRCibw5hfJhPVc/uXeVG7cQM2OAT8G8D9vK/++TdwCVbGL9GIvOJ9DMpZm3xmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	 To:Cc:Content-Type; b=g71N+CeTpEa7CtAHaQwf7O8Fyi/vzYH5qNJeApIoNGdgGGWs4Uwvru6VPZnto9yBDpwxZbXosiqwYIqI1JbfepH1gFs1fFWwntlWg5wjoStxBRwGBBciQ6aWFFPM/992Zl3JsvNyyZO4jzAH8G32dCnwZhHuPheL0mVmWQaN3IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dfa8427f22dso948268276.0;
-        Thu, 06 Jun 2024 03:15:35 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7025f4f4572so1448510b3a.1;
+        Thu, 06 Jun 2024 04:05:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717668934; x=1718273734;
+        d=1e100.net; s=20230601; t=1717671910; x=1718276710;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UAbA6XmlO0/+v57iUucYbTHgTS7aAv+JEntCcXUEmSs=;
-        b=jY1hj9QMKs/8U2NPnMBxoav/Id/17LtncxIe+LvQJ9Xs9mllqdJuaWSBYw+KMMZb26
-         Ji/K/h8VIZeoDaTYe46yvdkMhED4hhrJw55YuXAPS0EcPNhAIn5JmuZigAXfDv2TVvlu
-         +kZwflw6K/E2bvPzSP9xLS36h7zRfHisCpUGConeQy627TgI5j9bRx8rTyn5ubIOwo8V
-         wxsPp6LedNJvOJQljCt13BpzUfAsB9LbFqF7r+YjdBQQ5pOCjM6rD+YJK4N4OcVKD+gL
-         C2G6v4MUdiv/DvUP3nDwVLJH4g5Dn5DeFLMXMDY+0R9QaQQpkSWZ440c8lAOimb1HvGl
-         JfVA==
-X-Forwarded-Encrypted: i=1; AJvYcCUh20FCYZJL3/vz23ciyVMo1bJBhvFEQf55rZduqz0XVZidq8RMRxUWp5HqYvxrfSDNXU4LKpHz/6/X/XNKxa7AUB4CO0n3uIjMDiz1/WyiD2LjlToPT6SUGvLwOIPfsFpf2MqBNh/GeyqdmLJhbxgpwfLqXTYrlrgh8r7POYEk8pcPNRY=
-X-Gm-Message-State: AOJu0YwfO6HPpGerBAVUL6UeOtwKkW5zzlfX7ShuZImH6RRVkQDbZm1x
-	x2K4jykFb+j2vOJK2urz9wuE2OQCp3BNsiE1hwBgS0cCGjvPQpZ2/sqq4yR1
-X-Google-Smtp-Source: AGHT+IHls98VS/oK1RJtPFcaJRCqi3fRV+uXmEAI7vFotQucASXJXzDeZ1Js2/+eeghp4B9PE+iQ2g==
-X-Received: by 2002:a25:b320:0:b0:dfa:e6fe:96df with SMTP id 3f1490d57ef6-dfae6fe9886mr1056028276.29.1717668932618;
-        Thu, 06 Jun 2024 03:15:32 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-dfae53aa989sm223561276.43.2024.06.06.03.15.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jun 2024 03:15:32 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-62a145e0bb2so7446267b3.0;
-        Thu, 06 Jun 2024 03:15:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXbqC7mCvHgblC03lCEdJWaKiDrihytIBn79uDhr8AXWDbv4Qb+O/ofGPQV7dCEubs5AEUXHEhKox3hG1arEx/NxODoXmknsFQZNQFAOMit2e4myvG/lXtRmEyq/b3nhspGfC0+z27maQMRRCTvT0/WI9GXf3ZZHGeYqXFVF1DTO7kJGws=
-X-Received: by 2002:a25:b192:0:b0:df7:8e6f:b0fc with SMTP id
- 3f1490d57ef6-dfacad27254mr5168258276.63.1717668931812; Thu, 06 Jun 2024
- 03:15:31 -0700 (PDT)
+        bh=bflXmSi7eryx3IutiZnVV6UwS2elHr4HGVzH+xQaNuo=;
+        b=XmpY1OmqQK/lg7P11hhACVVyoHt4FWwwXEEtxr12H8zEjYyg5Me90eIqBVpG0cNyys
+         rFQ87QTCRooL9ycXBYKcxkgRTG3HdZv8LJtRMFwRSCK3ETYhlSRFIbBPGDdhKrFztRvq
+         iZIUuTx4UhLdMk4w4CO0ZUfMZAk4uhX3O7wKBxEndXadSQxAMUri+psOZewtVa1X26vC
+         /pZ9m8wX/b5g88tIf5yUV2nFRh2CSRCsIp/aLYYByn2z8EA558FFP11SNT5OFM6z9tta
+         gmGU9Hg01pkMNnNRYvl/PZ8LQi69BZVydM40VnNSvLBb2vI+9zAlJxLmYpVTAu/QCWAu
+         eiug==
+X-Forwarded-Encrypted: i=1; AJvYcCW7mQuSKoeMXIvf9utt6/Tlw39sAfYd6TqowXsOnySBz5FKo3u3B4DXfgALEhYJTkQ/9fS1UoJWyRBpshvQ+AcMzZUNIualgS2hic8IOcK+y3YQ0eikrv7OKrQelD5RQKTL1gqtyuDODxIIthp503RN6v85QC6qDpY6wCEbr9K9oD6k7Hs=
+X-Gm-Message-State: AOJu0Ywug1mqW8ccf4XA+TijyZk3b8S57T8pxjPdIYOMYGCkUkjKIFsK
+	TFPki7c7H74TMrLiBL8Nno18llPjoI30NnVMfWrXxiK2PMyGSzP3il5EmitqbnhdR+ueX6Dnipo
+	XAca6fVJ8Ol3CyQ+bAWmObEvv/7s=
+X-Google-Smtp-Source: AGHT+IFKW2ec3/HRyqmVW0kIun75Cic1VJob9nyHZ54FV+XUWliI+kAKLZGeOO5h3wXialZib/X58uQ2+UGJOvlCNcs=
+X-Received: by 2002:a17:90b:192:b0:2bf:7dd0:1713 with SMTP id
+ 98e67ed59e1d1-2c299a22206mr3066297a91.16.1717671910108; Thu, 06 Jun 2024
+ 04:05:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -66,72 +58,137 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <cover.1716973640.git.geert+renesas@glider.be> <2cf38c10b83c8e5c04d68b17a930b6d9dbf66f40.1716973640.git.geert+renesas@glider.be>
- <CAMZ6RqKZdo1Mk=tY-vqCm0YYr_Qk8m53+LHXqeM+1LL=S=+RqQ@mail.gmail.com>
-In-Reply-To: <CAMZ6RqKZdo1Mk=tY-vqCm0YYr_Qk8m53+LHXqeM+1LL=S=+RqQ@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 6 Jun 2024 12:15:19 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXV9q2D=Mhfi7s4NBuvivxBap-k_pkm4pUseoUb3SLWqQ@mail.gmail.com>
-Message-ID: <CAMuHMdXV9q2D=Mhfi7s4NBuvivxBap-k_pkm4pUseoUb3SLWqQ@mail.gmail.com>
+ <CAMZ6RqKZdo1Mk=tY-vqCm0YYr_Qk8m53+LHXqeM+1LL=S=+RqQ@mail.gmail.com> <CAMuHMdXV9q2D=Mhfi7s4NBuvivxBap-k_pkm4pUseoUb3SLWqQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdXV9q2D=Mhfi7s4NBuvivxBap-k_pkm4pUseoUb3SLWqQ@mail.gmail.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Thu, 6 Jun 2024 20:04:58 +0900
+Message-ID: <CAMZ6RqK32+i69Rd3qDDNm4cgQa3+m3ikZTbpt5jCGrkNt76+vw@mail.gmail.com>
 Subject: Re: [PATCH 1/3] can: rcar_canfd: Simplify clock handling
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
 Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
 	linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
 	netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Vincent,
-
-On Sun, Jun 2, 2024 at 10:03=E2=80=AFAM Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
-> On Wed. 29 May 2024 at 18:12, Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> > The main CAN clock is either the internal CANFD clock, or the external
-> > CAN clock.  Hence replace the two-valued enum by a simple boolean flag.
-> > Consolidate all CANFD clock handling inside a single branch.
+On Thu. 6 June 2024 at 19:15, Geert Uytterhoeven <geert@linux-m68k.org> wro=
+te:
+> Hi Vincent,
 >
-> For what it is worth, your patch also saves up to 8 bytes in struct
-> rcar_canfd_global (depends on the architecture).
-
-True.
-
-> > @@ -545,8 +539,8 @@ struct rcar_canfd_global {
-> >         struct platform_device *pdev;   /* Respective platform device *=
-/
-> >         struct clk *clkp;               /* Peripheral clock */
-> >         struct clk *can_clk;            /* fCAN clock */
-> > -       enum rcar_canfd_fcanclk fcan;   /* CANFD or Ext clock */
-> >         unsigned long channels_mask;    /* Enabled channels mask */
-> > +       bool extclk;                    /* CANFD or Ext clock */
-> >         bool fdmode;                    /* CAN FD or Classical CAN only=
- mode */
+> On Sun, Jun 2, 2024 at 10:03=E2=80=AFAM Vincent MAILHOL
+> <mailhol.vincent@wanadoo.fr> wrote:
+> > On Wed. 29 May 2024 at 18:12, Geert Uytterhoeven
+> > <geert+renesas@glider.be> wrote:
+> > > The main CAN clock is either the internal CANFD clock, or the externa=
+l
+> > > CAN clock.  Hence replace the two-valued enum by a simple boolean fla=
+g.
+> > > Consolidate all CANFD clock handling inside a single branch.
+> >
+> > For what it is worth, your patch also saves up to 8 bytes in struct
+> > rcar_canfd_global (depends on the architecture).
 >
-> Notwithstanding comment: you may consider to replace those two booleans b=
-y a:
+> True.
 >
->           unsigned int flags;
+> > > @@ -545,8 +539,8 @@ struct rcar_canfd_global {
+> > >         struct platform_device *pdev;   /* Respective platform device=
+ */
+> > >         struct clk *clkp;               /* Peripheral clock */
+> > >         struct clk *can_clk;            /* fCAN clock */
+> > > -       enum rcar_canfd_fcanclk fcan;   /* CANFD or Ext clock */
+> > >         unsigned long channels_mask;    /* Enabled channels mask */
+> > > +       bool extclk;                    /* CANFD or Ext clock */
+> > >         bool fdmode;                    /* CAN FD or Classical CAN on=
+ly mode */
+> >
+> > Notwithstanding comment: you may consider to replace those two booleans=
+ by a:
+> >
+> >           unsigned int flags;
+> >
+> > This way, no more fields would be needed in the future if more quirks a=
+re added.
 >
-> This way, no more fields would be needed in the future if more quirks are=
- added.
+> Using "unsigned int flags" and BIT(x) flags would increase code size
+> by 8 bytes (arm/arm64).
 
-Using "unsigned int flags" and BIT(x) flags would increase code size
-by 8 bytes (arm/arm64).
-Using "unsigned int foo:1" bitfields would increase code size by 16
-(arm) or 12 (arm64) bytes.
-So as long as we can fit more bools inside the hole, it is more
-efficient to do so...
+I am not sure where you derive your figure from, but looking at the pahole:
 
-Gr{oetje,eeting}s,
+  $ pahole drivers/net/can/rcar/rcar_canfd.o -C rcar_canfd_global
+  struct rcar_canfd_global {
+      struct rcar_canfd_channel * ch[8];               /*     0    64 */
+      /* --- cacheline 1 boundary (64 bytes) --- */
+      void *                     base;                 /*    64     8 */
+      struct platform_device *   pdev;                 /*    72     8 */
+      struct clk *               clkp;                 /*    80     8 */
+      struct clk *               can_clk;              /*    88     8 */
+      long unsigned int          channels_mask;        /*    96     8 */
+      bool                       extclk;               /*   104     1 */
+      bool                       fdmode;               /*   105     1 */
 
-                        Geert
+      /* XXX 6 bytes hole, try to pack */
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+      struct reset_control *     rstc1;                /*   112     8 */
+      struct reset_control *     rstc2;                /*   120     8 */
+      /* --- cacheline 2 boundary (128 bytes) --- */
+      const struct rcar_canfd_hw_info  * info;         /*   128     8 */
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+      /* size: 136, cachelines: 3, members: 11 */
+      /* sum members: 130, holes: 1, sum holes: 6 */
+      /* last cacheline: 8 bytes */
+  };
+
+on a 64 bits architecture, you are currently using two booleans (two
+bytes), followed by a hole of six bytes, which is a total of eight
+bytes. This should be way enough to fit an unsigned int. Same would go
+on 32 bits architecture in which you would use two bytes for the
+booleans and have a hole of two bytes, which is four bytes: one more
+time enough for an unsigned int.
+
+In both scenarios, you are not consuming more bytes, nor are you
+saving bytes. It is a neutral change.
+
+Of course, the pahole above was done on x86_64, but as far as I know,
+arm and arm64 paddings behave similarly.
+
+> Using "unsigned int foo:1" bitfields would increase code size by 16
+> (arm) or 12 (arm64) bytes.
+> So as long as we can fit more bools inside the hole, it is more
+> efficient to do so...
+
+I do not get this either. Where did you get your 16 bytes from? If I do:
+
+  struct foo {
+          unsigned int foo1:1;
+          unsigned int foo2:1;
+  };
+
+and
+
+  struct bar {
+          unsigned int flags;
+  };
+
+then I am pretty sure that sizeof(struct foo) is the same as
+sizeof(struct bar). That's the point of the bitfields: as long as the
+total of the bitfields fit in the type, the total size consumed by the
+bitfield is the same as the type size.
+
+But just to reiter my previous message, these are notwithstanding
+comments. I am fine if you keep the patch as-is ;)
+
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
+>
 
