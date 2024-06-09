@@ -1,79 +1,69 @@
-Return-Path: <linux-can+bounces-717-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-718-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F02339014F6
-	for <lists+linux-can@lfdr.de>; Sun,  9 Jun 2024 10:28:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2163490151A
+	for <lists+linux-can@lfdr.de>; Sun,  9 Jun 2024 10:32:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F66E1F211A6
-	for <lists+linux-can@lfdr.de>; Sun,  9 Jun 2024 08:28:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EEA6B22251
+	for <lists+linux-can@lfdr.de>; Sun,  9 Jun 2024 08:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48B201CAB7;
-	Sun,  9 Jun 2024 08:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69E550291;
+	Sun,  9 Jun 2024 08:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b="c3jg9XiA"
+	dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b="piJcIS//"
 X-Original-To: linux-can@vger.kernel.org
 Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB351CA89;
-	Sun,  9 Jun 2024 08:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAAA482FF;
+	Sun,  9 Jun 2024 08:28:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.134.164.83
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717921680; cv=none; b=ZQPgzDDLcl/QSGo1gkIIy7VgMsEwPZA8zCyPrtXP8d8XXrYlQGU52loGAQ0YxcC1EyiSGobzedoZQIySNxC0PqYUjGZSC1rtprAhDXMfLSDsWxYpOiVw0IS/rMoBYRaXhDRne9RRYJyQOJdImTUKTtULF1unqy2Oy5ClxFcJuGI=
+	t=1717921692; cv=none; b=N8ifeB0voo3JHccnLWotuGn6u28WDVMhv8LEVez8TN6TKm/ZxZAmxKNq6qqVN6ytlrRVSVk0YbG8AcKXBGycUvQRCWbfqJ3n6mcDuqAoRKKLGWAfJTSw6l7ilYGKGnZM8chnUfwCxE5Zk/WwOs4uSHiBgI5/y6nyJi+MkxI4PnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717921680; c=relaxed/simple;
-	bh=cl9fmVF+HqNubeETqLioP3KnvOsLThBpD2QkFmQe7ZM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cHqexTzfwS2VZtl2wgHwW7NnVCV5Gnx/7CQTtZRsC5mgR0Ol7JnCxa8A4u8T7CyPwakz4HnjxjPGmTmUbnRQ0AaANnLYziwdOYhlimmw+lh8MRBNh+wfJWswxtFtJey2YKpruKScdh8GjN0zpOZ5TyKP/iYvfERvpv8/36nDwrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr; spf=pass smtp.mailfrom=inria.fr; dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b=c3jg9XiA; arc=none smtp.client-ip=192.134.164.83
+	s=arc-20240116; t=1717921692; c=relaxed/simple;
+	bh=6GIjz5N6hc/+rjpb+kIsuZe52mzAkiPpkv+A8YoO+MI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iTNc/NTORkIq/AT6N+klMd4gTdIdTs3p0j/DIynbTRRoUFreid/nenoIMdVGY2/G+/MtzutFN5qCyuwiEPCzsC/2D5WC3zzCY4Pm1iY0oSqr06YuhQIY75T7L/bG3wdBG3XYaaH24doZ9UyUAGD8xZNvFAF8rqV0ZwCMx4dYH+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr; spf=pass smtp.mailfrom=inria.fr; dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b=piJcIS//; arc=none smtp.client-ip=192.134.164.83
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inria.fr
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=REYx9XJxXex1wT0g8DdBknTJa5z8s+++8BsQM1tAkdE=;
-  b=c3jg9XiAgeKcNkg9Ypz1MXA57+I6z9Upi3oqzG67AIxQoc2Tb/l9+twd
-   o1xqjWHj9bZB/XffVTZ6y3Q5wlIBrpiRIuaxP20ZifTf9z4PP9a6/uHrQ
-   jbNAr8EHCg32T8reqfZHBfM1Bu9ssqsOLmK26M8DXHwpWqbgwQfkqJwz8
-   I=;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=X9IqNiprrXZb6MHGk7aZq3SWcPVK5fPzmf82pe9GCT8=;
+  b=piJcIS//x58NzsIAPazGIB+abmqDcnvkuqGskL8US1zhYqDV8rt3qBPc
+   h6CIeifF90XNr/yhhLY/VPzaE2/VJlIk3jEopBvzmI7jbBXkvoD1+yEhu
+   rz7e3w+JXN9wDDW+odxmdOb54ZSBeILJrZZFdlEEnR1kl0UtOmhnkrj4t
+   k=;
 Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="6.08,225,1712613600"; 
-   d="scan'208";a="169696895"
+   d="scan'208";a="169696905"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2024 10:27:48 +0200
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2024 10:27:49 +0200
 From: Julia Lawall <Julia.Lawall@inria.fr>
-To: linux-block@vger.kernel.org
+To: Oliver Hartkopp <socketcan@hartkopp.net>
 Cc: kernel-janitors@vger.kernel.org,
-	bridge@lists.linux.dev,
-	linux-trace-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	kvm@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	netdev@vger.kernel.org,
-	wireguard@lists.zx2c4.com,
-	linux-kernel@vger.kernel.org,
-	ecryptfs@vger.kernel.org,
-	Neil Brown <neilb@suse.de>,
-	Olga Kornievskaia <kolga@netapp.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>,
-	Tom Talpey <tom@talpey.com>,
-	linux-nfs@vger.kernel.org,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
 	linux-can@vger.kernel.org,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	"Paul E . McKenney" <paulmck@kernel.org>,
 	Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH 00/14] replace call_rcu by kfree_rcu for simple kmem_cache_free callback
-Date: Sun,  9 Jun 2024 10:27:12 +0200
-Message-Id: <20240609082726.32742-1-Julia.Lawall@inria.fr>
+Subject: [PATCH 10/14] can: gw: replace call_rcu by kfree_rcu for simple kmem_cache_free callback
+Date: Sun,  9 Jun 2024 10:27:22 +0200
+Message-Id: <20240609082726.32742-11-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20240609082726.32742-1-Julia.Lawall@inria.fr>
+References: <20240609082726.32742-1-Julia.Lawall@inria.fr>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -170,24 +160,53 @@ Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
 ---
+ net/can/gw.c |   13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
- arch/powerpc/kvm/book3s_mmu_hpte.c  |    8 +-------
- block/blk-ioc.c                     |    9 +--------
- drivers/net/wireguard/allowedips.c  |    9 ++-------
- fs/ecryptfs/dentry.c                |    8 +-------
- fs/nfsd/nfs4state.c                 |    9 +--------
- fs/tracefs/inode.c                  |   10 +---------
- kernel/time/posix-timers.c          |    9 +--------
- kernel/workqueue.c                  |    8 +-------
- net/bridge/br_fdb.c                 |    9 +--------
- net/can/gw.c                        |   13 +++----------
- net/ipv4/fib_trie.c                 |    8 +-------
- net/ipv4/inetpeer.c                 |    9 ++-------
- net/ipv6/ip6_fib.c                  |    9 +--------
- net/ipv6/xfrm6_tunnel.c             |    8 +-------
- net/kcm/kcmsock.c                   |   10 +---------
- net/netfilter/nf_conncount.c        |   10 +---------
- net/netfilter/nf_conntrack_expect.c |   10 +---------
- net/netfilter/xt_hashlimit.c        |    9 +--------
- 18 files changed, 22 insertions(+), 143 deletions(-)
+diff --git a/net/can/gw.c b/net/can/gw.c
+index 37528826935e..ffb9870e2d01 100644
+--- a/net/can/gw.c
++++ b/net/can/gw.c
+@@ -577,13 +577,6 @@ static inline void cgw_unregister_filter(struct net *net, struct cgw_job *gwj)
+ 			  gwj->ccgw.filter.can_mask, can_can_gw_rcv, gwj);
+ }
+ 
+-static void cgw_job_free_rcu(struct rcu_head *rcu_head)
+-{
+-	struct cgw_job *gwj = container_of(rcu_head, struct cgw_job, rcu);
+-
+-	kmem_cache_free(cgw_cache, gwj);
+-}
+-
+ static int cgw_notifier(struct notifier_block *nb,
+ 			unsigned long msg, void *ptr)
+ {
+@@ -603,7 +596,7 @@ static int cgw_notifier(struct notifier_block *nb,
+ 			if (gwj->src.dev == dev || gwj->dst.dev == dev) {
+ 				hlist_del(&gwj->list);
+ 				cgw_unregister_filter(net, gwj);
+-				call_rcu(&gwj->rcu, cgw_job_free_rcu);
++				kfree_rcu(gwj, rcu);
+ 			}
+ 		}
+ 	}
+@@ -1168,7 +1161,7 @@ static void cgw_remove_all_jobs(struct net *net)
+ 	hlist_for_each_entry_safe(gwj, nx, &net->can.cgw_list, list) {
+ 		hlist_del(&gwj->list);
+ 		cgw_unregister_filter(net, gwj);
+-		call_rcu(&gwj->rcu, cgw_job_free_rcu);
++		kfree_rcu(gwj, rcu);
+ 	}
+ }
+ 
+@@ -1236,7 +1229,7 @@ static int cgw_remove_job(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 
+ 		hlist_del(&gwj->list);
+ 		cgw_unregister_filter(net, gwj);
+-		call_rcu(&gwj->rcu, cgw_job_free_rcu);
++		kfree_rcu(gwj, rcu);
+ 		err = 0;
+ 		break;
+ 	}
+
 
