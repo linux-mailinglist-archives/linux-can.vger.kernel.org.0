@@ -1,43 +1,46 @@
-Return-Path: <linux-can+bounces-752-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-756-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9DFA908E76
-	for <lists+linux-can@lfdr.de>; Fri, 14 Jun 2024 17:17:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2810908E89
+	for <lists+linux-can@lfdr.de>; Fri, 14 Jun 2024 17:20:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 515371F27775
-	for <lists+linux-can@lfdr.de>; Fri, 14 Jun 2024 15:17:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 229E6B2D898
+	for <lists+linux-can@lfdr.de>; Fri, 14 Jun 2024 15:17:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A52B1591E8;
-	Fri, 14 Jun 2024 15:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3B716B74D;
+	Fri, 14 Jun 2024 15:15:53 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from qmail.kvaser.se (static-195-22-86-94.cust.tele2.se [195.22.86.94])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A65915FCE7
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D2B7154457
 	for <linux-can@vger.kernel.org>; Fri, 14 Jun 2024 15:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.22.86.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718378152; cv=none; b=R7DGTZvIMeXFbEWQHgu6N0ntwlngvdQFg/dkcLOWl9vCtDh/MGeMhX744q3RF9ZVNwudTxXZLMwHWfegFHx12NkAQtD0V71TY81kB4sZ8MfwqqLSBLwiURa4jeMOLJCevB8TFafGAtGlpO1q0/Zm0ajUvabHjjMoAXsbuZkgPjE=
+	t=1718378153; cv=none; b=CDSc91iYeJjWBgS2F+IIMVtLfb4hfYXkyTU/+X/QpAaeXVwLPYp0XndXklQq88reO49UqmI97kSbeUXK5FmU4upJocMf7QXlpi60Xb9AucavlkrD47LKMej4DW+uFB92gg6UqKwTu8ldML6lsQCO22Ag1Fqq1plyBHxAoJFbea4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718378152; c=relaxed/simple;
-	bh=a0comCYX5UTVsuppaBqCQ/6FtvXp3om3CP+5NzCrGY0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RxCerWb4mEO0ru/yM2K8JDg922YYwIMeeBqnb8LjYMp0peU3g4neJ/1Og3bCuO9knRRqvK/J4hqLZcDD+eYwvaW5WZrOKp0T/ALWjAy4uUVoIJ1XqkGOGiK4VnMECZWg5OeptKa4hZiT031sWAiF0CqEZYx67SOBFJSme4B/bhU=
+	s=arc-20240116; t=1718378153; c=relaxed/simple;
+	bh=i6ES7opbPHx7cC5iGeXfCxzF7yttoZJVr1Hv50u6WRM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iahkgaisdlJpWzjpRqTXMiUJgFSRuReTHaOx32fH1zSkvLuDKzaiGrA0MkwUhJgSp5rIz7iX7s6wyNFtLosJkRwBUnA0uuC2uUrf1D77P9xdhZyeNZwUd/D0hWjbnckQSDYgXErHeHFm7ZCSvihqdY6P4ShBvGjyIdeWtvde9Ck=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; arc=none smtp.client-ip=195.22.86.94
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvaser.com
 Received: from localhost (balder.kvaser.se [10.0.6.1])
-	by qmail.kvaser.se (Postfix) with ESMTP id A83A4E00FF;
+	by qmail.kvaser.se (Postfix) with ESMTP id B78C4E0103;
 	Fri, 14 Jun 2024 17:15:41 +0200 (CEST)
 From: Martin Jocic <martin.jocic@kvaser.com>
 To: linux-can@vger.kernel.org,
 	mkl@pengutronix.de,
 	mailhol.vincent@wanadoo.fr
 Cc: extja@kvaser.com
-Subject: [PATCH 0/7] can: kvaser_pciefd: Minor improvements and cleanups
-Date: Fri, 14 Jun 2024 17:15:17 +0200
-Message-Id: <20240614151524.2718287-1-martin.jocic@kvaser.com>
+Subject: [PATCH 1/7] can: kvaser_pciefd: Group #defines together
+Date: Fri, 14 Jun 2024 17:15:18 +0200
+Message-Id: <20240614151524.2718287-2-martin.jocic@kvaser.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20240614151524.2718287-1-martin.jocic@kvaser.com>
+References: <20240614151524.2718287-1-martin.jocic@kvaser.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -46,22 +49,30 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Minor improvements and cleanups for the kvaser_pciefd driver
-in preparation for an upcoming MSI interrupts patch series.
+Increases readability
 
-Martin Jocic (7):
-  can: kvaser_pciefd: Group #defines together
-  can: kvaser_pciefd: Skip redundant NULL pointer check in ISR
-  can: kvaser_pciefd: Remove unnecessary comment
-  can: kvaser_pciefd: Add inline
-  can: kvaser_pciefd: Add unlikely
-  can: kvaser_pciefd: Rename board_irq to pci_irq
-  can: kvaser_pciefd: Change name of return code variable
+Signed-off-by: Martin Jocic <martin.jocic@kvaser.com>
+---
+ drivers/net/can/kvaser_pciefd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/net/can/kvaser_pciefd.c | 85 +++++++++++++++------------------
- 1 file changed, 39 insertions(+), 46 deletions(-)
-
---
+diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
+index 7b5028b67cd5..fa205091aafe 100644
+--- a/drivers/net/can/kvaser_pciefd.c
++++ b/drivers/net/can/kvaser_pciefd.c
+@@ -29,10 +29,10 @@ MODULE_DESCRIPTION("CAN driver for Kvaser CAN/PCIe devices");
+ #define KVASER_PCIEFD_CAN_TX_MAX_COUNT 17U
+ #define KVASER_PCIEFD_MAX_CAN_CHANNELS 8UL
+ #define KVASER_PCIEFD_DMA_COUNT 2U
+-
+ #define KVASER_PCIEFD_DMA_SIZE (4U * 1024U)
+ 
+ #define KVASER_PCIEFD_VENDOR 0x1a07
++
+ /* Altera based devices */
+ #define KVASER_PCIEFD_4HS_DEVICE_ID 0x000d
+ #define KVASER_PCIEFD_2HS_V2_DEVICE_ID 0x000e
+-- 
 2.40.1
 
 
