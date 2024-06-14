@@ -1,105 +1,111 @@
-Return-Path: <linux-can+bounces-760-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-763-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 770CA908E8C
-	for <lists+linux-can@lfdr.de>; Fri, 14 Jun 2024 17:20:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 764B59092F5
+	for <lists+linux-can@lfdr.de>; Fri, 14 Jun 2024 21:34:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 210381F218AE
-	for <lists+linux-can@lfdr.de>; Fri, 14 Jun 2024 15:20:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 052492855B0
+	for <lists+linux-can@lfdr.de>; Fri, 14 Jun 2024 19:34:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8858F15DBB5;
-	Fri, 14 Jun 2024 15:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8B8E1A38CD;
+	Fri, 14 Jun 2024 19:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Piy7/8cY"
 X-Original-To: linux-can@vger.kernel.org
-Received: from qmail.kvaser.se (static-195-22-86-94.cust.tele2.se [195.22.86.94])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0494376F1
-	for <linux-can@vger.kernel.org>; Fri, 14 Jun 2024 15:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.22.86.94
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC8D26AD7;
+	Fri, 14 Jun 2024 19:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718378413; cv=none; b=jWCMG3xFUpRy4v+0kKu5SAFJ9Xpyo2KlOXuWiAF/GI/SBRRCeDF5kNR+35HcCAfkajGcGNjbBGP8ep5lbttq6VgJVzTt8uJ44ZLfMQ3IyQzz/tmKHc8h0hDU4HCkWxQUK/9Cd4eGOYcsvQQTF2RpvzICtELwCeyMN3c9VF6ho9c=
+	t=1718393638; cv=none; b=dl+pCGeNQ2hQSLtgfDQar0YVr9tBn9Xoz2YTqbNxPUcjA5EyTrRwu28myy0oAxeTQPeEPS22PYLNrJfmvyLvdkP9gO7iYohkokIA9Pc4bp+o5prIwXozRfeY3lEfzN2eIHPNb4JzWvQH3afgsMAzTOG61BJ7TsQuZkdpAhpevJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718378413; c=relaxed/simple;
-	bh=/ozOzHTmkD3NtmU3F6k0ZJwO2Oq9kV9kH6YRfJm/SAo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cU7qQQeh+Vj9+rfeh8NA80mBOnUy+qrxf8EwRLSfj+EF4GsXNpC/uEZW7+AW65T+FxDynhpdguCdIYFMnQQywTo2o3i+KgSC+IKB1knOze4lovp+Ez7WXrs5c7eXHNJZChDYfDI5r6eBu8MXZSZOZz5mtSxksFhJSuW3dQU36n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; arc=none smtp.client-ip=195.22.86.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvaser.com
-Received: from localhost (balder.kvaser.se [10.0.6.1])
-	by qmail.kvaser.se (Postfix) with ESMTP id DAC8DE0437;
-	Fri, 14 Jun 2024 17:20:10 +0200 (CEST)
-From: Martin Jocic <martin.jocic@kvaser.com>
-To: linux-can@vger.kernel.org,
-	mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr
-Cc: extja@kvaser.com
-Subject: [PATCH 2/2] can: kvaser_pciefd: Add MSI interrupts
-Date: Fri, 14 Jun 2024 17:20:08 +0200
-Message-Id: <20240614152008.2730746-3-martin.jocic@kvaser.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240614152008.2730746-1-martin.jocic@kvaser.com>
-References: <20240614152008.2730746-1-martin.jocic@kvaser.com>
+	s=arc-20240116; t=1718393638; c=relaxed/simple;
+	bh=un2DKs68DVerlXBeKlpV6w20TzStZ/MgihGnCdsi2EU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A5O4zg/6E5qHVKs3c8INeozn/yCj0lrM3OGaEMV7P0Y+0O6D3bR5gNgd0fArTmglhgLXkhnUt9aaXO5/h15zYzD7wXiR0UN589jbazD6q4dym9gA+Vto8AlS7sSREOCzwnnHCyWpZbIV1PVG7l0ghBlmbsBxDjKYnTtbJPzKCQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=Piy7/8cY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8CBC2BD10;
+	Fri, 14 Jun 2024 19:33:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Piy7/8cY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1718393634;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DXA9wvv5IhNhdgqqoog09hrS0W28PIbc3nCXFgq2mxA=;
+	b=Piy7/8cYE5kX8QxCb1ovvf7Oew+mzdXJL4F6If9Frkz4X0RUzqFF12WjwrhUhRlUy+iIKO
+	DoV+j//Avs/4vzAsOjkSD1yxY/bbFo9eXQkn/oEw9txGMiy9XDfptZ5hiqtMHXpzOrUrXv
+	cPfOpW6hB2UusbVHO75CZUsDVUtb8kw=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6d22401f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 14 Jun 2024 19:33:52 +0000 (UTC)
+Date: Fri, 14 Jun 2024 21:33:45 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Uladzislau Rezki <urezki@gmail.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+	Vlastimil Babka <vbabka@suse.cz>, Jakub Kicinski <kuba@kernel.org>,
+	Julia Lawall <Julia.Lawall@inria.fr>, linux-block@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, bridge@lists.linux.dev,
+	linux-trace-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	kvm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Nicholas Piggin <npiggin@gmail.com>, netdev@vger.kernel.org,
+	wireguard@lists.zx2c4.com, linux-kernel@vger.kernel.org,
+	ecryptfs@vger.kernel.org, Neil Brown <neilb@suse.de>,
+	Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>,
+	Tom Talpey <tom@talpey.com>, linux-nfs@vger.kernel.org,
+	linux-can@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: Re: [PATCH 00/14] replace call_rcu by kfree_rcu for simple
+ kmem_cache_free callback
+Message-ID: <ZmybGZDbXkw7JTjc@zx2c4.com>
+References: <baee4d58-17b4-4918-8e45-4d8068a23e8c@paulmck-laptop>
+ <ZmrfA1p2zSVIaYam@zx2c4.com>
+ <80e03b02-7e24-4342-af0b-ba5117b19828@paulmck-laptop>
+ <Zmru7hhz8kPDPsyz@pc636>
+ <7efde25f-6af5-4a67-abea-b26732a8aca1@paulmck-laptop>
+ <Zmsuswo8OPIhY5KJ@pc636>
+ <cb51bc57-47b8-456a-9ac0-f8aa0931b144@paulmck-laptop>
+ <ZmszOd5idhf2Cb-v@pc636>
+ <b03b007f-3afa-4ad4-b76b-dea7b3aa2bc3@paulmck-laptop>
+ <Zmw5FTX752g0vtlD@pc638.lan>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Zmw5FTX752g0vtlD@pc638.lan>
 
-Use MSI interrupts with fallback to legacy interrupts.
+On Fri, Jun 14, 2024 at 02:35:33PM +0200, Uladzislau Rezki wrote:
+> +	/* Should a destroy process be deferred? */
+> +	if (s->flags & SLAB_DEFER_DESTROY) {
+> +		list_move_tail(&s->list, &slab_caches_defer_destroy);
+> +		schedule_delayed_work(&slab_caches_defer_destroy_work, HZ);
+> +		goto out_unlock;
+> +	}
 
-Signed-off-by: Martin Jocic <martin.jocic@kvaser.com>
----
- drivers/net/can/kvaser_pciefd.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+Wouldn't it be smoother to have the actual kmem_cache_free() function
+check to see if it's been marked for destruction and the refcount is
+zero, rather than polling every one second? I mentioned this approach
+in: https://lore.kernel.org/all/Zmo9-YGraiCj5-MI@zx2c4.com/ -
 
-diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index 63b4d2a4c7ce..53b82e11f7f3 100644
---- a/drivers/net/can/kvaser_pciefd.c
-+++ b/drivers/net/can/kvaser_pciefd.c
-@@ -1774,11 +1774,24 @@ static int kvaser_pciefd_probe(struct pci_dev *pdev,
- 	if (ret)
- 		goto err_teardown_can_ctrls;
+    I wonder if the right fix to this would be adding a `should_destroy`
+    boolean to kmem_cache, which kmem_cache_destroy() sets to true. And
+    then right after it checks `if (number_of_allocations == 0)
+    actually_destroy()`, and likewise on each kmem_cache_free(), it
+    could check `if (should_destroy && number_of_allocations == 0)
+    actually_destroy()`. 
 
--	ret = request_irq(pcie->pci->irq, kvaser_pciefd_irq_handler,
--			  IRQF_SHARED, KVASER_PCIEFD_DRV_NAME, pcie);
--	if (ret)
-+	ret = pci_alloc_irq_vectors(pcie->pci, 1, 1, PCI_IRQ_LEGACY | PCI_IRQ_MSI);
-+	if (ret < 0) {
-+		dev_info(&pcie->pci->dev, "Failed to allocate IRQ vectors.\n");
- 		goto err_teardown_can_ctrls;
-+	}
-+
-+	ret = pci_irq_vector(pcie->pci, 0);
-+	if (ret < 0)
-+		goto err_free_msi;
-+
-+	pcie->pci->irq = ret;
-
-+	ret = request_irq(pcie->pci->irq, kvaser_pciefd_irq_handler,
-+			  IRQF_SHARED, KVASER_PCIEFD_DRV_NAME, pcie);
-+	if (ret) {
-+		dev_info(&pcie->pci->dev, "Failed to request IRQ %d\n", pcie->pci->irq);
-+		goto err_free_msi;
-+	}
- 	iowrite32(KVASER_PCIEFD_SRB_IRQ_DPD0 | KVASER_PCIEFD_SRB_IRQ_DPD1,
- 		  KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_IRQ_REG);
-
-@@ -1807,6 +1820,10 @@ static int kvaser_pciefd_probe(struct pci_dev *pdev,
- 	iowrite32(0, irq_en_base);
- 	free_irq(pcie->pci->irq, pcie);
-
-+err_free_msi:
-+	if (pcie->pci->msi_enabled)
-+		pci_free_irq_vectors(pcie->pci);
-+
- err_teardown_can_ctrls:
- 	kvaser_pciefd_teardown_can_ctrls(pcie);
- 	iowrite32(0, KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_CTRL_REG);
---
-2.40.1
-
+Jason
 
