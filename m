@@ -1,123 +1,141 @@
-Return-Path: <linux-can+bounces-783-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-784-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C45E990D8E4
-	for <lists+linux-can@lfdr.de>; Tue, 18 Jun 2024 18:18:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31EAE90D9D1
+	for <lists+linux-can@lfdr.de>; Tue, 18 Jun 2024 18:49:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F409B2979E
-	for <lists+linux-can@lfdr.de>; Tue, 18 Jun 2024 16:17:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5258C2874B1
+	for <lists+linux-can@lfdr.de>; Tue, 18 Jun 2024 16:48:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77524152511;
-	Tue, 18 Jun 2024 16:12:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1667382D6D;
+	Tue, 18 Jun 2024 16:48:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="lc9PVF+p";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="LS/OLGrv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HrsVOBE2"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0FF513A89B;
-	Tue, 18 Jun 2024 16:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B398C208CB;
+	Tue, 18 Jun 2024 16:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718727166; cv=none; b=q9jPsWB2jZdeHUEc6Ns26O26em19b8mQ1pwlZ35ym+zdjpfj9XTNTy8xGslJgifvFqkScKRUBwla8AwtOze33nvCYatqU2YaTFMZA/Za4LytsKqJ2oEbElDpKqJFg2xgfGwyOZFahSmgiksSqalzEjU8jeFEJkIZ/c9+aenghs0=
+	t=1718729330; cv=none; b=jbg/uu8GG9hE1MoY1R0Mqs7kcEvPTzfgcRkftRjsJ5oZeqxq18SNY2PjUV214xbX5CNuf504alFtWxI9Y9LA5rofXrZMoHSLK9l/Xbkb7hQZoiOqaIxdly7eEMr0MWisEzVXK23fSNen6zRI5BZO/TJnIJ8/WIcBFxVqRXE34vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718727166; c=relaxed/simple;
-	bh=qNULmo001mC5yL2uC9neAijsJRYb5joYOHW/sq9OTls=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=cSlRQ90jpS7cD6EtM0TXBTMxhqgnTQZM07O6dOZSqmblb5OiS4N6zBKcsWq9SpkIk7ggIxCfslug498hfe8QAHCFZFo1toYqQsfEGzDnGCdezd4ygktcCeaN+yWxgFtNbcF4EMdbveHlSxiNqmf86wsPi1XcmI/+lNl3SlV8dPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=lc9PVF+p; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=LS/OLGrv reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1718727163; x=1750263163;
-  h=message-id:subject:from:to:cc:date:
-   content-transfer-encoding:mime-version;
-  bh=qNULmo001mC5yL2uC9neAijsJRYb5joYOHW/sq9OTls=;
-  b=lc9PVF+p//dq3Jl8gPUS0lGu9UN83ZYr6lB7KOqemgeSXB+WzW8XWmOi
-   4jGqGqO2+dHZQHedOScRo5OKAeqoQwOEG4RsSOmrXoaW2Hpl3Sfpt7XkO
-   BHZf5R+eMv1texL/VpjI+1/0jzLdQRzd1S8no4bq9Ihb41Op1CbF/XJax
-   49hqxcLwGZ1P6S1PeJremc2Cu42C1Mu358L1Ez3q6aYGV9z+fZ522aHWU
-   A2sAo6lY9DLwhnZq9OUxd8r7XaKWEcKYhTUK4d/BZ8ENsEaYCeM59+R4Q
-   oPOJ2sk7bHTfM6zJvjcrrn8oRRt8P1yrh1Ejgb4agCaYP3+E8cZyUf//e
-   Q==;
-X-CSE-ConnectionGUID: UFIXNrYPRUOnvkwpxts+4w==
-X-CSE-MsgGUID: orx72WeMR0idy2RCELZc2Q==
-X-IronPort-AV: E=Sophos;i="6.08,247,1712613600"; 
-   d="scan'208";a="37457616"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 18 Jun 2024 18:12:35 +0200
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3B5051664C9;
-	Tue, 18 Jun 2024 18:12:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1718727150;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=qNULmo001mC5yL2uC9neAijsJRYb5joYOHW/sq9OTls=;
-	b=LS/OLGrv/yld6GBB/DMqXy8/DiycpIH+FNzKfCT7A2THBG0TLcjyMVprzeFtT/JA8GS/5A
-	7KwK2puAK0sVidAs3x6YI47wboRSfT3jPJhZZeNSKziSkfHl6iR2Wh1rIayE50KgvOuadq
-	8Pd0CcW7N0DZOLiK1eVZAIQutJ74AyAVm7aiycrcyNL5esZ7IuEoLGm5WnpNmJOOkQHcA7
-	ASjTte6NPB6sqiwfgALZS3ZIFWVQr+lj7p0RmvtNm9VLtKwVvRJUAQki0VQIYSpyWoXapv
-	KaWGdHyFCdALxvIbx46/q/6l8k7dV0GmdTnVR6MQMA01ZCrN7BWKhxQXGqGzpA==
-Message-ID: <e72771c75988a2460fa8b557b0e2d32e6894f75d.camel@ew.tq-group.com>
-Subject: Kernel hang caused by commit "can: m_can: Start/Cancel polling
- timer together with interrupts"
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To: Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, Marc Kleine-Budde
- <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>, Tony Lindgren
- <tony@atomide.com>, Judith Mendez <jm@ti.com>,  linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,  linux@ew.tq-group.com
-Date: Tue, 18 Jun 2024 18:12:27 +0200
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1718729330; c=relaxed/simple;
+	bh=VfDzdOd/PBJM9nA6j0ZKm8qJpomLK1rSxnmNGkn9m68=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aOLKfLMuCC57noxrPfuliRpwDJrU6nxGNO2ViY6mmqwtkgH9IJ+4HalyitruXzGGG3pIN3uduNZTcuQ9kZNc1Ly62OPPShpOi+Yh4eZSdW4biap8BMW2jafWs9XCopCclQBdHAd7ar55rUHNOw5JSM1uBR38aIQeU86L+KsZJxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HrsVOBE2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DFD3C3277B;
+	Tue, 18 Jun 2024 16:48:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718729330;
+	bh=VfDzdOd/PBJM9nA6j0ZKm8qJpomLK1rSxnmNGkn9m68=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=HrsVOBE2UZX8+X+ns3WoipKKPnQlrXf46/WVd5Z8R08kgkeXyQZpJ3xbNp53mW9mR
+	 heTRYbFX6QLq79sc4TX3gceaCliIC49fBjdslD9tSepbzuQXYzZj/oR4qg+oxqMyUR
+	 SCgHWoeY3y1GSVheT8IwuCrjcwTBFwfw/ymCcCO5j+RDeWy1MibPA2MpM/dmvBceqn
+	 Md4s8MgF8TnOTenuVi09xWbCE2J+QqwjQUEIo4ueSno6A8qEYdy9kKtKI9Xs5ZQFI+
+	 q4wO1JBGHQ9K5vJ3V09XPmAG/dclEEFW0Db1j3pHWmIKKjhVTZmif7rRNHjHUNgQzz
+	 SZsG2RVZhy0Qg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id B9F83CE05B6; Tue, 18 Jun 2024 09:48:49 -0700 (PDT)
+Date: Tue, 18 Jun 2024 09:48:49 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Uladzislau Rezki <urezki@gmail.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Julia Lawall <Julia.Lawall@inria.fr>, linux-block@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, bridge@lists.linux.dev,
+	linux-trace-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	kvm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Nicholas Piggin <npiggin@gmail.com>, netdev@vger.kernel.org,
+	wireguard@lists.zx2c4.com, linux-kernel@vger.kernel.org,
+	ecryptfs@vger.kernel.org, Neil Brown <neilb@suse.de>,
+	Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>,
+	Tom Talpey <tom@talpey.com>, linux-nfs@vger.kernel.org,
+	linux-can@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	kasan-dev <kasan-dev@googlegroups.com>
+Subject: Re: [PATCH 00/14] replace call_rcu by kfree_rcu for simple
+ kmem_cache_free callback
+Message-ID: <5c8b2883-962f-431f-b2d3-3632755de3b0@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <Zmov7ZaL-54T9GiM@zx2c4.com>
+ <Zmo9-YGraiCj5-MI@zx2c4.com>
+ <08ee7eb2-8d08-4f1f-9c46-495a544b8c0e@paulmck-laptop>
+ <Zmrkkel0Fo4_g75a@zx2c4.com>
+ <e926e3c6-05ce-4ba6-9e2e-e5f3b37bcc23@suse.cz>
+ <3b6fe525-626c-41fb-8625-3925ca820d8e@paulmck-laptop>
+ <6711935d-20b5-41c1-8864-db3fc7d7823d@suse.cz>
+ <ZnCDgdg1EH6V7w5d@pc636>
+ <36c60acd-543e-48c5-8bd2-6ed509972d28@suse.cz>
+ <ZnFT1Czb8oRb0SE7@pc636>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZnFT1Czb8oRb0SE7@pc636>
 
-Hi Markus,
+On Tue, Jun 18, 2024 at 11:31:00AM +0200, Uladzislau Rezki wrote:
+> > On 6/17/24 8:42 PM, Uladzislau Rezki wrote:
+> > >> +
+> > >> +	s = container_of(work, struct kmem_cache, async_destroy_work);
+> > >> +
+> > >> +	// XXX use the real kmem_cache_free_barrier() or similar thing here
+> > > It implies that we need to introduce kfree_rcu_barrier(), a new API, which i
+> > > wanted to avoid initially.
+> > 
+> > I wanted to avoid new API or flags for kfree_rcu() users and this would
+> > be achieved. The barrier is used internally so I don't consider that an
+> > API to avoid. How difficult is the implementation is another question,
+> > depending on how the current batching works. Once (if) we have sheaves
+> > proven to work and move kfree_rcu() fully into SLUB, the barrier might
+> > also look different and hopefully easier. So maybe it's not worth to
+> > invest too much into that barrier and just go for the potentially
+> > longer, but easier to implement?
+> > 
+> Right. I agree here. If the cache is not empty, OK, we just defer the
+> work, even we can use a big 21 seconds delay, after that we just "warn"
+> if it is still not empty and leave it as it is, i.e. emit a warning and
+> we are done.
+> 
+> Destroying the cache is not something that must happen right away. 
 
-we've found that recent kernels hang on the TI AM62x SoC (where no m_can in=
-terrupt is available and
-thus the polling timer is used), always a few seconds after the CAN interfa=
-ces are set up.
+OK, I have to ask...
 
-I have bisected the issue to commit a163c5761019b ("can: m_can: Start/Cance=
-l polling timer together
-with interrupts"). Both master and 6.6 stable (which received a backport of=
- the commit) are
-affected. On 6.6 the commit is easy to revert, but on master a lot has happ=
-ened on top of that
-change.
+Suppose that the cache is created and destroyed by a module and
+init/cleanup time, respectively.  Suppose that this module is rmmod'ed
+then very quickly insmod'ed.
 
-As far as I can tell, the reason is that hrtimer_cancel() tries to cancel t=
-he timer synchronously,
-which will deadlock when called from the hrtimer callback itself (hrtimer_c=
-allback -> m_can_isr ->
-m_can_disable_all_interrupts -> hrtimer_cancel).
+Do we need to fail the insmod if the kmem_cache has not yet been fully
+cleaned up?  If not, do we have two versions of the same kmem_cache in
+/proc during the overlap time?
 
-I can try to come up with a fix, but I think you are much more familiar wit=
-h the driver code. Please
-let me know if you need any more information.
+							Thanx, Paul
 
-Best regards,
-Matthias
-
-
---=20
-TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
-any
-Amtsgericht M=C3=BCnchen, HRB 105018
-Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
-neider
-https://www.tq-group.com/
+> > > Since you do it asynchronous can we just repeat
+> > > and wait until it a cache is furry freed?
+> > 
+> > The problem is we want to detect the cases when it's not fully freed
+> > because there was an actual read. So at some point we'd need to stop the
+> > repeats because we know there can no longer be any kfree_rcu()'s in
+> > flight since the kmem_cache_destroy() was called.
+> > 
+> Agree. As noted above, we can go with 21 seconds(as an example) interval
+> and just perform destroy(without repeating).
+> 
+> --
+> Uladzislau Rezki
 
