@@ -1,139 +1,157 @@
-Return-Path: <linux-can+bounces-846-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-847-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09D85913153
-	for <lists+linux-can@lfdr.de>; Sat, 22 Jun 2024 03:20:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76083913C57
+	for <lists+linux-can@lfdr.de>; Sun, 23 Jun 2024 17:29:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8E3E284563
-	for <lists+linux-can@lfdr.de>; Sat, 22 Jun 2024 01:20:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AFC01F22808
+	for <lists+linux-can@lfdr.de>; Sun, 23 Jun 2024 15:29:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C221633;
-	Sat, 22 Jun 2024 01:20:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LTEzZ24g"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD6917FACE;
+	Sun, 23 Jun 2024 15:29:26 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533318BEE;
-	Sat, 22 Jun 2024 01:20:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6990B125D6
+	for <linux-can@vger.kernel.org>; Sun, 23 Jun 2024 15:29:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719019237; cv=none; b=LaT01XKhH5Ks+Te5kAHim2ixEgd24R6XGZpvBDEyt0mkUFeWYy0adatA68T8ovGNf3iE6tJ81EfUY37nNSLpdIM8GsTPEKHv6MLeHwsdsVt98X1fgDKOHCMo+WnzQLyK52DIxnu/9Gadvc91pBCI7eFmflATrTIsdK2bJnJNrKg=
+	t=1719156566; cv=none; b=tz2jIjRi93bs/K1v6YXKONjr6EOu4j6KRVzIPwu9ipMbvJc/JstGsfOBAvPN5tl4kdFtcIF2itogenFh7h5f6vdIP/FSCk0SiiPBo1/OLxeRXG0JOUjtRZ53xrAcXxwRFLCXJ3dwv3pRiviVlJK6UwyGpZybaZsrL5V3H9Vt3/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719019237; c=relaxed/simple;
-	bh=SX03R1QAKqYMHT/7BDXtmiylpw+3IjqMhvoveNnBnDc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=DBvuVPyRgu+WVcbe+uwVxuSt50zj6zbFR3FXLA7CX0d/QI/gu/ghYljh3qPCiNnGmw26qXxpVDZkP45v7Q90cHvjqkT5KYSU4V8unrPMY9U1zChC62YyDCZJdp+BoK80T2TAxwPhgvyXB1tdLWoSBDhyVLwBNFXLY7UYRE/tNxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LTEzZ24g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DF2DAC4AF07;
-	Sat, 22 Jun 2024 01:20:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719019236;
-	bh=SX03R1QAKqYMHT/7BDXtmiylpw+3IjqMhvoveNnBnDc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=LTEzZ24g9RZL4d/K5PQ7aYbmfKknkNP5rQIAMYoYqQG7xSrl1N/zcYCP/w6Z5FyCt
-	 VjfTSkvTVOcIAw7N+gpfvdVTpiWsV0x0/ZMssgtlDY9j+PM5hiiRVwsmY2k9T9RVKE
-	 69pwisxBnW0FZ5hngvRqR8Ll2Z7cPqdhTZJCg5szblxW025kqbFr3iGRx/I28VdUv7
-	 k/5J0HIPQructEeISQENa8LUr7QqS9zO3RA+RLQE4GtdzPldRhPmXL8S1Uxmxb2aoE
-	 eiHXufBD5YiURaFd6Fu4O8fjfsaONMHHQ1lTj8+HzI1Weg/DtCf1E2ohtRHRSzAf5B
-	 t4y1qJXVKMn5g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D1D5CC54BB3;
-	Sat, 22 Jun 2024 01:20:36 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1719156566; c=relaxed/simple;
+	bh=5GzQNXCfF8EdbfC3H4E9VS+tvgTWS1crHKs96+wLw5I=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=ro0hnM4ptuPgCLMbcH2xYiAtmt9XCLGocKQu3wBX+UbR3EfVJi4HLk3jtC7jpyVdQTltqz5gxnsusNPu1ujB8YmcYJmF46v8gCpEtSIxk1mpE2Jx1laFuURIYyYtn+IcU67jE6Adq3h2K2Z1yh2HBX4rCSpBloiRVeaBDuYe6E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-37642e69d7eso5401055ab.3
+        for <linux-can@vger.kernel.org>; Sun, 23 Jun 2024 08:29:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719156564; x=1719761364;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EP0r5vjIqTOj5wt9p5RxoVOv4/EypeRrWumP8Iu8xTU=;
+        b=j20/XsaVRyMEokwyD68L+4klaGS5QLmiWyxq6lu6pe/rItkChacfZTjCxP1q3ra1LQ
+         oniTg7DzQ4i3J2N6FnPYHXaj0QmAI7DGAvYrEriZiBB5l59PkO3LWMjeBxNufSrFmXtR
+         ZiZTQIckDDlp9MTyNZhBHZK6bLF2Yy3POOoZiJcAvmifLJfLpExXXMeoZ/u3RndaAH1w
+         TVi9+OheSPZX8x2nUDPmeBsdmbi+HYuaySvyAYe/oIbaFJM+QEDoFnS2jKzmbELAQC9b
+         9J7xZRXJaVK/2eD8PpRj1FtIxndmX69S7tWag8qtFk5G1ARp/4MpyN0jZbResmZmJqRX
+         bD6w==
+X-Forwarded-Encrypted: i=1; AJvYcCWGdtWH0ZIte1ERAWfOZTqJXa3H8RRyJOKtGMVfXFU1H/fCSZdifPXfDM1UCFjqQTE8wRm85C0zW3AwReo4g8vrHaoQhcqlAMoN
+X-Gm-Message-State: AOJu0Yxl+LX3xMMCuesFKIv+vcMPxiKzMmysq464bvXKAzCpoDeYHWa+
+	VMq0A+9tDg9LkJjH4CoZB1Egz+Tz+GfekrALcoL3yY1aISV58pSlMo1aGLp7TxmGyVPJlDIeuyr
+	0Px1vcwa3qJnBy+ZSNmzMabOPH76xWTXk9ZL7zy1mKInXJnVGA/xoKl8=
+X-Google-Smtp-Source: AGHT+IFqnPdpAhkaCMlzEMZuVA/C2S6JDfh8pY3BlYKXaqSV5TpYTSaMd5hwBP7t8YgYtHTf5gVQGwAtwWvzgO6DJ3GECpny+vp9
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 01/24] can: mcp251x: Fix up includes
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171901923685.1383.11857515191105644144.git-patchwork-notify@kernel.org>
-Date: Sat, 22 Jun 2024 01:20:36 +0000
-References: <20240621080201.305471-2-mkl@pengutronix.de>
-In-Reply-To: <20240621080201.305471-2-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de,
- andriy.shevchenko@linux.intel.com, mailhol.vincent@wanadoo.fr
+X-Received: by 2002:a92:cd84:0:b0:36c:4b17:e05d with SMTP id
+ e9e14a558f8ab-3763e16d8a6mr3431835ab.4.1719156564589; Sun, 23 Jun 2024
+ 08:29:24 -0700 (PDT)
+Date: Sun, 23 Jun 2024 08:29:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000589156061b90544f@google.com>
+Subject: [syzbot] [can?] INFO: task hung in cangw_pernet_exit_batch (3)
+From: syzbot <syzbot+21ad8c05e3792b6ffd14@syzkaller.appspotmail.com>
+To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, mkl@pengutronix.de, 
+	netdev@vger.kernel.org, pabeni@redhat.com, socketcan@hartkopp.net, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+Hello,
 
-This series was applied to netdev/net-next.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+syzbot found the following issue on:
 
-On Fri, 21 Jun 2024 09:48:21 +0200 you wrote:
-> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> This driver is including the legacy GPIO header <linux/gpio.h>
-> but the only thing it is using from that header is the wrong
-> define for GPIOF_DIR_OUT.
-> 
-> Fix it up by using GPIO_LINE_DIRECTION_* macros respectively.
-> 
-> [...]
+HEAD commit:    2ccbdf43d5e7 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16dd1f2e980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fa0ce06dcc735711
+dashboard link: https://syzkaller.appspot.com/bug?extid=21ad8c05e3792b6ffd14
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
 
-Here is the summary with links:
-  - [net-next,01/24] can: mcp251x: Fix up includes
-    https://git.kernel.org/netdev/net-next/c/b1dc3c68e977
-  - [net-next,02/24] can: sja1000: plx_pci: Reuse predefined CTI subvendor ID
-    https://git.kernel.org/netdev/net-next/c/5ca3801388f8
-  - [net-next,03/24] can: Kconfig: remove obsolete help text for slcan
-    https://git.kernel.org/netdev/net-next/c/58b34cd646b4
-  - [net-next,04/24] dt-bindings: can: xilinx_can: Modify the title to indicate CAN and CANFD controllers are supported
-    https://git.kernel.org/netdev/net-next/c/8416ac9c87bd
-  - [net-next,05/24] can: isotp: remove ISO 15675-2 specification version where possible
-    https://git.kernel.org/netdev/net-next/c/ba63a7e08523
-  - [net-next,06/24] can: xilinx_can: Document driver description to list all supported IPs
-    https://git.kernel.org/netdev/net-next/c/e562bad35fe3
-  - [net-next,07/24] Documentation: networking: document ISO 15765-2
-    https://git.kernel.org/netdev/net-next/c/67711e04254c
-  - [net-next,08/24] can: mscan: remove unused struct 'mscan_state'
-    https://git.kernel.org/netdev/net-next/c/f9f608e38b9c
-  - [net-next,09/24] can: kvaser_usb: Add support for Vining 800
-    https://git.kernel.org/netdev/net-next/c/2851d357a485
-  - [net-next,10/24] can: kvaser_usb: Add support for Kvaser USBcan Pro 5xCAN
-    https://git.kernel.org/netdev/net-next/c/96a669a1958f
-  - [net-next,11/24] can: kvaser_usb: Add support for Kvaser Mini PCIe 1xCAN
-    https://git.kernel.org/netdev/net-next/c/0135c4c6b84c
-  - [net-next,12/24] can: kvaser_pciefd: Group #defines together
-    https://git.kernel.org/netdev/net-next/c/cdbc9d055fc7
-  - [net-next,13/24] can: kvaser_pciefd: Skip redundant NULL pointer check in ISR
-    https://git.kernel.org/netdev/net-next/c/ac765219c2c4
-  - [net-next,14/24] can: kvaser_pciefd: Remove unnecessary comment
-    https://git.kernel.org/netdev/net-next/c/11d186697ceb
-  - [net-next,15/24] can: kvaser_pciefd: Add inline
-    https://git.kernel.org/netdev/net-next/c/0132a05df1e0
-  - [net-next,16/24] can: kvaser_pciefd: Add unlikely
-    https://git.kernel.org/netdev/net-next/c/cebfebefaa01
-  - [net-next,17/24] can: kvaser_pciefd: Rename board_irq to pci_irq
-    https://git.kernel.org/netdev/net-next/c/cbf88a6ba7bb
-  - [net-next,18/24] can: kvaser_pciefd: Change name of return code variable
-    https://git.kernel.org/netdev/net-next/c/26a1b0fe3f62
-  - [net-next,19/24] can: kvaser_pciefd: Move reset of DMA RX buffers to the end of the ISR
-    https://git.kernel.org/netdev/net-next/c/48f827d4f48f
-  - [net-next,20/24] can: kvaser_pciefd: Add MSI interrupts
-    https://git.kernel.org/netdev/net-next/c/dd1f05ba2a99
-  - [net-next,21/24] can: hi311x: simplify with spi_get_device_match_data()
-    https://git.kernel.org/netdev/net-next/c/1562a49d000c
-  - [net-next,22/24] can: mcp251x: simplify with spi_get_device_match_data()
-    https://git.kernel.org/netdev/net-next/c/d4383d67a25b
-  - [net-next,23/24] can: mcp251xfd: simplify with spi_get_device_match_data()
-    https://git.kernel.org/netdev/net-next/c/9cdae370c4ec
-  - [net-next,24/24] can: m_can: don't enable transceiver when probing
-    (no matching commit)
+Unfortunately, I don't have any reproducer for this issue yet.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/27e64d7472ce/disk-2ccbdf43.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e1c494bb5c9c/vmlinux-2ccbdf43.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/752498985a5e/bzImage-2ccbdf43.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+21ad8c05e3792b6ffd14@syzkaller.appspotmail.com
+
+INFO: task kworker/u8:1:12 blocked for more than 143 seconds.
+      Not tainted 6.10.0-rc3-syzkaller-00044-g2ccbdf43d5e7 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u8:1    state:D stack:18160 pid:12    tgid:12    ppid:2      flags:0x00004000
+Workqueue: netns cleanup_net
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5408 [inline]
+ __schedule+0x17e8/0x4a20 kernel/sched/core.c:6745
+ __schedule_loop kernel/sched/core.c:6822 [inline]
+ schedule+0x14b/0x320 kernel/sched/core.c:6837
+ schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6894
+ __mutex_lock_common kernel/locking/mutex.c:684 [inline]
+ __mutex_lock+0x6a4/0xd70 kernel/locking/mutex.c:752
+ cangw_pernet_exit_batch+0x20/0x90 net/can/gw.c:1257
+ ops_exit_list net/core/net_namespace.c:178 [inline]
+ cleanup_net+0x89f/0xcc0 net/core/net_namespace.c:640
+ process_one_work kernel/workqueue.c:3231 [inline]
+ process_scheduled_works+0xa2e/0x1830 kernel/workqueue.c:3312
+ worker_thread+0x86d/0xd70 kernel/workqueue.c:3393
+ kthread+0x2f2/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4d/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+INFO: task kworker/1:6:5181 blocked for more than 143 seconds.
+      Not tainted 6.10.0-rc3-syzkaller-00044-g2ccbdf43d5e7 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/1:6     state:D stack:20976 pid:5181  tgid:5181  ppid:2      flags:0x00004000
+Workqueue: events_power_efficient crda_timeout_work
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5408 [inline]
+ __schedule+0x17e8/0x4a20 kernel/sched/core.c:6745
+ __schedule_loop kernel/sched/core.c:6822 [inline]
+ schedule+0x14b/0x320 kernel/sched/core.c:6837
+ schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6894
+ __mutex_lock_common kernel/locking/mutex.c:684 [inline]
+ __mutex_lock+0x6a4/0xd70 kernel/locking/mutex.c:752
+ crda_timeout_work+0x15/0x50 net/wireless/reg.c:540
+ process_one_work kernel/workqueue.c:3231 [inline]
+ process_scheduled_works+0xa2e/0x1830 kernel/workqueue.c:3312
+ worker_thread+0x86d/0xd70 kernel/workqueue.c:3393
+ kthread+0x2f2/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
