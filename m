@@ -1,201 +1,216 @@
-Return-Path: <linux-can+bounces-881-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-882-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CB9C91C6F8
-	for <lists+linux-can@lfdr.de>; Fri, 28 Jun 2024 21:56:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37CF591C83C
+	for <lists+linux-can@lfdr.de>; Fri, 28 Jun 2024 23:41:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B577B284AED
-	for <lists+linux-can@lfdr.de>; Fri, 28 Jun 2024 19:56:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57ACA1C2136E
+	for <lists+linux-can@lfdr.de>; Fri, 28 Jun 2024 21:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB35974C09;
-	Fri, 28 Jun 2024 19:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b="BPkjUJts"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28017FBB7;
+	Fri, 28 Jun 2024 21:41:24 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2111.outbound.protection.outlook.com [40.107.104.111])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19E978C8F
-	for <linux-can@vger.kernel.org>; Fri, 28 Jun 2024 19:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.111
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719604565; cv=fail; b=Youutca6zBB1SY03mAokJodg6fXBz9K2e/7FYPmTrDla5fPfu1qlgIQdZHKLcSFJU3b73/plPl8ZDJo4CR+Bwl52yzGfIQxkfqIehagNpvEoQmlUSuhOiA22Egy5TgLYAQZXtNFffcOEPjGXlx8BuAlKvnZlR0cuZg02sSsPoVE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719604565; c=relaxed/simple;
-	bh=egoH4A+iRgkXwqGQPl14MOQktEbVDHrRkFPKtrfAmoY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=n3OYWoFjhvys5OqKiCk3cxLSifQSbanXSFtzpcbc0IgiYj97+8Rbpy2kxsyxL2i+lW0jhS6JHFjPq+d0S2NbwIAc3eXZt9iXVKyaUqtkp9dKrM2/D4h7/dhoNJBiPfUeq9hnJy7RmCpX8GEFEek9QfyuTWxTkKnMxL/33BEvnT0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b=BPkjUJts; arc=fail smtp.client-ip=40.107.104.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvaser.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WZN7zKJqe+5bWUvHdyhYjlAC5q5KrIZU4kitTpnSUy0bE+ZZf88jadAt59HJTZRQ5VCTChRCspJulMX1jn5tqpO+HQPrjtHKml0Aj6omdD0bPDSQMhs5bwcg8HF3rExp0oektTWg4jg/TRd4kVL0Smur6BEenBuHfv5twyYrYCtl3gafgkqvQL69i6+tIxDjuSnsEMH5th2O3p8ognFs0+4Y/aTYmniX1nbNg5fa6R+maQ6GmcS1Ljx4HvESObCHaLQFrlshCDyTkfC7OAuHpGWlx5Q23RhToPoshmlyCZc3sjxJVEc2aHdpibpBY1GQVr15kaHRlfkoSZ8rSZdqZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fN8qBTvFUlQ7JvCIzvPdBo0odlw72zYK+3OSIQ7a56s=;
- b=eglaDHMoJjo8tdE6AYGkPftvbOZ/KMxDsjmKcEqr+zkKaMJZC+Hl4jL29tFd52b2/QrTGx/bPmUciuMalfRtE1k1S43b5odF2O704Ijr5eVQE0TEi5Co0XuzOZ6iuC3u/wOjGouHCEn9jSrP/FOjAN62+oYmiG8+5V71FOzhUQLDhUoHjJ7ggKoEcryi872dpApFp8HOpgkWhSicuwOL0xdL+3Kp58Oe+kgryz2khV2xBWgg8GyVChnvDF3wtIuotw/3t3+k3T0cLoxNPofc/xFPq96Y6JwTpG2o23/5AkVUAo0aBy5vMzW3UXJ0MXNhpiUdX4mleybNR+oOcZLUfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kvaser.com; dmarc=pass action=none header.from=kvaser.com;
- dkim=pass header.d=kvaser.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kvaser.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fN8qBTvFUlQ7JvCIzvPdBo0odlw72zYK+3OSIQ7a56s=;
- b=BPkjUJtswEH1qT/N+F9FXKt+cOBDyzSZepi9PnS/B/zLHb7rN44Ag2y0GFeCG2RIQw3RGn+Y8wO49WiQ+ZpTTPbozWCQq7GwvhJGvZ9qNo6XlLpr+E/yd1wvoCZAM2sSxsh+ULfzqfFi6wrqwt1JCY8fVxArLH66ldXq1TmbDsE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kvaser.com;
-Received: from AS8P193MB2014.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:40d::20)
- by AM9P193MB1142.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:1f9::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.38; Fri, 28 Jun
- 2024 19:55:53 +0000
-Received: from AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
- ([fe80::ecab:d3fc:ce8e:ab6]) by AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
- ([fe80::ecab:d3fc:ce8e:ab6%6]) with mapi id 15.20.7698.025; Fri, 28 Jun 2024
- 19:55:53 +0000
-From: Jimmy Assarsson <extja@kvaser.com>
-To: linux-can@vger.kernel.org
-Cc: Jimmy Assarsson <jimmyassarsson@gmail.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH can-next 15/15] can: kvaser_usb: Rename kvaser_usb_{ethtool,netdev}_ops_hwts to kvaser_usb_{ethtool,netdev}_ops
-Date: Fri, 28 Jun 2024 21:55:14 +0200
-Message-ID: <20240628195514.316895-16-extja@kvaser.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240628195514.316895-1-extja@kvaser.com>
-References: <20240628195514.316895-1-extja@kvaser.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MM0P280CA0091.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:190:9::29) To AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:20b:40d::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C10F5339D
+	for <linux-can@vger.kernel.org>; Fri, 28 Jun 2024 21:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719610884; cv=none; b=lGw+dnHlz5r8AQK8kmoIihEmrg5odkVIxcBLq8N0fF5kFrJTri6/3FXnFz0o4Jfpyrqa90oE7jP0+vWZRpZfHWB4r4eLOg6N3cM57XkAtYrXh1OVD1b7KxDgvtqwLgxupIoCLNUePJT3wkXj3uVYNYk6yecLbrApJ0slHh9K7NM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719610884; c=relaxed/simple;
+	bh=o58Hc84fsq+Ltesz0M1Ri/m/Vu9nu/GQw7w2Pw07GJM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Qgpg6dMODOLqPVRUP1DDk3Al5/Mo6Y7kMd/9sWz70F9OxD2n5UYz98BYKsk26dksVwiR9d+GG1U39DUQ2RNQy7Z9JJDejQ0/cQ7f0niN9NobfFuDU+Vtst8+NELDsHxwfPoVlPgy1s2FKZ/KYkpMh35dlI0HGnzHj2gQAC7aYQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sNJLM-0001YU-HT
+	for linux-can@vger.kernel.org; Fri, 28 Jun 2024 23:41:20 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sNJLL-005h1h-R4
+	for linux-can@vger.kernel.org; Fri, 28 Jun 2024 23:41:19 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 7C9982F6094
+	for <linux-can@vger.kernel.org>; Fri, 28 Jun 2024 21:41:19 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 7409D2F6070;
+	Fri, 28 Jun 2024 21:41:16 +0000 (UTC)
+Received: from [10.11.86.119] (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f480d03f;
+	Fri, 28 Jun 2024 21:41:15 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH v4 0/9] can: mcp251xfd: workaround for erratum DS80000789E
+ 6 of mcp2518fd
+Date: Fri, 28 Jun 2024 23:40:24 +0200
+Message-Id: <20240628-mcp251xfd-workaround-erratum-6-v4-0-53586f168524@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8P193MB2014:EE_|AM9P193MB1142:EE_
-X-MS-Office365-Filtering-Correlation-Id: 99bb4f09-3d13-4ba5-e6b6-08dc97ac4e7e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?7/drMOTzVIFe+bMU8tXL8TGkUiGt3MNZ5QmFOLJHzpZJCW+pShAgySsGJKry?=
- =?us-ascii?Q?cbHD/bM/LduVEqRJKe35+IKm25T/AWTdWCAtFiap1vjbh+sxiY58KHdmc0I7?=
- =?us-ascii?Q?J8oaciYnOhOJnwzxbW5cbqXEEPIva3A+eJHmiJ0FPzRROmvOwKm6DEwoEu0C?=
- =?us-ascii?Q?va5MhC0TbuCgzjiH4XHIGrr7Li7fDb2LRQvbw+7djr8ZiHf4701wS5qv7saU?=
- =?us-ascii?Q?h63TuZ3cBu68UdSfePJ6DL9qDt9ko1vrQpadbgpnBKglVtksgindV5WBtqts?=
- =?us-ascii?Q?KNlYcoZCmR4yjSoFkgZQ5+4OOUVTSNWAHzj6ZHQwvcJg8IatNpWZc4T6i6aP?=
- =?us-ascii?Q?KxbPX4B73apm0DSfs7i1CCgOiINOyO3LyMl+RA/c5Luyrr2Zx1PgEo77mrcN?=
- =?us-ascii?Q?inXvoneeba+usgDjSmKAlrjJUQtq1e0g/fA5m1Bi30cKAuDIcuqq64pzdkmu?=
- =?us-ascii?Q?xE9FkHSbo7BGB/gn4RWK46p2K0PtuE9jo4tQWWLJkfYJfY5OELse3WqoE+IL?=
- =?us-ascii?Q?PvKToLKMBYOiwMiaw9wXuDPGYRIbleErlLwY7apYC/cFUAq8SXWCTZapJldV?=
- =?us-ascii?Q?VAj4P4SU56cfkjzXBAjaIPj1T5drP69t9FJ0qi1K2JOnM3DLnr4TtzxfAGMq?=
- =?us-ascii?Q?I+//9hqWwFq1SgK+kLohMICf4S6ahxeePa+o3dJys5WfNqmptDT/SxXfP1/o?=
- =?us-ascii?Q?10f5LIrSJn8zM8ZrxwAbg9kSUdH2B+BzSF/BF4Msimw7+9/VB/iMCmKVjhTj?=
- =?us-ascii?Q?lM75xwYanu3VOx7HnTjLIa5fte3+rxnufla+/S2/CPqf3AHcP26PUoT4Mr0+?=
- =?us-ascii?Q?7iT4nRzOlPJRtjFbY9EdNvDCkeFMf5b7sAv16TPDCIPjGNasd8U7PYP+q5uB?=
- =?us-ascii?Q?treecLvywRL1KcXIfIbNWMudRwsNsw8hqRw8g37hyWS0bCI8gqX3992eFZr+?=
- =?us-ascii?Q?KPcNkGuM96pod6IVDdAKlDhVvNu7Gda1MnfsTAq1Tbw8EsgGx6XgU+6MbbyL?=
- =?us-ascii?Q?fHWwYNUM9u9K1d59GRb/zYSzIEj6+3bZ10Hawp4OJPiwZ3+qxeqTabOZptp3?=
- =?us-ascii?Q?8eVFJRgdM4e6TKl2+CWqQpwUKrUp795C0Jx1ajpMqsmCr5SJnQAzi8bNI83n?=
- =?us-ascii?Q?OUphlcEevNnnFAGNLxZDNxdy75Gr1CCgl066AiUhrMm7ABwhVdIKMwu+32YI?=
- =?us-ascii?Q?h4Ah8s/xy9k3LxjpCIJJUESYLytwa06j7Naa6TXzfwNTZs3NtHbevK8zpFUK?=
- =?us-ascii?Q?rdlghUIDD9yVUEZD8XsamlwJ1KMT+OjO60+1nBViOokH4wTTmmgHZ9Uv8+Lq?=
- =?us-ascii?Q?6VQ9EOJdGitneBjJnjBWuijDKbSEnSwbnRvX3ypet0TUxA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P193MB2014.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?9i4GZ7Z7/d7GR++hJmwSsnYI2a1oIrCFqYFFGv6eykoOUQ6Sm/WKs+eXJa0i?=
- =?us-ascii?Q?JHMLO8svcCkXASgchPi35+UD5xyl+spE5Anlfg3umgBpJ2GhU4tmiOhR9a5T?=
- =?us-ascii?Q?LBSNtfZLdem/q7zL/bplOrkIaoj2WGEyGCUoQTAxO3Hsbl3lKbxw1re+ODZl?=
- =?us-ascii?Q?7AtP3xVAfZHb0RxsfF4GRFzOkUqat1G5GDiitQAzvnXKD+joS59FzzRK0h9K?=
- =?us-ascii?Q?vthbQTBdV5DKVXA/kfZe3lIOTTY3yDb+BZ2sRXcP4G/AEBOIgk0KVldbdvjz?=
- =?us-ascii?Q?cB337WR9y/MT2/+rHN4DZK7hhhA4TLjqZ7qaiOqIjtsHtwjvEZCjUif81zpE?=
- =?us-ascii?Q?QzuhGwe0qhdqag61VuG/j28+ljcqXks/iDc+c1V2xABK1wmhhMm+rSAAKL+0?=
- =?us-ascii?Q?Zx2+unMrXdtvFte0t4nlEHaP5P/SvElSaCw8X0OTJiPnOA1huDMUORyQ8G6r?=
- =?us-ascii?Q?21vuT/kfhCNbO8VxgVY1lyLzb0ZQ6ckGcD3EShk3qpZGrdfMk1pHPHoiQ9/y?=
- =?us-ascii?Q?DvMbKQZpuU3G50OLxmOqewHSUiowLGjlbKWoReWSRmxqGGYDPGBNVeEnuoZs?=
- =?us-ascii?Q?x3k6+15d6HTiShmQPGUP1689rwk7sfv3oxsBr++7G2HCZbKIXQRaOd0joime?=
- =?us-ascii?Q?nBmVyQ9AFYvXl3VHz5YbfeB7uwzXisT4DnFJx1dbG2/NTUjeoob0A+5DNCNT?=
- =?us-ascii?Q?nEr04W11z7JAOvw6QpBBm+WqQbq860Yh6p8tAHrERdtLi8x62QAdkcioNWq2?=
- =?us-ascii?Q?avVm04hT+emCPHVmg/0mTnBXdocyOSm0bUH1cWcpexE+b2TzbnmXlnVt2UMy?=
- =?us-ascii?Q?KJWIK7iCWolmRf6DoC9j7rVyi89xpfqNQM8mCrl42indZnLR2j8GoHC7tBkX?=
- =?us-ascii?Q?U7lw/8NhjmtpSxmGa2uAHT5WPGIIpP8YTT89BASHGqPxWxrJRohLxk7/BbuI?=
- =?us-ascii?Q?WD7IFl6dtI0J/R7GBj+lumTCh+ISrEgpaidjd+ufvYml690oa0/aNoSBSKI6?=
- =?us-ascii?Q?whpb0hBC558l9lRjMdb1+rRvYnVlDHUCEsjfFbXUcc7yYwf8DyDTVoQh1WEg?=
- =?us-ascii?Q?TUbc3w2LmKemxe+g/Vn2ZqOWSfXQjErfyD3Kj38jnWSYgXDGVaAR+zqQmnKf?=
- =?us-ascii?Q?1Rwta6Da8wBdZyQrgnbWcFl8OI37NnDqE0sNNwDAP9R2bGd6iWSGM2zJyL4y?=
- =?us-ascii?Q?bUOfEVUY0bZQWf11cBoOqr0xWAfeH15j61DvTs+xUHA12AgiirnE15C/XlpO?=
- =?us-ascii?Q?pExibF9L9TGdYau6J+Dc7NHPYReIR2oifY2+ivgZ4ALKapmc4nbRg4PFuwWx?=
- =?us-ascii?Q?U1Jib82tSYacvYOdvHW5SoxXWx/DLnKLHrSaRoeAT+Ms7zj8Afph+FrKWirE?=
- =?us-ascii?Q?N4W3yStz58CB2wHWKalkRKgpBjs7x0MonR2fL338yb7U2lRiM6heKkfpQRs8?=
- =?us-ascii?Q?CRjxCJcekcLQK3tmlGlXsw7pu2wOaZ0ynHKC/teIKJNeITCv8Cc0NJYEfHhl?=
- =?us-ascii?Q?dhxqbPoBSDx8v+WkOxW8Bak23LrxDPMLO7dHXediU6wmIhvttsW7OWxaRYKE?=
- =?us-ascii?Q?6eZrolhjGd6XU8BcwqiIhbvKjVz8Ut1zOiqA8uzz?=
-X-OriginatorOrg: kvaser.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99bb4f09-3d13-4ba5-e6b6-08dc97ac4e7e
-X-MS-Exchange-CrossTenant-AuthSource: AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2024 19:55:48.7785
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 73c42141-e364-4232-a80b-d96bd34367f3
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j3DaTDaYfqUZg+AMMNRRVlD+AGVVcFIA+Hdl7PUneYu5yq2uN225F6rIBjpqCfDWRfsdsm9boR/c3S7SUYkH4A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9P193MB1142
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMktf2YC/4WOS27DMAxEr2JwXaaq/EmRVe8RZKFIVEIUkhxKd
+ hwYvntd+wBZvgFm5s2QSZgynKoZhEbOnOIKzUcF9m7ijZDdyqCVblSrWgy21+3X5B0+k/waSUN
+ 0SCKmDAE71PStbWM77V0N60gv5HnaDs6XnYUew/pT9hCuJhPaFAKXUxWpYKSpfAbDEf4Ld84ly
+ WsTHOutsbl0unnnMtao0Bp/pNbro+/UT0/xNhRJkaeDI7gsy/IHjOk/WAIBAAA=
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Manivannan Sadhasivam <mani@kernel.org>, 
+ Thomas Kopp <thomas.kopp@microchip.com>, 
+ =?utf-8?q?Stefan_Alth=C3=B6fer?= <Stefan.Althoefer@janztec.com>, 
+ kernel@pengutronix.de, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15-dev-13183
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5294; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=o58Hc84fsq+Ltesz0M1Ri/m/Vu9nu/GQw7w2Pw07GJM=;
+ b=owEBbQGS/pANAwAKASg4oj56LbxvAcsmYgBmfy3riFtMn/m6WXug0Z/2vR8wzgwrreGll17PM
+ D6E4lqA0W6JATMEAAEKAB0WIQRQQLqG4LYE3Sm8Pl8oOKI+ei28bwUCZn8t6wAKCRAoOKI+ei28
+ b1m0B/46uu9IUe+c9y5T2RnjSb4IivnAw8sAKJDiMMiocVgfXKjOGT/jruO15g+t58jgB6k/ADf
+ EWL8dgescCDazLFIUBeomYHamDn7SffFvWf2YBgaAbJjrci/i7r9+SiUDgZknMdeHHdltY0qxfo
+ Y1WkHRwwqeO8c1FtGnYIf9YcEzqjbDOvh1DbIGBp287N+duPUsaPsb4H+IUUEicTbiDPcYSZspD
+ iRMB9mtBB56C0vPYYRDw5v8odztYwk3aoxHPNTTHTAFRIBSawgNP7Mo6IRuXKf66hbLuuyrWR1R
+ Fb2zv0rFmza8ZniBg/6MFm/JYTqj+QnM42N+9cfTgwLrHyqn
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Now when we only got one set of ethtool_ops and netdev_ops, remove the
-"hwts" suffix from the struct variables
-kvaser_usb_{ethtool,netdev}_ops_hwts.
+Hello,
 
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+This patch series tries to work around erratum DS80000789E 6 of the
+mcp2518fd, found by Stefan Althöfer, the other variants of the chip
+family (mcp2517fd and mcp251863) are probably also affected.
+
+Erratum DS80000789E 6 says "reading of the FIFOCI bits in the FIFOSTA
+register for an RX FIFO may be corrupted". However observation shows
+that this problem is not limited to RX FIFOs but also effects the TEF
+FIFO.
+
+In the bad case, the driver reads a too large head index. In the
+original code, the driver always trusted the read value.
+
+For the RX FIDO this caused old, already processed CAN frames or new,
+incompletely written CAN frames to be (re-)processed.
+
+To work around this issue, keep a per FIFO timestamp of the last valid
+received CAN frame and compare against the timestamp of every received
+CAN frame.
+
+Further tests showed that this workaround can recognize old CAN
+frames, but a small time window remains in which partially written CAN
+frames are not recognized but then processed. These CAN frames have
+the correct data and time stamps, but the DLC has not yet been
+updated.
+
+For the TEF FIFO the original driver already detects the error, update
+the error handling with the knowledge that it is causes by this erratum.
+
+The series applies against current net/main or net-next/main +
+d8fb63e46c88 ("can: mcp251xfd: fix infinite loop when xmit fails")
+
+regards,
+Marc
+
+Closes: https://lore.kernel.org/all/FR0P281MB1966273C216630B120ABB6E197E89@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Changes in v4:
+- 7/9: mcp251xfd_ring_alloc(): replace BITS_PER_TYPE(u8) by
+  BITS_PER_TYPE(rx_ring->obj_num_shift_to_u8) to calculate
+  rx_ring->obj_num_shift_to_u8
+- 7/9 mcp251xfd_get_rx_len(): add BUILD_BUG_ON() to ensure that all
+  variables used in calculation are actually u8
+- 9/9: mcp251xfd_ring_alloc(): replace BITS_PER_TYPE(u8) by
+  BITS_PER_TYPE(tx_ring->obj_num) to calculate
+  tx_ring->obj_num_shift_to_u8
+- 9/9: mcp251xfd_get_tef_len(): add BUILD_BUG_ON() to ensure that all
+  variables used in calculation are actually u8
+- Link to v3: https://lore.kernel.org/all/20240624-mcp251xfd-workaround-erratum-6-v3-0-caf7e5f27f60@pengutronix.de
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-index 4b6c23121b5d..35b4132b0639 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-@@ -753,7 +753,7 @@ static netdev_tx_t kvaser_usb_start_xmit(struct sk_buff *skb,
- 	return ret;
- }
- 
--static const struct net_device_ops kvaser_usb_netdev_ops_hwts = {
-+static const struct net_device_ops kvaser_usb_netdev_ops = {
- 	.ndo_open = kvaser_usb_open,
- 	.ndo_stop = kvaser_usb_close,
- 	.ndo_eth_ioctl = can_eth_ioctl_hwts,
-@@ -761,7 +761,7 @@ static const struct net_device_ops kvaser_usb_netdev_ops_hwts = {
- 	.ndo_change_mtu = can_change_mtu,
- };
- 
--static const struct ethtool_ops kvaser_usb_ethtool_ops_hwts = {
-+static const struct ethtool_ops kvaser_usb_ethtool_ops = {
- 	.get_ts_info = can_ethtool_op_get_ts_info_hwts,
- };
- 
-@@ -847,8 +847,8 @@ static int kvaser_usb_init_one(struct kvaser_usb *dev, int channel)
- 
- 	netdev->flags |= IFF_ECHO;
- 
--	netdev->netdev_ops = &kvaser_usb_netdev_ops_hwts;
--	netdev->ethtool_ops = &kvaser_usb_ethtool_ops_hwts;
-+	netdev->netdev_ops = &kvaser_usb_netdev_ops;
-+	netdev->ethtool_ops = &kvaser_usb_ethtool_ops;
- 	SET_NETDEV_DEV(netdev, &dev->intf->dev);
- 	netdev->dev_id = channel;
- 
+Changes in v3:
+- 1/9: can: mcp251xfd: properly indent labels:
+  - new
+- 2/9: can: mcp251xfd: update errata references:
+ - new
+- 3/9: can: mcp251xfd: move mcp251xfd_timestamp_start()/stop() into mcp251xfd_chip_start/stop()
+  - split mcp251xfd_timestamp_init() into mcp251xfd_timestamp_init()
+    and mcp251xfd_timestamp_start()
+  - update patch description
+- 6/9: can: mcp251xfd: rx: prepare to workaround broken RX FIFO head index erratum
+  - update comments  
+  - update patch description
+- 7/9: can: mcp251xfd: rx: add workaround for erratum DS80000789E 6 of mcp2518fd
+  - update comments  
+  - update patch description
+- 8/9: new
+  - import 1/2 from https://lore.kernel.org/all/20230124152729.814840-1-mkl@pengutronix.de
+- 9/9: new
+  - import 2/2 from https://lore.kernel.org/all/20230124152729.814840-1-mkl@pengutronix.de
+- Link to v2: https://lore.kernel.org/all/20230119112842.500709-1-mkl@pengutronix.de
+
+Changes in v2
+- all:
+  - add proper patch description
+  - added Tested-by
+- 2/5 can: mcp251xfd: clarify the meaning of timestamp:
+  - revisited new naming of variables and functions
+    now we use ts_raw instead of tbc
+- 4/5 can: mcp251xfd: rx: prepare to workaround broken RX:
+  - precalculate shift width needed for full u8 instead of calculating
+    it every time
+- 5/5 can: mcp251xfd: rx: workaround broken RX FIFO head:
+  - remove dumping of old CAN frame in error case
+  - add erratum comments
+- Link to v1: v1: https://lore.kernel.org/all/20230111222042.1139027-1-mkl@pengutronix.de
+
+---
+Marc Kleine-Budde (9):
+      can: mcp251xfd: properly indent labels
+      can: mcp251xfd: update errata references
+      can: mcp251xfd: move mcp251xfd_timestamp_start()/stop() into mcp251xfd_chip_start/stop()
+      can: mcp251xfd: clarify the meaning of timestamp
+      can: mcp251xfd: mcp251xfd_handle_rxif_ring_uinc(): factor out in separate function
+      can: mcp251xfd: rx: prepare to workaround broken RX FIFO head index erratum
+      can: mcp251xfd: rx: add workaround for erratum DS80000789E 6 of mcp2518fd
+      can: mcp251xfd: tef: prepare to workaround broken TEF FIFO tail index erratum
+      can: mcp251xfd: tef: update workaround for erratum DS80000789E 6 of mcp2518fd
+
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     |  82 +++++-----
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.c     |   2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c   |   2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c     |   5 +
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c       | 165 ++++++++++++++-------
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c      | 129 ++++++++--------
+ .../net/can/spi/mcp251xfd/mcp251xfd-timestamp.c    |  29 ++--
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h          |  56 +++----
+ 8 files changed, 269 insertions(+), 201 deletions(-)
+---
+base-commit: 748e3bbf47212d5e2e22d731328b0c15ee3b85ae
+change-id: 20240505-mcp251xfd-workaround-erratum-6-2e82c4c62fd3
+
+Best regards,
 -- 
-2.45.2
+Marc Kleine-Budde <mkl@pengutronix.de>
+
 
 
