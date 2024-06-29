@@ -1,113 +1,164 @@
-Return-Path: <linux-can+bounces-896-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-897-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1674591CBF8
-	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 11:52:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D240391CBFA
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 11:55:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89E23B21D9B
-	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 09:52:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D13D61C21183
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 09:55:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E0A3BBEB;
-	Sat, 29 Jun 2024 09:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BB6D3A1B0;
+	Sat, 29 Jun 2024 09:55:51 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B294E3BB30
-	for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 09:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36069445
+	for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 09:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719654748; cv=none; b=pfWG54OJwpaUuuAmPXqD85WlWuDr6BcDr9Mn83smP0+5fhZP3qJ9hFQ4FJzVmPkD6ht2Pwo1Kpq9i+REc/MHtwv2A6sxJpPsMUM8m7x4qSw72ulVIBmIVpwbL4FwdP57I8HpOx6iuoAEOi2cK6WIwq58GGVAJ/cY+dXDm02e4bc=
+	t=1719654951; cv=none; b=qrD5sk804IeotV1lVRV08RGTlIEsj9qlwYlQhdmW47+FgDwxDNs1giU6QFPqpaVeoSBTZr9pWTYiRs9JxlgpQArlc0fQT13OuMNUtaInCvErKBUk9ntE5Ah0bGxQoLi3kUA4yQB5gnXkZkz5sBDsJO9iJ37+KcCdroXeQ7vk3bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719654748; c=relaxed/simple;
-	bh=O6eCjHK0yIUixqjdY0h+BbwbRXrLBs4mp/Ra8dYcnzg=;
+	s=arc-20240116; t=1719654951; c=relaxed/simple;
+	bh=nNU/fQm+DA1KoCgAkOJISiJRmkNThAvaVqzH6Wq1J7U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d+nirdPviEdqJ13NxwFATiTr6j1acHKeErYUXbhTPtUJSOpiw3BR/eEB/YrTirL+wXrOboQQY/Cj2iKr0iN2AApDQeAxMQt7a86ACXUH71/GXz4Q/Rk8fHJrQdjfFv6mnmHxvxNexBdjYhaveYb3qFbqaP33oB5znGo6j0zQFeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.50
+	 To:Cc:Content-Type; b=F3E7Yd6WTSBFkjEr2zJZNnmyrgq6lVqVwyfiG+s7JDM13YMYjOjcro6HE+U57+iPXuw+0GzYz2FUSZyLfjwrToG4oSqaNC9//VlZVHLPOxSiOcnRQaIQlMXMItohcs78WxqnM/CIXhefx9Ppg19kHwDbKVB3d3l+UnyW/Vi9kf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5c21c68b786so677268eaf.0
-        for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 02:52:26 -0700 (PDT)
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2c901185d73so1816149a91.0
+        for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 02:55:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719654746; x=1720259546;
+        d=1e100.net; s=20230601; t=1719654949; x=1720259749;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PgArw37KC7B25EGjc/IQJl+5DRiNWpvmvweL+8DbN7I=;
-        b=lN2r/sCEmAehz80a4JhLl0553rmO0cz/Bhnc9wy6xETBLdEJr9qjujcmRpF9zPeKPC
-         n7UieljCLkrKigokNNx3S4if4mARNUK9caP9NjqsoTCQHlZpTHAUQQsHSLxhtNWA43yL
-         cagKNGCo0eau18KkLqVOvLnVcjEctwjsF0FEMlNIdqE+Y6Kv+y6VWxIZoewW+pC96Bq+
-         q7+A2HVyKEz9Ktoe+kiYlMTBHFSHO+bPGoOSd2w1Nb1PZxWw7MnwITtHUtrMxZ42p4OJ
-         zwzN25yOvdqLjOwohYVRs2tXRardOEUCJIyb8VQUuwfDeOsLfPxOdABKVqBCsf7AmVOj
-         0zmQ==
-X-Gm-Message-State: AOJu0YwPtY0OVLRgUlUNqUNRx3nkn+IsUKezB99ug1HO/APnzw4vxwlS
-	+JrlncrLBu7GImCe1DnbNb+sFpU4BTxyTVXgtbzg8LS+/J+usjSxVk0yPOqXYcvv26QA9r/vBht
-	7p28u8Xu1Iv8lB8otuN/jsYmqi/U=
-X-Google-Smtp-Source: AGHT+IFI6lYxJCR1U6Dmuas66Lbhyc+GivLL8Gh2KmD0RpGtJjFy9WNthyIzGMoexnn0lyVK2lM8iBXjuSyBPMp5QgI=
-X-Received: by 2002:a05:6358:7e44:b0:1a5:cb16:bc48 with SMTP id
- e5c5f4694b2df-1a6acc3043fmr54350155d.3.1719654745666; Sat, 29 Jun 2024
- 02:52:25 -0700 (PDT)
+        bh=wS5OMWWZPm0oH7aO/+HLlsjU5sLC36sUWzlRYCQEHXI=;
+        b=nNLGZDlsj9GkgclrrO+iy387wYryQ+7YlsdNhpJjFsS/VchCSRtPIffHjlkXhmhzst
+         KOJTJtfheR83p3uvPNiVfWpflSrrbPoVQiuy1f2VzgQbUl7ulIFTkDBu/KR9tNgxmo+D
+         CunA3eyczfrQ2a5eehKqur2L96K7h8IUrWqhfgaVpL7re25jpd6FbrxNHC5X6UCX5C27
+         3oJluJxH2Eng/u2DOuH1Wre3BJSXIK86Y+rsHW13fNtPaeztpeYBPzjHISfBIx8U+qie
+         Odcc9GUXrSd63+TJJGg3NUmSz6oUM5W5PvrvdWM1c570kLBRsjX8ZX1FKQ/2He1VHocm
+         tZbg==
+X-Gm-Message-State: AOJu0YxeOJ5wTKKOcI2bTeeNK8nf6vgaYsjUPfEePHw1d0wdOZmjbT7F
+	SHENECKfhKBtGWGsQ4dqWnXuOYHx5r3muTjUGvn9YrzldiNfll3EkBNg6zoEFqLE02cOOwj4Hhi
+	7TtZA1E+IzPVTTBC79HBWfU+S7qY=
+X-Google-Smtp-Source: AGHT+IEGOzK6uGKsSvjec/YRFtCzJEerLlLpZicEz7yqLME+2VPxymVfQvknlsvUqcgdBkDwi6QV6pOVOgXAduIoRTU=
+X-Received: by 2002:a17:90a:f406:b0:2c8:5055:e24f with SMTP id
+ 98e67ed59e1d1-2c93d1868d2mr1048267a91.2.1719654948925; Sat, 29 Jun 2024
+ 02:55:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240628195514.316895-1-extja@kvaser.com> <20240628195514.316895-15-extja@kvaser.com>
-In-Reply-To: <20240628195514.316895-15-extja@kvaser.com>
+References: <20240628195514.316895-1-extja@kvaser.com> <20240628195514.316895-11-extja@kvaser.com>
+In-Reply-To: <20240628195514.316895-11-extja@kvaser.com>
 From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Sat, 29 Jun 2024 18:52:14 +0900
-Message-ID: <CAMZ6RqJ8dyc62Hj+ACV99BSuX3g3ARGCfY4HHUtiKmpmmotDJw@mail.gmail.com>
-Subject: Re: [PATCH can-next 14/15] can: kvaser_usb: Remove struct variables kvaser_usb_{ethtool,netdev}_ops
+Date: Sat, 29 Jun 2024 18:55:37 +0900
+Message-ID: <CAMZ6RqKqJX6eqogS2598BFm-AN1uOBbBGL+MkoJtR=-z379Q=w@mail.gmail.com>
+Subject: Re: [PATCH can-next 10/15] can: kvaser_usb: leaf: Add structs for Tx
+ ACK and clock overflow commands
 To: Jimmy Assarsson <extja@kvaser.com>
 Cc: linux-can@vger.kernel.org, Jimmy Assarsson <jimmyassarsson@gmail.com>, 
 	Marc Kleine-Budde <mkl@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 
 On Sat. 29 June 2024 at 04:56, Jimmy Assarsson <extja@kvaser.com> wrote:
-> Remove no longer used struct variables, kvaser_usb_ethtool_ops and
-> kvaser_usb_netdev_ops.
-
-Does the driver still compile after this patch? Wouldn't it be better
-to squash patch 14 and 15 in one?
-
+> For usbcan devices (M16C), add struct usbcan_cmd_tx_acknowledge for Tx ACK
+> commands and struct usbcan_cmd_clk_overflow_event for clock overflow event
+> commands.
+>
 > Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 > ---
->  drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 11 -----------
->  1 file changed, 11 deletions(-)
+>  .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 22 +++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-> index a4f32d57173a..4b6c23121b5d 100644
-> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-> @@ -753,13 +753,6 @@ static netdev_tx_t kvaser_usb_start_xmit(struct sk_buff *skb,
->         return ret;
->  }
+> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+> index c0a8713d8cf2..98bd6cfca2ca 100644
+> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+> @@ -242,6 +242,13 @@ struct leaf_cmd_tx_acknowledge {
+>         u8 padding[2];
+>  } __packed;
 >
-> -static const struct net_device_ops kvaser_usb_netdev_ops = {
-> -       .ndo_open = kvaser_usb_open,
-> -       .ndo_stop = kvaser_usb_close,
-> -       .ndo_start_xmit = kvaser_usb_start_xmit,
-> -       .ndo_change_mtu = can_change_mtu,
-> -};
-> -
->  static const struct net_device_ops kvaser_usb_netdev_ops_hwts = {
->         .ndo_open = kvaser_usb_open,
->         .ndo_stop = kvaser_usb_close,
-> @@ -768,10 +761,6 @@ static const struct net_device_ops kvaser_usb_netdev_ops_hwts = {
->         .ndo_change_mtu = can_change_mtu,
+> +struct usbcan_cmd_tx_acknowledge {
+> +       u8 channel;
+> +       u8 tid;
+> +       __le16 time;
+> +       u8 padding[2];
+> +} __packed;
+> +
+>  struct leaf_cmd_can_error_event {
+>         u8 tid;
+>         u8 flags;
+> @@ -288,6 +295,12 @@ struct usbcan_cmd_error_event {
+>         __le16 padding;
+>  } __packed;
+>
+> +struct usbcan_cmd_clk_overflow_event {
+> +       u8 tid;
+> +       u8 padding;
+> +       __le32 time;
+> +} __packed;
+> +
+>  struct kvaser_cmd_ctrl_mode {
+>         u8 tid;
+>         u8 channel;
+> @@ -363,6 +376,8 @@ struct kvaser_cmd {
+>                         struct usbcan_cmd_chip_state_event chip_state_event;
+>                         struct usbcan_cmd_can_error_event can_error_event;
+>                         struct usbcan_cmd_error_event error_event;
+> +                       struct usbcan_cmd_tx_acknowledge tx_ack;
+> +                       struct usbcan_cmd_clk_overflow_event clk_overflow_event;
+>                 } __packed usbcan;
+>
+>                 struct kvaser_cmd_tx_can tx_can;
+> @@ -396,15 +411,14 @@ static const u8 kvaser_usb_leaf_cmd_sizes_usbcan[] = {
+>         [CMD_START_CHIP_REPLY]          = kvaser_fsize(u.simple),
+>         [CMD_STOP_CHIP_REPLY]           = kvaser_fsize(u.simple),
+>         [CMD_GET_CARD_INFO_REPLY]       = kvaser_fsize(u.cardinfo),
+> -       [CMD_TX_ACKNOWLEDGE]            = kvaser_fsize(u.tx_acknowledge_header),
+> +       [CMD_TX_ACKNOWLEDGE]            = kvaser_fsize(u.usbcan.tx_ack),
+>         [CMD_GET_SOFTWARE_INFO_REPLY]   = kvaser_fsize(u.usbcan.softinfo),
+>         [CMD_RX_STD_MESSAGE]            = kvaser_fsize(u.usbcan.rx_can),
+>         [CMD_RX_EXT_MESSAGE]            = kvaser_fsize(u.usbcan.rx_can),
+>         [CMD_CHIP_STATE_EVENT]          = kvaser_fsize(u.usbcan.chip_state_event),
+>         [CMD_CAN_ERROR_EVENT]           = kvaser_fsize(u.usbcan.can_error_event),
+>         [CMD_ERROR_EVENT]               = kvaser_fsize(u.usbcan.error_event),
+> -       /* ignored events: */
+> -       [CMD_USBCAN_CLOCK_OVERFLOW_EVENT] = CMD_SIZE_ANY,
+> +       [CMD_USBCAN_CLOCK_OVERFLOW_EVENT] = kvaser_fsize(u.usbcan.clk_overflow_event),
 >  };
 >
-> -static const struct ethtool_ops kvaser_usb_ethtool_ops = {
-> -       .get_ts_info = ethtool_op_get_ts_info,
-> -};
-> -
->  static const struct ethtool_ops kvaser_usb_ethtool_ops_hwts = {
->         .get_ts_info = can_ethtool_op_get_ts_info_hwts,
->  };
+>  /* Summary of a kvaser error event, for a unified Leaf/Usbcan error
+> @@ -1608,12 +1622,12 @@ static void kvaser_usb_leaf_handle_command(const struct kvaser_usb *dev,
+>                 kvaser_usb_leaf_get_busparams_reply(dev, cmd);
+>                 break;
+>
+> -       /* Ignored commands */
+>         case CMD_USBCAN_CLOCK_OVERFLOW_EVENT:
+>                 if (dev->driver_info->family != KVASER_USBCAN)
+>                         goto warn;
+>                 break;
+
+I did not understand this part. If the overflow event is now handled,
+why do you still have the
+
+  goto warn
+
+?
+
+Shouldn't you dispatch the command here?
+
+> +       /* Ignored commands */
+>         case CMD_FLUSH_QUEUE_REPLY:
+>                 if (dev->driver_info->family != KVASER_LEAF)
+>                         goto warn;
 > --
 > 2.45.2
 >
