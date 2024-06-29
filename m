@@ -1,30 +1,31 @@
-Return-Path: <linux-can+bounces-901-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-904-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346D591CC72
-	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 13:40:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B195891CC77
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 13:40:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC41F28308E
-	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 11:40:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55D3F1F2219E
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 11:40:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB0564D8B6;
-	Sat, 29 Jun 2024 11:40:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9811F59148;
+	Sat, 29 Jun 2024 11:40:27 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA571D52D
-	for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 11:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79DB4D9FB
+	for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 11:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719661226; cv=none; b=TWSsJNn9JHzYj/5qtE2UksQ42Ut6y7ZezzGj0XO3DprABmC7kFo0zqotBpgVrsy5WUyQ6hNL/p4p0ReQB+LW5T1e08KCFQM+dillTIaHXl2XdirtK33XCAWwbEi1zUkVWLUE2hWPTH4vmEsu9UPT/pqm4WX4dlZDukd4GE9Ai6U=
+	t=1719661227; cv=none; b=MngUnDEcU6k8a3OB/RqsP/Bfx68v2XfoK2Mb5dSjEini7Xvxfj3781ArvaEC4mrujpyWi48ntTq2+CTLza7v1g72jTEQLvytC2P4KVTQF+Bj/UOCxavh24RUVMh0oC/R/70hfxpbFNFI75c1z2x7skt79tVQ8Iq3fh27Y7N9yZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719661226; c=relaxed/simple;
-	bh=AY9FvO2u7+alDjTsyZFlGs5aeY2Yt0frJV28TFHjGLg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cMDtPuRqa9u0UIBI6/ZYIrOv8YA0k+smonRKwQnn8/NJ84xJLVlxWJrW4fGjRb79QRoWThumyqPnIU6mAMVFYrnUW6PVIriXzIwn4e+W9fKL03+I+EWY7AicV2MJnaNsz0XgXEWqVJIX5HQ/Sb7PmTZocVyLh+cwPP3qF4P9ZdQ=
+	s=arc-20240116; t=1719661227; c=relaxed/simple;
+	bh=g9DYHA9n/mS/01ocSc8ZuYgyvsNrXlDHFOkXI35SmPk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ApfcHlNJVG67XpEEjUsVBgkZ33uZp05EIll+NZpo7EJ7FR2dCgL35/yxVPxwOvHMOesYvVLSiVzrmfJJR4ezMHZOY0xPrpC4dUOtVwgGpG7zeLKDGR2rCms/Be3sJd48gads2SHOVLew9VqPHl6yGLTXZi7F7+S39+/EvUt7CuM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -32,36 +33,42 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1sNWRJ-000334-2q
-	for linux-can@vger.kernel.org; Sat, 29 Jun 2024 13:40:21 +0200
+	id 1sNWRK-00034v-FG
+	for linux-can@vger.kernel.org; Sat, 29 Jun 2024 13:40:22 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1sNWRI-005pWd-KS
-	for linux-can@vger.kernel.org; Sat, 29 Jun 2024 13:40:20 +0200
+	id 1sNWRJ-005pXl-JY
+	for linux-can@vger.kernel.org; Sat, 29 Jun 2024 13:40:21 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 4D8262F643C
-	for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 11:40:20 +0000 (UTC)
+	by bjornoya.blackshift.org (Postfix) with SMTP id 3E8E32F6455
+	for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 11:40:21 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 261E32F642E;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 5BEDB2F642F;
 	Sat, 29 Jun 2024 11:40:19 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 4041228f;
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a8328be3;
 	Sat, 29 Jun 2024 11:40:18 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
 	kuba@kernel.org,
 	linux-can@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: [PATCH net-next 0/14] pull-request: can-next 2024-06-29
-Date: Sat, 29 Jun 2024 13:36:14 +0200
-Message-ID: <20240629114017.1080160-1-mkl@pengutronix.de>
+	kernel@pengutronix.de,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH net-next 01/14] can: rcar_canfd: Simplify clock handling
+Date: Sat, 29 Jun 2024 13:36:15 +0200
+Message-ID: <20240629114017.1080160-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240629114017.1080160-1-mkl@pengutronix.de>
+References: <20240629114017.1080160-1-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -74,76 +81,91 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hello netdev-team,
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-this is a pull request of 14 patches for net-next/master.
+The main CAN clock is either the internal CANFD clock, or the external
+CAN clock.  Hence replace the two-valued enum by a simple boolean flag.
+Consolidate all CANFD clock handling inside a single branch.
 
-Geert Uytterhoeven contributes 3 patches with small improvements and
-cleanups for the rcar_canfd driver.
-
-A patch by Christophe JAILLET constifies the struct m_can_ops in the
-m_can driver to reduce the code size.
-
-The last 9 patches are by me an work around erratum DS80000789E 6 of
-mcp2518fd.
-
-regards,
-Marc
-
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Link: https://lore.kernel.org/all/2cf38c10b83c8e5c04d68b17a930b6d9dbf66f40.1716973640.git.geert+renesas@glider.be
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
+ drivers/net/can/rcar/rcar_canfd.c | 24 +++++++-----------------
+ 1 file changed, 7 insertions(+), 17 deletions(-)
 
-The following changes since commit 94833addfaba89d12e5dbd82e350a692c00648ab:
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index b82842718735..474840b58e8f 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -508,12 +508,6 @@
+  */
+ #define RCANFD_CFFIFO_IDX		0
+ 
+-/* fCAN clock select register settings */
+-enum rcar_canfd_fcanclk {
+-	RCANFD_CANFDCLK = 0,		/* CANFD clock */
+-	RCANFD_EXTCLK,			/* Externally input clock */
+-};
+-
+ struct rcar_canfd_global;
+ 
+ struct rcar_canfd_hw_info {
+@@ -545,8 +539,8 @@ struct rcar_canfd_global {
+ 	struct platform_device *pdev;	/* Respective platform device */
+ 	struct clk *clkp;		/* Peripheral clock */
+ 	struct clk *can_clk;		/* fCAN clock */
+-	enum rcar_canfd_fcanclk fcan;	/* CANFD or Ext clock */
+ 	unsigned long channels_mask;	/* Enabled channels mask */
++	bool extclk;			/* CANFD or Ext clock */
+ 	bool fdmode;			/* CAN FD or Classical CAN only mode */
+ 	struct reset_control *rstc1;
+ 	struct reset_control *rstc2;
+@@ -777,7 +771,7 @@ static void rcar_canfd_configure_controller(struct rcar_canfd_global *gpriv)
+ 		cfg |= RCANFD_GCFG_CMPOC;
+ 
+ 	/* Set External Clock if selected */
+-	if (gpriv->fcan != RCANFD_CANFDCLK)
++	if (gpriv->extclk)
+ 		cfg |= RCANFD_GCFG_DCS;
+ 
+ 	rcar_canfd_set_bit(gpriv->base, RCANFD_GCFG, cfg);
+@@ -1941,16 +1935,12 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 			return dev_err_probe(dev, PTR_ERR(gpriv->can_clk),
+ 					     "cannot get canfd clock\n");
+ 
+-		gpriv->fcan = RCANFD_CANFDCLK;
+-
++		/* CANFD clock may be further divided within the IP */
++		fcan_freq = clk_get_rate(gpriv->can_clk) / info->postdiv;
+ 	} else {
+-		gpriv->fcan = RCANFD_EXTCLK;
++		fcan_freq = clk_get_rate(gpriv->can_clk);
++		gpriv->extclk = true;
+ 	}
+-	fcan_freq = clk_get_rate(gpriv->can_clk);
+-
+-	if (gpriv->fcan == RCANFD_CANFDCLK)
+-		/* CANFD clock is further divided by (1/2) within the IP */
+-		fcan_freq /= info->postdiv;
+ 
+ 	addr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(addr)) {
+@@ -2060,7 +2050,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, gpriv);
+ 	dev_info(dev, "global operational state (clk %d, fdmode %d)\n",
+-		 gpriv->fcan, gpriv->fdmode);
++		 gpriv->extclk, gpriv->fdmode);
+ 	return 0;
+ 
+ fail_channel:
 
-  net: thunderx: Unembed netdev structure (2024-06-27 16:55:34 -0700)
+base-commit: 94833addfaba89d12e5dbd82e350a692c00648ab
+-- 
+2.43.0
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-6.11-20240629
-
-for you to fetch changes up to ae44fa998ee280303ee5dffe99cb669e4c245706:
-
-  Merge patch series "can: mcp251xfd: workaround for erratum DS80000789E 6 of mcp2518fd" (2024-06-28 23:49:37 +0200)
-
-----------------------------------------------------------------
-linux-can-next-for-6.11-20240629
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      can: m_can: Constify struct m_can_ops
-
-Geert Uytterhoeven (3):
-      can: rcar_canfd: Simplify clock handling
-      can: rcar_canfd: Improve printing of global operational state
-      can: rcar_canfd: Remove superfluous parentheses in address calculations
-
-Marc Kleine-Budde (12):
-      Merge patch series "can: rcar_canfd: Small improvements and cleanups"
-      can: gs_usb: add VID/PID for Xylanta SAINT3 product family
-      can: mcp251xfd: properly indent labels
-      can: mcp251xfd: update errata references
-      can: mcp251xfd: move mcp251xfd_timestamp_start()/stop() into mcp251xfd_chip_start/stop()
-      can: mcp251xfd: clarify the meaning of timestamp
-      can: mcp251xfd: mcp251xfd_handle_rxif_ring_uinc(): factor out in separate function
-      can: mcp251xfd: rx: prepare to workaround broken RX FIFO head index erratum
-      can: mcp251xfd: rx: add workaround for erratum DS80000789E 6 of mcp2518fd
-      can: mcp251xfd: tef: prepare to workaround broken TEF FIFO tail index erratum
-      can: mcp251xfd: tef: update workaround for erratum DS80000789E 6 of mcp2518fd
-      Merge patch series "can: mcp251xfd: workaround for erratum DS80000789E 6 of mcp2518fd"
-
- drivers/net/can/m_can/m_can.h                      |   2 +-
- drivers/net/can/m_can/m_can_pci.c                  |   2 +-
- drivers/net/can/m_can/m_can_platform.c             |   2 +-
- drivers/net/can/m_can/tcan4x5x-core.c              |   2 +-
- drivers/net/can/rcar/rcar_canfd.c                  |  41 ++---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     |  82 +++++-----
- drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.c     |   2 +-
- drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c   |   2 +-
- drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c     |   5 +
- drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c       | 165 ++++++++++++++-------
- drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c      | 129 ++++++++--------
- .../net/can/spi/mcp251xfd/mcp251xfd-timestamp.c    |  29 ++--
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h          |  56 +++----
- drivers/net/can/usb/gs_usb.c                       |   5 +
- 14 files changed, 294 insertions(+), 230 deletions(-)
 
 
