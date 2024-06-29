@@ -1,196 +1,152 @@
-Return-Path: <linux-can+bounces-893-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-894-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 696EA91CA80
-	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 04:18:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6442991CBE7
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 11:32:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBBB21F22824
-	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 02:18:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3F2E283560
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 09:32:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 381656AAD;
-	Sat, 29 Jun 2024 02:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="KOcN9fBc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01272033E;
+	Sat, 29 Jun 2024 09:32:04 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2081.outbound.protection.outlook.com [40.107.22.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5145763B8;
-	Sat, 29 Jun 2024 02:18:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.81
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719627501; cv=fail; b=guTP2QTiqsrYjqt519sO27oKLCgn/WaWCrH7Ay+hcKo2zN0HabAIa/sjEeXzdr2VTUCWIZPcfMBrWMG3jsrZFcwhFu9lbVOQmAkXcgPDIUylNPE0VP5BRhErkFLca/TCcW6KWFrE/fO43cyY6Pf+Cgs1yAONKmlq0R8gk/cYuQ8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719627501; c=relaxed/simple;
-	bh=cFUFo87Le31AEZWSzLEV4zAP+M/n+3q3YLuNEvEh3A4=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=EkxZ4RK+xO2B3TGp4ZFoyntvnXF6C33/PW3v4Z62tAImRD02Atpq/KA+jCTl5n903PmevHIWpFGX2p6EsKGiMFBG4++zIpI8rtFyIgUmfmZcOzqnEWdsDz9HUJllfv5zK5t9InhpuvhgSPbahFn5NzNOz/ET3yDVu5UY06ESwOU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=KOcN9fBc; arc=fail smtp.client-ip=40.107.22.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G7cuy9RViaiuOl5/B4mTmLOxRdu+iWiq7/Ogr5kkGQGCIWrFnyhcMvjDttZ+RD6pA0HnXrS/UlGQH2BIQ1RMoTcChnM6d57ef4v6BFug5IIpNKtdcHdgl4ldO6IwVTNnauF3aAmpotCja11fnVvd4v/0Ago92YFbhyerWgIzV1BOHBuLRQ9sNNU4kgQeBkK7FxoiY1khN/ohWEr8MXoFvyZjVFBu1LqET/AH731SeEbtijaiw/lGyNR9o/cM3moyVvEihbpCPEC/MWl3UfSHwnoYM62tYwaFXDPey42SGlD7SbMl/fZ/kJtBR3c4IjZU+9p8WVdPPww8R1eN4TsDJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W75/dEKxcN7qv1gFI3WU2iYxw0xPVUK0NgebHV9shaw=;
- b=Ez5CC8u30uifa246Ir4GEl5rEjRvsftWjWNpGuUxp41RnbEmUrY5g9YZwWlLinv40ePOaDSFKeD8brg0520qNdqo7w0YlsQEe1++RjMeLIpAQxXY4j8lIPmgoXBml4BGCukdIFGBaUfFM3Q/R8W4b6DMxVyiDKLclfH+869cChMypOeLmg4zXY+WU4XlJeXZIAjIsWF27LyBEDZ4MDyn8fS1l3c6dkkr/G4/1lJt0UKPBO3x2/6HDXuWnBK2XRU3iMPIQgUsUNb7zr09WFYeDqwVLjqJS9xrMdvMMhoGTj96/SVoAAYIxF14peQISSaa57EzeniVuvhOQ5dQHzXKcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W75/dEKxcN7qv1gFI3WU2iYxw0xPVUK0NgebHV9shaw=;
- b=KOcN9fBcnnN2ESVfzrI3oLFGdEc2uTBM8+ms3MD3PQevzXjkXedj0KkNShX+8MQBeXX3qW4BvYHLXpTRVVYJX4EQ25bZ4hIRx0o5ajBZOw99NFxMfWX/Aso+Jr/b7C1npkDNhX5MmeEq90+LpkLx9pNKBYQIjhQly1bK+U7YDR8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by VI0PR04MB10589.eurprd04.prod.outlook.com (2603:10a6:800:25f::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.28; Sat, 29 Jun
- 2024 02:18:16 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%2]) with mapi id 15.20.7719.022; Sat, 29 Jun 2024
- 02:18:16 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-can@vger.kernel.org (open list:CAN NETWORK DRIVERS),
-	netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-	linux-kernel@vger.kernel.org (open list)
-Cc: imx@lists.linux.dev
-Subject: [PATCH v2 1/1] dt-bindings: can: fsl,flexcan: add common 'can-transceiver' for fsl,flexcan
-Date: Fri, 28 Jun 2024 22:17:54 -0400
-Message-Id: <20240629021754.3583641-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR21CA0027.namprd21.prod.outlook.com
- (2603:10b6:a03:114::37) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1F01C20
+	for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 09:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719653524; cv=none; b=Awe+DofZ1METfIyvMWjE3AEnicuWFpb3qko+3AJDUfMPpNDnL+8kE5nQouLxP+CB2Kz2IeEvdmyGaJTxUWh2ZwsSdKvqjpXrLzjuuPzgyLgsDFBY9hBUheLjBG4QOCBZElo/5qXeMk3LTGI8vmiOgxWF/k5RSgJL2Zu9anVP0Zc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719653524; c=relaxed/simple;
+	bh=F7lJHBjbgnZL00j4F0V+IXBUarox4Ru+UtUSQyegMMM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B3WefCLL9E8SmfYppEQ6Ml+mTfX56V+a9ivrSZTGpkzNDAsXKY3+gF5vDgBUnwDhKtp7NZU+i7hA4HHIYzJCxNu78la8+N7/Vp2waxC1GjF7Jnnxqpn8iuPGTMLfAX09TnKjmhTLouRlrRG74QF1v5n0V50HhuCbccQo4sxFsFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2c8e7553c9eso1008288a91.3
+        for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 02:32:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719653522; x=1720258322;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dAbu2aDJzESiTc2Zw2M/zATdvnOQfFy8V566rlbdvbQ=;
+        b=vFZtPwFnIWgy/tlTjl1MXvgIldzG/OKYuYTSmD/EjvIKVRCPqDKOYIG5lAptZEdgHh
+         ctE2q1p0McsyBVAMaARj8IAHnfsPQbR4S6RDF/SC05j/McGfPF5OuzLtM7h3NdzZrPCM
+         BkuFMqzu/M1hhrqYYIFQDCOy6YfC39iCNSdDSObQAKcbVMIB8JM+g5rsosgQ4u9Aga8Y
+         oEcHS5ibTMq4g+ic/VDDv7Hg+kb3sfRT0Rp6Jn+4krlUi6OumH59wR3ZbNEoSpXfExnh
+         EDUVFlICTh+0fo927plhDNvfTDEJIUFyprd6fUtibgGTC9PRt57xOGodLVt2ln2giLV/
+         E0vA==
+X-Gm-Message-State: AOJu0YwXv6m5RwGwzkoxYiCmdXTlJN9/v9TvSYR8TsCHh+rctVDBWPD5
+	gaoCbJTu1DU92zhzOMARz/kYjB4NYTzJd5Ru3jOhKAqF5RVncCK7C50mDG4mLzCrKY+XwIamgjH
+	ZBEygywH4CvLjaUM/jjqcRTStmaj4f08s
+X-Google-Smtp-Source: AGHT+IGDUN8XREGQdTzEX6Mig6XLZOviMFe0MpSPjKYI/oE4GeJkHs7QWXOqk4Hnh6OXTG511yDOyeHHcDhbxgY9htw=
+X-Received: by 2002:a17:90b:3a8e:b0:2c9:321:1bf1 with SMTP id
+ 98e67ed59e1d1-2c93d775a7amr397744a91.39.1719653522015; Sat, 29 Jun 2024
+ 02:32:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI0PR04MB10589:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6bdc58c5-cf80-4317-2e26-08dc97e1bbf3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|7416014|376014|366016|921020|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?CfoQ/Xbp7/LTR1frDS9wCGFZBgf0E5WbBctHXLXVIH9bz7F2XJO95OHJhb4e?=
- =?us-ascii?Q?tJBH3zoOsSo+c2S/fLcph27FlsUkYYPsJjFsLKk7cwyBlW4cvrgNkNh7eh3Q?=
- =?us-ascii?Q?KW19Fa2Ks7cIDL/Pudh9C2wSukDKoYZC3B41Ayf0Osr0yr3DB1Uxgz9+6XQF?=
- =?us-ascii?Q?chvIVzsG5zqhWY+jRnRO9Z/cemlNyLIELHffm78m/vZloew2eP8KIG2fHRQa?=
- =?us-ascii?Q?sf8YDv/2AIMrn3dGbHESa0WpngM2/AZ+8B66c8FOX6r7WvWCNj0mjDDHd9gx?=
- =?us-ascii?Q?trIByG3cf/VwacpSYAa4IXATfuuFuMyPVUqJVtJPS9JXqG30mEjH6jn2Cfbz?=
- =?us-ascii?Q?/KhkokDsT91thmSfJ3sGHJ9gHsKYahtjdsw4qTfBHQGfYFYJUSN+PThxSwP8?=
- =?us-ascii?Q?tQGCYOsghJ7FzVfbUQPdMF0g1bqDSjIsXr1dcLreF27Q4k3HEUN/92KGqFSE?=
- =?us-ascii?Q?0MrxlCj6g0hESOVbkd+6XApEzR3ntmiNTpgmdU+F9wSt/Oz5qg5AQasqlBzd?=
- =?us-ascii?Q?OVHsJ+BRPoKI1kI0O34HrlwH+oggblBs04pENiL2lIbCCaMqTnp9k1e/rTy5?=
- =?us-ascii?Q?toZU8SWniRiOfpFk1fjaKkSk/KBjQqzgU7m6WoGl1KBfwFWStN4oHCKosgVk?=
- =?us-ascii?Q?tJYTufYx1RyGeZaO6vejI4ynDbsFXiZ9xnUSMJ/uSV93ON94uaR19Wzg0piV?=
- =?us-ascii?Q?ijt2JFZzbkkVMXf0CyZKi1optanwoGkDj1e8dfqPmMasbuaENwnlVSE4/c+g?=
- =?us-ascii?Q?9quygWX5H60Aud9zaxIPLOIGOtdf55hJrf/RPGIRD905slE3o0BhgwuYC3G+?=
- =?us-ascii?Q?4u/0M19RsPymSEqYri2caRBomzumduRWHL38KmmX/P6j+Y7ChUfaDm41qwmS?=
- =?us-ascii?Q?FS3vNf5GA6Gy/6q8lB6B4fuNztre7RpG4PCwSGXeiucXBSrmI25FY2lalIqd?=
- =?us-ascii?Q?i2aaQfmrGB0fYhPBtm6GgilPpsDFZvFEyCdGuYq1vKX1IsJdtYNtMwU1aP56?=
- =?us-ascii?Q?gvAnvv38yn65nqnbbuxt78q7JWt133n812ez2drQcB+uf/RJD7ZFTPdCbVji?=
- =?us-ascii?Q?gRaIVaOkcCYzJspCFb5P/c4HJ4gw/ikBmvGd8k+rbQWNChA70LaJS9olsp4F?=
- =?us-ascii?Q?3rdqh7IDELrvQ7o67ps++1h+f5JuAW4gEQJxOp1+amhtzqLPT9j3uxQpvniV?=
- =?us-ascii?Q?N+cOvtwXAq/rg4oNGZhfVtdsPYDCYhqL3+O5BjS2VlfWt+lI/1DpZvhQVkpn?=
- =?us-ascii?Q?1EFHFpBAldeszHFnCoVWE5A81cSKdBbxvB60keDRMl4RL6l5IYFRNhkWuRk2?=
- =?us-ascii?Q?mEyK3w5WI3f23NZqjeuryFSqtRSjHO7l+A7vuWHQ2/+bNdnV17zBV5L4hY4/?=
- =?us-ascii?Q?9PwdDrIpxeACk3rYm44S4QudBjAe?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(7416014)(376014)(366016)(921020)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?VT06zaXj8Aonq2Z3X/9Eu/Odz+yHPRVl3MvqjReV5nH1ny45cYQC2let0Lnw?=
- =?us-ascii?Q?hfQvy9z99PDvENVuLtq6c4wg5+koKgHQdiYFU9ukBVqRMxgZGt3JWvFy5eZc?=
- =?us-ascii?Q?5XJvRc73iFivVsRg5rZCGiHfyuOCh2worxA8LONBo0Slq5VeayhRW/+z3DTc?=
- =?us-ascii?Q?qGm1DjTemHYtSb/P9YJpTZkM9CrsnUGufQI6zpQWCmo93HZk9chQ198V8f4p?=
- =?us-ascii?Q?/1Xu1RQgXS1xEYvCIzha7GI9cDyaMxx78yD/iViRUE9PH57jnV42W7Mm9bwt?=
- =?us-ascii?Q?xSArKPYKjLxteOetv+yfqzagcKg9nFDg8VJ7VIaETfCsz91sXLxW+XANv5hd?=
- =?us-ascii?Q?9tKB3aLG+hBKC9nx0f/1WYfG7AI2fBLfjfB3ec+zSZoSKTsaidUMe/EvM+F4?=
- =?us-ascii?Q?izPZjpE9ZvkeOrWknSWZ5uY3Fu1yRB1tjYq+h2f3e+m9+pgG4Y1VoXjvPSBW?=
- =?us-ascii?Q?/6UkcE7jc7teQqdnhDXCOpF8AI0NJaC//5W94Pw07fYKLRchfeyE/y8G4LqN?=
- =?us-ascii?Q?X2okmtUJpbHw8vDg/blSj13gCvOs5VUSgjA04DPvlmfiKshTULyU6PqZY7bn?=
- =?us-ascii?Q?aFXUHN7HgLEfJMPsQzp+CVSAusofY3sEfDD/ovTzdnMtMWnAwIKAc5QBjqA6?=
- =?us-ascii?Q?zHJbQ2i58K/oW1q/pWBdQFlWK/qirh86Xo5heu9WiApjK5/tY20C7uEz2yUw?=
- =?us-ascii?Q?iy3CKcvWeFk6lcmN9ZCJDHQaoxhtD99IX4ai7XsyRTrIhpEky7yIcieCySe/?=
- =?us-ascii?Q?1wcKD2Y9xhtxC4IZRGy1gIJPYHbOP8xMpMUy3Whkk3gl7ZnDu4tStWPnOCoc?=
- =?us-ascii?Q?F0ri5VupJ9Ptufkr4kr3p7YlrhaH/zhYAELD6S+T2dvggb+wEDTxJblX27ms?=
- =?us-ascii?Q?c1IDzywZCGOUluJfJrqaRw3NLXhZbx2N2B1rjEwwJW/j9FM9KTZrU0p0qVkH?=
- =?us-ascii?Q?5lz4p03UYt6SSQrReQ2ioOa8O4sOqX9x0hd6+q2P7jho+JgRT72aQi9opRDG?=
- =?us-ascii?Q?okULLTWr898esOINrMQ2eM9UC1c47woDJL84JcCfaqdIQtjCJU2OXc0i7spF?=
- =?us-ascii?Q?EuTuUIF40XS+x2BUt1FzZJGJde9kEe0+YEpp4tGqP3NZU7gNmpxw2Om5fdy8?=
- =?us-ascii?Q?wYpMdF4ihb4yrrJKyQjd5IWprMjBphFwTDiU55OfbiYyxozva9jv9F44fr+K?=
- =?us-ascii?Q?YsrLkCHB2XaJ684ZU3YjUEzSfKJ0uaUeEPVEUAEGwtYZvwXHu7AWNvxE6Vq7?=
- =?us-ascii?Q?/VnN+qcxZFZtqCgGqviOdQ4kexdMupxgakTpzLW/A4thmhFDVlmZFQxWfgAS?=
- =?us-ascii?Q?/G0VIIIsWd+Uht3/Rv1uk6UZcifimMQ14OBMMdQtitRMHfTNM91FgtopWxis?=
- =?us-ascii?Q?TbVxqkcmYKiDQo9e2Y5KW+b7MwA7Iep/HRGi6SEBKf9oI99OL6+zpvtrmnZl?=
- =?us-ascii?Q?P6cJOBMQw4waTsflJMCdnLeYVyXLBryNZxm16Ua90fhO/jnXIqQn4Et7MSwp?=
- =?us-ascii?Q?Wk/h87j1c9CYD0hBrl/Ha1r5tMFZnA0ekQgerHyJz5TWwVpkZcv3j4JYK8Fn?=
- =?us-ascii?Q?eCD5UqN/CadgY55varVxRs94+dWOla9TXhKuXT/d?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6bdc58c5-cf80-4317-2e26-08dc97e1bbf3
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2024 02:18:15.9638
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GVlI7FajcZMELGGgNZbfqLhKO5y1ZUKohCYLc/i77r3o9qhNf6hIP2dvAGVOk0TvviX2pvMNqAVJfIfeuV5cbw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10589
+References: <20240628195514.316895-1-extja@kvaser.com> <20240628195514.316895-3-extja@kvaser.com>
+In-Reply-To: <20240628195514.316895-3-extja@kvaser.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Sat, 29 Jun 2024 18:31:50 +0900
+Message-ID: <CAMZ6RqKSa-6KjvgfmN9eL7A=A65gMkYsRrnaF41Azhsc45FA2Q@mail.gmail.com>
+Subject: Re: [PATCH can-next 02/15] can: kvaser_usb: hydra: Add struct for Tx
+ ACK commands
+To: Jimmy Assarsson <extja@kvaser.com>
+Cc: linux-can@vger.kernel.org, Jimmy Assarsson <jimmyassarsson@gmail.com>, 
+	Marc Kleine-Budde <mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Add common 'can-transceiver' children node for fsl,flexcan.
+On Sat. 29 June 2024 at 04:56, Jimmy Assarsson <extja@kvaser.com> wrote:
+> Add, struct kvaser_cmd_tx_ack, for standard Tx ACK commands.
+>
+> Expand kvaser_usb_hydra_ktime_from_cmd() to extract timestamps from both
+> standard and extended Tx ACK commands. Unsupported commands are silently
+> ignored, and 0 is returned.
+>
+> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+> ---
+>  .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 23 ++++++++++++++++---
+>  1 file changed, 20 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+> index a971fcb6158a..0be1cfe8d964 100644
+> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+> @@ -261,6 +261,15 @@ struct kvaser_cmd_tx_can {
+>         u8 reserved[11];
+>  } __packed;
+>
+> +struct kvaser_cmd_tx_ack {
+> +       __le32 id;
+> +       u8 data[8];
+> +       u8 dlc;
+> +       u8 flags;
+> +       __le16 timestamp[3];
+> +       u8 reserved0[8];
+> +} __packed;
+> +
+>  struct kvaser_cmd_header {
+>         u8 cmd_no;
+>         /* The destination HE address is stored in 0..5 of he_addr.
+> @@ -297,6 +306,7 @@ struct kvaser_cmd {
+>
+>                 struct kvaser_cmd_rx_can rx_can;
+>                 struct kvaser_cmd_tx_can tx_can;
+> +               struct kvaser_cmd_tx_ack tx_ack;
+>         } __packed;
+>  } __packed;
+>
+> @@ -525,16 +535,23 @@ kvaser_usb_hydra_net_priv_from_cmd(const struct kvaser_usb *dev,
+>  static ktime_t kvaser_usb_hydra_ktime_from_cmd(const struct kvaser_usb_dev_cfg *cfg,
+>                                                const struct kvaser_cmd *cmd)
+>  {
+> -       u64 ticks;
+> +       u64 ticks = 0;
+>
+>         if (cmd->header.cmd_no == CMD_EXTENDED) {
+>                 struct kvaser_cmd_ext *cmd_ext = (struct kvaser_cmd_ext *)cmd;
+>
+> -               ticks = le64_to_cpu(cmd_ext->rx_can.timestamp);
+> -       } else {
+> +               if (cmd_ext->cmd_no_ext == CMD_RX_MESSAGE_FD)
+> +                       ticks = le64_to_cpu(cmd_ext->rx_can.timestamp);
+> +               else if (cmd_ext->cmd_no_ext == CMD_TX_ACKNOWLEDGE_FD)
+> +                       ticks = le64_to_cpu(cmd_ext->tx_ack.timestamp);
+> +       } else if (cmd->header.cmd_no == CMD_RX_MESSAGE) {
+>                 ticks = le16_to_cpu(cmd->rx_can.timestamp[0]);
+>                 ticks += (u64)(le16_to_cpu(cmd->rx_can.timestamp[1])) << 16;
+>                 ticks += (u64)(le16_to_cpu(cmd->rx_can.timestamp[2])) << 32;
+> +       } else if (cmd->header.cmd_no == CMD_TX_ACKNOWLEDGE) {
+> +               ticks = le16_to_cpu(cmd->tx_ack.timestamp[0]);
+> +               ticks += (u64)(le16_to_cpu(cmd->tx_ack.timestamp[1])) << 16;
+> +               ticks += (u64)(le16_to_cpu(cmd->tx_ack.timestamp[2])) << 32;
 
-Fix below warning:
-arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dtb: can@2180000: 'can-transceiver' does not match any of the regexes: 'pinctrl-[0-9]+'
-        from schema $id: http://devicetree.org/schemas/net/can/fsl,flexcan.yaml#
+Nitpick: the conversion of teh timestamp[3] array to the u64 tick is
+now duplicated. Maybe worth adding a
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-Change from v1 to v2
-- rework commit message and add fix CHECK_DTBS warning
-- Add unevaluatedProperties: false
----
- Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+  kvaser_usb_hydra_convert_timestamp_to_ktime(__le16 *timestamp, u64 ticks);
 
-diff --git a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-index f197d9b516bb2..a4261a201fdb6 100644
---- a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-+++ b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-@@ -80,6 +80,10 @@ properties:
-       node then controller is assumed to be little endian. If this property is
-       present then controller is assumed to be big endian.
- 
-+  can-transceiver:
-+    $ref: can-transceiver.yaml#
-+    unevaluatedProperties: false
-+
-   fsl,stop-mode:
-     description: |
-       Register bits of stop mode control.
--- 
-2.34.1
+helper function to factorize this and the ns_to_ktime() all together?
 
+If you do so, it is better to add the new patch before this one.
+
+>         }
+>
+>         return ns_to_ktime(div_u64(ticks * 1000, cfg->timestamp_freq));
+> --
+> 2.45.2
+>
+>
 
