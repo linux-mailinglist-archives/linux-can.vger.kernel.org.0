@@ -1,121 +1,113 @@
-Return-Path: <linux-can+bounces-895-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-896-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A051D91CBE8
-	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 11:32:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1674591CBF8
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 11:52:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EAF21C20FD1
-	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 09:32:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89E23B21D9B
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jun 2024 09:52:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB4B2033E;
-	Sat, 29 Jun 2024 09:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E0A3BBEB;
+	Sat, 29 Jun 2024 09:52:28 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C62F1C20
-	for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 09:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B294E3BB30
+	for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 09:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719653536; cv=none; b=griun8TerugwxwKQNUfkB9h6gf+FUr5v8IeHbtuHdnTUWqZ2y60U/4yV6Ce0wbY4/zotgpGLmlpV3j/hiRO8Kx4RoiwCUJO0G+EcUtkt6BSh3CIfNZbQOlkvQoJ7epUPFPr7IO7Fqv8RrAh8sdPiATEhtl28Kqy54F557kJ3xQs=
+	t=1719654748; cv=none; b=pfWG54OJwpaUuuAmPXqD85WlWuDr6BcDr9Mn83smP0+5fhZP3qJ9hFQ4FJzVmPkD6ht2Pwo1Kpq9i+REc/MHtwv2A6sxJpPsMUM8m7x4qSw72ulVIBmIVpwbL4FwdP57I8HpOx6iuoAEOi2cK6WIwq58GGVAJ/cY+dXDm02e4bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719653536; c=relaxed/simple;
-	bh=y5h/4bGI1kk39OAmDZzprOMgyl0uV+ipJtJQxlRnrzg=;
+	s=arc-20240116; t=1719654748; c=relaxed/simple;
+	bh=O6eCjHK0yIUixqjdY0h+BbwbRXrLBs4mp/Ra8dYcnzg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Pey5qqMuFajTRtZ9ADNVCmSO2oOONy6RPCeixDHcXamIXMQyOmbpIAQSbV6glL9FZq07/WYEUxOKwVQAIj+dzu9CAo0XOANvt20gmC+Ft5ftCZzDORNNc2QpiXXbrm26qLW2RP6A2ViUG/kZmuDzffkI8jA5aQf97+kviegGQa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.172
+	 To:Cc:Content-Type; b=d+nirdPviEdqJ13NxwFATiTr6j1acHKeErYUXbhTPtUJSOpiw3BR/eEB/YrTirL+wXrOboQQY/Cj2iKr0iN2AApDQeAxMQt7a86ACXUH71/GXz4Q/Rk8fHJrQdjfFv6mnmHxvxNexBdjYhaveYb3qFbqaP33oB5znGo6j0zQFeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-73aba5230b6so178391a12.1
-        for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 02:32:15 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5c21c68b786so677268eaf.0
+        for <linux-can@vger.kernel.org>; Sat, 29 Jun 2024 02:52:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719653534; x=1720258334;
+        d=1e100.net; s=20230601; t=1719654746; x=1720259546;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZIP6jScN4m+JHER+Iqkwwvq8INH2pmrZolzXX/4Ag+k=;
-        b=vQlr7ICF4cApuomCIEaCcdqh2bpHhK9zWXN3B2EAz4TURxoX1HIpKGnVhYFNMpyqnb
-         HGlt+tpOGm/c3ZpxVFxn1m43TbjualCieNwDr46EuPnPzW5EsOBS62FQcz9G55YdbiE9
-         UKamlpxDWIfsQxfYTWmIVoZ3h1kZ+KyjAiHTHL2ctlHTmNigZCPDvro84NNyaoigSzqK
-         GPDUya7NcupMv8mYzHjMHiRAzih+hfRhDahIE6a+Voq8PSWnsgE/j9+CHUALlF7gN6iM
-         Q4CSIY4nTf6CndEhy8V2Qn9xQSLVBmFplk6dTe5N31+M6kdLp4UFsJnAQtOmNwggbx0e
-         qDjQ==
-X-Gm-Message-State: AOJu0YwVrLu9gKH+LtjdP5lH0fUMXgJJSB9vdwUBnIzDhSugbsEw2irl
-	3kfpIU68mag34lVWUjZwECBIpBQfvtUZ+VYfMjpr3gRrrzN4SSvcwtxMhl7KpHZOI4KT7YeFrSq
-	1fbm7oOnwMIyJHGELoH0Ut5DLG3UrZw==
-X-Google-Smtp-Source: AGHT+IGUxDS8i2YrRKwBtr7x5MilXXx02Fdi+JlPqVGilPNXyZivzI8J1rBmmOCHjsyLT9UP0pqjKmavnDzqCBEaSX0=
-X-Received: by 2002:a17:90b:230f:b0:2c4:e2d6:8de6 with SMTP id
- 98e67ed59e1d1-2c93d2d18d8mr1017421a91.21.1719653534517; Sat, 29 Jun 2024
- 02:32:14 -0700 (PDT)
+        bh=PgArw37KC7B25EGjc/IQJl+5DRiNWpvmvweL+8DbN7I=;
+        b=lN2r/sCEmAehz80a4JhLl0553rmO0cz/Bhnc9wy6xETBLdEJr9qjujcmRpF9zPeKPC
+         n7UieljCLkrKigokNNx3S4if4mARNUK9caP9NjqsoTCQHlZpTHAUQQsHSLxhtNWA43yL
+         cagKNGCo0eau18KkLqVOvLnVcjEctwjsF0FEMlNIdqE+Y6Kv+y6VWxIZoewW+pC96Bq+
+         q7+A2HVyKEz9Ktoe+kiYlMTBHFSHO+bPGoOSd2w1Nb1PZxWw7MnwITtHUtrMxZ42p4OJ
+         zwzN25yOvdqLjOwohYVRs2tXRardOEUCJIyb8VQUuwfDeOsLfPxOdABKVqBCsf7AmVOj
+         0zmQ==
+X-Gm-Message-State: AOJu0YwPtY0OVLRgUlUNqUNRx3nkn+IsUKezB99ug1HO/APnzw4vxwlS
+	+JrlncrLBu7GImCe1DnbNb+sFpU4BTxyTVXgtbzg8LS+/J+usjSxVk0yPOqXYcvv26QA9r/vBht
+	7p28u8Xu1Iv8lB8otuN/jsYmqi/U=
+X-Google-Smtp-Source: AGHT+IFI6lYxJCR1U6Dmuas66Lbhyc+GivLL8Gh2KmD0RpGtJjFy9WNthyIzGMoexnn0lyVK2lM8iBXjuSyBPMp5QgI=
+X-Received: by 2002:a05:6358:7e44:b0:1a5:cb16:bc48 with SMTP id
+ e5c5f4694b2df-1a6acc3043fmr54350155d.3.1719654745666; Sat, 29 Jun 2024
+ 02:52:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240628195514.316895-1-extja@kvaser.com> <20240628195514.316895-5-extja@kvaser.com>
-In-Reply-To: <20240628195514.316895-5-extja@kvaser.com>
+References: <20240628195514.316895-1-extja@kvaser.com> <20240628195514.316895-15-extja@kvaser.com>
+In-Reply-To: <20240628195514.316895-15-extja@kvaser.com>
 From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Sat, 29 Jun 2024 18:32:03 +0900
-Message-ID: <CAMZ6Rq+Xd7+th=dKV+vrqzRtS+GY-xq2UziH1CURcQ3HxEXMqQ@mail.gmail.com>
-Subject: Re: [PATCH can-next 04/15] can: kvaser_usb: Add function kvaser_usb_ticks_to_ktime()
+Date: Sat, 29 Jun 2024 18:52:14 +0900
+Message-ID: <CAMZ6RqJ8dyc62Hj+ACV99BSuX3g3ARGCfY4HHUtiKmpmmotDJw@mail.gmail.com>
+Subject: Re: [PATCH can-next 14/15] can: kvaser_usb: Remove struct variables kvaser_usb_{ethtool,netdev}_ops
 To: Jimmy Assarsson <extja@kvaser.com>
 Cc: linux-can@vger.kernel.org, Jimmy Assarsson <jimmyassarsson@gmail.com>, 
 	Marc Kleine-Budde <mkl@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 
 On Sat. 29 June 2024 at 04:56, Jimmy Assarsson <extja@kvaser.com> wrote:
-> Add function, kvaser_usb_ticks_to_ktime(), that converts from device ticks
-> to ktime.
->
+> Remove no longer used struct variables, kvaser_usb_ethtool_ops and
+> kvaser_usb_netdev_ops.
+
+Does the driver still compile after this patch? Wouldn't it be better
+to squash patch 14 and 15 in one?
+
 > Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 > ---
->  drivers/net/can/usb/kvaser_usb/kvaser_usb.h       | 8 ++++++++
->  drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 2 +-
->  2 files changed, 9 insertions(+), 1 deletion(-)
+>  drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 11 -----------
+>  1 file changed, 11 deletions(-)
 >
-> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-> index ff10b3790d84..f5868e0b3b23 100644
-> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-> @@ -22,6 +22,8 @@
->   */
->
->  #include <linux/completion.h>
-> +#include <linux/ktime.h>
-> +#include <linux/math64.h>
->  #include <linux/spinlock.h>
->  #include <linux/types.h>
->  #include <linux/usb.h>
-> @@ -216,4 +218,10 @@ int kvaser_usb_can_rx_over_error(struct net_device *netdev);
->
->  extern const struct can_bittiming_const kvaser_usb_flexc_bittiming_const;
->
-> +static inline ktime_t kvaser_usb_ticks_to_ktime(const struct kvaser_usb_dev_cfg *cfg,
-> +                                               u64 ticks)
-> +{
-> +       return ns_to_ktime(div_u64(ticks * 1000, cfg->timestamp_freq));
-> +}
-
-See my comment on patch 2: also add the timestamp to tick conversion here.
-
->  #endif /* KVASER_USB_H */
-> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> index 28a99d78ba8d..08688514d142 100644
-> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> @@ -553,7 +553,7 @@ static ktime_t kvaser_usb_hydra_ktime_from_cmd(const struct kvaser_usb_dev_cfg *
->                 ticks += (u64)(le16_to_cpu(cmd->tx_ack.timestamp[2])) << 32;
->         }
->
-> -       return ns_to_ktime(div_u64(ticks * 1000, cfg->timestamp_freq));
-> +       return kvaser_usb_ticks_to_ktime(cfg, ticks);
+> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+> index a4f32d57173a..4b6c23121b5d 100644
+> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+> @@ -753,13 +753,6 @@ static netdev_tx_t kvaser_usb_start_xmit(struct sk_buff *skb,
+>         return ret;
 >  }
 >
->  static int kvaser_usb_hydra_send_simple_cmd(struct kvaser_usb *dev,
+> -static const struct net_device_ops kvaser_usb_netdev_ops = {
+> -       .ndo_open = kvaser_usb_open,
+> -       .ndo_stop = kvaser_usb_close,
+> -       .ndo_start_xmit = kvaser_usb_start_xmit,
+> -       .ndo_change_mtu = can_change_mtu,
+> -};
+> -
+>  static const struct net_device_ops kvaser_usb_netdev_ops_hwts = {
+>         .ndo_open = kvaser_usb_open,
+>         .ndo_stop = kvaser_usb_close,
+> @@ -768,10 +761,6 @@ static const struct net_device_ops kvaser_usb_netdev_ops_hwts = {
+>         .ndo_change_mtu = can_change_mtu,
+>  };
+>
+> -static const struct ethtool_ops kvaser_usb_ethtool_ops = {
+> -       .get_ts_info = ethtool_op_get_ts_info,
+> -};
+> -
+>  static const struct ethtool_ops kvaser_usb_ethtool_ops_hwts = {
+>         .get_ts_info = can_ethtool_op_get_ts_info_hwts,
+>  };
 > --
 > 2.45.2
 >
