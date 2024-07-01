@@ -1,71 +1,71 @@
-Return-Path: <linux-can+bounces-926-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-923-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16C9691E49A
-	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2024 17:50:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C89491E496
+	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2024 17:50:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39B8A1C21D43
-	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2024 15:50:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 702D71C215A0
+	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2024 15:50:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694CF16D32E;
-	Mon,  1 Jul 2024 15:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC23D16D334;
+	Mon,  1 Jul 2024 15:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b="ONiH9yc+"
+	dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b="Sr76scjU"
 X-Original-To: linux-can@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2097.outbound.protection.outlook.com [40.107.20.97])
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2128.outbound.protection.outlook.com [40.107.105.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615AD2C6A3
-	for <linux-can@vger.kernel.org>; Mon,  1 Jul 2024 15:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D4016D4CE
+	for <linux-can@vger.kernel.org>; Mon,  1 Jul 2024 15:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.128
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719849013; cv=fail; b=XFMi43RcBt6pNAGrCaSR2Bo6hhxjzdoEPUfTSOQceOz18L5w0FJIeuASZ/irj7Xi3ANEjnkmQRI314GaGBU7JnxH3MpS+2OZoD5kQlwVEbmZE0uDPs1euYZBZ3rnANLHQi8VyzpLpOUGKJIFA2cth/b3HTWUkAdNnDd4KVy4Ohc=
+	t=1719849011; cv=fail; b=j6nX6WY0ga3WJVptbmRQUQIRjsN9ldQ+eY+3CxG1i0qfbYzErC/qGH13ME9V8pe371ZUg9mE8Sb29A58T7moufwRvt/+JeyYr1xQgGB2ywPocuClTNPt7m7UrfK2OISnl/Ohv7s3VVrmdvTvq5tbg/ufsXz4P4qAiHS6wh0Nwck=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719849013; c=relaxed/simple;
-	bh=uDec/tLd0ynK0DCk6kYvnTfaYWOifdit1ntEl6tijyk=;
+	s=arc-20240116; t=1719849011; c=relaxed/simple;
+	bh=XSAnCDIlA/NuSe5BKK15GvIWk8QqBa5CWCBddpVS34Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SknqXgm/0H+5E29wvJt6PsGDNKbKmTfWDmxPmU/yygSPOwkkvuUbYorSCwE9nYGPlODjK9pprnX2tjGO0l0SrV0KMKTpG+AlolZWOSdxq0esjFiEJ/wRktkJMN4IAD+lRIuj/55qAIHTDYD5yUc8Semqut/XZsfr8CXlmI8t6kI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b=ONiH9yc+; arc=fail smtp.client-ip=40.107.20.97
+	 Content-Type:MIME-Version; b=PU6xsQc7ov1VN1erWJapW0Xhf5geN0+cz6S+j3YNdo/ZR4Pj+mriuwPqOwU/EW5pk4KccF9njpZIZ++qv01nqLGsANmG2ZRROtwAn/oRRqd12vQhLBZE74Ui6ZAUhihAHKMcwCzaaD9s9eQns4UUEUCVFBRfeO4fBnDJ/t9IFiM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b=Sr76scjU; arc=fail smtp.client-ip=40.107.105.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvaser.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZGgmov0jm4JZ9cnQj3NaqEbNTDGYZ65SU3s+hRl3fM7rjGPHUlII2O4eQWZ15wb40CP9tj7+tNM/wE2HK/M5eH7dSEr8M2leorMbYujZAKg7R7rIzyLuhbzYxXDZr9AWXeMFocbU0dMhw+3t4le1YmRVF8BFTUvCBQtgdUJ2L8OPtC6nG+KnccNjDs3zum2dAfX/EfIxniE+Bw5dx0bC82LXU7rQSo0o9TaooGiimIFWah4kfvYulqpFMzY02KAyMokosJBTv26tS3GnJqurnEZy9MHGJ1yD7VZjcGwphSwhQHcdGP8LUSm2oB1lOEY8yENnIDdtyKj+FBFlp5ZKNA==
+ b=TcrVq8f0DD3gR6kQt6/++uenfTNx0WGTHqJiZSWK+oGALvTiO2XQlv+jl/jWTiTAMzk7I7aJ9N3MNZMawuyt5YFUB229PS6NjnB9A7ZaIIHyD/ZPiHxLa7hwNS660RiCbnT504rnoSUujIEVLOXAQO7xBotAJL8eE4P/H8/hAW8wc0vZDTCETsulbYX1JR0mEK7BAWYCglYHFOXBe9W2HlyAlsl2VGHr5XP+UUMXCoBIWlEyYy7Y+xI28kjWVWKILS3x/lCgqYqz9FSyLZh70o5ybu50n6iPmgGhgMynl5EPapvJ6YUpIEwqW6N567nJStrSLQZe6haj4j+1i2vT3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DuuDp/d3k2IYaO156QFV5Lt4rM645//DTYtH1YVIPxo=;
- b=Udgs4aISOX41u/AydZzRW4+gMjQFKp+WBElVpI4Gd+y8ympSP8RN3YLkAhn9kPCv2U9fAc1n7V8S+YD1P9Z1p294ByiYCU8v6rF7ooeB/nj051T+Z6/yGPx2iZi+9TwLzS3rI8SodVlSOurv+a/gH3zxNzUcaSIrZk6ECiUDT+PSbLE+8Gu8v4wGpXbCEzGceiPj3gMp0whfZT1zdhhXdYaBZV0hxxHmawSFR0gMXJO/Tu6ZeX0gelBvDLyjCVTiv4nT2d9luevHOUvINjNCS7e27ZaZrmjJApKe/WZfoTvrVxh52fEiDKaaJM3YQT5qs0FBxngJkQVEoSruVecWHA==
+ bh=xxHy02nseLp80gQMleN5/fcpasdlPPbZGRB/5i7ihhc=;
+ b=PodJorKhA+K4aDh0lgJvMjKuzW4SoQDX667dvd7nOWIshiItjwYPxzqyTBV9uZ/xVGSnN478oPyqj9eCTvwi2vkMHpXDmO+MjBs23uPjaXdf/DzWkU3IjHydZKRv9tl8iMf8XOeXysUTRr3uJ0L8bagy7vw4+MF33BkG3gPqi3WhoI3nGgNooblMF/jOtPq/KOobTFYyFhYS13Dxe8PVReIIFe0w3k0Q9qC29+9ws3DFv4IJw1EQsM5H6dcM2otjVHgL4zDeDJy9A9geO8++Hq2uaXjcTMwPdmgmATcP49QX0yEIy/S8hr/nB0wP3niVJMyjb3DTlobKhG+h6KIj1w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=kvaser.com; dmarc=pass action=none header.from=kvaser.com;
  dkim=pass header.d=kvaser.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kvaser.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DuuDp/d3k2IYaO156QFV5Lt4rM645//DTYtH1YVIPxo=;
- b=ONiH9yc+3nmsjIqL55SITozKiJk0doZRUsr1ZcokkC2jsg5ZnVCDr6AWIUvnjsXMG0ur79nS0JiJLnfsnDwzXnQ8nuozILOqtBtVmH1XE6pylfGD8q18+GQjjHhMx6uOpgmH+umV4ijwAJyliGdW0Cgiy+HoVekbJ4x8IjV+xT4=
+ bh=xxHy02nseLp80gQMleN5/fcpasdlPPbZGRB/5i7ihhc=;
+ b=Sr76scjUlC5a0vx6tRVC9EapvwIJvlm+DNS1XIy82vUVIlT9d7SNWli1Hz6BsSSHhBkHnvCF75ZAMwpoID2c6SH442TReGUwfGh8LRkX+W5xQ3U8d+VbZUgJYKu6tNieDbQEHExQeAvC6Qx950ar9JCtx8i8fsFW1cct7uhIAAI=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=kvaser.com;
 Received: from AS8P193MB2014.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:40d::20)
  by DB8P193MB0519.EURP193.PROD.OUTLOOK.COM (2603:10a6:10:15a::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.32; Mon, 1 Jul
- 2024 15:50:00 +0000
+ 2024 15:50:01 +0000
 Received: from AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
  ([fe80::ecab:d3fc:ce8e:ab6]) by AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
  ([fe80::ecab:d3fc:ce8e:ab6%6]) with mapi id 15.20.7698.025; Mon, 1 Jul 2024
- 15:50:00 +0000
+ 15:50:01 +0000
 From: Jimmy Assarsson <extja@kvaser.com>
 To: linux-can@vger.kernel.org
 Cc: Jimmy Assarsson <jimmyassarsson@gmail.com>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
 	Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH can-next v2 04/15] can: kvaser_usb: hydra: Set hardware timestamp on transmitted packets
-Date: Mon,  1 Jul 2024 17:49:25 +0200
-Message-ID: <20240701154936.92633-5-extja@kvaser.com>
+Subject: [PATCH can-next v2 05/15] can: kvaser_usb: leaf: Add struct for Tx ACK commands
+Date: Mon,  1 Jul 2024 17:49:26 +0200
+Message-ID: <20240701154936.92633-6-extja@kvaser.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240701154936.92633-1-extja@kvaser.com>
 References: <20240701154936.92633-1-extja@kvaser.com>
@@ -82,117 +82,123 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AS8P193MB2014:EE_|DB8P193MB0519:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6387b7aa-5fb8-401a-1329-08dc99e57705
+X-MS-Office365-Filtering-Correlation-Id: 7c5d1960-9575-4947-0207-08dc99e57762
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?xYyGQ1icYcWCACIjMW1kcpP9F7QJK6LquP9+Alun4G4bZFHdfazvuOLgYXtt?=
- =?us-ascii?Q?RWWXIJ5PKwvT7P8Aj0zqFQYARwIV0Uiy5G3Zn8SF33nNnpofLVRCyqPHzLVe?=
- =?us-ascii?Q?URzeGrsjubBdbmlCaRN+fqXL/vfIIo9FWClMl7mmZHmlbaBNbZLDS6/9tJSX?=
- =?us-ascii?Q?zC6J9mBclOBE2sCU6vI2gfW8B/08r66+qeM871op5gWhcZ6d3iydm9LDmI3E?=
- =?us-ascii?Q?WIATKNm2Bf76NZOH7gIiAMRNUpEGQzaXDG5Qju/p9/ngz27gabjubGiMqmh6?=
- =?us-ascii?Q?k+j52LTrQtlJE5KQx6xEjxeaFjaH7hr3g7MxKR783V/GKOnTaXHQCsC/uGwk?=
- =?us-ascii?Q?03JawYlMHBjEtRb6TbaNf+vAJeCYDxFTOyWWKji6EQVn2D2CpQpYRxc4au8v?=
- =?us-ascii?Q?2AQwsHLgQYdMdkPFduj0DzwaxDBpvIJgAVZKe1N2t9HqMFYMeVY1kZIeySGf?=
- =?us-ascii?Q?HupezvtHpfW/8yRjOUpZOItRd8I+jT6rSRVZexIFgyqMxSzkf1SlfURxmX3n?=
- =?us-ascii?Q?fk5hNscO+P7/WqQ1pC8syAiqyEvNTLKEL/qM5STYN1oiWwQWpGb9h6TR0Uc7?=
- =?us-ascii?Q?3uAfwFtY53IvklJFcn8OTbFGT+2ejrzx6qoqRb287SubCzSWlqNKPZltgtw+?=
- =?us-ascii?Q?WZjrZA9lqmZvqZ6kxFx886MAjzYD6YC6ogdQo4pcTffMeVIVeT2DnxtAPP9f?=
- =?us-ascii?Q?r/J6JNRG3sY3/TYjorP0V6jBaE8CowzU5IVWrismBu/CzkkIjBDXGq9MTGHu?=
- =?us-ascii?Q?ZztW3D3DjJ3dnGG++CuxIhnRmSYU72j6xYBOihdu4xU9EQPp1t27bg8mCcuv?=
- =?us-ascii?Q?cDTguGyjkAYhnU0wKsIvzXpP44XHUNWcW3GAGza/Mu0M/0b72lL+xUPgLT/5?=
- =?us-ascii?Q?WTRC4Ruk7ntT1bSYKu25+UH5mNEBugxvUGu9ktHVA/dmmd8oAUi5zuNg1kko?=
- =?us-ascii?Q?eEjI1mQPYGvFyQE1J4B+6RWwyEtoTaStKBWuMuyICuH6+O9Ih1+uW3mwEYKA?=
- =?us-ascii?Q?PCVcPHRh8hWh7G0s2s7Vjt6s90s38YOt6/M6d74CijvYEFrijbPLRH3It7Fw?=
- =?us-ascii?Q?PbVRvbVzbd+LoNwt6o/CdICZy+xPJJ+9qxV4KvAOw8uhQ5CL8HWcGS9M+GI/?=
- =?us-ascii?Q?dwsLjuw5QQRRMwW4B7Nxn6J2mYODQQC8SdNnpTAccT1dZtH9Jv6YDcnaMM/8?=
- =?us-ascii?Q?wxJCBSeJv5rt9NjanioGG+sAvJHchaIRFlEGuNSW13B8S0MGg2smS6PFCWCQ?=
- =?us-ascii?Q?9c5yWEhkFodTvOpkmFihtgPNHq+WTjAFPxBc6Orkagu/+DlACpscwPkLjDRU?=
- =?us-ascii?Q?2B5zPPSwv2bROKem8fJfwl4YEUYKnOTddlOJVXEHGTO+dw=3D=3D?=
+	=?us-ascii?Q?3AKcF2JCI7A805r8a7O/P1QkUX2JBDtF4LtPgjleRM7712SZCuuJluin5iCe?=
+ =?us-ascii?Q?ZVKc9JNvuukgwUg81NzMieYsb55VGybmw2uLe5mcMAbeKDMGCQcCtUd6vnjy?=
+ =?us-ascii?Q?dAyZ27758pKsL29tWgP/C07uSy93Rau8u+lIUYZ5nf3ZrvwkG0kcvJiaCSod?=
+ =?us-ascii?Q?t192Lvrgw/fLJk+WJdw2nQeVv13IQ1rBf3hjaaT8xqP1DihQw2shxtDWHTZh?=
+ =?us-ascii?Q?pAEOi0elA5H1fR4meBsuZQxE8PPnSr94HK7yykwSsGn040Z5gRDWNEtq91Dv?=
+ =?us-ascii?Q?5GCFNG+/L3in2+KHWQrgvtAr47xHqvP6IZeNKl9L8qFg5SZAzdGBsMUdw8tW?=
+ =?us-ascii?Q?gv5lGEMKuq5D94MwSKqijKjiuutQI9Mws4VYkbaB+svlgmh5SJaNoK+hMKxO?=
+ =?us-ascii?Q?O+lawBb52QHw1yPnjeeucUv04EHfTJEq1IFjV+eMgtaxk76YFcoJXpvKec8H?=
+ =?us-ascii?Q?Kxo/1pj3lQdvZZl3LnxNT5aZWJ5JpazU1UuzOUUucHSFATyyXPrmmoksHh2B?=
+ =?us-ascii?Q?5TB301hUd/c43jePa5aCtjghX4u159eTjNowUFBOHTA20kDXOgBSJVF/pJLf?=
+ =?us-ascii?Q?PUwz0swPcxmX8ZMr4w/Y0DbfAFK0xuWDtq9YL2VgTa2Q4u5X3xjVU6Sx9Yzl?=
+ =?us-ascii?Q?uKltAuRPLu3D9/iOgp8sHZHLT0kj7bHFdXb+YJg+ZWiWK/NfIEPUXITlO6q3?=
+ =?us-ascii?Q?dmGdiwUe/SvpQwFpr0pZrx1b97fwSim8E8FQi3OoD9ekRyNP8iwR8C90puXg?=
+ =?us-ascii?Q?NhwDji1DO2eEU/FkKMvog6Z2oXDXSNs/KDj+dXU8LXQnytwvKZGhnldR2iuo?=
+ =?us-ascii?Q?d1D05MDQCGmc50itMjRGlRdnZtQH7I8Aq4mQSHzDcE8sW22EFBpA4yWDMHdF?=
+ =?us-ascii?Q?1Cvt22GQu+hMjyRZ9cYSuSSCn3TQZpORtJhVGPtyNyLG/ZLrEwfLIjuJnAMp?=
+ =?us-ascii?Q?3EoT5PARj2iMNIFzTTWGINxqXtwnRQIPhLgRTh8EZF1RqXPC+TNI1L3feMsb?=
+ =?us-ascii?Q?9vWv2FaDsb4/wvnHxumr7voV/Jf4US020xARhCGveh1gA2BygcacHK/NeeT0?=
+ =?us-ascii?Q?Umg7pV/QyFAcxVGgLb6RN3l00iOGniqPPEeM2Nz/7CnzsthD+r/43XDXXNME?=
+ =?us-ascii?Q?y113HEidv3MDS296Q0hZn174T+vxvAgPwRSsR4y+4AX6RzN76qyV7wxCdCca?=
+ =?us-ascii?Q?PhI6BfjWsvH5HE3+aAF2qLEtOr0Fq2VvfvNk1dG7jycs045kokEiQdcqLG9L?=
+ =?us-ascii?Q?2NroX80gVt2fojnbV0sE4cFF+d97LHovK48rKcNR7FB+TjeQuzbO3fA9lezP?=
+ =?us-ascii?Q?ZHNQdlRe8cN73J/T4viXWhld7t8IGKT5GhYNSw25UqVosQ=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P193MB2014.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?yF+62r2iv0k26SftKEutTcKAnrRScbi3nO8GbMnioMgEa1ogHokb6IMXK0IY?=
- =?us-ascii?Q?lHUayf65bowzwb91QoJ83AQjrhA5//EXZvUFfDAK7NDhvcfwH4LOIfCWYVfW?=
- =?us-ascii?Q?+j3Ak557mD/D1hlI8GD7lhkes4G/pzYKF1g9SEJxI5Q5AUoLJFHZtea193EO?=
- =?us-ascii?Q?dlpigp2oDgb7Ge76vDkKDtAMmnLliLZRLuQ4DvqzFkkGTEysS3tmIwbwsK54?=
- =?us-ascii?Q?E4g1cxawLUfm80g5IvvK+Dz5UEXFrX3hwS6Fq4mwiXhIyOrOqaTQ3AgaLDap?=
- =?us-ascii?Q?AByoKS0IQb5GUom5jEiB01Ojw64a1pE56Ixt0VdfQLvqgCw21S8zfoqya6Zw?=
- =?us-ascii?Q?pEATMIP+Yfyv+Soz+rCX17zTelV8vwLJR4Ea0dfJixfvBUjCO4a2/Vbxzx5Y?=
- =?us-ascii?Q?TuJy5mBrtPhktCVD0r/Otos2soxowSh/e7XIlf8fEcQOch40Dol38nEBn89F?=
- =?us-ascii?Q?3AVk10TX7zb06SFYxBOmWe+WmEjIcKj53a/HXGPUA2lw/zcO5+6/XdtFXzlB?=
- =?us-ascii?Q?eZGtJxt8soG91pDT6OFsVOmqHO2VS9yZVeV5msqHtQkH8vKCFqgVbUHYO5zf?=
- =?us-ascii?Q?kv60Y2VPhyl9bmwwZ9o2BKDMPnTJ8lK0MlKMFdpooKH4ICK9q03P5kfpc16K?=
- =?us-ascii?Q?4McHpJ7fgQixJsatnK/So8jRsABJSz26aED4cjYOjeKPjZN80HjSpdZUUvN1?=
- =?us-ascii?Q?vtAJh0VtUuX+szgUamd8sYkQvGyqiUcA0C8CqpeWQVTb4ZqL732RXtA8wvnw?=
- =?us-ascii?Q?DzMPG+Llk2/Z7aJDQZaOHcytrhdCevNmJ8k2hdsgRv8duB8FCsZkY9tjerjr?=
- =?us-ascii?Q?hS3aC9v021vkeaUXHHJhoj0KdPdPgwuhyv1BQ1j3/1WPjqWPrvV0G71n9v1M?=
- =?us-ascii?Q?zLOCwxR5q1Ceih97GFqBnV49xs7bNW3JH948dya+TYyTGePoxtemFha81BSi?=
- =?us-ascii?Q?pqAfXxskjmzwPwoZfbdY6nGz7O6Dkyt4kcVwuBxtYtqNfl2iyQ7BEjmoAyxJ?=
- =?us-ascii?Q?a3GqiMcxCWcKdamURN9GGulhTO3J8Q4Pl/Q39Z3g8z1eymMXWLgq8RRTJH4z?=
- =?us-ascii?Q?81XEcyhJo2M/O8i5Jp8xDG2F1RyzNb2+xYnQhwIGGYw0J+WZUeV2R2eqxPfl?=
- =?us-ascii?Q?s8aZA0jiQufeJSADInTqDUpeH5ToYNFE/yWGjxALELBMdQ3TwUQBdQ4Owuny?=
- =?us-ascii?Q?C7x0sTc+H3TaNs/QZazhy9URgEmmK+kbEkPEpv76p0vK2WDjpEE3ENtqbLse?=
- =?us-ascii?Q?59KDHMOXaViuUDBoYPGnRR4jSTfBv7aEXLPQGEGp0RplUZUpnHVd4cSB1oIH?=
- =?us-ascii?Q?aYJW5jz6QcdMPEZ7NoKSpzSUCUP8TNz4tzyTj+rQ1oL3HKKFDsHi7MbpHJnP?=
- =?us-ascii?Q?Jelbnvi/JMxSyTW0Zr7zFNLhkWwKY3/SpwwjoOfOEozurrhF1FW0KwP7gPB4?=
- =?us-ascii?Q?SecBuzw/pnttoJ+E1wBa0ryEMqIO4eFeWM4dGzxtjaX919PVwQef3yAArYtg?=
- =?us-ascii?Q?dlgXSW76DbHt2xWbfEQ2WIsojaB9+MtOG3MNcM6Mjqb7ivwnItaJix6dGelU?=
- =?us-ascii?Q?/O63bFvuEMBT13ETrSGwN+wOcL0fEAD8M4FOiAAj?=
+	=?us-ascii?Q?aHnbNJ4a++LTop6T8pDcdMoFNXjJLu8pWhsxVNWsO9Wvz5nQqpA3gify51MP?=
+ =?us-ascii?Q?q56wKN/NN4fug37zrBb5xt3Pb/rdiDddzVbbR+9Avcetrd6x1cZ9jF4c/NyB?=
+ =?us-ascii?Q?zheupKOPkCnEjs5vpgoSOVuQ4C1aZD2oHffRscB6pV1Wvrv0bEY0yhlDcXm9?=
+ =?us-ascii?Q?KIICYsW76w+uHxOJ/6urDUNpqpm7o8Vjwjm2FezRTymNdTNrQ11SZUoATkRO?=
+ =?us-ascii?Q?ewvfc1T7ykTzn4kYjiRIMhXoEAlfpoHqC6K5bKe4rF/VCVX6r/VFNmPTj7N4?=
+ =?us-ascii?Q?e5Wsn1bj4j9AWE5173g2JS4YqbuxtHSKVwrvZYq54FXsUI1MFyGdQyiLwUSj?=
+ =?us-ascii?Q?XfIx2dzt99lWPXnQUX3Bhf4DS62naIyd6vtAiizNby7mRxWIW95qCNKHWk8W?=
+ =?us-ascii?Q?k2pjzUHJOhOYSPHRUjse93PituFMgayWI6ksbYO+iiydB7bRps0MpK3tdfkD?=
+ =?us-ascii?Q?B/y/qmNTZ+74i47fmqPtGy4Ho4Vr26xEHvCX/2pW3j2dBCeNEKMH4+qc6QB6?=
+ =?us-ascii?Q?1IqLXiCg/S5LTLUu8B8P4GdEbNG+WYCtHwbo/Uf5z66kg32YHELH+s/KKXyv?=
+ =?us-ascii?Q?ka6y8KY32XPh6TdxU4UnPzCXiwcXascUH3rgrEXo/FHnwwSbaRA6E9gkr5Pa?=
+ =?us-ascii?Q?2Kh0XVGnCZwBx7I2s9Le46yQwdRjic++41frqR0ouGvNBRvjjQAq6aSozmiN?=
+ =?us-ascii?Q?qGgBU3Cdxzpazr/DzKyMS6p00tWVLeWXJxKpyyh+4qaXWkFv7KUxdXPSWWz+?=
+ =?us-ascii?Q?eO2StagAcCy1EIT9quihmg/8FE++j/8kRmbbcyyUNAXK8WsN4Mme1TKZJEej?=
+ =?us-ascii?Q?aMjcHLlrvC/bGECDj6LH3Dp/CS4ISR+PBHYBAyqqCth1bdX0pLYQViOZCaVq?=
+ =?us-ascii?Q?SJ/Tyvsr1RzPPLJjZefsrGALdlgp4CuCIA9asD6n+OlVFigwXiEP3QQphb4S?=
+ =?us-ascii?Q?tSQFQ+rvBGiWgHSw+8zJOMJ0gFlnaWcGG7iy/1nRgJ8jQW4uNE36/52Gg3BD?=
+ =?us-ascii?Q?niR+rQp4DVOWtcjHVpQE8GXXHZLStX2bH4+2nV2B9CYvBQ1C0UzUO8iqEP9P?=
+ =?us-ascii?Q?kdpc5/mPhQLxRiyxhiYOu8zT58t4MuyZgYyCYiAbtU7VOsDlLv0plZxF1S8w?=
+ =?us-ascii?Q?Fw3rJeRMpD5HqBtCBXCjNsJLX9xTIgOQUAr/JFqO78sDJ+WXW5O77xiebtCv?=
+ =?us-ascii?Q?epFHkDMG8yCpiZ6aunItiW9HNXYCzDoOKJnXOnbb9K70LefSm/e0gw/KMoSd?=
+ =?us-ascii?Q?VgwolgVOKpbAEsQazqwSBhMH+Vz1UUvmiSoF4z3T0KoYN8ARcKEZ876ZKGxb?=
+ =?us-ascii?Q?ISIZ4o0ZR93lUvdvpxvmZlHU+TndSANciXuVQPyMV9ScE0I3yKGJqg43d8QL?=
+ =?us-ascii?Q?dvdp9fc5C3ya/+G8rdbldt33WMWmVX26CT8U/JanQpRS+HrwxG7/iu8CdTwZ?=
+ =?us-ascii?Q?ZHksQe4tlV3DSxAf7qqpT8n3ZSYhQ0E1SnofIKZASruCWMvaMZYhkKAHTuBK?=
+ =?us-ascii?Q?Oxf1nS94fd1BWs4sOPqY0Mj7zWZGnvXg85TFqljHKkyuHlg3kFF0aLfrYB+3?=
+ =?us-ascii?Q?yNLqtn6lCHyVjd21vOx9sXUIr9fIZiCzHIid1x4o?=
 X-OriginatorOrg: kvaser.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6387b7aa-5fb8-401a-1329-08dc99e57705
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c5d1960-9575-4947-0207-08dc99e57762
 X-MS-Exchange-CrossTenant-AuthSource: AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2024 15:50:00.5030
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2024 15:50:01.1040
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 73c42141-e364-4232-a80b-d96bd34367f3
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +wAPwQ+eBDOlXxSgaaryfC93hTT6aArcIKMyc34m95OxbEDTMcQoPblzafalu0Fa07EI1ah4L89xBvUEP6ouGA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: WaHJYeiIf8Amx16xYqt9Pb8EFy1Hz0zyZk+KSieYiICiROItaTfcTQzygJ6impK7ZI/M9pGiX7xRM6nJU+EOQw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P193MB0519
 
-Set hardware timestamp on transmitted packets.
+Add, struct leaf_cmd_tx_acknowledge, for Tx ACK commands received from leaf
+devices (M32C and leafimx28).
 
 Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 ---
 Changes in v2:
   - No changes
 
- drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-index f102f9de7d16..3764b263add3 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-@@ -10,7 +10,6 @@
-  *  - Transition from CAN_STATE_ERROR_WARNING to CAN_STATE_ERROR_ACTIVE is only
-  *    reported after a call to do_get_berr_counter(), since firmware does not
-  *    distinguish between ERROR_WARNING and ERROR_ACTIVE.
-- *  - Hardware timestamps are not set for CAN Tx frames.
-  */
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+index 23bd7574b1c7..70511e151a3b 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@ -235,6 +235,13 @@ struct kvaser_cmd_tx_acknowledge_header {
+ 	u8 tid;
+ } __packed;
  
- #include <linux/completion.h>
-@@ -1187,6 +1186,7 @@ static void kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
- 	bool one_shot_fail = false;
- 	bool is_err_frame = false;
- 	u16 transid = kvaser_usb_hydra_get_cmd_transid(cmd);
-+	struct sk_buff *skb;
++struct leaf_cmd_tx_acknowledge {
++	u8 channel;
++	u8 tid;
++	__le16 time[3];
++	u8 padding[2];
++} __packed;
++
+ struct leaf_cmd_can_error_event {
+ 	u8 tid;
+ 	u8 flags;
+@@ -347,6 +354,7 @@ struct kvaser_cmd {
+ 			struct leaf_cmd_error_event error_event;
+ 			struct kvaser_cmd_cap_req cap_req;
+ 			struct kvaser_cmd_cap_res cap_res;
++			struct leaf_cmd_tx_acknowledge tx_ack;
+ 		} __packed leaf;
  
- 	priv = kvaser_usb_hydra_net_priv_from_cmd(dev, cmd);
- 	if (!priv)
-@@ -1213,6 +1213,9 @@ static void kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
- 
- 	spin_lock_irqsave(&priv->tx_contexts_lock, irq_flags);
- 
-+	skb = priv->can.echo_skb[context->echo_index];
-+	if (skb)
-+		skb_hwtstamps(skb)->hwtstamp = kvaser_usb_hydra_ktime_from_cmd(dev->cfg, cmd);
- 	len = can_get_echo_skb(priv->netdev, context->echo_index, NULL);
- 	context->echo_index = dev->max_tx_urbs;
- 	--priv->active_tx_contexts;
+ 		union {
+@@ -370,7 +378,7 @@ static const u8 kvaser_usb_leaf_cmd_sizes_leaf[] = {
+ 	[CMD_START_CHIP_REPLY]		= kvaser_fsize(u.simple),
+ 	[CMD_STOP_CHIP_REPLY]		= kvaser_fsize(u.simple),
+ 	[CMD_GET_CARD_INFO_REPLY]	= kvaser_fsize(u.cardinfo),
+-	[CMD_TX_ACKNOWLEDGE]		= kvaser_fsize(u.tx_acknowledge_header),
++	[CMD_TX_ACKNOWLEDGE]		= kvaser_fsize(u.leaf.tx_ack),
+ 	[CMD_GET_SOFTWARE_INFO_REPLY]	= kvaser_fsize(u.leaf.softinfo),
+ 	[CMD_RX_STD_MESSAGE]		= kvaser_fsize(u.leaf.rx_can),
+ 	[CMD_RX_EXT_MESSAGE]		= kvaser_fsize(u.leaf.rx_can),
 -- 
 2.45.2
 
