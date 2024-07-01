@@ -1,73 +1,73 @@
-Return-Path: <linux-can+bounces-935-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-936-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2795D91E4AD
-	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2024 17:55:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF15B91E4B3
+	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2024 18:00:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F8C01C21420
-	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2024 15:55:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0D021C21835
+	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2024 16:00:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052A116D4C0;
-	Mon,  1 Jul 2024 15:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8731E502;
+	Mon,  1 Jul 2024 16:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jgiSfVDh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jWUsmUjI"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BC1126F1E
-	for <linux-can@vger.kernel.org>; Mon,  1 Jul 2024 15:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2F716D4E4
+	for <linux-can@vger.kernel.org>; Mon,  1 Jul 2024 16:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719849338; cv=none; b=XrFvDL6gt5JtjM7LS/VhwxsJasdU22DMVnATZIkF1kpmkuIUQPLFIEyNup9/jCVeE2rIDTaE6kI8EofBvCqBxxK/ha5XlUrF6Jabu+jWMOf6d9JpIsf70un0ic8nED2zmJdi2BS+sN8By1g5Ijd8jwGjv46nBxitcpRYKZfY6S4=
+	t=1719849631; cv=none; b=dcnF21/rfMhq61I8fI+xLvlkxsH9zlBhKoFqeBjmu2OU7Gw1nzWQaFCM9EO7En8sC5dxl6aIFguh+hIlswUDrb34ZUO8zF86rZzNALMvUldyqjjuuOa16Oz/TLVt/e3euaVfhTLpS4kjaN8lgvoyQowmvPudzRw9NBvDH1HwHRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719849338; c=relaxed/simple;
-	bh=zsSD3SVfS1QqK5Mt59E6q3eMcBkhVTs0QokNMxWo988=;
+	s=arc-20240116; t=1719849631; c=relaxed/simple;
+	bh=3a0m7ucIpj249yheZ181DCMViGrEXLaRdQMOp2u/PNI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HoMRPNa8S+YD8qCFMtLbNXuynfEYO7n9hybgQ6nyQLq6FW5Q3yecy2b0MngJrEzSj2mDinWMmMhM9KzL1D3iTPijegdRouSotEW1+nxe824aYHa3lyVC7ZTi8uAQRjknvSr4hHxmqWIvYBkXmbT1fTwfvE+Q/To5838DMAa4Avo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jgiSfVDh; arc=none smtp.client-ip=209.85.208.50
+	 In-Reply-To:Content-Type; b=KJPkK62MCRGNraNHnen7YSz3TtwMc3eizR2jL1X6FQa+ejNMVFx5VAZsZ8PsZZoDhBJO9QX55kC66M5GI3NTFGBQKEAQI6XOJf6Vwpc3E/9PfOnz2caBToKAi2gKfPgYoOZ/HivcCD6IUlPk/y0UOtnEbhB8XSv0yZxUOd49OAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jWUsmUjI; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57d4ee2aaabso557443a12.2
-        for <linux-can@vger.kernel.org>; Mon, 01 Jul 2024 08:55:37 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-52e764bb3fbso4079412e87.3
+        for <linux-can@vger.kernel.org>; Mon, 01 Jul 2024 09:00:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719849335; x=1720454135; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20230601; t=1719849628; x=1720454428; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VDj4a0O9LJQCCoD/N7IBSfmRCr7pE/U4d9jajdc7F4k=;
-        b=jgiSfVDhgoGVPsweIZOq2QTHUnPz08OR28tcjtma1H5Us4mkw/8liprUh09spF9bZN
-         NTH1ZTqBBLBNWKeSCkaocKAcQ81zr04CQWXyxk9vHjqC69t9s65N+HlVT2cf9hlufUZf
-         V+S+k1MzkwNUjRNBTK+QcYR5pK/gsGLzP3GiKLNeYboofYR3rscfZL0X12IYc7Anbrgj
-         mRQgxIAMYfWmSF4Z63Bjx/zPj67gIHPCHpO157eyXt8hzbyRF+k0+MInWb8o6DT+9nv7
-         JwJTlevv94HfuyCQLtgvjizoUHA20xFrGrOQ8TYQU6aWkmLTalMjSyhmTCj6NBfu2JiP
-         RBlw==
+        bh=SJUUfzRM2Mb3ZzxflGJ7G6RrwQ+Ssgh4zUH7i+AGYkg=;
+        b=jWUsmUjI5Hzk87GeyYabtzKQ62pFy78ZP0Hn2ZS6GV8GxReAraoZuEbp89OVl/tohR
+         v3spcvYVMBDWpZidVV3bLyAgq+tPbAEaQpPwMMfs/WK9q8hSpb2uk788yGNtQvoRpBFy
+         /fOiaE3hUi3pMzMcjAt2ED6frUeuseSTjy0F3kZAhw9wyFq23z2lrVz7xx5ptVuGA06V
+         NOjthVx4etKohl+qlOfv4E6PWEtw+oT+DQ3astodE1YiilnCD/plGc/XFk2MwTQuoevS
+         YCEEPVGv1kAjEk1W8UgClHUVywOUIKnPeBlcQrXzkaYETE90iNaiPPe0nPdyG0rPWhTD
+         IU+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719849335; x=1720454135;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1719849628; x=1720454428;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VDj4a0O9LJQCCoD/N7IBSfmRCr7pE/U4d9jajdc7F4k=;
-        b=PcOejjIrH4jHZX92LMzhVg0dBEUDmeE52vz/0uomP2JwNnobyd/kFr7kalF3eevCNY
-         UUXYXOXDOhaB/yRu6Xa/S7VGYMDDatQzP34Ge9Rs8cOG/H4ka+uN6pnK+rmWH4TbIKpK
-         TFkV0K0mw/8ZNq4tZIZNhQ3qfWV345Uug1sKSLV+0RKJsK7bSHcd/9oA+q4KykFixI8p
-         eo2QQfRkt9Qyip/g/hZV/h/UOaVZCCGCfTScB210NsyfrNs1yn3yu0Cbh0eHzz5HGZIy
-         C1pZkwoTp5w5sQHDnx0ZMw/rBk+PiJCqAUzhugdsjUxvw195epug6a5VHLySJYb3ZzDM
-         FVWg==
-X-Gm-Message-State: AOJu0YxgvDscw4jTxSUCSlhIo3+bZSwiOX/1QsgzkGjalOh5sys0KW+K
-	E0TrOWHm6vdYIVjFS6lKMJrxcVnxesIAYGODw9yjoZJwyl/B5MXtxSTmRA==
-X-Google-Smtp-Source: AGHT+IGgjv66Ry7GeuaOXOC5J4Bff6bUlczEGNWVw/z+IhCjaLmviv8ln0HC12Xt8B8/8VuTejaexg==
-X-Received: by 2002:a17:906:730b:b0:a6f:bae6:f56c with SMTP id a640c23a62f3a-a75142d853dmr505070866b.3.1719849335243;
-        Mon, 01 Jul 2024 08:55:35 -0700 (PDT)
+        bh=SJUUfzRM2Mb3ZzxflGJ7G6RrwQ+Ssgh4zUH7i+AGYkg=;
+        b=KXoOiqIb9z/rmAyqeBay3ZKuyDfq790yeBGM2XS3GO0uFmwfr7aIplVM7YH7nRdTA2
+         KY96JPuGy1sHvBaDCFAPXCVkMjyRRuL+TO/kHCynRohpPkZbMXoAycBfX4lOidPW1sZw
+         fTh8P3cMO64USVxL/v5JVRou8awnEFdNF2tSP46971Qoz6uJRcSD9LQ60nTqtFqWpXRu
+         KvqbxQjKF2TyBgZVKJBt5gNwSUc4N3aFA2gBHCIgz1kBFnAYUhGFzWGx6+/1dVGJrfkj
+         uDgesN8ewoLs2EtUe5BDn5e6K/WIEE0hEyc9VBXi/VJhfUKAe4BV49pQ8iCYh8C6NoUh
+         8k9g==
+X-Gm-Message-State: AOJu0YyXCfGY896MXEjrc5/yCBWx4sdLirUD1H3bfpqaUCaw+uBneHYZ
+	74yjjmq39LVIUjvNTJzuMKnGWoVhkpIO4hcYYUKZAwG54FHQtO8z
+X-Google-Smtp-Source: AGHT+IHaR2xmwO4mSkCxphmZP3jBjS0dU0AJprdusO4At723ISIKGcFVxtS8VR5p4PHSA+CFt7nCpg==
+X-Received: by 2002:a05:6512:6c7:b0:52c:dfa0:dca0 with SMTP id 2adb3069b0e04-52e826fb988mr4248349e87.43.1719849627888;
+        Mon, 01 Jul 2024 09:00:27 -0700 (PDT)
 Received: from [192.168.66.194] (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a72aaf6398csm343894466b.83.2024.07.01.08.55.34
+        by smtp.googlemail.com with ESMTPSA id 2adb3069b0e04-52e7ab3b263sm1451526e87.268.2024.07.01.09.00.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jul 2024 08:55:34 -0700 (PDT)
-Message-ID: <1564ee27-8216-ca3a-06b1-e8b7838d11fa@gmail.com>
-Date: Mon, 1 Jul 2024 17:55:32 +0200
+        Mon, 01 Jul 2024 09:00:27 -0700 (PDT)
+Message-ID: <104ad074-52fb-ceda-4634-e6f718c1313f@gmail.com>
+Date: Mon, 1 Jul 2024 18:00:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -76,111 +76,125 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH can-next 02/15] can: kvaser_usb: hydra: Add struct for Tx
- ACK commands
+Subject: Re: [PATCH can-next 10/15] can: kvaser_usb: leaf: Add structs for Tx
+ ACK and clock overflow commands
+Content-Language: en-US
 To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
  Jimmy Assarsson <extja@kvaser.com>
 Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
 References: <20240628195514.316895-1-extja@kvaser.com>
- <20240628195514.316895-3-extja@kvaser.com>
- <CAMZ6RqKSa-6KjvgfmN9eL7A=A65gMkYsRrnaF41Azhsc45FA2Q@mail.gmail.com>
-Content-Language: en-US
+ <20240628195514.316895-11-extja@kvaser.com>
+ <CAMZ6RqKqJX6eqogS2598BFm-AN1uOBbBGL+MkoJtR=-z379Q=w@mail.gmail.com>
 From: Jimmy Assarsson <jimmyassarsson@gmail.com>
-In-Reply-To: <CAMZ6RqKSa-6KjvgfmN9eL7A=A65gMkYsRrnaF41Azhsc45FA2Q@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKqJX6eqogS2598BFm-AN1uOBbBGL+MkoJtR=-z379Q=w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/29/24 11:31, Vincent MAILHOL wrote:
+On 6/29/24 11:55, Vincent MAILHOL wrote:
 > On Sat. 29 June 2024 at 04:56, Jimmy Assarsson <extja@kvaser.com> wrote:
->> Add, struct kvaser_cmd_tx_ack, for standard Tx ACK commands.
->>
->> Expand kvaser_usb_hydra_ktime_from_cmd() to extract timestamps from both
->> standard and extended Tx ACK commands. Unsupported commands are silently
->> ignored, and 0 is returned.
+>> For usbcan devices (M16C), add struct usbcan_cmd_tx_acknowledge for Tx ACK
+>> commands and struct usbcan_cmd_clk_overflow_event for clock overflow event
+>> commands.
 >>
 >> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 >> ---
->>   .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 23 ++++++++++++++++---
->>   1 file changed, 20 insertions(+), 3 deletions(-)
+>>   .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 22 +++++++++++++++----
+>>   1 file changed, 18 insertions(+), 4 deletions(-)
 >>
->> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
->> index a971fcb6158a..0be1cfe8d964 100644
->> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
->> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
->> @@ -261,6 +261,15 @@ struct kvaser_cmd_tx_can {
->>          u8 reserved[11];
+>> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+>> index c0a8713d8cf2..98bd6cfca2ca 100644
+>> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+>> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+>> @@ -242,6 +242,13 @@ struct leaf_cmd_tx_acknowledge {
+>>          u8 padding[2];
 >>   } __packed;
 >>
->> +struct kvaser_cmd_tx_ack {
->> +       __le32 id;
->> +       u8 data[8];
->> +       u8 dlc;
->> +       u8 flags;
->> +       __le16 timestamp[3];
->> +       u8 reserved0[8];
+>> +struct usbcan_cmd_tx_acknowledge {
+>> +       u8 channel;
+>> +       u8 tid;
+>> +       __le16 time;
+>> +       u8 padding[2];
 >> +} __packed;
 >> +
->>   struct kvaser_cmd_header {
->>          u8 cmd_no;
->>          /* The destination HE address is stored in 0..5 of he_addr.
->> @@ -297,6 +306,7 @@ struct kvaser_cmd {
->>
->>                  struct kvaser_cmd_rx_can rx_can;
->>                  struct kvaser_cmd_tx_can tx_can;
->> +               struct kvaser_cmd_tx_ack tx_ack;
->>          } __packed;
+>>   struct leaf_cmd_can_error_event {
+>>          u8 tid;
+>>          u8 flags;
+>> @@ -288,6 +295,12 @@ struct usbcan_cmd_error_event {
+>>          __le16 padding;
 >>   } __packed;
 >>
->> @@ -525,16 +535,23 @@ kvaser_usb_hydra_net_priv_from_cmd(const struct kvaser_usb *dev,
->>   static ktime_t kvaser_usb_hydra_ktime_from_cmd(const struct kvaser_usb_dev_cfg *cfg,
->>                                                 const struct kvaser_cmd *cmd)
->>   {
->> -       u64 ticks;
->> +       u64 ticks = 0;
+>> +struct usbcan_cmd_clk_overflow_event {
+>> +       u8 tid;
+>> +       u8 padding;
+>> +       __le32 time;
+>> +} __packed;
+>> +
+>>   struct kvaser_cmd_ctrl_mode {
+>>          u8 tid;
+>>          u8 channel;
+>> @@ -363,6 +376,8 @@ struct kvaser_cmd {
+>>                          struct usbcan_cmd_chip_state_event chip_state_event;
+>>                          struct usbcan_cmd_can_error_event can_error_event;
+>>                          struct usbcan_cmd_error_event error_event;
+>> +                       struct usbcan_cmd_tx_acknowledge tx_ack;
+>> +                       struct usbcan_cmd_clk_overflow_event clk_overflow_event;
+>>                  } __packed usbcan;
 >>
->>          if (cmd->header.cmd_no == CMD_EXTENDED) {
->>                  struct kvaser_cmd_ext *cmd_ext = (struct kvaser_cmd_ext *)cmd;
+>>                  struct kvaser_cmd_tx_can tx_can;
+>> @@ -396,15 +411,14 @@ static const u8 kvaser_usb_leaf_cmd_sizes_usbcan[] = {
+>>          [CMD_START_CHIP_REPLY]          = kvaser_fsize(u.simple),
+>>          [CMD_STOP_CHIP_REPLY]           = kvaser_fsize(u.simple),
+>>          [CMD_GET_CARD_INFO_REPLY]       = kvaser_fsize(u.cardinfo),
+>> -       [CMD_TX_ACKNOWLEDGE]            = kvaser_fsize(u.tx_acknowledge_header),
+>> +       [CMD_TX_ACKNOWLEDGE]            = kvaser_fsize(u.usbcan.tx_ack),
+>>          [CMD_GET_SOFTWARE_INFO_REPLY]   = kvaser_fsize(u.usbcan.softinfo),
+>>          [CMD_RX_STD_MESSAGE]            = kvaser_fsize(u.usbcan.rx_can),
+>>          [CMD_RX_EXT_MESSAGE]            = kvaser_fsize(u.usbcan.rx_can),
+>>          [CMD_CHIP_STATE_EVENT]          = kvaser_fsize(u.usbcan.chip_state_event),
+>>          [CMD_CAN_ERROR_EVENT]           = kvaser_fsize(u.usbcan.can_error_event),
+>>          [CMD_ERROR_EVENT]               = kvaser_fsize(u.usbcan.error_event),
+>> -       /* ignored events: */
+>> -       [CMD_USBCAN_CLOCK_OVERFLOW_EVENT] = CMD_SIZE_ANY,
+>> +       [CMD_USBCAN_CLOCK_OVERFLOW_EVENT] = kvaser_fsize(u.usbcan.clk_overflow_event),
+>>   };
 >>
->> -               ticks = le64_to_cpu(cmd_ext->rx_can.timestamp);
->> -       } else {
->> +               if (cmd_ext->cmd_no_ext == CMD_RX_MESSAGE_FD)
->> +                       ticks = le64_to_cpu(cmd_ext->rx_can.timestamp);
->> +               else if (cmd_ext->cmd_no_ext == CMD_TX_ACKNOWLEDGE_FD)
->> +                       ticks = le64_to_cpu(cmd_ext->tx_ack.timestamp);
->> +       } else if (cmd->header.cmd_no == CMD_RX_MESSAGE) {
->>                  ticks = le16_to_cpu(cmd->rx_can.timestamp[0]);
->>                  ticks += (u64)(le16_to_cpu(cmd->rx_can.timestamp[1])) << 16;
->>                  ticks += (u64)(le16_to_cpu(cmd->rx_can.timestamp[2])) << 32;
->> +       } else if (cmd->header.cmd_no == CMD_TX_ACKNOWLEDGE) {
->> +               ticks = le16_to_cpu(cmd->tx_ack.timestamp[0]);
->> +               ticks += (u64)(le16_to_cpu(cmd->tx_ack.timestamp[1])) << 16;
->> +               ticks += (u64)(le16_to_cpu(cmd->tx_ack.timestamp[2])) << 32;
+>>   /* Summary of a kvaser error event, for a unified Leaf/Usbcan error
+>> @@ -1608,12 +1622,12 @@ static void kvaser_usb_leaf_handle_command(const struct kvaser_usb *dev,
+>>                  kvaser_usb_leaf_get_busparams_reply(dev, cmd);
+>>                  break;
+>>
+>> -       /* Ignored commands */
+>>          case CMD_USBCAN_CLOCK_OVERFLOW_EVENT:
+>>                  if (dev->driver_info->family != KVASER_USBCAN)
+>>                          goto warn;
+>>                  break;
 > 
-> Nitpick: the conversion of teh timestamp[3] array to the u64 tick is
-> now duplicated. Maybe worth adding a
+> I did not understand this part. If the overflow event is now handled,
+> why do you still have the
 > 
->    kvaser_usb_hydra_convert_timestamp_to_ktime(__le16 *timestamp, u64 ticks);
+>    goto warn
 > 
-> helper function to factorize this and the ns_to_ktime() all together?
-> 
-> If you do so, it is better to add the new patch before this one.
+> ?
 
-Hi Vincent,
+The warning is for non-usbcan device (leaf), where this command is unexpected.
 
-I'll fix this in v2. I've added two new helper functions kvaser_usb_timestamp{48,64}_to_ktime(),
-that will convert from 48-bit and 64-bit device timestamps to to ktime [1]
+> Shouldn't you dispatch the command here?
 
-Thanks for the comments!
+It's dispatched in the succeeding patch
+can: kvaser_usb: leaf: Store MSB of timestamp [1]
+I'll fix this in v2. I keep the "ignored events/commands" comments in this patch,
+and move them to the proper patch.
 
 Regards,
-jimmy
+/jimmy
 
-[1] https://lore.kernel.org/linux-can/20240701154936.92633-2-extja@kvaser.com/T/#u
+[1] https://lore.kernel.org/linux-can/20240701154936.92633-12-extja@kvaser.com/T/#u
 
-> 
->>          }
->>
->>          return ns_to_ktime(div_u64(ticks * 1000, cfg->timestamp_freq));
+  
+>> +       /* Ignored commands */
+>>          case CMD_FLUSH_QUEUE_REPLY:
+>>                  if (dev->driver_info->family != KVASER_LEAF)
+>>                          goto warn;
 >> --
 >> 2.45.2
 >>
