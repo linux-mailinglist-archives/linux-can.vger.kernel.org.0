@@ -1,123 +1,181 @@
-Return-Path: <linux-can+bounces-939-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-940-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3853291ED6C
-	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2024 05:20:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CEF091EDF2
+	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2024 06:48:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE4001F22E38
-	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2024 03:20:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56ACE1C21E26
+	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2024 04:48:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF10F225CF;
-	Tue,  2 Jul 2024 03:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HI+B9hUU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 479F618E0E;
+	Tue,  2 Jul 2024 04:48:11 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DD314293;
-	Tue,  2 Jul 2024 03:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433E13211
+	for <linux-can@vger.kernel.org>; Tue,  2 Jul 2024 04:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719890431; cv=none; b=UYhkuwbV/1zIJXNkCTa3mZHSoLwlxc5GLDJ5S+vXFdbrN2XIN4Giw+C2WZYXLWrBM0hV45YCEddnCfXjMM9YDR6p84nqzID60+UJixFWWPhRxqAT+sOgkyfOCo+XIpCHFP5U7xg4blTfTWORcKVTr9iY6Jx/xrSqNB7xdl+yRDA=
+	t=1719895691; cv=none; b=F4sUlpxUNi+qcakoMNIlrCBJqWWFTTSOPluLMXmR/UOrcLTon5xLAPIbNg2k7wYvgJIy3sh2WKAlSqP0h/Hb5KF/Fl1TOes1PzFQxT0FXRsIi1/cGEmvCKt6uonwLjaMYJQr1ZxWlqZZSZKoY71JDXBZx/r93t7LLiVzaOaMiT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719890431; c=relaxed/simple;
-	bh=8SwA2nIhj41tQzxjrQG5hMHOvRhYR1wjkAviDns83Hs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=mOS+z2mdHkdwP/FVXUtrpmwe9opfELs4F7LS4oMRARNfSaKmTi2xgBq+b4kKJTjWBtGOFCc4za5EGr2SCbB+shLHFVYVmkflVXixtAIYv/AitsvhhrDRD2U58+BKPFej5YuYtrAGMquGt6GrKszsJs8qblfzzLLblHvUfytQp2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HI+B9hUU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 70DC8C4AF0A;
-	Tue,  2 Jul 2024 03:20:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719890431;
-	bh=8SwA2nIhj41tQzxjrQG5hMHOvRhYR1wjkAviDns83Hs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=HI+B9hUUXoNgJk7/C2nWFV7AM7Skrusk/ybvSaH9l7O57nE4oWA4m/o742EJ89wJi
-	 eIFl4RGBRxx+iiPvZ4g8+v/6Gc4lxRGosxZpHuj2GKmVHD1zBdtOHCmtbFPW9aygvE
-	 iI+oLJsTW07J12TlUUTB/EqICqZacJPVnhi/LU3l6sTwqyR7wC+eFcpNCc4XG4aL05
-	 1gGaUOk6E9hFdVxBGHVOdjdV1FuLWJkzY4h8ouMfTmME+7KvmCcIdE2VxTVVm8zZB4
-	 cyK1P1cdTiWnZ2q0bRyoMvmjixuPNFuGsFDkBAnn2Q9HbiRsbXJKK8Qb0PFQ/Vni9e
-	 tECJMyijz2GhA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6659AC43446;
-	Tue,  2 Jul 2024 03:20:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1719895691; c=relaxed/simple;
+	bh=mFqjqun7Vo/xTI8k+m1nyv85ofRGYrvGbXZoBLNCwfk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Hn0ahEditKyhqZY4OZjgs1cCgpWbazuSPfPB1eHgtZtAzraRVwYW1AQcto/qqXnwC7AHMk25slOK4bZI2oaR7V6aJA/yLmmV3P3e9ppYk5arSJ40IWgL4lDxgKe74lzi2FSIAs7cTGHcADe5L4JWEX4XL2GJbZU0GpOPqZNsByU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2c2c6b27428so2130223a91.3
+        for <linux-can@vger.kernel.org>; Mon, 01 Jul 2024 21:48:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719895688; x=1720500488;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A1E48QhkycDdi4aw1isIaxZQUmVXDAngOaeA2YDZ+pQ=;
+        b=X8an+UX7l+dWKBx1nX+3xBgolboV5wxH0Xpt+Y5ZY+3gD1Q27wsVzZOsf+W+lw7neD
+         B9gtwMzmwY0UnWwVllLFUafitE2HtD/u/98qG0PA+PcCutQe7pHaqWBnj3D0qcfMlSmU
+         Bno0tnIK9RRlD7aEXB4LxWqBhgqbg8Ie92RDzSbgZzqW4umaDIuLyUo2Ga9D9L068txp
+         yzNqTPDtbwiXgIEy1mRVdDCmJylipYwPGNGYkx91ualWkRFgjBu6DuGjZwd5gDdTg2dR
+         ZATMD1V36JP60s1L+SVDTbeQ1sOU0K8x/dANWbqSHz5P0A27QQVI4TPshohkgQT3Oe/d
+         nP1Q==
+X-Gm-Message-State: AOJu0YwFFHgQrYv79QCEHdDgRv2rV6irBgu+oR2TYnlV2g04xChhA101
+	MEaMIEpXgScyRHhK7uwrTGzaJFV3P41S/1LtOAA8cyVqhvO6ex62/sEt29EXJO/oRxDifRlmGHU
+	CrPhj9k60CZnpC6a5u06BcJaL0mg=
+X-Google-Smtp-Source: AGHT+IExmmniXYfpQsHsA8o5oPfHsgmchfLO7aBkPWXhKovpaudOUo/R9/tYf/KCUDbd9JlCRg9q5aExqnYXF/iHGVs=
+X-Received: by 2002:a17:90a:ac8:b0:2c5:12b5:b816 with SMTP id
+ 98e67ed59e1d1-2c93d77cf94mr4141956a91.48.1719895688317; Mon, 01 Jul 2024
+ 21:48:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 01/14] can: rcar_canfd: Simplify clock handling
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171989043141.2079.6249590029135979872.git-patchwork-notify@kernel.org>
-Date: Tue, 02 Jul 2024 03:20:31 +0000
-References: <20240629114017.1080160-2-mkl@pengutronix.de>
-In-Reply-To: <20240629114017.1080160-2-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de, geert+renesas@glider.be,
- wsa+renesas@sang-engineering.com, mailhol.vincent@wanadoo.fr
+References: <20240701154936.92633-1-extja@kvaser.com> <20240701154936.92633-2-extja@kvaser.com>
+In-Reply-To: <20240701154936.92633-2-extja@kvaser.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Tue, 2 Jul 2024 13:47:56 +0900
+Message-ID: <CAMZ6RqJFBooOgvrq4XmQDf_dFKMTe1hDnWLRObKEWA2t-U5+uQ@mail.gmail.com>
+Subject: Re: [PATCH can-next v2 01/15] can: kvaser_usb: Add helper functions
+ to convert device timestamp into ktime
+To: Jimmy Assarsson <extja@kvaser.com>
+Cc: linux-can@vger.kernel.org, Jimmy Assarsson <jimmyassarsson@gmail.com>, 
+	Marc Kleine-Budde <mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+On Tue. 2 juil. 2024 at 00:50, Jimmy Assarsson <extja@kvaser.com> wrote:
+> Add helper function kvaser_usb_ticks_to_ktime() that converts from
+> device ticks to ktime.
+> And kvaser_usb_timestamp{48,64}_to_ktime() that converts from device
+> 48-bit or 64-bit timestamp, to ktime.
+>
+> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+> ---
+> Changes in v2:
+>   - New in v2. Replaces
+>     can: kvaser_usb: Add function kvaser_usb_ticks_to_ktime()
+>   - Add two more helper functions, kvaser_usb_timestamp{48,64}_to_ktime()
+>     for converting timestamps, suggested by Vincent MAILHOL [2][3]
+> [2] https://lore.kernel.org/linux-can/CAMZ6RqKSa-6KjvgfmN9eL7A=A65gMkYsRrnaF41Azhsc45FA2Q@mail.gmail.com/
+> [3] https://lore.kernel.org/linux-can/CAMZ6Rq+Xd7+th=dKV+vrqzRtS+GY-xq2UziH1CURcQ3HxEXMqQ@mail.gmail.com/
+>
+>  drivers/net/can/usb/kvaser_usb/kvaser_usb.h   | 24 +++++++++++++++++++
+>  .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 10 ++++----
+>  2 files changed, 28 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+> index ff10b3790d84..4256a0caae20 100644
+> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+> @@ -22,6 +22,8 @@
+>   */
+>
+>  #include <linux/completion.h>
+> +#include <linux/ktime.h>
+> +#include <linux/math64.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/types.h>
+>  #include <linux/usb.h>
+> @@ -216,4 +218,26 @@ int kvaser_usb_can_rx_over_error(struct net_device *netdev);
+>
+>  extern const struct can_bittiming_const kvaser_usb_flexc_bittiming_const;
+>
+> +static inline ktime_t kvaser_usb_ticks_to_ktime(const struct kvaser_usb_dev_cfg *cfg,
+> +                                               u64 ticks)
+> +{
+> +       return ns_to_ktime(div_u64(ticks * 1000, cfg->timestamp_freq));
+> +}
+> +
+> +static inline ktime_t kvaser_usb_timestamp48_to_ktime(const struct kvaser_usb_dev_cfg *cfg,
+> +                                                     const __le16 *timestamp)
+> +{
+> +       u64 ticks = le16_to_cpu(timestamp[0]) |
+> +                   (u64)(le16_to_cpu(timestamp[1])) << 16 |
+> +                   (u64)(le16_to_cpu(timestamp[2])) << 32;
+> +
+> +       return kvaser_usb_ticks_to_ktime(cfg, ticks);
+> +}
+> +
+> +static inline ktime_t kvaser_usb_timestamp64_to_ktime(const struct kvaser_usb_dev_cfg *cfg,
+> +                                                     __le64 timestamp)
+> +{
+> +       return kvaser_usb_ticks_to_ktime(cfg, le64_to_cpu(timestamp));
+> +}
+> +
+>  #endif /* KVASER_USB_H */
+> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+> index c7ba768dfe17..ad1c6101a0cd 100644
+> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+> @@ -526,19 +526,17 @@ static ktime_t
+>  kvaser_usb_hydra_ktime_from_rx_cmd(const struct kvaser_usb_dev_cfg *cfg,
+>                                    const struct kvaser_cmd *cmd)
+>  {
+> -       u64 ticks;
+> +       ktime_t hwtstamp = 0;
+>
+>         if (cmd->header.cmd_no == CMD_EXTENDED) {
+>                 struct kvaser_cmd_ext *cmd_ext = (struct kvaser_cmd_ext *)cmd;
+>
+> -               ticks = le64_to_cpu(cmd_ext->rx_can.timestamp);
+> +               hwtstamp = kvaser_usb_timestamp64_to_ktime(cfg, cmd_ext->rx_can.timestamp);
+>         } else {
+> -               ticks = le16_to_cpu(cmd->rx_can.timestamp[0]);
+> -               ticks += (u64)(le16_to_cpu(cmd->rx_can.timestamp[1])) << 16;
+> -               ticks += (u64)(le16_to_cpu(cmd->rx_can.timestamp[2])) << 32;
+> +               hwtstamp = kvaser_usb_timestamp48_to_ktime(cfg, cmd->rx_can.timestamp);
+>         }
+>
+> -       return ns_to_ktime(div_u64(ticks * 1000, cfg->timestamp_freq));
+> +       return hwtstamp;
+>  }
 
-This series was applied to netdev/net-next.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+Nitpick: this can slightly be simplified by dropping the hwtstamp
+local variable:
 
-On Sat, 29 Jun 2024 13:36:15 +0200 you wrote:
-> From: Geert Uytterhoeven <geert+renesas@glider.be>
-> 
-> The main CAN clock is either the internal CANFD clock, or the external
-> CAN clock.  Hence replace the two-valued enum by a simple boolean flag.
-> Consolidate all CANFD clock handling inside a single branch.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Link: https://lore.kernel.org/all/2cf38c10b83c8e5c04d68b17a930b6d9dbf66f40.1716973640.git.geert+renesas@glider.be
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> 
-> [...]
+  kvaser_usb_hydra_ktime_from_rx_cmd(const struct kvaser_usb_dev_cfg *cfg,
+                                     const struct kvaser_cmd *cmd)
+  {
+         if (cmd->header.cmd_no == CMD_EXTENDED) {
+                 struct kvaser_cmd_ext *cmd_ext = (struct kvaser_cmd_ext *)cmd;
 
-Here is the summary with links:
-  - [net-next,01/14] can: rcar_canfd: Simplify clock handling
-    https://git.kernel.org/netdev/net-next/c/dd20d16dae83
-  - [net-next,02/14] can: rcar_canfd: Improve printing of global operational state
-    https://git.kernel.org/netdev/net-next/c/0c1d0a69c5e7
-  - [net-next,03/14] can: rcar_canfd: Remove superfluous parentheses in address calculations
-    https://git.kernel.org/netdev/net-next/c/f9a83965d40e
-  - [net-next,04/14] can: m_can: Constify struct m_can_ops
-    https://git.kernel.org/netdev/net-next/c/62d73261a0cf
-  - [net-next,05/14] can: gs_usb: add VID/PID for Xylanta SAINT3 product family
-    https://git.kernel.org/netdev/net-next/c/69e2326a21ef
-  - [net-next,06/14] can: mcp251xfd: properly indent labels
-    https://git.kernel.org/netdev/net-next/c/51b2a7216122
-  - [net-next,07/14] can: mcp251xfd: update errata references
-    https://git.kernel.org/netdev/net-next/c/71c45e6e0b42
-  - [net-next,08/14] can: mcp251xfd: move mcp251xfd_timestamp_start()/stop() into mcp251xfd_chip_start/stop()
-    https://git.kernel.org/netdev/net-next/c/a7801540f325
-  - [net-next,09/14] can: mcp251xfd: clarify the meaning of timestamp
-    https://git.kernel.org/netdev/net-next/c/e793c724b48c
-  - [net-next,10/14] can: mcp251xfd: mcp251xfd_handle_rxif_ring_uinc(): factor out in separate function
-    https://git.kernel.org/netdev/net-next/c/d49184b7b585
-  - [net-next,11/14] can: mcp251xfd: rx: prepare to workaround broken RX FIFO head index erratum
-    https://git.kernel.org/netdev/net-next/c/85505e585637
-  - [net-next,12/14] can: mcp251xfd: rx: add workaround for erratum DS80000789E 6 of mcp2518fd
-    https://git.kernel.org/netdev/net-next/c/24436be590c6
-  - [net-next,13/14] can: mcp251xfd: tef: prepare to workaround broken TEF FIFO tail index erratum
-    https://git.kernel.org/netdev/net-next/c/b8e0ddd36ce9
-  - [net-next,14/14] can: mcp251xfd: tef: update workaround for erratum DS80000789E 6 of mcp2518fd
-    https://git.kernel.org/netdev/net-next/c/3a0a88fcbaf9
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+                 return kvaser_usb_timestamp64_to_ktime(cfg,
+cmd_ext->rx_can.timestamp);
+         } else {
+                 return kvaser_usb_timestamp48_to_ktime(cfg,
+cmd->rx_can.timestamp);
+         }
+  }
 
 
+>  static int kvaser_usb_hydra_send_simple_cmd(struct kvaser_usb *dev,
+> --
+> 2.45.2
+>
+>
 
