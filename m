@@ -1,52 +1,73 @@
-Return-Path: <linux-can+bounces-944-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-945-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF3D2923B6A
-	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2024 12:30:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D768C924871
+	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2024 21:37:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96F961F22775
-	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2024 10:30:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C9CA28A66E
+	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2024 19:37:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BF9782D7F;
-	Tue,  2 Jul 2024 10:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C212F1CCCDA;
+	Tue,  2 Jul 2024 19:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="YN8Aq/Fz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YhRVuTzl"
 X-Original-To: linux-can@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00CA17BBB;
-	Tue,  2 Jul 2024 10:30:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B016E5ED
+	for <linux-can@vger.kernel.org>; Tue,  2 Jul 2024 19:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719916222; cv=none; b=o/rWr186LgrEkrTT9E3jiBWFGPS8b8KzV2t4ZWNw9xsp1uH3LRWLY+zVbOxlpWwYZRoY5UwZzSwmvv0ZKwNRoVID8w5snM7slWdEr19bQ5GLOCoFRTnLrvlRP8LvcsAr/h65Hlbnt9tB/DaC/l/ZHM49NlSQjdl0wJ+m2tzfLqA=
+	t=1719949043; cv=none; b=A/dKo36LK+RItCsm/hYK40RafePx9AGcQgDpKFI+QQs+TyProh7c/lboJU1igZDqBVISWsd9CbVsg2U0ToQtBKj4dAcU3f5vOzpt8BlHUuewVlS8cSjHiXorbIw2mtGa3iL98RLyCkdbFGDeFSPaB5oEA+IgvjOKrY6ZiJzob7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719916222; c=relaxed/simple;
-	bh=1B+3GT30ZinzSkjOdYycyY46lYkUK/OOoaS5AOUtjso=;
+	s=arc-20240116; t=1719949043; c=relaxed/simple;
+	bh=SyRR4GocI2hve7hGU/rFRjfaevKAtJ9bpLqr5+r0qS0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QX6Euwz2gy98HWoZaYMh8QInyHYWldaSke4eJinP70qwCGDr591mcIfUxk4OqJeeIy6crrjr+TNzQxU7khlzoIsWFVn7eSBQloHhCxczwfMubYGDNpQk21kmLQj7ZnYULz/GRnzJiM3dflF6ZD0KXR3azLmRAUnfnVkyrBjfKC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=YN8Aq/Fz; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
-	Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
-	In-Reply-To:References; bh=0qf92CZPlH8uBrIdQYOCZH5zn+O7ufKU3N+Njh8N6FI=;
-	t=1719916219; x=1720348219; b=YN8Aq/Fz/3/68OHbPf+/Su+eX0aoDB9+l08kXea9Zte/ctC
-	09sHBDuHGIwThUfW7EsKADke7wy7v3ZhJa4MVTEnl7cwDPQx6q89NQx047kaQAKwc12f7KT+HQ9JU
-	s3BTXlpC0A4Q7TEUozJs5/McZpps0l7UUv0j6mLbIQvP3tzhH4CHu36mxrwuj+vqF+W8xIlKlrcHM
-	jfdlaMRvnU0oOhF8+C90cIvv5jeJmw3qswm5n5draI/JWiEzPHouhB2w0iTYl9AkqiP31llRy2Mmx
-	ScqpERsJiWKvY2niAS213K8jJy7kHUa+ETd+zsDZquZMEw4lK0p5PSP0FoOXL6UQ==;
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1sOam1-000827-BY; Tue, 02 Jul 2024 12:30:09 +0200
-Message-ID: <c7bca2f0-1006-45c1-a13d-6d8f19357533@leemhuis.info>
-Date: Tue, 2 Jul 2024 12:30:08 +0200
+	 In-Reply-To:Content-Type; b=lCRfbvdZ6KEfILAUI1leIOwFd5zF4tSHDCH9feI3xsqyBQhwORcVKt1NtYcfl/r/MPtcmx/UEbEVUksk+mHkU4oKXhND4VJ3r/Gm/cpy8q3Ovg7tflemNQNUT39Rnlo0IUabf5SKVcAADgZBiUJPGF+DMa54xbOkG9y2wtKfcbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YhRVuTzl; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-52e9380add2so1049261e87.3
+        for <linux-can@vger.kernel.org>; Tue, 02 Jul 2024 12:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719949040; x=1720553840; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZVU9kPt4ZOYL/HD3K9WK0yJf2QlU/4CnE3YcD3nW7Bg=;
+        b=YhRVuTzlEFmDA6ffSrboptiWP5trYNAgh+mAbsX1wol5+ZJ6RgXKUOrKoB3r4OgjUD
+         gdmCsLsIY2IBLSzMOhoVwI7Ux8WUCDXxGofcF94g5YhTLQnR7mwsgKSXh8Xnv9xSn/kg
+         c9x28Qmzgdqlt7p7rN9OR5wpXbtB8DB8RYW60CvZ7kUH25OQ/nF5zdHF8s2Yz3hRcUgr
+         HwKdU2xN1ShCDuB+KQbQ8tRGOfhj+QXgueR85G1w5eVbS2XYaq18JJtaobwDHCRtYTKE
+         z6YF49jyFcBMnIFIU+sIgzAf6yWw4Bw2AdGBC0Nc/JxCSiDKyFjIk6ZXxbCC5YTi3MHC
+         pLTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719949040; x=1720553840;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZVU9kPt4ZOYL/HD3K9WK0yJf2QlU/4CnE3YcD3nW7Bg=;
+        b=nih/2tv0ta1Dj/LUuIo2Q0VqEp4lo0KELV3pEHmStWDckIDeVUsVf+1IaaP4a7PcJ1
+         wqpbQdVoYTkMF1B042jbhIMX/gtY817htjeZaPUuu+fxm/Qi4idt0e2OjfDLUw0igoFM
+         uzTqb8WfxPOl1CH846HeX6O0rT04EOrBYqwnR/SiBI34jFvvUObG0iZu9iBzpqlFDsae
+         zoPtRIk4jOV8xC0lB0Ap9zhOu/XLLhXB2QN6bwK7wWg0XUEVslOk9030Y2GNWSPdeve6
+         pqcHSdYcuWT3Wa1YrA0mJScUd/l8FOIC373nW/YU9hvooEtqXfo/niN5AnNxjI6k4vUS
+         acLA==
+X-Gm-Message-State: AOJu0Yz6eA4t5OtvpuzsDioEjDKsZEkjHAPVydyfTXI+R7BwD4tnI3YG
+	xBzrPif0laOnOgKR5o43txwSX/Y8t2uD2cv7T0hqqIWiA8Trza24
+X-Google-Smtp-Source: AGHT+IF/Ob8T/1J5+Gm+6ovbVbNWt0rw2atHQmMMY2+mjZVKX3K6zW0bkEhql72xyVAwfCUGWLVxDw==
+X-Received: by 2002:a05:6512:124a:b0:529:b718:8d00 with SMTP id 2adb3069b0e04-52e8264b5dfmr8947653e87.8.1719949040032;
+        Tue, 02 Jul 2024 12:37:20 -0700 (PDT)
+Received: from [192.168.1.94] (78-70-104-208-no600.tbcn.telia.com. [78.70.104.208])
+        by smtp.googlemail.com with ESMTPSA id 2adb3069b0e04-52e7ab3b3d3sm1899518e87.281.2024.07.02.12.37.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Jul 2024 12:37:19 -0700 (PDT)
+Message-ID: <feb71e43-8cb9-439d-a06e-42d6f83c1336@gmail.com>
+Date: Tue, 2 Jul 2024 21:37:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -54,100 +75,127 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Kernel hang caused by commit "can: m_can: Start/Cancel polling
- timer together with interrupts"
-To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
- Linux regressions mailing list <regressions@lists.linux.dev>,
- Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
- Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Tony Lindgren <tony@atomide.com>, Judith Mendez <jm@ti.com>,
- linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux@ew.tq-group.com
-References: <e72771c75988a2460fa8b557b0e2d32e6894f75d.camel@ew.tq-group.com>
- <c93ab2cc-d8e9-41ba-9f56-51acb331ae38@leemhuis.info>
- <h7lmtmqizoipzlazl36fz37w2f5ow7nbghvya3wu766la5hx6d@3jdesa3ltmuz>
- <08aabeaf-6a81-48a9-9c5b-82a69b071faa@leemhuis.info>
- <734a29a87613b9052fc795d56a30690833e4aba9.camel@ew.tq-group.com>
-From: "Linux regression tracking (Thorsten Leemhuis)"
- <regressions@leemhuis.info>
-Content-Language: en-US, de-DE
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <734a29a87613b9052fc795d56a30690833e4aba9.camel@ew.tq-group.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH can-next v2 01/15] can: kvaser_usb: Add helper functions
+ to convert device timestamp into ktime
+Content-Language: en-US
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+ Jimmy Assarsson <extja@kvaser.com>
+Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+References: <20240701154936.92633-1-extja@kvaser.com>
+ <20240701154936.92633-2-extja@kvaser.com>
+ <CAMZ6RqJFBooOgvrq4XmQDf_dFKMTe1hDnWLRObKEWA2t-U5+uQ@mail.gmail.com>
+From: Jimmy Assarsson <jimmyassarsson@gmail.com>
+In-Reply-To: <CAMZ6RqJFBooOgvrq4XmQDf_dFKMTe1hDnWLRObKEWA2t-U5+uQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1719916219;976f19fd;
-X-HE-SMSGID: 1sOam1-000827-BY
 
-On 02.07.24 12:03, Matthias Schiffer wrote:
-> On Tue, 2024-07-02 at 07:37 +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
->> On 01.07.24 16:34, Markus Schneider-Pargmann wrote:
->>> On Mon, Jul 01, 2024 at 02:12:55PM GMT, Linux regression tracking (Thorsten Leemhuis) wrote:
->
->>> @Matthias: Thanks for debugging and sorry for breaking it. If you have a
->>> fix for this, let me know. I have a lot of work right now, so I am not
->>> sure when I will have a proper fix ready. But it is on my todo list.
+On 7/2/24 06:47, Vincent MAILHOL wrote:
+> On Tue. 2 juil. 2024 at 00:50, Jimmy Assarsson <extja@kvaser.com> wrote:
+>> Add helper function kvaser_usb_ticks_to_ktime() that converts from
+>> device ticks to ktime.
+>> And kvaser_usb_timestamp{48,64}_to_ktime() that converts from device
+>> 48-bit or 64-bit timestamp, to ktime.
 >>
->> Thx. This made me wonder: is "revert the culprit to resolve this quickly
->> and reapply it later together with a fix" something that we should
->> consider if a proper fix takes some time? Or is this not worth it in
->> this case or extremely hard? Or would it cause a regression on it's own
->> for users of 6.9?
-> 
-> I think on 6.9 a revert is not easily possible (without reverting several other commits adding new
-> features), but it should be considered for 6.6.
->> I don't think further regressions are possible by reverting, as on
-6.6 the timer is only used for
-> platforms without an m_can IRQ, and on these platforms the current behavior is "the kernel
-> reproducibly deadlocks in atomic context", so there is not much room for making it worse.
-
-Often Greg does not revert commits in a stable branches when they cause
-the same problem in mainline. But I suspect in this case it is something
-different. But I guess he would prefer to hear "please revert
-887407b622f8e4 ("can: m_can: Start/Cancel polling timer together with
-interrupts")" coming from Markus, hence:
-
-Markus, if you agree that a revert from 6.6.y might be best, could you
-simply ask for a revert in a reply to this mail while CCing Greg and the
-stable list? tia!
-
-Ciao, Thorsten
-
-> Like Markus, I have writing a proper fix for this on my TODO list, but I'm not sure when I can get
-> to it - hopefully next week.
-> 
-> Best regards,
-> Matthias
-> 
-> 
-> 
+>> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+>> ---
+>> Changes in v2:
+>>    - New in v2. Replaces
+>>      can: kvaser_usb: Add function kvaser_usb_ticks_to_ktime()
+>>    - Add two more helper functions, kvaser_usb_timestamp{48,64}_to_ktime()
+>>      for converting timestamps, suggested by Vincent MAILHOL [2][3]
+>> [2] https://lore.kernel.org/linux-can/CAMZ6RqKSa-6KjvgfmN9eL7A=A65gMkYsRrnaF41Azhsc45FA2Q@mail.gmail.com/
+>> [3] https://lore.kernel.org/linux-can/CAMZ6Rq+Xd7+th=dKV+vrqzRtS+GY-xq2UziH1CURcQ3HxEXMqQ@mail.gmail.com/
 >>
->>>> On 18.06.24 18:12, Matthias Schiffer wrote:
->>>>> Hi Markus,
->>>>>
->>>>> we've found that recent kernels hang on the TI AM62x SoC (where no m_can interrupt is available and
->>>>> thus the polling timer is used), always a few seconds after the CAN interfaces are set up.
->>>>>
->>>>> I have bisected the issue to commit a163c5761019b ("can: m_can: Start/Cancel polling timer together
->>>>> with interrupts"). Both master and 6.6 stable (which received a backport of the commit) are
->>>>> affected. On 6.6 the commit is easy to revert, but on master a lot has happened on top of that
->>>>> change.
->>>>>
->>>>> As far as I can tell, the reason is that hrtimer_cancel() tries to cancel the timer synchronously,
->>>>> which will deadlock when called from the hrtimer callback itself (hrtimer_callback -> m_can_isr ->
->>>>> m_can_disable_all_interrupts -> hrtimer_cancel).
->>>>>
->>>>> I can try to come up with a fix, but I think you are much more familiar with the driver code. Please
->>>>> let me know if you need any more information.
->>>>>
->>>>> Best regards,
->>>>> Matthias
->>>>>
->>>>>
->>>
->>>
+>>   drivers/net/can/usb/kvaser_usb/kvaser_usb.h   | 24 +++++++++++++++++++
+>>   .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 10 ++++----
+>>   2 files changed, 28 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+>> index ff10b3790d84..4256a0caae20 100644
+>> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+>> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+>> @@ -22,6 +22,8 @@
+>>    */
+>>
+>>   #include <linux/completion.h>
+>> +#include <linux/ktime.h>
+>> +#include <linux/math64.h>
+>>   #include <linux/spinlock.h>
+>>   #include <linux/types.h>
+>>   #include <linux/usb.h>
+>> @@ -216,4 +218,26 @@ int kvaser_usb_can_rx_over_error(struct net_device *netdev);
+>>
+>>   extern const struct can_bittiming_const kvaser_usb_flexc_bittiming_const;
+>>
+>> +static inline ktime_t kvaser_usb_ticks_to_ktime(const struct kvaser_usb_dev_cfg *cfg,
+>> +                                               u64 ticks)
+>> +{
+>> +       return ns_to_ktime(div_u64(ticks * 1000, cfg->timestamp_freq));
+>> +}
+>> +
+>> +static inline ktime_t kvaser_usb_timestamp48_to_ktime(const struct kvaser_usb_dev_cfg *cfg,
+>> +                                                     const __le16 *timestamp)
+>> +{
+>> +       u64 ticks = le16_to_cpu(timestamp[0]) |
+>> +                   (u64)(le16_to_cpu(timestamp[1])) << 16 |
+>> +                   (u64)(le16_to_cpu(timestamp[2])) << 32;
+>> +
+>> +       return kvaser_usb_ticks_to_ktime(cfg, ticks);
+>> +}
+>> +
+>> +static inline ktime_t kvaser_usb_timestamp64_to_ktime(const struct kvaser_usb_dev_cfg *cfg,
+>> +                                                     __le64 timestamp)
+>> +{
+>> +       return kvaser_usb_ticks_to_ktime(cfg, le64_to_cpu(timestamp));
+>> +}
+>> +
+>>   #endif /* KVASER_USB_H */
+>> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+>> index c7ba768dfe17..ad1c6101a0cd 100644
+>> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+>> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+>> @@ -526,19 +526,17 @@ static ktime_t
+>>   kvaser_usb_hydra_ktime_from_rx_cmd(const struct kvaser_usb_dev_cfg *cfg,
+>>                                     const struct kvaser_cmd *cmd)
+>>   {
+>> -       u64 ticks;
+>> +       ktime_t hwtstamp = 0;
+>>
+>>          if (cmd->header.cmd_no == CMD_EXTENDED) {
+>>                  struct kvaser_cmd_ext *cmd_ext = (struct kvaser_cmd_ext *)cmd;
+>>
+>> -               ticks = le64_to_cpu(cmd_ext->rx_can.timestamp);
+>> +               hwtstamp = kvaser_usb_timestamp64_to_ktime(cfg, cmd_ext->rx_can.timestamp);
+>>          } else {
+>> -               ticks = le16_to_cpu(cmd->rx_can.timestamp[0]);
+>> -               ticks += (u64)(le16_to_cpu(cmd->rx_can.timestamp[1])) << 16;
+>> -               ticks += (u64)(le16_to_cpu(cmd->rx_can.timestamp[2])) << 32;
+>> +               hwtstamp = kvaser_usb_timestamp48_to_ktime(cfg, cmd->rx_can.timestamp);
+>>          }
+>>
+>> -       return ns_to_ktime(div_u64(ticks * 1000, cfg->timestamp_freq));
+>> +       return hwtstamp;
+>>   }
 > 
+> Nitpick: this can slightly be simplified by dropping the hwtstamp
+> local variable:
+> 
+>    kvaser_usb_hydra_ktime_from_rx_cmd(const struct kvaser_usb_dev_cfg *cfg,
+>                                       const struct kvaser_cmd *cmd)
+>    {
+>           if (cmd->header.cmd_no == CMD_EXTENDED) {
+>                   struct kvaser_cmd_ext *cmd_ext = (struct kvaser_cmd_ext *)cmd;
+> 
+>                   return kvaser_usb_timestamp64_to_ktime(cfg,
+> cmd_ext->rx_can.timestamp);
+>           } else {
+>                   return kvaser_usb_timestamp48_to_ktime(cfg,
+> cmd->rx_can.timestamp);
+>           }
+>    }
+
+I'll keep it as is. I prefer to have a single return at the end of the function.
+
+Regards,
+/jimmy
 
