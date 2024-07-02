@@ -1,91 +1,98 @@
-Return-Path: <linux-can+bounces-937-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-938-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80B3F91E6FA
-	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2024 19:54:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 410B791ED54
+	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2024 05:10:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A60B1F2354F
-	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2024 17:54:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBE912828A8
+	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2024 03:10:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F042016EB67;
-	Mon,  1 Jul 2024 17:54:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332CA171BA;
+	Tue,  2 Jul 2024 03:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pwy/Cwe5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q+XCo4p1"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCA616D4F0;
-	Mon,  1 Jul 2024 17:54:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DC715E8C;
+	Tue,  2 Jul 2024 03:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719856468; cv=none; b=qNiWJ7hg6ts4cN00rbeE41y06xliRSibw3e4gx3wHoXRzOp8Sz8KOfIlgHTuJnCaJGhdXTHMI3vmBnU1ZHRbmDU0PFYUvVF7hfsc4f+f8uuzDFfWeffdes2YsP1PaO5lIsfyPvN75V50OrCLqwm3UtebZSf5zO1uqz0XnGU5HSU=
+	t=1719889828; cv=none; b=M+tGnre1yCDuHIDiKDX1BJgAFvUCrtgF+kSaFa3tiCPI4KN/93AvLvgTq5GU1GsMUtpdzziRHHU5MVUsW6mv/joZMnzAuwGbXRR0SBZJw7AsvemULAHGwyxgZ7Y/MTR+Xl9/cbb6YJOyp5jaZ7r5kJsQJWKCUX3l5Paa+vOE00A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719856468; c=relaxed/simple;
-	bh=2M79EKuCi3pO/TN3rGqmddy5hzrxk2H0nREOY8R3wis=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ifiiC+1l1DIqv1VtjGBBSF+xEw1boMO+pzJyEyilJOwEdosBAsjCoztkk4nb6Zmv6RmsYY8rcxl4HPDL4tIsADvHl1LWO0DTrAW1C44HirmNhW8ynKR/9pMG0oK679GsDso8tlKGeMDlpkxD7S1zbOcTpl83ccQ75HpVVXDoDko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pwy/Cwe5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D6F7C32781;
-	Mon,  1 Jul 2024 17:54:28 +0000 (UTC)
+	s=arc-20240116; t=1719889828; c=relaxed/simple;
+	bh=McvXrlIAb0Df/RkudyuvJDZeF32sxxPSd3dTl3D/b/Y=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=j4a4Pxo4lTrWgmtF1m+H2K5uE6ZZn8MngBKDQ1mXByzKQLhesGv6CtpOsEOcte+mW5ZakqJRMMUQNePfIQdFgl7IQ2IiGotcbYrYp7j3DXHqQZHPvG7ZJMmJecEpITf4UrJ+OKm5F/EKtQ0YNH7Xr9bsz0sDyztnwcI4uC/7Gho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q+XCo4p1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C4B6EC4AF0A;
+	Tue,  2 Jul 2024 03:10:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719856468;
-	bh=2M79EKuCi3pO/TN3rGqmddy5hzrxk2H0nREOY8R3wis=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pwy/Cwe5KbiPM9h1yGqBlTc2YpppR7qVimWVUnxV3WmFk1DNjr20g0uvIj5pC7ggC
-	 OQh2bbvJ7gOU2+CeZa9soDbc46Tb4F1v1koNxz44dMGHMLC+GmxNHypm0PD1nZNbwY
-	 ec8vV5qgFP06jGv11FlsXlt9q5NNZF/uEXUzljA1HMYfsSxS+47knqLQK0q00Ej8pr
-	 SNujCT/lxPqsRsC4Jtih4PJxqoCfZDyLC4hJLt17V0KYwe9Wchw6B/FJvJ+Qs7p4Gm
-	 e4/o3362FO6TjIIGqgVvMgU4sULmuqztP3lacmDHK2NomsM5NqPr3y//MgQdqxDDk/
-	 +5r8BO8fV8aVA==
-Date: Mon, 1 Jul 2024 11:54:27 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, linux-can@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>, imx@lists.linux.dev,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] dt-bindings: can: fsl,flexcan: add common
- 'can-transceiver' for fsl,flexcan
-Message-ID: <171985646700.176465.4816542361707440956.robh@kernel.org>
-References: <20240629021754.3583641-1-Frank.Li@nxp.com>
+	s=k20201202; t=1719889827;
+	bh=McvXrlIAb0Df/RkudyuvJDZeF32sxxPSd3dTl3D/b/Y=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Q+XCo4p1WdlPUz3lyfIT85Ugwz6EHnY8mKPP1mFWNIxl2hwtxa9CjtijUcx8f8Fcn
+	 SX5Ah+X3CXxbT8NBHlIt7f0LiAy6oMyC+k/9w+MiaK8/SwxlkJbpX7QYRRtJ14NMYK
+	 eV6+uzXIb4r4uF8gkLDdc+Czmiw7eHniE85gU+3mfL0SCExGWw+ARGKdcNe7e/denb
+	 mvOwcwTweuaAmmrWBLVzuoBkNFUpjwhF+/R5R9fTogEYHPSMVQ/9oSRNJ1ZWSn8C5T
+	 sSd0ZtG/jAoUg77hERevTN7EWwm+SAUDeUL/X0R/+ZB8L1zh3mX1y+tQmlflV4o9XO
+	 ZnUDzR3R6awUg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B20E9C43446;
+	Tue,  2 Jul 2024 03:10:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240629021754.3583641-1-Frank.Li@nxp.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] can: kvaser_usb: Explicitly initialize family in leafimx
+ driver_info struct
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171988982772.28007.2255372828790530709.git-patchwork-notify@kernel.org>
+Date: Tue, 02 Jul 2024 03:10:27 +0000
+References: <20240701080643.1354022-2-mkl@pengutronix.de>
+In-Reply-To: <20240701080643.1354022-2-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ linux-can@vger.kernel.org, kernel@pengutronix.de, extja@kvaser.com,
+ stable@vger.kernel.org
 
+Hello:
 
-On Fri, 28 Jun 2024 22:17:54 -0400, Frank Li wrote:
-> Add common 'can-transceiver' children node for fsl,flexcan.
-> 
-> Fix below warning:
-> arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dtb: can@2180000: 'can-transceiver' does not match any of the regexes: 'pinctrl-[0-9]+'
->         from schema $id: http://devicetree.org/schemas/net/can/fsl,flexcan.yaml#
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> Change from v1 to v2
-> - rework commit message and add fix CHECK_DTBS warning
-> - Add unevaluatedProperties: false
-> ---
->  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+This patch was applied to netdev/net.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+On Mon,  1 Jul 2024 10:03:22 +0200 you wrote:
+> From: Jimmy Assarsson <extja@kvaser.com>
+> 
+> Explicitly set the 'family' driver_info struct member for leafimx.
+> Previously, the correct operation relied on KVASER_LEAF being the first
+> defined value in enum kvaser_usb_leaf_family.
+> 
+> Fixes: e6c80e601053 ("can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression")
+> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+> Link: https://lore.kernel.org/all/20240628194529.312968-1-extja@kvaser.com
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] can: kvaser_usb: Explicitly initialize family in leafimx driver_info struct
+    https://git.kernel.org/netdev/net/c/19d5b2698c35
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
