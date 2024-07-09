@@ -1,46 +1,46 @@
-Return-Path: <linux-can+bounces-955-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-956-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F406A92C0A3
-	for <lists+linux-can@lfdr.de>; Tue,  9 Jul 2024 18:41:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84F7F92C0AF
+	for <lists+linux-can@lfdr.de>; Tue,  9 Jul 2024 18:42:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F2D1B2722E
-	for <lists+linux-can@lfdr.de>; Tue,  9 Jul 2024 16:36:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 290361F2371F
+	for <lists+linux-can@lfdr.de>; Tue,  9 Jul 2024 16:42:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97B8C1C2DFC;
-	Tue,  9 Jul 2024 16:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24DCB2139D3;
+	Tue,  9 Jul 2024 16:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZC11SiMN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YZ0k10z7"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5561A01AE;
-	Tue,  9 Jul 2024 16:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDED92139B2;
+	Tue,  9 Jul 2024 16:24:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720542184; cv=none; b=a7LYLKsfQCaDTW1i4esD+fC0ELt2RBpkS6n4HyLkx8VnJ5vcIf4mdy0qjzp7sM1l1ODiQ/TbZFT5JWL0hi7qG4mjkfTYJS0F6RlK1kM+3imUReN4Slw/lnPFOEaikZP0SHHQ31ptYqiSjB+CBGAgMdgV3e1kP6+3aOuDl/lDf14=
+	t=1720542268; cv=none; b=FKBfPS9Mqy9s8c+29+/jUR5vKTPfvNUpWDLjtEGkY5lkey0pYBwf15izEEMoucDcgKytFW3eiDIeruLvSeh00Z1TVEF37ws+mMpHToWlu34YUPLcPCYTbMZoDQmoOEt7gMLCHLPKQREOjRvXNA9ITyPBy3974znKUJZPWU7a75w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720542184; c=relaxed/simple;
-	bh=tdzzJLvvDu0ufaMXnQPf31T2BYHzkosVnFTO5IXKVJo=;
+	s=arc-20240116; t=1720542268; c=relaxed/simple;
+	bh=rqQBo3mbDovOFPoF/8YNT6rE9vXlmpWf5sM6h/gqEFE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QzYsS5En7LLvoJHlT5mxLFoTANjOzHU05hYRqAc6tkrl8PL1GYkHot6hIx0f8aJzfAIognJ/3/NC5ys5ryGAcCJ37wJ4Vy1fq9otsf5qpyHpH5AD7oDzxdSjhHNyfZQzeiOgflgmnt7CtB+Tu/xOyrdNPm9j8rMeqLSNEQlyFvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZC11SiMN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A374AC32782;
-	Tue,  9 Jul 2024 16:23:02 +0000 (UTC)
+	 MIME-Version; b=XT+pW22co34XyFWfEK2DwxsPrj8fjAh2wnaNTuxhGKjh8+5wy27BYTCmUSyZA2AD5cfUK8RjUXHDvj/YreO/VLXLLI3BqSUh5YpLqVHR87bcHuIhbc+OMxDJ5cDtiKT3CETvEN0cECqLgLWL2AQFgdFkq0uc3vnbSBOv91LRQ8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YZ0k10z7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 770DDC32786;
+	Tue,  9 Jul 2024 16:24:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720542184;
-	bh=tdzzJLvvDu0ufaMXnQPf31T2BYHzkosVnFTO5IXKVJo=;
+	s=k20201202; t=1720542267;
+	bh=rqQBo3mbDovOFPoF/8YNT6rE9vXlmpWf5sM6h/gqEFE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZC11SiMNCY1Sy1OdLhvtckJLt+5y9tQoPB1bjM9OtlyNWM8hKgvH5s6zXIHRJ/F4w
-	 bb509xa0Ekma5/4eYaRl+jL6IPruIoyR3Uv0iNmgm1zRDLaCbQqmgtB66zAX0mKoBh
-	 l2TzMu5HG8PvE0wUtADhtE8sJHrEhmD0Kdg0cp13ZvJIk1JAZgQyfXeu4jbFpkeoJg
-	 XvNecwtPRFQT3cL42DFKRsr74GOJo7qx1TgETm8MJ/PukmGD9SDfmYqF1BRDyFjL4b
-	 TBnlgXrFhQDahTnwoM7a33ydr/dU8PXDM3S4+k61kPN+Ata8vofbcKt1EEnPriRzYg
-	 oBgktEELWDrEg==
+	b=YZ0k10z7Va1YXdjPe6u+/a25TlhQaiLccEnj0bgqIqNEDSOpZxtmOsckVN9eRQoC5
+	 +ODgkD0lRyg6JoCs0JX43TIRvLw/AvjGA5NA9/HFxgoH8sy1Eiu9sKjKDDi6I692G9
+	 X2xQ2Ma8SxpIx0nU6HBSIaWP3+blD5Pj4LLw6W5LmcH3QwEBY55/2l3yrOBZJ5uFL4
+	 tCVglT+buVvbD504kTVAQUJt/kMvhpDqylbBRAiEyB2HPIPoDKqgMHol73/UuQk4Nw
+	 DobKnYIqM6dcnpcZan36vaIiFJkwe9j2zNKNliAMmoCyyUDyVS1Onwk5jFWaN+wub2
+	 6/DidVOYdtiuA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -55,12 +55,12 @@ Cc: Chen Ni <nichen@iscas.ac.cn>,
 	extja@kvaser.com,
 	linux-can@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 17/33] can: kvaser_usb: fix return value for hif_usb_send_regout
-Date: Tue,  9 Jul 2024 12:21:43 -0400
-Message-ID: <20240709162224.31148-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 12/27] can: kvaser_usb: fix return value for hif_usb_send_regout
+Date: Tue,  9 Jul 2024 12:23:26 -0400
+Message-ID: <20240709162401.31946-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240709162224.31148-1-sashal@kernel.org>
-References: <20240709162224.31148-1-sashal@kernel.org>
+In-Reply-To: <20240709162401.31946-1-sashal@kernel.org>
+References: <20240709162401.31946-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.38
+X-stable-base: Linux 6.1.97
 Content-Transfer-Encoding: 8bit
 
 From: Chen Ni <nichen@iscas.ac.cn>
@@ -88,7 +88,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-index 71ef4db5c09f6..51c8b7c109728 100644
+index 3a2bfaad14065..6d50c94d40c37 100644
 --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
 +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
 @@ -291,7 +291,7 @@ int kvaser_usb_send_cmd_async(struct kvaser_usb_net_priv *priv, void *cmd,
