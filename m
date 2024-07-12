@@ -1,89 +1,78 @@
-Return-Path: <linux-can+bounces-970-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-971-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21ABD92F26D
-	for <lists+linux-can@lfdr.de>; Fri, 12 Jul 2024 01:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AF2A92F3F1
+	for <lists+linux-can@lfdr.de>; Fri, 12 Jul 2024 04:10:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52C291C2296E
-	for <lists+linux-can@lfdr.de>; Thu, 11 Jul 2024 23:01:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D4461C210BF
+	for <lists+linux-can@lfdr.de>; Fri, 12 Jul 2024 02:10:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3751D1A0711;
-	Thu, 11 Jul 2024 23:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZEqEsqRQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB250804;
+	Fri, 12 Jul 2024 02:10:13 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03F4B130487;
-	Thu, 11 Jul 2024 23:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481108BE5
+	for <linux-can@vger.kernel.org>; Fri, 12 Jul 2024 02:10:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720738874; cv=none; b=EawHOtrxghdik09B/k06myXyLCAHtbA4NDN3WAjgDzX9wB4zg7qpKxfxUUjwivoCykyZdXyEynfZgURIMvGb3yM5efuXCtLYRMRnku7EwxcJD2alUaeFruGNax3887UfWEYINot0GjbKYZFR5AqoEIbMo2uOzm6MAZ8NfhGf0Q4=
+	t=1720750213; cv=none; b=INtAcAnpAtFBrGzJh+06bKk47qOrC4zVCU+IpLGwmqsQCEcBIEvrwAM8WNctC88ugNRipNSUezVrgCNB7A99/1jIRJfNyZOBSDSidwxnPCNCCRxFgCV9bHIEsXY87kJsVseUq5xld/VWHuo6aIFyJ3rQz0WpSGoe9vIW3xCXnVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720738874; c=relaxed/simple;
-	bh=RO8Wi7LsNtSVOjKnh3Rni8Wc0vJub79bAX4WF0NF7I0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XLyFFbAbdRL7oKOPYb2k+rWfUt5CAUCXwo/AY3YosT763ECR8+5ejxFnn9imjFPPFjfVGACqiEyvU69DGShURg9fhX0rdtrr1KOg/DhNWVQPcOIERpl/egzVATgNXs04cNloD11gWuXpFQagPruCaMigWGQpdt2TkRHac9Zyp2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZEqEsqRQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA63C116B1;
-	Thu, 11 Jul 2024 23:01:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720738873;
-	bh=RO8Wi7LsNtSVOjKnh3Rni8Wc0vJub79bAX4WF0NF7I0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZEqEsqRQev9iXBeDGgSmnzFrn9OIDqFUpGTpLxG39mo9KBlR6fq58g8/PcqBskKxC
-	 bSf0XISzieldwrsLVu1LNiZ34NJdbHv2+B9/762vwEJ0wfm+2wrhNkIdfyaLnJ8rWx
-	 CgYEBePCiFVZfJfenCK+2ubzTT1ewXd536KQuz67+MDtki2N4BkVjGooK46hXGcyuF
-	 ibiZ4LmBsMUdOGkfvtmHSiNbQD07iGG0Ex1E5VZrNtS3h+7G2hFwCm0EAopoVMvGe+
-	 Xn3Li/5UX2FihJD89E/sujt3ZHenrx7bSSEzJjkO2NdxN+PEiqweJrC2988c7ulBz8
-	 RLYLec+hLfyHw==
-Date: Thu, 11 Jul 2024 17:01:12 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, han.xu@nxp.com,
-	Eric Dumazet <edumazet@google.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Paolo Abeni <pabeni@redhat.com>, haibo.chen@nxp.com
-Subject: Re: [PATCH 3/4] bingdings: can: flexcan: move fsl,imx95-flexcan
- standalone
-Message-ID: <172073887154.3280495.283425972699397722.robh@kernel.org>
-References: <20240711-flexcan-v1-0-d5210ec0a34b@nxp.com>
- <20240711-flexcan-v1-3-d5210ec0a34b@nxp.com>
+	s=arc-20240116; t=1720750213; c=relaxed/simple;
+	bh=zRrxqnK2CW3DjLA9T0yafIF2n+Ub0oIjrzxR7x64jmk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PE0qO7fAVq7iL+6+i+ts1UAqfhiMnk1YvO0tmUlP4hNF0XIcQ9V/NqAauXEPoeZsvp6yqfPsop37aNtqOAw5gjnLYlZaRUxBZD1Dga6nr0tTKEA8uFaseZg1xVRu37W+zvG49xWmXrBDMlRnaB/bEW5/AO1aWQpCkQPVOraTnZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-781f5007950so1312712a12.0
+        for <linux-can@vger.kernel.org>; Thu, 11 Jul 2024 19:10:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720750211; x=1721355011;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zRrxqnK2CW3DjLA9T0yafIF2n+Ub0oIjrzxR7x64jmk=;
+        b=DBkRkpP54iNq6YqPX23YlX/+Mj4+FrMmnDEp5UVxN3efwKftoaKLTmyYT0vDuk2JFV
+         iQC9dcazIPYQnxRCAKbjo9pXtvdh8r+Hpzblnft9fEr2d8Nbqmuq0OMuEzcVNe8FWuCg
+         72+ApzwnL3+aplaFXOF9kQrXfwLq/W2N+kZQsp86IZxTK0ANpzz7YozaGOIfjUYwWa+r
+         NSffjneGul47cIp+GS18bLORUI3L8Kcl4Ojx5WkuAIfWtChbHc8MO+cxEDxWa2XQmeAn
+         sGLlXfGBV3KrvHkGthS5Jzx3G8XKcR7/jCgtwSewzjFB7S/Ufx2mBzVhFeMzTygTdd/p
+         qeTQ==
+X-Gm-Message-State: AOJu0YyoZr+rxfKrAzhmBD74EWPXUFIw6CUz0u8FZ5i1ehOTNMG9gNXy
+	sJShGX82RSRDRXW1nmf2Pho3EoSJk9T1Jhept/4PoJUr0JmNF6NL5BuFdEzPabtoonBanbck44F
+	/IDA+KLMMqeljJ9PnzqjeSyrZlfJMMkki
+X-Google-Smtp-Source: AGHT+IHiJBMKbtHWyT7RqcTLVAMFQt8whK5V7cZBAPIhqt0SPP/STbASHiuM8AxC6Z82eDU+fVWXb58d9xS2JVuebyk=
+X-Received: by 2002:a17:90a:43c6:b0:2c8:660d:cc2 with SMTP id
+ 98e67ed59e1d1-2ca35be1c8dmr8800347a91.4.1720750211217; Thu, 11 Jul 2024
+ 19:10:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240711-flexcan-v1-3-d5210ec0a34b@nxp.com>
+References: <20240711135451.2736466-1-martin.jocic@kvaser.com>
+In-Reply-To: <20240711135451.2736466-1-martin.jocic@kvaser.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Fri, 12 Jul 2024 11:09:57 +0900
+Message-ID: <CAMZ6Rq+FMAmSku0kPHvG+6u7debxtMCRj7fs1X8zZphdY4fxOg@mail.gmail.com>
+Subject: Re: [PATCH] can: kvaser_pciefd: Use a single write when releasing RX buffers
+To: Martin Jocic <martin.jocic@kvaser.com>
+Cc: linux-can@vger.kernel.org, mkl@pengutronix.de, extja@kvaser.com
+Content-Type: text/plain; charset="UTF-8"
 
+On Thu. 11 Jul. 2024 at 23:22, Martin Jocic <martin.jocic@kvaser.com> wrote:
+> We should return from the ISR as fast as possible in order
+> not to mask a new interrupt.
+>
+> Signed-off-by: Martin Jocic <martin.jocic@kvaser.com>
 
-On Thu, 11 Jul 2024 14:20:02 -0400, Frank Li wrote:
-> From: Haibo Chen <haibo.chen@nxp.com>
-> 
-> The flexcan in iMX95 is not compatible with imx93 because wakeup method is
-> difference. Make fsl,imx95-flexcan not fallback to fsl,imx93-flexcan.
-> 
-> Reviewed-by: Han Xu <han.xu@nxp.com>
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
+Thank you for the patch.
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
