@@ -1,329 +1,226 @@
-Return-Path: <linux-can+bounces-972-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-973-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C32DA92F414
-	for <lists+linux-can@lfdr.de>; Fri, 12 Jul 2024 04:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 060F7931C18
+	for <lists+linux-can@lfdr.de>; Mon, 15 Jul 2024 22:39:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14DB5B20EC2
-	for <lists+linux-can@lfdr.de>; Fri, 12 Jul 2024 02:37:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35743B2227F
+	for <lists+linux-can@lfdr.de>; Mon, 15 Jul 2024 20:39:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7F3BA50;
-	Fri, 12 Jul 2024 02:37:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C68F13AD33;
+	Mon, 15 Jul 2024 20:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="orGAZVa7";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="EO6Fc55G";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="orGAZVa7";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="EO6Fc55G"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B410517C8D;
-	Fri, 12 Jul 2024 02:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DFE2B9CD;
+	Mon, 15 Jul 2024 20:39:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720751820; cv=none; b=hodWvMy7axRx0M1i1qLRz9QzMBY5aAPyhoBbSpiETZ92zIio1FFkyOSqaP+Bkukd6SoXnvT8cCZF3AbDnZmg/QDVgzRDOyXDIxjR94snWFX/dwjpdiInjc1c54oiVJQKlvBo/0r9B/7ugJTWwwvq+qIUCdkYWMvId/4Ms/RQxbw=
+	t=1721075982; cv=none; b=RJtZTVvFGI2kARy2UF0JDyYoFFNpUbJS3ClJpdLCNtsH+kaf0u+HPz+KnUUnfLqx03VO3db+1GxA73hje54QoMVAXUjUV+ea5LYJ7F9gsQtUsmr/a5CiH8ZULJPxOXsSyOnFKJgHgIOiYAWr3/yT/zHqm2gefviIR13s8WrTITM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720751820; c=relaxed/simple;
-	bh=LwRp7M9+Iv6W6VZqsKwMwUpkjTAA0AqCeyYcKJsUNIA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N2KOXNBGeArWRXR770JStYsn11pDwKVQKEi1otn82FExz06UJsko1x0l7kEW312QrrI7dZZPOsaukxAf6DVgacX5F7GRJ3M+Q6llvJ0StUqko/Y2gsslEdQe2AkqUdGFHVtGNqpaLe5U0cl2VY88GVTa25buvmu6MW9Q9wiA+KE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70af8062039so1281299b3a.0;
-        Thu, 11 Jul 2024 19:36:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720751818; x=1721356618;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xcus94JvdaYN36pjzwcYofoNVy/FnfCuu5gLU1GImrg=;
-        b=RgdP+AgycD2D3n4eouXiUxpkkEZyvBXggtnOCBMYf6MT4lO5BIivN6T6ySiomFgHni
-         15t0y4wTvrjqehweN4TuBNePc2d1Q/4V+BWfo5ioQZPYYQ8mxcOUhSrhpWiU8lNAV+Ux
-         BfvaBL2nFGnFByoEOKydErx9uqi9qLlEGCptkMuCTSQfoxPMFkOfpm26cWFkDfdD5Ue+
-         lQtzdtokMUh/Z1Qr13oFDUSi9O6BCieT8l8UbJtKKVOhJq37wjt/s/W+P/+N1AbwVgh0
-         RnWgRqIENqQqOAubRtL5v4ISbpxrXEc9bl1/a/KrCFbRmWUP4x3Korl5uLlC9Gqpn+Xt
-         DvGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX1V7dQVySHRu7TqQYqxOp5tElNGp/7JKVU6tv91Eq1htPB0dSEHncu0k4POyUkzbp0cFKigXLxu+pjWBX9v1PG/QM9NnGWAxigj9/nbLJNlrM9ix2WCdaJIxqullBIqCmgfHJgYqr8kFcmwL/o0d48cqyiQoyt3IPwJc6h+jXU7TMgDFSM4gC2FpZ4j9T4bVtw/Eqx89psbfXIcQ==
-X-Gm-Message-State: AOJu0YzdcJ6Ulk2PoLgxb/x6Ulxx9YH32J18eNofuE8+hOBmBaMPD0zo
-	X3MLm4dmmno26xmGbP+5WgjN7oB85pplrvdV5amjNbsxxcwnC9sfWmvL8RGsqdvFlgIU02oCBoV
-	6wfCExqFFGhmtEA3Snb8uHs1Su89Nhfwb
-X-Google-Smtp-Source: AGHT+IHE+bo+6bFeaD/wgffcQ9yZJ6QnIr/6GIOzBR0ASIFNAEirzgMhtRinvmoWFiuJ5sITOrJFQjXinzGQMMPJuKU=
-X-Received: by 2002:a05:6a20:734a:b0:1c0:eb1e:868e with SMTP id
- adf61e73a8af0-1c29821acbemr12251451637.19.1720751817868; Thu, 11 Jul 2024
- 19:36:57 -0700 (PDT)
+	s=arc-20240116; t=1721075982; c=relaxed/simple;
+	bh=V9+/ko+zXoD5I2WF5JxJeceKIAQ9TGTSvmNI/rBGt7c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BYKpm2v5WQMp+BHJ2nN1f9SXW8bN+TFAF2+SLUr6JR/Ks1S4bJnCSKz6N9OjOLnCZN9ym+gYA9mQUAKXkb2RO+IpULgmc70FwAZrDBcRGxmSFAOhcbe2BlqLSWDx3PeqjgkG0Iz3M1JjaBKcj0DRhRDfd5D/3XnCKPR3NyGj1yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=orGAZVa7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=EO6Fc55G; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=orGAZVa7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=EO6Fc55G; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id A2D1C1F833;
+	Mon, 15 Jul 2024 20:39:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1721075978; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=13l4KWTF4acx+DoFosvJJOCp5skXW9ib/ek+T6Gj1BU=;
+	b=orGAZVa7aS8dwRz7zAaSJ5DJiGvjUzgF5byRuSW/xh5bX54ACMhuDxQkfq5CvQlpDzfm/f
+	7H3aOI+fyJhVNx5bbD4Da7e9RAJfuv0ndyxHiJjpa7Ge0olMyxuQG9l3WTPXJu6+k4V3zL
+	SP5Vu2G4xvhozdFB/d1UMLGaAWWMK04=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1721075978;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=13l4KWTF4acx+DoFosvJJOCp5skXW9ib/ek+T6Gj1BU=;
+	b=EO6Fc55GxbiJuyg2W5VpBFdcwuiQvmKGGmLix2LUIJPD2ddGxBU7Wq0S9CY3ZDHFFWeWrJ
+	OXCTUbUPdgEU3SDQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=orGAZVa7;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=EO6Fc55G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1721075978; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=13l4KWTF4acx+DoFosvJJOCp5skXW9ib/ek+T6Gj1BU=;
+	b=orGAZVa7aS8dwRz7zAaSJ5DJiGvjUzgF5byRuSW/xh5bX54ACMhuDxQkfq5CvQlpDzfm/f
+	7H3aOI+fyJhVNx5bbD4Da7e9RAJfuv0ndyxHiJjpa7Ge0olMyxuQG9l3WTPXJu6+k4V3zL
+	SP5Vu2G4xvhozdFB/d1UMLGaAWWMK04=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1721075978;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=13l4KWTF4acx+DoFosvJJOCp5skXW9ib/ek+T6Gj1BU=;
+	b=EO6Fc55GxbiJuyg2W5VpBFdcwuiQvmKGGmLix2LUIJPD2ddGxBU7Wq0S9CY3ZDHFFWeWrJ
+	OXCTUbUPdgEU3SDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6827F137EB;
+	Mon, 15 Jul 2024 20:39:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id xIrMGAqJlWZ9VgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 15 Jul 2024 20:39:38 +0000
+Message-ID: <df0716ac-c995-498c-83ee-b8c25302f9ed@suse.cz>
+Date: Mon, 15 Jul 2024 22:39:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240711-flexcan-v1-0-d5210ec0a34b@nxp.com> <20240711-flexcan-v1-4-d5210ec0a34b@nxp.com>
-In-Reply-To: <20240711-flexcan-v1-4-d5210ec0a34b@nxp.com>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Fri, 12 Jul 2024 11:36:43 +0900
-Message-ID: <CAMZ6RqLcUoaD9ErNXyN5gxGSU7qPtW4HPRft=EnH0V1yVSYGCQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] can: flexcan: add wakeup support for imx95
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, haibo.chen@nxp.com, imx@lists.linux.dev, 
-	han.xu@nxp.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/14] replace call_rcu by kfree_rcu for simple
+ kmem_cache_free callback
+Content-Language: en-US
+To: Uladzislau Rezki <urezki@gmail.com>
+Cc: paulmck@kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ Jakub Kicinski <kuba@kernel.org>, Julia Lawall <Julia.Lawall@inria.fr>,
+ linux-block@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ bridge@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, kvm@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Nicholas Piggin <npiggin@gmail.com>, netdev@vger.kernel.org,
+ wireguard@lists.zx2c4.com, linux-kernel@vger.kernel.org,
+ ecryptfs@vger.kernel.org, Neil Brown <neilb@suse.de>,
+ Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>,
+ Tom Talpey <tom@talpey.com>, linux-nfs@vger.kernel.org,
+ linux-can@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+ kasan-dev <kasan-dev@googlegroups.com>
+References: <e926e3c6-05ce-4ba6-9e2e-e5f3b37bcc23@suse.cz>
+ <3b6fe525-626c-41fb-8625-3925ca820d8e@paulmck-laptop>
+ <6711935d-20b5-41c1-8864-db3fc7d7823d@suse.cz> <ZnCDgdg1EH6V7w5d@pc636>
+ <36c60acd-543e-48c5-8bd2-6ed509972d28@suse.cz> <ZnFT1Czb8oRb0SE7@pc636>
+ <5c8b2883-962f-431f-b2d3-3632755de3b0@paulmck-laptop>
+ <9967fdfa-e649-456d-a0cb-b4c4bf7f9d68@suse.cz>
+ <6dad6e9f-e0ca-4446-be9c-1be25b2536dd@paulmck-laptop>
+ <4cba4a48-902b-4fb6-895c-c8e6b64e0d5f@suse.cz> <ZnVInAV8BXhgAjP_@pc636>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ EP+ylKVEKb0Q2A==
+In-Reply-To: <ZnVInAV8BXhgAjP_@pc636>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-4.50 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	XM_UA_NO_VERSION(0.01)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_TWELVE(0.00)[29];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,zx2c4.com,inria.fr,vger.kernel.org,lists.linux.dev,efficios.com,lists.ozlabs.org,linux.ibm.com,csgroup.eu,gmail.com,lists.zx2c4.com,suse.de,netapp.com,oracle.com,talpey.com,netfilter.org,googlegroups.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	R_RATELIMIT(0.00)[to_ip_from(RLujeud1qp5x6qhm7ow61zc6bu)];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:dkim]
+X-Spam-Flag: NO
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -4.50
+X-Spam-Level: 
+X-Rspamd-Queue-Id: A2D1C1F833
 
-Hi,
+On 6/21/24 11:32 AM, Uladzislau Rezki wrote:
+> On Wed, Jun 19, 2024 at 11:28:13AM +0200, Vlastimil Babka wrote:
+> One question. Maybe it is already late but it is better to ask rather than not.
+> 
+> What do you think if we have a small discussion about it on the LPC 2024 as a
+> topic? It might be it is already late or a schedule is set by now. Or we fix
+> it by a conference time.
+> 
+> Just a thought.
 
-Thank you for the patch. I am not familiar with the iMX95 quirks, but
-to the extent of my knowledge, the patch looks good.
+Sorry for the late reply. The MM MC turned out to be so packed I didn't even
+propose a slab topic. We could discuss in hallway track or a BOF, but
+hopefully if the current direction taken by my RFC brings no unexpected
+surprise, and the necessary RCU barrier side is also feasible, this will be
+settled by time of plumbers.
 
-Here are a few nits. Next time, maybe you should run a syntax checker
-to catch the easy mistakes in the English grammar.
-
-You can directly add my review tag to the v2:
-
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-Le ven. 12 juil. 2024 =C3=A0 03:24, Frank Li <Frank.Li@nxp.com> a =C3=A9cri=
-t :
->
-> From: Haibo Chen <haibo.chen@nxp.com>
->
-> iMX95 define a bit in GPR that assert/desert IPG_STOP signal to Flex CAN
-        ^^^^^^
-define -> defines
-assert/desert -> desert means to "run away" or "leave behind". Not
-sure this is the correct word here. Maybe something like set/unset is
-better here? This sentence is worth rephrasing.
-
-> module. It control flexcan enter STOP mode. Wakeup should work even FlexC=
-AN
-             ^^^^^^^                                             ^^^^
-control -> controls
-even -> even if
-
-> is in STOP mode.
->
-> Due to iMX95 architecture design, A-Core can't access GPR. Only the syste=
-m
-> manager (SM) can config GPR. To support the wakeup feature, follow below
-                   ^^^^^^
-config -> configure
->
-> For suspend:
->
-> 1) linux suspend, when CAN suspend, do nothing for GPR, and keep CAN
-> related clock on.
-> 2) In ATF, check whether the CAN need to support wakeup, if yes, send a
-                                   ^^^^
-need -> needs
-
-> request to SM through SCMI protocol.
-> 3) In SM, config the GPR and assert IPG_STOP.
-> 4) A-Core suspend.
->
-> For wakeup and resume:
->
-> 1) A-core wakeup event arrive.
-> 2) In SM, deassert IPG_STOP.
-> 3) Linux resume.
-
-Indent your lists:
-
-  - For suspend:
-
-    1) linux suspend, when CAN suspend, do nothing for GPR, and keep CAN
-       related clock on.
-    2) In ATF, check whether the CAN need to support wakeup, if yes, send a
-       request to SM through SCMI protocol.
-    3) In SM, config the GPR and assert IPG_STOP.
-    4) A-Core suspend.
-
-  - For wakeup and resume:
-
-    1) A-core wakeup event arrive.
-    2) In SM, deassert IPG_STOP.
-    3) Linux resume.
-
-> Add a new fsl_imx95_devtype_data and FLEXCAN_QUIRK_SETUP_STOP_MODE_SCMI t=
-o
-> reflect this.
->
-> Reviewed-by: Han Xu <han.xu@nxp.com>
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  drivers/net/can/flexcan/flexcan-core.c | 49 ++++++++++++++++++++++++++++=
-++----
->  drivers/net/can/flexcan/flexcan.h      |  2 ++
->  2 files changed, 46 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/fle=
-xcan/flexcan-core.c
-> index f6e609c388d55..ad3240e7e6ab4 100644
-> --- a/drivers/net/can/flexcan/flexcan-core.c
-> +++ b/drivers/net/can/flexcan/flexcan-core.c
-> @@ -354,6 +354,14 @@ static struct flexcan_devtype_data fsl_imx93_devtype=
-_data =3D {
->                 FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR,
->  };
->
-> +static struct flexcan_devtype_data fsl_imx95_devtype_data =3D {
-> +       .quirks =3D FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EAC=
-EN_RRS |
-> +               FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_RX_MAILBOX=
- |
-> +               FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_SETUP_STO=
-P_MODE_SCMI |
-> +               FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SUPPORT_ECC |
-> +               FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
-> +               FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR,
-> +};
-
-Can you declare this as constant?
-
-  static const struct flexcan_devtype_data fsl_imx95_devtype_data =3D {
-
->  static const struct flexcan_devtype_data fsl_vf610_devtype_data =3D {
->         .quirks =3D FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EAC=
-EN_RRS |
->                 FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_RX_MAILBOX=
- |
-> @@ -548,6 +556,13 @@ static inline int flexcan_enter_stop_mode(struct fle=
-xcan_priv *priv)
->         } else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_M=
-ODE_GPR) {
->                 regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
->                                    1 << priv->stm.req_bit, 1 << priv->stm=
-.req_bit);
-> +       } else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_M=
-ODE_SCMI) {
-> +               /* For the SCMI mode, driver do nothing, ATF will send re=
-quest to
-> +                * SM(system manager, M33 core) through SCMI protocol aft=
-er linux
-> +                * suspend. Once SM get this request, it will send IPG_ST=
-OP signal
-> +                * to Flex_CAN, let CAN in STOP mode.
-> +                */
-> +               return 0;
->         }
->
->         return flexcan_low_power_enter_ack(priv);
-> @@ -559,7 +574,11 @@ static inline int flexcan_exit_stop_mode(struct flex=
-can_priv *priv)
->         u32 reg_mcr;
->         int ret;
->
-> -       /* remove stop request */
-> +       /* Remove stop request, for FLEXCAN_QUIRK_SETUP_STOP_MODE_SCMI,
-> +        * do nothing here, because ATF already send request to SM before
-> +        * linux resume. Once SM get this request, it will deassert the
-> +        * IPG_STOP signal to Flex_CAN.
-> +        */
->         if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_SCF=
-W) {
->                 ret =3D flexcan_stop_mode_enable_scfw(priv, false);
->                 if (ret < 0)
-> @@ -1987,6 +2006,9 @@ static int flexcan_setup_stop_mode(struct platform_=
-device *pdev)
->                 ret =3D flexcan_setup_stop_mode_scfw(pdev);
->         else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MOD=
-E_GPR)
->                 ret =3D flexcan_setup_stop_mode_gpr(pdev);
-> +       else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MOD=
-E_SCMI)
-> +               /* ATF will handle all STOP_IPG related work */
-> +               ret =3D 0;
->         else
->                 /* return 0 directly if doesn't support stop mode feature=
- */
->                 return 0;
-> @@ -2013,6 +2035,7 @@ static const struct of_device_id flexcan_of_match[]=
- =3D {
->         { .compatible =3D "fsl,imx8qm-flexcan", .data =3D &fsl_imx8qm_dev=
-type_data, },
->         { .compatible =3D "fsl,imx8mp-flexcan", .data =3D &fsl_imx8mp_dev=
-type_data, },
->         { .compatible =3D "fsl,imx93-flexcan", .data =3D &fsl_imx93_devty=
-pe_data, },
-> +       { .compatible =3D "fsl,imx95-flexcan", .data =3D &fsl_imx95_devty=
-pe_data, },
->         { .compatible =3D "fsl,imx6q-flexcan", .data =3D &fsl_imx6q_devty=
-pe_data, },
->         { .compatible =3D "fsl,imx28-flexcan", .data =3D &fsl_imx28_devty=
-pe_data, },
->         { .compatible =3D "fsl,imx53-flexcan", .data =3D &fsl_imx25_devty=
-pe_data, },
-> @@ -2311,9 +2334,22 @@ static int __maybe_unused flexcan_noirq_suspend(st=
-ruct device *device)
->         if (netif_running(dev)) {
->                 int err;
->
-> -               if (device_may_wakeup(device))
-> +               if (device_may_wakeup(device)) {
->                         flexcan_enable_wakeup_irq(priv, true);
->
-> +                       /* For FLEXCAN_QUIRK_SETUP_STOP_MODE_SCMI, it nee=
-d
-> +                        * ATF to send request to SM through SCMI protoco=
-l,
-> +                        * SM will assert the IPG_STOP signal. But all th=
-is
-> +                        * works need the CAN clocks keep on.
-> +                        * After the CAN module get the IPG_STOP mode, an=
-d
-> +                        * switch to STOP mode, whether still keep the CA=
-N
-> +                        * clocks on or gate them off depend on the Hardw=
-are
-> +                        * design.
-> +                        */
-> +                       if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SET=
-UP_STOP_MODE_SCMI)
-> +                               return 0;
-> +               }
-> +
->                 err =3D pm_runtime_force_suspend(device);
->                 if (err)
->                         return err;
-> @@ -2330,9 +2366,12 @@ static int __maybe_unused flexcan_noirq_resume(str=
-uct device *device)
->         if (netif_running(dev)) {
->                 int err;
->
-> -               err =3D pm_runtime_force_resume(device);
-> -               if (err)
-> -                       return err;
-> +               if (!(device_may_wakeup(device) &&
-> +                     priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STO=
-P_MODE_SCMI)) {
-> +                       err =3D pm_runtime_force_resume(device);
-> +                       if (err)
-> +                               return err;
-> +               }
->
->                 if (device_may_wakeup(device))
->                         flexcan_enable_wakeup_irq(priv, false);
-> diff --git a/drivers/net/can/flexcan/flexcan.h b/drivers/net/can/flexcan/=
-flexcan.h
-> index 025c3417031f4..4933d8c7439e6 100644
-> --- a/drivers/net/can/flexcan/flexcan.h
-> +++ b/drivers/net/can/flexcan/flexcan.h
-> @@ -68,6 +68,8 @@
->  #define FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR BIT(15)
->  /* Device supports RX via FIFO */
->  #define FLEXCAN_QUIRK_SUPPORT_RX_FIFO BIT(16)
-> +/* Setup stop mode with ATF SCMI protocol to support wakeup */
-> +#define FLEXCAN_QUIRK_SETUP_STOP_MODE_SCMI BIT(17)
->
->  struct flexcan_devtype_data {
->         u32 quirks;             /* quirks needed for different IP cores *=
-/
->
 > --
-> 2.34.1
->
->
+> Uladzislau Rezki
+
 
