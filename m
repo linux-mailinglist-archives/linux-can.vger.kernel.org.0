@@ -1,157 +1,169 @@
-Return-Path: <linux-can+bounces-984-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-986-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EBDB9337B7
-	for <lists+linux-can@lfdr.de>; Wed, 17 Jul 2024 09:21:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75EE193440E
+	for <lists+linux-can@lfdr.de>; Wed, 17 Jul 2024 23:44:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 455921C22445
-	for <lists+linux-can@lfdr.de>; Wed, 17 Jul 2024 07:21:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBDB3282A76
+	for <lists+linux-can@lfdr.de>; Wed, 17 Jul 2024 21:44:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F72E1BC39;
-	Wed, 17 Jul 2024 07:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A6B188CB1;
+	Wed, 17 Jul 2024 21:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="AJDXwqS0"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11020116.outbound.protection.outlook.com [52.101.69.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45460B64C
-	for <linux-can@vger.kernel.org>; Wed, 17 Jul 2024 07:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721200897; cv=none; b=E5FI1/1sK1oTQfRDNy5lDkVc0Rm23cG3pZLOELyNrarbSvjY6xtiqeYrgmLkg53oC4JM0o3T7ycJNgypD8uogX/lqYqOMuv5OG8WUeuHmRb/PSGiAk6wJtkZYZ8fyu5zHDc3aAHNbFfwYA3AoRcqIkNW8fMk7Ueq7UmPq2wEHwA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721200897; c=relaxed/simple;
-	bh=7dyhTQjy+22B7GIQfMe+2jE4/DTU5dL5I/JauqWJc+Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bbSA+Q6v0vUiE3TNAXYT+hUoEJ4MhlH2vgmWx8WUUvlIOsdTcPi6b6E8BFREx3tIH49mAccQ2SsHGNoTZbb59/Qo3Pf8yEr8JKho8ihCrVYweQFWoW5c8ZwqYqxXl1Ldqrv9cmsdY2J8Y2S5wBUPvn1Y0EvygS4LzMQ/dqTGOhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sTyyQ-0006wr-Ga; Wed, 17 Jul 2024 09:21:14 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sTyyO-000A17-Cx; Wed, 17 Jul 2024 09:21:12 +0200
-Received: from pengutronix.de (p5de45302.dip0.t-ipconnect.de [93.228.83.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 524B830595B;
-	Wed, 17 Jul 2024 07:20:46 +0000 (UTC)
-Date: Wed, 17 Jul 2024 09:20:45 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Bough Chen <haibo.chen@nxp.com>
-Cc: Frank Li <frank.li@nxp.com>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"imx@lists.linux.dev" <imx@lists.linux.dev>, Han Xu <han.xu@nxp.com>
-Subject: Re: RE: [PATCH v2 4/4] can: flexcan: add wakeup support for imx95
-Message-ID: <20240717-porpoise-of-imminent-inspiration-ef2fc6-mkl@pengutronix.de>
-References: <20240715-flexcan-v2-0-2873014c595a@nxp.com>
- <20240715-flexcan-v2-4-2873014c595a@nxp.com>
- <20240716-curious-scorpion-of-glory-8265aa-mkl@pengutronix.de>
- <ZpaF4Wc70VuV4Cti@lizhi-Precision-Tower-5810>
- <20240716-chowchow-of-massive-joviality-77e833-mkl@pengutronix.de>
- <DU0PR04MB9496C653249E66016A43F97790A32@DU0PR04MB9496.eurprd04.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD421822FD;
+	Wed, 17 Jul 2024 21:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.116
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721252657; cv=fail; b=nvgfl0n7mV7liNLNfOPPAMMxBMeqNPplk0Q51VLeNHrIZefAufOo2gK0pH8G9k0Xt4aKBXKSLPk8gZpKYlvXc7Y1qcrx00Vp+iwlUgpby58sZIHhYbceRqVZ5nG5aDM9036vLUy9MZAxr2fJ5HVj301bz4Eqnw/DdfaPP3Pl9a8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721252657; c=relaxed/simple;
+	bh=ceqHBvgFTTVoja0GTY7EDYCXDxhPJ6u4UUVub3Sw3Cw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=i9rJMIFgYmSsEwjzt9l5Km1IY3V3R8LMyfu0JeJUB/E9UTrBkQK06owqAxTd4ndA3YYQ7WI5taamvI2tkOXMdELnPcT+xruwJsBqzwQS5ah4dII0TQSebNo4kRI5Y1WMO/OYzaLo8hD911MbnOATBwp+lTV4pLl1T3R0p2Y8s9s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu; spf=pass smtp.mailfrom=esd.eu; dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b=AJDXwqS0; arc=fail smtp.client-ip=52.101.69.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esd.eu
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gThYnNHaJwCb4IOtev3ZUCe9eCmfaYAPnKW5aybsSSkgTvvogA0/thRF0KbcMHwwDhQXu3pX/R5M1X1At4HUDOEdb+yFxuhArjusXGdW5Qaw2d92IMZvFk9932HNX8Wk33sGLhX3awOe0LfTY2NYYUi4lCA+xOKEGsbfC0+4W+h6wMhFR66u0LkSPLTImCd//BrwGmwOq0YyR+Fj3mCxATem7WiQyrxotSktppnrWCfDAptem4o3yAkixM2qScOOyDpcHIQhiQveK5XlA4Rer90ovhKj8X/Q1tLuypvIAvbblWVOeVrH1z+GZG8GSLlnlHWMiAflITr7c1Ps157ujA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1fhRy3kzIVOPN5Yn/l85kLNce7Ucr6tPCMQP+nU1VoE=;
+ b=OftNLudHVJgxBFGmoQenkVJURgCVkNKRwUQt9joDaJEdAnNOCfQL61ZvFTW7kNyWo4zYiHuRX+t7jkA1i4/ShgELRenH9cB8WBd9qW1k/+816k87m1F1lqAdIqibw0xO8jTAwIt7PvYTnDF2qEScS4Zl/bYPYgYo9A7lIuxs38Nl2C635MvtHknxmGIBGD7iQeYSObupnVoni5RzKrXcfNlvJ/bLS7aNJKH7kUCMcbNz/cK4jvpV/SkoJbec5jTnmgL2CpqeWMVns0UsOqIdgSN883FQmtYsNkbn0ca51WHEbX7hALYhCDRdA7UToCzLZuj1XnBYz4cRq03fni6rBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 80.151.164.27) smtp.rcpttodomain=davemloft.net smtp.mailfrom=esd.eu;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=esd.eu; dkim=none
+ (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1fhRy3kzIVOPN5Yn/l85kLNce7Ucr6tPCMQP+nU1VoE=;
+ b=AJDXwqS0vtLtJaz28hDgFICjJluPKmhbwMTLfVMsVuScu/fAJLxTZrgl0Kgi1drAE4W4YS0VnvciJdP5qhI4ovwOic9HGljr87nn3GX0lNcbvLZcno+eNqqxxHDT+1aRJdyqq5hmSo2i3caa3ff1jGBH2wd3wVj1jT4IkXT1Wgk=
+Received: from AM6PR02CA0034.eurprd02.prod.outlook.com (2603:10a6:20b:6e::47)
+ by GV1PR03MB10385.eurprd03.prod.outlook.com (2603:10a6:150:170::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.31; Wed, 17 Jul
+ 2024 21:44:10 +0000
+Received: from AM2PEPF0001C708.eurprd05.prod.outlook.com
+ (2603:10a6:20b:6e:cafe::8c) by AM6PR02CA0034.outlook.office365.com
+ (2603:10a6:20b:6e::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.18 via Frontend
+ Transport; Wed, 17 Jul 2024 21:44:10 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=esd.eu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
+ discourages use of 80.151.164.27 as permitted sender)
+Received: from esd-s7.esd (80.151.164.27) by
+ AM2PEPF0001C708.mail.protection.outlook.com (10.167.16.196) with Microsoft
+ SMTP Server id 15.20.7784.11 via Frontend Transport; Wed, 17 Jul 2024
+ 21:44:09 +0000
+Received: from debby.esd.local (debby [10.0.0.190])
+	by esd-s7.esd (Postfix) with ESMTPS id 883F87C16C8;
+	Wed, 17 Jul 2024 23:44:09 +0200 (CEST)
+Received: by debby.esd.local (Postfix, from userid 2044)
+	id 764072E014B; Wed, 17 Jul 2024 23:44:09 +0200 (CEST)
+From: =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 0/2] can: esd_402_pci: Do cleanup; Add one-shot mode
+Date: Wed, 17 Jul 2024 23:44:07 +0200
+Message-Id: <20240717214409.3934333-1-stefan.maetje@esd.eu>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lyoxbz5qrcbtajuw"
-Content-Disposition: inline
-In-Reply-To: <DU0PR04MB9496C653249E66016A43F97790A32@DU0PR04MB9496.eurprd04.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM2PEPF0001C708:EE_|GV1PR03MB10385:EE_
+X-MS-Office365-Filtering-Correlation-Id: 97864543-2fdb-4c64-476c-08dca6a99760
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|7416014|376014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TVhBeGRKZnpEYmdiQW5jS0RnSGphRFVvUTE2K21mS2FRTXVzek1TQU43MG45?=
+ =?utf-8?B?WDI5S3ptbkxmZi8zRkNSVVdjc09ob3NoVUxZUDhvNE5lTGdiUVQvdEsxaHlo?=
+ =?utf-8?B?NUpKYTRGeFo1bTA1TkpUUWl0T3JkSjRGOW9zWXgrZUxJb1BaOW5HWGRqeVQ4?=
+ =?utf-8?B?eWRrRUllMlgzdzN0ZExGNGx4NFJTd0hzUzA4bGZqWVhZVkdYZjhtMHNvK0hF?=
+ =?utf-8?B?a1ZJT1lXeFFaaGNwV1owZEQ3eDQvUzlNdXBaUjhDTys1aFl2K0hyN3RCQzZ0?=
+ =?utf-8?B?NEVxZTkzTWkxTFZSVDd4RjVTMkZQMWVZWUNKMm03bFB4Sk9WQW8zYWFnWWNI?=
+ =?utf-8?B?dzN3MHM1VFR5eHZacWloN01YWDlIaytIRUlPOWQyZnZneWpHMDJ1SU9jdEpq?=
+ =?utf-8?B?ZXJWbUhGcWdmZUI3WVN0UHduMTNZQWthdjVOV3BPeDlRV0kvOEsxUUM4Y2lx?=
+ =?utf-8?B?cmNMSkZobWRTVitmTXJOTzQwekZpVFZ1TjJLWUZSVmZJMHI1ei9YWmUvK2FG?=
+ =?utf-8?B?dEJHYWZBaU1qVXZ1elZDUjhKVW13ekl0MlRLb1dUbGJESUhDYy9uUjNoTnFr?=
+ =?utf-8?B?SjQwM3lsZmJEaDF2MUtBYTR3ak1nUVJ6MG5iSWNIeGRmNHVnV0k2b01sVmsx?=
+ =?utf-8?B?bjN4ZHl5YmdsZ0lHSXUzYkdlRkhkbFZIRTlNWnFiMHhuUjIwV28za2hrTzE2?=
+ =?utf-8?B?ajF6ZXFVWU4wNk92ajhlWXhNY2RZYVlGSzFMamtoMUVTL3FQeU93VExXTWZ3?=
+ =?utf-8?B?b3ZJZnJPQ0tMZXRBSnNDeTk2T1lmL054OXZmb3lyT250THJYQkdzZVVlSGg5?=
+ =?utf-8?B?NjJnSjF1bzRncFZDQVhjQUcyZk9samdGZnNYcHQ0YXVhTHZ2ditzOVpZZ1pr?=
+ =?utf-8?B?bVduMGMyM0t6TFEycnJIQThPdlprT1MrZDlsd0p6NGxHTXc5eG5STURvYXQz?=
+ =?utf-8?B?cERSVmU0d0lJOHlySG16YTBlbmpuZUIyQXhJdGdWRzRzaWhFRGhJVS9KRDVk?=
+ =?utf-8?B?aG9LV1hFYzc5Znc2U1RLZnUyWDNjL2hYQXdja01UM1JockhUYzFHRGd6MnY4?=
+ =?utf-8?B?bFZrb2tGU0IrdFp0ek84MWZWcyt5bXJKSGFFNTNOZDJCU0MzaDRrak14VWhx?=
+ =?utf-8?B?RUVKYy9GbVpyaG9RTm5PNnViL2tHb1NMY21YRVVMenhWeFBoS0hHQ05iN2JT?=
+ =?utf-8?B?OUdQcTZQZ0duSkNzYldxaFFVa0xwclROb2xFR3drZlc0VXNPWEpjQ3VndndH?=
+ =?utf-8?B?NXVycVhCeERGVVVSc0I3UjZaRTNYT2YwbHVUU0xBbDNOQzg1V0xaNGRmNk5X?=
+ =?utf-8?B?cW1jRXdDZFRqWjdjQ0pzc1p4ajFLY1BxU2x6RHg5bnpKaldZcEszNE1XVHEy?=
+ =?utf-8?B?M0FUVzdEMDRoZjh6NVRrRUVLOWZwN0FET3V4VWd2a05KUE9mczJLWWhWeUxq?=
+ =?utf-8?B?eHNNRGNVN01OU2dDalNkMWdJM2o5VVIvbXAyMnlnaCtYSDBYbkFxQXhybVRR?=
+ =?utf-8?B?UUk0MkNaekN1dk9zSzdjaWcrS0N2VkQ4WFNNSUw0cUUva2tGamlkNjNsRDJH?=
+ =?utf-8?B?ZUh0UjJKNXh1N3JPSnEzdFdhejdIbGV3Q1l1dlV4UDhCRHhPSGpZdWQyTEt4?=
+ =?utf-8?B?akZtMXRrOHQ0ZUVJbUJLRWVHZkJabGJTL3R4RUNheWxSbVplU2ZUQTNOS0Fr?=
+ =?utf-8?B?ZEdMWkFtSlEwY3pwVUxqZWVEa0ptcVYrVVo3QlA1a2VOZk1hYlpoWE9NTDJ2?=
+ =?utf-8?B?OFBQeGx6TStBZTdpb2NCa09QQVNrNnp4d0xJUys4dTI5anExS1VwQThzcXBr?=
+ =?utf-8?B?TzJHQkIxbjRqRU1oQmppMENpUFgveUNidm5uMTYvbnE4cE1lREhxQlN3bU9q?=
+ =?utf-8?B?eldaS0ZabXptbkxUaExUVDRwTjV1eTVJNmFYNG96emFDbUx4YnM2ME1jN0JH?=
+ =?utf-8?Q?HinEQBuBQJ/N4wDo17Kv/sgZ8nQQW4y/?=
+X-Forefront-Antispam-Report:
+	CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(7416014)(376014)(82310400026);DIR:OUT;SFP:1102;
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2024 21:44:09.8495
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97864543-2fdb-4c64-476c-08dca6a99760
+X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM2PEPF0001C708.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR03MB10385
 
+The goal of this patch series is to do some cleanup
+and also add the support for the one-shot mode before
+the next patch introduces CAN-FD support for this
+driver.
 
---lyoxbz5qrcbtajuw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Stefan Mätje (2):
+  can: esd_402_pci: Rename esdACC CTRL register macros
+  can: esd_402_pci: Add support for one-shot mode
 
-On 17.07.2024 02:03:35, Bough Chen wrote:
-> > On 16.07.2024 10:40:31, Frank Li wrote:
-> > > > > @@ -2330,9 +2366,12 @@ static int __maybe_unused
-> > flexcan_noirq_resume(struct device *device)
-> > > > >  	if (netif_running(dev)) {
-> > > > >  		int err;
-> > > > >
-> > > > > -		err =3D pm_runtime_force_resume(device);
-> > > > > -		if (err)
-> > > > > -			return err;
-> > > > > +		if (!(device_may_wakeup(device) &&
-> > > >                       ^^^^^^^^^^^^^^^^^^^^^^^^
-> > > >
-> > > > Where does this come from?
-> > >
-> > > include/linux/pm_wakeup.h
-> > >
-> > > static inline bool device_may_wakeup(struct device *dev)
-> > > {
-> > >         return dev->power.can_wakeup && !!dev->power.wakeup;
-> > > }
-> >=20
-> > Sorry for the confusion. I wanted to point out, that the original drive=
-r doesn't
-> > have the check to device_may_wakeup(). Why was this added?
->=20
-> Here add this to make sure for CAN with flag
-> FLEXCAN_QUIRK_SETUP_STOP_MODE_SCMI and really used as wakeup source,
-> do not need to call pm_runtime_force_resume(), keep it align with what
-> we do in flexcan_noirq_suspend.
+ drivers/net/can/esd/esd_402_pci-core.c |  5 ++-
+ drivers/net/can/esd/esdacc.c           | 55 ++++++++++++++------------
+ drivers/net/can/esd/esdacc.h           | 38 +++++++++---------
+ 3 files changed, 53 insertions(+), 45 deletions(-)
 
-> As the comment in flexcan_noirq_suspend, CAN with flag
-> FLEXCAN_QUIRK_SETUP_STOP_MODE_SCMI, when used as wakeup source, need
-> to keep CAN clock on when system suspend, let ATF part logic works,
-> detail steps please refer to this patch commit log. Whether gate off
-> the CAN clock or not depends on the Hardware design. So for this case,
-> in flexcan_noirq_suspend, directly return0, do not call the
-> pm_runtime_force_suspend(), then in flexcan_noirq_resume(), use the
-> same logic to skip the pm_runtime_force_resume().
+-- 
+2.34.1
 
-Please change the control flow, so that flexcan_noirq_suspend() and
-flexcan_noirq_resume() look symmetrical.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---lyoxbz5qrcbtajuw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmaXcMoACgkQKDiiPnot
-vG+oPQf/YPWUrvcT++JZ07FcseBQUWKsH7dE6a2zvUJix3NiJbujU/7ZWRis8Bhl
-CGbvtpAmEkpcNuKWucYwTYt2eB8y4d0h3qCHeSi1B6Jsg+SGccThY+3/WxfCmwUu
-pMcw4nfvza024LNjyeZLBtys3O81K/GIg3iJ2NULzgQNeKfM8oalPvoEhrMVHEVn
-J+GyKB4zCaZAGfbndeG7OBQleiFSTQ4oi7OEq8rr8lsnjcCfPYDKDfLZQIpFZtqa
-VRiFq7hTayk/qYyVsZhRf8089C4wsp6zhLDoe9Dweu/J8sQ03klMIOUvpKuRD5jC
-FbL9ybQfk28QbWIANcLZnko0sBa6RA==
-=3SL7
------END PGP SIGNATURE-----
-
---lyoxbz5qrcbtajuw--
 
