@@ -1,42 +1,43 @@
-Return-Path: <linux-can+bounces-986-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-987-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75EE193440E
-	for <lists+linux-can@lfdr.de>; Wed, 17 Jul 2024 23:44:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F0C1934412
+	for <lists+linux-can@lfdr.de>; Wed, 17 Jul 2024 23:44:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBDB3282A76
-	for <lists+linux-can@lfdr.de>; Wed, 17 Jul 2024 21:44:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45405282B41
+	for <lists+linux-can@lfdr.de>; Wed, 17 Jul 2024 21:44:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A6B188CB1;
-	Wed, 17 Jul 2024 21:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C005E18C16D;
+	Wed, 17 Jul 2024 21:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="AJDXwqS0"
+	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="kxMdpF8A"
 X-Original-To: linux-can@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11020116.outbound.protection.outlook.com [52.101.69.116])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11021101.outbound.protection.outlook.com [52.101.65.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD421822FD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE43187325;
 	Wed, 17 Jul 2024 21:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.116
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.101
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721252657; cv=fail; b=nvgfl0n7mV7liNLNfOPPAMMxBMeqNPplk0Q51VLeNHrIZefAufOo2gK0pH8G9k0Xt4aKBXKSLPk8gZpKYlvXc7Y1qcrx00Vp+iwlUgpby58sZIHhYbceRqVZ5nG5aDM9036vLUy9MZAxr2fJ5HVj301bz4Eqnw/DdfaPP3Pl9a8=
+	t=1721252658; cv=fail; b=tWj4WXAMvzzN84VmzxddVsqqOp1YPPEdzrJ+ikqDG/q8XftiuHn9kZKmj3xr9LilaUjS5pIMlnxYVnOOtg/AZIZX8nv9rvXyr3Gt333o0XLLwryqmco/6NhvwerC3YEo+4B80sZ9hAAYVBRNDDrNeAhG+bFWYl2gweRjHZy05s8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721252657; c=relaxed/simple;
-	bh=ceqHBvgFTTVoja0GTY7EDYCXDxhPJ6u4UUVub3Sw3Cw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=i9rJMIFgYmSsEwjzt9l5Km1IY3V3R8LMyfu0JeJUB/E9UTrBkQK06owqAxTd4ndA3YYQ7WI5taamvI2tkOXMdELnPcT+xruwJsBqzwQS5ah4dII0TQSebNo4kRI5Y1WMO/OYzaLo8hD911MbnOATBwp+lTV4pLl1T3R0p2Y8s9s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu; spf=pass smtp.mailfrom=esd.eu; dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b=AJDXwqS0; arc=fail smtp.client-ip=52.101.69.116
+	s=arc-20240116; t=1721252658; c=relaxed/simple;
+	bh=fWbvBHKrWJT2QHXDdYmHiLsEgrKYcWS9XghsdlLl5jY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WLg10Bf2XrRpEKsq7AdC6xXjevNriaEz7HQkmzkGMZwqcokCLG9iDV2CQIZRzMsX0E5aC5lVjzzZstuHRTGwXr0caFkRn3mLhEZrqQ7Tmejo/xQ/SF1y1UHdMoGfjNDyyZXH+9I73mWDe6W0CtpeOyLD2P0waeEQkr3kdZkW4QA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu; spf=pass smtp.mailfrom=esd.eu; dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b=kxMdpF8A; arc=fail smtp.client-ip=52.101.65.101
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esd.eu
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gThYnNHaJwCb4IOtev3ZUCe9eCmfaYAPnKW5aybsSSkgTvvogA0/thRF0KbcMHwwDhQXu3pX/R5M1X1At4HUDOEdb+yFxuhArjusXGdW5Qaw2d92IMZvFk9932HNX8Wk33sGLhX3awOe0LfTY2NYYUi4lCA+xOKEGsbfC0+4W+h6wMhFR66u0LkSPLTImCd//BrwGmwOq0YyR+Fj3mCxATem7WiQyrxotSktppnrWCfDAptem4o3yAkixM2qScOOyDpcHIQhiQveK5XlA4Rer90ovhKj8X/Q1tLuypvIAvbblWVOeVrH1z+GZG8GSLlnlHWMiAflITr7c1Ps157ujA==
+ b=E19Cxvhuil1JPN3qhN7JrSGw8jiYbcrPWCyhML9SAg+2xOgKpBLzeF5MVcVtlv+7bEQnLHkZHgabK83rudh9Q8ctH1MSH97ISlw5tyLTSITAevVJDgNztaDuPPenYL5hADskRswzQVijDQblkv0dqhbFBvYNfzDf8RIDhUE7mcGBLaVtw5Fn/UX7uGovWMU01jZJFmquClnDxRudX+kwS1+elpllJefcaJje6HxH2dvv9ZupsLM6tnFr+7x91YpwNfl7uuhd0EviKTr+zHTSsGKvYKGRNhMlF4/tMTsfxKTYGWjZ2kND40aSsezyc2wHI/Kw0HArxf9fGxTtxwYxHg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1fhRy3kzIVOPN5Yn/l85kLNce7Ucr6tPCMQP+nU1VoE=;
- b=OftNLudHVJgxBFGmoQenkVJURgCVkNKRwUQt9joDaJEdAnNOCfQL61ZvFTW7kNyWo4zYiHuRX+t7jkA1i4/ShgELRenH9cB8WBd9qW1k/+816k87m1F1lqAdIqibw0xO8jTAwIt7PvYTnDF2qEScS4Zl/bYPYgYo9A7lIuxs38Nl2C635MvtHknxmGIBGD7iQeYSObupnVoni5RzKrXcfNlvJ/bLS7aNJKH7kUCMcbNz/cK4jvpV/SkoJbec5jTnmgL2CpqeWMVns0UsOqIdgSN883FQmtYsNkbn0ca51WHEbX7hALYhCDRdA7UToCzLZuj1XnBYz4cRq03fni6rBg==
+ bh=9t9cg9MUrzlNcPKH8xVyy9AVPEoX4vJ/X1Ms2jwjlhs=;
+ b=ygJNQbMqBkAkImdYlQlX4gqgr0G1B9PR+14LtauOWHUn/mI6vDdQHknpw3CJbgTbcfBnJPPf3ucwY47+rnUUx8ohK2hiJSxcNunMv4YIwUUantArxz3VQ8+lEyhEsbgp4jHWTDIpjTCLgae6YODOHsPOGG2GWiOLXYwEMUl0IlHwIhDHNRkfTIYWzA6oMef2SIMann6Sa3NMVKD+ktBDKzFQytdcIuEIjnp50JOvmsdQQkMEUM8TOaD98MNhPUtqmpI+I7DMY2QUVnbmu4Ko+TeVebdkh8DipuSQlj22jNeKBI4pJ/MLWRy2wgIAY7bxp4zhnqz3jdE0fyZZItIAQQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
  is 80.151.164.27) smtp.rcpttodomain=davemloft.net smtp.mailfrom=esd.eu;
  dmarc=fail (p=none sp=none pct=100) action=none header.from=esd.eu; dkim=none
@@ -44,16 +45,16 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1fhRy3kzIVOPN5Yn/l85kLNce7Ucr6tPCMQP+nU1VoE=;
- b=AJDXwqS0vtLtJaz28hDgFICjJluPKmhbwMTLfVMsVuScu/fAJLxTZrgl0Kgi1drAE4W4YS0VnvciJdP5qhI4ovwOic9HGljr87nn3GX0lNcbvLZcno+eNqqxxHDT+1aRJdyqq5hmSo2i3caa3ff1jGBH2wd3wVj1jT4IkXT1Wgk=
-Received: from AM6PR02CA0034.eurprd02.prod.outlook.com (2603:10a6:20b:6e::47)
- by GV1PR03MB10385.eurprd03.prod.outlook.com (2603:10a6:150:170::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.31; Wed, 17 Jul
+ bh=9t9cg9MUrzlNcPKH8xVyy9AVPEoX4vJ/X1Ms2jwjlhs=;
+ b=kxMdpF8AnZZIYh3SoLkVtni56+8SYUnDgMLljK3lytJmMdTYErr6E0huVYtI9dTPXeTHXdOvPxkngIlN8+pU14Fn3H+SgLfHw5NuUYAf2ZyjyQIeHu8gkedEQqhjKdlHQnB7Mi76SU3AWowCIvmxjKesmMC8fWdvHq2O4/rVmOY=
+Received: from DUZPR01CA0233.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4b4::17) by GV2PR03MB9524.eurprd03.prod.outlook.com
+ (2603:10a6:150:da::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.17; Wed, 17 Jul
  2024 21:44:10 +0000
-Received: from AM2PEPF0001C708.eurprd05.prod.outlook.com
- (2603:10a6:20b:6e:cafe::8c) by AM6PR02CA0034.outlook.office365.com
- (2603:10a6:20b:6e::47) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DB5PEPF00014B9D.eurprd02.prod.outlook.com
+ (2603:10a6:10:4b4:cafe::5a) by DUZPR01CA0233.outlook.office365.com
+ (2603:10a6:10:4b4::17) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.18 via Frontend
  Transport; Wed, 17 Jul 2024 21:44:10 +0000
 X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
@@ -62,14 +63,14 @@ X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
 Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
  discourages use of 80.151.164.27 as permitted sender)
 Received: from esd-s7.esd (80.151.164.27) by
- AM2PEPF0001C708.mail.protection.outlook.com (10.167.16.196) with Microsoft
+ DB5PEPF00014B9D.mail.protection.outlook.com (10.167.8.164) with Microsoft
  SMTP Server id 15.20.7784.11 via Frontend Transport; Wed, 17 Jul 2024
  21:44:09 +0000
-Received: from debby.esd.local (debby [10.0.0.190])
-	by esd-s7.esd (Postfix) with ESMTPS id 883F87C16C8;
+Received: from debby.esd.local (jenkins.esd.local [10.0.0.190])
+	by esd-s7.esd (Postfix) with ESMTPS id 8947E7C16C9;
 	Wed, 17 Jul 2024 23:44:09 +0200 (CEST)
 Received: by debby.esd.local (Postfix, from userid 2044)
-	id 764072E014B; Wed, 17 Jul 2024 23:44:09 +0200 (CEST)
+	id 7A03D2E0157; Wed, 17 Jul 2024 23:44:09 +0200 (CEST)
 From: =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -81,10 +82,12 @@ Cc: netdev@vger.kernel.org,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 0/2] can: esd_402_pci: Do cleanup; Add one-shot mode
-Date: Wed, 17 Jul 2024 23:44:07 +0200
-Message-Id: <20240717214409.3934333-1-stefan.maetje@esd.eu>
+Subject: [PATCH 1/2] can: esd_402_pci: Rename esdACC CTRL register macros
+Date: Wed, 17 Jul 2024 23:44:08 +0200
+Message-Id: <20240717214409.3934333-2-stefan.maetje@esd.eu>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240717214409.3934333-1-stefan.maetje@esd.eu>
+References: <20240717214409.3934333-1-stefan.maetje@esd.eu>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -95,74 +98,236 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM2PEPF0001C708:EE_|GV1PR03MB10385:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97864543-2fdb-4c64-476c-08dca6a99760
+X-MS-TrafficTypeDiagnostic: DB5PEPF00014B9D:EE_|GV2PR03MB9524:EE_
+X-MS-Office365-Filtering-Correlation-Id: affec90e-0fa5-43c4-d1bf-08dca6a9976e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|7416014|376014|82310400026;
+	BCL:0;ARA:13230040|376014|1800799024|7416014|82310400026|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TVhBeGRKZnpEYmdiQW5jS0RnSGphRFVvUTE2K21mS2FRTXVzek1TQU43MG45?=
- =?utf-8?B?WDI5S3ptbkxmZi8zRkNSVVdjc09ob3NoVUxZUDhvNE5lTGdiUVQvdEsxaHlo?=
- =?utf-8?B?NUpKYTRGeFo1bTA1TkpUUWl0T3JkSjRGOW9zWXgrZUxJb1BaOW5HWGRqeVQ4?=
- =?utf-8?B?eWRrRUllMlgzdzN0ZExGNGx4NFJTd0hzUzA4bGZqWVhZVkdYZjhtMHNvK0hF?=
- =?utf-8?B?a1ZJT1lXeFFaaGNwV1owZEQ3eDQvUzlNdXBaUjhDTys1aFl2K0hyN3RCQzZ0?=
- =?utf-8?B?NEVxZTkzTWkxTFZSVDd4RjVTMkZQMWVZWUNKMm03bFB4Sk9WQW8zYWFnWWNI?=
- =?utf-8?B?dzN3MHM1VFR5eHZacWloN01YWDlIaytIRUlPOWQyZnZneWpHMDJ1SU9jdEpq?=
- =?utf-8?B?ZXJWbUhGcWdmZUI3WVN0UHduMTNZQWthdjVOV3BPeDlRV0kvOEsxUUM4Y2lx?=
- =?utf-8?B?cmNMSkZobWRTVitmTXJOTzQwekZpVFZ1TjJLWUZSVmZJMHI1ei9YWmUvK2FG?=
- =?utf-8?B?dEJHYWZBaU1qVXZ1elZDUjhKVW13ekl0MlRLb1dUbGJESUhDYy9uUjNoTnFr?=
- =?utf-8?B?SjQwM3lsZmJEaDF2MUtBYTR3ak1nUVJ6MG5iSWNIeGRmNHVnV0k2b01sVmsx?=
- =?utf-8?B?bjN4ZHl5YmdsZ0lHSXUzYkdlRkhkbFZIRTlNWnFiMHhuUjIwV28za2hrTzE2?=
- =?utf-8?B?ajF6ZXFVWU4wNk92ajhlWXhNY2RZYVlGSzFMamtoMUVTL3FQeU93VExXTWZ3?=
- =?utf-8?B?b3ZJZnJPQ0tMZXRBSnNDeTk2T1lmL054OXZmb3lyT250THJYQkdzZVVlSGg5?=
- =?utf-8?B?NjJnSjF1bzRncFZDQVhjQUcyZk9samdGZnNYcHQ0YXVhTHZ2ditzOVpZZ1pr?=
- =?utf-8?B?bVduMGMyM0t6TFEycnJIQThPdlprT1MrZDlsd0p6NGxHTXc5eG5STURvYXQz?=
- =?utf-8?B?cERSVmU0d0lJOHlySG16YTBlbmpuZUIyQXhJdGdWRzRzaWhFRGhJVS9KRDVk?=
- =?utf-8?B?aG9LV1hFYzc5Znc2U1RLZnUyWDNjL2hYQXdja01UM1JockhUYzFHRGd6MnY4?=
- =?utf-8?B?bFZrb2tGU0IrdFp0ek84MWZWcyt5bXJKSGFFNTNOZDJCU0MzaDRrak14VWhx?=
- =?utf-8?B?RUVKYy9GbVpyaG9RTm5PNnViL2tHb1NMY21YRVVMenhWeFBoS0hHQ05iN2JT?=
- =?utf-8?B?OUdQcTZQZ0duSkNzYldxaFFVa0xwclROb2xFR3drZlc0VXNPWEpjQ3VndndH?=
- =?utf-8?B?NXVycVhCeERGVVVSc0I3UjZaRTNYT2YwbHVUU0xBbDNOQzg1V0xaNGRmNk5X?=
- =?utf-8?B?cW1jRXdDZFRqWjdjQ0pzc1p4ajFLY1BxU2x6RHg5bnpKaldZcEszNE1XVHEy?=
- =?utf-8?B?M0FUVzdEMDRoZjh6NVRrRUVLOWZwN0FET3V4VWd2a05KUE9mczJLWWhWeUxq?=
- =?utf-8?B?eHNNRGNVN01OU2dDalNkMWdJM2o5VVIvbXAyMnlnaCtYSDBYbkFxQXhybVRR?=
- =?utf-8?B?UUk0MkNaekN1dk9zSzdjaWcrS0N2VkQ4WFNNSUw0cUUva2tGamlkNjNsRDJH?=
- =?utf-8?B?ZUh0UjJKNXh1N3JPSnEzdFdhejdIbGV3Q1l1dlV4UDhCRHhPSGpZdWQyTEt4?=
- =?utf-8?B?akZtMXRrOHQ0ZUVJbUJLRWVHZkJabGJTL3R4RUNheWxSbVplU2ZUQTNOS0Fr?=
- =?utf-8?B?ZEdMWkFtSlEwY3pwVUxqZWVEa0ptcVYrVVo3QlA1a2VOZk1hYlpoWE9NTDJ2?=
- =?utf-8?B?OFBQeGx6TStBZTdpb2NCa09QQVNrNnp4d0xJUys4dTI5anExS1VwQThzcXBr?=
- =?utf-8?B?TzJHQkIxbjRqRU1oQmppMENpUFgveUNidm5uMTYvbnE4cE1lREhxQlN3bU9q?=
- =?utf-8?B?eldaS0ZabXptbkxUaExUVDRwTjV1eTVJNmFYNG96emFDbUx4YnM2ME1jN0JH?=
- =?utf-8?Q?HinEQBuBQJ/N4wDo17Kv/sgZ8nQQW4y/?=
+	=?utf-8?B?NHFudXptWUtCT3hpQ0s4SjM4dU1xdUthSjJmNjR2SnFGM3JNY2dVb0U5Vmxr?=
+ =?utf-8?B?cHpRWWRqWjJpaHV0dzBkZUtReU5lSy90QWZmZ3V2VGNFSTR0cUsrK1VhTStM?=
+ =?utf-8?B?c0JkNzBWNWxDRDRCZ3BSdzNJb09xSDVnK29Va2tVcGk1cXNSZzE2b2pqdzI0?=
+ =?utf-8?B?NHZpQ2VwT29xL2tMWFQvdStONWw1Z1Rkdmk5MkNEUUsrOFUyeGxYL0RUd2RG?=
+ =?utf-8?B?TW1rd2srcktSOUZ3OUFvWTBmcGxWVWQ5SXZtVXRVTlFJM1E5NGIybHR6OHU2?=
+ =?utf-8?B?WWptNittU2hZWlJDb1VIa3M4RjBNUlVVbnZ6d1plczk3S3V0MjFHbjFiM0p6?=
+ =?utf-8?B?emJBM1I2cEVPVmYyc0t6TmJXYUhoQ1FRRlIxL2dLV2hBakt6cCtRSGdRcm91?=
+ =?utf-8?B?dHY4Q3F1VWI4eTJRM1lENHJnYlNxR0Q4cEhLZ1hHeG1rR1hwMnFPNkNyYktk?=
+ =?utf-8?B?RnlYVDhuMUhqcDFuUnNlVC9jSml0NS9SZUQ4ZGJhWHVHZmVDY2hDTjlKblY5?=
+ =?utf-8?B?clIya0draDBBTGdzdTZrNDJTYmRsNi84dlJ5eGVkMEdnaGl6S09YUVNnOGJs?=
+ =?utf-8?B?VGdYdUpQcXZNQ3BsU1Y2Sjh3R2NZalgvSTZ5LzM3d3BSTWg3MUhoQ0RJbHM5?=
+ =?utf-8?B?TStWUmREUmd5a0RMYnZTN3g4dXQ4a3F2czAvQWQ2d28vQmNsUnFxNzE1UjMr?=
+ =?utf-8?B?K3R6TCs2LzBDcjJhblhnR21CTkVuZTdOdlZSc1ZKV0I2N2NHa0ZGYlAzNURa?=
+ =?utf-8?B?U3d6UHdsWk4xU3J1QVpiWldmNFllU1dKZDJMejNZMlRKM0VVVDkveXV1SFg1?=
+ =?utf-8?B?ZGpEYjRYMHd3REhqcjdFc1h3cTEvcmNYV1ZqQkxoR2FVM3UweXBhZ2R3WnRO?=
+ =?utf-8?B?SlMraFBGMFZoRkhjU2MxbHVuZ05RQUJ2a0tMUFNOU1ViRXhQV2JPdlI1Yjdk?=
+ =?utf-8?B?dGpqT0poMHdWaFRmSGFDOVJyNmNRT2JwZTV5OHhBbksxWnZuOXVPaXhPbXlj?=
+ =?utf-8?B?c3dTTXlVd0srZ3ZjZHQ1QXpHLzE2RlRHSmYrMEU2d0hPVDBDV1lKb2l0ek9L?=
+ =?utf-8?B?NllXcDdqbGFnZytnVm9aRTJrQzFlYWJzZVJTY1dPcGEwL0hoSXJMbFRsQ1FP?=
+ =?utf-8?B?b1YyZHlUbjd4RDM5NkFUeWlHK056Zy9vcDRqaEhHWFhxSlo1Wm0vTHcydW4x?=
+ =?utf-8?B?eGduTTh4SWxoZDd3akF3eVl3cmIrZlpESTQzbU9DbEp6NFp2TnFYekJ1R0lL?=
+ =?utf-8?B?S3ZZaTdBMVVXNmZJbE9MVHZkY2pCTnNDemkxV1ArMkViN04zOTVzRU9jNzJT?=
+ =?utf-8?B?ekhkZHlMT250WjR0eUsvTUVkbjhTMnNXbjJaWHZiaXNOZnJpaUZWSXZUSUdB?=
+ =?utf-8?B?TnZBTG9mMlB6UFE0YmlLWm8xYStCanVoWnMzR0pCSFRTUENLdlRHblZvNXFV?=
+ =?utf-8?B?dmltR0VDZ2ZHMVp0bW5VektTVnYwcUQ5TGdYN3RVYmhtcHRlNzkrZTliTEhB?=
+ =?utf-8?B?TnNnNFdhMjVMSE9rT0h4YjNEKytDTWpOZVpiTCtFWlR0bTJqdGZpWWloR2dV?=
+ =?utf-8?B?NGlHOEEvMjJZQTVEeFpHNlROVjNQb0hzczFsK1hmR2g4UlpwaEduQVZUNVFV?=
+ =?utf-8?B?WGVLdmZWVjlTOE9KYXExNyt5ZTYrN29jbHJTR2kwVlp6OVBrMndWR3QyUEQ5?=
+ =?utf-8?B?bndKVnRuRlh6OVV6dWRvek9JRDdwSDVmODJnd0ozNHJCZXJBTDRMalYzbllO?=
+ =?utf-8?B?aGNIdHZxRHB2MEZKbEh1YTE5NnJWWVBybW1ieFF3bEV3anRPeG9vVmYwQmhi?=
+ =?utf-8?B?WEd5U2lCN1AwMU5na3lyOWdQMVVzYlRUc2JWcTlSRTRiYXR4Q0k1MWVLaDkv?=
+ =?utf-8?B?dDNPMnZVNGI0dml1Y25reGdXbGxXNHhsS0xidHJjZ2VhcHNENDFsam9rSTlL?=
+ =?utf-8?Q?CG9osnl92IU9MGGyPTUPIcsIiNcQuFyi?=
 X-Forefront-Antispam-Report:
-	CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(7416014)(376014)(82310400026);DIR:OUT;SFP:1102;
+	CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(82310400026)(36860700013);DIR:OUT;SFP:1102;
 X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2024 21:44:09.8495
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2024 21:44:09.8980
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97864543-2fdb-4c64-476c-08dca6a99760
+X-MS-Exchange-CrossTenant-Network-Message-Id: affec90e-0fa5-43c4-d1bf-08dca6a9976e
 X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
 X-MS-Exchange-CrossTenant-AuthSource:
-	AM2PEPF0001C708.eurprd05.prod.outlook.com
+	DB5PEPF00014B9D.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR03MB10385
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR03MB9524
 
-The goal of this patch series is to do some cleanup
-and also add the support for the one-shot mode before
-the next patch introduces CAN-FD support for this
-driver.
+Rename macros to use for esdACC CTRL register access to match the
+internal documentation and to make the macro prefix consistent.
 
-Stefan Mätje (2):
-  can: esd_402_pci: Rename esdACC CTRL register macros
-  can: esd_402_pci: Add support for one-shot mode
+- ACC_CORE_OF_CTRL_MODE -> ACC_CORE_OF_CTRL
+  Makes the name match the documentation.
+- ACC_REG_CONTROL_MASK_MODE_ -> ACC_REG_CTRL_MASK_
+  ACC_REG_CONTROL_MASK_ -> ACC_REG_CTRL_MASK_
+  Makes the prefix consistent for macros describing masks in the same
+  register (CTRL).
 
- drivers/net/can/esd/esd_402_pci-core.c |  5 ++-
- drivers/net/can/esd/esdacc.c           | 55 ++++++++++++++------------
- drivers/net/can/esd/esdacc.h           | 38 +++++++++---------
- 3 files changed, 53 insertions(+), 45 deletions(-)
+Signed-off-by: Stefan Mätje <stefan.maetje@esd.eu>
+---
+ drivers/net/can/esd/esdacc.c | 46 ++++++++++++++++++------------------
+ drivers/net/can/esd/esdacc.h | 37 +++++++++++++++--------------
+ 2 files changed, 42 insertions(+), 41 deletions(-)
 
+diff --git a/drivers/net/can/esd/esdacc.c b/drivers/net/can/esd/esdacc.c
+index 121cbbf81458..ef33d2ccd220 100644
+--- a/drivers/net/can/esd/esdacc.c
++++ b/drivers/net/can/esd/esdacc.c
+@@ -43,8 +43,8 @@
+ 
+ static void acc_resetmode_enter(struct acc_core *core)
+ {
+-	acc_set_bits(core, ACC_CORE_OF_CTRL_MODE,
+-		     ACC_REG_CONTROL_MASK_MODE_RESETMODE);
++	acc_set_bits(core, ACC_CORE_OF_CTRL,
++		     ACC_REG_CTRL_MASK_RESETMODE);
+ 
+ 	/* Read back reset mode bit to flush PCI write posting */
+ 	acc_resetmode_entered(core);
+@@ -52,8 +52,8 @@ static void acc_resetmode_enter(struct acc_core *core)
+ 
+ static void acc_resetmode_leave(struct acc_core *core)
+ {
+-	acc_clear_bits(core, ACC_CORE_OF_CTRL_MODE,
+-		       ACC_REG_CONTROL_MASK_MODE_RESETMODE);
++	acc_clear_bits(core, ACC_CORE_OF_CTRL,
++		       ACC_REG_CTRL_MASK_RESETMODE);
+ 
+ 	/* Read back reset mode bit to flush PCI write posting */
+ 	acc_resetmode_entered(core);
+@@ -172,7 +172,7 @@ int acc_open(struct net_device *netdev)
+ 	struct acc_net_priv *priv = netdev_priv(netdev);
+ 	struct acc_core *core = priv->core;
+ 	u32 tx_fifo_status;
+-	u32 ctrl_mode;
++	u32 ctrl;
+ 	int err;
+ 
+ 	/* Retry to enter RESET mode if out of sync. */
+@@ -187,19 +187,19 @@ int acc_open(struct net_device *netdev)
+ 	if (err)
+ 		return err;
+ 
+-	ctrl_mode = ACC_REG_CONTROL_MASK_IE_RXTX |
+-			ACC_REG_CONTROL_MASK_IE_TXERROR |
+-			ACC_REG_CONTROL_MASK_IE_ERRWARN |
+-			ACC_REG_CONTROL_MASK_IE_OVERRUN |
+-			ACC_REG_CONTROL_MASK_IE_ERRPASS;
++	ctrl = ACC_REG_CTRL_MASK_IE_RXTX |
++		ACC_REG_CTRL_MASK_IE_TXERROR |
++		ACC_REG_CTRL_MASK_IE_ERRWARN |
++		ACC_REG_CTRL_MASK_IE_OVERRUN |
++		ACC_REG_CTRL_MASK_IE_ERRPASS;
+ 
+ 	if (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)
+-		ctrl_mode |= ACC_REG_CONTROL_MASK_IE_BUSERR;
++		ctrl |= ACC_REG_CTRL_MASK_IE_BUSERR;
+ 
+ 	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+-		ctrl_mode |= ACC_REG_CONTROL_MASK_MODE_LOM;
++		ctrl |= ACC_REG_CTRL_MASK_LOM;
+ 
+-	acc_set_bits(core, ACC_CORE_OF_CTRL_MODE, ctrl_mode);
++	acc_set_bits(core, ACC_CORE_OF_CTRL, ctrl);
+ 
+ 	acc_resetmode_leave(core);
+ 	priv->can.state = CAN_STATE_ERROR_ACTIVE;
+@@ -218,13 +218,13 @@ int acc_close(struct net_device *netdev)
+ 	struct acc_net_priv *priv = netdev_priv(netdev);
+ 	struct acc_core *core = priv->core;
+ 
+-	acc_clear_bits(core, ACC_CORE_OF_CTRL_MODE,
+-		       ACC_REG_CONTROL_MASK_IE_RXTX |
+-		       ACC_REG_CONTROL_MASK_IE_TXERROR |
+-		       ACC_REG_CONTROL_MASK_IE_ERRWARN |
+-		       ACC_REG_CONTROL_MASK_IE_OVERRUN |
+-		       ACC_REG_CONTROL_MASK_IE_ERRPASS |
+-		       ACC_REG_CONTROL_MASK_IE_BUSERR);
++	acc_clear_bits(core, ACC_CORE_OF_CTRL,
++		       ACC_REG_CTRL_MASK_IE_RXTX |
++		       ACC_REG_CTRL_MASK_IE_TXERROR |
++		       ACC_REG_CTRL_MASK_IE_ERRWARN |
++		       ACC_REG_CTRL_MASK_IE_OVERRUN |
++		       ACC_REG_CTRL_MASK_IE_ERRPASS |
++		       ACC_REG_CTRL_MASK_IE_BUSERR);
+ 
+ 	netif_stop_queue(netdev);
+ 	acc_resetmode_enter(core);
+@@ -233,9 +233,9 @@ int acc_close(struct net_device *netdev)
+ 	/* Mark pending TX requests to be aborted after controller restart. */
+ 	acc_write32(core, ACC_CORE_OF_TX_ABORT_MASK, 0xffff);
+ 
+-	/* ACC_REG_CONTROL_MASK_MODE_LOM is only accessible in RESET mode */
+-	acc_clear_bits(core, ACC_CORE_OF_CTRL_MODE,
+-		       ACC_REG_CONTROL_MASK_MODE_LOM);
++	/* ACC_REG_CTRL_MASK_LOM is only accessible in RESET mode */
++	acc_clear_bits(core, ACC_CORE_OF_CTRL,
++		       ACC_REG_CTRL_MASK_LOM);
+ 
+ 	close_candev(netdev);
+ 	return 0;
+diff --git a/drivers/net/can/esd/esdacc.h b/drivers/net/can/esd/esdacc.h
+index a70488b25d39..d13dfa60703a 100644
+--- a/drivers/net/can/esd/esdacc.h
++++ b/drivers/net/can/esd/esdacc.h
+@@ -50,7 +50,7 @@
+ #define ACC_OV_REG_MODE_MASK_FPGA_RESET BIT(31)
+ 
+ /* esdACC CAN Core Module */
+-#define ACC_CORE_OF_CTRL_MODE 0x0000
++#define ACC_CORE_OF_CTRL 0x0000
+ #define ACC_CORE_OF_STATUS_IRQ 0x0008
+ #define ACC_CORE_OF_BRP	0x000c
+ #define ACC_CORE_OF_BTR	0x0010
+@@ -66,21 +66,22 @@
+ #define ACC_CORE_OF_TXFIFO_DATA_0 0x00c8
+ #define ACC_CORE_OF_TXFIFO_DATA_1 0x00cc
+ 
+-#define ACC_REG_CONTROL_MASK_MODE_RESETMODE BIT(0)
+-#define ACC_REG_CONTROL_MASK_MODE_LOM BIT(1)
+-#define ACC_REG_CONTROL_MASK_MODE_STM BIT(2)
+-#define ACC_REG_CONTROL_MASK_MODE_TRANSEN BIT(5)
+-#define ACC_REG_CONTROL_MASK_MODE_TS BIT(6)
+-#define ACC_REG_CONTROL_MASK_MODE_SCHEDULE BIT(7)
+-
+-#define ACC_REG_CONTROL_MASK_IE_RXTX BIT(8)
+-#define ACC_REG_CONTROL_MASK_IE_TXERROR BIT(9)
+-#define ACC_REG_CONTROL_MASK_IE_ERRWARN BIT(10)
+-#define ACC_REG_CONTROL_MASK_IE_OVERRUN BIT(11)
+-#define ACC_REG_CONTROL_MASK_IE_TSI BIT(12)
+-#define ACC_REG_CONTROL_MASK_IE_ERRPASS BIT(13)
+-#define ACC_REG_CONTROL_MASK_IE_ALI BIT(14)
+-#define ACC_REG_CONTROL_MASK_IE_BUSERR BIT(15)
++/* CTRL register layout */
++#define ACC_REG_CTRL_MASK_RESETMODE BIT(0)
++#define ACC_REG_CTRL_MASK_LOM BIT(1)
++#define ACC_REG_CTRL_MASK_STM BIT(2)
++#define ACC_REG_CTRL_MASK_TRANSEN BIT(5)
++#define ACC_REG_CTRL_MASK_TS BIT(6)
++#define ACC_REG_CTRL_MASK_SCHEDULE BIT(7)
++
++#define ACC_REG_CTRL_MASK_IE_RXTX BIT(8)
++#define ACC_REG_CTRL_MASK_IE_TXERROR BIT(9)
++#define ACC_REG_CTRL_MASK_IE_ERRWARN BIT(10)
++#define ACC_REG_CTRL_MASK_IE_OVERRUN BIT(11)
++#define ACC_REG_CTRL_MASK_IE_TSI BIT(12)
++#define ACC_REG_CTRL_MASK_IE_ERRPASS BIT(13)
++#define ACC_REG_CTRL_MASK_IE_ALI BIT(14)
++#define ACC_REG_CTRL_MASK_IE_BUSERR BIT(15)
+ 
+ /* BRP and BTR register layout for CAN-Classic version */
+ #define ACC_REG_BRP_CL_MASK_BRP GENMASK(8, 0)
+@@ -300,9 +301,9 @@ static inline void acc_clear_bits(struct acc_core *core,
+ 
+ static inline int acc_resetmode_entered(struct acc_core *core)
+ {
+-	u32 ctrl = acc_read32(core, ACC_CORE_OF_CTRL_MODE);
++	u32 ctrl = acc_read32(core, ACC_CORE_OF_CTRL);
+ 
+-	return (ctrl & ACC_REG_CONTROL_MASK_MODE_RESETMODE) != 0;
++	return (ctrl & ACC_REG_CTRL_MASK_RESETMODE) != 0;
+ }
+ 
+ static inline u32 acc_ov_read32(struct acc_ov *ov, unsigned short offs)
 -- 
 2.34.1
 
