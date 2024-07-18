@@ -1,70 +1,72 @@
-Return-Path: <linux-can+bounces-988-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-989-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19AC79352A0
-	for <lists+linux-can@lfdr.de>; Thu, 18 Jul 2024 23:03:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C4119352A2
+	for <lists+linux-can@lfdr.de>; Thu, 18 Jul 2024 23:03:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8AACB20A3D
-	for <lists+linux-can@lfdr.de>; Thu, 18 Jul 2024 21:03:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 509F81C20F57
+	for <lists+linux-can@lfdr.de>; Thu, 18 Jul 2024 21:03:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79B477E0FF;
-	Thu, 18 Jul 2024 21:03:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC74144D35;
+	Thu, 18 Jul 2024 21:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EbjCwRyZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QUrJAMYW"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAEC56D1B4;
-	Thu, 18 Jul 2024 21:03:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1396278297;
+	Thu, 18 Jul 2024 21:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721336608; cv=none; b=E2b88kTZFWuGnLlkBypeB3Q2MnhJQQorx27Z1fHq94zn+gJw3u0/yaHYJQew+Kt2cLftzPCjTlKId9IxJycF3HHzEs8RyB4JxY1zU7xHp94bO56x8Nd82k090cTvneu7j7G1CT8fNO8HHkae80VrkLEPmMrZpJZzjzJ+qfsaQ9U=
+	t=1721336609; cv=none; b=CgvvMsbtaB/iJg3Mw2B2WstMQ4nJ3XP3MiWqOj9E/9H94xex7vBBlg2C+0ppr6EhjcqAtOHrGVoC69Fx/JJV81ck6YV+dOGOYyzVswlU+bHuzRbNuoFuuDzRUqswy0NWIQOP9UCTh2k1kynLNYoPIt1lN4TG04s8n5bBG05WUwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721336608; c=relaxed/simple;
-	bh=93NYKxrj5rmt9VZOgjsI57F4VCPUaTp06b17TR7Dtws=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NFGfLCtMdagmAMyqjJYlvUa029XWsUjDyo8BkaBjL6AbS7Ns1IoV6M5z6PfgiD/5ejiLYjVQd5EK5bANReDTqop8QAKxiqPpyzr/bY9nKvKGVktMwIaIhCKToTvsEdeNY6knK7YJXhbJyJFwZdPKHbSP4Ut2vGcbSaycY1Mq6sY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EbjCwRyZ; arc=none smtp.client-ip=209.85.208.181
+	s=arc-20240116; t=1721336609; c=relaxed/simple;
+	bh=rpgMkZiLKf+sjKsbyhuE9QXOCOqmw+pblS7+3J9MsdI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=CA4QGmyOwxuAmoOWVJvlT5/Ap35wDGywuvxRLzIwu1ppumsqHdjFVfCquPPe2RuAejMnNcu3THaMhE/K3JN9da4VbcmmvAo7aY9zQbEZkXusxz0ZWYW+n3oC+hF7wveZIcg1yUn5LVufAXlVI9T7h9r6feeBjzLxVeqlIqgPGB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QUrJAMYW; arc=none smtp.client-ip=209.85.208.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2ee91d9cb71so14997421fa.0;
-        Thu, 18 Jul 2024 14:03:26 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2eecd2c6432so20839841fa.3;
+        Thu, 18 Jul 2024 14:03:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721336605; x=1721941405; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7dxDbdzvY7eNqZGbwyiIl9uNuZ+ao9LaobEESaQILLo=;
-        b=EbjCwRyZanliJ4EgyRnuB++cwkJgV89/QKE1bL6JZzb1DkkOAvr39fV2zm+DKt18vy
-         Tt0pPxckN3vk4wqtb5BaimRVLdHLeoSR3GXE3QMq2Ty/exzl/BxMlUkp6SCgt4wwniJq
-         yoxNGUhrOkjCNRuAcQhHWrKTCrqjurKL32TGHSOJyr8tXM1CvYucCmupugY9wgMl8KgV
-         p1miz3MEZVaOIhC8w83s4uDVDZsniu6XHeJOYIImVlBDTHnDRP/yv3OYJzlK3a1aviDZ
-         CPOb3uIDSQv3GFrj65o7eU0qJH8+HJ4j5kcJHZ2OsTgC+FYJAc1mpHaXItj0l2bhgAwH
-         0yVw==
+        d=gmail.com; s=20230601; t=1721336606; x=1721941406; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4Ng8/MluP5o8TGqH9RO1LUWdUmWhLfHB51ju7l5WzX4=;
+        b=QUrJAMYWnI0a7GQghdfL7zow6mTKMWU11gtXtHeuaHaWlxBkEThuU23+GfSmwPu60u
+         AW60wrV0gvjEY/buKNdE8+twzIwZ4IKnz6O2yQbkR7afzZyRXOcqFZoJG2GoscxFdYO+
+         pQC4AQailp0BWQxb5MI1gJ6l56iG/yp0JKtIDeLdxZK8SECw03eB4Xq+nWBhevslaHpl
+         4VDSpbUK8MifSeOun8RvJUGK120kmkkPEoB6cYl1X/i3pcNSz9PpFlxlNH/e73ogf21l
+         AZZCgqRjhc+jcuXU0UwAYdB2iDwWRZs+0afceqhRM//lbo9Hn1FoZ9hTv8cjaB1lvp97
+         LVPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721336605; x=1721941405;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7dxDbdzvY7eNqZGbwyiIl9uNuZ+ao9LaobEESaQILLo=;
-        b=UfyT3j/pmqODSmj53L/KrGgiCKLfPa27YXYBdl2wx4mYA4OIZk69Jnd992xXbQmaVd
-         3CQ0bg6RRMO+Fseg6UZCdxuMyf/wmcfN57hFgGf2mEktIdjyjY9VtABwNzFnaVqbMJKR
-         XIqYwzIYBxKDlsaH5Uq5nAirkIxd/IbS6V6NauiIuo4IH110pqcTUw+rZhY9HbW0Bvlq
-         GC1U1Z+aQfYHvft59eGZNjjmHqTmNHnuB5lhC4hGyFdWyehMTXlvgFlqP4bKs9Z6fQUS
-         ujxaGbdzEHFjbn/aEqZdY2wnXfNLhW3iDJxQdAgH+bAEnp/wrbO2RfSNB3CH6pCeh0Ef
-         Pc0A==
-X-Forwarded-Encrypted: i=1; AJvYcCUZZBRvvsSsFpMuPwt45mMkcqhY6AMQMFZ55HF6grtGFrEoygI0exMAoPT1bLi/6JoIKHDmThBcxbjHsnbCTRKHSJGu7iM1BBM4hg==
-X-Gm-Message-State: AOJu0YyTB9TA2Jcp3OaUA+N9eJrhhpLNoGjCktwi/QKZZX+8OwNQhgWF
-	Wzo3bgYSQyX7ftbtH6araY34P+xY6E1crjFMyU3xcTiZjlAtEpQb
-X-Google-Smtp-Source: AGHT+IHj5qJtbIwhbNCUD4aF+OroIK+74WZEoQ2M0b6ONmmL3ysXNSjWfyZ9CFvwHf+jdtzfIx/7zg==
-X-Received: by 2002:a2e:7314:0:b0:2ee:871c:bcb3 with SMTP id 38308e7fff4ca-2ef05c78cc6mr22757171fa.13.1721336604732;
-        Thu, 18 Jul 2024 14:03:24 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1721336606; x=1721941406;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4Ng8/MluP5o8TGqH9RO1LUWdUmWhLfHB51ju7l5WzX4=;
+        b=iOOtP5rppsvA8WBTnzVDHPFGTlnxystlqbz/il7DQgavPMYS/w7/4Lx6QzAz9lO5Z4
+         wBig/dhoz09mVPz7RkP1yEt4ZQpMoqVXkcC3hn3mNEufftRMA1vKYFPtkG/hFAYf7KCB
+         LenjmDimkXBr0uWOEr5glmBu5BzVoLKzh4WlVF2j3FdFBFbTy0XIfnieUuhW8w+vH0xZ
+         k7yLnI3j3+Yic16af192tm2KK6nRcgjSHJKB3LcSlryjifIC58TU09pJc+dbSzLasQTW
+         L7nAheMgjWzvLTRW8D7pgKgK3TUD2Hg8AqWXvK3zWdtEuoExyI4m4qEYHcIyOQ0mFUiZ
+         ce3w==
+X-Forwarded-Encrypted: i=1; AJvYcCXeIrRyBILZXmVIe6u6KXADJ0ab+sZD4epK/TWP7Lv1CPZaw6xNYD121R4v4AuLQqBbAkeIK2FeHsOZvnjGATweYOxBMOeYEFKWjA==
+X-Gm-Message-State: AOJu0Yz1PXSp4fGY5N4KNXLVNn05jvnYNUCJapGRKfL7q6NAHlJqNKtv
+	BaP+yr1euyp96n5Ttc/RpoKApSh3Aq5fvHx4bgS9v9ZsyXf8kXnM
+X-Google-Smtp-Source: AGHT+IFtLRuDysLz+zGkK8nebDG8VhuqMbu8VfFfGsXzrU09Na8CGTIsRluoTBh3S2mHGVy2roCHVA==
+X-Received: by 2002:a2e:9f55:0:b0:2ee:7a7e:8ebd with SMTP id 38308e7fff4ca-2ef05d43ad8mr29097631fa.46.1721336605904;
+        Thu, 18 Jul 2024 14:03:25 -0700 (PDT)
 Received: from ilordash-vm.mshome.net (broadband-109-173-124-203.ip.moscow.rt.ru. [109.173.124.203])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ef05c80310sm4516511fa.13.2024.07.18.14.03.23
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ef05c80310sm4516511fa.13.2024.07.18.14.03.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jul 2024 14:03:24 -0700 (PDT)
+        Thu, 18 Jul 2024 14:03:25 -0700 (PDT)
 From: Ilya Orazov <ilordash02@gmail.com>
 To: mkl@pengutronix.de,
 	mailhol.vincent@wanadoo.fr,
@@ -77,10 +79,12 @@ Cc: linux-can@vger.kernel.org,
 	linux-phy@lists.infradead.org,
 	devicetree@vger.kernel.org,
 	ilordash02@gmail.com
-Subject: [PATCH 0/2] phy: Add support for Microchip ATA6561 CAN Transceiver
-Date: Fri, 19 Jul 2024 00:03:20 +0300
-Message-Id: <20240718210322.37492-1-ilordash02@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: phy: ti,tcan104x-can: Document Microchip ATA6561
+Date: Fri, 19 Jul 2024 00:03:21 +0300
+Message-Id: <20240718210322.37492-2-ilordash02@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240718210322.37492-1-ilordash02@gmail.com>
+References: <20240718210322.37492-1-ilordash02@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -89,27 +93,26 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi all,
+Microchip ATA6561 is High-Speed CAN Transceiver with Standby Mode.
+It is pin-compatible with TI TCAN1042.
 
-The Microchip ATA6561 is a High-Speed CAN Transceiver with Standby Mode,
-and it is pin-compatible with TI TCAN1042. Therefore, this patch series
-extends support for the TI TCAN1042 DT bindings and the generic
-CAN Transceiver PHY driver.
-
-This CAN transceiver is a popular chip that I have used in my boards.
-I decided to add support for ATA6561 to the kernel, as I believe it would be
-beneficial.
-
-Thank you for your feedback!
-
-Ilya Orazov (2):
-  dt-bindings: phy: ti,tcan104x-can: Document Microchip ATA6561
-  phy: phy-can-transceiver: Add support for Microchip ATA6561
-
+Signed-off-by: Ilya Orazov <ilordash02@gmail.com>
+---
  Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml | 1 +
- drivers/phy/phy-can-transceiver.c                          | 4 ++++
- 2 files changed, 5 insertions(+)
+ 1 file changed, 1 insertion(+)
 
+diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+index 79dad3e89aa6..03de361849d2 100644
+--- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
++++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+@@ -18,6 +18,7 @@ properties:
+       - nxp,tjr1443
+       - ti,tcan1042
+       - ti,tcan1043
++      - microchip,ata6561
+ 
+   '#phy-cells':
+     const: 0
 -- 
 2.34.1
 
