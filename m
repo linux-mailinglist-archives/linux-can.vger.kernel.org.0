@@ -1,222 +1,167 @@
-Return-Path: <linux-can+bounces-1005-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1006-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB6A393B2DB
-	for <lists+linux-can@lfdr.de>; Wed, 24 Jul 2024 16:40:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF4C93B5A7
+	for <lists+linux-can@lfdr.de>; Wed, 24 Jul 2024 19:15:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EEF4B24302
-	for <lists+linux-can@lfdr.de>; Wed, 24 Jul 2024 14:40:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19E3E1C23A82
+	for <lists+linux-can@lfdr.de>; Wed, 24 Jul 2024 17:15:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEA0715ADA1;
-	Wed, 24 Jul 2024 14:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3876A16ABF3;
+	Wed, 24 Jul 2024 17:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uavkczRl";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="vYV9t0cp";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uavkczRl";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="vYV9t0cp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MHGZynhr"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C6215884F;
-	Wed, 24 Jul 2024 14:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1159216A95E;
+	Wed, 24 Jul 2024 17:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721832045; cv=none; b=iQtJEoclCV/tau5tcit4vwOG6deRrnSd2L1M/GuglGpezliN/ROKVkUxLKn7jjMdYLIuVAsAh+BHVk7lW1K7ZQwZ8qIHwZsyC0vcu0kAJd1R3BG0PVanAhjMHrg4YoExKHJ7+VAbTIjPiWqtuAyr3J5WVtxiz0y3jVYb4zIkb1A=
+	t=1721841313; cv=none; b=iQt2IkNpjrYwR3l/HtCewBLK2jM0mBOyaTY+yp+5AMb68kklzYSaJ0MA1W2ySOmDdtGyxTs0F8TkVenHUHSId0Od7b/XH+BZWVSMpw+3QBG69cgc/58q9BFyrFhy5BKWzZrs6bnS2bmjd7JWSuVsdzd3GHTCSXe5rlG9MAZF72E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721832045; c=relaxed/simple;
-	bh=Tyv11+StWRcTJYiBlpVVwI64X4RXvYmIxnRwH2GK1sQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=leE2CL8onzCnu8KLi4IHJUrzXmLt9ChDRKszHfAGOXgD9m+MDKO3VxF05DikOjXKSycPZ5u9ghmNBn4YhLQdeanwL+jx36ERSlkQrcE2VZ/Mb+YZ5CyrkFHEpF5whVPjAcHCeQlBDb5xvoteCoGza1tScmKB1NXMR3IZU6m44Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uavkczRl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=vYV9t0cp; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uavkczRl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=vYV9t0cp; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 64F991F7A8;
-	Wed, 24 Jul 2024 14:40:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1721832042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=K2oU6KeNMEKKrmlqYMEEXIL0CAP2uyQ2NxyjtiwdL5s=;
-	b=uavkczRlmYpLPla5thNBXjNOtQrfeZmoLODNnhDoNwt1YT4O7KRINMVR3uU/OdYyzoGAIQ
-	9FmDa6uZAeR/rN8CrdzkDvIJOSiQ6Eg3psRzaw8nQ5NO+0ahoOCTXJ/b807SlT8+0x58L+
-	8NGOxKujsAuumRKkCg0UqP8EKl/44DA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1721832042;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=K2oU6KeNMEKKrmlqYMEEXIL0CAP2uyQ2NxyjtiwdL5s=;
-	b=vYV9t0cpsRrzF4ou/Se02S5+p69GDo3m/rLsX9R3uumUu3wcnC2k2lDLWKnPuNqlVQyM+C
-	r87DOnRYRQ9N6OBw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1721832042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=K2oU6KeNMEKKrmlqYMEEXIL0CAP2uyQ2NxyjtiwdL5s=;
-	b=uavkczRlmYpLPla5thNBXjNOtQrfeZmoLODNnhDoNwt1YT4O7KRINMVR3uU/OdYyzoGAIQ
-	9FmDa6uZAeR/rN8CrdzkDvIJOSiQ6Eg3psRzaw8nQ5NO+0ahoOCTXJ/b807SlT8+0x58L+
-	8NGOxKujsAuumRKkCg0UqP8EKl/44DA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1721832042;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=K2oU6KeNMEKKrmlqYMEEXIL0CAP2uyQ2NxyjtiwdL5s=;
-	b=vYV9t0cpsRrzF4ou/Se02S5+p69GDo3m/rLsX9R3uumUu3wcnC2k2lDLWKnPuNqlVQyM+C
-	r87DOnRYRQ9N6OBw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2C05813411;
-	Wed, 24 Jul 2024 14:40:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id fARjCmoSoWa1KQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Wed, 24 Jul 2024 14:40:42 +0000
-Message-ID: <38207d5c-c052-4701-8ccd-fe6381a97194@suse.cz>
-Date: Wed, 24 Jul 2024 16:40:41 +0200
+	s=arc-20240116; t=1721841313; c=relaxed/simple;
+	bh=E8IFZR1Vge2tEybKij2yROAYQyWSQQckOEgQRR5cKEs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jVpjyk+zhnfuiJAjPFViGsRAr4UyzVZbdG75Qxg4nW0NdTqwekhTuvvs1X8R2WBUHsH0hOISvhmBVSJuBUj3a+0S7vSErQKwg7/kqG/wc5oH5uKZF3j0GdRjdKJ7boioLnwJnevxNioNSlsEFuh4Joom7OcQeZvH2jlUb1sL0ZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MHGZynhr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73FCEC4AF0C;
+	Wed, 24 Jul 2024 17:15:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721841312;
+	bh=E8IFZR1Vge2tEybKij2yROAYQyWSQQckOEgQRR5cKEs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MHGZynhrptdScq8bL4CfpjAaNhSQlP31wTfcAD09a85at1Uluj73OwGafd00ds2Pw
+	 csPI6KMLJcJw/eA4JNcdCgueG2KWxca4frBGpIFaBkazkx+LKxCnaiDkVnJfhpAFwt
+	 71f7TlYiCCWSO9maOBWx22XHgHekoDEr37lChGZ19UxwmuUqNXda9byMNkzUszdaP3
+	 OXPkNQ8ZpYQGt+5zMSnSCuPb7J3H8MCDIw9t1R7E6zCC57P6FN7/S/T6gt5KppFTQv
+	 dFnbNpPRMOhAIMt03DPUYaBHWf1KxJ7ycWFy6aeBTCVWjoJzdLu8zQFNbAqZcqPAhm
+	 0ff3T/APvHnCQ==
+Date: Wed, 24 Jul 2024 18:15:08 +0100
+From: Simon Horman <horms@kernel.org>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	kuni1840@gmail.com, linux-can@vger.kernel.org, mkl@pengutronix.de,
+	netdev@vger.kernel.org, pabeni@redhat.com, socketcan@hartkopp.net,
+	syzkaller@googlegroups.com
+Subject: Re: [PATCH v1 net] can: bcm: Remove proc entry when dev is
+ unregistered.
+Message-ID: <20240724171508.GE97837@kernel.org>
+References: <20240723090405.GB24657@kernel.org>
+ <20240723183805.31201-1-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/14] replace call_rcu by kfree_rcu for simple
- kmem_cache_free callback
-Content-Language: en-US
-To: paulmck@kernel.org
-Cc: Uladzislau Rezki <urezki@gmail.com>, "Jason A. Donenfeld"
- <Jason@zx2c4.com>, Jakub Kicinski <kuba@kernel.org>,
- Julia Lawall <Julia.Lawall@inria.fr>, linux-block@vger.kernel.org,
- kernel-janitors@vger.kernel.org, bridge@lists.linux.dev,
- linux-trace-kernel@vger.kernel.org,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, kvm@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Nicholas Piggin <npiggin@gmail.com>, netdev@vger.kernel.org,
- wireguard@lists.zx2c4.com, linux-kernel@vger.kernel.org,
- ecryptfs@vger.kernel.org, Neil Brown <neilb@suse.de>,
- Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>,
- Tom Talpey <tom@talpey.com>, linux-nfs@vger.kernel.org,
- linux-can@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- kasan-dev <kasan-dev@googlegroups.com>
-References: <6711935d-20b5-41c1-8864-db3fc7d7823d@suse.cz>
- <ZnCDgdg1EH6V7w5d@pc636> <36c60acd-543e-48c5-8bd2-6ed509972d28@suse.cz>
- <ZnFT1Czb8oRb0SE7@pc636>
- <5c8b2883-962f-431f-b2d3-3632755de3b0@paulmck-laptop>
- <9967fdfa-e649-456d-a0cb-b4c4bf7f9d68@suse.cz>
- <6dad6e9f-e0ca-4446-be9c-1be25b2536dd@paulmck-laptop>
- <4cba4a48-902b-4fb6-895c-c8e6b64e0d5f@suse.cz> <ZnVInAV8BXhgAjP_@pc636>
- <df0716ac-c995-498c-83ee-b8c25302f9ed@suse.cz>
- <b3d9710a-805e-4e37-8295-b5ec1133d15c@paulmck-laptop>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- EP+ylKVEKb0Q2A==
-In-Reply-To: <b3d9710a-805e-4e37-8295-b5ec1133d15c@paulmck-laptop>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-4.09 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[29];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,zx2c4.com,kernel.org,inria.fr,vger.kernel.org,lists.linux.dev,efficios.com,lists.ozlabs.org,linux.ibm.com,csgroup.eu,lists.zx2c4.com,suse.de,netapp.com,oracle.com,talpey.com,netfilter.org,googlegroups.com];
-	R_RATELIMIT(0.00)[to_ip_from(RLr583pch5u74edj9dsne3chzi)];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: -4.09
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240723183805.31201-1-kuniyu@amazon.com>
 
-On 7/24/24 3:53 PM, Paul E. McKenney wrote:
-> On Mon, Jul 15, 2024 at 10:39:38PM +0200, Vlastimil Babka wrote:
->> On 6/21/24 11:32 AM, Uladzislau Rezki wrote:
->> > On Wed, Jun 19, 2024 at 11:28:13AM +0200, Vlastimil Babka wrote:
->> > One question. Maybe it is already late but it is better to ask rather than not.
->> > 
->> > What do you think if we have a small discussion about it on the LPC 2024 as a
->> > topic? It might be it is already late or a schedule is set by now. Or we fix
->> > it by a conference time.
->> > 
->> > Just a thought.
->> 
->> Sorry for the late reply. The MM MC turned out to be so packed I didn't even
->> propose a slab topic. We could discuss in hallway track or a BOF, but
->> hopefully if the current direction taken by my RFC brings no unexpected
->> surprise, and the necessary RCU barrier side is also feasible, this will be
->> settled by time of plumbers.
+On Tue, Jul 23, 2024 at 11:38:05AM -0700, Kuniyuki Iwashima wrote:
+> From: Simon Horman <horms@kernel.org>
+> Date: Tue, 23 Jul 2024 10:04:05 +0100
+> > On Mon, Jul 22, 2024 at 12:28:42PM -0700, Kuniyuki Iwashima wrote:
+> > > syzkaller reported a warning in bcm_connect() below. [0]
+> > > 
+> > > The repro calls connect() to vxcan1, removes vxcan1, and calls
+> > > connect() with ifindex == 0.
+> > > 
+> > > Calling connect() for a BCM socket allocates a proc entry.
+> > > Then, bcm_sk(sk)->bound is set to 1 to prevent further connect().
+> > > 
+> > > However, removing the bound device resets bcm_sk(sk)->bound to 0
+> > > in bcm_notify().
+> > > 
+> > > The 2nd connect() tries to allocate a proc entry with the same
+> > > name and sets NULL to bcm_sk(sk)->bcm_proc_read, leaking the
+> > > original proc entry.
+> > > 
+> > > Since the proc entry is available only for connect()ed sockets,
+> > > let's clean up the entry when the bound netdev is unregistered.
+> > > 
+> > > [0]:
+> > > proc_dir_entry 'can-bcm/2456' already registered
+> > > WARNING: CPU: 1 PID: 394 at fs/proc/generic.c:376 proc_register+0x645/0x8f0 fs/proc/generic.c:375
+> > > Modules linked in:
+> > > CPU: 1 PID: 394 Comm: syz-executor403 Not tainted 6.10.0-rc7-g852e42cc2dd4
+> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org 04/01/2014
+> > > RIP: 0010:proc_register+0x645/0x8f0 fs/proc/generic.c:375
+> > > Code: 00 00 00 00 00 48 85 ed 0f 85 97 02 00 00 4d 85 f6 0f 85 9f 02 00 00 48 c7 c7 9b cb cf 87 48 89 de 4c 89 fa e8 1c 6f eb fe 90 <0f> 0b 90 90 48 c7 c7 98 37 99 89 e8 cb 7e 22 05 bb 00 00 00 10 48
+> > > RSP: 0018:ffa0000000cd7c30 EFLAGS: 00010246
+> > > RAX: 9e129be1950f0200 RBX: ff1100011b51582c RCX: ff1100011857cd80
+> > > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000002
+> > > RBP: 0000000000000000 R08: ffd400000000000f R09: ff1100013e78cac0
+> > > R10: ffac800000cd7980 R11: ff1100013e12b1f0 R12: 0000000000000000
+> > > R13: 0000000000000000 R14: 0000000000000000 R15: ff1100011a99a2ec
+> > > FS:  00007fbd7086f740(0000) GS:ff1100013fd00000(0000) knlGS:0000000000000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 00000000200071c0 CR3: 0000000118556004 CR4: 0000000000771ef0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
+> > > PKRU: 55555554
+> > > Call Trace:
+> > >  <TASK>
+> > >  proc_create_net_single+0x144/0x210 fs/proc/proc_net.c:220
+> > >  bcm_connect+0x472/0x840 net/can/bcm.c:1673
+> > >  __sys_connect_file net/socket.c:2049 [inline]
+> > >  __sys_connect+0x5d2/0x690 net/socket.c:2066
+> > >  __do_sys_connect net/socket.c:2076 [inline]
+> > >  __se_sys_connect net/socket.c:2073 [inline]
+> > >  __x64_sys_connect+0x8f/0x100 net/socket.c:2073
+> > >  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+> > >  do_syscall_64+0xd9/0x1c0 arch/x86/entry/common.c:83
+> > >  entry_SYSCALL_64_after_hwframe+0x4b/0x53
+> > > RIP: 0033:0x7fbd708b0e5d
+> > > Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 73 9f 1b 00 f7 d8 64 89 01 48
+> > > RSP: 002b:00007fff8cd33f08 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+> > > RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fbd708b0e5d
+> > > RDX: 0000000000000010 RSI: 0000000020000040 RDI: 0000000000000003
+> > > RBP: 0000000000000000 R08: 0000000000000040 R09: 0000000000000040
+> > > R10: 0000000000000040 R11: 0000000000000246 R12: 00007fff8cd34098
+> > > R13: 0000000000401280 R14: 0000000000406de8 R15: 00007fbd70ab9000
+> > >  </TASK>
+> > > remove_proc_entry: removing non-empty directory 'net/can-bcm', leaking at least '2456'
+> > > 
+> > > Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
+> > > Reported-by: syzkaller <syzkaller@googlegroups.com>
+> > > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > 
+> > Thanks,
+> > 
+> > I agree that the problem was introduced by the cited commit
+> > and is resolved by this patch.
+> > 
+> > Reviewed-by: Simon Horman <horms@kernel.org>
+> > 
+> > > ---
+> > >  net/can/bcm.c | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > > 
+> > > diff --git a/net/can/bcm.c b/net/can/bcm.c
+> > > index 27d5fcf0eac9..46d3ec3aa44b 100644
+> > > --- a/net/can/bcm.c
+> > > +++ b/net/can/bcm.c
+> > > @@ -1470,6 +1470,10 @@ static void bcm_notify(struct bcm_sock *bo, unsigned long msg,
+> > >  
+> > >  		/* remove device reference, if this is our bound device */
+> > >  		if (bo->bound && bo->ifindex == dev->ifindex) {
+> > > +#if IS_ENABLED(CONFIG_PROC_FS)
+> > > +			if (sock_net(sk)->can.bcmproc_dir && bo->bcm_proc_read)
+> > > +				remove_proc_entry(bo->procname, sock_net(sk)->can.bcmproc_dir);
+> > > +#endif
+> > 
+> > As a fix this looks good. But I wonder if it is worth following up
+> > with a helper for the above as it inlines #if logic and now appears twice.
 > 
-> That would be even better!
+> Other places also have #if guard for CONFIG_PROC_FS, so if needed,
+> I'd move all of them into helper functions under a single #if in -next.
 
-I should have linked to the RFC :)
-
-https://lore.kernel.org/all/20240715-b4-slab-kfree_rcu-destroy-v1-0-46b2984c2205@suse.cz/
-
+I'm not saying it's needed.
+But it does sound nice to me.
 
