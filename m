@@ -1,219 +1,249 @@
-Return-Path: <linux-can+bounces-1023-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1024-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3B2793E315
-	for <lists+linux-can@lfdr.de>; Sun, 28 Jul 2024 03:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7AFF93E42F
+	for <lists+linux-can@lfdr.de>; Sun, 28 Jul 2024 10:52:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C763E1C212B6
-	for <lists+linux-can@lfdr.de>; Sun, 28 Jul 2024 01:24:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C37B01C20E68
+	for <lists+linux-can@lfdr.de>; Sun, 28 Jul 2024 08:52:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A391A0710;
-	Sun, 28 Jul 2024 00:55:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDDD912E75;
+	Sun, 28 Jul 2024 08:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XOqX9yGn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EKrmcFQx"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453921A070A;
-	Sun, 28 Jul 2024 00:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BA3182B4;
+	Sun, 28 Jul 2024 08:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722128145; cv=none; b=ljI5AqmqC0YbRfMVhFRYwMdDJWvxR2BrvTwXgPgAmCzeZ0rkKCW+iX+KL+IT/ARTFlbrLV3bsEuITLMSXZ74aNmTyPCI8eKLcUVd+FHP7sRYBynwqQQYz9T0DdK0TiIJp4R1QVxqWFirzfBKeBdtcSISlZykDvvxUYrM1TjAy2Q=
+	t=1722156766; cv=none; b=c0YYEKKe7O2KD7pEZBM0ruuYcOAidXKch+y9jopIlOQL6T6ddwYBjMQ18bYpoE2tzMtDkiuSK7kLNvIYuS4fOt8AcMQoTG1A0MWGFb8J3EEy95YnUriY6hmwThyAKKYJ+j1ir+vB1H72iZoPyF253t7HHJC6Zg9YpOmrD1puXro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722128145; c=relaxed/simple;
-	bh=jAPbD+tDdAEkxrjW3ugyTUD4yrD+HqPFygSPY3+5zxc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kqR4XdqjOdr4rGpvjWzgNn8BJy0+iBf9iNi9r69a/4yomnTSZEKCIHAHhv1M8wITZVs5Whj5gBBZwWtDejgbdalnpVhScaj7PbEIbdQqHObnGme7dqXCBu1KM9mnoMRZHj0oFpuADSR5BS5I8N4hSr2LN7jG7PSqACYkUHNnScU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XOqX9yGn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 239D6C4AF07;
-	Sun, 28 Jul 2024 00:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722128144;
-	bh=jAPbD+tDdAEkxrjW3ugyTUD4yrD+HqPFygSPY3+5zxc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XOqX9yGnHFi3gq51b88h8ceM6iFQjRxzSZYARvxEG/NQZft4CWh8Lza06mgmCPkkc
-	 ZyziVN3Z8AfS7PgwrDKsZ9h0Z6yiSEe/WQJnmg4PrlfZNq48OXS8vzP5v+iUFTraY4
-	 mq43sV9hHPsps2R/kusAVC5CA5YnuRXkb8WN6WXa9SnQXiZPCn8qg63/PXSuNZ5PdD
-	 bycKWy6FJNnzcELxaZicSJFQLr7jkrUFgK+IFiswPcdFpXtZI216IWnCKZ2c8OTqe7
-	 r1o7wUgIxQ7YIa1U2JtpCdkJLShk/VASBly/o5hy+ggs3NvaEHFBwJXSuG95WXz82E
-	 C7SuQJDdwWz/Q==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
-	=?UTF-8?q?Stefan=20Alth=C3=B6fer?= <Stefan.Althoefer@janztec.com>,
-	Thomas Kopp <thomas.kopp@microchip.com>,
-	Sasha Levin <sashal@kernel.org>,
-	manivannan.sadhasivam@linaro.org,
-	mailhol.vincent@wanadoo.fr,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 10/11] can: mcp251xfd: tef: update workaround for erratum DS80000789E 6 of mcp2518fd
-Date: Sat, 27 Jul 2024 20:55:15 -0400
-Message-ID: <20240728005522.1731999-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240728005522.1731999-1-sashal@kernel.org>
-References: <20240728005522.1731999-1-sashal@kernel.org>
+	s=arc-20240116; t=1722156766; c=relaxed/simple;
+	bh=NlU2OuxD9BmWpHF9CFPJ/QLw6zy8dx7RCela9LKcZJE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XL8KI+xBVnxbJrVF/B/33l9bjfuoJlnXCK4+oW66uij2vG0dFrzZNxSnYHiSJyma33E0CKKh++5LVPPLtH2cb9umWpqjcO4TJu5gYSl/Hhpq8wICCnDVmuEY0BovS+lqW6PjI/K77qCvTBOzSUfZCqcAE62QLvqSD4F3IKCe818=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EKrmcFQx; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-67b709024bfso8767637b3.3;
+        Sun, 28 Jul 2024 01:52:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722156763; x=1722761563; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=b50kQg9CcOfPljkM2el62+Gp/5HcSGg+41XNn2C/3x4=;
+        b=EKrmcFQxwD85npuV8oMNEqGSXAzoKU9AwvsxtRG3RvQi07+780C+C4bwwuGa2iVq+A
+         9tbUw//c86izq3hpvXTuksXVHwICqEjg/xEMom2b6eBttuxtWRTEWssuhC4UpT2UhaIR
+         ACxXZCtosP3gZ5RRg1ckzpIwRhU+ECO0xlCDH1mR/tsHxnWCq/oiJI90nUFnfgsN9xka
+         hAyn4+P15H+p3mmlsapP6obxWYiu/Fo2SK55j8blzxv8LlHfIRku6tdcQjoD2HuFHnVW
+         tg8dkUwMtFs9jOIP/R2n7NXZdu+egBlauq8NdAAdBux0yubWtRg1n2KvHT4tjoKu5LdV
+         TkYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722156763; x=1722761563;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b50kQg9CcOfPljkM2el62+Gp/5HcSGg+41XNn2C/3x4=;
+        b=JgNyOBi5LH+V384h1cdoFreMzHVk/j6ixKITcv1gczgOUHscH8gzW2u9+UhGxbrNxf
+         VMH3cpcfm1WNE7GoTNCPB1ShhKiRUWJNQnywFywtx6h6PZB1o9P11zQjaa//MmfPbqYW
+         vHIQKXXkph13tMPe8Z2qiqaVPfCdj/o5betDQTniktZ6tbpAKA/YZmW2Z83JxGB3Wdk4
+         aS0FPgXssPJa8xNtR6b3wxsRXF3+O11llJxTStfwPUvT1xaWSUGM8OrMaNGGGDsXwSFc
+         1ZOeUHBHL+PxkUISDG1T9RDJSYfLTnUue/baTaT3RghkPcgjFt3BGZR4LDi7MgJS4pdS
+         oHkA==
+X-Forwarded-Encrypted: i=1; AJvYcCVmtLGZHJxT1+hu6aQosy8ujo/6SiABBhGwatCHom8RO2AQDqrjF/H/6oRAbOwvtuQyCG47Lew+FVDROOKV8PVp1f8AYLf+mIaKgrOc0tiCSbDw+jDd8fstLwVdcXM9qMY3kRV1jg==
+X-Gm-Message-State: AOJu0YxDlFjFY4cjLWw4l6iT0bCOsvRX2/wlE2m/uMijJUjxJ+eBd0e8
+	dHLA4teURvNGhLod5zOEL7AvWoKmrO0XjSXaS6GeNwrQwuY383eEHmxGOaiP1GIFXDu5xemUyUM
+	E0k4QAiXXHn9fGAgNyaYTkSlNHYk=
+X-Google-Smtp-Source: AGHT+IFxPxC4Ng6BBPJ48T04Y3ihU8aK+aGafUQKzzm/XI0/Mws3uR/xLo9Uwm/f7iZEJNeBJn29rXvYEXrH93XwLTE=
+X-Received: by 2002:a0d:ea0e:0:b0:67a:f3d4:d9d2 with SMTP id
+ 00721157ae682-67af3d4e244mr38363277b3.39.1722156762788; Sun, 28 Jul 2024
+ 01:52:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.102
-Content-Transfer-Encoding: 8bit
+References: <20240718210322.37492-1-ilordash02@gmail.com> <20240718210322.37492-2-ilordash02@gmail.com>
+ <20240719-ahead-kiwi-995e52bf3e74@spud> <CAGCz5HkF_WNZBVpY2SWVf071Pi896BvKFk0jnfNAYX5AKx2Zcw@mail.gmail.com>
+ <20240723-dinginess-john-608d0b28293b@spud> <CAGCz5H=Gncw+Tr0XaQQhhGWQER5Rs1BcxbkPaJwx9jJ-8j7LGQ@mail.gmail.com>
+ <20240723-municipal-snowy-136b08b6db90@spud>
+In-Reply-To: <20240723-municipal-snowy-136b08b6db90@spud>
+From: Ilya Orazov <ilordash02@gmail.com>
+Date: Sun, 28 Jul 2024 11:52:31 +0300
+Message-ID: <CAGCz5HnJKjNj7A0YD2fw20m-NrEs3MoCLwox86mC11Kudq8xbg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: phy: ti,tcan104x-can: Document Microchip ATA6561
+To: Conor Dooley <conor@kernel.org>, geert+renesas@glider.be
+Cc: mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, vkoul@kernel.org, 
+	kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, a-govindraju@ti.com, 
+	linux-can@vger.kernel.org, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+Thank you for your detailed explanation. I support the decision to use
+fallback compatible.
 
-[ Upstream commit 3a0a88fcbaf9e027ecca3fe8775be9700b4d6460 ]
+However, I am curious as to why the NXP CAN PHY transceiver was not
+included as fallback compatible. Geert, could you please share your
+thoughts on this matter?
 
-This patch updates the workaround for a problem similar to erratum
-DS80000789E 6 of the mcp2518fd, the other variants of the chip
-family (mcp2517fd and mcp251863) are probably also affected.
+On Tue, 23 Jul 2024 at 23:14, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Tue, Jul 23, 2024 at 10:55:17PM +0300, Ilya Orazov wrote:
+> > On Tue, 23 Jul 2024 at 21:50, Conor Dooley <conor@kernel.org> wrote:
+> > >
+> > > On Tue, Jul 23, 2024 at 08:20:04PM +0300, IlorDash wrote:
+> > > > On Fri, 19 Jul 2024 at 18:07, Conor Dooley <conor@kernel.org> wrote:
+> > > > >
+> > > > > On Fri, Jul 19, 2024 at 12:03:21AM +0300, Ilya Orazov wrote:
+> > > > > > Microchip ATA6561 is High-Speed CAN Transceiver with Standby Mode.
+> > > > > > It is pin-compatible with TI TCAN1042.
+> > > > > >
+> > > > > > Signed-off-by: Ilya Orazov <ilordash02@gmail.com>
+> > > > > > ---
+> > > > > >  Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml | 1 +
+> > > > > >  1 file changed, 1 insertion(+)
+> > > > > >
+> > > > > > diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > > > > > index 79dad3e89aa6..03de361849d2 100644
+> > > > > > --- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > > > > > +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > > > > > @@ -18,6 +18,7 @@ properties:
+> > > > > >        - nxp,tjr1443
+> > > > > >        - ti,tcan1042
+> > > > > >        - ti,tcan1043
+> > > > > > +      - microchip,ata6561
+> > > > >
+> > > > > Given that your driver patch has
+> > > > > | diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
+> > > > > | index ee4ce4249698..dbcd99213ba1 100644
+> > > > > | --- a/drivers/phy/phy-can-transceiver.c
+> > > > > | +++ b/drivers/phy/phy-can-transceiver.c
+> > > > > | @@ -89,6 +89,10 @@ static const struct of_device_id can_transceiver_phy_ids[] = {
+> > > > > |                 .compatible = "nxp,tjr1443",
+> > > > > |                 .data = &tcan1043_drvdata
+> > > > > |         },
+> > > > > | +       {
+> > > > > | +               .compatible = "microchip,ata6561",
+> > > > > | +               .data = &tcan1042_drvdata
+> > > > > | +       },
+> > > > > |         { }
+> > > > > |  };
+> > > > >
+> > > > > the driver patch is actually not needed at all, and you just need to
+> > > > > allow ti,tcan1042 as fallback compatible in the binding, so something
+> > > > > like:
+> > > > >
+> > > > >   compatible:
+> > > > >     oneOf:
+> > > > >       - enum:
+> > > > >           - nxp,tjr1443
+> > > > >           - ti,tcan1042
+> > > > >           - ti,tcan1043
+> > > > >       - items:
+> > > > >           - const: microchip,ata6561
+> > > > >           - const: ti,tcan1042
+> > > > >
+> > > > >    '#phy-cells':
+> > > > >      const: 0
+> > > >
+> > > > I tested the build with fallback compatible:
+> > > >
+> > > > compatible:
+> > > >   oneOf:
+> > > >     - items:
+> > > >       - enum:
+> > > >         - microchip,ata6561
+> > > >       - const: ti,tcan1042
+> > > >     - items:
+> > > >       - enum:
+> > > >         - nxp,tjr1443
+> > > >       - const: ti,tcan1043
+> > > >
+> > > > and modified compatible property in DTS:
+> > > >
+> > > > compatible = "microchip,ata6561", "ti,tcan1042";
+> > > >
+> > > > Build succeeded, phy-can-transceiver driver was used. So I would like
+> > > > to add a fallback compatible for both "microchip,ata6561" and
+> > > > "nxp,tjr1443" in this binding and modify other DTS files with
+> > > > compatible = "nxp,tjr1443". What do you think?
+> > >
+> > > This is wrong on two counts. Firstly, were what you have correct, you
+> > > should
+> > > squash the two:
+> > >      - items:
+> > >          - enum:
+> > >            - nxp,tjr1443
+> > >            - microchip,ata6561
+> > >          - const: ti,tcan1042
+> > >
+> > > However, that does not allow the TI compatibles in isolation, so you
+> > > still need to allow that for the actual TI devices, so you need:
+> > >
+> > >    oneOf:
+> > >      - items:
+> > >          - enum:
+> > >            - microchip,ata6561
+> > >            - nxp,tjr1443
+> > >            - ti,tcan1043
+> > >          - const: ti,tcan1042
+> > >      - const: ti,tcan1042
+> > >
+> > > There's probably some devicetrees that would need to be fixed up. I'm
+> > > just not convinced that this is worth retrofitting however.
+> >
+> > But nxp,tjr1443 is pin compatible with ti,tcan1043, so it should
+> > fallback only to ti,tcan1043 and not ti,tcan1042. That's why I decided
+> > to split them into different enums.
+>
+> Ah, sorry I missed that. I misread the match data. Then you need:
+>   compatible:
+>     oneOf:
+>       - items:
+>         - enum:
+>           - microchip,ata6561
+>         - const: ti,tcan1042
+>       - items:
+>         - enum:
+>           - nxp,tjr1443
+>         - const: ti,tcan1043
+>       - enum:
+>           const: ti,tcan1042
+>           const: ti,tcan1043
+>
+> because the TI devices exist and we still need to be able to
+> differentiate the TI and NXP devices. If you have
+>   compatible = "nxp,tjr1443", "ti,tcan1042";
+> that means the device is an nxp,tjr1443. If you have
+>   compatible = "ti,tcan1042";
+> then that's a tcan1042.
+>
+> > I made my patch according to a similar one that adds support for
+> > nxp,tjr1443. You can find it's conversation on
+> > https://lore.kernel.org/all/6ee5e2ce00019bd3f77d6a702b38bab1a45f3bb0.1674037830.git.geert+renesas@glider.be/t/#u.
+>
+> > I thought we want to hold all PHY chip names in one compatible enum
+> > and each in its own of_device_id struct in driver and extend them
+> > where appropriate.
+>
+> Nah, fallbacks are preferred when the programming model is either
+> identical or a "compatible superset" of an existing device. New
+> of_device_id structs should only be used where we need to account for
+> differences in the programming model.
+>
+> Cheers,
+> Conor.
 
-Erratum DS80000789E 6 says "reading of the FIFOCI bits in the FIFOSTA
-register for an RX FIFO may be corrupted". However observation shows
-that this problem is not limited to RX FIFOs but also effects the TEF
-FIFO.
 
-In the bad case, the driver reads a too large head index. As the FIFO
-is implemented as a ring buffer, this results in re-handling old CAN
-transmit complete events.
 
-Every transmit complete event contains with a sequence number that
-equals to the sequence number of the corresponding TX request. This
-way old TX complete events can be detected.
-
-If the original driver detects a non matching sequence number, it
-prints an info message and tries again later. As wrong sequence
-numbers can be explained by the erratum DS80000789E 6, demote the info
-message to debug level, streamline the code and update the comments.
-
-Keep the behavior: If an old CAN TX complete event is detected, abort
-the iteration and mark the number of valid CAN TX complete events as
-processed in the chip by incrementing the FIFO's tail index.
-
-Cc: Stefan Althöfer <Stefan.Althoefer@janztec.com>
-Cc: Thomas Kopp <thomas.kopp@microchip.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c | 71 +++++++------------
- 1 file changed, 27 insertions(+), 44 deletions(-)
-
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-index b33192964cf7d..902eb767426d1 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-@@ -60,56 +60,39 @@ static int mcp251xfd_check_tef_tail(const struct mcp251xfd_priv *priv)
- 	return 0;
- }
- 
--static int
--mcp251xfd_handle_tefif_recover(const struct mcp251xfd_priv *priv, const u32 seq)
--{
--	const struct mcp251xfd_tx_ring *tx_ring = priv->tx;
--	u32 tef_sta;
--	int err;
--
--	err = regmap_read(priv->map_reg, MCP251XFD_REG_TEFSTA, &tef_sta);
--	if (err)
--		return err;
--
--	if (tef_sta & MCP251XFD_REG_TEFSTA_TEFOVIF) {
--		netdev_err(priv->ndev,
--			   "Transmit Event FIFO buffer overflow.\n");
--		return -ENOBUFS;
--	}
--
--	netdev_info(priv->ndev,
--		    "Transmit Event FIFO buffer %s. (seq=0x%08x, tef_tail=0x%08x, tef_head=0x%08x, tx_head=0x%08x).\n",
--		    tef_sta & MCP251XFD_REG_TEFSTA_TEFFIF ?
--		    "full" : tef_sta & MCP251XFD_REG_TEFSTA_TEFNEIF ?
--		    "not empty" : "empty",
--		    seq, priv->tef->tail, priv->tef->head, tx_ring->head);
--
--	/* The Sequence Number in the TEF doesn't match our tef_tail. */
--	return -EAGAIN;
--}
--
- static int
- mcp251xfd_handle_tefif_one(struct mcp251xfd_priv *priv,
- 			   const struct mcp251xfd_hw_tef_obj *hw_tef_obj,
- 			   unsigned int *frame_len_ptr)
- {
- 	struct net_device_stats *stats = &priv->ndev->stats;
-+	u32 seq, tef_tail_masked, tef_tail;
- 	struct sk_buff *skb;
--	u32 seq, seq_masked, tef_tail_masked, tef_tail;
- 
--	seq = FIELD_GET(MCP251XFD_OBJ_FLAGS_SEQ_MCP2518FD_MASK,
-+	 /* Use the MCP2517FD mask on the MCP2518FD, too. We only
-+	  * compare 7 bits, this is enough to detect old TEF objects.
-+	  */
-+	seq = FIELD_GET(MCP251XFD_OBJ_FLAGS_SEQ_MCP2517FD_MASK,
- 			hw_tef_obj->flags);
--
--	/* Use the MCP2517FD mask on the MCP2518FD, too. We only
--	 * compare 7 bits, this should be enough to detect
--	 * net-yet-completed, i.e. old TEF objects.
--	 */
--	seq_masked = seq &
--		field_mask(MCP251XFD_OBJ_FLAGS_SEQ_MCP2517FD_MASK);
- 	tef_tail_masked = priv->tef->tail &
- 		field_mask(MCP251XFD_OBJ_FLAGS_SEQ_MCP2517FD_MASK);
--	if (seq_masked != tef_tail_masked)
--		return mcp251xfd_handle_tefif_recover(priv, seq);
-+
-+	/* According to mcp2518fd erratum DS80000789E 6. the FIFOCI
-+	 * bits of a FIFOSTA register, here the TX FIFO tail index
-+	 * might be corrupted and we might process past the TEF FIFO's
-+	 * head into old CAN frames.
-+	 *
-+	 * Compare the sequence number of the currently processed CAN
-+	 * frame with the expected sequence number. Abort with
-+	 * -EBADMSG if an old CAN frame is detected.
-+	 */
-+	if (seq != tef_tail_masked) {
-+		netdev_dbg(priv->ndev, "%s: chip=0x%02x ring=0x%02x\n", __func__,
-+			   seq, tef_tail_masked);
-+		stats->tx_fifo_errors++;
-+
-+		return -EBADMSG;
-+	}
- 
- 	tef_tail = mcp251xfd_get_tef_tail(priv);
- 	skb = priv->can.echo_skb[tef_tail];
-@@ -223,12 +206,12 @@ int mcp251xfd_handle_tefif(struct mcp251xfd_priv *priv)
- 		unsigned int frame_len = 0;
- 
- 		err = mcp251xfd_handle_tefif_one(priv, &hw_tef_obj[i], &frame_len);
--		/* -EAGAIN means the Sequence Number in the TEF
--		 * doesn't match our tef_tail. This can happen if we
--		 * read the TEF objects too early. Leave loop let the
--		 * interrupt handler call us again.
-+		/* -EBADMSG means we're affected by mcp2518fd erratum
-+		 * DS80000789E 6., i.e. the Sequence Number in the TEF
-+		 * doesn't match our tef_tail. Don't process any
-+		 * further and mark processed frames as good.
- 		 */
--		if (err == -EAGAIN)
-+		if (err == -EBADMSG)
- 			goto out_netif_wake_queue;
- 		if (err)
- 			return err;
 -- 
-2.43.0
-
+Best regards,
+Ilya Orazov
 
