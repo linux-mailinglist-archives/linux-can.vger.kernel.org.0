@@ -1,231 +1,277 @@
-Return-Path: <linux-can+bounces-1034-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1033-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBAD093F0C6
-	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2024 11:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A2C1393F03A
+	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2024 10:52:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FCCF2811DB
-	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2024 09:16:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4081B28229C
+	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2024 08:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98DF813CF82;
-	Mon, 29 Jul 2024 09:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="o9fPmLMB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED7D13C80F;
+	Mon, 29 Jul 2024 08:52:07 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A6113C9A2;
-	Mon, 29 Jul 2024 09:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40971139D12;
+	Mon, 29 Jul 2024 08:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722244606; cv=none; b=gcJbUIpr3ARBAR9Y7qMRfNxyiE6gVTphxd08O35AxfLiXPHwelirCcqN1Z+dkYBdjj9hHsR4u2coAQrWNxQWvlAs9KXLN7/UTnz1i8iE8/1GsU5LD4cqU1/dbexpHq/6JXt16F91T0ORb1RkiIyWEzpwLHSwA+qMIbdbWIVeyzY=
+	t=1722243127; cv=none; b=ZorE/tipSsPP9uf899bzFMtJ6egfSST5V376L2v6TMrn9VQM24bRGs1+SV5509NmFC9jqS6yCuhZyW7KnpepUT+SulLPllFKO7kvtQNvdH4VTrnRRxZ6WSZ4UAWTspA/Oxim/g483fslydvuFsLpdAVQU9AoC5sNAbYcnLlu40w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722244606; c=relaxed/simple;
-	bh=vCO3rsz4c96FQBi8lBkTzWSFhuPoohJEICqV05nVnqk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UV5RObZvMZAy+7Sa3I8Rn6CD0Of3hYvCih4zXwforM4z8qW3OnAarMRmkEgMWk92TZRWhkaQIk0oIa6T2ynOGDSHFOY4+aF7Dk2q4pcZD8Rrg+8pimBbzAizRprfUQdmYzTGk6JzPGxWunrPc7m8yER7rwnUiTCc5WWVjRygdkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=o9fPmLMB; arc=none smtp.client-ip=188.40.30.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-	s=default2211; h=MIME-Version:Content-Transfer-Encoding:Content-Type:
-	References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=JMXOgVywNt8Njq2iXfRLDs6RYuucGTU1xDoulcabn5o=; b=o9fPmLMB75Q6LfZsEVtMgFgTZZ
-	DR8IDwsG3Yor5M89f2NXxUp0fcT7DJnNuXRIpn9czqWNisB2PeO44h5u1XvYuJMuo7gjnKhdyUdgz
-	lpn8rLaDIJuZrj1Z5CgCu8Bl+Kt99Shwd+vKPyLFNIRyFSwUufG56p1oC3I72bYIolAGe7bzOmfzT
-	ULVMZxrlVPXAynNEFx/iXKx5JmSAynUDiKX/64lrgvg6ZulqqZDIOCXbJCNW4fdLZ+mmi04DRA2oB
-	/gLTMae6z0gEwwuHWS0DiwdbPRKlvuQZQRa8SiKdVlUzMXzl+yHT3/kj47YJ2TgtLjQiVOczdZUmT
-	u4BDqJag==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <martin@geanix.com>)
-	id 1sYM6H-000OTm-2F; Mon, 29 Jul 2024 10:51:25 +0200
-Received: from [185.17.218.86] (helo=[192.168.64.76])
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <martin@geanix.com>)
-	id 1sYM6G-000Iz2-0W;
-	Mon, 29 Jul 2024 10:51:24 +0200
-Message-ID: <8dc30044f36a451766d2332f2869dce9d5e6f333.camel@geanix.com>
-Subject: Re: [PATCH v2 4/7] can: m_can: Support pinctrl wakeup state
-From: Martin =?ISO-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
-To: Markus Schneider-Pargmann <msp@baylibre.com>, Chandrasekar Ramakrishnan
- <rcsekar@samsung.com>, Marc Kleine-Budde <mkl@pengutronix.de>, Vincent
- Mailhol <mailhol.vincent@wanadoo.fr>, "David S . Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,  Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>,  Nishanth Menon <nm@ti.com>, Vignesh Raghavendra
- <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, Christophe JAILLET
- <christophe.jaillet@wanadoo.fr>,  Michal Kubiak <michal.kubiak@intel.com>
-Cc: Vibhore Vardhan <vibhore@ti.com>, Kevin Hilman <khilman@baylibre.com>, 
- Dhruva Gole <d-gole@ti.com>, Conor Dooley <conor@kernel.org>,
- linux-can@vger.kernel.org,  netdev@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org
-Date: Mon, 29 Jul 2024 10:51:23 +0200
-In-Reply-To: <20240729074135.3850634-5-msp@baylibre.com>
-References: <20240729074135.3850634-1-msp@baylibre.com>
-	 <20240729074135.3850634-5-msp@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3 
+	s=arc-20240116; t=1722243127; c=relaxed/simple;
+	bh=EllNsFQhKjhnG5Z+UAfKg7NfTbmjqrF+y4x25MeYGlo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ReIfVRpm/sQNQXFwaAerHNN2QR6BLR7TYRJtRVZdYecW2D2RptFlm89DRPLJGEeZXK5oMVp/1zNO9UoK1C0faIlz0rZYJmGz41m0XP2hQfbHPvRu2Vu99lLzDvMMJ2kKcoBsZaJ52yvwidJBiF0dSqmnAMS55ygj7lE0N/E4Izo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-65cd720cee2so17070657b3.1;
+        Mon, 29 Jul 2024 01:52:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722243123; x=1722847923;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qqSAntpxwAaK8Ju6K/LOPA95uiNO3TLROZcY1mWI+vA=;
+        b=omEd6X0xfLCJ/A/OIWUJvZDB6zcMIxPFTpqaAvL7lbbmQO21Lw9GkhkLEx0xYAlrVF
+         TgEAttJzF3t23xppUH6muXzr6/h76BHP0hzZ/nqll7xJj6Ur3K3ns56BO2FDP8yrW4Ps
+         g+0NRSJelcP8nE/2igTDNfslyGXDiMs58yq/SxzGZ9lyAUwxInPsJTM1TbfGjk5gvZNR
+         v5CfnI3bG4yiOvgUbZ9nVMvoAOzAwbLtimZCQ63BXab8XNdc7+fSxchu0p13kdmED9H2
+         n4YPukEMrIdRMn+gdqvJiwc3scMDmHXUVGCR1EOBUOskihZ61oFey1MXcXH5XyGRt8rK
+         9ZDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXfRZPRitOrTvR+kXltBlXfdDsinDmuOs6uDpZ1u23WhGUw6aq98GsIeo2h3BRLQ2oDhcWtbRKqH3ZrlokTxklprXolcwvcMQYLzfvi0egt58fewItZKsIjVvuA+7hxtZs9eRAoGw==
+X-Gm-Message-State: AOJu0Yxfac8RAUg9RsrlGV9Ut8JYJ2ieQFR6plY5ElM0M5c2kWtns/T6
+	uL3rmII1/ATMSlBYPY5ie5ekPv8g6LGpQFHdSDCL3Pt3dfbEwCVItxDDJrwO
+X-Google-Smtp-Source: AGHT+IE3FxFtbW35rP/iJQ67nZfFXxxUlKx05dZvHcF3PjBZpWjKzXJlT6fCPlwvNCfjVbmd3I+L+g==
+X-Received: by 2002:a0d:c344:0:b0:64a:e220:bfbf with SMTP id 00721157ae682-67a0813c74amr83389287b3.23.1722243123161;
+        Mon, 29 Jul 2024 01:52:03 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6756b024aeasm19700287b3.89.2024.07.29.01.52.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jul 2024 01:52:02 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-66599ca3470so16080977b3.2;
+        Mon, 29 Jul 2024 01:52:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWk1gI/PjQQ48EM3cdzm6nk2grcC/3HbZkuU8iEq8gHHrX63YyNpoZm8tveTsJQxXyA50HSlYFFMkS0d/DmCYHWhli3ByU22/63Q8uB/ejVsqdRPXeQcAv6gUAieaNciPAajrGbhA==
+X-Received: by 2002:a81:8101:0:b0:665:54fa:5abf with SMTP id
+ 00721157ae682-67a05e78c43mr85473567b3.2.1722243122638; Mon, 29 Jul 2024
+ 01:52:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Authenticated-Sender: martin@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27350/Sun Jul 28 10:25:11 2024)
+References: <20240718210322.37492-1-ilordash02@gmail.com> <20240718210322.37492-2-ilordash02@gmail.com>
+ <20240719-ahead-kiwi-995e52bf3e74@spud> <CAGCz5HkF_WNZBVpY2SWVf071Pi896BvKFk0jnfNAYX5AKx2Zcw@mail.gmail.com>
+ <20240723-dinginess-john-608d0b28293b@spud> <CAGCz5H=Gncw+Tr0XaQQhhGWQER5Rs1BcxbkPaJwx9jJ-8j7LGQ@mail.gmail.com>
+ <20240723-municipal-snowy-136b08b6db90@spud> <CAGCz5HnJKjNj7A0YD2fw20m-NrEs3MoCLwox86mC11Kudq8xbg@mail.gmail.com>
+In-Reply-To: <CAGCz5HnJKjNj7A0YD2fw20m-NrEs3MoCLwox86mC11Kudq8xbg@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 29 Jul 2024 10:51:50 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUf=McxMLqb1hgu_-4QkSFJkdWrdtbwiwn9yJoMSi3YWA@mail.gmail.com>
+Message-ID: <CAMuHMdUf=McxMLqb1hgu_-4QkSFJkdWrdtbwiwn9yJoMSi3YWA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: phy: ti,tcan104x-can: Document Microchip ATA6561
+To: Ilya Orazov <ilordash02@gmail.com>
+Cc: Conor Dooley <conor@kernel.org>, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	a-govindraju@ti.com, linux-can@vger.kernel.org, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Markus,
+Hi Ilya,
 
-On Mon, 2024-07-29 at 09:41 +0200, Markus Schneider-Pargmann wrote:
-> am62 requires a wakeup flag being set in pinctrl when mcan pins acts
-> as
-> a wakeup source. Add support to select the wakeup state if WOL is
-> enabled.
->=20
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> ---
-> =C2=A0drivers/net/can/m_can/m_can.c | 57
-> +++++++++++++++++++++++++++++++++++
-> =C2=A0drivers/net/can/m_can/m_can.h |=C2=A0 4 +++
-> =C2=A02 files changed, 61 insertions(+)
->=20
-> diff --git a/drivers/net/can/m_can/m_can.c
-> b/drivers/net/can/m_can/m_can.c
-> index 5b80a7d1f9a1..b71e7f8e9727 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -2193,6 +2193,7 @@ static void m_can_get_wol(struct net_device
-> *dev, struct ethtool_wolinfo *wol)
-> =C2=A0static int m_can_set_wol(struct net_device *dev, struct
-> ethtool_wolinfo *wol)
-> =C2=A0{
-> =C2=A0	struct m_can_classdev *cdev =3D netdev_priv(dev);
-> +	struct pinctrl_state *new_pinctrl_state =3D NULL;
-> =C2=A0	bool wol_enable =3D !!wol->wolopts & WAKE_PHY;
-> =C2=A0	int ret;
-> =C2=A0
-> @@ -2209,7 +2210,27 @@ static int m_can_set_wol(struct net_device
-> *dev, struct ethtool_wolinfo *wol)
-> =C2=A0		return ret;
-> =C2=A0	}
-> =C2=A0
-> +	if (wol_enable)
-> +		new_pinctrl_state =3D cdev->pinctrl_state_wakeup;
-> +	else
-> +		new_pinctrl_state =3D cdev->pinctrl_state_default;
-> +
-> +	if (!IS_ERR_OR_NULL(new_pinctrl_state)) {
+On Sun, Jul 28, 2024 at 10:52=E2=80=AFAM Ilya Orazov <ilordash02@gmail.com>=
+ wrote:
+> On Tue, 23 Jul 2024 at 23:14, Conor Dooley <conor@kernel.org> wrote:
+> > On Tue, Jul 23, 2024 at 10:55:17PM +0300, Ilya Orazov wrote:
+> > > On Tue, 23 Jul 2024 at 21:50, Conor Dooley <conor@kernel.org> wrote:
+> > > > On Tue, Jul 23, 2024 at 08:20:04PM +0300, IlorDash wrote:
+> > > > > On Fri, 19 Jul 2024 at 18:07, Conor Dooley <conor@kernel.org> wro=
+te:
+> > > > > >
+> > > > > > On Fri, Jul 19, 2024 at 12:03:21AM +0300, Ilya Orazov wrote:
+> > > > > > > Microchip ATA6561 is High-Speed CAN Transceiver with Standby =
+Mode.
+> > > > > > > It is pin-compatible with TI TCAN1042.
+> > > > > > >
+> > > > > > > Signed-off-by: Ilya Orazov <ilordash02@gmail.com>
+> > > > > > > ---
+> > > > > > >  Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml |=
+ 1 +
+> > > > > > >  1 file changed, 1 insertion(+)
+> > > > > > >
+> > > > > > > diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104=
+x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > > > > > > index 79dad3e89aa6..03de361849d2 100644
+> > > > > > > --- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.y=
+aml
+> > > > > > > +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.y=
+aml
+> > > > > > > @@ -18,6 +18,7 @@ properties:
+> > > > > > >        - nxp,tjr1443
+> > > > > > >        - ti,tcan1042
+> > > > > > >        - ti,tcan1043
+> > > > > > > +      - microchip,ata6561
+> > > > > >
+> > > > > > Given that your driver patch has
+> > > > > > | diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/=
+phy-can-transceiver.c
+> > > > > > | index ee4ce4249698..dbcd99213ba1 100644
+> > > > > > | --- a/drivers/phy/phy-can-transceiver.c
+> > > > > > | +++ b/drivers/phy/phy-can-transceiver.c
+> > > > > > | @@ -89,6 +89,10 @@ static const struct of_device_id can_trans=
+ceiver_phy_ids[] =3D {
+> > > > > > |                 .compatible =3D "nxp,tjr1443",
+> > > > > > |                 .data =3D &tcan1043_drvdata
+> > > > > > |         },
+> > > > > > | +       {
+> > > > > > | +               .compatible =3D "microchip,ata6561",
+> > > > > > | +               .data =3D &tcan1042_drvdata
+> > > > > > | +       },
+> > > > > > |         { }
+> > > > > > |  };
+> > > > > >
+> > > > > > the driver patch is actually not needed at all, and you just ne=
+ed to
+> > > > > > allow ti,tcan1042 as fallback compatible in the binding, so som=
+ething
+> > > > > > like:
+> > > > > >
+> > > > > >   compatible:
+> > > > > >     oneOf:
+> > > > > >       - enum:
+> > > > > >           - nxp,tjr1443
+> > > > > >           - ti,tcan1042
+> > > > > >           - ti,tcan1043
+> > > > > >       - items:
+> > > > > >           - const: microchip,ata6561
+> > > > > >           - const: ti,tcan1042
+> > > > > >
+> > > > > >    '#phy-cells':
+> > > > > >      const: 0
+> > > > >
+> > > > > I tested the build with fallback compatible:
+> > > > >
+> > > > > compatible:
+> > > > >   oneOf:
+> > > > >     - items:
+> > > > >       - enum:
+> > > > >         - microchip,ata6561
+> > > > >       - const: ti,tcan1042
+> > > > >     - items:
+> > > > >       - enum:
+> > > > >         - nxp,tjr1443
+> > > > >       - const: ti,tcan1043
+> > > > >
+> > > > > and modified compatible property in DTS:
+> > > > >
+> > > > > compatible =3D "microchip,ata6561", "ti,tcan1042";
+> > > > >
+> > > > > Build succeeded, phy-can-transceiver driver was used. So I would =
+like
+> > > > > to add a fallback compatible for both "microchip,ata6561" and
+> > > > > "nxp,tjr1443" in this binding and modify other DTS files with
+> > > > > compatible =3D "nxp,tjr1443". What do you think?
+> > > >
+> > > > This is wrong on two counts. Firstly, were what you have correct, y=
+ou
+> > > > should
+> > > > squash the two:
+> > > >      - items:
+> > > >          - enum:
+> > > >            - nxp,tjr1443
+> > > >            - microchip,ata6561
+> > > >          - const: ti,tcan1042
+> > > >
+> > > > However, that does not allow the TI compatibles in isolation, so yo=
+u
+> > > > still need to allow that for the actual TI devices, so you need:
+> > > >
+> > > >    oneOf:
+> > > >      - items:
+> > > >          - enum:
+> > > >            - microchip,ata6561
+> > > >            - nxp,tjr1443
+> > > >            - ti,tcan1043
+> > > >          - const: ti,tcan1042
+> > > >      - const: ti,tcan1042
+> > > >
+> > > > There's probably some devicetrees that would need to be fixed up. I=
+'m
+> > > > just not convinced that this is worth retrofitting however.
+> > >
+> > > But nxp,tjr1443 is pin compatible with ti,tcan1043, so it should
+> > > fallback only to ti,tcan1043 and not ti,tcan1042. That's why I decide=
+d
+> > > to split them into different enums.
+> >
+> > Ah, sorry I missed that. I misread the match data. Then you need:
+> >   compatible:
+> >     oneOf:
+> >       - items:
+> >         - enum:
+> >           - microchip,ata6561
+> >         - const: ti,tcan1042
+> >       - items:
+> >         - enum:
+> >           - nxp,tjr1443
+> >         - const: ti,tcan1043
+> >       - enum:
+> >           const: ti,tcan1042
+> >           const: ti,tcan1043
+> >
+> > because the TI devices exist and we still need to be able to
+> > differentiate the TI and NXP devices. If you have
+> >   compatible =3D "nxp,tjr1443", "ti,tcan1042";
+> > that means the device is an nxp,tjr1443. If you have
+> >   compatible =3D "ti,tcan1042";
+> > then that's a tcan1042.
+> >
+> > > I made my patch according to a similar one that adds support for
+> > > nxp,tjr1443. You can find it's conversation on
+> > > https://lore.kernel.org/all/6ee5e2ce00019bd3f77d6a702b38bab1a45f3bb0.=
+1674037830.git.geert+renesas@glider.be/t/#u.
+> >
+> > > I thought we want to hold all PHY chip names in one compatible enum
+> > > and each in its own of_device_id struct in driver and extend them
+> > > where appropriate.
+> >
+> > Nah, fallbacks are preferred when the programming model is either
+> > identical or a "compatible superset" of an existing device. New
+> > of_device_id structs should only be used where we need to account for
+> > differences in the programming model.
+>
+> However, I am curious as to why the NXP CAN PHY transceiver was not
+> included as fallback compatible. Geert, could you please share your
+> thoughts on this matter?
 
-Why not do
+The TJR1443 looked sufficiently similar to the TCAN1043 to use the
+same driver configuration (which is limited to having standby and/or
+enable signals or not).  However, I'm not sure it behaves exactly
+the same, e.g. in case of reporting an error condition (which is not
+yet supported by the driver). The part numbers are also different,
+so this is not a simple case of SN74HCxx vs. CD74HCxx.
 
-	if (IS_ERR_OR_NULL(new_pinctrl_state))
-		return 0;
+Summary: I don't know if they are identical, or if TJR1443 is a
+compatible superset of TCAN1043, or vice versa. Hence I went for the
+safest way....
 
-?
+Gr{oetje,eeting}s,
 
-// Martin
+                        Geert
 
-> +		ret =3D pinctrl_select_state(cdev->pinctrl,
-> new_pinctrl_state);
-> +		if (ret) {
-> +			netdev_err(cdev->net, "Failed to select
-> pinctrl state %pE\n",
-> +				=C2=A0=C2=A0 ERR_PTR(ret));
-> +			goto err_wakeup_enable;
-> +		}
-> +	}
-> +
-> =C2=A0	return 0;
-> +
-> +err_wakeup_enable:
-> +	/* Revert wakeup enable */
-> +	device_set_wakeup_enable(cdev->dev, !wol_enable);
-> +
-> +	return ret;
-> =C2=A0}
-> =C2=A0
-> =C2=A0static const struct ethtool_ops m_can_ethtool_ops_coalescing =3D {
-> @@ -2377,7 +2398,43 @@ struct m_can_classdev
-> *m_can_class_allocate_dev(struct device *dev,
-> =C2=A0
-> =C2=A0	m_can_of_parse_mram(class_dev, mram_config_vals);
-> =C2=A0
-> +	class_dev->pinctrl =3D devm_pinctrl_get(dev);
-> +	if (IS_ERR(class_dev->pinctrl)) {
-> +		ret =3D PTR_ERR(class_dev->pinctrl);
-> +
-> +		if (ret !=3D -ENODEV) {
-> +			dev_err_probe(dev, ret, "Failed to get
-> pinctrl\n");
-> +			goto err_free_candev;
-> +		}
-> +
-> +		class_dev->pinctrl =3D NULL;
-> +	} else {
-> +		class_dev->pinctrl_state_wakeup =3D
-> pinctrl_lookup_state(class_dev->pinctrl, "wakeup");
-> +		if (IS_ERR(class_dev->pinctrl_state_wakeup)) {
-> +			ret =3D PTR_ERR(class_dev-
-> >pinctrl_state_wakeup);
-> +			ret =3D -EIO;
-> +
-> +			if (ret !=3D -ENODEV) {
-> +				dev_err_probe(dev, ret, "Failed to
-> lookup pinctrl wakeup state\n");
-> +				goto err_free_candev;
-> +			}
-> +
-> +			class_dev->pinctrl_state_wakeup =3D NULL;
-> +		} else {
-> +			class_dev->pinctrl_state_default =3D
-> pinctrl_lookup_state(class_dev->pinctrl, "default");
-> +			if (IS_ERR(class_dev-
-> >pinctrl_state_default)) {
-> +				ret =3D PTR_ERR(class_dev-
-> >pinctrl_state_default);
-> +				dev_err_probe(dev, ret, "Failed to
-> lookup pinctrl default state\n");
-> +				goto err_free_candev;
-> +			}
-> +		}
-> +	}
-> +
-> =C2=A0	return class_dev;
-> +
-> +err_free_candev:
-> +	free_candev(net_dev);
-> +	return ERR_PTR(ret);
-> =C2=A0}
-> =C2=A0EXPORT_SYMBOL_GPL(m_can_class_allocate_dev);
-> =C2=A0
-> diff --git a/drivers/net/can/m_can/m_can.h
-> b/drivers/net/can/m_can/m_can.h
-> index 92b2bd8628e6..b75b0dd6ccc9 100644
-> --- a/drivers/net/can/m_can/m_can.h
-> +++ b/drivers/net/can/m_can/m_can.h
-> @@ -126,6 +126,10 @@ struct m_can_classdev {
-> =C2=A0	struct mram_cfg mcfg[MRAM_CFG_NUM];
-> =C2=A0
-> =C2=A0	struct hrtimer hrtimer;
-> +
-> +	struct pinctrl *pinctrl;
-> +	struct pinctrl_state *pinctrl_state_default;
-> +	struct pinctrl_state *pinctrl_state_wakeup;
-> =C2=A0};
-> =C2=A0
-> =C2=A0struct m_can_classdev *m_can_class_allocate_dev(struct device *dev,
-> int sizeof_priv);
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
