@@ -1,72 +1,72 @@
-Return-Path: <linux-can+bounces-1027-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1028-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6068793EEB8
-	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2024 09:42:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8169F93EEBE
+	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2024 09:43:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0B101F222E9
-	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2024 07:42:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37D88281DE4
+	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2024 07:43:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64BF312D76F;
-	Mon, 29 Jul 2024 07:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 266C612DD91;
+	Mon, 29 Jul 2024 07:42:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="fgy3eIpv"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="BGGyTvWw"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB0B12C552
-	for <linux-can@vger.kernel.org>; Mon, 29 Jul 2024 07:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F10C12D1FF
+	for <linux-can@vger.kernel.org>; Mon, 29 Jul 2024 07:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722238923; cv=none; b=enDkfWMzr92WsyvhgGJb5DdxwTyrev/JOSoVB1I8Bhc6imnowfx90DDMXCUP1QbQZP7tEsjcQcOgT4IZPD1US7tr94RddhcrDpysx5U5VYv9CEmw0l7DgjTD/Ji5Y1Qg0vYej/vEpHSc5/fMyFyo9HRblMOzz+H6rjA3RaQwugw=
+	t=1722238924; cv=none; b=rjdZVgawoz9Q1NVOt/C8e7Tz4kUDL8Wi11OA3o4BlLvkg8qi3+LVUwH4QLKcx8bgdN9puaGvMxYcIWubTXM8vDpbByjHBTF7j76pSgF1xJzZTkYw2Xz8c38fUl6zV4j67RrAIsx4FZTDmN2zVrdwzA/XnelCHT+BA5M+6+4gx5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722238923; c=relaxed/simple;
-	bh=t7F2lKoixWfzCSNEpIYekj5rawyt2QRxC3AGjmCilLM=;
+	s=arc-20240116; t=1722238924; c=relaxed/simple;
+	bh=Ta2L/1ooF+CTfVFwAjB2t5O92X2+ab6FoFth4ZdKJsY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EgLkSmtquEtJmCKNzp69gr+8gaO+Cvcowr6Zez4SRmpuBCIKfPcBlpHZ9sAXpocySuiIIdGTNDPh6qqk1+bDnjeVdrZV68gIATIdUaanipUaq3b5a8YDt4JKtbqYnYDoR/81nDe5eGFmIeZKIiXdAJGg+fxyzrbW/hiEHCPRGks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=fgy3eIpv; arc=none smtp.client-ip=209.85.128.44
+	 MIME-Version; b=uDOwIlDaj2fgwOEgrhAPlDKZu/xj0Y0cuMwTCl+6COrMpV/M2r3ldfV9dTSHmYaABs6/XE47q+IBgR7viqflytKe5pZzWLUpVOZCodAnYbmWfwa3Guxa2E79L+vFpLGRQiNDbXrG2VjbzbbVaRlrHS+US2jvRgPZ3ovcfGdmvvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=BGGyTvWw; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-427b1d4da32so7934325e9.0
-        for <linux-can@vger.kernel.org>; Mon, 29 Jul 2024 00:42:01 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-367940c57ddso1260469f8f.3
+        for <linux-can@vger.kernel.org>; Mon, 29 Jul 2024 00:42:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1722238920; x=1722843720; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1722238921; x=1722843721; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZCJyOdovnkFMEmbndXoqHv/AoixQbNLaTwmx6tiqcEI=;
-        b=fgy3eIpv4wNCMkq5iKTCCDuJryptZxSFJTCW7Esks7pESN6kl+8HkbJG09E1qDbp1F
-         qCXDkIeAPumM70YrzMKKBpCDw8BfIj80TUUucZneSCRHRwr5TZH5aBwAuDERp8iqwoHm
-         hj3JY/HRAtJQak7K0HSzjzNS5r8yyK6Hh27cnHVso8TbjyiZVuKqUPUc0I1QLP2niH8u
-         +ZTw/RPtxdkfCa1Osr10GVm4JTCH61QjiRjP0FOT9PKHVHv7RCpRhYb71F3XQZWLNino
-         /Y2bNfpQpyr6rqWveXi/rTPcvwaA0+tzCoLUqEFibSsGwOXWfs9113X0Ad2HWCpAjoN2
-         ciwA==
+        bh=qeg14f0KbqEGucxcVmm1WXsFuu/G6EBq2QXT7ORiCag=;
+        b=BGGyTvWwHZ0X1pkuYWdc12ml6XWvtXZVfBfHY8Q1sLYb72zkf+AO2PA06zZCPQSvv+
+         VUEgoSmuoKELl/WnSd/NfdOQIoroa9++zjE4HaVRSj9TeqUbtM0f38I4Xy9M7154cTgw
+         84ZWhYB6O37WLov1kgW803jFFIXRQFdpcbg0G1zFWxU68s+S38iu6W2ijfCpVNro3+m/
+         jYv0QTA4KkIMZ0tH/WDquwVbvQMCZ9m/CwL568r/agDZGCDL+y+dE1WnPDljDq+gi6VL
+         gzXyXutadjPehRYg7eCYWZ9ZF3fvbPK0SyIlEzDgA8vyEHHOm+1pBfz5Z7FxfmBcU/Nl
+         er9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722238920; x=1722843720;
+        d=1e100.net; s=20230601; t=1722238921; x=1722843721;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZCJyOdovnkFMEmbndXoqHv/AoixQbNLaTwmx6tiqcEI=;
-        b=tkUR/2q6ew5qKRaIOR5+KYwmj1fokiZbuX9n+WDkXqd34g8ESZgweqV52jP1PVmY32
-         TgLrAw8/CCfQhg7Ozs40nfBTBOOTPb69jOtH4i/53bsNyfcej5UQRt99PDv6YQUUZNoO
-         e5QDDEA7lnPVuxaWld159X2YkUAQ3SKs29xClMTIAyIb6r0WbHAmbxjXu4vy5GkA65lN
-         zGNXQY1k+t0p/aIO4L4Wqp5FR0XI7ZbQ+i7XPxuueG8XNKhaUl9OJ/RT+FwdhQQ7cOT6
-         fK27HuBqCF0TxyjMWhIvqDIaD6AhcXv+DVwKS4Xn9oh2CVjljhoSMmIVk0WDURc4QJDe
-         M8ZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVC8axFDMYeYlFiEZpl4x29UskgeS9ekGazVkr7kO+w8FuPBqiwM28o7wLhc8+bLWezWNNg6GQo5dl0a40k8fgex6rIYpMrOZjy
-X-Gm-Message-State: AOJu0YxJsmM7T66ZzyOqLKLxckXQ5eAAiS8QeVXX77GUcMKMM/fAtsGA
-	N6dSbIAEOu1MGuPOv9eW6VO8GOIfShLMvYvg0XDYWINXILtp+GeiH+0MvXbDLU4=
-X-Google-Smtp-Source: AGHT+IGA9WK2y4GsRw5Nh5f5SQhHnBIbXwPuYenvw4gciCMeqP8xAeSl3QvUhZ/h2LeIGM5P+g9f4Q==
-X-Received: by 2002:a5d:5227:0:b0:36b:5d86:d889 with SMTP id ffacd0b85a97d-36b5d86d95cmr3919065f8f.6.1722238919709;
-        Mon, 29 Jul 2024 00:41:59 -0700 (PDT)
+        bh=qeg14f0KbqEGucxcVmm1WXsFuu/G6EBq2QXT7ORiCag=;
+        b=ryFZO+X6wD2iDvNvVJGDgn3y9EXkSwxdECJ5wiad+QWGP4z7ETtcE7zEXeAyCtw5m4
+         kyUNRH6Xsz6dmQQH7TyMk3MvI+Ne2nmPGCegUDAwKWjCZl20TkHlX07jy4iJKnTAMfPd
+         i5PSR92KpI3T21PTL4isrB5a1KA58Uadp+v0V01TEm5K1AA7bW78D+t1eBw0TLZuCtQP
+         dUCoY3/mr+bQARprI8abpWnLDuchjKgFElNeIbYjRLYAzas7pOLyuOsySbQEZS6UXci5
+         75UMXzUQ3MUitqRqenwtaa2epISvlJOoc/0xHHS40Z/yG+J/HiBhouffjbcujiY1gQYv
+         G8Ew==
+X-Forwarded-Encrypted: i=1; AJvYcCUiUfAfc1Ks0TcJNG5aRW1YN5xbfrzCvTrN/zQ+xsycsfhgIqD6OcCCzXSWjQqEQdUNFOCL2fXt+JnO05mKdRtFx6sg7fkbMKHh
+X-Gm-Message-State: AOJu0Ywjp6p4Dewk73HaoxD6NaRu81FIUGz86iYWxg+GACJ6Vz3nnVg6
+	lMMpueO7Y0PtLpluKWDJeQAA3J9MIcN3jyc0uL5B3DZRVqErc7dwy8CDUgTmQzQ=
+X-Google-Smtp-Source: AGHT+IG/CESAQDtsmDP2HTDQ8KiBa0jkwD+YkksDTOEwTebAs8MrvspRVYp81dFcTJcPrwx9mnhJyg==
+X-Received: by 2002:adf:e94c:0:b0:369:f662:109b with SMTP id ffacd0b85a97d-36b5cf23abbmr4360020f8f.27.1722238920931;
+        Mon, 29 Jul 2024 00:42:00 -0700 (PDT)
 Received: from blmsp.fritz.box ([2001:4091:a245:8609:c1c4:a4f8:94c8:31f2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b36863aa7sm11460879f8f.109.2024.07.29.00.41.58
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b36863aa7sm11460879f8f.109.2024.07.29.00.41.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 00:41:59 -0700 (PDT)
+        Mon, 29 Jul 2024 00:42:00 -0700 (PDT)
 From: Markus Schneider-Pargmann <msp@baylibre.com>
 To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -94,9 +94,9 @@ Cc: Vibhore Vardhan <vibhore@ti.com>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 2/7] can: m_can: Map WoL to device_set_wakeup_enable
-Date: Mon, 29 Jul 2024 09:41:30 +0200
-Message-ID: <20240729074135.3850634-3-msp@baylibre.com>
+Subject: [PATCH v2 3/7] can: m_can: Return ERR_PTR on error in allocation
+Date: Mon, 29 Jul 2024 09:41:31 +0200
+Message-ID: <20240729074135.3850634-4-msp@baylibre.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240729074135.3850634-1-msp@baylibre.com>
 References: <20240729074135.3850634-1-msp@baylibre.com>
@@ -108,86 +108,93 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In some devices the pins of the m_can module can act as a wakeup source.
-This patch helps do that by connecting the PHY_WAKE WoL option to
-device_set_wakeup_enable. By marking this device as being wakeup
-enabled, this setting can be used by platform code to decide which
-sleep or poweroff mode to use.
-
-Also this prepares the driver for the next patch in which the pinctrl
-settings are changed depending on the desired wakeup source.
+We have more detailed error values available, return them in the core
+driver and the calling drivers to return proper errors to callers.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 ---
- drivers/net/can/m_can/m_can.c | 37 +++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ drivers/net/can/m_can/m_can.c          | 6 +++---
+ drivers/net/can/m_can/m_can_pci.c      | 4 ++--
+ drivers/net/can/m_can/m_can_platform.c | 4 ++--
+ drivers/net/can/m_can/tcan4x5x-core.c  | 4 ++--
+ 4 files changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 81e05746d7d4..2e4ccf05e162 100644
+index 2e4ccf05e162..5b80a7d1f9a1 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -2182,6 +2182,36 @@ static int m_can_set_coalesce(struct net_device *dev,
- 	return 0;
- }
- 
-+static void m_can_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
-+{
-+	struct m_can_classdev *cdev = netdev_priv(dev);
-+
-+	wol->supported = device_can_wakeup(cdev->dev) ? WAKE_PHY : 0;
-+	wol->wolopts = device_may_wakeup(cdev->dev) ? WAKE_PHY : 0;
-+}
-+
-+static int m_can_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
-+{
-+	struct m_can_classdev *cdev = netdev_priv(dev);
-+	bool wol_enable = !!wol->wolopts & WAKE_PHY;
-+	int ret;
-+
-+	if ((wol->wolopts & WAKE_PHY) != wol->wolopts)
-+		return -EINVAL;
-+
-+	if (wol_enable == device_may_wakeup(cdev->dev))
-+		return 0;
-+
-+	ret = device_set_wakeup_enable(cdev->dev, wol_enable);
-+	if (ret) {
-+		netdev_err(cdev->net, "Failed to set wakeup enable %pE\n",
-+			   ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct ethtool_ops m_can_ethtool_ops_coalescing = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS_IRQ |
- 		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ |
-@@ -2191,10 +2221,14 @@ static const struct ethtool_ops m_can_ethtool_ops_coalescing = {
- 	.get_ts_info = ethtool_op_get_ts_info,
- 	.get_coalesce = m_can_get_coalesce,
- 	.set_coalesce = m_can_set_coalesce,
-+	.get_wol = m_can_get_wol,
-+	.set_wol = m_can_set_wol,
- };
- 
- static const struct ethtool_ops m_can_ethtool_ops = {
- 	.get_ts_info = ethtool_op_get_ts_info,
-+	.get_wol = m_can_get_wol,
-+	.set_wol = m_can_set_wol,
- };
- 
- static int register_m_can_dev(struct m_can_classdev *cdev)
-@@ -2321,6 +2355,9 @@ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev,
- 		goto out;
+@@ -2352,7 +2352,7 @@ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev,
+ 					     sizeof(mram_config_vals) / 4);
+ 	if (ret) {
+ 		dev_err(dev, "Could not get Message RAM configuration.");
+-		goto out;
++		return ERR_PTR(ret);
  	}
  
-+	if (dev->of_node && of_property_read_bool(dev->of_node, "wakeup-source"))
-+		device_set_wakeup_capable(dev, true);
+ 	if (dev->of_node && of_property_read_bool(dev->of_node, "wakeup-source"))
+@@ -2367,7 +2367,7 @@ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev,
+ 	net_dev = alloc_candev(sizeof_priv, tx_fifo_size);
+ 	if (!net_dev) {
+ 		dev_err(dev, "Failed to allocate CAN device");
+-		goto out;
++		return ERR_PTR(-ENOMEM);
+ 	}
+ 
+ 	class_dev = netdev_priv(net_dev);
+@@ -2376,7 +2376,7 @@ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev,
+ 	SET_NETDEV_DEV(net_dev, dev);
+ 
+ 	m_can_of_parse_mram(class_dev, mram_config_vals);
+-out:
 +
- 	/* Get TX FIFO size
- 	 * Defines the total amount of echo buffers for loopback
- 	 */
+ 	return class_dev;
+ }
+ EXPORT_SYMBOL_GPL(m_can_class_allocate_dev);
+diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/m_can_pci.c
+index d72fe771dfc7..05a01dfdbfbf 100644
+--- a/drivers/net/can/m_can/m_can_pci.c
++++ b/drivers/net/can/m_can/m_can_pci.c
+@@ -111,8 +111,8 @@ static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 
+ 	mcan_class = m_can_class_allocate_dev(&pci->dev,
+ 					      sizeof(struct m_can_pci_priv));
+-	if (!mcan_class)
+-		return -ENOMEM;
++	if (IS_ERR(mcan_class))
++		return PTR_ERR(mcan_class);
+ 
+ 	priv = cdev_to_priv(mcan_class);
+ 
+diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+index 983ab80260dd..a5024e2cff8d 100644
+--- a/drivers/net/can/m_can/m_can_platform.c
++++ b/drivers/net/can/m_can/m_can_platform.c
+@@ -87,8 +87,8 @@ static int m_can_plat_probe(struct platform_device *pdev)
+ 
+ 	mcan_class = m_can_class_allocate_dev(&pdev->dev,
+ 					      sizeof(struct m_can_plat_priv));
+-	if (!mcan_class)
+-		return -ENOMEM;
++	if (IS_ERR(mcan_class))
++		return PTR_ERR(mcan_class);
+ 
+ 	priv = cdev_to_priv(mcan_class);
+ 
+diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+index 2f73bf3abad8..4c40b4447275 100644
+--- a/drivers/net/can/m_can/tcan4x5x-core.c
++++ b/drivers/net/can/m_can/tcan4x5x-core.c
+@@ -375,8 +375,8 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
+ 
+ 	mcan_class = m_can_class_allocate_dev(&spi->dev,
+ 					      sizeof(struct tcan4x5x_priv));
+-	if (!mcan_class)
+-		return -ENOMEM;
++	if (IS_ERR(mcan_class))
++		return PTR_ERR(mcan_class);
+ 
+ 	ret = m_can_check_mram_cfg(mcan_class, TCAN4X5X_MRAM_SIZE);
+ 	if (ret)
 -- 
 2.45.2
 
