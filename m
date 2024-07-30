@@ -1,124 +1,91 @@
-Return-Path: <linux-can+bounces-1062-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1063-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0AB394105C
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jul 2024 13:18:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05200941938
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jul 2024 18:30:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D317D1C22EC7
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jul 2024 11:18:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF89F1F24BB2
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jul 2024 16:30:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E97EE19885F;
-	Tue, 30 Jul 2024 11:18:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0DE51898EB;
+	Tue, 30 Jul 2024 16:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L1/ysDqu"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7CC19DF98
-	for <linux-can@vger.kernel.org>; Tue, 30 Jul 2024 11:18:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5BF98BE8;
+	Tue, 30 Jul 2024 16:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722338301; cv=none; b=J2iyh33BUxG4M16bcxITzJUF7nNac13iuuSoR6+Oy+E1SRKTO7RwxQ2Giulb+dMy2UA0pamDrHroE4EytpX9qNB5Vu1BOgsz/SMWNFixIdgAZvxs7l+mpqxXldMIliBJeXWbuhQJrOH96SpUPTMgokWO0JbUjThEWyBxeW7A6xU=
+	t=1722357020; cv=none; b=CYN/q8ZHlpL+5h5JcZ1zCY7bhQtZBaqeIZBl2mR4QriByJ48v9/45VHZcs0N2Gz21SXME/42uO4tkm+jzkr2UrZZ2ZQGwBt+EFL+SW7Ee2i9Lu57nrQgJe8ciZAB/vKIvRMiBDmbIRsFlsFnVj49A8qMqfuqHKS4HHgp9JFwpCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722338301; c=relaxed/simple;
-	bh=V56haVpUFlrD9G+P/ApnsxfO7fu8PgDIiuBLOvFaqlI=;
+	s=arc-20240116; t=1722357020; c=relaxed/simple;
+	bh=lhNcZ8ZEN5axq+CHqFJ7t45r9e7XQ0fIr4cY5Y/XNZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=msWRiZLe9HZc6PuW+87lBsIrerxW1fCYrCiwZYiYKMQQlkJtPaYiKooaPCLffIXPg/WyKVETp8KfrleqlRJtLgb+W6c+3Tq2TnskfeC1NLFO54lWhpqRjFQI6+MfYePOoGWq5bZf27PuZWWkyjQukDAxMIUkWstL1dIpYBQciZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sYkrX-0004Xm-8L; Tue, 30 Jul 2024 13:17:51 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sYkrV-003Gpk-Mw; Tue, 30 Jul 2024 13:17:49 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id B9994311BB3;
-	Tue, 30 Jul 2024 11:17:48 +0000 (UTC)
-Date: Tue, 30 Jul 2024 13:17:47 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Simon Horman <horms@kernel.org>
-Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Vivek Yadav <vivek.2311@samsung.com>, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org
-Subject: Re: [PATCH RFC] can: m_can: Release irq on error in m_can_open
-Message-ID: <20240730-slick-ochre-saluki-13bd13-mkl@pengutronix.de>
-References: <20240730-mcan-irq-v1-1-f47cee5d725c@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nApnmZvjujNQCR/i8doJC0pIWwSEeTY9khIJ9SVTLWdV9srFAsYlnwJwtQLIzuUKCa/mlejBBT/jNxWeH/zxn36VQgLF1QHKbjAjCvvdSVX7NAQIcuCPlE6Felxi+05EyTOiZlT3SvLhkwvArJhh5YP2m+2uklqSvg6brtLOPYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L1/ysDqu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D675CC4AF0A;
+	Tue, 30 Jul 2024 16:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722357020;
+	bh=lhNcZ8ZEN5axq+CHqFJ7t45r9e7XQ0fIr4cY5Y/XNZI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=L1/ysDqurtwedhyL2BI5lr4jACXoOR7RkG3q1LQ0Mt8chwVcNtO3dpKsOTH3YNYY3
+	 q9M8YFUT6zqNswbQgxugD9D9IDziuZNP4nKZD2V2nhsrkNDP0D8Z1c1ZnAVKg2xBuo
+	 yuIhLuhquJGC/eSxVqxJYKQvrp1baRY/n66TGzb97Ei7Y+NZArkn3t8Ma9jIPuQPsp
+	 JXypy/Uf5ZHtmPNIoNC59tfmA25QgasPj/tWs4BHOtWTptZsPa1lSzehYQ5ngw4vsZ
+	 JeVlu0uR1SyUu69PG78cGazGnYYNdK3ZGVQDzMt+4h5v2OoE84NyCag8LcmdGJOKH5
+	 /CyLOjWq5LKhw==
+Date: Tue, 30 Jul 2024 17:30:14 +0100
+From: Simon Horman <horms@kernel.org>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: kernel@pengutronix.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	David Jander <david.jander@protonic.nl>, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH can-next 19/21] can: rockchip_canfd: add hardware
+ timestamping support
+Message-ID: <20240730163014.GC1781874@kernel.org>
+References: <20240729-rockchip-canfd-v1-0-fa1250fd6be3@pengutronix.de>
+ <20240729-rockchip-canfd-v1-19-fa1250fd6be3@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6j3hsfckprgnpgna"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240730-mcan-irq-v1-1-f47cee5d725c@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20240729-rockchip-canfd-v1-19-fa1250fd6be3@pengutronix.de>
 
+On Mon, Jul 29, 2024 at 03:05:50PM +0200, Marc Kleine-Budde wrote:
+> Add support for hardware based timestamping.
+> 
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
---6j3hsfckprgnpgna
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Marc,
 
-On 30.07.2024 12:12:21, Simon Horman wrote:
-> It appears that the irq requested in m_can_open() may be leaked
-> if an error subsequently occurs: if m_can_start() fails.
->=20
-> Address this by calling free_irq in the unwind path for
-> such cases.
->=20
-> Flagged by Smatch.
-> Compile tested only.
->=20
-> Fixes: eaacfeaca7ad ("can: m_can: Call the RAM init directly from m_can_c=
-hip_config")
-> Signed-off-by: Simon Horman <horms@kernel.org>
+This patch seems to break allmodconfig builds on (at least) x86_64
+when applied to net-next.
 
-Looks good to me!
+In file included from drivers/net/can/rockchip/rockchip_canfd-ethtool.c:9:
+drivers/net/can/rockchip/rockchip_canfd.h:471:29: error: field 'cc' has incomplete type
+  471 |         struct cyclecounter cc;
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---6j3hsfckprgnpgna
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmaoy9gACgkQKDiiPnot
-vG9SRwf+JstLRjVK/HSfI6knM/Y4//wuo3mRdAg7NKsXt6W0QnJATIxKHZEDrjL1
-OFlbHKPEZajtCTwKC1BLGNXuoG8MBOEL3aYoIenHmRacMdEcfPnBNzlEHm5+5DN4
-v7Mx7tqGdHKfHvOgMX3GSxLpObOX/8hbDviG4C2gQawmoSf0ptyWXBwMfClkS4kQ
-8aK2j7oYExKkNzy2TsdJ62isaBM2cfEg0hi+y1GLUXUDBdUAYhsjdhyJVRPiD3cU
-dviDIIva5uzlS/mVT5Lk3L7VvgJV6me/+qY7MbI1XaqkOnDwr4SSwJE21VM9I6yO
-o0ZYqI6J0Mu6f6nm5hBFItSG6Q6pMg==
-=JR/c
------END PGP SIGNATURE-----
-
---6j3hsfckprgnpgna--
+...
 
