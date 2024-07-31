@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-1070-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1071-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82C31942893
-	for <lists+linux-can@lfdr.de>; Wed, 31 Jul 2024 10:02:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71D05942898
+	for <lists+linux-can@lfdr.de>; Wed, 31 Jul 2024 10:02:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B41B71C218D0
-	for <lists+linux-can@lfdr.de>; Wed, 31 Jul 2024 08:02:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C220B242F3
+	for <lists+linux-can@lfdr.de>; Wed, 31 Jul 2024 08:02:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F274450E2;
-	Wed, 31 Jul 2024 08:02:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E30A01A7F6E;
+	Wed, 31 Jul 2024 08:02:28 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4131A4B29
-	for <linux-can@vger.kernel.org>; Wed, 31 Jul 2024 08:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691F01A7F68
+	for <linux-can@vger.kernel.org>; Wed, 31 Jul 2024 08:02:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722412922; cv=none; b=T5b6bCBuV9gh6MZ0SwwjDeFEbAEpjZM93obWmkSEsrPe1jsJf2WME3IJZjydWMzf3QzLE3cf5ssCx0VW3qO4K+yk3TYW6+AexYu96gShgngIpI72hGYl2QBlFSj6fEd+ikWWiVEfHUXEcZtcVRCs4wtFX5cUwbeHTfF0bKe/9q4=
+	t=1722412948; cv=none; b=UV0sGYaw4n+exrlevPYgeyEQEmz83mlytJMbsxCFAi0ZZ2ATFhtS8brzfZ4B25e1JkhmjbyodZtETBrlKtihHuZ+J4fo1X0QYADG7C0cqWLBQXmAE4D7EMxwfH0g4NkbOcz/GayUCopYpzPuj/vIwlrcJIeAfqg+vqYODj8856Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722412922; c=relaxed/simple;
-	bh=C5FyirmAhRA35CTH9SzD6UuUJmCfDxZY3oJx3UZWCgY=;
+	s=arc-20240116; t=1722412948; c=relaxed/simple;
+	bh=jyOhEQN6paO/8Ei+LUPADImDZOXoiQEpIu6OFM9ecb4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VLiv3dJZ1aKCY1SxNv5Tk4wuAy2IanZFX50gOslM2s1E6C0C8feoVMUoCVtvqY9KoN8x3ODSn1a281aqmT9DvqBpbJiugRjqWhAIqDzyazeCEU04jTLlNZxuYbfitW9RcXJslj87ZbfdAVZ9NW8c7SLfTm+MGCD7FXcZFqppVQM=
+	 Content-Type:Content-Disposition:In-Reply-To; b=oJfFaISnf5GCSXP9E2VuDhnCrdVUPXT4HK4PwFdVn3CxI2xn2NkkA/j9QAoGHWarKkPGESouZOBBCXxC9vAlNKATtx7Ud5XsyZLWn7yKqepv0KkQ1tVf+jlTeUGKxwfEmV7dDExHTP5wg6Wf7ma8s4Cfsi/jIsDtu61uYRx0oqM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,20 +33,20 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1sZ4HC-0002st-NQ; Wed, 31 Jul 2024 10:01:38 +0200
+	id 1sZ4Hb-00034P-PX; Wed, 31 Jul 2024 10:02:03 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1sZ4HC-003Tbs-6H; Wed, 31 Jul 2024 10:01:38 +0200
+	id 1sZ4Hb-003Tcc-AE; Wed, 31 Jul 2024 10:02:03 +0200
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id B91A5312689;
-	Wed, 31 Jul 2024 08:01:36 +0000 (UTC)
-Date: Wed, 31 Jul 2024 10:01:36 +0200
+	by smtp.blackshift.org (Postfix) with ESMTPSA id CC60731268E;
+	Wed, 31 Jul 2024 08:02:01 +0000 (UTC)
+Date: Wed, 31 Jul 2024 10:02:00 +0200
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Simon Horman <horms@kernel.org>
 Cc: kernel@pengutronix.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
@@ -57,11 +57,12 @@ Cc: kernel@pengutronix.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
 	Elaine Zhang <zhangqing@rock-chips.com>, David Jander <david.jander@protonic.nl>, 
 	linux-can@vger.kernel.org, netdev@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH can-next 12/21] can: rockchip_canfd: add TX PATH
-Message-ID: <20240731-berserk-wandering-lemming-5abd7e-mkl@pengutronix.de>
+Subject: Re: [PATCH can-next 11/21] can: rockchip_canfd: add functions to
+ check if CAN-FD frames are equal
+Message-ID: <20240731-burrowing-lionfish-of-grandeur-e45e30-mkl@pengutronix.de>
 References: <20240729-rockchip-canfd-v1-0-fa1250fd6be3@pengutronix.de>
- <20240729-rockchip-canfd-v1-12-fa1250fd6be3@pengutronix.de>
- <20240730164401.GD1967603@kernel.org>
+ <20240729-rockchip-canfd-v1-11-fa1250fd6be3@pengutronix.de>
+ <20240730163730.GC1967603@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -69,54 +70,37 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qjjxgu7e523drimg"
+	protocol="application/pgp-signature"; boundary="vyizljpcqlcon2br"
 Content-Disposition: inline
-In-Reply-To: <20240730164401.GD1967603@kernel.org>
+In-Reply-To: <20240730163730.GC1967603@kernel.org>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
---qjjxgu7e523drimg
+--vyizljpcqlcon2br
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 30.07.2024 17:44:01, Simon Horman wrote:
-> On Mon, Jul 29, 2024 at 03:05:43PM +0200, Marc Kleine-Budde wrote:
-> > The IP core has a TX event FIFO. In other IP cores, this type of FIFO
-> > normally contains the event that a CAN frame has been successfully
-> > sent. However, the IP core on the rk3568v2 the FIFO also holds events
-> > of unsuccessful transmission attempts.
+On 30.07.2024 17:37:30, Simon Horman wrote:
+> On Mon, Jul 29, 2024 at 03:05:42PM +0200, Marc Kleine-Budde wrote:
+> > Add a pair new functions to check if 2 struct canfd_frame are equal.
+> > The 1st checks if the header of the CAN frames are equal, the 2nd
+> > checks if the data portion are equal:
 > >=20
-> > It turned out that the best way to work around this problem is to set
-> > the IP core to self-receive mode (RXSTX), filter out the self-received
-> > frames and insert them into the complete TX path.
+> > - rkcanfd_can_frame_header_equal()
+> > - rkcanfd_can_frame_data_equal()
 > >=20
-> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > This functionality is needed in the next patch.
 >=20
-> ...
->=20
-> > diff --git a/drivers/net/can/rockchip/rockchip_canfd-tx.c b/drivers/net=
-/can/rockchip/rockchip_canfd-tx.c
->=20
-> ...
->=20
-> > +void rkcanfd_handle_tx_done_one(struct rkcanfd_priv *priv, const u32 t=
-s,
-> > +				unsigned int *frame_len_p)
-> > +{
-> > +	struct net_device_stats *stats =3D &priv->ndev->stats;
-> > +	unsigned int tx_tail;
-> > +	struct sk_buff *skb;
-> > +
-> > +	tx_tail =3D rkcanfd_get_tx_tail(priv);
-> > +	skb =3D priv->can.echo_skb[tx_tail];
->=20
-> nit: skb is set but otherwise unused in this function.
+> nit: I would squash this into the next patch as
+>      rkcanfd_can_frame_header_equal() is defined but
+>      unused in this patch, which is flagged by
+>      allmodconfig W=3D1 builds.
 
-Moved into the appropriate patch.
+Makes sense, done.
 
 Thanks,
 Marc
@@ -127,20 +111,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---qjjxgu7e523drimg
+--vyizljpcqlcon2br
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmap710ACgkQKDiiPnot
-vG88YQgAg+dwmK2wbxGVd7we6a2Cm07aRjhauJAkwCiRHZAO+KZFaTb2E43AhhSE
-MwD/uba8v7zETenTpLeWSqLQlDnwAxRitVnloLZJLuKHPbpnxxC8Wjqx32d8ZQ0o
-HLgF72DO1nW+fkyjOVV9r8OWKyFi9e709yJ7ZajbJ6mAFi5vxt17B6lhWsY7+6Oc
-7ziCvHbdbpKwG2ys0ce5wlALqglcfwVpXQ3a30A4DPysKX9IZpWaBALjSd/E2h8d
-f1EoInEKm4yAdrUTgKF+MAZ86SqZWm8M7ns7chmZvVqydr7XShTBlKNwDRZugXwn
-O4h2ggdIU5YnzeB9u3uPkbYvHJqDHw==
-=ge4Q
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmap73YACgkQKDiiPnot
+vG9dIAgAnalii0C9bNkGXOiMeyu2gGcFPNJtZJUgj3B7/MSyodZ1rLymVBS8Ec9K
+2z8Wu4aDopn9kXMOL5wFGHEP9V83dI7iEKD9R/PHw/JtX4AiL8DgPbDLXSfvT8Eg
+v7Ag/KgijCSc/5lsFXPkBaOiPhR5Rg4qLnpewXrYHjQJ/DXYNWYWlbKOV8jAw1co
+ACAk2Fs2vBP3UDRbR3ikks3drCZMYCYn6HRgMSsonDgVgirbWxLVeCt6s3WPBrf5
+VH3elx6rR+skOmHNs6QU3MfnjXltkmbW7TUkpRJ3PRf+kqOE7BsbjeD9KzhckVlz
+sicriCsHA/LXD0mg7STt438G4RGkiA==
+=qwMN
 -----END PGP SIGNATURE-----
 
---qjjxgu7e523drimg--
+--vyizljpcqlcon2br--
 
