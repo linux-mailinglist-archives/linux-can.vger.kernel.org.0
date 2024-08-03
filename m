@@ -1,194 +1,297 @@
-Return-Path: <linux-can+bounces-1103-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1104-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A06DC945403
-	for <lists+linux-can@lfdr.de>; Thu,  1 Aug 2024 23:11:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 727159469A9
+	for <lists+linux-can@lfdr.de>; Sat,  3 Aug 2024 14:32:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CBAD1F2463E
-	for <lists+linux-can@lfdr.de>; Thu,  1 Aug 2024 21:11:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94F261C20A6C
+	for <lists+linux-can@lfdr.de>; Sat,  3 Aug 2024 12:32:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB86E14AD2B;
-	Thu,  1 Aug 2024 21:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AEF1139D03;
+	Sat,  3 Aug 2024 12:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="M3pEG/qd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nDCg5Z/S"
 X-Original-To: linux-can@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11013030.outbound.protection.outlook.com [52.101.67.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A88142E77;
-	Thu,  1 Aug 2024 21:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.30
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722546694; cv=fail; b=g/koQolifkIvBPDwuNcIx0kbXjh1+5CiFbcWCnmpftBuHGqpQ300mXB5Cm8rqurfAfhd/nXCKP057ftD82+ULECYrxBNLed1A2do7OQwzzwgi1a8BaxiAKNvWWLZUi0hz8X9nLiabmOHQkxFQ7xwnYjbRHscTSgL+V2KvpB7P2A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722546694; c=relaxed/simple;
-	bh=e4xtg55mdtO7+HmmkbTIln6zq+THkmNa7kbW89JFx2E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Jkh+G6AUSfNscEVfHklalmkxTb8uhmu4nWaKvfyX3sDz9QA+KbBXQcM4SgSW/EgEQrTJR2XRyoR1hT9dDcYHvugimxjLlhTZNPgpVAZAtmznAhmimlXktwi2/oANdRk80fNROG7ocnIzm3CY6i+8AJ69mzyYW3ubFejjitX5gQQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=fail (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=M3pEG/qd reason="signature verification failed"; arc=fail smtp.client-ip=52.101.67.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MV0C2aI7t6Hr+pZkBPoY6wwdSJFFEDY2ZEDPV1MnL0KCEwjYK1ulOBgFCl/q9CfuqpB0P7NVy2y7cbWhKFnPJ5oitbo9VI05+Yu4/JBerSztZtXgCwAXetAXDbydFYTwrefKnv/EupgG2ZZMrxk4ZwNFAg7j8afaRezXklU7Oey7tsTkXUCgg6Wh8xUZvNQTgSaOgb17weUwzlqyoQjL5dM5aKj9CawzR6uoOh+6pf02FRzcEsGerpCjY87ynnaBOVD9vrnNjfQSSaOPoWMaqiLW8P6iZ3aBAOz42KHvuk30SMq3Khku02gURAKQLAOLHfdf542leOIJlUlqAepocw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KHdjCen7n1k7BbozH6+kCl7flBliRpFDL0+efUJwIDk=;
- b=yiYV65cB2eW+suSUb7kQydu7R5X8yD6kpoZKG3XkZWY1JaYhA11pOcqZJx6jhpxxrGFGLc/OMyvBDozXoI8oLpjK7JjZEgoJqPYTrOsuDJAfciH8Z8CY7lsOpMh9GPIU4YOb8CyduUrzzEzyP+5QzR3NnYjv4dQrddmAzBtDeUuFRz7qax6Nkd+4Mqx75ajKCEPgQ0bXxCGttGCxFfKhjh7x9gZozQGvT12b0nVwsWP2Y1pdxsh6gJBvwd1BapOaeLt+mfjqS4Xbj/TTJgJlmz3Z1KYzCXLTW0a3+iS+cT7JFdLTL86Q1lvsfMhd4In1Rv0YjGH5qQsYYos/r+7Cng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KHdjCen7n1k7BbozH6+kCl7flBliRpFDL0+efUJwIDk=;
- b=M3pEG/qdyszoaE0Cs/o4kZ5gQHv2EzJ102bYqUlP0a/VlPxOMcV2NUPu65bSKWZihyDzCKrYeGld8r2tzOspNxG6ZFCfuaFN0O5ngFAexBM8pI+cvjYcBcJOAephQDP2lZ2G/hOE+TGza8wOBwXoUy2b1uK4llQocXRrVa7gYMzBTb+JIrFGq3hSUqCbmAHsNFmmaHc54XjVm3UYSlby6HoxV7uMdp3L6xpUKvh4+zOe1P2H0kTJNZgxwvp5DMHRrD1N9B7GIM1PVCISNT+iPboTRRRt3+O5xJx/k3FYd3cRuJkWgtzYhX0Bst8YMeqc1luHlwdmna97ORP9dmM65A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by DU0PR04MB9635.eurprd04.prod.outlook.com (2603:10a6:10:31f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.23; Thu, 1 Aug
- 2024 21:11:29 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%5]) with mapi id 15.20.7828.021; Thu, 1 Aug 2024
- 21:11:29 +0000
-Date: Thu, 1 Aug 2024 17:11:21 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
-	"open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH v2 1/1] dt-bindings: can: fsl,flexcan: add common
- 'can-transceiver' for fsl,flexcan
-Message-ID: <Zqv5+St34E7hR2Ou@lizhi-Precision-Tower-5810>
-References: <20240629021754.3583641-1-Frank.Li@nxp.com>
- <20240704-outstanding-outrageous-herring-003368-mkl@pengutronix.de>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240704-outstanding-outrageous-herring-003368-mkl@pengutronix.de>
-X-ClientProxiedBy: SJ0PR13CA0115.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::30) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5142D53B;
+	Sat,  3 Aug 2024 12:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722688326; cv=none; b=eo8KMBS57c9mxgEIJg93h7VMoJhxStXq1awPUPXyxFWk/uuJHEiWCPKIfMoEYuT3g0DkjaNvaiSXUkt+qXvNhS0pCEYOBeexQQieFlU8QQwQPY5FyTtP7WhM2vJLLe9EEwkZo9B4vo3RlY5HQGHwfdkvgLlkxT0HxkJMi1+SEOE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722688326; c=relaxed/simple;
+	bh=uOQrYcJATsAaf82PDCx7hDXIknFlDybJKCXPiGw2T9Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GfVisPOHNXHuIB9MU6Vg4BRDf0E4Icpgl6O/7rCdDuLEPf63E76SRZqyg+u8ksgpcJIkmymUHJle48TnuK1l0hdb0FQXrjGAQ1jFIMZ0dlyg6mm/C1c9XvK1pV4u+ZQ0LlJE7KBkNdxbIQ3Zu9hmHtebxtk6wFtVNzBuiyLk8aQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nDCg5Z/S; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-67b709024bfso83715187b3.3;
+        Sat, 03 Aug 2024 05:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722688323; x=1723293123; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V3+BaC9o/e9DWaWrjc0ap9vXeLeDNjNnKH8vyX7nP08=;
+        b=nDCg5Z/SniQge3QxLOy9uGbXR9ZP1lxsTmAln6kVCgUSjqjfsQv5JsUwsY/zWACQ90
+         EWAlzI5TjSHNOWN6CqJDSviXcPyuyGJePa71UBHFpmCg15QL7ZW0kfFC3E2uhXmpioi0
+         qKQCbz/4Jt5HeQwvEo1JanDAFI1LB7CTtTqA71q9jZG37TxmRNKZMgvLiXWpm2S7E6Az
+         KGoT/7l+FF4pLgjuN5d1J5j7HHTODoF6BxH04mVJjbdeMPK39l2iR+RaGQ76l0YuvYS+
+         eGpS83g3w4dFpsR4juMoc239AKyR5k62A7AkPXFoB2yCfC1y1Dp2lNjT4g5WC8y+jB9P
+         hfqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722688323; x=1723293123;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V3+BaC9o/e9DWaWrjc0ap9vXeLeDNjNnKH8vyX7nP08=;
+        b=uGDwk9VU2cfIfQ8iIqczU+9+bSpLzpT3YQe+JdDrNZcqiRSb794Fyn169zA5fGFIcG
+         AQh4aBKme5sZ4yo/MRGNdPuwL9kTVboeqVeyceCjdcHLcKWLhDaqKDMICn6YIrd/Sz7c
+         oGn+X+JTyTDX2SEHYr+GEyPEF8/V+T1cHBP44dBeWkresLeoPMDuw2yM/g5fiJtYzSal
+         3J9N9gQAgbG+zco8eWgoHtxrGAgTkp1aAeFn7c+pK1JFs9p1YuF/DZUXWwCQv7kDiD8t
+         lzQL03c0dmW2LWv80lYXg8o36FB214J77m3e6HcCo90f+djPXQsTvOOMGPMqB+FPyxMI
+         zakw==
+X-Forwarded-Encrypted: i=1; AJvYcCVxIiF3KC7bhXbOqXl+xu1TtDfvseYN1OkR8ibYa8ezQsfcSNexc4LfhHzWiSPXw2aRo6cKNLfXffKh@vger.kernel.org, AJvYcCWpkSxZJuvJunk89VxprwX2X0V+j66Btw48gDi/l4i0qSX53FJZ5ZzlKibZDy8FoV2LlEG2sa+IH4K/@vger.kernel.org
+X-Gm-Message-State: AOJu0YyELCQfvceAwmtuMVPYxDL+DMvjQOn/hrry6RHfvwlzPUiZkOQ1
+	rqFFWkQ6JA+OGHK5NvTaC3Ylv4ZN0xcLvl8pV6mUrhYzEHnmA/M2zqqM6OtwEqEfONFYra4gUUU
+	dIWjc4/ni3vD7lXCYEqGnWHW4d/w=
+X-Google-Smtp-Source: AGHT+IHyulwlUu12HySz+3pTmFjQx/SBzzCVa46bcv3gYiCYNGn3Ea7xgWm+nGgMXckttVObX/mBhtmS3Sx5N+NSxQ8=
+X-Received: by 2002:a0d:c346:0:b0:63b:d242:4fa0 with SMTP id
+ 00721157ae682-68960e44eb2mr69575297b3.21.1722688323383; Sat, 03 Aug 2024
+ 05:32:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DU0PR04MB9635:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63e16ebe-92c6-4aa8-84bd-08dcb26e831c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|52116014|376014|7416014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?iso-8859-1?Q?NjfIS1iBu4prbZ9v1bSRJt17fbizpcrdx7C20/SxUs2qyMuH2G9BV1PkMk?=
- =?iso-8859-1?Q?eSqXCxAd8TTuLmdMI/ZRfx8/oEsuldSTE3wdTPx6sSC6IRiruTYPOaTL4f?=
- =?iso-8859-1?Q?qUha1Vj+FVTTN9tvxEmkX5nS+n3QiY0hXHgwsI6PSQ9+Aa2s7P6JGqolVn?=
- =?iso-8859-1?Q?ycSWRhZxncBARi+5iqKRHuKAevKZJK12QnN+G0HDpKEF+YsTOR+j4vW94D?=
- =?iso-8859-1?Q?Q+Dfy+mrNzwmoW8cypitEINxesQG0VJ2+wcrlNjvTEKVnLeBhE2jv6y5SC?=
- =?iso-8859-1?Q?IG9NYDz+nkT0c+AxGGaoR1xe8vn+dytQYbi3YLt7yHiIRYpo0p0ImXGpSP?=
- =?iso-8859-1?Q?ZIYnnisYOHAMqyKRWdeemJA/qLoEeQnuofwfDVhcoV/D2cM/DqC3hzDPij?=
- =?iso-8859-1?Q?y9b9IE/G/x4ZPEXamA+ysx1h8riHwR0IpbUloNHf03obEiwh9RqnINbLNz?=
- =?iso-8859-1?Q?mMJRftPe1GPHlog7Frk+fKl/SQSP19XdFRBC2gmmkpJAV2wojNFTIPp9sK?=
- =?iso-8859-1?Q?nblppJe0KFbU22XEKrSEpFau1hquoFInA+ryC3BLNFo+d/xxMvScGg1U70?=
- =?iso-8859-1?Q?iJ4koUTyfpxzF0A+FqTsBpvxQjqSZkDO7N4S1ENUnVOnRQPcMHy3vV4aAH?=
- =?iso-8859-1?Q?5g3x1bBBvNq1bTjVn43BaDDqaj6pVUA1xNjCnsqG9AzTMxel7KhrtJrAi4?=
- =?iso-8859-1?Q?Y+WBOsYdlT+teSQlaNNd9ykMr0p12vFuBU8mojqAEITKQeuTy9zBXQbGCd?=
- =?iso-8859-1?Q?cY9Nb8ggkwP8lKUKVYUjy7W5BXTUnf2XIjJPFewEkEkEfx//W3Sz6JoeAF?=
- =?iso-8859-1?Q?Cf+An/rkZGvjX/ZBpnIpauSBLIK621EpWsxBBELXqGyU9dkW/q0QdaNI0/?=
- =?iso-8859-1?Q?ETTc+Gj5trYagNOxiqiP8kggfo9ShMs1E4eB+p0Uriy5GJ+T2tGk+nOG+4?=
- =?iso-8859-1?Q?FGZ/+WWwiGFCJqGknhprRmd0g3erlATP/R3uXNGddTEC+l56o/xMjuPRDJ?=
- =?iso-8859-1?Q?Mi2ct9kpIfMuiWtmKof7N4JkW9Hg8N/MBiHTe4ahVCA3Vtx+dMxXbQSPiD?=
- =?iso-8859-1?Q?77oeuprUMzc0ox1jZV1M5p8UTxdQOMu/XAFLXXuNS+Ge31REMl9q1TVBkk?=
- =?iso-8859-1?Q?+ixywn/m6c4POYWL6U8ieDD7z7kPEMo0q838dHFeB4/NzlT1eRCP84n0f7?=
- =?iso-8859-1?Q?88Usb4ObUApb3+BgP7szPiPBejryI1oYcpSd5y5JKxqwufkB393+EGDqk/?=
- =?iso-8859-1?Q?nheSfFobxdV+H+b4zvwmOejxYSESMaUAaQNTXMMHHDU4+FPH8qc6Ao0oiq?=
- =?iso-8859-1?Q?eq07Z4xEOyaK0dK6eSkPgeAL4Yb+KJ1R3r6e/rWyBLWnDzjkXXlBzJ39wE?=
- =?iso-8859-1?Q?wWJPxiXuuWsnU9CeRJJyIF0SdGfZGx7C83+yfxuFHcEK+DUFQyP/Y=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(376014)(7416014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?iso-8859-1?Q?QqtIzafQiQHn7x/nzIv5edCltRoQ7z4kvfi28tPCIkNnM4cDUDPDlt2nTw?=
- =?iso-8859-1?Q?JyMUvrfV08WKBED7BA+8X4V4T9nJfbv10bCbNdXzI2VxpNvOxzav9qGpnN?=
- =?iso-8859-1?Q?RbmuFcUi/IlY6t3/h7LhuXTbqCFaG3/24fJnNQbfIjILMO/cbkvIcA2+lh?=
- =?iso-8859-1?Q?N5ETFB3QA/exSN09XmyHDw11Eb3FxfL4oeIUsZujsgYTiJfiJEbnNDUbf2?=
- =?iso-8859-1?Q?YMzO756QuyPGAsniVd6Npmx2VFLopLGuWIhxAkZdBmfqCTmfGlBlTGwNtn?=
- =?iso-8859-1?Q?lK4ldkq9UcYnxs7pnjhBT+e/8FjRbTeoqQlome4eATXIjKQnzb1IuHYPC9?=
- =?iso-8859-1?Q?WWl7u8bwH0S3AmlA8NEoQNH66ARgmb3jGx+FXSvEsNGlLaQkYgy0FnFMnj?=
- =?iso-8859-1?Q?9t1KtOBENskn9rK2fQvcGhHCzX8+4I8Zq/muXuJ1x49VmrO8TV6U0WI+Li?=
- =?iso-8859-1?Q?ft7cvvEp7hOAdQ4KIUeiC/iYhLd/aF796k6U6olAgGV/ehe3+N++HRTWbs?=
- =?iso-8859-1?Q?QjVrbyVvZRR4/x8USYywciQapSj0e3EJ8qozzx6O6MHoKgd8G7HZfGYWZf?=
- =?iso-8859-1?Q?UMLv5ODSBKbCAJShgfAo7A/hKxTBFrgk6GZsPYtF16XyO6nddCWhVzD9kH?=
- =?iso-8859-1?Q?sjuwNUyiW7D61xfr1j7dGnjw+KSjMtd5j83tmmuZckFrU29rDY32yt7mO9?=
- =?iso-8859-1?Q?dHFpx15cXshaql4/R4EXE/fZ4ZM6mS4PYlPJ8yBP8696FBBgDvmZjcbmLV?=
- =?iso-8859-1?Q?BNaQ/JqAdC+0LDitAiMK+GWw6yb0sUbtO+TnbM8d4FajP7YHjIy+GK4U1O?=
- =?iso-8859-1?Q?wpYzdB5fhQpGnWkIHbeTKgVLju63wY10CSmtD8z0uurd2TyZGp5KBnvohP?=
- =?iso-8859-1?Q?+VW2LDzNjT7UrWobjXJ/D3tHVuk05HkEDmkJ862c2fVR9aZmZ7dBk8hAWL?=
- =?iso-8859-1?Q?ipRrYjZTESPd8ch95JIHW6KxJDitXAgOFJz2Wml1fGOaTBwXP2QhmicToz?=
- =?iso-8859-1?Q?rCk29x4J+l7B7a0bQz51XVGjxzOfqAZEdxTac/L39i/qQSlup5SpS7dGFs?=
- =?iso-8859-1?Q?1ZFEwtXXipjrATarQvhCyFIu9xAXzN7pWRqe9cI6tEmqa9BWJgrojIIKGR?=
- =?iso-8859-1?Q?Sdxz63UN9/FrbEofzgiiD2JGfDCvoA8e766u5oKynWeSiQ1PQvOmzR90zM?=
- =?iso-8859-1?Q?qAChRx8gJpKGfMY6ilBoV+1CdMrdbT6ysJO7ODJ75TT9EN8w5HW+OVVcmp?=
- =?iso-8859-1?Q?lLsEtRQYNv1oIrlsWAuAsmKC7LNuu4YO6Pw1dvwYmR/HY/hZq5RW/XeTNw?=
- =?iso-8859-1?Q?mz7IInmakWXIXYYdv4qJ/AARau8FtxRj+M0ttS27wIC4quPmzt4O38b/GB?=
- =?iso-8859-1?Q?W3C9pCfq/nLi8yP9CL/eVsHctzFBo/fqKjYH4ZZ8zJPLy+sEBk48c0ZN46?=
- =?iso-8859-1?Q?MapF4nWkfd/1Ag89+pYTgbUwrLKJaoAqmv191Z0fd2E8HMRZHLtyPLoTsd?=
- =?iso-8859-1?Q?mfZAXok13CbCWP2hJIfVJdF/PCUVuGfCwfTRUREMmI6tj6JlIRIScOl/Fx?=
- =?iso-8859-1?Q?Qrdr6lET0CwwY8vmRitcs8axzTcViHHyW8wInmUsvg+9ZHoEJsg06umDmz?=
- =?iso-8859-1?Q?xAA+TLBI5Dz4g=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63e16ebe-92c6-4aa8-84bd-08dcb26e831c
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2024 21:11:29.6744
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mt4w0bZRz4vybSAZ9UnskWeSb9D5cpccRthwoHOIy2sTQYZX/urUuElelGRdXV+pz+aqW8hgE0lrP+05I4e3zQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9635
+References: <20240718210322.37492-1-ilordash02@gmail.com> <20240718210322.37492-2-ilordash02@gmail.com>
+ <20240719-ahead-kiwi-995e52bf3e74@spud> <CAGCz5HkF_WNZBVpY2SWVf071Pi896BvKFk0jnfNAYX5AKx2Zcw@mail.gmail.com>
+ <20240723-dinginess-john-608d0b28293b@spud> <CAGCz5H=Gncw+Tr0XaQQhhGWQER5Rs1BcxbkPaJwx9jJ-8j7LGQ@mail.gmail.com>
+ <20240723-municipal-snowy-136b08b6db90@spud> <CAGCz5HnJKjNj7A0YD2fw20m-NrEs3MoCLwox86mC11Kudq8xbg@mail.gmail.com>
+ <CAMuHMdUf=McxMLqb1hgu_-4QkSFJkdWrdtbwiwn9yJoMSi3YWA@mail.gmail.com> <20240801-disarray-gesture-ebad121272b0@spud>
+In-Reply-To: <20240801-disarray-gesture-ebad121272b0@spud>
+From: Ilya Orazov <ilordash02@gmail.com>
+Date: Sat, 3 Aug 2024 15:31:52 +0300
+Message-ID: <CAGCz5H=gDfJpfAhH-QbxN5VSDyVtwGU6Zt16z7=sqpTdjkeGqA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: phy: ti,tcan104x-can: Document Microchip ATA6561
+To: Conor Dooley <conor@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	a-govindraju@ti.com, linux-can@vger.kernel.org, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 04, 2024 at 12:07:02PM +0200, Marc Kleine-Budde wrote:
-> On 28.06.2024 22:17:54, Frank Li wrote:
-> > Add common 'can-transceiver' children node for fsl,flexcan.
+On Thu, 1 Aug 2024 at 18:12, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Mon, Jul 29, 2024 at 10:51:50AM +0200, Geert Uytterhoeven wrote:
+> > Hi Ilya,
 > >
-> > Fix below warning:
-> > arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dtb: can@2180000: 'can-transceiver' does not match any of the regexes: 'pinctrl-[0-9]+'
-> >         from schema $id: http://devicetree.org/schemas/net/can/fsl,flexcan.yaml#
+> > On Sun, Jul 28, 2024 at 10:52=E2=80=AFAM Ilya Orazov <ilordash02@gmail.=
+com> wrote:
+> > > On Tue, 23 Jul 2024 at 23:14, Conor Dooley <conor@kernel.org> wrote:
+> > > > On Tue, Jul 23, 2024 at 10:55:17PM +0300, Ilya Orazov wrote:
+> > > > > On Tue, 23 Jul 2024 at 21:50, Conor Dooley <conor@kernel.org> wro=
+te:
+> > > > > > On Tue, Jul 23, 2024 at 08:20:04PM +0300, IlorDash wrote:
+> > > > > > > On Fri, 19 Jul 2024 at 18:07, Conor Dooley <conor@kernel.org>=
+ wrote:
+> > > > > > > >
+> > > > > > > > On Fri, Jul 19, 2024 at 12:03:21AM +0300, Ilya Orazov wrote=
+:
+> > > > > > > > > Microchip ATA6561 is High-Speed CAN Transceiver with Stan=
+dby Mode.
+> > > > > > > > > It is pin-compatible with TI TCAN1042.
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Ilya Orazov <ilordash02@gmail.com>
+> > > > > > > > > ---
+> > > > > > > > >  Documentation/devicetree/bindings/phy/ti,tcan104x-can.ya=
+ml | 1 +
+> > > > > > > > >  1 file changed, 1 insertion(+)
+> > > > > > > > >
+> > > > > > > > > diff --git a/Documentation/devicetree/bindings/phy/ti,tca=
+n104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > > > > > > > > index 79dad3e89aa6..03de361849d2 100644
+> > > > > > > > > --- a/Documentation/devicetree/bindings/phy/ti,tcan104x-c=
+an.yaml
+> > > > > > > > > +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-c=
+an.yaml
+> > > > > > > > > @@ -18,6 +18,7 @@ properties:
+> > > > > > > > >        - nxp,tjr1443
+> > > > > > > > >        - ti,tcan1042
+> > > > > > > > >        - ti,tcan1043
+> > > > > > > > > +      - microchip,ata6561
+> > > > > > > >
+> > > > > > > > Given that your driver patch has
+> > > > > > > > | diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/=
+phy/phy-can-transceiver.c
+> > > > > > > > | index ee4ce4249698..dbcd99213ba1 100644
+> > > > > > > > | --- a/drivers/phy/phy-can-transceiver.c
+> > > > > > > > | +++ b/drivers/phy/phy-can-transceiver.c
+> > > > > > > > | @@ -89,6 +89,10 @@ static const struct of_device_id can_t=
+ransceiver_phy_ids[] =3D {
+> > > > > > > > |                 .compatible =3D "nxp,tjr1443",
+> > > > > > > > |                 .data =3D &tcan1043_drvdata
+> > > > > > > > |         },
+> > > > > > > > | +       {
+> > > > > > > > | +               .compatible =3D "microchip,ata6561",
+> > > > > > > > | +               .data =3D &tcan1042_drvdata
+> > > > > > > > | +       },
+> > > > > > > > |         { }
+> > > > > > > > |  };
+> > > > > > > >
+> > > > > > > > the driver patch is actually not needed at all, and you jus=
+t need to
+> > > > > > > > allow ti,tcan1042 as fallback compatible in the binding, so=
+ something
+> > > > > > > > like:
+> > > > > > > >
+> > > > > > > >   compatible:
+> > > > > > > >     oneOf:
+> > > > > > > >       - enum:
+> > > > > > > >           - nxp,tjr1443
+> > > > > > > >           - ti,tcan1042
+> > > > > > > >           - ti,tcan1043
+> > > > > > > >       - items:
+> > > > > > > >           - const: microchip,ata6561
+> > > > > > > >           - const: ti,tcan1042
+> > > > > > > >
+> > > > > > > >    '#phy-cells':
+> > > > > > > >      const: 0
+> > > > > > >
+> > > > > > > I tested the build with fallback compatible:
+> > > > > > >
+> > > > > > > compatible:
+> > > > > > >   oneOf:
+> > > > > > >     - items:
+> > > > > > >       - enum:
+> > > > > > >         - microchip,ata6561
+> > > > > > >       - const: ti,tcan1042
+> > > > > > >     - items:
+> > > > > > >       - enum:
+> > > > > > >         - nxp,tjr1443
+> > > > > > >       - const: ti,tcan1043
+> > > > > > >
+> > > > > > > and modified compatible property in DTS:
+> > > > > > >
+> > > > > > > compatible =3D "microchip,ata6561", "ti,tcan1042";
+> > > > > > >
+> > > > > > > Build succeeded, phy-can-transceiver driver was used. So I wo=
+uld like
+> > > > > > > to add a fallback compatible for both "microchip,ata6561" and
+> > > > > > > "nxp,tjr1443" in this binding and modify other DTS files with
+> > > > > > > compatible =3D "nxp,tjr1443". What do you think?
+> > > > > >
+> > > > > > This is wrong on two counts. Firstly, were what you have correc=
+t, you
+> > > > > > should
+> > > > > > squash the two:
+> > > > > >      - items:
+> > > > > >          - enum:
+> > > > > >            - nxp,tjr1443
+> > > > > >            - microchip,ata6561
+> > > > > >          - const: ti,tcan1042
+> > > > > >
+> > > > > > However, that does not allow the TI compatibles in isolation, s=
+o you
+> > > > > > still need to allow that for the actual TI devices, so you need=
+:
+> > > > > >
+> > > > > >    oneOf:
+> > > > > >      - items:
+> > > > > >          - enum:
+> > > > > >            - microchip,ata6561
+> > > > > >            - nxp,tjr1443
+> > > > > >            - ti,tcan1043
+> > > > > >          - const: ti,tcan1042
+> > > > > >      - const: ti,tcan1042
+> > > > > >
+> > > > > > There's probably some devicetrees that would need to be fixed u=
+p. I'm
+> > > > > > just not convinced that this is worth retrofitting however.
+> > > > >
+> > > > > But nxp,tjr1443 is pin compatible with ti,tcan1043, so it should
+> > > > > fallback only to ti,tcan1043 and not ti,tcan1042. That's why I de=
+cided
+> > > > > to split them into different enums.
+> > > >
+> > > > Ah, sorry I missed that. I misread the match data. Then you need:
+> > > >   compatible:
+> > > >     oneOf:
+> > > >       - items:
+> > > >         - enum:
+> > > >           - microchip,ata6561
+> > > >         - const: ti,tcan1042
+> > > >       - items:
+> > > >         - enum:
+> > > >           - nxp,tjr1443
+> > > >         - const: ti,tcan1043
+> > > >       - enum:
+> > > >           const: ti,tcan1042
+> > > >           const: ti,tcan1043
+> > > >
+> > > > because the TI devices exist and we still need to be able to
+> > > > differentiate the TI and NXP devices. If you have
+> > > >   compatible =3D "nxp,tjr1443", "ti,tcan1042";
+> > > > that means the device is an nxp,tjr1443. If you have
+> > > >   compatible =3D "ti,tcan1042";
+> > > > then that's a tcan1042.
+> > > >
+> > > > > I made my patch according to a similar one that adds support for
+> > > > > nxp,tjr1443. You can find it's conversation on
+> > > > > https://lore.kernel.org/all/6ee5e2ce00019bd3f77d6a702b38bab1a45f3=
+bb0.1674037830.git.geert+renesas@glider.be/t/#u.
+> > > >
+> > > > > I thought we want to hold all PHY chip names in one compatible en=
+um
+> > > > > and each in its own of_device_id struct in driver and extend them
+> > > > > where appropriate.
+> > > >
+> > > > Nah, fallbacks are preferred when the programming model is either
+> > > > identical or a "compatible superset" of an existing device. New
+> > > > of_device_id structs should only be used where we need to account f=
+or
+> > > > differences in the programming model.
+> > >
+> > > However, I am curious as to why the NXP CAN PHY transceiver was not
+> > > included as fallback compatible. Geert, could you please share your
+> > > thoughts on this matter?
 > >
-> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > The TJR1443 looked sufficiently similar to the TCAN1043 to use the
+> > same driver configuration (which is limited to having standby and/or
+> > enable signals or not).  However, I'm not sure it behaves exactly
+> > the same, e.g. in case of reporting an error condition (which is not
+> > yet supported by the driver). The part numbers are also different,
+> > so this is not a simple case of SN74HCxx vs. CD74HCxx.
+> >
+> > Summary: I don't know if they are identical, or if TJR1443 is a
+> > compatible superset of TCAN1043, or vice versa. Hence I went for the
+> > safest way....
 >
-> Applied to linux-can-next.
+> If we don't know for sure what the craic is with compatibility, then we
+> should leave the existing tjr1443 compatible as-is I think.
 
-I have not seen it at v6.11-rc1. Anything wrong?
+If I understood the kernel documentation correctly, we use fallback
+compatibles when devices are similar or there is an iterative
+relationship between them. In my case, the TCAN1042 and ATA6561 are
+from different manufacturers, and I'm not sure about their fully
+identical functionality.
 
-Frank
+Therefore, I'll go back to the original idea where I shouldn't use a
+fallback compatible here and must leave it as another compatible
+property with its own of_device_id struct.
 
->
-> Thanks,
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde          |
-> Embedded Linux                   | https://www.pengutronix.de |
-> Vertretung Nürnberg              | Phone: +49-5121-206917-129 |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+What do you think about it? In my opinion, this is not a case for
+fallback compatibility.
 
-
+--=20
+Best regards,
+Ilya Orazov
 
