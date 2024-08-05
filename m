@@ -1,70 +1,72 @@
-Return-Path: <linux-can+bounces-1116-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1117-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54DEA948191
-	for <lists+linux-can@lfdr.de>; Mon,  5 Aug 2024 20:31:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12A62948196
+	for <lists+linux-can@lfdr.de>; Mon,  5 Aug 2024 20:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E19B28DF22
-	for <lists+linux-can@lfdr.de>; Mon,  5 Aug 2024 18:31:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91855B22D64
+	for <lists+linux-can@lfdr.de>; Mon,  5 Aug 2024 18:31:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC2C15B10C;
-	Mon,  5 Aug 2024 18:31:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBE60165F16;
+	Mon,  5 Aug 2024 18:31:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="10vt2jvm"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="PyBQM30F"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561B02AD13
-	for <linux-can@vger.kernel.org>; Mon,  5 Aug 2024 18:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79448165EF4
+	for <linux-can@vger.kernel.org>; Mon,  5 Aug 2024 18:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722882671; cv=none; b=J1F1EQkkQ17kqwiPai8nwiDG21B1qLjTiMNBSuEplcNd09l9fFdI/mjAY0noWxYF4DYv2PnKpsB1rEWBENbJkFLg6A262ScH2rxiS8tx5105L+xHmBb7tgioB3k3ImbX72aJqeAYsJDFUsi4UR+Enq5uvZl7k169UuXW6lKTxV4=
+	t=1722882675; cv=none; b=hH/K/1gGfFNANtC2YO+QAc5NX0X5VQ568QcPGSMM5zRR7b8yfyivILDXdoMX6RuRuIelC09gBFDyQh2j3Yovyj4Q7eN//o2+z30HkRbR2MUjT1kn6EPfgVaoUrjcB8g7S9+N0/d10cNYfjgJfDGJecEYOkKKV97A1GA+mb1MIbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722882671; c=relaxed/simple;
-	bh=DhthJzQUgrAFURwHIvJzMMhEyam9emx1mKZe4wt+dcU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tcS++kEyFN3tnqkYJIO4GKQ2p9vtsKg5ubsAn7dTN8id2mDNgrkEtacAuoi+6X7KMsdGgTLzhh6tnn+86gfmwu5RJGcZdHwwyUniK4mSA8mv4i09etO6g5bcVxHrwqpvudMHBlMyHcxztZVeJYG88oY0TxKTZpPWZ0n8e/ky28M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=10vt2jvm; arc=none smtp.client-ip=209.85.166.179
+	s=arc-20240116; t=1722882675; c=relaxed/simple;
+	bh=umTkgL20LJJ5BJ5TMY3wbVVZSYY4K2TQqLUKPlJzF6M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cftRp9IIvlRr2u5yLAKNnnjp/0oIqRAUlw7c+5k0b01GlFjVwuVK8Eu5uaDMAPVdUQtwjfTIAxMhCD4WzK+TJw7kT1MSKy9j4PemuSJhXRmYTSUyx9qM54lyOnObe66ffSqEdTRNJy76mKAjIAtootJzbOzV997pqvjT8CEMgL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=PyBQM30F; arc=none smtp.client-ip=209.85.166.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-397052a7b63so44120875ab.1
-        for <linux-can@vger.kernel.org>; Mon, 05 Aug 2024 11:31:09 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-39b27935379so10681795ab.1
+        for <linux-can@vger.kernel.org>; Mon, 05 Aug 2024 11:31:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1722882668; x=1723487468; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HBokw9oEyYRijU8V8MR0ptQT6J/uWSsuZHdUP+pag0s=;
-        b=10vt2jvmG+++8/EYrdLZPJv6mcId3n3HqEf83gNpZGTj7UIWjiJbbCM7opLJX6NUn+
-         Y1l0h1VcmUiamru8/YN5xR8T2bawZplfHPmUWg4bdtYfMSFnYsfk4m2vKj/47fwcezYs
-         b7HjX4GD+jvDw+OObqLwjqCWUmcLkS+Y7TcSOvSA55i3lIJiF7BfW4SGRJOe1Y2CDawn
-         8xYafdMWh6m3hTerAoC0qIgnzGPqLd6tlUJdmNtOAqwYwBKs8zYGhY98/l2ijP28ZVhX
-         nZITxuwc1aCq8ByErcxoyFpb5sOeejtI5FATaNEgg3Vjhowxiy7Xc7PolEE8bCtD4S4s
-         vhIw==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1722882672; x=1723487472; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0rRANtn5FFSQpIi4AkDQO6AI/rum9i8w5k7JfryoiRY=;
+        b=PyBQM30FVh81u26deIUXzTEP3TayrqVtrQQwzT4xEK42fQcy9zzaSrbDc3ApfPGndq
+         MrynKJ7NSvlx3oWczZFjM4T83VDLiaV/F9vpJorhb9MY4l2dIKpY74ZS9AN97WuRWhzE
+         X5+NpyOn81fTFOeboNzsfb6DaKqYvXJwyHxzCj2+eHuW8dWluYuuHcxp7xK078TSl+Bi
+         76Q8dz63/FXAjCIxDZcdE8dTadnnsOuh3LUUrhNHcOKYfrnqHka9J8zLmGBAY5usB0Ew
+         TrNRV3XaM4t2czpUDKvc8+FUWSTh2JsM3oGY5PeucZLcFn23Lx4ZIBtd+tetMoQcDeda
+         hRpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722882668; x=1723487468;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HBokw9oEyYRijU8V8MR0ptQT6J/uWSsuZHdUP+pag0s=;
-        b=cHhFXf5RhZVEoyw+OYPb6E6B6RIjBaaI6QDzsGNymgdO2LAk3YjV3QeGpA7MulKwRU
-         cTksKhOlgGI1lifeiPF8+ecI2CXZytS15zwfxXzdPpJ7N+zQRnzlk2rftEKImwfGuAoB
-         xA8hseIb+ZpLWSAWp68RQSoK4SQ4sR9I2z4Rq6cYYXSTwjEYHu/nnURjc3q3Y4wdoTRq
-         I6psxFESeK/N7voCxEXOSLR79jtbB0Uw6Z2w93po9LPZof/7+i/+VIG9FrwTJFKoSKua
-         Nm1AQrRRwPWgkhOX49TATLv8B3qSigdJWGtT1Z0X3rnl/97mMZkJ7uKfJXppx1c09+z+
-         qToQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXMZekaOzr75I9QJ6QrG/RPx+kVYlNDB0nqg7xfH3ehJIEr7kA4mdgUrVhM2g54zxAmDSUQ4MSyxZK92zOGb7xwTdxJvmHcZOMK
-X-Gm-Message-State: AOJu0YxihIZYkB8D9buT165BhGBp/tn2c9Fsvh6GQCmbgbxwg8PcHKJU
-	ArqilLWubvk218JDdhCwXWH1JMwbf+cBj02JBLDJKWKc0QNl2b9Ar1LJQm+DrdQ=
-X-Google-Smtp-Source: AGHT+IEIYrl4tOpKOuu8cQDxHO7vGrhEGCxzt6s8+OkqVq51qI0Ood3dvQh4rwOjJ4Z2X9zNbWivyA==
-X-Received: by 2002:a05:6e02:1ca7:b0:397:d503:6216 with SMTP id e9e14a558f8ab-39b1fc33e2amr181609425ab.25.1722882668428;
-        Mon, 05 Aug 2024 11:31:08 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1722882672; x=1723487472;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0rRANtn5FFSQpIi4AkDQO6AI/rum9i8w5k7JfryoiRY=;
+        b=eqeveIVWLJy+WfFQg0WXCSdymvTMkoqTX169VtRNNLpPqsZgrNDEs0zAwO6DpiMdAu
+         ZtBB2t116+bBhWAo12WBYWPGwA1KfHUnvZpyiM95rBdAm8aeo9YmJ/eLlgt7zF/pa9Aj
+         TIJ7q8fTW1vy+6EiC8aWS2/zfOhIRflW94ARhxsyBkmSop93WmkywlOkbxrhMa+r9sRl
+         9o42RrpCV56UYWVIpSKFzg4BK5sCq8+2rVyTLM/KYUJivt4amM0NlIL+vYZ51L1QRWdC
+         mHraUx632bC2VBxbaB7rNRZNQH3IsRJ+/AJJUMFG23rBialgPDBT81ZQJkcZnXpjs/Rv
+         6nTA==
+X-Forwarded-Encrypted: i=1; AJvYcCWC5KUAsf1jNL7PCDoq2mYwoa+v0hrzpbZKHroK4ZOecAXrFbvH0xpH5ZEIVbFKJoPR3iw/U8OwTJPH7BxqJye9RakubMUEJk+z
+X-Gm-Message-State: AOJu0Yyj72N6XfIisBL5onhll+FR1wqY2SAc6pW5/shfnZiYNQ2atPJH
+	m13D7cFQcEdfNRY6/R21hZFpBsEegX3/hg9iiZSuyMOw0ymXSGikzlt1cJW3smw=
+X-Google-Smtp-Source: AGHT+IHeeRmQwv4+q4ju/q0myu9Z6P6bR4evc/LRLY+BIe9M6etkllpDA/qldggtU/65E/yLphVmjw==
+X-Received: by 2002:a05:6e02:1a24:b0:39b:3635:e3a with SMTP id e9e14a558f8ab-39b36350f02mr116839525ab.22.1722882672647;
+        Mon, 05 Aug 2024 11:31:12 -0700 (PDT)
 Received: from blmsp.fritz.box ([2001:4091:a245:8609:c1c4:a4f8:94c8:31f2])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-39b20a9af29sm30867925ab.13.2024.08.05.11.31.05
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-39b20a9af29sm30867925ab.13.2024.08.05.11.31.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Aug 2024 11:31:08 -0700 (PDT)
+        Mon, 05 Aug 2024 11:31:11 -0700 (PDT)
 From: Markus Schneider-Pargmann <msp@baylibre.com>
 To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -83,10 +85,12 @@ Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
 	linux-can@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/7] can: m_can: Fix polling and other issues
-Date: Mon,  5 Aug 2024 20:30:40 +0200
-Message-ID: <20240805183047.305630-1-msp@baylibre.com>
+Subject: [PATCH v2 1/7] can: m_can: Reset coalescing during suspend/resume
+Date: Mon,  5 Aug 2024 20:30:41 +0200
+Message-ID: <20240805183047.305630-2-msp@baylibre.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240805183047.305630-1-msp@baylibre.com>
+References: <20240805183047.305630-1-msp@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -96,41 +100,58 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi everyone,
+During resume the interrupts are limited to IR_RF0N and the chip keeps
+running. In this case if coalescing is enabled and active we may miss
+waterlevel interrupts during suspend. It is safer to reset the
+coalescing by stopping the timer and adding IR_RF0N | IR_TEFN to the
+interrupts.
 
-these are a number of fixes for m_can that fix polling mode and some
-other issues that I saw while working on the code.
+This is a theoratical issue and probably extremely rare.
 
-Any testing and review is appreciated.
+Cc: Martin Hundebøll <martin@geanix.com>
+Fixes: 4a94d7e31cf5 ("can: m_can: allow keeping the transceiver running in suspend")
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+---
+ drivers/net/can/m_can/m_can.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-Base
-----
-v6.11-rc1
-
-Changes in v2
--------------
- - Fixed one multiline comment
- - Rebased to v6.11-rc1
-
-Previous versions
------------------
- v1: https://lore.kernel.org/lkml/20240726195944.2414812-1-msp@baylibre.com/
-
-Best,
-Markus
-
-Markus Schneider-Pargmann (7):
-  can: m_can: Reset coalescing during suspend/resume
-  can: m_can: Remove coalesing disable in isr during suspend
-  can: m_can: Remove m_can_rx_peripheral indirection
-  can: m_can: Do not cancel timer from within timer
-  can: m_can: disable_all_interrupts, not clear active_interrupts
-  can: m_can: Reset cached active_interrupts on start
-  can: m_can: Limit coalescing to peripheral instances
-
- drivers/net/can/m_can/m_can.c | 111 ++++++++++++++++++++--------------
- 1 file changed, 66 insertions(+), 45 deletions(-)
-
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 7f63f866083e..9d7d551e3534 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -2427,12 +2427,15 @@ int m_can_class_suspend(struct device *dev)
+ 		netif_device_detach(ndev);
+ 
+ 		/* leave the chip running with rx interrupt enabled if it is
+-		 * used as a wake-up source.
++		 * used as a wake-up source. Coalescing needs to be reset then,
++		 * the timer is cancelled here, interrupts are done in resume.
+ 		 */
+-		if (cdev->pm_wake_source)
++		if (cdev->pm_wake_source) {
++			hrtimer_cancel(&cdev->hrtimer);
+ 			m_can_write(cdev, M_CAN_IE, IR_RF0N);
+-		else
++		} else {
+ 			m_can_stop(ndev);
++		}
+ 
+ 		m_can_clk_stop(cdev);
+ 	}
+@@ -2462,6 +2465,13 @@ int m_can_class_resume(struct device *dev)
+ 			return ret;
+ 
+ 		if (cdev->pm_wake_source) {
++			/* Restore active interrupts but disable coalescing as
++			 * we may have missed important waterlevel interrupts
++			 * between suspend and resume. Timers are already
++			 * stopped in suspend. Here we enable all interrupts
++			 * again.
++			 */
++			cdev->active_interrupts |= IR_RF0N | IR_TEFN;
+ 			m_can_write(cdev, M_CAN_IE, cdev->active_interrupts);
+ 		} else {
+ 			ret  = m_can_start(ndev);
 -- 
 2.45.2
 
