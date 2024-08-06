@@ -1,62 +1,64 @@
-Return-Path: <linux-can+bounces-1151-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1152-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07EAB949687
-	for <lists+linux-can@lfdr.de>; Tue,  6 Aug 2024 19:18:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35947949814
+	for <lists+linux-can@lfdr.de>; Tue,  6 Aug 2024 21:15:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B341D1F23F5B
-	for <lists+linux-can@lfdr.de>; Tue,  6 Aug 2024 17:18:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 649661C227FF
+	for <lists+linux-can@lfdr.de>; Tue,  6 Aug 2024 19:15:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F08244C81;
-	Tue,  6 Aug 2024 17:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hrXaQzV5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9057D22EE5;
+	Tue,  6 Aug 2024 19:15:33 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4315A0F5;
-	Tue,  6 Aug 2024 17:18:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7253F762EF
+	for <linux-can@vger.kernel.org>; Tue,  6 Aug 2024 19:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722964719; cv=none; b=XTrZbRrhN9hZQNjE5HwrzIFNOkeQaf34Z1O3tHcOnZlzXo0YEH0LdU8vrDvsBYGEcQAgbu/R7gQmsGZzmCDPKInAMZjvMf4fbjbJFPf3raj6fpRi5qFrpSWuBCaQ64BASIOhUv1jZHpkaW/Vys5BnN8vPUWD7LDpehA2e6JxOP0=
+	t=1722971733; cv=none; b=L0crg444cYQVA208JQwqNfkWMw0lXP+v1S8Av8BppHuTCoW02s8RHU3yI7xLOolmlC5e+boxPAAeOSphmDTxUu9lsBjgOGGTNS1arfErozuvWMLZn8R8x1o0e5Mo79cp58sv0v706USYLhO12Z25q0gwYZsBLPIX6faL6rH+il8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722964719; c=relaxed/simple;
-	bh=1GTwqbPu1DRXS3CHjodb5Z+0yALaqUARNmOxa7+ibwQ=;
+	s=arc-20240116; t=1722971733; c=relaxed/simple;
+	bh=/KTY3Gaho72Tf3+2/vhp6C+9MfaiqfVEjgZtRJhZ9k0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vr5bAK1v+TeOxGZou4fFQHSa/8ouMEapV2Iy/wQwcYsF9fHEjFKiny4aHHy99UPNRDJa/4MFtHG3Z0hkqV+bCoazwOOWHXF4IHOW9C7/vWsnc8ZI8VSM+nYOq2dm1ZQzWzwTTPQndKgG3k/bHulEOoGzdPWmAo5nk89F6oFBT3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hrXaQzV5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61097C4AF0C;
-	Tue,  6 Aug 2024 17:18:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722964718;
-	bh=1GTwqbPu1DRXS3CHjodb5Z+0yALaqUARNmOxa7+ibwQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hrXaQzV5OLp1cBVoU02ep1rK415nwGP5UokWusAETNjwR76LaVhzspMByRxFuJWsT
-	 0fa2JgpjZ/J8Ac2HOsooKsQvvlPplyo2HhJv+OZoSY//oGoaDzdm7hpNqkGoePKvYg
-	 QoenUig9vGTPTMOLejYETyF1ICj2e+LQKM04cnTMnh9eKw+apMNA8bFXI7fBNzl5Zi
-	 9vKqZL3t7zaWQl6v1DBpMcig/FEhR8l5plJ302fo2bhExWaLnO9F+/BuYYQau7fZ9U
-	 OruGOAdoSqo7zExTwgHjz2mJfvDv1QH0MPmnmNSCikEh1vMgMbDR2AefhnGXyU6sJp
-	 /deUODRHopq2Q==
-Date: Tue, 6 Aug 2024 11:18:37 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=aqa+KZQiFC5SeAu5DM1GS+vQqQ7Mq2cwfKpCoKPj1XvnoOmyEgdgUIPyFzlS9eW87ojS+vqCibTbhinVs0wG/Rns+t6v/RHyLppvLFwcJhq4MN9tt9PpxaKzV4vOO8ZhyvouyZT9UvbEVpuDj5yM4VPAy35CQxfXwcz5Y0ilZgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sbPeI-0004ET-0G; Tue, 06 Aug 2024 21:15:10 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sbPeE-0051Tg-Pj; Tue, 06 Aug 2024 21:15:06 +0200
+Received: from pengutronix.de (p5de45302.dip0.t-ipconnect.de [93.228.83.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 6F10F31831F;
+	Tue, 06 Aug 2024 19:15:06 +0000 (UTC)
+Date: Tue, 6 Aug 2024 21:15:05 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	netdev@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	linux-can@vger.kernel.org, Duy Nguyen <duy.nguyen.rh@renesas.com>,
-	Eric Dumazet <edumazet@google.com>, devicetree@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	linux-renesas-soc@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	Duy Nguyen <duy.nguyen.rh@renesas.com>
 Subject: Re: [PATCH v3] dt-bindings: can: renesas,rcar-canfd: Document R-Car
  V4M support
-Message-ID: <172296471618.1826539.5724224646610844294.robh@kernel.org>
+Message-ID: <20240806-fragrant-nimble-crane-c5a129-mkl@pengutronix.de>
 References: <68b5f910bef89508e3455c768844ebe859d6ff1d.1722520779.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -64,41 +66,63 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mknissrzzstlngmz"
 Content-Disposition: inline
 In-Reply-To: <68b5f910bef89508e3455c768844ebe859d6ff1d.1722520779.git.geert+renesas@glider.be>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
-On Thu, 01 Aug 2024 16:03:17 +0200, Geert Uytterhoeven wrote:
+--mknissrzzstlngmz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 01.08.2024 16:03:17, Geert Uytterhoeven wrote:
 > From: Duy Nguyen <duy.nguyen.rh@renesas.com>
-> 
+>=20
 > Document support for the CAN-FD Interface on the Renesas R-Car V4M
 > (R8A779H0) SoC, which supports up to four channels.
-> 
+>=20
 > The CAN-FD module on R-Car V4M is very similar to the one on R-Car V4H,
 > but differs in some hardware parameters, as reflected by the Parameter
 > Status Information part of the Global IP Version Register.  However,
 > none of this parameterization should have any impact on the driver, as
 > the driver does not access any register that is impacted by the
 > parameterization (except for the number of channels).
-> 
+>=20
 > Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
 > [geert: Clarify R-Car V4M differences]
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v3:
->   - Add more clarification,
-> 
-> v2:
->   - Drop RFC state now it works.
-> 
-> Changes compared to the BSP:
->   - Restrict number of channels to four.
-> ---
->  .../bindings/net/can/renesas,rcar-canfd.yaml  | 22 ++++++++++++++-----
->  1 file changed, 16 insertions(+), 6 deletions(-)
-> 
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Added to linux-can-next.
 
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--mknissrzzstlngmz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmaydjYACgkQKDiiPnot
+vG+u2AgAn4+6wZaPame+miPr3sdkTEbM/Lg8mogLdoWmXvVo+Th8y/L03f4Toefj
+ms/W67M+6IKrmQ0knx6dvuxoqv2gm3nDDvaxl6cjbmob7bfRqgXgyMCkeQoLnHX3
+fQODaGqxPQUwJMVWkr2a1n22/0amEJS8rt5mJ3JB9q5ZbKomD600abjFBXi2CMiw
+rePQSVXAz7Xs8zliYk1fDUvPU7df+P+oTTFUOvl/6G38xnmRBYPHNEyPdSWN+cKZ
+p3LYYX0BcbjxovTUEx++/Ex9g9KX2OhVroi5C6He7to34xFYgMZmyiA35iZ4Zd8i
+PuyzFe7V+Qyl/4McRVkCyseIDq74Gw==
+=nZkM
+-----END PGP SIGNATURE-----
+
+--mknissrzzstlngmz--
 
