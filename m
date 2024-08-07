@@ -1,117 +1,121 @@
-Return-Path: <linux-can+bounces-1171-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1172-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BD2694B059
-	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 21:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F28F694B36A
+	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 01:12:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EE7E284F20
-	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 19:13:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B20F12828E8
+	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 23:12:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF0514430A;
-	Wed,  7 Aug 2024 19:12:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44870155322;
+	Wed,  7 Aug 2024 23:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Blu8wwhl"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="NQ+lNwEj"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C191419B5;
-	Wed,  7 Aug 2024 19:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D511509A5;
+	Wed,  7 Aug 2024 23:11:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723057962; cv=none; b=H74lo3G9qcJhCjyEexuGdtWdhcLE4yZVJEA37IOSHikobadCrgXqYZOALGNDkPMegk3RVQB6+GGqalb1AM6KUXsCQN3kA1vxQ1gJgS71KFAh8TXSJSM5LbOa+Nn5zAsHWb5RxgvqB6F0+2EkBo0XOdUqgDB0m2txNEjBQnuc09M=
+	t=1723072322; cv=none; b=RGkdYQrO3ENCBPvVnozbBqHMLnUGKvTo63jaCC7bWfuJ/zBw2EpwNNhnBRmrzVs2HMqF/1tJ3ZR2E4MH41WHziDPp7sgKyssDYEyOXwIbufVnQ/Sl1JXhMQ7ZsMQeJ1wIYYQje104ADr4GL1j6rhy3ZNwexWRiSFq+Z38EKZAV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723057962; c=relaxed/simple;
-	bh=igA/R1dhPYSPH3SJW/wKLLEHcSURTRCtuSc+w8fGXoU=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=S+suequwdNAQZbM0DBzH5RgD0usgUHjjDpfY49uOJ6aC7nNiL9n7MkjZCHuEw2ghfdWb3qDwALANpysnB8qRBaGJPVYZ2kR4F27CGgzXgioX6/K3j7/S/dWpP5vyPlRI0giRv9I2aJt9M+Rdg82DrnvIXbRtTRsZXgey9bOzPyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Blu8wwhl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC74EC32781;
-	Wed,  7 Aug 2024 19:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723057962;
-	bh=igA/R1dhPYSPH3SJW/wKLLEHcSURTRCtuSc+w8fGXoU=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=Blu8wwhls32sv5GkAteiD2Vn7Z48ZLthiIyrkpJkW5QliaI/pS+0SpzrTYQT0RdhG
-	 AxmnJv/1CGV+XfeQh5YXJtaE73mRaOrIGedX27UMqQOmcWLujzAFeUltkdRIN+Q5l4
-	 KynYiceG1JogP7DcpfG3g7AlNJnKywQbvMmSmXaWRnIhPsCpBmXdhG+tqUm4UNIsY9
-	 unr81+6FskrsIYFOhmscG+NGmi+CuHc5YsN0jOluGcJBAI6lX+RorkyVHXzw2NLD02
-	 FtN3ddFmGOhtrnIHPtVVJB0stzNXPNk1H+WeqAWCdus73TM9RYMd2fIIJ5oWH2fiqX
-	 ng0IqHkaCfY5A==
-Date: Wed, 07 Aug 2024 13:12:40 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1723072322; c=relaxed/simple;
+	bh=mmEQt4WLPvu1Q6AjOhQsDjmILJgncsyY4a/depz6Jr4=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=eoAbXoapUwdsBZ3Mpt9LPR9ifSjqNhy3wl57bOInLpmrN2lleV2qyWYTWve2yssijkIWs91f7PizAVHT/pFBorkLHzCJ4xWzM5B/4sCPTMTYStQ8VljX+bMw4bP3y7SvYcp6CKWZDzans358BUn09KInOhvARqClx2Up6MTBm3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=NQ+lNwEj; arc=none smtp.client-ip=162.62.57.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1723072013; bh=YfgS1SOKBc6BkxAyhWP7vMJVEPZCK6J/CiIBhINzIAY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=NQ+lNwEjhe1CteIS4mqCIbYEycTE+5BxjIg9CZ0DPoj33aMSEllzt08Dg+G8FProv
+	 51DTOF53ta1DkMduiEvuIOexb/h7OktTBOJwJCKCfY0mCl0Hxp1srg3LOL60e9zEjg
+	 XWBjQtrjZ1HFm6p3ZtYcwVWmHVuvk36jArlAoiKU=
+Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
+	by newxmesmtplogicsvrszb9-1.qq.com (NewEsmtp) with SMTP
+	id 1B0B88A3; Thu, 08 Aug 2024 07:06:48 +0800
+X-QQ-mid: xmsmtpt1723072008tza6m1i5m
+Message-ID: <tencent_91A42CC56E749550E926ED26CE0C78A26F0A@qq.com>
+X-QQ-XMAILINFO: OATpkVjS499uizFEc16KZAMm3J790h8RsmN+sb/uxy8sVMn0nkMJMSs0TSg4CL
+	 Efg1wOMGQJPEmEgoN6Wly+Qni0L43YHUre9MZKDXNBqK+dW/ufDYaO+t4bsL1id9OoErSbCwMjUQ
+	 ORd/UdVVwQNLtlcqPAkcKXoswa2dn4XBIYaeirKfAZu17UzqpX78dhGJ94U96q+rF6SO7D/+h36X
+	 Zld8fFQ2Mdk6dlv5FwoYuWSghOIsUOCuJ3ELXauwG7woMyhMjAZ3Hg4zXGDlTnFDsQZbXKaXU/lj
+	 T/j2iq6NFFSrM9iy53Sw7mehKaoCP+wHq3YRQ7q9qazP93Rtp8DXB29sLNRFFR0qhsnSrzErBOfW
+	 aeXv0MzxpGoMPlGlBzIRz6LifCh5fmhydqcPkdndzloqc7oKtZBXHLfxtFxZWhn2CmJrMaJOiMWM
+	 TGf9rwBynp0xQPbz5QU2puaMD8Cd2ONIHHpQRSH4WQvSEjCaSFalyBzO/pIljCaQNqUFqkI19Ooq
+	 h/YCJFIdybRHEiau1LDtVUF1Htuq9wZ06MWqX+yYYdTjZmIofold14YG4Q7QrVKjqhRGk8TTuqQr
+	 hzG5wB5wIxNhjVWuKvUeXwgYuPvpHNdD006kaSgkQX4QOA7g5bWpeSPbCgmWeDxwha2YLRlXhVWc
+	 L3QlQZjwsm72Adfxe3O1d4l/7w0LW4YBiDSftRmYGaW4/WQonwPE9H48lpUxgi9dqUIzgUD3Qw1F
+	 mj7vu/girtvD4vg2pV/ULiuAjocVvGJ220tfgNrvUOsf1ZtbWVS/EgGGyfsQHPPDW9DFIO1q2hp8
+	 QPFm0/hVVbuDhvGLNICXslFR5C+LizqMazRB/P0Dawb6B3LYGOjbbM7bi9MNxnGXNHAhgheLPv9J
+	 5l7Pvv82wtvhE5+u9ZW40zCXp5hYo0PtAf4F3zv3epqh7qhZs/E4130pkv7NTb6ZGKBlz7YUNz/F
+	 nfbe/S1Xl7GRGuWCW2C5H+rqkQWtXlhH6Te0BnHx8=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+From: Edward Adam Davis <eadavis@qq.com>
+To: leitao@debian.org
+Cc: davem@davemloft.net,
+	eadavis@qq.com,
+	edumazet@google.com,
+	kernel@pengutronix.de,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	mkl@pengutronix.de,
+	netdev@vger.kernel.org,
+	o.rempel@pengutronix.de,
+	pabeni@redhat.com,
+	robin@protonic.nl,
+	socketcan@hartkopp.net,
+	syzbot+ad601904231505ad6617@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [can?] WARNING: refcount bug in j1939_session_put
+Date: Thu,  8 Aug 2024 07:06:48 +0800
+X-OQ-MSGID: <20240807230647.592287-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <ZrMqFN4vE7WHRBjE@gmail.com>
+References: <ZrMqFN4vE7WHRBjE@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Ilya Orazov <ilordash02@gmail.com>
-Cc: Conor Dooley <conor+dt@kernel.org>, 
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Vinod Koul <vkoul@kernel.org>, 
- Marc Kleine-Budde <mkl@pengutronix.de>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Aswath Govindraju <a-govindraju@ti.com>, linux-phy@lists.infradead.org, 
- devicetree@vger.kernel.org, Kishon Vijay Abraham I <kishon@kernel.org>, 
- linux-can@vger.kernel.org
-In-Reply-To: <20240807180956.1341332-2-ilordash02@gmail.com>
-References: <20240807180210.1334724-2-ilordash02@gmail.com>
- <20240807180956.1341332-1-ilordash02@gmail.com>
- <20240807180956.1341332-2-ilordash02@gmail.com>
-Message-Id: <172305796084.3042321.10920811109606243151.robh@kernel.org>
-Subject: Re: [PATCH v2 1/1] dt-bindings: phy: ti,tcan104x-can: Document
- Microchip ATA6561
+Content-Transfer-Encoding: 8bit
 
-
-On Wed, 07 Aug 2024 21:09:56 +0300, Ilya Orazov wrote:
-> Microchip ATA6561 is High-Speed CAN Transceiver with Standby Mode.
-> It is pin-compatible with TI TCAN1042 and has a compatible programming
-> model, therefore use ti,tcan1042 as fallback compatible.
+On Wed, 7 Aug 2024 01:02:28 -0700, Breno Leitao wrote:
+> > Fixes: c9c0ee5f20c5 ("net: skbuff: Skip early return in skb_unref when debugging")
+> >
+> > Root cause: In commit c9c0ee5f20c5, There are following rules:
+> > In debug builds (CONFIG_DEBUG_NET set), the reference count is always  decremented, even when it's 1
 > 
-> Signed-off-by: Ilya Orazov <ilordash02@gmail.com>
-> ---
->  .../devicetree/bindings/phy/ti,tcan104x-can.yaml    | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
+> That is the goal, to pick problems like the one reported here. I.e, the
+> reference shouldn't be negative. If that is the case, it means that
+> there is a bug, and the skb is being unreferenced more than what it
+> needs to.
+Got it, I will remove the Fixes tag.
 > 
+> > This rule will cause the reference count to be 0 after calling skc_unref,
+> > which will affect the release of skb.
+> >
+> > The solution I have proposed is:
+> > Before releasing the SKB during session destroy, check the CONFIG_DEBUG_NET
+> > and skb_unref return values to avoid reference count errors caused by a
+> > reference count of 0 when releasing the SKB.
+> 
+> I am not sure this is the best approach. I would sugest finding where
+> the skb is being unreferenced first, so, it doesn't need to be
+> unreferenced again.
+> 
+> This suggestion is basically working around the findings.
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml:19:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-./Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml:20:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
-./Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml:24:11: [error] duplication of key "const" in mapping (key-duplicates)
-./Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml:25:11: [error] duplication of key "const" in mapping (key-duplicates)
-
-dtschema/dtc warnings/errors:
-make[2]: *** Deleting file 'Documentation/devicetree/bindings/phy/ti,tcan104x-can.example.dts'
-Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml:24:11: found duplicate key "const" with value "ti,tcan1043" (original value: "ti,tcan1042")
-make[2]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/phy/ti,tcan104x-can.example.dts] Error 1
-make[2]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml:24:11: found duplicate key "const" with value "ti,tcan1043" (original value: "ti,tcan1042")
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml: ignoring, error parsing file
-make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1430: dt_binding_check] Error 2
-make: *** [Makefile:240: __sub-make] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240807180956.1341332-2-ilordash02@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+BR,
+--
+Edward
 
 
