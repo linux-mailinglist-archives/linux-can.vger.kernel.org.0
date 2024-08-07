@@ -1,69 +1,69 @@
-Return-Path: <linux-can+bounces-1172-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1173-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F28F694B36A
-	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 01:12:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14E9894B37B
+	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 01:15:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B20F12828E8
-	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 23:12:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1D561F222AA
+	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 23:15:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44870155322;
-	Wed,  7 Aug 2024 23:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E955F153808;
+	Wed,  7 Aug 2024 23:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="NQ+lNwEj"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="pDX7mK7a"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
+Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D511509A5;
-	Wed,  7 Aug 2024 23:11:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB34250EC;
+	Wed,  7 Aug 2024 23:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723072322; cv=none; b=RGkdYQrO3ENCBPvVnozbBqHMLnUGKvTo63jaCC7bWfuJ/zBw2EpwNNhnBRmrzVs2HMqF/1tJ3ZR2E4MH41WHziDPp7sgKyssDYEyOXwIbufVnQ/Sl1JXhMQ7ZsMQeJ1wIYYQje104ADr4GL1j6rhy3ZNwexWRiSFq+Z38EKZAV4=
+	t=1723072513; cv=none; b=sAgYZVHfcVeMc1cyjz6KjR245Ibv4aOdHhE5gEVwNUQ3/b8VznHAUFIaUHFtSiuzTwlapnRPq4Ge5Wn8dZIgYmLKKqJNDwMgVF7zgHFSNapUDgm81gzg/3qinhaWXM8lb5nCAkyJwZ6rucFtcljyXmBu5qcluScQLP696jwyTig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723072322; c=relaxed/simple;
-	bh=mmEQt4WLPvu1Q6AjOhQsDjmILJgncsyY4a/depz6Jr4=;
+	s=arc-20240116; t=1723072513; c=relaxed/simple;
+	bh=sHhvml+mYSmDdgcMWP6jiNbju26OB7L8+gCQGhqWQvM=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=eoAbXoapUwdsBZ3Mpt9LPR9ifSjqNhy3wl57bOInLpmrN2lleV2qyWYTWve2yssijkIWs91f7PizAVHT/pFBorkLHzCJ4xWzM5B/4sCPTMTYStQ8VljX+bMw4bP3y7SvYcp6CKWZDzans358BUn09KInOhvARqClx2Up6MTBm3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=NQ+lNwEj; arc=none smtp.client-ip=162.62.57.49
+	 MIME-Version; b=Jum7QnRUd3Nl1XWAELa5x6iVoS7oo3ZL0iHF+JbTqZ299xvNraif9AHrq0ORuoNZhQvxLv6Y+5J+OB34BIN5eDEK2JZXmn4n3uyZZ23hAuLMM9T+Sffo3V5ziwtmuWLDqrekQbnlxxnVCwxOVX0PWWMkv/jeyVSd1kIp6AI8p5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=pDX7mK7a; arc=none smtp.client-ip=203.205.221.240
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1723072013; bh=YfgS1SOKBc6BkxAyhWP7vMJVEPZCK6J/CiIBhINzIAY=;
+	t=1723072508; bh=ld/aFBFO32VUAPp/57mNfqYKOGvt7MOQE+FG0HbCxC0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=NQ+lNwEjhe1CteIS4mqCIbYEycTE+5BxjIg9CZ0DPoj33aMSEllzt08Dg+G8FProv
-	 51DTOF53ta1DkMduiEvuIOexb/h7OktTBOJwJCKCfY0mCl0Hxp1srg3LOL60e9zEjg
-	 XWBjQtrjZ1HFm6p3ZtYcwVWmHVuvk36jArlAoiKU=
+	b=pDX7mK7aO9uhDzvwcEJMuq5c3QpLUQj9kjZc9dta2Grmh/WmPiACxHiZ8f4SDKZIu
+	 z2VGD55acHzj+YQc502Bo99eel44anwDm0y9zcqp3cpcUGmmiJx++cd6QoFxZkiEhw
+	 kvz1FyfoOLUl48ukWbDgpforjnzHOTrMXtpwK89M=
 Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
-	by newxmesmtplogicsvrszb9-1.qq.com (NewEsmtp) with SMTP
-	id 1B0B88A3; Thu, 08 Aug 2024 07:06:48 +0800
-X-QQ-mid: xmsmtpt1723072008tza6m1i5m
-Message-ID: <tencent_91A42CC56E749550E926ED26CE0C78A26F0A@qq.com>
-X-QQ-XMAILINFO: OATpkVjS499uizFEc16KZAMm3J790h8RsmN+sb/uxy8sVMn0nkMJMSs0TSg4CL
-	 Efg1wOMGQJPEmEgoN6Wly+Qni0L43YHUre9MZKDXNBqK+dW/ufDYaO+t4bsL1id9OoErSbCwMjUQ
-	 ORd/UdVVwQNLtlcqPAkcKXoswa2dn4XBIYaeirKfAZu17UzqpX78dhGJ94U96q+rF6SO7D/+h36X
-	 Zld8fFQ2Mdk6dlv5FwoYuWSghOIsUOCuJ3ELXauwG7woMyhMjAZ3Hg4zXGDlTnFDsQZbXKaXU/lj
-	 T/j2iq6NFFSrM9iy53Sw7mehKaoCP+wHq3YRQ7q9qazP93Rtp8DXB29sLNRFFR0qhsnSrzErBOfW
-	 aeXv0MzxpGoMPlGlBzIRz6LifCh5fmhydqcPkdndzloqc7oKtZBXHLfxtFxZWhn2CmJrMaJOiMWM
-	 TGf9rwBynp0xQPbz5QU2puaMD8Cd2ONIHHpQRSH4WQvSEjCaSFalyBzO/pIljCaQNqUFqkI19Ooq
-	 h/YCJFIdybRHEiau1LDtVUF1Htuq9wZ06MWqX+yYYdTjZmIofold14YG4Q7QrVKjqhRGk8TTuqQr
-	 hzG5wB5wIxNhjVWuKvUeXwgYuPvpHNdD006kaSgkQX4QOA7g5bWpeSPbCgmWeDxwha2YLRlXhVWc
-	 L3QlQZjwsm72Adfxe3O1d4l/7w0LW4YBiDSftRmYGaW4/WQonwPE9H48lpUxgi9dqUIzgUD3Qw1F
-	 mj7vu/girtvD4vg2pV/ULiuAjocVvGJ220tfgNrvUOsf1ZtbWVS/EgGGyfsQHPPDW9DFIO1q2hp8
-	 QPFm0/hVVbuDhvGLNICXslFR5C+LizqMazRB/P0Dawb6B3LYGOjbbM7bi9MNxnGXNHAhgheLPv9J
-	 5l7Pvv82wtvhE5+u9ZW40zCXp5hYo0PtAf4F3zv3epqh7qhZs/E4130pkv7NTb6ZGKBlz7YUNz/F
-	 nfbe/S1Xl7GRGuWCW2C5H+rqkQWtXlhH6Te0BnHx8=
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+	by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+	id 2312EEAA; Thu, 08 Aug 2024 07:08:49 +0800
+X-QQ-mid: xmsmtpt1723072129t5xidoyw0
+Message-ID: <tencent_1F473700968236B84AEA74ED76FF67023C09@qq.com>
+X-QQ-XMAILINFO: NMGzQWUSIfvTPOzuldNXnGeJ7s36h2U6hmp3yD4Ek7o1PE6XcYfGd+vnsxex9Q
+	 n3r13Pr88qwieI7NVZ1HudXOvKJEnpIFUicyKUOi5tbvz4PiwZHkJGnWQreHJIxPg65isn0ceO78
+	 lxku6wsjZZ6hMAvAf2MIC4xNYumSIubWYMJnlulXkJXEtx7X3HtkyGE4KPVtI3PC9/knpugv3Dy/
+	 sNo5WJ6hEmsHk7KSKVSVpBxK7eT4KXC2z4FIoFFyJs/WxOVftmYVZzfCfwGVfNJOqOtyBIh3vLhW
+	 S59vz0WSqdp5jc3avP+qfBz2jwAXwPOYpwYtYka3Owbvun6ax8uuh5JLPbLez433BT4RheechQRn
+	 PTjC6MrFLZv06LxoZBpse2Lm818ORfeJXk9Th5D0pbtWB0L44NPASsg7hO5DQwg6U/LVwRjBl9n8
+	 jx4q2HzCaQD8XLkHzRMb8ne7E8+YfYLLvWWti80+QA2Fs63Lptcd+BF3rF5TAj3WkTbHgDUO/a6d
+	 1Bbovs/mykw1uVNIypV529y4F445C5BTChCS0ZcHBP6kDNooZti2pQ0U29shZLVKJNV5WqIpnnzj
+	 a33hPlPRgVURReUFVammnPAzptiJN87tHrdcTireTFJ7L2Rx77x+ojGfuGklWg6r8GxAxb3eEiTd
+	 Q8McnoGFJdTW1vtvB0Vvs8+jb9dKcCiO9t3DKJR4ZGcc+QSVEqXsQ/e6w90+pJ9iFA8og+K7m58A
+	 R6jt4XxpK57mdX/ZA8FJzHGj/C927SvWHUdUeqGqUxa7rskXuf38PPKbB2bO3pjByvyBieCl8zP7
+	 IdKwWIUTFwJxwSe8JYI5mqdRKImByCxdGJVpvlrcRMMFVc+WSDBcKux+P0ErL1S1U/gCfIEQ3MAW
+	 MBrMEJkCm21bJpMkaB356/5Jh/LjfIGlyihAGKKC+zyG26DBHc0mtmflAqDQWx3Y2i5yGDuRBA8g
+	 sSH99ARedaeVFJuQqkhT9bTT/AStzH
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
 From: Edward Adam Davis <eadavis@qq.com>
-To: leitao@debian.org
+To: kuba@kernel.org
 Cc: davem@davemloft.net,
 	eadavis@qq.com,
 	edumazet@google.com,
 	kernel@pengutronix.de,
-	kuba@kernel.org,
+	leitao@debian.org,
 	linux-can@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	mkl@pengutronix.de,
@@ -74,12 +74,12 @@ Cc: davem@davemloft.net,
 	socketcan@hartkopp.net,
 	syzbot+ad601904231505ad6617@syzkaller.appspotmail.com,
 	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [can?] WARNING: refcount bug in j1939_session_put
-Date: Thu,  8 Aug 2024 07:06:48 +0800
-X-OQ-MSGID: <20240807230647.592287-2-eadavis@qq.com>
+Subject: [PATCH net-next V2] can: j1939: fix uaf warning in j1939_session_destroy
+Date: Thu,  8 Aug 2024 07:08:49 +0800
+X-OQ-MSGID: <20240807230848.594339-2-eadavis@qq.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <ZrMqFN4vE7WHRBjE@gmail.com>
-References: <ZrMqFN4vE7WHRBjE@gmail.com>
+In-Reply-To: <20240807071655.5b230108@kernel.org>
+References: <20240807071655.5b230108@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -88,34 +88,68 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Wed, 7 Aug 2024 01:02:28 -0700, Breno Leitao wrote:
-> > Fixes: c9c0ee5f20c5 ("net: skbuff: Skip early return in skb_unref when debugging")
-> >
-> > Root cause: In commit c9c0ee5f20c5, There are following rules:
-> > In debug builds (CONFIG_DEBUG_NET set), the reference count is always  decremented, even when it's 1
-> 
-> That is the goal, to pick problems like the one reported here. I.e, the
-> reference shouldn't be negative. If that is the case, it means that
-> there is a bug, and the skb is being unreferenced more than what it
-> needs to.
-Got it, I will remove the Fixes tag.
-> 
-> > This rule will cause the reference count to be 0 after calling skc_unref,
-> > which will affect the release of skb.
-> >
-> > The solution I have proposed is:
-> > Before releasing the SKB during session destroy, check the CONFIG_DEBUG_NET
-> > and skb_unref return values to avoid reference count errors caused by a
-> > reference count of 0 when releasing the SKB.
-> 
-> I am not sure this is the best approach. I would sugest finding where
-> the skb is being unreferenced first, so, it doesn't need to be
-> unreferenced again.
-> 
-> This suggestion is basically working around the findings.
+The root cause of this problem is when both of the following conditions
+are met simultaneously:
+[1] Introduced commit c9c0ee5f20c5, There are following rules:
+In debug builds (CONFIG_DEBUG_NET set), the reference count is always
+decremented, even when it's 1.
 
-BR,
---
-Edward
+[2] When executing sendmsg, the newly created session did not increase the
+skb reference count, only added skb to the session's skb_queue.
+
+The solution is:
+When creating a new session, do not add the skb to the skb_queue.
+Instead, when using skb, uniformly use j1939_session_skb_queue to add
+the skb to the queue and increase the skb reference count through it.
+
+Reported-and-tested-by: syzbot+ad601904231505ad6617@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=ad601904231505ad6617
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+---
+ net/can/j1939/socket.c    | 7 ++++---
+ net/can/j1939/transport.c | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+index 305dd72c844c..ec78bee1bfa6 100644
+--- a/net/can/j1939/socket.c
++++ b/net/can/j1939/socket.c
+@@ -1170,10 +1170,11 @@ static int j1939_sk_send_loop(struct j1939_priv *priv,  struct sock *sk,
+ 					break;
+ 				}
+ 			}
+-		} else {
+-			skcb->offset = session->total_queued_size;
+-			j1939_session_skb_queue(session, skb);
+ 		}
++		/* Session is ready, add it to skb queue and increase ref count.
++		 */
++		skcb->offset = session->total_queued_size;
++		j1939_session_skb_queue(session, skb);
+ 
+ 		todo_size -= segment_size;
+ 		session->total_queued_size += segment_size;
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index 4be73de5033c..dd503bc3adb5 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -1505,7 +1505,6 @@ static struct j1939_session *j1939_session_new(struct j1939_priv *priv,
+ 	session->state = J1939_SESSION_NEW;
+ 
+ 	skb_queue_head_init(&session->skb_queue);
+-	skb_queue_tail(&session->skb_queue, skb);
+ 
+ 	skcb = j1939_skb_to_cb(skb);
+ 	memcpy(&session->skcb, skcb, sizeof(session->skcb));
+@@ -1548,6 +1547,7 @@ j1939_session *j1939_session_fresh_new(struct j1939_priv *priv,
+ 		kfree_skb(skb);
+ 		return NULL;
+ 	}
++	j1939_session_skb_queue(session, skb);
+ 
+ 	/* alloc data area */
+ 	skb_put(skb, size);
+-- 
+2.43.0
 
 
