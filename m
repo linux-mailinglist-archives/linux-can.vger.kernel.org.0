@@ -1,123 +1,120 @@
-Return-Path: <linux-can+bounces-1154-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1155-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36A219498C1
-	for <lists+linux-can@lfdr.de>; Tue,  6 Aug 2024 22:02:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 029C8949D6D
+	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 03:42:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4621282DAE
-	for <lists+linux-can@lfdr.de>; Tue,  6 Aug 2024 20:02:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 868BA1F242D7
+	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 01:42:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8D9B6EB4A;
-	Tue,  6 Aug 2024 20:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 797D215B972;
+	Wed,  7 Aug 2024 01:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="NYO4au5E"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFE238DD8
-	for <linux-can@vger.kernel.org>; Tue,  6 Aug 2024 20:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D7510E6;
+	Wed,  7 Aug 2024 01:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722974559; cv=none; b=EzJBQeL1HSP8lUcVQJ9gTkD5MrY7ORyxq8Gdcup94KkUrQT+/nRqiF+dOtLz44XViGlBpigAVR6GdKQlfiWGugHdvmJdn70amvpyzvBoTrIhkODsM32lgyosZrcU+DHL4jPDR9mxJIeBmoWIhxgI5oEsCX+F9e/Zsddlqmjdl7o=
+	t=1722994972; cv=none; b=Oz3S2emWMPHLIamset5044EcUk/E6inBXi0No4CJXJIhHh6rBBAXuEoGEuvfbq4KL8xNjv/e4wEoFBWAzfGlCztXcvQeWQoQye9/rbLFxufWbRLiG5Ii9z/xH74R7v9tZbYHnAj7G0azpF7WRuUSYJ63vmi1bxrmaupXUvu/kiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722974559; c=relaxed/simple;
-	bh=26g9Ojmfp/XWsHZOBrHzTOF07DGuNxqX2cmP6duZhec=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OZC55TyIiAZn+qMMsLrr5jXUoZRwHKUK952B3By1Y/GbJBmxEwCl05JSDG1ZqYY8eQDQkrMoPnt4YhB2u82DuIbwdsU8TQo5da25SAo78Agf+kZoh7j5m7iW7MDciLhuqt3IyNhT1vMoYQ5dcaFnjrEsvqJnFCSVd8ITIDEXVkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sbQO2-0006ca-Cw; Tue, 06 Aug 2024 22:02:26 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sbQO0-0051lx-Pq; Tue, 06 Aug 2024 22:02:24 +0200
-Received: from pengutronix.de (p5de45302.dip0.t-ipconnect.de [93.228.83.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 6C38431837B;
-	Tue, 06 Aug 2024 20:02:24 +0000 (UTC)
-Date: Tue, 6 Aug 2024 22:02:24 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Anup Kulkarni <quic_anupkulk@quicinc.com>
-Cc: manivannan.sadhasivam@linaro.org, thomas.kopp@microchip.com, 
-	mailhol.vincent@wanadoo.fr, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com, quic_vdadhani@quicinc.com
-Subject: Re: [PATCH v1] can: mcp251xfd: Enable transceiver using gpio
-Message-ID: <20240806-industrious-augmented-crane-44239a-mkl@pengutronix.de>
-References: <20240806090339.785712-1-quic_anupkulk@quicinc.com>
+	s=arc-20240116; t=1722994972; c=relaxed/simple;
+	bh=nJc/EA5aX6HYio1FRcTvW+nGYVDvgNrrwuK9u2kXc74=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=Zc5CkBZraaBQU0sVii+FRPh+qRLbsWD1p+xub6C3ROLku9oVcu1kkR/5Z/H7evxjJdrvOD8TSEBYcX48ZQiw5C1DXto7xuWBouO11gTfNe6t32EqKRLXPWpDuVD2j1JTHAN6XxanBLmTLrBjACGu6qYmuxHNLFrBfUQXPOW6p2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=NYO4au5E; arc=none smtp.client-ip=162.62.58.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1722994964; bh=oEjPWbgLYa2owMiTzsj3wTp8GPNjpwQfhs8OU5kPAe4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=NYO4au5ECSgeNojeTuCBXKVf5FeaPqixvh85Hi9jxgwnVqoDqDibRKM2+KYDIywCZ
+	 hiPQ6JS5t6vqIWRbhbJQ2nco2YU/ffJA463V1u9B7lyceMOr3hdV3n+TS0qj9x8wuj
+	 4vGjMlD4BmmBdQo5h5/l56x9nPcQC8bon84hR8HI=
+Received: from pek-lxu-l1.wrs.com ([111.198.225.4])
+	by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+	id AA802823; Wed, 07 Aug 2024 09:42:40 +0800
+X-QQ-mid: xmsmtpt1722994960toihf7mun
+Message-ID: <tencent_2878E872ED62CC507B1A6F702C096FD8960A@qq.com>
+X-QQ-XMAILINFO: MmuCfgcSBfHxKKwxo/p8YL1xiGHNfKFtuBEW8I4yF+aKQOuLCtiS0xtdslArfI
+	 h54xGnl3oJuktD7cSc1A3sGEw3GzfMcokw9AKTMN/Zn6ZPvOs5QKcp3uH8MvuTJQ5SdV6R5kUIU1
+	 jQaEi5L6x7ytl+qRKXEnfG2IVFupe5JpZ4DqI24sR6Xrz9YQplc4C9cYTPIiR1czLO4FWC7C1ErX
+	 jcQVp5jJkeFhXF8RsQcrrkMPdOrCNMa0lFES6x+XinI2dGefhoYfSEAhzoXrn8G/wb/NOnyEbyyh
+	 eEdfP96Ncq++SW/9ZrwTXSWVsBoqORXbbM+GMTo1cB9uJ2+sClGKz2oDiXXypyhndyUKYi1SxyZu
+	 1M49MTNMj1lAioJ8NdAAW6OwWwPlcii4KIMyx9K6K9Bsec1lgLC+9cYHgHrWldT4jjlf3lGU6ksb
+	 2/r862Vh1YhOrQjvRAp2Y6U0g3IrngiRihqPFPqCRhOtptJv43SBYLx85Fcqp6uqo3w/7Dxh5SNy
+	 apsUDQxebk7uwrBeBJxQPslVbt2r01Dk8Dk8CKSV2nP1LFRio8guIU9XCKkPHxQktmKJbab+tY73
+	 XTxWZHxWbbnf4F2pkpr3Z3eWrHEu9+4SSHxxYlAfNf8yBgHfEqTFoPmNIaFw1j4FD9F8i+GxUYua
+	 1j8TckjqaVkMOYOWnqhTsqIx/MIUS1jXb9PMvsiX1+22e/AWk98ayN5OX1SzJt2qDheDpgs0uW6+
+	 VQhnbpqTu835+RsxSoR6WIptoIkmvCMaJVhzYaZLS+i0O++CEqMTca9f6JPrUDHQ4Wj8YZLPDv1g
+	 FvX67ju/4cme5IE2+P6pheshN+kng4L31m+X1Wou60/tP0zx/0scTkhqsHMcqxIJHTtcsjH2VWPF
+	 9aOAhpreyE38MeafAJ6a31OYKFmxzVi0ZGUtGw8ZdGQkGVFH7w956AdnIOGo3bmpEVGft5RfH8LP
+	 tdqVi1dtmCXs/WPytsawuE3/I9/AaNhwkoT+/thb8=
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
+From: Edward Adam Davis <eadavis@qq.com>
+To: syzbot+ad601904231505ad6617@syzkaller.appspotmail.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kernel@pengutronix.de,
+	kuba@kernel.org,
+	leitao@debian.org,
+	linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	mkl@pengutronix.de,
+	netdev@vger.kernel.org,
+	o.rempel@pengutronix.de,
+	pabeni@redhat.com,
+	robin@protonic.nl,
+	socketcan@hartkopp.net,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [can?] WARNING: refcount bug in j1939_session_put
+Date: Wed,  7 Aug 2024 09:42:40 +0800
+X-OQ-MSGID: <20240807014239.3997268-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <000000000000af9991061ef63774@google.com>
+References: <000000000000af9991061ef63774@google.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2namxbm3ltw7rz3l"
-Content-Disposition: inline
-In-Reply-To: <20240806090339.785712-1-quic_anupkulk@quicinc.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+Fixes: c9c0ee5f20c5 ("net: skbuff: Skip early return in skb_unref when debugging")
 
---2namxbm3ltw7rz3l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Root cause: In commit c9c0ee5f20c5, There are following rules:
+In debug builds (CONFIG_DEBUG_NET set), the reference count is always  decremented, even when it's 1
 
-On 06.08.2024 14:33:39, Anup Kulkarni wrote:
-> Ensure the CAN transceiver is active during mcp251xfd_open() and
-> inactive during mcp251xfd_close() by utilizing
-> mcp251xfd_transceiver_mode(). Adjust GPIO_0 to switch between
-> NORMAL and STANDBY modes of transceiver.
+This rule will cause the reference count to be 0 after calling skc_unref,
+which will affect the release of skb.
 
-There is still the gpio support patch pending, which I have to review
-and test.
+The solution I have proposed is:
+Before releasing the SKB during session destroy, check the CONFIG_DEBUG_NET
+and skb_unref return values to avoid reference count errors caused by a 
+reference count of 0 when releasing the SKB.
 
-https://lore.kernel.org/all/20240522-mcp251xfd-gpio-feature-v3-0-8829970269=
-c5@ew.tq-group.com/
+#syz test: net-next 743ff02152bc
 
-After this has been merged, we can have a look at this patch.
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index 4be73de5033c..50d96015c125 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -278,7 +278,8 @@ static void j1939_session_destroy(struct j1939_session *session)
+ 
+ 	while ((skb = skb_dequeue(&session->skb_queue)) != NULL) {
+ 		/* drop ref taken in j1939_session_skb_queue() */
+-		skb_unref(skb);
++		if (skb_unref(skb) && IS_ENABLED(CONFIG_DEBUG_NET))
++			skb_get(skb);
+ 		kfree_skb(skb);
+ 	}
+ 	__j1939_session_drop(session);
 
-It might actually not be needed anymore, as we can describe a CAN
-transceiver switched by a GPIO in the DT. Hopefully we don't run into
-some crazy circular dependencies or similar issues.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---2namxbm3ltw7rz3l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmaygUwACgkQKDiiPnot
-vG9+QQgAggrdk32CWlLAoZBayn4qT025uirjqvwMZlzCEGSvX9lMXPfzM1dnOwRh
-8IK+cKSJMGE3ntnzj/2MSlm9P/PPgNvoysPDzDgf82FYiVRMzl5EWFXZQxeh3kLT
-ORG/syZSKhSvI+EfKRV9vVF7jPUi4Ibkvk8dvfNSvY9NZEiimHnH4YFXwe5guaRt
-xBmx37tijZDyHprPDD4TAUmUk9v5dXu7rjZDAbBZwayhRyD4ShSnEfu1vmr8bWaI
-hg2pT9jpQSWXaaPk02EoTb6yfh8GcFT3TfnBdpajWJMdZ0Pz/4jzihR7UKkwI0q1
-qASw8iKfTE3sO2ALEdyuRqmaM0ZQjA==
-=rN/9
------END PGP SIGNATURE-----
-
---2namxbm3ltw7rz3l--
 
