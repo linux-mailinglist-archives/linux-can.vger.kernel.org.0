@@ -1,70 +1,70 @@
-Return-Path: <linux-can+bounces-1169-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1170-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DCFF94AF64
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 179E194AF63
 	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 20:10:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0740DB20F2A
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2869283D78
 	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 18:10:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DCD513D8A2;
-	Wed,  7 Aug 2024 18:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3584B13E02E;
+	Wed,  7 Aug 2024 18:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MBbM7czx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V4RlcGlO"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927A21F937;
-	Wed,  7 Aug 2024 18:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC8912BEBB;
+	Wed,  7 Aug 2024 18:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723054202; cv=none; b=mwG00lZDTKoMnfK3HyRqBdYTsOJggnNfhw892SriMZrdpmibofHjRYNKz4gOEnl3+oPmLN8Z3r2uOSLL4bO8Y9dFbiCPkOOm9UT752CC9uyGUMYL/Um9LL5kt55dMDJiZEm88WNu7D7s4hI5bbEyrqdOElSZ7Z1z6Zr2fao4b3M=
+	t=1723054203; cv=none; b=FPQ/PS/XLGD6gurNlSAGqI9nccUBTfRAsZ842duJeaCEye0E+Bg7Ji5MtzfErI2+ci/10sfA4MIHPaTio8dnVQqAV6ECkGXjowERQereQR5/cQ3GuJF/SoGv/+D67pLGTlkJND4VHvzIU4AA19JnezbgM9YwSRBODhmIQi6HEEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723054202; c=relaxed/simple;
-	bh=mJnxtt8f/lxiqCTBr92mX7r/ZI3VYEv5zS96yOF/J2U=;
+	s=arc-20240116; t=1723054203; c=relaxed/simple;
+	bh=B+oQ/WordNto0dzV1eaoJCasCSR6PvX5WTGkl3k+HSQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GDu+pxYpdX3AhIAsc9aQS+/qFBtSIQ2h0ITzMBeYts0SXKSdRHarhwiX509UFLixJeN39SC0PdC2nV7G3cb+TZ6tOZMF72j97nNC5ASKx4F3qxPqh5vXtrZl+f3TPqW/N9ZaYBIs8XF0UaZ9W27sdKuwLWaO3gZx1Al+IbI4ZDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MBbM7czx; arc=none smtp.client-ip=209.85.167.52
+	 MIME-Version; b=CKa9r2oC8bVQvf84khncWLLwT33p7zIAPeRj5T4ZbUViT7qmbap8D/FoPBQZKFlvngv1/gKGpCXwyGRlpf+zr8KIjvDifTcpANytyHui6bmUcD3RGMmxUiMnEmlsc1nb4QoM5vc5uDdLDg83EYE//XSoeG4QUwpRyEX9xgS+354=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V4RlcGlO; arc=none smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-52efc60a6e6so122543e87.1;
-        Wed, 07 Aug 2024 11:10:00 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-530e062217eso132501e87.1;
+        Wed, 07 Aug 2024 11:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723054199; x=1723658999; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723054200; x=1723659000; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VvQwopylpTcNNrDojafDg5hAThyB/Nm6dXGr8JGpA+A=;
-        b=MBbM7czxGnNehnQA1ODxmwJJa7HJ8mbSQbwSpO9QOHDpeyi8OJdaYNDEKGMdcFPltY
-         LiLV2zzE8bGVG4axzjJzQ1asWcUIMFlDQKsFgu0ubpHOPC13PELH4Ay7mCIduoWCgcf1
-         kC7YGGayNFPWVULhZ9S21QErm6P1HtVWfwdAErJfU9SDRQl0q6mCEiJpvKNOfZihx0tC
-         axrY37XxpeUDdRYw09UlkDUlqy8aaPpfJU6rXoyyh9C8J8JV9goHUpMsq58a50n99O3M
-         SXP3i4Sy+XIsqeVhgrAgXvF+TkgaKbGec/3sjsts9/qcMbncEGZa2Mdg09QLyBjjtgsM
-         xVzA==
+        bh=KuxEM8VZYz3rwPd3prNufQEQgMIp4xSelxjonO07Zgs=;
+        b=V4RlcGlOwqD87/ZY8tTgHq1E5qrARRFGnrvlJPK3YbHeBqW2H2xfubsUJbwz8XJTTH
+         VvFbyNbrxA50YPAuo09wP3+jge+50IBLvi4V/K/wiWndBXXfa+96UVqQlZKBSGQLHhlA
+         ZUlGbgivUYUella3Lrgp5qgrL7VK+bIytmAQoZtFTKirEHveXsrMoUZC00EQagTcxez4
+         /qvcUPl5PysQdNQ02xjScCAcCgdAoxoSxLjFOKR6wVAnZ/ctvIhLAbRZGYfXZijtuQZO
+         PClQNidlW2cxtBmXqZG3AYASAZZ5vPuXsrilmwqvv/rkN5EIi+y3JXzrgixvjoNBL3c8
+         wwJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723054199; x=1723658999;
+        d=1e100.net; s=20230601; t=1723054200; x=1723659000;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VvQwopylpTcNNrDojafDg5hAThyB/Nm6dXGr8JGpA+A=;
-        b=hf+E2VN4jT6WBhFaIbXF/XN3ma7DAaxb4FgxyqKkF7cWaI3YXABrz7NWjUmpuvbmJ7
-         Xv5zvuM5uZtVOOqleZFn9S6Qh5lWRxN8my6IZdqjcHItUfpHkgwtBXG+Co7VqE4dKpr7
-         JYHlMOnHIE/5AVoZYg47hJmkhOSQQ/V8N5tzfmFX7W24HYcMVfFXpJ03dTiX5BImeHZ7
-         2lKLg5muBDJyNDC3GLo6gESsfOCCUeEzeI/Ybsm7T3Nc2e7B5VLFiLYk79QlFcuhkLVt
-         lHGg3rb2RsOTivM5/sM+d8eLWn3ydAvLZLd5L5FinhLuoYFs2fM4VVZpugHQf8WHUBaC
-         WhEA==
-X-Forwarded-Encrypted: i=1; AJvYcCWtTazIvauZA6WuifK+Y8bxakDnfcC7ddO6rMgmfk3newlbsMeqorhXGrAOxbpBeuTmR6B9i0ANIg04Sy54cXBWLS2Ip0sWd839Kg==
-X-Gm-Message-State: AOJu0YzdoQdnIzYFMdP5gQsGBm9l7w6eAHZjGhSBDnB5zqMkY2YNsRYq
-	udfBp6rfmcfF8VjbT0YD4rehPGmhwpj8L0qroOeZiAgUw8HVJJpn
-X-Google-Smtp-Source: AGHT+IE1p0KvtyXH4tArk9IeeKyVKqob1VTMUZulp1j/uYXdIC9x8IkR+3jeqgl+4TIMi5I0M9B3Dw==
-X-Received: by 2002:a05:6512:1243:b0:52c:df6f:a66 with SMTP id 2adb3069b0e04-530bb3b189cmr10442926e87.58.1723054198397;
-        Wed, 07 Aug 2024 11:09:58 -0700 (PDT)
+        bh=KuxEM8VZYz3rwPd3prNufQEQgMIp4xSelxjonO07Zgs=;
+        b=rCXPNAug3k/VBHgTw1cTA6pYLRQImcLdOXxhiHmvCad3tpF3DHKPaMbpt+w0UqI7qX
+         aBV/A6bFUoqbANdyi5uodRP9FLlDKTKeaQRfiyxNcZxgvXs2E8EHsj6NCY8Jj4qkMzAK
+         5tUv+KMlmOJXnORf6KQ7I3ibMxjY/iAAWpTEZes/mSRal+q/Fqz9idXLFugHU4TrxsSf
+         dX0pFUTAtUeAJDREKBdc6L18+DNurtXFFpgEP9QjknYXxaAHLwws/VkkAeN76IiA8qPx
+         m8b9IoF13I7EkET3iCuaIXDqnqhWTPe4tr0dCWuSnYyRrq2B+Kk2MvuawCei7qDDSgMm
+         76Wg==
+X-Forwarded-Encrypted: i=1; AJvYcCUzuHNG94XBU5BV1it5ssPL1qt2l//mMJ8Z4z8kuQLFwBO5knQK2Ev8CxffSYnJJIWr4GwCfgliAPXd8fyyjkJBxKbOasdVLGnYWw==
+X-Gm-Message-State: AOJu0YyQMoGrGUr2V4SBfY9yojDT71PWMzSPFAYWJ9Jkf3j2zc9T8/aA
+	Qsy3SjB6njt9TT0tIoAif1ZoSwxoZxcP9nyAxYVykhhLXtDmJlFh
+X-Google-Smtp-Source: AGHT+IFQgMxCfTZ78J29Czohjtb4jQxi5+4UtE9O5Ch4U1w96P4Zt3x/nQ8fMNytR5RwLIOhgha6zA==
+X-Received: by 2002:a05:6512:130c:b0:52e:8141:1b27 with SMTP id 2adb3069b0e04-530bb39b079mr14003421e87.43.1723054199279;
+        Wed, 07 Aug 2024 11:09:59 -0700 (PDT)
 Received: from ilordash-vm.mshome.net (broadband-109-173-124-203.ip.moscow.rt.ru. [109.173.124.203])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-530de3e2ea2sm328995e87.36.2024.08.07.11.09.57
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-530de3e2ea2sm328995e87.36.2024.08.07.11.09.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 07 Aug 2024 11:09:58 -0700 (PDT)
 From: Ilya Orazov <ilordash02@gmail.com>
@@ -80,12 +80,13 @@ Cc: linux-can@vger.kernel.org,
 	linux-phy@lists.infradead.org,
 	devicetree@vger.kernel.org,
 	Ilya Orazov <ilordash02@gmail.com>
-Subject: [PATCH v2 0/1] phy: Add support for Microchip ATA6561 CAN Transceiver
-Date: Wed,  7 Aug 2024 21:09:55 +0300
-Message-Id: <20240807180956.1341332-1-ilordash02@gmail.com>
+Subject: [PATCH v2 1/1] dt-bindings: phy: ti,tcan104x-can: Document Microchip ATA6561
+Date: Wed,  7 Aug 2024 21:09:56 +0300
+Message-Id: <20240807180956.1341332-2-ilordash02@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240807180210.1334724-2-ilordash02@gmail.com>
+In-Reply-To: <20240807180956.1341332-1-ilordash02@gmail.com>
 References: <20240807180210.1334724-2-ilordash02@gmail.com>
+ <20240807180956.1341332-1-ilordash02@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -94,14 +95,39 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-I'm sorry, I missed mistake in commit message, fixed it.
+Microchip ATA6561 is High-Speed CAN Transceiver with Standby Mode.
+It is pin-compatible with TI TCAN1042 and has a compatible programming
+model, therefore use ti,tcan1042 as fallback compatible.
 
-Ilya Orazov (1):
-  dt-bindings: phy: ti,tcan104x-can: Document Microchip ATA6561
-
+Signed-off-by: Ilya Orazov <ilordash02@gmail.com>
+---
  .../devicetree/bindings/phy/ti,tcan104x-can.yaml    | 13 +++++++++----
  1 file changed, 9 insertions(+), 4 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+index 79dad3e89aa6..f6f1fd843874 100644
+--- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
++++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+@@ -14,10 +14,15 @@ properties:
+     pattern: "^can-phy"
+ 
+   compatible:
+-    enum:
+-      - nxp,tjr1443
+-      - ti,tcan1042
+-      - ti,tcan1043
++    oneOf:
++      - items:
++        - enum:
++          - microchip,ata6561
++        - const: ti,tcan1042
++      - enum:
++          const: ti,tcan1042
++          const: ti,tcan1043
++          const: nxp,tjr1443
+ 
+   '#phy-cells':
+     const: 0
 -- 
 2.34.1
 
