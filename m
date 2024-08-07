@@ -1,156 +1,122 @@
-Return-Path: <linux-can+bounces-1161-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1162-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4272594A272
-	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 10:11:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4161194A4BF
+	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 11:52:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 741BA1C21714
-	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 08:11:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DEB21B24509
+	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 09:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914201C57B0;
-	Wed,  7 Aug 2024 08:11:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="N4RWhCQI";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="qu+uEfPh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C64F1AE87B;
+	Wed,  7 Aug 2024 09:51:42 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12CF1B86DC;
-	Wed,  7 Aug 2024 08:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D0F3A267
+	for <linux-can@vger.kernel.org>; Wed,  7 Aug 2024 09:51:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723018271; cv=none; b=Qt/kljc1KieLDiSRCBR86AWbw/hXmMfsMjy7fKB73kcyfrOmHCwtpM/WuztaTlwpDv6ItETFAFGYBD6jC7CTJyHiHiw0gpM9bbruw53OIkgzdi1QHF3fQTnsItPqGD9tobW1wApL8ibEoDd7Y0+2GQbmrBnK5agznk1cHPPDV8A=
+	t=1723024302; cv=none; b=ZyabrGF2Lj2/pZoQvdQ7guIVOUpcp16C1w2+Lr3Gjq6V8ALi4+J6TO6qtqw1WVE+PB2NG8Opr7T+/P2vdYrXXnsIIjpYKNLPY7i1XwCqxqPJzVmxOE171fKeyrhKaG/d+bMtwn3kmkaZ2PC5gPVcTzqCzU2GBAevzoEIcRiEreo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723018271; c=relaxed/simple;
-	bh=+yCVqk49ajOkZuHoI/zV3gI0V8ytHOEMSm8ggTK9hgg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QfrEu4ry/G8Qc/OAn8+RYNk6I1H0BGGgcyCxfXHSyPhFpVouWXC8x7VUVmROxLkF45hHw42jN6NnUYvCuKcXSHAFZr3i8Rao+UoWVkU2v1l0fftq7Pa2TXZqhog9Hi1f3GGJCvO0s3C0TKn0YlI9adD9ThNHweF90pSz7aPpHbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=N4RWhCQI; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=qu+uEfPh reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1723018267; x=1754554267;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=4OeGaUxz8kjHxLe9YSzCVy9UlVICeIgRRXpVZVS9784=;
-  b=N4RWhCQIy1AHoANk1nWLHWsmbMtg6vJ14cQtzGVuCBPzCilS2g1eeYoG
-   sNI+81EAtject6yDlrfUN1uU18ubGaQDTA81jqngC9UDbs6wAseDS10Xy
-   8w/MKYFVXsGtKqqLMxYfZ9HwGFTJt52m6ECQjEeFwToHtSGIk9wqEHp5N
-   aCjmM7FMHrZRL84cx9bmV+nQ3u9ozWfykzbY94QdveS+38H3KScu4ZQdF
-   lLiUhOernnj8epdCYEfIP0eVBfiMKT5baT4YJUdnXQQ+XcahzAGcw8Ji9
-   4mXT+4sVmQc9Ity0MqYb7k9bVw0TPCoQsg8bGAeay2Q80em3x2Z868sME
-   g==;
-X-CSE-ConnectionGUID: vL4BY8/bSfSSK4VULycfvw==
-X-CSE-MsgGUID: 9EPCPu3QQkClBkU4cibRQg==
-X-IronPort-AV: E=Sophos;i="6.09,269,1716242400"; 
-   d="scan'208";a="38285481"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 07 Aug 2024 10:11:03 +0200
-X-CheckPoint: {66B32C17-19-CC8A42C9-EEB26961}
-X-MAIL-CPID: 927B592D4A3966CC78C5FCD753514530_2
-X-Control-Analysis: str=0001.0A782F22.66B32C17.01D5,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 368AF160D5D;
-	Wed,  7 Aug 2024 10:10:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1723018259;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=4OeGaUxz8kjHxLe9YSzCVy9UlVICeIgRRXpVZVS9784=;
-	b=qu+uEfPh2Zdr90bFwJzD1H1nRYjuh71QbswHZyNtG/cT+gabk23qBoiOsU8gA7gE9wLS+h
-	/zB1mDkqQo/PjqQcpxXIpmMRIOW8BYEPWtEDOZz5vj+v7wip3cEid6c80RJcYUtSCqkcmU
-	Rm8sPmyRme2/iPX/Jda6cglErzMfJbf3/LbTkw8D9g2aNIGgQMqzGFvbGokpXy9Fsf6CTg
-	stErBjfm5UExCMGaRzhNN3k1V2XLdmzS5RxBmXEfyxIKJYOoJJMfK+ae5Q9/JQsIr125i2
-	DaHUQg5zx+3IeYr+GRXVizwJMur+gkGkhmt0mIBXN3l3YamxphKV6FgR39Mi6Q==
-Message-ID: <ab4b649b32ca9a1287e5d1dc3629557975b7152f.camel@ew.tq-group.com>
-Subject: Re: [PATCH v2 0/7] can: m_can: Fix polling and other issues
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To: Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: Linux regression tracking <regressions@leemhuis.info>, 
- linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org,  Chandrasekar Ramakrishnan
- <rcsekar@samsung.com>, Marc Kleine-Budde <mkl@pengutronix.de>, Vincent
- Mailhol <mailhol.vincent@wanadoo.fr>, "David S.Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,  Martin
- =?ISO-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>, Judith Mendez
- <jm@ti.com>, Tony Lindgren <tony@atomide.com>,  Simon Horman
- <horms@kernel.org>, linux@ew.tq-group.com
-Date: Wed, 07 Aug 2024 10:10:56 +0200
-In-Reply-To: <20240805183047.305630-1-msp@baylibre.com>
-References: <20240805183047.305630-1-msp@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1723024302; c=relaxed/simple;
+	bh=TCxNvcFM95dEXhKuywWdQ4osqazRMl3b8p72efeJZUg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FC5q9lmF+F2P2kJThXPs0ku80rtBeiILYF8BKaUgysQAx0J7pzeOkoA+jQQC8Mm1YhkaF+3tMNsqXU2aY9sFWIzJf6RPrQO9zt3JPhSOmkknXNAmqi9f8UROnFciEbZ7LQI+rgiEM5PUD9K+zEZnQzMhNDWr8djss89fvOK9uGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sbdKR-0000j7-5E; Wed, 07 Aug 2024 11:51:35 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sbdKP-005ABo-TG; Wed, 07 Aug 2024 11:51:33 +0200
+Received: from pengutronix.de (p5de45302.dip0.t-ipconnect.de [93.228.83.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 818443189D9;
+	Wed, 07 Aug 2024 09:51:33 +0000 (UTC)
+Date: Wed, 7 Aug 2024 11:51:33 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, linux-can@vger.kernel.org, 
+	kernel@pengutronix.de, Jimmy Assarsson <extja@kvaser.com>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: Re: [PATCH net-next 19/20] can: kvaser_usb: Remove struct variables
+ kvaser_usb_{ethtool,netdev}_ops
+Message-ID: <20240807-khaki-yak-of-wealth-a252f9-mkl@pengutronix.de>
+References: <20240806074731.1905378-1-mkl@pengutronix.de>
+ <20240806074731.1905378-20-mkl@pengutronix.de>
+ <20240806194332.28648126@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-
-On Mon, 2024-08-05 at 20:30 +0200, Markus Schneider-Pargmann wrote:
-> Hi everyone,
->=20
-> these are a number of fixes for m_can that fix polling mode and some
-> other issues that I saw while working on the code.
->=20
-> Any testing and review is appreciated.
-
-Hi Markus,
-
-thanks for the series. I gave it a quick spin on the interrupt-less AM62x C=
-AN, and found that it
-fixes the deadlock I reported and makes CAN usable again.
-
-For the whole series:
-
-Tested-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="g6wrywl5gc6j6xwv"
+Content-Disposition: inline
+In-Reply-To: <20240806194332.28648126@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
+--g6wrywl5gc6j6xwv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On 06.08.2024 19:43:32, Jakub Kicinski wrote:
+> On Tue,  6 Aug 2024 09:42:10 +0200 Marc Kleine-Budde wrote:
+> > From: Jimmy Assarsson <extja@kvaser.com>
+> >=20
+> > Remove no longer used struct variables, kvaser_usb_ethtool_ops and
+> > kvaser_usb_netdev_ops.
+>=20
+> The last three patches in this series should really be a single one.
+> I don't wanna make you redo the PR but it causes a transient warning
+> which prevents our CI from trusting this series and doing anything
+> beyond build testing on it.
 
->=20
-> Base
-> ----
-> v6.11-rc1
->=20
-> Changes in v2
-> -------------
->  - Fixed one multiline comment
->  - Rebased to v6.11-rc1
->=20
-> Previous versions
-> -----------------
->  v1: https://lore.kernel.org/lkml/20240726195944.2414812-1-msp@baylibre.c=
-om/
->=20
-> Best,
-> Markus
->=20
-> Markus Schneider-Pargmann (7):
->   can: m_can: Reset coalescing during suspend/resume
->   can: m_can: Remove coalesing disable in isr during suspend
->   can: m_can: Remove m_can_rx_peripheral indirection
->   can: m_can: Do not cancel timer from within timer
->   can: m_can: disable_all_interrupts, not clear active_interrupts
->   can: m_can: Reset cached active_interrupts on start
->   can: m_can: Limit coalescing to peripheral instances
->=20
->  drivers/net/can/m_can/m_can.c | 111 ++++++++++++++++++++--------------
->  1 file changed, 66 insertions(+), 45 deletions(-)
->=20
+Doh! Will take care that every commit in the series compiles w/o
+warnings.
+
+regards,
+Marc
 
 --=20
-TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
-any
-Amtsgericht M=C3=BCnchen, HRB 105018
-Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
-neider
-https://www.tq-group.com/
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--g6wrywl5gc6j6xwv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmazQ6IACgkQKDiiPnot
+vG+MzAf+KjtNsw9aha6dQ+EGqr3kQyJosfj5P2WrTsoJPUSIYm0XCt89wUu4zMtA
+e/d0hn+4LKII3ixKjnipwmt8w3WHQEDqUcYvDc9keNcjz6ZRrNVp6nWHN2bPkUdo
+cf9mpLXT2IwEIAkFmSC4unBz/wFPlrwYHAMTDIS1i2fXsGjDGBnym4j5CXXFGgdv
+pGIUMqsNkyRqTHOTZraEZMwr7dv8fQnkpJzNT6ZmLjDDGpqGWl34d+ZaNTq/5Jga
+CmBd6tr3IkNdEKaiR52thmc8HQaK+Wev+EC0/niHFe1zJHnjYjNuSGJ+ZL5yJWaY
++Ybm77hZfDk9eQLt0lQVHlvDEgBL2w==
+=llPg
+-----END PGP SIGNATURE-----
+
+--g6wrywl5gc6j6xwv--
 
