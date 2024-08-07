@@ -1,157 +1,155 @@
-Return-Path: <linux-can+bounces-1163-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1164-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0DDF94A55F
-	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 12:26:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B03194A702
+	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 13:33:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCE831C20434
-	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 10:26:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3725428142E
+	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2024 11:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1191C823D;
-	Wed,  7 Aug 2024 10:26:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4592D1E486A;
+	Wed,  7 Aug 2024 11:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UjDVbRYS"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="RtnxBuOw"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C59190077
-	for <linux-can@vger.kernel.org>; Wed,  7 Aug 2024 10:26:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C931DF68A
+	for <linux-can@vger.kernel.org>; Wed,  7 Aug 2024 11:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723026371; cv=none; b=DUmw/bI9n+0Z3xFoRsfslh3uc80iAjyNCD0e939KLmFQZvikhi0EV8ftHTTq5u121h1uWGDTRHuDB6E/dCceMbORbBMK2fqTla3djyZqxiv/wZTGFi4tBdngci3DG+dEjro1E0Xd6OAKn7LomGd73a342bpHq4SZNN+cKR7jFAM=
+	t=1723030419; cv=none; b=m9iltdjRbLAofjgxn3eLHUy53abjA4HKCXJkmdX6W09fQYOMxcUohc9mBYYh3hi7EwLv+0hxjdGsF8YNYX2V5hprzreH3t1BIOeEj5MrAIxzzUy1B6zM4qfWexi9rBms14R1mxxi6Np/rerp0vOEIKz+2kSaD0HFCdT/10iVoiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723026371; c=relaxed/simple;
-	bh=u0+7atymIQTR5ashQDQvVoEy8dEmkeYdACkNqOsXOsM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RqvfMpS3lXScP+A7Tk7Dzaf3jN0LeYnLNrIAqCKHCk0B9TnYI3yhJXJtbwj/oVbm6S3MfxuLpWEzUo3+LWSVlSCxQbUIiBVmBFYqzB/CuATSAlkFaappgwpS8hQuTppmulCG3jiFwX6ngiSLh0nGUa0Q8RgN15LSxRjiv8sLY3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UjDVbRYS; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7a0b2924e52so948960a12.2
-        for <linux-can@vger.kernel.org>; Wed, 07 Aug 2024 03:26:09 -0700 (PDT)
+	s=arc-20240116; t=1723030419; c=relaxed/simple;
+	bh=6pVRo0NUIjztrkGDxcisHgjwv+iwRhqOaOeG8t2h/1Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z9Z2qXaZUEtq/p70IoxZvwEb56iy17k2TaBuLcehiaCco/MIs1Vs4ULvIkX02uhW3OJLwWXQ4mi0ueVCZ0LigWbQNA0CUJlosPQV1kd0If11L6XBCifVyMSPXSbJ9styKx1xzXfDnoYCZ9ON3zlHYzcVT9s+CmMoreV9y5MhFQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=RtnxBuOw; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-81fd1e1d38bso82297039f.1
+        for <linux-can@vger.kernel.org>; Wed, 07 Aug 2024 04:33:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723026369; x=1723631169; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dIET7ARXlNKcifpDPYP0bsdyVmrm9WpO/GMEiAt+m50=;
-        b=UjDVbRYSPkj5aDv+VD1v7/uDcdhNPgDRvprL/n8Www22XqI5UKkDM+x7clYz+C9jkm
-         0zDcEKTvrsi9qxnf64wQuLgGDJcgq8rfSPreFEAcxRQypCSRragwnYBZnn2pcZO5y65y
-         5b1+6bzmWoBHnO22wAO8fLws9oQJassCLib3phx0nJxbH7ktyCe/x/JVMShprrPnXKNY
-         /OPly6JwMGBrrT1GMySEI8nxspSXmnEoVkLUtj+FxGf5En+ESp6XIY2CFZW+7CpvKFra
-         LR/9cuPGITHVJk2aGOmSznAls4HSKMm4tvgnsn7BVjS6AShII9ofzMKX8J/6LArQfhzi
-         e87w==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1723030415; x=1723635215; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TO3M4/b2w+N5GFX+bWSuliwBhXhBbHQ7fK/88QYJzvU=;
+        b=RtnxBuOwKSQ8QJa+7RwRm8/mRI/irYbrAoi3Xed4p+bOXPKDiwFcyFh0st8cedG7UM
+         XiZpbyIdUNMSkG7QpMOY+Nb3XrKnz/ZeNljA2iUMdLUriofX/kuFXfkWTZcbhXQFyObR
+         ijVKov8BVYY9sWX9sWOUxXdy0GDk90xgugkGF3tjIB9qTA1uYVq3D/y87O+Bpd93qQeL
+         LuRd1B19CJuyScU1J7GHejQ02hqEg8oQ6MwG+INlTn4Z6tBONqSlB2zJ+Uz3xuxQoJns
+         fj5ymwfhdmgZcMYCN5n6JRCmHMc8vq2Nql9qB0zncymqLmp6wAnnxCr0fiGFCFYvdw7r
+         kWzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723026369; x=1723631169;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dIET7ARXlNKcifpDPYP0bsdyVmrm9WpO/GMEiAt+m50=;
-        b=XskElXjr1rCbqxwBGCa8vr1rxuyhECmUwbcfN8GewjWhT7pkWcnBor7+8666jEfcig
-         fRGmhi7ZZ8jZF+25V54Xe3smTU5XRsEHkIRQY0Z8BtrZtl348p2nelst9tBWdXZ38M3k
-         cRnQZSmh4zHGvuTdEgoK0+fb0E4zIEjA/qdSpDeR4LPKJPSl1/+mG5Zf78LFf43gPunf
-         ZnvvUHi5tWYe3SojgvDljl37gjb6AnjlZFKvtjS/bvpwIS0i5BWjcnAET9pY+kpxgx9I
-         o+ovHNzDZm9LlcmrPACgKne3flfyyVy+BQT1BU30kVg5DLj6Vn1IEDTvVV91HnwQVVgE
-         m7Sg==
-X-Gm-Message-State: AOJu0Yw2XimMpRomjP7xroQ6vDE0FLtbkkO7SEZvJNg3Ki9GN2uJHaJ2
-	ludfDEhfYxy1MaNztf09EdnmvbtoMhENCcZikxHMvgy+w124iuor1xtudvKo3uU3+SDcpn69TC9
-	o13W5Md5ED5ZEp4LK1vTWj2L4Nlo53lNq02Y=
-X-Google-Smtp-Source: AGHT+IFM0SK5wFoTiTMj7dViHqpFzfJqn3BQLl/adaOVW6S3JOpREETfRvo4kx3Y5/+9UlEj4tyzEWJiWwmRSvTyejU=
-X-Received: by 2002:a17:90a:a784:b0:2cd:3331:ebc7 with SMTP id
- 98e67ed59e1d1-2cff93db999mr16874815a91.2.1723026369242; Wed, 07 Aug 2024
- 03:26:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723030415; x=1723635215;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TO3M4/b2w+N5GFX+bWSuliwBhXhBbHQ7fK/88QYJzvU=;
+        b=nOXR/kb5LFwGimgkr8baSVbr1ug7JzwyAo0VN2tuXXUnIr6RJmQHYR76GSSUIrdChD
+         EGIZi0Gpp3RdfFbPTUxZwio0eke2Ss5Y/43BBNzsE1scWHqZwqHeLBk8DwdFa4bjykh4
+         PSG12gaKlEjoOAvOQRPDtS8yTikYFTdeLPjmaGP8OFf8tVXEUMqXmOlDFw30XbLi4/UJ
+         TnA1jNfiznYdNMezWYJslThR/icT5lwSNc3ilUs3Wh3N2tfNr6cdaF9GZj7i1ZUCAMte
+         Ai2x6rhZfkOFx9vks7pEJPCgtqZaZpwmmECjv9IihEp5GJytukVIsYbak5RtCcOm+Zr/
+         g0dA==
+X-Forwarded-Encrypted: i=1; AJvYcCUsy5ocrSQPANRQmp5XJdeyYFuPlSKXTK/nOBVUkCN5wAGMW72GHkM5B5mCbDi4nocqf9M7bpICBroVLxLRGtwS+/EHG8E+KIg2
+X-Gm-Message-State: AOJu0YxBQjoJEb4BM6nKIs81G3MBZaF18r0I650Irb9b4YydcdIbmdPB
+	Iiogel7CKLjgJyvZh+SJNdB2ScEP4cSGX+2tOpGD2Z1UImAj09kbcIoWHyJxMcM=
+X-Google-Smtp-Source: AGHT+IHGPYq6U63wYkXW5Ao1UYJo9K2LfIkWxE28uBk35YalI9BIp4WaXcnBvcyG5BZbzaCfz3g7fQ==
+X-Received: by 2002:a05:6602:641f:b0:7f7:e273:a97d with SMTP id ca18e2360f4ac-81fd437a1d5mr2224546739f.9.1723030414710;
+        Wed, 07 Aug 2024 04:33:34 -0700 (PDT)
+Received: from blmsp ([2001:4091:a245:8609:c1c4:a4f8:94c8:31f2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c8d69878b1sm2690261173.2.2024.08.07.04.33.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Aug 2024 04:33:34 -0700 (PDT)
+Date: Wed, 7 Aug 2024 13:33:30 +0200
+From: Markus Schneider-Pargmann <msp@baylibre.com>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Linux regression tracking <regressions@leemhuis.info>, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Chandrasekar Ramakrishnan <rcsekar@samsung.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S.Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Martin =?utf-8?Q?Hundeb=C3=B8ll?= <martin@geanix.com>, 
+	Judith Mendez <jm@ti.com>, Tony Lindgren <tony@atomide.com>, 
+	Simon Horman <horms@kernel.org>, linux@ew.tq-group.com
+Subject: Re: [PATCH v2 0/7] can: m_can: Fix polling and other issues
+Message-ID: <a3inpbruecwescx4imfzy4s5oaqywvzblhk75chkyyrhujflxr@vdbbf6jtxwso>
+References: <20240805183047.305630-1-msp@baylibre.com>
+ <ab4b649b32ca9a1287e5d1dc3629557975b7152f.camel@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <77a04054acea40a886d371adbd8d25d1@st.oth-regensburg.de>
- <CAMZ6RqK00=EKvCR8XBW7Vre5tSxsrD41LuGObV_5e=hYOKdSSA@mail.gmail.com> <8b96193b-082e-4c7f-b8ba-666580aae3e6@st.oth-regensburg.de>
-In-Reply-To: <8b96193b-082e-4c7f-b8ba-666580aae3e6@st.oth-regensburg.de>
-From: Vincent Mailhol <vincent.mailhol@gmail.com>
-Date: Wed, 7 Aug 2024 12:25:57 +0200
-Message-ID: <CAMZ6RqK1keG5EuFMOnVo5j0zyAWQSYsZhruHBQ_dUZdx5xEw6w@mail.gmail.com>
-Subject: Re: [EXT] Re: Introducing new Kernel Module for CAN over IP Networks
-To: Matthias Unterrainer <matthias.unterrainer@st.oth-regensburg.de>
-Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
-	Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>, 
-	Wolfgang Mauerer <wolfgang.mauerer@oth-regensburg.de>, 
-	"nils.weiss@dissecto.com" <nils.weiss@dissecto.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ab4b649b32ca9a1287e5d1dc3629557975b7152f.camel@ew.tq-group.com>
 
-On Sat. 27 Jul. 2024 at 12:17, Matthias Unterrainer
-<matthias.unterrainer@st.oth-regensburg.de> wrote:
-> Hi Vincent,
->
-> apologies for the late reply.
+On Wed, Aug 07, 2024 at 10:10:56AM GMT, Matthias Schiffer wrote:
+> On Mon, 2024-08-05 at 20:30 +0200, Markus Schneider-Pargmann wrote:
+> > Hi everyone,
+> > 
+> > these are a number of fixes for m_can that fix polling mode and some
+> > other issues that I saw while working on the code.
+> > 
+> > Any testing and review is appreciated.
+> 
+> Hi Markus,
+> 
+> thanks for the series. I gave it a quick spin on the interrupt-less AM62x CAN, and found that it
+> fixes the deadlock I reported and makes CAN usable again.
+> 
+> For the whole series:
+> 
+> Tested-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> 
 
-No problem. I am myself abroad until the end of August. My answers
-will also be delayed.
+Great, thanks for testing!
 
-> On 07-07-2024 17:23, Vincent Mailhol wrote:
-> > Hi Matthias,
-> >
-> > On Fri. 5 Jul. 2024 at 02:47, Matthias Unterrainer
-> > <matthias.unterrainer@st.oth-regensburg.de> wrote:
-> >> Hi Linux-CAN Community,
-> >>
-> >> my name is Matthias and I recently developed a kernel module during my=
- Bachelor's thesis that allows for transferring CAN frames over IP networks=
-, similar to userland tools like socketcand [0] or cannelloni [1].
-> >>
-> >> I wrote the thesis at dissecto GmbH [2], a german Startup that special=
-izes in security diagnostics and analytics for embedded systems, primarily =
-within the automotive industry.
-> >>
-> >> The idea behind the project is that dissecto has developed a hardware =
-device that can be connected to a CAN bus and acts as an ethernet gateway t=
-o the bus. It is capable of capturing the CAN traffic along with the corres=
-ponding timestamps and send this data via UDP or it can receive CAN frames =
-via UDP as well and pass them on to the CAN bus.
-> >> This allows for remote interaction with a CAN bus, as well as an accur=
-ate analyses of CAN traffic, as packets contain precise time stamps.
-> >>
-> >> An architectural design decision was to develop it as kernel module be=
-cause of lower latencies and high throughput.
-> >
-> > Question: did you consider Packet MMAP?
-> >
-> >    https://docs.kernel.org/networking/packet_mmap.html
-> >
-> > Most of the overhead comes from the syscall context switch between the
-> > user and kernel land and Packet MMAP is exactly designed to bypass
-> > this. Actually, a few months ago, I started to rewrite the can-utils's
-> > candump to use Packet MMAP, but I never finished it.
->
-> No, at the time I did not consider Packet MMAP. From my understanding
-> Packet MMAP is used for userspace applications. But the module has to
-> modify the timestamps of the CAN frames as they appear on the interface,
-> which, as far as I know, is not possible from userspace.
-> Please correct me if I am mistaken, but because of that I do not think
-> Packet MMAP or any userspace application for that matter could actually
-> be used here.
-
-Can you explain this in more detail? The precise CAN timestamps are
-all available from the user land. Some drivers even have the hardware
-timestamps as generated by the device. Why do you need to *modify* the
-timestamps?
-
-> >> For example, my measurements show that the average time it takes a CAN=
- frame to get processed by the module is just about 1/4 of the time it take=
-s applications like socketcand or cannelloni.
-> >>
-> >> We have published the module on GitHub [3], and would appreciate your =
-feedback and thoughts.
-> >>
-> >> If anyone is interested in this functionality for the same or similar =
-use cases, please don't hesitate to contact us.
-> >>
-> >> Best regards
-> >> Matthias Unterrainer
+> 
+> 
+> 
+> > 
+> > Base
+> > ----
+> > v6.11-rc1
+> > 
+> > Changes in v2
+> > -------------
+> >  - Fixed one multiline comment
+> >  - Rebased to v6.11-rc1
+> > 
+> > Previous versions
+> > -----------------
+> >  v1: https://lore.kernel.org/lkml/20240726195944.2414812-1-msp@baylibre.com/
+> > 
+> > Best,
+> > Markus
+> > 
+> > Markus Schneider-Pargmann (7):
+> >   can: m_can: Reset coalescing during suspend/resume
+> >   can: m_can: Remove coalesing disable in isr during suspend
+> >   can: m_can: Remove m_can_rx_peripheral indirection
+> >   can: m_can: Do not cancel timer from within timer
+> >   can: m_can: disable_all_interrupts, not clear active_interrupts
+> >   can: m_can: Reset cached active_interrupts on start
+> >   can: m_can: Limit coalescing to peripheral instances
+> > 
+> >  drivers/net/can/m_can/m_can.c | 111 ++++++++++++++++++++--------------
+> >  1 file changed, 66 insertions(+), 45 deletions(-)
+> > 
+> 
+> -- 
+> TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
+> Amtsgericht München, HRB 105018
+> Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
+> https://www.tq-group.com/
 
