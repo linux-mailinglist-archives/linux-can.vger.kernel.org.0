@@ -1,310 +1,212 @@
-Return-Path: <linux-can+bounces-1180-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1181-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B7DB94C2EA
-	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 18:42:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C64AE94C319
+	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 18:52:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3157281A9D
-	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 16:42:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 379DD1F220B1
+	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 16:52:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1906190059;
-	Thu,  8 Aug 2024 16:42:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A71D19049A;
+	Thu,  8 Aug 2024 16:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="EXYzXYIR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z9Lip2KV"
 X-Original-To: linux-can@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2122.outbound.protection.outlook.com [40.107.22.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84F1646;
-	Thu,  8 Aug 2024 16:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.122
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723135352; cv=fail; b=qz2C+U2gSU2CQc8FLzcnx25KHeypm5o2AYY0S+JF305jkL8csBG8k+1ClhFbMBt1Fogm9wAqrFSdO0nm56IU8L1zd4TBPZvLsw8DAkfCGnn1GszQEr/Dg53VbSs976aJ47Gg2tvTfvHKoP8pU08WH/G14grUy56Ti1HqJNRmcfY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723135352; c=relaxed/simple;
-	bh=bJXcw/+v8pixev3DGbrxDJVj7iozsH7QJ/bV7c5EGmg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Krj5JSB4lP7eOlM/MeKm0S8fJqYT2+/7l5Q3CpuC+zIxHmULlKuaGhPch1zqKF77Akaxb89jn1fU4z0+vIpn4mfnKUocqLXP0qZ20p2QdlI36MelwusocBsMJxSgDfOp/s5tMI+TZFCzEA4lN9p7cwoRt6PDgDkXecsJOAc1y3k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu; spf=pass smtp.mailfrom=esd.eu; dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b=EXYzXYIR; arc=fail smtp.client-ip=40.107.22.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esd.eu
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=csRrQ98vJzW4DMTpKMVcDjOyK/dX0WfVbdOw/PUPrNDZapY4NBGkk5JPtbTMAjy6bdDfiSdPgAmcCCcw2Hr3ApfuFmQDF+U7iQN/oowMKx6JLT6rN9tiTl2si8+6s/0JjueYbWdWETxFMviRtABCtf4Rdvk3iTcUg/f1alaDCrotiY3pq2a2T+wIpxi5SOhkw00pOrv8LdcCTAPGjjVvJVQglXfaVy48RmSc4FeVooMPEKx5oW77wBlwnYJ7+yjF2X1ZNV/gSo70wwwhl/eEbMEzS9KYMMu3oKO2Rd5ExiprteajY6+0Guo/tsA6E0w9xfewUmzE3qz2HhgswSvq3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=22hkwKW4f+Ugr5+IIQbXzI3JGI+hij0UgS482ya38dU=;
- b=idS04KLvDEbomAOPKBEZdzwm8Kkm+mcqXqCuI2be+qmyMg//TUYHA7/S0gG0ij0TiVSMerM0lNjoHUJmL7eGlOWJ9a2OJFEKxpxxKBJ1sjQJyRwt4kvdx3Y7u8q8NmrHlDPk2RG4a9ZIaRuOwMLiNAQzCWQqGmMEBaOMy9lkwCoXBoqzggBrqZ+yHXaGObCHei9BCFjNFCFZEyaPN7qYbkzOLn8t1UaYDwPZlbgIf7YYtYitTJBbbr2Ro3PBBY6+71IiF7G0tbesKMHrw22F9BXo4jxLFf1EWGcFkesFezII2wk0ECGZtqaMFUHONYPNTCgxuFklISbkUJ9RcQQYmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 80.151.164.27) smtp.rcpttodomain=davemloft.net smtp.mailfrom=esd.eu;
- dmarc=fail (p=none sp=none pct=100) action=none header.from=esd.eu; dkim=none
- (message not signed); arc=none (0)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6779418DF70
+	for <linux-can@vger.kernel.org>; Thu,  8 Aug 2024 16:52:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723135961; cv=none; b=apdKUE8hxQtxU9CNAJUBUc7NWOmV79wvNNMX2m9gMhdEdQ/8EzYDd3d6MPZqRDAEfiHTEEJo4tF/z6807bk+ueBHpXDYhRJqsFQNiHZOBNs8XfWkjbYn3j0miED/SCulhPs7ijFxFl5afqyfSC2E/k2y2w+iF9v5x1XgtNHvpGg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723135961; c=relaxed/simple;
+	bh=G90SsTCUWCiHPcGypDFiaRgzp9udvgH+C1s87SgdFO4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=d1EVg+0+nPWCZ5iN4t51ENUDYz/mbfte9l/L8G02VSl3mq27S3CHGBQcvFHi+M/38nqoTaVXX2VPpCrY1mYMMZZlbVa5yEfwAXTOgftIhwPkcujZqb94uzaZzQggv6/pCGrvJKoaEuvPniAMR/FcRLSl0CkJC2lUI6PfF4HDldk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z9Lip2KV; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-710d1de6ee5so401004b3a.0
+        for <linux-can@vger.kernel.org>; Thu, 08 Aug 2024 09:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=22hkwKW4f+Ugr5+IIQbXzI3JGI+hij0UgS482ya38dU=;
- b=EXYzXYIRCDSu+8fmWhieTJL1IPn27Dw5/xzz5ojhj5Vz7QanC4Z4hdn2C3MQ7evMDTOdvWFjaCJ+nMHjJey07aOMc3wxEBZjF8AZ1YyBcBi3UJRzI9VxvppjMdFLegB0vPwmSzQXUzX8ygizULHG2s/eXdIhliRGoJc7RikiOuw=
-Received: from DB7PR05CA0006.eurprd05.prod.outlook.com (2603:10a6:10:36::19)
- by DU0PR03MB9198.eurprd03.prod.outlook.com (2603:10a6:10:47a::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.13; Thu, 8 Aug
- 2024 16:42:25 +0000
-Received: from DB1PEPF00039233.eurprd03.prod.outlook.com
- (2603:10a6:10:36:cafe::11) by DB7PR05CA0006.outlook.office365.com
- (2603:10a6:10:36::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.14 via Frontend
- Transport; Thu, 8 Aug 2024 16:42:25 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=esd.eu;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
- discourages use of 80.151.164.27 as permitted sender)
-Received: from esd-s7.esd (80.151.164.27) by
- DB1PEPF00039233.mail.protection.outlook.com (10.167.8.106) with Microsoft
- SMTP Server id 15.20.7828.19 via Frontend Transport; Thu, 8 Aug 2024 16:42:24
- +0000
-Received: from debby.esd.local (debby [10.0.0.190])
-	by esd-s7.esd (Postfix) with ESMTPS id 928157C1278;
-	Thu,  8 Aug 2024 18:42:24 +0200 (CEST)
-Received: by debby.esd.local (Postfix, from userid 2044)
-	id 7E4D32E4731; Thu,  8 Aug 2024 18:42:24 +0200 (CEST)
-From: =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH] can: netlink: avoid call to do_set_data_bittiming callback with stale can_priv::ctrlmode
-Date: Thu,  8 Aug 2024 18:42:24 +0200
-Message-Id: <20240808164224.213522-1-stefan.maetje@esd.eu>
-X-Mailer: git-send-email 2.25.1
+        d=gmail.com; s=20230601; t=1723135960; x=1723740760; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JZsr+sRXWfALUIaRxqxVsMACEMmeGqNvXil8Nxs3PP8=;
+        b=Z9Lip2KVR9fP1e3kop+HodV5S+c8n3qwi6LQ5/cJ1Uj83qXTQJwzKLDO9+PSfHTT1f
+         UBOFf8T7ruGoBnwPtZTMnVkbCYUU987LWhGv/4LDM1+YoWgxzzx88qyfGZRwRaPF7qDW
+         x9N+HPahVpFqtloiaStdjoJwSUO3sj6+S6O7lpTDGfvSFTnBV5CrgG7wwmYhVka3vf81
+         OIh9i2WnWosiMKEYdbhmMPrnPmL9d8esvx0XjSKW0UwsODSCdzHdxesmIFrFh64E5Tfb
+         LysqmVp8b+J2iovviksHOQq0Hc238IepXoAoBaa9HtDf5CUiFFCB6uD/FnWcCE3eYdES
+         8cqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723135960; x=1723740760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JZsr+sRXWfALUIaRxqxVsMACEMmeGqNvXil8Nxs3PP8=;
+        b=mdAafoFs4f04/TeLPS7m/cfX2xppuFrNxjsULHRFjj1Y0WR2JLN9ueM2vt/9v39SNb
+         CX82KLK75cx0KSvFy95bStKAqBUPQ8YZXWWp5Dncku1lTLs3wUifVhK+tjnZX6qKWS8D
+         u9RP97u/JbOLdhyf50HEErwkEU+/Oz7sO+tClK2s0lcFr+aeGbY3jVDm6zZZ/J9WRMXz
+         wXxjFARd1EIEypKbyw5B0WG9djEkKn6b7tIqs4ZzHcDyn5l9+KFCr6uQXuscmGw4sU/i
+         8d3WzPjFEMqZoSSiAXnwPlo0KtNjnY6aFFqZv8Bhol49RWDGJz2HorkdKCr1pCe/R5fu
+         IksQ==
+X-Gm-Message-State: AOJu0Yyk5qWYc52AIp0WhnZEKJ1fcGxbJLcxy6IimQTj0Fw1rA6y7shP
+	IjpfIedF2xR2tBhmSmIMmF+P7BPBW/mS3i4+jVoB8Tv2sF+q4Nkdl1zRQRgC8SV6c1UfYpWmPI0
+	Rux1WivPc1qZv6RtdPzoDM1OIKX9W3EA94/o=
+X-Google-Smtp-Source: AGHT+IF/mqeI48domJ8mxmRFnboYWAU7hOOMrrC6P4A8oZiH3oYDNkuGDxKelSnuZFLVOlpx5NE0IXCupQEQ51i/AEY=
+X-Received: by 2002:a05:6a20:7f8c:b0:1c6:edfb:431f with SMTP id
+ adf61e73a8af0-1c6fcfacf07mr3120475637.44.1723135959457; Thu, 08 Aug 2024
+ 09:52:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB1PEPF00039233:EE_|DU0PR03MB9198:EE_
-X-MS-Office365-Filtering-Correlation-Id: cae2accb-9c24-46e6-7dfe-08dcb7c91523
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?b01iUEgyZDJqbjlHWWc1cWNKK01FWi81QlVNVTVDQTc4VTNuZExtcHdrSEQ1?=
- =?utf-8?B?amNhN2tiNjlBNjNYUDZFVGRZY2E3d21GSCs4N3ZNbmQ2d1UzZ3lGU09WTzVo?=
- =?utf-8?B?dEpqYTlnN0VxVDhUcWs0NjhMMWV4aVZrZk1ObHBjdXI3Z1hIbFhycUhzRENO?=
- =?utf-8?B?eWJyZG1YcGhia2xDNU5UanQ2UmZydU9KZHI5KzBKVjZIQnVZd3JrKzFONVZq?=
- =?utf-8?B?dTNaaG92aHlVT1MvVGFxWnJFME5tMlE0TDZSRWpGYUJhck1hWCtrZGRmaEZD?=
- =?utf-8?B?dXRSZG5YeGc0OEJTZHBPdDVhRTdWSDRkNnM0S0ExZDF1MWxrbFBOTWMxSlp0?=
- =?utf-8?B?MFY1VDBNYmF2TmQ1YXBvUUtHY1NFNnk4WGVLdkY0amhwUVg2aDJqd3QySDlW?=
- =?utf-8?B?c1MvUVRRUnBMUXFZQWdjYi9ldG5pQjEwWTZRdUFXLyt2aVBjalhuNW4yalRC?=
- =?utf-8?B?YVhhL0pIenZ0VVlOOHpsdDhEb3dpbFMzcEhoTVJOdDF6Y1UzaGp4eEhDZGJX?=
- =?utf-8?B?YXliU05tSVJxTEV5NDVuNkJQWnF0S2xYR2I2RXpQbGlLT2ZTQ2dNanAvbXFC?=
- =?utf-8?B?Y1A0cmJva2hMREQ3NjJnUHcyRVNhMDdZRmxXR2VQdlp3eEhMQkRXK0ZtczBw?=
- =?utf-8?B?d0xCK1JrR0I4OE1OeFRLV0MyWGVwOXQ0QlZwc1FMWjI2VXZDcWZ5U21LT1Rr?=
- =?utf-8?B?TVRMaS95N1hYK0tjSDc1c05sVkkvb29IcnJLZnNWQS94cXlNdXptaU10TmdT?=
- =?utf-8?B?QjNGRnVWM2cwU2djUUNGLzNBa3VnTXdFTGFoa1ZpSS9GRTNrRzVycDhJLzdh?=
- =?utf-8?B?azA5NjVtSkpKQjU3UUF6OEl3czZXNTJ5MzBid3ByT2tIckNwOCtKUVg4YnIz?=
- =?utf-8?B?LzkvQVFQcDg2Tyt1MUVLK00zeGxVYXlwTThra3Q4YTR3M1hvTGx3bFdUSE9j?=
- =?utf-8?B?Z3gzQmYrRDFrdjd6NVZWd2IxTVgvWG1zcXoyZmJyaWt0NXFHcko5MWI4bFBX?=
- =?utf-8?B?aFBmK2Z1dVAwOGRkdVRvcWxKd3l4aHB2Skl2R1ozL2NVcFV1TXg5cTZWMkhT?=
- =?utf-8?B?Y0JydmhNdkxJa2JieFdhdVoxR1c2UXFPWEg3elU2YjNKL0tWdkIxVmx1SE1H?=
- =?utf-8?B?QTRiTEQzcDNJSmVlWHZBTUdsUjdSNDlFcnBKVEJUZ0IvUy9peXRQcGRMaVh1?=
- =?utf-8?B?TGJxSmd5aFNicVB4V2ZVcEs3ejlRMldaMUFRTTF6aW90T3pFcVVZbTcrZjVx?=
- =?utf-8?B?WUFwRUxEZERFZWM2eExmL2FUN2NxSmRmaFlHeUwrdTAxT3M0L3JvSnNZb0E3?=
- =?utf-8?B?WjRxdllFdUg0VFM3bDAxdWNtOExuYXN3em4xTW5HT1M0OUEyZEZFZTNXMWNN?=
- =?utf-8?B?T3BwcFFhM1M2Zk5hZnRrd2NQeXFvdjdSdHdUNFdhZnJzaFVUcEsxbXhxc3R1?=
- =?utf-8?B?ZU51ZkowTVM4QWl0QWxsYnFTMEptWXV2cDFlNmNyWXphdEJpRUNrdTdiLytw?=
- =?utf-8?B?SWhZOElYSVRCVmtxY2lldG5jRGZsS1NGOTlZVS9rdnlvdTRLWlViVCtuL21E?=
- =?utf-8?B?UHpQRUdzeG5NUnhMaFR4RkE3bmk5WjE3L2ZTNkhRYUhuVXoyQVcxQnRMd2FZ?=
- =?utf-8?B?bEdUQlpad3pERjNjaVlvdzlaTy9WNGZJSFhQdWJGZHIyMlhrVXI1MlNDUG9v?=
- =?utf-8?B?TDFVbzVlVDdkYnJTbi9GTnoyLzlGQ0VwbVlOdkRyT2ZHajhXSW44dVpnZkdQ?=
- =?utf-8?B?MkhJWWIwYXpwMU10T0ZSL0NNZzhUejFDT0pkTEZ1VXZENTdkUUdzY0xaUm9m?=
- =?utf-8?B?bjJ2WVB5eGh2Z1QxR2xqektHbkF0b25EdE1mbzg1bTl0V3M3d3BkbHZsbjRP?=
- =?utf-8?B?cE9CSUphSDJVdlNGOFF3YUFDOW9oWEVEdXRScDBUQmZKN2hQVTM4VG1zRUNO?=
- =?utf-8?Q?xCP1RSc0sWxOUiUHWl3OmYQ4jsrqfSlV?=
-X-Forefront-Antispam-Report:
-	CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1102;
-X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2024 16:42:24.9474
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cae2accb-9c24-46e6-7dfe-08dcb7c91523
-X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB1PEPF00039233.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR03MB9198
+References: <77a04054acea40a886d371adbd8d25d1@st.oth-regensburg.de>
+ <CAMZ6RqK00=EKvCR8XBW7Vre5tSxsrD41LuGObV_5e=hYOKdSSA@mail.gmail.com>
+ <8b96193b-082e-4c7f-b8ba-666580aae3e6@st.oth-regensburg.de>
+ <CAMZ6RqK1keG5EuFMOnVo5j0zyAWQSYsZhruHBQ_dUZdx5xEw6w@mail.gmail.com> <676d5a7a-643d-423d-bada-95f3ec95e4d5@st.oth-regensburg.de>
+In-Reply-To: <676d5a7a-643d-423d-bada-95f3ec95e4d5@st.oth-regensburg.de>
+From: Vincent Mailhol <vincent.mailhol@gmail.com>
+Date: Thu, 8 Aug 2024 18:52:26 +0200
+Message-ID: <CAMZ6RqJTNQ34ooB_6kqpaNJfe+ZYoerDhJnHPRPzZrL8nbscpQ@mail.gmail.com>
+Subject: Re: [EXT] Re: Introducing new Kernel Module for CAN over IP Networks
+To: Matthias Unterrainer <matthias.unterrainer@st.oth-regensburg.de>
+Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
+	Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>, 
+	Wolfgang Mauerer <wolfgang.mauerer@oth-regensburg.de>, 
+	"nils.weiss@dissecto.com" <nils.weiss@dissecto.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch moves the evaluation of data[IFLA_CAN_CTRLMODE] in function
-can_changelink in front of the evaluation of data[IFLA_CAN_BITTIMING].
+On Thu. 8 Aug. 2024 at 15:18, Matthias Unterrainer
+<matthias.unterrainer@st.oth-regensburg.de> wrote:
+> On 07-08-2024 12:25, Vincent Mailhol wrote:
+> > On Sat. 27 Jul. 2024 at 12:17, Matthias Unterrainer
+> > <matthias.unterrainer@st.oth-regensburg.de> wrote:
+> >> Hi Vincent,
+> >>
+> >> apologies for the late reply.
+> >
+> > No problem. I am myself abroad until the end of August. My answers
+> > will also be delayed.
+> >
+> >> On 07-07-2024 17:23, Vincent Mailhol wrote:
+> >>> Hi Matthias,
+> >>>
+> >>> On Fri. 5 Jul. 2024 at 02:47, Matthias Unterrainer
+> >>> <matthias.unterrainer@st.oth-regensburg.de> wrote:
+> >>>> Hi Linux-CAN Community,
+> >>>>
+> >>>> my name is Matthias and I recently developed a kernel module during =
+my Bachelor's thesis that allows for transferring CAN frames over IP networ=
+ks, similar to userland tools like socketcand [0] or cannelloni [1].
+> >>>>
+> >>>> I wrote the thesis at dissecto GmbH [2], a german Startup that speci=
+alizes in security diagnostics and analytics for embedded systems, primaril=
+y within the automotive industry.
+> >>>>
+> >>>> The idea behind the project is that dissecto has developed a hardwar=
+e device that can be connected to a CAN bus and acts as an ethernet gateway=
+ to the bus. It is capable of capturing the CAN traffic along with the corr=
+esponding timestamps and send this data via UDP or it can receive CAN frame=
+s via UDP as well and pass them on to the CAN bus.
+> >>>> This allows for remote interaction with a CAN bus, as well as an acc=
+urate analyses of CAN traffic, as packets contain precise time stamps.
+> >>>>
+> >>>> An architectural design decision was to develop it as kernel module =
+because of lower latencies and high throughput.
+> >>>
+> >>> Question: did you consider Packet MMAP?
+> >>>
+> >>>     https://docs.kernel.org/networking/packet_mmap.html
+> >>>
+> >>> Most of the overhead comes from the syscall context switch between th=
+e
+> >>> user and kernel land and Packet MMAP is exactly designed to bypass
+> >>> this. Actually, a few months ago, I started to rewrite the can-utils'=
+s
+> >>> candump to use Packet MMAP, but I never finished it.
+> >>
+> >> No, at the time I did not consider Packet MMAP. From my understanding
+> >> Packet MMAP is used for userspace applications. But the module has to
+> >> modify the timestamps of the CAN frames as they appear on the interfac=
+e,
+> >> which, as far as I know, is not possible from userspace.
+> >> Please correct me if I am mistaken, but because of that I do not think
+> >> Packet MMAP or any userspace application for that matter could actuall=
+y
+> >> be used here.
+> >
+> > Can you explain this in more detail? The precise CAN timestamps are
+> > all available from the user land. Some drivers even have the hardware
+> > timestamps as generated by the device. Why do you need to *modify* the
+> > timestamps?
+> >
+>
+> I have to modify the timestamps, because I want the CAN-frames to have
+> the timestamps they had when they originally appeared on the "source"
+> device, which is not the same device I am modifying the timestamps on.
+>
+> An example setup for this would be, that we have two devices and one of
+> them, the "source" device, has a CAN-Bus we want to capture the traffic
+> from.
+> On that device we record the CAN-frames together with their timestamps.
+> Then all of this is sent to the second device and recreated there.
+> Meaning all the CAN-frames appear with the timestamps from when they
+> originally appeared on the "source" device.
+>
+> I hope this makes it a bit clearer what I am trying to accomplish.
 
-This avoids a call to do_set_data_bittiming providing a stale
-can_priv::ctrlmode with a CAN_CTRLMODE_FD flag not matching the
-requested state when switching between a CAN Classic and CAN-FD bitrate.
+I think I now understand. Overall, what you are building is a CAN
+tunnel over UDP. I looked at the other similar tunneling devices, for
+example drivers/net/tun.c, but I can not find a precedent of a
+tunneling device which would overwrite the timestamp with a remote
+value. As far as I can see, the logic is that the timestamp represents
+the moment the packet reaches the *device* (or the device driver in
+case of software timestamps). The same logic applies to tunnel
+devices. Usually, if you want the timestamps from a remote device, you
+would capture the traffic (e.g. in a .pcap file) and get all the
+timestamps for that.
 
-In the same manner the evaluation of data[IFLA_CAN_CTRLMODE] in function
-can_validate is also moved in front of the evaluation of
-data[IFLA_CAN_BITTIMING].
+I am not sure what your ultimate goal is. If you just want to let the
+community know about your work, then it is ok as-is. Overall, this is
+a nice student project.
+If you want your work to be merged upstream, I think the architecture
+should be adjusted to come with something more generice: a CAN tunnel
+device capable of taking remote timestamps as an input. If such a
+remote timestamp is added, maybe a new timestamp type would be needed?
+Something like: SOF_TIMESTAMPING_RX_REMOTE or
+SOF_TIMESTAMPING_RX_ORIGINE (c.f.
+https://www.kernel.org/doc/html/latest/networking/timestamping.html)?
+This way the user can choose between the timestamp from the tunnel
+device or from the remove device.
 
-This is a preparation for patches where the nominal and data bittiming
-may have interdependencies on the driver side depending on the
-CAN_CTRLMODE_FD flag state.
+But as I said, I could find no precedent even outside of the CAN
+subsystem. So expect to see a lot of push back. You will probably have
+to convince a lot of people of the need for this "remote timestamp".
+If you want to proceed further with this work, I suggest you first ask
+the net-dev mailing list opinion on whether such remote timestamping
+makes sense to them.
 
-Signed-off-by: Stefan Mätje <stefan.maetje@esd.eu>
----
- drivers/net/can/dev/netlink.c | 102 +++++++++++++++++-----------------
- 1 file changed, 51 insertions(+), 51 deletions(-)
-
-diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index dfdc039d92a6..01aacdcda260 100644
---- a/drivers/net/can/dev/netlink.c
-+++ b/drivers/net/can/dev/netlink.c
-@@ -65,15 +65,6 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
- 	if (!data)
- 		return 0;
- 
--	if (data[IFLA_CAN_BITTIMING]) {
--		struct can_bittiming bt;
--
--		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
--		err = can_validate_bittiming(&bt, extack);
--		if (err)
--			return err;
--	}
--
- 	if (data[IFLA_CAN_CTRLMODE]) {
- 		struct can_ctrlmode *cm = nla_data(data[IFLA_CAN_CTRLMODE]);
- 		u32 tdc_flags = cm->flags & CAN_CTRLMODE_TDC_MASK;
-@@ -114,6 +105,15 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
- 		}
- 	}
- 
-+	if (data[IFLA_CAN_BITTIMING]) {
-+		struct can_bittiming bt;
-+
-+		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
-+		err = can_validate_bittiming(&bt, extack);
-+		if (err)
-+			return err;
-+	}
-+
- 	if (is_can_fd) {
- 		if (!data[IFLA_CAN_BITTIMING] || !data[IFLA_CAN_DATA_BITTIMING])
- 			return -EOPNOTSUPP;
-@@ -195,48 +195,6 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
- 	/* We need synchronization with dev->stop() */
- 	ASSERT_RTNL();
- 
--	if (data[IFLA_CAN_BITTIMING]) {
--		struct can_bittiming bt;
--
--		/* Do not allow changing bittiming while running */
--		if (dev->flags & IFF_UP)
--			return -EBUSY;
--
--		/* Calculate bittiming parameters based on
--		 * bittiming_const if set, otherwise pass bitrate
--		 * directly via do_set_bitrate(). Bail out if neither
--		 * is given.
--		 */
--		if (!priv->bittiming_const && !priv->do_set_bittiming &&
--		    !priv->bitrate_const)
--			return -EOPNOTSUPP;
--
--		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
--		err = can_get_bittiming(dev, &bt,
--					priv->bittiming_const,
--					priv->bitrate_const,
--					priv->bitrate_const_cnt,
--					extack);
--		if (err)
--			return err;
--
--		if (priv->bitrate_max && bt.bitrate > priv->bitrate_max) {
--			NL_SET_ERR_MSG_FMT(extack,
--					   "arbitration bitrate %u bps surpasses transceiver capabilities of %u bps",
--					   bt.bitrate, priv->bitrate_max);
--			return -EINVAL;
--		}
--
--		memcpy(&priv->bittiming, &bt, sizeof(bt));
--
--		if (priv->do_set_bittiming) {
--			/* Finally, set the bit-timing registers */
--			err = priv->do_set_bittiming(dev);
--			if (err)
--				return err;
--		}
--	}
--
- 	if (data[IFLA_CAN_CTRLMODE]) {
- 		struct can_ctrlmode *cm;
- 		u32 ctrlstatic;
-@@ -284,6 +242,48 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
- 			priv->ctrlmode &= cm->flags | ~CAN_CTRLMODE_TDC_MASK;
- 	}
- 
-+	if (data[IFLA_CAN_BITTIMING]) {
-+		struct can_bittiming bt;
-+
-+		/* Do not allow changing bittiming while running */
-+		if (dev->flags & IFF_UP)
-+			return -EBUSY;
-+
-+		/* Calculate bittiming parameters based on
-+		 * bittiming_const if set, otherwise pass bitrate
-+		 * directly via do_set_bitrate(). Bail out if neither
-+		 * is given.
-+		 */
-+		if (!priv->bittiming_const && !priv->do_set_bittiming &&
-+		    !priv->bitrate_const)
-+			return -EOPNOTSUPP;
-+
-+		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
-+		err = can_get_bittiming(dev, &bt,
-+					priv->bittiming_const,
-+					priv->bitrate_const,
-+					priv->bitrate_const_cnt,
-+					extack);
-+		if (err)
-+			return err;
-+
-+		if (priv->bitrate_max && bt.bitrate > priv->bitrate_max) {
-+			NL_SET_ERR_MSG_FMT(extack,
-+					   "arbitration bitrate %u bps surpasses transceiver capabilities of %u bps",
-+					   bt.bitrate, priv->bitrate_max);
-+			return -EINVAL;
-+		}
-+
-+		memcpy(&priv->bittiming, &bt, sizeof(bt));
-+
-+		if (priv->do_set_bittiming) {
-+			/* Finally, set the bit-timing registers */
-+			err = priv->do_set_bittiming(dev);
-+			if (err)
-+				return err;
-+		}
-+	}
-+
- 	if (data[IFLA_CAN_RESTART_MS]) {
- 		/* Do not allow changing restart delay while running */
- 		if (dev->flags & IFF_UP)
-
-base-commit: ae44fa998ee280303ee5dffe99cb669e4c245706
--- 
-2.34.1
-
+> >>>> For example, my measurements show that the average time it takes a C=
+AN frame to get processed by the module is just about 1/4 of the time it ta=
+kes applications like socketcand or cannelloni.
+> >>>>
+> >>>> We have published the module on GitHub [3], and would appreciate you=
+r feedback and thoughts.
+> >>>>
+> >>>> If anyone is interested in this functionality for the same or simila=
+r use cases, please don't hesitate to contact us.
+> >>>>
+> >>>> Best regards
+> >>>> Matthias Unterrainer
 
