@@ -1,126 +1,157 @@
-Return-Path: <linux-can+bounces-1176-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1177-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63E3F94BCB1
-	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 13:58:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC8B894BE7F
+	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 15:25:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13B881F22EBE
-	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 11:58:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE72E1C23B8F
+	for <lists+linux-can@lfdr.de>; Thu,  8 Aug 2024 13:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99F0118B48A;
-	Thu,  8 Aug 2024 11:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526D018C90B;
+	Thu,  8 Aug 2024 13:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=st.oth-regensburg.de header.i=@st.oth-regensburg.de header.b="L4gRvjDz"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from b2752.mx.srv.dfn.de (b2752.mx.srv.dfn.de [194.95.235.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6C9148850
-	for <linux-can@vger.kernel.org>; Thu,  8 Aug 2024 11:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F971487C8
+	for <linux-can@vger.kernel.org>; Thu,  8 Aug 2024 13:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.95.235.60
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723118259; cv=none; b=Og6UxjP+JSJ83G9E6zzRMmbDYy+Jy3CdI0iFxEALL8ivrMiOkCVWciEAeZto85HkTZCB2dHckZaaH06nO/m9rs8Kz17LeusQzYR+tgWu60vVMEBBdqpIys62SPpQlDIwlvc8gWelLq7zDrepbhaUTWChNL5LMyNJFaM93Xuwr4c=
+	t=1723123548; cv=none; b=j7YQNJZGGfbUZ3CekHyxudO2aRIXe7jIc1ycCAU5RciXOUFfoOVcRw0f6CI2i4Qf33NL2YCK2JEyvkTjjznd5ATUi3QQrPePlZ2gHyP7O5HIQlTW6VRWLPQdHQbbTj7ZSSRvIc/JJRQ43u0OuwXAHXwavRbYCZTjg75le5CMS00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723118259; c=relaxed/simple;
-	bh=qNMmsEQ2EZ4cxvh69JOIOtIXnSx28gl37GRrOb3EQwk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=THp0zikeJvm+2qQRlVpGxApkapWDRO34suoWMQzcsDmtTxVFkyeJPyg+9YWVUs0f62Mg7hVbqncuxPH1Rejt6YgQlp+INNVfbcmOiNOjkHfo6K1A3UPiqz/3E1oCtMvPsc1Kx3GcHM31n23r8qLfJf8ZTkICHMJAtu1oiWGbaDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sc1lW-0002TZ-3n; Thu, 08 Aug 2024 13:57:10 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sc1lT-005PwN-8z; Thu, 08 Aug 2024 13:57:07 +0200
-Received: from pengutronix.de (p5de45302.dip0.t-ipconnect.de [93.228.83.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id DA2D53197FE;
-	Thu, 08 Aug 2024 11:57:06 +0000 (UTC)
-Date: Thu, 8 Aug 2024 13:57:06 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: o.rempel@pengutronix.de, davem@davemloft.net, edumazet@google.com, 
-	kernel@pengutronix.de, kuba@kernel.org, leitao@debian.org, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, robin@protonic.nl, 
-	socketcan@hartkopp.net, syzbot+ad601904231505ad6617@syzkaller.appspotmail.com, 
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH net-next V2] can: j1939: fix uaf warning in
- j1939_session_destroy
-Message-ID: <20240808-awesome-agama-of-cubism-b68cf0-mkl@pengutronix.de>
-References: <ZrR4fsTgDud3Uyo0@pengutronix.de>
- <tencent_5B8967E03C7737A897DA36604A8A75DB7709@qq.com>
+	s=arc-20240116; t=1723123548; c=relaxed/simple;
+	bh=6p476bRSOfDBjUoKH5neHOni+IcMfhe7AndUTC2N/7s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=SSekP+U0PYiDZ3MTKf+8jM+nvezMsw3vgJq7XXChtaOTjtElxQSGuqU0p57nPiwOUJHdvRzaogxss0GLQtJWPkmVJDLv+j8gf13ON1hTUg3gaztq5zsSr6cmnlwIKmfVREw7MgAXmWDyMV0K6k1r80cHmF45DSGcHATHQjEBtT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=st.oth-regensburg.de; spf=pass smtp.mailfrom=st.oth-regensburg.de; dkim=pass (2048-bit key) header.d=st.oth-regensburg.de header.i=@st.oth-regensburg.de header.b=L4gRvjDz; arc=none smtp.client-ip=194.95.235.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=st.oth-regensburg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=st.oth-regensburg.de
+Received: from mta01.hs-regensburg.de (mta01.hs-regensburg.de [194.95.104.11])
+	by b2752.mx.srv.dfn.de (Postfix) with ESMTPS id E3E553E0155;
+	Thu,  8 Aug 2024 15:17:59 +0200 (CEST)
+Received: from E16S03.hs-regensburg.de (e16s03.hs-regensburg.de [IPv6:2001:638:a01:8013::93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(Client CN "E16S03", Issuer "E16S03" (not verified))
+	by mta01.hs-regensburg.de (Postfix) with ESMTPS id 4WfnfH2p0Szy8H;
+	Thu,  8 Aug 2024 15:17:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=st.oth-regensburg.de; s=mta01-20211122; t=1723123079;
+	bh=WL6+0uMWHyswd0JF7krklGtmx42SRON0M6JVTuoeUOY=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+	b=L4gRvjDzhUS4SC8Z7rFg1+li8i4uzXdqBVsRrZoypV2j2Xp/TGy5pK5jc/G2TGiQa
+	 0QDVMx6yp5st+y6J8P/Enbw58SC4Flbgwms54vLDSEt4yxy4Tom1hDEL3ss1QAWAzV
+	 IjcPdLEtp3i6ZTlQNhHdTkEOuJN8W6AhLSuzEqkJ7fgbcDlAGx4gWqeuhHUTrs8WCG
+	 YaO9SiG1IQNApZOL4v/onW1KS5gcrqbvnTnVuerYj3I5J5bd/DpH7CpcKIECUbmyAG
+	 x3neW6HQR68+0XoVLqUtodFD9OxkBMvO8Tx2yZTYJMviMXsCcnsu5MLYXU5mZC2eLg
+	 VwVaZK+GWqL8A==
+Received: from [IPV6:2003:f7:1727:8a00:d2ab:d5ff:fe1f:cec1]
+ (2001:638:a01:8013::226) by E16S03.hs-regensburg.de (2001:638:a01:8013::93)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 8 Aug
+ 2024 15:17:58 +0200
+Message-ID: <676d5a7a-643d-423d-bada-95f3ec95e4d5@st.oth-regensburg.de>
+Date: Thu, 8 Aug 2024 15:17:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="urdcdsf4vvoztryz"
-Content-Disposition: inline
-In-Reply-To: <tencent_5B8967E03C7737A897DA36604A8A75DB7709@qq.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [EXT] Re: Introducing new Kernel Module for CAN over IP Networks
+To: Vincent Mailhol <vincent.mailhol@gmail.com>
+CC: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, Ralf Ramsauer
+	<ralf.ramsauer@oth-regensburg.de>, Wolfgang Mauerer
+	<wolfgang.mauerer@oth-regensburg.de>, "nils.weiss@dissecto.com"
+	<nils.weiss@dissecto.com>
+References: <77a04054acea40a886d371adbd8d25d1@st.oth-regensburg.de>
+ <CAMZ6RqK00=EKvCR8XBW7Vre5tSxsrD41LuGObV_5e=hYOKdSSA@mail.gmail.com>
+ <8b96193b-082e-4c7f-b8ba-666580aae3e6@st.oth-regensburg.de>
+ <CAMZ6RqK1keG5EuFMOnVo5j0zyAWQSYsZhruHBQ_dUZdx5xEw6w@mail.gmail.com>
+Content-Language: en-US
+From: Matthias Unterrainer <matthias.unterrainer@st.oth-regensburg.de>
+In-Reply-To: <CAMZ6RqK1keG5EuFMOnVo5j0zyAWQSYsZhruHBQ_dUZdx5xEw6w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: E16S03.hs-regensburg.de (2001:638:a01:8013::93) To
+ E16S03.hs-regensburg.de (2001:638:a01:8013::93)
 
 
---urdcdsf4vvoztryz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 08.08.2024 19:07:55, Edward Adam Davis wrote:
-> On Thu, 8 Aug 2024 09:49:18 +0200, Oleksij Rempel wrote:
-> > > the skb to the queue and increase the skb reference count through it.
-> > >=20
-> > > Reported-and-tested-by: syzbot+ad601904231505ad6617@syzkaller.appspot=
-mail.com
-> > > Closes: https://syzkaller.appspot.com/bug?extid=3Dad601904231505ad6617
-> > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> >=20
-> > This patch breaks j1939.
-> > The issue can be reproduced by running following commands:
-> I tried to reproduce the problem using the following command, but was=20
-> unsuccessful. Prompt me to install j1939cat and j1939acd, and there are
-> some other errors.
+On 07-08-2024 12:25, Vincent Mailhol wrote:
+> On Sat. 27 Jul. 2024 at 12:17, Matthias Unterrainer
+> <matthias.unterrainer@st.oth-regensburg.de> wrote:
+>> Hi Vincent,
+>>
+>> apologies for the late reply.
+> 
+> No problem. I am myself abroad until the end of August. My answers
+> will also be delayed.
+> 
+>> On 07-07-2024 17:23, Vincent Mailhol wrote:
+>>> Hi Matthias,
+>>>
+>>> On Fri. 5 Jul. 2024 at 02:47, Matthias Unterrainer
+>>> <matthias.unterrainer@st.oth-regensburg.de> wrote:
+>>>> Hi Linux-CAN Community,
+>>>>
+>>>> my name is Matthias and I recently developed a kernel module during my Bachelor's thesis that allows for transferring CAN frames over IP networks, similar to userland tools like socketcand [0] or cannelloni [1].
+>>>>
+>>>> I wrote the thesis at dissecto GmbH [2], a german Startup that specializes in security diagnostics and analytics for embedded systems, primarily within the automotive industry.
+>>>>
+>>>> The idea behind the project is that dissecto has developed a hardware device that can be connected to a CAN bus and acts as an ethernet gateway to the bus. It is capable of capturing the CAN traffic along with the corresponding timestamps and send this data via UDP or it can receive CAN frames via UDP as well and pass them on to the CAN bus.
+>>>> This allows for remote interaction with a CAN bus, as well as an accurate analyses of CAN traffic, as packets contain precise time stamps.
+>>>>
+>>>> An architectural design decision was to develop it as kernel module because of lower latencies and high throughput.
+>>>
+>>> Question: did you consider Packet MMAP?
+>>>
+>>>     https://docs.kernel.org/networking/packet_mmap.html
+>>>
+>>> Most of the overhead comes from the syscall context switch between the
+>>> user and kernel land and Packet MMAP is exactly designed to bypass
+>>> this. Actually, a few months ago, I started to rewrite the can-utils's
+>>> candump to use Packet MMAP, but I never finished it.
+>>
+>> No, at the time I did not consider Packet MMAP. From my understanding
+>> Packet MMAP is used for userspace applications. But the module has to
+>> modify the timestamps of the CAN frames as they appear on the interface,
+>> which, as far as I know, is not possible from userspace.
+>> Please correct me if I am mistaken, but because of that I do not think
+>> Packet MMAP or any userspace application for that matter could actually
+>> be used here.
+> 
+> Can you explain this in more detail? The precise CAN timestamps are
+> all available from the user land. Some drivers even have the hardware
+> timestamps as generated by the device. Why do you need to *modify* the
+> timestamps?
+> 
 
-The j1939 commands are part of the can-utils package. On Debian
-compatible systems it's "sudo apt install can-utils". Or you can build
-them from source: https://github.com/linux-can/can-utils
+I have to modify the timestamps, because I want the CAN-frames to have 
+the timestamps they had when they originally appeared on the "source" 
+device, which is not the same device I am modifying the timestamps on.
 
-Marc
+An example setup for this would be, that we have two devices and one of 
+them, the "source" device, has a CAN-Bus we want to capture the traffic 
+from.
+On that device we record the CAN-frames together with their timestamps.
+Then all of this is sent to the second device and recreated there.
+Meaning all the CAN-frames appear with the timestamps from when they 
+originally appeared on the "source" device.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+I hope this makes it a bit clearer what I am trying to accomplish.
 
---urdcdsf4vvoztryz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAma0so8ACgkQKDiiPnot
-vG97YAf/eKz8zsiBtjdl0rll7tKLB1PQOdPOHCssA3DTt3c2qYzJWEF/wEHAuvLI
-oDb8FmhHQzxF4UOlkiKJwK2k7Ca5mfYl9RrAzasVCeaoOwT5XthO7SYfpNTM+1cg
-jCKZ3X1fcbf9zL6PV7VkGrjEj0BQrbJgTI8V1+1tt6OXHs9s0gdnmnty7R4A+fIu
-vz4wihs5Qcg9zN+vs+gHbbajKnvsBJY+rjxTcpsCaEWYSXp955QnSumWjpRgZ2I6
-lzTPCfk9Wn2oIxA+DMLELpSNulza4FTsD0Zv3oYVyzkQRuPvfzspAam5zUw5JYGJ
-85mWsdYGrvgwrtoRIBLicnvMywU7tg==
-=i28/
------END PGP SIGNATURE-----
-
---urdcdsf4vvoztryz--
+>>>> For example, my measurements show that the average time it takes a CAN frame to get processed by the module is just about 1/4 of the time it takes applications like socketcand or cannelloni.
+>>>>
+>>>> We have published the module on GitHub [3], and would appreciate your feedback and thoughts.
+>>>>
+>>>> If anyone is interested in this functionality for the same or similar use cases, please don't hesitate to contact us.
+>>>>
+>>>> Best regards
+>>>> Matthias Unterrainer
 
