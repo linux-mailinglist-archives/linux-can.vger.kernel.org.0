@@ -1,241 +1,137 @@
-Return-Path: <linux-can+bounces-1191-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1192-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 183579509BA
-	for <lists+linux-can@lfdr.de>; Tue, 13 Aug 2024 18:05:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EA78950B43
+	for <lists+linux-can@lfdr.de>; Tue, 13 Aug 2024 19:14:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A8D5287819
-	for <lists+linux-can@lfdr.de>; Tue, 13 Aug 2024 16:05:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86A1C1C223E9
+	for <lists+linux-can@lfdr.de>; Tue, 13 Aug 2024 17:14:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F07A1A2556;
-	Tue, 13 Aug 2024 16:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E46B1A0710;
+	Tue, 13 Aug 2024 17:14:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pbByNzIw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ClJKROuA"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599F51DDD1;
-	Tue, 13 Aug 2024 16:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17013D38E;
+	Tue, 13 Aug 2024 17:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723564941; cv=none; b=cGqFwS3C2QixL0J8Dmv+pw2x97yMSCahO3ZJRWV6+xDwK93yBIMqLU89hwbOVNnhn4dJhLFtq1uuHRtsUdLunJE5b2nPFhDvijLkt1xn53NJUu+WJH89lkZ/WOB7SjW9u2xUPhgzCvx/MhVmabNx6fFvcXjUD6nEqwUnsLB+Bzs=
+	t=1723569257; cv=none; b=Zm116XSnsZpoON1L6/swfAcGIF0JMT5K7JSLsnsYtaOqg5XfMVNQr4LYU7uDD7kXgeVc4iOcHONqznOPR0ySaTebBgY01JquD64BLRx77CvglfTkqqTLM6wl/2ZiDhfXhZ4RSwe4TA0JyxWTn9OzcLMv3sEBDoiRPDc2FyVnGJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723564941; c=relaxed/simple;
-	bh=heU3e+lgGe2K9h8SHjoXVlse01k5eF5nF+N9YHix9k4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VAYRhcxv4dxgyXozgrb0Vud3uzjm3Nzx3P/s1LJowlawh3vQSnHZtBRgQoQs/NDizrDM8ev+cexnI5W5btoWSD19kYHTBnGrtKEA6d1i35UCRwrwvvk3rf8d6SNv4KXiZDz5wB14ruBTqt5PerN0iCWe6FgldufV+XHD7hOK+70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pbByNzIw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE88BC4AF09;
-	Tue, 13 Aug 2024 16:02:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723564940;
-	bh=heU3e+lgGe2K9h8SHjoXVlse01k5eF5nF+N9YHix9k4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pbByNzIwsEGuHe8fmU3XukBHbtOm+y+ja9Oebt7wtU4oSivdGnjxLJEGN3uLiKL5x
-	 gsKHTRVOgIXfIzKOQR2agpACdzz1Ezd+l8U1/aK5MukeZrKDvFrlqf7JpW6CEqmqwK
-	 ab8RJ3wucnU9I8CnWwFInJ6zGmO4XD7cBw2uVzrg+8lSCUKz2WqvkSzmp+Gs1thyJ4
-	 vWbmGWLspgF7wcwa6lqZpCQO+bNy7x1XUeh9MDT5dcnWzv4AgQGPQeqXXADLg4UrbT
-	 iTUQokm/9OfzdIpSpPRVjqJlukrbuNk2naHkQh8U6qgixckrU0zAhhfwr+tW6cg9gd
-	 rPM0UXGUM5+DQ==
-Date: Tue, 13 Aug 2024 17:02:15 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
-	"open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH 1/1] dt-bindings: can: convert microchip,mcp251x.txt to
- yaml
-Message-ID: <20240813-distant-plastic-6534f660376c@spud>
-References: <20240812211625.3835600-1-Frank.Li@nxp.com>
+	s=arc-20240116; t=1723569257; c=relaxed/simple;
+	bh=jvOeIXVgGCt6WRfdXqI7flO0Leqov1TGs9XNO326Xhs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DjSzzwNioiijInXK85V34IgW5Pg7k0oH0+P6asl8A1FmItbIepqqVlrNmpYIssJoIR9ofwBD0AM1mkhWwWdtBvGAhjp+cVxmfiWDeGFYxZzFjnpZPEytQ0NEsUHX1yaaWA1+9T9/L7j/cUUKsC8j+WP5ZCeHKxRm1CLgdwuBnNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ClJKROuA; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-39b3c36d247so23525365ab.3;
+        Tue, 13 Aug 2024 10:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723569255; x=1724174055; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XnQW8pYG6LCHnllh5P1GTODS6+I9/wuKSdiLV/Ktwcw=;
+        b=ClJKROuAcO2jJszujhIqLe9xDSulexPrb8L+uP/6e0+h9THQtx8bbifqG316176Enh
+         CTkswP2djC05rGJLS/RHb01hKPNa9eVrWt181I9/m942Slw6cQyyayIPRaWwdVUtx1H8
+         jHC1Cf/T8xAgZLFOeHXt3AdOH59vHwNI4Acz0NmUox3EG4ocuyln4Z2a761Va28Vr1Bl
+         IizecJHj/lHenhoNakwfHa3AJGmtg3jZElOM1GfxJjlyJ3orzRhxspNndQdrXrjt3V1d
+         A7gcP+8K96fxnPCRlcoArcOEAXptnTFHJx08tedgCbFtXcRkCxBWg5wUDZiYJFO69fNG
+         xKhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723569255; x=1724174055;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XnQW8pYG6LCHnllh5P1GTODS6+I9/wuKSdiLV/Ktwcw=;
+        b=NHOzrhP9Ri/Iyd7JPeHWmVNSB6PrNvbrae82onl6sRJSFetgBEyKCaFktOdGZjQRVO
+         Qe9UtEEwcAxOvpYghtmBSbBLBCG/R5nOduc3VSinwxS6jY6N+1IM2xT/ZhKbwGgA0DPT
+         dJ2YZO7ug8QoOoA4Iabeydi3AR74eKl0xWu/mcKw9+4UcIcox6JnV06wmtvWbaiKtHBA
+         bATSPSQdbuztMIbKthkdWHG/xocfFyFp6DJwJFgM6hcYEfYojCQRr3fKYVRftF1UOo3T
+         OqMrzsAyPu44LkS1XyvkxEXfplO/MmBi3Pn8CrUEHCD4AhHgMu4l5B2a2mEWHWzvsQDs
+         F9dA==
+X-Forwarded-Encrypted: i=1; AJvYcCU5lG8l2DZt8/LE2IRgvV1jd4vIxL8dp99xF1S9GcGkmwreg4NSl6AjcJUX5Sb3+m9hpTCczlamG9hfT/MLZB5NElIjYcQbyhGEFPdVdqaHaKPXprrldQ2Bc/7imsk00igJIh6MRA==
+X-Gm-Message-State: AOJu0YwStwTUiOR35LGI4CpjGsPN/O8Z+cim8h4iTvkEs+uQuOKualy8
+	cc7mcBg9P25ukC07YSeV+YC6H6q+Q/wqYK3pNau/bvnr63vUMabK51QiLtMphjaTJLUzDuuk1d3
+	KIexMNBCyntocIqb1D/dFmI4s/aQ=
+X-Google-Smtp-Source: AGHT+IE1SEdB2S6FPvLqmHpU+NfPOzND/hei07NGJ6SnXJB1C3ScxKKZcSU1n+qObrhFw1qzFXpNI0UnKg5i8mH7VNU=
+X-Received: by 2002:a05:6e02:184b:b0:383:6af0:eb0d with SMTP id
+ e9e14a558f8ab-39d124c3641mr4830845ab.26.1723569254595; Tue, 13 Aug 2024
+ 10:14:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="1mgxfAj48UD1hYzJ"
-Content-Disposition: inline
-In-Reply-To: <20240812211625.3835600-1-Frank.Li@nxp.com>
+References: <56a52c81-68de-438d-94ae-9decc799d824@kernel.org> <20240808191735.1483572-1-ilordash02@gmail.com>
+In-Reply-To: <20240808191735.1483572-1-ilordash02@gmail.com>
+From: Ilya Orazov <ilordash02@gmail.com>
+Date: Tue, 13 Aug 2024 20:14:03 +0300
+Message-ID: <CAGCz5Hk=mSjQ1eFWstQQu=JZUkavJ_mRhnp8DRELUXP_syq4Zw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] dt-bindings: phy: ti,tcan104x-can: Document
+ Microchip ATA6561
+To: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Aswath Govindraju <a-govindraju@ti.com>
+Cc: Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-
---1mgxfAj48UD1hYzJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Aug 12, 2024 at 05:16:24PM -0400, Frank Li wrote:
-> Convert binding doc microchip,mcp251x.txt to yaml.
-> Additional change:
-> - add ref to spi-peripheral-props.yaml
->=20
-> Fix below warning:
-> arch/arm64/boot/dts/freescale/imx8dx-colibri-eval-v3.dtb: /bus@5a000000/s=
-pi@5a020000/can@0:
-> 	failed to match any schema with compatible: ['microchip,mcp2515']
->=20
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+On Thu, 8 Aug 2024 at 22:18, Ilya Orazov <ilordash02@gmail.com> wrote:
+>
+> Microchip ATA6561 is High-Speed CAN Transceiver with Standby Mode.
+> It is pin-compatible with TI TCAN1042 and has a compatible programming
+> model, therefore use ti,tcan1042 as fallback compatible.
+>
+> Signed-off-by: Ilya Orazov <ilordash02@gmail.com>
 > ---
->  .../bindings/net/can/microchip,mcp251x.txt    | 30 --------
->  .../bindings/net/can/microchip,mcp251x.yaml   | 70 +++++++++++++++++++
->  2 files changed, 70 insertions(+), 30 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/can/microchip,m=
-cp251x.txt
->  create mode 100644 Documentation/devicetree/bindings/net/can/microchip,m=
-cp251x.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251x.=
-txt b/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
-> deleted file mode 100644
-> index 381f8fb3e865a..0000000000000
-> --- a/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
-> +++ /dev/null
-> @@ -1,30 +0,0 @@
-> -* Microchip MCP251X stand-alone CAN controller device tree bindings
-> -
-> -Required properties:
-> - - compatible: Should be one of the following:
-> -   - "microchip,mcp2510" for MCP2510.
-> -   - "microchip,mcp2515" for MCP2515.
-> -   - "microchip,mcp25625" for MCP25625.
-> - - reg: SPI chip select.
-> - - clocks: The clock feeding the CAN controller.
-> - - interrupts: Should contain IRQ line for the CAN controller.
-> -
-> -Optional properties:
-> - - vdd-supply: Regulator that powers the CAN controller.
-> - - xceiver-supply: Regulator that powers the CAN transceiver.
-> - - gpio-controller: Indicates this device is a GPIO controller.
-> - - #gpio-cells: Should be two. The first cell is the pin number and
-> -                the second cell is used to specify the gpio polarity.
-> -
-> -Example:
-> -	can0: can@1 {
-> -		compatible =3D "microchip,mcp2515";
-> -		reg =3D <1>;
-> -		clocks =3D <&clk24m>;
-> -		interrupt-parent =3D <&gpio4>;
-> -		interrupts =3D <13 IRQ_TYPE_LEVEL_LOW>;
-> -		vdd-supply =3D <&reg5v0>;
-> -		xceiver-supply =3D <&reg5v0>;
-> -		gpio-controller;
-> -		#gpio-cells =3D <2>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251x.=
-yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp251x.yaml
-> new file mode 100644
-> index 0000000000000..789545b6c669a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/can/microchip,mcp251x.yaml
-
-Filename matching a compatible please.
-
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/can/microchip,mcp251x.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip MCP251X stand-alone CAN controller
-> +
-> +maintainers:
-> +  - Frank Li <Frank.Li@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,mcp2510
-> +      - microchip,mcp2515
-> +      - microchip,mcp25625
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  vdd-supply:
-> +    description: Regulator that powers the CAN controller.
-> +
-> +  xceiver-supply:
-> +    description: Regulator that powers the CAN transceiver.
-> +
-> +  gpio-controller: true
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - interrupts
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    spi {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        can0: can@1 {
-
-The label here is not used and should be dropped.
-
-Otherwise, looks good to me.
-
-Thanks,
-Conor.
-
-> +             compatible =3D "microchip,mcp2515";
-> +             reg =3D <1>;
-> +             clocks =3D <&clk24m>;
-> +             interrupt-parent =3D <&gpio4>;
-> +             interrupts =3D <13 IRQ_TYPE_LEVEL_LOW>;
-> +             vdd-supply =3D <&reg5v0>;
-> +             xceiver-supply =3D <&reg5v0>;
-> +             gpio-controller;
-> +             #gpio-cells =3D <2>;
-> +        };
-> +    };
-> +
-> --=20
+>  .../devicetree/bindings/phy/ti,tcan104x-can.yaml    | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> index 79dad3e89aa6..4a8c3829d85d 100644
+> --- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> @@ -14,10 +14,15 @@ properties:
+>      pattern: "^can-phy"
+>
+>    compatible:
+> -    enum:
+> -      - nxp,tjr1443
+> -      - ti,tcan1042
+> -      - ti,tcan1043
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - microchip,ata6561
+> +          - const: ti,tcan1042
+> +      - enum:
+> +          - ti,tcan1042
+> +          - ti,tcan1043
+> +          - nxp,tjr1443
+>
+>    '#phy-cells':
+>      const: 0
+>
+> base-commit: 6a0e38264012809afa24113ee2162dc07f4ed22b
+> --
 > 2.34.1
->=20
+>
 
---1mgxfAj48UD1hYzJ
-Content-Type: application/pgp-signature; name="signature.asc"
+Could you please review my patch?
 
------BEGIN PGP SIGNATURE-----
+I hope the new patch version hasn't been lost in your inbox. Thanks to
+Conor, I understand now that sending new versions as a reply wasn't
+the best approach. I appreciate your time and feedback.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZruDhwAKCRB4tDGHoIJi
-0jCJAQDK0XmyAuShyMNkF6eWhwtO6Z1aZ1Qovf/60mTCFiCWZgD+IllneA7wU7n6
-EQKqolgIHYG76wOD9T8bv7O2ePuT9Qk=
-=p2lO
------END PGP SIGNATURE-----
-
---1mgxfAj48UD1hYzJ--
+-- 
+Best regards,
+Ilya Orazov
 
