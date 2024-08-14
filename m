@@ -1,130 +1,276 @@
-Return-Path: <linux-can+bounces-1193-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1194-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ACAD95174B
-	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2024 11:03:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5940F952046
+	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2024 18:44:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6FEC1F2190E
-	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2024 09:03:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5480D1C2211C
+	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2024 16:44:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8294B13D53B;
-	Wed, 14 Aug 2024 09:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AEEE1B9B47;
+	Wed, 14 Aug 2024 16:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OKZpb2LR"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ESdBqwhn"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2066.outbound.protection.outlook.com [40.107.21.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58DB836134;
-	Wed, 14 Aug 2024 09:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723626234; cv=none; b=sE+wp23/sJN6rkTdQdrFf9NXufptC9pCmwFbiBSvPiGsgASayCeK6NbMfRYdnd/6er4WAeBh4hviQAXuDsNABVCUUDoLx2OwHA6qVLypDJMTyyPcHmBP+EmbIQyqpjkbCHoH7KYp3O4UoD+jKAhJkCyaFlJkH4qMUUpoaK2PejM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723626234; c=relaxed/simple;
-	bh=Nwio2b+KIpBKtscfosoGuDFJEJasGqr+28wDK6WtuAI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t0FNPMhIfZUx1kLLNqZNP7pAEgP/qFdBGt6uAFXX4fPB+fs1+ET8UuzXHBIsTFJqjFsZVMq5ODTGQRgY+vcun+YSQ3i2BnCx1wfxuihm4fiy/D23New9e02OXRamMc9WjmmZu/oDXiuImAt768Tuqia+wxvKwtRM4G3XwXCnh7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OKZpb2LR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0ADC32786;
-	Wed, 14 Aug 2024 09:03:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723626233;
-	bh=Nwio2b+KIpBKtscfosoGuDFJEJasGqr+28wDK6WtuAI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OKZpb2LRAc52rbZUA13Uexa67euGYWWyHW4XUn28Q139v58W1TgXva5B9dlFQUjZn
-	 RlPAv4fckGKs8Vcn8Jk9FQ+kNTL1zrT+JH1ZT6SHPi4xwUE7vtpGIMO4npLFM/XaVX
-	 nESh3OFkyXfcApZ8TirbxGKWkZNaCed7xh5D3iyDQ6y8W559756+8BYQ1JIdoNqYN9
-	 1kJMVdfsO4rqJS95oIq4d9cqTsTHtx00iEdqCq52mVBCu+3/h/LkeAT1qYcCOElCEL
-	 v2L5t5UZFiHemxcrP9amkRg+BIut4PPRnkG8KWHY/2fr7aVOeC5KGxseqc1pjrNwcE
-	 m6YOILt7657Sg==
-Message-ID: <eb04b684-eccd-4952-a310-022d00b50a55@kernel.org>
-Date: Wed, 14 Aug 2024 11:03:47 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240561B8EB7;
+	Wed, 14 Aug 2024 16:44:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723653870; cv=fail; b=OljKJhPvqA6vzLXxCHYqd+NMUuevM7t6MlHNKV+7ar1KhuO9hCpflMT8zIX5ipd6VoEcdUBbYYjfsRzdle2SGEA+KeAShSjdJI4vmMS7SvfR44WLehUztiWZG6NnE2ULHZGRRo5Wq7NxQZ4bySKhBlA88Ob50dbqhfQrMwtIihU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723653870; c=relaxed/simple;
+	bh=Htx1oc9G13xwCQNiXjGvSDK9Vgs/8iwpWt4YiRlFXis=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=UWjfZx9+Ye+sDCv/g76rtWjMoGMEXN9sRHrwA9YGHkn8iL4r0xh7qQHX2goSmvIDoXxYtGy8oPjgtgr9LXxsxazniPQ2PQeb6dT8PU6vBRKfp9VR/e3FGITKP/CinZ9qCSMKw4VEq1vK2wHaaBYS0KbPQ6L9fx65A80ni4/wyRI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ESdBqwhn; arc=fail smtp.client-ip=40.107.21.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TVHy+K3Inv5jl7ECSu319t2Bye67q2QXKOfDu2MQ6bJIj15vCUfpBTKA5JiqkSNgdbQ1XHb1Ybn3BwDo/yoW3TAdOleNbn0wVp4qWCcbHG9DZuK9E/eWb+tdhTQBVTqGxhLiGdBIlcLhmu/6PrnI6eZ16nKSwo7ASokUVV3kGOaSdqb525SliBGkUmAJHS79AEiTBEgPZzpfflMTdx8ZfMeTdH3ofL+//g03sZ6qHOWzq0e+B0uUADg2DOGBmI9WEai0ORSm1EloxepH3W2cfZqTUzBODxb85wiFnMFl7YSWvteksk5EkMCiQkquiOw45jORCS/wItPr5lT9lPGdiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6ckNRVgo2c36MeTqUTk+EkLlBsWgB0Uj5FS7/7axYWg=;
+ b=PmZqqvUOM7HEPNuBpDTVggg/fX4ye66vy3sw0hOUCpX8z7BaJMFpI+u1SsH3tI+4RGV1mJsJtHvgOFqsXv8lvgbYvqj8E0LKmIBocRy5oQLKNY4Gf9C1+DGC+cUKwMUmqRWMza2B+9CX37RLarBBDg9OT0J3kY2TcUTASegevNMhjYf+v/VgDDJkJEBCFlvJHLNXibzo4fMaJ9SZ5VhyquA022KGg9N860SJz16KPuYXNHZkMapKONUTu9kH73zyeaekBrCT0uGnVgj4NpaPjP84xriuBlj1kGLKZe2U9frgVW0uSH8kH60y5EhLiuoW8EoNgi7WA6HW1yxt3yFisQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6ckNRVgo2c36MeTqUTk+EkLlBsWgB0Uj5FS7/7axYWg=;
+ b=ESdBqwhn9Sn2okNrZr2D4/C7mrRPScqb022ydfTdWQQoMWl+tAdgYzW/RPBrKMdyqhLLO7QHa3vpTPf8J3KRjGAQZiffDS4nP7ye6uFyXY/DD6A0bs9disQ2vozD6J/6HabA8fRaMU0k3N/DyfrHIwrU3PqbGAC3aw/n+3gmnC8okK2qGVnLoKShmDiWoQbbyhmZ3MPhI837ChIdRey0Ik4I+wQnPVba56k4ybYdafboyuvJBjYLdc9XM07m/oSm2PptoVp73sBr+nEN7a+D13SB3rroEMKis4NMiIT53C6CXJMDHV3cWKdtHC4Gnfx/6MhgXB3nsquzcCdWigB0WA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by VI0PR04MB10229.eurprd04.prod.outlook.com (2603:10a6:800:23e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.22; Wed, 14 Aug
+ 2024 16:44:23 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%3]) with mapi id 15.20.7875.016; Wed, 14 Aug 2024
+ 16:44:23 +0000
+From: Frank Li <Frank.Li@nxp.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-can@vger.kernel.org (open list:CAN NETWORK DRIVERS),
+	netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-kernel@vger.kernel.org (open list)
+Cc: imx@lists.linux.dev
+Subject: [PATCH v2 1/1] dt-bindings: can: convert microchip,mcp251x.txt to yaml
+Date: Wed, 14 Aug 2024 12:44:06 -0400
+Message-Id: <20240814164407.4022211-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR11CA0064.namprd11.prod.outlook.com
+ (2603:10b6:a03:80::41) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/1] dt-bindings: phy: ti,tcan104x-can: Document
- Microchip ATA6561
-To: Ilya Orazov <ilordash02@gmail.com>, Marc Kleine-Budde
- <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Aswath Govindraju <a-govindraju@ti.com>
-Cc: Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
- linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <56a52c81-68de-438d-94ae-9decc799d824@kernel.org>
- <20240808191735.1483572-1-ilordash02@gmail.com>
- <CAGCz5Hk=mSjQ1eFWstQQu=JZUkavJ_mRhnp8DRELUXP_syq4Zw@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CAGCz5Hk=mSjQ1eFWstQQu=JZUkavJ_mRhnp8DRELUXP_syq4Zw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI0PR04MB10229:EE_
+X-MS-Office365-Filtering-Correlation-Id: f4c4228e-8925-428b-b312-08dcbc805a37
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|7416014|376014|366016|1800799024|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	RFd9QKmJEIuiRLY1DqNgM5DIpMqvwOxFTK7h3DKO6ebtG6pxCfLSfslStGMOmj/cH+6BITecG6mYMvHml8MN5wohxrTt7o7wCD97y2jrZzdvkxHdqfU3csbvJQBJejD53ZTsoi+huNC2MvMhQLvbz5OUYgDZz6L6TzbAgUcVSdpzneRJOvRuIqcOrQC5/8vy6/95q1Ly5cCKCK4totedd2BGRmkT66Ob+9aYZsVoY98ssYF6QNlyUEU7JSdVaxy6KPvhqtB3oJKHjQfdkywtzE4pd6K1mHfBXh+jQ0fpi9ksvlW/B1mZeAAJgMhUV91XUzI9Ys385Dgq2PT4hY7Zv68MyJkKt1Vqdf6jqOS91D3gGOEsKfIbz2CXcLgvKsbSyV48hiBeKULit7WNTtlbRsJyPh2y09AQoXrzfZG9jZNEAZK4UDbRKGIFo34Hwczzn0M6y/Qw/E/7056utO2Sy4mqhfsEjmeH1m/yztfqKHlIu0PcjSnc6LG19Myq+5TthACm2d7LlpMn93Iv13MiNBj8RSXOWw7vAO5Kv5R74COpfrAnnDfio0TeM/WxU6Joo/E3YWZoMLUoQgSx1veIaS4RBiMmX0hPAKFNkAMqHh4bmZ7SCNinopDNXL0vcFjsUoH6IIAx5ds9GWxRDnfCpK8b5jx2Qa3wGCmhg8H9mMMz+kHGJ0jJjmeBAILekY8k
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(7416014)(376014)(366016)(1800799024)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?5mZ8oXTGL/xHr0gSDfJN4ts3mRICtEw6G1DzFK0sUVUNynT3r/dVYZOkxjsT?=
+ =?us-ascii?Q?EBbZds3qpOUjpwMn49xSFIYUHkB/IA01wun0G9AAzufa93PVmp6JNWJ1UMCw?=
+ =?us-ascii?Q?+kJBtBtrQphrJDj/0dA/u6eDWO4E74fPfDoLW+NTeM43O67t7/BNaEHvupr1?=
+ =?us-ascii?Q?sB/W/zkF9Js43nez1keaDhXqS0vvQ/Pfja7MalSYWvX8aXqCy3WQnognf0Zo?=
+ =?us-ascii?Q?mVKoro0uz5+nAGzl2oN4fblFUYNoXe1zSIupyhnAsRbZlCZaeGoxjPbEISCo?=
+ =?us-ascii?Q?IfMM5syRq/K1+vJHjr6j43VuoVVpMucWpNhttrc/fK3+xLFvXWMnK+Gehaag?=
+ =?us-ascii?Q?JNnibzHcEt2oHvmVhc3LCtDFeuU2Ys1B1xgE//OV1lh18jS65ywamsene8kY?=
+ =?us-ascii?Q?nN3EXtOdl96xJgKWdX+z3Zzlhc6I/w7z6txxQKCEwhLRlA2SmQuALBtpRv68?=
+ =?us-ascii?Q?ZfFAapH2PFxXjr7/3clCbQ3dUwBrVmrS+wJhfWNNYtBvl62TDq9tGC4SPJec?=
+ =?us-ascii?Q?hFSGy1vAp6Zw+CD4t5oixW4AQ+sibVMN5DOOnCQbIOHCKXuXUUSUgB2FVi0m?=
+ =?us-ascii?Q?MgfcjmGBS57GuofyLezlDKvF14wIqxojCMjHVklKVcn6jMSWwcc+/EsrU2SQ?=
+ =?us-ascii?Q?/wxZJDII+Wf5/ZEGTier/6YQCFEKPCUPvJ2ZivJ4RZbgWZmHXET1cldmVFUj?=
+ =?us-ascii?Q?iWCxJZbthdgRWaaG66YgwxymR7h4ieDGPXkVLZXR0zj7HZHnMnrwukcOuy0q?=
+ =?us-ascii?Q?EooRJmD6YztpveeekH93NaHMEP+XRLbs08aPmZPq+OYVfOczEw+OrMHR3NYK?=
+ =?us-ascii?Q?hKpNH6bMvF6GGsBCRVbrUzHhwXiWgZqH5+IKLxiPOIqt9hfXTt6ST15o6jnO?=
+ =?us-ascii?Q?cAHe/ZE5btmAVmOd6oBCt4viGe7KTxTif3s9njmrU9lDWnfKjUZCEO9DnAsM?=
+ =?us-ascii?Q?/ARBA09mvRRe1k/c7hLi2x6sA1b3UvX4vgrTmBhDbgHeHQ6Is2fz702wjNiT?=
+ =?us-ascii?Q?ydGAIBM2FM8tF3OqhS9AygRK06dik+R1BdLHoeXS9Tn5Yra7UY94JAOuIw34?=
+ =?us-ascii?Q?v4Y3pomqYkNPfyPorX954OIQUNU4J8cTYiRJeVOVKDyDq7DvQrc3YF50TTwT?=
+ =?us-ascii?Q?KxEP0A5HJWzn0eytzEtOvdFtFX3Bqzi1jmPSxwEKp3UutESq2VCNatWZgOIy?=
+ =?us-ascii?Q?bHHYPHQ5Y1p7V92kJ4knlMUuhCkm+exfylk241zNzIyru0mkHD708myAc5vT?=
+ =?us-ascii?Q?wtQJmMfTfuHyzFsYaB7VM/UZuJq9/7ONIydduF5j9YALwHW0nUjt84DI7moV?=
+ =?us-ascii?Q?crb9tr2kh4zxlEttCrwdFEv6MPjJ/SktizHcX8AhQrpOmuvfC9lKmPhfPpCC?=
+ =?us-ascii?Q?xP4S8SwdRnExYbPL8Bhtenw8K3N+cMiqpU2LH5kjzpUaa5Ir+QknS24F/YDz?=
+ =?us-ascii?Q?giGHc8H0vT71k6FZk4cR6cY3Mrpqd2lprTh4fcrOKrUlxr3otxk1fiCRAHif?=
+ =?us-ascii?Q?AMIkZIj2DBAi90Wv9CIl9XReC8o2jWli8Qb4TaF12s0T36qHavZL5wdj4f/l?=
+ =?us-ascii?Q?3Tc2z2gZoebhuyrKOVHzgc8TDvn8RH2rhQ9LHsDk?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4c4228e-8925-428b-b312-08dcbc805a37
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2024 16:44:23.6691
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vRVDYbEVLVvkpaxEv1QlrkRQypG6w/8Eh9Wz8lPuEXsw6lrN+QlWmOmDcN1tD8ryPVYFEq3Da7yVZCfwQ1vHug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10229
 
-On 13/08/2024 19:14, Ilya Orazov wrote:
->>    '#phy-cells':
->>      const: 0
->>
->> base-commit: 6a0e38264012809afa24113ee2162dc07f4ed22b
->> --
->> 2.34.1
->>
-> 
-> Could you please review my patch?
+Convert binding doc microchip,mcp251x.txt to yaml.
+Additional change:
+- add ref to spi-peripheral-props.yaml
 
-You received review. Why do you ping after few days?
+Fix below warning:
+arch/arm64/boot/dts/freescale/imx8dx-colibri-eval-v3.dtb: /bus@5a000000/spi@5a020000/can@0:
+	failed to match any schema with compatible: ['microchip,mcp2515']
 
-Best regards,
-Krzysztof
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+change from v1 to v2
+- Change maintainer to can's maintainer
+- remove label 'can0' in example
+- file name use microchip,mcp2510.yaml
+---
+ .../bindings/net/can/microchip,mcp2510.yaml   | 70 +++++++++++++++++++
+ .../bindings/net/can/microchip,mcp251x.txt    | 30 --------
+ 2 files changed, 70 insertions(+), 30 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
+
+diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml
+new file mode 100644
+index 0000000000000..db446dde68420
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/can/microchip,mcp2510.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip MCP251X stand-alone CAN controller
++
++maintainers:
++  - Marc Kleine-Budde <mkl@pengutronix.de>
++
++properties:
++  compatible:
++    enum:
++      - microchip,mcp2510
++      - microchip,mcp2515
++      - microchip,mcp25625
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  vdd-supply:
++    description: Regulator that powers the CAN controller.
++
++  xceiver-supply:
++    description: Regulator that powers the CAN transceiver.
++
++  gpio-controller: true
++
++  "#gpio-cells":
++    const: 2
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - interrupts
++
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        can@1 {
++             compatible = "microchip,mcp2515";
++             reg = <1>;
++             clocks = <&clk24m>;
++             interrupt-parent = <&gpio4>;
++             interrupts = <13 IRQ_TYPE_LEVEL_LOW>;
++             vdd-supply = <&reg5v0>;
++             xceiver-supply = <&reg5v0>;
++             gpio-controller;
++             #gpio-cells = <2>;
++        };
++    };
++
+diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt b/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
+deleted file mode 100644
+index 381f8fb3e865a..0000000000000
+--- a/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
++++ /dev/null
+@@ -1,30 +0,0 @@
+-* Microchip MCP251X stand-alone CAN controller device tree bindings
+-
+-Required properties:
+- - compatible: Should be one of the following:
+-   - "microchip,mcp2510" for MCP2510.
+-   - "microchip,mcp2515" for MCP2515.
+-   - "microchip,mcp25625" for MCP25625.
+- - reg: SPI chip select.
+- - clocks: The clock feeding the CAN controller.
+- - interrupts: Should contain IRQ line for the CAN controller.
+-
+-Optional properties:
+- - vdd-supply: Regulator that powers the CAN controller.
+- - xceiver-supply: Regulator that powers the CAN transceiver.
+- - gpio-controller: Indicates this device is a GPIO controller.
+- - #gpio-cells: Should be two. The first cell is the pin number and
+-                the second cell is used to specify the gpio polarity.
+-
+-Example:
+-	can0: can@1 {
+-		compatible = "microchip,mcp2515";
+-		reg = <1>;
+-		clocks = <&clk24m>;
+-		interrupt-parent = <&gpio4>;
+-		interrupts = <13 IRQ_TYPE_LEVEL_LOW>;
+-		vdd-supply = <&reg5v0>;
+-		xceiver-supply = <&reg5v0>;
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-	};
+-- 
+2.34.1
 
 
