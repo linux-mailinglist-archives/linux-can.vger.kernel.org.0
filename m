@@ -1,133 +1,149 @@
-Return-Path: <linux-can+bounces-1204-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1205-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B27595A729
-	for <lists+linux-can@lfdr.de>; Wed, 21 Aug 2024 23:54:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C37FD95AD9C
+	for <lists+linux-can@lfdr.de>; Thu, 22 Aug 2024 08:37:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC8831F22CD2
-	for <lists+linux-can@lfdr.de>; Wed, 21 Aug 2024 21:54:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F10D51C20314
+	for <lists+linux-can@lfdr.de>; Thu, 22 Aug 2024 06:37:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 479E217ADFE;
-	Wed, 21 Aug 2024 21:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFJbOKsW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 793E314A4CC;
+	Thu, 22 Aug 2024 06:36:08 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FB9179957;
-	Wed, 21 Aug 2024 21:54:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBA213BAEE
+	for <linux-can@vger.kernel.org>; Thu, 22 Aug 2024 06:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724277245; cv=none; b=md/280+goi7iRamJnWC7rRAx7ZgZWtCu4qYhDa/LD2ePamprHT8cZqcMEeSBe1E9bHvU1IHM9lM2YUF2ecNBFR7vm5cz/NLGNDbLcx4QMU0/K9Awf10VKzS3Ne5L1aH7VhRGjMvuRjkdGvNnF0Y+JBOUF0JdH0sCvx9mLmmmBgk=
+	t=1724308568; cv=none; b=XVJjgXYCmlpv8AP8hT9KGTr6M41JdEqByX23UxU8HqGAoH+TGw2YPBvSnDVuTbxAsMkcWoJerEY4eUBns9ye91KHrJCOTk+92mhMhTt6XkbqA6zK2mGp+pRQzVABE9LwEgbSovT0z+FSa0SUUw66CaZRbIUtlF5y2e1l4aHaU4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724277245; c=relaxed/simple;
-	bh=3zNERGB2LO4Ade+K5qoG6Wet/2QOoEDq/JHeM+ysJlw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Bz3Lm8CMBAtj2QQbes2jCTBMVBe72vl9zBJLKnrP0cgIQcUzlIYZgDCML3l+qexEDkpazVHLc+ta+G0QbXxGhzz+EmcsOHVgbV1ov6rlPUp2R+/xTOhUTZ/noAZup8/Lh4amyfxC4kuuXMmEUdntTgH/kt0Z7oCbSFkvkCOXJ5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iFJbOKsW; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52efef496ccso127981e87.1;
-        Wed, 21 Aug 2024 14:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724277242; x=1724882042; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XzT7u9Va9+FkDuNLpLus7IzkjxONKq3lMA75TDxSd+s=;
-        b=iFJbOKsWqM527ZGNczs/JVRwN2JxPdR+P/821RQMiZyzVHsnIkxmm9dJHnmpjwYHjn
-         r3CdiKaBV5TOZiAa7bz+TETg96BbxZ1MRaI3P2KaSPh0tkVt2uJhKbe0i5RKWIfe2E3z
-         YMppvCZkgDLdVgjl/pauGd6X8khgulgaK5oFI4sOc82APxDVY/RBDlHwYsjyDNBIE4jm
-         naprrxkIgPxcoCgfWtRPe/Ia1pmrNNMHE/7Z+vQ487L8Gx0kd80Pz1da3Df34g7VXS40
-         2wCKGa51Cc1MrfKxpsdXw8ZItnGJlNaXvUmKOTLPhEceAM+xu4GfQwa8szcgsOnZDjD+
-         qxsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724277242; x=1724882042;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XzT7u9Va9+FkDuNLpLus7IzkjxONKq3lMA75TDxSd+s=;
-        b=oCsJX2u7yN07nYSccBE8FHOhTYrvp1fh4qvuiWjUGgPFiqDnGtdkZmCBhRlETsYY44
-         7W1z6uQMeJb2JO4K7og7R+/7uw4wkxcwuIYjoUjALDOTRJJg14Y0SELy1QuPgz4tF5bB
-         nuZFkMqh3IHe1dbiwqocjIxCzVEar1GUuIWIG1zXK8zPvH9hj8n85GGjvZdvnRLA6cyp
-         dH9OI8pF5aOu3qKrwBwNGpfhlspVlg7fzBHX8K/67K/DyzVZ2kkJnJlztf6VtYCc13Jc
-         UVzRxETaOPSsH2bPvCWxgMpy5Hjso6Td5yRPoNYHUX/qrMbfsRq5DMYeXiM7qTamlprn
-         h5zw==
-X-Forwarded-Encrypted: i=1; AJvYcCXLstNVu0OhS5wjPFl2XIThveBs4KoCBfHQBDSnWx3Vjdyqr2Fg7+AcbAwudIwb/8nibwPJgY80zCYj@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdNvAzOLwUHv3CUEJebtUhicajxUtwsV1lJLhcxeblGoAHGrC/
-	oLIEbuxYGlzijtXwzvy8IlNZfMnFgaRTHxBj+Zvq6CO4TdhK/+4qTmObB8/R
-X-Google-Smtp-Source: AGHT+IG6spftSttzdVaDbR+Cow/+aj2DlHU11b0mq8N6KLzTL/5MVfbFQ8AUb7MhGFrrQVxZxQC9Rg==
-X-Received: by 2002:a05:6512:b03:b0:530:ad97:78ba with SMTP id 2adb3069b0e04-5334ca7d79dmr277195e87.9.1724277240906;
-        Wed, 21 Aug 2024 14:54:00 -0700 (PDT)
-Received: from ilordash-vm.mshome.net (95-26-8-211.broadband.corbina.ru. [95.26.8.211])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5334ea89004sm15623e87.274.2024.08.21.14.54.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2024 14:54:00 -0700 (PDT)
-From: Ilya Orazov <ilordash02@gmail.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Aswath Govindraju <a-govindraju@ti.com>
-Cc: linux-can@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	Ilya Orazov <ilordash02@gmail.com>
-Subject: [PATCH v3 1/1] dt-bindings: phy: ti,tcan104x-can: Document Microchip ATA6561
-Date: Thu, 22 Aug 2024 00:53:57 +0300
-Message-Id: <20240821215357.20224-2-ilordash02@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240821215357.20224-1-ilordash02@gmail.com>
-References: <20240821215357.20224-1-ilordash02@gmail.com>
+	s=arc-20240116; t=1724308568; c=relaxed/simple;
+	bh=ZFTpzIctnFmlrxfzNwwlwipkaQ7J2Y/78/8CWc7+VrE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T/M6kCX+ouN/m4betI9/RJEHlXnFXJvvdnXKsdIaThhvedvM9p/DJSFV2Gh7vcpXAZyLSFXEXR9SIiP/3yJpDe19mFE1NAeIV5+jgJn1gThRIc+RAQJFbRJf5F7h/4UbbxWepM7lfM9s74QbTr7D9sYNT7gl8gwCNwyjxrU8aNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sh1QP-00058U-RS; Thu, 22 Aug 2024 08:36:01 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sh1QO-002Ber-VT; Thu, 22 Aug 2024 08:36:01 +0200
+Received: from pengutronix.de (pd9e5994e.dip0.t-ipconnect.de [217.229.153.78])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id A37DB323516;
+	Thu, 22 Aug 2024 06:36:00 +0000 (UTC)
+Date: Thu, 22 Aug 2024 08:36:00 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Martin =?utf-8?B?Sm9jacSH?= <martin.jocic@kvaser.com>
+Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
+	Jimmy Assarsson <extja@kvaser.com>, "mailhol.vincent@wanadoo.fr" <mailhol.vincent@wanadoo.fr>
+Subject: Re: [PATCH] can: kvaser_pciefd: Enable 64-bit DMA addressing
+Message-ID: <20240822-able-octopus-of-swiftness-e68a9e-mkl@pengutronix.de>
+References: <20240819142255.643149-1-martin.jocic@kvaser.com>
+ <20240821-proficient-raptor-of-order-8cace0-mkl@pengutronix.de>
+ <f61b536397092bd46d701cba2a0fc41430964b73.camel@kvaser.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="t7hkvhesspd777mi"
+Content-Disposition: inline
+In-Reply-To: <f61b536397092bd46d701cba2a0fc41430964b73.camel@kvaser.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Microchip ATA6561 is High-Speed CAN Transceiver with Standby Mode.
-It is pin-compatible with TI TCAN1042 and has a compatible programming
-model, therefore use ti,tcan1042 as fallback compatible.
 
-Signed-off-by: Ilya Orazov <ilordash02@gmail.com>
----
- .../devicetree/bindings/phy/ti,tcan104x-can.yaml    | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+--t7hkvhesspd777mi
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-index 79dad3e89aa6..4a8c3829d85d 100644
---- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-+++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-@@ -14,10 +14,15 @@ properties:
-     pattern: "^can-phy"
- 
-   compatible:
--    enum:
--      - nxp,tjr1443
--      - ti,tcan1042
--      - ti,tcan1043
-+    oneOf:
-+      - items:
-+          - enum:
-+              - microchip,ata6561
-+          - const: ti,tcan1042
-+      - enum:
-+          - ti,tcan1042
-+          - ti,tcan1043
-+          - nxp,tjr1443
- 
-   '#phy-cells':
-     const: 0
--- 
-2.34.1
+On 21.08.2024 15:10:58, Martin Joci=C4=87 wrote:
+> > Several other driver first set a 64 bit mask and if this fails they set
+> > a 32 bit mask and then bail out, e.g.:
 
+[...]
+
+> As far as I can tell, the dynamic DMA mapping guide of the Kernel docs se=
+ems to
+> advise against this:
+>=20
+> From https://www.kernel.org/doc/html/next/core-api/dma-api-howto.html
+>=20
+> <begin quote>
+> The standard 64-bit addressing device would do something like this:
+>=20
+> dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64))
+>=20
+> dma_set_mask_and_coherent() never return fail when DMA_BIT_MASK(64).
+> Typical error code like:
+>=20
+> /* Wrong code */
+> if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64)))
+>         dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32))
+>=20
+> dma_set_mask_and_coherent() will never return failure when bigger than 32.
+> So typical code like:
+>=20
+> /* Recommended code */
+> if (support_64bit)
+>         dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+> else
+>         dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+> <end quote>
+
+Thanks for looking it up and pointing out.
+
+> In Kvaser's case all CAN PCIe devices support 64-bit addressing.
+>=20
+> Should I still change the patch as per your suggestion?
+
+Use the original patch but please convert the ifdef into IS_ENABLED:
+
+        if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT)
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--t7hkvhesspd777mi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbG3E0ACgkQKDiiPnot
+vG9Y5Qf9Hu2vfICKrJ4YqlJGVlCaaeBDxvpxYaMy/iLS8FPbXvmOqIAHxqYCo0AO
+qlBEiJDdFkDKsv9T7lCzZwXE3A8cpso+mfaT0cXKSaWFpcV2aipZT0XUcmEzBSpS
+AvB4P8ykJlGkkUwcVO8T64DYDEU/5BvGS0NuMGJp63zSupfGFYShlG1NPjvG5XPM
+LHJYKPc+fdVxyYsdGI49tCpwhs+6npo0zXqhboARhgP0Zvb+vSYSrW17fPZWaZ7I
+V68ThjeUVP9Ilb4/KmYZ5J2Qyebj5sn0LKeHoYSKshjRa1uHFdeI1AfaRNDBwVSg
+FVfk/t7MSjETwltYniMp4PGhUFalBw==
+=f/7k
+-----END PGP SIGNATURE-----
+
+--t7hkvhesspd777mi--
 
