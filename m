@@ -1,30 +1,31 @@
-Return-Path: <linux-can+bounces-1219-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1223-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B49F964ED4
-	for <lists+linux-can@lfdr.de>; Thu, 29 Aug 2024 21:30:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA151964EDA
+	for <lists+linux-can@lfdr.de>; Thu, 29 Aug 2024 21:30:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA98C281902
-	for <lists+linux-can@lfdr.de>; Thu, 29 Aug 2024 19:29:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D86FB203EC
+	for <lists+linux-can@lfdr.de>; Thu, 29 Aug 2024 19:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC04D1B9B36;
-	Thu, 29 Aug 2024 19:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D4001BA268;
+	Thu, 29 Aug 2024 19:29:59 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A041B86C0
-	for <linux-can@vger.kernel.org>; Thu, 29 Aug 2024 19:29:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530501B9B35
+	for <linux-can@vger.kernel.org>; Thu, 29 Aug 2024 19:29:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724959797; cv=none; b=ZWoJ2GcG8dAkKbPATpp7kd6pF4FT9i/ZqvpJslPpumfQsEeowFQAIiHMQCZ9sIKTIpVM4rnpiDDr0yrSHiFEvBHvGigcLrI7hg54OUqFpymYvqYbsPgeCK/wVWtm9gINyTztb6BU9FwamgwBtx3t/PJG6sJYp+lDY5dmylemA1M=
+	t=1724959798; cv=none; b=HPVAYRzjQAZM1zdgLtTRi7Ucw02aAOzyee6Z6q0pEOWPa3y3k95Z4yDXTEOLnTWTynlHmpVigP+UHk6Jj6icTzNqrECl0s/X7Xmux373p9PIv8YxAv/l90J81xIcEwl2nMUEWi74TH9MEFfO/RnLInRer7H/e7ue5ftSemQchvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724959797; c=relaxed/simple;
-	bh=VXoQ1owr7pgmYuXyEcU1YFEfS9aybD1xyJUEIjNIywg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=raEgpsFLl1MWGRoLUO4tF/S6+eBl/EgcM16MnSJiSq1WjhyG96mXch3x9cqs9UNgqtXKk+q3GJMnVHtV/AvlSjnyYv7kjpOgTeMF1baqm4+V+TvAIhEwn6jVj+U06A4XrTUV4aNCXjoD3Wd+w0HrMcTJPeG3rFJ23H/OUgdQxNo=
+	s=arc-20240116; t=1724959798; c=relaxed/simple;
+	bh=KbDT/LcX4fjmRGPRNezQ6gWxEF3QGKDLk8z+siYCBuU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=njp4YnSrCqo5o0gm5AGRnXKdZwRTamfSmHy7H+h4BNqQfbVXEgej7lMLwQARBhRuoGr8DhhevM1ffuIwgZI3gx/8w9NoRnhC27ND/lHwmi7KM9hhI1kqJ6bEp3l4B6DhG6FbDJaTaP+9qTBpZQpxXXZ9lsMRINpLWcYWrFlXzuA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -32,36 +33,42 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1sjkq9-000638-Hj
-	for linux-can@vger.kernel.org; Thu, 29 Aug 2024 21:29:53 +0200
+	id 1sjkqB-00065C-AC
+	for linux-can@vger.kernel.org; Thu, 29 Aug 2024 21:29:55 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1sjkq9-003yog-0K
-	for linux-can@vger.kernel.org; Thu, 29 Aug 2024 21:29:53 +0200
+	id 1sjkqA-003yq9-3l
+	for linux-can@vger.kernel.org; Thu, 29 Aug 2024 21:29:54 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 96E3D32D486
-	for <linux-can@vger.kernel.org>; Thu, 29 Aug 2024 19:29:52 +0000 (UTC)
+	by bjornoya.blackshift.org (Postfix) with SMTP id BB0A232D4A1
+	for <linux-can@vger.kernel.org>; Thu, 29 Aug 2024 19:29:53 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id AAEBB32D46C;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id BFF2632D46D;
 	Thu, 29 Aug 2024 19:29:51 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d4b88140;
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d09a9fab;
 	Thu, 29 Aug 2024 19:29:50 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
 	kuba@kernel.org,
 	linux-can@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: [PATCH net 0/13] pull-request: can 2024-08-29
-Date: Thu, 29 Aug 2024 21:20:33 +0200
-Message-ID: <20240829192947.1186760-1-mkl@pengutronix.de>
+	kernel@pengutronix.de,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	syzkaller <syzkaller@googlegroups.com>,
+	Simon Horman <horms@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH net 01/13] can: bcm: Remove proc entry when dev is unregistered.
+Date: Thu, 29 Aug 2024 21:20:34 +0200
+Message-ID: <20240829192947.1186760-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240829192947.1186760-1-mkl@pengutronix.de>
+References: <20240829192947.1186760-1-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -74,82 +81,98 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hello netdev-team,
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-this is a pull request of 13 patches for net/master.
+syzkaller reported a warning in bcm_connect() below. [0]
 
-The first patch is by Kuniyuki Iwashima for the CAN BCM protocol that
-adds a missing proc entry removal when a device unregistered.
+The repro calls connect() to vxcan1, removes vxcan1, and calls
+connect() with ifindex == 0.
 
-Simon Horman fixes the cleanup in the error cleanup path of the m_can
-driver's open function.
+Calling connect() for a BCM socket allocates a proc entry.
+Then, bcm_sk(sk)->bound is set to 1 to prevent further connect().
 
-Markus Schneider-Pargmann contributes 7 fixes for the m_can driver,
-all related to the recently added IRQ coalescing support.
+However, removing the bound device resets bcm_sk(sk)->bound to 0
+in bcm_notify().
 
-The next 2 patches are by me, target the mcp251xfd driver and fix ring
-and coalescing configuration problems when switching from CAN-CC to
-CAN-FD mode.
+The 2nd connect() tries to allocate a proc entry with the same
+name and sets NULL to bcm_sk(sk)->bcm_proc_read, leaking the
+original proc entry.
 
-Simon Arlott's patch fixes a possible deadlock in the mcp251x driver.
+Since the proc entry is available only for connect()ed sockets,
+let's clean up the entry when the bound netdev is unregistered.
 
-The last patch is by Martin Jocic and enables 64-bit DMA to prevent
-issues on memory constrained 64 bit platforms.
+[0]:
+proc_dir_entry 'can-bcm/2456' already registered
+WARNING: CPU: 1 PID: 394 at fs/proc/generic.c:376 proc_register+0x645/0x8f0 fs/proc/generic.c:375
+Modules linked in:
+CPU: 1 PID: 394 Comm: syz-executor403 Not tainted 6.10.0-rc7-g852e42cc2dd4
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org 04/01/2014
+RIP: 0010:proc_register+0x645/0x8f0 fs/proc/generic.c:375
+Code: 00 00 00 00 00 48 85 ed 0f 85 97 02 00 00 4d 85 f6 0f 85 9f 02 00 00 48 c7 c7 9b cb cf 87 48 89 de 4c 89 fa e8 1c 6f eb fe 90 <0f> 0b 90 90 48 c7 c7 98 37 99 89 e8 cb 7e 22 05 bb 00 00 00 10 48
+RSP: 0018:ffa0000000cd7c30 EFLAGS: 00010246
+RAX: 9e129be1950f0200 RBX: ff1100011b51582c RCX: ff1100011857cd80
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000002
+RBP: 0000000000000000 R08: ffd400000000000f R09: ff1100013e78cac0
+R10: ffac800000cd7980 R11: ff1100013e12b1f0 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: ff1100011a99a2ec
+FS:  00007fbd7086f740(0000) GS:ff1100013fd00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000200071c0 CR3: 0000000118556004 CR4: 0000000000771ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ proc_create_net_single+0x144/0x210 fs/proc/proc_net.c:220
+ bcm_connect+0x472/0x840 net/can/bcm.c:1673
+ __sys_connect_file net/socket.c:2049 [inline]
+ __sys_connect+0x5d2/0x690 net/socket.c:2066
+ __do_sys_connect net/socket.c:2076 [inline]
+ __se_sys_connect net/socket.c:2073 [inline]
+ __x64_sys_connect+0x8f/0x100 net/socket.c:2073
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xd9/0x1c0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x4b/0x53
+RIP: 0033:0x7fbd708b0e5d
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 73 9f 1b 00 f7 d8 64 89 01 48
+RSP: 002b:00007fff8cd33f08 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fbd708b0e5d
+RDX: 0000000000000010 RSI: 0000000020000040 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000040 R09: 0000000000000040
+R10: 0000000000000040 R11: 0000000000000246 R12: 00007fff8cd34098
+R13: 0000000000401280 R14: 0000000000406de8 R15: 00007fbd70ab9000
+ </TASK>
+remove_proc_entry: removing non-empty directory 'net/can-bcm', leaking at least '2456'
 
-regards,
-Marc
-
+Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Reviewed-by: Simon Horman <horms@kernel.org>
+Link: https://lore.kernel.org/all/20240722192842.37421-1-kuniyu@amazon.com
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
+ net/can/bcm.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-The following changes since commit 92c4ee25208d0f35dafc3213cdf355fbe449e078:
+diff --git a/net/can/bcm.c b/net/can/bcm.c
+index 27d5fcf0eac9..46d3ec3aa44b 100644
+--- a/net/can/bcm.c
++++ b/net/can/bcm.c
+@@ -1470,6 +1470,10 @@ static void bcm_notify(struct bcm_sock *bo, unsigned long msg,
+ 
+ 		/* remove device reference, if this is our bound device */
+ 		if (bo->bound && bo->ifindex == dev->ifindex) {
++#if IS_ENABLED(CONFIG_PROC_FS)
++			if (sock_net(sk)->can.bcmproc_dir && bo->bcm_proc_read)
++				remove_proc_entry(bo->procname, sock_net(sk)->can.bcmproc_dir);
++#endif
+ 			bo->bound   = 0;
+ 			bo->ifindex = 0;
+ 			notify_enodev = 1;
 
-  net: bridge: mcast: wait for previous gc cycles when removing port (2024-08-05 16:33:56 -0700)
+base-commit: 92c4ee25208d0f35dafc3213cdf355fbe449e078
+-- 
+2.45.2
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.11-20240829
-
-for you to fetch changes up to 96b3802c7f57d4ae1ffeed6d4c948899aa93a858:
-
-  can: kvaser_pciefd: Enable 64-bit DMA addressing (2024-08-29 10:44:28 +0200)
-
-----------------------------------------------------------------
-linux-can-fixes-for-6.11-20240829
-
-----------------------------------------------------------------
-Kuniyuki Iwashima (1):
-      can: bcm: Remove proc entry when dev is unregistered.
-
-Marc Kleine-Budde (4):
-      Merge patch series "can: m_can: Fix polling and other issues"
-      can: mcp251xfd: fix ring configuration when switching from CAN-CC to CAN-FD mode
-      can: mcp251xfd: mcp251xfd_ring_init(): check TX-coalescing configuration
-      Merge patch series "can: mcp251xfd: fix ring/coalescing configuration"
-
-Markus Schneider-Pargmann (7):
-      can: m_can: Reset coalescing during suspend/resume
-      can: m_can: Remove coalesing disable in isr during suspend
-      can: m_can: Remove m_can_rx_peripheral indirection
-      can: m_can: Do not cancel timer from within timer
-      can: m_can: disable_all_interrupts, not clear active_interrupts
-      can: m_can: Reset cached active_interrupts on start
-      can: m_can: Limit coalescing to peripheral instances
-
-Martin Jocic (1):
-      can: kvaser_pciefd: Enable 64-bit DMA addressing
-
-Simon Arlott (1):
-      can: mcp251x: fix deadlock if an interrupt occurs during mcp251x_open
-
-Simon Horman (1):
-      can: m_can: Release irq on error in m_can_open
-
- drivers/net/can/kvaser_pciefd.c                |   4 +
- drivers/net/can/m_can/m_can.c                  | 116 +++++++++++++++----------
- drivers/net/can/spi/mcp251x.c                  |   2 +-
- drivers/net/can/spi/mcp251xfd/mcp251xfd-ram.c  |  11 ++-
- drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c |  34 ++++++--
- net/can/bcm.c                                  |   4 +
- 6 files changed, 117 insertions(+), 54 deletions(-)
 
 
