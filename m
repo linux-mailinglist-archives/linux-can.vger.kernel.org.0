@@ -1,200 +1,148 @@
-Return-Path: <linux-can+bounces-1233-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1234-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8A08964F04
-	for <lists+linux-can@lfdr.de>; Thu, 29 Aug 2024 21:35:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 555C7965A81
+	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 10:37:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F5E42811A4
-	for <lists+linux-can@lfdr.de>; Thu, 29 Aug 2024 19:35:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 883F81C22024
+	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 08:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0971B6527;
-	Thu, 29 Aug 2024 19:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001B416DC23;
+	Fri, 30 Aug 2024 08:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aCjjKoNm"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1521AE046
-	for <linux-can@vger.kernel.org>; Thu, 29 Aug 2024 19:35:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7072D16D31C;
+	Fri, 30 Aug 2024 08:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724960151; cv=none; b=a23NHPF55NMbYKKQoxchnllicz+X5EvnnxzCqllRCLIeWwm58byvi1BFxXOlic6LJUyeIPdKxIqOWCLJ7I3N35eywyGJEidBum7sCrMiXObVBVGxZEh7+PNISiF3ifPiyUddO1t6bs5XkTW+3W+VDPkpegDFa7cTpyKpePSmyGg=
+	t=1725007030; cv=none; b=KMjgABFECdqD+9n2CE5pL2tJKyN+16qX7FeIMSyzleEVSgJRwRRdT0CISVwqokcsQWZw93J8C+ZDqabqXfodBB+6ZJtUN1V+klvr4zOeT4nPIM1zRy9ZnWmDtTkJrT5equFhNy8J0DZKr38kPljzsUaKEEHS/XVqDFPUPTsxdKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724960151; c=relaxed/simple;
-	bh=DKOoPQzVVaJtEe1bbHlHfP2Zo4nE/kjdZiCkf5ZdWEQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qYOxNGwLfRvJ3SwXW/H/rRxL3sK9I4oJceQweY1xcrzl6Lx7InRK0HncINkDqiLxy0sZR8M0et/dWX4WECg3db2KgE6gkcXLGr5kX/ZlelsG8RFO9akEHDxSDJR1OjzfREievmrImD12uFr3Cwk2MPt+7n5z8nX96fA0b2cTS0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sjkvl-0005NZ-98; Thu, 29 Aug 2024 21:35:41 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sjkvk-003z1W-GO; Thu, 29 Aug 2024 21:35:40 +0200
-Received: from pengutronix.de (pd9e5994e.dip0.t-ipconnect.de [217.229.153.78])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 2471832D54F;
-	Thu, 29 Aug 2024 19:35:40 +0000 (UTC)
-Date: Thu, 29 Aug 2024 21:35:39 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Simon Horman <horms@kernel.org>
-Cc: "Rob Herring (Arm)" <robh@kernel.org>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: can: cc770: Simplify parsing DT properties
-Message-ID: <20240829-spiked-amigurumi-bloodhound-d94a6c-mkl@pengutronix.de>
-References: <20240828131902.3632167-1-robh@kernel.org>
- <20240828161624.GS1368797@kernel.org>
+	s=arc-20240116; t=1725007030; c=relaxed/simple;
+	bh=9shBE0H2zwNmx3u97BgFCqYlaYKFOAo34QjRe1zHXUc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JeFMn/+M0QSXRjlVzTtZ8g/KAhLRCh3kp/lQKkdWmf+sxgpDFrat2cETQ8NYGra8kDU9t4eLwl9j0J57FcLxwpxMrWW/CDPsNf+lcCVMuqaOasB/7O71mRlTbIVcCanqS6RxHupgpaIIQ9iyp8gvOdRp/oAIfS3JvsSB6fXACBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aCjjKoNm; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-690ad83d4d7so13478447b3.3;
+        Fri, 30 Aug 2024 01:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725007028; x=1725611828; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=31d7hZq/3IptMCIezPTJphlV/fOaIPteID4cgke+Fm0=;
+        b=aCjjKoNmZFlVfIST8VnKPDclOt2s5aXnFr5TYTOWceAQ3Ni4oJJMKRcTPQ59vy4ir1
+         npSn9uEmV6BlQPw9tWIDKfOM7axpFxxkAHVsDdY8+PX8Nqyu5xFp0404cyHUqxvRNhdR
+         UNhxPSN2N3cmzGyfX6HKQngtSjLNLty4ByWk/xsKbZnoTR5UAK6cpwCghzqOB/QaS+GP
+         +TIh+9QzTRDPAyDWFExmIjSORoz32qOh+HQ+xdKRB/Z7VMxg7sJsFnf5Le3prOGFTmEa
+         RrSw6E+7aewBdwKQ236Mpev8TfP2RJL+F3bty97OTPeIQ6OXEyExJmxNxs5MCYuONI7m
+         uPOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725007028; x=1725611828;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=31d7hZq/3IptMCIezPTJphlV/fOaIPteID4cgke+Fm0=;
+        b=Z1xY8ixN502A/y8tTIh9FvxqhlefFCqqIOoGHFCTqjk5WOPWqjSaW4Ta/sS3A9/NOL
+         oBRXAkbS5RDqhRX69hmxSz7VWgSeuKUKnmgRotmEyaFWHn6UAVe/fX0kCtXKc2+htQ1Z
+         gUvm3xBfJH3JFunodSMdVQmg/ZQBbCh8mZQVIEn28eiHSEqSpcLV7LyPuh7X4kMoZO6n
+         EHjZ98AoYHQnxsB94fewBVRs1wx4iG6eHFUI9wh3l753PPp4AtFy22KUDNVzmtib7TRt
+         ZlWr9ciRgVg3OyuAIQhKfvXRfaYmaPn/uxKRctUAqqdbFGXdvDXs6DMohP+3f4hUkYk4
+         STdw==
+X-Forwarded-Encrypted: i=1; AJvYcCVG1/2aK3VactHt9ndMe6bBfIJ44Tyngx02qCSFPUxoUShnPuXGlfMj0lT8wHpDwLL9kma8kvCHsEm7@vger.kernel.org, AJvYcCVG7nNREcWsXKtZW6kH4lDN5IIT26uVGGW76iEVPX8cSrtazPFV4ZNR+HRLVWFn1IpNaHVuPIo4QtQf@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+WeGbPxzVjnqibrzaSVzhqFS91XOkckeHMhcKzMnE6Ntmm4up
+	K4H3ADftbuvfmcs3xuD5OP3OYfBwnQADSfPRobn2kBbPrF4ARys89mUzQZi5+LHyVKQrkP+O6kU
+	rxTHFrIHPm1mqIw2b1QkrVNy4th6wGmCi
+X-Google-Smtp-Source: AGHT+IGv646FbyuGE3nSt1USD81qaCTmkIsKuR1GVErqyBk4BGsOTCdJ41R5AwVCpk1z3YAtl3HfPbWoPoCieHUNZYk=
+X-Received: by 2002:a05:690c:10c:b0:6b5:5042:2c9d with SMTP id
+ 00721157ae682-6d40e77fd6emr11447737b3.24.1725007028363; Fri, 30 Aug 2024
+ 01:37:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gupfvblu2pdoqihu"
-Content-Disposition: inline
-In-Reply-To: <20240828161624.GS1368797@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20240822105238.213019-1-ilordash02@gmail.com> <20240822105238.213019-2-ilordash02@gmail.com>
+ <ZtC6S6I/QKihcsyu@vaman>
+In-Reply-To: <ZtC6S6I/QKihcsyu@vaman>
+From: Ilya Orazov <ilordash02@gmail.com>
+Date: Fri, 30 Aug 2024 11:36:56 +0300
+Message-ID: <CAGCz5HmTNtGJHoXmuFhC_43jTObDN+Bxn0rLK3OfH-DBhacomA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/1] dt-bindings: phy: ti,tcan104x-can: Document
+ Microchip ATA6561
+To: Vinod Koul <vkoul@kernel.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Aswath Govindraju <a-govindraju@ti.com>, linux-can@vger.kernel.org, 
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
+	Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+
+On Thu, 29 Aug 2024 at 21:13, Vinod Koul <vkoul@kernel.org> wrote:
+>
+> On 22-08-24, 13:52, Ilya Orazov wrote:
+> > Microchip ATA6561 is High-Speed CAN Transceiver with Standby Mode.
+> > It is pin-compatible with TI TCAN1042 and has a compatible programming
+> > model, therefore use ti,tcan1042 as fallback compatible.
+> >
+> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> > Signed-off-by: Ilya Orazov <ilordash02@gmail.com>
+> > ---
+> >  .../devicetree/bindings/phy/ti,tcan104x-can.yaml    | 13 +++++++++----
+> >  1 file changed, 9 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > index 79dad3e89aa6..4a8c3829d85d 100644
+> > --- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > @@ -14,10 +14,15 @@ properties:
+> >      pattern: "^can-phy"
+> >
+> >    compatible:
+> > -    enum:
+> > -      - nxp,tjr1443
+> > -      - ti,tcan1042
+> > -      - ti,tcan1043
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - microchip,ata6561
+> > +          - const: ti,tcan1042
+> > +      - enum:
+> > +          - ti,tcan1042
+> > +          - ti,tcan1043
+> > +          - nxp,tjr1443
+>
+> No driver/dt for new compatibles?
+
+There is phy-can-transceiver.c driver that can be used also for
+ata6561. I used this PHY in my own DTS. It is a popular chip, so I
+decided to add ATA6561 to the kernel, as I believe it would be
+beneficial.
 
 
---gupfvblu2pdoqihu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>
+> >
+> >    '#phy-cells':
+> >      const: 0
+> > --
+> > 2.34.1
+>
+> --
+> ~Vinod
 
-On 28.08.2024 17:16:24, Simon Horman wrote:
-> On Wed, Aug 28, 2024 at 08:19:02AM -0500, Rob Herring (Arm) wrote:
-> > Use of the typed property accessors is preferred over of_get_property().
-> > The existing code doesn't work on little endian systems either. Replace
-> > the of_get_property() calls with of_property_read_bool() and
-> > of_property_read_u32().
-> >=20
-> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
->=20
-> ...
->=20
-> > diff --git a/drivers/net/can/cc770/cc770_platform.c b/drivers/net/can/c=
-c770/cc770_platform.c
-> > index 13bcfba05f18..9993568154f8 100644
-> > --- a/drivers/net/can/cc770/cc770_platform.c
-> > +++ b/drivers/net/can/cc770/cc770_platform.c
-> > @@ -71,16 +71,9 @@ static int cc770_get_of_node_data(struct platform_de=
-vice *pdev,
-> >  				  struct cc770_priv *priv)
-> >  {
-> >  	struct device_node *np =3D pdev->dev.of_node;
-> > -	const u32 *prop;
-> > -	int prop_size;
-> > -	u32 clkext;
-> > -
-> > -	prop =3D of_get_property(np, "bosch,external-clock-frequency",
-> > -			       &prop_size);
-> > -	if (prop && (prop_size =3D=3D  sizeof(u32)))
-> > -		clkext =3D *prop;
-> > -	else
-> > -		clkext =3D CC770_PLATFORM_CAN_CLOCK; /* default */
-> > +	u32 clkext =3D CC770_PLATFORM_CAN_CLOCK, clkout =3D 0;
->=20
-> Marc,
->=20
-> Could you clarify if reverse xmas tree ordering - longest line to shortest
-> - of local variables is desired for can code? If so, I'm flagging that the
-> above now doesn't follow that scheme.
 
-If you touch the code, and noting speaks against it, please make it
-reverse xmas.
 
->=20
-> > +
-> > +	of_property_read_u32(np, "bosch,external-clock-frequency", &clkext);
-> >  	priv->can.clock.freq =3D clkext;
-> > =20
-> >  	/* The system clock may not exceed 10 MHz */
->=20
-> ...
->=20
-> > @@ -109,20 +102,16 @@ static int cc770_get_of_node_data(struct platform=
-_device *pdev,
-> >  	if (of_property_read_bool(np, "bosch,polarity-dominant"))
-> >  		priv->bus_config |=3D BUSCFG_POL;
-> > =20
-> > -	prop =3D of_get_property(np, "bosch,clock-out-frequency", &prop_size);
-> > -	if (prop && (prop_size =3D=3D sizeof(u32)) && *prop > 0) {
-> > -		u32 cdv =3D clkext / *prop;
-> > -		int slew;
-> > +	of_property_read_u32(np, "bosch,clock-out-frequency", &clkout);
-> > +	if (clkout > 0) {
-> > +		u32 cdv =3D clkext / clkout;
-> > +		u32 slew;
-> > =20
-> >  		if (cdv > 0 && cdv < 16) {
-> >  			priv->cpu_interface |=3D CPUIF_CEN;
-> >  			priv->clkout |=3D (cdv - 1) & CLKOUT_CD_MASK;
-> > =20
-> > -			prop =3D of_get_property(np, "bosch,slew-rate",
-> > -					       &prop_size);
-> > -			if (prop && (prop_size =3D=3D sizeof(u32))) {
-> > -				slew =3D *prop;
-> > -			} else {
-> > +			if (of_property_read_u32(np, "bosch,slew-rate", &slew)) {
-> >  				/* Determine default slew rate */
-> >  				slew =3D (CLKOUT_SL_MASK >>
-> >  					CLKOUT_SL_SHIFT) -
->=20
-> Rob,
->=20
-> The next few lines look like this:
->=20
-> 					((cdv * clkext - 1) / 8000000);
-> 				if (slew < 0)
-> 					slew =3D 0;
->=20
-> But slew is now unsigned, so this check will always be false.
->=20
-> Flagged by Smatch and Coccinelle.
-
-Good finding.
-
-Thanks,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---gupfvblu2pdoqihu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbQzYgACgkQKDiiPnot
-vG+0xgf+Jd7TG+Bgy8pVLY4i+WWleeGEDIMUYt57JUHFQe+1FkA3sMA3umuEW2Rd
-gH/GlB7jRhCrO69ecd5AjZD33ca3D83E1h/FJbL3vEA9EZp873WzdKcBQL0Gm86O
-Kq43+bAKDLOEsSM5N6jd2QqGKfJ8r4EOBG/pMkEj/VeaKZCHOAy+JwhfiYbjtNNk
-X2a0EcUJ6gITsBSJ5fRlfviiJsoT7OyMBpmBtuSa/oSaBAnG6wHPNdM/01pxJJZ/
-vPfNSnApWhaLBpS2/zdbjFdxy2v0kjb16Y7E2+pT6dVS5ctInkuHVFQDJqEXZ0BR
-h+ZwrjjjS2q9uHe31ZdblhSNUp7iQg==
-=o3cU
------END PGP SIGNATURE-----
-
---gupfvblu2pdoqihu--
+--
+Best regards,
+Ilya Orazov
 
