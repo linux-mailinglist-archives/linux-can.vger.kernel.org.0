@@ -1,146 +1,113 @@
-Return-Path: <linux-can+bounces-1267-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1268-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E3699669E5
-	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 21:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 80331966A42
+	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 22:16:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BE11283431
-	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 19:35:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25C762846A8
+	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 20:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3546F1BA292;
-	Fri, 30 Aug 2024 19:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 829731BCA08;
+	Fri, 30 Aug 2024 20:16:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YNy+ey6I"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55051BD4E8
-	for <linux-can@vger.kernel.org>; Fri, 30 Aug 2024 19:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9A9EEC3;
+	Fri, 30 Aug 2024 20:16:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725046424; cv=none; b=CHd6ReWxENByOq7pd3Zr3jrHLU0eYWou8tq9q2otPRPZyAbnWBBD1Ck0abqToydMXMy4DbLIPdzvF/QxIsFb3UvJQFSTfcZsdU8AN3HaUBkqQc/M90TRPkZXqn6aIwpt+090UF54yRcyHXwMIk9Zqhb5hhOywpZNkIV+m/55NgE=
+	t=1725048966; cv=none; b=BVNBffGQ+NmauwaWaBN03pSA2fpPNIYUtbiE/ZZZ7o9MrbuR5qw5t7D/eHzym0wEb0M8mQ2L8bt8EtYM5VZu7UVuul1rt7N9Aq9GwqGhRxjGsKNSm2ormv29bQ+VskJUMHUn167i2RxrHVKORCwdhbGYz/AE1yPXPlzjgtM+gmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725046424; c=relaxed/simple;
-	bh=AZFaq2r3hKbzSWF9nhGUccqEw86w4sEcBqhPeYy+xy4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jAjZ52O6BldICasM6KSFVHwxri2zCFAs0Otvnnhuybc05kEkbO1YFZktxZTFnnaeSHWLgObLKG6PCIVkTGgxjfSac1A0qwT8Eb3oBkvcxH8L4BsepGasj1f1NXHaD4Yxk5MrgNKzjOnXzk45orPIBEY/y+OmsjRSpX9eMi3F+f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sk7NL-0006c8-Sx; Fri, 30 Aug 2024 21:33:39 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sk7NK-004E75-Ty; Fri, 30 Aug 2024 21:33:38 +0200
-Received: from pengutronix.de (pd9e5994e.dip0.t-ipconnect.de [217.229.153.78])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id A679432E37A;
-	Fri, 30 Aug 2024 19:33:38 +0000 (UTC)
-Date: Fri, 30 Aug 2024 21:33:38 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Martin Jocic <martin.jocic@kvaser.com>
-Cc: linux-can@vger.kernel.org, mailhol.vincent@wanadoo.fr, 
-	extja@kvaser.com
-Subject: Re: [PATCH v2] can: kvaser_pciefd: Use a single write when releasing
- RX buffers
-Message-ID: <20240830-happy-pistachio-husky-46729a-mkl@pengutronix.de>
-References: <20240830153113.2081440-1-martin.jocic@kvaser.com>
+	s=arc-20240116; t=1725048966; c=relaxed/simple;
+	bh=BHJAPCRkkwvBrJQihBZsj9YydNkC0N902Xxm8U4CrfE=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=iQw2A9jPM0Zh3zFaf/KuciVf9Q0HJJI6i8mcrq4Ik3g16IGtylSMOY3CvGMQ8ONhmwRCiITmpeky/0BblnsUT1TxseuvgXaSZsJ9peqgRTyNqXQoFD/XZQqZDb1XXLtDR7nVtkhKnBSLw3MEo/DL8iOnr2TUJShF1jCFTX6cyAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YNy+ey6I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF73C4CEC2;
+	Fri, 30 Aug 2024 20:16:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725048965;
+	bh=BHJAPCRkkwvBrJQihBZsj9YydNkC0N902Xxm8U4CrfE=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=YNy+ey6INHaAq9MsgntpjXQRnsDtR4mQxaT5mip9SwXlpm49c7B5zp9PkHSqyPx+b
+	 AwMLMRu0e3WmZ3ZhpSPb6+xqc67eCDC6KidvQPHC8PV4+bwl/Q4h2v7nJoES2QOszJ
+	 bCVw9kWyVi0mhWJf6yeQsmlhORy47rpMoyJiGyvZIpNAahjD78TJf1ONtCa0LCI+wG
+	 TvXRYfI3/F8Bro8sv/+QV4179CosziWun+hm+KkkU4dHYkIl2UcPDEnGuuy45lvgv+
+	 xB0UqtTuGn5ikLwp364HDjVLCgG0ZPyilgdFDMxyrkpxPVs785/RRVRH1rb2EebrZt
+	 hkVENzPwrWwmQ==
+Date: Fri, 30 Aug 2024 15:16:03 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cychdlyubtvbptkr"
-Content-Disposition: inline
-In-Reply-To: <20240830153113.2081440-1-martin.jocic@kvaser.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: David Jander <david.jander@protonic.nl>, 
+ Jakub Kicinski <kuba@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+ Heiko Stuebner <heiko@sntech.de>, Elaine Zhang <zhangqing@rock-chips.com>, 
+ Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, linux-can@vger.kernel.org, 
+ linux-rockchip@lists.infradead.org, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, 
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ "David S. Miller" <davem@davemloft.net>
+In-Reply-To: <20240830-rockchip-canfd-v3-1-d426266453fa@pengutronix.de>
+References: <20240830-rockchip-canfd-v3-0-d426266453fa@pengutronix.de>
+ <20240830-rockchip-canfd-v3-1-d426266453fa@pengutronix.de>
+Message-Id: <172504896361.968651.6212275556677921387.robh@kernel.org>
+Subject: Re: [PATCH can-next v3 01/20] dt-bindings: can: rockchip_canfd:
+ add rockchip CAN-FD controller
 
 
---cychdlyubtvbptkr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, 30 Aug 2024 21:25:58 +0200, Marc Kleine-Budde wrote:
+> Add documentation for the rockchip rk3568 CAN-FD controller.
+> 
+> Co-developed-by: Elaine Zhang <zhangqing@rock-chips.com>
+> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  .../bindings/net/can/rockchip,rk3568-canfd.yaml    | 74 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  7 ++
+>  2 files changed, 81 insertions(+)
+> 
 
-On 30.08.2024 17:31:13, Martin Jocic wrote:
-> Kvaser's PCIe cards uses the KCAN FPGA IP block which has dual 4K buffers=
- for
-> incoming messages shared by all (currently up to eight) channels. While t=
-he
-> driver processes messages in one buffer, new incoming messages are stored=
- in
-> the other and so on.
->=20
-> The design of KCAN is such that a buffer must be fully read and then rele=
-ased.
-> Releasing a buffer will make the FPGA switch buffers. If the other buffer
-> contains at least one incoming message the FPGA will also instantly issue=
- a
-> new interrupt, if not the interrupt will be issued after receiving the fi=
-rst
-> new message.
->=20
-> With IRQx interrupts, it takes a little time for the interrupt to happen,
-> enough for any previous ISR call to do it's business and return, but MSI
-> interrupts are way faster so this time is reduced to almost nothing.
->=20
-> So with MSI, releasing the buffer HAS to be the very last action of the I=
-SR
-> before returning, otherwise the new interrupt might be "masked" by the ke=
-rnel
-> because the previous ISR call hasn't returned. And the interrupts are edg=
-e-
-> triggered so we cannot loose one, or the ping-pong reading process will s=
-top.
->=20
-> This is why this patch modifies the driver to use a single write to the S=
-RB_CMD
-> register before returning.
->=20
-> Signed-off-by: Martin Jocic <martin.jocic@kvaser.com>
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Thanks for the detailed commit message. I've added a fixed tag:
+yamllint warnings/errors:
 
-Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan dev=
-ices")
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/rockchip,rk3568-canfd.yaml: $id: Cannot determine base path from $id, relative path/filename doesn't match actual path or filename
+ 	 $id: http://devicetree.org/schemas/net/can/rockchip,canfd.yaml
+ 	file: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/rockchip,rk3568-canfd.yaml
 
-Thanks,
-Marc
+doc reference errors (make refcheckdocs):
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240830-rockchip-canfd-v3-1-d426266453fa@pengutronix.de
 
---cychdlyubtvbptkr
-Content-Type: application/pgp-signature; name="signature.asc"
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
------BEGIN PGP SIGNATURE-----
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbSHo4ACgkQKDiiPnot
-vG+gSgf/VKwKDbPZSTokHjVRBaHqxTAVYUDVfR8LAeFyk3Q9sUl3ueG13iVYhMPu
-aqa2TflbHQIX2hZHuljtT5d0U2haAWdqsehXyZGt5Es5LWbxP1STQU14l8ueTcO1
-A71sPn1Q0WAV/awS2CxVezCeqmVq2aIGiWDXpLePob0ipvfStBtvj4ky2V+tohNc
-4FVf7T+zcYGKLj2CdnTBABaqAn98xigQ8//mX2+STi6KuBpNjcjCKJHWewwxpjAp
-3pB+LGluni+k2JzzfUXi9S7CVY/hBelm0BdZy8sgw+w0Gfof7w98PzdMWix9WyPs
-ML/uOOfcwy3+DUKrTkGODVGLEtFUhw==
-=QXDY
------END PGP SIGNATURE-----
+pip3 install dtschema --upgrade
 
---cychdlyubtvbptkr--
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
