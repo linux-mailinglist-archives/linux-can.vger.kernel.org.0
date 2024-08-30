@@ -1,113 +1,72 @@
-Return-Path: <linux-can+bounces-1268-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1269-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80331966A42
-	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 22:16:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 273CD966A4F
+	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 22:17:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25C762846A8
-	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 20:16:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D21F51F239E7
+	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 20:17:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 829731BCA08;
-	Fri, 30 Aug 2024 20:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79EF21BF815;
+	Fri, 30 Aug 2024 20:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YNy+ey6I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XqvmAzks"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9A9EEC3;
-	Fri, 30 Aug 2024 20:16:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5191C1BF7F5;
+	Fri, 30 Aug 2024 20:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725048966; cv=none; b=BVNBffGQ+NmauwaWaBN03pSA2fpPNIYUtbiE/ZZZ7o9MrbuR5qw5t7D/eHzym0wEb0M8mQ2L8bt8EtYM5VZu7UVuul1rt7N9Aq9GwqGhRxjGsKNSm2ormv29bQ+VskJUMHUn167i2RxrHVKORCwdhbGYz/AE1yPXPlzjgtM+gmw=
+	t=1725049046; cv=none; b=XSXKKnHnVuB9n+pQIdLMWK6IPQWG2MoXQnR1knTMMO55LSzBfUpTKSc98hk3BPRzXTq2moWwuBexDzkMeb5wSPKaRa8VjoqmzQHIzkRe4hmB79FyoMAHah0NrdYfvZfjnrvLoURhBTnc2Tt5xyALMFe/69tKWwUKQm/oPKscJ+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725048966; c=relaxed/simple;
-	bh=BHJAPCRkkwvBrJQihBZsj9YydNkC0N902Xxm8U4CrfE=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=iQw2A9jPM0Zh3zFaf/KuciVf9Q0HJJI6i8mcrq4Ik3g16IGtylSMOY3CvGMQ8ONhmwRCiITmpeky/0BblnsUT1TxseuvgXaSZsJ9peqgRTyNqXQoFD/XZQqZDb1XXLtDR7nVtkhKnBSLw3MEo/DL8iOnr2TUJShF1jCFTX6cyAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YNy+ey6I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF73C4CEC2;
-	Fri, 30 Aug 2024 20:16:05 +0000 (UTC)
+	s=arc-20240116; t=1725049046; c=relaxed/simple;
+	bh=xsB/+fHM6pQvLAZfaAyWJzLUHX0vRSD25TrO5Z6iLkQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Y3pKoc31yiE85a24I5z/0ZMb8Y2ij/s9NnbUG8Str30DGCa6p4CPRYQ9sHSZD0tnbKMi6j2NuQWh9zinaKTg8qp0RCt1BHAaMF/fSQe8lXRVfB8O4Hb2yHd7f9UiTsQIzOPgIR8S+MwL1goJ4cJYPJtWCvnyGcmgcW+Vxvm5lZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XqvmAzks; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC17C4CEC6;
+	Fri, 30 Aug 2024 20:17:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725048965;
-	bh=BHJAPCRkkwvBrJQihBZsj9YydNkC0N902Xxm8U4CrfE=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=YNy+ey6INHaAq9MsgntpjXQRnsDtR4mQxaT5mip9SwXlpm49c7B5zp9PkHSqyPx+b
-	 AwMLMRu0e3WmZ3ZhpSPb6+xqc67eCDC6KidvQPHC8PV4+bwl/Q4h2v7nJoES2QOszJ
-	 bCVw9kWyVi0mhWJf6yeQsmlhORy47rpMoyJiGyvZIpNAahjD78TJf1ONtCa0LCI+wG
-	 TvXRYfI3/F8Bro8sv/+QV4179CosziWun+hm+KkkU4dHYkIl2UcPDEnGuuy45lvgv+
-	 xB0UqtTuGn5ikLwp364HDjVLCgG0ZPyilgdFDMxyrkpxPVs785/RRVRH1rb2EebrZt
-	 hkVENzPwrWwmQ==
-Date: Fri, 30 Aug 2024 15:16:03 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1725049045;
+	bh=xsB/+fHM6pQvLAZfaAyWJzLUHX0vRSD25TrO5Z6iLkQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=XqvmAzkssYSV6geulFG9etWLuQte05Ku2iWA0Y2RBXWdaunyNQKB83OgEwNSAS8HT
+	 b4KSft93py1EOp/JTE9f45mh/hMhb7J/sIRctpxGvAzx0NbudTnT/8r94KIIcNl98D
+	 W5ekufNRkrk4XSWSf2d+Rld+eKjbF0d9aNuCC7qpPcQdoN+LPq6go0NNv6IYClvatT
+	 4uyUBXgNpwtuQm5m+qIw+RZSnH1v8IoI4ku0T3fB/49kduMhhJr9vPZAajw9rweQwh
+	 pJ1uSymk7HXeeeze8+7Wkasc/Y2ofDegMmhtqtIqW6ITr5qgKZrnf6ntwfxS2D9pxD
+	 AGg5MveJxC1jQ==
+Date: Fri, 30 Aug 2024 13:17:24 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, linux-can@vger.kernel.org,
+ kernel@pengutronix.de, Martin Jocic <martin.jocic@kvaser.com>
+Subject: Re: [PATCH net 13/13] can: kvaser_pciefd: Enable 64-bit DMA
+ addressing
+Message-ID: <20240830131724.7c08eac4@kernel.org>
+In-Reply-To: <20240829192947.1186760-14-mkl@pengutronix.de>
+References: <20240829192947.1186760-1-mkl@pengutronix.de>
+	<20240829192947.1186760-14-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: David Jander <david.jander@protonic.nl>, 
- Jakub Kicinski <kuba@kernel.org>, linux-arm-kernel@lists.infradead.org, 
- Heiko Stuebner <heiko@sntech.de>, Elaine Zhang <zhangqing@rock-chips.com>, 
- Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
- kernel@pengutronix.de, linux-can@vger.kernel.org, 
- linux-rockchip@lists.infradead.org, 
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
- Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, 
- Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- "David S. Miller" <davem@davemloft.net>
-In-Reply-To: <20240830-rockchip-canfd-v3-1-d426266453fa@pengutronix.de>
-References: <20240830-rockchip-canfd-v3-0-d426266453fa@pengutronix.de>
- <20240830-rockchip-canfd-v3-1-d426266453fa@pengutronix.de>
-Message-Id: <172504896361.968651.6212275556677921387.robh@kernel.org>
-Subject: Re: [PATCH can-next v3 01/20] dt-bindings: can: rockchip_canfd:
- add rockchip CAN-FD controller
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Thu, 29 Aug 2024 21:20:46 +0200 Marc Kleine-Budde wrote:
+> +	if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT))
+> +		dma_set_mask_and_coherent(&pcie->pci->dev, DMA_BIT_MASK(64));
 
-On Fri, 30 Aug 2024 21:25:58 +0200, Marc Kleine-Budde wrote:
-> Add documentation for the rockchip rk3568 CAN-FD controller.
-> 
-> Co-developed-by: Elaine Zhang <zhangqing@rock-chips.com>
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  .../bindings/net/can/rockchip,rk3568-canfd.yaml    | 74 ++++++++++++++++++++++
->  MAINTAINERS                                        |  7 ++
->  2 files changed, 81 insertions(+)
-> 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/rockchip,rk3568-canfd.yaml: $id: Cannot determine base path from $id, relative path/filename doesn't match actual path or filename
- 	 $id: http://devicetree.org/schemas/net/can/rockchip,canfd.yaml
- 	file: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/rockchip,rk3568-canfd.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240830-rockchip-canfd-v3-1-d426266453fa@pengutronix.de
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+This IS_ENABLED() is quite unusual. The driver just advertises its
+capability of using 64 addressing. If the platform doesn't support
+64b DMA addressing and therefore dma_addr_t is narrower, everything
+will still work. I could be wrong, but that's how I understand it.
 
