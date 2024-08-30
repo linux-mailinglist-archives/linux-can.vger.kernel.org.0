@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-1258-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1267-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21C729669AD
-	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 21:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E3699669E5
+	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 21:35:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D39EC287066
-	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 19:29:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BE11283431
+	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2024 19:35:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852DC1C1AB2;
-	Fri, 30 Aug 2024 19:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3546F1BA292;
+	Fri, 30 Aug 2024 19:33:44 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2211C0DE4
-	for <linux-can@vger.kernel.org>; Fri, 30 Aug 2024 19:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55051BD4E8
+	for <linux-can@vger.kernel.org>; Fri, 30 Aug 2024 19:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725046035; cv=none; b=n9dzezaHatxvK2klSpWQu8GHTCZeB73ZdvuK+lVHH3MycEbAigaeqruL0+K+Y2vG10qNhFcxgDrauOyQBn/ekKckFTmjDqYnFtHo0fhUu/55L6r1EbMCfGj9CtkLsNo5kfihYUBGrVv5mi5J/Z2SMY1PcjAcoXrI2m9ucF06/Fk=
+	t=1725046424; cv=none; b=CHd6ReWxENByOq7pd3Zr3jrHLU0eYWou8tq9q2otPRPZyAbnWBBD1Ck0abqToydMXMy4DbLIPdzvF/QxIsFb3UvJQFSTfcZsdU8AN3HaUBkqQc/M90TRPkZXqn6aIwpt+090UF54yRcyHXwMIk9Zqhb5hhOywpZNkIV+m/55NgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725046035; c=relaxed/simple;
-	bh=LuMx/PlnK3WbirTHya0KJ2kuGTfiCv8jMDhEO9L4kY8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=n4DF7IOXHgcfGKK94XJCZm4ZdY7fEmQs6ePssVL+7Sd0jA4cq8NGGzfvcsYwE/jIIgv+fBbDoXfnXRf9UQVWX9UOOGv7G2UmlTntwFqRQI57YI2cFXl/Te8WnOm63ESNm/px9dCzFVrGo+i2NhkxBsY0wye5sjyk4gTBWvacj+c=
+	s=arc-20240116; t=1725046424; c=relaxed/simple;
+	bh=AZFaq2r3hKbzSWF9nhGUccqEw86w4sEcBqhPeYy+xy4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jAjZ52O6BldICasM6KSFVHwxri2zCFAs0Otvnnhuybc05kEkbO1YFZktxZTFnnaeSHWLgObLKG6PCIVkTGgxjfSac1A0qwT8Eb3oBkvcxH8L4BsepGasj1f1NXHaD4Yxk5MrgNKzjOnXzk45orPIBEY/y+OmsjRSpX9eMi3F+f8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,131 +33,114 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1sk7H2-0006Qo-Hq
-	for linux-can@vger.kernel.org; Fri, 30 Aug 2024 21:27:08 +0200
+	id 1sk7NL-0006c8-Sx; Fri, 30 Aug 2024 21:33:39 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1sk7Gv-004Dv8-FO
-	for linux-can@vger.kernel.org; Fri, 30 Aug 2024 21:27:01 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 0918A32E2B5
-	for <linux-can@vger.kernel.org>; Fri, 30 Aug 2024 19:27:00 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	id 1sk7NK-004E75-Ty; Fri, 30 Aug 2024 21:33:38 +0200
+Received: from pengutronix.de (pd9e5994e.dip0.t-ipconnect.de [217.229.153.78])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id F1D7232E125;
-	Fri, 30 Aug 2024 19:26:47 +0000 (UTC)
-Received: from [172.20.34.65] (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 662e71b0;
-	Fri, 30 Aug 2024 19:26:45 +0000 (UTC)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id A679432E37A;
+	Fri, 30 Aug 2024 19:33:38 +0000 (UTC)
+Date: Fri, 30 Aug 2024 21:33:38 +0200
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-Date: Fri, 30 Aug 2024 21:26:17 +0200
-Subject: [PATCH can-next v3 20/20] can: rockchip_canfd: add support for
- CAN_CTRLMODE_BERR_REPORTING
+To: Martin Jocic <martin.jocic@kvaser.com>
+Cc: linux-can@vger.kernel.org, mailhol.vincent@wanadoo.fr, 
+	extja@kvaser.com
+Subject: Re: [PATCH v2] can: kvaser_pciefd: Use a single write when releasing
+ RX buffers
+Message-ID: <20240830-happy-pistachio-husky-46729a-mkl@pengutronix.de>
+References: <20240830153113.2081440-1-martin.jocic@kvaser.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240830-rockchip-canfd-v3-20-d426266453fa@pengutronix.de>
-References: <20240830-rockchip-canfd-v3-0-d426266453fa@pengutronix.de>
-In-Reply-To: <20240830-rockchip-canfd-v3-0-d426266453fa@pengutronix.de>
-To: kernel@pengutronix.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Elaine Zhang <zhangqing@rock-chips.com>, 
- David Jander <david.jander@protonic.nl>
-Cc: Simon Horman <horms@kernel.org>, linux-can@vger.kernel.org, 
- netdev@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-X-Mailer: b4 0.15-dev-99b12
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2351; i=mkl@pengutronix.de;
- h=from:subject:message-id; bh=LuMx/PlnK3WbirTHya0KJ2kuGTfiCv8jMDhEO9L4kY8=;
- b=owEBbQGS/pANAwAKASg4oj56LbxvAcsmYgBm0hzzWSZOPJIz9FhQvHlaytA5ca9hKvtWeb2oA
- Fr49Lzww3SJATMEAAEKAB0WIQRQQLqG4LYE3Sm8Pl8oOKI+ei28bwUCZtIc8wAKCRAoOKI+ei28
- b8uTB/9NEiPYXbc82AadhaySflhfwVIf5BtMH5bmwGVeSDZC/X8ynol4bfnf5wTWpTLRtzOXz66
- Jbjx227dEo7mAAxhxpBzqRgd77cxSjNuNnfRSJOsJBsiPaAqx0ZTRnLSnuENt5f6JmUtEFJ4WCa
- tvWGu4GlbAroBT9sbSWYebwkDRZJOUjgqU0gyxawT/doIV/fs4NQnJpPz+aActxaj11Wy85eBsi
- 4bhC9e35yMzatN6hcpilFlPlUuWPPlr1fA85YlEP9vQVIZaenZt/an/VOFfPzRYeRiyKVOvV8mS
- KO7eDPfk0xrDFyyhPf5MwGGhQEchxEyuB9YnwV4980Vy/txw
-X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
- fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="cychdlyubtvbptkr"
+Content-Disposition: inline
+In-Reply-To: <20240830153113.2081440-1-martin.jocic@kvaser.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Add support for Bus Error Reporting.
 
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/rockchip/rockchip_canfd-core.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+--cychdlyubtvbptkr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/can/rockchip/rockchip_canfd-core.c b/drivers/net/can/rockchip/rockchip_canfd-core.c
-index 8853f6a135da..6883153e8fc1 100644
---- a/drivers/net/can/rockchip/rockchip_canfd-core.c
-+++ b/drivers/net/can/rockchip/rockchip_canfd-core.c
-@@ -293,6 +293,12 @@ static void rkcanfd_chip_start(struct rkcanfd_priv *priv)
- 		RKCANFD_REG_INT_OVERLOAD_INT |
- 		RKCANFD_REG_INT_TX_FINISH_INT;
- 
-+	/* Do not mask the bus error interrupt if the bus error
-+	 * reporting is requested.
-+	 */
-+	if (!(priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING))
-+		priv->reg_int_mask_default |= RKCANFD_REG_INT_ERROR_INT;
-+
- 	memset(&priv->bec, 0x0, sizeof(priv->bec));
- 
- 	rkcanfd_chip_fifo_setup(priv);
-@@ -533,14 +539,16 @@ static int rkcanfd_handle_error_int(struct rkcanfd_priv *priv)
- 	if (!reg_ec)
- 		return 0;
- 
--	skb = rkcanfd_alloc_can_err_skb(priv, &cf, &timestamp);
--	if (cf) {
--		struct can_berr_counter bec;
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
-+		skb = rkcanfd_alloc_can_err_skb(priv, &cf, &timestamp);
-+		if (cf) {
-+			struct can_berr_counter bec;
- 
--		rkcanfd_get_berr_counter_corrected(priv, &bec);
--		cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR | CAN_ERR_CNT;
--		cf->data[6] = bec.txerr;
--		cf->data[7] = bec.rxerr;
-+			rkcanfd_get_berr_counter_corrected(priv, &bec);
-+			cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR | CAN_ERR_CNT;
-+			cf->data[6] = bec.txerr;
-+			cf->data[7] = bec.rxerr;
-+		}
- 	}
- 
- 	rkcanfd_handle_error_int_reg_ec(priv, cf, reg_ec);
-@@ -899,7 +907,8 @@ static int rkcanfd_probe(struct platform_device *pdev)
- 	priv->can.clock.freq = clk_get_rate(priv->clks[0].clk);
- 	priv->can.bittiming_const = &rkcanfd_bittiming_const;
- 	priv->can.data_bittiming_const = &rkcanfd_data_bittiming_const;
--	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK;
-+	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
-+		CAN_CTRLMODE_BERR_REPORTING;
- 	if (!(priv->devtype_data.quirks & RKCANFD_QUIRK_CANFD_BROKEN))
- 		priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
- 	priv->can.do_set_mode = rkcanfd_set_mode;
+On 30.08.2024 17:31:13, Martin Jocic wrote:
+> Kvaser's PCIe cards uses the KCAN FPGA IP block which has dual 4K buffers=
+ for
+> incoming messages shared by all (currently up to eight) channels. While t=
+he
+> driver processes messages in one buffer, new incoming messages are stored=
+ in
+> the other and so on.
+>=20
+> The design of KCAN is such that a buffer must be fully read and then rele=
+ased.
+> Releasing a buffer will make the FPGA switch buffers. If the other buffer
+> contains at least one incoming message the FPGA will also instantly issue=
+ a
+> new interrupt, if not the interrupt will be issued after receiving the fi=
+rst
+> new message.
+>=20
+> With IRQx interrupts, it takes a little time for the interrupt to happen,
+> enough for any previous ISR call to do it's business and return, but MSI
+> interrupts are way faster so this time is reduced to almost nothing.
+>=20
+> So with MSI, releasing the buffer HAS to be the very last action of the I=
+SR
+> before returning, otherwise the new interrupt might be "masked" by the ke=
+rnel
+> because the previous ISR call hasn't returned. And the interrupts are edg=
+e-
+> triggered so we cannot loose one, or the ping-pong reading process will s=
+top.
+>=20
+> This is why this patch modifies the driver to use a single write to the S=
+RB_CMD
+> register before returning.
+>=20
+> Signed-off-by: Martin Jocic <martin.jocic@kvaser.com>
 
--- 
-2.45.2
+Thanks for the detailed commit message. I've added a fixed tag:
 
+Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan dev=
+ices")
 
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--cychdlyubtvbptkr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbSHo4ACgkQKDiiPnot
+vG+gSgf/VKwKDbPZSTokHjVRBaHqxTAVYUDVfR8LAeFyk3Q9sUl3ueG13iVYhMPu
+aqa2TflbHQIX2hZHuljtT5d0U2haAWdqsehXyZGt5Es5LWbxP1STQU14l8ueTcO1
+A71sPn1Q0WAV/awS2CxVezCeqmVq2aIGiWDXpLePob0ipvfStBtvj4ky2V+tohNc
+4FVf7T+zcYGKLj2CdnTBABaqAn98xigQ8//mX2+STi6KuBpNjcjCKJHWewwxpjAp
+3pB+LGluni+k2JzzfUXi9S7CVY/hBelm0BdZy8sgw+w0Gfof7w98PzdMWix9WyPs
+ML/uOOfcwy3+DUKrTkGODVGLEtFUhw==
+=QXDY
+-----END PGP SIGNATURE-----
+
+--cychdlyubtvbptkr--
 
