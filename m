@@ -1,119 +1,95 @@
-Return-Path: <linux-can+bounces-1295-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1296-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A20F1968082
-	for <lists+linux-can@lfdr.de>; Mon,  2 Sep 2024 09:24:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A20D968096
+	for <lists+linux-can@lfdr.de>; Mon,  2 Sep 2024 09:29:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10661B23297
-	for <lists+linux-can@lfdr.de>; Mon,  2 Sep 2024 07:24:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35F4A281EEE
+	for <lists+linux-can@lfdr.de>; Mon,  2 Sep 2024 07:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2889176FD2;
-	Mon,  2 Sep 2024 07:24:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91239176ADE;
+	Mon,  2 Sep 2024 07:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7TIY01H"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5261741DA
-	for <linux-can@vger.kernel.org>; Mon,  2 Sep 2024 07:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5A4153BC7
+	for <linux-can@vger.kernel.org>; Mon,  2 Sep 2024 07:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725261866; cv=none; b=XXtSzv1Xzk2cTrkaz0QAXFV6MzfJj6A0YNJ0g9onl+aFHUUB0my3CSk6OLFALtcJFgo5WgnxUxGvycinJRDWCzunS1ItwnOit7rCyYalLF3DM4ggyzCDV86Vc3UBhsDTmWJMyZZF8d+3pBRPKWqee5zqK3galLg2L/fOJhjDfp8=
+	t=1725262191; cv=none; b=s8M4kqdGocWeQG57UfV31sbQmOLV41ABqRn1qDyArRoBNIyV3c+HYmQBTfm9tG3OpmwC+K03YxfCw4CHxw/bzhjTyZ2DpHsAProWNWqd0eFuf7P9X33jnTfzjRolEdGGTuy8qK7pElIMU+A40Wre+ruXIQCAR94Baz2oYtAVBrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725261866; c=relaxed/simple;
-	bh=YEXp6iEnFwoyN5CrP6g30wwV26+B+8HmWFxrMTbgRS8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NTblEdSs16q9KBxfGwgXhcDNFi+FiO20Gvv13vz+lDm9O/zOLP5U5djznznepAUs5Js2XQMs5RTrfvibJjUZTCnTT5f0glFykRciE+VjwzBypwzABJ056T1cHX29zWansVRpmKZFniNfopEXgk8SddCEtS2nSIly4bVly5gIVYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sl1QD-0000ZX-0G; Mon, 02 Sep 2024 09:24:21 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sl1QC-004qbM-D8; Mon, 02 Sep 2024 09:24:20 +0200
-Received: from pengutronix.de (pd9e5994e.dip0.t-ipconnect.de [217.229.153.78])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 2105232F281;
-	Mon, 02 Sep 2024 07:24:20 +0000 (UTC)
-Date: Mon, 2 Sep 2024 09:24:19 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Alibek Omarov <a1ba.omarov@gmail.com>
-Cc: linux-rockchip@lists.infradead.org, linux-can@vger.kernel.org
-Subject: Re: [can-next,v3,00/20] can: rockchip_canfd: add support for CAN-FD
- IP core found on Rockchip RK3568
-Message-ID: <20240902-encouraging-fine-otter-a7db7a-mkl@pengutronix.de>
-References: <20240830-rockchip-canfd-v3-0-d426266453fa@pengutronix.de>
- <20240902032837.1513090-1-a1ba.omarov@gmail.com>
+	s=arc-20240116; t=1725262191; c=relaxed/simple;
+	bh=mTYRk8QDYfw7agaBF71vSyqd846XceBwZWHKjPzpyUU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ro9R7ISVXXJA1zVVcJadHX0ouR0o1aBGW+vUhf6P/MH/642yRaYhZKbcLIWRPXZa6+ZJo8l1V/QxnFjanjzaQdNun46Gz5rKwwrhGHEQ5fAoS0Yvsh9Z3as9JOZuFR8GzD8RKqbF9pyHM2YTiOKEdW+kdJgW03Nfwy/FMoeDwgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7TIY01H; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-201d5af11a4so33622465ad.3
+        for <linux-can@vger.kernel.org>; Mon, 02 Sep 2024 00:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725262189; x=1725866989; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTYRk8QDYfw7agaBF71vSyqd846XceBwZWHKjPzpyUU=;
+        b=S7TIY01HpKhK6xqLkNv4LP4rDuKCzT/13Ae0LvPjq3nLZekbK1ETAnRUfSVzQYj6cx
+         +58ztIZGA3fNtOd72ZkDWN7+xr8jYvufmqb3KjfR8OeKT0Kp6ZyWjjwJ+X3dzk+5SenH
+         oHAWB9WyImwU/VbdCmiVZK6Z76KYyNOId95fSNX8yEXvIsj1MAN4GRzQqjXzwKlPrJrR
+         6ccQmSf60VwEK3WroiQfbQleXwvIIjax2x/mM1k4zUdkU9klnD5KGrNeY0vHd5zsFT+K
+         ghnrwSCMpb//zkq7H8pUSf3w4DIpyRk5j6aI7IC364EaUhmxC47+2QMQxJX8qbgOYuar
+         9oLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725262189; x=1725866989;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mTYRk8QDYfw7agaBF71vSyqd846XceBwZWHKjPzpyUU=;
+        b=AxApo3vCU92FiNEF61Ioj4bLCg25VWedmrplxkofrCxEBwdW0Z88Z0soyPKzsXLUnc
+         kA36Da5O9pnO7UTUTS1tWUA7jsOADiHaDSaFnUNkTh5Qu1BLeKXHx+zny9J6q72mupwN
+         8R2rhllH5LXo68zS7urbQ39iYMqNSlLF1MH6tPUk7ekdSKzPA/Z1mBVqy2tekt6wWI+x
+         5nqi/we0Rs2/6fIhVGQckXWz+b51j+SHUQsfO4Vv3ocgB/SvWYrl6xK3in0IQhxJMSWz
+         vw6k43OOl6CScS0ym5ZYismS4U0vRtQzVMh/h7WEPus/QSbXFg7Y/rY6Z4YrCAMoUMqh
+         hIDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWDIrAsest1DIvuWu4rHebNdqxuSBnygk+C3ND3GNgD9mUIzY8sXHcTXEGI48rxsN8ZGwcz6//VMjo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNjxl1JVz67hef3yI1sX7+TLM3qfVquJZCjVvYzoU5vrZpkegN
+	R5o1r6MtDmUTwWzS/a7SUJ/eY2a8eXttCXHnjqTd0TALktQqQ2e0Tqm4St1bWvK67ndTM3LD85g
+	Y0OK412PcFWPdbEj2zeUayBv32ck=
+X-Google-Smtp-Source: AGHT+IGlftb219Q8PlYPJI38E8ORu4VRICcFddjZUO/s6r0Qf4D8FXpjpOnQuZ48yEbWZOefWdloS0L4RIQmswfahyA=
+X-Received: by 2002:a17:902:f689:b0:201:fcc1:492a with SMTP id
+ d9443c01a7336-2054612c3d6mr73174695ad.18.1725262189329; Mon, 02 Sep 2024
+ 00:29:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sse3wtb42fe4by46"
-Content-Disposition: inline
-In-Reply-To: <20240902032837.1513090-1-a1ba.omarov@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20240830-rockchip-canfd-v3-0-d426266453fa@pengutronix.de>
+ <20240902032837.1513090-1-a1ba.omarov@gmail.com> <20240902-aspiring-amphibian-swan-f65506-mkl@pengutronix.de>
+In-Reply-To: <20240902-aspiring-amphibian-swan-f65506-mkl@pengutronix.de>
+From: Alibek Omarov <a1ba.omarov@gmail.com>
+Date: Mon, 2 Sep 2024 10:29:38 +0300
+Message-ID: <CAKyg=SXE5FVW4zHVX5qzsm80zco5A3eNe-pU8Xrzq1a7AcM-xA@mail.gmail.com>
+Subject: Re: [can-next,v3,00/20] can: rockchip_canfd: add support for CAN-FD
+ IP core found on Rockchip RK3568
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-rockchip@lists.infradead.org, linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+> Are you using the CAN in production devices? The driver runs quite good
+> on a v3 chip, but still not stable on the v2. But as our customer now
+> only uses v3, I don't have any more time left to fix v2 issues. Drop me
+> a note, if you have issues with the v2 chip.
 
---sse3wtb42fe4by46
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Oh, I meant v2 patch set.
 
-On 02.09.2024 06:28:37, Alibek Omarov wrote:
-> >The IP core is a bit complicated and has several documented errata.
-> >The driver is added in several stages, first the base driver including
-> >the RX-path. Then several workarounds for errata and the TX-path, and
-> >finally features like hardware time stamping, loop-back mode and
-> >bus error reporting.
->=20
-> We've tried this on v2, with a custom board with Radxa CM3I connected and
-> it's even more stable than BSP driver we backported ourselves.
->=20
-> Tested-by: Alibek Omarov <a1ba.omarov@gmail.com>
-
-Can you bounce or resend this message to the linux-can@vger.kernel.org
-mailing list, as this is our primary review channel.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---sse3wtb42fe4by46
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbVaB4ACgkQKDiiPnot
-vG+uRwf/R7F13WFLDYQCVzRdn0E7y7DtJa/k9L1cuZM0oQEKh//eWZEfsc5Wh/kB
-B/s5mdqM9Itz6L5f9AIHLbzVrqMZelGW+ZlQZP/msrOmZxijbJ/hw6UuiQeMaX52
-SuUXq5uf7ZhI3EZf8hDEYOvWWWA3SSNfsoIQhbrJfuM8NU14K78sMuEFvQrhxKih
-WNvoZhGsONSnlciQ7jIViMDVaUyBg98QWkgOWsM9MmO2kDchAtyRaMl9lXQAOaF6
-nxNQ5ScB7SfXsyHvyR738mW8/awNc3tg1SYmpk6u22x5p5pXGX+OxzSUb++8vTOy
-RAlDqkt4og3iuzxJkqVaI+N6trwVUQ==
-=0BE2
------END PGP SIGNATURE-----
-
---sse3wtb42fe4by46--
+We're probably mostly running on v3 chips, since nobody so far
+complained about CAN bus and you're also telling it more stable there.
+:)
 
