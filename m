@@ -1,202 +1,169 @@
-Return-Path: <linux-can+bounces-1409-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1410-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA35796C59D
-	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2024 19:44:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B7B496CA6C
+	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2024 00:29:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A2961C22064
-	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2024 17:44:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E26CB2877E6
+	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2024 22:28:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DDD41E132F;
-	Wed,  4 Sep 2024 17:43:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1CA917ADF7;
+	Wed,  4 Sep 2024 22:27:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="H6r00sz1"
+	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="Ox/jzPml"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11020142.outbound.protection.outlook.com [52.101.69.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 595801DFE09;
-	Wed,  4 Sep 2024 17:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725471838; cv=none; b=kYfpgksOnv6u30cqK9kuRNu+gxsHxT2jVJ0XzEdLQzmzNZ2JrZG0idQYkl8W5kRy4s14vADgaYzsqM2LyGKmH1AybFMk9YTFqamkcsBB96tVRvxoVpolTopP9gOIsIsEbzB/pDMyMRH8siB9hdPiOn/OX1mTE6xXzLXe5Grl2ug=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725471838; c=relaxed/simple;
-	bh=jgFNIwh7TmMFpsYn60zkFlkwVBo27ZTfVXurrph+ZmM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pKhrc+ION6p3VbQE9FxImx3b9MGvFmEERUdSpOlJZceqqtoyBYvLWcc482gLt4UgSNmxgUeClBi3NyFfkEinqQvhf9pkE10VDlwF1gYUlq0IZ5hv2Xy7eoF3MUaqa4LB7BxNLQ8VMhi6VwuIOM/LQGqdg1XIkpWZFNqmNtPpBkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=H6r00sz1; arc=none smtp.client-ip=99.78.197.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B004A17838B;
+	Wed,  4 Sep 2024 22:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.142
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725488869; cv=fail; b=SkOVwYjYyiQ1iuR+CxBIzRNG+U3wS1Q7wcgXd8GVyT90KHK6v2kQpYLl0df4ZFn2YXpMcDqZMIj9VagUqQQ8IFXNRLvaTKTTzzkEFMaISyltwwVGeUMhMtVfve0OgFb2YTBDsesSFQwicQwSxJK7qIYuUbKHPNBUbI7aUxlCyPo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725488869; c=relaxed/simple;
+	bh=+EItJRmoNehfrDzQGbTbRCKy4RBNa+J555PXOHmOkSY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=lUW+TqrAZ7TPk02Q2kX7IZugzqs4r6WeQgppgBdfY+x/vZaSj1aaP8zUjDzX1oyOAWPAvY7nFcTKrTe6c7Hbq8dzHdFsK5C+eNEyLrWvZieSyFmvF91OcPIeyNX5/RtPWYshGDnd1e+E6ykUJrWYu39n62DSImu8FFYAUA7bcOA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu; spf=pass smtp.mailfrom=esd.eu; dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b=Ox/jzPml; arc=fail smtp.client-ip=52.101.69.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esd.eu
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vbIW6QAfr2p1oiK2pBVMQ3d3viHbGi+e1154Mf8qXnjn0UmUT4/ThfwpFnTlFqz0TvwSG6wJmEEi4AKT1M+J9OvWD/A7JoJtMm0dU/Idoaj3re8PY/EaaX81nAX1vT8ZCjQ1LDgzmmgQUVWXtlsKWSJvzDdKPn2Z3ODVVZHZzb3lIlP5jHDiaXyKXXSFdaFoisCbwxZYoVikxrqbdVpR8s/IW4AdjndJi4Vl0PcrRydbbCr04i75l1NXcO2wIucJgkOJrmAZDwVfEkYbbE5SaCbyIZvQxroe4UZJRZWFkJXxr2AGH8WgBUd5cX9Vnep+9Aj6u8B5p2V2p4wiLHaj0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ocjF7m0TTKnSOL9U0uJMcIBDZzueiFg39loyc/Ri9QU=;
+ b=x1TUdcRbMiS9cfmYqFtupeCJ6XoXzKIk0DZYIkqYfX5BGf4PNlIe7VMwWky5utmpdDA/xK5+kcvU+eVWABLSrUCoI5I/jpYh5UY1TdMSdPgzDAhUg/NzktKm/CfnSdV/oNIohVLFwtTNFrZQi4DeFN+LZWWEpidK3Fhg/0GLoSkC5zE0D7CNvJsW+4Ub+j8Pwgh0Kd6S3phc3jbvVkMpKIkg0mZ3Q7U9KUnEZZdWT8FIH7C8xpBuP7lCt3xCP3luFKuMe/f3xx54vQM3MDpU6coHtPNlbiRjg4heQNn/ZZQU/jTGtz2Rle42vyAXhJdKUaGQODz48GROH97WSPcpBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 80.151.164.27) smtp.rcpttodomain=davemloft.net smtp.mailfrom=esd.eu;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=esd.eu; dkim=none
+ (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1725471836; x=1757007836;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VaztKR8g+ioe+vJICHmS9w2/jXfJ3nv9bois1lIiiks=;
-  b=H6r00sz1zT0khERlkdyDHoGD03+oPiZBwJ8FlCrt64byLyramzhydoBp
-   U8ZEHjarsk8wcJrYPYiB9Grlz32q1v+haoOv+1ZOm+7ggiPmHBwp3O25a
-   +6yrC9SV61igNmJV+z2x2VhHLV69T8YCGyLhOYywQ+eheU6tSuuhIGy7w
-   A=;
-X-IronPort-AV: E=Sophos;i="6.10,202,1719878400"; 
-   d="scan'208";a="122555610"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 17:43:53 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.7.35:2416]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.63.127:2525] with esmtp (Farcaster)
- id c6a4ffff-fca8-4c65-a7e4-851a334983bc; Wed, 4 Sep 2024 17:43:53 +0000 (UTC)
-X-Farcaster-Flow-ID: c6a4ffff-fca8-4c65-a7e4-851a334983bc
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Wed, 4 Sep 2024 17:43:52 +0000
-Received: from 88665a182662.ant.amazon.com (10.106.101.38) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
- Wed, 4 Sep 2024 17:43:49 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <syzbot+0532ac7a06fb1a03187e@syzkaller.appspotmail.com>
-CC: <davem@davemloft.net>, <edumazet@google.com>, <horms@kernel.org>,
-	<kuba@kernel.org>, <kuniyu@amazon.com>, <linux-can@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <mkl@pengutronix.de>,
-	<netdev@vger.kernel.org>, <pabeni@redhat.com>, <socketcan@hartkopp.net>,
-	<syzkaller-bugs@googlegroups.com>
-Subject: Re: [syzbot] [can?] WARNING in remove_proc_entry (6)
-Date: Wed, 4 Sep 2024 10:43:39 -0700
-Message-ID: <20240904174339.7790-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <0000000000001934d306214b8aa9@google.com>
-References: <0000000000001934d306214b8aa9@google.com>
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ocjF7m0TTKnSOL9U0uJMcIBDZzueiFg39loyc/Ri9QU=;
+ b=Ox/jzPmlkWsDKnwxNb8nfoJn+OmPX8zuyNeTHLdf8z1OE8957pza7V+lWmgUiSM6z96J6UmJ6t9yZmPpJErA5xbaWPXkBr9GMJ3+1QAcGwtVsb82sfj5x8T02AWBIKeP3hCMnjx66XrdL+1OYMzRCx3YMAwuUH4m+w0yJwFjGKY=
+Received: from DB9PR01CA0014.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:1d8::19) by AS8PR03MB6888.eurprd03.prod.outlook.com
+ (2603:10a6:20b:294::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.28; Wed, 4 Sep
+ 2024 22:27:42 +0000
+Received: from DU2PEPF00028D03.eurprd03.prod.outlook.com
+ (2603:10a6:10:1d8:cafe::c2) by DB9PR01CA0014.outlook.office365.com
+ (2603:10a6:10:1d8::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.14 via Frontend
+ Transport; Wed, 4 Sep 2024 22:27:42 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=esd.eu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
+ discourages use of 80.151.164.27 as permitted sender)
+Received: from esd-s7.esd (80.151.164.27) by
+ DU2PEPF00028D03.mail.protection.outlook.com (10.167.242.187) with Microsoft
+ SMTP Server id 15.20.7918.13 via Frontend Transport; Wed, 4 Sep 2024 22:27:41
+ +0000
+Received: from debby.esd.local (jenkins.esd [10.0.0.190])
+	by esd-s7.esd (Postfix) with ESMTPS id B6B1D7C1278;
+	Thu,  5 Sep 2024 00:27:40 +0200 (CEST)
+Received: by debby.esd.local (Postfix, from userid 2044)
+	id 9CC2E2E17AE; Thu,  5 Sep 2024 00:27:40 +0200 (CEST)
+From: =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Frank Jungclaus <frank.jungclaus@esd.eu>,
+	linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Subject: [PATCH 0/1] can: esd_usb: Remove CAN_CTRLMODE_3_SAMPLES for CAN-USB/3-FD
+Date: Thu,  5 Sep 2024 00:27:39 +0200
+Message-Id: <20240904222740.2985864-1-stefan.maetje@esd.eu>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWC003.ant.amazon.com (10.13.139.252) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PEPF00028D03:EE_|AS8PR03MB6888:EE_
+X-MS-Office365-Filtering-Correlation-Id: c526b502-2c2e-4ff5-6312-08dccd30ca0d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SnY3SjI2WWR0QXRnTGkwZEsyUFhkeS9KWXNoMzQwTnR2b245cnk4dnJvbmZE?=
+ =?utf-8?B?azZ3RVErZFVwTEEwRHViaXFva3JFa0JYclVUU1FGbjM0OC8zU1k3RUdYZXEz?=
+ =?utf-8?B?YkxZcWVSWXM2Qkh3TFVKYURQMmxZbjhWbCtOV1ZsNllNVm0xS3ljUHlxTHJE?=
+ =?utf-8?B?c1FPRzBvUFplamdNZG8xVHQ4dVhSRVV4TWhJZEtWaUMrZ3pjTE1sR1NnOEhQ?=
+ =?utf-8?B?Q1Nwc0ZTYjFFL0VLSVlvVmhlTVlENGNWcmRxbzEzTE9PK1FiSXErL1l5TWds?=
+ =?utf-8?B?QjhWWU1saFlYZ3QwVEtQMW9scnBURDhncXhjQXRENkVNdEdmOVpiellNQzdj?=
+ =?utf-8?B?amg5Q2trTXdoT3lGSTlsSG11VGU1RXRESThpdTEyQ3NINjhGSFkvQkh3QXBo?=
+ =?utf-8?B?VDdaV1VJb1VKNkhZVGF6cExnS3lFYXBtSFlwODk4dXRWcllvaE93TXQ0Y1RN?=
+ =?utf-8?B?SlMvOFVtV2krMkMxdVhtVkcwb2tDUGhpdHgwQmVvOXlVeE5jSm04VURzK3pl?=
+ =?utf-8?B?c3VYWmMySUdlUEZyVllIRmtPRHZVSWUzaUJSMGV3K3h5Vld1WW5PWFlSRUZJ?=
+ =?utf-8?B?R3NlU1ZELzlpSlIvMnRCNnlDMnRKdDRIS25xOHlMYXFSMkdyREhYWjJzK2pF?=
+ =?utf-8?B?eC9abWljWWxNcUxCVkJWVjExZHB5R0hwTEVobkZDQk5Sa1NCRjg3bHBRb3d5?=
+ =?utf-8?B?cWhJOUpJVk1CdmZWZExPU2dKMEJlV21sZWtpNXc0Z3JMK0NKRkVHdDlHc0xU?=
+ =?utf-8?B?cDdob1NpV1MvZm8wR2Jhb2hEMURpanc1WDhOc0FtSFIzN1QzUXg4TTlWTmtU?=
+ =?utf-8?B?Z2hFcjhUZGZkU011M2Q5VFFhSnhRNjR4N1VOQ2tsSU1NUEp5S2VJRXJ6ZWFi?=
+ =?utf-8?B?QnJGdnRnNXBuZ0lzL2htRndubXlISlNobEVrRHdFbkdQeVJDejBlNFI1TmNH?=
+ =?utf-8?B?SEc5bDhIQUJ5Y1RwUS91Umc2V28vOFRydFJCQ29MWEtsb3pFRU4wcWVOeC82?=
+ =?utf-8?B?WUMwdW9oNzkyck1GQStDZ0tVYXlwZDl5cEtFN3VhYmwzUWZMaStZTlBKaVRJ?=
+ =?utf-8?B?WVdjMGs1NFN1MmJvUjlLcTBYOWJ0TWZwaktOcHYzR3pQQmx3dGpUTXFoejgr?=
+ =?utf-8?B?VytPUXF5MEYzcEgrR1oyS3Qwb1I2TVBpVFRISlRvQWtJRUdEOWZzQVZ6N3F6?=
+ =?utf-8?B?dGVmSnJORVFKVi9yaUU0Yy92OU9JdmppYi90d3JWMWF4enpXMTRXOGgyLzd4?=
+ =?utf-8?B?Z051NmY0TmlQc3pad3A3bHkvbXU3T1BkUU8zR1liVTV6cjRRbGEybzJ3TUYy?=
+ =?utf-8?B?Q0d1WDU1SzZDdGtMME5oQUh5U1hKR1IvV1ZQNFhya3IrTStsSmY2ZU9yaGZ3?=
+ =?utf-8?B?anRRRzBDRTVYeUs2SmUzNURMcm1tbWREVFQxcEZYRW4xZGFjMW85Lys2U2Er?=
+ =?utf-8?B?b3BCSTFKeFJnNHVnMHlnVjF4RjExdllyQ3VYeVJWUDJaMW12MmFKY205UkM0?=
+ =?utf-8?B?WEUxMHlmUVZ1WGhOK0V6aU10OVJWdUx3MDA0bDJ6MCt4MVBwTGxpd3A1cDIw?=
+ =?utf-8?B?Z1o3Q0FjdXBlV29CUzIxcnRicGhYbkhVbjRXTHFZSlNMVGNId3BVVGcxL2NJ?=
+ =?utf-8?B?bDNydmZDQlJtQXBWOWFVc3k0VXRWL1VicmN1VGo3cjFzQmg5MDFxTlUwNnB5?=
+ =?utf-8?B?REh0UzdXOUNzSy9HRy9TY0dDZHJ3Zmt0UVcrQjA3R2M3MHFjY3dtZXpkU0Nj?=
+ =?utf-8?B?N2R5WW9UTGNUUkxkRlBYTW00V0NSeXAvMnZGdmc1eHhheHY3S2hjQVpCKzBN?=
+ =?utf-8?B?bHhyNUdMUzlSU3F4bVFGS0NVYjhkTzkxSG9aaVk2eE02UjA2djN1TEZQWm5H?=
+ =?utf-8?B?aVprWit3VTVHMy9YdTdwaUlXK2NoSlpURlA4Z3Y5UVNPeGVYZHlQZndMbXZI?=
+ =?utf-8?Q?DNS5++3OGWAzIh57cKFbL/+UhM28soZ2?=
+X-Forefront-Antispam-Report:
+	CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1102;
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2024 22:27:41.0829
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c526b502-2c2e-4ff5-6312-08dccd30ca0d
+X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU2PEPF00028D03.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB6888
 
-From: syzbot <syzbot+0532ac7a06fb1a03187e@syzkaller.appspotmail.com>
-Date: Wed, 04 Sep 2024 06:56:23 -0700
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    5517ae241919 Merge tag 'for-net-2024-08-30' of git://git.k..
-> git tree:       net
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=111adcfb980000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=996585887acdadb3
-> dashboard link: https://syzkaller.appspot.com/bug?extid=0532ac7a06fb1a03187e
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138d43db980000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11fe3d43980000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/ddded5c54678/disk-5517ae24.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/ce0dfe9dbb55/vmlinux-5517ae24.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/ca81d6e3361d/bzImage-5517ae24.xz
-> 
-> The issue was bisected to:
-> 
-> commit 76fe372ccb81b0c89b6cd2fec26e2f38c958be85
-> Author: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Date:   Mon Jul 22 19:28:42 2024 +0000
-> 
->     can: bcm: Remove proc entry when dev is unregistered.
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=116f8e8f980000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=136f8e8f980000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=156f8e8f980000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+0532ac7a06fb1a03187e@syzkaller.appspotmail.com
-> Fixes: 76fe372ccb81 ("can: bcm: Remove proc entry when dev is unregistered.")
-> 
-> ------------[ cut here ]------------
-> name '4986'
-> WARNING: CPU: 0 PID: 5234 at fs/proc/generic.c:711 remove_proc_entry+0x2e7/0x5d0 fs/proc/generic.c:711
-> Modules linked in:
-> CPU: 0 UID: 0 PID: 5234 Comm: syz-executor606 Not tainted 6.11.0-rc5-syzkaller-00178-g5517ae241919 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
-> RIP: 0010:remove_proc_entry+0x2e7/0x5d0 fs/proc/generic.c:711
-> Code: ff eb 05 e8 cb 1e 5e ff 48 8b 5c 24 10 48 c7 c7 e0 f7 aa 8e e8 2a 38 8e 09 90 48 c7 c7 60 3a 1b 8c 48 89 de e8 da 42 20 ff 90 <0f> 0b 90 90 48 8b 44 24 18 48 c7 44 24 40 0e 36 e0 45 49 c7 04 07
-> RSP: 0018:ffffc9000345fa20 EFLAGS: 00010246
-> RAX: 2a2d0aee2eb64600 RBX: ffff888032f1f548 RCX: ffff888029431e00
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-> RBP: ffffc9000345fb08 R08: ffffffff8155b2f2 R09: 1ffff1101710519a
-> R10: dffffc0000000000 R11: ffffed101710519b R12: ffff888011d38640
-> R13: 0000000000000004 R14: 0000000000000000 R15: dffffc0000000000
-> FS:  0000000000000000(0000) GS:ffff8880b8800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fcfb52722f0 CR3: 000000000e734000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  bcm_release+0x250/0x880 net/can/bcm.c:1578
->  __sock_release net/socket.c:659 [inline]
->  sock_close+0xbc/0x240 net/socket.c:1421
->  __fput+0x24a/0x8a0 fs/file_table.c:422
->  task_work_run+0x24f/0x310 kernel/task_work.c:228
->  exit_task_work include/linux/task_work.h:40 [inline]
->  do_exit+0xa2f/0x27f0 kernel/exit.c:882
->  do_group_exit+0x207/0x2c0 kernel/exit.c:1031
->  __do_sys_exit_group kernel/exit.c:1042 [inline]
->  __se_sys_exit_group kernel/exit.c:1040 [inline]
->  __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1040
->  x64_sys_call+0x2634/0x2640 arch/x86/include/generated/asm/syscalls_64.h:232
->  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->  do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> RIP: 0033:0x7fcfb51ee969
-> Code: Unable to access opcode bytes at 0x7fcfb51ee93f.
-> RSP: 002b:00007ffce0109ca8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fcfb51ee969
-> RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
-> RBP: 00007fcfb526f3b0 R08: ffffffffffffffb8 R09: 0000555500000000
-> R10: 0000555500000000 R11: 0000000000000246 R12: 00007fcfb526f3b0
-> R13: 0000000000000000 R14: 00007fcfb5271ee0 R15: 00007fcfb51bf160
->  </TASK>
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> 
-> If the report is already addressed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
-> 
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
+The attached patch removes the announcement of CAN_CTRLMODE_3_SAMPLES
+for the CAN-USB/3-FD device.
 
-Ugh, I forgot to clear bo->bcm_proc_read.
+I see this patch as a candidate for inclusion in the stable series
+of the 6.6.x and 6.10.x kernels.
 
-#syz test git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git HEAD
+Stefan Mätje (1):
+  can: esd_usb: Remove CAN_CTRLMODE_3_SAMPLES for CAN-USB/3-FD
 
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 46d3ec3aa44b..217049fa496e 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -1471,8 +1471,10 @@ static void bcm_notify(struct bcm_sock *bo, unsigned long msg,
- 		/* remove device reference, if this is our bound device */
- 		if (bo->bound && bo->ifindex == dev->ifindex) {
- #if IS_ENABLED(CONFIG_PROC_FS)
--			if (sock_net(sk)->can.bcmproc_dir && bo->bcm_proc_read)
-+			if (sock_net(sk)->can.bcmproc_dir && bo->bcm_proc_read) {
- 				remove_proc_entry(bo->procname, sock_net(sk)->can.bcmproc_dir);
-+				bo->bcm_proc_read = NULL;
-+			}
- #endif
- 			bo->bound   = 0;
- 			bo->ifindex = 0;
+ drivers/net/can/usb/esd_usb.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+
+base-commit: d7caa9016063ab55065468e49ae0517e0d08358a
+-- 
+2.34.1
+
 
