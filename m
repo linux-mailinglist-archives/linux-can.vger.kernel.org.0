@@ -1,125 +1,100 @@
-Return-Path: <linux-can+bounces-1406-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1407-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 896EA96C1D8
-	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2024 17:11:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB90796C3A9
+	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2024 18:14:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46AE5289389
-	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2024 15:11:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 847B11F24650
+	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2024 16:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4831DCB1C;
-	Wed,  4 Sep 2024 15:10:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D8331E00A6;
+	Wed,  4 Sep 2024 16:13:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="UPRU765+"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F3E71E0082
-	for <linux-can@vger.kernel.org>; Wed,  4 Sep 2024 15:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30741DEFC2;
+	Wed,  4 Sep 2024 16:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725462646; cv=none; b=cVoWFVrV6/Nt4YWOM4IMQ6drAMaYg/BMa1kZU7eE1wXxTxUWFucubpBiLQyax+UaAgweklE9LK3bVeKa1K4dzNkmeUgJEA1T9YUp2T0lpTr04w+FQKpbE+qFKrzJGNUITUPmN290Wyxhwk1mze+unWPQymWVNB8CVmV5bTChR6Y=
+	t=1725466407; cv=none; b=Jz+/T3qcg2MvSWAL+ZRtg3FijgYJvzyoGcW+3qpJoaLchRqoMK/NmBCPW3ADr4qEzfRxkvSUWvP9bheE/1RqJEHzNuYwZE+MGiqPyCY5bfYWgOr5nzUuZPaqCCoWY26e/PZP6+6o141epDQtPwG3wvUwwKVVPozY7vp43eQXXgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725462646; c=relaxed/simple;
-	bh=Iu0nb6RTyrZkNvrkjSU5wjTALNRtvGB9NlsFVHRzYl4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N4Mk9UOS00qEusYUw0kBOFppgXS0h4tvFD3+MCh4rMzx/sig1RGY+WSubVh6IGEJqpca0zm788d3stsmPC3ioFatrJ0WmSs3uTWB+aNBg8LVdHa+/5NK3gZF1pLoJDpDMQw5xxGkx7mcIJnO3Uivtggfge+fhUKcf0ezuYojbjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1slre8-0005tl-7h; Wed, 04 Sep 2024 17:10:12 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1slre4-005TzF-TK; Wed, 04 Sep 2024 17:10:08 +0200
-Received: from pengutronix.de (pd9e5994e.dip0.t-ipconnect.de [217.229.153.78])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 6C417332A4A;
-	Wed, 04 Sep 2024 15:10:08 +0000 (UTC)
-Date: Wed, 4 Sep 2024 17:10:08 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
-Cc: kernel@pengutronix.de, Alibek Omarov <a1ba.omarov@gmail.com>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Elaine Zhang <zhangqing@rock-chips.com>, 
-	David Jander <david.jander@protonic.nl>, Simon Horman <horms@kernel.org>, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: Re: [PATCH can-next v5 00/20] can: rockchip_canfd: add support for
- CAN-FD IP core found on Rockchip RK3568
-Message-ID: <20240904-imposing-determined-mayfly-ba6402-mkl@pengutronix.de>
-References: <20240904-rockchip-canfd-v5-0-8ae22bcb27cc@pengutronix.de>
- <86274585.BzKH3j3Lxt@diego>
+	s=arc-20240116; t=1725466407; c=relaxed/simple;
+	bh=u+KeQ7XnTBV2WaOnAo0adDENVgOrsRCd5/2OivjahVY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lB0R37n3cU6RY26/iVZnF80Z+lsfot0JKDPpJKdQR/TKqsdtmhNRzhP1g1mdbDZAKl1Y5B+omKdX+iu/DxXgp7HXKg18M3N18E/FqxrJp21xVG6NjhOra190T/kBUwGcXECsEXs1BcGHu5WVV2der55LYZbIOMAmk/rZ4JWaILo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=UPRU765+; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-374c180d123so2389891f8f.3;
+        Wed, 04 Sep 2024 09:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1725466404; x=1726071204; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:reply-to:from:subject:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u+KeQ7XnTBV2WaOnAo0adDENVgOrsRCd5/2OivjahVY=;
+        b=UPRU765+Rmm5tQJEeO4GzqSFYoBhcGeuLkPFuUfmF+qnG781y2ZzSbftpl45RwpSou
+         gdQbH6rBPLScQvxfTIFlsYMyPiDLfs0K2q/7ZM4K+UeXCjW8+wG1989ew/2VBa9vETaq
+         Zv6M1OSypliUYsU77mEqsje54/Sn6oFmZroRjVv6P1h9I78Z7Q7gG8vPbYQVH2oOvfPp
+         pTyWKa/Efso9D+QjMJzEfygdQ1WWAWJrkQ8KqlDs63dxO4nDyY9AY6K9W9mGWy9HQ4rP
+         GfvoH0iPzabpaStnnXPl0EAXXhImuMwYxU77r37S1HjfhCzZIxB5jTB1RlbSZzSPUBQ7
+         e6SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725466404; x=1726071204;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:reply-to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+KeQ7XnTBV2WaOnAo0adDENVgOrsRCd5/2OivjahVY=;
+        b=Lm4rKC7aVstSMt/KY6kOIrwn437K8+D+7Yhq4o/Ul4svD0E6uBHycEXKeRO34mRsLt
+         IVPvaykjdjnhuXrixadeEyqJHJeFIZyDpD3+6VOHthbtuAfnSg8FPIWAGat4DY6aGiG1
+         o9j/Q0glE+SVRDuNyk4wcK8XmmYFdVY5ZYRefZN1WEZw0jaxkYDUYUj3yOu5NJVgfnNg
+         x1j2Is2hO4KqaVTd7w4GR5uVLjuWH7j9QaDKBBMLI266dq6qY6FghlyK6qRfJUYe/Iwx
+         3BmaA65KX/Tnl6N/W1DVpIk7T3+F9dj4HZMlCufCCiQlf1/3Q38nOyDTkdQqNyd3Z250
+         60Bg==
+X-Forwarded-Encrypted: i=1; AJvYcCUPS6poEdGwrj+6F/J8lPAXXW/6XOPbdYM4qqhaR101TjqskKereTbQW8NVPJCg++O7keIKGyBz5Gw=@vger.kernel.org, AJvYcCWCn0z7KavElldPxis3AM8BfzHez6TcYy1OYHyKjhQ0GF4/auNwJrq81khRty9Erm5KYb32LXLu@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5VdAhLqMMzgvG0SoW0Roi3+hs3e6TeofIt8WoOV+Dk6g/X3ru
+	3wbsE0m400/9fWhId0Rwl7o/0dhKKXdfy3xK4ZjmeMWUaC7uE2BZxxDw5Q==
+X-Google-Smtp-Source: AGHT+IGV9Ff/qdreHJMX/3XqXAWmM2KInRxmfz1L2SMpd8lFo43zrs/nU9pvyb15M8Cm9Vqp17l1qw==
+X-Received: by 2002:adf:b102:0:b0:364:6c08:b9b2 with SMTP id ffacd0b85a97d-3749b57f3d6mr12737370f8f.45.1725466403716;
+        Wed, 04 Sep 2024 09:13:23 -0700 (PDT)
+Received: from mars.fritz.box ([2a02:8071:7130:82c0:b352:6d7:c693:9659])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-374c6543ee3sm10184097f8f.12.2024.09.04.09.13.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Sep 2024 09:13:22 -0700 (PDT)
+Message-ID: <28a20a6697dbe610bd13829baa9d188ef22a1742.camel@googlemail.com>
+Subject: Re: [PATCH net-next 16/20] can: rockchip_canfd: prepare to use full
+ TX-FIFO depth
+From: Christoph Fritz <chf.fritz@googlemail.com>
+Reply-To: chf.fritz@googlemail.com
+To: Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org
+Cc: davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org, 
+ kernel@pengutronix.de, Alibek Omarov <a1ba.omarov@gmail.com>, Heiko
+ Stuebner <heiko@sntech.de>
+Date: Wed, 04 Sep 2024 18:13:21 +0200
+In-Reply-To: <20240904094218.1925386-17-mkl@pengutronix.de>
+References: <20240904094218.1925386-1-mkl@pengutronix.de>
+	 <20240904094218.1925386-17-mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="izku447zxf4ptlhk"
-Content-Disposition: inline
-In-Reply-To: <86274585.BzKH3j3Lxt@diego>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+> The workaround for the chips that are affected by erratum 6, i.e. EFF
+> frames may be send as standard frames, is to re-send the EFF frame.
+> This means the driver cannot queue the next frame for sending, as long
+> ad the EFF frame has not been successfully send out.
 
---izku447zxf4ptlhk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+just a nitpick, shouldn't it be "as" instead of "ad" ?
 
-On 04.09.2024 10:55:21, Heiko St=C3=BCbner wrote:
-[...]
-> How/when are you planning on applying stuff?
->=20
-> I.e. if you're going to apply things still for 6.12, you could simply take
-> the whole series if the dts patches still apply to your tree ;-)
-
-The DTS changes should not go via any driver subsystem upstream, so
-here's a dedicated PR:
-
-https://patch.msgid.link/20240904-rk3568-canfd-v1-0-73bda5fb4e03@pengutroni=
-x.de
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---izku447zxf4ptlhk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbYeE0ACgkQKDiiPnot
-vG/NCggAhHZEOGnOwc1rPZrwVIaf2Vk/TKCuDRfTsGiUyyxbdDW+wuoYfftH2EBc
-oHFMu3yMYRK83BqZJkyoXOoqdJaxbYnn5Km4uAx6/6mZBRDVecl+NzZajLFOd8Zr
-4jAn4NyJobWCkbYqTUF10RKpQXPOMqvP3DmZ0Mo+6Z1fSYRKKCYUXXBkQ/nOyo+7
-Kk4ZhppEJA5EPKCn8uflLkypS/y9VqAY22LhIX3t/PlJKU1/H2wuHxOZxsMSac+x
-+VZEdQPeqCYzmkZH0Fab6GLhBWQJcRpubtTMFm28J/DjSg3RI+SiOuQjLgwsjIAu
-JdlEyGYVRhVLmtPifpYaHUK1YMdLkA==
-=o39j
------END PGP SIGNATURE-----
-
---izku447zxf4ptlhk--
 
