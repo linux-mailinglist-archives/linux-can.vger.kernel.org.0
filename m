@@ -1,142 +1,141 @@
-Return-Path: <linux-can+bounces-1415-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1416-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C25D96CC48
-	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2024 03:30:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CC3396CF0C
+	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2024 08:19:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 944A51C219AC
-	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2024 01:30:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AA15287882
+	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2024 06:19:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAA096FDC;
-	Thu,  5 Sep 2024 01:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A9E126C1C;
+	Thu,  5 Sep 2024 06:19:45 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30C49463;
-	Thu,  5 Sep 2024 01:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4BC185941
+	for <linux-can@vger.kernel.org>; Thu,  5 Sep 2024 06:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725499840; cv=none; b=Du3UxXgKEYvUjxjJfPIqBDBnR27NmWvz+6aJoBohlI6yv0oV7WOGEETwrtQ45rLluHQIHJvQvJQQGFtITDsabDySgOShItRxbS8hOc6kSn6kQM+ldYWe4KtyDUXfzH4GLFpE6fAlBYjxstAZWeb2TDooKpfW+21PX5QdTzD8RlQ=
+	t=1725517185; cv=none; b=G9LEeBNZ3WCtc/cu+Zh4+YxEl/GxUD425pk+FAep9h6iaC7Cfcqo4EI7tdSP/gFEuVUMBRIC29nka6g5zJGS4DohOewUY2rrjO4PhWvNP9+nTJq3Mz8eojPQlm5Q2sxcU/4meP/vL9FKp0lhtEawn2rxqLvz8DToG8s9kykzPuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725499840; c=relaxed/simple;
-	bh=9Pmrj+fcoaD/YRwU9h2tnyj5nQnnVuZkdkK9DiZxhww=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p9a69PShlZoZh2VBVmctbi4ZqBKwgXpfyKj2CVbr7hZ7hNUvRNRrcoWL4iR5jN1TdpQRsrcN09ADHisEpxYsZZ+QmtXJIJtiLcCPvB6bX5cgK9iYqqknUhTFtw+uvM3pcpR4o6db5Kc6FHMjWJmjZL4QjhUTuT6TDGUYQs62JA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-6c5bcb8e8edso208815a12.2;
-        Wed, 04 Sep 2024 18:30:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725499838; x=1726104638;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LJolQwf1euELjkMn06jCNPYIcnCPKJMA8NUSas5Qbjg=;
-        b=sRuGE6MC+USxdEm80YbAnU4miXIyU/bn90kcjh/mhI2lQtRAhsGg260CvkAk1lLcpD
-         MwP1X+zTGZmNfPeiw2RMcSSOgZGMO7IgcU+6eDbKUatNJlydcQz/Q4T74dSVjmPCIlna
-         xk2E8e4SDzXERhqzdYY0CJOUR+vEy/LtUzVfwPs1G6ObaqcY/v+332lDOM6wT+7ru3kK
-         /AWx4ZeKh4YanpXiVpiYG7bViGpgAaNk8hHhLgr9uARoy0xAp7Xa3An2kl14yN/ilVGd
-         EZN12T0IkkfDS8aIPpxOWzY9UHTdCD6G0MX1C9fuYvXX8MklclHPVYzpHEqv9Y2epQGq
-         OvNA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHcATeHvuyq3EauKCnsXFHIYCJ4J5Z/DFEIv3WkytU6lrVGixX/lAZZZMzFQRDKRLvV/DP9ijY1Og=@vger.kernel.org, AJvYcCVvgw4jBZVLYZ0VT+xtO67Ffm4nGYW5MtHARdnWtpGA91ODCMjJKlqmSuR3vTaOsnHvnVn9fQUJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNNntk0VLAVsVeV6960OqtKGB9JoKrnp6uxte1rwKFgmRCL6yR
-	ONKt93uvWRoY26E/378G8IL7nX0mlAy8/2PR8crVFHkTvvUPgUOz5uvAycZ2LVC+3cRuOiIgxeU
-	MriwNF5/FkWFx/ZcRF6CEprHlGfIECYcd
-X-Google-Smtp-Source: AGHT+IES+cBXzaSvaSBSS51KD767JrfrVi6K/CaNSezsDz6Yl9Ze9TEs8wEG3i7JpoGVhJsrQ7EWZQl1xJjt1nPcd0U=
-X-Received: by 2002:a05:6a21:2d8b:b0:1cf:1218:ea07 with SMTP id
- adf61e73a8af0-1cf1218ed72mr1861244637.5.1725499838153; Wed, 04 Sep 2024
- 18:30:38 -0700 (PDT)
+	s=arc-20240116; t=1725517185; c=relaxed/simple;
+	bh=bRtFhROfyecNoXowVVEaoxV1CtMmwYGrUMt2lCkMoz4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SR+g4DSAqFXWx/jnQudrg5sseIsq8RM7fvk2IDMo6ejd3E2xfU4nDFtld7NrZEBCoXw10bMSn0JhXJaD3N2mcqIIw6pWmIn5RJW353WPj1zQ6/qUDyu95BI+34G8dbEbXgxkkS5fG8DGcUaRH2eEmOutClhpQ7T8fZBGrJzkPmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sm5pq-0007Na-VN; Thu, 05 Sep 2024 08:19:14 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sm5po-005dZX-2p; Thu, 05 Sep 2024 08:19:12 +0200
+Received: from pengutronix.de (pd9e5994e.dip0.t-ipconnect.de [217.229.153.78])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id AC96E33307A;
+	Thu, 05 Sep 2024 06:19:11 +0000 (UTC)
+Date: Thu, 5 Sep 2024 08:19:10 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
+Cc: kernel@pengutronix.de, Alibek Omarov <a1ba.omarov@gmail.com>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Elaine Zhang <zhangqing@rock-chips.com>, 
+	David Jander <david.jander@protonic.nl>, Simon Horman <horms@kernel.org>, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, David Jander <david@protonic.nl>
+Subject: Re: [PATCH can-next v5 00/20] can: rockchip_canfd: add support for
+ CAN-FD IP core found on Rockchip RK3568
+Message-ID: <20240905-galago-of-unmatched-development-cc97ac-mkl@pengutronix.de>
+References: <20240904-rockchip-canfd-v5-0-8ae22bcb27cc@pengutronix.de>
+ <86274585.BzKH3j3Lxt@diego>
+ <20240904-imposing-determined-mayfly-ba6402-mkl@pengutronix.de>
+ <4091366.iTQEcLzFEP@diego>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240905012237.79683-1-kuniyu@amazon.com>
-In-Reply-To: <20240905012237.79683-1-kuniyu@amazon.com>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Thu, 5 Sep 2024 10:30:26 +0900
-Message-ID: <CAMZ6RqLHbxdda_CLg-_N-WN8zxjWOaDQ2qOck8-Xj-6Myjh1Qg@mail.gmail.com>
-Subject: Re: [PATCH v1 can] can: bcm: Clear bo->bcm_proc_read after remove_proc_entry().
-To: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org, linux-can@vger.kernel.org, 
-	syzbot+0532ac7a06fb1a03187e@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jb2uxtxhgm4xkjdb"
+Content-Disposition: inline
+In-Reply-To: <4091366.iTQEcLzFEP@diego>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hi Iwashima san,
 
-Thank you for your patch.
+--jb2uxtxhgm4xkjdb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu. 5 Sep. 2024 at 10:24, Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> syzbot reported a warning in bcm_release(). [0]
->
-> The blamed change fixed another warning that is triggered when
-> connect() is issued again for a socket whose connect()ed device has
-> been unregistered.
->
-> However, if the socket is just close()d without the 2nd connect(), the
-> remaining bo->bcm_proc_read triggers unnecessary remove_proc_entry()
-> in bcm_release().
->
-> Let's clear bo->bcm_proc_read after remove_proc_entry() in bcm_notify().
->
-> [0]
-> name '4986'
-> WARNING: CPU: 0 PID: 5234 at fs/proc/generic.c:711 remove_proc_entry+0x2e7/0x5d0 fs/proc/generic.c:711
-> Modules linked in:
-> CPU: 0 UID: 0 PID: 5234 Comm: syz-executor606 Not tainted 6.11.0-rc5-syzkaller-00178-g5517ae241919 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
-> RIP: 0010:remove_proc_entry+0x2e7/0x5d0 fs/proc/generic.c:711
-> Code: ff eb 05 e8 cb 1e 5e ff 48 8b 5c 24 10 48 c7 c7 e0 f7 aa 8e e8 2a 38 8e 09 90 48 c7 c7 60 3a 1b 8c 48 89 de e8 da 42 20 ff 90 <0f> 0b 90 90 48 8b 44 24 18 48 c7 44 24 40 0e 36 e0 45 49 c7 04 07
-> RSP: 0018:ffffc9000345fa20 EFLAGS: 00010246
-> RAX: 2a2d0aee2eb64600 RBX: ffff888032f1f548 RCX: ffff888029431e00
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-> RBP: ffffc9000345fb08 R08: ffffffff8155b2f2 R09: 1ffff1101710519a
-> R10: dffffc0000000000 R11: ffffed101710519b R12: ffff888011d38640
-> R13: 0000000000000004 R14: 0000000000000000 R15: dffffc0000000000
-> FS:  0000000000000000(0000) GS:ffff8880b8800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fcfb52722f0 CR3: 000000000e734000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  bcm_release+0x250/0x880 net/can/bcm.c:1578
->  __sock_release net/socket.c:659 [inline]
->  sock_close+0xbc/0x240 net/socket.c:1421
->  __fput+0x24a/0x8a0 fs/file_table.c:422
->  task_work_run+0x24f/0x310 kernel/task_work.c:228
->  exit_task_work include/linux/task_work.h:40 [inline]
->  do_exit+0xa2f/0x27f0 kernel/exit.c:882
->  do_group_exit+0x207/0x2c0 kernel/exit.c:1031
->  __do_sys_exit_group kernel/exit.c:1042 [inline]
->  __se_sys_exit_group kernel/exit.c:1040 [inline]
->  __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1040
->  x64_sys_call+0x2634/0x2640 arch/x86/include/generated/asm/syscalls_64.h:232
->  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->  do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> RIP: 0033:0x7fcfb51ee969
-> Code: Unable to access opcode bytes at 0x7fcfb51ee93f.
-> RSP: 002b:00007ffce0109ca8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fcfb51ee969
-> RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
-> RBP: 00007fcfb526f3b0 R08: ffffffffffffffb8 R09: 0000555500000000
-> R10: 0000555500000000 R11: 0000000000000246 R12: 00007fcfb526f3b0
-> R13: 0000000000000000 R14: 00007fcfb5271ee0 R15: 00007fcfb51bf160
->  </TASK>
->
-> Fixes: 76fe372ccb81 ("can: bcm: Remove proc entry when dev is unregistered.")
-> Reported-by: syzbot+0532ac7a06fb1a03187e@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=0532ac7a06fb1a03187e
-> Tested-by: syzbot+0532ac7a06fb1a03187e@syzkaller.appspotmail.com
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+On 04.09.2024 18:43:52, Heiko St=C3=BCbner wrote:
+> Am Mittwoch, 4. September 2024, 17:10:08 CEST schrieb Marc Kleine-Budde:
+> > On 04.09.2024 10:55:21, Heiko St=C3=BCbner wrote:
+> > [...]
+> > > How/when are you planning on applying stuff?
+> > >=20
+> > > I.e. if you're going to apply things still for 6.12, you could simply=
+ take
+> > > the whole series if the dts patches still apply to your tree ;-)
+> >=20
+> > The DTS changes should not go via any driver subsystem upstream, so
+> > here's a dedicated PR:
+> >=20
+> > https://patch.msgid.link/20240904-rk3568-canfd-v1-0-73bda5fb4e03@pengut=
+ronix.de
+>=20
+> I wasn't on Cc for the pull-request so I'll probably not get a notificati=
+on
+> when it gets merged?
+>=20
+> So if you see your PR with the binding and driver getting merged to
+> next-next, can you provide a ping please?
+  ^^^^^^^^^
+  net-next?
 
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Will do.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--jb2uxtxhgm4xkjdb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbZTVsACgkQKDiiPnot
+vG96tQf/SxmDdp97bb66tXlUCf9x3X4Dory7Liw54EAzczBg1ycKNhJJojalvMoP
+aDuJOZ2Zmh3ho31TiRZ2oYkEvW11tK8Ep5/EBNGP2vergWFxZLe0+h+NLN93CXxB
+9gfLvz4AA0SwE+MdgPuK0TUwjDcl7tX0kRFzMWyuV+K9ARq9FRv7LzXZwaTEauYU
++Yx/jrkm2Z3RHGIr85yhS//6/KeS9G8Nzd9D3k9cBfZVMgRbWr2W8bR5ebNkB02w
+U2HUuaOwbGIsQDTDoC+7m72hMOdkrdSneMDvI0Ww4PFeml+KmSNr9s3uc8J5uTWi
+9liZ+iO4DMqQ80xIfnjQutSg8Ww33Q==
+=y7mx
+-----END PGP SIGNATURE-----
+
+--jb2uxtxhgm4xkjdb--
 
