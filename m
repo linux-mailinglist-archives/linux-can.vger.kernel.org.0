@@ -1,148 +1,115 @@
-Return-Path: <linux-can+bounces-1423-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1424-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20FE796DA3C
-	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2024 15:25:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CF2496DA79
+	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2024 15:36:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2D17282B42
-	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2024 13:25:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F7DD1C22F5A
+	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2024 13:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 557B819D08A;
-	Thu,  5 Sep 2024 13:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4169C19CCE2;
+	Thu,  5 Sep 2024 13:36:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lqNtYyoo"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80BA719D077
-	for <linux-can@vger.kernel.org>; Thu,  5 Sep 2024 13:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F38519CC23
+	for <linux-can@vger.kernel.org>; Thu,  5 Sep 2024 13:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725542722; cv=none; b=srgCytOXJQk0Hahxh6h/jWJChWFGZG0wvpnPM/BamnftHzc7Cgb+ldgryYvNR7UGNkPNbIrXDPghLDAK3Q5bXhJiRH4Xe5TJar5xYaGpTCgA5t/tBZB10XSZJeq8Voh6uVGfypxSlwD5xAryILEgZ739Cn03zonbmFmK28bymck=
+	t=1725543364; cv=none; b=eDdj/yMUthgxCRhQRVqiYH7mzgyY04GGTszKGRuPx/GoaNdALmojfYsclnbapd3zgHMmkE7cQ1DTOIrJCUtqgzanZHnK22W9Ex8dzpdAwzn4M4SfP6Qi9dWhhhTSMpgaQlYhTKAubzyTROU36rCFpizssFdwavGvtAi7Y/fQRhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725542722; c=relaxed/simple;
-	bh=7jZHLN6x7TS1NEyREZ70lKrrl7an8E99MUq7DicLtJ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=daVhvz7RivlYt9wcWjS3Hjy0Q1Vp9eDDCXj9WtLGH6V69lqobUCQnBnmClOvvu6lK/iozrvpK8B5dJgOa2/VHyWK4MZLYwrIfzbJ5H2syRa2xX110sl0ToL1Nw+NHLfgrIkYXt0uEP+CIASBAOnKm1z8XNYSui7IEmZditVtgC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1smCTY-0003eO-E5; Thu, 05 Sep 2024 15:24:40 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1smCTV-005iOY-Fj; Thu, 05 Sep 2024 15:24:37 +0200
-Received: from pengutronix.de (pd9e5994e.dip0.t-ipconnect.de [217.229.153.78])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 031D4333683;
-	Thu, 05 Sep 2024 13:24:37 +0000 (UTC)
-Date: Thu, 5 Sep 2024 15:24:36 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
-Cc: kernel@pengutronix.de, Alibek Omarov <a1ba.omarov@gmail.com>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Elaine Zhang <zhangqing@rock-chips.com>, 
-	David Jander <david.jander@protonic.nl>, Simon Horman <horms@kernel.org>, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: Re: [PATCH can-next v5 00/20] can: rockchip_canfd: add support for
- CAN-FD IP core found on Rockchip RK3568
-Message-ID: <20240905-thoughtful-gerbil-of-growth-28f014-mkl@pengutronix.de>
-References: <20240904-rockchip-canfd-v5-0-8ae22bcb27cc@pengutronix.de>
- <86274585.BzKH3j3Lxt@diego>
- <20240904-imposing-determined-mayfly-ba6402-mkl@pengutronix.de>
- <4091366.iTQEcLzFEP@diego>
- <20240905-galago-of-unmatched-development-cc97ac-mkl@pengutronix.de>
+	s=arc-20240116; t=1725543364; c=relaxed/simple;
+	bh=Y+P2j2qrwSnMDqeWUSlId8+yFQS3DtwH7Wxq2ewUubE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pAEqoB76MBCc5U+vDGNYkOju6A0VVR51eAxFyXI6lQpuHWvR1dUEvkU0A7igr5xsn2X6PU/Z0Q3f5iofliiFo/j8k/ScUnNuEIuwPWg112ocbeFzUgZ/KE98V7JeBnL2GdzbxVL47nsPDaowklD6J4HxnGTzAWi7M2XJf+HHDFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lqNtYyoo; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725543363; x=1757079363;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y+P2j2qrwSnMDqeWUSlId8+yFQS3DtwH7Wxq2ewUubE=;
+  b=lqNtYyooj1EHdeTeCkUWVfK5XNLPJA6r3ZHNBbUgwlm2GvnkhwE648NF
+   7UgoEyShLNDTYeaCLQ6KWQ9jICLNE+lsonrPVOGnhzT7MvFPuFKS/svsj
+   zDhHRhGsLZ+xrFOnQIdoMPFtfvbrlPZBx7OyGac2bAW+RHGVaYp581Z3r
+   EZ4+gfPjls6lnewXW/QU5IJHinYzVslK+yRIeC02eZLtbK7jacCCEPuYX
+   sOLR4CuzZ/KzyHVbHOGGBcn0l7d6xK0aEXVJofPEiGXTpDi2gP0ngd6bi
+   8MjreZPZY8mI3B86QuIEJdiD3Pf8TxCgBu2M+X0wIJMh/KwPniuIVvu5p
+   w==;
+X-CSE-ConnectionGUID: Z+GOsm/rSKWfQJ+eHDAoyA==
+X-CSE-MsgGUID: LwwZDUIQRJC65g49SmSlPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="28049269"
+X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
+   d="scan'208";a="28049269"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 06:36:02 -0700
+X-CSE-ConnectionGUID: jZDU/06vS5eHmtiyiZBExQ==
+X-CSE-MsgGUID: DRKUsx1rSJG5TEkPiQ+n1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
+   d="scan'208";a="65324357"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 05 Sep 2024 06:36:00 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1smCeU-0009wK-1z;
+	Thu, 05 Sep 2024 13:35:58 +0000
+Date: Thu, 5 Sep 2024 21:35:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: oe-kbuild-all@lists.linux.dev, linux-can@vger.kernel.org
+Subject: [mkl-can-next:rockchip-canfd-downstream 28/32]
+ drivers/net/can/rockchip/rockchip_canfd.c:29:10: fatal error:
+ linux/rockchip/cpu.h: No such file or directory
+Message-ID: <202409052113.UCbJ9FFA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="z26o4qqv53ya5nl6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240905-galago-of-unmatched-development-cc97ac-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git rockchip-canfd-downstream
+head:   57a1d7b3fcdc3ccf99336327347d54ad630a4485
+commit: 4e81d160c560ca2fea7805dee1c5262965268d93 [28/32] can: rockchip_canfd: remove obsolete CAN LED support
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20240905/202409052113.UCbJ9FFA-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240905/202409052113.UCbJ9FFA-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409052113.UCbJ9FFA-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/can/rockchip/rockchip_canfd.c:29:10: fatal error: linux/rockchip/cpu.h: No such file or directory
+      29 | #include <linux/rockchip/cpu.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
 
---z26o4qqv53ya5nl6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +29 drivers/net/can/rockchip/rockchip_canfd.c
 
-On 05.09.2024 08:19:10, Marc Kleine-Budde wrote:
-> On 04.09.2024 18:43:52, Heiko St=C3=BCbner wrote:
-> > Am Mittwoch, 4. September 2024, 17:10:08 CEST schrieb Marc Kleine-Budde:
-> > > On 04.09.2024 10:55:21, Heiko St=C3=BCbner wrote:
-> > > [...]
-> > > > How/when are you planning on applying stuff?
-> > > >=20
-> > > > I.e. if you're going to apply things still for 6.12, you could simp=
-ly take
-> > > > the whole series if the dts patches still apply to your tree ;-)
-> > >=20
-> > > The DTS changes should not go via any driver subsystem upstream, so
-> > > here's a dedicated PR:
-> > >=20
-> > > https://patch.msgid.link/20240904-rk3568-canfd-v1-0-73bda5fb4e03@peng=
-utronix.de
-> >=20
-> > I wasn't on Cc for the pull-request so I'll probably not get a notifica=
-tion
-> > when it gets merged?
-> >=20
-> > So if you see your PR with the binding and driver getting merged to
-> > next-next, can you provide a ping please?
->   ^^^^^^^^^
->   net-next?
->=20
-> Will do.
+b532c83f2c336c Elaine Zhang 2023-07-28 @29  #include <linux/rockchip/cpu.h>
+4a0161b0041f1c Elaine Zhang 2020-07-13  30  
 
-The driver reached net-next/main:
+:::::: The code at line 29 was first introduced by commit
+:::::: b532c83f2c336c54747f77f90831bd498505dbf4 can: rockchip_canfd: support rk3568 can v2
 
-https://lore.kernel.org/all/172554243626.1687913.5623663966016175191.git-pa=
-tchwork-notify@kernel.org/
+:::::: TO: Elaine Zhang <zhangqing@rock-chips.com>
+:::::: CC: Marc Kleine-Budde <mkl@pengutronix.de>
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---z26o4qqv53ya5nl6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbZsREACgkQKDiiPnot
-vG/JvAf/XoO+j2bRaV/OIKVKmVBLZH5kRJnidPSorqD9aB1pbIDk0+hNkyuHTghI
-sZIvHzuNJYf+y93aEiK2M3k8++YM0bEMLbkVOOJEK/CaMHCf1jIyFgOATkffElPC
-yOjaUlOuwyJwZt2idPGQIRqdoCO1PtkPTs6mki1ZY3y8pO7y1HXsoGJy4sKLnXxp
-BTZpdvAUZmdGeLEUefKaxiRH1NHMjh3jAb1TEst2IWdB/13IjNTw3jeALqer28nq
-1eJflTIXAs24J4CxUruHRl1YttaaTgyets+Qu0jTZnBZSnzlbm7qh+t8qrAoPyQx
-+2os847WP91NL5CRSbE0eMGZBR8A+w==
-=DLSm
------END PGP SIGNATURE-----
-
---z26o4qqv53ya5nl6--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
