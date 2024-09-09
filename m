@@ -1,145 +1,132 @@
-Return-Path: <linux-can+bounces-1445-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1446-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 486A097154F
-	for <lists+linux-can@lfdr.de>; Mon,  9 Sep 2024 12:28:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB8549716A4
+	for <lists+linux-can@lfdr.de>; Mon,  9 Sep 2024 13:23:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F07E61F25721
-	for <lists+linux-can@lfdr.de>; Mon,  9 Sep 2024 10:28:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 665FE282F4B
+	for <lists+linux-can@lfdr.de>; Mon,  9 Sep 2024 11:23:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C931B3F2D;
-	Mon,  9 Sep 2024 10:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C47451B81C6;
+	Mon,  9 Sep 2024 11:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ULDXuJML"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462EE1B3F2C
-	for <linux-can@vger.kernel.org>; Mon,  9 Sep 2024 10:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3461B81BA;
+	Mon,  9 Sep 2024 11:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725877706; cv=none; b=GuycOIvzSAeQvMJa91CAIg6rEPZe8goDGNpj8OUyjRLeSRy5BxPpiEVp2r8buF+zFZvPFg0JIIebXX5KH2AeNKLd1qiGom2YIeDEs/gTKvy+kgFPZ1Zxi+vm4uXS2G7VKyBLsql4UkSeeO6Stzc4J9a7mW+8PkKfPIT8vaD2GZI=
+	t=1725880848; cv=none; b=F6JfqaYQBbToSSyTYdjEQ9EazWRffyI4WFwkJw5wVWCcxabwAKx3IO4Whgvc5TDloPWtxokOy5CJ2fsMwLr1POkXvqtWH8Q2fpoZyUDnSVpevvKIrqNHL2Usb5nJvUL6VmCTvBRM+oKkDBx1/rDLHOnlCluTKG+hOAy94uLfgS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725877706; c=relaxed/simple;
-	bh=rwTU4OBCrj5FyIBE23hhrSCcr1FAJSZ6vhDKt8u/RBE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W6MTd38BRgD/LECA46ikgu6+LhezdXgd21ci92gd2jEmH9VfUd7lW1EJQs7JGG67/rV2zewcie1+Py33XGiRXZZaKjQFaLcbYNlPOutzetxI5p8TiAM73quSC7mgScvT0B56Av2AnSfKc27elMg1WN25S+6BGNPDd4uZHAhfto8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1snbd7-0008Cq-CC; Mon, 09 Sep 2024 12:28:21 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1snbd6-006d5V-Qw; Mon, 09 Sep 2024 12:28:20 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 78E3733682B;
-	Mon, 09 Sep 2024 10:28:20 +0000 (UTC)
-Date: Mon, 9 Sep 2024 12:28:20 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: "Hamby, Jake (US)" <Jake.Hamby@teledyne.com>
-Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] can: m_can: Enable NAPI before enabling interrupts
-Message-ID: <20240909-furry-spectral-guan-bb27d4-mkl@pengutronix.de>
-References: <DM8PR14MB5221D9DD3A7F2130EF161AF7EF9E2@DM8PR14MB5221.namprd14.prod.outlook.com>
+	s=arc-20240116; t=1725880848; c=relaxed/simple;
+	bh=xnJr/zsL534VZEk0Nh7lt6toQZM7O+OmyOi3AnZky+g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=kEzEUq5TtDdkqIMfqCMBdgUYL5KFAUh8DAj/pjQADvpjykwN8pR0/DE9sRQQbjgE6oXljIJGD5t+OcQAmQWakyOjoJiACJ4cripfqQws4xBJM0yoJCd9P1YSmC7ehAnAv3+5lVaWITwZ5Qacucv5tIAdbigKJT5AGx27YHCn4Hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ULDXuJML; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4899Jnul030692;
+	Mon, 9 Sep 2024 11:20:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	FKZfd352d3YrxGnDzNNnk0JqdueJK5oEeG2Wrl9zpkY=; b=ULDXuJML7isiwV0S
+	zbnFfWFH3jJ3K4SetyG/nYg2MFlFCa1K8Rp5z8P83suecWxY8BqzG8QtmwPm96RF
+	a6fyb0Z4eAL3RACt/G9zvnL0eJ7iNAJTrwKP6AaGYzEi1Yq4+iKp+xbgXES6gwM+
+	10gFXxn1O0iNtyao0No35BVnbprE1wku3xWK7OKAYhjT5WKHXyS2ADXiqRqKy8hD
+	yP97FPKX1sEd6G3EEqvIovWI/aRguE8leierjFcY9P4JaidQ6o+FTDBgQxxQ4pun
+	0o536r3ITvOOyEjvSHKiAbIpc7QCpuGeLKupTKqdLJFo13keDDXYDOcBcrfs6K7W
+	hilmAw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41gy5rak48-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Sep 2024 11:20:34 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 489BKOd2032617
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 9 Sep 2024 11:20:24 GMT
+Received: from [10.217.219.107] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 9 Sep 2024
+ 04:20:20 -0700
+Message-ID: <43de24a2-1fc4-4c04-a19e-09a11bac52e9@quicinc.com>
+Date: Mon, 9 Sep 2024 16:50:07 +0530
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="atvafioyx2obuspf"
-Content-Disposition: inline
-In-Reply-To: <DM8PR14MB5221D9DD3A7F2130EF161AF7EF9E2@DM8PR14MB5221.namprd14.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] can: mcp251xfd: Enable transceiver using gpio
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+CC: <manivannan.sadhasivam@linaro.org>, <thomas.kopp@microchip.com>,
+        <mailhol.vincent@wanadoo.fr>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
+        <quic_vdadhani@quicinc.com>
+References: <20240806090339.785712-1-quic_anupkulk@quicinc.com>
+ <20240806-industrious-augmented-crane-44239a-mkl@pengutronix.de>
+Content-Language: en-US
+From: Anup Kulkarni <quic_anupkulk@quicinc.com>
+In-Reply-To: <20240806-industrious-augmented-crane-44239a-mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: y1XjWUsM3S6CmtmXk23SG9WjMG35so1f
+X-Proofpoint-ORIG-GUID: y1XjWUsM3S6CmtmXk23SG9WjMG35so1f
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ clxscore=1011 malwarescore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
+ mlxscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=777 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2408220000
+ definitions=main-2409090091
 
+Thanks Marc, for pointing to the thread.
+I have internally validated the given patch, and it works fine for me.
+Hence we intend to add only DT related change.
 
---atvafioyx2obuspf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Do you plan to merge it in next release or any time by which I can expect the patch to be merged?
+Since my DT change is dependent on the given patch. 
 
-On 06.09.2024 23:19:51, Hamby, Jake (US) wrote:
-> If any error flags are set when bringing up the CAN device, e.g. due to
-> CAN bus traffic before initializing the device, when m_can_start is
-> called and interrupts are enabled, m_can_isr is called immediately,
-> which disables all CAN interrupts and calls napi_schedule.
->=20
-> Because napi_enable isn't called until later in m_can_open, the call to
-> napi_schedule never schedules the m_can_poll callback and the device is
-> left with interrupts disabled and can't receive any CAN packets until
-> rebooted. This can be verified by running "cansend" from another device
-> before setting the bitrate and calling "ip link set up can0" on the test
-> device. Adding debug lines to m_can_isr shows it's called with flags
-> (IR_EP | IR_EW | IR_CRCE), which calls m_can_disable_all_interrupts and
-> napi_schedule, and then m_can_poll is never called.
->=20
-> Move the call to napi_enable above the call to m_can_start to enable any
-> initial interrupt flags to be handled by m_can_poll so that interrupts
-> are reenabled. Add a call to napi_disable in the error handling section
-> of m_can_open, to handle the case where later functions return errors.
->=20
-> Also, in m_can_close, move the call to napi_disable below the call to
-> m_can_stop to ensure all interrupts are handled when bringing down the
-> device. This race condition is much less likely to occur.
->=20
-> While testing, I noticed that IR_TSW (timestamp wraparound) fires at
-> about 1 Hz, but the driver doesn't care about it. Add it to the list of
-> interrupts to disable in m_can_chip_config to reduce unneeded wakeups.
->=20
-> Tested on a Microchip SAMA7G54 MPU. The fix should be applicable to any
-> SoC with a Bosch M_CAN controller.
-
-Thank you very much for your contribution! I believe you have solved the
-problem I was investigating last Friday. I still need to test it with
-your solution though.
-
-This patch does not contain your Signed-off-by [1]. Add it to your next
-patches; "git commit -s" will add it automatically. For this patch, you
-can reply and include it in your email!
-
-[1] https://www.kernel.org/doc/html/latest/process/submitting-patches.html#=
-sign-your-work-the-developer-s-certificate-of-origin
+Please let me know if you need any support/help in any further validation of the patch.
 
 regards,
-Marc
+Anup
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+On 8/7/2024 1:32 AM, Marc Kleine-Budde wrote:
+> On 06.08.2024 14:33:39, Anup Kulkarni wrote:
+>> Ensure the CAN transceiver is active during mcp251xfd_open() and
+>> inactive during mcp251xfd_close() by utilizing
+>> mcp251xfd_transceiver_mode(). Adjust GPIO_0 to switch between
+>> NORMAL and STANDBY modes of transceiver.
+> 
+> There is still the gpio support patch pending, which I have to review
+> and test.
+> 
+> https://lore.kernel.org/all/20240522-mcp251xfd-gpio-feature-v3-0-8829970269c5@ew.tq-group.com/
+> 
+> After this has been merged, we can have a look at this patch.
+> 
+> It might actually not be needed anymore, as we can describe a CAN
+> transceiver switched by a GPIO in the DT. Hopefully we don't run into
+> some crazy circular dependencies or similar issues.
+> 
+> regards,
+> Marc
+> 
 
---atvafioyx2obuspf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbezcEACgkQKDiiPnot
-vG/lvgf8CfGCe8ElfbP4xj3EhaeSLMh2VbgJr7KMJF4FL89rVrjTgsFYU/G+XLMn
-ynlNRjvGHKPVHyDm93bRrYlIjG61x5JbRZ3Q1ohODpjAE9iMhDBY5mNTLEs5/h9R
-ilE+1700Y+UglDgT5Utx/ZoOq2g6R/C46MEZ2x4hk8nAF7acoiBa+iUtBB9Km5cV
-boxpjOhhHtm/tEmPKxVK3sAGSsMjMgaCD6Odu7h/Ec/1Mt97T9a9T1Nlp9XgFkB3
-Fz03apAos9d0iztKyNYfPeZOSe/LHfwViZ7GNeCmfF0j1QCJ+5wpMlDE5XuixIQk
-Gc5n2e6bxlZTo9s2itWXnINzp+Jukw==
-=Vucm
------END PGP SIGNATURE-----
-
---atvafioyx2obuspf--
 
