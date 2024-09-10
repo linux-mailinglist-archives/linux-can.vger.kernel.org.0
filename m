@@ -1,46 +1,45 @@
-Return-Path: <linux-can+bounces-1467-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1468-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2145A973F4E
-	for <lists+linux-can@lfdr.de>; Tue, 10 Sep 2024 19:25:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A662973F84
+	for <lists+linux-can@lfdr.de>; Tue, 10 Sep 2024 19:29:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C111C1F220CF
-	for <lists+linux-can@lfdr.de>; Tue, 10 Sep 2024 17:25:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FDEB1F29CD4
+	for <lists+linux-can@lfdr.de>; Tue, 10 Sep 2024 17:29:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B010F1A7AEC;
-	Tue, 10 Sep 2024 17:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15F81B78E4;
+	Tue, 10 Sep 2024 17:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gYPs8/F2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kn05P4rS"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8BB1A7AE3;
-	Tue, 10 Sep 2024 17:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E451A4F19;
+	Tue, 10 Sep 2024 17:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725988939; cv=none; b=INq6i/Fx71knf71o0/81ry8r/yNxIheL1eRsz6uA/VD9E4OmjARPAnXO/RLTur3xFegOhZ+4fHpFZiI80GMhK4xfHq31uD9ggbCz61NkcMNE2HMGeDmM+LpqXH7ASlIFNSWxzwLhQqikZE0/NmHjh+eqTy7GXG8Y7St+6xTqUTQ=
+	t=1725988984; cv=none; b=cKscEzWfAx1HLdzC063JetoEHiyXAVXGjfOnxBC5scngwUZjXZnhmgAeLvwR3bj+7ptag3lLd1fkueYmMrv15baSmEyafAhVvfCl72+rQC2s0sQQ83KK84iV6XLUTBD2EzxUHk/4tP9E+4ycvhclN8cDTkkQgNpPPCmzP09V5D8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725988939; c=relaxed/simple;
+	s=arc-20240116; t=1725988984; c=relaxed/simple;
 	bh=co+0/b4aRDm6iCVskWeVHG7wwfqak69YUvWTAJJ1DXc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JQDCqjqWaE83vZrZ1H3ShDdlV2i/JlqvUHQSFc/hUQQVIBI9UC5A5zwGfmdIpfwCDFPpaggpjnJgpeBY2cG3bVl+itJ7CNCxKz7pWrchdLiFfzVdqjyqS/vOsdxTfDr4DMlggLwAy9ypEjTzNBKXW9OAsjmXDEQ+8f6QbYNdzYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gYPs8/F2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF86C4CECC;
-	Tue, 10 Sep 2024 17:22:17 +0000 (UTC)
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zxpd3nSmKZzD//F1WK6/y5eyP5UGfUe5nL+RMT0kgXzjAFRFbhk2axYQdN+i00dK/bT//E8SRR5QyzDFfgIloN5T1QVE3izXqnNdLYodyyucJ9tRXmi2vcfur3loVg4BiYkAdE5+xJBfBNKVQfGNCXgEZrXYCj4UDscmgDSDz8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kn05P4rS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0260BC4CEC4;
+	Tue, 10 Sep 2024 17:23:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725988939;
+	s=k20201202; t=1725988984;
 	bh=co+0/b4aRDm6iCVskWeVHG7wwfqak69YUvWTAJJ1DXc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gYPs8/F2By0QeCsvyvugerE/drBTM5pA7l78Oqh+jew7AGHVO0ACMnNrzEVStsgSL
-	 T6BLxE5fXsbwcVm89pPtuk1WNAaw/E9yCXbFwFHV4LQ4YQymZqzOybvQylFSjZgyPf
-	 BXaxSZE5ex9u1avZQeGGu5ecWxkmhgEEINNlr4yYoVkUp2E/7f39MfOsAHcH0Seb/D
-	 jjgf6VoljJ+pT0MNk2C189/AytjrA0MA348zK3LDKnSkVQrSzlU31Nc0uYIfYk6GU/
-	 HZvDARhFBUO1tj1tWsh/L9qX5UO0+kF95VSyhmAnsknO5zLqbs6jS8xPiwTi8fqI4g
-	 aLjEzefi219yg==
+	h=From:To:Cc:Subject:Date:From;
+	b=kn05P4rSDEzw5iwg/iNH+7IccpH4G5uBqcjT/cVex/9h5CpF0YISg8gTjJw3Cpx2Z
+	 snj8rWuxM/crAXZA6oUDV8gkysPzki+hhhobxNTqab3z0lEO9MLhW3CDiOj1DhWfDB
+	 AjPogMjfjeeqDboA1WaINoHpQVFLvxhVeP39zh9dsTyCmRZPNoF+meaErY3EQv8/ta
+	 AZZ8FAXQY8XR9XiZshMOPOjc/ELI97RMZHx0MTe/hrQxYi5hwHZXAed56NtBajGvu9
+	 Kz62pqZHAJ+cLZbNu9syUQQ3X7KvPwysRBfdpKZuKFKslcMg7dN5p/HAlhNp+JBaPQ
+	 ppkn0XWkTEVgg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +53,10 @@ Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
 	pabeni@redhat.com,
 	linux-can@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.10 02/18] can: mcp251xfd: mcp251xfd_ring_init(): check TX-coalescing configuration
-Date: Tue, 10 Sep 2024 13:21:47 -0400
-Message-ID: <20240910172214.2415568-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 01/12] can: mcp251xfd: mcp251xfd_ring_init(): check TX-coalescing configuration
+Date: Tue, 10 Sep 2024 13:22:43 -0400
+Message-ID: <20240910172301.2415973-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240910172214.2415568-1-sashal@kernel.org>
-References: <20240910172214.2415568-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -68,7 +65,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.10.9
+X-stable-base: Linux 6.6.50
 Content-Transfer-Encoding: 8bit
 
 From: Marc Kleine-Budde <mkl@pengutronix.de>
