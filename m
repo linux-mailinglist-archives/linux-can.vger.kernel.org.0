@@ -1,80 +1,64 @@
-Return-Path: <linux-can+bounces-1480-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1494-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 054AE97619B
-	for <lists+linux-can@lfdr.de>; Thu, 12 Sep 2024 08:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 24ED2976408
+	for <lists+linux-can@lfdr.de>; Thu, 12 Sep 2024 10:07:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDDCE2839EC
-	for <lists+linux-can@lfdr.de>; Thu, 12 Sep 2024 06:37:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D55F1286A69
+	for <lists+linux-can@lfdr.de>; Thu, 12 Sep 2024 08:07:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4D0A18BC1A;
-	Thu, 12 Sep 2024 06:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="MiShd/+q"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8848A1917E9;
+	Thu, 12 Sep 2024 08:06:33 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB60376025;
-	Thu, 12 Sep 2024 06:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075AF1917EC
+	for <linux-can@vger.kernel.org>; Thu, 12 Sep 2024 08:06:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726123036; cv=none; b=iKH+Cnp7jqzSF1aLj8ZSzWl2a/7WHtpDBg43FBb/Bz5XJZImBAbZJZbQi3nHWkOJ+08+O+kCDNjppNRF/InPl8lbadhBASkGeiaILleaD9SEULct6RPw/67riYweogGzsFrA9psLwZhj21sNNfrODC2MptC9urAO2x161IWOzLA=
+	t=1726128393; cv=none; b=FxarzmGJQDzu5okDNeoGxDmiE0FZ9w7vSvFECYo3qe5uRLURFvKAiyKEMKH0p+zGj9FWUtUjB2r3okVKfBJVVu7n7fyEu5+YI5gAKAfTSw8HBXOzwLhCDxr3j1rvYRySNAMBLGoM38tMfHYjO+ityTNfbvOvwkWiBCpJxvSi5rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726123036; c=relaxed/simple;
-	bh=SU09P/N+FU06lHPPT9dW6yBaIR6NBJ/GB0UO74Le92s=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qB2lICCSruc5OjP7IcA5o+90XSUmA+hZgmL65shvrHZ17aHxgt53Fx7w2T8PALmZ9wW27R0nkW49eG+PJqQlv5Jk6nQ95QhH540LnUXGFqpohwG2nBeoRW1xSfQrN8zLUhH/1d/Wdc05CZAJ8Q2XrjFjriU9cxmmaBD29Gkmk9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=MiShd/+q; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1726123034; x=1757659034;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SU09P/N+FU06lHPPT9dW6yBaIR6NBJ/GB0UO74Le92s=;
-  b=MiShd/+qx9OH43ZyuKzg2oZtri9JbVezY3gPQYr8ZalAB+Jm+f3iYk3l
-   YMqL2uNAZWn4qWzhDXfjpMT4sbtXB/wEH3vnmEG1kpVCjdi5AduUiis+g
-   wZh20uZLHSguAzLLkVQK5ek3CsYDwCqI9sFhwdeud8NDQvDY3CWTAVL7P
-   rEStcTf/ZgaLg3N+P+zfsQceebYbaXMbsU4VQ2dGCg6UGuRoFLcjb8g/W
-   S6Y8yzP9CVkcZ9VAQ6+FXO87P4JQbtyA7qZs/igdeh2fGQLQE6c1trU2+
-   dtvPW8YHS6dvKENty5/kojxV7GCqw+HZ36GmmfwylPhCQXED5bYNjBM8W
-   A==;
-X-CSE-ConnectionGUID: SF6Mom6KSPO+4b8Pq1TERA==
-X-CSE-MsgGUID: 1HQHhiWbRS2jPXC7Yoajuw==
-X-IronPort-AV: E=Sophos;i="6.10,222,1719903600"; 
-   d="asc'?scan'208";a="199114207"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Sep 2024 23:37:13 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 11 Sep 2024 23:37:12 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Wed, 11 Sep 2024 23:37:10 -0700
-Date: Thu, 12 Sep 2024 07:36:37 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
+	s=arc-20240116; t=1726128393; c=relaxed/simple;
+	bh=yo6ClgrrYtZtJj0pgLHxHUjiwKMsQVS4UyGqBqyc2Ic=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o0aIPPFpwNB0P7SwNa20pL70ncaDiRjV/cTiiM8AaDmgE1jMBzD8F4EN5KvVy4jLmT85yyeMba8cY8lpSG176qpH/OMZwb1z1kZ6Ns+PuRnHZp+j6D1UOgf5Y2aidSLvdtmMwgaFbCGlVrBx36Z0suMPa68gUMX9ID56VD4GsJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1soeqA-0004AS-FW; Thu, 12 Sep 2024 10:06:10 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1soeq7-007KiX-Rx; Thu, 12 Sep 2024 10:06:07 +0200
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id E4905338DC1;
+	Thu, 12 Sep 2024 07:35:27 +0000 (UTC)
+Date: Thu, 12 Sep 2024 09:35:27 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Charan Pedumuru <charan.pedumuru@microchip.com>
-CC: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol
-	<mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nicolas Ferre
-	<nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	<linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: net: can: atmel: Convert to json schema
-Message-ID: <20240912-pushup-shaky-f0980435caf3@wendy>
+Message-ID: <20240912-literate-caped-mandrill-4c0c9d-mkl@pengutronix.de>
 References: <20240912-can-v1-1-c5651b1809bb@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -82,26 +66,25 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="fawzaBO9W7nNBNRn"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="orv67sewbwknpnrd"
 Content-Disposition: inline
 In-Reply-To: <20240912-can-v1-1-c5651b1809bb@microchip.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
---fawzaBO9W7nNBNRn
-Content-Type: text/plain; charset=us-ascii
+
+--orv67sewbwknpnrd
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 12, 2024 at 11:19:16AM +0530, Charan Pedumuru wrote:
+On 12.09.2024 11:19:16, Charan Pedumuru wrote:
 > Convert atmel-can documentation to yaml format
 >=20
 > Signed-off-by: Charan Pedumuru <charan.pedumuru@microchip.com>
-
-Please see the comments I left on the internal v2 of this patch.
-
-Thanks,
-Conor.
-
 > ---
 >  .../bindings/net/can/atmel,at91sam9263-can.yaml    | 67 ++++++++++++++++=
 ++++++
@@ -134,6 +117,9 @@ yaml
 > +          - atmel,at91sam9263-can
 > +          - atmel,at91sam9x5-can
 > +          - microchip,sam9x60-can
+
+The driver doesn't have a compatible for "microchip,sam9x60-can".
+
 > +      - items:
 > +          - enum:
 > +              - microchip,sam9x60-can
@@ -172,6 +158,9 @@ yaml
 > +        - interrupts
 > +        - clocks
 > +        - clock-names
+
+AFAICS clock-names is required for all compatibles.
+
 > +
 > +unevaluatedProperties: false
 > +
@@ -179,6 +168,9 @@ yaml
 > +  - |
 > +    #include <dt-bindings/interrupt-controller/irq.h>
 > +    can0: can@f000c000 {
+
+I think unused labels should be removed.
+
 > +          compatible =3D "atmel,at91sam9x5-can";
 > +          reg =3D <0xf000c000 0x300>;
 > +          interrupts =3D <30 IRQ_TYPE_LEVEL_HIGH 3>;
@@ -215,17 +207,31 @@ cumentation/devicetree/bindings/net/can/atmel-can.txt
 > --=20
 > Charan Pedumuru <charan.pedumuru@microchip.com>
 >=20
+>=20
+>=20
 
---fawzaBO9W7nNBNRn
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--orv67sewbwknpnrd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuKL8AAKCRB4tDGHoIJi
-0t9CAP0SdR9OtPTrKWLG8ZfJgmtnwlP9n9OKm4E4tJAAWZOncwEAttpdCT2WsNy9
-8GnsssxR3tYA3aqoSkW5rH0gXCmW6ww=
-=0Z9k
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbimbwACgkQKDiiPnot
+vG+igQf7BhUphCaYd67/BKLQBNIguPGy39T5kQzPkdg/QflMpcz6bSZQXYsvyguA
+GsRPQcDt7APYW7tTpTnIa0ZNlYj+lF7cWPl9afS90kk4kRAPPvSYb9Vd2UAMjsPt
+m/jhQsupujHXJg8m2REBHmB0npIGoHuL+kqg0qRIIucFWs0jgsMPG6C11e/QiFtQ
+ArgNdeuIsS7DUqKNXy9eb43tnRSomQkn4M1NojRVKSmAuzMrvheHmKA2mQOLJ2Or
+4JRvI/oRZsbx1KBxqID2y/NMb9pk7TbVw6gZnTLJcYKg5GmhXuIbPIP3RZ6eWnB4
+8h+/7/1vWZlVuhVrFKzyXj9OfBiIyQ==
+=50PA
 -----END PGP SIGNATURE-----
 
---fawzaBO9W7nNBNRn--
+--orv67sewbwknpnrd--
 
