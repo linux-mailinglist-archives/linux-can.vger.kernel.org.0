@@ -1,125 +1,103 @@
-Return-Path: <linux-can+bounces-1500-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1501-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF060978946
-	for <lists+linux-can@lfdr.de>; Fri, 13 Sep 2024 22:05:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47C69978D4E
+	for <lists+linux-can@lfdr.de>; Sat, 14 Sep 2024 06:30:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 174D1B213D4
-	for <lists+linux-can@lfdr.de>; Fri, 13 Sep 2024 20:05:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAE721F255AF
+	for <lists+linux-can@lfdr.de>; Sat, 14 Sep 2024 04:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDE97136E01;
-	Fri, 13 Sep 2024 20:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C94DD1758E;
+	Sat, 14 Sep 2024 04:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="n8Dw7WDy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kabH2t/M"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D545BA2E;
-	Fri, 13 Sep 2024 20:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09AE2107;
+	Sat, 14 Sep 2024 04:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726257938; cv=none; b=a8gnWy9VGsQYVsPmU+8AznTSa1bEmi3P7ZZPJFh77ORj7vlYqxKPkwZ1h6A7FEN3lLI8oU7ylZws7DRtsYSu5PGQsfmYwmPNDANREfp5tWjYY+Qixq/11nqZNmBTbkgfm2uw2+J2pjJmBZOwYtHG9yD48CEC1gAT8qAmlqQxGSo=
+	t=1726288229; cv=none; b=JtxEhYulyz8gS34v/9YR80eg1neZqzHYj/TKV5qHUc/PHi1SBZq16vwanSHcZLs9Mi5uXFknHgyAF8Ya1/0yxK8fw4l3b3N7zHHq9eGfabgUi62C909kUmJI+oDrbqWIr1xD0OWxtRdsEQrKD4/elB/o6k9NQyTFMcLrSKTjCQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726257938; c=relaxed/simple;
-	bh=88+WbYUILBPnMzh6jPB4Mj7NyId5g8mRCRkbvrT/nQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eE1RPSXGSP1f+uySFpg32ewvczDCBc4LH4ZM5KVXGkC+XBYF7y2ep2X3IpoN/Dg4lcV2w8k/qmDiWPuL72xbF27ZssHaPGWFufrJI3iJ4J20CLjVuX5XypUe+SUb3lAHnYs5ea6PHR6ED+jZlC74LAsXpQLisJGw6k+HCW9thzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=n8Dw7WDy; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
-	:Subject; bh=fdTfQKY0qkCMjwrdmN0Fuu0YLCsZGwp56cFev5joVpI=; b=n8Dw7WDyb8qe/vPk
-	zv/1LZwBTw68NIlZxHpBQEh4Oa7ShjOtFYOsru3+bCjk/h4lpiapemxcA2IQ/hfIwlTlDRwMPJTFK
-	9pldfEKL0sMlQ4tjm9JD0pvZl4B5xrjTZgS9nYX/SmKYzTQ8AXuJSwWuEdKyH0H1TWcxN6dqv7kEy
-	1+O9+KdqhyjZfD4NDHF05a4ej+P7upLyUztHVbXqb7RQfIPNkuUEKofjukBgjwp/HC8GsTHHBrewY
-	dbV2qY7UdZLdes6Y9TaKiWTwd1RvDdGUanxLi60ulWLKzIIzKnpjYFGGWqsiO4LA1SZbGGYuEnESA
-	AmLy17OzX6i0USUDtg==;
-Received: from dg by mx.treblig.org with local (Exim 4.96)
-	(envelope-from <dg@treblig.org>)
-	id 1spCXr-005fFw-0D;
-	Fri, 13 Sep 2024 20:05:31 +0000
-Date: Fri, 13 Sep 2024 20:05:31 +0000
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: mkl@pengutronix.de, linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: of alloc_canxl_skb
-Message-ID: <ZuSbC8iqeGcUnogC@gallifrey>
-References: <ZuRGRKU9bjgC52mD@gallifrey>
- <2540406e-8da3-4cb8-bd1a-30271dd6cc67@hartkopp.net>
+	s=arc-20240116; t=1726288229; c=relaxed/simple;
+	bh=Pt23YDzsiXIxf86qTthldfNXNvQFdJvxHF/Pisjvi8k=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=qNkrfLBsZ6ScEa+Rp1OerrkFrLsIvJeRVqkwiBHjlfWkKD0D1j1rKr/Z904bPtbgpqYefOZwTPSjhQz6h0uWQljf7kwFAlnW1OIqHdiYeC4CsEt/Wxw00ggaVjKfdFonJZNbl772i3EYJyLq/cRwsMF0C7uM/b9xqojCKuh8my8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kabH2t/M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FE7C4CEC0;
+	Sat, 14 Sep 2024 04:30:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726288229;
+	bh=Pt23YDzsiXIxf86qTthldfNXNvQFdJvxHF/Pisjvi8k=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=kabH2t/M6TX6Q3Zxqlk+gS4k+mq3AcGncXKl7RpHxOw3nmWpdatZN6qcczdQI+irO
+	 sXOREKtrkX3/gJoe4YvdKdrJXrmuKEQoRFfwwS5Q0omwOgfGvdZ5MeOJ+Z/DNLPMck
+	 r8SPlRjKveQGg7e9moV3f3z9dxe4HXTSJtR3YtIp5tpRHw4Wny0MLXRkLKNh6UygRg
+	 Jeyhye+Ffo4xzOEGtNDHyD5vVvvEXFt1ubyE6cFkq1QEdMgu2RXWdAHFHBoOLT3YlM
+	 ZWd22fqNVY2UqPiPohe+dW09fFXpOrYqg2/ogES3b59H4fEn79dxPEPiLz578IpKVj
+	 +CKSqfJCmz5Gg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE5CE3806655;
+	Sat, 14 Sep 2024 04:30:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <2540406e-8da3-4cb8-bd1a-30271dd6cc67@hartkopp.net>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
-X-Uptime: 20:04:08 up 128 days,  7:18,  1 user,  load average: 0.02, 0.02,
- 0.00
-User-Agent: Mutt/2.2.12 (2023-09-09)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/5] can: bcm: Clear bo->bcm_proc_read after
+ remove_proc_entry().
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172628823052.2458848.2139057553371045622.git-patchwork-notify@kernel.org>
+Date: Sat, 14 Sep 2024 04:30:30 +0000
+References: <20240912075804.2825408-2-mkl@pengutronix.de>
+In-Reply-To: <20240912075804.2825408-2-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ linux-can@vger.kernel.org, kernel@pengutronix.de, kuniyu@amazon.com,
+ syzbot+0532ac7a06fb1a03187e@syzkaller.appspotmail.com,
+ mailhol.vincent@wanadoo.fr
 
-* Oliver Hartkopp (socketcan@hartkopp.net) wrote:
-> Hi David,
+Hello:
 
-Hi Oliver,
+This series was applied to netdev/net.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-> On 13.09.24 16:03, Dr. David Alan Gilbert wrote:
+On Thu, 12 Sep 2024 09:50:50 +0200 you wrote:
+> From: Kuniyuki Iwashima <kuniyu@amazon.com>
 > 
-> >    I'm doing some deadcode hunting and noticed that
-> > 
-> >    alloc_canxl_skb in drivers/net/can/dev/skb.c
-> > 
-> > looks unused in the main kernel tree; is that expected?
-> > I see it was added back in 2022 by
-> >    fb08cba12b52 ("can: canxl: update CAN infrastructure for CAN XL frames")
-> > 
-> > I know almost exactly nothing about CAN, so I thought it best
-> > to ask!
+> syzbot reported a warning in bcm_release(). [0]
 > 
-> I created some slides so that you can get an introduction to the different
-> CAN protocols CAN CC (aka Classical CAN), CAN FD and CAN XL:
+> The blamed change fixed another warning that is triggered when
+> connect() is issued again for a socket whose connect()ed device has
+> been unregistered.
 > 
-> https://github.com/linux-can/can-doc/tree/master/presentations
+> [...]
 
-Thanks!
+Here is the summary with links:
+  - [net,1/5] can: bcm: Clear bo->bcm_proc_read after remove_proc_entry().
+    https://git.kernel.org/netdev/net/c/94b0818fa635
+  - [net,2/5] can: esd_usb: Remove CAN_CTRLMODE_3_SAMPLES for CAN-USB/3-FD
+    https://git.kernel.org/netdev/net/c/75b318954057
+  - [net,3/5] can: kvaser_pciefd: Enable 64-bit DMA addressing
+    https://git.kernel.org/netdev/net/c/d0fa06408ccf
+  - [net,5/5] can: m_can: m_can_close(): stop clocks after device has been shut down
+    https://git.kernel.org/netdev/net/c/2c09b50efcad
+  - [net-next,4/5] can: rockchip_canfd: rkcanfd_timestamp_init(): rework delay calculation
+    (no matching commit)
 
-> The introduction of the CAN XL support lead to some clean up and rework also
-> for the former alloc_can_skb() and alloc_canfd_skb() helpers.
-> 
-> The function is currently not in use in net/can/raw.c as it is only needed
-> when a CAN XL frame is received from read hardware. But the patch also
-> contains the definition of ETH_P_CANXL to already handle CAN XL frames
-> properly inside the Linux kernel and e.g. for WireShark 4.4.
-> 
-> There are currently some CAN XL IP cores in development (see attached
-> picture with an FPGA based IP core) and I am working on the kernel
-> infrastructure (e.g. bitrate configuration enhancements) on this board. So
-> alloc_canxl_skb() is already in use on my desk and there will be some more
-> stuff showing up soon ;-)
-
-OK, great - I won't try and deadcode it then!
-
-Thanks again for the reply,
-
-Dave
-
-
-> Best regards,
-> Oliver
-
-
+You are awesome, thank you!
 -- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
