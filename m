@@ -1,68 +1,65 @@
-Return-Path: <linux-can+bounces-1521-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1533-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E76FF97E27C
-	for <lists+linux-can@lfdr.de>; Sun, 22 Sep 2024 18:34:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D99A97E990
+	for <lists+linux-can@lfdr.de>; Mon, 23 Sep 2024 12:10:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65932B20CCC
-	for <lists+linux-can@lfdr.de>; Sun, 22 Sep 2024 16:34:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDC11B21DE4
+	for <lists+linux-can@lfdr.de>; Mon, 23 Sep 2024 10:10:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C050E2209B;
-	Sun, 22 Sep 2024 16:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="jm9nwVxc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF863198A31;
+	Mon, 23 Sep 2024 10:08:49 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3502581;
-	Sun, 22 Sep 2024 16:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BF0195FEF
+	for <linux-can@vger.kernel.org>; Mon, 23 Sep 2024 10:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727022861; cv=none; b=oKX8gcT5F4l4gZz4NARRQ9gFVMDjuZJ4Duo9dvur6sXRPizjqBiAJFZNAiDRHmH7QKV6gwvMYW6bnvtQtbejg0cCpfR08oJ+ISMslhQdAkgYKWL3HfsnDNP8ypgtj0h9ygmbnVTWudNZ6qcdnBXspqxhMJqkfqW2KIVTusiXhHk=
+	t=1727086129; cv=none; b=ek6Bg8SEMW8CfTUqpqAWld4nWWyMQj3xutPBvRm0ur0kvCrjxY4LaCogwXLRtliSsVhwu/Im4GtZiXLE7YP1zbD07yy79rgmCJO6mQsre9t7qnW08jRtOyaHtPwvJQIzJEBv7nDEZQwigrM6FvmwTw8Qutzui0C3OY1y0921yWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727022861; c=relaxed/simple;
-	bh=gFlVSCJab296RK5+Ai1YxYQl2rv5hxg3BElMeprdRII=;
+	s=arc-20240116; t=1727086129; c=relaxed/simple;
+	bh=wAxj4X47rwpfE8DME5JjC/KFI3GHmOUUJeEabElbU5c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nl7GyWkI58iZSBwCNs5P8kT0I3tYIQKouCyI/4eih/teDDZHV+SPs+RKOqM0maKBQld2nswJFavS3W3pmrnYqHHwvxT6w3h++ov1E/WgizF3uljXG0OyH5c14Y5H9jG8su2BeMppu9kM2rPRYRXm0CGdivblKe6LUQnNfEtvTug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=jm9nwVxc; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=xGmipcPUvSFvCq++6VT9S82wVCnPIsh0kZdD2tTzbJM=; b=jm9nwVxcMCmtyeT6Oyx1bwlk5b
-	QIt2JFKDn8FmrZFoi10orj33aeO2dLGY8ksjWgFZyWxgHm2j5wid8ZzC7QJ6anDx2t82kwpN088uc
-	UjC91LJRO9zSM2MqYEf+s8dMNGJvEaYn9PgvYMghtzhOHXHeEou9YBad//2eQ5BdVrek=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1ssPX3-0084MO-6x; Sun, 22 Sep 2024 18:33:57 +0200
-Date: Sun, 22 Sep 2024 18:33:57 +0200
-From: Andrew Lunn <andrew@lunn.ch>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DlAQvqSk2JrMFXwqJNBsVCuqhvVOLajkt0QgNPrarHGJtZx8XTy+9mFosSBQ19SuEQlS+EQt+LA4rtFyHrIrz4vGeTGgTHrK/Pz2A8oEByw9Nuo//QEvSov2TFlaWg6TFVsVCsfcQN5azKDzmKXvnwvY5FbocZ7xYAMxerDIAkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ssfzS-00006g-IR; Mon, 23 Sep 2024 12:08:22 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ssfzN-000vje-Rt; Mon, 23 Sep 2024 12:08:17 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 6D6CE340BDC;
+	Sun, 22 Sep 2024 21:13:45 +0000 (UTC)
+Date: Sun, 22 Sep 2024 23:13:44 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Hal Feng <hal.feng@starfivetech.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-	William Qiu <william.qiu@starfivetech.com>,
-	devicetree@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Emil Renner Berthing <emil.renner.berthing@canonical.com>, 
+	William Qiu <william.qiu@starfivetech.com>, devicetree@vger.kernel.org, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 3/4] can: Add driver for CAST CAN Bus Controller
-Message-ID: <cf17f15b-cbd7-4692-b3b2-065e549cb21e@lunn.ch>
+Message-ID: <20240922-inquisitive-stingray-of-philosophy-b725d3-mkl@pengutronix.de>
 References: <20240922145151.130999-1-hal.feng@starfivetech.com>
  <20240922145151.130999-4-hal.feng@starfivetech.com>
 Precedence: bulk
@@ -71,87 +68,55 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ynvekyrzzuwpg3ly"
 Content-Disposition: inline
 In-Reply-To: <20240922145151.130999-4-hal.feng@starfivetech.com>
-
-> +static inline u32 ccan_read_reg(const struct ccan_priv *priv, u8 reg)
-> +{
-> +	return ioread32(priv->reg_base + reg);
-> +}
-> +
-> +static inline void ccan_write_reg(const struct ccan_priv *priv, u8 reg, u32 value)
-> +{
-> +	iowrite32(value, priv->reg_base + reg);
-> +}
-
-No inline functions in .c files please. Let the compiler decide.
-
-> +static inline u8 ccan_read_reg_8bit(const struct ccan_priv *priv,
-> +				    enum ccan_reg reg)
-> +{
-> +	u8 reg_down;
-> +	union val {
-> +		u8 val_8[4];
-> +		u32 val_32;
-> +	} val;
-> +
-> +	reg_down = ALIGN_DOWN(reg, 4);
-> +	val.val_32 = ccan_read_reg(priv, reg_down);
-> +	return val.val_8[reg - reg_down];
-
-There is an ioread8(). Is it invalid to do a byte read for this
-hardware? If so, it is probably worth a comment.
-
-> +static int ccan_bittime_configuration(struct net_device *ndev)
-> +{
-> +	struct ccan_priv *priv = netdev_priv(ndev);
-> +	struct can_bittiming *bt = &priv->can.bittiming;
-> +	struct can_bittiming *dbt = &priv->can.data_bittiming;
-> +	u32 bittiming, data_bittiming;
-> +	u8 reset_test;
-> +
-> +	reset_test = ccan_read_reg_8bit(priv, CCAN_CFG_STAT);
-> +
-> +	if (!(reset_test & CCAN_RST_MASK)) {
-> +		netdev_alert(ndev, "Not in reset mode, cannot set bit timing\n");
-> +		return -EPERM;
-> +	}
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
-You don't see nedev_alert() used very often. If this is fatal then
-netdev_err().
+--ynvekyrzzuwpg3ly
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Also, EPERM? man 3 errno say:
+On 22.09.2024 22:51:49, Hal Feng wrote:
+> From: William Qiu <william.qiu@starfivetech.com>
+>=20
+> Add driver for CAST CAN Bus Controller used on
+> StarFive JH7110 SoC.
 
-       EPERM           Operation not permitted (POSIX.1-2001).
+Have you read me review of the v1 of this series?
 
-Why is this a permission issue?
+https://lore.kernel.org/all/20240129-zone-defame-c5580e596f72-mkl@pengutron=
+ix.de/
 
-> +static void ccan_tx_interrupt(struct net_device *ndev, u8 isr)
-> +{
-> +	struct ccan_priv *priv = netdev_priv(ndev);
-> +
-> +	/* wait till transmission of the PTB or STB finished */
-> +	while (isr & (CCAN_TPIF_MASK | CCAN_TSIF_MASK)) {
-> +		if (isr & CCAN_TPIF_MASK)
-> +			ccan_reg_set_bits(priv, CCAN_RTIF, CCAN_TPIF_MASK);
-> +
-> +		if (isr & CCAN_TSIF_MASK)
-> +			ccan_reg_set_bits(priv, CCAN_RTIF, CCAN_TSIF_MASK);
-> +
-> +		isr = ccan_read_reg_8bit(priv, CCAN_RTIF);
-> +	}
+regards,
+Marc
 
-Potentially endless loops like this are a bad idea. If the firmware
-crashes, you are never getting out of here. Please use one of the
-macros from iopoll.h
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-> +static irqreturn_t ccan_interrupt(int irq, void *dev_id)
-> +{
-> +	struct net_device *ndev = (struct net_device *)dev_id;
+--ynvekyrzzuwpg3ly
+Content-Type: application/pgp-signature; name="signature.asc"
 
-dev_id is a void *, so you don't need the cast.
+-----BEGIN PGP SIGNATURE-----
 
-	Andrew
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbwiIUACgkQKDiiPnot
+vG+1cAf+JRa6qiL+McRGaVYbwDK+5KafGW3568LC7Fz2J4e36IgRjTNWrK3zGdwR
+lUQekR2f2bapcH5T72+S0KDjjyI0v28jzRcWZR/A1/FsKY+xFTeNzOG+6ODx2VRV
+YMxZ58ZM2telOVS0SUtaGiLpXBrayzpz5nCOUxyymt1SdjjkdaVifDayKJI5vwvh
+IT4lXhvNRgPy3Guw9C9YcSk0OyIZ/TFOosTB3Db3j4M9SxdL8HgIc2H5NkV1+4Tz
+UmEmWzNKgZS0XDRPtpMe6DqR+zkm4IVm+9NNk6+0XRQ8aEZr77W7LQq946qSd/1O
+EgLfQi6D50XAsIef/NFxmgOk9EUKAQ==
+=udGo
+-----END PGP SIGNATURE-----
+
+--ynvekyrzzuwpg3ly--
 
