@@ -1,59 +1,74 @@
-Return-Path: <linux-can+bounces-1542-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1543-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CDB697EB2B
-	for <lists+linux-can@lfdr.de>; Mon, 23 Sep 2024 14:00:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B08297EB5E
+	for <lists+linux-can@lfdr.de>; Mon, 23 Sep 2024 14:13:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B61351C21488
-	for <lists+linux-can@lfdr.de>; Mon, 23 Sep 2024 12:00:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A55701F2200D
+	for <lists+linux-can@lfdr.de>; Mon, 23 Sep 2024 12:13:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262D71EB48;
-	Mon, 23 Sep 2024 12:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99537197A87;
+	Mon, 23 Sep 2024 12:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="P9LHlZhg"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="szWKbCKc"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FED7823AC
-	for <linux-can@vger.kernel.org>; Mon, 23 Sep 2024 12:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76018002A;
+	Mon, 23 Sep 2024 12:13:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727092835; cv=none; b=cF9Rta/ASlBNMitDuHdnVbYmOaxxzKsSjIrZwsxqMTWRY9Xbif+p4OQEXSuLbQ0WAmHqN2R83Js/aE8d1aB5NhMzzRoE0/sU+udAnoyA5Q69LZvlmv4/q3LaBI2N5gq573m93ypzDTenR9kP2LJgTDwZB00WJbFBd0apm0eVpwU=
+	t=1727093583; cv=none; b=ro65iHbDjL2b2Ixdvn+oBeqSPuDMaYCcawBxDHfC/qH9TOtW/l3SKGyCvbcWPao3m3Ow7d7+a4ZXCr0xD2j3l1kfGpMrWoCmLLH1+LNHjWbtEJX28v98j1Yobryh3o8CSi6XvvYHv644GoFALivhKntO4afQ6ibawfl8bxWqfQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727092835; c=relaxed/simple;
-	bh=+Ea8Bw2FuzoCiVoOWLnK2JG9tP3DswpDbZNA9O4enq0=;
+	s=arc-20240116; t=1727093583; c=relaxed/simple;
+	bh=mtUlxP0PeHJOjX6toxYU5t+iAgcA2Ki1i79is5A/tzo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kHP5dZ2KzXd9jdAs+pg1AoXxW6Oe8SOin0rHeGm92ze9zvqHhDMayBSjhrSyhMHCKUMoq4zE5SBzpKhYowceylHDfqABN4zuQ1uzdgJhq3Df6MTp8nAt9z6Z0CKoQw/Ns7TrXGbC5rqJDv0gRcNo4m1VDjYdBUIUfezibPZaZ6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=P9LHlZhg; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 8EE901F8F7;
-	Mon, 23 Sep 2024 14:00:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1727092828;
-	bh=YcVqBs6HbunVYXLynNuUCYgouoEOslEdWbejJi1IjhE=; h=From:To:Subject;
-	b=P9LHlZhgSsSfl8CQPu46DwqyPi5F8o6MYa66IUz8ERkPig61SLDouLvSXoBvDaZM2
-	 XfjdAO/oH15Av3DoVuc8tOUGPIf2ukbiVwgl+jZp+U521yHOnVMMAQh3KfjybocySn
-	 st+7NyknXXmfEIzBoCPCs9zZLmsBo72wLH8TVve/v/b1LvZVFg+cM5O67AksZIk/yl
-	 exMaviaEUuVVXSEJ2Qcd3iky44dRBhfbOTEQsPkmX6pk6hNr4mhmL7uBpkuReu+fyZ
-	 67hF4LaFFe4SLVLCBEJvAK+9THUA+pZCe2C0MRvLdd18b9M9nNYm79Z6I0SNjhwwNZ
-	 DYE7Vui7ifPEA==
-Date: Mon, 23 Sep 2024 14:00:27 +0200
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	linux-can@vger.kernel.org, Thomas Kopp <thomas.kopp@microchip.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: Oops on mcp251xfd open on 6.6.52
-Message-ID: <20240923120027.GB138774@francesco-nb>
-References: <20240923115310.GA138774@francesco-nb>
- <20240923-spry-badger-of-perception-303c63-mkl@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=VrR6IR+v46RESeqpR6YaFm05IWWF+iWp6syz0uvDcBGEU/N/bs7wXWItBrFsSY3jDuTjXtuXF//G8Ba3A7KxlGh7zI4abHHY0Al2kHfhvBLUyVPNNF6rFeA3K3Tv2bttv49amfUHCAgIEp207s7lXJAcvShV1Xe85McKGmVL4ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=szWKbCKc; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=Eq1Kj2dvKOSMfRsPuAE8w645hcxyoP4nvyUZ3L3dadU=; b=szWKbCKcaTKaRdtijfzBwrt+0g
+	nzZYalFp99LmsUhBcVHcE368+GrOSM7Pu5kpVlK+LttedoxNLPMLv6udFAkPD0vOqhNNhTJ+Y2qN+
+	oRfGZE5NsaLP2yGEZgxOHEEXuABvcyN2CVi3lqJiKW1O78IAiz3wmyYYCkw102QSS6PA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sshvj-0087dk-SM; Mon, 23 Sep 2024 14:12:39 +0200
+Date: Mon, 23 Sep 2024 14:12:39 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Hal Feng <hal.feng@starfivetech.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+	William Qiu <william.qiu@starfivetech.com>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/4] can: Add driver for CAST CAN Bus Controller
+Message-ID: <9cf40a68-a07f-46d5-bc2c-302ae0e99ab0@lunn.ch>
+References: <20240922145151.130999-1-hal.feng@starfivetech.com>
+ <20240922145151.130999-4-hal.feng@starfivetech.com>
+ <cf17f15b-cbd7-4692-b3b2-065e549cb21e@lunn.ch>
+ <ZQ2PR01MB13071A093EB33F48340F753EE66F2@ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -62,28 +77,46 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240923-spry-badger-of-perception-303c63-mkl@pengutronix.de>
+In-Reply-To: <ZQ2PR01MB13071A093EB33F48340F753EE66F2@ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn>
 
-Hello Marc,
-
-On Mon, Sep 23, 2024 at 01:57:07PM +0200, Marc Kleine-Budde wrote:
-> On 23.09.2024 13:53:10, Francesco Dolcini wrote:
-> > I got the following Oops on doing a simple ip link set canX up, running
-> > on an i.MX8MM SoC.
+> > > +	reset_test = ccan_read_reg_8bit(priv, CCAN_CFG_STAT);
+> > > +
+> > > +	if (!(reset_test & CCAN_RST_MASK)) {
+> > > +		netdev_alert(ndev, "Not in reset mode, cannot set bit
+> > timing\n");
+> > > +		return -EPERM;
+> > > +	}
 > > 
-> > This was reproduced with some automated testing, I have not tried to
-> > reproduce it so far. Any idea or hint? It seems systematic, introduced
-> > around 12th september on the v6.6.y branch.
+> > 
+> > You don't see nedev_alert() used very often. If this is fatal then netdev_err().
+> > 
+> > Also, EPERM? man 3 errno say:
+> > 
+> >        EPERM           Operation not permitted (POSIX.1-2001).
+> > 
+> > Why is this a permission issue?
 > 
-> Which Kernel version are you using?
+> Will use netdev_err() and return -EWOULDBLOCK instead.
 
-v6.6.52 is reproducing the issue, I guess it started on some previous
-v6.6.x kernel (with x < 52), but I was not able to dig out the logs
-running on older kernel from our automated testing (yet).
+I'm not sure that is any better.
 
-I was not able to test mainline (yet).
+       EAGAIN          Resource  temporarily unavailable (may be the same value
+                       as EWOULDBLOCK) (POSIX.1-2001).
 
-Francesco
+This is generally used when the kernel expects user space to try a
+system call again, and it might then work. Is that what you expect
+here?
 
+> > > +static irqreturn_t ccan_interrupt(int irq, void *dev_id) {
+> > > +	struct net_device *ndev = (struct net_device *)dev_id;
+> > 
+> > dev_id is a void *, so you don't need the cast.
+> 
+> OK, drop it.
 
+Please look at the whole patch. There might be other instances where a
+void * is used with a cast, which can be removed. This was just the
+first i spotted.
+
+	Andrew
 
