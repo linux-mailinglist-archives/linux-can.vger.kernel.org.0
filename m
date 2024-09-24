@@ -1,111 +1,117 @@
-Return-Path: <linux-can+bounces-1555-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1556-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4F9698422A
-	for <lists+linux-can@lfdr.de>; Tue, 24 Sep 2024 11:32:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC1249845CF
+	for <lists+linux-can@lfdr.de>; Tue, 24 Sep 2024 14:17:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 021491C231EC
-	for <lists+linux-can@lfdr.de>; Tue, 24 Sep 2024 09:32:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6EFD5B263C5
+	for <lists+linux-can@lfdr.de>; Tue, 24 Sep 2024 12:17:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B4C1422C7;
-	Tue, 24 Sep 2024 09:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="XgMQkuNE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BECBD3F9D5;
+	Tue, 24 Sep 2024 12:17:08 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D9228370;
-	Tue, 24 Sep 2024 09:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668A21A76AA
+	for <linux-can@vger.kernel.org>; Tue, 24 Sep 2024 12:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727170337; cv=none; b=MXr5JLlkFfS1Ojcyfp/OhfHue+GQxZcB74C+wYG/w8wVlUSC8tEVOXFFLOe37AqsLfWzm3pbhaPvh7UQ14DCFIufBmoKZ5mTJnz/oEB8QIQOorOVHjQ8xupF60gZER2szu32yLIyBKG5Po6dmUR0IprlR0hdMkXbAs+vBJNDGGc=
+	t=1727180228; cv=none; b=Oq/DTvxWSuJ1j+TgJtCqEY0u8nNKWQwWUCxvTowF30SlgukVz6zO4T72na5k5tJHUAguZ2+GjpJosIPOd7IHqbqX+3pmmdnqiAPSP3QkXsjmPJ/eFqfhRn4PBBBs0LlHrZpH0CegEorJZ/T7dPrYMfvNKCVXu+fNGYAZ31kiRs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727170337; c=relaxed/simple;
-	bh=gp2NHwIbWFlt6fClt8a9EY1QInTrnh6bAf2/oDFsk3s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a6J298JnOf+QhCZzZYHnEdtcQc7d0pfzsmibG8sZ+F2tIgoryEg9wd4YccdBZWtjPXNqJVzOlTjqd86dbkyJk3P63uL8T2bvZWKdlD031kZp8kF4foCOXcHMyxHWMjaQrUczNHIMMrvdhq5yYoxqr8Qy+HQ5O/dDpkyABzkcU/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=XgMQkuNE; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=UGv54ZPch4dldjaHLdymCbKvQ0+65iKRTDiB+9dLMKQ=; b=XgMQkuNEPbTmfKL9s1c+A/kV+T
-	qKg9bStvD9OtjJQ8qSw+YqR22Eni9tEyVb+xEVgH7smYY+RaGgofr2C9+jG1mqmE/Xpm+p/V7gmre
-	RmcYgomIwXxgK3m/I1nxiLAgXZylKpLVDfEjrQ+incAaQ5J/HNrCas1vu1uBikbeut+32DFXpv7FA
-	Q2F5Kwklay2l83N8jxkbTgj9r5KoECXAoWYCtV9dgu8x8HnYTEcQhjVPj1E7/Fwgy0HXa70N/NW8Y
-	Lw38bETPsCjEMR/L3NETmUNgcpp0dgaRN49/qZ0M9kvSUf2/2kwRCWWH/yl3zkfHxnleb9s91gnX6
-	iFbINuvg==;
-Received: from 90-177-212-167.rck.o2.cz ([90.177.212.167] helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	s=arc-20240116; t=1727180228; c=relaxed/simple;
+	bh=tl7y8kRBBHdFc79s2DuTQU8RzP2BajFebxnEf0mmfYw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dg+M2VJJq+moDZV9lVwMq/fLdSTJk2VcjX/RjRhge5RZJkMf8/2wa4D9RFYYZEAWaqjA2sls3PtYnAoiU7tn+58RDs/k2D+ftsTYnybeVQitEa/F2du2ZhX9eKvciLMvV3P9KUZSevJ0GPZoLJ2d/4FQn2B+xujpbwoMXBh/vGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1st4TL-0004Yy-P6; Tue, 24 Sep 2024 14:16:51 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1st1tb-0000eW-6G; Tue, 24 Sep 2024 11:31:47 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>, kernel@pengutronix.de,
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
- Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- Geert Uytterhoeven <geert+renesas@glider.be>
+	(envelope-from <mkl@pengutronix.de>)
+	id 1st4TJ-001CpB-TZ; Tue, 24 Sep 2024 14:16:49 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 53C90341CA6;
+	Tue, 24 Sep 2024 12:16:49 +0000 (UTC)
+Date: Tue, 24 Sep 2024 14:16:48 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: kernel@pengutronix.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Heiko Stuebner <heiko@sntech.de>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] can: CAN_ROCKCHIP_CANFD should depend on ARCH_ROCKCHIP
-Date: Tue, 24 Sep 2024 11:31:45 +0200
-Message-ID: <1931378.eGJsNajkDb@phil>
-In-Reply-To:
- <a4b3c8c1cca9515e67adac83af5ba1b1fab2fcbc.1727169288.git.geert+renesas@glider.be>
-References:
- <a4b3c8c1cca9515e67adac83af5ba1b1fab2fcbc.1727169288.git.geert+renesas@glider.be>
+Message-ID: <20240924-portable-spotted-hawk-279a86-mkl@pengutronix.de>
+References: <a4b3c8c1cca9515e67adac83af5ba1b1fab2fcbc.1727169288.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="luiiscxjhx5doxr2"
+Content-Disposition: inline
+In-Reply-To: <a4b3c8c1cca9515e67adac83af5ba1b1fab2fcbc.1727169288.git.geert+renesas@glider.be>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Am Dienstag, 24. September 2024, 11:15:31 CEST schrieb Geert Uytterhoeven:
+
+--luiiscxjhx5doxr2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 24.09.2024 11:15:31, Geert Uytterhoeven wrote:
 > The Rockchip CAN-FD controller is only present on Rockchip SoCs.  Hence
 > add a dependency on ARCH_ROCKCHIP, to prevent asking the user about this
 > driver when configuring a kernel without Rockchip platform support.
-> 
-> Fixes: ff60bfbaf67f219c ("can: rockchip_canfd: add driver for Rockchip CAN-FD controller")
+>=20
+> Fixes: ff60bfbaf67f219c ("can: rockchip_canfd: add driver for Rockchip CA=
+N-FD controller")
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-makes a lot of sense, and with the compile-test in, it'll still get
-test-build
+Applied to linux-can/testing.
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Thanks,
+Marc
 
-> ---
->  drivers/net/can/rockchip/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/can/rockchip/Kconfig b/drivers/net/can/rockchip/Kconfig
-> index e029e2a3ca4b04df..fd8d9f5eeaa434ac 100644
-> --- a/drivers/net/can/rockchip/Kconfig
-> +++ b/drivers/net/can/rockchip/Kconfig
-> @@ -3,6 +3,7 @@
->  config CAN_ROCKCHIP_CANFD
->  	tristate "Rockchip CAN-FD controller"
->  	depends on OF || COMPILE_TEST
-> +	depends on ARCH_ROCKCHIP || COMPILE_TEST
->  	select CAN_RX_OFFLOAD
->  	help
->  	  Say Y here if you want to use CAN-FD controller found on
-> 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--luiiscxjhx5doxr2
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbyra0ACgkQKDiiPnot
+vG+1PQf/UylvX67IKTMkg7IHv8Andvsu3ca/sqfLejrVeJnVdsG1ObQCbDcBLJDf
+Ak+W/ilndcH9Kv6IbNQSslYyukRhS5H+0cbEqO4EAYtthdBJ86CTcYKfJIhOIRxW
+QSJGg/MpxxVxf2526VCEJJvc6R/8j3rxsLFGZK2vJrApKKUQJk1vIpv0mMVMa43l
+x7T1oGwnkaP8auRQL7gSmA6TWd7Gh+o/6KZow1z/asUYRvdzeg3MDoneraLqNJ3q
+Ghn/ZWLz/v2YgEh0tNOjv9K1NNFFJhryOwGmOyGmxiOtfogc+wCYrCqI1kOjxwg9
+Jj3LBsk8f6qKjQN88mgvF+GiQPt4Zw==
+=ZWHR
+-----END PGP SIGNATURE-----
 
+--luiiscxjhx5doxr2--
 
