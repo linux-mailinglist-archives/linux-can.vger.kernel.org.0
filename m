@@ -1,240 +1,138 @@
-Return-Path: <linux-can+bounces-1562-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1563-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E461985EF5
-	for <lists+linux-can@lfdr.de>; Wed, 25 Sep 2024 15:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E3AF9861BC
+	for <lists+linux-can@lfdr.de>; Wed, 25 Sep 2024 17:00:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDF001F2507C
-	for <lists+linux-can@lfdr.de>; Wed, 25 Sep 2024 13:47:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEC4D1F2BF2B
+	for <lists+linux-can@lfdr.de>; Wed, 25 Sep 2024 15:00:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7F918871D;
-	Wed, 25 Sep 2024 12:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sXCM0pwA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB08E7D3F1;
+	Wed, 25 Sep 2024 14:33:28 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B189D188719;
-	Wed, 25 Sep 2024 12:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E9519F40D
+	for <linux-can@vger.kernel.org>; Wed, 25 Sep 2024 14:33:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727266411; cv=none; b=D5Kp35pn6C3SFvJKXRlyAiWDWgGxn8VbMAd6MAwmUtK8OA069mJjab9q101QVFT/KCSL/VvoRqcZ/vXoeALAwnxepNxHGEvVpy7fp4kfylh1+DwBIYJ175ZZ8//UyvtNVVl7EnU55J2dRwWTfTSKvPhflXOLs88AsbV1jOQ801k=
+	t=1727274808; cv=none; b=hiJ0N6IzP7NpfwQ9aKX5g4LghAsP7saWCwW7EmKmCzWg4Li0vGa0AXshmi10ovbHy5+78QQWH93QeF0kCv91M6bYmnUIdDirrbtih4gwVB4KmdE/35mCrrAEcfcjBUj56lQwY9pY03gwrZ+tnAVR7RY9OXHNmjF/MxFkPI7OcUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727266411; c=relaxed/simple;
-	bh=kRWR6qYrxWbNzYcGxDDO/mF6H7avlIAs8xLSBm1IsR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tELQMYT746avoGT/tvEv87mOc3N0Q3mxftksKBcNDy/s3TNYVOGHJ1YmowMZ+S5VX7cvHS/am7kYmwjjki0xL3aDzgJIMQc70zALZzVyIaM6opgnpsdjzYdJL8Dc1l1XeXIMNedUcb7VNlZI3rAHwslROPyUmWQvYppoEeEi4dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sXCM0pwA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3755C4CECD;
-	Wed, 25 Sep 2024 12:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727266411;
-	bh=kRWR6qYrxWbNzYcGxDDO/mF6H7avlIAs8xLSBm1IsR8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sXCM0pwAJUB4S7yL0B8GP1Vmx0CkxLx6d5K/DpFlG9QtbtoGPX+v35XPE/l0sP22S
-	 +rOFF3UTU94U5bO5l7njWSTIvK/W3h2ILLLLPoVHAEwqLJnuS9qE8e8oOy6X0vWqt8
-	 V4uSQCk99WeoD2ANZaawjTXmnm2FQqJJOY/MbeAcFa2w4qYaBdk/B/LHcnDvmvzZzr
-	 0SDTSLfm9H1lvLpKcdy6VwhMy5k54kbfYMATQfX6xatI+YWsOT0x3qyxF26HNLKJaj
-	 CT+AhQfFAFbsnJmX/ZkihNcjZsZoDD8p9vFslp8D5QglPsYWdPAaF2roClUjy+/oX0
-	 YR6pDPcgeekfA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Sasha Levin <sashal@kernel.org>,
-	mailhol.vincent@wanadoo.fr,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	maxime.jayat@mobile-devices.fr,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 050/139] can: netlink: avoid call to do_set_data_bittiming callback with stale can_priv::ctrlmode
-Date: Wed, 25 Sep 2024 08:07:50 -0400
-Message-ID: <20240925121137.1307574-50-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240925121137.1307574-1-sashal@kernel.org>
-References: <20240925121137.1307574-1-sashal@kernel.org>
+	s=arc-20240116; t=1727274808; c=relaxed/simple;
+	bh=Gkw0SZLaexIV+fDBfNcluwkJYxm6MCNhi51fvgTIF8w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=migfznMbMTI8I4TynhHZMnQ6qLMltpGjI3yM3NlqrmlKqd4EIVg7Jqq+Yz1VCXPM42pMbZJU/bjGSsX1yUS+wUm0RWVSqpsG1crNKo5f/xKGYVaXcvlN4X//etOEvUZgZFnFWzXqtUh+vGi4+XCk/ubcFNvYWUo+aQ2UV/+BZso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1stT51-0008PO-EK; Wed, 25 Sep 2024 16:33:23 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1stT50-001TAp-Jc; Wed, 25 Sep 2024 16:33:22 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 173FB34289C;
+	Wed, 25 Sep 2024 14:33:22 +0000 (UTC)
+Date: Wed, 25 Sep 2024 16:33:21 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Sven Schuchmann <schuchmann@schleissheimer.de>
+Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: Re: IRQ handler mcp251xfd_handle_tefif() returned -22
+Message-ID: <20240925-simple-nondescript-porcupine-d66a23-mkl@pengutronix.de>
+References: <FR3P281MB155216711EFF900AD9791B7ED9692@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.52
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="fcirzlls6ximoa46"
+Content-Disposition: inline
+In-Reply-To: <FR3P281MB155216711EFF900AD9791B7ED9692@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-From: Stefan Mätje <stefan.maetje@esd.eu>
 
-[ Upstream commit 2423cc20087ae9a7b7af575aa62304ef67cad7b6 ]
+--fcirzlls6ximoa46
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This patch moves the evaluation of data[IFLA_CAN_CTRLMODE] in function
-can_changelink in front of the evaluation of data[IFLA_CAN_BITTIMING].
+On 25.09.2024 07:38:12, Sven Schuchmann wrote:
+> I am using Kernel 6.6.47 and sometimes I see this in kernel logs:
+>=20
+> [  355.728634] mcp251xfd spi0.0 canfd0: IRQ handler mcp251xfd_handle_tefi=
+f() returned -22.
+> [  355.728672] mcp251xfd spi0.0 canfd0: IRQ handler returned -22 (intf=3D=
+0xbf1a0016).
+>=20
+> After that the complete CAN is down.
 
-This avoids a call to do_set_data_bittiming providing a stale
-can_priv::ctrlmode with a CAN_CTRLMODE_FD flag not matching the
-requested state when switching between a CAN Classic and CAN-FD bitrate.
+Yes, the interface is shut down intentionally in case of errors.
 
-In the same manner the evaluation of data[IFLA_CAN_CTRLMODE] in function
-can_validate is also moved in front of the evaluation of
-data[IFLA_CAN_BITTIMING].
+> ifconfig canfd0 down and up fixes the problem.
 
-This is a preparation for patches where the nominal and data bittiming
-may have interdependencies on the driver side depending on the
-CAN_CTRLMODE_FD flag state.
+That's intentional, too :)
 
-Signed-off-by: Stefan Mätje <stefan.maetje@esd.eu>
-Link: https://patch.msgid.link/20240808164224.213522-1-stefan.maetje@esd.eu
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/can/dev/netlink.c | 102 +++++++++++++++++-----------------
- 1 file changed, 51 insertions(+), 51 deletions(-)
+> We are using two CANs (both mcp251xfd) at the same time in canfd mode.
+> We are sending about 9 Frames each 10ms on  both CANs (bus load of about =
+35% per CAN).
+>=20
+> Top shows about 10% of CPU Load on the SPIs:
+>=20
+>     PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ CO=
+MMAND
+>    5620 root     -51   0       0      0      0 S  11.9   0.0   0:45.33 ir=
+q/45-spi0.0
+>=20
+> Anyone an idea on this?
 
-diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index dfdc039d92a6c..01aacdcda2606 100644
---- a/drivers/net/can/dev/netlink.c
-+++ b/drivers/net/can/dev/netlink.c
-@@ -65,15 +65,6 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
- 	if (!data)
- 		return 0;
- 
--	if (data[IFLA_CAN_BITTIMING]) {
--		struct can_bittiming bt;
--
--		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
--		err = can_validate_bittiming(&bt, extack);
--		if (err)
--			return err;
--	}
--
- 	if (data[IFLA_CAN_CTRLMODE]) {
- 		struct can_ctrlmode *cm = nla_data(data[IFLA_CAN_CTRLMODE]);
- 		u32 tdc_flags = cm->flags & CAN_CTRLMODE_TDC_MASK;
-@@ -114,6 +105,15 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
- 		}
- 	}
- 
-+	if (data[IFLA_CAN_BITTIMING]) {
-+		struct can_bittiming bt;
-+
-+		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
-+		err = can_validate_bittiming(&bt, extack);
-+		if (err)
-+			return err;
-+	}
-+
- 	if (is_can_fd) {
- 		if (!data[IFLA_CAN_BITTIMING] || !data[IFLA_CAN_DATA_BITTIMING])
- 			return -EOPNOTSUPP;
-@@ -195,48 +195,6 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
- 	/* We need synchronization with dev->stop() */
- 	ASSERT_RTNL();
- 
--	if (data[IFLA_CAN_BITTIMING]) {
--		struct can_bittiming bt;
--
--		/* Do not allow changing bittiming while running */
--		if (dev->flags & IFF_UP)
--			return -EBUSY;
--
--		/* Calculate bittiming parameters based on
--		 * bittiming_const if set, otherwise pass bitrate
--		 * directly via do_set_bitrate(). Bail out if neither
--		 * is given.
--		 */
--		if (!priv->bittiming_const && !priv->do_set_bittiming &&
--		    !priv->bitrate_const)
--			return -EOPNOTSUPP;
--
--		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
--		err = can_get_bittiming(dev, &bt,
--					priv->bittiming_const,
--					priv->bitrate_const,
--					priv->bitrate_const_cnt,
--					extack);
--		if (err)
--			return err;
--
--		if (priv->bitrate_max && bt.bitrate > priv->bitrate_max) {
--			NL_SET_ERR_MSG_FMT(extack,
--					   "arbitration bitrate %u bps surpasses transceiver capabilities of %u bps",
--					   bt.bitrate, priv->bitrate_max);
--			return -EINVAL;
--		}
--
--		memcpy(&priv->bittiming, &bt, sizeof(bt));
--
--		if (priv->do_set_bittiming) {
--			/* Finally, set the bit-timing registers */
--			err = priv->do_set_bittiming(dev);
--			if (err)
--				return err;
--		}
--	}
--
- 	if (data[IFLA_CAN_CTRLMODE]) {
- 		struct can_ctrlmode *cm;
- 		u32 ctrlstatic;
-@@ -284,6 +242,48 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
- 			priv->ctrlmode &= cm->flags | ~CAN_CTRLMODE_TDC_MASK;
- 	}
- 
-+	if (data[IFLA_CAN_BITTIMING]) {
-+		struct can_bittiming bt;
-+
-+		/* Do not allow changing bittiming while running */
-+		if (dev->flags & IFF_UP)
-+			return -EBUSY;
-+
-+		/* Calculate bittiming parameters based on
-+		 * bittiming_const if set, otherwise pass bitrate
-+		 * directly via do_set_bitrate(). Bail out if neither
-+		 * is given.
-+		 */
-+		if (!priv->bittiming_const && !priv->do_set_bittiming &&
-+		    !priv->bitrate_const)
-+			return -EOPNOTSUPP;
-+
-+		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
-+		err = can_get_bittiming(dev, &bt,
-+					priv->bittiming_const,
-+					priv->bitrate_const,
-+					priv->bitrate_const_cnt,
-+					extack);
-+		if (err)
-+			return err;
-+
-+		if (priv->bitrate_max && bt.bitrate > priv->bitrate_max) {
-+			NL_SET_ERR_MSG_FMT(extack,
-+					   "arbitration bitrate %u bps surpasses transceiver capabilities of %u bps",
-+					   bt.bitrate, priv->bitrate_max);
-+			return -EINVAL;
-+		}
-+
-+		memcpy(&priv->bittiming, &bt, sizeof(bt));
-+
-+		if (priv->do_set_bittiming) {
-+			/* Finally, set the bit-timing registers */
-+			err = priv->do_set_bittiming(dev);
-+			if (err)
-+				return err;
-+		}
-+	}
-+
- 	if (data[IFLA_CAN_RESTART_MS]) {
- 		/* Do not allow changing restart delay while running */
- 		if (dev->flags & IFF_UP)
--- 
-2.43.0
+Can you add "dev_err(&spi->dev, ... );" and print interesting things in
+mcp251xfd-regmap.c where it returns -EINVAL. Maybe add an additionally
+"dump_stack();"
 
+Have you enabled CONFIG_CAN_MCP251XFD_SANITY? If not, please do.
+Please also add "#define DEBUG" in mcp251xfd-tef.c before all "#includes".
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--fcirzlls6ximoa46
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmb0Hy4ACgkQKDiiPnot
+vG/sbwgAisQbtGPibnSTZEOb/5VoahU0+K2JHEjLXVivq72a4ijkiT+7gFE+7P+n
+W8p+D3sME8j55nopabHWLAgo7igH8512B5N0LAwNsPIUyE0vfSBZupskP824M1yL
+CVyoBcjQxl28IdepVHsvSI2+z4pnZY/nw8GpXz9HELtrldIfQlfChIYHqHj0TN5j
+Q4criaIagpQCR7AX+SdaLN5DMu4CNh6gqGVNjiP5hHmqjpkJxRmT+zh7MKdnAjUh
+xCrKc4eZmEsFF9JbMV1A4w6VPMMlQX/By4YwoniOSfBJOuV+wON1u9R+FJgJcYTr
+H73KHkhWNfsPMX4ZNGuLAQ7Otc1JjA==
+=Mano
+-----END PGP SIGNATURE-----
+
+--fcirzlls6ximoa46--
 
