@@ -1,31 +1,30 @@
-Return-Path: <linux-can+bounces-1587-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1588-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBDEF98C026
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2024 16:35:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D15EE98C132
+	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2024 17:10:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E3841F21B09
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2024 14:35:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F8B01C23B10
+	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2024 15:10:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47F811A08A8;
-	Tue,  1 Oct 2024 14:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D18CF1CB534;
+	Tue,  1 Oct 2024 15:07:07 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC53282F7
-	for <linux-can@vger.kernel.org>; Tue,  1 Oct 2024 14:35:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847F11C9DD2
+	for <linux-can@vger.kernel.org>; Tue,  1 Oct 2024 15:07:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727793319; cv=none; b=CX0dAMbh9hLtRgqTpXWUtkW6ITTHMrFONh+cQ7zO+T2R0LNlCVu/k/UKWHu/JDk60CBOT4y+MCX9dLhNvHOezeUsz/+ATXUcXpkPEEoTp8489tCrRuazgmO1abUPiFCemaOPxVI6iQDDzQW0OYS6PXIF9SxEvee7x0v6F4BJMb4=
+	t=1727795227; cv=none; b=PDND+gcmdo1OR050KJ0253x6C8P5qkwYSnAB1vNLVBqGFP28wEjagJ1JuKP2zQ5e9+JZWjYk3TddOpU++OYCMw2W8kpsBc2+Vr/3glWOd3NCf0K+SvwxqhX3A/mlh1nF5LwJN7jGICBho96tHoZnXHWBqoD+Cso1YvJhfTRXMew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727793319; c=relaxed/simple;
-	bh=bOvA02m+d1eVNwuWDqQUmqeziRFBg94GBBFS9UEmHJo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WSV9qXCpm8hXDQFsDiYAH2/QP+nVZDkIY2qJnVmDaJKTIhlYvuff1bMcumLNyWXImcrGXzONZra1WcO7Cqa1FWi+j5bXIj5k9W974pnm5qNnyT6vSHcqLv76uQiZjS1k/GfvWhsB7PtN+FTVQBCOyEg1HrP69Ti9WemjQf0PZ7A=
+	s=arc-20240116; t=1727795227; c=relaxed/simple;
+	bh=L0zMbpgks/KY6ypYC/SM/wZ4pvaefGA2PCVTsCwzW0Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kbRTT2pEDWAaYTxmEETCSUcqw1IDOikxX3cpn4ATXCdNr97f2oRVb6MztWnebu8E86opnoSkpDO+oXlCW3qArnl774Mu4CpZjq4lc6xy+XAGtEOplGCat+aW/XkeDgU+i40NntwWy2ybKvfKtU8//f33a/w0VtBCCs/6bbjIpGM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,90 +32,118 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1svdy7-0004bb-Qo; Tue, 01 Oct 2024 16:35:15 +0200
+	id 1sveSt-0005UN-QR
+	for linux-can@vger.kernel.org; Tue, 01 Oct 2024 17:07:03 +0200
 Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1svdy7-002teO-42; Tue, 01 Oct 2024 16:35:15 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	id 1sveSt-002u22-Cs
+	for linux-can@vger.kernel.org; Tue, 01 Oct 2024 17:07:03 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 1B505347C60
+	for <linux-can@vger.kernel.org>; Tue, 01 Oct 2024 15:07:03 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id CFD03347C26;
-	Tue, 01 Oct 2024 14:35:14 +0000 (UTC)
-Date: Tue, 1 Oct 2024 16:35:14 +0200
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id B2EF1347C5A;
+	Tue, 01 Oct 2024 15:07:01 +0000 (UTC)
+Received: from [172.20.34.65] (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id edacce11;
+	Tue, 1 Oct 2024 15:07:01 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sven Schuchmann <schuchmann@schleissheimer.de>
-Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: AW: AW: AW: AW: IRQ handler mcp251xfd_handle_tefif() returned -22
-Message-ID: <20241001-slick-dynamic-pegasus-200415-mkl@pengutronix.de>
-References: <FR3P281MB155216711EFF900AD9791B7ED9692@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM>
- <20240925-simple-nondescript-porcupine-d66a23-mkl@pengutronix.de>
- <FR3P281MB15522178FE612C6B5B728C2BD96A2@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM>
- <20240926-pragmatic-colorful-lyrebird-dc8068-mkl@pengutronix.de>
- <FR3P281MB1552B40D19AF9DE8CA8150AAD96A2@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM>
- <20240927-utopian-super-dolphin-88a1d9-mkl@pengutronix.de>
- <FR3P281MB1552D0C69616DA620C2629ACD96B2@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM>
- <20240929-upbeat-carrot-whippet-bc3e9c-mkl@pengutronix.de>
- <FR3P281MB15522AE82690498E0E20A66BD9772@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM>
+Date: Tue, 01 Oct 2024 17:06:58 +0200
+Subject: [PATCH RFC can] can: mcp251xfd: mcp251xfd_get_tef_len(): fix
+ length calculation
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hamzh27clfmzkagf"
-Content-Disposition: inline
-In-Reply-To: <FR3P281MB15522AE82690498E0E20A66BD9772@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241001-mcp251xfd-fix-length-calculation-v1-1-598b46508d61@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIABEQ/GYC/x2NQQrCMBBFrxJm7cBMqIJuBQ/gtrhIp9N2IMaS1
+ FIovbvB5YP//tuhaDYtcHM7ZF2t2CdV4JMDmUIaFa2vDJ58w0SMb5n9mbehx8E2jJrGZUIJUb4
+ xLFVGunYXEaagHUG9mbPW5T/RwvNxdxISvI7jB/SFbZZ7AAAA
+X-Change-ID: 20241001-mcp251xfd-fix-length-calculation-09b6cc10aeb0
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Thomas Kopp <thomas.kopp@microchip.com>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: linux-can@vger.kernel.org, kernel@pengutronix.de, 
+ Sven Schuchmann <schuchmann@schleissheimer.de>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15-dev-dedf8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1865; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=L0zMbpgks/KY6ypYC/SM/wZ4pvaefGA2PCVTsCwzW0Q=;
+ b=owEBbQGS/pANAwAKASg4oj56LbxvAcsmYgBm/BAS6U1BrA5QYCKj6fCJ/mfJK5dzfqVeWr/G5
+ I5JYP7xgYKJATMEAAEKAB0WIQRQQLqG4LYE3Sm8Pl8oOKI+ei28bwUCZvwQEgAKCRAoOKI+ei28
+ b48vB/0ZGQcUlNlUmqQYg7QexL9Kcoc1b1XgsTae1oY52VW0qR/n5oQ/0ZC3KEahiO9VjuD06Kb
+ Xq/c43Cr3W8JJeqSbIosOXxdW34oFD7G3yUBl78L28WVXM9VKrrT2FVjJAjXBl9OoTacP8I4Of9
+ dSE/g3cRgqGV4CwiMo8UE0XkQtUCr7yH8sJYZ/PcO3iOlwMf4b4nRZlpKmziP37vRGEoUzMgjAe
+ lCUPBNaYITi/48GvCLAMF4QDAXq4IVbfv4gBrEj9e4fcffuY/VEgFkgHSGAR+p12A331UPGVFmT
+ y22h9HPAG27RS8SnA3QL43shfekTmyBvOhwVxOV4fvjeU941
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+Reported-by: Sven Schuchmann <schuchmann@schleissheimer.de>
+Closes: https://patch.msgid.link/FR3P281MB155216711EFF900AD9791B7ED9692@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM
+Fixes: b8e0ddd36ce9 ("can: mcp251xfd: tef: prepare to workaround broken TEF FIFO tail index erratum")
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+Hello,
 
---hamzh27clfmzkagf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think the length calculation is wrong. Can you try this compile
+tested only patch. I'll add a proper patch description later.
 
-On 01.10.2024 13:37:07, Sven Schuchmann wrote:
-> > If the IRQ handler fails with an error, the driver will generate a dump
-> > of the driver and chip state and write it to
-> > "/var/log/devcoredump-*.dump". Please send me this file.
-> > Please use the unmodified v6.11 version of the driver on your v6.6 kern=
-el.
->=20
-> File is attached.
-
-Thanks, I think that contains all the necessary information. I'll have
-to think about this a bit.
-
-regards,
 Marc
+---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
+index f732556d233a7be3b43f6f08e0b8f25732190104..e40a6d4134c29b32baeda7ad3dbaf4de27b54ba3 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
+@@ -16,9 +16,9 @@
+ 
+ #include "mcp251xfd.h"
+ 
+-static inline bool mcp251xfd_tx_fifo_sta_full(u32 fifo_sta)
++static inline bool mcp251xfd_tx_fifo_sta_empty(u32 fifo_sta)
+ {
+-	return !(fifo_sta & MCP251XFD_REG_FIFOSTA_TFNRFNIF);
++	return !(fifo_sta & MCP251XFD_REG_FIFOSTA_TFERFFIF);
+ }
+ 
+ static inline int
+@@ -122,7 +122,11 @@ mcp251xfd_get_tef_len(struct mcp251xfd_priv *priv, u8 *len_p)
+ 	if (err)
+ 		return err;
+ 
+-	if (mcp251xfd_tx_fifo_sta_full(fifo_sta)) {
++	/* If the chip says the TX-FIFO is empty, but there are no TX
++	 * buffers free in the ring, we assume all have been sent.
++	 */
++	if (mcp251xfd_tx_fifo_sta_empty(fifo_sta) &&
++	    mcp251xfd_get_tx_free(tx_ring) == 0) {
+ 		*len_p = tx_ring->obj_num;
+ 		return 0;
+ 	}
 
---hamzh27clfmzkagf
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+base-commit: d505d3593b52b6c43507f119572409087416ba28
+change-id: 20241001-mcp251xfd-fix-length-calculation-09b6cc10aeb0
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-- 
+Marc Kleine-Budde <mkl@pengutronix.de>
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmb8CJ8ACgkQKDiiPnot
-vG9lhQgAlqum1ZxZPIEQdZOnAoAxTWENln09dMeg+/bEXdTgHfIBJ5+pUgBJY4BN
-oJGlFNw+9rfZ4FMP5JKS8svJlQ6jRKkMDr7x/0txkbdHrfRuXWckMleWlBFLlrMa
-64mJtPhL70pi3CxB9n+fBmIpnRn1GEtlAvEfE0JDwEV0c7pJNeAXTRU89MHFO83u
-OW/QvPD8QP7nFhlfTN9Ciwr1ZilWbFr24X1tkMhZi93NDcFAMMOc8+8hn3gTUQw4
-6TLJS6x68vK0J+r27b/n3z88dAFWHE7EfbfgRAm5CK5Yq0T2JGvJS410jtTO7A3A
-bQ43QCOR9VuU/xd2Y2IX5zXrmTgYuA==
-=rSSq
------END PGP SIGNATURE-----
 
---hamzh27clfmzkagf--
 
