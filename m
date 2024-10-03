@@ -1,61 +1,65 @@
-Return-Path: <linux-can+bounces-1588-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1589-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D15EE98C132
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2024 17:10:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 071C598E943
+	for <lists+linux-can@lfdr.de>; Thu,  3 Oct 2024 07:07:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F8B01C23B10
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2024 15:10:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8212CB20984
+	for <lists+linux-can@lfdr.de>; Thu,  3 Oct 2024 05:07:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D18CF1CB534;
-	Tue,  1 Oct 2024 15:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE12149627;
+	Thu,  3 Oct 2024 05:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="kggU+RnZ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847F11C9DD2
-	for <linux-can@vger.kernel.org>; Tue,  1 Oct 2024 15:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C917A224EA;
+	Thu,  3 Oct 2024 05:07:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727795227; cv=none; b=PDND+gcmdo1OR050KJ0253x6C8P5qkwYSnAB1vNLVBqGFP28wEjagJ1JuKP2zQ5e9+JZWjYk3TddOpU++OYCMw2W8kpsBc2+Vr/3glWOd3NCf0K+SvwxqhX3A/mlh1nF5LwJN7jGICBho96tHoZnXHWBqoD+Cso1YvJhfTRXMew=
+	t=1727932063; cv=none; b=JJDweDGwmZMfplTE+W1UvAMscOjW7BlOvATUEA82paFaB+dEm3mtjN3134MGOHYOiaChUpKDCtqVQy4CznDMdMajcg5tf6uU0FDQ/Irwku3MoS6CFYGR+F63vzra2nYwYOyd5DDaR2CJeVX57WZANKLn93zo8xByEUBjvyd2edg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727795227; c=relaxed/simple;
-	bh=L0zMbpgks/KY6ypYC/SM/wZ4pvaefGA2PCVTsCwzW0Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kbRTT2pEDWAaYTxmEETCSUcqw1IDOikxX3cpn4ATXCdNr97f2oRVb6MztWnebu8E86opnoSkpDO+oXlCW3qArnl774Mu4CpZjq4lc6xy+XAGtEOplGCat+aW/XkeDgU+i40NntwWy2ybKvfKtU8//f33a/w0VtBCCs/6bbjIpGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sveSt-0005UN-QR
-	for linux-can@vger.kernel.org; Tue, 01 Oct 2024 17:07:03 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sveSt-002u22-Cs
-	for linux-can@vger.kernel.org; Tue, 01 Oct 2024 17:07:03 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 1B505347C60
-	for <linux-can@vger.kernel.org>; Tue, 01 Oct 2024 15:07:03 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id B2EF1347C5A;
-	Tue, 01 Oct 2024 15:07:01 +0000 (UTC)
-Received: from [172.20.34.65] (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id edacce11;
-	Tue, 1 Oct 2024 15:07:01 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-Date: Tue, 01 Oct 2024 17:06:58 +0200
-Subject: [PATCH RFC can] can: mcp251xfd: mcp251xfd_get_tef_len(): fix
- length calculation
+	s=arc-20240116; t=1727932063; c=relaxed/simple;
+	bh=dhA9dUnTQrlbjUojmNt+lPn+T0Gcazf90rUxsux0e4c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=JI8Xa5xTeBmsoVZlz8M5GSwEWd6ec8pJmIXBU1VFAQIehdzvzDVevdgeBDoF378woG8DaFjyM0zMFpxsJHmabsRZzGEzVX8iCNqEqEVNir9DSgJgUGdO25RbKl+7O4U3voyxnPw3TthS0y9ArWIzLanlkw/qZguyjLLHPiZccWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=kggU+RnZ; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1727932062; x=1759468062;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=dhA9dUnTQrlbjUojmNt+lPn+T0Gcazf90rUxsux0e4c=;
+  b=kggU+RnZdAUHVnMHe5qRHta05Gtv5HZKDOn2If2mt7zq6UNHR6wkROx5
+   nFZKwstv5hfDHQkY6UTLQIFPhEYUlUBnCTl1jzLme44PBdScuqc19i9LF
+   ckcmZysUJPBx1FZ8sXAyVtD1FhLLOiSwQ8m8RMLcNVEOqhUPIBkgze+Bx
+   iMF+R4xV27+3qG2MRyunFPK2hxPU4AAJxRJ+sJHdlQBQVFhXW6FFZw6/7
+   cZzzHYc20PJJ9X3I0DdSG1kvU8rj5ndfCrdSBp5wbcV+N2jUU71B9zDVn
+   CI5f/SSmxVdZmc+b44jHwDT7o8J/HoEKMvTi2ar31h2kcMScKwGQgNL1f
+   w==;
+X-CSE-ConnectionGUID: tSbnCTCURiuQebcaCydRvg==
+X-CSE-MsgGUID: zdLMqo2iR/Szk5Hu91pizQ==
+X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
+   d="scan'208";a="33144171"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Oct 2024 22:07:34 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 2 Oct 2024 22:07:18 -0700
+Received: from [127.0.0.1] (10.10.85.11) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Wed, 2 Oct 2024 22:07:12 -0700
+From: Charan Pedumuru <charan.pedumuru@microchip.com>
+Date: Thu, 3 Oct 2024 10:37:03 +0530
+Subject: [PATCH v2] dt-bindings: net: can: atmel: Convert to json schema
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -64,86 +68,129 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241001-mcp251xfd-fix-length-calculation-v1-1-598b46508d61@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIABEQ/GYC/x2NQQrCMBBFrxJm7cBMqIJuBQ/gtrhIp9N2IMaS1
- FIovbvB5YP//tuhaDYtcHM7ZF2t2CdV4JMDmUIaFa2vDJ58w0SMb5n9mbehx8E2jJrGZUIJUb4
- xLFVGunYXEaagHUG9mbPW5T/RwvNxdxISvI7jB/SFbZZ7AAAA
-X-Change-ID: 20241001-mcp251xfd-fix-length-calculation-09b6cc10aeb0
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- Thomas Kopp <thomas.kopp@microchip.com>, 
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-can@vger.kernel.org, kernel@pengutronix.de, 
- Sven Schuchmann <schuchmann@schleissheimer.de>, 
- Marc Kleine-Budde <mkl@pengutronix.de>
-X-Mailer: b4 0.15-dev-dedf8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1865; i=mkl@pengutronix.de;
- h=from:subject:message-id; bh=L0zMbpgks/KY6ypYC/SM/wZ4pvaefGA2PCVTsCwzW0Q=;
- b=owEBbQGS/pANAwAKASg4oj56LbxvAcsmYgBm/BAS6U1BrA5QYCKj6fCJ/mfJK5dzfqVeWr/G5
- I5JYP7xgYKJATMEAAEKAB0WIQRQQLqG4LYE3Sm8Pl8oOKI+ei28bwUCZvwQEgAKCRAoOKI+ei28
- b48vB/0ZGQcUlNlUmqQYg7QexL9Kcoc1b1XgsTae1oY52VW0qR/n5oQ/0ZC3KEahiO9VjuD06Kb
- Xq/c43Cr3W8JJeqSbIosOXxdW34oFD7G3yUBl78L28WVXM9VKrrT2FVjJAjXBl9OoTacP8I4Of9
- dSE/g3cRgqGV4CwiMo8UE0XkQtUCr7yH8sJYZ/PcO3iOlwMf4b4nRZlpKmziP37vRGEoUzMgjAe
- lCUPBNaYITi/48GvCLAMF4QDAXq4IVbfv4gBrEj9e4fcffuY/VEgFkgHSGAR+p12A331UPGVFmT
- y22h9HPAG27RS8SnA3QL43shfekTmyBvOhwVxOV4fvjeU941
-X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
- fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Message-ID: <20241003-can-v2-1-85701d3296dd@microchip.com>
+X-B4-Tracking: v=1; b=H4sIAHYm/mYC/1WMwQ7CIBAFf6XZsxggQqmn/ofpodCt7KHQgCGah
+ n8Xe/M4L2/mgIyJMMO9OyBhoUwxNJCXDpyfwxMZLY1Bcnnjg5DMzYEZtP1qsFdaL9Cee8KV3mf
+ lMTX2lF8xfc5oEb/13y+CCeaUVsIKwwdrx41cis7TfnVxg6nW+gVC6gWTmgAAAA==
+To: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol
+	<mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nicolas Ferre
+	<nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
+CC: <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, Charan Pedumuru
+	<charan.pedumuru@microchip.com>
+X-Mailer: b4 0.14.1
 
-Reported-by: Sven Schuchmann <schuchmann@schleissheimer.de>
-Closes: https://patch.msgid.link/FR3P281MB155216711EFF900AD9791B7ED9692@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM
-Fixes: b8e0ddd36ce9 ("can: mcp251xfd: tef: prepare to workaround broken TEF FIFO tail index erratum")
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Convert atmel-can documentation to yaml format
+
+Signed-off-by: Charan Pedumuru <charan.pedumuru@microchip.com>
 ---
-Hello,
-
-I think the length calculation is wrong. Can you try this compile
-tested only patch. I'll add a proper patch description later.
-
-Marc
+Changes in v2:
+- Renamed the title to "Microchip AT91 CAN controller"
+- Removed the unnecessary labels and add clock properties to examples
+- Removed if condition statements and made clock properties as default required properties
+- Link to v1: https://lore.kernel.org/r/20240912-can-v1-1-c5651b1809bb@microchip.com
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ .../bindings/net/can/atmel,at91sam9263-can.yaml    | 58 ++++++++++++++++++++++
+ .../devicetree/bindings/net/can/atmel-can.txt      | 15 ------
+ 2 files changed, 58 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-index f732556d233a7be3b43f6f08e0b8f25732190104..e40a6d4134c29b32baeda7ad3dbaf4de27b54ba3 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-@@ -16,9 +16,9 @@
- 
- #include "mcp251xfd.h"
- 
--static inline bool mcp251xfd_tx_fifo_sta_full(u32 fifo_sta)
-+static inline bool mcp251xfd_tx_fifo_sta_empty(u32 fifo_sta)
- {
--	return !(fifo_sta & MCP251XFD_REG_FIFOSTA_TFNRFNIF);
-+	return !(fifo_sta & MCP251XFD_REG_FIFOSTA_TFERFFIF);
- }
- 
- static inline int
-@@ -122,7 +122,11 @@ mcp251xfd_get_tef_len(struct mcp251xfd_priv *priv, u8 *len_p)
- 	if (err)
- 		return err;
- 
--	if (mcp251xfd_tx_fifo_sta_full(fifo_sta)) {
-+	/* If the chip says the TX-FIFO is empty, but there are no TX
-+	 * buffers free in the ring, we assume all have been sent.
-+	 */
-+	if (mcp251xfd_tx_fifo_sta_empty(fifo_sta) &&
-+	    mcp251xfd_get_tx_free(tx_ring) == 0) {
- 		*len_p = tx_ring->obj_num;
- 		return 0;
- 	}
+diff --git a/Documentation/devicetree/bindings/net/can/atmel,at91sam9263-can.yaml b/Documentation/devicetree/bindings/net/can/atmel,at91sam9263-can.yaml
+new file mode 100644
+index 000000000000..c818c01a718b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/can/atmel,at91sam9263-can.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/can/atmel,at91sam9263-can.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip AT91 CAN Controller
++
++maintainers:
++  - Nicolas Ferre <nicolas.ferre@microchip.com>
++
++allOf:
++  - $ref: can-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - atmel,at91sam9263-can
++          - atmel,at91sam9x5-can
++      - items:
++          - enum:
++              - microchip,sam9x60-can
++          - const: atmel,at91sam9x5-can
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: can_clk
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/clock/at91.h>
++    can@f000c000 {
++          compatible = "atmel,at91sam9263-can";
++          reg = <0xf000c000 0x300>;
++          interrupts = <30 IRQ_TYPE_LEVEL_HIGH 3>;
++          clocks = <&pmc PMC_TYPE_PERIPHERAL 12>;
++          clock-names = "can_clk";
++    };
+diff --git a/Documentation/devicetree/bindings/net/can/atmel-can.txt b/Documentation/devicetree/bindings/net/can/atmel-can.txt
+deleted file mode 100644
+index 218a3b3eb27e..000000000000
+--- a/Documentation/devicetree/bindings/net/can/atmel-can.txt
++++ /dev/null
+@@ -1,15 +0,0 @@
+-* AT91 CAN *
+-
+-Required properties:
+-  - compatible: Should be "atmel,at91sam9263-can", "atmel,at91sam9x5-can" or
+-    "microchip,sam9x60-can"
+-  - reg: Should contain CAN controller registers location and length
+-  - interrupts: Should contain IRQ line for the CAN controller
+-
+-Example:
+-
+-	can0: can@f000c000 {
+-		compatible = "atmel,at91sam9x5-can";
+-		reg = <0xf000c000 0x300>;
+-		interrupts = <40 4 5>
+-	};
 
 ---
-base-commit: d505d3593b52b6c43507f119572409087416ba28
-change-id: 20241001-mcp251xfd-fix-length-calculation-09b6cc10aeb0
+base-commit: 62f92d634458a1e308bb699986b9147a6d670457
+change-id: 20240912-can-8eb7f8e7566d
 
 Best regards,
 -- 
-Marc Kleine-Budde <mkl@pengutronix.de>
-
+Charan Pedumuru <charan.pedumuru@microchip.com>
 
 
