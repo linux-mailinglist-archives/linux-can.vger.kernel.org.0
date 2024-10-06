@@ -1,98 +1,375 @@
-Return-Path: <linux-can+bounces-1593-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1594-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8690C990095
-	for <lists+linux-can@lfdr.de>; Fri,  4 Oct 2024 12:11:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4069B991D45
+	for <lists+linux-can@lfdr.de>; Sun,  6 Oct 2024 10:31:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2527FB25E0B
-	for <lists+linux-can@lfdr.de>; Fri,  4 Oct 2024 10:11:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F36C3281B66
+	for <lists+linux-can@lfdr.de>; Sun,  6 Oct 2024 08:31:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C084214A605;
-	Fri,  4 Oct 2024 10:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A9423CB;
+	Sun,  6 Oct 2024 08:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=schleissheimer.onmicrosoft.com header.i=@schleissheimer.onmicrosoft.com header.b="AxehFcyh"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from FR6P281CU001.outbound.protection.outlook.com (mail-germanywestcentralazon11020092.outbound.protection.outlook.com [52.101.171.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C20114A0B3
-	for <linux-can@vger.kernel.org>; Fri,  4 Oct 2024 10:11:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728036686; cv=none; b=m58N0RHcemRrDA1t1cATr+EIQOumjmM5KAEfhOkEsoUn5wKxUTjXc5/D085uz9zxJ0vB9FgZgCEPMDAMghBtNrcXlBfAnZNUR9DkaPP27Loezv6IoAphmy8F3BFnDnWovWNj1VcJOYsfj6Ex8PnS4CmWl5AfLnw7Ev1Emkb60CM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728036686; c=relaxed/simple;
-	bh=x2O7TS00RicfPt6G+WI0X138zcI334CP9Dx2o5AECSg=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=aIyBa7N2VtfTUZ5PYYgeEHjE0YuN90p+4okWD/qTUGVfJk/diXfuoJhxM8fWH5XKpy5RaDhP+/77pL4S/6dylLqIOQIpp+RmP0nI5GBdUOCIzB7aD97GmB65ZS/S+fWSv4dF8uYz+siNUdr44O/2xceOv/OwPUkmCWhb4XDL+JA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-82cea2c4e35so247828939f.3
-        for <linux-can@vger.kernel.org>; Fri, 04 Oct 2024 03:11:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728036684; x=1728641484;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vgrEqgbT4gTBIvHYHiHmpH8MQDGJqj6FO+l00kf1JG4=;
-        b=WuyhwnKkXxDjfXH5dMjd9Ai2/l5a8qgcc/7FTN2KNZUjMWeRdcv4a6Jlb00qVLUvjR
-         Y2HkXS0gjsZkGm93dbotp2vSw0GiPsBSHGwEBNlleENkDccKcP9q1+WDXHXE8BxLKCSc
-         /dd9A+b3+Ghjjl6loB7tMCIau1kJYfFkFHcPL8IcBRYx3D9k04mySM+y/iYqY+g+Nq9j
-         DpK6caq/evOc3wkBvMzb2qWIk7o2eOgFs44ySZxrpklsvaWCHesDeCvZzNerzJUaICwJ
-         VCqq7/ID8gr/GYgqO0BTHTso9qnTWCNc4nDZGEvXDbXIsRjPyPayfqQ35SMlRMVExvCn
-         wLOQ==
-X-Gm-Message-State: AOJu0Yzd+vckNCow0mvT83ALpeDgb24QCWqjeCn2dkyYEUH+NjKC+60J
-	gHhcIbpVKeDpmOSmai6WK0t50H7JKjRCdFI/Pay0oBNx7ruXehGxjl8sT+VwH3jL0XJHsZOUq6Y
-	eHWJ1cp7MHpYPHUgSdArpfv1KUGxAjTPRV5PM5FK2RFntjQmX+YoPp+Y=
-X-Google-Smtp-Source: AGHT+IEgF5qLKJShXi+y0+519ebwQbROqt63ZqpT+BMHXJSu3IlAa1Ve+1roHFw52YWzrTjljzxhlo4344nJtZBgasj5o0CIA5MH
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17B6170A19
+	for <linux-can@vger.kernel.org>; Sun,  6 Oct 2024 08:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.171.92
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728203504; cv=fail; b=Lrx8YMB98tC8y9OREpg41PlFS8QnNNzzgaEY2bodXRMyRe6MIltEB5cqm5sUt48kkD5/MJDStSxnQxpfcl0NRwQ0w4eSdA80TYSEpLHsZLhaV3aZC7d1oZ/wLKniQad3jdXNrBl2px+exGdPDx4kQ4oHZ1rm1qWdoUYmVgSpzZ0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728203504; c=relaxed/simple;
+	bh=IrItbYzvilbP0aCz03ztTkwMTQDckEyiVTKHmhOu7Nk=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=dhO9b7tOYRP52PeJ+5seq9s6CuNLtmvBcxIOnm+56Eo2OasDfGX425XO8tLJ9yZAvhtSVew0saxwBz9VhJtLKGb3qv6oQ8B2xny34Xn3js/8uHXl9RaCy/nOJuugwaTZWexZWeJq876c8tPrehypIGkk0wg3wd6fYSWEiLxibsU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schleissheimer.de; spf=pass smtp.mailfrom=schleissheimer.de; dkim=pass (1024-bit key) header.d=schleissheimer.onmicrosoft.com header.i=@schleissheimer.onmicrosoft.com header.b=AxehFcyh; arc=fail smtp.client-ip=52.101.171.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schleissheimer.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schleissheimer.de
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uGywINpuGqvmTQmBh9/NMIUMjVY7lZmk/Dg5AGQNMf2RKaG1imbSw4cJZvH8t8Q8k/trIJx+LCV77P1RDUQmH3Zd3ognkgGkFaErHfPoF72om/oFrphiku9rsTVBAqQFtjV5woB7cacrI/xD0doPocCNJkKsmDxvjyN+k4eFMdJklBslO7WS1d2K2/qGyp+DaXg0uQ+AT8Y2y4RvzWbrBvpTFP+QDjxLc81quzc5CvmEclUXh3E9Lm5EymH/oz16fAOxYuJdDFwaeLVFNF27EP9vMKwd4UhW5ZoJGLy3Vp7Fy21Rt36J8J/IoUxbmTXp6442TJ4c568N5U7D7CgDow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RmQEE7q6NI4WQ1LZ37c2QtFlsiPgdbnGO+Qzu9G85V4=;
+ b=CPYR1YuH/CdiHMpfIkW1otT4zwZDjql3sgsBb1V5cGGJSDXxdEqNZXrwA4Xl0gKkOTEAtCI71vimCskLhHljfwVykrWRolau9ULRytvjbTgV5RmhLPkJdIFxrmf0tI/mRJXIhoBukc+SQU5bJCQvHqI2sgPnNsko23hvr+OUpbIZxw9yTT5EYeWe501gH09n8IVbSDJnvcCTVh1ePILxFqYleLv1MVHSPSfU3UMiSdayxXKQFCBvZM0c/jh+8MSPvpFh4QWgew8sulHR+jPXKNnhpFKvpJsEX0YaSPCyXZjpFWP+BdYIPUNx+LOQPg0t+95wAhNC4d2X8tYVIQcuVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=schleissheimer.de; dmarc=pass action=none
+ header.from=schleissheimer.de; dkim=pass header.d=schleissheimer.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=schleissheimer.onmicrosoft.com; s=selector1-schleissheimer-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RmQEE7q6NI4WQ1LZ37c2QtFlsiPgdbnGO+Qzu9G85V4=;
+ b=AxehFcyhGvPtB+g+rMkxHwKMh1RVtODO/CwEePVDXqWheAJEl+kCFCtG13uTGo//5r57s9pQG4yAlGGr0wus+1/EaoURVIfsy+FdCLj610m2rUhFL2tZjPxUCdaWroroYw+gLGLRTVK9tN0jpB24CtVyeQcX0Whpgwr5WWgyX8c=
+Received: from BEZP281MB2245.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:52::10)
+ by FR2P281MB2841.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:66::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.22; Sun, 6 Oct
+ 2024 08:31:38 +0000
+Received: from BEZP281MB2245.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::30c2:e749:7c7f:a6b5]) by BEZP281MB2245.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::30c2:e749:7c7f:a6b5%5]) with mapi id 15.20.8026.020; Sun, 6 Oct 2024
+ 08:31:37 +0000
+From: Sven Schuchmann <schuchmann@schleissheimer.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>, Manivannan Sadhasivam
+	<manivannan.sadhasivam@linaro.org>, Thomas Kopp <thomas.kopp@microchip.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+CC: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+	"kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: AW: [PATCH RFC can] can: mcp251xfd: mcp251xfd_get_tef_len(): fix
+ length calculation
+Thread-Topic: [PATCH RFC can] can: mcp251xfd: mcp251xfd_get_tef_len(): fix
+ length calculation
+Thread-Index: AQHbFBOVeTJqdUhAD0yBXLlCGVgngbJ5a6Xi
+Date: Sun, 6 Oct 2024 08:31:37 +0000
+Message-ID:
+ <BEZP281MB224549045AA4601B1951CD3BD97C2@BEZP281MB2245.DEUP281.PROD.OUTLOOK.COM>
+References:
+ <20241001-mcp251xfd-fix-length-calculation-v1-1-598b46508d61@pengutronix.de>
+In-Reply-To:
+ <20241001-mcp251xfd-fix-length-calculation-v1-1-598b46508d61@pengutronix.de>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=schleissheimer.de;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BEZP281MB2245:EE_|FR2P281MB2841:EE_
+x-ms-office365-filtering-correlation-id: e74ba497-f35e-4da8-10a5-08dce5e14b87
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?aimz1wfy50HgtMS63Ky8OqVxgKIKmUXXpLydhdW7Y9skwfeQET3tZ36HdG?=
+ =?iso-8859-1?Q?zbpgG6RgaOzX6m0DLJWtoRpjeWcGWcH4n9Il55FQ8htJvtJyHthqPU+c0L?=
+ =?iso-8859-1?Q?59gWNhK33CWGPlRv4wSLjqVshaPi5xN8ERBH8QCiG0aTbnulhQftSemrhu?=
+ =?iso-8859-1?Q?wFgGnOEjZ1BvXsqWEgFm9cjCo2ENMrvaPEe1BLxQqPpkGbNzC8lCJ0pDwz?=
+ =?iso-8859-1?Q?mDn0R0M1gyD75lSznMGESKoqqvCKt4R7Ww7RgQXKPpaapvzlR4ZrOsfX/I?=
+ =?iso-8859-1?Q?MXe/zmS5zPNutcsml57PTy+9OkO3nfRoaouf3+LkaYlWn3agSf54o0uf7I?=
+ =?iso-8859-1?Q?Rkwaidr8hAswImNOKZr+d/t+rK7yjBhTF2lXwluZ/7g6RHFmJs9jD7j+iV?=
+ =?iso-8859-1?Q?SnQ3+rzVOZPkxmN6cGjJk6P8D2aaUdMwOm/r+RvgqCJkzppMnFFwBO3DEB?=
+ =?iso-8859-1?Q?SEkAnh1HwPFE4s/ytkGf1c43Fbr0Ga4SmMut9COv1Rrgh65O4CQg8EBATO?=
+ =?iso-8859-1?Q?0pylNDvZ504aJ08lXHub5AEma3QsxJbABbis2KK7kOR3LbiTsOlowPDBuC?=
+ =?iso-8859-1?Q?3ftIcZvf19Z2ASHt3WNbeFXp8T4FdyYAWOg2ul/A0+/hERtTm/EJDRns1S?=
+ =?iso-8859-1?Q?+Pjr5Pyk2bCTTd9XXUmdY3voDCb0iqKpQUr1oFF3q9sOKvvpnV/YBsp0vk?=
+ =?iso-8859-1?Q?L97yo6mXoJgu9anYNoORGyB844fTudBF9VE08GvS0XlgVA0Ik9EId7AOCZ?=
+ =?iso-8859-1?Q?D0imt964MSNSeqdXjwZkbvVGI+f2Q58tzh38/5rzfgtaQB6tKDLgZaau3Q?=
+ =?iso-8859-1?Q?C82HAiNXYnJTVM7hu3Fj2kJcwK32fRkKCaWzudYMR4IS7kHIBiGhDxZjcR?=
+ =?iso-8859-1?Q?TLz7/YorLwp+0XB2BHG72VEd8W+lrGkzHAnfeY+iGXhnLIuG17Obsjnzqt?=
+ =?iso-8859-1?Q?IqMZNbj132bS9wDwvDnDVYkJ4UlRkvhK81i6DGKPvQYDLX96zTfPbrRkZ6?=
+ =?iso-8859-1?Q?65rCm2MuZj8t+dZVZy25ld+pQtY+/eEnV8z9v4EBHuhfBM5CW5eSA7tARh?=
+ =?iso-8859-1?Q?JCU5/sutaIZI/3zK3eik4WK3+lcFozdBSmVa/lJlA+BlUL/6Mq6cvVuwPA?=
+ =?iso-8859-1?Q?c/Vs6UG4yXlBfR/6FLP/BcIVx8H6iGF9SQSRurygZTB35g64F4G0zvD0GK?=
+ =?iso-8859-1?Q?n+dBRhxhB2NIDR/jHnSJuU9DaylfU+DMf8eF6TcFLCHsMopzPVGO/5FYT2?=
+ =?iso-8859-1?Q?Ik/SEPFjyJ2i6fUN4bMRT/3nDpfS9vdffkImWh3s8zt/Z8Bhv8JCKzbOOa?=
+ =?iso-8859-1?Q?Xcv2Cv14yvKa2IwukVhofmdMrDe/9MIW/jB/ejF+9lW3FHE=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2245.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?ZwZZaurPdIv3eJEEECF4IbRscpfsqM2osv1PDzx2/fCJ7c71ng1Ej9l0Mg?=
+ =?iso-8859-1?Q?W5IWq+kokoOcfWEGO4QwnGp/NB6YKQPxBY0gpHLd8fRA2Zn68UApBoDcBZ?=
+ =?iso-8859-1?Q?ettJD085pXvmIQLKow1p+UG60xUXuD/tFuwiTsnt2i1PvUXoI3NUjMvY12?=
+ =?iso-8859-1?Q?acvGhixF27jwgg5kYKgrYESGjy5ennTDylOm4iSG8n82uKsIqF/ZUTEusN?=
+ =?iso-8859-1?Q?56wVGv4JRxYEuU7E8WFoGsr0z0Ch3rA36/jI/U9Ux78w8aUEFGE1VyMOHZ?=
+ =?iso-8859-1?Q?HedVEXJ1EmTIttmuy4EAKo17nx36PUEwYW5Va4BsfEh7ehsEMFrTZtNbxt?=
+ =?iso-8859-1?Q?MWPxioGpa3g9U+eJrS3tIqazJ37o6kKiKstwnHZwDS35Q4Y1nsC6oxfMga?=
+ =?iso-8859-1?Q?/tLDKwbLBQgnabCM8igi3OGyE27u/wi37w8565KGScJPFfzmikn8d+KT0S?=
+ =?iso-8859-1?Q?objxDaMO0dN8YGXFh8UUhDEIhGI8vUOe0wbfmSbiLRMD2uK2ggqkd6zq68?=
+ =?iso-8859-1?Q?RJyiRliF9gaXfVhzPzDuy+G6nbpuD3NSIZ9kWxBV5UHgThioqaDQMnLOjP?=
+ =?iso-8859-1?Q?NKazJ7Jcod9Gtizm6FepgnbWbzhgAdLARTpB/IH5Gw0baxh4lxiPkRRPJe?=
+ =?iso-8859-1?Q?Y2CETIVF7SIQST4BEL3OujRPlHN9vkm9AP6fnkS82OacOr1L94cMqR42Yz?=
+ =?iso-8859-1?Q?LKcxvbtD2QrZUku51bPtqJxoFbz2ECCDN0ylw68xd3hcVt+UH8La0qUG6i?=
+ =?iso-8859-1?Q?QbxqvrKYehyoi2VuQuRCO0XaGVkljEG/nygU7jph5pbItGINkRcsSA1rMD?=
+ =?iso-8859-1?Q?YPmI9JydjNLNapC232xKyVoIJNdD7O3ZJxcb/KwC/Zbv22AlJXZJaJuhRb?=
+ =?iso-8859-1?Q?211wRWUHCKGU8G6HoULeup3xj2038K5Qy6QFC9Ifdk/n1dEPgJMrfbI89l?=
+ =?iso-8859-1?Q?uiKa9kZCQN2+GehyHDcdGNUxjvPTonb7b4R36Sko72big7D9AdaX73En/x?=
+ =?iso-8859-1?Q?6z+LrNS95NVwcSz4TJ1Kb4uQjMCyXo39vil6MBwNi5Nc52Q2EvyeMk6J2y?=
+ =?iso-8859-1?Q?lskVE0nrx/8ctqQ0OuNddj+fnN3dDm+SgCgiwfbqe29yUAd+HdminWcBwO?=
+ =?iso-8859-1?Q?MJSaA0J6xGAPnD6i+PO4uElYE+TR1dBWjNQnUKsxt62U/XtJc34gqGMzjI?=
+ =?iso-8859-1?Q?ABlB4Qm8yMxpbayS3sMKHV0zJHThUlo0fc/9oyEf5Pbz9VW4NXzTYFoNWj?=
+ =?iso-8859-1?Q?oH2DSOHTTyiY8GJH9V7plSOtRpVIcxdOlogWpKBOooCHvJnEbmhdu+H1T6?=
+ =?iso-8859-1?Q?EZlr0VnG4wbAecy4NjoeK8kiK+Gd/Lx+D+61+UC+8FmnXB3TyX7Lw4IdQN?=
+ =?iso-8859-1?Q?jgq8rq/AJDZ96zR3IUxuGyZxIl56JcCPg8GO2lMq3rrW4DVpL/TcUHNu+h?=
+ =?iso-8859-1?Q?oRgfssB1HHKwOE7xh00dZPtZoV+hV/U+dJ3Pp+ogqRNvvtPkwZ8XPxYFL2?=
+ =?iso-8859-1?Q?eScj77lEoEDQhQ7JOZygZ4EEQ+H4+e5m/ZUPyWR7gYR0oOsNvJGbJ5xu9i?=
+ =?iso-8859-1?Q?RIgaTBXgbLIfO5KtcUtDakeFnL5h3rzvFeHv6RZLt2zhRv0ZFld35thvmq?=
+ =?iso-8859-1?Q?bHPTr7cKKizqF9qLzzY9ORq7qU5dNK4U8Fj8O0Qi/g9uG2CyRM+SmsjQ?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: multipart/mixed;
+	boundary="_002_BEZP281MB224549045AA4601B1951CD3BD97C2BEZP281MB2245DEUP_"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c8b:b0:3a0:8d2f:2914 with SMTP id
- e9e14a558f8ab-3a375bd4f33mr21615385ab.23.1728036684412; Fri, 04 Oct 2024
- 03:11:24 -0700 (PDT)
-Date: Fri, 04 Oct 2024 03:11:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <66ffbf4c.050a0220.49194.0485.GAE@google.com>
-Subject: [syzbot] Monthly can report (Oct 2024)
-From: syzbot <syzbot+list142a88e98c5a6a6358e7@syzkaller.appspotmail.com>
-To: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	mkl@pengutronix.de, netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: schleissheimer.de
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2245.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: e74ba497-f35e-4da8-10a5-08dce5e14b87
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Oct 2024 08:31:37.7071
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: ba05321a-a007-44df-8805-c7e62d5887b5
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: i3GKfPQuBKk3bH+jyZfq0a2aMEnccFrCXGHBdKgSy0WVq77OdvSFTb6j15OiCAx3/p59v32ysV7DXUb2CZjnSq+jONgG1QMlXF3PKL/lsxM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR2P281MB2841
 
-Hello can maintainers/developers,
+--_002_BEZP281MB224549045AA4601B1951CD3BD97C2BEZP281MB2245DEUP_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-This is a 31-day syzbot report for the can subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/can
+Hello Marc,=0A=
+=0A=
+sorry, it still crashes:=0A=
+[   25.173548] mcp251xfd spi1.0 canfd1: IRQ handler mcp251xfd_handle_tefif(=
+) returned -22.=0A=
+[   25.173576] mcp251xfd spi1.0 canfd1: IRQ handler returned -22 (intf=3D0x=
+bf1a0010).=0A=
+=0A=
+I attached the dump.=0A=
+=0A=
+Regards,=0A=
+=0A=
+   Sven=0A=
+=0A=
+________________________________________=0A=
+Von:=A0Marc Kleine-Budde <mkl@pengutronix.de>=0A=
+Gesendet:=A0Dienstag, 1. Oktober 2024 17:06=0A=
+An:=A0Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>; Thomas Kopp=
+ <thomas.kopp@microchip.com>; Vincent Mailhol <mailhol.vincent@wanadoo.fr>=
+=0A=
+Cc:=A0linux-can@vger.kernel.org <linux-can@vger.kernel.org>; kernel@pengutr=
+onix.de <kernel@pengutronix.de>; Sven Schuchmann <schuchmann@schleissheimer=
+.de>; Marc Kleine-Budde <mkl@pengutronix.de>=0A=
+Betreff:=A0[PATCH RFC can] can: mcp251xfd: mcp251xfd_get_tef_len(): fix len=
+gth calculation=0A=
+=A0=0A=
+Reported-by: Sven Schuchmann <schuchmann@schleissheimer.de>=0A=
+Closes: https://patch.msgid.link/FR3P281MB155216711EFF900AD9791B7ED9692@FR3=
+P281MB1552.DEUP281.PROD.OUTLOOK.COM=0A=
+Fixes: b8e0ddd36ce9 ("can: mcp251xfd: tef: prepare to workaround broken TEF=
+ FIFO tail index erratum")=0A=
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>=0A=
+---=0A=
+Hello,=0A=
+=0A=
+I think the length calculation is wrong. Can you try this compile=0A=
+tested only patch. I'll add a proper patch description later.=0A=
+=0A=
+Marc=0A=
+---=0A=
+=A0drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c | 10 +++++++---=0A=
+=A01 file changed, 7 insertions(+), 3 deletions(-)=0A=
+=0A=
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c b/drivers/net/ca=
+n/spi/mcp251xfd/mcp251xfd-tef.c=0A=
+index f732556d233a7be3b43f6f08e0b8f25732190104..e40a6d4134c29b32baeda7ad3db=
+af4de27b54ba3 100644=0A=
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c=0A=
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c=0A=
+@@ -16,9 +16,9 @@=0A=
+=A0=0A=
+=A0#include "mcp251xfd.h"=0A=
+=A0=0A=
+-static inline bool mcp251xfd_tx_fifo_sta_full(u32 fifo_sta)=0A=
++static inline bool mcp251xfd_tx_fifo_sta_empty(u32 fifo_sta)=0A=
+=A0{=0A=
+-=A0=A0=A0=A0=A0=A0 return !(fifo_sta & MCP251XFD_REG_FIFOSTA_TFNRFNIF);=0A=
++=A0=A0=A0=A0=A0=A0 return !(fifo_sta & MCP251XFD_REG_FIFOSTA_TFERFFIF);=0A=
+=A0}=0A=
+=A0=0A=
+=A0static inline int=0A=
+@@ -122,7 +122,11 @@ mcp251xfd_get_tef_len(struct mcp251xfd_priv *priv, u8 =
+*len_p)=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 if (err)=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return err;=0A=
+=A0=0A=
+-=A0=A0=A0=A0=A0=A0 if (mcp251xfd_tx_fifo_sta_full(fifo_sta)) {=0A=
++=A0=A0=A0=A0=A0=A0 /* If the chip says the TX-FIFO is empty, but there are=
+ no TX=0A=
++=A0=A0=A0=A0=A0=A0=A0 * buffers free in the ring, we assume all have been =
+sent.=0A=
++=A0=A0=A0=A0=A0=A0=A0 */=0A=
++=A0=A0=A0=A0=A0=A0 if (mcp251xfd_tx_fifo_sta_empty(fifo_sta) &&=0A=
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 mcp251xfd_get_tx_free(tx_ring) =3D=3D 0) {=
+=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 *len_p =3D tx_ring->obj_nu=
+m;=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return 0;=0A=
+=A0=A0=A0=A0=A0=A0=A0=A0 }=0A=
+=0A=
+---=0A=
+base-commit: d505d3593b52b6c43507f119572409087416ba28=0A=
+change-id: 20241001-mcp251xfd-fix-length-calculation-09b6cc10aeb0=0A=
+=0A=
+Best regards,=0A=
+--=0A=
+Marc Kleine-Budde <mkl@pengutronix.de>=0A=
+=0A=
 
-During the period, 1 new issues were detected and 1 were fixed.
-In total, 5 issues are still open and 53 have been fixed so far.
+--_002_BEZP281MB224549045AA4601B1951CD3BD97C2BEZP281MB2245DEUP_
+Content-Type: application/octet-stream;
+	name="devcoredump-20241006-102058.dump"
+Content-Description: devcoredump-20241006-102058.dump
+Content-Disposition: attachment; filename="devcoredump-20241006-102058.dump";
+	size=5960; creation-date="Sun, 06 Oct 2024 08:31:17 GMT";
+	modification-date="Sun, 06 Oct 2024 08:31:17 GMT"
+Content-Transfer-Encoding: base64
 
-Some of the still happening issues:
+TUMlGAAAAABgAAAACBYAAE1DJRgBAAAAaBYAADgAAABNQyUYAgAAAKAWAAA4AAAATUMlGAIAAADY
+FgAAOAAAAE1DJRgDAAAAEBcAADgAAABNQyUY/////wAAAAAAAAAAAAAAAGAHCwAEAAAAAg8+AAgA
+AAADBQwADAAAAAANAgAQAAAAWay4BRQAAAAAAAEAGAAAAEkAQEAcAAAAEAAavyAAAAAAAAAAJAAA
+AAAAAAAoAAAAAAAAACwAAAAAAAAAMAAAAAAAAAA0AAAAAAAAADgAAAAAAAAAPAAAAG8IAABAAAAA
+KgAAA0QAAAAHAAAASAAAACQAAABMAAAAAAAAAFAAAACAAGAAVAAAAAUAAABYAAAAMAAAAFwAAAAp
+AADvYAAAAAAAAABkAAAAMAAAAGgAAAApAADjbAAAAAAAAABwAAAA8AQAAHQAAACQAGDjeAAAAAcD
+AAB8AAAA+AYAAIAAAAAAAGAAhAAAAAAAAACIAAAAQAcAAIwAAAAAAGAAkAAAAAAAAACUAAAAUAcA
+AJgAAAAAAGAAnAAAAAAAAACgAAAAYAcAAKQAAAAAAGAAqAAAAAAAAACsAAAAcAcAALAAAAAAAGAA
+tAAAAAAAAAC4AAAAgAcAALwAAAAAAGAAwAAAAAAAAADEAAAAkAcAAMgAAAAAAGAAzAAAAAAAAADQ
+AAAAoAcAANQAAAAAAGAA2AAAAAAAAADcAAAAsAcAAOAAAAAAAGAA5AAAAAAAAADoAAAAwAcAAOwA
+AAAAAGAA8AAAAAAAAAD0AAAA0AcAAPgAAAAAAGAA/AAAAAAAAAAAAQAA4AcAAAQBAAAAAGAACAEA
+AAAAAAAMAQAA8AcAABABAAAAAGAAFAEAAAAAAAAYAQAAAAgAABwBAAAAAGAAIAEAAAAAAAAkAQAA
+EAgAACgBAAAAAGAALAEAAAAAAAAwAQAAIAgAADQBAAAAAGAAOAEAAAAAAAA8AQAAMAgAAEABAAAA
+AGAARAEAAAAAAABIAQAAQAgAAEwBAAAAAGAAUAEAAAAAAABUAQAAUAgAAFgBAAAAAGAAXAEAAAAA
+AABgAQAAYAgAAGQBAAAAAGAAaAEAAAAAAABsAQAAcAgAAHABAAAAAGAAdAEAAAAAAAB4AQAAgAgA
+AHwBAAAAAGAAgAEAAAAAAACEAQAAkAgAAIgBAAAAAGAAjAEAAAAAAACQAQAAoAgAAJQBAAAAAGAA
+mAEAAAAAAACcAQAAsAgAAKABAAAAAGAApAEAAAAAAACoAQAAwAgAAKwBAAAAAGAAsAEAAAAAAAC0
+AQAA0AgAALgBAAAAAGAAvAEAAAAAAADAAQAA4AgAAMQBAAAAAGAAyAEAAAAAAADMAQAA8AgAANAB
+AACBggAA1AEAAAAAAADYAQAAAAAAANwBAAAAAAAA4AEAAAAAAADkAQAAAAAAAOgBAAAAAAAA7AEA
+AAAAAADwAQAAAAAAAPQBAAAAAAAA+AEAAAAAAAD8AQAAAAAAAAACAAAAAAAABAIAAAAAAAAIAgAA
+AAAAAAwCAAAAAAAAEAIAAAAAAAAUAgAAAAAAABgCAAAAAAAAHAIAAAAAAAAgAgAAAAAAACQCAAAA
+AAAAKAIAAAAAAAAsAgAAAAAAADACAAAAAAAANAIAAAAAAAA4AgAAAAAAADwCAAAAAAAAQAIAAAAA
+AABEAgAAAAAAAEgCAAAAAAAATAIAAAAAAABQAgAAAAAAAFQCAAAAAAAAWAIAAAAAAABcAgAAAAAA
+AGACAAAAAAAAZAIAAAAAAABoAgAAAAAAAGwCAAAAAAAAcAIAAAAAAAB0AgAAAAAAAHgCAAAAAAAA
+fAIAAAAAAACAAgAAAAAAAIQCAAAAAAAAiAIAAAAAAACMAgAAAAAAAJACAAAAAAAAlAIAAAAAAACY
+AgAAAAAAAJwCAAAAAAAAoAIAAAAAAACkAgAAAAAAAKgCAAAAAAAArAIAAAAAAACwAgAAAAAAALQC
+AAAAAAAAuAIAAAAAAAC8AgAAAAAAAMACAAAAAAAAxAIAAAAAAADIAgAAAAAAAMwCAAAAAAAA0AIA
+AAAAAADUAgAAAAAAANgCAAAAAAAA3AIAAAAAAADgAgAAAAAAAOQCAAAAAAAA6AIAAAAAAADsAgAA
+AAAAAAAEAADFAQAABAQAAM/YEAAIBAAAs0C3BQwEAADGAQAAEAQAAM/aEAAUBAAAjny3BRgEAADH
+AQAAHAQAAM/cEAAgBAAAfbi3BSQEAADEAQAAKAQAAM/WEAAsBAAAxAS3BTAEAAAAAAAANAQAAAAA
+AAA4BAAAAAAAADwEAAAAAAAAQAQAAAAAAABEBAAAAAAAAEgEAAAAAAAATAQAAAAAAABQBAAAAAAA
+AFQEAAAAAAAAWAQAAAAAAABcBAAAAAAAAGAEAAAAAAAAZAQAAAAAAABoBAAAAAAAAGwEAAAAAAAA
+cAQAAAAAAAB0BAAAAAAAAHgEAAAAAAAAfAQAAAAAAACABAAAAAAAAIQEAAAAAAAAiAQAAAAAAACM
+BAAAAAAAAJAEAAAAAAAAlAQAAAAAAACYBAAAAAAAAJwEAAAAAAAAoAQAAAAAAACkBAAAAAAAAKgE
+AAAAAAAArAQAAAAAAACwBAAAAAAAALQEAAAAAAAAuAQAAAAAAAC8BAAAAAAAAMAEAAAAAAAAxAQA
+AAAAAADIBAAAAAAAAMwEAAAAAAAA0AQAAAAAAADUBAAAAAAAANgEAAAAAAAA3AQAAAAAAADgBAAA
+AAAAAOQEAAAAAAAA6AQAAAAAAADsBAAAAAAAAPAEAAAAAAAA9AQAAAAAAAD4BAAAAAAAAPwEAAAA
+AAAAAAUAAAAAAAAEBQAAAAAAAAgFAAAAAAAADAUAAAAAAAAQBQAAAAAAABQFAAAAAAAAGAUAAAAA
+AAAcBQAAAAAAACAFAAAAAAAAJAUAAAAAAAAoBQAAAAAAACwFAAAAAAAAMAUAAAAAAAA0BQAAAAAA
+ADgFAAAAAAAAPAUAAAAAAABABQAAAAAAAEQFAAAAAAAASAUAAAAAAABMBQAAAAAAAFAFAAAAAAAA
+VAUAAAAAAABYBQAAAAAAAFwFAAAAAAAAYAUAAAAAAABkBQAAAAAAAGgFAAAAAAAAbAUAAAAAAABw
+BQAAAAAAAHQFAAAAAAAAeAUAAAAAAAB8BQAAAAAAAIAFAAAAAAAAhAUAAAAAAACIBQAAAAAAAIwF
+AAAAAAAAkAUAAAAAAACUBQAAAAAAAJgFAAAAAAAAnAUAAAAAAACgBQAAAAAAAKQFAAAAAAAAqAUA
+AAAAAACsBQAAAAAAALAFAAAAAAAAtAUAAAAAAAC4BQAAAAAAALwFAAAAAAAAwAUAAAAAAADEBQAA
+AAAAAMgFAAAAAAAAzAUAAAAAAADQBQAAAAAAANQFAAAAAAAA2AUAAAAAAADcBQAAAAAAAOAFAAAA
+AAAA5AUAAAAAAADoBQAAAAAAAOwFAAAAAAAA8AUAAAAAAAD0BQAAAAAAAPgFAAAAAAAA/AUAAAAA
+AAAABgAAAAAAAAQGAAAAAAAACAYAAAAAAAAMBgAAAAAAABAGAAAAAAAAFAYAAAAAAAAYBgAAAAAA
+ABwGAAAAAAAAIAYAAAAAAAAkBgAAAAAAACgGAAAAAAAALAYAAAAAAAAwBgAAAAAAADQGAAAAAAAA
+OAYAAAAAAAA8BgAAAAAAAEAGAAAAAAAARAYAAAAAAABIBgAAAAAAAEwGAAAAAAAAUAYAAAAAAABU
+BgAAAAAAAFgGAAAAAAAAXAYAAAAAAABgBgAAAAAAAGQGAAAAAAAAaAYAAAAAAABsBgAAAAAAAHAG
+AAAAAAAAdAYAAAAAAAB4BgAAAAAAAHwGAAAAAAAAgAYAAAAAAACEBgAAAAAAAIgGAAAAAAAAjAYA
+AAAAAACQBgAAAAAAAJQGAAAAAAAAmAYAAAAAAACcBgAAAAAAAKAGAAAAAAAApAYAAAAAAACoBgAA
+AAAAAKwGAAAAAAAAsAYAAAAAAAC0BgAAAAAAALgGAAAAAAAAvAYAAAAAAADABgAAAAAAAMQGAAAA
+AAAAyAYAAAAAAADMBgAAAAAAANAGAAAAAAAA1AYAAAAAAADYBgAAAAAAANwGAAAAAAAA4AYAAAAA
+AADkBgAAAAAAAOgGAAAAAAAA7AYAAAAAAADwBgAAAAAAAPQGAAAAAAAA+AYAAAAAAAD8BgAAAAAA
+AAAHAAAAAAAABAcAAAAAAAAIBwAAAAAAAAwHAAAAAAAAEAcAAAAAAAAUBwAAAAAAABgHAAAAAAAA
+HAcAAAAAAAAgBwAAAAAAACQHAAAAAAAAKAcAAAAAAAAsBwAAAAAAADAHAAAAAAAANAcAAAAAAAA4
+BwAAAAAAADwHAAAAAAAAQAcAAAAAAABEBwAAAAAAAEgHAAAAAAAATAcAAAAAAABQBwAAAAAAAFQH
+AAAAAAAAWAcAAAAAAABcBwAAAAAAAGAHAAAAAAAAZAcAAAAAAABoBwAAAAAAAGwHAAAAAAAAcAcA
+AAAAAAB0BwAAAAAAAHgHAAAAAAAAfAcAAAAAAACABwAAAAAAAIQHAAAAAAAAiAcAAAAAAACMBwAA
+AAAAAJAHAAAAAAAAlAcAAAAAAACYBwAAAAAAAJwHAAAAAAAAoAcAAAAAAACkBwAAAAAAAKgHAAAA
+AAAArAcAAAAAAACwBwAAAAAAALQHAAAAAAAAuAcAAAAAAAC8BwAAAAAAAMAHAAAAAAAAxAcAAAAA
+AADIBwAAAAAAAMwHAAAAAAAA0AcAAAAAAADUBwAAAAAAANgHAAAAAAAA3AcAAAAAAADgBwAAAAAA
+AOQHAAAAAAAA6AcAAAAAAADsBwAAAAAAAPAHAAAAAAAA9AcAAAAAAAD4BwAAAAAAAPwHAAAAAAAA
+AAgAAAAAAAAECAAAAAAAAAgIAAAAAAAADAgAAAAAAAAQCAAAAAAAABQIAAAAAAAAGAgAAAAAAAAc
+CAAAAAAAACAIAAAAAAAAJAgAAAAAAAAoCAAAAAAAACwIAAAAAAAAMAgAAAAAAAA0CAAAAAAAADgI
+AAAAAAAAPAgAAAAAAABACAAAAAAAAEQIAAAAAAAASAgAAAAAAABMCAAAAAAAAFAIAAAAAAAAVAgA
+AAAAAABYCAAAAAAAAFwIAAAAAAAAYAgAAAAAAABkCAAAAAAAAGgIAAAAAAAAbAgAAAAAAABwCAAA
+AAAAAHQIAAAAAAAAeAgAAAAAAAB8CAAAAAAAAIAIAAAAAAAAhAgAAAAAAACICAAAAAAAAIwIAAAA
+AAAAkAgAAAAAAACUCAAAAAAAAJgIAAAAAAAAnAgAAAAAAACgCAAAAAAAAKQIAAAAAAAAqAgAAAAA
+AACsCAAAAAAAALAIAAAAAAAAtAgAAAAAAAC4CAAAAAAAALwIAAAAAAAAwAgAAAAAAADECAAAAAAA
+AMgIAAAAAAAAzAgAAAAAAADQCAAAAAAAANQIAAAAAAAA2AgAAAAAAADcCAAAAAAAAOAIAAAAAAAA
+5AgAAAAAAADoCAAAAAAAAOwIAAAAAAAA8AgAAAAAAAD0CAAAAAAAAPgIAAAAAAAA/AgAAAAAAAAA
+CQAAAAAAAAQJAAAAAAAACAkAAAAAAAAMCQAAAAAAABAJAAAAAAAAFAkAAAAAAAAYCQAAAAAAABwJ
+AAAAAAAAIAkAAAAAAAAkCQAAAAAAACgJAAAAAAAALAkAAAAAAAAwCQAAAAAAADQJAAAAAAAAOAkA
+AAAAAAA8CQAAAAAAAEAJAAAAAAAARAkAAAAAAABICQAAAAAAAEwJAAAAAAAAUAkAAAAAAABUCQAA
+AAAAAFgJAAAAAAAAXAkAAAAAAABgCQAAAAAAAGQJAAAAAAAAaAkAAAAAAABsCQAAAAAAAHAJAAAA
+AAAAdAkAAAAAAAB4CQAAAAAAAHwJAAAAAAAAgAkAAAAAAACECQAAAAAAAIgJAAAAAAAAjAkAAAAA
+AACQCQAAAAAAAJQJAAAAAAAAmAkAAAAAAACcCQAAAAAAAKAJAAAAAAAApAkAAAAAAACoCQAAAAAA
+AKwJAAAAAAAAsAkAAAAAAAC0CQAAAAAAALgJAAAAAAAAvAkAAAAAAADACQAAAAAAAMQJAAAAAAAA
+yAkAAAAAAADMCQAAAAAAANAJAAAAAAAA1AkAAAAAAADYCQAAAAAAANwJAAAAAAAA4AkAAAAAAADk
+CQAAAAAAAOgJAAAAAAAA7AkAAAAAAADwCQAAAAAAAPQJAAAAAAAA+AkAAAAAAAD8CQAAAAAAAAAK
+AAAAAAAABAoAAAAAAAAICgAAAAAAAAwKAAAAAAAAEAoAAAAAAAAUCgAAAAAAABgKAAAAAAAAHAoA
+AAAAAAAgCgAAxQEAACQKAADP2BAAKAoAAGkGAAAsCgAAAAAAADAKAAAAAAAANAoAAAAAAAA4CgAA
+AAAAADwKAAAAAAAAQAoAAAAAAABECgAAAAAAAEgKAAAAAAAATAoAAAAAAABQCgAAAAAAAFQKAAAA
+AAAAWAoAAAAAAABcCgAAAAAAAGAKAAAAAAAAZAoAAAAAAABoCgAAxgEAAGwKAADP2hAAcAoAAPIG
+AAB0CgAAAAAAAHgKAAAAAAAAfAoAAAAAAACACgAAAAAAAIQKAAAAAAAAiAoAAAAAAACMCgAAAAAA
+AJAKAAAAAAAAlAoAAAAAAACYCgAAAAAAAJwKAAAAAAAAoAoAAAAAAACkCgAAAAAAAKgKAAAAAAAA
+rAoAAAAAAACwCgAAxwEAALQKAADP3BAAuAoAAHMGAAC8CgAAAAAAAMAKAAAAAAAAxAoAAAAAAADI
+CgAAAAAAAMwKAAAAAAAA0AoAAAAAAADUCgAAAAAAANgKAAAAAAAA3AoAAAAAAADgCgAAAAAAAOQK
+AAAAAAAA6AoAAAAAAADsCgAAAAAAAPAKAAAAAAAA9AoAAAAAAAD4CgAAxAEAAPwKAADP1hAAAAsA
+ALUGAAAECwAAAAAAAAgLAAAAAAAADAsAAAAAAAAQCwAAAAAAABQLAAAAAAAAGAsAAAAAAAAcCwAA
+AAAAACALAAAAAAAAJAsAAAAAAAAoCwAAAAAAACwLAAAAAAAAMAsAAAAAAAA0CwAAAAAAADgLAAAA
+AAAAPAsAAAAAAABACwAAAAAAAEQLAAAAAAAASAsAAAAAAABMCwAAAAAAAFALAAAAAAAAVAsAAAAA
+AABYCwAAAAAAAFwLAAAAAAAAYAsAAAAAAABkCwAAAAAAAGgLAAAAAAAAbAsAAAAAAABwCwAAAAAA
+AHQLAAAAAAAAeAsAAAAAAAB8CwAAAAAAAIALAAAAAAAAhAsAAAAAAACICwAAAAAAAIwLAAAAAAAA
+kAsAAAAAAACUCwAAAAAAAJgLAAAAAAAAnAsAAAAAAACgCwAAAAAAAKQLAAAAAAAAqAsAAAAAAACs
+CwAAAAAAALALAAAAAAAAtAsAAAAAAAC4CwAAAAAAALwLAAAAAAAAwAsAAAAAAADECwAAAAAAAMgL
+AAAAAAAAzAsAAAAAAADQCwAAAAAAANQLAAAAAAAA2AsAAAAAAADcCwAAAAAAAOALAAAAAAAA5AsA
+AAAAAADoCwAAAAAAAOwLAAAAAAAA8AsAAAAAAAD0CwAAAAAAAPgLAAAAAAAA/AsAAAAAAAAADgAA
+aAQAAAQOAAADAAADCA4AAA+/AAMMDgAABwAAABAOAAAAAAAAAAAAAGsIAAABAAAAawgAAAIAAAAA
+AAAAAwAAAAAAAAAEAAAAAAAAAAUAAAAEAAAABgAAAAwAAAAAAAAAAAAAAAEAAAAAAAAAAgAAADAE
+AAADAAAAAAAAAAQAAAABAAAABQAAABAAAAAGAAAATAAAAAAAAAAAAAAAAQAAAAAAAAACAAAA8AgA
+AAMAAAABAAAABAAAAAIAAAAFAAAABAAAAAYAAABMAAAAAAAAAG8IAAABAAAAawgAAAIAAAAgCgAA
+AwAAAAAAAAAEAAAAAwAAAAUAAAAEAAAABgAAAEgAAAA=
 
-Ref Crashes Repro Title
-<1> 4408    Yes   WARNING: refcount bug in j1939_session_put
-                  https://syzkaller.appspot.com/bug?extid=ad601904231505ad6617
-<2> 2347    Yes   WARNING: refcount bug in j1939_xtp_rx_cts
-                  https://syzkaller.appspot.com/bug?extid=5a1281566cc25c9881e0
-<3> 2184    Yes   WARNING: refcount bug in sk_skb_reason_drop
-                  https://syzkaller.appspot.com/bug?extid=d4e8dc385d9258220c31
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+--_002_BEZP281MB224549045AA4601B1951CD3BD97C2BEZP281MB2245DEUP_--
 
