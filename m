@@ -1,72 +1,72 @@
-Return-Path: <linux-can+bounces-1601-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1602-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34C8A993952
-	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2024 23:37:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA99A993954
+	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2024 23:37:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96114B22E7B
-	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2024 21:37:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2BE82830F4
+	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2024 21:37:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2D5218C35E;
-	Mon,  7 Oct 2024 21:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C13B18BC3A;
+	Mon,  7 Oct 2024 21:35:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="KBDTEout"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="V0dg1jn+"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C7B19067C
-	for <linux-can@vger.kernel.org>; Mon,  7 Oct 2024 21:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E61D192D92
+	for <linux-can@vger.kernel.org>; Mon,  7 Oct 2024 21:35:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728336947; cv=none; b=Km0m9ApY2+kz16fJR+7eRbcRAUHwc6WVdky0/DWd3bf9HDHKTahsTx0ZYjNnGo/rwmfPS+Fd+iYyOT6VLMos4S6ExHjSC7SkIc1FrZGEvOWJadlBrW9nhykeQJTYXbQ+CawRfXTewnpbE0yixmQuFv6yesLlX3n8AslPg3Fa8BA=
+	t=1728336950; cv=none; b=m0KjMI2TjXO8px17FABrcqj4Ova955hHQaeh2Xs/Z8R+IqXwbTdXsDTyY6UCEZ5is2RLL5y5853NrmUvqqKAnstJcbsDwmodes7/eH2o1m7eadPQ2LcZ+sivTVQdjG753r63vSOZfPb9VYgseu4qENLiQLHl9muCjV6gDKf4fGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728336947; c=relaxed/simple;
-	bh=+sATRWeawQEUv1+UCi+L6joXgd2sN0KH+RYIISQm3Ag=;
+	s=arc-20240116; t=1728336950; c=relaxed/simple;
+	bh=q1wcm6mMQ7h4EZDUMr6oUmN6x8BUBq/PxsPoaXApW48=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WZmA31t2j3tex+U4/TGwwJ52VBeS/MYMBTvqVv30TYlI1cJE4KxHpluaHh/Ce+BIbdpBKkwjBWDPX7b+omwnTp8t18lZlKTUs61OGEFv1jChPiaRkwO4QK6xgu+ezBdBRODyNqYKUl7Mh9etUfVMYptow/YBKZl36sNicvfExik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=KBDTEout; arc=none smtp.client-ip=209.85.221.45
+	 MIME-Version; b=O+VY5Ex/3xzJT2pVR42ivM6Yl0QOEP1mlVtpUBiJZL3axIGQjLdoQ7225E5c0pjlv8ArZs2sKnCbm4w63JfnZf+sPXztzMYxWVUdRPCGlYJNAZ3qNLH16MbAs3zISaoU7bkIeCqcaNYLMKJW1fy07rwBxkpz40/vsc95nYQWklE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=V0dg1jn+; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37cfa129074so3370380f8f.1
-        for <linux-can@vger.kernel.org>; Mon, 07 Oct 2024 14:35:45 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42f56ad2afaso66347845e9.1
+        for <linux-can@vger.kernel.org>; Mon, 07 Oct 2024 14:35:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1728336944; x=1728941744; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1728336947; x=1728941747; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=47ahDvpGlziX1HY/1UDQ79MexuwMxPJ3vAc1BGnN1yo=;
-        b=KBDTEoutuH29YwT8WzkPAPKLJDUG/cjK6Om9wg87AHH/iCN0MdpwPqSE1jUWp7c5lV
-         Ogl09k/IknswIFe9HVxXuJM1mwSx8AO7ZFhZL82naqyzQh0hJxR4slCSyLG2QYr50LYE
-         bR6a4cqcN2PVsCc1Oj3vCt3/dggJTpGAkvp5qmtt0trGXDCsbFgIYx/AICFp/ULLkfDh
-         gcJwBOXbwHjGIyrxKd38HoExOtW8O3k9QDl5TCJO0H0WyQ+GabB8JqRA5KYilnjHAPnQ
-         AscpjjwKI2w0gn2UY/awN/vI2fT6fBQtUqs4gO1/glHtJW5gfjJpM7pPgIUZBF3hNNiD
-         7D4w==
+        bh=lghPtxWNb8lEoXQFFkVieItQmyHsjS0TFzxCTFvvuyY=;
+        b=V0dg1jn+hKCA6cx8/K7ivEzNGRNPOTwmbBp4libmwBR4w7QfFZykVVJwiFI0B3Dtwe
+         9pA4ppJZyurmox+9o8VN8W7IzdR1aoh9HUSAPzLNcG+snCsWpcj00jhS6ryv698rcoOC
+         gZnbN+0t1Gk00/rP4ePsOtZPj2joB/04jCR3LYs8lQ3QPIop/aTB9tPjfZg07Egp+QVz
+         l3U2ccKHLawsRuLPajBOanV5BSAm27X6cxI7T1uTuP0zp2l+01eZEiJOCkiBnjlmk4uO
+         ePOX9e3xqgda9uJXVc4DErdEKDqBNAen9xV8cMjKsx0k4wWdXaW6nMIvIezShB0ilT4V
+         ngXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728336944; x=1728941744;
+        d=1e100.net; s=20230601; t=1728336947; x=1728941747;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=47ahDvpGlziX1HY/1UDQ79MexuwMxPJ3vAc1BGnN1yo=;
-        b=SmQ3TgWroSFkHqZQjsgn5vX33MH40J2PGKw4dEgppv+Jpmf0Zri+6MpZc7bnqWajj/
-         T21nNlVl/RSxwl5L8EqoGpR8x+GRzMPhcJRYbJ4bWscfq0sjb/XP3YedzXIjJjatEC3F
-         I4U/SUQsvgHIgVWkbLSAq74sAlPSYLzJcG8rVxg2ICd90DhFietfGQgqNDpaqhxos/CT
-         QkmcU5XlBgi3duSclmCKtGZBNRILv/mh1XNRDjCw24scbrWiWaT4z7nlZn2wx95ycxA8
-         2/JIQthnhnNb3JS6zFiLNQOmpta48Zwy/LKmUCHR8xxfY7WakmsztL4SG8Zkt/dajb8D
-         Gjkg==
-X-Forwarded-Encrypted: i=1; AJvYcCW9Ii5zxs51nDjnL/sCO/l+t5RKe6HM90rZQ2zbtBvfLSUfHdk349kVZXW2oH8bGe0sjg5G35Gc5Mw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy98XsqArR9ZvGCxHxJaAbFmTkZWqPY59/Et2IoB/MESY09FXEd
-	ffbDR9sxdywpgIotg25wx6fVZ+MtXEJcdoalbrOSrWiNXfQJxWU5ABOR+CiwL1c=
-X-Google-Smtp-Source: AGHT+IEh2nNtGTy8ZHuRwyExnrSdxDBOaaRu0AmF4uU5YudljkVsFMbPD2jmqiCN6O47wxbJKhk2fQ==
-X-Received: by 2002:a5d:4d06:0:b0:374:c17a:55b5 with SMTP id ffacd0b85a97d-37d0e6f8eccmr8676059f8f.14.1728336944360;
-        Mon, 07 Oct 2024 14:35:44 -0700 (PDT)
+        bh=lghPtxWNb8lEoXQFFkVieItQmyHsjS0TFzxCTFvvuyY=;
+        b=Ps5+XA/OpOlSJjccNeyuDVKI09r7q+F+kfHugID3EsGcAUHfvfQ1YRqxJdtPTRs+s+
+         Vu7AWTzj9wO31AQkVQ/ol8YDXmnMHpL3riFuGTg6epRE+vD1QWC+9E5jCphDi1K0JMvz
+         bWXkEgS1hmf9VerptDJXBI3Ut6mepWLwlG0a6RQfgE4/focirRn0GdqHzhdtOtdxy0+w
+         g/OIC5SPTsFg2PWMP2GkHbZTiU5y+ZWTPFVwGiG80N3+3GilmnfJevgDa/FwEc9l+ANr
+         H4OU0tipVHzcjsZMCNsq/kjI9kgcxVd5+hyA7lUZLobNw+nvTt8zw3HP71Jo1SJmVYfj
+         WQrg==
+X-Forwarded-Encrypted: i=1; AJvYcCXvSBBWccrXRYYc8lX5z3b/6EWQ10zek/tT4deLCIm7eE4PJVXXNtp1qvBdKYL32mfEaH0RsmhxUJo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxA1iqdfddQ8Z8I9tr+lhFXX9y+ojIl+m1GTXsIUpxdu7qf3LZ8
+	Z0Cd5jgYhZmctAk6wfwL3adyaHv9v+jd0bZuM0hFmPvWhN37I5VaDAMvbCaMwJk=
+X-Google-Smtp-Source: AGHT+IGIEgvlVQ63MN8px9sXGIB6rH0PaHc0x2aiS2t9bCm+0YE6s5XpgSiahpjGOCaDNGfNsSEswQ==
+X-Received: by 2002:a05:600c:5494:b0:42f:8229:a09e with SMTP id 5b1f17b1804b1-42f85aef6e2mr143742535e9.29.1728336946921;
+        Mon, 07 Oct 2024 14:35:46 -0700 (PDT)
 Received: from localhost.localdomain ([104.28.192.66])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d1691a4absm6535887f8f.29.2024.10.07.14.35.42
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d1691a4absm6535887f8f.29.2024.10.07.14.35.44
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 07 Oct 2024 14:35:43 -0700 (PDT)
+        Mon, 07 Oct 2024 14:35:46 -0700 (PDT)
 From: Ignat Korchagin <ignat@cloudflare.com>
 To: "David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -91,9 +91,9 @@ Cc: kernel-team@cloudflare.com,
 	kuniyu@amazon.com,
 	alibuda@linux.alibaba.com,
 	Ignat Korchagin <ignat@cloudflare.com>
-Subject: [PATCH v2 4/8] Bluetooth: RFCOMM: avoid leaving dangling sk pointer in rfcomm_sock_alloc()
-Date: Mon,  7 Oct 2024 22:34:58 +0100
-Message-Id: <20241007213502.28183-5-ignat@cloudflare.com>
+Subject: [PATCH v2 5/8] net: af_can: do not leave a dangling sk pointer in can_create()
+Date: Mon,  7 Oct 2024 22:34:59 +0100
+Message-Id: <20241007213502.28183-6-ignat@cloudflare.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20241007213502.28183-1-ignat@cloudflare.com>
 References: <20241007213502.28183-1-ignat@cloudflare.com>
@@ -105,40 +105,27 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bt_sock_alloc() attaches allocated sk object to the provided sock object.
-If rfcomm_dlc_alloc() fails, we release the sk object, but leave the
-dangling pointer in the sock object, which may cause use-after-free.
-
-Fix this by swapping calls to bt_sock_alloc() and rfcomm_dlc_alloc().
+On error can_create() frees the allocated sk object, but sock_init_data()
+has already attached it to the provided sock object. This will leave a
+dangling sk pointer in the sock object and may cause use-after-free later.
 
 Signed-off-by: Ignat Korchagin <ignat@cloudflare.com>
 ---
- net/bluetooth/rfcomm/sock.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ net/can/af_can.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/bluetooth/rfcomm/sock.c b/net/bluetooth/rfcomm/sock.c
-index 37d63d768afb..0d0c4311da57 100644
---- a/net/bluetooth/rfcomm/sock.c
-+++ b/net/bluetooth/rfcomm/sock.c
-@@ -274,13 +274,13 @@ static struct sock *rfcomm_sock_alloc(struct net *net, struct socket *sock,
- 	struct rfcomm_dlc *d;
- 	struct sock *sk;
- 
--	sk = bt_sock_alloc(net, sock, &rfcomm_proto, proto, prio, kern);
--	if (!sk)
-+	d = rfcomm_dlc_alloc(prio);
-+	if (!d)
- 		return NULL;
- 
--	d = rfcomm_dlc_alloc(prio);
--	if (!d) {
--		sk_free(sk);
-+	sk = bt_sock_alloc(net, sock, &rfcomm_proto, proto, prio, kern);
-+	if (!sk) {
-+		rfcomm_dlc_free(d);
- 		return NULL;
+diff --git a/net/can/af_can.c b/net/can/af_can.c
+index 707576eeeb58..01f3fbb3b67d 100644
+--- a/net/can/af_can.c
++++ b/net/can/af_can.c
+@@ -171,6 +171,7 @@ static int can_create(struct net *net, struct socket *sock, int protocol,
+ 		/* release sk on errors */
+ 		sock_orphan(sk);
+ 		sock_put(sk);
++		sock->sk = NULL;
  	}
  
+  errout:
 -- 
 2.39.5
 
