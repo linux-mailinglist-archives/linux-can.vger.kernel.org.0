@@ -1,126 +1,97 @@
-Return-Path: <linux-can+bounces-1607-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1608-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E9F7993997
-	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2024 23:58:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8A70993BA2
+	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2024 02:20:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C7B11C22F88
-	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2024 21:57:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E56A1F242AC
+	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2024 00:20:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98E8818C352;
-	Mon,  7 Oct 2024 21:57:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD665AD5A;
+	Tue,  8 Oct 2024 00:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="kYPRDpNf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Upa9NYTG"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E33A74C08;
-	Mon,  7 Oct 2024 21:57:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A9EAD51;
+	Tue,  8 Oct 2024 00:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728338274; cv=none; b=MdJm1acYzyHVjUGJylc0rMHMVBM7pk2KiwViFG3GHJdX3SbM9aMN7o6TbhtdWV++cUtGkPp4ekFyC353q/i30Gb6ek/3nxnZoSDWZHvF703xKd+kfGPBWbFOcFAwYfcuKw69L6UOvHFmO7jgWPlf3RWC0mYLNoRRBvEJVLCNP0E=
+	t=1728346831; cv=none; b=teVeSS67rLDbOTMoAFLesNoej3lFlSIiy+ryWr58AtDWfbrYDkSW6Jmnn5MzsI71prmkyaw7zbY2gLA4I7H2kjQUN71SK1VfrI/svPb+gPFpcDkvK8UPSYNqXng41EMFAUNHi+VzDeMeOGLKeBAv9n1h2W9HtHbQYRxove/ETpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728338274; c=relaxed/simple;
-	bh=yO83BjF/EhIdb6aTjF7BPHgAouFqqASxCf24Qe5GbGU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KmecxqxFW5emA63r9YBBqFwBIhzKQsKdRqv1CI2Py8IigVjhiznPoHRNI9MNSEuxarClyod2IZKmdkKQ1SIyvDhDeYfNRmbWIza9lyTKKLscBNDdoYHV5rU8ugD00hNX2dvf9ipbMlr/GfTwnnmLht0b5N/hMRlnUjg5jPS0HTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=kYPRDpNf; arc=none smtp.client-ip=52.119.213.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1728338273; x=1759874273;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=k/7b6auwZDyRxDUdfhnW2bApj7G/ZohOfXk40geD9XI=;
-  b=kYPRDpNf2rPaqk6p6xKvRnkw7juaodWEMO94V8lxy9Wy+US0uHFDbmww
-   dHRRO38siQyA1mwSOJcRroMwyCge3VFd5d/BJMnVffTtiypVyOxD3lWwO
-   22gNQqnMHmDwhRVmrwqqt7a+t2U+zrRLC/PMnogWoBw4a19Xva0CzsfwO
-   o=;
-X-IronPort-AV: E=Sophos;i="6.11,185,1725321600"; 
-   d="scan'208";a="31343091"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2024 21:57:48 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.38.20:62342]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.41.198:2525] with esmtp (Farcaster)
- id d363b916-a870-437d-8fb0-40975da680ee; Mon, 7 Oct 2024 21:57:47 +0000 (UTC)
-X-Farcaster-Flow-ID: d363b916-a870-437d-8fb0-40975da680ee
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Mon, 7 Oct 2024 21:57:46 +0000
-Received: from 88665a182662.ant.amazon.com (10.119.221.239) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
- Mon, 7 Oct 2024 21:57:42 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <ignat@cloudflare.com>
-CC: <alex.aring@gmail.com>, <alibuda@linux.alibaba.com>,
-	<davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-	<johan.hedberg@gmail.com>, <kernel-team@cloudflare.com>, <kuba@kernel.org>,
-	<kuniyu@amazon.com>, <linux-bluetooth@vger.kernel.org>,
-	<linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-wpan@vger.kernel.org>, <luiz.dentz@gmail.com>, <marcel@holtmann.org>,
-	<miquel.raynal@bootlin.com>, <mkl@pengutronix.de>, <netdev@vger.kernel.org>,
-	<pabeni@redhat.com>, <socketcan@hartkopp.net>, <stefan@datenfreihafen.org>,
-	<willemdebruijn.kernel@gmail.com>
-Subject: Re: [PATCH v2 0/8] do not leave dangling sk pointers in pf->create functions
-Date: Mon, 7 Oct 2024 14:57:34 -0700
-Message-ID: <20241007215734.72373-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20241007213502.28183-1-ignat@cloudflare.com>
+	s=arc-20240116; t=1728346831; c=relaxed/simple;
+	bh=/+6uaaMCh4sbJPAQbhHpA/CscaKM7TpXkjIak0yRLVM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ANpiZcFlmMiMVIh7FsykRtUXSPpsHgxnWa0oQlGNRMVdNv59e20zim5rYDWbFWgIhnm0WoaO/thfzAZ2kWHtrTiqYR4nPZ3mH/30z1Z06ZsmPvDUyYtMX0aRJb2n3mYN7C7XICV9FMfuGGAqecBvihDd58KxehddIhf7TZISjws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Upa9NYTG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 509C2C4CEC6;
+	Tue,  8 Oct 2024 00:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728346831;
+	bh=/+6uaaMCh4sbJPAQbhHpA/CscaKM7TpXkjIak0yRLVM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Upa9NYTGyJ/4HOqvJ+z6HZV4iVbewGaDD7R0rtxi+8+0YHO75QlapLO0hblRyH54r
+	 Okpwc3i4hN2fm2TTAMum4DWcA3PuxELXL4id91Pzdf4YJsZzHIjUUEB+9LlhojT8Ty
+	 pGySaM8AdRn14naMI97Tn0ZovOiyYQp1GagE9QMcHbaWoSqBSa6SoYKb0i4f5Zbdxp
+	 7HgOBehE6GDxIekWcBJp3b+Cwm+YSiuk8rN/6eKzV/d9o4LO0Uo3bT6RorAppQZr0c
+	 LKoOakFhsxPgKmA31UDLNyGce01uDRGwf3jdbvlLf4IgJESjf5WZE2UEKxthqjVGHK
+	 bB1zUXWGFN/Ng==
+Date: Mon, 7 Oct 2024 17:20:29 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Ignat Korchagin <ignat@cloudflare.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, Marcel Holtmann
+ <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>, Luiz
+ Augusto von Dentz <luiz.dentz@gmail.com>, Oliver Hartkopp
+ <socketcan@hartkopp.net>, Marc Kleine-Budde <mkl@pengutronix.de>, Alexander
+ Aring <alex.aring@gmail.com>, Stefan Schmidt <stefan@datenfreihafen.org>,
+ Miquel Raynal <miquel.raynal@bootlin.com>, David Ahern
+ <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
+ linux-wpan@vger.kernel.org, kernel-team@cloudflare.com, kuniyu@amazon.com,
+ alibuda@linux.alibaba.com, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/8] net: explicitly clear the sk pointer, when
+ pf->create fails
+Message-ID: <20241007172029.5d48ea32@kernel.org>
+In-Reply-To: <20241007213502.28183-2-ignat@cloudflare.com>
 References: <20241007213502.28183-1-ignat@cloudflare.com>
+	<20241007213502.28183-2-ignat@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D036UWB002.ant.amazon.com (10.13.139.139) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-> [PATCH v2 0/8] do not leave dangling sk pointers in pf->create functions
+On Mon,  7 Oct 2024 22:34:55 +0100 Ignat Korchagin wrote:
+> diff --git a/net/socket.c b/net/socket.c
+> index 601ad74930ef..042451f01c65 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -1574,8 +1574,13 @@ int __sock_create(struct net *net, int family, int type, int protocol,
+>  	rcu_read_unlock();
+>  
+>  	err = pf->create(net, sock, protocol, kern);
+> -	if (err < 0)
+> +	if (err < 0) {
+> +		/* ->create should release the allocated sock->sk object on error
+> +		 * but it may leave the dangling pointer
+> +		 */
+> +		sock->sk = NULL;
+>  		goto out_module_put;
+> +	}
 
-For the future patches, please specify the target tree, net or net-next.
-
-
-From: Ignat Korchagin <ignat@cloudflare.com>
-Date: Mon,  7 Oct 2024 22:34:54 +0100
-> Some protocol family create() implementations have an error path after
-> allocating the sk object and calling sock_init_data(). sock_init_data()
-> attaches the allocated sk object to the sock object, provided by the
-> caller.
-> 
-> If the create() implementation errors out after calling sock_init_data(),
-> it releases the allocated sk object, but the caller ends up having a
-> dangling sk pointer in its sock object on return. Subsequent manipulations
-> on this sock object may try to access the sk pointer, because it is not
-> NULL thus creating a use-after-free scenario.
-> 
-> While the first patch in the series should be enough to handle this
-> scenario Eric Dumazet suggested that it would be a good idea to refactor
-> the code for the af_packet implementation to avoid the error path, which
-> leaves a dangling pointer, because it may be better for some tools like
-> kmemleak. I went a bit further and tried to actually fix all the
-> implementations, which could potentially leave a dangling sk pointer.
-
-I feel patch 2-8 are net-next materials as the first patch is enough
-to fix the issue.
-
-Also, once all protocols have moved sock_init_data() after the last
-failure point, we can change the patch 1's part to
-
-	err = pf->create(net, sock, protocol, kern);
-	if (err) {
-		DEBUG_NET_WARN_ON_ONCE(sock->sk);
-		goto out_module_put;
-	}
-
-for the future protocols.
+This chunk is already in net, as part of the fix you posted earlier.
+Please resend the cleanup portion with the other patches for net-next
+on Friday (IOW after net -> net-next merge).
+-- 
+pw-bot: cr
 
