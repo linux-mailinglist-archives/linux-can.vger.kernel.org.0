@@ -1,129 +1,117 @@
-Return-Path: <linux-can+bounces-1616-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1617-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 875B4995808
-	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2024 22:02:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C18B9961B5
+	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2024 10:03:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7FFB1C20A01
-	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2024 20:02:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B55F41F21E3E
+	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2024 08:03:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A64F9213EC9;
-	Tue,  8 Oct 2024 20:02:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F92013A409;
+	Wed,  9 Oct 2024 08:03:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rN+E6v8u"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="gLmeJezB";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="mSDpFUXX"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F64238DD6;
-	Tue,  8 Oct 2024 20:02:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728417746; cv=none; b=XnZ8GUmHQfB9wZhIN03KB7n7quy50H1Zd6twTmkUVMEu0ZT61Si5ZosCKqSW6//FJaU0brsRGvp+Ie1eG3XTHvftGI8WmiQGjwcQ6qS089FeSzIs9LT9Z0vz+FtPgsnOmlbnEW1yaKICXBJ64i8+J3oGcHtK9LAHaiOr7rYHwBM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728417746; c=relaxed/simple;
-	bh=mwnu9JDu0/QJ39vaeqgzPRoqn/uQOdBvX8cshH9rI2M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q1cIcYBCVNp+r5958RzSWAtJhnMaiL5euuPCKQL5pMVioAfzAKJmSrJQfUO+/nVOgA0zSrCyJn09aeVYiT0aPRQcVCNb+KSJhjVGS4i/ECavHN/HZ+tMCE8xMs/wjbKDP0+2kwoHE0THApl+GH01VNEjRNUD+yG2eIQHyk3R5hY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rN+E6v8u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF43C4CEC7;
-	Tue,  8 Oct 2024 20:02:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728417745;
-	bh=mwnu9JDu0/QJ39vaeqgzPRoqn/uQOdBvX8cshH9rI2M=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=rN+E6v8uF4ioUNKLIm91KJY7WajT816xax0xLKmMg82r/VdNKxRi2SuPyaYp5mvMp
-	 3iEUmIoUxBqAzw3S+3xHFwxDjNUXJ1ms4vvTgy40qSQdbS1e5YsXgihqx/FlfH41CR
-	 B5yXHM1xV2RQDH8pdQ+oYSffGAkWue72wxmp8FzHSdYe8F0+gQDgEtxtt3iMaFayap
-	 QQgLNNDuCW4krxkjKxBJa5Jy1wKnBCXJ8lwHOvYQ4u/HYgc6yow8XGPEF6rU7+hsiS
-	 Kkfhf7h/1UX7Uoiu1m8M2TLxAcmXcKHBMcjwCNjgHqioPraMS1As8rwzYnC/B4K15R
-	 l1T7CHnBap8VA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 56F9BCE0DD1; Tue,  8 Oct 2024 13:02:25 -0700 (PDT)
-Date: Tue, 8 Oct 2024 13:02:25 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Uladzislau Rezki <urezki@gmail.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Julia Lawall <Julia.Lawall@inria.fr>, linux-block@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, bridge@lists.linux.dev,
-	linux-trace-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	kvm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Nicholas Piggin <npiggin@gmail.com>, netdev@vger.kernel.org,
-	wireguard@lists.zx2c4.com, linux-kernel@vger.kernel.org,
-	ecryptfs@vger.kernel.org, Neil Brown <neilb@suse.de>,
-	Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>,
-	Tom Talpey <tom@talpey.com>, linux-nfs@vger.kernel.org,
-	linux-can@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	kasan-dev <kasan-dev@googlegroups.com>
-Subject: Re: [PATCH 00/14] replace call_rcu by kfree_rcu for simple
- kmem_cache_free callback
-Message-ID: <acf7a96b-facb-469b-8079-edbec7770780@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <36c60acd-543e-48c5-8bd2-6ed509972d28@suse.cz>
- <ZnFT1Czb8oRb0SE7@pc636>
- <5c8b2883-962f-431f-b2d3-3632755de3b0@paulmck-laptop>
- <9967fdfa-e649-456d-a0cb-b4c4bf7f9d68@suse.cz>
- <6dad6e9f-e0ca-4446-be9c-1be25b2536dd@paulmck-laptop>
- <4cba4a48-902b-4fb6-895c-c8e6b64e0d5f@suse.cz>
- <ZnVInAV8BXhgAjP_@pc636>
- <df0716ac-c995-498c-83ee-b8c25302f9ed@suse.cz>
- <b3d9710a-805e-4e37-8295-b5ec1133d15c@paulmck-laptop>
- <37807ec7-d521-4f01-bcfc-a32650d5de25@suse.cz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D446A2F46
+	for <linux-can@vger.kernel.org>; Wed,  9 Oct 2024 08:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.161
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728461023; cv=pass; b=dI0cbHH5/r94vjF56K7oW84p0t8cEYE2Bya1ocSEqrPz7cZxk5/jrIdUE7mJ2/KTi5t5Ugfy6sAl8j0MBu286mkSaYoL98fMeJpT97c5e8P+qMabPFuAah/bD67X9MRvoUzb6lhngokPUCQMBz0OukayXf2tursTjW4eXtmvDdQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728461023; c=relaxed/simple;
+	bh=sAEB3Oy7Yq+8crfNsSl/FM32xQVn+AFesUM9ASmeVJA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=jSMOXbum6fdAw0QoGf13Y0nc2NADoQ+7uuyeCHIqSMCaJk+4B9gMsULbncVMozvViJW4d19KRYGIWt3WIskVRlnjdRQ5E59AZdVOA+8JYVrPm3eg71UT9MNrI8dkMF+0/2qJmUo+jpHURzGzF37iTnB/ehEpOO1lAAnuzvzYa+A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=gLmeJezB; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=mSDpFUXX; arc=pass smtp.client-ip=81.169.146.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1728459569; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=VDGaHfMjnOKMy+R3/JqgUIKe99UPXBfMTjgURqnVQjUiSl5Ml7R4LtkNc2JZDutr5g
+    x9S3+x/UrXdUkBBnOlB1rItbyeYTF+2ZHk5bU4Uat+k8WtRl3z/+PeQodrlZriLAXW9s
+    wZhZhkNKwWVVJHgejSy57YcdVX6gFjXkCzux2PPQYEMnrTN0owbKShlFBfGHWdlHUd1f
+    Jhb7GAd3u0QcdFlDZtHuCVvm/9FzVQ0mPJXd8+UTeYHQfeix6I7T7FD4WZmgJQ+uf81z
+    Le1buuptUXyDCrzkrX6XJ+VpfQmIE2S28EAZkxyeNTgMyQ6M1X+2MfBcK1pOx8W0o79x
+    y2iA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1728459569;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=h/eYjxcg71o92jxzq4aC8YNg5ox17xg4KY9B9830eJI=;
+    b=Az3covEfCZ0UHSNpYSW89rPgLBbXBkfhNKKbZBzrQg5uCZtkCuKX4rm6BxXdlP1llH
+    6W117mxGCs8Hg+ioz9JdRZ6j8SldsokFL+1gF3Tipemma3sfwxcsnvzAYpW4xSN9F84G
+    ud6H0TgseW0dHJY43LzaEwGJAlHovWbGmG8dSkjgZIEv8mXPAmmFgJjysBH2GJZvvqEx
+    W5qBlDj2hQ+4FCe2x1QBIIv5Vslo+2dO94p3bXCiqkHlwoFNEXrJucHvsc3akA+uXXiY
+    x1oh4UiLpVZRhcgO+RennReZKjJT8URFvpR4w+yTKf1LOsc+tM8j5pdMmdsPxFdiUN38
+    9Mhg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1728459569;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=h/eYjxcg71o92jxzq4aC8YNg5ox17xg4KY9B9830eJI=;
+    b=gLmeJezBowbB+DMtGSPKfcmYSo9kQP5/dv6Mjo1EM2cH2ofUuwIT1rFwbnux4K33+d
+    8t1C13kjotnZNBEKDhWIL5jrzRYm5b4Cim32C2HWJhcmaxQB72Vo6l0qlAMZlNRFXXYr
+    ccFraZDgCes3defwATgW+0w8XwehcNQj2cTDfiM4ViUxBACVRiiSf1p0WP/km04nXkj4
+    KEiztqgpeADOX6W7ll5guC3nIAmqo4kHt8g3N5MP718sXNLTbQdj253B4RyS4nlf5oZ7
+    E/S4U7MeSSxqBK5QUn5tAMNbOv60cy0JTc1dQXDmcRYgyj0HWhkK+ruqfcbEgWBQgXmi
+    vFMw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1728459569;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=h/eYjxcg71o92jxzq4aC8YNg5ox17xg4KY9B9830eJI=;
+    b=mSDpFUXXyrDjL5MdiLjz1FrTkn4dJ71+Hi/2B4ETHvgDLsnYGS0KseQu83HoxVb64Z
+    OU6lZZPNz6VBwNN6vQDA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/vMMcFB+5xtv9aJ67XA=="
+Received: from [IPV6:2a00:6020:4a8e:5000::9f3]
+    by smtp.strato.de (RZmta 51.2.8 AUTH)
+    with ESMTPSA id Keb3f30997dSU1L
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Wed, 9 Oct 2024 09:39:28 +0200 (CEST)
+Message-ID: <687db169-810b-45d0-a6b9-df76221c1a7a@hartkopp.net>
+Date: Wed, 9 Oct 2024 09:39:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <37807ec7-d521-4f01-bcfc-a32650d5de25@suse.cz>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Predictable network device names for CAN devices
+To: "Dr. Michael 'Mickey' Lauer" <mickey@vanille.de>,
+ linux-can@vger.kernel.org
+References: <CAO7FjJE-opA-ZHSYOTAw1G1uWpX7Esqj-REid=RVccf_YKJ4vw@mail.gmail.com>
+ <15A4B417-3B79-4AF2-8A8D-25ABDAD2A6FC@vanille.de>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <15A4B417-3B79-4AF2-8A8D-25ABDAD2A6FC@vanille.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 08, 2024 at 06:41:12PM +0200, Vlastimil Babka wrote:
-> On 7/24/24 15:53, Paul E. McKenney wrote:
-> > On Mon, Jul 15, 2024 at 10:39:38PM +0200, Vlastimil Babka wrote:
-> >> On 6/21/24 11:32 AM, Uladzislau Rezki wrote:
-> >> > On Wed, Jun 19, 2024 at 11:28:13AM +0200, Vlastimil Babka wrote:
-> >> > One question. Maybe it is already late but it is better to ask rather than not.
-> >> > 
-> >> > What do you think if we have a small discussion about it on the LPC 2024 as a
-> >> > topic? It might be it is already late or a schedule is set by now. Or we fix
-> >> > it by a conference time.
-> >> > 
-> >> > Just a thought.
-> >> 
-> >> Sorry for the late reply. The MM MC turned out to be so packed I didn't even
-> >> propose a slab topic. We could discuss in hallway track or a BOF, but
-> >> hopefully if the current direction taken by my RFC brings no unexpected
-> >> surprise, and the necessary RCU barrier side is also feasible, this will be
-> >> settled by time of plumbers.
-> > 
-> > That would be even better!
-> > 
-> > 							Thanx, Paul
+On 08.10.24 18:57, Dr. Michael 'Mickey' Lauer wrote:
+>> Could someone provide some details on whether this works, if it is
+>> possible another way, or if it is possible to submit a feature request
+>> for a future kernel release?
 > 
-> Hah, so it was close but my hope was fulfilled in the end!
-
-Nice, and thank you!!!
-
-							Thanx, Paul
-
-> commit bdf56c7580d267a123cc71ca0f2459c797b76fde
-> Merge: efdfcd40ad5e ecc4d6af979b
-> Author: Linus Torvalds <torvalds@linux-foundation.org>
-> Date:   Wed Sep 18 08:53:53 2024 +0200
+> Does it really need to be a kernel feature? It works fine here via udev rules.
 > 
->     Merge tag 'slab-for-6.12' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab
-> 
-> So that was at 8:53 Vienna time, and Plumbers started at 10:00...
+
+Same here. I'm using several PEAK USB FD (Pro) devices and CANdlelight 
+(gs_usb) hardware. All of these have a device ID number that allows to 
+rename them via UDEV rules.
+
+Best regards,
+Oliver
 
