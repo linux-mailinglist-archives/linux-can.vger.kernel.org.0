@@ -1,160 +1,155 @@
-Return-Path: <linux-can+bounces-1630-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1631-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EC6499A544
-	for <lists+linux-can@lfdr.de>; Fri, 11 Oct 2024 15:40:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAD6099A5FB
+	for <lists+linux-can@lfdr.de>; Fri, 11 Oct 2024 16:12:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E008C285D5F
-	for <lists+linux-can@lfdr.de>; Fri, 11 Oct 2024 13:40:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 626FB1F22939
+	for <lists+linux-can@lfdr.de>; Fri, 11 Oct 2024 14:12:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57DE9218D71;
-	Fri, 11 Oct 2024 13:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6c7PbZo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3DD521C181;
+	Fri, 11 Oct 2024 14:10:50 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A48804;
-	Fri, 11 Oct 2024 13:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA23E21BB0C
+	for <linux-can@vger.kernel.org>; Fri, 11 Oct 2024 14:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728654030; cv=none; b=QoHjVqqmzoq3Y3z4s5Vilfjk6Ko0cf9NsqAxm4Bqi8Mzt9SzFOEuVnqSSRzeS8hVQHo/3kwuR2/QqHIC6XG+20XVprryigImB0ol2P4IJIf0ygH+i1jk49dqjbZsREYVUDiRcOcZPp2FnZBfJTGJ9UiI4jURLV2H/E7pNlqer5c=
+	t=1728655850; cv=none; b=GQFNW71S9ltZoGlf/W/sxQ4qQt40e3XIeSpl8W+CDMnhXWwSHlIPS40ClsNIpCIrFIcowLnuKkIBdFnuWBH7bfGcwx+izaaZktfXhSG2UYOR9sFjz9xJoPE+QxyTs7JdRniKvmqAYAo/hIuDWaMzrvxlvYJ5dqa3UfIUxbB4D94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728654030; c=relaxed/simple;
-	bh=wgjfu5r3AaoQ1nJV2V26leGa8fLPEXaUsDW3S1EM/fc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fFYzvsRsUodUXL0WLuiaJ/1IlaYUcFIfrAU0ZAJYybidSGiGRdVt/z2D1e3wgGmTluvn7wHrkhHEOMvQiTjyV/EJZa3J+J7U4LTxiIH3mpfCxVYdRbQn4ZuMpbCgQnNfWo/7Xb8VBAuwOTRmHGmtITa7VTtlpl7wXrtEX/f7V4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V6c7PbZo; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-539d0929f20so1237694e87.0;
-        Fri, 11 Oct 2024 06:40:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728654026; x=1729258826; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f0ZkUoJvRjLXyfZrkGYuzTLNlYvy7Oqnuq8aLsm5+ho=;
-        b=V6c7PbZo2yjd0bZIeh0HaBWK99ylwjDII8r53QkAwNJIkNzfVrVbtoXdshBbWEcElS
-         DunR87zF6YRMbrKGHwYTAKX7+ZFeTFNqN0UVH5JZ/VpQThcIem3kfDY0KMC/2V30/0wR
-         MPOU08RMeqEHZxyza4iPqZOtn4WvJbG9ikywwKAXEa83ervfX3ZXYM+Td4epCN6CLw/R
-         CaUdtB/t8H8Uzw4FbusVe28ZdqRifExzhKHYvhYAKJkt5zzHdjAKe+3TZ0FEHOykNObh
-         od3SF7KqheLmpcv7/3xncZwVl6sNTrtUuknbhSYmuItsYeOKU7iDqeJP0mACBAGcCUiO
-         YTcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728654026; x=1729258826;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f0ZkUoJvRjLXyfZrkGYuzTLNlYvy7Oqnuq8aLsm5+ho=;
-        b=N7HoSaqbeiz1QhPzhlo1ZP5/UWs2A47TJIScSVVH5X1/3h4eQE8rQrep9ClkmKaBOz
-         0gEBwoe3Ttj7qnP8D3DUZame9zD7O5+iDoY4+t7pUmxPE+gNdA7I0FKjMWl0TjIoVSxv
-         UU/p1gICjPVtRaOoJI9rIfep+dT9vu+4uIwmWk2qSO5EB724xnI+d4wIM7xWZB9Pd9zR
-         oxBnGFVfvDds3QiYd/Y1vBaod5Iv9H5PnGvb7+BPJj81TmuHLrKj+D+eP1D/lkkBHIFg
-         nu9po/HUdcxJVsgPRrJGsb9pRyqNcu81u3TJT6hU9b+dsULUSRgVJSvGx5n8oTx7WMKX
-         gRRw==
-X-Forwarded-Encrypted: i=1; AJvYcCUZFzsIDPqYaxpKDx2DJyfNRiHQJV4FTJT5JwXbqzHo1zVzWEo+VIjW9qbA5j8C8k2DQqwzMyTs@vger.kernel.org, AJvYcCUZJAERKObQsBF6rqVYIjzrhUCthStfEzUA8pPtdCktbURFAnVnBYe9M9v08R++drhrV4riRjzYLJy4BJLm@vger.kernel.org, AJvYcCXeAXiIWpnwT9HT/xvS8D/wUOhZ+/aZVN7Ll+WmVyXNkmULNHVqL8LNfZsxPcvH3myszVlWhz3SUQ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxdhy7h7sWWpH1lRN/Nq+VH4yby0qE1v6HT5Nfs1ErENLwPEwEr
-	ROvIk4z+hhalczB/D8+WNXNO5AqOSDB7+iXpLUSnjqU0syruai+E
-X-Google-Smtp-Source: AGHT+IGYbIPQBrWgRbvQaCx70aNq3oHv3T9A2i8xbZOrNifAHVoPr97Fosunh1fB0lmSO7qui2klhw==
-X-Received: by 2002:a05:6512:230f:b0:539:8dde:903e with SMTP id 2adb3069b0e04-539c98ab8a8mr2403029e87.22.1728654026130;
-        Fri, 11 Oct 2024 06:40:26 -0700 (PDT)
-Received: from work.. (2.133.25.254.dynamic.telecom.kz. [2.133.25.254])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539cb6c87fdsm604781e87.81.2024.10.11.06.40.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 06:40:25 -0700 (PDT)
-From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-To: eadavis@qq.com
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kernel@pengutronix.de,
-	kuba@kernel.org,
-	leitao@debian.org,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	mkl@pengutronix.de,
-	netdev@vger.kernel.org,
-	o.rempel@pengutronix.de,
-	pabeni@redhat.com,
-	robin@protonic.nl,
-	socketcan@hartkopp.net,
+	s=arc-20240116; t=1728655850; c=relaxed/simple;
+	bh=Evz9PqaYCouD/IH0SVGRo5c95kYbJTRWx/H2nAPLIQg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OKPCxnD7QvAvv/hEP35d72E4YOdeADayOwarkk8800rEZIceAPBfDU1be/hRqrDLbW/FViC1kcnGxjzOCFhiibF0hwnsHPACySlta+KYIhVd5l7ESsZ8btz4DfVSSJYQfKgCiJqKDi20T3D5kdRyhglH4luRajZ5YI4DIlrViUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1szGLX-0004Wz-Jd; Fri, 11 Oct 2024 16:10:23 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1szGLS-0016f6-BL; Fri, 11 Oct 2024 16:10:18 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1szGLS-005ipa-0l;
+	Fri, 11 Oct 2024 16:10:18 +0200
+Date: Fri, 11 Oct 2024 16:10:18 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+Cc: eadavis@qq.com, davem@davemloft.net, edumazet@google.com,
+	kernel@pengutronix.de, kuba@kernel.org, leitao@debian.org,
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+	mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
+	robin@protonic.nl, socketcan@hartkopp.net,
 	syzbot+ad601904231505ad6617@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com,
-	snovitoll@gmail.com
-Subject: Re: [PATCH net-next V2] can: j1939: fix uaf warning in j1939_session_destroy
-Date: Fri, 11 Oct 2024 18:41:24 +0500
-Message-Id: <20241011134124.3048936-1-snovitoll@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <tencent_5B8967E03C7737A897DA36604A8A75DB7709@qq.com>
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH net-next V2] can: j1939: fix uaf warning in
+ j1939_session_destroy
+Message-ID: <Zwkxyr-MndeD6mmB@pengutronix.de>
 References: <tencent_5B8967E03C7737A897DA36604A8A75DB7709@qq.com>
+ <20241011134124.3048936-1-snovitoll@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241011134124.3048936-1-snovitoll@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On Thu, 8 Aug 2024 19:07:55 +0800, Edward Adam Davis wrote:
-> On Thu, 8 Aug 2024 09:49:18 +0200, Oleksij Rempel wrote:
-> > > the skb to the queue and increase the skb reference count through it.
+Hi Sabyrzhan,
+
+On Fri, Oct 11, 2024 at 06:41:24PM +0500, Sabyrzhan Tasbolatov wrote:
+> On Thu, 8 Aug 2024 19:07:55 +0800, Edward Adam Davis wrote:
+> > On Thu, 8 Aug 2024 09:49:18 +0200, Oleksij Rempel wrote:
+> > > > the skb to the queue and increase the skb reference count through it.
+> > > > 
+> > > > Reported-and-tested-by: syzbot+ad601904231505ad6617@syzkaller.appspotmail.com
+> > > > Closes: https://syzkaller.appspot.com/bug?extid=ad601904231505ad6617
+> > > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
 > > > 
-> > > Reported-and-tested-by: syzbot+ad601904231505ad6617@syzkaller.appspotmail.com
-> > > Closes: https://syzkaller.appspot.com/bug?extid=ad601904231505ad6617
-> > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> > > This patch breaks j1939.
+> > > The issue can be reproduced by running following commands:
+> > I tried to reproduce the problem using the following command, but was 
+> > unsuccessful. Prompt me to install j1939cat and j1939acd, and there are
+> > some other errors.
 > > 
-> > This patch breaks j1939.
-> > The issue can be reproduced by running following commands:
-> I tried to reproduce the problem using the following command, but was 
-> unsuccessful. Prompt me to install j1939cat and j1939acd, and there are
-> some other errors.
+> > Can you share the logs from when you reproduced the problem?
+ 
+ah, i was on vacation and it went under my radar, sorry :(
+
+> Hello,
 > 
-> Can you share the logs from when you reproduced the problem?
+> Here is the log of can-tests/j1939/run_all.sh:
+> 
+> # ip link add type vcan
+> # ip l s dev vcan0 up
+> # ./run_all.sh vcan0 vcan0
+> ##############################################
+> run: j1939_ac_100k_dual_can.sh
+> generate random data for the test
+> 1+0 records in
+> 1+0 records out
+> 102400 bytes (102 kB, 100 KiB) copied, 0.00191192 s, 53.6 MB/s
+> start j1939acd and j1939cat on vcan0
+> 8321
+> 8323
+> start j1939acd and j1939cat on vcan0
+> [  132.211317][ T8326] vcan0: tx drop: invalid sa for name 0x0000000011223340
+> j1939cat: j1939cat_send_one: transfer error: -99: Cannot assign requested address
+> 
+> It fails here:
+> https://github.com/linux-can/can-tests/blob/master/j1939/j1939_ac_100k_dual_can.sh#L70
 
-Hello,
+I assume it is just secondary fail, it probably failed on address claim
+stage in j1939acd, so the j1939cat was not able to start transfer due to
+missing (not claimed) address.
 
-Here is the log of can-tests/j1939/run_all.sh:
+> The error message is printed in this condition:
+> https://elixir.bootlin.com/linux/v6.12-rc2/source/net/can/j1939/address-claim.c#L104-L108
+> 
+> I've applied your patch on the current 6.12.0-rc2 and the syzkaller C repro
+> doesn't trigger WARNING uaf, refcount anymore though.
 
-# ip link add type vcan
-# ip l s dev vcan0 up
-# ./run_all.sh vcan0 vcan0
-##############################################
-run: j1939_ac_100k_dual_can.sh
-generate random data for the test
-1+0 records in
-1+0 records out
-102400 bytes (102 kB, 100 KiB) copied, 0.00191192 s, 53.6 MB/s
-start j1939acd and j1939cat on vcan0
-8321
-8323
-start j1939acd and j1939cat on vcan0
-[  132.211317][ T8326] vcan0: tx drop: invalid sa for name 0x0000000011223340
-j1939cat: j1939cat_send_one: transfer error: -99: Cannot assign requested address
+Yes, because transfer protocol is broken now. 
 
-It fails here:
-https://github.com/linux-can/can-tests/blob/master/j1939/j1939_ac_100k_dual_can.sh#L70
+> == Offtopic:
+> I wonder if can-tests/j1939 should be refactored from shell to C tests in the
+> same linux-can/can-tests repository (or even migrate to KUnit tests)
+> to improve debugging, test coverage. I'd like to understand which syscalls
+> and params are used j1939cat and j1939acd utils -- currently, tracing with
+> strace and trace-cmd (ftrace).
 
-The error message is printed in this condition:
-https://elixir.bootlin.com/linux/v6.12-rc2/source/net/can/j1939/address-claim.c#L104-L108
+I have nothing against it, some of them I implemented in C:
+https://github.com/linux-can/can-tests/blob/master/j1939/tst-j1939-ac.c#L1160
 
-I've applied your patch on the current 6.12.0-rc2 and the syzkaller C repro
-doesn't trigger WARNING uaf, refcount anymore though.
+Right now I do not have enough time to port it, but I can support anyone
+who is willing to do it.
 
-== Offtopic:
-I wonder if can-tests/j1939 should be refactored from shell to C tests in the
-same linux-can/can-tests repository (or even migrate to KUnit tests)
-to improve debugging, test coverage. I'd like to understand which syscalls
-and params are used j1939cat and j1939acd utils -- currently, tracing with
-strace and trace-cmd (ftrace).
-
-> > git clone git@github.com:linux-can/can-tests.git
-> > cd can-tests/j1939/
-> > ip link add type vcan
-> > ip l s dev vcan0 up
-> > ./run_all.sh vcan0 vcan0
-
+Best Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
