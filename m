@@ -1,63 +1,62 @@
-Return-Path: <linux-can+bounces-1631-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1632-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAD6099A5FB
-	for <lists+linux-can@lfdr.de>; Fri, 11 Oct 2024 16:12:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E6A899A6A9
+	for <lists+linux-can@lfdr.de>; Fri, 11 Oct 2024 16:43:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 626FB1F22939
-	for <lists+linux-can@lfdr.de>; Fri, 11 Oct 2024 14:12:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB7ED1C21C6F
+	for <lists+linux-can@lfdr.de>; Fri, 11 Oct 2024 14:43:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3DD521C181;
-	Fri, 11 Oct 2024 14:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAFA68121F;
+	Fri, 11 Oct 2024 14:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JD3OJ9/s"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA23E21BB0C
-	for <linux-can@vger.kernel.org>; Fri, 11 Oct 2024 14:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7831A405FB;
+	Fri, 11 Oct 2024 14:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728655850; cv=none; b=GQFNW71S9ltZoGlf/W/sxQ4qQt40e3XIeSpl8W+CDMnhXWwSHlIPS40ClsNIpCIrFIcowLnuKkIBdFnuWBH7bfGcwx+izaaZktfXhSG2UYOR9sFjz9xJoPE+QxyTs7JdRniKvmqAYAo/hIuDWaMzrvxlvYJ5dqa3UfIUxbB4D94=
+	t=1728657797; cv=none; b=GIQvSyCKcu+uceMNlITwyNoMRFyHQgtZIC0PoLJsBrXv2RPP0sj+zy3slJV5YVAspDDhtO+4rA0qlgcCDD0NC7h4Bm+gtdyGgjFmxyGHcQfMC5NdzQHr442BJOGWbzO1D1difO07rgHKrA9yieD8kqKIeCmKlU+lXs37vz1T1nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728655850; c=relaxed/simple;
-	bh=Evz9PqaYCouD/IH0SVGRo5c95kYbJTRWx/H2nAPLIQg=;
+	s=arc-20240116; t=1728657797; c=relaxed/simple;
+	bh=gLtu5AZpGZcbTycLCtaJUcwPuMObUTXBrj/CeTpBl64=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OKPCxnD7QvAvv/hEP35d72E4YOdeADayOwarkk8800rEZIceAPBfDU1be/hRqrDLbW/FViC1kcnGxjzOCFhiibF0hwnsHPACySlta+KYIhVd5l7ESsZ8btz4DfVSSJYQfKgCiJqKDi20T3D5kdRyhglH4luRajZ5YI4DIlrViUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1szGLX-0004Wz-Jd; Fri, 11 Oct 2024 16:10:23 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1szGLS-0016f6-BL; Fri, 11 Oct 2024 16:10:18 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1szGLS-005ipa-0l;
-	Fri, 11 Oct 2024 16:10:18 +0200
-Date: Fri, 11 Oct 2024 16:10:18 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Cc: eadavis@qq.com, davem@davemloft.net, edumazet@google.com,
-	kernel@pengutronix.de, kuba@kernel.org, leitao@debian.org,
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-	mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
-	robin@protonic.nl, socketcan@hartkopp.net,
-	syzbot+ad601904231505ad6617@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH net-next V2] can: j1939: fix uaf warning in
- j1939_session_destroy
-Message-ID: <Zwkxyr-MndeD6mmB@pengutronix.de>
-References: <tencent_5B8967E03C7737A897DA36604A8A75DB7709@qq.com>
- <20241011134124.3048936-1-snovitoll@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=bTGcsGidEPOXgVou1WjrPyPUSv+25ZOGGKLvl472IIh9VYsanM5IpyW1ncx6WAmhBH3N4fVSF0Co6mr9Ofd/f0oiQcsJNcRDZqCkyABiPHRMKbAG9fEfNLjQ20dhZPwARKVeeHuY+PdNfDxGfC2rKJ9gWPf8jIKggxP25SpDMDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JD3OJ9/s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BE7C4CEC3;
+	Fri, 11 Oct 2024 14:43:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728657797;
+	bh=gLtu5AZpGZcbTycLCtaJUcwPuMObUTXBrj/CeTpBl64=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JD3OJ9/ssGzEV5F6hwF1sPqaa8FV/FQhLnvPSl0++2YkU0KMrETL2YnFM2wsrM+do
+	 0/QEtWg3sNSzY1YwSwcr3M25UPF6AviGEsPodHdIrLefhJSU9kVtE0E5tY/S9FM47Q
+	 ktwgmK55xZpPtssCXwbP17jc3MvAmrZWWXlP0ow0TsJuBIxFdLEzDqJ3YI8vfdJAve
+	 omJcqOtTanFnoLGpIUiSSTjpEeeWGYAhG0pvpWTUFHK6zMmy4XXtazh+xHJkgikpiv
+	 /kRyAcOY6BJOlOLuca5pFyLPaxfV4E3ROPPzkPC4R6bwbRzxZpOyyUACnRmbVPzj+j
+	 mJybp63U3J8MQ==
+Date: Fri, 11 Oct 2024 16:43:13 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Markus Schneider-Pargmann <msp@baylibre.com>
+Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
+	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, Matthias Schiffer <matthias.schiffer@ew.tq-group.com>, 
+	Vishal Mahaveer <vishalm@ti.com>, Kevin Hilman <khilman@baylibre.com>, Dhruva Gole <d-gole@ti.com>
+Subject: Re: [PATCH v3 1/9] dt-bindings: can: m_can: Add wakeup properties
+Message-ID: <ffatirswspolq67yg3vlxptslkkdaa3ufd7n2b2scaaqcf6hvw@r4jy55rmfsmy>
+References: <20241011-topic-mcan-wakeup-source-v6-12-v3-0-9752c714ad12@baylibre.com>
+ <20241011-topic-mcan-wakeup-source-v6-12-v3-1-9752c714ad12@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -66,90 +65,29 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241011134124.3048936-1-snovitoll@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20241011-topic-mcan-wakeup-source-v6-12-v3-1-9752c714ad12@baylibre.com>
 
-Hi Sabyrzhan,
-
-On Fri, Oct 11, 2024 at 06:41:24PM +0500, Sabyrzhan Tasbolatov wrote:
-> On Thu, 8 Aug 2024 19:07:55 +0800, Edward Adam Davis wrote:
-> > On Thu, 8 Aug 2024 09:49:18 +0200, Oleksij Rempel wrote:
-> > > > the skb to the queue and increase the skb reference count through it.
-> > > > 
-> > > > Reported-and-tested-by: syzbot+ad601904231505ad6617@syzkaller.appspotmail.com
-> > > > Closes: https://syzkaller.appspot.com/bug?extid=ad601904231505ad6617
-> > > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> > > 
-> > > This patch breaks j1939.
-> > > The issue can be reproduced by running following commands:
-> > I tried to reproduce the problem using the following command, but was 
-> > unsuccessful. Prompt me to install j1939cat and j1939acd, and there are
-> > some other errors.
-> > 
-> > Can you share the logs from when you reproduced the problem?
- 
-ah, i was on vacation and it went under my radar, sorry :(
-
-> Hello,
+On Fri, Oct 11, 2024 at 03:16:38PM +0200, Markus Schneider-Pargmann wrote:
+> m_can can be a wakeup source on some devices. Especially on some of the
+> am62* SoCs pins, connected to m_can in the mcu, can be used to wakeup
+> the SoC.
 > 
-> Here is the log of can-tests/j1939/run_all.sh:
+> The wakeup-source property defines on which devices m_can can be used
+> for wakeup.
 > 
-> # ip link add type vcan
-> # ip l s dev vcan0 up
-> # ./run_all.sh vcan0 vcan0
-> ##############################################
-> run: j1939_ac_100k_dual_can.sh
-> generate random data for the test
-> 1+0 records in
-> 1+0 records out
-> 102400 bytes (102 kB, 100 KiB) copied, 0.00191192 s, 53.6 MB/s
-> start j1939acd and j1939cat on vcan0
-> 8321
-> 8323
-> start j1939acd and j1939cat on vcan0
-> [  132.211317][ T8326] vcan0: tx drop: invalid sa for name 0x0000000011223340
-> j1939cat: j1939cat_send_one: transfer error: -99: Cannot assign requested address
+> The pins associated with m_can have to have a special configuration to
+> be able to wakeup the SoC. This configuration is described in the wakeup
+> pinctrl state while the default state describes the default
+> configuration.
 > 
-> It fails here:
-> https://github.com/linux-can/can-tests/blob/master/j1939/j1939_ac_100k_dual_can.sh#L70
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> ---
+>  .../devicetree/bindings/net/can/bosch,m_can.yaml       | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 
-I assume it is just secondary fail, it probably failed on address claim
-stage in j1939acd, so the j1939cat was not able to start transfer due to
-missing (not claimed) address.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> The error message is printed in this condition:
-> https://elixir.bootlin.com/linux/v6.12-rc2/source/net/can/j1939/address-claim.c#L104-L108
-> 
-> I've applied your patch on the current 6.12.0-rc2 and the syzkaller C repro
-> doesn't trigger WARNING uaf, refcount anymore though.
+Best regards,
+Krzysztof
 
-Yes, because transfer protocol is broken now. 
-
-> == Offtopic:
-> I wonder if can-tests/j1939 should be refactored from shell to C tests in the
-> same linux-can/can-tests repository (or even migrate to KUnit tests)
-> to improve debugging, test coverage. I'd like to understand which syscalls
-> and params are used j1939cat and j1939acd utils -- currently, tracing with
-> strace and trace-cmd (ftrace).
-
-I have nothing against it, some of them I implemented in C:
-https://github.com/linux-can/can-tests/blob/master/j1939/tst-j1939-ac.c#L1160
-
-Right now I do not have enough time to port it, but I can support anyone
-who is willing to do it.
-
-Best Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
