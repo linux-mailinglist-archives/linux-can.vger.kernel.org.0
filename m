@@ -1,72 +1,72 @@
-Return-Path: <linux-can+bounces-1639-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1640-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EB0099B705
-	for <lists+linux-can@lfdr.de>; Sat, 12 Oct 2024 22:42:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8344299B719
+	for <lists+linux-can@lfdr.de>; Sat, 12 Oct 2024 22:55:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDF152829B2
-	for <lists+linux-can@lfdr.de>; Sat, 12 Oct 2024 20:42:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A89031C20C8F
+	for <lists+linux-can@lfdr.de>; Sat, 12 Oct 2024 20:55:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CE4013D893;
-	Sat, 12 Oct 2024 20:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE39146590;
+	Sat, 12 Oct 2024 20:55:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ne+6MLbD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mq/ARfWX"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B2C8003F
-	for <linux-can@vger.kernel.org>; Sat, 12 Oct 2024 20:42:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DFF913B7A3
+	for <linux-can@vger.kernel.org>; Sat, 12 Oct 2024 20:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728765754; cv=none; b=CpdfB6OoXTklunG8JIfDtLgPoCWKrrOp6SrpqpCV7UE/hbaSun6KeAq4n6R4D/+/xjfiVOYUAU189LGhW4iPgR5covOHtkqtHaNVx2aTD0OMmnIBXBbQM1DBidlejv2d6kySwTZHB0HYGkA4e2b8gA7zjjyz75R0vW/ULr76OLE=
+	t=1728766517; cv=none; b=tbOVe/bQbbWgU7Ah1Uf7RUM7xT7fUmbjTlkO30cAf5WpHR6fHuyGyGiBfyJFeYEPY0bZG1yYpu2Rz6UQgW2NEZpdYu2W9Iu0IzMS7+0H4h36C5ThbUqIkFaFxx1w9UgEKLn+W4qLOSY2ZKgP+/UXu0no0C2PMpYf1tfOjyXAZPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728765754; c=relaxed/simple;
-	bh=gk5uRpCX+OJ4ViO1QUVcOtGxV3Nuv+2inaRjK0wc/Is=;
+	s=arc-20240116; t=1728766517; c=relaxed/simple;
+	bh=uJ4G7qJ6RqF7GwzpPOknQJ1zl0q5+A5aAWNE57llAUk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lvq6LJhQY870pmXUSjSkShj4XU1+gd/vn0EkLz7T4yaR+O0NJdHKDaoqR88MZsFfokhHYKMZ8w2afnpx1mGPLdDtdnLPVA768MK8eOkHYpZUon+RFoQz1XMifV9byQGBMz2e/bRSn4BST1NVVntEyUNeDpyhHH/I2AR0nqnKIKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ne+6MLbD; arc=none smtp.client-ip=209.85.218.44
+	 MIME-Version; b=XOTJNTWxTKz47XAI9v8Bf+Y5FNbh3GSfzB600yimVJobeGaJE+hPLZdoJc0/BGr9SAYEvmTfqnd1EIdHTAGryhasnBJUUzFnSbs0vD0XQHrW97BRybgcYB5BTeaVQFmHAlCyGAEKaqjD0trg1WcHSNKMVMkWomdg0QuMHTQXvZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mq/ARfWX; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a99c0c203f0so247449466b.2
-        for <linux-can@vger.kernel.org>; Sat, 12 Oct 2024 13:42:32 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a99ffeea60bso15319666b.3
+        for <linux-can@vger.kernel.org>; Sat, 12 Oct 2024 13:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728765751; x=1729370551; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728766513; x=1729371313; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5YHVyca9JcEqzFQrhvbsqP278Twf4oXcu0N/+z464KY=;
-        b=ne+6MLbDYwfkn6k6NtCMXZlMnwncGvD9fMWIryfVsuZYGPd8+3yY7N+WIt4+yeHmbR
-         JmCxY/TsmgCo17E7pWF4lBdqFYM9QMCA2zmdmu48xrDtO6BTTgywi0OkSzB9agS3te4b
-         Qra8jlyhlq58rg6YU05QEyzXuB+L8vJKQ8CAgzoTxGUkzv7ZK0tpePD3XJHt3Pl+USnR
-         YqrR93n5RIAvkl6op4ew9W4mP7KWA3g1vpqD/Y9A8P/8lvM6laKrvXk51bKpdfv60bBA
-         shPVV27zj+qR/N9DmK6KBqGIm7W/NqbpwxpemWcSlOsbR1VTKD0sVv8X5sytsyjL+X88
-         XxIw==
+        bh=uJ4G7qJ6RqF7GwzpPOknQJ1zl0q5+A5aAWNE57llAUk=;
+        b=Mq/ARfWXOC4rcUpmBIy+7PD5M4uXhv0QH+cWBqBp+RzotIdGPiE+MlWUjRDAg9TSU2
+         L7MWA/NKBGz/C/6vWRpBBv3Vs0dcqw8l1hVq65SP099i6ruo6AzRYKkfSnpA9/u1m3wg
+         58NfOba7KDNItWGkITWb9f+BlIeR7eatBdOqHa+gCwxNFae2ugcrh2/ckg+6J3/zK8Hl
+         xNRnDG+HsM1BiG4FJ8ouk5pP17Lp/VU3ytwPIc1SPULaEi+NJ9dllgeGBqi5wcPYhKfD
+         K3sVhm0r8fzv/tLB768fwE3T6yHJ8icXxGNwfMlLgxP4qDkdYVU60Z7Q654BocjmG2ow
+         sXew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728765751; x=1729370551;
+        d=1e100.net; s=20230601; t=1728766513; x=1729371313;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5YHVyca9JcEqzFQrhvbsqP278Twf4oXcu0N/+z464KY=;
-        b=eUnfSb9UKztW/90r1yoPv7JPkkdR+4mwk9FalVlofkJ58V5Rqpi+JiPHspSx9xorCZ
-         Ed1763nY7VrkYTPJsfeARrRROkeLo4dBEFeI2aHU0dWzQ+lEZP8I5Kd2M1Qh2RHRb7N1
-         lPYA6cPH5+Mntyd2O9Oaor4hh9xIrxa6rgVCYpGn93/nOjuFV7l1ZeujbLZeylV+wB+y
-         d8A4Ysg1tlE/29ZsIekrAljLTrDbIBfc/QLu52A5ut3LhHncd2aFmsQoOtX4KFR2O1Dx
-         rSo8gNyPExQLvi0soi4rpE706mpddBMXr9pPNkYAcgN+g7jUIF8eXdd9AeNxHeKGSWKR
-         YiSg==
-X-Forwarded-Encrypted: i=1; AJvYcCWXUe5qoYJMqeeYN3ZM4nCWlppEAGKba/uPrnj6woQmZEzQyza038IiVxlrBjC9UdalZ7j7/n2yvdY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9f7QB5v0jDPY+oAxZNMQDW4DZW1SbllDNWDAMEGrJxvmnYwYP
-	eIb/XxT+B9+8xAjHG9V7B8Cp5PFy+H2hIzEUwryv9YgfpBdaxF9A
-X-Google-Smtp-Source: AGHT+IHAz5GFdNg6kicOJ7YnAG10UzLQr4/sf5SeYxyrC+pXsYK5CifHqMp2mlFg7R0Syu5nN5dxqA==
-X-Received: by 2002:a17:907:e6cc:b0:a86:94e2:2a47 with SMTP id a640c23a62f3a-a99e3b5a86dmr318285166b.15.1728765750404;
-        Sat, 12 Oct 2024 13:42:30 -0700 (PDT)
+        bh=uJ4G7qJ6RqF7GwzpPOknQJ1zl0q5+A5aAWNE57llAUk=;
+        b=M0jAQn2bh9zW1VSXHvO7tT4cksxZC7rh4K1+BdsMbH+ZwQxL7j9poNST2M8GomZB/v
+         ucPF/tGtrXV03t9SFv+/6IQ2rA0qwgHI9T8MYVuqJrqHrbVG0xl8RMwUVZIl4Rtj24Tq
+         Nls/VHFNlIQsgGjAv3+TsS+5uixSGZsaJXZUhzejJ3QUgHdyb1BUWLyloYhXPj+nSlYD
+         nbo4W+mAeX/Yhz0R6C50Dkwieqp3+98idxmucnf30sfhrs+vxwujpZ3p1/Ck4dIonQ9e
+         03Y/70jrymjuHOUIZzwbvYK7zmQFOIPn9jYLRM/qBESL3lizXSWlxs2bXPtDY/Z6N4qu
+         BskA==
+X-Forwarded-Encrypted: i=1; AJvYcCWmJEyCrLObEYs/AQPzZNgDLeEd4Rhr7QSFXIztO5NVnZqFcbdfpohl6d16ngHh0b8kFJohSaWIJiI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzq4Jd3HLAh44wKWXN2NXS98CS7/Bcbel6fukFelQQ5WFEG1njj
+	4lgvOVwf8PcaGkCTBpdYC6VCe6Zz9CEui7cQWRbeY2sHULVVU+yY
+X-Google-Smtp-Source: AGHT+IGiZPGwV9SA1Wd7eYMkQkk6W16QdpCfckpwu1ZKOSRaMRe69TWo8M5HH3ldVPTCO31COi8tgQ==
+X-Received: by 2002:a17:907:360c:b0:a99:499f:4cb7 with SMTP id a640c23a62f3a-a99b940530bmr596100166b.23.1728766512705;
+        Sat, 12 Oct 2024 13:55:12 -0700 (PDT)
 Received: from localhost.localdomain (ip-037-201-007-048.um10.pools.vodafone-ip.de. [37.201.7.48])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99fff5457asm13167866b.190.2024.10.12.13.42.28
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99a7ede92bsm361552066b.28.2024.10.12.13.55.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Oct 2024 13:42:30 -0700 (PDT)
+        Sat, 12 Oct 2024 13:55:12 -0700 (PDT)
 From: Alexander Kozhinov <ak.alexander.kozhinov@gmail.com>
 To: mailhol.vincent@wanadoo.fr
 Cc: ak.alexander.kozhinov@gmail.com,
@@ -77,9 +77,9 @@ Cc: ak.alexander.kozhinov@gmail.com,
 	max@schneidersoft.net,
 	mkl@pengutronix.de,
 	pabeni@redhat.com
-Subject: Subject: Bytes order nitpick
-Date: Sat, 12 Oct 2024 22:41:35 +0200
-Message-ID: <20241012204135.6977-1-ak.alexander.kozhinov@gmail.com>
+Subject: Subject: Reviewer Reply
+Date: Sat, 12 Oct 2024 22:54:33 +0200
+Message-ID: <20241012205433.7268-1-ak.alexander.kozhinov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <CAMZ6Rq+rAdyYKOpna1T7dhEV69cuTNFK+gHy4oCfSf0+AmGtyg@mail.gmail.com>
 References: <CAMZ6Rq+rAdyYKOpna1T7dhEV69cuTNFK+gHy4oCfSf0+AmGtyg@mail.gmail.com>
@@ -91,64 +91,17 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-> Nitpick: by putting some integers after a u8, you are creating a hole
-> for 3 bytes between gs_usb->active_channels and gs_usb->pipe_in, as
-> shown by the pahole tool:
+> Hi Alexander,
 >
->   $ pahole --class_name=gs_usb drivers/net/can/usb/gs_usb.o
->   struct gs_usb {
->       struct gs_can *            canch[3];             /*     0    24 */
->       struct usb_anchor          rx_submitted;         /*    24    56 */
->
->       /* XXX last struct has 4 bytes of padding, 31 bits of padding */
->
->       /* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
->       struct usb_device *        udev;                 /*    80     8 */
->       struct cyclecounter        cc;                   /*    88    24 */
->       struct timecounter         tc;                   /*   112    40 */
->       /* --- cacheline 2 boundary (128 bytes) was 24 bytes ago --- */
->       spinlock_t                 tc_lock;              /*   152     4 */
->
->       /* XXX 4 bytes hole, try to pack */
->
->       struct delayed_work        timestamp;            /*   160    88 */
->
->       /* XXX last struct has 4 bytes of padding */
->
->       /* --- cacheline 3 boundary (192 bytes) was 56 bytes ago --- */
->       unsigned int               hf_size_rx;           /*   248     4 */
->       u8                         active_channels;      /*   252     1 */
->
->       /* XXX 3 bytes hole, try to pack */
->
->       /* --- cacheline 4 boundary (256 bytes) --- */
->       unsigned int               pipe_in;              /*   256     4 */
->       unsigned int               pipe_out;             /*   260     4 */
->
->       /* size: 264, cachelines: 5, members: 11 */
->       /* sum members: 257, holes: 2, sum holes: 7 */
->       /* member types with bit paddings: 1, total: 31 bits */
->       /* paddings: 2, sum paddings: 8 */
->       /* last cacheline: 8 bytes */
->   };
->
-> This 3 bytes hole will always exist even if you group the integers
-> together (because the padding also occurs at the end of the structure)
-> *but*, it is easier to maintain if the hole is at the end.
->
-> So, in summary, do it like this:
->
->         unsigned int hf_size_rx;
-> +       unsigned int pipe_in;
-> +       unsigned int pipe_out;
->         u8 active_channels;
->  };
->
-> Note that there is also 2 other 4 bytes holes, so a packing
-> optimization could be done here, but this is out of scope of your
-> patch. If you want to address that, it must go in a different patch
-> because, this time, it is another "logical change".
+> Thank you for this v4, the patch is overall good (there are two minor
+> comments left to address). With this, I think you are done with your
+> on boarding on understanding the patch submission process. Congrats
+> for your first patch on the mailing list!
 
-Thank you Vincent for this optional nitpick. For sake of simplicity
-I would prefer to skip this change, but I've got your point about additional "logical change".
+Hi Vincent thank you also from my side for careful and paitient guiding me through
+all the steps and specialities of linux kernel mailing lists. I've learned a lot about them.
+I will address requested changes and come with v5.
+
+Best Regards,
+Alexander Kozhinov
 
