@@ -1,62 +1,62 @@
-Return-Path: <linux-can+bounces-1676-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1677-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BA0A99D931
-	for <lists+linux-can@lfdr.de>; Mon, 14 Oct 2024 23:35:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74BB799D943
+	for <lists+linux-can@lfdr.de>; Mon, 14 Oct 2024 23:37:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CFF61C24AFA
-	for <lists+linux-can@lfdr.de>; Mon, 14 Oct 2024 21:35:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11C7E1F22892
+	for <lists+linux-can@lfdr.de>; Mon, 14 Oct 2024 21:37:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB9C71D1F69;
-	Mon, 14 Oct 2024 21:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E19F1D1E62;
+	Mon, 14 Oct 2024 21:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="GOO/4LB6"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="AOIZw3b6"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9034F1D27A9;
-	Mon, 14 Oct 2024 21:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.95.49.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FD01D1518;
+	Mon, 14 Oct 2024 21:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.190.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728941720; cv=none; b=LtHU/nIf1ii2+nVHRrQ6LzFxnjI/tncIp5Rm+2v/MQovKiKUoYTBzIw91mBA1wi+llZ3TtzbNxIdeVRUnqT8kVTmJRVKVK4yXZUp3E3U4WsEUxdmxCz7qq7MWD9aqBu1UoDhlWmlWjQFCMWUscc02sXeUH/b3EmfiIj1vByxsK0=
+	t=1728941842; cv=none; b=km1ezKOuR2BqFO0SWQpURF3RchwlTruPJHDICX4pTlRgdtEu3FlL159wI3qo929bPqCEDfIBxl4wmFGdLIpemTyqe3zGZnQfwgRG7vYBIAVWkBB+/2lROfXL6RirIpj0EauDfkZ7WhNM+ZXrjiL+INX/n0ZWpbiK6FfdvIzOOuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728941720; c=relaxed/simple;
-	bh=C2pOexooCIcGgd8vS6n6mfILsYcfRSYxPD2V+XFNlqY=;
+	s=arc-20240116; t=1728941842; c=relaxed/simple;
+	bh=p/HRydk2WbbeV1Xsj4DBf6LGpuJs9jl6ySz3PNzKmWU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ndRfIqoDgChJPVmq9mXIsUD/XiMmzg9fEWb1elUj13mGRC335zoGfiyfo/VgoFJwnuDPhLB0AQ+rxgNHk/VIOWsO3x5GHyeN3q7l5vEDaP4q1XxJq1o7W173c/akRorYAmJDe3Shc9qgmgVTP19FlEXUUL/VqW74642U+lj0cXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=GOO/4LB6; arc=none smtp.client-ip=52.95.49.90
+	 MIME-Version:Content-Type; b=L8VRdBM2TO6IBk9oRrpPfywRDV3xUt9WebI6cFl5+DkaYkPJfbGnoye9cEhMy6H/vE3i5cf41Dzh2tVOVj51Qd1LrrhzhRtPRyfaZsi2neqyxKClAb77Ry8EjtfWe8W+euolKaLJFi9az6Mx7RCOPiz3PnRx+1kminPmDKrYcE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=AOIZw3b6; arc=none smtp.client-ip=207.171.190.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1728941719; x=1760477719;
+  t=1728941841; x=1760477841;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gySbmUUcVgx8A0HlLGRHsrxS7qemurEk0AThfU8UVrA=;
-  b=GOO/4LB6ulLAr2cGcdnQmbVViDZu/tEQWrDYH6dq8AHRdT8C4AC1sVhD
-   iNAEWYPlQtVHYLpihwBxme5y5HH3nnjDVb7i8Xsf83MZ7SZQVGtkkUyl9
-   X1V+twCymLpDUem85mgzrpSLy+KkY6fvZl3IXG/WQQklG2qgCz10Nv7FN
-   U=;
+  bh=W3hd+4pFwwziUAi74TQ9zioclqFqUTYcF/v2j+nzP2M=;
+  b=AOIZw3b6LYLDxpP1OFY9GYEjDSS4nrkrD9eIacSM8TWOK8Tqi12XMotb
+   o6fc+1rrNUD0u4IPMjkhkkUa0nNOqz04nG38w2bCcIkq3Ja9V3c3FL8fp
+   NX/rsYpqF1Dq6UYyM7YlHKaphhrD9ysSDy1Wvv9CBC+cUCi0PieTC+iRU
+   o=;
 X-IronPort-AV: E=Sophos;i="6.11,203,1725321600"; 
-   d="scan'208";a="440761007"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 21:35:14 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.21.151:51033]
+   d="scan'208";a="376100539"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 21:37:15 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [10.0.7.35:61276]
  by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.24.95:2525] with esmtp (Farcaster)
- id 16445af8-4a7e-487d-9604-81aebfa4da36; Mon, 14 Oct 2024 21:35:12 +0000 (UTC)
-X-Farcaster-Flow-ID: 16445af8-4a7e-487d-9604-81aebfa4da36
+ id 68574c29-0a0f-4daf-83c2-8303d7174fd3; Mon, 14 Oct 2024 21:37:14 +0000 (UTC)
+X-Farcaster-Flow-ID: 68574c29-0a0f-4daf-83c2-8303d7174fd3
 Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.204) with Microsoft SMTP Server
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Mon, 14 Oct 2024 21:35:12 +0000
+ Mon, 14 Oct 2024 21:37:13 +0000
 Received: from 6c7e67c6786f.amazon.com (10.106.101.44) by
  EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
- Mon, 14 Oct 2024 21:35:07 +0000
+ Mon, 14 Oct 2024 21:37:08 +0000
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 To: <ignat@cloudflare.com>
 CC: <alex.aring@gmail.com>, <alibuda@linux.alibaba.com>,
@@ -68,12 +68,12 @@ CC: <alex.aring@gmail.com>, <alibuda@linux.alibaba.com>,
 	<miquel.raynal@bootlin.com>, <mkl@pengutronix.de>, <netdev@vger.kernel.org>,
 	<pabeni@redhat.com>, <socketcan@hartkopp.net>, <stefan@datenfreihafen.org>,
 	<willemdebruijn.kernel@gmail.com>
-Subject: Re: [PATCH net-next v3 5/9] net: ieee802154: do not leave a dangling sk pointer in ieee802154_create()
-Date: Mon, 14 Oct 2024 14:35:03 -0700
-Message-ID: <20241014213503.99078-1-kuniyu@amazon.com>
+Subject: Re: [PATCH net-next v3 6/9] net: inet: do not leave a dangling sk pointer in inet_create()
+Date: Mon, 14 Oct 2024 14:37:05 -0700
+Message-ID: <20241014213705.99272-1-kuniyu@amazon.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20241014153808.51894-6-ignat@cloudflare.com>
-References: <20241014153808.51894-6-ignat@cloudflare.com>
+In-Reply-To: <20241014153808.51894-7-ignat@cloudflare.com>
+References: <20241014153808.51894-7-ignat@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -82,20 +82,19 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D042UWB002.ant.amazon.com (10.13.139.175) To
+X-ClientProxiedBy: EX19D045UWA002.ant.amazon.com (10.13.139.12) To
  EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
 From: Ignat Korchagin <ignat@cloudflare.com>
-Date: Mon, 14 Oct 2024 16:38:04 +0100
+Date: Mon, 14 Oct 2024 16:38:05 +0100
 > sock_init_data() attaches the allocated sk object to the provided sock
-> object. If ieee802154_create() fails later, the allocated sk object is
-> freed, but the dangling pointer remains in the provided sock object, which
-> may allow use-after-free.
+> object. If inet_create() fails later, the sk object is freed, but the
+> sock object retains the dangling pointer, which may create use-after-free
+> later.
 > 
 > Clear the sk pointer in the sock object on error.
 > 
 > Signed-off-by: Ignat Korchagin <ignat@cloudflare.com>
-> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
 Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 
