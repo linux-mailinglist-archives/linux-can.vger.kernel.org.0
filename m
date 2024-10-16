@@ -1,118 +1,163 @@
-Return-Path: <linux-can+bounces-1707-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1708-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41CC199FE80
-	for <lists+linux-can@lfdr.de>; Wed, 16 Oct 2024 03:51:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD0D9A0065
+	for <lists+linux-can@lfdr.de>; Wed, 16 Oct 2024 07:06:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7429D1C247C1
-	for <lists+linux-can@lfdr.de>; Wed, 16 Oct 2024 01:51:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 251B628478D
+	for <lists+linux-can@lfdr.de>; Wed, 16 Oct 2024 05:06:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F84C163A97;
-	Wed, 16 Oct 2024 01:50:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M8LpzjbY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 225DD17B425;
+	Wed, 16 Oct 2024 05:06:13 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CDF13C9B3;
-	Wed, 16 Oct 2024 01:50:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0722E14EC47;
+	Wed, 16 Oct 2024 05:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729043433; cv=none; b=eZSQlvkIe+x9a896NoHMBA4myo0jOy1MYM5vSLY1P1EcdyvP5QTHMt5G8U5QGQkS1OUG187McJHh7IxzzkKOusU3QfdYKuhnwmcQJkGvj6Qq9m2brPJa7QdnKmEISx728Lz4w8d05wpkZE/ILeK2UzzaPvp08nOwmKYvfQ8QKIM=
+	t=1729055173; cv=none; b=kX7fzd4DHzxD8c57dPW1MTx3H1/ZYIYecLxDJfjwfzEjGE3QNOt9hUAdQ2e0M65MD0Zl+GuXqla0owafsMchIUCEvDUgk7MsNXq3ZZiYER0J00wbq2Iyf6Oh7JQToW5h3UfoQBmXX4zsCNwEmj6FdFfZCqpMGbH2AlIBigCgsI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729043433; c=relaxed/simple;
-	bh=//kfzT4z2I3p1+qb6QmkbVbdKWwkHcHb/4X+t3gmAy8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=XWSFpkDz3ydbG8RkE1xl6M9HWXDBYbJ+ExjN4pp+eGYYku1IO/pphfxHG8+4rW2iiebUnOTtArFFewZK3Ex5pu27sNRExl1ebR7j61ddFWxxtOlZHKyHiO+7bVmVsUUV9pubw8ojjfznzmpobThShvq+dANf6S/+7zA/ip5ofO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M8LpzjbY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D427C4CECD;
-	Wed, 16 Oct 2024 01:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729043432;
-	bh=//kfzT4z2I3p1+qb6QmkbVbdKWwkHcHb/4X+t3gmAy8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=M8LpzjbYJW3oUGICZGvuPFYT2fLvvbW1YIGZ/xk3KDquqnl9nF/N+99R6Pk/t3EVR
-	 YykV0DqLR7/pOYLfhFAVnPzkwN+AnTGMCQzmlCJ3eMgZohrIAcMFr8vehQoNLgCWV1
-	 fIk+wso56eelZ1ZYGALeHkaGQfulpFl98wUuyquorZ7zepUiI7hUyHieDr76s0xC0K
-	 EU8ejx9Yy7vCZbXzrS51xJvXTe8rn5kS+ZDwC7Okv3sx2DHFkWvADuVEVDu/9PTy2y
-	 BlOcDLZLFkjgP/0ujAb10gPi1OqITv4D6ooM5EKrIOY9SL7N+XkrP768lyStMBs4v6
-	 tdUNIsb9qcw+A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB3303809A8A;
-	Wed, 16 Oct 2024 01:50:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1729055173; c=relaxed/simple;
+	bh=HKQvGwPYr1inwgwgCF3hWMFzy3rV5u7emolGbmj55I4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f4QbawLEtgsmFSl1xA7jmFZmV27nuH/Olkg1x8C2eHS62unGdFmu8SNpCnzOXg9efproxV4+fJjYFr5sHhcsO+YuNQHzgXR31QMczwerTK95k2hQlQPwV82i8fLzZuwbDHDxx45oRoj5+9ly3ZThmIh78vLlAx+iB66EkgRpMic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a99cc265e0aso654479866b.3;
+        Tue, 15 Oct 2024 22:06:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729055169; x=1729659969;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aJpmoZDHNXOCQ0hPtAG85Btn1S/XrnkL2QxgMJLjgU0=;
+        b=a/oMt7MoIsK8G3ahbTGmmbP+W15lj58WpYx63xhSFO6rVykKE5Ak0z7vRTAgQUi49/
+         6evokxNjleyXKfB+qKpsa0wJKXDUdZApLpgfXHqO7ZOM8eIP/b2+BRDhdKdVHONW0Ayz
+         k+hEirEqSZv7Tmaa78VyauZMhdgRKMqZI9ChB5NQlls2cJSMHc1Fc67Sz7gbSMAR6bll
+         iglcA++MMO3kDXWB3totRt8uWRR1aNFGM46ui1M/UusITxdaaNltSAW/Ijk09Biwcie4
+         uDw0dNIEAJDPDb+axoBQEtI3mIS1zLRbk5bspT8zCZAiCVxTQR0fzCjKRaOl/47MBi/F
+         lXKA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYcVSDbtsTRM2i69ZCJCQbOp6xoBTuS6l5GhyICgEn5LQBa+tAbOeh4YBJXkYvkAAqCdspnXAx@vger.kernel.org, AJvYcCUy93uismFbHVCmOMjvcQ0vr14ysQYfYJV6G/ZWrzk2kiuzg5S5g0bqt53M8s6kZ6Q+P9q7FRFTCIEU@vger.kernel.org, AJvYcCVo+BcqV9fQKO99MYBd/2pQDw6vRFFxOsrmI1sFhd4jXT4ee2whkd0NuoRUx9S6xkY+MAkZ91rexZuQ@vger.kernel.org, AJvYcCX3te1Q2aIFoWCC0zUbysKa/drQRaFQarfvvriuaovIVjxgW+IJoZqbwivrQJfEY5MnGupYpGiRe5C+UDKn@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuG7sn1wE4eFY4TllGfc6EU8ohzBQq+twsjuojSM3YcCDVdDRs
+	h17BQoJYp3w7xXfT/PtUYg56hLeJy8Vl6ybI0gTrhPNOmY8xkAZnB77Q/+0F2ufJSFZvJz7wjPi
+	dzeTHNxMaUjUwUBxvum+RdZto7oU=
+X-Google-Smtp-Source: AGHT+IH74YJJx49nsFhkFyT1RiTJLRloxAcb38iBw6/nz//HY/ZNyBiPGvMCwwwDAg2enWh0s8igaco8Z4E7VnmPpHo=
+X-Received: by 2002:a17:907:e216:b0:a99:7c14:9197 with SMTP id
+ a640c23a62f3a-a9a34e9b0a6mr190098066b.64.1729055169080; Tue, 15 Oct 2024
+ 22:06:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/9] do not leave dangling sk pointers in
- pf->create functions
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172904343748.1354363.11673175872638481979.git-patchwork-notify@kernel.org>
-Date: Wed, 16 Oct 2024 01:50:37 +0000
-References: <20241014153808.51894-1-ignat@cloudflare.com>
-In-Reply-To: <20241014153808.51894-1-ignat@cloudflare.com>
-To: Ignat Korchagin <ignat@cloudflare.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
- socketcan@hartkopp.net, mkl@pengutronix.de, alex.aring@gmail.com,
- stefan@datenfreihafen.org, miquel.raynal@bootlin.com, dsahern@kernel.org,
- willemdebruijn.kernel@gmail.com, linux-bluetooth@vger.kernel.org,
- linux-can@vger.kernel.org, linux-wpan@vger.kernel.org,
- kernel-team@cloudflare.com, kuniyu@amazon.com, alibuda@linux.alibaba.com
+References: <20240922145151.130999-1-hal.feng@starfivetech.com>
+ <20240922145151.130999-4-hal.feng@starfivetech.com> <CAMZ6Rq+EM37Gvx8bLEwvhn+kUC9yGDiapwD0KX31-x-e-Rm3yQ@mail.gmail.com>
+ <EAC60558E0B6E4BB+e5384c3c-ba45-48f5-a86f-a74e84309a14@linux.starfivetech.com>
+In-Reply-To: <EAC60558E0B6E4BB+e5384c3c-ba45-48f5-a86f-a74e84309a14@linux.starfivetech.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Wed, 16 Oct 2024 14:05:57 +0900
+Message-ID: <CAMZ6RqLvzvttbCMFbZiY9v=nGcH+O3EV91c+x7GxTbkKhdTcwg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] can: Add driver for CAST CAN Bus Controller
+To: Hal Feng <hal.feng@linux.starfivetech.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Emil Renner Berthing <emil.renner.berthing@canonical.com>, 
+	William Qiu <william.qiu@starfivetech.com>, devicetree@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Hal Feng <hal.feng@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+On Tue. 15 Oct. 2024 at 18:33, Hal Feng <hal.feng@linux.starfivetech.com> wrote:
+> On 9/23/2024 11:41 AM, Vincent MAILHOL wrote:
+> > Hi Hal,
+> >
+> > A few more comments on top of what Andrew already wrote.
+> >
+> > On Mon. 23 Sep. 2024 at 00:09, Hal Feng <hal.feng@starfivetech.com> wrote:
+> >> From: William Qiu <william.qiu@starfivetech.com>
+> >>
+> >> Add driver for CAST CAN Bus Controller used on
+> >> StarFive JH7110 SoC.
+> >>
+> >> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> >> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
+> >> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> >> ---
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+(...)
 
-On Mon, 14 Oct 2024 16:37:59 +0100 you wrote:
-> Some protocol family create() implementations have an error path after
-> allocating the sk object and calling sock_init_data(). sock_init_data()
-> attaches the allocated sk object to the sock object, provided by the
-> caller.
-> 
-> If the create() implementation errors out after calling sock_init_data(),
-> it releases the allocated sk object, but the caller ends up having a
-> dangling sk pointer in its sock object on return. Subsequent manipulations
-> on this sock object may try to access the sk pointer, because it is not
-> NULL thus creating a use-after-free scenario.
-> 
-> [...]
+> >> +       stats->rx_packets++;
+> >> +       netif_receive_skb(skb);
+> >> +
+> >> +       return 1;
+> >
+> > Why return 1 on success and 0 on failure? The convention in the kernel
+> > is that 0 means success. If you really want to keep 0 for failure, at
+> > least make this return boolean true or boolean false, but overall, try
+> > to follow the return conventions.
+>
+> The return value here represents the number of successfully received packets.
+> It is used in ccan_rx_poll() for counting the number of successfully
+> received packets.
 
-Here is the summary with links:
-  - [net-next,v3,1/9] af_packet: avoid erroring out after sock_init_data() in packet_create()
-    https://git.kernel.org/netdev/net-next/c/46f2a11cb82b
-  - [net-next,v3,2/9] Bluetooth: L2CAP: do not leave dangling sk pointer on error in l2cap_sock_create()
-    https://git.kernel.org/netdev/net-next/c/7c4f78cdb8e7
-  - [net-next,v3,3/9] Bluetooth: RFCOMM: avoid leaving dangling sk pointer in rfcomm_sock_alloc()
-    https://git.kernel.org/netdev/net-next/c/3945c799f12b
-  - [net-next,v3,4/9] net: af_can: do not leave a dangling sk pointer in can_create()
-    https://git.kernel.org/netdev/net-next/c/811a7ca7320c
-  - [net-next,v3,5/9] net: ieee802154: do not leave a dangling sk pointer in ieee802154_create()
-    https://git.kernel.org/netdev/net-next/c/b4fcd63f6ef7
-  - [net-next,v3,6/9] net: inet: do not leave a dangling sk pointer in inet_create()
-    https://git.kernel.org/netdev/net-next/c/9365fa510c6f
-  - [net-next,v3,7/9] net: inet6: do not leave a dangling sk pointer in inet6_create()
-    https://git.kernel.org/netdev/net-next/c/9df99c395d0f
-  - [net-next,v3,8/9] net: warn, if pf->create does not clear sock->sk on error
-    https://git.kernel.org/netdev/net-next/c/48156296a08c
-  - [net-next,v3,9/9] Revert "net: do not leave a dangling sk pointer, when socket creation fails"
-    https://git.kernel.org/netdev/net-next/c/18429e6e0c2a
+Ack. I guess this will become more clear after you implement the queue logic.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+(...)
+
+> >> +
+> >> +       if (priv->cantype == CAST_CAN_TYPE_CANFD) {
+> >> +               priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK | CAN_CTRLMODE_FD;
+> >> +               priv->can.data_bittiming_const = &ccan_data_bittiming_const_canfd;
+> >> +       } else {
+> >> +               priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK;
+> >> +       }
+> >
+> > Nitpick, consider doing this:
+> >
+> >   priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK;
+> >   if (priv->cantype == CAST_CAN_TYPE_CANFD) {
+> >           priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
+> >           priv->can.data_bittiming_const = &ccan_data_bittiming_const_canfd;
+> >   }
+>
+> OK.
+>
+> >
+> > Also, does you hardware support dlc greater than 8 (c.f.
+> > CAN_CTRLMODE_CC_LEN8_DLC)?
+>
+> The class CAN (CC) mode does not support, but the CAN FD mode supports.
+
+So, CAN_CTRLMODE_CC_LEN8_DLC is a Classical CAN feature. Strictly
+speaking, this does not exist in CAN FD. Do you mean that only the
+CAST_CAN_TYPE_CANFD supports sending Classical CAN frames with a DLC
+greater than 8?
+
+If none of the Classical CAN or CAN FD variants of your device is able
+to send Classical CAN frames with a DLC greater than 8, then this is
+just not supported by your device.
+
+Could you share the datasheet so that I can double check this?
+
+(...)
+
+> Sorry for the late reply. Thank you for your detailed review.
+
+No problem, take your time!
 
 
+Yours sincerely,
+Vincent Mailhol
 
