@@ -1,206 +1,223 @@
-Return-Path: <linux-can+bounces-1709-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1710-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2468A9A0C53
-	for <lists+linux-can@lfdr.de>; Wed, 16 Oct 2024 16:16:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B9F19A0C92
+	for <lists+linux-can@lfdr.de>; Wed, 16 Oct 2024 16:26:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DBB61C22EDD
-	for <lists+linux-can@lfdr.de>; Wed, 16 Oct 2024 14:16:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1BCFB219D1
+	for <lists+linux-can@lfdr.de>; Wed, 16 Oct 2024 14:26:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 452C21411E0;
-	Wed, 16 Oct 2024 14:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9866520C027;
+	Wed, 16 Oct 2024 14:26:35 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4B0502BE;
-	Wed, 16 Oct 2024 14:16:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8787920ADDA;
+	Wed, 16 Oct 2024 14:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729088179; cv=none; b=LVVOp9nxOM0lr28jMq6oACnwYYUKIYLnT2HaFSYS8RhsLpyq4wP1cHZvDqUQcqDuElh3wk+6XRx7nWEzEJxHpJCRf21t1ClDZTX5m0AmG/byRwaT79kXPUN90eZdrkWzPXVHKn8+8bJCq0NsPNBi5Mtudkxj5qqIAOv2+I+S36w=
+	t=1729088795; cv=none; b=mZWxJchGAV6tUH6/udX83KlWn2FCDfFIctpN0F6IBBXza9RDBSHlb0EWr+DCOe1TtMWWzX5XeCw8TFXJc5C3uXWFS/WyNyuxBnpTBSu2xQLHy0d3BGjuz4z2PRtPW9a+h/9iTvrUJEx++TyGQ1nYjCgKY1OZFGIdbT6x0r/cCio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729088179; c=relaxed/simple;
-	bh=OG0ZoHiPmXUDWn0qYiiQHJeobdpgi9P/omaxHHZPUMk=;
+	s=arc-20240116; t=1729088795; c=relaxed/simple;
+	bh=BTpTIYQMDBwzjByt2BCxD0+WshTPDmkDdWMziv5LqKo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nFKRXYpUNk1hiA7TrHByoIXiJMqBiTExjoP0hSFet70Ey8vUIyxr3ibN2XvVJLT4fFpicQz+CnRFX1VYW+YSlcUi0rToKEOsB5cdpbKJ95bG/SFzLHQAVh0cOgW4PJvPx8SQvzQ3cLyqwGtnM0IkdYxX1O0BklcHuA6NlPN9Ogc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.53
+	 To:Cc:Content-Type; b=uMN/ZcBw42f6vRYlIMyVXP116/+0K8bYOFkITHyLl6kXyEapzrmZzERIIKzgH3G5GuGCbB/KBV8jaG13/KmVfbTbOzzC2onOeuXwM7I6/jalDy7YKck1UDB23ICQinuxKFmkmv/VFqoz0IWvF9tKWEAnYy5KgRibyp/RC5dAmW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539e1543ab8so8452147e87.2;
-        Wed, 16 Oct 2024 07:16:15 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a9a0474e70eso568932366b.0;
+        Wed, 16 Oct 2024 07:26:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729088174; x=1729692974;
+        d=1e100.net; s=20230601; t=1729088792; x=1729693592;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Zji2jjc7lmYCBaxDKjU5IirMGrQxMUOMfum9ROWevj4=;
-        b=JZjM4S21WAdUuuMHhWrX3J6YxT4/r9e8mvv5O9B460Md4Pk8Nam8X5Mx8D2XF3Iajn
-         FlFBsOLJ7gcPQ8GR9PKE31vyuHyS43uBa8DR+kgUv0zOgMA7bQHSeix6CaJagCXinQ3g
-         Ghb3nN6s4On5kbQQFdoUD+yF6yVKiw/H9uUwVna1bbC+npMDrq8IT6H1Gpg6WeLhkwRr
-         YryQC1DvM3UUX6i5tcSSDT8PX3T5hS5/YPBG/x/0Sb4ofStupLR0/hAm0v2h9TfpLXyh
-         yZa7hSpoID5a0QzJrXxHoKUdfAQFVnu0XlBAbqXGeLLV3ayAf2epDe/pgWrsGW090pWr
-         xDxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUECQIJ3GiG4MC7bhBaOQxCAYQkqFT0Cc/zTyG2LWJeEFM+H/TW9xB9qOe36xk8O+AgQcdfl8QwBQbt@vger.kernel.org, AJvYcCUcxgI0UWfibGpKARDVIlZKTUyQD9s9e8X1nRhTnCQhUiIFmpJOArFisCHM/Gd49VmYWT+O8wbH@vger.kernel.org, AJvYcCXLOwkYHtGgb7M5orts+mWmwwoGWQuCGWANJYxJCSSAzH4QPSYCvUyt3+HMWti0HZWLEPmAyXFg5lPm@vger.kernel.org, AJvYcCXLaRbIHh3E6fbSu2kc8SUUhad0sy56oL2ihb6fapXxKhH/bt6RKL19amaec+14w/gGvk6oFbvHMv6Y0NBh@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAX4psY4LXyGZtZ0xIpomR+TcgH4iKbfqGWAeNkGFKBts1eoIc
-	j4eCCeWKa66Eq7jDwU6++UEYJ4FLUrv98E/EBtJs2S67+FOoIYoShNv6x0EVE8G9bM6Il6fNgfB
-	6PvzkKrPjr2ncVGFRbodOZ7rQmn4=
-X-Google-Smtp-Source: AGHT+IE98DjXYsvonEn7MnmPN+JCagURuswXEjP6x9DsDz5MmxRBUXYi+4++5nWYQ8Ogm2EWnbuG+myw2gPNuaM96Gw=
-X-Received: by 2002:a05:6512:1598:b0:539:905c:15c5 with SMTP id
- 2adb3069b0e04-539e5521da6mr11043400e87.35.1729088173959; Wed, 16 Oct 2024
- 07:16:13 -0700 (PDT)
+        bh=9kosQyuVWG39YynNEUKXJCBxsTPwg1HVhHQTa1Z8n7k=;
+        b=pi4EIQkJqvhlSSI4WnScMkTcxna2yU4iBbiEsoIQ8LWyXz++j2xxyt08cQVUmTC0pu
+         LX2oYqo38ZwgQ1NfXsRvrheYrLVcWzrY6v91poBnepI1O4Is6dYCmhpyXFaTDyhbMToq
+         ZZIpwaQ2lmbYjbYa9YovmTwVnvKQVTdXCs4JiN4GnxiKOVusUbkSvCdNYn2BzB6tE17L
+         yf0oy5I7O5lEs/+E0ziwgTNDgGNV/PMmpUOuyyzuXDcR5pL6uZHadScgKBFqzXyT6cqJ
+         PTnELi6aIlYTjBDTxJk4HOCWUcbdJX85oKBvXh7TNN17QbCOUJAOAJKwXnHVjcpqmtiH
+         8Mpw==
+X-Forwarded-Encrypted: i=1; AJvYcCUM+SUdPcQ5xlhA9zFvqSC5ZbBSuJ81l1dGoPSNHHqLAztaNtt0Njc0yEyWR+5UpGu7KIqgOwyyppbpxahl@vger.kernel.org, AJvYcCV+m3439rIGQLhawzCEGRM5Ov3JPVZYjU+urI94bZyHSMXgZx18Ti0DMdPS0wbBuT3xYQrMtgdtgGsk@vger.kernel.org, AJvYcCWta3hkrRUgW6guxcJ4fbN1TKmqra/nagM/GWYazMmqpdOB3S8+eSnvKsVK3i1Sc+4X6ZeBCeQMAmL0@vger.kernel.org, AJvYcCX2g5lyaq6nXY0Lmy6tZFoWNhDekwr+6VHCG0b4N8r2YDarDL7ke/N9sQgro4UlNsJMwZWDNnam@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8xuq5RZ3RmbYpFGXsQ7TZ/USrw/N4jYcflwGr2Fl/ZYnrCJ74
+	oWuRtSgg3rg+UloZLd4nKaK7xVXtYENDHmIlI29ouXXvvv9vRxmpYzQO0UJ3zbzlT+vv/K6jSfD
+	HiX761qgCLaiFbahsaXKElp5bW3fPdJ+yYSo=
+X-Google-Smtp-Source: AGHT+IHxBPBf+m6UScPiP9T7rYboW+BUqS+rSedKKCFS0zaiDPv4D0O5W7BTwDQfrFhb1gdRSpU0fFSgNbjyzR/tOYY=
+X-Received: by 2002:a17:906:6a1e:b0:a99:f2bf:7c64 with SMTP id
+ a640c23a62f3a-a99f2bf8de2mr1100863466b.17.1729088791572; Wed, 16 Oct 2024
+ 07:26:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240922145151.130999-1-hal.feng@starfivetech.com>
- <20240922145151.130999-4-hal.feng@starfivetech.com> <CAMZ6Rq+EM37Gvx8bLEwvhn+kUC9yGDiapwD0KX31-x-e-Rm3yQ@mail.gmail.com>
- <EAC60558E0B6E4BB+e5384c3c-ba45-48f5-a86f-a74e84309a14@linux.starfivetech.com>
- <CAMZ6RqLvzvttbCMFbZiY9v=nGcH+O3EV91c+x7GxTbkKhdTcwg@mail.gmail.com>
-In-Reply-To: <CAMZ6RqLvzvttbCMFbZiY9v=nGcH+O3EV91c+x7GxTbkKhdTcwg@mail.gmail.com>
+References: <20241015-topic-mcan-wakeup-source-v6-12-v4-0-fdac1d1e7aa6@baylibre.com>
+ <20241015-topic-mcan-wakeup-source-v6-12-v4-5-fdac1d1e7aa6@baylibre.com>
+In-Reply-To: <20241015-topic-mcan-wakeup-source-v6-12-v4-5-fdac1d1e7aa6@baylibre.com>
 From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Wed, 16 Oct 2024 23:16:03 +0900
-Message-ID: <CAMZ6RqK428Pvwrgc=KPKjetZaTC8R55HzypMooOTziM8eMMxHg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] can: Add driver for CAST CAN Bus Controller
-To: Hal Feng <hal.feng@linux.starfivetech.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>, 
-	William Qiu <william.qiu@starfivetech.com>, devicetree@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Hal Feng <hal.feng@starfivetech.com>
+Date: Wed, 16 Oct 2024 23:26:22 +0900
+Message-ID: <CAMZ6Rq+NA9G=iON56vQcr5dxEMqn-FFzT5rdxc6XrtW+4ww1XQ@mail.gmail.com>
+Subject: Re: [PATCH v4 5/9] can: m_can: Support pinctrl wakeup state
+To: Markus Schneider-Pargmann <msp@baylibre.com>
+Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Matthias Schiffer <matthias.schiffer@ew.tq-group.com>, Vishal Mahaveer <vishalm@ti.com>, 
+	Kevin Hilman <khilman@baylibre.com>, Dhruva Gole <d-gole@ti.com>, Simon Horman <horms@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed. 16 Oct. 2024 at 14:05, Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
-> On Tue. 15 Oct. 2024 at 18:33, Hal Feng <hal.feng@linux.starfivetech.com> wrote:
-> > On 9/23/2024 11:41 AM, Vincent MAILHOL wrote:
-> > > Hi Hal,
-> > >
-> > > A few more comments on top of what Andrew already wrote.
-> > >
-> > > On Mon. 23 Sep. 2024 at 00:09, Hal Feng <hal.feng@starfivetech.com> wrote:
-> > >> From: William Qiu <william.qiu@starfivetech.com>
-> > >>
-> > >> Add driver for CAST CAN Bus Controller used on
-> > >> StarFive JH7110 SoC.
-> > >>
-> > >> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> > >> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
-> > >> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> > >> ---
+Hi Markus,
 
-(...)
+This is a nice improvement from the v3.
 
-> > >> +
-> > >> +       if (priv->cantype == CAST_CAN_TYPE_CANFD) {
-> > >> +               priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK | CAN_CTRLMODE_FD;
-> > >> +               priv->can.data_bittiming_const = &ccan_data_bittiming_const_canfd;
-> > >> +       } else {
-> > >> +               priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK;
-> > >> +       }
-> > >
-> > > Nitpick, consider doing this:
-> > >
-> > >   priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK;
-> > >   if (priv->cantype == CAST_CAN_TYPE_CANFD) {
-> > >           priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
-> > >           priv->can.data_bittiming_const = &ccan_data_bittiming_const_canfd;
-> > >   }
-> >
-> > OK.
-> >
-> > >
-> > > Also, does you hardware support dlc greater than 8 (c.f.
-> > > CAN_CTRLMODE_CC_LEN8_DLC)?
-> >
-> > The class CAN (CC) mode does not support, but the CAN FD mode supports.
+On Wed. 16 Oct. 2024 at 04:19, Markus Schneider-Pargmann
+<msp@baylibre.com> wrote:
+> am62 requires a wakeup flag being set in pinctrl when mcan pins acts as
+> a wakeup source. Add support to select the wakeup state if WOL is
+> enabled.
 >
-> So, CAN_CTRLMODE_CC_LEN8_DLC is a Classical CAN feature. Strictly
-> speaking, this does not exist in CAN FD. Do you mean that only the
-> CAST_CAN_TYPE_CANFD supports sending Classical CAN frames with a DLC
-> greater than 8?
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> ---
+>  drivers/net/can/m_can/m_can.c | 68 +++++++++++++++++++++++++++++++++++++++++++
+>  drivers/net/can/m_can/m_can.h |  4 +++
+>  2 files changed, 72 insertions(+)
 >
-> If none of the Classical CAN or CAN FD variants of your device is able
-> to send Classical CAN frames with a DLC greater than 8, then this is
-> just not supported by your device.
+> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> index 5a4e0ad07e9ecc82de5f1f606707f3380d3679fc..c539375005f71c88fd1f7d1a885ce890ce0e9327 100644
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -2196,6 +2196,7 @@ static void m_can_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
+>  static int m_can_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
+>  {
+>         struct m_can_classdev *cdev = netdev_priv(dev);
+> +       struct pinctrl_state *new_pinctrl_state = NULL;
+>         bool wol_enable = !!(wol->wolopts & WAKE_PHY);
+>         int ret;
 >
-> Could you share the datasheet so that I can double check this?
+> @@ -2212,7 +2213,28 @@ static int m_can_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
+>                 return ret;
+>         }
+>
+> +       if (wol_enable)
+> +               new_pinctrl_state = cdev->pinctrl_state_wakeup;
+> +       else
+> +               new_pinctrl_state = cdev->pinctrl_state_default;
+> +
+> +       if (IS_ERR_OR_NULL(new_pinctrl_state))
+> +               return 0;
+> +
+> +       ret = pinctrl_select_state(cdev->pinctrl, new_pinctrl_state);
+> +       if (ret) {
+> +               netdev_err(cdev->net, "Failed to select pinctrl state %pE\n",
+> +                          ERR_PTR(ret));
+> +               goto err_wakeup_enable;
+> +       }
+> +
+>         return 0;
+> +
+> +err_wakeup_enable:
+> +       /* Revert wakeup enable */
+> +       device_set_wakeup_enable(cdev->dev, !wol_enable);
+> +
+> +       return ret;
+>  }
+>
+>  static const struct ethtool_ops m_can_ethtool_ops_coalescing = {
+> @@ -2340,6 +2362,44 @@ int m_can_class_get_clocks(struct m_can_classdev *cdev)
+>  }
+>  EXPORT_SYMBOL_GPL(m_can_class_get_clocks);
+>
+> +static int m_can_class_setup_optional_pinctrl(struct m_can_classdev *class_dev)
+> +{
+> +       struct device *dev = class_dev->dev;
+> +       int ret;
+> +
+> +       class_dev->pinctrl = devm_pinctrl_get(dev);
+> +       if (IS_ERR(class_dev->pinctrl)) {
+> +               ret = PTR_ERR(class_dev->pinctrl);
+> +               class_dev->pinctrl = NULL;
+> +
+> +               if (ret == -ENODEV)
+> +                       return 0;
+> +
+> +               return dev_err_probe(dev, ret, "Failed to get pinctrl\n");
+> +       }
+> +
+> +       class_dev->pinctrl_state_wakeup =
+> +               pinctrl_lookup_state(class_dev->pinctrl, "wakeup");
+> +       if (IS_ERR(class_dev->pinctrl_state_wakeup)) {
+> +               ret = PTR_ERR(class_dev->pinctrl_state_wakeup);
+> +               class_dev->pinctrl_state_wakeup = NULL;
+> +
+> +               if (ret == -ENODEV)
+> +                       return 0;
+> +
+> +               return dev_err_probe(dev, ret, "Failed to lookup pinctrl wakeup state\n");
+> +       }
+> +
+> +       class_dev->pinctrl_state_default =
+> +               pinctrl_lookup_state(class_dev->pinctrl, "default");
+> +       if (IS_ERR(class_dev->pinctrl_state_default)) {
+> +               ret = PTR_ERR(class_dev->pinctrl_state_default);
 
-I received the datasheet from a good samaritan. With this, I was able
-to confirm a few things.
+Sorry if this is a silly question, but why aren't you doing the:
 
-1/ Your device can support CAN_CTRLMODE_CC_LEN8_DLC:
+                  class_dev->pinctrl_state_default = NULL;
 
-This is shown in the datasheet at:
+                  if (ret == -ENODEV)
+                          return 0;
 
-  Table 3-52 Definition of the DLC (according to the CAN 2.0 / FD specification)
+thing the same way you are doing it for the pinctrl and the
+pinctrl_state_wakeup?
 
-DLC values 9 to 15 (binary 1001 to 1111) are accepted by the device.
-When sending and receiving such frames, can_frame->len is set to 8 and
-can_frame->len8_dlc is set to the actual DLC value. Use the
-can_cc_dlc2len() and can_get_cc_dlc() helpers for this.
-
-
-2/ Your device can support CAN_CTRLMODE_TDC_AUTO:
-
-This is documented in the datasheet at:
-
-  8.8 TDC and RDC
-
-This will allow the use of higher bitrates (e.g. 4 Mbits/s) in CAN-FD.
-You can refer to this commit for an example of how to implement it:
-
-  https://git.kernel.org/torvalds/c/1010a8fa9608
-
-
-3/ Your device can support CAN_CTRLMODE_3_SAMPLES:
-
-This is called triple mode redundancy (TMR) in your datasheet.
-
-
-4/ Your device can support CAN_CTRLMODE_LISTENONLY:
-
-This is documented in the datasheet at:
-
-  3.9.10.2. Listen Only Mode (LOM)
-
-
-5/ Your device can support CAN_CTRLMODE_ONE_SHOT:
-
-This is documented in the datasheet at:
-
-  6.5.3 Single Shot Transmit Trigger
-
-
-6/ Your device can support CAN_CTRLMODE_BERR_REPORTING:
-
-This is shown in the datasheet at:
-
-  Table 3-24 Error Counter Registers RECNT (0xb2) and TECNT (0xb3)
-
-
-7/ Your device can support CAN_CTRLMODE_PRESUME_ACK:
-
-c.f. the SACK (self acknowledge) register
-
-
-So your device comes with MANY features. I would like to see those
-implemented in your driver. Most of the time, adding a feature just
-means writing one value to a register.
-
-Please let me know if any of this is unclear.
-
-
-Yours sincerely,
-Vincent Mailhol
+> +               return dev_err_probe(dev, ret, "Failed to lookup pinctrl default state\n");
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  struct m_can_classdev *m_can_class_allocate_dev(struct device *dev,
+>                                                 int sizeof_priv)
+>  {
+> @@ -2380,7 +2440,15 @@ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev,
+>
+>         m_can_of_parse_mram(class_dev, mram_config_vals);
+>
+> +       ret = m_can_class_setup_optional_pinctrl(class_dev);
+> +       if (ret)
+> +               goto err_free_candev;
+> +
+>         return class_dev;
+> +
+> +err_free_candev:
+> +       free_candev(net_dev);
+> +       return ERR_PTR(ret);
+>  }
+>  EXPORT_SYMBOL_GPL(m_can_class_allocate_dev);
+>
+> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+> index 92b2bd8628e6b31370f4accbc2e28f3b2257a71d..b75b0dd6ccc93973d0891daac07c92b61f81dc2a 100644
+> --- a/drivers/net/can/m_can/m_can.h
+> +++ b/drivers/net/can/m_can/m_can.h
+> @@ -126,6 +126,10 @@ struct m_can_classdev {
+>         struct mram_cfg mcfg[MRAM_CFG_NUM];
+>
+>         struct hrtimer hrtimer;
+> +
+> +       struct pinctrl *pinctrl;
+> +       struct pinctrl_state *pinctrl_state_default;
+> +       struct pinctrl_state *pinctrl_state_wakeup;
+>  };
+>
+>  struct m_can_classdev *m_can_class_allocate_dev(struct device *dev, int sizeof_priv);
 
