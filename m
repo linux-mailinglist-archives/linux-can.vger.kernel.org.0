@@ -1,119 +1,257 @@
-Return-Path: <linux-can+bounces-1718-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1719-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F01D9A48DB
-	for <lists+linux-can@lfdr.de>; Fri, 18 Oct 2024 23:23:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 526F79A48DE
+	for <lists+linux-can@lfdr.de>; Fri, 18 Oct 2024 23:25:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF68A1F22821
-	for <lists+linux-can@lfdr.de>; Fri, 18 Oct 2024 21:23:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 413161C230AF
+	for <lists+linux-can@lfdr.de>; Fri, 18 Oct 2024 21:25:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7D118D65E;
-	Fri, 18 Oct 2024 21:23:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35165204953;
+	Fri, 18 Oct 2024 21:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dVeoEcVZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N+Ja2zKi"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C2213A244
-	for <linux-can@vger.kernel.org>; Fri, 18 Oct 2024 21:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDFC518C92A
+	for <linux-can@vger.kernel.org>; Fri, 18 Oct 2024 21:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729286596; cv=none; b=Jwup8ZLvGa3Tf24g9OQq+SEGWnkUwJHuXCAg3TMm3m6JmS4SzlyfR7p394kELrlsq75Yq/mIfRwL10m1EzEc6EtQhOZ/0C6YmdC6z5AEQbA/BpHjCC1MOsEhSfMCaJ3XjlexvO319sQNacXxWRk/GDC7gIklXm8OhkkUAh/8QbI=
+	t=1729286720; cv=none; b=rScYj0+9EXciOPRXXTP8euvT8idWYu8GLIiXq7ODDjmft7jWirRZAG57B4V91qAyVXoAUrsbGIzLwHY70l+ofw/wjp8RrmKf3OZAGkFE6RDWHrSN187Wqz62RSG/07YH0N6as0ZBNxAwao9OiZhioM8vc4LyMwaA7HFmqXgf+vI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729286596; c=relaxed/simple;
-	bh=obTH7Hu30rnVPMeWyxvh3cZyD0Z3wVo+ujdRB7fxtTc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FwgZtRfoynPESupJmZFrGXzR9a4Ghg7ZOMWn+L96eAEDuwhrDsCEMwjQRPqcCCeUMviEy5EjSYkTwYilT1Gtfn7DWI3zzqVLNHTiEsrlKnh6bEHx7PkMeUrYKewDgFrbvPtk4Vp2jjfE6VHL89oD9D2J0tJXfteHhJJGGNBlr9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dVeoEcVZ; arc=none smtp.client-ip=209.85.218.50
+	s=arc-20240116; t=1729286720; c=relaxed/simple;
+	bh=/jh7PhdHgoPhdvJLmvqS0laTHv2aSe247wwfvMs3JdM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aGDDpzoca7WVpLYpsZYKnCpBcq93P8znahlzTJBYkxGslB3DQ17yqWMQ6mAzOepqJVspd9ZC6uY90HqC8ekaKSZGrHeEfwcTvMIzrzXTSZiyHS7gq4gofaRCMwY7mf7MsgLWZHgW6WK/v6xWycaU2/TQrwePGIicTxjpycMhiUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N+Ja2zKi; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a9a0c40849cso371766166b.3
-        for <linux-can@vger.kernel.org>; Fri, 18 Oct 2024 14:23:14 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a99f1fd20c4so324878266b.0
+        for <linux-can@vger.kernel.org>; Fri, 18 Oct 2024 14:25:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729286592; x=1729891392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GnZ91v35tkt5Bjsk0LNwLHOiJPAj2CEexom2lMzjmFk=;
-        b=dVeoEcVZG7C6bPx13Dv3qtwAxbYJvZwGydtzU0OxVqIPmsm8Z7v1EBZcfX3+vtxzL5
-         zjDtTxlDZpGT4sai3B6vCjJSX8ESLfEYbqtj+jPNU13MJYzFL71F4O79JXlhYwmAIaqY
-         mkxkWTehIBITMZHLdmaLeNmoNeWGwz2KfxA8HlwMxSl52aQ3keuk4LEsOiJZgDNhVnDm
-         8/iWa+MXfDVhOfmkxQec90WLnfMRY8j/EemWvojnI+zB8kQQECzydirMZnO9nOQ3d4+a
-         3j61PS0JP39CZCV8+Tkxg6/cIYSmxxQnhuW1GfT6WVGc6mnuteiAD4+4iEayFH4uA6Ks
-         BEcQ==
+        d=gmail.com; s=20230601; t=1729286716; x=1729891516; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y3PesIRhYfEU1201pgRUivxFLME+Dl0+qlkrWXQEFfs=;
+        b=N+Ja2zKifc43hDdRSPodmK66cS62UJGrsGfTedOExDFxE6JNIBr7+vZF2iHXHgwpGL
+         reFcPgaLC/7VbJgTOQAm5ZZoGT7yuVhvGb9J9v4OzMT/bwyOo0F9hfQ3jBa3vX0ET93Q
+         FdYNMwYJC9+MwlhLuWt10j9DgX4LwXZV0OXFvlQ1GBD4dH+3UbAiTG7FRzjcJG9Vv1la
+         9s4esIyJVnPoSqhOcqqWSdvKAy7vJ8wVeHUWkKoNESG88sU/zPhumHmBkAUUq6h20N/Y
+         AIk2DEPdAcN/S0iXCfFm+YqVGpkhczwU4a2Fve5flZKCrx7vQpIDPSlesB0X/pNrsixz
+         OucQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729286592; x=1729891392;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GnZ91v35tkt5Bjsk0LNwLHOiJPAj2CEexom2lMzjmFk=;
-        b=SF5wgScsb02gswDyfcacyZ+CAJCSjadF8KnIQMqjGLpHhmoI6gjjf80d6PhCF0ktTR
-         PR9jcBuBOIHRy6Qexnp+wDA66K3yx+jK/FdOyRgoRV65H01pFh008nSkEJHm1MWMEC2a
-         qv2P76+f5O9cwAwT6QqTKtZwUPI74s+1HF1Xu8uzOLXdUowDi6Fjvs4wRq6us8h6mZ+G
-         NwVVvzI2Yj/2bmiPELYw/xe+0N+gFQQ+UPe7m3vGSgB2t/tEWpMKq+FveXYP3qR1YoUC
-         5vuo3+DaV2geAQJK3IO5N6kL6T/CJvqZjQ2rCjXz2tp+i5yNgp3NHix+HXTTmgIhJesX
-         pqcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVE5tgyZvULX3iHDlDXGbmAtrSg2hQgRzCGj+uGXqv/cTOwcqG1GvLBp6MiNc2AnOoQeZw+S3/z4x4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yylq9P7NY0AMzkKbJKpg31emOgEo4PhL7cBNVoAAwR/hYGhnmEP
-	xbUXTiREP/LvW8wb4mKre3X+bP8ZvCIhtwVcUCFxOOcHCxEa6Qsh
-X-Google-Smtp-Source: AGHT+IESz2TKmAQnjaujcRXPZbIS+t/nxPGS2Pfet5isXJZxvPeNdXZiExsOl4072IcMt0hxZUD1vg==
-X-Received: by 2002:a17:907:7e92:b0:a9a:1918:c6c6 with SMTP id a640c23a62f3a-a9a6996a697mr363582666b.8.1729286592183;
-        Fri, 18 Oct 2024 14:23:12 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729286716; x=1729891516;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y3PesIRhYfEU1201pgRUivxFLME+Dl0+qlkrWXQEFfs=;
+        b=mfz86hx2oeiZ2DOtD7edmjWiKXATd0IREX7QQQ/Dtayi1A2JGDdLwrfeaKcyfvGIrQ
+         TwApW4INey5Uek0pEZwjHW0O45TeQCSAqungMAKK2iihH6iLb9vRHwyxTExOcTEygavo
+         YKv49/VpSG+3V6hnXrdacRMKHPqebklZLO7ihLLF77TtLyVH40p6ESe9+syk8AHQlIHa
+         HRv7ybi2ajAKhzd2tfxc+7p+7DZ5shrBqaYPLvK0uxs1zxDKWjtLRLs6PEENFytCnNHT
+         El9CfoOeb5mFkvL1ZnFvyr8mv8kCmFg7oJPtPAaJ8JywbF9wLEnvtRMhNkgu9QPemFxS
+         eAjQ==
+X-Gm-Message-State: AOJu0Yywcl0fKt7IEeSrN6VKiCy+ubLYgJknAhChOpgHkY9OxLGI/DOe
+	oIhsatTolSiWoF1J848Zpqsy2AiSJHhIV8bmC/lO8/meU47eke/1t3OHBXuA
+X-Google-Smtp-Source: AGHT+IHs+YqHWFdjRwM/jpuh/4FI8ox80OMzge0jJ4ZHvlmKCO8zw02zOjVx5PtuyrNFnDZqcdjYsw==
+X-Received: by 2002:a17:907:7285:b0:a9a:f82:7712 with SMTP id a640c23a62f3a-a9a69cd044fmr384298366b.52.1729286715993;
+        Fri, 18 Oct 2024 14:25:15 -0700 (PDT)
 Received: from localhost.localdomain (ip-037-201-007-048.um10.pools.vodafone-ip.de. [37.201.7.48])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68bc4db9sm138764166b.131.2024.10.18.14.23.11
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68ae98d5sm139030066b.86.2024.10.18.14.25.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2024 14:23:11 -0700 (PDT)
+        Fri, 18 Oct 2024 14:25:15 -0700 (PDT)
 From: Alexander Kozhinov <ak.alexander.kozhinov@gmail.com>
-To: mailhol.vincent@wanadoo.fr
-Cc: ak.alexander.kozhinov@gmail.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	max@schneidersoft.net,
-	mkl@pengutronix.de,
-	pabeni@redhat.com
-Subject: Subject: Alignment correction
-Date: Fri, 18 Oct 2024 23:22:01 +0200
-Message-ID: <20241018212201.31595-1-ak.alexander.kozhinov@gmail.com>
+To: linux-can@vger.kernel.org
+Cc: Alexander Kozhinov <ak.alexander.kozhinov@gmail.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Maximilian Schneider <max@schneidersoft.net>
+Subject: [PATCH v6] can: gs_usb.c: add usb endpoint address detection at driver probe step
+Date: Fri, 18 Oct 2024 23:24:26 +0200
+Message-ID: <20241018212450.31746-1-ak.alexander.kozhinov@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAMZ6Rq+Lx5171bcshugrm7R=ipCKTGhdtmAQO=5M62e+e5zFiw@mail.gmail.com>
-References: <CAMZ6Rq+Lx5171bcshugrm7R=ipCKTGhdtmAQO=5M62e+e5zFiw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-> Arg, I forgot to point out the wrong indentation in my last message.
-> The second line should be aligned with the first one.
->
-> You can see the problem by using the checkpatch.pl tool on your patch:
->
->   $ ./scripts/checkpatch.pl <path_to_your_patch>
->   (...)
->   CHECK: Alignment should match open parenthesis
->   #217: FILE: drivers/net/can/usb/gs_usb.c:1426:
->   +    rc = usb_find_common_endpoints(intf->cur_altsetting,
->   +                                    &ep_in, &ep_out, NULL, NULL);
+There is an approach made to implement gs_usb firmware/driver based on
+Zephyr RTOS. It was found that USB stack of Zephyr RTOS overwrites USB
+EP addresses, if they have different last 4 bytes in absence of other
+endpoints.
 
-Thank you Vincent. I will do v6 for it.
+For example in case of gs_usb candlelight firmware EP-IN is 0x81 and
+EP-OUT 0x02. If there are no additional USB endpoints, Zephyr RTOS will
+overwrite EP-OUT to 0x01. More information can be found in the
+discussion with Zephyr RTOS USB stack maintainer here:
 
-> Maybe you set the tab length to 4 columns in your editor? Here, the
-> tabulation width is eight. If you need some different settings for
-> some different project, then I recommend you to configure your editor
-> to rely on the .editorconfig file:
->
->   https://git.kernel.org/torvalds/c/5a602de99797
+https://github.com/zephyrproject-rtos/zephyr/issues/67812
 
-Thank you for pointing on it. It looks very interesting to me. I will take a look.
+There are already two different gs_usb FW driver implementations based
+on Zephyr RTOS:
 
-Best regards,
-Alexander Kozhinov
+1. https://github.com/CANnectivity/cannectivity
+   (by: https://github.com/henrikbrixandersen)
+2. https://github.com/zephyrproject-rtos/zephyr/compare/main...KozhinovAlexander:zephyr:gs_usb
+   (by: https://github.com/KozhinovAlexander)
+
+At the moment both Zephyr RTOS implementations use dummy USB endpoint,
+to overcome described USB stack behavior from Zephyr itself. Since
+Zephyr RTOS is intended to be used on microcontrollers with very
+constrained amount of resources (ROM, RAM) and additional endpoint
+requires memory, it is more convenient to update the gs_usb driver in
+the Linux kernel.
+
+To fix this problem, update the gs_usb driver from using hard coded
+endpoint numbers to evaluate the endpoint descriptors and use the
+endpoints provided there.
+
+To: linux-can@vger.kernel.org
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Maximilian Schneider <max@schneidersoft.net>
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Alexander Kozhinov <ak.alexander.kozhinov@gmail.com>
+
+---
+Changes in v3:
+- store pipe instead of endpoint address.
+	This change implements nitpick:
+	Instead of storing the ep_in and ep_out in your priv, you can
+	instead directly store the result of usb_rcvbulkpipe(parent->udev,
+	parent->ep_in) and usb_sndbulkpipe(dev->udev, dev->parent->ep_out).
+- use reverse xmas tree declaration.
+	This change implements request:
+	Move this declaration up (c.f. the Reverse christmas tree declarations).
+- use forward usb endpoints search.
+	This change implements request:
+	Any specific reason for doing this in reverse? The previous
+	GS_USB_ENDPOINT_IN and GS_USB_ENDPOINT_OUT macros were respectively 1
+	and 2, so at the beginning. And in such a case, the normal search
+	would find those quicker.
+- skip new variable declaration.
+	This change implements nipick:
+	no need to declare a new variable for host_iface which is used only once.
+
+Changes in v4:
+- put in CC most relevant mailing ist linux-can@vger.kernel.org
+- use one patch only since only one logical/contextual change were introduced.
+- add quick changelog over multiple pathc versions.
+
+Changes in v5:
+- add fixes tag to commit message
+- add reviewed-by tag
+- remove comment on line 1425
+
+Changes in v6:
+- update alignment on line 1426
+---
+ drivers/net/can/usb/gs_usb.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index bc86e9b329fd..b6f4de375df7 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -43,9 +43,6 @@
+ #define USB_XYLANTA_SAINT3_VENDOR_ID 0x16d0
+ #define USB_XYLANTA_SAINT3_PRODUCT_ID 0x0f30
+ 
+-#define GS_USB_ENDPOINT_IN 1
+-#define GS_USB_ENDPOINT_OUT 2
+-
+ /* Timestamp 32 bit timer runs at 1 MHz (1 µs tick). Worker accounts
+  * for timer overflow (will be after ~71 minutes)
+  */
+@@ -336,6 +333,9 @@ struct gs_usb {
+ 
+ 	unsigned int hf_size_rx;
+ 	u8 active_channels;
++
++	unsigned int pipe_in;
++	unsigned int pipe_out;
+ };
+ 
+ /* 'allocate' a tx context.
+@@ -687,7 +687,7 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 
+ resubmit_urb:
+ 	usb_fill_bulk_urb(urb, parent->udev,
+-			  usb_rcvbulkpipe(parent->udev, GS_USB_ENDPOINT_IN),
++			  parent->pipe_in,
+ 			  hf, dev->parent->hf_size_rx,
+ 			  gs_usb_receive_bulk_callback, parent);
+ 
+@@ -819,7 +819,7 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff *skb,
+ 	}
+ 
+ 	usb_fill_bulk_urb(urb, dev->udev,
+-			  usb_sndbulkpipe(dev->udev, GS_USB_ENDPOINT_OUT),
++			  dev->parent->pipe_out,
+ 			  hf, dev->hf_size_tx,
+ 			  gs_usb_xmit_callback, txc);
+ 
+@@ -925,8 +925,7 @@ static int gs_can_open(struct net_device *netdev)
+ 			/* fill, anchor, and submit rx urb */
+ 			usb_fill_bulk_urb(urb,
+ 					  dev->udev,
+-					  usb_rcvbulkpipe(dev->udev,
+-							  GS_USB_ENDPOINT_IN),
++					  dev->parent->pipe_in,
+ 					  buf,
+ 					  dev->parent->hf_size_rx,
+ 					  gs_usb_receive_bulk_callback, parent);
+@@ -1413,6 +1412,7 @@ static int gs_usb_probe(struct usb_interface *intf,
+ 			const struct usb_device_id *id)
+ {
+ 	struct usb_device *udev = interface_to_usbdev(intf);
++	struct usb_endpoint_descriptor *ep_in, *ep_out;
+ 	struct gs_host_frame *hf;
+ 	struct gs_usb *parent;
+ 	struct gs_host_config hconf = {
+@@ -1422,6 +1422,13 @@ static int gs_usb_probe(struct usb_interface *intf,
+ 	unsigned int icount, i;
+ 	int rc;
+ 
++	rc = usb_find_common_endpoints(intf->cur_altsetting,
++				       &ep_in, &ep_out, NULL, NULL);
++	if (rc) {
++		dev_err(&intf->dev, "Required endpoints not found\n");
++		return rc;
++	}
++
+ 	/* send host config */
+ 	rc = usb_control_msg_send(udev, 0,
+ 				  GS_USB_BREQ_HOST_FORMAT,
+@@ -1466,6 +1473,10 @@ static int gs_usb_probe(struct usb_interface *intf,
+ 	usb_set_intfdata(intf, parent);
+ 	parent->udev = udev;
+ 
++	/* store the detected endpoints */
++	parent->pipe_in = usb_rcvbulkpipe(parent->udev, ep_in->bEndpointAddress);
++	parent->pipe_out = usb_sndbulkpipe(parent->udev, ep_out->bEndpointAddress);
++
+ 	for (i = 0; i < icount; i++) {
+ 		unsigned int hf_size_rx = 0;
+ 
+-- 
+2.43.0
+
 
