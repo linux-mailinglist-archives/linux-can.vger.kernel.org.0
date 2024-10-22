@@ -1,162 +1,120 @@
-Return-Path: <linux-can+bounces-1720-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1721-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E33E49AA0C5
-	for <lists+linux-can@lfdr.de>; Tue, 22 Oct 2024 13:04:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64D2C9AA2EF
+	for <lists+linux-can@lfdr.de>; Tue, 22 Oct 2024 15:22:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A431D2849AE
-	for <lists+linux-can@lfdr.de>; Tue, 22 Oct 2024 11:04:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8F35B20BAF
+	for <lists+linux-can@lfdr.de>; Tue, 22 Oct 2024 13:22:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A2319925F;
-	Tue, 22 Oct 2024 11:04:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JMw7TGFX";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="//KssUk3";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JMw7TGFX";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="//KssUk3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81F9319ABD5;
+	Tue, 22 Oct 2024 13:22:21 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B52F19538D
-	for <linux-can@vger.kernel.org>; Tue, 22 Oct 2024 11:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ABC41C27
+	for <linux-can@vger.kernel.org>; Tue, 22 Oct 2024 13:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729595084; cv=none; b=erpvaUZuPuo9lv1ox9ZyX3qjsKJk2ox6dqe0GMcnDgKV6mOkam0VnvQOSkOBBE7Vr4aFQwZw1YqJbYM17n+DvMllrz9nXCsr0LRk3uqD+mI2V+tI9xH5QDQmzGSOpzzWXvA7jDuKgi85FjCDhG4i4ZyDQS+MUs4MjCTmByKv5Lg=
+	t=1729603341; cv=none; b=fR0Vh0jXJrTGQ+SJkYAnkvy0lA5sv6T8+nlRbMAiqX6vZtbbpU/xdMihJjDqL0IO7tf2ULCXEhEhD/RxyC9udG2lh2iY61NTOIEo59EUEPeSOWrjgduDIRkwV8rcqLlJpBLCQObhvvXpM/n2uWWpftKCp97/95aNYwTZ11C11rA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729595084; c=relaxed/simple;
-	bh=xNur0RRGEFSwf8uR82j78/SMbSR0YzoqHmNLt04vCG0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VVFWB2ePnnetYMGihC461gpf4fFmlQYMP8j0ajMA8XOzJWAJpeM6o81K842x8hi3nybg/TPa6RGOgLgdlMfxzEQ6XUdb7Gr+kE/pOi+Sm9u2cKYCMqmAHfc6K5yvICTCcjYXAdxqrk8z0IWeB9Hv0iPV0AuY9h6WmTj3NWW0gp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JMw7TGFX; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=//KssUk3; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JMw7TGFX; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=//KssUk3; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6AA7021C13;
-	Tue, 22 Oct 2024 11:04:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1729595080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lAw85LVEtY1vrhNqqkenMLlpAdV0oeGsi6OBgz/QADs=;
-	b=JMw7TGFXadjWJ010HPEUwj6sIxhpeuvq4PPUZ2hbJwgoz9OM0+tuKUcW7s8qfEtsccvGDI
-	feIwv9QDzWAlRWXR0ed8eZZ/h8H6s8qY91qJw94sgBrxoLokJ4ktPT1G/PKdRWyjd6rkZB
-	TvIqn/LGy51OtVM6z2YCCd3L2ChxtTY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1729595080;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lAw85LVEtY1vrhNqqkenMLlpAdV0oeGsi6OBgz/QADs=;
-	b=//KssUk3heZWGHhHy0OVS72vXzk8N8sg3Bnw6PHtacThJtAJ8GV5flb73SHy5z9FRwt+LB
-	ipuOL37BUEnrPVDg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=JMw7TGFX;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="//KssUk3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1729595080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lAw85LVEtY1vrhNqqkenMLlpAdV0oeGsi6OBgz/QADs=;
-	b=JMw7TGFXadjWJ010HPEUwj6sIxhpeuvq4PPUZ2hbJwgoz9OM0+tuKUcW7s8qfEtsccvGDI
-	feIwv9QDzWAlRWXR0ed8eZZ/h8H6s8qY91qJw94sgBrxoLokJ4ktPT1G/PKdRWyjd6rkZB
-	TvIqn/LGy51OtVM6z2YCCd3L2ChxtTY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1729595080;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lAw85LVEtY1vrhNqqkenMLlpAdV0oeGsi6OBgz/QADs=;
-	b=//KssUk3heZWGHhHy0OVS72vXzk8N8sg3Bnw6PHtacThJtAJ8GV5flb73SHy5z9FRwt+LB
-	ipuOL37BUEnrPVDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2946113AC9;
-	Tue, 22 Oct 2024 11:04:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id w8cGCMiGF2dcLwAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Tue, 22 Oct 2024 11:04:40 +0000
-Date: Tue, 22 Oct 2024 13:04:39 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: linux-can@vger.kernel.org
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, kernel@pengutronix.de,
- Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH] can: rockchip_canfd: Drop obsolete dependency on
- COMPILE_TEST
-Message-ID: <20241022130439.70d016e9@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
+	s=arc-20240116; t=1729603341; c=relaxed/simple;
+	bh=3kP7YSsV1Kn4G3PKROScgishfWtmgQPZXox/LbC6d+Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=amgrA9FqKCYhWQnXB83fThJgCe3oEdavvO9Z4NT6G7If5gp1gi/W10dvxyzxBemNnqVktDzpBRSt/Z8ShUsmXehJJ5dCh3indEcpTa8pGam7xE7HI3Xe6Bot4y7Ob/PSvQ4H+vLTe/+Y+WshrTnUcKyXe45vW279IhM2t7CtnTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a9aa8895facso177748766b.2
+        for <linux-can@vger.kernel.org>; Tue, 22 Oct 2024 06:22:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729603337; x=1730208137;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L8vFMNPZeyK2PR9pGhloOiUVmPbNCcnk3i6LVOi3UqA=;
+        b=Z2pq+nb28qACPbogI2B9x4skzha8HabHQt+RkAaR1pv01lCa9/j4ZMvithTEbfajNb
+         g2nYjU/+yRrSGci16AD9TUFPgwt48ECv6nkif987yorYX+eLLMhDx4IbaHrjs/kcwI+k
+         i3OHuRp+yBqNjiZVAM6iLE0R1WXqzZlIV8y9m6fxKIhnZOb3qnCRk4jYeA1HBdiUtobW
+         x0BfN3GH9N9jq2fiV6HZAYK7GYzTi0kNB/8LwHRQsb4AJ96pb0PrJ7sHyqCdAQYv5Npa
+         vknw5NVUNPcQSVJdrVb2z8aTXmY3mk35/BLcsFgbpZN+EM5MasfXLcVBQuVd7Tt0MiQd
+         KIgA==
+X-Gm-Message-State: AOJu0Yzo66ZzyTTQqY9wKdKfEhPMZMuvYExAk2X3WfpW5L6FKewUXqDz
+	ArNMUWidBv2j1fXi2MgiiiktGPD+AFDPLm64J6IbvgD5ZvytVU6g1jXvL+paNonIaLmcITwf8fJ
+	9/qxlCJOB5Ws0u3H1bWCmL3ofZAo=
+X-Google-Smtp-Source: AGHT+IFsm0AbjLF1nLMCpnpXEwhXuLnVS9AWjnaq++UvtVG89i5qw0763YZSKolYh6ItRVe2KPTcaVY+WMP0R7OegLM=
+X-Received: by 2002:a17:907:3f09:b0:a9a:8a4:e090 with SMTP id
+ a640c23a62f3a-a9a69c8fcf9mr1479457766b.50.1729603336508; Tue, 22 Oct 2024
+ 06:22:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 6AA7021C13
-X-Spam-Score: -4.51
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[wanadoo.fr];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[wanadoo.fr,pengutronix.de];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_EQ_ENVFROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:dkim];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+References: <20241022130439.70d016e9@endymion.delvare>
+In-Reply-To: <20241022130439.70d016e9@endymion.delvare>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Tue, 22 Oct 2024 22:22:05 +0900
+Message-ID: <CAMZ6RqJxb-52eSPqvaESjA-Wd_Jd-=gFO1HWbzxWe3gx7GWDmA@mail.gmail.com>
+Subject: Re: [PATCH] can: rockchip_canfd: Drop obsolete dependency on COMPILE_TEST
+To: Jean Delvare <jdelvare@suse.de>
+Cc: linux-can@vger.kernel.org, kernel@pengutronix.de, 
+	Marc Kleine-Budde <mkl@pengutronix.de>, Miguel Ojeda <ojeda@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), OF
-can be enabled on all architectures. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+Hi Jean,
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
----
- drivers/net/can/rockchip/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
++cc: Miguel Ojeda <ojeda@kernel.org>
++cc: Masahiro Yamada <masahiroy@kernel.org>
++cc: Andrew Morton <akpm@linux-foundation.org>
 
---- linux-6.12-rc4.orig/drivers/net/can/rockchip/Kconfig
-+++ linux-6.12-rc4/drivers/net/can/rockchip/Kconfig
-@@ -2,7 +2,7 @@
- 
- config CAN_ROCKCHIP_CANFD
- 	tristate "Rockchip CAN-FD controller"
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	select CAN_RX_OFFLOAD
- 	help
- 	  Say Y here if you want to use CAN-FD controller found on
+On Tue. 22 Oct. 2024 at 20:06, Jean Delvare <jdelvare@suse.de> wrote:
+> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), OF
+> can be enabled on all architectures. Therefore depending on
+> COMPILE_TEST as an alternative is no longer needed.
 
+I understand the motivation behind this patch, but for me, as a
+maintainer, it becomes more work when I want to do a compile test.
+Before I would have needed to only select COMPILE_TEST but now, I
+would need to remember to also select OF for that driver to appear in
+the menuconfig.
 
--- 
-Jean Delvare
-SUSE L3 Support
+Well, I am not strongly against this simplification, but, wouldn't it
+be good to make COMPILE_TEST automatically select OF then? Looking at
+the description of COMPILE_TEST, I read:
+
+ If you are a developer and want to build everything available, say Y here.
+
+So having COMPILE_TEST automatically select OF looks sane to me as it
+goes in the direction of "building everything". If this makes sense, I
+can send a patch for this. Thoughts?
+
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> ---
+>  drivers/net/can/rockchip/Kconfig |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> --- linux-6.12-rc4.orig/drivers/net/can/rockchip/Kconfig
+> +++ linux-6.12-rc4/drivers/net/can/rockchip/Kconfig
+> @@ -2,7 +2,7 @@
+>
+>  config CAN_ROCKCHIP_CANFD
+>         tristate "Rockchip CAN-FD controller"
+> -       depends on OF || COMPILE_TEST
+> +       depends on OF
+>         select CAN_RX_OFFLOAD
+>         help
+>           Say Y here if you want to use CAN-FD controller found on
+>
+>
+> --
+> Jean Delvare
+> SUSE L3 Support
+>
 
