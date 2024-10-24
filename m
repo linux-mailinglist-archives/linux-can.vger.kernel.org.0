@@ -1,137 +1,99 @@
-Return-Path: <linux-can+bounces-1744-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1745-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E7189AE217
-	for <lists+linux-can@lfdr.de>; Thu, 24 Oct 2024 12:05:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0534B9AE2D0
+	for <lists+linux-can@lfdr.de>; Thu, 24 Oct 2024 12:42:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE4931F23A5C
-	for <lists+linux-can@lfdr.de>; Thu, 24 Oct 2024 10:05:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF8921F22E7B
+	for <lists+linux-can@lfdr.de>; Thu, 24 Oct 2024 10:42:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3AA21C07CE;
-	Thu, 24 Oct 2024 10:05:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE4161C4A1D;
+	Thu, 24 Oct 2024 10:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/jxCsBg"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5001B21B6
-	for <linux-can@vger.kernel.org>; Thu, 24 Oct 2024 10:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F7F1B6D1F;
+	Thu, 24 Oct 2024 10:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729764341; cv=none; b=SnJrC/TyaoMB0jARk8bSs7RX5qreWd25HeLYV6QB/Wmbw6i8RT5SeG+68VoHr5/3tWmRqCpjvz3kQLXmjDU50X36zUxWm2fTfSy91hyEHkxeLT9eUeaghHp5S+E0YjOR+Ut31Sxo6rQ5B+0O8v4ahaksik3nLS1Dp2CMUN5JBd4=
+	t=1729766519; cv=none; b=VJ41T5/dPUEu8AztwgzqrbLdXgxrbTPmRIZ4/iiEom/OhFiFf4HIQ9AicanAakNAPXqF/Knk//j7r7oit3sTLyUPRqGkeIXfdEWETMWm7kiQmNHgENmcinmaE38NAb9BXnjuc6YStBo/4XiItFsYD1fXMNLInXC6EO2Lf4VxhbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729764341; c=relaxed/simple;
-	bh=hmCSYP6v8HOdxPC7VV4gDFeb9FzJmHEBakjWrcevsSY=;
+	s=arc-20240116; t=1729766519; c=relaxed/simple;
+	bh=CkOAGRd26mLI67dmD/BaQdzbXEOWA3GpFBs26vS3Fj8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VaR+L5Pg7mFIy1GPPJdhdBtNNdomc2+B98Kv/O0PWBEV035bNZKdi/aDXggRgazF/6UM7iEnCaVd8B7gaITmvBiUsFHcCpil8oHfmpoh9WMGB0oCGo4MPZfoditfvFvJiiIZ7AnfygssQ1yF17vYHBpAeLTxd7ga4VdbswGk7DU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3uil-0001QP-Q3; Thu, 24 Oct 2024 12:05:35 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3uil-000BIE-1l;
-	Thu, 24 Oct 2024 12:05:35 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 4484735D9A2;
-	Thu, 24 Oct 2024 10:05:35 +0000 (UTC)
-Date: Thu, 24 Oct 2024 12:05:35 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HoNG4ogaSZmj5L8JVBYIeHGrhKiUek4JT0GA2p3hNjLKph2MdiL7pcFYdqmGLeJDlbUEMQRMQ4jiaXMiv+rgtrqYWyxEN4dh31TXTvItLXzEMcx1A4i3EoTqoxhQR8rq36+Pp8Afac5oib6dYGA6c//JVUTVX+FLbjCjMrvQ/3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/jxCsBg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6862DC4CEC7;
+	Thu, 24 Oct 2024 10:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729766519;
+	bh=CkOAGRd26mLI67dmD/BaQdzbXEOWA3GpFBs26vS3Fj8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J/jxCsBgDfMeAKjiuCwahGbBWnueVH7zNvbB1HbZAAC5BM6BjdVGigaXkQlXMTLDy
+	 hHL9/CJGBsyYHj+D42jZ3sxiJzakW+naQGpCb5fv5UjquXyr9oBQ+b/reIjswHlPAk
+	 lLPd7StIfrhrZlb78DiJwrvpSirqhtvPmr2J2olct9eTjv6POXFEuqDLTiP8lSVIun
+	 HKAIdfa2mpnNUv0IdaCmrr+1c3ngJjYxP0LhW2J5vO5cnukFqXXePteFYtawXvLe3L
+	 xlNLeRHzX/D4DR2txiWlsxL2rdp2Kg4kVUIpc++ymcWK0GYJq+8rqvNGLMp7SEXNom
+	 hHdapvf8rIQRg==
+Date: Thu, 24 Oct 2024 12:41:55 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
 To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, mailhol.vincent@wanadoo.fr, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-Message-ID: <20241024-bald-orthodox-bloodhound-0ce66c-mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 3/9] i2c: Add Nuvoton NCT6694 I2C support
+Message-ID: <linka6lz5zpnaf64vmunrn2ezqts5gp5rsbwiaffm4v2mtnqyg@npxgcksgizrn>
 References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-5-tmyu0@nuvoton.com>
- <20241024-fluffy-fearless-wapiti-d48c1a-mkl@pengutronix.de>
+ <20241024085922.133071-4-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fza2wtvhypzli2lz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241024-fluffy-fearless-wapiti-d48c1a-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20241024085922.133071-4-tmyu0@nuvoton.com>
 
+Hi Ming,
 
---fza2wtvhypzli2lz
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-MIME-Version: 1.0
+...
 
-On 24.10.2024 12:03:34, Marc Kleine-Budde wrote:
-> Trimming Cc a bit
->=20
-> On 24.10.2024 16:59:17, Ming Yu wrote:
-> > +static struct platform_driver nct6694_canfd_driver =3D {
-> > +	.driver =3D {
-> > +		.name	=3D DRVNAME,
-> > +	},
-> > +	.probe		=3D nct6694_canfd_probe,
-> > +	.remove		=3D nct6694_canfd_remove,
-> > +};
-> > +
-> > +static int __init nct6694_init(void)
-> > +{
-> > +	int err;
-> > +
-> > +	err =3D platform_driver_register(&nct6694_canfd_driver);
-> > +	if (!err) {
->             ^^^^
-> > +		if (err)
->                     ^^^
->=20
-> This look wrong.
->=20
-> > +			platform_driver_unregister(&nct6694_canfd_driver);
->=20
-> Why do you want to unregister if registering fails?
+> +static int __init nct6694_init(void)
+> +{
+> +	int err;
+> +
+> +	err = platform_driver_register(&nct6694_i2c_driver);
+> +	if (!err) {
+> +		if (err)
+> +			platform_driver_unregister(&nct6694_i2c_driver);
+> +	}
+> +
+> +	return err;
+> +}
+> +subsys_initcall(nct6694_init);
+> +
+> +static void __exit nct6694_exit(void)
+> +{
+> +	platform_driver_unregister(&nct6694_i2c_driver);
+> +}
+> +module_exit(nct6694_exit);
 
-This is a pattern that repeats over all platform driver :/
+Have you thought about using auxiliary driver here?
+(auxiliary_bus.h)
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---fza2wtvhypzli2lz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaG+wACgkQKDiiPnot
-vG/XFwgAhTdMLoMZT1cfNlctXJc2pJWIjQL8HgKy0DKzsJ4kyP8cMczGadV8yDiH
-KSbsx7rdVDoklmS+a6OaEzUMV8rckwHdwsGvitzOTcs9wkQDmr1wMFwdqxQCzAzu
-YZdMHh8ZoaU7GXe5DeJkGI5Yky/9FSrhBEnsowS2420WfJRXSo389TPTgiSaRdnp
-0mDAoeBsyotBhEZ5LSfHu9cSlva4OYUVxE5VUXV7s4Im4W4giQ0LlI0SejbhbUDw
-EbqRAZhB+8Ot5Utz/ZBowLb05moVShlV3DtcKSip1bUDnUXjl5RDRSgJRSS4SyI3
-fp/q4Bu9N6avLmBn393gLiBrTOGX4w==
-=j0Qe
------END PGP SIGNATURE-----
-
---fza2wtvhypzli2lz--
+Thanks,
+Andi
 
