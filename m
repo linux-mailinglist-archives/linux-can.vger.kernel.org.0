@@ -1,247 +1,161 @@
-Return-Path: <linux-can+bounces-1817-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1818-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC8B19B4127
-	for <lists+linux-can@lfdr.de>; Tue, 29 Oct 2024 04:45:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A87F9B42A2
+	for <lists+linux-can@lfdr.de>; Tue, 29 Oct 2024 07:58:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B679282FE8
-	for <lists+linux-can@lfdr.de>; Tue, 29 Oct 2024 03:45:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 464991F2362C
+	for <lists+linux-can@lfdr.de>; Tue, 29 Oct 2024 06:58:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D41B41F76A9;
-	Tue, 29 Oct 2024 03:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 048BF201270;
+	Tue, 29 Oct 2024 06:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gtowu2h4"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="eMmNesmS"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC34282FB;
-	Tue, 29 Oct 2024 03:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34FF3200CA4;
+	Tue, 29 Oct 2024 06:58:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730173545; cv=none; b=cU7VKgyN9Tbvo4XaXV/Z9jcFkjBu/61ZvBF71HWbW2+z2ElSZ3zPizBqzwhtni4HG87khRIMTjkAyUyFtQJdsbMJpfzChO9VgjovyiioqkMgcRxaVn6Fpe/TLMcL0y+77SsK7jwMe2T1saPLDxsa2QKH/CK6Vov0kjv0pQ36C6Q=
+	t=1730185108; cv=none; b=O9ww4DKqXrFcdqpDj/PWR8o86rJGFg+QnaHYFjKcAHnR1vhz9SB/7iJqLUJgEup1c+9v4kjAJg3JCxTKMFNpP1VpjINa+/1fConLtuYnsgUfv3mo5ND9/eWf57ST2rjvGPklyhZMHDCZJIjPYh3LXCUA/1Q24BUg88nfvoH3jJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730173545; c=relaxed/simple;
-	bh=XYnM6DX+CYxWd6ljUMrgeFtnN/QrAB98BtTRnD5Ohn8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MiR/hcCUb0gDngSvQhBeGQPD+IZPoTW4Xq9DDjwYwu9NUQ/h/AG4qCdlLjGD+UJyudlbaMZZztjdpOeXGBx1ieFPpGM11lRP5sRV+oQ2/vIgyo+dO1IgY+C0l60yFiqIj+cQuWjvkhEjAGd/PkrNe1JtXRx7Mn2cBi2dhZVHQnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gtowu2h4; arc=none smtp.client-ip=209.85.219.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e2974743675so4472896276.1;
-        Mon, 28 Oct 2024 20:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730173542; x=1730778342; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T/CTs5K1y1Wb1h73no9mebagu5POeGng1N3JgW2OuRU=;
-        b=Gtowu2h4SGC7DktSemUBNe3r4C20PuuQUK1Gu13xI6e/FzBpc6IK+U5Xtv2IntjXSo
-         E/mdfhK58XXJ6Nmo511UJF8+qnTHJ3QvrtDdBQirngGPLaK4iv/qJx9re8QSbQ3XYhtt
-         W4Hm8gNlTjDjX3FZ7MxCSx4KJGQXa/hsQQpTuDwUN89K5E4Hi9QagrHiuifwTOTtI6gA
-         +b1QLEEATwH7r0iBWRsC+hHQyPqtchS6ycs94PG2YO3inqkwSVolknfWdGjfQduQbhZS
-         4qutj6pb2Gpa/EOuXiHiuEH4iPTSaH29O+HQflMy0BvcFUB0bYmsC10NCYE5SGNy3OWo
-         ifbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730173542; x=1730778342;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T/CTs5K1y1Wb1h73no9mebagu5POeGng1N3JgW2OuRU=;
-        b=t5i8r6dSCwm8eh0UCn896urLAM+3epkSM9lcBqYB6b3P1aoI4KXVqFRjR1O/cqW2je
-         BMgH5cLTwqJ+cvnGbmwJBrrPWbpL0spBB2RAd5XZmbkyU7RKtpRIPTbQ2U3l9xbFl4KU
-         Gw253pZRTdsSQSMNQHMIR6hValDX6getVKGCKPMYFUz4UYS6I7u+RUe4+9Pl5nJuQTt4
-         ut/fjBngAFYXY4XD5OejU+3fbotvFmv6pJPMP8DXRpRNKcjC1oqiZ44/JW9tdO10l6Qt
-         Y5HVHmiouDUp7qhhJtgmO8cLpWpOinM/H5faPk7oR3yS4BRzk7JntSlAcyFjd2HxFU1A
-         ubdA==
-X-Forwarded-Encrypted: i=1; AJvYcCURcLGxst1+NU9cIT5bXYzfKvq1OhgGIkaKyW7Ri6MdUap5aSYEpgl7z8GnVuiNu0hp96JUC34I@vger.kernel.org, AJvYcCVLpI+LIcNFeJPFqtgZIQ2tsbWzTQ7YWsnaPoLNBB2vBBlnLNjri45qawrDzCh0urB8T24MSogosFlGCg==@vger.kernel.org, AJvYcCVXEz+IAHGrePm4MZiwdutlNHBRGkpnm5G1vcZWgRH68ka4v13M4aCe9iM5LepavSF4ciqqVSpVNG8=@vger.kernel.org, AJvYcCW0hbK0CU9DKLaZRoRV1/cDBjvrfeDOwlaiZZYpiSlQ3nTWMZvFG/nK28Iv3FTuiQxN8Du0nRVq9L3TQJaF@vger.kernel.org, AJvYcCWAPdNVkHsOdMKm82yQiPuJodMGvS9cLfznjib4cu/RpZoHf3DAXM4NfnVy8R9XPN80OWxKjQ5/lyGX/sGDzxU=@vger.kernel.org, AJvYcCWZkA/Ebsvrsm1nzQqmVI2QoA1ZLgpgTRitgXjN8jvi04UxfTJXUSdvJJZBI29dEHCW19EocshcjMsD@vger.kernel.org, AJvYcCWkG26bwOBYdHuWuIx/w2ArSIw3v87kU1Y4rlaRyWYjU2BOAb7kM0cLziyhhTStxp9nn8JjpB2oIZmG@vger.kernel.org, AJvYcCWuMZkQ6fiBJUd6dKzdOqopu9ee/4dLre2VnjOYGotjP8a2gaFhmngHb70e9lgWIL+Kf7t2PCK6twu8@vger.kernel.org, AJvYcCXQ9JdtvqAXoRNx/prs/2BJ1/R5lr+9AN9OJrqABJIqbhtaB8GOL7kBwuXkw12C7k2tW+FfHJPkHZTMyXg=@vger.kernel.org, AJvYcCXWHd0MgKNNBFnsAHuLjCoPlYuEUNEx
- lw2sttxwdG7itDJKcHe38WKblEkalUz8d8Ebu0alXzNU+97Y@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXuBDcQF97Vo9aOSBY2QbzEN1iEoyEskfpXMznDbVuFeJHiGq2
-	JIRFRrYrFA/4rwSxWfoURJb/LvIvvRHnE8HDCUl65E04W88xv3VvrwGjfWotcyiVg7ZrPX+Smna
-	jUxy+V7JjyNEx1npWxMvPC9R4Rek=
-X-Google-Smtp-Source: AGHT+IGfm8i1NTOjdK59ar/oHoMjiqsPSqbc0JD5K9R4kxYreI+daaN7dVKfGowPbsaVFEJzyIlEL4zXfN95OO4rnFY=
-X-Received: by 2002:a05:6902:12cc:b0:e28:faf8:5cd7 with SMTP id
- 3f1490d57ef6-e3087a6c107mr8166564276.15.1730173542428; Mon, 28 Oct 2024
- 20:45:42 -0700 (PDT)
+	s=arc-20240116; t=1730185108; c=relaxed/simple;
+	bh=mTmt6tMfKXkU4Oe/Hi3YMpQOeB0phi5spbf2eXoX+9w=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KCyDTCKlqKB+0+kNEi4Oj6mq13lif195O+gokhnjN3RhlKgQUp3onAEHZngkGhXFvW301569IDzxXaevjGMY6oEOR5fe+TVM+4ND4eSOTc0SHVjTZe5o+imLshW62NQem654LIsFADumpM/22HaPjdwGr85NIRC0wlDl550bKtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=eMmNesmS; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 49T6w2fO076036;
+	Tue, 29 Oct 2024 01:58:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1730185082;
+	bh=zUjDcbzlfnrLKF5lb+YDPYeYzWPm6jfVrCSvxvwA3kQ=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=eMmNesmSNauzBozutzTULNyCWaioOr0Ftwi+bGEL1nrVRMOGF7ab9XsPNwg9+k8cp
+	 07qOOnnVLB8YaAieSTZrtexCTu3vmZyZ1D0ZrJ5etk6zwm5BEZzYHIsSVYmR/TEhue
+	 J922TrhrQ+JMCn9aIbNu+sUFZola0Ik8ZcY9qD44=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 49T6w2Ux023537
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 29 Oct 2024 01:58:02 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 29
+ Oct 2024 01:58:01 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 29 Oct 2024 01:58:01 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49T6w0fH027169;
+	Tue, 29 Oct 2024 01:58:01 -0500
+Date: Tue, 29 Oct 2024 12:28:00 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Markus Schneider-Pargmann <msp@baylibre.com>
+CC: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Marc Kleine-Budde
+	<mkl@pengutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        "David S.
+ Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub
+ Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra
+	<vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        Matthias Schiffer
+	<matthias.schiffer@ew.tq-group.com>,
+        Vishal Mahaveer <vishalm@ti.com>, Kevin
+ Hilman <khilman@baylibre.com>,
+        Simon Horman <horms@kernel.org>,
+        Krzysztof
+ Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 1/9] dt-bindings: can: m_can: Add wakeup properties
+Message-ID: <20241029065800.zktj76ut4le2fosg@lcpd911>
+References: <20241028-topic-mcan-wakeup-source-v6-12-v5-0-33edc0aba629@baylibre.com>
+ <20241028-topic-mcan-wakeup-source-v6-12-v5-1-33edc0aba629@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-2-tmyu0@nuvoton.com>
- <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
- <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
- <20241025-truthful-honest-newt-c371c8-mkl@pengutronix.de> <CAOoeyxUEf5vjqL67WjR-DbrhE0==2hqHLEyZ5XEBhEfMfQ5pag@mail.gmail.com>
- <20241025-spirited-nocturnal-antelope-ce93dd-mkl@pengutronix.de>
- <CAOoeyxW5QwPMGAYCWhQDtZwJJLG5xj9HXpL3-cduRSgF+4VHhg@mail.gmail.com>
- <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
- <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com> <20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de>
-In-Reply-To: <20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Tue, 29 Oct 2024 11:45:30 +0800
-Message-ID: <CAOoeyxWh1-=NVQdmNp5HBzf1YPo9tQdh=OzUUVFmvC-F7sCHWg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20241028-topic-mcan-wakeup-source-v6-12-v5-1-33edc0aba629@baylibre.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=8828=
-=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=8810:06=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> On 28.10.2024 16:31:25, Ming Yu wrote:
-> > > > > > > > > The Linux USB stack can receive bulk messages longer than=
- the max packet size.
-> > > > > > > >
-> > > > > > > > [Ming] Since NCT6694's bulk pipe endpoint size is 128 bytes=
- for this MFD device.
-> > > > > > > > The core will divide packet 256 bytes for high speed USB de=
-vice, but
-> > > > > > > > it is exceeds
-> > > > > > > > the hardware limitation, so I am dividing it manually.
-> > > > > > >
-> > > > > > > You say the endpoint descriptor is correctly reporting it's m=
-ax packet
-> > > > > > > size of 128, but the Linux USB will send packets of 256 bytes=
-?
-> > > > > >
-> > > > > > [Ming] The endpoint descriptor is correctly reporting it's max =
-packet
-> > > > > > size of 256, but the Linux USB may send more than 256 (max is 5=
-12)
-> > > > > > https://elixir.bootlin.com/linux/v6.11.5/source/drivers/usb/hos=
-t/xhci-mem.c#L1446
-> > > > >
-> > > > > AFAIK according to the USB-2.0 spec the maximum packet size for
-> > > > > high-speed bulk transfers is fixed set to 512 bytes. Does this me=
-an that
-> > > > > your device is a non-compliant USB device?
-> > > >
-> > > > We will reduce the endpoint size of other interfaces to ensure that=
- MFD device
-> > > > meets the USB2.0 spec. In other words, I will remove the code for m=
-anual
-> > > > unpacking in the next patch.
-> > >
-> > > I was not talking about the driver, but your USB device. According to
-> > > the USB2.0 spec, the packet size is fixed to 512 for high-speed bulk
-> > > transfers. So your device must be able to handle 512 byte transfers o=
-r
-> > > it's a non-compliant USB device.
-> >
-> > I understand. Therefore, the USB device's firmware will be modified to =
-support
-> > bulk pipe size of 512 bytes to comply with the USB 2.0 spec.
->
-> Then you don't need manual segmentation of bulk transfers anymore!
+On Oct 28, 2024 at 18:38:07 +0100, Markus Schneider-Pargmann wrote:
+> m_can can be a wakeup source on some devices. Especially on some of the
+> am62* SoCs pins, connected to m_can in the mcu, can be used to wakeup
+> the SoC.
+> 
+> The wakeup-source property defines on which devices m_can can be used
+> for wakeup.
+> 
+> The pins associated with m_can have to have a special configuration to
+> be able to wakeup the SoC. This configuration is described in the wakeup
+> pinctrl state while the default state describes the default
+> configuration.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> ---
+>  .../devicetree/bindings/net/can/bosch,m_can.yaml       | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index c4887522e8fe97c3947357b4dbd4ecf20ee8100a..0c1f9fa7371897d45539ead49c9d290fb4966f30 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -106,6 +106,22 @@ properties:
+>          maximum: 32
+>      minItems: 1
+>  
+> +  pinctrl-0:
+> +    description: Default pinctrl state
+> +
+> +  pinctrl-1:
+> +    description: Wakeup pinctrl state
+> +
+> +  pinctrl-names:
+> +    description:
+> +      When present should contain at least "default" describing the default pin
+> +      states. The second state called "wakeup" describes the pins in their
+> +      wakeup configuration required to exit sleep states.
+> +    minItems: 1
+> +    items:
+> +      - const: default
+> +      - const: wakeup
+> +
+>    power-domains:
+>      description:
+>        Power domain provider node and an args specifier containing
+> @@ -122,6 +138,8 @@ properties:
+>      minItems: 1
+>      maxItems: 2
+>  
+> +  wakeup-source: true
+> +
 
-Understood, thank you very much.
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
->
-> > > > > > > > > > +     for (i =3D 0, len =3D length; len > 0; i++, len -=
-=3D packet_len) {
-> > > > > > > > > > +             if (len > nct6694->maxp)
-> > > > > > > > > > +                     packet_len =3D nct6694->maxp;
-> > > > > > > > > > +             else
-> > > > > > > > > > +                     packet_len =3D len;
-> > > > > > > > > > +
-> > > > > > > > > > +             ret =3D usb_bulk_msg(udev, usb_rcvbulkpip=
-e(udev, BULK_IN_ENDPOINT),
-> > > > > > > > > > +                                nct6694->rx_buffer + n=
-ct6694->maxp * i,
-> > > > > > > > > > +                                packet_len, &rx_len, n=
-ct6694->timeout);
-> > > > > > > > > > +             if (ret)
-> > > > > > > > > > +                     goto err;
-> > > > > > > > > > +     }
-> > > > > > > > > > +
-> > > > > > > > > > +     for (i =3D 0; i < rd_len; i++)
-> > > > > > > > > > +             buf[i] =3D nct6694->rx_buffer[i + rd_idx]=
-;
-> > > > > > > > >
-> > > > > > > > > memcpy()?
-> > > > > > > > >
-> > > > > > > > > Or why don't you directly receive data into the provided =
-buffer? Copying
-> > > > > > > > > of the data doesn't make it faster.
-> > > > > > > > >
-> > > > > > > > > On the other hand, receiving directly into the target buf=
-fer means the
-> > > > > > > > > target buffer must not live on the stack.
-> > > > > > > >
-> > > > > > > > [Ming] Okay! I'll change it to memcpy().
-> > > > > > >
-> > > > > > > fine!
-> > > > > > >
-> > > > > > > > This is my perspective: the data is uniformly received by t=
-he rx_bffer held
-> > > > > > > > by the MFD device. does it need to be changed?
-> > > > > > >
-> > > > > > > My question is: Why do you first receive into the nct6694->rx=
-_buffer and
-> > > > > > > then memcpy() to the buffer provided by the caller, why don't=
- you
-> > > > > > > directly receive into the memory provided by the caller?
-> > > > > >
-> > > > > > [Ming] Due to the bulk pipe maximum packet size limitation, I t=
-hink consistently
-> > > > > > using the MFD'd dynamically allocated buffer to submit URBs wil=
-l better
-> > > > > > manage USB-related operations
-> > > > >
-> > > > > The non-compliant max packet size limitation is unrelated to the
-> > > > > question which RX or TX buffer to use.
-> > > >
-> > > > I think these two USB functions can be easily called using the buff=
-er
-> > > > dynamically
-> > > > allocated by the MFD. However, if they transfer data directly to th=
-e
-> > > > target buffer,
-> > > > they must ensure that it is not located on the stack.
-> > >
-> > > You have a high coupling between the MFD driver and the individual
-> > > drivers anyways, so why not directly use the dynamically allocated
-> > > buffer provided by the caller and get rid of the memcpy()?
-> >
-> > Okay! I will provide a function to request and free buffer for child de=
-vices,
-> > and update the caller's variables to use these two functions in the nex=
-t patch.
->
-> I don't see a need to provide dedicated function to allocate and free
-> the buffers. The caller can allocate them as part of their private data,
-> or allocate them during probe().
-
-Okay, so each child device may allocate a buffer like this during probe():
-priv->xmit_buf =3D devm_kcalloc(dev, MAX_PACKET_SZ, sizeof(unsigned char),
-GFP_KERNEL), right?
-
->
-> regards,
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde          |
-> Embedded Linux                   | https://www.pengutronix.de |
-> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
-Thanks,
-Ming
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
