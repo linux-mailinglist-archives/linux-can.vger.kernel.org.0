@@ -1,189 +1,157 @@
-Return-Path: <linux-can+bounces-1832-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1833-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0767E9B4511
-	for <lists+linux-can@lfdr.de>; Tue, 29 Oct 2024 09:57:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C9A19B488A
+	for <lists+linux-can@lfdr.de>; Tue, 29 Oct 2024 12:46:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A9C91C21F0F
-	for <lists+linux-can@lfdr.de>; Tue, 29 Oct 2024 08:57:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D52501F2387D
+	for <lists+linux-can@lfdr.de>; Tue, 29 Oct 2024 11:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2A82038DD;
-	Tue, 29 Oct 2024 08:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15E6B205AA5;
+	Tue, 29 Oct 2024 11:46:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="gJy2LEX1"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B566E1DFE11
-	for <linux-can@vger.kernel.org>; Tue, 29 Oct 2024 08:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55F8204035
+	for <linux-can@vger.kernel.org>; Tue, 29 Oct 2024 11:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730192237; cv=none; b=Zh7lH5mybHLHRCVaz3PB8vaHWbdStUISm5bgjQOImpMSCmt7sD0+q4AMvSK0J/5LvlE19rJ7KPvvlFbSkaKO9ucZps+OjvVEIVIPIm3q5/jo7O2WDBQBIT8oBMTKL88rgQIZLjcP9WBoqS01HKIhhIXqvXM0byQAgtd8sTpkBwg=
+	t=1730202392; cv=none; b=HaGZywHH77XixwFTfbgw8l4GjYIaQTe6q4ahwVeUkfRx3ubwDstQxLh8+YKwtp+EN5NOAuKTHZ1PS9JHrbxARrOYG683k1Fpp4OxeqoN9OVgyY1y5OhOYZNDuMki9DgNCeVBlVgt7HoehsFZXZ0SdCUIMFqcKHyB2F13o1OH/9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730192237; c=relaxed/simple;
-	bh=4Pz5cTRPw11z909m2kjm8d52XeDCnWJJZk62a3PC1cI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SUtA7zG7jpn4e4+OvdYIW09BL7Byh6o12ANdl5lODoNRH1qL3drnU2M49uVEqMlaj3YIlR9zhq6o3kSqf8kPcbLthlyCCbOcOpBc4UHzITMdZ4rUygpeEMFGEixGG5SzE+bYvDihYv6qcAMullc5AHNJUDyHbMsCL+4YWwhnKq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t5i2L-0002Tc-Cv; Tue, 29 Oct 2024 09:57:13 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t5i2K-000zna-2n;
-	Tue, 29 Oct 2024 09:57:12 +0100
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 8C7793613D6;
-	Tue, 29 Oct 2024 08:57:12 +0000 (UTC)
-Date: Tue, 29 Oct 2024 09:57:12 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org
-Subject: Re: [RFC PATCH v2 3/6] can: dev: add helpers to setup an error frame
-Message-ID: <20241029-ancient-sepia-tamarin-26e5af-mkl@pengutronix.de>
-References: <20241029084525.2858224-1-dario.binacchi@amarulasolutions.com>
- <20241029084525.2858224-4-dario.binacchi@amarulasolutions.com>
+	s=arc-20240116; t=1730202392; c=relaxed/simple;
+	bh=05amL8SvxVx1O2sLPStVWErHa1NKdoFQ/D3/Oe7ZQH8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JWHFCfTG87+aM5A+E+6LWDCWD5xJW56rfqktIYoMF8mG5ElnDOfo031q3FKbr9sB+MVFe7Bu3K1/SoZkiHbPwVZFROvzxwE7Ek4krQKIXn+S2l1GzDwdI3EhmXgCuuuiohqOXL+TBpTuGcCg0xU7qWnMcnYtT99ROQCUsN7nWRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=gJy2LEX1; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5c903f5bd0eso10526826a12.3
+        for <linux-can@vger.kernel.org>; Tue, 29 Oct 2024 04:46:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1730202387; x=1730807187; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IxDkWg/vsTbegwMYodB782ex0h2qobbSL22Fla0Iv1A=;
+        b=gJy2LEX1ismWYH1uWMLZjfQ1TYs7heZQ4dK2BCpnDtj86+L+JCXYF0Uu4DGUuDTmDx
+         DKyWqaTBZ7zwJgpYTNUTIes0JFtaYa9YblDEX6DJmK8kzGfgWU3gWYXBVNl58zNgrxfC
+         rsajVgg9lytpsPO0VoK+QUcbpHLjzMR5gkp3A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730202387; x=1730807187;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IxDkWg/vsTbegwMYodB782ex0h2qobbSL22Fla0Iv1A=;
+        b=YUyMvx+eDh7D1d2Ox4BeDMc1GPMZFpFm9qJwpGxRem+7HJFbAui3p9T+YJo+/dnFwW
+         ShYWytd3JQXcT/SCPlQN9c8fT73qYnaHXzzw9A/mNQp1YI+3HQjnxi0Pt8bqHllJit/i
+         QSVvIHc23VET7DiJ33igPTu1EW6pisxY2vAOandiAObLnev7S5xugM70ZryihGA2cBLQ
+         w85WNs39qwL3i3ltf/45RKeYHguLEVmAgr5Ni7ezR9BBbZm+TTwhZ4ZHk0GZV6444dRO
+         339eekuMJcxj1r+tX+QH6ArYo1u5hExtc/J1c13iMVfTp2l+vz0qDGsEQwv7y9mWcfaR
+         WRHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVCDjj5o5pmarOrjrQJA2pB1KX0ko4CqOVo0k3Wg6rqHtds1/TTk8u4ybaiu10D37mGNpH7IPLvqjY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg3HpFAo4bSZQ7fRe+pSvDyORea+8dgTZ200MhnMoOJvl42J01
+	2hLPfiNMk+zJ3lEjeWekLTPplcmlBAGLHZD0xNi3ryuVpaRim0vy4fdiI01r6kQ=
+X-Google-Smtp-Source: AGHT+IGs0NMmrdpvJR6bB5NncULQydlcvVJYr5FXrebgpvaHSMtDo/1P0dhuvOmM0yOgg+PhHaYuwg==
+X-Received: by 2002:a05:6402:268f:b0:5c9:b6dd:dace with SMTP id 4fb4d7f45d1cf-5cbbf891a41mr8436361a12.3.1730202386878;
+        Tue, 29 Oct 2024 04:46:26 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.41.207])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cbb6297a09sm3869301a12.21.2024.10.29.04.46.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Oct 2024 04:46:25 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-amarula@amarulasolutions.com,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Gal Pressman <gal@nvidia.com>,
+	Haibo Chen <haibo.chen@nxp.com>,
+	Han Xu <han.xu@nxp.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+	Rob Herring <robh@kernel.org>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Shannon Nelson <shannon.nelson@amd.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [RFC PATCH v3 0/6] Add helpers for stats and error frames
+Date: Tue, 29 Oct 2024 12:45:24 +0100
+Message-ID: <20241029114622.2989827-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2ukyjm6xwt5qzlrb"
-Content-Disposition: inline
-In-Reply-To: <20241029084525.2858224-4-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+This series originates from some tests I ran on a CAN communication for
+one of my clients that reports sporadic errors. After enabling BERR
+reporting, I was surprised that the command:
 
---2ukyjm6xwt5qzlrb
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFC PATCH v2 3/6] can: dev: add helpers to setup an error frame
-MIME-Version: 1.0
+ip -details -statistics link show can0
 
-On 29.10.2024 09:44:47, Dario Binacchi wrote:
-> These helpers can prevent errors and code duplication when setting up a
-> CAN error frame.
->=20
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+did not display the occurrence of different types of errors, but only the
+generic ones for reception and transmission. In trying to export this
+information, I felt that the code related to managing statistics and handling
+CAN errors (CRC, STUF, BIT, ACK, and FORM) was quite duplicated in the
+implementation of various drivers, and there wasn't a generic function like
+in the case of state changes (i. e. can_change_state). This led to the idea
+of adding can_update_bus_error_stats() and the helpers for setting up the
+CAN error frame.
 
-AFAICS in the flexcan driver we don't need the "if (cf)" checks, do we?
-Having repeated NULL pointer checks don't feel right.
+Regarding patch 5/6 ("can: netlink: extend stats to the error types (ack,
+CRC, form, ..."), I ran
 
-Marc
+./scripts/check-uapi.sh
 
->=20
-> ---
->=20
-> Changes in v2:
-> - Replace macros with static inline functions
-> - Update the commit message
->=20
->  include/linux/can/dev.h | 46 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
->=20
-> diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-> index 0977656b366d..1b09d30dae32 100644
-> --- a/include/linux/can/dev.h
-> +++ b/include/linux/can/dev.h
-> @@ -168,6 +168,52 @@ static inline bool can_dev_dropped_skb(struct net_de=
-vice *dev, struct sk_buff *s
->  	return can_dropped_invalid_skb(dev, skb);
->  }
-> =20
-> +static inline void can_frame_error_init(struct can_frame *cf)
-> +{
-> +	if (cf)
-> +		cf->can_id |=3D CAN_ERR_PROT | CAN_ERR_BUSERROR;
-> +}
-> +
-> +static inline void can_frame_set_err_bit0(struct can_frame *cf)
-> +{
-> +	if (cf)
-> +		cf->data[2] |=3D CAN_ERR_PROT_BIT0;
-> +}
-> +
-> +static inline void can_frame_set_err_bit1(struct can_frame *cf)
-> +{
-> +	if (cf)
-> +		cf->data[2] |=3D CAN_ERR_PROT_BIT1;
-> +}
-> +
-> +static inline void can_frame_set_err_ack(struct can_frame *cf)
-> +{
-> +	if (cf) {
-> +		cf->can_id |=3D CAN_ERR_ACK;
-> +		cf->data[3] =3D CAN_ERR_PROT_LOC_ACK;
-> +	}
-> +}
-> +
-> +static inline void can_frame_set_err_crc(struct can_frame *cf)
-> +{
-> +	if (cf) {
-> +		cf->data[2] |=3D CAN_ERR_PROT_BIT;
-> +		cf->data[3] =3D CAN_ERR_PROT_LOC_CRC_SEQ;
-> +	}
-> +}
-> +
-> +static inline void can_frame_set_err_form(struct can_frame *cf)
-> +{
-> +	if (cf)
-> +		cf->data[2] |=3D CAN_ERR_PROT_FORM;
-> +}
-> +
-> +static inline void can_frame_set_err_stuff(struct can_frame *cf)
-> +{
-> +	if (cf)
-> +		cf->data[2] |=3D CAN_ERR_PROT_STUFF;
-> +}
-> +
->  void can_setup(struct net_device *dev);
-> =20
->  struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_s=
-kb_max,
-> --=20
-> 2.43.0
->=20
->=20
+which found
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+"error - 1/934 UAPI headers compatible with x86 appear _not_ to be backwards
+compatible."
 
---2ukyjm6xwt5qzlrb
-Content-Type: application/pgp-signature; name="signature.asc"
+I included it in the series because I am currently interested in understanding
+whether the idea behind each of the submitted patches makes sense, and I can
+adjust them later if the response is positive, following your suggestions.
 
------BEGIN PGP SIGNATURE-----
+Changes in v3:
+- Drop double assignement of "priv" variable.
+- Check "dev" parameter is not NULL.
+- Drop the check of "cf" parameter not NULL
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcgo2UACgkQKDiiPnot
-vG/cPwf+NgF87abqp/jRHSmzOHRF7D/nsE46qfdm16FjPfy7w2Vbstddg1KFFSxk
-OyXLkA0HckvPhrU3ox8gXlgjBNc89Brjr+n0KtNCltDGucjrOf+sD5Zzxd4yD/L9
-Otn8hurW5rVW57yWIp0wZ1zYqL83uLPkUs07uHugVQYOFauHN0wK1BabHeBzA9n2
-W9FBc//hrmHdPg58xE2PcPyA6mEjcQ66wuWtX/RCaZn/Ew//1sYluNonfvOlUdXg
-ytpe9IQJLrohvOKRgYoWg3i5m1izzxztM4cSlUzrLEhTfLhwo9XlzSwDyMUAEWuz
-r6i3GlBpTS5O37LJlY7Ec0RLeLWYjQ==
-=/nIP
------END PGP SIGNATURE-----
+Changes in v2:
+- Replace macros with static inline functions
+- Update the commit message
+- Replace the macros with static inline funcions calls.
+- Update the commit message
 
---2ukyjm6xwt5qzlrb--
+Dario Binacchi (6):
+  can: dev: add generic function can_update_bus_error_stats()
+  can: flexcan: use can_update_bus_error_stats()
+  can: dev: add helpers to setup an error frame
+  can: flexcan: use helpers to setup the error frame
+  can: netlink: extend stats to the error types (ack, CRC, form, ...)
+  can: dev: update the error types stats (ack, CRC, form, ...)
+
+ drivers/net/can/dev/dev.c              | 45 ++++++++++++++++++++++++++
+ drivers/net/can/flexcan/flexcan-core.c | 29 +++++------------
+ include/linux/can/dev.h                | 38 ++++++++++++++++++++++
+ include/uapi/linux/can/netlink.h       |  6 ++++
+ 4 files changed, 97 insertions(+), 21 deletions(-)
+
+-- 
+2.43.0
+
 
