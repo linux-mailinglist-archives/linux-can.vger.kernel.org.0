@@ -1,90 +1,103 @@
-Return-Path: <linux-can+bounces-1847-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1849-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C628C9B7A11
-	for <lists+linux-can@lfdr.de>; Thu, 31 Oct 2024 12:55:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14C619B7C1F
+	for <lists+linux-can@lfdr.de>; Thu, 31 Oct 2024 14:48:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B59EB21736
-	for <lists+linux-can@lfdr.de>; Thu, 31 Oct 2024 11:55:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B500D1F21DF9
+	for <lists+linux-can@lfdr.de>; Thu, 31 Oct 2024 13:48:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8E8199FCC;
-	Thu, 31 Oct 2024 11:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FEAB1A0718;
+	Thu, 31 Oct 2024 13:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="juidbRsA"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="A6chTNt6"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E81153BC7
-	for <linux-can@vger.kernel.org>; Thu, 31 Oct 2024 11:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF47D1A00E2;
+	Thu, 31 Oct 2024 13:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730375730; cv=none; b=g3gOqNbhB7Y5LWSJ7KmOGKFZ4/eUWmlv8nvRrN94vsFPeRHcL7b8zleqwqIlJjuxvfuIgeVrA2+wtms88UBqSiDJz+FGJUKFVlBizFXkeVxsMBu2twcDTwp7TnCZMlDdEErumMS1JJ5ln70SYWjkZG39PWAnRWoFmHnxuzL4/CI=
+	t=1730382489; cv=none; b=lNb8nKzbfB7M0HFfJhh6mehWF6fRBnfbfYuUCmVsv+PEc49rarTZL2xNHKGRYHQjQPAk7yqcYO1Lmu08YbsZ0p8TOaPx6S+aXYUIaWvll+sfZEd9ehmTdwWDHJRCRjDZ12+aNi7zve/uBbQGHL479HYq4Bp1zlRdwipxzhaFVpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730375730; c=relaxed/simple;
-	bh=rBWHHGIBKG7aWGjy5o2LvySYQiy7eKFw8FuN7KLS0oI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=aVpEn4Mb1Lcy/qBLbVPbJFMDUidynGh3W01vrQTPkazJg6tGEf1HLEYbPxrhoJNcXAhLYu1q2Xw8r+fCyHCU/W3YoC8rGMEy7jYpshLuALxlhXPSqOa6tETfajIRgtLuA1xq3VYwmec0s+rdhfe6mUGzHSuIs1Y7KS4dJiQT9iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=juidbRsA; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5cb6ca2a776so1186478a12.0
-        for <linux-can@vger.kernel.org>; Thu, 31 Oct 2024 04:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730375727; x=1730980527; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rBWHHGIBKG7aWGjy5o2LvySYQiy7eKFw8FuN7KLS0oI=;
-        b=juidbRsA9MRDmYACPHJSmbIGXt7IlbdnGjxeJUIFVDH81jLxswt1spYaN62sL0OPpf
-         BxfjbUfc5UgxPgBeRcr1wpfnoki1pkeX2j8l3FRYrHpMYCXQS+ghkZxxxzTIiedV6ViJ
-         yQIu5MeSEVovMfTkSLAoHZvycVN27843SLPjCe1uhCXyBIQmUWC0xWqMGiS6G5Fejz/K
-         SsqG4DSdVEKZ1aD5by6vkHfX0AL8HMWQ/Jp2y0D6b6Eo/IuaWZ+6b6j6C1pOPIG3Kpjc
-         6O/5repMpx2BFlRkAZeXfjjG0wohnw+QW5zNaXoM5LfxVpOlRS99PQ+mrbwGY1rCVyrF
-         /Aiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730375727; x=1730980527;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rBWHHGIBKG7aWGjy5o2LvySYQiy7eKFw8FuN7KLS0oI=;
-        b=OpA+9c4xyIOJ9xqxsNAzDobCp6UGzRULZBno+CB89/loL3ynvDuoahAClVSlqFLFpU
-         PorbKOBYo7pUSLXeA2jC3UYCy7DMcff/YUcM6Kg6foABlncTdHL9QeKfUfAnlmWUuSRy
-         ZzXvh2QKzaC0M69K7l07JE0r0rmcV0aSuUUvjDJ1jmcpXbMlZT5S0THmq2Su96pnszSq
-         0hqSIGd7bDaZwDahIGXJvwrNRjgG5nGipKm3qozQ5c3P4+lOUgqhr8WDWrSxHPkr8rOn
-         thyBXO6zIgZHHiY6lhvL9VFqm5WbsuKDWjnfAenqbTXNndTOxTd6Gtzsfk93UtvPUvT5
-         1gTA==
-X-Gm-Message-State: AOJu0YzY0n+4/+YGi/+EXtMP2HO2msyYOUQ0ZmlLS1c5JtVjs6KDLFra
-	eZSrpRsPrH0LljqxmqmYIH0CPNfgSHJiWpU8JSmbURh5qRS4Djql5jn3tUSB5TrNYY9PCNm5nrE
-	Sb5XIZYQwpi7JuRS/XUj/K2evZ81mFFbDoGQ=
-X-Google-Smtp-Source: AGHT+IHDI2Qt5N4+fNjPDol62mHT72ORWi4rUlHemvGlamonbgAInoDEvitXy9wAKqfSgec+G3flxURMRL8yLafHenA=
-X-Received: by 2002:a05:6402:5242:b0:5c8:8bde:a1d3 with SMTP id
- 4fb4d7f45d1cf-5cd54af0e79mr4250965a12.22.1730375726030; Thu, 31 Oct 2024
- 04:55:26 -0700 (PDT)
+	s=arc-20240116; t=1730382489; c=relaxed/simple;
+	bh=rxqIYUa/88KA7IdISu4c3kQ5I2OSOmVp9YvD7HCgSnQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Dk6j6NhZQlhHjL+48R3ABdDZKjIJrwPeD1kxPxQhGrjOmnVJV4XRBZLbZMrcMD2dMC2ZkPSzuuwZQft24ZqL8yaLscY0m7QTvt9412rvo2E5TL809y8xA8Vyn5F6MPovkRtF8yxh2AZ7vfkoLoDrlCKVcuFsDVytVYsETmZr6Wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=A6chTNt6; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References; bh=/WX0zlVMGEjN7OmQYxz8QF0Yqk7Ydl3fEs/ezvkQO0w=; b=A6
+	chTNt6iJIXWR1g9MryBelAZnCtfOKjj7Mromu1S+HYk8tO5Tx83lkTr+AKw+KFODIq/ISxkIY8iKz
+	wCcgAsWqBCekLPRSAttJWEeOzCgizHSmyNnMqswuWGq3be+l4yPoOo6ngFZQVxJzelmd7QLJ+/mQe
+	ecyp9iQWMS20GIMtPhOEeIg9Fz31EeYHRPhpSRvOQbje26oAX9e8O6i3rVEPgui5GoQEP+5VDABLd
+	4cNQT5/9QwS85eLH24GnOdHYTaAJGvAE2zRYAGuHCW8btxtxftMpWyaY8Qi5siVMAhgGJCzsmqO8k
+	qj6UEPd81/+B9Rv4tcU+omZJnonPejbg==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <sean@geanix.com>)
+	id 1t6VAR-0005LO-Jb; Thu, 31 Oct 2024 14:24:51 +0100
+Received: from [185.17.218.86] (helo=zen.localdomain)
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <sean@geanix.com>)
+	id 1t6VAR-000DTL-0K;
+	Thu, 31 Oct 2024 14:24:50 +0100
+From: Sean Nyekjaer <sean@geanix.com>
+Subject: [PATCH 0/2] can: tcan4x5x: add option for selecting nWKRQ voltage
+Date: Thu, 31 Oct 2024 14:24:20 +0100
+Message-Id: <20241031-tcan-wkrqv-v1-0-823dbd12fe4a@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Robert Nawrath <mbro1689@gmail.com>
-Date: Thu, 31 Oct 2024 12:55:14 +0100
-Message-ID: <CAEQ16vpxthctdrpv0kBKEZJA8VNYffjGGPBGBY93RmKDD49bAQ@mail.gmail.com>
-Subject: Missing CAN-XL XL data bit timing
-To: linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAASFI2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDA2MD3ZLkxDzd8uyiwjLdZDOjJEsDMwMD05REJaCGgqLUtMwKsGHRsbW
+ 1AOmEH6hcAAAA
+X-Change-ID: 20241030-tcan-wkrqv-c62b906005da
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ Sean Nyekjaer <sean@geanix.com>
+X-Mailer: b4 0.14.2
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27444/Thu Oct 31 09:34:36 2024)
 
-Hi,
-I'm working on a kernel module for CAN-XL device. I can see in
-/linux/can/dev.h that there are structures and methods for setting
-bittiming and data_bittiming. The bittiming refers to CAN nominal bit
-time, data_bittiming refers to CAN data bit time (using ISO/FDIS
-11898-1:2024 nomenclature). But in CAN-XL the data bit rate has two
-values: FD data bit rate and XL data bit rate. This values are
-different and the device shall have separate configuration register
-sets for them. So for separate configuration registers there shall be
-separate methods and structs.
-Am I right that the current implementation in kernel is incomplete? Or
-am I missing something?
-Robert
+This series adds support for setting the nWKRQ voltage.
+
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+---
+Sean Nyekjaer (2):
+      can: tcan4x5x: add option for selecting nWKRQ voltage
+      dt-bindings: can: tcan4x5x: Document the ti,nwkrq-voltage-sel option
+
+ .../devicetree/bindings/net/can/tcan4x5x.txt       |  7 +++++
+ drivers/net/can/m_can/tcan4x5x-core.c              | 35 ++++++++++++++++++++++
+ drivers/net/can/m_can/tcan4x5x.h                   |  2 ++
+ 3 files changed, 44 insertions(+)
+---
+base-commit: 2b2a9a08f8f0b904ea2bc61db3374421b0f944a6
+change-id: 20241030-tcan-wkrqv-c62b906005da
+
+Best regards,
+-- 
+Sean Nyekjaer <sean@geanix.com>
+
 
