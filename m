@@ -1,126 +1,140 @@
-Return-Path: <linux-can+bounces-1864-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1865-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9FFD9BB0EA
-	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 11:22:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A5559BB123
+	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 11:31:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E8F92817E6
-	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 10:22:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04D5DB23240
+	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 10:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA1C1AF4EF;
-	Mon,  4 Nov 2024 10:22:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rut4Py5v"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B285D1B0F38;
+	Mon,  4 Nov 2024 10:31:22 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A551B0F09;
-	Mon,  4 Nov 2024 10:22:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB04B1AF0D7
+	for <linux-can@vger.kernel.org>; Mon,  4 Nov 2024 10:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730715771; cv=none; b=MeUe2TL2L10erg068N68o1MzzLdV8nCaEK6i2AO0ZdSsFJdV81B4XVk6Maf/2mQ8xnTjOruGBw20X2TRKz6jGgPuyb87RgyjJWd8y9F6lTiC1x6fiZgwS/C7W9Wb4AUGuWCkEEd7tmHftwJiz0PfFEylXNvuhcTmLbcWGJbEKvY=
+	t=1730716282; cv=none; b=DFhVU/mmFVDLvXWGFy2hGtjpgXhiIXcMx4HVdzD/W4tc53+WdNe2nh0brnywr3KBrLN0GvmPQfN3xxbIeeHKv0c/6WVuwIq0Aq9NrW+Vp16bbRbX4M+UnOiIwv1s4YdQr5//pSs8VNMQXegeTGJGUMohZfMICw0v2nkd5fqXn68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730715771; c=relaxed/simple;
-	bh=nMfTLLFzcG1ZcG1H25Gar8chdwYJf1C0bitXKfycbJ4=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=FjgDZIB1xSLCJcxwpBcuoRYF6z/FGBrNyhIo0VveQieFMakNb5BuAsLZBkqpF6uYhVgyH/jRNzrrhUXO8E9D/t8z9VdccBs2FQ23+kMG/32KU5RsXHCiLouRhftfPLWV0aLwqaRyoDiJdMEOEl2dNBVzO8bAmGxgnjnKc5ML7QM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rut4Py5v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC163C4CECE;
-	Mon,  4 Nov 2024 10:22:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730715771;
-	bh=nMfTLLFzcG1ZcG1H25Gar8chdwYJf1C0bitXKfycbJ4=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=rut4Py5vVrIi6BT1pfGKTCXZcGyAz3HgoAkBuQSfnktQis/5pd67FT7i3fpSNt9lI
-	 RVmQ/2kxQEXTovrZLkvfIa/FXiEjXcpP//w/H7jFsMfmapoMbnCENuiSNhAEGfWS3q
-	 8m+AvAmgpE41vBfzwg/cpYykzPHK+afTeqCCR7u3IHp8wsH9WXoRW+1IMKc/TCgFYM
-	 WWYErn3sC4kK9WLypVS8iGMb4Yd0uq0SbYOJXODcA/jZPeZnDn89od35lemgHI3s0S
-	 oYjrDUruelmeCbTg2CNcmhGXaZy/ojbtD/KTN+dETvSoSy/Pl/i23azPrCfw3k6GK4
-	 CO3QFKAgO/ErA==
-Date: Mon, 04 Nov 2024 04:22:48 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1730716282; c=relaxed/simple;
+	bh=eAs6U/Aoz/rGj94QOQ/UC48WAhVymTQAGlUCh//91io=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qGt/8JkhWbTdVZEZoPoVuB49VuAItNufb0hXJDOqRQBKNmH8u7pU029qL6lxnpiwTICl94oyObRp6KSKa6Hv37TJr52fdNcMvjeN/Vw2WSw/UzqmXfen5gZs80m07bgv3YcHrEnCvNTYy5Ohzv/Z6tlctuv2JookGNlSfPtngO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t7uMS-0004VW-1j; Mon, 04 Nov 2024 11:31:04 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t7uMQ-001xkX-2s;
+	Mon, 04 Nov 2024 11:31:02 +0100
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 80A293678E4;
+	Mon, 04 Nov 2024 10:31:02 +0000 (UTC)
+Date: Mon, 4 Nov 2024 11:31:02 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Sean Nyekjaer <sean@geanix.com>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] dt-bindings: can: convert tcan4x5x.txt to DT schema
+Message-ID: <20241104-upbeat-wondrous-crane-6f20a3-mkl@pengutronix.de>
+References: <20241104085616.469862-1-sean@geanix.com>
+ <ee47c6d7-4197-4f5d-b39e-aab70a9337d6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Sean Nyekjaer <sean@geanix.com>
-Cc: Conor Dooley <conor+dt@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org, 
- devicetree@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-kernel@vger.kernel.org, 
- Eric Dumazet <edumazet@google.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
- netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20241104085616.469862-1-sean@geanix.com>
-References: <20241104085616.469862-1-sean@geanix.com>
-Message-Id: <173071576894.2866974.11023196178832654081.robh@kernel.org>
-Subject: Re: [RFC PATCH] dt-bindings: can: convert tcan4x5x.txt to DT
- schema
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="q6hhbmkqjpisipvc"
+Content-Disposition: inline
+In-Reply-To: <ee47c6d7-4197-4f5d-b39e-aab70a9337d6@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
-On Mon, 04 Nov 2024 09:56:15 +0100, Sean Nyekjaer wrote:
-> Convert binding doc tcan4x5x.txt to yaml.
-> 
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> ---
-> 
-> Can we somehow reference bosch,mram-cfg from the bosch,m_can.yaml?
-> I have searched for yaml files that tries the same, but it's usually
-> includes a whole node.
-> 
-> I have also tried:
-> $ref: /schema/bosch,m_can.yaml#/properties/bosch,mram-cfg
-> 
-> Any hints to share a property?
-> 
->  .../devicetree/bindings/net/can/tcan4x5x.txt  | 48 ---------
->  .../bindings/net/can/ti,tcan4x5x.yaml         | 97 +++++++++++++++++++
->  2 files changed, 97 insertions(+), 48 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/can/tcan4x5x.txt
->  create mode 100644 Documentation/devicetree/bindings/net/can/ti,tcan4x5x.yaml
-> 
+--q6hhbmkqjpisipvc
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [RFC PATCH] dt-bindings: can: convert tcan4x5x.txt to DT schema
+MIME-Version: 1.0
 
-My bot found errors running 'make dt_binding_check' on your patch:
+On 04.11.2024 10:27:04, Krzysztof Kozlowski wrote:
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - enum:
+> > +          - ti,tcan4552
+> > +          - ti,tcan4553
+> > +          - ti,tcan4x5x
+>=20
+> That's not really what old binding said.
+>=20
+> It said for example:
+> "ti,tcan4552", "ti,tcan4x5x"
+>=20
+> Which is not allowed above. You need list. Considering there are no
+> in-tree users of ti,tcan4x5x alone, I would allow only lists followed by
+> ti,tcan4x5x. IOW: disallow ti,tcan4x5x alone.
 
-yamllint warnings/errors:
+I'd like to keep the old binding.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/ti,tcan4x5x.yaml: properties:bosch,mram-cfg: 'anyOf' conditional failed, one must be fixed:
-	'description' is a dependency of '$ref'
-	'bosch,m_can.yaml#' does not match 'types.yaml#/definitions/'
-		hint: A vendor property needs a $ref to types.yaml
-	'bosch,m_can.yaml#' does not match '^#/(definitions|\\$defs)/'
-		hint: A vendor property can have a $ref to a a $defs schema
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/ti,tcan4x5x.example.dtb: can@0: bosch,mram-cfg: [0, 0, 0, 16, 0, 0, 1, 1] is not of type 'object'
-	from schema $id: http://devicetree.org/schemas/net/can/ti,tcan4x5x.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/ti,tcan4x5x.example.dtb: can@0: bosch,mram-cfg: [0, 0, 0, 16, 0, 0, 1, 1] is not of type 'object'
-	from schema $id: http://devicetree.org/schemas/net/can/ti,tcan4x5x.yaml#
+> Mention this change to the binding in the commit message.
 
-doc reference errors (make refcheckdocs):
+The tcan4x5x chip family has 2 registers for automatic detection of the
+chip variant. While the ID2 register of the tcan4550 is 0x0, the
+registers for the tcan4552 and tcan4553 contain 4552 and 4553
+respectively in ASCII.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241104085616.469862-1-sean@geanix.com
+The driver was originally added for the tcan4550 chip, but currently
+only has a compatible for "ti,tcan4x5x".
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Marc
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-pip3 install dtschema --upgrade
+--q6hhbmkqjpisipvc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcoomIACgkQKDiiPnot
+vG8YrQf+JyvOYVVRW9nzhFGD9KVtlS8zKgG295wWe20oC5McULoWS3U8prFRcq1y
+Kv4fIwo5MzkWeX7ZMQjDtAPg25+C/GbnDIg7O5sZjt3iZng+D3TyXLRf0Qufj/rF
+HdJR4of7x7eYnh1Ft+Q9jlg7dY8i/r54v5msiMhQnj3z3U6zvMjoq4g8LVQMYU13
+P6HosfwXnjA4920KPdaGxgbxEaKPz5nCKZYlJck2AlElzcFILd2S8zjUTacEVIUK
+H5gaXpBXtu2A4/zPWg0f9AVhij4RAkjk63Cdc99rNiH91ZT+e8qhdmbDWm27bie/
+yqOH3AwjkRWeVQXZxaSRs4mNeVkN9A==
+=Lfas
+-----END PGP SIGNATURE-----
+
+--q6hhbmkqjpisipvc--
 
