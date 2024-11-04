@@ -1,144 +1,158 @@
-Return-Path: <linux-can+bounces-1866-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1867-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA13F9BB12A
-	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 11:33:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CD699BB154
+	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 11:40:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61D001F219C0
-	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 10:33:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B78371F20D22
+	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 10:40:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB971B0F2F;
-	Mon,  4 Nov 2024 10:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="qTZnGbOw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5141C1B2192;
+	Mon,  4 Nov 2024 10:39:15 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBDEF1AA78E;
-	Mon,  4 Nov 2024 10:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AA61B219F
+	for <linux-can@vger.kernel.org>; Mon,  4 Nov 2024 10:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730716378; cv=none; b=BVP0bNESxcasVO/yd1E4RWRzIAJqm6PAS+byKR+Belvts84v3Nq1UynXb6m3SxOb12WQWySMuWU5cOeHr51yLQtHX3a5wRP2ZiK+punpDvOL5djP5qOUDgAFMj9cOwKnqGW2+CS8f9Df8pvbRUB+qpIklyoYoAnExffvlaQ90lo=
+	t=1730716755; cv=none; b=mqkZwVEYLO58/oAX1ARPpbbHD8sAuCEVYCVL8JiUip87GLMhZAOZxuf0DEmx65hOSx5puF9K6/rQmX30Vcne4I4mQMvcwO4wXP6S9cE9Wen+m+JFCgJO5lPTMUMI6Ag9jQFEhNMg0c3pqjh4skKHNXvYq2Uo4DV+oUTpm5S6fW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730716378; c=relaxed/simple;
-	bh=DhTHzSF/MbKhjvfAVcyTh+RGny34PcR6mXMa7beXc68=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IUYhy0L+EVvvMRPrpqcM3UPksVNMFXgiCqzHKsFYDDDkaIuN4a00/6rtuFAHqYS1rq20tMyCGiTvM8+WHixherpuH35n6GH82wBZzc/ELtrYOsA1NgEGs5sfkopffms+9RjdWxbIn4c9bVgdO+hdWvmighfiMiy2ugkxDaeQLWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=qTZnGbOw; arc=none smtp.client-ip=80.12.242.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from mail-ed1-f48.google.com ([209.85.208.48])
-	by smtp.orange.fr with ESMTPSA
-	id 7uN3tjWIFb5FK7uN3tLy8n; Mon, 04 Nov 2024 11:31:41 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1730716301;
-	bh=TIrJOeAjkIO/iW9l0zknXoZmCAhFNmyJRbtzue7NlX4=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=qTZnGbOw/OTxDrAI9hUijYhxY0x40R4BI2yyA/ue3oSP1QO+fwSqCoFZCLbIh10t9
-	 A3Jx7a8zpALRupLpLzD55RpWz/KOT2vT1bZ9YXGCI/63J3KPUFscQbItxv1Fb/mAYS
-	 fdCOEd/Uhtbp759+4pUi3eypUr+Xt4xvhxTaH+ceOaZL8eZlaHxTHiTfVrszkh/moj
-	 PxqPzG4kg7m+dvfhQOvvB3Mv/Ys9OJbZeqMwT81jC0VfN8kJikD7cxLpimXGtYxuik
-	 C473arwzRflcfdslfvbn6VRe0PQ/MBJhJBiIvpGobC6xlz0iYOUQlBgKeKEAsYq1QA
-	 9RhIkuucXNsTg==
-X-ME-Helo: mail-ed1-f48.google.com
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 04 Nov 2024 11:31:41 +0100
-X-ME-IP: 209.85.208.48
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5ceb75f9631so3793962a12.0;
-        Mon, 04 Nov 2024 02:31:41 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUbEsFO99xFY+91QrYyOTzpzjt7W4mkI9a/nSeif9rQ03H5fPt0J8N8wX+XnPJm2edrf/XwN6ph@vger.kernel.org, AJvYcCVV2EUu3A6XKbaAP9fMa1Du5okzH4PLEWeSg1YRs4zqSUN29ta9DXNuQrJbGx4LwqpSIvW8ruToqbY=@vger.kernel.org, AJvYcCVaMkAPCMMDAIL6k8qCMumgHDuuEcda52iBEpS+Unxe3HjzDDyExl7mA8XpAkb+TRtA2/Vgx8zI4UOjzhCJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEwWELGd4lKG7XP7fSftAW9gZZkmgDzg+cM0EyMIoernMcLy5P
-	l1NulDiE4nbbIpTXOG+SUVaNhUztQygKg+1mNXc/XqsUWUvePwvoOJ4t/B5QzhT9PfqJuZ9cV1F
-	paSSYqBPxGB9lpedtSx4fRcQ2dlA=
-X-Google-Smtp-Source: AGHT+IGEATDreGB0HcaKxrgoZM4H0tce9OAs8bwHUi9hhwDpruLW1LMZaF+TVEuhzUDye4DdaEiYmVCpfwh0M+IdRb0=
-X-Received: by 2002:a17:907:cca3:b0:a9e:4b88:e03b with SMTP id
- a640c23a62f3a-a9e4b88e2famr1214120366b.0.1730716301029; Mon, 04 Nov 2024
- 02:31:41 -0800 (PST)
+	s=arc-20240116; t=1730716755; c=relaxed/simple;
+	bh=N3f8zM9BaHy1ub8djA4SwrgJt0GPZwBjTTRE/BIVDd0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NR1s5DCixpNHQjl3EHLQMDNSre/tPxejDAzLw+kteOkmU0McbzLJRRRK5dJHKinOvUaiRJm6anmUj66xzdqop36CC+EvW1Krcm8fTOGr2N5MMPIqzddXqrVtfxBZrZTPMqdqUbjdJR3+AT3cKT6JYYbmcbHD5a5ExYt+1GET53E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t7uUF-0005Px-81; Mon, 04 Nov 2024 11:39:07 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t7uUD-001xqC-02;
+	Mon, 04 Nov 2024 11:39:05 +0100
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id AA96F36791A;
+	Mon, 04 Nov 2024 10:39:04 +0000 (UTC)
+Date: Mon, 4 Nov 2024 11:39:04 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: "baozhu.liu" <lucas.liu@siengine.com>, wg@grandegger.com, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] can: flexcan: simplify the calculation of priv->mb_count
+Message-ID: <20241104-graceful-slug-of-growth-0ee47f-mkl@pengutronix.de>
+References: <20241104084705.5005-1-lucas.liu@siengine.com>
+ <CAMZ6RqJ-O6PcwUrA9azJHq8vJ4_2GEFcqU-8_epHyAoBmeeEuA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241104084705.5005-1-lucas.liu@siengine.com>
-In-Reply-To: <20241104084705.5005-1-lucas.liu@siengine.com>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Mon, 4 Nov 2024 19:31:30 +0900
-X-Gmail-Original-Message-ID: <CAMZ6RqJ-O6PcwUrA9azJHq8vJ4_2GEFcqU-8_epHyAoBmeeEuA@mail.gmail.com>
-Message-ID: <CAMZ6RqJ-O6PcwUrA9azJHq8vJ4_2GEFcqU-8_epHyAoBmeeEuA@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rvghoukwx3snbpoh"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqJ-O6PcwUrA9azJHq8vJ4_2GEFcqU-8_epHyAoBmeeEuA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+
+--rvghoukwx3snbpoh
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 Subject: Re: [PATCH] can: flexcan: simplify the calculation of priv->mb_count
-To: "baozhu.liu" <lucas.liu@siengine.com>
-Cc: mkl@pengutronix.de, wg@grandegger.com, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
 
-Hi Liu,
+On 04.11.2024 19:31:30, Vincent Mailhol wrote:
+> On Mon. 4 Nov. 2024 at 18:05, baozhu.liu <lucas.liu@siengine.com> wrote:
+> > Since mb is a fixed-size two-dimensional array (u8 mb[2][512]),
+> > "priv->mb_count =3D sizeof(priv->regs->mb)/priv->mb_size;",
+> > this expression calculates mb_count correctly and is more concise.
+>=20
+> When using integers,
+>=20
+>   (a1 / q) + (a2 / q)
+>=20
+> is not necessarily equal to
+>=20
+>   (a1 + a2) / q.
+>=20
+>=20
+> If the decimal place of
+>=20
+>   sizeof(priv->regs->mb[0]) / priv->mb_size
+>=20
+> were to be greater than or equal to 0.5, the result would have changed
+> because of the rounding.
+>=20
+> This is illustrated in https://godbolt.org/z/bfnhKcKPo.
+>=20
+> Here, luckily enough, the two valid results are, for CAN CC:
+>=20
+>   sizeof(priv->regs->mb[0]) / priv->mb_size =3D 512 / 16
+>                                             =3D 64
+>=20
+> and for CAN FD:
+>=20
+>   sizeof(priv->regs->mb[0]) / priv->mb_size =3D 512 / 72
+>                                             =3D 14.22
+>=20
+> and both of these have no rounding issues.
+>=20
+> I am not sure if we should take this patch. It is correct at the end
+> because you "won a coin flip", but the current code is doing the
+> correct logical calculation which would always yield the correct
+> result regardless of the rounding.
 
-On Mon. 4 Nov. 2024 at 18:05, baozhu.liu <lucas.liu@siengine.com> wrote:
-> Since mb is a fixed-size two-dimensional array (u8 mb[2][512]),
-> "priv->mb_count = sizeof(priv->regs->mb)/priv->mb_size;",
-> this expression calculates mb_count correctly and is more concise.
+Wow, that's an elaborative answer. Thanks Vincent!
 
-When using integers,
+And yes the current code does the correct logical calculation because of
+the underlying restrictions of the hardware. A CAN-CC/FD frame cannot
+cross the boundary between the 2 memory areas.
 
-  (a1 / q) + (a2 / q)
+If you want to improve something, feel free to add a comment explaining
+the reasoning for the existing calculation.
 
-is not necessarily equal to
+regards,
+Marc
 
-  (a1 + a2) / q.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--rvghoukwx3snbpoh
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If the decimal place of
+-----BEGIN PGP SIGNATURE-----
 
-  sizeof(priv->regs->mb[0]) / priv->mb_size
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcopEUACgkQKDiiPnot
+vG+ScAf/a7XypquJYiAv/hBRV51RnhSryuYsfRlSSS8wb3UCeVb6nADSf+6UVerW
+AjAy6H5MciVX9UvCdZRaL6NBzi+Qy3qbSTJY0YoYvaTSX9TuHOF9FAJnVoQoEp3k
+yWswClGqDLk9+3U51jUbJYKxIE1VQ8ea3vejo42n2hZx7DQnw3jhTtoeGktykAwD
+xGAedlkIzGtqhnWXAcGP/DbAafSpzZTCghA7Bemahn/aax2Jy/W3+9EbNPOU92rz
+yuj7qCrDV0pVOvmvqWl1A1URXXMvuyeJmN/spg2LFp2oHJwQJMPZeOZJ/wzuHOMK
+DEn1fqnjxL71ZQXcVyU8sSmLZPxAOQ==
+=e0L2
+-----END PGP SIGNATURE-----
 
-were to be greater than or equal to 0.5, the result would have changed
-because of the rounding.
-
-This is illustrated in https://godbolt.org/z/bfnhKcKPo.
-
-Here, luckily enough, the two valid results are, for CAN CC:
-
-  sizeof(priv->regs->mb[0]) / priv->mb_size = 512 / 16
-                                            = 64
-
-and for CAN FD:
-
-  sizeof(priv->regs->mb[0]) / priv->mb_size = 512 / 72
-                                            = 14.22
-
-and both of these have no rounding issues.
-
-I am not sure if we should take this patch. It is correct at the end
-because you "won a coin flip", but the current code is doing the
-correct logical calculation which would always yield the correct
-result regardless of the rounding.
-
-> Signed-off-by: baozhu.liu <lucas.liu@siengine.com>
-> ---
->  drivers/net/can/flexcan/flexcan-core.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
-> index 6d638c939..e3a8bad21 100644
-> --- a/drivers/net/can/flexcan/flexcan-core.c
-> +++ b/drivers/net/can/flexcan/flexcan-core.c
-> @@ -1371,8 +1371,7 @@ static int flexcan_rx_offload_setup(struct net_device *dev)
->         if (priv->devtype_data.quirks & FLEXCAN_QUIRK_NR_MB_16)
->                 priv->mb_count = 16;
->         else
-> -               priv->mb_count = (sizeof(priv->regs->mb[0]) / priv->mb_size) +
-> -                                (sizeof(priv->regs->mb[1]) / priv->mb_size);
-> +               priv->mb_count = sizeof(priv->regs->mb) / priv->mb_size;
->
->         if (priv->devtype_data.quirks & FLEXCAN_QUIRK_USE_RX_MAILBOX)
->                 priv->tx_mb_reserved =
-
-Yours sincerely,
-Vincent Mailhol
+--rvghoukwx3snbpoh--
 
