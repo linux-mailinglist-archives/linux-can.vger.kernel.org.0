@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-1878-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1883-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FE429BBE68
-	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 21:01:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 323239BBE72
+	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 21:02:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1A581C21C0D
-	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 20:01:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DDB8B21092
+	for <lists+linux-can@lfdr.de>; Mon,  4 Nov 2024 20:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BDB31CBE82;
-	Mon,  4 Nov 2024 20:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94AC81D365C;
+	Mon,  4 Nov 2024 20:01:31 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EFC1D0950
-	for <linux-can@vger.kernel.org>; Mon,  4 Nov 2024 20:01:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E6B1D358E
+	for <linux-can@vger.kernel.org>; Mon,  4 Nov 2024 20:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730750489; cv=none; b=ZIoXRRH7pgze16gpPA0xRfO9ymXL8TY6QcBU5OvEFq10InZgEv4DEuxMB6SJ7oz1YDYKAPBzLOe9q88ddxd1Vg9XRSWPwbEehvF6kiNUBYGOChmwkIFgLQiy0BQ2iXTsvJYj33+vpw/EpqDX+7EZOIPSQrYcqDnV52n0vIH6slc=
+	t=1730750491; cv=none; b=rEbKUx+b41yjuqRWQPfx2MCzZsdbp7gm6VRZCbd5sRfaDqpdGuPCjxjgG1QxHr8Be6bHcDn7b2gLtcOPU/oHuQIKPLyyDaFL/FGzYWB6/Hl4zXHPxnKNm55lRQsoHKk4iLGA+pR8rtmT9DKyr0sddDPO9lsZqjEjunMufWwrpgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730750489; c=relaxed/simple;
-	bh=BJTwdqvEBvDVACwbuektnm+mF4w6etJpPBrLk526E5w=;
+	s=arc-20240116; t=1730750491; c=relaxed/simple;
+	bh=nzTluwYybdPKvNBsT6GpichXoAzuRQBWR33xa3O7Wa8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QWqQD+B89fEXqt3EsTl4H6P3F6rMCcODNjB7Klh5tXs0TF51kEGTR+2yVfdhmsw/n5hbvqPPVLr8uw0dT5T8wuxVVhvhF2J6syF0ZCSqIWmesiVTApt9qUPFEpHn4SL1lUmb0e5a+gFrkDz8NQiIbHk4NB52uYP+YwWYYONY0SA=
+	 MIME-Version; b=PbkLcim3X9J8P/bR79NSpjwxwMOAPE28yIZek1BFQkRHJgAxBh6uhHDtxvmyjv1KS7sxRTM1Y5Jx5+DzDslaXz0gZ07cf+63rPaNgQrwjlCd6VI3lF3Kr83YZdCbnL3nJAcIT/K8WKPBnft/ISkvoU3C7dKxuCxA0JYReAsi1s8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,26 +33,26 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1t83GP-0001Yd-HG
-	for linux-can@vger.kernel.org; Mon, 04 Nov 2024 21:01:25 +0100
+	id 1t83GQ-0001aJ-Hs
+	for linux-can@vger.kernel.org; Mon, 04 Nov 2024 21:01:26 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1t83GO-00224f-20
+	id 1t83GP-00225k-1l
 	for linux-can@vger.kernel.org;
-	Mon, 04 Nov 2024 21:01:24 +0100
+	Mon, 04 Nov 2024 21:01:25 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 4450F367F8C
-	for <linux-can@vger.kernel.org>; Mon, 04 Nov 2024 20:01:24 +0000 (UTC)
+	by bjornoya.blackshift.org (Postfix) with SMTP id 39503367F9E
+	for <linux-can@vger.kernel.org>; Mon, 04 Nov 2024 20:01:25 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 79415367F64;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 910AD367F67;
 	Mon, 04 Nov 2024 20:01:22 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 49bdfc6e;
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id e2a5e04c;
 	Mon, 4 Nov 2024 20:01:21 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
@@ -60,11 +60,12 @@ Cc: davem@davemloft.net,
 	kuba@kernel.org,
 	linux-can@vger.kernel.org,
 	kernel@pengutronix.de,
-	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Heiko Stuebner <heiko@sntech.de>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 4/8] can: c_can: fix {rx,tx}_errors statistics
-Date: Mon,  4 Nov 2024 20:53:27 +0100
-Message-ID: <20241104200120.393312-5-mkl@pengutronix.de>
+Subject: [PATCH net 5/8] can: rockchip_canfd: CAN_ROCKCHIP_CANFD should depend on ARCH_ROCKCHIP
+Date: Mon,  4 Nov 2024 20:53:28 +0100
+Message-ID: <20241104200120.393312-6-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241104200120.393312-1-mkl@pengutronix.de>
 References: <20241104200120.393312-1-mkl@pengutronix.de>
@@ -80,66 +81,34 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-The c_can_handle_bus_err() function was incorrectly incrementing only the
-receive error counter, even in cases of bit or acknowledgment errors that
-occur during transmission. The patch fixes the issue by incrementing the
-appropriate counter based on the type of error.
+The Rockchip CAN-FD controller is only present on Rockchip SoCs. Hence
+add a dependency on ARCH_ROCKCHIP, to prevent asking the user about
+this driver when configuring a kernel without Rockchip platform
+support.
 
-Fixes: 881ff67ad450 ("can: c_can: Added support for Bosch C_CAN controller")
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Link: https://patch.msgid.link/20241014135319.2009782-1-dario.binacchi@amarulasolutions.com
+Fixes: ff60bfbaf67f219c ("can: rockchip_canfd: add driver for Rockchip CAN-FD controller")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://patch.msgid.link/a4b3c8c1cca9515e67adac83af5ba1b1fab2fcbc.1727169288.git.geert+renesas@glider.be
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/c_can/c_can_main.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/net/can/rockchip/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/can/c_can/c_can_main.c b/drivers/net/can/c_can/c_can_main.c
-index c63f7fc1e691..511615dc3341 100644
---- a/drivers/net/can/c_can/c_can_main.c
-+++ b/drivers/net/can/c_can/c_can_main.c
-@@ -1011,7 +1011,6 @@ static int c_can_handle_bus_err(struct net_device *dev,
- 
- 	/* common for all type of bus errors */
- 	priv->can.can_stats.bus_error++;
--	stats->rx_errors++;
- 
- 	/* propagate the error condition to the CAN stack */
- 	skb = alloc_can_err_skb(dev, &cf);
-@@ -1027,26 +1026,32 @@ static int c_can_handle_bus_err(struct net_device *dev,
- 	case LEC_STUFF_ERROR:
- 		netdev_dbg(dev, "stuff error\n");
- 		cf->data[2] |= CAN_ERR_PROT_STUFF;
-+		stats->rx_errors++;
- 		break;
- 	case LEC_FORM_ERROR:
- 		netdev_dbg(dev, "form error\n");
- 		cf->data[2] |= CAN_ERR_PROT_FORM;
-+		stats->rx_errors++;
- 		break;
- 	case LEC_ACK_ERROR:
- 		netdev_dbg(dev, "ack error\n");
- 		cf->data[3] = CAN_ERR_PROT_LOC_ACK;
-+		stats->tx_errors++;
- 		break;
- 	case LEC_BIT1_ERROR:
- 		netdev_dbg(dev, "bit1 error\n");
- 		cf->data[2] |= CAN_ERR_PROT_BIT1;
-+		stats->tx_errors++;
- 		break;
- 	case LEC_BIT0_ERROR:
- 		netdev_dbg(dev, "bit0 error\n");
- 		cf->data[2] |= CAN_ERR_PROT_BIT0;
-+		stats->tx_errors++;
- 		break;
- 	case LEC_CRC_ERROR:
- 		netdev_dbg(dev, "CRC error\n");
- 		cf->data[3] = CAN_ERR_PROT_LOC_CRC_SEQ;
-+		stats->rx_errors++;
- 		break;
- 	default:
- 		break;
+diff --git a/drivers/net/can/rockchip/Kconfig b/drivers/net/can/rockchip/Kconfig
+index e029e2a3ca4b..fd8d9f5eeaa4 100644
+--- a/drivers/net/can/rockchip/Kconfig
++++ b/drivers/net/can/rockchip/Kconfig
+@@ -3,6 +3,7 @@
+ config CAN_ROCKCHIP_CANFD
+ 	tristate "Rockchip CAN-FD controller"
+ 	depends on OF || COMPILE_TEST
++	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	select CAN_RX_OFFLOAD
+ 	help
+ 	  Say Y here if you want to use CAN-FD controller found on
 -- 
 2.45.2
 
