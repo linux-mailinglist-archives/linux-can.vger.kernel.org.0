@@ -1,103 +1,128 @@
-Return-Path: <linux-can+bounces-1886-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1887-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1A119BC550
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 07:21:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B401A9BC713
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 08:31:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EED91F24C70
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 06:21:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DAAF283B1F
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 07:31:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AD871B6D04;
-	Tue,  5 Nov 2024 06:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDFgIUEv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58131FE11B;
+	Tue,  5 Nov 2024 07:29:35 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37D61DFE8;
-	Tue,  5 Nov 2024 06:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8791BC077
+	for <linux-can@vger.kernel.org>; Tue,  5 Nov 2024 07:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730787681; cv=none; b=ih3smCWuWoEbV6VlCEHO1c82ZcsLepxipfN7S03Jfuj4sO7bQNClp3cmS9pVz+zDvIpqvYNP7ZArMMp46rdwVqRnUFBI3mcwyiQTpIqTXrjAT/e6/q6iF0KyoAORF2Qsq3wcBaVohSv5/6ucUj/p+mg01i/oyuv2rrhlOqe8RDU=
+	t=1730791775; cv=none; b=B06ftlzBMjvvZLIIhewjzrD+gbgWO/lc1lirfkqJjvF6/enK4EtxIgN9766YmxkAfttcSSdmiZ3cIigMzIg7vQrjFB/OWQ1S4lCo+zNIyzpuvvuA5TGzAV3OSmSKH1SdyUFcPuI5qiLpeFTEN/COXyKxNOlvRjk7PWO8ddlTung=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730787681; c=relaxed/simple;
-	bh=kk8dszoqp8PqiEkZB9fm5YAoTt8ToqdKlYqHvKHmOa0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IlJS7697aGpqVaEpgQd8jHgV0+YIKxO5wflOiHia7UFc2Hl1LUJkb5pB+ldLjNI4O6bbvH6X6jzxgOA7Vcd6hkQ3dI3Jh87RzPlUPvyzJSIbvx/wk0rnGKfKQnce0EW8LOlhYdbgGoWhyJmbgz67Wx+0NgyU6reS25ArGlqzh3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UDFgIUEv; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e2e340218daso5050854276.0;
-        Mon, 04 Nov 2024 22:21:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730787678; x=1731392478; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t3wFW12/6RoBqXny0VQWOTmH5aSf+LWh0KZ4bCkVkr0=;
-        b=UDFgIUEvoXQ0tOWsfZzd1cNcMKWGiquULIjrzIFwCHnkVplP2eDnjXVmcLVPlfFDMe
-         KQ6qiRkSrjpLMaEM6Byr4D4Q2bh5ZZbxkXwis3FWGZWaJ8jG/tIDSX3TVXVswvjx26rw
-         6IB/Ur+rmXACuoIxpa8QuGq6C6/ttJ04ATeGt9gdGLMKL8eML3RnLH3shH47tzEEwqcq
-         sFct5hre/HVGudfOOMnvwuXZK1Cic4ONXk+3hWAL29PQJge7sBYozlLuDpWFsMuTFD2e
-         i0D9I/9rlxwZOqEQjMM+kOhdhCbv9w9CFHJsohW36p/zQxnT0bHUjSUEgG9pMXv0moqZ
-         iA1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730787678; x=1731392478;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t3wFW12/6RoBqXny0VQWOTmH5aSf+LWh0KZ4bCkVkr0=;
-        b=FtCWOynGII977DVSQlLV7a4hsKaGZpfuH/i01hoEb8OLqcsBqlQtwY/lu6W4Bzr3x/
-         N/f2vO6LVxKTSsl4rDbHcGYbMbijOeIAlPvjRB7CYzUM5QD3ORt7067Byus4mDDNEyQt
-         S6Fs7soDKuWK/HLQbriF0yDF3fdol3YqGj5l7lx3CammjhHRiDcQigBr6Y6Z587oLmg+
-         wGZvcKXa9mMnTQm5cbJ6Oee2TbZgx0DK4gVR+ue6x7aTHtQSVXLvfQegTuFxrggFv/7l
-         A8yZT19UAYmwHvlEMpWTH4DSaECgCP41sX3Jzci6m5eddsVJaIKKPcTAIqvAcuhJRIrt
-         dpsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUi/RTmww2fBBEhsWqJ9/KHrrITWMZpj5STIQw5d9k+Ra/jL6dbQdMsEa9LQdmhUwZbHhNPuVGq598=@vger.kernel.org, AJvYcCVEMTymjrGQlbPG6Js2UUFRG1IKGf6bB1OcUm7yKQ62B8rGvZmIvkRCQxVgwYcE/dqKYCIC1L9Keg4112E=@vger.kernel.org, AJvYcCVI/7mIgZg+iIDJO74Jp/dytKeSqMLQvWNkkHClT7dcXc5ucMJpdschNYUSGFdF0c7PBIj1AbYr/L+gGJ04aHA=@vger.kernel.org, AJvYcCVQ9jkFV2yot1V4G0v7SmjTDxV1ezvqpoPZBjprZuGJJGy9Eg7uBIB+zb7Nc7dKRo0qokRR+GX71sRi@vger.kernel.org, AJvYcCVV2bUUeRfQaEnzYcTJbqP3pkZe95JvP4Dxs4qbst2psN0Iv4a0+nxczqm0sX+TL3wKmq23LZ7BqX9Ym8gY@vger.kernel.org, AJvYcCVrcpzf0qWH+i9h0n4UyAoYiN2ZMJL8QAkL8dKCirEXu9xXQHFDCCwlMDkGEbpuaeBEC/0Z7XwExPLsYQ==@vger.kernel.org, AJvYcCW5uOgORflXjroIlWko1DsoP3ZEf0u7Sjrzj0MnCMc6hRTHVxIlv2v28IPGMYukfQDsZW0tBzs9Epxk@vger.kernel.org, AJvYcCWDeBrSTQObBrgZSLyQwPtZgM2+iQYA3di0r2Zl6blPG7D5E1s6hn8KiU2an3+P/2330sjEg8Zf@vger.kernel.org, AJvYcCWcFjTndcE21ow7Scl64CaeiJgtoDLmZzmd38/JFDoTzBlMeksMZktDy0fvzmJzet7ht1HngbJ5x/wJ@vger.kernel.org, AJvYcCWrEZCgWtO8USER3+roGYiOPHQ9BYlc
- wEYOntV+6fYSQYOvzN/14gEZ75o8HLe14OjKuIcq1S330o2B@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWHGP4ZAPPfIcq23xAHxbqPgWVbn9m11d/au4Dyj9nnlXVY1id
-	CKBvSYr6Rwq65vvv6t6JDqgncMsxdoDPj29Nk5gPCRbyc2IXgdfOtiqgQ3BD9AzuuEV74L++Lsr
-	B+XnmiQu99yBFqErlyAoOeLrRHiA=
-X-Google-Smtp-Source: AGHT+IHa9Wl6kaZMC2Iqh+PZ97OJD2htTC9UI9oFXhLn0ebZGsBU/q2UeprWViXbP5D6nHQs3LLDaTs6iEW2fsyU8bY=
-X-Received: by 2002:a05:6902:15c4:b0:e29:24c:1d82 with SMTP id
- 3f1490d57ef6-e30e5b576e7mr16882810276.38.1730787677760; Mon, 04 Nov 2024
- 22:21:17 -0800 (PST)
+	s=arc-20240116; t=1730791775; c=relaxed/simple;
+	bh=2DTOm74VCL3q3+8xZzASedg2vi0UOyqRKHEQI8llv6c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bjbIew7YEw03ybtqXRInPmDHBetd2L1fg2kR9loGF+QtURKVW3nLQ2zsrkiSnS8jzEiAhDfCdOI4IwlyrgxWVvHEpFMGdgrEsIo+y7USa+kE8ox0J/X08yYEA+ohy5fER//Ug0U3O0MPAU2j9WrDsupoES03Jw9EHoChIXLWUt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t8E0C-0008Qr-BM; Tue, 05 Nov 2024 08:29:24 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t8E0B-0026lk-0k;
+	Tue, 05 Nov 2024 08:29:23 +0100
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id D5626369E37;
+	Tue, 05 Nov 2024 05:29:05 +0000 (UTC)
+Date: Tue, 5 Nov 2024 06:29:04 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, linux-can@vger.kernel.org, 
+	kernel@pengutronix.de, stable@vger.kernel.org, Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH net 7/8] can: mcp251xfd: mcp251xfd_ring_alloc(): fix
+ coalescing configuration when switching CAN modes
+Message-ID: <20241105-jovial-unselfish-wombat-453fe9-mkl@pengutronix.de>
+References: <20241104200120.393312-1-mkl@pengutronix.de>
+ <20241104200120.393312-8-mkl@pengutronix.de>
+ <20241104174446.72a2d120@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-8-tmyu0@nuvoton.com>
- <20241026154113.66fe0324@jic23-huawei>
-In-Reply-To: <20241026154113.66fe0324@jic23-huawei>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Tue, 5 Nov 2024 14:21:06 +0800
-Message-ID: <CAOoeyxXmOE5R03Gof9zXS_E+32AFaY-miPN7jNZU+2GGX+nsKQ@mail.gmail.com>
-Subject: Re: [PATCH v1 7/9] iio: adc: Add Nuvoton NCT6694 IIO support
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-
-Dear Jonathan,
-
-Thank you for your comments,
-I will make changes based on the part you mentioned in the  future.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qryq5ucgmrporour"
+Content-Disposition: inline
+In-Reply-To: <20241104174446.72a2d120@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
-Best regards
-Ming
+--qryq5ucgmrporour
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH net 7/8] can: mcp251xfd: mcp251xfd_ring_alloc(): fix
+ coalescing configuration when switching CAN modes
+MIME-Version: 1.0
+
+On 04.11.2024 17:44:46, Jakub Kicinski wrote:
+> On Mon,  4 Nov 2024 20:53:30 +0100 Marc Kleine-Budde wrote:
+> > Reported-by: https://github.com/vdh-robothania
+>=20
+> Did you do this because of a checkpatch warning or to give the person
+> credit? If the former ignore the warning, if the latter I think it's
+> better to mention their user name in the commit message and that's it.
+
+I added the link to their gh to credit them. Will @-mention github users
+without public email addresses in future commits.
+
+> IMO Reported-by should be a machine readable email address, in case we
+> need to CC the person and ask for testing.
+
+That makes sense.
+
+> That's just my $.02 for future cases.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--qryq5ucgmrporour
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcprR0ACgkQKDiiPnot
+vG8qhAf/Rg6EYXIoAEJdQf6xmOHPL0M11ucskQNMBRPh0Tr6OjBxqImCBMs8EN0L
+np1bdyNZ25Wnf6QJMY5Fc5erPYrMvvbfTpwn99b60RCsWrC0e4tnsMFhrpnyheFc
+jnf2aoGe+e1R8yTqNn3rwDlibZHAywXvqOOdalLSDrdPMA3ADuKuINzHqVHGUt2t
++hymZP7xvBk7pKdgW+eCwlQbKnt4gYbR5cFWIeE8atg2acyq0Hx9fyRvklfsX99P
+yyjpAqC3yU/CCqrVOQzV4ZFyNfVoEKtA0zVSzM2nZ6yCj1f/dWaLT64MKMqxKKkn
+HFW7xFk7xyhSh/4eYFqTKkJr+oj7wQ==
+=6tM2
+-----END PGP SIGNATURE-----
+
+--qryq5ucgmrporour--
 
