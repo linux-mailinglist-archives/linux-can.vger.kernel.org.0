@@ -1,109 +1,103 @@
-Return-Path: <linux-can+bounces-1885-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1886-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDAD39BC2FD
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 03:10:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1A119BC550
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 07:21:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B9901F22B49
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 02:10:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EED91F24C70
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 06:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A782752F71;
-	Tue,  5 Nov 2024 02:10:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AD871B6D04;
+	Tue,  5 Nov 2024 06:21:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOzX+5Tj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDFgIUEv"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA784E1C4;
-	Tue,  5 Nov 2024 02:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37D61DFE8;
+	Tue,  5 Nov 2024 06:21:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730772623; cv=none; b=WANGkvtOUX+UxrlUhdhLFdaZZMqGQjwpstG2/+lAZifabcrBREmGnsI1LkqXH6jBezoDt5uB9kc//Bn4XCoq6MRdBP0KZlQcyCglz8uwu98cMDE+5UlBQWIa3hhhdSejBzexQILze0PBlikQ85A65xBXgGL/2RYwNnWVmg2oP8A=
+	t=1730787681; cv=none; b=ih3smCWuWoEbV6VlCEHO1c82ZcsLepxipfN7S03Jfuj4sO7bQNClp3cmS9pVz+zDvIpqvYNP7ZArMMp46rdwVqRnUFBI3mcwyiQTpIqTXrjAT/e6/q6iF0KyoAORF2Qsq3wcBaVohSv5/6ucUj/p+mg01i/oyuv2rrhlOqe8RDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730772623; c=relaxed/simple;
-	bh=Po5MaKdUL6RYSi246eSx6gttyBF0y8NCd0d0fj15hts=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=MH7KHNRgDutdo6IdFiPAo3bFHJOlKjPqNcvUpK6x1G0nhcelgo+kVJmHBNaPzg/gbJHcfNcOSVsDTFCsWZIwn4hgLVmYvZUubnZY+gjxjn3Yx5P3MpmfuEcbN/72OtAGM67TL55gNhEuLFoSi4aoRGie1RlXOy7eLeUuV1SyKnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fOzX+5Tj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08729C4CED2;
-	Tue,  5 Nov 2024 02:10:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730772623;
-	bh=Po5MaKdUL6RYSi246eSx6gttyBF0y8NCd0d0fj15hts=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=fOzX+5Tj1H8+F6RU2c6VnfKhPuvwzrG2JwN8ePvhidf1l+jF/w6JTmkVdYgdTJf/v
-	 bi8IGKqenFpZMMJiV4HyjRJVow++hnxLzoFQCnGh1hHGesiWoa7fbcm/6LN/EJt2d2
-	 T+QI4sJzXgCzUbyoc5C9PVU1o9l25hSt0GxjHG3brzDGxl9gn6hhjo8qQPjua06mEx
-	 +u81VlpJqGTyNe8DeSJsqaH2kBE5lF+17LIu9fvj/p3g1i7sC+idv1VmBoD/Ae0lLY
-	 hO/q9wqTyu+BFexTjZ3Fkzjz7+/5jxrEONySqaKRHl2YZX9PNQ7GbCb3N1p8VUfDga
-	 JKyEmc0JB9SRQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB4053809A80;
-	Tue,  5 Nov 2024 02:10:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1730787681; c=relaxed/simple;
+	bh=kk8dszoqp8PqiEkZB9fm5YAoTt8ToqdKlYqHvKHmOa0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IlJS7697aGpqVaEpgQd8jHgV0+YIKxO5wflOiHia7UFc2Hl1LUJkb5pB+ldLjNI4O6bbvH6X6jzxgOA7Vcd6hkQ3dI3Jh87RzPlUPvyzJSIbvx/wk0rnGKfKQnce0EW8LOlhYdbgGoWhyJmbgz67Wx+0NgyU6reS25ArGlqzh3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UDFgIUEv; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e2e340218daso5050854276.0;
+        Mon, 04 Nov 2024 22:21:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730787678; x=1731392478; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=t3wFW12/6RoBqXny0VQWOTmH5aSf+LWh0KZ4bCkVkr0=;
+        b=UDFgIUEvoXQ0tOWsfZzd1cNcMKWGiquULIjrzIFwCHnkVplP2eDnjXVmcLVPlfFDMe
+         KQ6qiRkSrjpLMaEM6Byr4D4Q2bh5ZZbxkXwis3FWGZWaJ8jG/tIDSX3TVXVswvjx26rw
+         6IB/Ur+rmXACuoIxpa8QuGq6C6/ttJ04ATeGt9gdGLMKL8eML3RnLH3shH47tzEEwqcq
+         sFct5hre/HVGudfOOMnvwuXZK1Cic4ONXk+3hWAL29PQJge7sBYozlLuDpWFsMuTFD2e
+         i0D9I/9rlxwZOqEQjMM+kOhdhCbv9w9CFHJsohW36p/zQxnT0bHUjSUEgG9pMXv0moqZ
+         iA1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730787678; x=1731392478;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t3wFW12/6RoBqXny0VQWOTmH5aSf+LWh0KZ4bCkVkr0=;
+        b=FtCWOynGII977DVSQlLV7a4hsKaGZpfuH/i01hoEb8OLqcsBqlQtwY/lu6W4Bzr3x/
+         N/f2vO6LVxKTSsl4rDbHcGYbMbijOeIAlPvjRB7CYzUM5QD3ORt7067Byus4mDDNEyQt
+         S6Fs7soDKuWK/HLQbriF0yDF3fdol3YqGj5l7lx3CammjhHRiDcQigBr6Y6Z587oLmg+
+         wGZvcKXa9mMnTQm5cbJ6Oee2TbZgx0DK4gVR+ue6x7aTHtQSVXLvfQegTuFxrggFv/7l
+         A8yZT19UAYmwHvlEMpWTH4DSaECgCP41sX3Jzci6m5eddsVJaIKKPcTAIqvAcuhJRIrt
+         dpsg==
+X-Forwarded-Encrypted: i=1; AJvYcCUi/RTmww2fBBEhsWqJ9/KHrrITWMZpj5STIQw5d9k+Ra/jL6dbQdMsEa9LQdmhUwZbHhNPuVGq598=@vger.kernel.org, AJvYcCVEMTymjrGQlbPG6Js2UUFRG1IKGf6bB1OcUm7yKQ62B8rGvZmIvkRCQxVgwYcE/dqKYCIC1L9Keg4112E=@vger.kernel.org, AJvYcCVI/7mIgZg+iIDJO74Jp/dytKeSqMLQvWNkkHClT7dcXc5ucMJpdschNYUSGFdF0c7PBIj1AbYr/L+gGJ04aHA=@vger.kernel.org, AJvYcCVQ9jkFV2yot1V4G0v7SmjTDxV1ezvqpoPZBjprZuGJJGy9Eg7uBIB+zb7Nc7dKRo0qokRR+GX71sRi@vger.kernel.org, AJvYcCVV2bUUeRfQaEnzYcTJbqP3pkZe95JvP4Dxs4qbst2psN0Iv4a0+nxczqm0sX+TL3wKmq23LZ7BqX9Ym8gY@vger.kernel.org, AJvYcCVrcpzf0qWH+i9h0n4UyAoYiN2ZMJL8QAkL8dKCirEXu9xXQHFDCCwlMDkGEbpuaeBEC/0Z7XwExPLsYQ==@vger.kernel.org, AJvYcCW5uOgORflXjroIlWko1DsoP3ZEf0u7Sjrzj0MnCMc6hRTHVxIlv2v28IPGMYukfQDsZW0tBzs9Epxk@vger.kernel.org, AJvYcCWDeBrSTQObBrgZSLyQwPtZgM2+iQYA3di0r2Zl6blPG7D5E1s6hn8KiU2an3+P/2330sjEg8Zf@vger.kernel.org, AJvYcCWcFjTndcE21ow7Scl64CaeiJgtoDLmZzmd38/JFDoTzBlMeksMZktDy0fvzmJzet7ht1HngbJ5x/wJ@vger.kernel.org, AJvYcCWrEZCgWtO8USER3+roGYiOPHQ9BYlc
+ wEYOntV+6fYSQYOvzN/14gEZ75o8HLe14OjKuIcq1S330o2B@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWHGP4ZAPPfIcq23xAHxbqPgWVbn9m11d/au4Dyj9nnlXVY1id
+	CKBvSYr6Rwq65vvv6t6JDqgncMsxdoDPj29Nk5gPCRbyc2IXgdfOtiqgQ3BD9AzuuEV74L++Lsr
+	B+XnmiQu99yBFqErlyAoOeLrRHiA=
+X-Google-Smtp-Source: AGHT+IHa9Wl6kaZMC2Iqh+PZ97OJD2htTC9UI9oFXhLn0ebZGsBU/q2UeprWViXbP5D6nHQs3LLDaTs6iEW2fsyU8bY=
+X-Received: by 2002:a05:6902:15c4:b0:e29:24c:1d82 with SMTP id
+ 3f1490d57ef6-e30e5b576e7mr16882810276.38.1730787677760; Mon, 04 Nov 2024
+ 22:21:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/8] can: j1939: fix error in J1939 documentation.
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173077263177.87562.17899880515746032832.git-patchwork-notify@kernel.org>
-Date: Tue, 05 Nov 2024 02:10:31 +0000
-References: <20241104200120.393312-2-mkl@pengutronix.de>
-In-Reply-To: <20241104200120.393312-2-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de, alexander.hoelzl@gmx.net,
- o.rempel@pengutronix.de, mailhol.vincent@wanadoo.fr
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-8-tmyu0@nuvoton.com>
+ <20241026154113.66fe0324@jic23-huawei>
+In-Reply-To: <20241026154113.66fe0324@jic23-huawei>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Tue, 5 Nov 2024 14:21:06 +0800
+Message-ID: <CAOoeyxXmOE5R03Gof9zXS_E+32AFaY-miPN7jNZU+2GGX+nsKQ@mail.gmail.com>
+Subject: Re: [PATCH v1 7/9] iio: adc: Add Nuvoton NCT6694 IIO support
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+Dear Jonathan,
 
-This series was applied to netdev/net.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
-
-On Mon,  4 Nov 2024 20:53:24 +0100 you wrote:
-> From: Alexander Hölzl <alexander.hoelzl@gmx.net>
-> 
-> The description of PDU1 format usage mistakenly referred to PDU2 format.
-> 
-> Signed-off-by: Alexander Hölzl <alexander.hoelzl@gmx.net>
-> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Link: https://patch.msgid.link/20241023145257.82709-1-alexander.hoelzl@gmx.net
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,1/8] can: j1939: fix error in J1939 documentation.
-    https://git.kernel.org/netdev/net/c/b6ec62e01aa4
-  - [net,2/8] can: {cc770,sja1000}_isa: allow building on x86_64
-    https://git.kernel.org/netdev/net/c/7b22846f8af5
-  - [net,3/8] can: m_can: m_can_close(): don't call free_irq() for IRQ-less devices
-    https://git.kernel.org/netdev/net/c/e4de81f9e134
-  - [net,4/8] can: c_can: fix {rx,tx}_errors statistics
-    https://git.kernel.org/netdev/net/c/4d6d26537940
-  - [net,5/8] can: rockchip_canfd: CAN_ROCKCHIP_CANFD should depend on ARCH_ROCKCHIP
-    https://git.kernel.org/netdev/net/c/4384b8b6ec46
-  - [net,6/8] can: rockchip_canfd: Drop obsolete dependency on COMPILE_TEST
-    https://git.kernel.org/netdev/net/c/51e102ec23b2
-  - [net,7/8] can: mcp251xfd: mcp251xfd_ring_alloc(): fix coalescing configuration when switching CAN modes
-    https://git.kernel.org/netdev/net/c/eb9a839b3d8a
-  - [net,8/8] can: mcp251xfd: mcp251xfd_get_tef_len(): fix length calculation
-    https://git.kernel.org/netdev/net/c/3c1c18551e6a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thank you for your comments,
+I will make changes based on the part you mentioned in the  future.
 
 
+Best regards
+Ming
 
