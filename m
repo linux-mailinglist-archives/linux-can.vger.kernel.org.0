@@ -1,245 +1,363 @@
-Return-Path: <linux-can+bounces-1893-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1894-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 320B99BCA55
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 11:22:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 661049BCA81
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 11:33:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55A901C22447
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 10:22:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB27F1F239E8
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 10:33:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72A1B1D172E;
-	Tue,  5 Nov 2024 10:22:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA231D27AD;
+	Tue,  5 Nov 2024 10:33:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=formulatrix.com header.i=@formulatrix.com header.b="sOh8SDJr"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="tuft6Ufj"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7C81CC881
-	for <linux-can@vger.kernel.org>; Tue,  5 Nov 2024 10:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE4C1CDA3E;
+	Tue,  5 Nov 2024 10:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730802153; cv=none; b=b8kgQmwl0kMPNMil1sAipKlmpyZpDAtlomqwkYqVc3XpFfeRAOL+QgwpSmWWTajZKNL+bx6qQ7emzZE53Fi6pT2Mtp2lVYDt1qdO/tyxOuCeQHjza8xXbWyluTEPOJG7KGPcFdvw/C5su7oooDIN6iZsi1pz79bbYXaAIriZgtM=
+	t=1730802827; cv=none; b=BFwjFZxxHmXFSSMa0OATYQEweRz5RNq2yr/tz7UCMBpr3xaVYUu7cRh65CfWIKL+Pm5AIHPy1NQL5jXTU7h7SNFBwuXa51lkgrn6rqvAulo5ikmEp28Zg8uMRJhxKVdpf6it4mJl75VzJkDKIPKgei69SFkSxiToNsas2JU18Vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730802153; c=relaxed/simple;
-	bh=vmgW/bIyl3X3Xz7nJkzDu29O0k1yqDncb6X0zpT4zmY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PmBfROn64wfFm/xu4rrkJlq7PUBfZ2gRsJ3+6JrfiHjwx2EEzMIyFMUbZ7yNsZ0OVbyEg1iExMs5HoqWK0p+0iL4sqV3Hv2cjnNYNBUefMhfODCVK+hTJoO/z3dcrfFd9Ig8WcFYz82MB0pY0WvDMwmvp5iLTaBvE5Uzm+upSOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=formulatrix.com; spf=pass smtp.mailfrom=formulatrix.com; dkim=pass (1024-bit key) header.d=formulatrix.com header.i=@formulatrix.com header.b=sOh8SDJr; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=formulatrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=formulatrix.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a7aa086b077so671874366b.0
-        for <linux-can@vger.kernel.org>; Tue, 05 Nov 2024 02:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=formulatrix.com; s=google; t=1730802150; x=1731406950; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3voq4Rc8mEDKUuqBapLG+w+y6+JU/AV2jrFYfbmTeCk=;
-        b=sOh8SDJrhEoApC1Ae/15oKwvmfu2vVlqLT8bN6AqRiM9vze6zowkGjy8g0aYSwOcc2
-         eKQGR8wVLYtwxBkxBBVNpzWeJhUFAs0Qj6pvXWshzbNwPMMpk6OFR1W2F5lvB39p+Cts
-         TwBCUKLnaGiYwS1A+O5K+XidFQOqPGjoqioqA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730802150; x=1731406950;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3voq4Rc8mEDKUuqBapLG+w+y6+JU/AV2jrFYfbmTeCk=;
-        b=IupT4q9fmO8zQT2++WnAnN2vGVGBieIDi8bNeOdGvYq2oWEIBGIPoXiZw0fg+uAs2Y
-         pq8+wwstinXZSFp2LXBBkWtNPiknQa452HqE5YvIz4jiwk6Km5DkcYqzbpq2VymTWXbA
-         +xuXLsMScWh/McaAC9pnGhnOSEQ7hEMpWTHF1dTIUhVIcM+++1v3L4zfsmtiQYDvo3Y5
-         ajdrvysbAUiOoSSnkl7jbNmmtXYph0IXrA6IbQcFcJ64vHr7hecWZsg2tClpByMDzDCc
-         upnhW91XN/X1WlfWNliFyBkRcCaQfk82yT8FxMKZj3597k65lAUT1QSKgx+BUSTHlz23
-         YvtA==
-X-Forwarded-Encrypted: i=1; AJvYcCUtuh6HLlWyMUjda13RziYJAp23HTs+7chQycxgskI2qzhEp2vfCmoso9ozUjaBj2mxCiEyJXEbU4I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9p5QIIs3DgRP4nXITWT8eAvjAapVtMuLOoxOQ4PHbiy33Y+rJ
-	Umen1vsyHrqeOn2WUymXEw3hM/LC1HTHjR/REayUM1JwKGmO+bY6AM6gVbQA8wo1nkIosNZGIcm
-	YF8ATs6cWC3JJNOIPS8RUrXrui5Sjq+0Cobj6
-X-Google-Smtp-Source: AGHT+IFmGLB5smhgB80CEWtXCNiavWeZHwlSWSbAkvCrXon9zRVgMzOodRwpFGuhz/Gj/JftvNIOx5kbTM/4zN/+/w0=
-X-Received: by 2002:a17:907:1c1d:b0:a9a:f53:a5c6 with SMTP id
- a640c23a62f3a-a9e3a7f468fmr2241513866b.65.1730802149319; Tue, 05 Nov 2024
- 02:22:29 -0800 (PST)
+	s=arc-20240116; t=1730802827; c=relaxed/simple;
+	bh=/9OwNXT4wDtjPkJ6nX5NfwP0Hb8sxFz4gy3jIhzwrLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mprJOKgTMkWcBxon7Luwi7SQ71cRZ3jTnkHdKauuRUbG+BAsZx/gTjYh2+H9uhOxmAnB5ZlkIRtejDsRPaDQPTVp8m0maSC/lMTWq1iN4/PlsWJaNZIP+QmaD5XTxe1BpbQMqYD+pL65vibFRfZPZVSy2tC5XBFTAw4HkpO2VAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=tuft6Ufj; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID; bh=hLqN6GBp0XtIX0OeaoOad30FnloMkED96JI+4XREvMc=; b=tuft6U
+	fjAfVfhulwwaoLYFKNBfLxs546+5iYfk0TMkb0Wta/KeIypynbmDI1nnzPOQ46F1nBl1PsALurCWI
+	gbKdrTlzUSVjx8Dad/5ZRF4THx1JpVS0FNY9O1f3dg92sEBaT2FJ9y6LqZ2hgwdaZmBWHKocH0PHc
+	+7Lt9hpQbMKQ1d1H3gpaUb+DR/FhiK8+eXm4cpmCL6y4D2oihd2mcvyLeYRNwRXplDCjXVqr1Nh9F
+	DjCSuE7dnrMt2IEaKGc2LutmWLi+LLD39aadIL/9e5EWgB24cWg2HcjLrkQ7gt4ShnpxNCM1o3ExO
+	CuRTzZOFNHpAPpj2glE0kaAvuRKg==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <sean@geanix.com>)
+	id 1t8GsQ-000Mkc-JR; Tue, 05 Nov 2024 11:33:34 +0100
+Received: from [185.17.218.86] (helo=Seans-MacBook-Pro.local)
+	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <sean@geanix.com>)
+	id 1t8GsP-0005BF-2i;
+	Tue, 05 Nov 2024 11:33:33 +0100
+Date: Tue, 5 Nov 2024 11:33:33 +0100
+From: Sean Nyekjaer <sean@geanix.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: can: convert tcan4x5x.txt to DT schema
+Message-ID: <wdn2rtfahf3iu6rsgxm6ctfgft7bawtp6vzhgn7dffd54i72lu@r4v5lizhae57>
+References: <20241104125342.1691516-1-sean@geanix.com>
+ <dq36jlwfm7hz7dstrp3bkwd6r6jzcxqo57enta3n2kibu3e7jw@krwn5nsu6a4d>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241104-ludicrous-quartz-kakapo-07219e-mkl@pengutronix.de>
- <20241105082801.32475-1-renjaya.zenta@formulatrix.com> <20241105-crazy-petrel-of-tempering-cb8f6f-mkl@pengutronix.de>
-In-Reply-To: <20241105-crazy-petrel-of-tempering-cb8f6f-mkl@pengutronix.de>
-From: Renjaya Raga Zenta <renjaya.zenta@formulatrix.com>
-Date: Tue, 5 Nov 2024 17:20:39 +0700
-Message-ID: <CAJ7t6HhXEMhpmLVh3E14iWZJ0wMaG2ECxYoe_xTYB9mXAdBd9w@mail.gmail.com>
-Subject: Re: AW: [PATCH RFC can v2] can: mcp251xfd: mcp251xfd_get_tef_len():
- fix length calculation
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
-	mailhol.vincent@wanadoo.fr, manivannan.sadhasivam@linaro.org, 
-	schuchmann@schleissheimer.de, thomas.kopp@microchip.com
-Content-Type: multipart/mixed; boundary="00000000000049d5c5062627c7a7"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <dq36jlwfm7hz7dstrp3bkwd6r6jzcxqo57enta3n2kibu3e7jw@krwn5nsu6a4d>
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27448/Mon Nov  4 10:33:38 2024)
 
---00000000000049d5c5062627c7a7
-Content-Type: multipart/alternative; boundary="00000000000049d5c4062627c7a5"
+On Tue, Nov 05, 2024 at 10:16:30AM +0100, Krzysztof Kozlowski wrote:
+> On Mon, Nov 04, 2024 at 01:53:40PM +0100, Sean Nyekjaer wrote:
+> > Convert binding doc tcan4x5x.txt to yaml.
+> > 
+> > Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> > ---
+> > Changes since rfc:
+> 
+> That's a v2. RFC was v1. *ALWAYS*.
+> Try by yourself:
+> b4 diff 20241104125342.1691516-1-sean@geanix.com
+> 
+> Works? No. Should work? Yes.
+> 
+> 
 
---00000000000049d5c4062627c7a5
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Ok. Good to know RFC cannot be used...
+Next version would need to be? In order to fix this?
 
-File is attached.
+I have enrolled my patch into b4, next verison will be v2 ;)
 
-On Tue, Nov 5, 2024 at 4:57=E2=80=AFPM Marc Kleine-Budde wrote:
+> >   - Tried to re-add ti,tcan4x5x wildcard
+> >   - Removed xceiver and vdd supplies (copy paste error)
+> >   - Corrected max SPI frequency
+> >   - Copy pasted bosch,mram-cfg from bosch,m_can.yaml
+> >   - device-state-gpios and device-wake-gpios only available for tcan4x5x
+> 
+> ...
+> 
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - ti,tcan4552
+> > +          - const: ti,tcan4x5x
+> > +      - items:
+> > +          - enum:
+> > +              - ti,tcan4553
+> 
+> Odd syntax. Combine these two into one enum.
+> 
+> > +          - const: ti,tcan4x5x
+> > +      - items:
+> 
+> Drop items.
+> 
+> > +          - enum:
+> 
+> ... and drop enum. That's just const or do you already plan to add here
+> entries?
 
-> Can you follow the instructions in
+Honestly I'm struggling a bit with the syntax and I feel the feedback is containing
+a lot of implicit terms :)
 
-> >
-> |
-https://lore.kernel.org/all/20240929-upbeat-carrot-whippet-bc3e9c-mkl@pengu=
-tronix.de/
+Something like:
+properties:
+  compatible:
+    oneOf:
+      - items:
+          - enum:
+              - ti,tcan4552
+              - ti,tcan4x5x
+      - items:
+          - enum:
+              - ti,tcan4553
+              - ti,tcan4x5x
+      - const: ti,tcan4x5x
 
-> >
-> and send me the "/var/log/devcoredump-*.dump"?
+Gives:
+/linux/Documentation/devicetree/bindings/net/can/ti,tcan4x5x.example.dtb: can@0: compatible: ['ti,tcan4x5x'] is valid under each of {'items': [{'enum': ['ti,tcan4553', 'ti,tcan4x5x']}], 'type': 'array', 'minItems': 1, 'maxItems': 1}, {'items': [{'const': 'ti,tcan4x5x'}], 'type': 'array', 'minItems': 1, 'maxItems': 1}, {'items': [{'enum': ['ti,tcan4552', 'ti,tcan4x5x']}], 'type': 'array', 'minItems': 1, 'maxItems': 1}
+        from schema $id: http://devicetree.org/schemas/net/can/ti,tcan4x5x.yaml#
+/linux/Documentation/devicetree/bindings/net/can/ti,tcan4x5x.example.dtb: can@0: compatible: 'oneOf' conditional failed, one must be fixed:
+        ['ti,tcan4552', 'ti,tcan4x5x'] is too long
+        'ti,tcan4552' is not one of ['ti,tcan4553', 'ti,tcan4x5x']
+        'ti,tcan4x5x' was expected
+        from schema $id: http://devicetree.org/schemas/net/can/ti,tcan4x5x.yaml#
 
-Regards,
+I can understand the original binding is broken.
+I kinda agree with Marc that we cannot break things for users of this.
 
-Renjaya
+> 
+> > +              - ti,tcan4x5x
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +    description: The GPIO parent interrupt.
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  reset-gpios:
+> > +    description: Hardwired output GPIO. If not defined then software reset.
+> > +    maxItems: 1
+> > +
+> > +  device-state-gpios:
+> > +    description: |
+> 
+> Do not need '|' unless you need to preserve formatting.
+> 
+> Didn't you get this comment alerady?
+> 
 
---00000000000049d5c4062627c7a5
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+No, but I have removed the '|'
 
-<div dir=3D"ltr"><div dir=3D"ltr">File is attached.<br><br></div><div class=
-=3D"gmail_quote"><div class=3D"gmail_attr">On Tue, Nov 5, 2024 at 4:57=E2=
-=80=AFPM Marc Kleine-Budde wrote:<br></div><br><blockquote class=3D"gmail_q=
-uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
-04);padding-left:1ex">
-</blockquote>&gt; Can you follow the instructions in<br><blockquote class=
-=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
-b(204,204,204);padding-left:1ex">
-</blockquote>&gt;=C2=A0<br>&gt; | <a href=3D"https://lore.kernel.org/all/20=
-240929-upbeat-carrot-whippet-bc3e9c-mkl@pengutronix.de/" rel=3D"noreferrer"=
- target=3D"_blank">https://lore.kernel.org/all/20240929-upbeat-carrot-whipp=
-et-bc3e9c-mkl@pengutronix.de/</a><br><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
-g-left:1ex">
-</blockquote>&gt;=C2=A0<br>&gt; and send me the &quot;/var/log/devcoredump-=
-*.dump&quot;?<br><br>Regards,<br><br>Renjaya</div></div>
+> > +      Input GPIO that indicates if the device is in a sleep state or if the
+> > +      device is active. Not available with tcan4552/4553.
+> > +    maxItems: 1
+> > +
+> > +  device-wake-gpios:
+> > +    description: |
+> > +      Wake up GPIO to wake up the TCAN device.
+> > +      Not available with tcan4552/4553.
+> > +    maxItems: 1
+> > +
+> > +  bosch,mram-cfg:
+> > +    description: |
+> > +      Message RAM configuration data.
+> > +      Multiple M_CAN instances can share the same Message RAM
+> > +      and each element(e.g Rx FIFO or Tx Buffer and etc) number
+> > +      in Message RAM is also configurable, so this property is
+> > +      telling driver how the shared or private Message RAM are
+> > +      used by this M_CAN controller.
+> > +
+> > +      The format should be as follows:
+> > +      <offset sidf_elems xidf_elems rxf0_elems rxf1_elems rxb_elems txe_elems txb_elems>
+> > +      The 'offset' is an address offset of the Message RAM where
+> > +      the following elements start from. This is usually set to
+> > +      0x0 if you're using a private Message RAM. The remain cells
+> > +      are used to specify how many elements are used for each FIFO/Buffer.
+> > +
+> > +      M_CAN includes the following elements according to user manual:
+> > +      11-bit Filter	0-128 elements / 0-128 words
+> > +      29-bit Filter	0-64 elements / 0-128 words
+> > +      Rx FIFO 0		0-64 elements / 0-1152 words
+> > +      Rx FIFO 1		0-64 elements / 0-1152 words
+> > +      Rx Buffers	0-64 elements / 0-1152 words
+> > +      Tx Event FIFO	0-32 elements / 0-64 words
+> > +      Tx Buffers	0-32 elements / 0-576 words
+> > +
+> > +      Please refer to 2.4.1 Message RAM Configuration in Bosch
+> > +      M_CAN user manual for details.
+> > +    $ref: /schemas/types.yaml#/definitions/int32-array
+> > +    items:
+> > +      - description: The 'offset' is an address offset of the Message RAM where
+> > +          the following elements start from. This is usually set to 0x0 if
+> > +          you're using a private Message RAM.
+> > +        default: 0
+> > +      - description: 11-bit Filter 0-128 elements / 0-128 words
+> > +        minimum: 0
+> > +        maximum: 128
+> > +      - description: 29-bit Filter 0-64 elements / 0-128 words
+> > +        minimum: 0
+> > +        maximum: 64
+> > +      - description: Rx FIFO 0 0-64 elements / 0-1152 words
+> > +        minimum: 0
+> > +        maximum: 64
+> > +      - description: Rx FIFO 1 0-64 elements / 0-1152 words
+> > +        minimum: 0
+> > +        maximum: 64
+> > +      - description: Rx Buffers 0-64 elements / 0-1152 words
+> > +        minimum: 0
+> > +        maximum: 64
+> > +      - description: Tx Event FIFO 0-32 elements / 0-64 words
+> > +        minimum: 0
+> > +        maximum: 32
+> > +      - description: Tx Buffers 0-32 elements / 0-576 words
+> > +        minimum: 0
+> > +        maximum: 32
+> > +    minItems: 1
+> > +
+> > +  spi-max-frequency:
+> > +    description:
+> > +      Must be half or less of "clocks" frequency.
+> > +    maximum: 18000000
+> > +
+> > +  wakeup-source:
+> > +    $ref: /schemas/types.yaml#/definitions/flag
+> > +    description: |
+> 
+> Do not need '|' unless you need to preserve formatting.
+> 
 
---00000000000049d5c4062627c7a5--
---00000000000049d5c5062627c7a7
-Content-Type: application/octet-stream; 
-	name="devcoredump-20241105-084315.dump"
-Content-Disposition: attachment; filename="devcoredump-20241105-084315.dump"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m34aoacl0>
-X-Attachment-Id: f_m34aoacl0
+OK
 
-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
-AAgAAAAAAAAECAAAAAAAAAgIAAAAAAAADAgAAAAAAAAQCAAAAAAAABQIAAAAAAAAGAgAAAAAAAAc
-CAAAAAAAACAIAAAAAAAAJAgAAAAAAAAoCAAAAAAAACwIAAAAAAAAMAgAAAAAAAA0CAAAAAAAADgI
-AAAAAAAAPAgAAAAAAABACAAAAAAAAEQIAAAAAAAASAgAAAAAAABMCAAAAAAAAFAIAAAAAAAAVAgA
-AAAAAABYCAAAAAAAAFwIAAAAAAAAYAgAAAAAAABkCAAAAAAAAGgIAAAAAAAAbAgAAAAAAABwCAAA
-AAAAAHQIAAAAAAAAeAgAAAAAAAB8CAAAAAAAAIAIAAAAAAAAhAgAAAAAAACICAAAAAAAAIwIAAAA
-AAAAkAgAAAAAAACUCAAAAAAAAJgIAAAAAAAAnAgAAAAAAACgCAAAAAAAAKQIAAAAAAAAqAgAAAAA
-AACsCAAAAAAAALAIAAAAAAAAtAgAAAAAAAC4CAAAAAAAALwIAAAAAAAAwAgAAAAAAADECAAAAAAA
-AMgIAAAAAAAAzAgAAAAAAADQCAAAAAAAANQIAAAAAAAA2AgAAAAAAADcCAAAAAAAAOAIAAAAAAAA
-5AgAAAAAAADoCAAAAAAAAOwIAAAAAAAA8AgAAAAAAAD0CAAAAAAAAPgIAAAAAAAA/AgAAAAAAAAA
-CQAAAAAAAAQJAAAAAAAACAkAAAAAAAAMCQAAAAAAABAJAAAAAAAAFAkAAAAAAAAYCQAAAAAAABwJ
-AAAAAAAAIAkAAAAAAAAkCQAAAAAAACgJAAAAAAAALAkAAAAAAAAwCQAAAAAAADQJAAAAAAAAOAkA
-AAAAAAA8CQAAAAAAAEAJAAAAAAAARAkAAAAAAABICQAAAAAAAEwJAAAAAAAAUAkAAAAAAABUCQAA
-AAAAAFgJAAAAAAAAXAkAAAAAAABgCQAAAAAAAGQJAAAAAAAAaAkAAAAAAABsCQAAAAAAAHAJAAAA
-AAAAdAkAAAAAAAB4CQAAAAAAAHwJAAAAAAAAgAkAAAAAAACECQAAAAAAAIgJAAAAAAAAjAkAAAAA
-AACQCQAAAAAAAJQJAAAAAAAAmAkAAAAAAACcCQAAAAAAAKAJAAAAAAAApAkAAAAAAACoCQAAAAAA
-AKwJAAAAAAAAsAkAAAAAAAC0CQAAAAAAALgJAAAAAAAAvAkAAAAAAADACQAAAAAAAMQJAAAAAAAA
-yAkAAAAAAADMCQAAAAAAANAJAAAAAAAA1AkAAAAAAADYCQAAAAAAANwJAAAAAAAA4AkAAAAAAADk
-CQAAAAAAAOgJAAAAAAAA7AkAAAAAAADwCQAAAAAAAPQJAAAAAAAA+AkAAAAAAAD8CQAAAAAAAAAK
-AAAAAAAABAoAAAAAAAAICgAAAAAAAAwKAAAAAAAAEAoAAAAAAAAUCgAAAAAAABgKAAAAAAAAHAoA
-AAAAAAAgCgAAAgAAACQKAADKKNEAKAoAAOMBAAAsCgAAAAAAADAKAAAAAAAANAoAAAAAAAA4CgAA
-AAAAADwKAAAAAAAAQAoAAAAAAABECgAAAAAAAEgKAAAAAAAATAoAAAAAAABQCgAAAAAAAFQKAAAA
-AAAAWAoAAAAAAABcCgAAAAAAAGAKAAAAAAAAZAoAAAAAAABoCgAAAgAAAGwKAADKItEAcAoAAOAB
-AAB0CgAAAAAAAHgKAAAAAAAAfAoAAAAAAACACgAAAAAAAIQKAAAAAAAAiAoAAAAAAACMCgAAAAAA
-AJAKAAAAAAAAlAoAAAAAAACYCgAAAAAAAJwKAAAAAAAAoAoAAAAAAACkCgAAAAAAAKgKAAAAAAAA
-rAoAAAAAAACwCgAAAgAAALQKAADKJNEAuAoAAOEBAAC8CgAAAAAAAMAKAAAAAAAAxAoAAAAAAADI
-CgAAAAAAAMwKAAAAAAAA0AoAAAAAAADUCgAAAAAAANgKAAAAAAAA3AoAAAAAAADgCgAAAAAAAOQK
-AAAAAAAA6AoAAAAAAADsCgAAAAAAAPAKAAAAAAAA9AoAAAAAAAD4CgAAAgAAAPwKAADKJtEAAAsA
-AOIBAAAECwAAAAAAAAgLAAAAAAAADAsAAAAAAAAQCwAAAAAAABQLAAAAAAAAGAsAAAAAAAAcCwAA
-AAAAACALAAAAAAAAJAsAAAAAAAAoCwAAAAAAACwLAAAAAAAAMAsAAAAAAAA0CwAAAAAAADgLAAAA
-AAAAPAsAAAAAAABACwAAAAAAAEQLAAAAAAAASAsAAAAAAABMCwAAAAAAAFALAAAAAAAAVAsAAAAA
-AABYCwAAAAAAAFwLAAAAAAAAYAsAAAAAAABkCwAAAAAAAGgLAAAAAAAAbAsAAAAAAABwCwAAAAAA
-AHQLAAAAAAAAeAsAAAAAAAB8CwAAAAAAAIALAAAAAAAAhAsAAAAAAACICwAAAAAAAIwLAAAAAAAA
-kAsAAAAAAACUCwAAAAAAAJgLAAAAAAAAnAsAAAAAAACgCwAAAAAAAKQLAAAAAAAAqAsAAAAAAACs
-CwAAAAAAALALAAAAAAAAtAsAAAAAAAC4CwAAAAAAALwLAAAAAAAAwAsAAAAAAADECwAAAAAAAMgL
-AAAAAAAAzAsAAAAAAADQCwAAAAAAANQLAAAAAAAA2AsAAAAAAADcCwAAAAAAAOALAAAAAAAA5AsA
-AAAAAADoCwAAAAAAAOwLAAAAAAAA8AsAAAAAAAD0CwAAAAAAAPgLAAAAAAAA/AsAAAAAAAAADgAA
-aAQAAAQOAAADAAMDCA4AAA+/AAMMDgAABwAAABAOAAAAAAAAAAAAAJFoAAABAAAAkWgAAAIAAAAA
-AAAAAwAAAAAAAAAEAAAAAAAAAAUAAAAEAAAABgAAAAwAAAAAAAAAAAAAAAEAAAAAAAAAAgAAADAE
-AAADAAAAAAAAAAQAAAABAAAABQAAABAAAAAGAAAATAAAAAAAAAAAAAAAAQAAAAAAAAACAAAA8AgA
-AAMAAAABAAAABAAAAAIAAAAFAAAABAAAAAYAAABMAAAAAAAAAJVoAAABAAAAkWgAAAIAAAAgCgAA
-AwAAAAAAAAAEAAAAAwAAAAUAAAAEAAAABgAAAEgAAAA=
---00000000000049d5c5062627c7a7--
+> > +      Enable CAN remote wakeup.
+> > +
+> > +allOf:
+> > +  - $ref: can-controller.yaml#
+> > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - ti,tcan4552
+> > +              - ti,tcan4553
+> > +    then:
+> > +      properties:
+> > +        device-state-gpios: false
+> > +        device-wake-gpios: false
+> 
+> Heh, this is a weird binding. It should have specific compatibles for
+> all other variants because above does not make sense. For 4552 one could
+> skip front compatible and use only fallback, right? And then add these
+> properties bypassing schema check. I commented on this already that
+> original binding is flawed and should be fixed, but no one cares then I
+> also don't care.
+
+To me it looks like the example you linked:
+https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetree/bindings/example-schema.yaml#L223
+
+If you use fallback for a 4552 then it would enable the use of the
+optional pins device-state-gpios and device-wake-gpios. But the chip
+doesn't have those so the hw guys would connect them and they won't
+be in the DT.
+
+Honestly I'm confused :/
+
+> 
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - bosch,mram-cfg
+> > +
+> > +additionalProperties: false
+> 
+> Implement feedback. Nothing changed here.
+> 
+
+Uh? feedback?
+
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +
+> > +    spi {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        can@0 {
+> > +            compatible = "ti,tcan4x5x";
+> > +            reg = <0>;
+> > +            clocks = <&can0_osc>;
+> > +            pinctrl-names = "default";
+> > +            pinctrl-0 = <&can0_pins>;
+> > +            spi-max-frequency = <10000000>;
+> > +            bosch,mram-cfg = <0x0 0 0 16 0 0 1 1>;
+> > +            interrupt-parent = <&gpio1>;
+> > +            interrupts = <14 IRQ_TYPE_LEVEL_LOW>;
+> > +            device-state-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
+> > +            device-wake-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+> > +            reset-gpios = <&gpio1 27 GPIO_ACTIVE_HIGH>;
+> > +            wakeup-source;
+> > +        };
+> > +    };
+> > +  - |
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +
+> > +    spi {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        can@0 {
+> > +            compatible = "ti,tcan4552","ti,tcan4x5x";
+> 
+> Missing space after ,.
+> 
+
+Added
+
+Thanks for the review.
+
+/Sean
 
