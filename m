@@ -1,283 +1,198 @@
-Return-Path: <linux-can+bounces-1898-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1899-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9EA09BCC3D
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 12:55:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 720549BCCA6
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 13:24:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19E461C214D3
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 11:55:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A21B1B22A8D
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 12:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA1B1D45EF;
-	Tue,  5 Nov 2024 11:55:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5691A1D54DA;
+	Tue,  5 Nov 2024 12:24:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=formulatrix.com header.i=@formulatrix.com header.b="M0dvaxhA"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="LdubQuJP"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF981D3593
-	for <linux-can@vger.kernel.org>; Tue,  5 Nov 2024 11:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85151D5172;
+	Tue,  5 Nov 2024 12:24:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730807742; cv=none; b=lwPC/XuDrXqhm6V6CPvBbCE6zkRJrKw96s92o7FZwb+VszWaPGrsIAcyzkoPI2nEsOIpCc6p1iwD9gOCqnYMBRH8hzUIx9wF09St/VXjVJQekZi3O6OvPjRNdQhoYnQv7wDSL6Jro5tU0D1hJb9/rjBY17FjM38pSkzXPGh6dS0=
+	t=1730809475; cv=none; b=p2xzTy1HL6C5jC3Bp2v0cqUKo8EBicM8it1S0L0Iv7mc6UeQph5roXbiEkLdq1jBihlroEIHwi8p79t3O5f7Il7Vrw2+IwR609xUBbE+FZ+2sRduI0Hnfp9rHjEt+L6VBNNu8Ezn1Ehl06UFPGKA6p6YdVyEdwLmOrnfNKFsSRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730807742; c=relaxed/simple;
-	bh=vmYLm3LtdFfQu//KnNTGnNvJ9jzbUlxHPtvQYkvMg6s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r48Wr7izoiVS3jrHVrGJH62ko3uV8U+Ycb/L0VwbmIOrWhWyfTRTZZu0RSS/zl/XHgxbGiSIbngopRG7s5HvJ5PUL9EkZQyTrxeVrk57rYrFpzqWHjSBqlq8w+mDZG1stvSchNDBTOPW4HLX8o4J78WpNlpbZ76PkyJbsu5sI7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=formulatrix.com; spf=pass smtp.mailfrom=formulatrix.com; dkim=pass (1024-bit key) header.d=formulatrix.com header.i=@formulatrix.com header.b=M0dvaxhA; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=formulatrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=formulatrix.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a93c1cc74fdso858434166b.3
-        for <linux-can@vger.kernel.org>; Tue, 05 Nov 2024 03:55:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=formulatrix.com; s=google; t=1730807738; x=1731412538; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Au5dvYFCGnBONK8iDYmuEhzwvcFGaNwCsjIV6x+pTdk=;
-        b=M0dvaxhAH4oH05V9+2ciwg5TTsmuJ4D+PTOvm8XSbK9wha7wMxcqjdmr1tA9IY2jeg
-         oV713dVFhkcczLSBboAOrHun9FzKH3DG8PDfXCjYu8SSEgH/+3EOhJ1q/v7f/ttrO83m
-         zARwIGiwEv8Od3Wlf9DOOa0Mrul4RBttQN8J0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730807738; x=1731412538;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Au5dvYFCGnBONK8iDYmuEhzwvcFGaNwCsjIV6x+pTdk=;
-        b=sfSO4ktnBmjDO8uOKqd60kUAI0amLJO4+/vF3iNjI3esXBgy4tJnwkUAZm/aFXWnfn
-         iSibxeTK9RBNpKoAEkPjF5gKhC2SIyJ1TeaCJkYS3D2cVBVVhKc1B5OBXCPn/WWRTyVp
-         biiOEzp3JIbHgVB6RmPjzzVsJBlwtMPECsZHK+mhUgbHebNQ5pVcIx+mvo9ddpkL82F/
-         w+oZf7zpt6q3TK2Y76Z3opZnfEY+PrR1JywdDocElwuT0TkiSmc8EN6oItHeINwRJjhN
-         USRWGjcoottqDsYFoxO1JjL5KdwnPx0td/hYXYYbUvv93YsC+l0AwCGQGkdK8vAKq8c7
-         xfDg==
-X-Forwarded-Encrypted: i=1; AJvYcCVC3PupOB50pvIubcHHgawD+Pr+9exU3C+SXgF4EaOGG4VPewfI7Xdqq2WaHAnqXi9dbdnGnAdwB7U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhhdYLY0BBAxpvi8Q6YxKk/ipfCiZoMY3P/ebfO5XsqIqE16Mz
-	d+CH6hDLkFh4/PAhuNnx8rkfO8C+sdFzQBa5FrVYVuTeGAaul/Q9WcMVa7+qAQ5kGufK+RxSaxQ
-	fqFnyJVYbBcQTfpT/gCmbmaYsmB5UnwdPA+63
-X-Google-Smtp-Source: AGHT+IEzuLnnuB6RDhrj2o5z4er7ISrUofC7GEUJRY1KbKjn5yF0ZsHpSygEprKXeIZa1SevtUG/U1E20TVa0+JHlvM=
-X-Received: by 2002:a17:907:7290:b0:a99:37f5:de59 with SMTP id
- a640c23a62f3a-a9e658bc3admr1431067966b.53.1730807738540; Tue, 05 Nov 2024
- 03:55:38 -0800 (PST)
+	s=arc-20240116; t=1730809475; c=relaxed/simple;
+	bh=AwaaOCjl6IRNUdsw+L2crhsWw5WBqlJ+27riv3An4Bo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OTBg0E35BF3ho5f3gOhbpfwr3GmmdLr+JFkiFsg2uYb+jNTmWLv1RFiOOrcBtL2PHJNQsVUUpFIW4vVEYx5X/fEe9JFf5Gru5hwHGtjqf+xeOq4mCpc9OcbCYtFzHN+sdntEunETv3rFU7AAnJduy7k3BhyWdSWOO7FeNJrwDPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=LdubQuJP; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID; bh=cu2xVfSJiTZUpr+7HBsp7d5hE0sRaCcgNm0WEpQ0UcM=; b=LdubQu
+	JP7Qckf1aoNWCCsG3BPxr3v5ZILD7+yzvgAuY6ryz1Zzw3jCeiZENfnDvXWwMVe2lkzZWxdMb8OjU
+	cfPMINGXPY5KutbdpD5B4OygtWy7ebZRl2lprhKiDKzsjGobSWyNVRLWAoMmSN074GRL6CW8SVFcp
+	sNou+Vf9HuAnOBi02FNtfwrmEsdFuNHCxhIxHL53YNnVXHe5DftsPy6GbifHWws3L8SCKpQLtbDvP
+	mWlNH773dG+LjkVuAPwKmCl2kZK4w/aVgz6GFshBTPmPHnEfLby29q1X70FkFPtHLnbtbQhBhR2SF
+	6Op3toBDJf4iYPRRDgI7Fmmpq84g==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <sean@geanix.com>)
+	id 1t8Ibl-000LUE-1r; Tue, 05 Nov 2024 13:24:29 +0100
+Received: from [185.17.218.86] (helo=Seans-MacBook-Pro.local)
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <sean@geanix.com>)
+	id 1t8Ibk-0003XL-1P;
+	Tue, 05 Nov 2024 13:24:28 +0100
+Date: Tue, 5 Nov 2024 13:24:26 +0100
+From: Sean Nyekjaer <sean@geanix.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: can: convert tcan4x5x.txt to DT schema
+Message-ID: <mtuev7pve5ltr6vvknp2bwtwg2m7mzxduzshzbr7y3i7mwbzy6@qjbdjyb56nrv>
+References: <20241104125342.1691516-1-sean@geanix.com>
+ <dq36jlwfm7hz7dstrp3bkwd6r6jzcxqo57enta3n2kibu3e7jw@krwn5nsu6a4d>
+ <wdn2rtfahf3iu6rsgxm6ctfgft7bawtp6vzhgn7dffd54i72lu@r4v5lizhae57>
+ <60901c39-b649-4a20-a06a-7faa7ddc9346@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241104-ludicrous-quartz-kakapo-07219e-mkl@pengutronix.de>
- <20241105082801.32475-1-renjaya.zenta@formulatrix.com> <20241105-crazy-petrel-of-tempering-cb8f6f-mkl@pengutronix.de>
- <CAJ7t6HhXEMhpmLVh3E14iWZJ0wMaG2ECxYoe_xTYB9mXAdBd9w@mail.gmail.com> <20241105-masked-laughing-vulture-2e403e-mkl@pengutronix.de>
-In-Reply-To: <20241105-masked-laughing-vulture-2e403e-mkl@pengutronix.de>
-From: Renjaya Raga Zenta <renjaya.zenta@formulatrix.com>
-Date: Tue, 5 Nov 2024 18:53:49 +0700
-Message-ID: <CAJ7t6HgaeQ3a_OtfszezU=zB-FqiZXqrnATJ3UujNoQJJf7GgA@mail.gmail.com>
-Subject: Re: AW: [PATCH RFC can v2] can: mcp251xfd: mcp251xfd_get_tef_len():
- fix length calculation
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
-	mailhol.vincent@wanadoo.fr, manivannan.sadhasivam@linaro.org, 
-	schuchmann@schleissheimer.de, thomas.kopp@microchip.com
-Content-Type: multipart/mixed; boundary="0000000000006e9ab3062629144e"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <60901c39-b649-4a20-a06a-7faa7ddc9346@kernel.org>
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27449/Tue Nov  5 10:36:43 2024)
 
---0000000000006e9ab3062629144e
-Content-Type: multipart/alternative; boundary="0000000000006e9ab1062629144c"
+Hi Krzysztof,
 
---0000000000006e9ab1062629144c
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Tue, Nov 05, 2024 at 12:40:07PM +0100, Krzysztof Kozlowski wrote:
+> On 05/11/2024 11:33, Sean Nyekjaer wrote:
+> > On Tue, Nov 05, 2024 at 10:16:30AM +0100, Krzysztof Kozlowski wrote:
+> >> On Mon, Nov 04, 2024 at 01:53:40PM +0100, Sean Nyekjaer wrote:
+> >>> Convert binding doc tcan4x5x.txt to yaml.
 
-On Tue, Nov 5, 2024 at 6:03=E2=80=AFPM Marc Kleine-Buddewrote:
+[...]
 
-> Please add this patch, compile, reproduce the issue, send me the
-> devcoredump and the log output.
+> > 
+> > Gives:
+> > /linux/Documentation/devicetree/bindings/net/can/ti,tcan4x5x.example.dtb: can@0: compatible: ['ti,tcan4x5x'] is valid under each of {'items': [{'enum': ['ti,tcan4553', 'ti,tcan4x5x']}], 'type': 'array', 'minItems': 1, 'maxItems': 1}, {'items': [{'const': 'ti,tcan4x5x'}], 'type': 'array', 'minItems': 1, 'maxItems': 1}, {'items': [{'enum': ['ti,tcan4552', 'ti,tcan4x5x']}], 'type': 'array', 'minItems': 1, 'maxItems': 1}
+> >         from schema $id: http://devicetree.org/schemas/net/can/ti,tcan4x5x.yaml#
+> > /linux/Documentation/devicetree/bindings/net/can/ti,tcan4x5x.example.dtb: can@0: compatible: 'oneOf' conditional failed, one must be fixed:
+> >         ['ti,tcan4552', 'ti,tcan4x5x'] is too long
+> >         'ti,tcan4552' is not one of ['ti,tcan4553', 'ti,tcan4x5x']
+> >         'ti,tcan4x5x' was expected
+> >         from schema $id: http://devicetree.org/schemas/net/can/ti,tcan4x5x.yaml#
+> > 
+> > I can understand the original binding is broken.
+> > I kinda agree with Marc that we cannot break things for users of this.
+> 
+> Hm? Absolutely nothing would get broken for users. I don't understand
+> these references or false claims.
+> 
 
-> >
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-> @@ -149,6 +149,10 @@ mcp251xfd_get_tef_len(struct mcp251xfd_priv *priv,
-u8 *len_p)
->          len =3D (chip_tx_tail << shift) - (tail << shift);
->          *len_p =3D len >> shift;
+There are no users for this in-kernel, but out-of-tree there is :)
 
-> >
-> +        if (*len_p =3D=3D 0)
-> +                netdev_err(priv->ndev, "%s: fifo_sta=3D0x%08x head=3D0x%=
-08x
-tail=3D0x%08x\n", __func__,
-> +                           fifo_sta, tx_ring->head, tx_ring->tail);
-> +
->          return 0;
->  }
+> > 
 
-I applied this patch manually because it couldn't be applied after your
-"mcp251xfd_get_tef_len(): fix length calculation" patch.
+[...]
 
-The log (dmesg | grep spi)
-[  125.501493] mcp251xfd spi0.0 can1: mcp251xfd_get_tef_len:
-fifo_sta=3D0x00000103 head=3D0x00004a95 tail=3D0x00004a91
-[  125.511420] mcp251xfd spi0.0 can1: IRQ handler mcp251xfd_handle_tefif()
-returned -22.
-[  125.519250] mcp251xfd spi0.0 can1: IRQ handler returned -22
-(intf=3D0xbf1a0010).
+> > OK
+> > 
+> >>> +      Enable CAN remote wakeup.
+> >>> +
+> >>> +allOf:
+> >>> +  - $ref: can-controller.yaml#
+> >>> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> >>> +  - if:
+> >>> +      properties:
+> >>> +        compatible:
+> >>> +          contains:
+> >>> +            enum:
+> >>> +              - ti,tcan4552
+> >>> +              - ti,tcan4553
+> >>> +    then:
+> >>> +      properties:
+> >>> +        device-state-gpios: false
+> >>> +        device-wake-gpios: false
+> >>
+> >> Heh, this is a weird binding. It should have specific compatibles for
+> >> all other variants because above does not make sense. For 4552 one could
+> >> skip front compatible and use only fallback, right? And then add these
+> >> properties bypassing schema check. I commented on this already that
+> >> original binding is flawed and should be fixed, but no one cares then I
+> >> also don't care.
+> > 
+> > To me it looks like the example you linked:
+> > https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetree/bindings/example-schema.yaml#L223
+> 
+> Yes, it looks, that's not the point.
+> 
+> > 
+> > If you use fallback for a 4552 then it would enable the use of the
+> > optional pins device-state-gpios and device-wake-gpios. But the chip
+> > doesn't have those so the hw guys would connect them and they won't
+> > be in the DT.
+> > 
+> > Honestly I'm confused :/
+> 
+> What stops anyone to use tcan4x5x ALONE for 4552? Nothing. And that's
+> the problem here.
+> 
+>
 
-The devcoredump file is attached.
+Schema check will fail, but driver wize it will work just fine.
+Agree that is kinda broken.
+If I have time I can try to fix that later.
 
-Regards,
+Please explain one more time for me. Is this a comment on the if
+sentence or the broken behavior of the driver?
 
-Renjaya
+> > 
+> >>
+> >>> +
+> >>> +required:
+> >>> +  - compatible
+> >>> +  - reg
+> >>> +  - interrupts
+> >>> +  - clocks
+> >>> +  - bosch,mram-cfg
+> >>> +
+> >>> +additionalProperties: false
+> >>
+> >> Implement feedback. Nothing changed here.
+> >>
+> > 
+> > Uh? feedback?
+> 
+> Yeah, CAREFULLY previous review and respond to all comments or implement
+> all of them (or any combination). If you leave one comment ignored, it
+> will mean reviewer has to do same work twice. That's very discouraging
+> and wasteful of my time.
 
---0000000000006e9ab1062629144c
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Replaced with:
+unevaluatedProperties: false
 
-<div dir=3D"ltr"><div dir=3D"ltr">On Tue, Nov 5, 2024 at 6:03=E2=80=AFPM Ma=
-rc Kleine-Buddewrote:</div><div class=3D"gmail_quote"><br>&gt; Please add t=
-his patch, compile, reproduce the issue, send me the<br>&gt; devcoredump an=
-d the log output.<br><blockquote class=3D"gmail_quote" style=3D"margin:0px =
-0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-</blockquote>&gt;<br>&gt; --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef=
-.c<br>&gt; +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c<br>&gt; @@ -=
-149,6 +149,10 @@ mcp251xfd_get_tef_len(struct mcp251xfd_priv *priv, u8 *len=
-_p)<br>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 len =3D (chip_tx_tail &lt;&lt=
-; shift) - (tail &lt;&lt; shift);<br>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- *len_p =3D len &gt;&gt; shift;<br><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex">
-</blockquote>&gt;<br>&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 if (*len_p =3D=3D 0)=
-<br>&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 netdev_er=
-r(priv-&gt;ndev, &quot;%s: fifo_sta=3D0x%08x head=3D0x%08x tail=3D0x%08x\n&=
-quot;, __func__,<br>&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fifo_sta, tx_ring-&gt;head,=
- tx_ring-&gt;tail);<br>&gt; +<br>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=
-urn 0;<br>&gt;=C2=A0 }</div><div class=3D"gmail_quote"><br>I applied this p=
-atch manually because it couldn&#39;t be applied after your &quot;mcp251xfd=
-_get_tef_len(): fix length calculation&quot; patch.<br><br>The log (dmesg |=
- grep spi)</div><div class=3D"gmail_quote">[ =C2=A0125.501493] mcp251xfd sp=
-i0.0 can1: mcp251xfd_get_tef_len: fifo_sta=3D0x00000103 head=3D0x00004a95 t=
-ail=3D0x00004a91</div><div class=3D"gmail_quote">[ =C2=A0125.511420] mcp251=
-xfd spi0.0 can1: IRQ handler mcp251xfd_handle_tefif() returned -22.<br>[ =
-=C2=A0125.519250] mcp251xfd spi0.0 can1: IRQ handler returned -22 (intf=3D0=
-xbf1a0010).<br><br>The devcoredump file is attached.</div><div class=3D"gma=
-il_quote"><br></div><div class=3D"gmail_quote">Regards,</div><div class=3D"=
-gmail_quote"><br></div><div class=3D"gmail_quote">Renjaya</div><div class=
-=3D"gmail_quote"><br></div></div>
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
---0000000000006e9ab1062629144c--
---0000000000006e9ab3062629144e
-Content-Type: application/octet-stream; 
-	name="devcoredump-20241105-114659.dump"
-Content-Disposition: attachment; filename="devcoredump-20241105-114659.dump"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m34e4j8j0>
-X-Attachment-Id: f_m34e4j8j0
-
-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
-AAgAAAAAAAAECAAAAAAAAAgIAAAAAAAADAgAAAAAAAAQCAAAAAAAABQIAAAAAAAAGAgAAAAAAAAc
-CAAAAAAAACAIAAAAAAAAJAgAAAAAAAAoCAAAAAAAACwIAAAAAAAAMAgAAAAAAAA0CAAAAAAAADgI
-AAAAAAAAPAgAAAAAAABACAAAAAAAAEQIAAAAAAAASAgAAAAAAABMCAAAAAAAAFAIAAAAAAAAVAgA
-AAAAAABYCAAAAAAAAFwIAAAAAAAAYAgAAAAAAABkCAAAAAAAAGgIAAAAAAAAbAgAAAAAAABwCAAA
-AAAAAHQIAAAAAAAAeAgAAAAAAAB8CAAAAAAAAIAIAAAAAAAAhAgAAAAAAACICAAAAAAAAIwIAAAA
-AAAAkAgAAAAAAACUCAAAAAAAAJgIAAAAAAAAnAgAAAAAAACgCAAAAAAAAKQIAAAAAAAAqAgAAAAA
-AACsCAAAAAAAALAIAAAAAAAAtAgAAAAAAAC4CAAAAAAAALwIAAAAAAAAwAgAAAAAAADECAAAAAAA
-AMgIAAAAAAAAzAgAAAAAAADQCAAAAAAAANQIAAAAAAAA2AgAAAAAAADcCAAAAAAAAOAIAAAAAAAA
-5AgAAAAAAADoCAAAAAAAAOwIAAAAAAAA8AgAAAAAAAD0CAAAAAAAAPgIAAAAAAAA/AgAAAAAAAAA
-CQAAAAAAAAQJAAAAAAAACAkAAAAAAAAMCQAAAAAAABAJAAAAAAAAFAkAAAAAAAAYCQAAAAAAABwJ
-AAAAAAAAIAkAAAAAAAAkCQAAAAAAACgJAAAAAAAALAkAAAAAAAAwCQAAAAAAADQJAAAAAAAAOAkA
-AAAAAAA8CQAAAAAAAEAJAAAAAAAARAkAAAAAAABICQAAAAAAAEwJAAAAAAAAUAkAAAAAAABUCQAA
-AAAAAFgJAAAAAAAAXAkAAAAAAABgCQAAAAAAAGQJAAAAAAAAaAkAAAAAAABsCQAAAAAAAHAJAAAA
-AAAAdAkAAAAAAAB4CQAAAAAAAHwJAAAAAAAAgAkAAAAAAACECQAAAAAAAIgJAAAAAAAAjAkAAAAA
-AACQCQAAAAAAAJQJAAAAAAAAmAkAAAAAAACcCQAAAAAAAKAJAAAAAAAApAkAAAAAAACoCQAAAAAA
-AKwJAAAAAAAAsAkAAAAAAAC0CQAAAAAAALgJAAAAAAAAvAkAAAAAAADACQAAAAAAAMQJAAAAAAAA
-yAkAAAAAAADMCQAAAAAAANAJAAAAAAAA1AkAAAAAAADYCQAAAAAAANwJAAAAAAAA4AkAAAAAAADk
-CQAAAAAAAOgJAAAAAAAA7AkAAAAAAADwCQAAAAAAAPQJAAAAAAAA+AkAAAAAAAD8CQAAAAAAAAAK
-AAAAAAAABAoAAAAAAAAICgAAAAAAAAwKAAAAAAAAEAoAAAAAAAAUCgAAAAAAABgKAAAAAAAAHAoA
-AAAAAAAgCgAAAgAAACQKAADJKJUAKAoAALMEAAAsCgAAAAAAADAKAAAAAAAANAoAAAAAAAA4CgAA
-AAAAADwKAAAAAAAAQAoAAAAAAABECgAAAAAAAEgKAAAAAAAATAoAAAAAAABQCgAAAAAAAFQKAAAA
-AAAAWAoAAAAAAABcCgAAAAAAAGAKAAAAAAAAZAoAAAAAAABoCgAAAgAAAGwKAADJIpUAcAoAALAE
-AAB0CgAAAAAAAHgKAAAAAAAAfAoAAAAAAACACgAAAAAAAIQKAAAAAAAAiAoAAAAAAACMCgAAAAAA
-AJAKAAAAAAAAlAoAAAAAAACYCgAAAAAAAJwKAAAAAAAAoAoAAAAAAACkCgAAAAAAAKgKAAAAAAAA
-rAoAAAAAAACwCgAAAgAAALQKAADJJJUAuAoAALEEAAC8CgAAAAAAAMAKAAAAAAAAxAoAAAAAAADI
-CgAAAAAAAMwKAAAAAAAA0AoAAAAAAADUCgAAAAAAANgKAAAAAAAA3AoAAAAAAADgCgAAAAAAAOQK
-AAAAAAAA6AoAAAAAAADsCgAAAAAAAPAKAAAAAAAA9AoAAAAAAAD4CgAAAgAAAPwKAADJJpUAAAsA
-ALIEAAAECwAAAAAAAAgLAAAAAAAADAsAAAAAAAAQCwAAAAAAABQLAAAAAAAAGAsAAAAAAAAcCwAA
-AAAAACALAAAAAAAAJAsAAAAAAAAoCwAAAAAAACwLAAAAAAAAMAsAAAAAAAA0CwAAAAAAADgLAAAA
-AAAAPAsAAAAAAABACwAAAAAAAEQLAAAAAAAASAsAAAAAAABMCwAAAAAAAFALAAAAAAAAVAsAAAAA
-AABYCwAAAAAAAFwLAAAAAAAAYAsAAAAAAABkCwAAAAAAAGgLAAAAAAAAbAsAAAAAAABwCwAAAAAA
-AHQLAAAAAAAAeAsAAAAAAAB8CwAAAAAAAIALAAAAAAAAhAsAAAAAAACICwAAAAAAAIwLAAAAAAAA
-kAsAAAAAAACUCwAAAAAAAJgLAAAAAAAAnAsAAAAAAACgCwAAAAAAAKQLAAAAAAAAqAsAAAAAAACs
-CwAAAAAAALALAAAAAAAAtAsAAAAAAAC4CwAAAAAAALwLAAAAAAAAwAsAAAAAAADECwAAAAAAAMgL
-AAAAAAAAzAsAAAAAAADQCwAAAAAAANQLAAAAAAAA2AsAAAAAAADcCwAAAAAAAOALAAAAAAAA5AsA
-AAAAAADoCwAAAAAAAOwLAAAAAAAA8AsAAAAAAAD0CwAAAAAAAPgLAAAAAAAA/AsAAAAAAAAADgAA
-aAQAAAQOAAADAAMDCA4AAA+/AAMMDgAABwAAABAOAAAAAAAAAAAAAJFKAAABAAAAkUoAAAIAAAAA
-AAAAAwAAAAAAAAAEAAAAAAAAAAUAAAAEAAAABgAAAAwAAAAAAAAAAAAAAAEAAAAAAAAAAgAAADAE
-AAADAAAAAAAAAAQAAAABAAAABQAAABAAAAAGAAAATAAAAAAAAAAAAAAAAQAAAAAAAAACAAAA8AgA
-AAMAAAABAAAABAAAAAIAAAAFAAAABAAAAAYAAABMAAAAAAAAAJVKAAABAAAAkUoAAAIAAAAgCgAA
-AwAAAAAAAAAEAAAAAwAAAAUAAAAEAAAABgAAAEgAAAA=
---0000000000006e9ab3062629144e--
+/Sean
 
