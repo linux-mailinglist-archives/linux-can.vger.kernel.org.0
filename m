@@ -1,138 +1,245 @@
-Return-Path: <linux-can+bounces-1892-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1893-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFB1D9BC9C3
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 10:57:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 320B99BCA55
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 11:22:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 770711F22EEF
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 09:57:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55A901C22447
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 10:22:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D64631D172A;
-	Tue,  5 Nov 2024 09:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72A1B1D172E;
+	Tue,  5 Nov 2024 10:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=formulatrix.com header.i=@formulatrix.com header.b="sOh8SDJr"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CD51CDA3E
-	for <linux-can@vger.kernel.org>; Tue,  5 Nov 2024 09:57:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7C81CC881
+	for <linux-can@vger.kernel.org>; Tue,  5 Nov 2024 10:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730800634; cv=none; b=CUWW8ZBQd13B2q0686vld95dmniFprnqWToyCiRY9jBjU2BmVPYeITdCkznSw3RolXw0EBNb5McUmfKFtQnlRrtdrbnDBIDsB+nGrzzvu/SEHnCD7RcEZSbzdhmt40AaxlHKrtZW893fUI32mcoNCaSp/YXFXwBE2seToKTGF5M=
+	t=1730802153; cv=none; b=b8kgQmwl0kMPNMil1sAipKlmpyZpDAtlomqwkYqVc3XpFfeRAOL+QgwpSmWWTajZKNL+bx6qQ7emzZE53Fi6pT2Mtp2lVYDt1qdO/tyxOuCeQHjza8xXbWyluTEPOJG7KGPcFdvw/C5su7oooDIN6iZsi1pz79bbYXaAIriZgtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730800634; c=relaxed/simple;
-	bh=bWfRFMdu5Mou+MP11wkuQW0oadnXD4+02p8gUO3LjV4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MqRrqARLfqY3W3m6klJtmw/Dpj64q8TLqokx+1T8ccFk/PxFProQZQ/2HsucKSMLJqeusD91Adu4Bx3bJtObzjwwcidgudPQU1UTq9RCURyo/oEUsPUlAnMsT4AdtQeMldMC/dCNStCmpwZa8Borv1cjKi+gEXBJBALBQVcFmTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t8GJ3-0000BZ-89; Tue, 05 Nov 2024 10:57:01 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t8GJ2-0027iP-27;
-	Tue, 05 Nov 2024 10:57:00 +0100
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id E809636A3B6;
-	Tue, 05 Nov 2024 09:56:59 +0000 (UTC)
-Date: Tue, 5 Nov 2024 10:56:59 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Renjaya Raga Zenta <renjaya.zenta@formulatrix.com>
-Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
-	mailhol.vincent@wanadoo.fr, manivannan.sadhasivam@linaro.org, schuchmann@schleissheimer.de, 
-	thomas.kopp@microchip.com
-Subject: Re: AW: [PATCH RFC can v2] can: mcp251xfd: mcp251xfd_get_tef_len():
- fix length calculation
-Message-ID: <20241105-crazy-petrel-of-tempering-cb8f6f-mkl@pengutronix.de>
-References: <20241104-ludicrous-quartz-kakapo-07219e-mkl@pengutronix.de>
- <20241105082801.32475-1-renjaya.zenta@formulatrix.com>
+	s=arc-20240116; t=1730802153; c=relaxed/simple;
+	bh=vmgW/bIyl3X3Xz7nJkzDu29O0k1yqDncb6X0zpT4zmY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PmBfROn64wfFm/xu4rrkJlq7PUBfZ2gRsJ3+6JrfiHjwx2EEzMIyFMUbZ7yNsZ0OVbyEg1iExMs5HoqWK0p+0iL4sqV3Hv2cjnNYNBUefMhfODCVK+hTJoO/z3dcrfFd9Ig8WcFYz82MB0pY0WvDMwmvp5iLTaBvE5Uzm+upSOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=formulatrix.com; spf=pass smtp.mailfrom=formulatrix.com; dkim=pass (1024-bit key) header.d=formulatrix.com header.i=@formulatrix.com header.b=sOh8SDJr; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=formulatrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=formulatrix.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a7aa086b077so671874366b.0
+        for <linux-can@vger.kernel.org>; Tue, 05 Nov 2024 02:22:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=formulatrix.com; s=google; t=1730802150; x=1731406950; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3voq4Rc8mEDKUuqBapLG+w+y6+JU/AV2jrFYfbmTeCk=;
+        b=sOh8SDJrhEoApC1Ae/15oKwvmfu2vVlqLT8bN6AqRiM9vze6zowkGjy8g0aYSwOcc2
+         eKQGR8wVLYtwxBkxBBVNpzWeJhUFAs0Qj6pvXWshzbNwPMMpk6OFR1W2F5lvB39p+Cts
+         TwBCUKLnaGiYwS1A+O5K+XidFQOqPGjoqioqA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730802150; x=1731406950;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3voq4Rc8mEDKUuqBapLG+w+y6+JU/AV2jrFYfbmTeCk=;
+        b=IupT4q9fmO8zQT2++WnAnN2vGVGBieIDi8bNeOdGvYq2oWEIBGIPoXiZw0fg+uAs2Y
+         pq8+wwstinXZSFp2LXBBkWtNPiknQa452HqE5YvIz4jiwk6Km5DkcYqzbpq2VymTWXbA
+         +xuXLsMScWh/McaAC9pnGhnOSEQ7hEMpWTHF1dTIUhVIcM+++1v3L4zfsmtiQYDvo3Y5
+         ajdrvysbAUiOoSSnkl7jbNmmtXYph0IXrA6IbQcFcJ64vHr7hecWZsg2tClpByMDzDCc
+         upnhW91XN/X1WlfWNliFyBkRcCaQfk82yT8FxMKZj3597k65lAUT1QSKgx+BUSTHlz23
+         YvtA==
+X-Forwarded-Encrypted: i=1; AJvYcCUtuh6HLlWyMUjda13RziYJAp23HTs+7chQycxgskI2qzhEp2vfCmoso9ozUjaBj2mxCiEyJXEbU4I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9p5QIIs3DgRP4nXITWT8eAvjAapVtMuLOoxOQ4PHbiy33Y+rJ
+	Umen1vsyHrqeOn2WUymXEw3hM/LC1HTHjR/REayUM1JwKGmO+bY6AM6gVbQA8wo1nkIosNZGIcm
+	YF8ATs6cWC3JJNOIPS8RUrXrui5Sjq+0Cobj6
+X-Google-Smtp-Source: AGHT+IFmGLB5smhgB80CEWtXCNiavWeZHwlSWSbAkvCrXon9zRVgMzOodRwpFGuhz/Gj/JftvNIOx5kbTM/4zN/+/w0=
+X-Received: by 2002:a17:907:1c1d:b0:a9a:f53:a5c6 with SMTP id
+ a640c23a62f3a-a9e3a7f468fmr2241513866b.65.1730802149319; Tue, 05 Nov 2024
+ 02:22:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="taswtfcc5gqp4v3a"
-Content-Disposition: inline
-In-Reply-To: <20241105082801.32475-1-renjaya.zenta@formulatrix.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---taswtfcc5gqp4v3a
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+References: <20241104-ludicrous-quartz-kakapo-07219e-mkl@pengutronix.de>
+ <20241105082801.32475-1-renjaya.zenta@formulatrix.com> <20241105-crazy-petrel-of-tempering-cb8f6f-mkl@pengutronix.de>
+In-Reply-To: <20241105-crazy-petrel-of-tempering-cb8f6f-mkl@pengutronix.de>
+From: Renjaya Raga Zenta <renjaya.zenta@formulatrix.com>
+Date: Tue, 5 Nov 2024 17:20:39 +0700
+Message-ID: <CAJ7t6HhXEMhpmLVh3E14iWZJ0wMaG2ECxYoe_xTYB9mXAdBd9w@mail.gmail.com>
 Subject: Re: AW: [PATCH RFC can v2] can: mcp251xfd: mcp251xfd_get_tef_len():
  fix length calculation
-MIME-Version: 1.0
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
+	mailhol.vincent@wanadoo.fr, manivannan.sadhasivam@linaro.org, 
+	schuchmann@schleissheimer.de, thomas.kopp@microchip.com
+Content-Type: multipart/mixed; boundary="00000000000049d5c5062627c7a7"
 
-On 05.11.2024 15:28:01, Renjaya Raga Zenta wrote:
-> Hi, Marc and Sven,
->=20
-> On 25.10.2024 15:50:37, Sven Schuchmann wrote:
-> > this looks good to me!
-> > I have no crashes here anymore.
->=20
-> On , Marc Kleine-Budde wrote:
-> > Thanks, can I interpret this as a Tested-by: and add it to the patch?
->=20
-> Sorry, I'm also experiencing this kind of issue.=20
->=20
-> [  217.906113] mcp251xfd spi0.0 can1: IRQ handler mcp251xfd_handle_tefif(=
-) returned -22.
-> [  217.913946] mcp251xfd spi0.0 can1: IRQ handler returned -22 (intf=3D0x=
-bf1a0010).
->=20
-> Even with this patch applied, I still can reproduce the issue with:
->=20
-> cangen <can-interface> -g1 -c8 -L12 -fbx -I2 -Di
+--00000000000049d5c5062627c7a7
+Content-Type: multipart/alternative; boundary="00000000000049d5c4062627c7a5"
 
-Can you follow the instructions in
+--00000000000049d5c4062627c7a5
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-| https://lore.kernel.org/all/20240929-upbeat-carrot-whippet-bc3e9c-mkl@pen=
-gutronix.de/
+File is attached.
 
-and send me the "/var/log/devcoredump-*.dump"?
+On Tue, Nov 5, 2024 at 4:57=E2=80=AFPM Marc Kleine-Budde wrote:
 
-regards,
-Marc
+> Can you follow the instructions in
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+> >
+> |
+https://lore.kernel.org/all/20240929-upbeat-carrot-whippet-bc3e9c-mkl@pengu=
+tronix.de/
 
---taswtfcc5gqp4v3a
-Content-Type: application/pgp-signature; name="signature.asc"
+> >
+> and send me the "/var/log/devcoredump-*.dump"?
 
------BEGIN PGP SIGNATURE-----
+Regards,
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcp6+gACgkQKDiiPnot
-vG/UYgf9GpctOn6nEyLVisoyWFMAWEJoNE7ptiU28FINnJd+BxN0jGnlRnAJZbIC
-K/dr5tCgV6iJNaY7fy0wVusU4tRNuoK3wz/2I1FghPIv95mgGJ3XuOZkn4YI4lcQ
-kP/z0/igeCdSORZdTWPZDiF++WW/rPdEUmplFWp9ySIHcCMEpVs57hNLboxZBR8G
-cJgrE9LswgIua9vA/7DIQVESzFfRFcETgXwEpm7VgHPYjUijWqfKHKZW7IBTqFH4
-PC1jeKKRmuzNLr547ohlx7HmihZ3Y60AK6CwFOZEoSugaNwwzJv9VcODTQ248Nr7
-3ND+50iuGdk7XsAXafou6Di/+V5WBg==
-=tNV6
------END PGP SIGNATURE-----
+Renjaya
 
---taswtfcc5gqp4v3a--
+--00000000000049d5c4062627c7a5
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr">File is attached.<br><br></div><div class=
+=3D"gmail_quote"><div class=3D"gmail_attr">On Tue, Nov 5, 2024 at 4:57=E2=
+=80=AFPM Marc Kleine-Budde wrote:<br></div><br><blockquote class=3D"gmail_q=
+uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
+04);padding-left:1ex">
+</blockquote>&gt; Can you follow the instructions in<br><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">
+</blockquote>&gt;=C2=A0<br>&gt; | <a href=3D"https://lore.kernel.org/all/20=
+240929-upbeat-carrot-whippet-bc3e9c-mkl@pengutronix.de/" rel=3D"noreferrer"=
+ target=3D"_blank">https://lore.kernel.org/all/20240929-upbeat-carrot-whipp=
+et-bc3e9c-mkl@pengutronix.de/</a><br><blockquote class=3D"gmail_quote" styl=
+e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
+g-left:1ex">
+</blockquote>&gt;=C2=A0<br>&gt; and send me the &quot;/var/log/devcoredump-=
+*.dump&quot;?<br><br>Regards,<br><br>Renjaya</div></div>
+
+--00000000000049d5c4062627c7a5--
+--00000000000049d5c5062627c7a7
+Content-Type: application/octet-stream; 
+	name="devcoredump-20241105-084315.dump"
+Content-Disposition: attachment; filename="devcoredump-20241105-084315.dump"
+Content-Transfer-Encoding: base64
+Content-ID: <f_m34aoacl0>
+X-Attachment-Id: f_m34aoacl0
+
+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
+AAgAAAAAAAAECAAAAAAAAAgIAAAAAAAADAgAAAAAAAAQCAAAAAAAABQIAAAAAAAAGAgAAAAAAAAc
+CAAAAAAAACAIAAAAAAAAJAgAAAAAAAAoCAAAAAAAACwIAAAAAAAAMAgAAAAAAAA0CAAAAAAAADgI
+AAAAAAAAPAgAAAAAAABACAAAAAAAAEQIAAAAAAAASAgAAAAAAABMCAAAAAAAAFAIAAAAAAAAVAgA
+AAAAAABYCAAAAAAAAFwIAAAAAAAAYAgAAAAAAABkCAAAAAAAAGgIAAAAAAAAbAgAAAAAAABwCAAA
+AAAAAHQIAAAAAAAAeAgAAAAAAAB8CAAAAAAAAIAIAAAAAAAAhAgAAAAAAACICAAAAAAAAIwIAAAA
+AAAAkAgAAAAAAACUCAAAAAAAAJgIAAAAAAAAnAgAAAAAAACgCAAAAAAAAKQIAAAAAAAAqAgAAAAA
+AACsCAAAAAAAALAIAAAAAAAAtAgAAAAAAAC4CAAAAAAAALwIAAAAAAAAwAgAAAAAAADECAAAAAAA
+AMgIAAAAAAAAzAgAAAAAAADQCAAAAAAAANQIAAAAAAAA2AgAAAAAAADcCAAAAAAAAOAIAAAAAAAA
+5AgAAAAAAADoCAAAAAAAAOwIAAAAAAAA8AgAAAAAAAD0CAAAAAAAAPgIAAAAAAAA/AgAAAAAAAAA
+CQAAAAAAAAQJAAAAAAAACAkAAAAAAAAMCQAAAAAAABAJAAAAAAAAFAkAAAAAAAAYCQAAAAAAABwJ
+AAAAAAAAIAkAAAAAAAAkCQAAAAAAACgJAAAAAAAALAkAAAAAAAAwCQAAAAAAADQJAAAAAAAAOAkA
+AAAAAAA8CQAAAAAAAEAJAAAAAAAARAkAAAAAAABICQAAAAAAAEwJAAAAAAAAUAkAAAAAAABUCQAA
+AAAAAFgJAAAAAAAAXAkAAAAAAABgCQAAAAAAAGQJAAAAAAAAaAkAAAAAAABsCQAAAAAAAHAJAAAA
+AAAAdAkAAAAAAAB4CQAAAAAAAHwJAAAAAAAAgAkAAAAAAACECQAAAAAAAIgJAAAAAAAAjAkAAAAA
+AACQCQAAAAAAAJQJAAAAAAAAmAkAAAAAAACcCQAAAAAAAKAJAAAAAAAApAkAAAAAAACoCQAAAAAA
+AKwJAAAAAAAAsAkAAAAAAAC0CQAAAAAAALgJAAAAAAAAvAkAAAAAAADACQAAAAAAAMQJAAAAAAAA
+yAkAAAAAAADMCQAAAAAAANAJAAAAAAAA1AkAAAAAAADYCQAAAAAAANwJAAAAAAAA4AkAAAAAAADk
+CQAAAAAAAOgJAAAAAAAA7AkAAAAAAADwCQAAAAAAAPQJAAAAAAAA+AkAAAAAAAD8CQAAAAAAAAAK
+AAAAAAAABAoAAAAAAAAICgAAAAAAAAwKAAAAAAAAEAoAAAAAAAAUCgAAAAAAABgKAAAAAAAAHAoA
+AAAAAAAgCgAAAgAAACQKAADKKNEAKAoAAOMBAAAsCgAAAAAAADAKAAAAAAAANAoAAAAAAAA4CgAA
+AAAAADwKAAAAAAAAQAoAAAAAAABECgAAAAAAAEgKAAAAAAAATAoAAAAAAABQCgAAAAAAAFQKAAAA
+AAAAWAoAAAAAAABcCgAAAAAAAGAKAAAAAAAAZAoAAAAAAABoCgAAAgAAAGwKAADKItEAcAoAAOAB
+AAB0CgAAAAAAAHgKAAAAAAAAfAoAAAAAAACACgAAAAAAAIQKAAAAAAAAiAoAAAAAAACMCgAAAAAA
+AJAKAAAAAAAAlAoAAAAAAACYCgAAAAAAAJwKAAAAAAAAoAoAAAAAAACkCgAAAAAAAKgKAAAAAAAA
+rAoAAAAAAACwCgAAAgAAALQKAADKJNEAuAoAAOEBAAC8CgAAAAAAAMAKAAAAAAAAxAoAAAAAAADI
+CgAAAAAAAMwKAAAAAAAA0AoAAAAAAADUCgAAAAAAANgKAAAAAAAA3AoAAAAAAADgCgAAAAAAAOQK
+AAAAAAAA6AoAAAAAAADsCgAAAAAAAPAKAAAAAAAA9AoAAAAAAAD4CgAAAgAAAPwKAADKJtEAAAsA
+AOIBAAAECwAAAAAAAAgLAAAAAAAADAsAAAAAAAAQCwAAAAAAABQLAAAAAAAAGAsAAAAAAAAcCwAA
+AAAAACALAAAAAAAAJAsAAAAAAAAoCwAAAAAAACwLAAAAAAAAMAsAAAAAAAA0CwAAAAAAADgLAAAA
+AAAAPAsAAAAAAABACwAAAAAAAEQLAAAAAAAASAsAAAAAAABMCwAAAAAAAFALAAAAAAAAVAsAAAAA
+AABYCwAAAAAAAFwLAAAAAAAAYAsAAAAAAABkCwAAAAAAAGgLAAAAAAAAbAsAAAAAAABwCwAAAAAA
+AHQLAAAAAAAAeAsAAAAAAAB8CwAAAAAAAIALAAAAAAAAhAsAAAAAAACICwAAAAAAAIwLAAAAAAAA
+kAsAAAAAAACUCwAAAAAAAJgLAAAAAAAAnAsAAAAAAACgCwAAAAAAAKQLAAAAAAAAqAsAAAAAAACs
+CwAAAAAAALALAAAAAAAAtAsAAAAAAAC4CwAAAAAAALwLAAAAAAAAwAsAAAAAAADECwAAAAAAAMgL
+AAAAAAAAzAsAAAAAAADQCwAAAAAAANQLAAAAAAAA2AsAAAAAAADcCwAAAAAAAOALAAAAAAAA5AsA
+AAAAAADoCwAAAAAAAOwLAAAAAAAA8AsAAAAAAAD0CwAAAAAAAPgLAAAAAAAA/AsAAAAAAAAADgAA
+aAQAAAQOAAADAAMDCA4AAA+/AAMMDgAABwAAABAOAAAAAAAAAAAAAJFoAAABAAAAkWgAAAIAAAAA
+AAAAAwAAAAAAAAAEAAAAAAAAAAUAAAAEAAAABgAAAAwAAAAAAAAAAAAAAAEAAAAAAAAAAgAAADAE
+AAADAAAAAAAAAAQAAAABAAAABQAAABAAAAAGAAAATAAAAAAAAAAAAAAAAQAAAAAAAAACAAAA8AgA
+AAMAAAABAAAABAAAAAIAAAAFAAAABAAAAAYAAABMAAAAAAAAAJVoAAABAAAAkWgAAAIAAAAgCgAA
+AwAAAAAAAAAEAAAAAwAAAAUAAAAEAAAABgAAAEgAAAA=
+--00000000000049d5c5062627c7a7--
 
