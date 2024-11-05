@@ -1,153 +1,289 @@
-Return-Path: <linux-can+bounces-1889-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1890-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B568D9BC8CD
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 10:13:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94E509BC8E5
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 10:16:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6C201C23635
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 09:13:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 20A2BB23E90
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2024 09:16:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45C01CEEB8;
-	Tue,  5 Nov 2024 09:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9AFF1CEEB8;
+	Tue,  5 Nov 2024 09:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZyGUA7Xt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yv9G6haA"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCBF18F2F7
-	for <linux-can@vger.kernel.org>; Tue,  5 Nov 2024 09:13:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933F118132A;
+	Tue,  5 Nov 2024 09:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730797993; cv=none; b=L3OgUAlvtVnu9sVGUFZXduk4ISYBYD/JSq83N8CW0jVMk9QvcZaInZRz77Y0Mg+p4XNETZO5bwIyrgVFI8YO5nKB0kJNsmlhqTsq7LXAJQReMhmk2Ka7ZxiOeWyIltDH/5QJ1oQhLPchqnBW18ojrvqqbwZUbWtripPntktyXzg=
+	t=1730798195; cv=none; b=M8gBYASl/MCPgWDYZyxtsmPhhN6LwBVqMGc4me2Q8zBGgvGmyDlw/g+HGAtEeU8lmfcaorSfqXhtAl9iZGvxwmYRo2KBmAXd/tFXF8V3Y6xlsqmO9JhCfLAMrrBVeL/+G8zc0njkWy/5P9jmU/hwhuy+zMlVaBUdTUaQoRLo98I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730797993; c=relaxed/simple;
-	bh=uiQ2JAhXPSStNeyqq5mL2G709mftQouH1+W/58MUBiQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gwtZqDng43F1IUlbJxoHk0U5g1p54swZ2VBk8LAhEmiEoVLSa7/o8Kk7QvYRyImuur4V2xHSI+Rn4iwEC/QzMpbddsh4/fdtRiuRqKk4lnLS9K+PxdqFbdjTYA0qYCvg7TvOzAezKILjK04v11TY5PjmsRKXoly39pV0+06vNv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZyGUA7Xt; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2e3d523a24dso3984920a91.0
-        for <linux-can@vger.kernel.org>; Tue, 05 Nov 2024 01:13:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730797991; x=1731402791; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mkjVn9vxYfiyTYoSjdo6wZJS/fb5yrGuL1Y9+4PQuro=;
-        b=ZyGUA7XtpwxlIAr6DRCG1s/8o32Crxl7AMJhWvxMmsID8YJCulUrUCCwE75NYJ5xbs
-         P/RaNxg5/EzMQDeBP1W79XkDrJ8aLk1Dnubi+ePSyUWhAebk0cn+mnBVYRw0eiA59OZt
-         OTp5+SijGvMbkGI+Q9uXTMYapDR0620DZsF2NbKhVYT4AhU6VJI0OC1K3q3Py4l/cnEi
-         bg49C9xQo8JwDFbdXIbu3qw/EuDtUtquFFrk9RZs41qektmvFvZoMkoI4cve7J4D5jGm
-         Cklq4aci9pCXowuNG9yhgHFWBTteMn0goMdZAdBLoaABT1pp3lHfIfF8BfiLJqKulv2P
-         s57A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730797991; x=1731402791;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mkjVn9vxYfiyTYoSjdo6wZJS/fb5yrGuL1Y9+4PQuro=;
-        b=Z5lCPvdQLzHtLP+ZakpJtFirU2K/SPIVtAuYBoiNsrcpNhyvNxFM8x3urUgsnl+QRy
-         7M5izTtewD+jDq+QekYl6aq9vnNGTFkjbNaOSYwnw9m8yD9mbUMK8lLNetugV6si4aLX
-         HuIsLmsebyNzIcUycnutYzt3G+uvS4FQcTBzmm3M/w0xWsiQsKt2LROSWxO+wZn2pZ9l
-         IxUxG7+OXFlYvCXFa2TNKyRRNFKVqXkExb8Eu8uViYGHR3bKSZsV2rihLG8CsMKCpWrl
-         D6naQnYyKDQJ0QuGR+vm9CuuJjib1TybiSvhx0Y01t8zoiHZEBkW5ad1IlDjDpKUV0x/
-         KJrQ==
-X-Gm-Message-State: AOJu0YxHRZT4xI/1i6l+C3nqeeaU6MMJZyNHxmbpaS9FerOBMShOiH7x
-	7Jtb2ER4A1/hkMBiRoTPTGtV1DDXVjKS5dA/uS8aPsews3y//MxYMJizfUVqcv0DwTbu2BJBlgp
-	AL9IRs20Zvse+mxmDuYmkIer4zjQ=
-X-Google-Smtp-Source: AGHT+IGgVwytkXPui17vaVxYdaHpTa4bCShFHwA2+H0h7RonnEiBW+MLnG7Fkm/a53HiLEUrqiOMFQDlJPDR8P0bx+4=
-X-Received: by 2002:a17:90a:17ef:b0:2e7:8593:8365 with SMTP id
- 98e67ed59e1d1-2e913714ee4mr30844275a91.5.1730797991516; Tue, 05 Nov 2024
- 01:13:11 -0800 (PST)
+	s=arc-20240116; t=1730798195; c=relaxed/simple;
+	bh=WcZMe9/VfUeI82nF/gy6lNIFFjy2UM0JuNhq+6rR4XQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=As4KEpDWIigWRBVPkat8isg7kacJXZHklGneuTMluqjjF0TPisK0tMN7vRiXLJ9w+0MX+D56kmiedDigv71fTuOkLJqyB9kICn9MSnLANfE+udscoJcBAo1nI3lN99dB4ZF7Pd+wD4wGJ8VmOGxUEJHdBhUHKOaWtibctrjiSlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yv9G6haA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A1D8C4CECF;
+	Tue,  5 Nov 2024 09:16:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730798194;
+	bh=WcZMe9/VfUeI82nF/gy6lNIFFjy2UM0JuNhq+6rR4XQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Yv9G6haAugRVNUqDmDVNm9Zt+aj3atfwiskZQiuFtO2Rln71uUQcIi6iK2xqbB/gY
+	 T6GsnAiaaGRwSMIXK3UENS41UL889E7z4/Rw1v+OyGr6JUk9DxWdiaIhzpmct9rRSZ
+	 JqBfnr7HYhudu8njRT5qJHGlIQZrgn+47ELxcKRjnSoykYzEXyVNSu5iMp0/PCbu9e
+	 M6f/xwXl6CWa/hSr1FMTvRgxMttAKQwChSoLDcMnrg3qJRs55PIL7tzZmrC9BLRQBl
+	 sjo3SXwXC/CHd9Z8oyGm8EEk8WFzpKR9pXcol5bmRsdG/17Y1i+OqN+EFIqkdWlEnv
+	 bDLfVRxjK59ig==
+Date: Tue, 5 Nov 2024 10:16:30 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Sean Nyekjaer <sean@geanix.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: can: convert tcan4x5x.txt to DT schema
+Message-ID: <dq36jlwfm7hz7dstrp3bkwd6r6jzcxqo57enta3n2kibu3e7jw@krwn5nsu6a4d>
+References: <20241104125342.1691516-1-sean@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAEQ16vpxthctdrpv0kBKEZJA8VNYffjGGPBGBY93RmKDD49bAQ@mail.gmail.com>
- <CAMZ6Rq+9GO0-5BfauX73ReNTn2LzkZP04eGaybS6Vh+t3=Gmng@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+9GO0-5BfauX73ReNTn2LzkZP04eGaybS6Vh+t3=Gmng@mail.gmail.com>
-From: Robert Nawrath <mbro1689@gmail.com>
-Date: Tue, 5 Nov 2024 10:13:00 +0100
-Message-ID: <CAEQ16vokv=Xq+0T=6=e3UMooa_jJYCW-zXWSMKVrRPnM1HoZJg@mail.gmail.com>
-Subject: Re: Missing CAN-XL XL data bit timing
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241104125342.1691516-1-sean@geanix.com>
 
-@Vincent, thank you for the answer. Are there any plans to add the CAN
-XL driver and the netlink interface for CAN XL?
+On Mon, Nov 04, 2024 at 01:53:40PM +0100, Sean Nyekjaer wrote:
+> Convert binding doc tcan4x5x.txt to yaml.
+> 
+> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> ---
+> Changes since rfc:
 
-I use the DCAN XL implemented in FPGA. I work for Digital Core Design
-and it's one of our latest IP cores. I know the CAN-XL controller is a
-rare product for now.
+That's a v2. RFC was v1. *ALWAYS*.
+Try by yourself:
+b4 diff 20241104125342.1691516-1-sean@geanix.com
+
+Works? No. Should work? Yes.
+
+
+>   - Tried to re-add ti,tcan4x5x wildcard
+>   - Removed xceiver and vdd supplies (copy paste error)
+>   - Corrected max SPI frequency
+>   - Copy pasted bosch,mram-cfg from bosch,m_can.yaml
+>   - device-state-gpios and device-wake-gpios only available for tcan4x5x
+
+...
+
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - ti,tcan4552
+> +          - const: ti,tcan4x5x
+> +      - items:
+> +          - enum:
+> +              - ti,tcan4553
+
+Odd syntax. Combine these two into one enum.
+
+> +          - const: ti,tcan4x5x
+> +      - items:
+
+Drop items.
+
+> +          - enum:
+
+... and drop enum. That's just const or do you already plan to add here
+entries?
+
+> +              - ti,tcan4x5x
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description: The GPIO parent interrupt.
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  reset-gpios:
+> +    description: Hardwired output GPIO. If not defined then software reset.
+> +    maxItems: 1
+> +
+> +  device-state-gpios:
+> +    description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+Didn't you get this comment alerady?
+
+> +      Input GPIO that indicates if the device is in a sleep state or if the
+> +      device is active. Not available with tcan4552/4553.
+> +    maxItems: 1
+> +
+> +  device-wake-gpios:
+> +    description: |
+> +      Wake up GPIO to wake up the TCAN device.
+> +      Not available with tcan4552/4553.
+> +    maxItems: 1
+> +
+> +  bosch,mram-cfg:
+> +    description: |
+> +      Message RAM configuration data.
+> +      Multiple M_CAN instances can share the same Message RAM
+> +      and each element(e.g Rx FIFO or Tx Buffer and etc) number
+> +      in Message RAM is also configurable, so this property is
+> +      telling driver how the shared or private Message RAM are
+> +      used by this M_CAN controller.
+> +
+> +      The format should be as follows:
+> +      <offset sidf_elems xidf_elems rxf0_elems rxf1_elems rxb_elems txe_elems txb_elems>
+> +      The 'offset' is an address offset of the Message RAM where
+> +      the following elements start from. This is usually set to
+> +      0x0 if you're using a private Message RAM. The remain cells
+> +      are used to specify how many elements are used for each FIFO/Buffer.
+> +
+> +      M_CAN includes the following elements according to user manual:
+> +      11-bit Filter	0-128 elements / 0-128 words
+> +      29-bit Filter	0-64 elements / 0-128 words
+> +      Rx FIFO 0		0-64 elements / 0-1152 words
+> +      Rx FIFO 1		0-64 elements / 0-1152 words
+> +      Rx Buffers	0-64 elements / 0-1152 words
+> +      Tx Event FIFO	0-32 elements / 0-64 words
+> +      Tx Buffers	0-32 elements / 0-576 words
+> +
+> +      Please refer to 2.4.1 Message RAM Configuration in Bosch
+> +      M_CAN user manual for details.
+> +    $ref: /schemas/types.yaml#/definitions/int32-array
+> +    items:
+> +      - description: The 'offset' is an address offset of the Message RAM where
+> +          the following elements start from. This is usually set to 0x0 if
+> +          you're using a private Message RAM.
+> +        default: 0
+> +      - description: 11-bit Filter 0-128 elements / 0-128 words
+> +        minimum: 0
+> +        maximum: 128
+> +      - description: 29-bit Filter 0-64 elements / 0-128 words
+> +        minimum: 0
+> +        maximum: 64
+> +      - description: Rx FIFO 0 0-64 elements / 0-1152 words
+> +        minimum: 0
+> +        maximum: 64
+> +      - description: Rx FIFO 1 0-64 elements / 0-1152 words
+> +        minimum: 0
+> +        maximum: 64
+> +      - description: Rx Buffers 0-64 elements / 0-1152 words
+> +        minimum: 0
+> +        maximum: 64
+> +      - description: Tx Event FIFO 0-32 elements / 0-64 words
+> +        minimum: 0
+> +        maximum: 32
+> +      - description: Tx Buffers 0-32 elements / 0-576 words
+> +        minimum: 0
+> +        maximum: 32
+> +    minItems: 1
+> +
+> +  spi-max-frequency:
+> +    description:
+> +      Must be half or less of "clocks" frequency.
+> +    maximum: 18000000
+> +
+> +  wakeup-source:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+> +      Enable CAN remote wakeup.
+> +
+> +allOf:
+> +  - $ref: can-controller.yaml#
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - ti,tcan4552
+> +              - ti,tcan4553
+> +    then:
+> +      properties:
+> +        device-state-gpios: false
+> +        device-wake-gpios: false
+
+Heh, this is a weird binding. It should have specific compatibles for
+all other variants because above does not make sense. For 4552 one could
+skip front compatible and use only fallback, right? And then add these
+properties bypassing schema check. I commented on this already that
+original binding is flawed and should be fixed, but no one cares then I
+also don't care.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - bosch,mram-cfg
+> +
+> +additionalProperties: false
+
+Implement feedback. Nothing changed here.
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    spi {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        can@0 {
+> +            compatible = "ti,tcan4x5x";
+> +            reg = <0>;
+> +            clocks = <&can0_osc>;
+> +            pinctrl-names = "default";
+> +            pinctrl-0 = <&can0_pins>;
+> +            spi-max-frequency = <10000000>;
+> +            bosch,mram-cfg = <0x0 0 0 16 0 0 1 1>;
+> +            interrupt-parent = <&gpio1>;
+> +            interrupts = <14 IRQ_TYPE_LEVEL_LOW>;
+> +            device-state-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
+> +            device-wake-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+> +            reset-gpios = <&gpio1 27 GPIO_ACTIVE_HIGH>;
+> +            wakeup-source;
+> +        };
+> +    };
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    spi {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        can@0 {
+> +            compatible = "ti,tcan4552","ti,tcan4x5x";
+
+Missing space after ,.
 
 Best regards,
+Krzysztof
 
-Robert Nawrath
-
-
-On Fri, Nov 1, 2024 at 3:27=E2=80=AFPM Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
->
-> +cc: Oliver
->
-> On Thu. 31 Oct. 2024 at 20:55, Robert Nawrath <mbro1689@gmail.com> wrote:
-> > Hi,
-> > I'm working on a kernel module for CAN-XL device. I can see in
-> > /linux/can/dev.h that there are structures and methods for setting
-> > bittiming and data_bittiming. The bittiming refers to CAN nominal bit
-> > time, data_bittiming refers to CAN data bit time (using ISO/FDIS
-> > 11898-1:2024 nomenclature). But in CAN-XL the data bit rate has two
-> > values: FD data bit rate and XL data bit rate. This values are
-> > different and the device shall have separate configuration register
-> > sets for them. So for separate configuration registers there shall be
-> > separate methods and structs.
-> > Am I right that the current implementation in kernel is incomplete? Or
-> > am I missing something?
->
-> Yes, you are right. There is not yet a netlink interface for CAN XL,
-> mostly because there is not yet a CAN XL driver in linux-can and
-> because, before you, no one manifested a need for this.
->
-> @Oliver, in this message:
->
->   https://lore.kernel.org/linux-can/2540406e-8da3-4cb8-bd1a-30271dd6cc67@=
-hartkopp.net/
->
-> you mentioned that you were working on the bitrate configuration. Any
-> update? Seems that this is time to make this live! I did some work on
-> the netlink and the iproute2 tool in the past when I added the TDC, so
-> eventually, I can help a bit if needed.
->
-> @Robert, out of curiosity, what is the name of your CAN XL device?
->
->
-> Yours sincerely,
-> Vincent Mailhol
->
-> Le jeu. 31 oct. 2024 =C3=A0 20:55, Robert Nawrath <mbro1689@gmail.com> a =
-=C3=A9crit :
-> >
-> > Hi,
-> > I'm working on a kernel module for CAN-XL device. I can see in
-> > /linux/can/dev.h that there are structures and methods for setting
-> > bittiming and data_bittiming. The bittiming refers to CAN nominal bit
-> > time, data_bittiming refers to CAN data bit time (using ISO/FDIS
-> > 11898-1:2024 nomenclature). But in CAN-XL the data bit rate has two
-> > values: FD data bit rate and XL data bit rate. This values are
-> > different and the device shall have separate configuration register
-> > sets for them. So for separate configuration registers there shall be
-> > separate methods and structs.
-> > Am I right that the current implementation in kernel is incomplete? Or
-> > am I missing something?
-> > Robert
-> >
 
