@@ -1,85 +1,60 @@
-Return-Path: <linux-can+bounces-1914-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1915-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62E6A9BF08B
-	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 15:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 921FD9BF161
+	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 16:17:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16C061F229D6
-	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 14:42:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4653C1F227D6
+	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 15:17:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A4611DD871;
-	Wed,  6 Nov 2024 14:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A17B2036F0;
+	Wed,  6 Nov 2024 15:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="Shsw/FHq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UTiVV26D"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD898C11
-	for <linux-can@vger.kernel.org>; Wed,  6 Nov 2024 14:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E72622036E2;
+	Wed,  6 Nov 2024 15:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730904168; cv=none; b=n33d50exji6nuhq0ulive7P2c7Gpse46HJQhdNB0UxpHZym5ofzCPQTzVJmQP0pZqC0c4VNT41EzQcmaeiZLpoweB66+WpyNaPyKfyCYkKCsoigsuuSj3TJxSscY26cyozAqF5RodHZHUnvP7Mkgjjz4OslVV8jp+UnfsaH0aXA=
+	t=1730906239; cv=none; b=CFdOEOjhTBAEV1gRDmPT1GC+TEyb+wLwx2hNQAl8DTqj7YOPCNuvRZC/QnbgFtgRA22Y1WFwc7GN/A0kKBFHnXw16hL5pi3bjE1JzfTbRAk0y9sB7fKeBRAnuo8JzQD1Rc2BJPG4rjoCpU9pPdysHp98Mf6JjijXf00VyfuRqpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730904168; c=relaxed/simple;
-	bh=w/T12pLrwFekZWLQkG6iXZhkqC5oOjo9r+/EsD02cbA=;
+	s=arc-20240116; t=1730906239; c=relaxed/simple;
+	bh=C83+cS1FmxFeYWO4grdtw/TcIlDardzYddF7qf2i1sY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JCp1RWaqqg7h4B/3PQp5YPsW2pjBz2DihKNfTzWLUOMuCvWLJ0zjttooRbZ2Q/bDRfb96eFNCb0TcUzzSmXIOzlR58Z7RMLwFSoEL85YbfWhEXQpADeu2uh4Ii6ipLzTz9oJwVU/lAE9eTzxNyFgYN7N/Y97kymG6VMMAa4Amnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=Shsw/FHq; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37d808ae924so3830759f8f.0
-        for <linux-can@vger.kernel.org>; Wed, 06 Nov 2024 06:42:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1730904165; x=1731508965; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w/T12pLrwFekZWLQkG6iXZhkqC5oOjo9r+/EsD02cbA=;
-        b=Shsw/FHqykzb9/TAa/qGv9JVgnWWcyLjaif7ssChVGJWyW1eiAM1f5uo4qwdC9yCgT
-         tEQ+chfsf77XIfxIb0TFuDCtcQxjtxtaJPB1ml0O0sr5q3gfAkj/I1gvjoHgAqYoKgLr
-         uz5dxbZ4WBkg+iKzctNVmrtixGHSYCas27LqDdUXzulqsTjjLOKA+3RliTFzJmywrcYO
-         MzvRk7A2wOQ2aoUW2pJWkVPpVaLe+s7YvsWDtJgy7ig8gjjcto4UnMtRiYu8DB5wHgGU
-         ZboNLostMo+O7Fqm/cIfwBydT68Xcyz6U46LR3nGuvs1i6IvO2cYege/xHj1GdKSTHdF
-         q08A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730904165; x=1731508965;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w/T12pLrwFekZWLQkG6iXZhkqC5oOjo9r+/EsD02cbA=;
-        b=fS8VsedJoYVioD68ON9BqzTzNnf4SBeEP3bCuSoICQW4jNQsdLFAukfr8GVoTAEu/h
-         es9/1UfqK+RfqCLI5uXx+0Ecr3Xe+eZ2RkE17LZpjGujVYFw8JTRqYWPRsZUkmevkD12
-         INzgMY8kyYX3kpsZ8E/Dq3p4nzjs6URkP2tUllSz+g+mVdLg3suHbnR7Cg2hH8X5b12U
-         fBgJUHn43opTe4SS0pAPgF36/IxBHuJ3FlVjR1eAJq8WNhKDg9JSkcybqMzISzccYy6U
-         9GbKKj+EOjdzkRZNiCRdKgcb9LUbLgJOxyjoiPul8wrAhuF9bN+vNJZqemquezqI0D4/
-         gLcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX+sWB7yKZtu/Qgiyhqw9ZrmeVAy5g9LyncEihyDiW9L03Nqo3P3bJE27ss46VPjQ5JRz+rVS7JVCA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4s4m0zC0PKcDPDYX5GiVJ/6SU8dLdre6UklM8dPo2ye6Ogkm4
-	/lDLndUdiF8feRf2Uo4+yZ3ooiL3ftxc9+3VmiAM9DKbMKmDtsBiRHgmgoH0C3U=
-X-Google-Smtp-Source: AGHT+IEj7DDDgjJGqjAL6G6ehbFSukuRXVP5DKSB6trScqHTBzKbKGL0RNb9VtHv3hM/eCB76xhdZA==
-X-Received: by 2002:a05:6000:68a:b0:374:c8a0:5d05 with SMTP id ffacd0b85a97d-381e18314bcmr6108769f8f.50.1730904164884;
-        Wed, 06 Nov 2024 06:42:44 -0800 (PST)
-Received: from localhost ([193.47.165.251])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c10b7bf7sm19642445f8f.9.2024.11.06.06.42.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2024 06:42:44 -0800 (PST)
-Date: Wed, 6 Nov 2024 15:42:40 +0100
-From: Jiri Pirko <jiri@resnulli.us>
-To: Dmitry Antipov <dmantipov@yandex.ru>
-Cc: Robin van der Gracht <robin@protonic.nl>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, lvc-project@linuxtesting.org,
-	syzbot+d4e8dc385d9258220c31@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2] can: fix skb reference counting in j1939_session_new()
-Message-ID: <ZyuAYISuNQh1r7Ni@nanopsycho.orion>
-References: <20241105094823.2403806-1-dmantipov@yandex.ru>
- <ZypJ4ZnR0JkPedNz@nanopsycho.orion>
- <9393e900-b85e-428e-a2b0-9e3650b86975@yandex.ru>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dW3XnyJdThfXzRUXK5Capmz0Lr1302JqHdkWLKxMfqCeiglrOuZQsb5NKYLhDsqEzEVlycqRtJyQ/bNCGk1AOSDiwI9RhCno2AcitZM//GYJtbSJ3i2n5qnVhOwKB51m4lG4MDFuUCnCjWW7l4N/zA/Ox2KvBsZQ2pLu9wcH5cI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UTiVV26D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63FFC4CEC6;
+	Wed,  6 Nov 2024 15:17:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730906238;
+	bh=C83+cS1FmxFeYWO4grdtw/TcIlDardzYddF7qf2i1sY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UTiVV26DrXcC45caqLHhEMxU5TiEn317mvWJ7DfW+oTrT2FnLowY9e3jA8GcfJRFY
+	 dHBi4abr2dT5J8VsZRZxUoxLEz9kUEhgGxqT1iZ/wa0egKJZqQWLbOnN4cd4/52rmz
+	 7AfwUOaPUEHCV680Mx8SLb5as7x23TWPtPRVJ6CKFoL+FPtKpYrZvQH5guDp++/pbW
+	 myMU1fCXa9jcSWsAFRofcUdf3AZB5Fp72tBmBRcNCfUQNrTWeKHfypt4LUwb0GE4tt
+	 gma2EpI3KYVpQ6brHGU6U1awxLQLyco5HCZUdAP2cfNuqbEOMzUNit7Abafso4hIWm
+	 tf8zNAieC2xrw==
+Date: Wed, 6 Nov 2024 15:17:14 +0000
+From: Simon Horman <horms@kernel.org>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Thomas Kopp <thomas.kopp@microchip.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Sven Schuchmann <schuchmann@schleissheimer.de>,
+	linux-can@vger.kernel.org, kernel@pengutronix.de,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH can v3] can: mcp251xfd: mcp251xfd_get_tef_len(): fix
+ length calculation
+Message-ID: <20241106151714.GR4507@kernel.org>
+References: <20241104-mcp251xfd-fix-length-calculation-v3-1-608b6e7e2197@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -88,20 +63,32 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9393e900-b85e-428e-a2b0-9e3650b86975@yandex.ru>
+In-Reply-To: <20241104-mcp251xfd-fix-length-calculation-v3-1-608b6e7e2197@pengutronix.de>
 
-Wed, Nov 06, 2024 at 12:03:57PM CET, dmantipov@yandex.ru wrote:
->On 11/5/24 7:37 PM, Jiri Pirko wrote:
->
->> It is odd to write "I assume" for fix like this. You should know for
->> sure, don't you?
->
->Well, the final vote is up to the maintainer(s).
+On Mon, Nov 04, 2024 at 05:42:40PM +0100, Marc Kleine-Budde wrote:
+> Commit b8e0ddd36ce9 ("can: mcp251xfd: tef: prepare to workaround
+> broken TEF FIFO tail index erratum") introduced
+> mcp251xfd_get_tef_len() to get the number of unhandled transmit events
+> from the Transmit Event FIFO (TEF).
+> 
+> As the TEF has no head pointer, the driver uses the TX FIFO's tail
+> pointer instead, assuming that send frames are completed. However the
+> check for the TEF being full was not correct. This leads to the driver
+> stop working if the TEF is full.
+> 
+> Fix the TEF full check by assuming that if, from the driver's point of
+> view, there are no free TX buffers in the chip and the TX FIFO is
+> empty, all messages must have been sent and the TEF must therefore be
+> full.
+> 
+> Reported-by: Sven Schuchmann <schuchmann@schleissheimer.de>
+> Closes: https://patch.msgid.link/FR3P281MB155216711EFF900AD9791B7ED9692@FR3P281MB1552.DEUP281.PROD.OUTLOOK.COM
+> Fixes: b8e0ddd36ce9 ("can: mcp251xfd: tef: prepare to workaround broken TEF FIFO tail index erratum")
+> Tested-by: Sven Schuchmann <schuchmann@schleissheimer.de>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Vote of what?
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-
->
->Dmitry
->
+...
 
