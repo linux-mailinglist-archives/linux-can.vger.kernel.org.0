@@ -1,108 +1,122 @@
-Return-Path: <linux-can+bounces-1910-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1911-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FF4E9BEA98
-	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 13:48:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0677A9BEFC3
+	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 15:03:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 720001C238A0
-	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 12:48:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF598281E99
+	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 14:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA8051FBC9B;
-	Wed,  6 Nov 2024 12:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=formulatrix.com header.i=@formulatrix.com header.b="awczOLZO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F8C17DFF2;
+	Wed,  6 Nov 2024 14:03:39 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE6E1FBC93
-	for <linux-can@vger.kernel.org>; Wed,  6 Nov 2024 12:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821491DED75
+	for <linux-can@vger.kernel.org>; Wed,  6 Nov 2024 14:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730896727; cv=none; b=NCCArWu2zHlBpZwKLUvw+OY6yub4nLeI/x2exCYCNzDUU/xLYsUt0dxD/bXU4xczYeaIImOafs+9kmSfTboQnRWTjnZ6lS382lxm9vCmS/5/fA6sSOjQ/MrpoUbDvfHEmGuqO77uMTLEpDHFl1fpQMIjHUPn0oHH+za4+yNdc38=
+	t=1730901819; cv=none; b=dWqPZeJBeci6STTdgxx3IuAM2N8q6MFczGMtrvFZtcmuigTRhBYxIx8Hv1Jo1XQULrvaBprrIGjZqIdbcXVluMkU3HHgioICV1lJ3p/UdYoxPQ/2bU5YKHjfNew2/HqWBBdCHpfFjsmG/hSwGs7WVvRDNdDvljuW8p6lIsw3eR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730896727; c=relaxed/simple;
-	bh=CDjC6nWvjQXpbyv7qr5gnCApA/5Ifno/sV/kMz8RsZc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XDt+1eGjuEwIEYOQKh0gyAmyteK59zX0ZbKjBMxcf1ymyrObMOWgrUL03u0FfFs7YeDYHJzcj2/cvWe/l/FefO8LG/YxQuwWTrBakUqEWuiCpfHmDliiGMlf16jSYoCyuy3f8EzaVzqvqeXcmUmyJgOcIVNNEG26Nc0A8RRIF38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=formulatrix.com; spf=pass smtp.mailfrom=formulatrix.com; dkim=pass (1024-bit key) header.d=formulatrix.com header.i=@formulatrix.com header.b=awczOLZO; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=formulatrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=formulatrix.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20bb39d97d1so63701645ad.2
-        for <linux-can@vger.kernel.org>; Wed, 06 Nov 2024 04:38:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=formulatrix.com; s=google; t=1730896724; x=1731501524; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b63lFEryEs1cJbfbsaRBAKS7BzP7xAl1csIxo1LU5As=;
-        b=awczOLZOZZL57ekw2AJd6jA3U7BwTfTloYqdRSYJO+bNRGQXifFn3s9CEPyQgoo21N
-         XCAHzcDHjxi5lbFAiolbUJ/X/BbMF+EfzdP5MGKl/6tDmZ31fPI+7Ze5jVru910eRQQe
-         qhLOnkNHmZPxV9yZIwBrJYOaMkWaVT5OTlwvY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730896724; x=1731501524;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b63lFEryEs1cJbfbsaRBAKS7BzP7xAl1csIxo1LU5As=;
-        b=TGWI28k9Gao9yhE6RzzAU19tEIdf3WXS2QVZMl/21QKz/D4tvL0qRoKfZ3FmGWaM43
-         JPsjBfid14g3sO4AZwUGo8mOi//Wcsy/ZuA1RdW/3Ym+yTenKbvWmJoV6+yJSonW1SuD
-         V3qVWI7zgHgIKlqTDOC7yttvjVgDLiw2ol6qno6DIC9kqx3kz7dA5Sbd5CRC03HbrFSl
-         Yj5UhDAdNo9wkQDmBpF2ICONqtgNZ0K8k+8JizJr4TYwIs+FLdas4PyXaP3XEZYhzz4x
-         6G7w+u1+on4aTvALCSEf6jjWhOqSWmIK4G0cpRvSsWQa2P8IBGQkFt2djI1gra2lrB5y
-         /P6g==
-X-Gm-Message-State: AOJu0YznS48MndkreVv5u7PK6qldAo6fBj4dZK4eGFSXqOvXcCeXH8ni
-	vDKM8XgrkKHqn6sZ9kyWebdSJMXLMJyyeWphQ0wh8PhNs9CubihJ82C+vFVnI5S8WppDSBOY6Ts
-	=
-X-Google-Smtp-Source: AGHT+IES+ivS48rEo8MR51lJV41yaBz2AAT6263Iabcnp7tM8pjU+lxAgPBWCuqL+VE2XHfRngXMHw==
-X-Received: by 2002:a17:902:eccd:b0:20b:6e74:b712 with SMTP id d9443c01a7336-210f76d66cemr417957745ad.45.1730896724552;
-        Wed, 06 Nov 2024 04:38:44 -0800 (PST)
-Received: from SE-151.formulatrix.internal ([36.73.154.2])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057c1543sm94380855ad.186.2024.11.06.04.38.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2024 04:38:44 -0800 (PST)
-From: Renjaya Raga Zenta <renjaya.zenta@formulatrix.com>
-To: linux-can@vger.kernel.org
-Cc: martin@geanix.com,
-	mkl@pengutronix.de,
-	msp@baylibre.com
-Subject: tcan4x5x is refusing to configure device after os reboot
-Date: Wed,  6 Nov 2024 19:37:00 +0700
-Message-ID: <20241106123700.119074-1-renjaya.zenta@formulatrix.com>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1730901819; c=relaxed/simple;
+	bh=yKnlfEY2XbVSpif5mYgC9WScl5HzhCLSh3qD4He8z1Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FNw8oHbIaYW2ETviGvZs7+IlwAfAal4d0uWmZr3+jXTmTlO8eEqoBCu72pQThr38ZGE7Fgf2JEiuqv/DUlj+gJxEyj8ho7Li/qKooNHCxWM/2zSRhXkQrcLsh7QXfF1c+XRK3Pf+sJsD40Lud+lZlcg+kY5/z/jAvhAhgvabVd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t8gd8-00033n-2W; Wed, 06 Nov 2024 15:03:30 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t8gd7-002JIv-1t;
+	Wed, 06 Nov 2024 15:03:29 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 2D72C36C0FB;
+	Wed, 06 Nov 2024 14:02:42 +0000 (UTC)
+Date: Wed, 6 Nov 2024 15:02:41 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Robert Nawrath <mbro1689@gmail.com>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: Missing CAN-XL XL data bit timing
+Message-ID: <20241106-fuzzy-robust-sawfish-17895c-mkl@pengutronix.de>
+References: <CAEQ16vpxthctdrpv0kBKEZJA8VNYffjGGPBGBY93RmKDD49bAQ@mail.gmail.com>
+ <CAMZ6Rq+9GO0-5BfauX73ReNTn2LzkZP04eGaybS6Vh+t3=Gmng@mail.gmail.com>
+ <CAEQ16vokv=Xq+0T=6=e3UMooa_jJYCW-zXWSMKVrRPnM1HoZJg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-
-Hi,
-
-I'm evaluating tcan4550 on Raspberry Pi 5 and currently using tcan4x5x module
-from 6.11.y tree (because I think there are some performance improvements
-there, which aren't available in 6.6.y).
-
-I think I found an issue if I set up can interface and do os reboot *without*
-setting interface down first.
-
-[    7.917431] tcan4x5x spi0.0: Detected TCAN device version generic
-[    7.919833] tcan4x5x spi0.0: refusing to configure device when in normal mode
-[    7.927054] tcan4x5x spi0.0 (unnamed net_device) (uninitialized): failed to enable configuration mode
-[    7.961160] tcan4x5x spi0.0: Failed registering m_can device -EBUSY
-[    7.967940] tcan4x5x: probe of spi0.0 failed with error -16
-
-Based on above log, I figured that "refusing to configure..." message is from this patch:
-https://lore.kernel.org/all/20240607105210.155435-1-martin@geanix.com
-
-My question: is this expected? If I do `ip link set can0 down` before doing reboot, the issue
-disappears. I'm not sure if doing `systemctl reboot` should also set interface down, I think
-that's not the case.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7svskqy3utx2bhaf"
+Content-Disposition: inline
+In-Reply-To: <CAEQ16vokv=Xq+0T=6=e3UMooa_jJYCW-zXWSMKVrRPnM1HoZJg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
-Regards,
+--7svskqy3utx2bhaf
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: Missing CAN-XL XL data bit timing
+MIME-Version: 1.0
 
-Renjaya
+On 05.11.2024 10:13:00, Robert Nawrath wrote:
+> @Vincent, thank you for the answer. Are there any plans to add the CAN
+> XL driver and the netlink interface for CAN XL?
+>=20
+> I use the DCAN XL implemented in FPGA. I work for Digital Core Design
+> and it's one of our latest IP cores. I know the CAN-XL controller is a
+> rare product for now.
+
+Does the IP core support CAN-CC only and CAN-CC/CAN-FD mixed mode? If
+so, an option could be to write/mainline the driver for CAN-CC/CAN-FD
+first and than add CAN-XL bits.
+
+This has the advantage that it makes reviewing easier.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--7svskqy3utx2bhaf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcrdv4ACgkQKDiiPnot
+vG+iBwf8Ci3z7e3lGb3WfRYWbt+3QdClgkKs3LfTCyTwnbDQeoK5ZOQSlaZpphiy
+Be7FKssgvBQdNNCgItuXrSGySZkGRDit3NyK4OBcLUjxKCIx7ilYi9E+q20suLEW
+6cF0O0RpXDwaXTKlbGCLMI9CiShU75mpx7ptTSV7UkHa0nZv++7mgksil5KDpTro
+E+sS1Cqy8LUVBDCeKYNaLb3otROMBTOFRHyAtZSR6LHTo6tr3e1r7uTZ4ilaLeqM
+Irq0l+vD1kwihgSKY2vWlgjdudVP4/FUmgFMWmyPOrNAKmcbFRoLE6RKB8Bkoa+q
+NPuyozcC0Ch6UzBPfFUAF9mwZL26bA==
+=znon
+-----END PGP SIGNATURE-----
+
+--7svskqy3utx2bhaf--
 
