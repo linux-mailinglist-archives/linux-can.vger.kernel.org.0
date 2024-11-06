@@ -1,51 +1,51 @@
-Return-Path: <linux-can+bounces-1908-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1909-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D6379BE524
-	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 12:04:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDB529BE52C
+	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 12:05:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 080DA1F218D1
-	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 11:04:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91366281DE1
+	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 11:05:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFED81DE2DC;
-	Wed,  6 Nov 2024 11:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 659C51DE880;
+	Wed,  6 Nov 2024 11:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="Lvx1rC6e"
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="qF341/Hk"
 X-Original-To: linux-can@vger.kernel.org
-Received: from forward501a.mail.yandex.net (forward501a.mail.yandex.net [178.154.239.81])
+Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D391D54D6;
-	Wed,  6 Nov 2024 11:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD811DACBB;
+	Wed,  6 Nov 2024 11:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730891050; cv=none; b=FF/L56PnNYS2BIA9BiXnK8YxTDjYvat5rQ+XQpwRhA137eAdOi0dWQsy42gnU7tHmcpXM2P9/00fDpQsMgiJGX29YXnBL5AB02/2t5942iEgEFk9KjdulPJctou7ekYnSJp/ZOWGHGZgdeWcznw3GEfzhXll3v3cgF06yayoanI=
+	t=1730891136; cv=none; b=YlnnylvnGkxPDJd9yG0DSFrL/zHXEiY5odd3G5Xq3yfLhw+bwP1bUYaH8/dGXc/hl37nBwR/BS9Nr7Z8kH9uDBA1lMh2se+/84OzNDKCetsTMorDX41BeGFkSjqu6NNTeiz3NmZ0RE/mNDRBt191w0iC3ze1F4DBgIa8m05aqhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730891050; c=relaxed/simple;
-	bh=q4TFipn7rP5ZxRbG9ASHkp5pxcXEVeImBq/WXvCxCrU=;
+	s=arc-20240116; t=1730891136; c=relaxed/simple;
+	bh=B6S1bomOAKY+z5+R9WRl8rS6u0qIub9hlsk1Cj6m8Lg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i7BLAirp8RVjmk0noulsIgsHnIM94suoZDK2kudq4OCymAf3/EY04PmYX5Bhe0UqgWlW1VqGgmNV6Nd1sdLlJXptZrVRpMvCQjGWOL0jAdtEMWv+wQtAJ2EOi0bhQySw3T18EXvKblk8iNFiXvZjvLqJ3Kjx5KcLm+svOdmAkMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=Lvx1rC6e; arc=none smtp.client-ip=178.154.239.81
+	 In-Reply-To:Content-Type; b=hg/p/WLmsPuJN0xSVBeNgtjD51x9BHHNUQM0vlVT5Tg8BhzzvdLZFHPN31GPIxOoy/1YC1rvcUCcBVMG9JHZE1Icnu3RhB2X2q+eqihGraspJ7e2WyK9Qr8bWAz27UhL/9XwpwCgqAOiAz9c0G9is+jYc0iBNzXfc48xomg8Kso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=qF341/Hk; arc=none smtp.client-ip=178.154.239.144
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
-Received: from mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net [IPv6:2a02:6b8:c15:2c8f:0:640:f9cc:0])
-	by forward501a.mail.yandex.net (Yandex) with ESMTPS id E461661786;
-	Wed,  6 Nov 2024 14:03:58 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id v3fYu22Vq8c0-7VZM6GHH;
-	Wed, 06 Nov 2024 14:03:57 +0300
+Received: from mail-nwsmtp-smtp-production-main-31.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-31.sas.yp-c.yandex.net [IPv6:2a02:6b8:c08:de2c:0:640:e39b:0])
+	by forward500b.mail.yandex.net (Yandex) with ESMTPS id 4E282617BF;
+	Wed,  6 Nov 2024 14:05:25 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-31.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id N5fsD12qAOs0-k2u4RpDK;
+	Wed, 06 Nov 2024 14:05:24 +0300
 X-Yandex-Fwd: 1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1730891037; bh=q4TFipn7rP5ZxRbG9ASHkp5pxcXEVeImBq/WXvCxCrU=;
+	t=1730891124; bh=B6S1bomOAKY+z5+R9WRl8rS6u0qIub9hlsk1Cj6m8Lg=;
 	h=In-Reply-To:To:From:Cc:Date:References:Subject:Message-ID;
-	b=Lvx1rC6eCZSAkno5UhCC39XeJZb8LHJQtPDzVegmdSwkwWNQweZmFiPGJvQQspLah
-	 IwCSFgXsD0kOuu22Xa/iA3qjby9P3SXmVBWr9CCCA+/bUpFPj1K/sMbZBhQxqmoiIV
-	 NU96VLUVR+t4xS7sNMnBZpWHALOfuVYhykewF8vs=
-Authentication-Results: mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <9393e900-b85e-428e-a2b0-9e3650b86975@yandex.ru>
-Date: Wed, 6 Nov 2024 14:03:57 +0300
+	b=qF341/HkHzu/ppAB5D7Mw1Ollgylyowhknntncth+2FLWqAFM2V7n5kMvd+kYWsBR
+	 OJRec/vECHC1uPTk2bQJg7CF/jZis66WG7LZzfYxfFPMaVasfWCesKBS6yZ8DOkOrI
+	 ikzHod5wssXyNAsCwjgxsbYOIB3xvNq6KvxEhSXs=
+Authentication-Results: mail-nwsmtp-smtp-production-main-31.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <2c8a2598-6185-46b0-8869-186ea46a3325@yandex.ru>
+Date: Wed, 6 Nov 2024 14:05:23 +0300
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -55,15 +55,14 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2] can: fix skb reference counting in j1939_session_new()
 Content-Language: en-MW
-To: Jiri Pirko <jiri@resnulli.us>
+To: Oleksij Rempel <o.rempel@pengutronix.de>, Jiri Pirko <jiri@resnulli.us>
 Cc: Robin van der Gracht <robin@protonic.nl>,
- Oleksij Rempel <o.rempel@pengutronix.de>,
  Oliver Hartkopp <socketcan@hartkopp.net>,
  Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
  netdev@vger.kernel.org, lvc-project@linuxtesting.org,
  syzbot+d4e8dc385d9258220c31@syzkaller.appspotmail.com
 References: <20241105094823.2403806-1-dmantipov@yandex.ru>
- <ZypJ4ZnR0JkPedNz@nanopsycho.orion>
+ <ZypJ4ZnR0JkPedNz@nanopsycho.orion> <Zys6KGmEWVnwidLb@pengutronix.de>
 From: Dmitry Antipov <dmantipov@yandex.ru>
 Autocrypt: addr=dmantipov@yandex.ru; keydata=
  xsDNBGBYjL8BDAC1iFIjCNMSvYkyi04ln+5sTl5TCU9O5Ot/kaKKCstLq3TZ1zwsyeqF7S/q
@@ -99,16 +98,17 @@ Autocrypt: addr=dmantipov@yandex.ru; keydata=
  5TXWnMCmaYHDS/lP20obHMHW1MCItEYSIn0c5DaAIfD+IWAg8gn7n5NwrMj0iBrIVHBa5mRp
  KkzhwiUObL7NO2cnjzTQgAVUGt0MSN2YfJwmSWjKH6uppQ7bo4Z+ZEOToeBsl6waJnjCL38v
  A/UwwXBRuvydGV0=
-In-Reply-To: <ZypJ4ZnR0JkPedNz@nanopsycho.orion>
+In-Reply-To: <Zys6KGmEWVnwidLb@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 11/5/24 7:37 PM, Jiri Pirko wrote:
+On 11/6/24 12:43 PM, Oleksij Rempel wrote:
 
-> It is odd to write "I assume" for fix like this. You should know for
-> sure, don't you?
+> Hm... looks the there is more then one refcounting problem at this
+> point. skb_queue is set from 3 different paths, with resulting 3 different
+> refcount states:
 
-Well, the final vote is up to the maintainer(s).
+I'll take a look; anyway I would prefer "one patch per one problem" approach.
 
 Dmitry
 
