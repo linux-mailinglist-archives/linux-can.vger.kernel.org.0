@@ -1,153 +1,115 @@
-Return-Path: <linux-can+bounces-1907-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1908-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F0A09BE2ED
-	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 10:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D6379BE524
+	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 12:04:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57C1E1F2210A
-	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 09:43:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 080DA1F218D1
+	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2024 11:04:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01C261DA31D;
-	Wed,  6 Nov 2024 09:43:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFED81DE2DC;
+	Wed,  6 Nov 2024 11:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="Lvx1rC6e"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from forward501a.mail.yandex.net (forward501a.mail.yandex.net [178.154.239.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56381DAC95
-	for <linux-can@vger.kernel.org>; Wed,  6 Nov 2024 09:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D391D54D6;
+	Wed,  6 Nov 2024 11:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730886193; cv=none; b=L4Ezw9zA1ACHbKQaRjOs5Wzzq1OUDAKS6RU+uCDb6kIaUjufI2/rL55siPb9+h+DohQTT2jUduuc6ReYLa5HST1eGhUPosBO7znzteqhDJqFhoq7TyEpq0vIdTwxoKbP0FEum6sTgeLkxUiMIGcl40yIsf0V9OaBJFuPjthESYQ=
+	t=1730891050; cv=none; b=FF/L56PnNYS2BIA9BiXnK8YxTDjYvat5rQ+XQpwRhA137eAdOi0dWQsy42gnU7tHmcpXM2P9/00fDpQsMgiJGX29YXnBL5AB02/2t5942iEgEFk9KjdulPJctou7ekYnSJp/ZOWGHGZgdeWcznw3GEfzhXll3v3cgF06yayoanI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730886193; c=relaxed/simple;
-	bh=o5WzC5wKDT7nrFSU25/Vr4sHvTQ+DRwdgVhghX0UrCw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l8MvilNxigbuZcSmHaGUUueCv3p8BfBf6Rzybqyw3jkTCLIZ1Gr0wJq5cktLCqChZfqBfIcgYah9/21F2Y1YVyFRNi2vKsOJ0+WHwO9Hhss4GyIL5msNWC2IIT/eoVCTXTbdztozhneCMTNKPI2jwsy05OX2EpidSNs6DlWYW3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1t8cZ7-0003f5-95; Wed, 06 Nov 2024 10:43:05 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1t8cZ6-002HRH-0z;
-	Wed, 06 Nov 2024 10:43:04 +0100
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1t8cZ6-00HAnb-0e;
-	Wed, 06 Nov 2024 10:43:04 +0100
-Date: Wed, 6 Nov 2024 10:43:04 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Jiri Pirko <jiri@resnulli.us>
-Cc: Dmitry Antipov <dmantipov@yandex.ru>,
-	Robin van der Gracht <robin@protonic.nl>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, lvc-project@linuxtesting.org,
-	syzbot+d4e8dc385d9258220c31@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2] can: fix skb reference counting in j1939_session_new()
-Message-ID: <Zys6KGmEWVnwidLb@pengutronix.de>
-References: <20241105094823.2403806-1-dmantipov@yandex.ru>
- <ZypJ4ZnR0JkPedNz@nanopsycho.orion>
+	s=arc-20240116; t=1730891050; c=relaxed/simple;
+	bh=q4TFipn7rP5ZxRbG9ASHkp5pxcXEVeImBq/WXvCxCrU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i7BLAirp8RVjmk0noulsIgsHnIM94suoZDK2kudq4OCymAf3/EY04PmYX5Bhe0UqgWlW1VqGgmNV6Nd1sdLlJXptZrVRpMvCQjGWOL0jAdtEMWv+wQtAJ2EOi0bhQySw3T18EXvKblk8iNFiXvZjvLqJ3Kjx5KcLm+svOdmAkMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=Lvx1rC6e; arc=none smtp.client-ip=178.154.239.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
+Received: from mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net [IPv6:2a02:6b8:c15:2c8f:0:640:f9cc:0])
+	by forward501a.mail.yandex.net (Yandex) with ESMTPS id E461661786;
+	Wed,  6 Nov 2024 14:03:58 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id v3fYu22Vq8c0-7VZM6GHH;
+	Wed, 06 Nov 2024 14:03:57 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+	t=1730891037; bh=q4TFipn7rP5ZxRbG9ASHkp5pxcXEVeImBq/WXvCxCrU=;
+	h=In-Reply-To:To:From:Cc:Date:References:Subject:Message-ID;
+	b=Lvx1rC6eCZSAkno5UhCC39XeJZb8LHJQtPDzVegmdSwkwWNQweZmFiPGJvQQspLah
+	 IwCSFgXsD0kOuu22Xa/iA3qjby9P3SXmVBWr9CCCA+/bUpFPj1K/sMbZBhQxqmoiIV
+	 NU96VLUVR+t4xS7sNMnBZpWHALOfuVYhykewF8vs=
+Authentication-Results: mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <9393e900-b85e-428e-a2b0-9e3650b86975@yandex.ru>
+Date: Wed, 6 Nov 2024 14:03:57 +0300
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] can: fix skb reference counting in j1939_session_new()
+Content-Language: en-MW
+To: Jiri Pirko <jiri@resnulli.us>
+Cc: Robin van der Gracht <robin@protonic.nl>,
+ Oleksij Rempel <o.rempel@pengutronix.de>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, lvc-project@linuxtesting.org,
+ syzbot+d4e8dc385d9258220c31@syzkaller.appspotmail.com
+References: <20241105094823.2403806-1-dmantipov@yandex.ru>
+ <ZypJ4ZnR0JkPedNz@nanopsycho.orion>
+From: Dmitry Antipov <dmantipov@yandex.ru>
+Autocrypt: addr=dmantipov@yandex.ru; keydata=
+ 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
+ A/UwwXBRuvydGV0=
 In-Reply-To: <ZypJ4ZnR0JkPedNz@nanopsycho.orion>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 05, 2024 at 05:37:53PM +0100, Jiri Pirko wrote:
-> Tue, Nov 05, 2024 at 10:48:23AM CET, dmantipov@yandex.ru wrote:
-> >Since 'j1939_session_skb_queue()' do an extra 'skb_get()' for each
-> >new skb, I assume that the same should be done for an initial one
-> 
+On 11/5/24 7:37 PM, Jiri Pirko wrote:
+
 > It is odd to write "I assume" for fix like this. You should know for
 > sure, don't you?
 
-Hm... looks the there is more then one refcounting problem at this
-point. skb_queue is set from 3 different paths, with resulting 3 different
-refcount states:
+Well, the final vote is up to the maintainer(s).
 
-j1939_sk_send_loop()
-  skb = j1939_sk_alloc_skb() // skb with refcount == 1
-  if (!session) {
-    session = j1939_tp_send(priv, skb, size)
-       ... 
-       session = j1939_session_new(priv, skb, size);
-          skb_queue_tail(&session->skb_queue, skb); // skb refcount == 1
-          
-  } else {
-    j1939_session_skb_queue(session, skb);
-      // here, skb is refcounted
-      skb_queue_tail(&session->skb_queue, skb_get(skb)); // skb refcount == 2
-  }
-  
-  // at the end of function, skb refcount == 1 or 2
-     
-j1939_xtp_rx_rts_session_new()
-  j1939_session_fresh_new()
-    skb = alloc_skb() // skb with refcount == 1
-    session = j1939_session_new(priv, skb, size);
-       skb_queue_tail(&session->skb_queue, skb);
-    skb_put(skb, size); // skb with refcount == 0
+Dmitry
 
-I agree with this patch, but there is missing skb_put() in j1939_sk_send_loop()
-
-> 
-> >in 'j1939_session_new()' just to avoid refcount underflow.
-> >
-> >Reported-by: syzbot+d4e8dc385d9258220c31@syzkaller.appspotmail.com
-> >Closes: https://syzkaller.appspot.com/bug?extid=d4e8dc385d9258220c31
-> >Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> >Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
-> >---
-> >v2: resend after hitting skb refcount underflow once again when looking
-> >around https://syzkaller.appspot.com/bug?extid=0e6ddb1ef80986bdfe64
-> >---
-> > net/can/j1939/transport.c | 2 +-
-> > 1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> >diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-> >index 319f47df3330..95f7a7e65a73 100644
-> >--- a/net/can/j1939/transport.c
-> >+++ b/net/can/j1939/transport.c
-> >@@ -1505,7 +1505,7 @@ static struct j1939_session *j1939_session_new(struct j1939_priv *priv,
-> > 	session->state = J1939_SESSION_NEW;
-> > 
-> > 	skb_queue_head_init(&session->skb_queue);
-> >-	skb_queue_tail(&session->skb_queue, skb);
-> >+	skb_queue_tail(&session->skb_queue, skb_get(skb));
-> > 
-> > 	skcb = j1939_skb_to_cb(skb);
-> > 	memcpy(&session->skcb, skcb, sizeof(session->skcb));
-> >-- 
-> >2.47.0
-> >
-> >
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
