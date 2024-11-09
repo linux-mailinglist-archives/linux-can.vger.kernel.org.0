@@ -1,100 +1,101 @@
-Return-Path: <linux-can+bounces-1916-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1917-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1000E9C3015
-	for <lists+linux-can@lfdr.de>; Sun, 10 Nov 2024 00:36:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01C449C3019
+	for <lists+linux-can@lfdr.de>; Sun, 10 Nov 2024 00:38:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9871281EE7
-	for <lists+linux-can@lfdr.de>; Sat,  9 Nov 2024 23:36:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 215F51C20AD8
+	for <lists+linux-can@lfdr.de>; Sat,  9 Nov 2024 23:38:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7E221A00F0;
-	Sat,  9 Nov 2024 23:36:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2530B1A08CA;
+	Sat,  9 Nov 2024 23:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bHENmNV+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eWiaA3PK"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCC4233D62;
-	Sat,  9 Nov 2024 23:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3055919F411;
+	Sat,  9 Nov 2024 23:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731195407; cv=none; b=dODD2ymx5zBD27xHV+Ge1pw8cv/OBitxxnBiE5Kkg0kSCyzsZHhfgeR8HiHqP+iEA0A85zGQnx8cUMsgNSdTyyUxYKZkFAYXN2xlSceB+VQjECWVexKzAa7JTjSuS9g16Ht6pFo6LKiAJg6KtgsRB3QZkBNxeweW9wO39swd/pU=
+	t=1731195507; cv=none; b=IPktpPQAkUZcX5hNC6pJtnImJaMvtTv98wgY/cdbg4Ig7XfqyLgeSspd8s/j+/0D2WSo32gy44KlLzM/oeHBPbqbcU2uaf2uYz9bYZ/7P1JUZ0CV6YeUqDJ3zo30khqb70BmhVy4L2SPCrX1BHXP0rFBODz39zIAY6ATAvIAE70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731195407; c=relaxed/simple;
-	bh=mPOuqQq+9THAiLvCKk/rvRJhw8yCY4OwSTAeuD7KJTY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ih3advyvkwqT13eHW4rFlbnz+M/C7YxmgBW9peuV7IH0dAw37QAFwoK7KBWWRfYNCmpAuH0+by+xMXyVsomjcNkWerUWDxZxFwJAvCdLV6v9ojv0hwwWxGRoZTIdt2wRUubQ/gPqGrpdiB3SllVjCkKU6yzNVyAKy1iERj1H9/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bHENmNV+; arc=none smtp.client-ip=209.85.214.174
+	s=arc-20240116; t=1731195507; c=relaxed/simple;
+	bh=OvRuBQRlJYqAa3zaifkQ7QNsRA0syraG1BYWxZlfJtc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mPYHtp6ih3I6L/+GxLmPcczNti9UkmDVEzGJomGDIDWck1Hgay6RSEXErAGbTivgWKemBxkj1EEK4SfDSF99tCpVAci3ZgoMbCceQcURzX1tLzDVEQ90F7ccky9wEdrqDBNvm4V+EeJDv1MFp4VX3hMVNHC4jATp9ifpuRVrDhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eWiaA3PK; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-20c77459558so31740545ad.0;
-        Sat, 09 Nov 2024 15:36:45 -0800 (PST)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20c7ee8fe6bso33833985ad.2;
+        Sat, 09 Nov 2024 15:38:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731195405; x=1731800205; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731195504; x=1731800304; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hOaFeGiDzVniauo8dB6dFQAm1ygSecAWPCXcoITqQCo=;
-        b=bHENmNV+2v1OUHak2kT6kJ44j9/grZ3pdYt86uumR0BZKatJRZQs5kvbL8uEN/D4zx
-         ldrYyLEX4AU7Z9y9a66rk0gvsCgpecj0Lm8XhG2LpsuE1fPb2COygEw1mv5dTRIvaXVb
-         UR+Kx7I4YX9/r9OuzO8YH6oT8j65HAzog6ojzaMClwm1Pwf95keisHCiwRf5XTXFOke/
-         vNv7DycGXgI6qVykK39BI6ahWUcyDmL1CbOqTp/itTGP61xEX54lUMqGl+IunG+QeJE2
-         b4X9EN+psQMF3efpwpRuM+N1RRpr/ln3BbQKOm6RWH1vrDWMo8SMbXHB0gbq9VYiudOF
-         OFGQ==
+        bh=4WS9Cf0rpv763uMkx6ljFiQoDVVkOxO5ZGRudjYIJ+8=;
+        b=eWiaA3PKpMaXirmtS14bAcoYl/ZLCAJtzQPIBvIKIT7syt5B14XXeql5dTR/OVpjes
+         HqGgDUDNulUCX2L5LvfOE39qZdo1rdGScRjDCtmYNbLR+2ks2Pbb0KeRy1MBZU4OQSS1
+         9sm8Z8+gVSEqMqfmykXCl11AlffFI3TOb7EfLz9O285PD3Nzc2IvgJo20OBQ+0t21tPH
+         ezHHm4H+fycKh5EcTn1gsXwgU1ybj/ToFSJqsPP9kPjyesgf1yB08sdJIYBMacjiLVrG
+         iijS/NCxV+tgVFMIlxeFHGL3C9enyacRM/ssK8enIbObhVw8alWDmXj4qA7PfGbmv7bH
+         wE7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731195405; x=1731800205;
+        d=1e100.net; s=20230601; t=1731195504; x=1731800304;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hOaFeGiDzVniauo8dB6dFQAm1ygSecAWPCXcoITqQCo=;
-        b=UAdMW4xxjUCXsNtwDebrHOEG+QzNXi+J7CoJmAUV6k8bSvTphPlG0fIt2PKQL5GvRd
-         YmuZk93cHa3RjmalKDdtTMqWQcs14TdxHgROQQf2hVnJq+uDtPBy/PaPzeJu4Q/mEsRE
-         ium/2AvMiBakPFnU6lZcqhIB5hn04jupC3Kwz95jjOlTZ0ULOtvvpIxZ59VcnPBT3hYv
-         K3e/JNSQggETDcpqUo45FlZk5VJ08U97orTlbGpj07GpvKLtflG4TiSUMbq/sR23k4di
-         2g6rV7DiHseCKg4tfqSq8qEKRMXzudg9q3N5bvk7a2q4JmkbJwSij7DrY7/EEVBgnMx3
-         IL0A==
-X-Forwarded-Encrypted: i=1; AJvYcCUCf98XAJPZxoxJdVGanRmyhec6GyfGf3DcoV34hWWDuuv04e7TnfMJ0us6l8vhwn/Hzu9g4TdBNHPCbvaKrEnjQDE=@vger.kernel.org, AJvYcCV1UK25VeaYiEoo+p89f7I/AvHS0YA8YJL0k01FbTfzydo3y6dyCp+adhJPB4HxcBJkAUl4ZuWu1lkTbefD@vger.kernel.org, AJvYcCVoFlaWsoSLYxypE+mAfPELLBTwKqR4NYDfoxKvRMjXYKOi3GDl6KlD69ly+3rzH8KupmHIqsCxmGE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBYLa+L5H9alL3rqJhWnIrOLCWizawa2u6WnYrchM396Scs5GX
-	tfbLS3jGCma3FZp0C4lCozr8AUkmLapT0hMbkr3/SZ0TnJWdJUII0x41aDop
-X-Google-Smtp-Source: AGHT+IGg2mDfUJq+jQqTWx1fKe6UaJcs9cM3BE20Y+PqItmmGE5VIagxtqONCvnZ8+2PzAlfEShMdw==
-X-Received: by 2002:a17:902:c407:b0:20c:bea0:8d10 with SMTP id d9443c01a7336-21183556853mr91704535ad.20.1731195404666;
-        Sat, 09 Nov 2024 15:36:44 -0800 (PST)
+        bh=4WS9Cf0rpv763uMkx6ljFiQoDVVkOxO5ZGRudjYIJ+8=;
+        b=CCIAjkSTcsGB0NXaijXaymS9qoaOQolTG/LHHRihje0suXCrhRfOtMxen7wnOGKeh4
+         Z2TYFVjAbRqNLMyaPCv2gKlqs6WwXh0ks5jbhMe+lMwmlAVDlMxMOOmGRK66t1np7oTF
+         aVmiK/sZ4CZNZsyohuqX52o2ULj0Ity1B12AfbX8xQFElW06+aO5EE+fwUC4R16bdK+P
+         BTdxbXfbHjqzcTs3Gccd7i1zDtyE5sVg+BxemtOZzs+UTnbwYr0N0kz8J4aRck7vi+wU
+         x+XsEfQ4dKesR8TbOgelF8j2Ysca7kmPYYOLv/AnOsr1tqwCh0R3GcCw9ET0xZmYoYdP
+         EnDw==
+X-Forwarded-Encrypted: i=1; AJvYcCU63GdHSDxnz5tboOz4DxZbh48e6blnfyTnEhiFZOsTvCtuNY38CLJrSByj7LfLaaRDhha243Q2X7ql9a9Y@vger.kernel.org, AJvYcCXTkh9uciTwmNJNnphMHrd/1i6plni+4ECcsUpS/xVTCdd6LYXMkmK3hIdw7Vtucyr4prSKyeOeXgM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIU8Fu7acPBPURWbma8CBp++jjtYfoxps8XIzJVMnQwfW37Yss
+	QRBWVHqaTeYD0aXIGyawrsRub4KY+Bo5m8UnqDpXR9uxJRvjgL6qIA9/IGxI
+X-Google-Smtp-Source: AGHT+IFWJIUgHc1oRxZrf0aN5OX+ho3LnxY/4odziwXSjaXs6zql+r8FAmb9Rw6CT2WgI37pumpZrg==
+X-Received: by 2002:a17:902:f541:b0:20d:1866:ed6f with SMTP id d9443c01a7336-21183ccf11bmr103236155ad.4.1731195504224;
+        Sat, 09 Nov 2024 15:38:24 -0800 (PST)
 Received: from ryzen.lan ([2601:644:8200:dab8::a86])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e59dfesm51379375ad.181.2024.11.09.15.36.42
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e86e30sm50116915ad.281.2024.11.09.15.38.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Nov 2024 15:36:44 -0800 (PST)
+        Sat, 09 Nov 2024 15:38:23 -0800 (PST)
 From: Rosen Penev <rosenp@gmail.com>
 To: netdev@vger.kernel.org
-Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
-	Kurt Kanzenbach <kurt@linutronix.de>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	Chris Snook <chris.snook@gmail.com>,
-	Marcin Wojtas <marcin.s.wojtas@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	UNGLinuxDriver@microchip.com (maintainer:MICROCHIP LAN966X ETHERNET DRIVER),
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-	Doug Berger <opendmb@gmail.com>,
 	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Pantelis Antoniou <pantelis.antoniou@gmail.com>,
+	Marcin Wojtas <marcin.s.wojtas@gmail.com>,
+	Byungho An <bh74.an@samsung.com>,
+	Kevin Brace <kevinbrace@bracecomputerlab.com>,
+	Francois Romieu <romieu@fr.zoreil.com>,
+	Michal Simek <michal.simek@amd.com>,
 	Heiner Kallweit <hkallweit1@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	linux-can@vger.kernel.org (open list:MCAN MMIO DEVICE DRIVER),
+	Russell King <linux@armlinux.org.uk>,
+	Zhao Qiang <qiang.zhao@nxp.com>,
+	linux-can@vger.kernel.org (open list:CAN NETWORK DRIVERS),
 	linux-kernel@vger.kernel.org (open list),
-	linux-renesas-soc@vger.kernel.org (open list:RENESAS ETHERNET SWITCH DRIVER)
-Subject: [PATCH] net: modernize ioremap in probe
-Date: Sat,  9 Nov 2024 15:36:41 -0800
-Message-ID: <20241109233641.8313-1-rosenp@gmail.com>
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Allwinner sunXi SoC support),
+	linux-sunxi@lists.linux.dev (open list:ARM/Allwinner sunXi SoC support),
+	linuxppc-dev@lists.ozlabs.org (open list:FREESCALE SOC FS_ENET DRIVER)
+Subject: [PATCH net-next] net: use pdev instead of OF funcs
+Date: Sat,  9 Nov 2024 15:38:21 -0800
+Message-ID: <20241109233821.8619-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -104,568 +105,486 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-resource aquisition and ioremap can be performed in one step.
+np here is ofdev->dev.of_node. Better to use the proper functions as
+there's no use of children or anything else.
 
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/net/can/m_can/m_can_platform.c        | 13 +++-------
- drivers/net/can/sja1000/sja1000_platform.c    | 15 +++--------
- drivers/net/dsa/hirschmann/hellcreek.c        | 18 +++----------
- drivers/net/ethernet/atheros/ag71xx.c         | 13 ++++------
- drivers/net/ethernet/broadcom/bcm63xx_enet.c  |  6 ++---
- drivers/net/ethernet/freescale/xgmac_mdio.c   | 12 +++------
- drivers/net/ethernet/marvell/mvmdio.c         | 12 +++------
- .../net/ethernet/marvell/mvpp2/mvpp2_main.c   | 14 ++++-------
- .../ethernet/microchip/lan966x/lan966x_main.c | 16 +++---------
- drivers/net/ethernet/renesas/rswitch.c        |  9 +------
- drivers/net/ethernet/renesas/rtsn.c           | 10 ++------
- drivers/net/ethernet/renesas/sh_eth.c         | 25 +++----------------
- drivers/net/mdio/mdio-bcm-unimac.c            | 11 +++-----
- drivers/net/mdio/mdio-ipq4019.c               |  7 ++----
- drivers/net/mdio/mdio-ipq8064.c               |  6 +----
- drivers/net/mdio/mdio-mux-bcm6368.c           | 11 +++-----
- drivers/net/mdio/mdio-octeon.c                | 25 +++----------------
- 17 files changed, 50 insertions(+), 173 deletions(-)
+ drivers/net/can/grcan.c                       |  2 +-
+ drivers/net/can/mscan/mpc5xxx_can.c           |  2 +-
+ drivers/net/dsa/bcm_sf2.c                     |  4 ++--
+ drivers/net/ethernet/allwinner/sun4i-emac.c   |  2 +-
+ drivers/net/ethernet/freescale/fec_mpc52xx.c  | 23 ++++++++++---------
+ .../net/ethernet/freescale/fec_mpc52xx_phy.c  | 12 ++++++----
+ .../net/ethernet/freescale/fs_enet/mac-fcc.c  |  2 +-
+ .../net/ethernet/freescale/fs_enet/mac-fec.c  |  2 +-
+ .../net/ethernet/freescale/fs_enet/mac-scc.c  |  2 +-
+ .../net/ethernet/freescale/fs_enet/mii-fec.c  | 12 ++++++----
+ drivers/net/ethernet/freescale/ucc_geth.c     | 12 +++++-----
+ drivers/net/ethernet/marvell/mvneta.c         |  2 +-
+ drivers/net/ethernet/moxa/moxart_ether.c      |  4 ++--
+ .../ethernet/samsung/sxgbe/sxgbe_platform.c   |  8 +++----
+ drivers/net/ethernet/via/via-rhine.c          |  2 +-
+ drivers/net/ethernet/via/via-velocity.c       |  2 +-
+ drivers/net/ethernet/xilinx/ll_temac_mdio.c   |  6 ++---
+ drivers/net/mdio/mdio-mux-mmioreg.c           | 16 +++++++------
+ drivers/net/wan/fsl_ucc_hdlc.c                | 10 ++++----
+ 19 files changed, 66 insertions(+), 59 deletions(-)
 
-diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
-index b832566efda0..dfc0d2834b50 100644
---- a/drivers/net/can/m_can/m_can_platform.c
-+++ b/drivers/net/can/m_can/m_can_platform.c
-@@ -79,7 +79,6 @@ static int m_can_plat_probe(struct platform_device *pdev)
+diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+index cdf0ec9fa7f3..0a2cc0ba219f 100644
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -1673,7 +1673,7 @@ static int grcan_probe(struct platform_device *ofdev)
+ 		goto exit_error;
+ 	}
+ 
+-	irq = irq_of_parse_and_map(np, GRCAN_IRQIX_IRQ);
++	irq = platform_get_irq(ofdev, GRCAN_IRQIX_IRQ);
+ 	if (!irq) {
+ 		dev_err(&ofdev->dev, "no irq found\n");
+ 		err = -ENODEV;
+diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
+index 0080c39ee182..252ad40bdb97 100644
+--- a/drivers/net/can/mscan/mpc5xxx_can.c
++++ b/drivers/net/can/mscan/mpc5xxx_can.c
+@@ -300,7 +300,7 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
+ 	if (!base)
+ 		return dev_err_probe(&ofdev->dev, err, "couldn't ioremap\n");
+ 
+-	irq = irq_of_parse_and_map(np, 0);
++	irq = platform_get_irq(ofdev, 0);
+ 	if (!irq) {
+ 		dev_err(&ofdev->dev, "no irq found\n");
+ 		err = -ENODEV;
+diff --git a/drivers/net/dsa/bcm_sf2.c b/drivers/net/dsa/bcm_sf2.c
+index 43bde1f583ff..9229582efd05 100644
+--- a/drivers/net/dsa/bcm_sf2.c
++++ b/drivers/net/dsa/bcm_sf2.c
+@@ -1443,8 +1443,8 @@ static int bcm_sf2_sw_probe(struct platform_device *pdev)
+ 		of_node_put(ports);
+ 	}
+ 
+-	priv->irq0 = irq_of_parse_and_map(dn, 0);
+-	priv->irq1 = irq_of_parse_and_map(dn, 1);
++	priv->irq0 = platform_get_irq(pdev, 0);
++	priv->irq1 = platform_get_irq(pdev, 1);
+ 
+ 	base = &priv->core;
+ 	for (i = 0; i < BCM_SF2_REGS_NUM; i++) {
+diff --git a/drivers/net/ethernet/allwinner/sun4i-emac.c b/drivers/net/ethernet/allwinner/sun4i-emac.c
+index 2f516b950f4e..18df8d1d93fd 100644
+--- a/drivers/net/ethernet/allwinner/sun4i-emac.c
++++ b/drivers/net/ethernet/allwinner/sun4i-emac.c
+@@ -995,7 +995,7 @@ static int emac_probe(struct platform_device *pdev)
+ 
+ 	/* fill in parameters for net-dev structure */
+ 	ndev->base_addr = (unsigned long)db->membase;
+-	ndev->irq = irq_of_parse_and_map(np, 0);
++	ndev->irq = platform_get_irq(pdev, 0);
+ 	if (ndev->irq == -ENXIO) {
+ 		netdev_err(ndev, "No irq resource\n");
+ 		ret = ndev->irq;
+diff --git a/drivers/net/ethernet/freescale/fec_mpc52xx.c b/drivers/net/ethernet/freescale/fec_mpc52xx.c
+index 2bfaf14f65c8..553d33a98c99 100644
+--- a/drivers/net/ethernet/freescale/fec_mpc52xx.c
++++ b/drivers/net/ethernet/freescale/fec_mpc52xx.c
+@@ -811,7 +811,7 @@ static int mpc52xx_fec_probe(struct platform_device *op)
+ 	int rv;
+ 	struct net_device *ndev;
+ 	struct mpc52xx_fec_priv *priv = NULL;
+-	struct resource mem;
++	struct resource *mem;
+ 	const u32 *prop;
+ 	int prop_size;
+ 	struct device_node *np = op->dev.of_node;
+@@ -828,20 +828,21 @@ static int mpc52xx_fec_probe(struct platform_device *op)
+ 	priv->ndev = ndev;
+ 
+ 	/* Reserve FEC control zone */
+-	rv = of_address_to_resource(np, 0, &mem);
+-	if (rv) {
++	mem = platform_get_resource(op, 0, IORESOURCE_MEM);
++	if (!mem) {
+ 		pr_err("Error while parsing device node resource\n");
++		rv = -ENODEV;
+ 		goto err_netdev;
+ 	}
+-	if (resource_size(&mem) < sizeof(struct mpc52xx_fec)) {
++	if (resource_size(mem) < sizeof(struct mpc52xx_fec)) {
+ 		pr_err("invalid resource size (%lx < %x), check mpc52xx_devices.c\n",
+-		       (unsigned long)resource_size(&mem),
++		       (unsigned long)resource_size(mem),
+ 		       sizeof(struct mpc52xx_fec));
+ 		rv = -EINVAL;
+ 		goto err_netdev;
+ 	}
+ 
+-	if (!request_mem_region(mem.start, sizeof(struct mpc52xx_fec),
++	if (!request_mem_region(mem->start, sizeof(struct mpc52xx_fec),
+ 				DRIVER_NAME)) {
+ 		rv = -EBUSY;
+ 		goto err_netdev;
+@@ -851,13 +852,13 @@ static int mpc52xx_fec_probe(struct platform_device *op)
+ 	ndev->netdev_ops	= &mpc52xx_fec_netdev_ops;
+ 	ndev->ethtool_ops	= &mpc52xx_fec_ethtool_ops;
+ 	ndev->watchdog_timeo	= FEC_WATCHDOG_TIMEOUT;
+-	ndev->base_addr		= mem.start;
++	ndev->base_addr		= mem->start;
+ 	SET_NETDEV_DEV(ndev, &op->dev);
+ 
+ 	spin_lock_init(&priv->lock);
+ 
+ 	/* ioremap the zones */
+-	priv->fec = ioremap(mem.start, sizeof(struct mpc52xx_fec));
++	priv->fec = ioremap(mem->start, sizeof(struct mpc52xx_fec));
+ 
+ 	if (!priv->fec) {
+ 		rv = -ENOMEM;
+@@ -879,9 +880,9 @@ static int mpc52xx_fec_probe(struct platform_device *op)
+ 
+ 	/* Get the IRQ we need one by one */
+ 		/* Control */
+-	ndev->irq = irq_of_parse_and_map(np, 0);
++	ndev->irq = platform_get_irq(op, 0);
+ 
+-		/* RX */
++	/* RX */
+ 	priv->r_irq = bcom_get_task_irq(priv->rx_dmatsk);
+ 
+ 		/* TX */
+@@ -967,7 +968,7 @@ static int mpc52xx_fec_probe(struct platform_device *op)
+ 		bcom_fec_tx_release(priv->tx_dmatsk);
+ 	iounmap(priv->fec);
+ err_mem_region:
+-	release_mem_region(mem.start, sizeof(struct mpc52xx_fec));
++	release_mem_region(mem->start, sizeof(struct mpc52xx_fec));
+ err_netdev:
+ 	free_netdev(ndev);
+ 
+diff --git a/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c b/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c
+index 3d073f0fae63..4ffab516f770 100644
+--- a/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c
++++ b/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c
+@@ -68,7 +68,7 @@ static int mpc52xx_fec_mdio_probe(struct platform_device *of)
+ 	struct device_node *np = of->dev.of_node;
+ 	struct mii_bus *bus;
+ 	struct mpc52xx_fec_mdio_priv *priv;
+-	struct resource res;
++	struct resource *res;
+ 	int err;
+ 
+ 	bus = mdiobus_alloc();
+@@ -85,16 +85,18 @@ static int mpc52xx_fec_mdio_probe(struct platform_device *of)
+ 	bus->write = mpc52xx_fec_mdio_write;
+ 
+ 	/* setup registers */
+-	err = of_address_to_resource(np, 0, &res);
+-	if (err)
++	res = platform_get_resource(of, 0, IORESOURCE_MEM);
++	if (!res) {
++		err = -ENODEV;
+ 		goto out_free;
+-	priv->regs = ioremap(res.start, resource_size(&res));
++	}
++	priv->regs = ioremap(res->start, resource_size(res));
+ 	if (priv->regs == NULL) {
+ 		err = -ENOMEM;
+ 		goto out_free;
+ 	}
+ 
+-	snprintf(bus->id, MII_BUS_ID_SIZE, "%pa", &res.start);
++	snprintf(bus->id, MII_BUS_ID_SIZE, "%pa", &res->start);
+ 	bus->priv = priv;
+ 
+ 	bus->parent = dev;
+diff --git a/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c b/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
+index be63293511d9..8bed0ea11dd1 100644
+--- a/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
++++ b/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
+@@ -83,7 +83,7 @@ static int do_pd_setup(struct fs_enet_private *fep)
+ 	struct fs_platform_info *fpi = fep->fpi;
+ 	int ret = -EINVAL;
+ 
+-	fep->interrupt = irq_of_parse_and_map(ofdev->dev.of_node, 0);
++	fep->interrupt = platform_get_irq(ofdev, 0);
+ 	if (!fep->interrupt)
+ 		goto out;
+ 
+diff --git a/drivers/net/ethernet/freescale/fs_enet/mac-fec.c b/drivers/net/ethernet/freescale/fs_enet/mac-fec.c
+index f2ecd20027cf..8dbd624b87ac 100644
+--- a/drivers/net/ethernet/freescale/fs_enet/mac-fec.c
++++ b/drivers/net/ethernet/freescale/fs_enet/mac-fec.c
+@@ -88,7 +88,7 @@ static int do_pd_setup(struct fs_enet_private *fep)
  {
- 	struct m_can_classdev *mcan_class;
- 	struct m_can_plat_priv *priv;
--	struct resource *res;
- 	void __iomem *addr;
- 	void __iomem *mram_addr;
- 	struct phy *transceiver;
-@@ -112,15 +111,9 @@ static int m_can_plat_probe(struct platform_device *pdev)
- 	}
+ 	struct platform_device *ofdev = to_platform_device(fep->dev);
  
- 	/* message ram could be shared */
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram");
--	if (!res) {
--		ret = -ENODEV;
--		goto probe_fail;
--	}
--
--	mram_addr = devm_ioremap(&pdev->dev, res->start, resource_size(res));
--	if (!mram_addr) {
--		ret = -ENOMEM;
-+	mram_addr = devm_platform_ioremap_resource_byname(pdev, "message_ram");
-+	if (IS_ERR(mram_addr)) {
-+		ret = PTR_ERR(mram_addr);
- 		goto probe_fail;
- 	}
+-	fep->interrupt = irq_of_parse_and_map(ofdev->dev.of_node, 0);
++	fep->interrupt = platform_get_irq(ofdev, 0);
+ 	if (!fep->interrupt)
+ 		return -EINVAL;
  
-diff --git a/drivers/net/can/sja1000/sja1000_platform.c b/drivers/net/can/sja1000/sja1000_platform.c
-index c42ebe9da55a..2d555f854008 100644
---- a/drivers/net/can/sja1000/sja1000_platform.c
-+++ b/drivers/net/can/sja1000/sja1000_platform.c
-@@ -230,18 +230,9 @@ static int sp_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res_mem)
--		return -ENODEV;
--
--	if (!devm_request_mem_region(&pdev->dev, res_mem->start,
--				     resource_size(res_mem), DRV_NAME))
--		return -EBUSY;
--
--	addr = devm_ioremap(&pdev->dev, res_mem->start,
--				    resource_size(res_mem));
--	if (!addr)
--		return -ENOMEM;
-+	addr = devm_platform_get_and_ioremap_resource(pdev, 0, &res_mem);
-+	if (IS_ERR(addr))
-+		return PTR_ERR(addr);
- 
- 	if (of) {
- 		irq = platform_get_irq(pdev, 0);
-diff --git a/drivers/net/dsa/hirschmann/hellcreek.c b/drivers/net/dsa/hirschmann/hellcreek.c
-index 283ec5a6e23c..940c4fa6a924 100644
---- a/drivers/net/dsa/hirschmann/hellcreek.c
-+++ b/drivers/net/dsa/hirschmann/hellcreek.c
-@@ -1932,7 +1932,6 @@ static int hellcreek_probe(struct platform_device *pdev)
+diff --git a/drivers/net/ethernet/freescale/fs_enet/mac-scc.c b/drivers/net/ethernet/freescale/fs_enet/mac-scc.c
+index 6c97191649de..53d67fb08bad 100644
+--- a/drivers/net/ethernet/freescale/fs_enet/mac-scc.c
++++ b/drivers/net/ethernet/freescale/fs_enet/mac-scc.c
+@@ -87,7 +87,7 @@ static int do_pd_setup(struct fs_enet_private *fep)
  {
- 	struct device *dev = &pdev->dev;
- 	struct hellcreek *hellcreek;
--	struct resource *res;
- 	int ret, i;
+ 	struct platform_device *ofdev = to_platform_device(fep->dev);
  
- 	hellcreek = devm_kzalloc(dev, sizeof(*hellcreek), GFP_KERNEL);
-@@ -1982,23 +1981,12 @@ static int hellcreek_probe(struct platform_device *pdev)
+-	fep->interrupt = irq_of_parse_and_map(ofdev->dev.of_node, 0);
++	fep->interrupt = platform_get_irq(ofdev, 0);
+ 	if (!fep->interrupt)
+ 		return -EINVAL;
  
- 	hellcreek->dev = dev;
+diff --git a/drivers/net/ethernet/freescale/fs_enet/mii-fec.c b/drivers/net/ethernet/freescale/fs_enet/mii-fec.c
+index dec31b638941..0e6faba74e34 100644
+--- a/drivers/net/ethernet/freescale/fs_enet/mii-fec.c
++++ b/drivers/net/ethernet/freescale/fs_enet/mii-fec.c
+@@ -96,7 +96,7 @@ static int fs_enet_fec_mii_write(struct mii_bus *bus, int phy_id, int location,
  
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "tsn");
--	if (!res) {
--		dev_err(dev, "No memory region provided!\n");
--		return -ENODEV;
--	}
--
--	hellcreek->base = devm_ioremap_resource(dev, res);
-+	hellcreek->base = devm_platform_ioremap_resource_byname(pdev, "tsn");
- 	if (IS_ERR(hellcreek->base))
- 		return PTR_ERR(hellcreek->base);
+ static int fs_enet_mdio_probe(struct platform_device *ofdev)
+ {
+-	struct resource res;
++	struct resource *res;
+ 	struct mii_bus *new_bus;
+ 	struct fec_info *fec;
+ 	int (*get_bus_freq)(struct device *);
+@@ -117,13 +117,15 @@ static int fs_enet_mdio_probe(struct platform_device *ofdev)
+ 	new_bus->read = &fs_enet_fec_mii_read;
+ 	new_bus->write = &fs_enet_fec_mii_write;
  
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ptp");
--	if (!res) {
--		dev_err(dev, "No PTP memory region provided!\n");
--		return -ENODEV;
--	}
--
--	hellcreek->ptp_base = devm_ioremap_resource(dev, res);
-+	hellcreek->ptp_base =
-+		devm_platform_ioremap_resource_byname(pdev, "ptp");
- 	if (IS_ERR(hellcreek->ptp_base))
- 		return PTR_ERR(hellcreek->ptp_base);
+-	ret = of_address_to_resource(ofdev->dev.of_node, 0, &res);
+-	if (ret)
++	res = platform_get_resource(ofdev, 0, IORESOURCE_MEM);
++	if (!res) {
++		ret = -ENODEV;
+ 		goto out_res;
++	}
  
-diff --git a/drivers/net/ethernet/atheros/ag71xx.c b/drivers/net/ethernet/atheros/ag71xx.c
-index 3d4c3d8698e2..928d27b51b2a 100644
---- a/drivers/net/ethernet/atheros/ag71xx.c
-+++ b/drivers/net/ethernet/atheros/ag71xx.c
-@@ -1798,15 +1798,16 @@ static int ag71xx_probe(struct platform_device *pdev)
+-	snprintf(new_bus->id, MII_BUS_ID_SIZE, "%pap", &res.start);
++	snprintf(new_bus->id, MII_BUS_ID_SIZE, "%pap", &res->start);
+ 
+-	fec->fecp = ioremap(res.start, resource_size(&res));
++	fec->fecp = ioremap(res->start, resource_size(res));
+ 	if (!fec->fecp) {
+ 		ret = -ENOMEM;
+ 		goto out_fec;
+diff --git a/drivers/net/ethernet/freescale/ucc_geth.c b/drivers/net/ethernet/freescale/ucc_geth.c
+index 6663c1768089..2a10486bc1f0 100644
+--- a/drivers/net/ethernet/freescale/ucc_geth.c
++++ b/drivers/net/ethernet/freescale/ucc_geth.c
+@@ -3560,7 +3560,7 @@ static int ucc_geth_probe(struct platform_device* ofdev)
+ 	struct net_device *dev = NULL;
+ 	struct ucc_geth_private *ugeth = NULL;
+ 	struct ucc_geth_info *ug_info;
+-	struct resource res;
++	struct resource *res;
+ 	int err, ucc_num, max_speed = 0;
+ 	const unsigned int *prop;
+ 	phy_interface_t phy_interface;
+@@ -3605,12 +3605,12 @@ static int ucc_geth_probe(struct platform_device* ofdev)
+ 	if (err)
+ 		return err;
+ 
+-	err = of_address_to_resource(np, 0, &res);
+-	if (err)
+-		return err;
++	res = platform_get_resource(ofdev 0, IORESOURCE_MEM);
++	if (!res)
++		return -ENODEV;
+ 
+-	ug_info->uf_info.regs = res.start;
+-	ug_info->uf_info.irq = irq_of_parse_and_map(np, 0);
++	ug_info->uf_info.regs = res->start;
++	ug_info->uf_info.irq = platform_get_irq(ofdev, 0);
+ 
+ 	ug_info->phy_node = of_parse_phandle(np, "phy-handle", 0);
+ 	if (!ug_info->phy_node && of_phy_is_fixed_link(np)) {
+diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+index 1fb285fa0bdb..0da7084b80c4 100644
+--- a/drivers/net/ethernet/marvell/mvneta.c
++++ b/drivers/net/ethernet/marvell/mvneta.c
+@@ -5511,7 +5511,7 @@ static int mvneta_probe(struct platform_device *pdev)
+ 		pp->neta_ac5 = true;
+ 	}
+ 
+-	dev->irq = irq_of_parse_and_map(dn, 0);
++	dev->irq = platform_get_irq(pdev, 0);
+ 	if (dev->irq == 0)
+ 		return -EINVAL;
+ 
+diff --git a/drivers/net/ethernet/moxa/moxart_ether.c b/drivers/net/ethernet/moxa/moxart_ether.c
+index 8bd60168624a..f995591dc43b 100644
+--- a/drivers/net/ethernet/moxa/moxart_ether.c
++++ b/drivers/net/ethernet/moxa/moxart_ether.c
+@@ -465,9 +465,9 @@ static int moxart_mac_probe(struct platform_device *pdev)
  	if (!ndev)
  		return -ENOMEM;
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -EINVAL;
--
- 	dcfg = of_device_get_match_data(&pdev->dev);
- 	if (!dcfg)
+-	irq = irq_of_parse_and_map(node, 0);
++	irq = platform_get_irq(pdev, 0);
+ 	if (irq <= 0) {
+-		netdev_err(ndev, "irq_of_parse_and_map failed\n");
++		netdev_err(ndev, "platform_get_irq failed\n");
+ 		ret = -EINVAL;
+ 		goto irq_map_fail;
+ 	}
+diff --git a/drivers/net/ethernet/samsung/sxgbe/sxgbe_platform.c b/drivers/net/ethernet/samsung/sxgbe/sxgbe_platform.c
+index 2eccc7617507..4118e35b99e5 100644
+--- a/drivers/net/ethernet/samsung/sxgbe/sxgbe_platform.c
++++ b/drivers/net/ethernet/samsung/sxgbe/sxgbe_platform.c
+@@ -111,7 +111,7 @@ static int sxgbe_platform_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* Get the SXGBE common INT information */
+-	priv->irq  = irq_of_parse_and_map(node, 0);
++	priv->irq = platform_get_irq(pdev, 0);
+ 	if (priv->irq <= 0) {
+ 		dev_err(dev, "sxgbe common irq parsing failed\n");
+ 		goto err_drv_remove;
+@@ -122,7 +122,7 @@ static int sxgbe_platform_probe(struct platform_device *pdev)
+ 
+ 	/* Get the TX/RX IRQ numbers */
+ 	for (i = 0, chan = 1; i < SXGBE_TX_QUEUES; i++) {
+-		priv->txq[i]->irq_no = irq_of_parse_and_map(node, chan++);
++		priv->txq[i]->irq_no = platform_get_irq(pdev, chan++);
+ 		if (priv->txq[i]->irq_no <= 0) {
+ 			dev_err(dev, "sxgbe tx irq parsing failed\n");
+ 			goto err_tx_irq_unmap;
+@@ -130,14 +130,14 @@ static int sxgbe_platform_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	for (i = 0; i < SXGBE_RX_QUEUES; i++) {
+-		priv->rxq[i]->irq_no = irq_of_parse_and_map(node, chan++);
++		priv->rxq[i]->irq_no = platform_get_irq(pdev, chan++);
+ 		if (priv->rxq[i]->irq_no <= 0) {
+ 			dev_err(dev, "sxgbe rx irq parsing failed\n");
+ 			goto err_rx_irq_unmap;
+ 		}
+ 	}
+ 
+-	priv->lpi_irq = irq_of_parse_and_map(node, chan);
++	priv->lpi_irq = platform_get_irq(pdev, chan);
+ 	if (priv->lpi_irq <= 0) {
+ 		dev_err(dev, "sxgbe lpi irq parsing failed\n");
+ 		goto err_rx_irq_unmap;
+diff --git a/drivers/net/ethernet/via/via-rhine.c b/drivers/net/ethernet/via/via-rhine.c
+index 894911f3d560..f079242c33e2 100644
+--- a/drivers/net/ethernet/via/via-rhine.c
++++ b/drivers/net/ethernet/via/via-rhine.c
+@@ -1127,7 +1127,7 @@ static int rhine_init_one_platform(struct platform_device *pdev)
+ 	if (IS_ERR(ioaddr))
+ 		return PTR_ERR(ioaddr);
+ 
+-	irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
++	irq = platform_get_irq(pdev, 0);
+ 	if (!irq)
  		return -EINVAL;
  
- 	ag = netdev_priv(ndev);
-+
-+	ag->mac_base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(ag->mac_base))
-+		return PTR_ERR(ag->mac_base);
-+
- 	ag->mac_idx = -1;
- 	for (i = 0; i < ARRAY_SIZE(ar71xx_addr_ar7100); i++) {
- 		if (ar71xx_addr_ar7100[i] == res->start)
-@@ -1836,10 +1837,6 @@ static int ag71xx_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, PTR_ERR(ag->mac_reset),
- 				     "missing mac reset");
+diff --git a/drivers/net/ethernet/via/via-velocity.c b/drivers/net/ethernet/via/via-velocity.c
+index dd4a07c97eee..4aac9599c14d 100644
+--- a/drivers/net/ethernet/via/via-velocity.c
++++ b/drivers/net/ethernet/via/via-velocity.c
+@@ -2950,7 +2950,7 @@ static int velocity_platform_probe(struct platform_device *pdev)
+ 	if (!info)
+ 		return -EINVAL;
  
--	ag->mac_base = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(ag->mac_base))
--		return PTR_ERR(ag->mac_base);
--
- 	/* ensure that HW is in manual polling mode before interrupts are
- 	 * activated. Otherwise ag71xx_interrupt might call napi_schedule
- 	 * before it is initialized by netif_napi_add.
-diff --git a/drivers/net/ethernet/broadcom/bcm63xx_enet.c b/drivers/net/ethernet/broadcom/bcm63xx_enet.c
-index 65e3a0656a4c..420317abe3d2 100644
---- a/drivers/net/ethernet/broadcom/bcm63xx_enet.c
-+++ b/drivers/net/ethernet/broadcom/bcm63xx_enet.c
-@@ -2646,16 +2646,14 @@ static int bcm_enetsw_probe(struct platform_device *pdev)
- 	struct bcm_enet_priv *priv;
- 	struct net_device *dev;
- 	struct bcm63xx_enetsw_platform_data *pd;
--	struct resource *res_mem;
- 	int ret, irq_rx, irq_tx;
+-	irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
++	irq = platform_get_irq(pdev, 0);
+ 	if (!irq)
+ 		return -EINVAL;
  
- 	if (!bcm_enet_shared_base[0])
- 		return -EPROBE_DEFER;
+diff --git a/drivers/net/ethernet/xilinx/ll_temac_mdio.c b/drivers/net/ethernet/xilinx/ll_temac_mdio.c
+index 07a9fb49eda1..4bc5d47ecb7e 100644
+--- a/drivers/net/ethernet/xilinx/ll_temac_mdio.c
++++ b/drivers/net/ethernet/xilinx/ll_temac_mdio.c
+@@ -69,7 +69,7 @@ int temac_mdio_setup(struct temac_local *lp, struct platform_device *pdev)
+ 	u32 bus_hz;
+ 	int clk_div;
+ 	int rc;
+-	struct resource res;
++	struct resource *res;
  
--	res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	irq_rx = platform_get_irq(pdev, 0);
- 	irq_tx = platform_get_irq(pdev, 1);
--	if (!res_mem || irq_rx < 0)
-+	if (irq_rx < 0)
- 		return -ENODEV;
- 
- 	dev = alloc_etherdev(sizeof(*priv));
-@@ -2688,7 +2686,7 @@ static int bcm_enetsw_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto out;
- 
--	priv->base = devm_ioremap_resource(&pdev->dev, res_mem);
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(priv->base)) {
- 		ret = PTR_ERR(priv->base);
- 		goto out;
-diff --git a/drivers/net/ethernet/freescale/xgmac_mdio.c b/drivers/net/ethernet/freescale/xgmac_mdio.c
-index 65dc07d0df0f..688720e48396 100644
---- a/drivers/net/ethernet/freescale/xgmac_mdio.c
-+++ b/drivers/net/ethernet/freescale/xgmac_mdio.c
-@@ -381,11 +381,6 @@ static int xgmac_mdio_probe(struct platform_device *pdev)
- 	 * subdevice areas. Therefore, MDIO cannot claim exclusive access to
- 	 * this register area.
- 	 */
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "could not obtain address\n");
--		return -EINVAL;
--	}
- 
- 	bus = devm_mdiobus_alloc_size(&pdev->dev, sizeof(struct mdio_fsl_priv));
- 	if (!bus)
-@@ -400,10 +395,9 @@ static int xgmac_mdio_probe(struct platform_device *pdev)
- 	snprintf(bus->id, MII_BUS_ID_SIZE, "%pa", &res->start);
- 
- 	priv = bus->priv;
--	priv->mdio_base = devm_ioremap(&pdev->dev, res->start,
--				       resource_size(res));
--	if (!priv->mdio_base)
--		return -ENOMEM;
-+	priv->mdio_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->mdio_base))
-+		return PTR_ERR(priv->mdio_base);
- 
- 	/* For both ACPI and DT cases, endianness of MDIO controller
- 	 * needs to be specified using "little-endian" property.
-diff --git a/drivers/net/ethernet/marvell/mvmdio.c b/drivers/net/ethernet/marvell/mvmdio.c
-index 3f4447e68888..ad1dddfa6ea8 100644
---- a/drivers/net/ethernet/marvell/mvmdio.c
-+++ b/drivers/net/ethernet/marvell/mvmdio.c
-@@ -291,12 +291,6 @@ static int orion_mdio_probe(struct platform_device *pdev)
- 
- 	type = (uintptr_t)device_get_match_data(&pdev->dev);
- 
--	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!r) {
--		dev_err(&pdev->dev, "No SMI register address given\n");
--		return -ENODEV;
--	}
--
- 	bus = devm_mdiobus_alloc_size(&pdev->dev,
- 				      sizeof(struct orion_mdio_dev));
- 	if (!bus)
-@@ -319,10 +313,10 @@ static int orion_mdio_probe(struct platform_device *pdev)
- 	bus->parent = &pdev->dev;
- 
- 	dev = bus->priv;
--	dev->regs = devm_ioremap(&pdev->dev, r->start, resource_size(r));
--	if (!dev->regs) {
-+	dev->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
-+	if (IS_ERR(dev->regs)) {
- 		dev_err(&pdev->dev, "Unable to remap SMI register\n");
--		return -ENODEV;
-+		return PTR_ERR(dev->regs);
- 	}
- 
- 	init_waitqueue_head(&dev->smi_busy_wait);
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index 571631a30320..faf853edc0db 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -7425,21 +7425,17 @@ static int mvpp2_init(struct platform_device *pdev, struct mvpp2 *priv)
- static int mvpp2_get_sram(struct platform_device *pdev,
- 			  struct mvpp2 *priv)
- {
--	struct resource *res;
- 	void __iomem *base;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
--	if (!res) {
-+	base = devm_platform_ioremap_resource(pdev, 2);
-+	if (IS_ERR(base)) {
- 		if (has_acpi_companion(&pdev->dev))
- 			dev_warn(&pdev->dev, "ACPI is too old, Flow control not supported\n");
- 		else
--			dev_warn(&pdev->dev, "DT is too old, Flow control not supported\n");
--		return 0;
--	}
--
--	base = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(base))
-+			dev_warn(&pdev->dev,
-+				 "DT is too old, Flow control not supported\n");
- 		return PTR_ERR(base);
-+	}
- 
- 	priv->cm3_base = base;
- 	return 0;
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 3234a960fcc3..375e9a68b9a9 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -77,20 +77,12 @@ static int lan966x_create_targets(struct platform_device *pdev,
- 	 * this.
- 	 */
- 	for (idx = 0; idx < IO_RANGES; idx++) {
--		iores[idx] = platform_get_resource(pdev, IORESOURCE_MEM,
--						   idx);
--		if (!iores[idx]) {
--			dev_err(&pdev->dev, "Invalid resource\n");
--			return -EINVAL;
--		}
--
--		begin[idx] = devm_ioremap(&pdev->dev,
--					  iores[idx]->start,
--					  resource_size(iores[idx]));
--		if (!begin[idx]) {
-+		begin[idx] = devm_platform_get_and_ioremap_resource(
-+			pdev, idx, &iores[idx]);
-+		if (IS_ERR(begin[idx])) {
- 			dev_err(&pdev->dev, "Unable to get registers: %s\n",
- 				iores[idx]->name);
--			return -ENOMEM;
-+			return PTR_ERR(begin[idx]);
- 		}
- 	}
- 
-diff --git a/drivers/net/ethernet/renesas/rswitch.c b/drivers/net/ethernet/renesas/rswitch.c
-index 8d18dae4d8fb..8ef52fc46a01 100644
---- a/drivers/net/ethernet/renesas/rswitch.c
-+++ b/drivers/net/ethernet/renesas/rswitch.c
-@@ -2046,15 +2046,8 @@ static int renesas_eth_sw_probe(struct platform_device *pdev)
- {
- 	const struct soc_device_attribute *attr;
- 	struct rswitch_private *priv;
--	struct resource *res;
- 	int ret;
- 
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "secure_base");
--	if (!res) {
--		dev_err(&pdev->dev, "invalid resource\n");
--		return -EINVAL;
--	}
--
- 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
-@@ -2074,7 +2067,7 @@ static int renesas_eth_sw_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, priv);
- 	priv->pdev = pdev;
--	priv->addr = devm_ioremap_resource(&pdev->dev, res);
-+	priv->addr = devm_platform_ioremap_resource_byname(pdev, "secure_base");
- 	if (IS_ERR(priv->addr))
- 		return PTR_ERR(priv->addr);
- 
-diff --git a/drivers/net/ethernet/renesas/rtsn.c b/drivers/net/ethernet/renesas/rtsn.c
-index 6b3f7fca8d15..bfe08facc707 100644
---- a/drivers/net/ethernet/renesas/rtsn.c
-+++ b/drivers/net/ethernet/renesas/rtsn.c
-@@ -1297,14 +1297,8 @@ static int rtsn_probe(struct platform_device *pdev)
- 	ndev->netdev_ops = &rtsn_netdev_ops;
- 	ndev->ethtool_ops = &rtsn_ethtool_ops;
- 
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "gptp");
--	if (!res) {
--		dev_err(&pdev->dev, "Can't find gptp resource\n");
--		ret = -EINVAL;
--		goto error_free;
--	}
--
--	priv->ptp_priv->addr = devm_ioremap_resource(&pdev->dev, res);
-+	priv->ptp_priv->addr =
-+		devm_platform_ioremap_resource_byname(pdev, "gptp");
- 	if (IS_ERR(priv->ptp_priv->addr)) {
- 		ret = PTR_ERR(priv->ptp_priv->addr);
- 		goto error_free;
-diff --git a/drivers/net/ethernet/renesas/sh_eth.c b/drivers/net/ethernet/renesas/sh_eth.c
-index 8887b8921009..d9a2cba60a11 100644
---- a/drivers/net/ethernet/renesas/sh_eth.c
-+++ b/drivers/net/ethernet/renesas/sh_eth.c
-@@ -3349,31 +3349,12 @@ static int sh_eth_drv_probe(struct platform_device *pdev)
- 
- 	if (mdp->cd->tsu) {
- 		int port = pdev->id < 0 ? 0 : pdev->id % 2;
--		struct resource *rtsu;
- 
--		rtsu = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--		if (!rtsu) {
--			dev_err(&pdev->dev, "no TSU resource\n");
--			ret = -ENODEV;
--			goto out_release;
--		}
--		/* We can only request the  TSU region  for the first port
--		 * of the two  sharing this TSU for the probe to succeed...
--		 */
--		if (port == 0 &&
--		    !devm_request_mem_region(&pdev->dev, rtsu->start,
--					     resource_size(rtsu),
--					     dev_name(&pdev->dev))) {
--			dev_err(&pdev->dev, "can't request TSU resource.\n");
--			ret = -EBUSY;
--			goto out_release;
--		}
- 		/* ioremap the TSU registers */
--		mdp->tsu_addr = devm_ioremap(&pdev->dev, rtsu->start,
--					     resource_size(rtsu));
--		if (!mdp->tsu_addr) {
-+		mdp->tsu_addr = devm_platform_ioremap_resource(pdev, 1);
-+		if (IS_ERR(mdp->tsu_addr)) {
- 			dev_err(&pdev->dev, "TSU region ioremap() failed.\n");
--			ret = -ENOMEM;
-+			ret = PTR_ERR(mdp->tsu_addr);
- 			goto out_release;
- 		}
- 		mdp->port = port;
-diff --git a/drivers/net/mdio/mdio-bcm-unimac.c b/drivers/net/mdio/mdio-bcm-unimac.c
-index 074d96328f41..9796294d465a 100644
---- a/drivers/net/mdio/mdio-bcm-unimac.c
-+++ b/drivers/net/mdio/mdio-bcm-unimac.c
-@@ -239,7 +239,6 @@ static int unimac_mdio_probe(struct platform_device *pdev)
- 	struct unimac_mdio_priv *priv;
- 	struct device_node *np;
- 	struct mii_bus *bus;
--	struct resource *r;
- 	int ret;
- 
- 	np = pdev->dev.of_node;
-@@ -248,17 +247,13 @@ static int unimac_mdio_probe(struct platform_device *pdev)
- 	if (!priv)
+ 	/* Get MDIO bus frequency (if specified) */
+ 	bus_hz = 0;
+@@ -98,9 +98,9 @@ int temac_mdio_setup(struct temac_local *lp, struct platform_device *pdev)
  		return -ENOMEM;
  
--	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!r)
--		return -EINVAL;
--
- 	/* Just ioremap, as this MDIO block is usually integrated into an
- 	 * Ethernet MAC controller register range
- 	 */
--	priv->base = devm_ioremap(&pdev->dev, r->start, resource_size(r));
--	if (!priv->base) {
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base)) {
- 		dev_err(&pdev->dev, "failed to remap register\n");
--		return -ENOMEM;
-+		return PTR_ERR(priv->base);
- 	}
- 
- 	if (of_property_read_u32(np, "clock-frequency", &priv->clk_freq))
-diff --git a/drivers/net/mdio/mdio-ipq4019.c b/drivers/net/mdio/mdio-ipq4019.c
-index dd3ed2d6430b..725e5c13d212 100644
---- a/drivers/net/mdio/mdio-ipq4019.c
-+++ b/drivers/net/mdio/mdio-ipq4019.c
-@@ -256,7 +256,7 @@ static int ipq_mdio_reset(struct mii_bus *bus)
- 	/* To indicate CMN_PLL that ethernet_ldo has been ready if platform resource 1
- 	 * is specified in the device tree.
- 	 */
--	if (priv->eth_ldo_rdy) {
-+	if (!IS_ERR(priv->eth_ldo_rdy)) {
- 		val = readl(priv->eth_ldo_rdy);
- 		val |= BIT(0);
- 		writel(val, priv->eth_ldo_rdy);
-@@ -327,7 +327,6 @@ static int ipq4019_mdio_probe(struct platform_device *pdev)
- {
- 	struct ipq4019_mdio_data *priv;
- 	struct mii_bus *bus;
--	struct resource *res;
- 	int ret;
- 
- 	bus = devm_mdiobus_alloc_size(&pdev->dev, sizeof(*priv));
-@@ -351,9 +350,7 @@ static int ipq4019_mdio_probe(struct platform_device *pdev)
- 
- 	/* The platform resource is provided on the chipset IPQ5018 */
- 	/* This resource is optional */
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	if (res)
--		priv->eth_ldo_rdy = devm_ioremap_resource(&pdev->dev, res);
-+	priv->eth_ldo_rdy = devm_platform_ioremap_resource(pdev, 1);
- 
- 	bus->name = "ipq4019_mdio";
- 	bus->read = ipq4019_mdio_read_c22;
-diff --git a/drivers/net/mdio/mdio-ipq8064.c b/drivers/net/mdio/mdio-ipq8064.c
-index 6253a9ab8b69..716b22e9b93c 100644
---- a/drivers/net/mdio/mdio-ipq8064.c
-+++ b/drivers/net/mdio/mdio-ipq8064.c
-@@ -111,15 +111,11 @@ ipq8064_mdio_probe(struct platform_device *pdev)
+ 	if (np) {
+-		of_address_to_resource(np, 0, &res);
++		res = platform_get_resource(pdev, 0, IORESOURCE_MEM);
+ 		snprintf(bus->id, MII_BUS_ID_SIZE, "%.8llx",
+-			 (unsigned long long)res.start);
++			 (unsigned long long)res->start);
+ 	} else if (pdata) {
+ 		snprintf(bus->id, MII_BUS_ID_SIZE, "%.8llx",
+ 			 pdata->mdio_bus_id);
+diff --git a/drivers/net/mdio/mdio-mux-mmioreg.c b/drivers/net/mdio/mdio-mux-mmioreg.c
+index 9c4b1efd0d53..b5a65a1ab406 100644
+--- a/drivers/net/mdio/mdio-mux-mmioreg.c
++++ b/drivers/net/mdio/mdio-mux-mmioreg.c
+@@ -98,7 +98,7 @@ static int mdio_mux_mmioreg_probe(struct platform_device *pdev)
  {
  	struct device_node *np = pdev->dev.of_node;
- 	struct ipq8064_mdio *priv;
+ 	struct mdio_mux_mmioreg_state *s;
 -	struct resource res;
- 	struct mii_bus *bus;
- 	void __iomem *base;
- 	int ret;
++	struct resource *res;
+ 	const __be32 *iprop;
+ 	int len, ret;
  
--	if (of_address_to_resource(np, 0, &res))
--		return -ENOMEM;
--
--	base = devm_ioremap(&pdev->dev, res.start, resource_size(&res));
-+	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (!base)
+@@ -108,13 +108,15 @@ static int mdio_mux_mmioreg_probe(struct platform_device *pdev)
+ 	if (!s)
  		return -ENOMEM;
  
-diff --git a/drivers/net/mdio/mdio-mux-bcm6368.c b/drivers/net/mdio/mdio-mux-bcm6368.c
-index 476f8b72d020..fa369ff7d45c 100644
---- a/drivers/net/mdio/mdio-mux-bcm6368.c
-+++ b/drivers/net/mdio/mdio-mux-bcm6368.c
-@@ -90,7 +90,6 @@ static int bcm6368_mdiomux_probe(struct platform_device *pdev)
- {
- 	struct bcm6368_mdiomux_desc *md;
- 	struct mii_bus *bus;
--	struct resource *res;
- 	int rc;
+-	ret = of_address_to_resource(np, 0, &res);
+-	if (ret)
+-		return dev_err_probe(&pdev->dev, ret,
+-				     "could not obtain memory map for node %pOF\n", np);
+-	s->phys = res.start;
++	res = platform_get_resource(pdev, 0, IORESOURCE_MEM);
++	if (!res) {
++		dev_err(&pdev->dev,
++			"could not obtain memory map for node %pOF\n", np);
++		return -ENODEV;
++	}
++	s->phys = res->start;
  
- 	md = devm_kzalloc(&pdev->dev, sizeof(*md), GFP_KERNEL);
-@@ -98,18 +97,14 @@ static int bcm6368_mdiomux_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	md->dev = &pdev->dev;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -EINVAL;
--
- 	/*
- 	 * Just ioremap, as this MDIO block is usually integrated into an
- 	 * Ethernet MAC controller register range
- 	 */
--	md->base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
--	if (!md->base) {
-+	md->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(md->base)) {
- 		dev_err(&pdev->dev, "failed to ioremap register\n");
--		return -ENOMEM;
-+		return PTR_ERR(md->base);
+-	s->iosize = resource_size(&res);
++	s->iosize = resource_size(res);
+ 	if (s->iosize != sizeof(uint8_t) &&
+ 	    s->iosize != sizeof(uint16_t) &&
+ 	    s->iosize != sizeof(uint32_t))
+diff --git a/drivers/net/wan/fsl_ucc_hdlc.c b/drivers/net/wan/fsl_ucc_hdlc.c
+index f999798a5612..414a9d22da5e 100644
+--- a/drivers/net/wan/fsl_ucc_hdlc.c
++++ b/drivers/net/wan/fsl_ucc_hdlc.c
+@@ -1118,7 +1118,7 @@ static int ucc_hdlc_probe(struct platform_device *pdev)
+ 	struct ucc_hdlc_private *uhdlc_priv = NULL;
+ 	struct ucc_tdm_info *ut_info;
+ 	struct ucc_tdm *utdm = NULL;
+-	struct resource res;
++	struct resource *res;
+ 	struct net_device *dev;
+ 	hdlc_device *hdlc;
+ 	int ucc_num;
+@@ -1170,12 +1170,12 @@ static int ucc_hdlc_probe(struct platform_device *pdev)
+ 		return -EINVAL;
  	}
  
- 	md->mii_bus = devm_mdiobus_alloc(&pdev->dev);
-diff --git a/drivers/net/mdio/mdio-octeon.c b/drivers/net/mdio/mdio-octeon.c
-index 2beb83154d39..cb53dccbde1a 100644
---- a/drivers/net/mdio/mdio-octeon.c
-+++ b/drivers/net/mdio/mdio-octeon.c
-@@ -17,37 +17,20 @@ static int octeon_mdiobus_probe(struct platform_device *pdev)
- {
- 	struct cavium_mdiobus *bus;
- 	struct mii_bus *mii_bus;
--	struct resource *res_mem;
--	resource_size_t mdio_phys;
--	resource_size_t regsize;
- 	union cvmx_smix_en smi_en;
--	int err = -ENOENT;
-+	int err;
+-	ret = of_address_to_resource(np, 0, &res);
+-	if (ret)
++	res = platform_get_resource(pdev, 0, IORESOURCE_MEM);
++	if (!res)
+ 		return -EINVAL;
  
- 	mii_bus = devm_mdiobus_alloc_size(&pdev->dev, sizeof(*bus));
- 	if (!mii_bus)
- 		return -ENOMEM;
+-	ut_info->uf_info.regs = res.start;
+-	ut_info->uf_info.irq = irq_of_parse_and_map(np, 0);
++	ut_info->uf_info.regs = res->start;
++	ut_info->uf_info.irq = platform_get_irq(pdev, 0);
  
--	res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (res_mem == NULL) {
--		dev_err(&pdev->dev, "found no memory resource\n");
--		return -ENXIO;
--	}
--
- 	bus = mii_bus->priv;
- 	bus->mii_bus = mii_bus;
--	mdio_phys = res_mem->start;
--	regsize = resource_size(res_mem);
- 
--	if (!devm_request_mem_region(&pdev->dev, mdio_phys, regsize,
--				     res_mem->name)) {
--		dev_err(&pdev->dev, "request_mem_region failed\n");
--		return -ENXIO;
--	}
--
--	bus->register_base = devm_ioremap(&pdev->dev, mdio_phys, regsize);
--	if (!bus->register_base) {
-+	bus->register_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(bus->register_base)) {
- 		dev_err(&pdev->dev, "dev_ioremap failed\n");
--		return -ENOMEM;
-+		return PTR_ERR(bus->register_base);
- 	}
- 
- 	smi_en.u64 = 0;
+ 	uhdlc_priv = kzalloc(sizeof(*uhdlc_priv), GFP_KERNEL);
+ 	if (!uhdlc_priv)
 -- 
 2.47.0
 
