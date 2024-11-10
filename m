@@ -1,66 +1,66 @@
-Return-Path: <linux-can+bounces-1938-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1937-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F5429C33B7
-	for <lists+linux-can@lfdr.de>; Sun, 10 Nov 2024 17:04:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4751C9C33BA
+	for <lists+linux-can@lfdr.de>; Sun, 10 Nov 2024 17:04:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A30091C20A9E
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9651B20B88
 	for <lists+linux-can@lfdr.de>; Sun, 10 Nov 2024 16:04:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23BD25C603;
-	Sun, 10 Nov 2024 16:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A95003A8F7;
+	Sun, 10 Nov 2024 16:04:29 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8731655C29
-	for <linux-can@vger.kernel.org>; Sun, 10 Nov 2024 16:04:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE274C3D0
+	for <linux-can@vger.kernel.org>; Sun, 10 Nov 2024 16:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731254670; cv=none; b=XZU8wBoSMxl/NCFofm4IV8OxwPkapeHn91QqBq1qOf2vkjqfmvXrQ++ia57uousTUD3j5E8PAADbZXtc95ian7HcROkGYY2tm5sR9eh1p6ENnCCP77u6IWiQaqD85vZrvRBxRlwKmJSdguFUb5QriTqrSOY4SHap1GcCXSjJWV4=
+	t=1731254669; cv=none; b=UuNtpidbjwHfADuNtTXkcbfnsIRFR30VAW6/q/LGU4C+44ZcNkebVzNGjimbMiy8bO0Ut8OLFD/JewVQcHfcq00rbr6mtEYmdYvlaw1G8bI6tnkWO9n65O576BtVH/gh+N0VuCsmv7IOMX+2RqiDsbkUyu4zgaCrJqW3ytjaO4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731254670; c=relaxed/simple;
-	bh=xbgk5hAoqieohPCSfNFhSlP8wiXGZ1l1vbeJYgtQU6I=;
+	s=arc-20240116; t=1731254669; c=relaxed/simple;
+	bh=CqX8n0Owsum0Z1B7EszPVdIZX9NJI0hya+W5DpJXGW4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RZWI2oiDyWnrK7uNybtlCvZw2qlk/C3SPYxVEiuCyHFR1Ore9ufXQuV2FWmrfTKT5gQRBYG9dg0+cxDtvsyZWaHpNS+h5ymC52u82x2lB742/f5tH9RUMmJJlXw5nUe6LHwlewlXv5EWgnwUnmA4Iyw81VUkyRFkJSPNG4daUK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.180
+	 MIME-Version; b=UvbmXt5aV0u49HzkzS+3vl8/FPCDlnR7WVdvbwDMRNsbNdGcyk6Uze14nxjSxJGl3X/Rd3qmhDiahzC3wddtgu4AYV+iMyGPsohcBXE2be1CTJzzFyynGIO2L1c8du57rGvg98ymi6vmfrxN8dxFg8Ancr3BRnUBh1vgHtG5CuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-72041ff06a0so2994029b3a.2
-        for <linux-can@vger.kernel.org>; Sun, 10 Nov 2024 08:04:26 -0800 (PST)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-71e592d7f6eso2797300b3a.3
+        for <linux-can@vger.kernel.org>; Sun, 10 Nov 2024 08:04:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731254665; x=1731859465;
+        d=1e100.net; s=20230601; t=1731254667; x=1731859467;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5dn6D2PvAkkjUh/aBGO5vR9KleF05rgJT7heCtBroHA=;
-        b=pt57RvKD/2NrbRGz06C2uxmbLj2xsr48FjmaWEsKNSmaRkTVTEHKHFGdJqSFgaGqbt
-         Yc0LALFadYFHoBrODbvVXYYnql8+VbMnMQwUcDkmDi01uW6bGo3exJ/OZLHjLhS+9O6b
-         CBWblUeOSNHoCw27Ndv+PCFILMVZI6Ha7FpRSmIjnwZqDEV5uh2p3ykZXArvy9QULlaX
-         IDgMQ+lrZHEgU9seDMeR8hdadanu4sz699bgpHN1V5KZoc3cD0FLNWWDvo9DqiEAYZgs
-         M7AH2+6PfuEutBnP+HqLiqFJaspt5PtIqRLCVgspev5FhrzAQJaw70Zu2xVL9AX313u6
-         x21Q==
-X-Gm-Message-State: AOJu0Yy4njSTAQUJZXDgznK3vif/skDW/Hkb5qkgnEQKyoKfANRAR5Jd
-	y/TvWuaUjB7aowBvQkI8sXHeLy6OfBXkzUIm645407RvjQz8Axth0DbCcA==
-X-Google-Smtp-Source: AGHT+IFXTQ2BDkOwE7vmAR0Gr2mT5CGmA1peIDgRT79nuYEP1paNNQhY8trswDuQWsVIvdOrX/rQmA==
-X-Received: by 2002:a05:6a00:18a1:b0:71e:e4f:3e58 with SMTP id d2e1a72fcca58-72413358923mr14089699b3a.17.1731254665338;
-        Sun, 10 Nov 2024 08:04:25 -0800 (PST)
+        bh=YMmHsILc9wSuxIC3v3+L5VLMJNAlIR2dNPQT7/A1vY4=;
+        b=SN0q/2N5YfBXmoJmVkHNWuAhX/vJrmI6TOU/B0zV9DRLXLhs3uAKzc6e90g5TACLU0
+         irVaReDH1R5DD6mrVbEeJVyf/AQRObuj6RJKM/um789j04J0OSP50T0GxHO8KfmBYCYE
+         dhM9okt9jrGa0SkuwcywKokQaHP6mo2BD2VdlswQ1UhX6pYHLdW7BvcVLi6TQGpDlOLL
+         +oX+EQTP+170sUaO6Ep5Qwq4jZCQhe63bd+wyh1V5017EhQdh0nOjXPx3ATaH4jSbLcZ
+         exivnKTv8sjREwEio6nu3k9Wnkk0DCS3nnLBO3HwwT0lhWhEtR8gRlTYXQcmLAZdWW4G
+         Xpdw==
+X-Gm-Message-State: AOJu0Yziqtm513bOFBK7gEckNY1jK41V1ImnkOaLtZVzRbHDk8U33kta
+	C6lpl0oEAz4txiVjiqlqR9G5I+n3YB349PXQln/riHs+Y47o2qzxHYVzXg==
+X-Google-Smtp-Source: AGHT+IGnKUcdoOwoZsA3MTl7YmAt4do4dZBwSs0KuviScrrD7ueEiK0BIJM2KdWPsV1k+Oj2/JeZgQ==
+X-Received: by 2002:a05:6a20:7344:b0:1d2:eb91:c0c1 with SMTP id adf61e73a8af0-1dc22b38ac0mr13578089637.42.1731254667215;
+        Sun, 10 Nov 2024 08:04:27 -0800 (PST)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078a48cbsm7383037b3a.45.2024.11.10.08.04.23
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078a48cbsm7383037b3a.45.2024.11.10.08.04.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Nov 2024 08:04:25 -0800 (PST)
+        Sun, 10 Nov 2024 08:04:26 -0800 (PST)
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To: linux-can@vger.kernel.org,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
 	Oliver Hartkopp <socketcan@hartkopp.net>
 Cc: Robert Nawrath <mbro1689@gmail.com>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [RFC PATCH 1/8] iplink_can: remove unused FILE *f parameter in three functions
-Date: Mon, 11 Nov 2024 01:01:31 +0900
-Message-ID: <20241110160406.73584-11-mailhol.vincent@wanadoo.fr>
+Subject: [RFC PATCH 2/8] !!! DO NOT MERGE !!! can: netlink: update headers
+Date: Mon, 11 Nov 2024 01:01:32 +0900
+Message-ID: <20241110160406.73584-12-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241110160406.73584-10-mailhol.vincent@wanadoo.fr>
 References: <20241110160406.73584-10-mailhol.vincent@wanadoo.fr>
@@ -70,81 +70,71 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2361; i=mailhol.vincent@wanadoo.fr; h=from:subject; bh=xbgk5hAoqieohPCSfNFhSlP8wiXGZ1l1vbeJYgtQU6I=; b=owGbwMvMwCV2McXO4Xp97WbG02pJDOkGN8tPbqroWpB8kSmcL5ex9J8l62a3lEsb0ufZPq0y8 r+/+YhWRykLgxgXg6yYIsuyck5uhY5C77BDfy1h5rAygQxh4OIUgIloNDEy/Cs13/ohfeE2y4K1 Hfa7oj8e1WQz2Gk55bNz/YIFMydOc2P4Xx5XvOCyZbi8yU/xZbM6tiXdrb6eLWn02H/NBP0FZ6Y 8ZwEA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2442; i=mailhol.vincent@wanadoo.fr; h=from:subject; bh=CqX8n0Owsum0Z1B7EszPVdIZX9NJI0hya+W5DpJXGW4=; b=owGbwMvMwCV2McXO4Xp97WbG02pJDOkGN8uv/F5wxvWu7v+rNfGz13hOrlj2chH/a7OwJUaTT y+/er/JuaOUhUGMi0FWTJFlWTknt0JHoXfYob+WMHNYmUCGMHBxCsBEKnUYGbZN/pOh9crY1Prn 76h7T5sDPrUxzmm79nyjRsLSOP50nxsM/wz2Tn+62uYCR8+His/VrvX/L4n3bmm8uYQ7Z4f9IT2 9T6wA
 X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp; fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 Content-Transfer-Encoding: 8bit
 
-FILE *f, the first parameter of below functions:
-
- * can_print_tdc_opt()
- * can_print_tdc_const_opt()
- * void can_print_ctrlmode_ext()
-
-is unused. Remove it.
+Add the CAN XL definitions in the linux/can/netlink.h uapi
+header. Normally those are pulled automatically from net-next. But
+because the CAN XL series is still an RFC, this patch is added as a
+convinience so that you do not have to do the copy yourself.
 
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- ip/iplink_can.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ include/uapi/linux/can/netlink.h | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/ip/iplink_can.c b/ip/iplink_can.c
-index f2967db5..01d977fa 100644
---- a/ip/iplink_can.c
-+++ b/ip/iplink_can.c
-@@ -337,7 +337,7 @@ can_print_timing_min_max(const char *json_attr, const char *fp_attr,
- 	close_json_object();
- }
+diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
+index 8ec98c21..8edbfa20 100644
+--- a/include/uapi/linux/can/netlink.h
++++ b/include/uapi/linux/can/netlink.h
+@@ -101,8 +101,11 @@ struct can_ctrlmode {
+ #define CAN_CTRLMODE_PRESUME_ACK	0x40	/* Ignore missing CAN ACKs */
+ #define CAN_CTRLMODE_FD_NON_ISO		0x80	/* CAN FD in non-ISO mode */
+ #define CAN_CTRLMODE_CC_LEN8_DLC	0x100	/* Classic CAN DLC option */
+-#define CAN_CTRLMODE_TDC_AUTO		0x200	/* CAN transiver automatically calculates TDCV */
+-#define CAN_CTRLMODE_TDC_MANUAL		0x400	/* TDCV is manually set up by user */
++#define CAN_CTRLMODE_TDC_AUTO		0x200	/* FD transceiver automatically calculates TDCV */
++#define CAN_CTRLMODE_TDC_MANUAL		0x400	/* FD TDCV is manually set up by user */
++#define CAN_CTRLMODE_XL			0x800	/* CAN XL mode */
++#define CAN_CTRLMODE_XL_TDC_AUTO	0x200	/* XL transceiver automatically calculates TDCV */
++#define CAN_CTRLMODE_XL_TDC_MANUAL	0x400	/* XL TDCV is manually set up by user */
  
--static void can_print_tdc_opt(FILE *f, struct rtattr *tdc_attr)
-+static void can_print_tdc_opt(struct rtattr *tdc_attr)
- {
- 	struct rtattr *tb[IFLA_CAN_TDC_MAX + 1];
+ /*
+  * CAN device statistics
+@@ -129,15 +132,19 @@ enum {
+ 	IFLA_CAN_RESTART_MS,
+ 	IFLA_CAN_RESTART,
+ 	IFLA_CAN_BERR_COUNTER,
+-	IFLA_CAN_DATA_BITTIMING,
+-	IFLA_CAN_DATA_BITTIMING_CONST,
++	IFLA_CAN_DATA_BITTIMING, /* FD */
++	IFLA_CAN_DATA_BITTIMING_CONST, /* FD */
+ 	IFLA_CAN_TERMINATION,
+ 	IFLA_CAN_TERMINATION_CONST,
+ 	IFLA_CAN_BITRATE_CONST,
+-	IFLA_CAN_DATA_BITRATE_CONST,
++	IFLA_CAN_DATA_BITRATE_CONST, /* FD */
+ 	IFLA_CAN_BITRATE_MAX,
+-	IFLA_CAN_TDC,
++	IFLA_CAN_TDC, /* FD */
+ 	IFLA_CAN_CTRLMODE_EXT,
++	IFLA_CAN_XL_DATA_BITTIMING,
++	IFLA_CAN_XL_DATA_BITTIMING_CONST,
++	IFLA_CAN_XL_DATA_BITRATE_CONST,
++	IFLA_CAN_XL_TDC,
  
-@@ -365,7 +365,7 @@ static void can_print_tdc_opt(FILE *f, struct rtattr *tdc_attr)
- 	}
- }
+ 	/* add new constants above here */
+ 	__IFLA_CAN_MAX,
+@@ -145,7 +152,7 @@ enum {
+ };
  
--static void can_print_tdc_const_opt(FILE *f, struct rtattr *tdc_attr)
-+static void can_print_tdc_const_opt(struct rtattr *tdc_attr)
- {
- 	struct rtattr *tb[IFLA_CAN_TDC_MAX + 1];
- 
-@@ -393,7 +393,7 @@ static void can_print_tdc_const_opt(FILE *f, struct rtattr *tdc_attr)
- 	close_json_object();
- }
- 
--static void can_print_ctrlmode_ext(FILE *f, struct rtattr *ctrlmode_ext_attr,
-+static void can_print_ctrlmode_ext(struct rtattr *ctrlmode_ext_attr,
- 				   __u32 cm_flags)
- {
- 	struct rtattr *tb[IFLA_CAN_CTRLMODE_MAX + 1];
-@@ -417,7 +417,7 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
- 
- 		print_ctrlmode(PRINT_ANY, cm->flags, "ctrlmode");
- 		if (tb[IFLA_CAN_CTRLMODE_EXT])
--			can_print_ctrlmode_ext(f, tb[IFLA_CAN_CTRLMODE_EXT],
-+			can_print_ctrlmode_ext(tb[IFLA_CAN_CTRLMODE_EXT],
- 					       cm->flags);
- 	}
- 
-@@ -542,7 +542,7 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
- 		print_uint(PRINT_ANY, "brp", " dbrp %u", dbt->brp);
- 
- 		if (tb[IFLA_CAN_TDC])
--			can_print_tdc_opt(f, tb[IFLA_CAN_TDC]);
-+			can_print_tdc_opt(tb[IFLA_CAN_TDC]);
- 
- 		close_json_object();
- 	}
-@@ -566,7 +566,7 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
- 		print_uint(PRINT_ANY, "brp_inc", " dbrp_inc %u", dbtc->brp_inc);
- 
- 		if (tb[IFLA_CAN_TDC])
--			can_print_tdc_const_opt(f, tb[IFLA_CAN_TDC]);
-+			can_print_tdc_const_opt(tb[IFLA_CAN_TDC]);
- 
- 		close_json_object();
- 	}
+ /*
+- * CAN FD Transmitter Delay Compensation (TDC)
++ * CAN FD/XL Transmitter Delay Compensation (TDC)
+  *
+  * Please refer to struct can_tdc_const and can_tdc in
+  * include/linux/can/bittiming.h for further details.
 -- 
 2.45.2
 
