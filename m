@@ -1,66 +1,66 @@
-Return-Path: <linux-can+bounces-1923-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1924-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC1389C33A6
-	for <lists+linux-can@lfdr.de>; Sun, 10 Nov 2024 16:59:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17BC59C33A7
+	for <lists+linux-can@lfdr.de>; Sun, 10 Nov 2024 16:59:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E07C1C20921
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7FED28164C
 	for <lists+linux-can@lfdr.de>; Sun, 10 Nov 2024 15:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D908A22619;
-	Sun, 10 Nov 2024 15:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28D183CC7;
+	Sun, 10 Nov 2024 15:59:36 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389F84CDEC
-	for <linux-can@vger.kernel.org>; Sun, 10 Nov 2024 15:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA2E4CDEC
+	for <linux-can@vger.kernel.org>; Sun, 10 Nov 2024 15:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731254374; cv=none; b=Tc9qSlZiuj1B+X2+hsItvBClDEv5W6SOF7YGI7/HREii4wXBrZkevpwi+H8pLiOv+bblG2W4mtr9IFX1fHr9RHSaoRJpW5gDPvEFvSbvCMhWj8Uv/Eg7mw/b+PJjm4O83fJa3kkbQ49uVxzMWLvdb6XY27SkHYypWlp5/lH3qGE=
+	t=1731254376; cv=none; b=RDWc/JRfiGs6lizqCH020bQkewGplxlRZoG6slXFKZ2jPISPRpEBZks2RHLHJpGyhcNPV7kOXCS12tk/hUFK0nFeggoFFiRXj/Qq4I2giXDNp1iWLzVNQLCzw7uxo8RUYkTPPSZLs5gAjNjCf8DgU0DBMesUt3wX1fO4q0xD4vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731254374; c=relaxed/simple;
-	bh=igPwDEX+kBFS8vI6XFFpwe0dABOtFHrwLHC1/mtnRb4=;
+	s=arc-20240116; t=1731254376; c=relaxed/simple;
+	bh=rGQlHT/m68C3UfrBE/ikk7wol7f4uQPoJ3LHcF4oN6o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hUtibkXnKgWrftZv3ixfpYgd1XmclrRaw1GdrizSuWE6PMylVmPB0vmlsLrzuD8J7eqbWbKxr/1UfwlOC/HEzTm8PqAMxsb/iYrTV/CzrBq7MeA1HyrUaeWb5/knigWVwe0TQWsSp0sVy3s//0XgQHsJ4W7OOFU9qYySzvvHaeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version; b=nNhDAC4H25bGXTIPNC7Vwlyg4duS4Nnb2tgXJKNlLxzUH7ZMi7T2T07GtTN/Gy/87BNgWjbQk/qOvTrOmrcc2A0Z343XbFRJqZgDy47Dv/R8UFZ/hA4UnkZFMcacQP7LRyzDLShor8PtGIKQLYJKIPd0L3l5YxETT/x8iPGn9XQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-723db2798caso3877281b3a.0
-        for <linux-can@vger.kernel.org>; Sun, 10 Nov 2024 07:59:33 -0800 (PST)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7240d93fffdso2924860b3a.2
+        for <linux-can@vger.kernel.org>; Sun, 10 Nov 2024 07:59:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731254372; x=1731859172;
+        d=1e100.net; s=20230601; t=1731254374; x=1731859174;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MkHCbMuM5Oo8Rc+XZYcC1s9rSah9HoD4WbusbkFpTzk=;
-        b=MP6WE+Lq+UJfe/6SMwd0Dd5xaxttPpO9RCyHbnoEF8d6w9a/dB7GvxqLL4mSel5RE2
-         tl8KlXvqBUMoxS409KuB1ElPWwU075ybqV4ZgPHVHDbAvN8q9pV6mTBRRHIqcFb4OdD1
-         YA6pXOkifoda7nquL38HhirfuPaSuFVcxPUwF+az6kgxpv24NAMuzC9I6Xw0rj6Oea8Q
-         KYVWe7/taa8+8anJWxaR+tomSR3E7twoO/+qSP099d9B3RFja7yQ3JZ5GirVJmngqWDc
-         PBiBA2QoYPGgMDnKW5Ju1wxgVoaFCi4n+BLeLxSBFx2Ci4Ler6s8HXlEVEQZ3NL93rnZ
-         W9qA==
-X-Gm-Message-State: AOJu0Yw0k+43wII6oQhuPt5xeDuQgktcPMUXjmWmaJB6WR+xo/9TDh73
-	mFTKh/QakeK3UQeXNiaf4HqHXsbjasjITjrhGS2aVbaETZyDGLtJvTM5tw==
-X-Google-Smtp-Source: AGHT+IG5pFiNSJztPsIWauWCVf+9tx/GLvQ75iJx+DDXk5+YRFjSaOg9WSLbWizotOAPDaxQe3DQtw==
-X-Received: by 2002:a05:6a20:2587:b0:1da:4dea:3a41 with SMTP id adf61e73a8af0-1dc228b22d7mr13965805637.5.1731254372140;
-        Sun, 10 Nov 2024 07:59:32 -0800 (PST)
+        bh=X+RqkB1sUMX6vJyOuUWxOILOufOiaTgQEU1WBlalnbE=;
+        b=TF7LZdeiLR0mRAk2QK+FdRn6xQD6CjeKusVwZ0ZCIaitPsU6OwiwnIRTWcM9Qm15BL
+         c8dSFximmR0vjsktNaFTupATgy2Pux8pAZD8cNUyHhfHwjQxLZPFEq/fM+L+5yOtcz6z
+         h0N7zQeG5dTAnKLUfRNAkmvGWOqDyqznC+TQ984cBCfQkewP0hz5WmXPe39eU83UOXKI
+         8Sm0MEIsG9fakbKWJdi9OZarQte2qaaCouXjo0bFhpnXUGKH0vDBkPDkkuB7p9w7zKe8
+         mCbUKrgSfsL16St7bEgWC/2WQ7LqtJEmXc/GtiRWYykcjgM9rp4ITEczOpOZG5z9PCCc
+         1wCw==
+X-Gm-Message-State: AOJu0YyWBBkURNmfoMSXj0OrJvEYgVWv/OKcu+oINVxGcG8WO7EXsGBY
+	C/JtmO1zAprTeQWwoTt7fPr+e3eoZJZ2BuQ80DAH3Se+P8w40NceFldaVQ==
+X-Google-Smtp-Source: AGHT+IFV+1ZU5BywHCzHpqNv/oMf6gY47kZ4zdN4AyEnvdKQRJY7uarP9Y5tLXJyElJCCPNgthAVJg==
+X-Received: by 2002:a05:6a00:84c:b0:71e:3b8:666b with SMTP id d2e1a72fcca58-724132c0dd7mr13590563b3a.15.1731254374028;
+        Sun, 10 Nov 2024 07:59:34 -0800 (PST)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078609ddsm7490959b3a.22.2024.11.10.07.59.30
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078609ddsm7490959b3a.22.2024.11.10.07.59.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Nov 2024 07:59:31 -0800 (PST)
+        Sun, 10 Nov 2024 07:59:33 -0800 (PST)
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To: linux-can@vger.kernel.org,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
 	Oliver Hartkopp <socketcan@hartkopp.net>
 Cc: Robert Nawrath <mbro1689@gmail.com>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [RFC PATCH 02/14] can: netlink: replace tabulation by space in assignement
-Date: Mon, 11 Nov 2024 00:55:51 +0900
-Message-ID: <20241110155902.72807-18-mailhol.vincent@wanadoo.fr>
+Subject: [RFC PATCH 03/14] can: bittiming: rename CAN_CTRLMODE_TDC_MASK into CAN_CTRLMODE_FD_TDC_MASK
+Date: Mon, 11 Nov 2024 00:55:52 +0900
+Message-ID: <20241110155902.72807-19-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241110155902.72807-16-mailhol.vincent@wanadoo.fr>
 References: <20241110155902.72807-16-mailhol.vincent@wanadoo.fr>
@@ -70,35 +70,110 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1187; i=mailhol.vincent@wanadoo.fr; h=from:subject; bh=igPwDEX+kBFS8vI6XFFpwe0dABOtFHrwLHC1/mtnRb4=; b=owGbwMvMwCV2McXO4Xp97WbG02pJDOkGNwKYrY8IuSraL7P00eD71/rvyNurGdNEmEXckmfYl M+5IdHQUcrCIMbFICumyLKsnJNboaPQO+zQX0uYOaxMIEMYuDgFYCIJnQy/WSK4rtlOkfokJ/7J bs8MFi0Gicj01RWpUhFfWBwYb7GYMfwvKt9SrXP73Y4rm7J3b7yS80rzlhBnrtGhs1MuZp0JW9b GDQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3947; i=mailhol.vincent@wanadoo.fr; h=from:subject; bh=rGQlHT/m68C3UfrBE/ikk7wol7f4uQPoJ3LHcF4oN6o=; b=owGbwMvMwCV2McXO4Xp97WbG02pJDOkGNwLu7Z/H83fNEoaa0A3/BH1DebkamQ1eVtlvK826/ uHI/TulHaUsDGJcDLJiiizLyjm5FToKvcMO/bWEmcPKBDKEgYtTACZiI8HIcI3T/+ylT5M8VN5b r5i55UjF5RxrUW+HUKdH+mxLomXtgxj+u/t6+M5ubskUehgWr/j0xZx5VgJa/RNKzTrlj5rE8+s zAQA=
 X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp; fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 Content-Transfer-Encoding: 8bit
 
-commit cfd98c838cbe ("can: netlink: move '=' operators back to
-previous line (checkpatch fix)") inadvertedly introduced a tabulation
-between the IFLA_CAN_DATA_BITTIMING_CONST array index and the equal
-sign.
-
-Remove it.
+With the introduction of CAN XL, a new CAN_CTRLMODE_XL_TDC_MASK will
+be introduced later on. Because CAN_CTRLMODE_TDC_MASK is not part of
+the uapi, rename it to CAN_CTRLMODE_FD_TDC_MASK to make it more
+explicit that this mask is meant for CAN FD.
 
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/dev/netlink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/dev/calc_bittiming.c |  2 +-
+ drivers/net/can/dev/netlink.c        | 12 ++++++------
+ include/linux/can/bittiming.h        |  2 +-
+ include/linux/can/dev.h              |  2 +-
+ 4 files changed, 9 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/net/can/dev/calc_bittiming.c b/drivers/net/can/dev/calc_bittiming.c
+index 3809c148fb88..a94bd67c670c 100644
+--- a/drivers/net/can/dev/calc_bittiming.c
++++ b/drivers/net/can/dev/calc_bittiming.c
+@@ -179,7 +179,7 @@ void can_calc_tdco(struct can_tdc *tdc, const struct can_tdc_const *tdc_const,
+ 	if (!tdc_const || !(ctrlmode_supported & CAN_CTRLMODE_TDC_AUTO))
+ 		return;
+ 
+-	*ctrlmode &= ~CAN_CTRLMODE_TDC_MASK;
++	*ctrlmode &= ~CAN_CTRLMODE_FD_TDC_MASK;
+ 
+ 	/* As specified in ISO 11898-1 section 11.3.3 "Transmitter
+ 	 * delay compensation" (TDC) is only applicable if data BRP is
 diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index 7455a7c5a383..df8b7ba68b6e 100644
+index df8b7ba68b6e..72a60e8186aa 100644
 --- a/drivers/net/can/dev/netlink.c
 +++ b/drivers/net/can/dev/netlink.c
-@@ -18,7 +18,7 @@ static const struct nla_policy can_policy[IFLA_CAN_MAX + 1] = {
- 	[IFLA_CAN_CLOCK] = { .len = sizeof(struct can_clock) },
- 	[IFLA_CAN_BERR_COUNTER] = { .len = sizeof(struct can_berr_counter) },
- 	[IFLA_CAN_DATA_BITTIMING] = { .len = sizeof(struct can_bittiming) },
--	[IFLA_CAN_DATA_BITTIMING_CONST]	= { .len = sizeof(struct can_bittiming_const) },
-+	[IFLA_CAN_DATA_BITTIMING_CONST] = { .len = sizeof(struct can_bittiming_const) },
- 	[IFLA_CAN_TERMINATION] = { .type = NLA_U16 },
- 	[IFLA_CAN_TDC] = { .type = NLA_NESTED },
- 	[IFLA_CAN_CTRLMODE_EXT] = { .type = NLA_NESTED },
+@@ -67,12 +67,12 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+ 
+ 	if (data[IFLA_CAN_CTRLMODE]) {
+ 		struct can_ctrlmode *cm = nla_data(data[IFLA_CAN_CTRLMODE]);
+-		u32 tdc_flags = cm->flags & CAN_CTRLMODE_TDC_MASK;
++		u32 tdc_flags = cm->flags & CAN_CTRLMODE_FD_TDC_MASK;
+ 
+ 		is_can_fd = cm->flags & cm->mask & CAN_CTRLMODE_FD;
+ 
+ 		/* CAN_CTRLMODE_TDC_{AUTO,MANUAL} are mutually exclusive */
+-		if (tdc_flags == CAN_CTRLMODE_TDC_MASK)
++		if (tdc_flags == CAN_CTRLMODE_FD_TDC_MASK)
+ 			return -EOPNOTSUPP;
+ 		/* If one of the CAN_CTRLMODE_TDC_* flag is set then
+ 		 * TDC must be set and vice-versa
+@@ -230,16 +230,16 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 			dev->mtu = CAN_MTU;
+ 			memset(&priv->fd.data_bittiming, 0,
+ 			       sizeof(priv->fd.data_bittiming));
+-			priv->ctrlmode &= ~CAN_CTRLMODE_TDC_MASK;
++			priv->ctrlmode &= ~CAN_CTRLMODE_FD_TDC_MASK;
+ 			memset(&priv->fd.tdc, 0, sizeof(priv->fd.tdc));
+ 		}
+ 
+-		tdc_mask = cm->mask & CAN_CTRLMODE_TDC_MASK;
++		tdc_mask = cm->mask & CAN_CTRLMODE_FD_TDC_MASK;
+ 		/* CAN_CTRLMODE_TDC_{AUTO,MANUAL} are mutually
+ 		 * exclusive: make sure to turn the other one off
+ 		 */
+ 		if (tdc_mask)
+-			priv->ctrlmode &= cm->flags | ~CAN_CTRLMODE_TDC_MASK;
++			priv->ctrlmode &= cm->flags | ~CAN_CTRLMODE_FD_TDC_MASK;
+ 	}
+ 
+ 	if (data[IFLA_CAN_BITTIMING]) {
+@@ -339,7 +339,7 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 			err = can_tdc_changelink(priv, data[IFLA_CAN_TDC],
+ 						 extack);
+ 			if (err) {
+-				priv->ctrlmode &= ~CAN_CTRLMODE_TDC_MASK;
++				priv->ctrlmode &= ~CAN_CTRLMODE_FD_TDC_MASK;
+ 				return err;
+ 			}
+ 		} else if (!tdc_mask) {
+diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.h
+index 9b8a9c39614b..5dfdbb63b1d5 100644
+--- a/include/linux/can/bittiming.h
++++ b/include/linux/can/bittiming.h
+@@ -14,7 +14,7 @@
+ #define CAN_BITRATE_UNSET 0
+ #define CAN_BITRATE_UNKNOWN (-1U)
+ 
+-#define CAN_CTRLMODE_TDC_MASK					\
++#define CAN_CTRLMODE_FD_TDC_MASK				\
+ 	(CAN_CTRLMODE_TDC_AUTO | CAN_CTRLMODE_TDC_MANUAL)
+ 
+ /*
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index 492d23bec7be..e492dfa8a472 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -93,7 +93,7 @@ struct can_priv {
+ 
+ static inline bool can_tdc_is_enabled(const struct can_priv *priv)
+ {
+-	return !!(priv->ctrlmode & CAN_CTRLMODE_TDC_MASK);
++	return !!(priv->ctrlmode & CAN_CTRLMODE_FD_TDC_MASK);
+ }
+ 
+ /*
 -- 
 2.45.2
 
