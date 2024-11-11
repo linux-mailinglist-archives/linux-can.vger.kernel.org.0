@@ -1,163 +1,241 @@
-Return-Path: <linux-can+bounces-1960-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1961-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C176C9C41F0
-	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2024 16:34:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 640149C4280
+	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2024 17:21:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7948B1F24FF3
-	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2024 15:34:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24D8028901C
+	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2024 16:21:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5D31A4F02;
-	Mon, 11 Nov 2024 15:33:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 335F21A08DF;
+	Mon, 11 Nov 2024 16:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="piMwN90r";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="1H+ZKwky"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPH7cBOp"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD50A14B962
-	for <linux-can@vger.kernel.org>; Mon, 11 Nov 2024 15:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731339184; cv=pass; b=iVSw520XZfhHC+rfz4ZvYNObwKUAx0UCG6i9X1fpd3t6aEcbfkrMHBPMWfzq2Ue0hrycfIZcvRlwUmrn0R6D8xwqqpaqhCzkuLU19Ceu0dzdA/zC4XTrqnRjBXMp6DJ5m6ZqXWYLshQcafkIHsCuoJrHaPu6W+2gj8EaDvgmLbk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731339184; c=relaxed/simple;
-	bh=RXXg26CkbN/kU7FfeJT0znTAQBMbico4Ogmz3UlbKUU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y+NXbSeUjxahTV366WkXrfYxlUQPkCcDnjJ/a8YWXhDs8AsQEXqeN0gTStdhYzI/G3rZFI+izRrQm9AvLGwlQQuu0Uw7gW2lfb9egS131jz3DMYyB064XHi9ZAFgW/LMl3w7nEryx7OhifFfWIKOhTsD7yEnwAqMSksCYdSDjBU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=piMwN90r; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=1H+ZKwky; arc=pass smtp.client-ip=85.215.255.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1731339172; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Th+AMBONapcdw8E2o/Zxktqzj34jZWIaeENWEvewUznpe8qgTjMBOuorpwi2xsG+rl
-    jB/6B8vIwqAwn7zV4QfVft9/5Ndvos3z/LAYCzlSJ5JK7YoM0rBL0tPEL3DPoTm++J29
-    fr+/4QM/a+ppUVt2htGHiSwJunNA6QMRXsTAVNxifwUA3SnRxjsJsN5B+SChyZzq0/Pd
-    cF5g6G1QwliPaEiDPqyM69XeA6qEfirF1fp1pPHmbqzAwoitfnTXJ056cvtiwRyxL0YZ
-    ymStTpMwX2Wjs5QBmuCdxPfs4W2mptAgp1SeBOR8EG5pcJNmsVsiVGuU1QEaAuWtCpWf
-    A+XA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1731339172;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=N6qflJC0WngFCp68pmCyDOqjHZ7TuFG4J1Kl8Jn6bWE=;
-    b=UQOBBVvBldMWBhUvzzASn8xBCBuxPTzFweJIasveI9zVVlc5vvofJiHChAVbHa7mCe
-    Nggl1lbkOBHfOJUzekB+cxhCEl1Na2oFNoOZRIDTg0yq9/5jW8gFHCxzd0t3FWuVvVgD
-    fucjHElh3SLsT3hKQ7I5p7/2E1PCFBcuwVKdR6iUztU3MahwhHeV5UINgsQ5Yk7b+TlD
-    +qP/dijN2+4gLMLJGgLYWCMp0j4vfhpfApwvjUrV3bD4QiAJPOG49QLGmor1Nxnvzptm
-    CJe96+mhfH9W3jNJa9hlxTtngPFJi8whbtgQ1ch4IcOqRs17QElPne/zHumr58+j5E9f
-    yOXw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1731339172;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=N6qflJC0WngFCp68pmCyDOqjHZ7TuFG4J1Kl8Jn6bWE=;
-    b=piMwN90rG/dl6K7FHBoqT/dFFujOhR11UpuMvCyE7KBv95O2kU5VPwmYGp8ACP3elu
-    14pLsT+ALNgBLK9MH7cLUGo8rdr/JY8ye9kWlQh8GeklQQxKiONJH+8dNfJxeR2VYbsk
-    0JsNP/arqRkwW0ceKZIn71q81pNQmawpxvEpFZXWATd3AkDfZPZZNF50LYuhVC+UB5Qj
-    G8iI+v9KqESrKEwD6PPJoLbBPkbCU3ZhoCgLFL1gtpLABQRFj1wYStFjVenXwq+8vpYH
-    a3VzKsosv5NgLfYndlfjBr/GM1HIKIEbpYBsQz1Q8vveH5n3CpAFz3185MCPFffc9QPr
-    rFFw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1731339172;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=N6qflJC0WngFCp68pmCyDOqjHZ7TuFG4J1Kl8Jn6bWE=;
-    b=1H+ZKwkyOn+IodCPbclYhNHdSO4xLkkhqyvamccTNSvb0N2UgvB4jcBhGuP5vN9bnk
-    l57N0D34Fg33CiBogSCA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/vMMcFB+5xtv9aJ67XA=="
-Received: from [IPV6:2a00:6020:4a8e:5000::9f3]
-    by smtp.strato.de (RZmta 51.2.11 AUTH)
-    with ESMTPSA id K63ada0ABFWp8PU
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Mon, 11 Nov 2024 16:32:51 +0100 (CET)
-Message-ID: <23c914cf-0af2-4619-9f83-e4b6339ef65f@hartkopp.net>
-Date: Mon, 11 Nov 2024 16:32:51 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0559D54728;
+	Mon, 11 Nov 2024 16:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731342063; cv=none; b=TePZdrPBA7jEhvRXPOSG2WNtmLTnotDVjwXnoAKuLqjM+cBBrNJTXfxNVMUBpw0bmr2hvogkl5WyCxWEfkAQBlr7Nvlen+dCqs7py+e/TKS5pebbVXmMO2KKg9/pV8NyCyKHSkIP54gYq7PYEpBz5BxlqwRRcGuCBzuzy7T0XJI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731342063; c=relaxed/simple;
+	bh=GfqOZHoPyLMOe3TrvjRQ3VBO9c4vBbSeNCUI7N4diTo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VIIX70yrxO0cjxXP6lXbzyB+l08fF1aMqArwmkd2TPsXpHCcJO4wlJZsKmfMEJ+c2xvOqZUwBEZOJMgl9qEgIFnuM2jTvBOkbqjxykcYEfHzg0i7mb8htvm9RXMrUS++w+oXgDcnb6y8qI5Cpwhr6dDHrQP3AAIqpp1L2LPqZ6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPH7cBOp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5492C4CEE3;
+	Mon, 11 Nov 2024 16:21:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731342062;
+	bh=GfqOZHoPyLMOe3TrvjRQ3VBO9c4vBbSeNCUI7N4diTo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=hPH7cBOpV/0WSzgdkLacMc9djqKB799vXFOejt+DVzx4KyX0VGM8WDsX5Vz9xBG2I
+	 nqKki6CBmvBY7hxgqyW5ByFY0/CxRg9Usyhd+730U4gUtbdCalPKuJX/DyIdiGA37f
+	 plWo84v7RYNXS5ihGc7+zqQfai5laAsCzxngyZnU4lkFadbCyLnOTeRAOKBzrVm3FM
+	 taVFt5DEMApruTmKPSaH+G3dIUOT1qdk+jeUBv5WD9jdxBsgVVo7ZaA4uHjJ8EaJF0
+	 GyKlMuTYJ/sFPIe3wCIyuB/xSXjPobMjKiJ4V2UONynvsoHTvnaceNDZta7KRYS4nM
+	 OPcJRHFMMasGw==
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e2915f00c12so4536947276.0;
+        Mon, 11 Nov 2024 08:21:02 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUr8pZ33HxY+rYZq7lT6El35X1z6iJcYWu3S2bMqVsPBOtU02Ub5fxZf+rJgAVRJ3uncnXIPKmrWWviYtfK@vger.kernel.org, AJvYcCXiPlZPtrqDsjffMXeUmwhIkNbr/CmUbk2H7mi9G2v9BH8Us1RgfjxMCl2OzLU2tm9Ojb5UR8dsgKs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2u4IRJaM2u2shaAHLFDhQTHv2zY1OJ4YPoWULr1hmBJgYZS8L
+	IuNjEfDU73J5q3pYyDb18XA9rTab23JDXAXqCKQJs3JNjitg8/J+TkWXEZKMqIMcZr+ecOlo+DU
+	eEnjjuKBOxcSvspmscg6dE7tduQ==
+X-Google-Smtp-Source: AGHT+IFkAuK1RKHBxdF4ybGePBRZX8TGIGcGLxePtSshvEbTc34Fms21ng8jvbLerdOHzgIff9cxTqOeul3GUAOFeRE=
+X-Received: by 2002:a05:690c:7441:b0:6e2:aceb:fb34 with SMTP id
+ 00721157ae682-6eaddd72ec1mr118266547b3.1.1731342061623; Mon, 11 Nov 2024
+ 08:21:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 00/14] can: netlink: add CAN XL
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org,
- Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Robert Nawrath <mbro1689@gmail.com>
-References: <20241110155902.72807-16-mailhol.vincent@wanadoo.fr>
- <ea52eb8f-c59d-445a-bf4d-26f2772f7426@hartkopp.net>
- <a9d8eb65-c88d-4bc9-b0c2-c0e0799ea5bd@wanadoo.fr>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <a9d8eb65-c88d-4bc9-b0c2-c0e0799ea5bd@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241109233821.8619-1-rosenp@gmail.com>
+In-Reply-To: <20241109233821.8619-1-rosenp@gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 11 Nov 2024 10:20:50 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJeYS12OCVeMHze01631NOtj=uaLcEZRiWKPRZLQpSkUA@mail.gmail.com>
+Message-ID: <CAL_JsqJeYS12OCVeMHze01631NOtj=uaLcEZRiWKPRZLQpSkUA@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: use pdev instead of OF funcs
+To: Rosen Penev <rosenp@gmail.com>
+Cc: netdev@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Vladimir Oltean <olteanv@gmail.com>, 
+	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Pantelis Antoniou <pantelis.antoniou@gmail.com>, 
+	Marcin Wojtas <marcin.s.wojtas@gmail.com>, Byungho An <bh74.an@samsung.com>, 
+	Kevin Brace <kevinbrace@bracecomputerlab.com>, Francois Romieu <romieu@fr.zoreil.com>, 
+	Michal Simek <michal.simek@amd.com>, Heiner Kallweit <hkallweit1@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Zhao Qiang <qiang.zhao@nxp.com>, 
+	"open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	"moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>, 
+	"open list:ARM/Allwinner sunXi SoC support" <linux-sunxi@lists.linux.dev>, 
+	"open list:FREESCALE SOC FS_ENET DRIVER" <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Sat, Nov 9, 2024 at 5:40=E2=80=AFPM Rosen Penev <rosenp@gmail.com> wrote=
+:
+>
+> np here is ofdev->dev.of_node. Better to use the proper functions as
+> there's no use of children or anything else.
 
+Your commit message needs some work.
 
-On 11.11.24 16:17, Vincent Mailhol wrote:
-> On 11/11/2024 at 23:08, Oliver Hartkopp wrote:
->> Hello Vincent!
->>
->> Very impressive! Thanks for the effort.
->> Together with the example in the dummyxl driver it should become quite 
->> easy to integrate the netlink API into my XCANB driver hack for testing.
->>
->> Picking up the dummyxl driver I wonder if it would make sense to 
->> mainline this driver probably as can_nltest driver?!?
->> Of course this driver should be disabled or combined with some kernel 
->> testing Kconfig stuff. But is it a great testing tool.
-> 
-> Thanks. I do not recall similar things in the netdev subtree. I wonder 
-> what would be the idiomatic way to introduce such netlink test driver.
-> 
-> @Marc, any thoughts on this?
-> 
->> From what I can see with the bitrate and tdc configurations the 
->> extension for CAN XL is ok.
->>
->> If you take a look at this manual
->>
->> https://github.com/linux-can/can-doc/blob/master/x_can/ 
->> xcan_user_manual_v350.pdf
->>
->> on page 268/304 you will find the PWM configuration which consists of 
->> three values with 6 bits each. I assume this to be similar in all CAN 
->> XL controllers.
->>
->> The PWM feature switches the physical layer for a CAN XL transceiver 
->> in the CAN XL data phase. This is a weird feature to do some PWM on 
->> the controllers' TX data pin to be able to switch the physical layer 
->> while maintaining the CAN transceiver package with 8 pin layout.
->>
->> Additionally to this PWM configuration register, the PWM CAN XL 
->> transceiver switch feature has to be enabled similar to the way we 
->> enable 'fd on' or 'xl on' today.
->>
->> You can see this bit called XLTR in the Operating Mode section on page 
->> 269/304 and 270/304 .
->>
->> E.g. that might be named 'xltrx [on|off]' (default off)
-> Thanks for the information and the link to the documentation. I will 
-> also try to see what ISO 11898-1:2024 has to say on the topic. Just be 
-> patient on this and do not worry if I give no signal for a couple weeks.
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
+>  drivers/net/can/grcan.c                       |  2 +-
+>  drivers/net/can/mscan/mpc5xxx_can.c           |  2 +-
+>  drivers/net/dsa/bcm_sf2.c                     |  4 ++--
+>  drivers/net/ethernet/allwinner/sun4i-emac.c   |  2 +-
+>  drivers/net/ethernet/freescale/fec_mpc52xx.c  | 23 ++++++++++---------
+>  .../net/ethernet/freescale/fec_mpc52xx_phy.c  | 12 ++++++----
+>  .../net/ethernet/freescale/fs_enet/mac-fcc.c  |  2 +-
+>  .../net/ethernet/freescale/fs_enet/mac-fec.c  |  2 +-
+>  .../net/ethernet/freescale/fs_enet/mac-scc.c  |  2 +-
+>  .../net/ethernet/freescale/fs_enet/mii-fec.c  | 12 ++++++----
+>  drivers/net/ethernet/freescale/ucc_geth.c     | 12 +++++-----
+>  drivers/net/ethernet/marvell/mvneta.c         |  2 +-
+>  drivers/net/ethernet/moxa/moxart_ether.c      |  4 ++--
+>  .../ethernet/samsung/sxgbe/sxgbe_platform.c   |  8 +++----
+>  drivers/net/ethernet/via/via-rhine.c          |  2 +-
+>  drivers/net/ethernet/via/via-velocity.c       |  2 +-
+>  drivers/net/ethernet/xilinx/ll_temac_mdio.c   |  6 ++---
+>  drivers/net/mdio/mdio-mux-mmioreg.c           | 16 +++++++------
+>  drivers/net/wan/fsl_ucc_hdlc.c                | 10 ++++----
+>  19 files changed, 66 insertions(+), 59 deletions(-)
+>
+> diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+> index cdf0ec9fa7f3..0a2cc0ba219f 100644
+> --- a/drivers/net/can/grcan.c
+> +++ b/drivers/net/can/grcan.c
+> @@ -1673,7 +1673,7 @@ static int grcan_probe(struct platform_device *ofde=
+v)
+>                 goto exit_error;
+>         }
+>
+> -       irq =3D irq_of_parse_and_map(np, GRCAN_IRQIX_IRQ);
+> +       irq =3D platform_get_irq(ofdev, GRCAN_IRQIX_IRQ);
+>         if (!irq) {
+>                 dev_err(&ofdev->dev, "no irq found\n");
+>                 err =3D -ENODEV;
+> diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/=
+mpc5xxx_can.c
+> index 0080c39ee182..252ad40bdb97 100644
+> --- a/drivers/net/can/mscan/mpc5xxx_can.c
+> +++ b/drivers/net/can/mscan/mpc5xxx_can.c
+> @@ -300,7 +300,7 @@ static int mpc5xxx_can_probe(struct platform_device *=
+ofdev)
+>         if (!base)
+>                 return dev_err_probe(&ofdev->dev, err, "couldn't ioremap\=
+n");
+>
+> -       irq =3D irq_of_parse_and_map(np, 0);
+> +       irq =3D platform_get_irq(ofdev, 0);
+>         if (!irq) {
+>                 dev_err(&ofdev->dev, "no irq found\n");
+>                 err =3D -ENODEV;
+> diff --git a/drivers/net/dsa/bcm_sf2.c b/drivers/net/dsa/bcm_sf2.c
+> index 43bde1f583ff..9229582efd05 100644
+> --- a/drivers/net/dsa/bcm_sf2.c
+> +++ b/drivers/net/dsa/bcm_sf2.c
+> @@ -1443,8 +1443,8 @@ static int bcm_sf2_sw_probe(struct platform_device =
+*pdev)
+>                 of_node_put(ports);
+>         }
+>
+> -       priv->irq0 =3D irq_of_parse_and_map(dn, 0);
+> -       priv->irq1 =3D irq_of_parse_and_map(dn, 1);
+> +       priv->irq0 =3D platform_get_irq(pdev, 0);
+> +       priv->irq1 =3D platform_get_irq(pdev, 1);
+>
+>         base =3D &priv->core;
+>         for (i =3D 0; i < BCM_SF2_REGS_NUM; i++) {
+> diff --git a/drivers/net/ethernet/allwinner/sun4i-emac.c b/drivers/net/et=
+hernet/allwinner/sun4i-emac.c
+> index 2f516b950f4e..18df8d1d93fd 100644
+> --- a/drivers/net/ethernet/allwinner/sun4i-emac.c
+> +++ b/drivers/net/ethernet/allwinner/sun4i-emac.c
+> @@ -995,7 +995,7 @@ static int emac_probe(struct platform_device *pdev)
+>
+>         /* fill in parameters for net-dev structure */
+>         ndev->base_addr =3D (unsigned long)db->membase;
+> -       ndev->irq =3D irq_of_parse_and_map(np, 0);
+> +       ndev->irq =3D platform_get_irq(pdev, 0);
+>         if (ndev->irq =3D=3D -ENXIO) {
+>                 netdev_err(ndev, "No irq resource\n");
+>                 ret =3D ndev->irq;
+> diff --git a/drivers/net/ethernet/freescale/fec_mpc52xx.c b/drivers/net/e=
+thernet/freescale/fec_mpc52xx.c
+> index 2bfaf14f65c8..553d33a98c99 100644
+> --- a/drivers/net/ethernet/freescale/fec_mpc52xx.c
+> +++ b/drivers/net/ethernet/freescale/fec_mpc52xx.c
+> @@ -811,7 +811,7 @@ static int mpc52xx_fec_probe(struct platform_device *=
+op)
+>         int rv;
+>         struct net_device *ndev;
+>         struct mpc52xx_fec_priv *priv =3D NULL;
+> -       struct resource mem;
+> +       struct resource *mem;
+>         const u32 *prop;
+>         int prop_size;
+>         struct device_node *np =3D op->dev.of_node;
+> @@ -828,20 +828,21 @@ static int mpc52xx_fec_probe(struct platform_device=
+ *op)
+>         priv->ndev =3D ndev;
+>
+>         /* Reserve FEC control zone */
+> -       rv =3D of_address_to_resource(np, 0, &mem);
+> -       if (rv) {
+> +       mem =3D platform_get_resource(op, 0, IORESOURCE_MEM);
+> +       if (!mem) {
+>                 pr_err("Error while parsing device node resource\n");
+> +               rv =3D -ENODEV;
+>                 goto err_netdev;
+>         }
+> -       if (resource_size(&mem) < sizeof(struct mpc52xx_fec)) {
+> +       if (resource_size(mem) < sizeof(struct mpc52xx_fec)) {
+>                 pr_err("invalid resource size (%lx < %x), check mpc52xx_d=
+evices.c\n",
+> -                      (unsigned long)resource_size(&mem),
+> +                      (unsigned long)resource_size(mem),
+>                        sizeof(struct mpc52xx_fec));
+>                 rv =3D -EINVAL;
+>                 goto err_netdev;
+>         }
+>
+> -       if (!request_mem_region(mem.start, sizeof(struct mpc52xx_fec),
+> +       if (!request_mem_region(mem->start, sizeof(struct mpc52xx_fec),
+>                                 DRIVER_NAME)) {
+>                 rv =3D -EBUSY;
+>                 goto err_netdev;
+> @@ -851,13 +852,13 @@ static int mpc52xx_fec_probe(struct platform_device=
+ *op)
+>         ndev->netdev_ops        =3D &mpc52xx_fec_netdev_ops;
+>         ndev->ethtool_ops       =3D &mpc52xx_fec_ethtool_ops;
+>         ndev->watchdog_timeo    =3D FEC_WATCHDOG_TIMEOUT;
+> -       ndev->base_addr         =3D mem.start;
+> +       ndev->base_addr         =3D mem->start;
+>         SET_NETDEV_DEV(ndev, &op->dev);
+>
+>         spin_lock_init(&priv->lock);
+>
+>         /* ioremap the zones */
+> -       priv->fec =3D ioremap(mem.start, sizeof(struct mpc52xx_fec));
+> +       priv->fec =3D ioremap(mem->start, sizeof(struct mpc52xx_fec));
 
-No problem! I will give some feedback when I managed to integrate the 
-extended netlink API to my driver.
+Generally, devm_platform_ioremap_resource(),
+devm_platform_get_and_ioremap_resource(), etc. are preferred. So if
+we're going to rework things, rework them to use those.
 
-Maybe Robert also gets his hands on this, so that we can continue to 
-discuss things even when you are busy for some time.
-
-Best regards,
-Oliver
-
+Rob
 
