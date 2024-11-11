@@ -1,204 +1,110 @@
-Return-Path: <linux-can+bounces-1950-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1953-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D38AE9C3B0D
-	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2024 10:40:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D10A9C3CB6
+	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2024 12:09:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 931802832D1
-	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2024 09:40:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E98A1F224AF
+	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2024 11:09:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17D47156C71;
-	Mon, 11 Nov 2024 09:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BA45189F2B;
+	Mon, 11 Nov 2024 11:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CboJN/wZ"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="BTN3qrl8"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E096915C15B
-	for <linux-can@vger.kernel.org>; Mon, 11 Nov 2024 09:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B882D17C7BD;
+	Mon, 11 Nov 2024 11:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731318010; cv=none; b=QydXhuqEsAefd2KoAas1Mq0poR5DbaT5tn7NyBECNLRNQcgVIB1ezGhv7KGxUqFRfcAXjK7sJ49ukjN5MpIRzYe8A9VWTgZ5vTNL528nsXUtpXboGV4EsAk6Bm97BOJjpGMEkELzxwj6yGObSQoPxSg4BCPwg9UVjvFcN6dJI18=
+	t=1731323330; cv=none; b=n5lsCbABxGPeYYyPOpqal7+Yo7/PA+NYSbAfCiRPnOnw5zXbDHk1Z9KD4l12rYDpYQr4fnk2Ibk9CSGBFzz0+k56ZaHy1eB4DTswyaUF6W+PhuHIiQrrsPzMfjAps2Pgqo/2LzEkt/0c/LQa/XDhY3MceJVMtlHU49qV352uv9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731318010; c=relaxed/simple;
-	bh=eVbFQ8eRmgwQjhyZDrpzmXZtLQtDVQOa42qdW6+BPsA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=AbbYaycjUqkrObLEt357W9j4vBMHvrqPB+XpCOs9Dlo74XWsZU49/rgeLeuKsL2RTBx1KYVbssupIG2rlEFO3qTACj+qEe3ET2xx1FMAphhr+Tes9c1SaSe6t2D9+FQ1zvDmId0jCXsPBQzd8YCYaXxnaT+VrmrGT6w38H812ZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CboJN/wZ; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5ced377447bso6229715a12.1
-        for <linux-can@vger.kernel.org>; Mon, 11 Nov 2024 01:40:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731318006; x=1731922806; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RL5ouNz62J4rP7Vb2EwmgbN1hwLbAAvQeLoAfZ/ypHo=;
-        b=CboJN/wZx/s0KPqzs5G8KiJdfT0nBRV1sPV3gNT/W+zJdhJrw6Ekl046AJLjx+m36W
-         JCFXCqlXKsJhQvvp15uZ3D6sYVZtA+1OKF3CXm7stUxm4Mph/m9SxDFstILaKP39j21y
-         kFpxhWlNTS0YlWrN553BD8+1xJChy4fB/5A+N/GvxQXIv6Ylh8MLewPkJ59velzXeoKA
-         qV6XpSkBGjwbt38JYE/cjsCJ2gsCNzvBSb+klUeijdN928zdeS2TFDg9Gm03XaKpE/cw
-         ZSE9xQ1bBzouj/h6OspbtBm3VzxE12MJwo8hNQlvjoGKxoJgmkx6lilFVOdIjHa2Pc2m
-         IJOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731318006; x=1731922806;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RL5ouNz62J4rP7Vb2EwmgbN1hwLbAAvQeLoAfZ/ypHo=;
-        b=TypG3xj2Vze/59DvVIjYO7ATiKqAANjud4YVKdBwZI9ex88gCeB0eIEpgMhlggz5ML
-         7jgWB0GTnxqB8Deo8ib+pDmSIswKeRte/VJNPyKJFmlFkMXeRFsR0vMZvZe0+HrejaIs
-         knF3hyIFcnUAzvZV7ADBSQ6STJBUbWeloewalUoHNbGzTc1+oqlcQmNcm/9DfwR2g0ip
-         0gAeWYZd5ViWtvkWeOAwcG8i//xLziGiGXqk4WlWN6TIdaRzHkfjMHSzUmD4nesm3l9I
-         bP+RtFNJoSAqgditm5hyAGi730FPLR9AiyB5Yr4bBTKzsHI6ioVLlV6j8wI5R1p3tXTl
-         xitg==
-X-Forwarded-Encrypted: i=1; AJvYcCX10RrnuwIThA2oB8eX6POwI8RrDWiPOQ3AKr3Mj0DHDkdiS++6wtQTUtJeo+xUSi0MSFuTgg81/Q4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeiNrd7SD3NkU9nr6y7rk7e1f9FHC46gGYGUDTxv3/ZtlpUcsg
-	vPtyoTJFCNNmZywyESv7ybWsuZ7mUBBhcKEDjxAAYNLHNNiHJiDmybWnmBva64M=
-X-Google-Smtp-Source: AGHT+IF/p+575+YNR2OJr4WYmzHEumA5ro2KoQ7Lo/HcKAeV1re5jL3XLj3j1AdmsGeHCshinHqVXw==
-X-Received: by 2002:a05:6402:13ce:b0:5ce:ddd4:7c2f with SMTP id 4fb4d7f45d1cf-5cf0a30c5dcmr10678581a12.7.1731318006331;
-        Mon, 11 Nov 2024 01:40:06 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cf0f369037sm3560713a12.12.2024.11.11.01.40.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 01:40:06 -0800 (PST)
-Date: Mon, 11 Nov 2024 12:38:50 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Rosen Penev <rosenp@gmail.com>,
-	netdev@vger.kernel.org
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-	Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Kurt Kanzenbach <kurt@linutronix.de>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	Chris Snook <chris.snook@gmail.com>,
-	Marcin Wojtas <marcin.s.wojtas@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	UNGLinuxDriver@microchip.com,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
-	Doug Berger <opendmb@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] net: modernize ioremap in probe
-Message-ID: <0460e9ea-3d2b-425b-9e97-c69afe138670@stanley.mountain>
+	s=arc-20240116; t=1731323330; c=relaxed/simple;
+	bh=fTnBKWroAyibFZ32vMLmU6CwNgFakXylqSPOxlmzdyo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=G7JRE8XFBnpjrDCB1YwtXAySNGEOoTdaoxxSmOwTqZWy/dY6WCqXQZPDRD257Ka4Pe+yq+hCqE/O63CEZMs4VptCAgO6z43tr6YhTYcZLxG/9jwn70qfMh1injGxD5B9m1ZD29lcUWuU3p7Z2djCUrhvI9Q2gH0peh7b16PcKCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=BTN3qrl8; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References; bh=DAZ9kB/NRO4q+atx8mADsxFS6yrC9e9RVvCP2RbOVa8=; b=BT
+	N3qrl8Rn63I1aZUCGF1QQFIlWmQTduTRzSnj2zbzjdqNKagNh+7hHoap2Y4WS2Lst3j9ofY+hZ7XJ
+	Xm3WKtDT3DA2m/mokYjT5PNUv+cPTcbEwFzuced2RkvXusFEa6nnmOgGd5hIRUwjjXtADfPN00jkv
+	5ahp/F6wXoSt2OZGJaJQsRjHO36eyFZCsd9fbCgE8pWcAiq0YlIPvVSOPTMwHwu3PUDzIEneQgss/
+	FNjd0dAOiNCxQ8JRyacSHKUYQqKkjc/EuyrWSbGetrQ4ZfWpuf3cacvPuuMWggBhPCh25aL1u2Mdd
+	FxeljhDMet7DqILPXYUYWma50eP40pDQ==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <sean@geanix.com>)
+	id 1tAS19-0000iw-Ln; Mon, 11 Nov 2024 11:51:35 +0100
+Received: from [185.17.218.86] (helo=zen.localdomain)
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <sean@geanix.com>)
+	id 1tAS19-000JnT-08;
+	Mon, 11 Nov 2024 11:51:35 +0100
+From: Sean Nyekjaer <sean@geanix.com>
+Subject: [PATCH 0/3] can: tcan4x5x/m_can: use standby mode when down and in
+ suspend
+Date: Mon, 11 Nov 2024 11:51:22 +0100
+Message-Id: <20241111-tcan-standby-v1-0-f9337ebaceea@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241109233641.8313-1-rosenp@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKrhMWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDQwNz3ZLkxDzd4pLEvJSkSt2U1DRjUwtzc8MkoyQloJaCotS0zAqwcdG
+ xtbUA5hW7Il4AAAA=
+X-Change-ID: 20241107-tcan-standby-def358771b2b
+To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Sean Nyekjaer <sean@geanix.com>
+X-Mailer: b4 0.14.2
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27455/Mon Nov 11 10:58:33 2024)
 
-Hi Rosen,
+When downing the tcan4x5x there is no reason to keep the tcan4x5x in
+"normal" mode and waste power.
+So set standby mode when the interface is down and normal mode when
+interface is up.
 
-kernel test robot noticed the following build warnings:
+Also when going into suspend, set the tcan4x5x into standby mode. The
+tcan4x5x can still be used as a wake-source when in standby as low power
+rx is enabled.
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+---
+Sean Nyekjaer (3):
+      can: m_can: add deinit callback
+      can: tcan4x5x: add deinit callback to set standby mode
+      can: m_can: call deinit callback when going into suspend.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rosen-Penev/net-modernize-ioremap-in-probe/20241110-073751
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241109233641.8313-1-rosenp%40gmail.com
-patch subject: [PATCH] net: modernize ioremap in probe
-config: arm-randconfig-r071-20241110 (https://download.01.org/0day-ci/archive/20241111/202411110835.tTxOya6U-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
+ drivers/net/can/m_can/m_can.c         | 10 ++++++++++
+ drivers/net/can/m_can/m_can.h         |  1 +
+ drivers/net/can/m_can/tcan4x5x-core.c | 12 ++++++++++++
+ 3 files changed, 23 insertions(+)
+---
+base-commit: 2b2a9a08f8f0b904ea2bc61db3374421b0f944a6
+change-id: 20241107-tcan-standby-def358771b2b
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202411110835.tTxOya6U-lkp@intel.com/
-
-smatch warnings:
-drivers/net/ethernet/freescale/xgmac_mdio.c:395 xgmac_mdio_probe() error: uninitialized symbol 'res'.
-
-vim +/res +395 drivers/net/ethernet/freescale/xgmac_mdio.c
-
-33897cc869eef8 Bill Pemberton    2012-12-03  371  static int xgmac_mdio_probe(struct platform_device *pdev)
-9f35a7342cff0b Timur Tabi        2012-08-20  372  {
-ac53c26433b51f Marcin Wojtas     2021-06-25  373  	struct fwnode_handle *fwnode;
-73ee5442978b2d Shaohui Xie       2015-03-16  374  	struct mdio_fsl_priv *priv;
-15e7064e879335 Calvin Johnson    2021-06-11  375  	struct resource *res;
-15e7064e879335 Calvin Johnson    2021-06-11  376  	struct mii_bus *bus;
-9f35a7342cff0b Timur Tabi        2012-08-20  377  	int ret;
-9f35a7342cff0b Timur Tabi        2012-08-20  378  
-229f4bb47512ec Calvin Johnson    2020-06-22  379  	/* In DPAA-1, MDIO is one of the many FMan sub-devices. The FMan
-229f4bb47512ec Calvin Johnson    2020-06-22  380  	 * defines a register space that spans a large area, covering all the
-229f4bb47512ec Calvin Johnson    2020-06-22  381  	 * subdevice areas. Therefore, MDIO cannot claim exclusive access to
-229f4bb47512ec Calvin Johnson    2020-06-22  382  	 * this register area.
-229f4bb47512ec Calvin Johnson    2020-06-22  383  	 */
-9f35a7342cff0b Timur Tabi        2012-08-20  384  
-1d14eb15dc2c39 Tobias Waldekranz 2022-01-26  385  	bus = devm_mdiobus_alloc_size(&pdev->dev, sizeof(struct mdio_fsl_priv));
-9f35a7342cff0b Timur Tabi        2012-08-20  386  	if (!bus)
-9f35a7342cff0b Timur Tabi        2012-08-20  387  		return -ENOMEM;
-9f35a7342cff0b Timur Tabi        2012-08-20  388  
-9f35a7342cff0b Timur Tabi        2012-08-20  389  	bus->name = "Freescale XGMAC MDIO Bus";
-c0fc8e6dcee40c Andrew Lunn       2023-01-09  390  	bus->read = xgmac_mdio_read_c22;
-c0fc8e6dcee40c Andrew Lunn       2023-01-09  391  	bus->write = xgmac_mdio_write_c22;
-c0fc8e6dcee40c Andrew Lunn       2023-01-09  392  	bus->read_c45 = xgmac_mdio_read_c45;
-c0fc8e6dcee40c Andrew Lunn       2023-01-09  393  	bus->write_c45 = xgmac_mdio_write_c45;
-9f35a7342cff0b Timur Tabi        2012-08-20  394  	bus->parent = &pdev->dev;
-229f4bb47512ec Calvin Johnson    2020-06-22 @395  	snprintf(bus->id, MII_BUS_ID_SIZE, "%pa", &res->start);
-                                                                                                   ^^^
-res isn't initialized.
-
-9f35a7342cff0b Timur Tabi        2012-08-20  396  
-73ee5442978b2d Shaohui Xie       2015-03-16  397  	priv = bus->priv;
-865bbb2945a161 Rosen Penev       2024-11-09  398  	priv->mdio_base = devm_platform_ioremap_resource(pdev, 0);
-865bbb2945a161 Rosen Penev       2024-11-09  399  	if (IS_ERR(priv->mdio_base))
-865bbb2945a161 Rosen Penev       2024-11-09  400  		return PTR_ERR(priv->mdio_base);
-9f35a7342cff0b Timur Tabi        2012-08-20  401  
-15e7064e879335 Calvin Johnson    2021-06-11  402  	/* For both ACPI and DT cases, endianness of MDIO controller
-15e7064e879335 Calvin Johnson    2021-06-11  403  	 * needs to be specified using "little-endian" property.
-15e7064e879335 Calvin Johnson    2021-06-11  404  	 */
-229f4bb47512ec Calvin Johnson    2020-06-22  405  	priv->is_little_endian = device_property_read_bool(&pdev->dev,
-07bf2e11ad0586 Julia Lawall      2016-08-05  406  							   "little-endian");
-73ee5442978b2d Shaohui Xie       2015-03-16  407  
-6198c722019774 Tobias Waldekranz 2022-01-18  408  	priv->has_a009885 = device_property_read_bool(&pdev->dev,
-6198c722019774 Tobias Waldekranz 2022-01-18  409  						      "fsl,erratum-a009885");
-229f4bb47512ec Calvin Johnson    2020-06-22  410  	priv->has_a011043 = device_property_read_bool(&pdev->dev,
-1d3ca681b9d957 Madalin Bucur     2020-01-22  411  						      "fsl,erratum-a011043");
-1d3ca681b9d957 Madalin Bucur     2020-01-22  412  
-909bea73485fab Tobias Waldekranz 2022-01-26  413  	xgmac_mdio_set_suppress_preamble(bus);
-909bea73485fab Tobias Waldekranz 2022-01-26  414  
-dd8f467eda72cd Tobias Waldekranz 2022-01-26  415  	ret = xgmac_mdio_set_mdc_freq(bus);
-dd8f467eda72cd Tobias Waldekranz 2022-01-26  416  	if (ret)
-dd8f467eda72cd Tobias Waldekranz 2022-01-26  417  		return ret;
-dd8f467eda72cd Tobias Waldekranz 2022-01-26  418  
-105b0468d7b2e6 zhaoxiao          2022-08-18  419  	fwnode = dev_fwnode(&pdev->dev);
-ac53c26433b51f Marcin Wojtas     2021-06-25  420  	if (is_of_node(fwnode))
-ac53c26433b51f Marcin Wojtas     2021-06-25  421  		ret = of_mdiobus_register(bus, to_of_node(fwnode));
-ac53c26433b51f Marcin Wojtas     2021-06-25  422  	else if (is_acpi_node(fwnode))
-ac53c26433b51f Marcin Wojtas     2021-06-25  423  		ret = acpi_mdiobus_register(bus, fwnode);
-ac53c26433b51f Marcin Wojtas     2021-06-25  424  	else
-ac53c26433b51f Marcin Wojtas     2021-06-25  425  		ret = -EINVAL;
-9f35a7342cff0b Timur Tabi        2012-08-20  426  	if (ret) {
-9f35a7342cff0b Timur Tabi        2012-08-20  427  		dev_err(&pdev->dev, "cannot register MDIO bus\n");
-9f35a7342cff0b Timur Tabi        2012-08-20  428  		return ret;
-9f35a7342cff0b Timur Tabi        2012-08-20  429  	}
-9f35a7342cff0b Timur Tabi        2012-08-20  430  
-1d14eb15dc2c39 Tobias Waldekranz 2022-01-26  431  	platform_set_drvdata(pdev, bus);
-9f35a7342cff0b Timur Tabi        2012-08-20  432  
-9f35a7342cff0b Timur Tabi        2012-08-20  433  	return 0;
-9f35a7342cff0b Timur Tabi        2012-08-20  434  }
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sean Nyekjaer <sean@geanix.com>
 
 
