@@ -1,111 +1,118 @@
-Return-Path: <linux-can+bounces-1988-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1989-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B209C5515
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 11:58:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A48CF9C5673
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 12:28:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD7C11F26485
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 10:58:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B7DF1F247A4
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 11:28:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C649D1F7784;
-	Tue, 12 Nov 2024 10:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FNSKWWaY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E95D1CD212;
+	Tue, 12 Nov 2024 11:15:17 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB6521E103;
-	Tue, 12 Nov 2024 10:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115891CD215
+	for <linux-can@vger.kernel.org>; Tue, 12 Nov 2024 11:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731407889; cv=none; b=u5lRsjx/FU5OGZl9dnwiXij2Jg16IL5FLzvS6Wkh65hfuFAud400lw/Ee9K3QUaGi9Fbk20mfAe6QUyIYRpXD/IdBQhPAiEr+Xq/4RQkcqZ9nO4gdKKxO9wHKIqEX4vU0uIwWNY/cV0agaQ9m+/Rvxfa0yomRYhiz+wX56TChKc=
+	t=1731410117; cv=none; b=EtRzXctoh+OuZUxms1hxljkxRzYHRx3nHyYefhv05vufVIULL+bjlghTjPL7mRQb3TjPz8fxfvjfOsB9N9cRVYHu47plLTwx9XtHi38Cc4FAsuCfZJ7schnk1YyiLKjU7lNdGQNPwkCLWmyhTADL3GuXiUWB2IviFnNv6tfqLnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731407889; c=relaxed/simple;
-	bh=SCRBbqa7yEeu9vl/EFKHr1yv2U8iV/5Sj1IyFgS1c1s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=anwWnqv8IkN3pzcQP5aWQ8klwiqyvuZ02+d2A2zV95OSPWeITBPwZPuK/jRCrJlPjoozEb1lspa2NCQWM9SsBsauWJNVub3o3aHlsg/K56ylm0ojGssKIbh1CK/am4aADQb8Pmck7fvs5aBzNhpW+S+8yK2r7YfaZ5X+iFSj9mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FNSKWWaY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A9AC4AF09;
-	Tue, 12 Nov 2024 10:38:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731407889;
-	bh=SCRBbqa7yEeu9vl/EFKHr1yv2U8iV/5Sj1IyFgS1c1s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FNSKWWaYMfAdV4qfitBzlOjthQns1RFASELzCcNeJnGSW0eleb4Ud6gdcyZ0fjRB6
-	 5t8ohQ94S6WZ5DU5bSwApmmlej7wyruyZwChfc6pVtCvFmwrUnjbSCVfwdYiGtAHx+
-	 /2nlEdLBf2mKXNL0US4S6tFfCI4jvYnG+ZYkcbOjUD1w/j40jIEfFsOqbp1TYYBnOs
-	 0eoToesvSkb2f7wYl17FmG48II9Frk/JhptpEqixhnGYQjyZLVDqGlZoea95a4Lb1j
-	 tOfYZC4+/EdatEy8QrwafIDWRBlOK04UUz9v/1CJ3Xx+/hGed6weoNIHtv+Ixpxn7C
-	 OkRvbJhHmYULw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: =?UTF-8?q?Alexander=20H=C3=B6lzl?= <alexander.hoelzl@gmx.net>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Sasha Levin <sashal@kernel.org>,
-	robin@protonic.nl,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	corbet@lwn.net,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 3/6] can: j1939: fix error in J1939 documentation.
-Date: Tue, 12 Nov 2024 05:37:58 -0500
-Message-ID: <20241112103803.1654174-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241112103803.1654174-1-sashal@kernel.org>
-References: <20241112103803.1654174-1-sashal@kernel.org>
+	s=arc-20240116; t=1731410117; c=relaxed/simple;
+	bh=kJxEQskVB7pr9rpq21BHIGNP254vQv63rZRhuoTGy4o=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=YZoKCqY4qUQs9rr0v51y9pz2j1leasiJWsRADoHg42DvjH5wBa79In6W6RnW0Hboy8NmmoDsAkTfj7PoIh02+Sj89lryInja22dz3Yh4oqyf3Mq0INjf78WGiQLAG4uEw9SjdGhKX71k0FfbSB6ops/PZDxtLA2ERdR7hktmyHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:78de:3cf6:79c5:d375])
+	by baptiste.telenet-ops.be with cmsmtp
+	id bnF62D00N4mJWgD01nF6Hy; Tue, 12 Nov 2024 12:15:07 +0100
+Received: from geert (helo=localhost)
+	by ramsan.of.borg with local-esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tAorS-006owL-Js;
+	Tue, 12 Nov 2024 12:15:06 +0100
+Date: Tue, 12 Nov 2024 12:15:06 +0100 (CET)
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+To: Jean Delvare <jdelvare@suse.de>, 
+    Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+cc: linux-can@vger.kernel.org, kernel@pengutronix.de, 
+    Marc Kleine-Budde <mkl@pengutronix.de>, Miguel Ojeda <ojeda@kernel.org>, 
+    Masahiro Yamada <masahiroy@kernel.org>, 
+    Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] can: rockchip_canfd: Drop obsolete dependency on
+ COMPILE_TEST
+In-Reply-To: <CAMZ6RqJxb-52eSPqvaESjA-Wd_Jd-=gFO1HWbzxWe3gx7GWDmA@mail.gmail.com>
+Message-ID: <dcced72-7be1-b44-432a-dac2ad7f4cc6@linux-m68k.org>
+References: <20241022130439.70d016e9@endymion.delvare> <CAMZ6RqJxb-52eSPqvaESjA-Wd_Jd-=gFO1HWbzxWe3gx7GWDmA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.229
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 
-From: Alexander Hölzl <alexander.hoelzl@gmx.net>
+ 	Hi Jean, Vincent,
 
-[ Upstream commit b6ec62e01aa4229bc9d3861d1073806767ea7838 ]
+On Tue, 22 Oct 2024, Vincent MAILHOL wrote:
+> On Tue. 22 Oct. 2024 at 20:06, Jean Delvare <jdelvare@suse.de> wrote:
+>> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), OF
+>> can be enabled on all architectures. Therefore depending on
+>> COMPILE_TEST as an alternative is no longer needed.
+>
+> I understand the motivation behind this patch, but for me, as a
+> maintainer, it becomes more work when I want to do a compile test.
+> Before I would have needed to only select COMPILE_TEST but now, I
+> would need to remember to also select OF for that driver to appear in
+> the menuconfig.
 
-The description of PDU1 format usage mistakenly referred to PDU2 format.
+IMHO these are two different things: to get a working driver, you need
+to enable OF; to do (may be limited, i.e. may not give a working driver)
+compile-testing, you need to enable COMPILE_TEST.
 
-Signed-off-by: Alexander Hölzl <alexander.hoelzl@gmx.net>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Link: https://patch.msgid.link/20241023145257.82709-1-alexander.hoelzl@gmx.net
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- Documentation/networking/j1939.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So I think commit 51e102ec23b25e6c ("can: rockchip_canfd: Drop obsolete
+dependency on COMPILE_TEST") should be reverted.
 
-diff --git a/Documentation/networking/j1939.rst b/Documentation/networking/j1939.rst
-index 0a4b73b03b997..59f81ba411608 100644
---- a/Documentation/networking/j1939.rst
-+++ b/Documentation/networking/j1939.rst
-@@ -83,7 +83,7 @@ format, the Group Extension is set in the PS-field.
- 
- On the other hand, when using PDU1 format, the PS-field contains a so-called
- Destination Address, which is _not_ part of the PGN. When communicating a PGN
--from user space to kernel (or vice versa) and PDU2 format is used, the PS-field
-+from user space to kernel (or vice versa) and PDU1 format is used, the PS-field
- of the PGN shall be set to zero. The Destination Address shall be set
- elsewhere.
- 
--- 
-2.43.0
+> Well, I am not strongly against this simplification, but, wouldn't it
+> be good to make COMPILE_TEST automatically select OF then? Looking at
+> the description of COMPILE_TEST, I read:
+>
+> If you are a developer and want to build everything available, say Y here.
+>
+> So having COMPILE_TEST automatically select OF looks sane to me as it
+> goes in the direction of "building everything". If this makes sense, I
+> can send a patch for this. Thoughts?
 
+Please don't do that! Merely enabling COMPILE_TEST should not enable
+any additional code in the kernel.
+
+>> --- linux-6.12-rc4.orig/drivers/net/can/rockchip/Kconfig
+>> +++ linux-6.12-rc4/drivers/net/can/rockchip/Kconfig
+>> @@ -2,7 +2,7 @@
+>>
+>>  config CAN_ROCKCHIP_CANFD
+>>         tristate "Rockchip CAN-FD controller"
+>> -       depends on OF || COMPILE_TEST
+>> +       depends on OF
+>>         select CAN_RX_OFFLOAD
+>>         help
+>>           Say Y here if you want to use CAN-FD controller found on
+>>
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
 
