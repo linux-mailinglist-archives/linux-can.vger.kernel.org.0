@@ -1,46 +1,46 @@
-Return-Path: <linux-can+bounces-1985-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1986-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDD8A9C549C
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 11:46:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10F409C54E7
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 11:53:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94D921F2246C
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 10:46:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 75A02B25557
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 10:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 021CB21E116;
-	Tue, 12 Nov 2024 10:36:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A8C224608;
+	Tue, 12 Nov 2024 10:37:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NUkSckTX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J58g0gU6"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B2221E110;
-	Tue, 12 Nov 2024 10:36:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 595A52245FF;
+	Tue, 12 Nov 2024 10:37:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731407818; cv=none; b=Oajjd98wOnaY9bEw1LPU2YzzLPZtpfaeTcbmPHgnlj7S7CLig9DqVnB+Iw+semB21oseKlMaDx20Pb+hE9nFv/jIXEbuHLorTMTZ3hjw3auIjogVmtp/7aPz/IxplmWa7m6Jy5tHpY1kJmopJDhkW6BnWI85rVTwPFApObfB6+s=
+	t=1731407850; cv=none; b=M/LVpXeH8mkqlxEQne7RqovYGKAFzQ1N/IaPjSYcB9QppMOQqRvjbV0f+A5/lk2FbKuZnl1wmoH6Pw9qXn936SzU/mbebYGDcJuuyZK4nNL0EcnTh9R2jGO/raDECJfsT35lse4H9/6Lsyvm80Hi57PKz8VCyP1gSgC8Kl6pxOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731407818; c=relaxed/simple;
-	bh=mKHfPw49S/UjlwDth40dYQc6804kuiAi0oR24zuo3jU=;
+	s=arc-20240116; t=1731407850; c=relaxed/simple;
+	bh=vSRvIIeuP0uL1xcfrQcdNYT7Bq8X8dLrpOUUMuR5bYk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S4idEK1nrDMwR0FyHtD+rmeXlT6Xx3KxV2EXz3jnqZi8LJqs+dprrTqQgnCa//huvqGKQvp6oWXfA7f6nlZR5poZE+rLnJjXk8wi+Lvtme8uw1uVfJ3QcrQ5FkV5PUD7VZwPcjxogvO6bA4KouNXq9SCyzjgqq4v1CGnkZ/WLH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NUkSckTX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04837C4CEDD;
-	Tue, 12 Nov 2024 10:36:56 +0000 (UTC)
+	 MIME-Version:Content-Type; b=QNp2NTIGYnycxbxAbFhMekbRxAiNPF8Gi5//EpP6siHeZ0rGhD/DOnmfFiJ8FiVd1JVTTSQjAQMisQ421rrZkHcNR2vwWxSCofTVuxp9lnvQzHOpJqsEeuwIdUx1xBsCMmt1vSJDqPNFnkxgewPLERz8iEuk0788f5+vtYsouf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J58g0gU6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D4D5C4CED4;
+	Tue, 12 Nov 2024 10:37:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731407818;
-	bh=mKHfPw49S/UjlwDth40dYQc6804kuiAi0oR24zuo3jU=;
+	s=k20201202; t=1731407849;
+	bh=vSRvIIeuP0uL1xcfrQcdNYT7Bq8X8dLrpOUUMuR5bYk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NUkSckTXu/69B3dxEt/EDA+rS55OcypeV8pBUyX7LaLIgxNNNJ/MEvqaYTiTH3YlY
-	 FLN/5QzU+taXGxMcns230/VCArxLZruKw+MArCJOTVcIZQP8UFGt0RkiBSCVJzipdr
-	 5ouM10X+0vwDmlMbt+2T8Gu5eKm564uqo9CkKrl0eJQMdino8MmcVU3epkxoME557x
-	 6WPZbfou4nEb9sV6ko6lIpkAy/0hQM9P3QZdkKP66rrleHFQVPmBizFrTeSALNswVH
-	 KRXtSsPyvviLhPBWTcZW1vJxyUrvFLnphw8CC0LXTZiMQSL/a66M1u9PiHwUTpT25b
-	 FWbOk0dZGWwqg==
+	b=J58g0gU6nKZ56rK3vO8vcVgMd2qN7R0K6tKkpI08aSx4VwWg4QZ9x8/A7f/70XpEM
+	 STfIMz5nu7+NqRYTckZUPUxMFVygs9G+Nh5tpzg9akdUHbszBQ4IO3SJXq7F0XwwPQ
+	 AMAavo9sHZLqblyCX2fjgBlvnPvMAK/ls+eJ9+0m/T9vVpwYiVKSzZh4eurrqxbCRU
+	 suWMabRosFXcN/hip8OkKJ2u4svblPRfg/5413uYsGGq1WzN54XY+5447MFjoxNS6N
+	 IUIhUhptRe/S9kUAZKWFRFFNK51QH5hF9LAJOoUNHpqOmGPdewpyO2EmR+DStRF5KQ
+	 23npRUauPgQgw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -58,12 +58,12 @@ Cc: =?UTF-8?q?Alexander=20H=C3=B6lzl?= <alexander.hoelzl@gmx.net>,
 	linux-can@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 08/15] can: j1939: fix error in J1939 documentation.
-Date: Tue, 12 Nov 2024 05:36:29 -0500
-Message-ID: <20241112103643.1653381-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 06/12] can: j1939: fix error in J1939 documentation.
+Date: Tue, 12 Nov 2024 05:37:08 -0500
+Message-ID: <20241112103718.1653723-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241112103643.1653381-1-sashal@kernel.org>
-References: <20241112103643.1653381-1-sashal@kernel.org>
+In-Reply-To: <20241112103718.1653723-1-sashal@kernel.org>
+References: <20241112103718.1653723-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -73,7 +73,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.60
+X-stable-base: Linux 6.1.116
 Content-Transfer-Encoding: 8bit
 
 From: Alexander Hölzl <alexander.hoelzl@gmx.net>
@@ -93,7 +93,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Documentation/networking/j1939.rst b/Documentation/networking/j1939.rst
-index e4bd7aa1f5aa9..544bad175aae2 100644
+index b705d2801e9c3..80b1c5e19fd53 100644
 --- a/Documentation/networking/j1939.rst
 +++ b/Documentation/networking/j1939.rst
 @@ -121,7 +121,7 @@ format, the Group Extension is set in the PS-field.
