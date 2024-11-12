@@ -1,148 +1,133 @@
-Return-Path: <linux-can+bounces-1981-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1982-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1201E9C513A
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 09:53:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E1D89C51E8
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 10:25:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB36B28291B
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 08:53:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D39BC1F24686
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 09:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509AA1EBFFD;
-	Tue, 12 Nov 2024 08:53:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E11C20B814;
+	Tue, 12 Nov 2024 09:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="I7kIkpg2"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3482D154456
-	for <linux-can@vger.kernel.org>; Tue, 12 Nov 2024 08:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC4720B204
+	for <linux-can@vger.kernel.org>; Tue, 12 Nov 2024 09:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731401597; cv=none; b=Ps/E+feb16COGjyq1qAlfGERQp0+aMK2YAH3SOTyLsLl93IuAYdHVrnWqfWuKM2hNbbZ7iogYrcQIl45DCf+jH9ZOBySgb3bdUjQf+KYBd+ERQvdfDPntichunAcUsJGIEKuytTUMnJANEo+w7pgqW7tsNylAh6Eku71qBigCHc=
+	t=1731403511; cv=none; b=d5a1ndLi/i3kCK011wXoYmsHWcb2XVtmSoc/zVyngnijLog9xKzQaOOMblUuJWlm4OUGxvs2lU9b3eyk0rEtaujBTukpAYn4h9rEjfAU6pK3+O+teocg5UC+us6cc0lS/nFfFmT+bvdhpcfKT72qQVu1qmkSytClF/4P4aGIsLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731401597; c=relaxed/simple;
-	bh=7FeByrfiaYyvAFoAFAkKJ30sQIiJkvJ54FrP0xajRSw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HFPAy/D/Hlurn9Sw8olvQ0U/tkLMt5QkfGiOxvD8P0VW9GpUn/5N7OTfwj5qyaED6Wq8txKVZtGNkij/54E5TCmXSIHWK10LUG6yQa4PzXyTw7m0Ou7XwZcg3JStcwchqqWZLOwpyVRqQ/uKlJ2vjeslIcvjBI5KJxIpnTJu9pU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tAme7-0001Ub-Vs; Tue, 12 Nov 2024 09:53:12 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tAme7-000Ngz-23;
-	Tue, 12 Nov 2024 09:53:11 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 3D297371372;
-	Tue, 12 Nov 2024 08:53:11 +0000 (UTC)
-Date: Tue, 12 Nov 2024 09:53:10 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>, 
-	Robert Nawrath <mbro1689@gmail.com>
-Subject: Re: [RFC PATCH 00/14] can: netlink: add CAN XL
-Message-ID: <20241112-glittering-khaki-uakari-8e15cb-mkl@pengutronix.de>
-References: <20241110155902.72807-16-mailhol.vincent@wanadoo.fr>
+	s=arc-20240116; t=1731403511; c=relaxed/simple;
+	bh=BU7m7rZZq1HHHq0QxbCE+wOFiXNa8llmnVI+sDE5zqY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WzcgfVDjP1p4/HqlBRFEvkBvQnToIt8CQE40sWPaLllV7+RSkiVYjOaPyGLmoMAx4NfIlzD9H/KqWeBv7kcAPVtKy+stXJZxCChWBwGMnf7ih376GZoH//aswGkAluQtkFOKJNTP5KTeQxeMsAPg/ZK4Rba3rN2atwgfKRTRHI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=I7kIkpg2; arc=none smtp.client-ip=80.12.242.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from mail-ed1-f49.google.com ([209.85.208.49])
+	by smtp.orange.fr with ESMTPSA
+	id An90tcNYfYmvZAn90tdgz6; Tue, 12 Nov 2024 10:25:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1731403507;
+	bh=QzbTwWjIUdl6B6k9AcznxwNMY56K1qPblxZ32msVFjo=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To;
+	b=I7kIkpg2tGBNAS8PlaRNTbKQMHT2cVLEWrxsJpYeP8/VaRzrUV5joJVzkOfObWmWK
+	 8Am4Td2ZSQTXi9ryRiWYyUQwzXRm3Gl20ceYoGVJSy+EHtIjsDzDC/fRb1UcqieFBF
+	 Ts7hXitjxjM0F/Kti+hfqbCifabpVt946JB08mQzWYlCzkwXtxhTZDLRdPp36Ngphc
+	 YM4Qsu+OmFyGidiRivr0Xurc60sjCUmLpJPnOIgzBj2hF8V1piM4XDde7yPpl2SSEl
+	 qUY/5OLkrOd+Z2btw+Xbl19kEwe3xE1UzSTk1CmksrhTu/FmE2OuYDGgtPOaCJYcM0
+	 47CRSx73eGCqw==
+X-ME-Helo: mail-ed1-f49.google.com
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 12 Nov 2024 10:25:07 +0100
+X-ME-IP: 209.85.208.49
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5c948c41edeso7425443a12.1
+        for <linux-can@vger.kernel.org>; Tue, 12 Nov 2024 01:25:06 -0800 (PST)
+X-Gm-Message-State: AOJu0YwNTpZba5+PHGTB4Lax3zDTiBe+1kc6hUHTaOPTWkDIpgDRjDnm
+	kgwVbIMl8ulo+pCNRK9lP/x7xwXKhAHY6T7Dgv36yJUpGJTxf/88ZrVky0OlSMKF5ShhTXspvc4
+	lymvLAcPmGGNgR3ohuIiH08gWqKQ=
+X-Google-Smtp-Source: AGHT+IH9M2SSXOI2K0DhJh6gDtnIh39VWEuqA6+PTHeh52X2h/nsfUwLWuj6FsVRvGuFm1sqjhC5m2cxqohEqPxm2YQ=
+X-Received: by 2002:a17:907:3d9f:b0:a9a:6633:3a90 with SMTP id
+ a640c23a62f3a-a9eefeb157bmr1510217466b.8.1731403506606; Tue, 12 Nov 2024
+ 01:25:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="duwd7oqetrs2ub74"
-Content-Disposition: inline
-In-Reply-To: <20241110155902.72807-16-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---duwd7oqetrs2ub74
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+References: <20241110155902.72807-16-mailhol.vincent@wanadoo.fr> <20241112-glittering-khaki-uakari-8e15cb-mkl@pengutronix.de>
+In-Reply-To: <20241112-glittering-khaki-uakari-8e15cb-mkl@pengutronix.de>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Date: Tue, 12 Nov 2024 18:24:55 +0900
+X-Gmail-Original-Message-ID: <CAMZ6RqJVgsJ0EpXs-seO4MNMVADM17Pf0KNdZ7QYGgJK_oa1aw@mail.gmail.com>
+Message-ID: <CAMZ6RqJVgsJ0EpXs-seO4MNMVADM17Pf0KNdZ7QYGgJK_oa1aw@mail.gmail.com>
 Subject: Re: [RFC PATCH 00/14] can: netlink: add CAN XL
-MIME-Version: 1.0
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>, 
+	Robert Nawrath <mbro1689@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11.11.2024 00:55:49, Vincent Mailhol wrote:
-> Because of popular request [1] and to celebrate the fact that I joined
-> the kernel web of trust this week [2], here is an RFC to introduce the
-> CAN XL netlink support.
+On  12 nov. 2024 =C3=A0 17:53, Marc Kleine-Budde <mkl@pengutronix.de> a =C3=
+=A9crit :
+> On 11.11.2024 00:55:49, Vincent Mailhol wrote:
+> > Because of popular request [1] and to celebrate the fact that I joined
+> > the kernel web of trust this week [2], here is an RFC to introduce the
+> > CAN XL netlink support.
+>
+> yeay \o/
+>
+> > The logic is simple. The CAN XL basically just reuse the same kind of
+> > parameters as CAN FD: the databittiming and the TDC. So the series is
+> > just a bunch of refactor to either:
+> >
+> >   - factorize code.
+> >   - rename some variable to differentiate between CAN FD and XL.
+> >   - make some function more generic to accept both CAN FD and XL.
+> >
+> > The feature is working=E2=84=A2: there is a dummy driver at the end of =
+the
+> > series to show the traffic from the userland to a driver. This said, I
+> > did close to zero testing. Once I had one CAN XL frame reaching the
+> > driver, I call it a day, and decided to send the work. Regardless, it
+> > is Sunday night. If I do not send it now, that would be next week-end.
+> > Probably some mistakes are hidden here and there, but this should be
+> > enough for an RFC level.
+> >
+> > Also, I am not fully happy that can_dbt_changelink() requires 8
+> > parameters. I will probably revisit this later on. But for the moment,
+> > I think this is acceptable for an RFC.
+> >
+> > Overall, I do not want to rush this series. Linus should send the rc7
+> > anytime soon, and the merge window will probably start in eight days.
+> > I do not think this series will be finalized by then. I still need to
+> > give a deeper look at ISO 11898-1:2024 [3] to check that everything is
+> > good. However, if I receive positive feedback on this RFC, I would
+> > probably like to have the first patch merged so that I do not have to
+> > rebase that tree wide patch each time someone makes a change.
+> >
+> > I will send a second RFC series for iplink2 just after this one. Stay
+> > tuned!
+>
+> What's the base commit of this series? It doesn't apply to
+> net-next/main. For a series this big, try using 'b4', it also
+> automatically sends the base commit.
 
-yeay \o/
+It is linux-can-next/main.
 
-> The logic is simple. The CAN XL basically just reuse the same kind of
-> parameters as CAN FD: the databittiming and the TDC. So the series is
-> just a bunch of refactor to either:
->=20
->   - factorize code.
->   - rename some variable to differentiate between CAN FD and XL.
->   - make some function more generic to accept both CAN FD and XL.
->=20
-> The feature is working=E2=84=A2: there is a dummy driver at the end of the
-> series to show the traffic from the userland to a driver. This said, I
-> did close to zero testing. Once I had one CAN XL frame reaching the
-> driver, I call it a day, and decided to send the work. Regardless, it
-> is Sunday night. If I do not send it now, that would be next week-end.
-> Probably some mistakes are hidden here and there, but this should be
-> enough for an RFC level.
->=20
-> Also, I am not fully happy that can_dbt_changelink() requires 8
-> parameters. I will probably revisit this later on. But for the moment,
-> I think this is acceptable for an RFC.
->=20
-> Overall, I do not want to rush this series. Linus should send the rc7
-> anytime soon, and the merge window will probably start in eight days.
-> I do not think this series will be finalized by then. I still need to
-> give a deeper look at ISO 11898-1:2024 [3] to check that everything is
-> good. However, if I receive positive feedback on this RFC, I would
-> probably like to have the first patch merged so that I do not have to
-> rebase that tree wide patch each time someone makes a change.
->=20
-> I will send a second RFC series for iplink2 just after this one. Stay
-> tuned!
+I will rebase at least the first patch and maybe some of the trivial
+renaming onto net-next/main before the merge window opens. This way,
+we will not have to worry about these anymore. After this, the other
+patches should apply smoothly.
 
-What's the base commit of this series? It doesn't apply to
-net-next/main. For a series this big, try using 'b4', it also
-automatically sends the base commit.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---duwd7oqetrs2ub74
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmczF3MACgkQKDiiPnot
-vG+dpwgAl+rTNPLEg4w/fCBgO2lIrtSpVXxh1iJokEzqSV4onJqODKkWrPGORElR
-2TWIfDJ4Y8qbs4QxHmojC9VBweD8LTUUofdXDhUpwjoqPP3Ap1o5Ch/DdmFn4bH+
-u0Vlrv8uJxVRGGJ8hbE7oNmKUHOp4+TWfpH0BB7y+Jnc68dKwbE/xv6lEyMfLvF5
-+OLRjyPl1LCIMNr9VN8by8DglLrUg9c/gSpZ+KlGoU53X5HHWHBpnaNiP6ds46LN
-DspPa0saLWmTHZdUCsS+tmV9Iavw17itGvBBaY1DJGVzdFUdQl6buTUNWhOTxiNG
-x2iFLeVfyZpBXEjbbY379gTzUwhqZw==
-=EUFR
------END PGP SIGNATURE-----
-
---duwd7oqetrs2ub74--
+Yours sincerely,
+Vincent Mailhol
 
