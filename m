@@ -1,58 +1,58 @@
-Return-Path: <linux-can+bounces-2002-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2004-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E13009C5EED
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 18:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FA369C5EF3
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 18:30:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5EC8284281
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 17:29:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EB2E28151B
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 17:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D466C2144A1;
-	Tue, 12 Nov 2024 17:28:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AAE821500F;
+	Tue, 12 Nov 2024 17:28:30 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41AAE2141AD;
-	Tue, 12 Nov 2024 17:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E163215C5A;
+	Tue, 12 Nov 2024 17:28:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731432504; cv=none; b=myhpvTo5idBq5ItWR9lSinqWFVzJrPmmHTWIFaPzwFv5hMx/KlU/2AImPooaqfk2AQbEbzf3SjeYXmab5mk4bIkfxhm8ATYzbW1BxAJxXA1TQKcydZLKSSoyo8Y+2Lt7jqXNfEDzHjnphMsplhFwKXccRisBrVHVZL/Kvj59Thc=
+	t=1731432510; cv=none; b=HMOpeKwSO7nCXOrUlfy/x8OcOsnGpj2sQs9JrGNGy6lb2E28dG8ZDxD//6v05aEeZrjs7OHhzJfEdytml5BTk31WwZawFlsOrXR2z+QLzqQ9Bgl7T6CTONsrwKoqGvNUyUomgMRpEnIP6VbIk9N2z5HhbaLuta5ULSpldW/oxpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731432504; c=relaxed/simple;
-	bh=xbgk5hAoqieohPCSfNFhSlP8wiXGZ1l1vbeJYgtQU6I=;
+	s=arc-20240116; t=1731432510; c=relaxed/simple;
+	bh=NxGx5LvNaB+W1MatwU+Reu1ZyoVRJisImSs03EU7MXI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sud2cYKN9j/qISLEDz1CCz8cuuAnTxPnlydUds7YoJezOtCOxx6u1PueJJaRJvOq17FBWf29v8NarYSRAoonxemRWlp7SOEz0BLf4S7umQEAVCcyGXX/ubbzTaJTrXNkwZ6Y9wCly0f3bNPpM4tMtVLjwM/76OiH1+q9g6zdznc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.170
+	 MIME-Version; b=flJ7xnOoc58MD4Ty4c6xgjfAeNWq5WFztsKIbgQCeDPWXMcJ9HfBBYQKkaE/1HhuEepdsuaeImTBZFJunQ8r4Puze0p8e4YIOM5MqFWFfFS0DvYXI0QrETn6PlLhUBAHq/TCojYxri6T6/r/Gqk4Ju2buH0wMUuwUGHEG6lGXMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-72041ff06a0so4836745b3a.2;
-        Tue, 12 Nov 2024 09:28:22 -0800 (PST)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-72041ff06a0so4836824b3a.2;
+        Tue, 12 Nov 2024 09:28:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731432502; x=1732037302;
+        d=1e100.net; s=20230601; t=1731432507; x=1732037307;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5dn6D2PvAkkjUh/aBGO5vR9KleF05rgJT7heCtBroHA=;
-        b=NEMFV3R7AraiomzguFA8CfvXcLQjTKvbPpr1CVQUcOfSGfAFk11uI+4QTxCsV2MG2K
-         e73i/1IIcQKXIRY4eFK/fE6RpXpxQNO8To7D9e1s4OoViclvbCXNoe+ok+iWxHFMVMJu
-         nwFj3itnlix07J0425UlFtkB5bDupDDVpWwpi4mlASl/XdsPYdup8xsO7hXC1FaFMPd4
-         npB2QKFMG+jYQYLpaUghqegs/Ry93CBvtcMn2j4zVXvpZ9brooXo99R4xkuW5Rl5jejp
-         x2510u92UjXxXj5eVIhTzNejiSgLlqwZm+YExwbHzr0qETs4Knf5i7nK9MwL/wQUtrlj
-         lK+A==
-X-Forwarded-Encrypted: i=1; AJvYcCWMg6kpZQyxSOYfYy4XK/Uiv86HZl0snRdnj+80D3vU613rtDR+rDS5Q79416lRU93lQj6wmR4YJmpwuNRN@vger.kernel.org, AJvYcCXow8hr63VBI5WprS3PNA4dpkt3SFj59u1GyU3i6g3H37dJG3oWAT7OpY9gUw6NO33M2rUcqSQEiXU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywZR1BCNlKXpxWY2H6jYYlxd/QzJt1s/AndoFx3/x2FHT3uhnt
-	SoBMBrLjwfvaaHdoKcjoGtExzCqiwbgSaC4PpZKSa8Pcscsgo+0QQLDXAiEL
-X-Google-Smtp-Source: AGHT+IFSNsjE/iTfFwkGzc2xjx4LVmXz4eNCEmZ61WTfvXpPt6p/no7XzV4AWwvmr4PomUrYufaubg==
-X-Received: by 2002:a05:6a00:3d56:b0:71e:410:4764 with SMTP id d2e1a72fcca58-7241329bb4cmr24364304b3a.8.1731432502126;
-        Tue, 12 Nov 2024 09:28:22 -0800 (PST)
+        bh=s8KoOpwkyhRS3PqVqIRjg2hxzpyfF+mN3WNLkLLDJ/8=;
+        b=L8leaynAHWCSVrHCV1Oz86mAoWHoHRYDvzN7++6CGL8wdX15EpSYUUoBeo8qX2YfIA
+         JCjJw/naWqWeYBum5UeXMMU66gvmqB2BarybTVgV68S7lHonVXGi8o35rbYBD25X7omx
+         B4qtEftyp5ueDj/e8lOEmL4/uhW+OfTGYybTxefhryh2HtnrX8tZbLe3wiUYFNDEBfJw
+         TGMDHBF3FnKS2sx2NKd8HRc/oKvcJ0P6QyqOBjiM1eWWO8E5B5sNrYYSgGlaJ/jk/seq
+         k8EpjpfzRwyY4jBL7Jayz9vN8PrqmVK1OiTDXJTFiE6jLzhx5+53zwbV7uHYhowKUMK6
+         xCIA==
+X-Forwarded-Encrypted: i=1; AJvYcCX62QztVYMp2R1AjJuMcPRWEhTY3mF5BnDEHbTCpS8Uj4BEpOMHUjIw45qKCWVi4OGEmVsdatt2nbQ=@vger.kernel.org, AJvYcCXHnzqoUACY2enxM+K3w5E4lTghRs869jZ/HuwyYLeZu+3Bzs4uLtcOtQ14wKLyRDLsqG9BQSC7Dt6t4dtH@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw97STGRKy5LkehQp2VSjNz1lVxLcCVigvxmLBMjVsglhT53JS+
+	K41TItZ3xYPr9zrAWRnYvf83BzMIGgwM2pVLOE0m5YO7U+OUx0vOScTXagcC
+X-Google-Smtp-Source: AGHT+IFmQVmWnEvel4LsYHGUNSnQ/WgSxfj3tIuYyobWcVyRdNqd+nzUtfDFoEvK5VEo6wP0CfJnlQ==
+X-Received: by 2002:a05:6a00:139f:b0:71e:b1dc:f255 with SMTP id d2e1a72fcca58-7241329a391mr23153863b3a.9.1731432507276;
+        Tue, 12 Nov 2024 09:28:27 -0800 (PST)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72407864f78sm11481439b3a.33.2024.11.12.09.28.19
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72407864f78sm11481439b3a.33.2024.11.12.09.28.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 09:28:21 -0800 (PST)
+        Tue, 12 Nov 2024 09:28:26 -0800 (PST)
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To: netdev@vger.kernel.org,
 	Stephen Hemminger <stephen@networkplumber.org>,
@@ -63,9 +63,9 @@ To: netdev@vger.kernel.org,
 Cc: Robert Nawrath <mbro1689@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH iproute2-next v1 1/6] iplink_can: remove unused FILE *f parameter in three functions
-Date: Wed, 13 Nov 2024 02:27:51 +0900
-Message-ID: <20241112172812.590665-9-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH iproute2-next v1 3/6] iplink_can: remove newline at the end of invarg()'s messages
+Date: Wed, 13 Nov 2024 02:27:53 +0900
+Message-ID: <20241112172812.590665-11-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241112172812.590665-8-mailhol.vincent@wanadoo.fr>
 References: <20241112172812.590665-8-mailhol.vincent@wanadoo.fr>
@@ -75,81 +75,136 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2361; i=mailhol.vincent@wanadoo.fr; h=from:subject; bh=xbgk5hAoqieohPCSfNFhSlP8wiXGZ1l1vbeJYgtQU6I=; b=owGbwMvMwCV2McXO4Xp97WbG02pJDOnGE3RObqroWpB8kSmcL5ex9J8l62a3lEsb0ufZPq0y8 r+/+YhWRykLgxgXg6yYIsuyck5uhY5C77BDfy1h5rAygQxh4OIUgInE9DAyTNjseGdhnN28ybuO P25bKTVNtGXe75vCfsyqjQ9Cld5Ous3IcG25YoONMyuDH7P+P4XGYy0LmhL9trnfCX3y83f4/Fo BPgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5013; i=mailhol.vincent@wanadoo.fr; h=from:subject; bh=NxGx5LvNaB+W1MatwU+Reu1ZyoVRJisImSs03EU7MXI=; b=owGbwMvMwCV2McXO4Xp97WbG02pJDOnGE3Ta8yYkLbwp7j/z3A/zLU+2u4dPytyhuXPZX/eoc /s+fmbK6ShhYRDjYpAVU2RZVs7JrdBR6B126K8lzBxWJpAhDFycAjCRDSYM/x2bkzgMxUPXPd0v M1vX+4/tuYd8GnqH7wX3chy5WCS8/CjDZ7acxDkX52nPUXR5l/5Rhb3iaWJUSKp7VuexmE98162 ZAA==
 X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp; fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 Content-Transfer-Encoding: 8bit
 
-FILE *f, the first parameter of below functions:
-
- * can_print_tdc_opt()
- * can_print_tdc_const_opt()
- * void can_print_ctrlmode_ext()
-
-is unused. Remove it.
+invarg() already prints a new line by default. Adding an explicit "\n"
+at the end of the message results in two lines being printed. Remove
+all newlines at the end of the invarg() messages.
 
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- ip/iplink_can.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ ip/iplink_can.c | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
 diff --git a/ip/iplink_can.c b/ip/iplink_can.c
-index f2967db5..01d977fa 100644
+index 3414d6c3..6c6fcf61 100644
 --- a/ip/iplink_can.c
 +++ b/ip/iplink_can.c
-@@ -337,7 +337,7 @@ can_print_timing_min_max(const char *json_attr, const char *fp_attr,
- 	close_json_object();
- }
+@@ -134,78 +134,78 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
+ 		if (matches(*argv, "bitrate") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&bt.bitrate, *argv, 0))
+-				invarg("invalid \"bitrate\" value\n", *argv);
++				invarg("invalid \"bitrate\" value", *argv);
+ 		} else if (matches(*argv, "sample-point") == 0) {
+ 			float sp;
  
--static void can_print_tdc_opt(FILE *f, struct rtattr *tdc_attr)
-+static void can_print_tdc_opt(struct rtattr *tdc_attr)
- {
- 	struct rtattr *tb[IFLA_CAN_TDC_MAX + 1];
+ 			NEXT_ARG();
+ 			if (get_float(&sp, *argv))
+-				invarg("invalid \"sample-point\" value\n",
++				invarg("invalid \"sample-point\" value",
+ 				       *argv);
+ 			bt.sample_point = (__u32)(sp * 1000);
+ 		} else if (matches(*argv, "tq") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&bt.tq, *argv, 0))
+-				invarg("invalid \"tq\" value\n", *argv);
++				invarg("invalid \"tq\" value", *argv);
+ 		} else if (matches(*argv, "prop-seg") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&bt.prop_seg, *argv, 0))
+-				invarg("invalid \"prop-seg\" value\n", *argv);
++				invarg("invalid \"prop-seg\" value", *argv);
+ 		} else if (matches(*argv, "phase-seg1") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&bt.phase_seg1, *argv, 0))
+-				invarg("invalid \"phase-seg1\" value\n", *argv);
++				invarg("invalid \"phase-seg1\" value", *argv);
+ 		} else if (matches(*argv, "phase-seg2") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&bt.phase_seg2, *argv, 0))
+-				invarg("invalid \"phase-seg2\" value\n", *argv);
++				invarg("invalid \"phase-seg2\" value", *argv);
+ 		} else if (matches(*argv, "sjw") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&bt.sjw, *argv, 0))
+-				invarg("invalid \"sjw\" value\n", *argv);
++				invarg("invalid \"sjw\" value", *argv);
+ 		} else if (matches(*argv, "dbitrate") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&dbt.bitrate, *argv, 0))
+-				invarg("invalid \"dbitrate\" value\n", *argv);
++				invarg("invalid \"dbitrate\" value", *argv);
+ 		} else if (matches(*argv, "dsample-point") == 0) {
+ 			float sp;
  
-@@ -365,7 +365,7 @@ static void can_print_tdc_opt(FILE *f, struct rtattr *tdc_attr)
- 	}
- }
+ 			NEXT_ARG();
+ 			if (get_float(&sp, *argv))
+-				invarg("invalid \"dsample-point\" value\n", *argv);
++				invarg("invalid \"dsample-point\" value", *argv);
+ 			dbt.sample_point = (__u32)(sp * 1000);
+ 		} else if (matches(*argv, "dtq") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&dbt.tq, *argv, 0))
+-				invarg("invalid \"dtq\" value\n", *argv);
++				invarg("invalid \"dtq\" value", *argv);
+ 		} else if (matches(*argv, "dprop-seg") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&dbt.prop_seg, *argv, 0))
+-				invarg("invalid \"dprop-seg\" value\n", *argv);
++				invarg("invalid \"dprop-seg\" value", *argv);
+ 		} else if (matches(*argv, "dphase-seg1") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&dbt.phase_seg1, *argv, 0))
+-				invarg("invalid \"dphase-seg1\" value\n", *argv);
++				invarg("invalid \"dphase-seg1\" value", *argv);
+ 		} else if (matches(*argv, "dphase-seg2") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&dbt.phase_seg2, *argv, 0))
+-				invarg("invalid \"dphase-seg2\" value\n", *argv);
++				invarg("invalid \"dphase-seg2\" value", *argv);
+ 		} else if (matches(*argv, "dsjw") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&dbt.sjw, *argv, 0))
+-				invarg("invalid \"dsjw\" value\n", *argv);
++				invarg("invalid \"dsjw\" value", *argv);
+ 		} else if (matches(*argv, "tdcv") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&tdcv, *argv, 0))
+-				invarg("invalid \"tdcv\" value\n", *argv);
++				invarg("invalid \"tdcv\" value", *argv);
+ 		} else if (matches(*argv, "tdco") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&tdco, *argv, 0))
+-				invarg("invalid \"tdco\" value\n", *argv);
++				invarg("invalid \"tdco\" value", *argv);
+ 		} else if (matches(*argv, "tdcf") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&tdcf, *argv, 0))
+-				invarg("invalid \"tdcf\" value\n", *argv);
++				invarg("invalid \"tdcf\" value", *argv);
+ 		} else if (matches(*argv, "loopback") == 0) {
+ 			NEXT_ARG();
+ 			set_ctrlmode("loopback", *argv, &cm,
+@@ -268,14 +268,14 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
  
--static void can_print_tdc_const_opt(FILE *f, struct rtattr *tdc_attr)
-+static void can_print_tdc_const_opt(struct rtattr *tdc_attr)
- {
- 	struct rtattr *tb[IFLA_CAN_TDC_MAX + 1];
+ 			NEXT_ARG();
+ 			if (get_u32(&val, *argv, 0))
+-				invarg("invalid \"restart-ms\" value\n", *argv);
++				invarg("invalid \"restart-ms\" value", *argv);
+ 			addattr32(n, 1024, IFLA_CAN_RESTART_MS, val);
+ 		} else if (matches(*argv, "termination") == 0) {
+ 			__u16 val;
  
-@@ -393,7 +393,7 @@ static void can_print_tdc_const_opt(FILE *f, struct rtattr *tdc_attr)
- 	close_json_object();
- }
- 
--static void can_print_ctrlmode_ext(FILE *f, struct rtattr *ctrlmode_ext_attr,
-+static void can_print_ctrlmode_ext(struct rtattr *ctrlmode_ext_attr,
- 				   __u32 cm_flags)
- {
- 	struct rtattr *tb[IFLA_CAN_CTRLMODE_MAX + 1];
-@@ -417,7 +417,7 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
- 
- 		print_ctrlmode(PRINT_ANY, cm->flags, "ctrlmode");
- 		if (tb[IFLA_CAN_CTRLMODE_EXT])
--			can_print_ctrlmode_ext(f, tb[IFLA_CAN_CTRLMODE_EXT],
-+			can_print_ctrlmode_ext(tb[IFLA_CAN_CTRLMODE_EXT],
- 					       cm->flags);
- 	}
- 
-@@ -542,7 +542,7 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
- 		print_uint(PRINT_ANY, "brp", " dbrp %u", dbt->brp);
- 
- 		if (tb[IFLA_CAN_TDC])
--			can_print_tdc_opt(f, tb[IFLA_CAN_TDC]);
-+			can_print_tdc_opt(tb[IFLA_CAN_TDC]);
- 
- 		close_json_object();
- 	}
-@@ -566,7 +566,7 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
- 		print_uint(PRINT_ANY, "brp_inc", " dbrp_inc %u", dbtc->brp_inc);
- 
- 		if (tb[IFLA_CAN_TDC])
--			can_print_tdc_const_opt(f, tb[IFLA_CAN_TDC]);
-+			can_print_tdc_const_opt(tb[IFLA_CAN_TDC]);
- 
- 		close_json_object();
- 	}
+ 			NEXT_ARG();
+ 			if (get_u16(&val, *argv, 0))
+-				invarg("invalid \"termination\" value\n",
++				invarg("invalid \"termination\" value",
+ 				       *argv);
+ 			addattr16(n, 1024, IFLA_CAN_TERMINATION, val);
+ 		} else if (matches(*argv, "help") == 0) {
 -- 
 2.45.2
 
