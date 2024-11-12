@@ -1,46 +1,46 @@
-Return-Path: <linux-can+bounces-1984-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-1985-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AC9F9C545D
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 11:41:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDD8A9C549C
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 11:46:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E69A1F22223
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 10:41:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94D921F2246C
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2024 10:46:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D07512185BE;
-	Tue, 12 Nov 2024 10:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 021CB21E116;
+	Tue, 12 Nov 2024 10:36:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uuitetAc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NUkSckTX"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A082185B3;
-	Tue, 12 Nov 2024 10:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B2221E110;
+	Tue, 12 Nov 2024 10:36:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731407781; cv=none; b=Gykd4aZFNrJIcyxP+SC12GwYDjkqW4yRsS0JLXa+IgnXAXmORFkw+LTUwcGb68G2zQtYupNJsatd5Ow+/AY2wwYegEfjzkPtMHiUKC4GdONhsPF1KJ5YnIzUQE+S0YTs4Gg+fw2hxYsfs0xI8QF5cZxrXvv3h3azHQPdqAoJbo8=
+	t=1731407818; cv=none; b=Oajjd98wOnaY9bEw1LPU2YzzLPZtpfaeTcbmPHgnlj7S7CLig9DqVnB+Iw+semB21oseKlMaDx20Pb+hE9nFv/jIXEbuHLorTMTZ3hjw3auIjogVmtp/7aPz/IxplmWa7m6Jy5tHpY1kJmopJDhkW6BnWI85rVTwPFApObfB6+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731407781; c=relaxed/simple;
+	s=arc-20240116; t=1731407818; c=relaxed/simple;
 	bh=mKHfPw49S/UjlwDth40dYQc6804kuiAi0oR24zuo3jU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GMATVCu1oF3QGlD2PW83VfIzcxTs5YCk3zTv+SF3/+JRDvc0Ja2hKxRjpu5sW/r6lfNYFOx5EA4SiVCrvY9/RQI9zelch60NJx/uGWtgdi5B4j4+hDDukGt9QS2h83dT5aDJuzbdMR4+r6xIst0N3BQJTkeLx88JeqEmh4L5w8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uuitetAc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCDC5C4CED6;
-	Tue, 12 Nov 2024 10:36:19 +0000 (UTC)
+	 MIME-Version:Content-Type; b=S4idEK1nrDMwR0FyHtD+rmeXlT6Xx3KxV2EXz3jnqZi8LJqs+dprrTqQgnCa//huvqGKQvp6oWXfA7f6nlZR5poZE+rLnJjXk8wi+Lvtme8uw1uVfJ3QcrQ5FkV5PUD7VZwPcjxogvO6bA4KouNXq9SCyzjgqq4v1CGnkZ/WLH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NUkSckTX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04837C4CEDD;
+	Tue, 12 Nov 2024 10:36:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731407781;
+	s=k20201202; t=1731407818;
 	bh=mKHfPw49S/UjlwDth40dYQc6804kuiAi0oR24zuo3jU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uuitetAcfKakqE4Ejx/T2nMnuPKTF2I+J9yj0KFhMPNapi0IFt1TMJrQ3/C/6lvJQ
-	 ssE2g7ukz3aj0wBI/koODWiB7JaBjBeDzYfp9NDEKWOyRrKRf9mP4S1rFYsMvunsAd
-	 wAfR8tWrFH3j6QSbq/LRd+tmEuThDZ+k3FxlzDpPTieOHixSa1vJu1RP9iGBGFlz8e
-	 d3oBfgAdIm7PoFCoUNu0X8ts3FCee8yf4oNOYbQlSZMcR/Bl91Fhzs1cqXraVVQM6S
-	 KkKxQ1Fz/86JdeZpFq1cuUtNoeCA6zlUa8f3yLfAF5GUYHedhGjRS00bE8T6eEhYK7
-	 SOeg468SEvZ6w==
+	b=NUkSckTXu/69B3dxEt/EDA+rS55OcypeV8pBUyX7LaLIgxNNNJ/MEvqaYTiTH3YlY
+	 FLN/5QzU+taXGxMcns230/VCArxLZruKw+MArCJOTVcIZQP8UFGt0RkiBSCVJzipdr
+	 5ouM10X+0vwDmlMbt+2T8Gu5eKm564uqo9CkKrl0eJQMdino8MmcVU3epkxoME557x
+	 6WPZbfou4nEb9sV6ko6lIpkAy/0hQM9P3QZdkKP66rrleHFQVPmBizFrTeSALNswVH
+	 KRXtSsPyvviLhPBWTcZW1vJxyUrvFLnphw8CC0LXTZiMQSL/a66M1u9PiHwUTpT25b
+	 FWbOk0dZGWwqg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -58,12 +58,12 @@ Cc: =?UTF-8?q?Alexander=20H=C3=B6lzl?= <alexander.hoelzl@gmx.net>,
 	linux-can@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.11 09/16] can: j1939: fix error in J1939 documentation.
-Date: Tue, 12 Nov 2024 05:35:51 -0500
-Message-ID: <20241112103605.1652910-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 08/15] can: j1939: fix error in J1939 documentation.
+Date: Tue, 12 Nov 2024 05:36:29 -0500
+Message-ID: <20241112103643.1653381-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241112103605.1652910-1-sashal@kernel.org>
-References: <20241112103605.1652910-1-sashal@kernel.org>
+In-Reply-To: <20241112103643.1653381-1-sashal@kernel.org>
+References: <20241112103643.1653381-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -73,7 +73,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.11.7
+X-stable-base: Linux 6.6.60
 Content-Transfer-Encoding: 8bit
 
 From: Alexander Hölzl <alexander.hoelzl@gmx.net>
