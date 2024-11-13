@@ -1,136 +1,164 @@
-Return-Path: <linux-can+bounces-2012-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2013-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A95B9C69BC
-	for <lists+linux-can@lfdr.de>; Wed, 13 Nov 2024 08:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 831D19C6BEA
+	for <lists+linux-can@lfdr.de>; Wed, 13 Nov 2024 10:50:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1ED98284408
-	for <lists+linux-can@lfdr.de>; Wed, 13 Nov 2024 07:15:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C1EC2812A7
+	for <lists+linux-can@lfdr.de>; Wed, 13 Nov 2024 09:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D5D13AC1;
-	Wed, 13 Nov 2024 07:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BACDC1F942E;
+	Wed, 13 Nov 2024 09:48:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GxhMy+G2"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8036DBA34
-	for <linux-can@vger.kernel.org>; Wed, 13 Nov 2024 07:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE691F8EE0;
+	Wed, 13 Nov 2024 09:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731482150; cv=none; b=pVhSKMX46ZJJyQgvNEQzxT2WneXpDxaMVamEkiUdi86rmcw3IhwCYDhiqqDOwlZPcusvXZ/MGd7FipZbHhAYGcEbdj5DlGgifS6Wywp/o0vIUw6m8mdyeyuTKmHhlHyNUPR/oT0q4lvoMTJj2M8rMoy0QRsMHS6W4x9xQcCXl2w=
+	t=1731491319; cv=none; b=f8B9T4QeIBewFF3A1dLqmnEgLeSdJP+fkv8YqO/8txgkeF1QYLoTwk9AOWnCCPcGu/xKbhy1eYczhFUo2+xBq45eG+c9arClo0Krb1l+vfoxeDEbZaaDXqxtyExI08w/9W7tHBdSlcQnl4GhV0M/Gw5u0ZNujes13nj2mT2CIoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731482150; c=relaxed/simple;
-	bh=SBaq0tNsdJyjxFyTdktXxwIt5E9hSiPSZMXHIrQlJVU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=USmdBJRUdtyOXosAMQWZB35F4zwhr2qVmZzheNv1gzubd7BBTylNP/4IS7uSur6fH5vKPwI7lTCaPQPEDjfjmhznmDM16mpzhAQiMzC9bC0xUqvjugtHdL+4aGaF6yVhx5yuq2ek+D01/PERovPetXOWYT0KfUwt7R2zMDTXieA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tB7aT-0007QT-1e; Wed, 13 Nov 2024 08:14:49 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tB7aN-000XUv-0p;
-	Wed, 13 Nov 2024 08:14:43 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id C3AE03721A3;
-	Wed, 13 Nov 2024 07:14:42 +0000 (UTC)
-Date: Wed, 13 Nov 2024 08:14:41 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: netdev@vger.kernel.org, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Vladimir Oltean <olteanv@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Pantelis Antoniou <pantelis.antoniou@gmail.com>, Marcin Wojtas <marcin.s.wojtas@gmail.com>, 
-	Byungho An <bh74.an@samsung.com>, Kevin Brace <kevinbrace@bracecomputerlab.com>, 
-	Francois Romieu <romieu@fr.zoreil.com>, Michal Simek <michal.simek@amd.com>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Zhao Qiang <qiang.zhao@nxp.com>, "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>, 
-	"open list:ARM/Allwinner sunXi SoC support" <linux-sunxi@lists.linux.dev>, 
-	"open list:FREESCALE SOC FS_ENET DRIVER" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCHv3 net-next] net: modernize IRQ resource acquisition
-Message-ID: <20241113-nonchalant-spaniel-of-contentment-83978a-mkl@pengutronix.de>
-References: <20241112211442.7205-1-rosenp@gmail.com>
+	s=arc-20240116; t=1731491319; c=relaxed/simple;
+	bh=ks90hqffQrT0BE2v4o9sOT2myXod5HsJJ8zUteV+gKw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K1xlrCZdPbyJU8tAWWlIb/ZhZZF2Lrf4MT+c5MRGczffU2H0nolIG3t9nEW1pYN2OWmVqcruwXKaR6m1lEOsEdI+yL7vn+j0nbD7DE7nryJeY6CXdl/e8gtAXa2DZFitbOeANieJk8pUchC3+q486W/lict05J0lGjVWAy/QytA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GxhMy+G2; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6cbcc2bd800so4951406d6.0;
+        Wed, 13 Nov 2024 01:48:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731491317; x=1732096117; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XaSnfzm/t5DivDcI8TYnD0ZfKr8uwA2J8rw6CZWmB2k=;
+        b=GxhMy+G2e7m9E9ytfeJJ2FRRKn+k4bJAGKLETXozgLmocakpkFT5uyuDtnI9Cae28w
+         lxZarTXvw/JeT9JP0M5fqpeVyv2dyL8yEBN8OKjhZjHkObsMdTMzbi8kQyxCBelYHJ8u
+         Z7+SvCoez3MuBHDd/Z7LpIOHmHuvn0LXVVea9JQk7L6MKeqM5ziHDJtpTUV9ycGifhiN
+         0palZwvpiTGnMMZDZ+449vKiB2hmFDKUYs4huMMT4C2m0ED9WBVYbaLtiMkFpYnjfdDc
+         lV56rInoCSoa4kG1AAWSSHYdrD/wx3wf8LCcf6y71O8t+jAMidGhF5gVVE8Q0F+Q6SFE
+         UzyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731491317; x=1732096117;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XaSnfzm/t5DivDcI8TYnD0ZfKr8uwA2J8rw6CZWmB2k=;
+        b=Ae6HJRla1DsHSvj0RxQBzBONZ4NyPWv+J1K5+7e5u7OELlCw02fgRBWQrA+isu2nzv
+         obz32OadNftrJqGDwSp6h+5JVw0OmsbL5dR6awBF/0LJccxAI0EQ8Am/w0jkHfpzZGz3
+         UtRCxY3u4Wv6poitir/ZpQUUBxXhVnNyK+vKbOQr8Tqt83fkACGglVYFB+8QWOjiD2pd
+         sAb7SJ7ZQMWQc6ZoWWT2SvnHl+eVddpqMeQsoj34iB8fWzz7l/uP4ZQMNIMxgbON396j
+         tS+2oRow72YPbrRoo9eaqEfAUGTN610Nc6VLC0TERDRA56EE7zx+qyUyMGbgLTDVnaf/
+         dhfA==
+X-Forwarded-Encrypted: i=1; AJvYcCWMYpJqTV1XmAfLCswE6kxtRRwUuiPWrhXnrB78QSbAUNRbVnxo1ja7k49dSuEjDIX080uawWEVg3I=@vger.kernel.org, AJvYcCWeUu/96Pd+X4nzduKCWJu721eujbaFlArZiEjXB8UKWt0mrL0w9yrAjbmo2sWHHStKAfTOUWRftP3b3sui@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG+7NqEzELHHz+fHi7RhQQxDwGWda7ZBXTnfCq304R9SFAs+ra
+	UVKUH1ARhi69QZUONQaBuyNEm3EUSo/XSyvybNDKyd4Dzu1aFSGiqOoMe5vc5WPlnznPug4ylkS
+	W4pY+ao3ImnAAjAf7c3oxtzbcJnE=
+X-Google-Smtp-Source: AGHT+IHcLy8AEacbQGHGgfaEwyTub+t1gLTfFsAT9DwCgvxu+gX32+4tA6aRof7gwejihIaPx+ov6qt1kZkNWsKHlks=
+X-Received: by 2002:ad4:5d49:0:b0:6d3:5be3:e711 with SMTP id
+ 6a1803df08f44-6d39d57c179mr302997596d6.9.1731491316900; Wed, 13 Nov 2024
+ 01:48:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yqpx5eyx2zhvpvlt"
-Content-Disposition: inline
+References: <20241112211442.7205-1-rosenp@gmail.com>
 In-Reply-To: <20241112211442.7205-1-rosenp@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---yqpx5eyx2zhvpvlt
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From: Julian Calaby <julian.calaby@gmail.com>
+Date: Wed, 13 Nov 2024 20:48:24 +1100
+Message-ID: <CAGRGNgXhtPy_G9O0n7dEhcAX3sWN=08tF9tgFpLs8V---uELYg@mail.gmail.com>
 Subject: Re: [PATCHv3 net-next] net: modernize IRQ resource acquisition
-MIME-Version: 1.0
+To: Rosen Penev <rosenp@gmail.com>
+Cc: netdev@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Vladimir Oltean <olteanv@gmail.com>, 
+	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Pantelis Antoniou <pantelis.antoniou@gmail.com>, 
+	Marcin Wojtas <marcin.s.wojtas@gmail.com>, Byungho An <bh74.an@samsung.com>, 
+	Kevin Brace <kevinbrace@bracecomputerlab.com>, Francois Romieu <romieu@fr.zoreil.com>, 
+	Michal Simek <michal.simek@amd.com>, Heiner Kallweit <hkallweit1@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Zhao Qiang <qiang.zhao@nxp.com>, 
+	"open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	"moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>, 
+	"open list:ARM/Allwinner sunXi SoC support" <linux-sunxi@lists.linux.dev>, 
+	"open list:FREESCALE SOC FS_ENET DRIVER" <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12.11.2024 13:14:42, Rosen Penev wrote:
+Hi Rosen,
+
+On Wed, Nov 13, 2024 at 8:14=E2=80=AFAM Rosen Penev <rosenp@gmail.com> wrot=
+e:
+>
 > In probe, np =3D=3D pdev->dev.of_node. It's easier to pass pdev directly.
->=20
+>
 > Replace irq_of_parse_and_map() by platform_get_irq() to do so. Requires
 > removing the error message as well as fixing the return type.
->=20
+>
 > Replace of_address_to_resource() with platform_get_resource() for the
 > same reason.
->=20
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> (for CAN)
-> Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Please write this as:
+Sorry for the drive-by review, but I have to question the utility of
+this conversion.
 
-Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de> # for CAN
+> diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+> index cdf0ec9fa7f3..48e93c3445e7 100644
+> --- a/drivers/net/can/grcan.c
+> +++ b/drivers/net/can/grcan.c
+> @@ -1673,9 +1673,8 @@ static int grcan_probe(struct platform_device *ofde=
+v)
+>                 goto exit_error;
+>         }
+>
+> -       irq =3D irq_of_parse_and_map(np, GRCAN_IRQIX_IRQ);
+> -       if (!irq) {
+> -               dev_err(&ofdev->dev, "no irq found\n");
+> +       irq =3D platform_get_irq(ofdev, GRCAN_IRQIX_IRQ);
+> +       if (irq < 0) {
 
-regards,
-Marc
+In this change and a lot of the others, you're not removing the "np"
+variable, so you're basically replacing one wrapper with another.
+
+>                 err =3D -ENODEV;
+>                 goto exit_error;
+>         }
+> diff --git a/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c b/drivers/n=
+et/ethernet/freescale/fs_enet/mac-fcc.c
+> index be63293511d9..9006137e3a55 100644
+> --- a/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
+> +++ b/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
+> @@ -83,8 +83,8 @@ static int do_pd_setup(struct fs_enet_private *fep)
+>         struct fs_platform_info *fpi =3D fep->fpi;
+>         int ret =3D -EINVAL;
+>
+> -       fep->interrupt =3D irq_of_parse_and_map(ofdev->dev.of_node, 0);
+> -       if (!fep->interrupt)
+> +       fep->interrupt =3D platform_get_irq(ofdev, 0);
+> +       if (fep->interrupt < 0)
+
+This one and others like it are fine: it's much cleaner to use the
+"platform_irq()" function instead of reaching deep into the structure
+to grab the "of_node" property.
+
+That said, in this case and probably a few others this is a driver for
+an OF device so I'm still not sure this actually makes sense.
+
+Thanks,
 
 --=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Julian Calaby
 
---yqpx5eyx2zhvpvlt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmc0Ud0ACgkQKDiiPnot
-vG9ixwf+MRErFbP8EBNYW4KiknVHSCJqliQuxtMgRc5LE54Iz/W8AKqAbKIjgzTv
-XVCnuSSPn5hWw85VK1YrC2romqZQMmkjFDeaDAf27emw1tYQC5DkAg7DfdasiaFw
-ZUNWdDjmY3lm3YwXCupckUARjWB9VEXNsLca8eti0+gmBWR16gwNbd7lBeXHm+Qf
-mDzxiz9SQG5P/1V6GYCnHUgqw4yC6yxgNim60jfDfbD7t52x/C1EQylcG0Wzx3Uz
-H1irShtJQNqXv0j63qMX0K3NQOkUKy0/yfNUS5gqHefjAT5YnEqUHKReldiPq0JB
-IvRUsw91n6EDC2kPZwOR1gOkgMzKZA==
-=7118
------END PGP SIGNATURE-----
-
---yqpx5eyx2zhvpvlt--
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/
 
