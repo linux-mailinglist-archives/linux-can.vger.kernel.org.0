@@ -1,130 +1,126 @@
-Return-Path: <linux-can+bounces-2026-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2027-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AFFE9C84EC
-	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 09:40:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 679AA9C8547
+	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 09:53:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB63CB2487C
-	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 08:40:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 133A71F222A2
+	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 08:53:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BDE1F756B;
-	Thu, 14 Nov 2024 08:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8E851F709E;
+	Thu, 14 Nov 2024 08:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="Ee9N5MDM"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728CD1F7563
-	for <linux-can@vger.kernel.org>; Thu, 14 Nov 2024 08:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9F71E8822;
+	Thu, 14 Nov 2024 08:52:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731573596; cv=none; b=GGaPnQyMe8ckrMhi2TSHKu1tnQxZQd0yNQr4C40OCP1hQTFCGe0bDHWkpUkMHWdfyo/ReYRzSLV43/CA2+qWtHVzpyFQCfazHGpeoL+tci28fAKutVu5TRSofOkN83eZROuJ3QamxuXp5CeHKJpW5lafPql5e7umpfeRIgUAKMU=
+	t=1731574376; cv=none; b=MtNqlH18SwHYgK4EpTUWnx8n51qRWhtahj8cmpK5BUDPE+hXipUg8MImPfTtnxCFhlHhXvX5MegjokTYaZjx7FqdwSQSrvqa9wL6JTRvRstOWaKsgkROuoxkeWT6FpJlFpk54Iktv5RJFKjEf8m9CbZ/N8hEC4cMatAaQXTtbR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731573596; c=relaxed/simple;
-	bh=IbO8gli/e/c94g3RgX5UhBSer9mV0LL2pC3JNM4V+sc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p48v93Lu/rXqhNYcRyDFks99ID9M3VsI02h0zkAVrgO/U32av3JVE/GntcdNtB+t6y/fcRQVyFw0W7VEWCpM22cnGKfyL9CwqKV0yJAYQ8KOpRKRCKteN69YmlTThvfvMrCCoPvEMvpdDJbbeoXXGRI5uLK+OkG3JKWOKhNMEvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tBVNv-0006Bt-DF; Thu, 14 Nov 2024 09:39:27 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	s=arc-20240116; t=1731574376; c=relaxed/simple;
+	bh=mV6wCDQQ98rR/ujdsfhSfcUAcivczFca5OV8rGM7sSo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iImph95/WxJKiY/BUP2wQhIHpIJ5ey/eSx5ZYUU0UcPrJ3mhGHSQ3xcXdQaMN7cOxMPMuxO/q3TXvvNBmGMLOEF07FMV0Bxcd5q96gnzQ//wQRI7JjVQc4jxxgFRuc6kVG9HEW78PCP/vYRKAVkTf+OtyP7fbdswtywiJ14opnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=Ee9N5MDM; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References; bh=o42UFSPZ8M6NDF4IfNFLvd4R2qtAoiiJCVYA2hpMZhA=; b=Ee
+	9N5MDMiJjA2OJ7yI4vMvDWpiCcDBRHY0pc2aQyUsZ6Ql/I3CmTR1oE/yftk4utQYzXuD0a8qbsxaM
+	gxmFXtSv5kjnImoVgS4gJvG8Ub9CXcC+8DC3lZu7uRTamcPhzMHR67oAEjNnreOK3AOPm8Itdp9bW
+	u6Ew1WafMxF/jptC+feL7qfgGGpJj3cGa+x8DqqOK58x++YSOTftu6lNGqzeY8JDIznpVFillkeXz
+	vp5Wv1gO5lAwh35RbtUmp/W9UHs5xlW2VPLZKk6MyNkr+WgfRxWNOBYOz6CXe1OZtVU3Nx68hoUZy
+	+0Ugph65G2vwwrQ1hNUrw+VwwIzM+V4Q==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <sean@geanix.com>)
+	id 1tBVan-000CeT-8c; Thu, 14 Nov 2024 09:52:45 +0100
+Received: from [185.17.218.86] (helo=zen.localdomain)
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tBVNt-000iGw-33;
-	Thu, 14 Nov 2024 09:39:25 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 9327A372E77;
-	Thu, 14 Nov 2024 08:39:25 +0000 (UTC)
-Date: Thu, 14 Nov 2024 09:39:23 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sean Nyekjaer <sean@geanix.com>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH can-next v3 1/2] dt-bindings: can: tcan4x5x: Document the
- ti,nwkrq-voltage-vio option
-Message-ID: <20241114-honest-premium-nightingale-22eae6-mkl@pengutronix.de>
-References: <20241112-tcan-wkrqv-v3-0-c66423fba26d@geanix.com>
- <20241112-tcan-wkrqv-v3-1-c66423fba26d@geanix.com>
+	(envelope-from <sean@geanix.com>)
+	id 1tBVam-000CcT-1g;
+	Thu, 14 Nov 2024 09:52:44 +0100
+From: Sean Nyekjaer <sean@geanix.com>
+Subject: [PATCH can-next v4 0/2] can: tcan4x5x: add option for selecting
+ nWKRQ voltage
+Date: Thu, 14 Nov 2024 09:52:20 +0100
+Message-Id: <20241114-tcan-wkrqv-v4-0-f22589d67fb1@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="c4ad3lx4y36kkuyt"
-Content-Disposition: inline
-In-Reply-To: <20241112-tcan-wkrqv-v3-1-c66423fba26d@geanix.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEW6NWcC/2WQ207DMAyGX6XKNUGJc1jbK94DcZGDs0Wo7ZaWU
+ jTt3TEtE6vInWV/X+z/ykYsGUfWVldWcM5jHnoq9FPFwsn1R+Q5Us1AgJZCCT4F1/PP93KZebD
+ gG2GFMNExAs4FU15W2Sv7GetxmdgbdU55nIbytf4yy7X/K5SPwllywWtQ0UcJCbV7OaLr8/Ich
+ m71zPDH0tuxQGxzsMrIxhsw8I9VjyzsWEVssFaDSt6BjTv2tp1W8PJB8Uz3++7ptNWmFIaHoZ+
+ xTJtaeyPJqDEk29LiZPFuRBrqujwR5cE1TtSpToJi1OjAByujV+qgNUgvUqO1s7TA7Rt7INyNp
+ wEAAA==
+X-Change-ID: 20241030-tcan-wkrqv-c62b906005da
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, Sean Nyekjaer <sean@geanix.com>
+X-Mailer: b4 0.14.2
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27457/Wed Nov 13 10:35:46 2024)
 
+This series adds support for setting the nWKRQ voltage.
 
---c4ad3lx4y36kkuyt
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH can-next v3 1/2] dt-bindings: can: tcan4x5x: Document the
- ti,nwkrq-voltage-vio option
-MIME-Version: 1.0
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+---
+Changes in v4:
+- Fixed commit msg, as pr. Marc's comments
+- Added Reviewed-By tag to 2/2
+- Link to v3: https://lore.kernel.org/r/20241112-tcan-wkrqv-v3-0-c66423fba26d@geanix.com
 
-On 12.11.2024 15:39:39, Sean Nyekjaer wrote:
-> nWKRQ supports an output voltage of either the internal reference voltage
+Changes in v3:
+- Switched the order of patches, yaml patch first and then code change.
+- Switched to a boolean ti,nwkrq-voltage-vio.
+- Switched internal variable to a bool.
+- Link to v2: https://lore.kernel.org/r/20241111-tcan-wkrqv-v2-0-9763519b5252@geanix.com
 
-The nWKRQ pin
+Changes in v2:
+- Converted tcan4x5x.txt to DT schema. In
+  https://lore.kernel.org/linux-can/20241105-convert-tcan-v2-1-4b320f3fcf99@geanix.com/
+- Reworked ti,nwkrq-voltage-sel, to DH schema style.
+- Link to v1: https://lore.kernel.org/r/20241031-tcan-wkrqv-v1-0-823dbd12fe4a@geanix.com
 
-> (3.6V) or the reference voltage of the digital interface 0 - 6V (VIO).
-> Add the devicetree option ti,nwkrq-voltage-vio to set it to VIO.
+---
+Sean Nyekjaer (2):
+      dt-bindings: can: tcan4x5x: Document the ti,nwkrq-voltage-vio option
+      can: tcan4x5x: add option for selecting nWKRQ voltage
 
-If this property is omitted the reset default, the internal reference
-voltage, is used.
+ .../devicetree/bindings/net/can/ti,tcan4x5x.yaml     |  8 ++++++++
+ drivers/net/can/m_can/tcan4x5x-core.c                | 20 ++++++++++++++++++++
+ drivers/net/can/m_can/tcan4x5x.h                     |  2 ++
+ 3 files changed, 30 insertions(+)
+---
+base-commit: 2b2a9a08f8f0b904ea2bc61db3374421b0f944a6
+change-id: 20241030-tcan-wkrqv-c62b906005da
+prerequisite-change-id: 20241105-convert-tcan-4b516424ecf6:v2
+prerequisite-patch-id: a652b1a16dadd5ff525d0b58fec56f605a976aa3
 
->=20
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+Best regards,
+-- 
+Sean Nyekjaer <sean@geanix.com>
 
-With this change:
-
-Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---c4ad3lx4y36kkuyt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmc1tzgACgkQKDiiPnot
-vG8icwf/bYMlgy/0lxTBYOyveFvfW8QvmWpBdf/22k86tbeGfSIhdFcim4PWLNha
-R5Ach6ltU7IA3Zti7aS2cH/dX0ScTsVXoTPCvev8VV6uLwVJgGTH9aRn6HC1a6wD
-tv/fTJQHf+t3g2i9zW859qgnto4PjU0nXKwixK5EJsF9F/6gf1QyT9DLDdqi7ugq
-FPtC1r2kRvdEmmSz5qB3mqcOygpjblCMx2IUB1AdN51GOopUaJxFJxSRcptObJdg
-x8FEeuB1q8RCqpxQH/i8bUMbijU6hMHl7vjYjiLUoRDY5WMUwXEH4uLXKCh3eRbz
-U+iLvRxvWJC0+gRYsPwXRSGrIq7QFg==
-=HuND
------END PGP SIGNATURE-----
-
---c4ad3lx4y36kkuyt--
 
