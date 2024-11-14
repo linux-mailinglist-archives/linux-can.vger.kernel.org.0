@@ -1,214 +1,170 @@
-Return-Path: <linux-can+bounces-2040-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2045-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33CAE9C85F6
-	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 10:22:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7E9E9C861D
+	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 10:28:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23905B21E60
-	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 09:19:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B4DE2881A2
+	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 09:28:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 386DE1DD87C;
-	Thu, 14 Nov 2024 09:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E4A61F4718;
+	Thu, 14 Nov 2024 09:27:32 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B459429CFB
-	for <linux-can@vger.kernel.org>; Thu, 14 Nov 2024 09:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C22E1F4FD0;
+	Thu, 14 Nov 2024 09:27:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.38.239.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731575959; cv=none; b=XTrO4qrXvsHRREbVWYUvDjOv2ZtGeBXTwockFntst4VaHNzXcc1RYyxsHju65cSmzsMIMSLLkGgTYVUTsy58s3Jk+4ba5v1G0BJ1w2C6zfWXV1K4cJbcrnuBwnnQvjWImybh+DDEwJtaTcomcGmRohDdXaqyztlwaJ2Z0PhKCUM=
+	t=1731576452; cv=none; b=c3IlJ13HgJlW+5bgDN5nLAXYSZDclbGpGK3LVeJgQ9cYdxu0yyH35hthgkXJZsEYsI1QTfKiER+FGgaqvdjCb7FfhUKjW2e+E7ZxLRa1B6dLa/ZO3EU3LcVWn8ij96IHwx6vygMSRZXPcxW98cUPAnX/qdonZjtScz427NMimx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731575959; c=relaxed/simple;
-	bh=RtZCouCtaFI1zmBIODep1Ex0qiLADVcYrNIwyl66qx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xaj7uk8UQNctyX37YbpXoumM+vLJK18T128HIwbS6DIDTGMwms64kuQJlmifm3vfnTh9jdqdyMsl0sDMgI1V2w+KEMnhDXqiLrCM1JqrcDUpTLIrJPMdN/LaZCXdcYtlVH7PBPGg7n+uGP8FlDb3gGorU+w9hftiwatiVaO01OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tBW0D-0007H9-SX; Thu, 14 Nov 2024 10:19:01 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tBW0D-000ibF-0Z;
-	Thu, 14 Nov 2024 10:19:01 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id BC1B0372F1F;
-	Thu, 14 Nov 2024 09:19:00 +0000 (UTC)
-Date: Thu, 14 Nov 2024 10:19:00 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sean Nyekjaer <sean@geanix.com>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH can-next v4 2/2] can: tcan4x5x: add option for selecting
- nWKRQ voltage
-Message-ID: <20241114-classy-mongoose-of-philosophy-e9dbca-mkl@pengutronix.de>
-References: <20241114-tcan-wkrqv-v4-0-f22589d67fb1@geanix.com>
- <20241114-tcan-wkrqv-v4-2-f22589d67fb1@geanix.com>
+	s=arc-20240116; t=1731576452; c=relaxed/simple;
+	bh=vcmNDMnHTCbsk7v+wIdqk7Q11DIafstDmw6Umqcbmks=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WNb2LLU8k3p8uBSIs6GiITDOG8LDagjfNRBua42Pj7tzf6ED0hJoq1A4hG+3fYdT2DX/tlkQTMxkctk478K2jEfUNH28qzph9p92PrOeXb7Z+S7c0M9DLLUDG5/W/8x11GWPqPJ5LU5Qd2bnc18TagmCZW3FkHf6N3Qpazkaq3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enpas.org; spf=pass smtp.mailfrom=enpas.org; arc=none smtp.client-ip=46.38.239.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enpas.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enpas.org
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	by mail.enpas.org (Postfix) with ESMTPSA id 93ED0102EC3;
+	Thu, 14 Nov 2024 09:19:16 +0000 (UTC)
+Message-ID: <22e388b5-37a1-40a6-bb70-4784e29451ed@enpas.org>
+Date: Thu, 14 Nov 2024 18:19:12 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ogii7zxqsnm7ewak"
-Content-Disposition: inline
-In-Reply-To: <20241114-tcan-wkrqv-v4-2-f22589d67fb1@geanix.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] can: can327: fix snprintf() limit in
+ can327_handle_prompt()
+Content-Language: en-US
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <c896ba5d-7147-4978-9e25-86cfd88ff9dc@stanley.mountain>
+From: Max Staudt <max@enpas.org>
+Autocrypt: addr=max@enpas.org; keydata=
+ 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
+ PsRBqTJGs7jw5gOWMMchFaemEnEJtg==
+In-Reply-To: <c896ba5d-7147-4978-9e25-86cfd88ff9dc@stanley.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi Dan,
+
+On 11/14/24 18:03, Dan Carpenter wrote:
+> This code is printing hex values to the &local_txbuf buffer and it's
+> using the snprintf() function to try prevent buffer overflows.  The
+> problem is that it's not passing the correct limit to the snprintf()
+> function so the limit doesn't do anything.  On each iteration we print
+> two digits so the remaining size should also decrease by two, but
+> instead it passes the sizeof() the entire buffer each time.
+
+D'oh, silly mistake. Thank you for finding it!
 
 
---ogii7zxqsnm7ewak
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH can-next v4 2/2] can: tcan4x5x: add option for selecting
- nWKRQ voltage
-MIME-Version: 1.0
+IMHO the correct fix isn't further counting and checking within the 
+snprintf loop. Instead, the buffer is correctly sized for a payload of 
+up to 8 bytes, and what we should do is to initially establish that 
+frame->len is indeed no larger than 8 bytes. So, something like
 
-On 14.11.2024 09:52:22, Sean Nyekjaer wrote:
-> The nWKRQ pin supports an output voltage of either the internal reference
-> voltage (3.6V) or the reference voltage of
-> the digital interface 0-6V (VIO).
-> Add the devicetree option ti,nwkrq-voltage-vio to set it to VIO.
->=20
-> If this property is omitted the reset default, the internal reference
-> voltage, is used.
->=20
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
+if (frame->len > 8) {
+	netdev_err(elm->dev, "The CAN stack handed us a frame with len > 8 
+bytes. Dropped packet.\n");
+}
 
-I've given my R-b to 1/2 not 2/2 :)
+This check would go into can327_netdev_start_xmit(), and then a comment 
+at your current patch's location to remind of this. Also, snprintf() can 
+be simplified to sprintf(), since it is fully predictable in this case.
 
-Have you manually added the R-b? "b4" has an support to collect the
-trailers and add the to the patches with "b4 trailers -u".
 
-With this change, let b4 add by R-b:
+It's also possible that the CAN stack already checks frame->len, in 
+which case I'd just add comments to can327. I haven't dug into the code 
+now - maybe the maintainers know?
 
-Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-regards,
-Marc
+I can whip something up next week.
 
-> ---
->  drivers/net/can/m_can/tcan4x5x-core.c | 20 ++++++++++++++++++++
->  drivers/net/can/m_can/tcan4x5x.h      |  2 ++
->  2 files changed, 22 insertions(+)
->=20
-> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_ca=
-n/tcan4x5x-core.c
-> index 2f73bf3abad889c222f15c39a3d43de1a1cf5fbb..12a375c653cbd255b5dc85faf=
-2f76de397a644ec 100644
-> --- a/drivers/net/can/m_can/tcan4x5x-core.c
-> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
-> @@ -92,6 +92,8 @@
->  #define TCAN4X5X_MODE_STANDBY BIT(6)
->  #define TCAN4X5X_MODE_NORMAL BIT(7)
-> =20
-> +#define TCAN4X5X_NWKRQ_VOLTAGE_VIO BIT(19)
-> +
->  #define TCAN4X5X_DISABLE_WAKE_MSK	(BIT(31) | BIT(30))
->  #define TCAN4X5X_DISABLE_INH_MSK	BIT(9)
-> =20
-> @@ -267,6 +269,13 @@ static int tcan4x5x_init(struct m_can_classdev *cdev)
->  	if (ret)
->  		return ret;
-> =20
-> +	if (tcan4x5x->nwkrq_voltage_vio) {
-> +		ret =3D regmap_set_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
-> +				      TCAN4X5X_NWKRQ_VOLTAGE_VIO);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	return ret;
->  }
-> =20
-> @@ -318,6 +327,15 @@ static const struct tcan4x5x_version_info
->  	return &tcan4x5x_versions[TCAN4X5X];
->  }
-> =20
-> +static void tcan4x5x_get_dt_data(struct m_can_classdev *cdev)
-> +{
-> +	struct tcan4x5x_priv *tcan4x5x =3D cdev_to_priv(cdev);
-> +	struct device_node *np =3D cdev->dev->of_node;
-> +
-> +	if (of_property_read_bool(np, "ti,nwkrq-voltage-vio"))
-> +		tcan4x5x->nwkrq_voltage_vio =3D true;
-> +}
-> +
->  static int tcan4x5x_get_gpios(struct m_can_classdev *cdev,
->  			      const struct tcan4x5x_version_info *version_info)
->  {
-> @@ -453,6 +471,8 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
->  		goto out_power;
->  	}
-> =20
-> +	tcan4x5x_get_dt_data(mcan_class);
-> +
->  	tcan4x5x_check_wake(priv);
-> =20
->  	ret =3D tcan4x5x_write_tcan_reg(mcan_class, TCAN4X5X_INT_EN, 0);
-> diff --git a/drivers/net/can/m_can/tcan4x5x.h b/drivers/net/can/m_can/tca=
-n4x5x.h
-> index e62c030d3e1e5a713c997e7c8ecad4a44aff4e6a..203399d5e8ccf3fd7a26b54d8=
-356fca9d398524c 100644
-> --- a/drivers/net/can/m_can/tcan4x5x.h
-> +++ b/drivers/net/can/m_can/tcan4x5x.h
-> @@ -42,6 +42,8 @@ struct tcan4x5x_priv {
-> =20
->  	struct tcan4x5x_map_buf map_buf_rx;
->  	struct tcan4x5x_map_buf map_buf_tx;
-> +
-> +	bool nwkrq_voltage_vio;
->  };
-> =20
->  static inline void
->=20
-> --=20
-> 2.46.2
->=20
->=20
->=20
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Max
 
---ogii7zxqsnm7ewak
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmc1wIEACgkQKDiiPnot
-vG9qbwgAhVo/ZtACONHdxxF9Cq1VFafMGUn8asKMvcKpXv4Y+z0ev2qSSLQ1hWBC
-4/Y960ei0cTJd1tHhKrspU5boKTlGJ4JSMHYzsNdQuC50HNJpdh8j55jiRMUvlQn
-/XCSsQelP+X+qqMcykhMD20mm4BcBMOyVsc4jzj65DT4/05wN7cC6NyUMOpmAK9L
-tOy9d7E1ksf+OE0O5W38z1CAu4xVtNPvXMt+DHgNs1e2A56VwbEMhED7a4EEG5EC
-MNEJJKr5TvBEhKmwWLB67T2pCaLp145b/UQSt7yZSlytenP0s/kI+vOOXXkRpVy2
-E4qxEsSYhG+iVZKYdVar0oOgj+DLRQ==
-=aHBz
------END PGP SIGNATURE-----
-
---ogii7zxqsnm7ewak--
 
