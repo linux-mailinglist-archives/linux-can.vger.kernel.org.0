@@ -1,138 +1,123 @@
-Return-Path: <linux-can+bounces-2050-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2051-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D49F9C8640
-	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 10:35:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0146F9C8649
+	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 10:37:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28EAA1F212EA
-	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 09:35:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB5C8284F3B
+	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 09:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EC7D1F6669;
-	Thu, 14 Nov 2024 09:35:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC541F7074;
+	Thu, 14 Nov 2024 09:36:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="oKXO3QgC"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="0KKA2r4t"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB7D61F470B;
-	Thu, 14 Nov 2024 09:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941AB1E47A5;
+	Thu, 14 Nov 2024 09:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731576900; cv=none; b=Y0MOKXC5lmrStgi5QAIUlgdGjLSFjioOQUssw3ZZm4wGb21suRwfi1UJMboP3MMqNL5BT6iDAqi6lJkkQ+u7VzMLFG7Hl15ZBTkQ0pBGnhYUzkS7fXDEPzzbNzt48KftxqD0QgNGHUz0I7NuIFv03LEEwbnZiQunBkHIVlZ/+TQ=
+	t=1731577015; cv=none; b=V+W97gammJa0pu7Un5KCyVBMfFfLOs3fwDvkTUntAYf4PAcadWbclXpbe9fCwoRlSvrdc5ZHbIX/SIJR6qfiTQE+ngIRgFhelcjIGLnhrKAuE9fS+onfErnqPdf8EN15aYvCPll1N/7woy/gxPEDsO8vTOODUAlFGzeBG3XPfK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731576900; c=relaxed/simple;
-	bh=z6+I7+CYarKdEBPM3FA1TYZtfIOd/tndwNaEyQSMZPg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Si+o1NdJjWDZmYTHdb0/+2rAyKQyKPdAUSc0+rpGO7zDZ8Os/mBN/JobaifbqlXAuNWzLjPYRgD53Jtz48dU/TaBa8t941H5yBD2LLkQnge//gw2MKFHUXSb/k95joOIYMgqlj0ZIQ83PEMH1j++sZMsKK1AGE4kJpxvCygewK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=oKXO3QgC; arc=none smtp.client-ip=80.12.242.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id BWFRtPe7vUepfBWFVtwEYZ; Thu, 14 Nov 2024 10:34:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1731576896;
-	bh=FUfrCo/CScN+GZNhfYe1RnJiRuI/wkqeEkNkQMFOKuU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=oKXO3QgC7FzfFdy24K6cirs9PpHvYwoFE6Z7m7KGTU6+Gh8NYcVb2naYhOLpARhOd
-	 9lwfdmZ38E+GDrFpo0Pou7aGe5gaOK8B8ifN6NoYWWwe6ENT9OqDLZx07S6w/jw9aI
-	 o6KedacyMCGxGi4QDsn/dsxo8bg7ywzXOQzE5m2N99EhqUvc7VRgiyRAdc/2QGC2QF
-	 X9qp+q7kxazuf2ye8i3JnDaj9Ki1c2hFDioPzKTGssmhy3CNUPJ/fT55ns6lHWSqgK
-	 siG/kPv1IxGaGmBxdlor+kh1sFIJj/U1aV/JiVcYBg1TYuGBSmuUxbuaG0h//Zfmbj
-	 GWi7qSxbPqQkw==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 14 Nov 2024 10:34:56 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <6db4d783-6db2-4b86-887c-3c95d6763774@wanadoo.fr>
-Date: Thu, 14 Nov 2024 18:34:49 +0900
+	s=arc-20240116; t=1731577015; c=relaxed/simple;
+	bh=s3QnhZAO5ROD68rkKDuEW3vLNjp1mRO/dhxlIBhyvFk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nq9slNC8Obp4eGd0yCtwSO8RwPP2x8uLoXwWXsYkCkpZRsFiKW+bPPRQzr2zA5ux0LECOs73FNje5v0ll+dy1OxKzt6iupvP+m1vFQp4+U6mNw2xsHPSWSO8eKg9t5jVjDZHBzO3x0H+WFbnnqvtnH9KapAC06H/vfmBEa27EhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=0KKA2r4t; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID; bh=06DiPo7AE62BwZCT/sxN8094QUu3fzWP1D1lacFySp0=; b=0KKA2r
+	4tfV7PGVTnyeMJMLSqJnrz5WElMZqz7UAMo7ygbMP6EP+2Xucg9l9RWHL8qhh/kWBkhjb5sVdVVwO
+	7QL82EsuwLUvGLKogS9DT6ID5hNYB8ziuC3ChMSMa0vrHBWSU3kEWEVRjhFXlf+iUu5gsXL5Ay03u
+	vCFAUByJcWmdaZjtCq/nkH1Y6MlklDC2H1x99uFx1EVtW0+z2j3el2TRCuDpnKD2QhUTcsnniwWwi
+	L5RHPk/9R4U+tRNf5OKkR1TmG2PsY/xpp6SXSJAD2UkV4OBhMBX/nvdZ8CDC1brIjiKfWu3NL4LaQ
+	jEgC5b9oRZqk82pQ7CUrQqt05ntA==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <sean@geanix.com>)
+	id 1tBWHR-000M7z-Cv; Thu, 14 Nov 2024 10:36:49 +0100
+Received: from [2a06:4004:10df:0:6905:2e05:f1e4:316f] (helo=Seans-MacBook-Pro.local)
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <sean@geanix.com>)
+	id 1tBWHQ-000HLH-2O;
+	Thu, 14 Nov 2024 10:36:48 +0100
+Date: Thu, 14 Nov 2024 10:36:48 +0100
+From: Sean Nyekjaer <sean@geanix.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Simon Horman <horms@kernel.org>, 
+	Chandrasekar Ramakrishnan <rcsekar@samsung.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] can: m_can: add deinit callback
+Message-ID: <cjg6hv4wspgiavym5g2mwrx4ranz4payml37fnhzupp2xvqc6f@ckmweysspqto>
+References: <20241111-tcan-standby-v1-0-f9337ebaceea@geanix.com>
+ <20241111-tcan-standby-v1-1-f9337ebaceea@geanix.com>
+ <20241112144603.GR4507@kernel.org>
+ <20241114-energetic-denim-chipmunk-577438-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] can: can327: fix snprintf() limit in
- can327_handle_prompt()
-To: Dan Carpenter <dan.carpenter@linaro.org>, Max Staudt <max@enpas.org>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <c896ba5d-7147-4978-9e25-86cfd88ff9dc@stanley.mountain>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-In-Reply-To: <c896ba5d-7147-4978-9e25-86cfd88ff9dc@stanley.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241114-energetic-denim-chipmunk-577438-mkl@pengutronix.de>
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27457/Wed Nov 13 10:35:46 2024)
 
-Hi Dan,
-
-On 14/11/2024 at 18:03, Dan Carpenter wrote:
-> This code is printing hex values to the &local_txbuf buffer and it's
-> using the snprintf() function to try prevent buffer overflows.  The
-> problem is that it's not passing the correct limit to the snprintf()
-> function so the limit doesn't do anything.  On each iteration we print
-> two digits so the remaining size should also decrease by two, but
-> instead it passes the sizeof() the entire buffer each time.
+On Thu, Nov 14, 2024 at 10:34:23AM +0100, Marc Kleine-Budde wrote:
+> On 12.11.2024 14:46:03, Simon Horman wrote:
+> > On Mon, Nov 11, 2024 at 11:51:23AM +0100, Sean Nyekjaer wrote:
+> > > This is added in preparation for calling standby mode in the tcan4x5x
+> > > driver or other users of m_can.
+> > > For the tcan4x5x; If Vsup is 12V, standby mode will save 7-8mA, when
+> > > the interface is down.
+> > > 
+> > > Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> > > ---
+> > >  drivers/net/can/m_can/m_can.c | 3 +++
+> > >  drivers/net/can/m_can/m_can.h | 1 +
+> > >  2 files changed, 4 insertions(+)
+> > > 
+> > > diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> > > index a7b3bc439ae596527493a73d62b4b7a120ae4e49..a171ff860b7c6992846ae8d615640a40b623e0cb 100644
+> > > --- a/drivers/net/can/m_can/m_can.c
+> > > +++ b/drivers/net/can/m_can/m_can.c
+> > > @@ -1756,6 +1756,9 @@ static void m_can_stop(struct net_device *dev)
+> > >  
+> > >  	/* set the state as STOPPED */
+> > >  	cdev->can.state = CAN_STATE_STOPPED;
+> > > +
+> > > +	if (cdev->ops->deinit)
+> > > +		cdev->ops->deinit(cdev);
+> > 
+> > Hi Sean,
+> > 
+> > Perhaps this implementation is in keeping with other m_can code, but
+> > I am wondering if either the return value of the callback be returned to
+> > the caller, or the return type of the callback be changed to void?
+> > 
+> > Similarly for calls to callbacks in in patch 3/3.
 > 
-> If the frame->len were too long it would result in a buffer overflow.
-
-But, can frame->len be too long? Classical CAN frame maximum length is 8 
-bytes. And I do not see a path for a malformed frame to reach this part 
-of the driver.
-
-If such a path exists, I think this should be explained. Else, I am just 
-not sure if this needs a Fixes: tag.
-
-> I've also changed the function from snprintf() to scnprintf().  The
-> difference between the two functions is that snprintf() returns the number
-> of bytes which would have been printed if there were space while the
-> scnprintf() function returns the number of bytes which are actually
-> printed.
+> please take care of errors/return values.
 > 
-> Fixes: 43da2f07622f ("can: can327: CAN/ldisc driver for ELM327 based OBD-II adapters")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
-> ---
->   drivers/net/can/can327.c | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/can/can327.c b/drivers/net/can/can327.c
-> index 24af63961030..5c05ebc72318 100644
-> --- a/drivers/net/can/can327.c
-> +++ b/drivers/net/can/can327.c
-> @@ -623,16 +623,16 @@ static void can327_handle_prompt(struct can327 *elm)
->   			snprintf(local_txbuf, sizeof(local_txbuf), "ATRTR\r");
->   		} else {
->   			/* Send a regular CAN data frame */
-> +			int off = 0;
->   			int i;
->   
->   			for (i = 0; i < frame->len; i++) {
-> -				snprintf(&local_txbuf[2 * i],
-> -					 sizeof(local_txbuf), "%02X",
-> -					 frame->data[i]);
-> +				off += scnprintf(&local_txbuf[off],
-> +						 sizeof(local_txbuf) - off,
-> +						 "%02X", frame->data[i]);
->   			}
->   
-> -			snprintf(&local_txbuf[2 * i], sizeof(local_txbuf),
-> -				 "\r");
-> +			scnprintf(&local_txbuf[off], sizeof(local_txbuf) - off, "\r");
->   		}
->   
->   		elm->drop_next_line = 1;
 
-Yours sincerely,
-Vincent Mailhol
+Will do.
+It's also missing for the init callback. Would you like this series to
+fix that?
 
+/Sean
 
