@@ -1,121 +1,138 @@
-Return-Path: <linux-can+bounces-2056-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2057-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B11A09C8A11
-	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 13:35:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44BF79C8B0A
+	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 13:51:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66D9B1F22794
-	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 12:35:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1FC3B258E5
+	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 12:50:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE761F9ED8;
-	Thu, 14 Nov 2024 12:35:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F0C1FA84A;
+	Thu, 14 Nov 2024 12:50:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="l9Jn6FuM"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="CYwFkk7M"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC0E1F9A8D;
-	Thu, 14 Nov 2024 12:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0AF1E883F;
+	Thu, 14 Nov 2024 12:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731587727; cv=none; b=sUNRZ3yYvKO1hXhtdz/yjjEeZuUxwaowLYgbWNvY3Q8JxA0Yo8I9jFE/EcwUVGEZrxw2la3A0/FJpzkpQxpMaiUfAcEyBI8/0BhyEhufgejsLDSvF/MDaffLwtVHh8Kh7N2kXG1GiiCPsDdf+neitFgCAMkzXRdcGn1EvqS9eSA=
+	t=1731588639; cv=none; b=EUArDRk1MhSYu4WBiiZG5k9GWWqteFHDuOI/e783TLK43mT/Dj3iZSBroNFXZ2ysDnM//cim7P2plfhf7deMHdfM7XmvshvIxSmA+3xqt4o+jgVFN3PxQaWP1QFt+iJEbV6X5WtBeIzxfdqVQ4901Rc2SoZww3mrMNanu6WZM4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731587727; c=relaxed/simple;
-	bh=0WkcxfAr+SjjzcYjh2T51top57BNY5aFPaykSjgrnC0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kg2jWAS9kgNLGAtjxAuFM3yu9Zn6HoEolmlEnD5/p8Fjv5d82ghJrr71Co/urh5RQ0e8/+vSHtekPYMRfXxuKnqJD/ZRKIaYan9SaxmsmSsW6Y6kfEtMxG0G60U0371bXTQW4s6DIFtp6yCoO1VdkloTIhmoaKpSSr3LSaNQ0vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=l9Jn6FuM; arc=none smtp.client-ip=80.12.242.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id BZ40thIaGgtkHBZ41tUC1a; Thu, 14 Nov 2024 13:35:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1731587716;
-	bh=BHNcnOVeaZJasUSVXJ8QJzu53w+/kj7LUAx1oq0vuHI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=l9Jn6FuMBGr93BnQyPWs2l4LR7uh6VRheNq5TKgkXecQKIJuHI1IZS/H/vDQn5SV4
-	 HaRCZr4jrNuflztCnnbIo5O497lgQwskwO7oE3Qir8RLLE5cvp7TMiE1ypnBSploF2
-	 WPPxl/O0AUARNFLr8m4yFaAWXxfDDUHPxasy4TX4eqsrdwkP/1Rk35qrSt4u6qvuOc
-	 6QMKfFvfDgQ2mVLJFa3Hu9/Rgz6qoyNg1DYQp23ZqgaBwlcxEYxc5n7K9uAACBSjiO
-	 eWxk8AzcqXmZibMAoBxEOOoDy/3ifGT6zHlQtKK3TTuoPhykJXVNxZVUX7drOADaN6
-	 Ji/mRWELRS8dg==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 14 Nov 2024 13:35:16 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <9d6837c1-6fd1-4cc6-8315-c1ede8f20add@wanadoo.fr>
-Date: Thu, 14 Nov 2024 21:35:07 +0900
+	s=arc-20240116; t=1731588639; c=relaxed/simple;
+	bh=30EemVlxXVCzIcM8CElgaclSsg05Fk11b5D/AnIKsZ4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hfWv+qa0niIDQGWrkK6ZgLMTExuZvOexCZDqRYD6XjdbwVewPopc80N53z466WjNx62opn/7tbJGQ3aOOXl3cB5licst39HVVKDwuOmU/07rKS/iADiKhMwtRtWuHgCziEUodiTDEOYugywTMzb7duCE14mM7rh6I/LB5d0zjUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=CYwFkk7M; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1731588637; x=1763124637;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=30EemVlxXVCzIcM8CElgaclSsg05Fk11b5D/AnIKsZ4=;
+  b=CYwFkk7MfqRdAi6EzXhh7uSH2ZaYMtixGzHJuO5i40ru5HwAXW8U1nsq
+   bFEuok/mZ1oox8kPaD38G5OzLp5dtbx1p5ZsHY7nRIkQQVFXbfSxyRjfX
+   rTz7LUpdlhbO3ntqqRGk/HxJBBqDASDH4WKRzUvT/MvCqJHlfxvtJ1DDd
+   8irgCHHXZg3mzBo6T6gNDsDT6ruujf3gxeCGMny2Py0h88R1/EC997RlS
+   vUq3UamIOJ+UOZjw735qsAzLb9bArDg/HX1EVZavFsEg4KVyXOKmfson1
+   lfoZ/iuO9AvyyvpJRVBUi7N7Jm5kskms2W8oCsTgfUlByyt/dcPQeZe60
+   A==;
+X-CSE-ConnectionGUID: dprYk6rmQCadJdxyql8mEA==
+X-CSE-MsgGUID: b6rLs88DS46y5i09HfzQkw==
+X-IronPort-AV: E=Sophos;i="6.12,154,1728975600"; 
+   d="scan'208";a="201749152"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Nov 2024 05:50:36 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 14 Nov 2024 05:50:05 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Thu, 14 Nov 2024 05:50:01 -0700
+Date: Thu, 14 Nov 2024 12:50:01 +0000
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Rosen Penev <rosenp@gmail.com>
+CC: <netdev@vger.kernel.org>, Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol
+	<mailhol.vincent@wanadoo.fr>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Kurt Kanzenbach
+	<kurt@linutronix.de>, Vladimir Oltean <olteanv@gmail.com>, Chris Snook
+	<chris.snook@gmail.com>, Marcin Wojtas <marcin.s.wojtas@gmail.com>, "Russell
+ King" <linux@armlinux.org.uk>, Horatiu Vultur <horatiu.vultur@microchip.com>,
+	"maintainer:MICROCHIP LAN966X ETHERNET DRIVER"
+	<UNGLinuxDriver@microchip.com>, Yoshihiro Shimoda
+	<yoshihiro.shimoda.uh@renesas.com>, Niklas =?utf-8?Q?S=C3=B6derlund?=
+	<niklas.soderlund@ragnatech.se>, Doug Berger <opendmb@gmail.com>, "Florian
+ Fainelli" <florian.fainelli@broadcom.com>, "Broadcom internal kernel review
+ list" <bcm-kernel-feedback-list@broadcom.com>, Heiner Kallweit
+	<hkallweit1@gmail.com>, Richard Cochran <richardcochran@gmail.com>, "open
+ list:MCAN MMIO DEVICE DRIVER" <linux-can@vger.kernel.org>, open list
+	<linux-kernel@vger.kernel.org>, "open list:RENESAS ETHERNET SWITCH DRIVER"
+	<linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCHv2 net-next] net: modernize ioremap in probe
+Message-ID: <20241114125001.3hykb6dnzmt7bkti@DEN-DL-M70577>
+References: <20241111200212.5907-1-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] can: can327: fix snprintf() limit in
- can327_handle_prompt()
-To: Dan Carpenter <dan.carpenter@linaro.org>, Max Staudt <max@enpas.org>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <c896ba5d-7147-4978-9e25-86cfd88ff9dc@stanley.mountain>
- <6db4d783-6db2-4b86-887c-3c95d6763774@wanadoo.fr>
- <4ff913b9-93b3-4636-b0f6-6e874f813d2f@stanley.mountain>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-In-Reply-To: <4ff913b9-93b3-4636-b0f6-6e874f813d2f@stanley.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20241111200212.5907-1-rosenp@gmail.com>
 
-On 14/11/2024 at 18:57, Dan Carpenter wrote:
-> On Thu, Nov 14, 2024 at 06:34:49PM +0900, Vincent Mailhol wrote:
->> Hi Dan,
->>
->> On 14/11/2024 at 18:03, Dan Carpenter wrote:
->>> This code is printing hex values to the &local_txbuf buffer and it's
->>> using the snprintf() function to try prevent buffer overflows.  The
->>> problem is that it's not passing the correct limit to the snprintf()
->>> function so the limit doesn't do anything.  On each iteration we print
->>> two digits so the remaining size should also decrease by two, but
->>> instead it passes the sizeof() the entire buffer each time.
->>>
->>> If the frame->len were too long it would result in a buffer overflow.
->>
->> But, can frame->len be too long? Classical CAN frame maximum length is 8
->> bytes. And I do not see a path for a malformed frame to reach this part of
->> the driver.
->>
->> If such a path exists, I think this should be explained. Else, I am just not
->> sure if this needs a Fixes: tag.
+Hi Rosen,
 
-I confirmed the CAN frame length is correctly checked.
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> index 3234a960fcc3..375e9a68b9a9 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> @@ -77,20 +77,12 @@ static int lan966x_create_targets(struct platform_device *pdev,
+>          * this.
+>          */
+>         for (idx = 0; idx < IO_RANGES; idx++) {
+> -               iores[idx] = platform_get_resource(pdev, IORESOURCE_MEM,
+> -                                                  idx);
+> -               if (!iores[idx]) {
+> -                       dev_err(&pdev->dev, "Invalid resource\n");
+> -                       return -EINVAL;
+> -               }
+> -
+> -               begin[idx] = devm_ioremap(&pdev->dev,
+> -                                         iores[idx]->start,
+> -                                         resource_size(iores[idx]));
+> -               if (!begin[idx]) {
+> +               begin[idx] = devm_platform_get_and_ioremap_resource(
+> +                       pdev, idx, &iores[idx]);
 
-The only way to trigger that snprintf() with the wrong size is if 
-CAN327_TX_DO_CAN_DATA is set, which only occurs in can327_send_frame(). 
-And the only caller of can327_send_frame() is can327_netdev_start_xmit().
+Seems like this causes some trouble in the lan969x (see Horatius
+comment). While at it, maybe reformat this line - checkpatch is
+complaining:
 
-can327_netdev_start_xmit() calls can_dev_dropped_skb() which in turn 
-calls can_dropped_invalid_skb() which goes to can_is_can_skb() which 
-finally checks that cf->len is not bigger than CAN_MAX_DLEN (i.e. 8 bytes).
+CHECK: Lines should not end with a '('
+#314: FILE: drivers/net/ethernet/microchip/lan966x/lan966x_main.c:80:
++		begin[idx] = devm_platform_get_and_ioremap_resource(
 
-So indeed, no buffer overflow can occur here.
+/Daniel
 
-> Even when bugs don't affect runtime we still assign a Fixes tag, but we don't
-> CC stable.  There is no way that passing the wrong size was intentional.
-
-Got it. Thanks for the explanation, now it makes sense to keep the 
-Fixes: tag.
-
-
-Yours sincerely,
-Vincent Mailhol
+> +               if (IS_ERR(begin[idx])) {
+>                         dev_err(&pdev->dev, "Unable to get registers: %s\n",
+>                                 iores[idx]->name);
+> -                       return -ENOMEM;
+> +                       return PTR_ERR(begin[idx]);
+>                 }
+>         }
+> 
 
 
