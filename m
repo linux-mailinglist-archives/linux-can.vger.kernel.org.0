@@ -1,143 +1,187 @@
-Return-Path: <linux-can+bounces-2033-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2034-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E14D9C8590
-	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 10:04:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78B6C9C8592
+	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 10:04:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71A80B2AEF0
-	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 09:04:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38CF62832CF
+	for <lists+linux-can@lfdr.de>; Thu, 14 Nov 2024 09:04:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D65A1DF24B;
-	Thu, 14 Nov 2024 09:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51CFA1DD88E;
+	Thu, 14 Nov 2024 09:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lbvk/xIz"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="ijfhqiIa"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143E41DD525
-	for <linux-can@vger.kernel.org>; Thu, 14 Nov 2024 09:03:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CA81991CD;
+	Thu, 14 Nov 2024 09:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731575041; cv=none; b=kCCiGO7olxu9zNqRWrfHWBh412798co2E9g2t1wlJ2zOjFBz75g1FPK9phbmAiyhENB/jgTfSsleNROU+mSGURYLWeo7NPaYHbLxpAN4ewRF00L6tGfxl14OZA5TMl29ccA7buAsdmUtEhABJ9Sq6lmuH2QEFt1KlmkeuHnPaeg=
+	t=1731575080; cv=none; b=dic5IWTszQjYifIy56pwiEcZRPkx/UgjRaTEJcoI83CPqp2l9yItN1zjGyA28PvEnveTcCJc2zEQNlZbBbcyzA1F5kRU8/3sa1oxQYqZNBeF05MY+nups01YCLF/5sg5iUfyRzVXG12CmEMG9aa+UFX0T1FeJJ16TRoItYQUMGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731575041; c=relaxed/simple;
-	bh=zWuRiFchZrNBLXRq0j24MhQKqSTdtNiY9xXXezztt0E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Tirs1c4P/UynNsEn/8ZkyryNsYdUzI/RTOkt/e6eCJ7jvW1L3zinu8ze0ORcKfP6k+SvUC2A4K12Hy2V5xkx5JuIqV7VT3OxpfeUY2GbhB62Ib9Yz2BhZuNN5deScdVqKCdpdxrKIS2YPFxbdEXjt4HZBthyhjRrtf+3GNvGm7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lbvk/xIz; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-37d4b0943c7so261339f8f.1
-        for <linux-can@vger.kernel.org>; Thu, 14 Nov 2024 01:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731575036; x=1732179836; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8yR9tbhF0q7yv18wxqWfZSuY7tMkF/Aly2je5xrlXRw=;
-        b=lbvk/xIzFDHpYcENEsDUfX4v6vkLmdEQktMwFkPfPCkStNa5r8g9MwNcT6RmMg27k/
-         7H+L3rUf8b9Krh/OIeYSvQREm6Pkgaq4aezNsqGVTPqFRro8GI4u12gg+HvknsIUbBJk
-         lm02PXX8kZxd6cXzLMnmUBm7vV3edn90njBiiZ3o8TIShL33W3pFZOUi4kD9BI/z2KpH
-         uKPS8S4IKQ20LIS0Sr94GFIsutVA9EsAtwNaC9pA8kyp/F0IJrzJ0mgq/BAOTIpLNnjp
-         hHWwirY0Ozbp1IQBpdRqUSQhzwE8YVRkPEQD3GggCFIg+aFFJNvcaylN9xLg4AAUt4Dg
-         HRpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731575036; x=1732179836;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8yR9tbhF0q7yv18wxqWfZSuY7tMkF/Aly2je5xrlXRw=;
-        b=NblMFSmck4JpKp6cRjXJnAJl9kOvMS1wVa8+UjiFPZWRms1Yitfk8lcDvXQSWe0sah
-         URzJTLgvxpAXFVJ2V9UySv5r16tFzKUYj1vLWVuOJscyVftajfQMJNnK9rinMXf5rv1d
-         3Wzlw9mrcLBWXOwnDjtz5njtdxyApntmI194OME34u2j5gsxtAsEB/NZG4Al+LqsEikh
-         NZ2zsHJGs+XgqcDH4JuI1ALl+jSRnsrSE9Fekt9rNGSJ5KFKecVqH5KNnwSkcXSiCG7G
-         19mU1ioICmjAQ0hQwebX8BjEMlb5VPJQwF/oxqniLnF6guy1ATL18SGI505YiGcB/BR9
-         BLrg==
-X-Forwarded-Encrypted: i=1; AJvYcCViEJhRIlnJwWx7vBWZMziRRCpo3g2NzPplXaW0dCO0fDA1Rh6M0aDrwD1PPJVj/lUlFmBi+uRKQrQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YysRGeLJHFII72Fr3P8iJwMYhoSq9m3qZGe0FCdByLMZHm+cGdV
-	ZStNdd3nhFT4M32avLdGVr3zk+Ra5mAfIq4T88RCggLKy3LaMNpgzUJ5FFVQrFA=
-X-Google-Smtp-Source: AGHT+IF7LePleA2RVAB0zLKwWrjCZlENR6/gtLxK87oI7QxvhdPKjaNrSnuc/bm9zTG3lEGgwAT6DQ==
-X-Received: by 2002:a5d:6487:0:b0:37e:f4ae:987d with SMTP id ffacd0b85a97d-381f1872f43mr18512390f8f.29.1731575036374;
-        Thu, 14 Nov 2024 01:03:56 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-382207fd632sm82453f8f.44.2024.11.14.01.03.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2024 01:03:55 -0800 (PST)
-Date: Thu, 14 Nov 2024 12:03:52 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Max Staudt <max@enpas.org>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH net] can: can327: fix snprintf() limit in
- can327_handle_prompt()
-Message-ID: <c896ba5d-7147-4978-9e25-86cfd88ff9dc@stanley.mountain>
+	s=arc-20240116; t=1731575080; c=relaxed/simple;
+	bh=iRPXMOyExoi/69l5RX3rJc18D1pUDb01VAexzrIlrEQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g0KaTteh5EeuPrxcgBZutt1ActOVHCCPyibli4ZlrWqx6a/hJZRJuIgw2N5cy38C0P8MbE+9/UeB2geNXsTfG4hlRs+4LT3z955aKB4N+5apv+or14SZFrzCbqzR035d/JCRKPksQCPWuYAdLHzYPuiPTbm70eF7EvQT7vUsYNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=ijfhqiIa; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=DTask+hWGywo0tXDj4oHwyAVi94Iui8lkNGWuJeSb0w=; b=ijfhqiIaNkSj9Vm9B64Z7ZBM2Z
+	DVmR9pHHFBojzICcvhrNdotdtePKjaqRdtGWhQJwckWac4ABDdOhFYgStaWfUG5BlUDgBbLUEBQJI
+	JA0l+MHLgu7ousiWQ3Ci70W1VgwbkBjCAaUgdWPlHZKVstKNDco4wXWN45WbYCO+x/JpKbsXvCkgx
+	Ne7Ae/THTPKcLxclBAw/DPyRdZEFCeQ6H76zBtG8yYjwwJdvnhgP4Xgnw5+jQ0imFqE3p9yW2Vsq5
+	LoixFhmuakyWixoWjfpGHpZonxJ5sDZyX7JFWuvEMMI6Xa9Tvtsbt9ZeQ+D8DJkIKNoGXtiIDxSKx
+	B4sa/ESA==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <sean@geanix.com>)
+	id 1tBVmD-000EWr-6H; Thu, 14 Nov 2024 10:04:33 +0100
+Received: from [2a06:4004:10df:0:6905:2e05:f1e4:316f] (helo=Seans-MacBook-Pro.local)
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <sean@geanix.com>)
+	id 1tBVmC-000H8n-1e;
+	Thu, 14 Nov 2024 10:04:32 +0100
+Date: Thu, 14 Nov 2024 10:04:31 +0100
+From: Sean Nyekjaer <sean@geanix.com>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH can-next v3 2/2] can: tcan4x5x: add option for selecting
+ nWKRQ voltage
+Message-ID: <bmuodxb7xtuwexm7rg6ijepxlyqlwdux37ye2ztwreg7kiynwy@xxt3qvgwebvw>
+References: <20241112-tcan-wkrqv-v3-0-c66423fba26d@geanix.com>
+ <20241112-tcan-wkrqv-v3-2-c66423fba26d@geanix.com>
+ <b61e19bb-58ae-42ac-9863-f1149a812261@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b61e19bb-58ae-42ac-9863-f1149a812261@wanadoo.fr>
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27457/Wed Nov 13 10:35:46 2024)
 
-This code is printing hex values to the &local_txbuf buffer and it's
-using the snprintf() function to try prevent buffer overflows.  The
-problem is that it's not passing the correct limit to the snprintf()
-function so the limit doesn't do anything.  On each iteration we print
-two digits so the remaining size should also decrease by two, but
-instead it passes the sizeof() the entire buffer each time.
+Hi Vincent,
 
-If the frame->len were too long it would result in a buffer overflow.
+On Thu, Nov 14, 2024 at 05:59:54PM +0100, Vincent Mailhol wrote:
+> Hi Sean,
+> 
+> I found the v3. I was a bit confused because it was hidden before the v2 in
+> my mailbox: the active thread in v2 bump it to the top, thus "shadowing" the
+> v3.
+> 
+> On 12/11/2024 at 23:39, Sean Nyekjaer wrote:
+> > nWKRQ supports an output voltage of either the internal reference voltage
+> > (3.6V) or the reference voltage of the digital interface 0 - 6V (VIO).
+> > Add the devicetree option ti,nwkrq-voltage-vio to set it to VIO.
+> > Unset nWKRQ is kept at internal reference voltage.
+> > 
+> > Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> 
+> Notwithstanding of bellow nitpick:
+> 
+> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> 
+> > ---
+> >   drivers/net/can/m_can/tcan4x5x-core.c | 20 ++++++++++++++++++++
+> >   drivers/net/can/m_can/tcan4x5x.h      |  2 ++
+> >   2 files changed, 22 insertions(+)
+> > 
+> > diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+> > index 2f73bf3abad889c222f15c39a3d43de1a1cf5fbb..12a375c653cbd255b5dc85faf2f76de397a644ec 100644
+> > --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> > +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> > @@ -92,6 +92,8 @@
+> >   #define TCAN4X5X_MODE_STANDBY BIT(6)
+> >   #define TCAN4X5X_MODE_NORMAL BIT(7)
+> > +#define TCAN4X5X_NWKRQ_VOLTAGE_VIO BIT(19)
+> > +
+> >   #define TCAN4X5X_DISABLE_WAKE_MSK	(BIT(31) | BIT(30))
+> >   #define TCAN4X5X_DISABLE_INH_MSK	BIT(9)
+> > @@ -267,6 +269,13 @@ static int tcan4x5x_init(struct m_can_classdev *cdev)
+> >   	if (ret)
+> >   		return ret;
+> > +	if (tcan4x5x->nwkrq_voltage_vio) {
+> > +		ret = regmap_set_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
+> > +				      TCAN4X5X_NWKRQ_VOLTAGE_VIO);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > +
+> >   	return ret;>   }
+> > @@ -318,6 +327,15 @@ static const struct tcan4x5x_version_info
+> >   	return &tcan4x5x_versions[TCAN4X5X];
+> >   }
+> > +static void tcan4x5x_get_dt_data(struct m_can_classdev *cdev)
+> > +{
+> > +	struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
+> > +	struct device_node *np = cdev->dev->of_node;
+> > +
+> > +	if (of_property_read_bool(np, "ti,nwkrq-voltage-vio"))
+> > +		tcan4x5x->nwkrq_voltage_vio = true;
+> 
+> Nitpick: you can directly assign the value. No need for the if.
+> 
+> 	tcan4x5x->nwkrq_voltage_vio =
+> 		of_property_read_bool(cdev->dev->of_node,
+> 				      "ti,nwkrq-voltage-vio");
+> 
+> My personal preference is to not declare the np variable because it used
+> only once but instead directly use cdev->dev->of_node. See this as a
+> suggestion. If you prefer to keep as it is, OK for me :)
 
-I've also changed the function from snprintf() to scnprintf().  The
-difference between the two functions is that snprintf() returns the number
-of bytes which would have been printed if there were space while the
-scnprintf() function returns the number of bytes which are actually
-printed.
+It looks a lot cleaner :)
+Just send v4, with some commit messange changens from Marc.
+I will update and sent v5
 
-Fixes: 43da2f07622f ("can: can327: CAN/ldisc driver for ELM327 based OBD-II adapters")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
----
- drivers/net/can/can327.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> > +}
+> > +
+> >   static int tcan4x5x_get_gpios(struct m_can_classdev *cdev,
+> >   			      const struct tcan4x5x_version_info *version_info)
+> >   {
+> > @@ -453,6 +471,8 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
+> >   		goto out_power;
+> >   	}
+> > +	tcan4x5x_get_dt_data(mcan_class);
+> > +
+> >   	tcan4x5x_check_wake(priv);
+> >   	ret = tcan4x5x_write_tcan_reg(mcan_class, TCAN4X5X_INT_EN, 0);
+> > diff --git a/drivers/net/can/m_can/tcan4x5x.h b/drivers/net/can/m_can/tcan4x5x.h
+> > index e62c030d3e1e5a713c997e7c8ecad4a44aff4e6a..203399d5e8ccf3fd7a26b54d8356fca9d398524c 100644
+> > --- a/drivers/net/can/m_can/tcan4x5x.h
+> > +++ b/drivers/net/can/m_can/tcan4x5x.h
+> > @@ -42,6 +42,8 @@ struct tcan4x5x_priv {
+> >   	struct tcan4x5x_map_buf map_buf_rx;
+> >   	struct tcan4x5x_map_buf map_buf_tx;
+> > +
+> > +	bool nwkrq_voltage_vio;
+> >   };
+> >   static inline void
+> > 
+> 
+> Yours sincerely,
+> Vincent Mailhol
+> 
 
-diff --git a/drivers/net/can/can327.c b/drivers/net/can/can327.c
-index 24af63961030..5c05ebc72318 100644
---- a/drivers/net/can/can327.c
-+++ b/drivers/net/can/can327.c
-@@ -623,16 +623,16 @@ static void can327_handle_prompt(struct can327 *elm)
- 			snprintf(local_txbuf, sizeof(local_txbuf), "ATRTR\r");
- 		} else {
- 			/* Send a regular CAN data frame */
-+			int off = 0;
- 			int i;
- 
- 			for (i = 0; i < frame->len; i++) {
--				snprintf(&local_txbuf[2 * i],
--					 sizeof(local_txbuf), "%02X",
--					 frame->data[i]);
-+				off += scnprintf(&local_txbuf[off],
-+						 sizeof(local_txbuf) - off,
-+						 "%02X", frame->data[i]);
- 			}
- 
--			snprintf(&local_txbuf[2 * i], sizeof(local_txbuf),
--				 "\r");
-+			scnprintf(&local_txbuf[off], sizeof(local_txbuf) - off, "\r");
- 		}
- 
- 		elm->drop_next_line = 1;
--- 
-2.45.2
-
+/Sean
 
