@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-2066-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2064-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 171FC9CDA4F
-	for <lists+linux-can@lfdr.de>; Fri, 15 Nov 2024 09:16:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C7B29CDA4C
+	for <lists+linux-can@lfdr.de>; Fri, 15 Nov 2024 09:16:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE8332832DC
-	for <lists+linux-can@lfdr.de>; Fri, 15 Nov 2024 08:16:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFB6FB23201
+	for <lists+linux-can@lfdr.de>; Fri, 15 Nov 2024 08:16:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5EB718C900;
-	Fri, 15 Nov 2024 08:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E246A18C039;
+	Fri, 15 Nov 2024 08:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="mYv6NyCn"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="J1lOrnDQ"
 X-Original-To: linux-can@vger.kernel.org
 Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE75518B494;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7A518BBAE;
 	Fri, 15 Nov 2024 08:16:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731658571; cv=none; b=WY/AokO9wKurkDbMDswS5SLqRTDQtesbQ0oBuQ/+KyTZVMIKWQIVWUHEUqYQWp6aMRR9NMUGq0e0Qhm2wiTeVHZTCnfKpJbXJXrYhT6H5oYpFCSdJCl37oxHrPLd352kP27vGT2C/tBvpLkv8ryOR/z1yVvqNpm8Lgg78A6WnlQ=
+	t=1731658570; cv=none; b=X/mcvfCaeb0Uq6uxh91db0LIH1RnaqU2VfVluEWfQIU++hYDzST08OevbCj6Rs3CF84kQUoyPOfItteoVY2TkmSWz0qc/zcVZWmQDhypO/MAGtJ625RCHj80vBt/HwXwH429Hlq6CZ5ROuRgX/HkqNziHRNgq1CMfWgtM323Zm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731658571; c=relaxed/simple;
-	bh=S4FdzVYjf8ENUDl5+hO/16Bd9XzJEIyN8MgztKh0+WI=;
+	s=arc-20240116; t=1731658570; c=relaxed/simple;
+	bh=AlNSbTGZzzYhebHDyEMbrV6xohqUOXJctL+Pnj7/FUw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VHoXBmqlZxYlKJMEYkUi55fkXahK7Q8QvZI9Z0tJ+i1eGpp/162drroR4LSstfFUsCIc9dnMYFPxUmHl7joQUBX8D8WET14YLbz59StCf2RZXYRPXcykE934Z5R1xkgOs4aYFsB6XBekdS4xaXRECmDLZlQ9aow4VST48FDQvJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=mYv6NyCn; arc=none smtp.client-ip=188.40.30.78
+	 In-Reply-To:To:Cc; b=LauJsy1n2QTE7gBUpJh5B0LhaYZvLXjVqLob5t0clRO49I9n7oyJVKbW5rKEtFxG7SJDCZog8XCzSgJdX2zNeLI1JeWAFyhjOXGqOuMm6v2pXkKkfgo064j9yPN/O4ta4ZD/2ZfMp0T1ekQ1hGDG0r/YxvDYuDVrAJi3L+Flufo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=J1lOrnDQ; arc=none smtp.client-ip=188.40.30.78
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
@@ -36,26 +36,27 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=fffJKcNg4TRyI9YeClU3v8Y+9T3jAfJxagBxbbCRtD4=; b=mYv6NyCn6v7HLiTonOGOuenjFn
-	fCZK4mePVqbWNWQoNF/fqYMN1k9tGyrHmzNRWegRXKhnw4k6Td9S2UHpOkPO4TS7Wk+/pDsQDYz4P
-	AMHdfTnnBjcP5FhrTPFOx0DaQPmaNWdv8WB3xkMZgO27WzbrUsY2fHtYbL/Y/AyzKXqBg+k1xQz1x
-	nMhMhVj6rte0qSFP2l3YNT/GnoHQJbGuebFDDG4tU7W/o8doS1VSzh2zXGce0TmhjB1uyrIUAIRLI
-	RsBRLwk57XMSPX6PYflBmBw3zCysVJr5hGMDXJRlARcBbKqqJLGYneiLXaqpnpd/ahb/LWcXhHoa7
-	9wShZ4bw==;
+	bh=6ObOvMf1enZviPs8LOUyFoZzk/OF/FDf4jZp5aN0xyY=; b=J1lOrnDQGineuyhU9G/i3dC86f
+	VFpv+KnsjMlB/DsgNpnCPlsphVgJ5VDtH2hdA8xYzkDkOQSILLqqbwD/xVuzLhSTdoABWQ+p3AwSW
+	Xy46T2nqN+yvdtJJaOTX+JHlRaGGLtKvdmu35IFM9cBTxcYsXhl/SaPxZwQbpoO8wv5C0UpEPMXeu
+	5xPNFXyakzqbDktQF+C57lO10roI9IW33S2Slakvs2q4rqlfuzNaflcWAa6b30XGFtv+yPwXHGAIZ
+	Wn7CYt33zX7KQ6In2JFvZUPblY264c35Z3yWwBcKM3T3okdEUKsXAZBw+oyKd+nIq5eU79dcAWi5C
+	95eJn7vw==;
 Received: from sslproxy01.your-server.de ([78.46.139.224])
 	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <sean@geanix.com>)
-	id 1tBrUk-000NVB-2K; Fri, 15 Nov 2024 09:15:58 +0100
+	id 1tBrUk-000NVE-9L; Fri, 15 Nov 2024 09:15:58 +0100
 Received: from [185.17.218.86] (helo=zen.localdomain)
 	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <sean@geanix.com>)
-	id 1tBrUj-000OuX-1c;
+	id 1tBrUj-000OuX-2L;
 	Fri, 15 Nov 2024 09:15:57 +0100
 From: Sean Nyekjaer <sean@geanix.com>
-Date: Fri, 15 Nov 2024 09:15:50 +0100
-Subject: [PATCH can-next v2 1/3] can: m_can: add deinit callback
+Date: Fri, 15 Nov 2024 09:15:51 +0100
+Subject: [PATCH can-next v2 2/3] can: tcan4x5x: add deinit callback to set
+ standby mode
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -64,7 +65,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241115-tcan-standby-v2-1-4eb02026b237@geanix.com>
+Message-Id: <20241115-tcan-standby-v2-2-4eb02026b237@geanix.com>
 References: <20241115-tcan-standby-v2-0-4eb02026b237@geanix.com>
 In-Reply-To: <20241115-tcan-standby-v2-0-4eb02026b237@geanix.com>
 To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
@@ -78,53 +79,41 @@ X-Mailer: b4 0.14.2
 X-Authenticated-Sender: sean@geanix.com
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27458/Thu Nov 14 10:38:08 2024)
 
-This is added in preparation for calling standby mode in the tcan4x5x
-driver or other users of m_can.
-For the tcan4x5x; If Vsup 12V, standby mode will save 7-8mA, when the
-interface is down.
+At Vsup 12V, standby mode will save 7-8mA, when the interface is
+down.
 
 Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 ---
- drivers/net/can/m_can/m_can.c | 10 +++++++---
- drivers/net/can/m_can/m_can.h |  1 +
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ drivers/net/can/m_can/tcan4x5x-core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index a7b3bc439ae596527493a73d62b4b7a120ae4e49..667c70f8dc5e7e8b15b667119b63dea1fe667e8a 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1750,12 +1750,16 @@ static void m_can_stop(struct net_device *dev)
- 
- 	/* Set init mode to disengage from the network */
- 	ret = m_can_cccr_update_bits(cdev, CCCR_INIT, CCCR_INIT);
--	if (ret)
--		netdev_err(dev, "failed to enter standby mode: %pe\n",
--			   ERR_PTR(ret));
- 
- 	/* set the state as STOPPED */
- 	cdev->can.state = CAN_STATE_STOPPED;
-+
-+	if (!ret && cdev->ops->deinit)
-+		ret = cdev->ops->deinit(cdev);
-+
-+	if (ret)
-+		netdev_err(dev, "failed to enter standby mode: %pe\n",
-+			   ERR_PTR(ret));
+diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+index 2f73bf3abad889c222f15c39a3d43de1a1cf5fbb..7e6eea2c04ee7fbeaa6c8b229f7f64bd04bee309 100644
+--- a/drivers/net/can/m_can/tcan4x5x-core.c
++++ b/drivers/net/can/m_can/tcan4x5x-core.c
+@@ -270,6 +270,14 @@ static int tcan4x5x_init(struct m_can_classdev *cdev)
+ 	return ret;
  }
  
- static int m_can_close(struct net_device *dev)
-diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index 92b2bd8628e6b31370f4accbc2e28f3b2257a71d..6206535341a22a68d7c5570f619e6c4d05e6fcf4 100644
---- a/drivers/net/can/m_can/m_can.h
-+++ b/drivers/net/can/m_can/m_can.h
-@@ -68,6 +68,7 @@ struct m_can_ops {
- 	int (*write_fifo)(struct m_can_classdev *cdev, int addr_offset,
- 			  const void *val, size_t val_count);
- 	int (*init)(struct m_can_classdev *cdev);
-+	int (*deinit)(struct m_can_classdev *cdev);
- };
++static int tcan4x5x_deinit(struct m_can_classdev *cdev)
++{
++	struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
++
++	return regmap_update_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
++				  TCAN4X5X_MODE_SEL_MASK, TCAN4X5X_MODE_STANDBY);
++};
++
+ static int tcan4x5x_disable_wake(struct m_can_classdev *cdev)
+ {
+ 	struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
+@@ -359,6 +367,7 @@ static int tcan4x5x_get_gpios(struct m_can_classdev *cdev,
  
- struct m_can_tx_op {
+ static const struct m_can_ops tcan4x5x_ops = {
+ 	.init = tcan4x5x_init,
++	.deinit = tcan4x5x_deinit,
+ 	.read_reg = tcan4x5x_read_reg,
+ 	.write_reg = tcan4x5x_write_reg,
+ 	.write_fifo = tcan4x5x_write_fifo,
 
 -- 
 2.46.2
