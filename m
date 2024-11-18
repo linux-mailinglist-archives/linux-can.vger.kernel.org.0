@@ -1,205 +1,174 @@
-Return-Path: <linux-can+bounces-2091-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2092-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7977B9D133C
-	for <lists+linux-can@lfdr.de>; Mon, 18 Nov 2024 15:38:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEB739D1405
+	for <lists+linux-can@lfdr.de>; Mon, 18 Nov 2024 16:08:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0941F1F23523
-	for <lists+linux-can@lfdr.de>; Mon, 18 Nov 2024 14:38:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43E051F2426E
+	for <lists+linux-can@lfdr.de>; Mon, 18 Nov 2024 15:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F291C2324;
-	Mon, 18 Nov 2024 14:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B271AC45F;
+	Mon, 18 Nov 2024 15:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CL4T9EAm"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="u/JZFcvZ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21C41C243A;
-	Mon, 18 Nov 2024 14:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2FC19D899;
+	Mon, 18 Nov 2024 15:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731940441; cv=none; b=UMLYJg5BTnFFEVT6EkxkgAuMD4n4BNlQHJS/G8W9Hbbjpr8IIeLHiPGcKPJ6JoZyFw6B9W2XrNG1cRAJUFqXnH8yd9p60bifdIppyyRgsUWfQV1kUNdcWvOzauMOvubpeXsFYRUHIKyt0P3m0zFdpOrgekEFTuDFg2vJO7PG/7g=
+	t=1731942350; cv=none; b=t+Tmzz4oR/38NWiZB5dcGUbt1fcxByu7xY/Z33Q6tfa9psZgVuTV4hL2on+rPKJKh/Py335CEnfz7yukeuUH1PYtCp2iSupDAIDmw/gMWimpZL+4PZ7uxPjDeOGY7jHRSt+ULdWaU8EaK1P9RLulH7RdwX1gHd+NjizxanMQjNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731940441; c=relaxed/simple;
-	bh=EMm8SpRFSVdgOejildAdC2w3jXC1qx7tovAMGbdzoWw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RzoVPmVavIxMNPgaQX+8jSC4+iP1NyYELlyG1WltSrbvz7nGiEWcOoEtrdq+ns/0qHsQlRUwxn/7NIPyeHl6uylUyUPQK1omQUgmk8b8ye6pfiqUT9xqBhEKY3TPaYV++M2Rq2Q5h5timhIwfPp2ogld+4MgElKnsjcF0dZL1UQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CL4T9EAm; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7240fa50694so2573017b3a.1;
-        Mon, 18 Nov 2024 06:33:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731940438; x=1732545238; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mad+mOcno2P0CIpC5U9uxqbBM+RxeN4q/RBh6+yxx1g=;
-        b=CL4T9EAmet4oWj3D2aUczQ5Wy6j++1B1BMz+q0T1SnUYhEwh0UmnGmbx6yMFd/Yo/f
-         V6M6oitwQY+pCqyfNlQmhhOKLVKRxRGDqPRpAm1697TmGXcFrCS0F9FC6Vk2FkIjiOUX
-         uZwuWMiFyYK1VL2DO6fJNQrDFuomj+704nOcJ0O227+IqDuP2+9t/doT8em7PeFdaJ9Z
-         5QaTkBXhkyJYQ8jqNd4ZbmXzwCwG97RHuvTojNPdaVUPU2B5hgal09LPPzCq6kqqwNyz
-         F3mce2Bhn7Hk7xdlVmUHP4bpCWmzlfX3rU27yw3AykBjJeTB8hsMhAFxwhrlE/A+3CUH
-         ASNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731940438; x=1732545238;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mad+mOcno2P0CIpC5U9uxqbBM+RxeN4q/RBh6+yxx1g=;
-        b=mkcbTXOihPDoEF3kRJk7Z6KyTj8F8vetx6QL3VvAoIKk9J2ZfgSQfQ4sBl7kQ0Aspr
-         AptqKMjGTdCX1X4YgVHjlVSQUH2vUUOMvPcsfzES1rkxChhx/bFHOf89tsRQ8J8o6ihT
-         Nt8ADeL1UndOCkBA3N+nNoCuPX6pzo9nr9Lc1EmP3gd1Wy5/Fl5NBZ+F11W8TXg+f+W3
-         9eUnpXfysihiKr/x/FwKe/SxKT+760P/V2i1q5GjLiFMTNGFzq0DQRw1EDRXDSkOcRTr
-         ugyVf0eqffXPdotF98KYsHlIVLdi7G5gU2wlkAzpkyjkjmmsxvKdjDgS5fCBU5yHF6Nw
-         1BcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU4SqadZdzqBEM9eAGz8dPy8VyZ1N5qk6Ie2Mx4UucckIrB+1zRx2mlS+V3rPK8stP/S+Jx8T5sVwAqdQ==@vger.kernel.org, AJvYcCUkN84qgFYcXc0oTc3w1x10SERt/eR6PPXQDCnwZ/ohYn79c3bLEmvLl6dgw84L4yd7M1swezaAecYVpg==@vger.kernel.org, AJvYcCUn5OtIt1UrKk7YJEGol7JVUdHwDFUhm582scEMTsJ8TlwxBZ10uYLZJbELrcDlPYq41Qw=@vger.kernel.org, AJvYcCVjwnYxNcv+F2+D3fRpEZ8dw7RXfV0qecUZyEq3K6tZkm0MsTPuEtO7RSz2uQg43gc8tgwBnXNOd7G6yQUzhyU=@vger.kernel.org, AJvYcCVmWoubgTLk9VnhftPID3s+QQazA1I6ffijBTT90DMwIkQcIJVMANqxO6TRuhn6omi73bNqjessqMS5@vger.kernel.org, AJvYcCVvCtv7vs2Wm6XhDnqsZxAs4k2bTAm4E6Se7ypFRWSWJKqPWzRScdJxHwlI+QFudWg4p0EbEmpya0BL@vger.kernel.org, AJvYcCXOrhWF1YOhNgnJOfalKZhiE3Md1cX1CwCizoub9DVqH4exInnUXKvp/S5FFhuUT5DXy3PTBi+57HGdQlro@vger.kernel.org, AJvYcCXU7QP3tJIm2Wnv9wrwaV81935zbg9uQGRmlGIhLVnfXP0HPRGxe8a5KQ2hxR0h4N1uVuyP5zdT2wwadBmA8p6i@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxrr4Ja8m+mt2ByCjOsC3lrP+pyUhmA/kuxO/CqXRQev8c2sM29
-	CHd3g27ggyEIgcUwzbd+6Sa6Ads0ctmLLxeFOJ9ZctSA8oT6FJ6DqZv92e6DPXs=
-X-Google-Smtp-Source: AGHT+IF3SrGnsKmrF4jvHwe9jv6er3cYNAFkQ6BmUOZb81V3DDpEwoq4AchAw0/egZEddY1NEy8bEw==
-X-Received: by 2002:a17:90b:3887:b0:2ea:98f1:c172 with SMTP id 98e67ed59e1d1-2ea98f1c2a5mr1425759a91.7.1731940436264;
-        Mon, 18 Nov 2024 06:33:56 -0800 (PST)
-Received: from nova-ws.. ([103.167.140.11])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ea81b0e2fasm1616926a91.52.2024.11.18.06.33.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Nov 2024 06:33:55 -0800 (PST)
-From: Xiao Liang <shaw.leon@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	linux-rdma@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	osmocom-net-gprs@lists.osmocom.org,
-	bpf@vger.kernel.org,
-	linux-ppp@vger.kernel.org,
-	wireguard@lists.zx2c4.com,
-	linux-wireless@vger.kernel.org,
-	b.a.t.m.a.n@lists.open-mesh.org,
-	bridge@lists.linux.dev,
-	linux-wpan@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v4 5/5] selftests: net: Add two test cases for link netns
-Date: Mon, 18 Nov 2024 22:32:44 +0800
-Message-ID: <20241118143244.1773-6-shaw.leon@gmail.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241118143244.1773-1-shaw.leon@gmail.com>
-References: <20241118143244.1773-1-shaw.leon@gmail.com>
+	s=arc-20240116; t=1731942350; c=relaxed/simple;
+	bh=zyUf+NHwG8bBi0mmSVonh1jxa8hS+rUaveUXHjV+F/U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QZ8zylj9nBlwXacTv5jg+uUUYMDTP7RXVjk0Bz505lq+szg1xAE4J06V1yQzV16hoH5s+Eb99eUlOJ8EbBU8A56JT+giaujv/bgy0ZcIlvPJ8NqV8JxH0j0X8nl4bdP4llBUfCe4J1EuUpvLNJEvAq89XNcE5ULT/MIF8D1Yu/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=u/JZFcvZ; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID; bh=Md4nZg9mLXIh/IjbUDufdZzYT81SSfAjRdvm3pkBvKM=; b=u/JZFc
+	vZtCHQ9+p5jjn9WJZfx4bIj6CGVJLz/YjdknlQOOIxEC3l6KHmTBtuvBg6ac6zLXc40aLGE5d4U6b
+	ugtMB2myEv+3qCVlShZRzHJZy3eK2LWXfPI7nM7GSzvGnuOfy5cyfbRfpX95H9HNf08FHBkahUP18
+	Uwx63JokeYNQ7s1EaLg20uL2t/Wb+sZd6IZg2temlCF7PfDrhYqU7SXvLPSbOLnlHwII2pui5PEHG
+	J7roo/Y43hXSwqgjyRQO0/4tNMK6cRBOujEhvaFgFEa1AyYeqVqiVIF9qAx5mwPtbi9XWPWWYvvDK
+	tu3xLoQWBUaen5oPFadHJGgE0IsA==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <sean@geanix.com>)
+	id 1tD3Jv-0000B2-OB; Mon, 18 Nov 2024 16:05:43 +0100
+Received: from [2a06:4004:10df:0:606b:87c0:8e63:75d0] (helo=Seans-MBP.snzone.dk)
+	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <sean@geanix.com>)
+	id 1tD3Jv-000Nxy-0C;
+	Mon, 18 Nov 2024 16:05:43 +0100
+Date: Mon, 18 Nov 2024 16:05:42 +0100
+From: Sean Nyekjaer <sean@geanix.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH can-next v5 2/2] can: tcan4x5x: add option for selecting
+ nWKRQ voltage
+Message-ID: <clwiowhd5jwf7uzbcbexelsspdpflqhshq6ev5wsabhuugemlp@bbktuqgjd2gg>
+References: <20241114-tcan-wkrqv-v5-0-a2d50833ed71@geanix.com>
+ <20241114-tcan-wkrqv-v5-2-a2d50833ed71@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241114-tcan-wkrqv-v5-2-a2d50833ed71@geanix.com>
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27462/Mon Nov 18 10:41:19 2024)
 
- - Add test for creating link in another netns when a link of the same
-   name and ifindex exists in current netns.
- - Add test for link netns atomicity - create link directly in target
-   netns, and no notifications should be generated in current netns.
+Hi Marc,
 
-Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
----
- tools/testing/selftests/net/Makefile        |  1 +
- tools/testing/selftests/net/netns-name.sh   | 10 ++++++
- tools/testing/selftests/net/netns_atomic.py | 39 +++++++++++++++++++++
- 3 files changed, 50 insertions(+)
- create mode 100755 tools/testing/selftests/net/netns_atomic.py
+On Thu, Nov 14, 2024 at 10:14:50AM +0100, Sean Nyekjaer wrote:
+> The nWKRQ pin supports an output voltage of either the internal reference
+> voltage (3.6V) or the reference voltage of
+> the digital interface 0-6V (VIO).
+> Add the devicetree option ti,nwkrq-voltage-vio to set it to VIO.
+> 
+> If this property is omitted the reset default, the internal reference
+> voltage, is used.
+> 
+> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  drivers/net/can/m_can/tcan4x5x-core.c | 20 ++++++++++++++++++++
+>  drivers/net/can/m_can/tcan4x5x.h      |  2 ++
+>  2 files changed, 22 insertions(+)
+> 
+> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+> index 2f73bf3abad889c222f15c39a3d43de1a1cf5fbb..7213d9894c82d079bf92f1ec62d4eebb500cdfa4 100644
+> --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> @@ -92,6 +92,8 @@
+>  #define TCAN4X5X_MODE_STANDBY BIT(6)
+>  #define TCAN4X5X_MODE_NORMAL BIT(7)
+>  
+> +#define TCAN4X5X_NWKRQ_VOLTAGE_VIO BIT(19)
+> +
+>  #define TCAN4X5X_DISABLE_WAKE_MSK	(BIT(31) | BIT(30))
+>  #define TCAN4X5X_DISABLE_INH_MSK	BIT(9)
+>  
+> @@ -267,6 +269,13 @@ static int tcan4x5x_init(struct m_can_classdev *cdev)
+>  	if (ret)
+>  		return ret;
+>  
+> +	if (tcan4x5x->nwkrq_voltage_vio) {
+> +		ret = regmap_set_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
+> +				      TCAN4X5X_NWKRQ_VOLTAGE_VIO);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	return ret;
+>  }
+>  
+> @@ -318,6 +327,15 @@ static const struct tcan4x5x_version_info
+>  	return &tcan4x5x_versions[TCAN4X5X];
+>  }
+>  
+> +static void tcan4x5x_get_dt_data(struct m_can_classdev *cdev)
+> +{
+> +	struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
+> +	struct device_node *np = cdev->dev->of_node;
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 3d487b03c4a0..3aaa7950b0f0 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -34,6 +34,7 @@ TEST_PROGS += gre_gso.sh
- TEST_PROGS += cmsg_so_mark.sh
- TEST_PROGS += cmsg_time.sh cmsg_ipv6.sh
- TEST_PROGS += netns-name.sh
-+TEST_PROGS += netns_atomic.py
- TEST_PROGS += nl_netdev.py
- TEST_PROGS += srv6_end_dt46_l3vpn_test.sh
- TEST_PROGS += srv6_end_dt4_l3vpn_test.sh
-diff --git a/tools/testing/selftests/net/netns-name.sh b/tools/testing/selftests/net/netns-name.sh
-index 6974474c26f3..0be1905d1f2f 100755
---- a/tools/testing/selftests/net/netns-name.sh
-+++ b/tools/testing/selftests/net/netns-name.sh
-@@ -78,6 +78,16 @@ ip -netns $NS link show dev $ALT_NAME 2> /dev/null &&
-     fail "Can still find alt-name after move"
- ip -netns $test_ns link del $DEV || fail
- 
-+#
-+# Test no conflict of the same name/ifindex in different netns
-+#
-+ip -netns $NS link add name $DEV index 100 type dummy || fail
-+ip -netns $NS link add netns $test_ns name $DEV index 100 type dummy ||
-+    fail "Can create in netns without moving"
-+ip -netns $test_ns link show dev $DEV >> /dev/null || fail "Device not found"
-+ip -netns $NS link del $DEV || fail
-+ip -netns $test_ns link del $DEV || fail
-+
- echo -ne "$(basename $0) \t\t\t\t"
- if [ $RET_CODE -eq 0 ]; then
-     echo "[  OK  ]"
-diff --git a/tools/testing/selftests/net/netns_atomic.py b/tools/testing/selftests/net/netns_atomic.py
-new file mode 100755
-index 000000000000..d350a3fc0a91
---- /dev/null
-+++ b/tools/testing/selftests/net/netns_atomic.py
-@@ -0,0 +1,39 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+import time
-+
-+from lib.py import ksft_run, ksft_exit, ksft_true
-+from lib.py import ip
-+from lib.py import NetNS, NetNSEnter
-+from lib.py import RtnlFamily
-+
-+
-+def test_event(ns1, ns2) -> None:
-+    with NetNSEnter(str(ns1)):
-+        rtnl = RtnlFamily()
-+
-+    rtnl.ntf_subscribe("rtnlgrp-link")
-+
-+    ip(f"netns set {ns1} 0", ns=str(ns2))
-+
-+    ip(f"link add netns {ns2} link-netnsid 0 dummy1 type dummy")
-+    ip(f"link add netns {ns2} dummy2 type dummy", ns=str(ns1))
-+
-+    ip("link del dummy1", ns=str(ns2))
-+    ip("link del dummy2", ns=str(ns2))
-+
-+    time.sleep(1)
-+    rtnl.check_ntf()
-+    ksft_true(rtnl.async_msg_queue.empty(),
-+              "Received unexpected link notification")
-+
-+
-+def main() -> None:
-+    with NetNS() as ns1, NetNS() as ns2:
-+        ksft_run([test_event], args=(ns1, ns2))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.47.0
+Guess we can remove this line. Sorry
 
+> +
+> +	tcan4x5x->nwkrq_voltage_vio =
+> +		of_property_read_bool(cdev->dev->of_node, "ti,nwkrq-voltage-vio");
+> +}
+> +
+>  static int tcan4x5x_get_gpios(struct m_can_classdev *cdev,
+>  			      const struct tcan4x5x_version_info *version_info)
+>  {
+> @@ -453,6 +471,8 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
+>  		goto out_power;
+>  	}
+>  
+> +	tcan4x5x_get_dt_data(mcan_class);
+> +
+>  	tcan4x5x_check_wake(priv);
+>  
+>  	ret = tcan4x5x_write_tcan_reg(mcan_class, TCAN4X5X_INT_EN, 0);
+> diff --git a/drivers/net/can/m_can/tcan4x5x.h b/drivers/net/can/m_can/tcan4x5x.h
+> index e62c030d3e1e5a713c997e7c8ecad4a44aff4e6a..203399d5e8ccf3fd7a26b54d8356fca9d398524c 100644
+> --- a/drivers/net/can/m_can/tcan4x5x.h
+> +++ b/drivers/net/can/m_can/tcan4x5x.h
+> @@ -42,6 +42,8 @@ struct tcan4x5x_priv {
+>  
+>  	struct tcan4x5x_map_buf map_buf_rx;
+>  	struct tcan4x5x_map_buf map_buf_tx;
+> +
+> +	bool nwkrq_voltage_vio;
+>  };
+>  
+>  static inline void
+> 
+> -- 
+> 2.46.2
+> 
+
+/Sean
 
