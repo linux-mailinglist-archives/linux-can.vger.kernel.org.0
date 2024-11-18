@@ -1,143 +1,104 @@
-Return-Path: <linux-can+bounces-2094-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2095-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E15CB9D15F5
-	for <lists+linux-can@lfdr.de>; Mon, 18 Nov 2024 17:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AD4529D169F
+	for <lists+linux-can@lfdr.de>; Mon, 18 Nov 2024 18:00:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A60792829A9
-	for <lists+linux-can@lfdr.de>; Mon, 18 Nov 2024 16:53:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F02CC280E9C
+	for <lists+linux-can@lfdr.de>; Mon, 18 Nov 2024 17:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C1671AA1EE;
-	Mon, 18 Nov 2024 16:53:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF5831ADFED;
+	Mon, 18 Nov 2024 17:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bK9z7SDX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RwKJmait"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC3919DFA4
-	for <linux-can@vger.kernel.org>; Mon, 18 Nov 2024 16:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D1518B47E;
+	Mon, 18 Nov 2024 17:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731948786; cv=none; b=ZHkPp/qsJZkHQnYUlsbrVOHfcMJkwpljodztGe9rhLzCslG8nJrmY991+BfLMVkObcaF5A+DVbL9nv+Nl/ebxc5f39vb02/JBTKIbuybm+0N/2Wzhpo5ZtejpXqm+G8PpXm6UtsWXvxTNMvChStdekjUx2KAUB/n+QxD42Mf6LA=
+	t=1731949219; cv=none; b=fhHbigHlVgO2+QIMvF4kj3W+FxGDS6NDPJNUVW/tgC1VnVHLmwokM30wi7WrJ1ntj4sPqa4jE+hj+S3f7ILgX4ODZMLbwBn4Ex8GsaGlOFRH9/FpxWcXOjdKkvfCy5GMDOx3O3jIaGEbD+96dg3BfPMlK5VaGth991s0X7KyYpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731948786; c=relaxed/simple;
-	bh=IlE5jQMC28qvEIO1TsmfMkUNehxSyMRk/N6i1dXZ0VA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tQOjXvbs9E9c/O84MdfNkCLeyNcBxcGHaYZyoovfpcsMX+x1VuefpXC2mRW420ookxv87vV2rgYmx5cTsAQLjOfAQP6Erq0LqCX01lLk1bfacUJlFif29F018ONNp7rKsAX68yamB5nNyV8dsXQGPlIcU526YBzGZ5x5GueihV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bK9z7SDX; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731948784; x=1763484784;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IlE5jQMC28qvEIO1TsmfMkUNehxSyMRk/N6i1dXZ0VA=;
-  b=bK9z7SDXQeSZOoX7kuT5fg9HUXXVE/NeKbngLNWlLdmOSiYve/NXQdeX
-   BE2c9arqWrqxSrL9XdgLQKp4BNxxZYzoCBHCqVN4pnwNSbwwR5PddYjyY
-   JyoQlV+Ei4B6Cqi3gDD6Zxu6Vzgg15tQstOlrnKUrVnzxFB0PFrfKPJ8N
-   iTnZjjSGXY7e9PoLzYFsSoyVUzvlk1NM5dNaL1WJB6Nv+NmJygIzkMGXN
-   XwcFrxfb/DqmnuuH8dlArSuolwg9R1v1TXN4Cr5sx5X6ExMjBMUDvDrcc
-   TVCfihDzPmA7sikwilG0mVWyrjxG1T5GKKKJiwcSkgRcuV9GpIPxVrFfO
-   w==;
-X-CSE-ConnectionGUID: WZ5kUc1iQ/q2EMiSUlG+Fg==
-X-CSE-MsgGUID: scfl4wwfRJKgrbdfHIQQ0Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11260"; a="31321465"
-X-IronPort-AV: E=Sophos;i="6.12,164,1728975600"; 
-   d="scan'208";a="31321465"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 08:53:03 -0800
-X-CSE-ConnectionGUID: AIFHBgNZRyy9PyE3dm02qQ==
-X-CSE-MsgGUID: /LEg28OKQ3uZ9zslWRsbpg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,164,1728975600"; 
-   d="scan'208";a="89427910"
-Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 18 Nov 2024 08:53:01 -0800
-Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tD4zi-0002Y2-0C;
-	Mon, 18 Nov 2024 16:52:58 +0000
-Date: Tue, 19 Nov 2024 00:51:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Nyekjaer <sean@geanix.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [mkl-can-next:testing 4/5]
- drivers/net/can/m_can/tcan4x5x-core.c:333:22: warning: unused variable 'np'
-Message-ID: <202411190037.WDcg9NkS-lkp@intel.com>
+	s=arc-20240116; t=1731949219; c=relaxed/simple;
+	bh=ekE1O8xyEVJFoKtw0C3VA+kT2P+GQt3Yk/reFDaycPU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=cbQh2XxIGgkiRFWWAwd8fJCSOrf6AVRYa4YqbuBnk82PKMp7PATzATPuMZd5qARD7DOj+17TNN8aDkmcWYr27+i93q3759CriaVpUZ866CoL2+m86YURuzaREfh9PMZSkYn26Dklgrxh7FgM/fuL1J4qUXH6xvUHZ1P6571ngJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RwKJmait; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62F61C4CECC;
+	Mon, 18 Nov 2024 17:00:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731949219;
+	bh=ekE1O8xyEVJFoKtw0C3VA+kT2P+GQt3Yk/reFDaycPU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=RwKJmaitQhxE25emSDMbNhsN2ui59x3qyMzy5f1yYIWY0L4Ex7m+FqgJtoeDzAKA8
+	 Tny44j+yEFbROiB8r+aDBG591EwPxiwMpInKGgvaabLCAykqT8AoDFJbfMT57zYyfN
+	 kZP/f0Wj58X9YHtKUSLVKVEwnFeGzGaq+JOIzpeP5leLa1o/7G4stYmJkJatlAqaWX
+	 dOygGroPUqEeGaDDdWnJYsYNtUmLI6e053dXNVXHdj0lWlIrguhW47vK8E4JVVumxe
+	 6D21fQ8iUulmfFeQ4mawarArAcz5IkL/5HEfZHrW05pD+tH/5ePW83Q0LwGs8hY2iX
+	 MRhJ6gCyL2Ksg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEF03809A80;
+	Mon, 18 Nov 2024 17:00:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH iproute2-next v1 0/6] iplink_can: preparation before
+ introduction of CAN XL
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173194923075.4109060.18408610499610779344.git-patchwork-notify@kernel.org>
+Date: Mon, 18 Nov 2024 17:00:30 +0000
+References: <20241112172812.590665-8-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20241112172812.590665-8-mailhol.vincent@wanadoo.fr>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: netdev@vger.kernel.org, stephen@networkplumber.org, dsahern@gmail.com,
+ linux-can@vger.kernel.org, mkl@pengutronix.de, socketcan@hartkopp.net,
+ mbro1689@gmail.com, linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-head:   e0b741bc53c94f9ae25d4140202557a0aa51b5a0
-commit: 490105aa8f79a2f96de9c6c23fb22437faf0d6a4 [4/5] can: tcan4x5x: add option for selecting nWKRQ voltage
-config: x86_64-buildonly-randconfig-004-20241118 (https://download.01.org/0day-ci/archive/20241119/202411190037.WDcg9NkS-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241119/202411190037.WDcg9NkS-lkp@intel.com/reproduce)
+Hello:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411190037.WDcg9NkS-lkp@intel.com/
+This series was applied to iproute2/iproute2-next.git (main)
+by David Ahern <dsahern@kernel.org>:
 
-All warnings (new ones prefixed by >>):
+On Wed, 13 Nov 2024 02:27:50 +0900 you wrote:
+> An RFC was sent last weekend to kick-off the discussion of the
+> introduction of CAN XL: [1] for the kernel side and [2] for the
+> iproute2 interface. While the series received some positive feedback,
+> it is far from completion. Some work is still needed to:
+> 
+>   - adjust the nesting of the IFLA_CAN_XL_DATA_BITTIMING_CONST in the
+>     netlink interface
+> 
+> [...]
 
-   In file included from drivers/net/can/m_can/tcan4x5x-core.c:5:
-   In file included from drivers/net/can/m_can/tcan4x5x.h:14:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/can/m_can/tcan4x5x-core.c:333:22: warning: unused variable 'np' [-Wunused-variable]
-     333 |         struct device_node *np = cdev->dev->of_node;
-         |                             ^~
-   5 warnings generated.
+Here is the summary with links:
+  - [iproute2-next,v1,1/6] iplink_can: remove unused FILE *f parameter in three functions
+    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=df72757907f3
+  - [iproute2-next,v1,2/6] iplink_can: reduce the visibility of tdc in can_parse_opt()
+    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=3bd5fb4d57aa
+  - [iproute2-next,v1,3/6] iplink_can: remove newline at the end of invarg()'s messages
+    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=9b1f33d5a46d
+  - [iproute2-next,v1,4/6] iplink_can: use invarg() instead of fprintf()
+    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=68aaea862838
+  - [iproute2-next,v1,5/6] iplink_can: add struct can_tdc
+    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=aac087a0108b
+  - [iproute2-next,v1,6/6] iplink_can: rename dbt into fd_dbt in can_parse_opt()
+    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=3f2ab9d6070e
 
-
-vim +/np +333 drivers/net/can/m_can/tcan4x5x-core.c
-
-   329	
-   330	static void tcan4x5x_get_dt_data(struct m_can_classdev *cdev)
-   331	{
-   332		struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
- > 333		struct device_node *np = cdev->dev->of_node;
-   334	
-   335		tcan4x5x->nwkrq_voltage_vio =
-   336			of_property_read_bool(cdev->dev->of_node, "ti,nwkrq-voltage-vio");
-   337	}
-   338	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
