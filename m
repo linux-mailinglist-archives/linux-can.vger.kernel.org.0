@@ -1,96 +1,105 @@
-Return-Path: <linux-can+bounces-2098-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2099-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 355ED9D1E86
-	for <lists+linux-can@lfdr.de>; Tue, 19 Nov 2024 04:00:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A6C89D1E9F
+	for <lists+linux-can@lfdr.de>; Tue, 19 Nov 2024 04:07:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC6722836EE
-	for <lists+linux-can@lfdr.de>; Tue, 19 Nov 2024 03:00:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E883EB20BB2
+	for <lists+linux-can@lfdr.de>; Tue, 19 Nov 2024 03:07:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55803145A09;
-	Tue, 19 Nov 2024 03:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 459BC13EFF3;
+	Tue, 19 Nov 2024 03:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p5EGpenB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oGWzVf9f"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7FE1A28C;
-	Tue, 19 Nov 2024 03:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB7D13775E;
+	Tue, 19 Nov 2024 03:07:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731985223; cv=none; b=prhFezcsspBSAaFNONd7plCxg5jTOeLjwOKjNDs857QSpOvdSRZ61VCnuARmEOEYXvSZJkoL9A+DhTJPuG4l4yN7bmFU7T2Pr4yirGdRRjKj1oE/KswCqULxEjPs43zA3iDdFwulX7DbdhUefG9q7cqegPG0YR4tsIQ3M4lTJcU=
+	t=1731985623; cv=none; b=J/nYG2R5emdrf/B6Qxy3Dl2KSYZ4F9NsyllYHkj7yoySGJR7DnYpoPij/1OiRvUaD+7+RsN3Mk2Fe3116qE2u/q0oL0QshQqpQvBEZiBqGmp9S4Tl9TJs9gSJ+wjbd+WZO1Irjked3EPtpg5MZXfnx2PwkrIcT8JwpVf0UCHdyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731985223; c=relaxed/simple;
-	bh=HRSm8FbXAddqPiftvjnkUJyUs2zRtISWFUZwjHfSjf8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=I3trB6C7rv/FI40c0xxKD8wbe1ZWaYJtPaK3VJMTL5ZpPZw/wC5Zvheh1QWDyjJflZsFgN935/zx58rP/HFmkLQd240TorsVLGaf3zMTC0g/7+f5io9nO1OOD+VJ3QRRC/nkQ4Hh9srgc8C5FziKOrtjM5bjSdy/0LctCpWVTp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p5EGpenB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99BBBC4CED6;
-	Tue, 19 Nov 2024 03:00:22 +0000 (UTC)
+	s=arc-20240116; t=1731985623; c=relaxed/simple;
+	bh=PGoG8fEB7llM322/jpcOwn3LGAi0gafsk5SM9vL39KQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H9KUdDdg2Pywl0c/wAu2E7DH5nMKCEX8sNTgvGUmZ/DWaNLS+RDwx9R/DRSGoVlKnr9uib+00w3veqmIB97V8s7WNkAk2YMIr03I8FHs3J45z8Km4wqwr6mRNvA6Gl9VV940/X9STBtscGXroR0mjpZ3XmSFmzGBhnVJ2yyKl18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oGWzVf9f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD48C4CECF;
+	Tue, 19 Nov 2024 03:07:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731985222;
-	bh=HRSm8FbXAddqPiftvjnkUJyUs2zRtISWFUZwjHfSjf8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=p5EGpenB/+2G+Rezfd8J0qvOPxQjfa/O3CMCq+lXiMScq9+QIfXoOvhIROTJsnWKF
-	 NGbLyYDzjFLDJt5jE3MdK0jKBg7uYr5adyKfnFOIe9QlRy0uqbZd4ZJS78z25wAAme
-	 OEfLO/4aNZX67k+UNArDX+Y4p3hiv6yLV4BBIkHxqnNgWIdqg6llzloB2fWCvQWoya
-	 tI2oioY0Kh1jWmgMYdKFzND/Tb+7e5wnc5IV+JwBbwXrk4rRX0OktLyVeFoY2ZTjGV
-	 X1X5NKayAV+ZbJd7G2iIRJc8f0xQaN7UIxlMXkvLDGTOY7mcL8ZbxBaOx9PHdat8C7
-	 zBT+LZXG5zZuA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D673809A80;
-	Tue, 19 Nov 2024 03:00:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1731985622;
+	bh=PGoG8fEB7llM322/jpcOwn3LGAi0gafsk5SM9vL39KQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=oGWzVf9fm47IURqF82sBjxlSLSQaSxQvnftln+sAaadyrOaTpKmG1QB1++Q+XtGq2
+	 iqnrNBO0CyTqqEwlU/q+011kC2hwIrbq/6K0SGXImw3qfRg1+XKGoOsssJ5vIMkYcz
+	 Z6YQRFxP4izqrZoqEbsdoy+taGRJqRWgfpsrekJKESn6nbT7e6NOHGhh6GN5IbeTmn
+	 lzthFeg7CnYNFnEs0XFbrLEZd2ql/Jl9IGwusT5cDv1Qr6Psf8Q5n6XqbkH/peqmPn
+	 uwk0TjN/tbOC/IkQ2CmF/L5xISUzVUBpQQlxdujGCk9lYUVk7IvT7QmP1ZZAPQtMkX
+	 AVNlOOjcQBmSw==
+Date: Mon, 18 Nov 2024 19:07:00 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Xiao Liang <shaw.leon@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, Kuniyuki
+ Iwashima <kuniyu@amazon.com>, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Ido
+ Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Simon
+ Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko
+ <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
+ linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+ osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
+ linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+ linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
+ bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v4 0/5] net: Improve netns handling in RTNL and
+ ip_tunnel
+Message-ID: <20241118190700.4c1b8156@kernel.org>
+In-Reply-To: <20241118143244.1773-1-shaw.leon@gmail.com>
+References: <20241118143244.1773-1-shaw.leon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] MAINTAINERS: exclude can core,
- drivers and DT bindings from netdev ML
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173198523378.84991.13613749384566676729.git-patchwork-notify@kernel.org>
-Date: Tue, 19 Nov 2024 03:00:33 +0000
-References: <20241115195609.981049-1-kuba@kernel.org>
-In-Reply-To: <20241115195609.981049-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, mailhol.vincent@wanadoo.fr, mkl@pengutronix.de,
- socketcan@hartkopp.net, linux-can@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 15 Nov 2024 11:56:09 -0800 you wrote:
-> CAN networking and drivers are maintained by Marc, Oliver and Vincent.
-> Marc sends us already pull requests with reviewed and validated code.
-> Exclude the CAN patch postings from the netdev@ mailing list to lower
-> the patch volume there.
+On Mon, 18 Nov 2024 22:32:39 +0800 Xiao Liang wrote:
+> This patch series includes some netns-related improvements and fixes for
+> RTNL and ip_tunnel, to make link creation more intuitive:
 > 
-> Link: https://lore.kernel.org/20241113193709.395c18b0@kernel.org
-> Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>  - Creating link in another net namespace doesn't conflict with link names
+>    in current one.
+>  - Refector rtnetlink link creation. Create link in target namespace
+>    directly. Pass both source and link netns to drivers via newlink()
+>    callback.
 > 
-> [...]
+> So that
+> 
+>   # ip link add netns ns1 link-netns ns2 tun0 type gre ...
+> 
+> will create tun0 in ns1, rather than create it in ns2 and move to ns1.
+> And don't conflict with another interface named "tun0" in current netns.
 
-Here is the summary with links:
-  - [net] MAINTAINERS: exclude can core, drivers and DT bindings from netdev ML
-    https://git.kernel.org/netdev/net/c/4262bacb748f
+## Form letter - net-next-closed
 
-You are awesome, thank you!
+The merge window for v6.13 has begun and net-next is closed for new drivers,
+features, code refactoring and optimizations. We are currently accepting
+bug fixes only.
+
+Please repost when net-next reopens after Dec 2nd.
+
+RFC patches sent for review only are welcome at any time.
+
+See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+pw-bot: defer
 
 
