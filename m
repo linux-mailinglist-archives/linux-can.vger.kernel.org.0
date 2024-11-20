@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-2140-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2141-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1430C9D3A39
-	for <lists+linux-can@lfdr.de>; Wed, 20 Nov 2024 13:06:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2176B9D3A93
+	for <lists+linux-can@lfdr.de>; Wed, 20 Nov 2024 13:22:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBB432848B0
-	for <lists+linux-can@lfdr.de>; Wed, 20 Nov 2024 12:06:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E90CB23667
+	for <lists+linux-can@lfdr.de>; Wed, 20 Nov 2024 12:20:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26B1319E7E3;
-	Wed, 20 Nov 2024 12:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A5BC16A92D;
+	Wed, 20 Nov 2024 12:20:48 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E44619F41C
-	for <linux-can@vger.kernel.org>; Wed, 20 Nov 2024 12:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797F119F432
+	for <linux-can@vger.kernel.org>; Wed, 20 Nov 2024 12:20:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732104413; cv=none; b=N8i8jEToobAEhD/sTTn7DFu6CCu0MH5J+sJGGs4FlQOreb4AdjDAeZyfE8ejDejy11tJAJgT55r5ExRJO33eIT4hsQqiuT7ciyyikNFVSFOGvWmLnmWRx4VjhrRe6lecjgL/g3LGhvajguV4CM2Nm/LxX40Ae8yPMoYQKYdvmvU=
+	t=1732105248; cv=none; b=kwEpBLKSN5+lDAnHD11DI4pmW7mwaK3N7qG1lpSI/1Gx1ybqjYzsVR2v984yHUc4pX4JQM16E9w6PKy9sDzAmJ3jr0CoP7mFZPuTlix75H0Qk17Zpb6q9Q08WAoaEEln51Fx2iySKJirIbruOWNZAREvWX2Vc5RYyAt4Re7ShYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732104413; c=relaxed/simple;
-	bh=SSGS0r9eKeb50eUbueDOCYyOi5DPHSMpT4Nqdp7ulTQ=;
+	s=arc-20240116; t=1732105248; c=relaxed/simple;
+	bh=kj3ra5UKlV2cQyYvss4eMDHnBmaGYC2AyxIjO52JTms=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iAURfAAE0kCsP6qJKLvqWnhMYVH2DkNIye5HcswUpADHNRXkNphCq9mCVZDX+je0CTIoYZfQR0bxseYfBpctTM/5pGxb7u3/FsQyBc/zxuVB9sKsNHE/o5auUYRAQIGTPGOXcSce8+L5D0nT7ehmSJ2grAIoS+E8updiXni7ha0=
+	 Content-Type:Content-Disposition:In-Reply-To; b=J7cHOn2vfgVP/wePLBYypm4p+yaOCAlBVhBx1bs+gKP1XKjWSBMP03Hb2ztUyFqSg6nasK716vfjmo0JrD25koe9a7gN/y8WpIazjn5ED3jS0iDByGpzN3UN1/AhSQXicE98zDQn+5Q/b+edE0zAwZ/ddQiZ2NCO0Q/sSkNq7Cw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,23 +33,23 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tDjTf-0006Ro-1F; Wed, 20 Nov 2024 13:06:35 +0100
+	id 1tDjh8-0000az-4P; Wed, 20 Nov 2024 13:20:30 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tDjTe-001jeA-0S;
-	Wed, 20 Nov 2024 13:06:34 +0100
+	id 1tDjh7-001js0-21;
+	Wed, 20 Nov 2024 13:20:29 +0100
 Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id B9627377D05;
-	Wed, 20 Nov 2024 12:06:33 +0000 (UTC)
-Date: Wed, 20 Nov 2024 13:06:33 +0100
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 3C413377D2F;
+	Wed, 20 Nov 2024 12:20:29 +0000 (UTC)
+Date: Wed, 20 Nov 2024 13:20:28 +0100
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>
 Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
 	Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, 
 	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -61,17 +61,9 @@ Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
 	Enric Balletbo <eballetb@redhat.com>
 Subject: Re: [PATCH 3/3] can: flexcan: handle S32G2/S32G3 separate interrupt
  lines
-Message-ID: <20241120-angelic-coral-chital-c0f884-mkl@pengutronix.de>
-References: <20241120-magnificent-accelerated-robin-70e7ef-mkl@pengutronix.de>
- <c9d8ff57-730f-40d9-887e-d11aba87c4b5@oss.nxp.com>
- <20241120-venomous-skilled-rottweiler-622b36-mkl@pengutronix.de>
- <aa73f763-44bc-4e59-ad4a-ccaedaeaf1e8@oss.nxp.com>
- <20241120-cheerful-pug-of-efficiency-bc9b22-mkl@pengutronix.de>
- <72d06daa-82ed-4dc6-8396-fb20c63f5456@oss.nxp.com>
- <20241120-rational-chocolate-marten-70ed52-mkl@pengutronix.de>
- <06acdf7f-3b35-48bc-ab2e-9578221b7aea@oss.nxp.com>
- <20241120-spirited-vulture-of-coffee-423adb-mkl@pengutronix.de>
- <48171b0f-b0cd-4c9a-a93b-5537000329f8@oss.nxp.com>
+Message-ID: <20241120-mindful-belligerent-mussel-501d72-mkl@pengutronix.de>
+References: <20241119081053.4175940-1-ciprianmarian.costea@oss.nxp.com>
+ <20241119081053.4175940-4-ciprianmarian.costea@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -79,16 +71,16 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jurxan7aor24rika"
+	protocol="application/pgp-signature"; boundary="k7cj6qrunaieusmg"
 Content-Disposition: inline
-In-Reply-To: <48171b0f-b0cd-4c9a-a93b-5537000329f8@oss.nxp.com>
+In-Reply-To: <20241119081053.4175940-4-ciprianmarian.costea@oss.nxp.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
---jurxan7aor24rika
+--k7cj6qrunaieusmg
 Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -96,34 +88,130 @@ Subject: Re: [PATCH 3/3] can: flexcan: handle S32G2/S32G3 separate interrupt
  lines
 MIME-Version: 1.0
 
-On 20.11.2024 13:42:18, Ciprian Marian Costea wrote:
-> > > If you have successfully downloaded the Reference Manual for S32G2 or=
- S32G3
-> > > SoC, it should have attached an excel file describing all the interru=
-pt
-> > > mappings.
-> >=20
-> > I downloaded the S32G3 Reference Manual:
-> >=20
-> > | https://www.nxp.com/webapp/Download?colCode=3DRMS32G3
-> >=20
-> > It's a pdf. Where can I find the execl file?
+On 19.11.2024 10:10:53, Ciprian Costea wrote:
+> From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
 >=20
-> Correct, and in the software used after opening the pdf file (Adobe Acrob=
-at
-> Reader, Foxit PDF Reader, etc.) you should be able to find some excel fil=
-es
-> attached to it.
+> On S32G2/S32G3 SoC, there are separate interrupts
+> for state change, bus errors, MBs 0-7 and MBs 8-127 respectively.
+>=20
+> In order to handle this FlexCAN hardware particularity, reuse
+> the 'FLEXCAN_QUIRK_NR_IRQ_3' quirk provided by mcf5441x's irq
+> handling support.
+>=20
+> Additionally, introduce 'FLEXCAN_QUIRK_SECONDARY_MB_IRQ' quirk,
+> which can be used in case there are two separate mailbox ranges
+> controlled by independent hardware interrupt lines, as it is
+> the case on S32G2/S32G3 SoC.
 
-These are not available under Linux (Adobe), or you have to pay (foxit).
-Can you recommend a Linux reader?
+Please move the quirk and quirk handling to the 2nd patch. The 3rd patch
+should only add the nxp,s32g2-flexcan compatible and the struct
+flexcan_devtype_data nxp_s32g2_devtype_data.
 
-I've found zathura can extract attached files, use the "export" command
-for this:
+>=20
+> Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+> ---
+>  drivers/net/can/flexcan/flexcan-core.c | 25 +++++++++++++++++++++++--
+>  drivers/net/can/flexcan/flexcan.h      |  3 +++
+>  2 files changed, 26 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/fle=
+xcan/flexcan-core.c
+> index f0dee04800d3..dc56d4a7d30b 100644
+> --- a/drivers/net/can/flexcan/flexcan-core.c
+> +++ b/drivers/net/can/flexcan/flexcan-core.c
+> @@ -390,9 +390,10 @@ static const struct flexcan_devtype_data nxp_s32g2_d=
+evtype_data =3D {
+>  	.quirks =3D FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS=
+ |
+>  		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+>  		FLEXCAN_QUIRK_USE_RX_MAILBOX | FLEXCAN_QUIRK_SUPPORT_FD |
+> -		FLEXCAN_QUIRK_SUPPORT_ECC |
+> +		FLEXCAN_QUIRK_SUPPORT_ECC | FLEXCAN_QUIRK_NR_IRQ_3 |
+>  		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
+> -		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR,
+> +		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR |
+> +		FLEXCAN_QUIRK_SECONDARY_MB_IRQ,
+>  };
+> =20
+>  static const struct can_bittiming_const flexcan_bittiming_const =3D {
+> @@ -1771,12 +1772,21 @@ static int flexcan_open(struct net_device *dev)
+>  			goto out_free_irq_boff;
+>  	}
+> =20
+> +	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SECONDARY_MB_IRQ) {
+> +		err =3D request_irq(priv->irq_secondary_mb,
+> +				  flexcan_irq, IRQF_SHARED, dev->name, dev);
+> +		if (err)
+> +			goto out_free_irq_err;
+> +	}
+> +
+>  	flexcan_chip_interrupts_enable(dev);
+> =20
+>  	netif_start_queue(dev);
+> =20
+>  	return 0;
+> =20
+> + out_free_irq_err:
+> +	free_irq(priv->irq_err, dev);
+>   out_free_irq_boff:
+>  	free_irq(priv->irq_boff, dev);
+>   out_free_irq:
+> @@ -1808,6 +1818,9 @@ static int flexcan_close(struct net_device *dev)
+>  		free_irq(priv->irq_boff, dev);
+>  	}
+> =20
+> +	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SECONDARY_MB_IRQ)
+> +		free_irq(priv->irq_secondary_mb, dev);
+> +
+>  	free_irq(dev->irq, dev);
+>  	can_rx_offload_disable(&priv->offload);
+>  	flexcan_chip_stop_disable_on_error(dev);
+> @@ -2197,6 +2210,14 @@ static int flexcan_probe(struct platform_device *p=
+dev)
+>  		}
+>  	}
+> =20
+> +	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SECONDARY_MB_IRQ) {
+> +		priv->irq_secondary_mb =3D platform_get_irq(pdev, 3);
+> +		if (priv->irq_secondary_mb < 0) {
+> +			err =3D priv->irq_secondary_mb;
+> +			goto failed_platform_get_irq;
+> +		}
+> +	}
+> +
+>  	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SUPPORT_FD) {
+>  		priv->can.ctrlmode_supported |=3D CAN_CTRLMODE_FD |
+>  			CAN_CTRLMODE_FD_NON_ISO;
+> diff --git a/drivers/net/can/flexcan/flexcan.h b/drivers/net/can/flexcan/=
+flexcan.h
+> index 4933d8c7439e..d4b1a954c538 100644
+> --- a/drivers/net/can/flexcan/flexcan.h
+> +++ b/drivers/net/can/flexcan/flexcan.h
+> @@ -70,6 +70,8 @@
+>  #define FLEXCAN_QUIRK_SUPPORT_RX_FIFO BIT(16)
+>  /* Setup stop mode with ATF SCMI protocol to support wakeup */
+>  #define FLEXCAN_QUIRK_SETUP_STOP_MODE_SCMI BIT(17)
+> +/* Setup secondary mailbox interrupt */
 
-| export Export attachments. First argument specifies the attachment
-| identifier (use completion with Tab), second argument gives the target
-| filename (relative to current working directory).
+Describe why this quirk is needed. If you have a proper description in
+the commit message, you can copy it here.
+
+> +#define FLEXCAN_QUIRK_SECONDARY_MB_IRQ	BIT(18)
+> =20
+>  struct flexcan_devtype_data {
+>  	u32 quirks;		/* quirks needed for different IP cores */
+> @@ -105,6 +107,7 @@ struct flexcan_priv {
+>  	struct regulator *reg_xceiver;
+>  	struct flexcan_stop_mode stm;
+> =20
+> +	int irq_secondary_mb;
+
+Please place it after the irq_err, this way it's in order with the
+spread sheet.
+
+>  	int irq_boff;
+>  	int irq_err;
+> =20
 
 regards,
 Marc
@@ -134,20 +222,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---jurxan7aor24rika
+--k7cj6qrunaieusmg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmc90MYACgkQKDiiPnot
-vG9Obgf+IkrQWvC0KRcDbDXv1yqHidF/5yebrpyyAwVwK4uR/FiZDGv8aK4Qic9A
-WeHYujQjDhlb7Xv9VK2hAHtZQ+h0UAGUSAQuSw+lS40SpKTHOWrG4YQfHrSlr3v6
-voXBQgn8DZzblUjNIaBWu8h/OVU2YAX8/JYWRShstx/EF2pgByBeAqlelbHAMq9l
-DQORuXtVY4BUpwSE8j/XxXOzo4J9Sp1YZ95yHftnKjxpwanuFYlvmhLsoNx0C9nU
-oXLJ6Olmcj8Fd6LXdQRGxKMWr7065lRZdEYUwPt1vyXkMGTRlBsGG3VsdvQ7377o
-SbGb5OtbXBmbM4heczHfnk4bVskMiA==
-=rqJY
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmc91AkACgkQKDiiPnot
+vG9tvAf+MUCSC/bR1WQfJ6jsMBgAPuB/aRDz77YVLrt1feRFK0AkOLyXUW+PHbLn
+mvlvhVAUnT1vA7lcNOETI/mjKdDV1ISd9eK1ofJiUWzzYLGV5he0gfswT/7mCdHP
+RV708aOhXGyNokZHYfuEEF+Efbf1nqQuVoQUiZu+VHvvWNmG+fznr0kfB78jKehc
+K1OZIr5Pd8XPE5thxVzdnNUBDU87aX2auyyLwgnmI77ImHXjL8Mi1UP2UJYRu3UI
+bRd4+ZrX8QExbNNXiSiVxUUb6dWy271ORQ2KYcSfP0dOpyjH8bmJQyNIebuEEMk1
+gb3twa1WDvOBKuWDIXa5Lz3YH4VPDg==
+=3Q/0
 -----END PGP SIGNATURE-----
 
---jurxan7aor24rika--
+--k7cj6qrunaieusmg--
 
