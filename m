@@ -1,67 +1,78 @@
-Return-Path: <linux-can+bounces-2138-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2139-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE9A49D398E
-	for <lists+linux-can@lfdr.de>; Wed, 20 Nov 2024 12:34:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 920E09D39B7
+	for <lists+linux-can@lfdr.de>; Wed, 20 Nov 2024 12:43:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DA5CB238DD
-	for <lists+linux-can@lfdr.de>; Wed, 20 Nov 2024 11:34:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40E15B25BB2
+	for <lists+linux-can@lfdr.de>; Wed, 20 Nov 2024 11:43:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 863D416F907;
-	Wed, 20 Nov 2024 11:34:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5980D1A0B13;
+	Wed, 20 Nov 2024 11:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="s8kB8qIJ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013065.outbound.protection.outlook.com [40.107.162.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EDE17BB2E
-	for <linux-can@vger.kernel.org>; Wed, 20 Nov 2024 11:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732102452; cv=none; b=tz+qp+17TxFCsL/lyuYTaAohnBykdcA8is8RBf1WA5tr0AZQjibSbl3iwtSfwpkg5InT+dSJKhwIrLmFPqz7viAknkfgwbpxb0nDppq2vvS6dnBz5THSoUGKHYBbJFm57cb42C1PhmmfaPBL2CbRe3SnG3OJU6deSb+qNAfuCfY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732102452; c=relaxed/simple;
-	bh=rqYE/LDFYG+MmMRSDPJ7ITKApe4LdqoAau/AARTvmnQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MNJDZVUtnjF0FLOrL/EPrTt5FMpkPcnGlnOzzCOvek5KZigVX8/AdMRe/WDI3duhpXLwrzhdsgGMV6BQYyxIJCKtlf9sER8uZkGPPAc5E+e+L2dEH+lQxnV+eidLy0/rcEhMvtKRZGcEZ8ZdZow92icu23Mo1/vojSWTDK6PWxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tDixq-0000PP-So; Wed, 20 Nov 2024 12:33:42 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tDixp-001jS8-0J;
-	Wed, 20 Nov 2024 12:33:41 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id ADF44377CB4;
-	Wed, 20 Nov 2024 11:33:40 +0000 (UTC)
-Date: Wed, 20 Nov 2024 12:33:40 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	imx@lists.linux.dev, NXP Linux Team <s32@nxp.com>, 
-	Christophe Lizzi <clizzi@redhat.com>, Alberto Ruiz <aruizrui@redhat.com>, 
-	Enric Balletbo <eballetb@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1260019C56C;
+	Wed, 20 Nov 2024 11:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732102967; cv=fail; b=TuPl2ZXSlCJJuAtf9gqDmLOJRbysPmFaSrBNWWpUhVwztwwW7OhZqPoooCrCDQ4hG6uq8RRurJMhO9GZ9TjwZULVl+SnuN55zVNXVdXjcRNO+yD9OdBQvxFhWGXx7blt3V8YwAVia57yKOYOcC6fiTeM4Ox8HOO86ve9wKd0VTY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732102967; c=relaxed/simple;
+	bh=NLUunoI/UIy/EziwNKfFO3mv6zm09grYHISziC37atM=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=LCzXbLB1Bk7XDZ/zEhZbPhETmo2rHw2tShtBRiX7rGZkw266OPjbQzDddYoOvrFQg6Z44+1Zm4KMzADjXD+3/gnNUl2gIXnYLsJ/+N97O7IE2GWl5d/71U3fJcoj6E2zK2vdVPJrjPh6o8wTljpjVFWmVVTYTHEBWtAQqXp4DWo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=s8kB8qIJ; arc=fail smtp.client-ip=40.107.162.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=K2UQPPipnmCxAZm4CyzXcX8l1K9RDaawvsaCOQODZGoHCkEIvDFBZvq0CA2rUJaXOXWWsjpR1acUQdd+/MVXS5LS/vbhw+8RgKCHwdOKLC2fbosqU2w8+YKgvw4vk1ERlh4nw4CnJfihevMOJhqN/KWzUTu6m01m2MjiBqJi5FzrKGI18vOyS+pNT9ci527aH+Cm+ePjmtu7dDilGxhlr0Lc4cCdmSn5tN3WHTb8xuYunZyBV/5jujvEsgDoAFVicUyazUPmYETzYBF91oMCwB9RunufY6jup3bNDHaWD+wi4YDKvyS/124dOwLPDeNha4k6NHEdWhjz+RYJTpl1Ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M0PnJOUd9HVSAcAE/ZMq0C8td3bIvW7btAqboUZ9fvI=;
+ b=V8RvD1fSJ+/gh/9yFXGzjQg6prhbtxK+hV2oIjfbOrzezz4deoZhp2XWIdSMjv5V2DvUQrNujedW6CGO/eDAieR3+saOfJZOa9Q2JsHRi9c2bvW1mgdj+ynYOF1NkrARiBEzJGY8vyN5JaFnNhILlgnM3OgayGBLslw1NUS3qvqc6qjSeClIDmk8RefD35Ik7H0J/oEAicAhlg8oW+4B7s3p4b0rz6w4JhqXvA0X3yWKiHplYC+IUMibUHNy4ln2H2NONHS46owqRbxKdHf05ArdbCizBZpmtp9tYkadf6sC4kgY06DDdoSx/qczHvXdV2lBVgHRSLYmf85CUMfgAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M0PnJOUd9HVSAcAE/ZMq0C8td3bIvW7btAqboUZ9fvI=;
+ b=s8kB8qIJkl4/HurrTwZQRfM1feg6LfW1x/1qaiH2yoXRaZtVfHO5V5EO1/wD98yKHxQLCc1v+ZBQUabDlba9n5e3hcMcc/nngllVv/PImHA9+lrLFnEhNxct7JF2J9rMYl37UqCWmzZO97y8rDZZsfFZr8432g9I6V4rj6sAx905VonF/WDElkovhXKT9ZlBDIXMev3F8jv+ZMSNWwS4uwUTGG3xF1APkiZdMnQWScdIEtkDxZelTSrNWhQUD93XEFKhVgAwyNYuQ/ZwSU1MCdfekzRSSBAYiCKBoZ5TyGOwlm7LMVd9T8Cio5ZX2Nj6ZUb6ImNLwqsYb0txYnuzyw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9251.eurprd04.prod.outlook.com (2603:10a6:10:352::15)
+ by DU2PR04MB8597.eurprd04.prod.outlook.com (2603:10a6:10:2d8::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.14; Wed, 20 Nov
+ 2024 11:42:40 +0000
+Received: from DU0PR04MB9251.eurprd04.prod.outlook.com
+ ([fe80::708f:69ee:15df:6ebd]) by DU0PR04MB9251.eurprd04.prod.outlook.com
+ ([fe80::708f:69ee:15df:6ebd%6]) with mapi id 15.20.8158.021; Wed, 20 Nov 2024
+ 11:42:40 +0000
+Message-ID: <48171b0f-b0cd-4c9a-a93b-5537000329f8@oss.nxp.com>
+Date: Wed, 20 Nov 2024 13:42:18 +0200
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 3/3] can: flexcan: handle S32G2/S32G3 separate interrupt
  lines
-Message-ID: <20241120-spirited-vulture-of-coffee-423adb-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+ NXP Linux Team <s32@nxp.com>, Christophe Lizzi <clizzi@redhat.com>,
+ Alberto Ruiz <aruizrui@redhat.com>, Enric Balletbo <eballetb@redhat.com>
 References: <20241119081053.4175940-1-ciprianmarian.costea@oss.nxp.com>
  <20241119081053.4175940-4-ciprianmarian.costea@oss.nxp.com>
  <20241120-magnificent-accelerated-robin-70e7ef-mkl@pengutronix.de>
@@ -72,116 +83,174 @@ References: <20241119081053.4175940-1-ciprianmarian.costea@oss.nxp.com>
  <72d06daa-82ed-4dc6-8396-fb20c63f5456@oss.nxp.com>
  <20241120-rational-chocolate-marten-70ed52-mkl@pengutronix.de>
  <06acdf7f-3b35-48bc-ab2e-9578221b7aea@oss.nxp.com>
+ <20241120-spirited-vulture-of-coffee-423adb-mkl@pengutronix.de>
+Content-Language: en-US
+From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+In-Reply-To: <20241120-spirited-vulture-of-coffee-423adb-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS4P251CA0028.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d3::17) To DU0PR04MB9251.eurprd04.prod.outlook.com
+ (2603:10a6:10:352::15)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="idbngjom6ttlxwj6"
-Content-Disposition: inline
-In-Reply-To: <06acdf7f-3b35-48bc-ab2e-9578221b7aea@oss.nxp.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9251:EE_|DU2PR04MB8597:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a8cd518-b807-4659-1ccb-08dd09587065
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZHZ3T0F6Z2p3b1hjUGIzN2xnUWh1OXJ4cG1ZWkFLRXp5RHk4UFMwU2Myb2FH?=
+ =?utf-8?B?VFg5VXF6T1I2NS9BeHBHSzRKWGxUbmJ4LzNYSlZsN0RYR1p2dGJxRjJweE8w?=
+ =?utf-8?B?aEpoNHRHN2djWXJxYjJ4WDdrWXQxVGx3VzJ2MDhqVS8zcjc4cjNFZTEzaXVU?=
+ =?utf-8?B?dmhoSnlnT2JhMk16NytEWnRuQUtRTjlqRUU3TzU3dS9GVk16S1lFdlI4SHZC?=
+ =?utf-8?B?a05YV090bWc3TkNCMU11aTBNTnMrclVjMytpRTFaVHc0Tm54ckc1N3dIdUlr?=
+ =?utf-8?B?ZFo5b2NjUzdjRXNha1ZqTnFXUStjQmVkYloyVWFvcEp2TUozUCt3aXpZcVBn?=
+ =?utf-8?B?Wnpvd21jcFRlMm9VSGxzUUoxWDFFYTJjVUJSVG5za1Z3UmtqUWxVcXlEWW5n?=
+ =?utf-8?B?b1lXZjh1cW12aG1UTCtCZjcvQlVTemxUQTl6RWlVOXNCd0R4LzRjVXRScjl5?=
+ =?utf-8?B?RHdEcUtQOVYxcDZzdWViUXZqeWUrZHB0Tzcrbm1PTGwyaFVEMjQyT2VYQ0hB?=
+ =?utf-8?B?TlhwRDlxbDJRZ0Y5ekZsd1lGOStXa25GS1hZNmlTNnZwcGdoUzJhR2cram9X?=
+ =?utf-8?B?Qm5GZjF0c0doN2JqSExTS1VwV0RxMWc5aklyRUhNbktOeUljcHFVNWk2SDNo?=
+ =?utf-8?B?azYxbG1OQ1JGVTBmM2RxcDYxeUFiQ3NiWU1iMEFlNU1kU3NXb3FpTzhOK3BD?=
+ =?utf-8?B?RnJiYWZLVlVrbG5JWkd2WkhmUEFTVm5iSkF0YitCVDJUZ2RDY2dFbzh5WUlP?=
+ =?utf-8?B?aDJlY0hnRmJqTDdHdXY2dFZCRXlPbWhpS3JoUGlBczNPcHpzem13aitYUy8w?=
+ =?utf-8?B?NFZhOEhnOHZ5WUdFSHh5MFZOMysvSkFHZzlQODZ1ZEZYRmhCUlExb1Uzanhl?=
+ =?utf-8?B?cEsvNmF4YnVxSHNOd1p4SldQMkdlb0djbVh0Q3lTbUVKVEN6ZzlLNmwvd0py?=
+ =?utf-8?B?SzVtWXRnZmtGeS9MTjhFNEFuYUxpbkhtbk5YVy9RMURwRWlWeFY0NkhXZFdp?=
+ =?utf-8?B?T2FITWxMN2pRK0UvbGhBSE53Yjc3YU52V05HdXF2NlZncDNRV0VmMVFRMEUw?=
+ =?utf-8?B?K1FNYVNRSzJiYmVuNG9aY2NTTHVPY1pWc0FMcHRBL09MbG5UbXpzVjRydU1B?=
+ =?utf-8?B?bjNMemgveGFwM3Ayc3BQV0RTZnpKOTVWZTZsRTY5MUVVck5EZEVOL2doVzFK?=
+ =?utf-8?B?UmhTYjAzWHdBQ0lrcktKN1BwazB5ZXF4TGNtT2VLZldJQ2RPeUpSd0xSVEw2?=
+ =?utf-8?B?cUpPUURVcmc1VndiZ1QyQWdPS2lJd04xK0xqcGg1dmtmaENQRFo0TzJJbkNN?=
+ =?utf-8?B?V2o4bXk2QmdVQURmMHZiaUsrU2RsdDZEKzVUMkJIaUpsUzR5alVxdVlwMFU4?=
+ =?utf-8?B?MXpDR2wxMFpxbXNJaWZlamtkUHFqOUZmdDhXb1ozSFBzTnBaTGtSMjB0eFkv?=
+ =?utf-8?B?OUNqSis2QktrZVkwRkY5aFQ4S0lUNHo1L2w3YlhnczFLcWN2K3E0THQ2bnFo?=
+ =?utf-8?B?SlpOQTdGdy84L3N1NUQ3S0xpbnprcVg3dWZyb0d2bFF6b0orU3RnVDVYem0v?=
+ =?utf-8?B?U2pBWVVVeHV0OS9wZWswR0l6VWJwMjZSb0pUWnhVZkJUajJTWjltbFBMam9K?=
+ =?utf-8?B?dWl4NDZQZGQrRXBiTXRqZGRYNkV4R2lSZXpwZjAveUl3VjBGb2N3NnpTM2NH?=
+ =?utf-8?B?MTU0ZlNpeElxY0VSdDNhUUxoN3VQclhZVStZYWYrVFdibS96K1BPWGJRTjgy?=
+ =?utf-8?Q?JLRx9XbCkcyMOEANGWlcRd22O+i/omSU0DsuL8T?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9251.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?em5TMzkyUzVlazFKeWFuSTMwaDBTb1hXU3AvT1RhTzU2N3hKN1lXOWx0dVJG?=
+ =?utf-8?B?aVZVdkNXYkZPVU1hT0JtN2hhNTRiM3NSWG0xY1dRZXVZUjVFd0lpRkZmenpo?=
+ =?utf-8?B?SS90VU4zRXZHOGxEeHBoSTBodFBZWEZtS2dkeWN4RGdmVGdNRjdqZEd2WGl5?=
+ =?utf-8?B?WXNLSlR6cHdtazhKbkZKeWtsaXZBNENBUkNpZGtwZTFuNFZ4bjNENUxiUWZH?=
+ =?utf-8?B?TXVaL1hQcjVGN2R4NkxjTnpWVWdocGJYTURqZ0JxZGdUR2Zwc3M2QTJCNVNP?=
+ =?utf-8?B?c1pBM3NKVWZtQW5FV1QwN1podTE4V3cyZEIrcFVUWi9ITkdrUkZPNWQzV1J5?=
+ =?utf-8?B?NmRnVlN0bW5EMG9PbnFPSm1tSlVKNDg2ZU5qbVVzY2s4MFB6eENjLzZ4QTYr?=
+ =?utf-8?B?TjFuRWZOdTRmeFdzVmNOdjhqRCs5b2NxQko1ZEVRWnRyai9Ea25PTmxDUTR3?=
+ =?utf-8?B?OXpFaVBhcFdBbjR3RHAwODlFMjRkRnNMR1FUdS8xOUd2R3FPUUFjVStEbVQ4?=
+ =?utf-8?B?NnR6QVRoRWVUeXRoVERvaUNXWEp1V2phdjRlb2x4S29FZVRwOWRVVitKSHR5?=
+ =?utf-8?B?ZEVRcHR3ZDJVR3I5czJvTUM1czJkYjBTVW5HUUpZSDR5Mm9LMTZkNGswV0s5?=
+ =?utf-8?B?Rm1JbnZVOUVJZ3VpVHVqd2g5T0lReEE0RXlxQmhCNktac3ZWKzgvQTQvUGZ1?=
+ =?utf-8?B?dlFpT0F3N2lVNW9uY2hUdmNKRWlFaHVjR1MveW5IMTZveE9wem9NVElPTHRx?=
+ =?utf-8?B?UXZTZDhjcFBoNGdzUlFWb3hGbVhWRUpMdCtMTlNJdGJNY1p1NDdINFlHSVcw?=
+ =?utf-8?B?bm5lSVJuSHJjWEN3TzdyejlSZDgrRS9jUnMvazZ6TDJrT0s2c1V2MHhDeVVQ?=
+ =?utf-8?B?WnlQc2RaSTlQQnVsS0dGZGJ0c2xISzRZTVVJRUowQUcvczJpZmw4Zk9OTzlv?=
+ =?utf-8?B?MGl0S3kxbGJaLzgxWm9ZaE9RZlE4RWxPT0dJLzVJZXBVcTBPRzZrdWMza1V2?=
+ =?utf-8?B?SHoxaDhGZkFydHNLTTM0WW96dm9JY3NUVmpMMG5wU1JtQmF6NGdwU2x4enNH?=
+ =?utf-8?B?dEFidzlCSmRmRVFmblVnaGFpaEZFbVZrMjZwSU9SQ1RnSHhESHFhUnRtMXI0?=
+ =?utf-8?B?cXVITEFVdkJNR0NzSFozTGRBMWp4dHQ3Yi9KWGpqR1RuSWN1WHZzUXF0b09r?=
+ =?utf-8?B?T2pERDM0cmJZcGlLZnV4aDBQNlZYeTgzb1hnL21waS9RTXlQUEJ4QnBYT3c2?=
+ =?utf-8?B?ckl6VWY0OWl3Vjk1Y1FINlJYYUtvWDBncVJpMW9JdFNLdUxvYTJwNXV3RUpD?=
+ =?utf-8?B?VTV4ZStIbTNmVzh0OFVpK0owbHFIRFRJY05uNE1oZ2JBVklSd2FzNkNBT1dM?=
+ =?utf-8?B?WTZwdUNLNWdWTEJCbUxKT0tXWllsSndhOFRHUDlIU0txemtoQ0crUnVjYWFl?=
+ =?utf-8?B?dXUwa1pFeTBoZkxGNmM0am9mMWpLTzgzcGowbzUrTkpFdGN6eVZDY3ZUR3pQ?=
+ =?utf-8?B?OGs4SXhPS0ozQ0l2VTlNMVBkaERuSm1QMWJ0bEE0ZmtjYldtYUpYMzNXVlJF?=
+ =?utf-8?B?cjB1ejlpSTh5ZjVZcDFuWCsyQzlGeWo4RVFxenJySXdEemRqU0RJYkV2Y2Ir?=
+ =?utf-8?B?SDdPWDRzR0lEeXN1VjIxOHM3Sm42NVdxRWh4QjZkTjFaOHdmL1lidk5iSW9s?=
+ =?utf-8?B?ZHQvRUwxZmU1WmR5WnZpdlN4QVplN0Ewb0kvRG5YMGpGT3h3T2ZaME56R1FD?=
+ =?utf-8?B?b3BCWTJMLzVtTVBnVEgvNlhveXU5VUw3dkFzUzM5QnNIOFZWZmhKZlJYZFRl?=
+ =?utf-8?B?VE8wWEhuYytQMGowQkZ0Q3pCSCtJQUN5YU1XcHBOZi85ckw4YUdDYjQzUEJT?=
+ =?utf-8?B?SDRjZ2tiK05iMjRUajJKQ1duVi9Ub1VxWDdYaUp4bmg2MlNMa2l4aVpqcmI4?=
+ =?utf-8?B?eHp1dGNWMUh3NGVyaEh0WCtIWlF3bDJtZ2k0YUVDcnY4djlQMU14SjFkNEFM?=
+ =?utf-8?B?cDFXRUlXaEV5dDVhblhzc2pJSXg3VUh6MWw5a0xWenJoMW9rajcvRGRGMGhz?=
+ =?utf-8?B?bnpIeGFUeWRrc1RQSlVpRUVwTFRiTVlZaGd1dVM1OU1UUnlTNmUvVDUrdC9o?=
+ =?utf-8?B?SWVpYkw1aFRwMElPUXEzWExWYkRuR211eWRiWmhUbnh0Y0wxWWZJWDRYc05m?=
+ =?utf-8?Q?iKEd1Im/L+9bHQJl+rXizgg=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a8cd518-b807-4659-1ccb-08dd09587065
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9251.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2024 11:42:40.7300
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XBhIpnrj6UC41S8ZhJtTttSRdmxvBpENQuNHM+quIijE6pGmmfl/+K/wyyX6UNbvcXbvcVphUXLBp6fuT//iI/rjB32SBiI/BkR9d+1oWtE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8597
 
+On 11/20/2024 1:33 PM, Marc Kleine-Budde wrote:
+> On 20.11.2024 13:02:56, Ciprian Marian Costea wrote:
+>> On 11/20/2024 12:54 PM, Marc Kleine-Budde wrote:
+>>> On 20.11.2024 12:47:02, Ciprian Marian Costea wrote:
+>>>>>>>> The mainline driver already handles the 2nd mailbox range (same
+>>>>>>>> 'flexcan_irq') is used. The only difference is that for the 2nd mailbox
+>>>>>>>> range a separate interrupt line is used.
+>>>>>>>
+>>>>>>> AFAICS the IP core supports up to 128 mailboxes, though the driver only
+>>>>>>> supports 64 mailboxes. Which mailboxes do you mean by the "2nd mailbox
+>>>>>>> range"? What about mailboxes 64..127, which IRQ will them?
+>>>>>>
+>>>>>> On S32G the following is the mapping between FlexCAN IRQs and mailboxes:
+>>>>>> - IRQ line X -> Mailboxes 0-7
+>>>>>> - IRQ line Y -> Mailboxes 8-127 (Logical OR of Message Buffer Interrupt
+>>>>>> lines 127 to 8)
+>>>>>>
+>>>>>> By 2nd range, I was refering to Mailboxes 8-127.
+>>>>>
+>>>>> Interesting, do you know why it's not symmetrical (0...63, 64...127)?
+>>>>> Can you point me to the documentation.
+>>>>
+>>>> Unfortunately I do not know why such hardware integration decisions have
+>>>> been made.
+>>>>
+>>>> Documentation for S32G3 SoC can be found on the official NXP website,
+>>>> here:
+>>>> https://www.nxp.com/products/processors-and-microcontrollers/s32-automotive-platform/s32g-vehicle-network-processors/s32g3-processors-for-vehicle-networking:S32G3
+>>>>
+>>>> But please note that you need to setup an account beforehand.
+>>>
+>>> I have that already, where is the mailbox to IRQ mapping described?
+>>>
+>>> regards,
+>>> Marc
+>>>
+>>
+>> If you have successfully downloaded the Reference Manual for S32G2 or S32G3
+>> SoC, it should have attached an excel file describing all the interrupt
+>> mappings.
+> 
+> I downloaded the S32G3 Reference Manual:
+> 
+> | https://www.nxp.com/webapp/Download?colCode=RMS32G3
+> 
+> It's a pdf. Where can I find the execl file?
 
---idbngjom6ttlxwj6
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 3/3] can: flexcan: handle S32G2/S32G3 separate interrupt
- lines
-MIME-Version: 1.0
+Correct, and in the software used after opening the pdf file (Adobe 
+Acrobat Reader, Foxit PDF Reader, etc.) you should be able to find some 
+excel files attached to it.
 
-On 20.11.2024 13:02:56, Ciprian Marian Costea wrote:
-> On 11/20/2024 12:54 PM, Marc Kleine-Budde wrote:
-> > On 20.11.2024 12:47:02, Ciprian Marian Costea wrote:
-> > > > > > > The mainline driver already handles the 2nd mailbox range (sa=
-me
-> > > > > > > 'flexcan_irq') is used. The only difference is that for the 2=
-nd mailbox
-> > > > > > > range a separate interrupt line is used.
-> > > > > >=20
-> > > > > > AFAICS the IP core supports up to 128 mailboxes, though the dri=
-ver only
-> > > > > > supports 64 mailboxes. Which mailboxes do you mean by the "2nd =
-mailbox
-> > > > > > range"? What about mailboxes 64..127, which IRQ will them?
-> > > > >=20
-> > > > > On S32G the following is the mapping between FlexCAN IRQs and mai=
-lboxes:
-> > > > > - IRQ line X -> Mailboxes 0-7
-> > > > > - IRQ line Y -> Mailboxes 8-127 (Logical OR of Message Buffer Int=
-errupt
-> > > > > lines 127 to 8)
-> > > > >=20
-> > > > > By 2nd range, I was refering to Mailboxes 8-127.
-> > > >=20
-> > > > Interesting, do you know why it's not symmetrical (0...63, 64...127=
-)?
-> > > > Can you point me to the documentation.
-> > >=20
-> > > Unfortunately I do not know why such hardware integration decisions h=
-ave
-> > > been made.
-> > >=20
-> > > Documentation for S32G3 SoC can be found on the official NXP website,
-> > > here:
-> > > https://www.nxp.com/products/processors-and-microcontrollers/s32-auto=
-motive-platform/s32g-vehicle-network-processors/s32g3-processors-for-vehicl=
-e-networking:S32G3
-> > >=20
-> > > But please note that you need to setup an account beforehand.
-> >=20
-> > I have that already, where is the mailbox to IRQ mapping described?
-> >=20
-> > regards,
-> > Marc
-> >=20
->=20
-> If you have successfully downloaded the Reference Manual for S32G2 or S32=
-G3
-> SoC, it should have attached an excel file describing all the interrupt
-> mappings.
+Regards,
+Ciprian
 
-I downloaded the S32G3 Reference Manual:
+> 
+>> In the excel file, if you search for 'FlexCAN_0' for example, you should be
+>> able to find IRQ lines 39 and 40 which correspond to Maiboxes 0-7 and 8-129
+>> (ored) previously discussed.
+> 
+> regards,
+> Marc
+> 
 
-| https://www.nxp.com/webapp/Download?colCode=3DRMS32G3
-
-It's a pdf. Where can I find the execl file?
-
-> In the excel file, if you search for 'FlexCAN_0' for example, you should =
-be
-> able to find IRQ lines 39 and 40 which correspond to Maiboxes 0-7 and 8-1=
-29
-> (ored) previously discussed.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---idbngjom6ttlxwj6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmc9yREACgkQKDiiPnot
-vG/Bhwf/TmgOWpK70qWkVmuc6pmKnZd7518rr3HRby5yKjHlz9lMpMU+rdevXATt
-Eb1uT7wi4HkmIFcogcLaLaMiqlCd+r+4R4rdb1s93NNBMcTVqJPQUFcOGzmkW6Vm
-yhVdQRO2wbLTxizGSbKnJZEwVrSO+i45FBAzWiDOjfn5D4HTdcycQE7LQUr/d26l
-aBMOdm4qLqK/g5lnYFE6PipHYnhyTrVCRMJmBYItO7SvwhYf1lfMKx9JG6qUWINS
-tMJThoELNypy4s5miXbs6ohkPtcTDbcSFBMiBbc8d9aAUsJ0yjTmW5FQ8noxsaGX
-3y9ERfkDZbXgGXInziFvzYiXtXpRCQ==
-=qt5d
------END PGP SIGNATURE-----
-
---idbngjom6ttlxwj6--
 
