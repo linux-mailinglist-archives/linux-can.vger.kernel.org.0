@@ -1,116 +1,136 @@
-Return-Path: <linux-can+bounces-2157-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2158-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FF4C9D48DD
-	for <lists+linux-can@lfdr.de>; Thu, 21 Nov 2024 09:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E85A9D4C97
+	for <lists+linux-can@lfdr.de>; Thu, 21 Nov 2024 13:12:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9DD128344F
-	for <lists+linux-can@lfdr.de>; Thu, 21 Nov 2024 08:29:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23D97286286
+	for <lists+linux-can@lfdr.de>; Thu, 21 Nov 2024 12:12:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5401CB531;
-	Thu, 21 Nov 2024 08:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PnAQzOn3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7330B1CEAAC;
+	Thu, 21 Nov 2024 12:12:27 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2803F1CB329;
-	Thu, 21 Nov 2024 08:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CD81D5155
+	for <linux-can@vger.kernel.org>; Thu, 21 Nov 2024 12:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732177752; cv=none; b=JeIJkvRy5xBVmPKRUAb6SMBvYf1lOK1RP9JUU5Fzi+jZFKE+be07HWyks1L0RAv+DAJ2eGXkm4XQhYeP1EL2gAez1TkvAkCPeXFeg1iSJ4WlclfGsScIFkGzFj/Pwe1dbcWaiUpbTrSTrP4rjwMEQUKayvok4qy2ZNoiGotssNU=
+	t=1732191147; cv=none; b=n6r7fdtfK/ElITB63qlOurK5mMuTkSrdZlsZqsf/XXPPnTqTyjA65lZ71ClSeW+fTKYOhc61T7Ru8iHVcjfgrq+jbCq1sFOSGu99r25pw2Vcf5jpq6HaQ3jnKBZZ+g6L28K39PybEHyMU0gPulD7cTNzDzOXfxhd946CfR2X2QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732177752; c=relaxed/simple;
-	bh=jI8NHi8G+Wq7vsn+8sraQFg2O7HBgJMMZWRRb1whbGk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IS9bAZzYRw6agmLj/kuRaqvgmf85WRpG5ngR63eQPcD+bKpx1PWvKgWzD3ZYYxN5xmpzgiMKkkzIyB6Qso3BP/nVXnynP62ch2PMwKXeTEI8Jj1GLYuY++CJTRATWuw5tJoi3gLd9g16GaCptsKVmPcMYVMltUxxCgojTBusNWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PnAQzOn3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D175CC4CECC;
-	Thu, 21 Nov 2024 08:29:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732177751;
-	bh=jI8NHi8G+Wq7vsn+8sraQFg2O7HBgJMMZWRRb1whbGk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PnAQzOn3eltLr61OwJdBkrNCp84VdxjhOaWdJj5jwupNmUAW+fgCxGdVYi1u+4Uf6
-	 w8sOx+eYMqedJv3IH2gCsx+oFCmhqf83fEonTvFR2KABkkaoKyMrxZxVeB8SnarRls
-	 lSjeeIR60e3P017SBClhSDCT0XlWz2jLT7UHgwvRcI6cqm0ElOcmI9uzssomnkPen+
-	 7mxq4usUuT8tUvZxpbE8QmBanM4sSFdvgybqCsKqrVoBV/CJCcoObnZNo57iFedZsl
-	 ZDFGRYk5DBdEXxT2OZlZn0eax+v1BITx3xy68frt9dmCSMGDmJWhA38aVqrm5mvxht
-	 AqarzOygFaqvA==
-Date: Thu, 21 Nov 2024 09:29:08 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Charan Pedumuru <charan.pedumuru@microchip.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Andrew Lunn <andrew+netdev@lunn.ch>, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: net: can: atmel: Convert to json schema
-Message-ID: <ahftyfnreh27z6jyvdf2wwhhp5rcbkydy6afnkct77ppqlko56@5cvw5bmzcjb6>
-References: <20241120-can-v3-1-da5bb4f6128d@microchip.com>
+	s=arc-20240116; t=1732191147; c=relaxed/simple;
+	bh=N41w2X+8pE+ZSJ1A6dLwZKSsnwg06n0TPP7261slhTs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XGvWs+EP+4L4Rfu+McXxUwCPWdveQBQNFMWIuj+HQKxnm6d1LHG0FIG8uLVBl5DVS6NjUVoJrOem/5iD8q/TQxXKkWZW1I15P8CF65wJOwb9/+Y0utSytcCE81n3fvbCoiMLv7/rTyd0HR4PTUYIenMJ5chkxgL1bNJUIlZxNf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tE62i-00039t-Tc
+	for linux-can@vger.kernel.org; Thu, 21 Nov 2024 13:12:16 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tE62i-001txx-2E
+	for linux-can@vger.kernel.org;
+	Thu, 21 Nov 2024 13:12:16 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 5FF843788C3
+	for <linux-can@vger.kernel.org>; Thu, 21 Nov 2024 12:12:16 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 58AC33788BF;
+	Thu, 21 Nov 2024 12:12:15 +0000 (UTC)
+Received: from [172.20.34.65] (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ca082c11;
+	Thu, 21 Nov 2024 12:12:14 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Date: Thu, 21 Nov 2024 13:12:12 +0100
+Subject: [PATCH can] can: dev: can_set_termination(): allow sleeping GPIOs
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241120-can-v3-1-da5bb4f6128d@microchip.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20241121-dev-fix-can_set_termination-v1-1-41fa6e29216d@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAJsjP2cC/x2M0QpAQBAAf0X7bMtulPyKpHMW++Do7pKSf7d5n
+ JqZB5JElQRd8UCUS5MewYDKAvzmwiqoszFwxTURE85y4aI3ehfGJHnMEncNLluHC7m2Jp6YfQN
+ 2OKOY+t97sACG9/0AmXidgXIAAAA=
+X-Change-ID: 20241121-dev-fix-can_set_termination-f1a8412b22c5
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, 
+ =?utf-8?q?Leonard_G=C3=B6hrs?= <l.goehrs@pengutronix.de>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15-dev-355e8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1456; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=N41w2X+8pE+ZSJ1A6dLwZKSsnwg06n0TPP7261slhTs=;
+ b=owEBbQGS/pANAwAKASg4oj56LbxvAcsmYgBnPyOcVCx49fS2p7p2xIYffu1mLTYmamC/zYeni
+ 3+GDml5RvWJATMEAAEKAB0WIQRQQLqG4LYE3Sm8Pl8oOKI+ei28bwUCZz8jnAAKCRAoOKI+ei28
+ b71UB/wPWq6PY/Ug4OdcsZa5Ap7ejPPR/wcO1X5Umk7hZ3EV9a0EwmcKBEcpFKIIpp6x6tHRSCF
+ hL1MctqjN6Y6CFhstKfufDXh4uwyJyc41L8CdMcUbKLrU50F7NbOwA2ETtDb4gJfDqmp0HxemH3
+ 5Th9G/TiDKXinZ7ckgVkPuoXLJFqx36PP4aYzqVAKeZFQ/aUJNJpWr/o2/sr6VNHHOUR0SxhvxG
+ jk/D1wBE6GMBMApLLujRlokVOotiDm9b4S7GyGCi7WnuqqOwU7lPHyNQBr3AiRw891JuXyfnybO
+ NUA1J0eSnZzAboDD3TgF+DAdVDC6EEaJNMXMC5JPGTXQnSuN
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On Wed, Nov 20, 2024 at 01:58:08PM +0530, Charan Pedumuru wrote:
-> Convert old text based binding to json schema.
-> Changes during conversion:
-> - Add a fallback for `microchip,sam9x60-can` as it is compatible with the
->   CAN IP core on `atmel,at91sam9x5-can`.
-> - Add the required properties `clock` and `clock-names`, which were
->   missing in the original binding.
-> - Update examples and include appropriate file directives to resolve
->   errors identified by `dt_binding_check` and `dtbs_check`.
+In commit 6e86a1543c37 ("can: dev: provide optional GPIO based
+termination support") GPIO based termination support was added.
 
-...
+For no particular reason that patch uses gpiod_set_value() to set the
+GPIO. This leads to the following warning, if the systems uses a
+sleeping GPIO, i.e. behind an I2C port expander:
 
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/at91.h>
-> +    can@f000c000 {
-> +          compatible = "atmel,at91sam9263-can";
+| WARNING: CPU: 0 PID: 379 at /drivers/gpio/gpiolib.c:3496 gpiod_set_value+0x50/0x6c
+| CPU: 0 UID: 0 PID: 379 Comm: ip Not tainted 6.11.0-20241016-1 #1 823affae360cc91126e4d316d7a614a8bf86236c
 
-If there is going to be any resend - fix the indentation: Use 4 spaces
-for example indentation.
+Replace gpiod_set_value() by gpiod_set_value_cansleep() to allow
+sleeping GPIO.
 
-No need to resend just for this.
+Reported-by: Leonard Göhrs <l.goehrs@pengutronix.de>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/dev/dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+index 6792c14fd7eb009d551ac22bab1f0ee2cd0f0398..681643ab37804e9904cc4a899d44c55cefab7b6e 100644
+--- a/drivers/net/can/dev/dev.c
++++ b/drivers/net/can/dev/dev.c
+@@ -468,7 +468,7 @@ static int can_set_termination(struct net_device *ndev, u16 term)
+ 	else
+ 		set = 0;
+ 
+-	gpiod_set_value(priv->termination_gpio, set);
++	gpiod_set_value_cansleep(priv->termination_gpio, set);
+ 
+ 	return 0;
+ }
 
 ---
-
-<form letter>
-This is an automated instruction, just in case, because many review tags
-are being ignored. If you know the process, you can skip it (please do
-not feel offended by me posting it here - no bad intentions intended).
-If you do not know the process, here is a short explanation:
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-</form letter>
+base-commit: 66418447d27b7f4c027587582a133dd0bc0a663b
+change-id: 20241121-dev-fix-can_set_termination-f1a8412b22c5
 
 Best regards,
-Krzysztof
+-- 
+Marc Kleine-Budde <mkl@pengutronix.de>
+
 
 
