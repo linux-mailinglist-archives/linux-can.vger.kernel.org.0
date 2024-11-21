@@ -1,170 +1,163 @@
-Return-Path: <linux-can+bounces-2167-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2168-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEDA49D53BA
-	for <lists+linux-can@lfdr.de>; Thu, 21 Nov 2024 21:10:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 289E09D54EC
+	for <lists+linux-can@lfdr.de>; Thu, 21 Nov 2024 22:45:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 663C4B229A8
-	for <lists+linux-can@lfdr.de>; Thu, 21 Nov 2024 20:10:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77FD92848B7
+	for <lists+linux-can@lfdr.de>; Thu, 21 Nov 2024 21:45:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E832F1BD9EC;
-	Thu, 21 Nov 2024 20:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23741DDC39;
+	Thu, 21 Nov 2024 21:45:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Ly93oaHX";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="B9ioq4ei"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BNFcApkC"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.217])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AF243AA1
-	for <linux-can@vger.kernel.org>; Thu, 21 Nov 2024 20:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.217
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732219841; cv=pass; b=VZuTHWTmP0OhSdfYi+GEBfFrXc48n3k13/rxt1P9H55ufsPxY5/VwQCNM5aFOfmz2oAqQq0Lm8nwcUT12CHoOtHKms+N8+AhMIDXatLxWvERmdfZKMGq2MxtxfFYEchoJJ520659CEUJQfuofAWagOz+jVMdPKMUnyCpmb6rGRI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732219841; c=relaxed/simple;
-	bh=l41HFwcy5nX2xmm3RsmSr5VjmIrtKWIEjlakc8MIkKE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Sd/XDHnvh2di8s65B8zQ/cvYo1M/JSG0wMCOgc87jxRpM3uQvCB0ePOrIew+1uNwRdrZb4XwEg4efCyh8xmuk+QTKM4eTaivxljLaJiRy7b+XOazW7I6h2zJHdzUejdbnA4wXJQSZLibimYmmn5PcX7oJXsEatHCbbyxCbf0g8o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Ly93oaHX; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=B9ioq4ei; arc=pass smtp.client-ip=81.169.146.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1732219834; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=cPll9RQYFPZ+EpQCUtwqMGzpDCmSqE178wQvduYuthDjmO+H/FXMI9VNgNhHsYTMtp
-    RROSAMdIrgv7mcVdHlFoksDkzdGLHSNlMGO5gmfewrOUHpR4jlONF/muvqGC0rn5iGik
-    XoonFSnNkFYbPHTOhnvr8ETgW0BRtFJw76QjAe0l+gVjvadGeRkcrMPAlngh3JOFuq2I
-    rVu9pqVxGr90BeMKrjje4MWFT38BZP/T7jr2+c302eSGWjRfqPhH06bxzxas09WgK9sT
-    u43oZNpLURkOz/9srlYVtsRg/HaJuGoZrrK0yxBeJ4PnXi9xihrVzHwwX2IA6RRIVHyD
-    U0zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1732219834;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=me+J27R3JvCMkTL6KbgmZcoL4JkwRdyeCu+14zBUX+Y=;
-    b=hFsYeONwwN35yYu0mVEg6NMerF5E2T8ybYeRlIN5kiea3166Li3SZEVXAOnc3rYxCH
-    jhxZJug3lZ+ny6LbMaqkwcwjuFevE2JUfN/S1gEs5nWbCBuiAK/XSLDPI1ZFgv5Lp2Iu
-    WNiwbukOlHVcE7D+It5kno88mZQ+3xE+XjCB4/mCNKlYdCXnZm4mOj2ovykKeL5EtNY+
-    8P5HmrxhbyKIp6v3zLIPDFxb9/b5ZJoUb1HHn0cQ85jh2NFRxwVpvJzx9+d+LBW2z4eN
-    j3jTkA2kALw+UVi4wPF+O1Dh5cdcxbzQWbNzo+uo3FBbN15dQ137J8d7/iyq04XEJ3/A
-    SPYA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1732219834;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=me+J27R3JvCMkTL6KbgmZcoL4JkwRdyeCu+14zBUX+Y=;
-    b=Ly93oaHXT6GWFart5WPvaRmTlEnREOdM7YhBZxpCXTkMTOtzCbHtMJ/BpNKfnQj2TL
-    dPDOxG4yfpboweFs5CChsdzx1wpQhvxwgrd82MGeKpeyCtUOjlqoPZ6hrlxvop5aJk6B
-    zlRCrEmvTQI2yXZFAfZdaDKvLbwG5C69WW0sZ/CNrhLOG6EkDqVmkFjuS5acteMTY+xo
-    2w/NmGQPWIRUijnIQaFFYl9xYkd4xSY2/2hlEukViohkhtrXtZ+voodm5CGD7fz52QPX
-    XzE+xKlbhZ3qXJmkEpvwS1s9mqpzZHgDWOZYjyLrYVhZAvWS/Ae/VJKb1IM5kEXz6SoP
-    LIaA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1732219834;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=me+J27R3JvCMkTL6KbgmZcoL4JkwRdyeCu+14zBUX+Y=;
-    b=B9ioq4eiKa1Px5cQcYprEQX2jEuEjsjmHE8l1khhX7gohkwBAXS1rONYtGk/xZBJzs
-    eoPJhExZzQo/Xy0dUOCw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tRkI16oOSXVT6pap5"
-Received: from [192.168.20.116]
-    by smtp.strato.de (RZmta 51.2.11 DYNA|AUTH)
-    with ESMTPSA id K63ada0ALKAY5dt
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Thu, 21 Nov 2024 21:10:34 +0100 (CET)
-Message-ID: <12e013c2-d6ff-42b2-91ef-921db4e7ee0e@hartkopp.net>
-Date: Thu, 21 Nov 2024 21:10:28 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2C71DBB19;
+	Thu, 21 Nov 2024 21:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732225505; cv=none; b=R33sdyZoXyCKDyPFYavTW9tUrhzKtcIj3NC7HACs1Jdae7o7+WQYbYfIkJC0AjlP+hDcwgm7VUjwNMkOe1gwHKa6m0L4VkANTYEtITtImU0UT3zgOXd90rISlyKgh5YNQ2DQgqtWySgAYoAdIfzmAZXfLTFElKUr4J0/+rONMe4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732225505; c=relaxed/simple;
+	bh=NIUcN6+T+wki60rCRnwepyQ8KRF0PBbMkb47VLXLqKM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dVjNpgzoCzoV3P1SY4M70VTAZDlaKb1VAwsEM1ItD1jSqnZ8oEk4WbA4Yunuk6z/XrGBwY98cbCOG6yyN8Y5LUwzUJUxn2ke5vVrTyBL2hpXx5sUPfyED/Yex9E+kuvhjlDku0JhfrIeEnH7gxMJTIFYcRdTDLF3XzpUc0yYB/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BNFcApkC; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732225504; x=1763761504;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NIUcN6+T+wki60rCRnwepyQ8KRF0PBbMkb47VLXLqKM=;
+  b=BNFcApkCceVM9sS7dM7XHFFI8lIuy0mmm3XqLpRVhM+3qy5qt7P8kU4T
+   f/8rIOxMJXlnwqnAi+F/DijxT8xYFwtyGKOLXSj+8Tb23nEbIwvBWQewe
+   cFUuZd92N6PDupXXYMyNHL+GuBAQExGC+OITiX7sY8pwYweFr45jgh2p1
+   6ArBuuiGy1vRY6YcTCdIeuNsjVizmxfhe0ZtF/V4MN5DveTlaWvScF5Rt
+   7m/pbMhsNuxyC8wQ256oABy1O6lp+x9sVy6QFMHLOSQ6sVLGvcLzF0T5B
+   nDnRm8CHu7/JpKQSCWQzAva8/7hLpyH4mPx+Efl2AhMNXL47O4aZBD7+8
+   w==;
+X-CSE-ConnectionGUID: UGYcYd7LRrqR+VMlrOAW0g==
+X-CSE-MsgGUID: oCnwJEQ7Rc6PzIy/7uIaPA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="32514204"
+X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
+   d="scan'208";a="32514204"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 13:45:01 -0800
+X-CSE-ConnectionGUID: xdpPO1RmQrC72kpFCsgzmg==
+X-CSE-MsgGUID: zhZedUIBSeupQFYJAgkZ8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
+   d="scan'208";a="90753178"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 21 Nov 2024 13:44:56 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tEEyr-0003O1-1A;
+	Thu, 21 Nov 2024 21:44:53 +0000
+Date: Fri, 22 Nov 2024 05:43:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiao Liang <shaw.leon@gmail.com>, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Jiri Pirko <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
+	linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+	osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
+	linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+	linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
+	bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v4 3/5] rtnetlink: Decouple net namespaces in
+ rtnl_newlink_create()
+Message-ID: <202411220516.rokej98E-lkp@intel.com>
+References: <20241118143244.1773-4-shaw.leon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 00/14] can: netlink: add CAN XL
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org,
- Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Robert Nawrath <mbro1689@gmail.com>
-References: <20241110155902.72807-16-mailhol.vincent@wanadoo.fr>
- <ea52eb8f-c59d-445a-bf4d-26f2772f7426@hartkopp.net>
- <a9d8eb65-c88d-4bc9-b0c2-c0e0799ea5bd@wanadoo.fr>
- <23c914cf-0af2-4619-9f83-e4b6339ef65f@hartkopp.net>
-Content-Language: en-US
-In-Reply-To: <23c914cf-0af2-4619-9f83-e4b6339ef65f@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241118143244.1773-4-shaw.leon@gmail.com>
 
-Hi Vincent,
+Hi Xiao,
 
-On 11.11.24 16:32, Oliver Hartkopp wrote:
+kernel test robot noticed the following build warnings:
 
-> No problem! I will give some feedback when I managed to integrate the 
-> extended netlink API to my driver.
+[auto build test WARNING on net-next/main]
 
-I managed to set up my CAN XL dev board with the latest Linux kernel 
-(6.13 merge) and upgraded to Ubuntu 24.04 LTS.
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiao-Liang/net-ip_tunnel-Build-flow-in-underlay-net-namespace/20241121-112705
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20241118143244.1773-4-shaw.leon%40gmail.com
+patch subject: [PATCH net-next v4 3/5] rtnetlink: Decouple net namespaces in rtnl_newlink_create()
+config: arc-randconfig-002-20241122 (https://download.01.org/0day-ci/archive/20241122/202411220516.rokej98E-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411220516.rokej98E-lkp@intel.com/reproduce)
 
-Applying your RFC patches for the kernel and the iproute2 package 
-(including the sed hack) works great.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411220516.rokej98E-lkp@intel.com/
 
-While the xl transceiver switch and the and the PWM configuration (with 
-3 values with 6 bit each) are still missing I tried your current code as-is.
+All warnings (new ones prefixed by >>):
 
-# modprobe dummyxl
-(created can0)
+>> net/batman-adv/soft-interface.c:1075: warning: Function parameter or struct member 'params' not described in 'batadv_softif_newlink'
+>> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'nets' description in 'batadv_softif_newlink'
+>> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'dev' description in 'batadv_softif_newlink'
+>> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'tb' description in 'batadv_softif_newlink'
+>> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'data' description in 'batadv_softif_newlink'
+>> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'extack' description in 'batadv_softif_newlink'
 
-# ip link set can0 type can bitrate 500000 xbitrate 8000000 xl on 
-dbitrate 4000000 fd on
 
-# ip -det link show can0
-7: can0: <NOARP> mtu 2060 qdisc noop state DOWN mode DEFAULT group 
-default qlen 10
-     link/can  promiscuity 0 allmulti 0 minmtu 0 maxmtu 0
-     can <FD,TDC-AUTO,XL> state STOPPED restart-ms 0
+vim +1075 net/batman-adv/soft-interface.c
 
-Should there be a XTDC-AUTO too?
+128254ceea6ffe Sven Eckelmann 2020-10-11  1063  
+128254ceea6ffe Sven Eckelmann 2020-10-11  1064  /**
+128254ceea6ffe Sven Eckelmann 2020-10-11  1065   * batadv_softif_newlink() - pre-initialize and register new batadv link
+c19808cb1d05d1 Xiao Liang     2024-11-18  1066   * @nets: the applicable net namespaces
+128254ceea6ffe Sven Eckelmann 2020-10-11  1067   * @dev: network device to register
+128254ceea6ffe Sven Eckelmann 2020-10-11  1068   * @tb: IFLA_INFO_DATA netlink attributes
+128254ceea6ffe Sven Eckelmann 2020-10-11  1069   * @data: enum batadv_ifla_attrs attributes
+128254ceea6ffe Sven Eckelmann 2020-10-11  1070   * @extack: extended ACK report struct
+128254ceea6ffe Sven Eckelmann 2020-10-11  1071   *
+128254ceea6ffe Sven Eckelmann 2020-10-11  1072   * Return: 0 if successful or error otherwise.
+128254ceea6ffe Sven Eckelmann 2020-10-11  1073   */
+c19808cb1d05d1 Xiao Liang     2024-11-18  1074  static int batadv_softif_newlink(struct rtnl_newlink_params *params)
+128254ceea6ffe Sven Eckelmann 2020-10-11 @1075  {
+c19808cb1d05d1 Xiao Liang     2024-11-18  1076  	struct net_device *dev = params->dev;
+c19808cb1d05d1 Xiao Liang     2024-11-18  1077  	struct nlattr **data = params->data;
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1078  	struct batadv_priv *bat_priv = netdev_priv(dev);
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1079  	const char *algo_name;
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1080  	int err;
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1081  
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1082  	if (data && data[IFLA_BATADV_ALGO_NAME]) {
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1083  		algo_name = nla_data(data[IFLA_BATADV_ALGO_NAME]);
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1084  		err = batadv_algo_select(bat_priv, algo_name);
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1085  		if (err)
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1086  			return -EINVAL;
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1087  	}
+a5ad457eea41ef Sven Eckelmann 2020-10-11  1088  
+128254ceea6ffe Sven Eckelmann 2020-10-11  1089  	return register_netdevice(dev);
+128254ceea6ffe Sven Eckelmann 2020-10-11  1090  }
+128254ceea6ffe Sven Eckelmann 2020-10-11  1091  
 
-	  bitrate 500000 sample-point 0.875
-	  tq 12 prop-seg 69 phase-seg1 70 phase-seg2 20 sjw 10 brp 1
-	  dummyxl nominal: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 
-brp_inc 1
-	  dbitrate 4000000 dsample-point 0.750
-	  dtq 12 dprop-seg 7 dphase-seg1 7 dphase-seg2 5 dsjw 2 dbrp 1
-	  tdco 15 tdcf 0
-
-Should the tdc* values be placed behind dbrp 1 without a line break?
-The gso/gro stuff below also heavily exceeds the 80 columns. And it is 
-more in the same shape like with the CAN CC settings.
-
-	  dummyxl FD: dtseg1 2..256 dtseg2 2..128 dsjw 1..128 dbrp 1..512 
-dbrp_inc 1
-	  tdco 0..127 tdcf 0..127
-
-same here
-
-	  xbitrate 8000000 xsample-point 0.700
-	  xtq 12 xprop-seg 3 xphase-seg1 3 xphase-seg2 3 xsjw 1 xbrp 1
-
-xtdco/xtdcf missing here?
-
-	  dummyxl XL: xtseg1 2..256 xtseg2 2..128 xsjw 1..128 xbrp 1..512 
-xbrp_inc 1
-
-xtdco/xtdcf missing here?
-
-	  clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 
-gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 
-65536 gso_ipv4_max_size 65536 gro_ipv4_max_size 65536
-
-Best regards,
-Oliver
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
