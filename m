@@ -1,85 +1,92 @@
-Return-Path: <linux-can+bounces-2184-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2185-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C1989D65A0
-	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 23:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 06A519D65A3
+	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 23:17:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7526282397
-	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 22:17:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEA90282282
+	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 22:17:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE04118DF7F;
-	Fri, 22 Nov 2024 22:16:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C201AA792;
+	Fri, 22 Nov 2024 22:17:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="bkbNsZ9e"
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="ony2tUkd"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2900E18732B
-	for <linux-can@vger.kernel.org>; Fri, 22 Nov 2024 22:16:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52749189F36
+	for <linux-can@vger.kernel.org>; Fri, 22 Nov 2024 22:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732313818; cv=none; b=GZdEbGLFOoOy9k5NZvX6l5ITCLf2C8eHeff3rikMSjYSFZHLMiAjl/0chCalin6fSZ6I0LvzpqGJ91oV+g6FNGgkSe5ZV8UfbMSVcPIFRl0uaqKaC1Lj2+NrfNWvxjljFybFjv++zd5ddRWeJWasULIiuCIDcce67AOjnO592w0=
+	t=1732313820; cv=none; b=Tbims3Pl7lov7nx3i9D1JAANCpW2EBDjggAx6fOjpp3m2HqB1QozNPOpSqYyQMxEu9FrK/j9pRSyHRLGxHGqjXi6zMpSKuO1vSni55Cn6rENfRjcfUsiUir5muGCXs4HVR1QAMRgk8NJTu00C3iC1VOGIcivh81btDFd3J3/rvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732313818; c=relaxed/simple;
-	bh=ldxR7DmjrgRcjjZ1Z/p/luxN1xxh7dfLbpLVH96Oblw=;
+	s=arc-20240116; t=1732313820; c=relaxed/simple;
+	bh=cfN/Sqofe2yynbRgQXfBL6ERxMwzjmzkAWAp/j8LOdI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ogce8WtVViJwobtWyR3ULY9Y9p3umNTe7Hbk5D9cC2dMtp+QM1Ex8tbn73X+q/eFjM08P4BnU63RfZMnWOiaAXOP3ukat/xX/EWfME/WMReHdgaNtJPYn56AP7H+PSwzwSKD0KHCQMEpYGmBFBcLyKZAsrsd4T0veG87XD4XEjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=bkbNsZ9e; arc=none smtp.client-ip=209.85.167.44
+	 MIME-Version; b=J1D8iLssP1MWJBX/uqWXRppTQomC7UcX3MUkkaZr9yCmxefHtABv4/oJyhW1t/AjkyVpiIvAIZXPAfTOqPMvRRUaSWveDUf8XYYR07/N7QxTDmtXXaC/oK8dnBR14i/pE9ijSjFYQDU1vTrXY9LDxQRtMVS3GHRp527s6KxmZQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=ony2tUkd; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539e63c8678so2954854e87.0
-        for <linux-can@vger.kernel.org>; Fri, 22 Nov 2024 14:16:56 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-aa20944ce8cso662979666b.0
+        for <linux-can@vger.kernel.org>; Fri, 22 Nov 2024 14:16:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1732313815; x=1732918615; darn=vger.kernel.org;
+        d=amarulasolutions.com; s=google; t=1732313817; x=1732918617; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eXl+FSVARqVcRtIxq69Tn4oF98SIhVQqmrh7i+R1ZlE=;
-        b=bkbNsZ9eaWAvGMRAzTcz9B8FpGfDFioyNBSHHNJzxKhfa1QFmu++vLFtiVnXxbkcyF
-         +wFozAHgbeGaPcDup+3ENtLk22rJPmqmzcYO5l/jRjCx/OGeICUFaOhDLNnrJu0qvLFf
-         dq2Tu4aZ89taKZGrnQlmBSZV2/u0AbKun65D8=
+        bh=6HrdX116se3rn9QRZsQ51ceQKyywuhiVyeVP2xiWD4c=;
+        b=ony2tUkdauEIYZVEV/1jP8fiwqKeU4V4xvrVR4z5nok9zNeaZs1wGnAXaI1dj0N+tZ
+         KVJj3Bg83OubPEuE7KlXnFOYjYXtGqGhBb/hK6V8a0mM4ymG271Nv9CPoxaT3a7yVgv4
+         slHmejqsov+WI/jJuxWqKaCD86kYqO0FUmb38=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732313815; x=1732918615;
+        d=1e100.net; s=20230601; t=1732313817; x=1732918617;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eXl+FSVARqVcRtIxq69Tn4oF98SIhVQqmrh7i+R1ZlE=;
-        b=hmiDrDsREL509ERxpx1hImXQlD0puk7qEzg1Ljg+PLWuqAh4Gt2SzwTRZERgr0r60C
-         8YExWbUS9sF7ck91fRXkEs0W/1xrDhA1his1SaXapeAcRW3OmjjbHWFf3FAD1vGVasG8
-         E0sXj7PSrw+n77Fm9AlrWJcbceuS1sNjgS3LVBqHWAHqd+02jktfgRfmvoCcNQacSRgS
-         ObQcEddoHc2XWmdfpT2wIdh2tgayn0AlD7GE1PLvO7uzkbjwNWcRXPTxUmDbZqby5c51
-         SS896Sz8AKcShi4NIVygRudW4EEnZ+HsWQxvGGaDvYGVD9owqxWY2vO+C2xrk8YboE9V
-         q/Gg==
-X-Forwarded-Encrypted: i=1; AJvYcCWi6Dl2VDVYOtpIYERm0eYx4xy39bRnjXZmcKU7uomi1SZ/rqMLXaBcIAwy+wJJXaFB4UDCzFU7Lac=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxglU+jZ92jlGRDv2d956N7AOYC1pUGSfZBy8QcwKZRvIkoVX3J
-	sAXLyJP2abqiR995OmJxeH2NKCh23LKGf6mApBnKU8KlrNLGkUIwjiEQqYwVMEA=
-X-Gm-Gg: ASbGncue8YWKPdWsCxq0l2rzbKE17g2c/MBhoPt8UzN81JXqEhdN8JcKG1IweCW2mF7
-	8WEVsf+SzxEUlfn4L1yzqDOb5A16ggUfz8yYdBSYtwxSjgAFcg1r59lYvvaIXvhhZe3wZiYyKfB
-	B541JTQnSrOAta/91hf53SmRH9YaduigJBPSzcGcVod/tzcuMITVfTiQcHknaiu6yjs+SYAXCYB
-	1tpkNWZbiE5cxHp1bT9G9+rZ+fGETn5hFtQjgRys5vQ178ljvYqZh0GPSlKVUhmc+mdAsfs2EAo
-	8LLHa3GXYKFRnScjsXnhKIdw6erSkf4/qo/v6r4S6VItQsmAMUaBg4Ivlqfe34sdUPd/SyRWBfX
-	gLesuNVqKPwUzvE5G
-X-Google-Smtp-Source: AGHT+IHPZQFrM56J/OIyk1Q59hKMDjmlud7peYUn3uyJVNqixLxLsv4xopNTFKGImm55L3dfJExZHQ==
-X-Received: by 2002:a05:6512:39c3:b0:53d:d957:9f92 with SMTP id 2adb3069b0e04-53dd9579fd5mr1789697e87.9.1732313815331;
-        Fri, 22 Nov 2024 14:16:55 -0800 (PST)
+        bh=6HrdX116se3rn9QRZsQ51ceQKyywuhiVyeVP2xiWD4c=;
+        b=OD330HDAJ7VOGSmbFBPtlDMhoIIFyqafP61F9ZZAit5ziwQMgv4I4apjSrNpAxybUZ
+         rc/qfKIlTHKL/ENbrB3ChQYDq1F6tKK+yp+lTdMru1HUvynAC0VOPiS3Wg4kVLnaVMGg
+         K7kuzBy7T7nXJ0A12RTVypbZuYhRk1Ja74pBmMmAQ/K+z7JV2koO9csPX6puBc2GG2GP
+         M1PajWXl3qQJ/TnO3rhRZ8amNP7N2fn3tcncc/wcV9dS/8eU6ffRO0ieKX05Yb/9Jhql
+         P49heVI1eR683NkyUR0fasFknkO8bOAoPVvUlkBXNBFXdhLl9jUMMYc4wTHCumwkTgDw
+         getw==
+X-Forwarded-Encrypted: i=1; AJvYcCXbOzkHONf5Q5qBebmrqcPDJ10beRRLFyAm0PX8RV9lkhTshmjLxDc88OAG7wO4jHznn24nTRkZ2pY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhB35ubVeIinfIZs1rO3wBRiLk5saEW8pVO4l9Ug3K611vP2Fs
+	wz5NeNjMdOX7Sc33kDqJz6JksPD8uHQbWrgpeugAUhbifQY1DzwURAAMH2DUlHE=
+X-Gm-Gg: ASbGncuI71BE8MUiL9yGxA/Cy/7lUn+DxwMRSQLgE6DDXYoyRL4KPmMM/vHXWA/Dq/I
+	uxoooeVOXqjoDLuRtXR86SziBUGIyXrbx8m5qqZ4LEauuJO5ao+auATcotm5Dw8AKmV6Cb8PwpI
+	C057Q7WA7OnH8DCJYDPEvzR7ItoSD4iCe1OQKeq0TWiX+MttAamH6eb1pMzF3pDjcyTfMikX8kv
+	soHPRWW11OlaZFfnU/aafUOND6mhJIm4iDKdbzJIP8bCj6tAk27wwV3/SBlWGI7xYRjSW7pRykh
+	anErrosjwi0Z8dVa1yCKZ304avQYE5yoVQQJ8nrJt1jB4Of0rfHa4KoKxhQ/LqA3KUn2ExUYYmV
+	Cjjqs9KCsZXrm+2hK
+X-Google-Smtp-Source: AGHT+IHRSafR/Hd70o+h3rYpO/7VHYMjBwxEdj1MERjp9IAi6352iOe+u8OcuPheRZbM1LDn8364LQ==
+X-Received: by 2002:a17:906:31c1:b0:aa5:24df:ca8 with SMTP id a640c23a62f3a-aa524df1311mr297959966b.18.1732313816670;
+        Fri, 22 Nov 2024 14:16:56 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-82-54-94-193.retail.telecomitalia.it. [82.54.94.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b52fcebsm148226466b.127.2024.11.22.14.16.54
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b52fcebsm148226466b.127.2024.11.22.14.16.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2024 14:16:55 -0800 (PST)
+        Fri, 22 Nov 2024 14:16:56 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: linux-kernel@vger.kernel.org
 Cc: linux-amarula@amarulasolutions.com,
 	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Gerhard Bertelsmann <info@gerhard-bertelsmann.de>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Maxime Ripard <mripard@kernel.org>,
+	Samuel Holland <samuel@sholland.org>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	linux-can@vger.kernel.org
-Subject: [PATCH v2 01/12] can: c_can: update statistics if skb allocation fails
-Date: Fri, 22 Nov 2024 23:15:42 +0100
-Message-ID: <20241122221650.633981-2-dario.binacchi@amarulasolutions.com>
+	linux-arm-kernel@lists.infradead.org,
+	linux-can@vger.kernel.org,
+	linux-sunxi@lists.linux.dev
+Subject: [PATCH v2 02/12] can: sun4i_can: call can_change_state() even if cf is NULL
+Date: Fri, 22 Nov 2024 23:15:43 +0100
+Message-ID: <20241122221650.633981-3-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241122221650.633981-1-dario.binacchi@amarulasolutions.com>
 References: <20241122221650.633981-1-dario.binacchi@amarulasolutions.com>
@@ -91,10 +98,12 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch ensures that the statistics are always updated, even if the
-skb allocation fails.
+The function can_change_state() can also be called if the allocation
+of the skb fails, as it handles the cf parameter when it is null.
+Additionally, this ensures that the statistics related to state error
+counters (i. e. warning, passive, and bus-off) are updated.
 
-Fixes: 4d6d26537940 ("can: c_can: fix {rx,tx}_errors statistics")
+Fixes: 0738eff14d81 ("can: Allwinner A10/A20 CAN Controller support - Kernel module")
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 ---
@@ -102,80 +111,28 @@ Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Changes in v2:
 - Added in v2
 
- drivers/net/can/c_can/c_can_main.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+ drivers/net/can/sun4i_can.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/can/c_can/c_can_main.c b/drivers/net/can/c_can/c_can_main.c
-index 511615dc3341..cc371d0c9f3c 100644
---- a/drivers/net/can/c_can/c_can_main.c
-+++ b/drivers/net/can/c_can/c_can_main.c
-@@ -1014,49 +1014,57 @@ static int c_can_handle_bus_err(struct net_device *dev,
+diff --git a/drivers/net/can/sun4i_can.c b/drivers/net/can/sun4i_can.c
+index 360158c295d3..17f94cca93fb 100644
+--- a/drivers/net/can/sun4i_can.c
++++ b/drivers/net/can/sun4i_can.c
+@@ -629,10 +629,10 @@ static int sun4i_can_err(struct net_device *dev, u8 isrc, u8 status)
+ 		tx_state = txerr >= rxerr ? state : 0;
+ 		rx_state = txerr <= rxerr ? state : 0;
  
- 	/* propagate the error condition to the CAN stack */
- 	skb = alloc_can_err_skb(dev, &cf);
--	if (unlikely(!skb))
--		return 0;
- 
- 	/* check for 'last error code' which tells us the
- 	 * type of the last error to occur on the CAN bus
- 	 */
--	cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
-+	if (likely(skb))
-+		cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
- 
- 	switch (lec_type) {
- 	case LEC_STUFF_ERROR:
- 		netdev_dbg(dev, "stuff error\n");
--		cf->data[2] |= CAN_ERR_PROT_STUFF;
-+		if (likely(skb))
-+			cf->data[2] |= CAN_ERR_PROT_STUFF;
- 		stats->rx_errors++;
- 		break;
- 	case LEC_FORM_ERROR:
- 		netdev_dbg(dev, "form error\n");
--		cf->data[2] |= CAN_ERR_PROT_FORM;
-+		if (likely(skb))
-+			cf->data[2] |= CAN_ERR_PROT_FORM;
- 		stats->rx_errors++;
- 		break;
- 	case LEC_ACK_ERROR:
- 		netdev_dbg(dev, "ack error\n");
--		cf->data[3] = CAN_ERR_PROT_LOC_ACK;
-+		if (likely(skb))
-+			cf->data[3] = CAN_ERR_PROT_LOC_ACK;
- 		stats->tx_errors++;
- 		break;
- 	case LEC_BIT1_ERROR:
- 		netdev_dbg(dev, "bit1 error\n");
--		cf->data[2] |= CAN_ERR_PROT_BIT1;
-+		if (likely(skb))
-+			cf->data[2] |= CAN_ERR_PROT_BIT1;
- 		stats->tx_errors++;
- 		break;
- 	case LEC_BIT0_ERROR:
- 		netdev_dbg(dev, "bit0 error\n");
--		cf->data[2] |= CAN_ERR_PROT_BIT0;
-+		if (likely(skb))
-+			cf->data[2] |= CAN_ERR_PROT_BIT0;
- 		stats->tx_errors++;
- 		break;
- 	case LEC_CRC_ERROR:
- 		netdev_dbg(dev, "CRC error\n");
--		cf->data[3] = CAN_ERR_PROT_LOC_CRC_SEQ;
-+		if (likely(skb))
-+			cf->data[3] = CAN_ERR_PROT_LOC_CRC_SEQ;
- 		stats->rx_errors++;
- 		break;
- 	default:
- 		break;
+-		if (likely(skb))
+-			can_change_state(dev, cf, tx_state, rx_state);
+-		else
+-			priv->can.state = state;
++		/* The skb allocation might fail, but can_change_state()
++		 * handles cf == NULL.
++		 */
++		can_change_state(dev, cf, tx_state, rx_state);
+ 		if (state == CAN_STATE_BUS_OFF)
+ 			can_bus_off(dev);
  	}
- 
-+	if (unlikely(!skb))
-+		return 0;
-+
- 	netif_receive_skb(skb);
- 	return 1;
- }
 -- 
 2.43.0
 
