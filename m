@@ -1,141 +1,121 @@
-Return-Path: <linux-can+bounces-2177-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2179-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DB4E9D6090
-	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 15:40:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE2019D60E1
+	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 15:53:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 255971F222D5
-	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 14:40:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46341B281D2
+	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 14:53:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C9F57E0E8;
-	Fri, 22 Nov 2024 14:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A1B146A69;
+	Fri, 22 Nov 2024 14:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="Xng8Dcjw"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108AC13A3E4
-	for <linux-can@vger.kernel.org>; Fri, 22 Nov 2024 14:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884EA7081B;
+	Fri, 22 Nov 2024 14:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732286227; cv=none; b=XVgfl0bquc202/r+HfW9TpWpWtAk+M9rey3Jb5cjMdz8EtXEmZV2Q+vKWGzVgC/UyT7O8qqDrOhf76kIvaXh+tpsNXfZCu76xGFDdzZZ+eA4S+XagMz2x8umQSYnhzT3Yz/fcH2K+KOlr/BpOvaKPH/q1TP3q9J7GDVmoKN5JMQ=
+	t=1732287182; cv=none; b=KoakrB1xddmaj7qfo+WV61XbClLj7Wpdwf5BhV9iQlOVKKfFBJgglruf+p55dRm3Z+xKvh18PSM8OmDZ4tIDqH3MrST5PKs3LhVJo7swlcxePCU+xalgFGFCdXXVL1spqJvfii3lFvG28nJo3gMmDnmgfFAGe3JuNWAf2gRGXm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732286227; c=relaxed/simple;
-	bh=tpxFAZkyZspcgy8QnHv0cv67C1qduITx3cyu/nUuL3o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nWgpqTnHwdZmSAyKttoA5edSXyuX+A1MMsns/x5abtC02AbVwsnWfLVT+2BP2T8PmQmbP6etE+7VrUTrQppl05XfAeLRjFPAVSUIgtwNjonRVnQEgHWChvBz+zFDBNSDTWsqu+XgM9ptRhMt3j1eMpTcJE+UeL/eGcoiU5vqcOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6e377e4aea3so17242917b3.3
-        for <linux-can@vger.kernel.org>; Fri, 22 Nov 2024 06:37:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732286223; x=1732891023;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZklfME25XvyzUVchjCMWUKA5GZeWxdi5x6GGSsPFFow=;
-        b=MQO1fW4O9NiSRYurVlcNfSnyhFQuvCSh2Ovau6jdeCYmWu/v+8dKTWBijgEXkxL9Ai
-         TFwd4+gG0isYMAimGG69FqTMqp48FmCyIWr4Z6CTSxge9qlOVlzN36DHyxetJP9K8O1C
-         p7xqodi/Yd4esQ98hwPkjP1DTGxIkd5asYXZD856NsKrqfUNgjW6K0DQUEwiKQ3HFaTk
-         fhhizLKxodyvouqZzkFPRP3LVianqfPbE8o359wIYEHEKZigZuJZzmhwROu/ipkYV672
-         YM/mRmp29o70E8OLGsoze8GOcexsWAOohK87fvjusXj0rQQUJbSc8P8l2x2SZFIwK5C3
-         7vsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWrqXZVjjWAC8G14Wvlp7Gx6qWsP7Kj8mfa1OTCRASWUurDWOskTC56SPLJuRyJUadk6h4aAocO0hQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPl+iv9LjMuU8iqyGDqv1S7JaMuT92bP3w+6Jo/XIp9dV1TfgV
-	6ZPorbkNYSMZYxCUti/O0JcXwDMo75WE+tSXrrWjduayvzqPL2ON1WTX1PND
-X-Gm-Gg: ASbGncv/gqkj3uqo8eyLzY4RfgwXK4G0w/nIvOP5T3vx0+DWQVnAzlY0Jb2ymzcXA7X
-	5kbYMz+KXa/8GFHGefYIZBYN+bklLUho7Lnl7y8siKjwBz0DaGUQbPMVcYTGd7hZXl50N00OsTM
-	MbgDLCqv/xXcy5+BS6JRMXVo5IUbiYhmPCxJk/YdNpRWS59dJQUVtRlGAgQECpKEmEHRmfBc8gP
-	ZyV+1XZ5sTZppD6ChP/3I3ceOoJ/4s2Y/JAcKimMZhqIZl72UEZ+YwCVjQxEy6BVnNSp62Ua3o3
-	lOAgcP99CD9Ckop9
-X-Google-Smtp-Source: AGHT+IGfsI51G7ALadYulhhVtFzXIflVlPInUKckTAwpETwx3VTaKW+LLge8ZaDcIVZkT19fAkMVYw==
-X-Received: by 2002:a05:690c:6c01:b0:6c3:7d68:b400 with SMTP id 00721157ae682-6eee089f2fcmr40115407b3.10.1732286222515;
-        Fri, 22 Nov 2024 06:37:02 -0800 (PST)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6eee00823desm4712257b3.79.2024.11.22.06.37.02
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Nov 2024 06:37:02 -0800 (PST)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6eebb54fc48so21333797b3.1
-        for <linux-can@vger.kernel.org>; Fri, 22 Nov 2024 06:37:02 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWi2ec9MVxKaZrjAurn7ryZQszDzs8ZegjMrCA4OyUYpWEjXjVlxiUvF6cOzqr1rk9wS7RZ4Ir5818=@vger.kernel.org
-X-Received: by 2002:a05:690c:4a0e:b0:6e3:453f:fbd5 with SMTP id
- 00721157ae682-6eee0a4cd2fmr32735817b3.36.1732286221999; Fri, 22 Nov 2024
- 06:37:01 -0800 (PST)
+	s=arc-20240116; t=1732287182; c=relaxed/simple;
+	bh=hIZ/xDPyN/1QHmTijlYLd6msZPWHwDvrTt3hWM2PkCc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jmm+plPfPJBxnhPct9O6r2I/mu1a+WJ040UMqi0rmQ/u9cxInFJjneQsd+hDkzvPKfT9aNQkiyrsrzlJ/FE2Tipm/0MldUE4UCNKljxaxny4kZ2S/O9nwPP9BUoi194kGQf5Pm9YRilyLtvBprwF/3fAlZzpBEW0WNhq6g/3voA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=Xng8Dcjw; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References; bh=sqvgtVEOVfoQ6/LkzH6KDQcRvaoEUvwUSz00hqpnSEs=; b=Xn
+	g8Dcjw/fu959XMnoRvIRZTmyJdRXsW3DFe2v/CR1tlv+SpJC1RKHGxFUQni1FAbLNt3ZK/Oo4qyZB
+	sT+biwVHvAYPeHMiWmfnwU4JChP8K9R8QI+75bWfeWleELEaaXIoSgBbbLiD9bfucFji/KsVOZYPD
+	OWUZY2KRYlUYqxABcsZKeWrAmHig6Eik+ZzguAxKPsR+jjAMjevhEaGVxxo/YW2ZnwwLwMvbYwMlk
+	07Y0WZE5UnZgGLBZpiAvnDMbGDsNrkyvTtWMzBZVNHmZEhQfS7WAx//DLHCtyvp90tfg79i7mJhFO
+	f5SxAmxI2kZkVcHH/YaWjB5boGVOSZPA==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <sean@geanix.com>)
+	id 1tEV1W-000KIC-1U; Fri, 22 Nov 2024 15:52:42 +0100
+Received: from [185.17.218.86] (helo=zen.localdomain)
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <sean@geanix.com>)
+	id 1tEV1V-000HFz-2d;
+	Fri, 22 Nov 2024 15:52:41 +0100
+From: Sean Nyekjaer <sean@geanix.com>
+Subject: [PATCH can-next v3 0/3] can: tcan4x5x/m_can: use standby mode when
+ down and in suspend
+Date: Fri, 22 Nov 2024 15:52:21 +0100
+Message-Id: <20241122-tcan-standby-v3-0-90bafaf5eccd@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241022130439.70d016e9@endymion.delvare> <CAMZ6RqJxb-52eSPqvaESjA-Wd_Jd-=gFO1HWbzxWe3gx7GWDmA@mail.gmail.com>
- <dcced72-7be1-b44-432a-dac2ad7f4cc6@linux-m68k.org> <20241121145017.33ca43f7@endymion.delvare>
- <CAMuHMdXU8tMPbHMDZmU=0xd-X6OqxO_3j=iLDR2XQ4q3URw2RQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdXU8tMPbHMDZmU=0xd-X6OqxO_3j=iLDR2XQ4q3URw2RQ@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 22 Nov 2024 15:36:50 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUGFaa4Fj1ixNJiEtbsneweveb6oq80X2Xe9i0ZN4FVKA@mail.gmail.com>
-Message-ID: <CAMuHMdUGFaa4Fj1ixNJiEtbsneweveb6oq80X2Xe9i0ZN4FVKA@mail.gmail.com>
-Subject: Re: [PATCH] can: rockchip_canfd: Drop obsolete dependency on COMPILE_TEST
-To: Jean Delvare <jdelvare@suse.de>
-Cc: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org, 
-	kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>, Miguel Ojeda <ojeda@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKWaQGcC/12NzQ7CIBAGX6XZsxh+WlFPvofxAHTbcpAaIISm6
+ buLeLEev8zO7AoBvcUA12YFj8kGO7syxKEBMyk3IrF92cApbxmjkkSjHAlRuV4vpMdBdGcpmeY
+ aivLyONhcc3f4HDrMER6FTDbE2S/1T2KVf5OM7ZOJEUqGixAStTKI6jaicjYfzfyspcR/7e7P5
+ sVuUdOCT5oLubO3bXsDFyKugfEAAAA=
+X-Change-ID: 20241107-tcan-standby-def358771b2b
+To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Sean Nyekjaer <sean@geanix.com>
+X-Mailer: b4 0.14.2
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27465/Fri Nov 22 10:41:26 2024)
 
-On Fri, Nov 22, 2024 at 3:33=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
-k.org> wrote:
-> On Thu, Nov 21, 2024 at 2:50=E2=80=AFPM Jean Delvare <jdelvare@suse.de> w=
-rote:
-> > On Tue, 12 Nov 2024 12:15:06 +0100 (CET), Geert Uytterhoeven wrote:
-> > > On Tue, 22 Oct 2024, Vincent MAILHOL wrote:
-> > > > On Tue. 22 Oct. 2024 at 20:06, Jean Delvare <jdelvare@suse.de> wrot=
-e:
-> > > >> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), =
-OF
-> > > >> can be enabled on all architectures. Therefore depending on
-> > > >> COMPILE_TEST as an alternative is no longer needed.
-> > > >
-> > > > I understand the motivation behind this patch, but for me, as a
-> > > > maintainer, it becomes more work when I want to do a compile test.
-> > > > Before I would have needed to only select COMPILE_TEST but now, I
-> > > > would need to remember to also select OF for that driver to appear =
-in
-> > > > the menuconfig.
-> > >
-> > > IMHO these are two different things: to get a working driver, you nee=
-d
-> > > to enable OF;
-> >
-> > True.
-> >
-> > >(...) to do (may be limited, i.e. may not give a working driver)
-> > > compile-testing, you need to enable COMPILE_TEST.
-> >
-> > No, you don't *need* it. Enabling COMPILE_TEST is (or was) one way to
-> > do compile-testing, but it was not the only way. Which is the reason
-> > why it was dropped.
->
-> You could still do it the other way, by enabling CONFIG_OF.
+When downing the tcan4x5x there is no reason to keep the tcan4x5x in
+"normal" mode and waste power.
+So set standby mode when the interface is down and normal mode when
+interface is up.
 
-And you still need to enable COMPILE_TEST, to get around the
-ARCH_ROCKCHIP dependency...
+Also when going into suspend, set the tcan4x5x into standby mode. The
+tcan4x5x can still be used as a wake-source when in standby as low power
+rx is enabled.
 
-Gr{oetje,eeting}s,
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+---
+Changes in v3:
+- Run deinit in m_can_stop() in any case even if m_can_cccr_update_bits() fails
+- Link to v2: https://lore.kernel.org/r/20241115-tcan-standby-v2-0-4eb02026b237@geanix.com
 
-                        Geert
+Changes in v2:
+- Reduced code in tcan4x5x_deinit()
+- Taken care of return values from deinit callback
+- Link to v1: https://lore.kernel.org/r/20241111-tcan-standby-v1-0-f9337ebaceea@geanix.com
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+---
+Sean Nyekjaer (3):
+      can: m_can: add deinit callback
+      can: tcan4x5x: add deinit callback to set standby mode
+      can: m_can: call deinit/init callback when going into suspend/resume
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+ drivers/net/can/m_can/m_can.c         | 22 ++++++++++++++++++----
+ drivers/net/can/m_can/m_can.h         |  1 +
+ drivers/net/can/m_can/tcan4x5x-core.c |  9 +++++++++
+ 3 files changed, 28 insertions(+), 4 deletions(-)
+---
+base-commit: e0b741bc53c94f9ae25d4140202557a0aa51b5a0
+change-id: 20241107-tcan-standby-def358771b2b
+
+Best regards,
+-- 
+Sean Nyekjaer <sean@geanix.com>
+
 
