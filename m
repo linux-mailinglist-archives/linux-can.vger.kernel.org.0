@@ -1,150 +1,207 @@
-Return-Path: <linux-can+bounces-2195-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2196-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BCAF9D65B5
-	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 23:19:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B9989D663B
+	for <lists+linux-can@lfdr.de>; Sat, 23 Nov 2024 00:10:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C55DB2823FB
-	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 22:19:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15BA5283BBF
+	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 23:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010301E048A;
-	Fri, 22 Nov 2024 22:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F5518CC01;
+	Fri, 22 Nov 2024 23:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="aBwHWpdB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PtxtB+0L"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249441DFE3E
-	for <linux-can@vger.kernel.org>; Fri, 22 Nov 2024 22:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A24A189BBA;
+	Fri, 22 Nov 2024 23:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732313832; cv=none; b=Vd8jSAlOp9qv7+87L/TBanM90QE/zLEM/Gd66mOxDSDNjP2YjBxmOZgetNrcqawPcEvpiK4JtYxDZ4aDrLlwtcO9IvVw8Fke+NDbqnrTzva8qmIVY58jHIfsSzvMscxQUKSmgpkPkkfjS216ZPNZUbBfLA+B/vBRU4CvQ0JafQQ=
+	t=1732317038; cv=none; b=o4l11n/hopOLhDSqFcVsrL/s+oZpiTelDI1BNb93mGb0htSRaotis8IomefVTbcQZp6ltqxowtHcfOmtOx+bG40kblR//+0fnmlbCJ9P8/Yg84l8kSryRzRjSt4XZGiON7yIBHeeIEAiFF+uIn+SATDZTQpnH57l/snSF371wyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732313832; c=relaxed/simple;
-	bh=UIfE/i9uNl2q+Mi+kE8Q7UwUe7PKkReqlrcUvsBIvQg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jjfWqxWDO1p2OFfhHPjkG3Q+vdvMUJGvCdRYTOO8bgd1Tk2lUX05J1InPDWxixRf4ZaTVP0UaWo6SZTeIWm8UMbLrPNPl6FGqxneVKm0POOiirYdOtfLMcEM3REjhPVkIdFP4oDojrBfFVrvxLAXbSOXIpz+rc+7r6RIUYKDDC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=aBwHWpdB; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-53d9ff92ee9so3096753e87.1
-        for <linux-can@vger.kernel.org>; Fri, 22 Nov 2024 14:17:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1732313829; x=1732918629; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sIjLTiSdjHPZdtn456NOY4iL8rLUfrRnErOspsYBZzw=;
-        b=aBwHWpdBYtOMzrVwIkcQU/deEsfrwLJVBYkTWRzhekbIQ0QvtOK+ZtBgEzkeW9521y
-         fRJPF1n9Avbc3VXYXDNuDMMELY2bPSwgDYoGUxr7Wvz++vYndKJcKhbRS7Pksu9cp5CO
-         0aaRgIsbvQEZutrle1DH36U+MIMwgh3c1tyB0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732313829; x=1732918629;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sIjLTiSdjHPZdtn456NOY4iL8rLUfrRnErOspsYBZzw=;
-        b=TKtKtDP8tfZkkEBVxSlZcwIXpC+GquvVFjupVD+JwtZXRkayV+a+CBbSLPNreeundZ
-         nuLIiBlz3DEd4fRopWiqah4TRf1toOBIeV0Ce/mSDM1lVLZ5ZrH61WbbTqvL35qtBsqG
-         bnG3MbjmpuH2ri0ganIpdHGBagezBc5wyBPm2PQbnfdVP44nyJXtNRoXkybmfT6xTloj
-         KPXJRgP2SgxiJXMiEhRigZo3pp/xVyQdkI3mk6xPxp4ccChDjHLOFeP72k8xYr8Mu7f0
-         +tMqoVW5fI+j4XVbyQVMIrxDOWuiUYFgT7s5mDZNY1+P48gZUQkrClAF/GmMlULP46Pj
-         U7Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCXwNK4eO7smXepaSem9BqZjHKSzTrCpqYURpwcaseI+bvexbpEJrh4PErZ6EQKwdyMQCDxk2WRZN5Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7KAQz5aJmURMYzwRe+69iv4VsIK8T3DJzdnBx5JZXux/+me8T
-	NA4eDS6IxX+Hv8xhpAMx27MyQIBAqcQixY/jgxLMHf+dV2U51t2q0IPn2Aa7Gp3GZ68sh3lNzEe
-	x
-X-Gm-Gg: ASbGncu9ePxBK3lWvdxoEtBIx7pd98O85GquhZNacHvHQ6cIWjC9NzXG8PsSjHyjjbc
-	Ba/tlr01UnXAbdHJGy22TxHrGKSLvbA2f0P+96b6E6s4j3rbTifyx2wz3TSm5AyfIlfYCFfODGq
-	GYymwPBUgK4Q0dHkGbleVbdLGEpiF+GkU+YhNBk/eQpkFF4vy0FPSV8+2ftNSUsJNZZr2ipwLDK
-	c3OKLEYKrB1kScJH1nktoLjSZYJCyCi5zlsvbykREnjwVIr1TfL8inZlR0dqkO/RrbubeS65MpX
-	SeoP0QWNya2yBRdrYVpHxYGCvBO4UbpyN6QTQR5TmhUL9w0cbJ+nsG2hhoT8GVe+vHKWasc+uZM
-	WGhxmcFD/PIZ8LNX0
-X-Google-Smtp-Source: AGHT+IFzF09O/6bEbltd8l52ut4lZtd8WfeN0mrpAjDZSWj2O9HkQlqmxkwqoiHxqAM9cuMjAuwfqg==
-X-Received: by 2002:ac2:51b5:0:b0:53d:d3ff:77f6 with SMTP id 2adb3069b0e04-53dd3ff77fdmr2299001e87.46.1732313829337;
-        Fri, 22 Nov 2024 14:17:09 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-82-54-94-193.retail.telecomitalia.it. [82.54.94.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b52fcebsm148226466b.127.2024.11.22.14.17.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2024 14:17:09 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: linux-kernel@vger.kernel.org
-Cc: linux-amarula@amarulasolutions.com,
-	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-	"Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	linux-can@vger.kernel.org
-Subject: [PATCH v2 12/12] can: f81604: fix {rx,tx}_errors statistics
-Date: Fri, 22 Nov 2024 23:15:53 +0100
-Message-ID: <20241122221650.633981-13-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241122221650.633981-1-dario.binacchi@amarulasolutions.com>
-References: <20241122221650.633981-1-dario.binacchi@amarulasolutions.com>
+	s=arc-20240116; t=1732317038; c=relaxed/simple;
+	bh=rg4KHNnnEeVTWVIVzYwlcPs/NM4nUdpeTimePX7r2nY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rJPw/kmwfUrCXb3sOIcp7VzDSzDC20HjQXGqjWneQ8xjtN1+0spTf6xdDcI1e7jZJ538waWzfv67V5LSka1qS7OEFNUGWDAfBSnk6OJy0fHYfnEQe51lePee5g/qnTf/P6T6d482GTw63ljfuFyyZ+TaesROau/EBcQSqmdzoNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PtxtB+0L; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732317038; x=1763853038;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rg4KHNnnEeVTWVIVzYwlcPs/NM4nUdpeTimePX7r2nY=;
+  b=PtxtB+0L+e6oHfXKWxguG7vLA7ElAPQvfxnSkdbEOmg52QX7noFvXit3
+   vCLBFGDHNDM78q13jIt1ZdPmNgrlG6Bq7vZNpOsXXOjt2tz1pRqmhBlFW
+   L6GFiQhCc6KAIM6ef2GL5dVcZ4Nm6ZxXoLr5SwvGKWW2TVdAkP/60IYMY
+   wuxoCHVKdjwZwZOsSV0olTvhExAwIHFVKOROVdxfwPaIOEjTsPU70zzDx
+   h425rVkGdi7at3JF/C9EOJlixc9K23GTyrWePf23vfhZDM1LNjGOY9TwF
+   VY27eHrGAmHmRMAxn6vLa0LbRE+uWTaWwjNUi7vqIl6w/45TlEctmmb2I
+   A==;
+X-CSE-ConnectionGUID: zzOyAFecSKeZclkqaaTgIg==
+X-CSE-MsgGUID: YDdPoVk/RNyOhoHA+Ym10Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="32228175"
+X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
+   d="scan'208";a="32228175"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 15:10:37 -0800
+X-CSE-ConnectionGUID: nyI02MZhRs+DyRbiVgIqBQ==
+X-CSE-MsgGUID: ppn41E5DQyqo46xwD3yX1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
+   d="scan'208";a="91063475"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 22 Nov 2024 15:10:30 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tEcnE-0004H1-2W;
+	Fri, 22 Nov 2024 23:10:28 +0000
+Date: Sat, 23 Nov 2024 07:10:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
+	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+	linux@roeck-us.net, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+Message-ID: <202411230620.ncqamorB-lkp@intel.com>
+References: <20241121064046.3724726-7-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241121064046.3724726-7-tmyu0@nuvoton.com>
 
-The f81604_handle_can_bus_errors() function only incremented the receive
-error counter and never the transmit error counter, even if the ECC_DIR
-flag reported that an error had occurred during transmission. Increment
-the receive/transmit error counter based on the value of the ECC_DIR
-flag.
+Hi Ming,
 
-Fixes: 88da17436973 ("can: usb: f81604: add Fintek F81604 support")
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+kernel test robot noticed the following build errors:
 
----
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.12 next-20241122]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Changes in v2:
-- Fix patches 7 through 12 to ensure that statistics are updated even
-  if the allocation of skb fails.
-- Add five new patches (i. e. 1-5), created during the further analysis
-  of the code while correcting patches from the v1 series (i. e. 7-12).
-- Update statistics even if skb allocation fails
+url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Yu/mfd-Add-core-driver-for-Nuvoton-NCT6694/20241121-155723
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20241121064046.3724726-7-tmyu0%40nuvoton.com
+patch subject: [PATCH v2 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+config: hexagon-randconfig-r131-20241122 (https://download.01.org/0day-ci/archive/20241123/202411230620.ncqamorB-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20241123/202411230620.ncqamorB-lkp@intel.com/reproduce)
 
- drivers/net/can/usb/f81604.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411230620.ncqamorB-lkp@intel.com/
 
-diff --git a/drivers/net/can/usb/f81604.c b/drivers/net/can/usb/f81604.c
-index bc0c8903fe77..e0cfa1460b0b 100644
---- a/drivers/net/can/usb/f81604.c
-+++ b/drivers/net/can/usb/f81604.c
-@@ -526,7 +526,6 @@ static void f81604_handle_can_bus_errors(struct f81604_port_priv *priv,
- 		netdev_dbg(netdev, "bus error interrupt\n");
- 
- 		priv->can.can_stats.bus_error++;
--		stats->rx_errors++;
- 
- 		if (skb) {
- 			cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
-@@ -548,10 +547,15 @@ static void f81604_handle_can_bus_errors(struct f81604_port_priv *priv,
- 
- 			/* set error location */
- 			cf->data[3] = data->ecc & F81604_SJA1000_ECC_SEG;
-+		}
- 
--			/* Error occurred during transmission? */
--			if ((data->ecc & F81604_SJA1000_ECC_DIR) == 0)
-+		/* Error occurred during transmission? */
-+		if ((data->ecc & F81604_SJA1000_ECC_DIR) == 0) {
-+			stats->tx_errors++;
-+			if (skb)
- 				cf->data[2] |= CAN_ERR_PROT_TX;
-+		} else {
-+			stats->rx_errors++;
- 		}
- 
- 		set_bit(F81604_CLEAR_ECC, &priv->clear_flags);
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/nct6694-hwmon.c:263:15: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   frac_part = FIELD_GET(NCT6694_LSB_REG_MASK, data->xmit_buf[1]);
+                               ^
+>> drivers/hwmon/nct6694-hwmon.c:508:10: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                          FIELD_PREP(NCT6694_TIN_HYST_MASK, temp_hyst);
+                          ^
+   2 errors generated.
+
+
+vim +/FIELD_GET +263 drivers/hwmon/nct6694-hwmon.c
+
+   238	
+   239	static int nct6694_temp_read(struct device *dev, u32 attr, int channel,
+   240				     long *val)
+   241	{
+   242		struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
+   243		unsigned char temp_en, temp_hyst;
+   244		int ret, int_part, frac_part;
+   245		signed char temp_max;
+   246	
+   247		guard(mutex)(&data->lock);
+   248	
+   249		switch (attr) {
+   250		case hwmon_temp_enable:
+   251			temp_en = data->hwmon_en[NCT6694_TIN_EN(channel / 8)];
+   252			*val = temp_en & BIT(channel % 8) ? 1 : 0;
+   253	
+   254			return 0;
+   255		case hwmon_temp_input:
+   256			ret = nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
+   257					       NCT6694_TIN_IDX(channel), 2,
+   258					       data->xmit_buf);
+   259			if (ret)
+   260				return ret;
+   261	
+   262			int_part = sign_extend32(data->xmit_buf[0], 7);
+ > 263			frac_part = FIELD_GET(NCT6694_LSB_REG_MASK, data->xmit_buf[1]);
+   264			if (int_part < 0)
+   265				*val = (int_part + 1) * 1000 - (8 - frac_part) * 125;
+   266			else
+   267				*val = int_part * 1000 + frac_part * 125;
+   268	
+   269			return 0;
+   270		case hwmon_temp_max:
+   271			ret = nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD,
+   272					       NCT6694_HWMON_CMD2_OFFSET,
+   273					       NCT6694_HWMON_CMD2_LEN,
+   274					       data->xmit_buf);
+   275			if (ret)
+   276				return ret;
+   277	
+   278			*val = temp_from_reg(data->xmit_buf[NCT6694_TIN_HL(channel)]);
+   279	
+   280			return 0;
+   281		case hwmon_temp_max_hyst:
+   282			ret = nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD,
+   283					       NCT6694_HWMON_CMD2_OFFSET,
+   284					       NCT6694_HWMON_CMD2_LEN,
+   285					       data->xmit_buf);
+   286			if (ret)
+   287				return ret;
+   288	
+   289			temp_max = (signed char)data->xmit_buf[NCT6694_TIN_HL(channel)];
+   290			temp_hyst = FIELD_GET(NCT6694_TIN_HYST_MASK,
+   291					      data->xmit_buf[NCT6694_TIN_HYST(channel)]);
+   292			if (temp_max < 0)
+   293				*val = temp_from_reg(temp_max + temp_hyst);
+   294			else
+   295				*val = temp_from_reg(temp_max - temp_hyst);
+   296	
+   297			return 0;
+   298		case hwmon_temp_max_alarm:
+   299			ret = nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
+   300					       NCT6694_TIN_STS(channel / 8), 1,
+   301						   data->xmit_buf);
+   302			if (ret)
+   303				return ret;
+   304	
+   305			*val = !!(data->xmit_buf[0] & BIT(channel % 8));
+   306	
+   307			return 0;
+   308		default:
+   309			return -EOPNOTSUPP;
+   310		}
+   311	}
+   312	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
