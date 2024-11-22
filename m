@@ -1,163 +1,170 @@
-Return-Path: <linux-can+bounces-2168-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2169-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 289E09D54EC
-	for <lists+linux-can@lfdr.de>; Thu, 21 Nov 2024 22:45:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BEF19D59DC
+	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 08:20:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77FD92848B7
-	for <lists+linux-can@lfdr.de>; Thu, 21 Nov 2024 21:45:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 846D6B2283E
+	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2024 07:20:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23741DDC39;
-	Thu, 21 Nov 2024 21:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE0F916BE0D;
+	Fri, 22 Nov 2024 07:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BNFcApkC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dZHyrcmh"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2C71DBB19;
-	Thu, 21 Nov 2024 21:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A5C15B987;
+	Fri, 22 Nov 2024 07:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732225505; cv=none; b=R33sdyZoXyCKDyPFYavTW9tUrhzKtcIj3NC7HACs1Jdae7o7+WQYbYfIkJC0AjlP+hDcwgm7VUjwNMkOe1gwHKa6m0L4VkANTYEtITtImU0UT3zgOXd90rISlyKgh5YNQ2DQgqtWySgAYoAdIfzmAZXfLTFElKUr4J0/+rONMe4=
+	t=1732260019; cv=none; b=S1Ow8DcubwEnhbBAfED2VhnOAJNUxzQoZIwcyWescPYnYsmwigpNv5WJ/Av1P4ixqGbJR1/rsuYiekNHI3YDGf7lkGIHERrQtQ9vvLdBSWHNgCiqGnUtnfv4C5J+HPOOMY9mOPZWCTWDkuhnYLBrCKxG9ABCqdCFfCHqslNXljU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732225505; c=relaxed/simple;
-	bh=NIUcN6+T+wki60rCRnwepyQ8KRF0PBbMkb47VLXLqKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dVjNpgzoCzoV3P1SY4M70VTAZDlaKb1VAwsEM1ItD1jSqnZ8oEk4WbA4Yunuk6z/XrGBwY98cbCOG6yyN8Y5LUwzUJUxn2ke5vVrTyBL2hpXx5sUPfyED/Yex9E+kuvhjlDku0JhfrIeEnH7gxMJTIFYcRdTDLF3XzpUc0yYB/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BNFcApkC; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732225504; x=1763761504;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NIUcN6+T+wki60rCRnwepyQ8KRF0PBbMkb47VLXLqKM=;
-  b=BNFcApkCceVM9sS7dM7XHFFI8lIuy0mmm3XqLpRVhM+3qy5qt7P8kU4T
-   f/8rIOxMJXlnwqnAi+F/DijxT8xYFwtyGKOLXSj+8Tb23nEbIwvBWQewe
-   cFUuZd92N6PDupXXYMyNHL+GuBAQExGC+OITiX7sY8pwYweFr45jgh2p1
-   6ArBuuiGy1vRY6YcTCdIeuNsjVizmxfhe0ZtF/V4MN5DveTlaWvScF5Rt
-   7m/pbMhsNuxyC8wQ256oABy1O6lp+x9sVy6QFMHLOSQ6sVLGvcLzF0T5B
-   nDnRm8CHu7/JpKQSCWQzAva8/7hLpyH4mPx+Efl2AhMNXL47O4aZBD7+8
-   w==;
-X-CSE-ConnectionGUID: UGYcYd7LRrqR+VMlrOAW0g==
-X-CSE-MsgGUID: oCnwJEQ7Rc6PzIy/7uIaPA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="32514204"
-X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="32514204"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 13:45:01 -0800
-X-CSE-ConnectionGUID: xdpPO1RmQrC72kpFCsgzmg==
-X-CSE-MsgGUID: zhZedUIBSeupQFYJAgkZ8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="90753178"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 21 Nov 2024 13:44:56 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEEyr-0003O1-1A;
-	Thu, 21 Nov 2024 21:44:53 +0000
-Date: Fri, 22 Nov 2024 05:43:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xiao Liang <shaw.leon@gmail.com>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>
-Cc: oe-kbuild-all@lists.linux.dev, David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Jiri Pirko <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
-	linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
-	osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
-	linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-	linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
-	bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v4 3/5] rtnetlink: Decouple net namespaces in
- rtnl_newlink_create()
-Message-ID: <202411220516.rokej98E-lkp@intel.com>
-References: <20241118143244.1773-4-shaw.leon@gmail.com>
+	s=arc-20240116; t=1732260019; c=relaxed/simple;
+	bh=sBFVC7C9RINBCv8fmIUVR8aRbHxatozvHOs/XUgRHwk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LcqXhhUM21pVJijXJcpHkxIGfk04a0cAQE4avFL+1K7RqiYu50MUOY94fl2Z1hBydBaG6Mdbw3vzed7g76N3HW08fpWyTmM1Z7qKOMMj3iezuAjHuH9rUpTzwgB4KTHk4C/ZioLWNs6/pFhMeN9VdczG8dIWjfXG72E8POYRS4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dZHyrcmh; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e388c3b0b76so1529394276.0;
+        Thu, 21 Nov 2024 23:20:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732260017; x=1732864817; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=815PRNAXGixKSoavwJ5I7tnTzuqoesWmtEB/fULSXqw=;
+        b=dZHyrcmhAVuMbbK8SA4sxXyh2C9Qa9DP7/0Ibjp4RWUPHNXSzLwCrLIc9ZE6L5CACE
+         wThQYCteTbEPAoo5DxC/s0mIxiYMPqpf5nWeU2k5dxlyH9mhQVD++llrORBTXq+1xW5J
+         2hZZJ0EQPMJNmrTFyqvWHR9hq8AMNU/wddf24LJ5fnez49uL2zpAY7PLFNHWTIn0MUWA
+         OjQYg57lcx+q7uKFJ82oPPJBULaUp9qHIwP7+hB1+V/AenKQHJSJQAFmqNU5h9NjVnCS
+         JAk/6LbnX1+MyM5hL6E5PrlCjfVGI7be88Gb8+R8FpQnagrQKwMrOREY+5bE4jqvSzTI
+         gIBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732260017; x=1732864817;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=815PRNAXGixKSoavwJ5I7tnTzuqoesWmtEB/fULSXqw=;
+        b=WeGZHeJc5m6d4uYc3qS2F2AGUchkyr2x7iILG/ohGoeVrZOtEYhFjfjVNc71z948VX
+         u+IhzlPyx8lzSxz1aJCwm17ZDmHjWJwCV6z6l192cHuoy2D/mBHcrU0xdsO3R2NMjVtx
+         k/rmwCw2q9HkHflVbAUD07+r5Hvi5znjEayZ7txXvSbyIm8fkQE3nnAXvXLOakAOwlxp
+         uHoJkAMXUB6akSHLkEZH8iHRHWFCmgwoc/DksyVjjwiIKPUO7GMTOOFMwkmXgWt+DvhV
+         Fq3q0WK2LN4n46ktECySUr87/jHeZP/bYlF+cX26VD4/b5BucxJMWZaiHJlOmIxSu8w3
+         X9VQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUF4XUvY4poZ3dNFFKGjVWjuCM54CxWitCGyfRaAzc8ioggQvaodNvhgBd+aCRGqTzqPM1S55WYI2OOqTFX@vger.kernel.org, AJvYcCVILqoG4reSE/HhktxRv9V+xuX9B6KP51o58ZFNX7aKbuo/86W2mua9IEi1V0XVRgF+WbBaK9bOx6f/I22Lvsk=@vger.kernel.org, AJvYcCViAtX8Qu/zwr9cUgewfQUgGI0pDEKV87KeH0JldFPK0ma3+OsQZgcEEAS7CN/Squ93rLIdUSrDL/sRpA==@vger.kernel.org, AJvYcCVj0yDbwFpVlo6w54EWmQ+RtX5xg8ALnCiEOOE7txifhsYfcdO437l1mNB9hy60ozI3eEoufJeD4utrB7I=@vger.kernel.org, AJvYcCW7mWRC4dA0e7wn56as4yX0iUOjErqjTaMhsFaFaRt4tQq2V+F1349z7bGS1UL+5l7oSjGzuhnP1Fg=@vger.kernel.org, AJvYcCWBMy2CSp6WnyLhH6lFb2nkA9R67+kcnHB68tTyv+5WpOjnv6+KVL5nxhHiwRhfDOTTo575OCA2pLnb@vger.kernel.org, AJvYcCWGG0yPKLiL2biTMr6C04ScIubQWj3woIQsoo46VnH4B2Iqa12YC/emg1lScNMVQYSKOq/21IS/EkwT@vger.kernel.org, AJvYcCXa+joCqNVSA0edxD2f4HDiCzQ6IOYt2Am1UNcom7jc3l+RLgeVSL1l75ZCQD727tqQUIeQTTTd@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyx2Wk7fXhHFsHFA0Wj9xo4xqnJGAgKAnRho3/ZtYJZMulenrgA
+	5s5j6pMu8vnB7cXWn9J9hykpXmVQU4tXBNIJx3dzwR8Nqp4xLNgZPDUjNs3YLkNepKHGhpPU9n+
+	oxdxwI7eSTnLP5Q1uZoiR+8A9o34=
+X-Gm-Gg: ASbGncsbK27821sCgQ0yBn1GI9r4Wo9BJm0U2NV9ArM078W9y9Of42txhz8dB0o5r1r
+	0lamvdjAd8BPiZ00K/hFdbby0wf/QuLk=
+X-Google-Smtp-Source: AGHT+IEo9z3KG+qp+L7Dv7o9KTWLJa02iuVvebytFW0OHFU307Dg/AvnlIih0s/Axe8p+7QfLYX633cDQcq1B3yoR4c=
+X-Received: by 2002:a05:6902:114d:b0:e38:b48b:5fc2 with SMTP id
+ 3f1490d57ef6-e38f8bda124mr1654950276.36.1732260017069; Thu, 21 Nov 2024
+ 23:20:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241118143244.1773-4-shaw.leon@gmail.com>
+References: <20241121064046.3724726-1-tmyu0@nuvoton.com> <20241121064046.3724726-3-tmyu0@nuvoton.com>
+ <CAMRc=MdT_iXoRJeGFEhuCvjVXVPpJVNeddPc6pi5agTaTm+QpQ@mail.gmail.com>
+In-Reply-To: <CAMRc=MdT_iXoRJeGFEhuCvjVXVPpJVNeddPc6pi5agTaTm+QpQ@mail.gmail.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 22 Nov 2024 15:20:06 +0800
+Message-ID: <CAOoeyxVzVF0Jiiv1MeY6b=2XR5HFuGx+4q8Kvw3kFrgC+_LnBw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] gpio: Add Nuvoton NCT6694 GPIO support
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Xiao,
+Dear Bartosz,
 
-kernel test robot noticed the following build warnings:
+Thank you for your comments,
 
-[auto build test WARNING on net-next/main]
+Bartosz Golaszewski <brgl@bgdev.pl> =E6=96=BC 2024=E5=B9=B411=E6=9C=8821=E6=
+=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=884:28=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> > +struct nct6694_gpio_data {
+> > +       struct nct6694 *nct6694;
+> > +       struct gpio_chip gpio;
+> > +       struct mutex lock;
+> > +       /* Protect irq operation */
+> > +       struct mutex irq_lock;
+> > +
+> > +       unsigned char xmit_buf;
+> > +       unsigned char irq_trig_falling;
+> > +       unsigned char irq_trig_rising;
+> > +
+> > +       /* Current gpio group */
+> > +       unsigned char group;
+> > +
+> > +       /* GPIO line names */
+> > +       char **names;
+>
+> You only use this in probe() and after assigning it to gc->names, you
+> never reference it again. You don't need this field here, it can be a
+> local variable in probe().
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiao-Liang/net-ip_tunnel-Build-flow-in-underlay-net-namespace/20241121-112705
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241118143244.1773-4-shaw.leon%40gmail.com
-patch subject: [PATCH net-next v4 3/5] rtnetlink: Decouple net namespaces in rtnl_newlink_create()
-config: arc-randconfig-002-20241122 (https://download.01.org/0day-ci/archive/20241122/202411220516.rokej98E-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411220516.rokej98E-lkp@intel.com/reproduce)
+Understood. I will modify it in the next patch.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411220516.rokej98E-lkp@intel.com/
+> > +};
+...
+> > +
+> > +       data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> > +       if (!data)
+> > +               return -ENOMEM;
+> > +
+> > +       data->names =3D devm_kzalloc(dev, sizeof(char *) * NCT6694_NR_G=
+PIO,
+>
+> devm_kcalloc()?
+>
 
-All warnings (new ones prefixed by >>):
+Okay, fix it in v3.
 
->> net/batman-adv/soft-interface.c:1075: warning: Function parameter or struct member 'params' not described in 'batadv_softif_newlink'
->> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'nets' description in 'batadv_softif_newlink'
->> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'dev' description in 'batadv_softif_newlink'
->> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'tb' description in 'batadv_softif_newlink'
->> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'data' description in 'batadv_softif_newlink'
->> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'extack' description in 'batadv_softif_newlink'
+> > +                                  GFP_KERNEL);
+...
+> > +       mutex_init(&data->irq_lock);
+> > +
+> > +       platform_set_drvdata(pdev, data);
+>
+> There is no corresponding platform_get_drvdata() so you don't need this.
+>
+
+Okay, I'll drop it.
+
+> > +
+...
+> > +module_platform_driver(nct6694_gpio_driver);
+> > +
+> > +MODULE_DESCRIPTION("USB-GPIO controller driver for NCT6694");
+> > +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> > +MODULE_LICENSE("GPL");
+>
+> It's an MFD device, don't you need a MODULE_ALIAS() for this module to lo=
+ad?
+>
+
+I will add MODULE_ALIAS() for each child driver.
 
 
-vim +1075 net/batman-adv/soft-interface.c
-
-128254ceea6ffe Sven Eckelmann 2020-10-11  1063  
-128254ceea6ffe Sven Eckelmann 2020-10-11  1064  /**
-128254ceea6ffe Sven Eckelmann 2020-10-11  1065   * batadv_softif_newlink() - pre-initialize and register new batadv link
-c19808cb1d05d1 Xiao Liang     2024-11-18  1066   * @nets: the applicable net namespaces
-128254ceea6ffe Sven Eckelmann 2020-10-11  1067   * @dev: network device to register
-128254ceea6ffe Sven Eckelmann 2020-10-11  1068   * @tb: IFLA_INFO_DATA netlink attributes
-128254ceea6ffe Sven Eckelmann 2020-10-11  1069   * @data: enum batadv_ifla_attrs attributes
-128254ceea6ffe Sven Eckelmann 2020-10-11  1070   * @extack: extended ACK report struct
-128254ceea6ffe Sven Eckelmann 2020-10-11  1071   *
-128254ceea6ffe Sven Eckelmann 2020-10-11  1072   * Return: 0 if successful or error otherwise.
-128254ceea6ffe Sven Eckelmann 2020-10-11  1073   */
-c19808cb1d05d1 Xiao Liang     2024-11-18  1074  static int batadv_softif_newlink(struct rtnl_newlink_params *params)
-128254ceea6ffe Sven Eckelmann 2020-10-11 @1075  {
-c19808cb1d05d1 Xiao Liang     2024-11-18  1076  	struct net_device *dev = params->dev;
-c19808cb1d05d1 Xiao Liang     2024-11-18  1077  	struct nlattr **data = params->data;
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1078  	struct batadv_priv *bat_priv = netdev_priv(dev);
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1079  	const char *algo_name;
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1080  	int err;
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1081  
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1082  	if (data && data[IFLA_BATADV_ALGO_NAME]) {
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1083  		algo_name = nla_data(data[IFLA_BATADV_ALGO_NAME]);
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1084  		err = batadv_algo_select(bat_priv, algo_name);
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1085  		if (err)
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1086  			return -EINVAL;
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1087  	}
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1088  
-128254ceea6ffe Sven Eckelmann 2020-10-11  1089  	return register_netdevice(dev);
-128254ceea6ffe Sven Eckelmann 2020-10-11  1090  }
-128254ceea6ffe Sven Eckelmann 2020-10-11  1091  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Ming
 
