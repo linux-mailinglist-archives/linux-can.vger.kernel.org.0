@@ -1,106 +1,107 @@
-Return-Path: <linux-can+bounces-2205-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2206-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB6439D7513
-	for <lists+linux-can@lfdr.de>; Sun, 24 Nov 2024 16:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8861C9D7538
+	for <lists+linux-can@lfdr.de>; Sun, 24 Nov 2024 16:31:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70D32287CF6
-	for <lists+linux-can@lfdr.de>; Sun, 24 Nov 2024 15:27:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D4862873CD
+	for <lists+linux-can@lfdr.de>; Sun, 24 Nov 2024 15:31:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09A3D24002F;
-	Sun, 24 Nov 2024 13:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="axuR68f4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73887187555;
+	Sun, 24 Nov 2024 14:31:31 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D374924002C;
-	Sun, 24 Nov 2024 13:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9355F166F29
+	for <linux-can@vger.kernel.org>; Sun, 24 Nov 2024 14:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732456644; cv=none; b=NqKvo/3wPvcPqStJ+QzlrYaNsk8CHthakEsqQ+gOqtgDgzVMcsYrnFFQppSIa+sP3HzbsbbNOCwMMP+2uY9V0Kxy6rTgkDqWgoeTa77k6VBPCISxao5CXusxhklz1/+JbQ4EmvyVpXm8UgXyEA2I70BZwhLKG9IoCcZMEgkVUrk=
+	t=1732458691; cv=none; b=RAouJXicDd/tsSree4WVj7XrQoGSiqeTs9G6JuhoPxIObf0dKwiH4ooK/+RWOyQFZNOp98CoV8+Za8t/V62O2ajygbDI8soWal0uOFvqpikqGssI3SkPSE2/GhutoJZPcIlKOfW35P10sZSjgijNBBTz/UKbMwZ+aGDWvTzPM2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732456644; c=relaxed/simple;
-	bh=nXcFGeitzYT5m1nV1Uogt257741cT1pNjkWWqxUhDuA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QQ4jBMHRbdKFaYsgIZulQ1z8p738eSNpnpKRco92/0OKOxb+/qqZ1hDNsRhW/pDLbqcb3mQZARXAJBRU7qpRBFiB5MFQuV86rsWxLca7N0xvrkdVnArNpRzEx+abJtr8/DXTjpRNJ3AnrDtJvn6kBsV/Gg8lE8ub/ozs/EeY+z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=axuR68f4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5069BC4CED1;
-	Sun, 24 Nov 2024 13:57:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732456644;
-	bh=nXcFGeitzYT5m1nV1Uogt257741cT1pNjkWWqxUhDuA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=axuR68f4nfL7muN598/GYCadku7Z2RELsNl3eI8DoGT1c4PyEwesha/XJRDVIPBwB
-	 RXNaazfcWCTmpzI2BTWURxkVWHnac7KqeJhs7x///bYmwXT6bg2zjq/afSmU20Oc5O
-	 Tr1D2POpC/7kRLuS+uaDOkx8P8Cjr/ZtazE2jeeLDigtooIZchtTTHLxGz6qAKHZxH
-	 Bb+j7H+b4jI1z91jHI2Nwt85N9AOn6phBnGVLdFIL+At9nRgF2MfJ0XFuXfWH0Ji4o
-	 +bkqbVAbbaZ+c56MHcmTuBehFfoTokiqF1Sm0vWdihBE5Cn2U7a/rqiT1drKPyjCUZ
-	 1hU9QWuHM49IQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Ignat Korchagin <ignat@cloudflare.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	socketcan@hartkopp.net,
-	linux-can@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 07/21] net: af_can: do not leave a dangling sk pointer in can_create()
-Date: Sun, 24 Nov 2024 08:56:40 -0500
-Message-ID: <20241124135709.3351371-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241124135709.3351371-1-sashal@kernel.org>
-References: <20241124135709.3351371-1-sashal@kernel.org>
+	s=arc-20240116; t=1732458691; c=relaxed/simple;
+	bh=/59a56Or+HC1qu+o35+V39sLsLBYoYpmr03qKThdn5Q=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Cng1Tb1gcdwqDSV+zNbGno/A5Ib0MRcnF57SaLsl6A0VQkvm0GP4/7FaGgdLb1NUGS0xIL4WcCJNox3ceQrkT3Bl4cbybBpc5uBWDOOyRc+QK0JltEU1HL2+yASjVvBAKdd/xaQvZ3Pomfd5Pb1SPp43bw7n7p2g7C+oSO8tj8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tFDe1-000665-Kj; Sun, 24 Nov 2024 15:31:25 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tFDe1-002PKn-0y;
+	Sun, 24 Nov 2024 15:31:25 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id E6D8937B517;
+	Sun, 24 Nov 2024 14:31:24 +0000 (UTC)
+Date: Sun, 24 Nov 2024 15:31:24 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: linux-can@vger.kernel.org, mw@iot-make.de
+Subject: socanui
+Message-ID: <20241124-solid-micro-hummingbird-776382-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.324
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tiahrbzorx5yes5m"
+Content-Disposition: inline
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-From: Ignat Korchagin <ignat@cloudflare.com>
 
-[ Upstream commit 811a7ca7320c062e15d0f5b171fe6ad8592d1434 ]
+--tiahrbzorx5yes5m
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: socanui
+MIME-Version: 1.0
 
-On error can_create() frees the allocated sk object, but sock_init_data()
-has already attached it to the provided sock object. This will leave a
-dangling sk pointer in the sock object and may cause use-after-free later.
+Hello,
 
-Signed-off-by: Ignat Korchagin <ignat@cloudflare.com>
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Link: https://patch.msgid.link/20241014153808.51894-5-ignat@cloudflare.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/can/af_can.c | 1 +
- 1 file changed, 1 insertion(+)
+I just stumbled over https://github.com/miwagner/socanui by Michael
+Wagner (Cc'ed). Haven't tested it yet, but it looks awesome.
 
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index b3edb80921248..2e6fedffddd92 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -187,6 +187,7 @@ static int can_create(struct net *net, struct socket *sock, int protocol,
- 		/* release sk on errors */
- 		sock_orphan(sk);
- 		sock_put(sk);
-+		sock->sk = NULL;
- 	}
- 
-  errout:
--- 
-2.43.0
+regards,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--tiahrbzorx5yes5m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdDOLkACgkQKDiiPnot
+vG9Mhgf+P+9mGd84mpPU+M00f5qfxSswhYxiHxzvrKnfP1ZhwT7xRmA+O2JGzCMl
+tWzUP+p01kOzSuMDW7/GzBV3P7ttEmsUJwUAO7PZF8QwJoIw+8bYOlkBHIb3pYP6
+h4GbyNAZFnBTF3/o9ywcxUF2arf/KUPk+vTy+bU/u+GQuYHILo8DM8Je3HWQabVq
+BlTlUVsQy7axXi6z0wTHvnkHLEa+YkT+4ookQm34iDq56ypNJ4yXZNn2j9O5YckH
+Oi0/KaMvrEh1wsr7U1nvoFn/HK7Y7/chbXv78rssOLBR0UcYEH2lTnc5fnO/ZKDz
+9GTVXJZV+PCb3TZIJ0VXkxg3UcCDxw==
+=W74W
+-----END PGP SIGNATURE-----
+
+--tiahrbzorx5yes5m--
 
