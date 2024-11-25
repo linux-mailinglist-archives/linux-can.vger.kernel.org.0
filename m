@@ -1,116 +1,187 @@
-Return-Path: <linux-can+bounces-2207-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2208-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBBF39D7540
-	for <lists+linux-can@lfdr.de>; Sun, 24 Nov 2024 16:32:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0726F9D7CDF
+	for <lists+linux-can@lfdr.de>; Mon, 25 Nov 2024 09:26:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DF7316838A
-	for <lists+linux-can@lfdr.de>; Sun, 24 Nov 2024 15:32:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C57BA1633FC
+	for <lists+linux-can@lfdr.de>; Mon, 25 Nov 2024 08:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59FF31917CE;
-	Sun, 24 Nov 2024 14:34:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2461718B47C;
+	Mon, 25 Nov 2024 08:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="CbmRtSDz";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HmS2xztr";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="CbmRtSDz";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HmS2xztr"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA0718FC70
-	for <linux-can@vger.kernel.org>; Sun, 24 Nov 2024 14:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7D318A6C1
+	for <linux-can@vger.kernel.org>; Mon, 25 Nov 2024 08:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732458850; cv=none; b=bcJQEYjFRTtg7uHLTqRPYthcJeKKJqQH2zcY4qq1CoVvTnjiKopYwZ8LSc6skgPn3nThUSuFzn3J4OX2q77OjblGuGLi8Et975CdrJ40GefouA4AVyo/7IdIXt/7N0dA5hCOq4m2KUVQW1F9jgRmSCDFgeENdC8mJ4ACt32Yhjc=
+	t=1732523187; cv=none; b=Aif8DjImJ7y3e8gZeBHqMOGtF4FiEOFJtZKDVJXwZfAwkyajXHU/ORdxbYOH05qtNjFNdIOu2LC4xabeypPqPKrRjoKq+95aSuZfcw/16chiSekrarRoOvtUK2dXWgRTeL3JDKnBZStg191z+6pBWuY8PkbiqtHTqmL30Kb2xvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732458850; c=relaxed/simple;
-	bh=Qg6cgcT+Q7pGGKORiV9NKRVTyIHdmA1hySkMhq+dSEU=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o9IOkoOxoYASdI0E1Lvgw0YlpdqSUDhrvxoy/QT1eXVQBaf2uJbSqEsxNrSaiDEQwvHVzdE50q6M7JU2AB2D4YmB1DdI0S/6YgvmP1kEqbVpa+xHR9RuiIHrI29EksNg/o9t9EFYFVIdEtjUgzRGp8c2t9yEeB4GfL1+orUnwfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tFDgb-0006Fc-0c; Sun, 24 Nov 2024 15:34:05 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tFDga-002PL1-2c;
-	Sun, 24 Nov 2024 15:34:04 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	s=arc-20240116; t=1732523187; c=relaxed/simple;
+	bh=mKhrn3Edw8sVQifHb0Rrs9iBsJ1XYC+y0Hb8z7HjCQ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PaqOPcoj8b6IkbvGbGyVyyUmJbQVCWCJAfsX5MA/Y1OnJMg6k40ocuvuENq8vSW/wKKEzb8YAAA+frPFo0v4R4kYT0CPtMnG0Mae6JkwVt8r/aHRO8sgsDmQTTvXQLKv0Orq2GZ2bAD6NNkc93HOiQXfVAssaD7jHrZKin+2H3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=CbmRtSDz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HmS2xztr; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=CbmRtSDz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HmS2xztr; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 835CE37B51A;
-	Sun, 24 Nov 2024 14:34:04 +0000 (UTC)
-Date: Sun, 24 Nov 2024 15:34:04 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: linux-can@vger.kernel.org, mw@iot-make.de
-Subject: Re: socanui
-Message-ID: <20241124-inquisitive-brawny-macaque-df303d-mkl@pengutronix.de>
-References: <20241124-solid-micro-hummingbird-776382-mkl@pengutronix.de>
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id C11FA21186;
+	Mon, 25 Nov 2024 08:26:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1732523182; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mKhrn3Edw8sVQifHb0Rrs9iBsJ1XYC+y0Hb8z7HjCQ0=;
+	b=CbmRtSDzvpARHMv0nmQfLOjYjTE3P7F2N5Lc1R624OSFS7LOUxNzlRJ1QWLWNsT/8/e3JB
+	SkW2z1KdBX/hz9G5iTE67UqGo4/MBp2glVR/tZj7EplvCt5/56xQUzyu1mYLg41RH3HFIa
+	KCX46xfIKEvqwmYRPnBFa8V+l1LQe4s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1732523182;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mKhrn3Edw8sVQifHb0Rrs9iBsJ1XYC+y0Hb8z7HjCQ0=;
+	b=HmS2xztrPiiWBBUrNlmjMy6CDuyjNfwqlqE1yS9MAkRApgr0Npz3mU9dqVgeafdONiEvgu
+	PCQ+2hwiduNgFqCQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=CbmRtSDz;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=HmS2xztr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1732523182; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mKhrn3Edw8sVQifHb0Rrs9iBsJ1XYC+y0Hb8z7HjCQ0=;
+	b=CbmRtSDzvpARHMv0nmQfLOjYjTE3P7F2N5Lc1R624OSFS7LOUxNzlRJ1QWLWNsT/8/e3JB
+	SkW2z1KdBX/hz9G5iTE67UqGo4/MBp2glVR/tZj7EplvCt5/56xQUzyu1mYLg41RH3HFIa
+	KCX46xfIKEvqwmYRPnBFa8V+l1LQe4s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1732523182;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mKhrn3Edw8sVQifHb0Rrs9iBsJ1XYC+y0Hb8z7HjCQ0=;
+	b=HmS2xztrPiiWBBUrNlmjMy6CDuyjNfwqlqE1yS9MAkRApgr0Npz3mU9dqVgeafdONiEvgu
+	PCQ+2hwiduNgFqCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 67B3B137D4;
+	Mon, 25 Nov 2024 08:26:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ThFCF640RGcmTQAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Mon, 25 Nov 2024 08:26:22 +0000
+Date: Mon, 25 Nov 2024 09:26:16 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org,
+ kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>, Miguel Ojeda
+ <ojeda@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Subject: Re: [PATCH] can: rockchip_canfd: Drop obsolete dependency on
+ COMPILE_TEST
+Message-ID: <20241125092616.3b93c2b1@endymion.delvare>
+In-Reply-To: <CAMuHMdXU8tMPbHMDZmU=0xd-X6OqxO_3j=iLDR2XQ4q3URw2RQ@mail.gmail.com>
+References: <20241022130439.70d016e9@endymion.delvare>
+	<CAMZ6RqJxb-52eSPqvaESjA-Wd_Jd-=gFO1HWbzxWe3gx7GWDmA@mail.gmail.com>
+	<dcced72-7be1-b44-432a-dac2ad7f4cc6@linux-m68k.org>
+	<20241121145017.33ca43f7@endymion.delvare>
+	<CAMuHMdXU8tMPbHMDZmU=0xd-X6OqxO_3j=iLDR2XQ4q3URw2RQ@mail.gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ue2wmvfia5o7g5fr"
-Content-Disposition: inline
-In-Reply-To: <20241124-solid-micro-hummingbird-776382-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---ue2wmvfia5o7g5fr
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: socanui
-MIME-Version: 1.0
+X-Rspamd-Queue-Id: C11FA21186
+X-Spam-Score: -4.51
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[wanadoo.fr];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[wanadoo.fr,vger.kernel.org,pengutronix.de,kernel.org,linux-foundation.org];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-Hello Michael,
+Hi Geert,
 
-awesome project!
+On Fri, 22 Nov 2024 15:33:21 +0100, Geert Uytterhoeven wrote:
+> On Thu, Nov 21, 2024 at 2:50=E2=80=AFPM Jean Delvare <jdelvare@suse.de> w=
+rote:
+> > Your reasoning would hold only if building a limited, maybe
+> > not-working driver, was a purpose in itself. I personally can't see
+> > any value in doing this. =20
+>=20
+> It may help detecting more configuration issues using randconfig.
 
-On 24.11.2024 15:31:24, Marc Kleine-Budde wrote:
-> I just stumbled over https://github.com/miwagner/socanui by Michael
-> Wagner (Cc'ed). Haven't tested it yet, but it looks awesome.
+Maybe I would agree if build time, energy and engineering time were
+free and unlimited resources.
 
-I one thing I just noticed, you probably don't want to parse the output
-of "ip" with regex, but rather add the command line parameter "--json"
-(and "--pretty" while debugging) and use the json output.
+In our world though, the time spent by a test build farm to build a
+known-crippled driver would be better used to start the next test build
+earlier. This makes for better quality coverage. Or the energy used to
+do that could also be saved altogether.
 
-regards,
-Marc
+And this suboptimal use of build time and energy is only the best case.
+The worst case is if the randconfig case causes a "false positive" build
+error or warning. This will generate a report, which will be sent to
+mailing lists, read by human beings and investigated, wasting
+engineering time.
+
+I'm not making this up, this is in fact exactly what happened and led
+me to investigate a first "depends on OF || COMPILE_TEST" case a few
+years ago. I found out that the build warning would only possibly
+trigger if COMPILE_TEST was selected and OF was not. It would never
+trigger with any configuration options combination not including
+COMPILE_TEST. Fixing it would require adding #ifdefs and using macros.
+But why should we make the code more complex, less readable, to prevent
+a warning which can never happen in a non-test scenario? And more
+importantly, why should we allocate engineering time to look into such
+issues, when there are so many more useful tasks to work on?
 
 --=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---ue2wmvfia5o7g5fr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdDOVkACgkQKDiiPnot
-vG+aXQf8Crz4W2d7dtvrO+HDMX0aFQmOwCVoRDhjSPZqpYqPdX+fXfi+fjbAQob2
-Q7OyNYGAOoAnHdc3Ivlo8zWDHYa76l3r6FLpKUIL7a9k+MUscCPB8cDJJX4buZjE
-HnmSMIQZ/YDFBwP+ks4mgPrKjbXdQTxRW8oDSKZSAJFOvC58avkDA+65QeVXhFLW
-1LHJRLFWhb5wZ+h+voF0Qll1771HQq9Ld5Vhlb8Zjd0EmISulR5fSbUkxtfL53G8
-hgkgAKr5Pbcs44ZlvzrEEXoAhYXv0Hn0FZRox6maHLp/IpKhUlr9jTgzUmwJKs4d
-5Uqs/4nI75kuSfWmf1e95X5UU0K1hg==
-=ctLy
------END PGP SIGNATURE-----
-
---ue2wmvfia5o7g5fr--
+Jean Delvare
+SUSE L3 Support
 
