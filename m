@@ -1,110 +1,125 @@
-Return-Path: <linux-can+bounces-2211-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2212-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89A7C9D864B
-	for <lists+linux-can@lfdr.de>; Mon, 25 Nov 2024 14:24:21 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA98F9D859B
+	for <lists+linux-can@lfdr.de>; Mon, 25 Nov 2024 13:48:27 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BE71162B62
+	for <lists+linux-can@lfdr.de>; Mon, 25 Nov 2024 12:48:24 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118E421106;
+	Mon, 25 Nov 2024 12:48:25 +0000 (UTC)
+X-Original-To: linux-can@vger.kernel.org
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E402B28370
-	for <lists+linux-can@lfdr.de>; Mon, 25 Nov 2024 12:46:24 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF9A621106;
-	Mon, 25 Nov 2024 12:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=formulatrix.com header.i=@formulatrix.com header.b="tlU6WU0r"
-X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB3D188015
-	for <linux-can@vger.kernel.org>; Mon, 25 Nov 2024 12:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F0F18893C
+	for <linux-can@vger.kernel.org>; Mon, 25 Nov 2024 12:48:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732538780; cv=none; b=jG6mnjwXw4dC7FkaXZhd6mGNyZtTflKbqE1vEYZyl+7AkKGHdX/knIlB74G+lmvGhRDoFLyrG9UJaGIoVIugcTIWvoEM9SrFE+2+sreomC+fCXzUXe7lP42WCsJC+y7BGBXUCiRVlaMoMS9UmI9voO5BsGBpPOyUaYK2EAaTAsM=
+	t=1732538905; cv=none; b=bE0HItkrRH3nJvkmzFci4JFVQyzn7pLjpbjxIHQxGqOngEsT4fXeMO68Ra7daZl+09dBnWc/UT9HDzqDT2iG3hJx/NG88QqaerWdWmuR1ElknqvDBcjxS033hnZHNt9LbE+xKeBUnUuvl9udZiqnsOKLkzbmKL3Q+/yTr2AHLz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732538780; c=relaxed/simple;
-	bh=BvAQN4YC29SAYxWmCPP0356KXZZ265Xen8KYFjz9NvM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KysdFOCqeu+cKvHosS/C9FoIMaPjY27i/6oaEhZ3+N0jwOLpjUBuytAv3vLAmxhoTtPWdfs1UTUFpcS387W4GK9iic0e5O55nT3bXlPc8WJUKP3ASE8LRWoNTFY2PM8ixdpgR5/K72PWnObMwSm5/zx67Z2mEDQfMiNaLoGs3Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=formulatrix.com; spf=pass smtp.mailfrom=formulatrix.com; dkim=pass (1024-bit key) header.d=formulatrix.com header.i=@formulatrix.com header.b=tlU6WU0r; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=formulatrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=formulatrix.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7242f559a9fso4278369b3a.1
-        for <linux-can@vger.kernel.org>; Mon, 25 Nov 2024 04:46:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=formulatrix.com; s=google; t=1732538778; x=1733143578; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BvAQN4YC29SAYxWmCPP0356KXZZ265Xen8KYFjz9NvM=;
-        b=tlU6WU0rlDdIrDwBcSsCcyWQ17X4c4oiRu/0F3g8V7fpn5RBef+Q27f9EJFW93CDgr
-         J/y+B8GxnFGhB+PwOF7KNExblaZcZvFje7gj+nI+a6xSPr2KtYXvvhmQSgr1nldWL8p2
-         UhCxY1SOPzaR8yp6EFdQ9r2vsQiHJ8CBCb1Lc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732538778; x=1733143578;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BvAQN4YC29SAYxWmCPP0356KXZZ265Xen8KYFjz9NvM=;
-        b=TChP5vzZoYh7zBxgxl4HZAqplA0JyPoY1on96/WUBSlWZjVOmL7TFbqDXTCA8FgkIP
-         g4qjebcmAZABn0dwlAJfgZ4avB1fO/Lgbst1l0Q0lPZh35YLHbgcgX2+3CSCaf2yMvbq
-         rPPC3XsP297PrfYsBQVpb22xxopHcdL132VDN3evIKSpJBQ2XBQrey1VZzG+QUnaxKdV
-         JeqwG/Fayh+PVtXXhP2YgATaKIIk4AWB6x0/trz6/kUUrJzd7tW4/cl6Ik5mldkfh8aM
-         rgcL+nkqlRdJJJ6grLXPjCP1oqTI9WiES1nQ9k12AdUg40gjJFHwqDv4KZsXFrG5bF0S
-         h5PA==
-X-Forwarded-Encrypted: i=1; AJvYcCWuP5CS7INcduGEvDdQu5vNkf6SYzFRKxHDmu1MQptalBpXS+1tW+hzSoNObaRaR2gGGoO4nv/81YU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYkHaTbLmyVQsCOyWMEUfuMqepgBuJcvzOcyx/6E991CcAca3F
-	sI9GHUoxRRy/lW3JU+vpPKCRyCYhUAP5weJF0SlQdSuStSdHD0jEKQpBrgCdkw==
-X-Gm-Gg: ASbGncvu8Pj+O9SjuT3DfAn5nyhtzV4Se9EqZG9xL6O7VXe62ZpR3XodoOcV/ZeSXJQ
-	4SWbif56R3PB+coZAlYTjVVtgGJsuwgCOh/HXpkHq7PPNyErrpEa2T0LgZkAkM5ZfIW7CfhWYKT
-	VAqi8cGfpmEbyVPGmvAiBWUjNoLTJpkmiEnzmUg7oVueu5HJ0pCh99zUzcn6mYnsRsxSGLKZUTs
-	b7AXMOYfIGgsWEqt+KS6GC6bYUWhHP8qW0OoMEtZegf1R2lMIhIJ+ORgWh69mbszBgrx7qr+MwB
-	VvRxZO8=
-X-Google-Smtp-Source: AGHT+IF4YuEMdiCzruCGL/fEjGoaDZJgPmIaqI8VzgC22qkArn7lOoJ+CUDZHvBHXkOmiLHcD5ksBA==
-X-Received: by 2002:a05:6a00:9a0:b0:717:8ee0:4ea1 with SMTP id d2e1a72fcca58-724ded24deamr15030649b3a.0.1732538778612;
-        Mon, 25 Nov 2024 04:46:18 -0800 (PST)
-Received: from SE-151.formulatrix.internal ([103.12.224.66])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724de4795f9sm6306778b3a.50.2024.11.25.04.46.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Nov 2024 04:46:18 -0800 (PST)
-From: Renjaya Raga Zenta <renjaya.zenta@formulatrix.com>
-To: mkl@pengutronix.de
-Cc: kernel@pengutronix.de,
-	linux-can@vger.kernel.org,
-	mailhol.vincent@wanadoo.fr,
-	manivannan.sadhasivam@linaro.org,
-	renjaya.zenta@formulatrix.com,
-	schuchmann@schleissheimer.de,
+	s=arc-20240116; t=1732538905; c=relaxed/simple;
+	bh=s8qjWcyzpA0Dr/N4FoYPICErI/nN3MEkaZNL7HTn5pI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u7wt5wA8AaM03B4mzLZaP8wHENTcrNVyjJE9pHqQF5pra16RWrE9P+mAxcRUHyuuEM7O1z5rb022BSMA7qL2yi4I1FGcKciSN9rqhuEigX0Tad97ebhSVMu7TziquG9Pwg1YCJnzDqJe/y5vkuI9MZk8Cz3a7ACEOLBZanY9uQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tFYVk-0006NZ-TN; Mon, 25 Nov 2024 13:48:16 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tFYVj-00057p-1y;
+	Mon, 25 Nov 2024 13:48:16 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id ED4B537CCA0;
+	Mon, 25 Nov 2024 12:48:15 +0000 (UTC)
+Date: Mon, 25 Nov 2024 13:48:15 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Renjaya Raga Zenta <renjaya.zenta@formulatrix.com>
+Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
+	mailhol.vincent@wanadoo.fr, manivannan.sadhasivam@linaro.org, schuchmann@schleissheimer.de, 
 	thomas.kopp@microchip.com
-Subject: Re: AW: [PATCH RFC can v2] can: mcp251xfd: mcp251xfd_get_tef_len(): fix length calculation
-Date: Mon, 25 Nov 2024 19:46:13 +0700
-Message-ID: <20241125124613.29162-1-renjaya.zenta@formulatrix.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241124-fervent-unyielding-macaw-1c66fb-mkl@pengutronix.de>
+Subject: Re: AW: [PATCH RFC can v2] can: mcp251xfd: mcp251xfd_get_tef_len():
+ fix length calculation
+Message-ID: <20241125-hulking-liberal-stingray-ea500c-mkl@pengutronix.de>
 References: <20241124-fervent-unyielding-macaw-1c66fb-mkl@pengutronix.de>
+ <20241125124613.29162-1-renjaya.zenta@formulatrix.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rtvp63nzig4zuf3z"
+Content-Disposition: inline
+In-Reply-To: <20241125124613.29162-1-renjaya.zenta@formulatrix.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hi Marc,
 
-On 11/25/24 6:01 PM, Marc Kleine-Budde wrote:
+--rtvp63nzig4zuf3z
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: AW: [PATCH RFC can v2] can: mcp251xfd: mcp251xfd_get_tef_len():
+ fix length calculation
+MIME-Version: 1.0
 
-> I've just send a patch [1] to work around this issue. However not
-> tested, as I cannot reproduce the problem here.
->
-> [1] https://patch.msgid.link/20241125-mcp251xfd-fix-length-calculation-v1-1-974445b5f893@pengutronix.de
+On 25.11.2024 19:46:13, Renjaya Raga Zenta wrote:
+> On 11/25/24 6:01 PM, Marc Kleine-Budde wrote:
+>=20
+> > I've just send a patch [1] to work around this issue. However not
+> > tested, as I cannot reproduce the problem here.
+> >
+> > [1] https://patch.msgid.link/20241125-mcp251xfd-fix-length-calculation-=
+v1-1-974445b5f893@pengutronix.de
+>=20
+> I've tested this patch and it no longer crashes with the previous reprodu=
+cer.
+>=20
+> Thanks for the fix and detailed explanation.
 
-I've tested this patch and it no longer crashes with the previous reproducer.
+Can I add your Tested-by?
 
-Thanks for the fix and detailed explanation.
+Marc
 
-Regards,
-Renjaya
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--rtvp63nzig4zuf3z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdEcgwACgkQKDiiPnot
+vG+e9Af/TSqAkHYwbmrqy77U2NLq19Ye/nWfC6I9mKCcza/NEzuI76jifgJnlJiD
+kN0BRF8kf/uQMGsDCU5kDIX8doIt6YLVCfMZIsqMAYZCNy4mf/2knsj2ef4nXcIR
+gt11SkTFZoMP9Vv4KkT3G2v2NNppkWpmxShXhnc6h0Ux4fsuE7CZ1KKTCdoKQ4O8
+NVP0w3ust77ebm2tDIL9FjDnjzSRwTb6wIUw8wH0vvlXtgVqHHIBxDTRSniWmpRY
+ZSBdseESTt0Op+VbNUHBeqrtWT96tFy6BLOI8dqjijO9C7H4AmLNkxcjuv5z3b6U
+MRA3bf1HFPbb5suk3ZU+XpUKSX8Wpw==
+=DkIC
+-----END PGP SIGNATURE-----
+
+--rtvp63nzig4zuf3z--
 
