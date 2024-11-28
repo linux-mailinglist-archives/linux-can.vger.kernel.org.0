@@ -1,48 +1,48 @@
-Return-Path: <linux-can+bounces-2250-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2251-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0805A9DB363
-	for <lists+linux-can@lfdr.de>; Thu, 28 Nov 2024 09:09:16 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6739A9DB380
+	for <lists+linux-can@lfdr.de>; Thu, 28 Nov 2024 09:13:21 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB9541657EA
-	for <lists+linux-can@lfdr.de>; Thu, 28 Nov 2024 08:09:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC1F6B2268C
+	for <lists+linux-can@lfdr.de>; Thu, 28 Nov 2024 08:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3810514883C;
-	Thu, 28 Nov 2024 08:09:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0898A14A639;
+	Thu, 28 Nov 2024 08:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NjmHPRW5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZfVYdVc1"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2D3146018;
-	Thu, 28 Nov 2024 08:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D3A14A614;
+	Thu, 28 Nov 2024 08:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732781351; cv=none; b=s0wOz39p8BeOBKBbwCTxNX55w7YJEIv4S02LJbQz0kKcgqbTBV8CUwxQRSXVahzwaEzEOVunUQER9jKZeUeOF6ctllIDgL0ZvymXNoAYLdUGbwttJapCLcY/E24Tl4kbSlNtVaYBBy0dFKQnH+ZOUnEtaWvrx0KvRsbYEAJiRjk=
+	t=1732781541; cv=none; b=sCgJvDFlrEo2orehSj9yZdB3jXBxN5Eg4cIPvPlNCy9D35FQsP23aPoTk1kO/ptilPDhGDlF3IJXgAJE3w+4q9ZIb7N/Y8tTKCL6cQHjmSPr/rNsjOPAg1SK+9jncNBwVR6gHRU7ozCB6i72F6VogIn4eV1gi+vp/kgYBtdwqiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732781351; c=relaxed/simple;
-	bh=DJGvh8ExhceGZ+loc+E/bF08f+lkklT3hOQZiqcuboc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ua81/lvdgoHYaFXSBqpMFX/5LQo+bSEnJQvLIlHUU70bZCm+giFMt272zAeHtVzAoYdohnMokyqwDy0Vt15jHsqHnAKDkvn8aVyHOsIutRCjLF/GPcfKXmuc+VAXw26g84zYg3UepHuurWR8onwM77kBCfgemJwvIWQPgGb9qQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NjmHPRW5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC336C4CECE;
-	Thu, 28 Nov 2024 08:09:05 +0000 (UTC)
+	s=arc-20240116; t=1732781541; c=relaxed/simple;
+	bh=SGYqdYheOr3dXZn8fSr1ZblCjumAdXvs2NNxprmBZWs=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=BzwtxD6kZOiXKjQjDxXRpJxPuLN53Ui9viQpRwJ3EHbzDtqk6t3T9P+xVm31ty08OIjdx85CyTmOq+wWGSXXq8Rb4dTGDAL98INdMlj2E66qTJ3PDSJc5yOfrx2EEYBQD4vUYgVNod7CcQW1d2fT8Xjuz7p+BAwWJx7tjzZVqx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZfVYdVc1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859FBC4CED4;
+	Thu, 28 Nov 2024 08:12:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732781350;
-	bh=DJGvh8ExhceGZ+loc+E/bF08f+lkklT3hOQZiqcuboc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NjmHPRW5qFz33QsTlyKOt/vHurWzLzB9cZDwb/o3eHOB+Gug6iTv9wReRRVUqLD7u
-	 d13qZG5pFiuYnnDKhSS5OPSAsGsioVKWFffkSf5aidHtixW4XneeR9qRhsHzcUXoQM
-	 Yj19NmDiYvG4QFVSURdiFhwRL/uTENTyGK/XmfmMozDhbB1etzuCv/lnjl7vaR2lf7
-	 qPgO+U6kfwK0T9wgpOsqqAt8A8Vph4XJXRCb08s17EpaJRrOyxkl84+pCCKZ6+TuNG
-	 Ax+Fncdl8daIN2oc4UxpNSz71UraPUaxPWX2+VCjvwjUcn/nXK+RaP7j45iVkN0WnH
-	 zHADreh/RQfHg==
-Message-ID: <bfc49b65-4d14-4dd1-8dff-e200989a1805@kernel.org>
-Date: Thu, 28 Nov 2024 09:09:03 +0100
+	s=k20201202; t=1732781541;
+	bh=SGYqdYheOr3dXZn8fSr1ZblCjumAdXvs2NNxprmBZWs=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=ZfVYdVc1Dl7tIKO7zOELz4nGmdQVzjqov5OstfrL9SH9vRjhwF2w9k8NG3kns6pDh
+	 uDMYkMJ98wrSFRJOn8E20NW28jLqM+rag6wNtm/Bc8FfQe5PM1QleprojxJVTVEort
+	 zZZ3TDorA+zvJ2M/NwiTq/AQCSqf2AZh6ECNi3iDCi+AQGo8jBrnDpbR3QxOXBzQ/i
+	 R8rvewBlXM319U9Hwgcnp+KE4sCRaL5sfq5gnX/aYg8/fE/lMAZMkn9IkNTzjz1SJx
+	 eGVFw5PQ3j7wlhM52EozFayd+54Vs4Lsb5j4FClyj7w4u7Z682r8hjnpm0HU0cwliM
+	 4utzrAi1z9VNQ==
+Message-ID: <e5693766-1a2d-4cd5-a1ff-ea1f0800e238@kernel.org>
+Date: Thu, 28 Nov 2024 09:12:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -50,21 +50,20 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH can-next v2] dt-bindings: can: tcan4x5x: add missing
- required clock-names
+Subject: Re: [PATCH v2] dt-bindings: can: convert tcan4x5x.txt to DT schema
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Sean Nyekjaer <sean@geanix.com>
 Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
  Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241128-tcancclk-v2-1-fbf07f1f1626@geanix.com>
- <87378b2f-80a0-4a35-9989-9b96910701e3@kernel.org>
- <tmu6inhqzkecgdrnv3yip6fjoelcyby5b7ascby54afcn5iune@jd4lk4p5kplt>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ netdev@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241105-convert-tcan-v2-1-4b320f3fcf99@geanix.com>
+ <kfcs5hhpkjustyfxxjeecvyw5dbqaqkupppionovdqwyewwdcd@sodle7cc6yv6>
+ <4715808e-4066-4e64-979d-2ec75cd0d210@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -109,49 +108,52 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <tmu6inhqzkecgdrnv3yip6fjoelcyby5b7ascby54afcn5iune@jd4lk4p5kplt>
+In-Reply-To: <4715808e-4066-4e64-979d-2ec75cd0d210@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 28/11/2024 08:49, Sean Nyekjaer wrote:
-> Hi Krzysztof,
-> 
-> On Thu, Nov 28, 2024 at 08:31:41AM +0100, Krzysztof Kozlowski wrote:
->> On 28/11/2024 08:09, Sean Nyekjaer wrote:
->>> tcan4x5x requires an external clock called cclk, add it here.
+On 06/11/2024 15:27, Krzysztof Kozlowski wrote:
+> On 06/11/2024 15:24, Krzysztof Kozlowski wrote:
+>> On Tue, Nov 05, 2024 at 03:24:34PM +0100, Sean Nyekjaer wrote:
+>>> +  device-wake-gpios:
+>>> +    description:
+>>> +      Wake up GPIO to wake up the TCAN device.
+>>> +      Not available with tcan4552/4553.
+>>> +    maxItems: 1
+>>> +
+>>> +  bosch,mram-cfg:
 >>
->> Nothing improved. Device already has this clock, so your rationale is
->> not correct.
-> 
-> Please explain, yes the device has this clock, but not the name. The
-> driver depends on the name.
-
-You say that the device - tcan4x5x - requires an external clock. This is
-already satisfied.
-
-> 
+>> Last time I wrote:
+>> "You need to mention all changes done to the binding in the commit msg."
 >>
->> Also, offending patch is not in the next for some reason, so it should
->> be squashed there. Conversion which leads to incorrect binding is not a
->> correct conversion.
+>> Then I wrote again:
+>> "Yeah, CAREFULLY [read][//this was missing, added now] previous review
+>> and respond to all comments or implement all of them (or any
+>> combination). If you leave one comment ignored, it will mean reviewer
+>> has to do same work twice. That's very discouraging and wasteful of my
+>> time."
+>>
+>> Then I wrote:
+>> "Where? I pointed out that this is a change. I cannot find it...."
+>>
+>> So we are back at the same spot but I waste much more time to respond
+>> and repeat the same.
+>>
+>> You must address all comments: either respond, fix or ask for
+>> clarifications. You cannot leave anything ignored.
+>>
+>> I am not going to review the rest.
 > 
-> "offending patch":
-> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/commit/?h=testing&id=77400284f54b9a1f6b6127c08cb935fc05e5c3d2
+> Uh, I am wrong. You did remove the supplies, but I just looked at wrong
+> version. Apologies, everything is fine and you did implement my
+> feedback. Thank you.
 > 
-> "dt-bindings: can: convert tcan4x5x.txt to DT schema" did the
-> conversion no more or less.
-> The original txt file fails to mention the clock required,
-> therefore IMHO this patch should be as a seperate patch :)
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Stop repeating the same as last time.
-
-No, I said it already multiple times in multiple threads, including
-guideline I gave some time ago:
-https://social.kernel.org/notice/Ai9hYRUKo8suzX3zNY
-
-You conversion is supposed to be complete and pass checks on existing
-DTS, which also implies matching driver.
-
+As pointed out recently, this is not correct conversion - it does not
+match existing users. Conversion is supposed to lead to binding which
+satisfies existing users - DTS and actual ABI - otherwise you produced
+just incorrect schema.
 
 Best regards,
 Krzysztof
