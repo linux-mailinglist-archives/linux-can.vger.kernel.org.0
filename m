@@ -1,130 +1,150 @@
-Return-Path: <linux-can+bounces-2256-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2260-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5838F9DBBD3
-	for <lists+linux-can@lfdr.de>; Thu, 28 Nov 2024 18:38:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D6EA9DE661
+	for <lists+linux-can@lfdr.de>; Fri, 29 Nov 2024 13:27:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E212281DD8
-	for <lists+linux-can@lfdr.de>; Thu, 28 Nov 2024 17:38:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AAAFDB234D3
+	for <lists+linux-can@lfdr.de>; Fri, 29 Nov 2024 12:27:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF87B1C1F0D;
-	Thu, 28 Nov 2024 17:37:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kPG1Ukt8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12DB19DF4B;
+	Fri, 29 Nov 2024 12:27:37 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905BF537F8;
-	Thu, 28 Nov 2024 17:37:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0634519A28D
+	for <linux-can@vger.kernel.org>; Fri, 29 Nov 2024 12:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732815477; cv=none; b=csc+KzQH9/ti8qJK3Uy5sKrFdPVb+IrmS3jQI2QJU152Bm4X+qqlia75s+dJAS7TTSs+Lrnjhi6orVtCpZzXI05lCRvY8xfqSV1ljnVPK6pasdxCPv1lhrktm5/KWIJB/ucqLOmwUqZSTQRNG6W32dpQzh9ZrSK8EOK/J1FP+EE=
+	t=1732883257; cv=none; b=oVvTJ44cyqV5pvkryPNXBQEmbHFatinNoDDzVTS3WkV+q3lmB4a3R2VHP+npsZX7n+GA6Timu7xi63tyFXffxeKq/QMfJ6V9wIs/UdAU1hDcxGHYjPzM2fK7EaB1X6PjOjFM6bzNMTeidJ8dCTlhyI9hEKrgc/n4LbrmdDqv/nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732815477; c=relaxed/simple;
-	bh=S4du7DtfnNYDGfC4qZfazdeQhq5X3/Ner94sk9dhj/k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hd6/bbOakL34WLyvZDNCjMt6tGRlNzXGM6JkYdcit/l6APNVCDET7PMA4/6P15VqnyDumX1nvv3dnsHPYM4RCkJIjQWRTnfGS22yf61Kwb6At8Tm1Lh6uP9UbvA40m99ySqsEj0XmpeBDScpGMVhLWXm1MCdJOiHUFN2G69EwEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kPG1Ukt8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E375DC4CED2;
-	Thu, 28 Nov 2024 17:37:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732815477;
-	bh=S4du7DtfnNYDGfC4qZfazdeQhq5X3/Ner94sk9dhj/k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kPG1Ukt8y1d9761ioPMUpTBamzseaF73Ntnq/hwuF6OUP21sFHiEsrie/wX6Bm78s
-	 4Pf/PqRafwmJtC/LVtkFdKCQt8Zs+W1AaylYCxGj13JDuv2iLKWDn9GQeJd9pcc5xu
-	 U6nNRBDD7+Ujok459WsrSrrv5L+XA2Lz8xK4AGP1vbKjtMxNYoS/wAVWNp034S35hf
-	 cd8TBRIjFJB2FgFw8CvBZC4B6FJ7aWlOiYinA3SO8jHqPGKDItYVVvPyEOUdeXCkO4
-	 qZ9QGsUNIC68rG17m2UCf/CfqY1yOMV4cH9m9AQnIjWm/vhUGUQqBwxesdP/6u5MUt
-	 H5HvAkF58sEfw==
-Message-ID: <a34b06b6-73ab-4666-b6f8-1c8136f0be66@kernel.org>
-Date: Thu, 28 Nov 2024 18:37:50 +0100
+	s=arc-20240116; t=1732883257; c=relaxed/simple;
+	bh=BX6dNmRyBmtmvDOVfMug6Id+L2DaIwPG0ClQbElpQKE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=R2nEF7zw84ilGWYTWbNxa0kpj/pakRVvCwnIHzMZs1JU+BaSztawex4rFpkwZsRcIZ6v5Y1wtiYcUZ+N3bx6eVKpXbvxtOOc37wHAK5MgXp79yVzrzUj5MvsEMFGZcvkQ4rmbmf3HfzOMqE2eiCOQKIxmLqE2VdaNqvD+A9L7vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tH05r-0007jA-Js
+	for linux-can@vger.kernel.org; Fri, 29 Nov 2024 13:27:31 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tH05q-000mfo-1s
+	for linux-can@vger.kernel.org;
+	Fri, 29 Nov 2024 13:27:31 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 06E9238111D
+	for <linux-can@vger.kernel.org>; Fri, 29 Nov 2024 12:27:30 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id DA8C6381101;
+	Fri, 29 Nov 2024 12:27:29 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 489071bb;
+	Fri, 29 Nov 2024 12:27:29 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH net 0/14] pull-request: can 2024-11-29
+Date: Fri, 29 Nov 2024 13:16:47 +0100
+Message-ID: <20241129122722.1046050-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH can-next v3] dt-bindings: can: convert tcan4x5x.txt to DT
- schema
-To: Sean Nyekjaer <sean@geanix.com>, Marc Kleine-Budde <mkl@pengutronix.de>,
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-can@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20241128-convert-tcan-v3-1-bf2d8005bab5@geanix.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241128-convert-tcan-v3-1-bf2d8005bab5@geanix.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On 28/11/2024 09:29, Sean Nyekjaer wrote:
-> Convert binding doc tcan4x5x.txt to yaml.
-> 
-> Added during conversion, required clock-names cclk.
-> 
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> ---
-> Changes in v3:
-> - Added cclk to clock-names list
-> - Added clock-names to the required list
-> - Link to v2: https://lore.kernel.org/r/20241105-convert-tcan-v2-1-4b320f3fcf99@geanix.com
-> 
+Hello netdev-team,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+this is a pull request of 14 patches for net/master.
 
-Best regards,
-Krzysztof
+The first patch is by me and allows the use of sleeping GPIOs to set
+termination GPIOs.
+
+Alexander Kozhinov fixes the gs_usb driver to use the endpoints
+provided by the usb endpoint descriptions instead of hard coded ones.
+
+Dario Binacchi contributes 11 statistics related patches for various
+CAN driver. A potential use after free in the hi311x is fixed. The
+statistics for the c_can, sun4i_can, hi311x, m_can, ifi_canfd,
+sja1000, sun4i_can, ems_usb, f81604 are fixed: update statistics even
+if the allocation of the error skb fails and fix the incrementing of
+the rx,tx error counters.
+
+The last patch is by me, targets the mcp251xfd driver and fixes the
+workaround for erratum DS80000789E 6.
+
+regards,
+Marc
+
+---
+
+The following changes since commit 5ccdcdf186aec6b9111845fd37e1757e9b413e2f:
+
+  net: xilinx: axienet: Enqueue Tx packets in dql before dmaengine starts (2024-11-03 14:35:11 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.12-20241104
+
+for you to fetch changes up to 3c1c18551e6ac1b988d0a05c5650e3f6c95a1b8a:
+
+  can: mcp251xfd: mcp251xfd_get_tef_len(): fix length calculation (2024-11-04 18:01:07 +0100)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.12-20241104
+
+----------------------------------------------------------------
+Alexander Hölzl (1):
+      can: j1939: fix error in J1939 documentation.
+
+Dario Binacchi (1):
+      can: c_can: fix {rx,tx}_errors statistics
+
+Geert Uytterhoeven (1):
+      can: rockchip_canfd: CAN_ROCKCHIP_CANFD should depend on ARCH_ROCKCHIP
+
+Jean Delvare (1):
+      can: rockchip_canfd: Drop obsolete dependency on COMPILE_TEST
+
+Marc Kleine-Budde (3):
+      can: m_can: m_can_close(): don't call free_irq() for IRQ-less devices
+      can: mcp251xfd: mcp251xfd_ring_alloc(): fix coalescing configuration when switching CAN modes
+      can: mcp251xfd: mcp251xfd_get_tef_len(): fix length calculation
+
+Thomas Mühlbacher (1):
+      can: {cc770,sja1000}_isa: allow building on x86_64
+
+ Documentation/networking/j1939.rst             |  2 +-
+ drivers/net/can/c_can/c_can_main.c             |  7 ++++++-
+ drivers/net/can/cc770/Kconfig                  |  2 +-
+ drivers/net/can/m_can/m_can.c                  |  3 ++-
+ drivers/net/can/rockchip/Kconfig               |  3 ++-
+ drivers/net/can/sja1000/Kconfig                |  2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c |  8 +++++---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c  | 10 +++++++---
+ 8 files changed, 25 insertions(+), 12 deletions(-)
+
 
