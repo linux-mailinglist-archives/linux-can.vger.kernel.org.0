@@ -1,94 +1,88 @@
-Return-Path: <linux-can+bounces-2291-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2292-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 035EB9DF55E
-	for <lists+linux-can@lfdr.de>; Sun,  1 Dec 2024 12:23:31 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFB17162370
-	for <lists+linux-can@lfdr.de>; Sun,  1 Dec 2024 11:23:27 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32AE378685;
-	Sun,  1 Dec 2024 11:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="io7WChja";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="F9jM7zwb"
-X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.217])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D79B99DF55F
+	for <lists+linux-can@lfdr.de>; Sun,  1 Dec 2024 12:23:53 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41464087C
-	for <linux-can@vger.kernel.org>; Sun,  1 Dec 2024 11:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.217
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98186281172
+	for <lists+linux-can@lfdr.de>; Sun,  1 Dec 2024 11:23:52 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCAE478685;
+	Sun,  1 Dec 2024 11:23:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="FayXQ/4G";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="JjcG6bOI"
+X-Original-To: linux-can@vger.kernel.org
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37524087C
+	for <linux-can@vger.kernel.org>; Sun,  1 Dec 2024 11:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.22
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733052207; cv=pass; b=awJdIkzdOIwex+PN+sF5sXjLty1+GDqz7eYkbBnCNvtBF48UtrrhLhTvfQVfxA92pOZFo6bUva35zmJm1lMjpn3Fr9sV7kzN+euAVxnIU1ueNxzVtDtprXQO8P1qOsLRLD95aNeseyrq4EKjVBayD3KvxWrK2xF/KRMr8OizSUk=
+	t=1733052229; cv=pass; b=ZnrTzXBKLfXHdP5wsvxUP+cwrZ4sf2CJfdq2C+7pDgMqUzcbA6kjAFCF3BI1vNB/lMBV2+GMskx9vfz810OJd4SVnUhSZrcxQ4LxCSqLo0cWBz8dPQnDuuQokk843MsxYdcuqyFjV+bWNM2rn/WZUBPIgXpYvzUhDLKIcF+MIgc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733052207; c=relaxed/simple;
-	bh=VDOknzT5ZQ0Bs7u9kAJE08pI0LwVLqJVwh/obhaZ1hM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=j5VgWhN/15loUe8v+TN2XF5XOwx06CQ6gbZObrMFCAxlVT7wLbzSDB+MT35s8pEJi9t/hXia/qL05VejOqDocIoinAq7Wq+W1aFrCv3UnuJ7vuH6A48V7pFTVCZXS63URLfrhYN/RxvGqz/BjcqhoaxHUnsfCvSzYwwybOaKZp4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=io7WChja; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=F9jM7zwb; arc=pass smtp.client-ip=81.169.146.217
+	s=arc-20240116; t=1733052229; c=relaxed/simple;
+	bh=Toh7Aks2wrnmT8YooGRv27q5917BWA4WUcv6oGOaamg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EnT5DNS0VpCnG0HPpHk6vBKVZw2kTy+yX490ah0xX9h02AKCkeGyt8oHfiMVcTmeNIx9lC/qoxKleERrdicgn5bb2uykZXa/ZCveJPclDmYB+msII2+G1tBsV6xH0O0olr7N0DO6TtuUk/Cm1YXujKiZr/CPKitZa/WdEWhKPFM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=FayXQ/4G; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=JjcG6bOI; arc=pass smtp.client-ip=85.215.255.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1733052197; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1733052219; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=SohQC8zKiwWpyKwi9u8Aq1OAHNFqif+x9glKodEMyoAwntTSIr+IzR0Nl7LlVMxNxU
-    Alt54Enc+OpTWioEt1GJuMzevBb7+X9KRl6cniw6kVr+QGB0LaIsyRqjFjBjXLWWZxmx
-    br7iyHF4+K2U5su4jSxDer5RWdJCm/hyUCpGf2vfZ0xkoNNrHm0DQt3GJhX5ndiz3X15
-    l9hzrM3sg2J85CUW2+bc9fbufwX3Rz9uCG/SYURuyEjuHEQbrLBYpidBG7bD0wkDGaZo
-    /Ms5Gd5JV91yBscKwtsUSg0P94TmxFwvF5YDqf4TKXeLzy8t6+Vdrm/W7teqHuF3kGn+
-    TZpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1733052197;
+    b=Ms+P21YqzN0S8mq+8ZnJGoazVLpAJ098ZBfb5PijyUVO86dTqet8xBrLytCgAufhwV
+    9hfaVO4IzDmINSkFrk5LOVZnRWXkBl9Aub5PGYyVdOla/+Q63oC5mpPfMvb09UcKSCzm
+    pK4Q6HUgoBv9Ci21YJuF5aOvWnXLVSx217yeGcokjN4J9qckVggDUwb5QeRiVXrg3q8o
+    q7M3FxflaZ6Ltkvn4jCZuPpkdgRQ8dfL9JpTbli6vwtJcIgkeFGg3CR5jwuqiS7UuUQm
+    j/3da1v8iVMWlVYUOo2IKz7Vy57CrnKUqoe98R/tHs+VaJ9eN6g9jawcLFoGS5XQeHRs
+    2eTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1733052219;
     s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=rCMqS2hCw/j5XK+LaG3f7ULfifh8CndzoAMQKW3gxYk=;
-    b=YHvzlwG/t3UYO/bgX2qH7Kbu3V9+72XlfJT3DzQzK4yTvQbhmfW4F6iT20mzTywBdA
-    lvZi3vWBoYJ97Mewc5tB7AcHhrqh2H+TcBTgsAQSVDOU9OxDAjSscZHLV2F3NCNBoYt+
-    nseAqn/3Kq/38XRWa2qjWa6A+iQ8vvUKv1sth08UddSDHdmVrUhq7iCqFmb7aiQ4uQx0
-    C57frZiaUw7WxUH8TGjkx3wx0SIcX5jTLcy3XPp5SmJy7P1+XeD/mIXYgiobxn/beEe/
-    nAFkxafkV53VaMUvs9tq3cfXnBQa469NT+bG5DbJQ4KL+BBB0DnmcJ536GswiWdVmPd9
-    5LbA==
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=k4qKqcsye2SyP2oBfXAA3wN5cDjB5oceP2ChP2dlPlw=;
+    b=jDGaXiJl0XnbMz4DGn1874aNbScXuztlEGbNjE1nb44uW4oMDeCX9E0w1YwJFr00Dj
+    MsJ1b9YLLKA/1nxa/023+CrSV9sAlQk1hXzWaSaymJUAHZZhkkSoYSmoyyvNc2Smru4o
+    7Pl2VpNH7OLua4NZt6zaCK2jF/cFSBJ86eEy9/dfFFkxupVLMHbtKrSyV3UoqxoyTbP2
+    mXmyV3hfsiyaia1pPfqxWdKSGdzlEmCQxOpFbGhLaslWvvsNxwaDgUjBHW0eTNu9TGKZ
+    N5a7xp4aXDpdOUwgl2HiazldFLK7TBsnElPjkCp8MkglMAGR3EWyjyxUAROOD4oBwPb/
+    1opg==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1733052197;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1733052219;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=rCMqS2hCw/j5XK+LaG3f7ULfifh8CndzoAMQKW3gxYk=;
-    b=io7WChja5eP5IhBg7rNixDhufFDbhV6636Sdbj1ZDnVbi3YitW6UiIyOkVR4fru6VI
-    Equuvjr3Cn+i2uTpVZzB8D85kePxrfxYPFSOsV2c6QvFEYtfLYcDdpJh6r7nrzI0mXXM
-    lu9Co6Do6eXNl9lqaQG+WU59YbaUrbhpFMeK14JAbXM1FQvAb4Pv2H0p7ZETh68GUxL9
-    TAOBCWXkw8tU4vZFoJMA6RVGvh7Dvn9/dwsAPERxFPgpLJWQR7HT+Zx3058wDtNIlU6q
-    qcR/xJ/XS6ZQrgtr1juGDW6ly/uOb9UWHIj1QJcXYK7Bn8VGZ0v+tWbb83/l5UR810vd
-    EsjQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1733052197;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=k4qKqcsye2SyP2oBfXAA3wN5cDjB5oceP2ChP2dlPlw=;
+    b=FayXQ/4G3DRrsUjCA28SUq9E52nazPV3hRLk8HkuLwF4fwXecgczmqHu4HbjHKc023
+    5ns3w0McbQZdomoEQUT8BShqjN93/bGyvfkB/X94rtW28Pyj2umXqWmULY+en+QyMzE5
+    w2EF6QcmfQ0JSjCi05EmrVlx4Ofm7ge4wJea1ZWpDTfL+dBscs7Xr1/VgF+bfejrkrDx
+    B+Ar+yENcYC+kWGxXgdMsmgdYVX9kveBorqZaKNiUy2jA+EU8hvdrJd+OuMV8wrx7BhZ
+    qT+75jaaRD3KrSotBa3TZbybtEMijpWxI5pELvDGRGjqG7wBnj0QHDHiRCc9bd3hq84L
+    FP7w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1733052219;
     s=strato-dkim-0003; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=rCMqS2hCw/j5XK+LaG3f7ULfifh8CndzoAMQKW3gxYk=;
-    b=F9jM7zwbtANgHMywMvwUFt3hVfkEz6SHX+BwHXzHy5bqw1RPI8lXfYiZmmLdCkM3qd
-    TNw/i60oBgqZ5gc15aDQ==
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=k4qKqcsye2SyP2oBfXAA3wN5cDjB5oceP2ChP2dlPlw=;
+    b=JjcG6bOIDB1P1UjKANZPxSDyo3VDfxhNo49jkXioyc6jRs3pf+Pu454k/EP6aZUez0
+    +3f+uGeP4J73kDt3Y5BA==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tRkI16oOSXVT6pap5"
 Received: from lenov17.lan
     by smtp.strato.de (RZmta 51.2.11 DYNA|AUTH)
-    with ESMTPSA id K63ada0B1BNHgXE
+    with ESMTPSA id K63ada0B1BNcgXH
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Sun, 1 Dec 2024 12:23:17 +0100 (CET)
+    Sun, 1 Dec 2024 12:23:38 +0100 (CET)
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 To: linux-can@vger.kernel.org
 Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [RFC PATCH 2/2] can xl dummy driver from Vincent
-Date: Sun,  1 Dec 2024 12:22:30 +0100
-Message-ID: <20241201112230.6917-2-socketcan@hartkopp.net>
+Subject: [RFC PATCH] iplink_can: add CAN XL support RFC based on Vincent cleanups
+Date: Sun,  1 Dec 2024 12:23:33 +0100
+Message-ID: <20241201112333.6950-1-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241201112230.6917-1-socketcan@hartkopp.net>
-References: <20241201112230.6917-1-socketcan@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -98,287 +92,490 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
 
-added control mode/supported output
+Fixes from Oliver:
+- remove newline before tdc information to increase readability
+- fix copy/paste issue in CAN_CTRLMODE_XL_TDC_ definitions
+
+Based on the iproute2 CAN XL preparations patch set at
+https://lore.kernel.org/linux-can/173194923075.4109060.18408610499610779344.git-patchwork-notify@kernel.org/T/#t
+which was already merged into iproute2-next tree:
+https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=7b4d64895f7c58a12c01d2f394f75b0d1938eb9c
 
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- drivers/net/can/Kconfig   |   8 ++
- drivers/net/can/Makefile  |   1 +
- drivers/net/can/dummyxl.c | 226 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 235 insertions(+)
- create mode 100644 drivers/net/can/dummyxl.c
+ include/uapi/linux/can/netlink.h |  21 ++-
+ ip/iplink_can.c                  | 223 ++++++++++++++++++++++++++++---
+ 2 files changed, 216 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-index cf989bea9aa3..a8bc5f4e752f 100644
---- a/drivers/net/can/Kconfig
-+++ b/drivers/net/can/Kconfig
-@@ -122,10 +122,18 @@ config CAN_CAN327
- 	  Please refer to the documentation for information on how to use it:
- 	  Documentation/networking/device_drivers/can/can327.rst
+diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
+index 8ec98c21..416e2feb 100644
+--- a/include/uapi/linux/can/netlink.h
++++ b/include/uapi/linux/can/netlink.h
+@@ -99,12 +99,15 @@ struct can_ctrlmode {
+ #define CAN_CTRLMODE_BERR_REPORTING	0x10	/* Bus-error reporting */
+ #define CAN_CTRLMODE_FD			0x20	/* CAN FD mode */
+ #define CAN_CTRLMODE_PRESUME_ACK	0x40	/* Ignore missing CAN ACKs */
+ #define CAN_CTRLMODE_FD_NON_ISO		0x80	/* CAN FD in non-ISO mode */
+ #define CAN_CTRLMODE_CC_LEN8_DLC	0x100	/* Classic CAN DLC option */
+-#define CAN_CTRLMODE_TDC_AUTO		0x200	/* CAN transiver automatically calculates TDCV */
+-#define CAN_CTRLMODE_TDC_MANUAL		0x400	/* TDCV is manually set up by user */
++#define CAN_CTRLMODE_TDC_AUTO		0x200	/* FD transceiver automatically calculates TDCV */
++#define CAN_CTRLMODE_TDC_MANUAL		0x400	/* FD TDCV is manually set up by user */
++#define CAN_CTRLMODE_XL			0x800	/* CAN XL mode */
++#define CAN_CTRLMODE_XL_TDC_AUTO	0x1000	/* XL transceiver automatically calculates TDCV */
++#define CAN_CTRLMODE_XL_TDC_MANUAL	0x2000	/* XL TDCV is manually set up by user */
  
- 	  If this driver is built as a module, it will be called can327.
+ /*
+  * CAN device statistics
+  */
+ struct can_device_stats {
+@@ -127,27 +130,31 @@ enum {
+ 	IFLA_CAN_STATE,
+ 	IFLA_CAN_CTRLMODE,
+ 	IFLA_CAN_RESTART_MS,
+ 	IFLA_CAN_RESTART,
+ 	IFLA_CAN_BERR_COUNTER,
+-	IFLA_CAN_DATA_BITTIMING,
+-	IFLA_CAN_DATA_BITTIMING_CONST,
++	IFLA_CAN_DATA_BITTIMING, /* FD */
++	IFLA_CAN_DATA_BITTIMING_CONST, /* FD */
+ 	IFLA_CAN_TERMINATION,
+ 	IFLA_CAN_TERMINATION_CONST,
+ 	IFLA_CAN_BITRATE_CONST,
+-	IFLA_CAN_DATA_BITRATE_CONST,
++	IFLA_CAN_DATA_BITRATE_CONST, /* FD */
+ 	IFLA_CAN_BITRATE_MAX,
+-	IFLA_CAN_TDC,
++	IFLA_CAN_TDC, /* FD */
+ 	IFLA_CAN_CTRLMODE_EXT,
++	IFLA_CAN_XL_DATA_BITTIMING,
++	IFLA_CAN_XL_DATA_BITTIMING_CONST,
++	IFLA_CAN_XL_DATA_BITRATE_CONST,
++	IFLA_CAN_XL_TDC,
  
-+config CAN_DUMMY_XL
-+	tristate "Dummy CAN XL"
-+	help
-+	  A dummy module just to check the CAN XL netlink interface. Do not
-+	  merge this.
-+
-+	  If this driver is built as a module, it will be called dummyxl.
-+
- config CAN_FLEXCAN
- 	tristate "Support for Freescale FLEXCAN based chips"
- 	depends on OF || COLDFIRE || COMPILE_TEST
- 	depends on HAS_IOMEM
- 	select CAN_RX_OFFLOAD
-diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
-index a71db2cfe990..ff8e00fa26e3 100644
---- a/drivers/net/can/Makefile
-+++ b/drivers/net/can/Makefile
-@@ -19,10 +19,11 @@ obj-$(CONFIG_CAN_AT91)		+= at91_can.o
- obj-$(CONFIG_CAN_BXCAN)		+= bxcan.o
- obj-$(CONFIG_CAN_CAN327)	+= can327.o
- obj-$(CONFIG_CAN_CC770)		+= cc770/
- obj-$(CONFIG_CAN_C_CAN)		+= c_can/
- obj-$(CONFIG_CAN_CTUCANFD)	+= ctucanfd/
-+obj-$(CONFIG_CAN_DUMMY_XL)	+= dummyxl.o
- obj-$(CONFIG_CAN_FLEXCAN)	+= flexcan/
- obj-$(CONFIG_CAN_GRCAN)		+= grcan.o
- obj-$(CONFIG_CAN_IFI_CANFD)	+= ifi_canfd/
- obj-$(CONFIG_CAN_JANZ_ICAN3)	+= janz-ican3.o
- obj-$(CONFIG_CAN_KVASER_PCIEFD)	+= kvaser_pciefd.o
-diff --git a/drivers/net/can/dummyxl.c b/drivers/net/can/dummyxl.c
-new file mode 100644
-index 000000000000..ac1b579b4c1f
---- /dev/null
-+++ b/drivers/net/can/dummyxl.c
-@@ -0,0 +1,226 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/* Copyright (c) 2024 Vincent Mailhol <mailhol.vincent@wanadoo.fr> */
-+
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/netdevice.h>
-+#include <linux/units.h>
-+#include <linux/can.h>
-+#include <linux/can/dev.h>
-+#include <linux/can/skb.h>
-+
-+struct dummyxl {
-+	struct can_priv can;
-+	struct net_device *dev;
+ 	/* add new constants above here */
+ 	__IFLA_CAN_MAX,
+ 	IFLA_CAN_MAX = __IFLA_CAN_MAX - 1
+ };
+ 
+ /*
+- * CAN FD Transmitter Delay Compensation (TDC)
++ * CAN FD/XL Transmitter Delay Compensation (TDC)
+  *
+  * Please refer to struct can_tdc_const and can_tdc in
+  * include/linux/can/bittiming.h for further details.
+  */
+ enum {
+diff --git a/ip/iplink_can.c b/ip/iplink_can.c
+index fcffa852..8dc9229b 100644
+--- a/ip/iplink_can.c
++++ b/ip/iplink_can.c
+@@ -13,16 +13,10 @@
+ 
+ #include "rt_names.h"
+ #include "utils.h"
+ #include "ip_common.h"
+ 
+-struct can_tdc {
+-	__u32 tdcv;
+-	__u32 tdco;
+-	__u32 tdcf;
+-};
+-
+ static void print_usage(FILE *f)
+ {
+ 	fprintf(f,
+ 		"Usage: ip link set DEVICE type can\n"
+ 		"\t[ bitrate BITRATE [ sample-point SAMPLE-POINT] ] |\n"
+@@ -30,20 +24,26 @@ static void print_usage(FILE *f)
+ 		"\n"
+ 		"\t[ dbitrate BITRATE [ dsample-point SAMPLE-POINT] ] |\n"
+ 		"\t[ dtq TQ dprop-seg PROP_SEG dphase-seg1 PHASE-SEG1\n \t  dphase-seg2 PHASE-SEG2 [ dsjw SJW ] ]\n"
+ 		"\t[ tdcv TDCV tdco TDCO tdcf TDCF ]\n"
+ 		"\n"
++		"\t[ xbitrate BITRATE [ xsample-point SAMPLE-POINT] ] |\n"
++		"\t[ xtq TQ xprop-seg PROP_SEG xphase-seg1 PHASE-SEG1\n \t  xphase-seg2 PHASE-SEG2 [ xsjw SJW ] ]\n"
++		"\t[ xtdcv TDCV xtdco TDCO xtdcf TDCF ]\n"
++		"\n"
+ 		"\t[ loopback { on | off } ]\n"
+ 		"\t[ listen-only { on | off } ]\n"
+ 		"\t[ triple-sampling { on | off } ]\n"
+ 		"\t[ one-shot { on | off } ]\n"
+ 		"\t[ berr-reporting { on | off } ]\n"
+ 		"\t[ fd { on | off } ]\n"
+ 		"\t[ fd-non-iso { on | off } ]\n"
+ 		"\t[ presume-ack { on | off } ]\n"
+ 		"\t[ cc-len8-dlc { on | off } ]\n"
+ 		"\t[ tdc-mode { auto | manual | off } ]\n"
++		"\t[ xl { on | off } ]\n"
++		"\t[ xtdc-mode { auto | manual | off } ]\n"
+ 		"\n"
+ 		"\t[ restart-ms TIME-MS ]\n"
+ 		"\t[ restart ]\n"
+ 		"\n"
+ 		"\t[ termination { 0..65535 } ]\n"
+@@ -120,23 +120,33 @@ static void print_ctrlmode(enum output_type t, __u32 flags, const char* key)
+ 	print_flag(t, &flags, CAN_CTRLMODE_FD_NON_ISO, "FD-NON-ISO");
+ 	print_flag(t, &flags, CAN_CTRLMODE_PRESUME_ACK, "PRESUME-ACK");
+ 	print_flag(t, &flags, CAN_CTRLMODE_CC_LEN8_DLC, "CC-LEN8-DLC");
+ 	print_flag(t, &flags, CAN_CTRLMODE_TDC_AUTO, "TDC-AUTO");
+ 	print_flag(t, &flags, CAN_CTRLMODE_TDC_MANUAL, "TDC-MANUAL");
++	print_flag(t, &flags, CAN_CTRLMODE_XL, "XL");
++	print_flag(t, &flags, CAN_CTRLMODE_XL_TDC_AUTO, "XL-TDC-AUTO");
++	print_flag(t, &flags, CAN_CTRLMODE_XL_TDC_MANUAL, "XL-TDC-MANUAL");
+ 
+ 	if (flags)
+ 		print_hex(t, NULL, "%x", flags);
+ 
+ 	close_json_array(t, "> ");
+ }
+ 
++struct can_tdc {
++	__u32 tdcv;
++	__u32 tdco;
++	__u32 tdcf;
 +};
 +
-+static struct dummyxl *dummyxl;
+ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
+ 			 struct nlmsghdr *n)
+ {
+-	struct can_bittiming bt = {}, fd_dbt = {};
++	struct can_bittiming bt = {}, fd_dbt = {}, xl_dbt = {};
+ 	struct can_ctrlmode cm = { 0 };
+ 	struct can_tdc fd = { .tdcv = -1, .tdco = -1, .tdcf = -1 };
++	struct can_tdc xl = { .tdcv = -1, .tdco = -1, .tdcf = -1 };
+ 
+ 	while (argc > 0) {
+ 		if (matches(*argv, "bitrate") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&bt.bitrate, *argv, 0))
+@@ -210,10 +220,57 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
+ 				invarg("invalid \"tdco\" value", *argv);
+ 		} else if (matches(*argv, "tdcf") == 0) {
+ 			NEXT_ARG();
+ 			if (get_u32(&fd.tdcf, *argv, 0))
+ 				invarg("invalid \"tdcf\" value", *argv);
++		} else if (matches(*argv, "xl") == 0) {
++			NEXT_ARG();
++			set_ctrlmode("xl", *argv, &cm,
++				     CAN_CTRLMODE_XL);
++		} else if (matches(*argv, "xbitrate") == 0) {
++			NEXT_ARG();
++			if (get_u32(&xl_dbt.bitrate, *argv, 0))
++				invarg("invalid \"xbitrate\" value", *argv);
++		} else if (matches(*argv, "xsample-point") == 0) {
++			float sp;
 +
-+static const struct can_bittiming_const dummyxl_bittiming_const = {
-+	.name = "dummyxl nominal",
-+	.tseg1_min = 2,
-+	.tseg1_max = 256,
-+	.tseg2_min = 2,
-+	.tseg2_max = 128,
-+	.sjw_max = 128,
-+	.brp_min = 1,
-+	.brp_max = 512,
-+	.brp_inc = 1
-+};
++			NEXT_ARG();
++			if (get_float(&sp, *argv))
++				invarg("invalid \"xsample-point\" value", *argv);
++			xl_dbt.sample_point = (__u32)(sp * 1000);
++		} else if (matches(*argv, "xtq") == 0) {
++			NEXT_ARG();
++			if (get_u32(&xl_dbt.tq, *argv, 0))
++				invarg("invalid \"xtq\" value", *argv);
++		} else if (matches(*argv, "xprop-seg") == 0) {
++			NEXT_ARG();
++			if (get_u32(&xl_dbt.prop_seg, *argv, 0))
++				invarg("invalid \"xprop-seg\" value", *argv);
++		} else if (matches(*argv, "xphase-seg1") == 0) {
++			NEXT_ARG();
++			if (get_u32(&xl_dbt.phase_seg1, *argv, 0))
++				invarg("invalid \"xphase-seg1\" value", *argv);
++		} else if (matches(*argv, "xphase-seg2") == 0) {
++			NEXT_ARG();
++			if (get_u32(&xl_dbt.phase_seg2, *argv, 0))
++				invarg("invalid \"xphase-seg2\" value", *argv);
++		} else if (matches(*argv, "xsjw") == 0) {
++			NEXT_ARG();
++			if (get_u32(&xl_dbt.sjw, *argv, 0))
++				invarg("invalid \"xsjw\" value", *argv);
++		} else if (matches(*argv, "xtdcv") == 0) {
++			NEXT_ARG();
++			if (get_u32(&xl.tdcv, *argv, 0))
++				invarg("invalid \"xtdcv\" value", *argv);
++		} else if (matches(*argv, "xtdco") == 0) {
++			NEXT_ARG();
++			if (get_u32(&xl.tdco, *argv, 0))
++				invarg("invalid \"xtdco\" value", *argv);
++		} else if (matches(*argv, "xtdcf") == 0) {
++			NEXT_ARG();
++			if (get_u32(&xl.tdcf, *argv, 0))
++				invarg("invalid \"xtdcf\" value", *argv);
+ 		} else if (matches(*argv, "loopback") == 0) {
+ 			NEXT_ARG();
+ 			set_ctrlmode("loopback", *argv, &cm,
+ 				     CAN_CTRLMODE_LOOPBACK);
+ 		} else if (matches(*argv, "listen-only") == 0) {
+@@ -261,10 +318,25 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
+ 					   CAN_CTRLMODE_TDC_MANUAL;
+ 			} else {
+ 				invarg("\"tdc-mode\" must be either of \"auto\", \"manual\" or \"off\"",
+ 					*argv);
+ 			}
++		} else if (matches(*argv, "xtdc-mode") == 0) {
++			NEXT_ARG();
++			if (strcmp(*argv, "auto") == 0) {
++				cm.flags |= CAN_CTRLMODE_XL_TDC_AUTO;
++				cm.mask |= CAN_CTRLMODE_XL_TDC_AUTO;
++			} else if (strcmp(*argv, "manual") == 0) {
++				cm.flags |= CAN_CTRLMODE_XL_TDC_MANUAL;
++				cm.mask |= CAN_CTRLMODE_XL_TDC_MANUAL;
++			} else if (strcmp(*argv, "off") == 0) {
++				cm.mask |= CAN_CTRLMODE_XL_TDC_AUTO |
++					   CAN_CTRLMODE_XL_TDC_MANUAL;
++			} else {
++				invarg("\"xtdc-mode\" must be either of \"auto\", \"manual\" or \"off\"",
++					*argv);
++			}
+ 		} else if (matches(*argv, "restart") == 0) {
+ 			__u32 val = 1;
+ 
+ 			addattr32(n, 1024, IFLA_CAN_RESTART, val);
+ 		} else if (matches(*argv, "restart-ms") == 0) {
+@@ -295,10 +367,12 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
+ 
+ 	if (bt.bitrate || bt.tq)
+ 		addattr_l(n, 1024, IFLA_CAN_BITTIMING, &bt, sizeof(bt));
+ 	if (fd_dbt.bitrate || fd_dbt.tq)
+ 		addattr_l(n, 1024, IFLA_CAN_DATA_BITTIMING, &fd_dbt, sizeof(fd_dbt));
++	if (xl_dbt.bitrate || xl_dbt.tq)
++		addattr_l(n, 1024, IFLA_CAN_XL_DATA_BITTIMING, &xl_dbt, sizeof(xl_dbt));
+ 	if (cm.mask)
+ 		addattr_l(n, 1024, IFLA_CAN_CTRLMODE, &cm, sizeof(cm));
+ 
+ 	if (fd.tdcv != -1 || fd.tdco != -1 || fd.tdcf != -1) {
+ 		struct rtattr *tdc = addattr_nest(n, 1024,
+@@ -310,10 +384,22 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
+ 			addattr32(n, 1024, IFLA_CAN_TDC_TDCO, fd.tdco);
+ 		if (fd.tdcf != -1)
+ 			addattr32(n, 1024, IFLA_CAN_TDC_TDCF, fd.tdcf);
+ 		addattr_nest_end(n, tdc);
+ 	}
++	if (xl.tdcv != -1 || xl.tdco != -1 || xl.tdcf != -1) {
++		struct rtattr *tdc = addattr_nest(n, 1024,
++						  IFLA_CAN_XL_TDC | NLA_F_NESTED);
 +
-+static const struct can_bittiming_const dummyxl_fd_databittiming_const = {
-+	.name = "dummyxl FD",
-+	.tseg1_min = 2,
-+	.tseg1_max = 256,
-+	.tseg2_min = 2,
-+	.tseg2_max = 128,
-+	.sjw_max = 128,
-+	.brp_min = 1,
-+	.brp_max = 512,
-+	.brp_inc = 1
-+};
++		if (xl.tdcv != -1)
++			addattr32(n, 1024, IFLA_CAN_TDC_TDCV, xl.tdcv);
++		if (xl.tdco != -1)
++			addattr32(n, 1024, IFLA_CAN_TDC_TDCO, xl.tdco);
++		if (xl.tdcf != -1)
++			addattr32(n, 1024, IFLA_CAN_TDC_TDCF, xl.tdcf);
++		addattr_nest_end(n, tdc);
++	}
+ 
+ 	return 0;
+ }
+ 
+ static const char *can_state_names[CAN_STATE_MAX] = {
+@@ -340,62 +426,69 @@ can_print_timing_min_max(const char *json_attr, const char *fp_attr,
+ 	print_uint(PRINT_ANY, "min", " %d", min);
+ 	print_uint(PRINT_ANY, "max", "..%d", max);
+ 	close_json_object();
+ }
+ 
+-static void can_print_tdc_opt(struct rtattr *tdc_attr)
++static void can_print_tdc_opt(struct rtattr *tdc_attr, bool is_xl)
+ {
+ 	struct rtattr *tb[IFLA_CAN_TDC_MAX + 1];
+ 
+ 	parse_rtattr_nested(tb, IFLA_CAN_TDC_MAX, tdc_attr);
+ 	if (tb[IFLA_CAN_TDC_TDCV] || tb[IFLA_CAN_TDC_TDCO] ||
+ 	    tb[IFLA_CAN_TDC_TDCF]) {
+-		open_json_object("tdc");
+-		can_print_nl_indent();
++		const char *tdc = is_xl ? "xtdc" : "tdc";
 +
-+static const struct can_tdc_const dummyxl_fd_tdc_const = {
-+	.tdcv_min = 0,
-+	.tdcv_max = 0, /* Manual mode not supported. */
-+	.tdco_min = 0,
-+	.tdco_max = 127,
-+	.tdcf_min = 0,
-+	.tdcf_max = 127
-+};
++		open_json_object(tdc);
+ 		if (tb[IFLA_CAN_TDC_TDCV]) {
++			const char *tdcv_fmt = is_xl ? " xtdcv %u" : " tdcv %u";
+ 			__u32 *tdcv = RTA_DATA(tb[IFLA_CAN_TDC_TDCV]);
+ 
+-			print_uint(PRINT_ANY, "tdcv", " tdcv %u", *tdcv);
++			print_uint(PRINT_ANY, "tdcv", tdcv_fmt, *tdcv);
+ 		}
+ 		if (tb[IFLA_CAN_TDC_TDCO]) {
++			const char *tdco_fmt = is_xl ? " xtdco %u" : " tdco %u";
+ 			__u32 *tdco = RTA_DATA(tb[IFLA_CAN_TDC_TDCO]);
+ 
+-			print_uint(PRINT_ANY, "tdco", " tdco %u", *tdco);
++			print_uint(PRINT_ANY, "tdco", tdco_fmt, *tdco);
+ 		}
+ 		if (tb[IFLA_CAN_TDC_TDCF]) {
++			const char *tdcf_fmt = is_xl ? " xtdcf %u" : " tdcf %u";
+ 			__u32 *tdcf = RTA_DATA(tb[IFLA_CAN_TDC_TDCF]);
+ 
+-			print_uint(PRINT_ANY, "tdcf", " tdcf %u", *tdcf);
++			print_uint(PRINT_ANY, "tdcf", tdcf_fmt, *tdcf);
+ 		}
+ 		close_json_object();
+ 	}
+ }
+ 
+-static void can_print_tdc_const_opt(struct rtattr *tdc_attr)
++static void can_print_tdc_const_opt(struct rtattr *tdc_attr, bool is_xl)
+ {
++	const char *tdc = is_xl ? "xtdc" : "tdc";
+ 	struct rtattr *tb[IFLA_CAN_TDC_MAX + 1];
+ 
+ 	parse_rtattr_nested(tb, IFLA_CAN_TDC_MAX, tdc_attr);
+-	open_json_object("tdc");
+-	can_print_nl_indent();
++	open_json_object(tdc);
+ 	if (tb[IFLA_CAN_TDC_TDCV_MIN] && tb[IFLA_CAN_TDC_TDCV_MAX]) {
+ 		__u32 *tdcv_min = RTA_DATA(tb[IFLA_CAN_TDC_TDCV_MIN]);
+ 		__u32 *tdcv_max = RTA_DATA(tb[IFLA_CAN_TDC_TDCV_MAX]);
++		const char *tdcv = is_xl ? " xtdcv" : " tdcv";
+ 
+-		can_print_timing_min_max("tdcv", " tdcv", *tdcv_min, *tdcv_max);
++		can_print_timing_min_max("tdcv", tdcv, *tdcv_min, *tdcv_max);
+ 	}
+ 	if (tb[IFLA_CAN_TDC_TDCO_MIN] && tb[IFLA_CAN_TDC_TDCO_MAX]) {
+ 		__u32 *tdco_min = RTA_DATA(tb[IFLA_CAN_TDC_TDCO_MIN]);
+ 		__u32 *tdco_max = RTA_DATA(tb[IFLA_CAN_TDC_TDCO_MAX]);
++		const char *tdco = is_xl ? " xtdco" : " tdco";
+ 
+-		can_print_timing_min_max("tdco", " tdco", *tdco_min, *tdco_max);
++		can_print_timing_min_max("tdco", tdco, *tdco_min, *tdco_max);
+ 	}
+ 	if (tb[IFLA_CAN_TDC_TDCF_MIN] && tb[IFLA_CAN_TDC_TDCF_MAX]) {
+ 		__u32 *tdcf_min = RTA_DATA(tb[IFLA_CAN_TDC_TDCF_MIN]);
+ 		__u32 *tdcf_max = RTA_DATA(tb[IFLA_CAN_TDC_TDCF_MAX]);
++		const char *tdcf = is_xl ? " xtdcf" : " tdcf";
+ 
+-		can_print_timing_min_max("tdcf", " tdcf", *tdcf_min, *tdcf_max);
++		can_print_timing_min_max("tdcf", tdcf, *tdcf_min, *tdcf_max);
+ 	}
+ 	close_json_object();
+ }
+ 
+ static void can_print_ctrlmode_ext(struct rtattr *ctrlmode_ext_attr,
+@@ -545,11 +638,11 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
+ 			   dbt->phase_seg2);
+ 		print_uint(PRINT_ANY, "sjw", " dsjw %u", dbt->sjw);
+ 		print_uint(PRINT_ANY, "brp", " dbrp %u", dbt->brp);
+ 
+ 		if (tb[IFLA_CAN_TDC])
+-			can_print_tdc_opt(tb[IFLA_CAN_TDC]);
++			can_print_tdc_opt(tb[IFLA_CAN_TDC], false);
+ 
+ 		close_json_object();
+ 	}
+ 
+ 	/* data bittiming const is irrelevant if fixed bitrate is defined */
+@@ -569,11 +662,11 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
+ 		can_print_timing_min_max("brp", " dbrp",
+ 					 dbtc->brp_min, dbtc->brp_max);
+ 		print_uint(PRINT_ANY, "brp_inc", " dbrp_inc %u", dbtc->brp_inc);
+ 
+ 		if (tb[IFLA_CAN_TDC])
+-			can_print_tdc_const_opt(tb[IFLA_CAN_TDC]);
++			can_print_tdc_const_opt(tb[IFLA_CAN_TDC], false);
+ 
+ 		close_json_object();
+ 	}
+ 
+ 	if (tb[IFLA_CAN_DATA_BITRATE_CONST]) {
+@@ -608,10 +701,98 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
+ 				   dbitrate_const[i]);
+ 		}
+ 		close_json_array(PRINT_ANY, " ]");
+ 	}
+ 
++	/* data bittiming is irrelevant if fixed bitrate is defined */
++	if (tb[IFLA_CAN_XL_DATA_BITTIMING] &&
++	    !tb[IFLA_CAN_XL_DATA_BITRATE_CONST]) {
++		struct can_bittiming *dbt =
++			RTA_DATA(tb[IFLA_CAN_XL_DATA_BITTIMING]);
++		char dsp[6];
 +
-+static const struct can_bittiming_const dummyxl_xl_databittiming_const = {
-+	.name = "dummyxl XL",
-+	.tseg1_min = 2,
-+	.tseg1_max = 256,
-+	.tseg2_min = 2,
-+	.tseg2_max = 128,
-+	.sjw_max = 128,
-+	.brp_min = 1,
-+	.brp_max = 512,
-+	.brp_inc = 1
-+};
++		open_json_object("xl_data_bittiming");
++		can_print_nl_indent();
++		print_uint(PRINT_ANY, "bitrate", " xbitrate %u", dbt->bitrate);
++		snprintf(dsp, sizeof(dsp), "%.3f", dbt->sample_point / 1000.);
++		print_string(PRINT_ANY, "sample_point", " xsample-point %s",
++			     dsp);
++		can_print_nl_indent();
++		print_uint(PRINT_ANY, "tq", " xtq %u", dbt->tq);
++		print_uint(PRINT_ANY, "prop_seg", " xprop-seg %u",
++			   dbt->prop_seg);
++		print_uint(PRINT_ANY, "phase_seg1", " xphase-seg1 %u",
++			   dbt->phase_seg1);
++		print_uint(PRINT_ANY, "phase_seg2", " xphase-seg2 %u",
++			   dbt->phase_seg2);
++		print_uint(PRINT_ANY, "sjw", " xsjw %u", dbt->sjw);
++		print_uint(PRINT_ANY, "brp", " xbrp %u", dbt->brp);
 +
-+static const struct can_tdc_const dummyxl_xl_tdc_const = {
-+	.tdcv_min = 0,
-+	.tdcv_max = 0, /* Manual mode not supported. */
-+	.tdco_min = 0,
-+	.tdco_max = 127,
-+	.tdcf_min = 0,
-+	.tdcf_max = 127
-+};
++		if (tb[IFLA_CAN_XL_TDC])
++			can_print_tdc_opt(tb[IFLA_CAN_XL_TDC], true);
 +
-+static void dummyxl_print_bittiming(struct net_device *dev, struct can_bittiming *bt)
-+{
-+	netdev_info(dev, "\tbitrate: %u\n", bt->bitrate);
-+	netdev_info(dev, "\tsample_point: %u\n", bt->sample_point);
-+	netdev_info(dev, "\ttq: %u\n", bt->tq);
-+	netdev_info(dev, "\tprop_seg: %u\n", bt->prop_seg);
-+	netdev_info(dev, "\tphase_seg1: %u\n", bt->phase_seg1);
-+	netdev_info(dev, "\tphase_seg2: %u\n", bt->phase_seg2);
-+	netdev_info(dev, "\tsjw: %u\n", bt->sjw);
-+	netdev_info(dev, "\tbrp: %u\n", bt->brp);
-+}
++		close_json_object();
++	}
 +
-+static void dummyxl_print_tdc(struct net_device *dev, struct can_tdc *tdc)
-+{
-+	netdev_info(dev, "\t\ttdcv: %u\n", tdc->tdcv);
-+	netdev_info(dev, "\t\ttdco: %u\n", tdc->tdco);
-+	netdev_info(dev, "\t\ttdcf: %u\n", tdc->tdcf);
-+}
++	/* data bittiming const is irrelevant if fixed bitrate is defined */
++	if (tb[IFLA_CAN_XL_DATA_BITTIMING_CONST] &&
++	    !tb[IFLA_CAN_XL_DATA_BITRATE_CONST]) {
++		struct can_bittiming_const *dbtc =
++			RTA_DATA(tb[IFLA_CAN_XL_DATA_BITTIMING_CONST]);
 +
-+static int dummyxl_netdev_open(struct net_device *dev)
-+{
-+	struct dummyxl *priv = netdev_priv(dev);
-+	struct can_priv *can_priv = &priv->can;
-+	int ret;
++		open_json_object("xl_data_bittiming_const");
++		can_print_nl_indent();
++		print_string(PRINT_ANY, "name", " %s:", dbtc->name);
++		can_print_timing_min_max("tseg1", " xtseg1",
++					 dbtc->tseg1_min, dbtc->tseg1_max);
++		can_print_timing_min_max("tseg2", " xtseg2",
++					 dbtc->tseg2_min, dbtc->tseg2_max);
++		can_print_timing_min_max("sjw", " xsjw", 1, dbtc->sjw_max);
++		can_print_timing_min_max("brp", " xbrp",
++					 dbtc->brp_min, dbtc->brp_max);
++		print_uint(PRINT_ANY, "brp_inc", " xbrp_inc %u", dbtc->brp_inc);
 +
-+	netdev_info(dev, "CAN control mode/supported : %08X/%08X\n",
-+		    can_priv->ctrlmode, can_priv->ctrlmode_supported);
-+	netdev_info(dev, "CAN CC nominal bittiming:\n");
-+	dummyxl_print_bittiming(dev, &can_priv->bittiming);
-+	netdev_info(dev, "\n");
++		if (tb[IFLA_CAN_XL_TDC])
++			can_print_tdc_const_opt(tb[IFLA_CAN_XL_TDC], true);
 +
-+	if (can_priv->ctrlmode & CAN_CTRLMODE_FD) {
-+		netdev_info(dev, "CAN FD databittiming:\n");
-+		dummyxl_print_bittiming(dev, &can_priv->fd.data_bittiming);
-+		if (can_fd_tdc_is_enabled(can_priv)) {
-+			netdev_info(dev, "\tCAN FD TDC:\n");
-+			dummyxl_print_tdc(dev, &can_priv->fd.tdc);
-+		} else {
-+			netdev_info(dev, "\tCAN FD TDC is off\n");
++		close_json_object();
++	}
++
++	if (tb[IFLA_CAN_XL_DATA_BITRATE_CONST]) {
++		__u32 *dbitrate_const =
++			RTA_DATA(tb[IFLA_CAN_XL_DATA_BITRATE_CONST]);
++		int dbitrate_cnt =
++			RTA_PAYLOAD(tb[IFLA_CAN_XL_DATA_BITRATE_CONST]) /
++			sizeof(*dbitrate_const);
++		int i;
++		__u32 dbitrate = 0;
++
++		if (tb[IFLA_CAN_XL_DATA_BITTIMING]) {
++			struct can_bittiming *dbt =
++				RTA_DATA(tb[IFLA_CAN_XL_DATA_BITTIMING]);
++			dbitrate = dbt->bitrate;
 +		}
-+	} else {
-+		netdev_info(dev, "CAN FD is off\n");
-+	}
-+	netdev_info(dev, "\n");
 +
-+	if (can_priv->ctrlmode & CAN_CTRLMODE_XL) {
-+		netdev_info(dev, "CAN XL databittiming:\n");
-+		dummyxl_print_bittiming(dev, &can_priv->xl.data_bittiming);
-+		if (can_xl_tdc_is_enabled(can_priv)) {
-+			netdev_info(dev, "\tCAN XL TDC:\n");
-+			dummyxl_print_tdc(dev, &can_priv->xl.tdc);
-+		} else {
-+			netdev_info(dev, "\tCAN XL TDC is off\n");
++		can_print_nl_indent();
++		print_uint(PRINT_ANY, "xl_data_bittiming_bitrate", " xbitrate %u",
++			   dbitrate);
++		can_print_nl_indent();
++		open_json_array(PRINT_ANY, is_json_context() ?
++				"data_bitrate_const" : "    [");
++		for (i = 0; i < dbitrate_cnt; ++i) {
++			/* This will keep lines below 80 signs */
++			if (!(i % 6) && i) {
++				can_print_nl_indent();
++				print_string(PRINT_FP, NULL, "%s", "     ");
++			}
++			print_uint(PRINT_ANY, NULL,
++				   i < dbitrate_cnt - 1 ? "%8u, " : "%8u",
++				   dbitrate_const[i]);
 +		}
-+	} else {
-+		netdev_info(dev, "CAN XL is off\n");
-+	}
-+	netdev_info(dev, "\n");
-+
-+	ret = open_candev(dev);
-+	if (ret)
-+		return ret;
-+	netif_start_queue(dev);
-+	netdev_info(dev, "dummyxl is up\n");
-+
-+	return 0;
-+}
-+
-+static int dummyxl_netdev_close(struct net_device *dev)
-+{
-+	netif_stop_queue(dev);
-+	close_candev(dev);
-+	netdev_info(dev, "dummyxl is down\n");
-+
-+	return 0;
-+}
-+
-+static netdev_tx_t dummyxl_start_xmit(struct sk_buff *skb,
-+				      struct net_device *dev)
-+{
-+	if (can_is_canxl_skb(skb))
-+		netdev_info(dev, "Received CAN XL skb\n");
-+	else if (can_is_canfd_skb(skb))
-+		netdev_info(dev, "Received CAN FD skb\n");
-+	else if (can_is_can_skb(skb))
-+		netdev_info(dev, "Received Classical CAN skb\n");
-+	else
-+		netdev_info(dev, "Received an odd skb?!\n");
-+	kfree_skb(skb);
-+	dev->stats.tx_dropped++;
-+
-+	return NETDEV_TX_OK;
-+}
-+
-+static const struct net_device_ops dummyxl_netdev_ops = {
-+	.ndo_open = dummyxl_netdev_open,
-+	.ndo_stop = dummyxl_netdev_close,
-+	.ndo_start_xmit = dummyxl_start_xmit,
-+};
-+
-+static int __init dummyxl_init(void)
-+{
-+	struct net_device *dev;
-+	struct dummyxl *priv;
-+	int ret;
-+
-+	dev = alloc_candev(sizeof(struct dummyxl), 0);
-+	if (!dev)
-+		return -ENOMEM;
-+
-+	dev->netdev_ops = &dummyxl_netdev_ops;
-+	priv = netdev_priv(dev);
-+	priv->can.bittiming_const = &dummyxl_bittiming_const;
-+	priv->can.bitrate_max = 8 * MEGA /* BPS */;
-+	priv->can.clock.freq = 80 * MEGA /* Hz */;
-+	priv->can.fd.data_bittiming_const = &dummyxl_fd_databittiming_const;
-+	priv->can.fd.tdc_const = &dummyxl_fd_tdc_const;
-+	priv->can.xl.data_bittiming_const = &dummyxl_xl_databittiming_const;
-+	priv->can.xl.tdc_const = &dummyxl_xl_tdc_const;
-+	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
-+		CAN_CTRLMODE_FD | CAN_CTRLMODE_TDC_AUTO |
-+		CAN_CTRLMODE_XL | CAN_CTRLMODE_XL_TDC_AUTO;
-+	priv->dev = dev;
-+
-+	ret = register_candev(priv->dev);
-+	if (ret) {
-+		free_candev(priv->dev);
-+		return ret;
++		close_json_array(PRINT_ANY, " ]");
 +	}
 +
-+	dummyxl = priv;
-+	netdev_info(dev, "dummyxl OK\n");
-+
-+	return 0;
-+}
-+
-+static void __exit dummyxl_exit(void)
-+{
-+	struct net_device *dev = dummyxl->dev;
-+
-+	netdev_info(dev, "dummyxl bye bye\n");
-+	unregister_candev(dev);
-+	free_candev(dev);
-+}
-+
-+module_init(dummyxl_init);
-+module_exit(dummyxl_exit);
-+
-+MODULE_DESCRIPTION("A dummy module just to check the CAN XL netlink interface");
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Vincent Mailhol <mailhol.vincent@wanadoo.fr>");
+ 	if (tb[IFLA_CAN_TERMINATION_CONST] && tb[IFLA_CAN_TERMINATION]) {
+ 		__u16 *trm = RTA_DATA(tb[IFLA_CAN_TERMINATION]);
+ 		__u16 *trm_const = RTA_DATA(tb[IFLA_CAN_TERMINATION_CONST]);
+ 		int trm_cnt = RTA_PAYLOAD(tb[IFLA_CAN_TERMINATION_CONST]) /
+ 			sizeof(*trm_const);
 -- 
 2.45.2
 
