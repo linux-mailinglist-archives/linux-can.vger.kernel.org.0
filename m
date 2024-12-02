@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-2299-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2298-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E4099DFC93
-	for <lists+linux-can@lfdr.de>; Mon,  2 Dec 2024 10:01:15 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DDD89DFC8F
+	for <lists+linux-can@lfdr.de>; Mon,  2 Dec 2024 10:01:02 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24019163512
-	for <lists+linux-can@lfdr.de>; Mon,  2 Dec 2024 09:01:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76C2CB21389
+	for <lists+linux-can@lfdr.de>; Mon,  2 Dec 2024 09:00:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3279B1FA179;
-	Mon,  2 Dec 2024 09:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17CDB1F9AB9;
+	Mon,  2 Dec 2024 09:00:51 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F0A1F9F75
-	for <linux-can@vger.kernel.org>; Mon,  2 Dec 2024 09:00:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607731F9EA7
+	for <linux-can@vger.kernel.org>; Mon,  2 Dec 2024 09:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733130052; cv=none; b=pTsqnRWml9soGiQs/COIAU7Lb7+kqg8jUKhlQAPTW5ZXbyg41qm39sg5mihVcgn2nIA0MvY7iXA9iA9FVWDYF1vaVYPLJXG/3TNY8CPzg4UKN+vOIF+ALCrD14HqetzVtSRdhrJGpdNf+jcNF6e48f2xt4i8wPh98gJYhZhFA+w=
+	t=1733130051; cv=none; b=JkBNc1i+k0ajoq3UYt4TYgmR97n13ebVHBffYmf21Yz33TE+COmssjS7ecaxgeptgF96gdZJcNaMpPNu1Sz/SXDjVLjGcaR4pIsZ0Kprx3kLtB1XpTyDBN8afLsyz6ETiHAv/NefMun3dEYE444bJIEDo/Vowot0xAwiC53pT9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733130052; c=relaxed/simple;
-	bh=r5PlcXUYBo+yvNKc0PBkrA67Y3wssAcxdPfyy7DF4Oc=;
+	s=arc-20240116; t=1733130051; c=relaxed/simple;
+	bh=gj56lVY3KuiWdL4Vlw6FYJwu958CG5pxeEAd6bqyUV0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JxviPa9P8SU52mRJIp7kXH/URhKv/NMfVksB146OgEilB8VxlIdkDcfEJEeeDHYDTiQr9bVWsNns+8K7ozh7CKbd7Qr1UHg0xoXbcEQZr34TW2uC4egwo1aN66+hQsgNqLdWmrqpfsFRHTZWgaBL5UDLAoc41OQBWDtS5Kas1WA=
+	 MIME-Version:Content-Type; b=pgpNWJNeWJQUu0lgjkLQWnyH84NDUR/or1qL33hEai4qs+WX+DpEBl0jU3GoW1z1myn5s6TrfV7UYL6CeepCNdcX7NHGbvOTALqSPU4YXnNkp4ZbduhigXzZOS+pA7tqJPedqVOMERdp+qvalMgf/0svMe4WggLLBxI4np6D61A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,26 +33,26 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tI2IS-0007cI-Eq
-	for linux-can@vger.kernel.org; Mon, 02 Dec 2024 10:00:48 +0100
+	id 1tI2IR-0007bm-I1
+	for linux-can@vger.kernel.org; Mon, 02 Dec 2024 10:00:47 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tI2IQ-001GYI-17
+	id 1tI2IQ-001GXj-04
 	for linux-can@vger.kernel.org;
-	Mon, 02 Dec 2024 10:00:47 +0100
+	Mon, 02 Dec 2024 10:00:46 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id C1779383351
+	by bjornoya.blackshift.org (Postfix) with SMTP id 6C669383348
 	for <linux-can@vger.kernel.org>; Mon, 02 Dec 2024 09:00:46 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 7171038331B;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 87F0B38331C;
 	Mon, 02 Dec 2024 09:00:44 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id b6636728;
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id e767860c;
 	Mon, 2 Dec 2024 09:00:43 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
@@ -60,14 +60,12 @@ Cc: davem@davemloft.net,
 	kuba@kernel.org,
 	linux-can@vger.kernel.org,
 	kernel@pengutronix.de,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Nicolai Buchwitz <nb@tipi-net.de>,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-	stable@vger.kernel.org,
-	=?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-Subject: [PATCH net 01/15] can: dev: can_set_termination(): allow sleeping GPIOs
-Date: Mon,  2 Dec 2024 09:55:35 +0100
-Message-ID: <20241202090040.1110280-2-mkl@pengutronix.de>
+	Alexander Kozhinov <ak.alexander.kozhinov@gmail.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH net 02/15] can: gs_usb: add usb endpoint address detection at driver probe step
+Date: Mon,  2 Dec 2024 09:55:36 +0100
+Message-ID: <20241202090040.1110280-3-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241202090040.1110280-1-mkl@pengutronix.de>
 References: <20241202090040.1110280-1-mkl@pengutronix.de>
@@ -77,53 +75,140 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf8
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-In commit 6e86a1543c37 ("can: dev: provide optional GPIO based
-termination support") GPIO based termination support was added.
+From: Alexander Kozhinov <ak.alexander.kozhinov@gmail.com>
 
-For no particular reason that patch uses gpiod_set_value() to set the
-GPIO. This leads to the following warning, if the systems uses a
-sleeping GPIO, i.e. behind an I2C port expander:
+There is an approach made to implement gs_usb firmware/driver based on
+Zephyr RTOS. It was found that USB stack of Zephyr RTOS overwrites USB
+EP addresses, if they have different last 4 bytes in absence of other
+endpoints.
 
-| WARNING: CPU: 0 PID: 379 at /drivers/gpio/gpiolib.c:3496 gpiod_set_value+0x50/0x6c
-| CPU: 0 UID: 0 PID: 379 Comm: ip Not tainted 6.11.0-20241016-1 #1 823affae360cc91126e4d316d7a614a8bf86236c
+For example in case of gs_usb candlelight firmware EP-IN is 0x81 and
+EP-OUT 0x02. If there are no additional USB endpoints, Zephyr RTOS will
+overwrite EP-OUT to 0x01. More information can be found in the
+discussion with Zephyr RTOS USB stack maintainer here:
 
-Replace gpiod_set_value() by gpiod_set_value_cansleep() to allow the
-use of sleeping GPIOs.
+https://github.com/zephyrproject-rtos/zephyr/issues/67812
 
-Cc: Nicolai Buchwitz <nb@tipi-net.de>
-Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Cc: stable@vger.kernel.org
-Reported-by: Leonard Göhrs <l.goehrs@pengutronix.de>
-Tested-by: Leonard Göhrs <l.goehrs@pengutronix.de>
-Fixes: 6e86a1543c37 ("can: dev: provide optional GPIO based termination support")
-Link: https://patch.msgid.link/20241121-dev-fix-can_set_termination-v1-1-41fa6e29216d@pengutronix.de
+There are already two different gs_usb FW driver implementations based
+on Zephyr RTOS:
+
+1. https://github.com/CANnectivity/cannectivity
+   (by: https://github.com/henrikbrixandersen)
+2. https://github.com/zephyrproject-rtos/zephyr/compare/main...KozhinovAlexander:zephyr:gs_usb
+   (by: https://github.com/KozhinovAlexander)
+
+At the moment both Zephyr RTOS implementations use dummy USB endpoint,
+to overcome described USB stack behavior from Zephyr itself. Since
+Zephyr RTOS is intended to be used on microcontrollers with very
+constrained amount of resources (ROM, RAM) and additional endpoint
+requires memory, it is more convenient to update the gs_usb driver in
+the Linux kernel.
+
+To fix this problem, update the gs_usb driver from using hard coded
+endpoint numbers to evaluate the endpoint descriptors and use the
+endpoints provided there.
+
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Alexander Kozhinov <ak.alexander.kozhinov@gmail.com>
+Link: https://patch.msgid.link/20241018212450.31746-1-ak.alexander.kozhinov@gmail.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/dev/dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/usb/gs_usb.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index 6792c14fd7eb..681643ab3780 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -468,7 +468,7 @@ static int can_set_termination(struct net_device *ndev, u16 term)
- 	else
- 		set = 0;
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index bc86e9b329fd..b6f4de375df7 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -43,9 +43,6 @@
+ #define USB_XYLANTA_SAINT3_VENDOR_ID 0x16d0
+ #define USB_XYLANTA_SAINT3_PRODUCT_ID 0x0f30
  
--	gpiod_set_value(priv->termination_gpio, set);
-+	gpiod_set_value_cansleep(priv->termination_gpio, set);
+-#define GS_USB_ENDPOINT_IN 1
+-#define GS_USB_ENDPOINT_OUT 2
+-
+ /* Timestamp 32 bit timer runs at 1 MHz (1 µs tick). Worker accounts
+  * for timer overflow (will be after ~71 minutes)
+  */
+@@ -336,6 +333,9 @@ struct gs_usb {
  
- 	return 0;
- }
-
-base-commit: 9bb88c659673003453fd42e0ddf95c9628409094
+ 	unsigned int hf_size_rx;
+ 	u8 active_channels;
++
++	unsigned int pipe_in;
++	unsigned int pipe_out;
+ };
+ 
+ /* 'allocate' a tx context.
+@@ -687,7 +687,7 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 
+ resubmit_urb:
+ 	usb_fill_bulk_urb(urb, parent->udev,
+-			  usb_rcvbulkpipe(parent->udev, GS_USB_ENDPOINT_IN),
++			  parent->pipe_in,
+ 			  hf, dev->parent->hf_size_rx,
+ 			  gs_usb_receive_bulk_callback, parent);
+ 
+@@ -819,7 +819,7 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff *skb,
+ 	}
+ 
+ 	usb_fill_bulk_urb(urb, dev->udev,
+-			  usb_sndbulkpipe(dev->udev, GS_USB_ENDPOINT_OUT),
++			  dev->parent->pipe_out,
+ 			  hf, dev->hf_size_tx,
+ 			  gs_usb_xmit_callback, txc);
+ 
+@@ -925,8 +925,7 @@ static int gs_can_open(struct net_device *netdev)
+ 			/* fill, anchor, and submit rx urb */
+ 			usb_fill_bulk_urb(urb,
+ 					  dev->udev,
+-					  usb_rcvbulkpipe(dev->udev,
+-							  GS_USB_ENDPOINT_IN),
++					  dev->parent->pipe_in,
+ 					  buf,
+ 					  dev->parent->hf_size_rx,
+ 					  gs_usb_receive_bulk_callback, parent);
+@@ -1413,6 +1412,7 @@ static int gs_usb_probe(struct usb_interface *intf,
+ 			const struct usb_device_id *id)
+ {
+ 	struct usb_device *udev = interface_to_usbdev(intf);
++	struct usb_endpoint_descriptor *ep_in, *ep_out;
+ 	struct gs_host_frame *hf;
+ 	struct gs_usb *parent;
+ 	struct gs_host_config hconf = {
+@@ -1422,6 +1422,13 @@ static int gs_usb_probe(struct usb_interface *intf,
+ 	unsigned int icount, i;
+ 	int rc;
+ 
++	rc = usb_find_common_endpoints(intf->cur_altsetting,
++				       &ep_in, &ep_out, NULL, NULL);
++	if (rc) {
++		dev_err(&intf->dev, "Required endpoints not found\n");
++		return rc;
++	}
++
+ 	/* send host config */
+ 	rc = usb_control_msg_send(udev, 0,
+ 				  GS_USB_BREQ_HOST_FORMAT,
+@@ -1466,6 +1473,10 @@ static int gs_usb_probe(struct usb_interface *intf,
+ 	usb_set_intfdata(intf, parent);
+ 	parent->udev = udev;
+ 
++	/* store the detected endpoints */
++	parent->pipe_in = usb_rcvbulkpipe(parent->udev, ep_in->bEndpointAddress);
++	parent->pipe_out = usb_sndbulkpipe(parent->udev, ep_out->bEndpointAddress);
++
+ 	for (i = 0; i < icount; i++) {
+ 		unsigned int hf_size_rx = 0;
+ 
 -- 
 2.45.2
 
