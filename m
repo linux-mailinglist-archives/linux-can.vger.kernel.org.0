@@ -1,128 +1,125 @@
-Return-Path: <linux-can+bounces-2315-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2316-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73BC89E189E
-	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2024 10:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 558B29E27A1
+	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2024 17:36:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39B08B60852
-	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2024 09:47:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36E0EB44DC2
+	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2024 14:30:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074B91DF275;
-	Tue,  3 Dec 2024 09:47:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="WgC0sSIW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D271DEFE1;
+	Tue,  3 Dec 2024 14:29:40 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-13.smtpout.orange.fr [193.252.22.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FBD364AE
-	for <linux-can@vger.kernel.org>; Tue,  3 Dec 2024 09:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237751EF08A
+	for <linux-can@vger.kernel.org>; Tue,  3 Dec 2024 14:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733219244; cv=none; b=pWOhXwxMQ1U7Xip/kR1pI91gSwY153ukex30/YeIspVpe81NzjJk2hSVSZDEndCW96TkGWENs/QgRn/RC1zcmdI6i38bUCT0g05tQb4SkHZ7bvM25bG0DjKgpjwCsUWMcOzD3hAmhXsQcwvAea2kwlTc8YBqLgGbkXiPwfLlfdI=
+	t=1733236180; cv=none; b=Xi9BTXlBU0ig3v5RCIiCkthpaItU11RPID7qytn1tRh3xk9b9Rzr5cfW7vPcF5dUgkp/Lx6aYgAXRPVBTBmcjjHkv5ygDXXv/CrNNlmC63q/Ka66oF8TElJLdWWWMF5IAuNNYU3pvuBOLxNtHyFJ23cVkUPJaP94zmRgomDjgUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733219244; c=relaxed/simple;
-	bh=jm+E1GpF/RUhgrOP012stRANKX0TWnwEv6XmT7fpEe4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kEz6Rpv+YFRAHpqzagq9QfN8jRGf9OL46toBIhG7+oUJz+jtaiqOEXOYv1ictYYLgAIvr1+rXlPdI0y3+xqbBlvoZ8VbRp+JlV0V+zORd08e1F2S8Jn/3jkgsAqR6FHctbbqGSjI6zFYT0mtC8nlMRjEUpHVC2dAn6S1fAeEJEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=WgC0sSIW; arc=none smtp.client-ip=193.252.22.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from mail-ej1-f48.google.com ([209.85.218.48])
-	by smtp.orange.fr with ESMTPSA
-	id IPTmtju9PdwuOIPTmtbPiL; Tue, 03 Dec 2024 10:46:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1733219162;
-	bh=thLoruC4yUFDv+ISgmGKaXWPgUV99B5qVBSTju5LHwU=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=WgC0sSIWW5lguk2ns0ImMU05qjGENR4pxxPExTKqtK1PECssmyFq9TLlQHDxMx1R4
-	 FO29EKkdjIZEw0fdoA8Y7rYJukMcFr9UMyBW9O459fBip8Z/eItWub2uKSdOX2SedW
-	 mC/xXrGeMNapancrtWgeCaSRXV7FobU2xsHVP3t+1bTrPa1gxQ5Lf7/ZSMMgm2Esv4
-	 +2RVwVgyof2VOIUV2eSUFW0QyCkILHFd9yHrKel1McXwzZlS9nRj2TswlJrrm203ie
-	 avZJxxa2UeF9aik8jOjUewAaQf4LtNdTMOypMeOS9EtLZQ5t5T+r8nXpzrZkkGh7zb
-	 EjEJb4i0r2EGw==
-X-ME-Helo: mail-ej1-f48.google.com
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 03 Dec 2024 10:46:02 +0100
-X-ME-IP: 209.85.218.48
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aa51b8c5f4dso757913466b.2
-        for <linux-can@vger.kernel.org>; Tue, 03 Dec 2024 01:46:02 -0800 (PST)
-X-Gm-Message-State: AOJu0Yx0frf88jFh8RKtJxus8GZcIiX4QJ41V9PYi272lFYnhItNL9GN
-	5ppwR32YBKp9zpv836FvVBGZaAV555enYzar8Ym0WRyPvGAmKHRiwP8sqh/dLUv7k+cswxPKp7E
-	jxkWPagGOg3GPfn+FktYglq8cCJQ=
-X-Google-Smtp-Source: AGHT+IG7rfxsZd4h6smMLKUfSOZOW1GQMZAuultjuL1fRyG9DYHwNAIvOoyOLMXWkfmvX79tZQa6XSiK/MlsrhWu3zg=
-X-Received: by 2002:a17:906:bfea:b0:aa5:3853:5535 with SMTP id
- a640c23a62f3a-aa5f7eef1fdmr126741566b.38.1733219162013; Tue, 03 Dec 2024
- 01:46:02 -0800 (PST)
+	s=arc-20240116; t=1733236180; c=relaxed/simple;
+	bh=/e9aRfi0eZg+tK/j8d496YgB9JjHS+zdMQ+60HfffdU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zc4fpBSM9wA1idIHuD9HltGZKrNoT64MyuMyiw2/eOsV8+blMVWOqXDteUFCRDwX2AdE8Y5SPrI5CYFI0PIW6kRT+6hb/VJ97z0DmaKCmM+RLZ/i+lqi3wKlatcXRaQAjmyj5uX97CstTOq4K9kXzb0ENRehZkB0WZOeHHYltC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tITu8-0006iC-Vg; Tue, 03 Dec 2024 15:29:32 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tITu7-001UbM-2x;
+	Tue, 03 Dec 2024 15:29:32 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 5F65D384A07;
+	Tue, 03 Dec 2024 14:29:32 +0000 (UTC)
+Date: Tue, 3 Dec 2024 15:29:32 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: linux-can@vger.kernel.org
+Cc: Stefano Offredi <stefano.offredi@daosgroup.it>, 
+	stefano.offredi@gmail.com
+Subject: Re: ACPI compatible mcp251xfd driver
+Message-ID: <20241203-frisky-badger-of-fury-8c68c2-mkl@pengutronix.de>
+References: <CA+VHkVF89EZOtnqWFGfS4JFtuLdkX2uJNwY7vicJ=i3RiZtbZw@mail.gmail.com>
+ <20241202-organic-caracal-of-skill-4faeac-mkl@pengutronix.de>
+ <CA+VHkVHhE5tT6D60MJadVvJ1nvM9gK2kMmZYD_MRP6iJF89pYg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241110155902.72807-16-mailhol.vincent@wanadoo.fr>
- <ea52eb8f-c59d-445a-bf4d-26f2772f7426@hartkopp.net> <a9d8eb65-c88d-4bc9-b0c2-c0e0799ea5bd@wanadoo.fr>
- <23c914cf-0af2-4619-9f83-e4b6339ef65f@hartkopp.net> <12e013c2-d6ff-42b2-91ef-921db4e7ee0e@hartkopp.net>
- <77331a33-ac82-4cfb-9881-159d6d2daf58@hartkopp.net>
-In-Reply-To: <77331a33-ac82-4cfb-9881-159d6d2daf58@hartkopp.net>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Tue, 3 Dec 2024 18:45:50 +0900
-X-Gmail-Original-Message-ID: <CAMZ6RqLi1oywkSZ=pVFnV04efwk8mJWmwP+FzSyMknR2d+9=RA@mail.gmail.com>
-Message-ID: <CAMZ6RqLi1oywkSZ=pVFnV04efwk8mJWmwP+FzSyMknR2d+9=RA@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/14] can: netlink: add CAN XL
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Robert Nawrath <mbro1689@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-
-On Sun. 1 Dec. 2024 at 20:38, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> Hi Vincent,
->
-> I found some issues in the code and fixed up the problems below.
->
-> The funniest thing was this copy/paste problem in netlink.h ;-)
-> (see attached patch with my changes)
->
-> The patch descriptions are not finalized - but it becomes usable now.
-> I will add the CAN XL transceiver switch to the controlmode definitions.
->
-> For the PWM configuration we would need some more discussions.
->
-> https://lore.kernel.org/linux-can/20241201112333.6950-1-socketcan@hartkopp.net/T/#u
-> https://lore.kernel.org/linux-can/20241201112230.6917-1-socketcan@hartkopp.net/T/#t
->
-> Best regards,
-> Oliver
-
-Hi Oliver,
-
-Thanks for all the testing and the fixes. Because of the lack of
-testing of this RFC on my side, I was expecting such issues. But I
-really appreciate that you took time to investigate and debug, really
-helpful! I will make sure to incorporate these fixes in the next
-version.
-
-On my side, the last three weeks were more busy than anticipated but I
-finally found some time to do a deep dive in ISO 11898-1:2024, I read
-two thirds of it so far, just a few more pages to go. It just takes me
-time to digest all the information. Once this is done, things should
-be more straightforward.
-The next series I send will add the pwm and drop the RFC patch. My
-goal is to have this CAN XL series ready for inclusion in linux 6.14.
-I don't want to overcommit, but hopefully, I would like to send the v1
-either this weekend or next weekend.
-
-I will also rethink whether or not is it worth doing some NLA nesting
-as suggested by Marc here:
-
-  https://lore.kernel.org/linux-can/20241112-flashy-straight-poodle-9a796d-mkl@pengutronix.de/
-
-(I am still divided on this subject).
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="cgnocm2hzaxb3egj"
+Content-Disposition: inline
+In-Reply-To: <CA+VHkVHhE5tT6D60MJadVvJ1nvM9gK2kMmZYD_MRP6iJF89pYg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
-Yours sincerely,
-Vincent Mailhol
+--cgnocm2hzaxb3egj
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: ACPI compatible mcp251xfd driver
+MIME-Version: 1.0
+
+On 03.12.2024 15:05:04, Stefano Offredi wrote:
+> In these days I have modified the driver, and I was able to register
+> it and get it in ip link show.
+> I manage to do this porting looking at the spidev and st33zp24 driver.
+> I see now a similar implementation
+> also in mvpp2 you have just proposed to me (thanks again).
+
+Can you share the modifications with us?
+
+> Now I'm dealing with a problem in bringing UP the can0 interface with:
+> ip link set can0 type can bitrate 1000000
+> ip link set up can0
+> RTNETLINK answers: Invalid argument
+> ..I'm debugging it.
+
+anything of interest in demsg?
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--cgnocm2hzaxb3egj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdPFckACgkQKDiiPnot
+vG+FcwgAhigsxN9afZh89VjrBXl9BmLFMrgyuL3KujqwtnSfakcCGOoEM8PT5uMa
+cAbJCgbSmklCVRcDvXfW1g05el1CPJzKL27i7fRFeG6lxvSOk1tYO8cE8ks+0i0w
+cD7ANpAc2NuzW7sG/iMNlXkmIHV1lk2AhLHxqjwa9ff7euN1c9pM/LQ18IWHnAta
+aCHNX5IgRuJ8UYh2mG7HE7a2UACXiu+JqA3xu0Zzq5+lCG4Acjgn0JAe2WS9rJ3H
+9KihxLhm30ALyGHpMQAQMJ8lQ4aW6r0qvS22p9lG9ywMbicgbsFWHOd9CY2c0WRD
+hLEkTnV9l+H7e9S73fli+2H+pIxtbA==
+=UEUf
+-----END PGP SIGNATURE-----
+
+--cgnocm2hzaxb3egj--
 
