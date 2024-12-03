@@ -1,121 +1,128 @@
-Return-Path: <linux-can+bounces-2314-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2315-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC8F89E111A
-	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2024 03:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73BC89E189E
+	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2024 10:58:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0450CB2222D
-	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2024 02:10:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39B08B60852
+	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2024 09:47:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20BC81ADA;
-	Tue,  3 Dec 2024 02:10:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074B91DF275;
+	Tue,  3 Dec 2024 09:47:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JIW+0wl6"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="WgC0sSIW"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-13.smtpout.orange.fr [193.252.22.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B036C219E4;
-	Tue,  3 Dec 2024 02:10:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FBD364AE
+	for <linux-can@vger.kernel.org>; Tue,  3 Dec 2024 09:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733191819; cv=none; b=FqbzwyQ1T/AYsWQOyum3/hcnL3pqFJv6I9FJU7LzA2xwIcsZaR3EWesihESuaPHbs1qmkA+cHDJQece+URt+O52rYW+ZLlrKZKmzXpQkAvsmMWImADbNbl6dsqtGvRj4vYd551LKuj95KRy5Pi9EawRvj+XG8HS04cGrr3yeLQQ=
+	t=1733219244; cv=none; b=pWOhXwxMQ1U7Xip/kR1pI91gSwY153ukex30/YeIspVpe81NzjJk2hSVSZDEndCW96TkGWENs/QgRn/RC1zcmdI6i38bUCT0g05tQb4SkHZ7bvM25bG0DjKgpjwCsUWMcOzD3hAmhXsQcwvAea2kwlTc8YBqLgGbkXiPwfLlfdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733191819; c=relaxed/simple;
-	bh=VCw0se1R4PfQJFWrA7XvWz6U4ulPMrfws62VNJxPBjQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=g+23C4B86JPHX7UBp9VeqfBErDENdXe/RdnP1sK/9dG+A0P/u8IQzIXXrTHPWGaNyyQUC6eHcPir49AEX9vTXlTgkiwnq/bbW7F8v1tYnynNuQ5SpTpQwK98fY7MQuVver1gIqBZb8j/hkadYfNGjl64rYWvDRTnRz8W9KwAZ1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JIW+0wl6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA07C4CED2;
-	Tue,  3 Dec 2024 02:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733191819;
-	bh=VCw0se1R4PfQJFWrA7XvWz6U4ulPMrfws62VNJxPBjQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=JIW+0wl6bIuoLaJml0J5K8aUbsp9YtRiSxHEu0lf4l+tzQqGnZY4FJ70sSMFhR0Lw
-	 EhcJ3/SAoxEnlOjUy7gb3tzkrtQx49sQq3wzqpodhOXg/Vewm3ytS7GgsBKQPo6DMw
-	 WPFjZRX3zNippafRbpBuX9tGzjiYlP8LET1dVXlzBdasNnvGiu2SOEb+Q/eHyhB3vF
-	 T1b2YM0U1oFnhCzU1Z1K5pbmRYzU5Q48EtuCdwoFxxiME3t+kU8KXoyhE6avEiBldw
-	 lx+Bd9vB1SJWKKdUYiOgbADOSelxOoqirf+xjvpbcMnA+VotdBWiQWYAqfR+SP+3Tj
-	 ta5dfJ6/s0/nQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7194D3806656;
-	Tue,  3 Dec 2024 02:10:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1733219244; c=relaxed/simple;
+	bh=jm+E1GpF/RUhgrOP012stRANKX0TWnwEv6XmT7fpEe4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kEz6Rpv+YFRAHpqzagq9QfN8jRGf9OL46toBIhG7+oUJz+jtaiqOEXOYv1ictYYLgAIvr1+rXlPdI0y3+xqbBlvoZ8VbRp+JlV0V+zORd08e1F2S8Jn/3jkgsAqR6FHctbbqGSjI6zFYT0mtC8nlMRjEUpHVC2dAn6S1fAeEJEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=WgC0sSIW; arc=none smtp.client-ip=193.252.22.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from mail-ej1-f48.google.com ([209.85.218.48])
+	by smtp.orange.fr with ESMTPSA
+	id IPTmtju9PdwuOIPTmtbPiL; Tue, 03 Dec 2024 10:46:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1733219162;
+	bh=thLoruC4yUFDv+ISgmGKaXWPgUV99B5qVBSTju5LHwU=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To;
+	b=WgC0sSIWW5lguk2ns0ImMU05qjGENR4pxxPExTKqtK1PECssmyFq9TLlQHDxMx1R4
+	 FO29EKkdjIZEw0fdoA8Y7rYJukMcFr9UMyBW9O459fBip8Z/eItWub2uKSdOX2SedW
+	 mC/xXrGeMNapancrtWgeCaSRXV7FobU2xsHVP3t+1bTrPa1gxQ5Lf7/ZSMMgm2Esv4
+	 +2RVwVgyof2VOIUV2eSUFW0QyCkILHFd9yHrKel1McXwzZlS9nRj2TswlJrrm203ie
+	 avZJxxa2UeF9aik8jOjUewAaQf4LtNdTMOypMeOS9EtLZQ5t5T+r8nXpzrZkkGh7zb
+	 EjEJb4i0r2EGw==
+X-ME-Helo: mail-ej1-f48.google.com
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 03 Dec 2024 10:46:02 +0100
+X-ME-IP: 209.85.218.48
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aa51b8c5f4dso757913466b.2
+        for <linux-can@vger.kernel.org>; Tue, 03 Dec 2024 01:46:02 -0800 (PST)
+X-Gm-Message-State: AOJu0Yx0frf88jFh8RKtJxus8GZcIiX4QJ41V9PYi272lFYnhItNL9GN
+	5ppwR32YBKp9zpv836FvVBGZaAV555enYzar8Ym0WRyPvGAmKHRiwP8sqh/dLUv7k+cswxPKp7E
+	jxkWPagGOg3GPfn+FktYglq8cCJQ=
+X-Google-Smtp-Source: AGHT+IG7rfxsZd4h6smMLKUfSOZOW1GQMZAuultjuL1fRyG9DYHwNAIvOoyOLMXWkfmvX79tZQa6XSiK/MlsrhWu3zg=
+X-Received: by 2002:a17:906:bfea:b0:aa5:3853:5535 with SMTP id
+ a640c23a62f3a-aa5f7eef1fdmr126741566b.38.1733219162013; Tue, 03 Dec 2024
+ 01:46:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 01/15] can: dev: can_set_termination(): allow sleeping
- GPIOs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173319183325.3990091.10550590586093973028.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Dec 2024 02:10:33 +0000
-References: <20241202090040.1110280-2-mkl@pengutronix.de>
-In-Reply-To: <20241202090040.1110280-2-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de, nb@tipi-net.de,
- l.sanfilippo@kunbus.com, stable@vger.kernel.org, l.goehrs@pengutronix.de
+References: <20241110155902.72807-16-mailhol.vincent@wanadoo.fr>
+ <ea52eb8f-c59d-445a-bf4d-26f2772f7426@hartkopp.net> <a9d8eb65-c88d-4bc9-b0c2-c0e0799ea5bd@wanadoo.fr>
+ <23c914cf-0af2-4619-9f83-e4b6339ef65f@hartkopp.net> <12e013c2-d6ff-42b2-91ef-921db4e7ee0e@hartkopp.net>
+ <77331a33-ac82-4cfb-9881-159d6d2daf58@hartkopp.net>
+In-Reply-To: <77331a33-ac82-4cfb-9881-159d6d2daf58@hartkopp.net>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Date: Tue, 3 Dec 2024 18:45:50 +0900
+X-Gmail-Original-Message-ID: <CAMZ6RqLi1oywkSZ=pVFnV04efwk8mJWmwP+FzSyMknR2d+9=RA@mail.gmail.com>
+Message-ID: <CAMZ6RqLi1oywkSZ=pVFnV04efwk8mJWmwP+FzSyMknR2d+9=RA@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/14] can: netlink: add CAN XL
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Robert Nawrath <mbro1689@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+On Sun. 1 Dec. 2024 at 20:38, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> Hi Vincent,
+>
+> I found some issues in the code and fixed up the problems below.
+>
+> The funniest thing was this copy/paste problem in netlink.h ;-)
+> (see attached patch with my changes)
+>
+> The patch descriptions are not finalized - but it becomes usable now.
+> I will add the CAN XL transceiver switch to the controlmode definitions.
+>
+> For the PWM configuration we would need some more discussions.
+>
+> https://lore.kernel.org/linux-can/20241201112333.6950-1-socketcan@hartkopp.net/T/#u
+> https://lore.kernel.org/linux-can/20241201112230.6917-1-socketcan@hartkopp.net/T/#t
+>
+> Best regards,
+> Oliver
 
-This series was applied to netdev/net.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+Hi Oliver,
 
-On Mon,  2 Dec 2024 09:55:35 +0100 you wrote:
-> In commit 6e86a1543c37 ("can: dev: provide optional GPIO based
-> termination support") GPIO based termination support was added.
-> 
-> For no particular reason that patch uses gpiod_set_value() to set the
-> GPIO. This leads to the following warning, if the systems uses a
-> sleeping GPIO, i.e. behind an I2C port expander:
-> 
-> [...]
+Thanks for all the testing and the fixes. Because of the lack of
+testing of this RFC on my side, I was expecting such issues. But I
+really appreciate that you took time to investigate and debug, really
+helpful! I will make sure to incorporate these fixes in the next
+version.
 
-Here is the summary with links:
-  - [net,01/15] can: dev: can_set_termination(): allow sleeping GPIOs
-    https://git.kernel.org/netdev/net/c/ee1dfbdd8b4b
-  - [net,02/15] can: gs_usb: add usb endpoint address detection at driver probe step
-    https://git.kernel.org/netdev/net/c/889b2ae9139a
-  - [net,03/15] can: c_can: c_can_handle_bus_err(): update statistics if skb allocation fails
-    https://git.kernel.org/netdev/net/c/9e66242504f4
-  - [net,04/15] can: sun4i_can: sun4i_can_err(): call can_change_state() even if cf is NULL
-    https://git.kernel.org/netdev/net/c/ee6bf3677ae0
-  - [net,05/15] can: hi311x: hi3110_can_ist(): fix potential use-after-free
-    https://git.kernel.org/netdev/net/c/9ad86d377ef4
-  - [net,06/15] can: hi311x: hi3110_can_ist(): update state error statistics if skb allocation fails
-    https://git.kernel.org/netdev/net/c/ef5034aed9e0
-  - [net,07/15] can: m_can: m_can_handle_lec_err(): fix {rx,tx}_errors statistics
-    https://git.kernel.org/netdev/net/c/988d4222bf90
-  - [net,08/15] can: ifi_canfd: ifi_canfd_handle_lec_err(): fix {rx,tx}_errors statistics
-    https://git.kernel.org/netdev/net/c/bb03d568bb21
-  - [net,09/15] can: hi311x: hi3110_can_ist(): fix {rx,tx}_errors statistics
-    https://git.kernel.org/netdev/net/c/3e4645931655
-  - [net,10/15] can: sja1000: sja1000_err(): fix {rx,tx}_errors statistics
-    https://git.kernel.org/netdev/net/c/2c4ef3af4b02
-  - [net,11/15] can: sun4i_can: sun4i_can_err(): fix {rx,tx}_errors statistics
-    https://git.kernel.org/netdev/net/c/595a81988a6f
-  - [net,12/15] can: ems_usb: ems_usb_rx_err(): fix {rx,tx}_errors statistics
-    https://git.kernel.org/netdev/net/c/72a7e2e74b30
-  - [net,13/15] can: f81604: f81604_handle_can_bus_errors(): fix {rx,tx}_errors statistics
-    https://git.kernel.org/netdev/net/c/d7b916540c2b
-  - [net,14/15] can: mcp251xfd: mcp251xfd_get_tef_len(): work around erratum DS80000789E 6.
-    https://git.kernel.org/netdev/net/c/30447a1bc0e0
-  - [net,15/15] can: j1939: j1939_session_new(): fix skb reference counting
-    https://git.kernel.org/netdev/net/c/a8c695005bfe
+On my side, the last three weeks were more busy than anticipated but I
+finally found some time to do a deep dive in ISO 11898-1:2024, I read
+two thirds of it so far, just a few more pages to go. It just takes me
+time to digest all the information. Once this is done, things should
+be more straightforward.
+The next series I send will add the pwm and drop the RFC patch. My
+goal is to have this CAN XL series ready for inclusion in linux 6.14.
+I don't want to overcommit, but hopefully, I would like to send the v1
+either this weekend or next weekend.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I will also rethink whether or not is it worth doing some NLA nesting
+as suggested by Marc here:
+
+  https://lore.kernel.org/linux-can/20241112-flashy-straight-poodle-9a796d-mkl@pengutronix.de/
+
+(I am still divided on this subject).
 
 
+Yours sincerely,
+Vincent Mailhol
 
