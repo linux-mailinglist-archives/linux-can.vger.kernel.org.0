@@ -1,174 +1,170 @@
-Return-Path: <linux-can+bounces-2329-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2331-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 525D39E34D4
-	for <lists+linux-can@lfdr.de>; Wed,  4 Dec 2024 09:03:25 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D792168160
-	for <lists+linux-can@lfdr.de>; Wed,  4 Dec 2024 08:03:13 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0809190055;
-	Wed,  4 Dec 2024 07:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="CTdO+tu/";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="xxPB4zAW"
-X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CC0B9E3507
+	for <lists+linux-can@lfdr.de>; Wed,  4 Dec 2024 09:13:50 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DBE18FDBD
-	for <linux-can@vger.kernel.org>; Wed,  4 Dec 2024 07:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.166
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733299078; cv=pass; b=LUqtNbusqJNQsUT7yiIgKhR8dSFGF2531Gs35e1zpbuXHgj4CRh7TQTWgPcHvJ86DMdttvNKOVNTHeJektL9WmKjlRPNzcTZ9Kcwr/cQlgq1dhMkOz7618XaBvweiwjhfJhg4qb5CivvcMTBx7jNCoen/sX1IxMfdFzAqq8rvmg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733299078; c=relaxed/simple;
-	bh=tGgWOoRGyioAsjk/lZj0XsGzRkADvuhCoZkvzTZf9qQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HSJ17h2kGWPNuNmg61K5D0PdpZfN2Iy76NO8ZjD4TjUE+wsoVcknD7BG1dDLhMIn9KqNTvIaBP/f0wM+tGqa2EDiKHVSG22ze+/mzZLmdEaiK1+oK7zUcrYqSCLfvS8GtHBS+eqUHoPJBkSQ6VDPsY0W8ShBatdAtbq9ucnredQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=CTdO+tu/; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=xxPB4zAW; arc=pass smtp.client-ip=81.169.146.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1733299069; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=g65jPJboNnqhQaH6ZSi6iOvyVaGXOn78Q8km7GGEQEgEnN+s6xIkPHTb2tpSc8qmh8
-    KGSh6LGtFvt3kZVYExhs4mUQNGjw/YI5xf/Fb/EOGIJ3YylqhnhL2EGFQbN3uvM06zKo
-    2UA53hq15uitObN+Rh9jX09LjyZy7YoSAQeUPECedTHMmYYo2m4fbVvC7cLXmOXFiidF
-    Fm7A40zIDoetcW7gj61qfKCfYaHlJ8FG4blqeJ2nK0fkeAmszhNyQGO5amfJ0Es6Q/Fs
-    jxhq146fx4jBngdwwbPvAjDI6h8bi8WRJt3HdXa3mvaogoHBj1CYuP3F+rBKZf9pPyXY
-    C7RA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1733299069;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=dBh1e1anBOsJrXyjHlEsEQV3mx2mk47rSevvD78NUuQ=;
-    b=qU7cjvfEFCjeg0+UO0Pt+Lsoh1+WRuM53CGJiKf6+SMEsMOIEEIiB1eGBVlrB/qvay
-    ObWMeGGntdJCYJ84PFWWpYVgErXYt0J8LyXu2JGx0c3QPSj/v38ZYFvPMMnoaFbgNA2M
-    8sMp/TnH1xnFRbC0kxn0Wpzpau62xIXrNll97CsCiRc29/owchiBRMo8CN6CRHY1hTWg
-    /mWzkFNynaezPvZzCeVAxBBn5iEr6i+12tghseO9qSfYcW52Ozy5T04dMKdobbXz2bf3
-    qXGjze+5juG+DxHTyr02fn3dqJidJy+8AIEZb2j6U9EbsmPg429IPVJzvhHp7V7jALtu
-    P45w==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1733299069;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=dBh1e1anBOsJrXyjHlEsEQV3mx2mk47rSevvD78NUuQ=;
-    b=CTdO+tu/bgF8jI0v6xasfWm+n5YmLM66unoT18fpC69H7wMBqzaYasuDWp9p3xQZrT
-    5hmS/DiqqquH/PVEkEhCXugibwY/OMAVhoQJbj7auSTYyqbOLLlZSs/53lykDU3HFPuu
-    rC5p9idKZPDLNqkGzGWFz+NA1WKbDdl7o4U0GsLxH9WXv8RNtK0pLmMt4MfjZ914/l80
-    2Vq+z2dMatHzzhm2QLDVfN94KuyA+ciWwmhbHg4mgofUgs4cp0iLifN87YGd/phGfr9w
-    g8rSNUwe+OJuL/0zRgfjSNBp/v+Jf2JX1xirFYp6yDPYcd70L0CZ9ygHrQl2ZsbSVgWc
-    8W+Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1733299069;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=dBh1e1anBOsJrXyjHlEsEQV3mx2mk47rSevvD78NUuQ=;
-    b=xxPB4zAWZqmimB9zx8jpmd37MgPS9caEhgXimx+QWtLjL+DcX8IdWopoqDMXN+SBLT
-    qituIIY5EmFOkFZ+xUBw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tRkI16oOSXVT6pap5"
-Received: from lenov17.lan
-    by smtp.strato.de (RZmta 51.2.11 DYNA|AUTH)
-    with ESMTPSA id K63ada0B47vnsrG
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Wed, 4 Dec 2024 08:57:49 +0100 (CET)
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [RFC PATCH v2 3/3] iplink_can: canxl: support CAN XL transceiver switching in data phase
-Date: Wed,  4 Dec 2024 08:57:41 +0100
-Message-ID: <20241204075741.3727-3-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241204075741.3727-1-socketcan@hartkopp.net>
-References: <20241204075741.3727-1-socketcan@hartkopp.net>
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A588B37EA9
+	for <lists+linux-can@lfdr.de>; Wed,  4 Dec 2024 08:06:24 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9079B18C930;
+	Wed,  4 Dec 2024 08:05:59 +0000 (UTC)
+X-Original-To: linux-can@vger.kernel.org
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884AE155C97
+	for <linux-can@vger.kernel.org>; Wed,  4 Dec 2024 08:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733299559; cv=none; b=RRQkyJky47qLOo2fbfxXpyu9M1HOLsrW8aDq4c7htOElBl4yiC5Krcw9MB0eSpK0wXkgqH08dRGJRVaA7J5fJ64mY+6t8GG39sq6uqCbgrd2DbQYb8vAQ2AQooiJQRGLEHb5X48PDhgkbkY2Q4In81bTiUVoQxfk8Ne3wjwai6g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733299559; c=relaxed/simple;
+	bh=TFk100t4oChT5j4+F4h+MI9bm4tyQpBRk98BNOzwQfQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZcuuG3RwWnYhdy9pM69tZiFX3s1gj3Dsrx8DkAUl2tc0JKX9xbeoBUSiY+n8PdNupI7FUUkGq6+UOUtsJNJGQVHGQYxbiBLUebizQUr4LSdde3h3oONsLPlWr8ysCi0LTvw2Fk9ed5yGKGB1s+diONK1LUq5Z/OHazthleds2ZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tIkOC-0004wH-5O; Wed, 04 Dec 2024 09:05:40 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tIkOA-001c9E-2o;
+	Wed, 04 Dec 2024 09:05:39 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 3FAF8385421;
+	Wed, 04 Dec 2024 08:05:39 +0000 (UTC)
+Date: Wed, 4 Dec 2024 09:05:38 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, NXP S32 Linux <s32@nxp.com>, imx@lists.linux.dev, 
+	Christophe Lizzi <clizzi@redhat.com>, Alberto Ruiz <aruizrui@redhat.com>, 
+	Enric Balletbo <eballetb@redhat.com>
+Subject: Re: [PATCH v4 3/3] can: flexcan: add NXP S32G2/S32G3 SoC support
+Message-ID: <20241204-chipmunk-of-unmatched-research-e89301-mkl@pengutronix.de>
+References: <20241204074916.880466-1-ciprianmarian.costea@oss.nxp.com>
+ <20241204074916.880466-4-ciprianmarian.costea@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ewgk54txqho2u6s4"
+Content-Disposition: inline
+In-Reply-To: <20241204074916.880466-4-ciprianmarian.costea@oss.nxp.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-In the CAN XL data phase the CAN XL controller can advise the CAN XL
-transceiver to switch the physical layer.
-To enable this feature the CAN_CTRLMODE_XL_TRX has to be set in the
-driver control mode.
 
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- include/uapi/linux/can/netlink.h | 1 +
- ip/iplink_can.c                  | 6 ++++++
- 2 files changed, 7 insertions(+)
+--ewgk54txqho2u6s4
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 3/3] can: flexcan: add NXP S32G2/S32G3 SoC support
+MIME-Version: 1.0
 
-diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
-index 19267678..bea58373 100644
---- a/include/uapi/linux/can/netlink.h
-+++ b/include/uapi/linux/can/netlink.h
-@@ -105,10 +105,11 @@ struct can_ctrlmode {
- #define CAN_CTRLMODE_TDC_MANUAL		0x400	/* FD TDCV is manually set up by user */
- #define CAN_CTRLMODE_XL			0x800	/* CAN XL mode */
- #define CAN_CTRLMODE_XL_TDC_AUTO	0x1000	/* XL transceiver automatically calculates TDCV */
- #define CAN_CTRLMODE_XL_TDC_MANUAL	0x2000	/* XL TDCV is manually set up by user */
- #define CAN_CTRLMODE_XL_RRS		0x4000	/* XL enable RRS bit access */
-+#define CAN_CTRLMODE_XL_TRX		0x8000	/* XL switch trx in data phase */
- 
- /*
-  * CAN device statistics
-  */
- struct can_device_stats {
-diff --git a/ip/iplink_can.c b/ip/iplink_can.c
-index 9fe9ae6c..18854c2b 100644
---- a/ip/iplink_can.c
-+++ b/ip/iplink_can.c
-@@ -41,10 +41,11 @@ static void print_usage(FILE *f)
- 		"\t[ cc-len8-dlc { on | off } ]\n"
- 		"\t[ tdc-mode { auto | manual | off } ]\n"
- 		"\t[ xl { on | off } ]\n"
- 		"\t[ xtdc-mode { auto | manual | off } ]\n"
- 		"\t[ xlrrs { on | off } ]\n"
-+		"\t[ xltrx { on | off } ]\n"
- 		"\n"
- 		"\t[ restart-ms TIME-MS ]\n"
- 		"\t[ restart ]\n"
- 		"\n"
- 		"\t[ termination { 0..65535 } ]\n"
-@@ -125,10 +126,11 @@ static void print_ctrlmode(enum output_type t, __u32 flags, const char* key)
- 	print_flag(t, &flags, CAN_CTRLMODE_TDC_MANUAL, "TDC-MANUAL");
- 	print_flag(t, &flags, CAN_CTRLMODE_XL, "XL");
- 	print_flag(t, &flags, CAN_CTRLMODE_XL_TDC_AUTO, "XL-TDC-AUTO");
- 	print_flag(t, &flags, CAN_CTRLMODE_XL_TDC_MANUAL, "XL-TDC-MANUAL");
- 	print_flag(t, &flags, CAN_CTRLMODE_XL_RRS, "XL-RRS");
-+	print_flag(t, &flags, CAN_CTRLMODE_XL_TRX, "XL-TRX");
- 
- 	if (flags)
- 		print_hex(t, NULL, "%x", flags);
- 
- 	close_json_array(t, "> ");
-@@ -339,10 +341,14 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
- 			}
- 		} else if (matches(*argv, "xlrrs") == 0) {
- 			NEXT_ARG();
- 			set_ctrlmode("xlrrs", *argv, &cm,
- 				     CAN_CTRLMODE_XL_RRS);
-+		} else if (matches(*argv, "xltrx") == 0) {
-+			NEXT_ARG();
-+			set_ctrlmode("xltrx", *argv, &cm,
-+				     CAN_CTRLMODE_XL_TRX);
- 		} else if (matches(*argv, "restart") == 0) {
- 			__u32 val = 1;
- 
- 			addattr32(n, 1024, IFLA_CAN_RESTART, val);
- 		} else if (matches(*argv, "restart-ms") == 0) {
--- 
-2.45.2
+On 04.12.2024 09:49:15, Ciprian Costea wrote:
+> From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+>=20
+> Add device type data for S32G2/S32G3 SoC.
+>=20
+> FlexCAN module from S32G2/S32G3 is similar with i.MX SoCs, but interrupt
+> management is different.
+>=20
+> On S32G2/S32G3 SoC, there are separate interrupts for state change, bus
+> errors, Mailboxes 0-7 and Mailboxes 8-127 respectively.
+> In order to handle this FlexCAN hardware particularity, first reuse the
+> 'FLEXCAN_QUIRK_NR_IRQ_3' quirk provided by mcf5441x's irq handling
+> support. Secondly, use the newly introduced
+> 'FLEXCAN_QUIRK_SECONDARY_MB_IRQ' quirk which handles the case where two
+> separate mailbox ranges are controlled by independent hardware interrupt
+> lines.
+>=20
+> Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+> ---
 
+Looks good to me!
+
+Unrelated to this patch, but I want to extend the "FLEXCAN hardware
+feature flags" table in "flexcan.h". Can you provide the needed
+information?
+
+> /* FLEXCAN hardware feature flags
+>  *
+>  * Below is some version info we got:
+>  *    SOC   Version   IP-Version  Glitch- [TR]WRN_INT IRQ Err Memory err =
+RTR rece-   FD Mode     MB
+>  *                                Filter? connected?  Passive detection  =
+ption in MB Supported?
+>  * MCF5441X FlexCAN2  ?               no       yes        no       no    =
+    no           no     16
+>  *    MX25  FlexCAN2  03.00.00.00     no        no        no       no    =
+    no           no     64
+>  *    MX28  FlexCAN2  03.00.04.00    yes       yes        no       no    =
+    no           no     64
+>  *    MX35  FlexCAN2  03.00.00.00     no        no        no       no    =
+    no           no     64
+>  *    MX53  FlexCAN2  03.00.00.00    yes        no        no       no    =
+    no           no     64
+>  *    MX6s  FlexCAN3  10.00.12.00    yes       yes        no       no    =
+   yes           no     64
+>  *    MX8QM FlexCAN3  03.00.23.00    yes       yes        no       no    =
+   yes          yes     64
+>  *    MX8MP FlexCAN3  03.00.17.01    yes       yes        no      yes    =
+   yes          yes     64
+>  *    VF610 FlexCAN3  ?               no       yes        no      yes    =
+   yes?          no     64
+>  *  LS1021A FlexCAN2  03.00.04.00     no       yes        no       no    =
+   yes           no     64
+>  *  LX2160A FlexCAN3  03.00.23.00     no       yes        no      yes    =
+   yes          yes     64
+>  *
+>  * Some SOCs do not have the RX_WARN & TX_WARN interrupt line connected.
+>  */
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--ewgk54txqho2u6s4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdQDU8ACgkQKDiiPnot
+vG/0PAf+LSUwLnlxSvT5Jr4AbggMyghAkIAtN+WSik13Bc58adVUmQxUKXw/pFUT
+bRhErPWGJqhtcMCAb/3fETKKhwEV9tnSGx4AYiHw+8q9mAKiy6CxCd6bKh/AKUmK
+vtgAQ5kJL1OAVDMZ8w9DQ0ncqjYhd25D/Rw0gKI9MvMmQK2jaaInweR2t2iSNTB8
+d9P4B8jklNS2+4r9xRsCKTMbSLt0eGpC1ti7z0FeopPYaVdhZIJ0JmC7zVAXoEx/
+bXkTdyHSHJADnu7hrlAVoSWv8R0fGm3yeK1NTAkcZZwvbBj5zlcbRXPM985auMhc
+7WT9QnQH+31jNMRyjKYIvneKbmwdMw==
+=19Vs
+-----END PGP SIGNATURE-----
+
+--ewgk54txqho2u6s4--
 
