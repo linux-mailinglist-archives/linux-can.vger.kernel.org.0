@@ -1,212 +1,216 @@
-Return-Path: <linux-can+bounces-2347-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2348-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 802239E96B3
-	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2024 14:27:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE1379E980F
+	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2024 15:02:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 434AD18882DF
-	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2024 13:23:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD77D1885827
+	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2024 14:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083391ACED6;
-	Mon,  9 Dec 2024 13:16:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 084B71A238D;
+	Mon,  9 Dec 2024 14:02:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="cMI0x44f";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="N2NdDhhJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zo1QlyJu"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B617233158
-	for <linux-can@vger.kernel.org>; Mon,  9 Dec 2024 13:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733750212; cv=pass; b=chNYHCpahLg+SusKVKLwG2ocYmucfhtgwOmPUjI1y/rm/KxGyU7QE2nn4EcWGam290eUEE9g4l9iKcE7e7cJOmvlUh9ovkRBoA94JKUNr3a+ws1hdXZJ9YjYBEnlGnelrVnrSUtXSclNKi4N359j4S/+aEeBJRWrNHsVqypcULg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733750212; c=relaxed/simple;
-	bh=t9Nx3x2Frvhn1A6cPXnun/tSoKwrWmJJX3IlsPB/4v8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JyoaFEqe257vlqT2Kthh+FtkUEa/Qeu45pHrL2I3TB5DcOxOIeIx/OTl6jwdXf4NHKXC/Ggtbr5SvtXMXNbC8Kc4wkFnuYZw40Q/K6jvs3JyicNFjmU+MZaXx2cHqJIDK7OSdwOHY+ya5g+1YnENlm22DpIspCoIAbTVkWPrAOo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=cMI0x44f; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=N2NdDhhJ; arc=pass smtp.client-ip=85.215.255.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1733750015; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Oez4IcLszDu5RD+TDmZYi4LADHsNFoXgAt5sRIO8gN1b3TngVu2p4OX075vGVfgkvc
-    JN865PjIcpkvtDVdkN4ntCNjnX7U2r2K7tNTgwU81kV5H2vDKy7xw/nhTna77wkz3KDs
-    SG6VS5UrNUh3u2ZvJqMeb7Xt7kfyBvJ164SnGYe7rbftx5N5mC7D26qPOkm9Wijgn83C
-    Ojpl+mIGWTsbA3hBc9TTxeAIo7aq336bZftT09faO2ZJsz/4Qaqor5C3tdfI/hulOAuF
-    hLTByVciQrUn4nKZ0UGS6i/WLSnJDWiDXSQicei03oPV9KSVVc1xMS+Gwpa3X6TE2LnM
-    7X6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1733750015;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=17GQjiCgiTJroWR1qJTL0YxUHyG3zTcMMtkH4qjVCPA=;
-    b=m8luE0ANsGSjob6Ha5kxWCheMyj8x8X3FcrE0aDIJQHihadb+22R4oT3c6UXKn3RtS
-    IbDVcfhkpPJdXgYd5IrbkmnzEhvtGtpIOTyf1HPrwPvS8lzvcx2s85h8wYF5xEyyXHNm
-    LBkzTHiS6S+5uM3lpyR7GdCevi2CSMy2OjVid/FLamOgbur03kUcnhaLAuUTBWwdQml5
-    cPNzi9B5CaEhFctKHEbPi1RpQLW6F+kWd77HCxVe2o0Oz32YeTXCqbkjVdj5OF2xyIHN
-    2NZQ8dIWbwhUwhk33xELfkrx70VDU29te5JBfPAs+byhQJVYvvCp63U2dcI7+sr0ZlOO
-    jl5g==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1733750015;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=17GQjiCgiTJroWR1qJTL0YxUHyG3zTcMMtkH4qjVCPA=;
-    b=cMI0x44frUc6VFwOvSPJ8ZddX0HPJhwNV12bhG6tCK+rBrhRqKtedk9J+oqZQTrukX
-    Oeth8q2May3K2oqt7IEV/kZOHseVk6eqAmGabim0gTUQgwYu8qrgq4/j96gB8kw1rjoX
-    IIIh0GW7OxoUi5PQDY22dVue4in0yXGqzCWw7swwfpeWfAnIC2WHQTWsx0aCSBPkSD8p
-    M27OC91NDRatgUUP/jnRexSTDAz7hV2lB19SAkqLVb18bSDyEMASuQZcwu4HiT5U7W2a
-    xGKQ9fiiq8eOJRu/olaYZ+RxeTTczcA9YGz9LRZlBG+IXkQTjUgglPygOPGEAy90reCc
-    ISHw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1733750015;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=17GQjiCgiTJroWR1qJTL0YxUHyG3zTcMMtkH4qjVCPA=;
-    b=N2NdDhhJ/KTOzo65gO3QKHfKDqDmTXviYq3Fn5GdlLkr1DMdkZYknImLktJy5BXw0l
-    YUPlT6S7HknyJO4NFmAw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/vMMcFB+5xtv9aJ67XA=="
-Received: from [IPV6:2a00:6020:4a8e:5000::9f3]
-    by smtp.strato.de (RZmta 51.2.11 AUTH)
-    with ESMTPSA id K63ada0B9DDZBf5
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Mon, 9 Dec 2024 14:13:35 +0100 (CET)
-Message-ID: <572d0fa8-e9df-4047-951f-2747571086db@hartkopp.net>
-Date: Mon, 9 Dec 2024 14:13:29 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F62435971;
+	Mon,  9 Dec 2024 14:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733752950; cv=none; b=Lz+3oGG15a7YMNKobOSXtZ0zVd2DWFloBdr31RSN6TLFP/gKqg/jpdJG8dFmZ5HZR9xgm9vd9xmWS5plCh2tGaiSXs8yH4M8ls9L61o2OsUoKSSz0IjMYn7582rkbbtAY5e9ALIMjhmseDgj2EG1V3vpRDljiEcXrqpluD7S0Ew=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733752950; c=relaxed/simple;
+	bh=03xiu9pYOCrdNfcv/qw+gwiZHTNUJB2+YIld69kTu/Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hYRgf5hx29N50KuLNLiVN89h/etY7Dcf5MY0SZPfjXCiRNzHcC66qbPdOFMVZitH/J1KY/hPl7eVYyfcnFKeO0hHc2G/rrujEi2f2hFUPe/gvHxDdF44M9VJ+eoaycnWquvD55Y/OjdnAq3O7Tfto8b6Ecfte3gHmOF0PRyrzHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zo1QlyJu; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2165448243fso9431105ad.1;
+        Mon, 09 Dec 2024 06:02:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733752948; x=1734357748; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OAhPp2pGpsvDTqVI2eQ221kABd4Y8/kh7k1mWyeQzTw=;
+        b=Zo1QlyJu+XBbTOO3w8tdc1A3K2lJwyV/8N78TenKl/WSv6/43Mh7ynbcJQrT7vuJEB
+         VZit3+tvX2NY/mI42fkzQoSLYEW3NT/9F2egqk0KFHPOCbC6N0K6X1e1r586nvaa2Yng
+         Btx9WB9mwHnpmkyoB5eUWqQz1r8gNo4MmlxqhoGWoJapaff6XG/oBURLapB2gsYB/yKZ
+         dE44RyCUSMneeMPQYUhg3wpdx73MVunOvpT+K+ThEnmI1lwrGGZqg3ybUXBJFkSr/h4U
+         Y58cYcTR3OdBAR09eBO3kUrvEIbxNMdIPybE1boYdMKyQEzLCqKzPX43Qe7DNxizHkFz
+         tmOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733752948; x=1734357748;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OAhPp2pGpsvDTqVI2eQ221kABd4Y8/kh7k1mWyeQzTw=;
+        b=viUPrGf0LTdi2fKoIcPWM6KEiBrdjAbXkS7TyclAjmP5uaG4ASY5zbYncggROaOgWz
+         AIw17krdv5HlX91kMP1v+AIBVIim3dVPaeaFFcatxTlkOc7xTmJ77ajDjTyKEPiAlppx
+         zmrkbLl+PeVfhrQp+nUKzNfIWgtMfE4mQ6i1JIcNtV2mWpYfgVxtQG1D0lgRmQJVpSqh
+         W0O12xyCmoMV58k/ErBXZrHNaN/Oi2yBDxaqAUDAcmIGfec3xLoHBizX1v5Sn1GXovm9
+         4B39Klvm5eZXO9t7QX8IbcGmpXafpZSFaz5vHWZi4cJC6DoEwm1dnL87dpL8WpRQlDJM
+         1KBA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0lTN3rPXi3GK74dAIoY+HvFm2QvDwqGRWibMh3iUyvuK8z9AtURRUTg1XrQuiJXnjuv8=@vger.kernel.org, AJvYcCU8zqng2OpiE4vF46u6tgfE0IiNPcMXclVlVkGR1a+l2E49IxSxOGK9HnZuHwVBiSrjexlQ5ZQ3yHq65Q==@vger.kernel.org, AJvYcCUut6kck6f7uekoEuNhbB+dMXd4pNcViDq+Xt0z+Q8bXjY7AGzwurKu4Li2rsGWmP6tjSNyIfrzWmq7TQP5@vger.kernel.org, AJvYcCVP5UPLy/lrrB+k231xlOjSzzsrEL0VSPAVimVEzQjKEQ/XekITzjBmddfFmNxRv/TASU7ctTSdh71Y/RzR0L0=@vger.kernel.org, AJvYcCVd87fNDyW6jeItN+eFfXEW3vY78KV05tGRUWfG9kTW6ptS8j/vAaplk4MDQEKUzcDSeX5OC+JV4nTE@vger.kernel.org, AJvYcCWTDJdpCu/thTEae5mrZaHodfTkRkdESIjSKkYYkKoRpfV/+9PCLlK2oEgK3i7dL4jYVNVRZD3V496uhQ==@vger.kernel.org, AJvYcCWeqcqxbgFTCL/2FbBgD0RIawwsIUdaUc2OKMjU+fCcVtNOn9m/DBpyoN0iGN/3OqPuZxVlUKEDKrEXlgFvknQ7@vger.kernel.org, AJvYcCWqr0rJjQoksMWKY1Rbp3RDMyUZRfRqzepzLYxuDUwdOaX9FHMMlL0gQ/5MaK0vHTR23IENwoaeUsqI@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8Y2iJ6sjZX0kqTyUavxQoPxS+LN7DE9T4BpL9iEH9f/ZtlDxe
+	rLO+azhVPQKKYXayWI/Qo+U7nTHa64llceccduYhdUFZpeV1Kak8TIpUMdOfvnY=
+X-Gm-Gg: ASbGncvT4vtOE3nJYWZzhvSf/xsuFhmXbmcOEWuKpbAgae6Dtc/WY1q/zZw8yw65iFq
+	iKlooPPJE1cc+grS0rKaoCVdrpa6+rL3OLTctBwB56koLbRtTofkzdn/tI47k2OzxPdzkYrWssN
+	l1rLpC/5ElH0lmP34DMBWD1BhwE6hOmp+UecQ22yxrj7uuDyI4AMtai07Xx7Gzj0RVTPJLHlzQU
+	PcQbXKemkhmX2sceCS4pjKPmq2SUWmtwOqPqNfYvIfqTQ4=
+X-Google-Smtp-Source: AGHT+IEziqjANISe8V7T1b1Vo9dS8nge43qoErTxjCtNhfTplDp9qnHGPIzO4tjQCtyFccSJFTBRCw==
+X-Received: by 2002:a17:902:e74f:b0:216:4122:925f with SMTP id d9443c01a7336-21641229442mr90363145ad.14.1733752948110;
+        Mon, 09 Dec 2024 06:02:28 -0800 (PST)
+Received: from nova-ws.. ([103.167.140.11])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-216221db645sm49605645ad.46.2024.12.09.06.02.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2024 06:02:26 -0800 (PST)
+From: Xiao Liang <shaw.leon@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	linux-rdma@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	osmocom-net-gprs@lists.osmocom.org,
+	bpf@vger.kernel.org,
+	linux-ppp@vger.kernel.org,
+	wireguard@lists.zx2c4.com,
+	linux-wireless@vger.kernel.org,
+	b.a.t.m.a.n@lists.open-mesh.org,
+	bridge@lists.linux.dev,
+	linux-wpan@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v5 0/5] net: Improve netns handling in RTNL and ip_tunnel
+Date: Mon,  9 Dec 2024 22:01:46 +0800
+Message-ID: <20241209140151.231257-1-shaw.leon@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 12/14] can: netlink: add CAN XL support
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org,
- Robert Nawrath <mbro1689@gmail.com>
-References: <20241110155902.72807-16-mailhol.vincent@wanadoo.fr>
- <20241110155902.72807-28-mailhol.vincent@wanadoo.fr>
- <20241112-flashy-straight-poodle-9a796d-mkl@pengutronix.de>
- <CAMZ6RqKQLaEtgoLOAa3NHJotyHcAo=7ObXf=7tLh_DJ_QTCKOg@mail.gmail.com>
- <36b1f1cb-c431-43ad-be49-5093a3534b9d@hartkopp.net>
- <20241204-nippy-vivid-mantis-ee1725-mkl@pengutronix.de>
- <8d1cd5de-ae84-455d-8636-7f269bbfe7db@hartkopp.net>
- <20241204-mauve-asp-of-fortitude-e75174-mkl@pengutronix.de>
- <aeb667e7-9a5b-4d6f-8220-ac06dbdcfe80@hartkopp.net>
- <20241205-archetypal-stirring-kakapo-407537-mkl@pengutronix.de>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20241205-archetypal-stirring-kakapo-407537-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+
+This patch series includes some netns-related improvements and fixes for
+RTNL and ip_tunnel, to make link creation more intuitive:
+
+ - Creating link in another net namespace doesn't conflict with link names
+   in current one.
+ - Refector rtnetlink link creation. Create link in target namespace
+   directly. Pass both source and link netns to drivers via newlink()
+   callback.
+
+So that
+
+  # ip link add netns ns1 link-netns ns2 tun0 type gre ...
+
+will create tun0 in ns1, rather than create it in ns2 and move to ns1.
+And don't conflict with another interface named "tun0" in current netns.
+
+---
+
+v5:
+ - Fix function doc in batman-adv.
+ - Include peer_net in rtnl newlink parameters.
+
+v4:
+ link: https://lore.kernel.org/all/20241118143244.1773-1-shaw.leon@gmail.com/
+ - Pack newlink() parameters to a single struct.
+ - Use ynl async_msg_queue.empty() in selftest.
+
+v3:
+ link: https://lore.kernel.org/all/20241113125715.150201-1-shaw.leon@gmail.com/
+ - Drop "netns_atomic" flag and module parameter. Add netns parameter to
+   newlink() instead, and convert drivers accordingly.
+ - Move python NetNSEnter helper to net selftest lib.
+
+v2:
+ link: https://lore.kernel.org/all/20241107133004.7469-1-shaw.leon@gmail.com/
+ - Check NLM_F_EXCL to ensure only link creation is affected.
+ - Add self tests for link name/ifindex conflict and notifications
+   in different netns.
+ - Changes in dummy driver and ynl in order to add the test case.
+
+v1:
+ link: https://lore.kernel.org/all/20241023023146.372653-1-shaw.leon@gmail.com/
 
 
+Xiao Liang (5):
+  net: ip_tunnel: Build flow in underlay net namespace
+  rtnetlink: Lookup device in target netns when creating link
+  rtnetlink: Decouple net namespaces in rtnl_newlink_create()
+  selftests: net: Add python context manager for netns entering
+  selftests: net: Add two test cases for link netns
 
-On 05.12.24 10:15, Marc Kleine-Budde wrote:
-> On 05.12.2024 09:16:44, Oliver Hartkopp wrote:
->> On 04.12.24 12:44, Marc Kleine-Budde wrote:
->>> On 04.12.2024 12:35:43, Oliver Hartkopp wrote:
->>>>>>> Also, the main reason for not creating the nest was that I thought
->>>>>>> that the current bittiming API was stable. I was not aware of the
->>>>>>> current flaw on how to divide tseg1_min. Maybe we should first discuss
->>>>>>> how to solve this issue for CAN FD?
->>>>>>
->>>>>> I like the current way how you added the CAN XL support.
->>>>>> It maintains the known usage pattern - and the way how CAN XL bit timings
->>>>>> are defined is identical to CAN FD (including TDC).
->>>>>>
->>>>>> Is the separation of propseg and tseg1 that relevant?
->>>>>> Does it really need to be exposed to the user?
->>>>>
->>>>> There are IIRC at least 2 CAN-FD cores where the prop segment and phase
->>>>> segment 1 for the data bit timing have not the same width. This means we
->>>>> have to change the bittiming_const in the kernel.
->>
->> Sure?
-> 
-> I'm sure the registers don't have the same width. And I'm sure about my
-> conclusion, but that's up for discussion :)
-> 
-> https://elixir.bootlin.com/linux/v6.12.1/source/drivers/net/can/ctucanfd/ctucanfd_base.c#L197
-> https://elixir.bootlin.com/linux/v6.12.1/source/drivers/net/can/flexcan/flexcan-core.c#L1210
-> 
->> In the end (almost) every CAN controller has the tseg1 register which
->> contains prop_seg + phase_seg1 as a sum of these.
-> 
-> Some do (just a short grep): bxcan, esdacc, rcar_can, softing, hi311x,
-> ti_hecc. More controllers haven evenly divided prop_seg + phase_seg1.
-> 
->> The relevant point is behind prop_seg + phase_seg1 and I'm pretty sure these
->> "2 CAN-FD cores" will add the values internally too.
-> 
-> As the ctucanfd is open you can have a look :)
-> 
->> I'm a bit concerned that after 40 years someone shows up with the idea to
->> spend two registers for the tseg1 value instead of one.
-> 
-> It doesn't matter if prop_seg and phase_seg1 are in the same register or
-> not, what matters is:
-> a) 1. does the IP core want separate prop_seg and phase_seg1 values
->     - or -
->     2. does the IP core want a single "prop_seg + phase_seg1", a.k.a.
->        tseg1 value?
-> b) 1. what's the width of the prop_seg and phase_seg1?
->     2. what's the width of tseg1?
-> 
-> Currently the CAN infrastructure allows the driver to specify tseg1 only
-> and assumes the width of prop_seg and phase_seg1 to be the same, as it
-> distributes tseg1 evenly between prop_seg and phase_seg1:
-> 
-> https://elixir.bootlin.com/linux/v6.12.1/source/drivers/net/can/dev/calc_bittiming.c#L155
-> 
-> This leads to the workarounds in the CAN drivers, see above for links.
+ drivers/infiniband/ulp/ipoib/ipoib_netlink.c  | 11 +++--
+ drivers/net/amt.c                             | 13 +++---
+ drivers/net/bareudp.c                         | 11 +++--
+ drivers/net/bonding/bond_netlink.c            |  8 ++--
+ drivers/net/can/dev/netlink.c                 |  4 +-
+ drivers/net/can/vxcan.c                       |  9 ++--
+ .../ethernet/qualcomm/rmnet/rmnet_config.c    | 11 +++--
+ drivers/net/geneve.c                          | 11 +++--
+ drivers/net/gtp.c                             |  9 ++--
+ drivers/net/ipvlan/ipvlan.h                   |  4 +-
+ drivers/net/ipvlan/ipvlan_main.c              | 11 +++--
+ drivers/net/ipvlan/ipvtap.c                   |  7 ++-
+ drivers/net/macsec.c                          | 11 +++--
+ drivers/net/macvlan.c                         |  8 ++--
+ drivers/net/macvtap.c                         |  8 ++--
+ drivers/net/netkit.c                          |  9 ++--
+ drivers/net/pfcp.c                            |  8 ++--
+ drivers/net/ppp/ppp_generic.c                 | 10 +++--
+ drivers/net/team/team_core.c                  |  7 +--
+ drivers/net/veth.c                            |  9 ++--
+ drivers/net/vrf.c                             |  7 +--
+ drivers/net/vxlan/vxlan_core.c                | 11 +++--
+ drivers/net/wireguard/device.c                |  8 ++--
+ drivers/net/wireless/virtual/virt_wifi.c      | 10 +++--
+ drivers/net/wwan/wwan_core.c                  | 15 +++++--
+ include/net/ip_tunnels.h                      |  5 ++-
+ include/net/rtnetlink.h                       | 44 ++++++++++++++++---
+ net/8021q/vlan_netlink.c                      | 11 +++--
+ net/batman-adv/soft-interface.c               | 12 ++---
+ net/bridge/br_netlink.c                       |  8 ++--
+ net/caif/chnl_net.c                           |  6 +--
+ net/core/rtnetlink.c                          | 35 ++++++++-------
+ net/hsr/hsr_netlink.c                         | 14 +++---
+ net/ieee802154/6lowpan/core.c                 |  9 ++--
+ net/ipv4/ip_gre.c                             | 27 ++++++++----
+ net/ipv4/ip_tunnel.c                          | 16 ++++---
+ net/ipv4/ip_vti.c                             | 10 +++--
+ net/ipv4/ipip.c                               | 10 +++--
+ net/ipv6/ip6_gre.c                            | 28 +++++++-----
+ net/ipv6/ip6_tunnel.c                         | 16 +++----
+ net/ipv6/ip6_vti.c                            | 15 +++----
+ net/ipv6/sit.c                                | 16 +++----
+ net/xfrm/xfrm_interface_core.c                | 14 +++---
+ tools/testing/selftests/net/Makefile          |  1 +
+ .../testing/selftests/net/lib/py/__init__.py  |  2 +-
+ tools/testing/selftests/net/lib/py/netns.py   | 18 ++++++++
+ tools/testing/selftests/net/netns-name.sh     | 10 +++++
+ tools/testing/selftests/net/netns_atomic.py   | 39 ++++++++++++++++
+ 48 files changed, 385 insertions(+), 211 deletions(-)
+ create mode 100755 tools/testing/selftests/net/netns_atomic.py
 
-Yes. But why don't we just let this as-is then?
-
-Even if prop_seg phase_seg1 registers have a different size, this split 
-up can be done easily without changing the current bittiming API.
-
-Maybe a common helper function to split up the values based on given 
-register sizes could simplify the handling for those CAN drivers.
-
-I'm still not convinced that it brings some benefits for the user to 
-extend the bittiming API. IMHO it just complicates the bitrate settings.
-
-Best regards,
-Oliver
-
->> As a both values rely on the same tq can't we just split the tseg1 into
->> prop_seg + phase_seg1 values with some common e.g. 70:30 pattern?
-> 
-> We currently split 50:50 (hard-coded).
-> 
->> IMO changing the bittiming API has no value for the user just to satisfy the
->> "2 CAN-FD cores" that came late to the party.
->>
->>>>> A struct in netlink means we cannot change it.
->>>>
->>>> But are we not already in this situation with CAN FD that we can not change
->>>> the bittiming (const) in the userspace API?
->>>
->>> Yes, we have to support it. But we can add a new nested type that
->>> serializes the individual members of an improved struct bittiming_const.
->>> The old user space tools will just keep working, iproute2 can be updated
->>> to use the new bittiming_const if it's available and fall back to the
->>> existing one.
->>
->> Ok. Nice - but maybe obsolete due to my question above ;-)
-> 
-> regards,
-> Marc
-> 
+-- 
+2.47.1
 
 
