@@ -1,279 +1,445 @@
-Return-Path: <linux-can+bounces-2361-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2369-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C97839EAE30
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 11:45:39 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5E481888F0F
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 10:45:38 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E7432080D7;
-	Tue, 10 Dec 2024 10:45:29 +0000 (UTC)
-X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8279E9EAE77
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 11:49:03 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600B023DEA7
-	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 10:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00093283109
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 10:49:01 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 206D7223E7A;
+	Tue, 10 Dec 2024 10:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gLjnzMdC"
+X-Original-To: linux-can@vger.kernel.org
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5C7223E69;
+	Tue, 10 Dec 2024 10:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733827529; cv=none; b=ITu8rWgez9slYMZr8lrOOQAyxtxS4PIIKdPaDwQyLjZSgZQq6QwMsREbo6FtKO6HIjyFmyawXszavGX8sBHUMuMmn6Dyd0Kf8jszh2rYNgA8FZPEQlxKNQQLe8OKhBvPLEPuD7+OL43FoU8sjB8mjnTyBqVqavVN36gBlaXJ1EI=
+	t=1733827585; cv=none; b=RRLQNjvK+lRZJL5IOLrTMOWuUlrEzyBD2SaKn/slORvaJHSWBBdSFWnfSaKbQRwcGqYEPIFjdwW0YqwvMHXA4umEUg7EOVPix9OqvVe53qiUKvASZEaqIjIfplykpG8cuYAr1xTI6I1PVgFw5VvFKzi2JUrumNpvo/Zp3sPTl1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733827529; c=relaxed/simple;
-	bh=TrndgkCAix+TKm89+9IpXqkvTx8Tz8y31G0lEOdiFZA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M9FZKokN8oJRkX/gYC3Q8VE87njzck6n3uBoEzU3Fdxk20wdLKoibRXS4OyN84r/t+YsR4SdgfwP5Pd6VwUUhczDtAO5eEaneHq6Zi2wW+7hxXa8TIOenk2tAoltvLpVT+5v/MqpAX6VPyOKimxoLxzmJIWV1XRwbtibmorC+Zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tKxk4-0001Jd-T3; Tue, 10 Dec 2024 11:45:24 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tKxk3-002ftV-1M;
-	Tue, 10 Dec 2024 11:45:24 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id D5DE838A9EA;
-	Tue, 10 Dec 2024 10:45:23 +0000 (UTC)
-Date: Tue, 10 Dec 2024 11:45:23 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Thomas Kopp <thomas.kopp@microchip.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
-	Stefano Offredi <stefano.offredi@gmail.com>
-Subject: Re: [PATCH can-next v2] can: mcp251xfd: ACPI support
-Message-ID: <20241210-laughing-koel-of-nirvana-349f7e-mkl@pengutronix.de>
-References: <20241210-mcp251xfd-acpi-v2-1-d6694f590d00@pengutronix.de>
+	s=arc-20240116; t=1733827585; c=relaxed/simple;
+	bh=hUdmWJrZ8uZDa08fx3jiEpjOsAtFBYDD54GTsPyfnC8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=cLLoBuVjyQw9RL24p1KRTbEZAYleujAMMPjHndX8a6gNGcLXZNNKpsPqWlmvTjv3X+qt5NbtSYe5IKXa85nabRHxAC7RWVPdOHT+W+tkAmuMxc73RYbTQFu7zrVxrca86NcRVbBIuY2+Scy3puzt2vSusLh9GbkZ/4tTNdbylEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gLjnzMdC; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-725ee27e905so2175893b3a.2;
+        Tue, 10 Dec 2024 02:46:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733827583; x=1734432383; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a/tsulPfEI/HbzTLrZhhJrzZ8h085yaO/VGtKwjuGCg=;
+        b=gLjnzMdCnOx7iG/zJEDzfN93IjzDtOfR9l4T59jmvOOiKz45sGza3WZOK4cd0U1XOH
+         +hbF706uMF9Y4lKj0LlR5o3mCkH3xW5JdnP69gkNe8lmqWGPF0nzOGb4Wl8M6X9La/bU
+         +mPnGmtLLBtKe2kdBe5rRROiQ5x92mqCV0BgWyzqISBQAFMogxNdFSXN0WvpdxTCxRNX
+         5LSC6ET+SSa+6u8gUrXch4vvwwJ1EsIXu+dI3VsrRAkGs3UKSlYRUInm7VeSuGg3wAnZ
+         BYggvfkmKWJo1ckP1bU927ZxvBVD3iBs+pWdcxEizKVE7a//iEO47uRUFp6nl3/ib354
+         OB3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733827583; x=1734432383;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a/tsulPfEI/HbzTLrZhhJrzZ8h085yaO/VGtKwjuGCg=;
+        b=Ei4RjC/v5HwBKzeDx7GsA2fdaVCz3tRWzcyRxRpE9deLRb8k26qYvzCCDxSxJ2Sc4C
+         A+P/51KCP42iLPfUHfl5iugV1xUvfVPfCMa+SvTMsSutrlFprZMfuFjkgiwmzMtgSKO4
+         rRkwDL9nGBNPc29nFyOmi7/pggfy5t32K/qHGitsAWtic9kx+/DDuyncJo2GiG8cfTLr
+         7mxbP7gbK1iaBCbxrmpfUn3MJafUhUr3CK0bVZqsd1pwYDUzv0WfOCMbNAIKzlAsxiOl
+         5YIo7iQYfEbnINZpDZto85Ti0wnlFRxuo/PAHOPoC+gQrg+pAaL3QFLAVKBcPLQ0EIsA
+         U7Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCUZx+vhIBUy3U0JBkKynBzpZCgaWlutuC7rsTApK2RhR+dfwuxkEe3v87StYL24m6Lmwo73g/nIv6tS@vger.kernel.org, AJvYcCUuhc2JN3Tx2+sLDw4vA0nh4IAtuO7OwKnsNeAGoQSYaz9F3rjC/sdfHRQ9op7M3nonjjBBDNgcQxhD9g==@vger.kernel.org, AJvYcCVhnBqNSbvCiw11mnnCbsVsowpDLGoqi90zW2Oxu1iFlpKCwAqoq3VA00lLFgA8qBK59qMTH6lCppU/+ZkNJf0=@vger.kernel.org, AJvYcCVoIS/38/UKVoRv72OIjf+pfB1++ERoEuKDuHjAz+Zqm3OYuV5QYWM01FasxK4DUx2/GFlPin+4@vger.kernel.org, AJvYcCWSL05b/p3MXsROYBOQU7xz9j5TQWhLVoKTVmPVwuLp7kX308qRKjpokzDPC8IBxaoInj9hKxYhPoQ=@vger.kernel.org, AJvYcCXM3zuC6rf0einIUFLlmGQx5rBjEQCx2XVcyQFY+m+J/ZNbU1lDMRwe/Rd4p08FQ/VCkCXLJ3fn6dEI@vger.kernel.org, AJvYcCXxGOhifzF5Xe60SxemlGn6qQmNjY9khvu/dNICPAUjowD00zCe/9pb4mgzT8m3jxvlMmtTyavIlNku/8I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4RW0OwnYAB7kqe2QRUBZ4MhAuwxGDtqICz4hp6icQ2w9C0/xD
+	ILRlhK3+cAjaTx/il/ZGNOhjD1pw4yjX6IO1z/HlQw9BNbllO62x
+X-Gm-Gg: ASbGnctHAhQTEo0w3Zw4Y/lWumw9AduJtmI6tIhoUUCv4kKReSoE/xFe2Kx0+QGRBKZ
+	7Y5Lij2yoQTAG84692Xhbt1D4bkEftoM97iUgQiVQm63C9K0i+SHiOBIetlH5UNsYVie6XmCCYc
+	0SjRyAsGYxpeABXv7zJ8VQy+h2hyO6NjLSU7HMYkxOEZ0Wb9MUNN9jawlO6OVNPu0RO/tC16BFh
+	JJUYNRR9kl86nQKJ9YAuspNcYj+2mYB00BtoGkSll2eLf9s4I5tf/9JwPQ7eelq6KauqH/cShRL
+	o3Iu4AwHqbQw683f
+X-Google-Smtp-Source: AGHT+IEFzISgMzORm1VZJHloXLXa4RbAFlrP6lX4mjT3bkPPo/3uvNKogh8I0oZwg4hGcbnrTfGVmA==
+X-Received: by 2002:a05:6a20:3945:b0:1e1:afa9:d397 with SMTP id adf61e73a8af0-1e1afa9d6fdmr8076953637.15.1733827582738;
+        Tue, 10 Dec 2024 02:46:22 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fd156dfe2fsm8905748a12.31.2024.12.10.02.46.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2024 02:46:22 -0800 (PST)
+From: Ming Yu <a0282524688@gmail.com>
+X-Google-Original-From: Ming Yu <tmyu0@nuvoton.com>
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: [PATCH v3 7/7] rtc: Add Nuvoton NCT6694 RTC support
+Date: Tue, 10 Dec 2024 18:45:24 +0800
+Message-Id: <20241210104524.2466586-8-tmyu0@nuvoton.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241210104524.2466586-1-tmyu0@nuvoton.com>
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="67cb5y6uvguo342c"
-Content-Disposition: inline
-In-Reply-To: <20241210-mcp251xfd-acpi-v2-1-d6694f590d00@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+This driver supports RTC functionality for NCT6694 MFD device
+based on USB interface.
 
---67cb5y6uvguo342c
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH can-next v2] can: mcp251xfd: ACPI support
-MIME-Version: 1.0
+Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+---
+ MAINTAINERS               |   1 +
+ drivers/rtc/Kconfig       |  10 ++
+ drivers/rtc/Makefile      |   1 +
+ drivers/rtc/rtc-nct6694.c | 264 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 276 insertions(+)
+ create mode 100644 drivers/rtc/rtc-nct6694.c
 
-On 10.12.2024 08:57:14, Marc Kleine-Budde wrote:
-> From: Stefano Offredi <stefano.offredi@gmail.com>
->=20
-> This patch makes the Microchip MCP251xFD driver compatible with
-> hardware parameters loading from ACPI tables.
->=20
-> It's a patch for the 5.15 kernel version for which I could do tests on.
->=20
-> The ACPI driver hardware description table I used is the following:
->=20
-> DefinitionBlock ("can.aml", "SSDT", 1, "mcp2518fd", "Intel", 0x00000003)
-> {
->     External (\_SB.PC00.SPI0, DeviceObj)
->     Scope (\_SB.PC00.SPI0)
->     {
->         Device (CAN0) {
->             Name (_HID, "MCP2518")
->             Name (_CID, "mcp2518fd")
->             Name (_DDN, "CAN SPI device connected to CS0")
->             Name (_CRS, ResourceTemplate () {
->                 SpiSerialBus (
->                     0,                             // Chip select
->                     PolarityLow,             // Chip select is active low
->                     FourWireMode,        // Full duplex
->                     8,                              // Bits per word is 8=
- (byte)
->                     ControllerInitiated,    // Don't care
->                     20000000,                // 20 MHz
->                     ClockPolarityLow,     // SPI mode 0
->                     ClockPhaseFirst,      // SPI mode 0
->                     "\\_SB.PC00.SPI0",  // SPI host controller
->                     0                               // Must be 0
->                 )
->                 GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault, =
-0,
->                     "\\_SB.GPI0", 0, ResourceConsumer, ,
->                     )
->                     {
->                        2
->                     }
->             })
->             Name (_DSD, Package ()
->             {
->                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
->                 Package ()
->                 {
->                     Package () {"rxint-gpios", Package () { ^CAN0, 0, 0, =
-0 } },
->                     Package (2) {"clock-frequency",  40000000 }
->                 }
->             })
->          }
->      }
->  }
->=20
-> Signed-off-by: Stefano Offredi <stefano.offredi@gmail.com>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
-> This is a continuation of Stefano Offredi's work. For easier review
-> I've rebased the patch to current net-next/main and fixed the
-> indention.
-> ---
-> Changes in v2:
-> - rebased to net-next/main
-> - fix indention
-> ---
->  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 34 ++++++++++++++++++++=
-++++++
->  1 file changed, 34 insertions(+)
->=20
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net=
-/can/spi/mcp251xfd/mcp251xfd-core.c
-> index 3bc56517fe7a99d96dd43750a8ddd21961138e41..ee066dc2fdaa97ebadb5dc975=
-957426c563adc9e 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> @@ -12,6 +12,9 @@
->  // Copyright (c) 2019 Martin Sperl <kernel@martin.sperl.org>
->  //
-> =20
-> +#ifdef CONFIG_ACPI
-> +#include <linux/acpi.h>
-> +#endif
->  #include <linux/unaligned.h>
->  #include <linux/bitfield.h>
->  #include <linux/clk.h>
-> @@ -2002,6 +2005,23 @@ static const struct spi_device_id mcp251xfd_id_tab=
-le[] =3D {
->  };
->  MODULE_DEVICE_TABLE(spi, mcp251xfd_id_table);
-> =20
-> +#ifdef CONFIG_ACPI
-> +static const struct acpi_device_id  mcp251xfd_acpi_id_table[] =3D {
-> +	{ "MCP2517", .driver_data =3D (kernel_ulong_t)&mcp251xfd_devtype_data_m=
-cp2517fd, },
-> +	{ "MCP2518", .driver_data =3D (kernel_ulong_t)&mcp251xfd_devtype_data_m=
-cp2518fd, },
-> +	{ "MCP251X", .driver_data =3D (kernel_ulong_t)&mcp251xfd_devtype_data_m=
-cp251xfd, },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, mcp251xfd_acpi_id_table);
-> +
-> +static const struct acpi_gpio_params rx_int_gpios =3D { 1, 0, false };
-> +
-> +static const struct acpi_gpio_mapping acpi_mcp251xfd_gpios[] =3D {
-> +	{ "rx-int-gpios", &rx_int_gpios, 1 },
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d6414eea0463..6d1cfec28076 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16550,6 +16550,7 @@ F:	drivers/hwmon/nct6694-hwmon.c
+ F:	drivers/i2c/busses/i2c-nct6694.c
+ F:	drivers/mfd/nct6694.c
+ F:	drivers/net/can/nct6694_canfd.c
++F:	drivers/rtc/rtc-nct6694.c
+ F:	drivers/watchdog/nct6694_wdt.c
+ F:	include/linux/mfd/nct6694.h
+ 
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 66eb1122248b..36829d096194 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -406,6 +406,16 @@ config RTC_DRV_NCT3018Y
+ 	   This driver can also be built as a module, if so, the module will be
+ 	   called "rtc-nct3018y".
+ 
++config RTC_DRV_NCT6694
++	tristate "Nuvoton NCT6694 RTC support"
++	depends on MFD_NCT6694
++	help
++	  If you say yes to this option, support will be included for Nuvoton
++	  NCT6694, a USB device to RTC.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called rtc-nct6694.
++
+ config RTC_DRV_RK808
+ 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
+ 	depends on MFD_RK8XX
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index f62340ecc534..64443d26bb5b 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -116,6 +116,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
+ obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
+ obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
+ obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
++obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
+ obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
+ obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
+ obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
+diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
+new file mode 100644
+index 000000000000..0dbe2aa0a042
+--- /dev/null
++++ b/drivers/rtc/rtc-nct6694.c
+@@ -0,0 +1,264 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Nuvoton NCT6694 RTC driver based on USB interface.
++ *
++ * Copyright (C) 2024 Nuvoton Technology Corp.
++ */
++
++#include <linux/bcd.h>
++#include <linux/irqdomain.h>
++#include <linux/kernel.h>
++#include <linux/mfd/core.h>
++#include <linux/mfd/nct6694.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/rtc.h>
++#include <linux/slab.h>
++
++/* Host interface */
++#define NCT6694_RTC_MOD		0x08
++
++/* Message Channel */
++/* Command 00h */
++#define NCT6694_RTC_CMD0_LEN	0x07
++#define NCT6694_RTC_CMD0_OFFSET	0x0000	/* OFFSET = SEL|CMD */
++/* Command 01h */
++#define NCT6694_RTC_CMD1_LEN	0x05
++#define NCT6694_RTC_CMD1_OFFSET	0x0001	/* OFFSET = SEL|CMD */
++/* Command 02h */
++#define NCT6694_RTC_CMD2_LEN	0x02
++#define NCT6694_RTC_CMD2_OFFSET	0x0002	/* OFFSET = SEL|CMD */
++
++#define NCT6694_RTC_IRQ_INT_EN		BIT(0)	/* Transmit a USB INT-in when RTC alarm */
++#define NCT6694_RTC_IRQ_GPO_EN		BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
++
++#define NCT6694_RTC_IRQ_EN		(NCT6694_RTC_IRQ_INT_EN | NCT6694_RTC_IRQ_GPO_EN)
++#define NCT6694_RTC_IRQ_STS		BIT(0)	/* Write 1 clear IRQ status */
++
++struct __packed nct6694_rtc_cmd0 {
++	u8 sec;
++	u8 min;
++	u8 hour;
++	u8 week;
++	u8 day;
++	u8 month;
++	u8 year;
++};
++
++struct __packed nct6694_rtc_cmd1 {
++	u8 sec;
++	u8 min;
++	u8 hour;
++	u8 alarm_en;
++	u8 alarm_pend;
++};
++
++struct __packed nct6694_rtc_cmd2 {
++	u8 irq_en;
++	u8 irq_pend;
++};
++
++struct nct6694_rtc_data {
++	struct nct6694 *nct6694;
++	struct rtc_device *rtc;
++	struct mutex lock;
++	unsigned char *xmit_buf;
++};
++
++static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	struct nct6694_rtc_cmd0 *buf = (struct nct6694_rtc_cmd0 *)data->xmit_buf;
++	int ret;
++
++	guard(mutex)(&data->lock);
++
++	ret = nct6694_read_msg(data->nct6694, NCT6694_RTC_MOD,
++			       NCT6694_RTC_CMD0_OFFSET,
++			       NCT6694_RTC_CMD0_LEN,
++			       buf);
++	if (ret)
++		return ret;
++
++	tm->tm_sec = bcd2bin(buf->sec);		/* tm_sec expect 0 ~ 59 */
++	tm->tm_min = bcd2bin(buf->min);		/* tm_min expect 0 ~ 59 */
++	tm->tm_hour = bcd2bin(buf->hour);	/* tm_hour expect 0 ~ 23 */
++	tm->tm_wday = bcd2bin(buf->week) - 1;	/* tm_wday expect 0 ~ 6 */
++	tm->tm_mday = bcd2bin(buf->day);	/* tm_mday expect 1 ~ 31 */
++	tm->tm_mon = bcd2bin(buf->month) - 1;	/* tm_month expect 0 ~ 11 */
++	tm->tm_year = bcd2bin(buf->year) + 100;	/* tm_year expect since 1900 */
++
++	return ret;
++}
++
++static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	struct nct6694_rtc_cmd0 *buf = (struct nct6694_rtc_cmd0 *)data->xmit_buf;
++
++	guard(mutex)(&data->lock);
++
++	buf->sec = bin2bcd(tm->tm_sec);
++	buf->min = bin2bcd(tm->tm_min);
++	buf->hour = bin2bcd(tm->tm_hour);
++	buf->week = bin2bcd(tm->tm_wday + 1);
++	buf->day = bin2bcd(tm->tm_mday);
++	buf->month = bin2bcd(tm->tm_mon + 1);
++	buf->year = bin2bcd(tm->tm_year - 100);
++
++	return nct6694_write_msg(data->nct6694, NCT6694_RTC_MOD,
++				 NCT6694_RTC_CMD0_OFFSET,
++				 NCT6694_RTC_CMD0_LEN,
++				 buf);
++}
++
++static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	struct nct6694_rtc_cmd1 *buf = (struct nct6694_rtc_cmd1 *)data->xmit_buf;
++	int ret;
++
++	guard(mutex)(&data->lock);
++
++	ret = nct6694_read_msg(data->nct6694, NCT6694_RTC_MOD,
++			       NCT6694_RTC_CMD1_OFFSET,
++			       NCT6694_RTC_CMD1_LEN,
++			       buf);
++	if (ret)
++		return ret;
++
++	alrm->time.tm_sec = bcd2bin(buf->sec);
++	alrm->time.tm_min = bcd2bin(buf->min);
++	alrm->time.tm_hour = bcd2bin(buf->hour);
++	alrm->enabled = buf->alarm_en;
++	alrm->pending = buf->alarm_pend;
++
++	return ret;
++}
++
++static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	struct nct6694_rtc_cmd1 *buf = (struct nct6694_rtc_cmd1 *)data->xmit_buf;
++
++	guard(mutex)(&data->lock);
++
++	buf->sec = bin2bcd(alrm->time.tm_sec);
++	buf->min = bin2bcd(alrm->time.tm_min);
++	buf->hour = bin2bcd(alrm->time.tm_hour);
++	buf->alarm_en = alrm->enabled ? NCT6694_RTC_IRQ_EN : 0;
++	buf->alarm_pend = 0;
++
++	return nct6694_write_msg(data->nct6694, NCT6694_RTC_MOD,
++				 NCT6694_RTC_CMD1_OFFSET,
++				 NCT6694_RTC_CMD1_LEN,
++				 buf);
++}
++
++static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	struct nct6694_rtc_cmd2 *buf = (struct nct6694_rtc_cmd2 *)data->xmit_buf;
++
++	guard(mutex)(&data->lock);
++
++	if (enabled)
++		buf->irq_en |= NCT6694_RTC_IRQ_EN;
++	else
++		buf->irq_en &= ~NCT6694_RTC_IRQ_EN;
++
++	buf->irq_pend = 0;
++
++	return nct6694_write_msg(data->nct6694, NCT6694_RTC_MOD,
++				 NCT6694_RTC_CMD2_OFFSET,
++				 NCT6694_RTC_CMD2_LEN,
++				 buf);
++}
++
++static const struct rtc_class_ops nct6694_rtc_ops = {
++	.read_time = nct6694_rtc_read_time,
++	.set_time = nct6694_rtc_set_time,
++	.read_alarm = nct6694_rtc_read_alarm,
++	.set_alarm = nct6694_rtc_set_alarm,
++	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
++};
++
++static irqreturn_t nct6694_irq(int irq, void *dev_id)
++{
++	struct nct6694_rtc_data *data = dev_id;
++	struct nct6694_rtc_cmd2 *buf = (struct nct6694_rtc_cmd2 *)data->xmit_buf;
++	int ret;
++
++	guard(mutex)(&data->lock);
++
++	buf->irq_en = NCT6694_RTC_IRQ_EN;
++	buf->irq_pend = NCT6694_RTC_IRQ_STS;
++	ret = nct6694_write_msg(data->nct6694, NCT6694_RTC_MOD,
++				NCT6694_RTC_CMD2_OFFSET,
++				NCT6694_RTC_CMD2_LEN,
++				buf);
++	if (ret)
++		return IRQ_NONE;
++
++	rtc_update_irq(data->rtc, 1, RTC_IRQF | RTC_AF);
++
++	return IRQ_HANDLED;
++}
++
++static int nct6694_rtc_probe(struct platform_device *pdev)
++{
++	struct nct6694_rtc_data *data;
++	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
++	int ret, irq;
++
++	irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
++	if (!irq)
++		return -EINVAL;
++
++	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->xmit_buf = devm_kcalloc(&pdev->dev, NCT6694_MAX_PACKET_SZ,
++				      sizeof(unsigned char), GFP_KERNEL);
++	if (!data->xmit_buf)
++		return -ENOMEM;
++
++	data->rtc = devm_rtc_allocate_device(&pdev->dev);
++	if (IS_ERR(data->rtc))
++		return PTR_ERR(data->rtc);
++
++	data->nct6694 = nct6694;
++	data->rtc->ops = &nct6694_rtc_ops;
++	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
++	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
++
++	mutex_init(&data->lock);
++
++	device_set_wakeup_capable(&pdev->dev, 1);
++
++	platform_set_drvdata(pdev, data);
++
++	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
++					nct6694_irq, IRQF_ONESHOT,
++					"nct6694-rtc", data);
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
++
++	/* Register rtc device to RTC framework */
++	return devm_rtc_register_device(data->rtc);
++}
++
++static struct platform_driver nct6694_rtc_driver = {
++	.driver = {
++		.name	= "nct6694-rtc",
++	},
++	.probe		= nct6694_rtc_probe,
++};
++
++module_platform_driver(nct6694_rtc_driver);
++
++MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
++MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
++MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:nct6694-rtc");
+-- 
+2.34.1
 
-The devm_gpiod_get_optional() uses "microchip,rx-int". How does it find
-the "rx-int-gpios" here? Does the ACPI matching code remove the
-"microchip," prefix?
-
-Marc
-
-> +	{},
-> +};
-> +#endif
-> +
->  static int mcp251xfd_probe(struct spi_device *spi)
->  {
->  	struct net_device *ndev;
-> @@ -2012,11 +2032,20 @@ static int mcp251xfd_probe(struct spi_device *spi)
->  	bool pll_enable =3D false;
->  	u32 freq =3D 0;
->  	int err;
-> +	int ret;
-> =20
->  	if (!spi->irq)
->  		return dev_err_probe(&spi->dev, -ENXIO,
->  				     "No IRQ specified (maybe node \"interrupts-extended\" in DT mis=
-sing)!\n");
-> =20
-> +#ifdef CONFIG_ACPI
-> +	ret =3D devm_acpi_dev_add_driver_gpios(&spi->dev, acpi_mcp251xfd_gpios);
-> +	if (ret) {
-> +		dev_dbg(&spi->dev, "failed to add gpios mapping table\n");
-> +		return ret;
-> +	}
-> +#endif
-> +
->  	rx_int =3D devm_gpiod_get_optional(&spi->dev, "microchip,rx-int",
->  					 GPIOD_IN);
->  	if (IS_ERR(rx_int))
-> @@ -2049,6 +2078,8 @@ static int mcp251xfd_probe(struct spi_device *spi)
->  		if (err)
->  			return dev_err_probe(&spi->dev, err,
->  					     "Failed to get clock-frequency!\n");
-> +
-> +		dev_dbg(&spi->dev, "using clock-frequency %d Hz\n", freq);
->  	}
-> =20
->  	/* Sanity check */
-> @@ -2204,6 +2235,9 @@ static struct spi_driver mcp251xfd_driver =3D {
->  		.name =3D DEVICE_NAME,
->  		.pm =3D &mcp251xfd_pm_ops,
->  		.of_match_table =3D mcp251xfd_of_match,
-> +#ifdef CONFIG_ACPI
-> +		.acpi_match_table =3D ACPI_PTR(mcp251xfd_acpi_id_table),
-> +#endif
->  	},
->  	.probe =3D mcp251xfd_probe,
->  	.remove =3D mcp251xfd_remove,
->=20
-> ---
-> base-commit: a0e1fc921cb0651cd11469bf5378ec342bf7094d
-> change-id: 20241209-mcp251xfd-acpi-79b57084512f
->=20
-> Best regards,
-> --=20
-> Marc Kleine-Budde <mkl@pengutronix.de>
->=20
->=20
->=20
->=20
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---67cb5y6uvguo342c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdYG8AACgkQKDiiPnot
-vG/wzggAie2V0jozc5zWn5Y1N/q2LZgfFKyYOmmQejRr9OUCeYLHcAKQEjBLlOJU
-iH8NwJ38zWA4VK5hZL3X+WARmRZIPnv6UgNUmutx1LXERxL9ICx5k+G9d1QtEmxo
-pNNcFC4Gt2jGczXpISi1+p5BaYQsjez3IwDkYocmmCxyiBAd6q9upUXYuQu79hhD
-ZxS6jEtsQMSPCbSuOy7AwMQJNC0Q1swWk9zBD5yRhKqTjols+AsonZW8J30Pxyl/
-VtKOPFOLCFVndNbItGqA4O5XKZOl0LLifGs/FmULZovBtzg360q+OREuaf7C5wKm
-0Bhb86FtzHEu79DzcR/2anCvA2KL+g==
-=YufK
------END PGP SIGNATURE-----
-
---67cb5y6uvguo342c--
 
