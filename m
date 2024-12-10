@@ -1,114 +1,122 @@
-Return-Path: <linux-can+bounces-2374-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2375-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D24229EB125
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 13:47:07 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 217769EB1E6
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 14:28:12 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8427D188C533
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 12:47:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E14602883F9
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 13:28:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60021A725C;
-	Tue, 10 Dec 2024 12:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="N5GTBVsG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DFE21A9B3C;
+	Tue, 10 Dec 2024 13:28:03 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B8C78F44
-	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 12:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9880E41C64
+	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 13:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733834818; cv=none; b=H7L/ZVd1lOId3qf2QoJOEKOUF8Pbjk1EHv/lZpjqSTqKNx3YUGmzLyjQz5Qd5/um/ee//TO7bRlL26UN2sC7GQE2N57eNnFILeliCmWlFrlaqMmcYFHfuYIh2Xy+T2XH8PQNDDX18NwCw8Qnhy1g7dLcNltDWkqRfl8f8w/PTXo=
+	t=1733837283; cv=none; b=SCxHtaB0JPuJqOjHdhHtE+9iEYuH5ZvUhWsJxJfxcUKYHs8MWkxfEC78Q1MagXG8TdWV86jqxMFr4rcqaHEFS8EYUhcxO7dQv0B5AnATMBP5ZPHq2qi7YWqHmEn3BxxTIDb5ZrAsXHtNATCex3CY/IbKHukdpsIsqdaPmioKGec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733834818; c=relaxed/simple;
-	bh=KX4EV3S5tpdSVPVaMW0IgVo/XNFVcw+zGMXFSjwdn4I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EiRvtcvHODWNSN3ONUWlJNdDPuHeXRLFcZSyAETRuHWdOyFJsalmQBqi/iqxGmMK+YXHUrMGhZK2+Zl0KpIKLZPG/UrlpJXZTKebKLUtZ+qW4P3+sAStLy5g1peh9aU37cfthPFF/yuRtsBlBmghZyD5eWTOtnXlvr+czuB7MHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=N5GTBVsG; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ffc76368c6so51452091fa.0
-        for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 04:46:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1733834815; x=1734439615; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q2gv17yRT4z0rHDfJ0xNPXvIsRkRnNe0DZfYlBqVB+Y=;
-        b=N5GTBVsG2KMmwjiFXXNZANCiDdkUOMEhZXubJTwofUPnyPJfittosAC9P85mzVRcUH
-         m1f6AVL/CWSwuJ/9xgi2NmpmQVIR9Yb32Nfsd7P6xqViG6WPfpSp5oCB/UsFnQkk9Cnb
-         z1KIfeQUX1c0ob0E8NQmktlYOJTBjZlb+7YKZnCL9qrw3D1LUJuUBLeXxGF9aDR8alkp
-         xmIZDjVBiYMtP6SDIvy559XqDYGBGWVQEscQOUVYL/uuqVKyZqI5U2p0I4dtUbViHixk
-         WraUB39L/Av+uWRqoJfwJ6383htCur/3f9CAi1UskwuBuzUDkZnRB1ZEIlrdZLIJzCQn
-         uBnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733834815; x=1734439615;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q2gv17yRT4z0rHDfJ0xNPXvIsRkRnNe0DZfYlBqVB+Y=;
-        b=t4sxwzdXDRRCKDI5V/Weu38gdzsZLhC43seZasVLEZTUgDYUPeR6jcOjXPR8TncjXS
-         BKb2XHUV7XrFo0F7wapXyE9rSZTZuFVds36BXn9FfHPGL7UTGsKeA1Kjc0z0VzIhd+zr
-         YoqjLx+KR7kEraRGA/JTZWupXiutVyfENkm0WfGVJQrNFskirOM07DdQwhRDZTZNHang
-         xxNjLTwdTxpLIVS/6C61/Cl5uoaYwHiNw1BNif/OpvZr65Nu0Nrx5Cui2YXXlLCWoTso
-         mzmxGgE+COyYnsdLZOid20/1IVhPVRZxuZJ3WgAKJwf9lbGPNcux7CjqzhgH/1C6mbQ8
-         2x2w==
-X-Forwarded-Encrypted: i=1; AJvYcCVEuuFBS+uGLTiKdaeoUyUiDU6QQPZsi7Tr0BWgtnBX9s0Qfp6uGCumNCClKt+//qmDAsl7Fwy1Xcw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymBNllGn0y4GfqysuNCHuH2IhMo5kxHJzIbi6j9sTSzbJGt/DV
-	VMLtVK/LTthuAlUswfaDc9IbLAsVcCEN4rFTiWbGSdPinv31NLt6MUu4vJ1bpkGjrTpNzjWpyKZ
-	pHRxIG0PVx2RQvnLPZkXYvythRsfHBYN1kkb1vHoq3Zjj96As
-X-Gm-Gg: ASbGncvLbwuQ6RK+9tP0rm6IHCeo448GxTXMIZbhSsCI5df8lN1mEMpu9/JsGVeuIRt
-	ybUgfknAkoJBaQjbGLUAKhEAfEb7VgKA5VnrYcBEl9UbFIHfUu5pD+vaKzKyhRQJGvz0=
-X-Google-Smtp-Source: AGHT+IGlGjnX41lf5nD3xaDqv4/+1zouMo9m8MDdOTdpToJj+sYN673kMGyE3ysEnuS7DFynzHplBUGfucHdrqsCYuk=
-X-Received: by 2002:a2e:a163:0:b0:302:336a:898f with SMTP id
- 38308e7fff4ca-302336a8a1emr6922311fa.9.1733834815083; Tue, 10 Dec 2024
- 04:46:55 -0800 (PST)
+	s=arc-20240116; t=1733837283; c=relaxed/simple;
+	bh=rnvTy5IPn1k5Si1lIEswV3hisQRz+/TSIDKf/YS/lpE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=to0VUzpkFpm13f5m1EiXe5ApS7mQWIoKR2ttrvgy6VGTsGHH0TFBnlEKdMLO+XfbUft5rWGdl//kMzpkTlaVvz2HNlkneyVLu8E9Lv2X+bBjGSfv0eWP4dsB8XUeaLYfLnHXLjktsZ0BjM+/+1YwHQLvDndSvs/m20EdWQo/PPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tL0HM-0000ok-N6; Tue, 10 Dec 2024 14:27:56 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tL0HK-002hK7-2x;
+	Tue, 10 Dec 2024 14:27:55 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 5365738ABE0;
+	Tue, 10 Dec 2024 13:27:55 +0000 (UTC)
+Date: Tue, 10 Dec 2024 14:27:54 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: =?utf-8?Q?Pr=C3=BCckl?= Thomas <T.Prueckl@hainzl.at>
+Cc: "rcsekar@samsung.com" <rcsekar@samsung.com>, 
+	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: Re: net: m_can: missing mutexes in tx_work_queue and isr-handler
+Message-ID: <20241210-sly-impressive-kittiwake-aff4f1-mkl@pengutronix.de>
+References: <f6a9e128fbc04dcebd70e9b254b344e2@hainzl.at>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-3-tmyu0@nuvoton.com>
-In-Reply-To: <20241210104524.2466586-3-tmyu0@nuvoton.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 10 Dec 2024 13:46:40 +0100
-Message-ID: <CAMRc=Men4QM3a2rydxDYwLjJLYPB7Uid=y_DJ8YNa-So2H3NQQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/7] gpio: Add Nuvoton NCT6694 GPIO support
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7z3it5fbfqvswz3h"
+Content-Disposition: inline
+In-Reply-To: <f6a9e128fbc04dcebd70e9b254b344e2@hainzl.at>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+
+--7z3it5fbfqvswz3h
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: net: m_can: missing mutexes in tx_work_queue and isr-handler
+MIME-Version: 1.0
 
-On Tue, Dec 10, 2024 at 11:46=E2=80=AFAM Ming Yu <a0282524688@gmail.com> wr=
-ote:
->
-> This driver supports GPIO and IRQ functionality for NCT6694 MFD
-> device based on USB interface.
->
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
+On 10.12.2024 09:02:37, Pr=C3=BCckl Thomas wrote:
+> Hi Chandrasekar,
+>=20
+> I'm using the m_can driver with the externals TCAN4550-Q1 can controller =
+(SPI) on an IMX8MN controller.
+> After some time the driver stops working.
+>=20
+> After reviewing the driver (m_can.c) I noticed that there are not mutex l=
+ocks preventing concurrent access of=20
+> m_can_isr and m_can_tx_work_queue.
+>=20
+> After I added mutex_lock in these functions the driver was working fine.
 
-Looks much better now. Please address one more issue I just noticed.
+Can you show us the patch?
 
-> +
-> +       mutex_init(&data->irq_lock);
+> Is the driver really missing the locking or is it done on another level?
 
-This is never destroyed. Please use devm_mutex_init() preferably to
-not add remove(). Also, the other mutex doesn't seem to be initialized
-at all.
+Marc
 
-Bart
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--7z3it5fbfqvswz3h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdYQdcACgkQKDiiPnot
+vG/K4gf/WPxjoaat68QgKgDCMGQsLFtLEJSNdVHb3rv6Uh+7VrDnUjcMxDRmoRoB
+fWH67nhfIYhHpzAq8//7eSeHCSezqMcVTuHTigdArXUee0q2sD/rzfPay+OM5bJy
+O6dr823RvQVGX3dE6kSfKdiGfd9lbySHaqulh9pfy5tg72/PSeMRmVK2eeY7vMSM
+SmoXnMhKhieSm+RKqfbq6cDUL/5lojMn41PYmr3ZS7mov/0Raj5vfMwWKvOmW8dZ
+G0P2QQWLZ0x3mDT5Ogc1FJak9WvWIX84SMAcmjmARAWb97EBmZnuFAoG8ut0K33q
+NX4AHy7DJu1ZO6Xg8vaICXx+QI8FIA==
+=lig1
+-----END PGP SIGNATURE-----
+
+--7z3it5fbfqvswz3h--
 
