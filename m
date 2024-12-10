@@ -1,177 +1,180 @@
-Return-Path: <linux-can+bounces-2380-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2381-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 735E29EB44A
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 16:05:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A4C79EB494
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 16:19:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73D8A1888933
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 15:04:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B92C16BD24
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 15:19:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ADBB19E992;
-	Tue, 10 Dec 2024 15:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D0F1B4147;
+	Tue, 10 Dec 2024 15:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hainzl.at header.i=dkim@hainzl.at header.b="nCx0dJ1l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XBXRCp6u"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail.hainzl.at (mail.hainzl.at [80.120.1.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E339923DE87
-	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 15:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.120.1.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CBF11BD9C7
+	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 15:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733843074; cv=none; b=qqRu8nZiwizYOPWS9GL0JSU5m+oaElOTFyz84dSSYnwV2CncIYA59OTS1DnOliicxAQOLDOBwOLpXJJlwsO/ikV5xOIYvV/g0AghkpP46EU3SOEb2/A9e9Uto2NrsHDnTl3hIyh9uz6P5OOmj8wGDu4FqTeBTgU91omqik8UdXY=
+	t=1733843903; cv=none; b=fafAl1hFnY3qnej+gb26txSw2sDt3Xeva8WUNUECit0PoxJCIVm4Cck6mUBHMlaa/3TUDUIbzXHdcb9XkMQXH0b4t1bshUMd6SZYyTZoBC2QVzQCDJJAx6KWyY86Tc1ZOtieNuLay0T/WIq32Cf1xUN7B7fM0IXdlQ/kctSLq3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733843074; c=relaxed/simple;
-	bh=aVe7ipNl3jy6fNKAwTA9nd3lBOqWuW0b2j2v5NWmQqQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=DfaOPE8zYJVz6OuP9ZDxZmJEtxSKg0xcBPqenFfbX5ybGJ7Yg/afsa77HpTT5/xwL1GaqF7NvY0MgiC9HNyroBsZK8J1ZivpMd+btxSb3C3hDWwVYYF44AZfDN52ongD1VwPadz5kyy39ElI8TCQGVSQqPvifRrJuTNOFMSi9IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hainzl.at; spf=pass smtp.mailfrom=hainzl.at; dkim=pass (2048-bit key) header.d=hainzl.at header.i=dkim@hainzl.at header.b=nCx0dJ1l; arc=none smtp.client-ip=80.120.1.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hainzl.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hainzl.at
+	s=arc-20240116; t=1733843903; c=relaxed/simple;
+	bh=wByzIo4k4Til2XLAJq8xR1q9GwBj/8BM5QtfCiIj++Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W8eET4rozwR/uUpuBYK/t3SuBXZeBJQ+QNDw73bM8FfG5Kbima5e9gGlCvTxVu4dsbas+Cp//xCLqm6KF6OLki/mOBCy3jFz5eLViUFnPxnznuTAt1GdrAbtjhjqRuA9HNJHIfHLEekJ7Yk47q/f4x5q2/TwcMNMh+yj9ts1X5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XBXRCp6u; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2ff976ab0edso53645481fa.1
+        for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 07:18:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=hainzl.at; i=dkim@hainzl.at; q=dns/txt;
-  s=his-dkim-selector; t=1733843073; x=1765379073;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=aVe7ipNl3jy6fNKAwTA9nd3lBOqWuW0b2j2v5NWmQqQ=;
-  b=nCx0dJ1lOW9DtMuXD70MrVH7K6CSsjGYKrsX+UJ49GKLXi2M7SKNOgwK
-   Ri2l6GDVupUoDjUuMkv7gyxGXyNnQlJL18HjU4oJJjBwHksnvZhK06zfj
-   5zOIm9KAFstNEOsPh+0fsX+h+fhWP4wOWyNgcu5Pl/mzFXn3guMZHbouX
-   b5eQ2V61hWh+T2beQoknLO6s7AfLevsX8CIgLFSRCmUON/an6jQ7NdHWo
-   5b/zNbaSKjeg/uQsGI7k4fRmGFE96ZCWdLPhmaB6whgTcdKkKyhnvY1E5
-   dTVKG9id4ir2z4lgOOVQB4VC2rqtHByUULSdxofv2OhnN6I2o1E06073O
-   w==;
-X-CSE-ConnectionGUID: MmUvesFoRoWQJpekPyBIXg==
-X-CSE-MsgGUID: +PpGCcxRTf29hK/gXZxQsA==
-X-ESA-Internal_Domain: true
-X-ThreatScanner-Verdict: Negative
-X-IPAS-Result: =?us-ascii?q?A2GSAACoV1hn/48AEKxaHAEBAQEBAQcBARIBAQQEAQFAg?=
- =?us-ascii?q?UIEAQELAYMlAYIbhDmRcZIXjX8PAQEBAQEBAQEBCAFEBAEBhQcCFopVJzcGD?=
- =?us-ascii?q?gEBAQQBAQEBAQIFAQEBAQEBAQEBDQEBBgECAQEBBAgBAoEdhTVTgmIBg38BA?=
- =?us-ascii?q?QEBAgEjBA1FBQsCAR8DAiYCAgIvFQgIAQEEDg2FOyOvFnp/M4EB3naBKoEaL?=
- =?us-ascii?q?gGITQGBbIh2gk+CUIIthApQg0SCaQSCPIJng3mcKgkjgSEcA1kyAQ8RNRMXC?=
- =?us-ascii?q?wcFZIERA4EWg2CBA4JJaUk3Ag0CNoIkfIJNhReEaYRZhiaCGU4dQAMLB2Y9N?=
- =?us-ascii?q?xQbBgIBOnueJHM9Un+CI5ZZjBCjIQeCOF2BCKFMEhwXqlEuh2SQaaNnhRkCB?=
- =?us-ascii?q?AIEBQIXgX2CAE2DW1EXAg+OLRbCKIE0AgcLAQEDCYI5jWY0LoEdAQE?=
-IronPort-PHdr: A9a23:VIE8zxz+5+kgo1fXCzJ4zVBlVkEcU1XcAAcZ59Idhq5Udez7ptK+Z
- xWZuqUm0g6BHd2Cra4f06yO6+GocFdDyKjCmUhKSIZLWR4BhJdetC0bK+nBJGvFadXHVGgEJ
- vlET0Jv5HqhMEJYS47UblzWpWCuv3ZJQk2sfQV6Kf7oFYHMks+5y/69+4HJYwVPmTGxfa5+I
- A+5oAjfq8Uam4lvJ6U+xhbIpnZDZuBayX91KV6JkBvx6Nu88IR//yhMvv4q6tJNX7j9c6kkQ
- rNUCygrPXoo78PxrxnDSgWP5noYUmoIlxdDHhbI4hLnUJrvqyX2ruVz1jGVMsHvU706Vims4
- 79kRxH0higHMSU58HzMhcxrkK1buhOhqAdhzIPSfYqYKeBxfqLZfdMdWGpBQsNcXDFPD4+gc
- 4cCCfcKMP1GpIfhuVQBsRq+BRGtBOzxzD9ImmT21rA+3+g4DA3KwBAsE9cIvX/Jrtv6Kb0SX
- Pi1wqfW0zjNcu9W1zn+5ojGcB8hoO2DU71/fsfK1UkgDAHFgkmMpYD5PT6Y0PkGvWiB7+pnU
- OKik3QpqxttujezxccsjpTCiJwVylDD8CV22p01LsC/RUBle9KqCoFQtzyEOIRqQcMiR3plu
- CYgxb0Hv566fSwKxI49yB7DcvGKdZWD7R3/WuiLOzh4mG5ld6ylhxa06UWs1uPxWMe03ltFs
- CZIjNnBuH8M2hLT6MWKVvVw80W81DuA1A3d5PxJLVwpmaTVJZMs3LE+m5sNvEjeHyL4mFj6g
- amLfUsn4uil8/nrb7f4qpOGKoN5ixvyPrg0lsCiDuk1PBACU3Wf9OiizrHv4Ez0TbZQgvA5i
- KXVrZHXKMYdq6WkGQFayJwj5Ay6Dzq+1dQYmmQII0xddRKciojpJ0nOIPflDfejm1iskClkx
- /TBPrD5AJvDLWXNnrjgcrpg6kNQ0gozwspe55JSC7ABJOj/VVXttNDADx85NRK7w/r/Bdlg1
- I4SR3iDDrKYPa/IrVOE/P8jLuaCaYMNvTbyMfkl5/rgjX8jnl8deLGk04UNZH6iBPRmPluWb
- mbvgtcFCmoKvhAxTO3siFyDVT5ffWy9X74k6jEhFI2mFZvDRpyqgLGZ2Se7HZlWa3teCl+SF
- 3foeJiEW+sWaCKVJM9hkzMFWaK8RIA/zR2urhP1y6J7LurI/S0VrYjj28Ru5+LNlhE97yZ0A
- t+G026XSmF0hX4IRzk53KxlvUN9zVKD3bBig/NEDdxT++9JUgAiOJ7Yzux6Dc3yWw3YctiVU
- lmmRM6rAS8+Tt0v2d8CeUV9FMu4jhDFwSWqB6UZl7uRBJw76q7c2WP+KN5ny3nazKkhk0UmQ
- sxXOGConqJ/7RbcB5DKnUuDj6uqdaUc3DXT+2aM0GaDvVtUUA5qXqXEW3AeZ0/Woc7j6UPeV
- 7OhFLcnMgpEycOaMqVEZdPmg0taSvr/PtrSe3++m2KqChaS2ryBdJLkdXwF0ivSEEQEiBgT/
- XieOAYmHymvu23QX3RSEgfKalnnucp6pXK9Qwoe0g2GYgU10rmx0gYYg/OBV+kU2LMU/iss/
- WZaBlG4iurMn9GDo0JdfKJZaMh1tGsB7XjEugd+OrSgJqFklFpYehgh7BCm7Al+FogVyZtil
- 3gt1gcnbPvAiDt8
-IronPort-Data: A9a23:jFWYqKpL0tp83k4JDo088r0PW75eBmJkZBIvgKrLsJaIsI4StFCzt
- garIBmBMvjfZ2LxeNtyaNizoBxTu8DSyYVkTQpupSw9E3sTouPIVI+TRqvSF3jLcpCcFhIPA
- +Y2NoCRcJtsEhcwgj/watANeFEljfngqoLUUbOCZ2YrA1c9GE/NsDo788YhmIlknNOlNA2Ev
- NL2sqX3NUSss9JOGjt8B5mr9lU25pwehBtC5gZiPKoS5AeF/5UoJMt3yZ+ZfiOQrrZ8Q7bSq
- 9brlNmR4m7f9hExPdKp+p6TWlEKWLPbIT+VgXNQXaW46jAazsDl+v9mXBa0QR4/ZwShx7id+
- v0U3XCDYVtB0pn3pQgoe0Iw/xdWZvQapeCdcRBThuTIp6HOWyOEL/yDlyjaN6VAkgp8KTkmG
- fD1tFnhx/1M7g676OvTdwViuigsBOzuAZ0SoV9n9zbmNNQ+TJP7Uo/r1dANiV/chugWdRrfT
- +o4UhdfNUqGYxROPEUTTpsi9AuqriCgKXsB9hTN4/NruAA/zyQouFTpGOaTQsaXSM5Wmm6Yr
- 2PA7WC/Cw1y2Nm3kGbYrCnw17ancSXTG7oKO5az5sRWjgfCxk9UBy0kRWKgiKzs4qK5c5cFQ
- 6AOwQIrrqwa7EGtQcThRRq+oW7CshN0c8BbCOA54Rul0aPR+BufCS4PSTspQNgnstImADcj0
- HeXkN7zQz9iqruYTTSa7Lj8kN+pESgUNmISPHFCTQIE5cvn5ogv5v7Scute/GeOpoWdMVnNL
- /qi9UDSW517YRY36piG
-IronPort-HdrOrdr: A9a23:/s9QD66AT5l2JCbjCQPXwOzXdLJyesId70hD6qkoc20zTiSZ//
- rAoB1p726TtN93YgBcpTngAtj7fZqyz+8X3WB8B9qftUzdyQ+VxeJZnPffKl/bak/DH4dmvM
- 8KGZSWSueAaGSS5vyV3ODMKbYdKa68kZxA692z854nd3ASV0gp1XYANu+0KDwMeDV7
-X-Talos-CUID: 9a23:cYS97W5hxUjS/MM7Atss0UspBM0+XHrny0jpAVe1Cl54YpylRgrF
-X-Talos-MUID: 9a23:T1CQXgZodVwk/uBT9Af0qxppJP1U7f7/CGNKnqU0q/CfHHkl
-X-IronPort-Anti-Spam-Filtered: true
-Received: from hisex16.hainzl.at ([172.16.0.143])
-  by spam.hainzl.at with ESMTP; 10 Dec 2024 16:04:30 +0100
-Received: from HISEX16.hainzl.at (172.16.0.143) by HISEX16.hainzl.at
- (172.16.0.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Tue, 10 Dec
- 2024 16:04:29 +0100
-Received: from HISEX16.hainzl.at ([172.16.0.143]) by HISEX16.hainzl.at
- ([172.16.0.143]) with mapi id 15.01.2507.044; Tue, 10 Dec 2024 16:04:29 +0100
-From: =?utf-8?B?UHLDvGNrbCBUaG9tYXM=?= <T.Prueckl@hainzl.at>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-CC: "rcsekar@samsung.com" <rcsekar@samsung.com>, "linux-can@vger.kernel.org"
-	<linux-can@vger.kernel.org>
-Subject: AW: net: m_can: missing mutexes in tx_work_queue and isr-handler
-Thread-Topic: net: m_can: missing mutexes in tx_work_queue and isr-handler
-Thread-Index: AdtK4ec6I9ygDd19TmudazmqfTyZegAHQhkAAAU8e4A=
-Date: Tue, 10 Dec 2024 15:04:29 +0000
-Message-ID: <a1de308c7f96475281612c8ffa6fc820@hainzl.at>
-References: <f6a9e128fbc04dcebd70e9b254b344e2@hainzl.at>
- <20241210-sly-impressive-kittiwake-aff4f1-mkl@pengutronix.de>
-In-Reply-To: <20241210-sly-impressive-kittiwake-aff4f1-mkl@pengutronix.de>
-Accept-Language: de-DE, de-AT, en-US
-Content-Language: de-DE
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20230601; t=1733843899; x=1734448699; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kkVwHgGDTsHCuzMDJ15oDpSXvNq8fNs/zvYGijjfM7s=;
+        b=XBXRCp6uWB1NNkYjWUTG26VWQPjxu0wHSwEkdSgP4d+rEYnkygJ0wafBcYpFwnsjTj
+         EFndqT4PoVlOYCGFIBBiwmhKPUpdav6mIEbU6uXJ8qFFRnKMhY4TTtG5MFwPsdhwXduQ
+         EaAAZpIJA9WUdjGOJ0q9dhg3JCIDGOlXdy+bojJ140BxQAxpmbrhRhVppxklImXLG6O+
+         k6p8tLKQ9qOBM7JtKLrGVmWjMGQRIqUMeJstunlly6C8UbjitFrght0TG2VPSZgz7dhM
+         jeYHo/gfIfcwUqAsPxxEMjhJ/7nXgk5JmxUPm5W+lbd9DzABGtlx2tttRACUoTtiBncd
+         xuUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733843899; x=1734448699;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kkVwHgGDTsHCuzMDJ15oDpSXvNq8fNs/zvYGijjfM7s=;
+        b=TfxeMgB/0JcJ3fNic4GAiBaLofAm5XOjZY1uKvM3jQGqHKs1qP9dFZtlIbn4vrCPLi
+         aD+h0c/l156oLCe+ykqfqFQm1ekYfiAjqUZhjecZiTQQrvVqMMXYCIrFO/Oe46X06bYy
+         +bveOrbOyc/nBiEhSn+MnL886F6vBkdEzCnl35zHDPqNzyE3dJyFsuE+QTIrUhdx89W1
+         U7YUSmmX2m7K1EFQSVPCWH8SaAofgn+RykqF1GWg783XZXRPWX13dnzJdhVOrcTPqS9B
+         p7oEFyhaO9jQ5TeapJ79MFF9HqcSsGstcx+H6IXqFBd4DFkMO5GDoQwr7V00UNCXrdt2
+         j9Gw==
+X-Forwarded-Encrypted: i=1; AJvYcCVSIkrPIrI4zEU243vBvxZ5MYz7sp1Pe+WRd+Lq36IiuS37G4kB1/GCAwf+BJ9BCM+h3Tu0jbLz6BA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxChSdWd4oPCJIRoWAiWv+ffoArMiS+R2B9ZzfDWpSBDlk9cs6m
+	1vVoJmAcvUx5pqfEPb69RBVYtSwWuz6JwUisLRrF6qYKYiR29nBXcL001yFJbqMR7+TswlimFwt
+	CfTbRYgI7MhYQZcgjkMjwYU7FkTk=
+X-Gm-Gg: ASbGncsXKxO4ltCu1BcFJJR3DmbxM1tD8E1ddvHTrXwg7tk3MuLusFDJtTUgPzWd9Ql
+	Jlcpv+SnIeENyx0FXWezvORbpv7g9Le9ovE0=
+X-Google-Smtp-Source: AGHT+IEsOQrYPgmjG5gf5eJcoy90Njj25Int7K02YQRhWno5/1DVtUQaQ3A+S2Y6ZRVoPBJKSlc7bpGrgPTlOH5bN10=
+X-Received: by 2002:a2e:be0f:0:b0:302:3d74:a1af with SMTP id
+ 38308e7fff4ca-3023d74a2admr4572091fa.20.1733843899146; Tue, 10 Dec 2024
+ 07:18:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20241210-mcp251xfd-acpi-v2-1-d6694f590d00@pengutronix.de>
+ <20241210-laughing-koel-of-nirvana-349f7e-mkl@pengutronix.de>
+ <CAOv6HEC=FV1gGt17SQxWo9jTMkxhLHBmkPKAWDfg=EYGHpCfwg@mail.gmail.com>
+ <20241210-watchful-kingfisher-of-focus-8bbf9f-mkl@pengutronix.de>
+ <CAOv6HED6wuhUQcE36izZFWcjdsw0G=RUCLdnOJ1FKEj-e9dm_Q@mail.gmail.com> <20241210-gabby-augmented-mussel-8e3ea3-mkl@pengutronix.de>
+In-Reply-To: <20241210-gabby-augmented-mussel-8e3ea3-mkl@pengutronix.de>
+From: Stefano Offredi <stefano.offredi@gmail.com>
+Date: Tue, 10 Dec 2024 16:18:07 +0100
+Message-ID: <CAOv6HECvDWOQMvvLi7ZQRsOMAQ83rUZUQoMM0Siym2nOEFq_fw@mail.gmail.com>
+Subject: Re: [PATCH can-next v2] can: mcp251xfd: ACPI support
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Thomas Kopp <thomas.kopp@microchip.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	kernel@pengutronix.de, linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-PiBDYW4geW91IHNob3cgdXMgdGhlIHBhdGNoPw0KDQpNeSBjdXJyZW50IHBhdGNoIGN1cnJlbnRs
-eSBqdXN0IGxvY2tzIHRoZSBpc3IgYW5kIHdvcmsgcXVldWUuDQpJIGd1ZXNzIHRoYXQgYWRkaXRp
-b25hbCBsb2NrcyBhcmUgbmVjZXNzYXJ5IHRvbyAoZS5nLiBpbiBtX2Nhbl9jbG9zZSkNCg0KU3Vi
-amVjdDogW1BBVENIXSBjYW46IG1fY2FuOiBhZGRlZCBtdXRleCB0byBsb2NrIGlzciBhbmQgdHgg
-d29yayBxdWV1ZQ0KDQotLS0NCiBkcml2ZXJzL25ldC9jYW4vbV9jYW4vbV9jYW4uYyB8IDE3ICsr
-KysrKysrKysrKysrKystDQogZHJpdmVycy9uZXQvY2FuL21fY2FuL21fY2FuLmggfCAgMSArDQog
-MiBmaWxlcyBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRpZmYg
-LS1naXQgYS9kcml2ZXJzL25ldC9jYW4vbV9jYW4vbV9jYW4uYyBiL2RyaXZlcnMvbmV0L2Nhbi9t
-X2Nhbi9tX2Nhbi5jDQppbmRleCAyMzk1YjEyMjVjYzguLjM0ZGU2YmUyZGI3NiAxMDA2NDQNCi0t
-LSBhL2RyaXZlcnMvbmV0L2Nhbi9tX2Nhbi9tX2Nhbi5jDQorKysgYi9kcml2ZXJzL25ldC9jYW4v
-bV9jYW4vbV9jYW4uYw0KQEAgLTEwODUsNyArMTA4NSw3IEBAIHN0YXRpYyBpbnQgbV9jYW5fZWNo
-b190eF9ldmVudChzdHJ1Y3QgbmV0X2RldmljZSAqZGV2KQ0KIAlyZXR1cm4gZXJyOw0KIH0NCiAN
-Ci1zdGF0aWMgaXJxcmV0dXJuX3QgbV9jYW5faXNyKGludCBpcnEsIHZvaWQgKmRldl9pZCkNCitz
-dGF0aWMgaXJxcmV0dXJuX3QgbV9jYW5faXNyMihpbnQgaXJxLCB2b2lkICpkZXZfaWQpDQogew0K
-IAlzdHJ1Y3QgbmV0X2RldmljZSAqZGV2ID0gKHN0cnVjdCBuZXRfZGV2aWNlICopZGV2X2lkOw0K
-IAlzdHJ1Y3QgbV9jYW5fY2xhc3NkZXYgKmNkZXYgPSBuZXRkZXZfcHJpdihkZXYpOw0KQEAgLTEx
-NTAsNiArMTE1MCwxNyBAQCBzdGF0aWMgaXJxcmV0dXJuX3QgbV9jYW5faXNyKGludCBpcnEsIHZv
-aWQgKmRldl9pZCkNCiAJcmV0dXJuIElSUV9IQU5ETEVEOw0KIH0NCiANCitzdGF0aWMgaXJxcmV0
-dXJuX3QgbV9jYW5faXNyKGludCBpcnEsIHZvaWQgKmRldl9pZCkNCit7DQorCXN0cnVjdCBuZXRf
-ZGV2aWNlICpkZXYgPSAoc3RydWN0IG5ldF9kZXZpY2UgKilkZXZfaWQ7DQorCXN0cnVjdCBtX2Nh
-bl9jbGFzc2RldiAqY2RldiA9IG5ldGRldl9wcml2KGRldik7DQorCWlycXJldHVybl90IHJldDsN
-CisJbXV0ZXhfbG9jaygmY2Rldi0+bG9jayk7DQorCXJldCA9IG1fY2FuX2lzcjIoaXJxLCBkZXZf
-aWQpOw0KKwltdXRleF91bmxvY2soJmNkZXYtPmxvY2spOw0KKwlyZXR1cm4gcmV0Ow0KK30NCisN
-CiBzdGF0aWMgY29uc3Qgc3RydWN0IGNhbl9iaXR0aW1pbmdfY29uc3QgbV9jYW5fYml0dGltaW5n
-X2NvbnN0XzMwWCA9IHsNCiAJLm5hbWUgPSBLQlVJTERfTU9ETkFNRSwNCiAJLnRzZWcxX21pbiA9
-IDIsCQkvKiBUaW1lIHNlZ21lbnQgMSA9IHByb3Bfc2VnICsgcGhhc2Vfc2VnMSAqLw0KQEAgLTE3
-NzEsNyArMTc4Miw5IEBAIHN0YXRpYyB2b2lkIG1fY2FuX3R4X3dvcmtfcXVldWUoc3RydWN0IHdv
-cmtfc3RydWN0ICp3cykNCiAJc3RydWN0IG1fY2FuX2NsYXNzZGV2ICpjZGV2ID0gY29udGFpbmVy
-X29mKHdzLCBzdHJ1Y3QgbV9jYW5fY2xhc3NkZXYsDQogCQkJCQkJICAgdHhfd29yayk7DQogDQor
-CW11dGV4X2xvY2soJmNkZXYtPmxvY2spOw0KIAltX2Nhbl90eF9oYW5kbGVyKGNkZXYpOw0KKwlt
-dXRleF91bmxvY2soJmNkZXYtPmxvY2spOw0KIH0NCiANCiBzdGF0aWMgbmV0ZGV2X3R4X3QgbV9j
-YW5fc3RhcnRfeG1pdChzdHJ1Y3Qgc2tfYnVmZiAqc2tiLA0KQEAgLTE4MjUsNiArMTgzOCw4IEBA
-IHN0YXRpYyBpbnQgbV9jYW5fb3BlbihzdHJ1Y3QgbmV0X2RldmljZSAqZGV2KQ0KIAlzdHJ1Y3Qg
-bV9jYW5fY2xhc3NkZXYgKmNkZXYgPSBuZXRkZXZfcHJpdihkZXYpOw0KIAlpbnQgZXJyOw0KIA0K
-KwltdXRleF9pbml0KCZjZGV2LT5sb2NrKTsNCisNCiAJZXJyID0gcGh5X3Bvd2VyX29uKGNkZXYt
-PnRyYW5zY2VpdmVyKTsNCiAJaWYgKGVycikNCiAJCXJldHVybiBlcnI7DQpkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9uZXQvY2FuL21fY2FuL21fY2FuLmggYi9kcml2ZXJzL25ldC9jYW4vbV9jYW4vbV9j
-YW4uaA0KaW5kZXggNTIwZTE0Mjc3ZGZmLi45ZDcyNDUxMDhlNjAgMTAwNjQ0DQotLS0gYS9kcml2
-ZXJzL25ldC9jYW4vbV9jYW4vbV9jYW4uaA0KKysrIGIvZHJpdmVycy9uZXQvY2FuL21fY2FuL21f
-Y2FuLmgNCkBAIC05MSw2ICs5MSw3IEBAIHN0cnVjdCBtX2Nhbl9jbGFzc2RldiB7DQogDQogCWlu
-dCBwbV9jbG9ja19zdXBwb3J0Ow0KIAlpbnQgaXNfcGVyaXBoZXJhbDsNCisJc3RydWN0IG11dGV4
-IGxvY2s7DQogDQogCXN0cnVjdCBtcmFtX2NmZyBtY2ZnW01SQU1fQ0ZHX05VTV07DQogDQotLSAN
-CjIuMzQuMQ0KDQoNCg==
+Il giorno mar 10 dic 2024 alle ore 15:31 Marc Kleine-Budde
+<mkl@pengutronix.de> ha scritto:
+>
+> On 10.12.2024 15:04:05, Stefano Offredi wrote:
+> > > No! Please re-read the code, devm_gpiod_get_optional() uses
+> > > "microchip,rx-int", not "rx-int":
+> > >
+> > > |       rx_int =3D devm_gpiod_get_optional(&spi->dev, "microchip,rx-i=
+nt",
+> > >                                                      ^^^^^^^^^^
+> > > |                                        GPIOD_IN);
+> > >
+> > very sorry Marc, in my test environment I had modified this line but I
+> > have not reported it in the patch.
+> > Be patient, it's the first time I post a patch to the kernel. Any hint
+> > is very appreciated.
+>
+> No problem.
+>
+> > To keep compatibility with DTS loading I propose the following:
+> >
+> > #ifdef CONFIG_ACPI
+> >         ret =3D devm_acpi_dev_add_driver_gpios(&spi->dev, acpi_mcp251xf=
+d_gpios);
+> >         if (ret) {
+> >                 dev_dbg(&spi->dev, "failed to add gpios mapping table\n=
+");
+> >                 return ret;
+> >         }
+> >         rx_int =3D devm_gpiod_get_optional(&spi->dev, "rx-int", GPIOD_I=
+N);
+> > #else
+> >         rx_int =3D devm_gpiod_get_optional(&spi->dev,
+> > "microchip,rx-int", GPIOD_IN);
+> > #endif
+>
+> Why not use "microchip,rx-int" for ACPI, too?
+
+yes I'll test it.
+
+>
+> > Even with those lines of code, If I print  spi->irq before the call
+> > to request_threaded_irq() it keeps different error codes
+> > values (-19, -22, depending on whether I set the gpio controller
+> > values in ACPI table).
+>
+> Just to clarify: from the Linux point of view "rx-int" is a GPIO, not an
+> interrupt. It's connected to the "nINT1/GPIO1" pin of the mcp251xfd and
+> this is optional. The IRQ which is available under spi->irq is connected
+> to the "nINT" pin of the mcp251xfd.
+>
+> > Even If I remove in ACPI table all the gpio references listed
+> > here below:
+> >
+> > - GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault...
+> > - Package () {"rx-int-gpios", Package () { ^CAN0, 0, 0, 0 } }
+> >
+> > the spi->irq keeps error value -2.
+>
+> I suggest to first remove all "rx-int" related stuff from your ACPI
+> table and concentrate that "spi->irq" has a proper value.
+>
+> The relevant code is in acpi_status acpi_register_spi_device():
+>
+> | https://elixir.bootlin.com/linux/v5.15/source/drivers/spi/spi.c#L2294
+>
+
+Ok thanks I will investigate on it.
+
+Just to be sure, will the driver, if rx-int and interrupt logic is not
+used, perform
+ a polling on the spi bus to check for messages incoming on the can control=
+ler?
+So I should see in this operating mode continuous spi communication on
+the bus, right?
+
+regards
+Stefano
+
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
