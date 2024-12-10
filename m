@@ -1,31 +1,30 @@
-Return-Path: <linux-can+bounces-2356-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2357-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C77CC9E9BFC
-	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2024 17:43:30 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C88F9EAA15
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 08:57:29 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46F301625C0
-	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2024 16:43:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 185C32834EE
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 07:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1BAA145B18;
-	Mon,  9 Dec 2024 16:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36FCD1D5CCF;
+	Tue, 10 Dec 2024 07:57:26 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C95142E6F
-	for <linux-can@vger.kernel.org>; Mon,  9 Dec 2024 16:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E940233123
+	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 07:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733762604; cv=none; b=usV+qrmqvWJqPMnJtukbcKHhujKghXwvjOAtWX/JjLD7HvOUasUCWK2nfjSxJ9JNvjmxSnwzATBhIpJig/G7vU0JhiMRRtmfNcFJ1NllpIXD/PTG9c/T6WLo+1p66nY3hIQ6CDEXSP+Ed6JU3tscZUdC8ODLOnVWGJuCmCW8C+k=
+	t=1733817446; cv=none; b=OOylg9WVyL6rDPLROENuqzFn9UxPMYo4u/rpHw2Onopu2V4AlvuZxIz0DuBWq2ZmK3seAvGfbBpdICrOQDVul9MmQ3LHwvr0lmQALtbTWYJsxWjF4iQaNX4/uB5kDwvJV16XcmjaW3Yl0ofrGrSHN0BB18+5sCqBKhd4aBcepg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733762604; c=relaxed/simple;
-	bh=Ve3+6QZYxnpV995EYuHauNiqyLGm6tJyq8MPibx8DJQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H539sQUnekkMu8MAL9rLNfgWUfXJZzMkQ7/GISPh3x1wlpZG077qpTMbVYSUywk7RlzFBgcdqe5LFobB/0C34YE7EvMXlFULa0RbF63hNI3iKYGKnhmFQ68Se4IQI8iMIZr3LFz2RvE8Qe+6ZGFMFyFZrTlkTE8rj2RBcfRjBXE=
+	s=arc-20240116; t=1733817446; c=relaxed/simple;
+	bh=yGlCA7wKCLuZiusubto9z5glNITuVYeq69H4lC6P8o4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=odUvj3PZ68ME76dh7Fr5Cs7RcUCj6Mx5wZjB7aw3XTH09GqIUh4wS05r+2aW3wqkPGx6rcEi2jAIBg9DKSQ8SEIkdtlNRgXd10ACANgixoVgH74+sOglsLgrm0DnSrlD5EAHdXngTENwN+258v9fiZwW/vyX3HCulfc/CF8+ZQg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,100 +32,218 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tKgqs-0005pF-BZ; Mon, 09 Dec 2024 17:43:18 +0100
+	id 1tKv7P-0006W4-SC
+	for linux-can@vger.kernel.org; Tue, 10 Dec 2024 08:57:19 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tKgqq-002Xvc-34;
-	Mon, 09 Dec 2024 17:43:17 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	id 1tKv7O-002eUk-2q
+	for linux-can@vger.kernel.org;
+	Tue, 10 Dec 2024 08:57:19 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 5248238A41B
+	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 07:57:19 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 63AAE389D46;
-	Mon, 09 Dec 2024 16:43:17 +0000 (UTC)
-Date: Mon, 9 Dec 2024 17:43:17 +0100
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id E997F38A413;
+	Tue, 10 Dec 2024 07:57:17 +0000 (UTC)
+Received: from [172.20.34.65] (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 5f1526b5;
+	Tue, 10 Dec 2024 07:57:17 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Stefano Offredi <stefano.offredi@gmail.com>
-Cc: linux-can@vger.kernel.org, 
-	Stefano Offredi <stefano.offredi@daosgroup.it>
-Subject: Re: ACPI compatible mcp251xfd driver
-Message-ID: <20241209-quiet-steady-rottweiler-976abf-mkl@pengutronix.de>
-References: <CA+VHkVF89EZOtnqWFGfS4JFtuLdkX2uJNwY7vicJ=i3RiZtbZw@mail.gmail.com>
- <20241202-organic-caracal-of-skill-4faeac-mkl@pengutronix.de>
- <CA+VHkVHhE5tT6D60MJadVvJ1nvM9gK2kMmZYD_MRP6iJF89pYg@mail.gmail.com>
- <20241203-frisky-badger-of-fury-8c68c2-mkl@pengutronix.de>
- <CAOv6HECSnL-pqo9e9i-_90LHzipcz+Q7e7J+H=ZA8c8rtQUTEA@mail.gmail.com>
+Date: Tue, 10 Dec 2024 08:57:14 +0100
+Subject: [PATCH can-next v2] can: mcp251xfd: ACPI support
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dljpqbhfh7lzeqfw"
-Content-Disposition: inline
-In-Reply-To: <CAOv6HECSnL-pqo9e9i-_90LHzipcz+Q7e7J+H=ZA8c8rtQUTEA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241210-mcp251xfd-acpi-v2-1-d6694f590d00@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAFn0V2cC/x2MwQqCQBRFfyXetl6Mg2a2SqNsE1FGlNFimp460
+ aiNEgPhvyduLhwu5/ygIaOogcXoB4a+qlFV2QOfjEAWoswJ1bNn4Iy7DmcBallzz7HZE4WsFfr
+ Bw/PZ3PUcnkEv1YYyZYfgDaQosSTbwr1/MlNpbAtDYgiuwv13tl2HUTxHJ2lfJiWdR+2LsGZxs
+ jvPTrGNPtcdjo2/OZogvRyWWqj3NB9WVhq67g9d2WvivwAAAA==
+X-Change-ID: 20241209-mcp251xfd-acpi-79b57084512f
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Thomas Kopp <thomas.kopp@microchip.com>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
+ Stefano Offredi <stefano.offredi@gmail.com>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15-dev-355e8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5149; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=i4cOC0U+oKZAN+P6jQjp4ieLpT+I5eVw7fcNFfPPSgU=;
+ b=owEBbQGS/pANAwAKASg4oj56LbxvAcsmYgBnV/RaCdl65fMGG3ONwwreRTHqwKdA1lixyLv1z
+ B6GRyTe3VqJATMEAAEKAB0WIQRQQLqG4LYE3Sm8Pl8oOKI+ei28bwUCZ1f0WgAKCRAoOKI+ei28
+ bwr8CACCfjteUOKpx+yXVHt0WKJTTqmdwhaN+Q0Shf+LThkrWaSCSoLxqsZzQJ5RoDMLwcKTL5/
+ HPgvVc2E86fpphxFmXRJBCN1Tld5BcN54NmCEHNS+eydK47FHO0BaOdbp31c7EFRtYhLiI51Yoy
+ uvHFUMmrSm1grgXgqF4R1e1tHtXB3NIBANcD6en5DTIY35Do88z1a78tkUhhbTZEqKvLpUu5OIm
+ bXf+EqYcwBwHFN6GEbGwjfmzT3fM4ezEcs+frNU4doFsJaDfPPYNWklagJjL/hf7tvwpxZKYOUs
+ JGEmgR8vMSmM9duP3pJq9+rWaM4uSJdze2CPqOq/5yHMKgEX
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+From: Stefano Offredi <stefano.offredi@gmail.com>
 
---dljpqbhfh7lzeqfw
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: ACPI compatible mcp251xfd driver
-MIME-Version: 1.0
+This patch makes the Microchip MCP251xFD driver compatible with
+hardware parameters loading from ACPI tables.
 
-On 09.12.2024 17:01:42, Stefano Offredi wrote:
-> Hi Marc,
-> > Can you share the modifications with us?
->=20
-> Yes, Now I will send the patch I have done and tested on kernel
-> version 5.15 that  I have on my SOM.
->=20
-> > > Now I'm dealing with a problem in bringing UP the can0 interface with:
-> > > ip link set can0 type can bitrate 1000000
-> > > ip link set up can0
-> > > RTNETLINK answers: Invalid argument
-> > > ..I'm debugging it.
-> >
-> > anything of interest in demsg?
-> >
->=20
-> yes at the end it was a problem with my rx-int gpio, that was handled
-> not directly by intel chip, but with a gpio controller in the middle.
-> Now I'm able to bring the can0 interface UP.
+It's a patch for the 5.15 kernel version for which I could do tests on.
 
-The RX-int GPIO is purely optional.
+The ACPI driver hardware description table I used is the following:
 
-regards,
-Marc
+DefinitionBlock ("can.aml", "SSDT", 1, "mcp2518fd", "Intel", 0x00000003)
+{
+    External (\_SB.PC00.SPI0, DeviceObj)
+    Scope (\_SB.PC00.SPI0)
+    {
+        Device (CAN0) {
+            Name (_HID, "MCP2518")
+            Name (_CID, "mcp2518fd")
+            Name (_DDN, "CAN SPI device connected to CS0")
+            Name (_CRS, ResourceTemplate () {
+                SpiSerialBus (
+                    0,                             // Chip select
+                    PolarityLow,             // Chip select is active low
+                    FourWireMode,        // Full duplex
+                    8,                              // Bits per word is 8 (byte)
+                    ControllerInitiated,    // Don't care
+                    20000000,                // 20 MHz
+                    ClockPolarityLow,     // SPI mode 0
+                    ClockPhaseFirst,      // SPI mode 0
+                    "\\_SB.PC00.SPI0",  // SPI host controller
+                    0                               // Must be 0
+                )
+                GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault, 0,
+                    "\\_SB.GPI0", 0, ResourceConsumer, ,
+                    )
+                    {
+                       2
+                    }
+            })
+            Name (_DSD, Package ()
+            {
+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                Package ()
+                {
+                    Package () {"rxint-gpios", Package () { ^CAN0, 0, 0, 0 } },
+                    Package (2) {"clock-frequency",  40000000 }
+                }
+            })
+         }
+     }
+ }
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Signed-off-by: Stefano Offredi <stefano.offredi@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+This is a continuation of Stefano Offredi's work. For easier review
+I've rebased the patch to current net-next/main and fixed the
+indention.
+---
+Changes in v2:
+- rebased to net-next/main
+- fix indention
+---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 34 ++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
---dljpqbhfh7lzeqfw
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 3bc56517fe7a99d96dd43750a8ddd21961138e41..ee066dc2fdaa97ebadb5dc975957426c563adc9e 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -12,6 +12,9 @@
+ // Copyright (c) 2019 Martin Sperl <kernel@martin.sperl.org>
+ //
+ 
++#ifdef CONFIG_ACPI
++#include <linux/acpi.h>
++#endif
+ #include <linux/unaligned.h>
+ #include <linux/bitfield.h>
+ #include <linux/clk.h>
+@@ -2002,6 +2005,23 @@ static const struct spi_device_id mcp251xfd_id_table[] = {
+ };
+ MODULE_DEVICE_TABLE(spi, mcp251xfd_id_table);
+ 
++#ifdef CONFIG_ACPI
++static const struct acpi_device_id  mcp251xfd_acpi_id_table[] = {
++	{ "MCP2517", .driver_data = (kernel_ulong_t)&mcp251xfd_devtype_data_mcp2517fd, },
++	{ "MCP2518", .driver_data = (kernel_ulong_t)&mcp251xfd_devtype_data_mcp2518fd, },
++	{ "MCP251X", .driver_data = (kernel_ulong_t)&mcp251xfd_devtype_data_mcp251xfd, },
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, mcp251xfd_acpi_id_table);
++
++static const struct acpi_gpio_params rx_int_gpios = { 1, 0, false };
++
++static const struct acpi_gpio_mapping acpi_mcp251xfd_gpios[] = {
++	{ "rx-int-gpios", &rx_int_gpios, 1 },
++	{},
++};
++#endif
++
+ static int mcp251xfd_probe(struct spi_device *spi)
+ {
+ 	struct net_device *ndev;
+@@ -2012,11 +2032,20 @@ static int mcp251xfd_probe(struct spi_device *spi)
+ 	bool pll_enable = false;
+ 	u32 freq = 0;
+ 	int err;
++	int ret;
+ 
+ 	if (!spi->irq)
+ 		return dev_err_probe(&spi->dev, -ENXIO,
+ 				     "No IRQ specified (maybe node \"interrupts-extended\" in DT missing)!\n");
+ 
++#ifdef CONFIG_ACPI
++	ret = devm_acpi_dev_add_driver_gpios(&spi->dev, acpi_mcp251xfd_gpios);
++	if (ret) {
++		dev_dbg(&spi->dev, "failed to add gpios mapping table\n");
++		return ret;
++	}
++#endif
++
+ 	rx_int = devm_gpiod_get_optional(&spi->dev, "microchip,rx-int",
+ 					 GPIOD_IN);
+ 	if (IS_ERR(rx_int))
+@@ -2049,6 +2078,8 @@ static int mcp251xfd_probe(struct spi_device *spi)
+ 		if (err)
+ 			return dev_err_probe(&spi->dev, err,
+ 					     "Failed to get clock-frequency!\n");
++
++		dev_dbg(&spi->dev, "using clock-frequency %d Hz\n", freq);
+ 	}
+ 
+ 	/* Sanity check */
+@@ -2204,6 +2235,9 @@ static struct spi_driver mcp251xfd_driver = {
+ 		.name = DEVICE_NAME,
+ 		.pm = &mcp251xfd_pm_ops,
+ 		.of_match_table = mcp251xfd_of_match,
++#ifdef CONFIG_ACPI
++		.acpi_match_table = ACPI_PTR(mcp251xfd_acpi_id_table),
++#endif
+ 	},
+ 	.probe = mcp251xfd_probe,
+ 	.remove = mcp251xfd_remove,
 
------BEGIN PGP SIGNATURE-----
+---
+base-commit: a0e1fc921cb0651cd11469bf5378ec342bf7094d
+change-id: 20241209-mcp251xfd-acpi-79b57084512f
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdXHiEACgkQKDiiPnot
-vG/ZSgf8Cb7TI+PQFcP0BtaS9c4IEgnNBoixpgVRIcULIc3aRvArg8akJCkefR5C
-9up6lI/ltG3S5xOdt8D0CnTwqQCtlfyi/ae1RbxWg10rFhIjL+gz1t2XZ/jLvlUy
-ipBVVXVbEU71gcV5Dx+ggEqrbmrWcrKFyIhujx2Tz1GALWUzxEhqfevpSJzs6s7z
-KVyvi4uBCwcNsP9mUiFNWdDE8kjaCmLl/CRj2cgubrw5fedAC5P/u3AzUrdwMBTz
-130wEXiQJqg7YKvIh8sBgpZLUC5XAjTCoBlTlDxQwNqucyR1vUUxqDz0xbSFzqWv
-PzHaVerLdL9oRpc0H/SzQUxpu3D6nw==
-=if7B
------END PGP SIGNATURE-----
+Best regards,
+-- 
+Marc Kleine-Budde <mkl@pengutronix.de>
 
---dljpqbhfh7lzeqfw--
+
 
