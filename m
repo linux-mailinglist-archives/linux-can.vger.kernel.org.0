@@ -1,276 +1,144 @@
-Return-Path: <linux-can+bounces-2358-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2359-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9216B9EAA4C
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 09:10:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD4119EAB3D
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 10:03:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D2FF18890CE
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 08:10:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC75918814C6
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 09:03:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44A0422A1D5;
-	Tue, 10 Dec 2024 08:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A2C722616F;
+	Tue, 10 Dec 2024 09:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hainzl.at header.i=dkim@hainzl.at header.b="mkVrivFj"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mail.hainzl.at (mail.hainzl.at [80.120.1.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A76198E77
-	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 08:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884211B14FA
+	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 09:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.120.1.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733818198; cv=none; b=bSghEKijLSe0MQgbrnNt6gMZF1seu6rfCAts0FQqKLbUmI/lcwfZGm1R9/ahhOVlNJib9GWIg40i1+5ppK4+I11nPPLVdrZx7K+fe/aF/3CugRJYktJtpu7JnlOZVNzqTmYWY4JuRmpPmhW+NVXlBarGAVSipnyUY9hWJfqfT0c=
+	t=1733821432; cv=none; b=o8uzcwjf2paDx5aCqZtPha7o9OfdXvhCE4tBw2Xq3K8sb5ZpO4RHR0rXTdba9meNwfwFgJj1p7c3gxDnYuYD5HUd9dZjPTS0jbD8TkRgspFt/iGnl5zVvGVPSzc32GIF21hbmHyAq3bC+4B4Hsp/if3rfQIAd6hoOQIqXkQBKJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733818198; c=relaxed/simple;
-	bh=xZzX+R9FZe06HSW8CWC1y7tFQTGZCIL3JYWviXjmSYA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HneT5p9J+8IheMOD0kN9/eMhePm6dIU3BHeMyJBupJfvhAEV4byhI/zUPyOMOfp2Vo4jqw6JNZu96OZxerI0Znvdkmtj6iHgZ/Nq769H51/0IorwTN+1GBBOTYIFoAhgVNv0MbE4XM4qGxIKiUK5794P/0WB3Wr3TqkgP51o3RI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tKvJX-0008B2-9p; Tue, 10 Dec 2024 09:09:51 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tKvJW-002ebB-06;
-	Tue, 10 Dec 2024 09:09:50 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 245C238A444;
-	Tue, 10 Dec 2024 08:09:50 +0000 (UTC)
-Date: Tue, 10 Dec 2024 09:09:49 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Thomas Kopp <thomas.kopp@microchip.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
-	Stefano Offredi <stefano.offredi@gmail.com>
-Subject: Re: [PATCH can-next v2] can: mcp251xfd: ACPI support
-Message-ID: <20241210-khaki-dove-of-whirlwind-979568-mkl@pengutronix.de>
-References: <20241210-mcp251xfd-acpi-v2-1-d6694f590d00@pengutronix.de>
+	s=arc-20240116; t=1733821432; c=relaxed/simple;
+	bh=atPN0j8JOsoXLCbQEKbtniQ9hNeGLpFDAA0uZHhRAc0=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=AnruGEJSn9Z5e8p+4AyqHT/USQLj5i5G+gF1YdmB1H3sD4Ffemr/N1F/FpB9XBf3Esi1rZ5bBgcCKHVL5mgS20+w855GAjNM8+PoirULnxLxnPj0/3CgL7cBK3KQJd31XcQKVLlD+EkSbaWhNOFNAx7kwRR4iDKB8Qvj7Di5HLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hainzl.at; spf=pass smtp.mailfrom=hainzl.at; dkim=pass (2048-bit key) header.d=hainzl.at header.i=dkim@hainzl.at header.b=mkVrivFj; arc=none smtp.client-ip=80.120.1.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hainzl.at
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hainzl.at
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=hainzl.at; i=dkim@hainzl.at; q=dns/txt;
+  s=his-dkim-selector; t=1733821430; x=1765357430;
+  h=from:to:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=atPN0j8JOsoXLCbQEKbtniQ9hNeGLpFDAA0uZHhRAc0=;
+  b=mkVrivFjrVyUZ20iLlFNnovyk2xDRrRrWOVWXV1Tn69sjYL+S7c6aUyu
+   gKXJbv/+oJh9If0i+o6YBG2q0svy1FFWbNP6plM/qvBUIPbgOfEdXXrTU
+   Y25h/TDPqRbQ7Z2sAAU1hfE9WrVhKaobshDNQqTbaKFQIL90zWJl0NtdM
+   Xlb6lWy+bBU9vJnBD2eAtFNdHe6sdzmFqRchFeveE2J/yjTh+1oGul+Gp
+   KiUiF0/XKV1inB28AzuWESi1EahOYYtCZAWMp6H1xKiK+bCUIK3AjKXpM
+   d84FuuPKmq25aFNjD0kEeaIVNppfnrLkYRaSLhotIABPaGOtoXH3/5C+o
+   Q==;
+X-CSE-ConnectionGUID: bFJ6hLrZR6ahNuWElsMe+Q==
+X-CSE-MsgGUID: f9FXKvFvRQyAOeoQLWXPmA==
+X-ESA-Internal_Domain: true
+X-ThreatScanner-Verdict: Negative
+X-IPAS-Result: =?us-ascii?q?A2ERBgASA1hn/48AEKxagQmBUwKDJAGCG6hBjAGBfg8BA?=
+ =?us-ascii?q?QEBAQEBAQEIAUQEAQGPdCc1CA4BAQEEAQEBAQECBQEBAQEBAQEBAQ0BAQYBA?=
+ =?us-ascii?q?gEBAQQIAQKBHYU1U0kBEAGCAIUBGAF/JgEEARqFXrALgTSBAeAggUiFAYNNA?=
+ =?us-ascii?q?Y0xhH2LBwSCO4ZgnCgsgSEcA1kyAQ8RNRMXCwcFgTk7AyIMNxUcAoEegRwVg?=
+ =?us-ascii?q?Q+BA4JJaUs6Ag0CNoIkJFiCTYUXhGmEWIJJXYJ+ghlPHUADCwdmPTcGDhsGA?=
+ =?us-ascii?q?gGBNaFNphShbQeCOIFloUwSHBeDcaZgLodkkGkiowY/FYUEAgQCBAUCF4FpA?=
+ =?us-ascii?q?YITTYNbURcCD9EMgTQCBwsBAQMJjXCCYC6BHQEB?=
+IronPort-PHdr: A9a23:cWXArheHJSojSbPFyEmRIpYOlGM+EtnLVj580XLHo4xHfqnrxZn+J
+ kuXvawr0ASQG9qEoKse1aKW6/mmBTdYp87Z8TgrS99laVwssY0uhQsuAcqIWwXQDcXBSGgXO
+ voHf3Jeu0+BDE5OBczlbEfTqHDhpRQbGxH4KBYnbr+tQt2agMu4zf299IPOaAtUmjW9falyL
+ BKrpgnNq8Uam4RvJ6gsxhfToHZFeetayX52KV+Sgh3w4tu88IN5/ylftf8t69RMXbnmc6g9U
+ LdVECkoP2cp6cLkshXOURGB7WYGXGUMlRpIDQnF7BXkUZr0ryD3qOlz1jSEMMPvVbw6Viys4
+ KhyRBL2hykJKiY1/27LhMN+iqJbuw+hqAdkw4HIeoGVNeFxcb3bcNgHWGdORMdRVyhGAoOhc
+ 4sCCvcKMOhEo4XhoVYFsB2zDhSuCuzy0D9Fnn/407Mn3eQ9Hw/I3w0gEM4Bvnvbt9j1KL4SU
+ eKpwKXU0TnPcvVb0ir95ojSdRAhpOmBU6hqcdLN1UYvFAfFhUiOp4zlODOV0/4Cs3OG5OdnS
+ +yjkXQpqxtsojex2sgsiY3Ji5kVyl/e9CV5xoc0JdmiREFhfd6pCZ1dvDyVOIVqWM0tWX1ou
+ Dokxb0cv562ZCkHxYo7yhPQaPGKcZaE7g/iWeiRITl1gHFodbG/iRiy80Ws1/PwWte13VpWr
+ ydLnNfCuH8Q2xHS6cWKReZw8Emn1D2S1A7T8vlJLV02mKbFMZIt3789moAPvUjZAyP7l0v7g
+ LeLekgg5OSk8fnrb7Tlq5OGOIJ4kBzyP6Usl8G5HO82KBIBX3KB9uS5zLDj+Er5T6hUgfAui
+ anZtYzaJdwcpq6kHw9ZyoYj5Ai7DzehyNkWn3oJIk9Kdh2GkoTkOkvCIPDiAve+hVStkTNry
+ +rcMb39GpnNL37Dn6n9fbtl9kJRyhQ/wcpC659VEL0NPOj/VlL+udHWFhM5Nha7w+fjCNVzz
+ IMeXmePD7eHPq/Iq1GI/P8vLPeQa48WvDbwMPgl6OTvjX8/mF4debOl0oELaHygBPRpP12ZY
+ WbwgtcGCWoKpBYxTPf0h12BSzFTfW2/X7km6TE+E4KmEIHDRo+3jLOd2ye7G4VaZnpaBVCUD
+ Xfoa4KEVu8IaCKTJM9hjzMFWaG9RIA70xGjrxH6y7V5IerO4CEYtozs1MJz5+LNkRE+7zt0D
+ 96S022VSWF7hXsHRyUq06BnvUx91lCD3LBmj/BAD9xc+e1JXAQgO5PEz+x6CsvyVRzOf9uUS
+ VuqWNWmDiswTtI3wt4OZ1xxFM++jhzbwiWqAL4Vl7mTCZIs/azT0Wb/KdphxnjAzKUuklwmT
+ dFVNWK6nqNx7xHdCZbGnUmBjKaqbaoc0TbV+mma1WSAs1lUUBVoUaXLRX8fZlXZrdD+5k7aV
+ 7GgEKwpPAQSgfKFf+FQYcbkjlxcbOzqPc/DZW33kGC1T17c3LiXYYnjYU0G1SDGFU4L1QsU+
+ CDCfUI6ByG8syfVBTpGC13ieQXv/PN4pXf9SVU7hUnea0xnyqrw8RcTreKTRulV3b8eviol7
+ TJuEwDu8cjRDo+4vZ5qf6EUXdM65V5cnTbl8TRnI5GrLKRKhlcfdRZz+UrygUYkQr5cmNQn+
+ St5hDF5LriVhQspSg==
+IronPort-Data: A9a23:4lQDY6g95W9w5KZVqJ/h0rx6X161ABEKZh0ujC45NGQN5FlHY01je
+ htvWjvQaKyON2vzeIx/PYXjpB5XscKHnddjSAtupXw0QSxjpJueD7x1DG+rZn/PcZeTJK5Ex
+ 5lHO4WbdJxcolv0+0/F3m3J9CEkvU2wbuOhTrOCYGYpHF8MpB4J0XpLg/Q+jpNjne+3CgaMv
+ cKai8DEMTdJ4RYtWo4vw/zF8UkHUMja4mtC4gVkPKgT5zcyqlFMZH4hDfDpR5fHatQMdgKKb
+ 76r5K20+Grf4yAsBruN+p7nclcHS6LlJgOHjHxbQcCK2nCucQRrj87XnNJFAatmo23hc+JZk
+ b2hhrTsIesdBZAgrcxGO/VuO3onYfAZou+vzU+X6qR/x2WeG5flLm4H4EseZeX08c4vaY1CG
+ GBxxJngoXlvisrvqI9XRNWAiewpAuu1PKcFiEs+xDH/EMkLRYvmTubzsIowMDcY3qiiHN7+R
+ vE0WWMxKhTJYhtdPhEeFPrSns/x2SO5KmMe8BTM+fFfD2v7lWSd1JDRduLPZ9GBRsF9nk+Zo
+ HDCuW3lav0fHIXDlGfbryn97gPJtS2qdrIxCpOmzMd7qXqewVU3Ny0uUHLu9JFVjWb7AbqzM
+ Xc84CE1oKs77mSwR9zmQhu35nWDu3Y0X9tWDv1/4wiL4rTb7hzfBWUeSDNFLts8u6cLqScC1
+ l6SksOwW3pvubyTW3bb/6v8QS6OBBX55FQqPUcsJTbpKfG6yG3vpnojlupeLZM=
+IronPort-HdrOrdr: A9a23:D0t1la4/vfx6RETfNwPXwPnXdLJyesId70hD6qkoc202TiXqrb
+ HKoB19726NtN9xYgBYpTnuAsm9qB/nmKKdgrNhRotKPjOW21dARbsKheCJ/9SKIULDH5tmtJ
+ uIBJIRNDSfNzRHZI3BkW2F+p4bsb66GY6T9IHj80s=
+X-Talos-CUID: =?us-ascii?q?9a23=3AilJwMmiXKxccOAadjgKpHsYrcTJueFP/knf0OX2?=
+ =?us-ascii?q?CV29pbqCqZFuL3a4nqp87?=
+X-Talos-MUID: 9a23:wS+mbAlOMIhCler4mNqtdnpsZelYwLqAFno0gLwhts69ERNAAzK02WE=
+X-IronPort-Anti-Spam-Filtered: true
+Received: from hisex16.hainzl.at ([172.16.0.143])
+  by spam.hainzl.at with ESMTP; 10 Dec 2024 10:02:39 +0100
+Received: from HISEX16.hainzl.at (172.16.0.143) by HISEX16.hainzl.at
+ (172.16.0.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Tue, 10 Dec
+ 2024 10:02:37 +0100
+Received: from HISEX16.hainzl.at ([172.16.0.143]) by HISEX16.hainzl.at
+ ([172.16.0.143]) with mapi id 15.01.2507.044; Tue, 10 Dec 2024 10:02:37 +0100
+From: =?iso-8859-1?Q?Pr=FCckl_Thomas?= <T.Prueckl@hainzl.at>
+To: "rcsekar@samsung.com" <rcsekar@samsung.com>, "linux-can@vger.kernel.org"
+	<linux-can@vger.kernel.org>
+Subject: net: m_can: missing mutexes in tx_work_queue and isr-handler
+Thread-Topic: net: m_can: missing mutexes in tx_work_queue and isr-handler
+Thread-Index: AdtK4ec6I9ygDd19TmudazmqfTyZeg==
+Date: Tue, 10 Dec 2024 09:02:37 +0000
+Message-ID: <f6a9e128fbc04dcebd70e9b254b344e2@hainzl.at>
+Accept-Language: de-DE, de-AT, en-US
+Content-Language: de-DE
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="chrimzxfinuutve5"
-Content-Disposition: inline
-In-Reply-To: <20241210-mcp251xfd-acpi-v2-1-d6694f590d00@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+Hi Chandrasekar,
 
---chrimzxfinuutve5
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH can-next v2] can: mcp251xfd: ACPI support
-MIME-Version: 1.0
+I'm using the m_can driver with the externals TCAN4550-Q1 can controller (S=
+PI) on an IMX8MN controller.
+After some time the driver stops working.
 
-On 10.12.2024 08:57:14, Marc Kleine-Budde wrote:
-> From: Stefano Offredi <stefano.offredi@gmail.com>
->=20
-> This patch makes the Microchip MCP251xFD driver compatible with
-> hardware parameters loading from ACPI tables.
->=20
-> It's a patch for the 5.15 kernel version for which I could do tests on.
->=20
-> The ACPI driver hardware description table I used is the following:
->=20
-> DefinitionBlock ("can.aml", "SSDT", 1, "mcp2518fd", "Intel", 0x00000003)
-> {
->     External (\_SB.PC00.SPI0, DeviceObj)
->     Scope (\_SB.PC00.SPI0)
->     {
->         Device (CAN0) {
->             Name (_HID, "MCP2518")
->             Name (_CID, "mcp2518fd")
->             Name (_DDN, "CAN SPI device connected to CS0")
->             Name (_CRS, ResourceTemplate () {
->                 SpiSerialBus (
->                     0,                             // Chip select
->                     PolarityLow,             // Chip select is active low
->                     FourWireMode,        // Full duplex
->                     8,                              // Bits per word is 8=
- (byte)
->                     ControllerInitiated,    // Don't care
->                     20000000,                // 20 MHz
->                     ClockPolarityLow,     // SPI mode 0
->                     ClockPhaseFirst,      // SPI mode 0
->                     "\\_SB.PC00.SPI0",  // SPI host controller
->                     0                               // Must be 0
->                 )
->                 GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault, =
-0,
->                     "\\_SB.GPI0", 0, ResourceConsumer, ,
->                     )
->                     {
->                        2
->                     }
->             })
->             Name (_DSD, Package ()
->             {
->                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
->                 Package ()
->                 {
->                     Package () {"rxint-gpios", Package () { ^CAN0, 0, 0, =
-0 } },
->                     Package (2) {"clock-frequency",  40000000 }
->                 }
->             })
->          }
->      }
->  }
->=20
-> Signed-off-by: Stefano Offredi <stefano.offredi@gmail.com>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
-> This is a continuation of Stefano Offredi's work. For easier review
-> I've rebased the patch to current net-next/main and fixed the
-> indention.
-> ---
-> Changes in v2:
-> - rebased to net-next/main
-> - fix indention
-> ---
->  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 34 ++++++++++++++++++++=
-++++++
->  1 file changed, 34 insertions(+)
->=20
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net=
-/can/spi/mcp251xfd/mcp251xfd-core.c
-> index 3bc56517fe7a99d96dd43750a8ddd21961138e41..ee066dc2fdaa97ebadb5dc975=
-957426c563adc9e 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> @@ -12,6 +12,9 @@
->  // Copyright (c) 2019 Martin Sperl <kernel@martin.sperl.org>
->  //
-> =20
-> +#ifdef CONFIG_ACPI
-> +#include <linux/acpi.h>
-> +#endif
->  #include <linux/unaligned.h>
->  #include <linux/bitfield.h>
->  #include <linux/clk.h>
-> @@ -2002,6 +2005,23 @@ static const struct spi_device_id mcp251xfd_id_tab=
-le[] =3D {
->  };
->  MODULE_DEVICE_TABLE(spi, mcp251xfd_id_table);
-> =20
-> +#ifdef CONFIG_ACPI
-> +static const struct acpi_device_id  mcp251xfd_acpi_id_table[] =3D {
-> +	{ "MCP2517", .driver_data =3D (kernel_ulong_t)&mcp251xfd_devtype_data_m=
-cp2517fd, },
-> +	{ "MCP2518", .driver_data =3D (kernel_ulong_t)&mcp251xfd_devtype_data_m=
-cp2518fd, },
-> +	{ "MCP251X", .driver_data =3D (kernel_ulong_t)&mcp251xfd_devtype_data_m=
-cp251xfd, },
+After reviewing the driver (m_can.c) I noticed that there are not mutex loc=
+ks preventing concurrent access of=20
+m_can_isr and m_can_tx_work_queue.
 
-At lest in the Linux struct the acpi_device_id::id member has a length
-of 16. Can we add "FD", so that it reads "MCP2517FD"?
+After I added mutex_lock in these functions the driver was working fine.
 
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, mcp251xfd_acpi_id_table);
-> +
-> +static const struct acpi_gpio_params rx_int_gpios =3D { 1, 0, false };
-> +
-> +static const struct acpi_gpio_mapping acpi_mcp251xfd_gpios[] =3D {
-> +	{ "rx-int-gpios", &rx_int_gpios, 1 },
-> +	{},
-> +};
-> +#endif
-> +
->  static int mcp251xfd_probe(struct spi_device *spi)
->  {
->  	struct net_device *ndev;
-> @@ -2012,11 +2032,20 @@ static int mcp251xfd_probe(struct spi_device *spi)
->  	bool pll_enable =3D false;
->  	u32 freq =3D 0;
->  	int err;
-> +	int ret;
+Is the driver really missing the locking or is it done on another level?
 
-Reuse "err".
-
-> =20
->  	if (!spi->irq)
->  		return dev_err_probe(&spi->dev, -ENXIO,
->  				     "No IRQ specified (maybe node \"interrupts-extended\" in DT mis=
-sing)!\n");
-> =20
-> +#ifdef CONFIG_ACPI
-> +	ret =3D devm_acpi_dev_add_driver_gpios(&spi->dev, acpi_mcp251xfd_gpios);
-> +	if (ret) {
-> +		dev_dbg(&spi->dev, "failed to add gpios mapping table\n");
-> +		return ret;
-> +	}
-> +#endif
-> +
->  	rx_int =3D devm_gpiod_get_optional(&spi->dev, "microchip,rx-int",
->  					 GPIOD_IN);
->  	if (IS_ERR(rx_int))
-> @@ -2049,6 +2078,8 @@ static int mcp251xfd_probe(struct spi_device *spi)
->  		if (err)
->  			return dev_err_probe(&spi->dev, err,
->  					     "Failed to get clock-frequency!\n");
-> +
-> +		dev_dbg(&spi->dev, "using clock-frequency %d Hz\n", freq);
-
-The clock frequency is shown with "ip --details link show can0", so we
-can remove this here.
-
->  	}
-> =20
->  	/* Sanity check */
-> @@ -2204,6 +2235,9 @@ static struct spi_driver mcp251xfd_driver =3D {
->  		.name =3D DEVICE_NAME,
->  		.pm =3D &mcp251xfd_pm_ops,
->  		.of_match_table =3D mcp251xfd_of_match,
-> +#ifdef CONFIG_ACPI
-> +		.acpi_match_table =3D ACPI_PTR(mcp251xfd_acpi_id_table),
-> +#endif
->  	},
->  	.probe =3D mcp251xfd_probe,
->  	.remove =3D mcp251xfd_remove,
->=20
-> ---
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---chrimzxfinuutve5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdX90oACgkQKDiiPnot
-vG8b0gf9ElARTqJuSNu3wiz5tW+1OxhYkrvpwUcFGaUv3RV5pbxr1blAoYcBAw+j
-VrQI01DmNH8DRUAYAdxdcxxziUUE106OEqoGnwS/JA2yCImjjMiMsnNCyhRW9azB
-Z+D9kn7uHRPC9gkByU7pcypbEa2+IrfCqhN4ak05L5n8EleHxDFSAJiqmzS1G4P/
-E9lOHoqkmE+m/SxOsvkMRssshBc5GQedwx1X7wrmJwm0ba/Yja2/5a4xHg63dGjz
-2LTQz45ZgcPTx2DmjSR89Cuwhy5DtsuzJ6kGHIPvMi/y3x5NK4gd7Oi/R6OpNW/M
-K3UIk85buiZOPsY0Y4LEo+TkVuRn1Q==
-=9eZl
------END PGP SIGNATURE-----
-
---chrimzxfinuutve5--
+Yours sincerely,
+Thomas Prueckl
 
