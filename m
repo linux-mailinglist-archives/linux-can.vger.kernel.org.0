@@ -1,183 +1,159 @@
-Return-Path: <linux-can+bounces-2382-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2383-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FB4F9EB4A9
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 16:22:34 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42E409EB4E9
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 16:28:42 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F2FD168AA3
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 15:28:39 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6477178F23;
+	Tue, 10 Dec 2024 15:28:30 +0000 (UTC)
+X-Original-To: linux-can@vger.kernel.org
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DF13285A53
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 15:22:32 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F31C1B85D3;
-	Tue, 10 Dec 2024 15:22:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dPlq64R/"
-X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F84B78F23;
-	Tue, 10 Dec 2024 15:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FCF51BD51F
+	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 15:28:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733844148; cv=none; b=sC4RiQ9b81jIq4ivkfWzPJC7gbgBx0p8kqHIyFnRrCUGWKAQkljzxIvu3KUmI30tbPcnCWwo5jIx4MrJ9kMkskkXd1NYmkykfeuoKjEhGuUMyYMyMVjt3OZL/uLXYeXE8GFbJne81shOUFdq9cQKN9xyXXA7jsLwEwJ05wiZOLg=
+	t=1733844510; cv=none; b=OeVgQTwWQqh9WgpHhkkQaK8S+qCpWRT/TcbkIRGVzzXsxmZ1SI4So5MhV+MIX6hYoi0Y/0q+7+gQ2jolANlC4FAXR6IYpjxkyVcOJXy1uyy7rNO2VLL4KW7691nJgCtKU9zwAaixwd3Dk/hP0v0INudtxMWyUrMeFCAUQoSnf5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733844148; c=relaxed/simple;
-	bh=HVhiN2OBd6AGD8swy+GfRlzAmnRnYgAGWrQ6OR38Ccg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cD6FYPMNdD7HixjKLLPIYRUd8pAp0NKEXCfznBV+AHacXdLR/N78ZF9xgMDew5iGGG68vNXUYDTBmlvC3O8YYjlicguzOYEalOVrIwjOHxIWeLYCMF8qpii8YRuZrr0k5HPqMjqSI1qpv5/ZZZKIGvf4SRvNiVYo5cxst1mhARw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dPlq64R/; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2ef8c012913so2290129a91.3;
-        Tue, 10 Dec 2024 07:22:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733844146; x=1734448946; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rVmwqWOa/zEr6Xgq+J3zkDZBkkOC/ONE9vJotzchERc=;
-        b=dPlq64R/VnHWM1bOvw3DqR7NcByzUPGoXCV5GiKn7wex9M8NdMoqm0TeBjgkeU7f8d
-         RCxoKiwECnxQB+CDbZSd+o29flMYgpMghEOLrSKzCQettrEu8mJjEJqwhNy43yYGAbdg
-         VZs2TLHe7G3cWfmjFWm6JgeVl3VylUrVE6dyIe8a+WnYpoFhSadQF9+z7E9pSdQsj/4j
-         S+yo5SiPs8Sx3BoCi0sR7zE7zfA4ZbSCt/XBe8Nl1x34UeAaW3YdCNvhaHzbnhhNrzuN
-         xgEE88o9AwvUeGV3p6Fl6GAnGdaOz5dOa05IsoeWih0oVSg28olirIcNYA2CI8U+JTEF
-         94Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733844146; x=1734448946;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rVmwqWOa/zEr6Xgq+J3zkDZBkkOC/ONE9vJotzchERc=;
-        b=T/nw5f+xL3+eM+sIZSo68XPyMpObrteSkkoVJUyTqu/RfIbqw+xIVx0akFZtKTMXRJ
-         NiwFIYmC14lM3QwPmyeXNPLXAAMAYshfFGv2RY8xJ2PzX0pWwg0KVIoAzj/b8D3xO9si
-         cZA94cWJg4Hm6R1GKr2k1fcoFDghY//nIZc3/xovqXhZnxC7Xn96iPe9ZgSRemif8T/q
-         uypb9bzTR/rhydTQo8uaGU9zSfh9z18BI6odhmaCzQJqUF5d5UKafzK8yTcgE6DAyej0
-         N7wXURIxDtBzMOJv+nVH8LxBEg0iK/ml/8sytF3i4hVoTucTrcMMOQ6kEGZFruJ2raRW
-         sv9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUQweumVCZYoI29Em6efbMwYMjZDLB7LTJXK+a/qNTJj7VHVEVwZuf+JaafnDlxWXIHEVrxAdjcNfM=@vger.kernel.org, AJvYcCUxYtdtbXMpmPNvyAc2h77FyCvHI31O2u+QetYn0BF7ee4B3JjawhMhMA7UchRTKIWOQHvIRM1wJ27X@vger.kernel.org, AJvYcCVLOlHavfAmSgwfZIrLstrV3WAfmCYlski5mX6J/7mzaJR7UJl+/W00BS8VBfLjF7pbYANIyemt@vger.kernel.org, AJvYcCW2Ti3PLfgRU0jJ0CQd0lOoV353z4sz1FjMln5JSPWKw2JMIt1pKys+FjsIiWRtTyYn7pDZlZ1RCMH7oA==@vger.kernel.org, AJvYcCWjr30Qnt+HJh1gm5/xKVeLg+I3lX8j4U/IozXXXQVRvc/WNyhpGoQcj/VGuGrq82SaxczwdsExdRay@vger.kernel.org, AJvYcCXK1zm9lsO0eXMUu4wXRwMoWRtv9wIGTKnlFMiIDRZzEB1c28IgX5De//p+Dkytt8YV6iOdeOspEwmiyZU=@vger.kernel.org, AJvYcCXfjv4dgFszjK5q1cbBbpmcRAzcZzSUN/aNzH3dmkRmpB6fGQ7CY31s3ewJ+t3QxJaiEOAh+Aa0X6VfByN2tnA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxo152wzM+eZGy4rLEpih3aGigxP2TPTkSxmTi3Hk9jA+/+fjbm
-	UOYd7mhtMlZZ23uIF1uhf2HqskHuLkUYWZgKUvV5XBSfIJ1MeIUQ
-X-Gm-Gg: ASbGnct90AnBzCP9SyzE1p4FmF8jDkRIBF7xG/S6b5tSwgVu+eK1WQSDYe7SeHXlZTT
-	DFPFCW5c1/2FNCzViRLfeVnHAaM2fdvS0ksB+dP8cTyXMeET/Mk7BL1AIq15pXs71tvLDOImIOO
-	vYaZthOvVqTobGuDc3U1FsnKMpDa0Cc1lgRnYW2XbxSC2ZKMvhlR/RjuAB74AUrdFdvBn12lCJJ
-	Wc5xaFr6v4dTdrgKkYWlgVi1icCEV2894U2Y120GOmb/Gp9hvqU3pnTMp0xkW43lJVDpxxi+xm/
-	HxxJInOQm+MH0EMQvjH/NL66Q2c=
-X-Google-Smtp-Source: AGHT+IE69d+SUpUCbyXFidBraWIC6ZOeXjpJlhEVcNtxdVDV4xbV+c0aS0/OIIKn6yXac6dM5U2V0A==
-X-Received: by 2002:a17:90b:3d87:b0:2ef:1134:e350 with SMTP id 98e67ed59e1d1-2ef6ab2739dmr25065458a91.35.1733844144217;
-        Tue, 10 Dec 2024 07:22:24 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ef45f95899sm9954572a91.12.2024.12.10.07.22.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Dec 2024 07:22:23 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e8165e99-9770-4287-8a05-709a9a7bb701@roeck-us.net>
-Date: Tue, 10 Dec 2024 07:22:21 -0800
+	s=arc-20240116; t=1733844510; c=relaxed/simple;
+	bh=XbnkVor0nP8/0yTdYDnVuDldwVIGBONYZrLV1iSBAIE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nzY6gVqaIqcL/91DnAPuaFOeATVUb7ESqLkTF+z7TkQcpqV2LREJL+T+3av5AL5Ggi/Kd0i5DrvR5iqmGPS2+dQK0mtfWZGvHTeYd16sdqf0dWVxBdiZnn2bmX6PhWJXXoi+PR7AmFLcFtVbDFOmC6kYXwBwZOm4h6PiDR8gCRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tL29w-000414-O0; Tue, 10 Dec 2024 16:28:24 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tL29v-002iEV-1m;
+	Tue, 10 Dec 2024 16:28:24 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id F08A438ADA8;
+	Tue, 10 Dec 2024 15:28:23 +0000 (UTC)
+Date: Tue, 10 Dec 2024 16:28:23 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Stefano Offredi <stefano.offredi@gmail.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Thomas Kopp <thomas.kopp@microchip.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	kernel@pengutronix.de, linux-can@vger.kernel.org
+Subject: Re: [PATCH can-next v2] can: mcp251xfd: ACPI support
+Message-ID: <20241210-complex-impetuous-panther-fedb99-mkl@pengutronix.de>
+References: <20241210-mcp251xfd-acpi-v2-1-d6694f590d00@pengutronix.de>
+ <20241210-laughing-koel-of-nirvana-349f7e-mkl@pengutronix.de>
+ <CAOv6HEC=FV1gGt17SQxWo9jTMkxhLHBmkPKAWDfg=EYGHpCfwg@mail.gmail.com>
+ <20241210-watchful-kingfisher-of-focus-8bbf9f-mkl@pengutronix.de>
+ <CAOv6HED6wuhUQcE36izZFWcjdsw0G=RUCLdnOJ1FKEj-e9dm_Q@mail.gmail.com>
+ <20241210-gabby-augmented-mussel-8e3ea3-mkl@pengutronix.de>
+ <CAOv6HECvDWOQMvvLi7ZQRsOMAQ83rUZUQoMM0Siym2nOEFq_fw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/7] watchdog: Add Nuvoton NCT6694 WDT support
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, jdelvare@suse.com,
- alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
- <20241210104524.2466586-6-tmyu0@nuvoton.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241210104524.2466586-6-tmyu0@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7tog5qm5i3hyaw6t"
+Content-Disposition: inline
+In-Reply-To: <CAOv6HECvDWOQMvvLi7ZQRsOMAQ83rUZUQoMM0Siym2nOEFq_fw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On 12/10/24 02:45, Ming Yu wrote:
-> This driver supports Watchdog timer functionality for NCT6694 MFD
-> device based on USB interface.
-> 
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
-...
-> +static int nct6694_wdt_probe(struct platform_device *pdev)
-> +{
-...
-> +	wdev->timeout = timeout;
-> +	wdev->pretimeout = pretimeout;
-> +	if (timeout < pretimeout) {
-> +		dev_warn(data->dev, "pretimeout < timeout. Setting to zero\n");
-> +		wdev->pretimeout = 0;
-> +	}
-> +
-> +	wdev->min_timeout = 1;
-> +	wdev->max_timeout = 255;
-> +
-> +	mutex_init(&data->lock);
-> +
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	/* Register watchdog timer device to WDT framework */
-> +	watchdog_set_drvdata(&data->wdev, data);
-> +	watchdog_init_timeout(&data->wdev, timeout, dev);
 
-This is pointless since timeout is pre-initialized with a value != 0.
-That means a value provided through devicetree will never be used
-unless the user sets timeout=0 as module parameter. But then the above
-check for pretimeout is useless.
+--7tog5qm5i3hyaw6t
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH can-next v2] can: mcp251xfd: ACPI support
+MIME-Version: 1.0
 
-Guenter
+On 10.12.2024 16:18:07, Stefano Offredi wrote:
+> > > Even with those lines of code, If I print  spi->irq before the call
+> > > to request_threaded_irq() it keeps different error codes
+> > > values (-19, -22, depending on whether I set the gpio controller
+> > > values in ACPI table).
+> >
+> > Just to clarify: from the Linux point of view "rx-int" is a GPIO, not an
+> > interrupt. It's connected to the "nINT1/GPIO1" pin of the mcp251xfd and
+> > this is optional. The IRQ which is available under spi->irq is connected
+> > to the "nINT" pin of the mcp251xfd.
+> >
+> > > Even If I remove in ACPI table all the gpio references listed
+> > > here below:
+> > >
+> > > - GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault...
+> > > - Package () {"rx-int-gpios", Package () { ^CAN0, 0, 0, 0 } }
+> > >
+> > > the spi->irq keeps error value -2.
+> >
+> > I suggest to first remove all "rx-int" related stuff from your ACPI
+> > table and concentrate that "spi->irq" has a proper value.
+> >
+> > The relevant code is in acpi_status acpi_register_spi_device():
+> >
+> > | https://elixir.bootlin.com/linux/v5.15/source/drivers/spi/spi.c#L2294
+> >
+>=20
+> Ok thanks I will investigate on it.
+>=20
+> Just to be sure, will the driver, if rx-int and interrupt logic is not
 
+"rx-int" is not used as an interrupt source. To keep things simple
+forget about "rx-int" for now.
+
+> used, perform a polling on the spi bus to check for messages incoming
+> on the can controller?
+
+No - polling is not implemented and makes IMHO no sense, as it's quite
+some overhead.
+
+> So I should see in this operating mode
+> continuous spi communication on the bus, right?
+
+If there's no traffic on the bus, you should only see very little SPI
+communication. Just a read of the timestamp every 30s or so.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--7tog5qm5i3hyaw6t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdYXhQACgkQKDiiPnot
+vG9lZQf7BUTKj7xCgv0rLE4XS/Hf0qzslYP83aysnygTqWUX4Kc19Me92fD4chMx
+3Ii6Q01ZQ2fydWPf4k7edYG0sYC+uwOUp4ATPHxqX9q/2QIx97EBUsOSOk2MlLyw
+olER+++KVxXJadssw4AFHlx2T3FODTfxqFrVUcncAlH7T0iTDvfz0YUFCNh78kdc
+1OUuXGYFATdh3ImAIU20hklN0ZCTmn3AJ4Y8NKlvCAUoIfcPC6TpCOtzixdSAfFI
+RDC8ogailc5kEnis59n+ecFfRiSh+5j5T4JXIViWy/Y780aWkqjCV5tvXq4fS1dp
+NXLRAbVpdYMBAyd7EDBkI68t/3WkGA==
+=95Z7
+-----END PGP SIGNATURE-----
+
+--7tog5qm5i3hyaw6t--
 
