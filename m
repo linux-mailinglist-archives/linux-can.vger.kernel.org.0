@@ -1,295 +1,213 @@
-Return-Path: <linux-can+bounces-2371-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2372-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAC759EB036
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 12:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BE5B9EB052
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 12:59:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB2AC167D3E
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 11:53:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4611B164945
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2024 11:59:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C60119E965;
-	Tue, 10 Dec 2024 11:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fMy0RC1M"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F32DD19E99A;
+	Tue, 10 Dec 2024 11:59:06 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43A619CC3E
-	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 11:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A16C19F421
+	for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 11:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733831592; cv=none; b=aTIvpuMj8PUyzJA5ZoJeXuA28Adi0KfCG91VUcXx9CoO/CNSiq5UGuPORKSZWOMgVx6CEpe/1JpUqZ8t5eCyfm68zoQa9fCCkGmlOWPhcO+6MrOumgbAaiGP98SXlgBGX9LR8Bw6QY8Y0oEfP501U38i7iIHusgiyonEtAv7dI0=
+	t=1733831946; cv=none; b=TYobMu+9pfjFzuz84Ei/MWsDK7iTkIVYHvyX/1UVNpY0yv+HK6VWEd5o4wV9BfBSRX/7fMF+RZ1Zyy+jBWh8fkML64mF8ZnZqTc25PM4uS+AwVDXUPrUaYMR5+xuSrSODWUWbny6hA9gK5V/s/MDt3axr2fRoj+obo1zzzR0eXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733831592; c=relaxed/simple;
-	bh=8yJGWFrFnNv2BYpHwA2FSoBbhy3XiE9SVW1UfrEUK2E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U+GegE4s/ez4fHGlmdyvRixxUv2bE+xQw2Ia4WX5v2g2Aqb8QP6cNl7AF1fTJDfPDYztXge4aqRpU7SGpdypkUPbxjoqOiQfii3kK9cbfEckkh8kd1kJt+zk2TU81Yw3uNFnW+ZDBbdlZ5qWGaIsOLWHp+45ziwNytEHNTPbMPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fMy0RC1M; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-30229d5b229so14996301fa.0
-        for <linux-can@vger.kernel.org>; Tue, 10 Dec 2024 03:53:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733831589; x=1734436389; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=13n+ba1LkxNLKP0c5HIJHPkgMzZDZLuKVM71+znuCqY=;
-        b=fMy0RC1MTCaIjTs5SOwrSC3SfdmDxcu2uuaAH3erg8r0/1ArcAflfDvyERNYrOL8Si
-         YhoQkqQRa0WrDJQdF5a8n4WuxGAxZN2jdjtFtIIY72jYjIXZdPIsdv0BckQtvOcFCams
-         zjluYgpRNH6/MVZi5sNaH4wKVKlAof9iosJNai5xMkfIaUsNEZiBUU9Rbzs9tzjGRq6H
-         V83xXddhv2LKNdWXpkXb/OG/7iH0YHpuo2/7DXQeL25BQ0kZ2/bd+qI3zMRSGEiXDlhq
-         rmmwoWTguQXEcG8UJUoFDjIoBkEE7PwVqZLQLwefwkKAEy32AakrHAgtUpiRcFoB8XNW
-         OZhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733831589; x=1734436389;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=13n+ba1LkxNLKP0c5HIJHPkgMzZDZLuKVM71+znuCqY=;
-        b=Dg95/gY4ln3MDkWuQWDDTWcQyE+FVijg9KSk3Lom6hrF8nnE4LDEswybdfPtIxl27d
-         qn2I9t+WEgFU1xmQqHfPbciQN+4tJhhPrug3ySawunDAXDAzSi24BAW4F/z9KWeob6ZM
-         8F5KKTmWopZoiTuuZzKHKCYyvIEFh8YmPLGJ7fE0+EIqWSC3vq+ouE4hOo10H/SCR4+w
-         dqT74ij+Ptdr8H2BlF7cT5anX93AA72VTZMiLS1LsxtRBoG7HcXcuIzouDNTdK/B1TmT
-         umoKD9UUrLTvV8Yi7vA0V3NIVpwcBxRTVs8o065Vk5G4XenA/K4FPymPlaxR1DmM8LkD
-         5x7A==
-X-Forwarded-Encrypted: i=1; AJvYcCVjgEpF1aWI9g1vPrw5KxKsZLHaR2bxEHOLgWV0WzvVKSLEcb8z2fdfDeQe7DURX+u4dMM6UDkZRrI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrfoNDu9lbkQYKn2CzXXrnos5Rw0VNm2bOVdalumklcezavw63
-	aSe4w3g1wO+PsiSIbw2J/MUgSSg6Q7boZWjaTiawV9WBgdoMnsqggE6bZQH6DhRr6D6s1LocziW
-	8kmDpn4DHPI4xW0oCIbCHa5t3v3w=
-X-Gm-Gg: ASbGncs2Yn1O8PWMnt+yyg7iagvOiJ/vuNeyKuggcl5OKLJs18cw+b+WtZkUQ7z/xsb
-	Pa8tFHI+AGe1T5VGuBLgpFh/bN/o/jPfLBvs=
-X-Google-Smtp-Source: AGHT+IERgnhE9l7Pah+UbmA4pNJ+Sju6zGfQbXAYpIWSEJaUoH/hlLZ+vlcqZjf++m0CPbby1gkZfITga8rIjLYsJ74=
-X-Received: by 2002:a05:651c:4cb:b0:300:1d91:c2bf with SMTP id
- 38308e7fff4ca-3022ffca8bbmr11785361fa.41.1733831588533; Tue, 10 Dec 2024
- 03:53:08 -0800 (PST)
+	s=arc-20240116; t=1733831946; c=relaxed/simple;
+	bh=Z4LBcQtsYnhWsMQE+ORhsIb253wQjaiJeimVg202SVU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WmoN7341+nCnSIVKZbpePlxa8m11AGbtIfsqAEtdKC7hoJGq8F7m2bVjSscBgP1ngy3lV1IuDp7xgsQ+oH+9HvE/IBJ9g51muoW4tk7l3980pOptOyc5q017U5lyISItRgqONZ/D3R3v9IhXTCecgTHFgKeVPyt4azD2Xk25r6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tKytI-0004al-Bz; Tue, 10 Dec 2024 12:59:00 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tKytG-002gOT-38;
+	Tue, 10 Dec 2024 12:58:59 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 66EBA38AABC;
+	Tue, 10 Dec 2024 11:58:59 +0000 (UTC)
+Date: Tue, 10 Dec 2024 12:58:59 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	linux-can@vger.kernel.org, Robert Nawrath <mbro1689@gmail.com>
+Subject: Re: [RFC PATCH 12/14] can: netlink: add CAN XL support
+Message-ID: <20241210-alluring-cunning-swift-4bcd47-mkl@pengutronix.de>
+References: <20241110155902.72807-28-mailhol.vincent@wanadoo.fr>
+ <20241112-flashy-straight-poodle-9a796d-mkl@pengutronix.de>
+ <CAMZ6RqKQLaEtgoLOAa3NHJotyHcAo=7ObXf=7tLh_DJ_QTCKOg@mail.gmail.com>
+ <36b1f1cb-c431-43ad-be49-5093a3534b9d@hartkopp.net>
+ <20241204-nippy-vivid-mantis-ee1725-mkl@pengutronix.de>
+ <8d1cd5de-ae84-455d-8636-7f269bbfe7db@hartkopp.net>
+ <20241204-mauve-asp-of-fortitude-e75174-mkl@pengutronix.de>
+ <aeb667e7-9a5b-4d6f-8220-ac06dbdcfe80@hartkopp.net>
+ <20241205-archetypal-stirring-kakapo-407537-mkl@pengutronix.de>
+ <572d0fa8-e9df-4047-951f-2747571086db@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241210-mcp251xfd-acpi-v2-1-d6694f590d00@pengutronix.de> <20241210-laughing-koel-of-nirvana-349f7e-mkl@pengutronix.de>
-In-Reply-To: <20241210-laughing-koel-of-nirvana-349f7e-mkl@pengutronix.de>
-From: Stefano Offredi <stefano.offredi@gmail.com>
-Date: Tue, 10 Dec 2024 12:52:57 +0100
-Message-ID: <CAOv6HEC=FV1gGt17SQxWo9jTMkxhLHBmkPKAWDfg=EYGHpCfwg@mail.gmail.com>
-Subject: Re: [PATCH can-next v2] can: mcp251xfd: ACPI support
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Thomas Kopp <thomas.kopp@microchip.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	kernel@pengutronix.de, linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tpck7y6p36ouszny"
+Content-Disposition: inline
+In-Reply-To: <572d0fa8-e9df-4047-951f-2747571086db@hartkopp.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+
+--tpck7y6p36ouszny
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [RFC PATCH 12/14] can: netlink: add CAN XL support
+MIME-Version: 1.0
 
-Il giorno mar 10 dic 2024 alle ore 11:45 Marc Kleine-Budde
-<mkl@pengutronix.de> ha scritto:
->
-> On 10.12.2024 08:57:14, Marc Kleine-Budde wrote:
-> > From: Stefano Offredi <stefano.offredi@gmail.com>
-> >
-> > This patch makes the Microchip MCP251xFD driver compatible with
-> > hardware parameters loading from ACPI tables.
-> >
-> > It's a patch for the 5.15 kernel version for which I could do tests on.
-> >
-> > The ACPI driver hardware description table I used is the following:
-> >
-> > DefinitionBlock ("can.aml", "SSDT", 1, "mcp2518fd", "Intel", 0x00000003=
-)
-> > {
-> >     External (\_SB.PC00.SPI0, DeviceObj)
-> >     Scope (\_SB.PC00.SPI0)
-> >     {
-> >         Device (CAN0) {
-> >             Name (_HID, "MCP2518")
-> >             Name (_CID, "mcp2518fd")
-> >             Name (_DDN, "CAN SPI device connected to CS0")
-> >             Name (_CRS, ResourceTemplate () {
-> >                 SpiSerialBus (
-> >                     0,                             // Chip select
-> >                     PolarityLow,             // Chip select is active l=
-ow
-> >                     FourWireMode,        // Full duplex
-> >                     8,                              // Bits per word is=
- 8 (byte)
-> >                     ControllerInitiated,    // Don't care
-> >                     20000000,                // 20 MHz
-> >                     ClockPolarityLow,     // SPI mode 0
-> >                     ClockPhaseFirst,      // SPI mode 0
-> >                     "\\_SB.PC00.SPI0",  // SPI host controller
-> >                     0                               // Must be 0
-> >                 )
-> >                 GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault=
-, 0,
-> >                     "\\_SB.GPI0", 0, ResourceConsumer, ,
-> >                     )
-> >                     {
-> >                        2
-> >                     }
-> >             })
-> >             Name (_DSD, Package ()
-> >             {
-> >                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-> >                 Package ()
-> >                 {
-> >                     Package () {"rxint-gpios", Package () { ^CAN0, 0, 0=
-, 0 } },
-> >                     Package (2) {"clock-frequency",  40000000 }
-> >                 }
-> >             })
-> >          }
-> >      }
-> >  }
-> >
-> > Signed-off-by: Stefano Offredi <stefano.offredi@gmail.com>
-> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> > ---
-> > This is a continuation of Stefano Offredi's work. For easier review
-> > I've rebased the patch to current net-next/main and fixed the
-> > indention.
-> > ---
-> > Changes in v2:
-> > - rebased to net-next/main
-> > - fix indention
-> > ---
-> >  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 34 ++++++++++++++++++=
-++++++++
-> >  1 file changed, 34 insertions(+)
-> >
-> > diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/n=
-et/can/spi/mcp251xfd/mcp251xfd-core.c
-> > index 3bc56517fe7a99d96dd43750a8ddd21961138e41..ee066dc2fdaa97ebadb5dc9=
-75957426c563adc9e 100644
-> > --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> > +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> > @@ -12,6 +12,9 @@
-> >  // Copyright (c) 2019 Martin Sperl <kernel@martin.sperl.org>
-> >  //
-> >
-> > +#ifdef CONFIG_ACPI
-> > +#include <linux/acpi.h>
-> > +#endif
-> >  #include <linux/unaligned.h>
-> >  #include <linux/bitfield.h>
-> >  #include <linux/clk.h>
-> > @@ -2002,6 +2005,23 @@ static const struct spi_device_id mcp251xfd_id_t=
-able[] =3D {
-> >  };
-> >  MODULE_DEVICE_TABLE(spi, mcp251xfd_id_table);
-> >
-> > +#ifdef CONFIG_ACPI
-> > +static const struct acpi_device_id  mcp251xfd_acpi_id_table[] =3D {
-> > +     { "MCP2517", .driver_data =3D (kernel_ulong_t)&mcp251xfd_devtype_=
-data_mcp2517fd, },
-> > +     { "MCP2518", .driver_data =3D (kernel_ulong_t)&mcp251xfd_devtype_=
-data_mcp2518fd, },
-> > +     { "MCP251X", .driver_data =3D (kernel_ulong_t)&mcp251xfd_devtype_=
-data_mcp251xfd, },
-> > +     {}
-> > +};
-> > +MODULE_DEVICE_TABLE(acpi, mcp251xfd_acpi_id_table);
-> > +
-> > +static const struct acpi_gpio_params rx_int_gpios =3D { 1, 0, false };
-> > +
-> > +static const struct acpi_gpio_mapping acpi_mcp251xfd_gpios[] =3D {
-> > +     { "rx-int-gpios", &rx_int_gpios, 1 },
->
-> The devm_gpiod_get_optional() uses "microchip,rx-int". How does it find
-> the "rx-int-gpios" here? Does the ACPI matching code remove the
-> "microchip," prefix?
->
-It should use the devm_acpi_dev_add_driver_gpios() function to get
-rx-int-gpios using names listed in acpi_mcp251xfd_gpios[] (rx-int-gpios).
-Then watching at other drivers using gpios loading, after calling
-devm_acpi_dev_add_driver_gpios(),
-they call devm_gpiod_get_optional(), with the same name but without "-gpios=
-".
-So in our case it is exactly "rx-int".
+On 09.12.2024 14:13:29, Oliver Hartkopp wrote:
+>=20
+>=20
+> On 05.12.24 10:15, Marc Kleine-Budde wrote:
+> > On 05.12.2024 09:16:44, Oliver Hartkopp wrote:
+> > > On 04.12.24 12:44, Marc Kleine-Budde wrote:
+> > > > On 04.12.2024 12:35:43, Oliver Hartkopp wrote:
+> > > > > > > > Also, the main reason for not creating the nest was that I =
+thought
+> > > > > > > > that the current bittiming API was stable. I was not aware =
+of the
+> > > > > > > > current flaw on how to divide tseg1_min. Maybe we should fi=
+rst discuss
+> > > > > > > > how to solve this issue for CAN FD?
+> > > > > > >=20
+> > > > > > > I like the current way how you added the CAN XL support.
+> > > > > > > It maintains the known usage pattern - and the way how CAN XL=
+ bit timings
+> > > > > > > are defined is identical to CAN FD (including TDC).
+> > > > > > >=20
+> > > > > > > Is the separation of propseg and tseg1 that relevant?
+> > > > > > > Does it really need to be exposed to the user?
+> > > > > >=20
+> > > > > > There are IIRC at least 2 CAN-FD cores where the prop segment a=
+nd phase
+> > > > > > segment 1 for the data bit timing have not the same width. This=
+ means we
+> > > > > > have to change the bittiming_const in the kernel.
+> > >=20
+> > > Sure?
+> >=20
+> > I'm sure the registers don't have the same width. And I'm sure about my
+> > conclusion, but that's up for discussion :)
+> >=20
+> > https://elixir.bootlin.com/linux/v6.12.1/source/drivers/net/can/ctucanf=
+d/ctucanfd_base.c#L197
+> > https://elixir.bootlin.com/linux/v6.12.1/source/drivers/net/can/flexcan=
+/flexcan-core.c#L1210
+> >=20
+> > > In the end (almost) every CAN controller has the tseg1 register which
+> > > contains prop_seg + phase_seg1 as a sum of these.
+> >=20
+> > Some do (just a short grep): bxcan, esdacc, rcar_can, softing, hi311x,
+> > ti_hecc. More controllers haven evenly divided prop_seg + phase_seg1.
+> >=20
+> > > The relevant point is behind prop_seg + phase_seg1 and I'm pretty sur=
+e these
+> > > "2 CAN-FD cores" will add the values internally too.
+> >=20
+> > As the ctucanfd is open you can have a look :)
 
-The chain starts from the acpi table here:
-Package () {"rx-int-gpios", Package () { ^CAN0, 0, 0, 0 } }.
+As far as I understand, it internally adds sync + prop + phase1:
 
-For example you can watch at st33zp24/spi.c:237 driver, or st-nci/spi.c:235
+https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core/-/blob/master/src/presca=
+ler/bit_time_cfg_capture.vhd?ref_type=3Dheads#L242
 
-Stefano
+> > > I'm a bit concerned that after 40 years someone shows up with the ide=
+a to
+> > > spend two registers for the tseg1 value instead of one.
+> >=20
+> > It doesn't matter if prop_seg and phase_seg1 are in the same register or
+> > not, what matters is:
+> > a) 1. does the IP core want separate prop_seg and phase_seg1 values
+> >     - or -
+> >     2. does the IP core want a single "prop_seg + phase_seg1", a.k.a.
+> >        tseg1 value?
+> > b) 1. what's the width of the prop_seg and phase_seg1?
+> >     2. what's the width of tseg1?
+> >=20
+> > Currently the CAN infrastructure allows the driver to specify tseg1 only
+> > and assumes the width of prop_seg and phase_seg1 to be the same, as it
+> > distributes tseg1 evenly between prop_seg and phase_seg1:
+> >=20
+> > https://elixir.bootlin.com/linux/v6.12.1/source/drivers/net/can/dev/cal=
+c_bittiming.c#L155
+> >=20
+> > This leads to the workarounds in the CAN drivers, see above for links.
+>=20
+> Yes. But why don't we just let this as-is then?
+>=20
+> Even if prop_seg phase_seg1 registers have a different size, this split up
+> can be done easily without changing the current bittiming API.
+>=20
+> Maybe a common helper function to split up the values based on given
+> register sizes could simplify the handling for those CAN drivers.
 
-> Marc
->
-> > +     {},
-> > +};
-> > +#endif
-> > +
-> >  static int mcp251xfd_probe(struct spi_device *spi)
-> >  {
-> >       struct net_device *ndev;
-> > @@ -2012,11 +2032,20 @@ static int mcp251xfd_probe(struct spi_device *s=
-pi)
-> >       bool pll_enable =3D false;
-> >       u32 freq =3D 0;
-> >       int err;
-> > +     int ret;
-> >
-> >       if (!spi->irq)
-> >               return dev_err_probe(&spi->dev, -ENXIO,
-> >                                    "No IRQ specified (maybe node \"inte=
-rrupts-extended\" in DT missing)!\n");
-> >
-> > +#ifdef CONFIG_ACPI
-> > +     ret =3D devm_acpi_dev_add_driver_gpios(&spi->dev, acpi_mcp251xfd_=
-gpios);
-> > +     if (ret) {
-> > +             dev_dbg(&spi->dev, "failed to add gpios mapping table\n")=
-;
-> > +             return ret;
-> > +     }
-> > +#endif
-> > +
-> >       rx_int =3D devm_gpiod_get_optional(&spi->dev, "microchip,rx-int",
-> >                                        GPIOD_IN);
-> >       if (IS_ERR(rx_int))
-> > @@ -2049,6 +2078,8 @@ static int mcp251xfd_probe(struct spi_device *spi=
-)
-> >               if (err)
-> >                       return dev_err_probe(&spi->dev, err,
-> >                                            "Failed to get clock-frequen=
-cy!\n");
-> > +
-> > +             dev_dbg(&spi->dev, "using clock-frequency %d Hz\n", freq)=
-;
-> >       }
-> >
-> >       /* Sanity check */
-> > @@ -2204,6 +2235,9 @@ static struct spi_driver mcp251xfd_driver =3D {
-> >               .name =3D DEVICE_NAME,
-> >               .pm =3D &mcp251xfd_pm_ops,
-> >               .of_match_table =3D mcp251xfd_of_match,
-> > +#ifdef CONFIG_ACPI
-> > +             .acpi_match_table =3D ACPI_PTR(mcp251xfd_acpi_id_table),
-> > +#endif
-> >       },
-> >       .probe =3D mcp251xfd_probe,
-> >       .remove =3D mcp251xfd_remove,
-> >
-> > ---
-> > base-commit: a0e1fc921cb0651cd11469bf5378ec342bf7094d
-> > change-id: 20241209-mcp251xfd-acpi-79b57084512f
-> >
-> > Best regards,
-> > --
-> > Marc Kleine-Budde <mkl@pengutronix.de>
-> >
-> >
-> >
-> >
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde          |
-> Embedded Linux                   | https://www.pengutronix.de |
-> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Good idea!
+
+What about adding the information about prop_seg and phase_seg1 to
+bittiming_const and let the can_calc_bittiming() calculate it?
+
+> I'm still not convinced that it brings some benefits for the user to exte=
+nd
+> the bittiming API. IMHO it just complicates the bitrate settings.
+
+The benefit is, that the user knows about the limitation of prop_seg and
+phase_seg1.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--tpck7y6p36ouszny
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdYLP8ACgkQKDiiPnot
+vG9cPAf/YBpOigVLmroXcOuBsivW8yiPpyHbsJFMr8bGosmyqWmgi4Oy9l5Op5dW
+Gzrd+Cv7TFAHnM5mbFcLKMaaXLkFP2veYnX6uS4r5v/Om2SlKVqrjdyOm8NCDfp+
+SPwUgLL09lFiaRK4XCIKbfQJNhEjBx3jOr6mFdRv5Im0b9oMoGUxhnfOPArSo7jC
+RxUHD/jhkpPhiQnZV2QtjJeiDuezcHinaox3N5e0z/X5oi+eWho79g86H1G4x3h5
+VORy03hcrafEMVUoUSCW47vg0xrVt5EhHGDvQNmg/Cg0501DrJysZV5E6+90aUpd
+2jvimPkpwMdCTAFnnpfg37XorcEzbQ==
+=17/j
+-----END PGP SIGNATURE-----
+
+--tpck7y6p36ouszny--
 
