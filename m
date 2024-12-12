@@ -1,55 +1,86 @@
-Return-Path: <linux-can+bounces-2397-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2398-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E3329EE00C
-	for <lists+linux-can@lfdr.de>; Thu, 12 Dec 2024 08:14:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8CCD9EE307
+	for <lists+linux-can@lfdr.de>; Thu, 12 Dec 2024 10:28:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B6291887F17
-	for <lists+linux-can@lfdr.de>; Thu, 12 Dec 2024 07:14:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B5581605D5
+	for <lists+linux-can@lfdr.de>; Thu, 12 Dec 2024 09:27:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BF0E207E19;
-	Thu, 12 Dec 2024 07:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B7A20E6FC;
+	Thu, 12 Dec 2024 09:27:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="YhgXptoL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c87EtkV6"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEAA13BADF;
-	Thu, 12 Dec 2024 07:13:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A0220E6E7
+	for <linux-can@vger.kernel.org>; Thu, 12 Dec 2024 09:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733987639; cv=none; b=BCvFqltYxy0yjjwCmB4fm+oLRTsPkiCsn+g2X5Y1rTsXih7fI1m7n3P9/3T+PDLR/BB4vK7we7fAYP0kvKRdOu2s+/4d8FGAo7098Gjf7Nu52/E49YMR3eeefU1Py6WlwDbuTg9P1pSwA/a6VCf/idAzp5MmYcA01ZtfSV27ucM=
+	t=1733995676; cv=none; b=gYOqMCUIIAMWtqD4wNrnPrrflQhgTReh8xDsTP+g9gVmE3Ci5RZRVaB8jJ21mzrMFhpjDnSL33aKb3Gl9emy8V1Vuj8PBNDNnN/lqEnnTBStmAJRqNoHhDsg4U1Q2P4sZCHswTLJs+TXB2sCpsmQKwyt7CXB3Vy4KQONilhd2/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733987639; c=relaxed/simple;
-	bh=G+81i7czaWvBtBgCrJB7Z0BcwFOVSduOqU0gpDjhxi8=;
-	h=Message-ID:Date:MIME-Version:Subject:References:From:To:Cc:
-	 In-Reply-To:Content-Type; b=edDOX1pRxv9/GNdsVrgMgozlXG1xb44xRBUfx8MrT/7REKv87sFQqFmN2KfLdC2vs5gHt+PE/NnbU7EP5C51Ma1um6d8RiQLkWqIFbGjo1YBSDCsqdL6+ONr1VvmibwdL7Tv3NMsnhiAE5CYIGnK0H5GY/IMDxWws1TleLJZLKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=YhgXptoL; arc=none smtp.client-ip=80.12.242.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id LdOGtCMF9jBR6LdOGtUv3n; Thu, 12 Dec 2024 08:13:47 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1733987627;
-	bh=zM4ll0zQlMuj2VNY5t2n4Bpl5mQ/75H/P9Ox86HuePg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To;
-	b=YhgXptoL4QxmjnYJE5S9+leK+pyT1xMkoNN9ejRlFtAVdovClaTNG0kJdDzpMEM4x
-	 m9lWsSwZ7Lett7CyOxgVL7rd+RAHa6MO6BaFFd9uuM5H2eUbJcnmzlaLjFlowx8wJM
-	 Wk8VgVFDpMmDSnRgNM0Zw1ygPi72/il912etepMKC+you2AvTrlI/uJuXliG9N+rYU
-	 iic9Q474WQoZyx08i5g7kQQ7W1nvzZU/rhAC3fO/CHlvBB7mymLd1tZvqoSgjzSMTL
-	 nh+TAFOfQ05r2uCPrOl7CvcjI82KVX0tFOojzFp9iY4ixv5JKDN/1b5Xj1XZ5eA65e
-	 xxa3Y8IUJUUTg==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Thu, 12 Dec 2024 08:13:47 +0100
-X-ME-IP: 90.11.132.44
-Message-ID: <55411d5c-4167-4f69-9d5b-071764f44ace@wanadoo.fr>
-Date: Thu, 12 Dec 2024 08:13:39 +0100
+	s=arc-20240116; t=1733995676; c=relaxed/simple;
+	bh=b9cdBCl6i8/Pg9BidsE6MaRf0sy/S53LsQhJ0yDDCcE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k9RJI9IgzHHyn+dJrp/NnLnQ66AG3x04JWwFGPI9vwaCC77LMNb5X8vGn+QX6YORT4vE7ONZ2OydzbukW/Q+4wheq5lXp/+VTcg919re7eqK6Gdi3Q03p4vLv3wWhwq84iQp1GatEiPfHmrjLFM0ZV6YpG3C8GRQRcLvqi61/DE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c87EtkV6; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1733995673;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YQDLEldT18Fc0IWLf1h2y9YzeGe3KbZy7EnSjmgH5Ac=;
+	b=c87EtkV6eYaUI8u387TMDiiFfhEPpYXq+7Js0ftv7XrrdVSAewFJozVdeBZipmXtche6+F
+	lxsaMfZizWIo4ZpPWuLhJAcFhK37BMzxZ8vXmyeMC+Kvs5pqFJbsmOh13vs0vZxH2kXCWi
+	M8Ns+xqwNWwAPX8HuKvFjRktYTnBV9Q=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-590-HzcGERNDNSuT8VwD2Tuzdg-1; Thu, 12 Dec 2024 04:27:52 -0500
+X-MC-Unique: HzcGERNDNSuT8VwD2Tuzdg-1
+X-Mimecast-MFC-AGG-ID: HzcGERNDNSuT8VwD2Tuzdg
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4361efc9dc6so2285315e9.3
+        for <linux-can@vger.kernel.org>; Thu, 12 Dec 2024 01:27:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733995671; x=1734600471;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YQDLEldT18Fc0IWLf1h2y9YzeGe3KbZy7EnSjmgH5Ac=;
+        b=rlUSi6d/TvkC30ZqIKSwLUhq8Dqy4xLNuIJmRWveZFIXu2t+PzqVAww4or/FuB2sB0
+         PhHYOsdTytTv7PQhwvBovQRgSuvBxElDn4H/fdW3Lv9zln2rz7tV3mKrSYlHPtujoEmP
+         Fcqozp3gIIa6ioIFUn7fSJsI7ch5tW0b9VrnJP+bYRc7S5fRLNFJnEAyFWYd0tHoaWBh
+         K7XlNteCB4KICaGGYqDX8huc4X/sg5rzVH+tSk/aMcKxqqD6fQFxux627bnh371tfdgH
+         924PKOKQTfXEdCbu/3h6KtD5zuGdyiFgCurjT3sMA1TBuf3EvM1nIZxRjHSs79N71bPX
+         tQlg==
+X-Forwarded-Encrypted: i=1; AJvYcCXia1D6t0UipWLWYuQe19ItMTqqzs21BjCIsT7dRDbxhVfJjhuXZGisjq0nc/EUodengu8lNDv5kMw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNDhQG0kAmrYNyMM52lIGRtct9QCzzgJvMEPuSR6OPlWbdFbZ8
+	xaBgQrnTmCPPCSRw0DKYOmSTaT0hNZQKl9nWcFJ81LGHMtyPUnlFMqE1CtzQOfnw01c1bVySPYa
+	sAtKe/hDyYz5+i/BK3OB1clPvb39ggBCDAWXZw5g9W2fTxrQ0dN1QuzUmuA==
+X-Gm-Gg: ASbGncspIEgEKIw6W+JATuitG6HDRg9TONnI8FVDsq4MlcHkcOCn96s8nFp2D0eVijm
+	A0t3BP9NxtKKBwmtZbvt58bHoDT3F0yIGZAqLnIH1Y2MdyA/pad5vi8DLo8lmoIfUJq5rs2Qznp
+	BJH2vwyExFzeG+V/aj5KURr5dlZBU49gCQFBm5k5yG+q+QLHpnAn1wfxFnsUX1TEYWutrnwje8M
+	HkZH6hP3fxyEFXqzuxIH0SXbJ1fk3Hjs4Gw2x9dQkW17ddhXA8IvCuwukOSYUlu1CINZDOh3sBr
+	qrICDHM=
+X-Received: by 2002:a05:600c:548a:b0:434:f609:1afa with SMTP id 5b1f17b1804b1-43622823a9bmr23142175e9.4.1733995671102;
+        Thu, 12 Dec 2024 01:27:51 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGfecq/fvmxWbZmLr9mwKSJq21xM6RVRZ1wSoCEsNQjvNePz0TX5CuMdaiXcW+mTqnLDcuA8w==
+X-Received: by 2002:a05:600c:548a:b0:434:f609:1afa with SMTP id 5b1f17b1804b1-43622823a9bmr23141765e9.4.1733995670687;
+        Thu, 12 Dec 2024 01:27:50 -0800 (PST)
+Received: from [192.168.88.24] (146-241-48-67.dyn.eolo.it. [146.241.48.67])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436256b42a3sm10746345e9.28.2024.12.12.01.27.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Dec 2024 01:27:50 -0800 (PST)
+Message-ID: <2b89667d-ccd6-40b7-b355-1c71e159d14f@redhat.com>
+Date: Thu, 12 Dec 2024 10:27:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -57,63 +88,116 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/7] mfd: Add core driver for Nuvoton NCT6694
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
- <20241210104524.2466586-2-tmyu0@nuvoton.com>
- <47f720f8-90d7-4444-bfde-fb76ec2a2f0f@wanadoo.fr>
- <CAOoeyxXC5zj5R1qV-WSakJmh_q8vK0oh_sjg1VZK=dvhaZdYCw@mail.gmail.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, tmyu0@nuvoton.com,
- lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
- andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
- linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com
-In-Reply-To: <CAOoeyxXC5zj5R1qV-WSakJmh_q8vK0oh_sjg1VZK=dvhaZdYCw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v5 3/5] rtnetlink: Decouple net namespaces in
+ rtnl_newlink_create()
+To: Xiao Liang <shaw.leon@gmail.com>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+ Jakub Kicinski <kuba@kernel.org>, Donald Hunter <donald.hunter@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, David Ahern
+ <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>,
+ Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Jiri Pirko <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
+ linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+ osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
+ linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+ linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
+ bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241209140151.231257-1-shaw.leon@gmail.com>
+ <20241209140151.231257-4-shaw.leon@gmail.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20241209140151.231257-4-shaw.leon@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Le 12/12/2024 à 08:01, Ming Yu a écrit :
-> Dear Christophe,
+On 12/9/24 15:01, Xiao Liang wrote:
+> There are 4 net namespaces involved when creating links:
 > 
-> Thank you for your comments,
+>  - source netns - where the netlink socket resides,
+>  - target netns - where to put the device being created,
+>  - link netns - netns associated with the device (backend),
+>  - peer netns - netns of peer device.
 > 
-> Christophe JAILLET <christophe.jaillet-39ZsbGIQGT5GWvitb5QawA@public.gmane.org> 於 2024年12月12日 週四 上午12:44寫道：
->>
->>> +int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
->>> +                  u16 length, void *buf)
->>> +{
->>> +     struct nct6694_cmd_header *cmd_header = nct6694->cmd_header;
->>> +     struct nct6694_response_header *response_header = nct6694->response_header;
->>> +     struct usb_device *udev = nct6694->udev;
->>> +     int tx_len, rx_len, ret;
->>> +
->>> +     guard(mutex)(&nct6694->access_lock);
->>
->> Nitpick: This could be moved a few lines below, should it still comply
->> with your coding style.
->>
+> Currently, two nets are passed to newlink() callback - "src_net"
+> parameter and "dev_net" (implicitly in net_device). They are set as
+> follows, depending on netlink attributes.
 > 
-> I think the lock should be placed here to prevent the cmd_header from
-> being overwritten by another caller.
-> Could you share your perspective on this?
+>  +------------+-------------------+---------+---------+
+>  | peer netns | IFLA_LINK_NETNSID | src_net | dev_net |
+>  +------------+-------------------+---------+---------+
+>  |            | absent            | source  | target  |
+>  | absent     +-------------------+---------+---------+
+>  |            | present           | link    | link    |
+>  +------------+-------------------+---------+---------+
+>  |            | absent            | peer    | target  |
+>  | present    +-------------------+---------+---------+
+>  |            | present           | peer    | link    |
+>  +------------+-------------------+---------+---------+
+> 
+> When IFLA_LINK_NETNSID is present, the device is created in link netns
+> first. This has some side effects, including extra ifindex allocation,
+> ifname validation and link notifications. There's also an extra step to
+> move the device to target netns. These could be avoided if we create it
+> in target netns at the beginning.
+> 
+> On the other hand, the meaning of src_net is ambiguous. It varies
+> depending on how parameters are passed. It is the effective link or peer
+> netns by design, but some drivers ignore it and use dev_net instead.
+> 
+> This patch refactors netns handling by packing newlink() parameters into
+> a struct, and passing source, link and peer netns as is through this
+> struct. Fallback logic is implemented in helper functions -
+> rtnl_newlink_link_net() and rtnl_newlink_peer_net(). If is not set, peer
+> netns falls back to link netns, and link netns falls back to source netns.
+> rtnl_newlink_create() now creates devices in target netns directly,
+> so dev_net is always target netns.
+> 
+> For drivers that use dev_net as fallback of link_netns, current behavior
+> is kept for compatibility.
+> 
+> Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
 
-You are right, I misread the code :(
-(I though cmd_header was a local structure)
+I must admit this patch is way too huge for me to allow any reasonable
+review except that this has the potential of breaking a lot of things.
 
-> 
->>> +
->>> +     /* Send command packet to USB device */
->>> +     cmd_header->mod = mod;
->>> +     cmd_header->cmd = offset & 0xFF;
->>> +     cmd_header->sel = (offset >> 8) & 0xFF;
->>> +     cmd_header->hctrl = NCT6694_HCTRL_GET;
->>> +     cmd_header->len = length;
+I think you should be splitted to make it more palatable; i.e.
+- a patch just add the params struct with no semantic changes.
+- a patch making the dev_change_net_namespace() conditional on net !=
+tge_net[1]
+- many per-device patches creating directly the device in the target
+namespace.
+- a patch reverting [1]
 
-CJ
+Other may have different opinions, I'd love to hear them.
+
+> diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+> index 98c6205ed19f..2f7bf50e05d2 100644
+> --- a/drivers/net/amt.c
+> +++ b/drivers/net/amt.c
+> @@ -3161,14 +3161,17 @@ static int amt_validate(struct nlattr *tb[], struct nlattr *data[],
+>  	return 0;
+>  }
+>  
+> -static int amt_newlink(struct net *net, struct net_device *dev,
+> -		       struct nlattr *tb[], struct nlattr *data[],
+> -		       struct netlink_ext_ack *extack)
+> +static int amt_newlink(struct rtnl_newlink_params *params)
+>  {
+> +	struct net_device *dev = params->dev;
+> +	struct nlattr **tb = params->tb;
+> +	struct nlattr **data = params->data;
+> +	struct netlink_ext_ack *extack = params->extack;
+> +	struct net *link_net = rtnl_newlink_link_net(params);
+>  	struct amt_dev *amt = netdev_priv(dev);
+>  	int err = -EINVAL;
+
+Minor nit: here and and many other places, please respect the reverse
+xmas tree order.
+
+Thanks,
+
+Paolo
+
 
