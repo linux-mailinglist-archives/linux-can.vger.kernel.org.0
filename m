@@ -1,232 +1,147 @@
-Return-Path: <linux-can+bounces-2391-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2392-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C4E89ED273
-	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2024 17:45:16 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B82F9EDEE4
+	for <lists+linux-can@lfdr.de>; Thu, 12 Dec 2024 06:28:06 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3586B166878
-	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2024 16:45:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B327F283B14
+	for <lists+linux-can@lfdr.de>; Thu, 12 Dec 2024 05:28:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72E0E1DE2D2;
-	Wed, 11 Dec 2024 16:45:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 976BB178383;
+	Thu, 12 Dec 2024 05:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="PPUMdDom"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mHDfh5SJ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B137748A;
-	Wed, 11 Dec 2024 16:44:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038D816DC28;
+	Thu, 12 Dec 2024 05:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733935502; cv=none; b=dMtLBq8MmJdCXGN8jdJazFjtv3JcsxoQPSBNTIB1tuEOJuuA9vknfnuj2aLygZqb3Ga8Xu9XcZvXruJKtZAK0kjZDh1lv4WK2LxMhEbObrc3Bptj+pMrUXKFgdM2fz7e9uFQV9JSZsjscBbXHic+a4jqRF4RVVZWbkjieMu9dPY=
+	t=1733981280; cv=none; b=d5BupylUznLUZ20PEwr6M/yRDeKZv1Lkxr1WcZcakM0PlRkVb4EPyrBHMfTxukQS4zo41CtrFEggXBkHfYFltrYN42Te280ImB+Mb/ZwRTzDEOCxEe2c6pLXP/l84QTEO4Z2d7HK4+ekdUbydHoY/gz8cU3orFpLer0KvaanyxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733935502; c=relaxed/simple;
-	bh=sAP+tRgUhnql6R7R3db5IeDRYeDczl/yF1C3ExMaCgo=;
-	h=Message-ID:Date:MIME-Version:Subject:References:From:To:Cc:
-	 In-Reply-To:Content-Type; b=W4IeUBTY161sOdil/mKA1TplFeRTG9YMn52GVOLTjn+HuUMkfWn1gD0p4bP+mMkFuvps9t9Rr2I6twRom3zt8GgvhebxwKtX9xDYLyxJlNEM68HjKloUep2WPKbtu3wM7t+vvNuFhO+pMMFqWPid8IGwul3ZeHt6J17NEFmGHu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=PPUMdDom; arc=none smtp.client-ip=80.12.242.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id LPpQth5h4Q2aZLPpRtbPgg; Wed, 11 Dec 2024 17:44:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1733935495;
-	bh=SVQEOuIW0eCozjA9frw8qm4f/i4aTd4kf39LBuuYa5M=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To;
-	b=PPUMdDomNKLrzttqf/svHMgQjR+ic9Q4Ke8v4qJ8yx6CY73kKOm+Zl+mmQI7I323t
-	 5kgRkaExDDAXYCv1CBX9cSjpb3A1BoCbk+4ORMSP7XAksYZ+s9yVHnUKcgTJfptZmO
-	 gXRJI3qXgAJvvC7YFRPYn12+Xyyn1AuJj2xiOiroxwoli11iKs4Ujg1q/hr2AtMnD0
-	 Hd6sjCRAQBAlcdJ+aEKdirs6A3xlcuoUAR06okRqUVgQsscXVOSdxxrqoNWNtKA7zh
-	 cH5GiyDFROkKXRYq9AA/Ekfx+H9FeI4gDHcC+1QpOnCo0i4Wxf455VgKzWh+7/KwdQ
-	 m4INFOLUkmOkw==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Wed, 11 Dec 2024 17:44:55 +0100
-X-ME-IP: 90.11.132.44
-Message-ID: <47f720f8-90d7-4444-bfde-fb76ec2a2f0f@wanadoo.fr>
-Date: Wed, 11 Dec 2024 17:44:48 +0100
+	s=arc-20240116; t=1733981280; c=relaxed/simple;
+	bh=qp0i5w/u39t3jbXhVMeRQCOlDTJ4v3kQ6Qs1em2ybJ4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZBmB1prfHkn6FB1SEt6NYyxFZ63Gg+U0TJuZNJCEf149wMG+69DAYyActd2BuL9YOSDKt/3XIEWkjq3CurfDl21P0YyGDAxxdhz5iWHYNkjNDTJFsAKrpN0L4LKIg4zUSyPgKMc2Wg1h3u78M5GbfeCoa1Fn/tQAN/WbJSz2ZRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mHDfh5SJ; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6ef8028fe9fso1834257b3.2;
+        Wed, 11 Dec 2024 21:27:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733981278; x=1734586078; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i2jQavP4ta6B4Cbqnu1IGli2ZwXsJRL5QsCRRyBteD4=;
+        b=mHDfh5SJQP+HIePXtVlkvBf2FRCtretS6vVkF4QOvrzmUM9gXKatBDWKpq8xJNTrrc
+         fxbsr28Ln0iInO1oQDlJ09JPNw5vkaYjsOdVl1rhXh1krqa3Ombz+G12VHPt/FeV4qBS
+         opas9J3A+gVVCMCT1+9NJ9hvm4m93B7Efb2ed20mTYaELI38zQIES7eepmUdbiPGyhIA
+         An23NXM972ctVGXGIafTW0rZu8tvESOfRGF2pK0Z4xbaPgspKCTtAY0Mg0eatiFZ2uHu
+         vPNQ8+d8LE+r2nNsCsPD7sAU7tZd7kLuMVcSseiSuzcGcTb4lsy/qnTZhpfqLCjb7Vsa
+         xojw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733981278; x=1734586078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i2jQavP4ta6B4Cbqnu1IGli2ZwXsJRL5QsCRRyBteD4=;
+        b=MhchKkJ6AFALxTi8dEdQh5LqzuA1dNxIW66wImlZei2Y9appkDIE63BXd8VP99irhM
+         8D4GFkKHWFQVf9hANJSwOQ5R0oK0Z5/hvSVqB9Gd2PixZQ3p6gBEHh4dIQphNeRdjY08
+         Eox1bk4Wqx8kSd005uU0xTAw9H98Uh3lAqr+KMteece/Nwqqp/W1WiihylWKoaiYGjSc
+         5UU7F80gOUxReSPmtx9qakTW2wLG/Bw6OU1mzOMUNkFiWKzWseK2a4zdfeWVKQWfeWUZ
+         Lu8NN+z1X8GyA0f4Zrvf//yxGfFSvtRYkMaBqsTxOubE6I7SQ5FsWDKZ0EFa485D8Rdn
+         E7DQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3RnsTOJijdK+9GGDlO0fJQB8SmvaxIXanpwg+kZcj6959XZa8UkO2aezo+DnmjaQWEQKN4p8ZrCp25k5n@vger.kernel.org, AJvYcCUJkIv0zvdY38ma9IJm810eTixMY2RfUX7ULm6MBnWB0PwTKitDrx81Nqq9S8WZQ9jgDd9v94HRMwo=@vger.kernel.org, AJvYcCUbhLHoPHK19WtURQ34faZrPMRbcwjA0UHbqpiKTxEYY5mXvfASARFdms14AhwY8Ny+V/7iPy4UAzuktWs1iLU=@vger.kernel.org, AJvYcCUfMWOlpQCYeeKZRAUuB1TgIGikSo5LE1BfZp98W1qrx6anwsKCGsFYC5cAi2K2SUlFHDy8vFtnANdkpz4=@vger.kernel.org, AJvYcCUzWJl07K2EpOlF+vVJGCcQEEolKF0KZZmEs8DjV/MNDUzvOH6Ed2l6S3sy1kFOYQJQrUGr+9giD2Ta@vger.kernel.org, AJvYcCX3Z5D/p1iCpfIQx/2elza+/Wi0y4+TmU+eUgzSrY7G36R0jM2dKln4k0eQRSHraU4G4yXp0/JhtGNGXw==@vger.kernel.org, AJvYcCXm+zHuWwEo3eX3JIZRZyCZXTs0y1qjixscBuXC4eqLgZTFkiwHkf4p1RPHRrovUCjzezEm7C8H8dQb@vger.kernel.org, AJvYcCXr5YixUF63Jf3WjDg2TUu8ELQkaIRhrWUdXfW8fvRozSGSBApRG0nL+oo9jwagNQsX3qx9i0Qh@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOQraaoPhxpySDDNf4lLt0a+MKupDzmoSRkI/lTTsJRmIqJAIL
+	nRgCMmfI50tdgFSjUqzXxRci0xuZdPbsKRac0qgNMsgmMNhyqx2fnnXKPiGnKWk3hYuiyRC5sEP
+	eERfs/FQFWh9UJC28J94n/aEmyBs=
+X-Gm-Gg: ASbGncvsgnEwA5EGm8LflYi2gufq8ko55BRGJDcF/j78TgZlV3BXtfLbjKd22HgWqVL
+	paNh5ONWMtJIi9WDqu0ZqpPGaaPuPElu0ncHEffYlCLgQ+lKDJFkcnGBFN0eSCy6LvztB2Ro=
+X-Google-Smtp-Source: AGHT+IFdrPaTPZ9GejJx+R+k192Po7wThLXGiNtYgpHneGtofpZWdqMlRAawKJACPdSwzsCirltSWXVY1xz5qEDY38E=
+X-Received: by 2002:a05:690c:7249:b0:6ef:6a91:4965 with SMTP id
+ 00721157ae682-6f19e861030mr21004747b3.37.1733981277626; Wed, 11 Dec 2024
+ 21:27:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-2-tmyu0@nuvoton.com>
+ <68d1490a-ba67-480b-943f-afa56e5b8436@kernel.org>
+In-Reply-To: <68d1490a-ba67-480b-943f-afa56e5b8436@kernel.org>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 12 Dec 2024 13:27:46 +0800
+Message-ID: <CAOoeyxVAbf45g-PGiDiUkZoBrSq6mRvAwHdoC6OCjEUYAUS=Lw@mail.gmail.com>
 Subject: Re: [PATCH v3 1/7] mfd: Add core driver for Nuvoton NCT6694
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
- <20241210104524.2466586-2-tmyu0@nuvoton.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, tmyu0@nuvoton.com,
- lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
- andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
- linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com
-In-Reply-To: <20241210104524.2466586-2-tmyu0@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Le 10/12/2024 à 11:45, Ming Yu a écrit :
-> The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> PWM, and RTC.
-> 
-> This driver implements USB device functionality and shares the
-> chip's peripherals as a child device.
-> 
-> Each child device can use the USB functions nct6694_read_msg()
-> and nct6694_write_msg() to issue a command. They can also request
-> interrupt that will be called when the USB device receives its
-> interrupt pipe.
+Dear Krzysztof,
 
-...
+Thank you for your comments,
 
-> +int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
-> +		     u16 length, void *buf)
-> +{
-> +	struct nct6694_cmd_header *cmd_header = nct6694->cmd_header;
-> +	struct nct6694_response_header *response_header = nct6694->response_header;
-> +	struct usb_device *udev = nct6694->udev;
-> +	int tx_len, rx_len, ret;
-> +
-> +	guard(mutex)(&nct6694->access_lock);
+Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2024=E5=B9=B412=E6=9C=8810=
+=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8810:38=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> > +
+> > +     dev_set_drvdata(dev, nct6694);
+> > +     usb_set_intfdata(iface, nct6694);
+> > +
+> > +     ret =3D mfd_add_hotplug_devices(dev, nct6694_dev, ARRAY_SIZE(nct6=
+694_dev));
+> > +     if (ret)
+> > +             goto err_mfd;
+> > +
+> > +     dev_info(dev, "Probed device: (%04X:%04X)\n", id->idVendor, id->i=
+dProduct);
+>
+> Drop. Duplicating existing messages and interfaces. Your driver is
+> supposed to be silent on success.
+>
 
-Nitpick: This could be moved a few lines below, should it still comply 
-with your coding style.
+Okay, I will drop it in v4.
 
-> +
-> +	/* Send command packet to USB device */
-> +	cmd_header->mod = mod;
-> +	cmd_header->cmd = offset & 0xFF;
-> +	cmd_header->sel = (offset >> 8) & 0xFF;
-> +	cmd_header->hctrl = NCT6694_HCTRL_GET;
-> +	cmd_header->len = length;
-> +
-> +	ret = usb_bulk_msg(udev, usb_sndbulkpipe(udev, NCT6694_BULK_OUT_EP),
-> +			   cmd_header, NCT6694_CMD_PACKET_SZ, &tx_len,
-> +			   nct6694->timeout);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Receive response packet from USB device */
-> +	ret = usb_bulk_msg(udev, usb_rcvbulkpipe(udev, NCT6694_BULK_IN_EP),
-> +			   response_header, NCT6694_CMD_PACKET_SZ, &rx_len,
-> +			   nct6694->timeout);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = usb_bulk_msg(udev, usb_rcvbulkpipe(udev, NCT6694_BULK_IN_EP),
-> +			   buf, NCT6694_MAX_PACKET_SZ, &rx_len, nct6694->timeout);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return nct6694_response_err_handling(nct6694, response_header->sts);
-> +}
-> +EXPORT_SYMBOL(nct6694_read_msg);
-> +
-> +int nct6694_write_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
-> +		      u16 length, void *buf)
-> +{
-> +	struct nct6694_cmd_header *cmd_header = nct6694->cmd_header;
-> +	struct nct6694_response_header *response_header = nct6694->response_header;
-> +	struct usb_device *udev = nct6694->udev;
-> +	int tx_len, rx_len, ret;
-> +
-> +	guard(mutex)(&nct6694->access_lock);
+> > +     return 0;
+> > +
+> > +err_mfd:
+> > +     usb_kill_urb(nct6694->int_in_urb);
+> > +err_urb:
+> > +     usb_free_urb(nct6694->int_in_urb);
+> > +     return dev_err_probe(dev, ret, "Probe failed\n");
+>
+> No, this should go to individual call causing errors so this will be
+> informative. Above is not informative at all and kernel already reports
+> this, so drop.
+>
 
-Nitpick: This could be moved a few lines below, should it still comply 
-with your coding style.
+Okay, I will drop it in v4.
 
-> +
-> +	/* Send command packet to USB device  */
+> > +}
+> > +
+> > +static void nct6694_usb_disconnect(struct usb_interface *iface)
+> > +{
+> > +     struct usb_device *udev =3D interface_to_usbdev(iface);
+> > +     struct nct6694 *nct6694 =3D usb_get_intfdata(iface);
+>
 
-Nitpick: double space before */
-
-> +	cmd_header->mod = mod;
-> +	cmd_header->cmd = offset & 0xFF;
-> +	cmd_header->sel = (offset >> 8) & 0xFF;
-> +	cmd_header->hctrl = NCT6694_HCTRL_SET;
-> +	cmd_header->len = length;
-
-...
-
-> +static struct irq_chip nct6694_irq_chip = {
-
-const?
-
-> +	.name = "nct6694-irq",
-> +	.flags = IRQCHIP_SKIP_SET_WAKE,
-> +	.irq_bus_lock = nct6694_irq_lock,
-> +	.irq_bus_sync_unlock = nct6694_irq_sync_unlock,
-> +	.irq_enable = nct6694_irq_enable,
-> +	.irq_disable = nct6694_irq_disable,
-> +};
-
-...
-
-> +static int nct6694_usb_probe(struct usb_interface *iface,
-> +			     const struct usb_device_id *id)
-> +{
-> +	struct usb_device *udev = interface_to_usbdev(iface);
-> +	struct device *dev = &udev->dev;
-> +	struct usb_host_interface *interface;
-> +	struct usb_endpoint_descriptor *int_endpoint;
-> +	struct nct6694 *nct6694;
-> +	struct nct6694_cmd_header *cmd_header;
-> +	struct nct6694_response_header *response_header;
-> +	int pipe, maxp;
-> +	int ret;
-> +
-> +	interface = iface->cur_altsetting;
-> +
-> +	int_endpoint = &interface->endpoint[0].desc;
-> +	if (!usb_endpoint_is_int_in(int_endpoint))
-> +		return -ENODEV;
-> +
-> +	nct6694 = devm_kzalloc(dev, sizeof(*nct6694), GFP_KERNEL);
-> +	if (!nct6694)
-> +		return -ENOMEM;
-> +
-> +	pipe = usb_rcvintpipe(udev, NCT6694_INT_IN_EP);
-> +	maxp = usb_maxpacket(udev, pipe);
-> +
-> +	cmd_header = devm_kzalloc(dev, sizeof(*cmd_header),
-> +				  GFP_KERNEL);
-> +	if (!cmd_header)
-> +		return -ENOMEM;
-> +
-> +	response_header = devm_kzalloc(dev, sizeof(*response_header),
-> +				       GFP_KERNEL);
-> +	if (!response_header)
-> +		return -ENOMEM;
-> +
-> +	nct6694->int_buffer = devm_kcalloc(dev, NCT6694_MAX_PACKET_SZ,
-> +					   sizeof(unsigned char), GFP_KERNEL);
-
-Why for cmd_header and response_header we use a temp variable, while 
-here we update directly nct6694->int_buffer?
-
-It would save a few LoC do remove this temp var.
-
-> +	if (!nct6694->int_buffer)
-> +		return -ENOMEM;
-> +
-> +	nct6694->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> +	if (!nct6694->int_in_urb)
-> +		return -ENOMEM;
-
-...
-
-CJ
-
+Best regards,
+Ming
 
