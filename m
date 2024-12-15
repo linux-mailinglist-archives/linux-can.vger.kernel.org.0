@@ -1,301 +1,250 @@
-Return-Path: <linux-can+bounces-2408-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2409-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E65779F06D6
-	for <lists+linux-can@lfdr.de>; Fri, 13 Dec 2024 09:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE4E9F2293
+	for <lists+linux-can@lfdr.de>; Sun, 15 Dec 2024 09:15:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D072A188AFCA
-	for <lists+linux-can@lfdr.de>; Fri, 13 Dec 2024 08:46:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F89318867FE
+	for <lists+linux-can@lfdr.de>; Sun, 15 Dec 2024 08:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F49C1ADFF6;
-	Fri, 13 Dec 2024 08:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3BAF1758B;
+	Sun, 15 Dec 2024 08:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ejl8/pF7"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="MR1CGRh9"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from out.smtpout.orange.fr (out-18.smtpout.orange.fr [193.252.22.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8307F1AF0AE;
-	Fri, 13 Dec 2024 08:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0643A440C
+	for <linux-can@vger.kernel.org>; Sun, 15 Dec 2024 08:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734079546; cv=none; b=r9qlGafH8zFHgRMROJbH4t+mIW8Z51SSJz8gdCXJE1B2YxwKhJ1bnLLZYXMDupR6CwqYiZ0pyxx3B61togQUWyChTF2BBK8cJtGD+xPTtdWUvWFdOfR9gazvJD1X+jHUdIzxZP0z4DltJfjMFU8p1DzQXFNsYo0ss/gzzQlqGLk=
+	t=1734250498; cv=none; b=Bpx9QHCWCDn2XbFDelJRpbYpeWKbMbTZsfczzy/k03KHByCPlukzP4eGhzwoRXQXeaWsPWHZA691UEfKmaa+QnTZNv7L2KQlLD/zV2uXlYi6gE/U5BWjC/CTI+dWKBozgCOsdTxcBpwsUvF6XUoSpmHvbd8sSSuVcmfBM1bnp9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734079546; c=relaxed/simple;
-	bh=bKHfseLrLFam+t0l4K7cSgf5MpnHwyP6kMNZLJ8EnQU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NxgQfHkBYSEg54wvmEkJpwXTK1yL766YFqdo/5GWsRokc4TB+3L9Di8L9SWs6IgRbphAjp18RuTIo00i1WZemZiMnVcLtvTxlkDBOb8tXP2L9eSF7Sy4jQUD7ZfomJkxo2qi0zskV9UzzUNYD28yQnJTJBEB+gZIenT0VnyaJlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ejl8/pF7; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-436281c8a38so7570525e9.3;
-        Fri, 13 Dec 2024 00:45:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734079542; x=1734684342; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Wy+YHf2E614t23hlQRqaAuPuP0RfmetGDSjCxDtFm8=;
-        b=ejl8/pF7Gegjk72RzgxkSdBbtaM+1Wp6tEXVdZfD9Ma/LEGNOrdClQ9BgiSrqx6ztU
-         OeKL1JMSg8HbY1My3RICis7ltJZxCMdt1CzEz8EcMtfxnGeJshA6EECYHtZgkD4D9AFw
-         tNrYtPKCXu+Keva43VDFYE1w0aWra2qSigf3+BhBL/NGTiUIi84hMxroznBLJSxS4WLK
-         laNdJ55nB9rdU1qm3uzBYDnJMAa47nP0LUYH5IGDb5RqVcHwYOKTS+0F66x6RjQI6LA/
-         zHzdJDAq+0s/ckhYVbRnxW2AIJrMrYlLBAn4j2JqQfzbb44cHiui3u/fcncIb3UpvJ6l
-         nrMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734079542; x=1734684342;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Wy+YHf2E614t23hlQRqaAuPuP0RfmetGDSjCxDtFm8=;
-        b=HLGU6Z6TRNIDKcVd4JF2bXaQJBmCmlRwV61BLdff2GROfKAryA/ocilwtv9EL1E+y1
-         LtdXLECGI4/6twXbX9NATYB8LWO2bOqF0ox6cIXk7p1YWVJbnCC6N3vlGyNk2p4LI2uh
-         Bk1BNc7FFOcbs1isJlo+mqeu/gX4kUvvzFV1TaEeRZ9rQr5upEosOAS5bHOoZuEJ9O73
-         PyUh5F7kk8R6Vn4t+cB5CpDVn8QrJt7zcU0wWlmrvexni4tc/L5sR4jbHMtV0nJHyck5
-         twH9+OCuqSK7EyDlbMAyzDftvc9x5GUIyJaQ3fSt4J0bHrYAGHfbstuGzzhQksfBXxpo
-         VdOw==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ+fCzbpm3xlsmZGIYvmaAdGVgvQRj7iQvtJz+0E+MHDOb2/dElixqq1pw9qY2t1khiBJzf8O2se6smR1T@vger.kernel.org, AJvYcCUT45oj2kTrxIIm7jCUG7AL5ZuHBqoL5ozOaLn5bDloNFAnCSlqPJs/K60tvkbr0n4EpSfKE2Md5QNcjg==@vger.kernel.org, AJvYcCUd0vPpirqF/JTNBIBMcNsPsSKVMoMruN2/HUZHai6bsB4TYgyJZlms+K7mo5aFItv0ZIX0dkUXLqPD@vger.kernel.org, AJvYcCUxTKUU9Zp6hTjSvelblLMBmEe5o3paBlQrRfxyzdTUEo3UeztdostNXHJQl7Es9TFQjPZHHmlnjKGReA==@vger.kernel.org, AJvYcCVCVBIED9z/68mpHuoA4p60a+y+dzsQM8wW43AX7HwfqqDYvhrS9w0VQcLKO4SeBnpG0QJcDIQ2faNFOw==@vger.kernel.org, AJvYcCXctg1UrifCnXGu49FEmzeEcQlZBeccoB3EeQm68znGHGZnvOUEXDLt0fKsEpBeOH58QkC4yl1caXPNorURMms6@vger.kernel.org, AJvYcCXejwd42gPiB+joTt6OEZpPk7gAGFgz/AhbZE8Y+lobvxUFK9O84TN81W2J/GIxovUBj+nH6HdB7MOfiQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZH4dUM3sjb0/M54wvw1HqlPWW+nVvw7MCc/dh29Kc+aLeyDp3
-	0Ty9mgnrmc897Rhz8RRnC5HF+DMt4Ng5xOV/+McTyT+bJpzzQEBpwrxZ/oorIio=
-X-Gm-Gg: ASbGncs8398qdHKWr4sL6A8KOPfvVYqo+uSAOcPfdx36req4obmLFIQpsMCpzoIftXU
-	P/L8s5WPURqSkWM61Zln5IlP7dBncCH3d6o56i3menxHUMigvbV/xtopAU8hD5GbnucOvIj3Ns3
-	nO+mthzegGPbxr0eYSjnkcmFuaYZaKwwzVuRVI2ypGGOtn8iqFJS+BCTIC+buNepwq/4zUoiU79
-	1Z3LaeQpZvG+edm8BM82STObWgZbMyxiSKP8sLOzvkyKeApPeeFjjs2GZ9rEtTpJOTbkHpZpj7G
-	sSp1U4okno3Yv5QcUIwsdk5nGkuRT/QIciQ709sIraqRUkWNMEJOBZLcdU3sYvQ=
-X-Google-Smtp-Source: AGHT+IGTU+lhc2lWa5575ClokcDUoOVQuXcljdePkNZ8VtH/nBtJO1u/jxwEfj0Q47P8NpjHVdg9Xw==
-X-Received: by 2002:a05:600c:a10:b0:434:a59c:43c6 with SMTP id 5b1f17b1804b1-4362aaa4c0cmr10082605e9.26.1734079542232;
-        Fri, 13 Dec 2024 00:45:42 -0800 (PST)
-Received: from localhost.localdomain (20014C4E1E9B09007B50BC12F2E5C1B6.dsl.pool.telekom.hu. [2001:4c4e:1e9b:900:7b50:bc12:f2e5:c1b6])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4362559eaf6sm42487645e9.20.2024.12.13.00.45.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2024 00:45:41 -0800 (PST)
-From: Anna Emese Nyiri <annaemesenyiri@gmail.com>
-To: netdev@vger.kernel.org
-Cc: fejes@inf.elte.hu,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	willemb@google.com,
-	idosch@idosch.org,
-	horms@kernel.org,
-	dsahern@kernel.org,
-	linux-can@vger.kernel.org,
-	socketcan@hartkopp.net,
-	mkl@pengutronix.de,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	tsbogend@alpha.franken.de,
-	kaiyuanz@google.com,
-	James.Bottomley@HansenPartnership.com,
-	richard.henderson@linaro.org,
-	arnd@arndb.de,
-	almasrymina@google.com,
-	asml.silence@gmail.com,
-	linux-mips@vger.kernel.org,
-	andreas@gaisler.com,
-	mattst88@gmail.com,
-	kerneljasonxing@gmail.com,
-	sparclinux@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	deller@gmx.de,
-	vadim.fedorenko@linux.dev,
-	linux-parisc@vger.kernel.org,
-	Anna Emese Nyiri <annaemesenyiri@gmail.com>
-Subject: [PATCH net-next v7 4/4] sock: Introduce SO_RCVPRIORITY socket option
-Date: Fri, 13 Dec 2024 09:44:57 +0100
-Message-ID: <20241213084457.45120-5-annaemesenyiri@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241213084457.45120-1-annaemesenyiri@gmail.com>
-References: <20241213084457.45120-1-annaemesenyiri@gmail.com>
+	s=arc-20240116; t=1734250498; c=relaxed/simple;
+	bh=oVtOGbYMObXCecU6PDBzMBaPI5+a6+7c2GdkGsC/nSI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q/aim1CauhdgNyGXA+6nk/859Y98gZ7Nw8qGjHplpH6BN442W4Y8OfhtHU8rwl6BQDWFF5+0JCiWgefrmQUpHT6CSgZrZea/FQTVr/R1do9v8ENgHHstx6uCIr0/lNKCeU6By1nF8E096rvzGHvXU+baUJohimvzt99NrDNlWBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=MR1CGRh9; arc=none smtp.client-ip=193.252.22.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id MjdLt65r5aH0QMjdWtzGCt; Sun, 15 Dec 2024 09:06:01 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1734249961;
+	bh=o3yI10mQZnIeBWEkKVrGK1gkj3IupwOxla/+5QZeets=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=MR1CGRh9fQ5Y0rMe2UV7St6IQejJNMWRB0I/vkxWsxtgWuwFD60H2sIbU/UHfcJ7A
+	 etWMvsljBxN5CPoKCXJNf5unPSGN4fr0ceQrGHaJx8ZXFKuwMmPwyR0zwAHywFcMO/
+	 Fk2K8+9f3zQcBft7iUnu1AJTEj/g/OEAHMSjbirX3KwTmEAlhj8jC+Yq7k3GYG23J1
+	 ZStbLnrTRmdwGa4dW047+KzekvJXRrkhymYRJ83yt6gzRiUw1jrSJm/XQ2bwma3DfA
+	 bOGelfiMZ97cSh56pca7IIW/dme1v/IwYrtQHgPuj2RSccgL6LLfHnrlZbQTO8vwsK
+	 SI79oX2YdbbNw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 15 Dec 2024 09:06:01 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <70fd9522-7548-4a53-97db-dfb7619cb3b7@wanadoo.fr>
+Date: Sun, 15 Dec 2024 17:05:46 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 12/14] can: netlink: add CAN XL support
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+ Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org, Robert Nawrath <mbro1689@gmail.com>
+References: <20241110155902.72807-28-mailhol.vincent@wanadoo.fr>
+ <20241112-flashy-straight-poodle-9a796d-mkl@pengutronix.de>
+ <CAMZ6RqKQLaEtgoLOAa3NHJotyHcAo=7ObXf=7tLh_DJ_QTCKOg@mail.gmail.com>
+ <36b1f1cb-c431-43ad-be49-5093a3534b9d@hartkopp.net>
+ <20241204-nippy-vivid-mantis-ee1725-mkl@pengutronix.de>
+ <8d1cd5de-ae84-455d-8636-7f269bbfe7db@hartkopp.net>
+ <20241204-mauve-asp-of-fortitude-e75174-mkl@pengutronix.de>
+ <aeb667e7-9a5b-4d6f-8220-ac06dbdcfe80@hartkopp.net>
+ <20241205-archetypal-stirring-kakapo-407537-mkl@pengutronix.de>
+ <572d0fa8-e9df-4047-951f-2747571086db@hartkopp.net>
+ <20241210-alluring-cunning-swift-4bcd47-mkl@pengutronix.de>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20241210-alluring-cunning-swift-4bcd47-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add new socket option, SO_RCVPRIORITY, to include SO_PRIORITY in the
-ancillary data returned by recvmsg().
-This is analogous to the existing support for SO_RCVMARK, 
-as implemented in commit <6fd1d51cfa253>
-("net: SO_RCVMARK socket option for SO_MARK with recvmsg()").
+On 10/12/2024 at 20:58, Marc Kleine-Budde wrote:
+> On 09.12.2024 14:13:29, Oliver Hartkopp wrote:
+>>
+>>
+>> On 05.12.24 10:15, Marc Kleine-Budde wrote:
+>>> On 05.12.2024 09:16:44, Oliver Hartkopp wrote:
+>>>> On 04.12.24 12:44, Marc Kleine-Budde wrote:
+>>>>> On 04.12.2024 12:35:43, Oliver Hartkopp wrote:
+>>>>>>>>> Also, the main reason for not creating the nest was that I thought
+>>>>>>>>> that the current bittiming API was stable. I was not aware of the
+>>>>>>>>> current flaw on how to divide tseg1_min. Maybe we should first discuss
+>>>>>>>>> how to solve this issue for CAN FD?
+>>>>>>>>
+>>>>>>>> I like the current way how you added the CAN XL support.
+>>>>>>>> It maintains the known usage pattern - and the way how CAN XL bit timings
+>>>>>>>> are defined is identical to CAN FD (including TDC).
+>>>>>>>>
+>>>>>>>> Is the separation of propseg and tseg1 that relevant?
+>>>>>>>> Does it really need to be exposed to the user?
+>>>>>>>
+>>>>>>> There are IIRC at least 2 CAN-FD cores where the prop segment and phase
+>>>>>>> segment 1 for the data bit timing have not the same width. This means we
+>>>>>>> have to change the bittiming_const in the kernel.
+>>>>
+>>>> Sure?
+>>>
+>>> I'm sure the registers don't have the same width. And I'm sure about my
+>>> conclusion, but that's up for discussion :)
+>>>
+>>> https://elixir.bootlin.com/linux/v6.12.1/source/drivers/net/can/ctucanfd/ctucanfd_base.c#L197
+>>> https://elixir.bootlin.com/linux/v6.12.1/source/drivers/net/can/flexcan/flexcan-core.c#L1210
+>>>
+>>>> In the end (almost) every CAN controller has the tseg1 register which
+>>>> contains prop_seg + phase_seg1 as a sum of these.
+>>>
+>>> Some do (just a short grep): bxcan, esdacc, rcar_can, softing, hi311x,
+>>> ti_hecc. More controllers haven evenly divided prop_seg + phase_seg1.
+>>>
+>>>> The relevant point is behind prop_seg + phase_seg1 and I'm pretty sure these
+>>>> "2 CAN-FD cores" will add the values internally too.
+>>>
+>>> As the ctucanfd is open you can have a look :)
+> 
+> As far as I understand, it internally adds sync + prop + phase1:
+> 
+> https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core/-/blob/master/src/prescaler/bit_time_cfg_capture.vhd?ref_type=heads#L242
+> 
+>>>> I'm a bit concerned that after 40 years someone shows up with the idea to
+>>>> spend two registers for the tseg1 value instead of one.
+>>>
+>>> It doesn't matter if prop_seg and phase_seg1 are in the same register or
+>>> not, what matters is:
+>>> a) 1. does the IP core want separate prop_seg and phase_seg1 values
+>>>     - or -
+>>>     2. does the IP core want a single "prop_seg + phase_seg1", a.k.a.
+>>>        tseg1 value?
+>>> b) 1. what's the width of the prop_seg and phase_seg1?
+>>>     2. what's the width of tseg1?
+>>>
+>>> Currently the CAN infrastructure allows the driver to specify tseg1 only
+>>> and assumes the width of prop_seg and phase_seg1 to be the same, as it
+>>> distributes tseg1 evenly between prop_seg and phase_seg1:
+>>>
+>>> https://elixir.bootlin.com/linux/v6.12.1/source/drivers/net/can/dev/calc_bittiming.c#L155
+>>>
+>>> This leads to the workarounds in the CAN drivers, see above for links.
+>>
+>> Yes. But why don't we just let this as-is then?
+>>
+>> Even if prop_seg phase_seg1 registers have a different size, this split up
+>> can be done easily without changing the current bittiming API.
+>>
+>> Maybe a common helper function to split up the values based on given
+>> register sizes could simplify the handling for those CAN drivers.
+> 
+> Good idea!
+> 
+> What about adding the information about prop_seg and phase_seg1 to
+> bittiming_const and let the can_calc_bittiming() calculate it?
+> 
+>> I'm still not convinced that it brings some benefits for the user to extend
+>> the bittiming API. IMHO it just complicates the bitrate settings.
+> 
+> The benefit is, that the user knows about the limitation of prop_seg and
+> phase_seg1.
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+I finally caught up with this thread. As I said before I was divided on
+this topic two weeks ago, and still I am today.
 
-Suggested-by: Ferenc Fejes <fejes@inf.elte.hu>
-Signed-off-by: Anna Emese Nyiri <annaemesenyiri@gmail.com>
----
- arch/alpha/include/uapi/asm/socket.h    |  2 ++
- arch/mips/include/uapi/asm/socket.h     |  2 ++
- arch/parisc/include/uapi/asm/socket.h   |  2 ++
- arch/sparc/include/uapi/asm/socket.h    |  2 ++
- include/net/sock.h                      |  4 +++-
- include/uapi/asm-generic/socket.h       |  2 ++
- net/core/sock.c                         |  8 ++++++++
- net/socket.c                            | 11 +++++++++++
- tools/include/uapi/asm-generic/socket.h |  2 ++
- 9 files changed, 34 insertions(+), 1 deletion(-)
+One part of me tells me that if the ISO mandates the prop_seg and the
+phase_seg1 as two different configurable variables, then so shall it be.
 
-diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-index 302507bf9b5d..3df5f2dd4c0f 100644
---- a/arch/alpha/include/uapi/asm/socket.h
-+++ b/arch/alpha/include/uapi/asm/socket.h
-@@ -148,6 +148,8 @@
- 
- #define SCM_TS_OPT_ID		81
- 
-+#define SO_RCVPRIORITY		82
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-index d118d4731580..22fa8f19924a 100644
---- a/arch/mips/include/uapi/asm/socket.h
-+++ b/arch/mips/include/uapi/asm/socket.h
-@@ -159,6 +159,8 @@
- 
- #define SCM_TS_OPT_ID		81
- 
-+#define SO_RCVPRIORITY		82
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-index d268d69bfcd2..aa9cd4b951fe 100644
---- a/arch/parisc/include/uapi/asm/socket.h
-+++ b/arch/parisc/include/uapi/asm/socket.h
-@@ -140,6 +140,8 @@
- 
- #define SCM_TS_OPT_ID		0x404C
- 
-+#define SO_RCVPRIORITY		0x404D
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-index 113cd9f353e3..5b464a568664 100644
---- a/arch/sparc/include/uapi/asm/socket.h
-+++ b/arch/sparc/include/uapi/asm/socket.h
-@@ -141,6 +141,8 @@
- 
- #define SCM_TS_OPT_ID            0x005a
- 
-+#define SO_RCVPRIORITY           0x005b
-+
- #if !defined(__KERNEL__)
- 
- 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 316a34d6c48b..d4bdd3286e03 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -953,6 +953,7 @@ enum sock_flags {
- 	SOCK_XDP, /* XDP is attached */
- 	SOCK_TSTAMP_NEW, /* Indicates 64 bit timestamps always */
- 	SOCK_RCVMARK, /* Receive SO_MARK  ancillary data with packet */
-+	SOCK_RCVPRIORITY, /* Receive SO_PRIORITY ancillary data with packet */
- };
- 
- #define SK_FLAGS_TIMESTAMP ((1UL << SOCK_TIMESTAMP) | (1UL << SOCK_TIMESTAMPING_RX_SOFTWARE))
-@@ -2660,7 +2661,8 @@ static inline void sock_recv_cmsgs(struct msghdr *msg, struct sock *sk,
- {
- #define FLAGS_RECV_CMSGS ((1UL << SOCK_RXQ_OVFL)			| \
- 			   (1UL << SOCK_RCVTSTAMP)			| \
--			   (1UL << SOCK_RCVMARK))
-+			   (1UL << SOCK_RCVMARK)			|\
-+			   (1UL << SOCK_RCVPRIORITY))
- #define TSFLAGS_ANY	  (SOF_TIMESTAMPING_SOFTWARE			| \
- 			   SOF_TIMESTAMPING_RAW_HARDWARE)
- 
-diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-index deacfd6dd197..aa5016ff3d91 100644
---- a/include/uapi/asm-generic/socket.h
-+++ b/include/uapi/asm-generic/socket.h
-@@ -143,6 +143,8 @@
- 
- #define SCM_TS_OPT_ID		81
- 
-+#define SO_RCVPRIORITY		82
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
-diff --git a/net/core/sock.c b/net/core/sock.c
-index a3d9941c1d32..f9f4d976141e 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1518,6 +1518,10 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
- 	case SO_RCVMARK:
- 		sock_valbool_flag(sk, SOCK_RCVMARK, valbool);
- 		break;
-+
-+	case SO_RCVPRIORITY:
-+		sock_valbool_flag(sk, SOCK_RCVPRIORITY, valbool);
-+		break;
- 
- 	case SO_RXQ_OVFL:
- 		sock_valbool_flag(sk, SOCK_RXQ_OVFL, valbool);
-@@ -1947,6 +1951,10 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
- 		v.val = sock_flag(sk, SOCK_RCVMARK);
- 		break;
- 
-+	case SO_RCVPRIORITY:
-+		v.val = sock_flag(sk, SOCK_RCVPRIORITY);
-+		break;
-+
- 	case SO_RXQ_OVFL:
- 		v.val = sock_flag(sk, SOCK_RXQ_OVFL);
- 		break;
-diff --git a/net/socket.c b/net/socket.c
-index 9a117248f18f..79d08b734f7c 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -1008,12 +1008,23 @@ static void sock_recv_mark(struct msghdr *msg, struct sock *sk,
- 	}
- }
- 
-+static void sock_recv_priority(struct msghdr *msg, struct sock *sk,
-+			       struct sk_buff *skb)
-+{
-+	if (sock_flag(sk, SOCK_RCVPRIORITY) && skb) {
-+		__u32 priority = skb->priority;
-+
-+		put_cmsg(msg, SOL_SOCKET, SO_PRIORITY, sizeof(__u32), &priority);
-+	}
-+}
-+
- void __sock_recv_cmsgs(struct msghdr *msg, struct sock *sk,
- 		       struct sk_buff *skb)
- {
- 	sock_recv_timestamp(msg, sk, skb);
- 	sock_recv_drops(msg, sk, skb);
- 	sock_recv_mark(msg, sk, skb);
-+	sock_recv_priority(msg, sk, skb);
- }
- EXPORT_SYMBOL_GPL(__sock_recv_cmsgs);
- 
-diff --git a/tools/include/uapi/asm-generic/socket.h b/tools/include/uapi/asm-generic/socket.h
-index 281df9139d2b..ffff554a5230 100644
---- a/tools/include/uapi/asm-generic/socket.h
-+++ b/tools/include/uapi/asm-generic/socket.h
-@@ -126,6 +126,8 @@
- 
- #define SCM_TS_OPT_ID		78
- 
-+#define SO_RCVPRIORITY		79
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
--- 
-2.43.0
+The other part of me tells me that the benefit is small. The transceiver
+does not need to know the tseg1 split to figure out the sample point. So
+this is only useful for the user.
 
+One thing I am sure of: I am against deprecating the struct
+can_bittiming_const and creating a new nested structure with all the
+configuration ranges. I do not want to have two branches of code: one
+for the legacy struct can_bittiming_const, one for the new nest. It will
+needlessly complicate the logic.
+
+If we want to add the prop_seg to the configuration, the best is to just
+reuse what we have and only add an extension for what is missing:
+
+  /*
+   * IFLA_CAN_BITTIMING_CONST_EXT nest: additional bit-timing constants
+   * Extension of the struct can_bittiming_const.
+   */
+  enum {
+  	IFLA_CAN_BITTIMING_CONST_PROP_SEG_MAX,	/* u32 */
+
+  	/* add new constants above here */
+  	__IFLA_CAN_BITTIMING_CONST,
+  	IFLA_CAN_BITTIMING_CONST_MAX = __IFLA_CAN_BITTIMING_CONST - 1
+  };
+
+
+I purposely omitted IFLA_CAN_BITTIMING_CONST_PROP_SEG_MIN, because the
+standard already specifies that this minimum value is one.
+
+The CAN netlink interface then gets three additional entries:
+
+  IFLA_CAN_CC_BITRATE_CONST_EXT,
+  IFLA_CAN_FD_BITRATE_CONST_EXT,
+  IFLA_CAN_XL_BITRATE_CONST_EXT,
+
+all pointing the the new IFLA_CAN_BITTIMING_CONST_EXT nest.
+
+Finally, we create a new *internal* structure (i.e. not visible from
+uapi) that will replace the previous one in can_priv.
+
+  /*
+   * CAN internal bit-timing constant
+   *
+   * Used for calculating and checking bit-timing parameters,
+   * extended from struct can_bittiming_const.
+   */
+  struct can_bittiming_const_ext {
+  	char name[16];	/* Name of the CAN controller hardware */
+  	u32 tseg1_min;	/* Time segment 1 = prop_seg + phase_seg1 */
+  	u32 tseg1_max;
+  	u32 tseg2_min;	/* Time segment 2 = phase_seg2 */
+  	u32 tseg2_max;
+  	u32 sjw_max;		/* Synchronisation jump width */
+  	u32 brp_min;		/* Bit-rate prescaler */
+  	u32 brp_max;
+  	u32 brp_inc;
+  	u32 prop_seg_max;	/* 0: not set, legacy behaviour */
+  };
+
+The first fields up to the brp_inc matches the struct
+can_bittiming_const, the last field, prop_seg_max, matches the
+IFLA_CAN_BITTIMING_CONST_EXT nest. If prop_seg_max is zero, we keep the
+old behaviour: 50/50 split.
+
+This gives the same results for less work and all of the Classical CAN,
+CAN FD and CAN XL will use the same logic. And biggest point: no need to
+deprecate any existing code.
+
+Note that with this approach, it does not matter if we do it before or
+after the introduction on CAN XL.
+
+@Marc, I am fine to do the netlink part if you are willing to the
+bittiming and the driver part. Deal?
+
+
+Yours sincerely,
+Vincent Mailhol
 
