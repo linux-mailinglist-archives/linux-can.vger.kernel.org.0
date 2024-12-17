@@ -1,119 +1,84 @@
-Return-Path: <linux-can+bounces-2415-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2416-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FF809F3738
-	for <lists+linux-can@lfdr.de>; Mon, 16 Dec 2024 18:16:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8F7B9F4082
+	for <lists+linux-can@lfdr.de>; Tue, 17 Dec 2024 03:20:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4833316491B
-	for <lists+linux-can@lfdr.de>; Mon, 16 Dec 2024 17:16:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44BAA188DCC6
+	for <lists+linux-can@lfdr.de>; Tue, 17 Dec 2024 02:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12C10205E1B;
-	Mon, 16 Dec 2024 17:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9309213F42A;
+	Tue, 17 Dec 2024 02:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="l/TNgXT8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kz/3TXCd"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-73.smtpout.orange.fr [193.252.22.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBF9204F92;
-	Mon, 16 Dec 2024 17:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDBD13DBB6;
+	Tue, 17 Dec 2024 02:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734369343; cv=none; b=sFECxdHkokEQNwY7J8ioQDt4+BcP0pZWOCCOhM3c2x7eCTVEmkUUSQA0VerTqhC7rv5XJ46gl1hF1ovA9L1vr/H+cyxM3SynhWOmr6Ptss76weLhCfPx9fH8ErW3PppxN3DvGdCtevsBvsn31YjoTG167pPDabOtqJ/501bMjL4=
+	t=1734402005; cv=none; b=s1Y8N43O4RUVzvQoTrdedprgNyb0jvM7BL/E8SPsRxLCe0umsjRKfD6lLBZZlWzgig3sTWedNtycwibedXuSMeOWc9dIPe2MwmVjyMIXwofPrtCUhPH/WA/wkme+KW3DYIvDXayADo4aQ7Xec9OlNVbesuHCRZQcIlreQVyF2EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734369343; c=relaxed/simple;
-	bh=rPcSRu/xLQ3AacbWw5/6imPXGpyHuzRwRCOsO3qDO1I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X7+dKsrYGqJkJ4rrVV7USp3lNNHv9UsiSKmzDRFr+l/nsGAnZhq6fc2BQdwgo5yYff7fgaMtz7tT5M3/2OYkSkFy4k4FN9WrAN9Rq9sCFw9JAUR+uS+Z1SjwZLSgyRQCknQPBkDRG+OaOI/0nZEGyWT11pxvRtPaaCm7gflXPjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=l/TNgXT8; arc=none smtp.client-ip=193.252.22.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id NEfTt1ynneZBxNEfetJacV; Mon, 16 Dec 2024 18:14:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1734369265;
-	bh=ta+/XtD45kiERjaQDCMe+l1Wgsriuw2kZwoHtywgXTY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=l/TNgXT8UxJn7zsGoLq3KvwVaLXQarxWaXKYl3SG4WTEiPGu1wXmr0vQYRJxfk9+7
-	 ngXLjIRgIyLOOekIT3Qv1YTx3r/I9x8UyhlNQ611mtSrenxitt1R3ofhihCKauB5qC
-	 NklyoxNGTWK+g+hKREE7iv5BBH8/bTMQt+McngQrBWADIkRhfgo+C3ceWQfOGt4KQB
-	 zNTTA/D7/YJbV1ESVU8FxRrt2xDLc//6G7aszsPTojyKRZvq7eQMfwkD+4/PYD86dW
-	 oqavapDqKggTkL4YZ1+B8Dv1pQSGOeKIk0gd0WxHgdNJmt7ZOqlN0bL5kt2EbG587N
-	 Gs0tZOw6DLcew==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 16 Dec 2024 18:14:25 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <8d66cf66-5564-4272-8c3e-51b715c3d785@wanadoo.fr>
-Date: Tue, 17 Dec 2024 02:14:02 +0900
+	s=arc-20240116; t=1734402005; c=relaxed/simple;
+	bh=Zot6Em4Di0coBiKxeXdbs2tjclcZ+C2YYQ9nbTfTr1c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CviQ0J+194sxaI9jvFoHPPcE0iq5+MQWkN1weNKVdFVif6hUylb/eQvaEWyEqaIfZTL86sYAxbSBy/MiIoYcPmfH+LZy/EizFk1lX2MfRhgCQyI4khkTI6/NNQtU190cdTqQlDEqfem1KDbcZzMF8s+9uJlZlbzSfaBKdRFmquY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kz/3TXCd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B74D2C4CED7;
+	Tue, 17 Dec 2024 02:20:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734402003;
+	bh=Zot6Em4Di0coBiKxeXdbs2tjclcZ+C2YYQ9nbTfTr1c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Kz/3TXCdt7zW6TZfim1b5SYJT7miZdxCADSIFvfT0ueZUZGHVmogm60J2VQjjKBb5
+	 H1sNBY+MZFuzYHo2GUOud4pyBf9TP3SBDqAjoHWFd41tL5naAQerd+G4KapQxSwmtK
+	 wO0EhLSQjOO0IzydHsiaFWYPnQi0HuKPpVV3CAOQYObJCd9v6o66OP4ohjdHTl3WsH
+	 aTndzfU7Dvh/9TVOhha1lqsgyvwkxCypDH/2iU0Tpt+ncBk6C5l4jNQd1sfDcWRnr0
+	 J69VPS5ZzcuFLpBTIGCLSPMK2hpG1vEYSrnG6fx4+FR2SdwHJ2KD18w+cK/goDwtfX
+	 X+3CGwtRNqzbg==
+Date: Mon, 16 Dec 2024 18:20:01 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Anna Emese Nyiri <annaemesenyiri@gmail.com>
+Cc: netdev@vger.kernel.org, fejes@inf.elte.hu, edumazet@google.com,
+ pabeni@redhat.com, willemb@google.com, idosch@idosch.org, horms@kernel.org,
+ dsahern@kernel.org, linux-can@vger.kernel.org, socketcan@hartkopp.net,
+ mkl@pengutronix.de, linux-kselftest@vger.kernel.org, shuah@kernel.org,
+ tsbogend@alpha.franken.de, kaiyuanz@google.com,
+ James.Bottomley@HansenPartnership.com, richard.henderson@linaro.org,
+ arnd@arndb.de, almasrymina@google.com, asml.silence@gmail.com,
+ linux-mips@vger.kernel.org, andreas@gaisler.com, mattst88@gmail.com,
+ kerneljasonxing@gmail.com, sparclinux@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, deller@gmx.de,
+ vadim.fedorenko@linux.dev, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH net-next v7 4/4] sock: Introduce SO_RCVPRIORITY socket
+ option
+Message-ID: <20241216182001.557e2c19@kernel.org>
+In-Reply-To: <20241213084457.45120-5-annaemesenyiri@gmail.com>
+References: <20241213084457.45120-1-annaemesenyiri@gmail.com>
+	<20241213084457.45120-5-annaemesenyiri@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Ming Yu <a0282524688@gmail.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, tmyu0@nuvoton.com,
- lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
- andi.shyti@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
- alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-rtc@vger.kernel.org
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
- <20241210104524.2466586-5-tmyu0@nuvoton.com>
- <20241211-taupe-leech-of-respect-4c325a-mkl@pengutronix.de>
- <CAMZ6RqLMyW6HfTGEOHm7B8rr6=hvuxMEWfEEhxv5Nw7fgpM=WA@mail.gmail.com>
- <CAOoeyxVoqtLPceHxH=eV=QfYuh9E0QEQKaMjdB4dyk9V_JarXQ@mail.gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-In-Reply-To: <CAOoeyxVoqtLPceHxH=eV=QfYuh9E0QEQKaMjdB4dyk9V_JarXQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 16/12/2024 at 15:58, Ming Yu wrote:
-> Dear Vincent,
-> 
-> Thank you for your comments,
-> 
-> Vincent Mailhol <mailhol.vincent@wanadoo.fr> 於 2024年12月11日 週三 下午11:25寫道：
+On Fri, 13 Dec 2024 09:44:57 +0100 Anna Emese Nyiri wrote:
+> Add new socket option, SO_RCVPRIORITY, to include SO_PRIORITY in the
+> ancillary data returned by recvmsg().
+> This is analogous to the existing support for SO_RCVMARK, 
+> as implemented in commit <6fd1d51cfa253>
+> ("net: SO_RCVMARK socket option for SO_MARK with recvmsg()").
 
-(...)
-
->>>> +     cf->len = xmit->dlc;
->>>
->>> what does xmit->dlc contain? The DLC or the length?
->>
->> +1
->>
->> Also, do not trust the device data. Even if SPI attacks are less
->> common, make sure to sanitize this length.
->>
->>   cf->len = canfd_sanitize_len(xmit->dlc);
->>
->> Or
->>
->>   cf->len = canfd_sanitize_len(xmit->dlc);
->>
->> if xmit->dlc is in fact a DLC.
->>
-> 
-> Excuse me, the xmit->dlc is actual data length.
-> Does it need to be fixed?
-
-Yes, name is xmit->len. DLC has a different meaning.
-
-
-Yours sincerely,
-Vincent Mailhol
-
+Could you follow up with a test? The functionality is pretty
+straightforward but it'd nonetheless be good to exercise it,
+even if it's a trivial C program which sends a UDP packet to 
+itself over loopback?
 
