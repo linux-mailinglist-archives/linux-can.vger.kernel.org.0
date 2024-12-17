@@ -1,203 +1,107 @@
-Return-Path: <linux-can+bounces-2426-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2427-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C89F99F4AE1
-	for <lists+linux-can@lfdr.de>; Tue, 17 Dec 2024 13:25:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 631139F4C34
+	for <lists+linux-can@lfdr.de>; Tue, 17 Dec 2024 14:29:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F7CE188B44F
-	for <lists+linux-can@lfdr.de>; Tue, 17 Dec 2024 12:25:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F3B21895B25
+	for <lists+linux-can@lfdr.de>; Tue, 17 Dec 2024 13:20:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 494301CEEBB;
-	Tue, 17 Dec 2024 12:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 181971F5433;
+	Tue, 17 Dec 2024 13:14:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zg3wHKxY"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BA713A3ED
-	for <linux-can@vger.kernel.org>; Tue, 17 Dec 2024 12:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A155F1F1917
+	for <linux-can@vger.kernel.org>; Tue, 17 Dec 2024 13:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734438341; cv=none; b=bj3SwRW4IIRe/VRemqR93iySnTib8o+QN4tXGcNgz7jGgTmy4IANFb9qIy/lZjsd0XMf/7mh1uPmM2ZOUejxYnwedfBJfcbJY20MNQHglCB8dPadYYdTJGrm4uuhlnbzM4GsMZxspXMCaQjgnwC4naUl8ZBhNZQO8pNsIhO4HnM=
+	t=1734441295; cv=none; b=hmP+xLPQu1BlPjoSVBzaDOF5JeRI8/LUMhaFbQpwdwocdGCfZArRFTS7hvCFvcMcaNNJbjtQz7cpiG3rOcaJZS4UCmlwI0ggQ5IeHUYhny/lvhRl2AvoXXkTfQHDQBkdPdxE3Z7hgmmIL6H3aXXYYiWIt99TocMDXTn7EHtg5RI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734438341; c=relaxed/simple;
-	bh=l9MaQmrYHUS/EDjoAAvoSKVokHoMQH6NxagWTGL+uac=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RvqriGZksOO+euBl/2Fc/Hk6yayBqx3ptkY10ttMOG/HvPub6L5DyztV7Zty5pS329xrLb8xHCg0ABv+Mll3iFJaCy6oQQbJ9C0OgF3fTbLYPCDisCOWtuo5VZHgcm7+ME1gvVinZYaXL/GrzLUywzYl+Q+GykJXouQneChdfk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tNWdq-0006A2-VZ; Tue, 17 Dec 2024 13:25:34 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tNWdp-003rVG-23;
-	Tue, 17 Dec 2024 13:25:34 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 1A5C2390711;
-	Tue, 17 Dec 2024 12:25:34 +0000 (UTC)
-Date: Tue, 17 Dec 2024 13:25:32 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Renjaya Raga Zenta <ragazenta@gmail.com>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Markus Schneider-Pargmann <msp@baylibre.com>, Martin =?utf-8?Q?Hundeb=C3=B8ll?= <martin@geanix.com>, 
-	linux-can@vger.kernel.org
+	s=arc-20240116; t=1734441295; c=relaxed/simple;
+	bh=0tCzv5xhpV9X1fjNhjxKI6ZrerZtZecCQQ4OsMzM4CQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BqNO6yeMZVy5MdCfhIry0EcRoMV89v6ju01y87WGlgXw352iws4IUFEAXNGGWPexWcSJe5BmKhj0wuo30AO+BtQpaf0ydIBWDBp9Lxpl2dusomLYi74CY4D579lCRzS9M5kQwletn6mfwhIAIz0sYA02CmQjNGI5X4sfUuMnfI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zg3wHKxY; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-725ef0397aeso4648524b3a.2
+        for <linux-can@vger.kernel.org>; Tue, 17 Dec 2024 05:14:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734441293; x=1735046093; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yG9pmPYM+FmCPsypHUh7JqBaVT3IuwVxciSup41Kr3E=;
+        b=Zg3wHKxY2B8LyFqegSLY8f7ZOde00S7jdDzQfv+UfOYD0NPqmJ9e4uddKc0i7yEDAS
+         zgL2tsRpYLQ2tu6gKaF0qlijqfTuNclNbV4pHRmfCZLNFy6ehMFQoGYyDejr6EDjMmhT
+         nnNfh5YYiPfhyldyvoscruPemt2tpkgye6qo8/cv/dnTic2xbTY33kuFxnuy9mOsq313
+         Np6/ZX/u7YUONP2djR79ce8+16rNyPZxVcIdhtp+hUcSHCpM6IV4by+0Fm3xJtqtrpk9
+         p5O0teDi6p8RYg/Jc806Z3tM6QpW/K0EN/PeN9U74ekjFCwOFFZLTxgx1/xIsn1GMf/9
+         A0JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734441293; x=1735046093;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yG9pmPYM+FmCPsypHUh7JqBaVT3IuwVxciSup41Kr3E=;
+        b=j/PVhX6LgE4laFAaNw+3wxT/ZnpoF3KrRXbXOK+FsicjR8xrihr6yamQrnUZYxx5qx
+         HgAPmn3IEjo18iIH5oFZAfbv71rUASLm0clw5w4cwWnXYNMlh9FCXH0C+jjDIyDOTRxA
+         xNzS50q3mt2gZXLh6wd4ezd3Uz1ogjk6eWe5JGwDbnEg5lBzTCwbTE1I4wUygJY57Lui
+         ZS9osq6tKk/Ex8e4y3gFwKRGfN+d4J+mzPdalxGvv73Yy7Jx2HStIOvbG1curA125WDU
+         CPmamw3WVF1NX2jFaMo4sXdv+I9/1H6YokPOYFitIcqxcSxbqWp5HZB3XOHHvEsyxkNw
+         vFRw==
+X-Gm-Message-State: AOJu0Yy6vGuqCD2MXq0qZbsUpqu2ghXJlYBtx0ei1GRDYGxSnszMDmEz
+	UB1XdAwGbdmWzfWsbPSrclSxinXAiH4tnK2qjs3sme2ChjqWjw7u
+X-Gm-Gg: ASbGncuKkUXBcOqWNu5clgIYi8gihvFG/BCuRzvAzkaQXA+284U6rDKkUbZt5VYuKox
+	XbpTt83gnoXdK8Lpyy7K3D2GTzOGCmEvm+84ltf5Yb9Rc/v/438F82cguhE8uGzCGYRNbA7+dDm
+	/8eZi8JW7PlL9CH8wfIqcQMX2w5j9HuWxgAQ/9ia+OLS9XG/9C8IaTrFGwaFGbqxkN4Wrk64J+A
+	E75fP4OyC1THpCqu/UsX23bYa5V0CH1PWNqtE4jsG2rAZ6qC5E=
+X-Google-Smtp-Source: AGHT+IEILYI3hlKcGTRRKB1y+Q25MdfzaTw6g5UgiFKls+/PA2X4+W0g8n+apl5DmzosM2xjxD+f4Q==
+X-Received: by 2002:a05:6a00:1250:b0:729:49a:2db9 with SMTP id d2e1a72fcca58-7290c24ef90mr21491952b3a.21.1734441292919;
+        Tue, 17 Dec 2024 05:14:52 -0800 (PST)
+Received: from debian.. ([103.12.224.66])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918ad54f0sm6583410b3a.57.2024.12.17.05.14.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2024 05:14:52 -0800 (PST)
+From: Renjaya Raga Zenta <ragazenta@gmail.com>
+To: mkl@pengutronix.de
+Cc: linux-can@vger.kernel.org,
+	mailhol.vincent@wanadoo.fr,
+	martin@geanix.com,
+	msp@baylibre.com,
+	ragazenta@gmail.com
 Subject: Re: [PATCH] can: m_can: m_can_dev_setup(): set CCCR_INIT bit earlier
-Message-ID: <20241217-fair-misty-jaybird-2d72f7-mkl@pengutronix.de>
-References: <20241217-m_can_fix-v1-1-c043927f6374@gmail.com>
+Date: Tue, 17 Dec 2024 20:14:49 +0700
+Message-ID: <20241217131449.86794-1-ragazenta@gmail.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241217-fair-misty-jaybird-2d72f7-mkl@pengutronix.de>
+References: <20241217-fair-misty-jaybird-2d72f7-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hh6pzxltlur3hrxh"
-Content-Disposition: inline
-In-Reply-To: <20241217-m_can_fix-v1-1-c043927f6374@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+On 17.12.2024 19:25:32, Marc Kleine-Budde wrote:
+> Can you check if
+> https://lore.kernel.org/all/e247f331cb72829fcbdfda74f31a59cbad1a6006.1728288535.git.matthias.schiffer@ew.tq-group.com/
+> fixes your problem?
 
---hh6pzxltlur3hrxh
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] can: m_can: m_can_dev_setup(): set CCCR_INIT bit earlier
-MIME-Version: 1.0
+Hi Marc,
 
-On 17.12.2024 13:56:56, Renjaya Raga Zenta wrote:
-> When OS reboot, device is still in normal mode. Probing
-> will fail with this error message:
->=20
->   refusing to configure device when in normal mode
->   (unnamed net_device) (uninitialized): failed to enable configuration mo=
-de
->   Failed registering m_can device -EBUSY
->=20
-> The log can be traced, it's from:
->   m_can_dev_setup
->     -> m_can_niso_supported
->       -> m_can_config_enable
->         -> m_can_cccr_update_bits
->=20
-> In commit cd5a46ce6fa6 ("can: m_can: don't enable transceiver when
-> probing"), m_can_niso_supported() was reworked to call
-> m_can_config_enable(). However, in m_can_config_enable(), it's noted
-> that CCCR_INIT must be set in order to set CCCR_CCE. The CCCR_INIT
-> bit is set later in m_can_dev_setup().
->=20
-> To fix the problem, move forcing standby mode (set CCCR_INIT) lines
-> before m_can_niso_supported() line in m_can_dev_setup().
->=20
-> Fixes: cd5a46ce6fa6 ("can: m_can: don't enable transceiver when probing")
-> Signed-off-by: Renjaya Raga Zenta <ragazenta@gmail.com>
-> ---
-> Link: https://lore.kernel.org/linux-can/20241106123700.119074-1-renjaya.z=
-enta@formulatrix.com
+Yes that patch fixes my problem. I wonder why I missed that, I think 
+I've seen that before.
 
-Can you check if
-https://lore.kernel.org/all/e247f331cb72829fcbdfda74f31a59cbad1a6006.172828=
-8535.git.matthias.schiffer@ew.tq-group.com/
-fixes your problem?
+Thanks,
 
-Marc
-
-> ---
->  drivers/net/can/m_can/m_can.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index 533bcb77c9f934e5840b076ded948f8256ad2ad0..9345b181c5e31e1507a4dadc3=
-1e5f15545e1dc98 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1685,7 +1685,7 @@ static int m_can_niso_supported(struct m_can_classd=
-ev *cdev)
->  static int m_can_dev_setup(struct m_can_classdev *cdev)
->  {
->  	struct net_device *dev =3D cdev->net;
-> -	int m_can_version, err, niso;
-> +	int m_can_version, err, ret, niso;
-> =20
->  	m_can_version =3D m_can_check_core_release(cdev);
->  	/* return if unsupported version */
-> @@ -1710,6 +1710,12 @@ static int m_can_dev_setup(struct m_can_classdev *=
-cdev)
->  		CAN_CTRLMODE_FD |
->  		CAN_CTRLMODE_ONE_SHOT;
-> =20
-> +	/* Forcing standby mode should be redundant, as the chip should be in
-> +	 * standby after a reset. Write the INIT bit anyways, should the chip
-> +	 * be configured by previous stage.
-> +	 */
-> +	ret =3D m_can_cccr_update_bits(cdev, CCCR_INIT, CCCR_INIT);
-
-You don't check the return value.
-
-> +
->  	/* Set properties depending on M_CAN version */
->  	switch (cdev->version) {
->  	case 30:
-> @@ -1746,11 +1752,7 @@ static int m_can_dev_setup(struct m_can_classdev *=
-cdev)
->  		return -EINVAL;
->  	}
-> =20
-> -	/* Forcing standby mode should be redundant, as the chip should be in
-> -	 * standby after a reset. Write the INIT bit anyways, should the chip
-> -	 * be configured by previous stage.
-> -	 */
-> -	return m_can_cccr_update_bits(cdev, CCCR_INIT, CCCR_INIT);
-> +	return ret;
->  }
-> =20
->  static void m_can_stop(struct net_device *dev)
->=20
-> ---
-> base-commit: c7d876495ffad298d7f5fa252000c80fd4fd1b74
-> change-id: 20241217-m_can_fix-af60055d7c96
->=20
-> Best regards,
-> --=20
-> Renjaya Raga Zenta <ragazenta@gmail.com>
->=20
->=20
->=20
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---hh6pzxltlur3hrxh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdhbboACgkQKDiiPnot
-vG9pTwgAmRevKqcb7Wsx73ouDmJwMV5mB5inhUPeWFnqQ+oxBnzA0n8Mej2XZQdi
-fuF4sIOnHsR6e+QO9RfUu1Q1HJXMx97cXsDFFItu+CAWIJcN+MykPy7AqjvM7hAb
-1txPolbWvbRCqrAtTeNUFbIIkP/2Yj8vc1jjrm1jH4bZZIvjsWPBWyLNvwpzni1g
-JP4X69IQSeWabMxwvuK5lB2JTyNNTbm+N1EL8DxcHyYSMbkxYFmHuZ/wMXwBYKdJ
-aeBUixkZH5XLDnivvlRdFt9EBrZ5qUHzs5uxDZ8bmt3iPzUjC+qjy1cAUYhajitB
-vULup0jBxH/6lt6D8/gc6WLK8JHEKA==
-=uoPf
------END PGP SIGNATURE-----
-
---hh6pzxltlur3hrxh--
+Renjaya
 
