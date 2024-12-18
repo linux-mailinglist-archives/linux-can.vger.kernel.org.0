@@ -1,31 +1,30 @@
-Return-Path: <linux-can+bounces-2434-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2437-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BB219F6589
-	for <lists+linux-can@lfdr.de>; Wed, 18 Dec 2024 13:07:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59FAC9F65B4
+	for <lists+linux-can@lfdr.de>; Wed, 18 Dec 2024 13:17:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E01C716CA58
-	for <lists+linux-can@lfdr.de>; Wed, 18 Dec 2024 12:07:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E5EA7A1C5E
+	for <lists+linux-can@lfdr.de>; Wed, 18 Dec 2024 12:17:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B79E19F49F;
-	Wed, 18 Dec 2024 12:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564761A262D;
+	Wed, 18 Dec 2024 12:17:31 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6957419E97B
-	for <linux-can@vger.kernel.org>; Wed, 18 Dec 2024 12:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE4F1991A8
+	for <linux-can@vger.kernel.org>; Wed, 18 Dec 2024 12:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734523649; cv=none; b=nosD08OKMSZdJiFN0MUt+VFcF3Uhtu7TJ4+V78yU85OcGN6tx5scVxllSk4pImvVVLyE2fkDXmXo+SGcVgVKCg6tRZG6jMdAHDTDHOySvkKxCrAsPbH6bMp7u8iHe984SUrYmDXfCRCCD0d8EslyWfcmDzyjwaAvBBJE5cVZiTU=
+	t=1734524251; cv=none; b=mQgC0IHTQ/no5A/IEyGRIPVNU4FMs13IQIeXeiwhxMJVDCMrMcKJatCFfGfBuTFk6jjAaaLev8DjnQCEbs+IruRpBA1qKddJzc6znu6tXJ+ShuHeEij8oYpms+YGL3Sp48lUaCnayyGDY1/kd4XPXPkZDvs1IGk9FNtwcRAh24o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734523649; c=relaxed/simple;
-	bh=A3Q3aiySICafUyM/FGYPJvj3icOL6IVuLCKT1a9ywDI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pw2yapzvqMWSK4mQxOkNtfkk5O8wN86hA7bi3V7/IIjvU1sVGTiWClsga6eTRohQTSt1aNjCKvV04UWreKha5PJtKKkDwlB3VJ8uW1q4OokYKOOF4s/6QMKLeiDU55d4GuUOfRqU9dME1ta5J/kDKh8nKbOrp0+k8/08uFdJwJE=
+	s=arc-20240116; t=1734524251; c=relaxed/simple;
+	bh=K3Q5friwXF+y+4U48NWKPARZppEkjNyoH+uGCDtDhp8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=vFgDGljjN/WqVOgnDR1rBd6lzLQfu04TzUOEzZKOMFC7ZxM5wAz8wXr4QBGyaOG6SKzVpbosZRKi2gGF9+xf+pBcTLOcRzEAs+qSp03+cGrzOFlHPluquWawAuPWQxUS5EO5NudTuV3apsBoI0znDUUXkZe6x4+RW5pzlFv7kzg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,88 +32,89 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tNspf-0001Du-FG; Wed, 18 Dec 2024 13:07:15 +0100
+	id 1tNszV-0003Tc-ST
+	for linux-can@vger.kernel.org; Wed, 18 Dec 2024 13:17:25 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tNspd-0041hz-2h;
-	Wed, 18 Dec 2024 13:07:14 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	id 1tNszU-0041vH-2u
+	for linux-can@vger.kernel.org;
+	Wed, 18 Dec 2024 13:17:25 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 5B90B391681
+	for <linux-can@vger.kernel.org>; Wed, 18 Dec 2024 12:17:25 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 4B15B391653;
-	Wed, 18 Dec 2024 12:07:14 +0000 (UTC)
-Date: Wed, 18 Dec 2024 13:07:14 +0100
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 55B2F391676;
+	Wed, 18 Dec 2024 12:17:24 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f5cbc05e;
+	Wed, 18 Dec 2024 12:17:23 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: =?utf-8?Q?Pr=C3=BCckl?= Thomas <T.Prueckl@hainzl.at>
-Cc: "rcsekar@samsung.com" <rcsekar@samsung.com>, 
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: AW: net: m_can: missing mutexes in tx_work_queue and isr-handler
-Message-ID: <20241218-athletic-pig-of-perfection-14a7e6-mkl@pengutronix.de>
-References: <f6a9e128fbc04dcebd70e9b254b344e2@hainzl.at>
- <20241210-sly-impressive-kittiwake-aff4f1-mkl@pengutronix.de>
- <a1de308c7f96475281612c8ffa6fc820@hainzl.at>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH net 0/2] pull-request: can 2024-12-18
+Date: Wed, 18 Dec 2024 13:10:26 +0100
+Message-ID: <20241218121722.2311963-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5tf5rj2qqgncud3h"
-Content-Disposition: inline
-In-Reply-To: <a1de308c7f96475281612c8ffa6fc820@hainzl.at>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+Hello netdev-team,
 
---5tf5rj2qqgncud3h
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: AW: net: m_can: missing mutexes in tx_work_queue and isr-handler
-MIME-Version: 1.0
+this is a pull request of 21 patches for net/master.
 
-On 10.12.2024 15:04:29, Pr=C3=BCckl Thomas wrote:
-> > Can you show us the patch?
->=20
-> My current patch currently just locks the isr and work queue.
-> I guess that additional locks are necessary too (e.g. in m_can_close)
->=20
-> Subject: [PATCH] can: m_can: added mutex to lock isr and tx work queue
-
-Can you make the locking finer, I mean only lock the register access
-which is critical? And keep in mind, that you cannot use mutexes from
-the non-threaded IRQ handler, i.e. in non-peripheral mode.
+There are 2 patches by Matthias Schiffer for the m_can_pci driver that
+handles the m_can cores found on the Intel Elkhart Lake processor.
+They fix the initialization and the interrupt handling under high CAN
+bus load.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+---
 
---5tf5rj2qqgncud3h
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 954a2b40719a21e763a1bba2f0da92347e058fce:
 
------BEGIN PGP SIGNATURE-----
+  rtnetlink: Try the outer netns attribute in rtnl_get_peer_net(). (2024-12-17 17:54:18 -0800)
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdiuu8ACgkQKDiiPnot
-vG9XGwgAg8vs6NO1w3OxfUo1wdYCImZJWLSoudufFzANzVv2ccG1dvCM6tedZqRN
-vYnUyqN523e5+hduVEN/kjCreHCvTocHLqzdFKRkABrL8KR9OdbTwR6fpy1Y1W+m
-YvPx7ua7NaQkZb/waXL2aL8tfXgwh2OKkoE5kU8opo8SsbgSpjOFDbv5Rfa1WDj1
-9YILV2TJjWvzUw0d1+W6eOeFz/DhlggK4WDOk78zY0JBhqfSBDDKzKSOBaNCl16x
-lx/Q8LZjODw7H0pvJ8Po5wRzlpULN34y4jZdDyGYR+rO/IkgNymLKaIZukm3uoL/
-1A51s6wsHKZ4URDz1Un4739l5ScX0A==
-=XDb7
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---5tf5rj2qqgncud3h--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.13-20241218
+
+for you to fetch changes up to 87f54c12195150fec052f6a5458fcecdda5ec62f:
+
+  Merge patch series "can: m_can: set init flag earlier in probe" (2024-12-18 09:32:14 +0100)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.13-20241218
+
+----------------------------------------------------------------
+Marc Kleine-Budde (1):
+      Merge patch series "can: m_can: set init flag earlier in probe"
+
+Matthias Schiffer (2):
+      can: m_can: set init flag earlier in probe
+      can: m_can: fix missed interrupts with m_can_pci
+
+ drivers/net/can/m_can/m_can.c     | 36 ++++++++++++++++++++++++++----------
+ drivers/net/can/m_can/m_can.h     |  1 +
+ drivers/net/can/m_can/m_can_pci.c |  1 +
+ 3 files changed, 28 insertions(+), 10 deletions(-)
+
 
