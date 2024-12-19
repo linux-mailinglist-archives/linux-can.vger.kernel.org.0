@@ -1,93 +1,122 @@
-Return-Path: <linux-can+bounces-2451-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2452-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 661BA9F710A
-	for <lists+linux-can@lfdr.de>; Thu, 19 Dec 2024 00:42:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 577079F719B
+	for <lists+linux-can@lfdr.de>; Thu, 19 Dec 2024 02:17:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD0DB188FF81
-	for <lists+linux-can@lfdr.de>; Wed, 18 Dec 2024 23:42:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6065B7A2FFA
+	for <lists+linux-can@lfdr.de>; Thu, 19 Dec 2024 01:17:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 734311FD7B5;
-	Wed, 18 Dec 2024 23:38:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E045B2AE96;
+	Thu, 19 Dec 2024 01:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SMB95StF"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="ZPCOb3Aw"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m60103.netease.com (mail-m60103.netease.com [210.79.60.103])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2947E19CCEC;
-	Wed, 18 Dec 2024 23:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA24AD5A;
+	Thu, 19 Dec 2024 01:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.79.60.103
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734565081; cv=none; b=I4mObAh5Uz/8WJHj4fjezexar8bkfSG4/kZoQ+f0y0L/MUpbsLoBnAKBL853s4VsCm5SgpVGeFewh36EbxNTcUuQE6U1DUb7tB9OXlyNtKpuDs5zW+IaQryuy7SXUS1dN3HpuiN7qPEilzqFJGcef71bpu8+ofCFhceOVm3XJog=
+	t=1734571045; cv=none; b=okcM+X5KiHQKG7Jro7toHz5EXHDYNXLP/D6o30Os5gU28qdHaddCA5KRjpBBS1LrWhqiAeURg5eWoB5ejFpYMFEKCasPVNicOKSfJS/MjHEW9g0Q2bEOiUZpCuX2YluYiN3VJpYEFE8oBGKZcNsjGjwYdI6inTLOP0sMplo3X+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734565081; c=relaxed/simple;
-	bh=TE9MeQggFrUNHk7GnpsPc1qOO621qZHYt6YKXQvYGUs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uUFcnQ9HasVvhYRx6bQG2VCh7AJ68uSHy46mgS2LED2hmIDRPkWAPwVaNSwabrwBXmtSU+Qqqou6Rg17Nu7bet9yj1m2Qy1qc0VAkmUVavJN578pEdKt6/4cp4yk1Fsjo890fdj230dO6+dCzD6bI57uKadixfKK0u624IgY7rM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SMB95StF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9872C4CECD;
-	Wed, 18 Dec 2024 23:37:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734565080;
-	bh=TE9MeQggFrUNHk7GnpsPc1qOO621qZHYt6YKXQvYGUs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=SMB95StF87lMswBTmoy5w+GFfz3iCmebU4gbeFCJK7sk9+I16C9cplpIYLf0W9Qul
-	 QxmbLpIR7/E6R0kf5eKkyEYZx8mBxxIidhrnHdr7M4IeFwaA3J5y2wWv4oQmfmxORv
-	 D1j6lmCsAMuKx+jWknHgUh8GEb58788JfHfg1N+UuccR+d6b8ALbB6vzMOTnfrbNpk
-	 nrbFqHQ3vUtoVAGtl14Lhqr/MD+oEcAwxAPHEo6k2fp/JS6ZLbq87qH4FknN0j6i1c
-	 yDKA9jZ2UNpUbRlqHX4gnIrK03GFSOZ91dNOO2mqCDLBVJi/w2/4kNnX7grOmVIZvb
-	 15jS4zu2mRPLw==
-Date: Wed, 18 Dec 2024 15:37:59 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Xiao Liang <shaw.leon@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, Kuniyuki
- Iwashima <kuniyu@amazon.com>, Donald Hunter <donald.hunter@gmail.com>,
- Paolo Abeni <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>,
- David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, Ido
- Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Simon
- Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko
- <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
- linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
- osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
- linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
- linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
- bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v6 11/11] selftests: net: Add test cases for
- link and peer netns
-Message-ID: <20241218153759.672b7014@kernel.org>
-In-Reply-To: <20241218130909.2173-12-shaw.leon@gmail.com>
-References: <20241218130909.2173-1-shaw.leon@gmail.com>
-	<20241218130909.2173-12-shaw.leon@gmail.com>
+	s=arc-20240116; t=1734571045; c=relaxed/simple;
+	bh=e7jMw5nuQprl7AvcvKzUZSM092iEsTyrE8UmwNrHPS8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=mLUAlcitGa7z6YdUBKZr+d9QMjTqFGb7IJTbBEkTvrumVJDAHzdHcJomMsFXV53r9L0rBW5HgxD3XiAYmku4YURIKag0eM0IT1mtClhhVFvO2OKJ5Su3mNi3Jrh4TAcP/fmKlDasQWB+7V0uhtr4Fs/A0pJywsFIg68ygimKWnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=ZPCOb3Aw; arc=none smtp.client-ip=210.79.60.103
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from rockchip.. (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 626be1a6;
+	Thu, 19 Dec 2024 09:12:03 +0800 (GMT+08:00)
+From: Elaine Zhang <zhangqing@rock-chips.com>
+To: zhangqing@rock-chips.com,
+	mkl@pengutronix.de,
+	kernel@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	heiko@sntech.de,
+	cl@rock-chips.com,
+	kever.yang@rock-chips.com
+Cc: linux-can@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: [PATCH v2 2/2] arm64: dts: rockchip: rk3576: add can dts nodes
+Date: Thu, 19 Dec 2024 09:11:59 +0800
+Message-Id: <20241219011159.3357530-3-zhangqing@rock-chips.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241219011159.3357530-1-zhangqing@rock-chips.com>
+References: <20241219011159.3357530-1-zhangqing@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGk0aTlZDGklKGkNCHR9DS05WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCS0
+	NVSktLVUpCWQY+
+X-HM-Tid: 0a93dc78c72003a3kunm626be1a6
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OVE6Ngw6NjIKPhcDIh8IMEIt
+	LgkaFE5VSlVKTEhPTkxLTElPSk1MVTMWGhIXVQETGhUcChIVHDsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUpPQks3Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=ZPCOb3AwfxvQsOncQo5jgZGTjSUcCXRF6cHwKJSQv42xCl8KKCNjHXTY8HAmCNao2nydA+BIMDnMd4rfSW14Fp6yM/ho+UOabXTJ9gi6nkTIS4SBjysNpmJOCgvjAlwRl0ZDt0uHWQCBrteIIEnUWyWSrS1GAWVFg8hgjzhcI04=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=NF4rStkw0AAJ3+AgUeRof/dz2uW1bUTsT5f/s3AyNRY=;
+	h=date:mime-version:subject:message-id:from;
 
-On Wed, 18 Dec 2024 21:09:09 +0800 Xiao Liang wrote:
->  - Add test for creating link in another netns when a link of the same
->    name and ifindex exists in current netns.
->  - Add test to verify that link is created in target netns directly -
->    no link new/del events should be generated in link netns or current
->    netns.
->  - Add test cases to verify that link-netns is set as expected for
->    various drivers and combination of namespace-related parameters.
+Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+---
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi | 26 ++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Nice work!
-
-You need to make sure all the drivers the test is using are enabled by
-the selftest kernel config: tools/testing/selftests/net/config
-
-This may be helpful:
-https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style#how-to-build
+diff --git a/arch/arm64/boot/dts/rockchip/rk3576.dtsi b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
+index 436232ffe4d1..eefae2b5e6e4 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3576.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
+@@ -1195,6 +1195,32 @@ dmac2: dma-controller@2abd0000 {
+ 			#dma-cells = <1>;
+ 		};
+ 
++		can0: can@2ac00000 {
++			compatible = "rockchip,rk3576-canfd";
++			reg = <0x0 0x2ac00000 0x0 0x1000>;
++			interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cru CLK_CAN0>, <&cru HCLK_CAN0>;
++			clock-names = "baudclk", "apb_pclk";
++			resets = <&cru SRST_CAN0>, <&cru SRST_H_CAN0>;
++			reset-names = "can", "can-apb";
++			dmas = <&dmac0 20>;
++			dma-names = "rx";
++			status = "disabled";
++		};
++
++		can1: can@2ac10000 {
++			compatible = "rockchip,rk3576-canfd";
++			reg = <0x0 0x2ac10000 0x0 0x1000>;
++			interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cru CLK_CAN1>, <&cru HCLK_CAN1>;
++			clock-names = "baudclk", "apb_pclk";
++			resets = <&cru SRST_CAN1>, <&cru SRST_H_CAN1>;
++			reset-names = "can", "can-apb";
++			dmas = <&dmac1 21>;
++			dma-names = "rx";
++			status = "disabled";
++		};
++
+ 		i2c1: i2c@2ac40000 {
+ 			compatible = "rockchip,rk3576-i2c", "rockchip,rk3399-i2c";
+ 			reg = <0x0 0x2ac40000 0x0 0x1000>;
 -- 
-pw-bot: cr
+2.34.1
+
 
