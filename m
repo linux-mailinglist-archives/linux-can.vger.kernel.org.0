@@ -1,144 +1,206 @@
-Return-Path: <linux-can+bounces-2469-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2470-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 450919F91E9
-	for <lists+linux-can@lfdr.de>; Fri, 20 Dec 2024 13:06:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5542B9F926E
+	for <lists+linux-can@lfdr.de>; Fri, 20 Dec 2024 13:42:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 559801897173
-	for <lists+linux-can@lfdr.de>; Fri, 20 Dec 2024 12:06:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3148218988E8
+	for <lists+linux-can@lfdr.de>; Fri, 20 Dec 2024 12:42:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2925C1BCA19;
-	Fri, 20 Dec 2024 12:06:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5395C215706;
+	Fri, 20 Dec 2024 12:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZSfMj0bY"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD1B1C3027
-	for <linux-can@vger.kernel.org>; Fri, 20 Dec 2024 12:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289302153CD
+	for <linux-can@vger.kernel.org>; Fri, 20 Dec 2024 12:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734696388; cv=none; b=foSkukhIJw71ri/MGfmj+01pzat7WI90/ka8XmuMpz2MiNXBCQ3W9Rv0v+9XrqwqGybQoYqvmSFZCgA8b5HKvt7e+PJaJI35pbE8JR3nxwKS7KCB+zrMeQ3BAzupVafwGpPyqSRhvu8KZXzuBjZzZTVKn/WLJL2nMpL9r0rGWEs=
+	t=1734698535; cv=none; b=RauxwwDFsbykUheYCDCF+Gc4i0kQcdPZcXgIm3HWwiewbboNtVVAL/GhLtVkPT//waf3wU+wnTCpNDMwSJBRy3qZVNoESpvhrOGovLeGLKQZ9erxVvMa9dfISWdWCk/B7IT0rNZcwsVp6UuzINSquegwdS8BKBgPwawybVZU9OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734696388; c=relaxed/simple;
-	bh=30MbtmhXHnT8ga8C+x5EHziK5ZQ/9D+FcGao4N/6ybo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YDQmsCWre0w+7TL6pYs95PqfY3cTVIcJzDl44OfM4UFgFB8JHEhj4rYJ8w/eKVBw0MmOcUv0IKyu//EkugIyUdNxCiqEmyGXGOSW8ZZxyyXee+9Pe2PH9vSGHlLtCVWSe8v19tjxRLBjRgrMRhtiYxADrzPDwUCl/w8HFXZ4vxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tObli-0008UH-Kf; Fri, 20 Dec 2024 13:06:10 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tOblg-004Mzd-0v;
-	Fri, 20 Dec 2024 13:06:09 +0100
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 2E122392EF0;
-	Fri, 20 Dec 2024 12:06:06 +0000 (UTC)
-Date: Fri, 20 Dec 2024 13:06:01 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Elaine Zhang <zhangqing@rock-chips.com>
-Cc: kernel@pengutronix.de, mailhol.vincent@wanadoo.fr, heiko@sntech.de, 
-	cl@rock-chips.com, kever.yang@rock-chips.com, linux-can@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] net: can: rockchip: add can for RK3576 Soc
-Message-ID: <20241219-sapphire-vicugna-of-opposition-be748f-mkl@pengutronix.de>
-References: <20241219011159.3357530-1-zhangqing@rock-chips.com>
- <20241219011159.3357530-2-zhangqing@rock-chips.com>
+	s=arc-20240116; t=1734698535; c=relaxed/simple;
+	bh=HlBOh4jSSPlbfpktzNvwp+qwVjt5nv4jbi7s8EDlL/o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qe3hHNJnwsnLmbyC7PJQ6qNo+UEaRuPpAPpokOE/nsK6+7t1UQ0zbR1ssISDmRWHsOwXWrFR/jCG7hDaLO0dLHMHIp1aPp1pQ/S0wooCg5xFA3y6JMWq8JK4S5Y6DzCH3VbIfnN3N45gmH21htIp7KX9rrmqFejgk/XYUqfcbQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZSfMj0bY; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53df80eeeedso1837752e87.2
+        for <linux-can@vger.kernel.org>; Fri, 20 Dec 2024 04:42:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734698530; x=1735303330; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6JAaYSv0Ae1yeH34mVXmK+u6UW76Um4Sm/+sIA+YD/I=;
+        b=ZSfMj0bYjlPZLWmuWDgA4Da9C1QVUPPwtBC3SiYjXmMD/6V8MGsNjyi743ZCK4cWEH
+         ADdHj8y1WE6IG2U1TTb6MqyBGxX5zrf8lI9FmhF4C4wVYRzPDytmjUmu1nDf8IZffLzC
+         F8m1NxRDsyejLaLwV5VqD6qe9v/OgOSQE7m8H85NNa3bt0RpMur5sRcPwFbrQS1cBAEo
+         6ERxm3vBXfTUCa2xh5bIo5H55QjFiAd5f3nk2+H09b5MAvk1z6Lgl+DQlqjGm7zLN9GE
+         QnXi/ijgaaJAOk+1GEKyvwGL6O9yssG8C+2fvDNDwGyQK28onE+Zm/hXrFfUEqWH8tfy
+         8B1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734698530; x=1735303330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6JAaYSv0Ae1yeH34mVXmK+u6UW76Um4Sm/+sIA+YD/I=;
+        b=ZxKsgFWn6zTZ4uKlx+YoRygrlog4hnWS5C1RBKJ3rQHYEvNB1sdK8VT+W87MP+ox0U
+         yxZ/1AYxr514E9GKvzpxIQSFcZ7RcGDG5vPMQi+64vY2IeuivqMrCkDsw7lQpcRXaW29
+         VWiKKmL63peUfxT1imHrmNsq9wg6bMFZTjcPPnuKX0TcerIiXSioMA9UjpZ1QpcstYCJ
+         A7+tatCrUjWEUlo6PhrulCOecidvMeVfNe8KT8V/dJ5WChYMvgyJgVcoe4mNtPjb2h9E
+         R2CVLVdW/4SUMBdCNk4dFKbAtRb/aPbCYHGOKwoOdqaGHtyyIZq6vRyuck0iqcxz6MZz
+         iQnA==
+X-Forwarded-Encrypted: i=1; AJvYcCVm0fvoXgv8YzpgYNLPQRehMCSyWsfvS8MBCBUaa+24MCC65F8HdgG4xsKdiNGSJ6DVL0A+wlmXVFY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyooknfuIvo3DcCy5ArFhRf0eGhBu+huiSP1sDdWvWu24CnqWA
+	VXUb9O4nP7pQ5ugFSJwQkgE3yaZwoTfDgb3ddHV++rDu+REmvXuIgb6Sizb5TB5pQgfOAzD5wjZ
+	VOB2dAryI40EvlGs0V9c0pyRhNFVUDDewdp6S2A==
+X-Gm-Gg: ASbGncuA+t/VRsd39rNW4liUrYUvIKwgyHfmzugqz8AdU/Sjr9Ioq7BORYpO6viFXmz
+	YDD/R76wOI6eYOKUCI//oqyadaRHP688WqB6msg==
+X-Google-Smtp-Source: AGHT+IG/0DIpoBQtLX+2xTrpZ52kWuFm4zd5NY5XA3IybGxFiXX/atFeHWgT1av/lrPuINKlOWhHxww9t7kKEEWHrDk=
+X-Received: by 2002:ac2:4c48:0:b0:540:3579:f38f with SMTP id
+ 2adb3069b0e04-542295821afmr969235e87.37.1734698530305; Fri, 20 Dec 2024
+ 04:42:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eudui3nm55akuurq"
-Content-Disposition: inline
-In-Reply-To: <20241219011159.3357530-2-zhangqing@rock-chips.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---eudui3nm55akuurq
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-3-tmyu0@nuvoton.com>
+In-Reply-To: <20241210104524.2466586-3-tmyu0@nuvoton.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 20 Dec 2024 13:41:59 +0100
+Message-ID: <CACRpkdajLe94novxjsHkCCx3m5raB0DxMnnSegCqkdWxRoWazw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/7] gpio: Add Nuvoton NCT6694 GPIO support
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 1/2] net: can: rockchip: add can for RK3576 Soc
-MIME-Version: 1.0
 
-On 19.12.2024 09:11:58, Elaine Zhang wrote:
-> Is new controller:
-> Support CAN and CANFD protocol.
->=20
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+Hi Ming,
 
-Thanks for porting the rk3576 to the mainline driver. Looking at subtle
-differences between the IP cores I'm not sure if you want to add it to
-the existing driver or have a dedicated driver. But we can decide on
-this later. At least the mainline driver has a better structure than
-your original downstream driver.
+thanks for your patch!
 
-Why was the timestamp register removed from the registers? Previously
-the driver supported hardware timestamping. :(
+Some nits below:
 
-Some general comments here, a more detailed review will follow.
+On Tue, Dec 10, 2024 at 11:46=E2=80=AFAM Ming Yu <a0282524688@gmail.com> wr=
+ote:
 
-Why have bits been removed from several registers and the remaining ones
-moved? That doesn't make it easier for driver developers to cover new IP
-cores. :(
+> This driver supports GPIO and IRQ functionality for NCT6694 MFD
+> device based on USB interface.
+>
+> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+(...)
+> +#include <linux/gpio/driver.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/nct6694.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
 
-Please use FIELD_GET(), FIELD_PREP() macros instead of open coding shift
-and mask operations. See rest of the driver.
+#include <linux/bits.h>
+is missing, include it explicitly.
 
-Have you actually tested this code in both RX and TX direction? I don't
-see rkcanfd_handle_tx_int() being called?
+> +       return !(BIT(offset) & data->xmit_buf);
 
-What's the purpose of "rockchip,rx-max-data"?
+Here you use the BIT() macro from <linux/bits.h>
 
-Why do you add "rx_fifo_depth" to "struct rkcanfd_priv"? It's not used
-outside of rkcanfd_probe().
+> +static int nct6694_direction_input(struct gpio_chip *gpio, unsigned int =
+offset)
+> +{
+> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
+> +       int ret;
+> +
+> +       guard(mutex)(&data->lock);
+> +
+> +       ret =3D nct6694_read_msg(data->nct6694, NCT6694_GPIO_MOD,
+> +                              NCT6694_GPO_DIR + data->group,
+> +                              NCT6694_GPIO_LEN, &data->xmit_buf);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       data->xmit_buf &=3D ~(1 << offset);
 
-Can you configure the IP core for CAN-2.0 only mode, so that it only
-receives CAN-2.0 frames only?
+data->xmit_buf &=3D ~BIT(offset);
 
-regards,
-Marc
+> +static int nct6694_direction_output(struct gpio_chip *gpio,
+> +                                   unsigned int offset, int val)
+> +{
+> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
+> +       int ret;
+> +
+> +       guard(mutex)(&data->lock);
+> +
+> +       /* Set direction to output */
+> +       ret =3D nct6694_read_msg(data->nct6694, NCT6694_GPIO_MOD,
+> +                              NCT6694_GPO_DIR + data->group,
+> +                              NCT6694_GPIO_LEN, &data->xmit_buf);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       data->xmit_buf |=3D (1 << offset);
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+data->xmit_buf |=3D BIT(offset);
 
---eudui3nm55akuurq
-Content-Type: application/pgp-signature; name="signature.asc"
+> +       if (val)
+> +               data->xmit_buf |=3D (1 << offset);
+> +       else
+> +               data->xmit_buf &=3D ~(1 << offset);
 
------BEGIN PGP SIGNATURE-----
+Same
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdlXZAACgkQKDiiPnot
-vG83mQf/f6DaBGVIT5WusxNppsrY5LvjB2UCWh8j3u0AGBRxOL5ktwa/cZna9O4L
-BH0KOBH+K6mUQ6ssME6tH0EYz17DUbaaFnhPjVTRDGAQu0qktLXoFf0cRjiTo4vV
-xLLVVPn9++OTYFUQmN+SxWih0MHBK5+HhIUd+HZTw5GGWdt5V+Wh5kkS048slc9E
-mP2tspwcyzJaOAXz9zsdxOc540tcT4cfgI8GgzSIFiVtZWoliAEvgHFzNcp6ZZts
-GWRSK2Lf/sf6+mmbHNpa0GhG7M6zqu+nC6oVgVuWY23RO6laQvUTSktw0Ek9nq2f
-EtgEcqjYtJiSK62wZQ8ijhtgtX6D+Q==
-=AKwc
------END PGP SIGNATURE-----
+> +static void nct6694_set_value(struct gpio_chip *gpio, unsigned int offse=
+t,
+> +                             int val)
+> +{
+(...)
+> +       if (val)
+> +               data->xmit_buf |=3D (1 << offset);
+> +       else
+> +               data->xmit_buf &=3D ~(1 << offset);
 
---eudui3nm55akuurq--
+Same
+
+> +static irqreturn_t nct6694_irq_handler(int irq, void *priv)
+> +{
+> +       struct nct6694_gpio_data *data =3D priv;
+> +       unsigned char status;
+> +
+> +       guard(mutex)(&data->lock);
+> +
+> +       nct6694_read_msg(data->nct6694, NCT6694_GPIO_MOD,
+> +                        NCT6694_GPI_STS + data->group,
+> +                        NCT6694_GPIO_LEN, &data->xmit_buf);
+> +
+> +       status =3D data->xmit_buf;
+> +
+> +       while (status) {
+> +               int bit =3D __ffs(status);
+> +
+> +               data->xmit_buf =3D BIT(bit);
+> +               handle_nested_irq(irq_find_mapping(data->gpio.irq.domain,=
+ bit));
+> +               status &=3D ~(1 << bit);
+
+Same
+
+Just use BIT() consistently please.
+
+Yours,
+Linus Walleij
 
