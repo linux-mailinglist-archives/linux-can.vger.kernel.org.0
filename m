@@ -1,57 +1,57 @@
-Return-Path: <linux-can+bounces-2476-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2477-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AD0D9FA054
-	for <lists+linux-can@lfdr.de>; Sat, 21 Dec 2024 12:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 325539FA05D
+	for <lists+linux-can@lfdr.de>; Sat, 21 Dec 2024 12:15:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5ABAA1890832
-	for <lists+linux-can@lfdr.de>; Sat, 21 Dec 2024 11:15:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 703CA18909E3
+	for <lists+linux-can@lfdr.de>; Sat, 21 Dec 2024 11:15:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BAD1F2C5D;
-	Sat, 21 Dec 2024 11:15:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C541F37C5;
+	Sat, 21 Dec 2024 11:15:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b="D0Dcjtqp"
+	dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b="S92GJ8D5"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.eurecom.fr (smtp.eurecom.fr [193.55.113.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DF41F37A5;
-	Sat, 21 Dec 2024 11:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3F51F2C58;
+	Sat, 21 Dec 2024 11:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.55.113.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734779719; cv=none; b=k4nQlytifw9SPtkoUcrOlsz0FfUNsnNlttIeww5wVGvXaKKXS+cDx1CWUFQHHHpw9w1LbwCkYRh9rZ4aAmDmGhpSxu+xw53qb1SQH2qKIELaX+K5/xdBJOe+kG0MV9oR7Y3j8CGktoohwrmIESenXKslYnJN2KXFQBU51Wo0Ch8=
+	t=1734779723; cv=none; b=u+I4gPoEUyNGd1+V9cTZBskBUkI0XitEoTABQ99gph+Rb4WfD2W3C12OPCExe0hp8tcVPcypBb+j6endp8U+FXgTTgtU1uG0rZAd8nxXOpitur9EHNUVUkI7JqOrLnjQdPl+31a97cpWL9SQR1nO3xBFGeNORq3j9KlmCyrA9Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734779719; c=relaxed/simple;
-	bh=uEmo1klH0U7SH5rDjz3FuRRP2JFUHt/yzHHWnAmkJws=;
+	s=arc-20240116; t=1734779723; c=relaxed/simple;
+	bh=6Qt+jRjg0I6KADSD1c8k86YxGtfF5mXKwmnLgO/3LqU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DNkDZ9Kt+uLdyNV8YLQmbLPQPpqKbrEh+K2jp+FuvlYPyuF1RtcMkBLIvkRUOvH7sPfMCFSGgF6YFlnJss40GMH5l4UFxJwBJu/6sFu8LIVm1vShtQMPgO+KtkhP16Fh/F1GEoxQhGIT15BDs0qGOXDIj0NxKmtbUrabFY20X6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr; spf=pass smtp.mailfrom=eurecom.fr; dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b=D0Dcjtqp; arc=none smtp.client-ip=193.55.113.210
+	 MIME-Version; b=gzLS4eSHcQwsmD4uqfZGCW3mzoMp3VTivpI5JPSDAi/x3In4nG/BK51FtT9T5EGhJiLl7Qbe7LcMT547JTg/nfjDJ68J5+LvADDMa0bFnDzj8bjCEZ2JH24s8dHYItyEU27ucE44dGCjnrTtJPc7T9MFcH63XYIoWz0Eqz0FcDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr; spf=pass smtp.mailfrom=eurecom.fr; dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b=S92GJ8D5; arc=none smtp.client-ip=193.55.113.210
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eurecom.fr
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=eurecom.fr; i=@eurecom.fr; q=dns/txt; s=default;
-  t=1734779716; x=1766315716;
+  t=1734779720; x=1766315720;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=uEmo1klH0U7SH5rDjz3FuRRP2JFUHt/yzHHWnAmkJws=;
-  b=D0DcjtqpcpDlW6Wn6VM2XID4PiRCRuag3oWs6kdNg7On7I81jUtEf7Xf
-   v+EyKeKmlTAisQGGCLX8pQiOnKuADmbrRgNzdGxshquRAaf8YcsitH4nB
-   arWMFIndvoj6Ki3RF+njRJckqN5m9EwG1ZXlIAyiRJO6HcyQmP9/MUL9w
-   U=;
-X-CSE-ConnectionGUID: R61O3hRBSjuysspIkS5DpA==
-X-CSE-MsgGUID: p9IExXMRSMCJ6o8EooLJsg==
+  bh=6Qt+jRjg0I6KADSD1c8k86YxGtfF5mXKwmnLgO/3LqU=;
+  b=S92GJ8D5bj80jrbpKSg8MkUDK7PHYxRLvpqL79XF4CGQ//pFYDH23znw
+   WAtihPKw045xBNVCfESa0vL9+bBYhvCeAVfbNMRk5WP6psBcY58A6csCG
+   uJypSQWwXkLNuZadKnjJXDL/x2h+bWVZSLOiJFpleVieTlhUnZhAr7xsZ
+   k=;
+X-CSE-ConnectionGUID: +R2CjOwpT16CMchJvThsBw==
+X-CSE-MsgGUID: IsSiGuV2SIS3ZOPUnixErQ==
 X-IronPort-AV: E=Sophos;i="6.12,253,1728943200"; 
-   d="scan'208";a="28285769"
+   d="scan'208";a="28285770"
 Received: from waha.eurecom.fr (HELO smtps.eurecom.fr) ([10.3.2.236])
-  by drago1i.eurecom.fr with ESMTP; 21 Dec 2024 12:15:07 +0100
+  by drago1i.eurecom.fr with ESMTP; 21 Dec 2024 12:15:10 +0100
 Received: from localhost.localdomain (88-183-119-157.subs.proxad.net [88.183.119.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtps.eurecom.fr (Postfix) with ESMTPSA id 9155D24E0;
-	Sat, 21 Dec 2024 12:15:06 +0100 (CET)
+	by smtps.eurecom.fr (Postfix) with ESMTPSA id 1BB1624E1;
+	Sat, 21 Dec 2024 12:15:09 +0100 (CET)
 From: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
 To: linux-media@vger.kernel.org,
 	linux-mips@vger.kernel.org,
@@ -69,16 +69,14 @@ Cc: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v2 0/3] broadcom, ethernet/marvell,cx231xx,can/dev: Remove unused values and dead code
-Date: Sat, 21 Dec 2024 12:06:46 +0100
-Message-ID: <20241221111454.1074285-1-ariel.otilibili-anieli@eurecom.fr>
+	Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH v2 1/3] drivers/firmware/broadcom, ethernet/marvell: Remove unused values
+Date: Sat, 21 Dec 2024 12:06:47 +0100
+Message-ID: <20241221111454.1074285-2-ariel.otilibili-anieli@eurecom.fr>
 X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241221035352.1020228-1-ariel.otilibili-anieli@eurecom.fr>
+In-Reply-To: <20241221111454.1074285-1-ariel.otilibili-anieli@eurecom.fr>
 References: <20241221035352.1020228-1-ariel.otilibili-anieli@eurecom.fr>
+ <20241221111454.1074285-1-ariel.otilibili-anieli@eurecom.fr>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -87,28 +85,42 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello,
-
-This series clears out the Coverity IDs 1487817, 1561102, 1497123,
-& 1269153.
-
-Thank you,
---
-v2:
-* fixed CI warnings
-* see, https://linux-media.pages.freedesktop.org/-/users/patchwork/-/jobs/68562001/artifacts/report.htm
-
-Ariel Otilibili (3):
-  drivers/firmware/broadcom, ethernet/marvell: Remove unused values
-  usb/cx231xx: Remove unused value
-  net/can/dev: Remove dead code
-
+Coverity-Ids: 1487817, 1561102
+Signed-off-by: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
+---
  drivers/firmware/broadcom/tee_bnxt_fw.c                   | 2 --
- drivers/media/usb/cx231xx/cx231xx-avcore.c                | 1 -
- drivers/net/can/dev/dev.c                                 | 2 --
  drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c | 2 --
- 4 files changed, 7 deletions(-)
+ 2 files changed, 4 deletions(-)
 
+diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
+index 40e3183a3d11..e0ea4ddb9a74 100644
+--- a/drivers/firmware/broadcom/tee_bnxt_fw.c
++++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
+@@ -143,8 +143,6 @@ int tee_bnxt_copy_coredump(void *buf, u32 offset, u32 size)
+ 	prepare_args(TA_CMD_BNXT_COPY_COREDUMP, &arg, param);
+ 
+ 	while (rbytes)  {
+-		nbytes = rbytes;
+-
+ 		nbytes = min_t(u32, rbytes, param[0].u.memref.size);
+ 
+ 		/* Fill additional invoke cmd params */
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
+index 6cc7a78968fc..0584528485e6 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
+@@ -329,11 +329,9 @@ static int cn10k_mcs_write_rx_flowid(struct otx2_nic *pfvf,
+ 	mac_da = ether_addr_to_u64(secy->netdev->dev_addr);
+ 
+ 	req->data[0] = FIELD_PREP(MCS_TCAM0_MAC_DA_MASK, mac_da);
+-	req->mask[0] = ~0ULL;
+ 	req->mask[0] = ~MCS_TCAM0_MAC_DA_MASK;
+ 
+ 	req->data[1] = FIELD_PREP(MCS_TCAM1_ETYPE_MASK, ETH_P_MACSEC);
+-	req->mask[1] = ~0ULL;
+ 	req->mask[1] &= ~MCS_TCAM1_ETYPE_MASK;
+ 
+ 	req->mask[2] = ~0ULL;
 -- 
 2.47.1
 
