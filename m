@@ -1,103 +1,103 @@
-Return-Path: <linux-can+bounces-2479-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2480-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3520A9FA060
-	for <lists+linux-can@lfdr.de>; Sat, 21 Dec 2024 12:16:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A18AD9FA146
+	for <lists+linux-can@lfdr.de>; Sat, 21 Dec 2024 16:18:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDDA87A1005
-	for <lists+linux-can@lfdr.de>; Sat, 21 Dec 2024 11:16:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF06D1887E98
+	for <lists+linux-can@lfdr.de>; Sat, 21 Dec 2024 15:18:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3589F1F543B;
-	Sat, 21 Dec 2024 11:15:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5453E1F8661;
+	Sat, 21 Dec 2024 15:18:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b="zJzq7UBa"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ZvahHlPJ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.eurecom.fr (smtp.eurecom.fr [193.55.113.210])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6B91F0E3C;
-	Sat, 21 Dec 2024 11:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.55.113.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8F42EB00;
+	Sat, 21 Dec 2024 15:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734779724; cv=none; b=hFXUip8m3wkTeUDPFNkeP/YYPQzFnZHpWctNHx9bH5ri6dBg3H+/CFd8xYB04P673Bh3ROEcfWV38TilZCq4Rr49XevvRkp7LQc+Uck/kg8jY5qLyfy6qQZ72LeaSHXbGOtxVBOgUks2MoBdCNW7a8iIsYRFq6VyIDCi8oAI7XU=
+	t=1734794284; cv=none; b=IiZvVx1uH80PBVPJ29qG9XGppTt3zDRy84K68XNBMshNsDg0ZxQRvWlbakOpgPaUuUE8dbnx3wyKbVIFeYt6fVYDNqNpNsj+ikW5DYADyDkzGSpNi+YfDa96jVd/PfP/gr98TSeT5cwhHx4rbSYARke0BAA8ZrYX1pXi6lLKTxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734779724; c=relaxed/simple;
-	bh=qyuZSQuSPdf+MYhk0zy0wHji1939KejojCXtx3DRgXA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lAobpJ/5+3JMgsAOxhgWZFGnId1vUPI4V3h9XSMyKLMIFmMfCAQaK0n9KUrf8AVHJTU03oySa/+xpTBANpCbDWvexuQVMiUt+OrUhZi6bKfhIk4vNbHenT3r0O+W6nODUfES3F9rQg7flXjYmdCYedNz3kqUMdGh2qJ8D/tLWOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr; spf=pass smtp.mailfrom=eurecom.fr; dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b=zJzq7UBa; arc=none smtp.client-ip=193.55.113.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eurecom.fr
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=eurecom.fr; i=@eurecom.fr; q=dns/txt; s=default;
-  t=1734779722; x=1766315722;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qyuZSQuSPdf+MYhk0zy0wHji1939KejojCXtx3DRgXA=;
-  b=zJzq7UBa0jfvwb+7LaP/COgp9O07a51HzDsUyuoxC0Bfe4Ru4qqEzExU
-   Ou1UsOThjxJ35P4mX1nPi4c4I5NGW2XkMdg6HezsCRGj3wOzaT4yEz3h3
-   IB2elz0wG9IdWCYtwhyn6HddIr+3mQchIlSbwQWwbQbCG/ICFQc4MqS+u
-   c=;
-X-CSE-ConnectionGUID: zjX0CKoeTtyYI2U61AsfwQ==
-X-CSE-MsgGUID: iNsk4kxzSX2gvtZZPyxRwQ==
-X-IronPort-AV: E=Sophos;i="6.12,253,1728943200"; 
-   d="scan'208";a="28285774"
-Received: from waha.eurecom.fr (HELO smtps.eurecom.fr) ([10.3.2.236])
-  by drago1i.eurecom.fr with ESMTP; 21 Dec 2024 12:15:17 +0100
-Received: from localhost.localdomain (88-183-119-157.subs.proxad.net [88.183.119.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtps.eurecom.fr (Postfix) with ESMTPSA id 7247D24E3;
-	Sat, 21 Dec 2024 12:15:16 +0100 (CET)
-From: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
-To: linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-can@vger.kernel.org
-Cc: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v2 3/3] net/can/dev: Remove dead code
-Date: Sat, 21 Dec 2024 12:06:49 +0100
-Message-ID: <20241221111454.1074285-4-ariel.otilibili-anieli@eurecom.fr>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241221111454.1074285-1-ariel.otilibili-anieli@eurecom.fr>
+	s=arc-20240116; t=1734794284; c=relaxed/simple;
+	bh=5npocbCtF0vS/uYKknr1J0qqeN4M9EK8eV//ntVdydY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BM2i86D5HxDMgHQKb/YFE/vlmzzlO7grCNvNLQU8uW8PEZB8MlIQNr229vGbAK2jauGPoAUSf+zJHh0bRVqz8ZXjY0FMHv8hN4vqzgCsS1DQG5IVtrRik6ZYp4hH6KxnnI6oKNYRmfyV0NyxDfoPrjwC61l5iKDQ6nYR5VwWjRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ZvahHlPJ; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=Z/zWEEAFiJhjASlpovWheTu6czHSNtboPXzunoqWqNU=; b=ZvahHlPJqsL76Zxjdfy9FCDjBb
+	R/IIqoL+hBFOYHVAXBMRe/18w94D3CLB21ThZMQNQEgVuk+qOmQmUlNs3meiujeTeeoDji8+TLh+F
+	MnxwxMhl9c44kMQsd14CT/88imtLwLWkRnfBSAFHPhlIXQ58/oe1tKDGajSfglxyKYDA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tP1Er-002KPf-2D; Sat, 21 Dec 2024 16:17:57 +0100
+Date: Sat, 21 Dec 2024 16:17:57 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
+Cc: linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+	netdev@vger.kernel.org, linux-can@vger.kernel.org,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Sunil Goutham <sgoutham@marvell.com>,
+	Geetha sowjanya <gakula@marvell.com>,
+	Subbaraya Sundeep <sbhatta@marvell.com>,
+	hariprasad <hkelam@marvell.com>,
+	Bharat Bhushan <bbhushan2@marvell.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH 1/3] drivers/firmware/broadcom, ethernet/marvell: Remove
+ unused values
+Message-ID: <e99c8ff0-4b72-400b-a530-6808adbd5d1a@lunn.ch>
 References: <20241221035352.1020228-1-ariel.otilibili-anieli@eurecom.fr>
- <20241221111454.1074285-1-ariel.otilibili-anieli@eurecom.fr>
+ <20241221035352.1020228-2-ariel.otilibili-anieli@eurecom.fr>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241221035352.1020228-2-ariel.otilibili-anieli@eurecom.fr>
 
-The default switch case ends with a return; meaning this return is never
-reached.
+On Sat, Dec 21, 2024 at 04:44:15AM +0100, Ariel Otilibili wrote:
+> Coverity-IDs: 1487817, 1561102
+> Signed-off-by: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
 
-Coverity-ID: 1497123
-Signed-off-by: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
----
- drivers/net/can/dev/dev.c | 2 --
- 1 file changed, 2 deletions(-)
+One patch per driver please.
 
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index 681643ab3780..5ec3170b896a 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -85,8 +85,6 @@ const char *can_get_state_str(const enum can_state state)
- 	default:
- 		return "<unknown>";
- 	}
--
--	return "<unknown>";
- }
- EXPORT_SYMBOL_GPL(can_get_state_str);
- 
--- 
-2.47.1
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
+> @@ -329,11 +329,9 @@ static int cn10k_mcs_write_rx_flowid(struct otx2_nic *pfvf,
+>  	mac_da = ether_addr_to_u64(secy->netdev->dev_addr);
+>  
+>  	req->data[0] = FIELD_PREP(MCS_TCAM0_MAC_DA_MASK, mac_da);
+> -	req->mask[0] = ~0ULL;
+>  	req->mask[0] = ~MCS_TCAM0_MAC_DA_MASK;
+>  
+>  	req->data[1] = FIELD_PREP(MCS_TCAM1_ETYPE_MASK, ETH_P_MACSEC);
+> -	req->mask[1] = ~0ULL;
+>  	req->mask[1] &= ~MCS_TCAM1_ETYPE_MASK;
+>  
 
+As i said to another patch, you need to argue why you change is
+correct. If you have no idea what the correct fix is, you should
+simply report the issue to the Maintainer, and look at the git history
+for these lines and see who added them, and ask them what is the
+correct fix.
+
+	Andrew
 
