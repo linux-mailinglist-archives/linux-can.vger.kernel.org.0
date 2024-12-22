@@ -1,98 +1,117 @@
-Return-Path: <linux-can+bounces-2482-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2483-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DE599FA15B
-	for <lists+linux-can@lfdr.de>; Sat, 21 Dec 2024 16:22:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DE4A9FA6E0
+	for <lists+linux-can@lfdr.de>; Sun, 22 Dec 2024 17:37:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 987D81888BD2
-	for <lists+linux-can@lfdr.de>; Sat, 21 Dec 2024 15:22:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B4D17A19CD
+	for <lists+linux-can@lfdr.de>; Sun, 22 Dec 2024 16:37:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E9101FA8CA;
-	Sat, 21 Dec 2024 15:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="YdRNNcyy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A37018A6B7;
+	Sun, 22 Dec 2024 16:37:18 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFAD1BCA0F;
-	Sat, 21 Dec 2024 15:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF5B2A1BF
+	for <linux-can@vger.kernel.org>; Sun, 22 Dec 2024 16:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734794533; cv=none; b=hnbWZrRfgdStZ2aZBiIdCZGWmS7qFvQwtmc06f8zd+4iVrjTIFAR0nnJXPi2Krty2V36go1Nb7gPmIrnyA6RJChxoVBNs1RkzznxBeVI5TG7P6cQaYOmW7s+QfYg0ZH0wNDY7xs/2Jmdz2yLpouxasYD8/IqK+uotBXOXETc2Vg=
+	t=1734885438; cv=none; b=Dv4Km4pVIESpRIVzkVzhMpmhhy0ZEsVNInd5VEUGLWNbL5hCvLui+iWJl04Iq70GsLmipW1tVK2PxhysOs312uBoUpLUg9w+x59Am56kkGuRZecU5nU3fhgXdAKHkXhbttXouN3KR1iUHM6TNUIRKJuMZw8F+23spTcjPaOrfWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734794533; c=relaxed/simple;
-	bh=dWV7QpT1MkssZtoO7Vd7/Fo2wC2sKS0EPXfsZYtSlLg=;
+	s=arc-20240116; t=1734885438; c=relaxed/simple;
+	bh=2SZzl9eyY9Y6QrDQ2UoAg1a3tmLGactrhocsbj0LTrw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RzN8NH/OIPfRoDisg6bc9T3xQ7/VKMm1aoMzBCHVBCbYtvCq8ZmAx3M7Ydr3mrXchBEsK5CMu72kdIXU+7LN6ginDBj8fmqCZ54CCr7jIU5hmI5swrx24/4vW5jFPdCU6at6mM4oU6FyhP31HV9r7mCUP/kdPeWA+ZOthgCI+5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=YdRNNcyy; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=uLE/FMM2CopcBAaw+i5BPoQ8Oav6ZVj6eheOBwHanNM=; b=YdRNNcyyVlzGCsI5hSDQyoTc/4
-	ZgnOQuDiBc49CBvHGOuPr5IGKUMwkuaP1a/Shq0O86q9T4wSDY8dhRrhYG6br/LmsjyzDFS3Pzp2m
-	5n4MPQpCKhUvhm+/2fLc4hdwNgf7m2MDeFiq7wmZ2+Ax3WwAX1xVC652+R6lutF+ntqY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tP1Is-002KUK-Gg; Sat, 21 Dec 2024 16:22:06 +0100
-Date: Sat, 21 Dec 2024 16:22:06 +0100
-From: Andrew Lunn <andrew@lunn.ch>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TFAgxJ8mdxnmQB5o0HeGZ1rXmwbS75soBrp4ysv2aZpypaqi8bV97L5X4XCCzmu/SujQU5qwNX3LJ9cglPfgTjcF3VMjk97+qYZFZf7ewoefmOGkdD9pXZR1DsJMu9zAWvMZjS/WjQqrYBM+O+XkFkkdr0a6ji9lj6mTApBPXQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tPOx7-0004fs-O4; Sun, 22 Dec 2024 17:37:13 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tPOx6-004jFX-1G;
+	Sun, 22 Dec 2024 17:37:13 +0100
+Received: from pengutronix.de (2a02-8206-240a-ed00-dcc8-6079-a37a-d53f.dynamic.ewe-ip-backbone.de [IPv6:2a02:8206:240a:ed00:dcc8:6079:a37a:d53f])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 98303393BD4;
+	Sun, 22 Dec 2024 16:37:12 +0000 (UTC)
+Date: Sun, 22 Dec 2024 17:37:11 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
-Cc: linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-	netdev@vger.kernel.org, linux-can@vger.kernel.org,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Sunil Goutham <sgoutham@marvell.com>,
-	Geetha sowjanya <gakula@marvell.com>,
-	Subbaraya Sundeep <sbhatta@marvell.com>,
-	hariprasad <hkelam@marvell.com>,
-	Bharat Bhushan <bbhushan2@marvell.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
+Cc: linux-media@vger.kernel.org, linux-mips@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-can@vger.kernel.org, 
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH v2 0/3] broadcom, ethernet/marvell,cx231xx,can/dev:
- Remove unused values and dead code
-Message-ID: <f6453f4c-5b9f-466f-b1f2-f7ab31df4e5e@lunn.ch>
-References: <20241221035352.1020228-1-ariel.otilibili-anieli@eurecom.fr>
- <20241221111454.1074285-1-ariel.otilibili-anieli@eurecom.fr>
+Subject: Re: [PATCH v2 3/3] net/can/dev: Remove dead code
+Message-ID: <20241222-resolute-calculating-mamba-531d3d-mkl@pengutronix.de>
+References: <20241221111454.1074285-1-ariel.otilibili-anieli@eurecom.fr>
+ <20241221111454.1074285-4-ariel.otilibili-anieli@eurecom.fr>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="w5udhwgfvmqoyk63"
 Content-Disposition: inline
-In-Reply-To: <20241221111454.1074285-1-ariel.otilibili-anieli@eurecom.fr>
-
-On Sat, Dec 21, 2024 at 12:06:46PM +0100, Ariel Otilibili wrote:
-> Hello,
-> 
-> This series clears out the Coverity IDs 1487817, 1561102, 1497123,
-> & 1269153.
-
-Always start a new thread for a new version of a patch series.
-
-Also, please wait at least 24 hours before new revisions:
-
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
-
-netdev is also closed to patches until the beginning of the new year.
+In-Reply-To: <20241221111454.1074285-4-ariel.otilibili-anieli@eurecom.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
-    Andrew
+--w5udhwgfvmqoyk63
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 3/3] net/can/dev: Remove dead code
+MIME-Version: 1.0
 
----
-pw-bot: cr
+On 21.12.2024 12:06:49, Ariel Otilibili wrote:
+> The default switch case ends with a return; meaning this return is never
+> reached.
+>=20
+> Coverity-ID: 1497123
+> Signed-off-by: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
+
+Applied this patch only to linux-can-next/testing.
+
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--w5udhwgfvmqoyk63
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdoQDQACgkQKDiiPnot
+vG8eTwf/Sxe/6J1RWnwku+KXTmOwOThsF6STOKJ8i7Oyn/4Mv81WJLFDdUFN6m0b
+oVxkXQcDh2pxSkBQyHJ35US9bvRP3K5VkseOtf6O0ialbZFx/yEw2EKeaLC40A7g
+L13HTc+uloH652pwA+4826XpvUGhF2GqgnRa2N/Q4ueaUKhnG8Z/nIs9ZIAnrA0P
+pNKpPXmmk8bM4I0VN3VgIRqNFn32N7LQu0UVXtrdIbvXOGIk9+8rY4NrXDPhdrBT
+7CIVjcz1aFR6FOTTTek9WO5ttE5cOG50xc13n74OgEN13Jh0vSFJQEpMTmnlbqU2
+JP6onNgBDXuwpHOZ1yasdRh2HTEhTw==
+=9x7J
+-----END PGP SIGNATURE-----
+
+--w5udhwgfvmqoyk63--
 
