@@ -1,444 +1,771 @@
-Return-Path: <linux-can+bounces-2501-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2502-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCC399FD2E3
-	for <lists+linux-can@lfdr.de>; Fri, 27 Dec 2024 11:00:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF6B29FD5B1
+	for <lists+linux-can@lfdr.de>; Fri, 27 Dec 2024 16:44:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 962B97A1612
-	for <lists+linux-can@lfdr.de>; Fri, 27 Dec 2024 10:00:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5196618857C6
+	for <lists+linux-can@lfdr.de>; Fri, 27 Dec 2024 15:44:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8721E19539F;
-	Fri, 27 Dec 2024 09:58:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0EE41F7555;
+	Fri, 27 Dec 2024 15:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="awHXfniy"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="RBPWdXlb"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from out.smtpout.orange.fr (out-67.smtpout.orange.fr [193.252.22.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F67158555;
-	Fri, 27 Dec 2024 09:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AFBD320B;
+	Fri, 27 Dec 2024 15:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735293497; cv=none; b=MTSPAeULLP+zOrX08wOGqU0WQuhx/tVNpoCHGlctELxz/AchQll9MqvHqoIxQFdCqqqYyYdiQNhIwK6EpjzARjeu/oug1e+s3g9ZqJy8JQiqqhHuyA3xOvjxaGRNfgUPyom/HKUV/qOCe6SxJwY88K9NI+XwQIwvX2cyTtiNgg4=
+	t=1735314250; cv=none; b=h4j4KadF4Tqs4iAW3aworVCwIpE1fMsyQfDlSy7/Gyu9HZLAbuiJt2nCzps75TUITCvMV0QkcCmvo3fjyGnmDPEVdb3cypEJGPs4RN1gekarUzy3sCkiotceNtcje2cPGksgJdYDQ8otOOZG7CgxnMAx5GNaHV3SYYAi+HnjO08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735293497; c=relaxed/simple;
-	bh=GvT4BWDw5+8Gee0TOROTKU9jyBZIvEwjeaGgrsdlZPw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UZcNHggfjY31zzL70YhqyfHzSVoYVjyxYH/8rB7BCK+7IJs2L94XlVze2FvUmkYwSF1VIAUpidkI73YoZT8HfBp6R6CQ+OHevEHDWp99CbwEWRcS9uujabpjYr5ND5XEaFwS2tEcJhoAboIy02xx8WcGb2TxxxT0AfpiTD7aXTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=awHXfniy; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2ee786b3277so6376923a91.1;
-        Fri, 27 Dec 2024 01:58:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735293495; x=1735898295; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WZTAeE6qWcwJUNnxTnxrs2KZnvYlBCv3e3fLLBfhd2k=;
-        b=awHXfniyO8i1h6HeDt2bp/3ibV6MyTS4oCh7vE9Ubzbe6dqmmj9zsCwAgtlXMIZK5Z
-         16cHm8U9zGh97bh3SsBDfYQTCX4Quf2G6GYuMnu13Fz/ZzNJrqW2OHy0pqaUx5Crfacc
-         fTZkr9UDOv7ooqvW5O+RBj8d5TFEkfeGmWOojgSATqb2l6mFAB+69QdrB2Zacotbt6CI
-         ORIVOUdo0glcw0UZuthQrIAoPMbPSqrvOe8320fh4YEX5VkHBMMHYGQBVRTqBT7ON7+c
-         7klI7bfVF+P/CRh7LUIvvDNYNgVmkM9g/50JbOo4pD0Uws5fCG7cRPf7aGiYG5fd2m3M
-         Kgiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735293495; x=1735898295;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WZTAeE6qWcwJUNnxTnxrs2KZnvYlBCv3e3fLLBfhd2k=;
-        b=JX6EehRx209CZBJS/DbJLzD8xsYI+8DYFOBW2ZjnbYLf70GYHv3qQWzkUpvoMgyJRQ
-         j6B7kYqji6p8NB/4zzfSafvAHjpiDETdihJfU1J1lqR2jslpWovgoPAO0nUJyscbonDL
-         FwJ9RhOAfLWoXhsIy44dvKZkLN19/OgDbvLddIU1aM/UGXDPCVLHiL796yGGohhQ265l
-         E3lsYyXCZwxy0w1iHaGDt3V3/juulv3eQ1qjjO2ocB8XyiJkNtmNy++y/vrG7ovfdtE/
-         bsMfeU5Y4Vja0C2Cnp9gzh8qZlOoqJ3s/O0xjdJ3llKs2gWzv7w75f56vVFVau3BiiOW
-         80Fg==
-X-Forwarded-Encrypted: i=1; AJvYcCV8whMfmN+PM/KZ/bT17PoVzJXkgNeXMH+eoDOerL4moJZ1mhfAaFyasJCOu0yWRkDIBJZLrEQawbjFrshwFxg=@vger.kernel.org, AJvYcCVM5Q4RGBPZizwJC1j64B+Fbhm5hu4dS048DGWf6lt8ujEUzZ/2crufpTNKEnNtsLnXlFzV1LSOv8dg@vger.kernel.org, AJvYcCX2+yASB1Xx8P8NT5/iC9EeB8bpu4qgxVkHp+coZeiBIwuua1jnyq2lgW5KxizxrJS83pOwhhBlkP0=@vger.kernel.org, AJvYcCXkl23GRHP3yPb0psEIrLoGVqbHOK1ZOOF6PfNPhaIYis/QO8SVm0flbWlrlU81ip6PY2rl6+1INF2HIA==@vger.kernel.org, AJvYcCXqASpjHp3d1XqfZm0lPlPiEmOvW4ukYh/28loLMSzRv9UtFHc0N2RywGYwH/kY6RuOHPu1m9qi@vger.kernel.org, AJvYcCXyKNbX+Mhl+8Tut3cKrl+rzVybPopSq7nyw4yvc8ghC7YkRcxS3S/ivhknYrGfWifzxgyPB12lIVG5@vger.kernel.org, AJvYcCXz2QgTk86ENQCMoJd5yp9VEaSlnVMU7EzOioIkOcEbHd5AcICFZ+Q2LZcjeakxSiEiLTiDge8Y/sEhtYI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVXdN+tG/3Os2rfvCnLf9N+25qqnV69dC4LhVYxQxUv9yMISMs
-	YGdJe6G0EBt6leeB+zRs/CiSk9dZ993q9ZY7RdHiyRzKgiVih3UG
-X-Gm-Gg: ASbGncvfzPqSJ9zTzlA225eL46Ou69ENteDgfspmqQgYcFJyxSSp8AwcUGGTO1FFAcl
-	WwsvCYOzzlovEXbNdIGMlW7xRrXc+pcWotyUs9AV9XXaDrEn1Z+sjDPmvRaYgO1ylEahTGaEBCm
-	uNDPhyRRJIlNPrFLGtX9jSKWKnulZHWL+SzuOmAZ3PuI0UL7PW3IZ4RbI0ljGYjOpHnJIwf7Jju
-	Dalx95x/82yZj4BiyomNTjRj8/KAPwXePkaRzR0YoXIj3hiqS2M43lZkL17xHnotC97V5xI9EnF
-	EtFESBPLE6U9KLX5c/Z2D3YO
-X-Google-Smtp-Source: AGHT+IE/BxicRXP/2yiiUOPaQVK7Kp9pRaplWsxdyrRMR51dmHOqk8mKeolwbBrgJg8OdwL1MJkQ+A==
-X-Received: by 2002:a17:90b:2c84:b0:2ee:bbe0:98c6 with SMTP id 98e67ed59e1d1-2f452dfcb28mr43073326a91.8.1735293494739;
-        Fri, 27 Dec 2024 01:58:14 -0800 (PST)
-Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f51a0sm131581135ad.187.2024.12.27.01.58.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Dec 2024 01:58:14 -0800 (PST)
-From: Ming Yu <a0282524688@gmail.com>
-To: tmyu0@nuvoton.com,
-	lee@kernel.org,
-	linus.walleij@linaro.org,
-	brgl@bgdev.pl,
-	andi.shyti@kernel.org,
-	mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	jdelvare@suse.com,
-	alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	Ming Yu <a0282524688@gmail.com>
-Subject: [PATCH v4 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Date: Fri, 27 Dec 2024 17:57:27 +0800
-Message-Id: <20241227095727.2401257-8-a0282524688@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241227095727.2401257-1-a0282524688@gmail.com>
-References: <20241227095727.2401257-1-a0282524688@gmail.com>
+	s=arc-20240116; t=1735314250; c=relaxed/simple;
+	bh=l5y7bP7iS0md0aRYqO+J45+ZIPcSutE/1fwgEt5K7gg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fskmnX5fwB/+TafVlCk/6CGTo9w3pCtmeODP+SDTLbjpvM3K7IUxpdlxgYZPbpuw5xMlSQDHoNwRHuw4BoMUMIKLDt2G22V3mQLRuoqWphvuVEcXHolaE/R3JkUP+vzCh0b6cwCqgBuPs/5COEF+EbjliBQi0SJqoKi00hH0Q4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=RBPWdXlb; arc=none smtp.client-ip=193.252.22.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id RCLrtpBC9TjIXRCMCtpJuD; Fri, 27 Dec 2024 16:34:46 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1735313686;
+	bh=962JxV/h08FJVdYjln61lSA6Os2M6TEpHoPRLGvIooc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=RBPWdXlbciyl1JK1cspVoP/SAeHB7r5hhVTqyn4ue7lbi8af/+f7ldQQlS5y2kaQj
+	 7d5PV5VWtnYR7/kT+c56VZA1vWUm4Ci5QqboZExMfpqxNTiCNw0Ht4yoqtBtdjvroR
+	 TKuL7nqIYbZqQpOn8PEW2R5ZtLavXKlUG3Cb5ccC/ZqoeiOQ5PCsWZ/PIApTQjl+t4
+	 ATnsAVtdf1OmlsiCBVkHrYWkCVSkCCdp3Ni5lsgfaPtBbvYx6SShn7IvjTxAqaBrpf
+	 c/2fm/c9QvvDfV4ic/EkFNnhT28PWGqS/EcgGXjtkQ1KINf8qUNCjh20lc04LF20Xn
+	 RttZeiUie+wdg==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 27 Dec 2024 16:34:46 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <b1c5b18d-efe1-41f8-9825-2a3e090c47f5@wanadoo.fr>
+Date: Sat, 28 Dec 2024 00:34:10 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, tmyu0@nuvoton.com,
+ lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
+ andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+ jdelvare@suse.com, alexandre.belloni@bootlin.com, linux-usb@vger.kernel.org
+References: <20241227095727.2401257-1-a0282524688@gmail.com>
+ <20241227095727.2401257-2-a0282524688@gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20241227095727.2401257-2-a0282524688@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This driver supports RTC functionality for NCT6694 MFD device
-based on USB interface.
++cc: linux-usb@vger.kernel.org
 
-Signed-off-by: Ming Yu <a0282524688@gmail.com>
----
- MAINTAINERS               |   1 +
- drivers/rtc/Kconfig       |  10 ++
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-nct6694.c | 263 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 275 insertions(+)
- create mode 100644 drivers/rtc/rtc-nct6694.c
+On 27/12/2024 at 18:57, Ming Yu wrote:
+> The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
+> 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
+> PWM, and RTC.
+> 
+> This driver implements USB device functionality and shares the
+> chip's peripherals as a child device.
+> 
+> Each child device can use the USB functions nct6694_read_msg()
+> and nct6694_write_msg() to issue a command. They can also request
+> interrupt that will be called when the USB device receives its
+> interrupt pipe.
+> 
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+> ---
+>  MAINTAINERS                 |   7 +
+>  drivers/mfd/Kconfig         |  10 +
+>  drivers/mfd/Makefile        |   2 +
+>  drivers/mfd/nct6694.c       | 394 ++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/nct6694.h | 142 +++++++++++++
+>  5 files changed, 555 insertions(+)
+>  create mode 100644 drivers/mfd/nct6694.c
+>  create mode 100644 include/linux/mfd/nct6694.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 910305c11e8a..acb270037642 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16722,6 +16722,13 @@ F:	drivers/nubus/
+>  F:	include/linux/nubus.h
+>  F:	include/uapi/linux/nubus.h
+>  
+> +NUVOTON NCT6694 MFD DRIVER
+> +M:	Ming Yu <tmyu0@nuvoton.com>
+> +L:	linux-kernel@vger.kernel.org
+> +S:	Supported
+> +F:	drivers/mfd/nct6694.c
+> +F:	include/linux/mfd/nct6694.h
+> +
+>  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
+>  M:	Antonino Daplas <adaplas@gmail.com>
+>  L:	linux-fbdev@vger.kernel.org
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index ae23b317a64e..5429ba97b457 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -558,6 +558,16 @@ config MFD_MX25_TSADC
+>  	  i.MX25 processors. They consist of a conversion queue for general
+>  	  purpose ADC and a queue for Touchscreens.
+>  
+> +config MFD_NCT6694
+> +	tristate "Nuvoton NCT6694 support"
+> +	select MFD_CORE
+> +	depends on USB
+> +	help
+> +	  This adds support for Nuvoton USB device NCT6694 sharing peripherals
+> +	  This includes the USB devcie driver and core APIs.
+                                ^^^^^^
+device
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e5c65e382141..6a5164e42700 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16731,6 +16731,7 @@ F:	drivers/hwmon/nct6694-hwmon.c
- F:	drivers/i2c/busses/i2c-nct6694.c
- F:	drivers/mfd/nct6694.c
- F:	drivers/net/can/nct6694_canfd.c
-+F:	drivers/rtc/rtc-nct6694.c
- F:	drivers/watchdog/nct6694_wdt.c
- F:	include/linux/mfd/nct6694.h
- 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index a60bcc791a48..aeab67acbc84 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -416,6 +416,16 @@ config RTC_DRV_NCT3018Y
- 	   This driver can also be built as a module, if so, the module will be
- 	   called "rtc-nct3018y".
- 
-+config RTC_DRV_NCT6694
-+	tristate "Nuvoton NCT6694 RTC support"
-+	depends on MFD_NCT6694
-+	help
-+	  If you say yes to this option, support will be included for Nuvoton
-+	  NCT6694, a USB device to RTC.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called rtc-nct6694.
-+
- config RTC_DRV_RK808
- 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
- 	depends on MFD_RK8XX
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 489b4ab07068..d0d6f4a4972e 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -118,6 +118,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
- obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
- obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
- obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
-+obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
- obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
- obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
- obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
-diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
-new file mode 100644
-index 000000000000..9465ab895c6d
---- /dev/null
-+++ b/drivers/rtc/rtc-nct6694.c
-@@ -0,0 +1,263 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Nuvoton NCT6694 RTC driver based on USB interface.
-+ *
-+ * Copyright (C) 2024 Nuvoton Technology Corp.
-+ */
-+
-+#include <linux/bcd.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/core.h>
-+#include <linux/mfd/nct6694.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/rtc.h>
-+#include <linux/slab.h>
-+
-+/*
-+ * USB command module type for NCT6694 RTC controller.
-+ * This defines the module type used for communication with the NCT6694
-+ * RTC controller over the USB interface.
-+ */
-+#define NCT6694_RTC_MOD		0x08
-+
-+/* Command 00h - RTC Time */
-+#define NCT6694_RTC_TIME	0x0000	/* SEL|CMD */
-+/* Command 01h - RTC Alarm */
-+#define NCT6694_RTC_ALARM	0x0001	/* SEL|CMD */
-+/* Command 02h - RTC Status */
-+#define NCT6694_RTC_STATUS	0x0002	/* SEL|CMD */
-+
-+#define NCT6694_RTC_IRQ_INT_EN	BIT(0)	/* Transmit a USB INT-in when RTC alarm */
-+#define NCT6694_RTC_IRQ_GPO_EN	BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
-+
-+#define NCT6694_RTC_IRQ_EN	(NCT6694_RTC_IRQ_INT_EN | NCT6694_RTC_IRQ_GPO_EN)
-+#define NCT6694_RTC_IRQ_STS	BIT(0)	/* Write 1 clear IRQ status */
-+
-+struct __packed nct6694_rtc_time {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 week;
-+	u8 day;
-+	u8 month;
-+	u8 year;
-+};
-+
-+struct __packed nct6694_rtc_alarm {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 alarm_en;
-+	u8 alarm_pend;
-+};
-+
-+struct __packed nct6694_rtc_status {
-+	u8 irq_en;
-+	u8 irq_pend;
-+};
-+
-+union nct6694_rtc_msg {
-+	struct nct6694_rtc_time time;
-+	struct nct6694_rtc_alarm alarm;
-+	struct nct6694_rtc_status sts;
-+};
-+
-+struct nct6694_rtc_data {
-+	struct nct6694 *nct6694;
-+	struct rtc_device *rtc;
-+	union nct6694_rtc_msg *msg;
-+};
-+
-+static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, NCT6694_RTC_MOD,
-+			       NCT6694_RTC_TIME,
-+			       sizeof(*time),
-+			       time);
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_sec = bcd2bin(time->sec);                /* tm_sec expect 0 ~ 59 */
-+	tm->tm_min = bcd2bin(time->min);                /* tm_min expect 0 ~ 59 */
-+	tm->tm_hour = bcd2bin(time->hour);              /* tm_hour expect 0 ~ 23 */
-+	tm->tm_wday = bcd2bin(time->week) - 1;          /* tm_wday expect 0 ~ 6 */
-+	tm->tm_mday = bcd2bin(time->day);               /* tm_mday expect 1 ~ 31 */
-+	tm->tm_mon = bcd2bin(time->month) - 1;          /* tm_month expect 0 ~ 11 */
-+	tm->tm_year = bcd2bin(time->year) + 100;        /* tm_year expect since 1900 */
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+
-+	time->sec = bin2bcd(tm->tm_sec);
-+	time->min = bin2bcd(tm->tm_min);
-+	time->hour = bin2bcd(tm->tm_hour);
-+	time->week = bin2bcd(tm->tm_wday + 1);
-+	time->day = bin2bcd(tm->tm_mday);
-+	time->month = bin2bcd(tm->tm_mon + 1);
-+	time->year = bin2bcd(tm->tm_year - 100);
-+
-+	return nct6694_write_msg(data->nct6694, NCT6694_RTC_MOD,
-+				 NCT6694_RTC_TIME,
-+				 sizeof(*time),
-+				 time);
-+}
-+
-+static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, NCT6694_RTC_MOD,
-+			       NCT6694_RTC_ALARM,
-+			       sizeof(*alarm),
-+			       alarm);
-+	if (ret)
-+		return ret;
-+
-+	alrm->time.tm_sec = bcd2bin(alarm->sec);
-+	alrm->time.tm_min = bcd2bin(alarm->min);
-+	alrm->time.tm_hour = bcd2bin(alarm->hour);
-+	alrm->enabled = alarm->alarm_en;
-+	alrm->pending = alarm->alarm_pend;
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+
-+	alarm->sec = bin2bcd(alrm->time.tm_sec);
-+	alarm->min = bin2bcd(alrm->time.tm_min);
-+	alarm->hour = bin2bcd(alrm->time.tm_hour);
-+	alarm->alarm_en = alrm->enabled ? NCT6694_RTC_IRQ_EN : 0;
-+	alarm->alarm_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, NCT6694_RTC_MOD,
-+				 NCT6694_RTC_ALARM,
-+				 sizeof(*alarm),
-+				 alarm);
-+}
-+
-+static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+
-+	if (enabled)
-+		sts->irq_en |= NCT6694_RTC_IRQ_EN;
-+	else
-+		sts->irq_en &= ~NCT6694_RTC_IRQ_EN;
-+
-+	sts->irq_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, NCT6694_RTC_MOD,
-+				 NCT6694_RTC_STATUS,
-+				 sizeof(*sts),
-+				 sts);
-+}
-+
-+static const struct rtc_class_ops nct6694_rtc_ops = {
-+	.read_time = nct6694_rtc_read_time,
-+	.set_time = nct6694_rtc_set_time,
-+	.read_alarm = nct6694_rtc_read_alarm,
-+	.set_alarm = nct6694_rtc_set_alarm,
-+	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
-+};
-+
-+static irqreturn_t nct6694_irq(int irq, void *dev_id)
-+{
-+	struct nct6694_rtc_data *data = dev_id;
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	int ret;
-+
-+	rtc_lock(data->rtc);
-+
-+	sts->irq_en = NCT6694_RTC_IRQ_EN;
-+	sts->irq_pend = NCT6694_RTC_IRQ_STS;
-+	ret = nct6694_write_msg(data->nct6694, NCT6694_RTC_MOD,
-+				NCT6694_RTC_STATUS,
-+				sizeof(*sts),
-+				sts);
-+	if (ret) {
-+		rtc_unlock(data->rtc);
-+		return IRQ_NONE;
-+	}
-+
-+	rtc_update_irq(data->rtc, 1, RTC_IRQF | RTC_AF);
-+
-+	rtc_unlock(data->rtc);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int nct6694_rtc_probe(struct platform_device *pdev)
-+{
-+	struct nct6694_rtc_data *data;
-+	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	int ret, irq;
-+
-+	irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
-+	if (!irq)
-+		return -EINVAL;
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->msg = devm_kzalloc(&pdev->dev, sizeof(union nct6694_rtc_msg),
-+				 GFP_KERNEL);
-+	if (!data->msg)
-+		return -ENOMEM;
-+
-+	data->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(data->rtc))
-+		return PTR_ERR(data->rtc);
-+
-+	data->nct6694 = nct6694;
-+	data->rtc->ops = &nct6694_rtc_ops;
-+	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	platform_set_drvdata(pdev, data);
-+
-+	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-+					nct6694_irq, IRQF_ONESHOT,
-+					"nct6694-rtc", data);
-+	if (ret < 0)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
-+
-+	ret = devm_rtc_register_device(data->rtc);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to register rtc\n");
-+
-+	device_init_wakeup(&pdev->dev, true);
-+	return 0;
-+}
-+
-+static struct platform_driver nct6694_rtc_driver = {
-+	.driver = {
-+		.name	= "nct6694-rtc",
-+	},
-+	.probe		= nct6694_rtc_probe,
-+};
-+
-+module_platform_driver(nct6694_rtc_driver);
-+
-+MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-+MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:nct6694-rtc");
--- 
-2.34.1
+> +	  Additional drivers must be enabled in order to use the functionality
+> +	  of the device.
+> +
+>  config MFD_HI6421_PMIC
+>  	tristate "HiSilicon Hi6421 PMU/Codec IC"
+>  	depends on OF
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index e057d6d6faef..9d0365ba6a26 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -117,6 +117,8 @@ obj-$(CONFIG_TWL6040_CORE)	+= twl6040.o
+>  
+>  obj-$(CONFIG_MFD_MX25_TSADC)	+= fsl-imx25-tsadc.o
+>  
+> +obj-$(CONFIG_MFD_NCT6694)	+= nct6694.o
+
+Keep the alphabetic order. MFD_NCT6694 is after MFD_MC13XXX in the alphabet.
+
+>  obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
+>  obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
+>  obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
+> diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
+> new file mode 100644
+> index 000000000000..0f31489ef9fa
+> --- /dev/null
+> +++ b/drivers/mfd/nct6694.c
+
+If I understand correctly, your device is an USB device, so shouldn't it
+be under
+
+  drivers/usb/mfd/nct6694.c
+
+?
+
+At the moment, I see no USB maintainers in CC (this is why I added
+linux-usb myself). By putting it in the correct folder, the
+get_maintainers.pl will give you the correct list of persons to put in copy.
+
+The same comment applies to the other modules. For example, I would
+expect to see the CAN module under:
+
+  drivers/net/can/usb/nct6694_canfd.c
+
+> @@ -0,0 +1,394 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Nuvoton NCT6694 MFD driver based on USB interface.
+> + *
+> + * Copyright (C) 2024 Nuvoton Technology Corp.
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/nct6694.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/usb.h>
+> +
+> +#define MFD_DEV_SIMPLE(_name)				\
+> +{							\
+> +	.name = NCT6694_DEV_##_name,			\
+> +}							\
+> +
+> +#define MFD_DEV_WITH_ID(_name, _id)			\
+> +{							\
+> +	.name = NCT6694_DEV_##_name,			\
+> +	.id = _id,					\
+> +}
+> +
+> +/* MFD device resources */
+> +static const struct mfd_cell nct6694_dev[] = {
+> +	MFD_DEV_WITH_ID(GPIO, 0x0),
+> +	MFD_DEV_WITH_ID(GPIO, 0x1),
+> +	MFD_DEV_WITH_ID(GPIO, 0x2),
+> +	MFD_DEV_WITH_ID(GPIO, 0x3),
+> +	MFD_DEV_WITH_ID(GPIO, 0x4),
+> +	MFD_DEV_WITH_ID(GPIO, 0x5),
+> +	MFD_DEV_WITH_ID(GPIO, 0x6),
+> +	MFD_DEV_WITH_ID(GPIO, 0x7),
+> +	MFD_DEV_WITH_ID(GPIO, 0x8),
+> +	MFD_DEV_WITH_ID(GPIO, 0x9),
+> +	MFD_DEV_WITH_ID(GPIO, 0xA),
+> +	MFD_DEV_WITH_ID(GPIO, 0xB),
+> +	MFD_DEV_WITH_ID(GPIO, 0xC),
+> +	MFD_DEV_WITH_ID(GPIO, 0xD),
+> +	MFD_DEV_WITH_ID(GPIO, 0xE),
+> +	MFD_DEV_WITH_ID(GPIO, 0xF),
+> +
+> +	MFD_DEV_WITH_ID(I2C, 0x0),
+> +	MFD_DEV_WITH_ID(I2C, 0x1),
+> +	MFD_DEV_WITH_ID(I2C, 0x2),
+> +	MFD_DEV_WITH_ID(I2C, 0x3),
+> +	MFD_DEV_WITH_ID(I2C, 0x4),
+> +	MFD_DEV_WITH_ID(I2C, 0x5),
+> +
+> +	MFD_DEV_WITH_ID(CAN, 0x0),
+> +	MFD_DEV_WITH_ID(CAN, 0x1),
+> +
+> +	MFD_DEV_WITH_ID(WDT, 0x0),
+> +	MFD_DEV_WITH_ID(WDT, 0x1),
+> +
+> +	MFD_DEV_SIMPLE(HWMON),
+> +	MFD_DEV_SIMPLE(RTC),
+> +};
+> +
+> +static int nct6694_response_err_handling(struct nct6694 *nct6694,
+> +					 unsigned char err_status)
+> +{
+> +	struct device *dev = &nct6694->udev->dev;
+> +
+> +	switch (err_status) {
+> +	case NCT6694_NO_ERROR:
+> +		return err_status;
+> +	case NCT6694_NOT_SUPPORT_ERROR:
+> +		dev_dbg(dev, "%s: Command is not support!\n", __func__);
+
+Grammar: Command is not supported
+
+> +		break;
+> +	case NCT6694_NO_RESPONSE_ERROR:
+> +		dev_dbg(dev, "%s: Command is no response!\n", __func__);
+
+Not sure what you meant here. Maybe: command didn't get a response? But
+then, I do not see the nuance with the timeout.
+
+> +		break;
+> +	case NCT6694_TIMEOUT_ERROR:
+> +		dev_dbg(dev, "%s: Command is timeout!\n", __func__);
+
+Grammar: Command timed out
+> +		break;
+> +	case NCT6694_PENDING:
+> +		dev_dbg(dev, "%s: Command is pending!\n", __func__);
+> +		break;> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return -EIO;
+> +}
+> +
+> +int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
+> +		     u16 length, void *buf)
+> +{
+> +	union nct6694_usb_msg *msg = nct6694->usb_msg;
+> +	int tx_len, rx_len, ret;
+> +
+> +	guard(mutex)(&nct6694->access_lock);
+> +
+> +	memset(msg, 0, sizeof(*msg));
+> +
+> +	/* Send command packet to USB device */
+> +	msg->cmd_header.mod = mod;
+> +	msg->cmd_header.cmd = offset & 0xFF;
+> +	msg->cmd_header.sel = (offset >> 8) & 0xFF;
+
+In the other modules, you have some macros to combine together the cmd
+and the sel (selector, I guess?). For example from nct6694_canfd.c:
+
+  #define NCT6694_CAN_DELIVER(buf_cnt)	\
+  	((((buf_cnt) & 0xFF) << 8) | 0x10)	/* CMD|SEL */
+
+And here, you split them again. So what was the point to combine those
+together in the first place?
+
+Can't you just pass both the cmd and the sel as two separate argument?
+Those cmd and sel concatenation macros are too confusing.
+
+Also, if you are worried of having too many arguments in
+nct6694_read_msg(), you may just directly pass a pointer to a struct
+nct6694_cmd_header instead of all the arguments separately.
+
+> +	msg->cmd_header.hctrl = NCT6694_HCTRL_GET;
+> +	msg->cmd_header.len = cpu_to_le16(length);
+> +
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OUT_EP),
+> +			   &msg->cmd_header, sizeof(*msg), &tx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive response packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   &msg->response_header, sizeof(*msg), &rx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive data packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   buf, NCT6694_MAX_PACKET_SZ, &rx_len, nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (rx_len != length) {
+> +		dev_dbg(&nct6694->udev->dev, "%s: Received length is not match!\n",
+> +			__func__);
+> +		return -EIO;
+> +	}
+> +
+> +	return nct6694_response_err_handling(nct6694, msg->response_header.sts);
+> +}
+> +EXPORT_SYMBOL(nct6694_read_msg);
+> +
+> +int nct6694_write_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
+> +		      u16 length, void *buf)
+> +{
+> +	union nct6694_usb_msg *msg = nct6694->usb_msg;
+> +	int tx_len, rx_len, ret;
+> +
+> +	guard(mutex)(&nct6694->access_lock);
+> +
+> +	memset(msg, 0, sizeof(*msg));
+> +
+> +	/* Send command packet to USB device */
+> +	msg->cmd_header.mod = mod;
+> +	msg->cmd_header.cmd = offset & 0xFF;
+> +	msg->cmd_header.sel = (offset >> 8) & 0xFF;
+> +	msg->cmd_header.hctrl = NCT6694_HCTRL_SET;
+> +	msg->cmd_header.len = cpu_to_le16(length);
+> +
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OUT_EP),
+> +			   &msg->cmd_header, sizeof(*msg), &tx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Send data packet to USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OUT_EP),
+> +			   buf, length, &tx_len, nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive response packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   &msg->response_header, sizeof(*msg), &rx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive data packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   buf, NCT6694_MAX_PACKET_SZ, &rx_len, nct6694->timeout);
+
+What if the object size of buf is smaller than NCT6694_MAX_PACKET_SZ?
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (rx_len != length) {
+> +		dev_dbg(&nct6694->udev->dev, "%s: Sent length is not match!\n",
+> +			__func__);
+> +		return -EIO;
+> +	}
+> +
+> +	return nct6694_response_err_handling(nct6694, msg->response_header.sts);
+> +}
+> +EXPORT_SYMBOL(nct6694_write_msg);
+> +
+> +static void usb_int_callback(struct urb *urb)
+> +{
+> +	struct nct6694 *nct6694 = urb->context;
+> +	struct device *dev = &nct6694->udev->dev;
+> +	unsigned int *int_status = urb->transfer_buffer;
+> +	int ret;
+> +
+> +	switch (urb->status) {
+> +	case 0:
+> +		break;
+> +	case -ECONNRESET:
+> +	case -ENOENT:
+> +	case -ESHUTDOWN:
+> +		return;
+> +	default:
+> +		goto resubmit;
+> +	}
+> +
+> +	while (*int_status) {
+> +		int irq = __ffs(*int_status);
+> +
+> +		generic_handle_irq_safe(irq_find_mapping(nct6694->domain, irq));
+> +		*int_status &= ~BIT(irq);
+> +	}
+> +
+> +resubmit:
+> +	ret = usb_submit_urb(urb, GFP_ATOMIC);
+> +	if (ret)
+> +		dev_dbg(dev, "%s: Failed to resubmit urb, status %d",
+> +			__func__, ret);
+
+Print the error mnemotecnic instead of the error code:
+
+  	dev_dbg(dev, "%s: Failed to resubmit urb, status %pe",
+  		__func__, ERR_PTR(ret));
+
+(apply to other location where you print error).
+
+> +}
+> +
+> +static void nct6694_irq_lock(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +
+> +	mutex_lock(&nct6694->irq_lock);
+> +}
+> +
+> +static void nct6694_irq_sync_unlock(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +
+> +	mutex_unlock(&nct6694->irq_lock);
+> +}
+> +
+> +static void nct6694_irq_enable(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +	irq_hw_number_t hwirq = irqd_to_hwirq(data);
+> +
+> +	nct6694->irq_enable |= BIT(hwirq);
+> +}
+> +
+> +static void nct6694_irq_disable(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +	irq_hw_number_t hwirq = irqd_to_hwirq(data);
+> +
+> +	nct6694->irq_enable &= ~BIT(hwirq);
+> +}
+> +
+> +static struct irq_chip nct6694_irq_chip = {
+> +	.name = "nct6694-irq",
+> +	.flags = IRQCHIP_SKIP_SET_WAKE,
+> +	.irq_bus_lock = nct6694_irq_lock,
+> +	.irq_bus_sync_unlock = nct6694_irq_sync_unlock,
+> +	.irq_enable = nct6694_irq_enable,
+> +	.irq_disable = nct6694_irq_disable,
+> +};
+> +
+> +static int nct6694_irq_domain_map(struct irq_domain *d, unsigned int irq,
+> +				  irq_hw_number_t hw)
+> +{
+> +	struct nct6694 *nct6694 = d->host_data;
+> +
+> +	irq_set_chip_data(irq, nct6694);
+> +	irq_set_chip_and_handler(irq, &nct6694_irq_chip, handle_simple_irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static void nct6694_irq_domain_unmap(struct irq_domain *d, unsigned int irq)
+> +{
+> +	irq_set_chip_and_handler(irq, NULL, NULL);
+> +	irq_set_chip_data(irq, NULL);
+> +}
+> +
+> +static const struct irq_domain_ops nct6694_irq_domain_ops = {
+> +	.map	= nct6694_irq_domain_map,
+> +	.unmap	= nct6694_irq_domain_unmap,
+> +};
+> +
+> +static int nct6694_usb_probe(struct usb_interface *iface,
+> +			     const struct usb_device_id *id)
+> +{
+> +	struct usb_device *udev = interface_to_usbdev(iface);
+> +	struct usb_endpoint_descriptor *int_endpoint;
+> +	struct usb_host_interface *interface;
+> +	struct device *dev = &udev->dev;
+> +	struct nct6694 *nct6694;
+> +	int pipe, maxp;
+> +	int ret;
+> +
+> +	interface = iface->cur_altsetting;
+> +
+> +	int_endpoint = &interface->endpoint[0].desc;
+> +	if (!usb_endpoint_is_int_in(int_endpoint))
+> +		return -ENODEV;
+> +
+> +	nct6694 = devm_kzalloc(dev, sizeof(*nct6694), GFP_KERNEL);
+> +	if (!nct6694)
+> +		return -ENOMEM;
+> +
+> +	pipe = usb_rcvintpipe(udev, NCT6694_INT_IN_EP);
+> +	maxp = usb_maxpacket(udev, pipe);
+> +
+> +	nct6694->usb_msg = devm_kzalloc(dev, sizeof(union nct6694_usb_msg),
+> +					GFP_KERNEL);
+> +	if (!nct6694->usb_msg)
+> +		return -ENOMEM;
+> +
+> +	nct6694->int_buffer = devm_kzalloc(dev, maxp, GFP_KERNEL);
+> +	if (!nct6694->int_buffer)
+> +		return -ENOMEM;
+> +
+> +	nct6694->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
+> +	if (!nct6694->int_in_urb)
+> +		return -ENOMEM;
+> +
+> +	nct6694->domain = irq_domain_add_simple(NULL, NCT6694_NR_IRQS, 0,
+> +						&nct6694_irq_domain_ops,
+> +						nct6694);
+> +	if (!nct6694->domain) {
+> +		ret = -ENODEV;
+> +		goto err_urb;
+> +	}
+> +
+> +	nct6694->udev = udev;
+> +	nct6694->timeout = NCT6694_URB_TIMEOUT;	/* Wait until urb complete */
+> +
+> +	devm_mutex_init(dev, &nct6694->access_lock);
+> +	devm_mutex_init(dev, &nct6694->irq_lock);
+> +
+> +	usb_fill_int_urb(nct6694->int_in_urb, udev, pipe,
+> +			 nct6694->int_buffer, maxp, usb_int_callback,
+> +			 nct6694, int_endpoint->bInterval);
+> +	ret = usb_submit_urb(nct6694->int_in_urb, GFP_KERNEL);
+> +	if (ret)
+> +		goto err_urb;
+> +
+> +	dev_set_drvdata(dev, nct6694);
+> +	usb_set_intfdata(iface, nct6694);
+> +
+> +	ret = mfd_add_hotplug_devices(dev, nct6694_dev, ARRAY_SIZE(nct6694_dev));
+> +	if (ret)
+> +		goto err_mfd;
+> +
+> +	return 0;
+> +
+> +err_mfd:
+> +	usb_kill_urb(nct6694->int_in_urb);
+> +err_urb:
+> +	usb_free_urb(nct6694->int_in_urb);
+> +	return ret;
+> +}
+> +
+> +static void nct6694_usb_disconnect(struct usb_interface *iface)
+> +{
+> +	struct usb_device *udev = interface_to_usbdev(iface);
+> +	struct nct6694 *nct6694 = usb_get_intfdata(iface);
+> +
+> +	mfd_remove_devices(&udev->dev);
+> +	usb_kill_urb(nct6694->int_in_urb);
+> +	usb_free_urb(nct6694->int_in_urb);
+> +}
+> +
+> +static const struct usb_device_id nct6694_ids[] = {
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(NCT6694_VENDOR_ID,
+> +					NCT6694_PRODUCT_ID,
+> +					0xFF, 0x00, 0x00)},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(usb, nct6694_ids);
+> +
+> +static struct usb_driver nct6694_usb_driver = {
+> +	.name	= "nct6694",
+> +	.id_table = nct6694_ids,
+> +	.probe = nct6694_usb_probe,
+> +	.disconnect = nct6694_usb_disconnect,
+> +};
+> +
+> +module_usb_driver(nct6694_usb_driver);
+> +
+> +MODULE_DESCRIPTION("USB-MFD driver for NCT6694");
+> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+> new file mode 100644
+> index 000000000000..38c8c7af10d5
+> --- /dev/null
+> +++ b/include/linux/mfd/nct6694.h
+> @@ -0,0 +1,142 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Nuvoton NCT6694 USB transaction and data structure.
+> + *
+> + * Copyright (C) 2024 Nuvoton Technology Corp.
+> + */
+> +
+> +#ifndef __MFD_NCT6694_H
+> +#define __MFD_NCT6694_H
+> +
+> +#define NCT6694_DEV_GPIO	"nct6694-gpio"
+> +#define NCT6694_DEV_I2C		"nct6694-i2c"
+> +#define NCT6694_DEV_CAN		"nct6694-can"
+> +#define NCT6694_DEV_WDT		"nct6694-wdt"
+> +#define NCT6694_DEV_HWMON	"nct6694-hwmon"
+> +#define NCT6694_DEV_RTC		"nct6694-rtc"
+> +
+> +#define NCT6694_VENDOR_ID	0x0416
+> +#define NCT6694_PRODUCT_ID	0x200B
+> +#define NCT6694_INT_IN_EP	0x81
+> +#define NCT6694_BULK_IN_EP	0x02
+> +#define NCT6694_BULK_OUT_EP	0x03
+> +#define NCT6694_MAX_PACKET_SZ	512
+> +
+> +#define NCT6694_HCTRL_SET	0x40
+> +#define NCT6694_HCTRL_GET	0x80
+> +
+> +#define NCT6694_URB_TIMEOUT	1000
+> +
+> +enum nct6694_irq_id {
+> +	NCT6694_IRQ_GPIO0 = 0,
+> +	NCT6694_IRQ_GPIO1,
+> +	NCT6694_IRQ_GPIO2,
+> +	NCT6694_IRQ_GPIO3,
+> +	NCT6694_IRQ_GPIO4,
+> +	NCT6694_IRQ_GPIO5,
+> +	NCT6694_IRQ_GPIO6,
+> +	NCT6694_IRQ_GPIO7,
+> +	NCT6694_IRQ_GPIO8,
+> +	NCT6694_IRQ_GPIO9,
+> +	NCT6694_IRQ_GPIOA,
+> +	NCT6694_IRQ_GPIOB,
+> +	NCT6694_IRQ_GPIOC,
+> +	NCT6694_IRQ_GPIOD,
+> +	NCT6694_IRQ_GPIOE,
+> +	NCT6694_IRQ_GPIOF,
+> +	NCT6694_IRQ_CAN1,
+> +	NCT6694_IRQ_CAN2,
+> +	NCT6694_IRQ_RTC,
+> +	NCT6694_NR_IRQS,
+> +};
+> +
+> +enum nct6694_response_err_status {
+> +	NCT6694_NO_ERROR = 0,
+> +	NCT6694_FORMAT_ERROR,
+> +	NCT6694_RESERVED1,
+> +	NCT6694_RESERVED2,
+> +	NCT6694_NOT_SUPPORT_ERROR,
+> +	NCT6694_NO_RESPONSE_ERROR,
+> +	NCT6694_TIMEOUT_ERROR,
+> +	NCT6694_PENDING,
+> +};
+> +
+> +struct nct6694_cmd_header {
+> +	u8 rsv1;
+> +	u8 mod;
+> +	u8 cmd;
+> +	u8 sel;
+> +	u8 hctrl;
+> +	u8 rsv2;
+> +	__le16 len;
+> +} __packed;
+> +
+> +struct nct6694_response_header {
+> +	u8 sequence_id;
+> +	u8 sts;
+> +	u8 reserved[4];
+> +	__le16 len;
+> +} __packed;
+> +
+> +union nct6694_usb_msg {
+> +	struct nct6694_cmd_header cmd_header;
+> +	struct nct6694_response_header response_header;
+> +};
+> +
+> +struct nct6694 {
+> +	struct usb_device *udev;
+> +	struct urb *int_in_urb;
+> +	struct irq_domain *domain;
+> +	struct mutex access_lock;
+> +	struct mutex irq_lock;
+> +	union nct6694_usb_msg *usb_msg;
+> +	unsigned char *int_buffer;
+> +	unsigned int irq_enable;
+> +	/* time in msec to wait for the urb to the complete */
+> +	long timeout;
+> +};
+> +
+> +/*
+> + * nct6694_read_msg - Receive data from NCT6694 USB device
+> + *
+> + * @nct6694 - Nuvoton NCT6694 structure
+> + * @mod - Module byte
+> + * @offset - Offset byte or (Select byte | Command byte)
+> + * @length - Length byte
+> + * @buf - Read data from rx buffer
+> + *
+> + * USB Transaction format:
+> + *
+> + *	OUT	|RSV|MOD|CMD|SEL|HCTL|RSV|LEN_L|LEN_H|
+> + *	OUT	|SEQ|STS|RSV|RSV|RSV|RSV||LEN_L|LEN_H|
+> + *	IN	|-------D------A------D------A-------|
+> + *	IN			......
+> + *	IN	|-------D------A------D------A-------|
+
+The structure already discribes this information pretty well. No need
+for this table.
+
+> + */
+> +int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
+> +		     u16 length, void *buf);
+> +
+> +/*
+> + * nct6694_read_msg - Transmit data to NCT6694 USB device
+> + *
+> + * @nct6694 - Nuvoton NCT6694 structure
+> + * @mod - Module byte
+> + * @offset - Offset byte or (Select byte | Command byte)
+> + * @length - Length byte
+> + * @buf - Write data to tx buffer
+> + *
+> + * USB Transaction format:
+> + *
+> + *	OUT	|RSV|MOD|CMD|SEL|HCTL|RSV|LEN_L|LEN_H|
+> + *	OUT	|-------D------A------D------A-------|
+> + *	OUT			......
+> + *	OUT	|-------D------A------D------A-------|
+> + *	IN	|SEQ|STS|RSV|RSV|RSV|RSV||LEN_L|LEN_H|
+> + *	IN	|-------D------A------D------A-------|
+> + *	IN			......
+> + *	IN	|-------D------A------D------A-------|
+> + */
+> +int nct6694_write_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
+> +		      u16 length, void *buf);
+> +
+> +#endif
+
+Yours sincerely,
+Vincent Mailhol
 
 
