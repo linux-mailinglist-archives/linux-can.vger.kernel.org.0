@@ -1,109 +1,85 @@
-Return-Path: <linux-can+bounces-2514-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2515-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AE699FE7AC
-	for <lists+linux-can@lfdr.de>; Mon, 30 Dec 2024 16:39:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B96F9FEE08
+	for <lists+linux-can@lfdr.de>; Tue, 31 Dec 2024 09:43:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0264118829AE
-	for <lists+linux-can@lfdr.de>; Mon, 30 Dec 2024 15:39:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F22A161126
+	for <lists+linux-can@lfdr.de>; Tue, 31 Dec 2024 08:43:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B887C1AAA1B;
-	Mon, 30 Dec 2024 15:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE36818B460;
+	Tue, 31 Dec 2024 08:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XuvWJtEE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OfDVkJpo"
 X-Original-To: linux-can@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4FE154BE4;
-	Mon, 30 Dec 2024 15:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3BD516BE3A;
+	Tue, 31 Dec 2024 08:42:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735573183; cv=none; b=VbjHB7Dv4TRSJ1xvmA5Tt3yuUEta96ZVwi1ZpjGCxjcdA1GiM6b6j/CVyvgBIQjELceRVxzKm/ULQ9UO9y8+cqJonVniR7Bk8bzo65/LmyWo1WFEo6vcxLJAZcWlsX6G7Z1IE29nm24ofgVB8TkO0699JW7pikr3jcMzTYXD5ok=
+	t=1735634578; cv=none; b=sviDbt8/UmDBOatYgFWtZTAXkMyGgUpmQTO99mGn/5gxHPej2XbjF/HK/ObIvBqTylgRJLHixllTyJwA6s861HsJ0kykkZVZFhL5wxRlOL0lu1zNRPs2D5LSBLYro0kz5m/xEfMJt+39zzY5S8a6/rvIYSiFnniSGosIwh9zgcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735573183; c=relaxed/simple;
-	bh=z95nvnR0IBfFZgmgFKAM139dJRdkSORpd/LIl6jgSDI=;
+	s=arc-20240116; t=1735634578; c=relaxed/simple;
+	bh=sEVwsEUE+NBGeWQW5kfxfUmeuQ0OvQKO90sgRc/dEtw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TjqIVPNLZJwkbM9ku79OKmpRmhZAOeAbx+tqIyaYUJ/2ABgd9UC3MvTnl56VigNtJgptVwcyVOCX7PNVJm60IH/BxImazUCMJsLg9YT+t897c/wrjhWQphuq8lg0/6cUjlxtVX71/4ROs+8uwSnMuk4EArywgrq2K6MTYNy4yes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XuvWJtEE; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C90E1C0002;
-	Mon, 30 Dec 2024 15:39:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1735573178;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hA6CvsCmERwL792aXpdy/ULlGDIdsXDMPmDFIsJtA6E=;
-	b=XuvWJtEE0++XLT3rjMf9QjyWRB1g9h7vnqPO7uWmXBjocxq+NoCycynxsGKJmKQlDfH9Yx
-	1ilV8yt4k+8YgHIF9ToR+BZ6BTDhk/q1w37IAJYbJAodKEVUuzdeulTaOIoA4s6Z0ihmw4
-	sRkOi7lOxe30lAVxPMk+2ArnorH0JvtorS92rVthXDsL9+DWX64KZpPNsoWqSinnlfxDDt
-	4HmfgAvft3IdMa9U+q2i5XrPI3/K2KZkpmRnHOGIkX76XWqBB6uHPxiSToobxC2KNkZh08
-	vAGwy1jwSp7IWTxgauhY3nNw40B+bqmn6IeJSMURelKCAGbwdErgEnq2vtXnMQ==
-Date: Mon, 30 Dec 2024 16:39:36 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v4 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Message-ID: <2024123015393681ee26a3@mail.local>
-References: <20241227095727.2401257-1-a0282524688@gmail.com>
- <20241227095727.2401257-8-a0282524688@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BUa9WFQ/1YnroggaZJThYRNDtQRK4MYgBNneGgQqRrH2fpsqgWq04NgTvXNoEQp/1tW+kn84fci6nnqezaG53VgKLcCIem8DqEao44Ch7Z+HHOursSvl/Hi+x0rpFX/gLhRjAUGfRZmqVrywL07RTBAXjJZinD0RvF9Zc0qk+dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OfDVkJpo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C0BC4CED6;
+	Tue, 31 Dec 2024 08:42:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735634578;
+	bh=sEVwsEUE+NBGeWQW5kfxfUmeuQ0OvQKO90sgRc/dEtw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OfDVkJpomnmEJ8oDf9sOP5VICaSs2vALcrI6QlE9SEAEPvdMkgIgY+6PnOmzjxmO6
+	 G8VAZtJwMihHusD37VZfN/J5UbVfTJHgI7YxdGr9ctQT5jcO9ASjgC12ILNjmvjn6c
+	 XpcMIavXHuGTZdhllDPRSv0vke5hOnSzZX5HiZ/U2JJVHbuEEKaxXlkdZYlVtposNJ
+	 fLlBWH/0xkAeoc6PdQ1KHnwNIcDQlB+fCXrSZvHV7SbaKkFV/adjRwTqbObYBCNm5Z
+	 BrvG0SAYr65cRz0g/e5AMvGZ6uHwDqv0zcnDY6HAw5Odkew+Uubi0LesI3mPF6yRtR
+	 brPb4wksCLDVA==
+Date: Tue, 31 Dec 2024 09:42:54 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Conor Dooley <conor+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-can@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] dt-bindings: can: st,stm32-bxcan: fix st,gcan property
+ type
+Message-ID: <mqkkf4vgd25mq3xvial2unlyumtsbrei7ajkouvrsvkn7pc66y@j5do2qzlgysc>
+References: <20241228150043.3926696-1-dario.binacchi@amarulasolutions.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241227095727.2401257-8-a0282524688@gmail.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+In-Reply-To: <20241228150043.3926696-1-dario.binacchi@amarulasolutions.com>
 
-On 27/12/2024 17:57:27+0800, Ming Yu wrote:
-> +	ret = devm_rtc_register_device(data->rtc);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to register rtc\n");
-
-There is no error path where the error is silent in
-devm_rtc_register_device, the message is unnecessary .
-
-> +
-> +	device_init_wakeup(&pdev->dev, true);
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver nct6694_rtc_driver = {
-> +	.driver = {
-> +		.name	= "nct6694-rtc",
-> +	},
-> +	.probe		= nct6694_rtc_probe,
-> +};
-> +
-> +module_platform_driver(nct6694_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:nct6694-rtc");
-> -- 
-> 2.34.1
+On Sat, Dec 28, 2024 at 04:00:30PM +0100, Dario Binacchi wrote:
+> The SRAM memory shared pointed to by the st,gcan property is unique, so
+> we don't need an array of phandles.
 > 
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You should mention also that Linux implementation does not expect any
+argument.
+
+> Fixes: e43250c0ac81 ("dt-bindings: net: can: add STM32 bxcan DT bindings")
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> 
+> ---
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
