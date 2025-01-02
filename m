@@ -1,131 +1,130 @@
-Return-Path: <linux-can+bounces-2518-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2519-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1ABD9FF64F
-	for <lists+linux-can@lfdr.de>; Thu,  2 Jan 2025 06:41:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60BD39FF72D
+	for <lists+linux-can@lfdr.de>; Thu,  2 Jan 2025 10:04:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C18543A1FFD
-	for <lists+linux-can@lfdr.de>; Thu,  2 Jan 2025 05:41:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3096A161DCF
+	for <lists+linux-can@lfdr.de>; Thu,  2 Jan 2025 09:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FF86190055;
-	Thu,  2 Jan 2025 05:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7225E1922F5;
+	Thu,  2 Jan 2025 09:04:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e60WxBbY"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="to/xHWBC"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from out.smtpout.orange.fr (out-67.smtpout.orange.fr [193.252.22.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C548D54F8C;
-	Thu,  2 Jan 2025 05:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761333D68;
+	Thu,  2 Jan 2025 09:04:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735796467; cv=none; b=b1BcidgEz+zSmzli++nh7ScNinjOodkTzYFC9oW2GE0ldqhiSqZv+FHwMR/B61D1JT7wTBQmDYrAk2ai1VBpx3WKI7UURlsn6SOFVAb2mntP3DNlaEe3S7+SHxxWNAklVCF9hGNX4C/+5LDEy/nkHAyClf7zHgwBb8R7Fqu4x2E=
+	t=1735808663; cv=none; b=U97s+8IMLWPqow0ZbXopnoSIxNxubu5ZZzDq1+GQ+qn1EyAaCQEXeZrEJtL72dxcT51YTQMz0Qt/gkIX0wAkSUku9y+SKDlL7ghnupOg6Eiio9Ybb1PT/JpXH1tjNIQUrJ8O/OLKkT4GxXdrU7Zm6ZiionrosO1BPB2JsCDI/i0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735796467; c=relaxed/simple;
-	bh=x0GqOPflz3JU1F/JYbbkfOfzkYbLKZumeQJnrDyofl4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BE3f6hQWZP7CiB4A8639kWR0j/9hwG0FAhXhyQEXMJUmZzLV3mQsUq7DsLfrem2Wp8fr3HTQvZnMMcbO3MAYBH0dsY2H1n38/ykPK93leGehLIcyn0F1X+hXmi/R7hpQqbn8N4Tqy8QiyvdXfVLlx07J7EuwLWhn5nw8ogmRzd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e60WxBbY; arc=none smtp.client-ip=209.85.219.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e3f78f5fc07so11327449276.2;
-        Wed, 01 Jan 2025 21:41:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735796465; x=1736401265; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ASYw2YvvCKSoHOSnhWWZWXnYT66q6f5Arwrbz5nE6n0=;
-        b=e60WxBbY2J/XD/sTMG+GUy13XQ5pFmkdpOY+OpllbgZ81S48CdnttZzjED37XjlxNn
-         pxBEa7psZ/mMwIq49UMmV4n8sq86cMbSv6dDe2Gl2iVFhkeAxzfRxsPMaqkvVT3OOUXI
-         eQ3szalg4n5qZETB0eFhm5yKaJe6EdDWg71CZytvy2rJ4vFEx5V0mwmswVkQb7ySfugp
-         89L+qPCmadAqYnWO9z3VTYH8qVmO0EvwMWxu88CyPA/PK6HLENMWH931dGovWWABrsxP
-         8BgV7g5D/FuuK2lPaVA9zBCHriE80XTVy0qAeEce+L54iV2bUbOEhak0uLZHHiV6GxK2
-         O+dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735796465; x=1736401265;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ASYw2YvvCKSoHOSnhWWZWXnYT66q6f5Arwrbz5nE6n0=;
-        b=VTlpjWSmCWoHjbqqd8zB3ajM8Cj9wxXUK+Dp4tDkEOTJdYvn42cDoCWSth2/3NDw1t
-         IbGDe/glviKd/JjALafYj6WTSL7MwXIL2rsb6gkGbCQK3UtOsEEkOwNS1WVkzv3jnIC3
-         1z1Uul20hYlec/5Nf9KRv6gWcPO1tpedKgLuv80eyJQbzJp91/NsSBBWpXgD3tM+oeZH
-         Dim2QAoSbPwFpc7xCiOiW09ecFwGnv80siQsfQ+czq/LtO95nVsjNOkmBQgLQSbkheYk
-         kkyFFPDjcWEGwbSJHPf8j6m5EZ74u78ktvSVKxEW5zw53TPTcwV4fS9XwZT8v6xwbGYY
-         OKQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJQyEU4snbIVEk1KEK9Nw+h4rEQrXtcSxYQkjr3KF1xavKSRrEju8rBgRzn9Zy2/+kSoTx3HwnW2Q8Tw==@vger.kernel.org, AJvYcCUPplk9C6on+5MtOlvdjLn6Ynlo9bsfPqIbndfcmgG/m0Y5mzVDjhtbcyfIX6c1sUvSbcv3WLCm/hKoW7s=@vger.kernel.org, AJvYcCUd5i+IB6aI10OefpRc+K0MRdc8VQ43qY6xzYfzpztwQOgZnHvBNUcrH1KopQluY91Tun8sH/oJSsuVZKzcU+Q=@vger.kernel.org, AJvYcCVmy1+Qob+GA+QFS/WzeZ5b+GtpUP1gM3rF74GJOaJ4twc7GtiYy/6DO226xVI2feHBlcluNMlfjMg=@vger.kernel.org, AJvYcCW6Z+N6gZ8CeiTxlFi/YaWRwm6EPaIksyDi0mL5UsxNW8t8/JwEizwd9dJsrMh8r6xEt8vJhv9WGWGP@vger.kernel.org, AJvYcCWuqS5G6rgypeJoCtxMmeVVkndBQmDe+FUStQKDZ0EKx1gObT6yO/fOB+H0qXR081J6GV3Suwwn@vger.kernel.org, AJvYcCXPl24bJwendWlV+6pBKor5cUDA8tm9hXgN7axmK/nL/71yAJfjrHGebsWk6dzmV4xlO2R3qzbur6ES@vger.kernel.org
-X-Gm-Message-State: AOJu0YzW76Qpdioc070fz2MUL47nTW/qsfpWb6bU0IuOxCpmQa2WbH+H
-	fHTWZ3NwmQus9Kry8C4NmeduJZkZNOOgwmD4oxqHY7uABQvFgaEi75H249bdl3cJdnlG6rTElzk
-	Q0DY6cEx4beRnjjZnuf9ZcbPatdA=
-X-Gm-Gg: ASbGnctnZqDXeMIA8sDbBoWnMqMkLDKsVcjOzjjMCUVxLnksLOetTHOcRqFIbr2PG2K
-	t3iAAQp9FlISyDaBn6pyAk0ff+AuoZK4CShPz7PXxMuzauy4pygqKyYMxq2KfpRRGJyWGnmpM
-X-Google-Smtp-Source: AGHT+IH4op97zYxM0yElb80n1mWB5vje2idEq4j1aO+EgRYFQsMF+lHBsn3B3CF0kwlTajDY4BtnNpv7SKTe7hWMtDQ=
-X-Received: by 2002:a05:690c:3502:b0:6ef:799c:955b with SMTP id
- 00721157ae682-6f3f8242796mr265511177b3.41.1735796464603; Wed, 01 Jan 2025
- 21:41:04 -0800 (PST)
+	s=arc-20240116; t=1735808663; c=relaxed/simple;
+	bh=zghEmGBMc39NZbTdkZhdcwAKGgolK8rFK+hu7TmAzP0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jkvJfshkbABCa1Gn+GcwnWt4K2GkIUAWzWpMkLMtU5Wncd9RcEVLQOBfNpFLKX4LsrftcjkwKkphISAZ6q03BiNrldNsn8icYlRhuIGGwKgb+Nzf329dshRk3qNQ6BgRyyAaWQdeWmg8nAfX9Qk/7YgrJThCo+lHR9FFltwiQhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=to/xHWBC; arc=none smtp.client-ip=193.252.22.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id TH7UtHho2v8EoTH7ZtzYi9; Thu, 02 Jan 2025 10:04:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1735808652;
+	bh=39nmaAXlbtXxpI44yh3hY9JN+QCD/Pdn8DUS9Q3fxLI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=to/xHWBCunZGAPM3qDXj2KMhg9rv0ZHaJ9AdPbNG69HGM5jyjIW6/U9/+NxQuQcmq
+	 Mz7JqqlYDWn/3hGN4UpLLODWsA5EG1Vk3PmG47guje3kKKO/OSw/y+TO4L+xpgjk6D
+	 Iv2lUKbd5rCILZwyx1qtyf8cfzzaKbNomR52QHcdi5hwBYJhIAhRyx3jrRBafaTYEq
+	 4UjYgMVhsEVw64d3/dyX/ip/+RyUHACZ9swuz4zBl5SEg2BtYCcq9EYR0PzkAnU30m
+	 KAgb6kFrgroBU9ZgR8LiUYXpqyaEUZfydeyDcUAALrzeBWfQX2aAcSm++Ee20nwO92
+	 m78dDF/2o2tew==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 02 Jan 2025 10:04:12 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <1fdb892b-a1e9-4199-a538-d5b98f283096@wanadoo.fr>
+Date: Thu, 2 Jan 2025 18:03:55 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241227095727.2401257-1-a0282524688@gmail.com>
- <20241227095727.2401257-5-a0282524688@gmail.com> <41f77d39-bce3-4e3b-98c8-f248b723a24c@wanadoo.fr>
-In-Reply-To: <41f77d39-bce3-4e3b-98c8-f248b723a24c@wanadoo.fr>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 2 Jan 2025 13:40:53 +0800
-Message-ID: <CAOoeyxU0ex9_-a-uWda9hFbQa3MkFtNdAFan8C-899Z2pGYy7g@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org, 
-	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
-	mkl@pengutronix.de, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, tmyu0@nuvoton.com,
+ lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
+ andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+ jdelvare@suse.com, alexandre.belloni@bootlin.com
+References: <20241227095727.2401257-1-a0282524688@gmail.com>
+ <20241227095727.2401257-5-a0282524688@gmail.com>
+ <41f77d39-bce3-4e3b-98c8-f248b723a24c@wanadoo.fr>
+ <CAOoeyxU0ex9_-a-uWda9hFbQa3MkFtNdAFan8C-899Z2pGYy7g@mail.gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <CAOoeyxU0ex9_-a-uWda9hFbQa3MkFtNdAFan8C-899Z2pGYy7g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Dear Vincent,
+On 02/01/2025 at 14:40, Ming Yu wrote:
+> Dear Vincent,
+> 
+> Thank you for your comments,
+> 
+> Vincent Mailhol <mailhol.vincent@wanadoo.fr> 於 2024年12月30日 週一 下午1:56寫道：
+>>
+>>> +config CAN_NCT6694
+>>> +     tristate "Nuvoton NCT6694 Socket CANfd support"
+>>> +     depends on MFD_NCT6694
+>>
+>> I think it would be better to do a
+>>
+>>         select MFD_NCT6694
+>>
+>> here.
+>>
+>> Then, make MFD_NCT6694 an hidden configuration in a similar fashion as
+>> MFD_CORE. Alone, CONFIG_MFD_NCT6694 does nothing, so better to hide it
+>> from the end user.
+>>
+>> The comment also applies to the other patches.
+>>
+> 
+> I understand, but I noticed that in the Kconfig files of other
+> modules, the dependency is written in the form:
+> config CAN_NCT6694
+>         tristate "Nuvoton NCT6694 Socket CANfd support"
+>         depends on MFD_NCT6694
+> (e.g. CAN_JANZ_ICAN3, GPIO_DLN2, ...)
+> Do you think changing it to select MFD_NCT6694 would be better?
 
-Thank you for your comments,
+That's a fair point. Looking at the examples you provided, your approach
+makes sense. Please ignore my comment here.
 
-Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2024=E5=B9=B412=E6=
-=9C=8830=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=881:56=E5=AF=AB=E9=81=
-=93=EF=BC=9A
->
-> > +config CAN_NCT6694
-> > +     tristate "Nuvoton NCT6694 Socket CANfd support"
-> > +     depends on MFD_NCT6694
->
-> I think it would be better to do a
->
->         select MFD_NCT6694
->
-> here.
->
-> Then, make MFD_NCT6694 an hidden configuration in a similar fashion as
-> MFD_CORE. Alone, CONFIG_MFD_NCT6694 does nothing, so better to hide it
-> from the end user.
->
-> The comment also applies to the other patches.
->
 
-I understand, but I noticed that in the Kconfig files of other
-modules, the dependency is written in the form:
-config CAN_NCT6694
-        tristate "Nuvoton NCT6694 Socket CANfd support"
-        depends on MFD_NCT6694
-(e.g. CAN_JANZ_ICAN3, GPIO_DLN2, ...)
-Do you think changing it to select MFD_NCT6694 would be better?
+Yours sincerely,
+Vincent Mailhol
 
-Best regards,
-Ming
 
