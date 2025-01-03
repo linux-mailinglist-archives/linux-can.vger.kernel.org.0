@@ -1,158 +1,149 @@
-Return-Path: <linux-can+bounces-2529-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2531-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A527A002C2
-	for <lists+linux-can@lfdr.de>; Fri,  3 Jan 2025 03:33:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73EBAA00965
+	for <lists+linux-can@lfdr.de>; Fri,  3 Jan 2025 13:42:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84E9E1883D15
-	for <lists+linux-can@lfdr.de>; Fri,  3 Jan 2025 02:33:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 529CE3A3F3A
+	for <lists+linux-can@lfdr.de>; Fri,  3 Jan 2025 12:42:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 599B02AD20;
-	Fri,  3 Jan 2025 02:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32B1F1A8409;
+	Fri,  3 Jan 2025 12:42:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="UhuN/QDK"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="O6GsVT1X"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-69.smtpout.orange.fr [193.252.22.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9AE64C62
-	for <linux-can@vger.kernel.org>; Fri,  3 Jan 2025 02:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB3E13AD0;
+	Fri,  3 Jan 2025 12:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735871629; cv=none; b=SqAxoVA/BS1Q7JagXJ+YrJLmoSqRe5s/Iti9aOT8kXUlcRC53gLsDAD9wiD822t2kamSNWDEokFY1DMUbwH4wbMTZXGjCRvFDoDkE7Db4db7zygnvGLSXZTR7x7vYHEpha6Xe2IrmNZLOpG9GgqRl46uuxplKYr7RM8TEqJW66A=
+	t=1735908132; cv=none; b=diI/3Gn/LUavjZU5sqD0iulQI0J08XoK3dZekJpKFMdWDB1c/h4t+xvo4IHpr6yTjoegXDX+wSLkna2PBYAWSCQTSZE/MARveDVufaoqO0JmDL5M5EjbYvdfWCK+cw6Cc2t7l+ghgO2IxxFax4tVcFQyB8kO6H6zVF/M7hldJpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735871629; c=relaxed/simple;
-	bh=9+T5EPcTLjM5aHcnSYZVc7UBRH9SAvE6yht2eFcyin0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZNWapCKGN+7oEA5nOFsqOTcBJMhOC+YKwq8sITR6BmOSL5wQMyrKMGMhWUCFw8yvVCwtYpUn5BRB6U0N1SP7ca0z/6DQn153nEXhSgd8lq4FDOuR6THsqKeqpINxtDjsB5sVZiyn0W5dLOUL0BmHyLPs4YEuimnIXaGTiWot4Gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=UhuN/QDK; arc=none smtp.client-ip=193.252.22.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id TXVDt9pyMoTrQTXVHtOemJ; Fri, 03 Jan 2025 03:33:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1735871618;
-	bh=aXoGRSr8hcUJqjfeqZJqDEu0NkjR1GPcyM7wR2V4pc4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=UhuN/QDK4MyTVLjHMOnQFbSVUtEOTUUaz8DhyIlhLoGsij+bJ50mcKy587GqLyI/6
-	 jKaOXIKu9yWmadivT9f4x/3hwz94s62eUabkc8bFDzLQLXcOqzaJJL0ShiydbY1aHt
-	 X0ISnla+qMYe/GOOrKexliXFyY8BfvVsNdywOu1dzlE0aOhajdJkuT282nk3/XmqtV
-	 NP0gC/7KD0VL1cK+bFGP4p76laDdHSpB8dtM+EfMzBEoinGF50D6IvShZjooJ5ByBZ
-	 UCgJgTyULwr2uU17FA5F0sxCusk6yT0mW51cpaF79+7Cya4VNFEmd8u7PCpR0H+eq3
-	 e3GODjU8W5ZXQ==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 03 Jan 2025 03:33:38 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <58837571-9bb0-47b3-be0a-fd3eb5ff1273@wanadoo.fr>
-Date: Fri, 3 Jan 2025 11:33:30 +0900
+	s=arc-20240116; t=1735908132; c=relaxed/simple;
+	bh=bO8/dVTnZPvMWTMsHQngFWEhaJho18CdgR5bOVbC8Wo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i0aScbKHymtMho2pa28sswGvGfp7H65YFbOtRGa5IHO0bAjZNL6Sf/CWxZ4Is63CBY2nPllfgN2iG0vHTQc7/fBsy7wmiDi+w78Q9W8UTbDpfzP2jN2y3FK16bnZHCt/0qabQnLXwL51iebG6dTNhz0uRcKgrr7WbXdi94Z+V6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=O6GsVT1X; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID; bh=63DDlv1B8ESMghis3VptMZqGDW2+EMqgGuNLkv78d9o=; b=O6GsVT
+	1XKFgi/a2FK2rPu+nEt1uFWk6P6u1MC7umNuJcjd0wDWg8WJVtMSIymH9D/FH9qvU4vyMNecBLs/T
+	SDZ9/Cjh+Ekz4FB5dEhIT//glH4fi6wFgY1znsJaMRT0cTKr6lhk4tWp1nzz7uZxJ2JrF4zsxLyxZ
+	s4CW/IE7w2JTOkyNB4pul/hvaNv2fdGBMh9eR/AUbHzclKMLAS4cotS8UvT76N8DNrdoNwNxjKeQG
+	9pEUlrucS8/qZjYjJY8zBTzilg91XmxDzQXy1RZZShrupZGZ1Qv9ATvJx57vvHlLghgPRRDMHHTu0
+	0f0wF0pp7TXfpo9TKmVxunASTVlA==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <sean@geanix.com>)
+	id 1tTgrM-0003Ff-0T;
+	Fri, 03 Jan 2025 13:33:00 +0100
+Received: from [2a06:4004:10df:0:9e0:2602:be72:b34a] (helo=Seans-MBP.snzone.dk)
+	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <sean@geanix.com>)
+	id 1tTgrL-000HJ8-1k;
+	Fri, 03 Jan 2025 13:32:59 +0100
+Date: Fri, 3 Jan 2025 13:32:58 +0100
+From: Sean Nyekjaer <sean@geanix.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH can-next v5 2/2] can: tcan4x5x: add option for selecting
+ nWKRQ voltage
+Message-ID: <fndziki656cxg353f7bldt7s5dm2ybaq4e2foou3eb74savebx@q6uyltlj2klv>
+References: <20241114-tcan-wkrqv-v5-0-a2d50833ed71@geanix.com>
+ <20241114-tcan-wkrqv-v5-2-a2d50833ed71@geanix.com>
+ <clwiowhd5jwf7uzbcbexelsspdpflqhshq6ev5wsabhuugemlp@bbktuqgjd2gg>
+ <20241118-impetuous-mackerel-of-glamour-f482ed-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/6] can: esd: add CAN-FD for esd GmbH PCIe/402 CAN
- interface family
-To: =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
- Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
- Robert Nawrath <mbro1689@gmail.com>
-References: <20250102185821.670839-1-stefan.maetje@esd.eu>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250102185821.670839-1-stefan.maetje@esd.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241118-impetuous-mackerel-of-glamour-f482ed-mkl@pengutronix.de>
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27507/Fri Jan  3 10:40:57 2025)
 
-On 03/01/2025 at 03:58, Stefan Mätje wrote:
-> This patch adds support for CAN-FD in the existing esd_402_pci
-> driver for the PCI based PCIe/402 CAN interface family from
-> esd GmbH.
+On Mon, Nov 18, 2024 at 04:14:09PM +0100, Marc Kleine-Budde wrote:
+> On 18.11.2024 16:05:42, Sean Nyekjaer wrote:
+> > Hi Marc,
+> > 
+> > On Thu, Nov 14, 2024 at 10:14:50AM +0100, Sean Nyekjaer wrote:
+> > > The nWKRQ pin supports an output voltage of either the internal reference
+> > > voltage (3.6V) or the reference voltage of
+> > > the digital interface 0-6V (VIO).
+> > > Add the devicetree option ti,nwkrq-voltage-vio to set it to VIO.
+> > > 
+> > > If this property is omitted the reset default, the internal reference
+> > > voltage, is used.
+> > > 
+> > > Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> > > Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > > Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > ---
+> > >  drivers/net/can/m_can/tcan4x5x-core.c | 20 ++++++++++++++++++++
+> > >  drivers/net/can/m_can/tcan4x5x.h      |  2 ++
+> > >  2 files changed, 22 insertions(+)
+> > > 
+> > > diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+> > > index 2f73bf3abad889c222f15c39a3d43de1a1cf5fbb..7213d9894c82d079bf92f1ec62d4eebb500cdfa4 100644
+> > > --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> > > +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> > > @@ -92,6 +92,8 @@
+> > >  #define TCAN4X5X_MODE_STANDBY BIT(6)
+> > >  #define TCAN4X5X_MODE_NORMAL BIT(7)
+> > >  
+> > > +#define TCAN4X5X_NWKRQ_VOLTAGE_VIO BIT(19)
+> > > +
+> > >  #define TCAN4X5X_DISABLE_WAKE_MSK	(BIT(31) | BIT(30))
+> > >  #define TCAN4X5X_DISABLE_INH_MSK	BIT(9)
+> > >  
+> > > @@ -267,6 +269,13 @@ static int tcan4x5x_init(struct m_can_classdev *cdev)
+> > >  	if (ret)
+> > >  		return ret;
+> > >  
+> > > +	if (tcan4x5x->nwkrq_voltage_vio) {
+> > > +		ret = regmap_set_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
+> > > +				      TCAN4X5X_NWKRQ_VOLTAGE_VIO);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +	}
+> > > +
+> > >  	return ret;
+> > >  }
+> > >  
+> > > @@ -318,6 +327,15 @@ static const struct tcan4x5x_version_info
+> > >  	return &tcan4x5x_versions[TCAN4X5X];
+> > >  }
+> > >  
+> > > +static void tcan4x5x_get_dt_data(struct m_can_classdev *cdev)
+> > > +{
+> > > +	struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
+> > > +	struct device_node *np = cdev->dev->of_node;
+> > 
+> > Guess we can remove this line. Sorry
 > 
-> The patch is sent as RFC because the driver needs some
-> extensions in the netlink interface and user API.
-> 
-> @Vincent: I see that it conflicts with your changes for
->    CAN-XL support in netlink.h but I send it as RFC
->    to show what I have now.
+> ACK. Will fixup here.
 
-No problem. Whoever is merged in second will rebase, shouldn't be hard
-though :)
+Remenber to do the fixup :)
 
-> The esdACC CAN controller has only a single bitrate prescaler
-> for both the nominal and data bitrate. The hardware was
-> designed this way to follow CiA recommendations for the
-> bitrate configuration.
-> 
-> The detailed recommendations of the CiA can be found here:
-> https://www.can-cia.org/fileadmin/cia/documents/publications/cnlm/march_2018/18-1_p28_recommendation_for_the_canfd_bit-timing_holger_zeltwanger_cia.pdf
->> The current bit rate calculation in the kernel is done independently
-> for the nominal and the data bitrate. This can lead to the fact
-> that the selected nominal (NBRP) and data bitrate prescalers (DBRP)
-> differ. This kind of configuration is not supported by the esdACC.
-> 
-> In a first step to avoid this I propose to add a new control mode
-> CAN_CTRLMODE_FD_COMMON_BRP that tells the bitrate check logic
-> to reject bitrate settings with different NBRP and DBRP values.
+Sorry for the extra work
 
-Do you think that we may have controllers with shared Classical CAN and
-CAN FD BRP but different CAN XL BRP? If not, I would suggest to make
-this "CAN XL ready" by using a CAN FD agnostic naming, e.g.
-CAN_CTRLMODE_COMMON_BRP or CAN_CTRLMODE_SHARED_BRP.
-
-> This CAN_CTRLMODE_FD_COMMON_BRP is set statically by the driver
-> to tell that it needs a common BRP (see patch 0005).
-> 
-> The netlink part of this is done in the patches marked with
-> "DO NOT MERGE" in this patchset. 
-> 
-> In a second step the bitrate calculation should be changed to
-> prefer to use a common BRP at least if CAN_CTRLMODE_FD_COMMON_BRP
-> is set. This could be based on the bitrate calculation
-> algorithm of my colleague Oliver Thimm that I will present
-> in a follow up email. This email will then also discuss the
-> advantages of this approach in more detail.
-> 
-> Unfortunately I have no patches yet.
-> 
-> I will send a patch set for the iproute2 tool to add the
-> capability to set the CAN_CTRLMODE_FD_COMMON_BRP using
-> "fd-common-brp" with the ip command.
-
-Looking at the paper you linked, I understand that it is recommended to
-use a single BRP. But this raises a follow-up question: is there any use
-case in which we do *not* want a common BRP? If such use case does not
-exist, then I am not convinced that the CAN_CTRLMODE_FD_COMMON_BRP
-should be exposed in the netlink interface.
-
-If common BRP is simply better, wouldn't it be then simpler to just
-change the bitrate calculation so that everyone uses common BRP?
-
-That said, maybe there is one edge case I am not aware of. If under some
-circumstances it is not possible achieve common BRP, then that new
-control mode makes sense. And I guess that if the calculation fails to
-select a common BRP, then this control mode will be used in the new
-algorithm to decide if the calculation should stop (shared BRP) or
-continue (different BRP allowed).
-
-
-Yours sincerely,
-Vincent Mailhol
-
+/Sean
 
