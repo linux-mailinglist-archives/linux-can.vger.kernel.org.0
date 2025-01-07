@@ -1,170 +1,184 @@
-Return-Path: <linux-can+bounces-2549-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2550-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1907CA03E8B
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jan 2025 13:06:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0599EA03FEB
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jan 2025 13:54:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 809BA3A2865
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jan 2025 12:06:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74555188126D
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jan 2025 12:54:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2DF21EBFE3;
-	Tue,  7 Jan 2025 12:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A126E1EE7AA;
+	Tue,  7 Jan 2025 12:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JCYsGSj0"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604341E0B86
-	for <linux-can@vger.kernel.org>; Tue,  7 Jan 2025 12:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE40A1E9B18;
+	Tue,  7 Jan 2025 12:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736251565; cv=none; b=GR2NM/zNB5EiX6j3jMIIBvRRFr1u0D90iStU1jXtJp9EvkYgnyep/1mBBW9yJtJu/y41khGDfNI8KZAKjX5hfATiILH3taLC6ITLCvXh2D0PbVMcV1cuOexw4ZRS+NREqF4bMpTeWp5y66zM7afM1Sxh8dNDNH9goKJGvoXQa3s=
+	t=1736254440; cv=none; b=phWYxdIL48pZ49OMKLmuN/Et6Fb3W5dvTDRCTwik57sFZbGpqdnaB8U62RUFJWAUBIiic03ss3pr/gVy52lpat42ucl/AFIjl0/xs2V7A9+say7drb6S9IXsQVMM1T4CcTae403vmQkNAa/5AfzEpNXSrAzvqTYF5tjm/GUk90E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736251565; c=relaxed/simple;
-	bh=ITCSuZQwfw2vyxBOUCB4rmYaafYP+KIRaF4bg549Umw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F53UWNWBlctBzp4xUOPzKIcaKfzHneATWG+6LBg4BT2dVNeOoEEUIy8RnCQwURrKzSluZBbln1UcqqCaM4J4YUh9tlelZ7dCmTcK5SvtAjRpgiNbzIG1kC0YzzHJ4+0lOsjrp7VyR4puiSelbGWlbi1JVnwOkqxv/v09NG7SkWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tV8Ku-0000EA-8n; Tue, 07 Jan 2025 13:05:28 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tV8Kq-007L5X-2G;
-	Tue, 07 Jan 2025 13:05:25 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 02F0E3A07D8;
-	Tue, 07 Jan 2025 12:05:25 +0000 (UTC)
-Date: Tue, 7 Jan 2025 13:05:24 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Matthias Schiffer <matthias.schiffer@ew.tq-group.com>, 
-	Vishal Mahaveer <vishalm@ti.com>, Kevin Hilman <khilman@baylibre.com>, Dhruva Gole <d-gole@ti.com>, 
-	Simon Horman <horms@kernel.org>
-Subject: Re: [PATCH v6 1/7] dt-bindings: can: m_can: Add wakeup properties
-Message-ID: <20250107-liberal-unique-uakari-0ddc2c-mkl@pengutronix.de>
-References: <20241219-topic-mcan-wakeup-source-v6-12-v6-0-1356c7f7cfda@baylibre.com>
- <20241219-topic-mcan-wakeup-source-v6-12-v6-1-1356c7f7cfda@baylibre.com>
- <20241225-singing-passionate-antelope-88e154-mkl@pengutronix.de>
- <d6hukfwjqgtwqjgvo65icmpzbm32ob6n7ehrzlywwomjbdn5lg@2wm53244pszz>
+	s=arc-20240116; t=1736254440; c=relaxed/simple;
+	bh=inq18haWLx2b6yOB0em2RillkH2hQMFoTDPjGmfyXlM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Np1nWXoiIYYydbRvvx1bySUGoR4D3tQRPNIqDnKcoEnt4+o4vrDwjssrSvsK4xb6MvNpmqND002eOQhi2FUkBXTVgAGp2tdTaW3Py/WRaMEdNHhdx4v3nWaeGuXf0z9RV4l/OOHsyX1ba6qfEndooZ0VRG4Psg8bPPLbJX9nVr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JCYsGSj0; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3862df95f92so6821154f8f.2;
+        Tue, 07 Jan 2025 04:53:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736254437; x=1736859237; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F66Eu0GAg36EcgkwSAQsoLttohjhJJSzBhrgfuDrfa8=;
+        b=JCYsGSj0Ozsv7WXXWBE5vGxLV1giyFmwp9fqNQ6SV5l2qzXDhqqTTwbNTXRKipgTMU
+         GP6kQJGdbCBi7fh9CJnvDm42jAq/WoMXlgwKRpZISOwRczhcQt1LoE2B8FOakd+WYa0M
+         jPKT3sJAV/OQQyy4dkbWEWcqOYEPn8LR+Ytl1Ykxxa9RFdqEhCENHQ9slSy0/RuZoFNl
+         FdtRCqsdPaN2yDv2T/hnH89K9magsbWh44CaVoOH06zzN80+oMn0flWYrF/awZL0Tj6l
+         Ioc5B5LHKzsT+DxOwjr3vZ43oHFQnCsWWPqp6QRBQX5bHbOZjlhIhVZnoYMYk05WGZaG
+         F0CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736254437; x=1736859237;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F66Eu0GAg36EcgkwSAQsoLttohjhJJSzBhrgfuDrfa8=;
+        b=OoMfESW2J/Dmb/B1e0+l0EfcD43Wu4xqAALbcm6/TIxdp7Pmj3Zno3ansvVcJhiKSm
+         vkf5F7y05TfDigbxRJPnK0fHXT25OhnZa9gVzljWYODYfr+7BtT+iFRx3W5sG2qp8nCv
+         vFhI3RMVyQlrdV/9zm+ZItobJGVxc+ptQvMPAEPkazHulH4GDhUJITH3ODMnELvLbWjU
+         4UWRsJ+3B1EtWklqLX9+sOdh+10OHX2yE2OEbc3wNef0sbg4ieM+cJ77YY0ZUdJ7C34U
+         9cxxey+/GujSzfOI22SLGuUWwovPNq0QyIyItWc2Qt1h0Nfl/JUsnMacu2wsziMjS2K+
+         n/rg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0XnkoQ5hoIx9QAVhUquF/kQa0Z//9pvCeGJ0pCC1wJlrsltT84CgagfEoycR9QbujJJZJKds3HYpZ@vger.kernel.org, AJvYcCUE/0Adt020PWhyAsC2bKBHweiflNywzgpY5Biymkxgfplk6WReW7ltvOAyp9uXMn/SPObppyTSwZBgUyAXS52D@vger.kernel.org, AJvYcCVeQ1enEUxexP1GhEdy7ur8hyWjLfM4eWl2aeNSPDINEhWl3stmuvVYDQZrui5mLuS4dgamDxOk8xsyaA==@vger.kernel.org, AJvYcCVoYovxlTxVqdHC1hTGJLJee3Od/uvGHG6A84Plf02IguVCtJjSyWz9HBjTnqtnlZNGuQFNmwQVew48QQ==@vger.kernel.org, AJvYcCW+xm/Ymz7i7TFlRoiHFSB31ghWDK+a7TYUMmLt3jUl79mcCAaC9i5kI1LA6JSpyy/GfnqpOMlkSeolHmYH0/k=@vger.kernel.org, AJvYcCWKSm2v0nDKKLIJ1fmRYOaps1hTWdvV0MmFVqVwUqc6Xaw/p7JO3SqFrxyDw3V4kcyThFv2kL2t6j335Fqc@vger.kernel.org, AJvYcCWUJe8yuL5zTp7DNhaETLOmQwHojSuBzJPF3g+/V0EbhOy6yUekoj/hOjNQr0lNynrExQgamy0woPVp@vger.kernel.org, AJvYcCX8viDrYX/X8hWsPb9GZiUs47am/zXkLXR5PDP5IoRdHFUCPnhZa2EiaZSj5BjRz+2h4+Ks4i4x@vger.kernel.org, AJvYcCXfJzmDwYlSccjdYPBHZXCCDsbveNI39VlZrTAW4Of4oAO6Nb3KLbznKGgzKrfg84mi6FA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNjRZtVjM75gxKDr8ugr5xAC4uQ5OUgJFumt8H7RrW6mZA5UsG
+	rpk4i4weRqjt9we9041ooy//ivV3sRmugCiAsk0emOh5xWfnyRfL0XkAd+QhPG+vtWlZ24oNRJ+
+	V5UitLeTLfglYaJprvEBdaam4OhM=
+X-Gm-Gg: ASbGncsVhoCwfPPNt/S+ohS/TQ5R7pM0/Emgr9ZFJ1FDYQ16SDRxb7TUaHi6ZhLIpWa
+	v4JE1Ha+C6bPyFdhd3mANmJCwkLuylPpDaCNS
+X-Google-Smtp-Source: AGHT+IHLmQYT6Nfe/TxqetejkNmjRWULhNkXti9Y+FoSO0oNz6JKWmwppacRVdUE20hj8uvdZwuWTQu822tlGBPGUFc=
+X-Received: by 2002:adf:a15d:0:b0:38a:615c:8222 with SMTP id
+ ffacd0b85a97d-38a615c828emr14509037f8f.4.1736254436561; Tue, 07 Jan 2025
+ 04:53:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="irxivooeuvii5qqy"
-Content-Disposition: inline
-In-Reply-To: <d6hukfwjqgtwqjgvo65icmpzbm32ob6n7ehrzlywwomjbdn5lg@2wm53244pszz>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---irxivooeuvii5qqy
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+References: <20250104125732.17335-1-shaw.leon@gmail.com> <20250107085646.42302-1-kuniyu@amazon.com>
+In-Reply-To: <20250107085646.42302-1-kuniyu@amazon.com>
+From: Xiao Liang <shaw.leon@gmail.com>
+Date: Tue, 7 Jan 2025 20:53:19 +0800
+Message-ID: <CABAhCOQdBL6h9M2C+kd+bGivRJ9Q72JUxW+-gur0nub_=PmFPA@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 00/11] net: Improve netns handling in rtnetlink
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: andrew+netdev@lunn.ch, b.a.t.m.a.n@lists.open-mesh.org, 
+	bpf@vger.kernel.org, bridge@lists.linux.dev, davem@davemloft.net, 
+	donald.hunter@gmail.com, dsahern@kernel.org, edumazet@google.com, 
+	horms@kernel.org, idosch@nvidia.com, jiri@resnulli.us, kuba@kernel.org, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-ppp@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-wpan@vger.kernel.org, liuhangbin@gmail.com, netdev@vger.kernel.org, 
+	osmocom-net-gprs@lists.osmocom.org, pabeni@redhat.com, shuah@kernel.org, 
+	wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v6 1/7] dt-bindings: can: m_can: Add wakeup properties
-MIME-Version: 1.0
 
-On 07.01.2025 10:53:26, Markus Schneider-Pargmann wrote:
-> On Wed, Dec 25, 2024 at 08:50:17PM +0100, Marc Kleine-Budde wrote:
-> > On 19.12.2024 20:57:52, Markus Schneider-Pargmann wrote:
-> > > m_can can be a wakeup source on some devices. Especially on some of t=
-he
-> > > am62* SoCs pins, connected to m_can in the mcu, can be used to wakeup
-> > > the SoC.
-> > >=20
-> > > The wakeup-source property defines on which devices m_can can be used
-> > > for wakeup and in which power states.
-> > >=20
-> > > The pins associated with m_can have to have a special configuration to
-> > > be able to wakeup the SoC. This configuration is described in the wak=
-eup
-> > > pinctrl state while the default state describes the default
-> > > configuration.
-> > >=20
-> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> >=20
-> > The DTBS check fails:
-> >=20
-> > | $ make CHECK_DTBS=3Dy ti/k3-am625-beagleplay.dtb
-> > |   DTC [C] arch/arm64/boot/dts/ti/k3-am625-beagleplay.dtb
-> > | arch/arm64/boot/dts/ti/k3-am625-beagleplay.dtb: can@4e08000: wakeup-s=
-ource: 'oneOf' conditional failed, one must be fixed:
-> > |         ['suspend', 'poweroff'] is not of type 'boolean'
-> > |         ['suspend', 'poweroff'] is too long
-> > |         from schema $id: http://devicetree.org/schemas/net/can/bosch,=
-m_can.yaml#
-> > | arch/arm64/boot/dts/ti/k3-am625-beagleplay.dtb: can@4e08000: wakeup-s=
-ource: ['suspend', 'poweroff'] is not of type 'boolean'
-> > |         from schema $id: http://devicetree.org/schemas/wakeup-source.=
-yaml#
-> > | arch/arm64/boot/dts/ti/k3-am625-beagleplay.dtb: can@4e18000: wakeup-s=
-ource: 'oneOf' conditional failed, one must be fixed:
-> > |         ['suspend', 'poweroff'] is not of type 'boolean'
-> > |         ['suspend', 'poweroff'] is too long
-> > |         from schema $id: http://devicetree.org/schemas/net/can/bosch,=
-m_can.yaml#
-> > | arch/arm64/boot/dts/ti/k3-am625-beagleplay.dtb: can@4e18000: wakeup-s=
-ource: ['suspend', 'poweroff'] is not of type 'boolean'
-> > |         from schema $id: http://devicetree.org/schemas/wakeup-source.=
-yaml#
->=20
-> Thanks, the bot also notified me about this issue. I wasn't able to
-> solve it without updating the dt-schema, so I submitted a pull request
-> there:
->=20
-> https://github.com/devicetree-org/dt-schema/pull/150
+On Tue, Jan 7, 2025 at 4:57=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.com=
+> wrote:
+[...]
+>
+> We can fix this by linking the dev to the socket's netns and
+> clean them up in __net_exit hook as done in bareudp and geneve.
+>
+> ---8<---
+> diff --git a/drivers/net/gtp.c b/drivers/net/gtp.c
+> index 89a996ad8cd0..77638a815873 100644
+> --- a/drivers/net/gtp.c
+> +++ b/drivers/net/gtp.c
+> @@ -70,6 +70,7 @@ struct pdp_ctx {
+>  /* One instance of the GTP device. */
+>  struct gtp_dev {
+>         struct list_head        list;
+> +       struct list_head        sock_list;
+>
+>         struct sock             *sk0;
+>         struct sock             *sk1u;
+> @@ -102,6 +103,7 @@ static unsigned int gtp_net_id __read_mostly;
+>
+>  struct gtp_net {
+>         struct list_head gtp_dev_list;
+> +       struct list_head gtp_sock_list;
 
-I see, please add to the patch description that it depends on the that
-PR and re-post once it is accepted.
+After a closer look at the GTP driver, I'm confused about
+the gtp_dev_list here. GTP device is linked to this list at
+creation time, but netns can be changed afterwards.
+The list is used in gtp_net_exit_batch_rtnl(), but to my
+understanding net devices can already be deleted in
+default_device_exit_batch() by default.
+And I wonder if the use in gtp_genl_dump_pdp() can be
+replaced by something like for_each_netdev_rcu().
 
-Thanks,
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---irxivooeuvii5qqy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmd9GIEACgkQKDiiPnot
-vG+zTQgAihSGsmCQN7GOCUVL0pLqGfQ+AHZnIQy8rwBO01Z59sh6sqoE9gXb798d
-gHsC/et9Mcrq7CetVsitQgE0+4+1byxSBFQsfBmAY6IAlwoOwmMSMPNYldCs4y13
-XtQJnDDPc1zNgj5JGzoTbTs2ysu+qUK+N1lZDAkXd3k78OR9Lh2080q99UxeVFsX
-OF2/+FBp5tuxIbKwjpCY61XgW7zZKBQ3/weFrZUeGbeqeV33NOvUr+mvYXJmNG8O
-9IlOGY3my6JDMiYg4H6aGUwV2YmeBO3HgaUCJyJ+La+/J2odyAyxTWEUIacvgfDd
-p+TND+ZVqXJIXALf8Jk+iKfyB/c9mQ==
-=usZs
------END PGP SIGNATURE-----
-
---irxivooeuvii5qqy--
+>  };
+>
+>  static u32 gtp_h_initval;
+> @@ -1526,6 +1528,10 @@ static int gtp_newlink(struct net *src_net, struct=
+ net_device *dev,
+>
+>         gn =3D net_generic(dev_net(dev), gtp_net_id);
+>         list_add_rcu(&gtp->list, &gn->gtp_dev_list);
+> +
+> +       gn =3D net_generic(src_net, gtp_net_id);
+> +       list_add(&gtp->sock_list, &gn->gtp_sock_list);
+> +
+>         dev->priv_destructor =3D gtp_destructor;
+>
+>         netdev_dbg(dev, "registered new GTP interface\n");
+> @@ -1552,6 +1558,7 @@ static void gtp_dellink(struct net_device *dev, str=
+uct list_head *head)
+>                         pdp_context_delete(pctx);
+>
+>         list_del_rcu(&gtp->list);
+> +       list_del(&gtp->sock_list);
+>         unregister_netdevice_queue(dev, head);
+>  }
+>
+> @@ -2465,6 +2472,8 @@ static int __net_init gtp_net_init(struct net *net)
+>         struct gtp_net *gn =3D net_generic(net, gtp_net_id);
+>
+>         INIT_LIST_HEAD(&gn->gtp_dev_list);
+> +       INIT_LIST_HEAD(&gn->gtp_sock_list);
+> +
+>         return 0;
+>  }
+>
+> @@ -2475,9 +2484,12 @@ static void __net_exit gtp_net_exit_batch_rtnl(str=
+uct list_head *net_list,
+>
+>         list_for_each_entry(net, net_list, exit_list) {
+>                 struct gtp_net *gn =3D net_generic(net, gtp_net_id);
+> -               struct gtp_dev *gtp;
+> +               struct gtp_dev *gtp, *next;
+> +
+> +               list_for_each_entry_safe(gtp, next, &gn->gtp_dev_list, li=
+st)
+> +                       gtp_dellink(gtp->dev, dev_to_kill);
+>
+> -               list_for_each_entry(gtp, &gn->gtp_dev_list, list)
+> +               list_for_each_entry_safe(gtp, next, &gn->gtp_sock_list, s=
+ock_list)
+>                         gtp_dellink(gtp->dev, dev_to_kill);
+>         }
+>  }
+> ---8<---
 
