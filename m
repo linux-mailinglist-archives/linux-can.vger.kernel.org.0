@@ -1,169 +1,245 @@
-Return-Path: <linux-can+bounces-2555-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2556-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00EABA04125
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jan 2025 14:48:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1159DA0430B
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jan 2025 15:47:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AB9B3A12E9
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jan 2025 13:48:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC2C9161215
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jan 2025 14:47:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1AB1F0E43;
-	Tue,  7 Jan 2025 13:48:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D17361F2374;
+	Tue,  7 Jan 2025 14:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="CMnk2QAv"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com [52.119.213.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68A11F0E52
-	for <linux-can@vger.kernel.org>; Tue,  7 Jan 2025 13:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D241F2370;
+	Tue,  7 Jan 2025 14:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736257711; cv=none; b=GaB6mT4Yi6iiWxtlUlGcVYdOkCzRauXg8kIJrovkX2UMM3n4KWIPNCqE3DMSY5CzFO2cCTOKtywgHmUGGfHxyFcs3ieXuPHQVHJICG1CMBuKK8/R2hcz4hWgxClOA4IYGEgCXSMcBbDoXmvkXSEkKTtUGGIrHM5n+ZK3qcGS7Ok=
+	t=1736261262; cv=none; b=YoVE2gSx2HhylkvRnx6kkVBPw0ibIcgi3r3k1o9DEUZQJj9OcE9O1z1jYyCgcsYl8fCJN2m2EkNtnLva/oJIQJsAkCBOhbCo/KA+0rSm2U5VREeLAnlQHRWfK18p2Nae+zfLd6qXaFbK9SFGcTybtdkyWgosoeM/snviu/bdyH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736257711; c=relaxed/simple;
-	bh=cvLDMvZ9dRo7Bgr4jycM32wtYh+oNlLa6C42KkZo/TU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=puVbv5SkaBIUqHNoaDWeeokoDUMrprWSt4ZjXwYhDm4K4MftQhyCC/kKh8i/+T3p07MWM88/AK9XqUoW2OtQtmoRJK1XWbKqexw6gGMABwfhzzY6OAmKp8Znfd8sQ8sWuySwCwb3AJoYXFDBfEhdXXvvQZLqA0l9H3M6oUHA6qA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tV9wR-0004Z7-9m; Tue, 07 Jan 2025 14:48:19 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tV9wP-007M20-1L;
-	Tue, 07 Jan 2025 14:48:18 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id C8E4A3A0954;
-	Tue, 07 Jan 2025 13:48:17 +0000 (UTC)
-Date: Tue, 7 Jan 2025 14:48:17 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Alexander =?utf-8?B?SMO2bHps?= <alexander.hoelzl@gmx.net>
-Cc: robin@protonic.nl, socketcan@hartkopp.net, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, corbet@lwn.net, 
-	kernel@pengutronix.de, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] j1939: fix unable to send messages with data length zero
-Message-ID: <20250107-conscious-daring-lemming-c63aa8-mkl@pengutronix.de>
-References: <20250107133217.119646-1-alexander.hoelzl@gmx.net>
+	s=arc-20240116; t=1736261262; c=relaxed/simple;
+	bh=z9AcZKXBTCewxT8SPTS20nArEMQztrWlt8OFGIyL2io=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IYlnjIW7o4aNmRmVeS0JaJ5Uh6EujVNUGkJ9Ygn04NB2/390iCUiYARKA7P/Uu2Jr4DtsG6lOS4B4weDtUUMpIyfX1fam4kfZw+po38N7cBMuWVLAyLAirv5cMnVf0seWDibaH+POxuZL1YV35uRUrQWqkSJ/5bNbgqZ9am+f7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=CMnk2QAv; arc=none smtp.client-ip=52.119.213.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1736261260; x=1767797260;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=kzqP3KWquCSCvitwLtozsomdOR3PJTWU3++JR+6rcS0=;
+  b=CMnk2QAv+JNq4OBfRUrZVbBCfKqza9z7TrdKUxm27DJAaahnb4CdtgBL
+   66LHR5midZDHrrm8oIXMyF5ikBKH2LApxfvYcOYC6+0zc4YJM0S4TKT2L
+   lPtHkepVHwolN1flxAXBoyBkNqmTyN38Oge7fpqLBYh7BsASJ4Ce7KpB2
+   Q=;
+X-IronPort-AV: E=Sophos;i="6.12,295,1728950400"; 
+   d="scan'208";a="687495332"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
+  by smtp-border-fw-52002.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 14:47:34 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [10.0.21.151:43223]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.51.48:2525] with esmtp (Farcaster)
+ id 9b48386a-8619-40f1-8b35-660ddef4cf53; Tue, 7 Jan 2025 14:47:33 +0000 (UTC)
+X-Farcaster-Flow-ID: 9b48386a-8619-40f1-8b35-660ddef4cf53
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
+ Tue, 7 Jan 2025 14:47:33 +0000
+Received: from 6c7e67c6786f.amazon.com (10.118.249.113) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
+ Tue, 7 Jan 2025 14:47:24 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <shaw.leon@gmail.com>
+CC: <andrew+netdev@lunn.ch>, <b.a.t.m.a.n@lists.open-mesh.org>,
+	<bpf@vger.kernel.org>, <bridge@lists.linux.dev>, <davem@davemloft.net>,
+	<donald.hunter@gmail.com>, <dsahern@kernel.org>, <edumazet@google.com>,
+	<horms@kernel.org>, <idosch@nvidia.com>, <jiri@resnulli.us>,
+	<kuba@kernel.org>, <kuniyu@amazon.com>, <linux-can@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-ppp@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+	<linux-wireless@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
+	<liuhangbin@gmail.com>, <netdev@vger.kernel.org>,
+	<osmocom-net-gprs@lists.osmocom.org>, <pabeni@redhat.com>,
+	<shuah@kernel.org>, <wireguard@lists.zx2c4.com>
+Subject: Re: [PATCH net-next v7 00/11] net: Improve netns handling in rtnetlink
+Date: Tue, 7 Jan 2025 23:47:14 +0900
+Message-ID: <20250107144714.74446-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <CABAhCOQdBL6h9M2C+kd+bGivRJ9Q72JUxW+-gur0nub_=PmFPA@mail.gmail.com>
+References: <CABAhCOQdBL6h9M2C+kd+bGivRJ9Q72JUxW+-gur0nub_=PmFPA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vxpme32c2iydzg67"
-Content-Disposition: inline
-In-Reply-To: <20250107133217.119646-1-alexander.hoelzl@gmx.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: EX19D045UWC004.ant.amazon.com (10.13.139.203) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
+From: Xiao Liang <shaw.leon@gmail.com>
+Date: Tue, 7 Jan 2025 20:53:19 +0800
+> On Tue, Jan 7, 2025 at 4:57 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> [...]
+> >
+> > We can fix this by linking the dev to the socket's netns and
+> > clean them up in __net_exit hook as done in bareudp and geneve.
+> >
+> > ---8<---
+> > diff --git a/drivers/net/gtp.c b/drivers/net/gtp.c
+> > index 89a996ad8cd0..77638a815873 100644
+> > --- a/drivers/net/gtp.c
+> > +++ b/drivers/net/gtp.c
+> > @@ -70,6 +70,7 @@ struct pdp_ctx {
+> >  /* One instance of the GTP device. */
+> >  struct gtp_dev {
+> >         struct list_head        list;
+> > +       struct list_head        sock_list;
+> >
+> >         struct sock             *sk0;
+> >         struct sock             *sk1u;
+> > @@ -102,6 +103,7 @@ static unsigned int gtp_net_id __read_mostly;
+> >
+> >  struct gtp_net {
+> >         struct list_head gtp_dev_list;
+> > +       struct list_head gtp_sock_list;
+> 
+> After a closer look at the GTP driver, I'm confused about
+> the gtp_dev_list here. GTP device is linked to this list at
+> creation time, but netns can be changed afterwards.
+> The list is used in gtp_net_exit_batch_rtnl(), but to my
+> understanding net devices can already be deleted in
+> default_device_exit_batch() by default.
+> And I wonder if the use in gtp_genl_dump_pdp() can be
+> replaced by something like for_each_netdev_rcu().
 
---vxpme32c2iydzg67
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] j1939: fix unable to send messages with data length zero
-MIME-Version: 1.0
+Right, it should be, or we need to set netns_local.
+Will include this diff in the fix series.
 
-On 07.01.2025 14:32:17, Alexander H=C3=B6lzl wrote:
-> The J1939 standard requires the transmission of messages of length 0.
-> For example the proprietary messages are specified with a data length
-> of 0 to 1785. The transmission of such messages was not possible.
-> Sending such a message resulted in no error being returned but no
-> corresponding can frame being generated.
+---8<---
+diff --git a/drivers/net/gtp.c b/drivers/net/gtp.c
+index 2460a2c13c32..f9186eda36f0 100644
+--- a/drivers/net/gtp.c
++++ b/drivers/net/gtp.c
+@@ -2278,6 +2278,7 @@ static int gtp_genl_dump_pdp(struct sk_buff *skb,
+ 	struct gtp_dev *last_gtp = (struct gtp_dev *)cb->args[2], *gtp;
+ 	int i, j, bucket = cb->args[0], skip = cb->args[1];
+ 	struct net *net = sock_net(skb->sk);
++	struct net_device *dev;
+ 	struct pdp_ctx *pctx;
+ 	struct gtp_net *gn;
+ 
+@@ -2287,7 +2288,10 @@ static int gtp_genl_dump_pdp(struct sk_buff *skb,
+ 		return 0;
+ 
+ 	rcu_read_lock();
+-	list_for_each_entry_rcu(gtp, &gn->gtp_dev_list, list) {
++	for_each_netdev_rcu(net, dev) {
++		if (dev->rtnl_link_ops != &gtp_link_ops)
++			continue;
++
+ 		if (last_gtp && last_gtp != gtp)
+ 			continue;
+ 		else
+---8<---
 
-What does your patch do? Please describe it here.
+Otherwise, we need to move it manually like this, which is
+apparently overkill and unnecessary :p
 
-Marc
-
-> Signed-off-by: Alexander H=C3=B6lzl <alexander.hoelzl@gmx.net>
-> ---
->  net/can/j1939/socket.c    | 4 ++--
->  net/can/j1939/transport.c | 5 +++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
->=20
-> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-> index 305dd72c844c..17226b2341d0 100644
-> --- a/net/can/j1939/socket.c
-> +++ b/net/can/j1939/socket.c
-> @@ -1132,7 +1132,7 @@ static int j1939_sk_send_loop(struct j1939_priv *pr=
-iv,  struct sock *sk,
->=20
->  	todo_size =3D size;
->=20
-> -	while (todo_size) {
-> +	do {
->  		struct j1939_sk_buff_cb *skcb;
->=20
->  		segment_size =3D min_t(size_t, J1939_MAX_TP_PACKET_SIZE,
-> @@ -1177,7 +1177,7 @@ static int j1939_sk_send_loop(struct j1939_priv *pr=
-iv,  struct sock *sk,
->=20
->  		todo_size -=3D segment_size;
->  		session->total_queued_size +=3D segment_size;
-> -	}
-> +	} while (todo_size);
->=20
->  	switch (ret) {
->  	case 0: /* OK */
-> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-> index 319f47df3330..99832e60c08d 100644
-> --- a/net/can/j1939/transport.c
-> +++ b/net/can/j1939/transport.c
-> @@ -382,8 +382,9 @@ sk_buff *j1939_session_skb_get_by_offset(struct j1939=
-_session *session,
->  	skb_queue_walk(&session->skb_queue, do_skb) {
->  		do_skcb =3D j1939_skb_to_cb(do_skb);
->=20
-> -		if (offset_start >=3D do_skcb->offset &&
-> -		    offset_start < (do_skcb->offset + do_skb->len)) {
-> +		if ((offset_start >=3D do_skcb->offset &&
-> +		     offset_start < (do_skcb->offset + do_skb->len)) ||
-> +			(offset_start =3D=3D 0 && do_skcb->offset =3D=3D 0 && do_skb->len =3D=
-=3D 0)) {
->  			skb =3D do_skb;
->  		}
->  	}
-> --
-> 2.43.0
->=20
->=20
->=20
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---vxpme32c2iydzg67
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmd9MJ4ACgkQKDiiPnot
-vG/l6AgAhak9L/3s2F2He8AP9r2x4LJNpKRcQ+492x2vyKtSofznR4tZBg02eYXN
-dhvfdY6yv8jnbCc7/bpI4vgxyvGvIDTJok5V/boQ4/ubK0bNvFRgtMwXTvGSKBcW
-0C9TddSCyPUg3+iYjagbZ++qTo02iEsI3BChYYonif1967953df/vmV8cKudOnLn
-PO+No+i2yfDagu1BOzO0Isg9+dWXC9IneOx9wwjF1fjdivLqcjXrAM6EkCQTGpTT
-5YiJoJNYiP100cHF9rmC2kpdakxJl/yeHPlRfo0jnEZdrhWuhidLQoYfdoZ3oEeI
-WADmhhGiHjeXtzRqJ8nqVLfNSP+Yug==
-=TuID
------END PGP SIGNATURE-----
-
---vxpme32c2iydzg67--
+---8<---
+diff --git a/drivers/net/gtp.c b/drivers/net/gtp.c
+index 2460a2c13c32..90b410b73c89 100644
+--- a/drivers/net/gtp.c
++++ b/drivers/net/gtp.c
+@@ -2501,6 +2501,46 @@ static struct pernet_operations gtp_net_ops = {
+ 	.size	= sizeof(struct gtp_net),
+ };
+ 
++static int gtp_device_event(struct notifier_block *nb,
++			    unsigned long event, void *ptr)
++{
++	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
++	struct gtp_dev *gtp;
++	struct gtp_net *gn;
++
++	if (dev->rtnl_link_ops != &gtp_link_ops)
++		goto out;
++
++	gtp = netdev_priv(dev);
++
++	switch (event) {
++	case NETDEV_UNREGISTER:
++		if (dev->reg_state != NETREG_REGISTERED)
++			goto out;
++
++		/* dev_net(dev) is changed, see __dev_change_net_namespace().
++		 * rcu_barrier() after NETDEV_UNREGISTER guarantees that no
++		 * one traversing a list in the old netns jumps to another
++		 * list in the new netns.
++		 */
++		list_del_rcu(&gtp->list);
++		break;
++	case NETDEV_REGISTER:
++		if (gtp->list.prev != LIST_POISON2)
++			goto out;
++
++		/* complete netns change. */
++		gn = net_generic(dev_net(dev), gtp_net_id);
++		list_add_rcu(&gtp->list, &gn->gtp_dev_list);
++	}
++out:
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block gtp_notifier_block = {
++	.notifier_call = gtp_device_event,
++};
++
+ static int __init gtp_init(void)
+ {
+ 	int err;
+@@ -2511,10 +2551,14 @@ static int __init gtp_init(void)
+ 	if (err < 0)
+ 		goto error_out;
+ 
+-	err = rtnl_link_register(&gtp_link_ops);
++	err = register_netdevice_notifier(&gtp_notifier_block);
+ 	if (err < 0)
+ 		goto unreg_pernet_subsys;
+ 
++	err = rtnl_link_register(&gtp_link_ops);
++	if (err < 0)
++		goto unreg_netdev_notifier;
++
+ 	err = genl_register_family(&gtp_genl_family);
+ 	if (err < 0)
+ 		goto unreg_rtnl_link;
+@@ -2525,6 +2569,8 @@ static int __init gtp_init(void)
+ 
+ unreg_rtnl_link:
+ 	rtnl_link_unregister(&gtp_link_ops);
++unreg_netdev_notifier:
++	register_netdevice_notifier(&gtp_notifier_block);
+ unreg_pernet_subsys:
+ 	unregister_pernet_subsys(&gtp_net_ops);
+ error_out:
+@@ -2537,6 +2583,7 @@ static void __exit gtp_fini(void)
+ {
+ 	genl_unregister_family(&gtp_genl_family);
+ 	rtnl_link_unregister(&gtp_link_ops);
++	register_netdevice_notifier(&gtp_notifier_block);
+ 	unregister_pernet_subsys(&gtp_net_ops);
+ 
+ 	pr_info("GTP module unloaded\n");
+---8<---
 
