@@ -1,174 +1,109 @@
-Return-Path: <linux-can+bounces-2562-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2563-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C18BA05607
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jan 2025 10:01:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E14F9A06379
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jan 2025 18:32:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E6C118884F3
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jan 2025 09:01:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05B783A5912
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jan 2025 17:32:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1451A83F9;
-	Wed,  8 Jan 2025 09:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A46A51FF7D5;
+	Wed,  8 Jan 2025 17:31:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zn6IEtd/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dHciAqjY"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC4814B95A;
-	Wed,  8 Jan 2025 09:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5592F1A2541;
+	Wed,  8 Jan 2025 17:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736326882; cv=none; b=CFBN4ifYSFVZTyu3G1vMhdSwZUCAbQ1MiULfEaiGMKE9IH8mcv8gFrgzEA0i1sdwy1p9505/JIeFtbYO+UIq560BySUA5VhVAgpRdjkzechhNZVmh8creA1/v+IuAaByXHc/0VtbZrLbaasl/UQoIOAmeUvLYV65HX3q5A4Rqks=
+	t=1736357501; cv=none; b=e3K7HSH1ColxvRm7q1LA5N+ebyq0UT25YSvEp39h5jMDufWKMZAT+S392H1Xk2acbXVMLNDi99pJfqdkau4NKt107oigXZqPoQYX7xiV3OmqLVHbqsv2fkCEmrRuEs5QfT4Lzbt9OGbWUqT1mezrv9SXN8tPiZURcHxlVC4QJYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736326882; c=relaxed/simple;
-	bh=1/dmrtgI0VRd4HfkTxBDEJqU6yxTZzJ1DMNIgvHADVo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kSj+U8goh/kf8fpQhmofaM2KGduDGGEpvvw6wx9dDO/7/O7yx7E68lOfw9H64Bpz3nGfSFhQnHz8xZmzc30Lx1wEY61pTvXGVcboTaHw+NGThTClIXs7Z641Tk7J5Hq79KZeoxiy6TnF7oU06c7XcG0H8N7YzmH16Hm3DQwfalE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zn6IEtd/; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736326881; x=1767862881;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1/dmrtgI0VRd4HfkTxBDEJqU6yxTZzJ1DMNIgvHADVo=;
-  b=Zn6IEtd/3KiTjsDYG+hLajeBippd5EbLltHOVTW+3VqUAxS0wfSG1v57
-   n4lOzK2UaZ4JE90iHF+qaQ1ld6tNX3Oa6jfRWTU4mQfH4MLd7wIL1HVA+
-   8P3hnQFsYCzc9cnofFKqzgi9BZ+DE97ZrIehLQRWqQVKTZrtyGYQvJlD5
-   cMqoY+ldQCnr43yB7d61KVu+GEJJm0hRSc5on0o1joETYQG/PdqD4g5Sh
-   f44z9Q3OMzd2EUWEChiaRqT/S6ZPL2EHzCjZWM919jPTPaSIQF8swGzwn
-   caOH7qU5SAQCVEypYCYF71pw+LErDeyPSYzO46Q75K1B00UWGcWSY92fJ
-   g==;
-X-CSE-ConnectionGUID: LbJgGUFmS5mlcxBCHb+P7w==
-X-CSE-MsgGUID: IjKREzT0SfmIjkQBxz9v9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="47958613"
-X-IronPort-AV: E=Sophos;i="6.12,297,1728975600"; 
-   d="scan'208";a="47958613"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 01:01:19 -0800
-X-CSE-ConnectionGUID: yyFtFHT+S/Ca31kWntquPQ==
-X-CSE-MsgGUID: 0XTWQGM1Rzegf8mzzUVZlw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,297,1728975600"; 
-   d="scan'208";a="102843534"
-Received: from inlubt0246.iind.intel.com ([10.191.24.87])
-  by fmviesa006.fm.intel.com with ESMTP; 08 Jan 2025 01:01:14 -0800
-From: subramanian.mohan@intel.com
-To: rcsekar@samsung.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Cc: msp@baylibre.com,
-	balbi@kernel.org,
-	raymond.tan@intel.com,
-	jarkko.nikula@linux.intel.com,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@ew.tq-group.com,
-	lst@pengutronix.de,
-	subramanian.mohan@intel.com,
-	matthias.hahn@intel.com,
-	srinivasan.chinnadurai@intel.com
-Subject: [PATCH 1/1] can: m_can: Control tx flow to avoid message stuck
-Date: Wed,  8 Jan 2025 14:31:12 +0530
-Message-Id: <20250108090112.58412-1-subramanian.mohan@intel.com>
-X-Mailer: git-send-email 2.35.3
+	s=arc-20240116; t=1736357501; c=relaxed/simple;
+	bh=nFNghkqYK0OyBrmna6riJjtdRf/DJ2kks0ygjdBlGVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SdVuEVCtu9hO2jJQ4QF/RHTNX6uHNrJozYhfwYlrTxx5JYmUmx9RTjElJn3iH/uV3hkyIxgjRg0kNkCOL6vzggd0ANi90za6VMeX+Q8gIkfuTnFJFOmEioi8/mVAELz+elq+KP2sjCSbO9dQM2H9a4Za/AGCewQuNRKgVpDMTpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dHciAqjY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A24C4CED3;
+	Wed,  8 Jan 2025 17:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736357500;
+	bh=nFNghkqYK0OyBrmna6riJjtdRf/DJ2kks0ygjdBlGVE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dHciAqjYDmfJ4f1GrLA+k2mHdvH/PcVoEoaHp5l6oKUNCl2H/rGngM0bwH32RiDGA
+	 RKqyu4tcA5nz7uUemz8c9pBwQy5/Yl8okpkaljtV2r2hG4AolL+jj/8d3xoqFgJj/k
+	 A8Gm9TIsj/lz+b3kQ9boVv/nZhWvr6TKHL4QkMBonYptSr9cZeQpQoKuXcOHybpkHo
+	 e98f1a4tvA5J5nyWISRW/K9JoOD2UBjXudUvXF9tlj/7wrEctr/u5Qqq3QhEk/fT8p
+	 UuTt5BSsN/f7ZpDAzFwxdIWvEiqXFx0/T5vxvOySo2ialJKoOi0JYP1ThEhqIye8Rl
+	 dB8lzKIIuuacA==
+Date: Wed, 8 Jan 2025 09:31:39 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Xiao Liang <shaw.leon@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, Kuniyuki
+ Iwashima <kuniyu@amazon.com>, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Ido
+ Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Simon
+ Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko
+ <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
+ linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+ osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
+ linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+ linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
+ bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v7 02/11] rtnetlink: Pack newlink() params into
+ struct
+Message-ID: <20250108093139.126716e9@kernel.org>
+In-Reply-To: <CABAhCORV_s9m-EJ8914zUXCXt6O_e1wsaOVdSKUtm0Rbvc4orQ@mail.gmail.com>
+References: <20250104125732.17335-1-shaw.leon@gmail.com>
+	<20250104125732.17335-3-shaw.leon@gmail.com>
+	<20250107123805.748080ab@kernel.org>
+	<CABAhCORV_s9m-EJ8914zUXCXt6O_e1wsaOVdSKUtm0Rbvc4orQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Subramanian Mohan <subramanian.mohan@intel.com>
+On Wed, 8 Jan 2025 16:36:26 +0800 Xiao Liang wrote:
+> On Wed, Jan 8, 2025 at 4:38=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> w=
+rote:
+> >
+> > On Sat,  4 Jan 2025 20:57:23 +0800 Xiao Liang wrote: =20
+> > > -static int amt_newlink(struct net *net, struct net_device *dev,
+> > > -                    struct nlattr *tb[], struct nlattr *data[],
+> > > -                    struct netlink_ext_ack *extack)
+> > > +static int amt_newlink(struct rtnl_newlink_params *params)
+> > >  {
+> > > -     struct amt_dev *amt =3D netdev_priv(dev);
+> > > +     struct netlink_ext_ack *extack =3D params->extack;
+> > > +     struct net_device *dev =3D params->dev;
+> > > +     struct nlattr **data =3D params->data;
+> > > +     struct nlattr **tb =3D params->tb;
+> > > +     struct net *net =3D params->net;
+> > > +     struct amt_dev *amt; =20
+> >
+> > IMHO you packed a little too much into the struct.
+> > Could you take the dev and the extack back out? =20
+>=20
+> Sure. I thought you were suggesting packing them all
+> in review of v3...
 
-The prolonged testing of passing can messages between
-two Elkhartlake platforms resulted in message stuck
-i.e Message did not receive at receiver side
+Sorry about that, I wasn't very clear :(
 
-Contolling TX i.e TEFN bit helped to resolve the message
-stuck issue.
+What I had in mind was similar to how we define ethtool ops,
+(especially the more recent ones which have extack)
+for example:
 
-The current solution is enhanced/optimized from the below patch:
-https://lore.kernel.org/lkml/20230623051124.64132-1-kumari.pallavi@intel.com/T/
-
-Setup used to reproduce the issue:
-
-+---------------------+         +----------------------+
-|Intel ElkhartLake    |         |Intel ElkhartLake     |
-|       +--------+    |         |       +--------+     |
-|       |m_can 0 |    |<=======>|       |m_can 0 |     |
-|       +--------+    |         |       +--------+     |
-+---------------------+         +----------------------+
-
-Steps to be run on the two Elkhartlake HW:
-1)Bus-Rate is 1 MBit/s
-2)Busload during the test is about 40%
-3)we initialize the CAN with following commands
-4)ip link set can0 txqueuelen 100/1024/2048
-5)ip link set can0 up type can bitrate 1000000
-
-Python scripts are used send and receive the can messages
-between the EHL systems.
-
-Signed-off-by: Hahn Matthias <matthias.hahn@intel.com>
-Signed-off-by: Subramanian Mohan <subramanian.mohan@intel.com>
----
- drivers/net/can/m_can/m_can.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 97cd8bbf2e32..0a2c9a622842 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1220,7 +1220,7 @@ static void m_can_coalescing_update(struct m_can_classdev *cdev, u32 ir)
- static int m_can_interrupt_handler(struct m_can_classdev *cdev)
- {
- 	struct net_device *dev = cdev->net;
--	u32 ir = 0, ir_read;
-+	u32 ir = 0, ir_read, new_interrupts;
- 	int ret;
- 
- 	if (pm_runtime_suspended(cdev->dev))
-@@ -1283,6 +1283,9 @@ static int m_can_interrupt_handler(struct m_can_classdev *cdev)
- 			ret = m_can_echo_tx_event(dev);
- 			if (ret != 0)
- 				return ret;
-+
-+			new_interrupts = cdev->active_interrupts & ~(IR_TEFN);
-+			m_can_interrupt_enable(cdev, new_interrupts);
- 		}
- 	}
- 
-@@ -1989,6 +1992,7 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
- 	struct m_can_classdev *cdev = netdev_priv(dev);
- 	unsigned int frame_len;
- 	netdev_tx_t ret;
-+	u32 new_interrupts;
- 
- 	if (can_dev_dropped_skb(dev, skb))
- 		return NETDEV_TX_OK;
-@@ -2008,8 +2012,11 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
- 
- 	if (cdev->is_peripheral)
- 		ret = m_can_start_peripheral_xmit(cdev, skb);
--	else
-+	else {
-+		new_interrupts = cdev->active_interrupts | IR_TEFN;
-+		m_can_interrupt_enable(cdev, new_interrupts);
- 		ret = m_can_tx_handler(cdev, skb);
-+	}
- 
- 	if (ret != NETDEV_TX_OK)
- 		netdev_completed_queue(dev, 1, frame_len);
--- 
-2.35.3
-
+	int	(*set_mm)(struct net_device *dev, struct ethtool_mm_cfg *cfg,
+			  struct netlink_ext_ack *extack);
 
