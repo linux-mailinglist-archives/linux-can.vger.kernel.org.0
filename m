@@ -1,122 +1,174 @@
-Return-Path: <linux-can+bounces-2561-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2562-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47754A05582
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jan 2025 09:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C18BA05607
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jan 2025 10:01:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C90C6188808F
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jan 2025 08:37:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E6C118884F3
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jan 2025 09:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75B7D1A0BE0;
-	Wed,  8 Jan 2025 08:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1451A83F9;
+	Wed,  8 Jan 2025 09:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GkG/XGFu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zn6IEtd/"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1891DFD85;
-	Wed,  8 Jan 2025 08:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC4814B95A;
+	Wed,  8 Jan 2025 09:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736325427; cv=none; b=h7smiKeQZwZx91pBa6CjIjVFWYjpqZxBOjtRcf9yXDp80stN3uQ7yD9ICIw2WpFmzSyfNo0vjl7wRHHFRHIeIELM/nq00wF8cmxMKxTMCg55ZZW6GjttBzm7zCSLkDXsZDmIFD0pk4cnHT3UiKfknrSF+PDuvzEpfJGm2Zeny3o=
+	t=1736326882; cv=none; b=CFBN4ifYSFVZTyu3G1vMhdSwZUCAbQ1MiULfEaiGMKE9IH8mcv8gFrgzEA0i1sdwy1p9505/JIeFtbYO+UIq560BySUA5VhVAgpRdjkzechhNZVmh8creA1/v+IuAaByXHc/0VtbZrLbaasl/UQoIOAmeUvLYV65HX3q5A4Rqks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736325427; c=relaxed/simple;
-	bh=nxtV4VMFqi9OawJzTCLL5xTqLQUX4En71MCqEoFkWhU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bGhq08b60gmuQSYhD4NA0IOtPEloev+NFwMVNw3UydjSlO8yg8vMLjNd8JRBJ3AYUAQrrLKTXKw5L0dVuv1fBNYNKQjgpC4RvIa9kfZCBqJmGL3xUopEXWixZ1udyf6trUKaLRC0QGPvJobZrwv+xz8Seo6U2Rw/pnVNjo4t6aE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GkG/XGFu; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-385e0e224cbso8206786f8f.2;
-        Wed, 08 Jan 2025 00:37:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736325424; x=1736930224; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vvettVxfJ9lYY3or3UxLpfyl/cdkwWLgR9kVNnFx6ho=;
-        b=GkG/XGFuEu5fAXYebJ4D+UF1kCOvf9KEv5Ag5qbcOcJAET7p6asIOac8DWx2wzvJDZ
-         pjsikSy6uVdjOKqW9paEA0jTn8RZx0LJHyGP/wxPT4aNsmYUoE2r/UC5+Fq5ZoIDbKCs
-         a2aUfCfzCy+IG4Ph97QlCttaG3A529UNFGBTrr29exWwqgS0FVq0WInljhlpEplKUHpj
-         wiTGspRSfpECmN/hiWF8WjtrkqJMhXIeRUcxVmXklHnrtSiU89rV7S0mRwEtZpikEEAR
-         h+Nx16D+VSFoDiHkbZoeWEopuBkR7bVXVsELelqj/LwjeoUSf9+L9P2dZjHRjm6u0zU0
-         Kx6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736325424; x=1736930224;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vvettVxfJ9lYY3or3UxLpfyl/cdkwWLgR9kVNnFx6ho=;
-        b=m+pWUZwxKfJgwVuUdGn763aHhLkNaIxAvh68RRB6/1gvx8+swbfyQd5l7Tf0Wugbbr
-         Yny3fAPyKz0d1zofR8KqIQy3Rz1JwGN2InDMqB291J9+r1YNlP6AbQtgWqR68Uw/P+YE
-         +NGEc8L+6nM/1mNqd68r3cufap23ayN7qoh267u35N01avs9fqYjC9hv4L7BTYOw+amY
-         XbHVP4WNEHNM35RXgr4opxV5ElXSegLi5lGHD328EgcoY8yGmNy+K1IWUhNYPcZZEqh5
-         2AahZ7puXNO1b8tl/vRyZq3DlScuseAiUG5zgC1FnUnfZBptNswzZqi4fvBq6bQnZiZp
-         rkdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1/Jb0JC861p9qQ0YT6w8tlcDRadJm1mVthU/GJCJ/aPs2/OG/bPF/E+vGj8NDZTEEpH+spV/U5w2u0HL6@vger.kernel.org, AJvYcCUIpC5zXE0t7oUvcWB/V5IeOSQEb3JyBJzcdMECOlhskj1Xem9ljid6oOgOKT5zkVI3dmW0OKvwyFX5BQ==@vger.kernel.org, AJvYcCUnkqVuCcgIhOlnH3+L/QACy0lOxR/Ys+uI9ak8zCrS3p2FxzPR79dz+pSIZdzsCgaSIUHUr/cjvhN4akK6niVV@vger.kernel.org, AJvYcCVIbb/HaeVt1BOSQenc3OJpSPpQIacorerpd9MePdSYL3jCWzso+TrZXa6em5lJPSVGPuUl/fk2LaQj@vger.kernel.org, AJvYcCVpGooN8S/3Sw6DQInUjv1FPTQfAryiBRlzT3hgHXdWQsh941xOaxHDwgormT6NAuWOwsc=@vger.kernel.org, AJvYcCVq7cHEQ23b622HzPTsykqdggc42oImWyP3Yn3AJjFH73sk2dQNa6tBt72gYSJ89qejQD+Cjg0DW4vP@vger.kernel.org, AJvYcCX09hsXpcdb5GMNx6wwVF199+rvCqpA7DoQR4ZjFFwtngpriT2OzVgTSiwrcTvHMBdGXWEBRSDOyuYVxFQrkj4=@vger.kernel.org, AJvYcCXB62Jhgio/XGsI9ATOEF5oXPl/TM1IS053Dj2WLpllLOWs2UuvPOV63ewayHhMibiF7EbcNGyepuWKIg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBilIsjevSNkgXOqOUdmeBdi+JOtq+QxJUmctclmpJcQcNzs3z
-	tgNrkECqI5OP2oLXAOk50oSX7tiMdVBkVWbmbjZ/2uw07cPwcssR0iLPn/GevJzv28CS/mAEdnh
-	Kdot9oXASowOyoWPaZEdaAwWxZTs=
-X-Gm-Gg: ASbGnctSFLdWZYz8JTEjL/mehGoOJcmW/NsZfn/rdixYNWZnlKxBwsifHeaE23bYTJj
-	3msWMhnCAE9iZcE9tQdFZNRpHWA6JCYSbCBpR
-X-Google-Smtp-Source: AGHT+IFnmy3aEmpEtSYOMGcp/W5oHyWUG1cZe2OhDShkb+8U3jvy3oPHzekY3BLrSLnXQaOhfCodhl5ttnW21/EGgAw=
-X-Received: by 2002:a05:6000:4712:b0:385:f38e:c0d3 with SMTP id
- ffacd0b85a97d-38a8731a4d3mr1171129f8f.58.1736325423889; Wed, 08 Jan 2025
- 00:37:03 -0800 (PST)
+	s=arc-20240116; t=1736326882; c=relaxed/simple;
+	bh=1/dmrtgI0VRd4HfkTxBDEJqU6yxTZzJ1DMNIgvHADVo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kSj+U8goh/kf8fpQhmofaM2KGduDGGEpvvw6wx9dDO/7/O7yx7E68lOfw9H64Bpz3nGfSFhQnHz8xZmzc30Lx1wEY61pTvXGVcboTaHw+NGThTClIXs7Z641Tk7J5Hq79KZeoxiy6TnF7oU06c7XcG0H8N7YzmH16Hm3DQwfalE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zn6IEtd/; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736326881; x=1767862881;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1/dmrtgI0VRd4HfkTxBDEJqU6yxTZzJ1DMNIgvHADVo=;
+  b=Zn6IEtd/3KiTjsDYG+hLajeBippd5EbLltHOVTW+3VqUAxS0wfSG1v57
+   n4lOzK2UaZ4JE90iHF+qaQ1ld6tNX3Oa6jfRWTU4mQfH4MLd7wIL1HVA+
+   8P3hnQFsYCzc9cnofFKqzgi9BZ+DE97ZrIehLQRWqQVKTZrtyGYQvJlD5
+   cMqoY+ldQCnr43yB7d61KVu+GEJJm0hRSc5on0o1joETYQG/PdqD4g5Sh
+   f44z9Q3OMzd2EUWEChiaRqT/S6ZPL2EHzCjZWM919jPTPaSIQF8swGzwn
+   caOH7qU5SAQCVEypYCYF71pw+LErDeyPSYzO46Q75K1B00UWGcWSY92fJ
+   g==;
+X-CSE-ConnectionGUID: LbJgGUFmS5mlcxBCHb+P7w==
+X-CSE-MsgGUID: IjKREzT0SfmIjkQBxz9v9w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="47958613"
+X-IronPort-AV: E=Sophos;i="6.12,297,1728975600"; 
+   d="scan'208";a="47958613"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 01:01:19 -0800
+X-CSE-ConnectionGUID: yyFtFHT+S/Ca31kWntquPQ==
+X-CSE-MsgGUID: 0XTWQGM1Rzegf8mzzUVZlw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,297,1728975600"; 
+   d="scan'208";a="102843534"
+Received: from inlubt0246.iind.intel.com ([10.191.24.87])
+  by fmviesa006.fm.intel.com with ESMTP; 08 Jan 2025 01:01:14 -0800
+From: subramanian.mohan@intel.com
+To: rcsekar@samsung.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: msp@baylibre.com,
+	balbi@kernel.org,
+	raymond.tan@intel.com,
+	jarkko.nikula@linux.intel.com,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux@ew.tq-group.com,
+	lst@pengutronix.de,
+	subramanian.mohan@intel.com,
+	matthias.hahn@intel.com,
+	srinivasan.chinnadurai@intel.com
+Subject: [PATCH 1/1] can: m_can: Control tx flow to avoid message stuck
+Date: Wed,  8 Jan 2025 14:31:12 +0530
+Message-Id: <20250108090112.58412-1-subramanian.mohan@intel.com>
+X-Mailer: git-send-email 2.35.3
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250104125732.17335-1-shaw.leon@gmail.com> <20250104125732.17335-3-shaw.leon@gmail.com>
- <20250107123805.748080ab@kernel.org>
-In-Reply-To: <20250107123805.748080ab@kernel.org>
-From: Xiao Liang <shaw.leon@gmail.com>
-Date: Wed, 8 Jan 2025 16:36:26 +0800
-X-Gm-Features: AbW1kvZots7MSnDo6hVFO1pdLy0jTDp88J1frKk6l9Bo0g1-dsYfw260dsxsY30
-Message-ID: <CABAhCORV_s9m-EJ8914zUXCXt6O_e1wsaOVdSKUtm0Rbvc4orQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v7 02/11] rtnetlink: Pack newlink() params into struct
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko <jiri@resnulli.us>, 
-	Hangbin Liu <liuhangbin@gmail.com>, linux-rdma@vger.kernel.org, 
-	linux-can@vger.kernel.org, osmocom-net-gprs@lists.osmocom.org, 
-	bpf@vger.kernel.org, linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com, 
-	linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org, 
-	bridge@lists.linux.dev, linux-wpan@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 8, 2025 at 4:38=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
-te:
->
-> On Sat,  4 Jan 2025 20:57:23 +0800 Xiao Liang wrote:
-> > -static int amt_newlink(struct net *net, struct net_device *dev,
-> > -                    struct nlattr *tb[], struct nlattr *data[],
-> > -                    struct netlink_ext_ack *extack)
-> > +static int amt_newlink(struct rtnl_newlink_params *params)
-> >  {
-> > -     struct amt_dev *amt =3D netdev_priv(dev);
-> > +     struct netlink_ext_ack *extack =3D params->extack;
-> > +     struct net_device *dev =3D params->dev;
-> > +     struct nlattr **data =3D params->data;
-> > +     struct nlattr **tb =3D params->tb;
-> > +     struct net *net =3D params->net;
-> > +     struct amt_dev *amt;
->
-> IMHO you packed a little too much into the struct.
-> Could you take the dev and the extack back out?
+From: Subramanian Mohan <subramanian.mohan@intel.com>
 
-Sure. I thought you were suggesting packing them all
-in review of v3...
+The prolonged testing of passing can messages between
+two Elkhartlake platforms resulted in message stuck
+i.e Message did not receive at receiver side
+
+Contolling TX i.e TEFN bit helped to resolve the message
+stuck issue.
+
+The current solution is enhanced/optimized from the below patch:
+https://lore.kernel.org/lkml/20230623051124.64132-1-kumari.pallavi@intel.com/T/
+
+Setup used to reproduce the issue:
+
++---------------------+         +----------------------+
+|Intel ElkhartLake    |         |Intel ElkhartLake     |
+|       +--------+    |         |       +--------+     |
+|       |m_can 0 |    |<=======>|       |m_can 0 |     |
+|       +--------+    |         |       +--------+     |
++---------------------+         +----------------------+
+
+Steps to be run on the two Elkhartlake HW:
+1)Bus-Rate is 1 MBit/s
+2)Busload during the test is about 40%
+3)we initialize the CAN with following commands
+4)ip link set can0 txqueuelen 100/1024/2048
+5)ip link set can0 up type can bitrate 1000000
+
+Python scripts are used send and receive the can messages
+between the EHL systems.
+
+Signed-off-by: Hahn Matthias <matthias.hahn@intel.com>
+Signed-off-by: Subramanian Mohan <subramanian.mohan@intel.com>
+---
+ drivers/net/can/m_can/m_can.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 97cd8bbf2e32..0a2c9a622842 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1220,7 +1220,7 @@ static void m_can_coalescing_update(struct m_can_classdev *cdev, u32 ir)
+ static int m_can_interrupt_handler(struct m_can_classdev *cdev)
+ {
+ 	struct net_device *dev = cdev->net;
+-	u32 ir = 0, ir_read;
++	u32 ir = 0, ir_read, new_interrupts;
+ 	int ret;
+ 
+ 	if (pm_runtime_suspended(cdev->dev))
+@@ -1283,6 +1283,9 @@ static int m_can_interrupt_handler(struct m_can_classdev *cdev)
+ 			ret = m_can_echo_tx_event(dev);
+ 			if (ret != 0)
+ 				return ret;
++
++			new_interrupts = cdev->active_interrupts & ~(IR_TEFN);
++			m_can_interrupt_enable(cdev, new_interrupts);
+ 		}
+ 	}
+ 
+@@ -1989,6 +1992,7 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+ 	unsigned int frame_len;
+ 	netdev_tx_t ret;
++	u32 new_interrupts;
+ 
+ 	if (can_dev_dropped_skb(dev, skb))
+ 		return NETDEV_TX_OK;
+@@ -2008,8 +2012,11 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
+ 
+ 	if (cdev->is_peripheral)
+ 		ret = m_can_start_peripheral_xmit(cdev, skb);
+-	else
++	else {
++		new_interrupts = cdev->active_interrupts | IR_TEFN;
++		m_can_interrupt_enable(cdev, new_interrupts);
+ 		ret = m_can_tx_handler(cdev, skb);
++	}
+ 
+ 	if (ret != NETDEV_TX_OK)
+ 		netdev_completed_queue(dev, 1, frame_len);
+-- 
+2.35.3
+
 
