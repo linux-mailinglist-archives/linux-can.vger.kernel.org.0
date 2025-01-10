@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-2584-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2579-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9320A08F4E
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jan 2025 12:28:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90D48A08F43
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jan 2025 12:28:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 262CF188D316
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jan 2025 11:28:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 373053A5888
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jan 2025 11:28:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABA7620DD46;
-	Fri, 10 Jan 2025 11:27:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D93D20D4E2;
+	Fri, 10 Jan 2025 11:27:26 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EC320C499
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B4220CCC2
 	for <linux-can@vger.kernel.org>; Fri, 10 Jan 2025 11:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736508447; cv=none; b=ESFGJVUFKX37Gv12T8qf8QEFI5peWFfR5uJcZsFnc3DzF/RHfMP+wyFwdSBSmoPBjQWOmnaeg3mPCLPUS/R8+QHBtLFn0F/57oSGKHmPbFOGpX62Dtb9hHkHjCEfZmVfmGjS+IWjFnao6UKdYj03pZ+WXVav/+9d87mCk1MRx/o=
+	t=1736508446; cv=none; b=fsvTbKhaAJmaaeGUtJKzhPPgSLxBU5oBiQhA64bxF7e+heSBQ4jevigfwrmH4BDVNDI6udppHm38SautiOBcHKdm8mf790Waofn+WtWY+wkh04KYSi/z+5ESrpbQ+xXBUqe7ySgp2zp0p0qTpfE6PqvJUTh4vJupilKfiO+0fcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736508447; c=relaxed/simple;
-	bh=eDTaj2cSpeELI5MytHZlE7kGIDVwMM4WC+7I4W4yEUg=;
+	s=arc-20240116; t=1736508446; c=relaxed/simple;
+	bh=Kna/B1U1ZlytemGqwABIALAoBmFOTIcwrP8VTiX6SFs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aV4rFriXYwhFWE1KFnmm5cr5RwKxE/y5JOqLCISaCipJhuxJmk5XM2IyearAduJgz/Te3bWYPNa0X7mY90fFJS+vY5DZnuB5XC+Cbro+P3tq53eSh6GEIpGXq2Fc6d51JZHbWNCpnv7q2Rc+wNbBjuJArkFx9wUWnU8/ufEWafQ=
+	 MIME-Version; b=FGq3MnNW0TXd1eapHLT8KVUmNtXm7eY73kyv1CYXOow8h0QjXzRI5UFFpKjcNi9B/qNoPenFgCFGvyj5ez3MIok/V4J6Q4W0FNIDPUbKXrZzMravvwwytVN7LJgEmYjHTGviZn0c2e2Y+GQkhBIMpebibGN1WV7EfwwRDYk0Lz8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,26 +33,26 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tWDAf-00052i-Fd
+	id 1tWDAf-00052j-Lb
 	for linux-can@vger.kernel.org; Fri, 10 Jan 2025 12:27:21 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tWDAc-0009h4-1p
+	id 1tWDAc-0009hF-1v
 	for linux-can@vger.kernel.org;
 	Fri, 10 Jan 2025 12:27:18 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 139C43A4605
+	by bjornoya.blackshift.org (Postfix) with SMTP id 259D73A4608
 	for <linux-can@vger.kernel.org>; Fri, 10 Jan 2025 11:27:18 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 1A3FA3A45A1;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 2B0EB3A45A3;
 	Fri, 10 Jan 2025 11:27:15 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 103f7989;
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ca8f1926;
 	Fri, 10 Jan 2025 11:27:14 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
@@ -62,9 +62,9 @@ Cc: davem@davemloft.net,
 	kernel@pengutronix.de,
 	Sean Nyekjaer <sean@geanix.com>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 11/18] can: m_can: add deinit callback
-Date: Fri, 10 Jan 2025 12:04:19 +0100
-Message-ID: <20250110112712.3214173-12-mkl@pengutronix.de>
+Subject: [PATCH net-next 12/18] can: tcan4x5x: add deinit callback to set standby mode
+Date: Fri, 10 Jan 2025 12:04:20 +0100
+Message-ID: <20250110112712.3214173-13-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250110112712.3214173-1-mkl@pengutronix.de>
 References: <20250110112712.3214173-1-mkl@pengutronix.de>
@@ -82,49 +82,43 @@ X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 From: Sean Nyekjaer <sean@geanix.com>
 
-This is added in preparation for calling standby mode in the tcan4x5x
-driver or other users of m_can.
-For the tcan4x5x; If Vsup 12V, standby mode will save 7-8mA, when the
-interface is down.
+At Vsup 12V, standby mode will save 7-8mA, when the interface is
+down.
 
 Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Link: https://patch.msgid.link/20241122-tcan-standby-v3-1-90bafaf5eccd@geanix.com
+Link: https://patch.msgid.link/20241122-tcan-standby-v3-2-90bafaf5eccd@geanix.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/m_can/m_can.c | 7 +++++++
- drivers/net/can/m_can/m_can.h | 1 +
- 2 files changed, 8 insertions(+)
+ drivers/net/can/m_can/tcan4x5x-core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 16e9e7d7527d..e31ce973892a 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1756,6 +1756,13 @@ static void m_can_stop(struct net_device *dev)
- 
- 	/* set the state as STOPPED */
- 	cdev->can.state = CAN_STATE_STOPPED;
-+
-+	if (cdev->ops->deinit) {
-+		ret = cdev->ops->deinit(cdev);
-+		if (ret)
-+			netdev_err(dev, "failed to deinitialize: %pe\n",
-+				   ERR_PTR(ret));
-+	}
+diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+index 4c9454176607..e5c162f8c589 100644
+--- a/drivers/net/can/m_can/tcan4x5x-core.c
++++ b/drivers/net/can/m_can/tcan4x5x-core.c
+@@ -279,6 +279,14 @@ static int tcan4x5x_init(struct m_can_classdev *cdev)
+ 	return ret;
  }
  
- static int m_can_close(struct net_device *dev)
-diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index 92b2bd8628e6..6206535341a2 100644
---- a/drivers/net/can/m_can/m_can.h
-+++ b/drivers/net/can/m_can/m_can.h
-@@ -68,6 +68,7 @@ struct m_can_ops {
- 	int (*write_fifo)(struct m_can_classdev *cdev, int addr_offset,
- 			  const void *val, size_t val_count);
- 	int (*init)(struct m_can_classdev *cdev);
-+	int (*deinit)(struct m_can_classdev *cdev);
- };
++static int tcan4x5x_deinit(struct m_can_classdev *cdev)
++{
++	struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
++
++	return regmap_update_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
++				  TCAN4X5X_MODE_SEL_MASK, TCAN4X5X_MODE_STANDBY);
++};
++
+ static int tcan4x5x_disable_wake(struct m_can_classdev *cdev)
+ {
+ 	struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
+@@ -376,6 +384,7 @@ static int tcan4x5x_get_gpios(struct m_can_classdev *cdev,
  
- struct m_can_tx_op {
+ static const struct m_can_ops tcan4x5x_ops = {
+ 	.init = tcan4x5x_init,
++	.deinit = tcan4x5x_deinit,
+ 	.read_reg = tcan4x5x_read_reg,
+ 	.write_reg = tcan4x5x_write_reg,
+ 	.write_fifo = tcan4x5x_write_fifo,
 -- 
 2.45.2
 
