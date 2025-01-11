@@ -1,130 +1,127 @@
-Return-Path: <linux-can+bounces-2594-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2595-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B461A0A164
-	for <lists+linux-can@lfdr.de>; Sat, 11 Jan 2025 08:00:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91DD3A0A423
+	for <lists+linux-can@lfdr.de>; Sat, 11 Jan 2025 15:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E07A1188DEF2
-	for <lists+linux-can@lfdr.de>; Sat, 11 Jan 2025 07:00:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 612B318878DE
+	for <lists+linux-can@lfdr.de>; Sat, 11 Jan 2025 14:29:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69DEE14F9EB;
-	Sat, 11 Jan 2025 07:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50EFA1ACEDA;
+	Sat, 11 Jan 2025 14:29:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Drh4gB/D"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Lu12umaL"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-71.smtpout.orange.fr [193.252.22.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4112C8172A;
-	Sat, 11 Jan 2025 07:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD27324B22D;
+	Sat, 11 Jan 2025 14:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736578828; cv=none; b=ME9C5fXrnguZ2OUf39qUNPbhGLoUfurpIYAW/TzzUQeB3+KxBwLe20r3EiFCthqP67FJGCj8jDFub/h3WWf+SaexciQui+GBsRDGYdSdZLte/oLBb4KgM2gIL5L1lMoxj5D36VScxXVUgon9UGwbla442sQd7tJMSyQ8bEgF6os=
+	t=1736605790; cv=none; b=qM8ZkKSaPTDwegCelDeRcPYvJMWksN4bxeayKCoYpLGFSDAvmXMf75q/vgZxwKHZvb1uGAgTzLiVWDrtGxwy3bNthu+jFC26ACx8BOMmB4hee2q8SIztSLCcK5CPl9r+MtyAGkzEldsNUzEoUaoptklro2CYAqWCu8EgqwnKqk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736578828; c=relaxed/simple;
-	bh=cb044/Apa15lPwK9G9VB8pwZ7CbtuU12N98VF2Rg+bo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=XTg7MADrnehSCEAm9Gej9Tuh6gmTV4S813DlWRagJJcvAjUqNPwpCOCA+3rdAqAV7dj76Gfyn9vp/+8utnFn2fP0c7Y1V7osx4ILjWfIef4dFgmiQpXdm+io43itqrTmDDK/hl7rzWBKJe/1iIA38uvmI6RFN/VJf/+RD790wuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Drh4gB/D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA554C4CED2;
-	Sat, 11 Jan 2025 07:00:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736578827;
-	bh=cb044/Apa15lPwK9G9VB8pwZ7CbtuU12N98VF2Rg+bo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Drh4gB/DNIyHFdABgj0gkvwRKRvDbF25oD1xenkcwvSX6Gdi5hOZ1XZkF/tKI2O/E
-	 Of6ZRZD85/BMLhJasnAk2H7vRBMZf6P3cSWZK3ZieAymyZEYYp6PCHFgzOWtRz8Pmq
-	 jNyU7DOqVEe/+y2UFGK1dNpiaB/02lGTf9oHHun7CcAlVW9iMg6tCZMLZ4KQ3yLC1C
-	 lMHVpVUhobqfe/w6E1ZE3DeABr6p+tDzsf/oafoGg6+/0jU1ACyGUuNfiU+gT0+Cjt
-	 p3X6accotS6EM7MjZDgOQP7QGkL0K6LUi0Qc28IWwBtmBszCm6W2VjPSl6pmTseHCu
-	 S7HtKp6CLYDsQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB7FF380AA57;
-	Sat, 11 Jan 2025 07:00:50 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1736605790; c=relaxed/simple;
+	bh=TLWESpAt6i+RL1le7xlgqzHu9rsqzhATZ5qZDef8sjs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V/081fLzDBKvxoxejqNd7aiogoK4r5zvKTtQEpGFxvJJPbL9E4xRFu1jefAYL2sdFkpBaJYcQvyyvK0/YQ8L9iUG+66xxsP8l9aLZlOZKBwjpZ/i2CvorjcaROi8p+1UA1z66bukMOhGCRych9m/JuJBkvCtlmUNtrZwnEjNO3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Lu12umaL; arc=none smtp.client-ip=193.252.22.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id WcM2tn7VqBQudWcM7tS2ho; Sat, 11 Jan 2025 15:20:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1736605256;
+	bh=WsiTbARFpM+ocPNvsTMcVs1wvSYGOoycim0x2JkkrKM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=Lu12umaL8equQxEn+uNWIWSG8TRAydlHzBrQsr5DGljZc33huiqJlp8VydEezNA32
+	 FDfU3rYNCQSFkVTd3XVFypCwThImiFS325XsE0rJi4xxnoRcTXBW8/WYitFH5YVVB8
+	 7XwcKdVQICh3Oqb0nkln69b9KY2kzUCC7vtwUgGqJ89cY8uf06pDscNRPUp+/stJ2/
+	 ivkhjqRmohDIG9yG2f5K2aAe/8YJZdNb8nQZDBne65ci7k7JkSm+o10F6+U+mQ3Gjx
+	 uyKsofSOU/f+0CP2wmDyhLCO2UZs6yD/cyXfn75VHqDasAw+uiHDJpdew0BOYW0avz
+	 /0NMrhqjbhw4Q==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 11 Jan 2025 15:20:56 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <5589a4e2-75b5-49ca-a8bf-5de892cc45c0@wanadoo.fr>
+Date: Sat, 11 Jan 2025 23:20:45 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 01/18] dt-bindings: can: mpfs: add PIC64GX CAN
- compatibility
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173657884987.2317784.6866618632689015212.git-patchwork-notify@kernel.org>
-Date: Sat, 11 Jan 2025 07:00:49 +0000
-References: <20250110112712.3214173-2-mkl@pengutronix.de>
-In-Reply-To: <20250110112712.3214173-2-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de,
- pierre-henry.moussay@microchip.com, conor.dooley@microchip.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] can: grcan: move napi_enable() from under spin
+ lock
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, mkl@pengutronix.de,
+ linux-can@vger.kernel.org
+References: <20250111024742.3680902-1-kuba@kernel.org>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250111024742.3680902-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
-
-On Fri, 10 Jan 2025 12:04:09 +0100 you wrote:
-> From: Pierre-Henry Moussay <pierre-henry.moussay@microchip.com>
+On 11/01/2025 at 11:47, Jakub Kicinski wrote:
+> I don't see any reason why napi_enable() needs to be under the lock,
+> only reason I could think of is if the IRQ also took this lock
+> but it doesn't. napi_enable() will soon need to sleep.
 > 
-> PIC64GX CAN is compatible with the MPFS CAN, only add a fallback
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+
+> ---
+> Marc, if this is correct is it okay for me to take via net-next
+> directly? I have a bunch of patches which depend on it.
+
+Even if the question is not addressed to me, I am personally fine if
+this directly goes into net-next.
+
+> CC: mkl@pengutronix.de
+> CC: mailhol.vincent@wanadoo.fr
+> CC: linux-can@vger.kernel.org
+> ---
+>  drivers/net/can/grcan.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> Signed-off-by: Pierre-Henry Moussay <pierre-henry.moussay@microchip.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Link: https://patch.msgid.link/20240930095449.1813195-2-pierre-henry.moussay@microchip.com
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> 
-> [...]
+> diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+> index cdf0ec9fa7f3..21a61b86f67d 100644
+> --- a/drivers/net/can/grcan.c
+> +++ b/drivers/net/can/grcan.c
+> @@ -1073,9 +1073,10 @@ static int grcan_open(struct net_device *dev)
+>  	if (err)
+>  		goto exit_close_candev;
+>  
+> +	napi_enable(&priv->napi);
+> +
+>  	spin_lock_irqsave(&priv->lock, flags);
+>  
+> -	napi_enable(&priv->napi);
+>  	grcan_start(dev);
+>  	if (!(priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
+>  		netif_start_queue(dev);
 
-Here is the summary with links:
-  - [net-next,01/18] dt-bindings: can: mpfs: add PIC64GX CAN compatibility
-    https://git.kernel.org/netdev/net-next/c/130727c37b7e
-  - [net-next,02/18] dt-bindings: can: convert tcan4x5x.txt to DT schema
-    https://git.kernel.org/netdev/net-next/c/79195755cdeb
-  - [net-next,03/18] dt-bindings: can: tcan4x5x: Document the ti,nwkrq-voltage-vio option
-    https://git.kernel.org/netdev/net-next/c/6495567981be
-  - [net-next,04/18] can: tcan4x5x: add option for selecting nWKRQ voltage
-    https://git.kernel.org/netdev/net-next/c/36131b72fb1c
-  - [net-next,05/18] can: sun4i_can: continue to use likely() to check skb
-    https://git.kernel.org/netdev/net-next/c/bddad4fac9f7
-  - [net-next,06/18] can: tcan4x5x: get rid of false clock errors
-    https://git.kernel.org/netdev/net-next/c/68d426da13fa
-  - [net-next,07/18] dt-bindings: net: can: atmel: Convert to json schema
-    https://git.kernel.org/netdev/net-next/c/2351998fd833
-  - [net-next,08/18] mailmap: add an entry for Oliver Hartkopp
-    https://git.kernel.org/netdev/net-next/c/57769cb9ccba
-  - [net-next,09/18] MAINTAINERS: assign em_canid.c additionally to CAN maintainers
-    https://git.kernel.org/netdev/net-next/c/1263e69a7c47
-  - [net-next,10/18] can: dev: can_get_state_str(): Remove dead code
-    https://git.kernel.org/netdev/net-next/c/d50c837675a9
-  - [net-next,11/18] can: m_can: add deinit callback
-    https://git.kernel.org/netdev/net-next/c/baa8aaf79768
-  - [net-next,12/18] can: tcan4x5x: add deinit callback to set standby mode
-    https://git.kernel.org/netdev/net-next/c/a1366314703a
-  - [net-next,13/18] can: m_can: call deinit/init callback when going into suspend/resume
-    https://git.kernel.org/netdev/net-next/c/ad1ddb3bfb0c
-  - [net-next,14/18] dt-bindings: can: st,stm32-bxcan: fix st,gcan property type
-    https://git.kernel.org/netdev/net-next/c/7e0c2f136d1b
-  - [net-next,15/18] can: kvaser_usb: Update stats and state even if alloc_can_err_skb() fails
-    https://git.kernel.org/netdev/net-next/c/3749637b71b0
-  - [net-next,16/18] can: kvaser_usb: Add support for CAN_CTRLMODE_BERR_REPORTING
-    https://git.kernel.org/netdev/net-next/c/0dfa617c3f77
-  - [net-next,17/18] can: kvaser_pciefd: Update stats and state even if alloc_can_err_skb() fails
-    https://git.kernel.org/netdev/net-next/c/e048c5e55fbc
-  - [net-next,18/18] can: kvaser_pciefd: Add support for CAN_CTRLMODE_BERR_REPORTING
-    https://git.kernel.org/netdev/net-next/c/9d92fda0e2ad
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Yours sincerely,
+Vincent Mailhol
 
 
