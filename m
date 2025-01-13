@@ -1,211 +1,122 @@
-Return-Path: <linux-can+bounces-2606-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2607-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFED5A0ADA1
-	for <lists+linux-can@lfdr.de>; Mon, 13 Jan 2025 04:00:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E24CA0B43E
+	for <lists+linux-can@lfdr.de>; Mon, 13 Jan 2025 11:13:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A24A91885037
-	for <lists+linux-can@lfdr.de>; Mon, 13 Jan 2025 03:00:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31D327A5265
+	for <lists+linux-can@lfdr.de>; Mon, 13 Jan 2025 10:12:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E3A78F43;
-	Mon, 13 Jan 2025 03:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="msrmVdeE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F88120458D;
+	Mon, 13 Jan 2025 10:13:00 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52C279E1;
-	Mon, 13 Jan 2025 03:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BE31FDA9C
+	for <linux-can@vger.kernel.org>; Mon, 13 Jan 2025 10:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736737222; cv=none; b=rWGLD+Ik/ca036BVBdCx88tt91VWpGZS7Y+8s8b4RMTsFTiQ4jyxNzcL2lC0g3Ancgu4qVFuIwOHZiGkRUHcaZHBJgARK5q8RfU4nwcHM3do0AfX0zBWu9zJaWIgTxbAHuBIwcAF1IFn3MudHDb52M3yPGzWZMDDLS9hPBq3k8w=
+	t=1736763180; cv=none; b=qMagqcUFDB7s8hCzNlkrnBFqETawnbSokUPjYzp9ROjz9ZGDBGdMzreej/uWyqtkM1UpOzAkgNSB5kleJW8V5X617tpznE8ufMlmLK8RFwA4tEdXw1pS60Q+ZC8W921kaKWKzAqjuw2IZK36EVgUas6qUDOLW4lcNUOaf+IL6Pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736737222; c=relaxed/simple;
-	bh=vWDv9c+Hb5NFBDqnLC3anS0jUC4B07QypVbhZL/BxTk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pmf+eAJtbIH/LRS8V24RLS3He/IwgfqZL506ztWHylZCrB4fqg/SgCTwMuMrCtb8UqXLm2a2njhg0oVVqYt+7B0Lp0S+QIq73hrZKFXldmyZSsqrhgUQA2V0rRRo9bY5GkvZNtpDiUlUJnWcBwy2FtlLvLbYMqhX8qTPJPBOCJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=msrmVdeE; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e3983426f80so5878731276.1;
-        Sun, 12 Jan 2025 19:00:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736737219; x=1737342019; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7vHUyb9eNg2JqWHIeEtx4JxxlaEahhQgvricUcB0kaU=;
-        b=msrmVdeEXhgI6OED5WasaszCm5FJkvfwO3V8oini06lN/Mojp3sV8ykJybQRGFQWuS
-         Ew4rAU1R1AUK5pgbno5Nb9RR+bIkn0OW4uJHmQ7s4+rWo6lPX85smR7wyx5j77HZ9aMq
-         twY7tS0SH6tJqpETq5PeX0L7Kg+L3Gvn6n6nY3cNWnkgziJiZ/GHE427Oj8YzvkBuyz/
-         GVJY80AGg0t+ybgFyfDcoiM6yi5Tt089NLddd9HtHC2v4QDZ3BKyQjQZiPwTRSDOxO0H
-         pn6tFJ8vrNY7+q0LNx/aAirs4YN6unnNSLhHvcsZXTepPJAN2MAPfpXycAhj4NpfjnXN
-         Pvug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736737219; x=1737342019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7vHUyb9eNg2JqWHIeEtx4JxxlaEahhQgvricUcB0kaU=;
-        b=qTHphbfIIT1Iq8UwDKRHQ574R1okZ5Z2hcmXyK/XKLbBxk293ek3NIvwHiYEZkdrkV
-         mDKlYRl7iwi15/lr4/bfr2t2f3OAh1SjXJMMIU7lfylitsgKmYZZcdTX0KiRrUojYn+m
-         ZsLR8sAgP8VXyitGejHPZrPve5gDE7o4aS4g7nbqR1ubSAoa3dNUa9Y9ZZ4B4oQuxRDV
-         KUbzrdwi8ugQyHhO/lOrR3cJ/r9KUr3kAM5h4o5HAJW1l2rE53rs0OfjaFl17Whtubse
-         jqrTWs+YEPqegIF3irgAaWl3c1h1xH368c9mc0SGfFBxO8MKyCQVuoxpE3Qj4PsGmoAx
-         UYhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUK0CiXomYykw0fdYj25dDmuoz/DZ4uJO3K2AxyvWTU8flJhvikoOuw9IBPC0ybs/6dyjgORcr/@vger.kernel.org, AJvYcCW0ApG1ciJhKM3IKFIVaRBORJuiwNEbF8++CiaFhPEizgTZcR3fwFxpmu/v0dYxgiQYQ08bJBfXlXlZ+H83@vger.kernel.org, AJvYcCW6EaLrO+tG32JQ0cue501tXWsg4XFhspq3VfT/Kba979fUmpClYRfKlTIk4gl7RifjG5EGhYqreHj+@vger.kernel.org, AJvYcCWMmIrFgET8eIEZlM1xmwg7b73IWmYEzR5ajuUQLOtuqeKNwdaFddDaEDpuhyJEFDRo1SpLo1rufE7Dk536ZAg=@vger.kernel.org, AJvYcCWO+oeLv2sCLPYF6YY2NyFoJfy9kMEMoJ3RejC7We6Ihj74u8nqlX9Slin68afjb0DV87ogDvkEZVwW@vger.kernel.org, AJvYcCWTdxm8p1omKnHHmheTqjL4KsjoQFY/8u3ZWOhgQh24MxzIABD6NgS2ZYgHIV9On3utXfGl9F5cK99sreA=@vger.kernel.org, AJvYcCX20F3YL8xNuL17QBGXdtMQBbKB0AYtjkbbvA+2M78HpK1rqJ5godFBk/fGSYflfzYWfL9oa7XPc3YftA==@vger.kernel.org, AJvYcCXcKAb20c0Lj9IQ0urOd6JsQ3dDTXJbz/FVxlUt5o4TuGW2GWcY3PkPA4U5GJ+ptk9WTukgx65oTCA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxobPcfGrskszvDhj9vf0VjY4IUM9aypLXs2avVgcBTYruQ9wj
-	LxtFSMwhhUXvo4qZIPdlv1kWHt3wMZ3vUbgBuyRqYYJDJxzSIUOrOFe2ZGEwUh3hZL4Zd1BEVPd
-	haJYYAgbSONTloICF8jkoCr0T/qo=
-X-Gm-Gg: ASbGncubp5jZFm15NToKBfk87nrjcXQn9k0H3umDmqmj2WsUvn7eB3GNyJggPD3RGxW
-	cPsN4i9M5JtDr0qFhlTPPD8k4sXoiJDcUX2XkNd85rJHDD4/0ni8b+HDHxdYf3w/5Dkr+M08=
-X-Google-Smtp-Source: AGHT+IGsfoH84Emy/3VAy+2ciT/LDM53GHF7kLpSuNtlkY+mcbIYtSqMBLpJAo2tp5wPRRi4KWOuDrwlzY99kXjwbZU=
-X-Received: by 2002:a25:2104:0:b0:e47:f4e3:87e3 with SMTP id
- 3f1490d57ef6-e54edf25ca4mr10429337276.11.1736737218579; Sun, 12 Jan 2025
- 19:00:18 -0800 (PST)
+	s=arc-20240116; t=1736763180; c=relaxed/simple;
+	bh=aSlU/XU7Gw9vwATkxMVfaJHI9YBD7QlnksgCXz3qbtc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OjDGnAIq0P5zxZQvwO8O/FH6wvzVBLDKNm0q0dEwENDhq8Ih04QIC5L0EGn0DGH9tchq9o/Yj34X4prQRB5Mct8oWuHSCqTykEz0YpOF7o4TZ9tXg6PHC+FHdeNv7w/jvofTRwTFZkNklwFXWcn4srX+GzhoTxpqYWwbvR8Aw4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tXHRA-0003rW-Dw; Mon, 13 Jan 2025 11:12:48 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tXHR8-000Ere-1K;
+	Mon, 13 Jan 2025 11:12:46 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 369573A60B6;
+	Mon, 13 Jan 2025 09:52:33 +0000 (UTC)
+Date: Mon, 13 Jan 2025 10:52:32 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, 
+	mailhol.vincent@wanadoo.fr, linux-can@vger.kernel.org
+Subject: Re: [PATCH net-next] can: grcan: move napi_enable() from under spin
+ lock
+Message-ID: <20250113-outstanding-bronze-kestrel-d0927f-mkl@pengutronix.de>
+References: <20250111024742.3680902-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241227095727.2401257-1-a0282524688@gmail.com>
- <20241227095727.2401257-7-a0282524688@gmail.com> <20250106135135.GN4068@kernel.org>
-In-Reply-To: <20250106135135.GN4068@kernel.org>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 13 Jan 2025 11:00:07 +0800
-X-Gm-Features: AbW1kvZmveBm_1ZsSzbrQ6SCqOa0J-Y9vxXUkcqQ9J4x_X6pa8sZdwCwcoEMWQw
-Message-ID: <CAOoeyxWvRzHRVLW-U=nemfUpoF5pcO_bDmvg4U-wVqkFp=V=Yg@mail.gmail.com>
-Subject: Re: [PATCH v4 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-To: Simon Horman <horms@kernel.org>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="w3ictz64yuvhjsen"
+Content-Disposition: inline
+In-Reply-To: <20250111024742.3680902-1-kuba@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+
+--w3ictz64yuvhjsen
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH net-next] can: grcan: move napi_enable() from under spin
+ lock
+MIME-Version: 1.0
 
-Dear Simon,
+On 10.01.2025 18:47:42, Jakub Kicinski wrote:
+> I don't see any reason why napi_enable() needs to be under the lock,
+> only reason I could think of is if the IRQ also took this lock
+> but it doesn't. napi_enable() will soon need to sleep.
+>=20
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> Marc, if this is correct is it okay for me to take via net-next
+> directly? I have a bunch of patches which depend on it.
 
-Thank you for your comments,
+Yes, please take it via net-next directly.
 
-Simon Horman <horms@kernel.org> =E6=96=BC 2025=E5=B9=B41=E6=9C=886=E6=97=A5=
- =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=889:51=E5=AF=AB=E9=81=93=EF=BC=9A
->
-...
-> > +static int nct6694_pwm_read(struct device *dev, u32 attr, int channel,
-> > +                         long *val)
-> > +{
-> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
-> > +     unsigned char pwm_en;
-> > +     int ret;
-> > +
-> > +     guard(mutex)(&data->lock);
-> > +
-> > +     switch (attr) {
-> > +     case hwmon_pwm_enable:
-> > +             pwm_en =3D data->hwmon_en.pwm_en[channel / 8];
-> > +             *val =3D !!(pwm_en & BIT(channel % 8));
-> > +
-> > +             return 0;
-> > +     case hwmon_pwm_input:
-> > +             ret =3D nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
-> > +                                    NCT6694_PWM_IDX(channel),
-> > +                                    sizeof(data->rpt->fin),
-> > +                                    &data->rpt->fin);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             *val =3D data->rpt->fin;
->
-> Hi Ming Yu,
->
-> *val is host byte order, but fin is big endian.
-> Elsewhere in this patch this seems to be handled using,
-> which looks correct to me:
->
->                 *val =3D be16_to_cpu(data->rpt->fin);
->
-> Flagged by Sparse.
->
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Yes, it needs to be fixed to be16_to_cpu(). I'll make the modification
-in the next patch.
+Marc
 
-> > +
-> > +             return 0;
-> > +     case hwmon_pwm_freq:
-> > +             *val =3D NCT6694_FREQ_FROM_REG(data->hwmon_en.pwm_freq[ch=
-annel]);
-> > +
-> > +             return 0;
-> > +     default:
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +}
->
-> ...
->
-> > +static int nct6694_fan_write(struct device *dev, u32 attr, int channel=
-,
-> > +                          long val)
-> > +{
-> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
-> > +     int ret;
-> > +
-> > +     guard(mutex)(&data->lock);
-> > +
-> > +     switch (attr) {
-> > +     case hwmon_fan_enable:
-> > +             if (val =3D=3D 0)
-> > +                     data->hwmon_en.fin_en[channel / 8] &=3D ~BIT(chan=
-nel % 8);
-> > +             else if (val =3D=3D 1)
-> > +                     data->hwmon_en.fin_en[channel / 8] |=3D BIT(chann=
-el % 8);
-> > +             else
-> > +                     return -EINVAL;
-> > +
-> > +             return nct6694_write_msg(data->nct6694, NCT6694_HWMON_MOD=
-,
-> > +                                      NCT6694_HWMON_CONTROL,
-> > +                                      sizeof(data->msg->hwmon_ctrl),
-> > +                                      &data->hwmon_en);
-> > +     case hwmon_fan_min:
-> > +             ret =3D nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD=
-,
-> > +                                    NCT6694_HWMON_ALARM,
-> > +                                    sizeof(data->msg->hwmon_alarm),
-> > +                                    &data->msg->hwmon_alarm);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             val =3D clamp_val(val, 1, 65535);
-> > +             data->msg->hwmon_alarm.fin_ll[channel] =3D (u16)cpu_to_be=
-16(val);
->
-> cpu_to_be16() returns a 16bit big endian value.
-> And, AFAIKT, the type of data->msg->hwmon_alarm.fin_ll[channel] is __be16=
-.
->
-> So the cast above seems both unnecessary and misleading.
->
-> Also flagged by Sparse,
->
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-Understood. Fix it in v5.
+--w3ictz64yuvhjsen
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> ...
+-----BEGIN PGP SIGNATURE-----
 
-Best regards,
-Ming
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmeE4l4ACgkQKDiiPnot
+vG9HeAf+KWsa4lVfcia7SK0/l4aQ9itqxlDjwiV3UfE+FgzC+gb+dg1v8ZWEICMx
++2By71lhY3hYIS+H6vltiAIRNPHX2x0nZNe1HTdECwrA1rJxa9P7SkYpkF5DRnjP
+XX6bgn4Rln0/jXF+eo3q//3wXNFWh/qs5ir1vzAvlkI2bPTWrlCkKVTiF0nlZRXM
+Kl6Jjq6UNoAVLCZHH0UIgzcTZ4ER/PnVZS+pEw/kfCu4F6T3VXxBKemG1TfYy9DH
+ZeB6524+h9uI61RY+oI7cQ6eDS7IkpT/B7yGSdxsssSlEnY/54I7lUubq9uzpO/K
+eMYIcm3empQmdvvOiS+1MjnX9lBYAA==
+=BQhA
+-----END PGP SIGNATURE-----
+
+--w3ictz64yuvhjsen--
 
