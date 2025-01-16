@@ -1,182 +1,192 @@
-Return-Path: <linux-can+bounces-2659-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2660-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C342A13327
-	for <lists+linux-can@lfdr.de>; Thu, 16 Jan 2025 07:35:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2B9CA13460
+	for <lists+linux-can@lfdr.de>; Thu, 16 Jan 2025 08:54:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 476767A49E3
-	for <lists+linux-can@lfdr.de>; Thu, 16 Jan 2025 06:34:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8571163898
+	for <lists+linux-can@lfdr.de>; Thu, 16 Jan 2025 07:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE57157E88;
-	Thu, 16 Jan 2025 06:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FhYcbo2/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2098197A8B;
+	Thu, 16 Jan 2025 07:54:51 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A3024A7E8;
-	Thu, 16 Jan 2025 06:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AAC015252D
+	for <linux-can@vger.kernel.org>; Thu, 16 Jan 2025 07:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737009294; cv=none; b=FPseENzbTnfZ9aTGihYUaNzWxGnpw0TKf3iqQPqzoQ6qwI0APwrkwbQ3ccG8ZViTx8zrMz9pB+i1y6onVqkt9ZzYML/MXsofDbG5CXK7mfiSS7cxBQiwx+LSaXOLFW7lFh35G0F3eFuCu1Q/QyAj2HWdGwR88cCqA/SkUiS6O5Q=
+	t=1737014091; cv=none; b=uiE3VMXS/f058GI/FIRgDjLwlWdJFwhkRoB6PSyryQsFIYeMXihRJO3Q8ir6haA2gt4P8UbsXKaDjCkhzNQRcdTDYHW/lA4rvk428Yfwk6EJQ9Pm1rvGtPtdSNKKLaiwjNrfcLUFjC5WO//cfkU1eUPh3MOVyx/8FtbPWu2YziQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737009294; c=relaxed/simple;
-	bh=c4bb3EMGsgMUrTeDTt/1IawO6xWVcbipTrw2VtmyAng=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MPSSwH4W1U7Z4ir91fKJDY8D5scjvJlG0uSI0hSbh0PI446VQFTpmUZNcnhwmM4nXPULb1DiSnOHXZ81C6iocGG899kkiq2jZlBEthjEme4xGizqRBw3pF3vdoP7T9ppEGsh5VnCBjmgQqJeoKlyLz5aGoaqscY2SCE9D6eVeQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FhYcbo2/; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e54bd61e793so1095830276.2;
-        Wed, 15 Jan 2025 22:34:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737009292; x=1737614092; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hUMl2lV37NeEyUYQ+8hv4yRX1yZLm9fZeIJWVyQAT9A=;
-        b=FhYcbo2/BMbsjW7hmwyRbRc+edN+6c80zj7EVm+qPUuaziTQtJGz/jgbavNrg9qbXf
-         5Ku3U6+qStP21J2qr0DSG4hi7VkoLpAC3uY7Fi/A2NzdiE8xSF9IBuLxZ3prYQdj5a+R
-         QIy0f03tEBWLn1HEgQrQI+reAFruvukm5ryCXTsN4+qACkbPwAjkitxxHibjzGPmKBeC
-         hJiGSTGWaQDO4qgYIxKBi94Uy1YTPP//KM+OcQLrS7LlnpjP977+Jqd7xPzZJbLK8WzN
-         BYyvkSqZw69E6Ndu5YWe9gBm7uYs25yvkEHBiG4CUIg8yJ25B8IoB4C45rqEdBELo91a
-         TKEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737009292; x=1737614092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hUMl2lV37NeEyUYQ+8hv4yRX1yZLm9fZeIJWVyQAT9A=;
-        b=NW0sY/CS6nzXrNicZg7T6Q2wsVWEISOADkywNqOl3WBuzm1PoTahXRZ0Dps25op8ou
-         eHD1UiB1cTHdnGeU8McFXDoBteDS0hrHCRdEfAFExwMGfCTAPJCzYJ4Q/5GJfdcHJCw1
-         emr15p0Ij/RjExyW7rhtJ9ye2YJiu/LwUvEBrXsawiWELYbkk9th47CWklWaA+GEGz0w
-         ftdxvFrjAEm6KBXG1ye3bb0HOB0wFWmpIYLGqbRqv0/7+dipaSoQBwUoIqgmFFSaELnd
-         495dgMOtzGE3ZOGO3Im/mqORobF+ZHY4n1gWUu6lvplOaJr/TKjprIdgTLMEa07pkdEY
-         K9jA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCQt2kY1urPyRk/h9tN70EUmBq7HYgpNY3lr5R6W+HLKlowYou3RrfvMDKgL02rHxyvVmPNLgqsGNG@vger.kernel.org, AJvYcCUEZsIHdopj7ddkKiKANjCKry2fv6NmmNEkW3nvvRfsT5uVEOF5gL1ZqOmkca1TjsOlPvMvRmEvPtwl@vger.kernel.org, AJvYcCUosTDjI7JCMZWoq+SPv0o1iRtZEmudsbp1ciylKAwa6S8TFnv9ePfIlvrK1ztVuH9JO65KHjQKrAiK@vger.kernel.org, AJvYcCUq0GBEvra3eaRi/vl2xbsLHK7dEDH5Tdw/QeuyC4iIpArzWWe2kIMDysgWFmkOAvVqvhI6wQK2ZqU=@vger.kernel.org, AJvYcCVCiVUNKukvLrhziF0x8PGJJSo9aEfbRxhQF8Nbhvr/sbZDoCuVih4830cqT8TKg/l/hjShAWEdRr0JAw==@vger.kernel.org, AJvYcCWEFNsrcwhFSVz+Mt26vlcLljmhnpLUT9OMeL/7YfZhIm1rgtz5y9V8MGICQcUGav9YTMXkIb4B@vger.kernel.org, AJvYcCWOx8hin3A5cMdedhNkFj/BrNdBHHNXRiSXw4pve0adFrradrnTtM8RC9jX4dm9WNfXxllPAVl3+rTjIbP7Qbo=@vger.kernel.org, AJvYcCXFL62vzL6qVxVzQntc5yJbzL5VXBuxysQzbHUs1YxWRqT/z1dIGTZebZgd8i+ft1K8vXivM8GOE0YFIj0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo5kdDOdklx4LobLPhpxK8sHYyircAL0JFMdI6AmqXwRzJ86YY
-	qBmclXnxFSBtu4b8tU963WFTXQSm+zuJIc3auMAA5p/kkRrx2h4NHQlEgqD6W9k96jovi2qqe4C
-	i5pmgl1xqbu9A7GzS0NDin0Z7wj8=
-X-Gm-Gg: ASbGnctD8yoHXYqv8thkC4s6CRPB5tznyMNj9eKye+kThTNcLJQloh79iXWsj9PJIfy
-	SJOsgRExrNBKcQN98pFsk5CFC9/oNIfJS1npyRfVWb2qFvUxAQJFbP1/K0iqE5l5MLphjNgr8
-X-Google-Smtp-Source: AGHT+IEBjbrPYm9uZ4tkDJz8bKIImgmSbE3fPZUiZeCgys3yex7NZywUBcf/cb/InNa/yBzsGp+ThfaTGo+an3nLKdc=
-X-Received: by 2002:a05:6902:f84:b0:e38:8a2e:e3bc with SMTP id
- 3f1490d57ef6-e54fca4021cmr25184463276.5.1737009291859; Wed, 15 Jan 2025
- 22:34:51 -0800 (PST)
+	s=arc-20240116; t=1737014091; c=relaxed/simple;
+	bh=7M65RmMX3Ry4OaGybSFFVt26wFFfaatRGurZ9wLro+M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dfBir1DnM9uWKiHaIEOs8W/yfqLHjYKy7mceyuAxXgKVeJ33pe2sD8TwsqWGnN73i6mwurIaUl3Vsn8IUklGavBN+HrgLIOn9Q5Na95U5POkATmKlZ8C2FYDHUNJ/jSmdZo7FDL1chIoti7gMkRmhsZtjLuqN0hsQmMPu6Yr6sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tYKhe-00075B-4S; Thu, 16 Jan 2025 08:54:10 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tYKhT-000DS3-0I;
+	Thu, 16 Jan 2025 08:53:59 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 165233A99BF;
+	Thu, 16 Jan 2025 07:53:43 +0000 (UTC)
+Date: Thu, 16 Jan 2025 08:53:42 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Kees Cook <kees@kernel.org>
+Cc: Jakub Kicinski <kuba@kernel.org>, 
+	Cheng Xu <chengyou@linux.alibaba.com>, Kai Shen <kaishen@linux.alibaba.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Christian Benvenuti <benve@cisco.com>, Nelson Escobar <neescoba@cisco.com>, 
+	Bernard Metzler <bmt@zurich.ibm.com>, Karsten Keil <isdn@linux-pingi.de>, 
+	Michal Ostrowski <mostrows@earthlink.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
+	Chaitanya Kulkarni <kch@nvidia.com>, Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>, 
+	Mike Christie <michael.christie@oracle.com>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Alexander Aring <aahringo@redhat.com>, 
+	David Teigland <teigland@redhat.com>, Trond Myklebust <trondmy@kernel.org>, 
+	Anna Schumaker <anna@kernel.org>, Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, 
+	Joseph Qi <joseph.qi@linux.alibaba.com>, Namjae Jeon <linkinjeon@kernel.org>, 
+	Steve French <sfrench@samba.org>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Tom Talpey <tom@talpey.com>, Simon Horman <horms@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, Neil Brown <neilb@suse.de>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, David Ahern <dsahern@kernel.org>, 
+	Joerg Reuter <jreuter@yaina.de>, Marcel Holtmann <marcel@holtmann.org>, 
+	Johan Hedberg <johan.hedberg@gmail.com>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Oliver Hartkopp <socketcan@hartkopp.net>, Robin van der Gracht <robin@protonic.nl>, 
+	Oleksij Rempel <o.rempel@pengutronix.de>, Alexandra Winter <wintera@linux.ibm.com>, 
+	Thorsten Winkler <twinkler@linux.ibm.com>, James Chapman <jchapman@katalix.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Remi Denis-Courmont <courmisch@gmail.com>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Allison Henderson <allison.henderson@oracle.com>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
+	Xin Long <lucien.xin@gmail.com>, Wenjia Zhang <wenjia@linux.ibm.com>, 
+	Jan Karcher <jaka@linux.ibm.com>, "D. Wythe" <alibuda@linux.alibaba.com>, 
+	Tony Lu <tonylu@linux.alibaba.com>, Wen Gu <guwen@linux.alibaba.com>, Jon Maloy <jmaloy@redhat.com>, 
+	Ying Xue <ying.xue@windriver.com>, Stefano Garzarella <sgarzare@redhat.com>, 
+	Martin Schiller <ms@dev.tdt.de>, Kentaro Takeda <takedakn@nttdata.co.jp>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Guillaume Nault <gnault@redhat.com>, 
+	Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>, Andrew Morton <akpm@linux-foundation.org>, 
+	Wu Yunchuan <yunchuan@nfschina.com>, Max Gurtovoy <mgurtovoy@nvidia.com>, 
+	Maurizio Lombardi <mlombard@redhat.com>, David Howells <dhowells@redhat.com>, 
+	Atte =?utf-8?B?SGVpa2tpbMOk?= <atteh.mailbox@gmail.com>, Vincent Duvert <vincent.ldev@duvert.net>, 
+	Denis Kirjanov <kirjanov@gmail.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Thomas Huth <thuth@redhat.com>, 
+	Andrew Waterman <waterman@eecs.berkeley.edu>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Andrej Shadura <andrew.shadura@collabora.co.uk>, Ying Hsu <yinghsu@chromium.org>, 
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Tom Parkin <tparkin@katalix.com>, 
+	Jason Xing <kernelxing@tencent.com>, Dan Carpenter <error27@gmail.com>, Hyunwoo Kim <v4bel@theori.io>, 
+	Bernard Pidoux <f6bvp@free.fr>, Sangsoo Lee <constant.lee@samsung.com>, 
+	Doug Brown <doug@schmorgal.com>, Ignat Korchagin <ignat@cloudflare.com>, 
+	Gou Hao <gouhao@uniontech.com>, Mina Almasry <almasrymina@google.com>, 
+	Abhishek Chauhan <quic_abchauha@quicinc.com>, Yajun Deng <yajun.deng@linux.dev>, Michal Luczaj <mhal@rbox.co>, 
+	Jiri Pirko <jiri@resnulli.us>, syzbot <syzkaller@googlegroups.com>, 
+	linux-kernel@vger.kernel.org, kernel@pengutronix.de, linux-rdma@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-nvme@lists.infradead.org, open-iscsi@googlegroups.com, 
+	linux-scsi@vger.kernel.org, linux-arm-msm@vger.kernel.org, target-devel@vger.kernel.org, 
+	gfs2@lists.linux.dev, linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev, 
+	linux-cifs@vger.kernel.org, linux-hams@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-can@vger.kernel.org, linux-s390@vger.kernel.org, rds-devel@oss.oracle.com, 
+	linux-sctp@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
+	virtualization@lists.linux.dev, linux-x25@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	syzbot+d7ce59b06b3eb14fd218@syzkaller.appspotmail.com, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] net: Convert proto_ops::getname to sockaddr_storage
+Message-ID: <20250116-light-panda-of-reverence-2f5da8-mkl@pengutronix.de>
+References: <20241217023417.work.145-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
- <20250114033010.2445925-5-a0282524688@gmail.com> <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
-In-Reply-To: <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 16 Jan 2025 14:34:40 +0800
-X-Gm-Features: AbW1kvYJI-ZlyxfzNTVWRJivNQwAAI1rVA1G13z7pWoyr3_f28bZHldijS45J6Y
-Message-ID: <CAOoeyxVK=iBmj3BDX=D8a9=GFBkE158jbq3Rnq-RuoA5HxMi7g@mail.gmail.com>
-Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, 
-	lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nbdyd5ky7ajuduf3"
+Content-Disposition: inline
+In-Reply-To: <20241217023417.work.145-kees@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+
+--nbdyd5ky7ajuduf3
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] net: Convert proto_ops::getname to sockaddr_storage
+MIME-Version: 1.0
 
-Hi Vincent,
+On 16.12.2024 18:34:28, Kees Cook wrote:
+> The proto_ops::getname callback was long ago backed by sockaddr_storage,
+> but the replacement of it for sockaddr was never done. Plumb it through
+> all the getname() callbacks, adjust prototypes, and fix casts.
+>=20
+> There are a few cases where the backing object is _not_ a sockaddr_storage
+> and converting it looks painful. In those cases, they use a cast to
+> struct sockaddr_storage. They appear well bounds-checked, so the risk
+> is no worse that we have currently.
+>=20
+> Other casts to sockaddr are removed, though to avoid spilling this
+> change into BPF (which becomes a much larger set of changes), cast the
+> sockaddr_storage instances there to sockaddr for the time being.
+>=20
+> In theory this could be split up into per-caller patches that add more
+> casts that all later get removed, but it seemed like there are few
+> enough callers that it seems feasible to do this in a single patch. Most
+> conversions are mechanical, so review should be fairly easy. (Famous
+> last words.)
+>=20
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+>  net/can/isotp.c                               |  3 +-
+>  net/can/j1939/socket.c                        |  2 +-
+>  net/can/raw.c                                 |  2 +-
 
-I will remove priv->tx_skb in the next patch, but it seems that
-can_flush_echo_skb() has not been EXPORT_SYMBOL_GPL().
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for net/can
 
-I would like to know if nct6694_can_clean() requires modification.
+regards,
+Marc
 
-Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2025=E5=B9=B41=E6=9C=
-=8816=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8812:45=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> > +static void nct6694_can_clean(struct net_device *ndev)
-> > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +
-> > +     if (priv->tx_skb || netif_queue_stopped(ndev))
-> > +             ndev->stats.tx_errors++;
-> > +     dev_kfree_skb(priv->tx_skb);
->
-> Use:
->
->         can_flush_echo_skb(ndev);
->
-> (related to the following comments).
->
-> > +     priv->tx_skb =3D NULL;
-> > +}
->
-> (...)
->
-> > +static void nct6694_can_tx_work(struct work_struct *work)
-> > +{
-> > +     struct nct6694_can_priv *priv =3D container_of(work,
-> > +                                                  struct nct6694_can_p=
-riv,
-> > +                                                  tx_work);
-> > +     struct net_device *ndev =3D priv->ndev;
-> > +
-> > +     guard(mutex)(&priv->lock);
-> > +
-> > +     if (priv->tx_skb) {
-> > +             if (priv->can.state =3D=3D CAN_STATE_BUS_OFF) {
->
-> Just stop the queue when the can bus is off so that you do not have do
-> check the bus status each time a frame is sent.
->
-> > +                     nct6694_can_clean(ndev);
-> > +             } else {
-> > +                     nct6694_can_tx(ndev);
-> > +                     can_put_echo_skb(priv->tx_skb, ndev, 0, 0);
-> > +                     priv->tx_skb =3D NULL;
-> > +             }
-> > +     }
-> > +}
-> > +
-> > +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
-> > +                                       struct net_device *ndev)
-> > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +
-> > +     if (can_dev_dropped_skb(ndev, skb))
-> > +             return NETDEV_TX_OK;
-> > +
-> > +     if (priv->tx_skb) {
-> > +             netdev_err(ndev, "hard_xmit called while tx busy\n");
-> > +             return NETDEV_TX_BUSY;
-> > +     }
-> > +
-> > +     netif_stop_queue(ndev);
-> > +     priv->tx_skb =3D skb;
->
-> Here, you can directly do:
->
->         can_put_echo_skb(skb, ndev, 0, 0);
->
-> The skb remains accessible under priv->can.echo_skb[0]. With this, you
-> can remove the priv->tx_skb field.
->
-> > +     queue_work(priv->wq, &priv->tx_work);
-> > +
-> > +     return NETDEV_TX_OK;
-> > +}
->
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-Thanks,
-Ming
+--nbdyd5ky7ajuduf3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmeIuv8ACgkQKDiiPnot
+vG/tCQgAnoYMQthE5qhN4islXZibYx3HOEVpQp20V/CdVVRH56MNpoQvsjN0F5I9
+Pe8FiGuyUR9fNqhHJPDV5qTZfzq6vRSoc7PpwLTwF9ReyzpbKcMrYcmv/Wkbso1k
+faQaG0U/F/5wp2/nsK1h/PUHRvlwFfLs41wCCmlXQDks5vvt1U+8F/0mUiM/L0yT
+SQG9iudLNDMEv22xlkR1e90s94ARgRIKcBcOZ9LudgYLwGmT8I3JAenyHET3Q8d2
+GWVaepqliLBxoq7pfWcJm1yFL8DFp2xSUy/gP7BqrfKIJoJhRqOR2EXGSgAZ6rek
+c/YmUBVaGDu2ZBkxhzlB6NKXFu9dBA==
+=LAEY
+-----END PGP SIGNATURE-----
+
+--nbdyd5ky7ajuduf3--
 
