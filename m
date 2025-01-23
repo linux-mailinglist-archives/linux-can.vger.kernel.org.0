@@ -1,151 +1,116 @@
-Return-Path: <linux-can+bounces-2678-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2679-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D91FA19FE0
-	for <lists+linux-can@lfdr.de>; Thu, 23 Jan 2025 09:25:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FC51A19FFD
+	for <lists+linux-can@lfdr.de>; Thu, 23 Jan 2025 09:38:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3B5E18843D4
-	for <lists+linux-can@lfdr.de>; Thu, 23 Jan 2025 08:25:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6124916A879
+	for <lists+linux-can@lfdr.de>; Thu, 23 Jan 2025 08:38:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F60B20C02A;
-	Thu, 23 Jan 2025 08:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TSayIkE+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C11C320C008;
+	Thu, 23 Jan 2025 08:38:13 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAC3320B;
-	Thu, 23 Jan 2025 08:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3830F202C2B
+	for <linux-can@vger.kernel.org>; Thu, 23 Jan 2025 08:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737620730; cv=none; b=o4WCHC2U68oFIuBpPIz6mNxFIyPf4SXlFxo62XQ1a4nrYglfL9Zpz+Qiv70VAUoxVcDX0aDGbxkcHKnttlhLLVSa3vV2LJZUkuXCAz1hv1py80hupFktCkvbPH+SL+rUJD3nLjPJ6mdHzw8Q88r7GuKP7iyUZ/HeoHXrvX2ODxM=
+	t=1737621493; cv=none; b=C0nfkWzLnyLHmdzCPZ6h6CfGUB6ASn0LbESZYaGHNZ4RDiNtTRYMU2t/aUldvml13hyn5etYc9+P6/ktiqjr5giYFLxOTLRatDjhUkQIMY2iWlJKbNjPYHnYy1z0Oi4ODqyKGdDjwz8iFqF8FDiomuivw7u9w/lpuk/L6HKKQAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737620730; c=relaxed/simple;
-	bh=0RqbJsmBYD4psvJjsPR1/k8+RZSZVR7ryEwaJzId76g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kyh2c7hV2ImG1G6/Nz8a8LZlYSLWnlGJU+AeYM1zGY5d/Lue3KXrGh/hXFslLAy13QQzthkoxZKsi/gJ1RqotRBxM2NULJPDZyib++1lWs039yM23K0DUn9ItgV1QqBtf+GCeR9n3ADVUQXV8NaYVC5aC4cGC3c2rux1e3VWmiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TSayIkE+; arc=none smtp.client-ip=209.85.128.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-436ce2ab251so3707585e9.1;
-        Thu, 23 Jan 2025 00:25:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737620727; x=1738225527; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7x78WrC+cTNtBpfnkOUA5kq6ry12btJ1fKxNdWFZpHE=;
-        b=TSayIkE+0U+pOvEuJnRxcZgVtCapfSagrwq/toiKmQ8w4Wb4hJCpPg6r0QO8VTxCpi
-         O5iirqYdfrYwF9HYoyZ3B1qoirJZcahDRj4VoIbT2s6qS6dETU/FOVdCTgaMxXCMVgU3
-         kawda30JBuXD/72WCKpQTS/3EEWJk47Jl3FhpbyrWtImmjS6+DDN1u1e0l/IjJLj1R9o
-         O3EUq3Rk3mPZAYVtLPJPNykU5koESxoUd0rtIW4qiv+8VfM/fCYEBTy4Qk6UYLDtzk1W
-         oLV6EDoHkmSKiktgJ+9LMmSPec9Ocj7ZyF/O8Pr1qjHOONap3CbJhKCkKGbWczR3nT2C
-         2d0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737620727; x=1738225527;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7x78WrC+cTNtBpfnkOUA5kq6ry12btJ1fKxNdWFZpHE=;
-        b=mxmo3pGNz6zxiC9pokMJ2tYJt0MomVCfOiYxUvJM24fAvr7EcWzbO5dcn2zGPpWont
-         67ccdR57rSp50TizY18+gdYKy6f/FIdGx/R5vm/hZncWL6NJj7cU+WzljqbKpc7P+w8S
-         gRxB63T/yod/bLcGNpo+XOUpWYizO09tWHJv4bBklEGPSC3QqzEiBp9OLYwb19WbqMCz
-         dITgnso3Nql5nHV1qMKqwvBUFhLRTpItMNbYNlNvO0EvlllIpL+TITwJt42bR9rGti5m
-         Bs7gedb8lwKr12HVIYReezZ6PsA7rYLS651zIvrHNhL618KzWw+AfCvUoZgQ04a4aFsX
-         HhJw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbuOP5EvEk5GKTki3+/OehmCHq17Wqu1OAiQQZrb3PJLaIGzDS81+vPXQyLbBjzSzq1HcnvXp6@vger.kernel.org, AJvYcCVDW/khwxbsYEhBa1w9XGZL68gQtGvSV/gFyUwJdEZzM62sfLVoas3mF4bayYAY6fDf+L+QK5I1eGa60Js+@vger.kernel.org, AJvYcCVrjRI0wRHLSoVb1ZDyLwl+TwWKU3dlb0ERQKOYJ8xfpGPs+VbZa66y8+RXbhLZmyDh3BbVz5N1FgIO@vger.kernel.org, AJvYcCXNNMSU5KlhDD4rJAWdGpvu/yDfW1AxfOynrqLQ9jX2TnxzV37c8yJ3xzlptrfp9UCkq4mbGivcEwQ=@vger.kernel.org, AJvYcCXzDM37I4hjPWQ9EUCI3nS5mv9P/zzW09OOAMogCk3bjIogdCQgBlKf1kmGayYEF+RoUYEd+YfgKhD39dpjbIfqzzTOIy0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywl19QpVZVAoF3ZhSSwTw9u28bdknKZC4IIIHH7gkzxMAXRWsC9
-	vbCow9pcw4yeMB+i94ibcQKrNLsBjeSdWFy5Pbemyw4KAIhLlELe
-X-Gm-Gg: ASbGncuooC5rub8bL3fLdEg3+L4NnNFKWsODHwXDNsbGmC/VqWB5/dViDG9OMEsLkrQ
-	LD17jshJYW5hEnPYfiYTldAMmTsYMLti4NZswHGje3w2Scpr0rpSyJnMEP9DGYy9X2ozeFIYPOc
-	3xqPu/Ec8yPGqqf1QNA+j4stAqNCFq/Hq6pt44M1TnPiEsAnCkhR+mLjtdJwcpZYsxzxYbz9c/K
-	pqa5xGHlrhBdBvETlG1cn5cl9iS6jEn49i8LxKZvBCj/+2xtnLynGB7esnAIFxFVbJ+aiBBG0X4
-	NzPgxPbCZoYfh0YQ5EeVBdKvJqch7bg=
-X-Google-Smtp-Source: AGHT+IGC68+iWj/tGHITjYEzoOGz/ssjpVakkTiozXCptHX+mLeBDtIXnpipmOJtFYfncB14B/hKTA==
-X-Received: by 2002:a05:600c:3b94:b0:434:e2ea:fc94 with SMTP id 5b1f17b1804b1-438913cb620mr264534565e9.11.1737620726503;
-        Thu, 23 Jan 2025 00:25:26 -0800 (PST)
-Received: from localhost.localdomain ([197.63.236.210])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf3215bf2sm18829969f8f.18.2025.01.23.00.25.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 00:25:25 -0800 (PST)
-From: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
-To: socketcan@hartkopp.net,
-	mkl@pengutronix.de,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	corbet@lwn.net
-Cc: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>,
-	shuah@kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1737621493; c=relaxed/simple;
+	bh=NRiffExoiBTywk957KDVuy9EQ+pNNEaSF22eieHGcFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mNs7sUjZjVrwA3uaKYK9zfQQBF8m4+512l+9Qn0Z14LRm2eVYcnXHZyu1F+SUtiROgQMgrYgxrDEGjivrooW5fk0Dvy0G65NhGTtGiv+awI06Fv+Oa36C1QzKsDvOe08vAgB6aMpDZGEBHGChX1z0nHEVgJ6vmzJ6+vp24jPB7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tasim-0003Is-5K; Thu, 23 Jan 2025 09:37:52 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tasih-001Qgl-0w;
+	Thu, 23 Jan 2025 09:37:47 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id E101B3AF428;
+	Thu, 23 Jan 2025 08:37:46 +0000 (UTC)
+Date: Thu, 23 Jan 2025 09:37:45 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+Cc: socketcan@hartkopp.net, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, corbet@lwn.net, 
+	shuah@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-kernel-mentees@vger.kernel.org
-Subject: [PATCH] documentation: networking: fix spelling mistakes
-Date: Thu, 23 Jan 2025 10:25:20 +0200
-Message-ID: <20250123082521.59997-1-khaledelnaggarlinux@gmail.com>
-X-Mailer: git-send-email 2.45.2
+Subject: Re: [PATCH] documentation: networking: fix spelling mistakes
+Message-ID: <20250123-gay-burgundy-swan-12800c-mkl@pengutronix.de>
+References: <20250123082521.59997-1-khaledelnaggarlinux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="h5fwl7em2i4tyu2z"
+Content-Disposition: inline
+In-Reply-To: <20250123082521.59997-1-khaledelnaggarlinux@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Fix a couple of typos/spelling mistakes in the documentation.
 
-Signed-off-by: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
----
-Hello, I hope the patch is self-explanatory. Please let me know if you
-have any comments.
+--h5fwl7em2i4tyu2z
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] documentation: networking: fix spelling mistakes
+MIME-Version: 1.0
 
-Aside: CCing Shuah and linux-kernel-mentees as I am working on the mentorship
-application tasks.
+On 23.01.2025 10:25:20, Khaled Elnaggar wrote:
+> Fix a couple of typos/spelling mistakes in the documentation.
+>=20
+> Signed-off-by: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Thanks
-Khaled
----
- Documentation/networking/can.rst  | 4 ++--
- Documentation/networking/napi.rst | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Feel free to take the patch via the net-tree.
 
-diff --git a/Documentation/networking/can.rst b/Documentation/networking/can.rst
-index 62519d38c58b..b018ce346392 100644
---- a/Documentation/networking/can.rst
-+++ b/Documentation/networking/can.rst
-@@ -699,10 +699,10 @@ RAW socket option CAN_RAW_JOIN_FILTERS
+Marc
 
- The CAN_RAW socket can set multiple CAN identifier specific filters that
- lead to multiple filters in the af_can.c filter processing. These filters
--are indenpendent from each other which leads to logical OR'ed filters when
-+are independent from each other which leads to logical OR'ed filters when
- applied (see :ref:`socketcan-rawfilter`).
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
--This socket option joines the given CAN filters in the way that only CAN
-+This socket option joins the given CAN filters in the way that only CAN
- frames are passed to user space that matched *all* given CAN filters. The
- semantic for the applied filters is therefore changed to a logical AND.
+--h5fwl7em2i4tyu2z
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/Documentation/networking/napi.rst b/Documentation/networking/napi.rst
-index 6083210ab2a4..f970a2be271a 100644
---- a/Documentation/networking/napi.rst
-+++ b/Documentation/networking/napi.rst
-@@ -362,7 +362,7 @@ It is expected that ``irq-suspend-timeout`` will be set to a value much larger
- than ``gro_flush_timeout`` as ``irq-suspend-timeout`` should suspend IRQs for
- the duration of one userland processing cycle.
+-----BEGIN PGP SIGNATURE-----
 
--While it is not stricly necessary to use ``napi_defer_hard_irqs`` and
-+While it is not strictly necessary to use ``napi_defer_hard_irqs`` and
- ``gro_flush_timeout`` to use IRQ suspension, their use is strongly
- recommended.
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmeR/9UACgkQKDiiPnot
+vG9f6Af/anfRx98VLLIqnWOsh3E2GomHJIto2zRuuVgSgTc2KCKQdHJZGGPh5Ig5
+nzH3EE7HuwBTkwlqHj7M0jj1mHw8DPhteH3gy8CVAFWdBkL9iMIhARZGJbOVu7ya
+kAgPrSjens6mX3AXXRylVIWnl+9gHEqZC8KiAseuC3pxMakEpOskNJAVxuWLApen
+gS3xIYPutRuMmbV/Mu3psefKGozs8shjJB6ynD9CAvUgeAHu9U7Erlx7q08H/21H
+x8ikkr8scPaMlCXVPzZPnlsfWVM/lFULuncRod3bsg5/WYfMYHBZrUpLpnLmpSU6
+AHjC2Q68ZQ0MabWciDB4BXv9gxnUNg==
+=gq6t
+-----END PGP SIGNATURE-----
 
---
-2.45.2
-
+--h5fwl7em2i4tyu2z--
 
