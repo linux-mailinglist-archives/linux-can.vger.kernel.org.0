@@ -1,126 +1,151 @@
-Return-Path: <linux-can+bounces-2677-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2678-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 552EFA1946D
-	for <lists+linux-can@lfdr.de>; Wed, 22 Jan 2025 15:56:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D91FA19FE0
+	for <lists+linux-can@lfdr.de>; Thu, 23 Jan 2025 09:25:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91DCC1643ED
-	for <lists+linux-can@lfdr.de>; Wed, 22 Jan 2025 14:56:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3B5E18843D4
+	for <lists+linux-can@lfdr.de>; Thu, 23 Jan 2025 08:25:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B77E211712;
-	Wed, 22 Jan 2025 14:56:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F60B20C02A;
+	Thu, 23 Jan 2025 08:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TSayIkE+"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C3D2144A2
-	for <linux-can@vger.kernel.org>; Wed, 22 Jan 2025 14:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAC3320B;
+	Thu, 23 Jan 2025 08:25:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737557790; cv=none; b=qKAa92EO/DkPQsj09BJxNh/aojaeeNdD/dXIURu3JoFUF6LnDfgbVX6e/WNmeRFyh6DlPsgOlp5u5UjFh4E/3rRBH0AP1B/nbn0jaJ6glhEZ1W7K2cZRe8Elj3jScrR9Z1cl27sZOxgXYyRpVprprm+Kmf4ZggJKV3rtkhqNexY=
+	t=1737620730; cv=none; b=o4WCHC2U68oFIuBpPIz6mNxFIyPf4SXlFxo62XQ1a4nrYglfL9Zpz+Qiv70VAUoxVcDX0aDGbxkcHKnttlhLLVSa3vV2LJZUkuXCAz1hv1py80hupFktCkvbPH+SL+rUJD3nLjPJ6mdHzw8Q88r7GuKP7iyUZ/HeoHXrvX2ODxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737557790; c=relaxed/simple;
-	bh=OtddwqvUz1gzX7P/B7MGUy86skcIf3n3MAYY6O8XmNI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IOxBxebBqVVMqz3NyWtX7LFWA1WD0PAxTi5uDp5DZbsk4IwNXabnBlMKSJfPgj3yt2KrslFgxLes97gL5N00t5UkxGzlXic2qXO/+q9jCiLv2S0Xem7zmXLo3ljGnEzAv3ujx2jsBadTfhpUGcaX3CDhOh48hj//QEd7T1JJ55s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tac9R-0000kw-7H; Wed, 22 Jan 2025 15:56:17 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tac9Q-001IqY-38;
-	Wed, 22 Jan 2025 15:56:16 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id AC8F73AEBF9;
-	Wed, 22 Jan 2025 14:56:16 +0000 (UTC)
-Date: Wed, 22 Jan 2025 15:56:16 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: "Jonas Mark (BT-FS/ENG1-Mue)" <mark.jonas@de.bosch.com>
-Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
-	"Streidl Hubert (BT-FS/ENG1-Mue)" <Hubert.Streidl@de.bosch.com>
-Subject: Re: AW: AW: [can-utils][PATCH 2/3] canbusload: support busload
- statistic
-Message-ID: <20250122-scrupulous-sociable-barracuda-5c133f-mkl@pengutronix.de>
-References: <20250120162332.19157-1-mark.jonas@de.bosch.com>
- <20250120162332.19157-2-mark.jonas@de.bosch.com>
- <20250120-vigorous-almond-toad-a28dc0-mkl@pengutronix.de>
- <DU0PR10MB7076197E81AB49C6C59ECE60ADE62@DU0PR10MB7076.EURPRD10.PROD.OUTLOOK.COM>
- <20250121-heretic-weightless-terrier-c99522-mkl@pengutronix.de>
- <DU0PR10MB70768402AD0511053562B7CCADE12@DU0PR10MB7076.EURPRD10.PROD.OUTLOOK.COM>
+	s=arc-20240116; t=1737620730; c=relaxed/simple;
+	bh=0RqbJsmBYD4psvJjsPR1/k8+RZSZVR7ryEwaJzId76g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kyh2c7hV2ImG1G6/Nz8a8LZlYSLWnlGJU+AeYM1zGY5d/Lue3KXrGh/hXFslLAy13QQzthkoxZKsi/gJ1RqotRBxM2NULJPDZyib++1lWs039yM23K0DUn9ItgV1QqBtf+GCeR9n3ADVUQXV8NaYVC5aC4cGC3c2rux1e3VWmiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TSayIkE+; arc=none smtp.client-ip=209.85.128.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-436ce2ab251so3707585e9.1;
+        Thu, 23 Jan 2025 00:25:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737620727; x=1738225527; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7x78WrC+cTNtBpfnkOUA5kq6ry12btJ1fKxNdWFZpHE=;
+        b=TSayIkE+0U+pOvEuJnRxcZgVtCapfSagrwq/toiKmQ8w4Wb4hJCpPg6r0QO8VTxCpi
+         O5iirqYdfrYwF9HYoyZ3B1qoirJZcahDRj4VoIbT2s6qS6dETU/FOVdCTgaMxXCMVgU3
+         kawda30JBuXD/72WCKpQTS/3EEWJk47Jl3FhpbyrWtImmjS6+DDN1u1e0l/IjJLj1R9o
+         O3EUq3Rk3mPZAYVtLPJPNykU5koESxoUd0rtIW4qiv+8VfM/fCYEBTy4Qk6UYLDtzk1W
+         oLV6EDoHkmSKiktgJ+9LMmSPec9Ocj7ZyF/O8Pr1qjHOONap3CbJhKCkKGbWczR3nT2C
+         2d0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737620727; x=1738225527;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7x78WrC+cTNtBpfnkOUA5kq6ry12btJ1fKxNdWFZpHE=;
+        b=mxmo3pGNz6zxiC9pokMJ2tYJt0MomVCfOiYxUvJM24fAvr7EcWzbO5dcn2zGPpWont
+         67ccdR57rSp50TizY18+gdYKy6f/FIdGx/R5vm/hZncWL6NJj7cU+WzljqbKpc7P+w8S
+         gRxB63T/yod/bLcGNpo+XOUpWYizO09tWHJv4bBklEGPSC3QqzEiBp9OLYwb19WbqMCz
+         dITgnso3Nql5nHV1qMKqwvBUFhLRTpItMNbYNlNvO0EvlllIpL+TITwJt42bR9rGti5m
+         Bs7gedb8lwKr12HVIYReezZ6PsA7rYLS651zIvrHNhL618KzWw+AfCvUoZgQ04a4aFsX
+         HhJw==
+X-Forwarded-Encrypted: i=1; AJvYcCUbuOP5EvEk5GKTki3+/OehmCHq17Wqu1OAiQQZrb3PJLaIGzDS81+vPXQyLbBjzSzq1HcnvXp6@vger.kernel.org, AJvYcCVDW/khwxbsYEhBa1w9XGZL68gQtGvSV/gFyUwJdEZzM62sfLVoas3mF4bayYAY6fDf+L+QK5I1eGa60Js+@vger.kernel.org, AJvYcCVrjRI0wRHLSoVb1ZDyLwl+TwWKU3dlb0ERQKOYJ8xfpGPs+VbZa66y8+RXbhLZmyDh3BbVz5N1FgIO@vger.kernel.org, AJvYcCXNNMSU5KlhDD4rJAWdGpvu/yDfW1AxfOynrqLQ9jX2TnxzV37c8yJ3xzlptrfp9UCkq4mbGivcEwQ=@vger.kernel.org, AJvYcCXzDM37I4hjPWQ9EUCI3nS5mv9P/zzW09OOAMogCk3bjIogdCQgBlKf1kmGayYEF+RoUYEd+YfgKhD39dpjbIfqzzTOIy0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywl19QpVZVAoF3ZhSSwTw9u28bdknKZC4IIIHH7gkzxMAXRWsC9
+	vbCow9pcw4yeMB+i94ibcQKrNLsBjeSdWFy5Pbemyw4KAIhLlELe
+X-Gm-Gg: ASbGncuooC5rub8bL3fLdEg3+L4NnNFKWsODHwXDNsbGmC/VqWB5/dViDG9OMEsLkrQ
+	LD17jshJYW5hEnPYfiYTldAMmTsYMLti4NZswHGje3w2Scpr0rpSyJnMEP9DGYy9X2ozeFIYPOc
+	3xqPu/Ec8yPGqqf1QNA+j4stAqNCFq/Hq6pt44M1TnPiEsAnCkhR+mLjtdJwcpZYsxzxYbz9c/K
+	pqa5xGHlrhBdBvETlG1cn5cl9iS6jEn49i8LxKZvBCj/+2xtnLynGB7esnAIFxFVbJ+aiBBG0X4
+	NzPgxPbCZoYfh0YQ5EeVBdKvJqch7bg=
+X-Google-Smtp-Source: AGHT+IGC68+iWj/tGHITjYEzoOGz/ssjpVakkTiozXCptHX+mLeBDtIXnpipmOJtFYfncB14B/hKTA==
+X-Received: by 2002:a05:600c:3b94:b0:434:e2ea:fc94 with SMTP id 5b1f17b1804b1-438913cb620mr264534565e9.11.1737620726503;
+        Thu, 23 Jan 2025 00:25:26 -0800 (PST)
+Received: from localhost.localdomain ([197.63.236.210])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf3215bf2sm18829969f8f.18.2025.01.23.00.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2025 00:25:25 -0800 (PST)
+From: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+To: socketcan@hartkopp.net,
+	mkl@pengutronix.de,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	corbet@lwn.net
+Cc: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>,
+	shuah@kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@vger.kernel.org
+Subject: [PATCH] documentation: networking: fix spelling mistakes
+Date: Thu, 23 Jan 2025 10:25:20 +0200
+Message-ID: <20250123082521.59997-1-khaledelnaggarlinux@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="beb5jzc3bcgcowoz"
-Content-Disposition: inline
-In-Reply-To: <DU0PR10MB70768402AD0511053562B7CCADE12@DU0PR10MB7076.EURPRD10.PROD.OUTLOOK.COM>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+Fix a couple of typos/spelling mistakes in the documentation.
 
---beb5jzc3bcgcowoz
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: AW: AW: [can-utils][PATCH 2/3] canbusload: support busload
- statistic
-MIME-Version: 1.0
+Signed-off-by: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+---
+Hello, I hope the patch is self-explanatory. Please let me know if you
+have any comments.
 
-On 22.01.2025 14:53:30, Jonas Mark (BT-FS/ENG1-Mue) wrote:
-> > It basically fails on all of our CI plaforms (ubuntu and debian):
-> >=20
-> > | https://github.com/linux-can/can-utils/actions/runs/12872465505/job/3=
-5887996190
->=20
-> We now understood what the problem was: We only compiled using gcc but
-> the project supports gcc and clang. So we missed the clang problems we
-> introduced. Next time we'll use the project's GitHub actions to
-> validate our code.
+Aside: CCing Shuah and linux-kernel-mentees as I am working on the mentorship
+application tasks.
 
-Thanks again for contributing.
+Thanks
+Khaled
+---
+ Documentation/networking/can.rst  | 4 ++--
+ Documentation/networking/napi.rst | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-regards,
-Marc
+diff --git a/Documentation/networking/can.rst b/Documentation/networking/can.rst
+index 62519d38c58b..b018ce346392 100644
+--- a/Documentation/networking/can.rst
++++ b/Documentation/networking/can.rst
+@@ -699,10 +699,10 @@ RAW socket option CAN_RAW_JOIN_FILTERS
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+ The CAN_RAW socket can set multiple CAN identifier specific filters that
+ lead to multiple filters in the af_can.c filter processing. These filters
+-are indenpendent from each other which leads to logical OR'ed filters when
++are independent from each other which leads to logical OR'ed filters when
+ applied (see :ref:`socketcan-rawfilter`).
 
---beb5jzc3bcgcowoz
-Content-Type: application/pgp-signature; name="signature.asc"
+-This socket option joines the given CAN filters in the way that only CAN
++This socket option joins the given CAN filters in the way that only CAN
+ frames are passed to user space that matched *all* given CAN filters. The
+ semantic for the applied filters is therefore changed to a logical AND.
 
------BEGIN PGP SIGNATURE-----
+diff --git a/Documentation/networking/napi.rst b/Documentation/networking/napi.rst
+index 6083210ab2a4..f970a2be271a 100644
+--- a/Documentation/networking/napi.rst
++++ b/Documentation/networking/napi.rst
+@@ -362,7 +362,7 @@ It is expected that ``irq-suspend-timeout`` will be set to a value much larger
+ than ``gro_flush_timeout`` as ``irq-suspend-timeout`` should suspend IRQs for
+ the duration of one userland processing cycle.
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmeRBw0ACgkQKDiiPnot
-vG9n8gf/U6UmF2bhQ9NBQ74pmWvwOXSlEXx8KDmudvbRbmwboEgo/KRGvjETIABA
-9XOlgB2pEycoVtu2H0M04XZCLoJ2+qS13qReeoDkNnQq8t4rYoixVC90WQ53eVB4
-i2mBYNFQ9vZq4DgR/nQKe6ae/I+TgQXl3nIYOewhDWUNcLZFuDUXi3XohRaC8mAX
-Fk9tJQ7GFmXrYc3RTyvN/mdzW6jOAttT3Pfdq94ZQhcbbgF4TzKVWHPzCLze/3yb
-6M2oe8pu3B1JYCit4nXQeADkEe3IxWmhP+DYuRCuKuSMC4CTTL3QB0dzqs//L9aq
-iyih/h+w2B769XPB/VvnN0YluTQDtw==
-=J0fa
------END PGP SIGNATURE-----
+-While it is not stricly necessary to use ``napi_defer_hard_irqs`` and
++While it is not strictly necessary to use ``napi_defer_hard_irqs`` and
+ ``gro_flush_timeout`` to use IRQ suspension, their use is strongly
+ recommended.
 
---beb5jzc3bcgcowoz--
+--
+2.45.2
+
 
