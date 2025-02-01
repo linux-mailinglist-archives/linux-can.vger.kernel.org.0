@@ -1,123 +1,98 @@
-Return-Path: <linux-can+bounces-2709-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2710-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BFE6A22936
-	for <lists+linux-can@lfdr.de>; Thu, 30 Jan 2025 08:34:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50653A24803
+	for <lists+linux-can@lfdr.de>; Sat,  1 Feb 2025 10:47:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E40977A28B2
-	for <lists+linux-can@lfdr.de>; Thu, 30 Jan 2025 07:33:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 674301884B5D
+	for <lists+linux-can@lfdr.de>; Sat,  1 Feb 2025 09:47:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49E2AC2FB;
-	Thu, 30 Jan 2025 07:34:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B09E114A099;
+	Sat,  1 Feb 2025 09:47:01 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6221A8F9A
-	for <linux-can@vger.kernel.org>; Thu, 30 Jan 2025 07:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EA713F9C5;
+	Sat,  1 Feb 2025 09:46:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738222471; cv=none; b=Y8W3tAAWkv2cYoIGUpGORyiAzkz7SjWBewcJ63avi1lywCqiUKd7RYUm2sWfYOP4RdCTfeT6jDCK0VqjN/FDn40M09dAalap5cCMJZQOYKJZhumwuWud6lBiw1D/FZ1nGzCRKmUGxRWjpku33L/Wh5sNvzLiLhM8Y6ZIPsWrms4=
+	t=1738403221; cv=none; b=HXPPRRMU+2b2vemfR7jOU75q6Y1ygDtcIR7uGJtvJOOm2UGgzWAWQw7++czBqhgfLZn9r++Ugg1JUMn2KcP4k1HQNPOJ7EGDT5EabW0gPHthSLFs7U3FEW4oe9mnGbtqWElVoIkl7Ej0D+e3GtC6x8kKMok6jQVjGdlHyZofuFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738222471; c=relaxed/simple;
-	bh=5q084CDknXT9pHSEwM3Msyk81pJ6YeV/mJcuIE2Nbrw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AKxKwFUNCxLgeXwfYpWgWhOJGgoiCCAGkat7vdfz2ohUmhxJLLmbNwPNmOUaKfx9MgpXCN9St+3Cr3gkXaX/fz5ES9iMEe5Y4Kzi0GZUlbtbGOcJOZPpGIxiVvqgem8i9rwQBB430cWF9QMXMra+/+CQicut2oQz21UZTgPnGLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tdP46-0007LC-8p; Thu, 30 Jan 2025 08:34:18 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tdP45-002axN-2Z;
-	Thu, 30 Jan 2025 08:34:17 +0100
-Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:29d0:f16a:75e0:9efc])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 6816B3B4EF8;
-	Thu, 30 Jan 2025 07:34:17 +0000 (UTC)
-Date: Thu, 30 Jan 2025 08:34:16 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org, 
-	Robert Nawrath <mbro1689@gmail.com>, rsc@pengutronix.de
-Subject: Re: [RFC PATCH 00/14] can: netlink: add CAN XL
-Message-ID: <20250130-solid-dolphin-of-sufficiency-a5b014-mkl@pengutronix.de>
-References: <23c914cf-0af2-4619-9f83-e4b6339ef65f@hartkopp.net>
- <12e013c2-d6ff-42b2-91ef-921db4e7ee0e@hartkopp.net>
- <77331a33-ac82-4cfb-9881-159d6d2daf58@hartkopp.net>
- <CAMZ6RqLi1oywkSZ=pVFnV04efwk8mJWmwP+FzSyMknR2d+9=RA@mail.gmail.com>
- <8be877db-028a-413f-b55d-71311e0c88c9@hartkopp.net>
- <c4771c16-c578-4a6d-baee-918fe276dbe9@wanadoo.fr>
- <2bd47866-a995-4359-9639-724cd8a90a43@hartkopp.net>
- <4acc968e-d30e-400f-bc40-d4fc9f5299de@wanadoo.fr>
- <42b6acd2-dc9d-471b-b273-9b8094840935@hartkopp.net>
- <68e8c449-a6ab-4958-af3c-852ece2694c2@wanadoo.fr>
+	s=arc-20240116; t=1738403221; c=relaxed/simple;
+	bh=H1mDewkfpJI6awDhoH4yoCf6K2AzDwcXiVlQUCNnx0Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j5DcVt/KlAa6AagPiEZ/c3w/ISlu5xisDIFGNG1w3aWGYQ2hnJ2XOW4NtzjbWDzygwj0/XfAGjEk0s/txwA9XF5OnnZO8xQQk1VTCWMpvZcls36imrskiAm3Brtd/jeSbx1UFqpw308B4fdltAqdK4plqw8D5VeHRmFS396RBBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-CSE-ConnectionGUID: 11gYQjqkTU2PwJ+UGm8giQ==
+X-CSE-MsgGUID: frWol6YgSMiD5r29yq+hBg==
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 01 Feb 2025 18:46:57 +0900
+Received: from localhost.localdomain (unknown [10.226.92.62])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 9EDB741D879E;
+	Sat,  1 Feb 2025 18:46:45 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	linux-can@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] can: rcar_canfd: Use of_get_available_child_by_name()
+Date: Sat,  1 Feb 2025 09:46:36 +0000
+Message-ID: <20250201094642.16243-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ewltgwrobbkplijx"
-Content-Disposition: inline
-In-Reply-To: <68e8c449-a6ab-4958-af3c-852ece2694c2@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+Simplify rcar_canfd_probe() using of_get_available_child_by_name().
 
---ewltgwrobbkplijx
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFC PATCH 00/14] can: netlink: add CAN XL
-MIME-Version: 1.0
+Simplify rcar_canfd_probe() using of_get_available_child_by_name().
 
-On 30.01.2025 14:42:59, Vincent Mailhol wrote:
->   - CiA 612-2 will be published as ISO 16845-1 when ready.
->=20
->   - The only method to get access to the current draft right now would
->     be either to become a CiA member or an ISO Working Group 3 member.
+While at it, move of_node_put(child) inside the if block to avoid
+additional check if of_child is NULL.
 
-Let me see what I can do :)
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+This patch is only compile tested and depend upon[1]
+[1] https://lore.kernel.org/all/20250201093126.7322-1-biju.das.jz@bp.renesas.com/
+---
+ drivers/net/can/rcar/rcar_canfd.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-regards,
-Marc
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index df1a5d0b37b2..619a21d68d82 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1862,13 +1862,13 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 
+ 	for (i = 0; i < info->max_channels; ++i) {
+ 		name[7] = '0' + i;
+-		of_child = of_get_child_by_name(dev->of_node, name);
+-		if (of_child && of_device_is_available(of_child)) {
++		of_child = of_get_available_child_by_name(dev->of_node, name);
++		if (of_child) {
+ 			channels_mask |= BIT(i);
+ 			transceivers[i] = devm_of_phy_optional_get(dev,
+ 							of_child, NULL);
++			of_node_put(of_child);
+ 		}
+-		of_node_put(of_child);
+ 		if (IS_ERR(transceivers[i]))
+ 			return PTR_ERR(transceivers[i]);
+ 	}
+-- 
+2.43.0
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---ewltgwrobbkplijx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmebK3EACgkQKDiiPnot
-vG8EMggAh8ernYFB4uA7Qg5XNAQ3qBLIV4VlSbYvorUTmZ8sZ3/uZ2H3jxDPfyAf
-boU1nRANHdkGDNtShFvAY8VKXRKqOV4Yfm/kANejQSY59MCCOHIiLrvVnmpdzNxc
-a0AMGv71alwXggKvfLFsYZp2zzNPbVXZ48HLOb1E+i2BUk735YugI56ENzsbMnTk
-HUptmYk4MFd4FiQiRXucXtH9JgzJ7H3LPU0pdPtjCXa2OMLs7DGgjjJW1wjX6sAL
-X9wZo//yzCCKqEKeLitJCtp/fUqdQ8vAbBFRslNrfQ0Z1nr7h0NdUm0Afwr9tqdY
-lQcetKvgaw9KqaYoFPuIymeMn6BIgQ==
-=o9cE
------END PGP SIGNATURE-----
-
---ewltgwrobbkplijx--
 
