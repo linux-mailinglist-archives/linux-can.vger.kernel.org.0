@@ -1,107 +1,97 @@
-Return-Path: <linux-can+bounces-2729-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2730-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52208A27674
-	for <lists+linux-can@lfdr.de>; Tue,  4 Feb 2025 16:50:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99DFFA287D6
+	for <lists+linux-can@lfdr.de>; Wed,  5 Feb 2025 11:23:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5809A3A228F
-	for <lists+linux-can@lfdr.de>; Tue,  4 Feb 2025 15:50:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 322E7169828
+	for <lists+linux-can@lfdr.de>; Wed,  5 Feb 2025 10:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B202144DB;
-	Tue,  4 Feb 2025 15:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD9922ACDF;
+	Wed,  5 Feb 2025 10:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="VMSNN1dq"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pXUBfIoL"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-15.smtpout.orange.fr [193.252.22.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A4E2144BF;
-	Tue,  4 Feb 2025 15:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906392063D8;
+	Wed,  5 Feb 2025 10:23:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738684245; cv=none; b=H/iUDSayZ+quY9nOCb7qLoOTV2PWLGuJzhcZLJqhhE3TRh5iYQgffTILklcMx4jBuD2pzzrad3P9SLZjKbIiyaMi4/+p6w+D4gfA3tt+WdNAUaLioCAo/nQFy7S3PfM1LI5Hhr4xlyT/zVLBYy51nggImXXTL/q5cslDb21uT9Q=
+	t=1738751033; cv=none; b=uCQg2HzfL1TL+DtEpaXtf1vVpJzNWZEV3ExaefmVvMPepn/TBjUte5v/37D+ZtCwuQZOK+KidIZCpiScK9gpqoupcXg260JlTBBFLaU12O7gBA+0a1slG4j62mRi8Bj4HIK7l8U2RmvhV0WtO8gZbFj2tL/Zx/ssZjNoVr9yjks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738684245; c=relaxed/simple;
-	bh=hgq6PLLzwquAwcoJjWjAeIA7AfelQlL9J3oyq/pQXnI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ELre4KlXIP2tZqC5aBhxycSQUzMntPtVrXUh0VZhOULWFwjuH9BqFlsZ56nZqLVO/BXEqSonoBNNsgYgaLZ39v2BBncOpsPyP0XxXtGcWk4OU36+LlQDtSeVxk88H8F9CBe061iLEgV/k+yPi1kxgfRuGHrqO60A+o4y84SClVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=VMSNN1dq; arc=none smtp.client-ip=193.252.22.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from localhost.localdomain ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id fLAnt8hotUbA0fLAztNaVY; Tue, 04 Feb 2025 16:49:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1738684168;
-	bh=rRDeSQnod8uSP7ynJ/SgjIL7urMg+AxKe9ansz1nwIE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=VMSNN1dqivivCcInaUqQJNk8/Y8NdOquRgHGcLjX9B8ONEXlpT5Y9sSMgqRaQTGVs
-	 RKhLW2UNIMb1sVWBDzMDJ+xVt7tV+X6P55ISrYES7IaMDOT9x+Q9ZlvTadK6tBk8NE
-	 5mGMLUwbVUtySHvjodL3BVjUdEjzIsTk1+7HWnDtX+16EJmN4y7ZbwI5TzOTyqeaty
-	 FXSvXKc3lxgzIRSPnc+7zuMbVTME5ZuFGzDlP50/L+ZqFZ9WoKC4zaopLcNI2xYzlI
-	 mTAUI/X2nZ+O6Lv/IiHSiG2lfmtFp+NOMquCA9aDz6/Dvl42rgVM5WFbW8Vope/sv0
-	 qvrHe3oYFhvqQ==
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 04 Feb 2025 16:49:28 +0100
-X-ME-IP: 124.33.176.97
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	yan kang <kangyan91@outlook.com>,
-	yue sun <samsun1006219@gmail.com>
-Subject: [PATCH] can: etas_es58x: fix potential NULL pointer dereference on udev->serial
-Date: Wed,  5 Feb 2025 00:48:15 +0900
-Message-ID: <20250204154859.9797-2-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.45.3
+	s=arc-20240116; t=1738751033; c=relaxed/simple;
+	bh=l8WUMCh4/bacxntxMeJpQkFivTbCQf82Fd87xLkpqaI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eyedkiCT/O4K+Zw9NGYvQ2ok744E19GFjC1dEr48Fmmbqdk9bwWwQfygu6BmXd/KFCCNIjDOWIxNQ/4ZxAldWhgWq+a3gEeDnUD99YlUCabM9foiWldjeytPV82Bglv3JnugraYsgbh1u7KZhDmP3Jkv1E5rBBX+TeJG4RhSMPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pXUBfIoL; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B591520479;
+	Wed,  5 Feb 2025 10:23:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1738751027;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OCgPDTwzHkVl8WwhlQzvIZcaXBEvz3BrPQEMI8PN0Po=;
+	b=pXUBfIoL9X29WYaV553bYN5PrfgONgLKE0knP7SlKPqVv8uGlYh9Bxe9QxV2k630fFi61g
+	8JRtqr1lglESNL4ldKtcPtWvovVbwaqyMR0Us/3eYh/dt/ecKtai3h5N+oQ8dALkZieMF8
+	NrQ3XW6n0EHwPolG4QhWEa3bXAy4FEXlyvt8LHrEMEFJiqeryImqpOCzfjOAb0QT1kXH+F
+	DVNnx+VR7FjW5+Y2NHaNxyO6fm+lRrj3Rg/HHOI5nfMjUf1aM4xPM0l6EYBbkGv9e/xKt4
+	mntXL3TnTl67ISClR5aS1I3sPi67Gh/ZwRD0iAkDtq2PmS/01ZNjbIl8GXJEMQ==
+Date: Wed, 5 Feb 2025 11:23:46 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wqlinux@roeck-us.net, jdelvare@suse.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v6 7/7] rtc: Add Nuvoton NCT6694 RTC support
+Message-ID: <20250205102214a6357365@mail.local>
+References: <20250123091115.2079802-1-a0282524688@gmail.com>
+ <20250123091115.2079802-8-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1450; i=mailhol.vincent@wanadoo.fr; h=from:subject; bh=hgq6PLLzwquAwcoJjWjAeIA7AfelQlL9J3oyq/pQXnI=; b=owGbwMvMwCV2McXO4Xp97WbG02pJDOmLzF5/aHw6//C1FqfLW53faL4VC3Td8niG5X5Jpb0X4 4Xe3cyK7yhlYRDjYpAVU2RZVs7JrdBR6B126K8lzBxWJpAhDFycAjCRbjeG/y5b/zkt3r+4+HtO vAafBoP/5v7LPNy6Ppd+auhz8pqJpTD8sw39cVCmUoHPS9z7KBO3khJXq5qO8B9pk0szqyTXuJ9 jAQA=
-X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp; fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250123091115.2079802-8-a0282524688@gmail.com>
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeeiudeuteehhfekgeejveefhfeiudejuefhgfeljefgjeegkeeujeeugfehgefgnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemrggutdefmeegfheltgemfeefjehfmehffeefugenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemrggutdefmeegfheltgemfeefjehfmehffeefugdphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdegpdhrtghpthhtoheprgdtvdekvdehvdegieekkeesghhmrghilhdrtghomhdprhgtphhtthhopehtmhihuhdtsehnuhhvohhtohhnrdgtohhmpdhrtghpthhtoheplhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhus
+ hdrfigrlhhlvghijheslhhinhgrrhhordhorhhgpdhrtghpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtthhopegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhklhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepmhgrihhlhhholhdrvhhinhgtvghnthesfigrnhgrughoohdrfhhr
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-The driver assumed that es58x_dev->udev->serial could never be NULL.
-While this is true on commercially available devices, an attacker
-could spoof the device identity providing a NULL USB serial number.
-That would trigger a NULL pointer dereference.
+On 23/01/2025 17:11:15+0800, Ming Yu wrote:
+> +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+> +					nct6694_irq, IRQF_ONESHOT,
+> +					"rtc-nct6694", data);
+> +	if (ret < 0)
+> +		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
+> +
+> +	ret = devm_rtc_register_device(data->rtc);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret, "Failed to register rtc\n");
 
-Add a check on es58x_dev->udev->serial before accessing it.
+This message is not necessary, all the error paths of
+devm_rtc_register_device already print a message
 
-Reported-by: yan kang <kangyan91@outlook.com>
-Reported-by: yue sun <samsun1006219@gmail.com>
-Closes: https://lore.kernel.org/linux-can/SY8P300MB0421E0013C0EBD2AA46BA709A1F42@SY8P300MB0421.AUSP300.PROD.OUTLOOK.COM/
-Fixes: 9f06631c3f1f ("can: etas_es58x: export product information through devlink_ops::info_get()")
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/usb/etas_es58x/es58x_devlink.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_devlink.c b/drivers/net/can/usb/etas_es58x/es58x_devlink.c
-index eee20839d96f..0d155eb1b9e9 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_devlink.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_devlink.c
-@@ -248,7 +248,11 @@ static int es58x_devlink_info_get(struct devlink *devlink,
- 			return ret;
- 	}
- 
--	return devlink_info_serial_number_put(req, es58x_dev->udev->serial);
-+	if (es58x_dev->udev->serial)
-+		ret = devlink_info_serial_number_put(req,
-+						     es58x_dev->udev->serial);
-+
-+	return ret;
- }
- 
- const struct devlink_ops es58x_dl_ops = {
 -- 
-2.45.3
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
