@@ -1,118 +1,128 @@
-Return-Path: <linux-can+bounces-2737-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2738-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B15A3A2A48A
-	for <lists+linux-can@lfdr.de>; Thu,  6 Feb 2025 10:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 65BA7A2A69F
+	for <lists+linux-can@lfdr.de>; Thu,  6 Feb 2025 12:02:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 456CD166746
-	for <lists+linux-can@lfdr.de>; Thu,  6 Feb 2025 09:34:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 690BC168973
+	for <lists+linux-can@lfdr.de>; Thu,  6 Feb 2025 11:01:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C431FDE08;
-	Thu,  6 Feb 2025 09:30:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9712C2288D3;
+	Thu,  6 Feb 2025 10:57:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="HlF2JkqG"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9DA227587
-	for <linux-can@vger.kernel.org>; Thu,  6 Feb 2025 09:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C364422757F;
+	Thu,  6 Feb 2025 10:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738834251; cv=none; b=o6hgv0i7DnrvvwOSssyqOvCXd6UXPChxizj/ntH/8SbWL23Ns/+aWN/qKjxfuopLNBAAip9N/I4X1byQbb0OOhs+qVa5kmrwuEHTP1g/kD5Vo8cG5NPbbOUaPXUJc/LbwoIl5fNrS5d6wvPfRxWXCzyVTfcUuNswewtRhQ1RC+M=
+	t=1738839424; cv=none; b=o1iqeAK3bgbMIYIUzbadP4a5OZox/5uyiYibUDkTBTCUERriZaC2wDGeYhByKLg5PZGMmAUjhkqJFzg0CMH8kCsEEKGCepP/ETIlvC2Qwx4/uD+NlqgArRHewyJitlveZUckFtLilgCaJWk+8hQFXl30Sh8+fXV1qb0eTFKjpj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738834251; c=relaxed/simple;
-	bh=Y18W78DDacVBLpk7PrrIOqLKZ+MXb+MEFrYJWPkLRho=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ei0oJNIU5FeuY+jUGM4AvEwbzi6zqzL2oXseeztEJcy5nu1UbV6u8XZkoyPCNKMjtqWETS/AZ1m2GnXbGINQZ3L/BiiDmh6lfEDLbiNazBsUh265GwKuEyYV2i8tGIUT0KditrBeGSxKu/DsSDE6KFYORpn1lrgIdnnM+d/bsH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tfyDJ-0005ui-3U; Thu, 06 Feb 2025 10:30:25 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tfyDF-003mWx-2b;
-	Thu, 06 Feb 2025 10:30:21 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 6474B3BB259;
-	Thu, 06 Feb 2025 09:30:21 +0000 (UTC)
-Date: Thu, 6 Feb 2025 10:30:20 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Charles Han <hanchunchao@inspur.com>
-Cc: manivannan.sadhasivam@linaro.org, thomas.kopp@microchip.com, 
-	mailhol.vincent@wanadoo.fr, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	cem@kernel.org, djwong@kernel.org, corbet@lwn.net, linux-can@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH] Documentation: Remove repeated word in docs
-Message-ID: <20250206-quirky-malachite-mamba-598802-mkl@pengutronix.de>
-References: <20250206091530.4826-1-hanchunchao@inspur.com>
+	s=arc-20240116; t=1738839424; c=relaxed/simple;
+	bh=mZF4WJ4wshkC4Qp7P9+LXM8kZ9ppCOLNmAFpDQZp3G4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bL2scXBEcUP8p+9ZIJ6+kQ6W1tEPoD27EXZjqpl4r/T3+otdwfRQVLdKr/o0jUvnXv+R7YVrL08yP9QK9dzlXJasr1C4bqI5rWTHmy30G0Z+erv4Rj/UzAG9aKnwgK0jMYYhLyjxiKzLMb+juWTBrbLkak9NjZ350LFFzlxq6+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=HlF2JkqG; arc=none smtp.client-ip=193.252.22.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id fzYjtDgo1Ft3IfzYutp3tQ; Thu, 06 Feb 2025 11:56:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1738839414;
+	bh=wTaI7uWxfJ722CWHtIPOl9T+pRsm8ifKzI8h9O+PI5c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=HlF2JkqG5ukjEpbIBd4tr6yYQuDznjpL7a043gTv4H77qYLXx59j5W8NHZGzXGRyl
+	 GQ7q6N85iRiKLecZFckTpwlOCr2sakj3sZrltqKpvXf0kS02r7GWO+SjCkF6+LSLdM
+	 iq2XQ8/NsB9Gdul/7toFTk/XmIDsQNbIMOwzqohUOka8QI3SMtW+tIirxARB3wL5HN
+	 L3c0aRE+6OxptM+EIdcXj0qCVNGs1vFCqMi6ZeRRhwRS7xEFNmGoru7PhrQ5lf5Ak2
+	 X4lSj1n3zzZZ+MxAeJXyJ1bNsXexiQpE+SaPL17Z98ulsYrqtu08eGiR+aLyB2f48x
+	 KpRr3KtrNgjpQ==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 06 Feb 2025 11:56:54 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <e0aeefc5-bf01-42ab-91e4-e727d560c983@wanadoo.fr>
+Date: Thu, 6 Feb 2025 19:56:36 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hm4ctlzjszhq6mov"
-Content-Disposition: inline
-In-Reply-To: <20250206091530.4826-1-hanchunchao@inspur.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---hm4ctlzjszhq6mov
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] Documentation: Remove repeated word in docs
-MIME-Version: 1.0
+To: Charles Han <hanchunchao@inspur.com>
+Cc: linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+ linux-doc@vger.kernel.org, mkl@pengutronix.de,
+ manivannan.sadhasivam@linaro.org, thomas.kopp@microchip.com,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, cem@kernel.org,
+ djwong@kernel.org, corbet@lwn.net
+References: <20250206091530.4826-1-hanchunchao@inspur.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250206091530.4826-1-hanchunchao@inspur.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 06.02.2025 17:15:29, Charles Han wrote:
+On 06/02/2025 at 18:15, Charles Han wrote:
 > Remove the repeated word "to" docs.
->=20
+> 
 > Signed-off-by: Charles Han <hanchunchao@inspur.com>
+> ---
+>  .../devicetree/bindings/net/can/microchip,mcp251xfd.yaml        | 2 +-
+>  Documentation/filesystems/xfs/xfs-online-fsck-design.rst        | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+> index 2a98b26630cb..c155c9c6db39 100644
+> --- a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+> @@ -40,7 +40,7 @@ properties:
+>  
+>    microchip,rx-int-gpios:
+>      description:
+> -      GPIO phandle of GPIO connected to to INT1 pin of the MCP251XFD, which
+> +      GPIO phandle of GPIO connected to INT1 pin of the MCP251XFD, which
+>        signals a pending RX interrupt.
+>      maxItems: 1
+>  
+> diff --git a/Documentation/filesystems/xfs/xfs-online-fsck-design.rst b/Documentation/filesystems/xfs/xfs-online-fsck-design.rst
+> index 12aa63840830..994f9e5638ee 100644
+> --- a/Documentation/filesystems/xfs/xfs-online-fsck-design.rst
+> +++ b/Documentation/filesystems/xfs/xfs-online-fsck-design.rst
+> @@ -4521,7 +4521,7 @@ Both online and offline repair can use this strategy.
+>  | For this second effort, the ondisk parent pointer format as originally   |
+>  | proposed was ``(parent_inum, parent_gen, dirent_pos) → (dirent_name)``.  |
+>  | The format was changed during development to eliminate the requirement   |
+> -| of repair tools needing to to ensure that the ``dirent_pos`` field       |
+> +| of repair tools needing to ensure that the ``dirent_pos`` field       |
 
-Feel free to take the patch.
+This breaks the indentation of the pipe on the right.
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+>  | always matched when reconstructing a directory.                          |
+>  |                                                                          |
+>  | There were a few other ways to have solved that problem:                 |
 
-regards,
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Yours sincerely,
+Vincent Mailhol
 
---hm4ctlzjszhq6mov
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmekgSoACgkQDHRl3/mQ
-kZxdTAf5AdW1/IcCxxcCFzVXksRmp7Q0bHOPaSlom8ycnTbaN6nNbYeqeXv3mGMg
-5oBVg1sY2aWUW7r3V28h4HzCA9T+G7j2v2Mfv6whc3wTVCUIlTMbVqB+qL6ot0wM
-5p1JnlRrqjzdC5ufv1lgpbtYM7/BzHGq1ae6t5R6Ddye4F582kzTW+FmVQ/pgscg
-TpwH0NX1OTft3WvbXYzd50r/ycrhcG3buoY4/c28q08w1kgs2YDin8Nr/kn2r29G
-hd/lh4XOIG8JSmNojd1trXc+SWE9e271AO//+wFp2PUQXuF3FltKFn9o8Yf83nVE
-kqUDEwktUZjxMRDxtv54braGka5XSg==
-=WoBM
------END PGP SIGNATURE-----
-
---hm4ctlzjszhq6mov--
 
