@@ -1,55 +1,55 @@
-Return-Path: <linux-can+bounces-2759-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2760-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6284A2CBDF
-	for <lists+linux-can@lfdr.de>; Fri,  7 Feb 2025 19:49:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23304A2CC5B
+	for <lists+linux-can@lfdr.de>; Fri,  7 Feb 2025 20:15:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 100803A27DB
-	for <lists+linux-can@lfdr.de>; Fri,  7 Feb 2025 18:49:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BDF73A9EDB
+	for <lists+linux-can@lfdr.de>; Fri,  7 Feb 2025 19:15:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA8041ACEDE;
-	Fri,  7 Feb 2025 18:46:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D142019C54C;
+	Fri,  7 Feb 2025 19:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="nHaBnrUd"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Y6AeUfa3"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-65.smtpout.orange.fr [80.12.242.65])
+Received: from smtp.smtpout.orange.fr (smtp-71.smtpout.orange.fr [80.12.242.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C653419CD19;
-	Fri,  7 Feb 2025 18:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDEF323C8D8;
+	Fri,  7 Feb 2025 19:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738953987; cv=none; b=U5cIoV1Log3WK8pL7fBd+f3J/HlBEkVrmnoNb2dHdPt6HwBwJHegiI2AqwEq2LeIb8DHni1sDqEmqjBbMBq0vRG9p1wVCV3UsWIsPvkHwvREQ2NqZmseQaZGPFLi7SAh6ozWI9GKNRjZiHhurlVGuqsEspSVNEiWLpFYVJXW5no=
+	t=1738955741; cv=none; b=dTqcghZtMTyk5gwFdawoPo60cVKVynem3+RRHa1q9kNR6CHKoDGw05d91xI7q0R/04/pV31ErpOejtVoUnH0LHw76BaI6RoiUQ/lwQxut/RKzodqcJeOPamSFXzVDocTlmy/FlT/sev7R86AJ69KMpD3Ox8wBuIPQKjaD+oN10g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738953987; c=relaxed/simple;
-	bh=jG9PP8OmSmsAi3gu2ND0UFBXsklxiSRJ0nVDoTXKJjQ=;
+	s=arc-20240116; t=1738955741; c=relaxed/simple;
+	bh=FcL9rqAxwTwnO8DU+oECLsHcs3OBhNbHUgR1vVXaKDI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FzEZcYjrLr/e+N/57VzZTy8FCqH3XmiGEhdMJOUbXa3Gle3tDsfv9haUjp7+pWPcPUHStfaMjSQvVlpo9tAaJZ3kUSK1x3z8myTlgsx7O5lEAflRnOPoo5kD5cjh0zqZOmHAi4K6mqT1PjDXdaGsD8m0y66FIJC4aZtb4zShlsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=nHaBnrUd; arc=none smtp.client-ip=80.12.242.65
+	 In-Reply-To:Content-Type; b=LWf1wxJbnm8AejxfqrHaxO6gpjHpMuxFkLx5buZ0Yf0h/jql84B8/fZV1zqyN8lP9/DYRU0b4R+YleHJBbCx7z6FN+spIS9G13wNLg3YySGcpUMvrp45kRRFNmZmEIaxOrEZAfP6amqtVaSYC4EAdlWhHMCrcIYSvouGz+lX3BQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Y6AeUfa3; arc=none smtp.client-ip=80.12.242.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from [192.168.1.37] ([90.11.132.44])
 	by smtp.orange.fr with ESMTPA
-	id gTDktBe395xHLgTDntrXhH; Fri, 07 Feb 2025 19:37:05 +0100
+	id gTgJtDinHS3EkgTgNtvaZD; Fri, 07 Feb 2025 20:06:36 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1738953425;
-	bh=6PlvsS0qz2CZcL8tmalhXpsBjS7gKY13HQPvHB3Mi8k=;
+	s=t20230301; t=1738955196;
+	bh=bhHSi90GsFsWXWaNGZwev+3zlg20387bXu2VxNKk4dw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=nHaBnrUdPy2gXkXp1Wx7o8rVZjSVn4a+/+Mp+IizYUbpbvBBy3HoHLGJMgWzlxKvK
-	 5mx95ssZsPeC5rsYQbglj27IczHL+NWevccjj363Yq+Rf4LvKqqgIKlI563wq+hmiG
-	 g4sWQJ7WfTaafSCF9z1teOIui76v+b9w9DP1hJciI4GLT1yyT09v9SyWBZYlhZVe2b
-	 +5iNuQOPcZGanus78zusUL+B02npJA3gBILv3KU6Myi1E5A4eVu25j7bb5slSrpAXS
-	 ao6+TeuupJbe8BNAdA+VveQj+8ZmmL9B1wxVhhjhyiAj1n3SjQQMilYPY8a5dWpeUs
-	 bKu8dZTtMSyZw==
+	b=Y6AeUfa3realFOVJA41W1z3xCXnFmhOtVsYF6esw7xL8GVOsXhbYYkndCbY/enFpO
+	 a6hkz+4IoRPX8ff/xTQO5hKpyU4KFpNSAoFnIi7GgRvVGKb9157eXYUDKzhm3rADjB
+	 XeINf//OCDuRmf2oHC2TLUL1OruABJKeopgztEE8EWP/oY5vLziYesAUfgKff38cj9
+	 4c1WVOw6m0gcTMRVbPDevhwGdNZ5vxr9G9j0Q03+7DOMyM8A7U0bwf8KX6rjMQ45gb
+	 YE+UKUuMXFqDQ6f7vpKDqzeibXihoksvQpZnauqW5lECtl8vwnF9t8yPYD0C8T3Fw6
+	 +CY1paxxApqSg==
 X-ME-Helo: [192.168.1.37]
 X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Fri, 07 Feb 2025 19:37:05 +0100
+X-ME-Date: Fri, 07 Feb 2025 20:06:36 +0100
 X-ME-IP: 90.11.132.44
-Message-ID: <1ee664ec-f912-467e-aedb-81208987ea2a@wanadoo.fr>
-Date: Fri, 7 Feb 2025 19:36:56 +0100
+Message-ID: <01801937-6257-4381-bf18-90badf795da8@wanadoo.fr>
+Date: Fri, 7 Feb 2025 20:06:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/7] mfd: Add core driver for Nuvoton NCT6694
+Subject: Re: [PATCH v7 3/7] i2c: Add Nuvoton NCT6694 I2C support
 To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
  linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
  mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
@@ -70,56 +70,39 @@ Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
  linux-usb@vger.kernel.org
 References: <20250207074502.1055111-1-a0282524688@gmail.com>
- <20250207074502.1055111-2-a0282524688@gmail.com>
+ <20250207074502.1055111-4-a0282524688@gmail.com>
 Content-Language: en-US, fr-FR
 From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250207074502.1055111-2-a0282524688@gmail.com>
+In-Reply-To: <20250207074502.1055111-4-a0282524688@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 Le 07/02/2025 à 08:44, Ming Yu a écrit :
-> The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> PWM, and RTC.
-> 
-> This driver implements USB device functionality and shares the
-> chip's peripherals as a child device.
-> 
-> Each child device can use the USB functions nct6694_read_msg()
-> and nct6694_write_msg() to issue a command. They can also request
-> interrupt that will be called when the USB device receives its
-> interrupt pipe.
+> This driver supports I2C adapter functionality for NCT6694 MFD
+> device based on USB interface, each I2C controller use default
+> baudrate(100K).
 
 ...
 
-> +static struct irq_chip nct6694_irq_chip = {
-
-This could be const.
-
-(I'm working on a serie that should constify struct irq_chip, so this 
-one would already be done)
-
-> +	.name = "nct6694-irq",
-> +	.flags = IRQCHIP_SKIP_SET_WAKE,
-> +	.irq_bus_lock = nct6694_irq_lock,
-> +	.irq_bus_sync_unlock = nct6694_irq_sync_unlock,
-> +	.irq_enable = nct6694_irq_enable,
-> +	.irq_disable = nct6694_irq_disable,
-> +};
-> +
-> +static int nct6694_irq_domain_map(struct irq_domain *d, unsigned int irq,
-> +				  irq_hw_number_t hw)
+> +static int nct6694_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
 > +{
-> +	struct nct6694 *nct6694 = d->host_data;
+> +	struct nct6694_i2c_data *data = adap->algo_data;
+> +	struct nct6694_i2c_deliver *deliver = &data->deliver;
+> +	static const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_I2C_MOD,
+> +		.cmd = NCT6694_I2C_DELIVER,
+> +		.sel = NCT6694_I2C_DELIVER_SEL,
+> +		.len = cpu_to_le16(sizeof(*deliver))
+> +	};
+> +	int ret, i;
 > +
-> +	irq_set_chip_data(irq, nct6694);
-> +	irq_set_chip_and_handler(irq, &nct6694_irq_chip, handle_simple_irq);
-> +
-> +	return 0;
-> +}
+> +	for (i = 0; i < num ; i++) {
+
+Tiny tiny nitpick: unneeded extra space after num
+
+> +		struct i2c_msg *msg_temp = &msgs[i];
 
 ...
 
 CJ
-
 
