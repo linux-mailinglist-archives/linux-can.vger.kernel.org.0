@@ -1,138 +1,132 @@
-Return-Path: <linux-can+bounces-2762-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2763-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2545FA2CE23
-	for <lists+linux-can@lfdr.de>; Fri,  7 Feb 2025 21:31:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87289A2D5A2
+	for <lists+linux-can@lfdr.de>; Sat,  8 Feb 2025 11:40:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDEEA3AC961
-	for <lists+linux-can@lfdr.de>; Fri,  7 Feb 2025 20:31:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B17A1188A58A
+	for <lists+linux-can@lfdr.de>; Sat,  8 Feb 2025 10:41:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB01C1A0B0E;
-	Fri,  7 Feb 2025 20:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="TojjMHz8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 910561B4235;
+	Sat,  8 Feb 2025 10:40:26 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-72.smtpout.orange.fr [80.12.242.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0855B194C9E;
-	Fri,  7 Feb 2025 20:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B451B85D2
+	for <linux-can@vger.kernel.org>; Sat,  8 Feb 2025 10:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738960260; cv=none; b=Z0rFEt2j3BrOzwoKKUSYuLQxuj8EP+sOuPadIEmjpE7JocvlJoMW1G23WDnbmky8u63Aw1ArUyDGNGjvINUN/+Gd7Gi65otPIwW3U8QLuYJNn2kw6lhRAg/QdySTuMoGfsD7Zx0ID0oryh+Tpr40dbnziUC1sRqJ5ZS/DBd57ME=
+	t=1739011226; cv=none; b=O8p5jmoFCz1vNvVc5XnB79CsqQEEtaQVKHF2xNbKbARqfxdwLKoOuSiWcq6GlFrUkhmUX642pqQM9du7MqgpNWGeHuXpZb+dpocsjXUFbD8BDBaLrIUwRwP3+YY9ur3z9ppU5uKa2Vq0kdQRv5g/gHPLhYe/tWdCHJ3PNFwCelg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738960260; c=relaxed/simple;
-	bh=5xCA2aFRWIHt9UXYtDkyYMN6nBFHc3iGvDF2cYwAjEI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ll4eayEtJZBs1D7TdzOIYe1h5PaStTCG6VtlEj7epOJuiISn2Y0fjZ4/yGZs+YJi2P5jFVmrMqnvm+6j6SVKyfKDHiss3FA8Oeo3h2ajHeJ5ILIeMyhgak3haqCS1yfBxS3krZGUtFVz2/I7pKAGEOs7+ktQ+T03UitLC47NveU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=TojjMHz8; arc=none smtp.client-ip=80.12.242.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id gUzvtE7TuS3EkgUzztx5yo; Fri, 07 Feb 2025 21:30:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1738960254;
-	bh=v8RzLLz8uCfxpLBta41IG2wNm1yEnnjxj05C5WD4mOs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=TojjMHz8cfdFXLwbWT8w7XbHMiYM8vP1p/x6JCr68oFMahVzfgu/C1Jf9R/tcBHQs
-	 IzuZ4igAg8dwVzx+j7pnBWStOZGD6V5BPZ0fLCnulEhkXNrjHQvPEQ8o7jtKE7VIFB
-	 mtEc0AYTo8c4jYo+kKIFVxnQqss2l7fKHMjVI4XpNfycS2zr1pw7XKp1F0qRM/huU4
-	 9vHHF9Zi/bMqTgCYlRgNA3qZXveBQ+Oy8BL9U81m5BMqLgJQZppXkW1Ja36P/yOr1u
-	 L0oaW6UEtWtJUG0ZWua49q/+8OrFvsziOXBrnKw7Z1vfwS9yTe1jhTeOm3mxWA74Iz
-	 LRTMrr3BTIIaA==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Fri, 07 Feb 2025 21:30:54 +0100
-X-ME-IP: 90.11.132.44
-Message-ID: <9b451153-41b4-4c15-a586-01cb5126e207@wanadoo.fr>
-Date: Fri, 7 Feb 2025 21:30:47 +0100
+	s=arc-20240116; t=1739011226; c=relaxed/simple;
+	bh=86tImnlX82BynRtV2Tzz1EH8dQlhNptEGIZQcPj843k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AL8lrekWxnqXqn9Yj0d6EJVEBMwBoTwt4TamOMCyPVZ6+vz4VMpH5E9XPBMHigv3CS2mBIHRwmhWw1UhPLPkb1qyCyA7bhG0hVpUkCm3LkOPbmY+KH4u8nrs02iDF0xYIvjywKhYNRejzEq4I6WoqZKCne1nHmCKEmx3o8SiYQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tgiG4-0001Tr-Gd
+	for linux-can@vger.kernel.org; Sat, 08 Feb 2025 11:40:20 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tgiG4-0047tZ-0w
+	for linux-can@vger.kernel.org;
+	Sat, 08 Feb 2025 11:40:20 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id F198B3BCC80
+	for <linux-can@vger.kernel.org>; Sat, 08 Feb 2025 10:40:19 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 0D0D73BCC79;
+	Sat, 08 Feb 2025 10:40:15 +0000 (UTC)
+Received: from [172.20.34.65] (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d4e51cb2;
+	Sat, 8 Feb 2025 10:40:13 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Date: Sat, 08 Feb 2025 11:40:10 +0100
+Subject: [PATCH] can: rockchip: rkcanfd_handle_rx_fifo_overflow_int(): bail
+ out if skb cannot be allocated
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 5/7] watchdog: Add Nuvoton NCT6694 WDT support
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
- jdelvare@suse.com, alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250207074502.1055111-1-a0282524688@gmail.com>
- <20250207074502.1055111-6-a0282524688@gmail.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250207074502.1055111-6-a0282524688@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250208-fix-rockchip-canfd-v1-1-ec533c8a9895@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAIk0p2cC/x2MUQqAIBAFrxL73YKKQXWV6CPWZy2BhUIE0d2TP
+ gdm5qGCrCg0Ng9lXFr0SBVs25BsS1rBGiqTM64zzvQc9eZ8yC6bnixLioEFZoCFd15ANTwzqvV
+ Pp/l9P3aUMVNkAAAA
+X-Change-ID: 20250208-fix-rockchip-canfd-ce09e1e424ce
+To: kernel@pengutronix.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ Heiko Stuebner <heiko@sntech.de>
+Cc: linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, Robin van der Gracht <robin@protonic.nl>, 
+ stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15-dev-33ea6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1171; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=PwbCo7t4iBsksyF7q8Utv/uAB57+6RRB9poqEpMgKGU=;
+ b=owEBbQGS/pANAwAKAQx0Zd/5kJGcAcsmYgBnpzSLeZF041hFWwJznMla/rYHo/Kr6M9ABoeEf
+ I30PGx2iY+JATMEAAEKAB0WIQSf+wzYr2eoX/wVbPMMdGXf+ZCRnAUCZ6c0iwAKCRAMdGXf+ZCR
+ nK6oB/4/q1HDynZTpdxTvLZh2kNz03joEazK23rP5OaVDdzxMt39NZgK4+AzopoLbD3O8gbIXfl
+ QCtWdlnRVwaTcCtmmJqqb0yu8BRJICWoQKbf+ehUfQaztoL4BKL6/o3BYJidhBOyyuzursTjyjk
+ mjbs5geqx+qrD5WdFmZ+TUomvekUehuAs5CdXOesMv7B+1L1K992GB0UFt21sb7dz4KncplCeb8
+ MVhgA+oKUYX5VF4Cy5f5scDeCs7Mxry4VzUR78A9mhTVsATt1jIoY/JT/zivCTxDZSnlNbM3hra
+ yYzEOI+KVXmIsvCfzVzGKSaS3TksIKFye2pf1ocqtWO7zM4I
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Le 07/02/2025 à 08:45, Ming Yu a écrit :
-> This driver supports Watchdog timer functionality for NCT6694 MFD
-> device based on USB interface.
+From: Robin van der Gracht <robin@protonic.nl>
 
-...
+Fix NULL pointer check in rkcanfd_handle_rx_fifo_overflow_int() to
+bail out if skb cannot be allocated.
 
-> +static int nct6694_wdt_probe(struct platform_device *pdev)
-> +{
-> +	const struct mfd_cell *cell = mfd_get_cell(pdev);
-> +	struct device *dev = &pdev->dev;
-> +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-> +	struct nct6694_wdt_data *data;
-> +	struct watchdog_device *wdev;
-> +
-> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->msg = devm_kzalloc(dev, sizeof(union nct6694_wdt_msg),
-> +				 GFP_KERNEL);
-> +	if (!data->msg)
-> +		return -ENOMEM;
-> +
-> +	data->dev = dev;
-> +	data->nct6694 = nct6694;
-> +	data->wdev_idx = cell->id;
-> +
-> +	wdev = &data->wdev;
-> +	wdev->info = &nct6694_wdt_info;
-> +	wdev->ops = &nct6694_wdt_ops;
-> +	wdev->timeout = timeout;
-> +	wdev->pretimeout = pretimeout;
-> +	if (timeout < pretimeout) {
-> +		dev_warn(data->dev, "pretimeout < timeout. Setting to zero\n");
-> +		wdev->pretimeout = 0;
-> +	}
-> +
-> +	wdev->min_timeout = 1;
-> +	wdev->max_timeout = 255;
-> +
-> +	devm_mutex_init(dev, &data->lock);
+Fixes: ff60bfbaf67f ("can: rockchip_canfd: add driver for Rockchip CAN-FD controller")
+Cc: stable@vger.kernel.org
+Signed-off-by: Robin van der Gracht <robin@protonic.nl>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/rockchip/rockchip_canfd-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Error handling?
-(also apply for patch 1/7 and 6/7)
+diff --git a/drivers/net/can/rockchip/rockchip_canfd-core.c b/drivers/net/can/rockchip/rockchip_canfd-core.c
+index df18c85fc078..d9a937ba126c 100644
+--- a/drivers/net/can/rockchip/rockchip_canfd-core.c
++++ b/drivers/net/can/rockchip/rockchip_canfd-core.c
+@@ -622,7 +622,7 @@ rkcanfd_handle_rx_fifo_overflow_int(struct rkcanfd_priv *priv)
+ 	netdev_dbg(priv->ndev, "RX-FIFO overflow\n");
+ 
+ 	skb = rkcanfd_alloc_can_err_skb(priv, &cf, &timestamp);
+-	if (skb)
++	if (!skb)
+ 		return 0;
+ 
+ 	rkcanfd_get_berr_counter_corrected(priv, &bec);
 
-> +
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	watchdog_set_drvdata(&data->wdev, data);
-> +	watchdog_set_nowayout(&data->wdev, nowayout);
-> +	watchdog_stop_on_reboot(&data->wdev);
-> +
-> +	return devm_watchdog_register_device(dev, &data->wdev);
-> +}
+---
+base-commit: 1438f5d07b9a7afb15e1d0e26df04a6fd4e56a3c
+change-id: 20250208-fix-rockchip-canfd-ce09e1e424ce
 
-...
+Best regards,
+-- 
+Marc Kleine-Budde <mkl@pengutronix.de>
 
-CJ
+
 
