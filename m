@@ -1,180 +1,126 @@
-Return-Path: <linux-can+bounces-2791-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2792-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5890DA30C96
-	for <lists+linux-can@lfdr.de>; Tue, 11 Feb 2025 14:13:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 620A8A311E1
+	for <lists+linux-can@lfdr.de>; Tue, 11 Feb 2025 17:42:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E1803A6969
-	for <lists+linux-can@lfdr.de>; Tue, 11 Feb 2025 13:12:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5B81188B4B9
+	for <lists+linux-can@lfdr.de>; Tue, 11 Feb 2025 16:39:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA7E221DAE;
-	Tue, 11 Feb 2025 13:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 426AC255E42;
+	Tue, 11 Feb 2025 16:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pPigow7S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4Y5yIHA"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27202206B8;
-	Tue, 11 Feb 2025 13:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1165924E4C3;
+	Tue, 11 Feb 2025 16:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739279560; cv=none; b=OZFSTy1L2gUTuYrvWlKw3rKLdCAMhR2uiYpWDskcgpNoYotpZa+RflKvYdhF5/SwUte4sFSRFd4CiIH5ZHQXUR3wX0D8ZW4fDnczBaAk3x8BFBYiemjEWNTN/0541JLZczYmVlxCART5ibB9TTn+6iNTufRbjoVVq7f3gc1ivY0=
+	t=1739291933; cv=none; b=YwzB6/7lXGVFYGWRIxyO4k2Kzxx19u6BTukawVWLR5RnHTX5lsCEOIbF5irp1jRYW+jldKC6UL9Nrguns21H5cM7t7W+aVNnUfL69/iyEl+Zs2x/iAykC4r7TchtnGr66U93zQD8VcdGXPZgY5yuPcJN3fjHIm+tAJnGfiLMRw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739279560; c=relaxed/simple;
-	bh=yOn72q3rBX1Ok8bHjabDtYxA7XST1d2PNnze5+FAUu8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LOn8ebxaLoXRm+fEeIvOfKEX+IyHTTELGdwzKf7Otoqq3dbewvxa/l7HUq2Hy6fm0l8OiHHPY3L629RO5ziCgeGKd4z2vLuuxIw59DkTTX5Lbgf7o7F/y+n1cvt+nLJkdjWgTo/VQzAXlSJyEgepizC2qe9JAybr7s1jDo8jYpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pPigow7S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6DE66C4CEE9;
-	Tue, 11 Feb 2025 13:12:39 +0000 (UTC)
+	s=arc-20240116; t=1739291933; c=relaxed/simple;
+	bh=khNbYEj7D+meq38dfaVMuGZU0JsnF5ZjDcTMSNnp4bE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OHFZzNObteHzg0uYees8JqWgGZBaMXl+putJWp3DypH07pjGB5rFqH2BXTl++7QmenzAIsSRBnT+a1B0Zcq7/7Oi/PqslXnZDLZEOHwzALqgFbp6KzyFuaN/uOmjJB2+4RcYdtpaxqkQYESftVsOApMi3uJOjsrXAZ9rQvtS83c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4Y5yIHA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB45BC4CEDD;
+	Tue, 11 Feb 2025 16:38:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739279559;
-	bh=yOn72q3rBX1Ok8bHjabDtYxA7XST1d2PNnze5+FAUu8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=pPigow7SJv6KuyXeoIO/XG015RMepx8C4Z2kYwGKydj0YW1eWTUbo4aM1PX17auvk
-	 pbgXpZK6hS79lFAbneXY2N+dfsmPnDQSdutX5AysI4sSoyu3+Z6zBs0A1TpnplVxdE
-	 pHH4iCUSz9Lrfd2/Gz/68uYUZVCmJOCUSglBOrR31hVq26FkAx00N7rEumVWlyYafS
-	 +6AzFVBUl8f3kdQicUF0EcxK3M9kfzFGc7jkbfOIfgDqQVxlr/NcOGoET2l/bwf9Vr
-	 4s3f/BOygJDfBwQqrw6ucoAS3CwTtyXlJocpsevizM+m6JdXz5jIUqtECeTxeJmrSO
-	 4CfUKgLRpuKuQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CF52C0219B;
-	Tue, 11 Feb 2025 13:12:39 +0000 (UTC)
-From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
-Date: Tue, 11 Feb 2025 14:12:34 +0100
-Subject: [PATCH 2/2] can: flexcan: add transceiver capabilities
+	s=k20201202; t=1739291932;
+	bh=khNbYEj7D+meq38dfaVMuGZU0JsnF5ZjDcTMSNnp4bE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=j4Y5yIHAwlBfzEQ8PzbFlx5Biby5DSgJJphl+C2/mGotvbEIOimAYlmEaxeJyUOzJ
+	 r0vnIpZCyUq/9vD7I7XiFR36e28c7atBw1lISQD5zQeAHLKJ7EGnV+71xPLHuUAzyK
+	 JYIB50xG5vkpZ9FnOnMgHBrojgKy5PfEFpltHbMiyjsG5oovEfhVo0dd3McIe4v6LD
+	 VOuD73EwVdt5O2LCA3nRzz8NfvImrmPH736N7TVjYTfaFXC6v5KKROcJCHvtUIQOTK
+	 ZHZGdSfcMj24p6wt5jy3xovhdF+6ypkCz7nX7pDR2tji3qon4OCuDTJ4Dafa3S6aMz
+	 6z3HRgkN9/+mg==
+Date: Tue, 11 Feb 2025 16:38:48 +0000
+From: Conor Dooley <conor@kernel.org>
+To: dimitri.fedrau@liebherr.com
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	Dimitri Fedrau <dima.fedrau@gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: can: fsl,flexcan: add transceiver
+ capabilities
+Message-ID: <20250211-epidermis-crib-b50da209d954@spud>
+References: <20250211-flexcan-add-transceiver-caps-v1-0-c6abb7817b0f@liebherr.com>
+ <20250211-flexcan-add-transceiver-caps-v1-1-c6abb7817b0f@liebherr.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250211-flexcan-add-transceiver-caps-v1-2-c6abb7817b0f@liebherr.com>
-References: <20250211-flexcan-add-transceiver-caps-v1-0-c6abb7817b0f@liebherr.com>
-In-Reply-To: <20250211-flexcan-add-transceiver-caps-v1-0-c6abb7817b0f@liebherr.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>, 
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, Dimitri Fedrau <dimitri.fedrau@liebherr.com>, 
- Dimitri Fedrau <dima.fedrau@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739279554; l=3254;
- i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
- bh=MkScmJzMrjljm6Z+2YxSN5mrAzjdFqPq9BBLNkTJm7A=;
- b=EVN92FjdbZyxvcxPsWF5CnLlaCFU1m14KMU9FIwvcmpGUQi6Bqr+CYG7egBuEi4MJyO4pSYNf
- c/ypVbTExMsBj5wY22xvGuY63W9B9bIVim+pryJVx+w7A2JSKfAIO2D
-X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
- pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
-X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
- with auth_id=290
-X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-Reply-To: dimitri.fedrau@liebherr.com
-
-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-
-Currently the flexcan driver does not support adding PHYs. Add the
-capability to ensure that the PHY is in operational state when the link
-is set to an "up" state.
-
-Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
----
- drivers/net/can/flexcan/flexcan-core.c | 25 +++++++++++++++++++------
- drivers/net/can/flexcan/flexcan.h      |  1 +
- 2 files changed, 20 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
-index ac1a860986df69a1dd64c25ff879490d5b21073b..a03dc8e3c80546a0e2fa9a85f0e0cc8159afa4f0 100644
---- a/drivers/net/can/flexcan/flexcan-core.c
-+++ b/drivers/net/can/flexcan/flexcan-core.c
-@@ -30,6 +30,7 @@
- #include <linux/property.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/phy/phy.h>
- 
- #include "flexcan.h"
- 
-@@ -634,18 +635,22 @@ static void flexcan_clks_disable(const struct flexcan_priv *priv)
- 
- static inline int flexcan_transceiver_enable(const struct flexcan_priv *priv)
- {
--	if (!priv->reg_xceiver)
--		return 0;
-+	if (priv->reg_xceiver)
-+		return regulator_enable(priv->reg_xceiver);
-+	else if (priv->xceiver)
-+		return phy_power_on(priv->xceiver);
- 
--	return regulator_enable(priv->reg_xceiver);
-+	return 0;
- }
- 
- static inline int flexcan_transceiver_disable(const struct flexcan_priv *priv)
- {
--	if (!priv->reg_xceiver)
--		return 0;
-+	if (priv->reg_xceiver)
-+		return regulator_disable(priv->reg_xceiver);
-+	else if (priv->xceiver)
-+		return phy_power_off(priv->xceiver);
- 
--	return regulator_disable(priv->reg_xceiver);
-+	return 0;
- }
- 
- static int flexcan_chip_enable(struct flexcan_priv *priv)
-@@ -2061,6 +2066,7 @@ static int flexcan_probe(struct platform_device *pdev)
- 	struct net_device *dev;
- 	struct flexcan_priv *priv;
- 	struct regulator *reg_xceiver;
-+	struct phy *xceiver;
- 	struct clk *clk_ipg = NULL, *clk_per = NULL;
- 	struct flexcan_regs __iomem *regs;
- 	struct flexcan_platform_data *pdata;
-@@ -2076,6 +2082,12 @@ static int flexcan_probe(struct platform_device *pdev)
- 	else if (IS_ERR(reg_xceiver))
- 		return PTR_ERR(reg_xceiver);
- 
-+	xceiver = devm_phy_optional_get(&pdev->dev, NULL);
-+	if (IS_ERR(xceiver)) {
-+		dev_err(&pdev->dev, "failed to get phy\n");
-+		return PTR_ERR(xceiver);
-+	}
-+
- 	if (pdev->dev.of_node) {
- 		of_property_read_u32(pdev->dev.of_node,
- 				     "clock-frequency", &clock_freq);
-@@ -2173,6 +2185,7 @@ static int flexcan_probe(struct platform_device *pdev)
- 	priv->clk_per = clk_per;
- 	priv->clk_src = clk_src;
- 	priv->reg_xceiver = reg_xceiver;
-+	priv->xceiver = xceiver;
- 
- 	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_NR_IRQ_3) {
- 		priv->irq_boff = platform_get_irq(pdev, 1);
-diff --git a/drivers/net/can/flexcan/flexcan.h b/drivers/net/can/flexcan/flexcan.h
-index 4933d8c7439e62b5d6fcc445d88c2b5ccbfa13bb..56be40875eee24aee9297c4bc7c2fc4380e682ff 100644
---- a/drivers/net/can/flexcan/flexcan.h
-+++ b/drivers/net/can/flexcan/flexcan.h
-@@ -103,6 +103,7 @@ struct flexcan_priv {
- 	struct clk *clk_per;
- 	struct flexcan_devtype_data devtype_data;
- 	struct regulator *reg_xceiver;
-+	struct phy *xceiver;
- 	struct flexcan_stop_mode stm;
- 
- 	int irq_boff;
-
--- 
-2.39.5
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="0M1rxEtOyDljmutQ"
+Content-Disposition: inline
+In-Reply-To: <20250211-flexcan-add-transceiver-caps-v1-1-c6abb7817b0f@liebherr.com>
 
 
+--0M1rxEtOyDljmutQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Feb 11, 2025 at 02:12:33PM +0100, Dimitri Fedrau via B4 Relay wrote:
+> From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+>=20
+> Currently the flexcan driver does not support adding PHYs. Add the
+> capability to ensure that the PHY is in operational state when the link
+> is set to an "up" state.
+>=20
+> Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+> ---
+>  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml b=
+/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+> index 97dd1a7c5ed26bb7f1b2f78c326d91e2c299938a..397957569588a61111a313cf9=
+107e29dacc9e667 100644
+> --- a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+> @@ -70,6 +70,9 @@ properties:
+>    xceiver-supply:
+>      description: Regulator that powers the CAN transceiver.
+> =20
+> +  phys:
+> +    maxItems: 1
+
+Can all devices in this binding support external phy? Are all devices
+limited to a single external phy?
+
+> +
+>    big-endian:
+>      $ref: /schemas/types.yaml#/definitions/flag
+>      description: |
+>=20
+> --=20
+> 2.39.5
+>=20
+>=20
+
+--0M1rxEtOyDljmutQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ6t9GAAKCRB4tDGHoIJi
+0h+cAQCpb6VaOWlxOnR0WI9RvSnk8Rf0BtVOJZ+Y0f+FxVzUFgD/SECtzHai0eyN
+ILxdtE4ExqVMeRAT3FugEv8foAjEMAo=
+=vw34
+-----END PGP SIGNATURE-----
+
+--0M1rxEtOyDljmutQ--
 
