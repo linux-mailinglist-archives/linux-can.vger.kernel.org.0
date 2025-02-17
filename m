@@ -1,61 +1,89 @@
-Return-Path: <linux-can+bounces-2822-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2823-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2967FA383DA
-	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2025 14:06:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4C2CA38BDF
+	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2025 20:04:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 907033A8C62
-	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2025 13:01:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8A0B7A17E9
+	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2025 19:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27DC821C19F;
-	Mon, 17 Feb 2025 13:00:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB1A922DFBF;
+	Mon, 17 Feb 2025 19:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QMRZd3r+"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D21A21C178
-	for <linux-can@vger.kernel.org>; Mon, 17 Feb 2025 13:00:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646FF216605;
+	Mon, 17 Feb 2025 19:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739797241; cv=none; b=PvfyKalC3Usua5I1tU09zrlSauvuJduvAudqiBbpTyQYwhqu02QrKl8M4O6gyZwWzZ9PrZSHj5paOYMddgzCbqYddkYI70g+1IZaDUV8XALt5sTATuWFaszShNV3jTw0zN4z2U4+euWTDGdofEdRauxP1eMJKGvaGNC2NQahDQQ=
+	t=1739819052; cv=none; b=Tcq6cDNjYH5ANfQ8Qu6BT4xrAtAznK4GaNCx81BXf01wLdIk4B/lLIfOQLhj1/l5rkkrhsI0bvH4QagYNBphfQvEPRN1GwYmFzhkRh1EvNpih++x6f4oIHs48AsRjB2VGsjwvBoKvESwgzljcvWKz7mmjk36VxdcSRivsPsk9vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739797241; c=relaxed/simple;
-	bh=W0xJp2fHBSO+TzErYJnMGlOWfxHwZNWRa8XWc/U/pJw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O+6ORebtGzHuG9iVwJdezsgukahmkW1jybLgAgeJ6/b17ldQbooLoOd8TcBgNmnc49XaaDqzjshiqBKroFTXHaqtx5QumzQKUa/j02ebQF1b3EQm7uubOM8r6fD5MBTlxjaaZTqDODxRHJeWdcNRv6CVIZycmOaSG6AwqqdAvlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tk0jX-0005AT-Aw; Mon, 17 Feb 2025 14:00:23 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tk0jV-001PZg-07;
-	Mon, 17 Feb 2025 14:00:21 +0100
-Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id E345E3C4C3B;
-	Mon, 17 Feb 2025 12:57:06 +0000 (UTC)
-Date: Mon, 17 Feb 2025 13:57:06 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: syzbot <syzbot+d7d8c418e8317899e88c@syzkaller.appspotmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, gregkh@linuxfoundation.org, 
-	kuba@kernel.org, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	mailhol.vincent@wanadoo.fr, netdev@vger.kernel.org, oneukum@suse.com, pabeni@redhat.com, 
-	stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com, Xu Panda <xu.panda@zte.com.cn>
-Subject: Re: [syzbot] [can?] WARNING in ucan_probe
-Message-ID: <20250217-spectral-cordial-booby-968731-mkl@pengutronix.de>
+	s=arc-20240116; t=1739819052; c=relaxed/simple;
+	bh=KO2kfgFS56BUZdOcSTHtjmZFrdN1FXtNYPlVSHH+yw4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=I4/wSu/YnJ6Xt/VYZaknb4zlR8m4y8XH3EzlRM9m4pwMcoJrnhUyuluCCgvEJx3kHYjPNxL0ppC6CtSpefxAVGe5SKX4etr8k6vopdm5ozf4v3LLquYYpj9ZD6qGFV+txtT8W9Eh6kSbaftywW4JzzELsrAsZX0qE4vMiIbmMY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QMRZd3r+; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2212a930001so33890195ad.0;
+        Mon, 17 Feb 2025 11:04:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739819050; x=1740423850; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AzkP+pgnUzTb5fXTNKSxJCrrQ506fnmgvA15C64w6yk=;
+        b=QMRZd3r+VWunZbhKdbHi2Dip4aj6kxJCi9rGRodqtZbxKosM/ZElxqqy/rFOkO78sk
+         FYxqqWR+B0CZiqRTB70JnDV/sQTCQ1Jup1jNY14qIg0b9De6p9vT0Ql6JSL2igd2rFX1
+         BThqvjT/sL4bL7Ep6e/332+reWV4oArErK10EDNLiTZhRckKYBCMYEjFrhRImEMTnJK/
+         67KZyq548nuYRQss0+ZyO9cwpqQpsB2TmK/hOdC6bIjA+4onErKAMCCNjUfnHn1h0NNj
+         lcZj+HQdHgOzjTb7qzOSGn6NFSTlcYyd1ukEwSfeCBMtTsIdsRcEscYe2U7IlQ9H/pnZ
+         OL6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739819050; x=1740423850;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AzkP+pgnUzTb5fXTNKSxJCrrQ506fnmgvA15C64w6yk=;
+        b=sE1F3etiBuo/P4/kruEwbFX7gsOwe93Lz45i2B3/SFWGF4gC+k7hIsdvMy76Pf1Vpm
+         7OQm0aj4Iv3P0C8IemThqJ/aINgOe0urQLiq7TJwrfvRrhBCshmCzy+1Oyu7IIvWzSdA
+         YfuodmUjSLFRF6XFAb0AwkHRlWJ9IeMbxEmr1IeTv7fq/8ePyxbmtctaHFBkxfLtqAH2
+         qTQ/vrRm3LqJ12q6J8vf4+81frhb0LsjFZITDs2TILFMEmjpIgvQ4KxflX/DYTYs+99F
+         K8X7Vl/6VdAjiGp6i/RPWj2nvI3+9IenT3jewAm7wo6lNxQAZdiTGPZdV0KzIqhRT1yX
+         yMBg==
+X-Forwarded-Encrypted: i=1; AJvYcCU9kusX4re+HlsoA/mhpl+VJNI1Ii4+VsZg7pk7+EZbFbeAYjDyeyEt8S9yVKa/9trEJhejE3LE0tQ=@vger.kernel.org, AJvYcCW43EeMzaXyRNF7YhaCgfkgMQJlT2EX0IFPabwC8b7UXY27SfUdW9eWizBbErYx3wsyyRJkj5jRh98+eZhP@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxo77RQYHLJEjMWVoCTyrdblK7lnwwKmtEbhmYJif5pUGy9Vx2Z
+	t7922ISo3OMtL6/dTHmX1FmGoKPSl6YRWIbkY4Z3/WAAsftna2MB
+X-Gm-Gg: ASbGncsyEDD8jIO2LYmkfCG3779q+nVooZdiMG6t5yq1PabLJmNgLMrnnIHgztvolTl
+	qSqjsVZ+SBob+ZWEvnYRJf/YTyo3PhEnGDj/l7xU9XWT47dRKHiUFi3NPttiygmEHfXe6PmDIOh
+	kn6x1mlKd2mmzJHCt3U/5KShaPwJkgVkj2V6HGe3cXd1KNJHLFaiGWQ422jykdn+nEjtWbTlCUU
+	24rXa0mKJ+WZHl+owVw2k0JMY563oE8h2VMbddaXnr9xYn2JWBQWq2ihdm1E7x8GsuUoyw5s7MN
+	MJkCx1GbjCMDKtc4W3Mv8d22pDpBWL+qn3ZgS9V/o5eptXR8WXi7U1twI0mYYpi/3EWEOQ==
+X-Google-Smtp-Source: AGHT+IGgqgdJzgTfl69t4Ey8DdgeJrgVpz4clUAOHWF+w725HPTqhULI3J8MpIpecy/ABG9SZDPbHQ==
+X-Received: by 2002:a05:6a20:7287:b0:1ee:4813:8a93 with SMTP id adf61e73a8af0-1ee8cbe818cmr18150837637.27.1739819050580;
+        Mon, 17 Feb 2025 11:04:10 -0800 (PST)
+Received: from TW-MATTJAN1.eu.trendnet.org (61-216-130-235.hinet-ip.hinet.net. [61.216.130.235])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7326a38ff76sm4322087b3a.160.2025.02.17.11.04.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Feb 2025 11:04:10 -0800 (PST)
+From: Matt Jan <zoo868e@gmail.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Matt Jan <zoo868e@gmail.com>,
+	syzbot+d7d8c418e8317899e88c@syzkaller.appspotmail.com
+Subject: [PATCH] can: ucan: Correct the size parameter
+Date: Tue, 18 Feb 2025 03:04:04 +0800
+Message-Id: <20250217190404.354574-1-zoo868e@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <67b323a4.050a0220.173698.002b.GAE@google.com>
 References: <67b323a4.050a0220.173698.002b.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -63,84 +91,34 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="g7xglj7mfzpk3kuh"
-Content-Disposition: inline
-In-Reply-To: <67b323a4.050a0220.173698.002b.GAE@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+According to the comment, the size parameter is only required when
+@dst is not an array, or when the copy needs to be smaller than
+sizeof(@dst). Since the source is a `union ucan_ctl_payload`, the
+correct size should be sizeof(union ucan_ctl_payload).
 
---g7xglj7mfzpk3kuh
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [syzbot] [can?] WARNING in ucan_probe
-MIME-Version: 1.0
+Signed-off-by: Matt Jan <zoo868e@gmail.com>
+Reported-by: syzbot+d7d8c418e8317899e88c@syzkaller.appspotmail.com
+Fixes: b3e40fc85735 ("USB: usb_parse_endpoint: ignore reserved bits")
+---
+ drivers/net/can/usb/ucan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 17.02.2025 03:55:16, syzbot wrote:
-> Hello,
->=20
-> syzbot found the following issue on:
->=20
-> HEAD commit:    496659003dac Merge tag 'i2c-for-6.14-rc3' of git://git.ke=
-r..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D11012bf8580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dc776e555cfbdb=
-82d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dd7d8c418e831789=
-9e88c
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Deb=
-ian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D14f7b9b0580=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D155602e4580000
->=20
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/c1675d5fc116/dis=
-k-49665900.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/0342ce7d0bc9/vmlinu=
-x-49665900.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/5ce5b4978fc4/b=
-zImage-49665900.xz
->=20
-> The issue was bisected to:
->=20
-> commit b3e40fc85735b787ce65909619fcd173107113c2
-> Author: Oliver Neukum <oneukum@suse.com>
-> Date:   Thu May 2 11:51:40 2024 +0000
->=20
->     USB: usb_parse_endpoint: ignore reserved bits
+diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
+index 39a63b7313a4..1ccef00388ae 100644
+--- a/drivers/net/can/usb/ucan.c
++++ b/drivers/net/can/usb/ucan.c
+@@ -1533,7 +1533,7 @@ static int ucan_probe(struct usb_interface *intf,
+ 	if (ret > 0) {
+ 		/* copy string while ensuring zero termination */
+ 		strscpy(firmware_str, up->ctl_msg_buffer->raw,
+-			sizeof(union ucan_ctl_payload) + 1);
++			sizeof(union ucan_ctl_payload));
+ 	} else {
+ 		strcpy(firmware_str, "unknown");
+ 	}
+-- 
+2.25.1
 
-I think the issue was introduced in: 7fdaf8966aae ("can: ucan: use
-strscpy() to instead of strncpy()"). I'm preparing a fix.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---g7xglj7mfzpk3kuh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmezMh8ACgkQDHRl3/mQ
-kZzmzQgAhZ+U89NLPUKjnFb9vAGYtSjKJb+1+b3OLpNzt9Ta5nZXyX1gMS0I2zd/
-6E3cDfJ7vN/BOGCWTzgTMU5jbLyg4YzCZ2IyfMIyexJjxEUUJ35BkvHj29KUQgtr
-bDrK30tqr/XK3tKOvLDZkacNmKRT8dad8Lv36VOCueQU7bJJVUzTx+SbdRiCn2Bv
-jMMN3hnhJLQpfALoH/GnzESJcka4xyrHd5ZpD3SDx3mJiw82AEcJ+DLOA8X18ZiF
-t1JIY4jgXpD77uMBwsHrhP7FCoW9j/ps/yAbJdc4Je9FCbtvyagP8/uYBNNKGIkJ
-QIrwURE0P+NRGibiA//rqR55T8WU0Q==
-=sBNn
------END PGP SIGNATURE-----
-
---g7xglj7mfzpk3kuh--
 
