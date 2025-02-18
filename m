@@ -1,124 +1,220 @@
-Return-Path: <linux-can+bounces-2823-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2824-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4C2CA38BDF
-	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2025 20:04:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A47B8A390D9
+	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2025 03:25:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8A0B7A17E9
-	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2025 19:03:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D14A6188410E
+	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2025 02:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB1A922DFBF;
-	Mon, 17 Feb 2025 19:04:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1F834315A;
+	Tue, 18 Feb 2025 02:23:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QMRZd3r+"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="jgE1PVCM"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from out.smtpout.orange.fr (out-70.smtpout.orange.fr [193.252.22.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646FF216605;
-	Mon, 17 Feb 2025 19:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E20286A1;
+	Tue, 18 Feb 2025 02:23:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739819052; cv=none; b=Tcq6cDNjYH5ANfQ8Qu6BT4xrAtAznK4GaNCx81BXf01wLdIk4B/lLIfOQLhj1/l5rkkrhsI0bvH4QagYNBphfQvEPRN1GwYmFzhkRh1EvNpih++x6f4oIHs48AsRjB2VGsjwvBoKvESwgzljcvWKz7mmjk36VxdcSRivsPsk9vw=
+	t=1739845414; cv=none; b=cNTaGhATKs4wW1hduYbUs7LV4AkaTYP6y6N5i/q0Xn+z47jfuw3UwIAzEQWnCODVClNM+tGj+Xqh6P0Zw8b0j3/J/f0fBLO2cpsd6TupyxIyf3M0k+0TxCQkhQgbeWpHJryGNZ1psRzf5rY4+8aKgIAGIQo4DzC4ocRWS9U1Q4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739819052; c=relaxed/simple;
-	bh=KO2kfgFS56BUZdOcSTHtjmZFrdN1FXtNYPlVSHH+yw4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=I4/wSu/YnJ6Xt/VYZaknb4zlR8m4y8XH3EzlRM9m4pwMcoJrnhUyuluCCgvEJx3kHYjPNxL0ppC6CtSpefxAVGe5SKX4etr8k6vopdm5ozf4v3LLquYYpj9ZD6qGFV+txtT8W9Eh6kSbaftywW4JzzELsrAsZX0qE4vMiIbmMY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QMRZd3r+; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2212a930001so33890195ad.0;
-        Mon, 17 Feb 2025 11:04:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739819050; x=1740423850; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AzkP+pgnUzTb5fXTNKSxJCrrQ506fnmgvA15C64w6yk=;
-        b=QMRZd3r+VWunZbhKdbHi2Dip4aj6kxJCi9rGRodqtZbxKosM/ZElxqqy/rFOkO78sk
-         FYxqqWR+B0CZiqRTB70JnDV/sQTCQ1Jup1jNY14qIg0b9De6p9vT0Ql6JSL2igd2rFX1
-         BThqvjT/sL4bL7Ep6e/332+reWV4oArErK10EDNLiTZhRckKYBCMYEjFrhRImEMTnJK/
-         67KZyq548nuYRQss0+ZyO9cwpqQpsB2TmK/hOdC6bIjA+4onErKAMCCNjUfnHn1h0NNj
-         lcZj+HQdHgOzjTb7qzOSGn6NFSTlcYyd1ukEwSfeCBMtTsIdsRcEscYe2U7IlQ9H/pnZ
-         OL6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739819050; x=1740423850;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AzkP+pgnUzTb5fXTNKSxJCrrQ506fnmgvA15C64w6yk=;
-        b=sE1F3etiBuo/P4/kruEwbFX7gsOwe93Lz45i2B3/SFWGF4gC+k7hIsdvMy76Pf1Vpm
-         7OQm0aj4Iv3P0C8IemThqJ/aINgOe0urQLiq7TJwrfvRrhBCshmCzy+1Oyu7IIvWzSdA
-         YfuodmUjSLFRF6XFAb0AwkHRlWJ9IeMbxEmr1IeTv7fq/8ePyxbmtctaHFBkxfLtqAH2
-         qTQ/vrRm3LqJ12q6J8vf4+81frhb0LsjFZITDs2TILFMEmjpIgvQ4KxflX/DYTYs+99F
-         K8X7Vl/6VdAjiGp6i/RPWj2nvI3+9IenT3jewAm7wo6lNxQAZdiTGPZdV0KzIqhRT1yX
-         yMBg==
-X-Forwarded-Encrypted: i=1; AJvYcCU9kusX4re+HlsoA/mhpl+VJNI1Ii4+VsZg7pk7+EZbFbeAYjDyeyEt8S9yVKa/9trEJhejE3LE0tQ=@vger.kernel.org, AJvYcCW43EeMzaXyRNF7YhaCgfkgMQJlT2EX0IFPabwC8b7UXY27SfUdW9eWizBbErYx3wsyyRJkj5jRh98+eZhP@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxo77RQYHLJEjMWVoCTyrdblK7lnwwKmtEbhmYJif5pUGy9Vx2Z
-	t7922ISo3OMtL6/dTHmX1FmGoKPSl6YRWIbkY4Z3/WAAsftna2MB
-X-Gm-Gg: ASbGncsyEDD8jIO2LYmkfCG3779q+nVooZdiMG6t5yq1PabLJmNgLMrnnIHgztvolTl
-	qSqjsVZ+SBob+ZWEvnYRJf/YTyo3PhEnGDj/l7xU9XWT47dRKHiUFi3NPttiygmEHfXe6PmDIOh
-	kn6x1mlKd2mmzJHCt3U/5KShaPwJkgVkj2V6HGe3cXd1KNJHLFaiGWQ422jykdn+nEjtWbTlCUU
-	24rXa0mKJ+WZHl+owVw2k0JMY563oE8h2VMbddaXnr9xYn2JWBQWq2ihdm1E7x8GsuUoyw5s7MN
-	MJkCx1GbjCMDKtc4W3Mv8d22pDpBWL+qn3ZgS9V/o5eptXR8WXi7U1twI0mYYpi/3EWEOQ==
-X-Google-Smtp-Source: AGHT+IGgqgdJzgTfl69t4Ey8DdgeJrgVpz4clUAOHWF+w725HPTqhULI3J8MpIpecy/ABG9SZDPbHQ==
-X-Received: by 2002:a05:6a20:7287:b0:1ee:4813:8a93 with SMTP id adf61e73a8af0-1ee8cbe818cmr18150837637.27.1739819050580;
-        Mon, 17 Feb 2025 11:04:10 -0800 (PST)
-Received: from TW-MATTJAN1.eu.trendnet.org (61-216-130-235.hinet-ip.hinet.net. [61.216.130.235])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7326a38ff76sm4322087b3a.160.2025.02.17.11.04.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2025 11:04:10 -0800 (PST)
-From: Matt Jan <zoo868e@gmail.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Matt Jan <zoo868e@gmail.com>,
-	syzbot+d7d8c418e8317899e88c@syzkaller.appspotmail.com
-Subject: [PATCH] can: ucan: Correct the size parameter
-Date: Tue, 18 Feb 2025 03:04:04 +0800
-Message-Id: <20250217190404.354574-1-zoo868e@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <67b323a4.050a0220.173698.002b.GAE@google.com>
-References: <67b323a4.050a0220.173698.002b.GAE@google.com>
+	s=arc-20240116; t=1739845414; c=relaxed/simple;
+	bh=vi+ezaL3q6ML386BlLYDBuoOAdlqf0JMPGF1PaApdQ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eqo8iszJ6Fh0/itptQkAOmUSjMKyXd+5RCoI2EmqC7naOvqifik5cJbPxGHGkdkszcsK4qNZFtPNiFcri3nwUWm+/3xTx3xijZz1jXcIn7NM2HBUAanbIVWyiP7Q0siq+2seYqyLCKz4RPdbVS94u+sHQItkQhoc+fE800BQc4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=jgE1PVCM; arc=none smtp.client-ip=193.252.22.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id kDFUtMr7WwhW2kDFYtuOeV; Tue, 18 Feb 2025 03:22:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1739845339;
+	bh=f5pjnJVuN2RARGK/eLtkdQ2AY9d+D6FXv/r6YtancYc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=jgE1PVCM0C1OIfAi2GH1BRssBXKGi/Gsgbs5h8UDO0ovUs7pIXEkmtCPr7BvOVg+3
+	 8F7tBGSmmqkUoZTs+Ss4mwhNfwBZj5G33HkgN9pYUdskD8I1sb8fotOW8J6nFKOaQW
+	 mfEbgVnv4iGcE2t5oDmzO+JhaZwX6rnATPI7nyl0FwFjQukD4zwjDea3rxpxXQrOO/
+	 5O1FuSRx9XbSe/mxxMiSldcxbFos6ztZ5Eet8EdiGTsw/Rm0TpiVZzhi7IPANLX2Aa
+	 zW42KPePS25QRltB5S6rTd8lc4iBV3+WTp0GwT/M5h1W7rF3MUovLPRHINBK3fM34S
+	 akrQcHnGuC22g==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 18 Feb 2025 03:22:19 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <2f33170a-f7bb-47dd-8cb7-15c055dabc83@wanadoo.fr>
+Date: Tue, 18 Feb 2025 11:22:11 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] can: ucan: Correct the size parameter
+To: Matt Jan <zoo868e@gmail.com>, Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: syzbot+d7d8c418e8317899e88c@syzkaller.appspotmail.com,
+ linux-kernel@vger.kernel.org, linux-can@vger.kernel.org
+References: <67b323a4.050a0220.173698.002b.GAE@google.com>
+ <20250217190404.354574-1-zoo868e@gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250217190404.354574-1-zoo868e@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-According to the comment, the size parameter is only required when
-@dst is not an array, or when the copy needs to be smaller than
-sizeof(@dst). Since the source is a `union ucan_ctl_payload`, the
-correct size should be sizeof(union ucan_ctl_payload).
+On 18/02/2025 at 04:04, Matt Jan wrote:
+> According to the comment, the size parameter is only required when
+> @dst is not an array, or when the copy needs to be smaller than
+> sizeof(@dst). Since the source is a `union ucan_ctl_payload`, the
+> correct size should be sizeof(union ucan_ctl_payload).
 
-Signed-off-by: Matt Jan <zoo868e@gmail.com>
-Reported-by: syzbot+d7d8c418e8317899e88c@syzkaller.appspotmail.com
-Fixes: b3e40fc85735 ("USB: usb_parse_endpoint: ignore reserved bits")
----
- drivers/net/can/usb/ucan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+While this fix is correct, I think that the root cause is that
+up->ctl_msg_buffer->raw is not NUL terminated.
+
+Because of that, a local copy was added, just to reintroduce the NUL
+terminating byte.
+
+I think it is better to just directly terminate up->ctl_msg_buffer->raw
+and get rid of the firmware_str local variable and the string copy.
+
+So, what about this:
 
 diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
-index 39a63b7313a4..1ccef00388ae 100644
+index 39a63b7313a4..268085453d24 100644
 --- a/drivers/net/can/usb/ucan.c
 +++ b/drivers/net/can/usb/ucan.c
-@@ -1533,7 +1533,7 @@ static int ucan_probe(struct usb_interface *intf,
- 	if (ret > 0) {
- 		/* copy string while ensuring zero termination */
- 		strscpy(firmware_str, up->ctl_msg_buffer->raw,
--			sizeof(union ucan_ctl_payload) + 1);
-+			sizeof(union ucan_ctl_payload));
- 	} else {
- 		strcpy(firmware_str, "unknown");
- 	}
--- 
-2.25.1
+@@ -186,7 +186,7 @@ union ucan_ctl_payload {
+         */
+        struct ucan_ctl_cmd_get_protocol_version cmd_get_protocol_version;
+
+-       u8 raw[128];
++       char fw_info[128];
+ } __packed;
+
+ enum {
+@@ -424,18 +424,19 @@ static int ucan_ctrl_command_out(struct ucan_priv *up,
+                               UCAN_USB_CTL_PIPE_TIMEOUT);
+ }
+
+-static int ucan_device_request_in(struct ucan_priv *up,
+-                                 u8 cmd, u16 subcmd, u16 datalen)
++static void ucan_get_fw_info(struct ucan_priv *up, char *fw_info,
+size_t size)
+ {
+-       return usb_control_msg(up->udev,
+-                              usb_rcvctrlpipe(up->udev, 0),
+-                              cmd,
+-                              USB_DIR_IN | USB_TYPE_VENDOR |
+USB_RECIP_DEVICE,
+-                              subcmd,
+-                              0,
+-                              up->ctl_msg_buffer,
+-                              datalen,
+-                              UCAN_USB_CTL_PIPE_TIMEOUT);
++       int ret;
++
++       ret = usb_control_msg(up->udev, usb_rcvctrlpipe(up->udev, 0),
++                             UCAN_DEVICE_GET_FW_STRING,
++                             USB_DIR_IN | USB_TYPE_VENDOR |
+USB_RECIP_DEVICE,
++                             0, 0, fw_info, size - 1,
++                             UCAN_USB_CTL_PIPE_TIMEOUT);
++       if (ret > 0)
++               fw_info[ret] = '\0';
++       else
++               strcpy(fw_info, "unknown");
+ }
+
+ /* Parse the device information structure reported by the device and
+@@ -1314,7 +1315,6 @@ static int ucan_probe(struct usb_interface *intf,
+        u8 in_ep_addr;
+        u8 out_ep_addr;
+        union ucan_ctl_payload *ctl_msg_buffer;
+-       char firmware_str[sizeof(union ucan_ctl_payload) + 1];
+
+        udev = interface_to_usbdev(intf);
+
+@@ -1527,17 +1527,6 @@ static int ucan_probe(struct usb_interface *intf,
+         */
+        ucan_parse_device_info(up, &ctl_msg_buffer->cmd_get_device_info);
+
+-       /* just print some device information - if available */
+-       ret = ucan_device_request_in(up, UCAN_DEVICE_GET_FW_STRING, 0,
+-                                    sizeof(union ucan_ctl_payload));
+-       if (ret > 0) {
+-               /* copy string while ensuring zero termination */
+-               strscpy(firmware_str, up->ctl_msg_buffer->raw,
+-                       sizeof(union ucan_ctl_payload) + 1);
+-       } else {
+-               strcpy(firmware_str, "unknown");
+-       }
+-
+        /* device is compatible, reset it */
+        ret = ucan_ctrl_command_out(up, UCAN_COMMAND_RESET, 0, 0);
+        if (ret < 0)
+@@ -1555,7 +1544,10 @@ static int ucan_probe(struct usb_interface *intf,
+
+        /* initialisation complete, log device info */
+        netdev_info(up->netdev, "registered device\n");
+-       netdev_info(up->netdev, "firmware string: %s\n", firmware_str);
++       ucan_get_fw_info(up, up->ctl_msg_buffer->fw_info,
++                        sizeof(up->ctl_msg_buffer->fw_info));
++       netdev_info(up->netdev, "firmware string: %s\n",
++                   up->ctl_msg_buffer->fw_info);
+
+        /* success */
+        return 0;
+
+
+> Signed-off-by: Matt Jan <zoo868e@gmail.com>
+> Reported-by: syzbot+d7d8c418e8317899e88c@syzkaller.appspotmail.com
+> Fixes: b3e40fc85735 ("USB: usb_parse_endpoint: ignore reserved bits")
+
+I saw that the bot bisected it to this commit, but I doubt that this is
+correct. In
+
+
+https://lore.kernel.org/linux-can/20250217-spectral-cordial-booby-968731-mkl@pengutronix.de/
+
+Marc pointed out that the issue came from 7fdaf8966aae ("can: ucan: use
+strscpy() to instead of strncpy()"). And I agree with Marc's analysis.
+
+> ---
+>  drivers/net/can/usb/ucan.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
+> index 39a63b7313a4..1ccef00388ae 100644
+> --- a/drivers/net/can/usb/ucan.c
+> +++ b/drivers/net/can/usb/ucan.c
+> @@ -1533,7 +1533,7 @@ static int ucan_probe(struct usb_interface *intf,
+>  	if (ret > 0) {
+>  		/* copy string while ensuring zero termination */
+>  		strscpy(firmware_str, up->ctl_msg_buffer->raw,
+> -			sizeof(union ucan_ctl_payload) + 1);
+> +			sizeof(union ucan_ctl_payload));
+>  	} else {
+>  		strcpy(firmware_str, "unknown");
+>  	}
+
+Yours sincerely,
+Vincent Mailhol
 
 
