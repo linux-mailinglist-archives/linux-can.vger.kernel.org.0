@@ -1,59 +1,55 @@
-Return-Path: <linux-can+bounces-2829-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2830-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8CEDA39998
-	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2025 11:51:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EC39A39999
+	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2025 11:51:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F89A1648D1
-	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2025 10:50:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FE8E164DF9
+	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2025 10:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C29472376E2;
-	Tue, 18 Feb 2025 10:50:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB78013D51E;
+	Tue, 18 Feb 2025 10:50:39 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7869F23909E;
-	Tue, 18 Feb 2025 10:50:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A50A1239066;
+	Tue, 18 Feb 2025 10:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739875836; cv=none; b=TH7OnRgWMYcYQu0zbyhIilQUx4khmSriUO02imgt9UGgMJuHijxqyBbQF23jnUcpO6DWWN90hUb+hLzsb5hCqsgbEjadaqNNRcYt58PtjaQBgCmR89aIuPQxWc9UmdRjTN9mrtdRHp+H5zU4fEdAaznBH4brow6d79+Tr1bVSlw=
+	t=1739875839; cv=none; b=aaEfu619VspBwCCR8EoHEBy+QzTaP+LL5xz+MM9VJQdXZoczzwl1/xMuw7oFgJnqijBsrPAWRavU0tgH1cGWD9ZILAqFAm5J9Hlq0Zw87FAH6/CxVe6B09NS5DU8V8Jz9RFPH77IqXB9pTxNgfiSusUbFIc5ahvZLkNY9TQ4u6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739875836; c=relaxed/simple;
-	bh=JoA9r7k29ebqKTj0QkpETeeYh1HIEph6sh1RZJ65Ssc=;
+	s=arc-20240116; t=1739875839; c=relaxed/simple;
+	bh=2htMux/r8E/nhUOUGiOnFCD6g29RUic1OPslAJMKXUI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W8cAAV3tdFSESN7YtZ9gfh2SIWKJZs6eOJ0uW2XoPDUPbZfOFkrd6Ojru2hfus225rxS7QMaQbopZoVOpqPlAU4jH0F6ZWRul17XBgGHZ9f6CaKJ9U2ZCrLwUzzUZRXFf4naflGg9pJ2lkp4e5AtiqrWzgtg3UxQ3wbIof3RwFI=
+	 MIME-Version; b=Wy4IEgPCGAwgovOTPbG/nVG4XYqhXvtImFG7fC1yyFek0aZazuzpVIzYq/Rmypuj0cOZsAwmf6mDbZQ3baPn5bhWimm4BNYv/7osf+3L2YMrwiaH99PutvxG7dVy9+j49loQ5zpkYMwi8b7XF2rFEimQeTGpmTPEjRLwEhjPRGA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: BWdsOtbgTTSTbUo0X2rVEQ==
-X-CSE-MsgGUID: wPDGzNQISI64teND7paCNQ==
+X-CSE-ConnectionGUID: waEK7JIxTGecwViJiPxnmQ==
+X-CSE-MsgGUID: 7STGdtLJS1KijQCr2OPdpg==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 18 Feb 2025 19:50:33 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 18 Feb 2025 19:50:37 +0900
 Received: from localhost.localdomain (unknown [10.226.92.208])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id A8E4042A5EAE;
-	Tue, 18 Feb 2025 19:50:28 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id D231942A5EAE;
+	Tue, 18 Feb 2025 19:50:33 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Simon Horman <horms@kernel.org>,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Rob Herring <robh@kernel.org>,
+	Ulrich Hecht <ulrich.hecht+renesas@gmail.com>,
 	linux-can@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH 04/11] dt-bindings: can: renesas,rcar-canfd: Document RZ/G3E support
-Date: Tue, 18 Feb 2025 10:49:54 +0000
-Message-ID: <20250218105007.66358-5-biju.das.jz@bp.renesas.com>
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH 05/11] can: rcar_canfd: Fix page entries in the AFL list
+Date: Tue, 18 Feb 2025 10:49:55 +0000
+Message-ID: <20250218105007.66358-6-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250218105007.66358-1-biju.das.jz@bp.renesas.com>
 References: <20250218105007.66358-1-biju.das.jz@bp.renesas.com>
@@ -65,138 +61,85 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Document support for the CAN-FD Interface on the RZ/G3E (R9A09G047) SoC,
-which supports up to six channels.
+There are a total of 96 AFL pages and each page has 16 entries with
+registers CFDGAFLIDr, CFDGAFLMr, CFDGAFLP0r, CFDGAFLP1r holding
+the rule entries (r = 0..15).
 
-The CAN-FD module on RZ/G3E is very similar to the one on both R-Car V4H
-and RZ/G2L, but differs in some hardware parameters:
- * No external clock, but instead has ram clock.
- * Support up to 6 channels.
- * 20 interrupts.
+Currently, RCANFD_GAFL* macros use a start variable to find AFL entries,
+which is incorrect as the testing on RZ/G3E shows ch1 and ch4
+gets a start value of 0 and the register contents are overwritten.
 
+Fix this issue by using rule_entry corresponding to the channel
+to find the page entries in the AFL list.
+
+Fixes: dd3bd23eb438 ("can: rcar_canfd: Add Renesas R-Car CAN FD driver")
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
- .../bindings/net/can/renesas,rcar-canfd.yaml  | 67 +++++++++++++++++--
- 1 file changed, 62 insertions(+), 5 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-index f87f90f431e5..189d5303ad75 100644
---- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-+++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-@@ -42,6 +42,8 @@ properties:
-               - renesas,r9a07g054-canfd    # RZ/V2L
-           - const: renesas,rzg2l-canfd     # RZ/G2L family
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index df1a5d0b37b2..270f50d836f5 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -787,10 +787,11 @@ static void rcar_canfd_configure_controller(struct rcar_canfd_global *gpriv)
+ }
  
-+      - const: renesas,r9a09g047-canfd     # RZ/G3E
-+
-   reg:
-     maxItems: 1
+ static void rcar_canfd_configure_afl_rules(struct rcar_canfd_global *gpriv,
+-					   u32 ch)
++					   u32 ch, u32 rule_entry)
+ {
+ 	u32 cfg;
+ 	int offset, start, page, num_rules = RCANFD_CHANNEL_NUMRULES;
++	u32 rule_entry_index = rule_entry % 16;
+ 	u32 ridx = ch + RCANFD_RFFIFO_IDX;
  
-@@ -59,6 +61,19 @@ properties:
-           - description: CAN1 error interrupt
-           - description: CAN1 transmit interrupt
-           - description: CAN1 transmit/receive FIFO receive completion interrupt
-+          - description: CAN2 error interrupt
-+          - description: CAN2 transmit interrupt
-+          - description: CAN2 transmit/receive FIFO receive completion interrupt
-+          - description: CAN3 error interrupt
-+          - description: CAN3 transmit interrupt
-+          - description: CAN3 transmit/receive FIFO receive completion interrupt
-+          - description: CAN4 error interrupt
-+          - description: CAN4 transmit interrupt
-+          - description: CAN4 transmit/receive FIFO receive completion interrupt
-+          - description: CAN5 error interrupt
-+          - description: CAN5 transmit interrupt
-+          - description: CAN5 transmit/receive FIFO receive completion interrupt
-+        minItems: 8
+ 	if (ch == 0) {
+@@ -802,7 +803,7 @@ static void rcar_canfd_configure_afl_rules(struct rcar_canfd_global *gpriv,
+ 	}
  
-   interrupt-names:
-     oneOf:
-@@ -74,15 +89,33 @@ properties:
-           - const: ch1_err
-           - const: ch1_rec
-           - const: ch1_trx
-+          - const: ch2_err
-+          - const: ch2_rec
-+          - const: ch2_trx
-+          - const: ch3_err
-+          - const: ch3_rec
-+          - const: ch3_trx
-+          - const: ch4_err
-+          - const: ch4_rec
-+          - const: ch4_trx
-+          - const: ch5_err
-+          - const: ch5_rec
-+          - const: ch5_trx
-+        minItems: 8
+ 	/* Enable write access to entry */
+-	page = RCANFD_GAFL_PAGENUM(start);
++	page = RCANFD_GAFL_PAGENUM(rule_entry);
+ 	rcar_canfd_set_bit(gpriv->base, RCANFD_GAFLECTR,
+ 			   (RCANFD_GAFLECTR_AFLPN(gpriv, page) |
+ 			    RCANFD_GAFLECTR_AFLDAE));
+@@ -818,13 +819,13 @@ static void rcar_canfd_configure_afl_rules(struct rcar_canfd_global *gpriv,
+ 		offset = RCANFD_C_GAFL_OFFSET;
  
-   clocks:
-     maxItems: 3
+ 	/* Accept all IDs */
+-	rcar_canfd_write(gpriv->base, RCANFD_GAFLID(offset, start), 0);
++	rcar_canfd_write(gpriv->base, RCANFD_GAFLID(offset, rule_entry_index), 0);
+ 	/* IDE or RTR is not considered for matching */
+-	rcar_canfd_write(gpriv->base, RCANFD_GAFLM(offset, start), 0);
++	rcar_canfd_write(gpriv->base, RCANFD_GAFLM(offset, rule_entry_index), 0);
+ 	/* Any data length accepted */
+-	rcar_canfd_write(gpriv->base, RCANFD_GAFLP0(offset, start), 0);
++	rcar_canfd_write(gpriv->base, RCANFD_GAFLP0(offset, rule_entry_index), 0);
+ 	/* Place the msg in corresponding Rx FIFO entry */
+-	rcar_canfd_set_bit(gpriv->base, RCANFD_GAFLP1(offset, start),
++	rcar_canfd_set_bit(gpriv->base, RCANFD_GAFLP1(offset, rule_entry_index),
+ 			   RCANFD_GAFLP1_GAFLFDP(ridx));
  
-   clock-names:
--    items:
--      - const: fck
--      - const: canfd
--      - const: can_clk
-+    oneOf:
-+      - items:
-+          - const: fck
-+          - const: canfd
-+          - const: can_clk
-+      - items:
-+          - const: fck
-+          - const: ram_clk
-+          - const: can_clk
+ 	/* Disable write access to page */
+@@ -1851,6 +1852,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 	unsigned long channels_mask = 0;
+ 	int err, ch_irq, g_irq;
+ 	int g_err_irq, g_recc_irq;
++	u32 rule_entry = 0;
+ 	bool fdmode = true;			/* CAN FD only mode - default */
+ 	char name[9] = "channelX";
+ 	int i;
+@@ -2023,7 +2025,8 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 		rcar_canfd_configure_tx(gpriv, ch);
  
-   power-domains:
-     maxItems: 1
-@@ -173,7 +206,9 @@ allOf:
-       properties:
-         compatible:
-           contains:
--            const: renesas,rzg2l-canfd
-+            enum:
-+              - renesas,r9a09g047-canfd
-+              - renesas,rzg2l-canfd
-     then:
-       properties:
-         resets:
-@@ -187,6 +222,19 @@ allOf:
-       required:
-         - reset-names
+ 		/* Configure receive rules */
+-		rcar_canfd_configure_afl_rules(gpriv, ch);
++		rcar_canfd_configure_afl_rules(gpriv, ch, rule_entry);
++		rule_entry += RCANFD_CHANNEL_NUMRULES;
+ 	}
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,r9a09g047-canfd
-+    then:
-+      properties:
-+        interrupts:
-+          maxItems: 20
-+
-+        interrupt-names:
-+          maxItems: 20
-+
-   - if:
-       properties:
-         compatible:
-@@ -219,6 +267,15 @@ allOf:
-       patternProperties:
-         "^channel[4-7]$": false
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,r9a09g047-canfd
-+    then:
-+      patternProperties:
-+        "^channel[6-7]$": false
-+
- unevaluatedProperties: false
- 
- examples:
+ 	/* Configure common interrupts */
 -- 
 2.43.0
 
