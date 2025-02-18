@@ -1,216 +1,210 @@
-Return-Path: <linux-can+bounces-2841-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2842-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3D97A39B61
-	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2025 12:47:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82E02A39F73
+	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2025 15:28:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76596189497A
-	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2025 11:48:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A81E216BB15
+	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2025 14:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6B6B23958B;
-	Tue, 18 Feb 2025 11:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F320F26A0FD;
+	Tue, 18 Feb 2025 14:26:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="YrV7Oy+0"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Lu2BCr7f"
 X-Original-To: linux-can@vger.kernel.org
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011046.outbound.protection.outlook.com [52.101.125.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-70.smtpout.orange.fr [193.252.22.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93406154C12;
-	Tue, 18 Feb 2025 11:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739879270; cv=fail; b=QvTPP/gAz2SZTar8g+qIkUPUFq6Lcv0h3EEYRKHuRFp7ICK2z5NSBRxs/2IVMCe+PZ7G8jGj5RdG8YtTRpq89TvpbKWYNZyqxY2vqt6LaLLXhIHSx5l/uQw756cgigld9nscWG8wD4lsRhAR0o03eI5DbDQlN853a0P7aiKThb4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739879270; c=relaxed/simple;
-	bh=KLYybrvL4lqYQKgVq4MK6OZi6nmq/kkK476grlzzCkk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=t58z9Z9aoZSAIUTo3QSTzd8l9ZKDVxieri7N9yHfJQxf2p8jbwAZNz15xSAzAMwXOb+3oRZuiBmAzaGd4KqePe5ToFVXi5E0s9WYdR+URcHOMPtRWaQKlHubmWcGpJSeAGZ1uQM/jwvXBMdOTnR+hhkXFcODbEx6y2JujigRyCE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=YrV7Oy+0; arc=fail smtp.client-ip=52.101.125.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ShcuskmVwifhJ0savKHNg1CApzYpFc/PE7QZSqUG2OHVhX1dufpOKlZ4XtnuH8IfrkIFTbcl/yKtC6jdiJPr9pF+X604KxdJ2B7fyv4Cxzfe/UKc+xfrcPIZJnW6h4LaFTt/KsYkkG+TLUgTyliocqJ/ndeUVUNjUhyisb4QnAbCndvYA4IaSUf0VeRgGIcmT4ndUlIoZL1/PR0Bwnvs/UTKHC8saH7u8xF7P/5ZrGyhuXGtPI2wISKpj6WCCMGSbQjjgFFq12WvXQy7uLhCLpb7GenFW7hY1a3i1G72hKXQMwYoXvtG0/lXOvipTqosr20DcYwKarU/ZVD0HmHeig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KLYybrvL4lqYQKgVq4MK6OZi6nmq/kkK476grlzzCkk=;
- b=ULhpxZcfmhha4T8rXvbRVkwFFjynZvZUTzlR8eD8BU991FyvzX7BbQ7z/VSo5hqxeSA8RgP0ySllZaG50wO8LczxE/G3T7Vt2yzyI9uOx9qfaTSBUDMUUkuKbvZEOT/HQVuYcKNhMlbXj3fShdrr0Q28Aqzk1pwi1ED5BlaGzWJrcgs6+oFDC8r8AdvCVKIB48nGss3+3WTBB380Uh/8aEjHJTy3sIT6OJTzK17OLXzDH4CTupNPPnbDr5TUwLEeDOND5jz7o8nHkUEuIuV/KOkj0CeLJujenytScmCbsF6uzNKq0jzC32Mb1lx2GV84GuEIz5T42Zj2eoBbGgIT5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KLYybrvL4lqYQKgVq4MK6OZi6nmq/kkK476grlzzCkk=;
- b=YrV7Oy+07CcIAHUjp/UIQZqREuYB0g/sOXG/trQzBbs08KdgB/wQopU8e9F8MrCVG3n48CE3R2NsCaTVCnbxqB2mGzcxx4s8fd1GKcKA1TAmct5uLKVoIRAILEi5tHtTTm98+OAL8tiFderv98z0dfEyxI613VtDbf+/tBcUu9g=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by TYCPR01MB6141.jpnprd01.prod.outlook.com (2603:1096:400:4f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Tue, 18 Feb
- 2025 11:47:46 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1%5]) with mapi id 15.20.8445.019; Tue, 18 Feb 2025
- 11:47:46 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-CC: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, Wolfram Sang
-	<wsa+renesas@sang-engineering.com>, =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?=
-	<u.kleine-koenig@baylibre.com>, Prabhakar Mahadev Lad
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>, biju.das.au
-	<biju.das.au@gmail.com>
-Subject: RE: [PATCH 00/11] Add support for RZ/G3E CANFD
-Thread-Topic: [PATCH 00/11] Add support for RZ/G3E CANFD
-Thread-Index: AQHbgfLm+Dqw6+dv70i+39VSRIOW9rNM6dSAgAAH2vA=
-Date: Tue, 18 Feb 2025 11:47:46 +0000
-Message-ID:
- <TY3PR01MB11346E47688ADA3309409055286FA2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20250218105007.66358-1-biju.das.jz@bp.renesas.com>
- <20250218-smooth-macaque-of-inquire-45fb87-mkl@pengutronix.de>
-In-Reply-To: <20250218-smooth-macaque-of-inquire-45fb87-mkl@pengutronix.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYCPR01MB6141:EE_
-x-ms-office365-filtering-correlation-id: b85e676c-76c2-4f96-f448-08dd50120fd0
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?ZVZ2QjJmNmczc1NhYlFtRFRQaGRmcjNFcEdSS2dRaC9DRWE5aFg1QWZqNkR4?=
- =?utf-8?B?clFmWHNuNXNtM2pmT2JLaXBGWTdQWjBKQUpMYlZHL3dDVVk3YTlVTGhVSEdW?=
- =?utf-8?B?SHQwblFUb2tXR3VJWDhqTTBUNEd1YlF0RnZhUkI2QnZuRFQ1dk9aUDh2WEZS?=
- =?utf-8?B?RVJXNE9yOHB1cWFVaElvczEyMlNaZmtQZGtsUEZITnU2a0FUZEV0OFdTallU?=
- =?utf-8?B?TEU4QnptZTNBQmVGSFppV1J2bHhMVjNkOEFJWlVlRTZXS1VrSy9la1gySHh0?=
- =?utf-8?B?OEZHWTdDZUZzeXN5dDFaWVlxVzNJelQ3dDlOVHNhLy93aVdaQXlyU3ppVTMz?=
- =?utf-8?B?N1ZjbmNqYzR1NnhEVmx2MzZjRXNPc0s2dUlZYzMzaXFTUGJEZjA3Q3FEN05u?=
- =?utf-8?B?LzJoOW9ldjk0RDMxTHJuVEtmeE1BQ3JBeDdhY2RmT005cUxoeG16V3JOYytw?=
- =?utf-8?B?djVXYis1Y0I1eVBqNUF3QVdMZkRtbWlFaUNGWTBCS3RvbkQ3aWRDUjVSMFd3?=
- =?utf-8?B?VDZCd2ZZRjhUVUxOdWoxVTNjc3FYWWxNV1pCZHEvaTh4Sm05b1BtODFVcldL?=
- =?utf-8?B?WVlFSVluL1o0TkRBRFJwOHZmOGo5dCtkc3BNSkdKcld3RlNmV1NTZUoxWEhX?=
- =?utf-8?B?WDQ5WUF0N01pNGR0UFM3dWcwT0ZjMit2R1o1YXhBOVloMkRBWnQvOE5CTVU2?=
- =?utf-8?B?U2FYRXp6QlNuNk8vSkMyQWNZV0h5NWU0cytwMGZsZ0xrZ3EyYXRwaDJFcDZY?=
- =?utf-8?B?aFJZVTdyOHRHSEFXYmREYk1kMjhaZUl6cmx2LzZlR2U2ZmkzY0pkZ0pESHFl?=
- =?utf-8?B?MStyOUZZYlY1U3hXUTg1Qmg0Mng0anBNb3dUNlB2UjlKMkFRaGlxNTVrK3FY?=
- =?utf-8?B?VHl5Ukd2eUtvU3dRR1ZwMWFqZ2M5Nzg5MGxkNTZ1SHZtZDNXTWxKb2VydXVp?=
- =?utf-8?B?Vno1dUxiUFRTK0hsbHFQN29RcGFVa0l1M1Q0bzNEZW5vR0xBbUVvZUZXT3Zh?=
- =?utf-8?B?eFk3TFJNb0ZYYlVERzRuYkdsNnRJRjFvSFQ1ZlVZOHpFcEU2K0lEL2o0dzdV?=
- =?utf-8?B?WlRkc0Z3S0NQcGllRElhYUpRMDhYcmFkVnVtRHM4VUJ3Zk90dHNWOXZUMFhC?=
- =?utf-8?B?bU5nTVk2aG5VVFVsb1BKR3NGWk9HN0JpRnM3SVJpa21qTzhVajRad3lDczVZ?=
- =?utf-8?B?VVU4Wi9mUmxTY3BlckdqbWRhTTNBWkFzTklxTUNsU2E4RndqclBQZC9SaThh?=
- =?utf-8?B?UEh4cng2V2s4WEVJbEtYUmtvT1VCbUVuZktmNFVsU2FrRlZwOXhpdXdOV2ls?=
- =?utf-8?B?NDIwTERFMkhQOEVCTWx5SUdyUWRxMUZwalFaSjZnOE1BdzlUWUl6NDBHeUxo?=
- =?utf-8?B?eks3TUlkSzdDM1QveU93UG1VQUVjUzE4cHFHN1d3WS92U0RlU2xrNW9FL01D?=
- =?utf-8?B?MWxqMVJ6QnQrSVpXQUlmUHp3UXQ5SXJvTXp3MjRzSDVqVEIvT0tob25BVXhx?=
- =?utf-8?B?R1FncHhjTjhvZGtjcnZJNy9xSjB0aktMQWZMTkI1ZHBwbmYrTGE5T2pqakh1?=
- =?utf-8?B?TStUcUNYaUhaQjlnQisrOVBuVmg0YVVhVDJMckdHYTBkZGZZb1Vhc0RyQlow?=
- =?utf-8?B?V1ZZaWlSN1hpVmFMZEpIbVRTSVVXdmRSN01Db2twYmR0WmlKMmg1NUYxaDZt?=
- =?utf-8?B?NFU1OXk0d2VyWm8zajRyYkhBSHA5cHVWdFVzWlppYkxRMnZNWllrNlFKaXZX?=
- =?utf-8?B?Vm9vTkdCbmRkakZ5WXI2MUlxMG43QStqaW9XZnVhcGVsdTJCRjdSaDJSeVBx?=
- =?utf-8?B?T3VITHJINjBHenVEUzFDeC9CTlFwZnBuelVKOXE0eVFVZkNHaXVBTENIeG5W?=
- =?utf-8?B?NDJES25oVzRZMmNUdFprK08xY1lJdUtnS0RFQ2VKdklzTDBaS0t5UUJlb09T?=
- =?utf-8?Q?mragcsjO8LhS2C8CqtwzQ6/eIKVupUyK?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?bElWNWs2OHY2SEt4enVWUlNlSnRKM0crV283dXBaM3Iwejdib1ZRZ0VoWWkx?=
- =?utf-8?B?VlhQRGorNjRDRWQ1empYUURsNzBULzM0MHorTHBzSG9VVjA1NU9ScjY1clpo?=
- =?utf-8?B?UlNhNXViVmtJU0wyVTFRUXZka0pLTWlKVlRselJNa1doWHVmQzNOMkp3VlFw?=
- =?utf-8?B?ODBoYm1GT29FbWh4eXVscHNzL1hUSnlyUEdJVmFva2kwUmxiOS92SFlJTjVO?=
- =?utf-8?B?M3ZyM2hQNnRMbTltOWFtckp0YkhSd2ZBT0gxWi9tUm93MEpDMTAybzhsU3Fw?=
- =?utf-8?B?ZEVZTlRuVWpPOWlDRHdsRmQ0L0FZQ0dSU2F3ZFdGRXhZZzMxTytpdlQ0aEdD?=
- =?utf-8?B?NjZkbTFSUHg2WVJPM3dzcnVvSmZETXB0eExvRDJlaE9Ceis4Q0habTNSbEtU?=
- =?utf-8?B?NnpxZ1FseXFFcGc1MCtzbjNCT0F6NU5UNW0xRndqeE9UVGFrRzBsdFZ6R2pv?=
- =?utf-8?B?UnpuU0VvT2ZSclR3aHZINVh4RFF6NXN2RmlnbmU4MEFubWJmc09BQUV2ZHJu?=
- =?utf-8?B?YmJPc1d3QXY3RGhQT29lV1lUZXc1Z0pxMEplQUVzWHRIVFVkeHJqaTRlTU80?=
- =?utf-8?B?aHlNdWw0Lzcrc2cralNuSHRmY3VnN2ZqbG1ONkJUQXRrK0hiUTFLcnhOdzJR?=
- =?utf-8?B?eldoR0FvTERVcGpUTmJVRklJKzVaTkFDaTBJMWJpMjZvRDdyanZJbUNlL2l6?=
- =?utf-8?B?aUhTTVU5NlNHemIweDg4VFFpcDFoOVZhekg5TDJMcTVEaW5IaEJNTDBwUVhD?=
- =?utf-8?B?N1pzZTBZd2c4bGFuandDVTdIaHQ3ZUhUS2o5U0lnM3FwTk54b1J3cTBMektl?=
- =?utf-8?B?eTZ0YnkxZ09JcThiVGV0VWw4SGZSY0x0Z2tjbkVBZTgzQndDWTlJcXl1bklE?=
- =?utf-8?B?VXVOeVRrMjllOVJVa1BYQ0F5RERZV1dNWVhUbnZTRW9BQU5NMDNEU1dnSTd5?=
- =?utf-8?B?OWM0Zkk2SFFpMHBiN1FoRUZ2UTQxSUFHOENudWhzMS9UTGJKMzhDTVNaWis4?=
- =?utf-8?B?UmFmbWRqZUhRL002VmxjdGxTWWt6OXIrWkVaZFByS0R2VjlDOGF3UUtuSlBr?=
- =?utf-8?B?T1FqVnMzNzJ6MDlNT1pkYWgyN1VKY2t0NmhncFVFaG5sdlhVOFQ4NitHMDRL?=
- =?utf-8?B?M21CR2JEQm1saUkwcmRkeWNFdFpDbENjL2YyajU4Rm9pM1NKeG8xMEkrbjN4?=
- =?utf-8?B?aDIvQWZkOWRwb3JxUHh4cjFrTW1OSU1wQ01wczFabWI4SlgrdjFlWnFKTEkx?=
- =?utf-8?B?Qko3dGtrT1ZPSXpkbnAvanZTdVY4YXJHbjN2cEkrS1RjK3hhVndRL010SEkv?=
- =?utf-8?B?U2xwYmYzTDFaYWdKQ3kzZkNqeEM3NEtPYzBZU0c3cXlSVjhiRVYxYzZPS0Nk?=
- =?utf-8?B?d1BzYi9xeUt0MUhyd3RTTzNWaDlBbzB6NnZsc0czRlVPTDRyK3M3dnNWeUtt?=
- =?utf-8?B?R09jalp5NzR5UHpxT1c3WmVBdm8rSUx5TTEwbCtvODZUbHI4MEN4bzR6Qk8r?=
- =?utf-8?B?QWdEcmcwNngyajBZc3k1ZVplcU1EQkxHQnBxU3Q3Y1Rna2VGT2NiS044dGQw?=
- =?utf-8?B?ZUFMUlA0SHBYWDNjMjhMeTZmQ3F6TC96RXA4aTByVWZKalJvSDFVeW1UaXhL?=
- =?utf-8?B?RnRsbXBxUlVyQUxCckJqN2FZeStSVHV3bEJCdjFhcVVySkRXMFdSZHRYUWlN?=
- =?utf-8?B?VUNHQXJkdHAyNG1mMk9GdUEwQnBkV1habTlmcTIrbDlhNU5aQWVjYXAyamhs?=
- =?utf-8?B?QlJXOW9HNUJBN1UyU2pDUDdoc1JGZnZnOUU5UmxGNnN1Rm5mVGtPYkthVFha?=
- =?utf-8?B?UmpCanFuaVFSa1JMSk0yU3dUWk15RnVhZXVGdU1aaFFTUGVqODB6OUVoMWNC?=
- =?utf-8?B?UDhRUURxYVgvNGVBMUVHbFBpS0ZxY1NzSnZWTHQ1clBITmxwU0xLT2Q4M0Rm?=
- =?utf-8?B?amREVnZPbk1wMk5pVklPUHJqRlNBUjFIMU5EZUU0ZWJVSzlhRzhUellOU2dP?=
- =?utf-8?B?ajlQSWJVMC8zdHh2R3RSOEREVG5JSkZRaVMzZTRSZXZwUnVBQmJ0dE1QeGIv?=
- =?utf-8?B?OVpNUzRidUp0c1F0OGNNZmVXdW9YNkhob3NaY3M1V0NBdkpOU2J3alpVUzUw?=
- =?utf-8?B?NTVHR0FteGwzZ2dQeUlacDBJcEp5cmhia3hpNi90dFg4My83dnpjajU3dlJ0?=
- =?utf-8?B?N2c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0115C26A0CF;
+	Tue, 18 Feb 2025 14:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.70
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739888774; cv=none; b=ARZMiHXy1fcGNbx3RrmzQmpWAocpurn6730ukN1Fv/+jlwj+h32TfulNHot46FBe0bd/U6CswkM7ifyPV5qP4n22IhnVZIXlfBs83WgAxq1aQX9QNf6+0z0ZACxPZgCfEx4WiwRblXBcUwpnOPHKAmjHqSbVLNHq0z3/2Kkkz9s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739888774; c=relaxed/simple;
+	bh=Mp8d6EpMBRloZvPuJiF6u2bGZ//0HJO6xupro/jSprM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kPT5r8E89tXaEN2C36tdtLAmwOxdHn85vtlMqqrY7gdk4sCBaH4i4vbqvSazYefbyhuifVDbgWQYxIOdXxMlkQJNrBFDuiYaKPPvPhovzxUlahv7G3Kdd9lvQxi6elAYnQIRVNxm2u0XHrcHjM/V5rC7NWB8nVxo0jdSQFQWWWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Lu2BCr7f; arc=none smtp.client-ip=193.252.22.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id kOXytQovqwhW2kOY3t9Tl3; Tue, 18 Feb 2025 15:26:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1739888769;
+	bh=FOM6aVLTCFQEhcAakTKCUK4aqN5niM+ARVw4hM5AxUE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=Lu2BCr7fJIuZOr77zdaf58BTviH5sweS4ZpReMKNTRPkmXsHzzmeR9rLc4eWkC1zG
+	 /PnLPl9yBgUbCSiNLnb8cmA074iI0qSIcJxw4PJugCFQtI8AYF1S2RZx81A/w9Hn8M
+	 L7mpQ/ixYp7nZ9kTxppR3t1G11kCevgapOv2lwb9nLn2iQs/pla93H+tEuN/hrx+A0
+	 qpV8I7fi1oDnCCEdHbNdhbd/f1C2pz3knB+MJs+pGqt2aBqa5bhyYhHzSE5uii6lW3
+	 V/XlR7HnJbpkNs+yQ73pl10f6lEhIuhCWtAGzxajx2RKbK4FweapZRbR54ebM8TsEw
+	 EF2zOZHKtEwnw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 18 Feb 2025 15:26:09 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <b174cc40-d08b-42a5-89fc-9fdac2b15ea9@wanadoo.fr>
+Date: Tue, 18 Feb 2025 23:26:01 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b85e676c-76c2-4f96-f448-08dd50120fd0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2025 11:47:46.1409
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bYWzw0uTrblFvqiRBoAqZDfang+/xYj1a2MfP9PXuF1amXYrKv2cBE7zTPiLx4jiTRzuz+gQUbN/ewdaJCq/ubtiRJFnPY3Av8Vx+41BMVI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB6141
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] can: ucan: Correct the size parameter
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Matt Jan <zoo868e@gmail.com>,
+ syzbot+d7d8c418e8317899e88c@syzkaller.appspotmail.com,
+ linux-kernel@vger.kernel.org, linux-can@vger.kernel.org
+References: <67b323a4.050a0220.173698.002b.GAE@google.com>
+ <20250217190404.354574-1-zoo868e@gmail.com>
+ <2f33170a-f7bb-47dd-8cb7-15c055dabc83@wanadoo.fr>
+ <20250218-accurate-viridian-manatee-6f2878-mkl@pengutronix.de>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250218-accurate-viridian-manatee-6f2878-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-SGkgTWFyYywNCg0KVGhhbmtzIGZvciB0aGUgZmVlZGJhY2suDQoNCj4gLS0tLS1PcmlnaW5hbCBN
-ZXNzYWdlLS0tLS0NCj4gRnJvbTogTWFyYyBLbGVpbmUtQnVkZGUgPG1rbEBwZW5ndXRyb25peC5k
-ZT4NCj4gU2VudDogMTggRmVicnVhcnkgMjAyNSAxMToxOQ0KPiBTdWJqZWN0OiBSZTogW1BBVENI
-IDAwLzExXSBBZGQgc3VwcG9ydCBmb3IgUlovRzNFIENBTkZEDQo+IA0KPiBPbiAxOC4wMi4yMDI1
-IDEwOjQ5OjUwLCBCaWp1IERhcyB3cm90ZToNCj4gPiBUaGUgQ0FOLUZEIG1vZHVsZSBvbiBSWi9H
-M0UgaXMgdmVyeSBzaW1pbGFyIHRvIHRoZSBvbmUgb24gYm90aCBSLUNhcg0KPiA+IFY0SCBhbmQg
-UlovRzJMLCBidXQgZGlmZmVycyBpbiBzb21lIGhhcmR3YXJlIHBhcmFtZXRlcnM6DQo+ID4gICog
-Tm8gZXh0ZXJuYWwgY2xvY2ssIGJ1dCBpbnN0ZWFkIGhhcyByYW0gY2xvY2suDQo+ID4gICogU3Vw
-cG9ydCB1cCB0byA2IGNoYW5uZWxzLg0KPiA+ICAqIDIwIGludGVycnVwdHMuDQo+ID4NCj4gPiBC
-aWp1IERhcyAoMTEpOg0KPiA+ICAgY2xrOiByZW5lc2FzOiByOWEwOWcwNDc6IEFkZCBDQU5GRCBj
-bG9jay9yZXNldA0KPiA+ICAgZHQtYmluZGluZ3M6IGNhbjogcmVuZXNhcyxyY2FyLWNhbmZkOiBG
-aXggdHlwbyBpbiBwYXR0ZXJuIHByb3BlcnRpZXMNCj4gPiAgICAgZm9yIFItQ2FyIFY0TQ0KPiA+
-ICAgZHQtYmluZGluZ3M6IGNhbjogcmVuZXNhcyxyY2FyLWNhbmZkOiBTaW1wbGlmeSB0aGUgY29u
-ZGl0aW9uYWwgc2NoZW1hDQo+ID4gICBkdC1iaW5kaW5nczogY2FuOiByZW5lc2FzLHJjYXItY2Fu
-ZmQ6IERvY3VtZW50IFJaL0czRSBzdXBwb3J0DQo+ID4gICBjYW46IHJjYXJfY2FuZmQ6IEZpeCBw
-YWdlIGVudHJpZXMgaW4gdGhlIEFGTCBsaXN0DQo+ID4gICBjYW46IHJjYXJfY2FuZmQ6IEFkZCBn
-ZW40X3R5cGUgdmFyaWFibGUgdG8gc3RydWN0IHJjYXJfY2FuZmRfaHdfaW5mbw0KPiA+ICAgY2Fu
-OiByY2FyX2NhbmZkOiBBZGQgb25seV9pbnRlcm5hbF9jbGtzIHZhcmlhYmxlIHRvIHN0cnVjdA0K
-PiA+ICAgICByY2FyX2NhbmZkX2h3X2luZm8NCj4gPiAgIGNhbjogcmNhcl9jYW5mZDogRW5oYW5j
-ZSBtdWx0aV9jaGFubmVsX2lycXMgaGFuZGxpbmcNCj4gPiAgIGNhbjogcmNhcl9jYW5mZDogQWRk
-IFJaL0czRSBzdXBwb3J0DQo+ID4gICBhcm02NDogZHRzOiByZW5lc2FzOiByOWEwOWcwNDc6IEFk
-ZCBDQU5GRCBub2RlDQo+ID4gICBhcm02NDogZHRzOiByZW5lc2FzOiByOWEwOWcwNDdlNTctc21h
-cmM6IEVuYWJsZSBDQU5GRA0KPiANCj4gUGxlYXNlIHNlbmQgdGhlIGR0cyBjaGFuZ2VzIGFzIGEg
-c2VwYXJhdGUgc2VyaWVzLCB0b28uIFRoZXkgd2lsbCBwcm9iYWJseSBnbyBtYWlubGluZSB2aWEg
-dGhlIHJlbmVzYXMNCj4gU29DIHRyZWUuDQoNCkFncmVlZC4gQ2xrLCBkdHMgYXMgc2VwYXJhdGUg
-c2VyaWVzLg0KDQpDaGVlcnMsDQpCaWp1DQo=
+On 18/02/2025 at 16:37, Marc Kleine-Budde wrote:
+> On 18.02.2025 11:22:11, Vincent Mailhol wrote:
+>> On 18/02/2025 at 04:04, Matt Jan wrote:
+>>> According to the comment, the size parameter is only required when
+>>> @dst is not an array, or when the copy needs to be smaller than
+>>> sizeof(@dst). Since the source is a `union ucan_ctl_payload`, the
+>>> correct size should be sizeof(union ucan_ctl_payload).
+>>
+>> While this fix is correct, I think that the root cause is that
+>> up->ctl_msg_buffer->raw is not NUL terminated.
+>>
+>> Because of that, a local copy was added, just to reintroduce the NUL
+>> terminating byte.
+>>
+>> I think it is better to just directly terminate up->ctl_msg_buffer->raw
+>> and get rid of the firmware_str local variable and the string copy.
+>>
+>> So, what about this:
+>>
+>> diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
+>> index 39a63b7313a4..268085453d24 100644
+>> --- a/drivers/net/can/usb/ucan.c
+>> +++ b/drivers/net/can/usb/ucan.c
+>> @@ -186,7 +186,7 @@ union ucan_ctl_payload {
+>>          */
+>>         struct ucan_ctl_cmd_get_protocol_version cmd_get_protocol_version;
+>>
+>> -       u8 raw[128];
+>> +       char fw_info[128];
+>>  } __packed;
+>>
+>>  enum {
+>> @@ -424,18 +424,19 @@ static int ucan_ctrl_command_out(struct ucan_priv *up,
+>>                                UCAN_USB_CTL_PIPE_TIMEOUT);
+>>  }
+>>
+>> -static int ucan_device_request_in(struct ucan_priv *up,
+>> -                                 u8 cmd, u16 subcmd, u16 datalen)
+>> +static void ucan_get_fw_info(struct ucan_priv *up, char *fw_info,
+>> size_t size)
+>>  {
+>> -       return usb_control_msg(up->udev,
+>> -                              usb_rcvctrlpipe(up->udev, 0),
+>> -                              cmd,
+>> -                              USB_DIR_IN | USB_TYPE_VENDOR |
+>> USB_RECIP_DEVICE,
+>> -                              subcmd,
+>> -                              0,
+>> -                              up->ctl_msg_buffer,
+>> -                              datalen,
+>> -                              UCAN_USB_CTL_PIPE_TIMEOUT);
+>> +       int ret;
+>> +
+>> +       ret = usb_control_msg(up->udev, usb_rcvctrlpipe(up->udev, 0),
+>> +                             UCAN_DEVICE_GET_FW_STRING,
+>> +                             USB_DIR_IN | USB_TYPE_VENDOR |
+>> USB_RECIP_DEVICE,
+>> +                             0, 0, fw_info, size - 1,
+>> +                             UCAN_USB_CTL_PIPE_TIMEOUT);
+>> +       if (ret > 0)
+>> +               fw_info[ret] = '\0';
+>> +       else
+>> +               strcpy(fw_info, "unknown");
+>>  }
+>>
+>>  /* Parse the device information structure reported by the device and
+>> @@ -1314,7 +1315,6 @@ static int ucan_probe(struct usb_interface *intf,
+>>         u8 in_ep_addr;
+>>         u8 out_ep_addr;
+>>         union ucan_ctl_payload *ctl_msg_buffer;
+>> -       char firmware_str[sizeof(union ucan_ctl_payload) + 1];
+>>
+>>         udev = interface_to_usbdev(intf);
+>>
+>> @@ -1527,17 +1527,6 @@ static int ucan_probe(struct usb_interface *intf,
+>>          */
+>>         ucan_parse_device_info(up, &ctl_msg_buffer->cmd_get_device_info);
+>>
+>> -       /* just print some device information - if available */
+>> -       ret = ucan_device_request_in(up, UCAN_DEVICE_GET_FW_STRING, 0,
+>> -                                    sizeof(union ucan_ctl_payload));
+>> -       if (ret > 0) {
+>> -               /* copy string while ensuring zero termination */
+>> -               strscpy(firmware_str, up->ctl_msg_buffer->raw,
+>> -                       sizeof(union ucan_ctl_payload) + 1);
+>> -       } else {
+>> -               strcpy(firmware_str, "unknown");
+>> -       }
+>> -
+>>         /* device is compatible, reset it */
+>>         ret = ucan_ctrl_command_out(up, UCAN_COMMAND_RESET, 0, 0);
+>>         if (ret < 0)
+>> @@ -1555,7 +1544,10 @@ static int ucan_probe(struct usb_interface *intf,
+>>
+>>         /* initialisation complete, log device info */
+>>         netdev_info(up->netdev, "registered device\n");
+>> -       netdev_info(up->netdev, "firmware string: %s\n", firmware_str);
+>> +       ucan_get_fw_info(up, up->ctl_msg_buffer->fw_info,
+>> +                        sizeof(up->ctl_msg_buffer->fw_info));
+>> +       netdev_info(up->netdev, "firmware string: %s\n",
+>> +                   up->ctl_msg_buffer->fw_info);
+> 
+> We could also use the:
+> 
+>     printf("%.*s", sizeof(up->ctl_msg_buffer->fw_info), up->ctl_msg_buffer->fw_info);
+> 
+> format string trick to only print a limited number of chars of the given
+> string.
+
+Indeed. But after the renaming of ucan_device_request_in() into
+ucan_get_fw_info(), it makes slightly more sense to me to have this new
+function to handle the string NUL termination logic rather than to
+deffer it to the format string.
+
+But thanks for the suggestion.
+
+> But I'm also fine with your solution. Either way, please send a
+> proper patch :)
+
+Will do so right now!
+
+
+Yours sincerely,
+Vincent Mailhol
+
 
