@@ -1,31 +1,30 @@
-Return-Path: <linux-can+bounces-2854-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2855-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB854A3BC4E
-	for <lists+linux-can@lfdr.de>; Wed, 19 Feb 2025 12:01:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3837A3BC8E
+	for <lists+linux-can@lfdr.de>; Wed, 19 Feb 2025 12:17:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B67661887031
-	for <lists+linux-can@lfdr.de>; Wed, 19 Feb 2025 11:00:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7E15177532
+	for <lists+linux-can@lfdr.de>; Wed, 19 Feb 2025 11:15:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3A5B286291;
-	Wed, 19 Feb 2025 11:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45E4F1A5BA4;
+	Wed, 19 Feb 2025 11:15:54 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692C823DE
-	for <linux-can@vger.kernel.org>; Wed, 19 Feb 2025 11:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2C71B982E
+	for <linux-can@vger.kernel.org>; Wed, 19 Feb 2025 11:15:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739962833; cv=none; b=NotTgGOjwjlDgdGy226EPc56hB10h5hJ0SmWsBDncBlZgMeO6OWorjFje1eNqIgRMWdxXC2r7Upga1ausJ1gaAaDeOucBwBV/S4lFEYk8KZ8fgKcBzPRK9ePbys715fMAL9QZDB0J31oxt3p2UzENTWBiZ3e8f7KHQQ3ry3FUqg=
+	t=1739963754; cv=none; b=I6F+n4R1n3Xs2AVNnnhiqs6qYP5fzXGY/Cnr8kim7Br66zaeMbuFzX5mAYH2u3Rr9TjlanVYPzYY2AvRWSrJLj4iwCDTMqrQSELHU9z78gkRoopC4tlOlbhndPTA9fzsG3zcftCl02DMoOaBwcbfLIDBSetIACFxiXwtonkicAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739962833; c=relaxed/simple;
-	bh=MG3xGBAkVKmKkqiO52O8AdqSHtZcQiyeNK+723bu6Vs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mJVxj5eL4esbnNg/Askm78VP2+KO8himiNWElqtoGjLqHhaw0fv0EuThR/RyXuQhbVngS7MWol126igU2yw6pDiKgjCuLrIk2D50kO4WgEuruGFdhQGxcwtTtmSCmAHKAQVDRWUi68btn9ahiqUnJTSEGnStEXV3zwvyc+lL/C0=
+	s=arc-20240116; t=1739963754; c=relaxed/simple;
+	bh=bOVVUhjugw19Gfrb/l/6mPgJ8c9PnJ9LTdeHOKfiSvk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hl3BUXcuBCmCoX+xtgcFw/yQmzh6Dv+VMgKMkCheO0X+oFuHYiGAwbYuw6jNzlefFtyIXLhYdUDrFQjhxgfiBS/GNHfQOp6gzqK5/B5jJBsOjVfNT4PJvrtOYQoNsgjIClVvTvn8U1+OR91kWu7qTcIx8QzTNaFe/UQWp3Z3pik=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,102 +32,107 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tkhoS-0004su-Oc; Wed, 19 Feb 2025 12:00:20 +0100
+	id 1tki3S-0007ih-ON
+	for linux-can@vger.kernel.org; Wed, 19 Feb 2025 12:15:50 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tkhoR-001kbf-2H;
-	Wed, 19 Feb 2025 12:00:19 +0100
-Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
+	id 1tki3S-001kvJ-1o
+	for linux-can@vger.kernel.org;
+	Wed, 19 Feb 2025 12:15:50 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 409AB3C68B8
+	for <linux-can@vger.kernel.org>; Wed, 19 Feb 2025 11:15:50 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 5272A3C6891;
-	Wed, 19 Feb 2025 11:00:19 +0000 (UTC)
-Date: Wed, 19 Feb 2025 12:00:17 +0100
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 8761B3C68B1;
+	Wed, 19 Feb 2025 11:15:48 +0000 (UTC)
+Received: from [172.20.34.65] (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 6b31c62b;
+	Wed, 19 Feb 2025 11:15:47 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dimitri Fedrau <dima.fedrau@gmail.com>
-Cc: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-Subject: Re: [PATCH 2/2] can: flexcan: add transceiver capabilities
-Message-ID: <20250219-xanthic-elephant-of-jest-9b5720-mkl@pengutronix.de>
-References: <20250211-flexcan-add-transceiver-caps-v1-0-c6abb7817b0f@liebherr.com>
- <20250211-flexcan-add-transceiver-caps-v1-2-c6abb7817b0f@liebherr.com>
- <20250219-garnet-gorilla-of-will-6e389e-mkl@pengutronix.de>
- <20250219103955.GB3888@debian>
+Date: Wed, 19 Feb 2025 12:15:43 +0100
+Subject: [PATCH] can: rockchip_canfd: rkcanfd_chip_fifo_setup(): remove
+ duplicated setup of RX FIFO
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l2mzcqrvw6yumylm"
-Content-Disposition: inline
-In-Reply-To: <20250219103955.GB3888@debian>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250219-rk3568-canfd-v1-1-453869358c72@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAF69tWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDI0NL3aJsY1MzC93kxLy0FN1EgzTLZEMDY3NTw1QloJaCotS0zAqwcdG
+ xtbUAoxA+Ql4AAAA=
+X-Change-ID: 20250219-rk3568-canfd-a0f9c103751e
+To: kernel@pengutronix.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ Heiko Stuebner <heiko@sntech.de>
+Cc: linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Robin van der Gracht <robin@protonic.nl>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15-dev-42535
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1388; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=0jv/61mY47TiBPd7dSSwJFiyxZt74jw07+buK5Y0ayc=;
+ b=owEBbQGS/pANAwAKAQx0Zd/5kJGcAcsmYgBntb1hbnXZkPMz9MY3Cfse6k0cP85QCzJJp31vP
+ upyoPxOHZOJATMEAAEKAB0WIQSf+wzYr2eoX/wVbPMMdGXf+ZCRnAUCZ7W9YQAKCRAMdGXf+ZCR
+ nDx2B/wMkgexjMLtIBIpBULLQeVoO4zztTTxqk7ktd02LkxjPIUwI38QEVc3Vz6jtzX3glN8l5L
+ pJz15GesciFTiuy1BokVMkOHy0Lb7psPmunMBM/MdUSMMRVSh1Nu/Yt653ADtd5mkMi2WrsxndT
+ 3TCUtUbeHBSeiMwzcs82KOIMnxM06R035C6mOl7B2rL+k2qya2j44KHM9RxOiF4gkla0EeB/MIw
+ CygC8fSuYPNLojiahS8Ql9FOEiUlluPhEFivU4g8UBmiEDnXNSyFC77J+PDWUKahmw3RrguWKt5
+ 5CervoNvuD7w/YeofUArG6ySVl8qwad6AeaB/RnWVt8QusTt
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+From: Robin van der Gracht <robin@protonic.nl>
 
---l2mzcqrvw6yumylm
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 2/2] can: flexcan: add transceiver capabilities
-MIME-Version: 1.0
+The rockchip_canfd driver doesn't make use of the TXE FIFO.
 
-On 19.02.2025 11:39:55, Dimitri Fedrau wrote:
-> > > diff --git a/drivers/net/can/flexcan/flexcan.h b/drivers/net/can/flex=
-can/flexcan.h
-> > > index 4933d8c7439e62b5d6fcc445d88c2b5ccbfa13bb..56be40875eee24aee9297=
-c4bc7c2fc4380e682ff 100644
-> > > --- a/drivers/net/can/flexcan/flexcan.h
-> > > +++ b/drivers/net/can/flexcan/flexcan.h
-> > > @@ -103,6 +103,7 @@ struct flexcan_priv {
-> > >  	struct clk *clk_per;
-> > >  	struct flexcan_devtype_data devtype_data;
-> > >  	struct regulator *reg_xceiver;
-> > > +	struct phy *xceiver;
-> >=20
-> > All other drivers name this variable "transceiver", does it make sense
-> > to use this name here, too?
-> >=20
-> I have no preference on this, but my intention was to name it xceiver
-> according to reg_xceiver, so people familiar with the code would know
-> what it is about. I can change it to transceiver, what do you think ?
+Although the comment states that the TXE FIFO is setup, it's actually
+a setup of the RX FIFO. The regular setup of the RX FIFO follows.
 
-Please use transceiver.
+Remove the duplicated setup of the RX FIFO.
 
-regards,
-Marc
+Fixes: ff60bfbaf67f ("can: rockchip_canfd: add driver for Rockchip CAN-FD controller")
+Signed-off-by: Robin van der Gracht <robin@protonic.nl>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/rockchip/rockchip_canfd-core.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+diff --git a/drivers/net/can/rockchip/rockchip_canfd-core.c b/drivers/net/can/rockchip/rockchip_canfd-core.c
+index d9a937ba126c..46201c126703 100644
+--- a/drivers/net/can/rockchip/rockchip_canfd-core.c
++++ b/drivers/net/can/rockchip/rockchip_canfd-core.c
+@@ -236,11 +236,6 @@ static void rkcanfd_chip_fifo_setup(struct rkcanfd_priv *priv)
+ {
+ 	u32 reg;
+ 
+-	/* TXE FIFO */
+-	reg = rkcanfd_read(priv, RKCANFD_REG_RX_FIFO_CTRL);
+-	reg |= RKCANFD_REG_RX_FIFO_CTRL_RX_FIFO_ENABLE;
+-	rkcanfd_write(priv, RKCANFD_REG_RX_FIFO_CTRL, reg);
+-
+ 	/* RX FIFO */
+ 	reg = rkcanfd_read(priv, RKCANFD_REG_RX_FIFO_CTRL);
+ 	reg |= RKCANFD_REG_RX_FIFO_CTRL_RX_FIFO_ENABLE;
 
---l2mzcqrvw6yumylm
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+base-commit: aefd232de5eb2e77e3fc58c56486c7fe7426a228
+change-id: 20250219-rk3568-canfd-a0f9c103751e
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-- 
+Marc Kleine-Budde <mkl@pengutronix.de>
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAme1ub4ACgkQDHRl3/mQ
-kZzwZwf/V0UbOs2j2oZzUGx3EQAySIQ843epnVc8qB11S6fhhnBq+2/cCc3ABqpO
-QkZ4w0HomALIB2wT9Weqiv2QhbgzlN+jJK+C9gjTm8hEK91v28uzR7JcO+Zod7eO
-/eDYaHx5UrGooB2f5MH4mwWwH6W3kDYoFerMhM9rwcgDLJ8BByBdi5aKgnzCb5wU
-Sn1L5eD02YQEb42iOIVdmJxnGhWQKC3jCM25Lo4PNVP+iRtol2uMqXLYJrZFle0t
-XUO3QL/Qv9g2q7amwHfgQewjbWc8ZgOZ4Lpni5trJUIiqOrQzSF0b1tVIqV6Ahjk
-yxxexAh0DUC6cwIjOlheDS8Cw967og==
-=81Ih
------END PGP SIGNATURE-----
 
---l2mzcqrvw6yumylm--
 
