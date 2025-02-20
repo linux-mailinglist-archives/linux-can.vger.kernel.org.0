@@ -1,39 +1,39 @@
-Return-Path: <linux-can+bounces-2897-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2898-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40710A3DAC6
-	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 14:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43182A3DAC8
+	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 14:06:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B293179889
-	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 13:04:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00182179A72
+	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 13:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5BC61F7076;
-	Thu, 20 Feb 2025 13:04:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 045B41F76B9;
+	Thu, 20 Feb 2025 13:04:49 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1747D1F63E8;
-	Thu, 20 Feb 2025 13:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD3781F76B5;
+	Thu, 20 Feb 2025 13:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740056684; cv=none; b=eAtem/jNq2GzwQ1WpMWQwB/MJQmSuPQwL2PBrHKLcQrjEwVpoOYEG+japynUO46M11ObgCo8VTT64jbGEdVbvRWmaQaBnNw/c57WcwuZmdnS0kQoLMFSryTri7OxSaff2ZmyGWA2ctP2A2iAvglO4kJGG3Bw3NFWSmlXzKeB+rE=
+	t=1740056688; cv=none; b=UWCbYnD1keghIAzQqGaVJTIeEKQCJbeGsV1ZzQVfUaotyESSoVWxpvcZK1rkFQGt9Lt/cwa1wHyiLXLjKuRistxjmcaaK+auaCkxknwkejhNz179hdk2eYkzCKPjYWVdUyb+vDyb6+koabLA2DtmgzIWVLtXn3MfVSAhXDyj+Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740056684; c=relaxed/simple;
-	bh=QnNGMwHBs7bPPDzaJS7jitHji+MEZ8dHSZ7c6QuO+q0=;
+	s=arc-20240116; t=1740056688; c=relaxed/simple;
+	bh=MJDckZ0T+HwzpSqe4utVaHsghh+7mIeyiZRErV9rYdI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Kwx/I6j8kdDS25Pnd1r9p3GVEGLApjsOwXlKJ760E984UkjBAS+JTCN7Iv7jtTeo7pi/OKnZ8T44hWwt07jKOzGZiScNSNd4RanIhclpx0JcmMoKmxVdpuwKwpQgy/AXM02PkDC9+OEijOl3YQ+Ma+WP69PoYgRCqqpov/AVcvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+	 MIME-Version; b=VIACfwb53fqyJYDov4G3L3aFBSTsgs3oDWEUQ/nqtgwn17ezl7zZguNyu/coaAtY+Fnxy3syYUrzssIwGrVxpzFt/w+dDf0/OIDxKDGLK9HhwgCnNO5U6Oz9/RLHOUcrE2c857P82Sb21+jAjAPQa4ZF1ttK3F1lwoBxDW/ZwQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: mZYL3PD4REqa9MO4SLsmfA==
-X-CSE-MsgGUID: By8a1dv5RQmrChPs5u5XgQ==
+X-CSE-ConnectionGUID: aUXqi2ZZQay0RlVTPlzRMA==
+X-CSE-MsgGUID: IC36kelaTqSMmuPFBUDFLA==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 20 Feb 2025 22:04:40 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 20 Feb 2025 22:04:45 +0900
 Received: from localhost.localdomain (unknown [10.226.92.83])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id C632F42B36D8;
-	Thu, 20 Feb 2025 22:04:35 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 089B042B36D6;
+	Thu, 20 Feb 2025 22:04:40 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -51,9 +51,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	linux-renesas-soc@vger.kernel.org,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v2 1/7] dt-bindings: can: renesas,rcar-canfd: Simplify the conditional schema
-Date: Thu, 20 Feb 2025 13:04:17 +0000
-Message-ID: <20250220130427.217342-2-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v2 2/7] dt-bindings: can: renesas,rcar-canfd: Document RZ/G3E support
+Date: Thu, 20 Feb 2025 13:04:18 +0000
+Message-ID: <20250220130427.217342-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250220130427.217342-1-biju.das.jz@bp.renesas.com>
 References: <20250220130427.217342-1-biju.das.jz@bp.renesas.com>
@@ -65,183 +65,141 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RZ/G3E SoC has 20 interrupts, 2 resets and 6 channels that need more
-branching with conditional schema. Simplify the conditional schema with
-if statements rather than the complex if-else statements to prepare for
-supporting RZ/G3E SoC.
+Document support for the CAN-FD Interface on the RZ/G3E (R9A09G047) SoC,
+which supports up to six channels.
+
+The CAN-FD module on RZ/G3E is very similar to the one on both R-Car V4H
+and RZ/G2L, but differs in some hardware parameters:
+ * No external clock, but instead has ram clock.
+ * Support up to 6 channels.
+ * 20 interrupts.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
-This patch depend upon [1]
-[1] https://lore.kernel.org/all/20250220094516.126598-2-biju.das.jz@bp.renesas.com/
 v1->v2:
- * No change
+ * No change.
 ---
- .../bindings/net/can/renesas,rcar-canfd.yaml  | 123 ++++++++++++------
- 1 file changed, 80 insertions(+), 43 deletions(-)
+ .../bindings/net/can/renesas,rcar-canfd.yaml  | 67 +++++++++++++++++--
+ 1 file changed, 62 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-index f6884f6e59e7..f87f90f431e5 100644
+index f87f90f431e5..189d5303ad75 100644
 --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
 +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-@@ -45,7 +45,35 @@ properties:
+@@ -42,6 +42,8 @@ properties:
+               - renesas,r9a07g054-canfd    # RZ/V2L
+           - const: renesas,rzg2l-canfd     # RZ/G2L family
+ 
++      - const: renesas,r9a09g047-canfd     # RZ/G3E
++
    reg:
      maxItems: 1
  
--  interrupts: true
-+  interrupts:
-+    oneOf:
-+      - items:
-+          - description: Channel interrupt
-+          - description: Global interrupt
-+      - items:
-+          - description: CAN global error interrupt
-+          - description: CAN receive FIFO interrupt
-+          - description: CAN0 error interrupt
-+          - description: CAN0 transmit interrupt
-+          - description: CAN0 transmit/receive FIFO receive completion interrupt
-+          - description: CAN1 error interrupt
-+          - description: CAN1 transmit interrupt
-+          - description: CAN1 transmit/receive FIFO receive completion interrupt
-+
-+  interrupt-names:
-+    oneOf:
-+      - items:
-+          - const: ch_int
-+          - const: g_int
-+      - items:
-+          - const: g_err
-+          - const: g_recc
-+          - const: ch0_err
-+          - const: ch0_rec
-+          - const: ch0_trx
-+          - const: ch1_err
-+          - const: ch1_rec
-+          - const: ch1_trx
+@@ -59,6 +61,19 @@ properties:
+           - description: CAN1 error interrupt
+           - description: CAN1 transmit interrupt
+           - description: CAN1 transmit/receive FIFO receive completion interrupt
++          - description: CAN2 error interrupt
++          - description: CAN2 transmit interrupt
++          - description: CAN2 transmit/receive FIFO receive completion interrupt
++          - description: CAN3 error interrupt
++          - description: CAN3 transmit interrupt
++          - description: CAN3 transmit/receive FIFO receive completion interrupt
++          - description: CAN4 error interrupt
++          - description: CAN4 transmit interrupt
++          - description: CAN4 transmit/receive FIFO receive completion interrupt
++          - description: CAN5 error interrupt
++          - description: CAN5 transmit interrupt
++          - description: CAN5 transmit/receive FIFO receive completion interrupt
++        minItems: 8
+ 
+   interrupt-names:
+     oneOf:
+@@ -74,15 +89,33 @@ properties:
+           - const: ch1_err
+           - const: ch1_rec
+           - const: ch1_trx
++          - const: ch2_err
++          - const: ch2_rec
++          - const: ch2_trx
++          - const: ch3_err
++          - const: ch3_rec
++          - const: ch3_trx
++          - const: ch4_err
++          - const: ch4_rec
++          - const: ch4_trx
++          - const: ch5_err
++          - const: ch5_rec
++          - const: ch5_trx
++        minItems: 8
  
    clocks:
      maxItems: 3
-@@ -117,52 +145,71 @@ allOf:
+ 
+   clock-names:
+-    items:
+-      - const: fck
+-      - const: canfd
+-      - const: can_clk
++    oneOf:
++      - items:
++          - const: fck
++          - const: canfd
++          - const: can_clk
++      - items:
++          - const: fck
++          - const: ram_clk
++          - const: can_clk
+ 
+   power-domains:
+     maxItems: 1
+@@ -173,7 +206,9 @@ allOf:
+       properties:
+         compatible:
+           contains:
+-            const: renesas,rzg2l-canfd
++            enum:
++              - renesas,r9a09g047-canfd
++              - renesas,rzg2l-canfd
      then:
        properties:
-         interrupts:
--          items:
--            - description: CAN global error interrupt
--            - description: CAN receive FIFO interrupt
--            - description: CAN0 error interrupt
--            - description: CAN0 transmit interrupt
--            - description: CAN0 transmit/receive FIFO receive completion interrupt
--            - description: CAN1 error interrupt
--            - description: CAN1 transmit interrupt
--            - description: CAN1 transmit/receive FIFO receive completion interrupt
-+          minItems: 8
-+          maxItems: 8
- 
-         interrupt-names:
--          items:
--            - const: g_err
--            - const: g_recc
--            - const: ch0_err
--            - const: ch0_rec
--            - const: ch0_trx
--            - const: ch1_err
--            - const: ch1_rec
--            - const: ch1_trx
-+          minItems: 8
-+          maxItems: 8
+         resets:
+@@ -187,6 +222,19 @@ allOf:
+       required:
+         - reset-names
  
 +  - if:
 +      properties:
 +        compatible:
 +          contains:
-+            enum:
-+              - renesas,rcar-gen3-canfd
-+              - renesas,rcar-gen4-canfd
++            const: renesas,r9a09g047-canfd
 +    then:
 +      properties:
 +        interrupts:
-+          minItems: 2
-+          maxItems: 2
++          maxItems: 20
 +
 +        interrupt-names:
-+          minItems: 2
-+          maxItems: 2
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,rzg2l-canfd
-+    then:
-+      properties:
-         resets:
-+          minItems: 2
-           maxItems: 2
- 
-         reset-names:
--          items:
--            - const: rstp_n
--            - const: rstc_n
-+          minItems: 2
-+          maxItems: 2
- 
-       required:
-         - reset-names
--    else:
--      properties:
--        interrupts:
--          items:
--            - description: Channel interrupt
--            - description: Global interrupt
--
--        interrupt-names:
--          items:
--            - const: ch_int
--            - const: g_int
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,rcar-gen3-canfd
-+              - renesas,rcar-gen4-canfd
-+    then:
-+      properties:
-         resets:
-           maxItems: 1
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,rcar-gen3-canfd
-+              - renesas,rzg2l-canfd
-+    then:
-+      patternProperties:
-+        "^channel[2-7]$": false
++          maxItems: 20
 +
    - if:
        properties:
          compatible:
-@@ -171,16 +218,6 @@ allOf:
-     then:
+@@ -219,6 +267,15 @@ allOf:
        patternProperties:
          "^channel[4-7]$": false
--    else:
--      if:
--        not:
--          properties:
--            compatible:
--              contains:
--                const: renesas,rcar-gen4-canfd
--      then:
--        patternProperties:
--          "^channel[2-7]$": false
  
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: renesas,r9a09g047-canfd
++    then:
++      patternProperties:
++        "^channel[6-7]$": false
++
  unevaluatedProperties: false
  
+ examples:
 -- 
 2.43.0
 
