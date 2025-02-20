@@ -1,117 +1,121 @@
-Return-Path: <linux-can+bounces-2904-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2905-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB346A3DB16
-	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 14:17:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E309A3DF91
+	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 16:58:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FDC7189B6E4
-	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 13:17:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D23B916B255
+	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 15:57:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E1791A8F6D;
-	Thu, 20 Feb 2025 13:17:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759F01FF1AD;
+	Thu, 20 Feb 2025 15:56:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uc5iwXNz"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09EB71F4262;
-	Thu, 20 Feb 2025 13:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B4F8F5B;
+	Thu, 20 Feb 2025 15:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740057465; cv=none; b=WrPAbHVEw8VKxHBz/oEintKV038myk7Q0K2rupJgN+i5z9+00OQnylYBcrBz9Ed4cfg6mirEpicX0rVnaWtVio0RWfbXKmjI1EiyW/2IScFmeBxb+Dmn2amSKUeKcoC3d7P8mLnrIEIqpwpIYfZSPqb4p39oPh6l/ym/ARDzUkU=
+	t=1740067009; cv=none; b=A52ewjvE0IMJ72az5pSbGY6L7pj8TiasMZRgpMwUEVv+yKRdvQfEh1cA2ytU3oAFhiiwfy0v2GNFmIVRzxEvoemY4t+H/gtI2DPYpyHOu5YJdt6+nFlE2ezGOV068aTexCgCp/qldo6tfHQj8+tlJpp+f7SWLGPiJi4ULulHu2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740057465; c=relaxed/simple;
-	bh=OS3z7ALxQoHDxz9A3w1QKV5MAs2PgxcM+RGJ8dziU/Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IjWFrcJqDlchNyVMb5mYh5MX/8ODtD0Rq9d2YSvOFOEwfR+GPxEk14elEcaV7J5+94/7lK95KNmdQdiRbUnBGzqo/QLtuC4xZn6vKX/6DevBshcnC2BjV6w6mDkzrigFcF54Ibe139+uSvfgh6+MZsK5M0ShRRV0nN4+pFPUgEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1740067009; c=relaxed/simple;
+	bh=nffl1SGgb9k0XBd8LUDc+D1JLkHpjuO5YPcb5/zg9yg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j2WhqGFNafoz6mI6ItXESX71Z1utftdqlemfVwd7N/0kU3mYuuXe1LOD94BkUf6RAeO/Lgs9uV7euic/yroOxkuKBAPmLsxjaQWWPLbyD+48AyhSPdDVPFubKHDqRou6xCDmxH6Xd6CZu8osbf/Mopk6nUzMP03ORizoFTEsfIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uc5iwXNz; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-868e5684712so229093241.3;
-        Thu, 20 Feb 2025 05:17:42 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e04064af07so351149a12.0;
+        Thu, 20 Feb 2025 07:56:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740067006; x=1740671806; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GsbE5OioLs2uyCIYYbmafxzSYqPUZVYTy2gzhJIQqy0=;
+        b=Uc5iwXNz2VoZ+RZnHH7Fc8l3u7B3agQeHeYPsFkbM1cKVEbVQrIkqmODbGIuy1oaQR
+         2RwC3yiTOWf1J/K0JEhTE1ESa/jisDXwxY+s1OKeTsCLGi2XXu7dxFdAKXb/ShffFFv0
+         azuu+kzxjXXFF766LEB97qZ8eerhD90oFgZ/AdyvgkRGadoEBGGJJWb2Gvi0bNfd68i0
+         uy0lwFKzepMYUwZc5zG/dze0u7t2hCd8/wykyZNx/Wczr1QrhHKdbwMVywkXXd9wF47h
+         WUrgj4TaukX0oop6/XKyzUNINibxH87DV1q2owbfs2NOob8608IAyzd/KM0vy+1bYR7v
+         0U8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740057460; x=1740662260;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZTEqKWnqcKbGV39w4JvnHryZ4PrkgUOhPB4n5Z8x7hk=;
-        b=aPm2qTZu+XoG6mRZpE8a9vz5V6CPmGMsujEoORLDyh0pPUjkRdVFBgcgrLsMJsl+Jm
-         GR9WrWzaF0BpiYzXTicgHyIgxF8SX2EppgUXyuBn8kvNde4FsLLcdESEGiMjEN0QKUVA
-         Y2F7hXifKl8rw5/JwyyXVAfodmHzKz/2gbJLq8cVQj9LbOWxCjF8YwZxfjhVu1vPBo1J
-         zswACxiQLmUjvE1ajEnOVlgJA4F9DBktPO+ZHq2qpdrhYO7CkXOE1rQa8AGcdErXCfR5
-         VB42GcpVIwV2vrw6fkk96hpWef/RYRu2M3ZJN7TV6oG51IhUPwgeUJmH2DuHayLrJdH1
-         c4bg==
-X-Forwarded-Encrypted: i=1; AJvYcCVsBWHKp2hMVQOZThTR96Dz4ZMzikrB+ybv3jsm1hZeIv1x5yJMx27o7ZimcHFY8hWBY173ibDTr88nNrDy54LDM6w=@vger.kernel.org, AJvYcCWnD1kIvo5bVYnefO7GK+RTRQdAvQ2S+heM5xvVnnuog9ntZkXP8qgBUF/ey50zkfD8pMQt7QgJdGo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzonxdRKmBjrjHGv1/oT4MdvGs2DZPLg+uy399zAoeaWLCrvaww
-	POwIMiDDMp+qf4YH8wyqnm5LSEoADaFe66sGAWcMJIavg8OD4XQzN4ZWagGO
-X-Gm-Gg: ASbGncuURP9zGTv/WDDxFRT1QvtMuJ33gGY9qQld65ga1GKUm1lNQB6EQgDT4igLjRD
-	A3hYYVbg08jFjuEyN30m1tPUwiyPodS3Pw5SlCGqsx4t8LPyob8ls7/aItkdZUFwXJTuaAEaimk
-	OLxIbel3gravMCfYUQDCzjNJBNAOwFIiB2NRHtlJ93rxQjtWvLK2nFKZ/ap3sMQWSCDtGaV5NkS
-	v3tj1CiG3KKoC++oCS3lXlaNouC2uziEGx/73EmPGxBtaiNnKbZtanbg6vn1BZvZ8Jz0d4BwjPH
-	KNDcdQb9lF8SE6nfvDEn+vGCJZXYf29JraBB5w9M8lgid6grKrRo7A==
-X-Google-Smtp-Source: AGHT+IEx6vhhbEeToZvHi/bYBGBzZAszDFqphIkbpJa5ZjRlhKgAQNxsnpxjSCrxt99tTRZMcu+UaA==
-X-Received: by 2002:a05:6122:3d10:b0:51f:4154:c1b2 with SMTP id 71dfb90a1353d-5209da3cd8fmr12194773e0c.2.1740057460074;
-        Thu, 20 Feb 2025 05:17:40 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-52098c98d26sm3121371e0c.8.2025.02.20.05.17.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Feb 2025 05:17:39 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-8694ffca83eso147131241.1;
-        Thu, 20 Feb 2025 05:17:39 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUAB2pgs57ZtSZZRDwjcWW+NvHCpDCs/ENPOz11NktyrG6dYc5BOG7lgl/6mQkg0JvIbD526abK+9w=@vger.kernel.org, AJvYcCVZRztIN0zhNWq8iPtetCigu9F0kgqi8ylyDVvXpvCpsb9AjrxM3ibBg0G29JS38Wy9lwG/zLfzW3vqyvum790brpY=@vger.kernel.org
-X-Received: by 2002:a05:6122:658b:b0:520:420a:a07a with SMTP id
- 71dfb90a1353d-5209dde2362mr10745473e0c.8.1740057458950; Thu, 20 Feb 2025
- 05:17:38 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740067006; x=1740671806;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GsbE5OioLs2uyCIYYbmafxzSYqPUZVYTy2gzhJIQqy0=;
+        b=gwo7fRxQjGvShJMW6/mo0T2dmgSQfnCsH9dghpa9DRDn8GrcNrk4O5/Y9EKzJrZjBr
+         maGc83t8+pBAX2M+3veLFTwcTh2gpI7QQ9CPZ+QOETASkcM5OwkIeNorwu6zQk5o1xpu
+         X6OxZr4svr0h7dIBywO6zYCg9XRb2S148TZoZNvRqD62vSut5Yv2QMjNlOai6RK40S2u
+         wXaA71bUb1Ol/4A0m9U0amuubefZpurkmp1TzYnWjhce6rogqULQ/HXu4TXHpuz/HDPK
+         ZFPTvjfJcAuFh0yzADo0fpLbNYz3Bozo7V88RiHASU08XaoHMluS+SWVQIW1tPJwqmLv
+         W80Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUAT7ldHsgGvpiinpUfCoa5XHpRyrRFIIVMQw5iYXS1j4ot8lZzvpV5hNSnBK7QpvI0mkwgt5l88YEO@vger.kernel.org, AJvYcCULyXqkgAnzqZKLDK+jH6PPXKz1ETFB1QedUIEMzyVe2pV/jc46zdejzEpJNu56o9wSBypE5sJuT79zn8M8@vger.kernel.org, AJvYcCWel0txuIpg4suINM+wmPWQBaOCpCBGPNul616ifffYzf2Zlolr3sGi5begTx86fpNWqGFWjLgPkjF3@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCI2u3IqoXXKpGMxPpuopL0sQcp5AX8jnq/uRicsNsV2zc7+E5
+	Im7xoa0Vc31oXrjK1jaiqsgUBRll6+Kq/MMpQtSB0QvzuZ5vmWiqyo4+0A==
+X-Gm-Gg: ASbGncuz8oqX8NkMiP3d9Zk7gU1f0KppjPbDzvnFGqLYdpOVCy+W4K9/a3eCphsvgKG
+	/1n4sKHeIfsHgkAV3y1+H5CQWj8Nl4l+iTJzSUoHnUhGHtmSBGIpd+1WjpeDzQlOnK1iC8dsZWm
+	khY2soP9TASxntUBMjEut3rID6VzlyJBYNiyTcpHmR2HVHh0Kqn0ALaTT5L4pTjTRlKk/7raqtF
+	pkuxM2HhMeWerAf7/lDAvxmZ0tVJDrd9Gj3PC62n93aKvtkL4a1eIMNCstuA6mlAZ9mqCY/hMFZ
+	sAQI3eilz8M0
+X-Google-Smtp-Source: AGHT+IGIujcWQDxo5qV8UJ8g4ZyLG5Wa9jYKSb9r73rJ517jMf8TRzcFwudi44KSrQwdSdCPdZ92FQ==
+X-Received: by 2002:a05:6402:5306:b0:5dc:c3c2:225e with SMTP id 4fb4d7f45d1cf-5e03607063fmr19939243a12.8.1740067005059;
+        Thu, 20 Feb 2025 07:56:45 -0800 (PST)
+Received: from debian ([2a00:79c0:604:ea00:45fb:7d1a:5e4d:9727])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece270affsm12053072a12.54.2025.02.20.07.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Feb 2025 07:56:44 -0800 (PST)
+Date: Thu, 20 Feb 2025 16:56:42 +0100
+From: Dimitri Fedrau <dima.fedrau@gmail.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	Dimitri Fedrau <dimitri.fedrau@liebherr.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: can: fsl,flexcan: add transceiver
+ capabilities
+Message-ID: <20250220155642.GA43726@debian>
+References: <20250220-flexcan-add-transceiver-caps-v2-0-a81970f11846@liebherr.com>
+ <20250220-flexcan-add-transceiver-caps-v2-1-a81970f11846@liebherr.com>
+ <20250220-tasteful-loud-firefly-1e2438-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250220130427.217342-1-biju.das.jz@bp.renesas.com> <20250220130427.217342-4-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20250220130427.217342-4-biju.das.jz@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 20 Feb 2025 14:17:27 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXWfszP40uT-RxLzDMFY7O=Crm0O0b+kT9xADpJC_2LRw@mail.gmail.com>
-X-Gm-Features: AWEUYZn4GideiSNlnQthZAAA8c7UEy81sj5Um119YC_tj9IGa-qzxtReamtZ2FY
-Message-ID: <CAMuHMdXWfszP40uT-RxLzDMFY7O=Crm0O0b+kT9xADpJC_2LRw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] can: rcar_canfd: Use of_get_available_child_by_name()
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	Rob Herring <robh@kernel.org>, Ulrich Hecht <ulrich.hecht+renesas@gmail.com>, 
-	linux-can@vger.kernel.org, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250220-tasteful-loud-firefly-1e2438-mkl@pengutronix.de>
 
-On Thu, 20 Feb 2025 at 14:04, Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> Simplify rcar_canfd_probe() using of_get_available_child_by_name().
+Am Thu, Feb 20, 2025 at 09:44:50AM +0100 schrieb Marc Kleine-Budde:
+> On 20.02.2025 09:22:10, Dimitri Fedrau via B4 Relay wrote:
+> > From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+> > 
+> > Currently the flexcan driver does only support adding PHYs by using the
+> > "old" regulator bindings. Add support for CAN transceivers as a PHY.
+> > 
+> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> > Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+> 
+> Is it possible express in the biding that we either want to have
+> xceiver-supply or phys?
 >
-> While at it, move of_node_put(child) inside the if block to avoid
-> additional check if of_child is NULL.
->
-> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v2:
->  * Added to this series as dependency patch hit on can-next.
->  * Added Rb tag from Vincent Mailhol
->  * Dropped redundant comment from commit description.
+I didn't found anything to express that in the binding.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Best regards,
+Dimitri Fedrau
 
-Gr{oetje,eeting}s,
+[...]
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
