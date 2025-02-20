@@ -1,137 +1,130 @@
-Return-Path: <linux-can+bounces-2907-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2908-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38A2CA3DFDC
-	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 17:08:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7846A3E239
+	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 18:22:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76B9D700ED0
-	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 16:03:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4383C16F821
+	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 17:20:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05FB020C038;
-	Thu, 20 Feb 2025 16:03:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0433320DD47;
+	Thu, 20 Feb 2025 17:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V48dg0Ro"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BD4209F3F
-	for <linux-can@vger.kernel.org>; Thu, 20 Feb 2025 16:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5CF1FECD1;
+	Thu, 20 Feb 2025 17:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740067391; cv=none; b=Ma+ZoY7RVMqu8lQN74Rx4zrk1WOLRXpgkzNNlU0hx02mUQi/m/nwKAX73lPP01RXJ8V3g3XpJYDxKBK2Yt1fMEB8K1BgX9M5pNo8yCEmOaax3xZ4JGIJzM7Wole6Y1eV6kCftSZ5gjKIFC2CH8oJDm18tElXxe7m2Nz1S5dW05g=
+	t=1740072039; cv=none; b=rM7BAosNVfd4DDj/gRodPCay6Fn55cS5yJCwnm733h8WfMbCT6tm0xQhZbO2Or/018wvMOyCLX0+PL8Yrz9xe5c3YdfVAFf09kJo78kw71p4yIyzWFWVJTAaa8QM9xP/dqaplCDCPSwf06JNZuAXNBNQ0mv7GQ5k5bX4Nor3714=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740067391; c=relaxed/simple;
-	bh=opYWkCgMY/n5TWw5aaKOamNRs/af6edaq76M7S/EAAQ=;
+	s=arc-20240116; t=1740072039; c=relaxed/simple;
+	bh=Hu1WTAfqe+K8mtqQXODfypOXtNqLo8VKfdA62K3E6Jo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uwwEcz8glRFHHcTlVaj5WCehGI2XeKYx4wETLJOcWRCEknWb7tZBuQuqk+D1NzTDcBEI02HMG7SieHz1qkUBe+NdfJW1BZBgKW6PiIrwqwK8GhKYON1fFTs2BGJcxFjUS1vHMq8SCM/5i6EwQW+L7pAz9vqHwJE67M44qtgDfWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tl90s-0006xE-H0; Thu, 20 Feb 2025 17:02:58 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tl90r-001xiI-1Y;
-	Thu, 20 Feb 2025 17:02:57 +0100
-Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 1B1183C7C3A;
-	Thu, 20 Feb 2025 16:02:57 +0000 (UTC)
-Date: Thu, 20 Feb 2025 17:02:56 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dimitri Fedrau <dima.fedrau@gmail.com>
-Cc: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	Dimitri Fedrau <dimitri.fedrau@liebherr.com>, Conor Dooley <conor.dooley@microchip.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=j+gLzeb5WBatOKX8aBS6HQdK2IqWSxTPSprWoqm6RENHN9LO9LiPzmiALOmDontDZ5faD0d5gLf99mMHkES8foapr4jXtl2HFxO8gNQ4FraRlmNfOnZOfnncGZCzlTHxlruTDCoqwrPdav9v3m6vlR5FQXKnxvnK0UW+UWp/E4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V48dg0Ro; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62945C4CED1;
+	Thu, 20 Feb 2025 17:20:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740072039;
+	bh=Hu1WTAfqe+K8mtqQXODfypOXtNqLo8VKfdA62K3E6Jo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V48dg0RoRUN6ItMpHAomEWvzy7LCNB16MvbcB3yO8qei7e0TU8wMFwJTPYb/VsmxR
+	 YznzFN2hyHtMkOv/KBFyFFvYkpCeyPtbBaN+mkU9vS4jb6PvV+UWM7waQL2VfoUo9J
+	 +HDxcPhFqIUbWlHqJThGXpqU51bSKDTgN2mDT+ZSBWx+NtJLUZeFZGxsaQvP67ETG3
+	 h9VtqEX9FycYDcR4NWW0LNjSW1ZfHxCuNxSUBYxIwczx1oQCU+alH1IeQjLpE9Ku0J
+	 C83KM5q1+Ep5V74SENppQ1ge1clkV3+QIxLFib6Nx4mbks5yK2pmMwOw+X8C4BUUWl
+	 4W4UKo20naVEA==
+Date: Thu, 20 Feb 2025 17:20:35 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Dimitri Fedrau <dima.fedrau@gmail.com>,
+	Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	Dimitri Fedrau <dimitri.fedrau@liebherr.com>,
+	Conor Dooley <conor.dooley@microchip.com>
 Subject: Re: [PATCH v2 1/2] dt-bindings: can: fsl,flexcan: add transceiver
  capabilities
-Message-ID: <20250220-intelligent-serious-badger-978793-mkl@pengutronix.de>
+Message-ID: <20250220-underfed-taekwondo-22c1d4f4eea9@spud>
 References: <20250220-flexcan-add-transceiver-caps-v2-0-a81970f11846@liebherr.com>
  <20250220-flexcan-add-transceiver-caps-v2-1-a81970f11846@liebherr.com>
  <20250220-tasteful-loud-firefly-1e2438-mkl@pengutronix.de>
  <20250220155642.GA43726@debian>
+ <20250220-intelligent-serious-badger-978793-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wqtouqubhi2si6xv"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="cvX9SZ/wFqhw/Mos"
 Content-Disposition: inline
-In-Reply-To: <20250220155642.GA43726@debian>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20250220-intelligent-serious-badger-978793-mkl@pengutronix.de>
 
 
---wqtouqubhi2si6xv
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
+--cvX9SZ/wFqhw/Mos
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 1/2] dt-bindings: can: fsl,flexcan: add transceiver
- capabilities
-MIME-Version: 1.0
 
-On 20.02.2025 16:56:42, Dimitri Fedrau wrote:
-> Am Thu, Feb 20, 2025 at 09:44:50AM +0100 schrieb Marc Kleine-Budde:
-> > On 20.02.2025 09:22:10, Dimitri Fedrau via B4 Relay wrote:
-> > > From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+On Thu, Feb 20, 2025 at 05:02:56PM +0100, Marc Kleine-Budde wrote:
+> On 20.02.2025 16:56:42, Dimitri Fedrau wrote:
+> > Am Thu, Feb 20, 2025 at 09:44:50AM +0100 schrieb Marc Kleine-Budde:
+> > > On 20.02.2025 09:22:10, Dimitri Fedrau via B4 Relay wrote:
+> > > > From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+> > > >=20
+> > > > Currently the flexcan driver does only support adding PHYs by using=
+ the
+> > > > "old" regulator bindings. Add support for CAN transceivers as a PHY.
+> > > >=20
+> > > > Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> > > > Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
 > > >=20
-> > > Currently the flexcan driver does only support adding PHYs by using t=
-he
-> > > "old" regulator bindings. Add support for CAN transceivers as a PHY.
-> > >=20
-> > > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> > > Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-> >=20
-> > Is it possible express in the biding that we either want to have
-> > xceiver-supply or phys?
-> >
-> I didn't found anything to express that in the binding.
+> > > Is it possible express in the biding that we either want to have
+> > > xceiver-supply or phys?
+> > >
+> > I didn't found anything to express that in the binding.
+>=20
+> What about something like this:
+>=20
+> | dependencies:
+> |   prop-a: ["!prop-b"]
+> |   prop-b: ["!prop-a"]
 
-What about something like this:
+  # the internal reference buffer always requires high-z mode
+  - if:
+      required:
+        - refin-supply
+    then:
+      properties:
+        adi,no-ref-high-z: false
 
-| dependencies:
-|   prop-a: ["!prop-b"]
-|   prop-b: ["!prop-a"]
+Do it like so ;)
 
-regards,
-Marc
+Cheers,
+Conor.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---wqtouqubhi2si6xv
+--cvX9SZ/wFqhw/Mos
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAme3Ui0ACgkQDHRl3/mQ
-kZw6hAf+PRw5IO6COXcoXq45opFTd4+0MQHbBDiyNS98oJ28tCbY5TWgGqTKngQm
-V3hjrxZCmkTWluJJPbL8GtbizZyzM6bLVIKAHgy53+9ybJCNyewkZwv543XeZxQC
-VtOcY1bdazB+ewfxb3rYwPiiwrZ7w01CjPF9YFwBJDSdz51bDgCE7q9xnfX7XZc5
-wg9XUsucf7QkOH5UwrjeUes7aTlQxWUr6wgP1BorlS6HjSNV4eQ1UHKElqcrTW7p
-6CNPFtR2Aoon4belSVEOIM5cZ4duJTMuH4oyY1s4KI3HsArs8n0MfFGWBy3nLtFE
-BOiJ3AAKGhK/hOJepNLmMVMWwMGU0A==
-=CGvy
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ7dkYwAKCRB4tDGHoIJi
+0sOqAQChswDW5EztBIATr02uhJsvr3xn+8xab4wiA4bMf6Q9aQEAhXf6L4AA8aOv
+abXs1cmkgb+Qd63fLNDXupY9Ymvq/QM=
+=BfK4
 -----END PGP SIGNATURE-----
 
---wqtouqubhi2si6xv--
+--cvX9SZ/wFqhw/Mos--
 
