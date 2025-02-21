@@ -1,130 +1,136 @@
-Return-Path: <linux-can+bounces-2908-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2909-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7846A3E239
-	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 18:22:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85D4EA3EB43
+	for <lists+linux-can@lfdr.de>; Fri, 21 Feb 2025 04:25:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4383C16F821
-	for <lists+linux-can@lfdr.de>; Thu, 20 Feb 2025 17:20:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4AFE3AED3C
+	for <lists+linux-can@lfdr.de>; Fri, 21 Feb 2025 03:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0433320DD47;
-	Thu, 20 Feb 2025 17:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C97161F869E;
+	Fri, 21 Feb 2025 03:25:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V48dg0Ro"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="AdVglnvK"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5CF1FECD1;
-	Thu, 20 Feb 2025 17:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A601F5839;
+	Fri, 21 Feb 2025 03:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740072039; cv=none; b=rM7BAosNVfd4DDj/gRodPCay6Fn55cS5yJCwnm733h8WfMbCT6tm0xQhZbO2Or/018wvMOyCLX0+PL8Yrz9xe5c3YdfVAFf09kJo78kw71p4yIyzWFWVJTAaa8QM9xP/dqaplCDCPSwf06JNZuAXNBNQ0mv7GQ5k5bX4Nor3714=
+	t=1740108313; cv=none; b=MrYPk47om16/Gv9vaNQfX7o/FejHNTIkVdG4X0/GJfYpqNzSs7evzWtbOvW95DXvanUjxuz31TPma1Er+3a7NdqoJcqaS6Pc11aCqStMdtYKi001TYATvDFglVOCBX2IPFoCcGJv+ANE8XSegyHi2uHdfgCrmZkBKEChZLqkTvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740072039; c=relaxed/simple;
-	bh=Hu1WTAfqe+K8mtqQXODfypOXtNqLo8VKfdA62K3E6Jo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j+gLzeb5WBatOKX8aBS6HQdK2IqWSxTPSprWoqm6RENHN9LO9LiPzmiALOmDontDZ5faD0d5gLf99mMHkES8foapr4jXtl2HFxO8gNQ4FraRlmNfOnZOfnncGZCzlTHxlruTDCoqwrPdav9v3m6vlR5FQXKnxvnK0UW+UWp/E4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V48dg0Ro; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62945C4CED1;
-	Thu, 20 Feb 2025 17:20:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740072039;
-	bh=Hu1WTAfqe+K8mtqQXODfypOXtNqLo8VKfdA62K3E6Jo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V48dg0RoRUN6ItMpHAomEWvzy7LCNB16MvbcB3yO8qei7e0TU8wMFwJTPYb/VsmxR
-	 YznzFN2hyHtMkOv/KBFyFFvYkpCeyPtbBaN+mkU9vS4jb6PvV+UWM7waQL2VfoUo9J
-	 +HDxcPhFqIUbWlHqJThGXpqU51bSKDTgN2mDT+ZSBWx+NtJLUZeFZGxsaQvP67ETG3
-	 h9VtqEX9FycYDcR4NWW0LNjSW1ZfHxCuNxSUBYxIwczx1oQCU+alH1IeQjLpE9Ku0J
-	 C83KM5q1+Ep5V74SENppQ1ge1clkV3+QIxLFib6Nx4mbks5yK2pmMwOw+X8C4BUUWl
-	 4W4UKo20naVEA==
-Date: Thu, 20 Feb 2025 17:20:35 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Dimitri Fedrau <dima.fedrau@gmail.com>,
-	Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Dimitri Fedrau <dimitri.fedrau@liebherr.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: can: fsl,flexcan: add transceiver
- capabilities
-Message-ID: <20250220-underfed-taekwondo-22c1d4f4eea9@spud>
-References: <20250220-flexcan-add-transceiver-caps-v2-0-a81970f11846@liebherr.com>
- <20250220-flexcan-add-transceiver-caps-v2-1-a81970f11846@liebherr.com>
- <20250220-tasteful-loud-firefly-1e2438-mkl@pengutronix.de>
- <20250220155642.GA43726@debian>
- <20250220-intelligent-serious-badger-978793-mkl@pengutronix.de>
+	s=arc-20240116; t=1740108313; c=relaxed/simple;
+	bh=80AdJ7ZcONXQAx9BgLf5F2RhrRhVoagkS64xbotAsp4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fBOoR4o98hxQoEUUC/VqN+udBYoMRF9oW7kv2W2D8XZE6tN8uFEacxB9yZaS66F72IPkh17FuVaq1mWy6Kggce1fMOuAFi5NmPIRE/ZxGqb5JzUYr9W1kfvPSx0yXpTcomungU2VSHoRqH3KV+PBRKuZ6mgf1P79oUsXfaDc+Hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=AdVglnvK; arc=none smtp.client-ip=99.78.197.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1740108312; x=1771644312;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=98eKIkOj5zDaaN0aeg/8QMarn/Dvke+2ZuIrd8oeP2I=;
+  b=AdVglnvK8TbVyXlEPRf84DUIqPCl0WrQk0NbkqBxgJh5ko65IBfPz26X
+   Y0pwlJ092oQArq8RmWNbgs/Zs0DHRN8mCdfg+Ys8H09+JiwwZl1whA7xT
+   Lp3jQP+wSg9h7EA1E89dmAYVdTN7QVpX6W2mwhSfrt4xbzl4/gPAoZo0j
+   E=;
+X-IronPort-AV: E=Sophos;i="6.13,303,1732579200"; 
+   d="scan'208";a="171680556"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 03:25:09 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [10.0.7.35:29611]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.34.181:2525] with esmtp (Farcaster)
+ id 878d6712-a911-4454-a3d1-f12dc573cc97; Fri, 21 Feb 2025 03:25:09 +0000 (UTC)
+X-Farcaster-Flow-ID: 878d6712-a911-4454-a3d1-f12dc573cc97
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
+ Fri, 21 Feb 2025 03:25:04 +0000
+Received: from 6c7e67bfbae3.amazon.com (10.135.209.63) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Fri, 21 Feb 2025 03:24:58 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <shaw.leon@gmail.com>
+CC: <alex.aring@gmail.com>, <andrew+netdev@lunn.ch>,
+	<b.a.t.m.a.n@lists.open-mesh.org>, <bpf@vger.kernel.org>,
+	<bridge@lists.linux.dev>, <davem@davemloft.net>, <donald.hunter@gmail.com>,
+	<dsahern@kernel.org>, <edumazet@google.com>, <herbert@gondor.apana.org.au>,
+	<horms@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+	<linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-ppp@vger.kernel.org>,
+	<linux-rdma@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
+	<linux-wpan@vger.kernel.org>, <miquel.raynal@bootlin.com>,
+	<netdev@vger.kernel.org>, <osmocom-net-gprs@lists.osmocom.org>,
+	<pabeni@redhat.com>, <shuah@kernel.org>, <stefan@datenfreihafen.org>,
+	<steffen.klassert@secunet.com>, <wireguard@lists.zx2c4.com>
+Subject: Re: [PATCH net-next v10 02/13] rtnetlink: Pack newlink() params into struct
+Date: Thu, 20 Feb 2025 19:24:49 -0800
+Message-ID: <20250221032449.73597-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250219125039.18024-3-shaw.leon@gmail.com>
+References: <20250219125039.18024-3-shaw.leon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="cvX9SZ/wFqhw/Mos"
-Content-Disposition: inline
-In-Reply-To: <20250220-intelligent-serious-badger-978793-mkl@pengutronix.de>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D033UWC004.ant.amazon.com (10.13.139.225) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
+From: Xiao Liang <shaw.leon@gmail.com>
+Date: Wed, 19 Feb 2025 20:50:28 +0800
+> There are 4 net namespaces involved when creating links:
+> 
+>  - source netns - where the netlink socket resides,
+>  - target netns - where to put the device being created,
+>  - link netns - netns associated with the device (backend),
+>  - peer netns - netns of peer device.
+> 
+> Currently, two nets are passed to newlink() callback - "src_net"
+> parameter and "dev_net" (implicitly in net_device). They are set as
+> follows, depending on netlink attributes in the request.
+> 
+>  +------------+-------------------+---------+---------+
+>  | peer netns | IFLA_LINK_NETNSID | src_net | dev_net |
+>  +------------+-------------------+---------+---------+
+>  |            | absent            | source  | target  |
+>  | absent     +-------------------+---------+---------+
+>  |            | present           | link    | link    |
+>  +------------+-------------------+---------+---------+
+>  |            | absent            | peer    | target  |
+>  | present    +-------------------+---------+---------+
+>  |            | present           | peer    | link    |
+>  +------------+-------------------+---------+---------+
+> 
+> When IFLA_LINK_NETNSID is present, the device is created in link netns
+> first and then moved to target netns. This has some side effects,
+> including extra ifindex allocation, ifname validation and link events.
+> These could be avoided if we create it in target netns from
+> the beginning.
+> 
+> On the other hand, the meaning of src_net parameter is ambiguous. It
+> varies depending on how parameters are passed. It is the effective
+> link (or peer netns) by design, but some drivers ignore it and use
+> dev_net instead.
+> 
+> To provide more netns context for drivers, this patch packs existing
+> newlink() parameters, along with the source netns, link netns and peer
+> netns, into a struct. The old "src_net" is renamed to "net" to avoid
+> confusion with real source netns, and will be deprecated later. The use
+> of src_net are converted to params->net trivially.
+> 
+> Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
 
---cvX9SZ/wFqhw/Mos
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Feb 20, 2025 at 05:02:56PM +0100, Marc Kleine-Budde wrote:
-> On 20.02.2025 16:56:42, Dimitri Fedrau wrote:
-> > Am Thu, Feb 20, 2025 at 09:44:50AM +0100 schrieb Marc Kleine-Budde:
-> > > On 20.02.2025 09:22:10, Dimitri Fedrau via B4 Relay wrote:
-> > > > From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-> > > >=20
-> > > > Currently the flexcan driver does only support adding PHYs by using=
- the
-> > > > "old" regulator bindings. Add support for CAN transceivers as a PHY.
-> > > >=20
-> > > > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> > > > Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-> > >=20
-> > > Is it possible express in the biding that we either want to have
-> > > xceiver-supply or phys?
-> > >
-> > I didn't found anything to express that in the binding.
->=20
-> What about something like this:
->=20
-> | dependencies:
-> |   prop-a: ["!prop-b"]
-> |   prop-b: ["!prop-a"]
-
-  # the internal reference buffer always requires high-z mode
-  - if:
-      required:
-        - refin-supply
-    then:
-      properties:
-        adi,no-ref-high-z: false
-
-Do it like so ;)
-
-Cheers,
-Conor.
-
---cvX9SZ/wFqhw/Mos
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ7dkYwAKCRB4tDGHoIJi
-0sOqAQChswDW5EztBIATr02uhJsvr3xn+8xab4wiA4bMf6Q9aQEAhXf6L4AA8aOv
-abXs1cmkgb+Qd63fLNDXupY9Ymvq/QM=
-=BfK4
------END PGP SIGNATURE-----
-
---cvX9SZ/wFqhw/Mos--
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 
