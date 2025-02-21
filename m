@@ -1,138 +1,123 @@
-Return-Path: <linux-can+bounces-2917-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2919-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEF90A3ED5B
-	for <lists+linux-can@lfdr.de>; Fri, 21 Feb 2025 08:35:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 833DAA3ED76
+	for <lists+linux-can@lfdr.de>; Fri, 21 Feb 2025 08:41:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 501AD3BA0A0
-	for <lists+linux-can@lfdr.de>; Fri, 21 Feb 2025 07:35:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3FBF19C2E00
+	for <lists+linux-can@lfdr.de>; Fri, 21 Feb 2025 07:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2EAB1FF7B4;
-	Fri, 21 Feb 2025 07:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321781FFC4C;
+	Fri, 21 Feb 2025 07:41:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6JpJ457"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AdCo/KrS"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064691E47C2;
-	Fri, 21 Feb 2025 07:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7961FF7B4;
+	Fri, 21 Feb 2025 07:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740123307; cv=none; b=b6QpijdsajTn9HX83LQdDAsHeLBroWxbK0IwPFO7d4Lbzkuu2SVO4Gd5nUa/2p0I1hyexcKj0nzgZ6F0EkwPEneS6NYWjNT+hUrtLKMN4IDdVMjHOvwOVBQW5XC4quSvWluRDvSxzFCeXneQR16ep/wPF9ZMom8MlzSpwhG8lSo=
+	t=1740123680; cv=none; b=sfXyG8gOndPNrRjOt7LRtnbWjp3E4978L/Oaa09ElYwmkdwaT4SjV2xTSjcQwQ5E6j/GPc39Vfx+wUk7IstxilnGcMlzCGh5kpBlSyEqc7Bu6btV0p16iRNKgtugkvs78IeDlEEq/To76KJ7N/Uyk3fcoFRKRAE+/dcVrjmSqr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740123307; c=relaxed/simple;
-	bh=T1VOQiQtQXiQ9wkvgL+WC9xJqcl7iT4O6gvw688nMkU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=udBIafiy8mpy5ULEuGxuht3LzdHn/7U6dr10U7rsu06kkFkWs9QeGu+s7yZwCLUKxxWdtRkZE+/WVXBx694fxSMk5sAl+JdeP6KthDalOmq+H8ndYPI1+vZtyEiZgzDbsJ1SShVlIgDbbURH7UuhVVm/bhvVVNTxCJDxPafEQ/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U6JpJ457; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-38f2b7ce319so1464011f8f.2;
-        Thu, 20 Feb 2025 23:35:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740123304; x=1740728104; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z+QeLQVPsYwD13WdLTO9iwIZOqXlzHUuuYA44GHEnsU=;
-        b=U6JpJ457jP2izXV8r/eMuvXycpbgUpO7ekUzuySgQ/mxiwuQADcgrrGQ24uLCn3zLv
-         yZYPnrzne7VNjkMkUwRtTh5pfnISomK95JFYM3us61r7XNqNzo3QJV39bJSQjJ2ppSeY
-         zyWFUmS8XpsLxbrYFfKk92rRcrj5cxbhnwaR01Qmo9WVq6cG3KboI9EHo4pkMrOLEdT1
-         IuHawhQKlwB0U1ah4y7L0PjiN9S8bef5ZwgoMI+IIfe6kDX0YH4wLR8BTCr2L9S7hz6g
-         gQQ7wNtEdGvxkwvuk7xiRwFFUteObuw/hSuAl+ZzcXsEabp4D3wNdhDARer7tt7AzU/h
-         SxWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740123304; x=1740728104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z+QeLQVPsYwD13WdLTO9iwIZOqXlzHUuuYA44GHEnsU=;
-        b=XmxsRYtWEC496Z7ZsXLaLpC/H5vEKVpw+Zq2Klmy+tP6bgsC2h6biVOLP6qWVMlFbF
-         kmRodck5JG679E9Mgx7ospyvlShrPfywJeyGiZ9PE4BqJ+Gc2QfCKHW4kxJCxHC0ko6I
-         IuIl0raCi1mel8PGkgvu9Pvb50lGpebRN4f29wNkXhgnndDen0lwldd/vWe15CbgvQHD
-         EhQsR3j5NyoO+KmKxadyC/3RGZB0wki6BNhZ+mKDULcYhDi2Et+gKk/0d6pmR7mjIm7Q
-         tf4RK11qCL4HxCPzwhOBsKhuPqJE2a1U1sWSiidz5FbdU4D0CmDgudANR67eeOb2m3Np
-         HbnA==
-X-Forwarded-Encrypted: i=1; AJvYcCU9P+XNvRzAvk1jFKczjlrFOkuagMQSeJmIF4BaOxm/Di53yfkwD1/W3cqycDtlmfuRF1QrWzfLX5vpQQ==@vger.kernel.org, AJvYcCULxHTsdTum9DUSghT+QNq82RmXpLIzEsBr1cMF5YioE/Heyq4kdQ5m1bR3CY4YPU418yyf4GsSHLHkCQ==@vger.kernel.org, AJvYcCUi/6+SSFnRDyxgrsE/+yPkfZm0GbMRQ1jXT9yb9imSidW+SKSOB6pfwiHXtxrkNtGqNvVPOOm6t8RlinTz4EE=@vger.kernel.org, AJvYcCVBkCunSMgHIAazgRoWurTNMJKG7WlUl3cImzlc90uNCUjhjc1bcvxV+a/SMtSzsclMIzv+cTev58bIDJ+5@vger.kernel.org, AJvYcCVmC/0jWlNj1U+vrvhHC39R0O95XIqzIEWHW0gUaUfDBvqC3zMSwsgXoIS/4sGqStuG6HFzZftsXxbe@vger.kernel.org, AJvYcCWXnVF9jHY0+KAU1zucfOJCd1lgmy36OZlUHtvsoJdwSLsxnKU778KwplDU4Ry3t6+grBkdFvqK9ZfX/hhGQ5F5@vger.kernel.org, AJvYcCX+GU5TA1jp7gAx6VQCazY9fzPjT0cseS9eMoL9UrZZ3P9gMOi3D6R2AFdGmnDnSPN1vHA4eUls@vger.kernel.org, AJvYcCXXZdkX6yCGLQJ6v12VcINeYXBhLErs4peKZ9aBYGYIcKgqN5WhYY+UXNKspL4g44O83K0=@vger.kernel.org, AJvYcCXbSLj2op01AnruCL4TDWcyVqbiOn3XtxyS+qeumcp91VtzZoiA6/Aj4dmPr75rMCeeFKlUUSCQk9yX@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOysp3c2b71HetMD2mwvwOLmw3YMNU7cu3Dej2JbN7xDoS2JcO
-	zashF8skDnQcwKD53cl8Fv+EBMoAYBrd5veQCWwTL/ptJosdwEDcn0LEOUDNBEVVXMtheJJg0mJ
-	YjUePpKlJFXebC/PEhc4H2Frg3ZI=
-X-Gm-Gg: ASbGnctrC+gmKyKMoxLzbnq4IEI0b9IvQCjViA/mdnJdyXoP3ebwrtP14Jos1jJqtA9
-	2NPemW/bmeIFpgx+lJlePZ/e5ki5yLw7tSwyk00WZBG6ANKLixpEB80LCfQBNy1Q+Kg9RTE9O75
-	DX6mDvwg==
-X-Google-Smtp-Source: AGHT+IEnf7T/XWdU9Kctt2h3J5gBBMYg3Bh51JvuIgDPQVVK7cGhz8HpBuMv8GGd62Uk1SqkypkvwsyahBFfgLBFMsQ=
-X-Received: by 2002:a05:6000:4026:b0:38f:2856:7d9a with SMTP id
- ffacd0b85a97d-38f6e7563cfmr1756891f8f.3.1740123304054; Thu, 20 Feb 2025
- 23:35:04 -0800 (PST)
+	s=arc-20240116; t=1740123680; c=relaxed/simple;
+	bh=6jSgqIeR0c/xLJD5vzRfWmph7ikgHRiGHWzqjbobJj8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fiDkjdqZIh+1u8mC7bB5C928C0oj7rGrU/3r6XK4vgqRP5m7rLfsUcM9rp1GoRjZejSE/phCuJBQzpJR4OITAD4ZMNk1Iv0M5hps+8VbX3wdOvsW1x8FOhDSiAOPuezW5CeHENXm0hwQoJM7VxDYeheIAClCLKAlSgCgUWo7ovU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AdCo/KrS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 627CCC4CEEE;
+	Fri, 21 Feb 2025 07:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740123679;
+	bh=6jSgqIeR0c/xLJD5vzRfWmph7ikgHRiGHWzqjbobJj8=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=AdCo/KrSd8m0YzM6OiLc2zfbZPj8+j1QzOqb6SzR0w+LtLIb4o/jKxXtM4IL38HiM
+	 KZV9m67HHs/qICmcoxcKUZ5eLePbwfWPx6iur4F+I6fhaqdf+19ip+Y88rtudoQuPT
+	 pbNfUwul5J6pVlzh57NCM5Ut0uYKOTQI66p9vxaF97vAGV8YjpLzL+sd2ipdFl0/E+
+	 r0yPAxx3UN3kIVjcB4D8PVT4jKvLfO26nNGwmB9iIa0mgYaV8nnKY+68r/3m+LcVCp
+	 WPpbEjBdPZ0RgoAGvczPetbijxYsk8zbYcT6fLzO8YEZ6ogK/8Zyl3ArR4KcNNep+A
+	 3q4R6SFe2ASVA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FA4DC021AA;
+	Fri, 21 Feb 2025 07:41:19 +0000 (UTC)
+From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
+Subject: [PATCH v3 0/2] can: flexcan: add transceiver capabilities
+Date: Fri, 21 Feb 2025 08:40:03 +0100
+Message-Id: <20250221-flexcan-add-transceiver-caps-v3-0-a947bde55a62@liebherr.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250219125039.18024-8-shaw.leon@gmail.com> <20250221040641.77646-1-kuniyu@amazon.com>
-In-Reply-To: <20250221040641.77646-1-kuniyu@amazon.com>
-From: Xiao Liang <shaw.leon@gmail.com>
-Date: Fri, 21 Feb 2025 15:34:27 +0800
-X-Gm-Features: AWEUYZnNy9JuajIA_7tDw52YSOa4CSIEVEzv6mMTGyYFjN7-s6b2UXlhoSAg5e4
-Message-ID: <CABAhCOS3BC+spLNrb_P8Ovzo18BwHU6UEc6Aq80_YKUoc8rfMQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v10 07/13] net: ipv6: Init tunnel link-netns
- before registering dev
-To: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: alex.aring@gmail.com, andrew+netdev@lunn.ch, 
-	b.a.t.m.a.n@lists.open-mesh.org, bpf@vger.kernel.org, bridge@lists.linux.dev, 
-	davem@davemloft.net, donald.hunter@gmail.com, dsahern@kernel.org, 
-	edumazet@google.com, herbert@gondor.apana.org.au, horms@kernel.org, 
-	kuba@kernel.org, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-ppp@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-wpan@vger.kernel.org, miquel.raynal@bootlin.com, netdev@vger.kernel.org, 
-	osmocom-net-gprs@lists.osmocom.org, pabeni@redhat.com, shuah@kernel.org, 
-	stefan@datenfreihafen.org, steffen.klassert@secunet.com, 
-	wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANMtuGcC/4XNsQ6CMBSF4Vchna25tyKlTr6HcWjLrTRBIC1pM
+ IR3tzAZBx3/M3xnYZGCp8guxcICJR/90Oc4HQpmW90/iPsmNxMgShSguOtotrrnumn4FHQfLfl
+ EgVs9Ri6tc6oEsEpULBNjIOfnnb/dc7c+TkN47W8Jt3WDzyAQf8MJOXBbaWNkjdKAu3aeTEshH
+ O3wZJudxIcn4I8nsqdrVBIcYl1WX966rm9se3khGwEAAA==
+X-Change-ID: 20241209-flexcan-add-transceiver-caps-7cff9400c926
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, Dimitri Fedrau <dimitri.fedrau@liebherr.com>, 
+ Dimitri Fedrau <dima.fedrau@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740123678; l=1632;
+ i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
+ bh=6jSgqIeR0c/xLJD5vzRfWmph7ikgHRiGHWzqjbobJj8=;
+ b=qzOLZ9cXPue92g9sUo39JYmSXkvp/5FgZFy5Bg7sW9iFjdTL/jxrICP0c9+q6ELMqGf/NRiN/
+ Arkr4WgzQ13DhEhAcn1wLfwyxXewGGr2uB1vNwBBrSbGbyzR/1xJHud
+X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
+ pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
+X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
+ with auth_id=290
+X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Reply-To: dimitri.fedrau@liebherr.com
 
-On Fri, Feb 21, 2025 at 12:07=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.c=
-om> wrote:
->
-> From: Xiao Liang <shaw.leon@gmail.com>
-> Date: Wed, 19 Feb 2025 20:50:33 +0800
-> > Currently some IPv6 tunnel drivers set tnl->net to dev_net(dev) in
-> > ndo_init(), which is called in register_netdevice(). However, it lacks
-> > the context of link-netns when we enable cross-net tunnels at device
-> > registration time.
-> >
-> > Let's move the init of tunnel link-netns before register_netdevice().
-> >
-> > ip6_gre has already initialized netns, so just remove the redundant
-> > assignment.
-> >
-> > Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
->
-> Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
->
-> left a small comment, but not a blocker.
->
->
-> > @@ -1565,6 +1565,7 @@ static int ipip6_newlink(struct net_device *dev,
-> >       int err;
-> >
-> >       nt =3D netdev_priv(dev);
-> > +     nt->net =3D net;
->
-> This hunk is not necessary as we'll call ipip6_tunnel_locate(),
-> but it's harmless and not worth reposting the whole series given
-> we are alredy in v10.  You can just post a follow-up patch after
-> the series is applied.
+Currently the flexcan driver does only support adding PHYs by using the
+"old" regulator bindings. Add support for CAN transceivers as a PHY. Add
+the capability to ensure that the PHY is in operational state when the link
+is set to an "up" state.
 
-Seems ipip6_tunnel_locate() only sets netns for newly created
-devices (for ioctl). ipip6_newlink() is calling it to check for
-conflicts, so we might need this line.
+Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+---
+Changes in v3:
+- Have xceiver-supply or phys properties in bindings
+- Switch do dev_err_probe in flexcan_probe when checking error of call
+  devm_phy_optional_get
+- Link to v2: https://lore.kernel.org/r/20250220-flexcan-add-transceiver-caps-v2-0-a81970f11846@liebherr.com
 
-Thanks for your review!
+Changes in v2:
+- Rename variable xceiver to transceiver in struct flexcan_priv and in
+  flexcan_probe
+- Set priv->can.bitrate_max if transceiver is found
+- Fix commit messages which claim that transceivers are not supported
+- Do not print error on EPROBE_DEFER after calling devm_phy_optional_get in
+  flexcan_probe
+- Link to v1: https://lore.kernel.org/r/20250211-flexcan-add-transceiver-caps-v1-0-c6abb7817b0f@liebherr.com
+
+---
+Dimitri Fedrau (2):
+      dt-bindings: can: fsl,flexcan: add transceiver capabilities
+      can: flexcan: add transceiver capabilities
+
+ .../devicetree/bindings/net/can/fsl,flexcan.yaml   | 15 ++++++++++++
+ drivers/net/can/flexcan/flexcan-core.c             | 27 +++++++++++++++++-----
+ drivers/net/can/flexcan/flexcan.h                  |  1 +
+ 3 files changed, 37 insertions(+), 6 deletions(-)
+---
+base-commit: 6a24171b9625471abfc90c7b28c4b45bee64b3a4
+change-id: 20241209-flexcan-add-transceiver-caps-7cff9400c926
+
+Best regards,
+-- 
+Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+
+
 
