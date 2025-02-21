@@ -1,169 +1,152 @@
-Return-Path: <linux-can+bounces-2923-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2922-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85C75A3EE07
-	for <lists+linux-can@lfdr.de>; Fri, 21 Feb 2025 09:11:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDFAAA3EDEF
+	for <lists+linux-can@lfdr.de>; Fri, 21 Feb 2025 09:09:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D37A178503
-	for <lists+linux-can@lfdr.de>; Fri, 21 Feb 2025 08:11:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F64F7012D2
+	for <lists+linux-can@lfdr.de>; Fri, 21 Feb 2025 08:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3FD61E1A05;
-	Fri, 21 Feb 2025 08:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="XgP7Lodq";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="z7PFYUxg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BC1D45009;
+	Fri, 21 Feb 2025 08:09:16 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.21])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B110D1D89E4
-	for <linux-can@vger.kernel.org>; Fri, 21 Feb 2025 08:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740125458; cv=pass; b=Vuqx9qIW+79tcYaYTjfGmdc/LYLQZb7rRvL/Y64Jseicp4MQIRWWy+63NPVRPGfkGT4LYAVEhmIrMdu1hd9ZMuUen5jGD6fq/QPIBUfm21SHL4NPAdsCmyCcmntzO6ULzr6oGrdm5a7uuazVs/opXJjMjrVELdyPcrDM9WjuIBM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740125458; c=relaxed/simple;
-	bh=e/E3zIBluCFwS4xCsDbxmd/Mnhj73Me3/URzMofkAK4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ncRxv89jb/w9vNaVov1MzwaNS6aJuYVXG45LE3ge2+R26JI1XHR7vCY7xDK2hN0dSCJTNaydRnfOnShuKjUuWiznFjvbkl/scg9cOJFVDd6ZrqA3u36cF9MICzJuPxFlLuw1JBFnHWMhtJYYwtipl+r7Mda7plUThrdv7EIoEaA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=XgP7Lodq; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=z7PFYUxg; arc=pass smtp.client-ip=85.215.255.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1740125086; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=E+7GWcRkweZBKfdv2juv4riJ8Ajx76V/sftHJrlJiGzc+5mjkokJeJss4owxyCbaw7
-    bxvsPYnYbHiHDRO1PvsQ35TpFOszW4hofWIqyglC3CHpoDkR7l4BnOy9kv9mGigWtGp9
-    zuKa+5Yhc7IQ+xgZ5es7Z7KNBGxG0mqggas/bhnZk4ghOYiknrHz2jAdT26FLf5/8zB8
-    lnzNV3/PV2Wd/bZe40Rnm6pzrNAV/acvVff3Wvt9J8FBI1OebatC1g04rpop8kxRVYqU
-    /eBFEk2aY6fs11AXGfe4uvDuPKvKBK3Ul7QCghQ0oWs4nsF5RrLyi4KaH4KnoxP1GKlh
-    lA9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1740125086;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=VyimtLQTHAnmlmspqsz8tXevey4yE14Iy488EPrWYAo=;
-    b=Ba7/BIwyUsqYPwezjPT/Gv/7WAg2fT0siLXPTYoCIR/6MeOdcW5YY+3wkrQG/jxG0d
-    gbNkd/MLxdP6lWq0NxP+ECz5iJTcZb+YGD8EbsTSg1UtwEUjfmY/Q0zdRPIwO+YKG1vl
-    u8gFULPoRKuWyPMJGKXCya+Y0jNoxfaWoKxO7zAXTvxl5Dhw4r8DfKmO8Cyz/XDMrfMr
-    i7u1UlvNNw5zJTJiKzsRUj+oSi+FfyUME29/Kyo91CXDuwElJpakVCwxo/5E24ZBk75a
-    yd7U6zTGjiVm6sULZ9MufHa/Ak0h/rnsAi2wd5dJLFhxs1oUP2C2BF45J3w8VtkqFZ/L
-    Y8Vg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1740125086;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=VyimtLQTHAnmlmspqsz8tXevey4yE14Iy488EPrWYAo=;
-    b=XgP7LodqF/a5acirJIgzquemmrbuzBaKx2hhXIWtsaEj+MpZOBFyXYwUiezaQBeNk9
-    Ye4tbRHe5Cse3o86hHulO7wBYyoeQczrjgwqhGJidRCG+/l6E7i9oes8ddrFdPV8d1CT
-    Xbf1FQGAdBPfgcfsZL/+5g2jmaNQ0k5RNvxUAVJOtZES74zlpcmVqD9XRkwBWwgqnDnk
-    9G3wn/UtG832TKU82oU4rRpADRgLudG0AoXZVZLi4cbvAnByRZCxDmliSzTjdIOhAaf1
-    qGCiAA5aqXQopvtf1//w1oUNh1oBJ6l6GG3MUOpxTQ3Hzhyt5yakQGEWJOlYoFwHaiUB
-    S+qA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1740125086;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=VyimtLQTHAnmlmspqsz8tXevey4yE14Iy488EPrWYAo=;
-    b=z7PFYUxg9Br2c6+Poj2oQjj4M/v+w6Yqq7N5FjYcfHOznJGC+uBcCYYT+tHDc8MXTZ
-    HZ60Lr1jhgb2PxiRsrDA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/vMMcFB+5xtv9aJ67XA=="
-Received: from [IPV6:2a00:6020:4a8e:5000::9f3]
-    by smtp.strato.de (RZmta 51.2.23 AUTH)
-    with ESMTPSA id K0c06111L84jCcj
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Fri, 21 Feb 2025 09:04:45 +0100 (CET)
-Message-ID: <79891c7f-4a8b-4909-af6e-55598bf024e5@hartkopp.net>
-Date: Fri, 21 Feb 2025 09:04:39 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00FF31FAC33
+	for <linux-can@vger.kernel.org>; Fri, 21 Feb 2025 08:09:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740125356; cv=none; b=XoLJfIIyee/O6A3ohxAIW6N0ioMGUQU3feXWu3D59uJ9A/tTG4BIv41rXk4G5WIP3Pil3O0804eTzun8SvGt4p5FgsP+XoMdGYiKHYCEpdlktPXbZWLRbzTUZzxEu2/XFeC+CNKT1WHKlj+cyigy1i6u3RUMENspudtcBBC5Ib8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740125356; c=relaxed/simple;
+	bh=W2+lqFB3yvUvKTgq6OrbULXW2hoBiT0kzSTRg8T/j5c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p53336fSUz68oCErYVXXkA4uDJ3FH0GJt2cvBXFc9uV938fMQ5cs9gICxCFw+wcBe6CjPtHX8PqOE/5u7ZNXrgDNvlNaPgEZbYtMUj/iN+AXnGNG+mFFCHNonmGCOalZU/Kd9d8j7YHbOt5CG2mYlJ2n3EE3rg2yns4koSs/IQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tlO5e-0007gh-LR; Fri, 21 Feb 2025 09:08:54 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tlO5b-0024OL-2S;
+	Fri, 21 Feb 2025 09:08:51 +0100
+Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 585363C8315;
+	Fri, 21 Feb 2025 08:08:51 +0000 (UTC)
+Date: Fri, 21 Feb 2025 09:08:51 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250221-light-neat-doberman-1166a5-mkl@pengutronix.de>
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-5-a0282524688@gmail.com>
+ <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+ <CAOoeyxX4guHzUap1ieQ_L3PrvpBAYbMiQKrb6ko=MGsF5RcXLg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Advancing the testing for the CAN subsystem
-To: Felix Maurer <fmaurer@redhat.com>, Marc Kleine-Budde
- <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc: Davide Caratti <dcaratti@redhat.com>,
- Filippo Storniolo <fstornio@redhat.com>
-References: <0feda774-853b-42c3-8bae-5d84f7881171@redhat.com>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <0feda774-853b-42c3-8bae-5d84f7881171@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tjblaazmatqfq76v"
+Content-Disposition: inline
+In-Reply-To: <CAOoeyxX4guHzUap1ieQ_L3PrvpBAYbMiQKrb6ko=MGsF5RcXLg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hi Felix, all,
 
-by now I was only aware of syzbot who is sometimes showing up with some 
-splats
+--tjblaazmatqfq76v
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-and the Linux Test Project (LTP)
+On 21.02.2025 16:01:07, Ming Yu wrote:
+> Hi Marc,
+>=20
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B42=E6=9C=887=
+=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:15=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> >
+> > > +static irqreturn_t nct6694_can_irq(int irq, void *data)
+> > > +{
+> > > +     struct net_device *ndev =3D data;
+> > > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > > +     struct nct6694_can_event *evt =3D priv->event;
+> > > +     struct nct6694_cmd_header cmd_hd =3D {
+> > > +             .mod =3D NCT6694_CAN_MOD,
+> > > +             .cmd =3D NCT6694_CAN_EVENT,
+> > > +             .sel =3D NCT6694_CAN_EVENT_SEL(priv->can_idx, NCT6694_C=
+AN_EVENT_MASK),
+> > > +             .len =3D cpu_to_le16(sizeof(priv->event))
+> > > +     };
+> > > +     irqreturn_t handled =3D IRQ_NONE;
+> > > +     int can_idx =3D priv->can_idx;
+> > > +     int ret;
+> >
+> > it would make sense to have a event pointer here instead of the can_idx?
+> >
+> >         const struct nct6694_can_event *event =3D &priv->event[priv->ca=
+n_idx];
+> >
+> The CAN Event command always returns 16bytes: the first 8 bytes
+> correspond to the CAN0 event, and the last 8 bytes correspond to the
+> CAN1 event. Therefore, the event pointer here refers to both event
+> buffers.
 
-https://github.com/linux-test-project/ltp/tree/master/testcases/network/can
+Yes, but in the following code uses "priv->event[can_idx]" several
+times, this is why I proposed to have a dedicated "struct
+nct6694_can_event *event" variable.
 
-which e.g. provides CAN filter tests which you can also find in the 
-can-tests repo.
+regards,
+Marc
 
-On 20.02.25 14:03, Felix Maurer wrote:
-> Hi Marc, Oliver, and linux-can community,
-> 
-> we are reaching out to you because we would like to advance the testing
-> of the kernel CAN subsystem. We, that's Davide, Filippo and I, are
-> volunteering to provide the patches for this, but would like to get your
-> feedback and opinions first.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-I would definitely like it and support it :-)
+--tjblaazmatqfq76v
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> We know about the can-tests repository[1] and think this is a good
-> starting point for our efforts. Currently, there are two main activities
-> we'd like to do:
-> 
-> - Promote the test cases in can-tests to become part of the kernel
-> selftests: This would mainly get the tests closer to the upstream kernel
-> development, both in terms of maintenance and actually running them. CI
-> systems like LKFT and CKI could easily be continuously running the
-> tests.
+-----BEGIN PGP SIGNATURE-----
 
-Ok. Just for my understanding: Bringing the test cases into 
-tools/testing/selftests would be the enabler to run LKFT and CKI, right?
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAme4NJAACgkQDHRl3/mQ
+kZwgawgAqcasz/q2z0wDldtBADvSGWJpZYReThQnX06QjplHpEQwiaalyPWXJBK0
+IRkuBRHEj0mNahTZgsl731lg+Y+kz3DxS7QBVJIIKvuq4MebGerv+g96FJHQ/HPE
+6m7vE/Y46rSC5PJQpZgxL3K0V/L8NmFxDCMQjYOFaXvHvwG+4bgPi4vCmCElJYRn
+iOMtP7NhVwmP9c1YcFlraOBQ2exHFPrOnHA2J9myAewvFnXqLZRJDNQrEohPm7ZJ
+jlHgOB7cJYCzL8wed06r9RxSq6ZPHF3tPxCL6n5nVKgmxwTOdW2S8Mk1Z4LANrjY
+bjwfdAqvpMPU/EQQkTxSxIadWDQSWQ==
+=aqP2
+-----END PGP SIGNATURE-----
 
-Does it have any impact or improvement for syzbot or LTP too, e.g. that 
-we can also improve their test quality?
-
-> The downside is that existing automation depending on can-tests
-> (which we don't know about) would need to be modified.
-
-I don't know about any existing automation based in can-tests either.
-The reason for the can-test was mostly to document my own PoCs when 
-adding new features.
-
-I have no objections to stay with this repo as a PoC playground that 
-might also help developers to get inspirations - and start something new 
-with the current code base which aims to fuel the kernel selftests.
-
-> - Extend the coverage of the tests: This could include testing for,
-> e.g., vcan, vxcan, and the cangw netlink interface. But we're open to
-> feedback here if you see any pressing areas.
-
-I see no pressing areas right now. But the recently integrated CAN XL 
-support might get some attention ;-)
-
-> Like I stated in the beginning, this message should get the discussion
-> started and we are looking forward to your feedback or concerns on these
-> ideas.
-
-Many thanks Felix.
-
-Best regards,
-Oliver
-
+--tjblaazmatqfq76v--
 
