@@ -1,151 +1,128 @@
-Return-Path: <linux-can+bounces-2934-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2937-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 951E1A40612
-	for <lists+linux-can@lfdr.de>; Sat, 22 Feb 2025 08:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 20C5FA4061F
+	for <lists+linux-can@lfdr.de>; Sat, 22 Feb 2025 08:43:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA6D2189D752
-	for <lists+linux-can@lfdr.de>; Sat, 22 Feb 2025 07:22:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6546F19E0647
+	for <lists+linux-can@lfdr.de>; Sat, 22 Feb 2025 07:43:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29B341FBCB5;
-	Sat, 22 Feb 2025 07:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71754205E36;
+	Sat, 22 Feb 2025 07:43:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OHxcmYpb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V2/50kKm"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F347494;
-	Sat, 22 Feb 2025 07:22:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F72205E0C;
+	Sat, 22 Feb 2025 07:43:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740208969; cv=none; b=SR2usAJ2q7Leha9+qd5xhqRX02YXoSU6gN+AY7pFv5lZ5sWi3sTmbqGboGn2dFQCiL1RPfkUa8eEn4acbB+Rf955s4mYQaP1F0m0HA4RgoNQaTb7nwOYBrKDYNuNavw3unY5OsImfGfNwLtu/dguFJlc+7PBVkbN9S5Bwt2WIc4=
+	t=1740210202; cv=none; b=Ccxymge2S+RAPNJWTY3VZSqNp3ZdyHWazVL7UcsFzx7FtTWsNieL4BstqxeEhggzOrap62ObzcIgROzYTBqmDQ9gnomBHllwduNKELAj0gefQeQ8VqqV0qj/aS29eXJwnAvOqytugzPUcQtuu/KKAljtL1xj9a1LdemTNaYRxzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740208969; c=relaxed/simple;
-	bh=1wLzZlUplRYghJxP4Pd4ugXxm92+g9Fy6PS8vGc2tM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nnQqPrGN8LciwMXneRXMYvi2mty3mN08NDAWppJ/frWyBtnmIg3DjM49eMPZX1PkndjcmKd7So/6oE6fKUN9ywd6OTLXMJCOHIgDvU8kfYBUpt7QjSOpmxBusQwkc9Cd55sd1XsPjG0fPs0aL7xRVWbfR2xEXwO0k75vRC7KeSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OHxcmYpb; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-aaf3c3c104fso491461466b.1;
-        Fri, 21 Feb 2025 23:22:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740208966; x=1740813766; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aEnOhCave/qwMORS6+m/BSs/u7Kbv390RWFos8Jc8bs=;
-        b=OHxcmYpbqK6UwO5UJuguY1msLcjPSaRoZxAlqBDWY1f8v26icJaMj0ClvPVZjtdth8
-         YQCYFDYYP7TbTwq6DjPd03xPtoCrqC5CG+Q/iD/6gR5KNjUOXDX8JuzAju1PPZCqytsb
-         b9+JU06ZK0rjqwlyVmwzFGXUdG1mcsGNr2nxoCrSKdyIMwwmQxBf7u+3rrn45U0oTTyN
-         T5DAu3j/yvVEFb9yYCzuXz/ozUhzn0FhlHAjY61HZGmDdNZRk9Qq85YOT/6eL1j5nQ2s
-         +HZjhiGMkAeolA4+Jw72vNmX7kVzW37QJcXMlVCy3Q9RkeaQ2UiDMxU9kvnATePSVuUm
-         1HJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740208966; x=1740813766;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aEnOhCave/qwMORS6+m/BSs/u7Kbv390RWFos8Jc8bs=;
-        b=trbDycvRW4GkUNSNzHbkkO8ljw3vUNZy2A4zxUqUnn9CJXZhESvGUHZYLlKKZbUDrY
-         GPtFBP7rxwZX+MD6zTyHc0xThZkDsNoEH0n3XgacFHi4FRvy+5jfipMqvbE41xze7Dit
-         8SZRy1x0hOeUnATxtKar/W186FsSbOT68HusIx+G/ZJfdt08I9ldHGi5a38fLNnh3y47
-         8WxL3L51YrKZQg4sc9ZuydZkLtbZqchsMnyelSndzcZAGlfJtZPKoukAPIoY1UTfRraD
-         SyrDF/oEr8ERVQOx163Lvxmnx5mIKbYPhWSTeiFBDh4P12rfxztyg2BXEA323QkN3N/d
-         i+wQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWgLP1aUYmE3EbRB4VrZB6cPhBVFllnaaFtI9jwedpD08yfg7oX1A1nOWEmaOh5r86n7rVBibwo1lYLVd7d@vger.kernel.org, AJvYcCX171mnCTEm1jJ9nWykr+qluNvZQToY9Tn8EO5P45lIdm3LflvghLqEkWlUL0/YLgezlDtUvj9Oq8nC@vger.kernel.org, AJvYcCXWgzTRWQa1MS4Cdy6p9NkeI6pz2EbZSOozEegixW+3i3vKmQJV9K2rHebZZRkyUd/aAL+z1ZFNYmSH@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuAIvIOTRClSwohsyIom+rF/b1nRqK2ELhxouoE8XW43ygk3sH
-	nxn0Va/PJP3nfJTmXAbxoGaWcY2s0yTLTyO+bAp3QXumwC/ByWv+e7LTvE79
-X-Gm-Gg: ASbGncsIbIQWwYM8W38oVeEBtu5WqJVR6jdObX9q9+tHQ85SmvEQxNYO95FJsRChLc9
-	jWOUHkMaR039RIegZQXZNZMfiR0icm5XhJn7njXgAy6T8QdW8YG+JW+aCpixgvd3x/6/5XKj2ef
-	dSEctMrKYgdLVH8QiMHOrVodaCf+uz08SwbeXAec6AkSYEYv4VYabHcKEEW7/cRA/ZbSeH5qCyT
-	E1Ir6KqKLB+rXdHZ8WVyTpeNWO6VYQ1Niid07WY1AH5p0XG0zdzsfgF0PVfAtjV3TsnNKWIL5BD
-	xHW1hww0u5gK9YN3HNZgvGQ=
-X-Google-Smtp-Source: AGHT+IFsLluCqw1OK1Vu8s2oXQXiFugZr6iSL5teJLTvRjaP7xZkkMKHNbaGmCsCMH4Xe4pZawKPkw==
-X-Received: by 2002:a17:907:7815:b0:ab7:faca:a323 with SMTP id a640c23a62f3a-abc0de14741mr546560966b.39.1740208965284;
-        Fri, 21 Feb 2025 23:22:45 -0800 (PST)
-Received: from debian ([2a00:79c0:67a:4900:45fb:7d1a:5e4d:9727])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abbda707e3dsm645419466b.106.2025.02.21.23.22.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 23:22:44 -0800 (PST)
-Date: Sat, 22 Feb 2025 08:22:41 +0100
-From: Dimitri Fedrau <dima.fedrau@gmail.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: dimitri.fedrau@liebherr.com, Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: can: fsl,flexcan: add transceiver
- capabilities
-Message-ID: <20250222072241.GA3458@debian>
-References: <20250221-flexcan-add-transceiver-caps-v3-0-a947bde55a62@liebherr.com>
- <20250221-flexcan-add-transceiver-caps-v3-1-a947bde55a62@liebherr.com>
- <20250221-drinking-tantrum-6e0bf9051160@spud>
+	s=arc-20240116; t=1740210202; c=relaxed/simple;
+	bh=122xJzOd1ODbkxxXzrAgg7StS4O2IbUSeCXvlztvOyU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=K5TkmIyAFffcVd8ayXpkxws94jb1Z0dSPbf18B4FOqPxuAiCd5AWiRl8Q9odkcfkmfPr2wqfwv1tLSVKmZlSIum1fd+3w69KjIFjy4bSA8nX2HNZ4p3yAHAZyRJiSv7emOVpQFmlLRKI8MqEoR9RmyRHL6KWQEzaL024DaM1B9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V2/50kKm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A143CC4CED1;
+	Sat, 22 Feb 2025 07:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740210201;
+	bh=122xJzOd1ODbkxxXzrAgg7StS4O2IbUSeCXvlztvOyU=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=V2/50kKmDBw87qB5gTJN7FBVlUR91z3yotRNhTHh77brf6fAxR5JU10mwmaUI6x+s
+	 31CRMtYAbJQxiBm/+iqS/pCV+ATmLVf8xjk3dE8ql5CSVMvchVtkgzmlyxYEY3PZgV
+	 TTHJ9WNQYO4/YxArNbnALptfIFYJC7S9gwRGh9w4c0vxI3igRp1VlyuBvocemtiHom
+	 nkfF6jn8pmZShi3rSBEdKsem7nPODQWj+JRkjBfZQ7CssdCpIQscX38rLzlhM1woAE
+	 yc8l/iX3d4YNrkuiKPPLoqr0MJtlEwCfqPmB0EdXg6Sb584uKdeiJzBr9voDlbfvp7
+	 SrLR+u6qSUYeQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8850EC021B2;
+	Sat, 22 Feb 2025 07:43:21 +0000 (UTC)
+From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
+Subject: [PATCH v4 0/2] can: flexcan: add transceiver capabilities
+Date: Sat, 22 Feb 2025 08:43:12 +0100
+Message-Id: <20250222-flexcan-add-transceiver-caps-v4-0-a38dfadab763@liebherr.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250221-drinking-tantrum-6e0bf9051160@spud>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABCAuWcC/4XOQW7DIBCF4atErEs1M8bGZNV7VFkAHmKk1LYgQ
+ oks3704q6iqkuU/i+/NKjKnyFkcD6tIXGKO81RDfRyEH+10ZhmH2oKAFBIYGS5883aSdhjkNdk
+ pe46Fk/R2yVL7EIwC8IY6UYklcYi3B/99qj3GfJ3T/bFWcL/ucAuE+BouKEH6zjqne9QOwtcls
+ hs5pU8//4jdLvTkEbzxqHq2R6MhIPaq+8drnr13/zW7Z5R2A7et7eiPt23bLwDWrfprAQAA
+X-Change-ID: 20241209-flexcan-add-transceiver-caps-7cff9400c926
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, Dimitri Fedrau <dimitri.fedrau@liebherr.com>, 
+ Dimitri Fedrau <dima.fedrau@gmail.com>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740210200; l=1800;
+ i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
+ bh=122xJzOd1ODbkxxXzrAgg7StS4O2IbUSeCXvlztvOyU=;
+ b=BE4Cqc5UEaQRp3VsFd92B7n+NX5NASHTVto2Ukg22tEewCsR2xxQ29Umkz0llBipFWm8Q4kwI
+ QVOHJqTB9o9C4l+dIbzljglgpCG+opAy0JEFugrZ6NuKKeHsYEb1qHf
+X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
+ pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
+X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
+ with auth_id=290
+X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Reply-To: dimitri.fedrau@liebherr.com
 
-Am Fri, Feb 21, 2025 at 04:59:16PM +0000 schrieb Conor Dooley:
-> On Fri, Feb 21, 2025 at 08:40:04AM +0100, Dimitri Fedrau via B4 Relay wrote:
-> > From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-> > 
-> > Currently the flexcan driver does only support adding PHYs by using the
-> > "old" regulator bindings. Add support for CAN transceivers as a PHY.
-> > 
-> > Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-> > ---
-> >  .../devicetree/bindings/net/can/fsl,flexcan.yaml          | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-> > index 73252fe56fe6c8e9fd19142208bb655dc86d47cd..81125883cf86b9d19616bde378f74bdb6a32f1b2 100644
-> > --- a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-> > +++ b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-> > @@ -77,6 +77,9 @@ properties:
-> >    xceiver-supply:
-> >      description: Regulator that powers the CAN transceiver.
-> >  
-> > +  phys:
-> > +    maxItems: 1
-> > +
-> >    big-endian:
-> >      $ref: /schemas/types.yaml#/definitions/flag
-> >      description: |
-> > @@ -171,6 +174,18 @@ allOf:
-> >          interrupts:
-> >            maxItems: 1
-> >          interrupt-names: false
-> > +  - if:
-> > +      required:
-> > +        - xceiver-supply
-> > +    then:
-> > +      properties:
-> > +        phys: false
-> > +  - if:
-> > +      required:
-> > +        - phys
-> > +    then:
-> > +      properties:
-> > +        xceiver-supply: false
-> 
-> The duplication here is not needed, they both will cause errors in the
-> same situation. With one dropped,
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> 
+Currently the flexcan driver does only support adding PHYs by using the
+"old" regulator bindings. Add support for CAN transceivers as a PHY. Add
+the capability to ensure that the PHY is in operational state when the link
+is set to an "up" state.
 
-Thanks for your help, will drop one and sent out a V4.
+Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+---
+Changes in v4:
+- Dropped "if: required: phys" in bindings
+- Link to v3: https://lore.kernel.org/r/20250221-flexcan-add-transceiver-caps-v3-0-a947bde55a62@liebherr.com
+
+Changes in v3:
+- Have xceiver-supply or phys properties in bindings
+- Switch do dev_err_probe in flexcan_probe when checking error of call
+  devm_phy_optional_get
+- Link to v2: https://lore.kernel.org/r/20250220-flexcan-add-transceiver-caps-v2-0-a81970f11846@liebherr.com
+
+Changes in v2:
+- Rename variable xceiver to transceiver in struct flexcan_priv and in
+  flexcan_probe
+- Set priv->can.bitrate_max if transceiver is found
+- Fix commit messages which claim that transceivers are not supported
+- Do not print error on EPROBE_DEFER after calling devm_phy_optional_get in
+  flexcan_probe
+- Link to v1: https://lore.kernel.org/r/20250211-flexcan-add-transceiver-caps-v1-0-c6abb7817b0f@liebherr.com
+
+---
+Dimitri Fedrau (2):
+      dt-bindings: can: fsl,flexcan: add transceiver capabilities
+      can: flexcan: add transceiver capabilities
+
+ .../devicetree/bindings/net/can/fsl,flexcan.yaml   |  9 ++++++++
+ drivers/net/can/flexcan/flexcan-core.c             | 27 +++++++++++++++++-----
+ drivers/net/can/flexcan/flexcan.h                  |  1 +
+ 3 files changed, 31 insertions(+), 6 deletions(-)
+---
+base-commit: 6a24171b9625471abfc90c7b28c4b45bee64b3a4
+change-id: 20241209-flexcan-add-transceiver-caps-7cff9400c926
 
 Best regards,
-Dimitri Fedrau
+-- 
+Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+
+
 
