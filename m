@@ -1,39 +1,39 @@
-Return-Path: <linux-can+bounces-2962-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2963-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1903BA444BA
-	for <lists+linux-can@lfdr.de>; Tue, 25 Feb 2025 16:42:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5117A444BB
+	for <lists+linux-can@lfdr.de>; Tue, 25 Feb 2025 16:42:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1463919C2D19
-	for <lists+linux-can@lfdr.de>; Tue, 25 Feb 2025 15:41:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A9353BF91A
+	for <lists+linux-can@lfdr.de>; Tue, 25 Feb 2025 15:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F167015383D;
-	Tue, 25 Feb 2025 15:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AEE81624CD;
+	Tue, 25 Feb 2025 15:41:49 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 342EF140E3C;
-	Tue, 25 Feb 2025 15:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C726156677;
+	Tue, 25 Feb 2025 15:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740498105; cv=none; b=TcuwPT8fC5XdQ8MqDo67afw26h8WtHG4ktz8sscLUSfFCsuCrmGfg8KS5sSlnQDt6I5X94C21UDuHcPRWjpSxdn0AvnK8ynSUWB9/9GBCLE7hnBxY5y+vLiAKCgj40fbi00gSnut5DjInreTn64G6DYymdtOWthlYaaQgAMq0kw=
+	t=1740498109; cv=none; b=XQcQtTSsbVrIyISysRHusfadOOaRTikONSUqk+3elFIG2qPCiDtLjl65Rx4vX6YnaJ8cp+iEPc8BqiTh36pZTrM2kw/2Ub/43tMyHcNf76s1A7UcOLzduHR18TIe8uVGu5C0TxxXalIfEL++Do5Ice/M8xHbTk3Pe2E0sH6ESHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740498105; c=relaxed/simple;
-	bh=eU4vZqTQg2tRPSp213j9RytWa9qzgT1JRfh4TZMEgS4=;
+	s=arc-20240116; t=1740498109; c=relaxed/simple;
+	bh=JP62AUftG8RtnsNHSpdB3CFp+Xj3n7jqjoXVID0fWzM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a3Ei75zh/FcL90m8cRlmUYIsHM/mhVw8DxPUryk5o4LtbFWGXIBXpd5ntiHSnotwJWl+FGfOwSWPea3xWsHWoP7YuWUzNHRtRAKLECpoKETnhHagsiQC4U4XpdS6NZ5uJsMnp7XciGVSEtJybZJqrO4WscRmZ7+qACdqTXz6d8I=
+	 MIME-Version; b=fj2lhpklU9DbqUAGbDt8C+vhutk++KC+OgmMCOccrgFJWyLGGT6EyQe1C0YdWhAxRamBiip33G8cA9QQkb9Lmrydhr8D4zd+tHRP3fV3U206tmQqlOm6iqayCYy8mAK5Mh8MtXcHdV3mY7S8qFWS5PRSWGhx0bKceOJkwYSfjWs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: s7s+JxVxQleySeVb8OU8wQ==
-X-CSE-MsgGUID: edcMaNuwS/6ahjVCloCGEA==
+X-CSE-ConnectionGUID: xznwHZHtSeaN0U9FPl63vA==
+X-CSE-MsgGUID: pemhZoXhSt26GoJ1aE29Og==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 26 Feb 2025 00:41:43 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 26 Feb 2025 00:41:47 +0900
 Received: from localhost.localdomain (unknown [10.226.92.81])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 06DFD400FC34;
-	Wed, 26 Feb 2025 00:41:40 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 73CA7400FD08;
+	Wed, 26 Feb 2025 00:41:44 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
@@ -45,9 +45,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v3 10/11] can: rcar_canfd: Enhance multi_channel_irqs handling
-Date: Tue, 25 Feb 2025 15:40:49 +0000
-Message-ID: <20250225154058.59116-11-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v3 11/11] can: rcar_canfd: Add RZ/G3E support
+Date: Tue, 25 Feb 2025 15:40:50 +0000
+Message-ID: <20250225154058.59116-12-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250225154058.59116-1-biju.das.jz@bp.renesas.com>
 References: <20250225154058.59116-1-biju.das.jz@bp.renesas.com>
@@ -59,46 +59,72 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently multi_channel_irqs has only 2 channels. But RZ/G3E has six
-channels. Enhance multi_channel_irqs handling to support more than two
-channels.
+The CAN-FD IP found on the RZ/G3E SoC is similar to R-Car Gen4, but
+it has no external clock instead it has clk_ram, it has 6 channels
+and supports 20 interrupts. Add support for RZ/G3E CAN-FD driver.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v2->v3:
- * No change.
+ * Replaced gen4_type entry with mask_table, shift_table, regs,
+   ch_interface_mode and shared_can_reg.
 v1->v2:
  * No change.
 ---
- drivers/net/can/rcar/rcar_canfd.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 7ae06e3c4d85..48fead44556c 100644
+index 48fead44556c..290e5a231ea3 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1860,16 +1860,19 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
+@@ -730,6 +730,18 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
+ 	.multi_channel_irqs = 1,
+ };
  
- 	if (info->multi_channel_irqs) {
- 		char *irq_name;
-+		char name[10];
- 		int err_irq;
- 		int tx_irq;
++static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
++	.mask_table = rcar_gen4_mask_table,
++	.shift_table = rcar_gen4_shift_table,
++	.regs = rcar_gen4_regs,
++	.max_channels = 6,
++	.postdiv = 1,
++	.multi_channel_irqs = 1,
++	.ch_interface_mode = 1,
++	.shared_can_reg = 1,
++	.only_internal_clks = 1,
++};
++
+ /* Helper functions */
+ static inline void rcar_canfd_update(u32 mask, u32 val, u32 __iomem *reg)
+ {
+@@ -1973,6 +1985,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 	u32 rule_entry = 0;
+ 	bool fdmode = true;			/* CAN FD only mode - default */
+ 	char name[9] = "channelX";
++	struct clk *clk_ram;
+ 	int i;
  
--		err_irq = platform_get_irq_byname(pdev, ch == 0 ? "ch0_err" : "ch1_err");
-+		scnprintf(name, 10, "ch%u_err", ch);
-+		err_irq = platform_get_irq_byname(pdev, name);
- 		if (err_irq < 0) {
- 			err = err_irq;
- 			goto fail;
- 		}
+ 	info = of_device_get_match_data(dev);
+@@ -2062,6 +2075,11 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 		gpriv->extclk = !gpriv->info->only_internal_clks;
+ 	}
  
--		tx_irq = platform_get_irq_byname(pdev, ch == 0 ? "ch0_trx" : "ch1_trx");
-+		scnprintf(name, 10, "ch%u_trx", ch);
-+		tx_irq = platform_get_irq_byname(pdev, name);
- 		if (tx_irq < 0) {
- 			err = tx_irq;
- 			goto fail;
++	clk_ram = devm_clk_get_optional_enabled(dev, "ram_clk");
++	if (IS_ERR(clk_ram))
++		return dev_err_probe(dev, PTR_ERR(clk_ram),
++				     "cannot get ram clock\n");
++
+ 	addr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(addr)) {
+ 		err = PTR_ERR(addr);
+@@ -2224,6 +2242,7 @@ static SIMPLE_DEV_PM_OPS(rcar_canfd_pm_ops, rcar_canfd_suspend,
+ 
+ static const __maybe_unused struct of_device_id rcar_canfd_of_table[] = {
+ 	{ .compatible = "renesas,r8a779a0-canfd", .data = &rcar_gen4_hw_info },
++	{ .compatible = "renesas,r9a09g047-canfd", .data = &r9a09g047_hw_info },
+ 	{ .compatible = "renesas,rcar-gen3-canfd", .data = &rcar_gen3_hw_info },
+ 	{ .compatible = "renesas,rcar-gen4-canfd", .data = &rcar_gen4_hw_info },
+ 	{ .compatible = "renesas,rzg2l-canfd", .data = &rzg2l_hw_info },
 -- 
 2.43.0
 
