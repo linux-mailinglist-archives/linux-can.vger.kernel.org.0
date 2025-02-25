@@ -1,39 +1,39 @@
-Return-Path: <linux-can+bounces-2959-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2960-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8745A444B2
-	for <lists+linux-can@lfdr.de>; Tue, 25 Feb 2025 16:42:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07ABBA444B6
+	for <lists+linux-can@lfdr.de>; Tue, 25 Feb 2025 16:42:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3E1F19C4615
-	for <lists+linux-can@lfdr.de>; Tue, 25 Feb 2025 15:41:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51F343BF1D8
+	for <lists+linux-can@lfdr.de>; Tue, 25 Feb 2025 15:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01C69140E3C;
-	Tue, 25 Feb 2025 15:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5237E156F3A;
+	Tue, 25 Feb 2025 15:41:39 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC483155757;
-	Tue, 25 Feb 2025 15:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60432156677;
+	Tue, 25 Feb 2025 15:41:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740498095; cv=none; b=SXLck9FFmDusmmg79lx+sS4LqkF9o0fYsVy+uh3DJwAy50Pi/85Xs0njy4G8iY+Q96i9Ps57YqKLX5TmknPXPeiHi7o/RDMXBDhDt5ECRK8dJlstfVsFKjeIzfIJyBv3ICnH3CcD4/wRfgX5iVeWIvuds9cz0qHpeE7hpmxexfM=
+	t=1740498099; cv=none; b=osa5VwHvvDDfA1trwi5Fc9ybty1Y90xRwU73q8jybiugYnGzpao32cCqBsuiUI+Ja3rQCldFgqKLZQcjG/xeTuBPnTpeJrXFSV0CtskxlP6fHa57uwdcUUyKVHBL8J+ounZupReOrhg5R8nbczYkmFXV67GRPfwVmcAZID6Zoao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740498095; c=relaxed/simple;
-	bh=7pXez+U2Hd4alAA58FvqOity5qsVYS/bcJgi/zvG7cg=;
+	s=arc-20240116; t=1740498099; c=relaxed/simple;
+	bh=rQQwaJB6gdYV+odV6nITgaVljTBm4bLDn+ey+A7SQRU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ls/WW58HD6mZZBOvw9fvosPnzpYinSu3eS/oJPINpl4pADl7pNDH77/5zavcS8HSVbGHs3f7S5MxErtff3DVLd/X/SeEH/53v9L/H4+EdqAoovoidEeq+lnqN2C+eIYAQFRRvNJjVo7UTgaxV3IZZJ3Xhp6NIQGYHZVu6DKLbB8=
+	 MIME-Version; b=CLUnExi+PQsAqFIQF/e2b2bDcQODqQ4y5+FxeeiDYklqP9/8iqobAEtQGErLvHO6fVoIw9VyPWE0g+itNGjzSWfkDrhio8Rf9avaxlT1y6/k40/DeC64X24d0RXLD1fcmxcJtxhC8XHtBC3hcMFIxk/+jRZF3yEzBGos0X4Lep0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: JlNiz2/CQCSrZgiW/0mn5Q==
-X-CSE-MsgGUID: IoQDn8byQBOjIETVBpiILA==
+X-CSE-ConnectionGUID: gXhwBeRdSqus1aSNnFpB3Q==
+X-CSE-MsgGUID: 6yv3LkaBTsWjcN6tMDa2Lg==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 26 Feb 2025 00:41:33 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 26 Feb 2025 00:41:37 +0900
 Received: from localhost.localdomain (unknown [10.226.92.81])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id B173B400FC34;
-	Wed, 26 Feb 2025 00:41:30 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 29E37400FC34;
+	Wed, 26 Feb 2025 00:41:33 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
@@ -45,9 +45,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v3 07/11] can: rcar_canfd: Add mask table to struct rcar_canfd_hw_info
-Date: Tue, 25 Feb 2025 15:40:46 +0000
-Message-ID: <20250225154058.59116-8-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v3 08/11] can: rcar_canfd: Add shift table to struct rcar_canfd_hw_info
+Date: Tue, 25 Feb 2025 15:40:47 +0000
+Message-ID: <20250225154058.59116-9-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250225154058.59116-1-biju.das.jz@bp.renesas.com>
 References: <20250225154058.59116-1-biju.das.jz@bp.renesas.com>
@@ -59,170 +59,179 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-R-Car Gen3 and Gen4 has some differences in the mask bits. Add a
-mask table to handle these differences.
+R-Car Gen3 and Gen4 has some differences in the shift bits. Add a
+shift table to handle these differences. After this drop the unused
+functions reg_gen4() and is_gen4().
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v3:
  * New patch.
 ---
- drivers/net/can/rcar/rcar_canfd.c | 68 +++++++++++++++++++++++++------
- 1 file changed, 55 insertions(+), 13 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 78 ++++++++++++++++++++++---------
+ 1 file changed, 56 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 268b9b8835c4..fcf5cb93f57c 100644
+index fcf5cb93f57c..09a9e548b022 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -82,25 +82,24 @@
- #define RCANFD_GERFL_DEF		BIT(0)
- 
- #define RCANFD_GERFL_ERR(gpriv, x) \
--	((x) & (reg_gen4(gpriv, RCANFD_GERFL_EEF0_7, \
--			 RCANFD_GERFL_EEF(0) | RCANFD_GERFL_EEF(1)) | \
--		RCANFD_GERFL_MES | \
-+	((x) & ((gpriv)->info->mask_table[EEF_MASK_ID] | RCANFD_GERFL_MES | \
- 		((gpriv)->fdmode ? RCANFD_GERFL_CMPOF : 0)))
- 
- /* AFL Rx rules registers */
- 
+@@ -90,11 +90,13 @@
  /* RSCFDnCFDGAFLCFG0 / RSCFDnGAFLCFG0 */
  #define RCANFD_GAFLCFG_SETRNC(gpriv, n, x) \
--	(((x) & reg_gen4(gpriv, 0x1ff, 0xff)) << \
-+	(((x) & (gpriv)->info->mask_table[RNC_MASK_ID]) << \
- 	 (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8)))
+ 	(((x) & (gpriv)->info->mask_table[RNC_MASK_ID]) << \
+-	 (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8)))
++	 ((gpriv)->info->shift_table[FIRST_RNC_SH] - ((n) & 1) * \
++	  (gpriv)->info->shift_table[SECOND_RNC_SH]))
  
  #define RCANFD_GAFLCFG_GETRNC(gpriv, n, x) \
- 	(((x) >> (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8))) & \
--	 reg_gen4(gpriv, 0x1ff, 0xff))
-+	 (gpriv)->info->mask_table[RNC_MASK_ID])
+-	(((x) >> (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8))) & \
+-	 (gpriv)->info->mask_table[RNC_MASK_ID])
++	(((x) >> ((gpriv)->info->shift_table[FIRST_RNC_SH] - ((n) & 1) * \
++		  (gpriv)->info->shift_table[SECOND_RNC_SH])) & \
++		  (gpriv)->info->mask_table[RNC_MASK_ID])
  
  /* RSCFDnCFDGAFLECTR / RSCFDnGAFLECTR */
  #define RCANFD_GAFLECTR_AFLDAE		BIT(8)
--#define RCANFD_GAFLECTR_AFLPN(gpriv, x)	((x) & reg_gen4(gpriv, 0x7f, 0x1f))
-+#define RCANFD_GAFLECTR_AFLPN(gpriv, x)	((x) & \
-+					 (gpriv)->info->mask_table[AFLPN_MASK_ID])
- 
- /* RSCFDnCFDGAFLIDj / RSCFDnGAFLIDj */
- #define RCANFD_GAFLID_GAFLLB		BIT(29)
-@@ -118,13 +117,13 @@
+@@ -117,13 +119,13 @@
  
  /* RSCFDnCFDCmNCFG - CAN FD only */
  #define RCANFD_NCFG_NTSEG2(gpriv, x) \
--	(((x) & reg_gen4(gpriv, 0x7f, 0x1f)) << reg_gen4(gpriv, 25, 24))
-+	(((x) & (gpriv)->info->mask_table[NTSEG2_MASK_ID]) << reg_gen4(gpriv, 25, 24))
+-	(((x) & (gpriv)->info->mask_table[NTSEG2_MASK_ID]) << reg_gen4(gpriv, 25, 24))
++	(((x) & (gpriv)->info->mask_table[NTSEG2_MASK_ID]) << (gpriv)->info->shift_table[NTSEG2_SH])
  
  #define RCANFD_NCFG_NTSEG1(gpriv, x) \
--	(((x) & reg_gen4(gpriv, 0xff, 0x7f)) << reg_gen4(gpriv, 17, 16))
-+	(((x) & (gpriv)->info->mask_table[NTSEG1_MASK_ID]) << reg_gen4(gpriv, 17, 16))
+-	(((x) & (gpriv)->info->mask_table[NTSEG1_MASK_ID]) << reg_gen4(gpriv, 17, 16))
++	(((x) & (gpriv)->info->mask_table[NTSEG1_MASK_ID]) << (gpriv)->info->shift_table[NTSEG1_SH])
  
  #define RCANFD_NCFG_NSJW(gpriv, x) \
--	(((x) & reg_gen4(gpriv, 0x7f, 0x1f)) << reg_gen4(gpriv, 10, 11))
-+	(((x) & (gpriv)->info->mask_table[NSJW_MASK_ID]) << reg_gen4(gpriv, 10, 11))
+-	(((x) & (gpriv)->info->mask_table[NSJW_MASK_ID]) << reg_gen4(gpriv, 10, 11))
++	(((x) & (gpriv)->info->mask_table[NSJW_MASK_ID]) << (gpriv)->info->shift_table[NSJW_SH])
  
  #define RCANFD_NCFG_NBRP(x)		(((x) & 0x3ff) << 0)
  
-@@ -186,13 +185,13 @@
- #define RCANFD_CERFL_ERR(x)		((x) & (0x7fff)) /* above bits 14:0 */
- 
- /* RSCFDnCFDCmDCFG */
--#define RCANFD_DCFG_DSJW(gpriv, x)	(((x) & reg_gen4(gpriv, 0xf, 0x7)) << 24)
-+#define RCANFD_DCFG_DSJW(gpriv, x)	(((x) & (gpriv)->info->mask_table[DSJW_MASK_ID]) << 24)
+@@ -188,10 +190,10 @@
+ #define RCANFD_DCFG_DSJW(gpriv, x)	(((x) & (gpriv)->info->mask_table[DSJW_MASK_ID]) << 24)
  
  #define RCANFD_DCFG_DTSEG2(gpriv, x) \
--	(((x) & reg_gen4(gpriv, 0x0f, 0x7)) << reg_gen4(gpriv, 16, 20))
-+	(((x) & (gpriv)->info->mask_table[DTSEG2_MASK_ID]) << reg_gen4(gpriv, 16, 20))
+-	(((x) & (gpriv)->info->mask_table[DTSEG2_MASK_ID]) << reg_gen4(gpriv, 16, 20))
++	(((x) & (gpriv)->info->mask_table[DTSEG2_MASK_ID]) << (gpriv)->info->shift_table[DTSEG2_SH])
  
  #define RCANFD_DCFG_DTSEG1(gpriv, x) \
--	(((x) & reg_gen4(gpriv, 0x1f, 0xf)) << reg_gen4(gpriv, 8, 16))
-+	(((x) & (gpriv)->info->mask_table[DTSEG1_MASK_ID]) << reg_gen4(gpriv, 8, 16))
+-	(((x) & (gpriv)->info->mask_table[DTSEG1_MASK_ID]) << reg_gen4(gpriv, 8, 16))
++	(((x) & (gpriv)->info->mask_table[DTSEG1_MASK_ID]) << (gpriv)->info->shift_table[DTSEG1_SH])
  
  #define RCANFD_DCFG_DBRP(x)		(((x) & 0xff) << 0)
  
-@@ -234,7 +233,7 @@
+@@ -233,10 +235,10 @@
  
  /* RSCFDnCFDCFCCk */
  #define RCANFD_CFCC_CFTML(gpriv, x)	\
--	(((x) & reg_gen4(gpriv, 0x1f, 0xf)) << reg_gen4(gpriv, 16, 20))
-+	(((x) & (gpriv)->info->mask_table[CFTML_MASK_ID]) << reg_gen4(gpriv, 16, 20))
- #define RCANFD_CFCC_CFM(gpriv, x)	(((x) & 0x3) << reg_gen4(gpriv,  8, 16))
+-	(((x) & (gpriv)->info->mask_table[CFTML_MASK_ID]) << reg_gen4(gpriv, 16, 20))
+-#define RCANFD_CFCC_CFM(gpriv, x)	(((x) & 0x3) << reg_gen4(gpriv,  8, 16))
++	(((x) & (gpriv)->info->mask_table[CFTML_MASK_ID]) << (gpriv)->info->shift_table[CFTML_SH])
++#define RCANFD_CFCC_CFM(gpriv, x)	(((x) & 0x3) << (gpriv)->info->shift_table[CFM_SH])
  #define RCANFD_CFCC_CFIM		BIT(12)
- #define RCANFD_CFCC_CFDC(gpriv, x)	(((x) & 0x7) << reg_gen4(gpriv, 21,  8))
-@@ -518,9 +517,23 @@ enum rcar_canfd_reg_offset_id {
- 	CFOFFSET,	/* Transmit/receive FIFO buffer access ID register */
+-#define RCANFD_CFCC_CFDC(gpriv, x)	(((x) & 0x7) << reg_gen4(gpriv, 21,  8))
++#define RCANFD_CFCC_CFDC(gpriv, x)	(((x) & 0x7) << (gpriv)->info->shift_table[CFDC_SH])
+ #define RCANFD_CFCC_CFPLS(x)		(((x) & 0x7) << 4)
+ #define RCANFD_CFCC_CFTXIE		BIT(2)
+ #define RCANFD_CFCC_CFE			BIT(0)
+@@ -530,11 +532,25 @@ enum rcar_canfd_mask_id {
+ 	CFTML_MASK_ID,	/* Common FIFO TX Message Buffer Link */
  };
  
-+enum rcar_canfd_mask_id {
-+	EEF_MASK_ID,	/* Global Error Flag */
-+	RNC_MASK_ID,	/* Rule Number for Channel */
-+	AFLPN_MASK_ID,	/* Acceptance Filter List Page Number */
-+	NTSEG2_MASK_ID,	/* Nominal Bit Rate Time Segment 2 Control */
-+	NTSEG1_MASK_ID,	/* Nominal Bit Rate Time Segment 1 Control */
-+	NSJW_MASK_ID,	/* Nominal Bit Rate Resynchronization Jump Width Control */
-+	DSJW_MASK_ID,	/* Data Bit Rate Resynchronization Jump Width Control */
-+	DTSEG2_MASK_ID,	/* Data Bit Rate Time Segment 2 Control */
-+	DTSEG1_MASK_ID,	/* Data Bit Rate Time Segment 1 Control */
-+	CFTML_MASK_ID,	/* Common FIFO TX Message Buffer Link */
++enum rcar_canfd_shift_id {
++	FIRST_RNC_SH,	/* Rule Number for Channel x */
++	SECOND_RNC_SH,	/* Rule Number for Channel x + 1 */
++	NTSEG2_SH,	/* Nominal Bit Rate Time Segment 2 Control */
++	NTSEG1_SH,	/* Nominal Bit Rate Time Segment 1 Control */
++	NSJW_SH,	/* Nominal Bit Rate Resynchronization Jump Width Control */
++	DTSEG2_SH,	/* Data Bit Rate Time Segment 2 Control */
++	DTSEG1_SH,	/* Data Bit Rate Time Segment 1 Control */
++	CFTML_SH,	/* Common FIFO TX Message Buffer Link */
++	CFM_SH,		/* Common FIFO Mode */
++	CFDC_SH,	/* Common FIFO Depth Configuration */
 +};
 +
  struct rcar_canfd_global;
  
  struct rcar_canfd_hw_info {
-+	const u32 *mask_table;
+ 	const u32 *mask_table;
  	const u16 *regs;
++	const u8 *shift_table;
  	u8 max_channels;
  	u8 postdiv;
-@@ -619,7 +632,34 @@ static const u16 rcar_gen4_regs[] = {
- 	[CFOFFSET] = 0x6400,
+ 	/* hardware features */
+@@ -658,8 +674,35 @@ static const u32 rcar_gen4_mask_table[] = {
+ 	[CFTML_MASK_ID] = 0x1f,
  };
  
-+static const u32 rcar_gen3_mask_table[] = {
-+	[EEF_MASK_ID] = RCANFD_GERFL_EEF(0) | RCANFD_GERFL_EEF(1),
-+	[RNC_MASK_ID] = 0xff,
-+	[AFLPN_MASK_ID] = 0x1f,
-+	[NTSEG2_MASK_ID] = 0x1f,
-+	[NTSEG1_MASK_ID] = 0x7f,
-+	[NSJW_MASK_ID] = 0x1f,
-+	[DSJW_MASK_ID] = 0x7,
-+	[DTSEG2_MASK_ID] = 0x7,
-+	[DTSEG1_MASK_ID] = 0xf,
-+	[CFTML_MASK_ID] = 0xf,
++static const u8 rcar_gen3_shift_table[] = {
++	[FIRST_RNC_SH] = 24,
++	[SECOND_RNC_SH] = 8,
++	[NTSEG2_SH] = 24,
++	[NTSEG1_SH] = 16,
++	[NSJW_SH] = 11,
++	[DTSEG2_SH] = 20,
++	[DTSEG1_SH] = 16,
++	[CFTML_SH] = 20,
++	[CFM_SH] = 16,
++	[CFDC_SH] = 8,
 +};
 +
-+static const u32 rcar_gen4_mask_table[] = {
-+	[EEF_MASK_ID] = RCANFD_GERFL_EEF0_7,
-+	[RNC_MASK_ID] = 0x1ff,
-+	[AFLPN_MASK_ID] = 0x7f,
-+	[NTSEG2_MASK_ID] = 0x7f,
-+	[NTSEG1_MASK_ID] = 0xff,
-+	[NSJW_MASK_ID] = 0x7f,
-+	[DSJW_MASK_ID] = 0xf,
-+	[DTSEG2_MASK_ID] = 0xf,
-+	[DTSEG1_MASK_ID] = 0x1f,
-+	[CFTML_MASK_ID] = 0x1f,
++static const u8 rcar_gen4_shift_table[] = {
++	[FIRST_RNC_SH] = 16,
++	[SECOND_RNC_SH] = 16,
++	[NTSEG2_SH] = 25,
++	[NTSEG1_SH] = 17,
++	[NSJW_SH] = 10,
++	[DTSEG2_SH] = 16,
++	[DTSEG1_SH] = 8,
++	[CFTML_SH] = 16,
++	[CFM_SH] = 8,
++	[CFDC_SH] = 21,
 +};
 +
  static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
-+	.mask_table = rcar_gen3_mask_table,
+ 	.mask_table = rcar_gen3_mask_table,
++	.shift_table = rcar_gen3_shift_table,
  	.regs = rcar_gen3_regs,
  	.max_channels = 2,
  	.postdiv = 2,
-@@ -627,6 +667,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- };
+@@ -668,6 +711,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
  
  static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
-+	.mask_table = rcar_gen4_mask_table,
+ 	.mask_table = rcar_gen4_mask_table,
++	.shift_table = rcar_gen4_shift_table,
  	.regs = rcar_gen4_regs,
  	.max_channels = 8,
  	.postdiv = 2,
-@@ -636,6 +677,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
- };
+@@ -678,6 +722,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
  
  static const struct rcar_canfd_hw_info rzg2l_hw_info = {
-+	.mask_table = rcar_gen3_mask_table,
+ 	.mask_table = rcar_gen3_mask_table,
++	.shift_table = rcar_gen3_shift_table,
  	.regs = rcar_gen3_regs,
  	.max_channels = 2,
  	.postdiv = 1,
+@@ -685,17 +730,6 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
+ };
+ 
+ /* Helper functions */
+-static inline bool is_gen4(struct rcar_canfd_global *gpriv)
+-{
+-	return gpriv->info == &rcar_gen4_hw_info;
+-}
+-
+-static inline u32 reg_gen4(struct rcar_canfd_global *gpriv,
+-			   u32 gen4, u32 not_gen4)
+-{
+-	return is_gen4(gpriv) ? gen4 : not_gen4;
+-}
+-
+ static inline void rcar_canfd_update(u32 mask, u32 val, u32 __iomem *reg)
+ {
+ 	u32 data = readl(reg);
 -- 
 2.43.0
 
