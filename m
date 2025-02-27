@@ -1,449 +1,308 @@
-Return-Path: <linux-can+bounces-2969-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-2970-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2719A4730F
-	for <lists+linux-can@lfdr.de>; Thu, 27 Feb 2025 03:37:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 266C3A475C5
+	for <lists+linux-can@lfdr.de>; Thu, 27 Feb 2025 07:03:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38AA6168CF5
-	for <lists+linux-can@lfdr.de>; Thu, 27 Feb 2025 02:36:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 259731880279
+	for <lists+linux-can@lfdr.de>; Thu, 27 Feb 2025 06:03:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491811AF0B0;
-	Thu, 27 Feb 2025 02:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38BB5215769;
+	Thu, 27 Feb 2025 06:03:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="h0WXz1wB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJEY7UlC"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-72.smtpout.orange.fr [193.252.22.72])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9801ACEDB
-	for <linux-can@vger.kernel.org>; Thu, 27 Feb 2025 02:29:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BAA2E403;
+	Thu, 27 Feb 2025 06:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740623350; cv=none; b=JFdqyfEaIphYyE1OBnxd9ZIHbVsf37LvERO1dYydW7NdIcj4wP729BUGgJKsrJ2Bja/p8XduCBQLr7Z94BL5+NedA8GbXx2xx41G0UcsSG7p9yOk3qZhiDSW1QwDLm/GsGukOYsi1OIMOQYfuB0xgV20D1YQS5fEjdDPZTUgl40=
+	t=1740636216; cv=none; b=GLVtlWAjgavgDtdMgn97ow/xsf3n7PIFPKv71m2xpd1gJHJ3wnplG5j7rcQwceoA4Cx1qN4fJm8O+daiEiWdxKGFjRAGguY14WMhnsi6IAH0zBe1+0EuvJ4MDrMirbq50td9Wg5aje3DrX2895vYRDD7UkI+UjZVl9RtSjH769k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740623350; c=relaxed/simple;
-	bh=V/4+edgPO4eGVfTLYxoCARRnUJ9Vlw8VCirWOszG8BM=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=r9Ru2Ncg0KN+i9z1nUSmUhNqrTOLYSU0LAerzVoegWWM4gK4b45eH9VM0aSEdhihkRAeNOKL7vXSBGLOCeFD44bU8e9GPrhNk2h8lENCho6KHRIN3BydCRrJQpIF3e9ANdna7LqgUIRkOO6JGoMzqaMciige8TxLRbTqpz7wTDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=h0WXz1wB; arc=none smtp.client-ip=193.252.22.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id nTV0teh3ZBWACnTV5tQStv; Thu, 27 Feb 2025 03:19:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1740622789;
-	bh=eEBEnRNIFTzYp9AO/A26FXhwCe9rQmdxhpCwUyL1Ezw=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To;
-	b=h0WXz1wBcdgwTCUcRZiSXCRXUA0hz5kZPbSpkulK9CbDnCOnXFMd5xSDkTfckSFVR
-	 aHxrnObNu18mMFYtjBmEglB8OWUblpHsBnTg9FF6Z+vhutYBU6NYhixNJ2gPDNvdGA
-	 sw4fn092TMXdklka+a1NDZcQK2DYaSaOOhjEJ1yx6INoS3McuCLctk6JC0Z9xHZ7FC
-	 xqFYEIiVn9ek28cRAwMmVfgiPOg2NfNaqvtrCN9QYnh6z5ZuHsxJtdvXcAOhElWrRj
-	 10uVos6l86OPWKyD9SWljz4SOfxQEgvcZ4y1WEerQismkEhnf9wtfQKY/RV2999JQL
-	 wqMtXlUsquHyQ==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 27 Feb 2025 03:19:49 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <dadf7d1b-be16-4cc3-acab-0d9eb81b479b@wanadoo.fr>
-Date: Thu, 27 Feb 2025 11:19:41 +0900
+	s=arc-20240116; t=1740636216; c=relaxed/simple;
+	bh=5bQCSUlFL3cNMzqJxwc4JWiUDzaWUIigVUibvHYYM8I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U7SInUxPaGpd2jQFdRtBR+mvuLdJ8quUbMU4EccYQf87GYQZpNK/BE9Y59v5Cofzcy4nESetdhPSFi9rX2Hq1jdMOzSMqP27wFV0BAlX4syV1K/TrMCSCDOLM2jnfzimqL0g2sRtOPOZ7CoI09LfOktqsiw3S3BTKQUGrRNBqeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJEY7UlC; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6f77b9e0a34so4445677b3.2;
+        Wed, 26 Feb 2025 22:03:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740636213; x=1741241013; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KtYpkd2jzucIGjS+RbAQ8XkHU/fTQAGMdmomglbM5kM=;
+        b=BJEY7UlCawcICN9hVZhAMc9HiM/0JQxlBPGTwH08R0Ww+FNqclbWPmcOTE4RRPhF0u
+         LED6rA0XaiNmrLspCLhzl1S84RR8jK6xsy0RQ/ZxbP9O1AeArYrPdA5Jlpzf3gICQSf8
+         Rd+4H+slRTWLe7gllg/9kgyOLJcZiRr52484ppJzArcXVq2MZaza5D4+RTz9NpLAEPNQ
+         wkL6NPkfSbr2H0wa1AiW/TeZnVTRawDEtwBbghIximLZIco3yZNrhcakoJ254xHgPE5K
+         PsmmE65dU37D32EuAx8jJKrvWIfTwG5hf+bsh0aEHW8S08DIZLvau89c2AHhPR0iK2e2
+         kXBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740636213; x=1741241013;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KtYpkd2jzucIGjS+RbAQ8XkHU/fTQAGMdmomglbM5kM=;
+        b=D+XUxTE5cI9ICx5WE1Qt2w7+v+PuPlLdKVSNJxyw88qU25y2qcbulPwFaJHPv+1jHN
+         Zn9Y7AkGwlUTZ/nQkjDPLmah0+n8NhVeJlUrcjL/2S3mdjn5/vJTjMLANL9+LWg9eL6b
+         4GnU2Dt7SbCC15q0Pshoe+ulCa6ydSOnNIBI+KWy4mySxYcny+DtljtmIhW5kpcqNAxo
+         +hMrGNuqFgFJ07GhaUajGSwH1khseK5kZquDxKMepSlq7UE2sfEfjs1iupVv34KyWWJ/
+         fYN89odGWZ9k9FyE8OOockziLdYZz+P6YK4DtM6qt99kIu8KEqCHDv42L+F0+jul734r
+         PZgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUCtpnbkPZqSSB90WJefVbF3UVGQg1vuOoULWpks/KSegecs4RbzDBqo4T73nJ7bE92vogJQLHLbgBU@vger.kernel.org, AJvYcCV+j6l6tZuN9AVBB7ZlkSkMNcE5O/CXnV5eKhgAO9Pq4lpf7sgm+f0aYWhuTD3hg5yyYggNuz6Tx8Y=@vger.kernel.org, AJvYcCVH0DJ55Mp9tfAwnGUegXwh0FcCxpffMTN24DubxzEukfS1QhEy2zPyGOE0yO7gLiARd4rcydKx@vger.kernel.org, AJvYcCVzFgwizoGpVPBuhgS78hyO9DE4onasxNiQHnO5ZlV8KQUj2f1dW4k0YwPdJT/kD2Qb9bfJ5FfcD8iSOA==@vger.kernel.org, AJvYcCW+hu2Rtr8Ks6A7o7TXB/zuHSlhpca7YR5yRR9jrRPsTqOvPXXxaHC+eSMSdrNHiP9eYw24zNmb89B5GobPy/8=@vger.kernel.org, AJvYcCW6bShUpiRSE8tdp+f3gVzDs6zQw6FvQxLjKRpdTx4u8HkZLVd3RvPJZce77guIDcc4A/8W05nbM7N8@vger.kernel.org, AJvYcCWIMyWYsWWOplUd4GM/tDE6eB40P19p9cj9vLKsf0eKyBPHZ9U3sdWEEjKFloTIU3TzPUdECCQQ9wdB@vger.kernel.org, AJvYcCWirC+hJdMP1c9kTaWzdyg9ETkQ6G6UbLWkF30DZH9ORqKlIUmBb45NhAsuiU/BKaA3LN9PBFVS31RPABY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7SxDqufp/AVuD3yLIvceMmgVIdlll+a1ycvLteY1quqaKQUvg
+	KIee2VS+LdVq3/+StNizNzxeWUWD+sGoGVe7JjerUKSzf4KGjP0rp3/T4+fE8yz22Hvd3LaMlJs
+	Kq3d0zlXXdZ732+sQgMAvTg2kKQgx42Pl
+X-Gm-Gg: ASbGnctx+olhuQtj5eanz+KcTeYbh7l5aFoFP/oH1x8eRwxTUPIV53UKdOi/lj74w3V
+	Okjr4+Hb3n9n4ZQjP2vDWyHgEwEOy1n3gb7XjxSHmJMTewv0OX3Da/41v8f5juKh+99VlsUyUmw
+	7Gfj1c11NLltB6RprIDauce9hbc/7eV+oqQqI1m8HqIA==
+X-Google-Smtp-Source: AGHT+IHhW5RmOkI7gkOjlnGO69YlG3Snu/7w3uKIK+tMNwqUqsl2+cEq6+/+Jh1ycoF05KXQ4giGB5nQbc+/Fln9Lv8=
+X-Received: by 2002:a05:690c:6402:b0:6fd:359a:8fd2 with SMTP id
+ 00721157ae682-6fd359aa0f1mr37893927b3.26.1740636213413; Wed, 26 Feb 2025
+ 22:03:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Issue] Bosch D_CAN echo skb occupied error
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To: "Schmidt, Stefan" <schmidtssstefan@siemens-healthineers.com>
-Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-References: <AM8PR05MB8052EFD0609D2F65BECBE1AE8FE32@AM8PR05MB8052.eurprd05.prod.outlook.com>
- <CAMZ6RqKgFG=zhQTDWdrGHH1Sey1mLNFWQFAjTCcrXUgPdKTYrQ@mail.gmail.com>
- <AM8PR05MB8052972C60F231BAC9CA1E678FEC2@AM8PR05MB8052.eurprd05.prod.outlook.com>
- <09bb99b8-56fb-428e-b54d-c49097ca93fa@wanadoo.fr>
-Content-Language: en-US
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <09bb99b8-56fb-428e-b54d-c49097ca93fa@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com> <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
+In-Reply-To: <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 27 Feb 2025 14:03:22 +0800
+X-Gm-Features: AQ5f1JqT0RaRfdM1W6C9qCDjKis5nvigOw3vz5qmtqucCho9jlDXbeZ2UgpSNeA
+Message-ID: <CAOoeyxXax83oNg1MpC7N4B6TrLMeg8z53SaHGqsej8ZDMP1SLA@mail.gmail.com>
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, 
+	lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Schmidt,
+Dear Vincent,
 
-How is it going? Do you need support to address the issue? Or would you
-like us to take over? Please let us know if there is anything we can help!
+Thank you for reviewing,
 
-On 30/01/2025 at 13:28, Vincent Mailhol wrote:
-> +CC: Dario
-> 
-> On 28/01/2025 at 00:44, Schmidt, Stefan wrote:
->> Dear Vincent,
->>
->>> -----Ursprüngliche Nachricht-----
->>> Von: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->>> Gesendet: Freitag, 24. Januar 2025 15:16
->>> An: Schmidt, Stefan <schmidtssstefan@siemens-healthineers.com>
->>> Cc: linux-can@vger.kernel.org
->>> Betreff: Re: [Issue] Bosch D_CAN echo skb occupied error
-> 
-> (...)
-> 
->>>
->>>> Context:
->>>> Recently, we updated our kernel from 4.14 to 6.1.43 and our Debian from
->>> 10 to 12.
->>>> The system runs on an Altera Cyclone V, which has two Bosch D_CAN CAN
->>> Controllers on board. We use both. Additionally, it is a dual core system with
->>> two Arm cores.
->>>>
->>>> Issue:
->>>> After the update, I saw that both CAN devices sporadically print the message
->>> "BUG! echo_skb %d is occupied!" once into the syslog, with %d always being
->>> index 0.
->>>> From there on the affected device was unable to send any messages. A
->>> restart of the device (ifdown/up) recovered the problem.
->>>>
->>>> Steps Taken:
->>>> After heavily polluting the driver with trace points, I found out that in this
->>> case, the echo socket buffer is indeed still occupied by an old message on index
->>> 0.
->>>> Looking at the preceding usage of index 0, I saw that both functions
->>> c_can_start_xmit and c_can_do_tx  (drivers/net/can/c_can/c_can_main.c )
->>> were executed on different cores at the same time.
->>>> One was called by the tx-interrupt of the CAN controller and was scheduled
->>> on CPU0.
->>>> The other one was called by the application / network layer and was
->>> scheduled on CPU1.
->>>> As both functions operate on the same resources (variables in RAM and CAN
->>> controller registers), I think that there should be some kind of synchronization
->>> mechanism, but I did not find any in the code.
->>>>
->>>> Theory:
->>>> I think that the caching mechanism, that was introduced somewhen after
->>> the 4.14 version of the kernel, can get compromised by this parallel execution.
->>>> In the beginning of c_can_start_xmit, the function checks if there is a wrap
->>> around in the buffer. If this is the case, the message just gets prepared,
->>> everything gets written to the chip, but the final transmission request is not
->>> set.
->>>> ```c
->>>> // (1) drivers/net/can/c_can/c_can_main.c - c_can_start_xmit cmd &=
->>>> ~IF_COMM_TXRQST; /* Cache the message */ ``` In the end of
->>>> c_can_start_xmit this command gets written to the CAN controller.
->>>> ```c
->>>> // (2) drivers/net/can/c_can/c_can_main.c - c_can_start_xmit
->>>> c_can_object_put(dev, IF_TX, obj, cmd); ``` The final trigger to send
->>>> the message shall then be set in the tx-interrupt, as soon as message from
->>> object index 15 (last index) was processed, because otherwise, the new
->>> message on index 0 would bypass the one on index 15 and change the order in
->>> which they are put on the bus.
->>>> ```c
->>>> // (3) drivers/net/can/c_can/c_can_main.c - c_can_do_tx
->>>> c_can_object_put(dev, IF_NAPI, obj, IF_COMM_TXRQST); ``` My theory is,
->>>> that as it is possible that both functions run parallel on different CPUs, I think
->>> that it is possible that this can happen that it happens in this order (1) -> (3) ->
->>> (2). Which leads to the situation that the transmission request bit is
->>> immediately reset after being set.
->>>> To support my theory, I put a spinlock around both critical code sections. As
->>> of now, this seems to properly solve the issue, but I am aware that this is
->>> probably the clumsiest way to do it.
->>>>
->>>> Request:
->>>> I am reaching out to you because I have not found anyone else with a similar
->>> problem on the internet.
->>>> It would be great if you could share your thought about this problem and
->>> maybe give some hints for a cleaner solution.
->>>>
->>>> Additional Details:
->>>> Please find my clumsy fix with the spinlock below. I don't think that it is
->>> ready to be merged to any official repository, but maybe it is a short-term help
->>> for someone who is in a similar situation.
->>>
->>> So, theoretically, it should be possible to have a lockless queue under the
->>> conditions that:
->>>
->>>   - there is only one reader at a time
->>>   - there is only one writer at a time
->>>   - the queue size is a power of 2
->>>
->>
->> Implementing another queue length than power of 2 in hardware is probably a pain, so I think this point is always true.
-> 
-> Actually, the queue size is configured in software through
-> c_can_driver_data->msg_obj_num. Example:
-> 
-> 
-> https://elixir.bootlin.com/linux/v6.13/source/drivers/net/can/c_can/c_can_platform.c#L196
-> 
-> And all the values for D_CAN are either 32 or 64.
-> 
->> Maybe it can come to the problem even on single core systems. Is it possible that the TX soft-irq can interrupt the start_xmit, or is this somehow scheduled atomic?
->> If it is possible, then the lock is also needed on single core systems.
-> 
-> Not sure 100%, but I can imagine this appearing on single core systems
-> as well if the scheduler decides to stop in the middle of c_can_do_tx().
-> 
-> It is clear that c_can_start_xmit() and c_can_do_tx() are racing between
-> each other. So let's go back to the lockless queue topic, and see what
-> could have gone wrong. As established the queue size is not the issue.
-> 
-> So it means that c_can_start_xmit() and c_can_do_tx() are doing
-> concurrent read and writes as corroborated by your observations and
-> analysis.
-> 
-> On important aspect of the lockless queue is the self discipline.
-> Because it is lockless, the writer should monitor the occupancy of the
-> queue and stop writing when it is full. Similarly, the reader should
-> first free the slots *before* notifying the reader that these slots
-> became available again.
-> 
-> If the writer stops the queue too late or if the reader resumes the
-> queue too early, bad things happen.
-> 
-> Back to the network queue, this logic will be controlled using the
-> netif_wake_queue() and netif_stop_queue():
-> 
->   - just before the head reaches the queue, c_can_start_xmit() must call
->     netif_stop_queue() so that the network frame work stop calling that
->     function
-> 
->   - once c_can_do_tx() finishes reading the queue, it calls
->     netif_wake_queue() to notify the network framework that it is safe
->     again to call c_can_start_xmit().
-> 
->>> This design will then abuse the C unsigned integer wraparound property. The
->>> c_can/d_can meets all above requirements, so normally, no locks are needed
->>> here.
->>>
->>> So I think that the core issue is somewhere else. Looking at the recent
->>> commits, [1] and [2] caught my attention:
->>>
->>> [1] commit 387da6bc7a82 ("can: c_can: cache frames to operate as a true
->>> FIFO")
->>> https://git.kernel.org/torvalds/c/387da6bc7a82
->>>
->>> [2] commit 81d192c2ce74 ("can: c_can: don't cache TX messages for C_CAN
->>> cores")
->>> https://git.kernel.org/torvalds/c/81d192c2ce74
->>>
->>> Those two are present in 6.1.x on which you are having your problem.
->>>
->>> What triggers me the most is the fact that the D_CAN, on which you are having
->>> your problems, have a special if condition:
->>>
->>>
->>> https://elixir.bootlin.com/linux/v6.12/source/drivers/net/can/c_can/c_can.h
->>> #L244
->>>
->>> In addition, [2] says that, I quote:
->>>
->>>   the optimization introduced in [1] doesn't properly work on
->>>   C_CAN, but on D_CAN IP cores. The exact reasons are still
->>>   unknown.
->>>
->>> The other part of the queue implementation looks good to me. Only this
->>> c_can_get_tx_free() caught my attention.
->>>
->>> Can you try to revert above commits [1] and [2] and tell us if you still have the
->>> issue?
->>
->> Unfortunately, I don't have enough time for those tests,
-> 
-> With the good git commands, reverting commits should be an easy task.
-> Example working on the stable tree:
-> 
->   git clone git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
->   cd linux
->   git checkout v6.1.43
->   git revert 81d192c2ce74 # revert [2]
->   git revert 387da6bc7a82 # revert [1]
->   editor drivers/net/can/c_can/c_can_main.c # resolve the conflict
->   git add drivers/net/can/c_can/c_can_main.c # add conflict resolution
->   git revert --continue # continue and commit the revert of [1]
-> 
-> (this is FYI, your analysis gave enough information so that this revert
-> is not necessary anymore).
-> 
->> but I am quite sure that they are the reason, because the code looks almost like in 4.14 after reverting those changes.
->> Those changes [1] and [2] introduced write access to the TX buffer in the tx-irq (c_can_do_tx). This was not the case before those changes.
->> Maybe it was not considered that the function c_can_do_tx can / is called from another context.
->> Maybe, someone who uses the C_CAN had the same problems as me and therefore disabled the caching mechanism.
->>
->> From my point of view, those resources need to be protected by concurrent access:
->> - tx_ring->tail: This is incremented by the tx-irq. If it becomes 0 (message on index 15 was sent), it checks if other messages were cached by looking on tx_ring->head. If head is greater 0, it will set the TX request bit for all cached messages by calling c_can_object_put.
->> - tx_ring->head: This is incremented by the sending routine. If it becomes 0 and tail is still greater than 0 (there are still messages in the last objects that are waiting to be sent), the message must be cached (TX request must not be set), because the controller sends the messages object with the lowest index first. If it wasn’t cached, it would bypass the messages in the objects with the higher index.
->> - Any call to c_can_object_put / c_can_inval_tx_object / c_can_object_get, because they all call c_can_obj_update which sets a register and busy waits for the transaction to complete
->>
->> Probably it is not necessary to protect the first half of the tx-irq:
->> ```c
->> static void c_can_do_tx(struct net_device *dev)
->> {
->> 	struct c_can_priv *priv = netdev_priv(dev);
->> 	struct c_can_tx_ring *tx_ring = &priv->tx;
->> 	struct net_device_stats *stats = &dev->stats;
->> 	u32 idx, obj, pkts = 0, bytes = 0, pend;
->> 	u8 tail;
->>
->> 	if (priv->msg_obj_tx_last > 32)
->> 		pend = priv->read_reg32(priv, C_CAN_INTPND3_REG);
->> 	else
->> 		pend = priv->read_reg(priv, C_CAN_INTPND2_REG);
->>
->> 	while ((idx = ffs(pend))) {
->> 		idx--;
->> 		pend &= ~BIT(idx);
->> 		obj = idx + priv->msg_obj_tx_first;
->>
->> 		/* We use IF_NAPI interface instead of IF_TX because we
->> 		 * are called from c_can_poll(), which runs inside
->> 		 * NAPI. We are not transmitting.
->> 		 */
->> 		c_can_inval_tx_object(dev, IF_NAPI, obj);
->> 		bytes += can_get_echo_skb(dev, idx, NULL);
->> 		pkts++;
->> 	}
->>
->> 	if (!pkts)
->> 		return;
->>
->> ////////////// spinlock starting here
->>
->> 	tx_ring->tail += pkts;
->> 	if (c_can_get_tx_free(priv, tx_ring)) {
->> 		/* Make sure that anybody stopping the queue after
->> 		 * this sees the new tx_ring->tail.
->> 		 */
->> 		smp_mb();
->> ////////////// Do we get a problem here because this might call the send routine?! I have no idea. Maybe this should be moved to the end of the function and be removed out of the spin lock section
->> 		netif_wake_queue(priv->dev); // is this the equivalent to stop queue?
-> 
-> Yes! It is netif_stop_queue().
-> 
->> 	}
->>
->> 	stats->tx_bytes += bytes;
->> 	stats->tx_packets += pkts;
->>
->> 	tail = c_can_get_tx_tail(tx_ring);
->> 	if (priv->type == BOSCH_D_CAN && tail == 0) {
-> This bothers me the most. This check occurs *after* the call to
-> netif_wake_queue() so anything in this if block is not guarded anymore
-> and can race against c_can_start_xmit().
-> 
->> 		u8 head = c_can_get_tx_head(tx_ring);
->>
->> 		/* Start transmission for all cached messages */
->> 		for (idx = tail; idx < head; idx++) {
->> 			obj = idx + priv->msg_obj_tx_first;
->> 			c_can_object_put(dev, IF_NAPI, obj, IF_COMM_TXRQST);
->> 		}
->> 	}
->> }
->> ```
->>
->>
->> In the sending routine, I think most stuff needs to be protected. Some parts could be rearranged to reduce the amount of code in the critical area.
->> ```c
->> static netdev_tx_t c_can_start_xmit(struct sk_buff *skb,
->> 				    struct net_device *dev)
->> {
->> 	struct can_frame *frame = (struct can_frame *)skb->data;
->> 	struct c_can_priv *priv = netdev_priv(dev);
->> 	struct c_can_tx_ring *tx_ring = &priv->tx;
->> 	u32 idx, obj, cmd = IF_COMM_TX;
->>
->> 	if (can_dev_dropped_skb(dev, skb))
->> 		return NETDEV_TX_OK;
->>
->> 	if (c_can_tx_busy(priv, tx_ring))
->> 		return NETDEV_TX_BUSY;
->>
->> /////// spinlock starting here
->> 	idx = c_can_get_tx_head(tx_ring);   /// this probably doesn’t need the spinlock yet, because it just reads and the tx-irq does not modify
->> 	tx_ring->head++; // this needs to be protected because tx-irq will use it to decide how many tx request bits it needs to set
->> 	if (c_can_get_tx_free(priv, tx_ring) == 0) // if this wasn’t protected, the queue could possibly be stopped although a message object just became free, which would not be too bad
->> 		netif_stop_queue(dev);
->>
->> 	if (idx < c_can_get_tx_tail(tx_ring)) // this needs to be protected
->> 		cmd &= ~IF_COMM_TXRQST; /* Cache the message */
->>
->> 	/* Store the message in the interface so we can call
->> 	 * can_put_echo_skb(). We must do this before we enable
->> 	 * transmit as we might race against do_tx().
->> 	 */
->> 	c_can_setup_tx_object(dev, IF_TX, frame, idx); // this needs to be protected because it calls  c_can_inval_tx_object
->> 	can_put_echo_skb(skb, dev, idx, 0); // this probably doesn’t need protection
->> 	obj = idx + priv->msg_obj_tx_first;
->> 	c_can_object_put(dev, IF_TX, obj, cmd);  // this needs protection again
->>
->> 	return NETDEV_TX_OK;
->> }
->> ```
->>
->> I have done extensive tests with my patch, and it works well in my system. For me, it would be sufficient :-D.
->> In the meantime, I found that another driver had the same problem. They chose a similar solution
->> https://lore.kernel.org/lkml/20180327162802.559928021@linuxfoundation.org/
-> 
-> Putting spinlock will of course solves your issue, but it just papering
-> over the root cause. Here we need to find where the queue wake/stop
-> logic went wrong.
-> 
->>>> Thank you in advance for your time and assistance. I look forward to hearing
->>> your suggestions or advice.
->>>
->>> Thank you for the detailed report. Let me ask you: do you want to write the
->>> final patch? If yes, we can guide you into the process.
->>
->> It would be an honour to do this :-)
-> 
-> Great. Have a look at these:
-> 
-> 
-> https://nickdesaulniers.github.io/blog/2017/05/16/submitting-your-first-patch-to-the-linux-kernel-and-responding-to-feedback/
->   https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-> 
-> When you describe your changes in your patch, go for conciseness. No
-> need for the politeness, go strait to the point.
-> 
-> A good way to describe the race condition is through some ASCII art
-> diagram, something like this:
-> 
->          CPU 1                   CPU 2
-> 
->            |                       |
->     c_can_do_tx()                  |
->            |                       |
->       netif_wake_queue()           |
->            |                       |
->            |               c_can_start_xmit()
->            |                       |
->       c_can_object_put()     can_put_echo_skb()
->            |                       |
->            |                       |
->            v                       v
-> 
-> If you have a dmesg error log, it is also good to attach it at the
-> bottom of your patch description.
-> 
-> Have a look at:
-> 
->   git log --grep="race condition"
-> 
-> to see how people usually describe their patch when fixing a race condition.
+Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2025=E5=B9=B42=E6=9C=
+=8827=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8810:09=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+...
+> > +static void nct6694_can_handle_state_change(struct net_device *ndev,
+> > +                                         enum can_state new_state)
+> > +{
+> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +     struct can_berr_counter bec;
+> > +     struct can_frame *cf;
+> > +     struct sk_buff *skb;
+> > +
+> > +     skb =3D alloc_can_err_skb(ndev, &cf);
+> > +
+> > +     nct6694_can_get_berr_counter(ndev, &bec);
+> > +
+> > +     switch (new_state) {
+> > +     case CAN_STATE_ERROR_ACTIVE:
+> > +             priv->can.can_stats.error_warning++;
+> > +             priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
+> > +             if (cf)
+>
+> Set the CAN_ER_CRTL flag:
+>
+>                 if (cf) {
+>                         cf->can_id |=3D CAN_ERR_CRTL;
+>                         cf->data[1] |=3D CAN_ERR_CRTL_ACTIVE;
+>                 }
+>
 
-Yours sincerely,
-Vincent Mailhol
+Fix it in the v9.
 
+> > +                     cf->data[1] |=3D CAN_ERR_CRTL_ACTIVE;
+> > +             break;
+> > +     case CAN_STATE_ERROR_WARNING:
+> > +             priv->can.can_stats.error_warning++;
+> > +             priv->can.state =3D CAN_STATE_ERROR_WARNING;
+> > +             if (cf) {
+> > +                     cf->can_id |=3D CAN_ERR_CRTL;
+>
+> Set the CAN_ERR_CNT flag when you populate cf->data[6] and cf->data[7]:
+>
+>                         cf->can_id |=3D CAN_ERR_CRTL | CAN_ERR_CNT;
+>
+
+Fix it in the v9.
+
+> > +                     if (bec.txerr > bec.rxerr)
+> > +                             cf->data[1] =3D CAN_ERR_CRTL_TX_WARNING;
+> > +                     else
+> > +                             cf->data[1] =3D CAN_ERR_CRTL_RX_WARNING;
+> > +                     cf->data[6] =3D bec.txerr;
+> > +                     cf->data[7] =3D bec.rxerr;
+> > +             }
+> > +             break;
+> > +     case CAN_STATE_ERROR_PASSIVE:
+> > +             priv->can.can_stats.error_passive++;
+> > +             priv->can.state =3D CAN_STATE_ERROR_PASSIVE;
+> > +             if (cf) {
+> > +                     cf->can_id |=3D CAN_ERR_CRTL;
+>
+> Set the CAN_ERR_CNT flag when you populate cf->data[6] and cf->data[7]:
+>
+>                         cf->can_id |=3D CAN_ERR_CRTL | CAN_ERR_CNT;
+>
+
+Fix it in the v9.
+
+> > +                     cf->data[1] |=3D CAN_ERR_CRTL_RX_PASSIVE;
+> > +                     if (bec.txerr >=3D CAN_ERROR_PASSIVE_THRESHOLD)
+> > +                             cf->data[1] |=3D CAN_ERR_CRTL_TX_PASSIVE;
+> > +                     cf->data[6] =3D bec.txerr;
+> > +                     cf->data[7] =3D bec.rxerr;
+> > +             }
+> > +             break;
+> > +     case CAN_STATE_BUS_OFF:
+> > +             priv->can.state =3D CAN_STATE_BUS_OFF;
+> > +             priv->can.can_stats.bus_off++;
+> > +             if (cf)
+> > +                     cf->can_id |=3D CAN_ERR_BUSOFF;
+> > +             can_free_echo_skb(ndev, 0, NULL);
+> > +             netif_stop_queue(ndev);> +              can_bus_off(ndev)=
+;
+> > +             break;
+> > +     default:
+> > +             break;
+> > +     }
+> > +
+> > +     nct6694_can_rx_offload(&priv->offload, skb);
+> > +}
+> > +
+...
+> > +static int nct6694_can_stop(struct net_device *ndev)
+> > +{
+> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +
+> > +     priv->can.ctrlmode =3D CAN_CTRLMODE_LISTENONLY;
+>
+> Hmmm, when Marc asked you to put the device in listen only mode, I think
+> he meant that you set it on the device side (i.e. flag
+> NCT6694_CAN_SETTING_CTRL1_MON) and not on the driver side. If you set
+> CAN_CTRLMODE_LISTENONLY flag, that will be reported in the netlink
+> interface. So you should not change that flag.
+>
+> But before that, did you check the datasheet? Don't you have a device
+> flag to actually turn the device off (e.g. sleep mode)?
+>
+
+Our firmware currently does not provide an interface to turn the
+device off, I will put the device in listen-only mode as an
+alternative.
+
+> > +     netif_stop_queue(ndev);
+> > +     free_irq(ndev->irq, ndev);
+> > +     destroy_workqueue(priv->wq);
+> > +     can_rx_offload_disable(&priv->offload);
+> > +     priv->can.state =3D CAN_STATE_STOPPED;
+> > +     close_candev(ndev);
+> > +
+> > +     return 0;
+> > +}
+> > +
+...
+> > +static int nct6694_can_probe(struct platform_device *pdev)
+> > +{
+> > +     const struct mfd_cell *cell =3D mfd_get_cell(pdev);
+> > +     struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
+> > +     struct nct6694_can_priv *priv;
+> > +     struct net_device *ndev;
+> > +     int ret, irq, can_clk;
+> > +
+> > +     irq =3D irq_create_mapping(nct6694->domain,
+> > +                              NCT6694_IRQ_CAN0 + cell->id);
+> > +     if (!irq)
+> > +             return irq;
+> > +
+> > +     ndev =3D alloc_candev(sizeof(struct nct6694_can_priv), 1);
+> > +     if (!ndev)
+> > +             return -ENOMEM;
+> > +
+> > +     ndev->irq =3D irq;
+> > +     ndev->flags |=3D IFF_ECHO;
+> > +     ndev->dev_port =3D cell->id;
+> > +     ndev->netdev_ops =3D &nct6694_can_netdev_ops;
+> > +     ndev->ethtool_ops =3D &nct6694_can_ethtool_ops;
+> > +
+> > +     priv =3D netdev_priv(ndev);
+> > +     priv->nct6694 =3D nct6694;
+> > +     priv->ndev =3D ndev;
+> > +
+> > +     can_clk =3D nct6694_can_get_clock(priv);
+> > +     if (can_clk < 0) {
+> > +             ret =3D dev_err_probe(&pdev->dev, can_clk,
+> > +                                 "Failed to get clock\n");
+> > +             goto free_candev;
+> > +     }
+> > +
+> > +     INIT_WORK(&priv->tx_work, nct6694_can_tx_work);
+> > +
+> > +     priv->can.state =3D CAN_STATE_STOPPED;
+>
+> Marc asked you to remove this line during the v7 review.
+>
+
+Sorry, drop it in the v9.
+
+> > +     priv->can.clock.freq =3D can_clk;
+> > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_nominal_cons=
+t;
+> > +     priv->can.data_bittiming_const =3D &nct6694_can_bittiming_data_co=
+nst;
+> > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
+> > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_counter;
+> > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
+> > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
+> > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
+> > +
+> > +     ret =3D can_rx_offload_add_manual(ndev, &priv->offload,
+> > +                                     NCT6694_NAPI_WEIGHT);
+> > +     if (ret) {
+> > +             dev_err_probe(&pdev->dev, ret, "Failed to add rx_offload\=
+n");
+> > +             goto free_candev;
+> > +     }
+> > +
+> > +     platform_set_drvdata(pdev, priv);
+> > +     SET_NETDEV_DEV(priv->ndev, &pdev->dev);
+> > +
+> > +     ret =3D register_candev(priv->ndev);
+> > +     if (ret)
+> > +             goto rx_offload_del;
+> > +
+> > +     return 0;
+> > +
+> > +rx_offload_del:
+> > +     can_rx_offload_del(&priv->offload);
+> > +free_candev:
+> > +     free_candev(ndev);
+> > +     return ret;
+> > +}
+> > +
+
+
+Best regards,
+Ming
 
