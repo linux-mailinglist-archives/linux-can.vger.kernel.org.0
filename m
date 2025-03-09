@@ -1,249 +1,148 @@
-Return-Path: <linux-can+bounces-3028-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3029-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB409A578C1
-	for <lists+linux-can@lfdr.de>; Sat,  8 Mar 2025 07:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 351AFA58335
+	for <lists+linux-can@lfdr.de>; Sun,  9 Mar 2025 11:46:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2420171279
-	for <lists+linux-can@lfdr.de>; Sat,  8 Mar 2025 06:30:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C8F816BC00
+	for <lists+linux-can@lfdr.de>; Sun,  9 Mar 2025 10:46:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF25A18FC74;
-	Sat,  8 Mar 2025 06:30:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="cX/KRtc0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7075B1C5D4A;
+	Sun,  9 Mar 2025 10:46:24 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011065.outbound.protection.outlook.com [40.107.74.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711AB17583;
-	Sat,  8 Mar 2025 06:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741415401; cv=fail; b=Ij8kLJnx/5yV3441SxjTf2nY2iiQYPZJBng6ElTxJ6LNc883Kre/VuiEtBqEauelKa6AzMpkiJwv44S8wMxKRgl1LQ8J1uRaWZNtAjXc/2Vxg/1cf9aHoYg0K3NU8x0o1P5shGuux+8CzbkYPOQQ4oXCRdIRrqfVADzRfjUacrs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741415401; c=relaxed/simple;
-	bh=8QcMG5gZa0/iUcSClOjYNofzZ7O4wirwOCKU//aFQ5I=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=YvPD+yu+WA8xtNHBRT7sM46NjEkmmZdZeIwgxAS0+GjVQUcIGNeJ4vkIDa+TKaLe4MewIPMBn0JYjk82AwEaEgdrovjeCO1pEd9fcFcnx5I23GGt7ECPwO6u8x4Zd+hSHvXB+WYNsCpnEXIW4Y2K39VVEqJ8kT4Hkd2v3BLo7I8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=cX/KRtc0; arc=fail smtp.client-ip=40.107.74.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=zIWVaGCG0AndsTWvpOgtj4ADezV3OH7CmEi9dVwH+qTGUzOwqKwt05Y6jjIFnS53o1CVzBd3ItiUgdIixL9+K07oMkgb2e0r7JjeBxtmMH58C9AbqNmGu3W7VtF3kAEQ/U/H/QlLkzlBjSzuew6IkRjAeDYVhHdq8ciM8KHb11s17tJkeQ5Ta+538SZvIZlyG1C3NIhpflhOvBMaQxGLJJ6nmjk6Ro1t6xcZFyz4qykg+gPgcJgg91r29Wxs1gQLOypA/XbY6GDuk/bjSGDqayLoHXgiitvpCZtkiLWBWTHxjE5VM+a0qRi83SQ/FMWHC/B5d9EoxFnIiKcZPzjVLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8QcMG5gZa0/iUcSClOjYNofzZ7O4wirwOCKU//aFQ5I=;
- b=N2uDpvocfKG9Nu735Glk+/6MlWC05bBWw0TZtb6Fehnf8ygjQ8CXr3OukaE4V/LCoD3w85ddJB5WqVQW2EJEGv6zt+gKxnRQZVksffId0aAPDbmoFNIULCRmwhvhSO4zReV+3T1RS5PCmZ/1TwQm05xQou4Mcm1EdB0P7pth36nV/d1Oxsi8VGS0TrPEBq+fX4IaaZBfug7xNM4PlyEGxUhpzUPfRG248/e3yv+mhJDabaXzyjrukjIwYtLeoSaozFvmUVFrx/lWKQB/6f7RdhplZNhGbSD8NisovqT2uEA+blSDPMjTVuQ/JNwtBF9J21unhkeExqPderQXvRkX+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8QcMG5gZa0/iUcSClOjYNofzZ7O4wirwOCKU//aFQ5I=;
- b=cX/KRtc0qzzrzILaV3BBOVmmU0rWuGogoBpNRuJluT3eOlW+WYo5EGabxrlu3P8QhQequE7vnDy735s0YzP34eZXj2gyaPyU5KXd8oMgaLGeTzmmjpIQJu4dpjiCia11/OTHAVq4w2B/1Bzn6e5eLfw74HykpYSAdoBb5lIGzAU=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by OSOPR01MB12152.jpnprd01.prod.outlook.com (2603:1096:604:2da::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.24; Sat, 8 Mar
- 2025 06:29:51 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1%4]) with mapi id 15.20.8511.019; Sat, 8 Mar 2025
- 06:29:48 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-CC: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol
-	<mailhol.vincent@wanadoo.fr>, Wolfram Sang
-	<wsa+renesas@sang-engineering.com>, =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?=
-	<u.kleine-koenig@baylibre.com>, Rob Herring <robh@kernel.org>, Ulrich Hecht
-	<ulrich.hecht+renesas@gmail.com>, "linux-can@vger.kernel.org"
-	<linux-can@vger.kernel.org>, Prabhakar Mahadev Lad
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>, biju.das.au
-	<biju.das.au@gmail.com>, "linux-renesas-soc@vger.kernel.org"
-	<linux-renesas-soc@vger.kernel.org>, "stable@vger.kernel.org"
-	<stable@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] can: rcar_canfd: Fix page entries in the AFL list
-Thread-Topic: [PATCH v2 2/2] can: rcar_canfd: Fix page entries in the AFL list
-Thread-Index: AQHbg3wwxySbXtRqN0i0VotwnX4XtLNn1ygAgAEFZsA=
-Date: Sat, 8 Mar 2025 06:29:48 +0000
-Message-ID:
- <TY3PR01MB113462D6EF7BDDFE403FD0DC286D42@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20250220094516.126598-1-biju.das.jz@bp.renesas.com>
- <20250220094516.126598-3-biju.das.jz@bp.renesas.com>
- <CAMuHMdUs=+niOyBW0us=UjZTnqeYjVsLWZSmROndCO8azER=3g@mail.gmail.com>
-In-Reply-To:
- <CAMuHMdUs=+niOyBW0us=UjZTnqeYjVsLWZSmROndCO8azER=3g@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|OSOPR01MB12152:EE_
-x-ms-office365-filtering-correlation-id: 11c7efb2-43b4-48f7-ceef-08dd5e0aa02a
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?SDY5Sk9FZjFjTEE4eUluOXN5eFlQRVp3N0dYNmUySlc2dlo0d0hLclVxMVQy?=
- =?utf-8?B?aXhxcEw1bk1sOXVyamEwQW1JbGI2ZmFMY2g3UDlJQ05ybU9wMW1nOTNqdkY4?=
- =?utf-8?B?REtMR1BtbW1WVk4vVmFTSGY5b0FnejJEajQxbTQ0VlJ5VWdOcnpSTTcwVndy?=
- =?utf-8?B?eExCSGN3NjNFb295UCsvLytTalFzeW0vQlRVOXk4S0huRjgycTAvTGtUZFNw?=
- =?utf-8?B?cFl3bjI5azlqTWkxZ0YrMzRkdzd1VU16R2NjcjRHM0Q4R2JDNGQwUXB5ZjN3?=
- =?utf-8?B?elNueGgzbEdaL3FTZUY4Z2ZJdHU0MUJ6TE1TYUNOQUtQalZNTkJlUUUyVEt5?=
- =?utf-8?B?Z01tMFNPNDNEOWtJdkVuM040QmpqWXlWQ3BoekdNMWJnZ1ZFOVRCQm93Wk1Y?=
- =?utf-8?B?YVJCVTFWcThVa2NtMTBTZEROdGlWNS9icjJkS1lETkNRNlVIbmxoSUMwclhW?=
- =?utf-8?B?RjNrT2JabG5xbXVKbCtLYTdjM3hHUkFpcmRKcU9GR2NGK1JEdzFkdnhtQkY0?=
- =?utf-8?B?MU1OZ3Jod1NDTVNlREI2Qm9Gc2NZWkQrc1p2Vm5SNU5BSmxWd0dOdmN6VXdk?=
- =?utf-8?B?aXdDeUYveExTMUFWaGVFYWtESXE2MDQ5a1J2Rmo1QmlYeXlWNU0yeHlLakpr?=
- =?utf-8?B?RWI0NkJtNnR4U2ZXblhYMXdBVDArMzU1WjBYd3BQM1RCaEdXQzVJWk5kbUpF?=
- =?utf-8?B?ZVd1RFJaRDYyeU9ZTzU1ejF5VFVvRFNtSVZUOGcyNjFtSnh4S3lOVHFFQ0VM?=
- =?utf-8?B?dGtEa01DZW1UQ2ZNZ1YyLy8zYVFtQmg2OWZreGptVXc2ZkhDemVEMm4rQVdF?=
- =?utf-8?B?L0NrQnFLelgrUWwvaGplWldxWkVBcWJVUkI3eUFCY0N3M3h6bzQ2SHRqR2dC?=
- =?utf-8?B?WU5wUmJuT2ZhVGJ1NGx6NGhVQ3Bubnp6RHhxMUJ2TGsramVOV0gvTG1wNEw5?=
- =?utf-8?B?czVlT0xwcnhFcGVYaGdBQ0tVVUVtSTkwRE5KV0svNkpHZU9ESDBOL0VpKzUz?=
- =?utf-8?B?clk2MTl2SnZmdVdVWFRmUVAxMlozREN6MWlvMVZkR2RhdWp5eVM5SGdqN3JX?=
- =?utf-8?B?TjBTakFtbnM3ZlZ4d3Y1Q1R3K29Sbkd6TmN2Y090dFdyQmsrSFN3NGFXVkVa?=
- =?utf-8?B?MmlTcGRCVXFoWjZnUitqa253UERHTDdVcWJaOEUzeEtjN2R5dlBPeDZCQi92?=
- =?utf-8?B?d0FFN0pNeEFNZm5CTWdYeFpwcVpyb2c5VkxDQ2pObEZZWGlNR1BZZzl4NWN3?=
- =?utf-8?B?SUZHc3h4V0FGeGZOQkRNbHZaZXFnMFIrV2hGaE53ZlYyNEZqZnNzRHBCWll2?=
- =?utf-8?B?QnFQaktIL0V1N1BOWEs2RkxYTGpqZE05b3Naai9RT3h0L3hENW5NV0ZJbXR0?=
- =?utf-8?B?cDc2djFxWmUwQmM2WmJPZm5PajU0QmRBdGFaNjhKVUdkVHU1dTkyZ3pJRHhj?=
- =?utf-8?B?MjRKMHBXUUVTTFRMbytLT3ZVaGRqbS9TQTVOdTFwMWpmM3pueHRhMkVaVmY5?=
- =?utf-8?B?NjN5QWtmTlEyWitML2VZQmFmRDkvREhtYWdkMWRSaWJaaGFVSXVnNHR3T0Ra?=
- =?utf-8?B?NVBBNXl6aHR3dFV1S3NXN1JPem5UTEpWTUhrVm92M291aUJMWFBScXJXYkZX?=
- =?utf-8?B?TmJDY1Q1L2RFTWpnMFhybkZta2ZRRzkvQVFFVGM2cXVMdmRpZ2NMa0R5MXV3?=
- =?utf-8?B?ci9TWUI5aDhxYUhjSkNNbjhqL3JuZmR6M2ExMzJlMEtCVGJQMGtTdDdOZzl2?=
- =?utf-8?B?MHpsSG54dEtFRURuNmsvSXB6d204R2g3UFNPd2UrazhhOWVaZTNwem9saXJM?=
- =?utf-8?B?SytkSFE2c1FHY2NXVDNJbUFOSnYwS0xPRENDMnlsNGJTMC9vZURzM1o1SXZj?=
- =?utf-8?B?NDZRSi81V0VURXVJdml0L1FoQXlSSWowWE1JZXRiNW54QTZCZkR1WFhSNnhw?=
- =?utf-8?Q?SQc6LVaumGBl/fOfHLCk7IG5qM70ssRQ?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?N2tmVk1YODhmQTU4Qk8rcHZWYUNEaHhHU2pVNTAxc0hjbFo5MmNSb1NDbUhG?=
- =?utf-8?B?azl5WTV4SkZFRVd6S3U4UXlnWHBncFJEQU1rKzdqa25MeXFteVR0ZGFiaW1l?=
- =?utf-8?B?UlNyQVlqcGR4TmF1NS8zS25Gbms0dnIzanZIc2FPNFphNmhPUGVvTVV4eDgr?=
- =?utf-8?B?WGplUWpjeUtUelpaWUpHQThPNkFiTUxhR1NuVUY4MnJPV2xzd21yNklwUTdq?=
- =?utf-8?B?aWl3UnhOVnNsVGV0SEN4YWJZUUlqQlloNEFMRSsydXZjNjJ2cVlLVmIwTlZr?=
- =?utf-8?B?dDNJdDdLTXpxTGFxN0JBTUlITUwvak51ZjlzOHhZdW5ES0JQV1F5OGczL2tS?=
- =?utf-8?B?M1ZQay81NzFFTDR4OFY2WGE1Kzl4RTFid1pmUm0yaXozOVVKWi9XVVdkTFlT?=
- =?utf-8?B?MzBqTTNVZytPOS94SXl2MmNnWWQ3Y2tGcGp2bTVsUlBLSVl6L2pFekdQdE5a?=
- =?utf-8?B?RmZkbEM1SzZ2M21EemRmdXFaWjhFZjVLUG0vaTI3UFcxRjlqdVQrbXhxNXR5?=
- =?utf-8?B?aU9wU3Y0VlRUdm5qbzBPNkFDSXhNMzZRNHhlVVAvRW11RU83YWN6UkRrM3lV?=
- =?utf-8?B?R2FwUjVhMURPRWtTR1p4dXh2Z2VaY1ZjU21neWdxL0lkNWlITXN1TCtQRmdp?=
- =?utf-8?B?QUJIUkswcHRqQzNIbVdhZE9wSWN5TC9lQW9EUWUxM1R4MHRTcmM0Y2xicWRN?=
- =?utf-8?B?V2tQRG9jNlBZSjVsWFU5ak1DUG9oVkUzNEZCeEVHbEZVNytCNmFFVnhCZTBX?=
- =?utf-8?B?bDBOeWc4TDliRnlMcUttNnlmc25HNWcvOW00aXE2cHVKOVYxVUIyZEtTQ0VJ?=
- =?utf-8?B?Rmp6QVhKeFlPSmRUaWxQNWFoaHdzRTI2amZSM29lay9uTElvM3RoMS9DTlBH?=
- =?utf-8?B?YnJrMDdYRTdIWTFOTUNOWWp4bW9ZbnZnUEE5Q0oyZEFhL21TS3VGcjY2TFdz?=
- =?utf-8?B?UU51Y29DdnVYcWZ4amcvMzVzMFdWZDU1NTRNREJIUnpmL1FITkhxem0zT29z?=
- =?utf-8?B?dGdta1FKblpMTHdpc2JYQU5scDJlOHZ1c3J4N3VCazZrK05DbDMvLzUyRjRN?=
- =?utf-8?B?aFlXNG1MRlNFSW5iNk1wSXZMa2d6aHI0aFA3eWRHZUd5M09EVnhTU0p0SDNr?=
- =?utf-8?B?djNnTDhTSVJ5R1RqZ0pWcGJKTlRtcE1oVCtUNkpuRWxvVityMEhzWmJRNmlM?=
- =?utf-8?B?RXFWeUxyaUROQnFKeFNmU2NiZHROSDRSYVJiWXA1T1ZmNXFQUW11YlBnQTVY?=
- =?utf-8?B?TFBYTUhQUHdzZ0FWM3RubVMxMEplMUU2bG8xYko3cmpYRm5BeDZ4SG96TkFZ?=
- =?utf-8?B?ZUhhRUREbVlMSm5neEp1WDV6U0xXbnpXNm82bU53dTBiWEpvdi9Pc0FVQlZy?=
- =?utf-8?B?Um8xbi9kb2NmZzF2K0UwNU94UHZjWk9DUU5VRXhvbDdrZWVXMGJ0Y3FOTk5m?=
- =?utf-8?B?bGxYaUR2QnBSZGx5R25Tbm1ZczR3QkpnVlluMTg1dGhNL1ZYeVQ1cUJTTWoy?=
- =?utf-8?B?VE4xYXNvRnhROWlabjFYODRQcnE3VGl0cHJBdVFPN1lqY3JNcTdsZE9iMlBN?=
- =?utf-8?B?NFdVZEdVdVkwM2FnSTYyUFE4S3JqV3U1T20yUitWYVFQcG5FMzUraG1DdnJN?=
- =?utf-8?B?Mjg2V3lCRllYejlqRWZLRGpBTHB6QU5BZjMzK2NOVU0yNjB3bklKcGI4ZGZj?=
- =?utf-8?B?OTJMZjFncllwS0NYeFRHNFRrcDlGVFB6VUpqQ25Ha1B4bDVzMlFNbEZ1dTZl?=
- =?utf-8?B?NzFVU1NNWE05bTI2MTIzckFzTjZCQzJOOXk5WjExYnNTcGJlOFlNYnBBNldl?=
- =?utf-8?B?MGhqZnNYSjJSby9NMFVuTzdRMEs2TVhyUkZiK1V2WnBudUd4eE5vNGNpL1M0?=
- =?utf-8?B?RkorNTdsNWJqclJINXJrbFJzRXNnd2MxaERXajJxdWNnZ1hFYk1VS0xjMit4?=
- =?utf-8?B?TFE5WEtjKzVHTlRxdEJjTlR1ZjQyZlVjYitybG9vcVduWTh0VzFLS2xlTzBi?=
- =?utf-8?B?YS90SlNZVmk5UWt2QmlXRFBOMzBRVnJiZTJSK2VKSlUxa3k2STBZWGVqN2dQ?=
- =?utf-8?B?Zk8yS0lVMDNwcmhSS2xZRDN3S3NjNWtYUlMzRHNpdCtMWHBnVnZ3MDlZYmtL?=
- =?utf-8?B?b05Ncm9pNjBGYkFVQTA2ampPT05PTWpma0dhbnpPa0I5UHBwOWxsZElqT2dX?=
- =?utf-8?B?Y1E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D521C5D45
+	for <linux-can@vger.kernel.org>; Sun,  9 Mar 2025 10:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741517184; cv=none; b=BruuxYR006X94t8p8vM8NZrNWWmMs5PUwSwSOLNc/v4NNfpbi/eniFIZBUGwaj8csliQeXxX5tYOiExe22ROZLc8SDY4dUFYvVRYk3qGJDnhpmr+fZgLUCwHj1iK79DOSZIGyDfNCvOFmZWrig3jxui5vzgs9+S+dDvgMDfgkYE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741517184; c=relaxed/simple;
+	bh=FVqO0IZhKzpyNhoeFF+PIXD3POnSYl1Rj54YaoYG5VY=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=QpwxyuAeEMnpaAaduGBpM2sS+SehCyiARE/pmHs2h0MXqIm6aRae22Hn3rnFQxOjpLBoWcFCooTSBicz1Zh/z+CIzzju/HdUbegIcd2hJ+zIh6ODZH5un3AQwpwLIUxHpS8ehd5zzn2UgQV3xLAZoDuUj0DRgjQSjV7pdMI+2+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3d05b1ae6e3so30464445ab.0
+        for <linux-can@vger.kernel.org>; Sun, 09 Mar 2025 03:46:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741517182; x=1742121982;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Eco3k+TBsDkbmpqvhJ0sYzrtK8q7foQl94kdUFDByJQ=;
+        b=GbcvINjFTNDJVc2dATsD6lLZdi1FgycTgnAAZhZ2hykqT2MWEyKv6qS4H+r0MeBXjh
+         YQwJ1wIF+iewmmhc1TwzHawZoJtYSLnzn/re1DXdleRFk7TpbmJ+sq2/0HpYScJHqZo2
+         fsJfqJ/5GH6gMp5NlQfMOpyIrK4XG9Jb2RBXI9LvyA2BdJSUAmCx7YxybSwGXr3n/EIR
+         6UeyJ41IsgivoDy1x646S//CzXsnLmzYn5QCfuGob400ljZkdUlpiMKU5QqFdbBjGhUJ
+         TlAnqx4S+uJT0h0rar03i9mbecTokbS3IJSYX0xAy8ndvpBpen0SafB8ReJOHBp2bsqQ
+         LrRQ==
+X-Gm-Message-State: AOJu0Yz7MXBkMIOX5jqC7/SaLLVbV9bZoSGkFgSVumbKtrUkwYqvVRwo
+	9knG9tef514btYCLTqORdFhWOo4fZ/8QV4cXkg+8/VMocRcRHmZGCnbHCQX/DSbhjCIzPBKVLWM
+	crLHcNI0nBvgHfWWegTX7n+eHZTxXPCumIrUx8e+HJIEf4MmT+N5M/6j4mA==
+X-Google-Smtp-Source: AGHT+IHXNtwZ3elpyiLwduLxCpHFyTJc4L8eQ/csKiv/3aVcqzCU3ghy5QLbu6JvNnz1rMIkZXlGG7QXOpuUO4MorT5peQ9+Fj6I
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11c7efb2-43b4-48f7-ceef-08dd5e0aa02a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2025 06:29:48.6275
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4avG0+UqK3u6HbfJpLZdOg2JSHzOfGcg1cCSZA++1oBX731s9h86re2LmAUmBOQD4hUoqzjI4LW+53rIztLVuKfF1uCCCCwbgOwhIH1aZUE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSOPR01MB12152
+X-Received: by 2002:a05:6e02:180c:b0:3d4:276:9a1b with SMTP id
+ e9e14a558f8ab-3d441a06d98mr94835815ab.16.1741517182016; Sun, 09 Mar 2025
+ 03:46:22 -0700 (PDT)
+Date: Sun, 09 Mar 2025 03:46:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67cd717d.050a0220.e1a89.0006.GAE@google.com>
+Subject: [syzbot] [can?] KCSAN: data-race in can_send / can_send (5)
+From: syzbot <syzbot+78ce4489b812515d5e4d@syzkaller.appspotmail.com>
+To: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	mkl@pengutronix.de, socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-SGkgR2VlcnQsDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR2VlcnQg
-VXl0dGVyaG9ldmVuIDxnZWVydEBsaW51eC1tNjhrLm9yZz4NCj4gU2VudDogMDcgTWFyY2ggMjAy
-NSAxNDo0Mg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHYyIDIvMl0gY2FuOiByY2FyX2NhbmZkOiBG
-aXggcGFnZSBlbnRyaWVzIGluIHRoZSBBRkwgbGlzdA0KPiANCj4gSGkgQmlqdSwNCj4gDQo+IE9u
-IFRodSwgMjAgRmViIDIwMjUgYXQgMTA6NDUsIEJpanUgRGFzIDxiaWp1LmRhcy5qekBicC5yZW5l
-c2FzLmNvbT4gd3JvdGU6DQo+ID4gVGhlcmUgYXJlIGEgdG90YWwgb2YgOTYgQUZMIHBhZ2VzIGFu
-ZCBlYWNoIHBhZ2UgaGFzIDE2IGVudHJpZXMgd2l0aA0KPiA+IHJlZ2lzdGVycyBDRkRHQUZMSURy
-LCBDRkRHQUZMTXIsIENGREdBRkxQMHIsIENGREdBRkxQMXIgaG9sZGluZyB0aGUNCj4gPiBydWxl
-IGVudHJpZXMgKHIgPSAwLi4xNSkuDQo+ID4NCj4gPiBDdXJyZW50bHksIFJDQU5GRF9HQUZMKiBt
-YWNyb3MgdXNlIGEgc3RhcnQgdmFyaWFibGUgdG8gZmluZCBBRkwNCj4gPiBlbnRyaWVzLCB3aGlj
-aCBpcyBpbmNvcnJlY3QgYXMgdGhlIHRlc3Rpbmcgb24gUlovRzNFIHNob3dzIGNoMSBhbmQgY2g0
-DQo+ID4gZ2V0cyBhIHN0YXJ0IHZhbHVlIG9mIDAgYW5kIHRoZSByZWdpc3RlciBjb250ZW50cyBh
-cmUgb3ZlcndyaXR0ZW4uDQo+ID4NCj4gPiBGaXggdGhpcyBpc3N1ZSBieSB1c2luZyBydWxlX2Vu
-dHJ5IGNvcnJlc3BvbmRpbmcgdG8gdGhlIGNoYW5uZWwgdG8NCj4gPiBmaW5kIHRoZSBwYWdlIGVu
-dHJpZXMgaW4gdGhlIEFGTCBsaXN0Lg0KPiA+DQo+ID4gRml4ZXM6IGRkM2JkMjNlYjQzOCAoImNh
-bjogcmNhcl9jYW5mZDogQWRkIFJlbmVzYXMgUi1DYXIgQ0FOIEZEDQo+ID4gZHJpdmVyIikNCj4g
-PiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPiA+IFNpZ25lZC1vZmYtYnk6IEJpanUgRGFz
-IDxiaWp1LmRhcy5qekBicC5yZW5lc2FzLmNvbT4NCj4gDQo+IFRoYW5rcyBmb3IgeW91ciBwYXRj
-aCENCj4gDQo+IFRoaXMgZmluYWxseSBmaXhlcyBDQU4yIGFuZCBDQU4zIG9uIHRoZSBXaGl0ZSBI
-YXdrIGFuZCBXaGl0ZSBIYXdrIFNpbmdsZSBkZXZlbG9wbWVudCBib2FyZHMgYmFzZWQgb24NCj4g
-Ui1DYXIgVjRIIHdpdGggOCBDQU4gY2hhbm5lbHMgKHRoZSB0cmFuc2NlaXZlcnMgZm9yIENBTjQt
-NyBhcmUgbm90IG1vdW50ZWQpLCBzbw0KPiBUZXN0ZWQtYnk6IEdlZXJ0IFV5dHRlcmhvZXZlbiA8
-Z2VlcnQrcmVuZXNhc0BnbGlkZXIuYmU+DQoNClRoYW5rcyBmb3IgdGVzdGluZy4gDQoNClNvLCB0
-aGUgZml4IG5vdyB3b3JrcyBvbiAzIGRpZmZlcmVudCBib2FyZHMgd2l0aCBjaGFubmVsIG51bWJl
-ciA+IDINClJaL0czRSBTTUFSQyg2IGNoYW5uZWxzKSwgV2hpdGUgSGF3ayBhbmQgV2hpdGUgSGF3
-ayBTaW5nbGUgZGV2ZWxvcG1lbnQgYm9hcmRzIGJhc2VkIG9uDQpSLUNhciBWNEgoOCBDaGFubmVs
-cykuDQoNCj4gDQo+IFVuZm9ydHVuYXRlbHksIGl0IGRvZXMgbm90IGZpeCBDQU4yIGFuZCBDQU4z
-IG9uIHRoZSBHcmF5IEhhd2sgU2luZ2xlIGRldmVsb3BtZW50IGJvYXJkLCB3aGljaCBpcyBiYXNl
-ZA0KPiBvbiBSLUNhciBWNE0gd2l0aCA0IENBTiBjaGFubmVscy4NCg0KDQpRMSkgRG9lcyBpdCB3
-b3JrZWQgd2l0aCBkb3duc3RyZWFtIEJTUD8NClEyKSBEb2VzIGl0IGJ5IGNoYW5jZSBpcyBpbiBz
-dGFuZGJ5IG1vZGU/DQpRMykgRG9lcyBpdCB3b3JrIGlmIHlvdSBqdXN0IGNvbmZpZ3VyZSBzaW5n
-bGUgY2hhbm5lbCBieSBjb25uZWN0aW5nIHRvIGFuIGV4dGVybmFsIENBTiBkZXZpY2U/DQpRNCkg
-aWYgeW91IGFyZSB0ZXN0aW5nIGluIGxvb3BiYWNrIG1vZGUsIGlzIGZhaWx1cmUgaGFwcGVucyBD
-QU4yLT5DQU4zIG9yIENBTjM+Q0FOMj8NCg0KPiANCj4gPiAtLS0gYS9kcml2ZXJzL25ldC9jYW4v
-cmNhci9yY2FyX2NhbmZkLmMNCj4gPiArKysgYi9kcml2ZXJzL25ldC9jYW4vcmNhci9yY2FyX2Nh
-bmZkLmMNCj4gPiBAQCAtNzg3LDEwICs3ODcsMTEgQEAgc3RhdGljIHZvaWQNCj4gPiByY2FyX2Nh
-bmZkX2NvbmZpZ3VyZV9jb250cm9sbGVyKHN0cnVjdCByY2FyX2NhbmZkX2dsb2JhbCAqZ3ByaXYp
-ICB9DQo+ID4NCj4gPiAgc3RhdGljIHZvaWQgcmNhcl9jYW5mZF9jb25maWd1cmVfYWZsX3J1bGVz
-KHN0cnVjdCByY2FyX2NhbmZkX2dsb2JhbCAqZ3ByaXYsDQo+ID4gLSAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHUzMiBjaCkNCj4gPiArICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgdTMyIGNoLCB1MzIgcnVsZV9lbnRyeSkNCj4gPiAgew0K
-PiA+ICAgICAgICAgdTMyIGNmZzsNCj4gPiAgICAgICAgIGludCBvZmZzZXQsIHN0YXJ0LCBwYWdl
-LCBudW1fcnVsZXMgPSBSQ0FORkRfQ0hBTk5FTF9OVU1SVUxFUzsNCj4gPiArICAgICAgIHUzMiBy
-dWxlX2VudHJ5X2luZGV4ID0gcnVsZV9lbnRyeSAlIDE2Ow0KPiA+ICAgICAgICAgdTMyIHJpZHgg
-PSBjaCArIFJDQU5GRF9SRkZJRk9fSURYOw0KPiA+DQo+ID4gICAgICAgICBpZiAoY2ggPT0gMCkg
-ew0KPiANCj4gVGhlIG91dC1vZi1jb250ZXh0IGNvZGUgZG9lczoNCj4gDQo+ICAgICAgICAgICAg
-ICAgICBzdGFydCA9IDA7IC8qIENoYW5uZWwgMCBhbHdheXMgc3RhcnRzIGZyb20gMHRoIHJ1bGUg
-Ki8NCj4gICAgICAgICB9IGVsc2Ugew0KPiAgICAgICAgICAgICAgICAgLyogR2V0IG51bWJlciBv
-ZiBDaGFubmVsIDAgcnVsZXMgYW5kIGFkanVzdCAqLw0KPiAgICAgICAgICAgICAgICAgY2ZnID0g
-cmNhcl9jYW5mZF9yZWFkKGdwcml2LT5iYXNlLCBSQ0FORkRfR0FGTENGRyhjaCkpOw0KPiAgICAg
-ICAgICAgICAgICAgc3RhcnQgPSBSQ0FORkRfR0FGTENGR19HRVRSTkMoZ3ByaXYsIDAsIGNmZyk7
-DQo+ICAgICAgICAgfQ0KPiANCj4gQWZ0ZXIgeW91ciBjaGFuZ2VzIGJlbG93LCAic3RhcnQiIGlz
-IHNldCBidXQgbmV2ZXIgdXNlZC4NCj4gDQo+IExvb2tpbmcgYXQgdGhlIGFjdHVhbCBiZWhhdmlv
-ciBvZiB5b3VyIHBhdGNoLCB0aGUgc2FtZSBjYW4gYmUgYWNoaWV2ZWQgYnkgdXBkYXRpbmcgc3Rh
-cnQsIGJ5IGFkZGluZyBhDQo+IHNpbmdsZSBsaW5lIGhlcmU6DQo+IA0KPiAgICAgc3RhcnQgKz0g
-KGNoICYgLTIpICogbnVtX3J1bGVzOw0KDQpzdGFydCBpcyBub3QgcmVhZGFibGUgYXQgYWxsLiBJ
-IG5lZWQgdG8gd29yayBvdXQgZnJvbSAiIDEwMl91Y2lhcHJjbjAxNDBfSVBTcGVjX3YxcDA2X3Iy
-LnBkZiINCnNlY3Rpb24gNy43IHRvIHVuZGVyc3RhbmQsIHdoYXQgaXMgcGFnZSwgcnVsZV9pbmRl
-eF9lbnRyeSBldGMuLi4NCg0KQ2hlZXJzLA0KQmlqdQ0K
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    0f52fd4f67c6 Merge tag 'bcachefs-2025-03-06' of git://evil..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12d12a54580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=523b0e2f15224775
+dashboard link: https://syzkaller.appspot.com/bug?extid=78ce4489b812515d5e4d
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/eb0d7b540c67/disk-0f52fd4f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/51c261332ad9/vmlinux-0f52fd4f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/38914a4790c8/bzImage-0f52fd4f.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+78ce4489b812515d5e4d@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KCSAN: data-race in can_send / can_send
+
+read-write to 0xffff888117566290 of 8 bytes by interrupt on cpu 0:
+ can_send+0x5a2/0x6d0 net/can/af_can.c:290
+ bcm_can_tx+0x314/0x420 net/can/bcm.c:314
+ bcm_tx_timeout_handler+0xea/0x280
+ __run_hrtimer kernel/time/hrtimer.c:1801 [inline]
+ __hrtimer_run_queues+0x20d/0x5e0 kernel/time/hrtimer.c:1865
+ hrtimer_run_softirq+0xe4/0x2c0 kernel/time/hrtimer.c:1882
+ handle_softirqs+0xbf/0x280 kernel/softirq.c:561
+ run_ksoftirqd+0x1c/0x30 kernel/softirq.c:950
+ smpboot_thread_fn+0x31c/0x4c0 kernel/smpboot.c:164
+ kthread+0x4ae/0x520 kernel/kthread.c:464
+ ret_from_fork+0x4b/0x60 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+read-write to 0xffff888117566290 of 8 bytes by interrupt on cpu 1:
+ can_send+0x5a2/0x6d0 net/can/af_can.c:290
+ bcm_can_tx+0x314/0x420 net/can/bcm.c:314
+ bcm_tx_timeout_handler+0xea/0x280
+ __run_hrtimer kernel/time/hrtimer.c:1801 [inline]
+ __hrtimer_run_queues+0x20d/0x5e0 kernel/time/hrtimer.c:1865
+ hrtimer_run_softirq+0xe4/0x2c0 kernel/time/hrtimer.c:1882
+ handle_softirqs+0xbf/0x280 kernel/softirq.c:561
+ run_ksoftirqd+0x1c/0x30 kernel/softirq.c:950
+ smpboot_thread_fn+0x31c/0x4c0 kernel/smpboot.c:164
+ kthread+0x4ae/0x520 kernel/kthread.c:464
+ ret_from_fork+0x4b/0x60 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+value changed: 0x0000000000002b9d -> 0x0000000000002b9e
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 UID: 0 PID: 23 Comm: ksoftirqd/1 Tainted: G        W          6.14.0-rc5-syzkaller-00109-g0f52fd4f67c6 #0
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
