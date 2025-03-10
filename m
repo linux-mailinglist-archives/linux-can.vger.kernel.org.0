@@ -1,161 +1,130 @@
-Return-Path: <linux-can+bounces-3038-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3036-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55BD2A590AB
-	for <lists+linux-can@lfdr.de>; Mon, 10 Mar 2025 11:04:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E598A59022
+	for <lists+linux-can@lfdr.de>; Mon, 10 Mar 2025 10:47:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EBE527A4D60
-	for <lists+linux-can@lfdr.de>; Mon, 10 Mar 2025 10:03:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CFD016C057
+	for <lists+linux-can@lfdr.de>; Mon, 10 Mar 2025 09:47:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12521223704;
-	Mon, 10 Mar 2025 10:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="RO0vRoKG";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="YghSe3s3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 488902253E4;
+	Mon, 10 Mar 2025 09:46:53 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C7501C6F70;
-	Mon, 10 Mar 2025 10:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.25
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741601041; cv=pass; b=ldX5jq6u+Zg9+jJUs0Etc0PIDDvzgpQeJl/ZXJ/z2a4PB/9WsVEIJfPj8/xaISRJJ4H0hIePBfCPmpHJTFue7WH+YRSQXG1D9lzKtXHgsvph84PAxB3jraQw9oATc+FRZpoNj//aJmDQhHKMo9aOUClxDQ48SxGaJ6n9z2OxXU8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741601041; c=relaxed/simple;
-	bh=ieVSgl1n+Y3jk7qQKxXYcWYORmovbjqs1XE5G9Qx9SY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u6rVbFIQwxEDi1Z/HHlYb9wDgmXGOwd2k/90U9xt3Onc3OfrYhoH/HPK4pddSR5Gfcf7XXmJeYoI/sX8nBTt6yXccdN8RagpUmxhPeGXrAuf46cIgCff8pnUJCIAmkXQSIKnsgON5fQ9OKo92W08/63TIFD6gKICG6zGLu5FUiM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=RO0vRoKG; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=YghSe3s3; arc=pass smtp.client-ip=85.215.255.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1741599957; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=XMs/unWZqB8wrf2Nf8Y3wArQnAXgMyiADzjUEvaob3BiKLsUogNbm6FTmtX35T1CGc
-    LFb00H1iaGAirPfZ5zYasMgLYFrqGjQRM7HbrgO1VC0pqC+jsDxfifHIMESaEki2u/wE
-    vgZYNmwNlApAYQQB7aaJu6mU+il0yD5SPvsYQ8u4ky3hr4sHnlkAtTCVIRkxmhU+TqIE
-    Rkhxswlwc16VrLs6XjTgiq39X9OXBYTydGPSUlMZbXa5QWwfGOszX3Sq7IyheXVLa4qM
-    +3vfQcXI2CaqMjY6tJwb6WjPAfFMGG9niyjO31zak9dQNaoEFgCSVm3ksfhyDZNJhU22
-    /rKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1741599957;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=6c0rQTjE4PolH89nIKTpnQcF3fHayb1VmmI7dfoT9P4=;
-    b=ZWyfp2gVUj0vKNvZGBDepWvzLiPtEc1dQUgkc8VbHnXeoyqnBB5cSvLnjTbvRdVIKT
-    YWOxAzXadD/r+2UEm+mpEejiLrG600x5tc+kGX1lt/oRECp2Vg7jvJzInelsDnx9jnJC
-    pRQKI4M0nDu5hADDPpbcl1E/QefohnHM43125Y7O7MArfkotzz4LZVGv1XDv6b861iNv
-    /UsZAns6PWGV2nsc9/xrM8IwHfElr87ABOBkwIB99xfdS4wM7lMRbabfE5006ARtO7Z7
-    och1qps9qC2WzpELaUxdeVkBO86ZxtAY0qZIhvYT+BgJiwxprqkgEas5yrjywqA6H6Pp
-    xzRw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1741599957;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=6c0rQTjE4PolH89nIKTpnQcF3fHayb1VmmI7dfoT9P4=;
-    b=RO0vRoKG7LNeqtgRq8CgsPHMJeu2fAva5lG1cwGz4gf4Z7jYLMLupMRfd1S9Pdqbdo
-    8W41P94ZFf+d9pFMFJy0HDg/HSUgsE3SjiOL69usgrFYlMsFpdRoF7M847YfUyRRiKO8
-    ZGU7t5TNcftxv/OYPU62Ol8WQcSIE7iNXI7p9I+IuJxSmHF4vhv+2WHE5eG3p9uyWQdL
-    lO/I4ulAVKpU4faJm6CI2hdOcQrRX6xa089LM7MwnKbse0Fy2GRTgiZGF4/nvog0kPrC
-    bHF7FzjeLMHmeo9rM6KcPdp4EI5aqnc780QI6WOwGiPCcxo6AvTREIw9Ce9KJSemHVjA
-    kKQA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1741599957;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=6c0rQTjE4PolH89nIKTpnQcF3fHayb1VmmI7dfoT9P4=;
-    b=YghSe3s3dQ2MOYRGyhXD6P8gcPlIrc757HmVBsUglVPehubSDGiZOFRy3OaaLLwfDX
-    PNGbXPd7tR+GhOuQ3IBA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/vMMcFB+5xtv9aJ67XA=="
-Received: from [IPV6:2a00:6020:4a8e:5000::9f3]
-    by smtp.strato.de (RZmta 51.3.0 AUTH)
-    with ESMTPSA id K2a3e512A9jvSaS
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Mon, 10 Mar 2025 10:45:57 +0100 (CET)
-Message-ID: <f8e7f845-253b-47b7-9e09-97a580ce0e5c@hartkopp.net>
-Date: Mon, 10 Mar 2025 10:45:51 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E57192D83;
+	Mon, 10 Mar 2025 09:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741600013; cv=none; b=rVehZCl5DblsuicRruPiQD2qWLaMYH3xFgXWwgGZHcl/jeUQ69hXr12awaUCZXjJUQWM3lFruUpJfMzLv3kNaiUODbkjOKp+IzpxSEKB5RzjXYO7plo8mOUh4NH7IHDQ94g9MdJsURUerCFmjubJVpn6UaE9Ntd99oPZqWqrhAs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741600013; c=relaxed/simple;
+	bh=anYCRcYyRRrek0KNlmuuEaoJDKOrAsXU52D/HjEJxBQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DhKD6vaj4sIvbN6j5qwqD1JAGtjHljddl9An5f5Aex3pOsvq75CIzD1NY56Uu8WpW9IyzcCFm9uDHOv9VxktssJLnazLtHAUsiSgFnkJ/1MG26fzj4wk3NZjXwpav3DekgaxtqxNo0VrP7q7i48HLQL9SOSQdDT1PMzSEnm//7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-abf615d5f31so785650266b.2;
+        Mon, 10 Mar 2025 02:46:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741600006; x=1742204806;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Any+m7QILvqODsC+Atr0PhE/5U+BQGSuobkCo4tucCU=;
+        b=v0bMujP9Ovz4V8xEqXglLO0KeJX4mGqsMB4PWMcozjILv7RUcOT+uh1HixdfMAWooB
+         hWYYs6S2ZWVM0r+btQRXc+ug8CXTBrf+NqKFl0EAYvpOpN1eZmDDnNDC087sBvLmykW5
+         igws02zm848NJh1rLtZVoi+/INmn9tn7gzrefrBwP0+8Wcat3Kt/uUsWpTzg75Sqwd+P
+         yKNebimexV1ulejlLNxpnt2e3FutRz82pBTTVv2x6oCppWMJOd4SBpswoSKSl9CwM4+c
+         fciBVTd0LKCMUoZhEIKEXso80IV0N+52NRnOzvQDsbCEPD2wuX6nZI2CBZz22B3VMIVi
+         dNyw==
+X-Forwarded-Encrypted: i=1; AJvYcCUEoRgwShZy+QQCHOsSGcZei06bWkw47/uyie/t2SIGJwaBp8g8cO+c/er9YZzlGE34w4V4a4UOhTM=@vger.kernel.org, AJvYcCUmu15Z9WSoVsm+xXPpYnAHYIVpD+UPOE7LnP1YRcRBMqdMv8/7I/qGkhDI+d+ZnTzLWLN5JlOXcONv5qoYEmBCQd4=@vger.kernel.org, AJvYcCXLpWiOmO7nW2tfT3H9nlTPx9lQ5E/BlrsW0JW1z9ang22QVUN+G7aBKimg6Rl/8pA4DqLK00IC@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5k6u2f5ItFDPBmI/9rFYAqOvE46wp0Y0o1XmWlwvl657ZO1aT
+	lUNuClQsYO0GukLpzb9f+lVvZ24Upx1wZ99Gr4RXjcrk4r8pxAdQYxvbkF9FH6M=
+X-Gm-Gg: ASbGncuJO/yV42r5C1yx+9gZJ6vba2ytnyDy0XRjlh+trvqlOGxdgu6e4zsHi/isKfv
+	35E83/dMxA8Bv+Tua1LB1t+LzQ4CmmpPOiSAqkg+ih91sBZJQTmRm7AQST77AXSGllFMmoJ7f9h
+	0qtREBWmRiTfmn1aAaRoQCzWyj57CIsXwSbYug5hN/6BB/Zxa/egvC+uB+wOlda+9r7tII0klxy
+	6fhimZIVl7KmJ6l5PBMdxPuAB0li+FLhjRykBmvmG9XDR0ATp08GwB3OEWa0qF+ySVgqj35+iMb
+	1dU0tQzksnlQnJ6SBgn/Ps5HV7xYd6awjtUtPqRcnUjWWopmdikwApkC2pEx9CKUAfVE6561wn+
+	13XDGCjo=
+X-Google-Smtp-Source: AGHT+IF4kXzo5ZLz2A4hR+Ne0Cn6BSGMt0MV4JwHVSy/FHUh+h+Dq2CVIqQg3ChwDmLbmXZJROrnmw==
+X-Received: by 2002:a17:907:7f92:b0:abf:49de:36de with SMTP id a640c23a62f3a-ac2525b9adfmr1477829466b.1.1741600005968;
+        Mon, 10 Mar 2025 02:46:45 -0700 (PDT)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2a4ba2575sm118233266b.133.2025.03.10.02.46.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Mar 2025 02:46:45 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-abf615d5f31so785635066b.2;
+        Mon, 10 Mar 2025 02:46:44 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWZCDT7ZuqxJkwHuYP9UPXirjIbgXel65zV7v7FRprVUYw6BZp4VFqXLxzQ+lGtsKVUHREU0hp1Lts=@vger.kernel.org, AJvYcCXbt2wc6tr5QJsvX5N/lp52stHGfbMLNRktUpl52HZ2fwSO5a26NrEB5agyY9lpnYkSOYBjC0V7vkd465QPwg/1PAE=@vger.kernel.org, AJvYcCXe2yqoi3hUUwW4ebGMxhvnMJTshgJieuc8BUZiYwjfSp79L/2IoPeXv1n8wOynrZLu1GU/cBK3@vger.kernel.org
+X-Received: by 2002:a17:907:3604:b0:ac1:dc0f:e03e with SMTP id
+ a640c23a62f3a-ac252628a87mr1545179666b.13.1741600004722; Mon, 10 Mar 2025
+ 02:46:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [can?] KCSAN: data-race in can_send / can_send (5)
-To: Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc: mkl@pengutronix.de,
- syzbot <syzbot+78ce4489b812515d5e4d@syzkaller.appspotmail.com>,
- linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
- linux-can@vger.kernel.org
-References: <67cd717d.050a0220.e1a89.0006.GAE@google.com>
- <c9047828-708a-42d8-97f6-fffb7d806679@hartkopp.net>
- <CAMZ6RqKyMreMfNDmYU=tLyaEcReopmGx2VkBWPB12LLzd5o7Pg@mail.gmail.com>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <CAMZ6RqKyMreMfNDmYU=tLyaEcReopmGx2VkBWPB12LLzd5o7Pg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250220094516.126598-1-biju.das.jz@bp.renesas.com>
+ <20250220094516.126598-3-biju.das.jz@bp.renesas.com> <CAMuHMdUs=+niOyBW0us=UjZTnqeYjVsLWZSmROndCO8azER=3g@mail.gmail.com>
+ <TY3PR01MB113462D6EF7BDDFE403FD0DC286D42@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <CAMuHMdUyLLCdTHkhFJh9rK7Vv5S98anw8-Cc51MafzQ5DF+V_g@mail.gmail.com> <TY3PR01MB11346B8F2576A85B0006B9D6986D62@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY3PR01MB11346B8F2576A85B0006B9D6986D62@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 10 Mar 2025 10:46:28 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWBh=neb6P4Mw1=EPGa-1Yju2m9bNBPvPEnBJg1zaTrCA@mail.gmail.com>
+X-Gm-Features: AQ5f1JquJHFarnCtPjXDt3d-CsGfXWqk9PQy1QXjZfx-gKXGL3VhTR1ejwIYjxc
+Message-ID: <CAMuHMdWBh=neb6P4Mw1=EPGa-1Yju2m9bNBPvPEnBJg1zaTrCA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] can: rcar_canfd: Fix page entries in the AFL list
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Rob Herring <robh@kernel.org>, Ulrich Hecht <ulrich.hecht+renesas@gmail.com>, 
+	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	"biju.das.au" <biju.das.au@gmail.com>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Biju,
 
+On Mon, 10 Mar 2025 at 10:28, Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > From: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > Unfortunately, it does not fix CAN2 and CAN3 on the Gray Hawk Single
+> > > > development board, which is based on R-Car V4M with 4 CAN channels.
 
-On 10.03.25 10:29, Vincent Mailhol wrote:
-> On Mon. 10 Mar 2025 at 03:59, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> > > Q2) Does it by chance is in standby mode?
+> >
+> > You mean the transceiver?
+>
+> Yes, for some boards. we need to toggle GPIO to move it from stand by to normal mode, so that it
+> can start communication.
 
+CAN0 on White/Gray Hawk variants uses TJR1443AT transceivers,
+which do have enable-gpios (and do work).
 
->>> value changed: 0x0000000000002b9d -> 0x0000000000002b9e
->>>
->>
->> Increased by '1' ...
->>
->> I assume this problem is caused by increasing the per-netdevice statistic in
->>
->> https://elixir.bootlin.com/linux/v6.13.6/source/net/can/af_can.c#L289
->>
->> pkg_stats->tx_frames++;
->> pkg_stats->tx_frames_delta++;
->>
->> We update the statistics for the device and in this specific case the
->> hrtimer fired on two CPUs resulting in a can_send() to the same netdevice.
->>
->> Do you agree with this quick analysis?
-> 
-> Ack. Same conclusion here.
-> 
->> Isn't there some lock-less per-cpu safe statistic handling within netdev
->> we might pick for our use-case?
-> 
-> I see two solutions. Either we use lock_sock(skb->sk) and
-> release_sock(skb->sk) or we can change the types of
-> can_pkg_stats->tx_frames and can_pkg_stats->tx_frames_delta from long
-> to atomic_long_t.
-> 
-> The atomic_long_t is the closest solution to a lock-less. But my
-> preference goes to the lock_sock() which looks more natural in this
-> context. And look_sock() is just a spinlock which under the hood is
-> also an atomic, so no big penalty either.
+The other channels use MCP2558FD transceivers, and their
+standby pin is always deasserted (except during system reset).
 
-When we get skbs from the netdevice (and not from user space), we do not 
-have a valid sk value. It is set to zero.
+> > All channels but channel zero use the same type of transceiver, and similar wiring. There might still
+> > be a pin control bug, though.
 
-See:
-https://elixir.bootlin.com/linux/v6.13.6/source/net/can/raw.c#L203
+Gr{oetje,eeting}s,
 
-And those skbs can also be forwarded by can-gw using can_send().
+                        Geert
 
-Therefore there is no lock_sock() without a valid sk ;-)
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-When 'atomic_long_t' would also fix this simple statistics handling, we 
-should use that.
-
-Best regards,
-Oliver
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
