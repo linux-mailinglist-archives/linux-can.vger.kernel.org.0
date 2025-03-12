@@ -1,135 +1,141 @@
-Return-Path: <linux-can+bounces-3043-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3044-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94306A5DA70
-	for <lists+linux-can@lfdr.de>; Wed, 12 Mar 2025 11:31:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29288A5DA96
+	for <lists+linux-can@lfdr.de>; Wed, 12 Mar 2025 11:42:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E3501898D8D
-	for <lists+linux-can@lfdr.de>; Wed, 12 Mar 2025 10:31:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13BC73B1EA2
+	for <lists+linux-can@lfdr.de>; Wed, 12 Mar 2025 10:41:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EFF8237707;
-	Wed, 12 Mar 2025 10:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JhaNzZuA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B0A23E348;
+	Wed, 12 Mar 2025 10:41:57 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851E015A858
-	for <linux-can@vger.kernel.org>; Wed, 12 Mar 2025 10:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAAB1E9B35
+	for <linux-can@vger.kernel.org>; Wed, 12 Mar 2025 10:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741775481; cv=none; b=iiRQ3JXM3ayY5pW1FLk9Au8U1dKgddavbTRwrjO2/mJ7SSGeS/jN7Kd4qgeSI/aJ7kPWq2LcgzUaf58gTOr2W2OlcOpCXhfyJ7VqlFkqx6ISuV+JHkmrW/dydMjqTcxJgEDcXvfPGZnuwkl/3YEsHNx2p4dimWvQb/FFlcXnYjg=
+	t=1741776117; cv=none; b=PKPRLv+juHHvVv2r1v0WkepO1+n0krtw5QMZUY+3OHygdc8Y4fAk7lIcGDIbgpeayF3hvLqfeRKzB038x8RWbcQJosBMnxDrQrrAIVDPf3snpQBsM/Nz5YdGTjbwlF4zPi1m+xcm4hsBFHGmM2ptPq3LcSkDnTwlUZAiIDXsCFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741775481; c=relaxed/simple;
-	bh=P99lE3mJwXPj+GEbmP0xwX+rf4eTqzBXZGRaykWQ8v4=;
+	s=arc-20240116; t=1741776117; c=relaxed/simple;
+	bh=oP9DBHr7ZaAbB6keJAm59XCkp9krTFc8WFqNo8LwXrI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NKJ6SlUaO6TiqF8wH9LyAAW9JSl/S++6G0q+5/eXyMoWr88NL39aYLp6PfhsWTSnUIj1WIhpdYObanU1luz9myBP1D7mNfxU4CoKUwXC7yFzlIMZ/ucPDt3YRC/evF85vsLaFEUB59K+gyGLN5JA+4ldVVbm7nC+eCv5Q2fxXJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JhaNzZuA; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741775478;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cx0qYAqk+Ndkh+zCqVoXeKfQLXTHj6djYkow7w5DHN4=;
-	b=JhaNzZuA/KZTKA0gxXCl5msYwoHcs6YTaTvimCdD8BB0VAHTOR+UOzLmHlmUuKTfuexhSe
-	elmn5X1qQfK5brk00mD7s1eWSkNcVZHeuFeaVe7BqpPeKW8weRt3Wt3JnuoTrLxEsrLN5s
-	QbG8Ncn6eUWGbzWWjAB+5FKaekdy7eg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-104-BR5t29ZmNayaSphYR_HDvw-1; Wed, 12 Mar 2025 06:31:17 -0400
-X-MC-Unique: BR5t29ZmNayaSphYR_HDvw-1
-X-Mimecast-MFC-AGG-ID: BR5t29ZmNayaSphYR_HDvw_1741775476
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43cf327e9a2so26175945e9.3
-        for <linux-can@vger.kernel.org>; Wed, 12 Mar 2025 03:31:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741775476; x=1742380276;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cx0qYAqk+Ndkh+zCqVoXeKfQLXTHj6djYkow7w5DHN4=;
-        b=KcN24U0BrRVPXN53/2AEbo27Dq4fmC2dJ86uAJM/tXkgTtz2xdc13fRB93J8WqiZFf
-         v4Qzy8Ws2k7/QJgIg2yQBKabLYA3sTO84V46+WANsEAbJzEE/nyR9raUUc1ptBg29tQQ
-         D8GNiPGfyelleY+Rfi0Is6edXI4nNJ4CBCn9ZaQPDlh44pmjf8Bn7wkR1hMzrPNzf9fd
-         q30RnLAXn2MJ0vAVablGVtobIWJuUyDJKkIgnFVe/LtXzS7G5fquJxFCVWeXqnRrjkGz
-         HB4i6YpVn/5UjoBMyitcylpFDK3YGWxIYLQDtDZRgoY62GKn62b+7TSaFZCspNfUd+VX
-         b/rQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVNVjmSbfmh7SNSsGNj5l8N+Xgw44Xma7x6HqOTgwzKS+ftr1LruhEeoz0jsYelrdxauJntTTYsfmY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqaJDyNUktWRBPN44JD28uds4c5s39+Ss55OiNU0sYJnkaOrqa
-	ZHFQwdQ0M3bAOc7oBShd+sej8VNR7O8L2sqf34kHqNvBdma3XdSwYxxDsBVd1FtDidO0zRvVA4x
-	x8ahNl7jJknYxZ2wZqzeA3G6rY93PUFyr0Lwf5vA9mA+n9qmOPwgVyoZYPg==
-X-Gm-Gg: ASbGnctSX18SVPBG8FFv1+ys5KfqWlOIXOaBl/TL9ke7OkJe3nhyf7yQDJOvGUK9j0V
-	fJYIi6D93HRtaYFAxvfo9N0mq8lpFkphHiCoCeH87BI2+d+ax///1w609ep/De3qIB6k644+HUh
-	UvUOOWgqU6pUZFYI03jJTP/AazEIZ4XI0umJd2dkTp+o8sf6eW4DPsBrSWnHiPMQisi7REJvcge
-	aVDezoYsU0V2HHGoRmOeyDNwE9oyyLkEp1joHzc4mVvVsltQDrsOdt0t+aT81pLCicTEXCaFD/p
-	Jf8qhlJYNw==
-X-Received: by 2002:a05:600c:1c81:b0:43c:efed:733e with SMTP id 5b1f17b1804b1-43d01be6389mr90683925e9.14.1741775475784;
-        Wed, 12 Mar 2025 03:31:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFMo39VgoZH85nAphCFnLGhSo95m+X8Gu22NIYuOsLFerRQWzuG2jF+y+KHgzz3MHJwbiYZow==
-X-Received: by 2002:a05:600c:1c81:b0:43c:efed:733e with SMTP id 5b1f17b1804b1-43d01be6389mr90683655e9.14.1741775475423;
-        Wed, 12 Mar 2025 03:31:15 -0700 (PDT)
-Received: from fedora ([2a01:e0a:257:8c60:80f1:cdf8:48d0:b0a1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d0a72eb5fsm17374525e9.8.2025.03.12.03.31.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Mar 2025 03:31:14 -0700 (PDT)
-Date: Wed, 12 Mar 2025 11:31:12 +0100
-From: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-To: Harald Mommer <harald.mommer@opensynergy.com>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>,
-	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, virtualization@lists.linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zb3uGMBfFiUYIrmoDBDwTjrm+YxiCIlHA4snHW3ehbxAObWAi92OTUJRpPb9WQbKErllBTRBr8OAXktVrt/NCxiHT2crpZ1+nO5jAG/Xp4kvgE6mlZkQ2tVMnzJXYV7fBowo0xTF/fuNqe7nZ4/qOcmN5qdgdQWKl9EEgcTQ3+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tsJWj-0001L5-Vr; Wed, 12 Mar 2025 11:41:30 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tsJWh-005LKd-0u;
+	Wed, 12 Mar 2025 11:41:27 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id CE4123D8C12;
+	Wed, 12 Mar 2025 10:41:26 +0000 (UTC)
+Date: Wed, 12 Mar 2025 11:41:26 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
+Cc: Harald Mommer <harald.mommer@opensynergy.com>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>, Wolfgang Grandegger <wg@grandegger.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>, 
+	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	virtualization@lists.linux.dev
 Subject: Re: [PATCH v5] can: virtio: Initial virtio CAN driver.
-Message-ID: <Z9FicA7bHAYZWJAb@fedora>
+Message-ID: <20250312-conscious-sloppy-pegasus-b5099d-mkl@pengutronix.de>
 References: <20240108131039.2234044-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
  <a366f529-c901-4cd1-a1a6-c3958562cace@wanadoo.fr>
  <0878aedf-35c2-4901-8662-2688574dd06f@opensynergy.com>
+ <Z9FicA7bHAYZWJAb@fedora>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="r2js27gw2phijjja"
 Content-Disposition: inline
-In-Reply-To: <0878aedf-35c2-4901-8662-2688574dd06f@opensynergy.com>
+In-Reply-To: <Z9FicA7bHAYZWJAb@fedora>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hello,
 
-On Thu, Feb 01, 2024 at 07:57:45PM +0100, Harald Mommer wrote:
-> Hello,
-> 
-> I thought there would be some more comments coming and I could address
-> everything in one chunk. Not the case, besides your comments silence.
-> 
-> On 08.01.24 20:34, Christophe JAILLET wrote:
-> > 
-> > Hi,
-> > a few nits below, should there be a v6.
-> > 
-> 
-> I'm sure there will be but not so soon. Probably after acceptance of the
-> virtio CAN specification or after change requests to the specification are
-> received and the driver has to be adapted to an updated draft.
-> 
-> 
-What is the status of this series?
+--r2js27gw2phijjja
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v5] can: virtio: Initial virtio CAN driver.
+MIME-Version: 1.0
 
-Thanks, Matias.
+On 12.03.2025 11:31:12, Matias Ezequiel Vara Larsen wrote:
+> On Thu, Feb 01, 2024 at 07:57:45PM +0100, Harald Mommer wrote:
+> > Hello,
+> >=20
+> > I thought there would be some more comments coming and I could address
+> > everything in one chunk. Not the case, besides your comments silence.
+> >=20
+> > On 08.01.24 20:34, Christophe JAILLET wrote:
+> > >=20
+> > > Hi,
+> > > a few nits below, should there be a v6.
+> > >=20
+> >=20
+> > I'm sure there will be but not so soon. Probably after acceptance of the
+> > virtio CAN specification or after change requests to the specification =
+are
+> > received and the driver has to be adapted to an updated draft.
+> >=20
+> What is the status of this series?
 
+There has been no movement from the Linux side. The patch series is
+quite extensive. To get this mainline, we need not only a proper Linux
+CAN driver, but also a proper VirtIO specification. This whole project
+is too big for me to do it as a collaborative effort.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--r2js27gw2phijjja
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfRZNMACgkQDHRl3/mQ
+kZxzCgf+Js8qoTJ0nTwATrNdTHqpf2wSPVGJQNeAsLPsRgZYNeOdPPAsNgrYtpfP
+HxGRKv3QWJW3qLjtpzVTnb5AZBpDQhLRHaOrvkf5Mi1pwMQTLgQhGqQR1yXQVqp1
+O+fYBVqFT0MDCvHuwyn3F/rKid1WmoV0EQiNXueiRGRpdA45XfoPUh66xETqpVVU
+tuCGyW8lFOGV7mNsIrV8JfZVHSeGKx7Du17L6yUnmvqSnCFR2/5rsAd7oKNlr9pW
+9A2rLf/XAU4nMfTEDnSiBPAmcJ7Y8e78vLNTapU+Ey2JLuADaYCJufE99u27sZDS
+510o9vHMJusuQoeFxed0pQXFYFysrg==
+=xIkD
+-----END PGP SIGNATURE-----
+
+--r2js27gw2phijjja--
 
