@@ -1,122 +1,146 @@
-Return-Path: <linux-can+bounces-3052-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3053-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0901A5E93A
-	for <lists+linux-can@lfdr.de>; Thu, 13 Mar 2025 02:15:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59953A5EDD8
+	for <lists+linux-can@lfdr.de>; Thu, 13 Mar 2025 09:20:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E4993B846E
-	for <lists+linux-can@lfdr.de>; Thu, 13 Mar 2025 01:15:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 632D717BD95
+	for <lists+linux-can@lfdr.de>; Thu, 13 Mar 2025 08:20:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5B766FC5;
-	Thu, 13 Mar 2025 01:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kWST81A1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29874260A2C;
+	Thu, 13 Mar 2025 08:19:53 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECA12868B;
-	Thu, 13 Mar 2025 01:15:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75846225A23
+	for <linux-can@vger.kernel.org>; Thu, 13 Mar 2025 08:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741828512; cv=none; b=sAK+eppJ50uJWo1mrSlcK58TuS/GL23Mufjdi9ERvj6Bf/MnbYHKLK4YEpYl8ulA+ScNRoFK6xzxTZsVJWMXN94N6d4g5b4DDTrzyPnkrLqEq4s0YJk9mThPPeVLO68u0GJ8nJg59dp8bF3t9a+w9ikLDJtnIJAEZ/+P+PojlfQ=
+	t=1741853993; cv=none; b=B4M5pDsvRqsfxZ5xIa2xIR3GnOaKLepiFnszl7csqW5TIvtTm6uAPA6HjaXu63hOT0uNTDVrobQD0pmChlcKk6hmL7aKWY0VSFV5RfoVLYujAuXC6U2y9zP+EcwOS1kLYs9REDGr4yySUA/EKux/p5mJ+QIe7SMqRO6nyKiOh8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741828512; c=relaxed/simple;
-	bh=P+4AM5HRF2zbjRcn8ySbDfLqoLWfeET2V3x8L7ECH7Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ePcj7+781AjEO4lwMceNTuqG7WgfzcljMTAUwkslxEAxDNjVsN7AeO3NpTfvEMFjavbgQvq19HBA/jbv+QMn6dFBiC6RK2/vdbEdGvBp1+4LtmpjXYPZ0H4jJAfo+RVyAqUmalfbe15UL1qQm3JjKkOm+cL8dTKetXeEr072vbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kWST81A1; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6e241443e8dso717746d6.0;
-        Wed, 12 Mar 2025 18:15:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741828509; x=1742433309; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CplJ4qBm1rlLiAX8XwqfY3czuxTznGHQa5yRNrScf2Q=;
-        b=kWST81A19TNqSIDPcTTVcEgf27QXeAMxLh3jBYhWDGpPdGO+OrGEISiOCcf6RGobyE
-         be3VBHqccI9jcgNZCfreyXPeDnR4JJesVZPy9wGl3uqX5zVN0XdbgbSfZxd6UYDDrQkz
-         eJdvhEMrhB0m8DzbCGNpUwtlfps9xMmO/gDigamfODnNiaPSj4aT/K3cvs+u/6VSErJN
-         WcmaBMpzVjWjlVrsNa1M7tkgq+Fv54j13Ieg1vyVnOr1ZawAcyDC3CcfbAhkQd0091XW
-         u52nzNfKfa3kej7yaqMxqPBsEBRHkZN3Q6gO4GFKEHfBVp824D08ECar9HjIHtAPuFd6
-         AAjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741828509; x=1742433309;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CplJ4qBm1rlLiAX8XwqfY3czuxTznGHQa5yRNrScf2Q=;
-        b=hevr7KIHLIXDdJq29nDQlYFXP/MiMrP63aLPbZXTKuDMcf1E3hQb+wcBhc4oeC6ruJ
-         C6cum8FW8KRuF8qsgHp1rWa5C3xWhac4XvIbkuiYMKUDml1avWU+cXWYuGSPHnDYhtzo
-         5kXluLPB2bvkn0wmcFlOHdAY0ULjndGwqhL15eQtSvpXmSwfJtOm7JsWftdMLuQvQeIu
-         787OZ2Nf/EPy6pRknYlSgR59883BjGPAVmGpprSIS15J0dRAELYIUa/EHWQZlG4YsciT
-         GBCGscSo75Yepv90cBx+p/y7PPQVn4E9ZT4CHIipAnX6QEd5WPEFP38m65n773IpC19s
-         cSXw==
-X-Forwarded-Encrypted: i=1; AJvYcCWaoolD55yslfkMSyodG+5HnXskUG0uYs21ikhiX3SyjfDrkirDjsbR+16mcfX9pIM0RSjGPoAolG9V4Hw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcoyyjC7Ns0hxXCb6BmQcaLHT9i1v2JKA/bkNEDaAt8yLJ43bo
-	3tL1+Gz8xumw01pfXkIgMU3woEXbxPUyqaWmPK/Ibb/WicXzaX8=
-X-Gm-Gg: ASbGncvB8gUWy8eSWjQMRSToBTAYk2Kf/zooq4xTS0cY8PEf7uLyid7JlX68H4F4lZy
-	MjVKic3Xzwk5BCl5/Cksdg+vfxq8DnHv+iRnKs8HItKNvg4T2ZdGDMkknHDZsvU/qwPbhRlZLu3
-	HBVHEtJg8vrHuyyherJ63+O9db8rqrrO7599hjxq3tL79w56Ua0BI1FFR6jfUNpYQccLywOUdzM
-	PIlxGGpO40/nqCVWey7M92UadgaFKXKZ+L0EYwyTNexBm9q3AQMW8DxF1zBLyaaOVHybZn5YZBg
-	CfWQOsWpF1L2faz36+FYq4VnFhEeluou7x3naW+dAA==
-X-Google-Smtp-Source: AGHT+IHkt7gdCvT3sZMm/MUWsh89g+gMdYyxh1jTYIM+y9Ksbzc5TpKWzBj7zvLRqPmZLC8TC+4rDg==
-X-Received: by 2002:a05:622a:2b0c:b0:474:e7de:8595 with SMTP id d75a77b69052e-47666ca49c3mr100937371cf.14.1741828509184;
-        Wed, 12 Mar 2025 18:15:09 -0700 (PDT)
-Received: from ise-alpha.. ([2620:0:e00:550a:642:1aff:fee8:511b])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-476bb6082d1sm2428761cf.12.2025.03.12.18.15.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Mar 2025 18:15:08 -0700 (PDT)
-From: Chenyuan Yang <chenyuan0y@gmail.com>
-To: mkl@pengutronix.de,
-	kernel@pengutronix.de,
-	mailhol.vincent@wanadoo.fr,
-	heiko@sntech.de
-Cc: linux-can@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Chenyuan Yang <chenyuan0y@gmail.com>
-Subject: [PATCH] can: rockchip: bail out if skb cannot be allocated
-Date: Wed, 12 Mar 2025 20:15:05 -0500
-Message-Id: <20250313011506.3132295-1-chenyuan0y@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1741853993; c=relaxed/simple;
+	bh=ICD6c+vTcPmgCvlPSfErvejItxtLWXfY+HODu9IhgnU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MDf186Ixr+X6NLsbzL02CzoBklnFljaMLo/a50HHHyQrt+bJtXBF7bezd7B6HDhv5jbqfeXAbL7C8OtUwakaXzNIfF21Jg4HYznYi20owQP+wvNvAj1UJF92c7WQ44vkirw2jCGAoCGqeatdP28F9eCyxYo2SpnA404dEOMeMK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tsdn3-0005SZ-8X; Thu, 13 Mar 2025 09:19:41 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tsdn1-005VJV-2Z;
+	Thu, 13 Mar 2025 09:19:39 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 1CD723D9534;
+	Thu, 13 Mar 2025 07:12:07 +0000 (UTC)
+Date: Thu, 13 Mar 2025 08:12:06 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Chenyuan Yang <chenyuan0y@gmail.com>
+Cc: kernel@pengutronix.de, mailhol.vincent@wanadoo.fr, heiko@sntech.de, 
+	linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: rockchip: bail out if skb cannot be allocated
+Message-ID: <20250313-urban-bat-of-cubism-bf5a4a-mkl@pengutronix.de>
+References: <20250313011506.3132295-1-chenyuan0y@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hi4c7kylwypwmzkk"
+Content-Disposition: inline
+In-Reply-To: <20250313011506.3132295-1-chenyuan0y@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Add NULL pointer check in rkcanfd_handle_error_int() to
-bail out if skb cannot be allocated.
 
-This is similar to the commit f7f0adfe64de
-("can: rockchip: rkcanfd_handle_rx_fifo_overflow_int(): bail out if skb cannot be allocated").
+--hi4c7kylwypwmzkk
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] can: rockchip: bail out if skb cannot be allocated
+MIME-Version: 1.0
 
-Signed-off-by: Chenyuan Yang <chenyuan0y@gmail.com>
----
- drivers/net/can/rockchip/rockchip_canfd-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello Chenyuan Yang,
 
-diff --git a/drivers/net/can/rockchip/rockchip_canfd-core.c b/drivers/net/can/rockchip/rockchip_canfd-core.c
-index d9a937ba126c..90395cbdaab9 100644
---- a/drivers/net/can/rockchip/rockchip_canfd-core.c
-+++ b/drivers/net/can/rockchip/rockchip_canfd-core.c
-@@ -551,7 +551,7 @@ static int rkcanfd_handle_error_int(struct rkcanfd_priv *priv)
- 
- 	rkcanfd_handle_error_int_reg_ec(priv, cf, reg_ec);
- 
--	if (!cf)
-+	if (!cf || !skb)
- 		return 0;
- 
- 	err = can_rx_offload_queue_timestamp(&priv->offload, skb, timestamp);
--- 
-2.34.1
+thanks for your contribution.
 
+On 12.03.2025 20:15:05, Chenyuan Yang wrote:
+> Add NULL pointer check in rkcanfd_handle_error_int() to
+> bail out if skb cannot be allocated.
+
+If the skb cannot be allocated, the cf is also NULL.
+
+regards,
+Marc
+
+> This is similar to the commit f7f0adfe64de
+> ("can: rockchip: rkcanfd_handle_rx_fifo_overflow_int(): bail out if skb c=
+annot be allocated").
+>=20
+> Signed-off-by: Chenyuan Yang <chenyuan0y@gmail.com>
+> ---
+>  drivers/net/can/rockchip/rockchip_canfd-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/can/rockchip/rockchip_canfd-core.c b/drivers/net=
+/can/rockchip/rockchip_canfd-core.c
+> index d9a937ba126c..90395cbdaab9 100644
+> --- a/drivers/net/can/rockchip/rockchip_canfd-core.c
+> +++ b/drivers/net/can/rockchip/rockchip_canfd-core.c
+> @@ -551,7 +551,7 @@ static int rkcanfd_handle_error_int(struct rkcanfd_pr=
+iv *priv)
+> =20
+>  	rkcanfd_handle_error_int_reg_ec(priv, cf, reg_ec);
+> =20
+> -	if (!cf)
+> +	if (!cf || !skb)
+>  		return 0;
+> =20
+>  	err =3D can_rx_offload_queue_timestamp(&priv->offload, skb, timestamp);
+> --=20
+> 2.34.1
+>=20
+>=20
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--hi4c7kylwypwmzkk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfShUIACgkQDHRl3/mQ
+kZw+Vgf+Opaq2kYtMPX9Sc52f+TJg+T4rZBFr2HjmKx59vTMbPeQwECyTkMiZRyG
++KKA5CF5MTLZoS0+mi5Jh2Ju7iUVfH+PON/Yzk7bI1tGkGJ0T1WU5O6q2wrVx1rs
+MXLa/FNPQbCGvJQsIVpylRq3cw2Ny0kXv9vEMrdCa3RWKDEU/jZxgnYiAc49wyZV
+WlJ6RwNXJLO4fwr03+o8l/YUstsQ2vk/SqRB9/r10a2cduWUORBg7TWKPXy7sEoa
+TvrcPdFFKhHB8hScGokd367/9wL2VjPPojL3k1d76maZobHNaYZ9doXv2O4zoAC8
+aAghWiucEJKt71ZqaqKf47d8494AwA==
+=TqR1
+-----END PGP SIGNATURE-----
+
+--hi4c7kylwypwmzkk--
 
