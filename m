@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-3057-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3058-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59C42A60C44
-	for <lists+linux-can@lfdr.de>; Fri, 14 Mar 2025 09:53:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51B26A60C52
+	for <lists+linux-can@lfdr.de>; Fri, 14 Mar 2025 09:56:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77FD68811A5
-	for <lists+linux-can@lfdr.de>; Fri, 14 Mar 2025 08:53:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0EC03A70C8
+	for <lists+linux-can@lfdr.de>; Fri, 14 Mar 2025 08:55:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D002B1D5159;
-	Fri, 14 Mar 2025 08:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36FF61DAC81;
+	Fri, 14 Mar 2025 08:55:57 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7F71D63C3
-	for <linux-can@vger.kernel.org>; Fri, 14 Mar 2025 08:53:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC001D86FB
+	for <linux-can@vger.kernel.org>; Fri, 14 Mar 2025 08:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741942414; cv=none; b=hWYiBdGbyRPLFBAFt4mc5WNoTlkibG3C2qqGcULtroXXGeAgQOU0kCw3Jil/i8HGc5XcrDHfDf1GStX1tqgNtKbdBw/Fjpot8/a4iZNW0sObDQZgv6kOFi2MyG2qy+LE0f3X53E693HAUbjHWsS3KgOkQ02neOS0d/Pah6g/KnM=
+	t=1741942557; cv=none; b=Ech2L5s2SorxEoL7YVHz/3oOnO2UhrMFT/nU/mVABg331RYykinLM01rbqZFlCAJVMVqnnr1uYaNxRAM9OLQi4JBeiD05CZgxrHaxQpMaOc+IPpgtsDavqKN8CBx30pZV3d7gycMwQoYtpASwLzpix02TOx/b5pcqUmKz1Skbco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741942414; c=relaxed/simple;
-	bh=LG+zWUiU+YDS4u7udi6xwwIRvt4cLa8ZSYa7+ZaV17I=;
+	s=arc-20240116; t=1741942557; c=relaxed/simple;
+	bh=QVf6IAM1bd0o2o9CRTs9hW37xXi3Ym7SihZPhvQUXpo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UfdXhJ42bBnx64F2Yj3LtXSGYDJKxPBq/5ELkVKNpNq0Vst/9KLs6wy0Grefb3bkZLofsqQJB5j7x/cGOHVzDolqo61jRDIImYEfZxRcDQSydG/5fSSE5cMKs7ZEiTOhV7B9N8BfS3aYPiCdlal74Sd0PSJU851Hw7YkuawbPTw=
+	 Content-Type:Content-Disposition:In-Reply-To; b=P2dljCSwkp/hAx5dd+Am4smOPO2RNWJ4HiXCrlAdLc09ZX9ll/Lp1xTgSMjyAp9CO0Nd4NsO1UXmctwMYiXF5E5xygSMgkFj38jamEW5XpmNz4afAblwW5uNy9CHpf6NDvDD7tLfZh4dQuPs7NPYBjMHhQfFrLyQ/WWGqc3Lc2Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,33 +33,30 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tt0n5-0007tf-7y; Fri, 14 Mar 2025 09:53:15 +0100
+	id 1tt0pX-0008E9-6S; Fri, 14 Mar 2025 09:55:47 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1tt0n3-005fmP-13;
-	Fri, 14 Mar 2025 09:53:13 +0100
+	id 1tt0pW-005fmk-2j;
+	Fri, 14 Mar 2025 09:55:46 +0100
 Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id EB3603DB854;
-	Fri, 14 Mar 2025 08:53:12 +0000 (UTC)
-Date: Fri, 14 Mar 2025 09:53:12 +0100
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 787483DB85A;
+	Fri, 14 Mar 2025 08:55:46 +0000 (UTC)
+Date: Fri, 14 Mar 2025 09:55:46 +0100
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Biju Das <biju.das.jz@bp.renesas.com>
+To: Frank Li <Frank.Li@nxp.com>
 Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
 	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Magnus Damm <magnus.damm@gmail.com>, Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Duy Nguyen <duy.nguyen.rh@renesas.com>, Simon Horman <horms@kernel.org>, stable@vger.kernel.org, 
-	linux-can@vger.kernel.org, devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>
-Subject: Re: [PATCH v3 0/2] R-Car CANFD fixes
-Message-ID: <20250314-coyote-of-inspiring-perception-9f5089-mkl@pengutronix.de>
-References: <20250307170330.173425-1-biju.das.jz@bp.renesas.com>
+	Conor Dooley <conor+dt@kernel.org>, "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Subject: Re: [PATCH v2 1/1] dt-bindings: can: fsl,flexcan: add i.MX94 support
+Message-ID: <20250314-berserk-wine-turkey-18f714-mkl@pengutronix.de>
+References: <20250307190816.2971810-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -67,46 +64,31 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sfhcrqzzuf5ym3x3"
+	protocol="application/pgp-signature"; boundary="wqldkzxr5zxyxjkx"
 Content-Disposition: inline
-In-Reply-To: <20250307170330.173425-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20250307190816.2971810-1-Frank.Li@nxp.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
---sfhcrqzzuf5ym3x3
+--wqldkzxr5zxyxjkx
 Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3 0/2] R-Car CANFD fixes
+Subject: Re: [PATCH v2 1/1] dt-bindings: can: fsl,flexcan: add i.MX94 support
 MIME-Version: 1.0
 
-On 07.03.2025 17:03:25, Biju Das wrote:
-> This patch series addresses 2 issues
->  1) Fix typo in pattern properties for R-Car V4M.
->  2) Fix page entries in the AFL list.
+On 07.03.2025 14:08:15, Frank Li wrote:
+> Add compatible string "fsl,imx94-flexcan" for the i.MX94 chip, which is
+> backward compatible with i.MX95. Set it to fall back to
+> "fsl,imx95-flexcan".
 >=20
-> v2->v3:
->  * Collected tags.
->  * Dropped unused variables cfg and start from
->    rcar_canfd_configure_afl_rules().
-> v1->v2:
->  * Split fixes patches as separate series.
->  * Added Rb tag from Geert for binding patch.
->  * Added the tag Cc:stable@vger.kernel.org
->=20
-> Biju Das (2):
->   dt-bindings: can: renesas,rcar-canfd: Fix typo in pattern properties
->     for R-Car V4M
->   can: rcar_canfd: Fix page entries in the AFL list
->=20
->  .../bindings/net/can/renesas,rcar-canfd.yaml  |  2 +-
->  drivers/net/can/rcar/rcar_canfd.c             | 28 ++++++++-----------
->  2 files changed, 12 insertions(+), 18 deletions(-)
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 
-Applied to linux-can.
+Applied to linux-can-next.
 
 Thanks,
 Marc
@@ -117,20 +99,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---sfhcrqzzuf5ym3x3
+--wqldkzxr5zxyxjkx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfT7nYACgkQDHRl3/mQ
-kZyQcQf9GCCP/HKTjBxyq7lVtcXFI0SYyIzqN2BocqvkOk+LX8jiBhabI2Dj3LLi
-Kxuv4HZRFDTf9zQXa690wOcWtBnRBKxDb+jXFBZY7lEnH59WhJlH1FVX7GkFOtmx
-cbDqwS/nrzW2VH2w7+wLlgsyQvcKycB9VvxO6lQvbgqSltageE/Jl45e9aquCY7l
-GhZjcVMltZhy0jA6IVqGpjicXYESfrZYYD+H7fJ3xo7tDIVdG/LdvSx3x71/+/Ct
-dALlcctsLVAEqh26BrpbIMv0hed5QZUFXbDRla5D5z/rRswkPsioqJMkPGfhGMB5
-e1V95RJmMYEelyf3EsO1mxs25dtC/Q==
-=SXcH
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfT7w8ACgkQDHRl3/mQ
+kZzYnAf/WJzCDW04eHxhTNrkCZk7STUIXOpvxwWNwYPyUcpi/Le/aaYpItBySi7P
+kEdMGBBg3phIGSwbo+9lTrYMDRP02JUJbDJaS/0UrwqFPNvSKo00KYfNWUOrRnY6
+R+9Ojlq5wYFJnsDjXp822iR0kklnyRs4SuALLTdRn6LDkiHAEYSmpzOHcT7m0V/i
+O2Ir35lx8LrcL/6MXiHSmZhod01oUHS3WcvEMkBJa/B7JQX6x5SC9LGdbwnAvp4n
+Du4OcWS31kUvI/EDreABWjx5HMeUun/MiSPRd0RNyajFvoHNOPy3gJ1vWFpfO951
+u5EerZ8QkMFQfB0K2O3VZortPJke2Q==
+=yFfj
 -----END PGP SIGNATURE-----
 
---sfhcrqzzuf5ym3x3--
+--wqldkzxr5zxyxjkx--
 
