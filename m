@@ -1,142 +1,193 @@
-Return-Path: <linux-can+bounces-3147-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3148-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 147D8A65501
-	for <lists+linux-can@lfdr.de>; Mon, 17 Mar 2025 16:06:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29817A65692
+	for <lists+linux-can@lfdr.de>; Mon, 17 Mar 2025 16:53:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB88A171965
-	for <lists+linux-can@lfdr.de>; Mon, 17 Mar 2025 15:04:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D02A9189C3B7
+	for <lists+linux-can@lfdr.de>; Mon, 17 Mar 2025 15:51:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 005BA2459DD;
-	Mon, 17 Mar 2025 15:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F45719ABAB;
+	Mon, 17 Mar 2025 15:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VnrzyOsf"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C754421C194;
-	Mon, 17 Mar 2025 15:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4085119AD5C
+	for <linux-can@vger.kernel.org>; Mon, 17 Mar 2025 15:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742223849; cv=none; b=ZhQotJtTzMv9UEaix+OR7WDQy/P8d/dHQhW2lz59qsE3u1vGh7cPGF7ePWqmuvGvlQLtecYBzjtkHCpfEmSBufwwo1VF6gzrg9AQX9ogMF/RjNtbOI0N1a7NKNjIBRgEj1vTWuLrGrbBYlMRECvmuSU0miK6UppOpRDv3bcGp1w=
+	t=1742226614; cv=none; b=BXHtq5YWu9fldnXLZfEYLcK6gvTAO3433s7gs4ZFVkaA18xT2qT84nR/8KKpr+Aa+eFQFFZykmteEnd52dQrEOXfD1tmbDq5kPG55epGdjCyX9Aa1EcsGU3ap2ciLu2BKDzmsfuG9MhGT9pauJIj40KqxjFar64jduJ6LPsxvZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742223849; c=relaxed/simple;
-	bh=dhH/Id0pu7bbQ4g/wNKM18ywLnQklaShXBh3uRD2XTY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z2ghJ5yIHC9AwRmns3jd0mMtlk33/xDD+8O6KZ6tCstQU3Ci7EiIYEMdP/v1JDAtCIp8/rucMrGGwteNOUBgyBByEtxAf7iSJGnj4yAZ53pURKqjhpYa2vVzI/UAONb5WxS52UksTxHi25x5sDG1jsH8aiG0lNlJKQT9RBwRxFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c3bf231660so542448385a.0;
-        Mon, 17 Mar 2025 08:04:06 -0700 (PDT)
+	s=arc-20240116; t=1742226614; c=relaxed/simple;
+	bh=+jsXUXsNhU8tYFhj80qsL6lqk+NLDAweg7KcPvuivd8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MBkuJkx34WzqrWeC4NN9DChtJSKuPMVDIImWaYd9pX+uRjvFCHcFM3Nwq8p3uQo8pfdUrrSMTgGCU5S94Xg6eAMiK6ylkYYhZoGH16IE354+nS+F71ip9coZXSbGx98N+FjyIXAjCl0sZhViB46/BX4K54m+L4iuylhOik/ov7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VnrzyOsf; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742226611;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ON5mXt9+MGPLSgdLoJHuvKgzI2kCoio/ONcjOV1BUEc=;
+	b=VnrzyOsfBq/+dqQLwsBL1xzN0lvk4yzFf+yzh3OA1bJcM+TvHirju09jwFL5q1AaCa0Y79
+	X0EFh7cGdHUjLH/lrf156YSoe0Rnpsbt4VE2nmUDE9qTB5zDiDQURBC+dbY6wAJMbI4F9G
+	bP/pAD99NymnWioWnHfIe93hObHHAlI=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-483-WxVSDYvpPFyUERaQkYQmeA-1; Mon, 17 Mar 2025 11:50:07 -0400
+X-MC-Unique: WxVSDYvpPFyUERaQkYQmeA-1
+X-Mimecast-MFC-AGG-ID: WxVSDYvpPFyUERaQkYQmeA_1742226606
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-39123912ff0so2318676f8f.2
+        for <linux-can@vger.kernel.org>; Mon, 17 Mar 2025 08:50:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742223844; x=1742828644;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wYk7rUbV1AQGgwNQvYhtnikSWM5qBSUIOV3bM088vmo=;
-        b=vLbkHYGgaymktvXHjwa9IBLHKf5wyVGF5ogRNHPMB9CaBEaUONqpgxJGJM5MwvXMgy
-         +8s/eJ0huez6plXr9zGqxpze+APjwWYeqwkrjRNE90dRzlBl1vTLLxe+cBz5eWO754/L
-         uU3rsYZb3kB0wPOveQ3WezBd+zVV5JfJF4L/pRFEo1f/b87amCWhKtWJpcjYPmwLBUp5
-         JiumBXyFz2O3evnAOgVOMX09xNziR+GiULByX1r60SlBxHl2OYgNKmLbgZLo39VOm4Dv
-         S8UZXWzX7Q0wEJfUb5DWbvmfOWUmpmEmauVC41+qQHgqQVkQb+5as//6UUHO6oMkClfM
-         AMLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW44wIkoo5NzaBIxqGMPSyv0jO81DZA3Po2oeUHiYVTVKxzfz0QFR7adOfb/laOjWuXi/tdOmLLb2o=@vger.kernel.org, AJvYcCWLhMUIwNv2cK28g2/IJMacZoFdvNNipF99hW32CnrKqsU6ZlwUjtVf3kkIyz8mAlO9WkCycYPGrpFOYIfekIsdAjM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWJsheslfF8vMocTtUxFY7QYSedltRJQrqqqwHAe7uFvHSAYfH
-	E6WpIBk6ofsi349uw6EWiVi7IngJygx98+dfJjzEW4+vuddAawdEzpFZcVvX
-X-Gm-Gg: ASbGncv0ue1T+VKOh2jZbjlgDO3imv8VLOFH0D/XgkxLBsfc/nsETXzvTtzDhl1s2Kv
-	k2gFQom3K4KqVtBhUTszqGBQmjjmD+2kLK5VLQTA77GEJvVyUVijsPQplo2/r6GmmK9cGQ2rqp7
-	w/pL0/f07UV79FvZYngLt7qedyByGJrY/wmY8CT8FVjwzLSuX9ltPbud4tul0yf6hsRG0Yc4RPA
-	cRV4JCp+rL/0VsMcUMw5VH6pSEUHchkxQgL/FfxLr72qoMP58AG3vpJAmt49oZDlJY4ry35YTmC
-	bnnjT78BqTs85R7XmGU4opfHa1HQieGUqmpYIMkWp78ckrPqrPzViFilXjK1kfK5KT/NUXBeqaF
-	STszeLeY=
-X-Google-Smtp-Source: AGHT+IGSsO4tM30uDrpas6YAUFi7TMNjIpVE3XK+5RbJuaEWyLY/KSrGRQO5ldPFmae2VSmcQBAeqQ==
-X-Received: by 2002:a05:620a:2697:b0:7c5:5a97:f770 with SMTP id af79cd13be357-7c57c8c04c7mr1531969085a.41.1742223843969;
-        Mon, 17 Mar 2025 08:04:03 -0700 (PDT)
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com. [209.85.219.43])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c573c9a74fsm596798885a.51.2025.03.17.08.04.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Mar 2025 08:04:03 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6e8ffa00555so38065756d6.0;
-        Mon, 17 Mar 2025 08:04:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWjiDQIlNDEsg0ZSqPKbFFyLAG9ktA1k03VCAHhmV4JSnb06zREswP2EiJ7BFzmLohPOZISC13z6cg=@vger.kernel.org, AJvYcCXsZpyBkYhq6J8ROdF8kmwtkUdJpVbokbQwc2TSper3wtK+EETVobNaT84f5U9mh5mybySyuzc2I5bdPqDozIrSrG4=@vger.kernel.org
-X-Received: by 2002:ad4:5aae:0:b0:6ea:d69c:a22e with SMTP id
- 6a1803df08f44-6eaeaae36f5mr168169546d6.30.1742223842882; Mon, 17 Mar 2025
- 08:04:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1742226606; x=1742831406;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ON5mXt9+MGPLSgdLoJHuvKgzI2kCoio/ONcjOV1BUEc=;
+        b=SXR927qqU4AoOKbunsrWPYHWh26w6uZd7uRXbWGaLhVY3Z+qZkmpPjiU8/CeuTxniF
+         NSm2LPc0vOGocZQK+9HJnPJ1x5OZZH0x9vmvDmX/VrU4X8ruS3I9RlQ++rDA2Wo5ZXBJ
+         BRF33Jekdt8yuCJ0MRU1DNVXojWNu/xSd2hMSZMVYnA8UZOAXQBgIPQnuODSGbUNTD8g
+         ws2kG+IBgR9bNIkSSWSJPuI6HeXfGG8upY7oHzPSz+sTAYh2SKZhgj3OWQwQkLQScJR+
+         WLYvmMRuvqMYmMKgD3jaX+yLC+/cvOq3F16Pr4w2JY23TAJoNn35VNJvXo7Rqp56UoMS
+         42gw==
+X-Forwarded-Encrypted: i=1; AJvYcCXcDQlmdceuxaq7g1aRYeVasEI9INXB9s6c/lBtLQeimRu5TExI+gHowcMXOMz0PgY3B3zh4ddfsNg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpBQPf/2sMWO0nIBsM36OqO0eLsboZTEMsv7o2r+GBj1msTWiJ
+	ZEZTBdeN6qPpkqBdUxFRmyCvoUjP1NjB4JP1H+ofcSVz+IygSM9B259Gru3EujNX/5Xk9Q3DdaH
+	GRCmyPFMts3py8tDObHc9jWn3dvC6VoyTMCIapfruNdoF0Tkg5Su3van3bUaMRrrqF/gP
+X-Gm-Gg: ASbGnctafDIbITKNsDfRc24cyvZ4qhzAqcLao0djWyqsXTIf0JZ54B3J0V+6DLs43F5
+	ONDN9YRiRROEuY+Fu5/Kjj9/YWOjW+2Xjt91Ewr0jcLSTK/1ff0IEyPIlBIqY8dVonAebIQfz/J
+	9GepA0HyEpZvA0c2ewLVPzRlWQEfNEoV335Rehn4dmXR5xJVgxH4a4RIEG+cMCNhuAqnOEUff8l
+	1DuMiweGHnaBwhAsTsrVebFGExDWtVgeu00sFUNN6i39N3dF1Pxa6SI04+V5zcTGvGw1VCglm+n
+	reDKMyQHsv9hyQ==
+X-Received: by 2002:adf:a413:0:b0:394:7c55:7030 with SMTP id ffacd0b85a97d-3971e0bdc77mr8315576f8f.30.1742226605867;
+        Mon, 17 Mar 2025 08:50:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFSpiG1XUnayNucrvITHl0q751hDgfvdluSqTksUhmuP1HCEeGv1fOKUtfC9NgMCuy2Mo+cXA==
+X-Received: by 2002:adf:a413:0:b0:394:7c55:7030 with SMTP id ffacd0b85a97d-3971e0bdc77mr8315559f8f.30.1742226605452;
+        Mon, 17 Mar 2025 08:50:05 -0700 (PDT)
+Received: from localhost ([2a01:e11:1007:ea0:8374:5c74:dd98:a7b2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cbbc88f2sm15355857f8f.101.2025.03.17.08.50.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Mar 2025 08:50:04 -0700 (PDT)
+Date: Mon, 17 Mar 2025 16:50:04 +0100
+From: Davide Caratti <dcaratti@redhat.com>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: add protocol counter for AF_CAN sockets
+Message-ID: <Z9hErDHczAhqds_Q@dcaratti.users.ipa.redhat.com>
+References: <9db5d0e6c11b232ad895885616f1258882a32f61.1741952160.git.dcaratti@redhat.com>
+ <78951192-82b1-45bc-9903-d314c94cd182@hartkopp.net>
+ <Z9f16MYRF_vlkkVY@dcaratti.users.ipa.redhat.com>
+ <fdcebcb4-f1d4-4fc8-82cf-62e1213538c0@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250317123619.70988-1-biju.das.jz@bp.renesas.com>
- <20250317123619.70988-13-biju.das.jz@bp.renesas.com> <CAMuHMdVbcNqeNXnLRAhS-1g+VrTEwzfLiyNt+WCfuJDuF-Hacg@mail.gmail.com>
- <TY3PR01MB113466DCECC55DDE9913833F186DF2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY3PR01MB113466DCECC55DDE9913833F186DF2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 17 Mar 2025 16:03:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXbk8gqhd4FFGmFNQRrEwbOToQvr-00LE2pZWoZq65GGg@mail.gmail.com>
-X-Gm-Features: AQ5f1Jr4yPLIOXs0Wfe0Q4EA29Wimv8RMVdD_vomrUy6InT4b8ezDw-ZVH7MCZA
-Message-ID: <CAMuHMdXbk8gqhd4FFGmFNQRrEwbOToQvr-00LE2pZWoZq65GGg@mail.gmail.com>
-Subject: Re: [PATCH v5 12/16] can: rcar_canfd: Add mask table to struct rcar_canfd_hw_info
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	"biju.das.au" <biju.das.au@gmail.com>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fdcebcb4-f1d4-4fc8-82cf-62e1213538c0@hartkopp.net>
 
-Hi Biju,
+hi Oliver,
 
-On Mon, 17 Mar 2025 at 15:46, Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > -----Original Message-----
-> > From: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Sent: 17 March 2025 14:13
-> > Subject: Re: [PATCH v5 12/16] can: rcar_canfd: Add mask table to struct rcar_canfd_hw_info
-> >
-> > On Mon, 17 Mar 2025 at 13:37, Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > R-Car Gen3 and Gen4 have some differences in the mask bits. Add a mask
-> > > table to handle these differences.
-> > >
-> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > > ---
-> > > v4->v5:
-> > >  * Improved commit description by replacing has->have.
-> > >  * Collected tag.
-> > >  * Dropped RCANFD_EEF_MASK and RCANFD_RNC_MASK as it is taken
-> > >    care by gpriv->channels_mask and info->num_supported_rules.
-> >
-> > Thanks for the update!
-> >
-> > All mask values are just the maximum values of various parameters.
-> > Hence they could be replaced by the latter, like you already did for the RNC mask.
->
-> But this will increase memory size, right? Currently we have rcar-gen3 and gen4 tables
-> 2 tables used by 4 hardware info variants.
->
-> If we drop tables and use variable with max values like RNC MASK, then this will be
-> like 4 tables for 4 hardware info variants, right?
->
-> Please correct me if my understanding is wrong.
+On Mon, Mar 17, 2025 at 11:21:25AM +0100, Oliver Hartkopp wrote:
 
-It depends where you store the parameters: in the (two) tables, or in the (four)
-hardware info structures...
+> > > But don't we need to take care on every place where sock_put() is called
+> > > where sock_prot_inuse_add() has to decrease the counter?
+> > 
+> > only the last call to sock_put() needs sock_prot_inuse_add(..., -1):
+> 
+> Right.
 
-Gr{oetje,eeting}s,
+well, it does not even need to be the very last caller. Just +1 for each
+socket created, -1 for each socket released. /proc/net/protocols counts the
+number of active sockets for each protocol, so it's ok not to account for
+dead / already-orphaned ones that are just waiting for being freed in some
+later RCU callback - like it happens   See below:
 
-                        Geert
+[...]
+ 
+> > > af_can.c:               sock_put(sk);
+> > 
+> > 491 static void can_rx_delete_receiver(struct rcu_head *rp)
+> > 492 {
+> > 493         struct receiver *rcv = container_of(rp, struct receiver, rcu);
+> > 494         struct sock *sk = rcv->sk;
+> > 495
+> > 496         kmem_cache_free(rcv_cache, rcv);
+> > 497         if (sk)
+> > 498                 sock_put(sk);
+> > 499 }
+> > 
+> > this one comes from can_rx_unregister(), and it's called in RCU callback - so
+> > we can't tell if it happens before or after sock_put() in ->release().
+> > So we probably need something smarter in case we are not sure that ->release()
+> > is called at least once for each socket.
+> 
+> The can_rx_delete_receiver() might be called if the (e.g. USB) CAN interface
+> is removed in the network notifier. So this is no gracefully socket
+> termination from user space.
+> I think the need to decrease the prot-in-use counter here too.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+AFAIU sock_put() in can_rx_delete_receiver() is always balanced with
+sock_hold() here:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+564         /* schedule the receiver item for deletion */
+565         if (rcv) {
+566                 if (rcv->sk)
+567                         sock_hold(rcv->sk);
+568                 call_rcu(&rcv->rcu, can_rx_delete_receiver);
+569         }
+
+and we have can_rx_unregister() also in ->release(). So, I think it's OK not to
+do sock_prot_inuse_add(..., -1) inside the RCU callback and just decrement the
+after socket is orphaned. For similar reason, I think that 
+
+252 static void __j1939_session_drop(struct j1939_session *session)
+253 {
+254         if (!session->transmission)
+255                 return;
+256 
+257         j1939_sock_pending_del(session->sk);
+258         sock_put(session->sk);
+259 }
+
+does not need to touch 'in_use' counter, because it couples with this:
+
+2025         /* skb is recounted in j1939_session_new() */
+2026         sock_hold(skb->sk);
+2027         session->sk = skb->sk;
+
+for a socket (namely skb->sk) that's already created.
+
+[...]
+
+> > this is  '->release()' of each protocol, that I aimed to cover in the
+> > patch...
+> > 
+> ACK
+> 
+> > > j1939/socket.c: sock_put(sk);
+
+bottom line, I think we only need one sock_prot_inuse_add(..., -1)
+in the above file. WDYT?
+
+thanks,
+-- 
+davide
+
+(*) I'm planning to write a small module to add support for 'ss'
+diagnostics on AF_CAN sockets. This patch was sort-of preparatory work
+for kselftests :)
+
 
