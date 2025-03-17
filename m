@@ -1,39 +1,39 @@
-Return-Path: <linux-can+bounces-3132-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3133-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4F0CA64F23
-	for <lists+linux-can@lfdr.de>; Mon, 17 Mar 2025 13:37:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBFC1A64F25
+	for <lists+linux-can@lfdr.de>; Mon, 17 Mar 2025 13:37:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D09093ABBD4
-	for <lists+linux-can@lfdr.de>; Mon, 17 Mar 2025 12:37:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C662172911
+	for <lists+linux-can@lfdr.de>; Mon, 17 Mar 2025 12:37:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17D3A23AE96;
-	Mon, 17 Mar 2025 12:37:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D601238D32;
+	Mon, 17 Mar 2025 12:37:22 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306A723A98E;
-	Mon, 17 Mar 2025 12:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88BAB23A563;
+	Mon, 17 Mar 2025 12:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742215039; cv=none; b=TsGFmFoE6gzHPNMMf5NFi4qRAEl2vEgweeMtELxZ7rf7tyibGAqZwY4fTqMNDd90Vh9Sb88omsQ9tqKlR4zbWA/1G/VgEVyI/G3pVtxo6tId2+B/FI3qQqhpBw/7q1hKTrJKX4os/KYqqvpjiHMuFAXcYekJRaem94KXEsSwgQI=
+	t=1742215042; cv=none; b=nPjzcxILarPeOb8hkV55nD2SPQcslb0T4NG0731adntG1qYXulWv2uP7yvyuRwhr8qjbW/4DsHhZ0cYwJtBp96U72aTAn30psWaTgcYfHaDN+xaa3wluLfFpljNUqHOhHoPL8SI/8FiIGxV20gpXArszkVmTMjlcnP7C4v4gEhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742215039; c=relaxed/simple;
-	bh=m3WpGh5dSzvFcaK51daUXrmf5Z/36gs6BWhks6Wuzso=;
+	s=arc-20240116; t=1742215042; c=relaxed/simple;
+	bh=fV6kvEgrb14MbNUiyZNKsFkmY/f+OMpm6veaoFZBUWE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=axAoXEM572vtrYbvbWYhaOYm1qyD5MTzB6ihvIeBfFkjBfG/9CoJiEPYqPl87lVMGM/5ZbhBvsi/KImbs01L7ugDnpDvjPCYYqopjlSjFaODIEciF3oq8pkSmUTR9Q/yapJUvUtmZ0EBknHN/RTtbo3MEfwjozScZxgFIiLlkrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+	 MIME-Version; b=bM0lgRErgUlPyt1sMpmAo1MS7S3BcJ7orkiZLEuc9YJPKCxTOGYumxuPFODwWVUc3iQ5YFtIKRrenUq6uLxlI8xfCPL+2Df7Ncxtwh5rU49gdhcVqpfvdJxQ+7R/leluq6DVsqFMFZQhoHfOG2qpfUmxpZEtkFBgIZsgVfqNlD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: 3S3MFlAgQteVuZPSWLkeTg==
-X-CSE-MsgGUID: v99Aud2VRO+YH+OoIcuPOg==
+X-CSE-ConnectionGUID: UkYShSVLQKizQAX7mazOHg==
+X-CSE-MsgGUID: ttcNOiciRZ65mxcbrLJeeg==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 17 Mar 2025 21:37:16 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 17 Mar 2025 21:37:20 +0900
 Received: from localhost.localdomain (unknown [10.226.92.84])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id EC2CC400618A;
-	Mon, 17 Mar 2025 21:37:13 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 61A1F4000FBD;
+	Mon, 17 Mar 2025 21:37:17 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
@@ -45,9 +45,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v5 13/16] can: rcar_canfd: Add shift table to struct rcar_canfd_hw_info
-Date: Mon, 17 Mar 2025 12:36:07 +0000
-Message-ID: <20250317123619.70988-14-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v5 14/16] can: rcar_canfd: Add only_internal_clks variable to struct rcar_canfd_hw_info
+Date: Mon, 17 Mar 2025 12:36:08 +0000
+Message-ID: <20250317123619.70988-15-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250317123619.70988-1-biju.das.jz@bp.renesas.com>
 References: <20250317123619.70988-1-biju.das.jz@bp.renesas.com>
@@ -59,169 +59,48 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-R-Car Gen3 and Gen4 have some differences in the shift bits. Add a
-shift table to handle these differences. After this drop the unused
-functions reg_gen4() and is_gen4().
+All existing SoCs support an external clock, but RZ/G3E has only internal
+clocks. Add only_internal_clks to struct rcar_canfd_hw_info to handle this
+difference.
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v4->v5:
  * Collected tag.
- * Dropped RCANFD_FIRST_RNC_SH and RCANFD_SECOND_RNC_SH by using a
-   formula (32 - (n % rnc_per_reg + 1) * rnc_field_width.
+ * Improved commit description by "All SoCs supports extenal clock"->
+   "All existing SoCs support an external clock".
 v3->v4:
- * Added prefix RCANFD_* to enum rcar_canfd_shift_id.
-v3:
- * New patch.
+ * No change.
+v2->v3:
+ * No change
+v1->v2:
+ * No change.
 ---
- drivers/net/can/rcar/rcar_canfd.c | 70 ++++++++++++++++++++++---------
- 1 file changed, 51 insertions(+), 19 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index e019e941122f..4ba8e51242d3 100644
+index 4ba8e51242d3..5b07e3724fff 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -112,13 +112,16 @@
- 
- /* RSCFDnCFDCmNCFG - CAN FD only */
- #define RCANFD_NCFG_NTSEG2(gpriv, x) \
--	(((x) & (gpriv)->info->mask_table[RCANFD_NTSEG2_MASK]) << reg_gen4(gpriv, 25, 24))
-+	(((x) & (gpriv)->info->mask_table[RCANFD_NTSEG2_MASK]) << \
-+	 (gpriv)->info->shift_table[RCANFD_NTSEG2_SH])
- 
- #define RCANFD_NCFG_NTSEG1(gpriv, x) \
--	(((x) & (gpriv)->info->mask_table[RCANFD_NTSEG1_MASK]) << reg_gen4(gpriv, 17, 16))
-+	(((x) & (gpriv)->info->mask_table[RCANFD_NTSEG1_MASK]) << \
-+	 (gpriv)->info->shift_table[RCANFD_NTSEG1_SH])
- 
- #define RCANFD_NCFG_NSJW(gpriv, x) \
--	(((x) & (gpriv)->info->mask_table[RCANFD_NSJW_MASK]) << reg_gen4(gpriv, 10, 11))
-+	(((x) & (gpriv)->info->mask_table[RCANFD_NSJW_MASK]) << \
-+	 (gpriv)->info->shift_table[RCANFD_NSJW_SH])
- 
- #define RCANFD_NCFG_NBRP(x)		(((x) & 0x3ff) << 0)
- 
-@@ -183,10 +186,12 @@
- #define RCANFD_DCFG_DSJW(gpriv, x)	(((x) & (gpriv)->info->mask_table[RCANFD_DSJW_MASK]) << 24)
- 
- #define RCANFD_DCFG_DTSEG2(gpriv, x) \
--	(((x) & (gpriv)->info->mask_table[RCANFD_DTSEG2_MASK]) << reg_gen4(gpriv, 16, 20))
-+	(((x) & (gpriv)->info->mask_table[RCANFD_DTSEG2_MASK]) << \
-+	 (gpriv)->info->shift_table[RCANFD_DTSEG2_SH])
- 
- #define RCANFD_DCFG_DTSEG1(gpriv, x) \
--	(((x) & (gpriv)->info->mask_table[RCANFD_DTSEG1_MASK]) << reg_gen4(gpriv, 8, 16))
-+	(((x) & (gpriv)->info->mask_table[RCANFD_DTSEG1_MASK]) << \
-+	 (gpriv)->info->shift_table[RCANFD_DTSEG1_SH])
- 
- #define RCANFD_DCFG_DBRP(x)		(((x) & 0xff) << 0)
- 
-@@ -228,10 +233,11 @@
- 
- /* RSCFDnCFDCFCCk */
- #define RCANFD_CFCC_CFTML(gpriv, x)	\
--	(((x) & (gpriv)->info->mask_table[RCANFD_CFTML_MASK]) << reg_gen4(gpriv, 16, 20))
--#define RCANFD_CFCC_CFM(gpriv, x)	(((x) & 0x3) << reg_gen4(gpriv,  8, 16))
-+	(((x) & (gpriv)->info->mask_table[RCANFD_CFTML_MASK]) << \
-+	 (gpriv)->info->shift_table[RCANFD_CFTML_SH])
-+#define RCANFD_CFCC_CFM(gpriv, x)	(((x) & 0x3) << (gpriv)->info->shift_table[RCANFD_CFM_SH])
- #define RCANFD_CFCC_CFIM		BIT(12)
--#define RCANFD_CFCC_CFDC(gpriv, x)	(((x) & 0x7) << reg_gen4(gpriv, 21,  8))
-+#define RCANFD_CFCC_CFDC(gpriv, x)	(((x) & 0x7) << (gpriv)->info->shift_table[RCANFD_CFDC_SH])
- #define RCANFD_CFCC_CFPLS(x)		(((x) & 0x7) << 4)
- #define RCANFD_CFCC_CFTXIE		BIT(2)
- #define RCANFD_CFCC_CFE			BIT(0)
-@@ -523,11 +529,23 @@ enum rcar_canfd_mask_id {
- 	RCANFD_CFTML_MASK,	/* Common FIFO TX Message Buffer Link */
+@@ -555,6 +555,7 @@ struct rcar_canfd_hw_info {
+ 	unsigned multi_channel_irqs:1;	/* Has multiple channel irqs */
+ 	unsigned ch_interface_mode:1;	/* Has channel interface mode */
+ 	unsigned shared_can_regs:1;	/* Has shared classical can registers */
++	unsigned only_internal_clks:1;	/* Has only internal clocks */
  };
  
-+enum rcar_canfd_shift_id {
-+	RCANFD_NTSEG2_SH,	/* Nominal Bit Rate Time Segment 2 Control */
-+	RCANFD_NTSEG1_SH,	/* Nominal Bit Rate Time Segment 1 Control */
-+	RCANFD_NSJW_SH,		/* Nominal Bit Rate Resynchronization Jump Width Control */
-+	RCANFD_DTSEG2_SH,	/* Data Bit Rate Time Segment 2 Control */
-+	RCANFD_DTSEG1_SH,	/* Data Bit Rate Time Segment 1 Control */
-+	RCANFD_CFTML_SH,	/* Common FIFO TX Message Buffer Link */
-+	RCANFD_CFM_SH,		/* Common FIFO Mode */
-+	RCANFD_CFDC_SH,		/* Common FIFO Depth Configuration */
-+};
-+
- struct rcar_canfd_global;
+ /* Channel priv data */
+@@ -2041,7 +2042,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 		fcan_freq = clk_get_rate(gpriv->can_clk) / info->postdiv;
+ 	} else {
+ 		fcan_freq = clk_get_rate(gpriv->can_clk);
+-		gpriv->extclk = true;
++		gpriv->extclk = !gpriv->info->only_internal_clks;
+ 	}
  
- struct rcar_canfd_hw_info {
- 	const u32 *mask_table;
- 	const u16 *regs;
-+	const u8 *shift_table;
- 	u16 num_supported_rules;
- 	u8 rnc_field_width;
- 	u8 max_channels;
-@@ -649,8 +667,31 @@ static const u32 rcar_gen4_mask_table[] = {
- 	[RCANFD_CFTML_MASK] = 0x1f,
- };
- 
-+static const u8 rcar_gen3_shift_table[] = {
-+	[RCANFD_NTSEG2_SH] = 24,
-+	[RCANFD_NTSEG1_SH] = 16,
-+	[RCANFD_NSJW_SH] = 11,
-+	[RCANFD_DTSEG2_SH] = 20,
-+	[RCANFD_DTSEG1_SH] = 16,
-+	[RCANFD_CFTML_SH] = 20,
-+	[RCANFD_CFM_SH] = 16,
-+	[RCANFD_CFDC_SH] = 8,
-+};
-+
-+static const u8 rcar_gen4_shift_table[] = {
-+	[RCANFD_NTSEG2_SH] = 25,
-+	[RCANFD_NTSEG1_SH] = 17,
-+	[RCANFD_NSJW_SH] = 10,
-+	[RCANFD_DTSEG2_SH] = 16,
-+	[RCANFD_DTSEG1_SH] = 8,
-+	[RCANFD_CFTML_SH] = 16,
-+	[RCANFD_CFM_SH] = 8,
-+	[RCANFD_CFDC_SH] = 21,
-+};
-+
- static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- 	.mask_table = rcar_gen3_mask_table,
-+	.shift_table = rcar_gen3_shift_table,
- 	.regs = rcar_gen3_regs,
- 	.num_supported_rules = 256,
- 	.rnc_field_width = 8,
-@@ -661,6 +702,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- 
- static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
- 	.mask_table = rcar_gen4_mask_table,
-+	.shift_table = rcar_gen4_shift_table,
- 	.regs = rcar_gen4_regs,
- 	.num_supported_rules = 512,
- 	.rnc_field_width = 16,
-@@ -673,6 +715,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
- 
- static const struct rcar_canfd_hw_info rzg2l_hw_info = {
- 	.mask_table = rcar_gen3_mask_table,
-+	.shift_table = rcar_gen3_shift_table,
- 	.regs = rcar_gen3_regs,
- 	.num_supported_rules = 256,
- 	.rnc_field_width = 8,
-@@ -682,17 +725,6 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
- };
- 
- /* Helper functions */
--static inline bool is_gen4(struct rcar_canfd_global *gpriv)
--{
--	return gpriv->info == &rcar_gen4_hw_info;
--}
--
--static inline u32 reg_gen4(struct rcar_canfd_global *gpriv,
--			   u32 gen4, u32 not_gen4)
--{
--	return is_gen4(gpriv) ? gen4 : not_gen4;
--}
--
- static inline void rcar_canfd_update(u32 mask, u32 val, u32 __iomem *reg)
- {
- 	u32 data = readl(reg);
+ 	addr = devm_platform_ioremap_resource(pdev, 0);
 -- 
 2.43.0
 
