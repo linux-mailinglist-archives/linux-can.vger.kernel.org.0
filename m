@@ -1,48 +1,47 @@
-Return-Path: <linux-can+bounces-3158-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3159-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 479B3A68DBE
-	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 14:26:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1566A68DCE
+	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 14:27:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7D2117D8AD
-	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 13:26:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22D6B3B157D
+	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 13:27:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96443256C84;
-	Wed, 19 Mar 2025 13:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF97F256C70;
+	Wed, 19 Mar 2025 13:27:40 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E74E2566F2
-	for <linux-can@vger.kernel.org>; Wed, 19 Mar 2025 13:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186DE2561D7
+	for <linux-can@vger.kernel.org>; Wed, 19 Mar 2025 13:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742390761; cv=none; b=co5vpdxfNM2/Uq59XNZQGSSvFIwMP8zMPAcwaXVB8M6GO8t6heZBuwCR+a4KdQeZzT63kMAJ4ur2ixyBaYOrwCxKwO6korXLnDMyhwnivBCkpX2reLU9IKu8l6bH4v3TG/h7NW7aDSZH+P79sSjBfT/uqd9xQH7p87IpAwugYqY=
+	t=1742390860; cv=none; b=D4C339uE1qoPNV7OwaPWb6KhDFcibp3siMI1awnGqkRzGgiz8sm0/F3EsIftYIDM1N6cSFTxMZMNqauH7jPIUzR32bgqJIX3PTwv4ck4528JKnnEh/6jMIgs7IArPF5E9Mczt1UnWueu2QtMP4vC2tdu2VACmZPRTk3uhWScVGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742390761; c=relaxed/simple;
+	s=arc-20240116; t=1742390860; c=relaxed/simple;
 	bh=H6XYnRoO0ffYCwemv6mdC/71RwSZcugq+eoIdiEoCs4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JwaZXzPjQQLQHoHod3VIF+jXH6mEP8upxS+cdN0fufJlEioD4YzjKbsYhNwUJGSkqcaeXXDyOLpzVUcYYWobF3NQPmbgK4QvicMxGqVlHdknM0p721lJGFDubo4tgZD1OZoGaaf3aZJdUZDibvcDEIWCJRac9ZBJ7ZAn22s5lIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.89
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tD382h/wuXiWnq38EPLw73xkaR2ZIKxpOyOrJn2VX2ly6D84tWDS8q1Lc0LZ0YjiOZ80vEAVNZzkqjT4Y8Z2i8plWkaQf/bdu26YHyXxG435zYpA+opqitIr+0GkqjZ1PqoDKfGWjIHEtxqKOI6A27cNSYAB/c6MiKaLm67k1pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:1557:27ad:a073:92ed])
-	by laurent.telenet-ops.be with cmsmtp
-	id SdRt2E0010FbbzD01dRtAa; Wed, 19 Mar 2025 14:25:56 +0100
+	by andre.telenet-ops.be with cmsmtp
+	id SdTY2E00C0FbbzD01dTYDn; Wed, 19 Mar 2025 14:27:36 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.97)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1tutQ9-0000000EmS6-1drF;
-	Wed, 19 Mar 2025 14:25:49 +0100
+	id 1tutRp-0000000EmSK-0Mtr;
+	Wed, 19 Mar 2025 14:27:32 +0100
 Received: from geert by rox.of.borg with local (Exim 4.97)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1tutQa-0000000BlRv-460m;
-	Wed, 19 Mar 2025 14:25:48 +0100
+	id 1tutSG-0000000BlTG-33Bn;
+	Wed, 19 Mar 2025 14:27:32 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Rob@rox.of.borg,
-	Herring@rox.of.borg,
+To: Rob Herring <robh@kernel.org>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
 	Vinod Koul <vkoul@kernel.org>,
@@ -55,7 +54,7 @@ Cc: linux-can@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
 Subject: [PATCH] phy: can-transceiver: Re-instate "mux-states" property presence check
-Date: Wed, 19 Mar 2025 14:25:47 +0100
+Date: Wed, 19 Mar 2025 14:27:31 +0100
 Message-ID: <6bcfde63b3a6b25640a56be2e24a357e41f8400f.1742390569.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
