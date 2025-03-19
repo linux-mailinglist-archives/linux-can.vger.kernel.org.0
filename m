@@ -1,131 +1,89 @@
-Return-Path: <linux-can+bounces-3162-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3163-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0E23A693FD
-	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 16:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A49EAA69CF5
+	for <lists+linux-can@lfdr.de>; Thu, 20 Mar 2025 00:58:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 539F6173129
-	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 15:48:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F0CB4626E4
+	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 23:58:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 310C01AA1C9;
-	Wed, 19 Mar 2025 15:48:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A68A22423C;
+	Wed, 19 Mar 2025 23:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="RTXnJnGX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aEs3QJCh"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-18.smtpout.orange.fr [193.252.22.18])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4296114A09E;
-	Wed, 19 Mar 2025 15:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4034F1DE3A9;
+	Wed, 19 Mar 2025 23:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742399304; cv=none; b=mU6QAuICi6j/5Eh7G31jpYktqFV50kcA65cknZDG3bH4kxnNejoq8P8clNVt9qLLlR2HpVtxvIOgXMNQLi9iy4AudhzehlULUj5vGz8ZINhDn40qg026v22VoX4i1f7u6ADUn+c/69YV5d0XOFmN6CBEFsl6CX5716QEglbAiQo=
+	t=1742428693; cv=none; b=Ndoj6luz0+1V47TvDMU8A9SAhUnYbgXrpXC19oLWh9GppfgWp5VrRNgheaQhZuf9tOGi9jxFAa0HPGJisqeDTLXSGpHJztfgCo67nL91WwwLMYVyOuGNLFCUUZn781S2EEPaxJ6NWN+Mi7BgGsMtAJIE5RKenp32LrKBodwB+bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742399304; c=relaxed/simple;
-	bh=TWNrwxifGY3EzCLYJfiO7rO1Ae11gGERZQ9pPIpWJFk=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=sYucbtikZPmpqDrEU/x03xum5hPijKVPvkZbisJ4EKu6FS7HldINFwkzXJZGCmUIPbfkeZgRCK8uklXwktaBpGLhPuefmekg1wFGfky8AzdibGyYTiO1GLFLNvsKxbgYAljABfFNTSZVSi0NzIhDVQ2CVHlNOOyn8EgjV59DTQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=RTXnJnGX; arc=none smtp.client-ip=193.252.22.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id uveJtyP6dQBhYuveOtlLnP; Wed, 19 Mar 2025 16:48:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1742399297;
-	bh=drRXaJR0UoQ5nPULEuhz5/B+tox7MBOIWrTIUebRvQg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To;
-	b=RTXnJnGX4JF+onW8BdM2h1yrn9bbnTWZ+u8CV4sHASwQ7dD1n9Otl1R7l5ne9HkTf
-	 9f4Nbs0mls1/zZgh98YNzlK4e9Uka5uXCRGaWHx4E4ENOI4Q4lSFrf2f1niqHC+VlX
-	 pt+tqg6EAX1Q6FUfEds6dcKCbUDhma2aPSQCBJjAHB50ZWie7JLbnBPZmBKpbv+ku6
-	 WCaTdTkQJWMSM7L8WE6v2h9PL0gzUaRpvm2DIGzrShlabVFjwZg+77svuJEW0q20gg
-	 14rFIHTfWJ3ThQJJ+tnrv6ioFLI8WAuJ0X6Ui/Ty5+OqFfcQz0eenD9MjGqydJxbG8
-	 xrwaG/mJJBfBw==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 19 Mar 2025 16:48:17 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <4c221c24-05c4-4be2-ad9b-e5a58968b5b0@wanadoo.fr>
-Date: Thu, 20 Mar 2025 00:48:06 +0900
+	s=arc-20240116; t=1742428693; c=relaxed/simple;
+	bh=ZZKfA84RzRDEAliz95nfjz5QwDog7cyZVSrWYTw/zI8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nXLJj2x84gKvXdTOhljDJhSM5yr7bzeu76svY0Y1Q2dmiB6q9DJqFoC+K5wFpieUB20t80s0PX4Cg8cnWTxkCn76rYVsxjdcbCoXQQ32Ps/0IjVz5w39AWPna44nrdh4cPP9c1i4c+fEM439NUGZozmDZtzA808PA8yManRo5D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aEs3QJCh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458ACC4CEE4;
+	Wed, 19 Mar 2025 23:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742428692;
+	bh=ZZKfA84RzRDEAliz95nfjz5QwDog7cyZVSrWYTw/zI8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aEs3QJChJFcdnPOHTauCmOrZ6IULAT7ZHAPKR4zUQKWpU4fVfq9xjjqMYvsI+BjnY
+	 tGhOwI9ScxsMy66k/+abaRY04I7+m9j1tjEdH9fAhcXCSi4LivrGhOBfVFXXTzlwMI
+	 p6De/RCvhON6CzIS0tGTyTbJuvO/FmRVGYyS9qC2+lu2dN/kngG4jI+E5IYPUo5gkM
+	 HheOzDF+CuZXuwayiJHFY7XfsiLvcbIecQPzGP0Uq9g85V4ym5K4eDIuM35vhUNiP3
+	 c/51O56HdxpGl/vDaGjSfPHxwvJ+8zacziTn2x/482i+A/8y3atJDVk6Ur1lsSqNve
+	 C0gP39TapTPrQ==
+Date: Thu, 20 Mar 2025 00:58:09 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 3/7] i2c: Add Nuvoton NCT6694 I2C support
+Message-ID: <jpaqx2z5io2bvtluexnzrkz4zcvea7qqgpa6bdhm4yzby2rjgb@izncuolmv7tl>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-4-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] phy: can-transceiver: Re-instate "mux-states" property
- presence check
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-can@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Rob Herring <robh@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Peter Rosin <peda@axentia.se>, Aswath Govindraju <a-govindraju@ti.com>
-References: <6bcfde63b3a6b25640a56be2e24a357e41f8400f.1742390569.git.geert+renesas@glider.be>
- <9875d99a-4e16-4f0e-9249-69f0acc4c890@wanadoo.fr>
-Content-Language: en-US
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <9875d99a-4e16-4f0e-9249-69f0acc4c890@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250225081644.3524915-4-a0282524688@gmail.com>
 
-On 19/03/2025 at 23:06, Vincent Mailhol wrote:
-> For some reasons, I received your message twice (with a two minutes
-> interval between both messages). These look identical. I am answering
-> the most recent. :)
-> 
-> On 19/03/2025 at 22:27, Geert Uytterhoeven wrote:
->> On the Renesas Gray Hawk Single development board:
->>
->>     can-transceiver-phy can-phy0: /can-phy0: failed to get mux-state (0)
->>
->> "mux-states" is an optional property for CAN transceivers.  However,
->> mux_get() always prints an error message in case of an error, including
->> when the property is not present, confusing the user.
-> 
-> Hmmm, I understand why you are doing this patch. But on the long term,
-> wouldn't it make more sense to have a devm_mux_state_get_optional()? Or
-> maybe add a property somewhere to inform devm_mux_state_get() that this
-> is optional?
-> 
-> Regardless, just see this as an open question. I am OK with the approach
-> of your patch.
+Hi Ming,
 
-Ah, and I just realized that you mentioned the exact same thing under
-the --- cutter, which for some reasons my eyes refused to see.
+...
 
-Sorry for the noise.
+> +enum i2c_baudrate {
+> +	I2C_BR_25K = 0,
+> +	I2C_BR_50K,
+> +	I2C_BR_100K,
+> +	I2C_BR_200K,
+> +	I2C_BR_400K,
+> +	I2C_BR_800K,
+> +	I2C_BR_1M
+> +};
 
->> Fix this by re-instating the property presence check.
->>
->> This is bascially a revert of commit d02dfd4ceb2e9f34 ("phy:
->> can-transceiver: Drop unnecessary "mux-states" property presence
->> check"), with two changes:
->>   1. Use the proper API for checking whether a property is present,
->>   2. Do not print an error message, as the mux core already takes care
->>      of that.
->>
->> Fixes: d02dfd4ceb2e9f34 ("phy: can-transceiver: Drop unnecessary "mux-states" property presence check")> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> 
-> Notwithstanding of above comment:
-> 
-> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+do we need all these frequencies? I don't see them use anywhere.
 
-Yours sincerely,
-Vincent Mailhol
+Besides, can you please use a proper prefix? I2C_BR_* prefix
+doesn't belong to this driver.
 
+Andi
 
