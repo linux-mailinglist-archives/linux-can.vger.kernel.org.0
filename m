@@ -1,55 +1,40 @@
-Return-Path: <linux-can+bounces-3160-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3161-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBD33A68EA2
-	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 15:13:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC623A693C8
+	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 16:42:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 895234270B4
-	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 14:09:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C680188ED62
+	for <lists+linux-can@lfdr.de>; Wed, 19 Mar 2025 15:36:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3459D192B6D;
-	Wed, 19 Mar 2025 14:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="NZZDSOzi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0A81C8602;
+	Wed, 19 Mar 2025 15:36:13 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-15.smtpout.orange.fr [193.252.22.15])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA16487BE;
-	Wed, 19 Mar 2025 14:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A741C3BE1;
+	Wed, 19 Mar 2025 15:36:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742393296; cv=none; b=G8erpKyKPErur40IoCdlRj86H4qj82jOo9HoH4bMSAotR9dWq6J0DLOf3vddeI2yfRpvGtjvlSKFQmPHnVJVrp+jdqi9+LMRGCCNt/6TaT+crp88+2AcPY4Wtedz04CFwb71Y69Fe0tPcilmfMMOEksgbQpVi8EJpsOMZa/Rv60=
+	t=1742398573; cv=none; b=UvGPLIup5TKkApw971jP39G4WAQ6inF8E+BVnNhL3uMb0hnc865mOVZ2TRNLceIyreLaPclFp63ckDb/ij3zDEhsOVstLVPiHv9UJ45oidjE4Ei82GGcVFPnja3hdeQFlHpm28wpjwe/pu8vce3lSQVph6tZiwvbS19Qc+0dRrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742393296; c=relaxed/simple;
-	bh=eadsQhCoAnWOW5orH50NaMyqwddlzL1TV3Kc8Ep1sq8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m+mWJDPzyuzOOqRRjzoF8vbQB0Qi9qFOv7c1AgH2iIQQh4VdPWrx30INFLYe32k71/SaTkNOHOnftsmCbq7YLjLtqwjcN7NFcpi8m6Rk0EwGYMGxwibCDHcmadH2CqjYPbqgZaqPrFRx7PQFGtKTrxsoO3W41ttPy90SGZrgzWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=NZZDSOzi; arc=none smtp.client-ip=193.252.22.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id uu4JtWV2Z7cNtuu4NtYw7s; Wed, 19 Mar 2025 15:07:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1742393220;
-	bh=FXtT3TyOuREop0nAPbjd8Bh8NcKyfaMb6/bV7hE+Y9g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=NZZDSOziNkt+PTbhmfL9cjo9HFF5lpC4b+Sy0lwu+QyET6zBVpjMJKQiPK5CXPmCg
-	 WbtehyqC9u0f4ATJaS2ibG5WlHA+DQumDUlII/LDd0zRQbn+TPIGRYtIDqvzd3/a1p
-	 mdrZ9Mgrc2pfHHJ9JTD56wDtJc/hThAcCDIacKoPZ5hDc77KQNK0nmUmDfFInlAB1X
-	 eU/JBGCmFzOiCsV/lPdpbCwnQVmWKxjH7bxNOq/Jh8loXekplFe4GKG5FuVk7apo4N
-	 cLZP3Aa3YU0MDi53Cc8caUFd5IWl9mG+YJrH89oTAcbC+BRrd+t4e3MzkU+eXXbQWt
-	 h4PnE4eqJ0tMA==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 19 Mar 2025 15:07:00 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <9875d99a-4e16-4f0e-9249-69f0acc4c890@wanadoo.fr>
-Date: Wed, 19 Mar 2025 23:06:50 +0900
+	s=arc-20240116; t=1742398573; c=relaxed/simple;
+	bh=xdtm+471F3kzqqSki+lmuRp7EwkY5QYi6eOUgWf+UNQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=EOL2ZtSz0218xyXnEYf7bhUwXvGAu7jmr6oenx5f2YycVpmWlSXZVhxxdCiAETg/Y8FgwIS6C+Vxb8oveJBkz0YB57VMxBkjfSxOeOYAs16owtMqG2NVNGdK/0ZqWA5A/kTp/Mbj/oBjCw4bGmSfOfT/2uqe/2zItTpSMkza2qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from [192.168.2.102] (213.87.131.243) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Wed, 19 Mar
+ 2025 18:35:48 +0300
+Message-ID: <5691f9a6-07f0-4295-a25d-cb5bc572e824@omp.ru>
+Date: Wed, 19 Mar 2025 18:35:47 +0300
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -59,34 +44,63 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] phy: can-transceiver: Re-instate "mux-states" property
  presence check
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-can@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Rob Herring <robh@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Peter Rosin <peda@axentia.se>, Aswath Govindraju <a-govindraju@ti.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>, Rob Herring
+	<robh@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol
+	<mailhol.vincent@wanadoo.fr>, Vinod Koul <vkoul@kernel.org>, Kishon Vijay
+ Abraham I <kishon@kernel.org>, Peter Rosin <peda@axentia.se>, Aswath
+ Govindraju <a-govindraju@ti.com>
+CC: <linux-can@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+	<linux-renesas-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 References: <6bcfde63b3a6b25640a56be2e24a357e41f8400f.1742390569.git.geert+renesas@glider.be>
 Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
 In-Reply-To: <6bcfde63b3a6b25640a56be2e24a357e41f8400f.1742390569.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 03/19/2025 15:24:30
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 19
+X-KSE-AntiSpam-Info: Lua profiles 191947 [Mar 19 2025]
+X-KSE-AntiSpam-Info: Version: 6.1.1.11
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 51 0.3.51
+ 68896fb0083a027476849bf400a331a2d5d94398
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 213.87.131.243 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 213.87.131.243 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info:
+	127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: {Tracking_ip_hunter}
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.131.243
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 19
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 03/19/2025 15:27:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 3/19/2025 12:11:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-For some reasons, I received your message twice (with a two minutes
-interval between both messages). These look identical. I am answering
-the most recent. :)
+On 3/19/25 4:27 PM, Geert Uytterhoeven wrote:
 
-On 19/03/2025 at 22:27, Geert Uytterhoeven wrote:
 > On the Renesas Gray Hawk Single development board:
 > 
 >     can-transceiver-phy can-phy0: /can-phy0: failed to get mux-state (0)
@@ -94,32 +108,25 @@ On 19/03/2025 at 22:27, Geert Uytterhoeven wrote:
 > "mux-states" is an optional property for CAN transceivers.  However,
 > mux_get() always prints an error message in case of an error, including
 > when the property is not present, confusing the user.
-
-Hmmm, I understand why you are doing this patch. But on the long term,
-wouldn't it make more sense to have a devm_mux_state_get_optional()? Or
-maybe add a property somewhere to inform devm_mux_state_get() that this
-is optional?
-
-Regardless, just see this as an open question. I am OK with the approach
-of your patch.
-
+> 
 > Fix this by re-instating the property presence check.
 > 
 > This is bascially a revert of commit d02dfd4ceb2e9f34 ("phy:
+
+   Basically. :-)
+
 > can-transceiver: Drop unnecessary "mux-states" property presence
 > check"), with two changes:
 >   1. Use the proper API for checking whether a property is present,
 >   2. Do not print an error message, as the mux core already takes care
 >      of that.
 > 
-> Fixes: d02dfd4ceb2e9f34 ("phy: can-transceiver: Drop unnecessary "mux-states" property presence check")> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Notwithstanding of above comment:
-
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-
-Yours sincerely,
-Vincent Mailhol
+> Fixes: d02dfd4ceb2e9f34 ("phy: can-transceiver: Drop unnecessary "mux-states" property presence check")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> Alternatively, the multiplexer subsystem needs to gain support for
+> getting an optional mux...
+[...]
+MBR, Sergey
 
 
