@@ -1,149 +1,169 @@
-Return-Path: <linux-can+bounces-3190-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3191-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B99AA6AFBF
-	for <lists+linux-can@lfdr.de>; Thu, 20 Mar 2025 22:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 34473A6B3AB
+	for <lists+linux-can@lfdr.de>; Fri, 21 Mar 2025 05:28:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA398886B70
-	for <lists+linux-can@lfdr.de>; Thu, 20 Mar 2025 21:19:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65C113AC23D
+	for <lists+linux-can@lfdr.de>; Fri, 21 Mar 2025 04:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA9E1227E9F;
-	Thu, 20 Mar 2025 21:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE12F1E376E;
+	Fri, 21 Mar 2025 04:27:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rDezse0C"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="KxUvipl/"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out.smtpout.orange.fr (out-72.smtpout.orange.fr [193.252.22.72])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D990213245
-	for <linux-can@vger.kernel.org>; Thu, 20 Mar 2025 21:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7ABCB664;
+	Fri, 21 Mar 2025 04:27:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742505591; cv=none; b=JTqTgEcUNeOLwMHty89LGuWmvFgLFIGZc5vl+O+C6rZ/5GXSyRyb/bDPEFVulxBs5sco2B76b6amFfdnOVEbTDUkq8fI9Jl9ozjtL53rjy3bbfeVoNGkD1NmcRywSezOv+3Jd1SGiBl6/11y9gWDBBFyCx/95LceRCEcQddPD1k=
+	t=1742531270; cv=none; b=HMkS6pLZy1ZSVBTOCj48lgXaQTLjk/JW8+yB1R/5d8S6gbbCBP9F4X8XnLmymCdTxbXY83n8GFlrBrQdpmO+r9CDQ7hmYx34Y5Mh7FjshJLXVRHu7GzCsKKuoFrMPjvt3+aamfN8rzYwyJfF1cObCrKqo0k1SSWPP769MK3e4X8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742505591; c=relaxed/simple;
-	bh=SeYsGh25r0ywhE/QvnvEtolHiHO3v9wHxs9KaINCRUo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=skufpZljqjxwgPrbKGakBGUfhwG/sYoNziGJIaEFrLvj30KIOrABGBfl9GkKVM8AWdViEmp37+vZKOfOfbHOvzlLItgCEoR56+b2/q1CBVVDKT4GWkCNYDtCFwAtDJtur2hLCjjw2f5WUcgQU2Wuudf/W0Q35LzWkppLS/A107g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rDezse0C; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2ff797f8f1bso2238014a91.3
-        for <linux-can@vger.kernel.org>; Thu, 20 Mar 2025 14:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742505589; x=1743110389; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SeYsGh25r0ywhE/QvnvEtolHiHO3v9wHxs9KaINCRUo=;
-        b=rDezse0C8M7QUC9X+OBK11eQH920lTQcutT/Q52SKaViHt7ouFq53F/saxC2vIAdE9
-         3Dpw3uxG5vvwq28rWwCUhusebVDqGxK1rLcqv13yOK4eKwScHV1ASzsRaCYU6XmBaj8e
-         k6hLrIHP+tdZRHQdSdQjCbSuZvZCyR8dYbqD1PNS8liDhkNSijquwnXPkZ62d3l/w7/V
-         dPLlBRgcS2Tund+jQRoYymRxTdIK+XqsJTz8Y2euIzTJ0Dsd1LgQfLwhFLV7atwIJXzp
-         N30odrIHPyBcb6gn5JoqKb6DRNpGb7UK0jyLuEMtWYg/+ExcFjy4xWU4eVa/AtMJiqBV
-         L5Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742505589; x=1743110389;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SeYsGh25r0ywhE/QvnvEtolHiHO3v9wHxs9KaINCRUo=;
-        b=WVbbN9XcugC/nWWteX+dvRSyeA4INPzKzxmblaeT2VOwaAV5ZJwyznggr2L47dYxvM
-         o9KMd6NAAj/vmqQ/5IGZ4cMhzKFlM2MjfZ9xXL8rPJnGd1NwLlOw+0pGK0UAy2R3ockm
-         05i8JHe/oxe94C5f7ywRyOZtKyABNJlUUXc5/oIdqQ4VpGIneKLK++aGrZbCqyUg1AQf
-         dDmbaN6EH95IFzCB24n4b1i8BYUzCwn5Dn2iDSD7IPkYm1UeT8SFUxEb8Ne71rtbD546
-         0N2PMaR7U1PoFlXu5EvG1FmH1byiXV7R3PWIbRfc/AH6JKD9Lqo3TBcXZ4gQm9trQjv/
-         t5VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVWW96xJf19Mz/mDEnp//FSDf/qkI2FV691aQ21/rEByHN9RBoH7iocdUqL8KYsnJfFlyJrTQWLzw0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOfjxLPiWhLTHPZ6iN2rWxrWDlNc+7m6wDALxLIjvz+h8imN2/
-	FP8eM6wJyEXqu1sXTlkl/d6DafbVeSeb2NcJBGVP4+x8hacurHjfN052BakRuCBrDDs3q/s/iK3
-	MxRJdnzhY6WqeDqgSSvsvFamWHlrr4nsnENHv
-X-Gm-Gg: ASbGncv6faLO5JXhoKLELfUZz0VIC+CKODR+Av82lLC4Vp4dszB50zTNBZnp8MsxsAK
-	xdjxSqJiN2oqGKuz7QGsUgnn3bZgE++DyZFbe+8hE938c2o1eJnVh863GfEEXy9usvy2RRsS4td
-	ZfBPq09rlKA7/bEVYX5NQHcE5OJ0V0StdaFPJ7aFn1qj4Y53Vvs0uw7/465Q==
-X-Google-Smtp-Source: AGHT+IG5UxLbD/zV9btCjR0yXp3YjG8T0d1HLUnOEWiogKiEAEYLj7jcwZRSsZGc2U9tFqcLLhKZ135161o8xG5oZ0c=
-X-Received: by 2002:a17:90b:554e:b0:2fa:228d:5af2 with SMTP id
- 98e67ed59e1d1-3030fea0d35mr1302957a91.15.1742505588652; Thu, 20 Mar 2025
- 14:19:48 -0700 (PDT)
+	s=arc-20240116; t=1742531270; c=relaxed/simple;
+	bh=C7HXbRAAikkBwHspUHiehLT+PSVXQ2/fzwqlCI0p5vc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WkWcEUYOp/z0NXwodu0xB+fIQJrnMERQuZQYJo8t5ja2ZVb0Iur0KHgkbhUk4AuwQx6iyGfKNA99jsZK2ghKAsa6wa4mcOxreKM7xENvQAmcONAgonxh+DjWUXzvGXjLmSLdSvydddHC6ShE5lMLH/LnR3MCxlI+dh48zdbpjrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=KxUvipl/; arc=none smtp.client-ip=193.252.22.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id vTpqtuCVJpih5vTpvtXDey; Fri, 21 Mar 2025 05:18:29 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1742530710;
+	bh=RfTovQ5pBBPXl/sQntAxGWbDNnwENYAK9Bt2Ch93r58=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=KxUvipl/mBH9mc3/+Jxp2x1493gZQeZOd7O1dWUrPtM6thSRht5eemzsz0bAhoVki
+	 UK6CTEtCyIr0B2njVsiL/Rbr4irCB0+2uOw5H+lalCF9jyZTppgCSLooDDJSUxSqiP
+	 KLwOa3oQaBRKfU1w7HcWDEh8qDV9uKdiX8SEa3TJYLNcfQMoUqnv/Y+c4nKoVmstXw
+	 QtOzdhj2FmatopgmqctXNjsEuD+W5CATzJW4ecmjZKK+YxcyTexp8CHwQ510jgHD3x
+	 Q85cTm7l4Tdfae2YGjxEcK0z2m8NKPbDmVd5zGOqFiHSeZzl8e/qDzEFkGwqSLiRK8
+	 h/GCI4MlrBSDQ==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 21 Mar 2025 05:18:30 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <7805e0db-7c17-438d-9985-f4feec644da6@wanadoo.fr>
+Date: Fri, 21 Mar 2025 13:18:18 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <67cd717d.050a0220.e1a89.0006.GAE@google.com> <c9047828-708a-42d8-97f6-fffb7d806679@hartkopp.net>
- <CAMZ6RqKyMreMfNDmYU=tLyaEcReopmGx2VkBWPB12LLzd5o7Pg@mail.gmail.com>
- <f8e7f845-253b-47b7-9e09-97a580ce0e5c@hartkopp.net> <CAMZ6RqKga=f=Xd33GF1zPwmiearrz3mg+ZiryVbJD_RE5MGjKA@mail.gmail.com>
- <b7cb5a2f-29a8-4174-8b0e-c9cbf7349531@hartkopp.net>
-In-Reply-To: <b7cb5a2f-29a8-4174-8b0e-c9cbf7349531@hartkopp.net>
-From: Marco Elver <elver@google.com>
-Date: Thu, 20 Mar 2025 22:19:11 +0100
-X-Gm-Features: AQ5f1JpihXOzjTzRKykL2TcmD5WiD1Urfdf6T7S2ftDirq7tmr_69RLvSySNM0w
-Message-ID: <CANpmjNNMT6DNEB69dTySX61dSMHc2fqMWN1sA1fcvCWSXeRugA@mail.gmail.com>
-Subject: Re: [syzbot] [can?] KCSAN: data-race in can_send / can_send (5)
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, mkl@pengutronix.de, 
-	syzbot <syzbot+78ce4489b812515d5e4d@syzkaller.appspotmail.com>, 
-	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
-	linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] phy: can-transceiver: Re-instate "mux-states" property
+ presence check
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+ Rob Herring <robh@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Marc Kleine-Budde <mkl@pengutronix.de>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Peter Rosin <peda@axentia.se>,
+ Aswath Govindraju <a-govindraju@ti.com>,
+ Biju Das <biju.das.jz@bp.renesas.com>
+References: <3d7e0d723908284e8cf06ad1f7950c03173178f3.1742483710.git.geert+renesas@glider.be>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <3d7e0d723908284e8cf06ad1f7950c03173178f3.1742483710.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, 10 Mar 2025 at 15:36, 'Oliver Hartkopp' via syzkaller-bugs
-<syzkaller-bugs@googlegroups.com> wrote:
->
-> Hi Vincent, Marc,
->
-> I sent a patch to be reviewed:
-> https://lore.kernel.org/linux-can/20250310143353.3242-1-socketcan@hartkopp.net/T/#u
->
-> I've also tested this patch without any new issues.
->
-> Best regards,
-> Oliver
->
-> On 10.03.25 10:55, Vincent Mailhol wrote:
-> > On Mon. 10 Mar 2025 at 18:46, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> >> On 10.03.25 10:29, Vincent Mailhol wrote:
-> >>> On Mon. 10 Mar 2025 at 03:59, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> >
-> > (...)
-> >
-> >>>> Isn't there some lock-less per-cpu safe statistic handling within netdev
-> >>>> we might pick for our use-case?
-> >>>
-> >>> I see two solutions. Either we use lock_sock(skb->sk) and
-> >>> release_sock(skb->sk) or we can change the types of
-> >>> can_pkg_stats->tx_frames and can_pkg_stats->tx_frames_delta from long
-> >>> to atomic_long_t.
-> >>>
-> >>> The atomic_long_t is the closest solution to a lock-less. But my
-> >>> preference goes to the lock_sock() which looks more natural in this
-> >>> context. And look_sock() is just a spinlock which under the hood is
-> >>> also an atomic, so no big penalty either.
-> >>
-> >> When we get skbs from the netdevice (and not from user space), we do not
-> >> have a valid sk value. It is set to zero.
-> >>
-> >> See:
-> >> https://elixir.bootlin.com/linux/v6.13.6/source/net/can/raw.c#L203
-> >>
-> >> And those skbs can also be forwarded by can-gw using can_send().
-> >>
-> >> Therefore there is no lock_sock() without a valid sk ;-)
-> >>
-> >> When 'atomic_long_t' would also fix this simple statistics handling, we
-> >> should use that.
-> >
-> > I see, Thanks for the explanation. Then atomic_long_t seems the best
-> > (and easiest).
+On 21/03/2025 at 00:15, Geert Uytterhoeven wrote:
+> On the Renesas Gray Hawk Single development board:
+> 
+>     can-transceiver-phy can-phy0: /can-phy0: failed to get mux-state (0)
+> 
+> "mux-states" is an optional property for CAN transceivers.  However,
+> mux_get() always prints an error message in case of an error, including
+> when the property is not present, confusing the user.
+> 
+> Fix this by re-instating the property presence check (this time using
+> the proper API) in a wrapper around devm_mux_state_get().  When the
+> multiplexer subsystem gains support for optional muxes, the wrapper can
+> just be removed.
+> 
+> In addition, propagate all real errors upstream, instead of ignoring
+> them.
 
-While I would prefer atomic_long_t myself, just to point out an
-alternative for "lossy" stats counters: could use __data_racy or
-data_race(..), and just accept the data race if "approximate"
-statistics can be lived with if the stats counting is happening from a
-very performance sensitive hot path. See section "Data-Racy Reads for
-Approximate Diagnostics" in
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/memory-model/Documentation/access-marking.txt
+I would like to hear Rob's opinion on this. In d02dfd4ceb2e9f34 Rob
+purposely changed the function to ignore errors other than EPROBE_DEFER.
+
+Right now, I do not see a reason not to propagate the other errors, so
+I am in favor of this roll back. But maybe we are missing something?
+
+Otherwise, the patch looks good to me. Nice improvement over the v1. I
+will wait for Rob's comment to give my review tag.
+
+> Fixes: d02dfd4ceb2e9f34 ("phy: can-transceiver: Drop unnecessary "mux-states" property presence check")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> Alternatively, the multiplexer subsystem needs to gain support for
+> getting an optional mux...
+> 
+> v2:
+>   - Add and use devm_mux_state_get_optional(),
+>   - No given tags added, as the new solution is different.
+> ---
+>  drivers/phy/phy-can-transceiver.c | 22 +++++++++++++++-------
+>  1 file changed, 15 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
+> index 2bec70615449f94d..f59caff4b3d4c267 100644
+> --- a/drivers/phy/phy-can-transceiver.c
+> +++ b/drivers/phy/phy-can-transceiver.c
+> @@ -93,6 +93,16 @@ static const struct of_device_id can_transceiver_phy_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, can_transceiver_phy_ids);
+>  
+> +/* Temporary wrapper until the multiplexer subsystem supports optional muxes */
+> +static inline struct mux_state *
+> +devm_mux_state_get_optional(struct device *dev, const char *mux_name)
+> +{
+> +	if (!of_property_present(dev->of_node, "mux-states"))
+> +		return NULL;
+> +
+> +	return devm_mux_state_get(dev, mux_name);
+> +}
+> +
+>  static int can_transceiver_phy_probe(struct platform_device *pdev)
+>  {
+>  	struct phy_provider *phy_provider;
+> @@ -114,13 +124,11 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
+>  	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
+>  	drvdata = match->data;
+>  
+> -	mux_state = devm_mux_state_get(dev, NULL);
+> -	if (IS_ERR(mux_state)) {
+> -		if (PTR_ERR(mux_state) == -EPROBE_DEFER)> -			return PTR_ERR(mux_state);
+> -	} else {
+> -		can_transceiver_phy->mux_state = mux_state;
+> -	}
+> +	mux_state = devm_mux_state_get_optional(dev, NULL);
+> +	if (IS_ERR(mux_state))
+> +		return PTR_ERR(mux_state);
+> +
+> +	can_transceiver_phy->mux_state = mux_state;
+>  
+>  	phy = devm_phy_create(dev, dev->of_node,
+>  			      &can_transceiver_phy_ops);
+
+Yours sincerely,
+Vincent Mailhol
+
 
