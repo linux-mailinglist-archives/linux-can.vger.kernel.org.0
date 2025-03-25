@@ -1,45 +1,45 @@
-Return-Path: <linux-can+bounces-3197-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3198-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC86CA70956
-	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 19:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D7ACFA70967
+	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 19:49:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC604172DA4
-	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 18:44:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B418E17717D
+	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 18:46:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A96651D7E4A;
-	Tue, 25 Mar 2025 18:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21ED41DDC3E;
+	Tue, 25 Mar 2025 18:42:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dXS3nnUU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HX5TFQ3y"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAED1CBA02;
-	Tue, 25 Mar 2025 18:42:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8111AE875;
+	Tue, 25 Mar 2025 18:42:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742928163; cv=none; b=Q6Dp4TmJqjtE+/e6novRsqoXdNZEZJuBcmmc0KOoxc5RIZzOkMgCTn76RqKwoM6+ZjGJSs6g/7iGD9xqt07pzDnwLnyj+mTGZiHOtjTt6yLuUBFmymFIKsOr2pI3DvjGjbKgKwTq6hsBS8LJ/6fQC1x3AlsHxioPdzy7PbZX7Wc=
+	t=1742928175; cv=none; b=t8bB/C4uQi6OB9KspsDFAmj8hgXVgowd5+XeF97uw5mGUc1LSCJvtU+gh7oO/0uX8YweMzKlq9yRxq+G96J1rjPzJSXwv8EUBLcFKSa8/TIx8Ml6BakXfHC/rqR5C9w2BGPL/cIZ/NxvX4l1yHPxB5xd+nJ2gdnjj2j0FpwAYhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742928163; c=relaxed/simple;
-	bh=fW5tuiDIaABRDPN2atUvbHCcLI/ZT07db+kDwcop6O0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q9OstZZKytsI4+xXwgzv1LgNpDs0YNXaIb+PDfpyZ/IIoY12/CKdD3SIbQV+EVYGv6bwdT6NA8Z0L5LM3R1Rb8n98uyqxQ851CdvUDbAZJ0/smchQQ31j+juw2ESadcZorlnPhhw4FsL0QSgrDqdWOmL5yHz6eLcz5yFDMmkPkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dXS3nnUU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00998C4CEE4;
-	Tue, 25 Mar 2025 18:42:40 +0000 (UTC)
+	s=arc-20240116; t=1742928175; c=relaxed/simple;
+	bh=eUJdDnj4ZjDq9dOPlJ/JUG00bt0PnCuHCHjtlNK0khE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pT3/1FN2y6ArWjNdhxsf1Jex43LFrlS27Rh9q8qA1UDI73BlXcmameWKvqanwhxq+MVbnAdg0yzt31mCfZKlQ9Fs3ODZ/bZmomvVXT90sIWHYYd1sznnoWCaylg6YVomT9MPhQwPz3DnQt6vow9Z4dJ2aWCMf/7SblDJYsFGXzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HX5TFQ3y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F2FC4CEE4;
+	Tue, 25 Mar 2025 18:42:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742928161;
-	bh=fW5tuiDIaABRDPN2atUvbHCcLI/ZT07db+kDwcop6O0=;
+	s=k20201202; t=1742928174;
+	bh=eUJdDnj4ZjDq9dOPlJ/JUG00bt0PnCuHCHjtlNK0khE=;
 	h=From:To:Cc:Subject:Date:From;
-	b=dXS3nnUU/n0tTd1xQo1zTqr30LxX6Grd0d7itmgGbs4LiWC6gVcggPvjkd4sKGVgO
-	 FuoYU3vKJihl/dED7IN7mFWuO6SVY7HFqvqTLZq4FWPW5JT/O/5tQViDSqnXCiVXRl
-	 YN2Q13y4y3JHA41tawBb0FrMQRg0g0OanVcG0V9ePtngYSU8Pxy/l5wnpltdDElWEu
-	 MDwqqHEoFkW61cdaRs4QY1BqpCifLhIBlDcqoMWHhniStRAgfUJyf+w9iLCPA8otHV
-	 xXgGP79hpgAoWCQqitW9tw3Ddz8G8/PM/3fEmtECknbyz8sE9jubnx/aOrR9fxZGp/
-	 p8Y5734EgIVyQ==
+	b=HX5TFQ3ylizajvG33Q0bmyBusppP99u0pXgJFHWYAJiFsrCINX0YffdSTP+a7P1Fe
+	 PvnIMwVpdS2lDxDQFQs6iHisSOkrL9x7ZuJouPgJ2luA/9uqVl4CPrNnqIbZDwMuzw
+	 iTN4v69udInPRAKbS5mtpGRoZOttMHmDiddcxAjK59161gdt0Jx13SfTf0/nqKco9f
+	 w7eIUVxI/a5tk9O04zUarhULIMGNos7X6YePXPuw0dOajd8vip02atUAJvX6AQvlRS
+	 Ls8BEKJd4jTr1m0oLEm8QCzGqMXPPr0LXKlxQSj8ersHA+P0Li7l9s1BsT/6YtJdiL
+	 T3nBKfBcImH9Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,9 +49,9 @@ Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-can@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 1/5] can: statistics: use atomic access in hot path
-Date: Tue, 25 Mar 2025 14:42:31 -0400
-Message-Id: <20250325184236.2152255-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 1/3] can: statistics: use atomic access in hot path
+Date: Tue, 25 Mar 2025 14:42:46 -0400
+Message-Id: <20250325184249.2152329-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -61,7 +61,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.20
+X-stable-base: Linux 6.6.84
 Content-Transfer-Encoding: 8bit
 
 From: Oliver Hartkopp <socketcan@hartkopp.net>
@@ -90,7 +90,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 39 insertions(+), 31 deletions(-)
 
 diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 01f3fbb3b67dc..65230e81fa08c 100644
+index c469fc187f0c7..cdad0be43e8ff 100644
 --- a/net/can/af_can.c
 +++ b/net/can/af_can.c
 @@ -287,8 +287,8 @@ int can_send(struct sk_buff *skb, int loop)
