@@ -1,45 +1,45 @@
-Return-Path: <linux-can+bounces-3199-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3200-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C378DA7096C
-	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 19:49:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B113AA7095C
+	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 19:48:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82E09168D39
-	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 18:46:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6E0B3A79CB
+	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 18:47:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC26E1E9B30;
-	Tue, 25 Mar 2025 18:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D4E1EDA1E;
+	Tue, 25 Mar 2025 18:43:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NiwmQtpz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EMpy5VSv"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC0D1E7C0B;
-	Tue, 25 Mar 2025 18:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9451A315D;
+	Tue, 25 Mar 2025 18:43:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742928183; cv=none; b=EGd3KH0poEoPMod9joK9MJ+/1lrMmwdk49YQ26Nmji//NYF1GQ8dyzOLjwp1mwmmB24wdq9QaG1Ev9P/ieuk524nzTEPSvmyP641BZ+zAjigJSyA+eIQ3fb5Y6Rh3BB/LQt4JCt7Wj38iPNJ9SJUMxAmlt9TaRweWSpFOk5/Uso=
+	t=1742928191; cv=none; b=tfcbdHkto9C3QLFTgsPNFXqfHKC2v6FzKm2wLWUf0HwGqZL8C4Gs6o5DO6t6nQiPWDaAyZ29/bLfoG2qHtnQ6jimMXdzCkn017PfzhqF1bi0Sj24+h+RyXYbBNwrCy7Pv88V8+GG3FqwA0EgIP5zOLN/J/rR3hdOa1Dmo871KpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742928183; c=relaxed/simple;
-	bh=TCNUYhKYPlxPl0mXTR9OfYsGNg0amrQDo6SUnqCx8xI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Cw5s0Oh1mW6SIrgACAYlcuIZuudTl39VaJ6igjkORDJSHe7lI958r2DrAFWslZInxgXmduROLnV+0jc7o4Sl6DKcsymep8tIqQzgbBSpWWU2TDIL44KfY/6NHculODOekqBpD79cfgPbJaCgq6cCxPu/ZodZuPKAfB95p2hwtIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NiwmQtpz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00A4CC4CEE4;
-	Tue, 25 Mar 2025 18:43:01 +0000 (UTC)
+	s=arc-20240116; t=1742928191; c=relaxed/simple;
+	bh=jyBCjjfKZy1y0c063sOuagadf1Ykq6f4O2OQXHXdZuA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BupHlspeP/N8HQNPIPLqS7CSG2/PXWM0fK9Vfg0Oz1ruNvILpn7ppAt+OwR/g4DJGe5YpuHW1pe+MpKprtfUJNhGUx97EDoJbSHufduKupi0cokwkd0CLPwJrvXbj2r94DEHTzFuWYWDZBVRiVFtw79tE5iA+t+8kD4fThaHKJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EMpy5VSv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7303CC4CEE4;
+	Tue, 25 Mar 2025 18:43:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742928182;
-	bh=TCNUYhKYPlxPl0mXTR9OfYsGNg0amrQDo6SUnqCx8xI=;
+	s=k20201202; t=1742928191;
+	bh=jyBCjjfKZy1y0c063sOuagadf1Ykq6f4O2OQXHXdZuA=;
 	h=From:To:Cc:Subject:Date:From;
-	b=NiwmQtpzxN1xl26xpAf7VsxWq6kLlpJL2m1gZ5oLFP6OVQ8hNz1PkM4mAOb3QB5NF
-	 tJ6Peo+cZbH8SlkZFpuXt0IwaFDMe5r1GCAyM5M9musIfCt/tRZQvQIKIZyJgYGTIn
-	 JJXUckNe2j2Nwcu64X5Z+DOfAo7uEFXdokMEHAk/Vp3V5An1M8b9X0kZhCCE3ajQ4a
-	 FFWOuVDvCF2Xc0Rh9gJfTsLudfRRSoNI7etGmvFZ42kzCOc9VL6NLbtLYN1gtMNsza
-	 oyTDJzfxIbrqujBXuABHI0FDUivoLebRhJclv9EEyqR1pvm/xqbmbpS5K/fZtlnM/a
-	 dKktYs97lp+4w==
+	b=EMpy5VSv/VcA4wcZLcRsF/9nr7HcW31vWONIAItGFC6tExeQ9iqzKTwZGYwYxSwiA
+	 t1hhqSDKYTgv16T/8+vpfWAcm5LNxeix8XY8heNdcf5gVI/PlK4EMkGGmu7HXPFDhD
+	 QbuygwzYr4i7ueNFTB/hrH1hsatvfxwpFNfkpVVPuO1BL8duq49ZvDdftU1s57RmjY
+	 uvDA6yKjE+CuH7wt6l6Rd173jowviYiPzKT8SmA9syygG1FlwrUi3YWX/4ny0LwRC7
+	 PHWM3V6pgvcJFpILKGoE84lbaOrxDDaxT5/4cdhsEOx6Fd753XaNEGKon77haeVxeb
+	 Pny5vlGBBgHGQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,9 +49,9 @@ Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-can@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 1/3] can: statistics: use atomic access in hot path
-Date: Tue, 25 Mar 2025 14:42:55 -0400
-Message-Id: <20250325184258.2152379-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 1/2] can: statistics: use atomic access in hot path
+Date: Tue, 25 Mar 2025 14:43:05 -0400
+Message-Id: <20250325184306.2152429-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -61,7 +61,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.131
+X-stable-base: Linux 5.15.179
 Content-Transfer-Encoding: 8bit
 
 From: Oliver Hartkopp <socketcan@hartkopp.net>
@@ -90,11 +90,11 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 39 insertions(+), 31 deletions(-)
 
 diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 7d8543e877b44..bbd8e959137d9 100644
+index 4e728b3da40b3..edf01b73d2878 100644
 --- a/net/can/af_can.c
 +++ b/net/can/af_can.c
-@@ -287,8 +287,8 @@ int can_send(struct sk_buff *skb, int loop)
- 		netif_rx(newskb);
+@@ -288,8 +288,8 @@ int can_send(struct sk_buff *skb, int loop)
+ 		netif_rx_ni(newskb);
  
  	/* update statistics */
 -	pkg_stats->tx_frames++;
@@ -104,7 +104,7 @@ index 7d8543e877b44..bbd8e959137d9 100644
  
  	return 0;
  
-@@ -648,8 +648,8 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
+@@ -649,8 +649,8 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
  	int matches;
  
  	/* update statistics */
@@ -115,7 +115,7 @@ index 7d8543e877b44..bbd8e959137d9 100644
  
  	/* create non-zero unique skb identifier together with *skb */
  	while (!(can_skb_prv(skb)->skbcnt))
-@@ -670,8 +670,8 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
+@@ -671,8 +671,8 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
  	consume_skb(skb);
  
  	if (matches > 0) {
@@ -157,7 +157,7 @@ index 7c2d9161e2245..22f3352c77fec 100644
  
  /* persistent statistics */
 diff --git a/net/can/proc.c b/net/can/proc.c
-index bbce97825f13f..25fdf060e30d0 100644
+index b3099f0a3cb82..0533a3c4ff0e1 100644
 --- a/net/can/proc.c
 +++ b/net/can/proc.c
 @@ -118,6 +118,13 @@ void can_stat_update(struct timer_list *t)
