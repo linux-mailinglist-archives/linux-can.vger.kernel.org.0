@@ -1,45 +1,45 @@
-Return-Path: <linux-can+bounces-3196-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3197-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E3CFA70927
-	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 19:42:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC86CA70956
+	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 19:47:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 338C01892CA8
-	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 18:42:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC604172DA4
+	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 18:44:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604041ADC86;
-	Tue, 25 Mar 2025 18:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A96651D7E4A;
+	Tue, 25 Mar 2025 18:42:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TiT/7Yz7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dXS3nnUU"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332E51A840E;
-	Tue, 25 Mar 2025 18:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAED1CBA02;
+	Tue, 25 Mar 2025 18:42:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742928142; cv=none; b=XrX86d4Sc0A+8lg+BvVMJ5faKhRRzPDkU3T9GJYl9aa8Bce4GRL1essGyonSplU7dYWN4TrTF2V1F+iXFT4fnTm6Anta8Sh/pzHvw59DfF4k3idJIbo/4IF7mT0fvuErct1juezVHUdGxSrdX3nWe6k8UdGj8wOdUtN5gY2AkhA=
+	t=1742928163; cv=none; b=Q6Dp4TmJqjtE+/e6novRsqoXdNZEZJuBcmmc0KOoxc5RIZzOkMgCTn76RqKwoM6+ZjGJSs6g/7iGD9xqt07pzDnwLnyj+mTGZiHOtjTt6yLuUBFmymFIKsOr2pI3DvjGjbKgKwTq6hsBS8LJ/6fQC1x3AlsHxioPdzy7PbZX7Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742928142; c=relaxed/simple;
+	s=arc-20240116; t=1742928163; c=relaxed/simple;
 	bh=fW5tuiDIaABRDPN2atUvbHCcLI/ZT07db+kDwcop6O0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dybaWqXWxlExgcMhlCnMu/Alm8BTvlBh3hPv+hLCz+uhPutaJ4Da/xBqNPCxa3wZ42zE7G1vRnpwgsMiL+iaPFc1ClMDb5nhMx16pQski/Ds9+0poTu+5HC5FDU4cdfX87T/URJksjFMS8/e49RJn5HhuPsP+sNemBr9KvicYag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TiT/7Yz7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0E2C4CEE4;
-	Tue, 25 Mar 2025 18:42:20 +0000 (UTC)
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q9OstZZKytsI4+xXwgzv1LgNpDs0YNXaIb+PDfpyZ/IIoY12/CKdD3SIbQV+EVYGv6bwdT6NA8Z0L5LM3R1Rb8n98uyqxQ851CdvUDbAZJ0/smchQQ31j+juw2ESadcZorlnPhhw4FsL0QSgrDqdWOmL5yHz6eLcz5yFDMmkPkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dXS3nnUU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00998C4CEE4;
+	Tue, 25 Mar 2025 18:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742928141;
+	s=k20201202; t=1742928161;
 	bh=fW5tuiDIaABRDPN2atUvbHCcLI/ZT07db+kDwcop6O0=;
 	h=From:To:Cc:Subject:Date:From;
-	b=TiT/7Yz7H8M8ssdr1z2jit2j8D+bSICModdFzwDf4oxq1VFr9HmLKUIcQLavutBsf
-	 O/rGGd+Ug4apj2uxFA/PSnf11PY1DhJvBuTAyUSASHE4zhkHRZYv1JKFXwMiHSGFXM
-	 LsDsqBMItRWi0ZUox7wfPGLMslXIlvZb1HZsXFcRSY0puV5/3qctKFR/pYsMcT/CXZ
-	 WLSLsNA3ZE59ooXe6x0dTqprqAjws5OUY7r17Xk/AIxMFpxo88A6aQQXaOijms6ILc
-	 furO5qbUoDf6giSvq+cZhCWi2J73QmoxKX8DEt74SwYh31gp79Mv9lkIC1CbwPkefQ
-	 0wim8DPeF3N4A==
+	b=dXS3nnUU/n0tTd1xQo1zTqr30LxX6Grd0d7itmgGbs4LiWC6gVcggPvjkd4sKGVgO
+	 FuoYU3vKJihl/dED7IN7mFWuO6SVY7HFqvqTLZq4FWPW5JT/O/5tQViDSqnXCiVXRl
+	 YN2Q13y4y3JHA41tawBb0FrMQRg0g0OanVcG0V9ePtngYSU8Pxy/l5wnpltdDElWEu
+	 MDwqqHEoFkW61cdaRs4QY1BqpCifLhIBlDcqoMWHhniStRAgfUJyf+w9iLCPA8otHV
+	 xXgGP79hpgAoWCQqitW9tw3Ddz8G8/PM/3fEmtECknbyz8sE9jubnx/aOrR9fxZGp/
+	 p8Y5734EgIVyQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,9 +49,9 @@ Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-can@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.13 1/7] can: statistics: use atomic access in hot path
-Date: Tue, 25 Mar 2025 14:42:09 -0400
-Message-Id: <20250325184215.2152123-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 1/5] can: statistics: use atomic access in hot path
+Date: Tue, 25 Mar 2025 14:42:31 -0400
+Message-Id: <20250325184236.2152255-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -61,7 +61,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.13.8
+X-stable-base: Linux 6.12.20
 Content-Transfer-Encoding: 8bit
 
 From: Oliver Hartkopp <socketcan@hartkopp.net>
