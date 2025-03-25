@@ -1,45 +1,45 @@
-Return-Path: <linux-can+bounces-3201-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3202-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6558A70969
-	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 19:49:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3054FA70983
+	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 19:51:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48F1D3A7716
-	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 18:47:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9DBE189D253
+	for <lists+linux-can@lfdr.de>; Tue, 25 Mar 2025 18:48:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 289FF1FA243;
-	Tue, 25 Mar 2025 18:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8007A1BC9F4;
+	Tue, 25 Mar 2025 18:43:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="omfW5zM8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQgaWWlZ"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B951EF0A1;
-	Tue, 25 Mar 2025 18:43:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563721FBE9B;
+	Tue, 25 Mar 2025 18:43:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742928200; cv=none; b=puSQ0EkM2S/MgVhMUjjdUFfkKi9SbDkYyUcfKv2Rk1mFaZyC9GiGQtKcObG4fo2Bi9WIKRWHL/vjBUcFaLC+v0yEJ/bx2qv4LSZIy2aJdIWs9SPuFqjTqz04AuzbNsnAXX3XTf1nMPZxr8CWVEcq6hbyBc2ucJ1s1N/yFiIbll4=
+	t=1742928206; cv=none; b=Px5kB+832wKHtm84Hb2SytLMiwF67IKGMhtgIcCuTM0N6Z4HUEfocgDqjWZSJFZqYMwN9Bdx5MsiJI/sS/ng8ii3ZZZ186AxWkeAQF4IpuX/idmTVNHQMFhd6KRZ0pUpPpCnn31FIwSJaQFRbscg0kMCcJ8kQG1qnQWRPqfhdXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742928200; c=relaxed/simple;
-	bh=hGIn06kEfFgL2JYBNA6uj1rpS8ap9zRq8nmm0l4azAk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mRO9NVX1OfH77ILRJhbM07d7FGTXN3xQEqLnaCiq9Xc+pzbsH1pEoURTzlnHOw2i72LxTT7fB8O86FczeE+okwK9yYJyWgLiWK8BhnAXUOiErPmskfJBBAapWvOGhq1kdtVj4pVc/lrUQW1pUW9lZFgW3fj85EfJWeLtoHTFFjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=omfW5zM8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DBA9C4CEE8;
-	Tue, 25 Mar 2025 18:43:17 +0000 (UTC)
+	s=arc-20240116; t=1742928206; c=relaxed/simple;
+	bh=qP5CdOE7FKi+3VfuYjXWYlzoMtbMZGypbtq4ljSLRUM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HRklkebbJQx3gzVdvet+wXlE5TFZ1LxZCmj8ityThsVkBKX2VleGpsQfIUTANdyGIdSTx2MZQtGYvAt/H0eD4H4WDxCqVC/EWf7vM351pYyRqWEGVR6lK7W5CwfQYUBlrLVL+0qx38cUfTRV2GfHRZ5vfkzkSPb0rOT6H/g3CeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQgaWWlZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E44BFC4CEE4;
+	Tue, 25 Mar 2025 18:43:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742928198;
-	bh=hGIn06kEfFgL2JYBNA6uj1rpS8ap9zRq8nmm0l4azAk=;
+	s=k20201202; t=1742928205;
+	bh=qP5CdOE7FKi+3VfuYjXWYlzoMtbMZGypbtq4ljSLRUM=;
 	h=From:To:Cc:Subject:Date:From;
-	b=omfW5zM88Z0cePr6IJ53EIvrr8zd8zANRxH3TIjDPt644p6ejQhiDkl1ra2C4ZePN
-	 vLh9uuIQcOCh+Wg/adY4cMzYR5otMeiZcNpMnQGPlUTTLx0ykGs25vhW2cAvxliu+t
-	 Iy75TFkQ75OHRDqilqVtvdSDTadrI1PLSrW73uiLJRvQHgRtQSdj/S4PuyVCDof5XZ
-	 b6lvnH8DMYxiEHrqK7FS3KQ4GXGKZwBO2RQ6d0PO0oy/bvDQgRrFbcj8pQ/pRkyCW3
-	 laF/926etssYbv/nMsCWGPVKPf1VXqIFKR8TKTZMA7CC6NznH+cxGMeF4mR4UAFU6l
-	 jrVJ6v1IJ6bZg==
+	b=oQgaWWlZgJOn+PJfwLFR6xwcV+bmySNzDBUmvBXeJo9H/j25jshZIN+UQZ80cp2pW
+	 8VEMYPw8SjyHLLTARfB+4dPEYkztEPh3dWSeYwBSHxSoeyrmcSphiPLPAH0IOTRa4o
+	 Qwba44hUOkR8pTEAfXfl7HthlYakwvrMfByqIlUUHHcj0XskLQ1ttkhX/GsXkzDVI3
+	 oI8Rg2YfP7U0wce1hd+UuLyLSIBDOfqHxvp89k83Rc+ECB+1jvWbYnULfQ1ZbVzFXB
+	 u1TPs9o116YA50lyD2ZiRA40r9FKCtxZwA2baYO7EHQinQOkTHv0dsLJHFCNifTJAW
+	 iciWMGfVamj7g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,9 +49,9 @@ Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-can@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 1/2] can: statistics: use atomic access in hot path
-Date: Tue, 25 Mar 2025 14:43:12 -0400
-Message-Id: <20250325184313.2152467-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/2] can: statistics: use atomic access in hot path
+Date: Tue, 25 Mar 2025 14:43:18 -0400
+Message-Id: <20250325184320.2152507-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -61,7 +61,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.235
+X-stable-base: Linux 5.4.291
 Content-Transfer-Encoding: 8bit
 
 From: Oliver Hartkopp <socketcan@hartkopp.net>
@@ -90,7 +90,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 39 insertions(+), 31 deletions(-)
 
 diff --git a/net/can/af_can.c b/net/can/af_can.c
-index de47c16b134bf..3e77a52709aaa 100644
+index bc06016a4fe90..d2fd12da30c60 100644
 --- a/net/can/af_can.c
 +++ b/net/can/af_can.c
 @@ -288,8 +288,8 @@ int can_send(struct sk_buff *skb, int loop)
@@ -104,7 +104,7 @@ index de47c16b134bf..3e77a52709aaa 100644
  
  	return 0;
  
-@@ -649,8 +649,8 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
+@@ -647,8 +647,8 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
  	int matches;
  
  	/* update statistics */
@@ -115,7 +115,7 @@ index de47c16b134bf..3e77a52709aaa 100644
  
  	/* create non-zero unique skb identifier together with *skb */
  	while (!(can_skb_prv(skb)->skbcnt))
-@@ -671,8 +671,8 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
+@@ -669,8 +669,8 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
  	consume_skb(skb);
  
  	if (matches > 0) {
@@ -157,10 +157,10 @@ index 7c2d9161e2245..22f3352c77fec 100644
  
  /* persistent statistics */
 diff --git a/net/can/proc.c b/net/can/proc.c
-index b15760b5c1cce..2be4a239f31e4 100644
+index a5fc63c78370e..ea442ddd4fd9d 100644
 --- a/net/can/proc.c
 +++ b/net/can/proc.c
-@@ -122,6 +122,13 @@ void can_stat_update(struct timer_list *t)
+@@ -123,6 +123,13 @@ void can_stat_update(struct timer_list *t)
  	struct can_pkg_stats *pkg_stats = net->can.pkg_stats;
  	unsigned long j = jiffies; /* snapshot */
  
@@ -174,7 +174,7 @@ index b15760b5c1cce..2be4a239f31e4 100644
  	/* restart counting in timer context on user request */
  	if (user_reset)
  		can_init_stats(net);
-@@ -131,35 +138,33 @@ void can_stat_update(struct timer_list *t)
+@@ -132,35 +139,33 @@ void can_stat_update(struct timer_list *t)
  		can_init_stats(net);
  
  	/* prevent overflow in calc_rate() */
@@ -221,7 +221,7 @@ index b15760b5c1cce..2be4a239f31e4 100644
  
  	/* check / update maximum values */
  	if (pkg_stats->max_tx_rate < pkg_stats->current_tx_rate)
-@@ -172,9 +177,9 @@ void can_stat_update(struct timer_list *t)
+@@ -173,9 +178,9 @@ void can_stat_update(struct timer_list *t)
  		pkg_stats->max_rx_match_ratio = pkg_stats->current_rx_match_ratio;
  
  	/* clear values for 'current rate' calculation */
@@ -234,7 +234,7 @@ index b15760b5c1cce..2be4a239f31e4 100644
  
  	/* restart timer (one second) */
  	mod_timer(&net->can.stattimer, round_jiffies(jiffies + HZ));
-@@ -216,9 +221,12 @@ static int can_stats_proc_show(struct seq_file *m, void *v)
+@@ -217,9 +222,12 @@ static int can_stats_proc_show(struct seq_file *m, void *v)
  	struct can_rcv_lists_stats *rcv_lists_stats = net->can.rcv_lists_stats;
  
  	seq_putc(m, '\n');
