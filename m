@@ -1,85 +1,85 @@
-Return-Path: <linux-can+bounces-3210-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3211-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6C06A713E7
-	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 10:40:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3694BA713E8
+	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 10:40:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AAAA3BBAB7
-	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 09:39:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0629E3AFD26
+	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 09:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E3EA185920;
-	Wed, 26 Mar 2025 09:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B262815381A;
+	Wed, 26 Mar 2025 09:40:41 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87CC1A3A80;
-	Wed, 26 Mar 2025 09:39:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7BF2A1B2;
+	Wed, 26 Mar 2025 09:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742981973; cv=none; b=ThBQJEe1G/46QVWRnVNdvif7eyEseIkWfn2uiKf17CJVVAn2ieV2asmCHBaPHMiowjNdfUcttCA6cMZ9jsAaTWRQ15z2AHpPDlSjbrDFvTIhkHHDGqZpI3AYKcAQFp1KmjMbIimVICg3pi3NlGitlxdRBwIQCK3GdmDgbOfXOeI=
+	t=1742982041; cv=none; b=cfPcy+qaedz6xeSfDC7IBJq22Dsc2RZ8EgGZdkZ2CsN8uTUJOZ1PcMBkEKpsh3HK/cOnT2e50hBxZccnhlgj7mUmE7iy6kUwsmiv/djUzuJZ7/8BIjuQgNZBeBRsX0W7W6kSRSntVMWUDMsut9GS2MJVjA6cxp7sMHdxXRPZTGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742981973; c=relaxed/simple;
-	bh=zw/xrKhc+MHVHo3Pa9SHpHrS8+vVAiADBHc5Gu21toc=;
+	s=arc-20240116; t=1742982041; c=relaxed/simple;
+	bh=QdyqFy3DEvMsvBU17jzvoj9Vw1xK1m9CdhoW+hbUfkc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RLC6hlXME0d4w4hNR/7iUFHPjjvBgxYPmihFFhPVL2Qfk6LLnCBwOMC1ZuxS6+RYxowyefmvBuMy9n1rx9urjP1eHyseYiHrBTpHbt5kgwL/Dx43FsEt0RPD5YsUWMRFIwnEIwUMYOhey7rtiILAqz4vbqbVqXT2gacjskTLbuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.46
+	 To:Cc:Content-Type; b=KFCYoChKxGSQwW5+Sc2OHaUfpagk9YpxBo6sOiSdX8tRP9v3KQw0VMEKNGIlh0Ksjgielifn4Dm4ACJxtdtT/OP2jc7qSyXG5h7SJrgu3za4kZkyj8ncWqSId9z/zP9XBjETQq+MswXz89D0lyBwqsvq0gish+r04rUjgcZPtpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-86d2fba8647so6296901241.0;
-        Wed, 26 Mar 2025 02:39:31 -0700 (PDT)
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-5259331b31eso3013319e0c.0;
+        Wed, 26 Mar 2025 02:40:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742981969; x=1743586769;
+        d=1e100.net; s=20230601; t=1742982037; x=1743586837;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=k3yP7fk0CipVt2LVgS7AnFph7AVutPzETlsy/zCNiq4=;
-        b=I0QUF91RXzNtfl01hcdEPtuejKjEybnfKCZ0qtFa6nIggBJ5G9I6eL+Q8E4+FMnS6n
-         6zKJla6KHtMFosvB5UCEYLpNv5yWfYVVghIANx/DT9Gc1zpI9uuonsWsUfCH0XHtCdoW
-         DvQqNxXjqXffHIiYNBRhP/JhHaDugcm13kXoSB06h1lL8gRV1phxTC1CCjkRCGvLSt80
-         jMIs/iBLjZcnswrhmuw8LXTL27yifBlzsTKfWLuM4ENqybVZrf2tcP0gA8HvJuSvUohJ
-         09VljR9aJ2Mg0xGFcHso4uf9Hoor+yqnc569omjjLjpefRt4cgwI84qACG/zQv+es/tu
-         YDSg==
-X-Forwarded-Encrypted: i=1; AJvYcCXioLpp8fku7fvKsQY8DCqLjsK9TnkAL8CVTEqHGeJiZQyuAAl0ZSkkF/k0ONM0PHsNIqiIpkx9XFg=@vger.kernel.org, AJvYcCXnVVm9J1ipxaPAb6zPpBSWcvGgYeiixTL7qxTPpMRQZOX4cJXwNwS1MBmwhWxYEyT6zLa12uZLiIjp7X3b8uT5TB4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyylJ9FSXQRQEtR3wZCysbIdKkjfDRJoaW+yxNW8p30Jr6nS/m4
-	wWnznj2sa/0pcsi2q+VPuZaamhMkqvuzJnfZb42n02dgu5SIhSEGG/ycluBZEds=
-X-Gm-Gg: ASbGnctSr49SG5WCXstugzH7sn0KUGBHpsCOC/SxTmwbtt57LwqYFM3hJ8DLpu6+yEL
-	V9mL2IlxlcUWNRv6u8ngItIbEEhezGihPUBQEGTsOoNYt7nPsm0DBN1UQg/vzwLrRw2iuMwMPPW
-	1fORL6XFNhMX/lKF17yH7+6vnvbC559lQZaLkUMtXMBMk8KWW/CU/jb25lFTnkH9Z9YU3MX4yXL
-	EENK/JWBuII6KeswyfdWdHftnzEV27INY1TIAVa/x3GePTO1BsolN35+7MiHpEQOoGuY93mz9UP
-	MdOR2rCE5IBmoc9BdNkM49mIMaJPEuViUBa5RRTbNa3H4QKlXUqdpmXBVz9TIL3/GxUnOUmKCPY
-	vNgzBlEjW2/R9Vh9A0DgHZQ==
-X-Google-Smtp-Source: AGHT+IFr0T4U2G3vzJVbaig55JCGq0ZkDULLqrbuTBwMG6eyBGoly2uzxvjNUA8FINzCsXN7w4EjbQ==
-X-Received: by 2002:a05:6102:800d:b0:4bb:623:e1f7 with SMTP id ada2fe7eead31-4c50d5e3d7amr15283775137.16.1742981969404;
-        Wed, 26 Mar 2025 02:39:29 -0700 (PDT)
-Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com. [209.85.221.182])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-86f9f3c4828sm2393060241.18.2025.03.26.02.39.28
+        bh=J6e/IUVbLKZBDaNXUvjvJWIciPMSTe+9z0wM1euWPxY=;
+        b=I0bB5ham5OUXnP5/oRzF+fMieS5XLAvqs8QHTwshPwkFTultofPbCyySq+549Lw4En
+         Ajif9fJ99wt5UzfHuag5G0Sh0cy3nBCHInVQlRhs4jRLR8vEP3sW92uLGqdno2f/Ofxl
+         uisTcG36h/MXXFlI7xpUeDd/QCOJav9S9t54OoAlOCfLfrqWwE0ILuxlQRZjGmPqMqA1
+         IdwkgPekHLUjU/mE7JgSQPvtjusDEu5psat1nskFiFQk0gWzhKzdPK67FpnHipX3LNXW
+         SqvN0nXwFS1DJ2H8ou1BD0yn/ZZC0hC6nD+UGj8vcvfHP8t24q5WPKJWlmXVf9LE9IxN
+         dPjA==
+X-Forwarded-Encrypted: i=1; AJvYcCWiOp7ffRlqQCgOsxylnfOE/jsrgIiIPokH4t2H14RDywxgjiugmfg4zusUlqyLc2mJ3o7lC1viPrntWXMBwXjf3UE=@vger.kernel.org, AJvYcCX4hxHoXhyGjptjleSOoli1ARQ0zmgu5DgnqqpO9ypA1fKm3XDCNfNNDsUPSlEsJRZBO9bBEQ6rBq4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yytj1pdjvk8H3xtHwbFc28Enpu+ASIBemy0IxgWe0HAwGGrAhQ+
+	Mbn+e/VYFdh1Ihb2iUXzwl9OxqNa3vuMiZSh6zNJPYjI2UQ7yBX4gHK+FM84e1o=
+X-Gm-Gg: ASbGncuTBUMDQejiqlpcDM7aKhIgL4rL1pk7fyE2efRIz4qv1934jiBqUOuP/l7Ch5O
+	YzRG4v4Cy3zr+R5K+WrQQeHIxezgLmg2BK3V4y298OfwPt0iPlxtczX9V/sD0bp4s6MKyspgZ9P
+	3c4yUVGB2oh2rWWA2A1ILSu5+llBI0NIyywtWCEh9b+jtk431bfmgc0w9NutGr7gwoEkho7GbrX
+	zSgd4ELDQ2YXqUL0O5CLz6z0sRGhPz6fM/Rh494B3vbaggAwlQLhCZHq+vO/1ofF9B9NnuxmZHE
+	BkkptHgyPH6gAf/JwgyObcMLXP2CU0um9kD8ARc4xyZ6tt0YHQihRu79rypvQ+UZmXcU6Ew9k49
+	t7j4gNE8=
+X-Google-Smtp-Source: AGHT+IGnq9byCkUZp7brL3tzMJqDShkmmfTwSa04bZmBVvnuWiSXRLtVRBecVvQnkarSYtYWmgnnKQ==
+X-Received: by 2002:a05:6122:88d:b0:520:5185:1c31 with SMTP id 71dfb90a1353d-525a850df05mr14055014e0c.9.1742982037414;
+        Wed, 26 Mar 2025 02:40:37 -0700 (PDT)
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-525a766e5f2sm2163872e0c.40.2025.03.26.02.40.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Mar 2025 02:39:29 -0700 (PDT)
-Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-520847ad493so6348369e0c.1;
-        Wed, 26 Mar 2025 02:39:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV2ht/lGrVXItsxWM5jFB8iyuvaW61NczZJjj9kmtotgMrxMM5ar577NHNs86fxkII0QGCiKIovXeWkVRUXlUBoO4s=@vger.kernel.org, AJvYcCVx9EfrZFgjCccGWI5Ul6aLtcBmI8hRoot5imgpB7/3t8IW5jov+ZCCJDgi3NMXsAxgUkDFGxKwcic=@vger.kernel.org
-X-Received: by 2002:a05:6122:469f:b0:520:9688:d1bb with SMTP id
- 71dfb90a1353d-525a82f1da9mr17156569e0c.2.1742981968577; Wed, 26 Mar 2025
- 02:39:28 -0700 (PDT)
+        Wed, 26 Mar 2025 02:40:36 -0700 (PDT)
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-86b31db3c3bso2607014241.3;
+        Wed, 26 Mar 2025 02:40:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUdhArpYZfGGllbJ1KJ2FxDD9F+zOElpzBJc6yj4GRmLK/AFAo7+SOSExvgUN3o50HyBcWEOZar0WnvOJeSImDYGIs=@vger.kernel.org, AJvYcCXTf8bZpoRXm89sraWO8a2ot0ipudHzdD8VVpJw5DG6GqDnLJz7BsLYajgTHJg8ph76+9qNVyEBewg=@vger.kernel.org
+X-Received: by 2002:a05:6102:162b:b0:4c3:9b0:9e6b with SMTP id
+ ada2fe7eead31-4c50d4ce4f4mr15374318137.10.1742982036183; Wed, 26 Mar 2025
+ 02:40:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250320091101.33637-1-biju.das.jz@bp.renesas.com> <20250320091101.33637-11-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20250320091101.33637-11-biju.das.jz@bp.renesas.com>
+References: <20250320091101.33637-1-biju.das.jz@bp.renesas.com> <20250320091101.33637-12-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20250320091101.33637-12-biju.das.jz@bp.renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 26 Mar 2025 10:39:16 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWqfE+ijJC1rwkEu=iypZmdnRc3=-6oBKVTQiDC9vyY9Q@mail.gmail.com>
-X-Gm-Features: AQ5f1JqyGLUYvGRK0b0xXFU5tH7LVabBicjgC-F4wUT8pSqSsKVJcRX4PKJDm7Q
-Message-ID: <CAMuHMdWqfE+ijJC1rwkEu=iypZmdnRc3=-6oBKVTQiDC9vyY9Q@mail.gmail.com>
-Subject: Re: [PATCH v6 10/18] can: rcar_canfd: Add max_cftml variable to
- struct rcar_canfd_hw_info
+Date: Wed, 26 Mar 2025 10:40:24 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVVtR8FiP3_k0zwqDpp_-pkm5J0Xh=KPedcf1-cRhBpwg@mail.gmail.com>
+X-Gm-Features: AQ5f1JrYZUyFv92r2xE3Y2QMr9HAWoc9Dmob0OW2Lumsk3vBNIkAnE-3zELlIx0
+Message-ID: <CAMuHMdVVtR8FiP3_k0zwqDpp_-pkm5J0Xh=KPedcf1-cRhBpwg@mail.gmail.com>
+Subject: Re: [PATCH v6 11/18] can: rcar_canfd: Add {nom,data}_bittiming
+ variables to struct rcar_canfd_hw_info
 To: Biju Das <biju.das.jz@bp.renesas.com>
 Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
 	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
@@ -90,10 +90,15 @@ Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wan
 Content-Type: text/plain; charset="UTF-8"
 
 On Thu, 20 Mar 2025 at 10:11, Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> R-Car Gen3 has CFTML max positional value is 15 whereas on R-Car Gen4 it
-> is 31. Add a max_cftml variable to struct rcar_canfd_hw_info to handle
-> this difference.
+> Both R-Car Gen4 and R-Car Gen3 have different bit timing parameters
+> Add {nom,data}_bittiming variables to struct rcar_canfd_hw_info to
+> handle this difference.
 >
+> Since the mask used in the macros are max value - 1, replace that
+> aswell.
+
+as well
+
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
