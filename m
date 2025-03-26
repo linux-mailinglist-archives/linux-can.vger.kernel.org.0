@@ -1,39 +1,39 @@
-Return-Path: <linux-can+bounces-3229-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3230-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A7C3A7167F
-	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 13:22:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A9F6A71697
+	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 13:23:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9E4E3B9B32
-	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 12:21:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8277B174314
+	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 12:21:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF64E1DF969;
-	Wed, 26 Mar 2025 12:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72C8D1E1C2B;
+	Wed, 26 Mar 2025 12:21:16 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42DA81E1C2B;
-	Wed, 26 Mar 2025 12:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7E9A1DF963;
+	Wed, 26 Mar 2025 12:21:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742991673; cv=none; b=Y7SwogOuSl+llRnkLlm22Jp7ZHtE20NCAGLrhxt6ItE3DLzUV3Ge5kpkUFB020uUBTzMrhsX50PtYs1hpHaUSAEV8dm3MmqUa6S4UICb5Of5DoBS6763QnIQeYttXWRpVtqAmMhKKH4eHPwwNLb0IblL0t1mBVc2hLcwnycHlZ0=
+	t=1742991676; cv=none; b=WVg3YYXUSWrPRn6Zj9PA6W2+f5ELumgJNLBGx79JJjoYhsA5f4gTef9mhVhC7d7RQTl2bvOeTgF7Uwe8HQzTrYQ6GAR7TMB4Iscr5tKBqYAIpEUqSEyKRJzRf0jrh9k2RkTMiWjRxWercyyFLX7MBGH1LkOL0UEgcZdt4pecwPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742991673; c=relaxed/simple;
-	bh=GCA/h7JXBbPrRaHZaqh353DSOW6ZlzcWmmyGRY6jYq4=;
+	s=arc-20240116; t=1742991676; c=relaxed/simple;
+	bh=Cm0VAgCjDAZTz7FFj5RDnzBqvaoyFRE+Tmryu9mCFCw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U5pxJM4oLLCJij+xDcplvGt9JR0FsTZaB9ZmWZH0JWrXFW4nze2QvhNV5TlQSpNpfQFtvrVD64ZEMWbNJH2JQHgsBoqCV5ymEOgWkbKFRcNKBs1qYUL1A3sh4LcaYLaBiqKDYAcb+liDGvSvVE9R9YypEWCJEtXOEZ99AMYKDFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+	 MIME-Version; b=ZE1gBoMQuA6w25/828FzJ4Wi1A5dfPtbHKgFe1yTRzJ2GdY+p6uPOVsbrAGgJL268LF4FnjMAW81ukpf84sfFSSfY8q8NygO7VO1ToLwi3OM9MdEU5UpL6rxpY56GYZ/LCxLfx9179CzsESDqK389JeKmYl1F8U8ifViT8mUDZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: FILwTVt3SaC0X2Q/+fRqRw==
-X-CSE-MsgGUID: 74VXc3QTQiuO/fg9Pe7QFw==
+X-CSE-ConnectionGUID: 7EUIL3t5RSaOP0NWsJDGTQ==
+X-CSE-MsgGUID: 8DS0BzxoRlWo2dRRfl8gEQ==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 26 Mar 2025 21:21:11 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 26 Mar 2025 21:21:14 +0900
 Received: from localhost.localdomain (unknown [10.226.92.116])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 40C4240104CB;
-	Wed, 26 Mar 2025 21:21:08 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id ADF9640104FA;
+	Wed, 26 Mar 2025 21:21:11 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
@@ -45,9 +45,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v7 16/18] can: rcar_canfd: Add only_internal_clks variable to struct rcar_canfd_hw_info
-Date: Wed, 26 Mar 2025 12:19:51 +0000
-Message-ID: <20250326122003.122976-17-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v7 17/18] can: rcar_canfd: Enhance multi_channel_irqs handling
+Date: Wed, 26 Mar 2025 12:19:52 +0000
+Message-ID: <20250326122003.122976-18-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
 References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
@@ -59,9 +59,9 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-All existing SoCs support an external clock, but RZ/G3E has only internal
-clocks. Add only_internal_clks to struct rcar_canfd_hw_info to handle this
-difference.
+Currently multi_channel_irqs has only 2 channels. But RZ/G3E has six
+channels. Enhance multi_channel_irqs handling to support more than two
+channels.
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
@@ -72,39 +72,42 @@ v5->v6:
  * No change.
 v4->v5:
  * Collected tag.
- * Improved commit description by "All SoCs supports extenal clock"->
-   "All existing SoCs support an external clock".
 v3->v4:
  * No change.
 v2->v3:
- * No change
+ * No change.
 v1->v2:
  * No change.
 ---
- drivers/net/can/rcar/rcar_canfd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/can/rcar/rcar_canfd.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 20e591421cc6..7ad27087a176 100644
+index 7ad27087a176..91f5649078c6 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -546,6 +546,7 @@ struct rcar_canfd_hw_info {
- 	unsigned multi_channel_irqs:1;	/* Has multiple channel irqs */
- 	unsigned ch_interface_mode:1;	/* Has channel interface mode */
- 	unsigned shared_can_regs:1;	/* Has shared classical can registers */
-+	unsigned only_internal_clks:1;	/* Has only internal clocks */
- };
+@@ -1851,16 +1851,19 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
  
- /* Channel priv data */
-@@ -2045,7 +2046,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 		fcan_freq = clk_get_rate(gpriv->can_clk) / info->postdiv;
- 	} else {
- 		fcan_freq = clk_get_rate(gpriv->can_clk);
--		gpriv->extclk = true;
-+		gpriv->extclk = !gpriv->info->only_internal_clks;
- 	}
+ 	if (info->multi_channel_irqs) {
+ 		char *irq_name;
++		char name[10];
+ 		int err_irq;
+ 		int tx_irq;
  
- 	addr = devm_platform_ioremap_resource(pdev, 0);
+-		err_irq = platform_get_irq_byname(pdev, ch == 0 ? "ch0_err" : "ch1_err");
++		scnprintf(name, 10, "ch%u_err", ch);
++		err_irq = platform_get_irq_byname(pdev, name);
+ 		if (err_irq < 0) {
+ 			err = err_irq;
+ 			goto fail;
+ 		}
+ 
+-		tx_irq = platform_get_irq_byname(pdev, ch == 0 ? "ch0_trx" : "ch1_trx");
++		scnprintf(name, 10, "ch%u_trx", ch);
++		tx_irq = platform_get_irq_byname(pdev, name);
+ 		if (tx_irq < 0) {
+ 			err = tx_irq;
+ 			goto fail;
 -- 
 2.43.0
 
