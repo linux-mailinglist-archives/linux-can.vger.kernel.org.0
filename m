@@ -1,39 +1,39 @@
-Return-Path: <linux-can+bounces-3217-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3218-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 598EDA7166C
-	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 13:21:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C16BA7168E
+	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 13:23:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BD603A89C0
-	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 12:20:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAA3B188FC52
+	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 12:20:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08F601DE3C1;
-	Wed, 26 Mar 2025 12:20:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F3EE1E00A0;
+	Wed, 26 Mar 2025 12:20:36 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9FEF1799F;
-	Wed, 26 Mar 2025 12:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49DCB1799F;
+	Wed, 26 Mar 2025 12:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742991632; cv=none; b=NOx57bn9t57vN78Fb+u98LXDP77QfUyNAv4zxiL3Pd41WpYYDXu7CThXdbFolf1ISpkP+Y9k+kDxwJkzWEkitIrrYk2NXB0Ho6w/SP23lHx5Um1rtlsT3ePs1V+j74N35srX1XSFRkIUPQaGubkER1HbUXYRu/WAn9K5wRA/K8U=
+	t=1742991636; cv=none; b=fX4yB2mZ795cY6Asqm3iIZamk+m2iTygbso5uANo+ZX4OF2CxFhJm7J9sNlaKpwIKLpLkSq84hPI0D2FIoMJP+yXg7Ag3d3r6Yl1EKE9uzeq/iOULq1I76dKy2pF9twY+tPlHQD50Leq8wlsuX0nABOZU9eqAKwMWjoCQJvKT9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742991632; c=relaxed/simple;
-	bh=sFZhX8rcZFj1zgboDFphz7qtX7j/1ruZvk0KVsNHp/c=;
+	s=arc-20240116; t=1742991636; c=relaxed/simple;
+	bh=/z+NQXUmW8iu4pTcSDCl2k92lNgva5WpYy0+NMp+wx0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Gzp6xbvIVBEa5lDNUTP/KnOasqhjselnQcvll/74J2gQS/vMQemEB12wpv9x356MWwdOXW/0EUd82EzOVQvYdejttaDiokLu5RSqj8LPkcifEF1q4rD5OGaJCBJdfe58hN/VzN4ykx0fYazG33+PaPlIOAyiq/rrY+0vIqxecF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+	 MIME-Version; b=X0CXcSb/BztsABNBp/pzZI72UPTm/qhbfF3OOwJtxwqQSgKsZBkgcDOQsKMbA7ccimyuZEPJj4B42FZ9kkJ4TsoQudLMK8mwm1JVJkws19hFuGfE1wmnCVdtaT3cdNSRZooRFjCOp+ief7qHB956xSHw0qitS2JgMl0R/ICpgZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: 9HrpnW/DTuycoroSnMOrDw==
-X-CSE-MsgGUID: zRy5MAyWScugR0A46zoD3g==
+X-CSE-ConnectionGUID: Ysj/moIYQB2buwhfjTnRfg==
+X-CSE-MsgGUID: Ph++b9xSRbW/835QPJqbgQ==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 26 Mar 2025 21:20:29 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 26 Mar 2025 21:20:33 +0900
 Received: from localhost.localdomain (unknown [10.226.92.116])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id C44FA40104CB;
-	Wed, 26 Mar 2025 21:20:26 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 37F5140104CB;
+	Wed, 26 Mar 2025 21:20:29 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
@@ -45,9 +45,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v7 04/18] can: rcar_canfd: Drop RCANFD_GAFLCFG_GETRNC macro
-Date: Wed, 26 Mar 2025 12:19:39 +0000
-Message-ID: <20250326122003.122976-5-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v7 05/18] can: rcar_canfd: Drop RCANFD_GERFL_EEF* macros in RCANFD_GERFL_ERR
+Date: Wed, 26 Mar 2025 12:19:40 +0000
+Message-ID: <20250326122003.122976-6-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
 References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
@@ -59,7 +59,10 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Drop the unused macro RCANFD_GAFLCFG_GETRNC.
+The macros RCANFD_GERFL_EEF* in RCANFD_GERFL_ERR can be replaced by
+gpriv->channels_mask << 16.
+
+After this drop the macro RCANFD_GERFL_EEF0_7 as it is unused.
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
@@ -69,26 +72,34 @@ v6->v7:
 v5->v6:
  * Collected tag.
 v5:
- * New patch
+ * New patch.
 ---
- drivers/net/can/rcar/rcar_canfd.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 2d9569fd0e0b..565a91c2ca83 100644
+index 565a91c2ca83..a9e962a1510e 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -94,10 +94,6 @@
- 	(((x) & reg_gen4(gpriv, 0x1ff, 0xff)) << \
- 	 (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8)))
+@@ -74,7 +74,6 @@
+ #define RCANFD_GSTS_GNOPM		(BIT(0) | BIT(1) | BIT(2) | BIT(3))
  
--#define RCANFD_GAFLCFG_GETRNC(gpriv, n, x) \
--	(((x) >> (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8))) & \
--	 reg_gen4(gpriv, 0x1ff, 0xff))
--
- /* RSCFDnCFDGAFLECTR / RSCFDnGAFLECTR */
- #define RCANFD_GAFLECTR_AFLDAE		BIT(8)
- #define RCANFD_GAFLECTR_AFLPN(gpriv, x)	((x) & reg_gen4(gpriv, 0x7f, 0x1f))
+ /* RSCFDnCFDGERFL / RSCFDnGERFL */
+-#define RCANFD_GERFL_EEF0_7		GENMASK(23, 16)
+ #define RCANFD_GERFL_EEF(ch)		BIT(16 + (ch))
+ #define RCANFD_GERFL_CMPOF		BIT(3)	/* CAN FD only */
+ #define RCANFD_GERFL_THLES		BIT(2)
+@@ -82,9 +81,7 @@
+ #define RCANFD_GERFL_DEF		BIT(0)
+ 
+ #define RCANFD_GERFL_ERR(gpriv, x) \
+-	((x) & (reg_gen4(gpriv, RCANFD_GERFL_EEF0_7, \
+-			 RCANFD_GERFL_EEF(0) | RCANFD_GERFL_EEF(1)) | \
+-		RCANFD_GERFL_MES | \
++	((x) & ((gpriv->channels_mask << 16) | RCANFD_GERFL_MES | \
+ 		((gpriv)->fdmode ? RCANFD_GERFL_CMPOF : 0)))
+ 
+ /* AFL Rx rules registers */
 -- 
 2.43.0
 
