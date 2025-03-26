@@ -1,156 +1,271 @@
-Return-Path: <linux-can+bounces-3233-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3234-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AC7EA71D96
-	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 18:45:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 912E4A72051
+	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 22:00:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BFBE841A71
-	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 17:42:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76E5F3BB02E
+	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 21:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B652823E329;
-	Wed, 26 Mar 2025 17:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C12A253337;
+	Wed, 26 Mar 2025 21:00:35 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3D723E32A
-	for <linux-can@vger.kernel.org>; Wed, 26 Mar 2025 17:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BEB49659
+	for <linux-can@vger.kernel.org>; Wed, 26 Mar 2025 21:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743010911; cv=none; b=b7fUY6+WcaaMvvVbT8jZS/WYNpiflsA1EqvvA9ofGPL13Gv71ch7sTI1wrZwWsjhES/KVDCvkJ49N4ZIr877o1Za1v4EWuwFr7GEcNYdMK3nxBWYlJB64GE+TWjQoarw7QLfGnq0RZta5sFy+WlkvEPZugx2KoPrqnRmqhxmTQM=
+	t=1743022835; cv=none; b=ZXm6D8auDKcd8twir1Zy9bxyn5WTx6fmCY5k6vSHTS4GrzQ9QlsXjRujoIPgOUuGzhUSR3InwLwtoqUuPfxS5RP+JFPgx1HEuzHGYHobckC79uPMU8bWxkqWTcazrDPnXMTZZ+ulkoUNbwWvK0nOFfwDrIlsQyuW9L04wUV3jmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743010911; c=relaxed/simple;
-	bh=Z+kmXHGClhFpLj7Nta6mCo6WFt55JgT1HnxwLsMrksk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JvdxorV+PXbYSnkeLGXbgGbNugctQ++AnG6xEhlpctLaHNWdchmfjqJnLcg5aKwUMKYliYVO8WSLiXHUreO2t+e96fOoSg1HyiPZyUsu1n+e8BY6IvzsX+7DkZqBSD0aJpe0tXyF8cWL3yHypqXtjRmWV4DKBkjtWFoQvZEbjCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1txUky-0001hP-Qx; Wed, 26 Mar 2025 18:41:36 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1txUky-001nIV-1O;
-	Wed, 26 Mar 2025 18:41:36 +0100
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id D680D3E7735;
-	Wed, 26 Mar 2025 17:41:35 +0000 (UTC)
-Date: Wed, 26 Mar 2025 18:41:35 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com>
- <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
- <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
- <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
- <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
+	s=arc-20240116; t=1743022835; c=relaxed/simple;
+	bh=E0IkEfVisWGoQ1WZ8+CYWOL64hx1UwRHul6HFNIHgx4=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=SrwuumgPbHIwfn7rXdqIDsIOBVV2d6iRj/Lrf8vD322h3hy3qiXOFvWnaBxm+yFeYr7JcrEwj6i7qtyaHKRqczwr5vyKNDRc0yyppKi9Ap9tYLgtphEKX5Xdx+/qSSpv2MovbI9QuRbkYFGegCtREIKgaI2TaND8geHs/ch6odg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3d4578fbaf4so5218435ab.0
+        for <linux-can@vger.kernel.org>; Wed, 26 Mar 2025 14:00:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743022833; x=1743627633;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BLLzLUb7qILRPjQxfLkRYJ1D15qk9GUCshDqBYTc6eA=;
+        b=v9xEV7+/lGMXwibV14J+B0gfSL2paRDdW4u/TDULEcQv+RS+h0WaPP2dyKXD34tSyp
+         zSTA4f00nph074S9M0p+uUqjQ40i3qTv5AGgQAhTJKuVmF6Xr1w6hL9K8TKEiaseeWdc
+         L3XpQg7h/rcYJSR4i681yPwbMLCeittG7u6QvkQp1VhIt7JijgcZa9o43bZ51duQJ6eF
+         2224EXWfz/w/VCM3cdiTCvgC22yglOHpV5FkI+Pyv8IpxgJ6m5H4qcLA/YgqiENEbG9Z
+         SCXcXSJsOtKNduYg9PmKrSsSGj14C8177Ix/ZO4rNs5I/ZVLz7zAje7MvhskZC2OYVmH
+         tq/w==
+X-Gm-Message-State: AOJu0Ywk6iYb//1UUo6wkIVBTmWoskFJcVt+4MSYs+fdja3PwUMAymBq
+	7u3mvR1x+09G6O/5tOhWjvqCp17D3D7Q9L4xa+OTqcvZQZ5m8NxwBXnNzr77VKXiO1zyH1q3bcA
+	QJgO2M2/a1mBx8cgQbF93cSV3K5bgGHX84+PzvoBy7lV6uXcuTMxMTIEZLA==
+X-Google-Smtp-Source: AGHT+IGPJCFoOqOahWTOVIcJIlDOGOnWZDlwgusHMoNCxl2eewK4l+sSpT5ryYGA8mn3JKLc1dI+ZPRfJge87XtTNZIWjYUBWuya
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="r56ki5hqfoc5hcq4"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Received: by 2002:a05:6e02:144a:b0:3d1:7835:1031 with SMTP id
+ e9e14a558f8ab-3d5ccdd1b3bmr13954815ab.7.1743022832700; Wed, 26 Mar 2025
+ 14:00:32 -0700 (PDT)
+Date: Wed, 26 Mar 2025 14:00:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67e46af0.050a0220.2f068f.000e.GAE@google.com>
+Subject: [syzbot] [can?] [usb?] KASAN: slab-out-of-bounds Read in ucan_probe
+From: syzbot <syzbot+79340d79a8ed013a2313@syzkaller.appspotmail.com>
+To: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mailhol.vincent@wanadoo.fr, mkl@pengutronix.de, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    245aece3750d MAINTAINERS: Add myself as a riscv reviewer
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+console output: https://syzkaller.appspot.com/x/log.txt?x=1241643f980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ef948fab17fe83a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=79340d79a8ed013a2313
+compiler:       riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: riscv64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10de2804580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14bd4198580000
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/a741b348759c/non_bootable_disk-245aece3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1570230830d5/vmlinux-245aece3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a3c2191c4291/Image-245aece3.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+79340d79a8ed013a2313@syzkaller.appspotmail.com
+
+usb 1-1: ucan: probing device on interface #0
+==================================================================
+BUG: KASAN: slab-out-of-bounds in sized_strscpy+0x2a2/0x2cc lib/string.c:182
+Read of size 1 at addr ffffaf801ba334c0 by task kworker/0:1/9
+
+CPU: 0 UID: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.14.0-rc1-syzkaller-g245aece3750d #0
+Hardware name: riscv-virtio,qemu (DT)
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+[<ffffffff80074518>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:132
+[<ffffffff80003206>] show_stack+0x30/0x3c arch/riscv/kernel/stacktrace.c:138
+[<ffffffff8005fa4c>] __dump_stack lib/dump_stack.c:94 [inline]
+[<ffffffff8005fa4c>] dump_stack_lvl+0x12e/0x1a6 lib/dump_stack.c:120
+[<ffffffff8000eac8>] print_address_description mm/kasan/report.c:378 [inline]
+[<ffffffff8000eac8>] print_report+0x28e/0x5aa mm/kasan/report.c:489
+[<ffffffff80a6e636>] kasan_report+0xf0/0x214 mm/kasan/report.c:602
+[<ffffffff80a70424>] __asan_report_load1_noabort+0x12/0x1a mm/kasan/report_generic.c:378
+[<ffffffff8621a08e>] sized_strscpy+0x2a2/0x2cc lib/string.c:182
+[<ffffffff83308bf2>] ucan_probe+0x1682/0x178c drivers/net/can/usb/ucan.c:1535
+[<ffffffff8368edaa>] usb_probe_interface+0x2d6/0x8c4 drivers/usb/core/driver.c:396
+[<ffffffff82a4dd52>] call_driver_probe drivers/base/dd.c:579 [inline]
+[<ffffffff82a4dd52>] really_probe+0x232/0x9be drivers/base/dd.c:658
+[<ffffffff82a4e6b2>] __driver_probe_device+0x1d4/0x3f2 drivers/base/dd.c:800
+[<ffffffff82a4eb18>] driver_probe_device+0x60/0x1ce drivers/base/dd.c:830
+[<ffffffff82a4ee68>] __device_attach_driver+0x1e2/0x2fc drivers/base/dd.c:958
+[<ffffffff82a48572>] bus_for_each_drv+0x142/0x1da drivers/base/bus.c:462
+[<ffffffff82a4f8a2>] __device_attach+0x1c4/0x462 drivers/base/dd.c:1030
+[<ffffffff82a4fe48>] device_initial_probe+0x1c/0x26 drivers/base/dd.c:1079
+[<ffffffff82a4afdc>] bus_probe_device+0x15c/0x192 drivers/base/bus.c:537
+[<ffffffff82a444b8>] device_add+0x10da/0x181c drivers/base/core.c:3665
+[<ffffffff836885c8>] usb_set_configuration+0xf08/0x19dc drivers/usb/core/message.c:2210
+[<ffffffff836b32ea>] usb_generic_driver_probe+0xae/0x128 drivers/usb/core/generic.c:250
+[<ffffffff83689f0a>] usb_probe_device+0xd6/0x360 drivers/usb/core/driver.c:291
+[<ffffffff82a4dd52>] call_driver_probe drivers/base/dd.c:579 [inline]
+[<ffffffff82a4dd52>] really_probe+0x232/0x9be drivers/base/dd.c:658
+[<ffffffff82a4e6b2>] __driver_probe_device+0x1d4/0x3f2 drivers/base/dd.c:800
+[<ffffffff82a4eb18>] driver_probe_device+0x60/0x1ce drivers/base/dd.c:830
+[<ffffffff82a4ee68>] __device_attach_driver+0x1e2/0x2fc drivers/base/dd.c:958
+[<ffffffff82a48572>] bus_for_each_drv+0x142/0x1da drivers/base/bus.c:462
+[<ffffffff82a4f8a2>] __device_attach+0x1c4/0x462 drivers/base/dd.c:1030
+[<ffffffff82a4fe48>] device_initial_probe+0x1c/0x26 drivers/base/dd.c:1079
+[<ffffffff82a4afdc>] bus_probe_device+0x15c/0x192 drivers/base/bus.c:537
+[<ffffffff82a444b8>] device_add+0x10da/0x181c drivers/base/core.c:3665
+[<ffffffff8366429e>] usb_new_device+0x964/0x1778 drivers/usb/core/hub.c:2652
+[<ffffffff8366a616>] hub_port_connect drivers/usb/core/hub.c:5523 [inline]
+[<ffffffff8366a616>] hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
+[<ffffffff8366a616>] port_event drivers/usb/core/hub.c:5823 [inline]
+[<ffffffff8366a616>] hub_event+0x2716/0x48de drivers/usb/core/hub.c:5905
+[<ffffffff801b3668>] process_one_work+0x96a/0x1f3a kernel/workqueue.c:3236
+[<ffffffff801b667a>] process_scheduled_works kernel/workqueue.c:3317 [inline]
+[<ffffffff801b667a>] worker_thread+0x5be/0xdc6 kernel/workqueue.c:3398
+[<ffffffff801d3b2e>] kthread+0x37e/0x7b6 kernel/kthread.c:464
+[<ffffffff8626888e>] ret_from_fork+0xe/0x18 arch/riscv/kernel/entry.S:327
+
+Allocated by task 9:
+ stack_trace_save+0xa0/0xd2 kernel/stacktrace.c:122
+ kasan_save_stack+0x3e/0x6a mm/kasan/common.c:47
+ kasan_save_track+0x16/0x28 mm/kasan/common.c:68
+ kasan_save_alloc_info+0x30/0x3e mm/kasan/generic.c:562
+ poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
+ __kasan_kmalloc+0xa0/0xa6 mm/kasan/common.c:394
+ kasan_kmalloc include/linux/kasan.h:260 [inline]
+ __do_kmalloc_node mm/slub.c:4294 [inline]
+ __kmalloc_node_track_caller_noprof+0x258/0x5ec mm/slub.c:4313
+ alloc_dr drivers/base/devres.c:119 [inline]
+ devm_kmalloc+0x9a/0x1fe drivers/base/devres.c:843
+ devm_kzalloc include/linux/device.h:328 [inline]
+ ucan_probe+0x57e/0x178c drivers/net/can/usb/ucan.c:1401
+ usb_probe_interface+0x2d6/0x8c4 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x232/0x9be drivers/base/dd.c:658
+ __driver_probe_device+0x1d4/0x3f2 drivers/base/dd.c:800
+ driver_probe_device+0x60/0x1ce drivers/base/dd.c:830
+ __device_attach_driver+0x1e2/0x2fc drivers/base/dd.c:958
+ bus_for_each_drv+0x142/0x1da drivers/base/bus.c:462
+ __device_attach+0x1c4/0x462 drivers/base/dd.c:1030
+ device_initial_probe+0x1c/0x26 drivers/base/dd.c:1079
+ bus_probe_device+0x15c/0x192 drivers/base/bus.c:537
+ device_add+0x10da/0x181c drivers/base/core.c:3665
+ usb_set_configuration+0xf08/0x19dc drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xae/0x128 drivers/usb/core/generic.c:250
+ usb_probe_device+0xd6/0x360 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x232/0x9be drivers/base/dd.c:658
+ __driver_probe_device+0x1d4/0x3f2 drivers/base/dd.c:800
+ driver_probe_device+0x60/0x1ce drivers/base/dd.c:830
+ __device_attach_driver+0x1e2/0x2fc drivers/base/dd.c:958
+ bus_for_each_drv+0x142/0x1da drivers/base/bus.c:462
+ __device_attach+0x1c4/0x462 drivers/base/dd.c:1030
+ device_initial_probe+0x1c/0x26 drivers/base/dd.c:1079
+ bus_probe_device+0x15c/0x192 drivers/base/bus.c:537
+ device_add+0x10da/0x181c drivers/base/core.c:3665
+ usb_new_device+0x964/0x1778 drivers/usb/core/hub.c:2652
+ hub_port_connect drivers/usb/core/hub.c:5523 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
+ port_event drivers/usb/core/hub.c:5823 [inline]
+ hub_event+0x2716/0x48de drivers/usb/core/hub.c:5905
+ process_one_work+0x96a/0x1f3a kernel/workqueue.c:3236
+ process_scheduled_works kernel/workqueue.c:3317 [inline]
+ worker_thread+0x5be/0xdc6 kernel/workqueue.c:3398
+ kthread+0x37e/0x7b6 kernel/kthread.c:464
+ ret_from_fork+0xe/0x18 arch/riscv/kernel/entry.S:327
+
+The buggy address belongs to the object at ffffaf801ba33400
+ which belongs to the cache kmalloc-192 of size 192
+The buggy address is located 0 bytes to the right of
+ allocated 192-byte region [ffffaf801ba33400, ffffaf801ba334c0)
+
+The buggy address belongs to the physical page:
+page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x9ba33
+flags: 0xffe000000000000(node=0|zone=0|lastcpupid=0x7ff)
+page_type: f5(slab)
+raw: 0ffe000000000000 ffffaf80114013c0 ffff8d80006dafc0 dead000000000002
+raw: 0000000000000000 0000000080100010 00000000f5000000 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x52cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP), pid 1, tgid 1 (swapper/0), ts 49582585400, free_ts 0
+ __set_page_owner+0xa2/0x710 mm/page_owner.c:320
+ set_page_owner include/linux/page_owner.h:32 [inline]
+ post_alloc_hook+0xea/0x1e2 mm/page_alloc.c:1551
+ prep_new_page mm/page_alloc.c:1559 [inline]
+ get_page_from_freelist+0xf78/0x2bd6 mm/page_alloc.c:3477
+ __alloc_frozen_pages_noprof+0x1e8/0x20fc mm/page_alloc.c:4739
+ alloc_pages_mpol+0x1fa/0x5b8 mm/mempolicy.c:2270
+ alloc_frozen_pages_noprof+0x174/0x2f0 mm/mempolicy.c:2341
+ alloc_slab_page mm/slub.c:2423 [inline]
+ allocate_slab mm/slub.c:2587 [inline]
+ new_slab+0x26a/0x340 mm/slub.c:2640
+ ___slab_alloc+0xaf4/0x1290 mm/slub.c:3826
+ __slab_alloc.constprop.0+0x60/0xb0 mm/slub.c:3916
+ __slab_alloc_node mm/slub.c:3991 [inline]
+ slab_alloc_node mm/slub.c:4152 [inline]
+ __kmalloc_cache_noprof+0xd4/0x3f8 mm/slub.c:4320
+ kmalloc_noprof include/linux/slab.h:901 [inline]
+ kzalloc_noprof include/linux/slab.h:1037 [inline]
+ kset_create lib/kobject.c:965 [inline]
+ kset_create_and_add+0x56/0x182 lib/kobject.c:1008
+ bus_register+0x29c/0x63c drivers/base/bus.c:894
+ fw_core_init+0x74/0x24a drivers/firewire/core-transaction.c:1334
+ do_one_initcall+0x1a2/0xae4 init/main.c:1257
+ do_initcall_level init/main.c:1319 [inline]
+ do_initcalls init/main.c:1335 [inline]
+ do_basic_setup init/main.c:1354 [inline]
+ kernel_init_freeable+0x6ec/0x792 init/main.c:1568
+ kernel_init+0x28/0x24c init/main.c:1457
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffffaf801ba33380: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ ffffaf801ba33400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffffaf801ba33480: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+                                           ^
+ ffffaf801ba33500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffaf801ba33580: 00 00 00 00 00 00 00 06 fc fc fc fc fc fc fc fc
+==================================================================
 
 
---r56ki5hqfoc5hcq4
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On 26.03.2025 10:27:03, Ming Yu wrote:
-> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=881=
-7=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=885:21=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> >
-> > > > > +     priv->can.clock.freq =3D can_clk;
-> > > > > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_nomina=
-l_const;
-> > > > > +     priv->can.data_bittiming_const =3D &nct6694_can_bittiming_d=
-ata_const;
-> > > > > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
-> > > > > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_coun=
-ter;
-> > > > > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
-> > > > > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTI=
-NG |
-> > > > > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
-> > > >
-> > > > Does your device run in CAN-FD mode all the time? If so, please use
-> > > > can_set_static_ctrlmode() to set it after priv->can.ctrlmode_suppor=
-ted
-> > > > and remove CAN_CTRLMODE_FD from ctrlmode_supported.
-> > > >
-> > >
-> > > Our device is designed to allow users to dynamically switch between
-> > > Classical CAN and CAN-FD mode via ip link set ... fd on/off.
-> > > Therefore, CAN_CTRLMODE_FD needs to remain in ctrlmode_supported, and
-> > > can_set_static_ctrlmode() is not suitable in this case.
-> > > Please let me know if you have any concerns about this approach.
-> >
-> > Where do you evaluate if the user has configured CAN_CTRLMODE_FD or not?
-> >
->=20
-> Sorry, I was previously confused about our device's control mode. I
-> will use can_set_static_ctrlmode() to set CAN_FD mode in the next
-> patch.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Does your device support CAN-CC only mode? Does your device support to
-switch between CAN-CC only and CAN-FD mode?
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-regards,
-Marc
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
---r56ki5hqfoc5hcq4
-Content-Type: application/pgp-signature; name="signature.asc"
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
------BEGIN PGP SIGNATURE-----
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfkPEwACgkQDHRl3/mQ
-kZwXaAf/a0RArL3RY/rCsvGqnhAz/Nk1ljI1/sjXn6b6BRnEzwSev7b8LpGNMeTK
-ygCzVEDcFHwfjhcV2/C2irc0XtxnLLmh3YqpNF54IY/vAAFDzqPGqzOHYPiOE+Al
-ZFK6zjj26zmBDh011lfjyWk9EYvhDUfZNCUAX6N8Cdic+9wNGDiN9HKVfz6cUj9K
-oGTTUPVTU0Nh7bwnuHLuj5IIruIQlTPH6w0Yd56Uv4TvGZ0cQ+S9hgGvY2J6v4f8
-tdvZIe+xMQTR2d4kaK/HU+wA0iMdSoxKyu9sCszU3tWGH/Yb+UAF1/gcdc0f5Gk6
-0X0j7uJgXLMbbdpHbsWypGiIkORpqQ==
-=mUFO
------END PGP SIGNATURE-----
-
---r56ki5hqfoc5hcq4--
+If you want to undo deduplication, reply with:
+#syz undup
 
