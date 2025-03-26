@@ -1,148 +1,174 @@
-Return-Path: <linux-can+bounces-3231-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3232-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70171A71698
-	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 13:23:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CE8FA71D45
+	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 18:37:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E2F6174400
-	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 12:21:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 053A5189DB0B
+	for <lists+linux-can@lfdr.de>; Wed, 26 Mar 2025 17:36:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D911DE3C1;
-	Wed, 26 Mar 2025 12:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52C923C8C5;
+	Wed, 26 Mar 2025 17:36:23 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701741DF963;
-	Wed, 26 Mar 2025 12:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8CD23C8C2
+	for <linux-can@vger.kernel.org>; Wed, 26 Mar 2025 17:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742991680; cv=none; b=eBWzM13z7c6cPPrqWLXbDn1twof3E1LfYx2TWmVq02SjQHJ0Jx5/9P3ftvTDQkIapDKf2n/YhJsoEnyQlGWlQzYyBJraFw2BEEVfSde3InudsBMyn5Q05oA+UiseikmsvK3uMKRDblV4zHlWzj0rWJ76h+ziDa+VZU40NZe7InU=
+	t=1743010583; cv=none; b=COwURZGhe/4SwHrnsfvsdJqoTRn+Lpdfoj9y2Et5G+Ktih64yj0tahy4LU7+9Zxid0qSQSKUf5qePw519/WuVYTfkgEp1N2txx9VlLZxzb+thXu7LN57A6glbntDQbGBkvvb+L01bedGeFyqNa6X127M3Xv6XdBdfkd5a/oseUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742991680; c=relaxed/simple;
-	bh=/h0/GwO8iEZ0rlUPZab7dy4ECfbH8lLFIzs3CJXJjhQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aDPDj+kEAviFf5hA7u1Zf9j5lHxaJvpcD493MXCPVWhQk33WCWFW+UCpM83p6bw8OOJ7erE1U1gLwe56z3AlzMDVcoj7TpYUrQVrnxtbadKG9ATsdBt+1BKkeXxLPAsynMGsTgFpBuF9skSFywdRJXdqMK3HzfFLVb5cZdR4Gcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: USWJUceiQLWFw1OMM1YEpg==
-X-CSE-MsgGUID: psrj5hQ2Rlepfpj6xakwpQ==
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 26 Mar 2025 21:21:18 +0900
-Received: from localhost.localdomain (unknown [10.226.92.116])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 2649240104CB;
-	Wed, 26 Mar 2025 21:21:14 +0900 (JST)
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
-	linux-can@vger.kernel.org,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>,
-	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v7 18/18] can: rcar_canfd: Add RZ/G3E support
-Date: Wed, 26 Mar 2025 12:19:53 +0000
-Message-ID: <20250326122003.122976-19-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
-References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
+	s=arc-20240116; t=1743010583; c=relaxed/simple;
+	bh=1VrlRkek0WqK4HdrG8gRnbeBPzHFXN/BnW7I901OUcI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SXPAi9GtSjH9uVw3D3Q+e9rV3NB//oFzhPetj45u1VDl7Y36EzaWTS86YIhTJa3zTrtnVjxlGeg545Jo+DSbI4+XNA1121d/law9GtVMKyauuBaOqwdF1/z0jejxezUHNxnj4zVhqvDOIA7qr/zvDO4hXZKXbDD2UMSZ/chiWG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1txUfR-0000ck-SV; Wed, 26 Mar 2025 18:35:53 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1txUfO-001nHx-0b;
+	Wed, 26 Mar 2025 18:35:50 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id B6C7C3E7719;
+	Wed, 26 Mar 2025 17:35:49 +0000 (UTC)
+Date: Wed, 26 Mar 2025 18:35:47 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250326-utopian-mega-scallop-5f6899-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
+ <20250317-outrageous-helpful-agama-39476f-mkl@pengutronix.de>
+ <CAOoeyxVF9baa8UKJKWcbTLzvMo3Ma=GRCbdnBSoGOw0Lk5j4sA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3fo4gps22dugmrwp"
+Content-Disposition: inline
+In-Reply-To: <CAOoeyxVF9baa8UKJKWcbTLzvMo3Ma=GRCbdnBSoGOw0Lk5j4sA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-The CAN-FD IP found on the RZ/G3E SoC is similar to R-Car Gen4, but
-it has no external clock instead it has clk_ram, it has 6 channels
-and supports 20 interrupts. Add support for RZ/G3E CAN-FD driver.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v6->v7:
- * No change.
-v5->v6:
- * Collected tag
- * Updated r9a09g047_hw_info table. 
-v4->v5:
- * Updated error description as "cannot get enabled ram clock"
- * Updated r9a09g047_hw_info table.  
-v3->v4:
- * No change.
-v2->v3:
- * Replaced gen4_type entry with mask_table, shift_table, regs,
-   ch_interface_mode and shared_can_reg.
-v1->v2:
- * No change.
----
- drivers/net/can/rcar/rcar_canfd.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+--3fo4gps22dugmrwp
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 91f5649078c6..243eaf6c24c4 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -730,6 +730,24 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
- 	.multi_channel_irqs = 1,
- };
- 
-+static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
-+	.nom_bittiming = &rcar_canfd_gen4_nom_bittiming_const,
-+	.data_bittiming = &rcar_canfd_gen4_data_bittiming_const,
-+	.regs = rcar_gen4_regs,
-+	.shift_table = rcar_gen4_shift_table,
-+	.num_supported_rules = 512,
-+	.rnc_stride = 2,
-+	.rnc_field_width = 16,
-+	.max_aflpn = 63,
-+	.max_cftml = 31,
-+	.max_channels = 6,
-+	.postdiv = 1,
-+	.multi_channel_irqs = 1,
-+	.ch_interface_mode = 1,
-+	.shared_can_regs = 1,
-+	.only_internal_clks = 1,
-+};
-+
- /* Helper functions */
- static inline void rcar_canfd_update(u32 mask, u32 val, u32 __iomem *reg)
- {
-@@ -1963,6 +1981,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	u32 rule_entry = 0;
- 	bool fdmode = true;			/* CAN FD only mode - default */
- 	char name[9] = "channelX";
-+	struct clk *clk_ram;
- 	int i;
- 
- 	info = of_device_get_match_data(dev);
-@@ -2052,6 +2071,11 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 		gpriv->extclk = !gpriv->info->only_internal_clks;
- 	}
- 
-+	clk_ram = devm_clk_get_optional_enabled(dev, "ram_clk");
-+	if (IS_ERR(clk_ram))
-+		return dev_err_probe(dev, PTR_ERR(clk_ram),
-+				     "cannot get enabled ram clock\n");
-+
- 	addr = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(addr)) {
- 		err = PTR_ERR(addr);
-@@ -2214,6 +2238,7 @@ static SIMPLE_DEV_PM_OPS(rcar_canfd_pm_ops, rcar_canfd_suspend,
- 
- static const __maybe_unused struct of_device_id rcar_canfd_of_table[] = {
- 	{ .compatible = "renesas,r8a779a0-canfd", .data = &rcar_gen4_hw_info },
-+	{ .compatible = "renesas,r9a09g047-canfd", .data = &r9a09g047_hw_info },
- 	{ .compatible = "renesas,rcar-gen3-canfd", .data = &rcar_gen3_hw_info },
- 	{ .compatible = "renesas,rcar-gen4-canfd", .data = &rcar_gen4_hw_info },
- 	{ .compatible = "renesas,rzg2l-canfd", .data = &rzg2l_hw_info },
--- 
-2.43.0
+On 26.03.2025 10:37:11, Ming Yu wrote:
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=881=
+7=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=888:01=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> > > +static int nct6694_can_start(struct net_device *ndev)
+> > > +{
+> > > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
+> > > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
+> > > +     struct nct6694_can_setting *setting __free(kfree) =3D NULL;
+> > > +     const struct nct6694_cmd_header cmd_hd =3D {
+> > > +             .mod =3D NCT6694_CAN_MOD,
+> > > +             .cmd =3D NCT6694_CAN_SETTING,
+> > > +             .sel =3D ndev->dev_port,
+> > > +             .len =3D cpu_to_le16(sizeof(*setting))
+> > > +     };
+> > > +     int ret;
+> > > +
+> > > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
+> > > +     if (!setting)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     setting->nbr =3D cpu_to_le32(n_bt->bitrate);
+> > > +     setting->dbr =3D cpu_to_le32(d_bt->bitrate);
+> >
+> > I just noticed one thing that needs clarification/documentation.
+> >
+> > You have nct6694_can_bittiming_nominal_const and
+> > nct6694_can_bittiming_data_const, but only pass the bit rates to your
+> > device.
+> >
+> > Do the bit timing const really reflect the HW limitations of your
+> > device?
+> >
+> > Are you sure your device uses the same algorithm as the kernel and
+> > calculates the same bit timing parameters as the kernel, so that the
+> > values given to the user space reflects the bit timing parameter chosen
+> > by your device?
+> >
+>=20
+> Originally, I only intended to provide NBR and DBR for user
+> configuration. In the next patch, I will add code to configure
+> NBTP(Nominal Bit Timing Prescaler) and DBTP(Data Bit Timing Prescaler)
+> based on the setting of nct6694_can_bittiming_nominal_const and
+> nct6694_can_bittiming_data_const.
 
+Sounds good, but this doesn't answer my questions:
+
+You have nct6694_can_bittiming_nominal_const and
+nct6694_can_bittiming_data_const, but only pass the bit rates and the
+prescaler to your device.
+
+Do the bit timing const really reflect the HW limitations of your
+device?
+
+Are you sure your device uses the same algorithm as the kernel and
+calculates the same bit timing parameters as the kernel, so that the
+values given to the user space reflects the bit timing parameter chosen
+by your device?
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--3fo4gps22dugmrwp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfkOvEACgkQDHRl3/mQ
+kZzpHQgAgGRAJKZUC90pxD/IpTMDutPBbTPEyhq69hM419fjym5rJ4HxuM6meZHF
+MCGE5zEy8fsC05K8QdtwmiAmvaGYg8b/Ky/4MTwj0R5AjFqfWFghJJ5hrypphQzB
+ZKiyvcnkIAxTgkEZlMg9MBQf+OdN5Q3Z/nHLPvfk0OHrsz44UqxPAfWuMI6HWoaN
+RTSbxLxlKoAWEDTzmyT6YAyehq42fVSdsC+FK82lQmloaAkq7dkQAUmaJn1pTEHL
++ea6VayK34n+e3kzz2OkTDrOIvJwDSdX0lMrIT9A97ju+hgzdQSY839BL5xOvDEe
+9TFcEhv92TjknvV5PdmFfiwnNLDNHg==
+=T1kB
+-----END PGP SIGNATURE-----
+
+--3fo4gps22dugmrwp--
 
