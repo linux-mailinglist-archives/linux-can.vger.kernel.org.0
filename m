@@ -1,161 +1,120 @@
-Return-Path: <linux-can+bounces-3236-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3237-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34C53A729DA
-	for <lists+linux-can@lfdr.de>; Thu, 27 Mar 2025 06:31:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C6E4A729E6
+	for <lists+linux-can@lfdr.de>; Thu, 27 Mar 2025 06:33:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8438172146
-	for <lists+linux-can@lfdr.de>; Thu, 27 Mar 2025 05:31:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFE1018860F8
+	for <lists+linux-can@lfdr.de>; Thu, 27 Mar 2025 05:33:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 172747E105;
-	Thu, 27 Mar 2025 05:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA721BC07B;
+	Thu, 27 Mar 2025 05:33:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aM5DG74t"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="r45snMuL"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out.smtpout.orange.fr (out-66.smtpout.orange.fr [193.252.22.66])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620AF1FAA;
-	Thu, 27 Mar 2025 05:31:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEAFC61FF2;
+	Thu, 27 Mar 2025 05:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743053473; cv=none; b=rKOgFJmd0WOLqkl9LncPPjch/YGTe3ZZkzFDzgkq8AwJ2NqEHs6H9GYKQ0MkfI9UNmz5/O1Z7mMNSnozqFt1FF43HX2WIpnzAeZHAh71I+5af+MRpXkTrKsZukY7z6UvQP2EF3i2VNi4jqZTPBTqhgAh1+UHG0CvoUq0mWvwy3E=
+	t=1743053603; cv=none; b=rip6NH/Ak0MISi+j+iuIfSm8FlZlbADNBodbFzTWmlunfuhbxkQwlnD7is1wENAmrXxwfIq/XpXodKE7i+izstAP4eNnq4ah+F0b/9bXmK/s51ke/CSRLog/P0J4/t/q5QnSplM9OD+gXRynHmyJnihoJpl5hrZ5JalFiKjzxwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743053473; c=relaxed/simple;
-	bh=zlEk+nM0KMjO6BK5HgI9naEyY/gzus1ziRhcIU4nxZQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fBpb2Jnq5Z0GmcJZvKmUGHzeqZCb+r6Ln3Q3Ccw2emsZro52XzGgFP5UfLVeVg0VIzmYS0xj6DOKHcbyt2AZ/aNkmyClNxtWd0qXkeon1kX3IkYwMKdBh9TIf8LRdeDpb+0E5nCIr/djw9a9jiaxkrmW6TR2SHiZYwPSKyl8uyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aM5DG74t; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e549b0f8d57so575959276.3;
-        Wed, 26 Mar 2025 22:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743053470; x=1743658270; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=anfb6aMXjqKoh0pdnMJlZSbWmygDUF0+cL+VQ4pLtcU=;
-        b=aM5DG74tguKzfzyrCO/mAYlqKl1DHMbLm9KIauxGfOyYan2M5OLMGc1kcAKmNnObnJ
-         AGybSr4/CwF8Px7zSXjZA/wrq1YZiqEcNJMgYSoRKCehVl6Hb+vD6G5ydyEi9zhGXun1
-         wZCo1BrOfNKzERACFA3TWDY55Hvby2AwnFfOXI6zBkRT3UOLg8VCJdMEIMmNjy49Pr+8
-         kpo6tGqLHkyBNF9p50SpjzTukGERoU/OhoHOl55d2VZqynfi6yxkT0OS1rFBU2SN7EfA
-         lo+KGHps9ZEA8avhfxcfZQsKrsbAn579UtcGPF6AajjTFmd6ok4CHVWMZnom3h2FewlP
-         YUcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743053470; x=1743658270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=anfb6aMXjqKoh0pdnMJlZSbWmygDUF0+cL+VQ4pLtcU=;
-        b=C/zMnfgMSJ02W5eg1tG9DF0+jfUF1gqts5fmxBEUYJW03UKp7avMEjOeSDIS53m9Qs
-         9PA8ZAWYm5pJUuGzh75Mah74IkbblgLuzEbjuM5Pq/WgDewuk/JNlhHmn3QQmco01MGH
-         ltf8ibVS1sP0Nb5P3HGdnZr88WJSJcPhtMgKbZ8OX1SWE1C/bPzpggGx7iIalZvjuAKR
-         Au8tfsczOFUuCTnQexhVpkA76Bu3Ny2kJCqqnxr0GcKK1aYGFu2zVoq6URl17s8qMtXu
-         mxBgKudabl+gw5+kwW0zVgn8LC42dHBd+KrJCBbFR+DmPmWKtNZrMVr6xiI9+QaWTzO7
-         0DKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUOsdeYE2jDwlzaSLDPcmzRWpaxVehk5uqqqO1wa354U8plg3IqREI3Pw3CFr4NKyYdmVfGlgUJ@vger.kernel.org, AJvYcCUQotam4WAW87Z8UjCuN6M6RMXQaACqL+FbplQZ0DwgXPI7rHQYyZmdGjsAeL7fBdV70u2NFV6Clz3bkg==@vger.kernel.org, AJvYcCUh8ysWaPMYC2luAGekXx1bQh2cSQmJ9EstCFCEDCHSlYV1RadQgxefzvs6voSMkTzzDdFeS/5LMa5Uvi8zGng=@vger.kernel.org, AJvYcCV2z1SiL6/vvrUd/M6ySS0UcVJSzyaJ9m9alQJYdlx+Aw103KTXCzIzpgcd7RoIqhCJSOQv062c0E1C@vger.kernel.org, AJvYcCVdutZ8a/pkOUqghMmE4J4BLUP4cBUeoJuldrG4DJKBpZhAsqA0BkRh69ZMfZhQP7ov2kPzQfqNmScbaDw=@vger.kernel.org, AJvYcCVgNGVnlaocNeaUl7W8JRK0qrFTUCtJfhI6rqeGpUOBVkdgOAhv4gMCkhTe98P9qCxkPvb02PDhrV25ojTl@vger.kernel.org, AJvYcCVmUBH0IUu3MVZ6Ho9ama/4sxtkAEIOiEsoFj8XxnPuHOjHgY9+z423c8qDOzeLdKgeERwIptKni+Na@vger.kernel.org, AJvYcCWB9mhtKNun+IYls/751oYfkpfpd3S37cf+tA3LeTcAm/fnfgWH88JpR03aQkNyqVAv1xtWSGou2OU+@vger.kernel.org, AJvYcCWy/yWXkXuf+jeVIIn0GOb1Mw2BYbKC4lAwHEBtek+bcb8/urhSo9ANmgR2HefAU//BxdQSs1C10nM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWjN8MLGqoQnGTaTvB/oysDICluavSvCQKyHESMgEeFPAKPYmO
-	jBFM+H0cPPKVbK5Xq23evHBfgMEp5utAan0IdX3b0KYqgLwzqxPYQeffdWldjf48+apfABtw/5K
-	3oeiOifqqJSG2MWA6N5Yt2CoVs+I=
-X-Gm-Gg: ASbGnctZzRiL9RK44M85beDtezxhDj/3oj2tybRswKHY5IMKlRBMR1xrHRKPLSzrAeX
-	OuGxIxuDe1APs5EZVOoyaQGJ29JioKShPiMNmaFkbEaRUb6jHl0j8oBHUpq4l3UpOy6uYT8eRyw
-	LlTzgexkKOcWIPxSDJ6VcvFN+V747OVpuKiQO2VedRg6yGLaBp45r+wH572w1K
-X-Google-Smtp-Source: AGHT+IHsm/5tNxOhtqTseSel8U8cDVO7gbZGGe5VA4fyssBkjWJmJDSWCPGOq5ql1afQV4+vF574tKYXoEFyQTgNfCA=
-X-Received: by 2002:a05:6902:260e:b0:e5a:e39d:c2ad with SMTP id
- 3f1490d57ef6-e69430b9e5emr3350436276.0.1743053470043; Wed, 26 Mar 2025
- 22:31:10 -0700 (PDT)
+	s=arc-20240116; t=1743053603; c=relaxed/simple;
+	bh=tLUAS9dGI+wo8uk4MrNiJXSGrRZP6Eeua4jIfpiG9jI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=Y4y8foSpSbT6bBINyGS3riJNTVjFk4IXA3fKJhddCu9McVuhlmo7S2HSkH2Mx8hmSNpm6Ry+KnERL7HeW7RgH3OrihiPKnXvUOfGiGBUY7PZ0+iWL1xjIsIwcc/U0yGn20ivKclyMtANZX8gk3nx8pritDOz8dwc6yr7NHFafbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=r45snMuL; arc=none smtp.client-ip=193.252.22.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id xfrVtkf7to3Z8xfratsj2c; Thu, 27 Mar 2025 06:33:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1743053592;
+	bh=ltVEfqyIvF8S0cNST+rZk3ktk+yuzbGynB5Pi/65nTM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=r45snMuL7CiY6LxMtPFNFUTYX0KDde+FDgVOYBx/XBUhHxGQOPzxEmzUoThZJ+368
+	 uDBig2YWse19S7gC35e/qd4XfaLDTekEXEQv01WFiMvuxC+NpjKIbQ53e2IumVoe8T
+	 90HNI2pwTu9Lq4GNhBPq21EHQM5JpCUOW8jN4uc6d6MVAaT867z2DnL5PCI7B9+M0R
+	 wk1paxkk0Nbi721cGaWBbVuJ+G9Krq5FVclEMPgvEAu1SuJmGiFvDkONF0cX7jSyZP
+	 BHygXm4WPzJM3BSOXhWc42J/Kl0ikls7n2BxM/beC4wgzxvbBv9GPv/1SJZ/3ZJ/l2
+	 KtcCG4N0ee2qg==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 27 Mar 2025 06:33:12 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <713f8ca1-e406-421e-89b3-17458995ed1c@wanadoo.fr>
+Date: Thu, 27 Mar 2025 14:33:04 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com> <20250317-outrageous-helpful-agama-39476f-mkl@pengutronix.de>
- <CAOoeyxVF9baa8UKJKWcbTLzvMo3Ma=GRCbdnBSoGOw0Lk5j4sA@mail.gmail.com> <20250326-utopian-mega-scallop-5f6899-mkl@pengutronix.de>
-In-Reply-To: <20250326-utopian-mega-scallop-5f6899-mkl@pengutronix.de>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 27 Mar 2025 13:30:58 +0800
-X-Gm-Features: AQ5f1JpwYaYKq-V3JQ6MJSoAPPPQl8Dr7KjIQEXlTvSTgSXvEJFYfp0Qb4l0Dhw
-Message-ID: <CAOoeyxUvoYsKpLMY6OU+Eo_4=Ka+au7e_awA4yVKswwtaDp6NQ@mail.gmail.com>
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [can?] [usb?] KASAN: slab-out-of-bounds Read in
+ ucan_probe
+To: syzbot <syzbot+79340d79a8ed013a2313@syzkaller.appspotmail.com>
+References: <67e46af0.050a0220.2f068f.000e.GAE@google.com>
+Content-Language: en-US
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, mkl@pengutronix.de,
+ syzkaller-bugs@googlegroups.com
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <67e46af0.050a0220.2f068f.000e.GAE@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=8827=
-=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=881:35=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> > > > +static int nct6694_can_start(struct net_device *ndev)
-> > > > +{
-> > > > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > > > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittimin=
-g;
-> > > > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
-> > > > +     struct nct6694_can_setting *setting __free(kfree) =3D NULL;
-> > > > +     const struct nct6694_cmd_header cmd_hd =3D {
-> > > > +             .mod =3D NCT6694_CAN_MOD,
-> > > > +             .cmd =3D NCT6694_CAN_SETTING,
-> > > > +             .sel =3D ndev->dev_port,
-> > > > +             .len =3D cpu_to_le16(sizeof(*setting))
-> > > > +     };
-> > > > +     int ret;
-> > > > +
-> > > > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
-> > > > +     if (!setting)
-> > > > +             return -ENOMEM;
-> > > > +
-> > > > +     setting->nbr =3D cpu_to_le32(n_bt->bitrate);
-> > > > +     setting->dbr =3D cpu_to_le32(d_bt->bitrate);
-> > >
-> > > I just noticed one thing that needs clarification/documentation.
-> > >
-> > > You have nct6694_can_bittiming_nominal_const and
-> > > nct6694_can_bittiming_data_const, but only pass the bit rates to your
-> > > device.
-> > >
-> > > Do the bit timing const really reflect the HW limitations of your
-> > > device?
-> > >
-> > > Are you sure your device uses the same algorithm as the kernel and
-> > > calculates the same bit timing parameters as the kernel, so that the
-> > > values given to the user space reflects the bit timing parameter chos=
-en
-> > > by your device?
-> > >
-> >
-> > Originally, I only intended to provide NBR and DBR for user
-> > configuration. In the next patch, I will add code to configure
-> > NBTP(Nominal Bit Timing Prescaler) and DBTP(Data Bit Timing Prescaler)
-> > based on the setting of nct6694_can_bittiming_nominal_const and
-> > nct6694_can_bittiming_data_const.
->
-> Sounds good, but this doesn't answer my questions:
->
-> You have nct6694_can_bittiming_nominal_const and
-> nct6694_can_bittiming_data_const, but only pass the bit rates and the
-> prescaler to your device.
->
+On 27/03/2025 at 06:00, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    245aece3750d MAINTAINERS: Add myself as a riscv reviewer
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1241643f980000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=ef948fab17fe83a5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=79340d79a8ed013a2313
+> compiler:       riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+> userspace arch: riscv64
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10de2804580000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14bd4198580000
+> 
+> Downloadable assets:
+> disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/a741b348759c/non_bootable_disk-245aece3.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/1570230830d5/vmlinux-245aece3.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/a3c2191c4291/Image-245aece3.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+79340d79a8ed013a2313@syzkaller.appspotmail.com
+> 
+> usb 1-1: ucan: probing device on interface #0
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in sized_strscpy+0x2a2/0x2cc lib/string.c:182
+> Read of size 1 at addr ffffaf801ba334c0 by task kworker/0:1/9
 
-I understand.
-The prescaler field is used to calculate sjw, brp, prop_seg,
-phase_seg1 and phase_seg2. I will update the code in the next patch.
+This is already fixed upstream in commit 1d22a122ffb1 ("can: ucan: fix
+out of bound read in strscpy() source")
+
+Link: https://git.kernel.org/torvalds/c/1d22a122ffb1
 
 
-Thanks,
-Ming
+Yours sincerely,
+Vincent Mailhol
+
 
