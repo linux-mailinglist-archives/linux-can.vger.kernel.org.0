@@ -1,70 +1,70 @@
-Return-Path: <linux-can+bounces-3264-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3265-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC870A748A2
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 11:46:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B233A748BC
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 11:54:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8F967A85A4
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 10:45:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAFF11898745
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 10:54:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A0D1A5BAE;
-	Fri, 28 Mar 2025 10:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A23215040;
+	Fri, 28 Mar 2025 10:54:11 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85BE6FBF;
-	Fri, 28 Mar 2025 10:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA94213237;
+	Fri, 28 Mar 2025 10:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743158768; cv=none; b=HcVC7tIKcv60gvbbuRsokwFKooVDGkN30ekLO4kdw7Dj7ID/TCki536R8cGFmP81Q4DchgKAG7keyuAU2p+cmK2F2MdiK9fk7/2P3kudtb0MN0Z66S1bpfsgqxphki6b/oZFNX2tHYmkRnuev2+uQG9XfaVV89AVxXeaEHTuHd4=
+	t=1743159251; cv=none; b=quTKLXOvgCtCkaUgJFGM8Ihdj2Wrh0t562x0FfZBOeCy3sNaNsYiffBQYrCMtJSd4/hfO0S5yzpQ8I8MdxbDYVB6Wp/XCU+3BYkP7zzM+7gY7ZaqR6I4WpqYgvqfivyC6+6lhV2FLuUPXJJ8uemUHIyc6LYRq7t9WA2oEIfasMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743158768; c=relaxed/simple;
-	bh=aq+Q2Tz94GcDqbYiph2YuHAplYRXJslchXRCTz0ozGA=;
+	s=arc-20240116; t=1743159251; c=relaxed/simple;
+	bh=vJXOUm3e30DYF79lo+AbmupyoyAtXPggoEK2uY+416w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qtai+CSycwVnAeHRWPOXINaDqjq77wt5ynXyjjRLLFEjbTIUZ0ULqwNuW9nmHv4mVQxDHVA+AKSCYUZQGOMaisb7IsKtT/nKOZoHUz5TNLOhElF8YdmJn4BrjaFeJBRwjpTwn86qKHULgcJZlp5kzEZmozyD52RePTcyOOWgww4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.177
+	 To:Cc:Content-Type; b=OmVOAZC97MF7hNBVj/IyOOYFyiLCrFVNF7AQpO8wKKmVKvXDTISCnHOSL/LPFEVEjtfgaRB3RIiW61h8ezBQUxQyAdedeTAEy0UE7sv2T+DaILLHA4d345m7SA7qPLj3PwvS0vn9MnBDisGPwZLJg2o6Lj616qASDozuX8JyVvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-523eb86b31aso933357e0c.0;
-        Fri, 28 Mar 2025 03:46:06 -0700 (PDT)
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-523dc190f95so1021518e0c.1;
+        Fri, 28 Mar 2025 03:54:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743158765; x=1743763565;
+        d=1e100.net; s=20230601; t=1743159247; x=1743764047;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fz7Hy0X0ja0MUy8SfPs14C/LCrU2EryH1zXbLEH1v80=;
-        b=t1WzkiwdIRAeA1gR0+aPfjel24NZ+Fic2Cxr73HvjoUZwHWKFLUbuJg9P3xiNd40N8
-         Vw8TVp7LEnBiyo9P+n/cA64DtovrTXK0yUdiqbedHYzPCIZvG3230621dqwcrEgzPesP
-         aCqIoA1CR6O9I7IH2egWJ44EacJOARzvMT3r/bvzYS6ichoRZ480PnEB9+P8xRULGmn8
-         6L5FbM/LsCVOXbzxKCJ2gq+uMnTxDtyI6GutqNJGom2EisrxmNzd4DCxVkTlcV/RNS4k
-         JvG/hzftr7Ue/gc5A7irl+uSA1viGnS+UkjeRGnFQ+b5m6h9ycUgDC9QUacqEy/VI3Z5
-         3ccg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXXBcxGKE9uZ0Vmvha0m0Ovj30MhU6mUdPKm4WO5M4BK6ssoOBJmM/82Xs4GzW7YmBv8G7WlJP2pZggHiOjvLa7lk=@vger.kernel.org, AJvYcCVA3OOk0ziEUe2NBZ3jtElAju8O9rJ1yraMhZKdQH5dS9n3nACgnaqO6v56pQOajRNghswl92RlfnY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv6xoiquRDpBTn0JdS7vaHco4nHZH/skWPEqTf1ebOAyJsEl3N
-	ZRBKqHeRaX2IVs22Sm+dkWZOuTJq6PkQx742XJ0AMVoCncZmAgYSAr+VxI09
-X-Gm-Gg: ASbGncuh25KagYjJqgVPzxva9vCEf7se8Uw4h4BMAfgHNSlUnoh5U7NLH4PcNS3jfIv
-	R5XESUU2z4SsgVVo+LVW8P/Zr4tYOmU4jig4OfEB9fEHvzzGghMAN/drVDKwc/7xgcgC2aAkjBm
-	wpBRzzPOTow7tJbrMtFQT0CfoH2CVj9Zi7AKmT1V5Na63lUuu2iF8BUIR1Gw/F4E0faFcEO74ZE
-	IVw/N5P0/k9hqanhIYuJzDvPMgBZyIbER/IoXl153aSUFe1317h5TLaTXqsn52BYPvWH0z2Ytmj
-	R7GvIxi5wghvo6drjmK9TQ6O/s55OdmtONwfSIEEgMXeEeR9kYs1QXa0b/BIFDzH3M4vY4LKk79
-	oSgu9Rfk=
-X-Google-Smtp-Source: AGHT+IELw3N84GL6rvcPukuG6hqUVnOxhu42zJxwpy9982MIlcFbWKXCeejolKhkGfVLLnYYnMPqxQ==
-X-Received: by 2002:a05:6122:660c:b0:50b:e9a5:cd7b with SMTP id 71dfb90a1353d-52600a8ada4mr6333995e0c.9.1743158764884;
-        Fri, 28 Mar 2025 03:46:04 -0700 (PDT)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5260e7e9014sm348211e0c.12.2025.03.28.03.46.04
+        bh=2ZD2zCXfu8f1Q7njk9I/6vI7xEwTvUpMJtXBabLn7wM=;
+        b=eUeSUMW7LPJrp6IZcXIgdc/IJc9lwOMfYSjw3XKdT4K+U/oYt4wZlm4g2DrgfMsObz
+         PA8kR8fJG9anWgAXJP/eRhK2UfPi4qllIJOezyyncGwpDVaeHpgTb6kbatzonU7hxgt/
+         D2dRjQ3WjTAdo1mCk9h9JC/F2xkmkKd20yVxApV4ZtC9TbbT/ZYDJ2tIDNE4v80lz6+J
+         czCjaFQ1A8sZrq3UF2W7bUCW/BRID/GxTgOaWXyXyu42IYMuT/1Pzt89/E3wUhHxaH6T
+         1fmXDaTEMgkIbRJUo+T3CafAd7iFr3PXqeKuTdM/iwna4BjseGkHhHek/JApS0H1zqlX
+         9mrw==
+X-Forwarded-Encrypted: i=1; AJvYcCU88vE1FNWm+zjZ5Fux2Tq2FRsEKspwqP28pkX6kHHyVOBFJBiQnfsXxpnoHImLk7XUXUPcmVB9gsw=@vger.kernel.org, AJvYcCUbXf9t/SD7QUY+hw02zg2D8PS4FeLyYbUWrX77pCc9dUlAPGrW0/c3uKnxTQ6qTXMSDxljuKf3ITjl8C+sSxHwLPQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQc/53ewr8XtLzhGqaT8cJxDMBxOv7h2ZsLPvyqHC0duvv11O2
+	95G/je8A4G8wdzsjs8xlF/nwcbZPYK+qFpTx8XmBnOdA3IKydnR5HOwcYzgX
+X-Gm-Gg: ASbGncvF+hhX6kiGx/NEuxELb1ezGrRzMC44ZfVMzycwxQ/OO5ciIP8W9gCKgQdBPDA
+	NVEWLFcgMhuSTVxVVZuyprTwTZcFcVxNzFXcSSDvucVVUQso8xzR8xaih7I+CmbAPAzjsgQH7as
+	LGrTKvw1NJs0bWko2QvV6zbUG0M3khVSzqslKB3T6FnEgNYygI+orkf8xCpyg3uTDFhS418V7YZ
+	Feb5Q1Cgk+PbvyPCOs7AlnZC1REWVeY8SuzlYnnSnP8lbq0p4NSikJ6a38M0ibO6lqzQifAYvax
+	ftyDOrsDzMOcKPwYzE5sQuRw4tUwbxpdcRKISY7fH/5bvcWXHV9N8iH8c+NKIMDMxkPC3mCnCb3
+	i3O96i/U=
+X-Google-Smtp-Source: AGHT+IFq9IfrBSLTkOgHjzZAHD7MlJ0Ui7v/D2bGzHa2CrCh0sl9ifxANTwSUf/VlpE/srGa51HaFg==
+X-Received: by 2002:a05:6122:4897:b0:520:5a87:66ed with SMTP id 71dfb90a1353d-526009598damr6537052e0c.5.1743159246752;
+        Fri, 28 Mar 2025 03:54:06 -0700 (PDT)
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-871a33b28e3sm317439241.30.2025.03.28.03.54.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Mar 2025 03:46:04 -0700 (PDT)
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-86715793b1fso887924241.0;
-        Fri, 28 Mar 2025 03:46:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWoz6HV9ZvFzlqSTDuOdUxUV45QMBDeyhcze6FPM+cgwvEFH/ZNZmzQ+ixXNann8ORwqoepmYsS0JJBo6RjmfEkyNE=@vger.kernel.org, AJvYcCXlksIkh3d2zEIoUKc76gw3uwnYk8ojjIObAvQrVS3LmJNB+YWcqjRHz86KH0RipqRGlrIeZHDdQUE=@vger.kernel.org
-X-Received: by 2002:a05:6102:3f4e:b0:4c3:49b:8f78 with SMTP id
- ada2fe7eead31-4c5870e0a6fmr5369028137.25.1743158764315; Fri, 28 Mar 2025
- 03:46:04 -0700 (PDT)
+        Fri, 28 Mar 2025 03:54:06 -0700 (PDT)
+Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-86d377306ddso838002241.2;
+        Fri, 28 Mar 2025 03:54:05 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXYSSKfNT/pv8qBTFb7RUMrUpqmtCGnS1cuucDkiyBYnrm6DN65zYv95lEC1oVLoErWrf+yz/XRi/g=@vger.kernel.org, AJvYcCXZU/e2jOtZhvmu6okodoVA58/Jayxbmdi0rIOTPYuCLvqCa+FPGy8XgE1AAnG8HNIcr1h50seDhcqmQDPx7EF8Ems=@vger.kernel.org
+X-Received: by 2002:a05:6102:4407:b0:4bb:4c52:6730 with SMTP id
+ ada2fe7eead31-4c586fbaf67mr4918794137.12.1743159245693; Fri, 28 Mar 2025
+ 03:54:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -72,77 +72,106 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
- <20250326122003.122976-8-biju.das.jz@bp.renesas.com> <3bf3ec05-d900-494a-954e-633828b4c984@wanadoo.fr>
-In-Reply-To: <3bf3ec05-d900-494a-954e-633828b4c984@wanadoo.fr>
+ <20250326122003.122976-9-biju.das.jz@bp.renesas.com> <ee0f8bff-6dc4-4ddc-a2d2-89ed6fddcc8f@wanadoo.fr>
+In-Reply-To: <ee0f8bff-6dc4-4ddc-a2d2-89ed6fddcc8f@wanadoo.fr>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 28 Mar 2025 11:45:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUJpE93H2=QDcPAD9-gimQC9B21AUe8mksn-WVyiiHO-w@mail.gmail.com>
-X-Gm-Features: AQ5f1Jo4SH8dF8yYfKyTm3Nhcxsg1e_BU04tUZCjguNdJa75TcnqSe7v3lG2xk0
-Message-ID: <CAMuHMdUJpE93H2=QDcPAD9-gimQC9B21AUe8mksn-WVyiiHO-w@mail.gmail.com>
-Subject: Re: [PATCH v7 07/18] can: rcar_canfd: Add rnc_stride variable to
- struct rcar_canfd_hw_info
+Date: Fri, 28 Mar 2025 11:53:54 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWYTTpmwXdUpQnm8HWFWnDGp1M6mHn8jqUKFU5z_2Q2Sw@mail.gmail.com>
+X-Gm-Features: AQ5f1JqO3jjyQbXYAyJ2G64QUgkGevm5fy7rh0sszZPaDxyZB0llAmUX_8XGb1Q
+Message-ID: <CAMuHMdWYTTpmwXdUpQnm8HWFWnDGp1M6mHn8jqUKFU5z_2Q2Sw@mail.gmail.com>
+Subject: Re: [PATCH v7 08/18] can: rcar_canfd: Simplify RCANFD_GAFLCFG_SETRNC macro
 To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>, 
+Cc: Biju Das <biju.das.jz@bp.renesas.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
 	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
 	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
 	linux-can@vger.kernel.org, 
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>, 
-	linux-renesas-soc@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+	linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
 Hi Vincent,
 
-On Fri, 28 Mar 2025 at 11:36, Vincent Mailhol
+On Fri, 28 Mar 2025 at 11:39, Vincent Mailhol
 <mailhol.vincent@wanadoo.fr> wrote:
 > On 26/03/2025 at 21:19, Biju Das wrote:
-> > R-Car Gen4 packs 2 RNC values in a 32-bit word, whereas R-Car Gen3 packs
-> > up to 4 values in a 32-bit word. Handle this difference by adding
-> > rnc_stride variable to struct rcar_canfd_hw_info and update the macro
-> > RCANFD_GAFLCFG.
+> > The shift values in RCANFD_GAFLCFG_SETRNC are dictated by the field width:
+> >   - R-Car Gen4 packs 2 values in a 32-bit word, using a field width
+> >     of 16 bits,
+> >   - R-Car Gen3 packs up to 4 values in a 32-bit word, using a field
+> >     width of 8 bits.
+> >
+> > Add rnc_field_width variable to struct rcar_canfd_hw_info to handle this
+> > difference and simplify the shift value in RCANFD_GAFLCFG_SETRNC macro by
+> > using a formula (32 - (n % rnc_stride + 1) * rnc_field_width).
 > >
 > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > ---
-> > v6->v7:
-> >  * Collected tag.
-> > v5->v6:
-> >  * Replaced RCANFD_RNC_PER_REG macro with rnc_stride variable.
-> >  * Updated commit description
-> >  * Dropped Rb tag.
-> > v5:
-> >  * New patch.
-> > ---
-> >  drivers/net/can/rcar/rcar_canfd.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-> > index 32d700962d69..0001c8043c25 100644
+
 > > --- a/drivers/net/can/rcar/rcar_canfd.c
 > > +++ b/drivers/net/can/rcar/rcar_canfd.c
-> > @@ -291,7 +291,7 @@
-> >  /* RSCFDnCFDGAFLECTR / RSCFDnGAFLECTR */
-> >  #define RCANFD_GAFLECTR                      (0x0098)
-> >  /* RSCFDnCFDGAFLCFG / RSCFDnGAFLCFG */
-> > -#define RCANFD_GAFLCFG(ch)           (0x009c + (0x04 * ((ch) / 2)))
-> > +#define RCANFD_GAFLCFG(gpriv, ch)    (0x009c + (0x04 * ((ch) / (gpriv)->info->rnc_stride)))
+> > @@ -89,7 +89,7 @@
+> >  /* RSCFDnCFDGAFLCFG0 / RSCFDnGAFLCFG0 */
+> >  #define RCANFD_GAFLCFG_SETRNC(gpriv, n, x) \
+> >       (((x) & ((gpriv)->info->num_supported_rules - 1)) << \
+> > -      (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8)))
+> > +      (32 - (((n) % (gpriv)->info->rnc_stride + 1) * (gpriv)->info->rnc_field_width)))
 >
-> I find it rather hard to follow the logic here. Your are multiplying by
-> four and then dividing again to get the good results. Here, I guess that
-> 0x04 represents sizeof(u32), but this needs some thinking to figure that
-> out.
-
-The division is done first...
-
-> Wouldn't it be more intuitive to instead store the size in bytes of the
-> RNC value?
+> I can not follow how this is the same. Let's take the gen4 as an
+> example. Before:
 >
-> #define RCANFD_GAFLCFG(gpriv, ch) \
->         (0x009c + (gpriv)->info->sizeof_rnc * (ch))
+>   (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8))) =
+>   16 - ((n & 1) * 16)
 >
-> This way, no more 0x04 magic number and it is easier to process a
-> multiplication than a division in your head when reading the code.
+> So, I have:
+>
+>          n      shift value
+>         ---------------------------------
+>          0      16 - ((0 & 1) * 16) = 0
 
-... so this is not equivalent.
+16
+
+>          1      16 - ((1 & 1) * 16) = 16
+
+0
+
+>          2      16 - ((2 & 1) * 16) = 0
+
+16
+
+>          3      16 - ((3 & 1) * 16) = 16
+
+0
+
+>          4      16 - ((4 & 1) * 16) = 0
+
+16
+
+>
+> After:
+>
+>   (32 - ((n % rnc_stride + 1)) * rnc_field_width) =
+>   32 - ((n % (2 + 1)) * 16) =
+
+You got the operator precedence wrong: should be (n % 2) + 1 instead
+of n % (2 + 1).
+
+>   32 - ((n % 3) * 16)
+>
+>          n      shift value
+>         ---------------------------------
+>          0      32 - ((0 % 3) * 16) = 32
+>          1      32 - ((1 % 3) * 16) = 16
+>          2      32 - ((2 % 3) * 16) = 0
+>          3      32 - ((3 % 3) * 16) = 32
+>          4      32 - ((4 % 3) * 16) = 16
+>
+> Is there something wrong in my calculation? What am I missing?
+>
+> More generally, it is really hard to review and understand what this
+> macro does.
+
+It prepares a value for storing in a 16-bit or 8-bit field of a 32-bit
+register, where the fields are numbered MSB-first.
 
 Gr{oetje,eeting}s,
 
