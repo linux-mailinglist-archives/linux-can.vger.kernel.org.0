@@ -1,55 +1,55 @@
-Return-Path: <linux-can+bounces-3275-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3276-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5AA3A74A2D
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 13:59:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D237AA74BB1
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 14:55:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BEE73BC68C
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 12:58:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC8EC3B4EEA
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 13:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BADB31EF1D;
-	Fri, 28 Mar 2025 12:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3E321B9DA;
+	Fri, 28 Mar 2025 13:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="bzChFBKe"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Xrcc0ULF"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-70.smtpout.orange.fr [193.252.22.70])
+Received: from out.smtpout.orange.fr (out-69.smtpout.orange.fr [193.252.22.69])
 	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D472D78A;
-	Fri, 28 Mar 2025 12:59:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FBF21B918;
+	Fri, 28 Mar 2025 13:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743166747; cv=none; b=dfHDadPH5N20Sae4f2S65PFnGIEWhT28b7eLgI5f+hpo1X+zCFTMS7z89PFxtHqFJO0IC07qxnCkcImfAG7YvkLH2plYNxtIIdYsHcWIfRLSErLwu3Z1KihdLAt7TVtrB5HKZxlmT7xxNYANHXM+8MoAoqJMnDDxtUKJ4AznbfI=
+	t=1743169342; cv=none; b=rTW3kqXCdv6GKWPiFAx/jMYU+bzoJqdkiCYuYVxAGCpMg5wNrSuf0WUdGl2BdKEcnr76hCqH+lbdJ1fYRuEvMJZMLTaxyzaov0kupwb3oCRjt1tCEIbiuLSmRIT9Jl7al6/7bsiaSqx8vPhJjTiB2uF+iXJ7XpNwVjGnaiS/7cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743166747; c=relaxed/simple;
-	bh=Cgfd211PcW68WHHc8LTwiKfdRrXBEskTnlck2ixBA98=;
+	s=arc-20240116; t=1743169342; c=relaxed/simple;
+	bh=GJIvqYo2qpRzu79CzftBIyB8AplHrvhU1wbs8lbUxv0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LZin79Q/F5GE4z4RxHmbcNVub5w7qOYNW3IIkgoXY6ef3FEaLBSkjUHuaL6gbuGU894YFBIYD6FslDuY41mk8ubsXgZP0f0ZebXf321mg8Oz1OmaaVCWyvxw/pUQvuUMggnD7X4Edf8Pa2847RGG9e3B3yA8SCWExZKbg+2o6oQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=bzChFBKe; arc=none smtp.client-ip=193.252.22.70
+	 In-Reply-To:Content-Type; b=tWIQHwvSMn736JNRnduXBPZnzlB1c2NAjVZrswOYXmOG/Md0hJyi69f40+L3gawif/zU1zRn3Z1thS6SgFrXQUvvh0iT+sOt9x91GEb+g7tM2SmWLuZYK2jpl7zH4bAInnV1L10YkipkOITjf883I/wWCVpQazy/TQNH5T24LxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Xrcc0ULF; arc=none smtp.client-ip=193.252.22.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from [172.16.82.72] ([124.33.176.97])
 	by smtp.orange.fr with ESMTPA
-	id y9INte9naVylty9IRtVoCX; Fri, 28 Mar 2025 13:58:54 +0100
+	id y9yIt85jMXDgsy9yMtCDTA; Fri, 28 Mar 2025 14:42:14 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1743166734;
-	bh=qOj0aFtgm3QCb4V6G8O4Vo7VdZRWB2Y/mUY+LJVXYmE=;
+	s=t20230301; t=1743169334;
+	bh=4VhEea2BiuW9lwnCr91HUSwYdgkMA13aMHe2eYXAoK4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=bzChFBKekWOz2L8Kn8R1S/YDTMOLbkjPL1Q5QbiIuHDpBCwLWbBLrLeb7aZxeAB/6
-	 Sp8gzzuAeIHwrCalVbOXcv/uMSOcykVznDgl14kwcTj3htGNVqXCD1S7hFAalwJ1KG
-	 mWaMwBl25Y3fK3jECYJUL7su3qAuII+CGYElO3AumDfpBlN+QpEf6xRWRs6Zmtce+c
-	 Ftgk0/88UvuNCFR4cLFgdEfRcMbslYWLMdHmvkRlKo60HLYFHkVyUjpvvUecrfqyUz
-	 CZQAtOoCzoB5HguenRaY+FkuET4JrfTrQWrLf1orq2dMElkRsqM6O0nWVorfR4rTBs
-	 kjO/GgvaK/jVw==
+	b=Xrcc0ULFXFdU2I9n9JHAkFbiA+wVuoKW9ALehC26/wdK1agdsHF3X71gXNDvRlfN8
+	 Y74M9R+Z3W8rXdIT/v/qIbHHo410+ze0+nd9zTRqYQFBx5kV/KWWqGyBQjShoIBTRe
+	 8MKYddlXMRTIbk/+h26CLigVakkbOI/t/DGP+lb2GMrvdpS1afX6D8hFpWtTfatxr/
+	 /AA3k6pWl4wjyczEzI+cH9ON7xE220jF/6bxwiH2wre5FGEmiZmQ+BUWySMDSZlXZF
+	 mIgHa2QF9DBpq8Xu7X3QVTIHU0hSg4eYOnMjg4Xgy5Fs734M0Vv84CM64AnkAqByn1
+	 pbZ1Y8dqv5kZA==
 X-ME-Helo: [172.16.82.72]
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 28 Mar 2025 13:58:54 +0100
+X-ME-Date: Fri, 28 Mar 2025 14:42:14 +0100
 X-ME-IP: 124.33.176.97
-Message-ID: <8a9cf211-bc79-42bc-bfad-555b39124c95@wanadoo.fr>
-Date: Fri, 28 Mar 2025 21:58:46 +0900
+Message-ID: <245492b9-a78c-4575-89d1-4181db70cff6@wanadoo.fr>
+Date: Fri, 28 Mar 2025 22:42:06 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -57,18 +57,25 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 10/18] can: rcar_canfd: Add max_cftml variable to
- struct rcar_canfd_hw_info
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- linux-can@vger.kernel.org,
- Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org,
+Subject: Re: [PATCH v7 05/18] can: rcar_canfd: Drop RCANFD_GERFL_EEF* macros
+ in RCANFD_GERFL_ERR
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
  Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+ Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ "biju.das.au" <biju.das.au@gmail.com>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
 References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
- <20250326122003.122976-11-biju.das.jz@bp.renesas.com>
+ <20250326122003.122976-6-biju.das.jz@bp.renesas.com>
+ <40392a70-3be4-4d11-8614-eebd5d9d24a8@wanadoo.fr>
+ <TY3PR01MB11346C091544B49A6C160712E86A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <deffdc35-86cf-4282-ba6d-f36890bf9fcd@wanadoo.fr>
+ <TY3PR01MB11346DA97D5F685D96A638DB086A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <20250328-serious-orange-oarfish-3631f1-mkl@pengutronix.de>
+ <CAMuHMdXWDaJx5THFd9NB7VsTjGZgFt8JPGa+WQivSdgYVY1yWg@mail.gmail.com>
 Content-Language: en-US
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
@@ -81,78 +88,78 @@ Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
  yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
  CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
  ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250326122003.122976-11-biju.das.jz@bp.renesas.com>
+In-Reply-To: <CAMuHMdXWDaJx5THFd9NB7VsTjGZgFt8JPGa+WQivSdgYVY1yWg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 26/03/2025 à 21:19, Biju Das wrote:
-> R-Car Gen3 has CFTML max positional value is 15 whereas on R-Car Gen4 it
-> is 31. Add a max_cftml variable to struct rcar_canfd_hw_info to handle
-> this difference.
+On 28/03/2025 at 19:42, Geert Uytterhoeven wrote:
+> Hi Marc,
 > 
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-> ---
-> v6->v7:
->  * Collected tag.
-> v6:
->  * New patch.
-> ---
->  drivers/net/can/rcar/rcar_canfd.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> On Fri, 28 Mar 2025 at 11:20, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>> On 28.03.2025 09:51:43, Biju Das wrote:
+>>>> Yes, it starts at bit 16, but at which bit does it end?
+>>>>
+>>>> The GENMASK() helps to document the register names. Of course is works if you replace the FIELD_PREP
+>>>> with a left shift, but you are replacing some meaningful information about the register name, register
+>>>> start bit and end bit by just a start bit value. See? You just lost the register name and end bit
+>>>> info.
+>>>>
+>>>> FIELD_PREP() is not only about doing the correct shift but also about documenting that you are putting
+>>>> the value into a specific register.
+>>>>
+>>>> When reading:
+>>>>
+>>>>   FIELD_PREP(RCANFD_GERFL_EEF0_7, gpriv->channels_mask)
+>>>>
+>>>> I immediately understand that you are putting the gpriv->channels_mask value into the GERFL_EEF0_7
+>>>> register and I can look at the datasheet for details about that GERFL_EEF0_7 if I want to.
+>>>
+>>> Gen4 has 8 channels (GENMASK(16, 23)
+>>> G3E has 6 channels  (GENMASK(16, 21)
+>>> V4M has 4 channels  (GENMASK(16, 19)
+>>> V3H_2 has 3 channels (GENMASK(16,18)
+>>> All other SoCs has 2 channels (GENMASK(16,17)
+>>>
+>>> So you mean, I should replace RCANFD_GERFL_EEF0_7 with a
+>>>
+>>> Generic one RCANFD_GERFL_EEF(x) GENMASK(16, 16 + (x) - 1) to handle
+>>> this differences
+>>>
+>>> Where x is the number of supported channels(info->max_channels)
+>>>
+>>> and then use
+>>>
+>>> FIELD_PREP(RCANFD_GERFL_EEF(x), gpriv->channels_mask)
+>>
+>> The mask for FIELD_PREP must be compile time constant.
+>>
+>> Geert recently posted a series to add non constant helpers:
+>>
+>> | https://lore.kernel.org/all/1824412519cb8791ab428065116927ee7b77cf35.1738329459.git.geert+renesas@glider.be/
+>>
+>> It seems it wasn't applied yet...
 > 
-> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-> index 7cef0673fbc8..c37fb85fe478 100644
-> --- a/drivers/net/can/rcar/rcar_canfd.c
-> +++ b/drivers/net/can/rcar/rcar_canfd.c
-> @@ -227,7 +227,7 @@
->  
->  /* RSCFDnCFDCFCCk */
->  #define RCANFD_CFCC_CFTML(gpriv, x)	\
-                                    ^
-Notwithstanding of above review tag and same as before, please demystify
-what this x is.
+> Yeah, people keep on asking for more...
+> #perfectistheenemyofgoodenough...
 
-> -	(((x) & reg_gen4(gpriv, 0x1f, 0xf)) << reg_gen4(gpriv, 16, 20))
-> +	(((x) & (gpriv)->info->max_cftml) << reg_gen4(gpriv, 16, 20))
->  #define RCANFD_CFCC_CFM(gpriv, x)	(((x) & 0x3) << reg_gen4(gpriv,  8, 16))
->  #define RCANFD_CFCC_CFIM		BIT(12)
->  #define RCANFD_CFCC_CFDC(gpriv, x)	(((x) & 0x7) << reg_gen4(gpriv, 21,  8))
-> @@ -508,6 +508,7 @@ struct rcar_canfd_hw_info {
->  	u8 rnc_stride;
->  	u8 rnc_field_width;
->  	u8 max_aflpn;
-> +	u8 max_cftml;
->  	u8 max_channels;
->  	u8 postdiv;
->  	/* hardware features */
-> @@ -588,6 +589,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
->  	.rnc_stride = 4,
->  	.rnc_field_width = 8,
->  	.max_aflpn = 31,
-> +	.max_cftml = 15,
->  	.max_channels = 2,
->  	.postdiv = 2,
->  	.shared_global_irqs = 1,
-> @@ -598,6 +600,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
->  	.rnc_stride = 2,
->  	.rnc_field_width = 16,
->  	.max_aflpn = 127,
-> +	.max_cftml = 31,
->  	.max_channels = 8,
->  	.postdiv = 2,
->  	.shared_global_irqs = 1,
-> @@ -608,6 +611,7 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
->  	.rnc_stride = 4,
->  	.rnc_field_width = 8,
->  	.max_aflpn = 31,
-> +	.max_cftml = 15,
->  	.max_channels = 2,
->  	.postdiv = 1,
->  	.multi_channel_irqs = 1,
+Modifying the most popular headers really takes a lot of effort.
+I experienced it first hand when I introduced the GEMASK_U*() fixed
+width macros:
+
+https://lore.kernel.org/all/20250326-fixed-type-genmasks-v8-0-24afed16ca00@wanadoo.fr/
+
+
+Sorry to have been one of those asking for more. My intent was not to
+block the effort. Your answers were satisfactory to me.
+
+In my opinion, just adding a rationale to the patch description of:
+
+  - why FIELD_PREP() can not be generalized to non-const mask
+  - why the u32_get_bits() & Cie do not work as well
+
+would help to have it move forward. If you resend, I would give you my
+support.
+
 
 Yours sincerely,
 Vincent Mailhol
