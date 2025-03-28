@@ -1,231 +1,140 @@
-Return-Path: <linux-can+bounces-3287-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3288-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C57CFA74E19
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 16:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA8B0A74E2F
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 17:03:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 751BA3AC384
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 15:51:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 823333B3EB4
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 16:03:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 964401C2324;
-	Fri, 28 Mar 2025 15:51:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Ogrzb8S4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAAE41D5CD1;
+	Fri, 28 Mar 2025 16:03:42 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-69.smtpout.orange.fr [193.252.22.69])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7631D514F;
-	Fri, 28 Mar 2025 15:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D801D5CC1;
+	Fri, 28 Mar 2025 16:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743177097; cv=none; b=Zx7lbEaHFKmvA1AW+EiGsmfr4KeLQ6344VrJgYhhQhWrLmItJaYmzXAxIUoJTQhKr5QH1PzG4sTO2RiccBiLvdmRu3IOPDEnTue+qxhuiLeHnL+aMXvTA8L83dlz9MmUJGEPvkQH2HSeLLUmFsWBVpVe3/QuIJj9IsQv2bMGhJc=
+	t=1743177822; cv=none; b=LhJH7ypFzZXpl1gHFLa9nTFm88aC38ajygiOt4YCx4HCAOh8NFuUfbf8fJ9Gr0VgZ3mtaKihvaCWXybFOelVqmo05O2Oams8bFWRlMAtOihserRYSy8wFG+F1Stl++d2GT9wYTQaKYiJCsso2gtfQqzjCnaZHRmprCcfDd6GDTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743177097; c=relaxed/simple;
-	bh=ghsZaAuBTkXE9CE7Wr7rOgOKqs0KjC2f39qNSlSBiAQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hnc3jDghvW+XXq92QLS77qJuMUMU9HIIjXTS/JdsD6AWTrq2h7V/ZTkdBWQTQ2Fef5QblnrF/VtL8r1Dq2RipM51bTp1sCNC1o8PGRDJTFZE5pmQwy9wwqzNMLnWLFyVhdgbEn7kWFO2ROMSWgFX605oryNcRxAizIv35iWgs2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Ogrzb8S4; arc=none smtp.client-ip=193.252.22.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id yBzPtUQnhKYSDyBzTtreOl; Fri, 28 Mar 2025 16:51:31 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1743177091;
-	bh=Nn9U1fjytFH/G7ihiliNcL9ekzdD+EhZivT4FvgCs3w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=Ogrzb8S4UcjZv8JCj4D92t2n5Oy/9Vs5EFAzleIjttBP8ZtouGwZ4XgqxE9RHlfXj
-	 tmnqPEIv7s9jX94i80FnOeqWwevL3rhaXvSWpOYg5bCLg05uVOTUR+EfDvtcmxah8m
-	 bPi+mxixzX30NSz8qmBMTCU1R1D+Uo5GxxZljSBI0yrKmjE42+xpxb9vpetNVK8MvI
-	 q6xOl8Wptc4OpXQGlScttRxHHOpOsIszAgqyDE39l9j3sRGKnFd6PIwyGVMryoNEJR
-	 fC9NCECiAbCe3Q5o/3ZNCBMZ5ze56vs5IBki7mB5nrnGxAsB91efEpkWZDGD5VXhWf
-	 IwngluZzOlC0w==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 28 Mar 2025 16:51:31 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <98fe6fbc-60ce-42fb-9740-2c66aaa2ef8f@wanadoo.fr>
-Date: Sat, 29 Mar 2025 00:51:22 +0900
+	s=arc-20240116; t=1743177822; c=relaxed/simple;
+	bh=Zno6HutHdT8q/G02ExrzilXLEKpaM2i3/A2ubk+10vM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ikhz1x1/OnwsCjiJcbpvkT8AI4ImTOYGVaRrMaexi3DS6xcyegzpSOWX/6d93gxZBOodVXORc169tiZDAM3Fwf4VFPcaKUgCqT/96vw/FakRvhFM2CMkKHK7YpFWF+ro0q6P21gBbPj8lK0SjyK4IzUELdw/2CNeLGiNL/g2LsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4772f48f516so34149261cf.1;
+        Fri, 28 Mar 2025 09:03:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743177818; x=1743782618;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tJ3/oeNOv16kMMM9uJQHAi2WhpN4gQHJ7vNpCBo2xE8=;
+        b=eotwUUTjJNN/kEOiOdxZBaeh2SxHo7IlozgT+fK/qFOBnRfzvHsEYTQ7l/IX3jxBbc
+         0YkrawAgk88XDxtXU1y6lN8XDrKKwTJxXU+y0J36ThqYE80vaeNVL7iLMgB+s3JhFkV2
+         H+QlIyHj0AeEz+3voHMdCVPSKW+plBatmrhpBo9baVBs/hgL3q66laudo1GDuW5gXaQk
+         Dw91UJbPyLbqPmzHM+8pNT9mXrNFGoED+bIIgeFaV8RMBIU5TU2HkZZJxM7wtBLcYnMe
+         FvEIxQd7ZTmshzd4me43/Lt8z89hjB8kEQnxUeNjOd95QagWwAsmyhwx1zviaoZGR89C
+         Xl8A==
+X-Forwarded-Encrypted: i=1; AJvYcCWhBsdDQK0pzbzeS5Wgmna0m2Y9phzbgg13gP9rORKbZTb7OmzaeSedBUgVXwXQHYl6QrxIumymNGU=@vger.kernel.org, AJvYcCXBJ43G7vt+Rj4ypeIh7ZbM3Rr+zp8Oi/84CDUv4VSM5g2vPyBnMw1Z6w8kYh4GySwjvJ7gEG6KnMXH7go5cSp98tA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwA6dsoekOp6TlE3uDI9ItcfzNwnuozJDkt3hQkhta4f6rpQWGC
+	oFNp2o9ZDemFeUjnFNyEnicbKphM1gZ9489OTQPjIIA94o0ng/qprF2lLYrV
+X-Gm-Gg: ASbGncvbcaQzWFmZJl0mtcM3tBOkvYL1620JnajO8+D+PJ4hm2RtWvJE1kqZJ2Ad7ni
+	YoYzNs/aBrt4hyUbYPwdCae0xQ4+R35WBWj9iDe3Y6O9yVEH4Vanj2L+UftdFU23Cneb/7iV4T7
+	+9DdXl1R4yYAJ03eWACsLWOaqfLel9MJRgTWew73n3cBz7cViboqvFkJ8EUDmybQPwp+0CfGO1X
+	gvRIV7CCHFOuUGTgKlvweyJpHwqwzn84DUPKtB141qxCdtK3SWocm2bhWFd9qQhCg5YDllXg74s
+	I0fyekVTJzSN1Ds0jWbcEGS9gD8Vp7mpPwtuBO9+0O4jopRi7HlHSb+9BR4c4m55HBUpoYYlv9e
+	RXL0goEckUxc=
+X-Google-Smtp-Source: AGHT+IHGjH4fa+8Y3DyppfbqBISmrWbjfaIaSog+jUcqueJeQDJaTkrk4nDP1ypNA7aZausBSMxAgA==
+X-Received: by 2002:ac8:7d86:0:b0:477:6e32:aae2 with SMTP id d75a77b69052e-477a15a4402mr1065341cf.0.1743177817884;
+        Fri, 28 Mar 2025 09:03:37 -0700 (PDT)
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com. [209.85.222.172])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4778317b877sm12331521cf.58.2025.03.28.09.03.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Mar 2025 09:03:37 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7c592764e24so249878085a.0;
+        Fri, 28 Mar 2025 09:03:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVSbodfrmvhcwmvIBD0HTwrLIGVdTaWE+JVTUuNg+9h7Smh0ufyu/rr8j1IEi0/e3u18hbcGEp+LYRc0E0l5qaZRfU=@vger.kernel.org, AJvYcCWVn3qgFD5jGi1J4kEJPP83aZDHyk9Zmw9jyXH5vSVvuViyzVcOxdPxGvCiD3hjSPMw3t0T1SwXc2Q=@vger.kernel.org
+X-Received: by 2002:a05:620a:2625:b0:7c0:a9ee:e6c1 with SMTP id
+ af79cd13be357-7c5f9b83841mr471702585a.7.1743177816971; Fri, 28 Mar 2025
+ 09:03:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
+ <20250326122003.122976-8-biju.das.jz@bp.renesas.com> <3bf3ec05-d900-494a-954e-633828b4c984@wanadoo.fr>
+ <TY3PR01MB113461BFAD846313BD0584A8A86A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY3PR01MB113461BFAD846313BD0584A8A86A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 28 Mar 2025 17:03:25 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW7qTBVuHCxVfpOom-dEkROYfPG_neUiY7iUq=HAgAjFA@mail.gmail.com>
+X-Gm-Features: AQ5f1JrN7YcmCj0YrWw24W7lAhVMo-mpJYNgnCd8Qr3Ss1favnyARhevriU6iDc
+Message-ID: <CAMuHMdW7qTBVuHCxVfpOom-dEkROYfPG_neUiY7iUq=HAgAjFA@mail.gmail.com>
 Subject: Re: [PATCH v7 07/18] can: rcar_canfd: Add rnc_stride variable to
  struct rcar_canfd_hw_info
 To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
- Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- "biju.das.au" <biju.das.au@gmail.com>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- Marc Kleine-Budde <mkl@pengutronix.de>
-References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
- <20250326122003.122976-8-biju.das.jz@bp.renesas.com>
- <3bf3ec05-d900-494a-954e-633828b4c984@wanadoo.fr>
- <TY3PR01MB113461BFAD846313BD0584A8A86A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <TY3PR01MB113461BFAD846313BD0584A8A86A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	"biju.das.au" <biju.das.au@gmail.com>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 
-On 29/03/2025 at 00:39, Biju Das wrote:
-> Hi Vincent,
-> 
-> Thanks for the feedback.
-> 
->> -----Original Message-----
->> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->> Sent: 28 March 2025 10:37
->> Subject: Re: [PATCH v7 07/18] can: rcar_canfd: Add rnc_stride variable to struct rcar_canfd_hw_info
->>
->> On 26/03/2025 at 21:19, Biju Das wrote:
->>> R-Car Gen4 packs 2 RNC values in a 32-bit word, whereas R-Car Gen3
->>> packs up to 4 values in a 32-bit word. Handle this difference by
->>> adding rnc_stride variable to struct rcar_canfd_hw_info and update the
->>> macro RCANFD_GAFLCFG.
->>>
->>> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->>> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
->>> ---
->>> v6->v7:
->>>  * Collected tag.
->>> v5->v6:
->>>  * Replaced RCANFD_RNC_PER_REG macro with rnc_stride variable.
->>>  * Updated commit description
->>>  * Dropped Rb tag.
->>> v5:
->>>  * New patch.
->>> ---
->>>  drivers/net/can/rcar/rcar_canfd.c | 8 ++++++--
->>>  1 file changed, 6 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/net/can/rcar/rcar_canfd.c
->>> b/drivers/net/can/rcar/rcar_canfd.c
->>> index 32d700962d69..0001c8043c25 100644
->>> --- a/drivers/net/can/rcar/rcar_canfd.c
->>> +++ b/drivers/net/can/rcar/rcar_canfd.c
->>> @@ -291,7 +291,7 @@
->>>  /* RSCFDnCFDGAFLECTR / RSCFDnGAFLECTR */
->>>  #define RCANFD_GAFLECTR			(0x0098)
->>>  /* RSCFDnCFDGAFLCFG / RSCFDnGAFLCFG */
->>> -#define RCANFD_GAFLCFG(ch)		(0x009c + (0x04 * ((ch) / 2)))
->>> +#define RCANFD_GAFLCFG(gpriv, ch)	(0x009c + (0x04 * ((ch) / (gpriv)->info->rnc_stride)))
->>
->> I find it rather hard to follow the logic here. Your are multiplying by four and then dividing again
->> to get the good results. Here, I guess that
->> 0x04 represents sizeof(u32), but this needs some thinking to figure that out.
->>
->> Wouldn't it be more intuitive to instead store the size in bytes of the RNC value?
->>
->> #define RCANFD_GAFLCFG(gpriv, ch) \
->> 	(0x009c + (gpriv)->info->sizeof_rnc * (ch))
->>
->> This way, no more 0x04 magic number and it is easier to process a multiplication than a division in
->> your head when reading the code.
-> 
-> Now the macro simplified as after introducing setrnc() [1]
-> #define RCANFD_GAFLCFG(w)		(0x009c + (0x04 * (w)))
-> 
-> Where "w" is the index mentioned in the hardware manual.
-> 
->>
->>>  /* RSCFDnCFDRMNB / RSCFDnRMNB */
->>>  #define RCANFD_RMNB			(0x00a4)
->>>  /* RSCFDnCFDRMND / RSCFDnRMND */
->>> @@ -505,6 +505,7 @@ struct rcar_canfd_global;
->>>
->>>  struct rcar_canfd_hw_info {
->>>  	u16 num_supported_rules;
->>> +	u8 rnc_stride;
->>>  	u8 max_channels;
->>>  	u8 postdiv;
->>>  	/* hardware features */
->>> @@ -582,6 +583,7 @@ static const struct can_bittiming_const
->>> rcar_canfd_bittiming_const = {
->>>
->>>  static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
->>>  	.num_supported_rules = 256,
->>> +	.rnc_stride = 4,
->>>  	.max_channels = 2,
->>>  	.postdiv = 2,
->>>  	.shared_global_irqs = 1,
->>> @@ -589,6 +591,7 @@ static const struct rcar_canfd_hw_info
->>> rcar_gen3_hw_info = {
->>>
->>>  static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
->>>  	.num_supported_rules = 512,
->>> +	.rnc_stride = 2,
->>>  	.max_channels = 8,
->>>  	.postdiv = 2,
->>>  	.shared_global_irqs = 1,
->>> @@ -596,6 +599,7 @@ static const struct rcar_canfd_hw_info
->>> rcar_gen4_hw_info = {
->>>
->>>  static const struct rcar_canfd_hw_info rzg2l_hw_info = {
->>>  	.num_supported_rules = 256,
->>> +	.rnc_stride = 4,
->>>  	.max_channels = 2,
->>>  	.postdiv = 1,
->>>  	.multi_channel_irqs = 1,
->>> @@ -797,7 +801,7 @@ static void rcar_canfd_configure_afl_rules(struct rcar_canfd_global *gpriv,
->>>  			    RCANFD_GAFLECTR_AFLDAE));
->>>
->>>  	/* Write number of rules for channel */
->>> -	rcar_canfd_set_bit(gpriv->base, RCANFD_GAFLCFG(ch),
->>> +	rcar_canfd_set_bit(gpriv->base, RCANFD_GAFLCFG(gpriv, ch),
->>>  			   RCANFD_GAFLCFG_SETRNC(gpriv, ch, num_rules));
-> 
+Hi Biju,
+
+On Fri, 28 Mar 2025 at 16:39, Biju Das <biju.das.jz@bp.renesas.com> wrote:
 > By introducing setrnc(), this patch is no more needed as
 > rnc_stride is local variable inside strnc(). So I would like to drop this
 > patch in next version.
-> 
+>
 > [1]
 > static void rcar_canfd_setrnc(struct rcar_canfd_global *gpriv, u32 ch,
-> 			      int num_rules)
+>                               int num_rules)
 > {
-> 	u32 shift, rnc, offset, w, rnc_stride;
-> 
-> 	rnc_stride = 32 / gpriv->info->rnc_field_width;
-> 	shift = 32 - ((ch % rnc_stride + 1) * gpriv->info->rnc_field_width);
-> 	rnc = (num_rules & (gpriv->info->num_supported_rules - 1)) << shift;
-> 	w = ch / rnc_stride;
-> 	offset = RCANFD_GAFLCFG(w);
-> 	rcar_canfd_set_bit(gpriv->base, offset, rnc);
+>         u32 shift, rnc, offset, w, rnc_stride;
+>
+>         rnc_stride = 32 / gpriv->info->rnc_field_width;
+>         shift = 32 - ((ch % rnc_stride + 1) * gpriv->info->rnc_field_width);
+>         rnc = (num_rules & (gpriv->info->num_supported_rules - 1)) << shift;
+>         w = ch / rnc_stride;
+>         offset = RCANFD_GAFLCFG(w);
+>         rcar_canfd_set_bit(gpriv->base, offset, rnc);
 > }
 
-Yes, yes, yes!
+Nice!
 
-See, that's way better that the previous macros!
+Please combine variable declaration and assignment.
+While at it, perhaps "unsigned int ch" and "unsigned int num_rules"?
+Actually about everything above should be unsigned int, except rnc.
 
-No more parenthesis madness, the intermediate variables get a proper
-name, you do not need so separately store the rnc_field_width and the
-rnc_stride. All good.
+I know this existed before, but do we need
 
-Sorry for the poor feedback earlier on, but I am glad that I insisted
-now that I see the nice improvement.
+    num_rules & (gpriv->info->num_supported_rules - 1)
 
+? That "&" only works as long as num_supported_rules is a power of two,
+and I think num_rules can never be larger than num_supported_rules anyway.
 
-Yours sincerely,
-Vincent Mailhol
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
