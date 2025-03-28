@@ -1,148 +1,183 @@
-Return-Path: <linux-can+bounces-3259-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3260-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A022A74818
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 11:22:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95643A7486A
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 11:37:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F795167BF3
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 10:22:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BC2A17893A
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 10:37:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E1BB214200;
-	Fri, 28 Mar 2025 10:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DA0F4A35;
+	Fri, 28 Mar 2025 10:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="HPoVGni6"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-73.smtpout.orange.fr [193.252.22.73])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C671D7E21
-	for <linux-can@vger.kernel.org>; Fri, 28 Mar 2025 10:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169021ACECB;
+	Fri, 28 Mar 2025 10:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743157318; cv=none; b=YPGuzMbzGoA5qn6T4VFZkuE/mXyU0UPC9CCnzTdZ1AOL3LTZTdp8qAshOtE0vbZ2m3U7qeoFpbFJJVkRRP9Y3xVVyqNThKCtzHEGgWQfnpB+i82tSwa4MKBrWAX65ZzZ07VxgiBJAamoL/hS9EjRW6KZpi4R9g6JoQ4FSL9uIgo=
+	t=1743158218; cv=none; b=FXcYC+3BarJ3hXJ2fWkQ8MvcW3qfLgZ79Xp7vP16BGm1IzBZheCXL11l2QdYTySwLCk7Fcz4ZxDEUXoiqpvif+7xUV0vyJDCeF5g/sWI1SaORx9PTBgBJqt0UzcPLcQuBcwZHUB4aB7DF6XaY82nSAiwuZNkwfVcCN7Z4ejQUHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743157318; c=relaxed/simple;
-	bh=5E8xTt5NsbrIl3C6fpfWzGI8WCrHNrHt7zTd+gWSxKU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z2gZLlw//2DUo4mD9JjhRYT3RRmcFHBXgNiGrlVUaaQ4yuA22AelwoWSJwPqdRDUjhhx9AC9rpzKAZcX7mBkjnsVXsb1uq3K6X6E3A172lyu09wuy237e+TXOY2A+w/xnvlGLwzu6DKave/0PawsTcVLA81TobsOmZlRvHnpPeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ty6qS-0006vx-FW; Fri, 28 Mar 2025 11:21:48 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ty6qS-0025Ac-0b;
-	Fri, 28 Mar 2025 11:21:48 +0100
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id DD1363E8789;
-	Fri, 28 Mar 2025 10:21:47 +0000 (UTC)
-Date: Fri, 28 Mar 2025 11:21:47 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	"biju.das.au" <biju.das.au@gmail.com>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v7 05/18] can: rcar_canfd: Drop RCANFD_GERFL_EEF* macros
- in RCANFD_GERFL_ERR
-Message-ID: <20250328-clay-grouse-of-calibration-a165b3-mkl@pengutronix.de>
-References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
- <20250326122003.122976-6-biju.das.jz@bp.renesas.com>
- <40392a70-3be4-4d11-8614-eebd5d9d24a8@wanadoo.fr>
- <TY3PR01MB11346C091544B49A6C160712E86A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <deffdc35-86cf-4282-ba6d-f36890bf9fcd@wanadoo.fr>
- <TY3PR01MB11346DA97D5F685D96A638DB086A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <CAMuHMdUacYqUd_iPk95C3+bc64SeMbDj1=zdfLvuMHFbTRS39w@mail.gmail.com>
+	s=arc-20240116; t=1743158218; c=relaxed/simple;
+	bh=RKwGm0t3NLBLtILhOZHTaiiMzbzLEFX8lNXYb61WNiE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bQn4GIksEyf7Abi/oUSsgWLIKbUhKX6aLeB+f1xSPn98p58WQgQxQfuGgFFBUPwM8lkaMZjMY29/m5ffXXzuARKURIYCPmvLWEGOkIN9gjHDLgwT3FSakkLPAcJGHlKIt2ezM8DrEXunpK243Zu1WDf3rgOvZDRX9dY4IPx8Iw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=HPoVGni6; arc=none smtp.client-ip=193.252.22.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id y74ttxUWgDCLUy74ytqsoU; Fri, 28 Mar 2025 11:36:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1743158212;
+	bh=TSWyVYmDyHgXemt9QL1W8qoxyHsQnAOHADO1xlW62O0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=HPoVGni6j9d89W5HEee/I7d/jF3w1TuicoLHiDtb7j0kSPWmMEK28nairm9kYYaOT
+	 u+mVrtvI0vUylVjeL7995NcWI7HEubs714UAopGZjv11bkHyM+zVXHmQvqa4M7mptV
+	 BrMeAd2NHd2aMZE7dEB2DA0dXq+rcyZ4gwAtYqRSYGPPkexxTrbprYqcK7ga0sWRiy
+	 LEdfNNJbyOw++C52iGC5C9CH+f0Cirk+a6v4GP2G/9v/8V6MGPrcT2T/8TcWo60GmA
+	 fzx4UvU2cIEe3gyo+NHTs4AdCn+0mHFrxhnrgWCsG0SgxTJmIkiUAqKrFrPNzdFdXb
+	 CDsvkcZZdi9eQ==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 28 Mar 2025 11:36:52 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <3bf3ec05-d900-494a-954e-633828b4c984@wanadoo.fr>
+Date: Fri, 28 Mar 2025 19:36:42 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dlfiiapzcmofp6mq"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUacYqUd_iPk95C3+bc64SeMbDj1=zdfLvuMHFbTRS39w@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 07/18] can: rcar_canfd: Add rnc_stride variable to
+ struct rcar_canfd_hw_info
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ linux-can@vger.kernel.org,
+ Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org,
+ Marc Kleine-Budde <mkl@pengutronix.de>
+References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
+ <20250326122003.122976-8-biju.das.jz@bp.renesas.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250326122003.122976-8-biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+On 26/03/2025 at 21:19, Biju Das wrote:
+> R-Car Gen4 packs 2 RNC values in a 32-bit word, whereas R-Car Gen3 packs
+> up to 4 values in a 32-bit word. Handle this difference by adding
+> rnc_stride variable to struct rcar_canfd_hw_info and update the macro
+> RCANFD_GAFLCFG.
+> 
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v6->v7:
+>  * Collected tag.
+> v5->v6:
+>  * Replaced RCANFD_RNC_PER_REG macro with rnc_stride variable.
+>  * Updated commit description
+>  * Dropped Rb tag.
+> v5:
+>  * New patch.
+> ---
+>  drivers/net/can/rcar/rcar_canfd.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+> index 32d700962d69..0001c8043c25 100644
+> --- a/drivers/net/can/rcar/rcar_canfd.c
+> +++ b/drivers/net/can/rcar/rcar_canfd.c
+> @@ -291,7 +291,7 @@
+>  /* RSCFDnCFDGAFLECTR / RSCFDnGAFLECTR */
+>  #define RCANFD_GAFLECTR			(0x0098)
+>  /* RSCFDnCFDGAFLCFG / RSCFDnGAFLCFG */
+> -#define RCANFD_GAFLCFG(ch)		(0x009c + (0x04 * ((ch) / 2)))
+> +#define RCANFD_GAFLCFG(gpriv, ch)	(0x009c + (0x04 * ((ch) / (gpriv)->info->rnc_stride)))
+
+I find it rather hard to follow the logic here. Your are multiplying by
+four and then dividing again to get the good results. Here, I guess that
+0x04 represents sizeof(u32), but this needs some thinking to figure that
+out.
+
+Wouldn't it be more intuitive to instead store the size in bytes of the
+RNC value?
+
+#define RCANFD_GAFLCFG(gpriv, ch) \
+	(0x009c + (gpriv)->info->sizeof_rnc * (ch))
+
+This way, no more 0x04 magic number and it is easier to process a
+multiplication than a division in your head when reading the code.
+
+>  /* RSCFDnCFDRMNB / RSCFDnRMNB */
+>  #define RCANFD_RMNB			(0x00a4)
+>  /* RSCFDnCFDRMND / RSCFDnRMND */
+> @@ -505,6 +505,7 @@ struct rcar_canfd_global;
+>  
+>  struct rcar_canfd_hw_info {
+>  	u16 num_supported_rules;
+> +	u8 rnc_stride;
+>  	u8 max_channels;
+>  	u8 postdiv;
+>  	/* hardware features */
+> @@ -582,6 +583,7 @@ static const struct can_bittiming_const rcar_canfd_bittiming_const = {
+>  
+>  static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
+>  	.num_supported_rules = 256,
+> +	.rnc_stride = 4,
+>  	.max_channels = 2,
+>  	.postdiv = 2,
+>  	.shared_global_irqs = 1,
+> @@ -589,6 +591,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
+>  
+>  static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
+>  	.num_supported_rules = 512,
+> +	.rnc_stride = 2,
+>  	.max_channels = 8,
+>  	.postdiv = 2,
+>  	.shared_global_irqs = 1,
+> @@ -596,6 +599,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
+>  
+>  static const struct rcar_canfd_hw_info rzg2l_hw_info = {
+>  	.num_supported_rules = 256,
+> +	.rnc_stride = 4,
+>  	.max_channels = 2,
+>  	.postdiv = 1,
+>  	.multi_channel_irqs = 1,
+> @@ -797,7 +801,7 @@ static void rcar_canfd_configure_afl_rules(struct rcar_canfd_global *gpriv,
+>  			    RCANFD_GAFLECTR_AFLDAE));
+>  
+>  	/* Write number of rules for channel */
+> -	rcar_canfd_set_bit(gpriv->base, RCANFD_GAFLCFG(ch),
+> +	rcar_canfd_set_bit(gpriv->base, RCANFD_GAFLCFG(gpriv, ch),
+>  			   RCANFD_GAFLCFG_SETRNC(gpriv, ch, num_rules));
+>  	if (is_gen4(gpriv))
+>  		offset = RCANFD_GEN4_GAFL_OFFSET;
 
 
---dlfiiapzcmofp6mq
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v7 05/18] can: rcar_canfd: Drop RCANFD_GERFL_EEF* macros
- in RCANFD_GERFL_ERR
-MIME-Version: 1.0
+Yours sincerely,
+Vincent Mailhol
 
-On 28.03.2025 11:10:23, Geert Uytterhoeven wrote:
-> > Gen4 has 8 channels (GENMASK(16, 23)
-> > G3E has 6 channels  (GENMASK(16, 21)
-> > V4M has 4 channels  (GENMASK(16, 19)
-> > V3H_2 has 3 channels (GENMASK(16,18)
-> > All other SoCs has 2 channels (GENMASK(16,17)
-> >
-> > So you mean, I should replace RCANFD_GERFL_EEF0_7 with a
-> >
-> > Generic one RCANFD_GERFL_EEF(x) GENMASK(16, 16 + (x) - 1) to handle
-> > this differences
-> >
-> > Where x is the number of supported channels(info->max_channels)
-> >
-> > and then use
-> >
-> > FIELD_PREP(RCANFD_GERFL_EEF(x), gpriv->channels_mask)
->=20
-> Just use
->=20
->     #define RCANFD_GERFL_EEF    GENMASK(23, 16)
->=20
-> and
->=20
->     FIELD_PREP(RCANFD_GERFL_EEF, gpriv->channels_mask)
->=20
-> As channels_mask can never have bits set for non-existing channels,
-> all reserved bits above EEF in the GERFL register will be zero.
-
-That's even better than computing the mask at runtime!
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---dlfiiapzcmofp6mq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfmeDkACgkQDHRl3/mQ
-kZz1Lgf9HmdNOQRJmAL3Os5ybONV+vLNI9hYg4vGMjZidOLTQFDLJBH4zrj8VMuG
-KvtP2n7jja4xUSeFIasmxBKvtV85P1hQ9BiTnmwJp6/y1UNjXXQdn+Z3zva1ioGU
-CNfqaoLsAQFzuNc4QmpZT3bbzjxvoFjD40VmH0xOp1RTguPJMpRakaoWddzDfiZd
-tZAjfTJV7fFcSnDQkdGEDCqP1+/ySuBDj3/094B5bAkrshFzo7qo3WTP/uiee+wY
-U/n7XisMz2Fskos1z08WWZIRReE4CTnUzat751PxmBShBkF/hU6jrv0ESXIwj4ph
-nIrWFHcgNKHBaF5x0zHaW1wPkMbxNw==
-=coSN
------END PGP SIGNATURE-----
-
---dlfiiapzcmofp6mq--
 
