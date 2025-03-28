@@ -1,55 +1,55 @@
-Return-Path: <linux-can+bounces-3280-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3281-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F5ABA74C54
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 15:20:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 914BEA74DAA
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 16:26:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA4D31887F95
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 14:19:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 461C23B4C05
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 15:25:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABF781C5D79;
-	Fri, 28 Mar 2025 14:19:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796CF4204E;
+	Fri, 28 Mar 2025 15:26:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="nOvP62wm"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="MzLT7JqW"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-69.smtpout.orange.fr [193.252.22.69])
+Received: from out.smtpout.orange.fr (out-74.smtpout.orange.fr [193.252.22.74])
 	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653001BDAA0;
-	Fri, 28 Mar 2025 14:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E0F23CB;
+	Fri, 28 Mar 2025 15:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743171556; cv=none; b=XjT1btxj+BfvLfBpz2mbKzBCft4ZHVl/c6Lzl04JrMuZtyM9FzINEq4kDpJeNsDwAOddf73kTURyhfrwjPKfKE9F2I+Q899yG3NYyRZgSg2k8+OLjAlftEEI5TtNRy/din6cQ8D4AneFw/FBFvD9ll2SqoEy50ESjDXAjt2kALE=
+	t=1743175563; cv=none; b=dABgBCqGiyQPMEfJeuiKldb0udd1ffMmYa2eKEDagIEqnjXdc3n7g/J8lHPBq1JoGpBdfZQKXyJiAPRAWS2/vBa3mpQW7azalJ8FMDG6IEKAxDgQeWaXmaCLpdUoDxBWW7OLWMwR/HF5adbRIrKZlVa00BE6BEHzRTXQuj6h7EA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743171556; c=relaxed/simple;
-	bh=/2gzlGTMeTcyXlWYxj938SoC8uBgbmqPjay4fmGgQhQ=;
+	s=arc-20240116; t=1743175563; c=relaxed/simple;
+	bh=NJmQq3+nuFff5yO10g6ZhH2WsaQaTa39pkH3W4jEIfA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OFd2N9tcnDn1oSEMpAIpzPl5YByAKV9jwBmxky6hPnINwuCbcCUiqg/MHkeYWx5o64fdSjziLbf8lHyhwcF/E+UTB9HUYsaaP3Yzt/s5AVsSyB0Ff6rd7vbq3TS3J4rUG/qaMKVPktaxCSA3ik/aVuLvVOS4og2Jvfps47TYDgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=nOvP62wm; arc=none smtp.client-ip=193.252.22.69
+	 In-Reply-To:Content-Type; b=nBTwVeP+RSm1hbgf/lTn6ZdginHfMSbven7zaN1KnJPoqDkPZZfQ9gmE1mifDMrFfRY/5wprD3Beo/P9UOvyM7yq4+s/hUgNpdnRBkgdla8ktF/QSYJeUHIpxSWc1cEDp0eBTuTQdGt48ZpLqm+6vwuXjRiGP85WaLgN+7Cfz0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=MzLT7JqW; arc=none smtp.client-ip=193.252.22.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from [172.16.82.72] ([124.33.176.97])
 	by smtp.orange.fr with ESMTPA
-	id yAY3teqtMVyltyAY7taaT4; Fri, 28 Mar 2025 15:19:11 +0100
+	id yBaet048JDCLUyBait7Bmi; Fri, 28 Mar 2025 16:25:56 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1743171551;
-	bh=n1NdEMzqSvi5FwHMEhzbaySmh09oT0jKAh2Z6epovok=;
+	s=t20230301; t=1743175556;
+	bh=flTBAYFCzoaspgtlvoo6CMakhNExORAANLgcY+2eurk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=nOvP62wmgLNHiIEhNhjP7QBTipJfHRgfchjmDkYcSdrun9hJvn9OQQAK3zKPDbDVf
-	 WVzCI+PxZqbxxQUta9wqqDGRUmIJ5CqXj30BmI+4q0gesDeBNoNhRc4OLz1kWzwUk0
-	 To9LxGjP+xrJfJdNQ+d1Pk76tMtv1UAKxFj6nIRxJnWJYpRRozZo5O4TGOORgAtZ7Z
-	 fMeDy4WjPxDvlDyPrhBbMpN76SUFtBIiSQrznab5wLr5GHyiSQ7oUCXOHgF/itqvHG
-	 wK9l5cs3srDvQXY8E56PHljaOVdy2Knyefpbwk8EDnJK3th0JqUGn6Z/fZg9wYdzoQ
-	 V8p0Y6bn8YElA==
+	b=MzLT7JqWQidftgqWEfQ+LSEXSHRadzKyw6SPRkyTSipMIt27W0oQVT7sc//Foi/bd
+	 tHQyCIwZVLEFnTJ4qb1YFPQuTyWsp/NQ7oC1S+oyKAyabgQ6pN2d9mXaKIrepIq944
+	 dlP7ZwBvVQ9yulDrz15A4WKyR2LIOlIacxNMEwM8GOVcZcx9wcKS+mDHoHVl0LXu5X
+	 901TKOkLFY2KafVNDN1ODuInCVdj3xu8yHZU0fxJ6ADaDFFj7bMCMWXH7ORQ9Jc4Tp
+	 /bVEoM82cozdoyNWZb0otbuQgz8/jQQUa5Ui1dw010VXFHf9ODvlp+PBbrIT8lNQZ9
+	 1LkHx/D518W4Q==
 X-ME-Helo: [172.16.82.72]
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 28 Mar 2025 15:19:11 +0100
+X-ME-Date: Fri, 28 Mar 2025 16:25:56 +0100
 X-ME-IP: 124.33.176.97
-Message-ID: <014afe2e-768a-45ad-9e43-f2fd6a003663@wanadoo.fr>
-Date: Fri, 28 Mar 2025 23:19:03 +0900
+Message-ID: <6b663ace-002c-44f9-bbdb-38af8a4e4da3@wanadoo.fr>
+Date: Sat, 29 Mar 2025 00:25:47 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -57,18 +57,18 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 14/18] can: rcar_canfd: Add register mapping table to
- struct rcar_canfd_hw_info
-To: Biju Das <biju.das.jz@bp.renesas.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [PATCH v7 15/18] can: rcar_canfd: Add shift table to struct
+ rcar_canfd_hw_info
+To: Biju Das <biju.das.jz@bp.renesas.com>
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
  Geert Uytterhoeven <geert+renesas@glider.be>,
  =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
  linux-can@vger.kernel.org,
  Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
+ Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org,
+ Marc Kleine-Budde <mkl@pengutronix.de>
 References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
- <20250326122003.122976-15-biju.das.jz@bp.renesas.com>
+ <20250326122003.122976-16-biju.das.jz@bp.renesas.com>
 Content-Language: en-US
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
@@ -81,13 +81,14 @@ Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
  yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
  CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
  ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250326122003.122976-15-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20250326122003.122976-16-biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 26/03/2025 at 21:19, Biju Das wrote:
-> R-Car Gen3 and Gen4 have some differences in the register offsets. Add a
-> mapping table to handle these differences.
+> R-Car Gen3 and Gen4 have some differences in the shift bits. Add a
+> shift table to handle these differences. After this drop the unused
+> functions reg_gen4() and is_gen4().
 > 
 > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
@@ -97,85 +98,83 @@ On 26/03/2025 at 21:19, Biju Das wrote:
 > v5->v6:
 >  * No change.
 > v4->v5:
->  * Improved commit description by replacing has->have.
 >  * Collected tag.
+>  * Dropped RCANFD_FIRST_RNC_SH and RCANFD_SECOND_RNC_SH by using a
+>    formula (32 - (n % rnc_per_reg + 1) * rnc_field_width.
 > v3->v4:
->  * Added prefix RCANFD_* to enum rcar_canfd_reg_offset_id.
+>  * Added prefix RCANFD_* to enum rcar_canfd_shift_id.
 > v3:
 >  * New patch.
 > ---
->  drivers/net/can/rcar/rcar_canfd.c | 48 ++++++++++++++++++++++++++-----
->  1 file changed, 41 insertions(+), 7 deletions(-)
+>  drivers/net/can/rcar/rcar_canfd.c | 69 ++++++++++++++++++++++---------
+>  1 file changed, 50 insertions(+), 19 deletions(-)
 > 
 > diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-> index 360999e6ab45..a96cf499f04b 100644
+> index a96cf499f04b..20e591421cc6 100644
 > --- a/drivers/net/can/rcar/rcar_canfd.c
 > +++ b/drivers/net/can/rcar/rcar_canfd.c
-> @@ -298,7 +298,7 @@
->  #define RCANFD_RMND(y)			(0x00a8 + (0x04 * (y)))
+> @@ -111,13 +111,16 @@
 >  
->  /* RSCFDnCFDRFCCx / RSCFDnRFCCx */
-> -#define RCANFD_RFCC(gpriv, x)		(reg_gen4(gpriv, 0x00c0, 0x00b8) + (0x04 * (x)))
-> +#define RCANFD_RFCC(gpriv, x)		((gpriv)->info->regs[RCANFD_RFCC] + (0x04 * (x)))
->  /* RSCFDnCFDRFSTSx / RSCFDnRFSTSx */
->  #define RCANFD_RFSTS(gpriv, x)		(RCANFD_RFCC(gpriv, x) + 0x20)
->  /* RSCFDnCFDRFPCTRx / RSCFDnRFPCTRx */
-> @@ -308,13 +308,13 @@
+>  /* RSCFDnCFDCmNCFG - CAN FD only */
+>  #define RCANFD_NCFG_NTSEG2(gpriv, x) \
+> -	(((x) & ((gpriv)->info->nom_bittiming->tseg2_max - 1)) << reg_gen4(gpriv, 25, 24))
+> +	(((x) & ((gpriv)->info->nom_bittiming->tseg2_max - 1)) << \
+> +	 (gpriv)->info->shift_table[RCANFD_NTSEG2_SH])
 >  
->  /* RSCFDnCFDCFCCx / RSCFDnCFCCx */
->  #define RCANFD_CFCC(gpriv, ch, idx) \
-> -	(reg_gen4(gpriv, 0x0120, 0x0118) + (0x0c * (ch)) + (0x04 * (idx)))
-> +	((gpriv)->info->regs[RCANFD_CFCC] + (0x0c * (ch)) + (0x04 * (idx)))
->  /* RSCFDnCFDCFSTSx / RSCFDnCFSTSx */
->  #define RCANFD_CFSTS(gpriv, ch, idx) \
-> -	(reg_gen4(gpriv, 0x01e0, 0x0178) + (0x0c * (ch)) + (0x04 * (idx)))
-> +	((gpriv)->info->regs[RCANFD_CFSTS] + (0x0c * (ch)) + (0x04 * (idx)))
->  /* RSCFDnCFDCFPCTRx / RSCFDnCFPCTRx */
->  #define RCANFD_CFPCTR(gpriv, ch, idx) \
-> -	(reg_gen4(gpriv, 0x0240, 0x01d8) + (0x0c * (ch)) + (0x04 * (idx)))
-> +	((gpriv)->info->regs[RCANFD_CFPCTR] + (0x0c * (ch)) + (0x04 * (idx)))
+>  #define RCANFD_NCFG_NTSEG1(gpriv, x) \
+> -	(((x) & ((gpriv)->info->nom_bittiming->tseg1_max - 1)) << reg_gen4(gpriv, 17, 16))
+> +	(((x) & ((gpriv)->info->nom_bittiming->tseg1_max - 1)) << \
+> +	 (gpriv)->info->shift_table[RCANFD_NTSEG1_SH])
 >  
->  /* RSCFDnCFDFESTS / RSCFDnFESTS */
->  #define RCANFD_FESTS			(0x0238)
-> @@ -430,7 +430,7 @@
->  /* CAN FD mode specific register map */
+>  #define RCANFD_NCFG_NSJW(gpriv, x) \
+> -	(((x) & ((gpriv)->info->nom_bittiming->sjw_max - 1)) << reg_gen4(gpriv, 10, 11))
+> +	(((x) & ((gpriv)->info->nom_bittiming->sjw_max - 1)) << \
+> +	 (gpriv)->info->shift_table[RCANFD_NSJW_SH])
 >  
->  /* RSCFDnCFDCmXXX -> RCANFD_F_XXX(m) */
-> -#define RCANFD_F_DCFG(gpriv, m)		(reg_gen4(gpriv, 0x1400, 0x0500) + (0x20 * (m)))
-> +#define RCANFD_F_DCFG(gpriv, m)		((gpriv)->info->regs[RCANFD_F_DCFG] + (0x20 * (m)))
->  #define RCANFD_F_CFDCFG(m)		(0x0504 + (0x20 * (m)))
->  #define RCANFD_F_CFDCTR(m)		(0x0508 + (0x20 * (m)))
->  #define RCANFD_F_CFDSTS(m)		(0x050c + (0x20 * (m)))
-> @@ -446,7 +446,7 @@
->  #define RCANFD_F_RMDF(q, b)		(0x200c + (0x04 * (b)) + (0x20 * (q)))
+>  #define RCANFD_NCFG_NBRP(x)		(((x) & 0x3ff) << 0)
 >  
->  /* RSCFDnCFDRFXXx -> RCANFD_F_RFXX(x) */
-> -#define RCANFD_F_RFOFFSET(gpriv)	reg_gen4(gpriv, 0x6000, 0x3000)
-> +#define RCANFD_F_RFOFFSET(gpriv)	((gpriv)->info->regs[RCANFD_RFOFFSET])
->  #define RCANFD_F_RFID(gpriv, x)		(RCANFD_F_RFOFFSET(gpriv) + (0x80 * (x)))
->  #define RCANFD_F_RFPTR(gpriv, x)	(RCANFD_F_RFOFFSET(gpriv) + 0x04 + (0x80 * (x)))
->  #define RCANFD_F_RFFDSTS(gpriv, x)	(RCANFD_F_RFOFFSET(gpriv) + 0x08 + (0x80 * (x)))
-> @@ -454,7 +454,7 @@
->  	(RCANFD_F_RFOFFSET(gpriv) + 0x0c + (0x80 * (x)) + (0x04 * (df)))
+> @@ -182,10 +185,12 @@
+>  #define RCANFD_DCFG_DSJW(gpriv, x)	(((x) & ((gpriv)->info->data_bittiming->sjw_max - 1)) << 24)
 >  
->  /* RSCFDnCFDCFXXk -> RCANFD_F_CFXX(ch, k) */
-> -#define RCANFD_F_CFOFFSET(gpriv)	reg_gen4(gpriv, 0x6400, 0x3400)
-> +#define RCANFD_F_CFOFFSET(gpriv)	((gpriv)->info->regs[RCANFD_CFOFFSET])
+>  #define RCANFD_DCFG_DTSEG2(gpriv, x) \
+> -	(((x) & ((gpriv)->info->data_bittiming->tseg2_max - 1)) << reg_gen4(gpriv, 16, 20))
+> +	(((x) & ((gpriv)->info->data_bittiming->tseg2_max - 1)) << \
+> +	 (gpriv)->info->shift_table[RCANFD_DTSEG2_SH])
 >  
->  #define RCANFD_F_CFID(gpriv, ch, idx) \
->  	(RCANFD_F_CFOFFSET(gpriv) + (0x180 * (ch)) + (0x80 * (idx)))
-> @@ -501,11 +501,22 @@
->   */
->  #define RCANFD_CFFIFO_IDX		0
+>  #define RCANFD_DCFG_DTSEG1(gpriv, x) \
+> -	(((x) & ((gpriv)->info->data_bittiming->tseg1_max - 1)) << reg_gen4(gpriv, 8, 16))
+> +	(((x) & ((gpriv)->info->data_bittiming->tseg1_max - 1)) << \
+> +	 (gpriv)->info->shift_table[RCANFD_DTSEG1_SH])
 >  
-> +enum rcar_canfd_reg_offset_id {
-> +	RCANFD_RFCC,		/* RX FIFO Configuration/Control Register */
-> +	RCANFD_CFCC,		/* Common FIFO Configuration/Control Register */
-> +	RCANFD_CFSTS,		/* Common FIFO Status Register */
-> +	RCANFD_CFPCTR,		/* Common FIFO Pointer Control Register */
-> +	RCANFD_F_DCFG,		/* Global FD Configuration Register */
-> +	RCANFD_RFOFFSET,	/* Receive FIFO buffer access ID register */
-> +	RCANFD_CFOFFSET,	/* Transmit/receive FIFO buffer access ID register */
+>  #define RCANFD_DCFG_DBRP(x)		(((x) & 0xff) << 0)
+>  
+> @@ -227,10 +232,10 @@
+>  
+>  /* RSCFDnCFDCFCCk */
+>  #define RCANFD_CFCC_CFTML(gpriv, x)	\
+> -	(((x) & (gpriv)->info->max_cftml) << reg_gen4(gpriv, 16, 20))
+> -#define RCANFD_CFCC_CFM(gpriv, x)	(((x) & 0x3) << reg_gen4(gpriv,  8, 16))
+> +	(((x) & (gpriv)->info->max_cftml) << (gpriv)->info->shift_table[RCANFD_CFTML_SH])
+> +#define RCANFD_CFCC_CFM(gpriv, x)	(((x) & 0x3) << (gpriv)->info->shift_table[RCANFD_CFM_SH])
+>  #define RCANFD_CFCC_CFIM		BIT(12)
+> -#define RCANFD_CFCC_CFDC(gpriv, x)	(((x) & 0x7) << reg_gen4(gpriv, 21,  8))
+> +#define RCANFD_CFCC_CFDC(gpriv, x)	(((x) & 0x7) << (gpriv)->info->shift_table[RCANFD_CFDC_SH])
+>  #define RCANFD_CFCC_CFPLS(x)		(((x) & 0x7) << 4)
+>  #define RCANFD_CFCC_CFTXIE		BIT(2)
+>  #define RCANFD_CFCC_CFE			BIT(0)
+> @@ -511,12 +516,24 @@ enum rcar_canfd_reg_offset_id {
+>  	RCANFD_CFOFFSET,	/* Transmit/receive FIFO buffer access ID register */
+>  };
+>  
+> +enum rcar_canfd_shift_id {
+> +	RCANFD_NTSEG2_SH,	/* Nominal Bit Rate Time Segment 2 Control */
+> +	RCANFD_NTSEG1_SH,	/* Nominal Bit Rate Time Segment 1 Control */
+> +	RCANFD_NSJW_SH,		/* Nominal Bit Rate Resynchronization Jump Width Control */
+> +	RCANFD_DTSEG2_SH,	/* Data Bit Rate Time Segment 2 Control */
+> +	RCANFD_DTSEG1_SH,	/* Data Bit Rate Time Segment 1 Control */
+> +	RCANFD_CFTML_SH,	/* Common FIFO TX Message Buffer Link */
+> +	RCANFD_CFM_SH,		/* Common FIFO Mode */
+> +	RCANFD_CFDC_SH,		/* Common FIFO Depth Configuration */
 > +};
 > +
 >  struct rcar_canfd_global;
@@ -183,74 +182,82 @@ On 26/03/2025 at 21:19, Biju Das wrote:
 >  struct rcar_canfd_hw_info {
 >  	const struct can_bittiming_const *nom_bittiming;
 >  	const struct can_bittiming_const *data_bittiming;
-> +	const u16 *regs;
+>  	const u16 *regs;
+> +	const u8 *shift_table;
 >  	u16 num_supported_rules;
 >  	u8 rnc_stride;
 >  	u8 rnc_field_width;
-> @@ -612,9 +623,30 @@ static const struct can_bittiming_const rcar_canfd_bittiming_const = {
->  	.brp_inc = 1,
+> @@ -643,10 +660,33 @@ static const u16 rcar_gen4_regs[] = {
+>  	[RCANFD_CFOFFSET] = 0x6400,
 >  };
 >  
-> +static const u16 rcar_gen3_regs[] = {
-> +	[RCANFD_RFCC] = 0x00b8,
-> +	[RCANFD_CFCC] = 0x0118,
-> +	[RCANFD_CFSTS] = 0x0178,
-> +	[RCANFD_CFPCTR] = 0x01d8,
-> +	[RCANFD_F_DCFG] = 0x0500,
-> +	[RCANFD_RFOFFSET] = 0x3000,
-> +	[RCANFD_CFOFFSET] = 0x3400,
+> +static const u8 rcar_gen3_shift_table[] = {
+> +	[RCANFD_NTSEG2_SH] = 24,
+> +	[RCANFD_NTSEG1_SH] = 16,
+> +	[RCANFD_NSJW_SH] = 11,
+> +	[RCANFD_DTSEG2_SH] = 20,
+> +	[RCANFD_DTSEG1_SH] = 16,
+> +	[RCANFD_CFTML_SH] = 20,
+> +	[RCANFD_CFM_SH] = 16,
+> +	[RCANFD_CFDC_SH] = 8,
 > +};
 > +
-> +static const u16 rcar_gen4_regs[] = {
-> +	[RCANFD_RFCC] = 0x00c0,
-> +	[RCANFD_CFCC] = 0x0120,
-> +	[RCANFD_CFSTS] = 0x01e0,
-> +	[RCANFD_CFPCTR] = 0x0240,
-> +	[RCANFD_F_DCFG] = 0x1400,
-> +	[RCANFD_RFOFFSET] = 0x6000,
-> +	[RCANFD_CFOFFSET] = 0x6400,
+> +static const u8 rcar_gen4_shift_table[] = {
+> +	[RCANFD_NTSEG2_SH] = 25,
+> +	[RCANFD_NTSEG1_SH] = 17,
+> +	[RCANFD_NSJW_SH] = 10,
+> +	[RCANFD_DTSEG2_SH] = 16,
+> +	[RCANFD_DTSEG1_SH] = 8,
+> +	[RCANFD_CFTML_SH] = 16,
+> +	[RCANFD_CFM_SH] = 8,
+> +	[RCANFD_CFDC_SH] = 21,
 > +};
 
-The mapping is convinient when you want to iterate throught it. Here, if
-you just want to access the offset value from its name, a structure
-looks more appropriate. This way:
-
-  gpriv->info->regs[RCANFD_RFOFFSET]
-
-becomes:
-
-  gpriv->info->rfoffset
-
-and so on.
-
-Internally, it is the same layout, but no need for the enum anymore.
-
-Note that you can either inline those values in struct
-rcar_canfd_hw_info or have a separate struct rcar_regs, as you prefer!
+Exact same comment as previous patch. A structure looks more appropriate
+than an array here.
 
 >  static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
 >  	.nom_bittiming = &rcar_canfd_gen3_nom_bittiming_const,
 >  	.data_bittiming = &rcar_canfd_gen3_data_bittiming_const,
-> +	.regs = rcar_gen3_regs,
+>  	.regs = rcar_gen3_regs,
+> +	.shift_table = rcar_gen3_shift_table,
 >  	.num_supported_rules = 256,
 >  	.rnc_stride = 4,
 >  	.rnc_field_width = 8,
-> @@ -628,6 +660,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
->  static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
+> @@ -661,6 +701,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
 >  	.nom_bittiming = &rcar_canfd_gen4_nom_bittiming_const,
 >  	.data_bittiming = &rcar_canfd_gen4_data_bittiming_const,
-> +	.regs = rcar_gen4_regs,
+>  	.regs = rcar_gen4_regs,
+> +	.shift_table = rcar_gen4_shift_table,
 >  	.num_supported_rules = 512,
 >  	.rnc_stride = 2,
 >  	.rnc_field_width = 16,
-> @@ -643,6 +676,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
->  static const struct rcar_canfd_hw_info rzg2l_hw_info = {
+> @@ -677,6 +718,7 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
 >  	.nom_bittiming = &rcar_canfd_gen3_nom_bittiming_const,
 >  	.data_bittiming = &rcar_canfd_gen3_data_bittiming_const,
-> +	.regs = rcar_gen3_regs,
+>  	.regs = rcar_gen3_regs,
+> +	.shift_table = rcar_gen3_shift_table,
 >  	.num_supported_rules = 256,
 >  	.rnc_stride = 4,
 >  	.rnc_field_width = 8,
+> @@ -688,17 +730,6 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
+>  };
+>  
+>  /* Helper functions */
+> -static inline bool is_gen4(struct rcar_canfd_global *gpriv)
+> -{
+> -	return gpriv->info == &rcar_gen4_hw_info;
+> -}
+> -
+> -static inline u32 reg_gen4(struct rcar_canfd_global *gpriv,
+> -			   u32 gen4, u32 not_gen4)
+> -{
+> -	return is_gen4(gpriv) ? gen4 : not_gen4;
+> -}
+> -
+>  static inline void rcar_canfd_update(u32 mask, u32 val, u32 __iomem *reg)
+>  {
+>  	u32 data = readl(reg);
 
 Yours sincerely,
 Vincent Mailhol
