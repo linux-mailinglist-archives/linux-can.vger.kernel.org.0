@@ -1,217 +1,157 @@
-Return-Path: <linux-can+bounces-3263-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3264-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D34AA74891
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 11:43:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC870A748A2
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 11:46:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4D6617C0B7
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 10:43:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8F967A85A4
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 10:45:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B423521322B;
-	Fri, 28 Mar 2025 10:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="B/3HxoVj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A0D1A5BAE;
+	Fri, 28 Mar 2025 10:46:08 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-68.smtpout.orange.fr [193.252.22.68])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF922135BB;
-	Fri, 28 Mar 2025 10:43:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85BE6FBF;
+	Fri, 28 Mar 2025 10:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743158603; cv=none; b=AmAa34SS/vxBV9WJF/KA20/VfSq2Ow8tLIDCxbCHt0oDmvDrw+n3NBtRgDu0jmIukY/uLKaEsfX19jqmxMWX2Yj/CLiKowJ8thqMmHX5HVMcyZ2dsYhDQOmuZYrdncHOsHOeS5mEUcfCJAvcdW+ysrUHppseFGpo+V3/Y+skg7c=
+	t=1743158768; cv=none; b=HcVC7tIKcv60gvbbuRsokwFKooVDGkN30ekLO4kdw7Dj7ID/TCki536R8cGFmP81Q4DchgKAG7keyuAU2p+cmK2F2MdiK9fk7/2P3kudtb0MN0Z66S1bpfsgqxphki6b/oZFNX2tHYmkRnuev2+uQG9XfaVV89AVxXeaEHTuHd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743158603; c=relaxed/simple;
-	bh=bffKTtaMqhmrwZrKNP7lJJ/4Q9eUQdxdN5IUCav0zyQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=blcWAtah6TY/TvLBCH9VbLoOfRAxmSfwufrKhau0muHuvVOxFopHRwYkGE0POXbXXZTvtAtxmkBH+YkZv5LQWSqazr141bPFTMFGpJVIrzzp5q+8FR3pUkev52cACgd2S3AEzlA3jul/Hqp2CnK2/Od67ZubkDjxAwqDgzcxcgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=B/3HxoVj; arc=none smtp.client-ip=193.252.22.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id y7B9tJctnhqDwy7BDtmSxi; Fri, 28 Mar 2025 11:43:19 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1743158599;
-	bh=h+L06X47729V5pMjb45e6wShqeH8a46mgG8d3/En6OM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=B/3HxoVjizflzAZ2vUlmY/vsQFpeFxg8W3FP/Uaewq3D8J3mDa8zi52e5ebwbukmT
-	 QwZ7E+6n4R+5i2PfW5P9m8C3zAUtXgcZWbBWa/bIYBgx4TN4XTsYz36Q4kLeibYHBx
-	 d6o/ykOqo+YZFzKcvBd5ASZJ09Zi0w546Ac1f39BZzjFEi8op8ww2GHQCjQ6RL8eS5
-	 pMbhw0bEyxrPg9+0IXP3okbnEyAqCsZQQLGNsUeVKT2G8loZz8pDm8yX1eMWV+EBQ8
-	 wQIEsbObIh9V8xrWaonDMKuXJZR21pKyv4dAWtyZ/eSuc6odSG2fz/aDhyGp60lY7c
-	 yTDPXeD9BemDA==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 28 Mar 2025 11:43:19 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <b486255e-4699-4ca2-a783-9c164eef3f24@wanadoo.fr>
-Date: Fri, 28 Mar 2025 19:43:10 +0900
+	s=arc-20240116; t=1743158768; c=relaxed/simple;
+	bh=aq+Q2Tz94GcDqbYiph2YuHAplYRXJslchXRCTz0ozGA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qtai+CSycwVnAeHRWPOXINaDqjq77wt5ynXyjjRLLFEjbTIUZ0ULqwNuW9nmHv4mVQxDHVA+AKSCYUZQGOMaisb7IsKtT/nKOZoHUz5TNLOhElF8YdmJn4BrjaFeJBRwjpTwn86qKHULgcJZlp5kzEZmozyD52RePTcyOOWgww4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-523eb86b31aso933357e0c.0;
+        Fri, 28 Mar 2025 03:46:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743158765; x=1743763565;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fz7Hy0X0ja0MUy8SfPs14C/LCrU2EryH1zXbLEH1v80=;
+        b=t1WzkiwdIRAeA1gR0+aPfjel24NZ+Fic2Cxr73HvjoUZwHWKFLUbuJg9P3xiNd40N8
+         Vw8TVp7LEnBiyo9P+n/cA64DtovrTXK0yUdiqbedHYzPCIZvG3230621dqwcrEgzPesP
+         aCqIoA1CR6O9I7IH2egWJ44EacJOARzvMT3r/bvzYS6ichoRZ480PnEB9+P8xRULGmn8
+         6L5FbM/LsCVOXbzxKCJ2gq+uMnTxDtyI6GutqNJGom2EisrxmNzd4DCxVkTlcV/RNS4k
+         JvG/hzftr7Ue/gc5A7irl+uSA1viGnS+UkjeRGnFQ+b5m6h9ycUgDC9QUacqEy/VI3Z5
+         3ccg==
+X-Forwarded-Encrypted: i=1; AJvYcCUXXBcxGKE9uZ0Vmvha0m0Ovj30MhU6mUdPKm4WO5M4BK6ssoOBJmM/82Xs4GzW7YmBv8G7WlJP2pZggHiOjvLa7lk=@vger.kernel.org, AJvYcCVA3OOk0ziEUe2NBZ3jtElAju8O9rJ1yraMhZKdQH5dS9n3nACgnaqO6v56pQOajRNghswl92RlfnY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyv6xoiquRDpBTn0JdS7vaHco4nHZH/skWPEqTf1ebOAyJsEl3N
+	ZRBKqHeRaX2IVs22Sm+dkWZOuTJq6PkQx742XJ0AMVoCncZmAgYSAr+VxI09
+X-Gm-Gg: ASbGncuh25KagYjJqgVPzxva9vCEf7se8Uw4h4BMAfgHNSlUnoh5U7NLH4PcNS3jfIv
+	R5XESUU2z4SsgVVo+LVW8P/Zr4tYOmU4jig4OfEB9fEHvzzGghMAN/drVDKwc/7xgcgC2aAkjBm
+	wpBRzzPOTow7tJbrMtFQT0CfoH2CVj9Zi7AKmT1V5Na63lUuu2iF8BUIR1Gw/F4E0faFcEO74ZE
+	IVw/N5P0/k9hqanhIYuJzDvPMgBZyIbER/IoXl153aSUFe1317h5TLaTXqsn52BYPvWH0z2Ytmj
+	R7GvIxi5wghvo6drjmK9TQ6O/s55OdmtONwfSIEEgMXeEeR9kYs1QXa0b/BIFDzH3M4vY4LKk79
+	oSgu9Rfk=
+X-Google-Smtp-Source: AGHT+IELw3N84GL6rvcPukuG6hqUVnOxhu42zJxwpy9982MIlcFbWKXCeejolKhkGfVLLnYYnMPqxQ==
+X-Received: by 2002:a05:6122:660c:b0:50b:e9a5:cd7b with SMTP id 71dfb90a1353d-52600a8ada4mr6333995e0c.9.1743158764884;
+        Fri, 28 Mar 2025 03:46:04 -0700 (PDT)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5260e7e9014sm348211e0c.12.2025.03.28.03.46.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Mar 2025 03:46:04 -0700 (PDT)
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-86715793b1fso887924241.0;
+        Fri, 28 Mar 2025 03:46:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWoz6HV9ZvFzlqSTDuOdUxUV45QMBDeyhcze6FPM+cgwvEFH/ZNZmzQ+ixXNann8ORwqoepmYsS0JJBo6RjmfEkyNE=@vger.kernel.org, AJvYcCXlksIkh3d2zEIoUKc76gw3uwnYk8ojjIObAvQrVS3LmJNB+YWcqjRHz86KH0RipqRGlrIeZHDdQUE=@vger.kernel.org
+X-Received: by 2002:a05:6102:3f4e:b0:4c3:49b:8f78 with SMTP id
+ ada2fe7eead31-4c5870e0a6fmr5369028137.25.1743158764315; Fri, 28 Mar 2025
+ 03:46:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 05/18] can: rcar_canfd: Drop RCANFD_GERFL_EEF* macros
- in RCANFD_GERFL_ERR
-To: Biju Das <biju.das.jz@bp.renesas.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
- Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- "biju.das.au" <biju.das.au@gmail.com>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
 References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
- <20250326122003.122976-6-biju.das.jz@bp.renesas.com>
- <40392a70-3be4-4d11-8614-eebd5d9d24a8@wanadoo.fr>
- <TY3PR01MB11346C091544B49A6C160712E86A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <deffdc35-86cf-4282-ba6d-f36890bf9fcd@wanadoo.fr>
- <TY3PR01MB11346DA97D5F685D96A638DB086A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <CAMuHMdUacYqUd_iPk95C3+bc64SeMbDj1=zdfLvuMHFbTRS39w@mail.gmail.com>
- <TY3PR01MB113464539C208D4A1AAF403A286A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <TY3PR01MB113464539C208D4A1AAF403A286A02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <20250326122003.122976-8-biju.das.jz@bp.renesas.com> <3bf3ec05-d900-494a-954e-633828b4c984@wanadoo.fr>
+In-Reply-To: <3bf3ec05-d900-494a-954e-633828b4c984@wanadoo.fr>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 28 Mar 2025 11:45:52 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUJpE93H2=QDcPAD9-gimQC9B21AUe8mksn-WVyiiHO-w@mail.gmail.com>
+X-Gm-Features: AQ5f1Jo4SH8dF8yYfKyTm3Nhcxsg1e_BU04tUZCjguNdJa75TcnqSe7v3lG2xk0
+Message-ID: <CAMuHMdUJpE93H2=QDcPAD9-gimQC9B21AUe8mksn-WVyiiHO-w@mail.gmail.com>
+Subject: Re: [PATCH v7 07/18] can: rcar_canfd: Add rnc_stride variable to
+ struct rcar_canfd_hw_info
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	linux-can@vger.kernel.org, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>, 
+	linux-renesas-soc@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 
-On 28/03/2025 at 19:15, Biju Das wrote:
-> Hi Geert and Vincent,
-> 
->> -----Original Message-----
->> From: Geert Uytterhoeven <geert@linux-m68k.org>
->> Sent: 28 March 2025 10:10
->> Subject: Re: [PATCH v7 05/18] can: rcar_canfd: Drop RCANFD_GERFL_EEF* macros in RCANFD_GERFL_ERR
->>
->> Hi Biju,
->>
->> On Fri, 28 Mar 2025 at 10:51, Biju Das <biju.das.jz@bp.renesas.com> wrote:
->>>> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr> On 28/03/2025 at
->>>> 18:21, Biju Das wrote:
->>>>>> -----Original Message-----
->>>>>> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->>>>>> Sent: 28 March 2025 09:10
->>>>>> Subject: Re: [PATCH v7 05/18] can: rcar_canfd: Drop
->>>>>> RCANFD_GERFL_EEF* macros in RCANFD_GERFL_ERR
->>>>>>
->>>>>> On 26/03/2025 à 21:19, Biju Das wrote:
->>>>>>> The macros RCANFD_GERFL_EEF* in RCANFD_GERFL_ERR can be replaced
->>>>>>> by
->>>>>>> gpriv->channels_mask << 16.
->>>>>>>
->>>>>>> After this drop the macro RCANFD_GERFL_EEF0_7 as it is unused.
->>>>>>>
->>>>>>> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->>>>>>> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
->>
->>>>>>> --- a/drivers/net/can/rcar/rcar_canfd.c
->>>>>>> +++ b/drivers/net/can/rcar/rcar_canfd.c
->>>>>>> @@ -74,7 +74,6 @@
->>>>>>>  #define RCANFD_GSTS_GNOPM                (BIT(0) | BIT(1) | BIT(2) | BIT(3))
->>>>>>>
->>>>>>>  /* RSCFDnCFDGERFL / RSCFDnGERFL */
->>>>>>> -#define RCANFD_GERFL_EEF0_7              GENMASK(23, 16)
->>>>>>>  #define RCANFD_GERFL_EEF(ch)             BIT(16 + (ch))
->>>>>>>  #define RCANFD_GERFL_CMPOF               BIT(3)  /* CAN FD only */
->>>>>>>  #define RCANFD_GERFL_THLES               BIT(2)
->>>>>>> @@ -82,9 +81,7 @@
->>>>>>>  #define RCANFD_GERFL_DEF         BIT(0)
->>>>>>>
->>>>>>>  #define RCANFD_GERFL_ERR(gpriv, x) \
->>>>>>> - ((x) & (reg_gen4(gpriv, RCANFD_GERFL_EEF0_7, \
->>>>>>> -                  RCANFD_GERFL_EEF(0) | RCANFD_GERFL_EEF(1)) | \
->>>>>>> -         RCANFD_GERFL_MES | \
->>>>>>> + ((x) & ((gpriv->channels_mask << 16) | RCANFD_GERFL_MES | \
->>>>>>
->>>>>> The previous RCANFD_GERFL_EEF0_7 macro documented that the
->>>>>> register was from bit index 16 to bit index 23. Here, we loose this piece of information.
->>>>>>
->>>>>> What about:
->>>>>>
->>>>>>    FIELD_PREP(RCANFD_GERFL_EEF0_7, gpriv->channels_mask)
->>>>>
->>>>> For all SoCs, ECC Error flag for Channel x (a.k.a. EEFx) starts from BIT position 16.
->>>>>
->>>>> By using gpriv->channels_mask, we allow only enabled channels and
->>>>> <<
->>>>> 16 says it is from Bit position 16.
->>>>
->>>> Yes, it starts at bit 16, but at which bit does it end?
->>>>
->>>> The GENMASK() helps to document the register names. Of course is
->>>> works if you replace the FIELD_PREP with a left shift, but you are
->>>> replacing some meaningful information about the register name,
->>>> register start bit and end bit by just a start bit value. See? You just lost the register name and
->> end bit info.
->>>>
->>>> FIELD_PREP() is not only about doing the correct shift but also
->>>> about documenting that you are putting the value into a specific register.
->>>>
->>>> When reading:
->>>>
->>>>   FIELD_PREP(RCANFD_GERFL_EEF0_7, gpriv->channels_mask)
->>>>
->>>> I immediately understand that you are putting the
->>>> gpriv->channels_mask value into the GERFL_EEF0_7 register and I can look at the datasheet for
->> details about that GERFL_EEF0_7 if I want to.
->>>
->>> Gen4 has 8 channels (GENMASK(16, 23)
->>> G3E has 6 channels  (GENMASK(16, 21)
->>> V4M has 4 channels  (GENMASK(16, 19)
->>> V3H_2 has 3 channels (GENMASK(16,18)
->>> All other SoCs has 2 channels (GENMASK(16,17)
->>>
->>> So you mean, I should replace RCANFD_GERFL_EEF0_7 with a
->>>
->>> Generic one RCANFD_GERFL_EEF(x) GENMASK(16, 16 + (x) - 1) to handle
->>> this differences
->>>
->>> Where x is the number of supported channels(info->max_channels)
->>>
->>> and then use
->>>
->>> FIELD_PREP(RCANFD_GERFL_EEF(x), gpriv->channels_mask)
->>
->> Just use
->>
->>     #define RCANFD_GERFL_EEF    GENMASK(23, 16)
->>
->> and
->>
->>     FIELD_PREP(RCANFD_GERFL_EEF, gpriv->channels_mask)
+Hi Vincent,
 
-Ack. Pretty close to my initial suggestion of
+On Fri, 28 Mar 2025 at 11:36, Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+> On 26/03/2025 at 21:19, Biju Das wrote:
+> > R-Car Gen4 packs 2 RNC values in a 32-bit word, whereas R-Car Gen3 packs
+> > up to 4 values in a 32-bit word. Handle this difference by adding
+> > rnc_stride variable to struct rcar_canfd_hw_info and update the macro
+> > RCANFD_GAFLCFG.
+> >
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > ---
+> > v6->v7:
+> >  * Collected tag.
+> > v5->v6:
+> >  * Replaced RCANFD_RNC_PER_REG macro with rnc_stride variable.
+> >  * Updated commit description
+> >  * Dropped Rb tag.
+> > v5:
+> >  * New patch.
+> > ---
+> >  drivers/net/can/rcar/rcar_canfd.c | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+> > index 32d700962d69..0001c8043c25 100644
+> > --- a/drivers/net/can/rcar/rcar_canfd.c
+> > +++ b/drivers/net/can/rcar/rcar_canfd.c
+> > @@ -291,7 +291,7 @@
+> >  /* RSCFDnCFDGAFLECTR / RSCFDnGAFLECTR */
+> >  #define RCANFD_GAFLECTR                      (0x0098)
+> >  /* RSCFDnCFDGAFLCFG / RSCFDnGAFLCFG */
+> > -#define RCANFD_GAFLCFG(ch)           (0x009c + (0x04 * ((ch) / 2)))
+> > +#define RCANFD_GAFLCFG(gpriv, ch)    (0x009c + (0x04 * ((ch) / (gpriv)->info->rnc_stride)))
+>
+> I find it rather hard to follow the logic here. Your are multiplying by
+> four and then dividing again to get the good results. Here, I guess that
+> 0x04 represents sizeof(u32), but this needs some thinking to figure that
+> out.
 
-  #define RCANFD_GERFL_EEF0_7              GENMASK(23, 16)
-  FIELD_PREP(RCANFD_GERFL_EEF0_7, gpriv->channels_mask)
+The division is done first...
 
->> As channels_mask can never have bits set for non-existing channels, all reserved bits above EEF in the
->> GERFL register will be zero.
-> 
-> Agreed. Will add this change in next version
+> Wouldn't it be more intuitive to instead store the size in bytes of the
+> RNC value?
+>
+> #define RCANFD_GAFLCFG(gpriv, ch) \
+>         (0x009c + (gpriv)->info->sizeof_rnc * (ch))
+>
+> This way, no more 0x04 magic number and it is easier to process a
+> multiplication than a division in your head when reading the code.
 
-Thank you :)
+... so this is not equivalent.
 
+Gr{oetje,eeting}s,
 
-Yours sincerely,
-Vincent Mailhol
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
