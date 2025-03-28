@@ -1,492 +1,173 @@
-Return-Path: <linux-can+bounces-3245-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3246-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45016A745C1
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 09:55:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 844D4A745C9
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 09:58:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0271A7A6EF8
-	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 08:54:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 760A21B60823
+	for <lists+linux-can@lfdr.de>; Fri, 28 Mar 2025 08:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 362B41D63FD;
-	Fri, 28 Mar 2025 08:55:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C0721325C;
+	Fri, 28 Mar 2025 08:58:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="l2DkOnrh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c8Qpccc+"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-67.smtpout.orange.fr [193.252.22.67])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E115714375D;
-	Fri, 28 Mar 2025 08:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDE721147C;
+	Fri, 28 Mar 2025 08:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743152144; cv=none; b=IgsD//UisAutgFo/8kd3Xp0/Gz64QC1GJnmYl6BUtJuZ+LdXxhsZGP7iw1UijXOnIsqOujmCrVwE9ZxLJk70N7ylkAcSl11xyV6uhV9uNJRVOvaBmZ8knDCkAaa8J512t8xJkkGWtQv2+v+QIqLbk2buuJNfcYTm1vMAe2r3/nk=
+	t=1743152280; cv=none; b=LOXJyiarJz+Jx0AL2+5m454NwHDTMrQp+pE1jvUjyUeWL6Bw1nzOgRv95uOQM6GlGMtv2QGW6F47fnrpu3hDCSywvX90OFo8ZLTZJLj2gmMM9JpLCW0FjKorHGCJ8B3rbtfv/9tZD+lN48jqZUsyXqDyxWh51lW+gsYutS2/x+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743152144; c=relaxed/simple;
-	bh=i2UCd9CTJqdl1BvJsa74TjHe+SdFc+PagWycl5GOCfk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iRtcBuMA+MHUDmZe0wDrNbXNaV/z+MF3DI7t0gPYnouFV8c3kncotpE+/BQgNr6glT/VVMnkBbhAa3i0A0omjFw+arBSOE7BrgNFN/x4Epecb4kl95m0IAxQVb/e6yNutvsVJD9ga2iaIUi8sBqkqyGBPnzFtRtUTFTdcF9ojxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=l2DkOnrh; arc=none smtp.client-ip=193.252.22.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id y5TptIcsRhqDwy5TttfmyL; Fri, 28 Mar 2025 09:54:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1743152069;
-	bh=KqC0MBA/hDJkF4hZt485kZTvkFQNygloRMOLFewr1Do=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=l2DkOnrhJEcMUkg4cwmJ1/1V9qk1g60nK4rugrphc+UK804HpAkSUf6x88OQajzS5
-	 o65gyXqnNpTK1UvLjfNpRk5byNtwTVnT9te/I8T1R5Ul0+qQroRhDhaVvDPAp8TV8e
-	 Uj0kqqcDyNMtfZQu1nVKpfkPNfh6VHkUG4niEIExebRlUQeAwzedChZQL33v3XtGp/
-	 zVwawPt8U3JxoRc6iJsX5fcd2js+xZiLsi0MCNw+nnwysKHRobDy6gBiUJQckEyvwk
-	 JVXSfEIiAGSvPn39wG8TWjK+4HenDH3MTmJ3LjkysGLfd9AVzjPJJJ9dWFHHfczZQh
-	 Q0diFNSkahlWw==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 28 Mar 2025 09:54:29 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <7ff93ff9-f578-4be2-bdc6-5b09eab64fe6@wanadoo.fr>
-Date: Fri, 28 Mar 2025 17:54:21 +0900
+	s=arc-20240116; t=1743152280; c=relaxed/simple;
+	bh=xYLXywumfYcBE2gdZINxZy+YFrU0fq7kxGGQ+cSsn0o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KHvJeB6S44PwmYQzyUL57vUSfmVX6BBYGuKBygwl8NUSZCrRogqyPFt4ZshENAvzc8LGEji1zMVsVqCuKF1MeClf1xlMMAEsr8+YrzREj9rU9Y0OJVsoz7AJFP6yrS7llwSzJfOnkGeO0Ug7Rdl4tPwSZj7U9Nf+rpSfAhV3Ddg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c8Qpccc+; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e461015fbd4so1577430276.2;
+        Fri, 28 Mar 2025 01:57:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743152277; x=1743757077; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jWPb1mI/9upCcqkogSbWtUh32Sdpc2DRyu7FzyouqhI=;
+        b=c8Qpccc+IDLMbbKQiG+H7j0cwHx6h97nUuOE7O3ItKoqzSvIai/Vu2Q56+3+WXz5yM
+         73VhaIaDXeIIHZGllYkK0l2ZtyMCfgj5UMoXmoVJdflnNajUERagkMX9jiChSR84PLRy
+         YJOs0qANhcZ2t0ROPNdGCloscM4jfrOg5Ai7SjghZkDaoGO7vTtCtj3FILN/zdph1Xum
+         Q9dnStoRp6ectxCBhRqeiI+nMTTXEeuKBLyKcuOqp3zayxE8LI5JQ2ZOBwJWH6T8V6fC
+         Ny+wxbHflHxaHh8DOvBM3VAOFFlw8GHOU4JQoF5fjPexWHY09mQ23T0e+TKw3eWiPLKC
+         /nyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743152277; x=1743757077;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jWPb1mI/9upCcqkogSbWtUh32Sdpc2DRyu7FzyouqhI=;
+        b=Vj9gCBGo4DTTTYPLVEA5fCcP2jNdBOYRO7ucBCCSSMbcWatKTiE+EaahppMgORY2fF
+         kgdCDEqb9U0FJkh5CGoffTWdJYWHry3xC0devzUBuaziQi/rainIUSWxBCXoULtTRBgp
+         PFv0sRtkevCwB9NDSIjC9ak/5RF3FSL5IIZIud2bSWLYRf+qqIADwvBrisKz4dTRn89v
+         GhHB5MaGewBnZBgdWI85VscqBMadfNzkGckEP40rOfDhGelVxYD/MvB7sPXCm2T5HWDH
+         8EFFO1BsedVYrzeBj9lATsfq9BV1AQbYXwQgoV7O51w46FipkBYWvRfWn9UsS3CpPMRP
+         ZCnw==
+X-Forwarded-Encrypted: i=1; AJvYcCUAOzt0TW8eVFcrxBVbuXusSEBimiolrjHVY6HbJcM2Hyx2/c0nQSwEhMXHT71KJcnzTCwx259ucE2Xnxuex/0=@vger.kernel.org, AJvYcCUZeAejiXHTXarfHUd1pSMkmJqFuCLfYj+qRZOT9h/UCsTjB3I8Ya9aR/MT9dHhyvvvrhQQuEsb@vger.kernel.org, AJvYcCUyPDbZ5gawXisjKDq3Q1vc4JIrlbWNetx7I8BSjIbEJ1mrjabhe1K0pEP3kKsHi25OPnrMSSDzCJQ9PMU=@vger.kernel.org, AJvYcCVds2TmvnvNRKsPTzT0RtqlAtcxsJHAh/kQvo9tlwayJ6SB3J4Ifvj3XErxzuG3usmAka6wUQ0qmz0=@vger.kernel.org, AJvYcCViS8wmhHrxfo8WSiaO+urahGvGdruMWhwsARHoZJcB/Jxj/4D98JftYnaal/k1y6Kx5lGd55i7b6nB@vger.kernel.org, AJvYcCWfSM+LC00bloVC/dK9JpSUSQNMx6ZuD4T8J0uYYp14Y9RxKv2Q4AWacykD7O3Y5DyBgl7u6KQD8aQA@vger.kernel.org, AJvYcCWkyfLP7RnvkyRR1/h8gXEBXFfO/1nowZCk2ckq3d4yzoBIV5CyKBz0iVcfrQJs/lYHpwCrgsM7U6A0@vger.kernel.org, AJvYcCWxmWgwF5imLVmCINyH5tPZi+peEcj+0qnb/h/cDVk5+5T8AeTJy5JO41OmPWgRhCc6A6B4KQSkAc0kEA==@vger.kernel.org, AJvYcCXKZqclMosWzW7Wx/kdNFpq88Z/ON48TNA/rfEJThGTASQIwPJqiE4NxChRnhOvTJHJxYr22YDO9E9iKaLH@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx91q8QHscCj7o997BN12xXshS2Ba3hbFIos32EZ72ydQ6hb7CX
+	1kOZ2bliLgVDYSRx6VCkJaCYjtnZmcAnn7uIFg2DC2XtDfi9lp3S+TmDDIKUV7LmvP5MAES3IoQ
+	e8iSma/ICi7ChSXRqW1jqr2mHIks=
+X-Gm-Gg: ASbGncvsznS1oiGZG3nDH3qzkjP0VF4thqM7ge9K9oUz1ajTEGCatCmPC9J1LAu+jpI
+	DuFwL91FUaZErTTP1mz0s1XybXrgHYjI4o9yaxD3lT5Rhn0lTvpRy6Y1wYOPWG2uol2AZsFRXPN
+	5BE6D7dy1jDPn1HKuhFKFyF4lGMxgOu80PSqDj9JOhaQbuvlfd1SmtppFz
+X-Google-Smtp-Source: AGHT+IFLLC9PtZXtkSzNtOYuXckibCE5a+SweHKkkBiwOPRXFXjjbhxDt6SFVeqrDzFpbxVVVSlFSPuYln+B4xj4Dd8=
+X-Received: by 2002:a05:6902:2806:b0:e5d:ddd2:8acf with SMTP id
+ 3f1490d57ef6-e69437fd4afmr7959068276.38.1743152277453; Fri, 28 Mar 2025
+ 01:57:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 04/18] can: rcar_canfd: Drop RCANFD_GAFLCFG_GETRNC
- macro
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- linux-can@vger.kernel.org,
- Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org,
- Marc Kleine-Budde <mkl@pengutronix.de>
-References: <20250326122003.122976-1-biju.das.jz@bp.renesas.com>
- <20250326122003.122976-5-biju.das.jz@bp.renesas.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250326122003.122976-5-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com> <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
+ <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
+ <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
+ <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
+ <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
+ <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
+ <20250327-awesome-mutant-cuscus-0f0314-mkl@pengutronix.de>
+ <CAOoeyxWa5sB+YS6W=oG7xUeizXxigkdw3b=7w9aGftCWzWsw2A@mail.gmail.com> <20250328-smart-thundering-asp-2536b0-mkl@pengutronix.de>
+In-Reply-To: <20250328-smart-thundering-asp-2536b0-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 28 Mar 2025 16:57:46 +0800
+X-Gm-Features: AQ5f1JqFFh94KtgZpMrBv-osA_XLKd_POUmZCUtvpqZF_h4Uo1CEEcQaSnNuCO4
+Message-ID: <CAOoeyxWy7n32iD03sr+8jPwf5OpHaCe_itkRnzOQK8GC32A9+A@mail.gmail.com>
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 26/03/2025 at 21:19, Biju Das wrote:
-> Drop the unused macro RCANFD_GAFLCFG_GETRNC.
-> 
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v6->v7:
->  * No change.
-> v5->v6:
->  * Collected tag.
-> v5:
->  * New patch
-> ---
->  drivers/net/can/rcar/rcar_canfd.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-> index 2d9569fd0e0b..565a91c2ca83 100644
-> --- a/drivers/net/can/rcar/rcar_canfd.c
-> +++ b/drivers/net/can/rcar/rcar_canfd.c
-> @@ -94,10 +94,6 @@
->  	(((x) & reg_gen4(gpriv, 0x1ff, 0xff)) << \
->  	 (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8)))
->  
-> -#define RCANFD_GAFLCFG_GETRNC(gpriv, n, x) \
-> -	(((x) >> (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8))) & \
-> -	 reg_gen4(gpriv, 0x1ff, 0xff))
-> -
->  /* RSCFDnCFDGAFLECTR / RSCFDnGAFLECTR */
->  #define RCANFD_GAFLECTR_AFLDAE		BIT(8)
->  #define RCANFD_GAFLECTR_AFLPN(gpriv, x)	((x) & reg_gen4(gpriv, 0x7f, 0x1f))
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=8828=
+=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=883:22=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> > > > > > > > > > +     priv->can.clock.freq =3D can_clk;
+> > > > > > > > > > +     priv->can.bittiming_const =3D &nct6694_can_bittim=
+ing_nominal_const;
+> > > > > > > > > > +     priv->can.data_bittiming_const =3D &nct6694_can_b=
+ittiming_data_const;
+> > > > > > > > > > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
+> > > > > > > > > > +     priv->can.do_get_berr_counter =3D nct6694_can_get=
+_berr_counter;
+> > > > > > > > > > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOO=
+PBACK |
+> > > > > > > > > > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BE=
+RR_REPORTING |
+> > > > > > > > > > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO=
+;
+> > > > > > > > >
+> > > > > > > > > Does your device run in CAN-FD mode all the time? If so, =
+please use
+> > > > > > > > > can_set_static_ctrlmode() to set it after priv->can.ctrlm=
+ode_supported
+> > > > > > > > > and remove CAN_CTRLMODE_FD from ctrlmode_supported.
+> > > > > > > > >
+> > > > > > > >
+> > > > > > > > Our device is designed to allow users to dynamically switch=
+ between
+> > > > > > > > Classical CAN and CAN-FD mode via ip link set ... fd on/off=
+.
+> > > > > > > > Therefore, CAN_CTRLMODE_FD needs to remain in ctrlmode_supp=
+orted, and
+> > > > > > > > can_set_static_ctrlmode() is not suitable in this case.
+> > > > > > > > Please let me know if you have any concerns about this appr=
+oach.
+> > > > > > >
+> > > > > > > Where do you evaluate if the user has configured CAN_CTRLMODE=
+_FD or not?
+> > > > > > >
+> > > > > >
+> > > > > > Sorry, I was previously confused about our device's control mod=
+e. I
+> > > > > > will use can_set_static_ctrlmode() to set CAN_FD mode in the ne=
+xt
+> > > > > > patch.
+> > > > >
+> > > > > Does your device support CAN-CC only mode? Does your device suppo=
+rt to
+> > > > > switch between CAN-CC only and CAN-FD mode?
+> > > > >
+> > > >
+> > > > Our device supports both CAN-CC and CAN-FD mode.
+> > >
+> > > This doesn't answer my question:
+> > >
+> > > Does your device support CAN-CC only mode?
+> >
+> > It can dynamically switch between CAN-CC and CAN-FD mode when
+> > trasmitting or receiving, depending on whether the nct6694_can_frame
+> > passs the flag with NCT6694_CAN_FRAME_FLAG_FD.
+>
+> Ok, but what about the receive path? Does the device support CAN-CC only
+> mode? Will it throw an error, if it receives a CAN-FD frame?
+>
 
-
-It seems to me that there are a ton of unused macro in this module:
-
-Why are you removing just RCANFD_GAFLCFG_GETRNC an not the others?
-
-  $ make W=2 drivers/net/can/rcar/rcar_canfd.o
-  (...)
-  drivers/net/can/rcar/rcar_canfd.c: At top level:
-  drivers/net/can/rcar/rcar_canfd.c:159: warning: macro
-"RCANFD_CSTS_TRMSTS" is not used [-Wunused-macros]
-    159 | #define RCANFD_CSTS_TRMSTS              BIT(5)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:351: warning: macro "RCANFD_TMTASTS"
-is not used [-Wunused-macros]
-    351 | #define RCANFD_TMTASTS(y)               (0x0380 + (0x04 * (y)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:259: warning: macro
-"RCANFD_CFPTR_CFPTR" is not used [-Wunused-macros]
-    259 | #define RCANFD_CFPTR_CFPTR(x)           (((x) & 0xfff) << 16)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:430: warning: macro
-"RCANFD_C_RPGACC" is not used [-Wunused-macros]
-    430 | #define RCANFD_C_RPGACC(r)              (0x1900 + (0x04 * (r)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:135: warning: macro
-"RCANFD_CCTR_BOM_ISO" is not used [-Wunused-macros]
-    135 | #define RCANFD_CCTR_BOM_ISO             (0x0 << 21)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:297: warning: macro "RCANFD_GTSC" is
-not used [-Wunused-macros]
-    297 | #define RCANFD_GTSC                     (0x0094)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:331: warning: macro "RCANFD_FMSTS"
-is not used [-Wunused-macros]
-    331 | #define RCANFD_FMSTS                    (0x0240)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:61: warning: macro
-"RCANFD_GCTR_DEIE" is not used [-Wunused-macros]
-     61 | #define RCANFD_GCTR_DEIE                BIT(8)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:249: warning: macro
-"RCANFD_CFSTS_CFFLL" is not used [-Wunused-macros]
-    249 | #define RCANFD_CFSTS_CFFLL              BIT(1)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:356: warning: macro "RCANFD_TXQCC"
-is not used [-Wunused-macros]
-    356 | #define RCANFD_TXQCC(m)                 (0x03a0 + (0x04 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:154: warning: macro
-"RCANFD_CCTR_CHDMC_CHLT" is not used [-Wunused-macros]
-    154 | #define RCANFD_CCTR_CHDMC_CHLT          (0x2)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:378: warning: macro "RCANFD_GLOCKK"
-is not used [-Wunused-macros]
-    378 | #define RCANFD_GLOCKK                   (0x047c)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:82: warning: macro
-"RCANFD_GERFL_DEF" is not used [-Wunused-macros]
-     82 | #define RCANFD_GERFL_DEF                BIT(0)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:423: warning: macro "RCANFD_C_TMPTR"
-is not used [-Wunused-macros]
-    423 | #define RCANFD_C_TMPTR(p)               (0x1004 + (0x10 * (p)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:106: warning: macro
-"RCANFD_GAFLID_GAFLLB" is not used [-Wunused-macros]
-    106 | #define RCANFD_GAFLID_GAFLLB            BIT(29)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:372: warning: macro
-"RCANFD_GTINTSTS1" is not used [-Wunused-macros]
-    372 | #define RCANFD_GTINTSTS1                (0x0464)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:303: warning: macro "RCANFD_RMNB" is
-not used [-Wunused-macros]
-    303 | #define RCANFD_RMNB                     (0x00a4)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:305: warning: macro "RCANFD_RMND" is
-not used [-Wunused-macros]
-    305 | #define RCANFD_RMND(y)                  (0x00a8 + (0x04 * (y)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:495: warning: macro
-"RCANFD_CHANNELS_MASK" is not used [-Wunused-macros]
-    495 | #define RCANFD_CHANNELS_MASK
-BIT((RCANFD_NUM_CHANNELS) - 1)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:132: warning: macro
-"RCANFD_CCTR_CTME" is not used [-Wunused-macros]
-    132 | #define RCANFD_CCTR_CTME                BIT(24)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:345: warning: macro "RCANFD_TMTRSTS"
-is not used [-Wunused-macros]
-    345 | #define RCANFD_TMTRSTS(y)               (0x0350 + (0x04 * (y)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:335: warning: macro "RCANFD_CFRISTS"
-is not used [-Wunused-macros]
-    335 | #define RCANFD_CFRISTS                  (0x0248)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:337: warning: macro "RCANFD_CFTISTS"
-is not used [-Wunused-macros]
-    337 | #define RCANFD_CFTISTS                  (0x024c)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:363: warning: macro "RCANFD_THLCC"
-is not used [-Wunused-macros]
-    363 | #define RCANFD_THLCC(m)                 (0x0400 + (0x04 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:161: warning: macro
-"RCANFD_CSTS_EPSTS" is not used [-Wunused-macros]
-    161 | #define RCANFD_CSTS_EPSTS               BIT(3)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:444: warning: macro
-"RCANFD_F_CFDCRC" is not used [-Wunused-macros]
-    444 | #define RCANFD_F_CFDCRC(m)              (0x0510 + (0x20 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:399: warning: macro "RCANFD_C_RMDF0"
-is not used [-Wunused-macros]
-    399 | #define RCANFD_C_RMDF0(q)               (0x0608 + (0x10 * (q)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:400: warning: macro "RCANFD_C_RMDF1"
-is not used [-Wunused-macros]
-    400 | #define RCANFD_C_RMDF1(q)               (0x060c + (0x10 * (q)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:225: warning: macro
-"RCANFD_RFPTR_RFPTR" is not used [-Wunused-macros]
-    225 | #define RCANFD_RFPTR_RFPTR(x)           (((x) >> 16) & 0xfff)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:482: warning: macro
-"RCANFD_F_TMFDCTR" is not used [-Wunused-macros]
-    482 | #define RCANFD_F_TMFDCTR(p)             (0x4008 + (0x20 * (p)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:66: warning: macro
-"RCANFD_GCTR_GMDC_GTEST" is not used [-Wunused-macros]
-     66 | #define RCANFD_GCTR_GMDC_GTEST          (0x2)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:54: warning: macro
-"RCANFD_GCFG_TPRI" is not used [-Wunused-macros]
-     54 | #define RCANFD_GCFG_TPRI                BIT(0)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:138: warning: macro
-"RCANFD_CCTR_TDCVFIE" is not used [-Wunused-macros]
-    138 | #define RCANFD_CCTR_TDCVFIE             BIT(19)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:80: warning: macro
-"RCANFD_GERFL_THLES" is not used [-Wunused-macros]
-     80 | #define RCANFD_GERFL_THLES              BIT(2)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:483: warning: macro "RCANFD_F_TMDF"
-is not used [-Wunused-macros]
-    483 | #define RCANFD_F_TMDF(p, b)             (0x400c + (0x20 * (p))
-+ (0x04 * (b)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:347: warning: macro
-"RCANFD_TMTARSTS" is not used [-Wunused-macros]
-    347 | #define RCANFD_TMTARSTS(y)              (0x0360 + (0x04 * (y)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:202: warning: macro
-"RCANFD_FDCFG_TDCE" is not used [-Wunused-macros]
-    202 | #define RCANFD_FDCFG_TDCE               BIT(9)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:204: warning: macro
-"RCANFD_FDCFG_TDCO" is not used [-Wunused-macros]
-    204 | #define RCANFD_FDCFG_TDCO(x)            (((x) & 0x7f) >> 16)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:158: warning: macro
-"RCANFD_CSTS_RECSTS" is not used [-Wunused-macros]
-    158 | #define RCANFD_CSTS_RECSTS              BIT(6)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:139: warning: macro
-"RCANFD_CCTR_SOCOIE" is not used [-Wunused-macros]
-    139 | #define RCANFD_CCTR_SOCOIE              BIT(18)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:53: warning: macro "RCANFD_GCFG_DCE"
-is not used [-Wunused-macros]
-     53 | #define RCANFD_GCFG_DCE                 BIT(1)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:216: warning: macro
-"RCANFD_RFSTS_RFFLL" is not used [-Wunused-macros]
-    216 | #define RCANFD_RFSTS_RFFLL              BIT(1)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:358: warning: macro "RCANFD_TXQSTS"
-is not used [-Wunused-macros]
-    358 | #define RCANFD_TXQSTS(m)                (0x03c0 + (0x04 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:255: warning: macro
-"RCANFD_CFID_CFID_MASK" is not used [-Wunused-macros]
-    255 | #define RCANFD_CFID_CFID_MASK(x)        ((x) & 0x1fffffff)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:376: warning: macro "RCANFD_GTSTCTR"
-is not used [-Wunused-macros]
-    376 | #define RCANFD_GTSTCTR                  (0x046c)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:57: warning: macro
-"RCANFD_GCTR_TSRST" is not used [-Wunused-macros]
-     57 | #define RCANFD_GCTR_TSRST               BIT(16)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:422: warning: macro "RCANFD_C_TMID"
-is not used [-Wunused-macros]
-    422 | #define RCANFD_C_TMID(p)                (0x1000 + (0x10 * (p)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:333: warning: macro "RCANFD_RFISTS"
-is not used [-Wunused-macros]
-    333 | #define RCANFD_RFISTS                   (0x0244)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:140: warning: macro
-"RCANFD_CCTR_EOCOIE" is not used [-Wunused-macros]
-    140 | #define RCANFD_CCTR_EOCOIE              BIT(17)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:71: warning: macro
-"RCANFD_GSTS_GHLTSTS" is not used [-Wunused-macros]
-     71 | #define RCANFD_GSTS_GHLTSTS             BIT(1)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:481: warning: macro "RCANFD_F_TMPTR"
-is not used [-Wunused-macros]
-    481 | #define RCANFD_F_TMPTR(p)               (0x4004 + (0x20 * (p)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:329: warning: macro "RCANFD_FFSTS"
-is not used [-Wunused-macros]
-    329 | #define RCANFD_FFSTS                    (0x023c)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:360: warning: macro "RCANFD_TXQPCTR"
-is not used [-Wunused-macros]
-    360 | #define RCANFD_TXQPCTR(m)               (0x03e0 + (0x04 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:453: warning: macro "RCANFD_F_RMDF"
-is not used [-Wunused-macros]
-    453 | #define RCANFD_F_RMDF(q, b)             (0x200c + (0x04 * (b))
-+ (0x20 * (q)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:340: warning: macro "RCANFD_TMC" is
-not used [-Wunused-macros]
-    340 | #define RCANFD_TMC(p)                   (0x0250 + (0x01 * (p)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:370: warning: macro
-"RCANFD_GTINTSTS0" is not used [-Wunused-macros]
-    370 | #define RCANFD_GTINTSTS0                (0x0460)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:353: warning: macro "RCANFD_TMIEC"
-is not used [-Wunused-macros]
-    353 | #define RCANFD_TMIEC(y)                 (0x0390 + (0x04 * (y)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:398: warning: macro "RCANFD_C_RMPTR"
-is not used [-Wunused-macros]
-    398 | #define RCANFD_C_RMPTR(q)               (0x0604 + (0x10 * (q)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:260: warning: macro
-"RCANFD_CFPTR_CFTS" is not used [-Wunused-macros]
-    260 | #define RCANFD_CFPTR_CFTS(x)            (((x) & 0xff) << 0)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:97: warning: macro
-"RCANFD_GAFLCFG_GETRNC" is not used [-Wunused-macros]
-     97 | #define RCANFD_GAFLCFG_GETRNC(gpriv, n, x) \
-        |
-  drivers/net/can/rcar/rcar_canfd.c:367: warning: macro "RCANFD_THLPCTR"
-is not used [-Wunused-macros]
-    367 | #define RCANFD_THLPCTR(m)               (0x0440 + (0x04 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:442: warning: macro
-"RCANFD_F_CFDCTR" is not used [-Wunused-macros]
-    442 | #define RCANFD_F_CFDCTR(m)              (0x0508 + (0x20 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:203: warning: macro
-"RCANFD_FDCFG_TDCOC" is not used [-Wunused-macros]
-    203 | #define RCANFD_FDCFG_TDCOC              BIT(8)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:452: warning: macro
-"RCANFD_F_RMFDSTS" is not used [-Wunused-macros]
-    452 | #define RCANFD_F_RMFDSTS(q)             (0x2008 + (0x20 * (q)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:250: warning: macro
-"RCANFD_CFSTS_CFEMP" is not used [-Wunused-macros]
-    250 | #define RCANFD_CFSTS_CFEMP              BIT(0)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:180: warning: macro
-"RCANFD_CERFL_BORF" is not used [-Wunused-macros]
-    180 | #define RCANFD_CERFL_BORF               BIT(4)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:365: warning: macro "RCANFD_THLSTS"
-is not used [-Wunused-macros]
-    365 | #define RCANFD_THLSTS(m)                (0x0420 + (0x04 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:160: warning: macro
-"RCANFD_CSTS_BOSTS" is not used [-Wunused-macros]
-    160 | #define RCANFD_CSTS_BOSTS               BIT(4)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:451: warning: macro "RCANFD_F_RMPTR"
-is not used [-Wunused-macros]
-    451 | #define RCANFD_F_RMPTR(q)               (0x2004 + (0x20 * (q)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:424: warning: macro "RCANFD_C_TMDF0"
-is not used [-Wunused-macros]
-    424 | #define RCANFD_C_TMDF0(p)               (0x1008 + (0x10 * (p)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:425: warning: macro "RCANFD_C_TMDF1"
-is not used [-Wunused-macros]
-    425 | #define RCANFD_C_TMDF1(p)               (0x100c + (0x10 * (p)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:450: warning: macro "RCANFD_F_RMID"
-is not used [-Wunused-macros]
-    450 | #define RCANFD_F_RMID(q)                (0x2000 + (0x20 * (q)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:397: warning: macro "RCANFD_C_RMID"
-is not used [-Wunused-macros]
-    397 | #define RCANFD_C_RMID(q)                (0x0600 + (0x10 * (q)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:443: warning: macro
-"RCANFD_F_CFDSTS" is not used [-Wunused-macros]
-    443 | #define RCANFD_F_CFDSTS(m)              (0x050c + (0x20 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:70: warning: macro
-"RCANFD_GSTS_GSLPSTS" is not used [-Wunused-macros]
-     70 | #define RCANFD_GSTS_GSLPSTS             BIT(2)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:349: warning: macro "RCANFD_TMTCSTS"
-is not used [-Wunused-macros]
-    349 | #define RCANFD_TMTCSTS(y)               (0x0370 + (0x04 * (y)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:441: warning: macro
-"RCANFD_F_CFDCFG" is not used [-Wunused-macros]
-    441 | #define RCANFD_F_CFDCFG(m)              (0x0504 + (0x20 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:480: warning: macro "RCANFD_F_TMID"
-is not used [-Wunused-macros]
-    480 | #define RCANFD_F_TMID(p)                (0x4000 + (0x20 * (p)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:327: warning: macro "RCANFD_FESTS"
-is not used [-Wunused-macros]
-    327 | #define RCANFD_FESTS                    (0x0238)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:486: warning: macro
-"RCANFD_F_THLACC" is not used [-Wunused-macros]
-    486 | #define RCANFD_F_THLACC(m)              (0x6000 + (0x04 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:162: warning: macro
-"RCANFD_CSTS_SLPSTS" is not used [-Wunused-macros]
-    162 | #define RCANFD_CSTS_SLPSTS              BIT(2)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:488: warning: macro
-"RCANFD_F_RPGACC" is not used [-Wunused-macros]
-    488 | #define RCANFD_F_RPGACC(r)              (0x6400 + (0x04 * (r)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:137: warning: macro
-"RCANFD_CCTR_BOM_BEND" is not used [-Wunused-macros]
-    137 | #define RCANFD_CCTR_BOM_BEND            (0x2 << 21)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:428: warning: macro
-"RCANFD_C_THLACC" is not used [-Wunused-macros]
-    428 | #define RCANFD_C_THLACC(m)              (0x1800 + (0x04 * (m)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:374: warning: macro "RCANFD_GTSTCFG"
-is not used [-Wunused-macros]
-    374 | #define RCANFD_GTSTCFG                  (0x0468)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:342: warning: macro "RCANFD_TMSTS"
-is not used [-Wunused-macros]
-    342 | #define RCANFD_TMSTS(p)                 (0x02d0 + (0x01 * (p)))
-        |
-  drivers/net/can/rcar/rcar_canfd.c:163: warning: macro
-"RCANFD_CSTS_HLTSTS" is not used [-Wunused-macros]
-    163 | #define RCANFD_CSTS_HLTSTS              BIT(1)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:59: warning: macro
-"RCANFD_GCTR_THLEIE" is not used [-Wunused-macros]
-     59 | #define RCANFD_GCTR_THLEIE              BIT(10)
-        |
-  drivers/net/can/rcar/rcar_canfd.c:226: warning: macro
-"RCANFD_RFPTR_RFTS" is not used [-Wunused-macros]
-    226 | #define RCANFD_RFPTR_RFTS(x)            (((x) >> 0) & 0xffff)
-        |
-
-
-Yours sincerely,
-Vincent Mailhol
-
+No, it can receive both CAN-CC and CAN-FD frames, if the hardware
+receives a CAN-FD frame, the firmware will set the
+NCT6694_CAN_FRAME_FLAG_FD flag.
 
