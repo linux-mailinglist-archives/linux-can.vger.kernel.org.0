@@ -1,38 +1,39 @@
-Return-Path: <linux-can+bounces-3320-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3321-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7DC2A78BEE
-	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 12:21:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 055D5A78BE8
+	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 12:21:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DF8B1705F3
-	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 10:21:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 286321894237
+	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 10:21:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00EDB235BE8;
-	Wed,  2 Apr 2025 10:21:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FA60236422;
+	Wed,  2 Apr 2025 10:21:05 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FEB921ABC3;
-	Wed,  2 Apr 2025 10:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97B5F23496B;
+	Wed,  2 Apr 2025 10:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743589260; cv=none; b=XXpuoLrgFIhKqYCfXnEKWs7rUE2Qht11/jyk5Lif1Y/2KGouLVRYz6XAH1hebREkOht3jjaXuLWz5NBuAx7JsuELc0BjVackEUMBmjpt6mv/TY9yH1ky+OSZWClpPH/ziE4Q7aEeHES5mBlVCUQTXkGT5lSi1iII9M+uHyBdlbo=
+	t=1743589265; cv=none; b=oc+5PyMDd0+hcZvqVK6gAVjePAjYJefVEFJZwuCtzBpNkx1zgb94+E2WZWTy7SjtGQ0ogVtufRbgoKcYkVzs4tZkVGoU9dNSkjXou6hcq8Cg/o3wy3dtMrImfOh80U41BwqtuoEVmCXcPAQXtgQp7JjHLm63xPrx/+9wKdGcH6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743589260; c=relaxed/simple;
-	bh=Me7OUgOVepAtrtHTCUw4eo0nvqbAbb3ZE9zGuNAYJRk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PL/AXttojipeOtGEhOvYfPWeV4+0cHt7iigC3gNy6Xeii4wBzbTNgxyPRb9HDkmAy3KAs1uNIzVpwch7/Z5L92f8BzmUzXu39Nyjav8s7kMBxppDOAouL/+uDPX4uMqzz+VMdtR8ANkWtCaHssSjURbKHCiPixrQRARYlDTLjyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+	s=arc-20240116; t=1743589265; c=relaxed/simple;
+	bh=5wtNBVVkxEfypneA46AZuGKvxc8VE8UUQN+plr+f0gI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=U1H33x0j0OGwz6PSWWd62w4jm02ZUOiOIp0+rgJG3fXvnPGTEk92fd4nuWomIFlEhzwhkurkNQzK2Hivzf4iX95NWqr8dGaiojuo9uEkpbKIr8XgbSTs67m6GtAlPI2bjuiId4SYSNLl4+vI4pTEUNvrXwp5fzUnpMGL3mIN+Cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: tseEOo8pRLGQbD9fj8R1gg==
-X-CSE-MsgGUID: J4lDgruCRBKn5dUdFySnBw==
+X-CSE-ConnectionGUID: 5T6+DECLSEi/aPcVlDJMCA==
+X-CSE-MsgGUID: 2ne81RzrRGG3Px1JluBHzQ==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 02 Apr 2025 19:20:55 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 02 Apr 2025 19:21:01 +0900
 Received: from localhost.localdomain (unknown [10.226.93.220])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 2B0A4401C75A;
-	Wed,  2 Apr 2025 19:20:50 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 84665401C75A;
+	Wed,  2 Apr 2025 19:20:56 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -40,21 +41,23 @@ To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
+	Magnus Damm <magnus.damm@gmail.com>
 Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Simon Horman <horms@kernel.org>,
+	Duy Nguyen <duy.nguyen.rh@renesas.com>,
 	linux-can@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
 	devicetree@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	linux-renesas-soc@vger.kernel.org,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v8 00/19] Add support for RZ/G3E CANFD
-Date: Wed,  2 Apr 2025 11:20:20 +0100
-Message-ID: <20250402102047.27943-1-biju.das.jz@bp.renesas.com>
+	Biju Das <biju.das.au@gmail.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v8 01/19] dt-bindings: can: renesas,rcar-canfd: Simplify the conditional schema
+Date: Wed,  2 Apr 2025 11:20:21 +0100
+Message-ID: <20250402102047.27943-2-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250402102047.27943-1-biju.das.jz@bp.renesas.com>
+References: <20250402102047.27943-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -63,121 +66,177 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The CAN-FD module on RZ/G3E is very similar to the one on both R-Car V4H
-and RZ/G2L, but differs in some hardware parameters:
- * No external clock, but instead has ram clock.
- * Support up to 6 channels.
- * 20 interrupts.
+RZ/G3E SoC has 20 interrupts, 2 resets and 6 channels that need more
+branching with conditional schema. Simplify the conditional schema with
+if statements rather than the complex if-else statements to prepare for
+supporting RZ/G3E SoC.
 
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
 v7->v8:
- * Collected tags.
- * Updated commit description for patch#{5,9,15,16,17}.
- * Replaced the macro RCANFD_GERFL_EEF0_7->RCANFD_GERFL_EEF.
- * Dropped the redundant macro RCANFD_GERFL_EEF(ch).
- * Added patch for dropping the mask operation in RCANFD_GAFLCFG_SETRNC
-   macro.
- * Converted RCANFD_GAFLCFG_SETRNC->rcar_canfd_setrnc().
- * Updated RCANFD_GAFLCFG macro by replacing the parameter ch->w, where w
-   is the GAFLCFG index used in the hardware manual.
- * Renamed the parameter x->page_num in RCANFD_GAFLECTR_AFLPN macro to
-   make it clear.
- * Renamed the parameter x->cftml in RCANFD_CFCC_CFTML macro to make it
-   clear.
- * Updated {rzg2l,car_gen3_hw_info} with ch_interface_mode = 0.
- * Updated {rzg2l,rcar_gen3}_hw_info with shared_can_regs = 0.
- * Started using struct rcanfd_regs instead of LUT for reg offsets.
- * Started using struct rcar_canfd_shift_data instead of LUT for shift
-   data.
- * Renamed only_internal_clks->external_clk to avoid negation.
- * Updated rcar_canfd_hw_info tables with external_clk entries.
- * Replaced 10->sizeof(name) in scnprintf().
+ * No change.
 v6->v7:
- * Collected tags
- * Replaced 'aswell'->'as well' in patch#11 commit description.
+ * No change.
 v5->v6:
- * Replaced RCANFD_RNC_PER_REG macro with rnc_stride variable.
- * Updated commit description for patch#7 and #8
- * Dropped mask_table:
-     AFLPN_MASK is replaced by max_aflpn variable.
-     CFTML_MASK is replaced by max_cftml variable.
-     BITTIMING MASK's are replaced by {nom,data}_bittiming variables.
- * Collected tag from Geert.
+ * No change.
 v4->v5:
- * Collected tag from Geert.
  * The rules for R-Car Gen3/4 could be kept together, reducing the number
-   of lines. Similar change for rzg2l-canfd aswell.
- * Keeping interrupts and resets together allows to keep a clear
-   separation between RZ/G2L and RZ/G3E, at the expense of only
-   a single line.
- * Retained the tags for binding patches as it is trivial changes.
- * Dropped the unused macro RCANFD_GAFLCFG_GETRNC.
- * Updated macro RCANFD_GERFL_ERR by using gpriv->channels_mask and
-   dropped unused macro RCANFD_GERFL_EEF0_7.
- * Replaced RNC mask in RCANFD_GAFLCFG_SETRNC macro by using
-   info->num_supported_rules variable.
- * Updated the macro RCANFD_GAFLCFG by using info->rnc_field_width
-   variable.
- * Updated shift value in RCANFD_GAFLCFG_SETRNC macro by using a formula
-   (32 - (n % rnc_per_reg + 1) * field_width).
- * Replaced the variable name shared_can_reg->shared_can_regs.
- * Improved commit description for patch{#11,#12}by replacing has->have.
- * Dropped RCANFD_EEF_MASK and RCANFD_RNC_MASK as it is taken
-   care by gpriv->channels_mask and info->num_supported_rules.
- * Dropped RCANFD_FIRST_RNC_SH and RCANFD_SECOND_RNC_SH by using a
-   formula (32 - (n % rnc_per_reg + 1) * rnc_field_width.
- * Improved commit description by "All SoCs supports extenal clock"->
-   "All existing SoCs support an external clock".
- * Updated error description in probe as "cannot get enabled ram clock"
- * Updated r9a09g047_hw_info table.
+   of lines. Done the similar change for rzg2l-canfd.
+ * Retained the tags as it is trivial change.
 v3->v4:
- * Added Rb tag from Rob for patch#2.
- * Added prefix RCANFD_* to enum rcar_canfd_reg_offset_id.
- * Added prefix RCANFD_* to enum rcar_canfd_mask_id.
- * Added prefix RCANFD_* to enum rcar_canfd_shift_id.
+ * No change.
 v2->v3:
  * Collected tags.
- * Dropped reg_gen4() and is_gen4() by adding mask_table, shift_table,
-   regs, ch_interface_mode and shared_can_reg variables to
-   struct rcar_canfd_hw_info.
 v1->v2:
- * Split the series with fixes patch separately.
- * Added patch for Simplify rcar_canfd_probe() using
-   of_get_available_child_by_name() as dependency patch hit on can-next.
- * Added Rb tag from Vincent Mailhol.
- * Dropped redundant comment from commit description for patch#3.
+ * No change
+---
+ .../bindings/net/can/renesas,rcar-canfd.yaml  | 99 +++++++++++--------
+ 1 file changed, 60 insertions(+), 39 deletions(-)
 
-Biju Das (19):
-  dt-bindings: can: renesas,rcar-canfd: Simplify the conditional schema
-  dt-bindings: can: renesas,rcar-canfd: Document RZ/G3E support
-  can: rcar_canfd: Use of_get_available_child_by_name()
-  can: rcar_canfd: Drop RCANFD_GAFLCFG_GETRNC macro
-  can: rcar_canfd: Update RCANFD_GERFL_ERR macro
-  can: rcar_canfd: Drop the mask operation in RCANFD_GAFLCFG_SETRNC
-    macro
-  can: rcar_canfd: Add rcar_canfd_setrnc()
-  can: rcar_canfd: Update RCANFD_GAFLCFG macro
-  can: rcar_canfd: Add rnc_field_width variable to struct
-    rcar_canfd_hw_info
-  can: rcar_canfd: Add max_aflpn variable to struct rcar_canfd_hw_info
-  can: rcar_canfd: Add max_cftml variable to struct rcar_canfd_hw_info
-  can: rcar_canfd: Add {nom,data}_bittiming variables to struct
-    rcar_canfd_hw_info
-  can: rcar_canfd: Add ch_interface_mode variable to struct
-    rcar_canfd_hw_info
-  can: rcar_canfd: Add shared_can_regs variable to struct
-    rcar_canfd_hw_info
-  can: rcar_canfd: Add struct rcanfd_regs variable to struct
-    rcar_canfd_hw_info
-  can: rcar_canfd: Add sh variable to struct rcar_canfd_hw_info
-  can: rcar_canfd: Add external_clk variable to struct
-    rcar_canfd_hw_info
-  can: rcar_canfd: Enhance multi_channel_irqs handling
-  can: rcar_canfd: Add RZ/G3E support
-
- .../bindings/net/can/renesas,rcar-canfd.yaml  | 171 ++++++++---
- drivers/net/can/rcar/rcar_canfd.c             | 277 +++++++++++++-----
- 2 files changed, 339 insertions(+), 109 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+index f6884f6e59e7..4a83498b2a8b 100644
+--- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
++++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+@@ -45,7 +45,35 @@ properties:
+   reg:
+     maxItems: 1
+ 
+-  interrupts: true
++  interrupts:
++    oneOf:
++      - items:
++          - description: Channel interrupt
++          - description: Global interrupt
++      - items:
++          - description: CAN global error interrupt
++          - description: CAN receive FIFO interrupt
++          - description: CAN0 error interrupt
++          - description: CAN0 transmit interrupt
++          - description: CAN0 transmit/receive FIFO receive completion interrupt
++          - description: CAN1 error interrupt
++          - description: CAN1 transmit interrupt
++          - description: CAN1 transmit/receive FIFO receive completion interrupt
++
++  interrupt-names:
++    oneOf:
++      - items:
++          - const: ch_int
++          - const: g_int
++      - items:
++          - const: g_err
++          - const: g_recc
++          - const: ch0_err
++          - const: ch0_rec
++          - const: ch0_trx
++          - const: ch1_err
++          - const: ch1_rec
++          - const: ch1_trx
+ 
+   clocks:
+     maxItems: 3
+@@ -117,52 +145,55 @@ allOf:
+     then:
+       properties:
+         interrupts:
+-          items:
+-            - description: CAN global error interrupt
+-            - description: CAN receive FIFO interrupt
+-            - description: CAN0 error interrupt
+-            - description: CAN0 transmit interrupt
+-            - description: CAN0 transmit/receive FIFO receive completion interrupt
+-            - description: CAN1 error interrupt
+-            - description: CAN1 transmit interrupt
+-            - description: CAN1 transmit/receive FIFO receive completion interrupt
++          minItems: 8
++          maxItems: 8
+ 
+         interrupt-names:
+-          items:
+-            - const: g_err
+-            - const: g_recc
+-            - const: ch0_err
+-            - const: ch0_rec
+-            - const: ch0_trx
+-            - const: ch1_err
+-            - const: ch1_rec
+-            - const: ch1_trx
++          minItems: 8
++          maxItems: 8
+ 
+         resets:
++          minItems: 2
+           maxItems: 2
+ 
+         reset-names:
+-          items:
+-            - const: rstp_n
+-            - const: rstc_n
++          minItems: 2
++          maxItems: 2
+ 
+       required:
+         - reset-names
+-    else:
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - renesas,rcar-gen3-canfd
++              - renesas,rcar-gen4-canfd
++    then:
+       properties:
+         interrupts:
+-          items:
+-            - description: Channel interrupt
+-            - description: Global interrupt
++          minItems: 2
++          maxItems: 2
+ 
+         interrupt-names:
+-          items:
+-            - const: ch_int
+-            - const: g_int
++          minItems: 2
++          maxItems: 2
+ 
+         resets:
+           maxItems: 1
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - renesas,rcar-gen3-canfd
++              - renesas,rzg2l-canfd
++    then:
++      patternProperties:
++        "^channel[2-7]$": false
++
+   - if:
+       properties:
+         compatible:
+@@ -171,16 +202,6 @@ allOf:
+     then:
+       patternProperties:
+         "^channel[4-7]$": false
+-    else:
+-      if:
+-        not:
+-          properties:
+-            compatible:
+-              contains:
+-                const: renesas,rcar-gen4-canfd
+-      then:
+-        patternProperties:
+-          "^channel[2-7]$": false
+ 
+ unevaluatedProperties: false
+ 
 -- 
 2.43.0
 
