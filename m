@@ -1,39 +1,39 @@
-Return-Path: <linux-can+bounces-3348-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3349-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48D7DA78C39
-	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 12:25:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B573EA78C3B
+	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 12:25:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1A073B32E1
-	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 10:23:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C26C33B332F
+	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 10:23:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B3C9235BE8;
-	Wed,  2 Apr 2025 10:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC0153BE;
+	Wed,  2 Apr 2025 10:23:41 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5108C236458;
-	Wed,  2 Apr 2025 10:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49BA9235BF0;
+	Wed,  2 Apr 2025 10:23:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743589417; cv=none; b=OQ+BB4wXfT2GWgFwAlZR0xCrihuFnRdasYxr+0eY5qkz03dwkbREc5PoYRBZDOPJ++Ejgnqs8hPW6U2raNyQv+VruF+/SiAqsYrGoRQAr+nXBBZz4bgZRyUfEIb9d11dlOjXPonNFHHiwQSop1q/z5NdzA5g0nvvgkznRetiEOk=
+	t=1743589421; cv=none; b=HhzVN7vYLoXGwMKb2QzFLwIzIEtO+rqq5u/wCMmvgGMRCelDioLkx148WfZIQs7EimMFkuma3a2iIXozfk8Xca5yJUUitENvc8duZmjQ1UUp3hjtKPeXNTuAAqtclNyekhOcHIk78BNoee1TXVsV3QEX0VHqcswN633RX83L0nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743589417; c=relaxed/simple;
-	bh=7fIh0qAmuWaknqgBDZFudnSDW33VQKb/IMN9ZUEM8EQ=;
+	s=arc-20240116; t=1743589421; c=relaxed/simple;
+	bh=eYj0DoRiDXafJXbvWxuK/tBh30UjNkeTeCw4glhAA04=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Bjdwt7ybE2QW8s7TpsTMpy8bO1BTCPEljNuYtGdfjz6cEO0pSp0CsVDv8iJA7jj9kx28PKYRY9T6b48V2z2H8hI9Oh38Tpv5wp6aHgc7UlHAITOuMqcaNxtdOG3VzWOcSNJBTq6V35lAXB4592B/DainaWrp+5k+eot6YdaWVyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+	 MIME-Version; b=TsWj3k9oQoaZ+n3Mne8DJdMGnwVi/BkVDmaL9zPXU/YK5q2XJilwmwXFan7ud7JJf2rdySBdc6pIBuWfrRMxdfzOSFp7AaCuwRElcS23utnL24fK/DkTgNn9wH1G6D8SV1urXCotlcu6HGuE452rz0yVDHKm1lJH199pLwqoH7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: tVklE34bS+O9c7IyKS3YKg==
-X-CSE-MsgGUID: UPiPBUzdSyC349w5xfu3OQ==
+X-CSE-ConnectionGUID: jaWyMNkrQtWIDsvbdLVnIQ==
+X-CSE-MsgGUID: pIJaTKyvRyysz0IcoiG9Aw==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 02 Apr 2025 19:23:35 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 02 Apr 2025 19:23:39 +0900
 Received: from localhost.localdomain (unknown [10.226.93.220])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2547C4224218;
-	Wed,  2 Apr 2025 19:23:32 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8C06C4224218;
+	Wed,  2 Apr 2025 19:23:36 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
@@ -45,9 +45,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v8 17/19] can: rcar_canfd: Add external_clk variable to struct rcar_canfd_hw_info
-Date: Wed,  2 Apr 2025 11:22:09 +0100
-Message-ID: <20250402102226.28032-18-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v8 18/19] can: rcar_canfd: Enhance multi_channel_irqs handling
+Date: Wed,  2 Apr 2025 11:22:10 +0100
+Message-ID: <20250402102226.28032-19-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250402102226.28032-1-biju.das.jz@bp.renesas.com>
 References: <20250402102226.28032-1-biju.das.jz@bp.renesas.com>
@@ -59,18 +59,16 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-All existing SoCs support an external clock, but RZ/G3E has only internal
-clocks. Add external_clk variable to struct rcar_canfd_hw_info to handle
-this difference.
+Currently multi_channel_irqs has only 2 channels. But RZ/G3E has six
+channels. Enhance multi_channel_irqs handling to support more than two
+channels.
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v7->v8:
- * Renamed only_internal_clks->external_clk to avoid negation.
- * Updated commit description.
- * Updated rcar_canfd_hw_info tables.
+ * Replaced 10->sizeof(name) in scnprintf().
  * Collected tag.
 v6->v7:
  * No change.
@@ -78,63 +76,42 @@ v5->v6:
  * No change.
 v4->v5:
  * Collected tag.
- * Improved commit description by "All SoCs supports extenal clock"->
-   "All existing SoCs support an external clock".
 v3->v4:
  * No change.
 v2->v3:
- * No change
+ * No change.
 v1->v2:
  * No change.
 ---
- drivers/net/can/rcar/rcar_canfd.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/can/rcar/rcar_canfd.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 5c46bc0e352f..11dd3730e98c 100644
+index 11dd3730e98c..2631e88dbf47 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -540,6 +540,7 @@ struct rcar_canfd_hw_info {
- 	unsigned multi_channel_irqs:1;	/* Has multiple channel irqs */
- 	unsigned ch_interface_mode:1;	/* Has channel interface mode */
- 	unsigned shared_can_regs:1;	/* Has shared classical can registers */
-+	unsigned external_clk:1;	/* Has external clock */
- };
+@@ -1856,16 +1856,19 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
  
- /* Channel priv data */
-@@ -689,6 +690,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- 	.shared_global_irqs = 1,
- 	.ch_interface_mode = 0,
- 	.shared_can_regs = 0,
-+	.external_clk = 1,
- };
+ 	if (info->multi_channel_irqs) {
+ 		char *irq_name;
++		char name[10];
+ 		int err_irq;
+ 		int tx_irq;
  
- static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
-@@ -704,6 +706,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
- 	.shared_global_irqs = 1,
- 	.ch_interface_mode = 1,
- 	.shared_can_regs = 1,
-+	.external_clk = 1,
- };
+-		err_irq = platform_get_irq_byname(pdev, ch == 0 ? "ch0_err" : "ch1_err");
++		scnprintf(name, sizeof(name), "ch%u_err", ch);
++		err_irq = platform_get_irq_byname(pdev, name);
+ 		if (err_irq < 0) {
+ 			err = err_irq;
+ 			goto fail;
+ 		}
  
- static const struct rcar_canfd_hw_info rzg2l_hw_info = {
-@@ -719,6 +722,7 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
- 	.multi_channel_irqs = 1,
- 	.ch_interface_mode = 0,
- 	.shared_can_regs = 0,
-+	.external_clk = 1,
- };
- 
- /* Helper functions */
-@@ -2047,7 +2051,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 		fcan_freq = clk_get_rate(gpriv->can_clk) / info->postdiv;
- 	} else {
- 		fcan_freq = clk_get_rate(gpriv->can_clk);
--		gpriv->extclk = true;
-+		gpriv->extclk = gpriv->info->external_clk;
- 	}
- 
- 	addr = devm_platform_ioremap_resource(pdev, 0);
+-		tx_irq = platform_get_irq_byname(pdev, ch == 0 ? "ch0_trx" : "ch1_trx");
++		scnprintf(name, sizeof(name), "ch%u_trx", ch);
++		tx_irq = platform_get_irq_byname(pdev, name);
+ 		if (tx_irq < 0) {
+ 			err = tx_irq;
+ 			goto fail;
 -- 
 2.43.0
 
