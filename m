@@ -1,229 +1,184 @@
-Return-Path: <linux-can+bounces-3319-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3320-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C732A785CA
-	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 02:46:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7DC2A78BEE
+	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 12:21:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B0C7188F04D
-	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 00:46:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DF8B1705F3
+	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 10:21:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC4B846F;
-	Wed,  2 Apr 2025 00:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cORw6mFJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00EDB235BE8;
+	Wed,  2 Apr 2025 10:21:01 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75DAD5C96
-	for <linux-can@vger.kernel.org>; Wed,  2 Apr 2025 00:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FEB921ABC3;
+	Wed,  2 Apr 2025 10:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743554779; cv=none; b=KxJfzaGYF3qTyOrYXc9yGzA4EWWSnSRgOtrrdArLZBoKN1Z/6drBXMk9OjF8uelCCjkceXvmGqZUZS8SlFVAC855/MLm9f3mgTm5OJpNW2IG3Yp678k6GiUF7AlWjoFlrwvNFBnLKKsl278BFwKx+OB2JRbUop44Jspc5Hts1oA=
+	t=1743589260; cv=none; b=XXpuoLrgFIhKqYCfXnEKWs7rUE2Qht11/jyk5Lif1Y/2KGouLVRYz6XAH1hebREkOht3jjaXuLWz5NBuAx7JsuELc0BjVackEUMBmjpt6mv/TY9yH1ky+OSZWClpPH/ziE4Q7aEeHES5mBlVCUQTXkGT5lSi1iII9M+uHyBdlbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743554779; c=relaxed/simple;
-	bh=gKvtz1iMes15Dk29gHgnGLSQ0AzIDyIu+TI574Yzf08=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZcN7phe5kph/oCuiRBrGULNKPGB7HeKsWbwuohDxGzudT5Y/UKBTGcJ5WAO9rC5maTYn+Wfi5IezSsFgaeKz+LcS310CGaE2dxTrS9P5aDzF+7lKjf2P7AWyXrc8B4ofXi7RZjpiuE/WmiieN2w637lz4ov8Uoin6InybFNdscM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cORw6mFJ; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5e614da8615so690550a12.1
-        for <linux-can@vger.kernel.org>; Tue, 01 Apr 2025 17:46:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1743554775; x=1744159575; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vu/Ham6OvzEjp0kQLpwOmOKgb686vhg9IiykSVIyewU=;
-        b=cORw6mFJAKCX7ALG1GgR6r5dr9ozCwGGa6R2CcDJSepWeh6auOtgimc4keMslhXnb/
-         O5pfilgAH7v7IpS5rJt6/xoQDN7NWQj91gUh3veP5i8vO9/vpMRs8qseS+mHa2Fcmui8
-         PMo1k9lXiUFH8w569hkUUZ3mA7f0YYaqDxMH4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743554775; x=1744159575;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vu/Ham6OvzEjp0kQLpwOmOKgb686vhg9IiykSVIyewU=;
-        b=F2KJU28dV5RqBnnlNKLm1W2ekMxw8kSdcAkq0xeAVK88yOKzB4FalFE4AooCcgSZyU
-         qDLPV/QSuyhtiR6VYhplrP0ho/qU4/2SMn1NeUzm48Re93TY9VtuaZ7YFO98CMwXpFSs
-         0N3ZQe9dSYaTwp2PqJSUGn+oDUgp5YK8ZThA/Y6PDUsGKJrPN1EM608g1z6rAqRaPRvs
-         QW9Sj6Z7lpDkvnM+Xf14jUPadZbc+o4dKoHuw8N8po7CbV6kmqMx7K14CZOLaKVnb+P5
-         dkLcElzu14lK00PqII1OQ+YbqwwQc/JaupSq0j8phmcxAFvbmdPmxAVEOfbTiH9d0sNC
-         bS0w==
-X-Forwarded-Encrypted: i=1; AJvYcCVpMlcGUxsjSTCQLE367mJCvvl71gf6/o38NYpfommtFxBVpPUQ/0ZIP8R/wesZohZjFQeBhXWe7ro=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRezGb7LdV9/NkcKhx02KcReooze464/+MXzRbFXR9bHKqwpX/
-	gLyknMNL8d1bkSKoWlo4x/kNqFuECj01CKXw3PuKz/U1Bm94qrBuTfCsZbbk8qVYzrqSJxpJziS
-	tDN4=
-X-Gm-Gg: ASbGncu02LCqM9gfJHuJzMWmrXxErJKI/XA9onf+jrFfMF5Bm7RN1RuNu+RnhyfoLg4
-	hlpyKN7hBoNlSbP0uhdLo8O0+qM+1uAhilv8XhiruO7YrAa4P71rz16Uwfz5QiGGCwG57AZrbUd
-	w2kqXA+Zk1svIJk6jawCQPocI10tY948MdWnFZQa48nLerLLA+ikahvo4g57veqR5XXGBnGRnLr
-	svq0XiugHbIJG1w/6J9ghdfjmfYQxKQB50F+EwE6YtsBQGXhitLA7FYcxDamBMkJa6kPaKngUhZ
-	g9ELSbyUB77IsT3c4AMf3TLkIhoeXjsdNVLnfXgtAC3CowpPgmBtgvGmd70+WuA8ZlUCFQIDmm4
-	ArCcqro+tIhJ6sFliuMbxFi5O1hwU2Q==
-X-Google-Smtp-Source: AGHT+IG/RVPjxTBO5x2TlpcgC7jIXP1jnrmoUkdcDlfmC3MUacL/UwQeAqn3ZZzATldRfEb4g0ddYQ==
-X-Received: by 2002:a05:6402:5215:b0:5ed:16a9:c333 with SMTP id 4fb4d7f45d1cf-5f05f35012fmr136322a12.2.1743554774993;
-        Tue, 01 Apr 2025 17:46:14 -0700 (PDT)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc16d3629sm7682789a12.23.2025.04.01.17.46.13
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Apr 2025 17:46:13 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5e5deb6482cso625897a12.1
-        for <linux-can@vger.kernel.org>; Tue, 01 Apr 2025 17:46:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX4C3yBqmDLy6QU873CGRFB6egVUENwYkz5wfA0UQdHCmKgB/89PCko7xmjgtXjGNpaXjgsmJUjl4A=@vger.kernel.org
-X-Received: by 2002:a17:906:5a58:b0:ac6:b80b:2331 with SMTP id
- a640c23a62f3a-ac7a5a6a7femr5394166b.4.1743554436373; Tue, 01 Apr 2025
- 17:40:36 -0700 (PDT)
+	s=arc-20240116; t=1743589260; c=relaxed/simple;
+	bh=Me7OUgOVepAtrtHTCUw4eo0nvqbAbb3ZE9zGuNAYJRk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PL/AXttojipeOtGEhOvYfPWeV4+0cHt7iigC3gNy6Xeii4wBzbTNgxyPRb9HDkmAy3KAs1uNIzVpwch7/Z5L92f8BzmUzXu39Nyjav8s7kMBxppDOAouL/+uDPX4uMqzz+VMdtR8ANkWtCaHssSjURbKHCiPixrQRARYlDTLjyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-CSE-ConnectionGUID: tseEOo8pRLGQbD9fj8R1gg==
+X-CSE-MsgGUID: J4lDgruCRBKn5dUdFySnBw==
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 02 Apr 2025 19:20:55 +0900
+Received: from localhost.localdomain (unknown [10.226.93.220])
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 2B0A4401C75A;
+	Wed,  2 Apr 2025 19:20:50 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	linux-can@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH v8 00/19] Add support for RZ/G3E CANFD
+Date: Wed,  2 Apr 2025 11:20:20 +0100
+Message-ID: <20250402102047.27943-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1743449872.git.metze@samba.org>
-In-Reply-To: <cover.1743449872.git.metze@samba.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 1 Apr 2025 17:40:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com>
-X-Gm-Features: AQ5f1JqzSUFwvrLn7ljSUlWXdbqdVpjtPJUQgf_7X3eWbMud67Mtv15-jjUkgBs
-Message-ID: <CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] net/io_uring: pass a kernel pointer via optlen_t
- to proto[_ops].getsockopt()
-To: Stefan Metzmacher <metze@samba.org>
-Cc: Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, 
-	Breno Leitao <leitao@debian.org>, Jakub Kicinski <kuba@kernel.org>, Christoph Hellwig <hch@lst.de>, 
-	Karsten Keil <isdn@linux-pingi.de>, Ayush Sawal <ayush.sawal@chelsio.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn <willemb@google.com>, David Ahern <dsahern@kernel.org>, 
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
-	Neal Cardwell <ncardwell@google.com>, Joerg Reuter <jreuter@yaina.de>, 
-	Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Oliver Hartkopp <socketcan@hartkopp.net>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, Robin van der Gracht <robin@protonic.nl>, 
-	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de, 
-	Alexander Aring <alex.aring@gmail.com>, Stefan Schmidt <stefan@datenfreihafen.org>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Alexandra Winter <wintera@linux.ibm.com>, 
-	Thorsten Winkler <twinkler@linux.ibm.com>, James Chapman <jchapman@katalix.com>, 
-	Jeremy Kerr <jk@codeconstruct.com.au>, Matt Johnston <matt@codeconstruct.com.au>, 
-	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Remi Denis-Courmont <courmisch@gmail.com>, Allison Henderson <allison.henderson@oracle.com>, 
-	David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>, 
-	Wenjia Zhang <wenjia@linux.ibm.com>, Jan Karcher <jaka@linux.ibm.com>, 
-	"D. Wythe" <alibuda@linux.alibaba.com>, Tony Lu <tonylu@linux.alibaba.com>, 
-	Wen Gu <guwen@linux.alibaba.com>, Jon Maloy <jmaloy@redhat.com>, 
-	Boris Pismenny <borisp@nvidia.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Stefano Garzarella <sgarzare@redhat.com>, Martin Schiller <ms@dev.tdt.de>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org, 
-	dccp@vger.kernel.org, linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org, 
-	mptcp@lists.linux.dev, linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com, 
-	linux-afs@lists.infradead.org, tipc-discussion@lists.sourceforge.net, 
-	virtualization@lists.linux.dev, linux-x25@vger.kernel.org, 
-	bpf@vger.kernel.org, isdn4linux@listserv.isdn4linux.de, 
-	io-uring@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-"
+The CAN-FD module on RZ/G3E is very similar to the one on both R-Car V4H
+and RZ/G2L, but differs in some hardware parameters:
+ * No external clock, but instead has ram clock.
+ * Support up to 6 channels.
+ * 20 interrupts.
 
-On Mon, 31 Mar 2025 at 13:11, Stefan Metzmacher <metze@samba.org> wrote:
->
-> But as Linus don't like 'sockptr_t' I used a different approach.
+v7->v8:
+ * Collected tags.
+ * Updated commit description for patch#{5,9,15,16,17}.
+ * Replaced the macro RCANFD_GERFL_EEF0_7->RCANFD_GERFL_EEF.
+ * Dropped the redundant macro RCANFD_GERFL_EEF(ch).
+ * Added patch for dropping the mask operation in RCANFD_GAFLCFG_SETRNC
+   macro.
+ * Converted RCANFD_GAFLCFG_SETRNC->rcar_canfd_setrnc().
+ * Updated RCANFD_GAFLCFG macro by replacing the parameter ch->w, where w
+   is the GAFLCFG index used in the hardware manual.
+ * Renamed the parameter x->page_num in RCANFD_GAFLECTR_AFLPN macro to
+   make it clear.
+ * Renamed the parameter x->cftml in RCANFD_CFCC_CFTML macro to make it
+   clear.
+ * Updated {rzg2l,car_gen3_hw_info} with ch_interface_mode = 0.
+ * Updated {rzg2l,rcar_gen3}_hw_info with shared_can_regs = 0.
+ * Started using struct rcanfd_regs instead of LUT for reg offsets.
+ * Started using struct rcar_canfd_shift_data instead of LUT for shift
+   data.
+ * Renamed only_internal_clks->external_clk to avoid negation.
+ * Updated rcar_canfd_hw_info tables with external_clk entries.
+ * Replaced 10->sizeof(name) in scnprintf().
+v6->v7:
+ * Collected tags
+ * Replaced 'aswell'->'as well' in patch#11 commit description.
+v5->v6:
+ * Replaced RCANFD_RNC_PER_REG macro with rnc_stride variable.
+ * Updated commit description for patch#7 and #8
+ * Dropped mask_table:
+     AFLPN_MASK is replaced by max_aflpn variable.
+     CFTML_MASK is replaced by max_cftml variable.
+     BITTIMING MASK's are replaced by {nom,data}_bittiming variables.
+ * Collected tag from Geert.
+v4->v5:
+ * Collected tag from Geert.
+ * The rules for R-Car Gen3/4 could be kept together, reducing the number
+   of lines. Similar change for rzg2l-canfd aswell.
+ * Keeping interrupts and resets together allows to keep a clear
+   separation between RZ/G2L and RZ/G3E, at the expense of only
+   a single line.
+ * Retained the tags for binding patches as it is trivial changes.
+ * Dropped the unused macro RCANFD_GAFLCFG_GETRNC.
+ * Updated macro RCANFD_GERFL_ERR by using gpriv->channels_mask and
+   dropped unused macro RCANFD_GERFL_EEF0_7.
+ * Replaced RNC mask in RCANFD_GAFLCFG_SETRNC macro by using
+   info->num_supported_rules variable.
+ * Updated the macro RCANFD_GAFLCFG by using info->rnc_field_width
+   variable.
+ * Updated shift value in RCANFD_GAFLCFG_SETRNC macro by using a formula
+   (32 - (n % rnc_per_reg + 1) * field_width).
+ * Replaced the variable name shared_can_reg->shared_can_regs.
+ * Improved commit description for patch{#11,#12}by replacing has->have.
+ * Dropped RCANFD_EEF_MASK and RCANFD_RNC_MASK as it is taken
+   care by gpriv->channels_mask and info->num_supported_rules.
+ * Dropped RCANFD_FIRST_RNC_SH and RCANFD_SECOND_RNC_SH by using a
+   formula (32 - (n % rnc_per_reg + 1) * rnc_field_width.
+ * Improved commit description by "All SoCs supports extenal clock"->
+   "All existing SoCs support an external clock".
+ * Updated error description in probe as "cannot get enabled ram clock"
+ * Updated r9a09g047_hw_info table.
+v3->v4:
+ * Added Rb tag from Rob for patch#2.
+ * Added prefix RCANFD_* to enum rcar_canfd_reg_offset_id.
+ * Added prefix RCANFD_* to enum rcar_canfd_mask_id.
+ * Added prefix RCANFD_* to enum rcar_canfd_shift_id.
+v2->v3:
+ * Collected tags.
+ * Dropped reg_gen4() and is_gen4() by adding mask_table, shift_table,
+   regs, ch_interface_mode and shared_can_reg variables to
+   struct rcar_canfd_hw_info.
+v1->v2:
+ * Split the series with fixes patch separately.
+ * Added patch for Simplify rcar_canfd_probe() using
+   of_get_available_child_by_name() as dependency patch hit on can-next.
+ * Added Rb tag from Vincent Mailhol.
+ * Dropped redundant comment from commit description for patch#3.
 
-So the sockptr_t thing has already happened. I hate it, and I think
-it's ugly as hell, but it is what it is.
+Biju Das (19):
+  dt-bindings: can: renesas,rcar-canfd: Simplify the conditional schema
+  dt-bindings: can: renesas,rcar-canfd: Document RZ/G3E support
+  can: rcar_canfd: Use of_get_available_child_by_name()
+  can: rcar_canfd: Drop RCANFD_GAFLCFG_GETRNC macro
+  can: rcar_canfd: Update RCANFD_GERFL_ERR macro
+  can: rcar_canfd: Drop the mask operation in RCANFD_GAFLCFG_SETRNC
+    macro
+  can: rcar_canfd: Add rcar_canfd_setrnc()
+  can: rcar_canfd: Update RCANFD_GAFLCFG macro
+  can: rcar_canfd: Add rnc_field_width variable to struct
+    rcar_canfd_hw_info
+  can: rcar_canfd: Add max_aflpn variable to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add max_cftml variable to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add {nom,data}_bittiming variables to struct
+    rcar_canfd_hw_info
+  can: rcar_canfd: Add ch_interface_mode variable to struct
+    rcar_canfd_hw_info
+  can: rcar_canfd: Add shared_can_regs variable to struct
+    rcar_canfd_hw_info
+  can: rcar_canfd: Add struct rcanfd_regs variable to struct
+    rcar_canfd_hw_info
+  can: rcar_canfd: Add sh variable to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add external_clk variable to struct
+    rcar_canfd_hw_info
+  can: rcar_canfd: Enhance multi_channel_irqs handling
+  can: rcar_canfd: Add RZ/G3E support
 
-I think it's a complete hack and having that "kernel or user" pointer
-flag is disgusting.
+ .../bindings/net/can/renesas,rcar-canfd.yaml  | 171 ++++++++---
+ drivers/net/can/rcar/rcar_canfd.c             | 277 +++++++++++++-----
+ 2 files changed, 339 insertions(+), 109 deletions(-)
 
-Making things worse, the naming is disgusting too, talking about some
-random "socket pointer", when it has absolutely nothing to do with
-socket, and isn't even a pointer. It's something else.
+-- 
+2.43.0
 
-It's literally called "socket" not because it has anything to do with
-sockets, but because it's a socket-specific hack that isn't acceptable
-anywhere else in the kernel.
-
-So that "socket" part of the name is literally shorthand for "only
-sockets are disgusting enough to use this, and nobody else should ever
-touch this crap".
-
-At least so far that part has mostly worked, even if there's some
-"sockptr_t" use in the crypto code. I didn't look closer, because I
-didn't want to lose my lunch.
-
-I don't understand why the networking code uses that thing.
-
-If you have a "fat pointer", you should damn well make it have the
-size of the area too, and do things *right*.
-
-Instead of doing what sockptr_t does, which is a complete hack to just
-pass a kernel/user flag, and then passes the length *separately*
-because the socket code couldn't be arsed to do the right thing.
-
-So I do still think "sockptr_t" should die.
-
-As Stanislav says, if you actually want that "user or kernel" thing,
-just use an "iov_iter".
-
-No, an "iov_iter" isn't exactly a pretty thing either, but at least
-it's the standard way to say "this pointer can have multiple different
-kinds of sources".
-
-And it keeps the size of the thing it points to around, so it's at
-least a fat pointer with proper ranges, even if it isn't exactly "type
-safe" (yes, it's type safe in the sense that it stays as a "iov_iter",
-but it's still basically a "random pointer").
-
-> @Linus, would that optlen_t approach fit better for you?
-
-The optlen_t thing is slightly better mainly because it's more
-type-safe. At least it's not a "random misnamed
-user-or-kernel-pointer" thing where the name is about how nothing else
-is so broken as to use it.
-
-So it's better because it's more limited, and it's better in that at
-least it has a type-safe pointer rather than a "void *" with no size
-or type associated with it.
-
-That said, I don't think it's exactly great.
-
-It's just another case of "networking can't just do it right, and uses
-a random hack with special flag values".
-
-So I do think that it would be better to actually get rid of
-"sockptr_t optval, unsigned int optlen" ENTIRELY, and replace that
-with iov_iter and just make networking bite the bullet and do the
-RightThing(tm).
-
-In fact, to make it *really* typesafe, it might be a good idea to wrap
-the iov_iter in another struct, something like
-
-   typedef struct sockopt {
-        struct iov_iter iter;
-   } sockopt_t;
-
-and make the networking functions make the typing very clear, and end
-up with an interface something like
-
-   int do_tcp_setsockopt(struct sock *sk,
-                     int level, int optname,
-                     sockopt_t *val);
-
-where that "sockopt_t *val" replaces not just the "sockptr_t optval",
-but also the "unsigned int optlen" thing.
-
-And no, I didn't look at how much churn that would be. Probably a lot.
-Maybe more than people are willing to do - even if I think some of it
-could be automated with coccinelle or whatever.
-
-                Linus
 
