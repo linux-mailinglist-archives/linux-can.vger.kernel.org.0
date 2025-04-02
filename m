@@ -1,39 +1,39 @@
-Return-Path: <linux-can+bounces-3337-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3338-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1841A78C0B
-	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 12:23:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BC45A78C32
+	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 12:25:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76CC37A2797
-	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 10:21:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4A6C3B2D02
+	for <lists+linux-can@lfdr.de>; Wed,  2 Apr 2025 10:22:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 127B3236443;
-	Wed,  2 Apr 2025 10:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4409B235BE8;
+	Wed,  2 Apr 2025 10:23:04 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61583235BF0;
-	Wed,  2 Apr 2025 10:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9000F235BE4;
+	Wed,  2 Apr 2025 10:23:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743589380; cv=none; b=ODduZWZQRKbVUJ7bLZZ+0P0gjFTjXY52BiGynCvl4n5Lxg0nhRj0nIEC9uNZQl5kOEAP2o99iHCC7UV7xuNRkj5Qci9o5ccIlgEs88ROgp7q6WZNwyEJyJKu7tfjXfOnF22xs0J/0qmT1pot7vKnQPX5dp4xH+YVnXNFX359O/o=
+	t=1743589384; cv=none; b=gkLXxojRhpmsv12SegJXlnKe1Tn0FO2UHgGA72BtyWotieopojc2N1kN/Qm1VJ9DYn8+BGzwO2sCerMYQiN9daBnmnLbUd8WjHyPj6mCCvAS1kd73euLAGRtBBdMxj5TokjWrNnzautQNHsQDTrL/RMlSavTT0GMMEubzfWL4sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743589380; c=relaxed/simple;
-	bh=squ4J4KXqQBUlULcmYlzGzCJxkIWghsxDRs1Te4RYrk=;
+	s=arc-20240116; t=1743589384; c=relaxed/simple;
+	bh=0kq1G3DHhA9ffXoYE2ZCDUdX+emnmO/4xdi1UFZmiq0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aw9YF1m8clFs8czFVlejkXh4kszvfRrjLsNJF0hYceyPEuud1A6r4dy7h4noCFg6fRxQnaDnirwkQebmE/610MueXynHvzx3nT5WoOWlckZvwO+FIGvaxFEKNFS7aINu1CfqQn2z3wMGkPgP5LEIozBFohJamM3D3Cimp8oUayg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+	 MIME-Version; b=SCAllzYEk6kjN6+9VvPADMAIeMaNzs0sj7SOidy2BljqYxt6SJYmoHwzbjdK4e8MK8DGupq3kIkP011RGjBJ2uk2r65LCQgoEQcUTPxbAt2UyrqYFWG4ZoNKFWWPMrkUa8t4yL5cSXfhzo8j21aN6wfDojYWl/u4pcUpcEclmVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: 8DhZlcFmRD+SX+ZVORO7JQ==
-X-CSE-MsgGUID: 2NZbHlx2RQSYRmPQWsIsTQ==
+X-CSE-ConnectionGUID: rJo7DCmARL6vP5+h3iUYIQ==
+X-CSE-MsgGUID: RoF8yThlQO6+T3Go0hiWhw==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 02 Apr 2025 19:22:58 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 02 Apr 2025 19:23:01 +0900
 Received: from localhost.localdomain (unknown [10.226.93.220])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 498184222E70;
-	Wed,  2 Apr 2025 19:22:55 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id AEEF442241F9;
+	Wed,  2 Apr 2025 19:22:58 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
@@ -45,9 +45,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v8 06/19] can: rcar_canfd: Drop the mask operation in RCANFD_GAFLCFG_SETRNC macro
-Date: Wed,  2 Apr 2025 11:21:58 +0100
-Message-ID: <20250402102226.28032-7-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v8 07/19] can: rcar_canfd: Add rcar_canfd_setrnc()
+Date: Wed,  2 Apr 2025 11:21:59 +0100
+Message-ID: <20250402102226.28032-8-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250402102226.28032-1-biju.das.jz@bp.renesas.com>
 References: <20250402102226.28032-1-biju.das.jz@bp.renesas.com>
@@ -59,31 +59,68 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Drop the mask operation in RCANFD_GAFLCFG_SETRNC macro as the num_rules
-can never be larger than number of supported rules.
+Add rcar_canfd_setrnc() to replace the macro RCANFD_GAFLCFG_SETRNC.
+While at it, replace int->unsigned int for local variables offset, page
+and num_rules in rcar_canfd_configure_afl_rules().
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v8:
- * New patch
+ * New patch.
 ---
- drivers/net/can/rcar/rcar_canfd.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 34b918e8ec1c..8205e4ada12e 100644
+index 8205e4ada12e..98532f4031b1 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -91,8 +91,7 @@
+@@ -89,10 +89,6 @@
  
- /* RSCFDnCFDGAFLCFG0 / RSCFDnGAFLCFG0 */
- #define RCANFD_GAFLCFG_SETRNC(gpriv, n, x) \
--	(((x) & reg_gen4(gpriv, 0x1ff, 0xff)) << \
--	 (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8)))
-+	((x) << (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8)))
+ /* AFL Rx rules registers */
  
+-/* RSCFDnCFDGAFLCFG0 / RSCFDnGAFLCFG0 */
+-#define RCANFD_GAFLCFG_SETRNC(gpriv, n, x) \
+-	((x) << (reg_gen4(gpriv, 16, 24) - ((n) & 1) * reg_gen4(gpriv, 16, 8)))
+-
  /* RSCFDnCFDGAFLECTR / RSCFDnGAFLECTR */
  #define RCANFD_GAFLECTR_AFLDAE		BIT(8)
+ #define RCANFD_GAFLECTR_AFLPN(gpriv, x)	((x) & reg_gen4(gpriv, 0x7f, 0x1f))
+@@ -676,6 +672,15 @@ static void rcar_canfd_tx_failure_cleanup(struct net_device *ndev)
+ 		can_free_echo_skb(ndev, i, NULL);
+ }
+ 
++static void rcar_canfd_setrnc(struct rcar_canfd_global *gpriv, unsigned int ch,
++			      unsigned int num_rules)
++{
++	unsigned int shift = reg_gen4(gpriv, 16, 24) - (ch & 1) * reg_gen4(gpriv, 16, 8);
++	u32 rnc = num_rules  << shift;
++
++	rcar_canfd_set_bit(gpriv->base, RCANFD_GAFLCFG(ch), rnc);
++}
++
+ static void rcar_canfd_set_mode(struct rcar_canfd_global *gpriv)
+ {
+ 	if (is_gen4(gpriv)) {
+@@ -784,7 +789,7 @@ static void rcar_canfd_configure_controller(struct rcar_canfd_global *gpriv)
+ static void rcar_canfd_configure_afl_rules(struct rcar_canfd_global *gpriv,
+ 					   u32 ch, u32 rule_entry)
+ {
+-	int offset, page, num_rules = RCANFD_CHANNEL_NUMRULES;
++	unsigned int offset, page, num_rules = RCANFD_CHANNEL_NUMRULES;
+ 	u32 rule_entry_index = rule_entry % 16;
+ 	u32 ridx = ch + RCANFD_RFFIFO_IDX;
+ 
+@@ -795,8 +800,7 @@ static void rcar_canfd_configure_afl_rules(struct rcar_canfd_global *gpriv,
+ 			    RCANFD_GAFLECTR_AFLDAE));
+ 
+ 	/* Write number of rules for channel */
+-	rcar_canfd_set_bit(gpriv->base, RCANFD_GAFLCFG(ch),
+-			   RCANFD_GAFLCFG_SETRNC(gpriv, ch, num_rules));
++	rcar_canfd_setrnc(gpriv, ch, num_rules);
+ 	if (is_gen4(gpriv))
+ 		offset = RCANFD_GEN4_GAFL_OFFSET;
+ 	else if (gpriv->fdmode)
 -- 
 2.43.0
 
