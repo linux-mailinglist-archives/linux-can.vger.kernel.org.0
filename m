@@ -1,142 +1,173 @@
-Return-Path: <linux-can+bounces-3370-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3371-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5F7CA7FB90
-	for <lists+linux-can@lfdr.de>; Tue,  8 Apr 2025 12:22:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DAB4A806DE
+	for <lists+linux-can@lfdr.de>; Tue,  8 Apr 2025 14:32:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B4E33A2DAC
-	for <lists+linux-can@lfdr.de>; Tue,  8 Apr 2025 10:17:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BB201B845BD
+	for <lists+linux-can@lfdr.de>; Tue,  8 Apr 2025 12:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A92CB267AE2;
-	Tue,  8 Apr 2025 10:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0130926AA8F;
+	Tue,  8 Apr 2025 12:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b="f+rf7Ewo"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2114.outbound.protection.outlook.com [40.107.247.114])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE9B267AE7;
-	Tue,  8 Apr 2025 10:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744107050; cv=none; b=Fx6E10asOc+ZrUXsB2viWtPxSTbFlWrzyijJKMC5+oH0qlvO5rDD3XhWsj7BBBgzdVN3MgR+udjxwU+8BY8SU9Go0579XKLLtunx1jnq178uSlH4OIkIdUwLzYYKqicKZO75QTG0e2rT8P4FCpG+SD4RRBV4MVJdEUQIQcUzhJM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744107050; c=relaxed/simple;
-	bh=7u/xSUkUO9yn/yipKrfGD6s8VmTbpmnDhlrjOUEUufQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AWtoaBUSeDSX6uXX0X0dUKtoEFg+BsO9517PUDm46owH9+mk0wYWl+Mbd8qcwtebZV/pO/7Axv1PMOoHjg6BvpPvp4h58SgtH4JHBSYEGv0LrbY28gQ+sZYwRTkmixLlGe5yUNG67SA3m8KDxID/ykE7Rjd8rgsTojAiXa9tmhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-523dc190f95so2627561e0c.1;
-        Tue, 08 Apr 2025 03:10:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744107047; x=1744711847;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sn0dEIDKEarsIBX53h4F7dKWgVPs41TGZ/71AYv7Vuk=;
-        b=C3RGo2qpNerlzuDgOjm8QMltwSDuh0pZJq50TC80arIQc984nS7eArIHZpKUKreSS1
-         +3eh/oheTM656qss5iZgxBjqetTQjz+jb62Mzg4ZxgAIy/DeOuYb/rt1mP8VYzBPkLIT
-         OSBvzY36XRYQGVnaN0x0b59LIYf8iGz6Uzxk2Tv7pPNUB5X7zwEs6Wuopf1evExubzR6
-         wRjJjlZ0nJFj8XZ/jTW81WdSjxuCVC7x7+PoAdYO2Cd6we6F6mFa9ERStEO6X1GEipMZ
-         hLBO1/pyen3gjRjJCmU4ST17+tQ0vDgNVgqNiJSkGTtR5q2tcqM2iDozE1UEgIohcT5b
-         WOdA==
-X-Forwarded-Encrypted: i=1; AJvYcCVEC2lENhRHt0HMX5cVYIVlVhkgNYYkpwgayv3AG0EfxOBSe1uij8iSaHrVjCwa0/niTeFsD+yu5Ws=@vger.kernel.org, AJvYcCXxElTONtEseMGIow97MaK827QsZ8P2hYcgyLXyCZOBsYQ6q9dpNf79Gmbp+NCcO0I9iOLGG/Z3/19i/8OZF5re7qg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMb1c3b/rw0Ouhl9F/lcsGwnYM+NP3797j/TYtdgu8qd/7/eAp
-	DAM3xBHfat90FQbB0DGsCzzy6ebuzozURtfsSycK17NbAEvtcIqfkVGm//gP
-X-Gm-Gg: ASbGncvJqgSxhaxZOSTiw6MYW2WifzeoOTxbNwwxh4xBRr1PB1e5i+HLxREqJVe8b6S
-	nyq/3Oa0/hxC61Iv/TQTm2If8J7CZ1NYuc83TZbABSpHDEeRgcSCamyRbT2ZLD1weh4Mlu+uK2f
-	JQ66bDrRrfSZMQP9Gvb8FDBDruB3ZNMKdBdFSLmmo0qKvJddiEW52L/+a8fy8zPbLYd7MIyvPNV
-	NSgK7dI7lsSVO2fbxfvBwe41h9mgOw/soV0U7Th9LofYHQCoguuSZzQjoTVtugftKXJp96Ppqdo
-	IlaXM1FN5SCl9At4WnshMoISog/WEtT9wDRt3+SI/Y+Zw3vubCUQugutXyPIBqtY5ISaCFF3cVZ
-	H117fPAQVezutzdLyPw==
-X-Google-Smtp-Source: AGHT+IGagaV/gR8xBYykgGLsduR2pMAiQ6AYjhlgdUr+2X2KnYDde4Zs/D7ln0SLPbeiKbFb2pTLvA==
-X-Received: by 2002:a05:6122:8d2:b0:523:e175:4af1 with SMTP id 71dfb90a1353d-5277308100emr7753865e0c.6.1744107046947;
-        Tue, 08 Apr 2025 03:10:46 -0700 (PDT)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5279b55a2c7sm311228e0c.5.2025.04.08.03.10.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Apr 2025 03:10:46 -0700 (PDT)
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-86d377306ddso2318674241.2;
-        Tue, 08 Apr 2025 03:10:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVFc6rkNU79NxiEVuc7GQ3ds9eFQ4LMfu8BTaHHsEvhSTUv3tCiOmkudjnVUlZVdSellLVNl0oSTbxF5jqGl7y4OEM=@vger.kernel.org, AJvYcCXzEGiXCnJswDdVc/Xr9DdlAyZbVn6IxFO7Qc/foJyfZ7gIWcL6oKZOpp03MnZb14qr2nDMUi6kCqM=@vger.kernel.org
-X-Received: by 2002:a05:6102:3c8d:b0:4bb:e2a1:183e with SMTP id
- ada2fe7eead31-4c86374a466mr9364968137.18.1744107046285; Tue, 08 Apr 2025
- 03:10:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E284269CEB;
+	Tue,  8 Apr 2025 12:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.114
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744115057; cv=fail; b=Ij/gfik81WiyXMp7xpEegDdDsgkSlRLgcfY+VumASGa4Ci1Zwb26bqlgl7J0yfr9o6FSe0F8cUutcyZW2GyZzCRsRDvCdJXUTr81tELEyDigz1GPGXDiinzkz0Oe7FHGqM3S6eJ7iw5n70fgSO8cDJIJO0I9YzwyvWrqgC/2FWM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744115057; c=relaxed/simple;
+	bh=dSOGEwWScOZt+xWmGVyAPLWcnserTXzbD5XJTvxBX/8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=KoAV1VXPbDD5sL/wQ72Gd4edsPbFDNparJtuCLNX8rrmMJP93/2uBh8SU0dQ4D/SYLx7zHF/vmFQQ/GO9a3Fd6v0UqjoEBo5CBGWPC9jPTuld50HJ77HfmBGSN22KZ606Wgfgddqu9diTg9Y4Jy7KmC+xRI5Tv/0lXQwSLNvOjU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b=f+rf7Ewo; arc=fail smtp.client-ip=40.107.247.114
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvaser.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uTldOQs8gwSO+x/L/X2/XpYr9Ykp7t1Kva0KrV5PMNQnt1pTabdLRq7Hyjn61yN537cjTAHAsbbbQNroq+GM4eYzS7WT7BqtEzFDqv8t8so8gGEsCM4kZlUypNAb+pEh3P77PtUoDU+KZ+pFlFQULAq+3xJ1+QAV8mcrB1RRgzbUXo9FBpUUz6ojpDhwAchCKVPSeGohYowbe1GWMXvJD+kSPUnif11yhPeKjd6lWutCqTOGvC6KJ8CHi94wrW9W+5WPVmUTa+NI2AL2QuqL0EAbpaMFralmTz8VBSVEWdk8eoAWMDrRzz1YX+/B5mOkpHNvtvsPq2a6Fwnm1R86+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZVVTZOMstDjIPF6H66719ObB69J6OotupDD+IPqPt+U=;
+ b=Mvp64JpY9naS8ezJIBFgAyE9K9qcql9i/OL4t4rzi+2knjEvESevOwkCq9+kfdQwuKV7FLvZCsPi0z9+7LOjTAWvYUtEks7LOem30dQQRPAR+EKYX7hXxrmAoji0Q9kUBKhL3WBYZYH89JQYdpmUSaGqyQdv3civnm/CcQaMN1jychUTJ2VW+8VSkrPptFWV98l5P2XAfkHbUcu6s+VdPGRfOt1n+Amj/nqgzHLHJEHxs+L7hzEkNDx2g3H2n5t/Tp2nngNyyFPzOlwFL6l291c4mtp1CRJuPxmWYtnoZkk5GgqOyz7bY7rcn7/jHYJY7JESysAzJD4/nOm9B2efbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kvaser.com; dmarc=pass action=none header.from=kvaser.com;
+ dkim=pass header.d=kvaser.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kvaser.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZVVTZOMstDjIPF6H66719ObB69J6OotupDD+IPqPt+U=;
+ b=f+rf7EwoUeOoTSFR9IZgCgXw2kpdncKJQTH6CcUH7tF4gyJyJWHYLGzP3zowJ1a/pfQx6N+McBfFgxq129xnZSK4JEV7PgTQAUccJvCMF/m/3/f+JEQ1QwmvSjqeLJJ5cT4SCKpRvRZQTBV2YPhgOtDkwpAr2mtkFITRiYmN6CA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kvaser.com;
+Received: from PAXP193MB1663.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:1c3::18)
+ by VI0P193MB2617.EURP193.PROD.OUTLOOK.COM (2603:10a6:800:258::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.17; Tue, 8 Apr
+ 2025 12:24:10 +0000
+Received: from PAXP193MB1663.EURP193.PROD.OUTLOOK.COM
+ ([fe80::a4de:d967:751f:55fc]) by PAXP193MB1663.EURP193.PROD.OUTLOOK.COM
+ ([fe80::a4de:d967:751f:55fc%3]) with mapi id 15.20.8632.017; Tue, 8 Apr 2025
+ 12:24:10 +0000
+From: Axel Forsman <axfo@kvaser.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-can@vger.kernel.org, mailhol.vincent@wanadoo.fr,
+ stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>
+Subject: Re: [PATCH 1/3] can: kvaser_pciefd: Force IRQ edge in case of
+ nested IRQ
+In-Reply-To: <20250407-unyielding-panda-of-wealth-5c277e-mkl@pengutronix.de>
+References: <20250331072528.137304-1-axfo@kvaser.com>
+ <20250331072528.137304-2-axfo@kvaser.com>
+ <20250407-unyielding-panda-of-wealth-5c277e-mkl@pengutronix.de>
+Date: Tue, 08 Apr 2025 14:24:08 +0200
+Message-ID: <871pu296zb.fsf@kvaser.com>
+Content-Type: text/plain
+X-ClientProxiedBy: MM0P280CA0037.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:b::27) To PAXP193MB1663.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:102:1c3::18)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250402102226.28032-1-biju.das.jz@bp.renesas.com> <20250402102226.28032-6-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20250402102226.28032-6-biju.das.jz@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 8 Apr 2025 12:10:34 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWDrbAAwBz80ve6UbH8m4uCNe3gqoF6H0A1Sn9hUbw+FQ@mail.gmail.com>
-X-Gm-Features: ATxdqUFC43TJTsokU2r1u_JcihKvFsaDXQx3XWImF67c1WmQlJNrfU_QrZhj9HM
-Message-ID: <CAMuHMdWDrbAAwBz80ve6UbH8m4uCNe3gqoF6H0A1Sn9hUbw+FQ@mail.gmail.com>
-Subject: Re: [PATCH v8 05/19] can: rcar_canfd: Update RCANFD_GERFL_ERR macro
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	linux-can@vger.kernel.org, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXP193MB1663:EE_|VI0P193MB2617:EE_
+X-MS-Office365-Filtering-Correlation-Id: 34a5626d-05e2-43d9-b867-08dd769843cc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?O9gB0D1QLAXAyxDf0pMpl7wWHvLrr/ahkl0TaQmelK9TF7zcSO2E2/Wc/mrj?=
+ =?us-ascii?Q?xWpNWiN2dZ8m/BXiarI3CimsMN6uUUB9DR3u/VYlLknUyfvXdu5TVv2s66uE?=
+ =?us-ascii?Q?KqfyAhn+zR6oxH2+qsbgxbfmwrutBl/vfxUVyoZPkfjiPBBS7/PytBpp2l+V?=
+ =?us-ascii?Q?UYfndimaGqd36ua5+TBAFuwxcDqhe4+DIvr9HseKUWp9dSoZNjxu/VgRfJwm?=
+ =?us-ascii?Q?RVMpsnVW+n8Tk/951gfHJRX8/A0vcfc7JhvhewK5oFBtErOxXYLKAB3DrAeu?=
+ =?us-ascii?Q?Gb2NMyOYba8IO6sg0jqEw8dqmKK30TCbFsStBmFlAhgNoOYyn9+WvnFYY4Tk?=
+ =?us-ascii?Q?iEBZmSSSthXj7be5eqT2rARw+GKAAYB8h6iQ8HlBB2OEFadXS7VR4CwwJ+Lb?=
+ =?us-ascii?Q?ePUXGq9k+721OpP8MA8WsBFyR5Z6wJ5y4oOoFe+ohgOEIIkshbaBgkIUg9Me?=
+ =?us-ascii?Q?yUey76Cj+NvFdLVmzqT8PdOdeVB8Lou0cN8hPuvvkBfIZg4YkMsdcH3YQhKK?=
+ =?us-ascii?Q?50jzA8cTP7FT6dPaSg4PTCT9BCjJZppwfIiOe44nW7Fdigo9ifDDbBfthNaZ?=
+ =?us-ascii?Q?mSfu0znZmOUaxfdi0sxi9rgOzzWRVJGZMcveV1eJX7X7VRf5bzui0jB0qlLJ?=
+ =?us-ascii?Q?8O6nG8v1bIFVSeEoWd/THoUCZWayobMfRwQvmsBFF0I/26zLR1s5eGEA09Yt?=
+ =?us-ascii?Q?JpbOBR/uNYa14AjqZweEN652e51M1mdsBRjbGIn7CezO5aZi/k5h3C+QOvmB?=
+ =?us-ascii?Q?KV9QB98gpLxwG81l+QgRCYMrox78lAZO0YmIgHquF4EMeg+PNprSkSofA9GJ?=
+ =?us-ascii?Q?7okOsLSz28zSKDUdt40P7pP7qEubcqGJGLLkEGXg81giUd4cNLNOTxit9DAx?=
+ =?us-ascii?Q?bnPsjgsLBkbwCg9l6W6cL8TsQITfu4J2U6pNCOV0pzk1yQRriGvCJPHqSpop?=
+ =?us-ascii?Q?WvzcJ0RUZYvGKwyR9QhZlHYPu8LWGqb8ZoxcazPjfwCV9KheY8Slg0OvwNaU?=
+ =?us-ascii?Q?Z9S5VsePhQYDu22DQSzZjYiateUF2xuAhIPvh4oJH6WAW7XOXPhjIWAwjdu0?=
+ =?us-ascii?Q?8Xq02XsYK9A2o7CbHKA7n1t1wmqOVP56dB8i4hI+eFT2mnDMW73MDlNoUxM2?=
+ =?us-ascii?Q?bnEY7W68ORrI1wD4yBwmMBFX24RJGPc6WfataiqJnyDtCkXq2cJXguEmR2jR?=
+ =?us-ascii?Q?SeXBjgV3VH7TXWyrg1RBlorbPyNh9z7plB61LdCeO/+L2y8A3DMnkpQTyx04?=
+ =?us-ascii?Q?PG+rEFsqGJj0uY0OQ40HxD1pQHjxri1InBwi9kd1Je3QvHbKkJS1d/bitiF2?=
+ =?us-ascii?Q?Uyt7Ms6pkZKiVBbima5WrBzHsv85Uq5zBhRWtxBu2Pa50tOalC24cd85AN4k?=
+ =?us-ascii?Q?fQJKQc0v6Wx6UYrmMCU7SnfZzIgp?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXP193MB1663.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7053199007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?nqpk+ErYqEzp7s9JUob+YvRLOPGGr+QdznAcL9Ss0a8otFlqLbA4RmAIrTHO?=
+ =?us-ascii?Q?I59LCxNvBKv518ofBmfOHZg7Rsa64iaDszHyxD9G+htpbkPdTUUwZ+N9SDtJ?=
+ =?us-ascii?Q?SDG5UOpo2XWns01Dn4YvsShH2xTZQKwF5ReiMPMt/nv0zz9LyvC5p0MlRMFl?=
+ =?us-ascii?Q?dh0ile+zznHEGtkH17OD4EqXGXOslrveuv8vsHam5ZWn29wu9D/73qDAAM2W?=
+ =?us-ascii?Q?SAtTmXJLk0cKGkfis/55XpLPoakJteEqSbt5oXofMph9agOxhBvhI7R9kLEv?=
+ =?us-ascii?Q?wQm9MTaWrIPCdGlPW/VgrnBDgtW24F2Q4ZmPDSBxVyYAAPc2PswY+G4D9Ct2?=
+ =?us-ascii?Q?FRC18qe0ihIQy559N+2R3hJGJVIKbYuI8GvWcK1TXcvW9bvgt5PnYuVF0QOV?=
+ =?us-ascii?Q?gJqgTAMcyZmW7KxmKDKddathNUV3QYdWRk0crgzoiTLcezC/tTvzUau6N7MQ?=
+ =?us-ascii?Q?Er3fopJ+wuo0o4swqQMjXlAtGYPjYizucHvmChKimXPqicNcPF4/M2ApYPNN?=
+ =?us-ascii?Q?3isMGlhWOGi6AJJkNodLW8DbIGsTfzwpd0bTh+u/arpTogbN3wvuPiPHF+RV?=
+ =?us-ascii?Q?BAzKqg330/FnsY11PlMHHeNFmhNqufNFQVPN9av1WsWdsb9xsioakDOMYk9W?=
+ =?us-ascii?Q?tc/BNv1vo6uJ6M2vTuawV2bkDkdTNXrHdYBA4cQMjxdW+MbXxnCAHB9h31cJ?=
+ =?us-ascii?Q?ZHhITQdqa/EZ9a3UYeCnxJcDVTCyGw8k6pt9b+ZmFfQfwXQVUTd4kyekdbd+?=
+ =?us-ascii?Q?zV656s798lK4A6IaKZRBJcCsPChABESl0+er9rX+Khf5Ps8UAYhKxElIvbXl?=
+ =?us-ascii?Q?M52687kiNHbbTDSynv1GWhhPhJwky0Sob7KKUpsAvtjAnccFalLb84iQB/FI?=
+ =?us-ascii?Q?7XDra+WjVuE95dLavW7EN4zt0FCiNQPo6QhzcQzP72mE6w/m/oIIEIM+mW5o?=
+ =?us-ascii?Q?yPF1AvZF/qigC3kRdJQUA3g8kuf5VYYMwNOYzCQ8Za6hOEHhnAzklxCtFdVe?=
+ =?us-ascii?Q?MnTz32aGbHkffO+kWbEqfNpFtK4QTdIAL9OTUKb5EByFDgDLKGiF7j0XQaHT?=
+ =?us-ascii?Q?A7LPHiHdYbIsefWifyteh5j+amizkHwMxW2jiUeC9hUW5SLCTSffppdR20c0?=
+ =?us-ascii?Q?Y65JKVdhcedJ057LHzmcmhU172OnW1zS1Lrn0JV4TQWSC09z2WIlcWA4DFnj?=
+ =?us-ascii?Q?USc5d7Pxnfki03kXMvLaE1Mxg74kxQl0LOl6goajRCndtAG/iFnAuxJ1j7HK?=
+ =?us-ascii?Q?7pO6FkDyd3zWORfWqRnDNtUfC6+53B4C7tPlRT4HUG6G89CjhyEKkVLouSnJ?=
+ =?us-ascii?Q?67MwIKQJafmU6OuEw7JCrqUMturycThUcUctCulnZdW65q0HgFOdt7P0V1qW?=
+ =?us-ascii?Q?+ZfgYASxY59XSrBo8ca/zhrjieYUdHMMNiStQRVlswef0uSWi1Y0UXBR3GL3?=
+ =?us-ascii?Q?s1DBGto4Oc7dX+lQRIV7487k5dLhXcOw/gzqCjxe9yMkg9gohPFpbIIH/e/S?=
+ =?us-ascii?Q?EcwbkpPaw5rMLedztNIulC56piVlvDCTYQVNYV8S2yhFu5uq1CKQL4Wg9QNP?=
+ =?us-ascii?Q?h3WUqUdiL1p3C3rAx29uQkukVB/WGhLpuxRpyf0f?=
+X-OriginatorOrg: kvaser.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34a5626d-05e2-43d9-b867-08dd769843cc
+X-MS-Exchange-CrossTenant-AuthSource: PAXP193MB1663.EURP193.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2025 12:24:10.3031
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 73c42141-e364-4232-a80b-d96bd34367f3
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JKXVRLRkHgrTYleOmx7LCxXFAPPYif3+nUyA3tryYWtD5IUzdJzx4JJGnXKx3bPjIHWGph90ZoX/TxzuLDKT4w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0P193MB2617
 
-Hi Biju,
+Marc Kleine-Budde <mkl@pengutronix.de> writes:
 
-On Wed, 2 Apr 2025 at 12:22, Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> Replace the macro RCANFD_GERFL_EEF0_7->RCANFD_GERFL_EEF. The macros
-> RCANFD_GERFL_EEF* in RCANFD_GERFL_ERR can be replaced by FIELD_PREP() and
-> drop the redundant macro RCANFD_GERFL_EEF(ch).
+> On 31.03.2025 09:25:26, Axel Forsman wrote:
+>> -static u32 kvaser_pciefd_receive_irq(struct kvaser_pciefd *pcie)
+>> +static void kvaser_pciefd_receive_irq(struct kvaser_pciefd *pcie)
+>>  {
+>> +	__le32 __iomem *srb_cmd_reg = KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_CMD_REG;
 >
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v7->v8:
->  * Updated commit description.
->  * Replaced the macro RCANFD_GERFL_EEF0_7->RCANFD_GERFL_EEF.
->  * Dropped the redundant macro RCANFD_GERFL_EEF(ch).
->  * Dropped the tag.
+> Why is this an __le32? The struct kvaser_pciefd::reg_base is __iomem
+> void *.
 
-Thanks for the update!
+Just as a hint that the register is 32-bit.
+But you are right, I will change to "void __iomem *" for consistency
+in the next iteration.
 
-> --- a/drivers/net/can/rcar/rcar_canfd.c
-> +++ b/drivers/net/can/rcar/rcar_canfd.c
-> @@ -938,7 +938,7 @@ static void rcar_canfd_global_error(struct net_device=
- *ndev)
->         u32 ridx =3D ch + RCANFD_RFFIFO_IDX;
->
->         gerfl =3D rcar_canfd_read(priv->base, RCANFD_GERFL);
-> -       if (gerfl & RCANFD_GERFL_EEF(ch)) {
-> +       if (gerfl & FIELD_PREP(RCANFD_GERFL_EEF, ch)) {
 
-On RZ/Five: error: implicit declaration of function =E2=80=98FIELD_PREP=E2=
-=80=99,
-i.e. missing #include <linux/bitfield.h>.
-
-I will do more review later...
-
->                 netdev_dbg(ndev, "Ch%u: ECC Error flag\n", ch);
->                 stats->tx_dropped++;
->         }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+/Axel
 
