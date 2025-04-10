@@ -1,89 +1,90 @@
-Return-Path: <linux-can+bounces-3383-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3384-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BDB1A823B2
-	for <lists+linux-can@lfdr.de>; Wed,  9 Apr 2025 13:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBB0CA836A5
+	for <lists+linux-can@lfdr.de>; Thu, 10 Apr 2025 04:40:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36E8E1B65B0E
-	for <lists+linux-can@lfdr.de>; Wed,  9 Apr 2025 11:40:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 916D31B64CFE
+	for <lists+linux-can@lfdr.de>; Thu, 10 Apr 2025 02:41:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1C9525E44F;
-	Wed,  9 Apr 2025 11:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C781E1E411C;
+	Thu, 10 Apr 2025 02:40:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="VjPFJfeT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ep0VsQTf"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10A525E45D
-	for <linux-can@vger.kernel.org>; Wed,  9 Apr 2025 11:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8C01E285A;
+	Thu, 10 Apr 2025 02:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744198784; cv=none; b=JPM4/+KWrV56EdFC5hVdnYYTadygI4UQ8WhcLIxlTIZbwR5clyJ5QeW3MMAlGa2TnlCJsWVlQtEq/1a6+68bC2fK1h26b8aFWNNkXHJmNr601ICXLx6gYpkNegeBJG4b+TSnhxBVphphgtf+amIaWmEZIn/1bHX7gW+Y72U86hs=
+	t=1744252848; cv=none; b=KjMWkFOWHwwza7b/Dcy+x6KJfgVzMs7XMMKZVsvXSN/9eTAk+n1O4W3OM5aSqnthQYgssSFXeTxjCliOAXZzUiwTHW101D48d0TxH2VciNLmwTO60b7knii8tGVH1pGmtOzIpGSQnrXYvPhRIksQ1hgTPEmccsOIKSecoipZg8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744198784; c=relaxed/simple;
-	bh=9JPqM5tB/xt7Ke455v87Sqtbxm1iucVYBgzAxrP0jGY=;
+	s=arc-20240116; t=1744252848; c=relaxed/simple;
+	bh=3/tfsE5WqQ4jsxy0JOcV1bgcuEhi9GuIovCCra7x0/o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Cb8I6BlH9/tWtaUHBP1BsXKLZ57fK3NbLc3ONgicXwtxQk1kX+5XlvbURi1JUkvV3CbviqsZ5yiYba8p2wfW3wcgFDRZyKsWDaJmmA3pzHj1WGVFpHVGi0Z8vTS2D9jD9By54wScih3hP/KduANk1uOgCwEurAGADv+EdDMK9+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=VjPFJfeT; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-30db2c2c609so70017371fa.3
-        for <linux-can@vger.kernel.org>; Wed, 09 Apr 2025 04:39:41 -0700 (PDT)
+	 To:Cc:Content-Type; b=lkGTpujUKNo+MCc1M6Qri/+WoGuoExfrJUiEqZmfnTHMdLwn5ILvoTWFDQE3k4sbhW+JTDspJBCuGVyLUzRNKSLj/4YnjdDX7YWld9UwHtpRDEoXzG8G5I9BEibjLbMrpWavPDuJXxYLE7MqmnW8tAbE47oJCCvjM1zxuIl+sjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ep0VsQTf; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e6dee579f38so243005276.0;
+        Wed, 09 Apr 2025 19:40:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1744198780; x=1744803580; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744252846; x=1744857646; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dqZ7G3XZuno9/BWbcpOUNm32JyzY1vuuWJOOv2PSiuI=;
-        b=VjPFJfeTDcr+YOimJmfUKCRre4cvyvMoztN40x+rVmN/gFCrsjWZooaMa4NWgFRIQY
-         v4P/wybg88s+yluq7ZaZ3Nc588R04lNCZ65f4OtGk7PjMsHry6jPbvODKScRp8J0wk79
-         kit3JuGHoD1ziXbjYwtl6PT74XaFzEUEzTTzDK8iH61hSAK9txF4Ix1J7Jt6/ol90xaS
-         NOoeFGTm8xM3NEzRtE95HKe/WfFi0rFE2nz5fFrG7NucT7I1hhbwHhBKzRtqg/oE9Rdf
-         L0kLJagr97uuj8NuZ5bNWLEqEx2/d69Q9eDldyNhHugWeWhycah/4AZMNq/y50vo8V6U
-         TMHw==
+        bh=KcuOTVyHU6jhzBy0xZ293tFvt3BaYYRswaEJVrukAHE=;
+        b=Ep0VsQTf5v+ZELQRtqkzYH1/5DRHxxQ7gVeHZZm8UGBURjtGsxEnpFFhn7ePBIwDDL
+         v6hcMA6CgADw5yrJ/GjhoOGOYxdpqpSl43oQyk9wQxDmOyEzNZJc+odEmA3gtEojxS+D
+         OfiGzdUd/9pXUFfTOJDdfWcRdYEeWb29wW/ruVbVtuHjHFmhA8BrsZfarbnZaxSrjUaa
+         knQM3UMtZZ8WjaDbJt4+XctOxuwy2cKbIYFzlhHx1KlM85DqTbg4+URg/ohTx09c3ahL
+         elXao5WpDk2vG5nUneDiMtodRJzAUl0/nG5gS6gjyNuuY+ubdotV7Gko7RFlLzYz0zR1
+         ebxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744198780; x=1744803580;
+        d=1e100.net; s=20230601; t=1744252846; x=1744857646;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dqZ7G3XZuno9/BWbcpOUNm32JyzY1vuuWJOOv2PSiuI=;
-        b=d3cWkBiLiMj9F668xrVnxMy2gfAptXCMXrAfQQiq1JSV+K8lIk1fdl5TZpujTajOhs
-         S2qwmB68DlKJQH4EdL556E/QRt/b99vYpyJaktQxg/0uRGG0a69wRC+y+ZWBfsvKt5pI
-         1z91HCWWpsXcColAk5RlLIPtAgdr+imsrkGpYFD24x3Kvi6dSHtggGCI3c5jWQjQ7IWp
-         1uXOFUy3/Sn/wgxihOyAvbyI68gytbvvj/GgbuQZPdFWCULn9WLi5qNUY1+JZvZt/5eQ
-         +lH1Xl5kGQ9lOrBUwuJaDXEwQZd1dr5J1/5ed9VsOHSQzJQKtnrZgemEXOEWD4lLKEu5
-         JhmA==
-X-Forwarded-Encrypted: i=1; AJvYcCW5t1kCHnKxj9dlAsHIttVeh87sEQrmZgacZdzk8LIkcy5N0ZpbT3qKo0CZxJXDo/+YaJhxDtZ6AmY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp0//aiCOAZAElZG88ZEE49Y2XZHfIWUwm5wwu9H5R7SnF21wL
-	wx4yp5YHainu/mgWJocA4CaNxSU3hM3zn8/+PkX5UkoGBvUGE14gd7I1KJI4PeiSpeJdAz6ZJMv
-	c7Ao8vKPZmoR7/IhJC6UyJnyEvZ2V4ia+0n7NWGFdOnkFEXwt
-X-Gm-Gg: ASbGnctsVpPL8doKZ8iCSh/EwhHxkDx8rg6XnlTfmsuH+fiac1kxrYYT9DdFZd+0+D9
-	xcGfNPnfM4p7DgTxynvtOQUpJX0BCBh7heZyfF60Eencve21vkDpJIo3JjdKkb51jy44H4s2g3W
-	d9KTAdjUWw7MkCmWE21k82N1UT2feUWxMBUsD4gkPCkXiGLAzoGczbHw==
-X-Google-Smtp-Source: AGHT+IH2rhh9UZr3gT+gk9vauBbff4rqoLJ0eK+N4IMBNrWJkLz7WugNYn/eMwW03Soju/MnS5YCOKqclgKaC+gr7b8=
-X-Received: by 2002:a2e:a916:0:b0:30b:aabf:fa8 with SMTP id
- 38308e7fff4ca-30f438a304cmr9221251fa.28.1744198779776; Wed, 09 Apr 2025
- 04:39:39 -0700 (PDT)
+        bh=KcuOTVyHU6jhzBy0xZ293tFvt3BaYYRswaEJVrukAHE=;
+        b=h8tMtq5rnnHdhOGbQBoSkvUbbyd5M1R+L9JrC/9030IDqKo3w7sfd0D00lOLv1oQzf
+         GGk3pjQSrtSk3TU/ECS9VA53rndRSVR98qwNodH3WHH53CByim47WnB3vcZP24CVwSni
+         fuWNJBiSviN0KHq29t/qcOIcU7ISIGE3zd58CRgyL+HSbhw4Gx0OSE0ZEhpbNsAjS7Oi
+         t25g7WiipkrA229BIA2LQ3ZlMx/UpP2bXT78ck8pJxyBomd4TIJWkr+JXEZhdYKKBuF/
+         GZ1eEo1ukX5P40akrr9P3+kZtmbxwonvidL9LD2gs6HxxezXpI6YhRIvKBiP89lASuQS
+         J9CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKAqzRv/TCfnZSzQAk0asjIuuEAcomNxNFNQWAWLph3tWh9j9amoWecIcjZbuQbkM4DC8LLhmIQnJV@vger.kernel.org, AJvYcCUX/lL3I2k4hWFy4WBySQ2q8Z+KlOyaeysfpVvE3U2GoqzFTMFcoIisXawrdZ4jG+FcB/h/bHh7FUA=@vger.kernel.org, AJvYcCVPE+AW2wGJybhPvGOteNXTYA8v9Jwq5C7eAAvkHubY3csjd8VBlhArqzSSvZZgvjFIvuhDQ7No0Gj8voGEZ/4=@vger.kernel.org, AJvYcCVWvLo0tRWLyhCLa5+zfkUO+0gHQoO0kCPaAdzPbP/0I7zMzFezhWTurSTAqWKUFMRw2ovJPKjsbyl1ZQ==@vger.kernel.org, AJvYcCWF2sivcCMa7hDhWF0cJvWPKvLDse0ktPWCadLWU9KC0Gk3EAUTskxHGrv8r/mBgkd18IAV0r+EAfhJ+Kjl@vger.kernel.org, AJvYcCWKaQtfSZVOVbTGZqYeOJmocKAU7Hn+U6c5R0ODGbhJBQ2bIRnyVeT/8VkqT5U4kb5miraUNVbAcHMLtr0=@vger.kernel.org, AJvYcCWOW21NxHoYlEdaS5zIiQrrJfIt+d5hlfMYX5RS7R8WiPa3woE0LlEXqagDhxIa6sG4uHHk9v2l@vger.kernel.org, AJvYcCXbINYZP7Hl7NA5/cotrHn07tD0uGLpE5+3DhGNAP7z3jtZa1q0IvQAfo2Y1J7PDUnEOJ1DujKndV4H@vger.kernel.org, AJvYcCXqkHV9/RgtBZVlDYXRELfjF+olewpO9rnVcUpYLV6EDTT4w9u6G7E7FYoe5LPZMzAcceTdKLbV8x1z@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAM4Z5i3kEcp3hdZcLGcG0JdLhORFsUy9pryxhizVi8vi412cy
+	mPlm4JlXY4aLpBn/QgUXro3mZ2XNbBCcu0i1GkKz4GQ1SYQHxKJVtLVm4zB27k9nfJPQatD8e9G
+	44GSl50kEeaXIbnu76XuK89TpHKA=
+X-Gm-Gg: ASbGncvXPDy0zgDGCJ75jBA1I3XIM957a7Jbf7IBoCP5RJFm0RLLLOkZ1IfnMtwt5vI
+	HrL3VHism/4rsvyC6WbccSnQIODa6lhOgnbwuu5gc2QNEAtZfFbdqsNACo86JnnvBPG4siKS6RH
+	4yKzASJhJJZt6oeoUd03CIvAzMGEnFNGxfw8tAAYXJW1eQQabPLIJ40YXc
+X-Google-Smtp-Source: AGHT+IF3IaahFFEt95p88L2E+DMS5YlqS8f6R+jKEhaHG6PmdCAg0utj1GK9fsdr5gTPdjPGEMMC0Hqk+ak++gS3uUU=
+X-Received: by 2002:a05:6902:981:b0:e6d:f0a6:4cc5 with SMTP id
+ 3f1490d57ef6-e703e0dce41mr1936544276.1.1744252845873; Wed, 09 Apr 2025
+ 19:40:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250409082752.3697532-1-tmyu0@nuvoton.com> <20250409082752.3697532-3-tmyu0@nuvoton.com>
-In-Reply-To: <20250409082752.3697532-3-tmyu0@nuvoton.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 9 Apr 2025 13:39:28 +0200
-X-Gm-Features: ATxdqUFijEYx6QdFRrhVQhViJ0ULDwLemnwxjabwnPjw2A_QybzwG7P-pxJwIsc
-Message-ID: <CAMRc=Meb9wbhd_wH0OBGAivgUA3-3_+-E5neE+b32T54zQkQjg@mail.gmail.com>
-Subject: Re: [PATCH v9 2/7] gpio: Add Nuvoton NCT6694 GPIO support
-To: a0282524688@gmail.com
-Cc: lee@kernel.org, linus.walleij@linaro.org, andi.shyti@kernel.org, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+References: <20250409082752.3697532-1-tmyu0@nuvoton.com> <20250409082752.3697532-5-tmyu0@nuvoton.com>
+ <20250409-cooperative-elastic-pillbug-672a03-mkl@pengutronix.de>
+In-Reply-To: <20250409-cooperative-elastic-pillbug-672a03-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 10 Apr 2025 10:40:34 +0800
+X-Gm-Features: ATxdqUHWhDl-xyLqC0glS-YG8IxmYyFFtwBiJ5M-DMW7Jb2-OYIl3qY47lOEkyg
+Message-ID: <CAOoeyxULns52vAwzsLoXB+BwT+CN+VGBwqrg61pjKJH8bTD5bw@mail.gmail.com>
+Subject: Re: [PATCH v9 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
 	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
 	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
 	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
@@ -91,613 +92,164 @@ Cc: lee@kernel.org, linus.walleij@linaro.org, andi.shyti@kernel.org,
 	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
 	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+	Ming Yu <tmyu0@nuvoton.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 9, 2025 at 10:28=E2=80=AFAM <a0282524688@gmail.com> wrote:
->
-> From: Ming Yu <tmyu0@nuvoton.com>
->
-> This driver supports GPIO and IRQ functionality for NCT6694 MFD
-> device based on USB interface.
->
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
->  MAINTAINERS                 |   1 +
->  drivers/gpio/Kconfig        |  12 +
->  drivers/gpio/Makefile       |   1 +
->  drivers/gpio/gpio-nct6694.c | 494 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 508 insertions(+)
->  create mode 100644 drivers/gpio/gpio-nct6694.c
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f67f78a1d7b0..c3e849701497 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17305,6 +17305,7 @@ F:      include/uapi/linux/nubus.h
->  NUVOTON NCT6694 MFD DRIVER
->  M:     Ming Yu <tmyu0@nuvoton.com>
->  S:     Supported
-> +F:     drivers/gpio/gpio-nct6694.c
->  F:     drivers/mfd/nct6694.c
->  F:     include/linux/mfd/nct6694.h
->
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index f2c39bbff83a..ced4a93dccb6 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -1463,6 +1463,18 @@ config GPIO_MAX77650
->           GPIO driver for MAX77650/77651 PMIC from Maxim Semiconductor.
->           These chips have a single pin that can be configured as GPIO.
->
-> +config GPIO_NCT6694
-> +       tristate "Nuvoton NCT6694 GPIO controller support"
-> +       depends on MFD_NCT6694
-> +       select GENERIC_IRQ_CHIP
-> +       select GPIOLIB_IRQCHIP
-> +       help
-> +         This driver supports 8 GPIO pins per bank that can all be inter=
-rupt
-> +         sources.
-> +
-> +         This driver can also be built as a module. If so, the module wi=
-ll be
-> +         called gpio-nct6694.
-> +
->  config GPIO_PALMAS
->         bool "TI PALMAS series PMICs GPIO"
->         depends on MFD_PALMAS
-> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-> index af130882ffee..6a56ec5430c6 100644
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -124,6 +124,7 @@ obj-$(CONFIG_GPIO_MT7621)           +=3D gpio-mt7621.=
-o
->  obj-$(CONFIG_GPIO_MVEBU)               +=3D gpio-mvebu.o
->  obj-$(CONFIG_GPIO_MXC)                 +=3D gpio-mxc.o
->  obj-$(CONFIG_GPIO_MXS)                 +=3D gpio-mxs.o
-> +obj-$(CONFIG_GPIO_NCT6694)             +=3D gpio-nct6694.o
->  obj-$(CONFIG_GPIO_NOMADIK)             +=3D gpio-nomadik.o
->  obj-$(CONFIG_GPIO_NPCM_SGPIO)          +=3D gpio-npcm-sgpio.o
->  obj-$(CONFIG_GPIO_OCTEON)              +=3D gpio-octeon.o
-> diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
-> new file mode 100644
-> index 000000000000..5b6562814836
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-nct6694.c
-> @@ -0,0 +1,494 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Nuvoton NCT6694 GPIO controller driver based on USB interface.
-> + *
-> + * Copyright (C) 2024 Nuvoton Technology Corp.
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/nct6694.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +/*
-> + * USB command module type for NCT6694 GPIO controller.
-> + * This defines the module type used for communication with the NCT6694
-> + * GPIO controller over the USB interface.
-> + */
-> +#define NCT6694_GPIO_MOD       0xFF
-> +
-> +#define NCT6694_GPIO_VER       0x90
-> +#define NCT6694_GPIO_VALID     0x110
-> +#define NCT6694_GPI_DATA       0x120
-> +#define NCT6694_GPO_DIR                0x170
-> +#define NCT6694_GPO_TYPE       0x180
-> +#define NCT6694_GPO_DATA       0x190
-> +
-> +#define NCT6694_GPI_STS                0x130
-> +#define NCT6694_GPI_CLR                0x140
-> +#define NCT6694_GPI_FALLING    0x150
-> +#define NCT6694_GPI_RISING     0x160
-> +
-> +#define NCT6694_NR_GPIO                8
-> +
-> +struct nct6694_gpio_data {
-> +       struct nct6694 *nct6694;
-> +       struct gpio_chip gpio;
-> +       struct mutex lock;
-> +       /* Protect irq operation */
-> +       struct mutex irq_lock;
-> +
-> +       unsigned char reg_val;
-> +       unsigned char irq_trig_falling;
-> +       unsigned char irq_trig_rising;
-> +
-> +       /* Current gpio group */
-> +       unsigned char group;
-> +       int irq;
-> +};
-> +
-> +static int nct6694_get_direction(struct gpio_chip *gpio, unsigned int of=
-fset)
-> +{
-> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
-> +       const struct nct6694_cmd_header cmd_hd =3D {
-> +               .mod =3D NCT6694_GPIO_MOD,
-> +               .offset =3D cpu_to_le16(NCT6694_GPO_DIR + data->group),
-> +               .len =3D cpu_to_le16(sizeof(data->reg_val))
-> +       };
-> +       int ret;
-> +
-> +       guard(mutex)(&data->lock);
-> +
-> +       ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       return !(BIT(offset) & data->reg_val);
-> +}
-> +
-> +static int nct6694_direction_input(struct gpio_chip *gpio, unsigned int =
-offset)
-> +{
-> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
-> +       const struct nct6694_cmd_header cmd_hd =3D {
-> +               .mod =3D NCT6694_GPIO_MOD,
-> +               .offset =3D cpu_to_le16(NCT6694_GPO_DIR + data->group),
-> +               .len =3D cpu_to_le16(sizeof(data->reg_val))
-> +       };
-> +       int ret;
-> +
-> +       guard(mutex)(&data->lock);
-> +
-> +       ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       data->reg_val &=3D ~BIT(offset);
-> +
-> +       return nct6694_write_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +}
-> +
-> +static int nct6694_direction_output(struct gpio_chip *gpio,
-> +                                   unsigned int offset, int val)
-> +{
-> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
-> +       struct nct6694_cmd_header cmd_hd =3D {
-> +               .mod =3D NCT6694_GPIO_MOD,
-> +               .offset =3D cpu_to_le16(NCT6694_GPO_DIR + data->group),
-> +               .len =3D cpu_to_le16(sizeof(data->reg_val))
-> +       };
-> +       int ret;
-> +
-> +       guard(mutex)(&data->lock);
-> +
-> +       /* Set direction to output */
-> +       ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       data->reg_val |=3D BIT(offset);
-> +       ret =3D nct6694_write_msg(data->nct6694, &cmd_hd, &data->reg_val)=
-;
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       /* Then set output level */
-> +       cmd_hd.offset =3D cpu_to_le16(NCT6694_GPO_DATA + data->group);
-> +       ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       if (val)
-> +               data->reg_val |=3D BIT(offset);
-> +       else
-> +               data->reg_val &=3D ~BIT(offset);
-> +
-> +       return nct6694_write_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +}
-> +
-> +static int nct6694_get_value(struct gpio_chip *gpio, unsigned int offset=
-)
-> +{
-> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
-> +       struct nct6694_cmd_header cmd_hd =3D {
-> +               .mod =3D NCT6694_GPIO_MOD,
-> +               .offset =3D cpu_to_le16(NCT6694_GPO_DIR + data->group),
-> +               .len =3D cpu_to_le16(sizeof(data->reg_val))
-> +       };
-> +       int ret;
-> +
-> +       guard(mutex)(&data->lock);
-> +
-> +       ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       if (BIT(offset) & data->reg_val) {
-> +               cmd_hd.offset =3D cpu_to_le16(NCT6694_GPO_DATA + data->gr=
-oup);
-> +               ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->r=
-eg_val);
-> +               if (ret < 0)
-> +                       return ret;
-> +
-> +               return !!(BIT(offset) & data->reg_val);
-> +       }
-> +
-> +       cmd_hd.offset =3D cpu_to_le16(NCT6694_GPI_DATA + data->group);
-> +       ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       return !!(BIT(offset) & data->reg_val);
-> +}
-> +
-> +static void nct6694_set_value(struct gpio_chip *gpio, unsigned int offse=
-t,
-> +                             int val)
-> +{
-> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
-> +       const struct nct6694_cmd_header cmd_hd =3D {
-> +               .mod =3D NCT6694_GPIO_MOD,
-> +               .offset =3D cpu_to_le16(NCT6694_GPO_DATA + data->group),
-> +               .len =3D cpu_to_le16(sizeof(data->reg_val))
-> +       };
-> +
-> +       guard(mutex)(&data->lock);
-> +
-> +       nct6694_read_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +
-> +       if (val)
-> +               data->reg_val |=3D BIT(offset);
-> +       else
-> +               data->reg_val &=3D ~BIT(offset);
-> +
-> +       nct6694_write_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +}
-> +
-> +static int nct6694_set_config(struct gpio_chip *gpio, unsigned int offse=
-t,
-> +                             unsigned long config)
-> +{
-> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
-> +       const struct nct6694_cmd_header cmd_hd =3D {
-> +               .mod =3D NCT6694_GPIO_MOD,
-> +               .offset =3D cpu_to_le16(NCT6694_GPO_TYPE + data->group),
-> +               .len =3D cpu_to_le16(sizeof(data->reg_val))
-> +       };
-> +       int ret;
-> +
-> +       guard(mutex)(&data->lock);
-> +
-> +       ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       switch (pinconf_to_config_param(config)) {
-> +       case PIN_CONFIG_DRIVE_OPEN_DRAIN:
-> +               data->reg_val |=3D BIT(offset);
-> +               break;
-> +       case PIN_CONFIG_DRIVE_PUSH_PULL:
-> +               data->reg_val &=3D ~BIT(offset);
-> +               break;
-> +       default:
-> +               return -ENOTSUPP;
-> +       }
-> +
-> +       return nct6694_write_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +}
-> +
-> +static int nct6694_init_valid_mask(struct gpio_chip *gpio,
-> +                                  unsigned long *valid_mask,
-> +                                  unsigned int ngpios)
-> +{
-> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
-> +       const struct nct6694_cmd_header cmd_hd =3D {
-> +               .mod =3D NCT6694_GPIO_MOD,
-> +               .offset =3D cpu_to_le16(NCT6694_GPIO_VALID + data->group)=
-,
-> +               .len =3D cpu_to_le16(sizeof(data->reg_val))
-> +       };
-> +       int ret;
-> +
-> +       guard(mutex)(&data->lock);
-> +
-> +       ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       *valid_mask =3D data->reg_val;
-> +
-> +       return ret;
-> +}
-> +
-> +static irqreturn_t nct6694_irq_handler(int irq, void *priv)
-> +{
-> +       struct nct6694_gpio_data *data =3D priv;
-> +       struct nct6694_cmd_header cmd_hd =3D {
-> +               .mod =3D NCT6694_GPIO_MOD,
-> +               .offset =3D cpu_to_le16(NCT6694_GPI_STS + data->group),
-> +               .len =3D cpu_to_le16(sizeof(data->reg_val))
-> +       };
-> +       unsigned char status;
-> +       int ret;
-> +
-> +       guard(mutex)(&data->lock);
-> +
-> +       ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->reg_val);
-> +       if (ret)
-> +               return IRQ_NONE;
-> +
-> +       status =3D data->reg_val;
-> +
-> +       while (status) {
-> +               int bit =3D __ffs(status);
-> +
-> +               data->reg_val =3D BIT(bit);
-> +               handle_nested_irq(irq_find_mapping(data->gpio.irq.domain,=
- bit));
-> +               status &=3D ~BIT(bit);
-> +               cmd_hd.offset =3D cpu_to_le16(NCT6694_GPI_CLR + data->gro=
-up);
-> +               nct6694_write_msg(data->nct6694, &cmd_hd, &data->reg_val)=
-;
-> +       }
-> +
-> +       return IRQ_HANDLED;
-> +}
-> +
-> +static int nct6694_get_irq_trig(struct nct6694_gpio_data *data)
-> +{
-> +       struct nct6694_cmd_header cmd_hd =3D {
-> +               .mod =3D NCT6694_GPIO_MOD,
-> +               .offset =3D cpu_to_le16(NCT6694_GPI_FALLING + data->group=
-),
-> +               .len =3D cpu_to_le16(sizeof(data->reg_val))
-> +       };
-> +       int ret;
-> +
-> +       guard(mutex)(&data->lock);
-> +
-> +       ret =3D nct6694_read_msg(data->nct6694, &cmd_hd, &data->irq_trig_=
-falling);
-> +       if (ret)
-> +               return ret;
-> +
-> +       cmd_hd.offset =3D cpu_to_le16(NCT6694_GPI_RISING + data->group);
-> +       return nct6694_read_msg(data->nct6694, &cmd_hd, &data->irq_trig_r=
-ising);
-> +}
-> +
-> +static void nct6694_irq_mask(struct irq_data *d)
-> +{
-> +       struct gpio_chip *gpio =3D irq_data_get_irq_chip_data(d);
-> +       irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
-> +
-> +       gpiochip_disable_irq(gpio, hwirq);
-> +}
-> +
-> +static void nct6694_irq_unmask(struct irq_data *d)
-> +{
-> +       struct gpio_chip *gpio =3D irq_data_get_irq_chip_data(d);
-> +       irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
-> +
-> +       gpiochip_enable_irq(gpio, hwirq);
-> +}
-> +
-> +static int nct6694_irq_set_type(struct irq_data *d, unsigned int type)
-> +{
-> +       struct gpio_chip *gpio =3D irq_data_get_irq_chip_data(d);
-> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
-> +       irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
-> +
-> +       guard(mutex)(&data->lock);
-> +
-> +       switch (type) {
-> +       case IRQ_TYPE_EDGE_RISING:
-> +               data->irq_trig_rising |=3D BIT(hwirq);
-> +               break;
-> +
-> +       case IRQ_TYPE_EDGE_FALLING:
-> +               data->irq_trig_falling |=3D BIT(hwirq);
-> +               break;
-> +
-> +       case IRQ_TYPE_EDGE_BOTH:
-> +               data->irq_trig_rising |=3D BIT(hwirq);
-> +               data->irq_trig_falling |=3D BIT(hwirq);
-> +               break;
-> +
-> +       default:
-> +               return -ENOTSUPP;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static void nct6694_irq_bus_lock(struct irq_data *d)
-> +{
-> +       struct gpio_chip *gpio =3D irq_data_get_irq_chip_data(d);
-> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
-> +
-> +       mutex_lock(&data->irq_lock);
-> +}
-> +
-> +static void nct6694_irq_bus_sync_unlock(struct irq_data *d)
-> +{
-> +       struct gpio_chip *gpio =3D irq_data_get_irq_chip_data(d);
-> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
-> +       struct nct6694_cmd_header cmd_hd =3D {
-> +               .mod =3D NCT6694_GPIO_MOD,
-> +               .offset =3D cpu_to_le16(NCT6694_GPI_FALLING + data->group=
-),
-> +               .len =3D cpu_to_le16(sizeof(data->reg_val))
-> +       };
-> +
-> +       scoped_guard(mutex, &data->lock) {
-> +               nct6694_write_msg(data->nct6694, &cmd_hd, &data->irq_trig=
-_falling);
-> +
-> +               cmd_hd.offset =3D cpu_to_le16(NCT6694_GPI_RISING + data->=
-group);
-> +               nct6694_write_msg(data->nct6694, &cmd_hd, &data->irq_trig=
-_rising);
-> +       }
-> +
-> +       mutex_unlock(&data->irq_lock);
-> +}
-> +
-> +static const struct irq_chip nct6694_irq_chip =3D {
-> +       .name                   =3D "gpio-nct6694",
-> +       .irq_mask               =3D nct6694_irq_mask,
-> +       .irq_unmask             =3D nct6694_irq_unmask,
-> +       .irq_set_type           =3D nct6694_irq_set_type,
-> +       .irq_bus_lock           =3D nct6694_irq_bus_lock,
-> +       .irq_bus_sync_unlock    =3D nct6694_irq_bus_sync_unlock,
-> +       .flags                  =3D IRQCHIP_IMMUTABLE,
-> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
-> +};
-> +
-> +static int nct6694_gpio_probe(struct platform_device *pdev)
-> +{
-> +       const struct mfd_cell *cell =3D mfd_get_cell(pdev);
-> +       struct device *dev =3D &pdev->dev;
-> +       struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
-> +       struct nct6694_gpio_data *data;
-> +       struct gpio_irq_chip *girq;
-> +       int ret, irq, i;
-> +       char **names;
-> +
-> +       irq =3D irq_create_mapping(nct6694->domain,
-> +                                NCT6694_IRQ_GPIO0 + cell->id);
-> +       if (!irq)
-> +               return -EINVAL;
-> +
-> +       data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +       if (!data) {
-> +               ret =3D -ENOMEM;
-> +               goto dispose_irq;
-> +       }
-> +
-> +       names =3D devm_kcalloc(dev, NCT6694_NR_GPIO, sizeof(char *),
-> +                            GFP_KERNEL);
-> +       if (!names) {
-> +               ret =3D -ENOMEM;
-> +               goto dispose_irq;
-> +       }
-> +
-> +       for (i =3D 0; i < NCT6694_NR_GPIO; i++) {
-> +               names[i] =3D devm_kasprintf(dev, GFP_KERNEL, "GPIO%X%d",
-> +                                         cell->id, i);
-> +               if (!names[i]) {
-> +                       ret =3D -ENOMEM;
-> +                       goto dispose_irq;
-> +               }
-> +       }
-> +
-> +       data->irq =3D irq;
-> +       data->nct6694 =3D nct6694;
-> +       data->group =3D cell->id;
-> +
-> +       data->gpio.names                =3D (const char * const*)names;
-> +       data->gpio.label                =3D pdev->name;
-> +       data->gpio.direction_input      =3D nct6694_direction_input;
-> +       data->gpio.get                  =3D nct6694_get_value;
-> +       data->gpio.direction_output     =3D nct6694_direction_output;
-> +       data->gpio.set                  =3D nct6694_set_value;
+Dear Marc,
 
-Please use the set_rv variant, regular set is deprecated now.
+Thank you for reviewing.
 
-> +       data->gpio.get_direction        =3D nct6694_get_direction;
-> +       data->gpio.set_config           =3D nct6694_set_config;
-> +       data->gpio.init_valid_mask      =3D nct6694_init_valid_mask;
-> +       data->gpio.base                 =3D -1;
-> +       data->gpio.can_sleep            =3D false;
-> +       data->gpio.owner                =3D THIS_MODULE;
-> +       data->gpio.ngpio                =3D NCT6694_NR_GPIO;
-> +
-> +       platform_set_drvdata(pdev, data);
-> +
-> +       ret =3D devm_mutex_init(dev, &data->lock);
-> +       if (ret)
-> +               goto dispose_irq;
-> +
-> +       ret =3D devm_mutex_init(dev, &data->irq_lock);
-> +       if (ret)
-> +               goto dispose_irq;
-> +
-> +       ret =3D nct6694_get_irq_trig(data);
-> +       if (ret) {
-> +               dev_err_probe(dev, ret, "Failed to get irq trigger type\n=
-");
-> +               goto dispose_irq;
-> +       }
-> +
-> +       girq =3D &data->gpio.irq;
-> +       gpio_irq_chip_set_chip(girq, &nct6694_irq_chip);
-> +       girq->parent_handler =3D NULL;
-> +       girq->num_parents =3D 0;
-> +       girq->parents =3D NULL;
-> +       girq->default_type =3D IRQ_TYPE_NONE;
-> +       girq->handler =3D handle_level_irq;
-> +       girq->threaded =3D true;
-> +
-> +       ret =3D devm_request_threaded_irq(dev, irq, NULL, nct6694_irq_han=
-dler,
-> +                                       IRQF_ONESHOT | IRQF_SHARED,
-> +                                       "gpio-nct6694", data);
-> +       if (ret) {
-> +               dev_err_probe(dev, ret, "Failed to request irq\n");
-> +               goto dispose_irq;
-> +       }
-> +
-> +       ret =3D devm_gpiochip_add_data(dev, &data->gpio, data);
-> +       if (ret)
-> +               goto dispose_irq;
-> +
-> +       return 0;
-> +
-> +dispose_irq:
-> +       irq_dispose_mapping(irq);
-> +       return ret;
-> +}
-> +
-> +static void nct6694_gpio_remove(struct platform_device *pdev)
-> +{
-> +       struct nct6694_gpio_data *data =3D platform_get_drvdata(pdev);
-> +
-> +       devm_free_irq(&pdev->dev, data->irq, data);
-
-That's definitely not right. If you need to use the devm_free variant
-in remove(), then you're doing something wrong. Most likely you can
-rely on the devres release path here...
-
-> +       irq_dispose_mapping(data->irq);
-
-... and schedule this as a custom devm action.
-
-Bart
-
-> +}
-> +
-> +static struct platform_driver nct6694_gpio_driver =3D {
-> +       .driver =3D {
-> +               .name   =3D "nct6694-gpio",
-> +       },
-> +       .probe          =3D nct6694_gpio_probe,
-> +       .remove         =3D nct6694_gpio_remove,
-> +};
-> +
-> +module_platform_driver(nct6694_gpio_driver);
-> +
-> +MODULE_DESCRIPTION("USB-GPIO controller driver for NCT6694");
-> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:nct6694-gpio");
-> --
-> 2.34.1
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B44=E6=9C=889=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:21=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+...
+> > +static void nct6694_canfd_handle_state_change(struct net_device *ndev,=
+ u8 status)
+> > +{
+> > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
+> > +     enum can_state new_state, rx_state, tx_state;
+> > +     struct can_berr_counter bec;
+> > +     struct can_frame *cf;
+> > +     struct sk_buff *skb;
+> > +
+> > +     nct6694_canfd_get_berr_counter(ndev, &bec);
+> > +     can_state_get_by_berr_counter(ndev, &bec, &tx_state, &rx_state);
+> > +
+> > +     new_state =3D max(tx_state, rx_state);
+> > +
+> > +     /* state hasn't changed */
+> > +     if (new_state =3D=3D priv->can.state)
+> > +             return;
+> > +
+> > +     skb =3D alloc_can_err_skb(ndev, &cf);
+> > +
+> > +     can_change_state(ndev, cf, tx_state, rx_state);
+> > +
+> > +     if (new_state =3D=3D CAN_STATE_BUS_OFF) {
+> > +             can_bus_off(ndev);
 >
+> What does your device do when it goes into bus off? Does it recover itsel=
+f?
+>
+
+No, the device does not support automatic bus-off recovery. It
+requires an explicit CAN Setting and Initialization(CMD0) command to
+re-initialize the controller after entering bus-off state.
+
+> > +     } else if (cf) {
+> > +             cf->can_id |=3D CAN_ERR_CNT;
+> > +             cf->data[6] =3D bec.txerr;
+> > +             cf->data[7] =3D bec.rxerr;
+> > +     }
+> > +
+> > +     if (skb)
+> > +             nct6694_canfd_rx_offload(&priv->offload, skb);
+> > +}
+> > +
+> > +static void nct6694_canfd_handle_bus_err(struct net_device *ndev, u8 b=
+us_err)
+> > +{
+> > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
+> > +     struct can_frame *cf;
+> > +     struct sk_buff *skb;
+> > +
+> > +     if (bus_err =3D=3D NCT6694_CANFD_EVT_ERR_NO_ERROR)
+> > +             return;
+>
+> I think this has already been checked nct6694_canfd_irq()
+>
+
+Drop it in v10.
+
+> > +
+...
+> > +static int nct6694_canfd_start(struct net_device *ndev)
+> > +{
+> > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
+> > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
+> > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
+> > +     struct nct6694_canfd_setting *setting __free(kfree) =3D NULL;
+> > +     const struct nct6694_cmd_header cmd_hd =3D {
+> > +             .mod =3D NCT6694_CANFD_MOD,
+> > +             .cmd =3D NCT6694_CANFD_SETTING,
+> > +             .sel =3D ndev->dev_port,
+> > +             .len =3D cpu_to_le16(sizeof(*setting))
+> > +     };
+> > +     int ret;
+> > +
+> > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
+> > +     if (!setting)
+> > +             return -ENOMEM;
+> > +
+> > +     setting->nbr =3D cpu_to_le32(n_bt->bitrate);
+> > +     setting->dbr =3D cpu_to_le32(d_bt->bitrate);
+> > +
+> > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+> > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_CTR=
+L1_MON);
+> > +
+> > +     if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+> > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_CTR=
+L1_NISO);
+> > +
+> > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+> > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_CTR=
+L1_LBCK);
+> > +
+> > +     setting->nbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NB=
+TP_NSJW,
+> > +                                            n_bt->sjw - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NBTP=
+_NBRP,
+> > +                                            n_bt->brp - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NBTP=
+_NTSEG2,
+> > +                                            n_bt->phase_seg2 - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NBTP=
+_NTSEG1,
+> > +                                            n_bt->prop_seg + n_bt->pha=
+se_seg1 - 1));
+> > +
+> > +     setting->dbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_DB=
+TP_DSJW,
+> > +                                            d_bt->sjw - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP=
+_DBRP,
+> > +                                            d_bt->brp - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP=
+_DTSEG2,
+> > +                                            d_bt->phase_seg2 - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP=
+_DTSEG1,
+> > +                                            d_bt->prop_seg + d_bt->pha=
+se_seg1 - 1));
+>
+> What does your device do, if you set the bitrates _and_ the bit timing
+> parameters? They are redundant.
+>
+
+The firmware calculates the default bit timing parameters when it
+receives the bitrates, and then overwrites them if it later receives
+explicit bit timing parameters.
+
+To avoid confusion and ensure consistent behavior, I will remove the
+bitrate setting logic in next patch. Instead, the bit timing will be
+determined solely based on the provided bit timing parameters.
+
+> > +     setting->active =3D NCT6694_CANFD_SETTING_ACTIVE_CTRL1 |
+> > +                       NCT6694_CANFD_SETTING_ACTIVE_NBTP_DBTP;
+> > +
+> > +     ret =3D nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
+> > +
+> > +     return 0;
+> > +}
+>
+
+Best regards,
+Ming
 
