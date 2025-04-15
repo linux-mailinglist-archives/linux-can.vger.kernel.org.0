@@ -1,128 +1,91 @@
-Return-Path: <linux-can+bounces-3397-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3398-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE33DA88BDD
-	for <lists+linux-can@lfdr.de>; Mon, 14 Apr 2025 21:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B77AA8906F
+	for <lists+linux-can@lfdr.de>; Tue, 15 Apr 2025 02:27:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAA76189AE9F
-	for <lists+linux-can@lfdr.de>; Mon, 14 Apr 2025 19:00:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07C151899BD5
+	for <lists+linux-can@lfdr.de>; Tue, 15 Apr 2025 00:27:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F617279785;
-	Mon, 14 Apr 2025 18:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6A9133987;
+	Tue, 15 Apr 2025 00:27:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="I0EauWmK";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="G17ucTpM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XTZMzOQA"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.161])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDDA261575
-	for <linux-can@vger.kernel.org>; Mon, 14 Apr 2025 18:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.161
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744657198; cv=pass; b=AWKBWwe6wuqH1pipLjTaaGJNyFXGox55GQig8g8FYxMebg6QKreBObecMiPMPY0Tt6u4Wu8ye4zu1uC1bxIyxpRzXJFQwyUbYdioL/TDTKoT98c1t9ugFVCwf+yagAoqFrAnjku7PMZta1JdrFd/q9ROODzLz44oQpkMeXH7OMI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744657198; c=relaxed/simple;
-	bh=iA9dBh3yS1pd7W130y6Vz87SxXfBgCBIWQ0MM6LoMRs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Oauy3HaECCan/CvBn8XUeSnGX0JrTQCSignMjfE64X799vma2krWu4kp7VujUr+vZC21Bzszl8JG2c8oE03+l5L4iLTt8+FDiT2Rbz/9NIL3vweHIoRrZXMeSpPA0mO78KUG8TghN7Ny52xlM8YO6d4L8unnVdkl+FFOjKtW28g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=I0EauWmK; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=G17ucTpM; arc=pass smtp.client-ip=81.169.146.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1744657003; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=ldod1QWK/WoYDt4O/hRjvaoRAPQuDEdsJ6zXRTuFdfr3YZM6hRTiALPWQsIg8KKepc
-    XpfQGFWyUD5GxAhv4Hjktn222HOhE00oq//bToIjIvrlgG8Tq/jnQ03jmhLfb9DiljTO
-    KN2TBCPpmw1bxtH4GZfRH14Zd1OFnAkEC5qHd/p8LHnUsvBpNBppz+veEbCE5scGNkTy
-    F54KkDMJ7snBsLYc8dA1z6DdKLPxl5QZu7p5PVf48+I+QNBEb9m1yd5fBcEZ3dBvXypw
-    T/3hbDvHAYA2BwoCa+npDQ3v79vIcKHQ42duYNmULlGSJuswE+xeaShQpC6DY6VxS8+E
-    JYdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1744657003;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=eST8mwUwoKK+zf0KjC8oA/+fk9Qtp8nAG5+5r7AQAXs=;
-    b=cgS86DevvUrydbFGlQHAU9m8Qafipl8CgL4MI3Hdk4HmaylLBJToiWbsuCmXWVpsDs
-    9uVKoEjGL23ma2+LkDruPlReAOPdFSpJAKwbn1nJ4Wg4nxePCpj4o8/PYxQeFnVFkBIx
-    T0GUBi72isz8EBTRzu4BsIAdb8RvSC+QuTApHmOUX3tW16f343wx2fz94l43H5xbPCJr
-    yykW7wfTZPY1WF7qKQ+Wzt5quIAmhQhnFpZnJK5vQyBFD7yn9M9DkZ3BNDdsW4U2IYfe
-    WBAp/ffVuksapCfyb0Kr/oTkvOCYUkW7jixBQvGmbTbGR5bZm9FDifUGH+8r2gW3wJFI
-    geeA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1744657003;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=eST8mwUwoKK+zf0KjC8oA/+fk9Qtp8nAG5+5r7AQAXs=;
-    b=I0EauWmKykv+BEWs3VjYnODNiu/x7RN4WuinXN5enw8Pp0MGBGMA2/ESKyM6VC8+AC
-    LQPy87FFM1ewuI4NbBN+Bdg2gb/1YlgV0eoIU1uF55btzXQorQnYgL2VUqr224Ri/F6k
-    VlaiDN5KqK3UVJmwxLuWZCz7AmEagDRNQXXcn152m2uNvytheFrafKKOYG2JEcu1RQBA
-    XlMV53/vf4p1eESZea+pemea7WbvidEkWA3wyZaJyu4hfp+GaEGqd62k4NzzWBUj2C32
-    7PDe6NYfvdPnTNBbCiQbozMFpFKVolKPJikfYCh54hFBM2WsABnwFyPcp9iNXui+5MwX
-    xgvA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1744657003;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=eST8mwUwoKK+zf0KjC8oA/+fk9Qtp8nAG5+5r7AQAXs=;
-    b=G17ucTpMjBQKJp+MB9uMOjQgHhGYn9UTFF6ySgV06zaGp5VVZIuENsuAHF5XgWdc96
-    XuRA2TQw5pzLej1DjvBg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/vMMcFB+5xtv9aJ67XA=="
-Received: from [IPV6:2a00:6020:4a8e:5000::9f3]
-    by smtp.strato.de (RZmta 51.3.0 AUTH)
-    with ESMTPSA id K2a3e513EIuhMj4
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Mon, 14 Apr 2025 20:56:43 +0200 (CEST)
-Message-ID: <f8d8c706-a44f-49b2-b75d-bd35066b47d3@hartkopp.net>
-Date: Mon, 14 Apr 2025 20:56:38 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09DCB22EE5;
+	Tue, 15 Apr 2025 00:27:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744676833; cv=none; b=iC4d2z8uf9jYwNeZSX+MwRCw4WwJKuahvKAesrgP3VMqGEn9cX1bNrxSp+81+WXCVNObvS4tu3v3YjVxMMQrFFbO8XHcBxj00nDcX2tbkOg88JMWS/ytuRQaTTod/FB0X1wiaVBTryTu3DuMpAB49Dy2Ju16Ul6mNTCsnttmHUQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744676833; c=relaxed/simple;
+	bh=p/7BiZ9Yzsgk30h25OyaW/iYOh0nxPPaqAteJXbR6bY=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=T9v+rFCzMcGPzxjNuAnzEDr6PzE2nybIe+CnTYGF/FSYVhBqkfa6nOBvvN2VODSP3HDCXxwiB+jNRy2J1HHj4Rdm3cGejqAYW0OL4SIKBOmLYqbr+4T7/lFoNrO/40yCzttrZhZRp0MUSEAwP2pxeUlotXwbslPHNT6CpAFCkIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XTZMzOQA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67FA4C4AF09;
+	Tue, 15 Apr 2025 00:27:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744676832;
+	bh=p/7BiZ9Yzsgk30h25OyaW/iYOh0nxPPaqAteJXbR6bY=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=XTZMzOQAUI7mP2pfZTh93/xCW2LAIw3Q1mVUiaCy1BhVWLOn7WSu5NH19L7r5VSBU
+	 PGMACMxYH1rmDBIDPfv3pb4Y5BwTMYgot2rvR+Uae+E5rSy22siZAM+ReHSOsLwrjI
+	 5xfd7VCx5k2LqLChVTk9fKRlgIHBoqBEKwl+8YBHYQfHe6VXg8Ihlqc+/zDqfLrzEm
+	 W4H/mFFq83PFZuXrIJhtPG6sWVSjc3UzoEuFhnEdrEA6z+cuwzDhmdV/qYzput4CkL
+	 yIRQnHaGVhMUoHiRM/HCZWfcE/NHz82GL2XJJz5wDh1cQcLwWHcuBo7kJ0xfyr8Y1j
+	 0K0ZOek4vO4Hw==
+Message-ID: <e4bd8e47aeab761e409121ac9bc19408@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] can: fix missing decrement of j1939_proto.inuse_idx
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de,
- linux-can@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
- Davide Caratti <dcaratti@redhat.com>
-References: <09ce71f281b9e27d1e3d1104430bf3fceb8c7321.1742292636.git.dcaratti@redhat.com>
- <Z9qJ7_MGJgzXlUcj@pengutronix.de>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <Z9qJ7_MGJgzXlUcj@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250414-camouflaged-silver-dodo-d0c000-mkl@pengutronix.de>
+References: <20250414073646.1473157-1-ciprianmarian.costea@oss.nxp.com> <20250414-camouflaged-silver-dodo-d0c000-mkl@pengutronix.de>
+Subject: Re: [PATCH] can: flexcan: enable PER clock before obtaining its rate
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, NXP S32 Linux Team <s32@nxp.com>, imx@lists.linux.dev, Christophe Lizzi <clizzi@redhat.com>, Alberto Ruiz <aruizrui@redhat.com>, Enric Balletbo <eballetb@redhat.com>, Eric Chanudet <echanude@redhat.com>, Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>, Michael Turquette <mturquette@baylibre.com>, linux-clk@vger.kernel.org, kernel@pengutronix.de
+To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>, Marc Kleine-Budde <mkl@pengutronix.de>, Maxime Ripard <mripard@kernel.org>
+Date: Mon, 14 Apr 2025 17:27:10 -0700
+User-Agent: alot/0.12.dev8+g17a99a841c4b
 
-Hello Marc,
+Quoting Marc Kleine-Budde (2025-04-14 02:55:34)
+> On 14.04.2025 10:36:46, Ciprian Costea wrote:
+> > From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+> >=20
+> > The FlexCan driver assumes that the frequency of the 'per' clock can be
+> > obtained even on disabled clocks, which is not always true.
+> >=20
+> > According to 'clk_get_rate' documentation, it is only valid once the cl=
+ock
+> > source has been enabled.
+>=20
+> In commit bde8870cd8c3 ("clk: Clarify clk_get_rate() expectations")
+> Maxime Ripard changed the documentation of the of the function in clk.c
+> to say it's allowed. However clk.h states "This is only valid once the
+> clock source has been enabled.".
+>=20
+> I've added the common clock maintainers to Cc.
+>=20
+> Which documentation is correct? Is the clk.h correct for archs not using
+> the common clock framework?
+>=20
 
-we are already in -rc2 and this fix is still missing upstream to fix the 
-protocol counter introduced via net-next.
-
-Best regards,
-Oliver
-
-On 19.03.25 10:10, Oleksij Rempel wrote:
-> On Tue, Mar 18, 2025 at 11:21:41AM +0100, Davide Caratti wrote:
->> Like other protocols on top of AF_CAN family, also j1939_proto.inuse_idx
->> needs to be decremented on socket dismantle.
->>
->> Fixes: 6bffe88452db ("can: add protocol counter for AF_CAN sockets")
->> Reported-by: Oliver Hartkopp <socketcan@hartkopp.net>
->> Closes: https://lore.kernel.org/linux-can/7e35b13f-bbc4-491e-9081-fb939e1b8df0@hartkopp.net/
->> Signed-off-by: Davide Caratti <dcaratti@redhat.com>
-> 
-> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> 
-> Thank you!
-> 
-
+I don't know what arches not using the common clk framework (CCF) do so
+I can't comment there. If you want something to work on an architecture
+that doesn't use the CCF then follow the header file, but in all
+practical cases _some_ rate will be returned from clk_get_rate() and
+we're not going to BUG_ON() or crash the system in the CCF
+implementation for this case. Enabling the clk is good hygiene though,
+so is it really a problem to enable it here?
 
