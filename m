@@ -1,125 +1,96 @@
-Return-Path: <linux-can+bounces-3404-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3406-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62C76A89A5B
-	for <lists+linux-can@lfdr.de>; Tue, 15 Apr 2025 12:35:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EB47A8A7D3
+	for <lists+linux-can@lfdr.de>; Tue, 15 Apr 2025 21:25:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D45BD7A6914
-	for <lists+linux-can@lfdr.de>; Tue, 15 Apr 2025 10:33:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 158D8190320F
+	for <lists+linux-can@lfdr.de>; Tue, 15 Apr 2025 19:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 975D9284691;
-	Tue, 15 Apr 2025 10:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99900241C8C;
+	Tue, 15 Apr 2025 19:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMC9v116"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 089CC27EC9A
-	for <linux-can@vger.kernel.org>; Tue, 15 Apr 2025 10:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AAF2356B1;
+	Tue, 15 Apr 2025 19:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744713248; cv=none; b=LNFJGcH1ByGHSkbGLFOaCjplOuRoJWvtWbhDWPl9Oxb7LW0NSxH1qTN8OuKGP7SyYmXj2yz2eXC6ZwdOvFjgy5ApwHMRJZFW9FtL0tfjtgtj3VavqfVgbnq3fU+hXEdX8L73XQQQ+nuxslUY13PjfuIowvVb+f2TFU1ZboFtmEQ=
+	t=1744744993; cv=none; b=VOv/ip/887qtzl4rVhSexZL6r05A+pxQ6VoYrk2IGmUlNTZL0ehuKVei5cy1yfaB2Zvha1aXil/kYdT8mvqbM0wzqGPpHiEU0tY6IlfTDb9vtwJLUC8YhZ6XdP8rI00jWJeLax1lKIeB8R41Aj5rEkxIp/sqh2GihaUtfrMdZRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744713248; c=relaxed/simple;
-	bh=/cAoqqJiceTtsveDOFFXsiASt1G0/g0AKzPnXXGy5uQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OGPGK0eF92rpe5lT0/VarZwQBuUUlngNtJc4IuqsjGBNVa+68quy1n55B5Vni9GrhOXZJOzF0x3Slv/NYggtBTb66kgfn194Pi4eOLHRMcJpdpHpZfY1jYBtGVrlVJS3B7410v9YQ3zedN/nhHpKPaZnFHQYYUX1DODPcZuYRZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1u4dcD-0006Ot-8N
-	for linux-can@vger.kernel.org; Tue, 15 Apr 2025 12:34:05 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1u4dcD-000P55-05
-	for linux-can@vger.kernel.org;
-	Tue, 15 Apr 2025 12:34:05 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id B2FD13F9BE6
-	for <linux-can@vger.kernel.org>; Tue, 15 Apr 2025 10:34:04 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 381593F9BD5;
-	Tue, 15 Apr 2025 10:34:03 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 4df992a3;
-	Tue, 15 Apr 2025 10:34:02 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	Weizhao Ouyang <o451686892@gmail.com>,
+	s=arc-20240116; t=1744744993; c=relaxed/simple;
+	bh=x09FjVOAZBwkbITfwM+C4hWOy9jtbp+fErNxZ4F57Zs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=riuAtX3MxLwE4pihO9fzxD6xOdSACZTDTpo6l0dWPp8K7bk5wncUNrTfq9M9YDSMVnUDx32X16KR/ehEADyUHcq7zLfExsu5zJwEiHxgoLhlYzoEAz78XbznTpjjpApryLhQMTMKZk9t5YVqfrSq6TrWrcnSECjEyNeBFqseTlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMC9v116; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB0DC4CEE7;
+	Tue, 15 Apr 2025 19:23:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744744992;
+	bh=x09FjVOAZBwkbITfwM+C4hWOy9jtbp+fErNxZ4F57Zs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AMC9v116l3kDuwOh8VnyqdgEUvSUHqvSzRJWkGOhFzh0KBD+gd3Vjsx6V47nKLfG2
+	 Xb8Pu12XAN7Aoq0Ts58Dz/j+YqBecvZAEYYRDqunkVaixuSI3SbX9eCJkfpBzJzP1C
+	 pYsugK7hhCik+56+v5Qg1o9XkXjgTFrzZwVWVkezuakwfiP0zFipPVzXYvEH6Vo2z2
+	 xQLMfX7OEsZvWxerQIsKZYtvr/gY4nHepBi4c9zZmwlTiD4tV10AnTQZ+1OZ+BBZTT
+	 mHxeYRjxzc+/1Lw7+Ip5U2t+n/+T4XgrgkGzTg3diIuCkckddZIuBouU0AnTP+4E1H
+	 n4RTzWysfnOpg==
+Date: Tue, 15 Apr 2025 14:23:10 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Wolfgang Grandegger <wg@grandegger.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-gpio@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 2/2] can: rockchip_canfd: fix broken quirks checks
-Date: Tue, 15 Apr 2025 12:31:45 +0200
-Message-ID: <20250415103401.445981-3-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250415103401.445981-1-mkl@pengutronix.de>
-References: <20250415103401.445981-1-mkl@pengutronix.de>
+	Mark Brown <broonie@kernel.org>, linux-can@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Subject: Re: [PATCH] dt-bindings: remove RZ/N1S bindings
+Message-ID: <174474498632.835692.11318420233043373659.robh@kernel.org>
+References: <20250411194849.11067-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250411194849.11067-2-wsa+renesas@sang-engineering.com>
 
-From: Weizhao Ouyang <o451686892@gmail.com>
 
-First get the devtype_data then check quirks.
+On Fri, 11 Apr 2025 21:47:57 +0200, Wolfram Sang wrote:
+> Except for these four quite random bindings, no further upstream
+> activity has been observed in the last 8 years. So, remove these
+> fragments to reduce maintenance burden.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> In the previous discussion [1], Rob offered to take this patch.
+> 
+> [1] https://lore.kernel.org/r/CAL_Jsq+DOp8YOcshTVqYcbmgbuc4etTQeeswmMUYjw1sws4mAA@mail.gmail.com
+> 
+>  .../devicetree/bindings/net/can/nxp,sja1000.yaml     |  4 +---
+>  .../bindings/pinctrl/renesas,rzn1-pinctrl.yaml       |  4 +---
+>  .../devicetree/bindings/serial/snps-dw-apb-uart.yaml | 12 +++---------
+>  .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml     |  4 +---
+>  4 files changed, 6 insertions(+), 18 deletions(-)
+> 
 
-Fixes: bbdffb341498 ("can: rockchip_canfd: add quirk for broken CAN-FD support")
-Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Link: https://patch.msgid.link/20250324114416.10160-1-o451686892@gmail.com
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/rockchip/rockchip_canfd-core.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/can/rockchip/rockchip_canfd-core.c b/drivers/net/can/rockchip/rockchip_canfd-core.c
-index 46201c126703..7107a37da36c 100644
---- a/drivers/net/can/rockchip/rockchip_canfd-core.c
-+++ b/drivers/net/can/rockchip/rockchip_canfd-core.c
-@@ -902,15 +902,16 @@ static int rkcanfd_probe(struct platform_device *pdev)
- 	priv->can.data_bittiming_const = &rkcanfd_data_bittiming_const;
- 	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
- 		CAN_CTRLMODE_BERR_REPORTING;
--	if (!(priv->devtype_data.quirks & RKCANFD_QUIRK_CANFD_BROKEN))
--		priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
- 	priv->can.do_set_mode = rkcanfd_set_mode;
- 	priv->can.do_get_berr_counter = rkcanfd_get_berr_counter;
- 	priv->ndev = ndev;
- 
- 	match = device_get_match_data(&pdev->dev);
--	if (match)
-+	if (match) {
- 		priv->devtype_data = *(struct rkcanfd_devtype_data *)match;
-+		if (!(priv->devtype_data.quirks & RKCANFD_QUIRK_CANFD_BROKEN))
-+			priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
-+	}
- 
- 	err = can_rx_offload_add_manual(ndev, &priv->offload,
- 					RKCANFD_NAPI_WEIGHT);
--- 
-2.47.2
-
+Applied, thanks!
 
 
