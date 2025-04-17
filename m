@@ -1,158 +1,116 @@
-Return-Path: <linux-can+bounces-3436-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3437-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9BDBA91331
-	for <lists+linux-can@lfdr.de>; Thu, 17 Apr 2025 07:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C2B8A9162C
+	for <lists+linux-can@lfdr.de>; Thu, 17 Apr 2025 10:09:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0820317E98B
-	for <lists+linux-can@lfdr.de>; Thu, 17 Apr 2025 05:45:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD65E172E78
+	for <lists+linux-can@lfdr.de>; Thu, 17 Apr 2025 08:09:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C79911E7C38;
-	Thu, 17 Apr 2025 05:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5001822DF8D;
+	Thu, 17 Apr 2025 08:08:52 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B889C179A7;
-	Thu, 17 Apr 2025 05:45:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3F522DF8E;
+	Thu, 17 Apr 2025 08:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744868713; cv=none; b=QEC/hf80I3iibfaavG3p2R+3Og2m+aI0q9Nkw54a0E+5tw0nJixf5NdPm7CgUZ00WwvrU00FCCYgVZgzwUP3VCWbKekSlm7AXv79C/QYZxrVoN3H6RRY8I/V+yipHcjFif2kpbZu33o6HwHaZ6ThCHjHhF94J1gu6qoTSk8QyAs=
+	t=1744877332; cv=none; b=TVrT35xv1iHs29IdbaltR+SY3s4KZt7jITNwjUClbex2fHRPOQ1ZDqqNvOshYwHt/vyl7V3g6Du1qzU0CGSyA7dChNFHCAfDW1nXSsI1rtm0c5cPvaPTTMQpVGJuNUSGTwijgq/jMT5+YCGjF9h8FTrSZlYhZCsktKakX/opebA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744868713; c=relaxed/simple;
-	bh=hKljaHKyZTE04MHAij+pfZXy6OCT4wDM9UWUfuMMCXk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kCziqS8AjTsbjWKSGv0POQq2iCLkR5xROgcLPpPbBVDGTv5gxZriw7YYN8w6Jj5pXgVpJq1DHOCniqkORHkRho1twp0uJMjJe1EAZYwvC6vi9W8XxDYdUVFALv0SNlHpT6w8l0FpOPe6TCaSLRw82X73bFuc8yvFFnlrKhlq8BE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: lqEideBSTtaFLIberh49LQ==
-X-CSE-MsgGUID: OQCtVt0VSvyuXB/ldBT+LA==
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 17 Apr 2025 14:45:11 +0900
-Received: from localhost.localdomain (unknown [10.226.92.77])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id AAD7F44E7E38;
-	Thu, 17 Apr 2025 14:45:06 +0900 (JST)
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	u.kleine-koenig@baylibre.com,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Simon Horman <horms@kernel.org>,
-	linux-renesas-soc@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Biju Das <biju.das.jz@bp.renesas.com>
-Subject: [PATCH v9 19/19] can: rcar_canfd: Add RZ/G3E support
-Date: Thu, 17 Apr 2025 06:43:20 +0100
-Message-ID: <20250417054320.14100-20-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250417054320.14100-1-biju.das.jz@bp.renesas.com>
-References: <20250417054320.14100-1-biju.das.jz@bp.renesas.com>
+	s=arc-20240116; t=1744877332; c=relaxed/simple;
+	bh=WoqULKDdQaWy3miQ7iO0szYycC5LoDyqvTXTuhX3sL0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iwa9ZespuqyKMO+aXC5+8TRornNnHRz7KwbPnDOLqnkdjspBa9CAzqMae1q/0O6VxQRZVhnr0Gj8E8ssufyXaQOJJV/n+bcoumk+ccdW8YyhkSQkGNF1CuxEBFgsLZbFEBUTFhMKfz7whvww7JOYwisW+jWO2ILLyWtrClcyJks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-523dc190f95so222909e0c.1;
+        Thu, 17 Apr 2025 01:08:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744877327; x=1745482127;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j3Xh33BRiUbSRT+JQZ7ejXYSdhDyQlm7mU6tXMQulXI=;
+        b=K+KDcO75Ky0ubiLwx+Kd4+m7P6j/IZQQIzvsB5/dpZRvushzzv6UIV62i1z/60NQ76
+         tcd6SeWsg8ZbTYAJQhhHF4z0aqPjTHO84m/d2G3wUN0jlrBkcqBEp5xkK8Y/O4KgHbSP
+         mVh9YwUbIxzaBgGgtWZtZYBv3+cgyH9OBNmmUQtUqzxQOl+17nEf5hS1sLhJifOte+BU
+         mF80KAPgUAWE+DiCXavXqQmM6sWSdm+AAk1eml4iM9eFlp3nzEBw3NCgxbuf4DLCz+/+
+         3gaeF0GkGvKObmeBy20uN9BYeA8RYWtdU/Hk5BtaJKGK/ISl3Giy12qOnRCm/pkuGRVP
+         +Kww==
+X-Forwarded-Encrypted: i=1; AJvYcCWOzRwLUav1OijTokw5pKFmerPHusiwGKYCCSlV2knBQ8mAwwlHoFuPNBAm5CY0o1/bUYBAzKVg3Xvk@vger.kernel.org, AJvYcCWhFGdf6N1xKtJxw/zzc85g+U3Aoj0URyR7hAjm5Mc6zBial0UY/iQo3wh7pP+WEI3wWjndBQtTByTd@vger.kernel.org, AJvYcCWypRNh8iSgOUTpajkqQ+Yvq/aLvOrB9B1GC+LoVDx3pGJgCja42ZRcBWk7xYV22ouFpKHQ87qxCWf3nwVNZCxjhtg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUHZhv35jeS7bFTMoBgGLlg9+MsyQJODx8QHPjKJuwiPvUbzon
+	d7Lh25P5GADNWe+qP6DR4IMrBGP9hJL05PdWnZ43nsmllzZDncWL3JeAkRat
+X-Gm-Gg: ASbGncs+v6BF10oomS0LEWGJcBLUvMScI1V6RRfZ9lh54yvrtDofxcTL2do+oTh8Y5N
+	6eEUY+jLBOEeq6g0KkyzM/jB73D4TCxG+e++wH8MJiOkYjjkr3UG9uu7chm71x33aOWYbkF2mOv
+	lNmfxZEBYQYZsrkRSQssWfo812+PDkC4J0CJ0zaiyikdJnYSV5nT4pnREgUYnJNAR2PaLAgCkf0
+	vsxdTRVoDcYvNrhZrdH7EiE8IuNDZydro6TgC81Rab7BVZNcFJWnKRb7Wc2MUYnYwf8m+wHVgKf
+	9aziyksrQTCr/O4X39yg1yhKffKoAhu/k160CpjDbDOAwLV1H8DsJ84wAg/CeTV0bKL/54GMdTe
+	4mOSyHGA=
+X-Google-Smtp-Source: AGHT+IF7yHWXjRlRjq8dWBz5ISpCJkmkOsQtuc/T5teCebAWQR/DZJxYOH+1bsa5adApTEa+s9j/rQ==
+X-Received: by 2002:a05:6122:8c29:b0:527:67c6:faff with SMTP id 71dfb90a1353d-5290de99a49mr3712446e0c.4.1744877327643;
+        Thu, 17 Apr 2025 01:08:47 -0700 (PDT)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-527abe8e78bsm3480388e0c.32.2025.04.17.01.08.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Apr 2025 01:08:47 -0700 (PDT)
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-527a2b89a11so229855e0c.2;
+        Thu, 17 Apr 2025 01:08:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVy2ic2S8y4220YQOFmviBLcjr3oWXGjVBAL40gpBUySIBln8QN8JezkStZ9oILcXFpx/6sUIUxXlIn@vger.kernel.org, AJvYcCWkf9y4ZmnkmyPkdjZCotzQC32p56mds6vakkXm9frMbnUL4Y9gMsxHaIpSDua93RkNYM+l9w20QIrYNmIOyOKR82Y=@vger.kernel.org, AJvYcCXky5+5B0+SgTj5bmsDbgttnxnVvECwqcz4Z1lGNR23XcD32vPtNVq9/xTr11hDixE6Svf0p8Jnvxt0@vger.kernel.org
+X-Received: by 2002:a05:6122:3c8f:b0:523:e175:4af1 with SMTP id
+ 71dfb90a1353d-5290e18b406mr4186887e0c.6.1744877326589; Thu, 17 Apr 2025
+ 01:08:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250417054320.14100-1-biju.das.jz@bp.renesas.com> <20250417054320.14100-6-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20250417054320.14100-6-biju.das.jz@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 17 Apr 2025 10:08:33 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW8n04tmahsVpZwNp_xc5i=P_fad-CQROXJBmDT3=vt3Q@mail.gmail.com>
+X-Gm-Features: ATxdqUG74U_uISQ6QK0k2c6Ea3ZgjnCBo_dI_KqMsGmM5eDHbx9NCve-CJ3XEiA
+Message-ID: <CAMuHMdW8n04tmahsVpZwNp_xc5i=P_fad-CQROXJBmDT3=vt3Q@mail.gmail.com>
+Subject: Re: [PATCH v9 05/19] can: rcar_canfd: Update RCANFD_GERFL_ERR macro
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, u.kleine-koenig@baylibre.com, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>, 
+	Duy Nguyen <duy.nguyen.rh@renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, Simon Horman <horms@kernel.org>, 
+	linux-renesas-soc@vger.kernel.org, linux-can@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The CAN-FD IP found on the RZ/G3E SoC is similar to R-Car Gen4, but
-it has no external clock instead it has clk_ram, it has 6 channels
-and supports 20 interrupts. Add support for RZ/G3E CAN-FD driver.
+On Thu, 17 Apr 2025 at 07:44, Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> Replace the macro RCANFD_GERFL_EEF0_7->RCANFD_GERFL_EEF. The macros
+> RCANFD_GERFL_EEF* in RCANFD_GERFL_ERR can be replaced by FIELD_PREP() and
+> drop the redundant macro RCANFD_GERFL_EEF(ch).
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v8->v9:
+>  * Added missing header bitfield.h.
+>  * Fixed logical error ch->BIT(ch) in rcar_canfd_global_error().
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v8->v9:
- * No change.
-v7->v8:
- * Collected tag.
-v6->v7:
- * No change.
-v5->v6:
- * Collected tag.
- * Updated r9a09g047_hw_info table. 
-v4->v5:
- * Updated error description as "cannot get enabled ram clock"
- * Updated r9a09g047_hw_info table.  
-v3->v4:
- * No change.
-v2->v3:
- * Replaced gen4_type entry with mask_table, shift_table, regs,
-   ch_interface_mode and shared_can_reg.
-v1->v2:
- * No change.
----
- drivers/net/can/rcar/rcar_canfd.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 6a9c970364cb..27d503ac87dc 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -726,6 +726,22 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
- 	.external_clk = 1,
- };
- 
-+static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
-+	.nom_bittiming = &rcar_canfd_gen4_nom_bittiming_const,
-+	.data_bittiming = &rcar_canfd_gen4_data_bittiming_const,
-+	.regs = &rcar_gen4_regs,
-+	.sh = &rcar_gen4_shift_data,
-+	.rnc_field_width = 16,
-+	.max_aflpn = 63,
-+	.max_cftml = 31,
-+	.max_channels = 6,
-+	.postdiv = 1,
-+	.multi_channel_irqs = 1,
-+	.ch_interface_mode = 1,
-+	.shared_can_regs = 1,
-+	.external_clk = 0,
-+};
-+
- /* Helper functions */
- static inline void rcar_canfd_update(u32 mask, u32 val, u32 __iomem *reg)
- {
-@@ -1969,6 +1985,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	u32 rule_entry = 0;
- 	bool fdmode = true;			/* CAN FD only mode - default */
- 	char name[9] = "channelX";
-+	struct clk *clk_ram;
- 	int i;
- 
- 	info = of_device_get_match_data(dev);
-@@ -2058,6 +2075,11 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 		gpriv->extclk = gpriv->info->external_clk;
- 	}
- 
-+	clk_ram = devm_clk_get_optional_enabled(dev, "ram_clk");
-+	if (IS_ERR(clk_ram))
-+		return dev_err_probe(dev, PTR_ERR(clk_ram),
-+				     "cannot get enabled ram clock\n");
-+
- 	addr = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(addr)) {
- 		err = PTR_ERR(addr);
-@@ -2220,6 +2242,7 @@ static SIMPLE_DEV_PM_OPS(rcar_canfd_pm_ops, rcar_canfd_suspend,
- 
- static const __maybe_unused struct of_device_id rcar_canfd_of_table[] = {
- 	{ .compatible = "renesas,r8a779a0-canfd", .data = &rcar_gen4_hw_info },
-+	{ .compatible = "renesas,r9a09g047-canfd", .data = &r9a09g047_hw_info },
- 	{ .compatible = "renesas,rcar-gen3-canfd", .data = &rcar_gen3_hw_info },
- 	{ .compatible = "renesas,rcar-gen4-canfd", .data = &rcar_gen4_hw_info },
- 	{ .compatible = "renesas,rzg2l-canfd", .data = &rzg2l_hw_info },
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.43.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
