@@ -1,428 +1,177 @@
-Return-Path: <linux-can+bounces-3439-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3440-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1208AA91FFE
-	for <lists+linux-can@lfdr.de>; Thu, 17 Apr 2025 16:41:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B29A7A935ED
+	for <lists+linux-can@lfdr.de>; Fri, 18 Apr 2025 12:21:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 653C03AAD5F
-	for <lists+linux-can@lfdr.de>; Thu, 17 Apr 2025 14:41:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3261A1B60630
+	for <lists+linux-can@lfdr.de>; Fri, 18 Apr 2025 10:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF90C1AA7BA;
-	Thu, 17 Apr 2025 14:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937D826FD86;
+	Fri, 18 Apr 2025 10:21:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iaUafgX7";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="7mn1DhVp"
+	dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b="aDnJx9Gi";
+	dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b="gPXHCgQz"
 X-Original-To: linux-can@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtpx1.feld.cvut.cz (smtpx1.feld.cvut.cz [147.32.210.191])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892EB2512E2
-	for <linux-can@vger.kernel.org>; Thu, 17 Apr 2025 14:41:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EEC2528EA;
+	Fri, 18 Apr 2025 10:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.32.210.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744900888; cv=none; b=ROEHtrPqIrdcHwME/+ocWOw3AvDKje0QfibnH74FKtiCv+p0IEXbyddbum9WSH063U4ZCWXu8ojFKyduA0Ttaxk51hHCf2e2URtLzY9iqf7zFPfKPoYwNFKbnl1EHBKzNsaXTgrMdPOXvZUQaTOlKFsIpT5xMTS+/RUAOhVu62s=
+	t=1744971669; cv=none; b=G/FKjHvrNCsAWe2Iw9HdjswAABvAimVZIDMP24rVxPazUY96gFmmoRJPjnNY3pEnV61ao66fW44RydkPCxf3H1YVa2YKD5cfhpc91f5iDqndlCLdg82+2cnKxkXTX9srnrwW4JhiM2g3ifSNcZPqTr3932QoxQDeb7KP/4IStZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744900888; c=relaxed/simple;
-	bh=MPrUqPag29G5YQr81OaMHNC2xB9imFiMzsNiJCAYsx8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pKIlWWs2zoRCzwy2jlmv+bP8jvhF8CVj+sJVcSmnnV8gysdNRftlPYW0BqhEfouFNbb70A3Hnn10eDQITbACB+1Lywu74v47hXFvKxYx64crICUWSwn9hmIkPKfquTBZWeVxR7r/PkOst8k6p30aDIWNaMapbQY8a/YdquZDJfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iaUafgX7; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=7mn1DhVp; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Thu, 17 Apr 2025 16:41:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1744900884;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=6kXse2KhaZUBUEc63h956+VZ7p5QdXp2Htaycq8Dy0o=;
-	b=iaUafgX7UFI3ObU4/vBED/Lo3INEtSVoQTpqPXPTPgt0JcV1xBW3MQcgIgkB4PEoBOZphd
-	28WZfuTLLsVF/2DYvoA+eT7dL5+wVKGwMm0EEJyGVC72c7nnEb2+eYzeyVRKPI5gGfa1XQ
-	FsTFvSg7pBo+tCzKqsS65moY7sjGwcGtbPNX3R/Wk5kp9a9F7xMuyY6EiBJdQQG3L+fghg
-	HRoNu4ONYCR3PasGOqdy3k0xznsRoYohU8oGfgwtzR020soIwnGri/ia85midLOneAuXoL
-	GBgV/fQcvPiArp0xrNnj4c3vYoYkupxy3y9OL05jwzIpA1PaPPduyLdT6IHcOA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1744900884;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=6kXse2KhaZUBUEc63h956+VZ7p5QdXp2Htaycq8Dy0o=;
-	b=7mn1DhVpi5SXO8DVNesvKHpjhHL5PeFg9vr/r96YsCo+WCIde9xnzmFRMos5vqQhKY+7Vt
-	5LkRk/8nP3XolgAQ==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, tglx@linutronix.de,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH] can: gw: fix RCU/BH usage in cgw_create_job()
-Message-ID: <20250417144122.LVyWdXXO@linutronix.de>
+	s=arc-20240116; t=1744971669; c=relaxed/simple;
+	bh=exFdmBB4YtQi78HkYK9tHYCz7NpFcrbi4bTabGprP+8=;
+	h=From:To:Subject:Date:Cc:References:In-Reply-To:MIME-Version:
+	 Content-Type:Content-Disposition:Message-Id; b=HSIBC4jbdnOEpe/vw0L7e9hvEtrK0wMQG+6BveXh0tQ0SonCpFcP8N13CRR/FA3iaGZ0H2yXzivgpeEhK0lC/iVm4YYRMT6obLWNm3EDxw16SFmBXDj77+hAgdVh1MGd2JyPDpxq8f2B1WN90k4K36am28efjiYWfzu21WD9g3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz; spf=pass smtp.mailfrom=fel.cvut.cz; dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b=aDnJx9Gi; dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b=gPXHCgQz; arc=none smtp.client-ip=147.32.210.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fel.cvut.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
+	s=felmail; t=1744971116;
+	bh=zeCHnzdzJ7WmitTwfQHAhoQybBfjFWYJsTF/8AQiuMU=;
+	h=From:To:Subject:Date:Cc:References:In-Reply-To:From;
+	b=aDnJx9GivkN4u5LnT1JhjLexoVQP0b4DRGnzmi0kQzSY7Vtr6z0bDsxZCWsPx8/fM
+	 +Z2twOCevxylBLCvUO4MWIXMoMbPIG66rKXMvMc17QXPsoXIunjmFvGGgPi4AXGdKm
+	 vt5qwcqRs8UD+Tud/lZcQGjNebjUMLHIMu2iiPYx4jkt+5gUPWUvCaNPwlAtxX0TZT
+	 xUgIF/oDqCn8txmnYU5L/HRvyE6IHwINeXcSr+P/t9vPh7mZ+GinfNum6qomlRZdO4
+	 dg8reL5CjdfrzEe4Y3sGPJq3zj+Lt7ZC/N6ha2ysdodz8lbi+ACBFLiOzL2zLm3Xwf
+	 I1UclYQUMT1nA==
+Received: from smtpx.fel.cvut.cz (smtpx.feld.cvut.cz [147.32.210.153])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtpx1.feld.cvut.cz (Postfix) with ESMTPS id 80E2629F77;
+	Fri, 18 Apr 2025 12:11:56 +0200 (CEST)
+Received: from localhost (unknown [192.168.200.27])
+	by smtpx.fel.cvut.cz (Postfix) with ESMTP id 771CC47ED2;
+	Fri, 18 Apr 2025 12:11:56 +0200 (CEST)
+X-Virus-Scanned: IMAP STYX AMAVIS
+Authentication-Results: cerokez-250.feld.cvut.cz (amavis);
+ dkim=pass (2048-bit key) header.d=fel.cvut.cz
+Received: from smtpx.fel.cvut.cz ([192.168.200.2])
+ by localhost (cerokez-250.feld.cvut.cz [192.168.200.27]) (amavis, port 10060)
+ with ESMTP id Uid27AREP-RT; Fri, 18 Apr 2025 12:11:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
+	s=felmail; t=1744971113;
+	bh=zeCHnzdzJ7WmitTwfQHAhoQybBfjFWYJsTF/8AQiuMU=;
+	h=From:To:Subject:Date:Cc:References:In-Reply-To:From;
+	b=gPXHCgQzvVl3536KUg+b1HXPEGsNDy+IBAQzfzm4QLUj9W5SalAHTgdmCzHgJ+76G
+	 oD+7ri1LuQKCDnJfHN5pH+yWzgveUI9GsPGEIqdd9XFhBJFtM8i9ooxM5AxoGp/J+b
+	 9gW9drZKkgUpda/ris3lY7WrnG6cwqE0+MO7gNyjAyXdNC44vPaLmJrHT1CwLVZOJL
+	 wnPGANKaUy+WOvSxG7trgNHgjXvclb0w64X1jkmxnmHSpcHfxnU0Dq40ipNQkCoaY0
+	 wYhUuWE7JH0pZQvbyzxHF8ln/T/0BC4F06jOR3qC2cONtedepJKQcKaGpiIEL+qeqh
+	 mVSvTWmTomJUg==
+Received: from baree.pikron.com (static-84-242-78-234.bb.vodafone.cz [84.242.78.234])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pisa)
+	by smtpx.fel.cvut.cz (Postfix) with ESMTPSA id 10FF247ED1;
+	Fri, 18 Apr 2025 12:11:51 +0200 (CEST)
+From: Pavel Pisa <pisa@fel.cvut.cz>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: CAN latency measuremet on AMD/Xilinx Zynq with PREEMP_RT - added threaded NAPI configuration
+Date: Fri, 18 Apr 2025 12:12:22 +0200
+User-Agent: KMail/1.9.10
+Cc: "Marc Kleine-Budde" <mkl@pengutronix.de>,
+ linux-rt-users@vger.kernel.org,
+ Carsten Emde <c.emde@osadl.org>,
+ linux-can@vger.kernel.org,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ Jan Altenberg <Jan.Altenberg@osadl.org>,
+ Pavel Hronek <hronepa1@fel.cvut.cz>
+References: <202501281629.27139.pisa@fel.cvut.cz> <202503281304.47808.pisa@fel.cvut.cz> <20250417081254.EUqrBagT@linutronix.de>
+In-Reply-To: <20250417081254.EUqrBagT@linutronix.de>
+X-KMail-QuotePrefix: > 
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Message-Id: <202504181212.22699.pisa@fel.cvut.cz>
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+Hello Sebastian,
 
-As reported by Sebastian Andrzej Siewior the use of local_bh_disable()
-is only feasible in uni processor systems to update the modification rules.
-The usual use-case to update the modification rules is to update the data
-of the modifications but not the modification types (AND/OR/XOR/SET) or
-the checksum functions itself.
+On Thursday 17 of April 2025 10:12:54 Sebastian Andrzej Siewior wrote:
+> The IRQ thread should be limited to one CPU which is the same where the
+> IRQ it itself is set to. I don't think that this done the NAPI thread
+> automatically so it is probably free floating in the system.
 
-To omit additional memory allocations to maintain fast modification
-switching times, the modification description space is doubled at gw-job
-creation time so that only the reference to the active modification
-desciption is changed under rcu protection.
+you are right, I have added
 
-Rename cgw_job::mod to cf_mod and make it a RCU pointer. Allocate in
-cgw_create_job() and free it together with cgw_job in
-cgw_job_free_rcu(). Update all users to dereference cgw_job::cf_mod with
-a RCU accessor and if possible once.
+  taskset -p 1 $pid
 
-[bigeasy: Replace mod1/mod2 from the Oliver's original patch with dynamic
-allocation, use RCU annotation and accessor]
+in can-latester-automation/device-scripts/set-can-threaded.sh
 
-Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Closes: https://lore.kernel.org/linux-can/20231031112349.y0aLoBrz@linutronix.de/
-Fixes: dd895d7f21b2 ("can: cangw: introduce optional uid to reference created routing jobs")
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- net/can/gw.c | 152 +++++++++++++++++++++++++++++++--------------------
- 1 file changed, 92 insertions(+), 60 deletions(-)
+the effect can be seen after some days on the midnight
+build and testing records.
 
-diff --git a/net/can/gw.c b/net/can/gw.c
-index ef93293c1fae3..e11c38c55f5c5 100644
---- a/net/can/gw.c
-+++ b/net/can/gw.c
-@@ -130,7 +130,7 @@ struct cgw_job {
- 	u32 handled_frames;
- 	u32 dropped_frames;
- 	u32 deleted_frames;
--	struct cf_mod mod;
-+	struct cf_mod __rcu *cf_mod;
- 	union {
- 		/* CAN frame data source */
- 		struct net_device *dev;
-@@ -459,6 +459,7 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
- 	struct cgw_job *gwj = (struct cgw_job *)data;
- 	struct canfd_frame *cf;
- 	struct sk_buff *nskb;
-+	struct cf_mod *mod;
- 	int modidx = 0;
- 
- 	/* process strictly Classic CAN or CAN FD frames */
-@@ -506,7 +507,8 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
- 	 * When there is at least one modification function activated,
- 	 * we need to copy the skb as we want to modify skb->data.
- 	 */
--	if (gwj->mod.modfunc[0])
-+	mod = rcu_dereference(gwj->cf_mod);
-+	if (mod->modfunc[0])
- 		nskb = skb_copy(skb, GFP_ATOMIC);
- 	else
- 		nskb = skb_clone(skb, GFP_ATOMIC);
-@@ -529,8 +531,8 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
- 	cf = (struct canfd_frame *)nskb->data;
- 
- 	/* perform preprocessed modification functions if there are any */
--	while (modidx < MAX_MODFUNCTIONS && gwj->mod.modfunc[modidx])
--		(*gwj->mod.modfunc[modidx++])(cf, &gwj->mod);
-+	while (modidx < MAX_MODFUNCTIONS && mod->modfunc[modidx])
-+		(*mod->modfunc[modidx++])(cf, mod);
- 
- 	/* Has the CAN frame been modified? */
- 	if (modidx) {
-@@ -546,11 +548,11 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
- 		}
- 
- 		/* check for checksum updates */
--		if (gwj->mod.csumfunc.crc8)
--			(*gwj->mod.csumfunc.crc8)(cf, &gwj->mod.csum.crc8);
-+		if (mod->csumfunc.crc8)
-+			(*mod->csumfunc.crc8)(cf, &mod->csum.crc8);
- 
--		if (gwj->mod.csumfunc.xor)
--			(*gwj->mod.csumfunc.xor)(cf, &gwj->mod.csum.xor);
-+		if (mod->csumfunc.xor)
-+			(*mod->csumfunc.xor)(cf, &mod->csum.xor);
- 	}
- 
- 	/* clear the skb timestamp if not configured the other way */
-@@ -581,9 +583,20 @@ static void cgw_job_free_rcu(struct rcu_head *rcu_head)
- {
- 	struct cgw_job *gwj = container_of(rcu_head, struct cgw_job, rcu);
- 
-+	/* cgw_job::cf_mod is always accessed from the same cgw_job object within
-+	 * the same RCU read section. Once cgw_job is scheduled for removal,
-+	 * cf_mod can also be removed without mandating an additional grace period.
-+	 */
-+	kfree(rcu_access_pointer(gwj->cf_mod));
- 	kmem_cache_free(cgw_cache, gwj);
- }
- 
-+/* Return cgw_job::cf_mod with RTNL protected section */
-+static struct cf_mod *cgw_job_cf_mod(struct cgw_job *gwj)
-+{
-+	return rcu_dereference_protected(gwj->cf_mod, rtnl_is_locked());
-+}
-+
- static int cgw_notifier(struct notifier_block *nb,
- 			unsigned long msg, void *ptr)
- {
-@@ -616,6 +629,7 @@ static int cgw_put_job(struct sk_buff *skb, struct cgw_job *gwj, int type,
- {
- 	struct rtcanmsg *rtcan;
- 	struct nlmsghdr *nlh;
-+	struct cf_mod *mod;
- 
- 	nlh = nlmsg_put(skb, pid, seq, type, sizeof(*rtcan), flags);
- 	if (!nlh)
-@@ -650,82 +664,83 @@ static int cgw_put_job(struct sk_buff *skb, struct cgw_job *gwj, int type,
- 			goto cancel;
- 	}
- 
-+	mod = cgw_job_cf_mod(gwj);
- 	if (gwj->flags & CGW_FLAGS_CAN_FD) {
- 		struct cgw_fdframe_mod mb;
- 
--		if (gwj->mod.modtype.and) {
--			memcpy(&mb.cf, &gwj->mod.modframe.and, sizeof(mb.cf));
--			mb.modtype = gwj->mod.modtype.and;
-+		if (mod->modtype.and) {
-+			memcpy(&mb.cf, &mod->modframe.and, sizeof(mb.cf));
-+			mb.modtype = mod->modtype.and;
- 			if (nla_put(skb, CGW_FDMOD_AND, sizeof(mb), &mb) < 0)
- 				goto cancel;
- 		}
- 
--		if (gwj->mod.modtype.or) {
--			memcpy(&mb.cf, &gwj->mod.modframe.or, sizeof(mb.cf));
--			mb.modtype = gwj->mod.modtype.or;
-+		if (mod->modtype.or) {
-+			memcpy(&mb.cf, &mod->modframe.or, sizeof(mb.cf));
-+			mb.modtype = mod->modtype.or;
- 			if (nla_put(skb, CGW_FDMOD_OR, sizeof(mb), &mb) < 0)
- 				goto cancel;
- 		}
- 
--		if (gwj->mod.modtype.xor) {
--			memcpy(&mb.cf, &gwj->mod.modframe.xor, sizeof(mb.cf));
--			mb.modtype = gwj->mod.modtype.xor;
-+		if (mod->modtype.xor) {
-+			memcpy(&mb.cf, &mod->modframe.xor, sizeof(mb.cf));
-+			mb.modtype = mod->modtype.xor;
- 			if (nla_put(skb, CGW_FDMOD_XOR, sizeof(mb), &mb) < 0)
- 				goto cancel;
- 		}
- 
--		if (gwj->mod.modtype.set) {
--			memcpy(&mb.cf, &gwj->mod.modframe.set, sizeof(mb.cf));
--			mb.modtype = gwj->mod.modtype.set;
-+		if (mod->modtype.set) {
-+			memcpy(&mb.cf, &mod->modframe.set, sizeof(mb.cf));
-+			mb.modtype = mod->modtype.set;
- 			if (nla_put(skb, CGW_FDMOD_SET, sizeof(mb), &mb) < 0)
- 				goto cancel;
- 		}
- 	} else {
- 		struct cgw_frame_mod mb;
- 
--		if (gwj->mod.modtype.and) {
--			memcpy(&mb.cf, &gwj->mod.modframe.and, sizeof(mb.cf));
--			mb.modtype = gwj->mod.modtype.and;
-+		if (mod->modtype.and) {
-+			memcpy(&mb.cf, &mod->modframe.and, sizeof(mb.cf));
-+			mb.modtype = mod->modtype.and;
- 			if (nla_put(skb, CGW_MOD_AND, sizeof(mb), &mb) < 0)
- 				goto cancel;
- 		}
- 
--		if (gwj->mod.modtype.or) {
--			memcpy(&mb.cf, &gwj->mod.modframe.or, sizeof(mb.cf));
--			mb.modtype = gwj->mod.modtype.or;
-+		if (mod->modtype.or) {
-+			memcpy(&mb.cf, &mod->modframe.or, sizeof(mb.cf));
-+			mb.modtype = mod->modtype.or;
- 			if (nla_put(skb, CGW_MOD_OR, sizeof(mb), &mb) < 0)
- 				goto cancel;
- 		}
- 
--		if (gwj->mod.modtype.xor) {
--			memcpy(&mb.cf, &gwj->mod.modframe.xor, sizeof(mb.cf));
--			mb.modtype = gwj->mod.modtype.xor;
-+		if (mod->modtype.xor) {
-+			memcpy(&mb.cf, &mod->modframe.xor, sizeof(mb.cf));
-+			mb.modtype = mod->modtype.xor;
- 			if (nla_put(skb, CGW_MOD_XOR, sizeof(mb), &mb) < 0)
- 				goto cancel;
- 		}
- 
--		if (gwj->mod.modtype.set) {
--			memcpy(&mb.cf, &gwj->mod.modframe.set, sizeof(mb.cf));
--			mb.modtype = gwj->mod.modtype.set;
-+		if (mod->modtype.set) {
-+			memcpy(&mb.cf, &mod->modframe.set, sizeof(mb.cf));
-+			mb.modtype = mod->modtype.set;
- 			if (nla_put(skb, CGW_MOD_SET, sizeof(mb), &mb) < 0)
- 				goto cancel;
- 		}
- 	}
- 
--	if (gwj->mod.uid) {
--		if (nla_put_u32(skb, CGW_MOD_UID, gwj->mod.uid) < 0)
-+	if (mod->uid) {
-+		if (nla_put_u32(skb, CGW_MOD_UID, mod->uid) < 0)
- 			goto cancel;
- 	}
- 
--	if (gwj->mod.csumfunc.crc8) {
-+	if (mod->csumfunc.crc8) {
- 		if (nla_put(skb, CGW_CS_CRC8, CGW_CS_CRC8_LEN,
--			    &gwj->mod.csum.crc8) < 0)
-+			    &mod->csum.crc8) < 0)
- 			goto cancel;
- 	}
- 
--	if (gwj->mod.csumfunc.xor) {
-+	if (mod->csumfunc.xor) {
- 		if (nla_put(skb, CGW_CS_XOR, CGW_CS_XOR_LEN,
--			    &gwj->mod.csum.xor) < 0)
-+			    &mod->csum.xor) < 0)
- 			goto cancel;
- 	}
- 
-@@ -1059,7 +1074,7 @@ static int cgw_create_job(struct sk_buff *skb,  struct nlmsghdr *nlh,
- 	struct net *net = sock_net(skb->sk);
- 	struct rtcanmsg *r;
- 	struct cgw_job *gwj;
--	struct cf_mod mod;
-+	struct cf_mod *mod;
- 	struct can_can_gw ccgw;
- 	u8 limhops = 0;
- 	int err = 0;
-@@ -1078,37 +1093,48 @@ static int cgw_create_job(struct sk_buff *skb,  struct nlmsghdr *nlh,
- 	if (r->gwtype != CGW_TYPE_CAN_CAN)
- 		return -EINVAL;
- 
--	err = cgw_parse_attr(nlh, &mod, CGW_TYPE_CAN_CAN, &ccgw, &limhops);
--	if (err < 0)
--		return err;
-+	mod = kmalloc(sizeof(*mod), GFP_KERNEL);
-+	if (!mod)
-+		return -ENOMEM;
- 
--	if (mod.uid) {
-+	err = cgw_parse_attr(nlh, mod, CGW_TYPE_CAN_CAN, &ccgw, &limhops);
-+	if (err < 0)
-+		goto out_free_cf;
-+
-+	if (mod->uid) {
- 		ASSERT_RTNL();
- 
- 		/* check for updating an existing job with identical uid */
- 		hlist_for_each_entry(gwj, &net->can.cgw_list, list) {
--			if (gwj->mod.uid != mod.uid)
-+			struct cf_mod *old_cf;
-+
-+			old_cf = cgw_job_cf_mod(gwj);
-+			if (old_cf->uid != mod->uid)
- 				continue;
- 
- 			/* interfaces & filters must be identical */
--			if (memcmp(&gwj->ccgw, &ccgw, sizeof(ccgw)))
--				return -EINVAL;
-+			if (memcmp(&gwj->ccgw, &ccgw, sizeof(ccgw))) {
-+				err = -EINVAL;
-+				goto out_free_cf;
-+			}
- 
--			/* update modifications with disabled softirq & quit */
--			local_bh_disable();
--			memcpy(&gwj->mod, &mod, sizeof(mod));
--			local_bh_enable();
-+			rcu_assign_pointer(gwj->cf_mod, mod);
-+			kfree_rcu_mightsleep(old_cf);
- 			return 0;
- 		}
- 	}
- 
- 	/* ifindex == 0 is not allowed for job creation */
--	if (!ccgw.src_idx || !ccgw.dst_idx)
--		return -ENODEV;
-+	if (!ccgw.src_idx || !ccgw.dst_idx) {
-+		err = -ENODEV;
-+		goto out_free_cf;
-+	}
- 
- 	gwj = kmem_cache_alloc(cgw_cache, GFP_KERNEL);
--	if (!gwj)
--		return -ENOMEM;
-+	if (!gwj) {
-+		err = -ENOMEM;
-+		goto out_free_cf;
-+	}
- 
- 	gwj->handled_frames = 0;
- 	gwj->dropped_frames = 0;
-@@ -1118,7 +1144,7 @@ static int cgw_create_job(struct sk_buff *skb,  struct nlmsghdr *nlh,
- 	gwj->limit_hops = limhops;
- 
- 	/* insert already parsed information */
--	memcpy(&gwj->mod, &mod, sizeof(mod));
-+	RCU_INIT_POINTER(gwj->cf_mod, mod);
- 	memcpy(&gwj->ccgw, &ccgw, sizeof(ccgw));
- 
- 	err = -ENODEV;
-@@ -1149,12 +1175,15 @@ static int cgw_create_job(struct sk_buff *skb,  struct nlmsghdr *nlh,
- 	ASSERT_RTNL();
- 
- 	err = cgw_register_filter(net, gwj);
--	if (!err)
-+	if (!err) {
- 		hlist_add_head_rcu(&gwj->list, &net->can.cgw_list);
-+		mod = NULL;
-+	}
- out:
- 	if (err)
- 		kmem_cache_free(cgw_cache, gwj);
--
-+out_free_cf:
-+	kfree(mod);
- 	return err;
- }
- 
-@@ -1214,19 +1243,22 @@ static int cgw_remove_job(struct sk_buff *skb, struct nlmsghdr *nlh,
- 
- 	/* remove only the first matching entry */
- 	hlist_for_each_entry_safe(gwj, nx, &net->can.cgw_list, list) {
-+		struct cf_mod *cf_mod;
-+
- 		if (gwj->flags != r->flags)
- 			continue;
- 
- 		if (gwj->limit_hops != limhops)
- 			continue;
- 
-+		cf_mod = cgw_job_cf_mod(gwj);
- 		/* we have a match when uid is enabled and identical */
--		if (gwj->mod.uid || mod.uid) {
--			if (gwj->mod.uid != mod.uid)
-+		if (cf_mod->uid || mod.uid) {
-+			if (cf_mod->uid != mod.uid)
- 				continue;
- 		} else {
- 			/* no uid => check for identical modifications */
--			if (memcmp(&gwj->mod, &mod, sizeof(mod)))
-+			if (memcmp(cf_mod, &mod, sizeof(mod)))
- 				continue;
- 		}
- 
--- 
-2.49.0
+Our system is small and simple and all CAN IRQs are
+mapped to CPU0 now. But I have looked if I can find some
+easy way how to find affinity of the IRQ thread from
+/sys/class/net/canX and have not succeed a much.
+There is queues/rx-0/rps_cpus but it is probably another
+level.
 
+There is easy way to find matching kernel driver task
+and copy affinity to NAPI task. But I am not sure how
+much naming match is guaranteed if some interfaces aliasing
+etc. is in effect. I see next names now
+
+  [irq/48-can2]
+  [irq/49-can3]
+  [irq/50-can4]
+  [irq/51-can5]
+
+and
+
+ [napi/can2-19]
+ [napi/can3-20]
+ [napi/can4-21]
+ [napi/can5-22]
+
+One question to Oliver, in which thread/callaback context
+is running kernel CAN gateway? I think that it does not
+use separate task. Because with threaded NAPI it seems
+that simple user space "gateway" (task to forward all
+messages from one interface to another) has more stable
+results than routing of messages directly in kernel.
+
+Some side note, project implementing FlexCAN controller
+emulation for QEMU (initial target sabrelite iMX6)
+is moving forward. And as Bernhard Beschow submitted
+iMX8 platform support into mainline QEMU, the FlexCAN
+emulation support can be extended to it in future as well.
+If somebody is interested then we can somehow join
+resources. Foe example if some funding is found
+I would discuse if the studnet working on the thesis
+project finalized by submitting iMX6 support would
+be willing to continue on iMX8 or other targets support.
+
+Best wishes,
+
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://control.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    social:     https://social.kernel.org/ppisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    RISC-V education: https://comparch.edu.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
 
