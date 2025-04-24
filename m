@@ -1,110 +1,135 @@
-Return-Path: <linux-can+bounces-3468-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3469-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77DD8A9A5C3
-	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 10:23:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56EE4A9AE05
+	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 14:53:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD5AA7ACD13
-	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 08:22:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5208E3B4EA5
+	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 12:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A37EC2080E8;
-	Thu, 24 Apr 2025 08:23:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE3527B509;
+	Thu, 24 Apr 2025 12:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="MgB8nMK5"
+	dkim=pass (2048-bit key) header.d=mwa.re header.i=@mwa.re header.b="fKuh/Lkq"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2357B207A2B;
-	Thu, 24 Apr 2025 08:23:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48022701AA
+	for <linux-can@vger.kernel.org>; Thu, 24 Apr 2025 12:53:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745482990; cv=none; b=eHsNgWzoWTeQyL8ceR3qD0sTMDzdWK8fEx3FtGpU1g+HZdsyRgkX/2lyW858ZIIfxG3bTl6zPwg2UKPCyo0tdisZGtqimjgH9iLls2kyenChEY4syD/ejwOCdVF3USRzeVMaCLMF0M7acvdT0RmQYDL2v0pEJU0nK4zzu519rng=
+	t=1745499201; cv=none; b=XSaisvhBGA+e2hBkryPiei+afgBX6JWSr5+kiq7tXgCOovrT1bFeB669yCtXmeS6JCOP5wpjUaY2Sl5ajwd5CMengaKDzPNyKmg3tGodBQaNxgDIPxdpFj7Bx8lvmOegUfCbdBJEvrmfl0qYXtiEhaoNnS3T852dCz5oX91su7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745482990; c=relaxed/simple;
-	bh=qnRPE/OjqDULD2P8NhZ9G/++7eMxpWckPTuemPzYeDE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M6rZuP4G0qV1kUWgaQbvC6lSxujCGOp6+HQw2DFWY6HRQZ8dqNe1DunXNkvEHZMzyXRIKIBgP4hXXrsiIxYFZpwviBmZb9iNQ4ym5rPAtOInmZR5v9l+MnechzRvaIV2KXxbS0IPSHiZ6oNGN0eQLur/gahD1xF7bINnO3KUbag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=MgB8nMK5; arc=none smtp.client-ip=193.252.22.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from mail-ej1-f48.google.com ([209.85.218.48])
-	by smtp.orange.fr with ESMTPSA
-	id 7rqCubwxvvSg77rqGuXwwe; Thu, 24 Apr 2025 10:21:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1745482916;
-	bh=Qi0itqsQpWay2GuVwalqq2IwjGZETj75/Z4w2YScqHQ=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=MgB8nMK55fXzCwcRiTZXUIwuKktqYavs7OO9YYaFUXjMNI24e/31L0w1Cgo04pNBA
-	 IDGapSnOXlncr7xLJpT6SxulStwd0ojaHI08aq9PL3hJ7IzPh0hU9+PJfnAHyrDPIm
-	 HwKJsXht//lrVmScoYYA+vmtbxEyo5HpH5JK1BGADxkZ4VnAUqr5p5bdoClkDw7OuY
-	 BNwW6R3Wl+NVuGmzCDKsxRC2lX7K8GEqghThuEHAPHj0R/0WSADFxkOPC7589fv8Ok
-	 87V6iC7QJT5Pur/NUL7uMSglJlRsnUpOgrAvt5vd3QRJbc2qRWL83eqOi7hBY6yPyz
-	 21HrCicXXSACg==
-X-ME-Helo: mail-ej1-f48.google.com
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 24 Apr 2025 10:21:56 +0200
-X-ME-IP: 209.85.218.48
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ace333d5f7bso133525866b.3;
-        Thu, 24 Apr 2025 01:21:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU+c75tGkvUtBZpza9i8iLAudf1qnLj0CRiHnX9v+WFQARzWkDEFrPMkZ26e08k26Xc0wkQDWehucM2QSIf+mb7@vger.kernel.org, AJvYcCX7GD8Xk5Mtu9NqnA9IWNV51a54ULwJLDfMjj3TrzkhFKnJPfDE8VDIOuYYhPum4IPPSzee5DlHbWs=@vger.kernel.org, AJvYcCXsq8IZD402gINaC39S7yFy9wnXqxYyvpAcqWgoVYy6xy8FSrKJmNggjN7GPzC8FqGTGQepvUVp@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHk3C03MKO+emjwB85D1RKvdFS/KpwrO4ZF71Osd8v/VExbXKj
-	n6/GamuY5NhLb+FGnjhb91TLnLd4In1eD1YbgG2R4GwZzsbQS72ZkerSp3bfz3qTu8HDXs42gA5
-	/d2hMZISXTv+i2npoeIWHFMA8Hd8=
-X-Google-Smtp-Source: AGHT+IG0UHw7cStUnc5g3aVjgS9EvHS8GbZ/STZwvgx1+CuvS1aIGReEO/sw76SXPLW5pLvsQpjnpMm6tc6W9FpRgho=
-X-Received: by 2002:a17:907:6eab:b0:ac7:9712:d11a with SMTP id
- a640c23a62f3a-ace572bd80bmr177134266b.32.1745482912754; Thu, 24 Apr 2025
- 01:21:52 -0700 (PDT)
+	s=arc-20240116; t=1745499201; c=relaxed/simple;
+	bh=DxBNQJBPeh8jU6Xckk6xFrDJjMmrCmkkKoxjle3sUXk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BbDgRe84+QtAuM3SqpAX9toTlmQq5+hXe9frwuUioQa09JBLDijxmKKaLF7+FMC63a3eIi6V8jAxwkAetjFf7YpdlTSH7x4vvsjv9TkbkunwqA+X9vpwzM9UZrCYS43Zq6a4XOTATyeaCNRxT4LuiKk585RMMcO2schisTqEwmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mwa.re; spf=pass smtp.mailfrom=mwa.re; dkim=pass (2048-bit key) header.d=mwa.re header.i=@mwa.re header.b=fKuh/Lkq; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mwa.re
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mwa.re
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43d04dc73b7so8637645e9.3
+        for <linux-can@vger.kernel.org>; Thu, 24 Apr 2025 05:53:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mwa.re; s=google; t=1745499197; x=1746103997; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LBeAKJ7KUcW1dQvt6wdl3NV+6b3AZQYzsiqjB7Iqsd4=;
+        b=fKuh/LkqOZju5xY0QNfjc+bbIMzJspTkQUc5EsF0fxLrfjYdPELWjzQx7XUy5c5/tA
+         cMzz1Kozrxro1WCt5ZSPviclG5emk3I7G/o7kK1Fpz1ZVcRodNTIQ2jS2wMPL4Guu+kR
+         ei8qtvBO+l2NTFknc5sKEBuPav1Qr3bkI21yD6mpkIHGxJc7AZRu5hSOffD1Pv3rl4mv
+         4skA/Iqx6k/ZDM6CcHjJTey1pgiJVSnr//SfZIwZis+t7EaQpvkYK5r2Azq/uO9AsMzI
+         7kQlHxlG37T/3eVKMxU0t/c4tzRPPuQ2P1MnNRo67TyHEFZaTRm3FXoQ+1WALXeOElzp
+         XY6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745499197; x=1746103997;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LBeAKJ7KUcW1dQvt6wdl3NV+6b3AZQYzsiqjB7Iqsd4=;
+        b=U56GdnUpuWEuYCUJQ9qTwqw1zFZ00TZ9tjmNetWDxmQ74D0Jt2Sb/u8lGc/j0rLG0p
+         59E1j41QGEwsJzob/8AHDt06jabUjKYWrP4ITqCNd0BOAjXX7T2eMAG9Y2yY/tZF3jvI
+         XgVbrXWzPkfEfv3fXr4pIfpZmU3FqI5UJfbHaWg7oE6keDWBPWbuq0m0nNZUEbiGwRfm
+         Tdy7wNv0Ih9xvuWmd/Au3/CTxMNs9G4b0492vM85aeA7u9KsazIsr5DipLynElIKK+uC
+         bRnlFLxQAtK0qA209DZ383eTBrK5hWa2He0QUEOSXsgfINx0E3/lktWKapTN42YQ33en
+         6/qw==
+X-Forwarded-Encrypted: i=1; AJvYcCU0j89+IQHGWoZWKfYYvlKZNc/Z1YB3UXrs2rijSxMfmpPKBpZRVX/ThvUBWj+w0JaLCFji/ToSSH0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2/DzRCZvGP/5O4Fr9w/xmsqYTHvrGwG3UDeJLvSWtBvcpcsRU
+	sCGO/bEO5HA4QUAxJfw88OVC77kJye5i5XMSWUCl2Y4t2mQvFQbhLx8qdmXqU/w=
+X-Gm-Gg: ASbGncvSmBUY0w98Ht2euiNh2AVj9g3Ll8TR2PIhjB2kfAX/UhlIaYwkt7EgFMtkWKi
+	8J5FyNxnuJAJXtmGaZ9R6Bha1KYvUfXC/c3LvXuAD/3Irp4QG1UDYn6xgWeKVPNnFO1I2rTtRqS
+	Jhjd0px11ETNMf+hPxmMBRKRBnPWAJ1OzFZlryMU2HhZxNdq16r27q0E53G3WnX6IilBIYyylch
+	wyf8u5bTaNVnZmn7fFROXFk4bQnLp/AHL/IVs8upg2L1/J1c6x35ICdaRupVQMC/M0CRE5qXpzA
+	YGi65o3WEHEe79kMh4ZQKSEOygM6LXqbG6y4P2AoFWwiDByzGXlqHq3jIubx7/OzSt/YJvyIfMT
+	y
+X-Google-Smtp-Source: AGHT+IEppmH4zKcBOoPZazDeFre0hec+YmCx5L9B/fZlDtqDoVt95EXVe+b4uRH2rTi83dPaArW3UQ==
+X-Received: by 2002:a05:600c:46c9:b0:43d:ac5:11e8 with SMTP id 5b1f17b1804b1-4409bd8fca2mr16008835e9.21.1745499196866;
+        Thu, 24 Apr 2025 05:53:16 -0700 (PDT)
+Received: from mw-ac-stu-3.corp.mwa.re (static-195-14-251-13.nc.de. [195.14.251.13])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4409d2b8a9csm20471435e9.29.2025.04.24.05.53.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Apr 2025 05:53:16 -0700 (PDT)
+From: Antonios Salios <antonios@mwa.re>
+To: rcsekar@samsung.com
+Cc: mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lukas@mwa.re,
+	jan@mwa.re,
+	Antonios Salios <antonios@mwa.re>
+Subject: [PATCH] can: m_can: initialize spin lock on device probe
+Date: Thu, 24 Apr 2025 14:52:20 +0200
+Message-ID: <20250424125219.47345-2-antonios@mwa.re>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1745323279.git.fmaurer@redhat.com> <710557cef8fb8472628862d9b65edcf7aeb32bb5.1745323279.git.fmaurer@redhat.com>
- <CAMZ6RqKcp=JNcbZjX6xSGo9Hyw=1nXbpS9Nc36xuDkbGG+=wtA@mail.gmail.com>
-In-Reply-To: <CAMZ6RqKcp=JNcbZjX6xSGo9Hyw=1nXbpS9Nc36xuDkbGG+=wtA@mail.gmail.com>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Thu, 24 Apr 2025 17:21:41 +0900
-X-Gmail-Original-Message-ID: <CAMZ6RqKJd_qMEy3ohoLAXMgCq2s=AntD0VKCpVwxT1DWjd7KrQ@mail.gmail.com>
-X-Gm-Features: ATxdqUFf81mWoiqNoCRhJ3HhKjTcNKKwIUAnAO_jBJPEy0HAn8kmfieQNcpj2yc
-Message-ID: <CAMZ6RqKJd_qMEy3ohoLAXMgCq2s=AntD0VKCpVwxT1DWjd7KrQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] selftests: can: Document test_raw_filter test cases
-To: Felix Maurer <fmaurer@redhat.com>
-Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, dcaratti@redhat.com, fstornio@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu. 24 Apr. 2025 at 16:44, Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
-> On Tue. 22 Apr. 2025 at 21:03, Felix Maurer <fmaurer@redhat.com> wrote:
+The spin lock tx_handling_spinlock in struct m_can_classdev is not being
+initialized. This leads to bug complaints from the kernel, eg. when
+trying to send CAN frames with cansend from can-utils.
 
-(...)
+This patch fixes that by initializing the spin lock in the corresponding
+device probe functions.
 
-> > +       .exp_rxbits = (1 | 1 << (T_EFF) | 1 << (T_RTR) | 1 << (T_EFF | T_RTR)),
->                         ^                                                      ^
-> Nitpick: those outermost parentheses are not needed.
->
-> This took me time to process. Isn't your expression redundant? What about
->
->   .exp_rxbits = 1 | 1 << (T_EFF | T_RTR),
->
-> ?
->
-> This gives me the same result:
->
->   https://godbolt.org/z/cr3q5vjMr
+Signed-off-by: Antonios Salios <antonios@mwa.re>
+---
+ drivers/net/can/m_can/m_can_pci.c      | 1 +
+ drivers/net/can/m_can/m_can_platform.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-Never mind. This was a silly comment. I messed up the operator
-precedence in the above example, these are obviously different.
+diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/m_can_pci.c
+index 9ad7419f8..06243cd43 100644
+--- a/drivers/net/can/m_can/m_can_pci.c
++++ b/drivers/net/can/m_can/m_can_pci.c
+@@ -143,6 +143,7 @@ static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 	pm_runtime_use_autosuspend(dev);
+ 	pm_runtime_put_noidle(dev);
+ 	pm_runtime_allow(dev);
++	spin_lock_init(&mcan_class->tx_handling_spinlock);
+ 
+ 	return 0;
+ 
+diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+index b832566ef..c09c61d25 100644
+--- a/drivers/net/can/m_can/m_can_platform.c
++++ b/drivers/net/can/m_can/m_can_platform.c
+@@ -154,6 +154,7 @@ static int m_can_plat_probe(struct platform_device *pdev)
+ 	ret = m_can_class_register(mcan_class);
+ 	if (ret)
+ 		goto out_runtime_disable;
++	spin_lock_init(&mcan_class->tx_handling_spinlock);
+ 
+ 	return ret;
+ 
+-- 
+2.49.0
 
-Please disregard my comment and sorry for the noise.
-
-Yours sincerely,
-Vincent Mailhol
 
