@@ -1,146 +1,152 @@
-Return-Path: <linux-can+bounces-3462-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3463-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15FFEA99ED6
-	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 04:33:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D219A9A48B
+	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 09:46:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3006819468B1
-	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 02:34:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2DFB7B23FA
+	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 07:44:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5E5D4C62;
-	Thu, 24 Apr 2025 02:33:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 746741F4604;
+	Thu, 24 Apr 2025 07:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="qlLyndTY"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="hKIKRJFx"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (outm-52.smtpout.orange.fr [193.252.22.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out.smtpout.orange.fr (out-18.smtpout.orange.fr [193.252.22.18])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E739460
-	for <linux-can@vger.kernel.org>; Thu, 24 Apr 2025 02:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2640F1F4281;
+	Thu, 24 Apr 2025 07:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745462022; cv=none; b=Yv3lniEP1NbeZDNDSsans5AOol5ycUk9u/5FoNXYMZRNzGWqD3AiK+CPFejhDu0CPpvakjKQKSOWvyrq0zz1oeJh4RBCg8nLCw8T/HcrnAR0YVCIX982NQElnhb5lOU6ikEOlyUGQXHIl+frfVBr9PFihqrBO2fJzEZW/c4K+G8=
+	t=1745480627; cv=none; b=B4y1/gtP/VBsnu+pZlLUYFLhtUU4RGrg2eZB1h/hh/hNXoTx3gL1rxswEprc+MaYQ4oUvjo3dvv62cLOdmJqMwFDa/QaYgK/bvFL2nqmoXTLXuQE8QHG1UZS2U8YTKGsvGtWsNrz+H3jgwEsYfDCLHJ+89OeVyaD1lzO9P0uTYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745462022; c=relaxed/simple;
-	bh=PRc1EaKS815eLh27ig8AVUM8mHELpux39tDDYa1qaMQ=;
+	s=arc-20240116; t=1745480627; c=relaxed/simple;
+	bh=O6yrGAzqaup7CwFSBUUclkCIDxpOHbcfAMztnYjjkfs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lN6mandcaxMiHyN0mDqaO3QMagyfvvmxzGUD6sn1HNeVa5Ak244A6aatdGV/j+4Q7PcSGoudUH4GcRfKtrul96odVU7rNDOA12xGOpbvg/pl/k1mVz+HpuyA1H0uH15wuDGf00hQrKkmpJf3sS8L96jDAegJVNC/7DXEAWI0EcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=qlLyndTY; arc=none smtp.client-ip=193.252.22.52
+	 To:Cc:Content-Type; b=G4gsJLgEHI9xekU4uWX5RxrDmcC1RUTHvjgk8Yk+ii/Kd7lK8WAkC5IQXXEJPPZdbogjyyTqoq9ZhFB8cQuLpVQ5fnUtHDUvbhkxmTHzTVEu8dlahCSVcmNY8s9jw4c0wAzgyiNgQQkuGcEYib+ITIbt1kX6/jUx9Vcwek48o68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=hKIKRJFx; arc=none smtp.client-ip=193.252.22.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from mail-ed1-f54.google.com ([209.85.208.54])
+Received: from mail-ed1-f43.google.com ([209.85.208.43])
 	by smtp.orange.fr with ESMTPSA
-	id 7mG2uqJ4s1J2g7mG6u0R6n; Thu, 24 Apr 2025 04:24:14 +0200
+	id 7rE2uyXOmRaJG7rE5uYbSH; Thu, 24 Apr 2025 09:42:29 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1745461454;
-	bh=GcELfArsFFvPxDLCWXA4HVw7uvUWj8oWP17A4OFJBvw=;
+	s=t20230301; t=1745480549;
+	bh=P1axsTqElSQvWU//00NHvuNC2bG0mO4cI3nuzaLgbrA=;
 	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=qlLyndTY0d2pUMbs4o8MjPo2AiKQl0IL9+MOFc169lzdXOACxtYfzFFYch8R4SMi8
-	 jzKXozeQmPav4xvqMLwzdeyae2bmEOWDnm6CYzSelrQjsYplZJ3nlPy1xc6D+WeuLp
-	 aUuzQpwM/r4JBQXhXATIWVmc2NtIxR7Ik2mVVIJJLYFu0tU+npBDJKLauAdEiPp2bx
-	 F4abtveq3jJ0K7cBb2Y4KFg2ahlWJjGzhMnDsqtyKHjmU+wNPloXILJ/Vu31VtuNjU
-	 ubeURF+wT06icsmLDPte0tXCYBk12+Fmh2L7uPc7ujEajxyFP0RlEA+6fe54X4tWJp
-	 5LZurSV6OJWqw==
-X-ME-Helo: mail-ed1-f54.google.com
+	b=hKIKRJFx9JbI+zw1lpBvRFk8EfyWBrFXvBV8X3uthuOREVPRWNlpWO+aPv1H/3w8J
+	 A2oAeyAsrfBGucs/nuxKRWFp0vpguGcinC6Hm1T8UiQ/pEnW0FfRBvw3Ejnd6+ReJT
+	 8QaQwA94Z0Ui1jv5E9oNEInmw1kBLISUjvj3kreDfrIWE0IydJ2C8RzbrYhcNimjGx
+	 DaEnAp6GYlZcOP0kTvQ34wrftgLbo+4x80mgMGSMlvj3SHWXQk+D+VM61AQefH7aSx
+	 tSswD2idav4xqn2bxhZlghx3w7oo3+KC1dCazO+K6IiI3RxccAdjnqvDVnREwPIw7n
+	 0GbSgUCDPs93w==
+X-ME-Helo: mail-ed1-f43.google.com
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 24 Apr 2025 04:24:14 +0200
-X-ME-IP: 209.85.208.54
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5f4ca707e31so734218a12.2
-        for <linux-can@vger.kernel.org>; Wed, 23 Apr 2025 19:24:14 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzmK8Lk6m3xAragxc5Y1vDKwYrjO+qjZXxyI4gZtY2xHCxzSZrZ
-	wA5564HTRp94JVYfkuD8Q4/h0rHjJF2Zgk2Ua6oFQvmx7sZvvNwZl3kbE4p2JafMuWjlStTfTPv
-	LhdRpjzdQssnZZkPS0tSg7YIzKLA=
-X-Google-Smtp-Source: AGHT+IHCDWxAXwChsHUZfytHJcS36xfsPOVEDSf+UlwlTskUgRgqTRnLDTM1bealZLCBjpqALuvcgG8Cw8ZuGasZqyo=
-X-Received: by 2002:a17:907:6d1e:b0:acb:8492:fe with SMTP id
- a640c23a62f3a-ace5748b945mr87496566b.52.1745461450652; Wed, 23 Apr 2025
- 19:24:10 -0700 (PDT)
+X-ME-Date: Thu, 24 Apr 2025 09:42:29 +0200
+X-ME-IP: 209.85.208.43
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5e5e22e6ed2so1030311a12.3;
+        Thu, 24 Apr 2025 00:42:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVvyK6P08n+EvagWhToN3EzfyqJl6aR5USORbLJt80+Bp4lT6i37CxxSTTpUwUGJZkaqKymvrMTgkw=@vger.kernel.org, AJvYcCWciqa2R50wT/0KkGPUeGlDrMl+8UBUOZrKT7/enwyK3QQ9jWgdUXhvlkJS3e9TiUf0AQCqzhb44mn2OgXnBH2N@vger.kernel.org, AJvYcCWy2J4xytl4yR8d1Il6OwYhhkf8JOr+oFtYG1phBxeVgYPf1ShUeRWnDrBUUO3QLfoYA2H+gkjI@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLW7HOhIfD8qHxsZnzJpOj7e81tNYgy68gAeF98duvDjQ5XAgy
+	Bc2DeWvPe34vfdKzNoqslXmJ9vJUZhsVNMjr4FFwNsoXgU3olGar/Fls4LiSwcIwwWW1otOfigK
+	tVDl9F9mOmocY4Z1Rhp9WnHrTAKM=
+X-Google-Smtp-Source: AGHT+IHZQb/HhPms49jRFsOdFIdNhHRS6tNNAnKO7HEKgdlO1Ec4NnmI/xA3SIe436TbwHIyhN0/XBMLsO0FM9+xQtY=
+X-Received: by 2002:a17:907:3e0e:b0:acb:6472:c444 with SMTP id
+ a640c23a62f3a-ace5737a688mr171411366b.32.1745480546375; Thu, 24 Apr 2025
+ 00:42:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <C2121586-C87F-4B23-A933-845362C29CA1@vpprocess.com>
-In-Reply-To: <C2121586-C87F-4B23-A933-845362C29CA1@vpprocess.com>
+References: <cover.1745323279.git.fmaurer@redhat.com> <a4468403cc51ea6c0e8495d7d095befb37aa5aaf.1745323279.git.fmaurer@redhat.com>
+In-Reply-To: <a4468403cc51ea6c0e8495d7d095befb37aa5aaf.1745323279.git.fmaurer@redhat.com>
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Thu, 24 Apr 2025 11:23:59 +0900
-X-Gmail-Original-Message-ID: <CAMZ6RqKdyFPRwMbCZY5HwzLTeT9jcbxFiOfcuHbo+VgFF3ZViw@mail.gmail.com>
-X-Gm-Features: ATxdqUEkNBEyxmIVyrj5ICpxiKEoK0HTOvb4pKgiswuvYgYAjF_nAjGr8VUPl0Y
-Message-ID: <CAMZ6RqKdyFPRwMbCZY5HwzLTeT9jcbxFiOfcuHbo+VgFF3ZViw@mail.gmail.com>
-Subject: Re: mcp251xfd: forced TDC
-To: Kelsey Maes <kelsey@vpprocess.com>
-Cc: linux-can@vger.kernel.org
+Date: Thu, 24 Apr 2025 16:42:14 +0900
+X-Gmail-Original-Message-ID: <CAMZ6RqKfdNRBKoH16=7JDC2QKB+XO68mahg2X7zKDcUAM+8bzw@mail.gmail.com>
+X-Gm-Features: ATxdqUEevC2dGJ5oiLCxPIqUZQBSdUTkUF8Dy15XOtMX3G08Wv9ODH_Z4UFgHPQ
+Message-ID: <CAMZ6RqKfdNRBKoH16=7JDC2QKB+XO68mahg2X7zKDcUAM+8bzw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] selftests: can: Import tst-filter from can-tests
+To: Felix Maurer <fmaurer@redhat.com>
+Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	horms@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, dcaratti@redhat.com, fstornio@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Kelsey,
+On Tue. 22 Apr. 2025 at 21:08, Felix Maurer <fmaurer@redhat.com> wrote:
+> diff --git a/tools/testing/selftests/net/can/test_raw_filter.sh b/tools/testing/selftests/net/can/test_raw_filter.sh
+> new file mode 100755
+> index 000000000000..e5f175c8b27b
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/can/test_raw_filter.sh
+> @@ -0,0 +1,37 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +#set -x
 
-On Thu. 24 Apr. 2025 at 08:48, Kelsey Maes <kelsey@vpprocess.com> wrote:
-> Hello,
->
-> I have a custom board attached to a Raspberry Pi using a MCP2518FD and a =
-40MHz clock. I have a problem where I get a bus-off condition when using bi=
-t rates that use a DBRP > 1.
->
-> Here is a reproduction method:
->
-> 1. In config.txt:
-> [all]
-> dtoverlay=3Dmcp251xfd,spi0-0,interrupt=3D25,rx_interrupt=3D24
->
-> 2. Run the following commands:
-> sudo ip link set can0 type can sample-point 0.875 bitrate 125000 dsample-=
-point 0.875 dbitrate 500000 fd on berr-reporting on restart-ms 100
+Leftover from the debug?
+Can you remove this line?
 
-dbitrate 500000?
+> +ALL_TESTS="
+> +       test_raw_filter
+> +"
+> +
+> +net_dir=$(dirname $0)/..
+> +source $net_dir/lib.sh
+> +
+> +VCANIF="vcan0"
 
-Do you really mean 500 kbps? TDC is only relevant for higher bitrates,
-typically above 2Mbps.
+Here, you are making the VCANIF variable configuration, but then, in
+your test_raw_filter.c I see:
 
-> sudo ethtool -C can0 rx-usecs-irq 10000 rx-frames-irq 8 tx-usecs-irq 1000=
-0 tx-frames-irq 2
-> sudo ip link set can0 up
-> cansend can0 00000000##1.00.00
->
-> 3. Observe the bus-off condition in dmesg.
->
-> This also happens for 250 / 1000 but works for 500 / 2000 and 1000 / 4000=
-.
+  #define VCANIF "vcan0"
 
-So what you mean is that it works for higher bitrates but fails on slower o=
-nes?
+This means that in order to modify the interface, one would have to
+both modify the .sh script and the .c source. Wouldn't it be possible
+to centralize this? For example by reading the environment variable in
+the C file?
 
-> I have tested a hack where TDC is disabled if DBRP > 1 in mcp251xfd_set_b=
-ittiming() and this fixes the issue, though I=E2=80=99m not sure it=E2=80=
-=99s the right fix in the long run.
+Or maybe there is a smarter way to pass values in the kernel selftests
+framework which I am not aware of?
 
-I see, so the TDC is always on, even when it shouldn't.
+> +setup()
+> +{
+> +       ip link add name $VCANIF type vcan || exit $ksft_skip
+> +       ip link set dev $VCANIF up
+> +       pwd
+> +}
+> +
+> +cleanup()
+> +{
+> +       ip link delete $VCANIF
+> +}
 
-> TDC should probably be controlled from userspace somehow as its usage is =
-highly dependent on external factors.
+I guess that this setup() and this cleanup() is something that you
+will also need in the other can tests. Would it make sense to declare
+these in a common.sh file and just do a
 
-This makes sense. The TDC userspace logic already exists but was
-introduced later on, after the mcp251xfd module already existed. And
-it was never updated and it still uses some hard coded logic.
+  source common.sh
 
-If you are confident with writing the change, maybe you can give it a
-try? It shouldn't be that hard and we can guide you through it. You
-can refer to the patch below for an example on how to integrate the
-TDC.
+here?
 
-  https://git.kernel.org/torvalds/c/1010a8fa9608
-
-The key is just to use can_tdc_is_enabled()
-
-  https://elixir.bootlin.com/linux/v6.14.3/source/include/linux/can/dev.h#L=
-90
-
-This function will be controlled by the userspace (and should provide
-a correct behavior by default).
-
+> +test_raw_filter()
+> +{
+> +       ./test_raw_filter
+> +}
+> +
+> +trap cleanup EXIT
+> +setup
+> +
+> +tests_run
+> +
+> +exit $EXIT_STATUS
 
 Yours sincerely,
 Vincent Mailhol
