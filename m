@@ -1,77 +1,78 @@
-Return-Path: <linux-can+bounces-3466-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3468-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7233AA9A4B0
-	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 09:48:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77DD8A9A5C3
+	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 10:23:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7E533A8FF0
-	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 07:47:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD5AA7ACD13
+	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 08:22:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 626D71E5B88;
-	Thu, 24 Apr 2025 07:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A37EC2080E8;
+	Thu, 24 Apr 2025 08:23:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="CZhOGtQD"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="MgB8nMK5"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-18.smtpout.orange.fr [193.252.22.18])
+Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
 	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD00DDC3;
-	Thu, 24 Apr 2025 07:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2357B207A2B;
+	Thu, 24 Apr 2025 08:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745480760; cv=none; b=QncgMgw0c4AIsYuY16Ef39iTxFolSTY7k3Rb7qUi6lKDPDAhEDiJv+sQQlUPW58QqEZUxheMcGsoYcQOZjCwFc1FRFM9m0UeHSLid3h88luGKJJsRKL4hTWFIdI941dj6iJQOXcyJ36IzDOeJ+KD1lrImbFi0apF3IsWEnqFE0s=
+	t=1745482990; cv=none; b=eHsNgWzoWTeQyL8ceR3qD0sTMDzdWK8fEx3FtGpU1g+HZdsyRgkX/2lyW858ZIIfxG3bTl6zPwg2UKPCyo0tdisZGtqimjgH9iLls2kyenChEY4syD/ejwOCdVF3USRzeVMaCLMF0M7acvdT0RmQYDL2v0pEJU0nK4zzu519rng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745480760; c=relaxed/simple;
-	bh=sxpPaFhd+Ue6b02ohkhAO2i4Z5lkuhyrfHxIzZsWLIM=;
+	s=arc-20240116; t=1745482990; c=relaxed/simple;
+	bh=qnRPE/OjqDULD2P8NhZ9G/++7eMxpWckPTuemPzYeDE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PWzSAj7p+BZ3IE+n+aJUm/b2RyBLyo+BV43n7sRrhTqdB4RDrpAOdiFuXKHg2gvyTj4hUVNgujqb7YywzWvexwIreNcOmQawoS9FtXrudPYYHMEYP8+xT+mEBxT7//xCfkN0/Du/SMmwZPyOI2LSBYqtqeSxaMIO3ITOBNHn/9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=CZhOGtQD; arc=none smtp.client-ip=193.252.22.18
+	 To:Cc:Content-Type; b=M6rZuP4G0qV1kUWgaQbvC6lSxujCGOp6+HQw2DFWY6HRQZ8dqNe1DunXNkvEHZMzyXRIKIBgP4hXXrsiIxYFZpwviBmZb9iNQ4ym5rPAtOInmZR5v9l+MnechzRvaIV2KXxbS0IPSHiZ6oNGN0eQLur/gahD1xF7bINnO3KUbag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=MgB8nMK5; arc=none smtp.client-ip=193.252.22.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from mail-ej1-f42.google.com ([209.85.218.42])
+Received: from mail-ej1-f48.google.com ([209.85.218.48])
 	by smtp.orange.fr with ESMTPSA
-	id 7rHMuyZ0fRaJG7rHQuYlyJ; Thu, 24 Apr 2025 09:45:56 +0200
+	id 7rqCubwxvvSg77rqGuXwwe; Thu, 24 Apr 2025 10:21:56 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1745480756;
-	bh=2fqv4IDSS2zr1aUyGU0ieiex1pCPFx+Sg+AMYvPVOJA=;
+	s=t20230301; t=1745482916;
+	bh=Qi0itqsQpWay2GuVwalqq2IwjGZETj75/Z4w2YScqHQ=;
 	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=CZhOGtQDVNBzTGef0MCcbPx2sQ/2YgBsuuJxn/5fSoiC6J0ZmJzUpG4hWa7LB8LcV
-	 l+8i4AlJJuQEbJNFV+MbekNgf/OauuEbKnbfHZJvVMCC1W0NnYNOIwvKmLKvZR6mWU
-	 SrTCYAzAOccBtwmm5JnIXmt34bYWU82DGcO1HogkEvR/Q7r1Xx8j7GQSDuS4TPxu3F
-	 tM75tmApZxH0KfNm+Av7YMbDnQAeZjlVtbIF6hLySANyX2g83krQw/vIuJp1/N3NLS
-	 r6j5RHBRwAmxrgC2ovVrSPSavv+SqQYWfFyjE+dcx1YcRpDGBQfSvmyprDUqJlrEw5
-	 bqbhe1hO4HJUA==
-X-ME-Helo: mail-ej1-f42.google.com
+	b=MgB8nMK55fXzCwcRiTZXUIwuKktqYavs7OO9YYaFUXjMNI24e/31L0w1Cgo04pNBA
+	 IDGapSnOXlncr7xLJpT6SxulStwd0ojaHI08aq9PL3hJ7IzPh0hU9+PJfnAHyrDPIm
+	 HwKJsXht//lrVmScoYYA+vmtbxEyo5HpH5JK1BGADxkZ4VnAUqr5p5bdoClkDw7OuY
+	 BNwW6R3Wl+NVuGmzCDKsxRC2lX7K8GEqghThuEHAPHj0R/0WSADFxkOPC7589fv8Ok
+	 87V6iC7QJT5Pur/NUL7uMSglJlRsnUpOgrAvt5vd3QRJbc2qRWL83eqOi7hBY6yPyz
+	 21HrCicXXSACg==
+X-ME-Helo: mail-ej1-f48.google.com
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 24 Apr 2025 09:45:56 +0200
-X-ME-IP: 209.85.218.42
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ac2902f7c2aso118263566b.1;
-        Thu, 24 Apr 2025 00:45:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVHpsjiTF8B23UF5skpC5ORXXSaeWO8PfGPHoDqMvnsPBkUXcn8eX8M7ex2vAnKnneyDBcBi05V@vger.kernel.org, AJvYcCVgGMkyEDmfY4/yUFNnGDWTIWcYzQ4BHXlI60Khk0pHp2J7YeWxdI/82cakdzHFR3W+7dkKyvj5sHqY1lVkAu48@vger.kernel.org, AJvYcCWpHAMeGOsoQFEIty2cF0vfDpohpofAo8EcKZJwhan6G8oFDvQJ0aqlLTmrzDTegtPnRKybLYZWy8w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyGfCI4mrKSSL3k2e81F1bGm38Ldb4QzlCNOY4CVqzLvGJoCT8
-	VFNB0F8xmUMqsyr0B0GWPCss5HgMTGZ+Ysg12sudazFhTvym1K1Wartvn2uQGCH5+5A+O56XjOq
-	E6WqcvpiM8xdNEGMQlOd7gAxHDcg=
-X-Google-Smtp-Source: AGHT+IEXEuzhAtzMJUDSys5Tp9omu6oqt32tdaeZ9eDKgN3uoXirPbUeaxeLP4sm6QZQiet7HI/xBdUBvWJbK92Zd60=
-X-Received: by 2002:a17:907:3c93:b0:ac2:9093:6856 with SMTP id
- a640c23a62f3a-ace573a6e8cmr170228666b.54.1745480752789; Thu, 24 Apr 2025
- 00:45:52 -0700 (PDT)
+X-ME-Date: Thu, 24 Apr 2025 10:21:56 +0200
+X-ME-IP: 209.85.218.48
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ace333d5f7bso133525866b.3;
+        Thu, 24 Apr 2025 01:21:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU+c75tGkvUtBZpza9i8iLAudf1qnLj0CRiHnX9v+WFQARzWkDEFrPMkZ26e08k26Xc0wkQDWehucM2QSIf+mb7@vger.kernel.org, AJvYcCX7GD8Xk5Mtu9NqnA9IWNV51a54ULwJLDfMjj3TrzkhFKnJPfDE8VDIOuYYhPum4IPPSzee5DlHbWs=@vger.kernel.org, AJvYcCXsq8IZD402gINaC39S7yFy9wnXqxYyvpAcqWgoVYy6xy8FSrKJmNggjN7GPzC8FqGTGQepvUVp@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHk3C03MKO+emjwB85D1RKvdFS/KpwrO4ZF71Osd8v/VExbXKj
+	n6/GamuY5NhLb+FGnjhb91TLnLd4In1eD1YbgG2R4GwZzsbQS72ZkerSp3bfz3qTu8HDXs42gA5
+	/d2hMZISXTv+i2npoeIWHFMA8Hd8=
+X-Google-Smtp-Source: AGHT+IG0UHw7cStUnc5g3aVjgS9EvHS8GbZ/STZwvgx1+CuvS1aIGReEO/sw76SXPLW5pLvsQpjnpMm6tc6W9FpRgho=
+X-Received: by 2002:a17:907:6eab:b0:ac7:9712:d11a with SMTP id
+ a640c23a62f3a-ace572bd80bmr177134266b.32.1745482912754; Thu, 24 Apr 2025
+ 01:21:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1745323279.git.fmaurer@redhat.com>
-In-Reply-To: <cover.1745323279.git.fmaurer@redhat.com>
+References: <cover.1745323279.git.fmaurer@redhat.com> <710557cef8fb8472628862d9b65edcf7aeb32bb5.1745323279.git.fmaurer@redhat.com>
+ <CAMZ6RqKcp=JNcbZjX6xSGo9Hyw=1nXbpS9Nc36xuDkbGG+=wtA@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKcp=JNcbZjX6xSGo9Hyw=1nXbpS9Nc36xuDkbGG+=wtA@mail.gmail.com>
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Thu, 24 Apr 2025 16:45:41 +0900
-X-Gmail-Original-Message-ID: <CAMZ6RqK8TdzzMW645OLq5tbkyQdYW+tGGVcr7vsRBE81_u4W4Q@mail.gmail.com>
-X-Gm-Features: ATxdqUGcHCEvNbNb4kKFz7RewC2S_idBvf0uxICwJ6_bEDAtUlXro5ygwq8HyoU
-Message-ID: <CAMZ6RqK8TdzzMW645OLq5tbkyQdYW+tGGVcr7vsRBE81_u4W4Q@mail.gmail.com>
-Subject: Re: [PATCH 0/4] selftest: can: Start importing selftests from can-tests
+Date: Thu, 24 Apr 2025 17:21:41 +0900
+X-Gmail-Original-Message-ID: <CAMZ6RqKJd_qMEy3ohoLAXMgCq2s=AntD0VKCpVwxT1DWjd7KrQ@mail.gmail.com>
+X-Gm-Features: ATxdqUFf81mWoiqNoCRhJ3HhKjTcNKKwIUAnAO_jBJPEy0HAn8kmfieQNcpj2yc
+Message-ID: <CAMZ6RqKJd_qMEy3ohoLAXMgCq2s=AntD0VKCpVwxT1DWjd7KrQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] selftests: can: Document test_raw_filter test cases
 To: Felix Maurer <fmaurer@redhat.com>
 Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org, 
 	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
@@ -79,53 +80,30 @@ Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org,
 	linux-kselftest@vger.kernel.org, dcaratti@redhat.com, fstornio@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Felix,
+On Thu. 24 Apr. 2025 at 16:44, Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+> On Tue. 22 Apr. 2025 at 21:03, Felix Maurer <fmaurer@redhat.com> wrote:
 
-On Tue. 22 Apr. 2025 at 21:08, Felix Maurer <fmaurer@redhat.com> wrote:
-> This is the initial import of a CAN selftest from can-tests[1] into the
-> tree. For now, it is just a single test but when agreed on the
-> structure, we intend to import more tests from can-tests and add
-> additional test cases.
+(...)
 
-Excellent initiative!
-
-> The goal of moving the CAN selftests into the tree is to align the tests
-> more closely with the kernel, improve testing of CAN in general, and to
-> simplify running the tests automatically in the various kernel CI
-> systems.
+> > +       .exp_rxbits = (1 | 1 << (T_EFF) | 1 << (T_RTR) | 1 << (T_EFF | T_RTR)),
+>                         ^                                                      ^
+> Nitpick: those outermost parentheses are not needed.
 >
-> I have cc'ed netdev and its reviewers and maintainers to make sure they
-> are okay with the location of the tests and the changes to the paths in
-> MAINTAINERS. The changes should be merged through linux-can-next and
-> subsequent changes will not go to netdev anymore.
-
-I am not a netdev maintainer, just a /drivers/net/can maintainer, but
-you have my blessing on this. As far the location goes, your proposal
-makes perfect sense to me. Actually, I can not think of any other
-places than
-
-  tools/testing/selftests/net/can
-
-for this kind of thing.
-
-> [1]: https://github.com/linux-can/can-tests
+> This took me time to process. Isn't your expression redundant? What about
 >
-> Felix Maurer (4):
->   selftests: can: Import tst-filter from can-tests
->   selftests: can: use kselftest harness in test_raw_filter
->   selftests: can: Use fixtures in test_raw_filter
->   selftests: can: Document test_raw_filter test cases
+>   .exp_rxbits = 1 | 1 << (T_EFF | T_RTR),
+>
+> ?
+>
+> This gives me the same result:
+>
+>   https://godbolt.org/z/cr3q5vjMr
 
-You are doing a lot of change to the original to the point that this
-is more a full rewrite. I have no intent of reviewing the first patch
-which is just the copy paste from the original. If no one else has a
-strong opinion on this, I would rather prefer if you just squash
-everything and send a single patch with the final result. This will
-also save you some effort when migrating the other tests.
+Never mind. This was a silly comment. I messed up the operator
+precedence in the above example, these are obviously different.
 
-I have a few comments on the individual patches, but overall very
-good. Thanks a lot!
-
+Please disregard my comment and sorry for the noise.
 
 Yours sincerely,
 Vincent Mailhol
