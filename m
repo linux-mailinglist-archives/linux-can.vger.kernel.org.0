@@ -1,173 +1,132 @@
-Return-Path: <linux-can+bounces-3475-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3474-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DB26A9B10D
-	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 16:35:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5615BA9B0EC
+	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 16:32:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8374C188AC18
-	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 14:34:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DC694A5C07
+	for <lists+linux-can@lfdr.de>; Thu, 24 Apr 2025 14:31:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48B8615573A;
-	Thu, 24 Apr 2025 14:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A0E11D799D;
+	Thu, 24 Apr 2025 14:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Mo0zD16k"
+	dkim=pass (2048-bit key) header.d=mwa.re header.i=@mwa.re header.b="IqtCuEPQ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-67.smtpout.orange.fr [193.252.22.67])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F432701DA;
-	Thu, 24 Apr 2025 14:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792811C2335
+	for <linux-can@vger.kernel.org>; Thu, 24 Apr 2025 14:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745505218; cv=none; b=lHVe5pPKQRFtTBmIKRTudG8Tnw0seou2gHfEM0RwDQVtPTRfZOIC+lq/JGb81Kn/BAvx+AGgiAzRxMTI6R+MXBvG0COkA/Csz2aEiTVnixhH8cOw9ostp2Lpv2aHwqCYifC9zYtqJGT7MuQdh9pjoNwtV6GKhlD9otCOWiWFIvU=
+	t=1745504853; cv=none; b=UIxo3379dF5qUcwdsXyKuDlbkjfoCdnmNkuDkTeD1ikRFGP5ZP3N8etp1akkrbuykP8l1dMxWYgFnNA5SukTamVt/HnAfqUuYh48nRVGKU8ALNvP3XpjiCg6NUjk3dP9obDFWXsnar750GC8Tq5dJyNeZs5ZIr/LaKSGRUgCn8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745505218; c=relaxed/simple;
-	bh=bdu4AdfU3rVBoxI7dS381WsNGFKefFYdMLFb+5Z2TMI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hsnzu3FBpHIr5xsURRaJQ6eywc2fNo2KkcU11NxlcI8Nfw7fGkIRJKBiEIs+vqRRGP27b/OFoclMDt4kaD7rgR31GD8r/vopt5VXZo4VSIEOednu6y6arW1z1MJtoz4HZmXhKHw8but1sQGe7LMXKO3aeK1iFyN5AtHz6LyZBGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Mo0zD16k; arc=none smtp.client-ip=193.252.22.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id 7xUeu3cnoukJt7xUiuRXfG; Thu, 24 Apr 2025 16:24:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1745504649;
-	bh=K9cTD87TavWzyJKYV4zrWDK5k7WI86kJqfUPCYnBnpY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=Mo0zD16kfhROPb+1Ho5AGTv/skh9UvI9T+ybmvv0ZaPxLZk/mRql/25aIiG8QyLCe
-	 tvxfUJsuopjzSih0MEig6qCnAog+5SP+EMQwFehpp9jWfjQH3UbRHUiZEDxvxAXfad
-	 RNooe3PS1rVFnrCa6LKgdWKDncDCdIIdFz4n0db4lkkILWSELqJPYRLnDm3RYA43Bn
-	 oM5uxlXMQYjE6e9suw2j9QZkzwlBfcEstuxJDkMkuzkds4s1w/nhnBWYe8qP4GDtVl
-	 vuklKInx8Tvyi5Cahx1qUsKW6AE+SmJJfgm5+Lt52iwK2XwMrjobv6E2ulGXl00phY
-	 /rpMczZfmaSPA==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 24 Apr 2025 16:24:09 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <6c1980f7-9cdb-4443-830d-1d76dc8e2dd6@wanadoo.fr>
-Date: Thu, 24 Apr 2025 23:23:59 +0900
+	s=arc-20240116; t=1745504853; c=relaxed/simple;
+	bh=F1YJqwR1H6hHO182e1YH6Y4+1p4GU9R6+42/wafryRw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O6y7BONTwl/MQJpszdnXSpAqEbUKikmgWN/gDHlancoLiRtje2ZDMhWNuu4oaXUyUqxqixeO/LoBMd3AnSNYmqDOAZ2QzgI6cZgisTQms90Sr8Ar1Q0VA+Jvcy7ORxqNgCG2f9PxGEXl0h+yPvHe1GhX3hc6Iep4jUwbovcle50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mwa.re; spf=pass smtp.mailfrom=mwa.re; dkim=pass (2048-bit key) header.d=mwa.re header.i=@mwa.re header.b=IqtCuEPQ; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mwa.re
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mwa.re
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cf628cb14so17407555e9.1
+        for <linux-can@vger.kernel.org>; Thu, 24 Apr 2025 07:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mwa.re; s=google; t=1745504850; x=1746109650; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9d7NqJO4EtxlTXgpDiP0f6RU3e65rl//+9+R1L+ng+k=;
+        b=IqtCuEPQUpQMNLHzsOc5SxDZc3t5OUcDXKalghqn9t5FE1T5lKx8XoeMMYefBlf2fQ
+         ffo5qyIphy+Fv0O+koPexCt0JvkyQkGswz1S9Hr95iCZ5Ttlt/PcDlRuJiii9+kfrxqR
+         m//xbEjJNhQglkjL7Sd4fdMYRNqxH6xzViXGN9GPTx+klAuRyK5dL2t21eco5txZMM8S
+         04PpvcR833x+J7zcuYoRL3ymrDMyZiWQGlOqkiQvGlItRcFiB9QU/6MPCfArP08pBlKK
+         mr7ziVj6ous7cB2QvA5IazY0jSiQVa8igOo3HFqs1WY0PkzQHu1HKeIg063FZ3ZrhNx/
+         OMMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745504850; x=1746109650;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9d7NqJO4EtxlTXgpDiP0f6RU3e65rl//+9+R1L+ng+k=;
+        b=LqRteXO0AS0eIUx+Q0CTb7n7yxPKXubyiZoCazLewtuE5rgzAVcsmo4wDllv+EUy62
+         JkaJeNyB1MEO44RdQlMa43FIwSFdcbXc5OmIRguwDzJX9gDOpSmdrWGNSZNOoKytx6Qi
+         BGcGdmDjqBi9x9gbHJe3vlbDLJ47aIERbhmx/tVW9gX/lt6FETlt/5fQuXbHwBplT5gS
+         3QQH6ACjMAn8/oB3RWqHh05tUY6FFuGnP0oRHRBDucIm21OwaHmzmHUAlhd5FpCrUvzG
+         3i7DTexjbjzU1YRTbqBdzQcTkkTDOUOoKnJxWrUCzZ4m+ldt2gNqeF+R+5D10igaKMR9
+         eY4w==
+X-Forwarded-Encrypted: i=1; AJvYcCXFXDugytTwAwTOaWmYokoE1BvxhRMSyy+/4SmFTJ3uzhZYrrRYfTfMzHfw/gnLEwR+MomA9wVlttY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa8mPT2+mFYxgV2PqM2gEswllUOGLt4B1sLJPRkL3S3nB9UhGU
+	3TPPxRZ5F4WO1/OkSP0saWg2o2DQ+xEkzgtximzDkFXcDVUMTA3P0FeCqVet4mzpOOQYDuruqcw
+	1QEw=
+X-Gm-Gg: ASbGncsB4MirA7k5H4JVIw9rj/8IApo76+z2WjdrxCUuYdfzzECA15fImxQWe7wbGBr
+	d79+ng3V2O/H8mF4wBoCBQje6HM7QbxA9ZWpt9/mxBbtYihYrNzOoiUrsrNvM1ihPWRk1NxWssj
+	Alk69myUnYT8alxMG3eGoteht2jWDE9ewQzWU91ztO93m3XN4U+fmgyigXzo/rM4bkPvhHMFAgR
+	tpTXF9jdPIhx4jHm1O7XWm1SCqK6NDpOVmgMzuin1f35lEpZba7pg+NYsz//ZwBAYeXzzqZSIzh
+	8+MJgbylY0xnpTbu4boKl8s9zHLagDr2SR/CG2S2+WkflyANtgoYULfGgNs6T9/fXxch6UFRzmB
+	u
+X-Google-Smtp-Source: AGHT+IEMsAKqZvQKv1HURFPLcJMP9q2fFIiW//bzYr0WFnNqRgNJbE3RCkzOZJu0K7dFBbOpVgGL1Q==
+X-Received: by 2002:a05:600c:91a:b0:435:edb0:5d27 with SMTP id 5b1f17b1804b1-4409c4938ebmr19886315e9.9.1745504849577;
+        Thu, 24 Apr 2025 07:27:29 -0700 (PDT)
+Received: from mw-ac-stu-3.corp.mwa.re (static-195-14-251-13.nc.de. [195.14.251.13])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4409d2b892asm22807565e9.32.2025.04.24.07.27.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Apr 2025 07:27:29 -0700 (PDT)
+From: Antonios Salios <antonios@mwa.re>
+To: rcsekar@samsung.com
+Cc: mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lukas@mwa.re,
+	jan@mwa.re,
+	msp@baylibre.com,
+	Antonios Salios <antonios@mwa.re>
+Subject: [PATCH v2] can: m_can: initialize spin lock on device probe
+Date: Thu, 24 Apr 2025 16:25:26 +0200
+Message-ID: <20250424142525.69930-2-antonios@mwa.re>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] selftests: can: Import tst-filter from can-tests
-To: Felix Maurer <fmaurer@redhat.com>
-Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- dcaratti@redhat.com, fstornio@redhat.com
-References: <cover.1745323279.git.fmaurer@redhat.com>
- <a4468403cc51ea6c0e8495d7d095befb37aa5aaf.1745323279.git.fmaurer@redhat.com>
- <CAMZ6RqKfdNRBKoH16=7JDC2QKB+XO68mahg2X7zKDcUAM+8bzw@mail.gmail.com>
- <96bd9677-c257-480b-be3c-7c4b9b79b238@redhat.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <96bd9677-c257-480b-be3c-7c4b9b79b238@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 24/04/2025 at 23:02, Felix Maurer wrote:
-> On 24.04.25 09:42, Vincent Mailhol wrote:
->> On Tue. 22 Apr. 2025 at 21:08, Felix Maurer <fmaurer@redhat.com> wrote:
-> [...]
->>> +ALL_TESTS="
->>> +       test_raw_filter
->>> +"
->>> +
->>> +net_dir=$(dirname $0)/..
->>> +source $net_dir/lib.sh
->>> +
->>> +VCANIF="vcan0"
->>
->> Here, you are making the VCANIF variable configuration, but then, in
->> your test_raw_filter.c I see:
->>
->>   #define VCANIF "vcan0"
->>
->> This means that in order to modify the interface, one would have to
->> both modify the .sh script and the .c source. Wouldn't it be possible
->> to centralize this? For example by reading the environment variable in
->> the C file?
->>
->> Or maybe there is a smarter way to pass values in the kernel selftests
->> framework which I am not aware of?
-> 
-> Good point, I'll try to come up with something to avoid the duplication
-> (either from the selftest framework or just for the CAN tests). I'd
-> prefer an argument to the program though, as I find this the more usual
-> way to pass info if one ever wants to run the test directly.
+The spin lock tx_handling_spinlock in struct m_can_classdev is not being
+initialized. This leads to bug complaints from the kernel, eg. when
+trying to send CAN frames with cansend from can-utils.
 
-Passing an argument would be the best. I am not sure how to do this with the
-selftests (but I did not investigate either).
+This patch fixes that by initializing the spin lock in the corresponding
+device probe functions.
 
->>> +setup()
->>> +{
->>> +       ip link add name $VCANIF type vcan || exit $ksft_skip
->>> +       ip link set dev $VCANIF up
->>> +       pwd
->>> +}
+Fixes: 1fa80e23c150 ("can: m_can: Introduce a tx_fifo_in_flight counter")
 
-Speaking of which, if you allow the user to modify the interface, then you will
-one additional check here to see whether it is a virtual can interface or not
-(the ip link commands are not the same for the vcan and the physical can).
+Signed-off-by: Antonios Salios <antonios@mwa.re>
+---
 
-Something like:
+Changes since v1:
+ * Move spin_lock_init from device probe functions to classdev alloc function
+ * Add a fixes tag
+---
+ drivers/net/can/m_can/m_can.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-  CANIF="${CANIF:-vcan}"
-  BITRATE="${BITRATE:-500000}"
-
-  setup()
-  {
-  	if [ $CANIF == vcan* ]; then
-  		ip link add name $CANIF type vcan || exit $ksft_skip
-  	else
-  		ip link set dev $CANIF type can $BITRATE 500000
-  	fi
-  	ip link set dev $VCANIF up
-  	pwd
-  }
-
->>> +cleanup()
->>> +{
->>> +       ip link delete $VCANIF
->>> +}
->>
->> I guess that this setup() and this cleanup() is something that you
->> will also need in the other can tests. Would it make sense to declare
->> these in a common.sh file and just do a
->>
->>   source common.sh
->>
->> here?
-> 
-> I usually try to avoid making changes in anticipation of the future. I'm
-> not sure if all the tests need a similar environment and would prefer to
-> split this when we encounter that they do. Are you okay with that?
-
-Yes, this works. Keep this idea in back of your mind and if there is a need to
-reuse those in the future, then it will be a good timing to do the factorize the
-code.
-
-
-Yours sincerely,
-Vincent Mailhol
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 884a6352c..12e313998 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -2379,6 +2379,8 @@ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev,
+ 	SET_NETDEV_DEV(net_dev, dev);
+ 
+ 	m_can_of_parse_mram(class_dev, mram_config_vals);
++
++	spin_lock_init(&class_dev->tx_handling_spinlock);
+ out:
+ 	return class_dev;
+ }
+-- 
+2.49.0
 
 
