@@ -1,130 +1,136 @@
-Return-Path: <linux-can+bounces-3484-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3485-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29C65A9C09B
-	for <lists+linux-can@lfdr.de>; Fri, 25 Apr 2025 10:15:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF1EDA9C31F
+	for <lists+linux-can@lfdr.de>; Fri, 25 Apr 2025 11:18:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 316347A9B33
-	for <lists+linux-can@lfdr.de>; Fri, 25 Apr 2025 08:14:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 508739273CF
+	for <lists+linux-can@lfdr.de>; Fri, 25 Apr 2025 09:18:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95BAD1F4180;
-	Fri, 25 Apr 2025 08:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42B801F4612;
+	Fri, 25 Apr 2025 09:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="DJKVm7Um"
+	dkim=pass (2048-bit key) header.d=mwa.re header.i=@mwa.re header.b="U8jTMOCw"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA868BEA;
-	Fri, 25 Apr 2025 08:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F40E22E3E1
+	for <linux-can@vger.kernel.org>; Fri, 25 Apr 2025 09:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745568927; cv=none; b=kq6ihGUm6V+wXtwvjOUFEWY3bFpvuWb2H6VWzrQZtBIhc2VatD9+WyqfZTF3QqKN4NiRKpUGvJjS+ROefubh/4HXnjD2KYR+lcAi08x68djz+kx40gU2zYCYW/5RLFYVh0QOQR9FOWlb2/AQwNbKije258tTi1VQeb5RcCfp9GE=
+	t=1745572714; cv=none; b=GMr+uwR77p+yZCyJRCVYHoS77yUD6LCc8EozOjodmqzNnrqx1itCZsrSa/FY/oXXOYGTeNpeXux3eeLhSEKtpXgvPQM8zASmMiEyh2GEj/tRHTzM2lttPWYRuyFyrrjH/ccOMedjZQxcQwnZW2J0tz4AB8Avn3+slFERQhrFPDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745568927; c=relaxed/simple;
-	bh=86b6Qygih6V8o2xUszx+iWOy8Fak2smPLa/wf8BPUEs=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=rASbwvfiilkHjRvn4SuAaSlNTXU5skGi49YooJ12QJyHEP0Zo1Kz/o7h03grsT27X+m1KOVexzJLnp/n989nDJ03Bzu5qNpSzc5RuigI2DAdNzEPAhA5k7BG7XL7ia2cBVYOUmsT37PoEWStQaOtdMMPsH6z6TKqsS1eM0bsPOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=DJKVm7Um; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1745568912; x=1746173712; i=markus.elfring@web.de;
-	bh=86b6Qygih6V8o2xUszx+iWOy8Fak2smPLa/wf8BPUEs=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=DJKVm7Um14QBrGI5YF5f6phDVq8hfM7NndJP+Iwp3pF/nqMLMhlYsFTNKYDMHM1b
-	 oNtEOPymIsCdWpK4SJeI2XH5hnKnJdyTDbihMRQNw8VDjl53yRL9my6cyC+r/Jrq9
-	 tVqnkb0/CttgR/nIH34cFM69nQadk6t5+TnoFWqu2R3uC8paO7s4aXCMjhTYPkEWf
-	 ycQVvZ82lf8Tqi4Pk/kS+9zsMMm444EF2RLd1G6A3B0wDOASYFeXVgHEc/o5njETK
-	 YOx1kuEYBp1kZ2jrWR+TPo6NYDV7Ou6xCrusPcS0CiG+0mjHiXXdNebVCC/4FfEUc
-	 +wPMN89LZozQMb/RoA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.70.30]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mo6Jz-1urni70HAB-00hWDX; Fri, 25
- Apr 2025 10:15:12 +0200
-Message-ID: <7426e045-d0af-4243-b147-98098dd9015d@web.de>
-Date: Fri, 25 Apr 2025 10:15:09 +0200
+	s=arc-20240116; t=1745572714; c=relaxed/simple;
+	bh=S3Ck7vwc07MYkEysfARCrCCCX/V3182fdfUPmdNoVyo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=dXkZCtLOLRz5v7K1tTAdXK3ihznye6yMSbKL/GMFV9hVrizCWfNln4yQYci7iTAMqYTthwyb2HBw8Yt4raukvsS3jE9nvyLuFLgAmapej03plkObC9LGuxLxVHgW5FRZifSnKBg8R1TNtMjXx3MeWD/s1umtHlOI6p+rs1Oru1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mwa.re; spf=pass smtp.mailfrom=mwa.re; dkim=pass (2048-bit key) header.d=mwa.re header.i=@mwa.re header.b=U8jTMOCw; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mwa.re
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mwa.re
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-39ac9aea656so2398418f8f.3
+        for <linux-can@vger.kernel.org>; Fri, 25 Apr 2025 02:18:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mwa.re; s=google; t=1745572711; x=1746177511; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=S3Ck7vwc07MYkEysfARCrCCCX/V3182fdfUPmdNoVyo=;
+        b=U8jTMOCw/kXdkFy9QKP8c2E8arPcg/MPEDhyD72nlo+pP4gvo1KYh+/upszNk6ytXE
+         ytg5S59bXBi1HH4xzLmideznPwLIBMcFQOaaD2vXYvyinQ3Du9NKEA/pngw10WZJOQ9S
+         hkyBke3+jC1/ITLyWU37G1TnNf1l9GeR9kPu6PuMFugGqUbdCZQwJCa+t+AdSuZmT9iY
+         /0w9ldfU7Bg5ejnUUKu875oaRjouxgqALMsPsu2ANy3dKX18NoTdPMJ4NLpKm0/cLlpx
+         WVW4ww4mQFwsk9QCKeEeLjRgbkBqlgN0jZ3LgusGLrvHRIoKkQHLTlCRm6WKb2AeFJ6E
+         gFRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745572711; x=1746177511;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S3Ck7vwc07MYkEysfARCrCCCX/V3182fdfUPmdNoVyo=;
+        b=ntFoeHHHwkILHJewbcuDKMP1mf6ejj5SjSOE3/uiRtc1V+aYls9ZA/uB/DKO6h8te3
+         6S+mnes2Y5Zqxm2IU7qn631M9P4GpRbmHXmUPt6V9KfytlkRxhUBPJJmtmprYoCFcZoh
+         x/JD3ZsrkRWhlBldf2GU3DdTv5vjHu73vJHPu1LxQ+wMvQGbE2pLid4FwW2xKvh/68E5
+         pA4NtK/PutX19zjEihP3C8TU6EyVXneQDFAy+92Z6X230YEYGavefFcPasUQFS+CsSEX
+         AKUafAuGCAidadXb4BGq5xd8wCjTFuJTA5Scb/ijRoXm5GH72mjq08fY+nLgbgiQmjQk
+         nIEA==
+X-Forwarded-Encrypted: i=1; AJvYcCUD0fSo81/c1KCfX1Uanfbw1X0MUdqOjNWrfAbmgOKgfQVyfzoCiR6zXcZdh1eT5ph2LrGK6Bt+2YE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9iy0z21woVXS+I3SZEsp7adu6RxRrZ+DEgfL6Y5nWW56b9/w0
+	KGBayk1lNshVkhS7bWG5r++5XE+nKMWWf1lmM2cJtgjsUDeh+C2xiJmr2ZQLsXE=
+X-Gm-Gg: ASbGncsJsfsiCZ5CPFQjt5H1rIEIyBqdsdPaRvf2WJ/vAlLOhn0v2WbrQlsBpoY7Asq
+	4/pDiGhkQpaLHwVFkyl6EGsNAZ/BeFs9xqfPteSGaKS9shxLyfobNGUUSc/Pc/5JPdLio3TR5m3
+	JwqbxAeDFFsSX3KNyITUJ8vJOA1ycfGnLI26xNbAqWpHv27zwvmgbtcnOTJpMMaj0bPHXwVyCqJ
+	jzKSM8IROmT7xhqhD4RRrKqN0dhOS1cjZE02qKUIkG+Q9dGfmiNCeUbfuy2lNjoQ4Gb+46egZlI
+	+ZZtVQyoh4uxz4hfUO4CFv1DcFIUDS5UtPYw/WoR8IIQIu+ZGOTNCmqBvdNKYUJ7hqXZxIIpNfj
+	m
+X-Google-Smtp-Source: AGHT+IEy07M1Kka6h0pm1sIZsbtuaQoKm69f7gu2Qjmv8Z2/gVciyi0ynSFrOvtZvI9ezjUo9BawLA==
+X-Received: by 2002:adf:e28e:0:b0:39a:c9fe:f069 with SMTP id ffacd0b85a97d-3a074e4261amr818270f8f.30.1745572710598;
+        Fri, 25 Apr 2025 02:18:30 -0700 (PDT)
+Received: from mw-ac-stu-3.corp.mwa.re (static-195-14-251-13.nc.de. [195.14.251.13])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e5c82fsm1714217f8f.85.2025.04.25.02.18.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Apr 2025 02:18:30 -0700 (PDT)
+Message-ID: <1f4d6de1f452021511301070e76695d1e56a14a1.camel@mwa.re>
+Subject: Re: [PATCH] can: m_can: initialize spin lock on device probe
+From: Antonios Salios <antonios@mwa.re>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, rcsekar@samsung.com, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, lukas@mwa.re,
+ jan@mwa.re,  Markus Schneider-Pargmann	 <msp@baylibre.com>
+Date: Fri, 25 Apr 2025 11:18:29 +0200
+In-Reply-To: <CAMZ6Rq+QVHAh8HvWcn8rAYGE8VoJmhQUxOFNqBpijSQz10Dodg@mail.gmail.com>
+References: <20250424125219.47345-2-antonios@mwa.re>
+	 <20250424-industrious-rottweiler-of-attack-e7ef77-mkl@pengutronix.de>
+	 <a5684bfe-981e-4ba3-bbea-d713b5b83160@wanadoo.fr>
+	 <2fe59c0c7e0f7b9369976501790fce5beaea5bc7.camel@mwa.re>
+	 <CAMZ6Rq+QVHAh8HvWcn8rAYGE8VoJmhQUxOFNqBpijSQz10Dodg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1 (3.56.1-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Antonios Salios <antonios@mwa.re>, linux-can@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
- Jan Henrik Weinstock <jan@mwa.re>, Marc Kleine-Budde <mkl@pengutronix.de>,
- lukas@mwa.re, Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-References: <20250424125219.47345-2-antonios@mwa.re>
-Subject: Re: [PATCH] can: m_can: initialize spin lock on device probe
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20250424125219.47345-2-antonios@mwa.re>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:UQ/5Rtz6vO/hpJwJp9JNwQWdaF/N/xTJDqhoEq0FoRbPEALdAgW
- 9csabdgKf3aJJQEcB+d2BeHLoLnWxtrMtXPsQZrc4/+qqEGyd4EYpIfyMHDWqobTOFfFHBG
- +BZnu1yKA7oxe+OFT0c0UmrqPdgKOlQElgvkuEcCh9dmw9brEV6F3NO+OwpfqG2tIMAiICg
- IFQiPe14aVYOzmLYN7CRw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:H541I6rwjww=;7hiBvQ0crSkS/OyofSlnRvl+pGe
- 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
 
-=E2=80=A6
-> This patch fixes =E2=80=A6
+On Fri, 2025-04-25 at 16:18 +0900, Vincent Mailhol wrote:
+> I guess this is because your kernel has CONFIG_DEBUG_SPINLOCK:
 
-See also:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
-e/Documentation/process/submitting-patches.rst?h=3Dv6.15-rc3#n94
+Indeed.
 
-Regards,
-Markus
+> Without it, this would have been a more severe NULL pointer
+> dereference.
+
+Strangely, a NULL pointer dereference does not occur, when I try again
+with CONFIG_DEBUG_SPINLOCK disabled. The kernel does not crash, at
+least on rv64.
+
+Looking through the implementations of arch_spinlock_t, it seems that
+only PARISC's implementation would cause problems in this case since it
+uses an array.
+
+https://elixir.bootlin.com/linux/v6.15-rc3/source/arch/parisc/include/asm/s=
+pinlock_types.h#L11
+
+I think I'm missing something, why do you think a NULL pointer deref
+would occur in this case?
+
+
+Thanks for your feedback!
+
+--=20
+Antonios Salios
+Software Engineer
+
+MachineWare GmbH | www.machineware.de
+H=C3=BChnermarkt 19, 52062 Aachen, Germany
+Amtsgericht Aachen HRB25734
+
+Gesch=C3=A4ftsf=C3=BChrung
+Lukas J=C3=BCnger
+Dr.-Ing. Jan Henrik Weinstock
 
