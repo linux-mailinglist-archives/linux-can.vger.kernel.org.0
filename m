@@ -1,121 +1,202 @@
-Return-Path: <linux-can+bounces-3497-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3498-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DD47A9EB26
-	for <lists+linux-can@lfdr.de>; Mon, 28 Apr 2025 10:50:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7D76A9F538
+	for <lists+linux-can@lfdr.de>; Mon, 28 Apr 2025 18:11:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADB1A3BB6BE
-	for <lists+linux-can@lfdr.de>; Mon, 28 Apr 2025 08:50:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0338F1A808C2
+	for <lists+linux-can@lfdr.de>; Mon, 28 Apr 2025 16:11:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD5425E829;
-	Mon, 28 Apr 2025 08:50:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90AAA18F2FC;
+	Mon, 28 Apr 2025 16:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=vpprocess.com header.i=@vpprocess.com header.b="DQIjionV"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2124625D1EC
-	for <linux-can@vger.kernel.org>; Mon, 28 Apr 2025 08:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0041A27A11C
+	for <linux-can@vger.kernel.org>; Mon, 28 Apr 2025 16:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745830233; cv=none; b=hRvNQRR/hKLZ36Kn7edrUv8S1RN6QQA4gaTDX2Zc8AltLAjmIac7sGFaKAjA8puFuQ2d1x1mqsqlW2Rw/o0k5D6g/c9jj+5NqW+SKG/MzHNGh7vRDjLyZyvrWcRyl1FoHYP+Gu/0IXqAonAOu7/KwaKQoqKlmZW7yeC1LENuxR4=
+	t=1745856685; cv=none; b=PR3GDBFgXWGuCScyuwuHl95NBAtd0uhWF5lPF9PWLJifEr7OzJUqOzJa5atcNxm8E7yCNGHZhJ5Bk+CysbJ0uM4/jmJg+CHDdONVnGVk24cvcFJtAZO3dDE03A3mTowwgsqlnNkDPHUs5kS2nEI8ZtspRHMVrIneTdxci6T09jQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745830233; c=relaxed/simple;
-	bh=F7+2e2LCRjyzP5iiptXwOuLsBQTadyTATFPLcCgPpCs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RdW4zVk/PdSjuhrubHEEaA9wWBBjvLBToUefg8/o+rgaf30dvw3HNXxLrZuQD5RcRerxH/lgMpSTORMtatoAdHWmaDpG0i9Y+/Vvzw6LAT2iKC2Y/qGZWy0adngf8mue+OTWsSpy/NyZ7B1vuxkM1G5zjifWzjnhF2xeOa7QFvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1u9KC3-0004nA-Gt; Mon, 28 Apr 2025 10:50:27 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1u9KC3-00042U-05;
-	Mon, 28 Apr 2025 10:50:27 +0200
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id A8E9D403502;
-	Mon, 28 Apr 2025 08:50:26 +0000 (UTC)
-Date: Mon, 28 Apr 2025 10:50:21 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Antonios Salios <antonios@mwa.re>
-Cc: rcsekar@samsung.com, mailhol.vincent@wanadoo.fr, 
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, lukas@mwa.re, jan@mwa.re, 
-	msp@baylibre.com
-Subject: Re: [PATCH v2] can: m_can: initialize spin lock on device probe
-Message-ID: <20250428-tentacled-stoat-of-warranty-a9465c-mkl@pengutronix.de>
-References: <20250424142525.69930-2-antonios@mwa.re>
+	s=arc-20240116; t=1745856685; c=relaxed/simple;
+	bh=ZKguwXyVbhZ9Pk73iVtu52EzowDwTy+vRlY8lu39RYM=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=Gueo00ZsITxlf2d0dC+HGhiQcJdqQjV1cLUmW7kSk9iLfKNCe+SLcSFSbM+meD/b6WrpXJrsfWDWq38kgSWAUy3S/EjLvxdmAjVm7MIVPG/AwF7tbqQHEmuncoXD6ytxr1e0A0Y7l6Pm1hMljM77n3SvFA1H6FowgNkxfMYvI/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vpprocess.com; spf=pass smtp.mailfrom=vpprocess.com; dkim=pass (2048-bit key) header.d=vpprocess.com header.i=@vpprocess.com header.b=DQIjionV; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vpprocess.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vpprocess.com
+Content-Type: text/plain;
+	charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vpprocess.com;
+	s=key1; t=1745856680;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=isG9kKVwy6B8IdTidZLIa4Cr5ue76ODn4gT4qxVwJqM=;
+	b=DQIjionVh+s15FewFeMUqFqycp7G/m1ZHQgrkLi7TnFNkwNsAQXp0ZrHViG6YcMi5lLOKO
+	sISHGM34AtjeurmXsBoEtibI68M3ZF6jfO9k2aXaNldk0G5XDp0PpMdj3A1dLJF3J65yOH
+	ZcWoDWxCngwLes6Zy3UllG1+e8bgSXk2O0Ws1BSkfJ2YqB2S3T+kzVBOj4D/fSwwU16hnI
+	dm/Wk7q58sMcCvnb8U+pilvz3sHKJOd/eruJ9qmqFsCUNxi46xljszJ9A97WdehY+ivGfI
+	oI8hfioYMXcsoUoUxEcFSZB/0rAHk3LI+IAloE5WN57WCcwkv17M/XiJighmzQ==
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="77v3de343k77ggtf"
-Content-Disposition: inline
-In-Reply-To: <20250424142525.69930-2-antonios@mwa.re>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---77v3de343k77ggtf
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.2\))
+Subject: Re: [PATCH] can: mcp251xfd: make TDC controllable from userspace
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kelsey Maes <kelsey@vpprocess.com>
+In-Reply-To: <20250428-impressive-masterful-squid-a898c4-mkl@pengutronix.de>
+Date: Mon, 28 Apr 2025 09:11:05 -0700
+Cc: linux-can@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] can: m_can: initialize spin lock on device probe
-MIME-Version: 1.0
+Message-Id: <79BCE02A-D4EC-4362-B0D3-3FE76FB17B78@vpprocess.com>
+References: <20250425191336.45581-1-kelsey@vpprocess.com>
+ <20250428-impressive-masterful-squid-a898c4-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+X-Migadu-Flow: FLOW_OUT
 
-On 24.04.2025 16:25:26, Antonios Salios wrote:
-> The spin lock tx_handling_spinlock in struct m_can_classdev is not being
-> initialized. This leads to bug complaints from the kernel, eg. when
-> trying to send CAN frames with cansend from can-utils.
+On Apr 28, 2025, at 01:39, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 >=20
-> This patch fixes that by initializing the spin lock in the corresponding
-> device probe functions.
+> On 25.04.2025 12:13:36, Kelsey Maes wrote:
+>> TDC is currently hardcoded enabled so lower CAN FD data bitrates =
+result in a
+>> bus-off condition. This patch allows userspace to control TDC as =
+needed.
 >=20
-> Fixes: 1fa80e23c150 ("can: m_can: Introduce a tx_fifo_in_flight counter")
+> I think the underlying problem is that the original code always =
+enables
+> TDC. Lower data bitrates result in a DBRP > 1, as you stated in your
+> original mail:
 >=20
-> Signed-off-by: Antonios Salios <antonios@mwa.re>
+>>> I have a problem where I get a bus-off condition when using bit
+>>> rates that use a DBRP > 1.
+>=20
+> ...and in auto mode TDC is only enabled for DBRP =3D=3D 1 or 2. =
+Switching to
+> CAN_CTRLMODE_TDC_AUTO brings the positive side effect, that TDC is
+> controllable from user space. So the commit message can be made more
+> precise, what about:
+>=20
+> Subject: can: mcp251xfd: fix TDC setting for low data bit rates
+>=20
+> THe TDC is currently hardcoded enabled. This means even for lower =
+CAN-FD
+> data bitrates (with a DBRP (data bitrate prescaler) > 2) a TDC is
+> configured. This leads to a bus-off condition.
+>=20
+> ISO 11898-1 section 11.3.3 says "Transmitter delay compensation" (TDC)
+> is only applicable if data BRP is 1 or 2.
+>=20
+> To fix the problem, switch the driver to use the TDC calculation
+> provided by the CAN driver framework (which respects ISO 11898-1 =
+section
+> 11.3.3). This has the positive side effect, that the user space can
+> control TDC as needed.
+>=20
+> Can you also add these tags:
+>=20
+> Reported-by: Kelsey Maes <kelsey@vpprocess.com>
+> Closes: =
+https://lore.kernel.org/all/C2121586-C87F-4B23-A933-845362C29CA1@vpprocess=
+.com
 
-Applied to linux-can.
+Sure, I=E2=80=99m fine with that.
 
-Thanks,
-Marc
+> BTW: In you original mail, you've written that you're using a bitrate
+> of 125 kbit/s and a data bitrate of 500 kbit/s. This is a bit unusual.
+> Is that a real world application? Are you allowed to say which one?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+We are building an industrial automation system that uses CAN bus in =
+place of
+RS-485 for controlling potentially distant modules. That particular =
+bitrate is one
+of 4 possible bitrates the system can operate at: 125 / 500, 250 / 1000,
+500 / 2000, 1000 / 4000. We have an automatic bit rate detection =
+mechanism
+and having a fixed 1:4 ratio simplifies the implementation. The lower =
+bitrates
+will only be used in situations where a very long bus, poor wiring, =
+and/or noise
+issues prevent the use of higher bitrates. These are all very common =
+issues we
+have encountered with our existing RS-485 systems in the field.=20
 
---77v3de343k77ggtf
-Content-Type: application/pgp-signature; name="signature.asc"
+> I just noticed that there is another potential problem with this
+> combination of bit rates. The used BRP for the arbitration- and data
+> bitrate are not identical:
+>=20
+> | Bit timing parameters for mcp251xfd with 40.000000 MHz ref clock =
+(CIA recommendation) using algo 'v6.3'
+> |                     _----+--------------=3D> TSeg1: 2 =E2=80=A6  256
+> |                    /    /     _---------=3D> TSeg2: 1 =E2=80=A6  128
+> |                   |    |     /    _-----=3D> SJW:   1 =E2=80=A6  128
+> |                   |    |    |    /    _-=3D> BRP:   1 =E2=80=A6  256 =
+(inc: 1)
+> |                   |    |    |   |    /
+> |  nominal          |    |    |   |   |     real  Bitrt    nom   real  =
+ SampP
+> |  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  =
+ Error      NBTCFG
+> |   500000     25  34   35   10   5   1   500000   0.0%  87.5%  87.5%  =
+ 0.0%   0x00440904
+> |   125000     50  69   70   20  10   2   125000   0.0%  87.5%  87.5%  =
+ 0.0%   0x018a1309
+> |=20
+> | Data Bit timing parameters for mcp251xfd with 40.000000 MHz ref =
+clock (CIA recommendation) using algo 'v6.3'
+> |                     _----+--------------=3D> TSeg1: 1 =E2=80=A6   32
+> |                    /    /     _---------=3D> TSeg2: 1 =E2=80=A6   16
+> |                   |    |     /    _-----=3D> SJW:   1 =E2=80=A6   16
+> |                   |    |    |    /    _-=3D> BRP:   1 =E2=80=A6  256 =
+(inc: 1)
+> |                   |    |    |   |    /
+> |  nominal          |    |    |   |   |     real  Bitrt    nom   real  =
+ SampP
+> |  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  =
+ Error      NBTCFG
+> |   500000    125   6    7    2   1   5   500000   0.0%  87.5%  87.5%  =
+ 0.0%   0x040c0100
+>=20
+> This leads to a phase error while switching from arbitration to the =
+data
+> bitrate. A common BRP of 5 is better:
+>=20
+> | Bit timing parameters for mcp251xfd with 40.000000 MHz ref clock =
+(cmd-line) using algo 'v6.3'
+> |  nominal                                  real  Bitrt    nom   real  =
+ SampP
+> |  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  =
+ Error      NBTCFG
+> |   125000    125  27   28    8   4   5   125000   0.0%  87.5%  87.5%  =
+ 0.0%   0x04360703
+> |=20
+> | Data Bit timing parameters for mcp251xfd with 40.000000 MHz ref =
+clock (cmd-line) using algo 'v6.3'
+> |  nominal                                  real  Bitrt    nom   real  =
+ SampP
+> |  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  =
+ Error      NBTCFG
+> |   500000    125   6    7    2   1   5   500000   0.0%  87.5%  87.5%  =
+ 0.0%   0x040c0100
 
------BEGIN PGP SIGNATURE-----
+I agree. This problem can be worked around by specifying the timing =
+parameters
+explicitly, if required. It has not been an issue so far.
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmgPQUoACgkQDHRl3/mQ
-kZzpGQf/UtMKCSbXC45rXta8h+DvIjkCOyBK6tgzc3aQ4fqOtEMTMPML/+G9iQz2
-d6QtEBO2SoyvAmVB/4PUSnoFXW3/AwV35d3mvzFFBSGHMGX7BOmOMzue5R7vProV
-nB2C9r+e1JQphUb5TUA16cnSXuKy0MDxK/zSSooLwXgxZ3ruO1RLWalMfIsOESjq
-c//WxjK+/E9AdiUar4FEMo4Z/qnxyGPn2f5cdDLi6WWcvRE2VhG1nuOFQNAQT9FL
-YPYLYSjJbZ/i4UaxrBAnVOlJNByJ3+Q73XaOgp0jdSa4BGDvHwz1J6dq6Ghod1p/
-Zgoqk9sqIYFZQg+TuqJyBvGKWOnWMg==
-=605h
------END PGP SIGNATURE-----
+--
+Kelsey Maes
+VP Process Inc.
 
---77v3de343k77ggtf--
+
+
+
 
