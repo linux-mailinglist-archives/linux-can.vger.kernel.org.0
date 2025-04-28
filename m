@@ -1,202 +1,183 @@
-Return-Path: <linux-can+bounces-3498-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3499-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7D76A9F538
-	for <lists+linux-can@lfdr.de>; Mon, 28 Apr 2025 18:11:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9FD4A9F716
+	for <lists+linux-can@lfdr.de>; Mon, 28 Apr 2025 19:15:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0338F1A808C2
-	for <lists+linux-can@lfdr.de>; Mon, 28 Apr 2025 16:11:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 262B316A833
+	for <lists+linux-can@lfdr.de>; Mon, 28 Apr 2025 17:15:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90AAA18F2FC;
-	Mon, 28 Apr 2025 16:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D21827B4E3;
+	Mon, 28 Apr 2025 17:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vpprocess.com header.i=@vpprocess.com header.b="DQIjionV"
+	dkim=pass (2048-bit key) header.d=vpprocess.com header.i=@vpprocess.com header.b="Z2wqmfci"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0041A27A11C
-	for <linux-can@vger.kernel.org>; Mon, 28 Apr 2025 16:11:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52F028CF48
+	for <linux-can@vger.kernel.org>; Mon, 28 Apr 2025 17:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745856685; cv=none; b=PR3GDBFgXWGuCScyuwuHl95NBAtd0uhWF5lPF9PWLJifEr7OzJUqOzJa5atcNxm8E7yCNGHZhJ5Bk+CysbJ0uM4/jmJg+CHDdONVnGVk24cvcFJtAZO3dDE03A3mTowwgsqlnNkDPHUs5kS2nEI8ZtspRHMVrIneTdxci6T09jQ=
+	t=1745860527; cv=none; b=hn8tBnUdO9cJy6AsZMe9CQnnGNo5gUosHzZFJp31f5LyPOaeuPYGt3/3iIHXAtBe3oHFbZ68KYAUHwJKgQgVd20nDI97gElIypIMFDwX51Lx1WmWQCk2DXX0JR0Hscq70mYiAS6ZBAIZOL5ZX4xdh3UwxkfAnim8iXhxDV8B2+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745856685; c=relaxed/simple;
-	bh=ZKguwXyVbhZ9Pk73iVtu52EzowDwTy+vRlY8lu39RYM=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=Gueo00ZsITxlf2d0dC+HGhiQcJdqQjV1cLUmW7kSk9iLfKNCe+SLcSFSbM+meD/b6WrpXJrsfWDWq38kgSWAUy3S/EjLvxdmAjVm7MIVPG/AwF7tbqQHEmuncoXD6ytxr1e0A0Y7l6Pm1hMljM77n3SvFA1H6FowgNkxfMYvI/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vpprocess.com; spf=pass smtp.mailfrom=vpprocess.com; dkim=pass (2048-bit key) header.d=vpprocess.com header.i=@vpprocess.com header.b=DQIjionV; arc=none smtp.client-ip=91.218.175.170
+	s=arc-20240116; t=1745860527; c=relaxed/simple;
+	bh=BdsosA9y3lUI+A7azdfujvfHt5jJZotAYUTSnlzbaDo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RwujMlZK8W16vt6+d5Ag1IoGY4R8XQ6RQasCoo+thWySwBMj08yaqc6BniVE4gVO9qqr3Dfms+uwrN1JILgh8dT5vXERZCFzi2KwU9tB6tJa69DznojpFnlStDQ/7nEUu4Ue9WWlYPESyjkJDkCXwXkQwjrpmP9ZQHpRVOHTOrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vpprocess.com; spf=pass smtp.mailfrom=vpprocess.com; dkim=pass (2048-bit key) header.d=vpprocess.com header.i=@vpprocess.com header.b=Z2wqmfci; arc=none smtp.client-ip=95.215.58.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vpprocess.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vpprocess.com
-Content-Type: text/plain;
-	charset=utf-8
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vpprocess.com;
-	s=key1; t=1745856680;
+	s=key1; t=1745860518;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=isG9kKVwy6B8IdTidZLIa4Cr5ue76ODn4gT4qxVwJqM=;
-	b=DQIjionVh+s15FewFeMUqFqycp7G/m1ZHQgrkLi7TnFNkwNsAQXp0ZrHViG6YcMi5lLOKO
-	sISHGM34AtjeurmXsBoEtibI68M3ZF6jfO9k2aXaNldk0G5XDp0PpMdj3A1dLJF3J65yOH
-	ZcWoDWxCngwLes6Zy3UllG1+e8bgSXk2O0Ws1BSkfJ2YqB2S3T+kzVBOj4D/fSwwU16hnI
-	dm/Wk7q58sMcCvnb8U+pilvz3sHKJOd/eruJ9qmqFsCUNxi46xljszJ9A97WdehY+ivGfI
-	oI8hfioYMXcsoUoUxEcFSZB/0rAHk3LI+IAloE5WN57WCcwkv17M/XiJighmzQ==
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SRUMN5J6ueZ7h10CHlJXwl9powtzlKNM7/FNPEdJmlA=;
+	b=Z2wqmfci/jFZP2MgWeE96A/VgvQZJIYoFxEqWAlVI3aEiwpNpXcurSWuSw2RGrVxQiN3YC
+	7zOIeBkWRbd6jUWuTJeaF8VztvfgDVz8xq0x8+8E6Tp1L1nnEwcs75hspqG/MVUFC3M7BG
+	1/jiPqwgaboz+aF71xWCCII80esNpyhGzyFZvfQk1Lw8JUDnNfQAJeAs8TNTVnDme4DqMN
+	+8Qkvn0j4klT4Yc2C6qyh71qnoBMpC5pQUk7QnTfpv8qwoTA8BQyBBD8gCyBc6ell/gdH3
+	dUj2I4l8PFSRmE7A/eZoxZmaHrIG34+g17085fkybkafQUejzQh6+Z1p9a4Tfw==
+From: Kelsey Maes <kelsey@vpprocess.com>
+To: linux-can@vger.kernel.org
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v3] can: mcp251xfd: fix TDC setting for low data bit rates
+Date: Mon, 28 Apr 2025 10:15:01 -0700
+Message-Id: <20250428171501.75830-1-kelsey@vpprocess.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.2\))
-Subject: Re: [PATCH] can: mcp251xfd: make TDC controllable from userspace
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kelsey Maes <kelsey@vpprocess.com>
-In-Reply-To: <20250428-impressive-masterful-squid-a898c4-mkl@pengutronix.de>
-Date: Mon, 28 Apr 2025 09:11:05 -0700
-Cc: linux-can@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <79BCE02A-D4EC-4362-B0D3-3FE76FB17B78@vpprocess.com>
-References: <20250425191336.45581-1-kelsey@vpprocess.com>
- <20250428-impressive-masterful-squid-a898c4-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On Apr 28, 2025, at 01:39, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->=20
-> On 25.04.2025 12:13:36, Kelsey Maes wrote:
->> TDC is currently hardcoded enabled so lower CAN FD data bitrates =
-result in a
->> bus-off condition. This patch allows userspace to control TDC as =
-needed.
->=20
-> I think the underlying problem is that the original code always =
-enables
-> TDC. Lower data bitrates result in a DBRP > 1, as you stated in your
-> original mail:
->=20
->>> I have a problem where I get a bus-off condition when using bit
->>> rates that use a DBRP > 1.
->=20
-> ...and in auto mode TDC is only enabled for DBRP =3D=3D 1 or 2. =
-Switching to
-> CAN_CTRLMODE_TDC_AUTO brings the positive side effect, that TDC is
-> controllable from user space. So the commit message can be made more
-> precise, what about:
->=20
-> Subject: can: mcp251xfd: fix TDC setting for low data bit rates
->=20
-> THe TDC is currently hardcoded enabled. This means even for lower =
-CAN-FD
-> data bitrates (with a DBRP (data bitrate prescaler) > 2) a TDC is
-> configured. This leads to a bus-off condition.
->=20
-> ISO 11898-1 section 11.3.3 says "Transmitter delay compensation" (TDC)
-> is only applicable if data BRP is 1 or 2.
->=20
-> To fix the problem, switch the driver to use the TDC calculation
-> provided by the CAN driver framework (which respects ISO 11898-1 =
-section
-> 11.3.3). This has the positive side effect, that the user space can
-> control TDC as needed.
->=20
-> Can you also add these tags:
->=20
-> Reported-by: Kelsey Maes <kelsey@vpprocess.com>
-> Closes: =
-https://lore.kernel.org/all/C2121586-C87F-4B23-A933-845362C29CA1@vpprocess=
-.com
+The TDC is currently hardcoded enabled. This means that even for lower CAN-FD
+data bitrates (with a DBRP (data bitrate prescaler) > 2) a TDC is configured.
+This leads to a bus-off condition.
 
-Sure, I=E2=80=99m fine with that.
+ISO 11898-1 section 11.3.3 says "Transmitter delay compensation" (TDC) is only
+applicable if DBRP is 1 or 2.
 
-> BTW: In you original mail, you've written that you're using a bitrate
-> of 125 kbit/s and a data bitrate of 500 kbit/s. This is a bit unusual.
-> Is that a real world application? Are you allowed to say which one?
+To fix the problem, switch the driver to use the TDC calculation provided by the
+CAN driver framework (which respects ISO 11898-1 section 11.3.3). This has the
+positive side effect that userspace can control TDC as needed.
 
-We are building an industrial automation system that uses CAN bus in =
-place of
-RS-485 for controlling potentially distant modules. That particular =
-bitrate is one
-of 4 possible bitrates the system can operate at: 125 / 500, 250 / 1000,
-500 / 2000, 1000 / 4000. We have an automatic bit rate detection =
-mechanism
-and having a fixed 1:4 ratio simplifies the implementation. The lower =
-bitrates
-will only be used in situations where a very long bus, poor wiring, =
-and/or noise
-issues prevent the use of higher bitrates. These are all very common =
-issues we
-have encountered with our existing RS-485 systems in the field.=20
+Demonstration of the feature in action:
+  $ ip link set can0 up type can bitrate 125000 dbitrate 500000 fd on
+  $ ip -details link show can0
+  3: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 72 qdisc pfifo_fast state UP mode DEFAULT group default qlen 10
+      link/can  promiscuity 0  allmulti 0 minmtu 0 maxmtu 0
+      can <FD> state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+  	  bitrate 125000 sample-point 0.875
+  	  tq 50 prop-seg 69 phase-seg1 70 phase-seg2 20 sjw 10 brp 2
+  	  mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp_inc 1
+  	  dbitrate 500000 dsample-point 0.875
+  	  dtq 125 dprop-seg 6 dphase-seg1 7 dphase-seg2 2 dsjw 1 dbrp 5
+  	  mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbrp_inc 1
+  	  tdco 0..63
+  	  clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus spi parentdev spi0.0
+  $ ip link set can0 up type can bitrate 1000000 dbitrate 4000000 fd on
+  $ ip -details link show can0
+  3: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 72 qdisc pfifo_fast state UP mode DEFAULT group default qlen 10
+      link/can  promiscuity 0  allmulti 0 minmtu 0 maxmtu 0
+      can <FD,TDC-AUTO> state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+  	  bitrate 1000000 sample-point 0.750
+  	  tq 25 prop-seg 14 phase-seg1 15 phase-seg2 10 sjw 5 brp 1
+  	  mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp_inc 1
+  	  dbitrate 4000000 dsample-point 0.700
+  	  dtq 25 dprop-seg 3 dphase-seg1 3 dphase-seg2 3 dsjw 1 dbrp 1
+  	  tdco 7
+  	  mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbrp_inc 1
+  	  tdco 0..63
+  	  clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus spi parentdev spi0.0
 
-> I just noticed that there is another potential problem with this
-> combination of bit rates. The used BRP for the arbitration- and data
-> bitrate are not identical:
->=20
-> | Bit timing parameters for mcp251xfd with 40.000000 MHz ref clock =
-(CIA recommendation) using algo 'v6.3'
-> |                     _----+--------------=3D> TSeg1: 2 =E2=80=A6  256
-> |                    /    /     _---------=3D> TSeg2: 1 =E2=80=A6  128
-> |                   |    |     /    _-----=3D> SJW:   1 =E2=80=A6  128
-> |                   |    |    |    /    _-=3D> BRP:   1 =E2=80=A6  256 =
-(inc: 1)
-> |                   |    |    |   |    /
-> |  nominal          |    |    |   |   |     real  Bitrt    nom   real  =
- SampP
-> |  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  =
- Error      NBTCFG
-> |   500000     25  34   35   10   5   1   500000   0.0%  87.5%  87.5%  =
- 0.0%   0x00440904
-> |   125000     50  69   70   20  10   2   125000   0.0%  87.5%  87.5%  =
- 0.0%   0x018a1309
-> |=20
-> | Data Bit timing parameters for mcp251xfd with 40.000000 MHz ref =
-clock (CIA recommendation) using algo 'v6.3'
-> |                     _----+--------------=3D> TSeg1: 1 =E2=80=A6   32
-> |                    /    /     _---------=3D> TSeg2: 1 =E2=80=A6   16
-> |                   |    |     /    _-----=3D> SJW:   1 =E2=80=A6   16
-> |                   |    |    |    /    _-=3D> BRP:   1 =E2=80=A6  256 =
-(inc: 1)
-> |                   |    |    |   |    /
-> |  nominal          |    |    |   |   |     real  Bitrt    nom   real  =
- SampP
-> |  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  =
- Error      NBTCFG
-> |   500000    125   6    7    2   1   5   500000   0.0%  87.5%  87.5%  =
- 0.0%   0x040c0100
->=20
-> This leads to a phase error while switching from arbitration to the =
-data
-> bitrate. A common BRP of 5 is better:
->=20
-> | Bit timing parameters for mcp251xfd with 40.000000 MHz ref clock =
-(cmd-line) using algo 'v6.3'
-> |  nominal                                  real  Bitrt    nom   real  =
- SampP
-> |  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  =
- Error      NBTCFG
-> |   125000    125  27   28    8   4   5   125000   0.0%  87.5%  87.5%  =
- 0.0%   0x04360703
-> |=20
-> | Data Bit timing parameters for mcp251xfd with 40.000000 MHz ref =
-clock (cmd-line) using algo 'v6.3'
-> |  nominal                                  real  Bitrt    nom   real  =
- SampP
-> |  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  =
- Error      NBTCFG
-> |   500000    125   6    7    2   1   5   500000   0.0%  87.5%  87.5%  =
- 0.0%   0x040c0100
+There has been some confusion about the MCP2518FD using a relative or absolute
+TDCO due to the datasheet specifying a range of [-64,63]. I have a custom board
+with a 40 MHz clock and an estimated loop delay of 100 to 216 ns. During testing
+at a data bit rate of 4 Mbit/s I found that using can_get_relative_tdco()
+resulted in bus-off errors. The final TDCO value was 1 which corresponds to a
+10% SSP in an absolute configuration. This behavior is expected if the TDCO
+value is really absolute and not relative. Using priv->can.tdc.tdco instead
+results in a final TDCO of 8, setting the SSP at exactly 80%. This configuration
+works.
 
-I agree. This problem can be worked around by specifying the timing =
-parameters
-explicitly, if required. It has not been an issue so far.
+Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
+Reported-by: Kelsey Maes <kelsey@vpprocess.com>
+Closes: https://lore.kernel.org/all/C2121586-C87F-4B23-A933-845362C29CA1@vpprocess.com
+Signed-off-by: Kelsey Maes <kelsey@vpprocess.com>
+---
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 25 +++++++++++++------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
 
---
-Kelsey Maes
-VP Process Inc.
-
-
-
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 3bc56517f..d2184a32d 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -75,6 +75,15 @@ static const struct can_bittiming_const mcp251xfd_data_bittiming_const = {
+ 	.brp_inc = 1,
+ };
+ 
++static const struct can_tdc_const mcp251xfd_tdc_const = {
++	.tdcv_min = 0,
++	.tdcv_max = 63,
++	.tdco_min = 0,
++	.tdco_max = 63,
++	.tdcf_min = 0,
++	.tdcf_max = 0,
++};
++
+ static const char *__mcp251xfd_get_model_str(enum mcp251xfd_model model)
+ {
+ 	switch (model) {
+@@ -511,7 +520,6 @@ static int mcp251xfd_set_bittiming(const struct mcp251xfd_priv *priv)
+ 	const struct can_bittiming *bt = &priv->can.bittiming;
+ 	const struct can_bittiming *dbt = &priv->can.data_bittiming;
+ 	u32 val = 0;
+-	s8 tdco;
+ 	int err;
+ 
+ 	/* CAN Control Register
+@@ -575,11 +583,13 @@ static int mcp251xfd_set_bittiming(const struct mcp251xfd_priv *priv)
+ 		return err;
+ 
+ 	/* Transmitter Delay Compensation */
+-	tdco = clamp_t(int, dbt->brp * (dbt->prop_seg + dbt->phase_seg1),
+-		       -64, 63);
+-	val = FIELD_PREP(MCP251XFD_REG_TDC_TDCMOD_MASK,
+-			 MCP251XFD_REG_TDC_TDCMOD_AUTO) |
+-		FIELD_PREP(MCP251XFD_REG_TDC_TDCO_MASK, tdco);
++	if (can_tdc_is_enabled(&priv->can))
++		val = FIELD_PREP(MCP251XFD_REG_TDC_TDCMOD_MASK,
++				 MCP251XFD_REG_TDC_TDCMOD_AUTO);
++	else
++		val = FIELD_PREP(MCP251XFD_REG_TDC_TDCMOD_MASK,
++				 MCP251XFD_REG_TDC_TDCMOD_DISABLED) |
++			FIELD_PREP(MCP251XFD_REG_TDC_TDCO_MASK, priv->can.tdc.tdco);
+ 
+ 	return regmap_write(priv->map_reg, MCP251XFD_REG_TDC, val);
+ }
+@@ -2083,10 +2093,11 @@ static int mcp251xfd_probe(struct spi_device *spi)
+ 	priv->can.do_get_berr_counter = mcp251xfd_get_berr_counter;
+ 	priv->can.bittiming_const = &mcp251xfd_bittiming_const;
+ 	priv->can.data_bittiming_const = &mcp251xfd_data_bittiming_const;
++	priv->can.tdc_const = &mcp251xfd_tdc_const;
+ 	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
+ 		CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
+ 		CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO |
+-		CAN_CTRLMODE_CC_LEN8_DLC;
++		CAN_CTRLMODE_CC_LEN8_DLC | CAN_CTRLMODE_TDC_AUTO;
+ 	set_bit(MCP251XFD_FLAGS_DOWN, priv->flags);
+ 	priv->ndev = ndev;
+ 	priv->spi = spi;
+-- 
+2.39.5 (Apple Git-154)
 
 
