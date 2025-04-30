@@ -1,232 +1,193 @@
-Return-Path: <linux-can+bounces-3510-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3511-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4A65AA4754
-	for <lists+linux-can@lfdr.de>; Wed, 30 Apr 2025 11:36:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD3EAAA5151
+	for <lists+linux-can@lfdr.de>; Wed, 30 Apr 2025 18:15:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5F0D3B5B18
-	for <lists+linux-can@lfdr.de>; Wed, 30 Apr 2025 09:36:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3516E1C04D30
+	for <lists+linux-can@lfdr.de>; Wed, 30 Apr 2025 16:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6B9231847;
-	Wed, 30 Apr 2025 09:36:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10C227718;
+	Wed, 30 Apr 2025 16:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PLcIL3rr"
+	dkim=pass (2048-bit key) header.d=vpprocess.com header.i=@vpprocess.com header.b="Jgm6DBrf"
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF3322F74E
-	for <linux-can@vger.kernel.org>; Wed, 30 Apr 2025 09:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF70425E81F
+	for <linux-can@vger.kernel.org>; Wed, 30 Apr 2025 16:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746005803; cv=none; b=kkM+YgbPd5GXToS7lfNAlBLVJ4i93CjZi2UnU3bHIX2UBelgPehWJUMT2JyVcgDo6opxITn7eLdhKFIfb6T4f53XjGPIIGZlVKDTAqq5OBtYtSxuIYLqz+WgFj8kGESFlurrttW5HzzzgDiRBA/Zh63ZPs6quAk2pN/JtIyAvWw=
+	t=1746029711; cv=none; b=F0DGGLj+DtdBpr+DYVM1ba/1v0Tki3pePYUoVB9nEFQV99i7viYvtZpvPSdLFG/dm/JiCgfwI9/yzqku6vPMDECS6Nv55+2Drr/c7sLWBvFc4iMLptzHuNa4wECHZ/x5WGVyK6YE/gFDFf/EHh69qTeKqaaMXyT9a9wykS4F6sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746005803; c=relaxed/simple;
-	bh=LKbgVgvETQL2Z9FMH1hokLD+1a7kjWCTl8cKHjR38Zs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IuFOI6tWKxFlDkLwtIMkwbDedLLAu9dGhJtO5DLP52y4Mr1Q4ALuYMEezxMSKpLuCWQ3MOwdtYFmoaYOaTf0FL/1OlIhu+cft4sZX8hdtnwZ4l7t0RY2toOW7KkuCW2J92dvW047DaM53kPCmWXGkAAB39dWvzFhCnJrSemUqKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PLcIL3rr; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746005800;
+	s=arc-20240116; t=1746029711; c=relaxed/simple;
+	bh=mq15vDpFckG3leXg02phUYPtYirs5M00OWmPldAaq2I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Spnm7rneqYYQC+13zjUYOGGDo0Eec6Q1YsOZyYl2Ln9Tu+Sk9rXUyYPhozcKqvmxUr/WPvryryh7KzrxwJZCc9oAyh6UN64OxV23mHO37WU8rEVCHVpOqwt4qz+WLYs4E6epJJvpcFKHjVaBEdxUQ/aobLxULYGy8Uuyw5856bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vpprocess.com; spf=pass smtp.mailfrom=vpprocess.com; dkim=pass (2048-bit key) header.d=vpprocess.com header.i=@vpprocess.com header.b=Jgm6DBrf; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vpprocess.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vpprocess.com
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vpprocess.com;
+	s=key1; t=1746029705;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MSPsTTFeEcnCdwW0Vym+XYLIte4DYBrgKfCXQ1hkyeQ=;
-	b=PLcIL3rrYc7xiiJ2U116/1UToLGEIXW86cA2We/Tsidg7+dh3y480y6Fa3rHIb3mFBa3hw
-	MAY6SCna3WsVDnfSaH+nyxqEO0kkXg1zAboHDG/mWTL8HGZl0CH0Zhog+4VhWIwVrXd6dA
-	/jfsB7J0b+c4ch+SwKuBSdpnnk6VcZQ=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-463-59LndPhNOzSjcpmE1lVBpg-1; Wed, 30 Apr 2025 05:36:38 -0400
-X-MC-Unique: 59LndPhNOzSjcpmE1lVBpg-1
-X-Mimecast-MFC-AGG-ID: 59LndPhNOzSjcpmE1lVBpg_1746005798
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-39c1b1c0969so4334946f8f.1
-        for <linux-can@vger.kernel.org>; Wed, 30 Apr 2025 02:36:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746005797; x=1746610597;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MSPsTTFeEcnCdwW0Vym+XYLIte4DYBrgKfCXQ1hkyeQ=;
-        b=Av1MbR0unn0EfdlCHlpug1Vd4E3/TT3YWkVlCZYIxoc2DIWvBQmbp438PDseMaMsf0
-         EMEXSYvocLv3HMuTY27r5ZjLi6B0MtyGlwQ97NAvfBVLn+ehRUUg1X0boJw+IGnV/63I
-         bXQHxnI6cpwXWGHoChix8z9FIZ56foM0hZtbP+QLGH2dUbxpZfM0KjDbMOg3rY1EsDzP
-         8PzgllZjznlmnWjTUILiyvB3u+AlKm8SdzKSBCR0jYYCMRoxCAE++LrKAD8ytM16p0tV
-         rFbcJeV53y6PuP+8/1/lsUJTjxyCEVZPqb1QFeSgRULNtpoe2FnyFnQKqFB134/BjYyj
-         Pqpw==
-X-Forwarded-Encrypted: i=1; AJvYcCVXvN1TjLVWTqyMFxhzLsA9s7/5jMs8EbJKb1iRZJylHjBNadpUzsgjKAu6314xOwJlJDey0rvnJkM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjfaZ7vePFPwmPbftoOdhLQIRCEeK2GtXICq3vFT5DS20Bx70r
-	FKwyXsFVDtQbmj9iIYIlZfSOb2oc65nxJ+/iojPZtpsz1HdvY7ZBKltRhfF0YcRnUO1kOkleq3N
-	xQzF38twsYVazVU8KrdmcjiPAh2c6Y0IrxNrXR3y/b+Pg034gln7Qj1opwg==
-X-Gm-Gg: ASbGncvTu0mIzlBvYQP84e6NdGAryewRf7Q14jwOO3nRBUbCMeCBpxwfF/Nndz+TYec
-	pCQMlNx+gJUdhTCYCB/TzZCbl9nz9U7tKEzbCDlMu8qtR3Nvjkkzq5mwuIQqtxBVMSfjcSl0Ckr
-	HR0xxHnLDRophyA/CJicX8EHqH6+Knrsl+Enzq1JQ7sIeIvspq5xP/IqsdJ4aT/db4Vxjzxc5Il
-	iLZeeqBwk8Goq6rJBgzhoeYsHGx9H1CpexiRrwp+v8GUtRpjSFcQU/q5p1JPsL7DOeWhYnTBAjL
-	6IsmTyEPSRYOVp8FK4CB7sLpqZN8F1qB5OTDoiYpZ2La
-X-Received: by 2002:a5d:59a8:0:b0:391:3915:cffb with SMTP id ffacd0b85a97d-3a08ff465b4mr1716271f8f.43.1746005797572;
-        Wed, 30 Apr 2025 02:36:37 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGgdj7osQIlrwBtpolueyo0OCJRGNsPw7nP/YnjWorltc/OOlGv2Ls+W6kZFmWgAkKIRYm6lA==
-X-Received: by 2002:a5d:59a8:0:b0:391:3915:cffb with SMTP id ffacd0b85a97d-3a08ff465b4mr1716245f8f.43.1746005797110;
-        Wed, 30 Apr 2025 02:36:37 -0700 (PDT)
-Received: from [172.16.17.99] (pd9ed5a70.dip0.t-ipconnect.de. [217.237.90.112])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073ca4e50sm16867435f8f.30.2025.04.30.02.36.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Apr 2025 02:36:36 -0700 (PDT)
-Message-ID: <69d35507-f4aa-484c-8e1f-f2a766b4ffd1@redhat.com>
-Date: Wed, 30 Apr 2025 11:36:35 +0200
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZDmZva/esD2gIYYPPBcSTqk+xJflPdF9ogz2jAzpe0Q=;
+	b=Jgm6DBrf7ofDjfwcenOF9gpB2Si0haUyklrGLF1ygh3izcoI32RdvCDRzGaHcmICIlulm/
+	La3Osx3iE4Xa7FIyy/il0WHrrZHW9tSsXxb7lL5V1NiivZ/1VyjWTc4NrmN6p6LSaCKpgU
+	67ZbGd8Od5RPSg/9oJMJkKyjIstkYXvS89a9B7yuCVaZ4uREbjrSi6nMruoE1iCjBef6V6
+	O6eggIBBQz0GcZX5+NKEgKBPkI+1ERtAqfNP6orH8aamC2UkrQPEPkY1j9I74mCNAtOeR4
+	DACsuG1NU0FTBVVFrxWpuqgKYECM3BjA0IIQD/MU4M9ecfUABRz0ZuxpsAPtwg==
+From: Kelsey Maes <kelsey@vpprocess.com>
+To: linux-can@vger.kernel.org
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v5] can: mcp251xfd: fix TDC setting for low data bit rates
+Date: Wed, 30 Apr 2025 09:15:01 -0700
+Message-Id: <20250430161501.79370-1-kelsey@vpprocess.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] selftests: can: Document test_raw_filter test cases
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- dcaratti@redhat.com, fstornio@redhat.com
-References: <cover.1745323279.git.fmaurer@redhat.com>
- <710557cef8fb8472628862d9b65edcf7aeb32bb5.1745323279.git.fmaurer@redhat.com>
- <CAMZ6RqKcp=JNcbZjX6xSGo9Hyw=1nXbpS9Nc36xuDkbGG+=wtA@mail.gmail.com>
- <a28ff624-c73a-4e16-867a-66e423315c29@redhat.com>
- <08cb8dd7-5685-4a41-b6a9-c8758a804ed1@wanadoo.fr>
-Content-Language: en-US
-From: Felix Maurer <fmaurer@redhat.com>
-In-Reply-To: <08cb8dd7-5685-4a41-b6a9-c8758a804ed1@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 24.04.25 17:08, Vincent Mailhol wrote:
-> On 24/04/2025 at 23:02, Felix Maurer wrote:
->> On 24.04.25 09:44, Vincent Mailhol wrote:
->>> On Tue. 22 Apr. 2025 at 21:03, Felix Maurer <fmaurer@redhat.com> wrote:
->> [...]
->>>> diff --git a/tools/testing/selftests/net/can/test_raw_filter.c b/tools/testing/selftests/net/can/test_raw_filter.c
->>>> index 7fe11e020a1c..8d43053824d2 100644
->>>> --- a/tools/testing/selftests/net/can/test_raw_filter.c
->>>> +++ b/tools/testing/selftests/net/can/test_raw_filter.c
->>>> @@ -101,94 +101,113 @@ FIXTURE_VARIANT(can_filters) {
->>>>         int exp_num_rx;
->>>>         int exp_rxbits;
->>>>  };
->>>> +#define T_EFF (CAN_EFF_FLAG >> 28)
->>>> +#define T_RTR (CAN_RTR_FLAG >> 28)
->>>
->>> I do not like this
->>>
->>>   >> 28
->>>
->>> shift. I understand that it is part of the original design, but for
->>> me, this is just obfuscation.
->>>
->>> Why just not using CAN_EFF_FLAG and CAN_RTR_FLAG as-is for the
->>> expected values? What benefit does this shift add?
->>
->> I agree, that looks like magic numbers and the original design is not
->> very nice here. The main reason for the >>28 is that later on values are
->> shifted by T_EFF and/or T_RTR, so they shouldn't be too large (with the
->>>> 28, the shift value later is in the range 0-14). See below for a
->> slightly different idea.
->>
->>>> +/* Ignore EFF flag in filter ID if not covered by filter mask */
->>>>  FIXTURE_VARIANT_ADD(can_filters, base_eff) {
->>>>         .testcase = 2,
->>>>         .id = ID | CAN_EFF_FLAG,
->>>>         .mask = CAN_SFF_MASK,
->>>>         .exp_num_rx = 4,
->>>> -       .exp_rxbits = 4369,
->>>> +       .exp_rxbits = (1 | 1 << (T_EFF) | 1 << (T_RTR) | 1 << (T_EFF | T_RTR)),
->>>                          ^
->>> What is the meaning of this 1?
->>
->> The 1 means that a packet will be received with no flags set.
-> 
-> OK. Now I understand.
-> 
->> The whole rxbit thing took me a while to understand and the result now
->> is not straightforward either. Let's see if we can come up with
->> something better.
->>
->> The exp_rxbits is basically a bitfield that describes which flags should
->> be set on the received frames. Maybe this could be made more explicit
->> with something like this:
->>
->> .exp_rxbits = FRAME_NOFLAGS | FRAME_EFF | FRAME_RTR | FRAME_EFFRTR,
-> 
-> This is better. But yet, how would this scale in the future if we introduce the
-> CAN FD? For n flags, you have n combinations.
-> 
->> And in the receive loop something like this:
->>
->> rxbits |= FRAME_RCVD(frame.can_id);
->>
->> Of course, the definitions of these macros would still have the >>28,
->> but at a central point, with better explanation. Do you think that's
->> more understandable? Or do you have a different idea?
-> 
-> The
-> 
->   >> 28
-> 
-> trick just allows to save a couple line but by doing so, adds a ton of
-> complexity. What is wrong in writing this:
+The TDC is currently hardcoded enabled. This means that even for lower CAN-FD
+data bitrates (with a DBRP (data bitrate prescaler) > 2) a TDC is configured.
+This leads to a bus-off condition.
 
-I don't see anything wrong with it, I like it :) I'll send an updated
-version of the patches soon (probably squashed as well).
+ISO 11898-1 section 11.3.3 says "Transmitter delay compensation" (TDC) is only
+applicable if DBRP is 1 or 2.
 
->   FIXTURE_VARIANT(can_filters) {
->   	int testcase;
->   	canid_t id;
->   	canid_t mask;
->   	int exp_num_rx;
->   	canid_t exp_flags[];
->   };
-> 
->   /* Receive all frames when filtering for the ID in standard frame format */
->   FIXTURE_VARIANT_ADD(can_filters, base) {
->   	.testcase = 1,
->   	.id = ID,
->   	.mask = CAN_SFF_MASK,
->   	.exp_num_rx = 4,
->   	.exp_flags = {
->   		0,
->   		CAN_EFF_FLAG,
->   		CAN_RTR_FLAG,
->   		CAN_EFF_FLAG | CAN_RTR_FLAG,
->   	},
->   };
-> 
-> And then, in your TEST_F(), the do {} while loops becomes a:
-> 
->   for (int i = 0; i <= variant->exp_num_rx; i++) {
->   	/* FD logic here */
->   	ret = FD_ISSET(self->sock, &rdfs);
-> 	if (i == variant->exp_num_rx) {
->   		ASSERT_EQ(ret == 0);
->   	} else (i < variant->exp_num_rx)
->   		/* other relevant checks */
->   		ASSERT_EQ(frame.can_id & ~CAN_ERR_MASK ==
->   		          variant->exp_flags[i]);
->   	}
->   }
-> 
-> Here, you even check that the frames are received in order.
-> 
-> OK, the bitmap saved some memory, but here, we are speaking of selftests. The
-> priority is readability. I will happily get rid of the bitmap and just simplify
-> the logic.
+To fix the problem, switch the driver to use the TDC calculation provided by the
+CAN driver framework (which respects ISO 11898-1 section 11.3.3). This has the
+positive side effect that userspace can control TDC as needed.
 
-I fully agree, thank you!
-   Felix
+Demonstration of the feature in action:
+  $ ip link set can0 up type can bitrate 125000 dbitrate 500000 fd on
+  $ ip -details link show can0
+  3: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 72 qdisc pfifo_fast state UP mode DEFAULT group default qlen 10
+      link/can  promiscuity 0  allmulti 0 minmtu 0 maxmtu 0
+      can <FD> state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+  	  bitrate 125000 sample-point 0.875
+  	  tq 50 prop-seg 69 phase-seg1 70 phase-seg2 20 sjw 10 brp 2
+  	  mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp_inc 1
+  	  dbitrate 500000 dsample-point 0.875
+  	  dtq 125 dprop-seg 6 dphase-seg1 7 dphase-seg2 2 dsjw 1 dbrp 5
+  	  mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbrp_inc 1
+  	  tdcv 0..63 tdco 0..63
+  	  clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus spi parentdev spi0.0
+  $ ip link set can0 up type can bitrate 1000000 dbitrate 4000000 fd on
+  $ ip -details link show can0
+  3: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 72 qdisc pfifo_fast state UP mode DEFAULT group default qlen 10
+      link/can  promiscuity 0  allmulti 0 minmtu 0 maxmtu 0
+      can <FD,TDC-AUTO> state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+  	  bitrate 1000000 sample-point 0.750
+  	  tq 25 prop-seg 14 phase-seg1 15 phase-seg2 10 sjw 5 brp 1
+  	  mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp_inc 1
+  	  dbitrate 4000000 dsample-point 0.700
+  	  dtq 25 dprop-seg 3 dphase-seg1 3 dphase-seg2 3 dsjw 1 dbrp 1
+  	  tdco 7
+  	  mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbrp_inc 1
+  	  tdcv 0..63 tdco 0..63
+  	  clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus spi parentdev spi0.0
+
+There has been some confusion about the MCP2518FD using a relative or absolute
+TDCO due to the datasheet specifying a range of [-64,63]. I have a custom board
+with a 40 MHz clock and an estimated loop delay of 100 to 216 ns. During testing
+at a data bit rate of 4 Mbit/s I found that using can_get_relative_tdco()
+resulted in bus-off errors. The final TDCO value was 1 which corresponds to a
+10% SSP in an absolute configuration. This behavior is expected if the TDCO
+value is really absolute and not relative. Using priv->can.tdc.tdco instead
+results in a final TDCO of 8, setting the SSP at exactly 80%. This configuration
+works.
+
+The automatic, manual, and off TDC modes were tested at speeds up to, and
+including, 8 Mbit/s on real hardware and behave as expected.
+
+Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
+Reported-by: Kelsey Maes <kelsey@vpprocess.com>
+Closes: https://lore.kernel.org/all/C2121586-C87F-4B23-A933-845362C29CA1@vpprocess.com
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Kelsey Maes <kelsey@vpprocess.com>
+---
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 31 ++++++++++++++-----
+ 1 file changed, 23 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 3bc56517f..34d5cbef6 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -75,6 +75,15 @@ static const struct can_bittiming_const mcp251xfd_data_bittiming_const = {
+ 	.brp_inc = 1,
+ };
+ 
++static const struct can_tdc_const mcp251xfd_tdc_const = {
++	.tdcv_min = 0,
++	.tdcv_max = 63,
++	.tdco_min = 0,
++	.tdco_max = 63,
++	.tdcf_min = 0,
++	.tdcf_max = 0,
++};
++
+ static const char *__mcp251xfd_get_model_str(enum mcp251xfd_model model)
+ {
+ 	switch (model) {
+@@ -510,8 +519,7 @@ static int mcp251xfd_set_bittiming(const struct mcp251xfd_priv *priv)
+ {
+ 	const struct can_bittiming *bt = &priv->can.bittiming;
+ 	const struct can_bittiming *dbt = &priv->can.data_bittiming;
+-	u32 val = 0;
+-	s8 tdco;
++	u32 tdcmod, val = 0;
+ 	int err;
+ 
+ 	/* CAN Control Register
+@@ -575,11 +583,16 @@ static int mcp251xfd_set_bittiming(const struct mcp251xfd_priv *priv)
+ 		return err;
+ 
+ 	/* Transmitter Delay Compensation */
+-	tdco = clamp_t(int, dbt->brp * (dbt->prop_seg + dbt->phase_seg1),
+-		       -64, 63);
+-	val = FIELD_PREP(MCP251XFD_REG_TDC_TDCMOD_MASK,
+-			 MCP251XFD_REG_TDC_TDCMOD_AUTO) |
+-		FIELD_PREP(MCP251XFD_REG_TDC_TDCO_MASK, tdco);
++	if (priv->can.ctrlmode & CAN_CTRLMODE_TDC_AUTO)
++		tdcmod = MCP251XFD_REG_TDC_TDCMOD_AUTO;
++	else if (priv->can.ctrlmode & CAN_CTRLMODE_TDC_MANUAL)
++		tdcmod = MCP251XFD_REG_TDC_TDCMOD_MANUAL;
++	else
++		tdcmod = MCP251XFD_REG_TDC_TDCMOD_DISABLED;
++
++	val = FIELD_PREP(MCP251XFD_REG_TDC_TDCMOD_MASK, tdcmod) |
++		FIELD_PREP(MCP251XFD_REG_TDC_TDCV_MASK, priv->can.tdc.tdcv) |
++		FIELD_PREP(MCP251XFD_REG_TDC_TDCO_MASK, priv->can.tdc.tdco);
+ 
+ 	return regmap_write(priv->map_reg, MCP251XFD_REG_TDC, val);
+ }
+@@ -2083,10 +2096,12 @@ static int mcp251xfd_probe(struct spi_device *spi)
+ 	priv->can.do_get_berr_counter = mcp251xfd_get_berr_counter;
+ 	priv->can.bittiming_const = &mcp251xfd_bittiming_const;
+ 	priv->can.data_bittiming_const = &mcp251xfd_data_bittiming_const;
++	priv->can.tdc_const = &mcp251xfd_tdc_const;
+ 	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
+ 		CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
+ 		CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO |
+-		CAN_CTRLMODE_CC_LEN8_DLC;
++		CAN_CTRLMODE_CC_LEN8_DLC | CAN_CTRLMODE_TDC_AUTO |
++		CAN_CTRLMODE_TDC_MANUAL;
+ 	set_bit(MCP251XFD_FLAGS_DOWN, priv->flags);
+ 	priv->ndev = ndev;
+ 	priv->spi = spi;
+-- 
+2.39.5 (Apple Git-154)
 
 
