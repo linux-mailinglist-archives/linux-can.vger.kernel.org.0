@@ -1,162 +1,165 @@
-Return-Path: <linux-can+bounces-3517-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3518-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBAC6AA6DA8
-	for <lists+linux-can@lfdr.de>; Fri,  2 May 2025 11:08:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBF35AA722C
+	for <lists+linux-can@lfdr.de>; Fri,  2 May 2025 14:35:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1133C4C1C2F
-	for <lists+linux-can@lfdr.de>; Fri,  2 May 2025 09:08:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47B8B3B3873
+	for <lists+linux-can@lfdr.de>; Fri,  2 May 2025 12:34:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD0A26A087;
-	Fri,  2 May 2025 09:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EHP2L7o9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC46252284;
+	Fri,  2 May 2025 12:34:52 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75927267B77;
-	Fri,  2 May 2025 09:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4BF251782
+	for <linux-can@vger.kernel.org>; Fri,  2 May 2025 12:34:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746176674; cv=none; b=Ddc/Mcm/Lfh1Q+MlpODEFDtiTUDgv6W5oRWrPn5VCpazY8yUqdQPg6OFJbVbjQCkDzrBy9VBNpybglMJwnvbYjwNt+7E6wKlcg05dC5Jt5oSoPxKn6lS/Ji/Ybh0m/pxytHEQKFSBIEnSG5kEnsOVuP7a+aan5vcNHteALuaWk4=
+	t=1746189292; cv=none; b=KtJ+EiK+iypr2tcHMmrZK3VHeQGMWnH367FlIE/cCk/Dhemka8zDoryINSxqGQipyqh2EMnPRXmwrsiG6hiquXSb/edGCIO+wIZa3PAjqmngue12UZcgpjHKbWN5qNvXHeB4LdthGK0/zb1auEU3DzRC5NthYACSRqITh1wdbcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746176674; c=relaxed/simple;
-	bh=I7kWDbCb9YT/O0Cj2R2bStAeSRvHrutnIYH0yo5EYFA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t76UFxCbQCkp90228Q+7CN0MXWONgRek/Ozbh/GiS3ODFNXN0CRDzJukUpPWUkDcDhJNmWFIxNseXL/Nb8HkpBaqo80pCPs5fGzGdQ3AvJIP3XvOx/N0fE7E6exkQPFrgcYauz3/LfHKEiCd/lgDa4ohyF1tpHsgaKMY0Tye5M8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EHP2L7o9; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6fead317874so15771147b3.0;
-        Fri, 02 May 2025 02:04:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746176671; x=1746781471; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ax6rAQxnmMYtNEHshOX9p41p7YxJfMs7tSxdQeWwIh8=;
-        b=EHP2L7o9uzzb5K7rVvAG0U3ueCu+nA8hXzCKmoFEP8bUPmOrIiKhzoLQpcToBjeccW
-         /WdJhbC/iX3kT/Oj8s+P0KXkJNZHc3A9e4x4SdaTi65sK+M3nU5qrL/RctvnN9bFbrqB
-         JqTIdBdsNUGVsjfVRMlImVFWTexnyaofAjPoYVXzi6386tRevDilERE09LNYbOhtRV/7
-         J/7wBR8IDOJjyP09ERpq4IF2hVFK+faLABwK4tTiiwTCUyXAGq3pysvAg/5PGbHtcYh3
-         ccTqkmSkso923v5xrBjF3z53bLrLJrU+S5RymYyz4VZh/HVvU85fr1uFlkPF1yh8m8q7
-         Dfkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746176671; x=1746781471;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ax6rAQxnmMYtNEHshOX9p41p7YxJfMs7tSxdQeWwIh8=;
-        b=rcgd2HdToi3VGbJ72uzz4XjBtK2rpUItG9aPt6jmxyclGriSuaGlSRJbzv96UJA3V2
-         FrzhDiipfiShb+T/BfkV+mcmgu/pIJ1O3DwYWgA/br0hdpfhw96MmbHDqP++mrvIU4Pe
-         jEA6oaalPxg6ztE6Own1IbjUeZtkNo1ROqjwIMmtUhQBIx1+lqZmTCVBGo0o1OcCYB10
-         MOa+vM0VWaCdI9hcNO09flDOCugmi1lnRoe/v2RokBt5QnVvWttxjSmFIDqz0yGq9bpc
-         iSSbtP9sKUtSV6/n7bfac43UYAIBmXFeZGkCDLKRUdvgtOzoN4BYghB58YeVEIq6P8np
-         FFAw==
-X-Forwarded-Encrypted: i=1; AJvYcCUcT8i1YTvWGEfiRdrcmGKs92qHcl5uPwlXtCDgqJBFYXeuuusXF13pk8F9N4oqpkopiyjpeno6yfzh5IX2ir4=@vger.kernel.org, AJvYcCUuhidYu0piXblS3dtZpppuxfC90DKv4GpVpa8ZytfC+44qmzg0dZ7Y5c/wFCWV4BxCurwZ010q1PxJjg==@vger.kernel.org, AJvYcCV5VjhM2yySPliwv4JiWLBrfChCl4Vfn5mxGpZifDC3teyjlevx+vM9fla/lY0akzYiO9JfnRCaaoGA@vger.kernel.org, AJvYcCVSrI377ArsAHzNhz03ZUkP2PSdH3Bw+2oDU8LkvdHXF0xPbS443OaMG7ZqiGdRRKjcNTRLEweXCaz3@vger.kernel.org, AJvYcCWAtmF56APy6D45Le4Cusho02EcH/3p78tGY0qQQLBcHyRQW1lQCpmXCSbU1TmEnYjNRFnyK5XvalMnmepO@vger.kernel.org, AJvYcCWabstch6zBM8uGmmGHd6qp6dR66IUr0A4SqEz7CeYkw410wB9LQFkxPGFrvrlbrDaGcYWUqSWa6WbT@vger.kernel.org, AJvYcCWsp0xdoL1q4Z/ywX6zqKVLJRtI/ziyetGe9sR9ppIapMBov+C3ln5nmfe+gm3MBJ5PtGvOwowMKhJCwHk=@vger.kernel.org, AJvYcCXBxT4p3DYAz3uASiHh7mPhOG7WDtccg5E1bKMuD20973jlQr8ip4QgNrWboEvJncqtyjuaeSUioN4=@vger.kernel.org, AJvYcCXv0N2Eb4L6F/H7zFaA3Srkk8CX0rTzVrxYK+yU9LJz7AcYD3+9QsvNRIBPBR9QPRCu4uoc6RKM@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWPElaiTtdND9WHemUoS/sPU6GlZ3c+YzwOfrvNj8g6bJKi/Vt
-	7xX1+08jg6oTeYZL9JbUJG9WjLUV57fpfKr4RRnaCPuBtAmHHoaIRcu6XA2/9e+Jch3wV5QjqJf
-	vqRLhIDDXqpZ3t98+zOyjahEC60Y=
-X-Gm-Gg: ASbGncuqgu2NCJdWa2ZzKmyI3FtN1MDFFhUr4HMlrldJJaBbQSKapl+ZN6ik+S4iBh4
-	9KdLhNulu42Gnygr9F7EaV9z/MMfxZq7PH4KKo8aDlvuFwckPTh0pGEC82588DIUG4AduaYYkWL
-	WaO0HfFQgZmq8JAUEXy9j9mDWxJK6zqFoX6aYGsIG5quYVsPgapnXdYQ==
-X-Google-Smtp-Source: AGHT+IFeIif58xXASLlUQ5gUuhwQWQfmgZ6uEgeqnbXUDfU31RgSE83NowbSJaAJgLlbclQ9hMc30P2+IT7ECEc6eyc=
-X-Received: by 2002:a05:690c:7307:b0:703:ac44:d367 with SMTP id
- 00721157ae682-708ced214admr35881097b3.6.1746176671162; Fri, 02 May 2025
- 02:04:31 -0700 (PDT)
+	s=arc-20240116; t=1746189292; c=relaxed/simple;
+	bh=uuOu+aJmFh8t/CGTXqml2m2wi/LsBLGeddyeesWvub8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=He/0atflQIUo/k/PYSCFUBQW+oun5YjqRQ75KRX5yWxDHLCv/NyniccZMubNY2QcPfXzxDq3+W69nwNVAB8RjT+k0jbl8VI4w0z5dd71LmjIX3MeqThPdQVqoAUTp17uq3sM9OOtvjvWOnefGOKKAIgovQ1uKW+c0FLxcr6PpDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uApbM-0006E2-DO; Fri, 02 May 2025 14:34:48 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uApbL-000khI-2k;
+	Fri, 02 May 2025 14:34:47 +0200
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 81CFB4064AB;
+	Fri, 02 May 2025 12:34:47 +0000 (UTC)
+Date: Fri, 2 May 2025 14:34:47 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] can: dev: add struct data_bittiming_params to group
+ FD parameters
+Message-ID: <20250502-scrupulous-sunfish-of-attack-ca0160-mkl@pengutronix.de>
+References: <20250501171213.2161572-2-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com> <20250423094058.1656204-2-tmyu0@nuvoton.com>
- <20250501122214.GK1567507@google.com> <CAOoeyxVL2MV83CJaYCXMiw0b5YUzk728H4B9GY1q9h_P8D43fg@mail.gmail.com>
- <20250502080754.GD3865826@google.com>
-In-Reply-To: <20250502080754.GD3865826@google.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 2 May 2025 17:04:19 +0800
-X-Gm-Features: ATxdqUELjUMd__-XSmruQ7aiBehkcn0fiRFxm_J9Q8eFjgTFGBlNo-dtZFMfegY
-Message-ID: <CAOoeyxWpYmcg1_FBXYqDfMi28R5ZXp2Sk2PhUo=cL10Nn3iVEw@mail.gmail.com>
-Subject: Re: [PATCH v10 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="p3azooixii3bxc6t"
+Content-Disposition: inline
+In-Reply-To: <20250501171213.2161572-2-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+
+--p3azooixii3bxc6t
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] can: dev: add struct data_bittiming_params to group
+ FD parameters
+MIME-Version: 1.0
 
-Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B45=E6=9C=882=E6=97=A5 =E9=
-=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=884:08=E5=AF=AB=E9=81=93=EF=BC=9A
->
-...
-> > > > +static const struct mfd_cell nct6694_devs[] =3D {
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > >
-> > > These are all identical.
-> > >
-> > > I thought you were going to use PLATFORM_DEVID_AUTO?  In fact, you ar=
-e
-> > > already using PLATFORM_DEVID_AUTO since you are calling
-> > > mfd_add_hotplug_devices().  So you don't need this IDs.
-> > >
-> > > MFD_CELL_NAME() should do.
-> > >
-> >
-> > Yes, it uses PLATFORM_DEVID_AUTO, but in my implementation, the
-> > sub-devices use cell->id instead of platform_device->id, so it doesn't
-> > affect the current behavior.
-> > However, if you think there's a better approach or that this should be
-> > changed for consistency or correctness, I'm happy to update it, please
-> > let me know your recommendation.
-> >
-> > When using MFD_CELL_NAME(), the platform_device->id for the GPIO
-> > devices is assigned values from 1 to 16, and for the I2C devices from
-> > 1 to 6, but I need the ID offset to start from 0 instead.
->
-> Oh no, don't do that.  mfd_cell isn't supposed to be used outside of MFD.
->
-> Just use the platform_device id-- if you really need to start from 0.
->
-> As an aside, I'm surprised numbering starts from 1.
->
+On 02.05.2025 02:12:10, Vincent Mailhol wrote:
+> This is a preparation patch for the introduction of CAN XL.
+>=20
+> CAN FD and CAN XL uses similar bittiming parameters. Add one level of
+> nesting for all the CAN FD parameters. Typically:
+>=20
+>   priv->can.data_bittiming;
+>=20
+> becomes:
+>=20
+>   priv->can.fd.data_bittiming;
+>=20
+> This way, the CAN XL equivalent (to be introduced later) would be:
+>=20
+>   priv->can.xl.data_bittiming;
+>=20
+> Add the new struct data_bittiming_params which contains all the data
+> bittiming parameters, including the TDC and the callback functions.
+>=20
+> This done, update all the CAN FD drivers to make use of the new
+> layout.
 
-OK, I will use platform_device->id instead. However, I'm still unsure
-why the ID starts from1.
+Thanks for the series!
 
-Additionally, I noticed that when calling mfd_add_devices()
-separately, the IDs are also assigned consecutively (e.g., GPIO: 1~16,
-I2C: 17~22, ...).
+> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+> The CAN XL series is still blocked because of lack of information on
+> the PWMS and PWML calculations, c.f.:
+>=20
+>   https://lore.kernel.org/linux-can/68e8c449-a6ab-4958-af3c-852ece2694c2@=
+wanadoo.fr/
+>=20
+> Regardless, the above patch will be needed at some time. And instead
+> of constantly rebasing it, I would rather have it merged early.
+>=20
+> The other CAN XL preparation patches target a smaller subset of the
+> tree and rebasing those is not an issue.
+>=20
+> ** Changelog **
+>=20
+> v1 -> v2:
+>=20
+>   - add Oliver's Acked-by tag
+>   - rebase on top of:
+>=20
+>       [PATCH v5] can: mcp251xfd: fix TDC setting for low data bit rates
+>       Link: https://lore.kernel.org/linux-can/20250430161501.79370-1-kels=
+ey@vpprocess.com/T/#u
+>=20
+>   Link: https://lore.kernel.org/linux-can/20250320144154.56611-2-mailhol.=
+vincent@wanadoo.fr/
 
-Do you have any recommendations on how I should implement this?
+As "mcp251xfd: fix TDC setting for low data bit rates" will go through
+the "can" and "net" tree, we have to wait until "net" is merged back to
+"net-next".
 
+Regards,
+Marc
 
-Thanks,
-Ming
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--p3azooixii3bxc6t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmgUu+MACgkQDHRl3/mQ
+kZw3DAf9EHh8b1+KqOwr/TBrHaQBO5esjx8fUF7D93qne7afbCiFKTM+570KKcFE
+vmOV4k1IvW54UkydnLTVulbgsKmprw+Lgd0hLPSupI8Sd+ow8LvBT9vo3nvOvVmP
+K8mb/x+LpqgGTBwyHb9ulvzGYAWsHfHRzWpmtXn+ezS8sXpNwKDKdUKh+b8Q57uO
+rNPcDKqt17l0FgL0S9ppQDaUW6gzKPiJ8RD/LrNjMssHHhlOAagaNC0zxs0XYCyb
+QrAlLhhMNoMBSYmn0Y5p9fHQlgTE81Ql+B0vXzsEn8GcEbihrgq/uxsVq917eR4S
+nFGju7HN+Umywc5kyrPzIL514BLIXA==
+=e+i5
+-----END PGP SIGNATURE-----
+
+--p3azooixii3bxc6t--
 
