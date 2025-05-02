@@ -1,31 +1,30 @@
-Return-Path: <linux-can+bounces-3518-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3519-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBF35AA722C
-	for <lists+linux-can@lfdr.de>; Fri,  2 May 2025 14:35:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD5FEAA74A8
+	for <lists+linux-can@lfdr.de>; Fri,  2 May 2025 16:14:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47B8B3B3873
-	for <lists+linux-can@lfdr.de>; Fri,  2 May 2025 12:34:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15A909E5D61
+	for <lists+linux-can@lfdr.de>; Fri,  2 May 2025 14:14:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC46252284;
-	Fri,  2 May 2025 12:34:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133602528EF;
+	Fri,  2 May 2025 14:14:06 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4BF251782
-	for <linux-can@vger.kernel.org>; Fri,  2 May 2025 12:34:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2518B2571C9
+	for <linux-can@vger.kernel.org>; Fri,  2 May 2025 14:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746189292; cv=none; b=KtJ+EiK+iypr2tcHMmrZK3VHeQGMWnH367FlIE/cCk/Dhemka8zDoryINSxqGQipyqh2EMnPRXmwrsiG6hiquXSb/edGCIO+wIZa3PAjqmngue12UZcgpjHKbWN5qNvXHeB4LdthGK0/zb1auEU3DzRC5NthYACSRqITh1wdbcg=
+	t=1746195246; cv=none; b=F3Ycb+wyVrfkWpO863KRcfybD03q4yBMk8uId+rLfKt+5s94vBgh0LnMLYmltNR6G+28V7NpM2QxDBREJqb1WfOheS1QcUyYMtdzA9Mnc7Y9/mGD06j3V3TWdHIiGWIEERwLyWBftUl/I49V29ioi6zZc+bIf932khWG1mDDOvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746189292; c=relaxed/simple;
-	bh=uuOu+aJmFh8t/CGTXqml2m2wi/LsBLGeddyeesWvub8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=He/0atflQIUo/k/PYSCFUBQW+oun5YjqRQ75KRX5yWxDHLCv/NyniccZMubNY2QcPfXzxDq3+W69nwNVAB8RjT+k0jbl8VI4w0z5dd71LmjIX3MeqThPdQVqoAUTp17uq3sM9OOtvjvWOnefGOKKAIgovQ1uKW+c0FLxcr6PpDA=
+	s=arc-20240116; t=1746195246; c=relaxed/simple;
+	bh=wKNEquMMqRCDDxXwq44IRpJvSwnrG9pSA9GxTv2slhE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HYhQFQ9GnyFKXn2a+jiZQKrh8c5UrYK6p/ZUpm+cqTZi+X2AdnN3DrztPPvjN8lBypjVgDo7XAW6TSjhzKVoQRGr6h7TuLDGdxxJ3w9cdxOmK7TXLH5cJejgY3hr8V27ZGFbaGYDBRwUh3EmiYYtYbVvg2y0CbDpd0ieebdnyDQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,133 +32,109 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uApbM-0006E2-DO; Fri, 02 May 2025 14:34:48 +0200
+	id 1uAr9M-0000up-3C
+	for linux-can@vger.kernel.org; Fri, 02 May 2025 16:14:00 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uApbL-000khI-2k;
-	Fri, 02 May 2025 14:34:47 +0200
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	id 1uAr9L-000lQT-1V
+	for linux-can@vger.kernel.org;
+	Fri, 02 May 2025 16:13:59 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 2BBDD4065C4
+	for <linux-can@vger.kernel.org>; Fri, 02 May 2025 14:13:59 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 81CFB4064AB;
-	Fri, 02 May 2025 12:34:47 +0000 (UTC)
-Date: Fri, 2 May 2025 14:34:47 +0200
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 8CF8340659C;
+	Fri, 02 May 2025 14:13:56 +0000 (UTC)
+Received: from hardanger.blackshift.org (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 1e9aea9b;
+	Fri, 2 May 2025 14:13:56 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] can: dev: add struct data_bittiming_params to group
- FD parameters
-Message-ID: <20250502-scrupulous-sunfish-of-attack-ca0160-mkl@pengutronix.de>
-References: <20250501171213.2161572-2-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH 0/3] can: rx-offload: fix order of unregistration calls
+Date: Fri, 02 May 2025 16:13:43 +0200
+Message-Id: <20250502-can-rx-offload-del-v1-0-59a9b131589d@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="p3azooixii3bxc6t"
-Content-Disposition: inline
-In-Reply-To: <20250501171213.2161572-2-mailhol.vincent@wanadoo.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABfTFGgC/x3MQQqAIBBA0avErBswJaSuEi2sGWtANBQiCO+et
+ HyL/18onIULzN0LmW8pkmLD0Hewny4ejELNoJUe1ag07i5ifjB5H5IjJA7Im52MnawxRNDCK7O
+ X558ua60fshOVEmQAAAA=
+X-Change-ID: 20250502-can-rx-offload-del-eb79379733dd
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Thomas Kopp <thomas.kopp@microchip.com>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, kernel@pengutronix.de, 
+ Heiko Stuebner <heiko@sntech.de>, 
+ Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
+ Markus Schneider-Pargmann <msp@baylibre.com>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, stable@vger.kernel.org
+X-Mailer: b4 0.15-dev-048ad
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1661; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=wKNEquMMqRCDDxXwq44IRpJvSwnrG9pSA9GxTv2slhE=;
+ b=owEBbQGS/pANAwAKAQx0Zd/5kJGcAcsmYgBoFNMZ+DcELaBl0lz4gVEsR+oe731Z3vOvy7b2m
+ b2FTbj9YuWJATMEAAEKAB0WIQSf+wzYr2eoX/wVbPMMdGXf+ZCRnAUCaBTTGQAKCRAMdGXf+ZCR
+ nMwvB/9BEUC1dtYbDGi5TQBbvaBKY6YrVwI3NEpZhtUZWIIHSiOte6QcTtsFg97q+xbvSge7DqT
+ vE/jLpU74PHl1GpDIrvyuzUO2XEAywLHiPPudUsTmWYNuJtYvo3lvHzkbI/ejsCmUM/ZEjB2RpG
+ i62671TdSBAp57MN4J2M2H5POJlTqd2uLAfdVliGnOX6O+VSBax0gdtA7QqB+PtL8Bk2coH+b8u
+ hyx6ilTkOcCBa0p0GCY5Q/HkibJq8kStPIUnIDgj800Tb3BrmTNG3jDu/LZVBXzsmoqzqAmz62t
+ GzmcfQ1ZGb7WR4PwhLiDmUDBG/pAQHSyVcwqpEBnpkzFFvj3
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+If a driver is removed, the driver framework invokes the driver's
+remove callback. A CAN driver's remove function calls
+unregister_candev(), which calls net_device_ops::ndo_stop further down
+in the call stack for interfaces which are in the "up" state.
 
---p3azooixii3bxc6t
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] can: dev: add struct data_bittiming_params to group
- FD parameters
-MIME-Version: 1.0
+With the mcp251xfd driver the removal of the module causes the
+following warning:
 
-On 02.05.2025 02:12:10, Vincent Mailhol wrote:
-> This is a preparation patch for the introduction of CAN XL.
->=20
-> CAN FD and CAN XL uses similar bittiming parameters. Add one level of
-> nesting for all the CAN FD parameters. Typically:
->=20
->   priv->can.data_bittiming;
->=20
-> becomes:
->=20
->   priv->can.fd.data_bittiming;
->=20
-> This way, the CAN XL equivalent (to be introduced later) would be:
->=20
->   priv->can.xl.data_bittiming;
->=20
-> Add the new struct data_bittiming_params which contains all the data
-> bittiming parameters, including the TDC and the callback functions.
->=20
-> This done, update all the CAN FD drivers to make use of the new
-> layout.
+| WARNING: CPU: 0 PID: 352 at net/core/dev.c:7342 __netif_napi_del_locked+0xc8/0xd8
 
-Thanks for the series!
+as can_rx_offload_del() deletes the NAPI, while it is still active,
+because the interface is still up.
 
-> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
-> The CAN XL series is still blocked because of lack of information on
-> the PWMS and PWML calculations, c.f.:
->=20
->   https://lore.kernel.org/linux-can/68e8c449-a6ab-4958-af3c-852ece2694c2@=
-wanadoo.fr/
->=20
-> Regardless, the above patch will be needed at some time. And instead
-> of constantly rebasing it, I would rather have it merged early.
->=20
-> The other CAN XL preparation patches target a smaller subset of the
-> tree and rebasing those is not an issue.
->=20
-> ** Changelog **
->=20
-> v1 -> v2:
->=20
->   - add Oliver's Acked-by tag
->   - rebase on top of:
->=20
->       [PATCH v5] can: mcp251xfd: fix TDC setting for low data bit rates
->       Link: https://lore.kernel.org/linux-can/20250430161501.79370-1-kels=
-ey@vpprocess.com/T/#u
->=20
->   Link: https://lore.kernel.org/linux-can/20250320144154.56611-2-mailhol.=
-vincent@wanadoo.fr/
+To fix the warning, first unregister the network interface, which
+calls net_device_ops::ndo_stop, which disables the NAPI, and then call
+can_rx_offload_del().
 
-As "mcp251xfd: fix TDC setting for low data bit rates" will go through
-the "can" and "net" tree, we have to wait until "net" is merged back to
-"net-next".
+All other driver using the rx-offload helper have been checked and the
+same issue has been found in the rockchip and m_can driver. These have
+been fixed, but only compile time tested. On the mcp251xfd the fix was
+tested on hardware.
 
-Regards,
-Marc
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+Marc Kleine-Budde (3):
+      can: mcp251xfd: mcp251xfd_remove(): fix order of unregistration calls
+      can: rockchip_canfd: m_can_class_unregister: fix order of unregistration calls
+      can: mcan: m_can_class_unregister: fix order of unregistration calls
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+ drivers/net/can/m_can/m_can.c                  | 2 +-
+ drivers/net/can/rockchip/rockchip_canfd-core.c | 2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+---
+base-commit: ebd297a2affadb6f6f4d2e5d975c1eda18ac762d
+change-id: 20250502-can-rx-offload-del-eb79379733dd
 
---p3azooixii3bxc6t
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+-- 
+Marc Kleine-Budde <mkl@pengutronix.de>
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmgUu+MACgkQDHRl3/mQ
-kZw3DAf9EHh8b1+KqOwr/TBrHaQBO5esjx8fUF7D93qne7afbCiFKTM+570KKcFE
-vmOV4k1IvW54UkydnLTVulbgsKmprw+Lgd0hLPSupI8Sd+ow8LvBT9vo3nvOvVmP
-K8mb/x+LpqgGTBwyHb9ulvzGYAWsHfHRzWpmtXn+ezS8sXpNwKDKdUKh+b8Q57uO
-rNPcDKqt17l0FgL0S9ppQDaUW6gzKPiJ8RD/LrNjMssHHhlOAagaNC0zxs0XYCyb
-QrAlLhhMNoMBSYmn0Y5p9fHQlgTE81Ql+B0vXzsEn8GcEbihrgq/uxsVq917eR4S
-nFGju7HN+Umywc5kyrPzIL514BLIXA==
-=e+i5
------END PGP SIGNATURE-----
-
---p3azooixii3bxc6t--
 
