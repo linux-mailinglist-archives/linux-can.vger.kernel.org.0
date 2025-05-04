@@ -1,134 +1,190 @@
-Return-Path: <linux-can+bounces-3529-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3530-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF494AA8841
-	for <lists+linux-can@lfdr.de>; Sun,  4 May 2025 19:01:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7FBAAA890E
+	for <lists+linux-can@lfdr.de>; Sun,  4 May 2025 20:54:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C2F43A8949
-	for <lists+linux-can@lfdr.de>; Sun,  4 May 2025 17:01:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CDE51892158
+	for <lists+linux-can@lfdr.de>; Sun,  4 May 2025 18:55:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B4352F85B;
-	Sun,  4 May 2025 17:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18F91C3BFC;
+	Sun,  4 May 2025 18:54:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAEcg+Ww"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="yhV8hH+7"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB89BE46;
-	Sun,  4 May 2025 17:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E50C15C158
+	for <linux-can@vger.kernel.org>; Sun,  4 May 2025 18:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746378080; cv=none; b=Q2n3UKGBu8mdUEg/9EYufkQtvD9aoPvZNwV78KDpjdAauOvZ0Z7KVy0arhBPlkyqW8y1uaP+5uFP4Fv5jNoBVd7Akd9OmjfnpidClBC5A0RsyP5bfmIwZBIr/h/P26j5H/YL302hfvYMme/ZBg4+RZ1earh8X/ZOnwOIpuiLB5A=
+	t=1746384885; cv=none; b=Ocy90FQj/IQPbzGCeiDFzOrGMKDOI3/QSN71Ulpo+1liQVp3dTTACSfCEpIIgl7tVYne/NlDJZpaQkHbsI94HczsE8YOE61rbZl5hsTBHduYnvoZ6ALmoWv1kykShOuIaQ9kYJuWa0VVSoXnl+x2/jo1re2wzdTv3f6ORMSWvYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746378080; c=relaxed/simple;
-	bh=BaPPJANucR/812RtKyZtISxhsCg/BNk42rLMW10I6hA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pBSXpghWH93fmVrE/WvCf0XT1+7pxkqi2LREXEPLsyNoYzsUkpGMTiuF/JeKQXC7/DvvaaBml4Ykhw7NxqqXvVZJTIUT5jF80A0MLlkI8dxDNQNh+XqscXZkJvZS1CpIaOK4DEVcMH4MoGZ4RkMrg4p9XhQOUjDeXcbUCyXCqeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAEcg+Ww; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACAEFC4CEE7;
-	Sun,  4 May 2025 17:01:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746378077;
-	bh=BaPPJANucR/812RtKyZtISxhsCg/BNk42rLMW10I6hA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cAEcg+WwbNBEhPyJS1HOkM72ACHl4NXN5PjTsKiX2HF93LCbtUnxtvhUI13TuHmKB
-	 2EOuj/qU/WnK/GFFy89yBmRsHP1nzEVOzcEuF4LvL8MH4fxqvuf9JdrSR9ILhI0W0e
-	 /36t7wMfkHD8pNChqI8nvA9k3H5eZKCFEIe/fxUOnAlyK2AjqQh5s0kMB3i6Q8BOkw
-	 Ubw5tqI5gvPuP7SajT3bZDTLxJxX1yo54Iqphjflxp3tsHR98cGnmlQ9BQT/8hOQow
-	 QgE6w65WcfrkHGm1NH6OmbB5TCRb9Vv+Jrv4POZMlxsUCiXxifRVSfxvUrHRrmZ7PJ
-	 5Lmz9bFc3I5Nw==
-Message-ID: <fc3aee25-2d0f-4825-abbf-6631dbc64996@kernel.org>
-Date: Sun, 4 May 2025 19:01:11 +0200
+	s=arc-20240116; t=1746384885; c=relaxed/simple;
+	bh=JEMaVjkx1LoMBN5m7YsK+6mQnob63u4EFgV3UGdIQdE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=KPmsIvkCJfyhO8kPbMzOWmFxW2afOYDPeVN3T8+uPrzlIZ80KEQXpJZQcEEe8NdCgEtSUvbMSeV8DajuoaspynANGzHzj9r/w/JiV18glBgCuuDsUzn2ggLvrSdrHjVBZHd4eQT7idiMxv8tw5eyYCvKOmHpmvUFKdmMB8gW65g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=yhV8hH+7; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e6f4b3ebe5so6531386a12.0
+        for <linux-can@vger.kernel.org>; Sun, 04 May 2025 11:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1746384880; x=1746989680; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3zyO3GAeHWNpUR/NK9tQ8bLVW/TIJbHJ26iQW6eAXwM=;
+        b=yhV8hH+74SwkT4AJLvU8PadwtAl3gwPy35g19nn4WwMN3B5VboTM6RkhJvMB5X0dPt
+         Nf1HeVuZckVCs0LPvmXeht00YxydTgQCl99J2a7ZcTkWze3iS+0eVtGx8P8OggOMzLYQ
+         oQa4Pb12+a5TUl361APqbKEviHbsSzXuOcIjlR6jdUCfmcgJT3IL6oM7aQ2S1z3Ibkwy
+         fjO5eyTjflMX2+Zysq2S933yKaijsbLXP23eymcLDMd1Inq+1kx68lDzJWvCn+l7bl59
+         UlsUktLtN/b1E4Lhn2O5YcPbYQX6PJMKXSIf38k69JdBeHrdLxPjVZWeLW84l/raMzaU
+         UjeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746384880; x=1746989680;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3zyO3GAeHWNpUR/NK9tQ8bLVW/TIJbHJ26iQW6eAXwM=;
+        b=KlXkYi7m6m1IYsltaX0iIPK6al9uDI+qLJepgqBvEqg6z5BbquQV4Od/y4Yzqjy2DC
+         JmjwkrvQhkYKtEvI0KXViWKe2lSVNVY2XwyjvHWMqer9mfYukpVDKcgnysEW7b3hO2MF
+         oSX6By81qPTjR5PdRO5MVyfbgTfi23v6j7O9X86auiKxY+J6BAUCEm1fZi1W50M/imo5
+         4fRbw3Vap559KH1XJAmax1oFfdaN/cpY0cyIQ1E02GDulLzsRvJLpixks185T1dDbXkK
+         YqIeSSRUZH+cysbAcIfIVvZxmtBDP3vY2H7D1ViGL0Io0ig1hK+Z44oVk/9uQae4n0c9
+         jnZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVmeYLZaEEgCd7lT57EZU1+QjCW0wYuw2lFf5gokylQCImGgHPFzZKcgqG/doGhuT6JQevy6pgXCIM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaH9Bcl2w7Y9FF1Pq01EKmGohbaGCIjEvE1pDN61FkGL4HIArz
+	KnL3c+TkDIAZHEZpGCSheZltv4zpiv1XxF4okriMlH3LbAL5rKsKYMO9sQdgOUM=
+X-Gm-Gg: ASbGncuEGswHjL9kGOls1M+oM2V/pBBpvkLlgxAXV9sTTcXZcNjJrzHxFpBmXNmFn6C
+	uHcKhbv3SJfU4eK2jGtTZZ5ToHiambVygTM/mPh560rbNBOIYkTggtfeRCSqUttbwCABgaT9wDe
+	pMRIuxKR5uVoaWTrKfGq5JdOGptv9wLQ4uk/ljXNynECSKNE/izvjY3Y3ZEeCOnTPo7ougaNHky
+	I+55e/dyJOkfTyF8MF/ZhkypdJJZNkX3wR76GQmXW0L9nQjYxR2mln8QlTOIlrLrABj+8VtrTA5
+	5nC3nRznNexgcCf/AsqZ1lmlDjO/3d65m4qgnxrsVQTbeg==
+X-Google-Smtp-Source: AGHT+IHrsNrppdqktQJ9HgmKg1AXRw1BSUbjPhnEPEnyxp85lpy5ahaJizVjarul/hB8wXh8acHITw==
+X-Received: by 2002:a17:906:6a19:b0:abf:19ac:771 with SMTP id a640c23a62f3a-ad1a48bc392mr453075266b.2.1746384879785;
+        Sun, 04 May 2025 11:54:39 -0700 (PDT)
+Received: from localhost ([2001:4090:a244:802a:8179:d45a:7862:147])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-ad1891f508asm359164166b.85.2025.05.04.11.54.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 May 2025 11:54:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 0/4] can: m_can: Add am62 wakeup support
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
- Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Vishal Mahaveer <vishalm@ti.com>,
- Kevin Hilman <khilman@baylibre.com>, Dhruva Gole <d-gole@ti.com>,
- Sebin Francis <sebin.francis@ti.com>, Kendall Willis <k-willis@ti.com>,
- Akashdeep Kaur <a-kaur@ti.com>, Simon Horman <horms@kernel.org>,
- Vincent MAILHOL <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250421-topic-mcan-wakeup-source-v6-12-v7-0-1b7b916c9832@baylibre.com>
- <20250503-petite-echidna-from-hyperborea-cfd7fc-mkl@pengutronix.de>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250503-petite-echidna-from-hyperborea-cfd7fc-mkl@pengutronix.de>
+Mime-Version: 1.0
+Content-Type: multipart/signed;
+ boundary=a2be36fb501c3dfa35a1012a0204bfd7cc7ee65d88753afd76602dbef972;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Sun, 04 May 2025 20:54:27 +0200
+Message-Id: <D9NLROGMM21Q.1IV5PFM7ATZU2@baylibre.com>
+Cc: <mkl@pengutronix.de>, <mailhol.vincent@wanadoo.fr>,
+ <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <lukas@mwa.re>, <jan@mwa.re>
+Subject: Re: [PATCH v3] can: m_can: initialize spin lock on device probe
+From: "Markus Schneider-Pargmann" <msp@baylibre.com>
+To: "Antonios Salios" <antonios@mwa.re>, <rcsekar@samsung.com>
+X-Mailer: aerc 0.20.1
+References: <20250425111744.37604-2-antonios@mwa.re>
+In-Reply-To: <20250425111744.37604-2-antonios@mwa.re>
+
+--a2be36fb501c3dfa35a1012a0204bfd7cc7ee65d88753afd76602dbef972
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 03/05/2025 16:03, Marc Kleine-Budde wrote:
-> On 21.04.2025 10:10:36, Markus Schneider-Pargmann wrote:
-> 
-> [...]
-> 
->> Devicetree Bindings
->> -------------------
->> The wakeup-source property is used with references to
->> system-idle-states. This depends on the dt-schema pull request that adds
->> bindings for system-idle-states and updates the binding for wakeup-source:
->>   https://github.com/devicetree-org/dt-schema/pull/150
-> 
-> How can we get an Ack for patch 1 by the DT people?
+Hi,
 
-No ack, because it waits on dtschema changes. I commented there some
-time ago but there was no response from the author.
+On Fri Apr 25, 2025 at 1:17 PM CEST, Antonios Salios wrote:
+> The spin lock tx_handling_spinlock in struct m_can_classdev is not being
+> initialized. This leads the following spinlock bad magic complaint from t=
+he
+> kernel, eg. when trying to send CAN frames with cansend from can-utils:
+>
+> [   10.631450] BUG: spinlock bad magic on CPU#0, cansend/95
+> [   10.631462]  lock: 0xff60000002ec1010, .magic: 00000000, .owner: <none=
+>/-1, .owner_cpu: 0
+> [   10.631479] CPU: 0 UID: 0 PID: 95 Comm: cansend Not tainted 6.15.0-rc3=
+-00032-ga79be02bba5c #5 NONE
+> [   10.631487] Hardware name: MachineWare SIM-V (DT)
+> [   10.631490] Call Trace:
+> [   10.631493] [<ffffffff800133e0>] dump_backtrace+0x1c/0x24
+> [   10.631503] [<ffffffff800022f2>] show_stack+0x28/0x34
+> [   10.631510] [<ffffffff8000de3e>] dump_stack_lvl+0x4a/0x68
+> [   10.631518] [<ffffffff8000de70>] dump_stack+0x14/0x1c
+> [   10.631526] [<ffffffff80003134>] spin_dump+0x62/0x6e
+> [   10.631534] [<ffffffff800883ba>] do_raw_spin_lock+0xd0/0x142
+> [   10.631542] [<ffffffff807a6fcc>] _raw_spin_lock_irqsave+0x20/0x2c
+> [   10.631554] [<ffffffff80536dba>] m_can_start_xmit+0x90/0x34a
+> [   10.631567] [<ffffffff806148b0>] dev_hard_start_xmit+0xa6/0xee
+> [   10.631577] [<ffffffff8065b730>] sch_direct_xmit+0x114/0x292
+> [   10.631586] [<ffffffff80614e2a>] __dev_queue_xmit+0x3b0/0xaa8
+> [   10.631596] [<ffffffff8073b8fa>] can_send+0xc6/0x242
+> [   10.631604] [<ffffffff8073d1c0>] raw_sendmsg+0x1a8/0x36c
+> [   10.631612] [<ffffffff805ebf06>] sock_write_iter+0x9a/0xee
+> [   10.631623] [<ffffffff801d06ea>] vfs_write+0x184/0x3a6
+> [   10.631633] [<ffffffff801d0a88>] ksys_write+0xa0/0xc0
+> [   10.631643] [<ffffffff801d0abc>] __riscv_sys_write+0x14/0x1c
+> [   10.631654] [<ffffffff8079ebf8>] do_trap_ecall_u+0x168/0x212
+> [   10.631662] [<ffffffff807a830a>] handle_exception+0x146/0x152
+>
+> Initializing the spin lock in m_can_class_allocate_dev solves that
+> problem.
+>
+> Fixes: 1fa80e23c150 ("can: m_can: Introduce a tx_fifo_in_flight counter")
+>
+> Signed-off-by: Antonios Salios <antonios@mwa.re>
+> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-Best regards,
-Krzysztof
+Thanks for finding and fixing this.
+
+Reviewed-by: Markus Schneider-Pargmann <msp@baylibre.com>
+
+Best
+Markus
+
+> ---
+> Changes since v2:
+>  * Clarify bug in commit message
+>
+> Changes since v1:
+>  * Move spin_lock_init from device probe functions to classdev alloc func=
+tion
+>  * Add a fixes tag
+> ---
+>  drivers/net/can/m_can/m_can.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.=
+c
+> index 884a6352c..12e313998 100644
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -2379,6 +2379,8 @@ struct m_can_classdev *m_can_class_allocate_dev(str=
+uct device *dev,
+>  	SET_NETDEV_DEV(net_dev, dev);
+> =20
+>  	m_can_of_parse_mram(class_dev, mram_config_vals);
+> +
+> +	spin_lock_init(&class_dev->tx_handling_spinlock);
+>  out:
+>  	return class_dev;
+>  }
+
+
+--a2be36fb501c3dfa35a1012a0204bfd7cc7ee65d88753afd76602dbef972
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iIcEABYKAC8WIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaBe34xEcbXNwQGJheWxp
+YnJlLmNvbQAKCRCFwVZpkBVKU89GAQDr3jtUGj6D1oEty/ukeBy81LKZK/2B/h9L
+59c4zdDlggD9G78Y8FCOVpLAFNjVySknxhREhi53v9mLu3NI3DYzBgs=
+=TsUr
+-----END PGP SIGNATURE-----
+
+--a2be36fb501c3dfa35a1012a0204bfd7cc7ee65d88753afd76602dbef972--
 
