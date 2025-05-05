@@ -1,122 +1,134 @@
-Return-Path: <linux-can+bounces-3533-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3534-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E97AAA9521
-	for <lists+linux-can@lfdr.de>; Mon,  5 May 2025 16:12:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8C00AA973D
+	for <lists+linux-can@lfdr.de>; Mon,  5 May 2025 17:20:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D05501794D3
-	for <lists+linux-can@lfdr.de>; Mon,  5 May 2025 14:12:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F08943AB3F0
+	for <lists+linux-can@lfdr.de>; Mon,  5 May 2025 15:19:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A2025A62B;
-	Mon,  5 May 2025 14:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q77tO/Fc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D796F25E823;
+	Mon,  5 May 2025 15:17:06 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DBB825A347;
-	Mon,  5 May 2025 14:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05CD25DD0F
+	for <linux-can@vger.kernel.org>; Mon,  5 May 2025 15:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746454321; cv=none; b=k5OzuUdlS6tNF9reAr9P0wts15pNBRGfdAj0l5jqd6sbz56+PYVAZ0mTTEB+wbESMk80XRHPf6RBbWMSIean1AGpryAN1O5Qr2vQAXdfCNwdhodu3/FlibncrlmXnM6OEHAij3AKmzWvOi3KVwS+s6YLrlpVd2V+9HI/BMJptaA=
+	t=1746458226; cv=none; b=VfT8glckbWbcqLGcTLDJKQOpjFd9LFvZT1tdAPgq+z/iTTGqCafWSpjLsQwg6j3U/AvcD8XC8fLEeFVEh5cSAmdRMRR73MDE1VDslYMKtJUw5G9xHyNUW1u0aYaPx913K1s9zQVJbhF+k0UHDM5lE4KdRgM3f6kQjB6uaF7wHSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746454321; c=relaxed/simple;
-	bh=BTWJbvtEnXkKEvmHaXNtXyFzO/kbUh+PwIlY1ssRUxg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OtL0cK3t23fLRPC28h1YbzaprosZKls1n3YNI+OaN0hS+KplxplLgV/GDte2VTf+2rAdi8a+nCIBzGOnOzhTCKNk2cUtuNhxQ8CUN3QqY861/9atLXm9o6jv+KnGQbjLkb7Zw1jb1okynXCCSabvW2nqUC8XwyQU8idSShDfkEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q77tO/Fc; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-af589091049so3151956a12.1;
-        Mon, 05 May 2025 07:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746454319; x=1747059119; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fn5MKJLR7azj6ncvVFO/CDl6rBZRH4MiC47Hn4Xq13A=;
-        b=Q77tO/FcOpgTM8J/RVc2lpOHz0ODMJPfUihP+Cz3xDy5ly4fCahAJkNGwepmYfYthS
-         i5JqCElajEYkGtwakO6MvEHIOleH0CUfKngOrFIbdoQiGudhlIEI88cpCktBotnvaHZi
-         H0Ym9jXJ8HAxlChOaBaPYHdTO2PLSluW5WAY/LIGHM++3Q2RcmH/63wKDWpmM+E75nvl
-         MOr+DNosTNG+8KHAl2wg7rbqeZCmpkN1WJCDUOqtnRN48DQiTPSw2R19eNw3dPB5s4mG
-         CYP9W+hjZHIAKJvxfBBWZKcj1sT1fEnVqIHxS23N5b5mK3v4F3I1vfN/ku5L3nQw9r+8
-         rT7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746454319; x=1747059119;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fn5MKJLR7azj6ncvVFO/CDl6rBZRH4MiC47Hn4Xq13A=;
-        b=l8sWmB3B5OwDk2Fg7aEDTqcF5B6d5XLq9RMUlB/3Bg9rjvgN0XNI0tE3YIR/tdCwzT
-         pWN2EZ3DT0dNXWNAjGdoPjInk3JfX3qBQaFErqRqlyjXi3jpfUAv1XoV86Lds01rYpSd
-         8sMFkD5GYWf/jaRNZb4Rx/2jIgX+Fg0pXe/iCgzTj7j3GzidMR3w9uYI0/PC2jX67pxC
-         qZqels5A/S84VqRtKZ9SXuLEt7kwzdnneivDBeHjpbxC/vE3FJrokj+kDF3Pu/tcD34U
-         AXSO8mta0zrGhmQqhlKBajm+nVojHVjwHgm+z/EG2s2No84BIgmjkGVuWb/8C9TPXoyX
-         1NXA==
-X-Forwarded-Encrypted: i=1; AJvYcCWvNEnoCg7G/bguGb1Tv5TPVSUh6aB9nnObOeQzJXBzy8mrbzjGZUxEL9ChuXbuvkgZc1CZDJElm7M=@vger.kernel.org, AJvYcCXIzO9qaYASN6AB3a66xQERW87YLBVbcQ/qX6Oamg1FMoGWx44+0eBpf3XEtUCrDnnK7+Gkz+9Zk8orq9Sh@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWRuGiwLsB+lgax6s7q8m90Rh3/63DbKCenkDVRWmfFXTtxzHv
-	uVqLhNE3bMzw7wrxo7YB8T5mpLe8L7hS0uFFsHgaCfxWZg/7gDnq
-X-Gm-Gg: ASbGnctfS6oi9ZUgMA79zHARrosEsnvvg0zXYM3Vl2yi2I8VEtZC/tjwSj23J4Cgist
-	TZNh8IssqWvUAySjDGeEbm7xMWlChAGM/F45KWLeXB4q1413yM2iQA8/nfi2XhoUyvv0rlEHqtw
-	ieVTIrost8uvN/CEedpf/r5VJlD31uI3xSNxSNufxUiu2yaUMB1KopBHedo4FsBfgBX9rdimyIW
-	YctJVrwQtSKj8t1LTG1fKALlXaCXi2qhWZ9x7f5+GlzBcuUyjy++SswtgDHlpSpocYtUP4pLjV1
-	XGfgik4HxA90cFz7FgGLeUfMI6x9iyNbfu2JXY23bJTcuxTZJYV8acbeW3TATq23yEHjvg==
-X-Google-Smtp-Source: AGHT+IHKqRuuX7Zzw40XE5YTylHTC/7eJCZt76O3bWHo0w0+el/U/vIlZShG608xW2VRiRR+thvl/Q==
-X-Received: by 2002:a17:90b:270b:b0:2fe:8a84:e033 with SMTP id 98e67ed59e1d1-30a4e5626f4mr21790919a91.2.1746454319172;
-        Mon, 05 May 2025 07:11:59 -0700 (PDT)
-Received: from vaxr-ASUSPRO-D840MB-M840MB.. ([2001:288:7001:2703:afa:5db4:54e4:f59c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30a4b21514fsm9232099a91.14.2025.05.05.07.11.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 May 2025 07:11:58 -0700 (PDT)
-From: I Hsin Cheng <richard120310@gmail.com>
-To: mkl@pengutronix.de
-Cc: mailhol.vincent@wanadoo.fr,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	I Hsin Cheng <richard120310@gmail.com>
-Subject: [PATCH] can: kvaser_pciefd: Error handling for dma_set_mask_and_coherent()
-Date: Mon,  5 May 2025 22:11:54 +0800
-Message-ID: <20250505141154.673290-1-richard120310@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1746458226; c=relaxed/simple;
+	bh=eXC/ONCQge5w2vLJ+Q7ZxPY2HLqQ3evbxJGLKRDuPu0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hAxwGKikiic7fzQBGZVBDXPh3pEEN5q5DDDIbj6CDrwmZP7BQNza7EwU6bauZehsCS5WaeCIU4qjtBVG/ej9xL5VNjUSITK7Krs0dnflVBqsZpQ9GTaF2pRLUVg0BuN5HUznfSg4eBqqV1pfFUV1wdyq1XA58UZ2jcplPKs4fJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uBxYy-0002yH-9m; Mon, 05 May 2025 17:17:00 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uBxYx-001FaW-2Q;
+	Mon, 05 May 2025 17:16:59 +0200
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 6B7A3408087;
+	Mon, 05 May 2025 15:16:59 +0000 (UTC)
+Date: Mon, 5 May 2025 17:16:59 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: I Hsin Cheng <richard120310@gmail.com>, 
+	Martin Jocic <martin.jocic@kvaser.com>
+Cc: mailhol.vincent@wanadoo.fr, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+Subject: Re: [PATCH] can: kvaser_pciefd: Error handling for
+ dma_set_mask_and_coherent()
+Message-ID: <20250505-foamy-nautilus-of-artistry-b6d785-mkl@pengutronix.de>
+References: <20250505141154.673290-1-richard120310@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qeey2hzc4h7qnxuz"
+Content-Disposition: inline
+In-Reply-To: <20250505141154.673290-1-richard120310@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Ammend error handling for the use of "dma_set_mask_and_coherent()"
-inside "kvaser_pciefd_setup_dma()".
 
-Link: https://scan5.scan.coverity.com/#/project-view/36179/10063?selectedIssue=1631256
-Signed-off-by: I Hsin Cheng <richard120310@gmail.com>
----
- drivers/net/can/kvaser_pciefd.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+--qeey2hzc4h7qnxuz
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] can: kvaser_pciefd: Error handling for
+ dma_set_mask_and_coherent()
+MIME-Version: 1.0
 
-diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index cf0d51805272..e5b67e92f602 100644
---- a/drivers/net/can/kvaser_pciefd.c
-+++ b/drivers/net/can/kvaser_pciefd.c
-@@ -1106,7 +1106,12 @@ static int kvaser_pciefd_setup_dma(struct kvaser_pciefd *pcie)
- 	/* Disable the DMA */
- 	iowrite32(0, KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_CTRL_REG);
- 
--	dma_set_mask_and_coherent(&pcie->pci->dev, DMA_BIT_MASK(64));
-+	int err = dma_set_mask_and_coherent(&pcie->pci->dev, DMA_BIT_MASK(64));
-+
-+	if (err) {
-+		dev_err(&pcie->pci->dev, "Failed to set 64-bit DMA mask\n");
-+		return err;
-+	}
- 
- 	for (i = 0; i < KVASER_PCIEFD_DMA_COUNT; i++) {
- 		pcie->dma_data[i] = dmam_alloc_coherent(&pcie->pci->dev,
--- 
-2.43.0
+Hello I Hsin Cheng,
 
+thanks for your contribution.
+
+On 05.05.2025 22:11:54, I Hsin Cheng wrote:
+> Ammend error handling for the use of "dma_set_mask_and_coherent()"
+> inside "kvaser_pciefd_setup_dma()".
+>=20
+> Link: https://scan5.scan.coverity.com/#/project-view/36179/10063?selected=
+Issue=3D1631256
+
+This link is not public.
+
+> Signed-off-by: I Hsin Cheng <richard120310@gmail.com>
+
+If I understand the documentation correctly:
+
+https://www.kernel.org/doc/html/next/core-api/dma-api-howto.html
+
+| dma_set_mask_and_coherent() never return fail when DMA_BIT_MASK(64).
+
+Also see discussion:
+https://lore.kernel.org/all/f61b536397092bd46d701cba2a0fc41430964b73.camel@=
+kvaser.com/
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--qeey2hzc4h7qnxuz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmgY1mgACgkQDHRl3/mQ
+kZzT1Qf9GEgFN/W+ni9wVIcc372piY5GnY9g746Y2PZisbsQSxwG8okRwOaAQ8bN
+xU6AS5zGPLxFAtWn5HWmWYeisipOZ7d+Teb8jD2Vp4Y3ofKN2Cqvt93hj58gHePy
+gpQ23p/3uQXKiHrrg468g4tcD8wdBzI8r35obVu2Xgsn0L4sVaMTaotI00P9c4N8
+i+8wIPXpK36IcqOHyVq7Mo9j9Lf4hRQD6m2BYJ2mKJYnuHWilWDa2XDnKst+mtzs
+1tmIaIfolN4xtmbfG0tLJAxxg88UnIOjPf+Y7jSDC4fBxQavX32hbPSRiYEK5STW
+Tts19isFatt9ZhGPY29G4JcjDuRhvQ==
+=OrUC
+-----END PGP SIGNATURE-----
+
+--qeey2hzc4h7qnxuz--
 
