@@ -1,90 +1,194 @@
-Return-Path: <linux-can+bounces-3558-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3559-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 797B2AAE523
-	for <lists+linux-can@lfdr.de>; Wed,  7 May 2025 17:43:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DF77AAE67E
+	for <lists+linux-can@lfdr.de>; Wed,  7 May 2025 18:24:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 524424A8749
-	for <lists+linux-can@lfdr.de>; Wed,  7 May 2025 15:43:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1B886B21121
+	for <lists+linux-can@lfdr.de>; Wed,  7 May 2025 16:21:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1707028B4F7;
-	Wed,  7 May 2025 15:42:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E61228D8ED;
+	Wed,  7 May 2025 16:19:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="noyMKEK1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kde1Y7nx"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01EA28BA91;
-	Wed,  7 May 2025 15:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771FB28C2C2;
+	Wed,  7 May 2025 16:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746632548; cv=none; b=SEeLe7HKa48Ua6oOpI3gpG8/RePwJh8e/sgHmbttgWS7dFM4lPjBAUdQm5Dyabi2YYIVqh5xQRa/ugFF6ZufwwFtKQj/FAY8pmjzBjurRv9FYfwiplBDAiM6cXhcgSpLnOi5CG8Ulh0G+fBMOarjP0rILW9eWDn37QLH+NYbCdI=
+	t=1746634763; cv=none; b=GQxIzk6+DwZ+9A7aGCt7gdiZbR0A3rberCuq8yfU63X9lJ5D7nlYVc20O2sYm9nvy3h2KemnCnDL5t8SnnMN407Djf3osrN1vjsI5+j5jNapaxKWXx7lP1TS9G0r+jldIgTjQj+fmaZ2MiTjUQVHNHtwRpCjTIP4bDgBSfou/ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746632548; c=relaxed/simple;
-	bh=UCG9uUCi1T07aauhMZzXc1mEyWGFALTK5OrhIqBgmqY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rL6cMf783/Txpzh/v5NDzOhtjrvR/5CQrA/SmqEQuyXW29EnTSQYs4l02UazMyu29u30N+XDGNDUy6I1inrWIAln0OyF90SZ5qWUyn833GX1YETw3f5wEoLzZXWDF8y4Kv7EE/ZU5x4FJ3I5Ru4V6eKyFLAXbiB3y9quBxjPfww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=noyMKEK1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E1EFC4CEEB;
-	Wed,  7 May 2025 15:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746632547;
-	bh=UCG9uUCi1T07aauhMZzXc1mEyWGFALTK5OrhIqBgmqY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=noyMKEK1FiH0vcsaVV6EVq7wZP01ngc3mnlvfZeKNNJzRYQiPexxYyQq7bv73W5q8
-	 rxYjuR0+FozHa/P/g+Nwwep4Xa1MYYsTmJwdLeJThbtG7KJX1NEqXPARJIHm1OIOBn
-	 jeac1QTqKgXeDfic/FPm8DBQOJZUIZKhTBCg5jzYldS+Rnqpp9fNhFbH3Lh8N+de2m
-	 0jEmeaqYPbw7vR43LycegMaYj61OykRzMxlJFYtp/omKnTpZ1ZbksbNnpa70L7yaFt
-	 6TaSghb7AGLrawMqosvsAbeaDEdycCfa1BFp3y737AcpWKsAepPIB/2xT3TjO+2FFO
-	 2Cu1bad8uJlFw==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Frank Li <Frank.Li@nxp.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	linux-can@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: can: microchip,mcp2510: Fix $id path
-Date: Wed,  7 May 2025 10:42:00 -0500
-Message-ID: <20250507154201.1589542-1-robh@kernel.org>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1746634763; c=relaxed/simple;
+	bh=bjvKIxu4eG9uCBmREGHiuI3YzEktQh1+u8s53l9D5c0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s6ApguIN5erGByg/IeRtb2ANogKZiXrNGL+lu7H+BeLP4rp4RbeylcEsUrbDeBRn06AV2NeR3U15lSbLU6ghS4RVWWtFVl2pt993VTr6lXvAwhFeg6I+CX4oQ16hVmY3FVdcR0MfEsyv/lPYFPG+u2FPixgXcton2xRsfjPyWE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kde1Y7nx; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746634761; x=1778170761;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bjvKIxu4eG9uCBmREGHiuI3YzEktQh1+u8s53l9D5c0=;
+  b=kde1Y7nxnJK+llHE2wJylU5eyF7s1whCukTnhHvIXyR8X+b5vtqQdely
+   QtloJaj/kaYuW3Tujk2s/Ip3a5NUhVhXCvf7hICsMu5ZA0867w2jp2doL
+   vdd2MkTSalbHiHdferPXkw70efj0mfNuACMkJxpX8G4zWX4d9Z99P7MKD
+   nIXGdLiRuhDLGZo5H4ygqYxGIkl0HNiiO9UgZqTsFIqWOdZ+x2dqH1kOT
+   aQR6ILW0GYopITUxE358n1YUQUQpi6U0496X6Qh6e4QBSH7vSO7TAhfEx
+   sZPjVfC/lorD+luygBEyNHMabn3MiG01YiXqCcyS9yUSI5wfhqudptY+h
+   A==;
+X-CSE-ConnectionGUID: 6TTN1G5CQCutI7U6mwcJdQ==
+X-CSE-MsgGUID: b76AnggTS26A/vkoOsm9qA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="59772965"
+X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
+   d="scan'208";a="59772965"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 09:19:20 -0700
+X-CSE-ConnectionGUID: b/FN9FoPQpuKIolEffre2w==
+X-CSE-MsgGUID: fdCGD3zBSKSaMGmZkOdFcw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
+   d="scan'208";a="141200324"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 07 May 2025 09:19:13 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uChUE-00089N-22;
+	Wed, 07 May 2025 16:19:10 +0000
+Date: Thu, 8 May 2025 00:18:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: a0282524688@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <202505072336.mhh6H9Ma-lkp@intel.com>
+References: <20250423094058.1656204-5-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250423094058.1656204-5-tmyu0@nuvoton.com>
 
-The "$id" value must match the relative path under bindings/ and is
-missing the "net" sub-directory.
+Hi,
 
-Fixes: 09328600c2f9 ("dt-bindings: can: convert microchip,mcp251x.txt to yaml")
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- .../devicetree/bindings/net/can/microchip,mcp2510.yaml          | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml
-index e0ec53bc10c6..1525a50ded47 100644
---- a/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml
-+++ b/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/can/microchip,mcp2510.yaml#
-+$id: http://devicetree.org/schemas/net/can/microchip,mcp2510.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Microchip MCP251X stand-alone CAN controller
+[auto build test ERROR on lee-mfd/for-mfd-next]
+[also build test ERROR on brgl/gpio/for-next andi-shyti/i2c/i2c-host mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc5 next-20250507]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250423-174637
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/20250423094058.1656204-5-tmyu0%40nuvoton.com
+patch subject: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250507/202505072336.mhh6H9Ma-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505072336.mhh6H9Ma-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505072336.mhh6H9Ma-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/can/usb/nct6694_canfd.c:543:30: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     543 |         setting->nbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NSJW,
+         |                                     ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+      88 | #define cpu_to_le32 __cpu_to_le32
+         |                     ^
+   1 error generated.
+
+
+vim +/FIELD_PREP +543 drivers/net/can/usb/nct6694_canfd.c
+
+   512	
+   513	static int nct6694_canfd_start(struct net_device *ndev)
+   514	{
+   515		struct nct6694_canfd_priv *priv = netdev_priv(ndev);
+   516		const struct can_bittiming *d_bt = &priv->can.data_bittiming;
+   517		const struct can_bittiming *n_bt = &priv->can.bittiming;
+   518		struct nct6694_canfd_setting *setting __free(kfree) = NULL;
+   519		const struct nct6694_cmd_header cmd_hd = {
+   520			.mod = NCT6694_CANFD_MOD,
+   521			.cmd = NCT6694_CANFD_SETTING,
+   522			.sel = ndev->dev_port,
+   523			.len = cpu_to_le16(sizeof(*setting))
+   524		};
+   525		int ret;
+   526	
+   527		setting = kzalloc(sizeof(*setting), GFP_KERNEL);
+   528		if (!setting)
+   529			return -ENOMEM;
+   530	
+   531		if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+   532			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_MON);
+   533	
+   534		if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+   535			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_NISO);
+   536	
+   537		if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+   538			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_LBCK);
+   539	
+   540		/* Disable clock divider */
+   541		setting->ctrl2 = 0;
+   542	
+ > 543		setting->nbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NSJW,
+   544						       n_bt->sjw - 1) |
+   545					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NBRP,
+   546						       n_bt->brp - 1) |
+   547					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NTSEG2,
+   548						       n_bt->phase_seg2 - 1) |
+   549					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NTSEG1,
+   550						       n_bt->prop_seg + n_bt->phase_seg1 - 1));
+   551	
+   552		setting->dbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DSJW,
+   553						       d_bt->sjw - 1) |
+   554					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DBRP,
+   555						       d_bt->brp - 1) |
+   556					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DTSEG2,
+   557						       d_bt->phase_seg2 - 1) |
+   558					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DTSEG1,
+   559						       d_bt->prop_seg + d_bt->phase_seg1 - 1));
+   560	
+   561		setting->active = NCT6694_CANFD_SETTING_ACTIVE_CTRL1 |
+   562				  NCT6694_CANFD_SETTING_ACTIVE_CTRL2 |
+   563				  NCT6694_CANFD_SETTING_ACTIVE_NBTP_DBTP;
+   564	
+   565		ret = nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
+   566		if (ret)
+   567			return ret;
+   568	
+   569		priv->can.state = CAN_STATE_ERROR_ACTIVE;
+   570	
+   571		return 0;
+   572	}
+   573	
+
 -- 
-2.47.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
