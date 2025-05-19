@@ -1,94 +1,59 @@
-Return-Path: <linux-can+bounces-3577-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3578-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4D8EABBE5B
-	for <lists+linux-can@lfdr.de>; Mon, 19 May 2025 14:54:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB3F3ABC1B1
+	for <lists+linux-can@lfdr.de>; Mon, 19 May 2025 17:08:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BD9C189AF99
-	for <lists+linux-can@lfdr.de>; Mon, 19 May 2025 12:54:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEA0918903CD
+	for <lists+linux-can@lfdr.de>; Mon, 19 May 2025 15:08:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94D881E7C2E;
-	Mon, 19 May 2025 12:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="r38Kgj9P";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="hCK4SnHd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E13C42820C2;
+	Mon, 19 May 2025 15:08:27 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8239278E44
-	for <linux-can@vger.kernel.org>; Mon, 19 May 2025 12:54:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.221
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747659246; cv=pass; b=jsR4ggiGeaOOmJM3b7eQL623J2jhJx1VR5nBbXNz7X+NgGnUiKY8u9x9iArac+Oc8TieEBMkczoxaywE8S/jj9E5UuppXHIdTvuq+ojkNYGzqKOBWzZYIMbLqPqQq5q49C6yOl8T4ZrIQRRHja3/XpjiVoEgnxwZgJo+XovDAME=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747659246; c=relaxed/simple;
-	bh=x4mdLk0wrSkSbFIbMa/YmOGtCmi2JvuW8mZaQqIv3vs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LWfjDORIVR6x3nXwmadSaEMag1StVayBJeAds4xLi282Gd6m6y8A2eNZmBpBwW5+Wx8PBt7V8zlOF9Ky7mGuP+Towr2IWdV4oZbufVgCkx38HvMjYR76BFhKdPQGcWCQWdVVkAnjj5GqF3F3NrC0QMQkL5m0uv1zmQFmt+bXJiM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=r38Kgj9P; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=hCK4SnHd; arc=pass smtp.client-ip=81.169.146.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1747659052; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=UUIsFqX4oPRhMGubsQivMooRwlGkh/aJuJFTeU9/VHJE8XoOGtQS2eooHupvRijX7q
-    IXSnqOXqyx5wrE84rKHwteEBUi5fls0yoJ4Ep7F/mabUwplWJg+xNCxP2AZ+sfRudA0c
-    GuKGY/uwLWqPn7hkT+kkhNAfepzWN7nUxv0mkZUdsmUJXHRd03ZllvRPWPNTnBvj+yoY
-    e9/2N4yecItEjMDHmD4s596mHe9N3W1Q2sRogDUfRPYNqC+YcDpL2Z/Rp+rDK3PTSDT0
-    UqdNuHIyHlH7F5wHLpBqb+xK7+cA5f5wbhQao9+h1BAXMMfxDlTpgKich/MEJZjoqyZt
-    2BgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1747659052;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=w2aB+VTIrm0FM0pXMYUib8yJxYkEEVq6WpMV4SP4aVg=;
-    b=nInjW/HhQR89jwixG+YcHhtBQu2hEmZ1ddNXLAweDoI5tsSlCfe2OADG8WSPM4/cR1
-    A3YQGjXNv0hpey6jHlIJj7s0Facbm0uQNnShC9E9jEaBDI8yEejM9+ZnepQVACDoJ9aP
-    jAS6h3ypCqVkkUgO5d+u0nUG6OfyADVskXiauxSIwcaq1EhTH3M5aButyeaeh7TyxXi1
-    eeAsQFIO6D8dj5XT+9wLRGWdLTkyktbwrvmMMWsZMIQkZ556PrI4/1FXKvhP1DVYuDfl
-    c82pQsePkrJK5dheD6Hea8eowtSflId+QrPitWRA7uQHDjAJeJXGuMDEL5zRJc8T39Ns
-    UIEQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1747659052;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=w2aB+VTIrm0FM0pXMYUib8yJxYkEEVq6WpMV4SP4aVg=;
-    b=r38Kgj9PUANRk2LYgHKbBfWTNzDu2FHVM6AzEmJZV0Cb2zz9tVoGFw81dYjQoyiQMs
-    SIAd+z3rEJN+9yqsbeql9cRn/TagCw59Mk0I/OPZHf+kdYpnwkrkridxHqOtSEgJu/QO
-    ezSHbRUwMijsll90UnzZ49Fq9R4ydDSzmGXCKRTtZCKRa2y8oScuTlHsr+lbgosNpB/L
-    zIjUhbbBhgoLNH+7YNmT3nu9qfA5ePypCC3+6sa8xVXPbejTwUJIxj6/7YX1y1sW6/vU
-    Oc2u2FU1Ifinf+/aeKr+PERa5czR/CV5MIAViZqal7n3iM4N6RRzoBdaf0/Xpl2JoYmU
-    TrZA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1747659052;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=w2aB+VTIrm0FM0pXMYUib8yJxYkEEVq6WpMV4SP4aVg=;
-    b=hCK4SnHdYsWZxepzK2+k4F7gnDcbsRWc+/FOcVoJRcruSmtUp1pWe8mhG5eUEV948u
-    epmiCN1sINzYpPKByCCA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/vMMcFB+4xtv9aJ67XA=="
-Received: from lenov17.lan
-    by smtp.strato.de (RZmta 51.3.0 AUTH)
-    with ESMTPSA id K2a3e514JCoqDpo
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Mon, 19 May 2025 14:50:52 +0200 (CEST)
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB29280CFF
+	for <linux-can@vger.kernel.org>; Mon, 19 May 2025 15:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747667307; cv=none; b=Ie4pirLR6R2xef4NW5sztayfnkEXn2b+S7jkkBvh2tzhkoNV7IBS6RxsDhv/yXNPdRVWFatQSRyOmgwCwJ/JvKJAPH7IDbgEPXiiv8hz4wkCgkZGT/rBkdsDFyPdBCbzfLCBUP8OevH0HbXt7pS3xY9KQ0wMetehh4B7xJQoMpY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747667307; c=relaxed/simple;
+	bh=in27uqZLQz3oYiT+xLQ4jtUuDDaoJPU98G+tKiMg4sE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dssdz+oNElks5J9u1JKPJ5s/DLvliYoH8y/W9nCqAW57ra9Y89BIOHRmh5Wv2I2tF5wn+8T8DUSz9qglillTbpEGqI7paGcAEJIv2GgVWVaVHV0RpRK5gIVKfdDioI8DuQsJvqCwdAUWdzomxecXgX9X//XL4aLeHws9vo37LXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uH26B-0004nx-Fs; Mon, 19 May 2025 17:08:15 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uH26B-000GgT-0D;
+	Mon, 19 May 2025 17:08:15 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:2260:2009:2000::])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 90EF0415305;
+	Mon, 19 May 2025 15:08:14 +0000 (UTC)
+Date: Mon, 19 May 2025 17:08:12 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org, 
 	Anderson Nascimento <anderson@allelesecurity.com>
-Subject: [PATCH 2/2] can: bcm: add missing rcu read protection for procfs content
-Date: Mon, 19 May 2025 14:50:27 +0200
-Message-ID: <20250519125027.11900-2-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250519125027.11900-1-socketcan@hartkopp.net>
+Subject: Re: [PATCH 1/2] can: bcm: add locking for bcm_op runtime updates
+Message-ID: <20250519-whimsical-asparagus-quail-7b8775-mkl@pengutronix.de>
 References: <20250519125027.11900-1-socketcan@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -96,98 +61,67 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qbt2cuv26hmyfo4y"
+Content-Disposition: inline
+In-Reply-To: <20250519125027.11900-1-socketcan@hartkopp.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-When the procfs content is generated for a bcm_op which is in the process
-to be removed the procfs output might show unreliable data (UAF).
 
-As the removal of bcm_op's is already implemented with rcu handling this
-patch adds the missing rcu_read_lock() and makes sure the list entries
-are properly removed under rcu protection.
+--qbt2cuv26hmyfo4y
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/2] can: bcm: add locking for bcm_op runtime updates
+MIME-Version: 1.0
 
-Fixes: f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly synchronize_rcu()") # >= 5.4
-Reported-by: Anderson Nascimento <anderson@allelesecurity.com>
-Suggested-by: Anderson Nascimento <anderson@allelesecurity.com>
-Tested-by: Anderson Nascimento <anderson@allelesecurity.com>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- net/can/bcm.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+On 19.05.2025 14:50:26, Oliver Hartkopp wrote:
+> The CAN broadcast manager (CAN BCM) can send a sequence of CAN frames via
+> hrtimer. The content and also the length of the sequence can be changed
+> resp reduced at runtime where the 'currframe' counter is then set to zero.
+>=20
+> Although this appeared to be a safe operation the updates of 'currframe'
+> can be triggered from user space and hrtimer context in bcm_can_tx().
+> Anderson Nascimento created a proof of concept that triggered a KASAN
+> slab-out-of-bounds read access which can be prevented with a spin_lock_bh.
+>=20
+> At the rework of bcm_can_tx() the 'count' variable has been moved into
+> the protected section as this variable can be modified from both contexts
+> too.
+>=20
+> Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
+> Reported-by: Anderson Nascimento <anderson@allelesecurity.com>
+> Tested-by: Anderson Nascimento <anderson@allelesecurity.com>
+> Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 871707dab7db..6bc1cc4c94c5 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -217,11 +217,13 @@ static int bcm_proc_show(struct seq_file *m, void *v)
- 	seq_printf(m, " / bo %pK", bo);
- 	seq_printf(m, " / dropped %lu", bo->dropped_usr_msgs);
- 	seq_printf(m, " / bound %s", bcm_proc_getifname(net, ifname, bo->ifindex));
- 	seq_printf(m, " <<<\n");
- 
--	list_for_each_entry(op, &bo->rx_ops, list) {
-+	rcu_read_lock();
-+
-+	list_for_each_entry_rcu(op, &bo->rx_ops, list) {
- 
- 		unsigned long reduction;
- 
- 		/* print only active entries & prevent division by zero */
- 		if (!op->frames_abs)
-@@ -273,10 +275,13 @@ static int bcm_proc_show(struct seq_file *m, void *v)
- 				   (long long)ktime_to_us(op->kt_ival2));
- 
- 		seq_printf(m, "# sent %ld\n", op->frames_abs);
- 	}
- 	seq_putc(m, '\n');
-+
-+	rcu_read_unlock();
-+
- 	return 0;
- }
- #endif /* CONFIG_PROC_FS */
- 
- /*
-@@ -856,11 +861,11 @@ static int bcm_delete_rx_op(struct list_head *ops, struct bcm_msg_head *mh,
- 				can_rx_unregister(sock_net(op->sk), NULL,
- 						  op->can_id,
- 						  REGMASK(op->can_id),
- 						  bcm_rx_handler, op);
- 
--			list_del(&op->list);
-+			list_del_rcu(&op->list);
- 			bcm_remove_op(op);
- 			return 1; /* done */
- 		}
- 	}
- 
-@@ -876,11 +881,11 @@ static int bcm_delete_tx_op(struct list_head *ops, struct bcm_msg_head *mh,
- 	struct bcm_op *op, *n;
- 
- 	list_for_each_entry_safe(op, n, ops, list) {
- 		if ((op->can_id == mh->can_id) && (op->ifindex == ifindex) &&
- 		    (op->flags & CAN_FD_FRAME) == (mh->flags & CAN_FD_FRAME)) {
--			list_del(&op->list);
-+			list_del_rcu(&op->list);
- 			bcm_remove_op(op);
- 			return 1; /* done */
- 		}
- 	}
- 
-@@ -1294,11 +1299,11 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
- 			err = can_rx_register(sock_net(sk), NULL, op->can_id,
- 					      REGMASK(op->can_id),
- 					      bcm_rx_handler, op, "bcm", sk);
- 		if (err) {
- 			/* this bcm rx op is broken -> remove it */
--			list_del(&op->list);
-+			list_del_rcu(&op->list);
- 			bcm_remove_op(op);
- 			return err;
- 		}
- 	}
- 
--- 
-2.47.2
+Applied to linux-can and added stable on Cc.
 
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--qbt2cuv26hmyfo4y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmgrSVkACgkQDHRl3/mQ
+kZyxzwgAhjfeRSFy3eleB4HSqPsg8RMu6KVkWKEd7oCs22VWCJ/zzCsYim5rQZ5H
+izzCFuLBPo179/7gzpfdXThWk7FCe83GVnZc6XhRYW9bTgu5iKjwLAw1ItKOQDws
+XgCY4ndmzBAJ7wkna75w5jvwokBaz+F/s/lqoqoTUg94B+8w0AMVSChgAy/n8n9z
+Asy9ZucswXMDCTNC5dsHZJw4Hwhdl3ZXXn4Q9NRKSF9lWb3usRPifbAJvrvhs0bh
+yieQtizGpeAxJMf7DpKenfeyImdbHMBP8pSRWAPjw8AFc2vxUyYlWr9enr1ZA3wI
+9ZLEhu+cYf9nVClvLLtk3jWUe/bJMA==
+=hOhf
+-----END PGP SIGNATURE-----
+
+--qbt2cuv26hmyfo4y--
 
