@@ -1,62 +1,62 @@
-Return-Path: <linux-can+bounces-3597-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3599-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A06EEABD721
-	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 13:43:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D2C4ABD725
+	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 13:44:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60B928C02A6
-	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 11:43:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 567891BA14F0
+	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 11:44:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C064266EEA;
-	Tue, 20 May 2025 11:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4662127C179;
+	Tue, 20 May 2025 11:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b="auIK8Tbj"
+	dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b="bPXFLbjy"
 X-Original-To: linux-can@vger.kernel.org
 Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2102.outbound.protection.outlook.com [40.107.249.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F85327C864;
-	Tue, 20 May 2025 11:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517EF27C178;
+	Tue, 20 May 2025 11:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.102
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747741432; cv=fail; b=Jl3Ds8Bq/w7zRx4fc/NbwBZfjfM2elf4eoBwBqqTuhTj7dMA3PPI4W/7+pfdY5cew5O/TTcrH6xW8k8dqkMMHy4DDxiBXO0yIeO86SZfqSyMQHlvB2Ynd+WqcmVZFrWs79dTYVRYrkdziSWl2r9mkNXcQLCigbz1ujZVXAtUjx4=
+	t=1747741438; cv=fail; b=E/LGIyUpHotrWy15PVH3dRvz8kBUcGgIQDp6KkyimnpsbwrszTYRDtaAPPoJ6RT++/uth+i3lVYXtbdVbXoh+WLC686SkR8631p/DDfJ7v4KkF7Wb0R2LThrtjLUTCKjhroemwGVdCCMuJIzrzb7BL6ifNG/Lg5EkxbCpilbaC8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747741432; c=relaxed/simple;
-	bh=UoTYVpxTkC/FijXffNV6ReF3IziKc6ltQrA4MFi0SfE=;
+	s=arc-20240116; t=1747741438; c=relaxed/simple;
+	bh=Z/1mkbGBPt28ZY5GSoaoOBRbblLpQd9urnZoP66nUjs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=e79ANStNNfXYoxGQdtUWo0koVJkdK1KezXL3yFxRQtDORzNLhTODnw2IF2nMh1iGBMb+UfBHTQoRswSvGDoJa4NkSstETR33Qwbeqw0nbagNrBn6dfd2IJ3W34hhpmpON9aCjqThxN111vunCUM3UxisiN6xsLvmbUYa1gpSzGY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b=auIK8Tbj; arc=fail smtp.client-ip=40.107.249.102
+	 Content-Type:MIME-Version; b=Fjo1FJVMnSYUo21zee0OYYXorIPLc1ixkS/z+zTyx9HWBpA9LVcshOLtRELWAFKr4jeb1NELLmtrfP5yq/jobC/c0MugeDj9TGdmuQUpaOVz7dtnuWKh6qk2XXT+YtS0iBMjmSn7c9m0S1RpE6SgpMNXW9e/2fhXaU2OBENW7/8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b=bPXFLbjy; arc=fail smtp.client-ip=40.107.249.102
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvaser.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bxSk+JXhBrZ3tL89lG53/PSDnbZwyQReDSu2KdxwWfI3fPFJhry5nYWWBy1q7Gn5FycgyZQkKyj6dNDCAAe8GCYTx74u7lHRkvDhn41zIYRfw8fpW2sjgMbaHBlFjNZM4p57t8W0Uw3paeJ1Hj1Pdug/pVfzJ9kV5rVEKM5oQ329nvEgtILMrEworKXt4rILQXqyCy2HwroCVqn0UmXYR/hudvehQacOVT7KCjvTFGEiBWxy56FBa04ND2gXdDb4lKV06cxPoWFiMwHnUVOGzsFlrHSM7m6oI+FdFWAJQW5LeM5wfY9fDugtmaN4HqKj0Hh6VD5XWkU+xzJ7tmqb3Q==
+ b=LclDcIUoxe6l2LpqIEtXvFi+Mc2H9al4+U5PZVzMkkIpHOfoj0YoiGrccG5N2Zn48E14/dhMhNv6qSeyyi4P+ctH2+OU7Hx0SH0KbFLoz/znmVNG/FAihZOucGgDtISNQJQeeRtzB3UO7SZ3k6ffwnftXNJY7HV2b+RS6yq+7z1oBL3LpAuogW16KPasAAMy6jXCOKkrMUWfpi3bvTakcyXwg+AvVHlAeXT4bM9lPTiY9GiEw/Bo7U2rnw9PG+ChS14kVHLm4r/2Ii8NJyYhT5CmMTgs6p7Mgo8lBJmlKeOpaPHo3aEAamLG+ZZa5OYrmxgEyWYhzzyom24WLgjv6w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1yyNI+/iKwW04Q/OccgFqXsy8rzCOd/q4k0YQ0wpjxo=;
- b=wDojAa4uTSrgNQ9ZQFBQFlIqFqvkxJcxBFUnjd4zQAG7DfZRm30FULZW4HelvkrFZ22q2RB1eQ2IH6wJHP/exEjNjOitEYtJwyk8h6zRSWDmnWbSf7Mx/OxdqG4mU18zyCGSArsRIsJE6ftGZob2s6MR9NUlJ32eiTLD9jOPetlcZzNElSfco7JV2LnlMdpJ9+loxputRYO1lZUdjSyTbTFHI1fp7Re4lwYiXfZ4imSMecH03eWGYb6v2a9DEvDvJKntrB38yp5b4S1X2BMaiA2J3povSbQTBCAgCsZXfD0+ux9eVlHZ3CcKk9LJr+VrJVXWTcWeIzS0zVVbO003gA==
+ bh=FWCRfpZU8UtdEYCNS194/0prlbqxIlTW5tIdtMA6OGY=;
+ b=KN6Og/kEZVP9mF1adkGDmQIqAKEnPkl+QP4aZDUsgOr1c9njC3Oq1cuRToXeYrZb/JxsSoFs1jt6eAyt9FY86vOuVoX3+/CrlMfhDLW6hz8GlIzWLqHgrP8b0d0sG/g+C4prhZEaMc3b889u8Y+3lMP6B3CtuAUJrNugDDAkZOntSDYI1gLw3GWOE+y71UXbuRTEgBuERee9nqXhZ5lxqhCUwFzjsLbtC0M4KaS9ArGgXDLIluDYvzacqGEus3CKTeZZAkjsqOVDQpyEalCtaLVKM4l+d9UCP6m82OWj1jmgNLQV4s4RhyleCgFA7KFTGKI3oGaiPXiukaK7QCRuHw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=kvaser.com; dmarc=pass action=none header.from=kvaser.com;
  dkim=pass header.d=kvaser.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kvaser.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1yyNI+/iKwW04Q/OccgFqXsy8rzCOd/q4k0YQ0wpjxo=;
- b=auIK8TbjUdEpkgHFi0LLYAOmx4bhdRV70NfnJ7SudgsQWbbXnRceDu5ONBhjUFcbW8C+EjH1bF9TPNrL8+d7aO4gA+xmbdKywClNlPb0YwOfEaOTCgF3lOim+qqx/vwKQJ8nZvw0WcQBl0s0jn9oRpUkwZfzJ/9RoKScqR6Mu2Q=
+ bh=FWCRfpZU8UtdEYCNS194/0prlbqxIlTW5tIdtMA6OGY=;
+ b=bPXFLbjyzQx37bOTiiNpObMPuYhvyY8bKWeB02INVbPfVVs++S/fo7/ejjp69XolKx5lFqPck6c3oI3hySFXhocmpf4/aRxX94OUQXWDlkZ8nbb6QYMc/cBNCWoWzsBD50kGzYLmwFEfct6OajgY1qKiuRJ27JkfHgHOcIp1/6g=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=kvaser.com;
 Received: from AM9P193MB1652.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:3ed::14)
  by DU2P193MB2226.EURP193.PROD.OUTLOOK.COM (2603:10a6:10:2ff::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.31; Tue, 20 May
- 2025 11:43:43 +0000
+ 2025 11:43:45 +0000
 Received: from AM9P193MB1652.EURP193.PROD.OUTLOOK.COM
  ([fe80::e973:de09:5df2:4e18]) by AM9P193MB1652.EURP193.PROD.OUTLOOK.COM
  ([fe80::e973:de09:5df2:4e18%7]) with mapi id 15.20.8746.030; Tue, 20 May 2025
- 11:43:43 +0000
+ 11:43:45 +0000
 From: Axel Forsman <axfo@kvaser.com>
 To: linux-can@vger.kernel.org
 Cc: mkl@pengutronix.de,
@@ -64,16 +64,16 @@ Cc: mkl@pengutronix.de,
 	Axel Forsman <axfo@kvaser.com>,
 	stable@vger.kernel.org,
 	Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH v3 1/3] can: kvaser_pciefd: Force IRQ edge in case of nested IRQ
-Date: Tue, 20 May 2025 13:43:30 +0200
-Message-ID: <20250520114332.8961-2-axfo@kvaser.com>
+Subject: [PATCH v3 2/3] can: kvaser_pciefd: Fix echo_skb race
+Date: Tue, 20 May 2025 13:43:31 +0200
+Message-ID: <20250520114332.8961-3-axfo@kvaser.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250520114332.8961-1-axfo@kvaser.com>
 References: <20250520114332.8961-1-axfo@kvaser.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MM0P280CA0067.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:190:8::34) To AM9P193MB1652.EURP193.PROD.OUTLOOK.COM
+X-ClientProxiedBy: MM0P280CA0013.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:a::19) To AM9P193MB1652.EURP193.PROD.OUTLOOK.COM
  (2603:10a6:20b:3ed::14)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -83,258 +83,306 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM9P193MB1652:EE_|DU2P193MB2226:EE_
-X-MS-Office365-Filtering-Correlation-Id: 620e0d9c-c803-4e4a-cf95-08dd979392c6
+X-MS-Office365-Filtering-Correlation-Id: 3c661e9a-6153-4a17-81f1-08dd979393d5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?IH9j8RuGSNbkYHeFD9ofVpox6Lp/U9MMeklmjItf0wrK3U2Fu6CFlEqMKNq3?=
- =?us-ascii?Q?VIDu5yfpjm/rI2Tlg/QJf73K86G5y77zXhjtYkK75OvC+0/gFMwzf8zDZzf4?=
- =?us-ascii?Q?I0a9M8lvlL1vQhjhXVXWCWjPlKT5CPArsUU7mb00v6xYbhhmNQlrR8iW0tjC?=
- =?us-ascii?Q?oymBXAi3CyeWqyDBddh0Knl3rArehDQYTxm5DQeZuxJXgTEfd43+PDwQIADt?=
- =?us-ascii?Q?uhWP3qu7tBMF2qP69qbAmMy9RdNkz/BphRRinVE87R3H7MNwftZXAXO1KIbm?=
- =?us-ascii?Q?lfA8jZ5qv3YnhAT0rzyT0Ak4DBEdvhg+Wt0eZgJHk7I1W8Xd0NeODOvvN+j2?=
- =?us-ascii?Q?jbUvpfcgFbIHcZd0qQKlgZALlRGrdp5mMcA0Amj4oZmdzPrKyDZIoDHeOOjv?=
- =?us-ascii?Q?Th89uwjYg+WKouGpBrncsEdcBTLtySUhKTM7B2AUtdv89uLuLlLJN3kVkqtl?=
- =?us-ascii?Q?iXkr4lO2jJsdYtOs2OxchEgJj/Q7MfdwUiG3bRObsdGRKEM7X70SR92e9J1L?=
- =?us-ascii?Q?BzFEegV5si+d1C9oNZfZ83raIiS3748DjSt2FasbCr9Xi8GNHGKmFwW+DBaX?=
- =?us-ascii?Q?F1lsvWMksdNf5MQVA8YJbB/N39ENES5Bxi4+J/KmHRvnNK7n5nWDjDEqXU7N?=
- =?us-ascii?Q?f1WC+7+g4ngyq/cTXngM6UpX2uCH5pOYq0MG5JRkiG5hdXtntSdV7NcRQq+H?=
- =?us-ascii?Q?g26GvVoEfysXFV+kgZR0xo102XzoQNZI6AATBBdu2lN21/R14IfnJkzo4Nln?=
- =?us-ascii?Q?dk4Ut+Cn8tzsbic3RLvGlrO6RcVxtmI8UqGVmkYlH6SwEQyn5iwTyA0Df7P7?=
- =?us-ascii?Q?owM+aUlhdqQtzcMhhHODyOam7SIww7XKOW2EMPEmQp4pKgIC97GBSxtckbgp?=
- =?us-ascii?Q?m4sclkVQYGM7EYxYzNLHBQ4Av6Q+lOlEmbXmg4/OxNzNIATwLORD1Gmve9Mu?=
- =?us-ascii?Q?0xglZYFk7t1h+aVMIFok6kTjXi6lACNaTpCLRUjXYkwmoHN/If636mDTlS9u?=
- =?us-ascii?Q?8cwTCbR8pAXq2lHmTSFm5GHZcB3E70tWS5T0v/lSFrsPgz25rRVpYErhFegX?=
- =?us-ascii?Q?9ikaQrYZBCaf5Lr6KiPyGf4L7pye7X5z4Wec0X50UcIv/KZxXokthCADsTX8?=
- =?us-ascii?Q?BrwXHAYvhBASHUx0n/9IQYJYUWXPkbXBHus75tkwnwXj1pecFkZH2iA4GNFD?=
- =?us-ascii?Q?er/sMKPbE8oeZBolMHVqdQvfGJfkm6qlCkvsqEFTFGL79bYcX0Q64qF3k/NV?=
- =?us-ascii?Q?r6iP+/ghQ1W1HleaZpT8W8o8UFV8MPrMjZaiRo5822fWM3BbwmvC40pRvMjl?=
- =?us-ascii?Q?7Ru91zkOCHZ0ABYePS5EXV7bi4k5SxtvrgtFYY1/wI5HC6Zz3vYjLHXMo0Js?=
- =?us-ascii?Q?8OTveQlOIIsBocaFaU7cLlD2Mpdwq0JiBMZu39tnSHyRjcZXokDxvmBhzenZ?=
- =?us-ascii?Q?vvrtgMK8oZ8=3D?=
+	=?us-ascii?Q?aX6fg1S5oRCRCrzHkk/pGKJL8n5baYzZk58xVNRwdvxUaej7+0I2bzEaodpf?=
+ =?us-ascii?Q?QNS5u5kWLFrkxh9f7WfIK9wMjzA622eO1nQQCRdJrH+k2f2cAREmA8a6gId9?=
+ =?us-ascii?Q?21I9407JaTDzCDa8plmpbLyKIOD0U3k4Y7SXvkmu5YdHP0vNUB0qIN5EqQrr?=
+ =?us-ascii?Q?WPQ1RbMARJIN/+KW1iMjf2npGW7tnZrDfXKKWZseryjfnXb8Z7NIoqnamWoj?=
+ =?us-ascii?Q?T8U+jSG37tJZnR39544M908jVkdo6BAHsYzBO4cVKWvQ65KwIECQw7SmJ3lf?=
+ =?us-ascii?Q?qYv5/4WYvSskmIDyj0nHm3bH5oGJOTCFUk+3vePsq+gB5/4vRsvQF5JBG8A2?=
+ =?us-ascii?Q?AFO0GFhu3wUJnaP5JfEKZpYnW71Hmm1qHi5j6g2WyvPgj+p2epmksapTBKwn?=
+ =?us-ascii?Q?JaZyOfKkXnPGbTPdj8VAlOkdw/jbYE56uK7u+ZlENbV/l1si9YfAdlxTJkDi?=
+ =?us-ascii?Q?a+JejTpoz/jPP60G8HI+0HNm6HhdJ8xa3LeOfxpQslppf3FHI5/GHyZ9KF3H?=
+ =?us-ascii?Q?r7XxAhbXHWTsPKd1BTOUM5/4L8D+HqKIWiHZZi6JLBRH4PV1rm4wfrWXjJPo?=
+ =?us-ascii?Q?93Xm4Kpv0kfgz70eIWV3s6Px5XWq92A7mBnZGsLkMdGGq+bhMnpVkkupQyFT?=
+ =?us-ascii?Q?ynUoJe7V75ua0Nt8w7S1CGdlbO+9rFXAQAk5cWE7wbJmPiQM+6KwA/js5wPv?=
+ =?us-ascii?Q?h+zOuJi5KI7w4lvZO3itFwSFrIWPvZns0go86VkVZE53PeoALPIZfofwjZ1C?=
+ =?us-ascii?Q?I+qKUUl9WCj7/KQy/Q37WT1ov3LGZ4ZlojOj6wTOV4/SjUzriHg311r/Z/tg?=
+ =?us-ascii?Q?CY8EJ9rugKy0bfVCZmxvBlOtpHcnL8x14LaCA79n51n6m7ytMadV/WaAGPB0?=
+ =?us-ascii?Q?eCVsVciaKYZ4qXiEhHpiQOfUcwpP4gowepZ6+DsExOfH3yZtPtHNgmg3uzxz?=
+ =?us-ascii?Q?Si8bMkUt3IpZbtah8PyYvaXR4gSnU8pcS4S3WjUJleiZaaR/y9fUWKX5rMFL?=
+ =?us-ascii?Q?D5t9b3LajAuQWqxTDLDUHXCV/TCRWFz2RkbrIZQ390WXsK1rn30pSOig+yni?=
+ =?us-ascii?Q?ILhE6jxISiV9sGFfO31gSYbm7Ss9+ICnHVf9XR3bUXKAPrtuZRH9xZ/Mr2Zb?=
+ =?us-ascii?Q?rq8Ia4YXmk6bFokciXJKbVVhZSMjjxnLbx6BynWL4sP3VkR2rIMAQCDQhtuc?=
+ =?us-ascii?Q?xiCz8YLJZ2AiLUPM6hiK8wHCTqIAYdtpQnwvYjAckLhpaYkTAJvuKRsssPSB?=
+ =?us-ascii?Q?aeLuFljqslaRJ+fNVDvJgb3SFWB1amfTrXaxX6or8HlehZt6iUsJkRESAcO7?=
+ =?us-ascii?Q?/Y1hEf9l0maKL9p7kl/JiV8Ynl97kve3Kt8InGxsoBDVBCCb6ejA4zQ7jAdf?=
+ =?us-ascii?Q?91gyAK9GsVH5Zg93PbA6w/7XQwlGwZsiaTYhWOid70hEa8EGwYRFb5uCSDwT?=
+ =?us-ascii?Q?JlXGUMEK93w=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P193MB1652.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?YmLvJAflA3zLV/tOZHUiICDXLVKZMtkRShXDxgVGI9MVhGkcoAUrZjtducR3?=
- =?us-ascii?Q?K/oruaImnAzDCA1Zlfh+1AevKsfSgXeG5UBefgFAZ0TkMO+v18O0NiyWSX9+?=
- =?us-ascii?Q?WFIThgtJTpOLTonXuzwzB5yqAtO+35DYqF19zSuORLvkO29BOFnh+erXvZCL?=
- =?us-ascii?Q?aDHDDuJb5q7e8NFnzhWNQXvWvo68WT5ck0TCcZXPEUazrLmb0/MTQ8WG+PSQ?=
- =?us-ascii?Q?0KjVhX2NgDejGyDQA5ri6Dcbsm2xi29TR2iG5sGfN90cuDwpOVoRg+8WEfSJ?=
- =?us-ascii?Q?AxDqDzQ0yi51ErigeLXGVVFghpSoU3zGvfnNJ/gofNXXJCiiuRR8ZXDeHDco?=
- =?us-ascii?Q?ke9BMRcYLkyEVYwP798rQg1Zee9eQ9dvNPdsqd+0OqEpW/lnYFoCEhHCqqKH?=
- =?us-ascii?Q?Ad8BK+Fi1PXRmafBUqhuV3APJhy2y1GVhELSIpNTfuZ4AuUaQyOWTuKs9vhV?=
- =?us-ascii?Q?U3dje4dT6B19D39ux4gIsHGMV+p0oiNWy+aQPwqSsV4T04TF/FLuuymrOhkW?=
- =?us-ascii?Q?gk+/WYdziPuzp8TNjdT8kxm6safLLdol8WsGEZBSam7j2IGhZhBZLDXn9FT7?=
- =?us-ascii?Q?l7o58pJ2G/61aWQXQyTEPfS+4Bley4huOjtrGpJ3QBpZKsQJ7UI2x60hqDy3?=
- =?us-ascii?Q?PGnxNkjrwkg6zMDDVeikT2DTg0akJYvfA0WT0SntjbToFswayT9sO0BOHARE?=
- =?us-ascii?Q?NyEYaAbG0moWEl/VfFT9fJi2z4tYkguJ9uy9qm3Q1y5tG9y+X/iWLhrcwouI?=
- =?us-ascii?Q?BXgy4JK7wkfFEh/SiOYLHr5bBi3VH7F9MnzPbjCl6gs6LWhzOP264HwSDuPD?=
- =?us-ascii?Q?VlMTpa3wGxyyqu2K74GwpjPzhuerYOwJIn5qH9mwvfaLHuwqTxMZ4iCR4QuZ?=
- =?us-ascii?Q?dxZy4Mv1k3kALK7QeZfL1XLXmDh6njP1ADMmUhIIIIA1Udugvf15zg8oKm1h?=
- =?us-ascii?Q?DeERbeEsJTcryqKfSrZ2YewziSPoJqLthtIUoeTbCqwKsVPnr12GvVk4DMc3?=
- =?us-ascii?Q?7iYmHqnXgfgkeFrfSnhjA0pjOz8X7PGg2e+8UyDlfPUQ1aCGfV3GPtVGeT7B?=
- =?us-ascii?Q?bOR9AMZRAdxARosW+6o8Jur66sG/kCWGDPFCkBwWLmvdjimN+0D9QnMMB6Pn?=
- =?us-ascii?Q?rakUXmoRtPaHWuI5zvyi0L+qCB1XXERGyt504hhjWnEh4fUsiYZ15ickxXtB?=
- =?us-ascii?Q?WIlvCz41wFQlNfQG+InG2wxbxSbzQ2GuNO82EYWQ30+KngFDNHivg+s1BjEU?=
- =?us-ascii?Q?TY5mhm8TVK59/tNcAFWR/Tz0BpMRElAxX7n796FoTRYgiJmUpCsEpGUYUTYq?=
- =?us-ascii?Q?fPTai6vf9ZN/QUUvn4hV9eoG6lP5DslOsiPN2MWbs9lFCcO5m7Hb55ajbMZy?=
- =?us-ascii?Q?gqsopBm3P2ZX9s/GMYyG85ewzhylprS4181Rnh25c09rGWhyIJ8vCj+eyqkb?=
- =?us-ascii?Q?Cj3x3LHaqJDESFbug0XBMmBXrw4ZX2Dj+q3poAVHGVOLBxV+ETnplsRt4Kq8?=
- =?us-ascii?Q?Zl6UUrB3aLiyY2juMtUMUnxb8JD4zSSVsTyYfpdqFX9ZsrQfrwIvScSgpGBd?=
- =?us-ascii?Q?VHn9Ilr9WOJQY4vMkRcD8M4pUClReEucKqB9Rgt/?=
+	=?us-ascii?Q?Ii4vp5ODD0Gq3jjg/qu+qBeR7Faj2sZi2fbvmIJYKkmhkXHumTAvE3tyLJ75?=
+ =?us-ascii?Q?QDWAAoNt7WT6bcEEqjIKwUkLVMW1WVSBL8/N7QGu6zrFzDcurxjr4DMp3YN+?=
+ =?us-ascii?Q?5pRvtsWfAH5WCKM3+0UgavT02o8z9m65j9KkeFEjgN1fy0fkZVPt8rw0z/LJ?=
+ =?us-ascii?Q?KPBoz4ZkP+qt0GWoLcua4iGed5+SLZYS3jIcQy9X8HYM6ugVZHCYdV/zySKk?=
+ =?us-ascii?Q?byha7QG2MDF5AAA9apgr0a1foZ20VG6OqiHCTwM+tdYaUUZllJ0rnDY8uMA2?=
+ =?us-ascii?Q?YgjIVNJe2vsXpOU31W+hhEChEp053HPfSsCF3f+uTkTUnB/HezVNiQTAuI8U?=
+ =?us-ascii?Q?an7zCRhkHQXYVusKUSlJ+ScDGBV4ZZ9GGeq+JDHpo947X24sSZns7s7E7gkt?=
+ =?us-ascii?Q?4p3F5uHOoiAEL7XwIpegf0RpKEHDFW6Y7vgYnywguwZC2Ig4gw4pJmj9EBmu?=
+ =?us-ascii?Q?a3I5WD8EBoIA8IG6ruIuzgrf6OSvxMKfkv5oJjSeJqKtJLVjKCxVUUXXiAYv?=
+ =?us-ascii?Q?R84DHCFoergAKoAomF6lmiw+HM7eacat04tTVhxc9/Z404lS6D9DQXYXz3NL?=
+ =?us-ascii?Q?d0VDUk/QRBlL4XedImlncJQ/Hj6/at0ztoM2p7R3ARn1Aket6MM8p0ozhgML?=
+ =?us-ascii?Q?T9YMrA0PPgDYYG6wdYRjH2QE8qMEXDOGMmFnJOKmEBopyF4WEXNM25s1mrD6?=
+ =?us-ascii?Q?X1Vp30nKBTPOwl5v8h+m/6CD2i+At2MOcrs+i5OcUhlj0rIC7e+09YINlgH4?=
+ =?us-ascii?Q?c+/NiIXW0lBq0IjYFq9iGnlq7MsEDF9KgALU98iMDss5sOO35jzrrJjkb/vR?=
+ =?us-ascii?Q?5eiZzWwNdqaDC3HKQvPSP8omHW4w5C7U6F2PM26XsWDKy+iZNrB+kkS4U9nv?=
+ =?us-ascii?Q?OVwDcQDwNLfN5gs+YjOBMHSPA0hTjU+Zu142ctOCbqHP8J4SYw/gn1QPxZyL?=
+ =?us-ascii?Q?AWSfLT1RHZMBIV94jc1tnFhTgmN6CFwFuasZ6wICIVC1VMCzlsBsWbmSGube?=
+ =?us-ascii?Q?3CC4N2yq46TyQp2f0E+GaYKWQwdsrMAsVMHEWFpNzZzOjGFN5X/acCO85c/t?=
+ =?us-ascii?Q?pgXHEWikzajUb4KjEGwz8bKP1RRyKbuxM4P2VgbGPf2hBnJ7rwmQs5RjhkmP?=
+ =?us-ascii?Q?iRr66DedbNSRDZDRphQp3zq+B3HeEX21KrmeYyQAiOLWnQGYMLMIZfm2MBcc?=
+ =?us-ascii?Q?BMArvgmeaVf08RkkX/WocurGjHjmk06mu5ijqSkyr2qmUp6ZslDeDbzf6Gm/?=
+ =?us-ascii?Q?v4we7bXJw8yDoOr/BVY3CzIevrZ5tW/i3KKqkUUvD0xn15cn4hy2Xq7O/yrx?=
+ =?us-ascii?Q?dDHZcWC3UoqB9U8g25J/r3006mdUiKPcoY6CqeWwjLYkxAr5g3ufM2oyCiiD?=
+ =?us-ascii?Q?03GHMhHEOcoRHOdDrzGmYbRvq1ji3RBwKpy/y0mkF7YDB2/dGwVfwcTvfNP8?=
+ =?us-ascii?Q?iNsYuGF3MXXTHQhVOhUzOdn/mdoeaH/kw8m/NicsFyD7/fuZ0Ep5iQLxXVtY?=
+ =?us-ascii?Q?O/fdcnIhNsA8t0XL4rAhEO7FdhTFD9yy0aV/0VjcNRRIALmW5QQuyDMGn3u5?=
+ =?us-ascii?Q?ZlvHJVa+sfKk8RwdeJJN1w+xQ4OxjvOkKULnDGOL?=
 X-OriginatorOrg: kvaser.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 620e0d9c-c803-4e4a-cf95-08dd979392c6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c661e9a-6153-4a17-81f1-08dd979393d5
 X-MS-Exchange-CrossTenant-AuthSource: AM9P193MB1652.EURP193.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2025 11:43:43.6759
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2025 11:43:45.3987
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 73c42141-e364-4232-a80b-d96bd34367f3
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i1DSV1KqNA1xNS2ZCEzCzhHBxlWc7z/r/k8fsWhIOS6HrP72xfy/p3dtvbkSUOXCueiLfeSEwRTTqeGJfqZbPQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: fKrB2HNVPhq+pYwY9ZUQ9HcIjMKwHnKbthAVi0Dffu4wYp4Fn4EytWiRAjXgk0/pT7X/UQLt1fHYo8grYcoBEg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2P193MB2226
 
-Avoid the driver missing IRQs by temporarily masking IRQs in the ISR
-to enforce an edge even if a different IRQ is signalled before handled
-IRQs are cleared.
+The functions kvaser_pciefd_start_xmit() and
+kvaser_pciefd_handle_ack_packet() raced to stop/wake TX queues and
+get/put echo skbs, as kvaser_pciefd_can->echo_lock was only ever taken
+when transmitting and KCAN_TX_NR_PACKETS_CURRENT gets decremented
+prior to handling of ACKs. E.g., this caused the following error:
 
-Fixes: 48f827d4f48f ("can: kvaser_pciefd: Move reset of DMA RX buffers to the end of the ISR")
+    can_put_echo_skb: BUG! echo_skb 5 is occupied!
+
+Instead, use the synchronization helpers in netdev_queues.h. As those
+piggyback on BQL barriers, start updating in-flight packets and bytes
+counts as well.
+
 Cc: stable@vger.kernel.org
 Signed-off-by: Axel Forsman <axfo@kvaser.com>
 Tested-by: Jimmy Assarsson <extja@kvaser.com>
 Reviewed-by: Jimmy Assarsson <extja@kvaser.com>
 ---
- drivers/net/can/kvaser_pciefd.c | 83 ++++++++++++++++-----------------
- 1 file changed, 39 insertions(+), 44 deletions(-)
+ drivers/net/can/kvaser_pciefd.c | 93 +++++++++++++++++++++------------
+ 1 file changed, 59 insertions(+), 34 deletions(-)
 
 diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index cf0d51805272..9cc9176c2058 100644
+index 9cc9176c2058..a61cbade96d9 100644
 --- a/drivers/net/can/kvaser_pciefd.c
 +++ b/drivers/net/can/kvaser_pciefd.c
-@@ -1646,24 +1646,28 @@ static int kvaser_pciefd_read_buffer(struct kvaser_pciefd *pcie, int dma_buf)
- 	return res;
- }
+@@ -16,6 +16,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/pci.h>
+ #include <linux/timer.h>
++#include <net/netdev_queues.h>
  
--static u32 kvaser_pciefd_receive_irq(struct kvaser_pciefd *pcie)
-+static void kvaser_pciefd_receive_irq(struct kvaser_pciefd *pcie)
- {
-+	void __iomem *srb_cmd_reg = KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_CMD_REG;
- 	u32 irq = ioread32(KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_IRQ_REG);
- 
--	if (irq & KVASER_PCIEFD_SRB_IRQ_DPD0)
--		kvaser_pciefd_read_buffer(pcie, 0);
-+	iowrite32(irq, KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_IRQ_REG);
- 
--	if (irq & KVASER_PCIEFD_SRB_IRQ_DPD1)
-+	if (irq & KVASER_PCIEFD_SRB_IRQ_DPD0) {
-+		kvaser_pciefd_read_buffer(pcie, 0);
-+		iowrite32(KVASER_PCIEFD_SRB_CMD_RDB0, srb_cmd_reg); /* Rearm buffer */
-+	}
-+
-+	if (irq & KVASER_PCIEFD_SRB_IRQ_DPD1) {
- 		kvaser_pciefd_read_buffer(pcie, 1);
-+		iowrite32(KVASER_PCIEFD_SRB_CMD_RDB1, srb_cmd_reg); /* Rearm buffer */
-+	}
- 
- 	if (unlikely(irq & KVASER_PCIEFD_SRB_IRQ_DOF0 ||
- 		     irq & KVASER_PCIEFD_SRB_IRQ_DOF1 ||
- 		     irq & KVASER_PCIEFD_SRB_IRQ_DUF0 ||
- 		     irq & KVASER_PCIEFD_SRB_IRQ_DUF1))
- 		dev_err(&pcie->pci->dev, "DMA IRQ error 0x%08X\n", irq);
--
--	iowrite32(irq, KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_IRQ_REG);
--	return irq;
- }
- 
- static void kvaser_pciefd_transmit_irq(struct kvaser_pciefd_can *can)
-@@ -1691,29 +1695,22 @@ static irqreturn_t kvaser_pciefd_irq_handler(int irq, void *dev)
- 	struct kvaser_pciefd *pcie = (struct kvaser_pciefd *)dev;
- 	const struct kvaser_pciefd_irq_mask *irq_mask = pcie->driver_data->irq_mask;
- 	u32 pci_irq = ioread32(KVASER_PCIEFD_PCI_IRQ_ADDR(pcie));
--	u32 srb_irq = 0;
--	u32 srb_release = 0;
- 	int i;
- 
- 	if (!(pci_irq & irq_mask->all))
- 		return IRQ_NONE;
- 
-+	iowrite32(0, KVASER_PCIEFD_PCI_IEN_ADDR(pcie));
-+
- 	if (pci_irq & irq_mask->kcan_rx0)
--		srb_irq = kvaser_pciefd_receive_irq(pcie);
-+		kvaser_pciefd_receive_irq(pcie);
- 
- 	for (i = 0; i < pcie->nr_channels; i++) {
- 		if (pci_irq & irq_mask->kcan_tx[i])
- 			kvaser_pciefd_transmit_irq(pcie->can[i]);
- 	}
- 
--	if (srb_irq & KVASER_PCIEFD_SRB_IRQ_DPD0)
--		srb_release |= KVASER_PCIEFD_SRB_CMD_RDB0;
--
--	if (srb_irq & KVASER_PCIEFD_SRB_IRQ_DPD1)
--		srb_release |= KVASER_PCIEFD_SRB_CMD_RDB1;
--
--	if (srb_release)
--		iowrite32(srb_release, KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_CMD_REG);
-+	iowrite32(irq_mask->all, KVASER_PCIEFD_PCI_IEN_ADDR(pcie));
- 
- 	return IRQ_HANDLED;
- }
-@@ -1733,13 +1730,22 @@ static void kvaser_pciefd_teardown_can_ctrls(struct kvaser_pciefd *pcie)
- 	}
- }
- 
-+static void kvaser_pciefd_disable_irq_srcs(struct kvaser_pciefd *pcie)
-+{
-+	unsigned int i;
-+
-+	/* Masking PCI_IRQ is insufficient as running ISR will unmask it */
-+	iowrite32(0, KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_IEN_REG);
-+	for (i = 0; i < pcie->nr_channels; ++i)
-+		iowrite32(0, pcie->can[i]->reg_base + KVASER_PCIEFD_KCAN_IEN_REG);
-+}
-+
- static int kvaser_pciefd_probe(struct pci_dev *pdev,
- 			       const struct pci_device_id *id)
- {
+ MODULE_LICENSE("Dual BSD/GPL");
+ MODULE_AUTHOR("Kvaser AB <support@kvaser.com>");
+@@ -410,10 +411,13 @@ struct kvaser_pciefd_can {
+ 	void __iomem *reg_base;
+ 	struct can_berr_counter bec;
+ 	u8 cmd_seq;
++	u8 tx_max_count;
++	u8 tx_idx;
++	u8 ack_idx;
+ 	int err_rep_cnt;
+-	int echo_idx;
++	unsigned int completed_tx_pkts;
++	unsigned int completed_tx_bytes;
+ 	spinlock_t lock; /* Locks sensitive registers (e.g. MODE) */
+-	spinlock_t echo_lock; /* Locks the message echo buffer */
+ 	struct timer_list bec_poll_timer;
+ 	struct completion start_comp, flush_comp;
+ };
+@@ -714,6 +718,9 @@ static int kvaser_pciefd_open(struct net_device *netdev)
  	int ret;
- 	struct kvaser_pciefd *pcie;
- 	const struct kvaser_pciefd_irq_mask *irq_mask;
--	void __iomem *irq_en_base;
+ 	struct kvaser_pciefd_can *can = netdev_priv(netdev);
  
- 	pcie = devm_kzalloc(&pdev->dev, sizeof(*pcie), GFP_KERNEL);
- 	if (!pcie)
-@@ -1805,8 +1811,7 @@ static int kvaser_pciefd_probe(struct pci_dev *pdev,
- 		  KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_IEN_REG);
++	can->tx_idx = 0;
++	can->ack_idx = 0;
++
+ 	ret = open_candev(netdev);
+ 	if (ret)
+ 		return ret;
+@@ -745,21 +752,26 @@ static int kvaser_pciefd_stop(struct net_device *netdev)
+ 		timer_delete(&can->bec_poll_timer);
+ 	}
+ 	can->can.state = CAN_STATE_STOPPED;
++	netdev_reset_queue(netdev);
+ 	close_candev(netdev);
  
- 	/* Enable PCI interrupts */
--	irq_en_base = KVASER_PCIEFD_PCI_IEN_ADDR(pcie);
--	iowrite32(irq_mask->all, irq_en_base);
-+	iowrite32(irq_mask->all, KVASER_PCIEFD_PCI_IEN_ADDR(pcie));
- 	/* Ready the DMA buffers */
- 	iowrite32(KVASER_PCIEFD_SRB_CMD_RDB0,
- 		  KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_CMD_REG);
-@@ -1820,8 +1825,7 @@ static int kvaser_pciefd_probe(struct pci_dev *pdev,
- 	return 0;
- 
- err_free_irq:
--	/* Disable PCI interrupts */
--	iowrite32(0, irq_en_base);
-+	kvaser_pciefd_disable_irq_srcs(pcie);
- 	free_irq(pcie->pci->irq, pcie);
- 
- err_pci_free_irq_vectors:
-@@ -1844,35 +1848,26 @@ static int kvaser_pciefd_probe(struct pci_dev *pdev,
  	return ret;
  }
  
--static void kvaser_pciefd_remove_all_ctrls(struct kvaser_pciefd *pcie)
--{
--	int i;
--
--	for (i = 0; i < pcie->nr_channels; i++) {
--		struct kvaser_pciefd_can *can = pcie->can[i];
--
--		if (can) {
--			iowrite32(0, can->reg_base + KVASER_PCIEFD_KCAN_IEN_REG);
--			unregister_candev(can->can.dev);
--			timer_delete(&can->bec_poll_timer);
--			kvaser_pciefd_pwm_stop(can);
--			free_candev(can->can.dev);
--		}
--	}
--}
--
- static void kvaser_pciefd_remove(struct pci_dev *pdev)
++static unsigned int kvaser_pciefd_tx_avail(const struct kvaser_pciefd_can *can)
++{
++	return can->tx_max_count - (READ_ONCE(can->tx_idx) - READ_ONCE(can->ack_idx));
++}
++
+ static int kvaser_pciefd_prepare_tx_packet(struct kvaser_pciefd_tx_packet *p,
+-					   struct kvaser_pciefd_can *can,
++					   struct can_priv *can, u8 seq,
+ 					   struct sk_buff *skb)
  {
- 	struct kvaser_pciefd *pcie = pci_get_drvdata(pdev);
+ 	struct canfd_frame *cf = (struct canfd_frame *)skb->data;
+ 	int packet_size;
+-	int seq = can->echo_idx;
+ 
+ 	memset(p, 0, sizeof(*p));
+-	if (can->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT)
++	if (can->ctrlmode & CAN_CTRLMODE_ONE_SHOT)
+ 		p->header[1] |= KVASER_PCIEFD_TPACKET_SMS;
+ 
+ 	if (cf->can_id & CAN_RTR_FLAG)
+@@ -782,7 +794,7 @@ static int kvaser_pciefd_prepare_tx_packet(struct kvaser_pciefd_tx_packet *p,
+ 	} else {
+ 		p->header[1] |=
+ 			FIELD_PREP(KVASER_PCIEFD_RPACKET_DLC_MASK,
+-				   can_get_cc_dlc((struct can_frame *)cf, can->can.ctrlmode));
++				   can_get_cc_dlc((struct can_frame *)cf, can->ctrlmode));
+ 	}
+ 
+ 	p->header[1] |= FIELD_PREP(KVASER_PCIEFD_PACKET_SEQ_MASK, seq);
+@@ -797,22 +809,24 @@ static netdev_tx_t kvaser_pciefd_start_xmit(struct sk_buff *skb,
+ 					    struct net_device *netdev)
+ {
+ 	struct kvaser_pciefd_can *can = netdev_priv(netdev);
+-	unsigned long irq_flags;
+ 	struct kvaser_pciefd_tx_packet packet;
++	unsigned int seq = can->tx_idx & (can->can.echo_skb_max - 1);
++	unsigned int frame_len;
+ 	int nr_words;
+-	u8 count;
+ 
+ 	if (can_dev_dropped_skb(netdev, skb))
+ 		return NETDEV_TX_OK;
++	if (!netif_subqueue_maybe_stop(netdev, 0, kvaser_pciefd_tx_avail(can), 1, 1))
++		return NETDEV_TX_BUSY;
+ 
+-	nr_words = kvaser_pciefd_prepare_tx_packet(&packet, can, skb);
++	nr_words = kvaser_pciefd_prepare_tx_packet(&packet, &can->can, seq, skb);
+ 
+-	spin_lock_irqsave(&can->echo_lock, irq_flags);
+ 	/* Prepare and save echo skb in internal slot */
+-	can_put_echo_skb(skb, netdev, can->echo_idx, 0);
+-
+-	/* Move echo index to the next slot */
+-	can->echo_idx = (can->echo_idx + 1) % can->can.echo_skb_max;
++	WRITE_ONCE(can->can.echo_skb[seq], NULL);
++	frame_len = can_skb_get_frame_len(skb);
++	can_put_echo_skb(skb, netdev, seq, frame_len);
++	netdev_sent_queue(netdev, frame_len);
++	WRITE_ONCE(can->tx_idx, can->tx_idx + 1);
+ 
+ 	/* Write header to fifo */
+ 	iowrite32(packet.header[0],
+@@ -836,14 +850,7 @@ static netdev_tx_t kvaser_pciefd_start_xmit(struct sk_buff *skb,
+ 			     KVASER_PCIEFD_KCAN_FIFO_LAST_REG);
+ 	}
+ 
+-	count = FIELD_GET(KVASER_PCIEFD_KCAN_TX_NR_PACKETS_CURRENT_MASK,
+-			  ioread32(can->reg_base + KVASER_PCIEFD_KCAN_TX_NR_PACKETS_REG));
+-	/* No room for a new message, stop the queue until at least one
+-	 * successful transmit
+-	 */
+-	if (count >= can->can.echo_skb_max || can->can.echo_skb[can->echo_idx])
+-		netif_stop_queue(netdev);
+-	spin_unlock_irqrestore(&can->echo_lock, irq_flags);
++	netif_subqueue_maybe_stop(netdev, 0, kvaser_pciefd_tx_avail(can), 1, 1);
+ 
+ 	return NETDEV_TX_OK;
+ }
+@@ -970,6 +977,8 @@ static int kvaser_pciefd_setup_can_ctrls(struct kvaser_pciefd *pcie)
+ 		can->kv_pcie = pcie;
+ 		can->cmd_seq = 0;
+ 		can->err_rep_cnt = 0;
++		can->completed_tx_pkts = 0;
++		can->completed_tx_bytes = 0;
+ 		can->bec.txerr = 0;
+ 		can->bec.rxerr = 0;
+ 
+@@ -983,11 +992,10 @@ static int kvaser_pciefd_setup_can_ctrls(struct kvaser_pciefd *pcie)
+ 		tx_nr_packets_max =
+ 			FIELD_GET(KVASER_PCIEFD_KCAN_TX_NR_PACKETS_MAX_MASK,
+ 				  ioread32(can->reg_base + KVASER_PCIEFD_KCAN_TX_NR_PACKETS_REG));
++		can->tx_max_count = min(KVASER_PCIEFD_CAN_TX_MAX_COUNT, tx_nr_packets_max - 1);
+ 
+ 		can->can.clock.freq = pcie->freq;
+-		can->can.echo_skb_max = min(KVASER_PCIEFD_CAN_TX_MAX_COUNT, tx_nr_packets_max - 1);
+-		can->echo_idx = 0;
+-		spin_lock_init(&can->echo_lock);
++		can->can.echo_skb_max = roundup_pow_of_two(can->tx_max_count);
+ 		spin_lock_init(&can->lock);
+ 
+ 		can->can.bittiming_const = &kvaser_pciefd_bittiming_const;
+@@ -1510,19 +1518,21 @@ static int kvaser_pciefd_handle_ack_packet(struct kvaser_pciefd *pcie,
+ 		netdev_dbg(can->can.dev, "Packet was flushed\n");
+ 	} else {
+ 		int echo_idx = FIELD_GET(KVASER_PCIEFD_PACKET_SEQ_MASK, p->header[0]);
+-		int len;
+-		u8 count;
++		unsigned int len, frame_len = 0;
+ 		struct sk_buff *skb;
+ 
++		if (echo_idx != (can->ack_idx & (can->can.echo_skb_max - 1)))
++			return 0;
+ 		skb = can->can.echo_skb[echo_idx];
+-		if (skb)
+-			kvaser_pciefd_set_skb_timestamp(pcie, skb, p->timestamp);
+-		len = can_get_echo_skb(can->can.dev, echo_idx, NULL);
+-		count = FIELD_GET(KVASER_PCIEFD_KCAN_TX_NR_PACKETS_CURRENT_MASK,
+-				  ioread32(can->reg_base + KVASER_PCIEFD_KCAN_TX_NR_PACKETS_REG));
++		if (!skb)
++			return 0;
++		kvaser_pciefd_set_skb_timestamp(pcie, skb, p->timestamp);
++		len = can_get_echo_skb(can->can.dev, echo_idx, &frame_len);
+ 
+-		if (count < can->can.echo_skb_max && netif_queue_stopped(can->can.dev))
+-			netif_wake_queue(can->can.dev);
++		/* Pairs with barrier in kvaser_pciefd_start_xmit() */
++		smp_store_release(&can->ack_idx, can->ack_idx + 1);
++		can->completed_tx_pkts++;
++		can->completed_tx_bytes += frame_len;
+ 
+ 		if (!one_shot_fail) {
+ 			can->can.dev->stats.tx_bytes += len;
+@@ -1638,11 +1648,26 @@ static int kvaser_pciefd_read_buffer(struct kvaser_pciefd *pcie, int dma_buf)
+ {
+ 	int pos = 0;
+ 	int res = 0;
 +	unsigned int i;
  
--	kvaser_pciefd_remove_all_ctrls(pcie);
+ 	do {
+ 		res = kvaser_pciefd_read_packet(pcie, &pos, dma_buf);
+ 	} while (!res && pos > 0 && pos < KVASER_PCIEFD_DMA_SIZE);
+ 
++	/* Report ACKs in this buffer to BQL en masse for correct periods */
 +	for (i = 0; i < pcie->nr_channels; ++i) {
 +		struct kvaser_pciefd_can *can = pcie->can[i];
- 
--	/* Disable interrupts */
--	iowrite32(0, KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_CTRL_REG);
--	iowrite32(0, KVASER_PCIEFD_PCI_IEN_ADDR(pcie));
-+		unregister_candev(can->can.dev);
-+		timer_delete(&can->bec_poll_timer);
-+		kvaser_pciefd_pwm_stop(can);
++
++		if (!can->completed_tx_pkts)
++			continue;
++		netif_subqueue_completed_wake(can->can.dev, 0,
++					      can->completed_tx_pkts,
++					      can->completed_tx_bytes,
++					      kvaser_pciefd_tx_avail(can), 1);
++		can->completed_tx_pkts = 0;
++		can->completed_tx_bytes = 0;
 +	}
++
+ 	return res;
+ }
  
-+	kvaser_pciefd_disable_irq_srcs(pcie);
- 	free_irq(pcie->pci->irq, pcie);
- 	pci_free_irq_vectors(pcie->pci);
-+
-+	for (i = 0; i < pcie->nr_channels; ++i)
-+		free_candev(pcie->can[i]->can.dev);
-+
- 	pci_iounmap(pdev, pcie->reg_base);
- 	pci_release_regions(pdev);
- 	pci_disable_device(pdev);
 -- 
 2.47.2
 
