@@ -1,30 +1,31 @@
-Return-Path: <linux-can+bounces-3591-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3592-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73737ABD2F5
-	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 11:14:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3ABAABD2F6
+	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 11:14:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A28B38A633A
-	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 09:14:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE9527A388F
+	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 09:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3CA2676DA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 111972676DC;
 	Tue, 20 May 2025 09:14:34 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEA1266EEF
-	for <linux-can@vger.kernel.org>; Tue, 20 May 2025 09:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1C425486A
+	for <linux-can@vger.kernel.org>; Tue, 20 May 2025 09:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747732474; cv=none; b=ave3x1/a5arO8Bg8kps4w9CtVQUv08cL/fr6gJM5XGFYT0S6AHwELiozbEcPcFHF0WpeVK1u42XYSPHtrEAI/wolGUkjavGLq7JjgdopOasmVt/0PF/isQNjKNwaAmH/Iwa9kKuaslxl5W/msRmowA4QPsvv3g8IWNsV56iO8lE=
+	t=1747732474; cv=none; b=N5DTbnkeSY6W9LgAokGaZepimRw+wckqFbBTEajgMz9X/17+fl7Z/0fH0JfaZnZ50LzNokexKettF6Ji+tH6AS3/l+VXu2veD3QvC6CqqG/WS+q+2UOyppQz2vAgD7RFADHEszS+Y0A3VTSzpHjSdLEqknYgYLlbHZ04FZq2aVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1747732474; c=relaxed/simple;
-	bh=6CMZ4PTrmwYmYOwUo7w1DlR3hRPvxU9uzteAgA6RAos=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lSRaxbcyzC++wto17mD5zb0mJ6ygh0GxSJpwzUnbVxkn5F4UKIXSMRw01qYuDuHAAKrFvOEhcLnFrGxAsDD+EDKMpkw/s2T3b3WSXzNZlW310v9r1frsKF2UOfZcG8hHAv0neYayT4uar5I5Nu1RjtLrUhts6MZrPyLdlzR9sr8=
+	bh=Zk2Q0HBVqnOOMWfARYxxUIR4OxQJr5XY03zurPT7vfo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IRO2gtenCJCsHf0p9mUdCmwlISQGFHba/77SkuaCXGdnpEmddyyBE1pIQT0Vn1muPYHVYrUMtpsZRpQDkutVx12kuBGITxVTwNQy53kimUuaeK1ZicLDdQv5hi8JceCiEP7nhtbixTwORxlf3Ex5JuvTbZ0wFFYWkhmtOhBUkIw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -32,37 +33,42 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uHJ3N-0007kO-25
-	for linux-can@vger.kernel.org; Tue, 20 May 2025 11:14:29 +0200
+	id 1uHJ3O-0007na-I9
+	for linux-can@vger.kernel.org; Tue, 20 May 2025 11:14:30 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uHJ3M-000O4x-2i
+	id 1uHJ3O-000O5k-0m
 	for linux-can@vger.kernel.org;
-	Tue, 20 May 2025 11:14:28 +0200
+	Tue, 20 May 2025 11:14:30 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 82530415A29
-	for <linux-can@vger.kernel.org>; Tue, 20 May 2025 09:14:28 +0000 (UTC)
+	by bjornoya.blackshift.org (Postfix) with SMTP id E09B2415A37
+	for <linux-can@vger.kernel.org>; Tue, 20 May 2025 09:14:29 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 55531415A22;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id BE300415A23;
 	Tue, 20 May 2025 09:14:27 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a8c96f24;
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 95ee9b4b;
 	Tue, 20 May 2025 09:14:26 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
 	kuba@kernel.org,
 	linux-can@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: [PATCH net 0/3] pull-request: can 2025-05-20
-Date: Tue, 20 May 2025 11:11:00 +0200
-Message-ID: <20250520091424.142121-1-mkl@pengutronix.de>
+	kernel@pengutronix.de,
+	"Rob Herring (Arm)" <robh@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH net 1/3] dt-bindings: can: microchip,mcp2510: Fix $id path
+Date: Tue, 20 May 2025 11:11:01 +0200
+Message-ID: <20250520091424.142121-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250520091424.142121-1-mkl@pengutronix.de>
+References: <20250520091424.142121-1-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -75,50 +81,37 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hello netdev-team,
+From: "Rob Herring (Arm)" <robh@kernel.org>
 
-this is a pull request of 3 patches for net/main.
+The "$id" value must match the relative path under bindings/ and is
+missing the "net" sub-directory.
 
-The 1st patch is by Rob Herring, and fixes the $id path in the
-microchip,mcp2510.yaml device tree bindinds documentation.
-
-The last 2 patches are from Oliver Hartkopp and fix a use-after-free
-read and an out-of-bounds read in the CAN Broadcast Manager (BCM)
-protocol.
-
-regards,
-Marc
-
+Fixes: 09328600c2f9 ("dt-bindings: can: convert microchip,mcp251x.txt to yaml")
+Signed-off-by: "Rob Herring (Arm)" <robh@kernel.org>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Link: https://patch.msgid.link/20250507154201.1589542-1-robh@kernel.org
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
+ .../devicetree/bindings/net/can/microchip,mcp2510.yaml          | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The following changes since commit 239af1970bcb039a1551d2c438d113df0010c149:
+diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml
+index e0ec53bc10c6..1525a50ded47 100644
+--- a/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml
++++ b/Documentation/devicetree/bindings/net/can/microchip,mcp2510.yaml
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/can/microchip,mcp2510.yaml#
++$id: http://devicetree.org/schemas/net/can/microchip,mcp2510.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Microchip MCP251X stand-alone CAN controller
 
-  llc: fix data loss when reading from a socket in llc_ui_recvmsg() (2025-05-19 12:12:54 +0100)
+base-commit: 239af1970bcb039a1551d2c438d113df0010c149
+-- 
+2.47.2
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.15-20250520
-
-for you to fetch changes up to 8283fd51e6ea7d0420bd93055761a5b38fe2be9b:
-
-  Merge patch series "can: bcm: add locking for bcm_op runtime updates" (2025-05-19 17:09:33 +0200)
-
-----------------------------------------------------------------
-linux-can-fixes-for-6.15-20250520
-
-----------------------------------------------------------------
-Marc Kleine-Budde (1):
-      Merge patch series "can: bcm: add locking for bcm_op runtime updates"
-
-Oliver Hartkopp (2):
-      can: bcm: add locking for bcm_op runtime updates
-      can: bcm: add missing rcu read protection for procfs content
-
-Rob Herring (Arm) (1):
-      dt-bindings: can: microchip,mcp2510: Fix $id path
-
- .../bindings/net/can/microchip,mcp2510.yaml        |  2 +-
- net/can/bcm.c                                      | 79 +++++++++++++++-------
- 2 files changed, 55 insertions(+), 26 deletions(-)
 
 
