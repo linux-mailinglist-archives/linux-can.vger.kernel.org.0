@@ -1,228 +1,124 @@
-Return-Path: <linux-can+bounces-3590-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3591-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DB56ABD01C
-	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 09:14:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73737ABD2F5
+	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 11:14:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF07F3B0F19
-	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 07:14:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A28B38A633A
+	for <lists+linux-can@lfdr.de>; Tue, 20 May 2025 09:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F5D325CC63;
-	Tue, 20 May 2025 07:14:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="ivhpsD2e"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3CA2676DA;
+	Tue, 20 May 2025 09:14:34 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C91D25CC5E
-	for <linux-can@vger.kernel.org>; Tue, 20 May 2025 07:14:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEA1266EEF
+	for <linux-can@vger.kernel.org>; Tue, 20 May 2025 09:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747725273; cv=none; b=P1UbIEZ5QgvIbw94KkVuziAW0e6kemODaABcwxlQetL/bnKX8JH+sqOpzkXqXSQxyoiEm+6H22lBNKKGctCeUgEnu2Fn/oQnhyq2Cbjqsl/G6VcC3a0irlXRQEpS5dshgZH8jiu0mGWAsIizX8vMJH/lOAzTwGsN6o3fqNPzVoc=
+	t=1747732474; cv=none; b=ave3x1/a5arO8Bg8kps4w9CtVQUv08cL/fr6gJM5XGFYT0S6AHwELiozbEcPcFHF0WpeVK1u42XYSPHtrEAI/wolGUkjavGLq7JjgdopOasmVt/0PF/isQNjKNwaAmH/Iwa9kKuaslxl5W/msRmowA4QPsvv3g8IWNsV56iO8lE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747725273; c=relaxed/simple;
-	bh=tRidWgdVXaGgcCCS4EcX/PPe0mHajjfMB8wA86WKrx0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CvVEvjZHByWQnEU0FAhp3twjMpkkU1yGoiOjqoD4lokklXAKod1lv/PQn6ZkaqEA98iLcsQMLw4ekF/wZZwPDpbUIzxC9x4qfSgFMlvvRu4KP1Gt6fNIK0GPcThyMAdc8lN5BIr7I6ZM5Eixyt459xoRQsAjZ5K2Cm5T2jPQLpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=ivhpsD2e; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e733e25bfc7so4621853276.3
-        for <linux-can@vger.kernel.org>; Tue, 20 May 2025 00:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1747725270; x=1748330070; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O2vQFMPdKfJ/p2joX4Ju/wpunrwcSJg3TjeoVymBJqk=;
-        b=ivhpsD2ewi94M7LvQw25iKZxT4EJalTASPOZ0qcS13a4M7Z0+YDoLiGENVnB6aqAAB
-         bfIinKiKDimBof2YSfxjs5dFWD+SDW8rGzRxetTKNe2tSgCGG4DRU1RmxyHzXDSmnOqm
-         ECATzsiIpVZkq1m5TiDRVom7erV3ONDdBw26Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747725270; x=1748330070;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O2vQFMPdKfJ/p2joX4Ju/wpunrwcSJg3TjeoVymBJqk=;
-        b=LK9SCv4Je2QF/GhVmau+whAOVjblS3lSc3QyHi6KJML+U/mrQf0BmsEokvxLKbfOPX
-         KPhPhSuGzG21QF9CNPKbmCiEZUq7anlV2vDuAVS1xPtTnpWYJ4h3sH1nB50V+Mqik4rg
-         FPYniU5Cgntv84alXqVm4xYmaLjxcOnrTpfYxXDNElOTJlMB12NSSbhKV02yphYxsaxp
-         WzH7WqN8+Ab6ILqTY2ghInh6UbttmhRKBpkOKv7lJ/OBwgBwR7LFWqsH5m9hg5V5OGaX
-         aP+wFzhAuGyI4DSqW5QfE9NmaMM8JrgMPEV0Dsc70TLdLaLKOkUQU+QuV6ORF0JeQigS
-         D1+w==
-X-Forwarded-Encrypted: i=1; AJvYcCU9AUziAANySLeXRi6zN/y1XlZh7VUOjO/sDN1Gd7amCP912dSW9EnZF1i81BoX6itgBRCcoDOrO6w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXim2RjqfG0OZc9/+1WgL9PInoKVWxD40MGlaW+ebV7lP8vjj6
-	iTxoi7bhLBnp07bFwhp2vDqdHyK8fFcLu9MXK58N/yOzfLZMSmVaiTLLIrUOrWxQd0NfFkZinno
-	pQDUePL8w4keQeCB71fPFeo21wPsvy1HdPA8RwIYDAs0D1mVKqGHIUN0=
-X-Gm-Gg: ASbGnct+zW5YJ300WxuqzTdpG8qe5+ZEFQqPhOKDsYr7MTDvzP+VS92jTTQsQ7w/7rT
-	64vx1YKvFw0ZplRRDyPp/XNAtAFczi6t2kTw1rb24pCPYDRzF6rgq8vcpox4Pzxwf1kfe6kFVtW
-	7penBgF0GVhupbtEhaJ43ShMIiH4ZGtQ==
-X-Google-Smtp-Source: AGHT+IEM7b0OXs4NDSUR5+Bppi6SlwJi8oTGdYepNkoiw2G+oPZIJQUjqWLQPMfXSSqAksVKS15RtGrVmG8l92zD0WM=
-X-Received: by 2002:a05:6902:2401:b0:e7a:b45a:c73d with SMTP id
- 3f1490d57ef6-e7b6d414212mr19137181276.22.1747725269765; Tue, 20 May 2025
- 00:14:29 -0700 (PDT)
+	s=arc-20240116; t=1747732474; c=relaxed/simple;
+	bh=6CMZ4PTrmwYmYOwUo7w1DlR3hRPvxU9uzteAgA6RAos=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lSRaxbcyzC++wto17mD5zb0mJ6ygh0GxSJpwzUnbVxkn5F4UKIXSMRw01qYuDuHAAKrFvOEhcLnFrGxAsDD+EDKMpkw/s2T3b3WSXzNZlW310v9r1frsKF2UOfZcG8hHAv0neYayT4uar5I5Nu1RjtLrUhts6MZrPyLdlzR9sr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uHJ3N-0007kO-25
+	for linux-can@vger.kernel.org; Tue, 20 May 2025 11:14:29 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uHJ3M-000O4x-2i
+	for linux-can@vger.kernel.org;
+	Tue, 20 May 2025 11:14:28 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 82530415A29
+	for <linux-can@vger.kernel.org>; Tue, 20 May 2025 09:14:28 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 55531415A22;
+	Tue, 20 May 2025 09:14:27 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a8c96f24;
+	Tue, 20 May 2025 09:14:26 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH net 0/3] pull-request: can 2025-05-20
+Date: Tue, 20 May 2025 11:11:00 +0200
+Message-ID: <20250520091424.142121-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250519163100.733754-1-carlossanchez@geotab.com>
-In-Reply-To: <20250519163100.733754-1-carlossanchez@geotab.com>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Tue, 20 May 2025 09:14:19 +0200
-X-Gm-Features: AX0GCFskUWIky5PJoNINmYxjzoP-_yCaaDhrZI9r_XLRufr_nROmRWwlkwB51CI
-Message-ID: <CABGWkvpCQ-5wVp_TGRg2i7rtERwBykke_Y+ScCOXupiwtmAdjQ@mail.gmail.com>
-Subject: Re: [PATCH v3] can: slcan: allow reception of short error messages
-To: Carlos Sanchez <carlossanchez@geotab.com>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hello Carlos,
+Hello netdev-team,
 
-On Mon, May 19, 2025 at 6:31=E2=80=AFPM Carlos Sanchez <carlossanchez@geota=
-b.com> wrote:
->
-> Allows slcan to receive short messages (typically errors) from the serial
-> interface.
->
-> When error support was added to slcan protocol in
-> b32ff4668544e1333b694fcc7812b2d7397b4d6a ("can: slcan: extend the protoco=
-l
-> with error info") the minimum valid message size changed from 5 (minimum
-> standard can frame tIII0) to 3 ("e1a" is a valid protocol message, it is
-> one of the examples given in the comments for slcan_bump_err() ), but the
-> check for minimum message length prodicating all decoding was not adjuste=
-d.
-> This makes short error messages discarded and error frames not being
-> generated.
->
-> This patch changes the minimum length to the new minimum (3 characters,
-> excluding terminator, is now a valid message).
->
-> Signed-off-by: Carlos Sanchez <carlossanchez@geotab.com>
-> Fixes: b32ff4668544 ("can: slcan: extend the protocol with error info")
-> ---
->
-> I have remove the unclear global min length check incoming serial
-> line messages, and add a min size check per message type. While doing
-> so, I have renamed SLCAN_STATE_FRAME_LEN by s/FRAME/MSG/, because
-> those are serial line *messages* (and CAN frame is one of the possible
-> types of messages). Using "frame" the old way was confusing, even more
-> when adding the defines for other message types.
->
->
->  drivers/net/can/slcan/slcan-core.c | 22 ++++++++++++++++------
->  1 file changed, 16 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/s=
-lcan-core.c
-> index 24c6622d36bd..bbb2f82a6147 100644
-> --- a/drivers/net/can/slcan/slcan-core.c
-> +++ b/drivers/net/can/slcan/slcan-core.c
-> @@ -74,9 +74,14 @@ MODULE_AUTHOR("Dario Binacchi <dario.binacchi@amarulas=
-olutions.com>");
->  #define SLCAN_STATE_LEN 1
->  #define SLCAN_STATE_BE_RXCNT_LEN 3
->  #define SLCAN_STATE_BE_TXCNT_LEN 3
-> -#define SLCAN_STATE_FRAME_LEN       (1 + SLCAN_CMD_LEN + \
-> -                                    SLCAN_STATE_BE_RXCNT_LEN + \
-> -                                    SLCAN_STATE_BE_TXCNT_LEN)
-> +#define SLCAN_STATE_MSG_LEN     (SLCAN_CMD_LEN +               \
-> +                                 SLCAN_STATE_LEN +             \
-> +                                 SLCAN_STATE_BE_RXCNT_LEN +    \
-> +                                 SLCAN_STATE_BE_TXCNT_LEN)
-> +#define SLCAN_ERROR_MSG_LEN_MIN (SLCAN_CMD_LEN + 2)
+this is a pull request of 3 patches for net/main.
 
-What do you think about introducing some macros to remove the number 2, in
-order to make the code more readable?
+The 1st patch is by Rob Herring, and fixes the $id path in the
+microchip,mcp2510.yaml device tree bindinds documentation.
 
-Something like:
-SLCAN_ERROR_LEN 1
-SLCAN_ERROR_DATA_LEN_MIN 1
-And add them to SLCAN_ERROR_MSG_LEN_MIN
+The last 2 patches are from Oliver Hartkopp and fix a use-after-free
+read and an out-of-bounds read in the CAN Broadcast Manager (BCM)
+protocol.
 
-> +#define SLCAN_FRAME_MSG_LEN_MIN (SLCAN_CMD_LEN +       \
-> +                                 SLCAN_SFF_ID_LEN +    \
-> +                                 1)
-The same here, replace the 1 number with a macro.
+regards,
+Marc
 
-Thanks and regards,
-Dario
+---
 
->  struct slcan {
->         struct can_priv         can;
->
-> @@ -176,6 +181,9 @@ static void slcan_bump_frame(struct slcan *sl)
->         u32 tmpid;
->         char *cmd =3D sl->rbuff;
->
-> +       if (sl->rcount < SLCAN_FRAME_MSG_LEN_MIN)
-> +               return;
-> +
->         skb =3D alloc_can_skb(sl->dev, &cf);
->         if (unlikely(!skb)) {
->                 sl->dev->stats.rx_dropped++;
-> @@ -281,7 +289,7 @@ static void slcan_bump_state(struct slcan *sl)
->                 return;
->         }
->
-> -       if (state =3D=3D sl->can.state || sl->rcount < SLCAN_STATE_FRAME_=
-LEN)
-> +       if (state =3D=3D sl->can.state || sl->rcount !=3D SLCAN_STATE_MSG=
-_LEN)
->                 return;
->
->         cmd +=3D SLCAN_STATE_BE_RXCNT_LEN + SLCAN_CMD_LEN + 1;
-> @@ -328,6 +336,9 @@ static void slcan_bump_err(struct slcan *sl)
->         bool rx_errors =3D false, tx_errors =3D false, rx_over_errors =3D=
- false;
->         int i, len;
->
-> +       if (sl->rcount < SLCAN_ERROR_MSG_LEN_MIN)
-> +               return;
-> +
->         /* get len from sanitized ASCII value */
->         len =3D cmd[1];
->         if (len >=3D '0' && len < '9')
-> @@ -456,8 +467,7 @@ static void slcan_bump(struct slcan *sl)
->  static void slcan_unesc(struct slcan *sl, unsigned char s)
->  {
->         if ((s =3D=3D '\r') || (s =3D=3D '\a')) { /* CR or BEL ends the p=
-du */
-> -               if (!test_and_clear_bit(SLF_ERROR, &sl->flags) &&
-> -                   sl->rcount > 4)
-> +               if (!test_and_clear_bit(SLF_ERROR, &sl->flags))
->                         slcan_bump(sl);
->
->                 sl->rcount =3D 0;
-> --
-> 2.49.0
->
+The following changes since commit 239af1970bcb039a1551d2c438d113df0010c149:
 
+  llc: fix data loss when reading from a socket in llc_ui_recvmsg() (2025-05-19 12:12:54 +0100)
 
---=20
+are available in the Git repository at:
 
-Dario Binacchi
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.15-20250520
 
-Senior Embedded Linux Developer
+for you to fetch changes up to 8283fd51e6ea7d0420bd93055761a5b38fe2be9b:
 
-dario.binacchi@amarulasolutions.com
+  Merge patch series "can: bcm: add locking for bcm_op runtime updates" (2025-05-19 17:09:33 +0200)
 
-__________________________________
+----------------------------------------------------------------
+linux-can-fixes-for-6.15-20250520
 
+----------------------------------------------------------------
+Marc Kleine-Budde (1):
+      Merge patch series "can: bcm: add locking for bcm_op runtime updates"
 
-Amarula Solutions SRL
+Oliver Hartkopp (2):
+      can: bcm: add locking for bcm_op runtime updates
+      can: bcm: add missing rcu read protection for procfs content
 
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
+Rob Herring (Arm) (1):
+      dt-bindings: can: microchip,mcp2510: Fix $id path
 
-T. +39 042 243 5310
-info@amarulasolutions.com
+ .../bindings/net/can/microchip,mcp2510.yaml        |  2 +-
+ net/can/bcm.c                                      | 79 +++++++++++++++-------
+ 2 files changed, 55 insertions(+), 26 deletions(-)
 
-www.amarulasolutions.com
 
