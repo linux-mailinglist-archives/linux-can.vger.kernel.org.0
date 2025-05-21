@@ -1,146 +1,87 @@
-Return-Path: <linux-can+bounces-3613-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3614-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59602ABF3EE
-	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 14:14:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1C02ABF448
+	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 14:23:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A17473A39A2
-	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 12:14:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7DC054A79DD
+	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 12:24:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EABA264FA6;
-	Wed, 21 May 2025 12:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 538E5255F2C;
+	Wed, 21 May 2025 12:23:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="nZQf6y2D"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="eaBmbSR2"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-66.smtpout.orange.fr [193.252.22.66])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F342221D8D;
-	Wed, 21 May 2025 12:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10392231A37;
+	Wed, 21 May 2025 12:23:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747829678; cv=none; b=IH/DURN40t3/MoowjpMS4JBOKsqn0wk1A+vhJKPIoLUbjQ7dnivnSusLIkhm6O8/YKC3RGI1c86Qrb/7tYrxEH+NwVwmROkpgH20cgFi1C9f/snGQvSrVYtU2zRUloL1lHJ6voPUxgm1tl6JqZ83JmgV3q5OKSfthD1vGxeiWsA=
+	t=1747830236; cv=none; b=mumUFwA3rbm4kGxNm7kcbnYLHp6ES77R8745IlDRDcQW4ojbO6b6NA+nGQJs09MwhRVXd1khfDrgF4h5BQTmTe0isBwcjr0w4kRjjvbf4RF3P5L76BnKYUHyqPcwlbk8FxI5bosKHr2mGbcYNFF/sdCWYckYzfeDY+Yi0i77d80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747829678; c=relaxed/simple;
-	bh=jYHxqaFVXTDmKACrAKeH0s0kCrj27dHQEfoqXdtAXUY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nu85Oy9unGygR7qKAJ3TA27MLCi0mcamiameOTYC+93LyF9MIe1rYUIaDqHm0uR+VVNqc2Kb/qNH1h5Qt+5CT3fgb+x5GcT9H4EEVOSEPC145IxGKZMubaCTS1T4KStFXN6WKdOyV0tp3i7hjwwlERdLQhi0/hRURsK8ieU/0hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=nZQf6y2D; arc=none smtp.client-ip=193.252.22.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id HiL5upFGFAiZ4HiL6uxpGd; Wed, 21 May 2025 14:14:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1747829670;
-	bh=h4DcQovfptu9scaQr7PaHj5iQU+exolK1M2m9CxTu/g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=nZQf6y2D9LdRMhuRpaHzIUT7eBzs+pTIxOEETKcmQB+IM1cjnUGtTGG31Us9qS2CE
-	 iNjAuwvHpRBx2qxuT4BcIF8zFGAityzIKUtCGyFATHuaETYQABqCBAIpwhFeAPWctx
-	 C/ZpE5w1g6eCAG3VUXxGLI0GPRgZ5MxmAENNw+vQEG9ebaFwdbpAdkkevqNajfx+x9
-	 T0KmS3eJgGcmF9CXh486kOtvPxIVJFX5O7hAlbHSiG7YLuhOpRNvAqqXCEf+KA3fv7
-	 v+SlST8nbqr70CS6MDbM44NMqqnr/+vWAIBYhUFuHIm+v46292/SmMOsw6bMWJ8WMK
-	 2ulIavhb5cUZA==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 21 May 2025 14:14:30 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <4b5e3351-9435-4d4c-9553-98b7d0112fd8@wanadoo.fr>
-Date: Wed, 21 May 2025 21:14:26 +0900
+	s=arc-20240116; t=1747830236; c=relaxed/simple;
+	bh=DOJDmTsY7IcPVHChU5j9ew4xNita5TY+w7wzmZGWwxw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jQHvcoPgCLCKI8hqy2ncWjh0TNCo8Sp9h/jW6l60jfW+7/zbBfDuTSRYmB2oMNpn2XQRH+lNTMgg4l12iqqtvbTe9MkznMocXRkRTqu+gi2DJ7MNElsv+9YRi0fcE7JYWJcMevmQ5rpWYNyHnmk982fNpZobqIEVfT897Ki6zWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=eaBmbSR2; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=QC7FOGnDbniB2ILmcErRWoVq08mHS6HymgbS60fVsNI=; b=eaBmbSR2rZbHZEkXbI9dy+v0ls
+	nbfSvlVO0pVcDnUPAVF1UnPSmfrjfGCGJ3o4TAN2W2n6LlMP5Ztg7AQIao7W0pG3tDdzVg4ELN+ot
+	QR57WcRM8+V95XG0xrRZ4I4OoAY6XVsPDWFTxEs4tMVopcZwHXDblxqIPwGS2El8EsKA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uHiTy-00DGcl-0O; Wed, 21 May 2025 14:23:38 +0200
+Date: Wed, 21 May 2025 14:23:37 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] documentation: networking: can: Document
+ alloc_candev_mqs()
+Message-ID: <e361c02b-fddc-4b80-9ae2-ee3f2b69f69a@lunn.ch>
+References: <a679123dfa5a5a421b8ed3e34963835e019099b0.1747820705.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] can: dev: add struct data_bittiming_params to group FD
- parameters
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250501171213.2161572-2-mailhol.vincent@wanadoo.fr>
- <20250502-scrupulous-sunfish-of-attack-ca0160-mkl@pengutronix.de>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250502-scrupulous-sunfish-of-attack-ca0160-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a679123dfa5a5a421b8ed3e34963835e019099b0.1747820705.git.geert+renesas@glider.be>
 
-Hi Marc,
-
-On 02/05/2025 at 21:34, Marc Kleine-Budde wrote:
-> On 02.05.2025 02:12:10, Vincent Mailhol wrote:
->> This is a preparation patch for the introduction of CAN XL.
->>
->> CAN FD and CAN XL uses similar bittiming parameters. Add one level of
->> nesting for all the CAN FD parameters. Typically:
->>
->>   priv->can.data_bittiming;
->>
->> becomes:
->>
->>   priv->can.fd.data_bittiming;
->>
->> This way, the CAN XL equivalent (to be introduced later) would be:
->>
->>   priv->can.xl.data_bittiming;
->>
->> Add the new struct data_bittiming_params which contains all the data
->> bittiming parameters, including the TDC and the callback functions.
->>
->> This done, update all the CAN FD drivers to make use of the new
->> layout.
+On Wed, May 21, 2025 at 11:51:21AM +0200, Geert Uytterhoeven wrote:
+> Since the introduction of alloc_candev_mqs() and friends, there is no
+> longer a need to allocate a generic network device and perform explicit
+> CAN-specific setup.  Remove the code showing this setup, and document
+> alloc_candev_mqs() instead.
 > 
-> Thanks for the series!
-> 
->> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
->> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->> ---
->> The CAN XL series is still blocked because of lack of information on
->> the PWMS and PWML calculations, c.f.:
->>
->>   https://lore.kernel.org/linux-can/68e8c449-a6ab-4958-af3c-852ece2694c2@wanadoo.fr/
->>
->> Regardless, the above patch will be needed at some time. And instead
->> of constantly rebasing it, I would rather have it merged early.
->>
->> The other CAN XL preparation patches target a smaller subset of the
->> tree and rebasing those is not an issue.
->>
->> ** Changelog **
->>
->> v1 -> v2:
->>
->>   - add Oliver's Acked-by tag
->>   - rebase on top of:
->>
->>       [PATCH v5] can: mcp251xfd: fix TDC setting for low data bit rates
->>       Link: https://lore.kernel.org/linux-can/20250430161501.79370-1-kelsey@vpprocess.com/T/#u
->>
->>   Link: https://lore.kernel.org/linux-can/20250320144154.56611-2-mailhol.vincent@wanadoo.fr/
-> 
-> As "mcp251xfd: fix TDC setting for low data bit rates" will go through
-> the "can" and "net" tree, we have to wait until "net" is merged back to
-> "net-next".
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> Dunno if this deserves
+> Fixes: 39549eef3587f1c1 ("can: CAN Network device driver and Netlink interface")
 
-That commit now reached the net tree. Do you think that my patch can now be applied?
+Documentation often does get added to net and back ported. It is not
+going to break anything, and there are developers who work on the last
+LTS rather than net-next.
 
-
-Yours sincerely,
-Vincent Mailhol
-
+	Andrew
 
