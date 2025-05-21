@@ -1,163 +1,175 @@
-Return-Path: <linux-can+bounces-3611-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3612-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61123ABF0F0
-	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 12:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37A8CABF310
+	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 13:39:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 302751688B7
-	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 10:08:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B389417623E
+	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 11:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A938C25A342;
-	Wed, 21 May 2025 10:07:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A32025F78B;
+	Wed, 21 May 2025 11:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y/k8K0zo"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778A3253F3A
-	for <linux-can@vger.kernel.org>; Wed, 21 May 2025 10:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7903264630
+	for <linux-can@vger.kernel.org>; Wed, 21 May 2025 11:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747822047; cv=none; b=bi+NVAZTgk8a5ww16LyD4KjNlr/Bm7Lv0L0IanUWvzFjtU2HGyZVtbd6YWYnO2jclbbr4a26a1fZYiD1IFgw0C/nGSRJqoxWPhVn8CmwQwiskElpjW2lH7zGH5qDQ5Oc3XdeKP90yRv2BFWfA6mufmrThdwfdK2tsS9Ts8sOp5w=
+	t=1747827564; cv=none; b=MgeMqtms2p5CH5y7GDd2adXRQ5DYsMrTeD9WxDlhMVvT4Nyn36oABVx4HRM9EshC0stAQC5SK63Vxi/Wnm5xiuNENF52qs/72vT4NPk9koYt4xz/mcYjB8zM6DSfRL5rlSP4RIytb/YJo8xdmH5NkpC3Ypzs8WCl932eE0d+dRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747822047; c=relaxed/simple;
-	bh=opxaVNb07Rd8axYijuIwX0qLz4PZ5eUnXP+JCXL4XbI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N4dLCyvy1x9IsoquJZ01iPBUgorGBtBLEYDxFn4xDexREmH9yLirO7YcQjxfE5JhtuHVVwo7C7VnA2ChiB36YKgu/onVAju7eAZZ7+KovsC27ppzJCC60TNghn1UMnK4z3M1DfgBeCaWEAR6DsELjAmmaPP6RsyCyZBl5Pi7H9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uHgLw-0007R6-Sq; Wed, 21 May 2025 12:07:12 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uHgLu-000YT3-1s;
-	Wed, 21 May 2025 12:07:10 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:2260:2009:2000::])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id A31874167EC;
-	Wed, 21 May 2025 10:07:09 +0000 (UTC)
-Date: Wed, 21 May 2025 12:07:07 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, 
-	Jonathan Corbet <corbet@lwn.net>, Wolfgang Grandegger <wg@grandegger.com>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] documentation: networking: can: Document
- alloc_candev_mqs()
-Message-ID: <20250521-ancient-discreet-weasel-98b145-mkl@pengutronix.de>
-References: <a679123dfa5a5a421b8ed3e34963835e019099b0.1747820705.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1747827564; c=relaxed/simple;
+	bh=ZCZ2aJ1b5eMSWudl4vKU4ptaYuhCrY9+6o62fv7wrhA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F5LTEMNOmQmH6ON+6NaLY+eTRF89h6xo1Fby5zwgmvIEGfjQcAiI9I8uTYYCxRmWqRxtrNbct/ZUCOWmwdp+jApfGtel6udVe1MAR9Kq8Rdhnt03JvGFnU5UPdsG4ewGowmw9bbwi6YCD6sseD2BCSGve1kJI+RMzhryuCaaZdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y/k8K0zo; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747827560;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=G9KOOfsW+8OgloJMhG+itfRoJTQZ8+HhBWqoWSniyY4=;
+	b=Y/k8K0zojUj3/O6y6E4b3/5+3BM8KlhWtr90uzo3jmrC/uH4bwP3u4tGCVN1jylsa3lV7+
+	i1/oEvVljewc+aRAGdjcZcT52WGMK2oHw5sAjUYlHnSROFJNkjBWbiS5Fo6YS5/S6Fh+Jx
+	brX5okNx9aggBLljcWfjV8J2vT7QLcU=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-586-7IU8SWDuOZ6IZolszohdzg-1; Wed, 21 May 2025 07:39:19 -0400
+X-MC-Unique: 7IU8SWDuOZ6IZolszohdzg-1
+X-Mimecast-MFC-AGG-ID: 7IU8SWDuOZ6IZolszohdzg_1747827558
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a362dcc86fso2049298f8f.0
+        for <linux-can@vger.kernel.org>; Wed, 21 May 2025 04:39:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747827558; x=1748432358;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G9KOOfsW+8OgloJMhG+itfRoJTQZ8+HhBWqoWSniyY4=;
+        b=Y1C+BupL8gKBqFJ2x8MzWQVHD6RO/ZJC04vjqqZJmMRPtLUZBMvtMOg/jaGPG/z4RL
+         KcCWCaL1EjlrS6fzXKqg7V+nTE+RFxoR/DUKg65+BUZ9QCFAq7EcOw0PVsN9SU95/bSR
+         lkTquwSg9Z2Z31MYMMZlZ11EPuSpJuOHnnz4sXevKYWKezCHP/gda6SW+1bLqE/wjsnZ
+         w045CNKjvefduEUsXsUetWtCL/e44eByiVQRyjfgBH2EQ2qiCcT19YqI9K8cv6SAO6UM
+         bz2yqTKWtXvS7v3ZzOEe+KNtxMaQXPeAXcW3mzIlZ0UxmkeCB8PwgrqbQ9ihZLgB9Ppl
+         oMcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWTdhOJ00BrSINJ5U1ztBVXcKcX3ExAJPpkRKpP6DH+dv7UPX2eKUSTiF9ZPexxkmkEDBVfH5LCxdw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjwAW4omyGrl7tVOv76Vk8LTwtOV4dFy5zSYrP/OTK1qZDUcQi
+	/f1PMkW2kRL6KbwogVxRt9mg3CK2uvFfIKFYQ/GpR+3RcW9U4Ulyi7rVdH9GiW22+zbW2v2++08
+	CWTbXEEuCRI2mQ9NnwPHxVysYq9Fzz/m5JRyZUcEFa/qF3udMCy143WTxWcOQ0g==
+X-Gm-Gg: ASbGncsPAlNKy8rbrgj0Gh/gnRi6Ns2lp7pHOILrhSTBXihjp2/3m45CVPqcaSwpP9/
+	cB72wafjNjdMUy+DKen7bJd5IWtXbGZrW8t0dONvdYPSqWDws8nADAh6W3D+ILu9Q0fJT1acfLn
+	HR/vU7HKeoVZlzfGFrgcAcRbGlDUIx0pt3ZoYo9crP0MyL/TA71OYQxIo0ALGRhXI4WFyTaTGc5
+	nDGbxqf1F+gYDYw+n0yqzOHLix0vlcKhS/ZFbO+skr9zLLURwQoAmT2OBu1DB0y9JmYHeHYzJ1Q
+	O1AUWtEKYspK/jL77ZeAUPfFwXQkwxM9ejSrKSxMqSY=
+X-Received: by 2002:a05:6000:2dc6:b0:3a3:779d:5f42 with SMTP id ffacd0b85a97d-3a3779d5f61mr6318195f8f.3.1747827557906;
+        Wed, 21 May 2025 04:39:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHxQsTXZ+Ts2cIK3EuR4b/M12UVesyDgK3ufrotSRgReR+EMMzUPKugbn4ggPlauNfM02nRYw==
+X-Received: by 2002:a05:6000:2dc6:b0:3a3:779d:5f42 with SMTP id ffacd0b85a97d-3a3779d5f61mr6318166f8f.3.1747827557508;
+        Wed, 21 May 2025 04:39:17 -0700 (PDT)
+Received: from [172.16.17.1] (pd9ed5a70.dip0.t-ipconnect.de. [217.237.90.112])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca4d224sm20072118f8f.12.2025.05.21.04.39.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 May 2025 04:39:17 -0700 (PDT)
+Message-ID: <96837efb-63ac-4191-8e2a-4785672c8d7a@redhat.com>
+Date: Wed, 21 May 2025 13:39:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sbvuoiedkezuzawe"
-Content-Disposition: inline
-In-Reply-To: <a679123dfa5a5a421b8ed3e34963835e019099b0.1747820705.git.geert+renesas@glider.be>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests: can: Import tst-filter from can-tests
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dcaratti@redhat.com, fstornio@redhat.com
+References: <dac10156eb550871c267bdfe199943e12610730b.1746801747.git.fmaurer@redhat.com>
+ <CAMZ6RqKmPD+BZkVC1C-vn7hcAVdQr8Qhd6PW8bASZiQkD6MV-A@mail.gmail.com>
+Content-Language: en-US
+From: Felix Maurer <fmaurer@redhat.com>
+In-Reply-To: <CAMZ6RqKmPD+BZkVC1C-vn7hcAVdQr8Qhd6PW8bASZiQkD6MV-A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+Hi Vincent,
 
---sbvuoiedkezuzawe
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] documentation: networking: can: Document
- alloc_candev_mqs()
-MIME-Version: 1.0
+On 14.05.25 11:47, Vincent Mailhol wrote:
+> Hi Felix,
+> 
+> On Sat. 10 May 2025 at 00:07, Felix Maurer <fmaurer@redhat.com> wrote:
+>> Tests for the can subsystem have been in the can-tests repository[1] so
+>> far. Start moving the tests to kernel selftests by importing the current
+>> tst-filter test. The test is now named test_raw_filter and is substantially
+>> updated to be more aligned with the kernel selftests, follow the coding
+>> style, and simplify the validation of received CAN frames. We also include
+>> documentation of the test design. The test verifies that the single filters
+>> on raw CAN sockets work as expected.
+>>
+>> We intend to import more tests from can-tests and add additional test cases
+>> in the future. The goal of moving the CAN selftests into the tree is to
+>> align the tests more closely with the kernel, improve testing of CAN in
+>> general, and to simplify running the tests automatically in the various
+>> kernel CI systems.
+>>
+>> [1]: https://github.com/linux-can/can-tests
+>>
+>> Signed-off-by: Felix Maurer <fmaurer@redhat.com>
+> 
+> Thanks again.
+> 
+> I left a set of nitpicks, I expect to give my reviewed-by tag on the
+> next version.
 
-On 21.05.2025 11:51:21, Geert Uytterhoeven wrote:
-> Since the introduction of alloc_candev_mqs() and friends, there is no
-> longer a need to allocate a generic network device and perform explicit
-> CAN-specific setup.  Remove the code showing this setup, and document
-> alloc_candev_mqs() instead.
+Thank you for your feedback. I'll post a new version with the changes
+included soon.
 
-Makes sense.
+[...]
+>> +FIXTURE_SETUP(can_filters)
+>> +{
+>> +       struct sockaddr_can addr;
+>> +       struct ifreq ifr;
+>> +       int recv_own_msgs = 1;
+>> +       int s, ret;
+>> +
+>> +       s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+>> +       ASSERT_LT(0, s)
+> 
+> 0 is a valid fd (OK it is used for the stout, so your code will work,
+> but the comparison still looks unnatural).
+> 
+> What about:
+> 
+>   ASSERT_NE(s, -1)
+> 
+> or:
+> 
+>   ASSERT_GE(s, 0)
+> 
+> ?
+> 
+> (same comment for the other ASSERT_LE)
 
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> Dunno if this deserves
-> Fixes: 39549eef3587f1c1 ("can: CAN Network device driver and Netlink inte=
-rface")
->=20
->  Documentation/networking/can.rst | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
->=20
-> diff --git a/Documentation/networking/can.rst b/Documentation/networking/=
-can.rst
-> index b018ce346392652b..784dbd19b140d262 100644
-> --- a/Documentation/networking/can.rst
-> +++ b/Documentation/networking/can.rst
-> @@ -1106,13 +1106,10 @@ General Settings
-> =20
->  .. code-block:: C
+I was a bit hesitant to change the order of expected and seen value for
+the the assertions because it's documented as ASSERT_*(expected, seen).
+But it seems to be common in the selftest to not follow this order where
+assertions are used for error checking and failure message doesn't
+explicitly say what was expected/seen. I'll take a look at the error
+checking in the whole file where the more familiar form is with reversed
+arguments.
 
-This breaks the rst rendering. I think you should remove the "..
-code-block:: C"...
+Thanks,
+   Felix
 
-> =20
-> -    dev->type  =3D ARPHRD_CAN; /* the netdevice hardware type */
-> -    dev->flags =3D IFF_NOARP;  /* CAN has no arp */
-> +CAN network device drivers can use alloc_candev_mqs() and friends instea=
-d of
-> +alloc_netdev_mqs(), to automatically take care of CAN-specific setup:
-
-and add a second ":" after "setup:"
-
-> =20
-> -    dev->mtu =3D CAN_MTU; /* sizeof(struct can_frame) -> Classical CAN i=
-nterface */
-> -
-> -    or alternative, when the controller supports CAN with flexible data =
-rate:
-> -    dev->mtu =3D CANFD_MTU; /* sizeof(struct canfd_frame) -> CAN FD inte=
-rface */
-> +    dev =3D alloc_candev_mqs(...);
-> =20
->  The struct can_frame or struct canfd_frame is the payload of each socket
->  buffer (skbuff) in the protocol family PF_CAN.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---sbvuoiedkezuzawe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmgtpcgACgkQDHRl3/mQ
-kZzZBAf+KobGBApygB4CwC3hCcnYb71xjwgtbkiWO5q4KhXRr930pIva6X5+T98v
-pYeIvgWBHWIb+oX+XtODqQ8Oecye/wbxH1vE5/HBlN8MrAWboUUj1By66QpVT8ON
-aXipujw3xZ9W0DNEjZC9dNi0HFlNquQnEukbjL/LwpOg4RucG5nDrbMi/JeUU4zi
-fw3w1Wn+0Jby2EJViWX0maZauvcFm7sSF2zSPT6T0xcyWHOmPPiE9DoyFv4sZ3a/
-zvKjzWxGxByng32iRHDJIbzpMGPy89ws5hdy4os42O1TR4SmwoIfkUpVFYYd8l+B
-7GZTZEflFfOdesOsMoN97v4Tgj/D5g==
-=WQeM
------END PGP SIGNATURE-----
-
---sbvuoiedkezuzawe--
 
