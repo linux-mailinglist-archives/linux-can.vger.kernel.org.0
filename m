@@ -1,112 +1,143 @@
-Return-Path: <linux-can+bounces-3616-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3617-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A9D0ABF749
-	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 16:10:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66790ABF7D9
+	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 16:29:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08B439E6A78
-	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 14:09:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 282334E42D0
+	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 14:29:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EADE18DF89;
-	Wed, 21 May 2025 14:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 113C01A23BB;
+	Wed, 21 May 2025 14:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="r9tzsjMa"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="QLg4w/I5"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-13.smtpout.orange.fr [193.252.22.13])
+Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
 	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0111618DB14;
-	Wed, 21 May 2025 14:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B0317E
+	for <linux-can@vger.kernel.org>; Wed, 21 May 2025 14:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747836527; cv=none; b=ROhw/bpTFUyEd+2EX3AIfU0i1TjeOWu03L7s9DlrR4jxSYe5oZBiAnfNo7HWsbkPLFIvvkaV1fnixJ7yCqdhgeIQ5S/cyNWi/fHt44s+WIFmxUxCBsl9Tv0Smd5OBwlJVypEOZRZEbCpOeEStCIP00WWMmKGG+OU+m8SNGfr1fI=
+	t=1747837766; cv=none; b=DU7Ub0hkJXJ5I3CEWtiHd/XBWVrQzzhcMdEVBJr+IN3b+e2+Zi6KugUPnVgxdIZrBRzkemfDKQ1yKA0v/LcXCkC63WABY40RSshS+cpeASgFef6KFS/wJzg0WOA/54Oj6B5jxlA4PXWVYOf/RderJlGmuZhv59HPHQm9Vz5TyVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747836527; c=relaxed/simple;
-	bh=7X2bDw7QnzI+Ry95G/GHDrSBj9tycNP3+ulwGxSrXgc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HZo0EunJssC4zhdEZ2OZyFZO1rGOQIvsGTl1SZQdL3sesKbl/CGI5nnofctcXctyueTe39O2KNViYD9WAfAlyEjEbv6Lf5jfX90i18He51YVP4Bi4SwFrGKvuCmG2eQcpNlHOsbn6RO2dGX2W9L61UVqRIiqcZrT64lfpHgwDbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=r9tzsjMa; arc=none smtp.client-ip=193.252.22.13
+	s=arc-20240116; t=1747837766; c=relaxed/simple;
+	bh=Q/STPmTu7RpLqcmifIG5b8s9o56dmo6SlfYvJbtLwzg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hF7B0bE+1H84yDzIzhCkjUHsAGc/nKxEcx+GSvvueRfnkCYIUKJ3l/KJPxhWe4GAkR77SkaDvWUZolVrry2/MW25aSnl1oWOhXleuTAbJk7+FJg9hR/HTmQG8Oz2tn4LYXiwmA8srWSaE1OrEzAIv5d3bRTVQ9SwuP03TcNkGt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=QLg4w/I5; arc=none smtp.client-ip=193.252.22.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
+Received: from localhost.localdomain ([124.33.176.97])
 	by smtp.orange.fr with ESMTPA
-	id Hk6HuahaZpEs6Hk6QuvpuY; Wed, 21 May 2025 16:07:31 +0200
+	id HkIXuCBk7ftZ8HkIeuL17k; Wed, 21 May 2025 16:20:09 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1747836452;
-	bh=1p4bBOM6X/rWnNjj84c+v68lEDBrduzX5mBWWcyQmak=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=r9tzsjMaVrP1Qp77I+48WpcjD4FydBs0ftajiJPZViYAe48B7LJTSj2CH2d+TKOO+
-	 16OhFfgqrot7pKbj0snZf7Kq/jjbHZHDWLFhoxR+JFNn6MtRdI1RkTR8oKEh9EdBsV
-	 M6AW+ZJ7x+SHIYn5Sw3ZvdxEwrBteX4uYcrkgV1w+Sj6T3gr7Q2BOLbvSkPFi9/FXF
-	 tl8sfUam/WhcLu/INgfXQE3Ej7nfpZO5+gY7R15XIv0lS0W8rlChYVbAK8J/qnmBy3
-	 b0koIuIKbpkSzKgr3XEo9cRNnYt3QHHTcGJNvVPJejunkvGcoZOBQUDlo+Y9pDTriR
-	 fIrPZaas4zfYw==
-X-ME-Helo: [172.16.82.72]
+	s=t20230301; t=1747837209;
+	bh=PQFIsv362059jYm/0PMO+rM0+yjRL3CD7EbulC0nNSI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=QLg4w/I5Sxw1u6InMbClBmA8DSatqmS5NStAx8iXIEWjxFwxv4hV5nRLLPYayDcUK
+	 vU8SVThwNsqnwjxA/mM+AIf3fsgFtv8zkLtj/OxuHTA1DXUQxyKcpUQBktER1cyO4k
+	 k+R7UJ+f+ySz1mG+kUfWCTEubRiqkzRMqphr17sF+2UdRawaqEXHcgbM5ss8cHeLgO
+	 Y7kDkfypt+F8XEybR+9FLlWXDmxfoMJoTFZfI6DW0jrrBhhe66EUgFBKfa0aV4xDuO
+	 38T0HMDXodhtnoLoRplZb6A2Z57QARFcvCFjynDOafm1CyOUKUdlP7KRkkjZcXGanO
+	 Syvx3Feb06n/g==
+X-ME-Helo: localhost.localdomain
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 21 May 2025 16:07:32 +0200
+X-ME-Date: Wed, 21 May 2025 16:20:09 +0200
 X-ME-IP: 124.33.176.97
-Message-ID: <e5487982-2a7a-44ca-95d6-f270a7533749@wanadoo.fr>
-Date: Wed, 21 May 2025 23:07:16 +0900
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To: Felix Maurer <fmaurer@redhat.com>,
+	socketcan@hartkopp.net,
+	mkl@pengutronix.de
+Cc: shuah@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	dcaratti@redhat.com,
+	fstornio@redhat.com,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] selftests: can: test_raw_filter.sh: add support of physical interfaces
+Date: Wed, 21 May 2025 23:18:53 +0900
+Message-ID: <20250521141945.13358-2-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com>
+References: <87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] selftests: can: Import tst-filter from can-tests
-To: Felix Maurer <fmaurer@redhat.com>, socketcan@hartkopp.net,
- mkl@pengutronix.de
-Cc: shuah@kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, dcaratti@redhat.com, fstornio@redhat.com
-References: <87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1799; i=mailhol.vincent@wanadoo.fr; h=from:subject; bh=Q/STPmTu7RpLqcmifIG5b8s9o56dmo6SlfYvJbtLwzg=; b=owGbwMvMwCV2McXO4Xp97WbG02pJDBm6DxnNjqcKHbfqNctwrS4oPrbn5bkH5+oPPjyg5eC/z e+F+IylHaUsDGJcDLJiiizLyjm5FToKvcMO/bWEmcPKBDKEgYtTACYiOo3hf3jdlKN+y2MMV6vn LKt812i10O/n6/k6Lb3RfXMZslbFBDEyrD4dZr+80OLtZ0F7h1CXwDsN+/QFj88/Nfvjmiuz+ra KcAIA
+X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp; fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
+Content-Transfer-Encoding: 8bit
 
-On 21/05/2025 at 22:16, Felix Maurer wrote:
-> Tests for the can subsystem have been in the can-tests repository[1] so
-> far. Start moving the tests to kernel selftests by importing the current
-> tst-filter test. The test is now named test_raw_filter and is substantially
-> updated to be more aligned with the kernel selftests, follow the coding
-> style, and simplify the validation of received CAN frames. We also include
-> documentation of the test design. The test verifies that the single filters
-> on raw CAN sockets work as expected.
-> 
-> We intend to import more tests from can-tests and add additional test cases
-> in the future. The goal of moving the CAN selftests into the tree is to
-> align the tests more closely with the kernel, improve testing of CAN in
-> general, and to simplify running the tests automatically in the various
-> kernel CI systems.
-> 
-> [1]: https://github.com/linux-can/can-tests
-> 
-> Signed-off-by: Felix Maurer <fmaurer@redhat.com>
+Allow the user to specify a physical interface through the $CANIF
+environment variable. Add a $BITRATE environment variable set with a
+default value of 500000.
 
-Thanks. I will send a follow-up patch which will add the support of physical can
-interfaces.
+If $CANIF is omitted or if it starts with vcan (e.g. vcan1), the test
+will use the virtual can interface type. Otherwise, it will assume
+that the provided interface is a physical can interface.
 
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+For example:
 
+  CANIF=can1 BITRATE=1000000 ./test_raw_filter.sh
 
-Yours sincerely,
-Vincent Mailhol
+will run set the can1 interface with a bitrate of one million and run
+the tests on it.
+
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+This depends on "selftests: can: Import tst-filter from can-tests"
+from Felix.
+
+Link: https://lore.kernel.org/linux-can/87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com/
+---
+ tools/testing/selftests/net/can/test_raw_filter.sh | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/net/can/test_raw_filter.sh b/tools/testing/selftests/net/can/test_raw_filter.sh
+index 2216134b431b..276d6c06ac95 100755
+--- a/tools/testing/selftests/net/can/test_raw_filter.sh
++++ b/tools/testing/selftests/net/can/test_raw_filter.sh
+@@ -9,17 +9,25 @@ net_dir=$(dirname $0)/..
+ source $net_dir/lib.sh
+ 
+ export CANIF=${CANIF:-"vcan0"}
++BITRATE=${BITRATE:-500000}
+ 
+ setup()
+ {
+-	ip link add name $CANIF type vcan || exit $ksft_skip
++	if [[ $CANIF == vcan* ]]; then
++		ip link add name $CANIF type vcan || exit $ksft_skip
++	else
++		ip link set dev $CANIF type can bitrate $BITRATE || exit $ksft_skip
++	fi
+ 	ip link set dev $CANIF up
+ 	pwd
+ }
+ 
+ cleanup()
+ {
+-	ip link delete $CANIF
++	ip link set dev $CANIF down
++	if [[ $CANIF == vcan* ]]; then
++		ip link delete $CANIF
++	fi
+ }
+ 
+ test_raw_filter()
+-- 
+2.49.0
 
 
