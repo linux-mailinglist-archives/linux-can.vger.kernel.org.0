@@ -1,147 +1,153 @@
-Return-Path: <linux-can+bounces-3622-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3624-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 033EBAC050A
-	for <lists+linux-can@lfdr.de>; Thu, 22 May 2025 09:00:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37F86AC05CC
+	for <lists+linux-can@lfdr.de>; Thu, 22 May 2025 09:34:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 053DB9E0C6A
-	for <lists+linux-can@lfdr.de>; Thu, 22 May 2025 07:00:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D2269E4C59
+	for <lists+linux-can@lfdr.de>; Thu, 22 May 2025 07:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CE09221FAE;
-	Thu, 22 May 2025 07:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GFJl7FTU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8E3221FD6;
+	Thu, 22 May 2025 07:33:59 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0088422156E;
-	Thu, 22 May 2025 07:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E40C3234;
+	Thu, 22 May 2025 07:33:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747897221; cv=none; b=VPSqt6tQ1fxVKtG/u9oND9fxHVUDK2/Fa1Agvf7jO1nTK5YG0DdZXGwk7d8HmoWkmO2m5LF5Q9o15HrJ0QRFcB5KvegnkMSSKnCvjqjwEqlKX5TN67PN+Zw8yvBahaAtNhL3kubLDs7uPZ/xS/A1pWDaoJARdbUFOXdBew/NVi8=
+	t=1747899239; cv=none; b=b66au5RPCMgE5UeGUTSnEQKA8kVD80ee5cGVJqU5xCH1SRF0w6jXESPsHhdun/x/R/Ow8PZaE/MBFKJBRIW2+7nA8y8nkpd2mjYiiG7m7QjMvtc3pguy09FCGGnT9XDlB0iUvVAU169RcdxUYOH9lykCCSFafGCq+15frLPX4F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747897221; c=relaxed/simple;
-	bh=LZLkbGZ2PnVJ7iVxraNYnGaePANsUO1SvKxcHJG4w7M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e+TacbcwLqoxyvDeIRNiJk1s/TBkB1FMg84+Vcpn6GW2keEHO6izgiDgJdt4SBOIYBENvlnv72Udg7Tcv10F/gXI0PY1Xgv7HeIQQLicBs0db1+6XrpdHNlM4Uyer0WS7RhwNjLiZzm8DWvbx4/yQOICUyFJbIhQ2SUKLRQe2QQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GFJl7FTU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDB65C4CEE4;
-	Thu, 22 May 2025 07:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747897219;
-	bh=LZLkbGZ2PnVJ7iVxraNYnGaePANsUO1SvKxcHJG4w7M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GFJl7FTUOvI+TOAcZZz9l9T+gQypgQGHqiU7YtStXMarDa9OMtDnwP1DTbACXCA3r
-	 9bI+DknzSYQr6k+vyP75tsPcz5pxYBDT9nlcMUZJA+TdbYJqMcTGXqcF7M+NpLgNAu
-	 C2iKjAw6RR1DL/W3svv1vio+ISIvS35a85kkSH1FqYQjvUxVyzKBXXp9+bbLAzjg1J
-	 Jd+55gKt6KSB4PjdTzMl0QWlxzMRQhST5QWuJAx5aRM+A0f/DPVRruJ8iIzgradJ2u
-	 DiPkUK/th9A3UsSyW7V5srF1SIle029wkms0fLl4mvwnMtoHiAjdmGOELuTN2KR3oj
-	 Y+hjr/B2ifxpQ==
-Message-ID: <2127437a-d231-44f0-9866-6a565185401a@kernel.org>
-Date: Thu, 22 May 2025 09:00:13 +0200
+	s=arc-20240116; t=1747899239; c=relaxed/simple;
+	bh=afyt6vYfbzReFuh6xX3pKfOpek+1H61IQUVeBZj8jEM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eXypGXYQt+r/qfnmoqyO6424xK/GDIv1zLLEwLju0c8Kot9nGA/CymLCs6LgcJTz2ECZMaqUFIQClGfKqcuo5N9bCd8dsrPHd3dk81ZzSDYQ6WxjXiq/N2AiDqJWE9bbQU/E3j/aqmGRsrSl8/1hR7dxCN+IXT/qSQlSSf+d728=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-5242f137a1eso2377987e0c.1;
+        Thu, 22 May 2025 00:33:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747899235; x=1748504035;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X7KW42M2nPHRBzgnk6YsRbRV24Eym9REz3RjLED1wag=;
+        b=I1OExxbLDyUAkVZhhoEZyCilMQkquKKGH+LI/QJArc5rQWkQSVx8AXYeGWxNkTb5oy
+         jQgFQyNjQc0D+J7yQui+1/D12E1+azdMWI+PDsFJr2X1+I+sXPIiOQvh6OhyC6dXOHZp
+         4vloLPdrzcBZQqqZbPtmnSD9aB7p6YV4XFoyGM7LSPyzDE7liZ21FhMjSp7oPCWYkQYC
+         8sJpbhW1wYJpVA8xOdAt3AnnmT5UtZAeb1TP0uX0opSiTPjLOcXfDmxIKvhLicVBR2SP
+         apxX3QKoxjibfj9LTFgMRMnciHSo9/tSo0x++9lsJRlqicLaa69mJQ8S/UHfIh+U3vNp
+         OsZw==
+X-Forwarded-Encrypted: i=1; AJvYcCWw7CsoLgcnJanHlpOs2YWXm2n1pOYOVvfTDUOkW1xAQZFj52fWFGEcWVoX+76DgQet5KCte6Ip@vger.kernel.org, AJvYcCX2dBlsx+hu7I6nDDCCzgXiVm4yll+BbuAEL90dHP5kKWyjzE2XuYKtiuppjHOAc374tbj/TYrsL7Y=@vger.kernel.org, AJvYcCXgJkzdDfR9BK426nRGmt8iK3l49IaTsn4HMdCzeqeb+go/9dw5zZwz+DBQCw2xjlLqLa45Zk1UzH4U@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiIKpWS1LsDdtG4Syg3DVtOaZUCr6QdoDT5C/Ecy/c4XMl5ahc
+	9lFzEWRkK55xy8JgKr+DMsSoqNO1GbQJCRUC2wR6/60lyNQwQZ9Qyn/HzAxa2mNy
+X-Gm-Gg: ASbGnctW+p3hBoTw05omx9MgU5hwKGqNOf46lh6qoxspkMLqKnjBaXJIhRdozFFAjU5
+	js/y/NQw5EWKukl2pi2WTGyLWBOUuDBVZ+IzllaVUzs8LSG9pw3heQH7OUTg/DZaZibm89iz2ki
+	kbDF8mepiynz9VT0uvFZ1GIQGEkjk5wl3gR7MpOuwxX4tZ7Jl6N5z8BAuFT1+8MmdX2f8nKkzu7
+	c6hDUX++u4tZICVbMvdLSDLHbEPixOoYn/hWUg57ZuDoZ45gNgOxgT25jOHDn5zPnoMFbIyYRIa
+	QdDRadtvTZCZJy9QezE6fpQWhcDmg0A54hYtJTBQLrMnOycI/X//D+tw8tcQHOtFjrL9DOqCX/Z
+	3lzLLvOxDn+J/HA==
+X-Google-Smtp-Source: AGHT+IHikIZLZ1dZSgH/RR2Hdv8CSv8vbOX08ARUI5So85blok34d0/WyJjUj46TinX6Rt76XAidYA==
+X-Received: by 2002:a05:6122:a1f:b0:527:8771:2d39 with SMTP id 71dfb90a1353d-52dbcd6d66dmr19724074e0c.7.1747899235036;
+        Thu, 22 May 2025 00:33:55 -0700 (PDT)
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-52dba910901sm11367008e0c.2.2025.05.22.00.33.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 May 2025 00:33:54 -0700 (PDT)
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-4e14dd8abdaso2061520137.3;
+        Thu, 22 May 2025 00:33:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUQOsYvbTuRwXmLJS9UUXZGOsFd+L7QMvKR5welDqXnMH9wBqGnzpNKnCPe+pv5DfPBfO2+xHPpxfc=@vger.kernel.org, AJvYcCX+4R3Iz2nSf4Ps108yyz+lYgUSc47F2Cq/agLTUYYoG+iC1HOlFydgisr1QzA3W58uHXPgOEtH@vger.kernel.org, AJvYcCXI36llW902E4N2dEAsdFPZqUA5cO08XogZ3ovDmByput4ZFLitE4Hc+0fUW1/DrpvZ8/ObKaEzrA1X@vger.kernel.org
+X-Received: by 2002:a05:6102:b06:b0:4e2:aafe:1bb7 with SMTP id
+ ada2fe7eead31-4e2aafe1e8dmr8036440137.15.1747899234351; Thu, 22 May 2025
+ 00:33:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] net: can: rockchip: add can for RK3576 Soc
-To: Elaine Zhang <zhangqing@rock-chips.com>, mkl@pengutronix.de,
- kernel@pengutronix.de, mailhol.vincent@wanadoo.fr, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de, cl@rock-chips.com,
- kever.yang@rock-chips.com
-Cc: linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <20250522063232.2197432-1-zhangqing@rock-chips.com>
- <20250522063232.2197432-3-zhangqing@rock-chips.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250522063232.2197432-3-zhangqing@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <a679123dfa5a5a421b8ed3e34963835e019099b0.1747820705.git.geert+renesas@glider.be>
+ <20250521-ancient-discreet-weasel-98b145-mkl@pengutronix.de>
+In-Reply-To: <20250521-ancient-discreet-weasel-98b145-mkl@pengutronix.de>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 22 May 2025 09:33:42 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXVbBciPriF6wWBUE0FHs3ZfEHAodFOsACiaMCEbLKpeg@mail.gmail.com>
+X-Gm-Features: AX0GCFthFAH_k5GLf92vZ0TJkMlPKuOGRFvQs0hIExouVBk96m2MS6fQ5ujhrd8
+Message-ID: <CAMuHMdXVbBciPriF6wWBUE0FHs3ZfEHAodFOsACiaMCEbLKpeg@mail.gmail.com>
+Subject: Re: [PATCH] documentation: networking: can: Document alloc_candev_mqs()
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Jonathan Corbet <corbet@lwn.net>, 
+	Wolfgang Grandegger <wg@grandegger.com>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 22/05/2025 08:32, Elaine Zhang wrote:
->  	}
->  
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	priv->regs = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(priv->regs)) {
->  		err = PTR_ERR(priv->regs);
-> @@ -912,13 +1426,46 @@ static int rkcanfd_probe(struct platform_device *pdev)
->  	priv->can.do_set_mode = rkcanfd_set_mode;
->  	priv->can.do_get_berr_counter = rkcanfd_get_berr_counter;
->  	priv->ndev = ndev;
-> +	priv->dev = &pdev->dev;
->  
->  	match = device_get_match_data(&pdev->dev);
->  	if (match)
->  		priv->devtype_data = *(struct rkcanfd_devtype_data *)match;
->  
-> +	if (device_property_read_u32(&pdev->dev, "rockchip,auto-retx-cnt", &val))
+Hi Marc,
 
-No, undocumented ABI. You never tested this or DTS.
+On Wed, 21 May 2025 at 12:07, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 21.05.2025 11:51:21, Geert Uytterhoeven wrote:
+> > Since the introduction of alloc_candev_mqs() and friends, there is no
+> > longer a need to allocate a generic network device and perform explicit
+> > CAN-specific setup.  Remove the code showing this setup, and document
+> > alloc_candev_mqs() instead.
+>
+> Makes sense.
+>
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > ---
+> > Dunno if this deserves
+> > Fixes: 39549eef3587f1c1 ("can: CAN Network device driver and Netlink interface")
+> >
+> >  Documentation/networking/can.rst | 9 +++------
+> >  1 file changed, 3 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/Documentation/networking/can.rst b/Documentation/networking/can.rst
+> > index b018ce346392652b..784dbd19b140d262 100644
+> > --- a/Documentation/networking/can.rst
+> > +++ b/Documentation/networking/can.rst
+> > @@ -1106,13 +1106,10 @@ General Settings
+> >
+> >  .. code-block:: C
+>
+> This breaks the rst rendering. I think you should remove the "..
+> code-block:: C"...
 
+Doh, how did I miss that? Will fix...
 
-> +		priv->auto_retx_cnt = 0;
-> +	else
-> +		priv->auto_retx_cnt = val;
-> +	if (priv->auto_retx_cnt > RK3576CANFD_RETX_TIME_LIMIT_CNT_MAX)
-> +		priv->auto_retx_cnt = RK3576CANFD_RETX_TIME_LIMIT_CNT_MAX;
-> +
-> +	/* rx-max-data only 4 Words or 18 words are supported */
-> +	if (device_property_read_u32_array(&pdev->dev, "rockchip,rx-max-data", &val, 1))
+>
+> >
+> > -    dev->type  = ARPHRD_CAN; /* the netdevice hardware type */
+> > -    dev->flags = IFF_NOARP;  /* CAN has no arp */
+> > +CAN network device drivers can use alloc_candev_mqs() and friends instead of
+> > +alloc_netdev_mqs(), to automatically take care of CAN-specific setup:
+>
+> and add a second ":" after "setup:"
+>
+> >
+> > -    dev->mtu = CAN_MTU; /* sizeof(struct can_frame) -> Classical CAN interface */
+> > -
+> > -    or alternative, when the controller supports CAN with flexible data rate:
+> > -    dev->mtu = CANFD_MTU; /* sizeof(struct canfd_frame) -> CAN FD interface */
+> > +    dev = alloc_candev_mqs(...);
+> >
+> >  The struct can_frame or struct canfd_frame is the payload of each socket
+> >  buffer (skbuff) in the protocol family PF_CAN.
+=
+Gr{oetje,eeting}s,
 
-No, you cannot keep adding undocumented ABI.
+                        Geert
 
-Best regards,
-Krzysztof
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
