@@ -1,143 +1,72 @@
-Return-Path: <linux-can+bounces-3617-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3618-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66790ABF7D9
-	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 16:29:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1413BAC0314
+	for <lists+linux-can@lfdr.de>; Thu, 22 May 2025 05:41:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 282334E42D0
-	for <lists+linux-can@lfdr.de>; Wed, 21 May 2025 14:29:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C00B84E3C66
+	for <lists+linux-can@lfdr.de>; Thu, 22 May 2025 03:41:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 113C01A23BB;
-	Wed, 21 May 2025 14:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E16454640;
+	Thu, 22 May 2025 03:41:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="QLg4w/I5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OC8Nocn6"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B0317E
-	for <linux-can@vger.kernel.org>; Wed, 21 May 2025 14:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9208F9DA;
+	Thu, 22 May 2025 03:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747837766; cv=none; b=DU7Ub0hkJXJ5I3CEWtiHd/XBWVrQzzhcMdEVBJr+IN3b+e2+Zi6KugUPnVgxdIZrBRzkemfDKQ1yKA0v/LcXCkC63WABY40RSshS+cpeASgFef6KFS/wJzg0WOA/54Oj6B5jxlA4PXWVYOf/RderJlGmuZhv59HPHQm9Vz5TyVk=
+	t=1747885276; cv=none; b=nJnMHiEY41djGJPW2f7Olmvjr7BwX17PXRj8JeyQAXBxJTNJ6gEyu5b6y1GI+hjDxRxFSG5Nwa15h1HMYETV97/8mxzfyKMj3Je4sTXU6gnntDAuPqbE2aJ/SgUeq7miePDdmnsPNS+n1n+7MDrWzdcgON+WUklQrNmjOqsPF54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747837766; c=relaxed/simple;
-	bh=Q/STPmTu7RpLqcmifIG5b8s9o56dmo6SlfYvJbtLwzg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hF7B0bE+1H84yDzIzhCkjUHsAGc/nKxEcx+GSvvueRfnkCYIUKJ3l/KJPxhWe4GAkR77SkaDvWUZolVrry2/MW25aSnl1oWOhXleuTAbJk7+FJg9hR/HTmQG8Oz2tn4LYXiwmA8srWSaE1OrEzAIv5d3bRTVQ9SwuP03TcNkGt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=QLg4w/I5; arc=none smtp.client-ip=193.252.22.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from localhost.localdomain ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id HkIXuCBk7ftZ8HkIeuL17k; Wed, 21 May 2025 16:20:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1747837209;
-	bh=PQFIsv362059jYm/0PMO+rM0+yjRL3CD7EbulC0nNSI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=QLg4w/I5Sxw1u6InMbClBmA8DSatqmS5NStAx8iXIEWjxFwxv4hV5nRLLPYayDcUK
-	 vU8SVThwNsqnwjxA/mM+AIf3fsgFtv8zkLtj/OxuHTA1DXUQxyKcpUQBktER1cyO4k
-	 k+R7UJ+f+ySz1mG+kUfWCTEubRiqkzRMqphr17sF+2UdRawaqEXHcgbM5ss8cHeLgO
-	 Y7kDkfypt+F8XEybR+9FLlWXDmxfoMJoTFZfI6DW0jrrBhhe66EUgFBKfa0aV4xDuO
-	 38T0HMDXodhtnoLoRplZb6A2Z57QARFcvCFjynDOafm1CyOUKUdlP7KRkkjZcXGanO
-	 Syvx3Feb06n/g==
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 21 May 2025 16:20:09 +0200
-X-ME-IP: 124.33.176.97
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To: Felix Maurer <fmaurer@redhat.com>,
-	socketcan@hartkopp.net,
-	mkl@pengutronix.de
-Cc: shuah@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	dcaratti@redhat.com,
-	fstornio@redhat.com,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH] selftests: can: test_raw_filter.sh: add support of physical interfaces
-Date: Wed, 21 May 2025 23:18:53 +0900
-Message-ID: <20250521141945.13358-2-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com>
-References: <87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com>
+	s=arc-20240116; t=1747885276; c=relaxed/simple;
+	bh=hpje0d0hKUxLnhR5mVdZtV+IkwxSK8YLSTLyOoJXO+8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nkZnLOzuGvIzMI1ACcJGDM4ZVUltkAJv4FdG4EI954J/CyVjnfstGKSLgDkvWyRmix5PTt9BVXEsOZ9sh2/oojwy8SzT3DzZ3NvM/zc43lJbvj3DbgoJJXbPfusW6h3mQnlvh/cPqDoviXxJHpHg/CCB+dr66ODjwqCeY93P/eA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OC8Nocn6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4A98C4CEE4;
+	Thu, 22 May 2025 03:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747885276;
+	bh=hpje0d0hKUxLnhR5mVdZtV+IkwxSK8YLSTLyOoJXO+8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OC8Nocn60ELqbs4vEw9ZXZq/Nte3ONo7sUTcbE38zltOjVRu3BjRWkPERlG6rCt2B
+	 2zB1IR3k/voZ+mwZmUDb6RS/USRgRU8lETAytd+F+sTSyzoGsM3eczcXQy4ciBQd9E
+	 OSlXuQm7IM1lyhHjLvDlMETzUYpg38QVF6fMXZjGR9qvHsvWqJhDDyB9YAh+j4kHde
+	 y6fNyflCED4oDJRhFOkEMRsASRc9eECLII0GkETiUFBlhBGY18RATXCO+PW6DQzmtb
+	 RBjXpFHW1EFoCotT69zaIujimTE1odzPOP2kW8EjoxAxcW1gMeGx1qO9QVpLZ1Gmr+
+	 XRRRewlc5AkeQ==
+Date: Wed, 21 May 2025 20:41:14 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, linux-can@vger.kernel.org,
+ kernel@pengutronix.de
+Subject: Re: [PATCH net 0/n] pull-request: can 2025-05-21
+Message-ID: <20250521204114.1d131ff9@kernel.org>
+In-Reply-To: <20250521082239.341080-2-mkl@pengutronix.de>
+References: <20250521082239.341080-2-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1799; i=mailhol.vincent@wanadoo.fr; h=from:subject; bh=Q/STPmTu7RpLqcmifIG5b8s9o56dmo6SlfYvJbtLwzg=; b=owGbwMvMwCV2McXO4Xp97WbG02pJDBm6DxnNjqcKHbfqNctwrS4oPrbn5bkH5+oPPjyg5eC/z e+F+IylHaUsDGJcDLJiiizLyjm5FToKvcMO/bWEmcPKBDKEgYtTACYiOo3hf3jdlKN+y2MMV6vn LKt812i10O/n6/k6Lb3RfXMZslbFBDEyrD4dZr+80OLtZ0F7h1CXwDsN+/QFj88/Nfvjmiuz+ra KcAIA
-X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp; fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Allow the user to specify a physical interface through the $CANIF
-environment variable. Add a $BITRATE environment variable set with a
-default value of 500000.
+On Wed, 21 May 2025 10:14:24 +0200 Marc Kleine-Budde wrote:
+> Subject: [PATCH net 0/n] pull-request: can 2025-05-21
 
-If $CANIF is omitted or if it starts with vcan (e.g. vcan1), the test
-will use the virtual can interface type. Otherwise, it will assume
-that the provided interface is a physical can interface.
+Looks like the 0/n confused patchwork and it couldn't do our build
+testing. Given that we're targeting the final release I'd rather
+not risk merging this without a full run thru our builds.
+Could you respin? Not sure it will make tomorrow's PR but then again
+I don't think anything here is super critical for 6.15 final?
 
-For example:
-
-  CANIF=can1 BITRATE=1000000 ./test_raw_filter.sh
-
-will run set the can1 interface with a bitrate of one million and run
-the tests on it.
-
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-This depends on "selftests: can: Import tst-filter from can-tests"
-from Felix.
-
-Link: https://lore.kernel.org/linux-can/87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com/
----
- tools/testing/selftests/net/can/test_raw_filter.sh | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/can/test_raw_filter.sh b/tools/testing/selftests/net/can/test_raw_filter.sh
-index 2216134b431b..276d6c06ac95 100755
---- a/tools/testing/selftests/net/can/test_raw_filter.sh
-+++ b/tools/testing/selftests/net/can/test_raw_filter.sh
-@@ -9,17 +9,25 @@ net_dir=$(dirname $0)/..
- source $net_dir/lib.sh
- 
- export CANIF=${CANIF:-"vcan0"}
-+BITRATE=${BITRATE:-500000}
- 
- setup()
- {
--	ip link add name $CANIF type vcan || exit $ksft_skip
-+	if [[ $CANIF == vcan* ]]; then
-+		ip link add name $CANIF type vcan || exit $ksft_skip
-+	else
-+		ip link set dev $CANIF type can bitrate $BITRATE || exit $ksft_skip
-+	fi
- 	ip link set dev $CANIF up
- 	pwd
- }
- 
- cleanup()
- {
--	ip link delete $CANIF
-+	ip link set dev $CANIF down
-+	if [[ $CANIF == vcan* ]]; then
-+		ip link delete $CANIF
-+	fi
- }
- 
- test_raw_filter()
--- 
-2.49.0
-
+Sorry for not noticing earlier.
 
