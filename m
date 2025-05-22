@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-3657-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3661-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 871F1AC0778
-	for <lists+linux-can@lfdr.de>; Thu, 22 May 2025 10:44:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC70BAC080E
+	for <lists+linux-can@lfdr.de>; Thu, 22 May 2025 11:00:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C56117AF59
-	for <lists+linux-can@lfdr.de>; Thu, 22 May 2025 08:43:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 436AC4A12D9
+	for <lists+linux-can@lfdr.de>; Thu, 22 May 2025 09:00:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B89EC28A1C0;
-	Thu, 22 May 2025 08:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 135B8262FEA;
+	Thu, 22 May 2025 08:59:47 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83CE281360
-	for <linux-can@vger.kernel.org>; Thu, 22 May 2025 08:41:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7203B1F17F7
+	for <linux-can@vger.kernel.org>; Thu, 22 May 2025 08:59:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747903309; cv=none; b=XOukpLlhRVhPPQGVa9vsAc1Il+s5AYhSgJT3PwBxBs5MgaIoJacqCCzhfRLjbiuHEEGv8kycqWeD9V3ebQ03/2XG7pe/X/H+Imew7O0tNVvXDBkRPLD+yv3TweyyRjdSLfuHsIDX3iUeG5hx24Xi02BTQ46ns3eWpr+DxuXe2eE=
+	t=1747904387; cv=none; b=F2iwh9mHhx+ZCYdIypV+T9AmdMvUX+NcjmKJA0HN50ZK8VzLNuCwUUzrNtnlGGULuPNKkvP5bRCXCeZ/OyytBaT4JvPILsOG0AkpOQKa1sU0TPfiQhTYRHwrbLgyxDWzKSRSD8S/FqO53rXDC7Lq2Dfxhilwe8FWOkAQq3QjTrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747903309; c=relaxed/simple;
-	bh=f6B/Gs2R/h2VZ58PvWhNWRf+c9KyccQuW+lJ1UcjNlA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UZeB7S7oMuuyOsIFjBTXqUWaLEhbqUn6VFm1dj4VnqUjZKrwgmVb/YlXf5z1mEDCCcOvA98O5CqODQs2u9g/zQBaFAFidUwA8WjH4akGslTXVpIwQonvzM2WnuTDQJTMc2BWCV5kj0Wd8zQYCjaZlsW+LQ+KdGb6zrIJarH8ZSs=
+	s=arc-20240116; t=1747904387; c=relaxed/simple;
+	bh=vKURFuIpdq/K/4MGm+TN1457AIiKfPHKolVqXUq2u90=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eac04U+8N3KcropJ9EcKi/5VqHhY0HgEiMYB3rKjX17tfHbwbmyS39XjL6JtcfSnFXMXTTqUOoBVE80xP+mmys+WRGOeHq7KsKkcQE9i3zdbsJgasvbYYg+cK5+rHhan7Vd0gzxbifiU5pVAmnbAZ3kqCoAmDcK6HjzAlxXvlYk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,110 +33,87 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uI1Um-0006IX-JN
-	for linux-can@vger.kernel.org; Thu, 22 May 2025 10:41:44 +0200
+	id 1uI1lv-0002vJ-Hh; Thu, 22 May 2025 10:59:27 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uI1Uj-000hr6-1J
-	for linux-can@vger.kernel.org;
-	Thu, 22 May 2025 10:41:41 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 1D635417372
-	for <linux-can@vger.kernel.org>; Thu, 22 May 2025 08:41:41 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	id 1uI1lu-000huF-01;
+	Thu, 22 May 2025 10:59:26 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:2260:2009:2000::])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 93AD741734E;
-	Thu, 22 May 2025 08:41:39 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id abba9649;
-	Thu, 22 May 2025 08:41:31 +0000 (UTC)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 1844F4175DB;
+	Thu, 22 May 2025 08:59:25 +0000 (UTC)
+Date: Thu, 22 May 2025 10:59:22 +0200
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 22/22] selftests: can: test_raw_filter.sh: add support of physical interfaces
-Date: Thu, 22 May 2025 10:36:50 +0200
-Message-ID: <20250522084128.501049-23-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250522084128.501049-1-mkl@pengutronix.de>
-References: <20250522084128.501049-1-mkl@pengutronix.de>
+To: Elaine Zhang <zhangqing@rock-chips.com>
+Cc: kernel@pengutronix.de, mailhol.vincent@wanadoo.fr, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de, cl@rock-chips.com, 
+	kever.yang@rock-chips.com, linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] rockchip: add can for RK3576 Soc
+Message-ID: <20250522-idealistic-khaki-tuna-91290d-mkl@pengutronix.de>
+References: <20250522074616.3115348-1-zhangqing@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sa6ejazolcmnr6ge"
+Content-Disposition: inline
+In-Reply-To: <20250522074616.3115348-1-zhangqing@rock-chips.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-Allow the user to specify a physical interface through the $CANIF
-environment variable. Add a $BITRATE environment variable set with a
-default value of 500000.
+--sa6ejazolcmnr6ge
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 0/3] rockchip: add can for RK3576 Soc
+MIME-Version: 1.0
 
-If $CANIF is omitted or if it starts with vcan (e.g. vcan1), the test
-will use the virtual can interface type. Otherwise, it will assume
-that the provided interface is a physical can interface.
+On 22.05.2025 15:46:13, Elaine Zhang wrote:
+> rk3576 can is a new controller:
+> Support CAN and CANFD protocol.
+> Support Dma.
+>=20
+> There are major differences from the previous rk3568. All errata on the
+> rk3568 have been fixed and redesigned.
 
-For example:
+Which tree does this series apply to? Please rebase to
+linux-can-next-for-6.16-20250522
 
-  CANIF=can1 BITRATE=1000000 ./test_raw_filter.sh
+regards,
+Marc
 
-will run set the can1 interface with a bitrate of one million and run
-the tests on it.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- tools/testing/selftests/net/can/test_raw_filter.sh | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+--sa6ejazolcmnr6ge
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/tools/testing/selftests/net/can/test_raw_filter.sh b/tools/testing/selftests/net/can/test_raw_filter.sh
-index 2216134b431b..276d6c06ac95 100755
---- a/tools/testing/selftests/net/can/test_raw_filter.sh
-+++ b/tools/testing/selftests/net/can/test_raw_filter.sh
-@@ -9,17 +9,25 @@ net_dir=$(dirname $0)/..
- source $net_dir/lib.sh
- 
- export CANIF=${CANIF:-"vcan0"}
-+BITRATE=${BITRATE:-500000}
- 
- setup()
- {
--	ip link add name $CANIF type vcan || exit $ksft_skip
-+	if [[ $CANIF == vcan* ]]; then
-+		ip link add name $CANIF type vcan || exit $ksft_skip
-+	else
-+		ip link set dev $CANIF type can bitrate $BITRATE || exit $ksft_skip
-+	fi
- 	ip link set dev $CANIF up
- 	pwd
- }
- 
- cleanup()
- {
--	ip link delete $CANIF
-+	ip link set dev $CANIF down
-+	if [[ $CANIF == vcan* ]]; then
-+		ip link delete $CANIF
-+	fi
- }
- 
- test_raw_filter()
--- 
-2.47.2
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmgu52cACgkQDHRl3/mQ
+kZwdfgf/d8vv4Y+eCOIDpy04JenmxN8n8PZDriO0bTQAcrysrzSwWUfkouJA9sI5
+avJL3hLCOVrSRzmvh/lkkW4voCfIfki7FI/STC/LeEpri85JOxOQfYLw1FgZ1Oeu
+/b70nkM8d5A06HIVBB6WpUuj9B3B06p58KMlvSySaiK1EtfyIzZZ5O8LPmvzGLBZ
+Nn9dbaH7KmSHboVpsx21zOyAIu1yAeu1Shl62nWBuFCBT1RYIpOWAKUX7cLpH4Dd
+WTzeBnQxhzNKvLV91+pM/W0t89/tH5L7UfyhOHH3F1y4owdA2InWkOkYj22yTFiL
+rNz898AB9XRisrl8I6jjG3Xp/yVvMA==
+=7M2p
+-----END PGP SIGNATURE-----
 
+--sa6ejazolcmnr6ge--
 
