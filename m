@@ -1,132 +1,109 @@
-Return-Path: <linux-can+bounces-3673-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3675-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D989AAC1E72
-	for <lists+linux-can@lfdr.de>; Fri, 23 May 2025 10:16:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FD8BAC1F14
+	for <lists+linux-can@lfdr.de>; Fri, 23 May 2025 11:00:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F479A401B1
-	for <lists+linux-can@lfdr.de>; Fri, 23 May 2025 08:16:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 568083BE6AA
+	for <lists+linux-can@lfdr.de>; Fri, 23 May 2025 08:59:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55DF5289811;
-	Fri, 23 May 2025 08:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AE951E2602;
+	Fri, 23 May 2025 09:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nO06MBFx"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA88289E1B
-	for <linux-can@vger.kernel.org>; Fri, 23 May 2025 08:16:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A071537C6;
+	Fri, 23 May 2025 09:00:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747988166; cv=none; b=OUwVn2bWMxXHPWxLjAjuw+D3fk9PmyWIE/N8EaRrb2V2uNLou1uWUD7r3mxI+2s7yTonPicMlc8Cr4J2DqWVXoAFAZJWdLlhaFUTJZQcCmctAHieyFOSeXV2tjLeOxu9Sf/fE6JW9MXWjngmgL8PIlbc1amRVPtFmwJpcNEkXyU=
+	t=1747990812; cv=none; b=Py/qlV+uuz1QuZvzqeU0QRsKE7zIUFvg0FQsw+F0ULYJpldVxN7f1Ip4zBOKraMguIGhOd3NsZ3IIZMrKksvZBY0XtSndoCT+TJY+q6qHFmHD12UKatB/lZGCZ8hBAIq65ES/vcZRsxSR3YOcxbhstTIcDGQl+ifQ8/Cbl/43+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747988166; c=relaxed/simple;
-	bh=WnGkweXbMTvqm1k+cA/PuSpChITwx4vZKQFQpjZpfaw=;
+	s=arc-20240116; t=1747990812; c=relaxed/simple;
+	bh=vBAD3B3RuAcHaVrtFlDId+NmOFJNwESunRfMjFyuPX8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gJC/ORQgeBO7t6X40Ope9bzP+RZGvUuU7+AT+tPExX5DEzExnPO8rrD9x/OMM/iPzNR90USMqvCdv3gHb20O6/gJSXuk4+Sp5uMiJpSrOxdVupLl2RBSE4vAuyFlI6Np9zykiROlb4Na0mCUsJQ+YPFH2KFOSoCFuYAmUQni6+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uINZE-00048L-H1; Fri, 23 May 2025 10:15:48 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uINZE-000s0g-0C;
-	Fri, 23 May 2025 10:15:48 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:2260:2009:2000::])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 1562B418169;
-	Fri, 23 May 2025 08:15:47 +0000 (UTC)
-Date: Fri, 23 May 2025 10:15:46 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Elaine Zhang <zhangqing@rock-chips.com>
-Cc: kernel@pengutronix.de, mailhol.vincent@wanadoo.fr, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de, cl@rock-chips.com, 
-	kever.yang@rock-chips.com, linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 3/4] net: can: rockchip: add can for RK3576 Soc
-Message-ID: <20250523-elegant-elite-iguana-8b4116-mkl@pengutronix.de>
-References: <20250523075422.4010083-1-zhangqing@rock-chips.com>
- <20250523075422.4010083-4-zhangqing@rock-chips.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CTVal8M68Cpj91M+1F2V8f0uKk0SmvsmhrbRW6jPn2PXAmn5awAguEl40hKlm9cQbrKAuV+BV+a9FStrQvLw7slSmbHWYBIrO7RA/mPtxwJZiVxAvpQacNDPSJvCN20I/PWb5yVHPj2hh7Y4nUgVCRxtyJttBFI3hb8ATw15utM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nO06MBFx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C20F7C4CEE9;
+	Fri, 23 May 2025 09:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747990812;
+	bh=vBAD3B3RuAcHaVrtFlDId+NmOFJNwESunRfMjFyuPX8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nO06MBFxJsDLr+YmqKsf42UYiLh214VkFBd5BSCzGIMjkMH2dpWZyEUVOBmCsDAEI
+	 t9ByLYwzqp0JeG4rMkjVDC3IIKdLD5j3TxL7IXEvjnuIaZanD/cH8wyLuF4XzIB1R3
+	 O+8CG436Chqk21R96Eg4BBchB51U/ArSrpih3kYYBjkSSRJ+/OY5O5NpcisRPm+4wV
+	 iNe7THMhtWm9gcR9PxzzGmQQ3U9I3lGtUNFgFLyI3O7vjCqFlYoWUgqVgVMlGnyJ0F
+	 /WfePNrvguUC1vGq8QdnPMGMceMb1CnTpgGBHrl/bUGv1xym7W4aqHkw8+VmuLJLTS
+	 M8Q2dkGZlo4+A==
+Date: Fri, 23 May 2025 10:00:04 +0100
+From: Lee Jones <lee@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: a0282524688@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+Message-ID: <20250523090004.GC1378991@google.com>
+References: <20250520020355.3885597-7-tmyu0@nuvoton.com>
+ <202505210555.mud6jZoi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="c5dnlywm7hswlywp"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250523075422.4010083-4-zhangqing@rock-chips.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202505210555.mud6jZoi-lkp@intel.com>
 
+On Wed, 21 May 2025, kernel test robot wrote:
 
---c5dnlywm7hswlywp
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v5 3/4] net: can: rockchip: add can for RK3576 Soc
-MIME-Version: 1.0
+> Hi,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on andi-shyti/i2c/i2c-host]
+> [also build test ERROR on mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc7]
+> [cannot apply to lee-mfd/for-mfd-next brgl/gpio/for-next next-20250516]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250520-100732
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+> patch link:    https://lore.kernel.org/r/20250520020355.3885597-7-tmyu0%40nuvoton.com
+> patch subject: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+> config: i386-randconfig-013-20250521 (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/config)
+> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202505210555.mud6jZoi-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/hwmon/nct6694-hwmon.c:12:10: fatal error: linux<mfd/core.h: No such file or directory
+>       12 | #include <linux<mfd/core.h>
 
-On 23.05.2025 15:54:21, Elaine Zhang wrote:
-> Is new controller, new register layout and Bit position definition:
-> Support CAN and CANFD protocol, ISO 11898-1
-> Support transmit or receive error count
-> Support acceptance filter, more functional
-> Support interrupt and all interrupt can be masked
-> Support error code check
-> Support self test\silent\loop-back mode
-> Support auto retransmission mode
-> Support auto bus on after bus-off state
-> Support 2 transmit buffers
-> Support Internal Storage Mode
-> Support DMA
->=20
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+This suggests that the set wasn't even build (let alone run) tested!
 
-Compiling throws the following error:
-
-| drivers/net/can/rockchip/rockchip_canfd-tx.c:173:18: error: variable 'skb=
-' set but not used [-Werror,-Wunused-but-set-variable]
-|   173 |         struct sk_buff *skb;
-|       |                         ^
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---c5dnlywm7hswlywp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmgwLq8ACgkQDHRl3/mQ
-kZxFJgf/RJLII4jmWOIO0Kb32Hp9dCsN8hBYODQ+RosNpTkM/rBDuyJtV6a8RjoA
-QkGvGiZgji4sv3G5o/kWmggUz4OIY7hbqzKWy4wy3rRVLeotubC/O4Fw7q5tYBCv
-uX7C4eiAJKBiJvnnAT7qiQ4jc4foCQqZgh0b73GKu2oUmYoN7kTfl6yF/yICbbSq
-sMMteatdKMyTwn5zbgSp3+QnxqWD8rnEU8eDyPOrZBhQ1PVS9Ck5prYF7e5erxEw
-OpfsaJRJXfjf0h1ZTZiNbOlKvtqnUWFCDwUV/ScZ/wP94vdiRSrJfWrsKn07KjQa
-rljIHYoxSu7aVhIUgk/71QvejRHWOQ==
-=egoG
------END PGP SIGNATURE-----
-
---c5dnlywm7hswlywp--
+-- 
+Lee Jones [李琼斯]
 
