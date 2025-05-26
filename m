@@ -1,160 +1,337 @@
-Return-Path: <linux-can+bounces-3682-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3683-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C845CAC2FF0
-	for <lists+linux-can@lfdr.de>; Sat, 24 May 2025 15:56:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 825E5AC3850
+	for <lists+linux-can@lfdr.de>; Mon, 26 May 2025 05:56:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B40497AAB5F
-	for <lists+linux-can@lfdr.de>; Sat, 24 May 2025 13:54:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 459FB7A232E
+	for <lists+linux-can@lfdr.de>; Mon, 26 May 2025 03:55:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 004E41DE3C4;
-	Sat, 24 May 2025 13:56:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37563195811;
+	Mon, 26 May 2025 03:56:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BeuQqIKU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RMYCWkrM"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766B77E9;
-	Sat, 24 May 2025 13:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E75C7E110;
+	Mon, 26 May 2025 03:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748094966; cv=none; b=DPNLYyVYV0ybu7nYrOXxc+pm9ZuhD5iE5uDFXD4hS3uig5ZLOaTydQoSllOjvCrCKgg2aNVqWQRyZ5RcL/dFwK0CURQpCy0it454tzgLuCld2Vsfe4RLKUHiGNThHUaOHDKruUzvGa5eoXPPB+GQvcJv7DwtNpX9+RF5ei+V0DM=
+	t=1748231800; cv=none; b=gv3fq4VMuBjLVRDSkAA0ykX6WV4uIMBffJcDxwGKboC+t/kLLmbN8hc3QgDbjFhX1JBJzQBAZVwIc3I59mIfvymOqgbCSCN+kyzwiAXBH5m407LrqrdxHD4CTPZwmCC80hpJ4JE9C+4pEnNDdZ4cfvfuG1yxyukzKaFIJOP6rcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748094966; c=relaxed/simple;
-	bh=nT6QCH2t9NHJHSkhiqFg+TCciSaU2u+6fD4wOw0my9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vCvO6AtVXaHK3fvhmjXhJ9KbYr5YyBXI7UUQKdWsDsoqhiGbTugB5q7sHrVWQIx+mpS3CnHVDiXJFzpkbn0DDTWR7YGG1v/LgAVPJ2sbl9c463Cle1A90o1Tl3jDo26MHU9j7O+YmhImw+t37XbwekIDpB0dPCAkPaLw2KJ+17M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BeuQqIKU; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748094964; x=1779630964;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nT6QCH2t9NHJHSkhiqFg+TCciSaU2u+6fD4wOw0my9A=;
-  b=BeuQqIKU4IVeSsYLWnOLX3xzOXMOzW8y/2argsWJwzj2XdMFLYQdNcAj
-   zcDeHC8V1g/RVjm2MkI/4AyFu48x+cIY/L7b97Wmxt55/WIS8Lwv+L6Oi
-   gaicJqAs+B0g1DuWpK0NTVQ0Cwg33M+8Io96DNrhqBb78suTaz5Httwl/
-   kvLoxEbQy1g8EZLq0oKm3Z7wUdVRJniQcTAAmaYQ7Frbi8X081y/4j62v
-   AudbYNq7dyLHfynlBI1Y2cJOGPGF3CGopOdg0DZP9nuio8VgRQX+EsBU8
-   1JnCbxY3PnYvg2aa8YKBIBTb+8zvhfnz86DSfEh9nVff0TF6wtk8xNVMM
-   w==;
-X-CSE-ConnectionGUID: Wg4C2iknSvi4kFyalkIRoA==
-X-CSE-MsgGUID: QIYSUhqtTHym9wbsn/ZXoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11443"; a="52755537"
-X-IronPort-AV: E=Sophos;i="6.15,311,1739865600"; 
-   d="scan'208";a="52755537"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2025 06:56:04 -0700
-X-CSE-ConnectionGUID: xlrkOS08SuWnWMtbmXAaIA==
-X-CSE-MsgGUID: w/KrP6sOS9GvTY79VoUOGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,311,1739865600"; 
-   d="scan'208";a="141440807"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 24 May 2025 06:56:00 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uIpLx-000REG-2q;
-	Sat, 24 May 2025 13:55:57 +0000
-Date: Sat, 24 May 2025 21:55:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Elaine Zhang <zhangqing@rock-chips.com>, mkl@pengutronix.de,
-	kernel@pengutronix.de, mailhol.vincent@wanadoo.fr, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de,
-	cl@rock-chips.com, kever.yang@rock-chips.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-can@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 3/4] net: can: rockchip: add can for RK3576 Soc
-Message-ID: <202505242132.Mau7vNde-lkp@intel.com>
-References: <20250523075422.4010083-4-zhangqing@rock-chips.com>
+	s=arc-20240116; t=1748231800; c=relaxed/simple;
+	bh=DZrlE/bv8rOS6qOE2CpBwzOco93+rwVtR9PKQ5hujjo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GPUesOuYk1Vlf00PfH4t1NSpBQrPtwi29YJcvhzATnr0tSCvCML0AFIaLaPqq+MZnoT2lrLMF6RlOXGXgwGVWfXlwx52L1LubDF5Aji4gY8vfxlhpDyVPzfb/s9z6vQ1aaMpy9oGMTl4tE+e5vtugsMyDOLnt7cUrWB2d0Qu8+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RMYCWkrM; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e7d90078caeso1500625276.3;
+        Sun, 25 May 2025 20:56:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748231797; x=1748836597; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zcXECQBhnFA3Mb5kPluHe4DGBg2LPiSyVzF0Ca7K9Ec=;
+        b=RMYCWkrM7R5ZrxWBG66m2SrHqAxK8QdeMeYRd4WEyvsjzp192AetjMcCHEB1P0lAvT
+         xZwrCW64Xll5ua7bxzGE0YQmOZOngVJBOpm8ujjJ8tqZ9Y5wF4b31r2uhBmYGsfUbsXN
+         x8mbrHsdVKAJr9SzGR+hTYDrE6vyLFt29VNq9CL+u21ule1TDaC3RushkNHzVFuJpGjE
+         w2arUYX/F9IKYSQUDwc3IGatHVS0qTgUwVabeqFt/74vrS2TAup1OQ8FfCFE8y/qn4fs
+         MRiSV1XRU26G4g6qjNo08w5HUQ95o3oaSzYkDnYCooCNwyuW0x0soiyjd3brKKvM+i/+
+         DGdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748231797; x=1748836597;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zcXECQBhnFA3Mb5kPluHe4DGBg2LPiSyVzF0Ca7K9Ec=;
+        b=Q82qQP9X2jvo436tXtVbrLQghcRZ/eeuwk7eyQHpdCyg4I6XSOTmAlXjPaifNGe0mt
+         e47nfZUJUXeclDw6MvlT/KUGr+iBci6l7t9Y9DIEpB0s/Ik71JLGcDJK1wgKHhHCt1ZH
+         F0mV2Zv7IMoQkIno/40hDgJwLP/HJsBa3X2T1Xag19pOI3GGQDDvnsN7+yDsvwwrQRna
+         RMRKXn3ectgdr7yts6m3E0wCzNnsNb/Id0dC2dBJw+eskv6SrOcr6/4YbSsFvzV/fMdt
+         mIfGQtDiBrKimV9DaOgyTP4dbcaDLGsyZo37W12CE53jEOFT0EkMJqP7abXCcz1C+2SC
+         4aSw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1McOvQl2oDEfsXYMDyGiDWo96bdn9wr+Q5sEOJAH56K9PnfOaWWSV0vsqDWwJP6kZ3oqLPmu0TjKX@vger.kernel.org, AJvYcCUuQMtfJvfc0AXw3Cm/lHO8ZJdiGP1YRIWbrDGxKi4gLSUV80NGjYOyAhX7MIHp0MeehmFv9N9mRQkiibG2uTo=@vger.kernel.org, AJvYcCVUUgttKaEUQovKA1kkAA59QoRyqNzjs3223JIO9GmWtLOGBPUiAdOdMkrBCUiPN8n//hmH1ZzhPVFD@vger.kernel.org, AJvYcCW4rbtYVd1Z9UGzFdMk85HpGKieNQcCJqjHiQ5aKFugLBNvDF2xrttyLV/8jVNrcA8728Ei4TSDBI8b78o=@vger.kernel.org, AJvYcCX/HK4zVuPf/gZUc4znx9MfmZSv3hZe8L1+e3He4lVGJdhR4H2UTa8bvVN17uKwNfLgDAVS+09W@vger.kernel.org, AJvYcCXQcCJgQRHyol/gNapEvTA0q60GXI0oxMIHPiceSmcZM0f+Q7ahnkU9R9xQ4Z0ptA4ADrb2maKJOvJ7IA==@vger.kernel.org, AJvYcCXSvHIk15Uza9iUxPQBHw8NEpFNtwDNsyPhAwDOwnEYes1Abf+7y6bHdlbK+dZSCrmJSVwA6zEo6sRL6jMv@vger.kernel.org, AJvYcCXhnVtlIiIctsi8XeKiqK32W5eOVExi72vDOaZshyLZqQycowx3lAyPEz45Y/ayUBNhYyYpWO+RwqJo@vger.kernel.org, AJvYcCXtUaZ2Ie53JDe2qFePFld0g9KMCmzIdzqhSeo0O6SlVmjEVUu06SeEXrOiaZG8W7IZM0dkDEG1GzQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlPxpDYS8vZkpMVKiPN7pwvPTWrJrDbvVR/xRmf4x7f3eJXyVH
+	p6zrWc3lRG+uafbiMSi+W5JxavbDrG+iJ8sMQIV0oG7fcx/HaFskJVoGz8PkPHmbcRhq6dwFFBM
+	28lk+T8XWsImrd762sAYDgrrp62jL8xM=
+X-Gm-Gg: ASbGncu+SVlQhDdWLn+itM1616pZEAt3AUXl3DatBGlLpVKcU96DZEUlXxscdiIENsG
+	FgPnPbHYKUITUCsbSdxMKbyjEzF/6I/h+6KPLfQK22g6JoS67S57Klzs/pe0UA+GzLUlym9QCaq
+	m7Bro6X4QPXgg5mNUzE+8wIhYEkeAu5IxQ3dT/+/jwTZjNOzrslcIBy/96xfOuwJC/u0c=
+X-Google-Smtp-Source: AGHT+IHBOM1OanC7PctOKlKIA/qqdT+KTdJ1sIRiHPRM93YrlR6/SshGx6q+jmHoL85oR/ljjBwIGDPwYdyHzYtdif4=
+X-Received: by 2002:a05:6902:1543:b0:e6d:da84:e901 with SMTP id
+ 3f1490d57ef6-e7d919f01c5mr8035278276.27.1748231797046; Sun, 25 May 2025
+ 20:56:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250523075422.4010083-4-zhangqing@rock-chips.com>
+References: <20250520020355.3885597-1-tmyu0@nuvoton.com> <20250520020355.3885597-2-tmyu0@nuvoton.com>
+ <20250523090207.GD1378991@google.com>
+In-Reply-To: <20250523090207.GD1378991@google.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Mon, 26 May 2025 11:56:25 +0800
+X-Gm-Features: AX0GCFuMuPJii5QWGzS547_08e9jROJWo5JYbgwGTIEUBA702NbvTfv_wsjtEQ0
+Message-ID: <CAOoeyxW-4ChnrgeUT-8Tfcx2=MkehcM6hUtztwrb7128iC95_Q@mail.gmail.com>
+Subject: Re: [PATCH v11 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Lee Jones <lee@kernel.org>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Ming Yu <tmyu0@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Elaine,
+Dear Lee,
 
-kernel test robot noticed the following build warnings:
+Thank you for reviewing.
+I will fix the code which you mentioned.
 
-[auto build test WARNING on mkl-can-next/testing]
-[also build test WARNING on robh/for-next linus/master v6.15-rc7 next-20250523]
-[cannot apply to rockchip/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Elaine-Zhang/dt-bindings-can-rockchip_canfd-add-rk3576-CAN-FD-controller/20250523-211340
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-patch link:    https://lore.kernel.org/r/20250523075422.4010083-4-zhangqing%40rock-chips.com
-patch subject: [PATCH v5 3/4] net: can: rockchip: add can for RK3576 Soc
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20250524/202505242132.Mau7vNde-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505242132.Mau7vNde-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505242132.Mau7vNde-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/can/rockchip/rockchip_canfd-tx.c: In function 'rkcanfd_handle_rk3576_tx_int':
->> drivers/net/can/rockchip/rockchip_canfd-tx.c:173:25: warning: variable 'skb' set but not used [-Wunused-but-set-variable]
-     173 |         struct sk_buff *skb;
-         |                         ^~~
-   In file included from drivers/net/can/rockchip/rockchip_canfd-tx.c:9:
-   drivers/net/can/rockchip/rockchip_canfd.h: At top level:
-   drivers/net/can/rockchip/rockchip_canfd.h:699:29: warning: 'priv' defined but not used [-Wunused-variable]
-     699 | static struct rkcanfd_priv *priv;
-         |                             ^~~~
+Additionally, I will revert the mfd_cell changes to match version 10. (i.e.=
+,
+static const struct mfd_cell nct6694_dev[] =3D {
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+    MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+    ...
+}; ), since I found that using devm_mfd_add_devices() with id field
+set to 0 meets my needs. This allows me to use pdev->id in the
+sub-drivers.
 
 
-vim +/skb +173 drivers/net/can/rockchip/rockchip_canfd-tx.c
+Best regards,
+Ming
 
-   168	
-   169	int rkcanfd_handle_rk3576_tx_int(struct rkcanfd_priv *priv)
-   170	{
-   171		struct net_device_stats *stats = &priv->ndev->stats;
-   172		unsigned int tx_tail;
- > 173		struct sk_buff *skb;
-   174		unsigned int frame_len = 0;
-   175	
-   176		tx_tail = rkcanfd_get_tx_tail(priv);
-   177		skb = priv->can.echo_skb[tx_tail];
-   178	
-   179		/* Manual handling of CAN Bus Error counters. See
-   180		 * rkcanfd_get_corrected_berr_counter() for detailed
-   181		 * explanation.
-   182		 */
-   183		if (priv->bec.txerr)
-   184			priv->bec.txerr--;
-   185	
-   186		stats->tx_bytes +=
-   187			can_rx_offload_get_echo_skb_queue_tail(&priv->offload,
-   188							       tx_tail, &frame_len);
-   189		stats->tx_packets++;
-   190		WRITE_ONCE(priv->tx_tail, priv->tx_tail + 1);
-   191		netif_subqueue_completed_wake(priv->ndev, 0, 1, frame_len,
-   192					      rkcanfd_get_effective_tx_free(priv),
-   193					      RKCANFD_TX_START_THRESHOLD);
-   194		return 0;
-   195	}
-   196	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B45=E6=9C=8823=E6=97=A5 =E9=
+=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:02=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Tue, 20 May 2025, a0282524688@gmail.com wrote:
+>
+> > From: Ming Yu <tmyu0@nuvoton.com>
+> >
+> > The Nuvoton NCT6694 provides an USB interface to the host to
+> > access its features.
+> >
+> > Sub-devices can use the USB functions nct6694_read_msg() and
+> > nct6694_write_msg() to issue a command. They can also request
+> > interrupt that will be called when the USB device receives its
+> > interrupt pipe.
+> >
+> > Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+> > ---
+> >
+> > Changes since version 10:
+> > - Add change log for the patch
+> > - Fix mfd_cell to MFD_CELL_NAME()
+> > - Remove unnecessary blank line
+> >
+> > Changes since version 9:
+> > - Add KernelDoc to exported functions
+> >
+> > Changes since version 8:
+> > - Modify the signed-off-by with my work address
+> > - Rename all MFD cell names to "nct6694-xxx"
+> > - Fix some comments in nct6694.c and in nct6694.h
+> >
+> > Changes since version 7:
+> > - Add error handling for devm_mutex_init()
+> >
+> > Changes since version 6:
+> >
+> > Changes since version 5:
+> > - Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
+> > - Drop unnecessary macros
+> >
+> > Changes since version 4:
+> > - Modify arguments in read/write function to a pointer to cmd_header
+> >
+> > Changes since version 3:
+> > - Modify array buffer to structure
+> > - Fix defines and comments
+> > - Add header <linux/bits.h> and use BIT macro
+> > - Modify mutex_init() to devm_mutex_init()
+> >
+> > Changes since version 2:
+> >
+> > Changes since version 1:
+> > - Implement IRQ domain to handle IRQ demux
+> > - Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API
+> > - Add command structure
+> > - Fix USB functions
+> > - Sort each driver's header files alphabetically
+> >
+> >  MAINTAINERS                 |   6 +
+> >  drivers/mfd/Kconfig         |  15 ++
+> >  drivers/mfd/Makefile        |   2 +
+> >  drivers/mfd/nct6694.c       | 387 ++++++++++++++++++++++++++++++++++++
+> >  include/linux/mfd/nct6694.h |  98 +++++++++
+> >  5 files changed, 508 insertions(+)
+> >  create mode 100644 drivers/mfd/nct6694.c
+> >  create mode 100644 include/linux/mfd/nct6694.h
+>
+> [...]
+>
+> I was just going to fix this up for you when I applied the set, but
+> seeing as it looks like you have to re-submit anyway ...
+>
+> > +static const struct usb_device_id nct6694_ids[] =3D {
+> > +     { USB_DEVICE_AND_INTERFACE_INFO(NCT6694_VENDOR_ID, NCT6694_PRODUC=
+T_ID, 0xFF, 0x00, 0x00)},
+>
+> You need a space before the '}'.
+>
+> > +     {}
+> > +};
+> > +MODULE_DEVICE_TABLE(usb, nct6694_ids);
+> > +
+> > +static struct usb_driver nct6694_usb_driver =3D {
+> > +     .name           =3D "nct6694",
+> > +     .id_table       =3D nct6694_ids,
+> > +     .probe          =3D nct6694_usb_probe,
+> > +     .disconnect     =3D nct6694_usb_disconnect,
+> > +};
+> > +module_usb_driver(nct6694_usb_driver);
+> > +
+> > +MODULE_DESCRIPTION("Nuvoton NCT6694 core driver");
+> > +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> > +MODULE_LICENSE("GPL");
+> > diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+> > new file mode 100644
+> > index 000000000000..5e172609be3f
+> > --- /dev/null
+> > +++ b/include/linux/mfd/nct6694.h
+> > @@ -0,0 +1,98 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2025 Nuvoton Technology Corp.
+> > + *
+> > + * Nuvoton NCT6694 USB transaction and data structure.
+> > + */
+> > +
+> > +#ifndef __MFD_NCT6694_H
+> > +#define __MFD_NCT6694_H
+> > +
+> > +#define NCT6694_VENDOR_ID    0x0416
+> > +#define NCT6694_PRODUCT_ID   0x200B
+> > +#define NCT6694_INT_IN_EP    0x81
+> > +#define NCT6694_BULK_IN_EP   0x02
+> > +#define NCT6694_BULK_OUT_EP  0x03
+> > +
+> > +#define NCT6694_HCTRL_SET    0x40
+> > +#define NCT6694_HCTRL_GET    0x80
+> > +
+> > +#define NCT6694_URB_TIMEOUT  1000
+> > +
+> > +enum nct6694_irq_id {
+> > +     NCT6694_IRQ_GPIO0 =3D 0,
+> > +     NCT6694_IRQ_GPIO1,
+> > +     NCT6694_IRQ_GPIO2,
+> > +     NCT6694_IRQ_GPIO3,
+> > +     NCT6694_IRQ_GPIO4,
+> > +     NCT6694_IRQ_GPIO5,
+> > +     NCT6694_IRQ_GPIO6,
+> > +     NCT6694_IRQ_GPIO7,
+> > +     NCT6694_IRQ_GPIO8,
+> > +     NCT6694_IRQ_GPIO9,
+> > +     NCT6694_IRQ_GPIOA,
+> > +     NCT6694_IRQ_GPIOB,
+> > +     NCT6694_IRQ_GPIOC,
+> > +     NCT6694_IRQ_GPIOD,
+> > +     NCT6694_IRQ_GPIOE,
+> > +     NCT6694_IRQ_GPIOF,
+> > +     NCT6694_IRQ_CAN0,
+> > +     NCT6694_IRQ_CAN1,
+> > +     NCT6694_IRQ_RTC,
+> > +     NCT6694_NR_IRQS,
+> > +};
+> > +
+> > +enum nct6694_response_err_status {
+> > +     NCT6694_NO_ERROR =3D 0,
+> > +     NCT6694_FORMAT_ERROR,
+> > +     NCT6694_RESERVED1,
+> > +     NCT6694_RESERVED2,
+> > +     NCT6694_NOT_SUPPORT_ERROR,
+> > +     NCT6694_NO_RESPONSE_ERROR,
+> > +     NCT6694_TIMEOUT_ERROR,
+> > +     NCT6694_PENDING,
+> > +};
+> > +
+> > +struct __packed nct6694_cmd_header {
+> > +     u8 rsv1;
+> > +     u8 mod;
+> > +     union __packed {
+> > +             __le16 offset;
+> > +             struct __packed {
+> > +                     u8 cmd;
+> > +                     u8 sel;
+> > +             };
+> > +     };
+> > +     u8 hctrl;
+> > +     u8 rsv2;
+> > +     __le16 len;
+> > +};
+> > +
+> > +struct __packed nct6694_response_header {
+> > +     u8 sequence_id;
+> > +     u8 sts;
+> > +     u8 reserved[4];
+> > +     __le16 len;
+> > +};
+> > +
+> > +union __packed nct6694_usb_msg {
+> > +     struct nct6694_cmd_header cmd_header;
+> > +     struct nct6694_response_header response_header;
+> > +};
+> > +
+> > +struct nct6694 {
+> > +     struct device *dev;
+> > +     struct irq_domain *domain;
+> > +     struct mutex access_lock;
+> > +     struct mutex irq_lock;
+> > +     struct urb *int_in_urb;
+> > +     struct usb_device *udev;
+> > +     union nct6694_usb_msg *usb_msg;
+> > +     unsigned char *int_buffer;
+> > +     unsigned int irq_enable;
+> > +};
+> > +
+> > +int nct6694_read_msg(struct nct6694 *nct6694, const struct nct6694_cmd=
+_header *cmd_hd, void *buf);
+> > +int nct6694_write_msg(struct nct6694 *nct6694, const struct nct6694_cm=
+d_header *cmd_hd, void *buf);
+> > +
+> > +#endif
+> > --
+> > 2.34.1
+> >
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
 
