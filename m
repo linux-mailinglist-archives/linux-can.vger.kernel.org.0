@@ -1,582 +1,422 @@
-Return-Path: <linux-can+bounces-3712-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3713-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B359AC5B3D
-	for <lists+linux-can@lfdr.de>; Tue, 27 May 2025 22:09:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58925AC62ED
+	for <lists+linux-can@lfdr.de>; Wed, 28 May 2025 09:26:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F31C13B9D98
-	for <lists+linux-can@lfdr.de>; Tue, 27 May 2025 20:08:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8DD7B7AFBC9
+	for <lists+linux-can@lfdr.de>; Wed, 28 May 2025 07:25:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4079F1FDA92;
-	Tue, 27 May 2025 20:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A707A244678;
+	Wed, 28 May 2025 07:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="bX16aBh9";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="yfnNvJlZ"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="IQSjxLSk"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+Received: from mail-m1973196.qiye.163.com (mail-m1973196.qiye.163.com [220.197.31.96])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253B51E32B7
-	for <linux-can@vger.kernel.org>; Tue, 27 May 2025 20:09:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748376549; cv=pass; b=TFlPenvMv6WH35bj48AZYcxa6fFigNqjLv2BvWl//CQbPzMxzXcJt1rsmhNMCSyuyWfUEUIdxQ8Cvs3yqzVrcbJA9l2IFaryEuh9C/5/KlQcdVaaSxVqpaMQcmZOGpo8r4wYnQXbFnVqSMns8N2wRcoLmDIFkmOolNy3Ca10Kiw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748376549; c=relaxed/simple;
-	bh=brs7HbAovmy0/5PGBBalre2vdTzVcHAkQ2C25wEOEQg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=E4CU87nvimuFMloj7F5uS0ZOlrmO82TUYR/1OLjF3uOjUJO+r1+wBHqFnRICB93GcPU/fgFW2C1+J1s18pSh2jDqGCQSDujiUYs3qyH7UIXQty8nSRKHYCZor5WPtkxKIbO95IjjG3XAd3Oq/gLvCJeh3VCTyaiQBdB/PsTj5gs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=bX16aBh9; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=yfnNvJlZ; arc=pass smtp.client-ip=85.215.255.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1748375821; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=NiC0OEoQbqHSuzPWhgzLW+RyQmBSDto6uxTjB0EZzoTIn5448uwsJ7Uj2d21bMDwAg
-    Om20yWOEVTmfwN5vp7hR9FSIjHHCDIZcdEzNfbWdxCG53LcXgO0uv931CnCDVLPDS27g
-    oLbiouLvX+t2GWwr/Ly3oACNCo6z4MnsLE/akIpskpxyHec0ELPCkHa6qArFTxRh/JE3
-    /j/3ZK+8baqSxFWZmwiSF79d9q2pKDhTPUU0HfCFj0qLfh6UmSK0X6vMgGF9y2HEfcdr
-    0raxV/EBW9MSbRVZCnvE9qFT58TCkWbRE3pVtXslCCpMxTMuliiDw0HTkZV7teNr2I0I
-    s6zA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1748375821;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=jfQKNxGPea9Avsw/9jlkib6TNuHlRWHPWm1qtn66PGc=;
-    b=WFVRSd9chFMSxALFXrNF/EPKqZuiJamSfGyf4tWZXzhapyRoIvfTBpqiciI6tQ8rs5
-    EZlaIrc77yiIfUkk0aDsTgWQotqHK2KSwVV73sqtX+kbeLQuAzGAFj97IirEMI5Q8n1C
-    CmbT5w8C4FicvhnKfvIvdnpkUtQ7MgZBQ2gfjPnNj59qgMutyZUxh70LGdPJm129f2ni
-    rCJXSFushwx03LPjr0yk7327+j8XNia3ow6kmHL7GqVwzQRyP5sZG+9RbR8rJDIMK5Gj
-    J/PGQUvATJwVRL0beEjVynaufDeofV+2CxlP5Ykt3luIdI0nNXGcuntF5DsHkErRHiIv
-    RQbg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1748375821;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=jfQKNxGPea9Avsw/9jlkib6TNuHlRWHPWm1qtn66PGc=;
-    b=bX16aBh9QIMCU/qim6aH0D/xOQv6+Cs1pUZBbTvdMCayYzZfFYnxq573scCKT7+i7J
-    +SJhlwiUKkUPSxAi5QXaeUCnqErAVvRCSWMsFPQYyvSXWseHqJtDXo8UKnqLjNsfR1rf
-    2LsXkP2NdCaHfg71ANePZ9RctpZk+v1ci4UpH64/DEK8mFARuwUYWVt3gCGufiMsoq+R
-    5d7BNRWg8FjAWGlEYx6mCHnXQKIS7cGjWZjVp1CHRv+W10SAqGrVTwXu4q/4URp8o3UZ
-    bTlGL080oJ/H9Hyt6oYmZ0yJU8TZn9wOs4HimtmccWpRiDKxxQIjJQ7rC2W8dsvGhPRE
-    EPJw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1748375821;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=jfQKNxGPea9Avsw/9jlkib6TNuHlRWHPWm1qtn66PGc=;
-    b=yfnNvJlZa8DFZCC81vSOmos7H58VDlbHrXPGAzdDSnIsnFaQ66SsA7FQ7mHpuWu6N6
-    SxIsPQwbNIBc34wz5EBw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/vMMcFB+5xtv9aJ67XA=="
-Received: from lenov17.lan
-    by smtp.strato.de (RZmta 51.3.0 AUTH)
-    with ESMTPSA id K2a3e514RJv1iWF
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 27 May 2025 21:57:01 +0200 (CEST)
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH 1/5] iplink_can: add CAN XL support RFC based on Vincent cleanups
-Date: Tue, 27 May 2025 21:56:46 +0200
-Message-ID: <20250527195650.65306-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.47.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2014A1367;
+	Wed, 28 May 2025 07:26:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.96
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748417202; cv=none; b=FGVRlyS2LeDUgvyXB2/QhLn7XYza9oSttr3I7TDmMHodr6NeWiiplU5gITvlOTiS17By0qaiNOo84D+HeOaeOJ2lKF0aS2pEkvvXkNCcCRzcnOllIuO8WYwN3SBoDS2kXQq4U5yg3zrul/VkYBHyd7hTExoxFVLZnJp9yBVvY7s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748417202; c=relaxed/simple;
+	bh=oCxNkydoGors5tHiS9k0A0CzHEVAaQ5VWNQ7UidB+6k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pbtEP08dhTzPM7SHJNnEN9O5vVC5MuW9QC9b+VghbE1X/7IrSjlF05610mIw11CvZoiwtvqfwgmmbYcRkX5PMVg06NgAnx2dmKJ7IeyMqPzZ0zOgEJPHYl3o6b5rLa23dz31Un4LbhKOwKLdvzLUTJiKqnyNTInULzkixSHcHkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=IQSjxLSk; arc=none smtp.client-ip=220.197.31.96
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.30] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 16ad6a08f;
+	Wed, 28 May 2025 15:21:18 +0800 (GMT+08:00)
+Message-ID: <c3884749-7d26-425c-8ca4-2e2d708aa7f9@rock-chips.com>
+Date: Wed, 28 May 2025 15:21:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/4] net: can: rockchip: support dma for rk3576 rx
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: kernel@pengutronix.de, mailhol.vincent@wanadoo.fr, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de, cl@rock-chips.com,
+ kever.yang@rock-chips.com, linux-can@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20250526062559.2061311-1-zhangqing@rock-chips.com>
+ <20250526062559.2061311-5-zhangqing@rock-chips.com>
+ <20250527-benevolent-rainbow-sturgeon-55c33b-mkl@pengutronix.de>
+From: zhangqing <zhangqing@rock-chips.com>
+In-Reply-To: <20250527-benevolent-rainbow-sturgeon-55c33b-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGh9PQlYYQx1DGUtJGh9KGkpWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a9715c457cd03a3kunm7db02ee67c217e
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NDo6PRw5AzE2GEkSCiMhPAID
+	HxoaCQFVSlVKTE9DT0pNQ0NKSUlCVTMWGhIXVQETGhUcChIVHDsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUpPT0tJNwY+
+DKIM-Signature:a=rsa-sha256;
+	b=IQSjxLSkv153Y/Qna1clKI8BTL3sq9ZrV1PtCeXuuO/fxOcJIE9SGv/uTrc2LL5sFT5OKN8rK/QxFrIrmKWsxJ911nnxKEpoS/Sq4mGGmbBejK3NS5c5MtSsmqyhG1JTmKCm2/Ri87IkT4AMRDc80Ajm46Bkty4QF2lgRumPzik=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=xqyFlrQNnrOFMkrHG9lvTlzgz/nAJIiDsV2HEdjtv58=;
+	h=date:mime-version:subject:message-id:from;
 
-Fixes from Oliver:
-- remove newline before tdc information to increase readability
-- fix copy/paste issue in CAN_CTRLMODE_XL_TDC_ definitions
 
-Based on the iproute2 CAN XL preparations patch set at
-https://lore.kernel.org/linux-can/173194923075.4109060.18408610499610779344.git-patchwork-notify@kernel.org/T/#t
-which was already merged into iproute2-next tree:
-https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=7b4d64895f7c58a12c01d2f394f75b0d1938eb9c
+在 2025/5/27 19:00, Marc Kleine-Budde 写道:
+> On 26.05.2025 14:25:59, Elaine Zhang wrote:
+>> The new can controller of rk3576 supports rx dma.
+> I'm missing dma_sync_single_for_cpu() and dma_sync_single_for_device().
+>
+> What does the overall picture look like?
+>
+> The CAN controller receives a CAN frame, it triggers an interrupt, the
+> driver starts a RX-DMA, the RX-DMA finishes triggers the callback, the
+> driver allocates an skb and copies the data from the DMA dest memory to
+> the skb. Finally the skb is passed to the networking stack.
+After enabling dma, when the water level of the fifo reaches the 
+expected level, dma is initiated. First, the frame numbers in the fifo 
+are read, and dma moves the data of these frame numbers at one time.
+Then the dma completion interrupt is returned, and the cpu begins to 
+process the data moved by dma.
+>
+> Have you done any measurements if using DMA brings any benefits here? I
+> doubt that.
+It has been tested that for the RK3576 cpu with relatively strong 
+capabilities, switching dma has little impact.
 
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- include/uapi/linux/can/netlink.h |  21 ++-
- ip/iplink_can.c                  | 223 ++++++++++++++++++++++++++++---
- 2 files changed, 216 insertions(+), 28 deletions(-)
+However, for the RK3506 with only three cpu cores, enabling dma can 
+reduce cpu interruption. The most obvious one is that after enabling 
+dma, there will be no frame loss problem when the CAN load is over 90%.
 
-diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
-index 8ec98c21..416e2feb 100644
---- a/include/uapi/linux/can/netlink.h
-+++ b/include/uapi/linux/can/netlink.h
-@@ -99,12 +99,15 @@ struct can_ctrlmode {
- #define CAN_CTRLMODE_BERR_REPORTING	0x10	/* Bus-error reporting */
- #define CAN_CTRLMODE_FD			0x20	/* CAN FD mode */
- #define CAN_CTRLMODE_PRESUME_ACK	0x40	/* Ignore missing CAN ACKs */
- #define CAN_CTRLMODE_FD_NON_ISO		0x80	/* CAN FD in non-ISO mode */
- #define CAN_CTRLMODE_CC_LEN8_DLC	0x100	/* Classic CAN DLC option */
--#define CAN_CTRLMODE_TDC_AUTO		0x200	/* CAN transiver automatically calculates TDCV */
--#define CAN_CTRLMODE_TDC_MANUAL		0x400	/* TDCV is manually set up by user */
-+#define CAN_CTRLMODE_TDC_AUTO		0x200	/* FD transceiver automatically calculates TDCV */
-+#define CAN_CTRLMODE_TDC_MANUAL		0x400	/* FD TDCV is manually set up by user */
-+#define CAN_CTRLMODE_XL			0x800	/* CAN XL mode */
-+#define CAN_CTRLMODE_XL_TDC_AUTO	0x1000	/* XL transceiver automatically calculates TDCV */
-+#define CAN_CTRLMODE_XL_TDC_MANUAL	0x2000	/* XL TDCV is manually set up by user */
- 
- /*
-  * CAN device statistics
-  */
- struct can_device_stats {
-@@ -127,27 +130,31 @@ enum {
- 	IFLA_CAN_STATE,
- 	IFLA_CAN_CTRLMODE,
- 	IFLA_CAN_RESTART_MS,
- 	IFLA_CAN_RESTART,
- 	IFLA_CAN_BERR_COUNTER,
--	IFLA_CAN_DATA_BITTIMING,
--	IFLA_CAN_DATA_BITTIMING_CONST,
-+	IFLA_CAN_DATA_BITTIMING, /* FD */
-+	IFLA_CAN_DATA_BITTIMING_CONST, /* FD */
- 	IFLA_CAN_TERMINATION,
- 	IFLA_CAN_TERMINATION_CONST,
- 	IFLA_CAN_BITRATE_CONST,
--	IFLA_CAN_DATA_BITRATE_CONST,
-+	IFLA_CAN_DATA_BITRATE_CONST, /* FD */
- 	IFLA_CAN_BITRATE_MAX,
--	IFLA_CAN_TDC,
-+	IFLA_CAN_TDC, /* FD */
- 	IFLA_CAN_CTRLMODE_EXT,
-+	IFLA_CAN_XL_DATA_BITTIMING,
-+	IFLA_CAN_XL_DATA_BITTIMING_CONST,
-+	IFLA_CAN_XL_DATA_BITRATE_CONST,
-+	IFLA_CAN_XL_TDC,
- 
- 	/* add new constants above here */
- 	__IFLA_CAN_MAX,
- 	IFLA_CAN_MAX = __IFLA_CAN_MAX - 1
- };
- 
- /*
-- * CAN FD Transmitter Delay Compensation (TDC)
-+ * CAN FD/XL Transmitter Delay Compensation (TDC)
-  *
-  * Please refer to struct can_tdc_const and can_tdc in
-  * include/linux/can/bittiming.h for further details.
-  */
- enum {
-diff --git a/ip/iplink_can.c b/ip/iplink_can.c
-index fcffa852..8dc9229b 100644
---- a/ip/iplink_can.c
-+++ b/ip/iplink_can.c
-@@ -13,16 +13,10 @@
- 
- #include "rt_names.h"
- #include "utils.h"
- #include "ip_common.h"
- 
--struct can_tdc {
--	__u32 tdcv;
--	__u32 tdco;
--	__u32 tdcf;
--};
--
- static void print_usage(FILE *f)
- {
- 	fprintf(f,
- 		"Usage: ip link set DEVICE type can\n"
- 		"\t[ bitrate BITRATE [ sample-point SAMPLE-POINT] ] |\n"
-@@ -30,20 +24,26 @@ static void print_usage(FILE *f)
- 		"\n"
- 		"\t[ dbitrate BITRATE [ dsample-point SAMPLE-POINT] ] |\n"
- 		"\t[ dtq TQ dprop-seg PROP_SEG dphase-seg1 PHASE-SEG1\n \t  dphase-seg2 PHASE-SEG2 [ dsjw SJW ] ]\n"
- 		"\t[ tdcv TDCV tdco TDCO tdcf TDCF ]\n"
- 		"\n"
-+		"\t[ xbitrate BITRATE [ xsample-point SAMPLE-POINT] ] |\n"
-+		"\t[ xtq TQ xprop-seg PROP_SEG xphase-seg1 PHASE-SEG1\n \t  xphase-seg2 PHASE-SEG2 [ xsjw SJW ] ]\n"
-+		"\t[ xtdcv TDCV xtdco TDCO xtdcf TDCF ]\n"
-+		"\n"
- 		"\t[ loopback { on | off } ]\n"
- 		"\t[ listen-only { on | off } ]\n"
- 		"\t[ triple-sampling { on | off } ]\n"
- 		"\t[ one-shot { on | off } ]\n"
- 		"\t[ berr-reporting { on | off } ]\n"
- 		"\t[ fd { on | off } ]\n"
- 		"\t[ fd-non-iso { on | off } ]\n"
- 		"\t[ presume-ack { on | off } ]\n"
- 		"\t[ cc-len8-dlc { on | off } ]\n"
- 		"\t[ tdc-mode { auto | manual | off } ]\n"
-+		"\t[ xl { on | off } ]\n"
-+		"\t[ xtdc-mode { auto | manual | off } ]\n"
- 		"\n"
- 		"\t[ restart-ms TIME-MS ]\n"
- 		"\t[ restart ]\n"
- 		"\n"
- 		"\t[ termination { 0..65535 } ]\n"
-@@ -120,23 +120,33 @@ static void print_ctrlmode(enum output_type t, __u32 flags, const char* key)
- 	print_flag(t, &flags, CAN_CTRLMODE_FD_NON_ISO, "FD-NON-ISO");
- 	print_flag(t, &flags, CAN_CTRLMODE_PRESUME_ACK, "PRESUME-ACK");
- 	print_flag(t, &flags, CAN_CTRLMODE_CC_LEN8_DLC, "CC-LEN8-DLC");
- 	print_flag(t, &flags, CAN_CTRLMODE_TDC_AUTO, "TDC-AUTO");
- 	print_flag(t, &flags, CAN_CTRLMODE_TDC_MANUAL, "TDC-MANUAL");
-+	print_flag(t, &flags, CAN_CTRLMODE_XL, "XL");
-+	print_flag(t, &flags, CAN_CTRLMODE_XL_TDC_AUTO, "XL-TDC-AUTO");
-+	print_flag(t, &flags, CAN_CTRLMODE_XL_TDC_MANUAL, "XL-TDC-MANUAL");
- 
- 	if (flags)
- 		print_hex(t, NULL, "%x", flags);
- 
- 	close_json_array(t, "> ");
- }
- 
-+struct can_tdc {
-+	__u32 tdcv;
-+	__u32 tdco;
-+	__u32 tdcf;
-+};
-+
- static int can_parse_opt(struct link_util *lu, int argc, char **argv,
- 			 struct nlmsghdr *n)
- {
--	struct can_bittiming bt = {}, fd_dbt = {};
-+	struct can_bittiming bt = {}, fd_dbt = {}, xl_dbt = {};
- 	struct can_ctrlmode cm = { 0 };
- 	struct can_tdc fd = { .tdcv = -1, .tdco = -1, .tdcf = -1 };
-+	struct can_tdc xl = { .tdcv = -1, .tdco = -1, .tdcf = -1 };
- 
- 	while (argc > 0) {
- 		if (matches(*argv, "bitrate") == 0) {
- 			NEXT_ARG();
- 			if (get_u32(&bt.bitrate, *argv, 0))
-@@ -210,10 +220,57 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
- 				invarg("invalid \"tdco\" value", *argv);
- 		} else if (matches(*argv, "tdcf") == 0) {
- 			NEXT_ARG();
- 			if (get_u32(&fd.tdcf, *argv, 0))
- 				invarg("invalid \"tdcf\" value", *argv);
-+		} else if (matches(*argv, "xl") == 0) {
-+			NEXT_ARG();
-+			set_ctrlmode("xl", *argv, &cm,
-+				     CAN_CTRLMODE_XL);
-+		} else if (matches(*argv, "xbitrate") == 0) {
-+			NEXT_ARG();
-+			if (get_u32(&xl_dbt.bitrate, *argv, 0))
-+				invarg("invalid \"xbitrate\" value", *argv);
-+		} else if (matches(*argv, "xsample-point") == 0) {
-+			float sp;
-+
-+			NEXT_ARG();
-+			if (get_float(&sp, *argv))
-+				invarg("invalid \"xsample-point\" value", *argv);
-+			xl_dbt.sample_point = (__u32)(sp * 1000);
-+		} else if (matches(*argv, "xtq") == 0) {
-+			NEXT_ARG();
-+			if (get_u32(&xl_dbt.tq, *argv, 0))
-+				invarg("invalid \"xtq\" value", *argv);
-+		} else if (matches(*argv, "xprop-seg") == 0) {
-+			NEXT_ARG();
-+			if (get_u32(&xl_dbt.prop_seg, *argv, 0))
-+				invarg("invalid \"xprop-seg\" value", *argv);
-+		} else if (matches(*argv, "xphase-seg1") == 0) {
-+			NEXT_ARG();
-+			if (get_u32(&xl_dbt.phase_seg1, *argv, 0))
-+				invarg("invalid \"xphase-seg1\" value", *argv);
-+		} else if (matches(*argv, "xphase-seg2") == 0) {
-+			NEXT_ARG();
-+			if (get_u32(&xl_dbt.phase_seg2, *argv, 0))
-+				invarg("invalid \"xphase-seg2\" value", *argv);
-+		} else if (matches(*argv, "xsjw") == 0) {
-+			NEXT_ARG();
-+			if (get_u32(&xl_dbt.sjw, *argv, 0))
-+				invarg("invalid \"xsjw\" value", *argv);
-+		} else if (matches(*argv, "xtdcv") == 0) {
-+			NEXT_ARG();
-+			if (get_u32(&xl.tdcv, *argv, 0))
-+				invarg("invalid \"xtdcv\" value", *argv);
-+		} else if (matches(*argv, "xtdco") == 0) {
-+			NEXT_ARG();
-+			if (get_u32(&xl.tdco, *argv, 0))
-+				invarg("invalid \"xtdco\" value", *argv);
-+		} else if (matches(*argv, "xtdcf") == 0) {
-+			NEXT_ARG();
-+			if (get_u32(&xl.tdcf, *argv, 0))
-+				invarg("invalid \"xtdcf\" value", *argv);
- 		} else if (matches(*argv, "loopback") == 0) {
- 			NEXT_ARG();
- 			set_ctrlmode("loopback", *argv, &cm,
- 				     CAN_CTRLMODE_LOOPBACK);
- 		} else if (matches(*argv, "listen-only") == 0) {
-@@ -261,10 +318,25 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
- 					   CAN_CTRLMODE_TDC_MANUAL;
- 			} else {
- 				invarg("\"tdc-mode\" must be either of \"auto\", \"manual\" or \"off\"",
- 					*argv);
- 			}
-+		} else if (matches(*argv, "xtdc-mode") == 0) {
-+			NEXT_ARG();
-+			if (strcmp(*argv, "auto") == 0) {
-+				cm.flags |= CAN_CTRLMODE_XL_TDC_AUTO;
-+				cm.mask |= CAN_CTRLMODE_XL_TDC_AUTO;
-+			} else if (strcmp(*argv, "manual") == 0) {
-+				cm.flags |= CAN_CTRLMODE_XL_TDC_MANUAL;
-+				cm.mask |= CAN_CTRLMODE_XL_TDC_MANUAL;
-+			} else if (strcmp(*argv, "off") == 0) {
-+				cm.mask |= CAN_CTRLMODE_XL_TDC_AUTO |
-+					   CAN_CTRLMODE_XL_TDC_MANUAL;
-+			} else {
-+				invarg("\"xtdc-mode\" must be either of \"auto\", \"manual\" or \"off\"",
-+					*argv);
-+			}
- 		} else if (matches(*argv, "restart") == 0) {
- 			__u32 val = 1;
- 
- 			addattr32(n, 1024, IFLA_CAN_RESTART, val);
- 		} else if (matches(*argv, "restart-ms") == 0) {
-@@ -295,10 +367,12 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
- 
- 	if (bt.bitrate || bt.tq)
- 		addattr_l(n, 1024, IFLA_CAN_BITTIMING, &bt, sizeof(bt));
- 	if (fd_dbt.bitrate || fd_dbt.tq)
- 		addattr_l(n, 1024, IFLA_CAN_DATA_BITTIMING, &fd_dbt, sizeof(fd_dbt));
-+	if (xl_dbt.bitrate || xl_dbt.tq)
-+		addattr_l(n, 1024, IFLA_CAN_XL_DATA_BITTIMING, &xl_dbt, sizeof(xl_dbt));
- 	if (cm.mask)
- 		addattr_l(n, 1024, IFLA_CAN_CTRLMODE, &cm, sizeof(cm));
- 
- 	if (fd.tdcv != -1 || fd.tdco != -1 || fd.tdcf != -1) {
- 		struct rtattr *tdc = addattr_nest(n, 1024,
-@@ -310,10 +384,22 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
- 			addattr32(n, 1024, IFLA_CAN_TDC_TDCO, fd.tdco);
- 		if (fd.tdcf != -1)
- 			addattr32(n, 1024, IFLA_CAN_TDC_TDCF, fd.tdcf);
- 		addattr_nest_end(n, tdc);
- 	}
-+	if (xl.tdcv != -1 || xl.tdco != -1 || xl.tdcf != -1) {
-+		struct rtattr *tdc = addattr_nest(n, 1024,
-+						  IFLA_CAN_XL_TDC | NLA_F_NESTED);
-+
-+		if (xl.tdcv != -1)
-+			addattr32(n, 1024, IFLA_CAN_TDC_TDCV, xl.tdcv);
-+		if (xl.tdco != -1)
-+			addattr32(n, 1024, IFLA_CAN_TDC_TDCO, xl.tdco);
-+		if (xl.tdcf != -1)
-+			addattr32(n, 1024, IFLA_CAN_TDC_TDCF, xl.tdcf);
-+		addattr_nest_end(n, tdc);
-+	}
- 
- 	return 0;
- }
- 
- static const char *can_state_names[CAN_STATE_MAX] = {
-@@ -340,62 +426,69 @@ can_print_timing_min_max(const char *json_attr, const char *fp_attr,
- 	print_uint(PRINT_ANY, "min", " %d", min);
- 	print_uint(PRINT_ANY, "max", "..%d", max);
- 	close_json_object();
- }
- 
--static void can_print_tdc_opt(struct rtattr *tdc_attr)
-+static void can_print_tdc_opt(struct rtattr *tdc_attr, bool is_xl)
- {
- 	struct rtattr *tb[IFLA_CAN_TDC_MAX + 1];
- 
- 	parse_rtattr_nested(tb, IFLA_CAN_TDC_MAX, tdc_attr);
- 	if (tb[IFLA_CAN_TDC_TDCV] || tb[IFLA_CAN_TDC_TDCO] ||
- 	    tb[IFLA_CAN_TDC_TDCF]) {
--		open_json_object("tdc");
--		can_print_nl_indent();
-+		const char *tdc = is_xl ? "xtdc" : "tdc";
-+
-+		open_json_object(tdc);
- 		if (tb[IFLA_CAN_TDC_TDCV]) {
-+			const char *tdcv_fmt = is_xl ? " xtdcv %u" : " tdcv %u";
- 			__u32 *tdcv = RTA_DATA(tb[IFLA_CAN_TDC_TDCV]);
- 
--			print_uint(PRINT_ANY, "tdcv", " tdcv %u", *tdcv);
-+			print_uint(PRINT_ANY, "tdcv", tdcv_fmt, *tdcv);
- 		}
- 		if (tb[IFLA_CAN_TDC_TDCO]) {
-+			const char *tdco_fmt = is_xl ? " xtdco %u" : " tdco %u";
- 			__u32 *tdco = RTA_DATA(tb[IFLA_CAN_TDC_TDCO]);
- 
--			print_uint(PRINT_ANY, "tdco", " tdco %u", *tdco);
-+			print_uint(PRINT_ANY, "tdco", tdco_fmt, *tdco);
- 		}
- 		if (tb[IFLA_CAN_TDC_TDCF]) {
-+			const char *tdcf_fmt = is_xl ? " xtdcf %u" : " tdcf %u";
- 			__u32 *tdcf = RTA_DATA(tb[IFLA_CAN_TDC_TDCF]);
- 
--			print_uint(PRINT_ANY, "tdcf", " tdcf %u", *tdcf);
-+			print_uint(PRINT_ANY, "tdcf", tdcf_fmt, *tdcf);
- 		}
- 		close_json_object();
- 	}
- }
- 
--static void can_print_tdc_const_opt(struct rtattr *tdc_attr)
-+static void can_print_tdc_const_opt(struct rtattr *tdc_attr, bool is_xl)
- {
-+	const char *tdc = is_xl ? "xtdc" : "tdc";
- 	struct rtattr *tb[IFLA_CAN_TDC_MAX + 1];
- 
- 	parse_rtattr_nested(tb, IFLA_CAN_TDC_MAX, tdc_attr);
--	open_json_object("tdc");
--	can_print_nl_indent();
-+	open_json_object(tdc);
- 	if (tb[IFLA_CAN_TDC_TDCV_MIN] && tb[IFLA_CAN_TDC_TDCV_MAX]) {
- 		__u32 *tdcv_min = RTA_DATA(tb[IFLA_CAN_TDC_TDCV_MIN]);
- 		__u32 *tdcv_max = RTA_DATA(tb[IFLA_CAN_TDC_TDCV_MAX]);
-+		const char *tdcv = is_xl ? " xtdcv" : " tdcv";
- 
--		can_print_timing_min_max("tdcv", " tdcv", *tdcv_min, *tdcv_max);
-+		can_print_timing_min_max("tdcv", tdcv, *tdcv_min, *tdcv_max);
- 	}
- 	if (tb[IFLA_CAN_TDC_TDCO_MIN] && tb[IFLA_CAN_TDC_TDCO_MAX]) {
- 		__u32 *tdco_min = RTA_DATA(tb[IFLA_CAN_TDC_TDCO_MIN]);
- 		__u32 *tdco_max = RTA_DATA(tb[IFLA_CAN_TDC_TDCO_MAX]);
-+		const char *tdco = is_xl ? " xtdco" : " tdco";
- 
--		can_print_timing_min_max("tdco", " tdco", *tdco_min, *tdco_max);
-+		can_print_timing_min_max("tdco", tdco, *tdco_min, *tdco_max);
- 	}
- 	if (tb[IFLA_CAN_TDC_TDCF_MIN] && tb[IFLA_CAN_TDC_TDCF_MAX]) {
- 		__u32 *tdcf_min = RTA_DATA(tb[IFLA_CAN_TDC_TDCF_MIN]);
- 		__u32 *tdcf_max = RTA_DATA(tb[IFLA_CAN_TDC_TDCF_MAX]);
-+		const char *tdcf = is_xl ? " xtdcf" : " tdcf";
- 
--		can_print_timing_min_max("tdcf", " tdcf", *tdcf_min, *tdcf_max);
-+		can_print_timing_min_max("tdcf", tdcf, *tdcf_min, *tdcf_max);
- 	}
- 	close_json_object();
- }
- 
- static void can_print_ctrlmode_ext(struct rtattr *ctrlmode_ext_attr,
-@@ -545,11 +638,11 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
- 			   dbt->phase_seg2);
- 		print_uint(PRINT_ANY, "sjw", " dsjw %u", dbt->sjw);
- 		print_uint(PRINT_ANY, "brp", " dbrp %u", dbt->brp);
- 
- 		if (tb[IFLA_CAN_TDC])
--			can_print_tdc_opt(tb[IFLA_CAN_TDC]);
-+			can_print_tdc_opt(tb[IFLA_CAN_TDC], false);
- 
- 		close_json_object();
- 	}
- 
- 	/* data bittiming const is irrelevant if fixed bitrate is defined */
-@@ -569,11 +662,11 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
- 		can_print_timing_min_max("brp", " dbrp",
- 					 dbtc->brp_min, dbtc->brp_max);
- 		print_uint(PRINT_ANY, "brp_inc", " dbrp_inc %u", dbtc->brp_inc);
- 
- 		if (tb[IFLA_CAN_TDC])
--			can_print_tdc_const_opt(tb[IFLA_CAN_TDC]);
-+			can_print_tdc_const_opt(tb[IFLA_CAN_TDC], false);
- 
- 		close_json_object();
- 	}
- 
- 	if (tb[IFLA_CAN_DATA_BITRATE_CONST]) {
-@@ -608,10 +701,98 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
- 				   dbitrate_const[i]);
- 		}
- 		close_json_array(PRINT_ANY, " ]");
- 	}
- 
-+	/* data bittiming is irrelevant if fixed bitrate is defined */
-+	if (tb[IFLA_CAN_XL_DATA_BITTIMING] &&
-+	    !tb[IFLA_CAN_XL_DATA_BITRATE_CONST]) {
-+		struct can_bittiming *dbt =
-+			RTA_DATA(tb[IFLA_CAN_XL_DATA_BITTIMING]);
-+		char dsp[6];
-+
-+		open_json_object("xl_data_bittiming");
-+		can_print_nl_indent();
-+		print_uint(PRINT_ANY, "bitrate", " xbitrate %u", dbt->bitrate);
-+		snprintf(dsp, sizeof(dsp), "%.3f", dbt->sample_point / 1000.);
-+		print_string(PRINT_ANY, "sample_point", " xsample-point %s",
-+			     dsp);
-+		can_print_nl_indent();
-+		print_uint(PRINT_ANY, "tq", " xtq %u", dbt->tq);
-+		print_uint(PRINT_ANY, "prop_seg", " xprop-seg %u",
-+			   dbt->prop_seg);
-+		print_uint(PRINT_ANY, "phase_seg1", " xphase-seg1 %u",
-+			   dbt->phase_seg1);
-+		print_uint(PRINT_ANY, "phase_seg2", " xphase-seg2 %u",
-+			   dbt->phase_seg2);
-+		print_uint(PRINT_ANY, "sjw", " xsjw %u", dbt->sjw);
-+		print_uint(PRINT_ANY, "brp", " xbrp %u", dbt->brp);
-+
-+		if (tb[IFLA_CAN_XL_TDC])
-+			can_print_tdc_opt(tb[IFLA_CAN_XL_TDC], true);
-+
-+		close_json_object();
-+	}
-+
-+	/* data bittiming const is irrelevant if fixed bitrate is defined */
-+	if (tb[IFLA_CAN_XL_DATA_BITTIMING_CONST] &&
-+	    !tb[IFLA_CAN_XL_DATA_BITRATE_CONST]) {
-+		struct can_bittiming_const *dbtc =
-+			RTA_DATA(tb[IFLA_CAN_XL_DATA_BITTIMING_CONST]);
-+
-+		open_json_object("xl_data_bittiming_const");
-+		can_print_nl_indent();
-+		print_string(PRINT_ANY, "name", " %s:", dbtc->name);
-+		can_print_timing_min_max("tseg1", " xtseg1",
-+					 dbtc->tseg1_min, dbtc->tseg1_max);
-+		can_print_timing_min_max("tseg2", " xtseg2",
-+					 dbtc->tseg2_min, dbtc->tseg2_max);
-+		can_print_timing_min_max("sjw", " xsjw", 1, dbtc->sjw_max);
-+		can_print_timing_min_max("brp", " xbrp",
-+					 dbtc->brp_min, dbtc->brp_max);
-+		print_uint(PRINT_ANY, "brp_inc", " xbrp_inc %u", dbtc->brp_inc);
-+
-+		if (tb[IFLA_CAN_XL_TDC])
-+			can_print_tdc_const_opt(tb[IFLA_CAN_XL_TDC], true);
-+
-+		close_json_object();
-+	}
-+
-+	if (tb[IFLA_CAN_XL_DATA_BITRATE_CONST]) {
-+		__u32 *dbitrate_const =
-+			RTA_DATA(tb[IFLA_CAN_XL_DATA_BITRATE_CONST]);
-+		int dbitrate_cnt =
-+			RTA_PAYLOAD(tb[IFLA_CAN_XL_DATA_BITRATE_CONST]) /
-+			sizeof(*dbitrate_const);
-+		int i;
-+		__u32 dbitrate = 0;
-+
-+		if (tb[IFLA_CAN_XL_DATA_BITTIMING]) {
-+			struct can_bittiming *dbt =
-+				RTA_DATA(tb[IFLA_CAN_XL_DATA_BITTIMING]);
-+			dbitrate = dbt->bitrate;
-+		}
-+
-+		can_print_nl_indent();
-+		print_uint(PRINT_ANY, "xl_data_bittiming_bitrate", " xbitrate %u",
-+			   dbitrate);
-+		can_print_nl_indent();
-+		open_json_array(PRINT_ANY, is_json_context() ?
-+				"data_bitrate_const" : "    [");
-+		for (i = 0; i < dbitrate_cnt; ++i) {
-+			/* This will keep lines below 80 signs */
-+			if (!(i % 6) && i) {
-+				can_print_nl_indent();
-+				print_string(PRINT_FP, NULL, "%s", "     ");
-+			}
-+			print_uint(PRINT_ANY, NULL,
-+				   i < dbitrate_cnt - 1 ? "%8u, " : "%8u",
-+				   dbitrate_const[i]);
-+		}
-+		close_json_array(PRINT_ANY, " ]");
-+	}
-+
- 	if (tb[IFLA_CAN_TERMINATION_CONST] && tb[IFLA_CAN_TERMINATION]) {
- 		__u16 *trm = RTA_DATA(tb[IFLA_CAN_TERMINATION]);
- 		__u16 *trm_const = RTA_DATA(tb[IFLA_CAN_TERMINATION_CONST]);
- 		int trm_cnt = RTA_PAYLOAD(tb[IFLA_CAN_TERMINATION_CONST]) /
- 			sizeof(*trm_const);
+Subsequently, both rk3506 and rv1126b used the rk3576 canfd controller.
+
+>
+> If your hardware supports, a better setup would be to allocate a bunch
+> of skbs and setup the a DMA request per skb and push them all to the DMA
+> engine during open(). If the CAN controller receives a CAN frame, the
+> DMA automatically starts and raises an IRQ after finish of the DMA
+> transfer. Transform the header and then pass the skb to the networking
+> stack - no need for memcpy.
+>
+> This _might_ lower the total CPU cost of RX, but a lot of additional
+> code is used for that.
+I can try to modify.
+Including other modifications proposed below, they will be updated in 
+the next version
+>
+> Never the less, review inline.
+>
+>> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+>> ---
+>>   .../net/can/rockchip/rockchip_canfd-core.c    | 39 +++++++++
+>>   drivers/net/can/rockchip/rockchip_canfd-rx.c  | 87 +++++++++++++++++++
+>>   drivers/net/can/rockchip/rockchip_canfd.h     | 11 +++
+>>   3 files changed, 137 insertions(+)
+>>
+>> diff --git a/drivers/net/can/rockchip/rockchip_canfd-core.c b/drivers/net/can/rockchip/rockchip_canfd-core.c
+>> index 92e260cb2527..9ef4a9ae19d8 100644
+>> --- a/drivers/net/can/rockchip/rockchip_canfd-core.c
+>> +++ b/drivers/net/can/rockchip/rockchip_canfd-core.c
+>> @@ -433,6 +433,9 @@ static void rk3576canfd_chip_start(struct rkcanfd_priv *priv)
+>>   		      RK3576CANFD_REG_BRS_CFG_BRS_NEGSYNC_EN |
+>>   		      RK3576CANFD_REG_BRS_CFG_BRS_POSSYNC_EN);
+>>   
+>> +	if (priv->use_dma)
+>> +		rkcanfd_write(priv, RK3576CANFD_REG_DMA_CTRL,
+>> +			      RK3576CANFD_REG_DMA_CTRL_DMA_RX_EN | priv->dma_thr);
+>>   	rkcanfd_set_bittiming(priv);
+>>   
+>>   	priv->devtype_data.interrupts_disable(priv);
+>> @@ -1324,10 +1327,31 @@ static const struct of_device_id rkcanfd_of_match[] = {
+>>   };
+>>   MODULE_DEVICE_TABLE(of, rkcanfd_of_match);
+>>   
+>> +static void rk3576_canfd_dma_init(struct rkcanfd_priv *priv)
+>> +{
+>> +	struct dma_slave_config rxconf = {
+>> +		.direction = DMA_DEV_TO_MEM,
+>> +		.src_addr = priv->rx_dma_src_addr,
+>> +		.src_addr_width = 4,
+>> +		.dst_addr_width = 4,
+>> +		.src_maxburst = 9,
+>> +	};
+>> +
+>> +	priv->dma_thr = rxconf.src_maxburst - 1;
+>> +	priv->rxbuf = dma_alloc_coherent(priv->dev, priv->dma_size * 14,
+> Where does the 14 come from?
+In the fixed mode of CANFD, there are 18 words per frame, and the 
+maximum number of words in the fifo is 256. The fifo can store up to 
+256/18=14 frames at most.
+>
+>> +					 &priv->rx_dma_dst_addr, GFP_KERNEL);
+> I'm missing the cleanup for priv->rxbuf.
+>
+>> +	if (!priv->rxbuf) {
+>> +		priv->use_dma = 0;
+>> +		return;
+>> +	}
+>> +	dmaengine_slave_config(priv->rxchan, &rxconf);
+> Please add error handling.
+>
+>> +}
+>> +
+>>   static int rkcanfd_probe(struct platform_device *pdev)
+>>   {
+>>   	struct rkcanfd_priv *priv;
+>>   	struct net_device *ndev;
+>> +	struct resource *res;
+>>   	const void *match;
+>>   	int err;
+>>   
+>> @@ -1349,6 +1373,7 @@ static int rkcanfd_probe(struct platform_device *pdev)
+>>   		goto out_free_candev;
+>>   	}
+>>   
+>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>   	priv->regs = devm_platform_ioremap_resource(pdev, 0);
+> Please use devm_platform_get_and_ioremap_resource();
+>
+>>   	if (IS_ERR(priv->regs)) {
+>>   		err = PTR_ERR(priv->regs);
+>> @@ -1376,6 +1401,7 @@ static int rkcanfd_probe(struct platform_device *pdev)
+>>   	priv->can.do_set_mode = rkcanfd_set_mode;
+>>   	priv->can.do_get_berr_counter = rkcanfd_get_berr_counter;
+>>   	priv->ndev = ndev;
+>> +	priv->dev = &pdev->dev;
+> Please remove, priv->dev is not used in the hot path, use
+> priv->ndev->dev.parent instead.
+>
+>>   
+>>   	match = device_get_match_data(&pdev->dev);
+>>   	if (match) {
+>> @@ -1384,6 +1410,19 @@ static int rkcanfd_probe(struct platform_device *pdev)
+>>   			priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
+>>   	}
+>>   
+>> +	priv->rxchan = dma_request_chan(&pdev->dev, "rx");
+> I'm missing the cleanup for priv->rxchan.
+>
+>> +	if (IS_ERR(priv->rxchan)) {
+> Please handle -EPROBE_DEFER properly.
+>
+>> +		dev_warn(&pdev->dev, "Failed to request rxchan\n");
+> Please print the error value and state that you are continuing w/o DMA,
+> e.g.:
+>
+>      netdev_warn("Failed to request RX-DMA channel: %pe, continuing without DMA", priv->rxchan);
+>
+>> +		priv->rxchan = NULL;
+>> +		priv->use_dma = 0;
+>> +	} else {
+>> +		priv->rx_dma_src_addr = res->start + RK3576CANFD_REG_RXFRD;
+>> +		priv->dma_size = RK3576CANFD_REG_STR_STATE_INTM_LEFT_CNT_UNIT * 4;
+> Why do you need priv->dma_size, it doesn't change during runtime, does it?
+>
+>> +		priv->use_dma = 1;
+>> +	}
+>> +	if (priv->use_dma)
+>> +		rk3576_canfd_dma_init(priv);
+>> +
+> Can you move all DMA related functionality into rk3576_canfd_dma_init(),
+> pass res as a parameter, remove rx_dma_src_addr.
+>
+> I think you don't need use_dma, checking rxchan != NULL should be
+> sufficient.
+>
+>>   	err = can_rx_offload_add_manual(ndev, &priv->offload,
+>>   					RKCANFD_NAPI_WEIGHT);
+>>   	if (err)
+>> diff --git a/drivers/net/can/rockchip/rockchip_canfd-rx.c b/drivers/net/can/rockchip/rockchip_canfd-rx.c
+>> index 8a383cabd9d2..ac06e876552e 100644
+>> --- a/drivers/net/can/rockchip/rockchip_canfd-rx.c
+>> +++ b/drivers/net/can/rockchip/rockchip_canfd-rx.c
+>> @@ -285,6 +285,52 @@ static int rk3576canfd_handle_rx_int_one(struct rkcanfd_priv *priv)
+>>   	return 0;
+>>   }
+>>   
+>> +static int rk3576canfd_handle_rx_dma(struct rkcanfd_priv *priv, u32 addr)
+>> +{
+>> +	struct net_device_stats *stats = &priv->ndev->stats;
+>> +	struct canfd_frame cfd[1] = { }, *skb_cfd;
+>> +	struct rk3576canfd_fifo_header header[1] = { };
+>> +	struct sk_buff *skb;
+>> +	u32 __iomem *rxbuf = (u32 __iomem *)priv->rxbuf;
+> Why do you cast rx_buf to __iomem? It's normal memory, isn't it?
+>
+>> +	unsigned int len;
+>> +	int i;
+>> +
+>> +	header->frameinfo = readl(rxbuf +
+>> +				  addr * RK3576CANFD_REG_STR_STATE_INTM_LEFT_CNT_UNIT);
+>> +	header->id = readl(rxbuf + 1 +
+>> +			   addr * RK3576CANFD_REG_STR_STATE_INTM_LEFT_CNT_UNIT);
+>> +	for (i = 0; i < (RK3576CANFD_REG_STR_STATE_INTM_LEFT_CNT_UNIT - 2); i++)
+>> +		cfd->data[i] = readl(rxbuf + 2 + i +
+>> +				     addr * RK3576CANFD_REG_STR_STATE_INTM_LEFT_CNT_UNIT);
+>> +
+> Remove cfd and header and directly access the rxbuf.
+>
+>> +	len = rk3576canfd_fifo_header_to_cfd_header(priv, header, cfd);
+>> +
+>> +	/* Manual handling of CAN Bus Error counters. See
+>> +	 * rkcanfd_get_corrected_berr_counter() for detailed
+>> +	 * explanation.
+>> +	 */
+>> +	if (priv->bec.rxerr)
+>> +		priv->bec.rxerr = min(CAN_ERROR_PASSIVE_THRESHOLD,
+>> +				      priv->bec.rxerr) - 1;
+>> +
+>> +	if (header->frameinfo & RK3576CANFD_REG_RXFRD_FRAMEINFO_FDF)
+>> +		skb = alloc_canfd_skb(priv->ndev, &skb_cfd);
+>> +	else
+>> +		skb = alloc_can_skb(priv->ndev, (struct can_frame **)&skb_cfd);
+> copy the data to the allocated skb directly.
+>
+>> +
+>> +	if (!skb) {
+>> +		stats->rx_dropped++;
+>> +
+>> +		return 0;
+>> +	}
+>> +
+>> +	memcpy(skb_cfd, cfd, len);
+>> +	stats->rx_packets++;
+>> +	stats->rx_bytes += cfd->len;
+>> +	netif_rx(skb);
+> Use the rx_offload_helper here too.
+>
+>> +	return 0;
+>> +}
+>> +
+>>   static int rkcanfd_handle_rx_int_one(struct rkcanfd_priv *priv)
+>>   {
+>>   	struct net_device_stats *stats = &priv->ndev->stats;
+>> @@ -380,6 +426,43 @@ rk3576canfd_rx_fifo_get_len(const struct rkcanfd_priv *priv)
+>>   	return DIV_ROUND_UP(val, RK3576CANFD_REG_STR_STATE_INTM_LEFT_CNT_UNIT);
+>>   }
+>>   
+>> +static void rk3576_canfd_rx_dma_callback(void *data)
+>> +{
+>> +	struct rkcanfd_priv *priv = data;
+>> +	int i;
+>> +
+>> +	for (i = 0; i < priv->quota; i++)
+>> +		rk3576canfd_handle_rx_dma(priv, i);
+>> +
+>> +	rkcanfd_write(priv, RK3576CANFD_REG_INT_MASK, priv->reg_int_mask_default);
+>> +}
+>> +
+>> +static int rk3576_canfd_rx_dma(struct rkcanfd_priv *priv)
+>> +{
+>> +	struct dma_async_tx_descriptor *rxdesc = NULL;
+>> +	const u32 reg = rkcanfd_read(priv, RK3576CANFD_REG_STR_STATE);
+>> +	int quota = FIELD_GET(RK3576CANFD_REG_STR_STATE_INTM_LEFT_CNT, reg);
+>> +
+>> +	quota = DIV_ROUND_UP(quota, RK3576CANFD_REG_STR_STATE_INTM_LEFT_CNT_UNIT);
+>> +	priv->quota = quota;
+>> +	if (priv->quota == 0) {
+>> +		rkcanfd_write(priv, RK3576CANFD_REG_INT_MASK, priv->reg_int_mask_default);
+>> +		return 0;
+>> +	}
+>> +
+>> +	rxdesc = dmaengine_prep_slave_single(priv->rxchan, priv->rx_dma_dst_addr,
+>> +					     priv->dma_size * priv->quota, DMA_DEV_TO_MEM, 0);
+>> +	if (!rxdesc)
+>> +		return -ENOMSG;
+>> +
+>> +	rxdesc->callback = rk3576_canfd_rx_dma_callback;
+>> +	rxdesc->callback_param = priv;
+>> +
+>> +	dmaengine_submit(rxdesc);
+> Please add error handling.
+>
+>> +	dma_async_issue_pending(priv->rxchan);
+>> +	return 0;
+>> +}
+>> +
+>>   int rkcanfd_handle_rx_int(struct rkcanfd_priv *priv)
+>>   {
+>>   	unsigned int len;
+>> @@ -399,6 +482,10 @@ int rkcanfd_handle_rk3576_rx_int(struct rkcanfd_priv *priv)
+>>   	unsigned int len;
+>>   	int err;
+>>   
+>> +	if (priv->use_dma) {
+>> +		rk3576_canfd_rx_dma(priv);
+>> +		return 0;
+> Please add error handling.
+>
+>> +	}
+>>   	while ((len = rk3576canfd_rx_fifo_get_len(priv))) {
+>>   		err = rk3576canfd_handle_rx_int_one(priv);
+>>   		if (err)
+>> diff --git a/drivers/net/can/rockchip/rockchip_canfd.h b/drivers/net/can/rockchip/rockchip_canfd.h
+>> index 9b91d757d054..c7d6845c6d95 100644
+>> --- a/drivers/net/can/rockchip/rockchip_canfd.h
+>> +++ b/drivers/net/can/rockchip/rockchip_canfd.h
+>> @@ -11,6 +11,8 @@
+>>   #include <linux/can/dev.h>
+>>   #include <linux/can/rx-offload.h>
+>>   #include <linux/clk.h>
+>> +#include <linux/dma-mapping.h>
+>> +#include <linux/dmaengine.h>
+>>   #include <linux/io.h>
+>>   #include <linux/netdevice.h>
+>>   #include <linux/reset.h>
+>> @@ -737,6 +739,7 @@ struct rkcanfd_priv {
+>>   	struct can_priv can;
+>>   	struct can_rx_offload offload;
+>>   	struct net_device *ndev;
+>> +	struct device *dev;
+> It's not used in the hot path, please remove.
+>
+>>   
+>>   	void __iomem *regs;
+>>   	unsigned int tx_head;
+>> @@ -758,6 +761,14 @@ struct rkcanfd_priv {
+>>   	struct reset_control *reset;
+>>   	struct clk_bulk_data *clks;
+>>   	int clks_num;
+>> +	bool use_dma;
+>> +	u32 dma_size;
+>> +	u32 dma_thr;
+>> +	int quota;
+>> +	struct dma_chan *rxchan;
+>> +	u32 *rxbuf;
+>> +	dma_addr_t rx_dma_src_addr;
+>> +	dma_addr_t rx_dma_dst_addr;
+>>   };
+>>   
+>>   static inline u32
+> I'll look at patch 3/4 later this week or next week.
+>
+> regards,
+> Marc
+>
 -- 
-2.47.2
+张晴
+瑞芯微电子股份有限公司
+Rockchip Electronics Co.,Ltd
+地址：福建省福州市铜盘路软件大道89号软件园A区21号楼
+Add:No.21 Building, A District, No.89 Software Boulevard Fuzhou, Fujian 350003, P.R.China
+Tel:+86-0591-83991906-8601
+邮编：350003
+E-mail:elaine.zhang@rock-chips.com
+****************************************************************************
+保密提示：本邮件及其附件含有机密信息，仅发送给本邮件所指特定收件人。若非该特定收件人，请勿复制、使用或披露本邮件的任何内容。若误收本邮件，请从系统中永久性删除本邮件及所有附件，并以回复邮件或其他方式即刻告知发件人。福州瑞芯微电子有限公司拥有本邮件信息的著作权及解释权，禁止任何未经授权许可的侵权行为。
+
+IMPORTANT NOTICE: This email is from Fuzhou Rockchip Electronics Co., Ltd .The contents of this email and any attachments may contain information that is privileged, confidential and/or exempt from disclosure under applicable law and relevant NDA. If you are not the intended recipient, you are hereby notified that any disclosure, copying, distribution, or use of the information is STRICTLY PROHIBITED. Please immediately contact the sender as soon as possible and destroy the material in its entirety in any format. Thank you.
+
+****************************************************************************
 
 
