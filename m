@@ -1,100 +1,232 @@
-Return-Path: <linux-can+bounces-3751-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3752-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBE1DACADBB
-	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 14:00:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03C1EACAE5C
+	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 14:57:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89E4417E669
-	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 12:00:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75381189FD92
+	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 12:57:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F1482116EB;
-	Mon,  2 Jun 2025 11:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4615121B9C5;
+	Mon,  2 Jun 2025 12:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="hMTyHcPG"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-71.smtpout.orange.fr [193.252.22.71])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E33220F078;
-	Mon,  2 Jun 2025 11:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01EE1F461D;
+	Mon,  2 Jun 2025 12:57:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748865598; cv=none; b=m+etkz42HGBXRnaja5I7ldv1HfGhgOBw6FdvvUau6Tm9QFOI6OPpmlDFComGK1BPY3yusUfIv72jIctp/4JIft5DdwSCrIRCu41RPb8lI/vFyaEF2yIjeHjU84gff7lyWTOpaSAc8MdBSIxT1i1Yz/ToYcvE+cnhuD6V1L0ynbc=
+	t=1748869046; cv=none; b=UdqDGwqnFKRoATRXYT/6rLofbv1Zrj5gIPEGiokSZ92Py5BeCG0RkaPGFxP/vKKwz/mMp+p4Q7Ei53VWjdYyPMyVm9VeEmnqyXNlo+ueOQ+BzPERGY1iXD09pPvT/ez7x61umKzNNBj9Szay1+C2t/3KEqMEDEiQZDgz23o29iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748865598; c=relaxed/simple;
-	bh=7XYV3KkxV92L9ICtrPlZhbT2Bc4RXMJiRmkRccZBJ2c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ooy9rzYIBZqj6JEEPRLW5/SrXUO5uSy/DRezBL6/dGeooA8//HhK9ZT7zB3Qk0rc5qToDATHdiajYM52/u7/aqGwO/1O+r6Z+lhtsMMLaxC2EeD41u+uZOjPJPhc/zE0eGaOcBU55zYDbOx9KrPO/8GdhwMQm3uedYAJPD61gGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB81C4CEEB;
-	Mon,  2 Jun 2025 11:59:55 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	Andrew Lunn <andrew@lunn.ch>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	linux-can@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] documentation: networking: can: Document alloc_candev_mqs()
-Date: Mon,  2 Jun 2025 13:59:52 +0200
-Message-ID: <c0f9a706ba31f1a49eb72e58526cd294d97a1ce9.1748865431.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1748869046; c=relaxed/simple;
+	bh=1T+4SjlPktQEfdR3wxZEdOF+qZdvMuowjfd72KE39/E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Gfj0osIgjZvQAPmyr44hMmUKyQYpJmflmQZIRtLCqUjw8h6+bQgnQjK/Kv3eIJ7f8cKC2Z1wNJ7XM9Ej/f2IX+TLx2mkdiVk5xJ1IkihFkkG0jHK/YqLeP+nDUBZ4OwJS9BIiWVUqVTCXORKMdJbCbRESaITrZN9pZhSasqbss0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=hMTyHcPG; arc=none smtp.client-ip=193.252.22.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id M4hyu0vvBVLIhM4hzubQOb; Mon, 02 Jun 2025 14:56:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1748868969;
+	bh=tJpgnt56+6gsOzEu20toZVeHIgDQ2dRsyJW0tnHgKwU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=hMTyHcPGlhHISDzQz5qTSzqnDykQUtWBMCIHzWUVj2pdesekSkWwhFfyMuuJwLfNa
+	 UQaDLpOwEnOra0eVwbcoeXPA2VD6Tuz/XFbegSLffE2EXvWufC6f3rCVTsvLpXCYyS
+	 gxWqq11aRkNodTBMMRdiqyTlCyVxfgql6CnE2lXt9rnxdAlQsqiuiKir8jHK4Cag7j
+	 +Kmp4DqQOaLPeY7C2WGEJ09sL/qGDYQP3XZXlK05E5drY/TD3mkSDfPnMZbcxdlPAQ
+	 wAyqk7Hn/XK70Fu8yuKqqL7uVT5cybD8bPOgcjnFVxRZscDpnZT+140aG2+BfCFrb+
+	 OX5CSooo41hsw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 02 Jun 2025 14:56:09 +0200
+X-ME-IP: 124.33.176.97
+Message-ID: <ad3dbd97-eb25-41bc-a105-1fd328b53899@wanadoo.fr>
+Date: Mon, 2 Jun 2025 21:56:05 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/6] can: netlink: add interface for CAN-FD Transmitter
+ Delay Compensation (TDC)
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ =?UTF-8?Q?Stefan_M=C3=A4tje?= <Stefan.Maetje@esd.eu>
+References: <20210918095637.20108-1-mailhol.vincent@wanadoo.fr>
+ <20210918095637.20108-5-mailhol.vincent@wanadoo.fr>
+ <CAMuHMdVEBLoG084rhBtELcFO+3cA9_UrZrUfspOeLNo80zyb9g@mail.gmail.com>
+ <10ed3ec2-ac66-494a-9d3f-bf2df459ebc0@wanadoo.fr>
+ <CAMuHMdWDUpkwPVCm2Dha04F59MES4QvKFUVfvg70x5GPZHsxDA@mail.gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <CAMuHMdWDUpkwPVCm2Dha04F59MES4QvKFUVfvg70x5GPZHsxDA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Since the introduction of alloc_candev_mqs() and friends, there is no
-longer a need to allocate a generic network device and perform explicit
-CAN-specific setup.  Remove the code showing this setup, and document
-alloc_candev_mqs() instead.
+On 02/06/2025 at 16:23, Geert Uytterhoeven wrote:
+> Hi Vincent,
+> 
+> On Sat, 31 May 2025 at 10:25, Vincent Mailhol
+> <mailhol.vincent@wanadoo.fr> wrote:
+>> On 30/05/2025 at 20:44, Geert Uytterhoeven wrote:
 
-Fixes: 39549eef3587f1c1 ("can: CAN Network device driver and Netlink interface")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v2:
-  - Fix RST rendering,
-  - Promote Fixes-tag.
----
- Documentation/networking/can.rst | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+(...)
 
-diff --git a/Documentation/networking/can.rst b/Documentation/networking/can.rst
-index b018ce346392652b..bc1b585355f7ad99 100644
---- a/Documentation/networking/can.rst
-+++ b/Documentation/networking/can.rst
-@@ -1104,15 +1104,12 @@ for writing CAN network device driver are described below:
- General Settings
- ----------------
- 
--.. code-block:: C
--
--    dev->type  = ARPHRD_CAN; /* the netdevice hardware type */
--    dev->flags = IFF_NOARP;  /* CAN has no arp */
-+CAN network device drivers can use alloc_candev_mqs() and friends instead of
-+alloc_netdev_mqs(), to automatically take care of CAN-specific setup:
- 
--    dev->mtu = CAN_MTU; /* sizeof(struct can_frame) -> Classical CAN interface */
-+.. code-block:: C
- 
--    or alternative, when the controller supports CAN with flexible data rate:
--    dev->mtu = CANFD_MTU; /* sizeof(struct canfd_frame) -> CAN FD interface */
-+    dev = alloc_candev_mqs(...);
- 
- The struct can_frame or struct canfd_frame is the payload of each socket
- buffer (skbuff) in the protocol family PF_CAN.
--- 
-2.43.0
+>> Let me first repost what I wrote but this time using numerals and letters
+>> instead of the bullet points:
+>>
+>>   The TDC netlink logic works as follow:
+>>
+>>    1. CAN_CTRLMODE_FD is not provided:
+>>       a) if any TDC parameters are provided: error.
+>>
+>>       b) TDC parameters not provided: TDC parameters unchanged.
+>>
+>>    2. CAN_CTRLMODE_FD is provided and is false:
+>>       a) TDC is deactivated: both the structure and the
+>>          CAN_CTRLMODE_TDC_{AUTO,MANUAL} flags are flushed.
+>>
+>>    3. CAN_CTRLMODE_FD provided and is true:
+>>       a) CAN_CTRLMODE_TDC_{AUTO,MANUAL} and tdc{v,o,f} not provided: call
+>>          can_calc_tdco() to automatically decide whether TDC should be
+>>          activated and, if so, set CAN_CTRLMODE_TDC_AUTO and uses the
+>>          calculated tdco value.
+>>
+>>       b) CAN_CTRLMODE_TDC_AUTO and tdco provided: set
+>>          CAN_CTRLMODE_TDC_AUTO and use the provided tdco value. Here,
+>>          tdcv is illegal and tdcf is optional.
+>>
+>>       c) CAN_CTRLMODE_TDC_MANUAL and both of tdcv and tdco provided: set
+>>          CAN_CTRLMODE_TDC_MANUAL and use the provided tdcv and tdco
+>>          value. Here, tdcf is optional.
+>>
+>>       d) CAN_CTRLMODE_TDC_{AUTO,MANUAL} are mutually exclusive. Whenever
+>>          one flag is turned on, the other will automatically be turned
+>>          off. Providing both returns an error.
+>>
+>>       e) Combination other than the one listed above are illegal and will
+>>          return an error.
+>>
+>> You can double check that it is the exact same as before.
+>>
+>>> By default, a CAN-FD interface comes up in TDC-AUTO mode (if supported),
+>>> using a calculated tdco value.  However, enabling "tdc-mode auto"
+>>> explicitly from userland requires also specifying an explicit tdco
+>>> value.  I.e.
+>>>
+>>>     ip link set can0 type can bitrate 500000 dbitrate 8000000 fd on
+>>                                                                 ^^^^^
+>> Here:
+>>
+>>   - CAN_CTRLMODE_FD provided and is true: so we are in close 3.
+>>
+>>   - CAN_CTRLMODE_TDC_{AUTO,MANUAL} and tdc{v,o,f} not provided: so we *are* in
+>>     sub-clause a)
+>>
+>> 3.a) tells that the framework will decide whether or not TDC should be
+>> activated, and if activated, will set the TDCO.
+>>
+>>> gives "can <FD,TDC-AUTO>" and "tdcv 0 tdco 3", while
+>>
+>> Looks perfectly coherent with 3.a)
+>>
+>> Note that with lower data bitrate, the framework might have decided to set TDC off.
+> 
+> Yes, that case is fine for sure.
+> 
+>>>     ip link set can0 type can bitrate 500000 dbitrate 8000000 fd on
+>>> tdc-mode auto
+>>
+>> This time:
+>>
+>>   - CAN_CTRLMODE_FD provided and is true: so we are in close 3.
+>>
+>>   - CAN_CTRLMODE_TDC_AUTO is provided, we are *not* in sub-clause a)
+>>
+>>   - tdco is not provided.
+>>
+>> No explicit clauses matches this pattern so it defaults to the last
+>> sub-clause: e), which means an error.
+>>
+>>> gives:
+>>>
+>>>     tdc-mode auto: RTNETLINK answers: Operation not supported
+>>
+>> Looks perfectly coherent with 3.e)
+> 
+> Thanks, I misread this as clause 3.a being applicable (hasn't NOT a
+> higher precedence than AND? ;-)
+
+Now I see where your confusion comes from.
+
+But if I read:
+
+  Paul and Mary not present
+
+I understand that both are absent. I do not see an ambiguity that Paul may be
+present and only Mary absent.
+
+Well, I guess this is what occurs when you write in English instead of C.
+
+And I just realize that there was an actual mistake in my description: I forgot
+to state the obvious and I omitted to mention that TDC_OFF means that TDC is
+forcefully deactivated.
+
+>>> unless I add an explicit "tdco 3".
+>>
+>> Yes, if you provide tcdo 3, then you are under 3.b).
+>>
+>>> According to your commit description, this is not the expected behavior?
+>>> Thanks!
+>>
+>> Looking back to my commit, I admit that the explanation is convoluted and could
+>> be hard to digest, but I do not see a mismatch between the description and the
+>> behaviour.
+> 
+> OK, so the description and the behaviour do match.
+> 
+> However, I still find it a bit counter-intuitive that
+> CAN_CTRLMODE_TDC_AUTO is not fully automatic, but automatic-with-one-
+> manual-knob.
+
+Fair enough. In truth, TDC_AUTO and TDC_MANUAL means respectively
+TDC_ON_WITH_TDCV_AUTO and TDC_ON_WITH_TDCV_MANUAL.
+
+The problem is that it makes close to no sense to allow the user to ask to have
+TDC explicitly ON and TDCO automatically calculated. And if I recall, TDC_AUTO
+and TDC_MANUAL is also consistent with what I found in the datasheets.
+
+On a side note, I still have to update Documentation/networking/can.rst to add
+some TDC explanations. I will of course not change the naming (this is part of
+the UAPI, so now it is set in stone), but I will try to clarify the concerns you
+raised here so that the documentation is more clear than my patch comments.
+
+Also, I am not writing this documentation any soon. CAN-XL has a higher priority
+in my TODO list :)
+
+
+Yours sincerely,
+Vincent Mailhol
 
 
