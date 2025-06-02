@@ -1,55 +1,55 @@
-Return-Path: <linux-can+bounces-3753-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3754-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA809ACAE7A
-	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 15:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 05ACFACAEC3
+	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 15:18:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61A191BA0AA8
-	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 13:03:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20CBF189F7AD
+	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 13:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E79020F066;
-	Mon,  2 Jun 2025 13:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA5981EFF8B;
+	Mon,  2 Jun 2025 13:18:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="T2kEEHuV"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="a1KWAcUK"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-73.smtpout.orange.fr [193.252.22.73])
+Received: from out.smtpout.orange.fr (out-71.smtpout.orange.fr [193.252.22.71])
 	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E226619049B;
-	Mon,  2 Jun 2025 13:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F316D1401B;
+	Mon,  2 Jun 2025 13:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748869366; cv=none; b=p3c4cugpR3XfcL0cFbHptUZm6UUtjnBhgn0B+uSOZ4M6osT3qgUga4aqDDjjk6ue2h6KJg9Idp09RZvsLl6hVMY0V9AkCtXK3ZcDUGDTgjLoK1a+/HKwR9FwBZ43Z+Uu+ph7Pc4JqPDEaWPHrEBiHQKJQqxMEeZ0b53x609u4LU=
+	t=1748870291; cv=none; b=rYtSjYfre3JAxo/uq2KC6RbZC+2FV5veOTVaV+Y1KsmZvstqqU6+0H9yV6EHOx0RCiTHaxrapx+ImuzQnImM7KPghYK5LrN0rZizu5iUhgdaA4GI/xRj47zDVdnC9SxMHRqMCtqvJ+esBB01N2X+Lsxmsz2qzUMpnP5AiyDp1XA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748869366; c=relaxed/simple;
-	bh=cU8USTqkBSFoKA9f8WFdyWC6Qqhj9/RbvON8idYUL68=;
+	s=arc-20240116; t=1748870291; c=relaxed/simple;
+	bh=6xVA49aPgN6bhbJktQ3Qgjr9p8G9muEybUCZeHcQbNs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P7CZ1MDXu8PeORftxHUPv77gff6sHPUIISj5bCHGZ+z2/B5VuPv0Z2Lqm1sBZv2jkVf0MWyJOqRVYZ6PmVI/NJraD0nLayNBVky6W3wGIpx7xTXb8iCoc6CYSGPHLhuL0srZGM63Gza6cCf9iRmuWSHCktGFnK/Q8b4UwupHT2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=T2kEEHuV; arc=none smtp.client-ip=193.252.22.73
+	 In-Reply-To:Content-Type; b=CXZ180tuFeqTziAMNiYR4Mgy0Js1LwrgLAN1aVvLp33KWLvyT0jgxuOVSx86SA+2tVh44CIbKSw0htZ+TQleWwMmOu1v9vQbetDSU0NpH9ax6kivIHZ6s59VN2jyO4wsxDeS8JQNJVZcr2P/vndm9dGIbHe4RdoCJ9c0qPg4qAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=a1KWAcUK; arc=none smtp.client-ip=193.252.22.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from [172.16.82.72] ([124.33.176.97])
 	by smtp.orange.fr with ESMTPA
-	id M4n8u8Zdb411zM4n9uLAd4; Mon, 02 Jun 2025 15:01:31 +0200
+	id M521u14DOVLIhM522ucJLC; Mon, 02 Jun 2025 15:16:54 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1748869291;
-	bh=FieVAEWznLoIbNcxXAkkWP3eu6tZdHagdagZTMItcqE=;
+	s=t20230301; t=1748870214;
+	bh=+Hp49TL4jJ0TyfDOF/OoCiTSO7M0syn25/3UQuLLFp4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=T2kEEHuVKwlzIZJ0gPdHg2NgeNN6OyHGBgkvsWK97ab8cnnrM5dfqY0kpBuJg43xi
-	 YDzS099GBMnjIBI6E7AmvSEkzMguH7ERcPxchTros2Auut3J6sm5MdKFABwVBXdK/o
-	 oUugewbduXNfAml7PulHND5Y4U3aTLRWA/s+41ltaZJXOus3/qHzuE6QRgWxPtXg17
-	 jwe9C6pxYUjabKurmLXBkX4NtZjOfEo58RZd7yw20akU1TuffIFG+e8qNdQZMsMFJi
-	 +Zp0+ZjO3xAaFAYAGDBXLKqZntkCY7EDkCb28tqN3lEQerPbDoJgz8R+cLA+3Lb6QK
-	 KEeZFqYu+jKdw==
+	b=a1KWAcUKH1l0PbRXo58Mv3/17TgcBZqYa9GBOyV42enwCYSSMRlb5y0XfSLln9Ttg
+	 WmQRjsHTNx5wd3D4fC7m9oW4FBPUyeUibCkIaGKDPR2EO6AQ6WhAwZMTDPe4DWwRgj
+	 tUSGb9QO8RaNPr/spr5hw8Nfn02Mj/X3Po7qsXTflYa/ZRubTKiNzhf66pNXk2xQS/
+	 XQcCujjjrQptjsombgWD7D8MNnjXXIL0OGACoEzF+IqR7We7NYhOVCPc1TcdzS9Cy/
+	 I4qZ1OnaZ7Nl5q8+RCm9LpbLD24jn0MOUaHcgnZa+e0ZFGh04IdObzA1PHD4FtawGl
+	 t892i0sdC5d5A==
 X-ME-Helo: [172.16.82.72]
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 02 Jun 2025 15:01:31 +0200
+X-ME-Date: Mon, 02 Jun 2025 15:16:54 +0200
 X-ME-IP: 124.33.176.97
-Message-ID: <3dccf669-3d09-4eaf-b4d4-09841d19bd84@wanadoo.fr>
-Date: Mon, 2 Jun 2025 22:01:25 +0900
+Message-ID: <94755286-47fb-461e-9850-e14830f2536e@wanadoo.fr>
+Date: Mon, 2 Jun 2025 22:16:48 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -57,16 +57,16 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/9] can: rcar_canfd: Use ndev parameter in
- rcar_canfd_set_bittiming()
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH 6/9] can: rcar_canfd: Repurpose f_dcfg base for other
+ registers
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, Biju Das
+ <biju.das.jz@bp.renesas.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc: Kazuhiro Takagi <kazuhiro.takagi.hh@hitachi-solutions.com>,
  Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>
+ linux-renesas-soc@vger.kernel.org
 References: <cover.1748863848.git.geert+renesas@glider.be>
- <002c3ab28323210e83ab3d35462dad40d22128ff.1748863848.git.geert+renesas@glider.be>
+ <f9c114fcf8cc8eaae150a3ce95dd3224cf247f6b.1748863848.git.geert+renesas@glider.be>
 Content-Language: en-US
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
@@ -79,58 +79,102 @@ Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
  yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
  CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
  ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <002c3ab28323210e83ab3d35462dad40d22128ff.1748863848.git.geert+renesas@glider.be>
+In-Reply-To: <f9c114fcf8cc8eaae150a3ce95dd3224cf247f6b.1748863848.git.geert+renesas@glider.be>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/06/2025 at 20:54, Geert Uytterhoeven wrote:
-> There is no need to do a back-and-forth "priv = netdev_priv(ndev)" and
-> "priv->ndev" where the "ndev" parameter is available.
+> Reuse the existing Channel Data Bitrate Configuration Register offset
+> member in the register configuration as the base offset for all related
+> channel-specific registers.
+> Rename the member and update the (incorrect) comment to reflect this.
+> 
+> This fixes the addresses of all other (currently unused)
+> channel-specific registers on R-Car Gen4 and RZ/G3E, and allows us to
+> replace RCANFD_GEN4_FDCFG() by the more generic RCANFD_F_CFDCFG().
 > 
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Are these still useful anyhow? You can get all the bittiming values through the
-netlink interface.
-
-Well, if you tell me these are still useful, then I trust you and OK to keep. If
-not, consider removing.
-
 > ---
->  drivers/net/can/rcar/rcar_canfd.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+>  drivers/net/can/rcar/rcar_canfd.c | 22 ++++++++++------------
+>  1 file changed, 10 insertions(+), 12 deletions(-)
 > 
 > diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-> index 2174c9667cabce54..dbf17b16c18aa5cc 100644
+> index 0cad3c198e58e494..7a9a88fa5fb1a521 100644
 > --- a/drivers/net/can/rcar/rcar_canfd.c
 > +++ b/drivers/net/can/rcar/rcar_canfd.c
-> @@ -1458,7 +1458,7 @@ static void rcar_canfd_set_bittiming(struct net_device *ndev)
->  		       RCANFD_NCFG_NSJW(gpriv, sjw) | RCANFD_NCFG_NTSEG2(gpriv, tseg2));
+> @@ -425,18 +425,16 @@
+>  #define RCANFD_C_RPGACC(r)		(0x1900 + (0x04 * (r)))
 >  
->  		rcar_canfd_write(priv->base, RCANFD_CCFG(ch), cfg);
-> -		netdev_dbg(priv->ndev, "nrate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
-> +		netdev_dbg(ndev, "nrate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
->  			   brp, sjw, tseg1, tseg2);
+>  /* R-Car Gen4 Classical and CAN FD mode specific register map */
+> -#define RCANFD_GEN4_FDCFG(m)		(0x1404 + (0x20 * (m)))
+> -
+>  #define RCANFD_GEN4_GAFL_OFFSET		(0x1800)
 >  
->  		/* Data bit timing settings */
-> @@ -1471,7 +1471,7 @@ static void rcar_canfd_set_bittiming(struct net_device *ndev)
->  		       RCANFD_DCFG_DSJW(gpriv, sjw) | RCANFD_DCFG_DTSEG2(gpriv, tseg2));
+>  /* CAN FD mode specific register map */
 >  
->  		rcar_canfd_write(priv->base, RCANFD_F_DCFG(gpriv, ch), cfg);
-> -		netdev_dbg(priv->ndev, "drate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
-> +		netdev_dbg(ndev, "drate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
->  			   brp, sjw, tseg1, tseg2);
+>  /* RSCFDnCFDCmXXX -> RCANFD_F_XXX(m) */
+> -#define RCANFD_F_DCFG(gpriv, m)		((gpriv)->info->regs->f_dcfg + (0x20 * (m)))
+> -#define RCANFD_F_CFDCFG(m)		(0x0504 + (0x20 * (m)))
+> -#define RCANFD_F_CFDCTR(m)		(0x0508 + (0x20 * (m)))
+> -#define RCANFD_F_CFDSTS(m)		(0x050c + (0x20 * (m)))
+> -#define RCANFD_F_CFDCRC(m)		(0x0510 + (0x20 * (m)))
+> +#define RCANFD_F_DCFG(gpriv, m)		((gpriv)->info->regs->coffset + 0x00 + (0x20 * (m)))
+> +#define RCANFD_F_CFDCFG(gpriv, m)	((gpriv)->info->regs->coffset + 0x04 + (0x20 * (m)))
+> +#define RCANFD_F_CFDCTR(gpriv, m)	((gpriv)->info->regs->coffset + 0x08 + (0x20 * (m)))
+> +#define RCANFD_F_CFDSTS(gpriv, m)	((gpriv)->info->regs->coffset + 0x0c + (0x20 * (m)))
+> +#define RCANFD_F_CFDCRC(gpriv, m)	((gpriv)->info->regs->coffset + 0x10 + (0x20 * (m)))
+
+I really start to dislike all those function like macros in the rcar_canfd
+driver. The only benefits of a function like macro is either to have type
+polymorphism or to generate integer constant expression or to work with context
+specific info (e.g. __func__ or __LINE__).
+
+Can you just change these five function like macros to static functions?
+
+And from now on, each time there is a need to modify one of the rcar_canfd, I
+would like this to become an opportunity to little by little clean up that macro
+madness.
+
+>  /* RSCFDnCFDGAFLXXXj offset */
+>  #define RCANFD_F_GAFL_OFFSET		(0x1000)
+> @@ -510,7 +508,7 @@ struct rcar_canfd_regs {
+>  	u16 cfcc;	/* Common FIFO Configuration/Control Register */
+>  	u16 cfsts;	/* Common FIFO Status Register */
+>  	u16 cfpctr;	/* Common FIFO Pointer Control Register */
+> -	u16 f_dcfg;	/* Global FD Configuration Register */
+> +	u16 coffset;	/* Channel Data Bitrate Configuration Register */
+>  	u16 rfoffset;	/* Receive FIFO buffer access ID register */
+>  	u16 cfoffset;	/* Transmit/receive FIFO buffer access ID register */
+>  };
+> @@ -641,7 +639,7 @@ static const struct rcar_canfd_regs rcar_gen3_regs = {
+>  	.cfcc = 0x0118,
+>  	.cfsts = 0x0178,
+>  	.cfpctr = 0x01d8,
+> -	.f_dcfg = 0x0500,
+> +	.coffset = 0x0500,
+>  	.rfoffset = 0x3000,
+>  	.cfoffset = 0x3400,
+>  };
+> @@ -651,7 +649,7 @@ static const struct rcar_canfd_regs rcar_gen4_regs = {
+>  	.cfcc = 0x0120,
+>  	.cfsts = 0x01e0,
+>  	.cfpctr = 0x0240,
+> -	.f_dcfg = 0x1400,
+> +	.coffset = 0x1400,
+>  	.rfoffset = 0x6000,
+>  	.cfoffset = 0x6400,
+>  };
+> @@ -827,8 +825,8 @@ static void rcar_canfd_set_mode(struct rcar_canfd_global *gpriv)
+>  
+>  		for_each_set_bit(ch, &gpriv->channels_mask,
+>  				 gpriv->info->max_channels)
+> -			rcar_canfd_set_bit(gpriv->base, RCANFD_GEN4_FDCFG(ch),
+> -					   val);
+> +			rcar_canfd_set_bit(gpriv->base,
+> +					   RCANFD_F_CFDCFG(gpriv, ch), val);
 >  	} else {
->  		/* Classical CAN only mode */
-> @@ -1488,8 +1488,7 @@ static void rcar_canfd_set_bittiming(struct net_device *ndev)
->  		}
->  
->  		rcar_canfd_write(priv->base, RCANFD_CCFG(ch), cfg);
-> -		netdev_dbg(priv->ndev,
-> -			   "rate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
-> +		netdev_dbg(ndev, "rate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
->  			   brp, sjw, tseg1, tseg2);
->  	}
->  }
+>  		if (gpriv->fdmode)
+>  			rcar_canfd_set_bit(gpriv->base, RCANFD_GRMCFG,
 
 Yours sincerely,
 Vincent Mailhol
