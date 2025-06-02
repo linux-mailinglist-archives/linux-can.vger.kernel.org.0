@@ -1,182 +1,128 @@
-Return-Path: <linux-can+bounces-3754-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3755-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05ACFACAEC3
-	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 15:18:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F907ACAEC5
+	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 15:18:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20CBF189F7AD
-	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 13:18:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E6B21760D7
+	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 13:18:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA5981EFF8B;
-	Mon,  2 Jun 2025 13:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="a1KWAcUK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C391AF4D5;
+	Mon,  2 Jun 2025 13:18:17 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-71.smtpout.orange.fr [193.252.22.71])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F316D1401B;
-	Mon,  2 Jun 2025 13:18:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F78D4A0F
+	for <linux-can@vger.kernel.org>; Mon,  2 Jun 2025 13:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748870291; cv=none; b=rYtSjYfre3JAxo/uq2KC6RbZC+2FV5veOTVaV+Y1KsmZvstqqU6+0H9yV6EHOx0RCiTHaxrapx+ImuzQnImM7KPghYK5LrN0rZizu5iUhgdaA4GI/xRj47zDVdnC9SxMHRqMCtqvJ+esBB01N2X+Lsxmsz2qzUMpnP5AiyDp1XA=
+	t=1748870297; cv=none; b=QeTQx2PYUDJLl4LQHSLyqrJd5UdDnHQrwEaR30IANdAGDUDpwDYHTbuI8+BNfw6uILK4+00hq8BkEvoQtfsll6HDKo53OCf1U66SxwlGBx7ViivsP52/p+zvGvsgbKHf+Ej5vuS0Viqw2vEvLp/ExdHiiX/5JhaagQAYqjoEwwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748870291; c=relaxed/simple;
-	bh=6xVA49aPgN6bhbJktQ3Qgjr9p8G9muEybUCZeHcQbNs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CXZ180tuFeqTziAMNiYR4Mgy0Js1LwrgLAN1aVvLp33KWLvyT0jgxuOVSx86SA+2tVh44CIbKSw0htZ+TQleWwMmOu1v9vQbetDSU0NpH9ax6kivIHZ6s59VN2jyO4wsxDeS8JQNJVZcr2P/vndm9dGIbHe4RdoCJ9c0qPg4qAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=a1KWAcUK; arc=none smtp.client-ip=193.252.22.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id M521u14DOVLIhM522ucJLC; Mon, 02 Jun 2025 15:16:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1748870214;
-	bh=+Hp49TL4jJ0TyfDOF/OoCiTSO7M0syn25/3UQuLLFp4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=a1KWAcUKH1l0PbRXo58Mv3/17TgcBZqYa9GBOyV42enwCYSSMRlb5y0XfSLln9Ttg
-	 WmQRjsHTNx5wd3D4fC7m9oW4FBPUyeUibCkIaGKDPR2EO6AQ6WhAwZMTDPe4DWwRgj
-	 tUSGb9QO8RaNPr/spr5hw8Nfn02Mj/X3Po7qsXTflYa/ZRubTKiNzhf66pNXk2xQS/
-	 XQcCujjjrQptjsombgWD7D8MNnjXXIL0OGACoEzF+IqR7We7NYhOVCPc1TcdzS9Cy/
-	 I4qZ1OnaZ7Nl5q8+RCm9LpbLD24jn0MOUaHcgnZa+e0ZFGh04IdObzA1PHD4FtawGl
-	 t892i0sdC5d5A==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 02 Jun 2025 15:16:54 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <94755286-47fb-461e-9850-e14830f2536e@wanadoo.fr>
-Date: Mon, 2 Jun 2025 22:16:48 +0900
+	s=arc-20240116; t=1748870297; c=relaxed/simple;
+	bh=KnwDpKw+0AovZBk5A25QTLv/FOHcCpWpm5j70Kw19CA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fyKvQhZ8oQGkBNjCREotMgt1Aay6oy46c7DEwIIYy9MEyVKWFIemuimZ1f/ASGJdhpOfu6wJq+2ErTT3P0jZVwxsvRu//lAEtiC6/KtAfamaJAk7/bETI/gQt606GF0App4emX9hCU6B1XjCTFcNOAnUk0JSOx+Pi0UNi25ACgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uM538-0003XH-H8; Mon, 02 Jun 2025 15:17:58 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uM536-001Ske-1s;
+	Mon, 02 Jun 2025 15:17:56 +0200
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 2EEAA41EE93;
+	Mon, 02 Jun 2025 13:17:56 +0000 (UTC)
+Date: Mon, 2 Jun 2025 15:17:55 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Kazuhiro Takagi <kazuhiro.takagi.hh@hitachi-solutions.com>, Duy Nguyen <duy.nguyen.rh@renesas.com>, 
+	linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 6/9] can: rcar_canfd: Repurpose f_dcfg base for other
+ registers
+Message-ID: <20250602-rigorous-ermine-of-abracadabra-467998-mkl@pengutronix.de>
+References: <cover.1748863848.git.geert+renesas@glider.be>
+ <f9c114fcf8cc8eaae150a3ce95dd3224cf247f6b.1748863848.git.geert+renesas@glider.be>
+ <94755286-47fb-461e-9850-e14830f2536e@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kkkezthwqp4euq4q"
+Content-Disposition: inline
+In-Reply-To: <94755286-47fb-461e-9850-e14830f2536e@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+
+--kkkezthwqp4euq4q
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 Subject: Re: [PATCH 6/9] can: rcar_canfd: Repurpose f_dcfg base for other
  registers
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- Marc Kleine-Budde <mkl@pengutronix.de>, Biju Das
- <biju.das.jz@bp.renesas.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Kazuhiro Takagi <kazuhiro.takagi.hh@hitachi-solutions.com>,
- Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org
-References: <cover.1748863848.git.geert+renesas@glider.be>
- <f9c114fcf8cc8eaae150a3ce95dd3224cf247f6b.1748863848.git.geert+renesas@glider.be>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <f9c114fcf8cc8eaae150a3ce95dd3224cf247f6b.1748863848.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
 
-On 02/06/2025 at 20:54, Geert Uytterhoeven wrote:
-> Reuse the existing Channel Data Bitrate Configuration Register offset
-> member in the register configuration as the base offset for all related
-> channel-specific registers.
-> Rename the member and update the (incorrect) comment to reflect this.
-> 
-> This fixes the addresses of all other (currently unused)
-> channel-specific registers on R-Car Gen4 and RZ/G3E, and allows us to
-> replace RCANFD_GEN4_FDCFG() by the more generic RCANFD_F_CFDCFG().
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/net/can/rcar/rcar_canfd.c | 22 ++++++++++------------
->  1 file changed, 10 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-> index 0cad3c198e58e494..7a9a88fa5fb1a521 100644
-> --- a/drivers/net/can/rcar/rcar_canfd.c
-> +++ b/drivers/net/can/rcar/rcar_canfd.c
-> @@ -425,18 +425,16 @@
->  #define RCANFD_C_RPGACC(r)		(0x1900 + (0x04 * (r)))
->  
->  /* R-Car Gen4 Classical and CAN FD mode specific register map */
-> -#define RCANFD_GEN4_FDCFG(m)		(0x1404 + (0x20 * (m)))
-> -
->  #define RCANFD_GEN4_GAFL_OFFSET		(0x1800)
->  
->  /* CAN FD mode specific register map */
->  
->  /* RSCFDnCFDCmXXX -> RCANFD_F_XXX(m) */
-> -#define RCANFD_F_DCFG(gpriv, m)		((gpriv)->info->regs->f_dcfg + (0x20 * (m)))
-> -#define RCANFD_F_CFDCFG(m)		(0x0504 + (0x20 * (m)))
-> -#define RCANFD_F_CFDCTR(m)		(0x0508 + (0x20 * (m)))
-> -#define RCANFD_F_CFDSTS(m)		(0x050c + (0x20 * (m)))
-> -#define RCANFD_F_CFDCRC(m)		(0x0510 + (0x20 * (m)))
-> +#define RCANFD_F_DCFG(gpriv, m)		((gpriv)->info->regs->coffset + 0x00 + (0x20 * (m)))
-> +#define RCANFD_F_CFDCFG(gpriv, m)	((gpriv)->info->regs->coffset + 0x04 + (0x20 * (m)))
-> +#define RCANFD_F_CFDCTR(gpriv, m)	((gpriv)->info->regs->coffset + 0x08 + (0x20 * (m)))
-> +#define RCANFD_F_CFDSTS(gpriv, m)	((gpriv)->info->regs->coffset + 0x0c + (0x20 * (m)))
-> +#define RCANFD_F_CFDCRC(gpriv, m)	((gpriv)->info->regs->coffset + 0x10 + (0x20 * (m)))
+On 02.06.2025 22:16:48, Vincent Mailhol wrote:
+> I really start to dislike all those function like macros in the rcar_canfd
+> driver. The only benefits of a function like macro is either to have type
+> polymorphism or to generate integer constant expression or to work with c=
+ontext
+> specific info (e.g. __func__ or __LINE__).
+>=20
+> Can you just change these five function like macros to static functions?
+>=20
+> And from now on, each time there is a need to modify one of the rcar_canf=
+d, I
+> would like this to become an opportunity to little by little clean up tha=
+t macro
+> madness.
 
-I really start to dislike all those function like macros in the rcar_canfd
-driver. The only benefits of a function like macro is either to have type
-polymorphism or to generate integer constant expression or to work with context
-specific info (e.g. __func__ or __LINE__).
++1
 
-Can you just change these five function like macros to static functions?
+Marc
 
-And from now on, each time there is a need to modify one of the rcar_canfd, I
-would like this to become an opportunity to little by little clean up that macro
-madness.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
->  /* RSCFDnCFDGAFLXXXj offset */
->  #define RCANFD_F_GAFL_OFFSET		(0x1000)
-> @@ -510,7 +508,7 @@ struct rcar_canfd_regs {
->  	u16 cfcc;	/* Common FIFO Configuration/Control Register */
->  	u16 cfsts;	/* Common FIFO Status Register */
->  	u16 cfpctr;	/* Common FIFO Pointer Control Register */
-> -	u16 f_dcfg;	/* Global FD Configuration Register */
-> +	u16 coffset;	/* Channel Data Bitrate Configuration Register */
->  	u16 rfoffset;	/* Receive FIFO buffer access ID register */
->  	u16 cfoffset;	/* Transmit/receive FIFO buffer access ID register */
->  };
-> @@ -641,7 +639,7 @@ static const struct rcar_canfd_regs rcar_gen3_regs = {
->  	.cfcc = 0x0118,
->  	.cfsts = 0x0178,
->  	.cfpctr = 0x01d8,
-> -	.f_dcfg = 0x0500,
-> +	.coffset = 0x0500,
->  	.rfoffset = 0x3000,
->  	.cfoffset = 0x3400,
->  };
-> @@ -651,7 +649,7 @@ static const struct rcar_canfd_regs rcar_gen4_regs = {
->  	.cfcc = 0x0120,
->  	.cfsts = 0x01e0,
->  	.cfpctr = 0x0240,
-> -	.f_dcfg = 0x1400,
-> +	.coffset = 0x1400,
->  	.rfoffset = 0x6000,
->  	.cfoffset = 0x6400,
->  };
-> @@ -827,8 +825,8 @@ static void rcar_canfd_set_mode(struct rcar_canfd_global *gpriv)
->  
->  		for_each_set_bit(ch, &gpriv->channels_mask,
->  				 gpriv->info->max_channels)
-> -			rcar_canfd_set_bit(gpriv->base, RCANFD_GEN4_FDCFG(ch),
-> -					   val);
-> +			rcar_canfd_set_bit(gpriv->base,
-> +					   RCANFD_F_CFDCFG(gpriv, ch), val);
->  	} else {
->  		if (gpriv->fdmode)
->  			rcar_canfd_set_bit(gpriv->base, RCANFD_GRMCFG,
+--kkkezthwqp4euq4q
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Yours sincerely,
-Vincent Mailhol
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmg9pIAACgkQDHRl3/mQ
+kZyJtgf/T8fMk4y0IS5uEPBqD6d/vEWjlRz5QHUHuNFLd2PQmmkl4+UZwPLYpB3n
+jw/Q7vLI0TlS/DooOr8LaVVNhwps5rBd0g9QK0e2cZwbp4A7BPzv2Pyj+N5YAYL6
+JJTH+XEYC2GpRr/ZKc31Zer2G8VsU1r2uNNMtfwOuynZg4MrH0HD34p28YMUYLQf
+yzkueRC/BnNuOgZSpeEmOqSv/JlHhfYoIuKCT8xGQjOf2uGINHgwPpsJJuNQB7vf
+/a9Halu2Rgr7Z/+egc1NrlaxFGT6PcApMyrSHLitGl17NUVCiI/gRlODmV5G0NUE
+xzytW5J/FBiT/ct6tE+or8QfHWIb4g==
+=wzaz
+-----END PGP SIGNATURE-----
+
+--kkkezthwqp4euq4q--
 
