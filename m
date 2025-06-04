@@ -1,198 +1,286 @@
-Return-Path: <linux-can+bounces-3762-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3763-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9BE5ACB4A3
-	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 16:54:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70569ACD6D2
+	for <lists+linux-can@lfdr.de>; Wed,  4 Jun 2025 06:14:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9D824A1109
-	for <lists+linux-can@lfdr.de>; Mon,  2 Jun 2025 14:43:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84F44188B525
+	for <lists+linux-can@lfdr.de>; Wed,  4 Jun 2025 04:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CABF0222571;
-	Mon,  2 Jun 2025 14:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B54F726139C;
+	Wed,  4 Jun 2025 04:14:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="I57TAqes"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S4PbTDGn"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-71.smtpout.orange.fr [193.252.22.71])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355A61CAA7D;
-	Mon,  2 Jun 2025 14:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88551876;
+	Wed,  4 Jun 2025 04:14:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748875095; cv=none; b=hmQj28gS78HJQ2uGihtF4XaPFn4NwJOOydUNzmeNGVzEUNjJv/aJjttVAFaJOAI3bQ2+Dhd5TbwCTJP9M/fkyMjLCY9UpqNktilSMxnzxklsaiAOMvWqOxpe5YyIXpL8YnC/7sp34BRdK6SkwuShUokzqngwYRAQ3gWWZVeWK7s=
+	t=1749010480; cv=none; b=ggjYwg5Mv8LtruUXHCuyqJIX/HjCdhM1rnrj/Gstnb0e7qAvdWAaxVWJIUg9YiKL1YKAP4LpOuel+dLS3Umagx45jFO1VDFSo26dkttUeyBKR00ZPMFAnpREFjm+ihm0qdN4IXjOyHsNNYH8RQb4oMoPTNd6n3vqmgs/ebE1VZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748875095; c=relaxed/simple;
-	bh=YWph8DqEtl3QRx+BBfajE6GttVswr8QwnNU45whQdhs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gHj37WIhIwaCGodLoJAhfS51bqcHLoTAQa52MSl9CMG2Sgupl6JqxfPukZNtX/3nf9N04BiZ9/66f6qCfePf5aYB1oiyNhHLQBkra5ATwojZ49JaQ6cnzlVwOvDkS2yeNdzRaznB8MDgxTubvZ/1Q00SPjnxcitpj3+r7G3QffA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=I57TAqes; arc=none smtp.client-ip=193.252.22.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id M6Icu0uk6Q1a2M6IduTrDL; Mon, 02 Jun 2025 16:38:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1748875088;
-	bh=Q3FY7W/SN+3RTIKTpGqSErEG0R0kJpBVY5zlTwSvIZc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=I57TAqescbmwFxWJQFo9xNbOaRC2pmg/OIQhkTomC5atGWPcJYYvKUD+nK6zNJM4N
-	 /IOBPM83QdQ5a/fHJTYRQTNXE4Pn095FsWR50oroTca6JKdDYM1U+AzCXUuIQ7eVCt
-	 VupOAdF4cRLxZlRaBOHcX9XMqDSXP3iRjFnkenXCHk39Ysw4Ifoqcs+mAqzsEV2O7I
-	 OJbvSBVRt/MN/o+2+fy2SEqIaFAIye449zuUbZVtZgwt7FzqSfZokM7Y3Ny5cIbHhK
-	 bpxESaGdGZdtJUwzW7TrGje2jQ1WImWNaQ6rR1D2oxSmywE2lmSbnOboldVC+OjYLO
-	 qJTItwIwBhRtA==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 02 Jun 2025 16:38:08 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <f712180d-7a8d-4ce0-9e3e-a4ded446c40d@wanadoo.fr>
-Date: Mon, 2 Jun 2025 23:38:01 +0900
+	s=arc-20240116; t=1749010480; c=relaxed/simple;
+	bh=Ooc4rwgOmVTDBYoJuDOLjlichD6bq6i6WP/iNrY6I+Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lU0Y0MJd2/z+kKkOXcz7cnPWuHJv5PxwhKmJPv7rjoZIOkTidyJoNkTgziXO2awwtLgbl9ztQkqDwfFuqw3s/WHSfMzpfdD73gIAU6ZKoQl17VH0eFofak1+Mzz3mhbLpPlWpY6WNjh2AVZ/1fY3jTZBND1XTPN30mCCdnOVd74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S4PbTDGn; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-747c2cc3419so3611303b3a.2;
+        Tue, 03 Jun 2025 21:14:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749010478; x=1749615278; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Re6lT76sWJRhrAsHMS8iwF2V7EMeEh3m0ySCqASUFZE=;
+        b=S4PbTDGnqztYVvdVWO6HMqn2qVJAiOFceQ5qMGJ1iPHtmVJ9sCsGIWx3BwvxPirMCa
+         ajLaYA7Fu7CrW0HaBIB7HQtuMRsmPpfTkGhgp9OObx/sL6KoSeB9DYPd6v4C4Kq4audX
+         +Z4084l/1Dql0/GNefV9qe5PsCWAQivKEg+HR5uYAQGarjc6HcSH99elWrRpNged1Onv
+         lWVWyxHNmIDgpSHA9GpRgQu8JjsN+V1uFEO778UV+GvRCuYjM6W1dLtJ4LsU9cHlN7l9
+         k0XtJwJdcm6xNPhJxsGd7yjiRNHKsRam3+4VdMzu9qP0upcqHZRcTgiqjqfgYYlsb/dS
+         WRLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749010478; x=1749615278;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Re6lT76sWJRhrAsHMS8iwF2V7EMeEh3m0ySCqASUFZE=;
+        b=w+GENjVrpCYBY42+eP2N0RAFuvYpmpLVSg4itH5CeKEDN2zbmxSQbFoz9E0XoJ/Rnw
+         CsRBcAIN7Zl7x1vC8Rxpqlso7LmfJmGbrDIga8uizySAOXmdMEtHmcNknoEeS4fHhihW
+         pLFFs0fcSomSph/g7XtuYBG+tNPPQ3zjMIKGrTIseWoiSgLzqn9odLI1Gbe7DflMdjLi
+         Kd5CUdztuf9YHLiK40yPi3Q0DU5wNQwlSkFxCaw92grbuKTC7wLyXo7Hx+kbod4g/yYP
+         zIwLLXDo8RWZbryTtU+9YQSN/6tgoQQQz6egZ7iZIfdCvKA2PQu++wrh59E0q3SXh8cg
+         zsoA==
+X-Forwarded-Encrypted: i=1; AJvYcCUaEDBG3YXZUfe8UE9NB0EVGuCS/zdtEl2rsAtR4adVKIBFFwuEQSPj4O0UsbLwe6+vpJDtmKQb5quC@vger.kernel.org, AJvYcCUu4j6jq+AmxUPt1Pvrh+ZZ6kdGBs7VGJJn3RwD/2y0e//Fl355NM4ftbmtMzjQvMpGB5JzTNcPUHT4@vger.kernel.org, AJvYcCVBGYpa48G+o8rYl8sUPMzyQ2UeqRCHGESaRdsTooYig4zpW/jus0rCqoyomdhtJQdOYO3NEv+2B0wHQvM=@vger.kernel.org, AJvYcCVb6EB+ik7qGk7P97MtyROw2cc9jnoZMFE4ByMnjQ5HNA80SH2T5yyMFx1rc8DIqrjTrJSC10KR@vger.kernel.org, AJvYcCVfv2o7EstlY63i2CGRgjFgbI+rpp41zHqfGQIzLWTNzfEC9QuWcj4JSaq02uI8rEoboEl8Q6XifxJKXSAyD2o=@vger.kernel.org, AJvYcCWBzyvlIpcRMtZFHzxtOVJTycRObLlXdczX5gu+4JK/PVZU6xIJu3xxHFRvm24gOWCcQKnasfau/w2m@vger.kernel.org, AJvYcCWEfvigujY2BjvstQHVG3TSWMMHImg2N561fcQrgWoERv2p5qPCykzhUEsEJCjHF3VWCgDS6kerO3S6UQ==@vger.kernel.org, AJvYcCWdKvJYAAYK0tKjt1hhN9iutFK0++sImKW97WXK5PuL+Ck5M/bwUB/jWzzM9MJaBhX1/Fh81111kaA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXxJZLuhl7ROSmR+Ib2NMnW86liczynwHyniyY2xcwfj9YWPvb
+	h1lWBGCaUnp88anAEMVXDSQWrIw6iT6Ksbbs6c7S9XxcwMfx3/mA4RukFK50kA==
+X-Gm-Gg: ASbGncs3b2c91KZc7vJKTbA4DCt6YRBsz+NwcOe5HaTpEigvJdQWe5gl9CC98G8k5tq
+	2x8lk4ZdZu78aPUEsYF1/aZ/8C/b2wOKuEZMR791VH1EFLq5OIG2WZFu5XtPdsqYVJWxxii8Dqv
+	AqqcQeWmCvhVeqEy0w2LG0xmFDt+fNIU08hyHgv5pYtmZURYmtU16UvPk8TnNY8+JICDpNKzKfq
+	qeiDrnl37cyGLKB3meTBA9i1Jf+AUGRRsdRG2uJfn7yjxAfNT+1JRwPjM2NEiRT/eNIPz1SzEK6
+	B+WHPhzV/mq+4diZGe0IfmC5KdVd0KkvEN2GuSbn5PsyiWY2El29vcBAv+QnDmkq/I0gF2Erx3B
+	AOOlmAIBSSaf2Ow==
+X-Google-Smtp-Source: AGHT+IGifg/pS/ZS1sqlaZZ8vkXGObbubcKsP52DwMiQOH5lHDepvI08orbmJwJuJ3JzlZPkQmzCPg==
+X-Received: by 2002:a05:6a21:9208:b0:215:dc32:ffac with SMTP id adf61e73a8af0-21d22b41c1emr1747628637.26.1749010478053;
+        Tue, 03 Jun 2025 21:14:38 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-747afff755bsm10526057b3a.179.2025.06.03.21.14.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jun 2025 21:14:37 -0700 (PDT)
+From: a0282524688@gmail.com
+X-Google-Original-From: tmyu0@nuvoton.com
+To: lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: [PATCH v12 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Wed,  4 Jun 2025 12:14:11 +0800
+Message-Id: <20250604041418.1188792-1-tmyu0@nuvoton.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 9/9] can: rcar_canfd: Add support for Transceiver Delay
- Compensation
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
- Biju Das <biju.das.jz@bp.renesas.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Kazuhiro Takagi <kazuhiro.takagi.hh@hitachi-solutions.com>,
- Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org
-References: <cover.1748863848.git.geert+renesas@glider.be>
- <c830bd8b65d5f96c8831a2967c5b4c0eeb30e0af.1748863848.git.geert+renesas@glider.be>
- <7df51717-ffd1-43c1-8c5a-ab181439f580@wanadoo.fr>
- <CAMuHMdU0PNpsfNfDUAW09d5DTuuwJ_FnEFYk6a3KAC7sPRmkeg@mail.gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <CAMuHMdU0PNpsfNfDUAW09d5DTuuwJ_FnEFYk6a3KAC7sPRmkeg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 02/06/2025 at 23:08, Geert Uytterhoeven wrote:
-> Hi Vincent,
-> 
-> On Mon, 2 Jun 2025 at 15:41, Vincent Mailhol <mailhol.vincent@wanadoo.fr> wrote:
->> On 02/06/2025 at 20:54, Geert Uytterhoeven wrote:
->>> The Renesas CAN-FD hardware block supports configuring Transceiver Delay
->>> Compensation, and reading back the Transceiver Delay Compensation
->>> Result, which is needed to support high transfer rates like 8 Mbps.
->>> The Secondary Sample Point is either the measured delay plus the
->>> configured offset, or just the configured offset.
->>>
->>> Fix the existing RCANFD_FDCFG_TDCO() macro for the intended use case
->>> (writing instead of reading the field).  Add register definition bits
->>> for the Channel n CAN-FD Status Register.
->>>
->>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> 
->>> --- a/drivers/net/can/rcar/rcar_canfd.c
->>> +++ b/drivers/net/can/rcar/rcar_canfd.c
->>> @@ -191,9 +191,19 @@
->>>  /* RSCFDnCFDCmFDCFG */
->>>  #define RCANFD_GEN4_FDCFG_CLOE               BIT(30)
->>>  #define RCANFD_GEN4_FDCFG_FDOE               BIT(28)
->>> +#define RCANFD_FDCFG_TDCO            GENMASK(23, 16)
->>>  #define RCANFD_FDCFG_TDCE            BIT(9)
->>>  #define RCANFD_FDCFG_TDCOC           BIT(8)
->>> -#define RCANFD_FDCFG_TDCO(x)         (((x) & 0x7f) >> 16)
->>> +
->>> +/* RSCFDnCFDCmFDSTS */
->>> +#define RCANFD_FDSTS_SOC             GENMASK(31, 24)
->>> +#define RCANFD_FDSTS_EOC             GENMASK(23, 16)
->>> +#define RCANFD_GEN4_FDSTS_PNSTS              GENMASK(13, 12)
->>> +#define RCANFD_FDSTS_SOCO            BIT(9)
->>> +#define RCANFD_FDSTS_EOCO            BIT(8)
->>> +#define RCANFD_FDSTS_TDCR(gpriv, x)  ((x) & ((gpriv)->info->tdc_const->tdcv_max - 1))
->>> +#define RCANFD_FDSTS_TDCVF(gpriv) \
->>> +     ((gpriv)->info->tdc_const->tdcv_max > 128 ? BIT(15) : BIT(7))
->>
->> See my previous comment: no more function like macro please.
-> 
-> OK, "int rcar_canfd_get_fdsts_tdcr(gpriv, sts)".
-> 
-> RCANFD_FDSTS_TDCVF() is unused, so I'll drop it.
-> 
->>> @@ -634,6 +645,25 @@ static const struct can_bittiming_const rcar_canfd_bittiming_const = {
->>>       .brp_inc = 1,
->>>  };
->>>
->>> +/* CAN FD Transmission Delay Compensation constants */
->>> +static const struct can_tdc_const rcar_canfd_gen3_tdc_const = {
->>> +     .tdcv_min = 1,
->>
->> Interesting. This is the first time I see a driver with the tdcv_min and the
->> tdco_min different than 0. At one point in time, I wanted those to be implicit
->> values. Guess it was finally a good idea to include those minimums to the framework.
-> 
-> Really? As most other timing values need subtracting 1 when programming
-> the hardware, I would expect it to be rather common.
+From: Ming Yu <tmyu0@nuvoton.com>
 
-Do a
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-  git grep "tdc[ov]_min ="
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
 
-and see by yourself :)
+The following introduces the custom-define USB transactions:
+	nct6694_read_msg - Send bulk-out pipe to write request packet
+			   Receive bulk-in pipe to read response packet
+			   Receive bulk-in pipe to read data packet
 
-I also expected that this might occur one day, so glad I anticipated.
+	nct6694_write_msg - Send bulk-out pipe to write request packet
+			    Send bulk-out pipe to write data packet
+			    Receive bulk-in pipe to read response packet
+			    Receive bulk-in pipe to read data packet
 
->>> @@ -1477,6 +1514,22 @@ static void rcar_canfd_set_bittiming(struct net_device *ndev)
->>>       rcar_canfd_write(priv->base, RCANFD_F_DCFG(gpriv, ch), cfg);
->>>       netdev_dbg(ndev, "drate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
->>>                  brp, sjw, tseg1, tseg2);
->>> +
->>> +     /* Transceiver Delay Compensation */
->>> +     if (priv->can.ctrlmode & CAN_CTRLMODE_TDC_AUTO) {
->>> +             /* TDC enabled, measured + offset */
->>> +             tdcmode = RCANFD_FDCFG_TDCE;
->>> +             tdco = tdc->tdco - 1;
->>> +             netdev_dbg(ndev, "tdc: auto %u\n", tdco);
->>
->> Same as previously. Are those debugs really useful? You can get the value
->> through the netlink interface (OK, you still have to do the minus one by hand,
->> but don't tell me that's the reason).
-> 
-> No, I just mimicked the existing debug prints, which we already agreed
-> upon to remove.
-> 
->>> +     } else if (priv->can.ctrlmode & CAN_CTRLMODE_TDC_MANUAL) {
->>> +             /* TDC enabled, offset only */
->>> +             tdcmode = RCANFD_FDCFG_TDCE | RCANFD_FDCFG_TDCOC;
->>> +             tdco = min(tdc->tdcv + tdc->tdco, tdc_const->tdco_max) - 1;
->>
->> That's an edge case I did not think of and that is thus not handled by the
->> framework. This min() is a bit hacky, but I do not see a better workaround.
->> Also, I guess that this edge case will rarely occur.
-> 
-> can_calc_tdco() also does a silent min(..., tdc_const->tdco_max).
+Changes since version 11:
+- Use platform_device's id to replace IDA
+- Modify the irq_domain_add_simple() to irq_domain_create_simple() in
+  nct6694.c
+- Update struct data_bittiming_params related part in nct6694_canfd.c
+- Fix the typo in the header in nct6694-hwmon.c
 
-Good catch!
+Changes since version 10:
+- Add change log for each patch
+- Fix mfd_cell to MFD_CELL_NAME() in nct6694.c
+- Implement IDA to allocate id in gpio-nct6694.c, i2c-nct6694.c,
+  nct6694_canfd.c and nct6694_wdt.c
+- Add header <linux/bitfield.h> in nct6694_canfd.c
+- Add support to config tdc in nct6694_canfd.c
+- Add module parameters to configure WDT's timeout and pretimeout value
+  in nct6694_wdt.c
 
->>> +             netdev_dbg(ndev, "tdc: manual %u\n", tdco);
->>> +     }
->>> +
->>> +     rcar_canfd_update_bit(gpriv->base, RCANFD_F_CFDCFG(gpriv, ch), mask,
->>> +                           tdcmode | FIELD_PREP(RCANFD_FDCFG_TDCO, tdco));
->>>  }
+Changes since version 9:
+- Add devm_add_action_or_reset() to dispose irq mapping
+- Add KernelDoc to exported functions in nct6694.c
 
-Yours sincerely,
-Vincent Mailhol
+Changes since version 8:
+- Modify the signed-off-by with my work address
+- Rename all MFD cell names to "nct6694-xxx"
+- Add irq_dispose_mapping() in the error handling path and in the remove
+  function
+- Fix some comments in nct6694.c and in nct6694.h
+- Add module parameters to configure I2C's baudrate in i2c-nct6694.c
+- Rename all function names nct6694_can_xxx to nct6694_canfd_xxx in
+  nct6694_canfd.c
+- Fix nct6694_canfd_handle_state_change() in nct6694_canfd.c
+- Fix nct6694_canfd_start() to configure NBTP and DBTP in nct6694_canfd.c
+- Add can_set_static_ctrlmode() in nct6694_canfd.c
+
+Changes since version 7:
+- Add error handling for devm_mutex_init()
+- Modify the name of the child devices CAN1 and CAN2 to CAN0 and CAN1.
+- Fix multiline comments to net-dev style in nct6694_canfd.c
+
+Changes since version 6:
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+- Fix warnings in nct6694_canfd.c
+- Move the nct6694_can_priv's bec to the end in nct6694_canfd.c
+- Fix warning in nct6694_wdt.c
+- Fix temp_hyst's data type to signed variable in nct6694-hwmon.c
+
+Changes since version 5:
+- Modify the module name and the driver name consistently
+- Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
+- Drop unnecessary macros in nct6694.c
+- Update private data and drop mutex in nct6694_canfd.c
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+
+Changes since version 4:
+- Modify arguments in read/write function to a pointer to cmd_header
+- Modify all callers that call the read/write function
+- Move the nct6694_canfd.c to drivers/net/can/usb/
+- Fix the missing rx offload function in nct6694_canfd.c
+- Fix warngings in nct6694-hwmon.c
+
+Changes since version 3:
+- Modify array buffer to structure for each drivers
+- Fix defines and comments for each drivers
+- Add header <linux/bits.h> and use BIT macro in nct6694.c and
+  gpio-nct6694.c
+- Modify mutex_init() to devm_mutex_init()
+- Add rx-offload helper in nct6694_canfd.c
+- Drop watchdog_init_timeout() in nct6694_wdt.c
+- Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
+- Drop private mutex and use rtc core lock in rtc-nct6694.c
+- Modify device_set_wakeup_capable() to device_init_wakeup() in
+  rtc-nct6694.c
+
+Changes since version 2:
+- Add MODULE_ALIAS() for each child driver
+- Modify gpio line names be a local variable in gpio-nct6694.c
+- Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
+- Rename each command in nct6694_canfd.c
+- Modify each function name consistently in nct6694_canfd.c
+- Modify the pretimeout validation procedure in nct6694_wdt.c
+- Fix warnings in nct6694-hwmon.c
+
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
+
+
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CANFD support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                         |  12 +
+ drivers/gpio/Kconfig                |  12 +
+ drivers/gpio/Makefile               |   1 +
+ drivers/gpio/gpio-nct6694.c         | 479 ++++++++++++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig          |  10 +
+ drivers/i2c/busses/Makefile         |   1 +
+ drivers/i2c/busses/i2c-nct6694.c    | 174 +++++
+ drivers/mfd/Kconfig                 |  15 +
+ drivers/mfd/Makefile                |   2 +
+ drivers/mfd/nct6694.c               | 386 +++++++++++
+ drivers/net/can/usb/Kconfig         |  11 +
+ drivers/net/can/usb/Makefile        |   1 +
+ drivers/net/can/usb/nct6694_canfd.c | 820 ++++++++++++++++++++++++
+ drivers/rtc/Kconfig                 |  10 +
+ drivers/rtc/Makefile                |   1 +
+ drivers/rtc/rtc-nct6694.c           | 297 +++++++++
+ drivers/watchdog/Kconfig            |  11 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/nct6694_wdt.c      | 291 +++++++++
+ include/linux/mfd/nct6694.h         |  98 +++
+ 23 files changed, 3593 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
+
+-- 
+2.34.1
 
 
