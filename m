@@ -1,31 +1,30 @@
-Return-Path: <linux-can+bounces-3782-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3783-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8B98AD3041
-	for <lists+linux-can@lfdr.de>; Tue, 10 Jun 2025 10:28:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93C87AD32B2
+	for <lists+linux-can@lfdr.de>; Tue, 10 Jun 2025 11:51:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03B1D1722BE
-	for <lists+linux-can@lfdr.de>; Tue, 10 Jun 2025 08:27:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E0E63AD7FB
+	for <lists+linux-can@lfdr.de>; Tue, 10 Jun 2025 09:50:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FB8525E80A;
-	Tue, 10 Jun 2025 08:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00D828C2BE;
+	Tue, 10 Jun 2025 09:49:40 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A32327FD6E
-	for <linux-can@vger.kernel.org>; Tue, 10 Jun 2025 08:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8307C28BA9F
+	for <linux-can@vger.kernel.org>; Tue, 10 Jun 2025 09:49:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749544042; cv=none; b=BC587SOeKKZpV0Nr8XzSjgD60sfJjzrnoGpuidxkWupjOnkcRLlkr39MWr/LdJbLENKZNsIJ52H2iF7lyfGB1iPqWRPP1tlLaDPlkhHerJGHooIP1+1Umd1J7aJsYRREh8IBDf5MMc4VuqDBmq8XKqdHc+Y2nJGslc+Y2tzUr9o=
+	t=1749548980; cv=none; b=C9geL8f7xgOUiFjywWY7GvAw0VT9N0DPyp0gfY+iUyHWepzxiOJh0agec4pJhDStqsNMUjKMEte92dWTFb8485DtGdo1Iq7dw/Fzrc0zCS7BLgTlVzFZFUYnQBQyvYgDw7Omcr2Az1ds+vRsoecYW0u2YGxivNSPNKWoSOPmSv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749544042; c=relaxed/simple;
-	bh=aJo5MLwkMkWdEcQ8icbT8AUR1XfmV3eIZHT4cvzd/FU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r+LddLjRWSUhSxiiUShIi6KGOT0y6y9EJafPhobLm+lWeLv3moKAaPTjaiY9BASz7Qpbqf+GpP6JRUzqUwNpTGTiEy679mbafU0I2Ubh7m2RbU+h5KFqX9yIApF3oPAE/BVE5p/pT+1M05Jm+/GN/bsGRdzMehtufrrn2wEqdYI=
+	s=arc-20240116; t=1749548980; c=relaxed/simple;
+	bh=1xA64Sa5xK9ytDTG6xDkLMCa4OcFT8IKpvTjHVigaBU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n3uzTllTPlJr0WZLzqtTcRX51HanhjujH0BTShBc7oR1/K4JX+rF/iF10W9dWSLOb7S9rg5Na5ZpAjpX3YGoF1o3uZ8xij8zjy5U9VpY59k1ShHgbt+Ul3ICzgYkpILiYWcxTa4le4uaz9yFA/HIBjheZU/1Og4PcK1ovvn4J4Y=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,82 +32,112 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uOuKA-0006NB-Tf; Tue, 10 Jun 2025 10:27:14 +0200
+	id 1uOvbs-00062R-Pz
+	for linux-can@vger.kernel.org; Tue, 10 Jun 2025 11:49:36 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uOuKA-002k0V-1l;
-	Tue, 10 Jun 2025 10:27:14 +0200
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	id 1uOvbs-002kbe-1V
+	for linux-can@vger.kernel.org;
+	Tue, 10 Jun 2025 11:49:36 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 29210424196
+	for <linux-can@vger.kernel.org>; Tue, 10 Jun 2025 09:49:36 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id CACAB424090;
-	Tue, 10 Jun 2025 08:27:07 +0000 (UTC)
-Date: Tue, 10 Jun 2025 10:27:05 +0200
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 33C43424180;
+	Tue, 10 Jun 2025 09:49:35 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 8d1fb4aa;
+	Tue, 10 Jun 2025 09:49:34 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Davide Caratti <dcaratti@redhat.com>
-Cc: linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>, 
-	fstornio@redhat.com, fmaurer@redhat.com
-Subject: Re: [PATCH 0/2] can: add drop reasons in the receive path
-Message-ID: <20250610-careful-banana-wombat-f3038f-mkl@pengutronix.de>
-References: <20250604160605.1005704-1-dcaratti@redhat.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH net-next 0/7] pull-request: can-next 2025-06-10
+Date: Tue, 10 Jun 2025 11:46:15 +0200
+Message-ID: <20250610094933.1593081-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pikmvfzsov46ubfr"
-Content-Disposition: inline
-In-Reply-To: <20250604160605.1005704-1-dcaratti@redhat.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+Hello netdev-team,
 
---pikmvfzsov46ubfr
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 0/2] can: add drop reasons in the receive path
-MIME-Version: 1.0
+this is a pull request of 7 patches for net-next/main.
 
-On 04.06.2025 18:06:03, Davide Caratti wrote:
-> drop reasons have been recently introduced to improve debuggability
-> of networking stack. This series introduces drop reasons in the RX path
-> of the CAN protocol stack.
+The first 4 patches are by Vincent Mailhol and prepare the CAN netlink
+interface for the introduction of CAN XL configuration.
 
-Applied to linux-can-next. The threading of these mails is broken.
-Consider using "git send-email" or "b4" for future patch series.
+Geert Uytterhoeven's patch updates the CAN networking documentation.
+
+The last 2 patched are by Davide Caratti and introduce skb drop
+reasons in the receive path of several CAN protocols.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+---
 
---pikmvfzsov46ubfr
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 2c7e4a2663a1ab5a740c59c31991579b6b865a26:
 
------BEGIN PGP SIGNATURE-----
+  Merge tag 'net-6.16-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2025-06-05 12:34:55 -0700)
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmhH7FYACgkQDHRl3/mQ
-kZwSSwgAjPjVoxY6Ikdd80kyGjMM/FBsWgZncvNzLKMB203iWfSpy7UhCwyZL//A
-f5xHm3GydBHpxEvks9KTvKZVMIp3MMceoF7gLSxJSMJWijlUz2W0CgXFVHYzFZiH
-iLk2YS9swdzn+Yhd6pyowFB5EJnnVMchmTV2Qi9NHV7rjcy3fRhAKVvI7g/KJV/j
-S4v6J1wYBdvI69pQ21DTfYRBeY6NBPnY5PiDwEbrPSSOkd9Q3LEookPByfImSdXs
-lxSm3yF/V+64WR9jxFCmmQPTMg0Hr8CEC9CbzyJgqsVbwN95CiTSfG6cJzba7v0h
-u2/5vRg9okzaHoeRse7K4H3pNd+Pdw==
-=V4Xp
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---pikmvfzsov46ubfr--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-6.17-20250610
+
+for you to fetch changes up to af42404179c0e7b590ddfe56c4a753ace39cc1a4:
+
+  Merge patch series "can: add drop reasons in the receive path" (2025-06-10 11:44:18 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-6.17-20250610
+
+----------------------------------------------------------------
+Davide Caratti (2):
+      can: add drop reasons in the receive path of AF_CAN
+      can: add drop reasons in CAN protocols receive path
+
+Geert Uytterhoeven (1):
+      documentation: networking: can: Document alloc_candev_mqs()
+
+Marc Kleine-Budde (2):
+      Merge patch series "can: netlink: preparation before introduction of CAN XL"
+      Merge patch series "can: add drop reasons in the receive path"
+
+Vincent Mailhol (4):
+      can: netlink: replace tabulation by space in assignment
+      can: bittiming: rename CAN_CTRLMODE_TDC_MASK into CAN_CTRLMODE_FD_TDC_MASK
+      can: bittiming: rename can_tdc_is_enabled() into can_fd_tdc_is_enabled()
+      can: netlink: can_changelink(): rename tdc_mask into fd_tdc_flag_provided
+
+ Documentation/networking/can.rst          | 11 ++++-------
+ drivers/net/can/dev/calc_bittiming.c      |  2 +-
+ drivers/net/can/dev/netlink.c             | 26 +++++++++++++-------------
+ drivers/net/can/usb/etas_es58x/es58x_fd.c |  2 +-
+ drivers/net/can/xilinx_can.c              |  2 +-
+ include/linux/can/bittiming.h             |  2 +-
+ include/linux/can/dev.h                   |  4 ++--
+ include/net/dropreason-core.h             | 18 ++++++++++++++++++
+ net/can/af_can.c                          |  6 +++---
+ net/can/bcm.c                             |  5 +++--
+ net/can/isotp.c                           |  5 +++--
+ net/can/j1939/socket.c                    |  5 +++--
+ net/can/raw.c                             |  5 +++--
+ 13 files changed, 56 insertions(+), 37 deletions(-)
+
 
