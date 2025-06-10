@@ -1,210 +1,154 @@
-Return-Path: <linux-can+bounces-3788-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3791-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B3ECAD32BC
-	for <lists+linux-can@lfdr.de>; Tue, 10 Jun 2025 11:52:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F110AD3708
+	for <lists+linux-can@lfdr.de>; Tue, 10 Jun 2025 14:46:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BB073A254C
-	for <lists+linux-can@lfdr.de>; Tue, 10 Jun 2025 09:51:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69F4F179BD8
+	for <lists+linux-can@lfdr.de>; Tue, 10 Jun 2025 12:45:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A184028D8F3;
-	Tue, 10 Jun 2025 09:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50042BE7CF;
+	Tue, 10 Jun 2025 12:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="xenBnU60"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4B928C2C5
-	for <linux-can@vger.kernel.org>; Tue, 10 Jun 2025 09:49:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3C92BE7B8
+	for <linux-can@vger.kernel.org>; Tue, 10 Jun 2025 12:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749548983; cv=none; b=tvjfdin0J6Bh+xjpHgsPrlqtTih7izFskQxTro32dwaC+4Q/TyYWWPcHzkTKGl+7aU+LNbhMfaKABF89oNe6Cve7VKiguDqNm1QUZd8RFffPUzGzi8g8ZJRC5ITjllCg0iNrvOZdjDFCQGW62yQF8R28lRNM9ubsR+qaA6X6h00=
+	t=1749559083; cv=none; b=FaTytAIQ0/ZFIXk8pmP/BfzrVlT01fm8dGFk7Nb5pVlvRdKvqR3o0lAc1INS/v8I5m+x36/QQPxSVsD7TXSjGG8EMhH9y4aC+IEJW90kpY/j2OIxRYnU8XAtXTV5DFur4ZJXxafmzBpHDD3zIhSJlwECWh9NQMv+WhkiBecdHFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749548983; c=relaxed/simple;
-	bh=sfksOESy/54OYTsecxQUt2yOqobn76gzeR6X8QIzFQA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bNVle04yD9b2/pAx/TYl35DrZq8iGeEDVf2LpTrcOs6wrAxh9rJRPkU36aj00DVMBvmcBQmevp6AHR21XzS66iPokUbyc22SwtGSVWuVtTFgiK8PhW9f1cybomXA7GhCfXEX/K7nR9i8GmMxd+8U1jyTuJdvrTByJ1HZmXksuRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uOvbv-00068L-Lc
-	for linux-can@vger.kernel.org; Tue, 10 Jun 2025 11:49:39 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uOvbu-002keG-2O
-	for linux-can@vger.kernel.org;
-	Tue, 10 Jun 2025 11:49:38 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 6A75F4241BC
-	for <linux-can@vger.kernel.org>; Tue, 10 Jun 2025 09:49:38 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id AA60042418C;
-	Tue, 10 Jun 2025 09:49:35 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d159747e;
-	Tue, 10 Jun 2025 09:49:34 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	Davide Caratti <dcaratti@redhat.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 7/7] can: add drop reasons in CAN protocols receive path
-Date: Tue, 10 Jun 2025 11:46:22 +0200
-Message-ID: <20250610094933.1593081-8-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250610094933.1593081-1-mkl@pengutronix.de>
-References: <20250610094933.1593081-1-mkl@pengutronix.de>
+	s=arc-20240116; t=1749559083; c=relaxed/simple;
+	bh=KwxEa/uJuk3pJvTN2X8lujDshvrYOWCdkyKc2L1pS/I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DZZWRk/o/B6GqTdWAsfSrghhqBcZCYx/NSAe57SWW3/Dnh+Tnf8lQVx15/rBdgtlCEsBxxKmdHSV3YUfctd1copmDO7E7kjlipDUkDEb5Y1m37wluel24cD6oCbgSPG3mNI5hi0z5MIJXCl30m+NxVgcHU+HFUg3/ywHU/1NrYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=xenBnU60; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3a3798794d3so4627866f8f.1
+        for <linux-can@vger.kernel.org>; Tue, 10 Jun 2025 05:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1749559080; x=1750163880; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=76J2LCVixashUDb/m2qpfx8ikv/ZEUvoe4KOmQxn0YQ=;
+        b=xenBnU60b9gQp90ap5DPzJhLcijnnQdsXm2JClJGNt/V4YeFS0PUSSsnpA1dXjpvrN
+         Gk3QlCfAEqP7ISc0YuVfRDOVMuy4fgnsMCUnZue4agx1vFIag8r2QopEKQFtyX+G46YP
+         CWCsfMIgFTAtbArmZTB1LsHOzshRzJGODf2IJpQ6195g7cniMhWaqJ1c6c30hd1Gxu/I
+         62S43YH15Jaeq7wvWlMWIyh3wiLTWBfcp38S4GnJKId40yrZbFY1rUDKZrUlUn1LbaWI
+         +GGPjn1QryGSU5hBbzZ6Flj+9DlycDJpw1ngOCnG9lp4uWEh7BmgqAusugVqNAlX7uj4
+         EFog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749559080; x=1750163880;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=76J2LCVixashUDb/m2qpfx8ikv/ZEUvoe4KOmQxn0YQ=;
+        b=TeWYmPwffT9Hd1JH0Dhcj6bGJNgkqW0ORBS/f5RQBcKPn60bjUoMzLbp9OqG8xIgAH
+         RuV2AP8jQzRmdtIbTzBvgV8NcqOAS/Gnygm3aYL6A7w5U8nEb9e+umFqk2FOt8EBpavt
+         KCf23/Oy5pOKuJPbtvAAgw4u+VrNEOASkd3gTyjaba6dMatcjznEvAGYkyhWMHI7dXC3
+         tTDgrWRINHGqySA+4+8aJgRyOf5WVqA2XjhJ/gxPfDF5BnLHPrd5kq0fEh1DkLFGICKR
+         BhxqOO1hJ8jXzUNqAqftITHz8wL/eeFgMux0mWuiQnSdYBLveyiMWzVAyJnb9/yLk3+t
+         mOoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWH8ZdQTOkDD4ub44YCGtMKn1kL60SwOIJRs4cBDCM9lx0lQliotZghyg+O0h6wrS60kZkKyt8W+Zo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3NJMp0wVXIMFWJulHAGparE1/RC3cwo4jlBikuaeLY68OgjKO
+	7vnz7j8TNyQP13FsD8wHAyllbcdQovabPLpXI6ZGRRQ7sARwUNoojFSxjx/cZwS/IyY=
+X-Gm-Gg: ASbGncuhuLJ74k83Y8l9w77wbpr7YsfUQ97JXEqyAsvzf9W/jDnaYsH2c1hsqnh5hnz
+	m+2WKRJLW5Jf4LjTdaNuarybTuV9OCRcFFkAFZnWy1znHDkkvYlJ+9f4cF+8AUUqCINVhEr2UkA
+	Q2bo/W9tTX96X0oC+R+Y/vJz8uo/iQ9BRVFYR0j9hCrpVn+hAwfnst0w9JvqvIGbM5HsHonrCsL
+	+XFOJ6hLPXz1MKaM5/R8dV6sjY2pF5Mvgo3D+gAyQ/kWogDb6H0uiwm/mODEvMquz5zQPjpkn2v
+	d3Uy3jH2O/a4QnS8+d1sx/IfhUBFC1W903nU6bBwFN+62EKuqG2VTZlrBLjV94gW
+X-Google-Smtp-Source: AGHT+IGsSDaRB1hqZwU1/G5MCu4Szr+Exf9GnhrFkMwxOumN0QR4RfbCMoZmzXDX0IpoSo9pzctkjw==
+X-Received: by 2002:a05:6000:26c8:b0:3a3:7077:aba1 with SMTP id ffacd0b85a97d-3a531ce677bmr13926248f8f.48.1749559080359;
+        Tue, 10 Jun 2025 05:38:00 -0700 (PDT)
+Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:4d:e52b:812d:eb7c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45213759fb2sm142476805e9.38.2025.06.10.05.37.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jun 2025 05:38:00 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH 0/4] net: use new GPIO line value setter callbacks
+Date: Tue, 10 Jun 2025 14:37:56 +0200
+Message-Id: <20250610-gpiochip-set-rv-net-v1-0-35668dd1c76f@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACQnSGgC/x2MMQqAMAwAv1IyG9CgFP2KOGiNbZZaUimC+HeL0
+ 3HD3QOZVTjDZB5QLpLljFW6xoALa/SMslcHamloB7Lok5wuSMLMF2rBWDGy3cZu7emwDmqZlA+
+ 5/+u8vO8HXLWAMGUAAAA=
+X-Change-ID: 20250527-gpiochip-set-rv-net-9e7b91a42f7c
+To: Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, 
+ "Chester A. Unal" <chester.a.unal@arinc9.com>, 
+ Daniel Golle <daniel@makrotopia.org>, DENG Qingfang <dqfext@gmail.com>, 
+ Sean Wang <sean.wang@mediatek.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ Heiner Kallweit <hkallweit1@gmail.com>, 
+ Russell King <linux@armlinux.org.uk>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, linux-can@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1195;
+ i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
+ bh=KwxEa/uJuk3pJvTN2X8lujDshvrYOWCdkyKc2L1pS/I=;
+ b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBoSCcm+33A95fkBlAJxBo1vos+qspK8wslT2V1V
+ Wh30tXt2cyJAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCaEgnJgAKCRARpy6gFHHX
+ cuYrD/44rRjrB6mmO6/fNfGeJctkPA103u6ffSW8zmiUHtgIJ5B1V5Qasz+jhTr2tg3lUTCnbYe
+ w34O88SipckwpEJoWpdvuB2hboyNKzPQQS1WPa2E39MYGaJw7fYPsbvFVVrtxBCZ7RzWFExW3MQ
+ 3TOsO1fEzH+UzzX4LwNR5DYvCTbc5uo6WA/tYEj2Cf5UdkI3ukiMfJB3cxEaZgW1Xhv0oVIOX0C
+ NpnbvH/9zY+5TwvO/xjSNoOdxotzl2H05KRpJ5Aa5WaeU68D/TlijfF/9pB3tsq0N0SK4uPITOk
+ 1nvjFoAGwO9zoPERN3DQ+sB0Tp5RHQXfrfpo11vUn9qqGhDExZAen6z8FlYixLirLMdzj+UvWxj
+ XBKO0O1hoZfuK4ZHjVYa5tdLT5ofLoIoKxVQd3n3UENerD2HXefvq4tvwtxQ4+MVk9r0Vwd8BZL
+ dweZ0tHZ/7Ntl8kGYNe7A7JtI42JgVzJXVV/t3fa7pzQBU+ulPgswxTSNIeYXYxETT7g4cYWjK7
+ 25FpJqsQrKFCE9mZbAaj+kQt6QKR7ceIUa3pe0x5mnErUjbysE7QUJcphFy2dh4QZ+YpI328z8P
+ Z8jaeoUcMeTqO8wIjnMJV4NBzsCznTgTgvtZ5EFwA8JfF2IN/tWFT0I8wKy1PwzioUBgGqzP1R3
+ QGBdUz7g9snOoDg==
+X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-From: Davide Caratti <dcaratti@redhat.com>
+Commit 98ce1eb1fd87e ("gpiolib: introduce gpio_chip setters that return
+values") added new line setter callbacks to struct gpio_chip. They allow
+to indicate failures to callers. We're in the process of converting all
+GPIO controllers to using them before removing the old ones. This series
+converts all GPIO chips implemented under drivers/net/.
 
-sock_queue_rcv_skb() can fail because of lack of memory resources: use
-drop reasons and pass the receiving socket to the tracepoint, so that
-it's possible to better locate/debug such events.
-
-Tested with:
-
-| # modprobe vcan echo=1
-| # ip link add name vcan2 type vcan
-| # ip link set dev vcan2 up
-| # ./netlayer/tst-proc 1 &
-| # bg
-| # while true ; do perf record -e skb:kfree_skb -aR  -- \
-| > ./raw/tst-raw-sendto vcan2 ; perf script ; done
-| [...]
-| tst-raw-sendto 10942 [000] 506428.431856: skb:kfree_skb: skbaddr=0xffff97cec38b4200 rx_sk=0xffff97cf0f75a800 protocol=12 location=raw_rcv+0x20e reason: SOCKET_RCVBUF
-
-Signed-off-by: Davide Caratti <dcaratti@redhat.com>
-Link: https://patch.msgid.link/20250604160605.1005704-3-dcaratti@redhat.com
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- net/can/bcm.c          | 5 +++--
- net/can/isotp.c        | 5 +++--
- net/can/j1939/socket.c | 5 +++--
- net/can/raw.c          | 5 +++--
- 4 files changed, 12 insertions(+), 8 deletions(-)
+Bartosz Golaszewski (4):
+      net: dsa: vsc73xx: use new GPIO line value setter callbacks
+      net: dsa: mt7530: use new GPIO line value setter callbacks
+      net: can: mcp251x: use new GPIO line value setter callbacks
+      net: phy: qca807x: use new GPIO line value setter callbacks
 
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 6bc1cc4c94c5..5e690a2377e4 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -359,6 +359,7 @@ static void bcm_send_to_user(struct bcm_op *op, struct bcm_msg_head *head,
- 	unsigned int datalen = head->nframes * op->cfsiz;
- 	int err;
- 	unsigned int *pflags;
-+	enum skb_drop_reason reason;
- 
- 	skb = alloc_skb(sizeof(*head) + datalen, gfp_any());
- 	if (!skb)
-@@ -413,11 +414,11 @@ static void bcm_send_to_user(struct bcm_op *op, struct bcm_msg_head *head,
- 	addr->can_family  = AF_CAN;
- 	addr->can_ifindex = op->rx_ifindex;
- 
--	err = sock_queue_rcv_skb(sk, skb);
-+	err = sock_queue_rcv_skb_reason(sk, skb, &reason);
- 	if (err < 0) {
- 		struct bcm_sock *bo = bcm_sk(sk);
- 
--		kfree_skb(skb);
-+		sk_skb_reason_drop(sk, skb, reason);
- 		/* don't care about overflows in this statistic */
- 		bo->dropped_usr_msgs++;
- 	}
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 1efa377f002e..dee1412b3c9c 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -278,6 +278,7 @@ static int isotp_send_fc(struct sock *sk, int ae, u8 flowstatus)
- static void isotp_rcv_skb(struct sk_buff *skb, struct sock *sk)
- {
- 	struct sockaddr_can *addr = (struct sockaddr_can *)skb->cb;
-+	enum skb_drop_reason reason;
- 
- 	BUILD_BUG_ON(sizeof(skb->cb) < sizeof(struct sockaddr_can));
- 
-@@ -285,8 +286,8 @@ static void isotp_rcv_skb(struct sk_buff *skb, struct sock *sk)
- 	addr->can_family = AF_CAN;
- 	addr->can_ifindex = skb->dev->ifindex;
- 
--	if (sock_queue_rcv_skb(sk, skb) < 0)
--		kfree_skb(skb);
-+	if (sock_queue_rcv_skb_reason(sk, skb, &reason) < 0)
-+		sk_skb_reason_drop(sk, skb, reason);
- }
- 
- static u8 padlen(u8 datalen)
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index 6fefe7a68761..3d8b588822f9 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -311,6 +311,7 @@ static void j1939_sk_recv_one(struct j1939_sock *jsk, struct sk_buff *oskb)
- {
- 	const struct j1939_sk_buff_cb *oskcb = j1939_skb_to_cb(oskb);
- 	struct j1939_sk_buff_cb *skcb;
-+	enum skb_drop_reason reason;
- 	struct sk_buff *skb;
- 
- 	if (oskb->sk == &jsk->sk)
-@@ -331,8 +332,8 @@ static void j1939_sk_recv_one(struct j1939_sock *jsk, struct sk_buff *oskb)
- 	if (skb->sk)
- 		skcb->msg_flags |= MSG_DONTROUTE;
- 
--	if (sock_queue_rcv_skb(&jsk->sk, skb) < 0)
--		kfree_skb(skb);
-+	if (sock_queue_rcv_skb_reason(&jsk->sk, skb, &reason) < 0)
-+		sk_skb_reason_drop(&jsk->sk, skb, reason);
- }
- 
- bool j1939_sk_recv_match(struct j1939_priv *priv, struct j1939_sk_buff_cb *skcb)
-diff --git a/net/can/raw.c b/net/can/raw.c
-index 020f21430b1d..76b867d21def 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -129,6 +129,7 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
- {
- 	struct sock *sk = (struct sock *)data;
- 	struct raw_sock *ro = raw_sk(sk);
-+	enum skb_drop_reason reason;
- 	struct sockaddr_can *addr;
- 	struct sk_buff *skb;
- 	unsigned int *pflags;
-@@ -205,8 +206,8 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
- 	if (oskb->sk == sk)
- 		*pflags |= MSG_CONFIRM;
- 
--	if (sock_queue_rcv_skb(sk, skb) < 0)
--		kfree_skb(skb);
-+	if (sock_queue_rcv_skb_reason(sk, skb, &reason) < 0)
-+		sk_skb_reason_drop(sk, skb, reason);
- }
- 
- static int raw_enable_filters(struct net *net, struct net_device *dev,
+ drivers/net/can/spi/mcp251x.c          | 16 ++++++++++------
+ drivers/net/dsa/mt7530.c               |  6 ++++--
+ drivers/net/dsa/vitesse-vsc73xx-core.c | 10 +++++-----
+ drivers/net/phy/qcom/qca807x.c         | 10 ++++------
+ 4 files changed, 23 insertions(+), 19 deletions(-)
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250527-gpiochip-set-rv-net-9e7b91a42f7c
+
+Best regards,
 -- 
-2.47.2
-
+Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
 
