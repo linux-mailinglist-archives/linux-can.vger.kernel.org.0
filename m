@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-3814-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3815-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8CD3AD5AAE
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 17:38:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41216AD5AD8
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 17:42:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 385A216E1F7
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 15:38:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5B13188EA6D
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 15:38:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E5191CBEAA;
-	Wed, 11 Jun 2025 15:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59EC91C6FF6;
+	Wed, 11 Jun 2025 15:38:00 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030331B0412;
-	Wed, 11 Jun 2025 15:37:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DFE01ABEA5;
+	Wed, 11 Jun 2025 15:38:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749656278; cv=none; b=RqvUKiXdlIeTF35SgEPDvSWU5LTtLCpigq0t5dzwGwWyMiQdyD7VWM7O6BmVg4TgCobAoAPX6kFPKlA15+TFzuPPIMxXt2O1+SPT3TN8p+AUhsDla/UsWHxycvyhjzfjcpLIsnRsqR4W2DZtA+KE8lCPye+U5lNdkDXDE+o9xFI=
+	t=1749656280; cv=none; b=oQlzw6zbIE+sVgiNuBIacMOapO+H0RPZgaEdQB4OkO5f1v72j4PQb7sTKF9uw8nHwKluyFh3W7L3Q/XdTvdf44DeKEperrj0k8+J5DC6M68jR7ScDcmDGTAlX4I3gK7ySvQfb5VT3V01wbsjNDd7gGTNhwBbBK+mBLV4wKI5xWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749656278; c=relaxed/simple;
-	bh=tGuBrZQAASU+yMyRpt4iubt4gYAVNyc1v7tKF9SRIdA=;
+	s=arc-20240116; t=1749656280; c=relaxed/simple;
+	bh=5ueshOevEELFr8VFxsLs0mkW6LEac4nTkCd9LkVhjmE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CwuJEra8QdR/7Laya7wvSY0Qo4auiiPQPJJNhUpqUO0MgOwh0FGGlJ5hJ1NIZPRdgp2zQ7aPo1WmnGlS1qQIAq4KFJypIV2eZRcLWPHkjIATrRGdcUkwWglaHQlQNu3SgsJe10GZntb/LmAc181rjQLVG5ihNre/6jEHr0iiDys=
+	 MIME-Version; b=dxJ64yfv/4AU0W+m0BV2BZOfmjY539M+F+YYplMqr0/2z29vpLoXRmGozQq5Z4ISF7Fq0HiumEAJ+/i7ZbJpCuA3W1/CqiqJwfiWM8/phTs4PlyldYJjoDOMuldbQ3+okmg9C5iamvEpXyz4E22S3HNHWUL5Obarvk0KNWvstKc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B20C4CEEA;
-	Wed, 11 Jun 2025 15:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C7BC4CEE3;
+	Wed, 11 Jun 2025 15:37:58 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -39,9 +39,9 @@ Cc: Kazuhiro Takagi <kazuhiro.takagi.hh@hitachi-solutions.com>,
 	linux-can@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 04/10] can: rcar_canfd: Add helper variable dev to rcar_canfd_reset_controller()
-Date: Wed, 11 Jun 2025 17:37:33 +0200
-Message-ID: <21e64816808eb3eba722f4c547f4f5112d5d62a6.1749655315.git.geert+renesas@glider.be>
+Subject: [PATCH v2 05/10] can: rcar_canfd: Simplify data access in rcar_canfd_{ge,pu}t_data()
+Date: Wed, 11 Jun 2025 17:37:34 +0200
+Message-ID: <4f43f44dcfda13d48a2c502648833934a51d9d6c.1749655315.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1749655315.git.geert+renesas@glider.be>
 References: <cover.1749655315.git.geert+renesas@glider.be>
@@ -53,8 +53,8 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-rcar_canfd_reset_controller() has many users of "pdev->dev".  Introduce
-a shorthand to simplify the code.
+Replace the repeated casts, pointer additions, and pointer dereferences
+by array accesses to improve readability.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
@@ -66,45 +66,37 @@ v2:
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index ddf3b91d3d2bba97..3244584a6ee5d67b 100644
+index 3244584a6ee5d67b..dded509793bb93ec 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -841,6 +841,7 @@ static void rcar_canfd_set_mode(struct rcar_canfd_global *gpriv)
- 
- static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
+@@ -781,23 +781,23 @@ static void rcar_canfd_update_bit(void __iomem *base, u32 reg,
+ static void rcar_canfd_get_data(struct rcar_canfd_channel *priv,
+ 				struct canfd_frame *cf, u32 off)
  {
-+	struct device *dev = &gpriv->pdev->dev;
- 	u32 sts, ch;
- 	int err;
++	u32 *data = (u32 *)cf->data;
+ 	u32 i, lwords;
  
-@@ -850,7 +851,7 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
- 	err = readl_poll_timeout((gpriv->base + RCANFD_GSTS), sts,
- 				 !(sts & RCANFD_GSTS_GRAMINIT), 2, 500000);
- 	if (err) {
--		dev_dbg(&gpriv->pdev->dev, "global raminit failed\n");
-+		dev_dbg(dev, "global raminit failed\n");
- 		return err;
- 	}
+ 	lwords = DIV_ROUND_UP(cf->len, sizeof(u32));
+ 	for (i = 0; i < lwords; i++)
+-		*((u32 *)cf->data + i) =
+-			rcar_canfd_read(priv->base, off + i * sizeof(u32));
++		data[i] = rcar_canfd_read(priv->base, off + i * sizeof(u32));
+ }
  
-@@ -863,7 +864,7 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
- 	err = readl_poll_timeout((gpriv->base + RCANFD_GSTS), sts,
- 				 (sts & RCANFD_GSTS_GRSTSTS), 2, 500000);
- 	if (err) {
--		dev_dbg(&gpriv->pdev->dev, "global reset failed\n");
-+		dev_dbg(dev, "global reset failed\n");
- 		return err;
- 	}
+ static void rcar_canfd_put_data(struct rcar_canfd_channel *priv,
+ 				struct canfd_frame *cf, u32 off)
+ {
++	const u32 *data = (u32 *)cf->data;
+ 	u32 i, lwords;
  
-@@ -887,8 +888,7 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
- 					 (sts & RCANFD_CSTS_CRSTSTS),
- 					 2, 500000);
- 		if (err) {
--			dev_dbg(&gpriv->pdev->dev,
--				"channel %u reset failed\n", ch);
-+			dev_dbg(dev, "channel %u reset failed\n", ch);
- 			return err;
- 		}
- 	}
+ 	lwords = DIV_ROUND_UP(cf->len, sizeof(u32));
+ 	for (i = 0; i < lwords; i++)
+-		rcar_canfd_write(priv->base, off + i * sizeof(u32),
+-				 *((u32 *)cf->data + i));
++		rcar_canfd_write(priv->base, off + i * sizeof(u32), data[i]);
+ }
+ 
+ static void rcar_canfd_tx_failure_cleanup(struct net_device *ndev)
 -- 
 2.43.0
 
