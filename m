@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-3813-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3814-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8BBEAD5AAC
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 17:37:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8CD3AD5AAE
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 17:38:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56D157A4948
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 15:36:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 385A216E1F7
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 15:38:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6A21D130E;
-	Wed, 11 Jun 2025 15:37:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E5191CBEAA;
+	Wed, 11 Jun 2025 15:37:58 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4161B0412;
-	Wed, 11 Jun 2025 15:37:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030331B0412;
+	Wed, 11 Jun 2025 15:37:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749656275; cv=none; b=BHN31rRKlqlzxTG+QhpbtZE3RX1b85oTG15RQEoLH4ZfoeMycEbxIAVxdK1FnLdPcKME+po9Cxwkg6dBjAeo/F7EptN3nTmUvygzdWyqOcnaY+odER6xpKPtR0DFpkI0+mNCpiBkNTNQ8/NyrQ5X290fgUJiaiXHBpD8JVAM47k=
+	t=1749656278; cv=none; b=RqvUKiXdlIeTF35SgEPDvSWU5LTtLCpigq0t5dzwGwWyMiQdyD7VWM7O6BmVg4TgCobAoAPX6kFPKlA15+TFzuPPIMxXt2O1+SPT3TN8p+AUhsDla/UsWHxycvyhjzfjcpLIsnRsqR4W2DZtA+KE8lCPye+U5lNdkDXDE+o9xFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749656275; c=relaxed/simple;
-	bh=pyJ8llq/pZeV/foCZFnGQeAu/yQMIU2+R8GhmYCh5fk=;
+	s=arc-20240116; t=1749656278; c=relaxed/simple;
+	bh=tGuBrZQAASU+yMyRpt4iubt4gYAVNyc1v7tKF9SRIdA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AoDmBCXKg6xiTz3HVtkSqgJdREvbGqA0ck5LpNirHoqseb9zajerKLSIb1yZBDQulRAQ7GkM3tmBpCnb4uRcLAVrGSd1+VMbLKBXIZ1Bx8ss64XHp2OFydfNatTrwIzVWYLStRg+1GwlNOTGwAB2JWJKNzrppAahQ7aSFCNuU/k=
+	 MIME-Version; b=CwuJEra8QdR/7Laya7wvSY0Qo4auiiPQPJJNhUpqUO0MgOwh0FGGlJ5hJ1NIZPRdgp2zQ7aPo1WmnGlS1qQIAq4KFJypIV2eZRcLWPHkjIATrRGdcUkwWglaHQlQNu3SgsJe10GZntb/LmAc181rjQLVG5ihNre/6jEHr0iiDys=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CB4C4CEE3;
-	Wed, 11 Jun 2025 15:37:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B20C4CEEA;
+	Wed, 11 Jun 2025 15:37:55 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -39,9 +39,9 @@ Cc: Kazuhiro Takagi <kazuhiro.takagi.hh@hitachi-solutions.com>,
 	linux-can@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 03/10] can: rcar_canfd: Add helper variable ndev to rcar_canfd_rx_pkt()
-Date: Wed, 11 Jun 2025 17:37:32 +0200
-Message-ID: <22afe32a65f7c3e64ce3917aec943ac24d6e185a.1749655315.git.geert+renesas@glider.be>
+Subject: [PATCH v2 04/10] can: rcar_canfd: Add helper variable dev to rcar_canfd_reset_controller()
+Date: Wed, 11 Jun 2025 17:37:33 +0200
+Message-ID: <21e64816808eb3eba722f4c547f4f5112d5d62a6.1749655315.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1749655315.git.geert+renesas@glider.be>
 References: <cover.1749655315.git.geert+renesas@glider.be>
@@ -53,8 +53,8 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-rcar_canfd_rx_pkt() has many users of "priv->ndev".  Introduce a
-shorthand to simplify the code.
+rcar_canfd_reset_controller() has many users of "pdev->dev".  Introduce
+a shorthand to simplify the code.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
@@ -62,50 +62,49 @@ Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 v2:
   - Add Reviewed-by.
 ---
- drivers/net/can/rcar/rcar_canfd.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index b353168f75f28565..ddf3b91d3d2bba97 100644
+index ddf3b91d3d2bba97..3244584a6ee5d67b 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1684,7 +1684,8 @@ static netdev_tx_t rcar_canfd_start_xmit(struct sk_buff *skb,
+@@ -841,6 +841,7 @@ static void rcar_canfd_set_mode(struct rcar_canfd_global *gpriv)
  
- static void rcar_canfd_rx_pkt(struct rcar_canfd_channel *priv)
+ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
  {
--	struct net_device_stats *stats = &priv->ndev->stats;
-+	struct net_device *ndev = priv->ndev;
-+	struct net_device_stats *stats = &ndev->stats;
- 	struct rcar_canfd_global *gpriv = priv->gpriv;
- 	struct canfd_frame *cf;
- 	struct sk_buff *skb;
-@@ -1700,14 +1701,13 @@ static void rcar_canfd_rx_pkt(struct rcar_canfd_channel *priv)
++	struct device *dev = &gpriv->pdev->dev;
+ 	u32 sts, ch;
+ 	int err;
  
- 		if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) &&
- 		    sts & RCANFD_RFFDSTS_RFFDF)
--			skb = alloc_canfd_skb(priv->ndev, &cf);
-+			skb = alloc_canfd_skb(ndev, &cf);
- 		else
--			skb = alloc_can_skb(priv->ndev,
--					    (struct can_frame **)&cf);
-+			skb = alloc_can_skb(ndev, (struct can_frame **)&cf);
- 	} else {
- 		id = rcar_canfd_read(priv->base, RCANFD_C_RFID(ridx));
- 		dlc = rcar_canfd_read(priv->base, RCANFD_C_RFPTR(ridx));
--		skb = alloc_can_skb(priv->ndev, (struct can_frame **)&cf);
-+		skb = alloc_can_skb(ndev, (struct can_frame **)&cf);
+@@ -850,7 +851,7 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
+ 	err = readl_poll_timeout((gpriv->base + RCANFD_GSTS), sts,
+ 				 !(sts & RCANFD_GSTS_GRAMINIT), 2, 500000);
+ 	if (err) {
+-		dev_dbg(&gpriv->pdev->dev, "global raminit failed\n");
++		dev_dbg(dev, "global raminit failed\n");
+ 		return err;
  	}
  
- 	if (!skb) {
-@@ -1728,7 +1728,7 @@ static void rcar_canfd_rx_pkt(struct rcar_canfd_channel *priv)
+@@ -863,7 +864,7 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
+ 	err = readl_poll_timeout((gpriv->base + RCANFD_GSTS), sts,
+ 				 (sts & RCANFD_GSTS_GRSTSTS), 2, 500000);
+ 	if (err) {
+-		dev_dbg(&gpriv->pdev->dev, "global reset failed\n");
++		dev_dbg(dev, "global reset failed\n");
+ 		return err;
+ 	}
  
- 		if (sts & RCANFD_RFFDSTS_RFESI) {
- 			cf->flags |= CANFD_ESI;
--			netdev_dbg(priv->ndev, "ESI Error\n");
-+			netdev_dbg(ndev, "ESI Error\n");
+@@ -887,8 +888,7 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
+ 					 (sts & RCANFD_CSTS_CRSTSTS),
+ 					 2, 500000);
+ 		if (err) {
+-			dev_dbg(&gpriv->pdev->dev,
+-				"channel %u reset failed\n", ch);
++			dev_dbg(dev, "channel %u reset failed\n", ch);
+ 			return err;
  		}
- 
- 		if (!(sts & RCANFD_RFFDSTS_RFFDF) && (id & RCANFD_RFID_RFRTR)) {
+ 	}
 -- 
 2.43.0
 
