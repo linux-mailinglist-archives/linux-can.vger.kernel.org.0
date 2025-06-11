@@ -1,192 +1,132 @@
-Return-Path: <linux-can+bounces-3809-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3810-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A33CAD56C4
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 15:18:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 829C7AD5AD5
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 17:42:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BC8D160C7B
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 13:18:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3645B1885C8D
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 15:38:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9B2286413;
-	Wed, 11 Jun 2025 13:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="M17/FgXi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480D01C6FF6;
+	Wed, 11 Jun 2025 15:37:49 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-70.smtpout.orange.fr [193.252.22.70])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0FFF78F43;
-	Wed, 11 Jun 2025 13:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DB71B0412;
+	Wed, 11 Jun 2025 15:37:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749647908; cv=none; b=VPLRzMXhA97VVIbiNxcqyVGdrEAlzvyU6bPgPj8GktQ6DRGq2Zh69QjF/hOaUr/n9NP6z0VIqgNwxjUwhk1Vi5KPwuFbNkVVMC39u/RSls+KM2EnYAXR9t8Olvx07P8rpBqvlP3WPJkA0CN0JvilaS4HiBosneom5F3TFZ6zu3Y=
+	t=1749656269; cv=none; b=XwQHFK5Qyl/R3iAnysxL//cJbsGdHTpCwKZpzw+5jGt985s7B4vX+q0JP+EetwnyL+RCwVXHPgPc+5cFeOVwq0qtCviP14epQ8ycCn4mz8HSJSY8iYaLEaPHg6rI5mDMlWmOiWK7U3eSHdKE61tikyDD1CftFOP6wltxIpBiTnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749647908; c=relaxed/simple;
-	bh=3ImL6HcMMuEnuKo/YZNjhvWD+k67FXIGpUec8YR+upk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iJrT9Ziax3zyhhsWFsXm7xvSSn0zSXf2DH4pTYFdPJavb9r2/q0Qc9r/j2wJq6SJzqf+RwVPbFL7r4qu2+Rwoz1ao3roMDXifIhz6A1Nw1tc80qsjgDOwglmfrunRavrBxeVcX+JU9KuUIYONgclQPCxmRJq/4fY/+pZUAlzJuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=M17/FgXi; arc=none smtp.client-ip=193.252.22.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id PLK1uaf7zSZTqPLK3uQEoa; Wed, 11 Jun 2025 15:17:07 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1749647827;
-	bh=gPwsajLBsNL8XA7/sk2C74g5jjpD7PSQHxW65bPJTD4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=M17/FgXiTcdr7lS6G03JsO24EzLrPAbSaLdpabOS8KSO9ZEXvCwjxVSLQlhclwiey
-	 GU56llktfNWO77AIbtJnO0IAiggrUGmaiUzv8Xmkw2DgB0RpdGc07IBsV0w1nsbXu8
-	 fAXtlPWEo57EiI6hAVY6AQFCCwfdJ6BzRYW0kgC5C3yIIN6W5eFA9Fc3JLan2k8kHc
-	 egUAG7bVTwa/EvSd4aaAKk/s2n6UNuFr5HTZgzxV3+RLRh3GYkYM20NYmhzLtOoyO6
-	 HW0Pw9zzC3ok64XoPrHLF5ogesxujWXldaMR0SeWUqXPPz9UoJXWYF/7kr4W1ygWPl
-	 fGi2IavEa67Cw==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 11 Jun 2025 15:17:07 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <e252f15f-ea80-4969-b754-82da5f9a7f56@wanadoo.fr>
-Date: Wed, 11 Jun 2025 22:16:52 +0900
+	s=arc-20240116; t=1749656269; c=relaxed/simple;
+	bh=YdwfrHn55EcHmzR6Vvqw1F/4MhrbhfwW1Xd3P6mL9LU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XfsVdBokJuHGf6De9xrQKcX/sg2IO5ERgh9TtxKlDhFld5Dol22jlejLWeTNwdARiNmxlW5m37uxAigTtxT8pveNpgLmq2oge8CCyBHuCGTUoccApK0eJgdpSIz3f19iIp+x3LpOxv9GZ9G56Iew5/acpCJpUtGF4FEdG0fBXJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE93EC4CEE3;
+	Wed, 11 Jun 2025 15:37:46 +0000 (UTC)
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Kazuhiro Takagi <kazuhiro.takagi.hh@hitachi-solutions.com>,
+	Duy Nguyen <duy.nguyen.rh@renesas.com>,
+	linux-can@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2 00/10] can: rcar_canfd: Add support for Transceiver Delay Compensation
+Date: Wed, 11 Jun 2025 17:37:29 +0200
+Message-ID: <cover.1749655315.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] net: can: mcp251x: use new GPIO line value setter
- callbacks
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-can@vger.kernel.org,
- linux-arm-msm@vger.kernel.org,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- "Chester A. Unal" <chester.a.unal@arinc9.com>,
- Daniel Golle <daniel@makrotopia.org>, DENG Qingfang <dqfext@gmail.com>,
- Sean Wang <sean.wang@mediatek.com>, Matthias Brugger
- <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>,
- Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>
-References: <20250610-gpiochip-set-rv-net-v1-0-35668dd1c76f@linaro.org>
- <20250610-gpiochip-set-rv-net-v1-3-35668dd1c76f@linaro.org>
- <b2f87cff-3a81-482b-bfdd-389950b7ec8e@wanadoo.fr>
- <CAMRc=MfCwz3BV15aATr_5er7wU=AmKV=Z=sHJyrjEvLwx2cMjQ@mail.gmail.com>
- <b9ea7e0e-7dd1-460b-950a-083620dd52e9@wanadoo.fr>
- <CAMRc=Mf4qupdJEm9mWPF3-B3hprn6AvP7Po2=aQYbaSvFf8OeA@mail.gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <CAMRc=Mf4qupdJEm9mWPF3-B3hprn6AvP7Po2=aQYbaSvFf8OeA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 11/06/2025 at 01:05, Bartosz Golaszewski wrote:
-> On Tue, Jun 10, 2025 at 5:48 PM Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
->>
->> On 10/06/2025 at 23:05, Bartosz Golaszewski wrote:
->>> On Tue, Jun 10, 2025 at 3:55 PM Vincent Mailhol
->>> <mailhol.vincent@wanadoo.fr> wrote:
->>>>
->>>> On 10/06/2025 at 21:37, Bartosz Golaszewski wrote:
->>>>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>>>>
->>>>> struct gpio_chip now has callbacks for setting line values that return
->>>>> an integer, allowing to indicate failures. Convert the driver to using
->>>>> them.
->>>>>
->>>>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>>>                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->>>>
->>>> This does not match the address with which you sent the patch: brgl@bgdev.pl
->>>>
->>>>> ---
->>>>>  drivers/net/can/spi/mcp251x.c | 16 ++++++++++------
->>>>>  1 file changed, 10 insertions(+), 6 deletions(-)
->>>>>
->>>>> diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
->>>>> index ec5c64006a16f703bc816983765584c5f3ac76e8..7545497d14b46c6388f3976c2bf7b9a99e959c1e 100644
->>>>> --- a/drivers/net/can/spi/mcp251x.c
->>>>> +++ b/drivers/net/can/spi/mcp251x.c
->>>>> @@ -530,8 +530,8 @@ static int mcp251x_gpio_get_multiple(struct gpio_chip *chip,
->>>>>       return 0;
->>>>>  }
->>>>>
->>>>> -static void mcp251x_gpio_set(struct gpio_chip *chip, unsigned int offset,
->>>>> -                          int value)
->>>>> +static int mcp251x_gpio_set(struct gpio_chip *chip, unsigned int offset,
->>>>> +                         int value)
->>>>>  {
->>>>>       struct mcp251x_priv *priv = gpiochip_get_data(chip);
->>>>>       u8 mask, val;
->>>>> @@ -545,9 +545,11 @@ static void mcp251x_gpio_set(struct gpio_chip *chip, unsigned int offset,
->>>>>
->>>>>       priv->reg_bfpctrl &= ~mask;
->>>>>       priv->reg_bfpctrl |= val;
->>>>> +
->>>>> +     return 0;
->>>>
->>>> mcp251x_gpio_set() calls mcp251x_write_bits() which calls mcp251x_spi_write()
->>>> which can fail.
->>>>
->>>> For this change to really make sense, the return value of mcp251x_spi_write()
->>>> should be propagated all the way around.
->>>>
->>>
->>> I don't know this code so I followed the example of the rest of the
->>> codebase where the result of this function is never checked - even in
->>> functions that do return values. I didn't know the reason for this and
->>> so didn't want to break anything as I have no means of testing it.
->>
->> The return value of mcp251x_spi_write() is used in mcp251x_hw_reset(). In other
->> locations, mcp251x_spi_write() is only used in functions which return void, so
->> obviously, the return value is not checked.
->>
-> 
-> Wait, after a second look GPIO callbacks (including those that return
-> a value like request()) use mcp251x_write_bits() which has no return
-> value.
+	Hi all,
 
-Yes. Read again my first message:
+This patch series adds CAN-FD Transceiver Delay Compensation support to
+the R-Car CAN-FD driver, after the customary cleanups and refactorings.
 
-  mcp251x_gpio_set() calls mcp251x_write_bits() which calls mcp251x_spi_write()
-  which can fail.
+Changes compared to v1:
+  - Dropped patch "can: rcar_canfd: Use ndev parameter in
+    rcar_canfd_set_bittiming()",
+  - New patch "[PATCH v2 02/10] can: rcar_canfd: Remove bittiming debug
+    prints",
+  - New patch "[PATCH v2 07/10] can: rcar_canfd: Rename
+    rcar_canfd_setrnc() to rcar_canfd_set_rnc()",
+  - Add Reviewed-by,
+  - Replace function-like RCANFD_F_*() macros by rcar_canfd_f_*()
+    inline functions,
+  - Replace function-like macro RCANFD_FDSTS_TDCR() by bitmask
+    RCANFD_FDSTS_TDCR and helper function rcar_canfd_get_tdcr(),
+  - Replace function-like macro RCANFD_FDSTS_TDCVF() by two bit
+    definitions,
+  - Drop debug print of tdc mode and tdco value.
 
-My point is that the grand father can fail.
+This has been tested on R-Car V4H (White Hawk), V4M (Gray Hawk Single),
+and E3 (Ebisu-4D[2]), using various data bit rates.  Without proper TDC
+configuration, transmitting at 8 Mbps makes the CAN-FD controller enter
+BUS-OFF state.  The TDCV value as measured by the CAN-FD controller is 4
+on all boards tested (base clock 40 MHz, i.e. 25 ns period), and ca. 90
+ns as measured by a logic analyzer on Gray Hawk Single.
 
-> It probably should propagate what mcp251x_spi_write() returns
+Note that the BSP (predating upstream TDC support), uses a much simpler
+method: for transfer rates >= 5 Mbps on R-Car Gen4, it enables TDC with
+a hardcoded (hardware) TDCO value of 2 (i.e. actual 3), which matches
+the behavior of this series at 8 Mbps.
 
-Exactly what I asked for :)
+Thanks for your comments!
 
-> but that's material for a different series.
+[1] "[PATCH 0/9] can: rcar_canfd: Add support for Transceiver Delay Compensation"
+    https://lore.kernel.org/cover.1748863848.git.geert+renesas@glider.be
 
-Why? Are you going to do this other series?
+[2] r8a77990.dtsi configures the CANFD core clock to 40 MHz, limiting
+    transfer rates to 4 Mbps.  Enable support for 8 Mbps by adding to
+    ebisu.dtsi:
 
-If the answer is no, then please just do it here. Propagating the error in
-mcp251x_write_bits() is a three line change. Am I asking for too much?
+	&canfd {
+		assigned-clock-rates = <80000000>;
+	}
 
-> The goal of this one is to
-> use the new setters treewide and drop the old ones from struct
-> gpio_chip.
+    I plan to send patches to update this on all R-Car Gen3 and RZ/G2
+    SoCs once this series has reached upstream.
 
-Yours sincerely,
-Vincent Mailhol
+Geert Uytterhoeven (10):
+  can: rcar_canfd: Consistently use ndev for net_device pointers
+  can: rcar_canfd: Remove bittiming debug prints
+  can: rcar_canfd: Add helper variable ndev to rcar_canfd_rx_pkt()
+  can: rcar_canfd: Add helper variable dev to
+    rcar_canfd_reset_controller()
+  can: rcar_canfd: Simplify data access in rcar_canfd_{ge,pu}t_data()
+  can: rcar_canfd: Repurpose f_dcfg base for other registers
+  can: rcar_canfd: Rename rcar_canfd_setrnc() to rcar_canfd_set_rnc()
+  can: rcar_canfd: Share config code in rcar_canfd_set_bittiming()
+  can: rcar_canfd: Return early in rcar_canfd_set_bittiming() when not
+    FD
+  can: rcar_canfd: Add support for Transceiver Delay Compensation
+
+ drivers/net/can/rcar/rcar_canfd.c | 228 ++++++++++++++++++++----------
+ 1 file changed, 156 insertions(+), 72 deletions(-)
+
+-- 
+2.43.0
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
