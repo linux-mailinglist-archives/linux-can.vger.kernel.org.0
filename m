@@ -1,152 +1,192 @@
-Return-Path: <linux-can+bounces-3808-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3809-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E06CCAD54E2
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 14:02:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A33CAD56C4
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 15:18:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0010189CF11
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 12:03:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BC8D160C7B
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 13:18:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 478F225BF01;
-	Wed, 11 Jun 2025 12:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9B2286413;
+	Wed, 11 Jun 2025 13:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="M17/FgXi"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-70.smtpout.orange.fr [193.252.22.70])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297A318DB2B
-	for <linux-can@vger.kernel.org>; Wed, 11 Jun 2025 12:02:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0FFF78F43;
+	Wed, 11 Jun 2025 13:18:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749643375; cv=none; b=SFj4/h8YcjOG//dFJBrt+PXcBMDP7Co2f5UPJZP8SKrvP+dhelxRBwGi1DHnrCS0WrxbuPWVdsepEAR1rwoCj9OCKvEOaMCws3mciq3c79n+gusYZKVNQD6P0MXX0DVNHUQ6maNjhHe4gq6/I4kF+3sAppbWvL5K1dSmLoDyBFc=
+	t=1749647908; cv=none; b=VPLRzMXhA97VVIbiNxcqyVGdrEAlzvyU6bPgPj8GktQ6DRGq2Zh69QjF/hOaUr/n9NP6z0VIqgNwxjUwhk1Vi5KPwuFbNkVVMC39u/RSls+KM2EnYAXR9t8Olvx07P8rpBqvlP3WPJkA0CN0JvilaS4HiBosneom5F3TFZ6zu3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749643375; c=relaxed/simple;
-	bh=oFNB79qBPSDfa8chQTC5qVURASHgLB/3n9yFcA+/Uyg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PwCU+Mg88Nt8uWP6y4cesD4EvTs7SK9J1A7JI2P5CyZ+fFi5OOCKBNX0lfg6oijblf2+g4JSS2NWQSjfsvZ6EXYR35uGvT33B/bK4yEkGJfN3lwvTiu1eZNkp+/UV8IWfd3SgnCG/sx/RQUOKbftOf+c6+ohngrPB4J2tfrXFAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uPKAF-0007OZ-3R; Wed, 11 Jun 2025 14:02:43 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uPKAE-002wOd-27;
-	Wed, 11 Jun 2025 14:02:42 +0200
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 53DE14253C1;
-	Wed, 11 Jun 2025 12:02:42 +0000 (UTC)
-Date: Wed, 11 Jun 2025 14:02:40 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Subject: Re: [PATCH 02/11] can: netlink: replace tabulation by space in
- assignment
-Message-ID: <20250611-wild-glaring-scallop-cf68e7-mkl@pengutronix.de>
-References: <20250527195625.65252-1-socketcan@hartkopp.net>
- <20250527195625.65252-2-socketcan@hartkopp.net>
- <20250528-quirky-ultra-hawk-37000f-mkl@pengutronix.de>
- <77c5a904-8b2c-4a78-890d-2777ddefe250@wanadoo.fr>
- <20250528-bronze-penguin-of-joviality-0ce1a8-mkl@pengutronix.de>
- <20250611-just-degu-of-virtuosity-933b17-mkl@pengutronix.de>
- <e2ae158d-eb43-4883-b4c3-90fd23d1ee1f@wanadoo.fr>
+	s=arc-20240116; t=1749647908; c=relaxed/simple;
+	bh=3ImL6HcMMuEnuKo/YZNjhvWD+k67FXIGpUec8YR+upk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iJrT9Ziax3zyhhsWFsXm7xvSSn0zSXf2DH4pTYFdPJavb9r2/q0Qc9r/j2wJq6SJzqf+RwVPbFL7r4qu2+Rwoz1ao3roMDXifIhz6A1Nw1tc80qsjgDOwglmfrunRavrBxeVcX+JU9KuUIYONgclQPCxmRJq/4fY/+pZUAlzJuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=M17/FgXi; arc=none smtp.client-ip=193.252.22.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id PLK1uaf7zSZTqPLK3uQEoa; Wed, 11 Jun 2025 15:17:07 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1749647827;
+	bh=gPwsajLBsNL8XA7/sk2C74g5jjpD7PSQHxW65bPJTD4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=M17/FgXiTcdr7lS6G03JsO24EzLrPAbSaLdpabOS8KSO9ZEXvCwjxVSLQlhclwiey
+	 GU56llktfNWO77AIbtJnO0IAiggrUGmaiUzv8Xmkw2DgB0RpdGc07IBsV0w1nsbXu8
+	 fAXtlPWEo57EiI6hAVY6AQFCCwfdJ6BzRYW0kgC5C3yIIN6W5eFA9Fc3JLan2k8kHc
+	 egUAG7bVTwa/EvSd4aaAKk/s2n6UNuFr5HTZgzxV3+RLRh3GYkYM20NYmhzLtOoyO6
+	 HW0Pw9zzC3ok64XoPrHLF5ogesxujWXldaMR0SeWUqXPPz9UoJXWYF/7kr4W1ygWPl
+	 fGi2IavEa67Cw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 11 Jun 2025 15:17:07 +0200
+X-ME-IP: 124.33.176.97
+Message-ID: <e252f15f-ea80-4969-b754-82da5f9a7f56@wanadoo.fr>
+Date: Wed, 11 Jun 2025 22:16:52 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kinnvzfzu7nrs4zg"
-Content-Disposition: inline
-In-Reply-To: <e2ae158d-eb43-4883-b4c3-90fd23d1ee1f@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/4] net: can: mcp251x: use new GPIO line value setter
+ callbacks
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-can@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ "Chester A. Unal" <chester.a.unal@arinc9.com>,
+ Daniel Golle <daniel@makrotopia.org>, DENG Qingfang <dqfext@gmail.com>,
+ Sean Wang <sean.wang@mediatek.com>, Matthias Brugger
+ <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>,
+ Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>
+References: <20250610-gpiochip-set-rv-net-v1-0-35668dd1c76f@linaro.org>
+ <20250610-gpiochip-set-rv-net-v1-3-35668dd1c76f@linaro.org>
+ <b2f87cff-3a81-482b-bfdd-389950b7ec8e@wanadoo.fr>
+ <CAMRc=MfCwz3BV15aATr_5er7wU=AmKV=Z=sHJyrjEvLwx2cMjQ@mail.gmail.com>
+ <b9ea7e0e-7dd1-460b-950a-083620dd52e9@wanadoo.fr>
+ <CAMRc=Mf4qupdJEm9mWPF3-B3hprn6AvP7Po2=aQYbaSvFf8OeA@mail.gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <CAMRc=Mf4qupdJEm9mWPF3-B3hprn6AvP7Po2=aQYbaSvFf8OeA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 11/06/2025 at 01:05, Bartosz Golaszewski wrote:
+> On Tue, Jun 10, 2025 at 5:48 PM Vincent Mailhol
+> <mailhol.vincent@wanadoo.fr> wrote:
+>>
+>> On 10/06/2025 at 23:05, Bartosz Golaszewski wrote:
+>>> On Tue, Jun 10, 2025 at 3:55 PM Vincent Mailhol
+>>> <mailhol.vincent@wanadoo.fr> wrote:
+>>>>
+>>>> On 10/06/2025 at 21:37, Bartosz Golaszewski wrote:
+>>>>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>>>
+>>>>> struct gpio_chip now has callbacks for setting line values that return
+>>>>> an integer, allowing to indicate failures. Convert the driver to using
+>>>>> them.
+>>>>>
+>>>>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>>                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>
+>>>> This does not match the address with which you sent the patch: brgl@bgdev.pl
+>>>>
+>>>>> ---
+>>>>>  drivers/net/can/spi/mcp251x.c | 16 ++++++++++------
+>>>>>  1 file changed, 10 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
+>>>>> index ec5c64006a16f703bc816983765584c5f3ac76e8..7545497d14b46c6388f3976c2bf7b9a99e959c1e 100644
+>>>>> --- a/drivers/net/can/spi/mcp251x.c
+>>>>> +++ b/drivers/net/can/spi/mcp251x.c
+>>>>> @@ -530,8 +530,8 @@ static int mcp251x_gpio_get_multiple(struct gpio_chip *chip,
+>>>>>       return 0;
+>>>>>  }
+>>>>>
+>>>>> -static void mcp251x_gpio_set(struct gpio_chip *chip, unsigned int offset,
+>>>>> -                          int value)
+>>>>> +static int mcp251x_gpio_set(struct gpio_chip *chip, unsigned int offset,
+>>>>> +                         int value)
+>>>>>  {
+>>>>>       struct mcp251x_priv *priv = gpiochip_get_data(chip);
+>>>>>       u8 mask, val;
+>>>>> @@ -545,9 +545,11 @@ static void mcp251x_gpio_set(struct gpio_chip *chip, unsigned int offset,
+>>>>>
+>>>>>       priv->reg_bfpctrl &= ~mask;
+>>>>>       priv->reg_bfpctrl |= val;
+>>>>> +
+>>>>> +     return 0;
+>>>>
+>>>> mcp251x_gpio_set() calls mcp251x_write_bits() which calls mcp251x_spi_write()
+>>>> which can fail.
+>>>>
+>>>> For this change to really make sense, the return value of mcp251x_spi_write()
+>>>> should be propagated all the way around.
+>>>>
+>>>
+>>> I don't know this code so I followed the example of the rest of the
+>>> codebase where the result of this function is never checked - even in
+>>> functions that do return values. I didn't know the reason for this and
+>>> so didn't want to break anything as I have no means of testing it.
+>>
+>> The return value of mcp251x_spi_write() is used in mcp251x_hw_reset(). In other
+>> locations, mcp251x_spi_write() is only used in functions which return void, so
+>> obviously, the return value is not checked.
+>>
+> 
+> Wait, after a second look GPIO callbacks (including those that return
+> a value like request()) use mcp251x_write_bits() which has no return
+> value.
 
---kinnvzfzu7nrs4zg
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 02/11] can: netlink: replace tabulation by space in
- assignment
-MIME-Version: 1.0
+Yes. Read again my first message:
 
-On 11.06.2025 20:29:32, Vincent Mailhol wrote:
-> Yes, I=C2=A0saw the pull request.
->=20
-> I=C2=A0actually started to tidy up my previous work. So nice timing.
->=20
-> For the next step, I plan to split the CAN-XL series in two:
->=20
->   1. One more preparation series that will do all the netlink.c refactor
->=20
->   2. The actual stuff that will modify the uapi and add the CAN XL netlink
->      interface
->=20
-> For point 1., it will be patch 6 to 11 and patch 13 of the original RFC:
->=20
-> https://lore.kernel.org/linux-can/20241110155902.72807-16-mailhol.vincent=
-@wanadoo.fr/
->=20
-> Actually, I already have it ready in my local tree, I just need to double=
- check
-> before sending.
+  mcp251x_gpio_set() calls mcp251x_write_bits() which calls mcp251x_spi_write()
+  which can fail.
 
-nice, looking forward for this.
+My point is that the grand father can fail.
 
-> I intend to have the preparation series 1. merged first before sending se=
-ries 2.
+> It probably should propagate what mcp251x_spi_write() returns
 
-makes sense
+Exactly what I asked for :)
 
-> On a different topic, I=C2=A0know have my kernel.org account. I do not kn=
-ow what is
-> the most convenient for you, but I could also create my own branch on
-> git.kernel.org. Or, if gitolite allows it, maybe you can give me write ac=
-cess to
-> your b4/can-xl branch? (I didn't check yet what gitolite offers in term of
-> access control=E2=80=A6)
+> but that's material for a different series.
 
-I haven't checked access control, but it's faster/easier if you create a
-b4/can-xl branch.
+Why? Are you going to do this other series?
 
-regards,
-Marc
+If the answer is no, then please just do it here. Propagating the error in
+mcp251x_write_bits() is a three line change. Am I asking for too much?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+> The goal of this one is to
+> use the new setters treewide and drop the old ones from struct
+> gpio_chip.
 
---kinnvzfzu7nrs4zg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmhJcFwACgkQDHRl3/mQ
-kZwy+gf/R1pcYTdOSDcSKhEA71Yxb58UIteBdrL127fzjjHCr3MukGLtsWwIjYQY
-fmpZu1j8oKp13Eq4eoPRYDnz9ktMhAl33hWdmOA58/YxaIRIwzBDpVakot3fA3Jp
-H/CAeTpafnL2Zs131rgN284FCPk8oAWo0WPt3VfKDfoqGGSzP8loKgDWAjf0/gAp
-/0rOqK2VE5QMwQEHt7RMbGIdRI6zQfV2yUPUeeaIpcnHFzFyz8oKeA/99HNLaGbf
-VM7y6dJduHcgYxKWeapLr66LDBVvZxyVCMvSbjD+NzIjgC8Xo1h2+NBqnEwWY7C3
-vsVtknFDd8hGf4MN1y1NZ9ARqhdkSw==
-=FQUK
------END PGP SIGNATURE-----
-
---kinnvzfzu7nrs4zg--
+Yours sincerely,
+Vincent Mailhol
 
