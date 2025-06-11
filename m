@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-3812-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3813-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 920DCAD5AD7
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 17:42:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8BBEAD5AAC
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 17:37:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3842B1889593
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 15:38:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56D157A4948
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 15:36:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C0FC1CBEAA;
-	Wed, 11 Jun 2025 15:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6A21D130E;
+	Wed, 11 Jun 2025 15:37:55 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA631B0412;
-	Wed, 11 Jun 2025 15:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4161B0412;
+	Wed, 11 Jun 2025 15:37:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749656273; cv=none; b=MOdiqt8jmQF607hWm1FBGlV4BaGQ/oTSmkmTxs3/6H2/QRYOTRvrEf4Niavhb2HIjMH7+P9nqOrSC+M+wVZmoF9/ORzOmxLjYvoWqKl5LZddoAnyqMwQKkju+fNCayI8GTVXg0n9Ms/osVCi2woSB21pMoZJWzCvLZcmfRj1SL0=
+	t=1749656275; cv=none; b=BHN31rRKlqlzxTG+QhpbtZE3RX1b85oTG15RQEoLH4ZfoeMycEbxIAVxdK1FnLdPcKME+po9Cxwkg6dBjAeo/F7EptN3nTmUvygzdWyqOcnaY+odER6xpKPtR0DFpkI0+mNCpiBkNTNQ8/NyrQ5X290fgUJiaiXHBpD8JVAM47k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749656273; c=relaxed/simple;
-	bh=ZO1ks7oamK+0RCT5QpBlfmv4bwYIcLZ+4TrYkXqk2GE=;
+	s=arc-20240116; t=1749656275; c=relaxed/simple;
+	bh=pyJ8llq/pZeV/foCZFnGQeAu/yQMIU2+R8GhmYCh5fk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jAtWjnBoH1kR8/1IO5wMmAAnG9cPGLfgVtzPfVnIgvYZqB4CPFufg1KwKrytvnX7xCr4AtBZQoFB7bzAs/3t34xbNNU8H9y8lIuAkRvuVtP6VH3iXBX8Tu6li6lA2Ye3RFVSI8c4SI6XU7HrQg+Xdh8Sn8hE3FwvSweIqvX77jc=
+	 MIME-Version; b=AoDmBCXKg6xiTz3HVtkSqgJdREvbGqA0ck5LpNirHoqseb9zajerKLSIb1yZBDQulRAQ7GkM3tmBpCnb4uRcLAVrGSd1+VMbLKBXIZ1Bx8ss64XHp2OFydfNatTrwIzVWYLStRg+1GwlNOTGwAB2JWJKNzrppAahQ7aSFCNuU/k=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BA0C4CEE3;
-	Wed, 11 Jun 2025 15:37:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CB4C4CEE3;
+	Wed, 11 Jun 2025 15:37:53 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -39,9 +39,9 @@ Cc: Kazuhiro Takagi <kazuhiro.takagi.hh@hitachi-solutions.com>,
 	linux-can@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 02/10] can: rcar_canfd: Remove bittiming debug prints
-Date: Wed, 11 Jun 2025 17:37:31 +0200
-Message-ID: <a8b9f2c8938dc5e63b8faf1d0cdc91dadc12117e.1749655315.git.geert+renesas@glider.be>
+Subject: [PATCH v2 03/10] can: rcar_canfd: Add helper variable ndev to rcar_canfd_rx_pkt()
+Date: Wed, 11 Jun 2025 17:37:32 +0200
+Message-ID: <22afe32a65f7c3e64ce3917aec943ac24d6e185a.1749655315.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1749655315.git.geert+renesas@glider.be>
 References: <cover.1749655315.git.geert+renesas@glider.be>
@@ -53,50 +53,59 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There is no need to have debug code to print the bittiming values, as
-the user can get all values through the netlink interface.
+rcar_canfd_rx_pkt() has many users of "priv->ndev".  Introduce a
+shorthand to simplify the code.
 
-Suggested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
 v2:
-  - New.
+  - Add Reviewed-by.
 ---
- drivers/net/can/rcar/rcar_canfd.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 2174c9667cabce54..b353168f75f28565 100644
+index b353168f75f28565..ddf3b91d3d2bba97 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1458,8 +1458,6 @@ static void rcar_canfd_set_bittiming(struct net_device *ndev)
- 		       RCANFD_NCFG_NSJW(gpriv, sjw) | RCANFD_NCFG_NTSEG2(gpriv, tseg2));
+@@ -1684,7 +1684,8 @@ static netdev_tx_t rcar_canfd_start_xmit(struct sk_buff *skb,
  
- 		rcar_canfd_write(priv->base, RCANFD_CCFG(ch), cfg);
--		netdev_dbg(priv->ndev, "nrate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
--			   brp, sjw, tseg1, tseg2);
+ static void rcar_canfd_rx_pkt(struct rcar_canfd_channel *priv)
+ {
+-	struct net_device_stats *stats = &priv->ndev->stats;
++	struct net_device *ndev = priv->ndev;
++	struct net_device_stats *stats = &ndev->stats;
+ 	struct rcar_canfd_global *gpriv = priv->gpriv;
+ 	struct canfd_frame *cf;
+ 	struct sk_buff *skb;
+@@ -1700,14 +1701,13 @@ static void rcar_canfd_rx_pkt(struct rcar_canfd_channel *priv)
  
- 		/* Data bit timing settings */
- 		brp = dbt->brp - 1;
-@@ -1471,8 +1469,6 @@ static void rcar_canfd_set_bittiming(struct net_device *ndev)
- 		       RCANFD_DCFG_DSJW(gpriv, sjw) | RCANFD_DCFG_DTSEG2(gpriv, tseg2));
- 
- 		rcar_canfd_write(priv->base, RCANFD_F_DCFG(gpriv, ch), cfg);
--		netdev_dbg(priv->ndev, "drate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
--			   brp, sjw, tseg1, tseg2);
+ 		if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) &&
+ 		    sts & RCANFD_RFFDSTS_RFFDF)
+-			skb = alloc_canfd_skb(priv->ndev, &cf);
++			skb = alloc_canfd_skb(ndev, &cf);
+ 		else
+-			skb = alloc_can_skb(priv->ndev,
+-					    (struct can_frame **)&cf);
++			skb = alloc_can_skb(ndev, (struct can_frame **)&cf);
  	} else {
- 		/* Classical CAN only mode */
- 		if (gpriv->info->shared_can_regs) {
-@@ -1488,9 +1484,6 @@ static void rcar_canfd_set_bittiming(struct net_device *ndev)
+ 		id = rcar_canfd_read(priv->base, RCANFD_C_RFID(ridx));
+ 		dlc = rcar_canfd_read(priv->base, RCANFD_C_RFPTR(ridx));
+-		skb = alloc_can_skb(priv->ndev, (struct can_frame **)&cf);
++		skb = alloc_can_skb(ndev, (struct can_frame **)&cf);
+ 	}
+ 
+ 	if (!skb) {
+@@ -1728,7 +1728,7 @@ static void rcar_canfd_rx_pkt(struct rcar_canfd_channel *priv)
+ 
+ 		if (sts & RCANFD_RFFDSTS_RFESI) {
+ 			cf->flags |= CANFD_ESI;
+-			netdev_dbg(priv->ndev, "ESI Error\n");
++			netdev_dbg(ndev, "ESI Error\n");
  		}
  
- 		rcar_canfd_write(priv->base, RCANFD_CCFG(ch), cfg);
--		netdev_dbg(priv->ndev,
--			   "rate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
--			   brp, sjw, tseg1, tseg2);
- 	}
- }
- 
+ 		if (!(sts & RCANFD_RFFDSTS_RFFDF) && (id & RCANFD_RFID_RFRTR)) {
 -- 
 2.43.0
 
