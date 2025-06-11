@@ -1,146 +1,130 @@
-Return-Path: <linux-can+bounces-3806-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3807-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A60FAD53F9
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 13:31:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22772AD543B
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 13:40:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33C9E3AD235
-	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 11:30:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E673516976F
+	for <lists+linux-can@lfdr.de>; Wed, 11 Jun 2025 11:40:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90862749CF;
-	Wed, 11 Jun 2025 11:29:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39D7825BEEA;
+	Wed, 11 Jun 2025 11:39:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="NUaUeKq0"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UPLHyVGY"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-72.smtpout.orange.fr [193.252.22.72])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC9A25BEEB
-	for <linux-can@vger.kernel.org>; Wed, 11 Jun 2025 11:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858AE25BEE3
+	for <linux-can@vger.kernel.org>; Wed, 11 Jun 2025 11:39:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749641384; cv=none; b=O9Vyi9FhDfSqH5A3M/4MN8GqLubcaXjuKJEGyBQs/EXpXCeMzReLgzesdB9cFjUFTzJSGrh6E6mZE0O5Z42ecAoMvMmWXhQjnINEFf+oPAwqKKiBOz6KZy+n9+uaz1/Rr2zobuvSBFjpTyM8uIdXqUQrF1OQ3p08E+oCEkkOTqw=
+	t=1749641999; cv=none; b=OBohT4BMZ/IXVxprGENR58dujLofYIY+CsUka6AcsGAsoRnUvbIi1uXBQl2SKEys8pnR0tmKd4qWNDepHqqrtafXAN0cO4ljhwj61CnA9s9U9W1WKh3lx1GMuGO6/GDftET1NAoaV1vLkf/CROlYoh5ibdPpKQIod9AXgdZEsIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749641384; c=relaxed/simple;
-	bh=noXnaxvovc2FXna1it6isbBNaDeUSF4moo+dwFr0YSc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NG/u6BVFVYS1+iA+ufc/iSP/9jAyPQ4ggN81OaEnG7NMXloF14YB7up5aLFaITQ6ROLvj1S4+QoSzTzaBCGxBQFsxCbDtC0Dv9R+rkRUIBnrcpYnQ+GQg2ksO1eLV+mVhrASSFf+4NDrT++sdBpx66YhIuGpLBgJNxD5m4XetVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=NUaUeKq0; arc=none smtp.client-ip=193.252.22.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id PJe9uh7fVtcjXPJeBuFFGN; Wed, 11 Jun 2025 13:29:37 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1749641377;
-	bh=7GZ9jQCw6ZulAUrcs5dpTi+u+XVZF9V9UQBrDi0siOY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=NUaUeKq0UDAnkQyHOM3lcdAJ/LaDONt3DReh9Q+IjS7Lv62sZ6i5DwCEvKpI74kTe
-	 Zgw1I1tVMtGUZ6twBYePkhhTCYVO5v1i/QJ7S+13kazEjxUxsYzu98qoZwPoHtxAWa
-	 zgzjO687j5JrGJ9yqR0aHDOqVVz7XGl6IBf+vqQ7H4RbvtFfsj0owP96xAWGi5eWFX
-	 Rlmvrp3Ib1rp3WrtdVuUEI1Tsk8r7T3CRq6+W0OFmOH3UQUBosWnBH+IwBh6zo4dWg
-	 rAsGJUSlPRPOqa1uNnrnZDb3XbAJMCJV4S8iNf3zXq5e6GAMctxuTJGrPWPbU3vv7U
-	 MBbvXCQIS0eaw==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 11 Jun 2025 13:29:37 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <e2ae158d-eb43-4883-b4c3-90fd23d1ee1f@wanadoo.fr>
-Date: Wed, 11 Jun 2025 20:29:32 +0900
+	s=arc-20240116; t=1749641999; c=relaxed/simple;
+	bh=QPPFuoZ3d4W5VV8HW1sVSL7jX4Xs4dHXPiQH8dRGzic=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=atQuEUTw3T6uLbkwXRAA5KPsPErrnVSfe2xwltpnlbBWLQqH2SbTVWPavjPyajLCpW478gJMGNm9lmHEPCRNDWYM9bbg3zEdOah0HYqNYKYrt8R1dKqy5vaaPwv3ezOEOCXfpXiB/9xcD4y/hXqqS6gIQDTgTFwhh9z2QuyF4SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UPLHyVGY; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749641996;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yyBz4kAiu10VL86LEJ1Vf5IRYzjxg7iBJOh/zIIAubM=;
+	b=UPLHyVGYmJ+in/z5NNMRkrR8n2N1Jzvy6Lk3Rmy3RGbw7TI9+TNVpzz5oYiU8gDkrvBrmL
+	i7IHKdM1HPN89nuAqGZITexUZGYYGuwww7hePB3cGSpmjDBZU6h7JiFCIYU/JbjTI1/OKI
+	co/Z+4Ouo6dxQoDy58vUdE5hmDZUwnY=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-139-tAuAj7o_PVO_OAdWXtT3uw-1; Wed, 11 Jun 2025 07:39:55 -0400
+X-MC-Unique: tAuAj7o_PVO_OAdWXtT3uw-1
+X-Mimecast-MFC-AGG-ID: tAuAj7o_PVO_OAdWXtT3uw_1749641994
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3a4f7f1b932so3848162f8f.2
+        for <linux-can@vger.kernel.org>; Wed, 11 Jun 2025 04:39:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749641994; x=1750246794;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yyBz4kAiu10VL86LEJ1Vf5IRYzjxg7iBJOh/zIIAubM=;
+        b=DxAv1KSoEKZ0X8ZjHqXmwgsGH/51rUacptbxk0XrGkR27sQbEUK4pNo4k06g6de6MW
+         EfnByWtgiN169rrhqOXRQV0x7UtGb3dBL0XstzT2kW49GmHliT6Sk9Q0sXT3R2mjgHS/
+         EoqCP1nfvnqTjUJa4UTYWMKTwDtnzZVEcbmeHJifzi+p7jijzT9HIh1atj1s0XohSCVd
+         rYy1oUmhCTbMnh6Sx5+GovK7HePGYNloXtn5hivM3udpHFi9t6uRaByhxCTD5tTI5SG9
+         XuMR7qPzmuQErvbJr1HyysTXAxnL8Z4/RxbwwZKPKw2leMh8RhJQ50MNnPnviA4ki7le
+         Fagg==
+X-Forwarded-Encrypted: i=1; AJvYcCWXtg40GeLDSqbMR3PVmDOGr+OxT2J7JfPVrMWJ1XZ0uOiY98bPtGLc9O4PKP5AnVfE5xLUATom+dU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKK9IunRnjWEuK/smgvkBoYOs7Cc8iqIyT4OXDs060JKI0/swK
+	NQV8XBGMlcLoVmWi9uhgdx7J6VY4/nFFwgnr4k/94ZT3+cwoHkrqb1IY+JyV9dS3CILYivbjjrP
+	Ybczf48PNzol9FvZ5roZs1p63ZDpdpc0rcreuyOJ4WWgiBpZujwShGiMxWvIfpyWk3QkwstR+
+X-Gm-Gg: ASbGnctZfNjt+SZM4kPPIOI+/ZnjXW4itOvKl/8Fu0aYHIxW9tSmK+iZjvfnr+UhQTm
+	a553c3VEAk4xHl6cdx9ugM0D33ArxK6uekB82Jhb8HChIB/r48p4QH+7vGI54OURkh4fAcrSC4H
+	t9ZJb5mB6vu9pXwLdmtsIbUdDVkbcCGgHCryjsCUeea8dbpqIGsmlnCCYdBbJsqD4BVfmtdQdTw
+	O6nc381HFUK/9Q8zVFFrnUATbHbbjqjHWbdIIs7A157HAQ5bFV72XYoOCjOtdD5n6rLM6O5sL2s
+	OSINUyifu6kGee6zR/WdDHfftid9DYjLF72iM7rDVio=
+X-Received: by 2002:a05:6000:430a:b0:3a5:26fd:d450 with SMTP id ffacd0b85a97d-3a558a31835mr1993893f8f.47.1749641993872;
+        Wed, 11 Jun 2025 04:39:53 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFRUBKlfDmwu/XPXakdq33ilj8R46WG1+OEU6DJFMDzXj+rsrCDUY8YS9lGv5cDnB6ADuhUxg==
+X-Received: by 2002:a05:6000:430a:b0:3a5:26fd:d450 with SMTP id ffacd0b85a97d-3a558a31835mr1993872f8f.47.1749641993479;
+        Wed, 11 Jun 2025 04:39:53 -0700 (PDT)
+Received: from localhost (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4531fe85260sm31418165e9.0.2025.06.11.04.39.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jun 2025 04:39:51 -0700 (PDT)
+Date: Wed, 11 Jun 2025 13:39:49 +0200
+From: Davide Caratti <dcaratti@redhat.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+	davem@davemloft.net, linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: Re: [PATCH net-next 6/7] can: add drop reasons in the receive path
+ of AF_CAN
+Message-ID: <aElrBfTYkepfUxD-@dcaratti.users.ipa.redhat.com>
+References: <20250610094933.1593081-1-mkl@pengutronix.de>
+ <20250610094933.1593081-7-mkl@pengutronix.de>
+ <20250610155039.64ccdbda@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/11] can: netlink: replace tabulation by space in
- assignment
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-References: <20250527195625.65252-1-socketcan@hartkopp.net>
- <20250527195625.65252-2-socketcan@hartkopp.net>
- <20250528-quirky-ultra-hawk-37000f-mkl@pengutronix.de>
- <77c5a904-8b2c-4a78-890d-2777ddefe250@wanadoo.fr>
- <20250528-bronze-penguin-of-joviality-0ce1a8-mkl@pengutronix.de>
- <20250611-just-degu-of-virtuosity-933b17-mkl@pengutronix.de>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250611-just-degu-of-virtuosity-933b17-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250610155039.64ccdbda@kernel.org>
 
-On 11/06/2025 at 16:10, Marc Kleine-Budde wrote:
-> On 28.05.2025 18:12:53, Marc Kleine-Budde wrote:
->>>> The patches 2...5 look good to me. If Oliver adds his S-o-b, I can take
->>>> them for linux-can-next.
->>>
->>> If you prefer, I already submitted those in the past in a dedicated series with
->>> a proper cover letter:
->>>
->>> https://lore.kernel.org/linux-can/20241112165118.586613-7-mailhol.vincent@wanadoo.fr/
->>
->> Even better.
+On Tue, Jun 10, 2025 at 03:50:39PM -0700, Jakub Kicinski wrote:
+> On Tue, 10 Jun 2025 11:46:21 +0200 Marc Kleine-Budde wrote:
+> > Besides the existing pr_warn_once(), use skb drop reasons in case AF_CAN
+> > layer drops non-conformant CAN{,FD,XL} frames, or conformant frames
+> > received by "wrong" devices, so that it's possible to debug (and count)
+> > such events using existing tracepoints:
 > 
-> These are in net-next now \o/
+> Hm, I wonder if the protocol is really the most useful way 
+> to categorize. Does it actually help to identify problems on
+> production systems?
 > 
->>> Because I got zero answers, I split it even further. This is why only one patch
->>> got merge in for 6.15. I was planning to resend those clean-up patches anyway,
->>> but if you are OK to take them directly from my previous series, go ahead.
->>> Nothing has changed for these since November, except from the first patch with
->>> was merged separately.
->>
->> I've adjusted the cover letter, as patch 1 is already mainline, and
->> taken the rest of the series to can-next/testing. Note, once -rc1 is
->> out, I'll rebase this branch.
+> AFAIU we try to categorize by drop condition. So given the condition
+> is:
 > 
-> I've rebased the remaining can-xl patches to current net-next/main and
-> pushed it to my b4/can-xl branch:
+> 	if (unlikely(dev->type != ARPHRD_CAN || !can_get_ml_priv(dev) || !can_is_canfd_skb(skb))) 
 > 
-> | https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/log/?h=b4/can-xl
+> my intuition would be to split this into two: "not a CAN device" and
+> "invalid CAN frame". 
 
-Yes, I saw the pull request.
+hello,
 
-I actually started to tidy up my previous work. So nice timing.
+yes, that makes sense: I will post a follow-up patch soon.
 
-For the next step, I plan to split the CAN-XL series in two:
-
-  1. One more preparation series that will do all the netlink.c refactor
-
-  2. The actual stuff that will modify the uapi and add the CAN XL netlink
-     interface
-
-For point 1., it will be patch 6 to 11 and patch 13 of the original RFC:
-
-
-https://lore.kernel.org/linux-can/20241110155902.72807-16-mailhol.vincent@wanadoo.fr/
-
-Actually, I already have it ready in my local tree, I just need to double check
-before sending.
-
-I intend to have the preparation series 1. merged first before sending series 2.
-
-On a different topic, I know have my kernel.org account. I do not know what is
-the most convenient for you, but I could also create my own branch on
-git.kernel.org. Or, if gitolite allows it, maybe you can give me write access to
-your b4/can-xl branch? (I didn't check yet what gitolite offers in term of
-access control…)
-
-
-Yours sincerely,
-Vincent Mailhol
+thanks,
+-- 
+davide
 
 
