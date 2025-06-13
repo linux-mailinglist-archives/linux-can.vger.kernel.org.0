@@ -1,157 +1,119 @@
-Return-Path: <linux-can+bounces-3832-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3833-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DD82AD8512
-	for <lists+linux-can@lfdr.de>; Fri, 13 Jun 2025 09:55:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08A08AD8BEA
+	for <lists+linux-can@lfdr.de>; Fri, 13 Jun 2025 14:21:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF19818968C9
-	for <lists+linux-can@lfdr.de>; Fri, 13 Jun 2025 07:51:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 832027AE8DD
+	for <lists+linux-can@lfdr.de>; Fri, 13 Jun 2025 12:19:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D880C2D8DA4;
-	Fri, 13 Jun 2025 07:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919022DA77D;
+	Fri, 13 Jun 2025 12:21:01 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A652D8768
-	for <linux-can@vger.kernel.org>; Fri, 13 Jun 2025 07:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7542727E8;
+	Fri, 13 Jun 2025 12:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749800455; cv=none; b=f6dZcDvkrq9ViNKEmwwvnDK1X+VCUFtXlqusunrB19td3rkYOyQtlqcd2NqJ1Y9XNzaBAKzdPVgji/+8XL0Rfj0lHB09uWQsyZT9zLo9Ajwb8Ks83HqCJYSfSSoap6jvikP0gLCoAA7FXHNN6J8sJi9LnVvgV+2jIb6IBRGKTDI=
+	t=1749817261; cv=none; b=SNLZ/kY8RpxV4UsLz5RIlnn726yKkevYKSpyumIpPCFky9s+jH3C/uBcJ5/Or/g5KR8rbMJ47ABNdC5ESrusNZ0gqPScXF0D5B31gfX88+TqS2mWx8gNB8lt5LzGnfoyuixXfrJff1E7JXKlg4oKpPCxi5oU2cIBcQAGBviz5ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749800455; c=relaxed/simple;
-	bh=ZTgykwrQ/uvu0WxrFe5IWaDg+Ue2q3mSdGGue0wJEzI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IsXMyWYy08pErKHtIsKJaUiItGqtRlksjgXgAlRFf79VRdfzU0jHWVCR3adPEM2gHxF5ueFwZlLdcaVetrWk6TXPLpkFuF8PzHkJNyeK8mdLg4VL3zC3lzzmvkcZrwc3n9QJVC8m4/FM2JZPsH2v5YHGGnx7LtlKIPzzq2qfWI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uPz1m-0000p0-91; Fri, 13 Jun 2025 09:40:42 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uPz1l-003Fm3-0I;
-	Fri, 13 Jun 2025 09:40:41 +0200
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id BCB85426D71;
-	Fri, 13 Jun 2025 07:40:40 +0000 (UTC)
-Date: Fri, 13 Jun 2025 09:40:40 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Kazuhiro Takagi <kazuhiro.takagi.hh@hitachi-solutions.com>, Duy Nguyen <duy.nguyen.rh@renesas.com>, 
-	linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 00/10] can: rcar_canfd: Add support for Transceiver
- Delay Compensation
-Message-ID: <20250613-misty-amethyst-swine-7bd775-mkl@pengutronix.de>
-References: <cover.1749655315.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1749817261; c=relaxed/simple;
+	bh=KpByp7oiBWsFlDo+6IBQoeHG+Db8xjMEtnJqoi+wkGM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QeQ80E6ZkNKFKPhJRoaBxzofpazcY/3e8q93IKLC+FoG41X1cJm33JEugTXv9mlQFqB4fz4cu9RC2R6iCxTAY9nH5dvnNUpputgQk+IZSuDPTirs1+3KUJovBzkOaeeZEStAmfYN1NuKVGctGP1CD4ht7gH/8F90KqOz+/zrKlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4e7f367ea11so24760137.3;
+        Fri, 13 Jun 2025 05:20:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749817258; x=1750422058;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NpeiDo8J6cAac0AiU7gPbcdtw/9jRIit5zL+pfPrVik=;
+        b=iwFDkC2gvUId6N+EVw90LJcfYIu9OH8mSX9cMVj1patMxu0PpwdF5D0P2bc1EEF39J
+         vsJ3pKRgNUN3x5K2LEF0Df7E+KUpHIoUnaNORASDRuZnAEBLfJp89BDRmeSB8a5dfIWY
+         psLDLzp8BG8QopDAjwdfzb3H88UqNXOoabfmR/SNBMU0+dcbDtyp8/mwM1R9g3+mKcY9
+         wey9vdNsVKkXr/G/wfI3KovQbVOF0zus0bya6OgCx0pbV7wCR+wyA9QH6M2qmYx6wOPe
+         KgGwLDvB1JTHFm6YQTpbePZ0F393w3ZnLkjbYqaaGGOfGsyUn8ek0OC+5Bs17+KWBLex
+         uc2w==
+X-Forwarded-Encrypted: i=1; AJvYcCWm8IAipB1fcscvV0mEtLFc1T6KblrMtwP72XsE3UpyNbLR+yR/GZEVU+P7TUHps7f3KwjzcNIKkRM=@vger.kernel.org, AJvYcCXT6ONndMK+r6rh9qQlkg6UQ+F967XMVs4yi/+iesld7WJDm9c0M8ag+12iGD1M+mKZYr7aN/R3pFmyYuOouXH7iG8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6leBq93wFUmgOk5viMBRpQPuCwxd00+vVMVKcm8tz7DWjrqju
+	6I8w1MTgHPWvpbDtuDRyruErPISnFzy00RPW2w0U5Q5xMIbVSM1818FHNMtwQ7pH
+X-Gm-Gg: ASbGncspI1f19HoNGeeqAlNRLMzcn0vopjMZmHfk4sKmZ1iZKNx3EEzgsXHtQPRta4U
+	SRhXtmvHTpFKe2qymle6kLpiZ7LQUq5uAPrzc2H7UfeWmdo0f+SX8KhrHrd69ThbzyJ+Hy9RyjS
+	AxgMixAQy1Uvqb8KSRSMm/kfdQbS4HhVfO5ESL4ws6OKgRh4kOshRGMIezMVVZ6WJNj8qVJV/HP
+	BO5Ea1wy9MrQcxdKfvHELQYtpOxFnDhPJAibe+iUlCgIwR9DqmDjpmur3Z+NHn2TMYOeYYU/ncy
+	NXbYw5Hhy6BafapHBPLFw9ocqK14bf3W5V9QWTCZP+vjaoI6HvSBAOBUNh3SBxwbGMHR01eU31x
+	FDaV1AQUb7XCJyimrZ6aIsc+k
+X-Google-Smtp-Source: AGHT+IGxB3lIgc/6KjmypJUwpdag0y9asvj3+OX3RFpGn0NIhrePzzNvg8TTFapSQ/fI+FWFzUumDQ==
+X-Received: by 2002:a05:6102:5717:b0:4e7:bf03:cd6f with SMTP id ada2fe7eead31-4e7e389207amr2104084137.2.1749817257607;
+        Fri, 13 Jun 2025 05:20:57 -0700 (PDT)
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com. [209.85.217.52])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-87f0f9e90c2sm203106241.10.2025.06.13.05.20.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jun 2025 05:20:57 -0700 (PDT)
+Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-4e7971effd6so571192137.1;
+        Fri, 13 Jun 2025 05:20:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUl3rnp6XGZQnwz0T5Gb93PpSrGioNV7BA7/wqh7B6KbUr4aLpbAfJnjpIxWK8WFvTfweygcLmGPgk=@vger.kernel.org, AJvYcCVNxT9pUmg//kuudgL7ReQtw2r7eddS2d1polCFAPXHlRiG37qsHUA+ERCtQ62GAsRftzcUFAgbEMUSPo2cOG8Xlvg=@vger.kernel.org
+X-Received: by 2002:a05:6102:c49:b0:4e5:aa1c:4f99 with SMTP id
+ ada2fe7eead31-4e7e3c6b2f1mr1684264137.25.1749817256943; Fri, 13 Jun 2025
+ 05:20:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cqr3lbnu6ay557v2"
-Content-Disposition: inline
-In-Reply-To: <cover.1749655315.git.geert+renesas@glider.be>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---cqr3lbnu6ay557v2
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+References: <cover.1749655315.git.geert+renesas@glider.be> <20250613-misty-amethyst-swine-7bd775-mkl@pengutronix.de>
+In-Reply-To: <20250613-misty-amethyst-swine-7bd775-mkl@pengutronix.de>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 13 Jun 2025 14:20:44 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWFHVh+8dpgKE4eyVOE_Q6Gyk451ZEw5ZqRk85Rzh1m_g@mail.gmail.com>
+X-Gm-Features: AX0GCFv1Vw-v1TYWmUBZeeBjwZzJXK9jD59gq5zwP5PPl66J7W760lyydgrdxno
+Message-ID: <CAMuHMdWFHVh+8dpgKE4eyVOE_Q6Gyk451ZEw5ZqRk85Rzh1m_g@mail.gmail.com>
 Subject: Re: [PATCH v2 00/10] can: rcar_canfd: Add support for Transceiver
  Delay Compensation
-MIME-Version: 1.0
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Kazuhiro Takagi <kazuhiro.takagi.hh@hitachi-solutions.com>, 
+	Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 11.06.2025 17:37:29, Geert Uytterhoeven wrote:
-> 	Hi all,
->=20
-> This patch series adds CAN-FD Transceiver Delay Compensation support to
-> the R-Car CAN-FD driver, after the customary cleanups and refactorings.
->=20
+Hi Marc,
 
-There's no reference to footnote [1], as it refers to the v1, I'll add
-it here.
+On Fri, 13 Jun 2025 at 13:42, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 11.06.2025 17:37:29, Geert Uytterhoeven wrote:
+> > This patch series adds CAN-FD Transceiver Delay Compensation support to
+> > the R-Car CAN-FD driver, after the customary cleanups and refactorings.
+>
+> There's no reference to footnote [1], as it refers to the v1, I'll add
+> it here.
 
-> Changes compared to v1:
+Sorry, my mistake.
 
-Changes compared to v1 [1]:
+> > Changes compared to v1:
+>
+> Changes compared to v1 [1]:
 
->   - Dropped patch "can: rcar_canfd: Use ndev parameter in
->     rcar_canfd_set_bittiming()",
->   - New patch "[PATCH v2 02/10] can: rcar_canfd: Remove bittiming debug
->     prints",
->   - New patch "[PATCH v2 07/10] can: rcar_canfd: Rename
->     rcar_canfd_setrnc() to rcar_canfd_set_rnc()",
->   - Add Reviewed-by,
->   - Replace function-like RCANFD_F_*() macros by rcar_canfd_f_*()
->     inline functions,
->   - Replace function-like macro RCANFD_FDSTS_TDCR() by bitmask
->     RCANFD_FDSTS_TDCR and helper function rcar_canfd_get_tdcr(),
->   - Replace function-like macro RCANFD_FDSTS_TDCVF() by two bit
->     definitions,
->   - Drop debug print of tdc mode and tdco value.
->=20
-> This has been tested on R-Car V4H (White Hawk), V4M (Gray Hawk Single),
-> and E3 (Ebisu-4D[2]), using various data bit rates.  Without proper TDC
-> configuration, transmitting at 8 Mbps makes the CAN-FD controller enter
-> BUS-OFF state.  The TDCV value as measured by the CAN-FD controller is 4
-> on all boards tested (base clock 40 MHz, i.e. 25 ns period), and ca. 90
-> ns as measured by a logic analyzer on Gray Hawk Single.
->=20
-> Note that the BSP (predating upstream TDC support), uses a much simpler
-> method: for transfer rates >=3D 5 Mbps on R-Car Gen4, it enables TDC with
-> a hardcoded (hardware) TDCO value of 2 (i.e. actual 3), which matches
-> the behavior of this series at 8 Mbps.
->=20
-> Thanks for your comments!
->=20
-> [1] "[PATCH 0/9] can: rcar_canfd: Add support for Transceiver Delay Compe=
-nsation"
->     https://lore.kernel.org/cover.1748863848.git.geert+renesas@glider.be
+That was my intention, thanks!
 
-regards,
-Marc
+Gr{oetje,eeting}s,
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+                        Geert
 
---cqr3lbnu6ay557v2
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmhL1fYACgkQDHRl3/mQ
-kZz2fgf/edR1T7y9FKCMHjWXZUu8CKSp/DTFYYtRtJx7sJbLDxIsV/Iqx/ZcOm0d
-9VojNbRX3gFAW0LuoMl++jV6DNrSRnELY3YIMTu9ZGVHlthVe+AYIiwa0ApWZqov
-jQ+S9Z9rnhkWBzJx/mIxnWfxD15s1pbWIUd8rMjx4bHR+csXU/EogF3rOmb08G33
-l/YkzcAqYenYJJac9okyckodwFl26or9r4ROmegF2A8tN6EKK+nOAiPhVrInB6pG
-U1AmC+xLddxDW0T5/MPSicDn3VRQy42q99AngPIRT2R3dX2W0HHv/OIq2VPHf6ww
-mOe+8nepx2bkf4zF+0vKACRrNVFafg==
-=/l4W
------END PGP SIGNATURE-----
-
---cqr3lbnu6ay557v2--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
