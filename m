@@ -1,49 +1,49 @@
-Return-Path: <linux-can+bounces-3850-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3851-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DB5CADDF4B
-	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 01:00:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F65ADE0BE
+	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 03:40:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9890189D033
-	for <lists+linux-can@lfdr.de>; Tue, 17 Jun 2025 23:00:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DF19178BB6
+	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 01:40:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DDBF29DB68;
-	Tue, 17 Jun 2025 23:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F7A9199939;
+	Wed, 18 Jun 2025 01:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7C/zaDL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dw/g8ufy"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D4F298CA6;
-	Tue, 17 Jun 2025 23:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C800B199396;
+	Wed, 18 Jun 2025 01:40:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750201206; cv=none; b=kLF9QrVBTNl1cOWP9zP9wMunh4bxzxRV6F34egGvnR6hxne5rJrKTw65hrtuQbR0JpbX+bPORf7JEhTStjvBOLN+d3ouYt7fG+d9vHgp8X3CPwgLH9Vh55ry54pLO09ZfYmIOy5bzFo15sXOo34q9zu7xuZPY9J54rXjwHAEpUs=
+	t=1750210842; cv=none; b=s6o9K1Qf5eHNiVYhEYjfH97w6rxfW2m3nT+gTzI09WPaVmNAD90PaYcp57fjbnrChncR/uTxVlddeCOXJf0uAh8/ZhmvTzgPzAp2ERsqhTJ3NXPX9srzQYQs5iU/7+RNbiM6eKu31KCSklasH0v3RfGP1lhmrcPG51jrKqQIOQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750201206; c=relaxed/simple;
-	bh=lCpYwprXV7CwJRsBN3bGZ+l2iUgPR67nqne4oPrW2yE=;
+	s=arc-20240116; t=1750210842; c=relaxed/simple;
+	bh=dWWHgiEt3tYWTZRgQm02U8aGJUCEgTY0w6sEmnkU+4s=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lPAK9q8QM63u4LSrmOcX6wPf2ySYawozR+JQO3RPIykFplaGk9+61334x/xHjRmpVgHMJ1cg4YQRqxPQSPmDJ8QN855n6LQAMnrqjbYt8a9ZkffXT9+MkFOpieCy24RG+vFobMiEPgDnZcI/fW3TqI40at9PKsfFrR3e1defEhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7C/zaDL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C4D3C4CEF3;
-	Tue, 17 Jun 2025 23:00:05 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=EOeaqdgMAwHUXcMNCjSAvVcIz62zJpSucv2Zhr+XXFO6s1D0xvKOVXaoR23InDEzI4OJceUXUZGA/WDPyYjPYB6dwfLoBuQdSIw5ajRVWAIWZcIO+NfSKc82YY1w8aRsIrKc8QeHxWzzLC6vJPJ8EzNBopo/BInmBfRYJLFodC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dw/g8ufy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 348C4C4CEF0;
+	Wed, 18 Jun 2025 01:40:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750201205;
-	bh=lCpYwprXV7CwJRsBN3bGZ+l2iUgPR67nqne4oPrW2yE=;
+	s=k20201202; t=1750210841;
+	bh=dWWHgiEt3tYWTZRgQm02U8aGJUCEgTY0w6sEmnkU+4s=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=U7C/zaDLDIf6t9o3aiBPLmzyjOEUDajRPIWGx1jXnwjLKXH4aQo4cIPH26Lv+mBy4
-	 6PZ9ijFEYFoGdEhUSXKalqIRKZMx448Qw12hOAvEILK6LX0jxfa43hTiiCLlCq9A/p
-	 TupCnAjoKVqG24MnRdDFd1tJtBd/75oKo9/S+87oEjzMaK6+U42fluGaABu2kbaSPu
-	 iKCBIuMoRq2bPDIalcNjxKnQC9dVZ3oc8wEaKg2Ug13i+X6z5HOKjYTpssZj7wOnJW
-	 SPiJVIpnwxdr1RUh7symac+uYpceFqKlyqzBdqSec941my18g/corfH1eVo8MFfxRy
-	 EA6hpHfOfifTg==
+	b=dw/g8ufyu11VCbuMaNH4zZzsZdGQI+Frv2Bdhof0fbxSnVzrdeBylNSHvRJhDwibv
+	 QD3nGymvb8a2VPn8/d/F+xH5C2fcdkUVNUfs9gBSYOYcnoBtQf/YiioPQ8qWhU/1Fi
+	 /TwI0Cz59/BlnTyiC5q7u6K6bE2XF85SWcYyM4R8LcW5T8dAQ6pLOup1yl6nQK2rwo
+	 tNb+jVEzw8TSsodBpO8MgA6c/kh20BoqSecflSaYFp9EDsbuguuuZnpJU8gCvFN5nQ
+	 WmlL/8Ss+ex1zz0eLaE1Kz/w/ns6U8ZH+eTjGkqyptLL6PEMAm3kXr+3w1NQjjOHsu
+	 npR4ZTWw/z2xg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3425938111DD;
-	Tue, 17 Jun 2025 23:00:35 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EADD338111DD;
+	Wed, 18 Jun 2025 01:41:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -52,42 +52,52 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] can: tcan4x5x: fix power regulator retrieval during
- probe
+Subject: Re: [PATCH v2 0/5] net: use new GPIO line value setter callbacks
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <175020123399.3727356.275761194504576050.git-patchwork-notify@kernel.org>
-Date: Tue, 17 Jun 2025 23:00:33 +0000
-References: <20250617155123.2141584-2-mkl@pengutronix.de>
-In-Reply-To: <20250617155123.2141584-2-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de, brett.werling@garmin.com,
- stable@vger.kernel.org
+ <175021086974.3761578.16857215533657509710.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Jun 2025 01:41:09 +0000
+References: <20250616-gpiochip-set-rv-net-v2-0-cae0b182a552@linaro.org>
+In-Reply-To: <20250616-gpiochip-set-rv-net-v2-0-cae0b182a552@linaro.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: andrew@lunn.ch, olteanv@gmail.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ linus.walleij@linaro.org, chester.a.unal@arinc9.com, daniel@makrotopia.org,
+ dqfext@gmail.com, sean.wang@mediatek.com, matthias.bgg@gmail.com,
+ angelogioacchino.delregno@collabora.com, mkl@pengutronix.de,
+ mailhol.vincent@wanadoo.fr, hkallweit1@gmail.com, linux@armlinux.org.uk,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-can@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, bartosz.golaszewski@linaro.org
 
 Hello:
 
-This patch was applied to netdev/net.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue, 17 Jun 2025 17:50:02 +0200 you wrote:
-> From: Brett Werling <brett.werling@garmin.com>
+On Mon, 16 Jun 2025 09:24:03 +0200 you wrote:
+> Commit 98ce1eb1fd87e ("gpiolib: introduce gpio_chip setters that return
+> values") added new line setter callbacks to struct gpio_chip. They allow
+> to indicate failures to callers. We're in the process of converting all
+> GPIO controllers to using them before removing the old ones. This series
+> converts all GPIO chips implemented under drivers/net/.
 > 
-> Fixes the power regulator retrieval in tcan4x5x_can_probe() by ensuring
-> the regulator pointer is not set to NULL in the successful return from
-> devm_regulator_get_optional().
-> 
-> Fixes: 3814ca3a10be ("can: tcan4x5x: tcan4x5x_can_probe(): turn on the power before parsing the config")
-> Signed-off-by: Brett Werling <brett.werling@garmin.com>
-> Link: https://patch.msgid.link/20250612191825.3646364-1-brett.werling@garmin.com
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] can: tcan4x5x: fix power regulator retrieval during probe
-    https://git.kernel.org/netdev/net/c/db2272054520
+  - [v2,1/5] net: dsa: vsc73xx: use new GPIO line value setter callbacks
+    https://git.kernel.org/netdev/net-next/c/c73832445bf2
+  - [v2,2/5] net: dsa: mt7530: use new GPIO line value setter callbacks
+    https://git.kernel.org/netdev/net-next/c/4a03562794a3
+  - [v2,3/5] net: can: mcp251x: propagate the return value of mcp251x_spi_write()
+    https://git.kernel.org/netdev/net-next/c/b9e3c7af9e4d
+  - [v2,4/5] net: can: mcp251x: use new GPIO line value setter callbacks
+    https://git.kernel.org/netdev/net-next/c/5d31311715b5
+  - [v2,5/5] net: phy: qca807x: use new GPIO line value setter callbacks
+    https://git.kernel.org/netdev/net-next/c/dea3be40464a
 
 You are awesome, thank you!
 -- 
