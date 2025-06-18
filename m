@@ -1,286 +1,116 @@
-Return-Path: <linux-can+bounces-3862-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3863-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2536ADE6C5
-	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 11:26:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBADEADEC5D
+	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 14:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1639017D3C8
-	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 09:25:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49BAD176BAA
+	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 12:29:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5642728541B;
-	Wed, 18 Jun 2025 09:23:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F1E2E54C5;
+	Wed, 18 Jun 2025 12:27:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q62LiJ4a"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4E7285059
-	for <linux-can@vger.kernel.org>; Wed, 18 Jun 2025 09:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187AF2DF3F2
+	for <linux-can@vger.kernel.org>; Wed, 18 Jun 2025 12:27:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750238629; cv=none; b=slzN8O+G3dGlTFZv6/S1Roxu+Es6yNXQN8/twCAk+j2I1bXxgSBlNbR5G59loK0aT2KSb5TI+V489O5L/VB4zzkPLSyZS8Uib34kmjZdxGplcWBeFtilIMf8S7uXhaCTNrycYAb87jeEDyNq07Nq7NP8/ea6zuzFXw/8F95Y4+M=
+	t=1750249669; cv=none; b=Bsqcy7fTVXdo1CkHQs6AbpGInp1fIcTyWWZ3D1RW0KfD8SHfdmCM7kIn2NhC54WdrydWGWmSlssNKxvUhgUbQ1Y8OKjfuD0xswJpCc2084nOupcI7DU4ykycTVCsbjYO0mblrY8m1uEMOpQGOkc3uKBl/7y0de3nKq0WfAF/DoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750238629; c=relaxed/simple;
-	bh=pT0/lqkZiAKydNR73vgEFiXszFWZQBjVmqPWkVWCwPM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WJQthzBYHYeLW+je1Xj/5HoENfz9DE5yiYsAj69auJluolIaCjLXqPJr05WwouroOhvdTwyTD1CwPW3SgOW59dbqH4EoGosDKwzOpZDRX6je6KUNTDU/iEVyXWTTWMBcvgRoQY7LwCi92FIu/TQPkAJBVq7FCgcUIE72NUS81JY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uRp1E-0006eA-D7
-	for linux-can@vger.kernel.org; Wed, 18 Jun 2025 11:23:44 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uRp1C-00479q-2V
-	for linux-can@vger.kernel.org;
-	Wed, 18 Jun 2025 11:23:42 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 7055742B2C8
-	for <linux-can@vger.kernel.org>; Wed, 18 Jun 2025 09:23:42 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id A422042B286;
-	Wed, 18 Jun 2025 09:23:39 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ce70aeb6;
-	Wed, 18 Jun 2025 09:23:38 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 10/10] can: rcar_canfd: Add support for Transceiver Delay Compensation
-Date: Wed, 18 Jun 2025 11:20:04 +0200
-Message-ID: <20250618092336.2175168-11-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250618092336.2175168-1-mkl@pengutronix.de>
-References: <20250618092336.2175168-1-mkl@pengutronix.de>
+	s=arc-20240116; t=1750249669; c=relaxed/simple;
+	bh=lvDeYY1tyHLW44AqHwWF82BKnD0o1q8Cao4PGtdqJcc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bQz7r9D+UG7JIaAcUB/1DRhnpEgpmFlUFPO4FAMRdFVFjor4jAePTFWxI9NCfnfNJr/lQNbDoV528YSS44EN/18vRGhItvmr491hhtWjjdk5LmirGcTAv+uQNJzUWKtuVM9xNFuPrrwS7etNGJ3s61fKzwXaMGcuc/VFR1JVMA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q62LiJ4a; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-32b7f41d3e6so4917161fa.1
+        for <linux-can@vger.kernel.org>; Wed, 18 Jun 2025 05:27:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750249666; x=1750854466; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lvDeYY1tyHLW44AqHwWF82BKnD0o1q8Cao4PGtdqJcc=;
+        b=Q62LiJ4anBM9mCtPO1s1wPQafnXMiY44Wb6sed9JH7B+3kqfcj6OlRn0afcRWdxW2T
+         GbRcS2/PDp9OME8vCM6aCKmKaSnRlRkd59Vywk+e0f+LJKKgmpr0IkbPHWiFpdeQJTed
+         Ki1UZKrjGbTKc3php1hkcjQXclqOj8kH4nvJPUbCkJ64BuXCSjNYt7EpEJ9H8YK6/UAt
+         hYlkTo3J5CwzbkEY7LCkAbhwCYvxdwlCVBsecB6OxorgUdahP0dPqdIUTSpYbRS0VW0b
+         jmNktZZFxYS4UhcC6SxCXM/VnJgbSDqrjF/aSDVzedYhZLiOR6sWKcwvIHp7m1Ky8hvt
+         U3wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750249666; x=1750854466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lvDeYY1tyHLW44AqHwWF82BKnD0o1q8Cao4PGtdqJcc=;
+        b=bTTl4MBxqsP2Kk1CGog1WVJxfWYW9YnTyB0Fuy8BgsuH+hubhLvWshawhw+FbqfVmY
+         713bc0mWmfqvkLxB2VWNAJD/AEpE2cdTmQ4G8LtOHlVwqPombGucyEnnaaAgHHgdVle5
+         /BzclBFV/Ap2GdIFd0HhEH0rizFvGhQ0BNzk5Nqi+vM3+QFcVF0EMRcCIv471I3b7u36
+         AmrAdLykcpdUmZ5HeFBGHIcijijdBCPF97u69pzgf6iRF/zJk2c+/lU1VVIt/XfZ5JVk
+         z+nDM3vLSiglOonbvmlDGQYcdon2cO7SQXXAiQprlKJJw6uLqUaJLdI3vMKDUQ/4Sj5n
+         G6ug==
+X-Forwarded-Encrypted: i=1; AJvYcCUtJFa/mzm2/kD1Cf4tXGO4cZ/+VOqFxmthDrfRwCFHBvowrgrDTvJHTkybZyzcUbVUfk/r6jIJQYE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+u/bhF62BdEwz4Yw0AAfVCSLcTAJpfk3VKJegP431y2LBFQpr
+	dlMez13Z/K/em4aYfAEhxdcwetBpSJoIWKw2SVSQffiHBoWT7s3HqdvJ6TB+y32JBH8N2PbQ0FE
+	PqE16shqkrrL7af1nWTUjeEicqLUXz0vrOLn+v6ggxw==
+X-Gm-Gg: ASbGnct4zjhONT1pr5+h/sv12BYbyOijR2r2aIEZ3q4BMNf4xybMJTmKo7p7X7cGXnR
+	g90JdCBkuPztrv6e4nGFs5PiGBeMtAnbZGrc9UXQsQYBllXvcgX2DPE8JsZJnlH5NmKx5REeWna
+	FO/1fquEvSe3i7PgQrme563GZmCvGC+Ld99LuvxTihNUE=
+X-Google-Smtp-Source: AGHT+IEO41Nyhls6z+tYoLHnOV+DOmxEURxkPhjx4goE9pZdzx8ZYG8pWoqgfu9hnvxH3hdYq4NmpJCLdC/k/NenFbc=
+X-Received: by 2002:a05:651c:169c:b0:32b:4441:e1a6 with SMTP id
+ 38308e7fff4ca-32b7cece005mr6055841fa.1.1750249666214; Wed, 18 Jun 2025
+ 05:27:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20250616-gpiochip-set-rv-net-v2-0-cae0b182a552@linaro.org> <20250616-gpiochip-set-rv-net-v2-1-cae0b182a552@linaro.org>
+In-Reply-To: <20250616-gpiochip-set-rv-net-v2-1-cae0b182a552@linaro.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 18 Jun 2025 14:27:32 +0200
+X-Gm-Features: AX0GCFudNOYMyXLJ7vMaeO2dSvhoaQWQJroQG17p-nXTR5Iec4T0QKmapC2D9eA
+Message-ID: <CACRpkdYJ9O_y9TGTOw8mzf1=LvaxYCE463MPf12YaXUQCKaLzQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] net: dsa: vsc73xx: use new GPIO line value setter callbacks
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Chester A. Unal" <chester.a.unal@arinc9.com>, Daniel Golle <daniel@makrotopia.org>, 
+	DENG Qingfang <dqfext@gmail.com>, Sean Wang <sean.wang@mediatek.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-can@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+On Mon, Jun 16, 2025 at 9:24=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
 
-The Renesas CAN-FD hardware block supports configuring Transceiver Delay
-Compensation, and reading back the Transceiver Delay Compensation
-Result, which is needed to support high transfer rates like 8 Mbps.
-The Secondary Sample Point is either the measured delay plus the
-configured offset, or just the configured offset.
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> struct gpio_chip now has callbacks for setting line values that return
+> an integer, allowing to indicate failures. Convert the driver to using
+> them.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Fix the existing RCANFD_FDCFG_TDCO() macro for the intended use case
-(writing instead of reading the field).  Add register definition bits
-for the Channel n CAN-FD Status Register.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Link: https://patch.msgid.link/69db727d5f728d679ba691d20854e7d963d0f323.1749655315.git.geert+renesas@glider.be
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/rcar/rcar_canfd.c | 85 +++++++++++++++++++++++++++++--
- 1 file changed, 82 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 3340ae75bbec..1e559c0ff038 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -191,9 +191,19 @@
- /* RSCFDnCFDCmFDCFG */
- #define RCANFD_GEN4_FDCFG_CLOE		BIT(30)
- #define RCANFD_GEN4_FDCFG_FDOE		BIT(28)
-+#define RCANFD_FDCFG_TDCO		GENMASK(23, 16)
- #define RCANFD_FDCFG_TDCE		BIT(9)
- #define RCANFD_FDCFG_TDCOC		BIT(8)
--#define RCANFD_FDCFG_TDCO(x)		(((x) & 0x7f) >> 16)
-+
-+/* RSCFDnCFDCmFDSTS */
-+#define RCANFD_FDSTS_SOC		GENMASK(31, 24)
-+#define RCANFD_FDSTS_EOC		GENMASK(23, 16)
-+#define RCANFD_GEN4_FDSTS_TDCVF		BIT(15)
-+#define RCANFD_GEN4_FDSTS_PNSTS		GENMASK(13, 12)
-+#define RCANFD_FDSTS_SOCO		BIT(9)
-+#define RCANFD_FDSTS_EOCO		BIT(8)
-+#define RCANFD_FDSTS_TDCVF		BIT(7)
-+#define RCANFD_FDSTS_TDCR		GENMASK(7, 0)
- 
- /* RSCFDnCFDRFCCx */
- #define RCANFD_RFCC_RFIM		BIT(12)
-@@ -520,6 +530,7 @@ struct rcar_canfd_shift_data {
- struct rcar_canfd_hw_info {
- 	const struct can_bittiming_const *nom_bittiming;
- 	const struct can_bittiming_const *data_bittiming;
-+	const struct can_tdc_const *tdc_const;
- 	const struct rcar_canfd_regs *regs;
- 	const struct rcar_canfd_shift_data *sh;
- 	u8 rnc_field_width;
-@@ -627,6 +638,25 @@ static const struct can_bittiming_const rcar_canfd_bittiming_const = {
- 	.brp_inc = 1,
- };
- 
-+/* CAN FD Transmission Delay Compensation constants */
-+static const struct can_tdc_const rcar_canfd_gen3_tdc_const = {
-+	.tdcv_min = 1,
-+	.tdcv_max = 128,
-+	.tdco_min = 1,
-+	.tdco_max = 128,
-+	.tdcf_min = 0,	/* Filter window not supported */
-+	.tdcf_max = 0,
-+};
-+
-+static const struct can_tdc_const rcar_canfd_gen4_tdc_const = {
-+	.tdcv_min = 1,
-+	.tdcv_max = 256,
-+	.tdco_min = 1,
-+	.tdco_max = 256,
-+	.tdcf_min = 0,	/* Filter window not supported */
-+	.tdcf_max = 0,
-+};
-+
- static const struct rcar_canfd_regs rcar_gen3_regs = {
- 	.rfcc = 0x00b8,
- 	.cfcc = 0x0118,
-@@ -672,6 +702,7 @@ static const struct rcar_canfd_shift_data rcar_gen4_shift_data = {
- static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- 	.nom_bittiming = &rcar_canfd_gen3_nom_bittiming_const,
- 	.data_bittiming = &rcar_canfd_gen3_data_bittiming_const,
-+	.tdc_const = &rcar_canfd_gen3_tdc_const,
- 	.regs = &rcar_gen3_regs,
- 	.sh = &rcar_gen3_shift_data,
- 	.rnc_field_width = 8,
-@@ -688,6 +719,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
- 	.nom_bittiming = &rcar_canfd_gen4_nom_bittiming_const,
- 	.data_bittiming = &rcar_canfd_gen4_data_bittiming_const,
-+	.tdc_const = &rcar_canfd_gen4_tdc_const,
- 	.regs = &rcar_gen4_regs,
- 	.sh = &rcar_gen4_shift_data,
- 	.rnc_field_width = 16,
-@@ -704,6 +736,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
- static const struct rcar_canfd_hw_info rzg2l_hw_info = {
- 	.nom_bittiming = &rcar_canfd_gen3_nom_bittiming_const,
- 	.data_bittiming = &rcar_canfd_gen3_data_bittiming_const,
-+	.tdc_const = &rcar_canfd_gen3_tdc_const,
- 	.regs = &rcar_gen3_regs,
- 	.sh = &rcar_gen3_shift_data,
- 	.rnc_field_width = 8,
-@@ -720,6 +753,7 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
- static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
- 	.nom_bittiming = &rcar_canfd_gen4_nom_bittiming_const,
- 	.data_bittiming = &rcar_canfd_gen4_data_bittiming_const,
-+	.tdc_const = &rcar_canfd_gen4_tdc_const,
- 	.regs = &rcar_gen4_regs,
- 	.sh = &rcar_gen4_shift_data,
- 	.rnc_field_width = 16,
-@@ -1460,12 +1494,15 @@ static irqreturn_t rcar_canfd_channel_interrupt(int irq, void *dev_id)
- 
- static void rcar_canfd_set_bittiming(struct net_device *ndev)
- {
-+	u32 mask = RCANFD_FDCFG_TDCO | RCANFD_FDCFG_TDCE | RCANFD_FDCFG_TDCOC;
- 	struct rcar_canfd_channel *priv = netdev_priv(ndev);
- 	struct rcar_canfd_global *gpriv = priv->gpriv;
- 	const struct can_bittiming *bt = &priv->can.bittiming;
- 	const struct can_bittiming *dbt = &priv->can.fd.data_bittiming;
-+	const struct can_tdc_const *tdc_const = priv->can.fd.tdc_const;
-+	const struct can_tdc *tdc = &priv->can.fd.tdc;
-+	u32 cfg, tdcmode = 0, tdco = 0;
- 	u16 brp, sjw, tseg1, tseg2;
--	u32 cfg;
- 	u32 ch = priv->channel;
- 
- 	/* Nominal bit timing settings */
-@@ -1497,6 +1534,20 @@ static void rcar_canfd_set_bittiming(struct net_device *ndev)
- 	       RCANFD_DCFG_DSJW(gpriv, sjw) | RCANFD_DCFG_DTSEG2(gpriv, tseg2));
- 
- 	rcar_canfd_write(priv->base, rcar_canfd_f_dcfg(gpriv, ch), cfg);
-+
-+	/* Transceiver Delay Compensation */
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_TDC_AUTO) {
-+		/* TDC enabled, measured + offset */
-+		tdcmode = RCANFD_FDCFG_TDCE;
-+		tdco = tdc->tdco - 1;
-+	} else if (priv->can.ctrlmode & CAN_CTRLMODE_TDC_MANUAL) {
-+		/* TDC enabled, offset only */
-+		tdcmode = RCANFD_FDCFG_TDCE | RCANFD_FDCFG_TDCOC;
-+		tdco = min(tdc->tdcv + tdc->tdco, tdc_const->tdco_max) - 1;
-+	}
-+
-+	rcar_canfd_update_bit(gpriv->base, rcar_canfd_f_cfdcfg(gpriv, ch), mask,
-+			      tdcmode | FIELD_PREP(RCANFD_FDCFG_TDCO, tdco));
- }
- 
- static int rcar_canfd_start(struct net_device *ndev)
-@@ -1807,6 +1858,29 @@ static int rcar_canfd_rx_poll(struct napi_struct *napi, int quota)
- 	return num_pkts;
- }
- 
-+static unsigned int rcar_canfd_get_tdcr(struct rcar_canfd_global *gpriv,
-+					unsigned int ch)
-+{
-+	u32 sts = rcar_canfd_read(gpriv->base, rcar_canfd_f_cfdsts(gpriv, ch));
-+	u32 tdcr = FIELD_GET(RCANFD_FDSTS_TDCR, sts);
-+
-+	return tdcr & (gpriv->info->tdc_const->tdcv_max - 1);
-+}
-+
-+static int rcar_canfd_get_auto_tdcv(const struct net_device *ndev, u32 *tdcv)
-+{
-+	struct rcar_canfd_channel *priv = netdev_priv(ndev);
-+	u32 tdco = priv->can.fd.tdc.tdco;
-+	u32 tdcr;
-+
-+	/* Transceiver Delay Compensation Result */
-+	tdcr = rcar_canfd_get_tdcr(priv->gpriv, priv->channel) + 1;
-+
-+	*tdcv = tdcr < tdco ? 0 : tdcr - tdco;
-+
-+	return 0;
-+}
-+
- static int rcar_canfd_do_set_mode(struct net_device *ndev, enum can_mode mode)
- {
- 	int err;
-@@ -1929,12 +2003,17 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 	if (gpriv->fdmode) {
- 		priv->can.bittiming_const = gpriv->info->nom_bittiming;
- 		priv->can.fd.data_bittiming_const = gpriv->info->data_bittiming;
-+		priv->can.fd.tdc_const = gpriv->info->tdc_const;
- 
- 		/* Controller starts in CAN FD only mode */
- 		err = can_set_static_ctrlmode(ndev, CAN_CTRLMODE_FD);
- 		if (err)
- 			goto fail;
--		priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING;
-+
-+		priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING |
-+					       CAN_CTRLMODE_TDC_AUTO |
-+					       CAN_CTRLMODE_TDC_MANUAL;
-+		priv->can.fd.do_get_auto_tdcv = rcar_canfd_get_auto_tdcv;
- 	} else {
- 		/* Controller starts in Classical CAN only mode */
- 		priv->can.bittiming_const = &rcar_canfd_bittiming_const;
--- 
-2.47.2
-
-
+Yours,
+Linus Walleij
 
