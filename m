@@ -1,86 +1,86 @@
-Return-Path: <linux-can+bounces-3863-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3864-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBADEADEC5D
-	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 14:32:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43BC2ADEC7D
+	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 14:34:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49BAD176BAA
-	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 12:29:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9F673A7F38
+	for <lists+linux-can@lfdr.de>; Wed, 18 Jun 2025 12:30:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F1E2E54C5;
-	Wed, 18 Jun 2025 12:27:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DECFD2EAD08;
+	Wed, 18 Jun 2025 12:28:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q62LiJ4a"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dYakY6J5"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187AF2DF3F2
-	for <linux-can@vger.kernel.org>; Wed, 18 Jun 2025 12:27:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9502B2EA172
+	for <linux-can@vger.kernel.org>; Wed, 18 Jun 2025 12:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750249669; cv=none; b=Bsqcy7fTVXdo1CkHQs6AbpGInp1fIcTyWWZ3D1RW0KfD8SHfdmCM7kIn2NhC54WdrydWGWmSlssNKxvUhgUbQ1Y8OKjfuD0xswJpCc2084nOupcI7DU4ykycTVCsbjYO0mblrY8m1uEMOpQGOkc3uKBl/7y0de3nKq0WfAF/DoI=
+	t=1750249693; cv=none; b=GR/VSTXaDADUXHWBDVkOA7GBXKSuns2leEslhHVTZRTwtpbQ0teuj8I9Ioln7LqcM31+MTLBNFbYyH7MGixdjiEQbNKWfKH5YUTRGdk6fdW6EwYm17pROG7lIXz+B2NMv21KTCt7ggMNnkNqObUl5KMATwekzS1YpKEg1FBk9Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750249669; c=relaxed/simple;
+	s=arc-20240116; t=1750249693; c=relaxed/simple;
 	bh=lvDeYY1tyHLW44AqHwWF82BKnD0o1q8Cao4PGtdqJcc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bQz7r9D+UG7JIaAcUB/1DRhnpEgpmFlUFPO4FAMRdFVFjor4jAePTFWxI9NCfnfNJr/lQNbDoV528YSS44EN/18vRGhItvmr491hhtWjjdk5LmirGcTAv+uQNJzUWKtuVM9xNFuPrrwS7etNGJ3s61fKzwXaMGcuc/VFR1JVMA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q62LiJ4a; arc=none smtp.client-ip=209.85.208.176
+	 To:Cc:Content-Type; b=VaOgj8n3kdJ+QH4tKmHglxEKtjhKAFF5KjbEAB+WA4nQa+V6IiY170LBI4xbRv0tYqSRV79WNV49e3J0YU4H3sKJZwT95qDE57u9133WuUIU7kCP+Dpc4EhfLheLfWEP9FzLSIiJrCPYU6eI4kaNRs/dHpZmHPcnQYG7dox+ryk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dYakY6J5; arc=none smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-32b7f41d3e6so4917161fa.1
-        for <linux-can@vger.kernel.org>; Wed, 18 Jun 2025 05:27:47 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-553b51f5218so5203373e87.0
+        for <linux-can@vger.kernel.org>; Wed, 18 Jun 2025 05:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750249666; x=1750854466; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1750249687; x=1750854487; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
         bh=lvDeYY1tyHLW44AqHwWF82BKnD0o1q8Cao4PGtdqJcc=;
-        b=Q62LiJ4anBM9mCtPO1s1wPQafnXMiY44Wb6sed9JH7B+3kqfcj6OlRn0afcRWdxW2T
-         GbRcS2/PDp9OME8vCM6aCKmKaSnRlRkd59Vywk+e0f+LJKKgmpr0IkbPHWiFpdeQJTed
-         Ki1UZKrjGbTKc3php1hkcjQXclqOj8kH4nvJPUbCkJ64BuXCSjNYt7EpEJ9H8YK6/UAt
-         hYlkTo3J5CwzbkEY7LCkAbhwCYvxdwlCVBsecB6OxorgUdahP0dPqdIUTSpYbRS0VW0b
-         jmNktZZFxYS4UhcC6SxCXM/VnJgbSDqrjF/aSDVzedYhZLiOR6sWKcwvIHp7m1Ky8hvt
-         U3wg==
+        b=dYakY6J5RcYzb6omLmKYYIz3TI3xl/KZHg1mfJgQ/ArkezRGWpHZALVwx2Ssm3uIux
+         dwfgA8QHt1H6TGPmDx/nQ1Co8QKFzoAB0r4PhB6A+8q4CzbNhzMkxycx8MiiFOHXfy0F
+         Y0P9YQL21+lWZD/v4hB1eQXMmPF9TgEyik/eH3A98lbfmNu2CGv/GNLhylgIkeLugSHZ
+         ffxHVk2Zxp1mK6kUOo6pA4ZwGh0Ov0nLJXiaJ2GSXuLCJ7gruSeeKZZOAGDm7+WZhQBA
+         TbPig0qdgIAQ+bC+XSuiSJ+ihuc/wDfQK4MHfw34BPC2uit/IjfFuxSShOvjqYxTuLAs
+         eXdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750249666; x=1750854466;
+        d=1e100.net; s=20230601; t=1750249687; x=1750854487;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=lvDeYY1tyHLW44AqHwWF82BKnD0o1q8Cao4PGtdqJcc=;
-        b=bTTl4MBxqsP2Kk1CGog1WVJxfWYW9YnTyB0Fuy8BgsuH+hubhLvWshawhw+FbqfVmY
-         713bc0mWmfqvkLxB2VWNAJD/AEpE2cdTmQ4G8LtOHlVwqPombGucyEnnaaAgHHgdVle5
-         /BzclBFV/Ap2GdIFd0HhEH0rizFvGhQ0BNzk5Nqi+vM3+QFcVF0EMRcCIv471I3b7u36
-         AmrAdLykcpdUmZ5HeFBGHIcijijdBCPF97u69pzgf6iRF/zJk2c+/lU1VVIt/XfZ5JVk
-         z+nDM3vLSiglOonbvmlDGQYcdon2cO7SQXXAiQprlKJJw6uLqUaJLdI3vMKDUQ/4Sj5n
-         G6ug==
-X-Forwarded-Encrypted: i=1; AJvYcCUtJFa/mzm2/kD1Cf4tXGO4cZ/+VOqFxmthDrfRwCFHBvowrgrDTvJHTkybZyzcUbVUfk/r6jIJQYE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+u/bhF62BdEwz4Yw0AAfVCSLcTAJpfk3VKJegP431y2LBFQpr
-	dlMez13Z/K/em4aYfAEhxdcwetBpSJoIWKw2SVSQffiHBoWT7s3HqdvJ6TB+y32JBH8N2PbQ0FE
-	PqE16shqkrrL7af1nWTUjeEicqLUXz0vrOLn+v6ggxw==
-X-Gm-Gg: ASbGnct4zjhONT1pr5+h/sv12BYbyOijR2r2aIEZ3q4BMNf4xybMJTmKo7p7X7cGXnR
-	g90JdCBkuPztrv6e4nGFs5PiGBeMtAnbZGrc9UXQsQYBllXvcgX2DPE8JsZJnlH5NmKx5REeWna
-	FO/1fquEvSe3i7PgQrme563GZmCvGC+Ld99LuvxTihNUE=
-X-Google-Smtp-Source: AGHT+IEO41Nyhls6z+tYoLHnOV+DOmxEURxkPhjx4goE9pZdzx8ZYG8pWoqgfu9hnvxH3hdYq4NmpJCLdC/k/NenFbc=
-X-Received: by 2002:a05:651c:169c:b0:32b:4441:e1a6 with SMTP id
- 38308e7fff4ca-32b7cece005mr6055841fa.1.1750249666214; Wed, 18 Jun 2025
- 05:27:46 -0700 (PDT)
+        b=bivrAydkMzCUz/ood3CSbIf5DsFBZ/ENRMAXubL617TTXR9eph1GXjYQC1/ayydzg3
+         DKrBons8bule3jiBOXW+GzXoPUsCcLL3RhtO71fU1VInLTQNa+7VscIE/PKKtD3B4Gxv
+         ey97nsLhH+2+5NENoQIOyEjqoQ1OskrXQvhvaFwwbT23QQoU7D+yphktn8hjW2aDz/W3
+         J8pj9GMhKxDFGwMdZN8McDHVY5zQ0U895qxPIpAdKJnC7PboqA0BdSiJzRDaOA8AKtGC
+         tXDT3KKqHqvUultkD44h4htUpXIFSulDQeOlIdI+zRl1izSvtJhtFozPaMkaJu5LP8ez
+         ZbOA==
+X-Forwarded-Encrypted: i=1; AJvYcCUI5lGwsCMHR4WvPOQAo2uuwqX+zUtlbsTgHfzT37jCTV4I1XUm3PkuI2TdahUv4u6EE5y9k/sqtzg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycjCrun1IqlauvTQXkcDSnEeO7Q5cfExGsBmLyAAY3tPJIG5rr
+	eRsKJLp9nBueaAFQxvDsoU08AZ2tF53WxKjwQC+xO5+sMvvkKgg+qEKA+xYdKGhWC0vyGChiZlF
+	8F8tfBUdlP9MWFF4VLwDjuBJb/XB8AmlVjeTzLTdMng==
+X-Gm-Gg: ASbGncvtmIu9xR/NyP7e///LPKStJ3kT5jZgG7y7vnu000mpxHTw7eVOgtTnDBUgbOx
+	eA2ZgarYHwLRy3Byx3EFU5u3da/51TlzjIIbd5LzeFbBeu5OzXVYWuleyAdMAuSGMAVlmnek6Kn
+	EtsqcztSbIJgUWM1ZTqr3nG32gHA0CiWEh4t6XRMet0vI=
+X-Google-Smtp-Source: AGHT+IEqcYdJwMh4FSJGyni6X0wxHGpPoUz/ob8ESveA1VpUKphDYobFyqmST5aw3MNHLgS47EAGeONWHSlMXxk934Q=
+X-Received: by 2002:a05:6512:2315:b0:553:adf2:38bb with SMTP id
+ 2adb3069b0e04-553b6f42459mr4514077e87.46.1750249687261; Wed, 18 Jun 2025
+ 05:28:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250616-gpiochip-set-rv-net-v2-0-cae0b182a552@linaro.org> <20250616-gpiochip-set-rv-net-v2-1-cae0b182a552@linaro.org>
-In-Reply-To: <20250616-gpiochip-set-rv-net-v2-1-cae0b182a552@linaro.org>
+References: <20250616-gpiochip-set-rv-net-v2-0-cae0b182a552@linaro.org> <20250616-gpiochip-set-rv-net-v2-2-cae0b182a552@linaro.org>
+In-Reply-To: <20250616-gpiochip-set-rv-net-v2-2-cae0b182a552@linaro.org>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 18 Jun 2025 14:27:32 +0200
-X-Gm-Features: AX0GCFudNOYMyXLJ7vMaeO2dSvhoaQWQJroQG17p-nXTR5Iec4T0QKmapC2D9eA
-Message-ID: <CACRpkdYJ9O_y9TGTOw8mzf1=LvaxYCE463MPf12YaXUQCKaLzQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] net: dsa: vsc73xx: use new GPIO line value setter callbacks
+Date: Wed, 18 Jun 2025 14:27:53 +0200
+X-Gm-Features: AX0GCFtOmBUtsD4jP5iXZmqQJNmNp3Xkluag7JKU4cjSCOXhD78FpOnWyAbPHYM
+Message-ID: <CACRpkdYi0oVa3uek7zcb2Jy_YPded6jfEKoXUp=BL01V5XX1MQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] net: dsa: mt7530: use new GPIO line value setter callbacks
 To: Bartosz Golaszewski <brgl@bgdev.pl>
 Cc: Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
