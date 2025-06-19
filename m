@@ -1,164 +1,144 @@
-Return-Path: <linux-can+bounces-3870-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3871-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D34CAE045D
-	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 13:53:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5FCEAE0493
+	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 13:59:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 342713A5416
-	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 11:53:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31B391649A5
+	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 11:58:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E168722D9E9;
-	Thu, 19 Jun 2025 11:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLK1SjZk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6FE522F76F;
+	Thu, 19 Jun 2025 11:56:58 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE8521FF26;
-	Thu, 19 Jun 2025 11:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D2A221FB5;
+	Thu, 19 Jun 2025 11:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334032; cv=none; b=s+P+uH55Ibacxvjb7GtNO5Iew/h5QcYDdyKt6OOWhBYj3ZkKaieilmOUhE7g2my+wLc3K1o10pwJ5D/B8C768tfMZY34/jamT8ZJcNW/pf2hPfwf5/d+wwdUH2bQbAII7uz49lIWpo3Qj5e9Gg90uUpR3r+XCqZNMmNydoid5F4=
+	t=1750334218; cv=none; b=mV1vJSBVl/OsvvobAa/ictXoZ/EU8mZqZ4qGq8xhDf9m1UlvoUaR1AKcy8urqAOhZWcmCOo4XcB1fncFi4DCXUw/Ua+7xCdDVTRleL3vFLKIG5RxDbma2pUqdH5iAlLF8ZE6IV0DwWjLH3UKaMrnq65K2OKJxzlXKlPurJggiJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750334032; c=relaxed/simple;
-	bh=Tfq8NMCtMxIzB90AN2oTeQY3u4pSOFzZv4JlxXKP5Dw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NSf9Nhytq9rykCyvfgCBC5HfpXUckT+wNhN1p6gWDaG/xN43ROh+VKDxa3pRNlIe5R1PZXNKFd1Tr9r9MIYbqVMw10EbcrxCAM2jGxRuCm28JO3EPvJxuItvKknaiX86m6zvCbeuhx1YFtUTRnBhGewiPDXIwvOV4fR3zdmG5XA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLK1SjZk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61C3C4CEEA;
-	Thu, 19 Jun 2025 11:53:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750334032;
-	bh=Tfq8NMCtMxIzB90AN2oTeQY3u4pSOFzZv4JlxXKP5Dw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TLK1SjZkJKtOa2GDJx0KT8zWbLM0Onmv52DVFQ4AgL5lHXTrikKxzDBx0mCXJu0EN
-	 Kikw4V92eV1H6BgfWAD0506FOAnY8rnH1rNzo65+cKAO7IxMzGgfpByWyUWKoN/oQZ
-	 a/375VH0yWoRtXkMpmxMPNo+RdAMgQClaCjI+Lt8kFC68jMuzWKaiaPhAm3LPn25eI
-	 5Vy86Tzf6tejlWflhZQN+1rjxhvEe5apntIF1YAuOrVyqUvW7YVikRy+Q996WPIZP4
-	 kAlTbt4BkJHrwYniPmoJu47rcDrOBqbU6tXRNpgMfWqdRT9Ggd1nwTem3wpNIbwqLL
-	 kNsKtxHhfGesA==
-Date: Thu, 19 Jun 2025 12:53:45 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250619115345.GL587864@google.com>
-References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
- <20250604041418.1188792-2-tmyu0@nuvoton.com>
- <20250612140041.GF381401@google.com>
- <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
- <20250612152313.GP381401@google.com>
- <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
- <20250613131133.GR381401@google.com>
- <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
+	s=arc-20240116; t=1750334218; c=relaxed/simple;
+	bh=8gpgFAMcvUJ6Rja32ErDKR6th+vyq1ETj1ydtbmRPkc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CVnZId2MmQ6wp0siZedzUlfrB1X6xYEgIQeGx5Vf99+VSJCtBf2Qw/+b7HrXdwDuLQheSeI0YkDMqCOeF5rdnTA6+OoNiuNtDR6KKCDWeqA6JlGWRxGqNYCUoBI7J6D3mIZfJTu80mOMps9qRCnTVjVftXSJus6SfENQCUeEKos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-4e7fb730078so216456137.1;
+        Thu, 19 Jun 2025 04:56:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750334213; x=1750939013;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BOekpUHLxVl+H9ogVNkhekXa6Qv+Gfytq3jYEtN/Fk8=;
+        b=UUaPUTqFPR+yc1uobCeOCmB02VwPFvbAI8Cuyp+kCNBn/NYCDTk7yl1dGQBbA4sW1R
+         5okh3N9MsQ7V1Oc1ltLzHfBTR006u9vjSvfeHNUfO54tZoSM9J8tulcEXwRCaj6NfDpI
+         8xyeDRNBK1z5kNIloyp+LqyeACm/3jVDCXdyuN2Jm6idfPoJK+TPxvTsfTfopXlHBU4G
+         bNR7Nr2C2lSnJz2ajC69q2s4n+cnctnyafyG4KuzUAi9EKNqmCVSgWGESyUOEYyK/lut
+         EvHsylTo8Owmf2ZQ5PXfUytJr0g+INLyWJXJKELEPTe1TTbMWoG5kbUX9AgF4ppkko3N
+         Rdsw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQgd09bTbAfRbdTyqxvdOoPf29TqR5OH1yyTKND4BJ5nODLNMQeQym4uJtZG/km63dvDGxjKTP@vger.kernel.org, AJvYcCVSbOMiLnHOkQM4B3P54qrIwjhkvGeihXtRDdoCnFbQdRc15uzZmsbNUJ37yDyqCqX4OLglYU7V3Cms82Q8iYoxgpM=@vger.kernel.org, AJvYcCVi3lyfU88U0Li6+nonA3Q7S0dJvq3cBY8owyMGqbjq53iDcX6Xnvp2Yph9Fw9OCjCYr8TLS0pVUZM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjUlXqWRI+6djl7Hlb+tEBs+PlgK7aeu+JHu411CAM1wqGJ1tm
+	xvXhg7obxRXN6KmU4URzxJFYJE07JkfBzOzEOE+PJxMQHDn+UeNLVp94SezdSg7X
+X-Gm-Gg: ASbGnctNA2O3Tuz79yqwkXPW/FTzal7d5DrtVMSLvPRSO+hvdnblXTQ79DxKwLpb6oU
+	jZliDp/ShrbK2iX9TF2Gbv1aV7jSe0/mNgAo+qnhVFceJj0uCUShmAEd5pG+3mcaQUIDfjgkFPu
+	/9aB5OsLIzSYe5tRfz/4LVdyu7I9qX5XXVsbhqUbrEErE5OoDandF/wDeSN7aF+/vvr7Ltvc/yB
+	rkuOq2By8ma8e9rSzvKww+ONlKy8tSX+Y2q9H9AsiCFFRjTL1ApWd31OmD7H/tS0qqtVu0cjqbJ
+	k+bnV3+x1AHZE2ZqXVeQshdEh5QrvrbJSl+AZ+ji8M6Ch4+eDIJrxY9yooE5iYIyHbDeXoehFBe
+	/di08BwqBGKQ9t2USxGcharB8+8O6jfZXcAQ=
+X-Google-Smtp-Source: AGHT+IHUdje8djMOJ6vGdfnq6/CfUq2jHO/6QR8A/m7Dc+6do4a+BpGZQ6c2bc5Npn5cfNyWr1Z5OQ==
+X-Received: by 2002:a05:6102:dcd:b0:4e4:5e11:6848 with SMTP id ada2fe7eead31-4e7f62db333mr15418479137.23.1750334212811;
+        Thu, 19 Jun 2025 04:56:52 -0700 (PDT)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-87f0fa1551bsm2233395241.15.2025.06.19.04.56.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jun 2025 04:56:52 -0700 (PDT)
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-87f2a0825e1so73403241.2;
+        Thu, 19 Jun 2025 04:56:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV7RdkEIL3uujE0waJjEgpfXyjPevK/NUQ8WKx6f67VAmDMjnaDMtkQk8MIxys5MnXebb8EUIgj@vger.kernel.org, AJvYcCVEG3+iD7oRQUXww7HfivtKSHwb2tUW0VdH3DeDbmKcFjGaCBbSRZqakovzkTo42tJGiV1dQemD6cE=@vger.kernel.org, AJvYcCVEeFPHIEvPeQ/JjouPtX4td8MCVFhk+9MwmFjaShb+Wu6u5Feg0bNKeB+NyAn4IqFX5BWr7+HX2j/k7EDpu80+qtU=@vger.kernel.org
+X-Received: by 2002:a05:6102:508b:b0:4e2:aafe:1bde with SMTP id
+ ada2fe7eead31-4e7f61b60b9mr15809836137.9.1750334211820; Thu, 19 Jun 2025
+ 04:56:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
+References: <292b75b3bc8dd95f805f0223f606737071c8cf86.1750327217.git.geert+renesas@glider.be>
+ <88b0892f-5994-4b7a-9de3-eab39075acaa@wanadoo.fr>
+In-Reply-To: <88b0892f-5994-4b7a-9de3-eab39075acaa@wanadoo.fr>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 19 Jun 2025 13:56:40 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVKx7+errmKfzEZmuan0sRFw0-NXEORtntfyksgpAy8_g@mail.gmail.com>
+X-Gm-Features: Ac12FXxLqCQOLmUYExvuxFVIHkAzYSxdzJTT0HSJUsvD4i8ZwRv-VEuUpXdyQuw
+Message-ID: <CAMuHMdVKx7+errmKfzEZmuan0sRFw0-NXEORtntfyksgpAy8_g@mail.gmail.com>
+Subject: Re: [PATCH] can: rcar_canfd: Describe channel-specific FD registers
+ using C struct
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Jakub Kicinski <kuba@kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	"David S . Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 13 Jun 2025, Ming Yu wrote:
+Hi Vincent,
 
-> Lee Jones <lee@kernel.org> 於 2025年6月13日 週五 下午9:11寫道：
+On Thu, 19 Jun 2025 at 13:12, Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+> On 19/06/2025 at 19:13, Geert Uytterhoeven wrote:
+> > The rcar_canfd_f_*() inline functions to obtain channel-specific CAN-FD
+> > register offsets really describe a memory layout.  Hence replace them by
+> > a C structure, to simplify the code, and reduce kernel size.
 > >
-> > On Fri, 13 Jun 2025, Ming Yu wrote:
+> > This also gets rid of warnings about unused rcar_canfd_f_*() inline
+> > functions, which are reported by recent versions of clang.
 > >
-> > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午11:23寫道：
-> > > >
-> > > > On Thu, 12 Jun 2025, Ming Yu wrote:
-> > > >
-> > > > > Dear Lee,
-> > > > >
-> > > > > Thank you for reviewing,
-> > > > >
-> > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
-> > > > > >
-> > > > > ...
-> > > > > > > +static const struct mfd_cell nct6694_devs[] = {
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > > > > > > +
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
-> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
-> > > > > >
-> > > > > > Why have we gone back to this silly numbering scheme?
-> > > > > >
-> > > > > > What happened to using IDA in the child driver?
-> > > > > >
-> > > > >
-> > > > > In a previous version, I tried to maintain a static IDA in each
-> > > > > sub-driver. However, I didn’t consider the case where multiple NCT6694
-> > > > > devices are bound to the same driver — in that case, the IDs are not
-> > > > > fixed and become unusable for my purpose.
-> > > >
-> > > > Not sure I understand.
-> > > >
-> > >
-> > > As far as I know, if I maintain the IDA in the sub-drivers and use
-> > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
-> > > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
-> > > However, when a second NCT6694 device is connected to the system, it
-> > > will receive IDs 16~31.
-> > > Because of this behavior, I switched back to using platform_device->id.
-> >
-> > Each of the devices will probe once.
-> >
-> > The first one will be given 0, the second will be given 1, etc.
-> >
-> > Why would you give multiple IDs to a single device bound to a driver?
-> >
-> 
-> The device exposes multiple peripherals — 16 GPIO controllers, 6 I2C
-> adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
-> is independently addressable, has its own register region, and can
-> operate in isolation. The IDs are used to distinguish between these
-> instances.
-> For example, the GPIO driver will be probed 16 times, allocating 16
-> separate gpio_chip instances to control 8 GPIO lines each.
-> 
-> If another device binds to this driver, it is expected to expose
-> peripherals with the same structure and behavior.
+> > Suggested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > Reported-by: Jakub Kicinski <kuba@kernel.org>
+> > Closes: https://lore.kernel.org/20250618183827.5bebca8f@kernel.org
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > ---
+> > Fast-tracked because of the clang warnings.
+>
+> Make sense.
+>
+> @Jakub, OK for me if you want to directly pick this patch without going through
+> the linux-can tree.
+>
+> > Changes compared to Vincent's original suggestion
+> > (https://lore.kernel.org/420d37b1-5648-4209-8d6f-1ac9d780eea2@wanadoo.fr):
+> >   - Move rcar_canfd_f to the old RCANFD_F_*() location,
+> >   - Update RSCFDnCFDCmXXX comment.
+> >   - Rename struct rcar_canfd_f to struct rcar_canfd_f,
+>                                            ^^^^^^^^^^^^
+> rcar_canfd_f_c ;)
 
-I still don't see why having a per-device IDA wouldn't render each
-probed device with its own ID.  Just as you have above.
+Oops, right...
+
+> >   - Rename cbase to fcbase,
+> >   - Drop static_assert(),
+> >   - Drop unused car_canfd_*_reg() functions.
+> >   - Drop simple wrappers around {read,write}l(),
+>
+> Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Lee Jones [李琼斯]
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
