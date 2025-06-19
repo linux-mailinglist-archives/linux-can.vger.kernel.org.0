@@ -1,128 +1,164 @@
-Return-Path: <linux-can+bounces-3869-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3870-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BBA6AE0330
-	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 13:14:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D34CAE045D
+	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 13:53:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F24A57A7E89
-	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 11:12:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 342713A5416
+	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 11:53:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8F3227BAD;
-	Thu, 19 Jun 2025 11:14:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E168722D9E9;
+	Thu, 19 Jun 2025 11:53:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="t+XfUDuP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLK1SjZk"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-68.smtpout.orange.fr [193.252.22.68])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02BC226D09;
-	Thu, 19 Jun 2025 11:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE8521FF26;
+	Thu, 19 Jun 2025 11:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750331646; cv=none; b=VwWMB/D5TK+JqvzzOkQLeC4mWdFOHSdIom1DLqdW7tZ4sh1cAM/sJsoTUdggX8eeBoT9jl+0uK5dcJPSiJSodz3oCpnn6dXcKKHO6gf7SZga1vG25XdrxEdo4CIS8dAZz/PWFSFzwstuzqiJux0M0/hxjY0CVQ2XtJ9IR58EXzg=
+	t=1750334032; cv=none; b=s+P+uH55Ibacxvjb7GtNO5Iew/h5QcYDdyKt6OOWhBYj3ZkKaieilmOUhE7g2my+wLc3K1o10pwJ5D/B8C768tfMZY34/jamT8ZJcNW/pf2hPfwf5/d+wwdUH2bQbAII7uz49lIWpo3Qj5e9Gg90uUpR3r+XCqZNMmNydoid5F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750331646; c=relaxed/simple;
-	bh=Ir12Ssgjmm+Db2m2mLWpiSb7No+ZNzezXL6QrEsyz7U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AnuoHRqw43ttFpepJT9m0vqFncsHDECFYjvW+KDS+0Xen1gRfUAU5ozoCK3cxQV/eQ9QEwWTU+QFyFU3TKYgJ7lLR916AP/d3xT46CucqflhvbWwOfmEnoDb/6BWFHuneMrA+AtEd/pBdcOF7Yz0JAckpJa1h7mkixZOgzN9AvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=t+XfUDuP; arc=none smtp.client-ip=193.252.22.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id SDCEuaWyOZo3bSDCJufxIG; Thu, 19 Jun 2025 13:12:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1750331571;
-	bh=nzO1C4CtcnTvS6n7XDCN/bT/rN8sTJAHKtCh/p2wEY4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=t+XfUDuPEBlk2RN7y4GnFO4YE+Ylk1E/cNcntvJyJQ3BIB+sRuK/77cetL7OaKJXM
-	 Ju8lmLb+L5fpEEkniNSnuvj59yYpk5b54HZlgaFGad4nSR6soEud5tmRA9XFvCJDbp
-	 NH0TbYkfdtMO/q/TzzXojDuNmJJgDZtOpUIjdxXTErJZt+v+T3CkKpaoFgNDETbxGz
-	 lm4/gp9uEWz2vcExToVB5fHDlNQQ9ryk6sDMN+ljm6FMn+bUxnR/MgE90wxKHy+LvI
-	 v5KEqYiMQ1uuElooFub3YBh4rZrxzyzvKOEDAkBEwt4R8Pc6psw1U1qeGJ34AcqCEj
-	 p2YHAEpr8JROA==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 19 Jun 2025 13:12:51 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <88b0892f-5994-4b7a-9de3-eab39075acaa@wanadoo.fr>
-Date: Thu, 19 Jun 2025 20:12:41 +0900
+	s=arc-20240116; t=1750334032; c=relaxed/simple;
+	bh=Tfq8NMCtMxIzB90AN2oTeQY3u4pSOFzZv4JlxXKP5Dw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NSf9Nhytq9rykCyvfgCBC5HfpXUckT+wNhN1p6gWDaG/xN43ROh+VKDxa3pRNlIe5R1PZXNKFd1Tr9r9MIYbqVMw10EbcrxCAM2jGxRuCm28JO3EPvJxuItvKknaiX86m6zvCbeuhx1YFtUTRnBhGewiPDXIwvOV4fR3zdmG5XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLK1SjZk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61C3C4CEEA;
+	Thu, 19 Jun 2025 11:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750334032;
+	bh=Tfq8NMCtMxIzB90AN2oTeQY3u4pSOFzZv4JlxXKP5Dw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TLK1SjZkJKtOa2GDJx0KT8zWbLM0Onmv52DVFQ4AgL5lHXTrikKxzDBx0mCXJu0EN
+	 Kikw4V92eV1H6BgfWAD0506FOAnY8rnH1rNzo65+cKAO7IxMzGgfpByWyUWKoN/oQZ
+	 a/375VH0yWoRtXkMpmxMPNo+RdAMgQClaCjI+Lt8kFC68jMuzWKaiaPhAm3LPn25eI
+	 5Vy86Tzf6tejlWflhZQN+1rjxhvEe5apntIF1YAuOrVyqUvW7YVikRy+Q996WPIZP4
+	 kAlTbt4BkJHrwYniPmoJu47rcDrOBqbU6tXRNpgMfWqdRT9Ggd1nwTem3wpNIbwqLL
+	 kNsKtxHhfGesA==
+Date: Thu, 19 Jun 2025 12:53:45 +0100
+From: Lee Jones <lee@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+	linux@roeck-us.net, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250619115345.GL587864@google.com>
+References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
+ <20250604041418.1188792-2-tmyu0@nuvoton.com>
+ <20250612140041.GF381401@google.com>
+ <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+ <20250612152313.GP381401@google.com>
+ <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
+ <20250613131133.GR381401@google.com>
+ <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] can: rcar_canfd: Describe channel-specific FD registers
- using C struct
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- Jakub Kicinski <kuba@kernel.org>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- Marc Kleine-Budde <mkl@pengutronix.de>,
- "David S . Miller" <davem@davemloft.net>
-References: <292b75b3bc8dd95f805f0223f606737071c8cf86.1750327217.git.geert+renesas@glider.be>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <292b75b3bc8dd95f805f0223f606737071c8cf86.1750327217.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
 
-Hi Geert,
+On Fri, 13 Jun 2025, Ming Yu wrote:
 
-Thanks for the patch.
-
-On 19/06/2025 at 19:13, Geert Uytterhoeven wrote:
-> The rcar_canfd_f_*() inline functions to obtain channel-specific CAN-FD
-> register offsets really describe a memory layout.  Hence replace them by
-> a C structure, to simplify the code, and reduce kernel size.
+> Lee Jones <lee@kernel.org> 於 2025年6月13日 週五 下午9:11寫道：
+> >
+> > On Fri, 13 Jun 2025, Ming Yu wrote:
+> >
+> > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午11:23寫道：
+> > > >
+> > > > On Thu, 12 Jun 2025, Ming Yu wrote:
+> > > >
+> > > > > Dear Lee,
+> > > > >
+> > > > > Thank you for reviewing,
+> > > > >
+> > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
+> > > > > >
+> > > > > ...
+> > > > > > > +static const struct mfd_cell nct6694_devs[] = {
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+> > > > > > > +
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
+> > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
+> > > > > >
+> > > > > > Why have we gone back to this silly numbering scheme?
+> > > > > >
+> > > > > > What happened to using IDA in the child driver?
+> > > > > >
+> > > > >
+> > > > > In a previous version, I tried to maintain a static IDA in each
+> > > > > sub-driver. However, I didn’t consider the case where multiple NCT6694
+> > > > > devices are bound to the same driver — in that case, the IDs are not
+> > > > > fixed and become unusable for my purpose.
+> > > >
+> > > > Not sure I understand.
+> > > >
+> > >
+> > > As far as I know, if I maintain the IDA in the sub-drivers and use
+> > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
+> > > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
+> > > However, when a second NCT6694 device is connected to the system, it
+> > > will receive IDs 16~31.
+> > > Because of this behavior, I switched back to using platform_device->id.
+> >
+> > Each of the devices will probe once.
+> >
+> > The first one will be given 0, the second will be given 1, etc.
+> >
+> > Why would you give multiple IDs to a single device bound to a driver?
+> >
 > 
-> This also gets rid of warnings about unused rcar_canfd_f_*() inline
-> functions, which are reported by recent versions of clang.
+> The device exposes multiple peripherals — 16 GPIO controllers, 6 I2C
+> adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
+> is independently addressable, has its own register region, and can
+> operate in isolation. The IDs are used to distinguish between these
+> instances.
+> For example, the GPIO driver will be probed 16 times, allocating 16
+> separate gpio_chip instances to control 8 GPIO lines each.
 > 
-> Suggested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Reported-by: Jakub Kicinski <kuba@kernel.org>
-> Closes: https://lore.kernel.org/20250618183827.5bebca8f@kernel.org
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> Fast-tracked because of the clang warnings.
+> If another device binds to this driver, it is expected to expose
+> peripherals with the same structure and behavior.
 
-Make sense.
+I still don't see why having a per-device IDA wouldn't render each
+probed device with its own ID.  Just as you have above.
 
-@Jakub, OK for me if you want to directly pick this patch without going through
-the linux-can tree.
-
-> Changes compared to Vincent's original suggestion
-> (https://lore.kernel.org/420d37b1-5648-4209-8d6f-1ac9d780eea2@wanadoo.fr):
->   - Move rcar_canfd_f to the old RCANFD_F_*() location,
->   - Update RSCFDnCFDCmXXX comment.
->   - Rename struct rcar_canfd_f to struct rcar_canfd_f,
-                                           ^^^^^^^^^^^^
-rcar_canfd_f_c ;)
-
->   - Rename cbase to fcbase,
->   - Drop static_assert(),
->   - Drop unused car_canfd_*_reg() functions.
->   - Drop simple wrappers around {read,write}l(),
-
-Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-
-Yours sincerely,
-Vincent Mailhol
-
+-- 
+Lee Jones [李琼斯]
 
