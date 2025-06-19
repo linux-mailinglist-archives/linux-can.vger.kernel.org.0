@@ -1,191 +1,114 @@
-Return-Path: <linux-can+bounces-3875-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3876-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5BA6AE0A76
-	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 17:30:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CCB3AE0A70
+	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 17:30:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 974281881C12
-	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 15:28:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50AAB3B373F
+	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 15:29:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C2922A4FA;
-	Thu, 19 Jun 2025 15:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFCEC2376EB;
+	Thu, 19 Jun 2025 15:29:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UtEyfa2K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4DGq0Ii"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E023085DB;
-	Thu, 19 Jun 2025 15:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97888234987;
+	Thu, 19 Jun 2025 15:29:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750346901; cv=none; b=lAVDOS7/lcSUPqoZbHHgIueyFRYRSpTZycSgTi2ZbjExpjYo0FQVgDhuEEpHKj35pwQ+MpYA9V1uY3Nrx7Zj/ROJms1vikHVP/WDF11Gny5sBWxZ8gTne+ru9AIOLGKUAMkUr/N9mEN6jo8a2h4jUyQvmigy0u9DF//ETqqo0us=
+	t=1750346990; cv=none; b=qk7zwKVGfLsfGlq/ATkw9E2Qie8aLj7oNil41h2YWsIWZzM85UfclLCULUTfxB1+ewc60/IQY+UGfa8/1uK0ndVhQaySkmrn5cM794JLg3dBUH+KyQPwwJsbALEzC4efwgwmx00W7OZYl8PoIiMF5PMvj4O6DJiXy0luhaehKlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750346901; c=relaxed/simple;
-	bh=nkBVuy8yaSRVyY7240jNJJUyi5FunCZ+peQkhFA/csM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FpPcsarb3ZkS2yenQdTwbl1sEcdDb4b+XBqz1xBN/b9HH1ecVWsUXObt/nAMPCJI27vFQq8QlLA4tsiX5rGMimzK+60E57ghnXSnn8cqpBT9DCEQJ5r2Q+ZFeI9DjUNUERc50po21EpIf3IWOTvtVZGqZsTNniRIfAcM80L0Bw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UtEyfa2K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DFBC4CEEA;
-	Thu, 19 Jun 2025 15:28:16 +0000 (UTC)
+	s=arc-20240116; t=1750346990; c=relaxed/simple;
+	bh=ZSB2w2pDNXAaKy02ne9tEPm0Aw1qypvq3SEaQ7Srs8Y=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=DUFFQ0VgGu/W+VF9tciWDYPfZeg4vRZpzCORz1AuiOE80IYSxkqWrQDlkr1aS4QKBtbYRRQcwajc5ALdypWwE9HNTEnICzhcxCj7u16bu3pcPFnw32T0HWmw2cTNntawGKaqbXBSBorkgtZbWdhOeUbNAn/StQQR8l/e5PRD/r0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4DGq0Ii; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D90C4CEEA;
+	Thu, 19 Jun 2025 15:29:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750346901;
-	bh=nkBVuy8yaSRVyY7240jNJJUyi5FunCZ+peQkhFA/csM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UtEyfa2K8XZUovYXxPzSvi1B6sGFrKKf5w0404gJgSUfaiqDcwouKi3F5OY2vJRwH
-	 tEgizBKEFsPK6NAhMu9Y/vxnEiUcvIgudryHoLidQKCNtyMfMFsbJ2KRPgMJellZkA
-	 DvsqCB6tYVkm6bWc8YNG5fVkPRo/+2b0M2llnbJmkeyb8A8BZalVR1qZTL0MUwtMjE
-	 fUbvdqYyJCLosgCmBnjTwqMXDbtNCghKERGQ0pxjoJRXMrAY/Q926eA1djUl3KWfyo
-	 xa2Jztnw1w/aJ8IC1u3MaO2fGMLXMAcNndfCWf8NMyngNoWUdvkQjvLl/VzhJRKUUr
-	 tkiEIDhWMvGcg==
-Date: Thu, 19 Jun 2025 16:28:14 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250619152814.GK795775@google.com>
-References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
- <20250604041418.1188792-2-tmyu0@nuvoton.com>
- <20250612140041.GF381401@google.com>
- <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
- <20250612152313.GP381401@google.com>
- <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
- <20250613131133.GR381401@google.com>
- <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
- <20250619115345.GL587864@google.com>
- <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
+	s=k20201202; t=1750346990;
+	bh=ZSB2w2pDNXAaKy02ne9tEPm0Aw1qypvq3SEaQ7Srs8Y=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=X4DGq0IizGuIk6r5CxkyYx/g7ofGRTY3GyjSjc8deeXLTd9WkaCexvt4MDjT6e5fC
+	 Fj1jjpzs8KlsHiiZvdCBkx4cubU5fUg5SbAGokDdDSNf7ZrDoct1dB6tn7dgxaRPsK
+	 0wVJx94ld48e2S8kZIwez/I8BHoAjjVjC1iph5xHbR0CS2BvN/W7xckNBX3J21IhYp
+	 qT0Z94cIKWfQywNpiS17Od3Hri7l5huWWDd0WVkFCG3QUfsLPMchJKq9xOO+kdFHFj
+	 kXRzOZB12W233eaisWXDLK979FOa+mZNV2LhdGIM9xPXU1Qw5Mv/UH8J6a0r4Gu2Zk
+	 a3ezRaIaOyrgw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70CD138111DD;
+	Thu, 19 Jun 2025 15:30:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
+Subject: Re: [PATCH net-next 01/10] can: rcar_canfd: Consistently use ndev for
+ net_device pointers
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175034701825.902685.14496314972839844896.git-patchwork-notify@kernel.org>
+Date: Thu, 19 Jun 2025 15:30:18 +0000
+References: <20250618092336.2175168-2-mkl@pengutronix.de>
+In-Reply-To: <20250618092336.2175168-2-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ linux-can@vger.kernel.org, kernel@pengutronix.de, geert+renesas@glider.be,
+ mailhol.vincent@wanadoo.fr
 
-On Thu, 19 Jun 2025, Ming Yu wrote:
+Hello:
 
-> Lee Jones <lee@kernel.org> 於 2025年6月19日 週四 下午7:53寫道：
-> >
-> > On Fri, 13 Jun 2025, Ming Yu wrote:
-> >
-> > > Lee Jones <lee@kernel.org> 於 2025年6月13日 週五 下午9:11寫道：
-> > > >
-> > > > On Fri, 13 Jun 2025, Ming Yu wrote:
-> > > >
-> > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午11:23寫道：
-> > > > > >
-> > > > > > On Thu, 12 Jun 2025, Ming Yu wrote:
-> > > > > >
-> > > > > > > Dear Lee,
-> > > > > > >
-> > > > > > > Thank you for reviewing,
-> > > > > > >
-> > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
-> > > > > > > >
-> > > > > > > ...
-> > > > > > > > > +static const struct mfd_cell nct6694_devs[] = {
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > > > > > > > > +
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
-> > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
-> > > > > > > >
-> > > > > > > > Why have we gone back to this silly numbering scheme?
-> > > > > > > >
-> > > > > > > > What happened to using IDA in the child driver?
-> > > > > > > >
-> > > > > > >
-> > > > > > > In a previous version, I tried to maintain a static IDA in each
-> > > > > > > sub-driver. However, I didn’t consider the case where multiple NCT6694
-> > > > > > > devices are bound to the same driver — in that case, the IDs are not
-> > > > > > > fixed and become unusable for my purpose.
-> > > > > >
-> > > > > > Not sure I understand.
-> > > > > >
-> > > > >
-> > > > > As far as I know, if I maintain the IDA in the sub-drivers and use
-> > > > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
-> > > > > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
-> > > > > However, when a second NCT6694 device is connected to the system, it
-> > > > > will receive IDs 16~31.
-> > > > > Because of this behavior, I switched back to using platform_device->id.
-> > > >
-> > > > Each of the devices will probe once.
-> > > >
-> > > > The first one will be given 0, the second will be given 1, etc.
-> > > >
-> > > > Why would you give multiple IDs to a single device bound to a driver?
-> > > >
-> > >
-> > > The device exposes multiple peripherals — 16 GPIO controllers, 6 I2C
-> > > adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
-> > > is independently addressable, has its own register region, and can
-> > > operate in isolation. The IDs are used to distinguish between these
-> > > instances.
-> > > For example, the GPIO driver will be probed 16 times, allocating 16
-> > > separate gpio_chip instances to control 8 GPIO lines each.
-> > >
-> > > If another device binds to this driver, it is expected to expose
-> > > peripherals with the same structure and behavior.
-> >
-> > I still don't see why having a per-device IDA wouldn't render each
-> > probed device with its own ID.  Just as you have above.
-> >
+This series was applied to netdev/net-next.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
+
+On Wed, 18 Jun 2025 11:19:55 +0200 you wrote:
+> From: Geert Uytterhoeven <geert+renesas@glider.be>
 > 
-> For example, when the MFD driver and the I2C sub-driver are loaded,
-> connecting the first NCT6694 USB device to the system results in 6
-> nct6694-i2c platform devices being created and bound to the
-> i2c-nct6694 driver. These devices receive IDs 0 through 5 via the IDA.
+> Most net_device pointers are named "ndev", but some are called "dev".
+> Increase uniformity by always using "ndev".
 > 
-> However, when a second NCT6694 USB device is connected, its
-> corresponding nct6694-i2c platform devices receive IDs 6 through 11 —
-> instead of 0 through 5 as I originally expected.
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Link: https://patch.msgid.link/7593bdd484a35999030865f90e4c9063b22d2a54.1749655315.git.geert+renesas@glider.be
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 > 
-> If I've misunderstood something, please feel free to correct me. Thank you!
+> [...]
 
-In the code above you register 6 I2C devices.  Each device will be
-assigned a platform ID 0 through 5. The .probe() function in the I2C
-driver will be executed 6 times.  In each of those calls to .probe(),
-instead of pre-allocating a contiguous assignment of IDs here, you
-should be able to use IDA in .probe() to allocate those same device IDs
-0 through 5.
+Here is the summary with links:
+  - [net-next,01/10] can: rcar_canfd: Consistently use ndev for net_device pointers
+    https://git.kernel.org/netdev/net-next/c/df6b192e25df
+  - [net-next,02/10] can: rcar_canfd: Remove bittiming debug prints
+    https://git.kernel.org/netdev/net-next/c/a62781343160
+  - [net-next,03/10] can: rcar_canfd: Add helper variable ndev to rcar_canfd_rx_pkt()
+    https://git.kernel.org/netdev/net-next/c/4e5974f5515b
+  - [net-next,04/10] can: rcar_canfd: Add helper variable dev to rcar_canfd_reset_controller()
+    https://git.kernel.org/netdev/net-next/c/1f9b5003d4ba
+  - [net-next,05/10] can: rcar_canfd: Simplify data access in rcar_canfd_{ge,pu}t_data()
+    https://git.kernel.org/netdev/net-next/c/f5e3150b1a0f
+  - [net-next,06/10] can: rcar_canfd: Repurpose f_dcfg base for other registers
+    https://git.kernel.org/netdev/net-next/c/e4d8eb97a469
+  - [net-next,07/10] can: rcar_canfd: Rename rcar_canfd_setrnc() to rcar_canfd_set_rnc()
+    https://git.kernel.org/netdev/net-next/c/1b76dca8fd89
+  - [net-next,08/10] can: rcar_canfd: Share config code in rcar_canfd_set_bittiming()
+    https://git.kernel.org/netdev/net-next/c/0a0c94c682fd
+  - [net-next,09/10] can: rcar_canfd: Return early in rcar_canfd_set_bittiming() when not FD
+    https://git.kernel.org/netdev/net-next/c/0acd46190ea2
+  - [net-next,10/10] can: rcar_canfd: Add support for Transceiver Delay Compensation
+    https://git.kernel.org/netdev/net-next/c/586d5eecdf14
 
-What am I missing here?
-
+You are awesome, thank you!
 -- 
-Lee Jones [李琼斯]
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
