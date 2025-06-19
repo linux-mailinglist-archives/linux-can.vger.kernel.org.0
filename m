@@ -1,61 +1,59 @@
-Return-Path: <linux-can+bounces-3873-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3874-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 108E0AE0897
-	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 16:22:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB52FAE08F4
+	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 16:41:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABF223ADCA2
-	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 14:21:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42EC61BC5DAC
+	for <lists+linux-can@lfdr.de>; Thu, 19 Jun 2025 14:42:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C184921883E;
-	Thu, 19 Jun 2025 14:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5069E2264C1;
+	Thu, 19 Jun 2025 14:41:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JXdVQp7x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EyP3FWQG"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E1F1C3C04;
-	Thu, 19 Jun 2025 14:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249B11AA782;
+	Thu, 19 Jun 2025 14:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750342934; cv=none; b=i/SIrTEn7VnptT5q5mHlINgkv4siF7G7/EuudZLhxyH5w6oTBPPUyzr5wk9RQV6okIc1bQaXs2ajcDAMnaLrA3I39TSfbLnsLeBed65E43Klqbo9yTUW2K/jtLauiCaWtScqt4VmwgTdGZSzNNxIkppCseEkljbFIw2CzgucRww=
+	t=1750344112; cv=none; b=W6GagOMtE4DWyO1XeEU6w4YbsS4v5LfGv1Fvg6aEE9Ay7Tu1ZWp44dZ6JdUXuH97rnIkdBWX21MO8Ip19TtCY3YxKhyl0u3kseTCVdQ1/Fv15ClB15FnlCmRo5sQ3Hv+EmWSRecNS6cbThIHauI1KpphBF26eGkM7z9jiyNszYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750342934; c=relaxed/simple;
-	bh=UUJ2Oo7w36PsdYpLovHSd8OEWg3RiaNcBSmrNY/hHH8=;
+	s=arc-20240116; t=1750344112; c=relaxed/simple;
+	bh=GpHmjHuZACLqv3N0cwcSZsOLDoCubWR8H68gS49+Ew8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fv/F+TG3YiWYTrpOOoUFid1IZ4aEzGMv69DRGzl/vqTcY+zGqK7nohZssDMyLYqSNE2VJW42QgYiTSOYkBJ3XjpGrgc45fqf12ayBxF2ZP8Exqy/oGalCH/d2/HsszVSaXFaUv3gnP64cFcMjjYtFrtQhF9Pnd1NQkjp3+EFSho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JXdVQp7x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9865C4CEEA;
-	Thu, 19 Jun 2025 14:22:13 +0000 (UTC)
+	 MIME-Version:Content-Type; b=jxVOdlVFiVmbvliqRT55AclaQgJ/1ax+ZGv0s/Dww3k+RKlCjiVonHZ3LGmqz6JsHrgVdaHq4v64Lps6P0t8paXlb9RkW51QG69qPpmpxoHXCUW0Lz2w7QQpMozHbj1mfByQ8OA4o2C7AtPIvrZCtWoR0mfSXbGhYvbHhCxnUd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EyP3FWQG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510D3C4CEEF;
+	Thu, 19 Jun 2025 14:41:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750342934;
-	bh=UUJ2Oo7w36PsdYpLovHSd8OEWg3RiaNcBSmrNY/hHH8=;
+	s=k20201202; t=1750344111;
+	bh=GpHmjHuZACLqv3N0cwcSZsOLDoCubWR8H68gS49+Ew8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JXdVQp7x/Xr3a71TZxt5MTs3bihXSgo5imc0jEqDayqa3z7P1c0N3uRPldIkequpx
-	 7/t2cfjEUKWwxREv69jwySZUUrhHvoZ1Cr8tcyBpAUThfp/KShsUXOOQHD4fwsxjzj
-	 rMacuQWvFwU8st5sL04dgtkt4WAJ3cgaOLfieFgNBprow9tnMK8GLZS2zB/vt3Phj6
-	 PQg6ntsDdn5JssAid08L7aG7rRIjzlU/u6wOCr/A9sZmhHbcmp+oaTNVfq5TnvTVyU
-	 K76XmQPTeDZEobLFQ4Q1y/iSvqRVoBVQPcVbaQmWgW//m5kkWYkGNNfbdMuqGZk46W
-	 MutITUgY5hF+Q==
-Date: Thu, 19 Jun 2025 07:22:13 -0700
+	b=EyP3FWQGYiEuRKKF3KpkMJHKAFnX4R+0EfA4OCD52hjwweASZGO6wxOxRqK5aaM8v
+	 47F0VXdkrvQaqc0AeQLmgNL2y02Ka5+5fAxVqKEO1ktT7wwvCW7fCdlQLaZ1aoOhvD
+	 3GIcNiKu7u/2lNQhl6sBbtlHygIKZsuBPU9t/OihBBQZJaHXTJe8rMzbr2jy2T9q+D
+	 a4NeuGkG2rglFJvI4gosfvw5ct9MdqL063TQOCAuRe5LSuvYkXD1szIaF9MoDpw5Kz
+	 ciulQMMcIOrd6aq0Os8cZUYKQKeEcJhG0HU1D+5IsHsp4GiGFz2QdDSG+pnvskPdYP
+	 RgxEQEm3U9gKw==
+Date: Thu, 19 Jun 2025 07:41:50 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Marc Kleine-Budde
- <mkl@pengutronix.de>, netdev@vger.kernel.org, davem@davemloft.net,
- linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH net-next 06/10] can: rcar_canfd: Repurpose f_dcfg base
- for other registers
-Message-ID: <20250619072213.3d84c100@kernel.org>
-In-Reply-To: <CAMuHMdU=7YUZgcwK_annDigTgE9YqQ=sxjtF9ttAGzPV-7wR6A@mail.gmail.com>
-References: <20250618092336.2175168-1-mkl@pengutronix.de>
-	<20250618092336.2175168-7-mkl@pengutronix.de>
-	<20250618183827.5bebca8f@kernel.org>
-	<CAMZ6Rq+azM63cyLc+A3JLwVCgopOcu=LSGfmBQAbKrkJzmFYGg@mail.gmail.com>
-	<CAMuHMdU=7YUZgcwK_annDigTgE9YqQ=sxjtF9ttAGzPV-7wR6A@mail.gmail.com>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>, Biju Das
+ <biju.das.jz@bp.renesas.com>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org, Marc
+ Kleine-Budde <mkl@pengutronix.de>, "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH] can: rcar_canfd: Describe channel-specific FD registers
+ using C struct
+Message-ID: <20250619074150.31e39212@kernel.org>
+In-Reply-To: <88b0892f-5994-4b7a-9de3-eab39075acaa@wanadoo.fr>
+References: <292b75b3bc8dd95f805f0223f606737071c8cf86.1750327217.git.geert+renesas@glider.be>
+	<88b0892f-5994-4b7a-9de3-eab39075acaa@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -65,36 +63,11 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 19 Jun 2025 12:16:00 +0200 Geert Uytterhoeven wrote:
-> On Thu, 19 Jun 2025 at 06:43, Vincent Mailhol <mailhol.vincent@wanadoo.fr> wrote:
-> > On Thu. 19 Jun. 2025 at 10:38, Jakub Kicinski <kuba@kernel.org> wrote:  
-> > > On Wed, 18 Jun 2025 11:20:00 +0200 Marc Kleine-Budde wrote:  
-> > > > +static inline unsigned int rcar_canfd_f_cfdcrc(struct rcar_canfd_global *gpriv,
-> > > > +                                            unsigned int ch)
-> > > > +{
-> > > > +     return gpriv->info->regs->coffset + 0x10 + 0x20 * ch;
-> > > > +}  
-> > >
-> > > clang is no longer fooled by static inline, it identifies that 4 out of  
-> 
-> Oh well, that explains why someone pointed to a CI log showing more
-> unused functions in a different driver.  I hope it only does that
-> for unused functions in .c files, not in header files?
+On Thu, 19 Jun 2025 20:12:41 +0900 Vincent Mailhol wrote:
+> @Jakub, OK for me if you want to directly pick this patch without going through
+> the linux-can tree.
 
-Yes, AFAIU it's clever enough to distinguish what came in from 
-the headers.
+Ah, missed this before replying to the other thread.
 
-> > > these functions are never called. I think one ends up getting used in
-> > > patch 10 (just looking at warning counts), but the other 3 remain dead
-> > > code. Geert, do you have a strong attachment to having all helpers
-> > > defined or can we trim this, please?  
-> 
-> I would like to keep them (or at least the information), as it serves
-> as register documentation, just like the macros they replaced....
-
-Okay, we'll pull, but we really should try to keep the tree free of W=1
-warnings. The CI can deal with existing warnings but they will annoy
-humans doing development. Maybe there is a way to disable the warning
-selectively for rcar if you find it unhelpful? And then we'll see if
-some well meaning code janitor sends a patch to delete them anyway ;)
+We'll take it direct then, thank you!
 
