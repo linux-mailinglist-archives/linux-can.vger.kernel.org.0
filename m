@@ -1,176 +1,162 @@
-Return-Path: <linux-can+bounces-3900-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3901-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 520FBAE945F
-	for <lists+linux-can@lfdr.de>; Thu, 26 Jun 2025 04:47:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E61EAE96AB
+	for <lists+linux-can@lfdr.de>; Thu, 26 Jun 2025 09:22:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F7A95A1217
-	for <lists+linux-can@lfdr.de>; Thu, 26 Jun 2025 02:47:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 569EF160DBD
+	for <lists+linux-can@lfdr.de>; Thu, 26 Jun 2025 07:22:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4007812C544;
-	Thu, 26 Jun 2025 02:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61703238C36;
+	Thu, 26 Jun 2025 07:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="AXKcreC2"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="cO4c5oaQ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-68.smtpout.orange.fr [193.252.22.68])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738F12F1FC6;
-	Thu, 26 Jun 2025 02:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B71EB1DE8BE;
+	Thu, 26 Jun 2025 07:22:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750906061; cv=none; b=UZK7SegTyyZ5vuDRox/XwV8z1ojLPELUiAi5aNuv8+lOKNtMv0j58FpLOkvTR2YYQrusrDW3CF4DclztM342wqWquGa0RHpuWVQxpbsdLiJ71T1ChBQ7K3hbGIKPjcNzsG6KgR4nPbXaxtjOmFocc3op8ZRceBLb8+srkYHICi4=
+	t=1750922574; cv=none; b=YyNxJ+RkAqMMdI9LN5SF1niE8jCs2iNYg8m2ltkN4BAWoa8KJUD2zS9H158KGLb2Ftgc63gS9GCQCURcnIEYl5iZVD6QjYnUrUFv3sQmeskb2xf9QsMZ2hmc6NURnKmNrrH06G8B4IJakyGNZTUeSR/QBZ+GOwRfuc280p0ruOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750906061; c=relaxed/simple;
-	bh=ScQib/iIummUOWXbX8F7fB94LmFMCLeWS/9/eLvbi8I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=is9/3FCVugXEYj859d26AAqZybbtpxaJMdaLJhCczQRF0+4SmQOMA2813QMpMV5ET396mDO+BpM8K+6GTXBrgkNiK5Jg/zA3ImRfnX0Ux1mnm6qBoS1olLdEog1fylhLDvGN4BCycouXYFNmJ32/O5F/xKqu9irserB5Kyxgjoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=AXKcreC2; arc=none smtp.client-ip=193.252.22.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from mail-ed1-f48.google.com ([209.85.208.48])
-	by smtp.orange.fr with ESMTPA
-	id Uce6uBOZ4XsbBUce6uYh0i; Thu, 26 Jun 2025 04:47:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1750906047;
-	bh=V/WDGm52hjpGx8ncCcYjJQ6PVfKZmpK1IbtetFcAPZo=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=AXKcreC2hdhLd56+Cey94Qh+dtSb4I1iZ4F7tzKufV3IjHBmxIB/b2JAISrtiqr8h
-	 AkiniknS7H5b/fs1p98bDforeC1c9oO+ZA2F2IFe66qb1pwyNFqER3fkfKfGNXdy/n
-	 9UPrhZyyOmVjK7Zt5jJeVgF1QKTMUu8usI0uZaJVMl1svvvC3bgcLtDKifZOM1MxaG
-	 sIguHRExXuyLw4yoJst0bcEuBBVF2RvoQL5tTjc6OLhnF5DTFJI+LOpMRJtvj8mz/E
-	 SQBIbsgbTtLqt142XCkiLZC9KBF3rCNTlms3VDvi40tOX5q/VKMLSSGdIzuXcEVVdA
-	 vWawg+qiYa/PQ==
-X-ME-Helo: mail-ed1-f48.google.com
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 26 Jun 2025 04:47:27 +0200
-X-ME-IP: 209.85.208.48
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-60768f080d8so866660a12.1;
-        Wed, 25 Jun 2025 19:47:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV+ohoYjU5M+e3OTzaId6wGj22wLl9pV4L2K8uT64VQ0VsSmswsh8b/oLKYhpfnclT15bt7C5SiqFg1yDOABO4=@vger.kernel.org, AJvYcCVs0mHN/eG6dylXrVECvQOp35vWuzuP0/7tP3SkwivbFNNYre+Ma6g9k7sCerFql0JCyVQ+dzYRLocpsoet@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6bwiaPtO/PbnP80vxpXo1d/B3I0soAoJrm8Vw8dF3dTBV5wac
-	FGmD38YgRpp74LoUb8hWRO8cGN0CjVa9ejxQL3pBmE05vHkoSxqWsH0cCYoyqDVgcErclhJHlos
-	8Fj6rSXHEhvoLluUDi15IQXM5gpVSzyM=
-X-Google-Smtp-Source: AGHT+IGrHj2tMbiZ2QeqZjQlXbTaO+MvqmYe6H6UjmXckgl2wWAV/SH/jd2Fj2A10MlMl3Fc5SZuuFIsEb6X+IB+Lpo=
-X-Received: by 2002:a17:907:7b85:b0:ae0:d54d:2d0e with SMTP id
- a640c23a62f3a-ae0d54d3185mr115037266b.38.1750906046477; Wed, 25 Jun 2025
- 19:47:26 -0700 (PDT)
+	s=arc-20240116; t=1750922574; c=relaxed/simple;
+	bh=xn5xGJTDX8CLgN3pQX67e9rZW+ZHFqb9uNcuHUdSfW4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pU8A7HeTcFda9xiNFXWlfeKF/M/Il5iwxrv4pDNkfIbH8R9UxQZJ3lulqf6V5edWqJa8BVB4/3bAnNhxZA1z0ZU1tL8kVVRSGvKFLLREOHLuGyJEw6I2ARg3o+UBK/r1xs/hvwnTCAkbOTIj+Mg6jm2trnOr75310D3YBD0Y9ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=cO4c5oaQ; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1750922557; x=1751527357; i=markus.elfring@web.de;
+	bh=hHLsvSh4Eh45XDZ3IR1yDnB2tpn9jxt0fU65TXDdnZk=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=cO4c5oaQoghtbWSHBByEZWmTN0ok6EMieFRpThEbaIIjpRahWn6k3G1apVDrKXua
+	 2YW6LgTNpHHy55TuBvBCaXoSCidA2i1WopvVba07sY35sw7UKNBcNnRfNzm+TjQwF
+	 7qcnR1ZEAg9ZIQrVlCwDpErNk/JTm7BM537KkvlV3jGPJHj4fqT0Ma2DsK7m6WE/x
+	 /C/DyH063YQnbK1OjzjxOCjsRPCb6f1/zq+13eUR49c0sU1Rt8kDi6d3w2aLg8TAp
+	 tCrxU9qoC9DP/iuWLTfbfDnziLOKes08gJnflSAWGv+1wX852jWixiFgnJ34l8wKW
+	 4MYiClGougRiIvHEBA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.202]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MElV3-1uXfrr33sp-004xvP; Thu, 26
+ Jun 2025 09:22:36 +0200
+Message-ID: <1e64bcef-33f1-4295-b91f-d4598b32b866@web.de>
+Date: Thu, 26 Jun 2025 09:22:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <48e217a7-b90e-4af3-b535-812c449dd3ba@web.de> <bf5442d1-34e0-495f-8a56-4e47f53ca4ad@wanadoo.fr>
- <a7a00125-b393-4283-a7dc-6c80ced8e7e6@web.de> <c96a5d2c-0ee1-4e3e-a95d-d38a8f668feb@wanadoo.fr>
- <0768a008-d4a9-41ec-bc47-1e7c63362296@web.de> <c04376f2-6ab7-4256-8bdc-aa6ff3ea88b4@wanadoo.fr>
+User-Agent: Mozilla Thunderbird
+Subject: Re: can: ucan: Use usb_endpoint_type() rather than duplicating its
+ implementation
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
+ Chen Ni <nichen@iscas.ac.cn>, Marc Kleine-Budde <mkl@pengutronix.de>
+References: <48e217a7-b90e-4af3-b535-812c449dd3ba@web.de>
+ <bf5442d1-34e0-495f-8a56-4e47f53ca4ad@wanadoo.fr>
+ <a7a00125-b393-4283-a7dc-6c80ced8e7e6@web.de>
+ <c96a5d2c-0ee1-4e3e-a95d-d38a8f668feb@wanadoo.fr>
+ <0768a008-d4a9-41ec-bc47-1e7c63362296@web.de>
+ <c04376f2-6ab7-4256-8bdc-aa6ff3ea88b4@wanadoo.fr>
  <7e6f8929-6665-45af-b01b-167a1aa80305@web.de>
-In-Reply-To: <7e6f8929-6665-45af-b01b-167a1aa80305@web.de>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Thu, 26 Jun 2025 11:47:15 +0900
-X-Gmail-Original-Message-ID: <CAMZ6Rq+PEZWzxNYDODq-Rz_Y8T_XEihyZKoY-MYo6bn5ATaGLQ@mail.gmail.com>
-X-Gm-Features: Ac12FXxlciyP7y1Op9Ovh1hpCQMsTtZ2R8U4meStboJJffsNcUC2zhdd5dGfQGY
-Message-ID: <CAMZ6Rq+PEZWzxNYDODq-Rz_Y8T_XEihyZKoY-MYo6bn5ATaGLQ@mail.gmail.com>
-Subject: Re: can: ucan: Use usb_endpoint_type() rather than duplicating its implementation
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-can@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	kernel-janitors@vger.kernel.org, Chen Ni <nichen@iscas.ac.cn>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+ <CAMZ6Rq+PEZWzxNYDODq-Rz_Y8T_XEihyZKoY-MYo6bn5ATaGLQ@mail.gmail.com>
+Content-Language: en-GB, de-DE
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <CAMZ6Rq+PEZWzxNYDODq-Rz_Y8T_XEihyZKoY-MYo6bn5ATaGLQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:qH6guRNMh1V/bjtNkPumCT1nFNcmdGkHMRT3zsUqIyKHcDMciXG
+ CsLomwRwkSSkbFjMkpyGq+1tQ8SRbQ7QTA/mercj3Zac5bcpdqgJyyx9SuEROgnkAfS1UX+
+ RSpr9eFlD/5sXok+u+k4U7YMltjUU9ocHapT5ZzaFXtwnaQISYgud0hIYvFm0xcgPaB7Km+
+ xmM+YvhJltMaIv2uUNbMQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:TsuQJnbwb8E=;Bjg3XX1+VE251eK+w3wW2nr3VNK
+ uuAr4LS4paV6BSab2LQdpXp+mlGIA+LoyQguLX7uvfL1Jih/8BUzm8HRns5Xcma9OSzmb+LDn
+ wf6DWK8Mvb9ts53BGuZHvowqY/M0ryarEShtc36cr/WMvkQG5rYILbsPiFJ1sGO8vLlZxHfQH
+ /Ki5oZK1VnIRCGvdRO/uOeU2xaw6YFUr6KNklf5ltqhWnLP/BSC4lF5iY91ZJ5mrwszQi3RVz
+ BL1V7QMoKzC49MsVUBJjCq/S2Hz3Cad7E9jB3kvh0FwBnONKY/7qCbZ6zqMVQQkFSg0ltR/WN
+ a2qYWZ1d8CKbN7wyteQSA7gfELzwGOzLG/jfonJZTqyYHvDu7877Bi601xh4TddcumdmXT8TK
+ dH+bbxWDLZ+GBARSJL2xJxklNtaPiEqpn0eo1IdDVUPPuq1XCuJIm2cGmUj2EMLwjQKN1KgE0
+ zKAZdYZk9tCQCSC3KyOnXp/G/Ef2+AL6442wmP7Vt7L3+1LmHcmHDEDzbtLJ3LFWwlL7pThPb
+ MdF4kMIXSki0+e2L8WegXY6xzguD3KYjWfEuc4zvP0x7QBbJxc/TU0Z+F7d5PeOAPelQD5Gci
+ ay1OoZW+ghhl6u8Dws/tXhsZToUUSbhA198Ye+YT0ly/5aOmKDzMJfNjRbRxgoJ5dHqPtbvcd
+ xI7m2zJlnq11CZ3SqGETwhln4TFo5qJ7EvFJ5Kn/47IU7axJHiK3y4cAjqkZjiCR7vk7xWNpj
+ aVYLzM11aYjslq2KGNqPTAymjHvt6TatU/i6nC69dkyYSFTHU0aF87bs4cg9AVaOOrFdVbGWU
+ ZutrIfH5+WMayxZl+17LrVOf7u7HtN5+HZEWoC05lZ1rMPdSzpFn/Cor2uIJLSWWVq6LS4RP9
+ YsEEDpR2sKqu90WLArZ8ro+z77NWcT9SkNKoQn9RdpEjUHp2AdWmEA8xgaOQs5XF+YKpzx2XB
+ lAwcUedGYy0L8x9PDDLiAbk4xBdWt+ibuXThdznndz2ehKVuLMKVnJcxS8Is1KizcH8fWC6rY
+ /UE2f5DY8+nUaN7SH2mCzVvcxE9pGD+pEc52WbZFnfiP22Y4zeqpaa+qaHJ4jxiMyUXXYYyeZ
+ r6uUhm6D/JikCDNoA/x6iwuhaYCU9HAlqGTruKELcdy3wtb8Rcxn+b6ptM84k1O7CPp5K8hW6
+ lQ3lNUgQV0OX4zzX6yCjhF9dDWqxi5mT/J80tYeOzfrrwQJVdQD39bP3CJD9lPmRQat3jk0z3
+ sSQ/cTeN8WhKUdlzMymAPMaM9tzYPlu9I/WjioOwUN+/Z1ha7EaYlYeyTOFK/e4A1HOnqlptv
+ aln/NZHSjxdOZ/N9WkD+DPygpGlCMayX01g/8HXRPhu/em/j7Y+EulTOpY1Ks2juKUuQYcu4h
+ 1brrZfRBnn8TaKe+gdI09lIurxmApoykpC2mBuUZiiZjLR1iopcpCn2nN1LlTfwQzLqdFRri0
+ 14tQMV6wO3mf8nIxO+Kk50nOmFsXeSf0leS4fKr3hj0vIMKBB8vqQKZ+E3Qzh5kOnSGCOVVSF
+ d51n/rqZiIy4AjR8DV3E1C/3uU/H6SvvzEW1GkD3qp4Tyr0Qf6SDurAi7KFOT9rPC25HO+6mU
+ e57fkSsQWL/PiZXmsvMTCamNGZcO99rDya/LJskKjAN2kWERddvR85mWOMiC9BDkP98Gf/XgL
+ MhGtGiOz3SquJ/zSOBeDIZsMx7uWu7urN+QT2H0m4Gyexj5W3IJ+ROX1Yo82T2xOLQ5m7oB20
+ Uw0HHsFN4TGSXUFz2nsdjMucwwuZ74+4klQ6oXZZxsDQUp6v5vtDLcGhwwGcoqZjHd5FLflkc
+ NrG9kXtaVegwl0kEWnUEFnpKK6vj0rzM6BjvRnzmPkSVPZl9R57ppVDOCq++LFtQToLdB64A1
+ pm8VghWOb5LrYvgikSGdtrhouHA4pjjV1u7Y25YmJdBF7vAve+H8SXaE0pS3JK3jTow2d5JeP
+ GSivXsqtf4/R5FjWAZ20kImeYp6siRELGJXu9Q0vn2c2pQGtiSSERsv0Q05nR2N4kAgMzmGsH
+ kN00MNU/emE3afuqozH/DoDJABsL4k8/1ZUOCvELtRgATIe+kDyD/5SKXfz2q8IgU+fEKk05S
+ Ej+N+2PWUCvHJgiiD1pkRsPCpsZqGpIkS+wRuUyTIY1mNbhH42fErluqrZFhUSP691X9GIH5s
+ BZYyD7BECFiV2p+w+KxRHMh5DpoCS2bkz+r0B0MlkCpcGmLROPscERyd/36fucRSYl782NwwH
+ 65zfqYZ09gEaVselGyzuY8p1ySiCeLSDcHxrbx0gxwnecPbD3fvCiVLsGd0FpMwuSeeuTmUeb
+ W4cCUl90svDgA5v5MG1gFujzcdd8nDqaKBTUTldL+38Xrw+SHH+Hz8MX/ovaoIBHgfuggX3VO
+ V0jIN770p2A8BAQkTaR8CGd/vMZ3rljWoWv/uCCW4ovTj3Hjge7GuJjbjNYXYTr8CO3FbrKrU
+ RRJfnfmDmzD7Sgt+93gjCZXSKQvzZxOIgkfsfVo2msMzeShRXvfdSBNLnHrO6ON03qy/BndH3
+ UDdfjwYKPXYJJGJc1hWxUWhYlfFwQgwaDzafjFG6BT/t6sbjM8IN1hI0FaZiY5vJusAfVKOSl
+ gi5Itp9o2uy6wLgWN+Z/dMQRyax22DElQXersPSteDmdEibwuPeWGLEDzd/TWxzVDBsPcFiA3
+ w2eZleE0ynS9mrGN1HjARmxGHLMH95dRcRxHQ6+c688rTrxXQgpCgX4XbBrktQJd69VtYqprZ
+ 8q2Wie8su1/GodT5PM5Y8TzS92k+4OmHO8IxJvJzYOUnBrugViY+vwxBO6pZk4xqm5hf0MZd6
+ yXs1ISWPtMMH04yTgfr69XbO/3+r44VoBB1A/2pQdkmHlmOhIh/17ufEjpgs6zE2wzrc5LXam
+ PI35FCRvbLkCYO2XyYW5sMrVTSyhNELX/p+E1FBrEKI+PQ5J5J/Jtf9AJQio2RUau7xVTZyef
+ 9djX7s129I2dadGfShVt5viw3vLLV7qJqzlWvULv+fzVt9Dphf4tGseNc5P3CWDBQ82f2l5sj
+ ZAGKiXj0f4yvAHJJCnNq5w0zLkB0JDIBbDzCr2oCyfB9V0WWkeAxI98mBTIZbY5tOzyuP+chJ
+ Zh/MVNF9VsS10VhlUkCQdt1O+yJZLHiJVZ2rklzNnYxNfPvXRKf7JVDi28dSMMQDqKTzL5zxz
+ I7a+/B5RHPqgjWmmDLZBwSOjV0TM27jkCXFVnXRr9WtCes2eaO78unBGyOvr58ZEh1Ci1Tfxl
+ 342pdV61QuKfeGPHFGL4CzYPpkZrPZ7SWleJDacVgCmn6zrijV5K3bhWlHJ0TytuP6QKHs7oU
+ b3GcxReVk7KXveVltfhFesLHh3K4dkBq4U0TinFeNP+tZmqaIJrMXyp7ZER0svuzZEuJgmTMS
+ rutGLGHL3gi4eIv/2DVzkDhW8na7WGg2/+6IKT3WvjTSXb1HcWn5EBtgDrs8cukwsnQFzBJXw
+ vrfj30+kVZKu50q2JOBZZjKmesn7TaEo=
 
-On Thu. 26 Jun. 2025 at 01:47, Markus Elfring <Markus.Elfring@web.de> wrote=
-:
-> > A real quick search shows me that this ucan driver is not an isolated c=
-ase.
-> > Here is an example:
-> >
-> > https://elixir.bootlin.com/linux/v6.16-rc3/source/drivers/media/rc/imon=
-.c#L2137-L2148
->
-> Thanks that you pointed another implementation detail out from
-> the function =E2=80=9Cimon_find_endpoints=E2=80=9D.
+>> I am unsure if the check reordering would be desirable for this functio=
+n implementation.
+>=20
+> Ah, you want to confirm whether
+>=20
+>   usb_endpoint_dir_in(ep) && usb_endpoint_xfer_bulk(ep)
+>=20
+> is the same as
+>=20
+>   usb_endpoint_xfer_bulk(ep) && usb_endpoint_dir_in(ep)
+>=20
+> ?
 
-What I did here was simply to look at all the users of the
-USB_ENDPOINT_DIR_MASK macro:
+Exactly, yes.
 
-https://elixir.bootlin.com/linux/v6.16-rc3/C/ident/USB_ENDPOINT_DIR_MASK
+Commutativity can probably be applied in this case.
+But the different execution order will influence the corresponding run tim=
+e characteristics.
+https://en.wikipedia.org/wiki/Short-circuit_evaluation
+https://en.wikipedia.org/wiki/Commutative_property
 
-and bingo, the very first user of that macro is the imon driver with a
-true positive. I did not check the other drivers from the list, but
-that is what I meant by the manual hunt: I believe that 15 minutes
-would be enough to quickly check all those drivers. Of course, doing
-it manually is a one time solution whereas adding the coccinelle
-script is a long term solution. Also, I am just sharing my thoughts. I
-am not trying to discourage you in any way, it is even the opposite:
-such initiatives are really nice! Even if I do not participate in
-these myself, I want to tell you my gratitude for your efforts!
+The data processing order from known API function implementations might ge=
+t priority
+also at discussed source code places in the near future.
 
-> > But it does not seem to occur so often either. So not sure what is the =
-best:
-> > do a manual hunt
->
-> Unlikely.
->
-> I am unsure if such an aspect would become relevant for a code review
-> by other contributors.
->
->
-> >                  or write a coccinelle checker.
->
-> I would find it more convenient to achieve corresponding adjustments
-> to some degree with the help of such a development tool.
-> I constructed scripts for the semantic patch language accordingly.
->
->
-> >> Can the functions =E2=80=9Cusb_endpoint_is_bulk_in=E2=80=9D and =E2=80=
-=9Cusb_endpoint_is_bulk_out=E2=80=9D
-> >> be applied here?
-> >> https://elixir.bootlin.com/linux/v6.16-rc3/source/include/uapi/linux/u=
-sb/ch9.h#L572-L595
-> >
-> > Further simplification, nice :)
-> >
-> > I didn't see that last one, so glad you found what seems to be the opti=
-mal solution!
-> I am unsure if the check reordering would be desirable for this function =
-implementation.
-
-Ah, you want to confirm whether
-
-  usb_endpoint_dir_in(ep) && usb_endpoint_xfer_bulk(ep)
-
-is the same as
-
-  usb_endpoint_xfer_bulk(ep) && usb_endpoint_dir_in(ep)
-
-?
-
-In this case, that is OK. *Mathematically speaking* we have this equivalenc=
-e:
-
-  a & b <=3D> b & a
-
-In C it is roughly the same except if the expression has some
-undefined behaviour. The typical example is:
-
-  foo && foo->bar
-
-Here, the short cut evaluation of the && operator will prevent the
-undefined behaviour to occur if foo is NULL. And so, obviously,
-refactoring as:
-
-  foo->bar && foo
-
-would be a bug. In our case, there is no undefined behaviour on the
-right hand operand (I mean, if ep is NULL, the undefined behaviour
-will already occur on the left hand operand). So we are totally safe
-to reorder the operand here.
-
-
-Yours sincerely,
-Vincent Mailhol
+Regards,
+Markus
 
