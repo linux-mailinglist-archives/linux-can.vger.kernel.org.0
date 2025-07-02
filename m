@@ -1,137 +1,143 @@
-Return-Path: <linux-can+bounces-3931-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3932-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8B75AF1102
-	for <lists+linux-can@lfdr.de>; Wed,  2 Jul 2025 12:01:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C26AFAF138A
+	for <lists+linux-can@lfdr.de>; Wed,  2 Jul 2025 13:19:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4AD5188D799
-	for <lists+linux-can@lfdr.de>; Wed,  2 Jul 2025 10:01:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79D29482F00
+	for <lists+linux-can@lfdr.de>; Wed,  2 Jul 2025 11:18:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F8111E3775;
-	Wed,  2 Jul 2025 10:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE401255F26;
+	Wed,  2 Jul 2025 11:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="tqT6VSg1"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out.smtpout.orange.fr (out-67.smtpout.orange.fr [193.252.22.67])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B65DF42;
-	Wed,  2 Jul 2025 10:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40171244693;
+	Wed,  2 Jul 2025 11:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751450488; cv=none; b=CNkwrHd0lpShynTAL+M11vw9yB47Lcdl11kWamTkLj7M/bIrA3H2crQA/QCjYKVtZD7Pc6U9FtPTSlySzaTcHp/cyT1iQ4CRbgSWaT+QmhIuplkPQHNrMx2xlKT2uExoa2BQSh+xWCJSxHCN9dlZOhhc16s0ORmiiKYuSDmVv6w=
+	t=1751455154; cv=none; b=QqD3qNbM/GfHHkuDlqSu8fggsPPAuZx/cr7nTTeXoWm8mwsn3phwn18B6tqftdHy5EPcZ383EXB5SxQaHnfByk3D6EhAGIuy1iNKm6tfoifvRcvq3V8zBnlSwkkTsoF8ozwMBxh/ZQPpHzW1jkeubS2LtQfXQ2o01cz22UCpOR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751450488; c=relaxed/simple;
-	bh=WWgjTbYmZoGnhpkjWEAze55dVkBL2mGCVKOkjtyo/6Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BjtZ4bgdDex9Ah1QrH+90GECt/+oH8qQF3Mr/2fbDMHw1i2LTads0ljTItTk+DO2DU7Uk2pZXU9WEL01fzJ1OhE+Csd7SzB97fRg26Xv8BK0tGm9c2Qj7P3dNcqHMruPDsVMgVaD2us7OgO8oaCUQ4ExH6yVu79eio7NohtrGPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-5314b486207so1366124e0c.2;
-        Wed, 02 Jul 2025 03:01:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751450484; x=1752055284;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LEr1iJohCGNsLPZlIt87oQ8gruL6FU9A7/YLok/d6QI=;
-        b=Ief5jCVEi+e518zzhXn8xhelwXEej0ZvGIw95oe6Xi9XJdvgUB+NtVnX32Za9iQbR+
-         OmTJ1cvYQJHOJLT72NxhtL9qNNIgZbfQIIN6z80LAiKt2lvk1jPUqGrQSQiJPagFDZHL
-         2sPDpeuGaxDjOoKUG0B+qFzziYqn8I5gX+KMHN8FJsbzJaymWMnnaMm6lpOIXg1lLSkW
-         Aqsdjz+YgrVCfvfRfLeGcdy/dNaWWGXwdpEhUrNRR9cponazcgV4rrBuq/B7ykpD/YDo
-         XKKjn/JyELs4AKLYE+UulekF4I3jS5P75xqTmP24nEHmy3mgaaRf0qSuT7iq+qnU0xlA
-         J7jA==
-X-Forwarded-Encrypted: i=1; AJvYcCV8cXndl/b+FSwiQrufuPa4qrMFF/qZ341iojrpgwtFrOR+xN7EW9XAJOEJppk+pCAt/qgTOeh6JxwOQ2ykYeamUx4=@vger.kernel.org, AJvYcCXAfwwwyo/trKMsnU6t6u9AWqFEWKewbt+gNGbj4K0he8UZmHdq9LWedd9CYaVWvH59YNZWnmPhvt8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzArGf8CHr2QwqDsd30a5akC6FvjPTqR/xjuLUOMfus3NlgejNB
-	9jkmXomKEeTdot1u0ZnUdG+k8fhZSaBARELnxeMP6CcPL7nneMc3sAkurKYMmve4
-X-Gm-Gg: ASbGncvo05AE5oxr27HW3PrPcUytcS/Emb+j02p1bFAKXyLH12h2v190PTOuw+6ah8N
-	y1s6SVI8N1G6feO511ieaYNeiSJAiVmEHMeTxX5gf4HdsP4CNwygOOCY/jpVHmJwXq/5Zg6Po2y
-	8i+BBXbilVh73VGlYnHyYYckZgKrUiOqr8uizeIHCvDASICXADfbgOvkwRb/UnTu65XOm/0Z47s
-	k8ms9PeutGaOZeeAVEuJXaW0pu50Iwd9ebj0Ro19g+itKWLgrCscwJY5A07srTRGRsPLqphLNIe
-	6PnLkhsNq5hsMfGq1ys9TFMhsNoZ37lo5g5YLF4G+WZ+r83k7MLU6RKKA5eMs1DiMHaXUXVMwqn
-	qJ/oilH66zYK0rqXfk/gTtOKP
-X-Google-Smtp-Source: AGHT+IHqn81ffMrXSUuMk8TEGNoT3uvIivTL4enwWdrifZryw0RjWteFtnY6GxXfNV1Gyx80kkl9gg==
-X-Received: by 2002:a05:6122:1781:b0:520:60c2:3fd with SMTP id 71dfb90a1353d-53458093396mr1424680e0c.3.1751450483537;
-        Wed, 02 Jul 2025 03:01:23 -0700 (PDT)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-533090792b7sm2046665e0c.4.2025.07.02.03.01.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Jul 2025 03:01:22 -0700 (PDT)
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-884f2b3bc2eso848686241.2;
-        Wed, 02 Jul 2025 03:01:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUL4rICOqQFViIszxraxgH6hk7/2ra8729TwccAevceJ1ZplQ992s03+8ThTzxLtEyEa3CJoBFFYicwvJTk9IBFiBs=@vger.kernel.org, AJvYcCUY8yXRVC7hUaSvgySi8X5ywAk4gyYRCHTTSr/n/NQ8NvxE4UTDk5A7XgwILZ5iti0fy4qQBVkEVy8=@vger.kernel.org
-X-Received: by 2002:a05:6102:3f4e:b0:4e7:f3d3:a283 with SMTP id
- ada2fe7eead31-4f16136a54dmr633168137.25.1751450481993; Wed, 02 Jul 2025
- 03:01:21 -0700 (PDT)
+	s=arc-20240116; t=1751455154; c=relaxed/simple;
+	bh=vFgPLOm/HF2rte6e4ZbxusmO3v5sRE5ZjJu9SjGeizw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bDNBcmRjFlJkjH/G4OG7Na5bZkkciixdeWF/6aSP7PngNQxssd1tKOF/9yIr/1PVN7M/ABQ4N6WIb5drOOTViKcoij6x68ARLAZ/QcHheaIah5OUSA6AR8eoMpqrq/NEMQLMff6aartT/Qtu1TlCal8VkGwoJ2lkW3l7ae+5o00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=tqT6VSg1; arc=none smtp.client-ip=193.252.22.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id WvUQuOSXovzLVWvURuX85Z; Wed, 02 Jul 2025 13:19:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1751455143;
+	bh=zY0Vcncre8ymncF/krsSSccSYnb8ci79tIDtcmbKi8o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=tqT6VSg1AGvOz0HtRL6ZqeRZ50FWwUsVhw6FsqXGN9GsRo/7ZoQ6Qwacqfll6LBDv
+	 B5uJamNYlGN+Mbd3eawjQSV4EtaCljFlnWHiyTsaQi8quPA9G4NIIlH0C2Ul4v+MQm
+	 hbVHr6PLM+G8wyViMtTiF5eA0C9WtVPzYrpYlCstKoFEiJruCFiruuc/KEI7yyKsYC
+	 C60Zf6h38Z/vprDIweUFmh2dc0JBhJj1bZxtgyGTmNZvtUNG0rzfWSo95BSzUZPxoj
+	 Cz7GxouzwtNAkfomOkhGcszlfgPGcEypvajDvcKFg6GQln2iR9Eh8BpiQDjGwidPqP
+	 7RUhjldGO/Qhw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 02 Jul 2025 13:19:03 +0200
+X-ME-IP: 124.33.176.97
+Message-ID: <b0e1655d-1efc-419c-8acf-f9a6243e56d0@wanadoo.fr>
+Date: Wed, 2 Jul 2025 20:18:57 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250629150417.97784-1-biju.das.jz@bp.renesas.com>
- <CAMuHMdXK9ZBpgPSE32Zya-nVBXQw25=2-g5pnixjFOoyOkrrvg@mail.gmail.com> <TY3PR01MB113463762D1EC916BDE1B7BA28640A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY3PR01MB113463762D1EC916BDE1B7BA28640A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 2 Jul 2025 12:01:09 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUcTbM_pbxmbb-kuWf7Kgb=94QtPzRVJZaUrezL3wwN6w@mail.gmail.com>
-X-Gm-Features: Ac12FXyAGqFgRe82GCxfe0ExkpQMoQ_6pcjFo9ivcv-Q9isw0ietBLOkNlu7X-8
-Message-ID: <CAMuHMdUcTbM_pbxmbb-kuWf7Kgb=94QtPzRVJZaUrezL3wwN6w@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] can: rcar_canfd: Drop unused macros
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Magnus Damm <magnus.damm@gmail.com>, 
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	"biju.das.au" <biju.das.au@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
+ Magnus Damm <magnus.damm@gmail.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ "biju.das.au" <biju.das.au@gmail.com>
+References: <20250629150417.97784-1-biju.das.jz@bp.renesas.com>
+ <CAMuHMdXK9ZBpgPSE32Zya-nVBXQw25=2-g5pnixjFOoyOkrrvg@mail.gmail.com>
+ <TY3PR01MB113463762D1EC916BDE1B7BA28640A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <CAMuHMdUcTbM_pbxmbb-kuWf7Kgb=94QtPzRVJZaUrezL3wwN6w@mail.gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <CAMuHMdUcTbM_pbxmbb-kuWf7Kgb=94QtPzRVJZaUrezL3wwN6w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Biju,
+On 02/07/2025 at 19:01, Geert Uytterhoeven wrote:
+> Hi Biju,
+> 
+> On Wed, 2 Jul 2025 at 11:46, Biju Das <biju.das.jz@bp.renesas.com> wrote:
+>>> From: Geert Uytterhoeven <geert@linux-m68k.org>
+>>> On Sun, 29 Jun 2025 at 17:04, Biju Das <biju.das.jz@bp.renesas.com> wrote:
+>>>> Drop unused macros from the rcar_canfd.c.
+>>>>
+>>>> Reported-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>>>> Closes:
+>>>> https://lore.kernel.org/all/7ff93ff9-f578-4be2-bdc6-5b09eab64fe6@wanad
+>>>> oo.fr/
+>>>> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> 
+>>>     #define RCANFD_RFPTR_RFDLC    GENMASK(31, 28)
+>>>
+>>>> @@ -298,16 +256,10 @@
+>>>>  #define RCANFD_GSTS                    (0x008c)
+>>>>  /* RSCFDnCFDGERFL / RSCFDnGERFL */
+>>>>  #define RCANFD_GERFL                   (0x0090)
+>>>> -/* RSCFDnCFDGTSC / RSCFDnGTSC */
+>>>> -#define RCANFD_GTSC                    (0x0094)
+>>>
+>>> Note that removed register offsets will become anonymous gaps when the register offsets are replaced
+>>> by C structs, cfr. commit ab2aa5453bb83d05
+>>> ("can: rcar_canfd: Describe channel-specific FD registers using C struct").
+>>
+>> OK. But removing unused reg offset is not an issue at the moment, I guess??
+> 
+> No, it is not an issue at the moment, as they are unused.  Re-adding
+> register members to a C struct later is just more tedious, as you have
+> remove gaps or adjust their sizes (lol, mind the gap ;-).
+> 
+> IIRC Vincent's biggest gripe is the use of function-like macros,
+> not the definition of unused register offsets and bits?
 
-On Wed, 2 Jul 2025 at 11:46, Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > From: Geert Uytterhoeven <geert@linux-m68k.org>
-> > On Sun, 29 Jun 2025 at 17:04, Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > Drop unused macros from the rcar_canfd.c.
-> > >
-> > > Reported-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > Closes:
-> > > https://lore.kernel.org/all/7ff93ff9-f578-4be2-bdc6-5b09eab64fe6@wanad
-> > > oo.fr/
-> > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Correct.
 
-> >     #define RCANFD_RFPTR_RFDLC    GENMASK(31, 28)
-> >
-> > > @@ -298,16 +256,10 @@
-> > >  #define RCANFD_GSTS                    (0x008c)
-> > >  /* RSCFDnCFDGERFL / RSCFDnGERFL */
-> > >  #define RCANFD_GERFL                   (0x0090)
-> > > -/* RSCFDnCFDGTSC / RSCFDnGTSC */
-> > > -#define RCANFD_GTSC                    (0x0094)
-> >
-> > Note that removed register offsets will become anonymous gaps when the register offsets are replaced
-> > by C structs, cfr. commit ab2aa5453bb83d05
-> > ("can: rcar_canfd: Describe channel-specific FD registers using C struct").
->
-> OK. But removing unused reg offset is not an issue at the moment, I guess??
+My comment really came from the fact that I did not understand why you were only
+removing RCANFD_GAFLCFG_GETRNC() while keeping the other unused macros in:
 
-No, it is not an issue at the moment, as they are unused.  Re-adding
-register members to a C struct later is just more tedious, as you have
-remove gaps or adjust their sizes (lol, mind the gap ;-).
+https://lore.kernel.org/all/7ff93ff9-f578-4be2-bdc6-5b09eab64fe6@wanadoo.fr/
 
-IIRC Vincent's biggest gripe is the use of function-like macros,
-not the definition of unused register offsets and bits?
+To be honnest, I would still rather prefer to see those unused macros removed,
+but it is something that I am totally fine to leave to your judgement.
 
-Gr{oetje,eeting}s,
+Keeping the unused macro is totally negotiable if you prefer to do so :)
 
-                        Geert
+My no-go is indeed on the proliferation of function-like macros.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Yours sincerely,
+Vincent Mailhol
+
 
