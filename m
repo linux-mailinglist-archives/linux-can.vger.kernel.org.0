@@ -1,96 +1,97 @@
-Return-Path: <linux-can+bounces-3935-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3936-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E9DBAF1589
-	for <lists+linux-can@lfdr.de>; Wed,  2 Jul 2025 14:24:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48576AF15EB
+	for <lists+linux-can@lfdr.de>; Wed,  2 Jul 2025 14:42:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDF4B1BC5F2A
-	for <lists+linux-can@lfdr.de>; Wed,  2 Jul 2025 12:24:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDB723A7B7E
+	for <lists+linux-can@lfdr.de>; Wed,  2 Jul 2025 12:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C3E126F46C;
-	Wed,  2 Jul 2025 12:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="F0SCA7CM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDC442727E7;
+	Wed,  2 Jul 2025 12:42:25 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-70.smtpout.orange.fr [193.252.22.70])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47C526B747;
-	Wed,  2 Jul 2025 12:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796EA266B72;
+	Wed,  2 Jul 2025 12:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751459053; cv=none; b=lRd0j7vjm9sK/RMrHyERGQEGK6F96W+d1P/Vpa5I8qSRmi/CGIkuZ3E318OmokpI2plrmENImxMB8UI2DNqOOVHgX3xbsVeU96kW41g5+P7cglz/AqRJL8J+eHQObvYlBEBdOtt5kkMQNl879Wp4aYynStghZL73R7TKVpHSGwc=
+	t=1751460145; cv=none; b=nFJHSfrb/dthPy9Yf+I7ZiSAMSt+woTSu4JStLjzlWCM7anPNiFi/JujjrdCWV95JrTdq7uJuj23b2a30BgLNGv9GmsOelQLq5A3MB17Kw+onxUsUw0fWJS8KfoIL0AroPk/M61L8sCvgk6efG/sh1ON8Mfu2t9JXhO4hvgdtE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751459053; c=relaxed/simple;
-	bh=FnTPS7XrucGy4Vkovkr4+yG8KSsot54yCzj6ft7QxKQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ekEy5oqFL3CA6aWQYGdQbOGG/pVBwQrnBi7bibYcYpeSS63sfmrKCuZIf/ciuOKK65AvA/lR3u7jp3iPBWJneY3p3YsJvmh4GRu4M1xHHoAGfv4OUTLaxtoa78xkHR0j7VoblgY7+M1dAzebO564FNGxvEbygXoxLKx3PkgJAQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=F0SCA7CM; arc=none smtp.client-ip=193.252.22.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id WwUKuU4efLcVHWwULu3zCl; Wed, 02 Jul 2025 14:23:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1751458981;
-	bh=6AUGzcNiTKnyYAvQQAMQveENbbz1AubdZ1CqkeZ4AEo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=F0SCA7CMjk17ST1ESJdj+eX//PXF9chUocEUvBpjdh5rL4IVLdMtIia1TN5zJO63d
-	 T6d61cwVkyQjCftcAhb2/Z2pCL8Q25tyb2g0DloaWReUEblvJ6V4/6ZwkQBLKy2/T5
-	 c/5xiaMvxcHNfckmhGNqjRe/rSZrZOBLgSycwgjXlr3JHCMBugQ7g6uL4V0YplWDeq
-	 2xmE8SL9z007D34L7dsonXCovBvg3PcCfxMkINQtOTBW0QYOJshJBx8jfqLOm6L9w3
-	 jkyIOjUudFyA7areOCqSBZmb50djcikGZkxsC0zQAjXmli96rzwU6tCW3ExM7N6bI7
-	 WQ4W8E0PPJHpQ==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 02 Jul 2025 14:23:01 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <23dbf1ed-543c-4765-91a6-b54db2d49150@wanadoo.fr>
-Date: Wed, 2 Jul 2025 21:22:56 +0900
+	s=arc-20240116; t=1751460145; c=relaxed/simple;
+	bh=Wp/bPCZSWaK03f8Wauo7UJdWJ+RF3nKt7kYP5tEg7N4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nwibeCkiuOcNpWS1xM4/3xBR3CVMmSz/IG2SbjfXoqOlDKHV5fNUrYWvJd8CDo+wx6t2mh0Avpz1+glA8Oug7ktJ2b1e5NskIj+jMbrYx8ifMZU+OHPlBFIs2Fseaj/CdqAEafuA+VXiy3znpwLgg2Xm6fsbS4BSc5gAQoZbrHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-531b4407cfbso1221125e0c.1;
+        Wed, 02 Jul 2025 05:42:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751460141; x=1752064941;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YJgLqOUo4bzsY26K6/CBMEPB4usC4u2n2nOEOmNiasM=;
+        b=EDWDse2pRgy8WpZfuayur3n5cnmQ/71b/JTyKYpG8nXRhK8bMSVtlREVH64ejnmn+Y
+         L4LjN3a1YAD1ZhtS+Asi4wkRVPGwAuPaHZoZ2V+XM1g6PwF3itLAndXCDEle9+7Px1ro
+         uLx5bvO+YNHer79FhJJ88HfgDiYxryamoCWxG/M1B3aXpW6Tt5tShVBukibi5i56Hfnx
+         Lo+xYACYs4F8m4A4T40KOXzlWuOHIBIvx4vdyDrhgBUeq+7vl8qu0u8E8s0gDPKqiZkA
+         RGrkBSc75QOStcK2r8CkU2qT1BMkrSf8BwqNIGBnaeENpJ4PnJVpm6N8cPA+tkiEvD8Q
+         iI1A==
+X-Forwarded-Encrypted: i=1; AJvYcCU2qpcGSaEh7J9RqQP9Ly2CUfiU8woxaRZFVP4ISFZAB8w/yJX+KJ3+8SA0CE5bd8fJL9p82z98NZC6gbe7@vger.kernel.org, AJvYcCVZaaZ9Jf9hxrUZ0h9Vw+TiolKi0/UrQQP29+X2sT6zURw2WblrpeaG8n3r7cD+nGu4sWVfdsxWrYntYcsEkQS3XuA=@vger.kernel.org, AJvYcCVu7MOMDS2wwaiBbiHVZ3G7Sw43KNu03PkP7GbQoKGonqlrD7Rpy7XiFNFN0Gk2UA77SAEdXoaqwkc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHwao5VdPb/WohZYQxbYSBCo/ed9Xs0YQ3qlU26rjx75gpZcve
+	zI7JBT2Qy8YpFBAFEy6anHlk4vUNZy1IKEgZl16EKC3c54ucV+ximnfbHP+FnWxM
+X-Gm-Gg: ASbGncsi4Huq8fYTT00h5TGEa1nGAe9pKHwG9xObYUMjRSHokobYFsAUd+P/R6dgzvl
+	dyqCd9JlVVEk+YZ1mi11EUROIkrpLH3YYf6qSedb70z4IyTKx6dm+kpqYNTDcBy0MDU6MHltWCG
+	KssNZtKL6Omz9XBRwv+gVeLwV5EDF8jYmy+PjVOFB55YSdRsXDgNznw3czudhQ3Ry8+CQtcSVcv
+	5B3Y19lfGUM6+EPThB5EeJilfkvBL+6uyqK04OH0NRtVNmNdKIkqEJlGKzH0nrRxRvbepUgm8+G
+	tmVRxKKqQJvOWQAe73ppHXtHNXEUPmeOAa4MwGZfgR4eQn97eQ0PaYSTL01wIa2zPYF+01hHzkg
+	q6FHYF8HB2v0XEGy/bjqhnFGo
+X-Google-Smtp-Source: AGHT+IHyyjYZFjH0BrLpbsdAH5yi4QQjEiYqwkouO3F15EAW2kBd5leXHDAJqsfrPzYppGvpzUPzig==
+X-Received: by 2002:a05:6122:4682:b0:530:72da:d13d with SMTP id 71dfb90a1353d-53457fe128bmr1464791e0c.1.1751460141105;
+        Wed, 02 Jul 2025 05:42:21 -0700 (PDT)
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-53309079316sm2094632e0c.6.2025.07.02.05.42.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Jul 2025 05:42:20 -0700 (PDT)
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-4e79de9da3fso1135747137.1;
+        Wed, 02 Jul 2025 05:42:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU0knzMme7B3om/ejXpKo4WmLLAEavD/AxUZZz+C3W0hdvVXDmtES/U/xVXV4oLwEait40Tv/WXtBs=@vger.kernel.org, AJvYcCVgIm2T2SGR2IYdBjR6QtD8+M9Iq9Nw5fVsUa4biRXtrcUwKQMUi3qpM5IrJiDBXtwmJYezUM9h71+0NOyH@vger.kernel.org, AJvYcCXDid1vu5PU10za73DaMr5PpfrdxuotAmRC6OAAmySlpQEgUxJ853zqWYNKY/6qOGQ5IEfKuLlPx5Ya3BRJ0CP2wjE=@vger.kernel.org
+X-Received: by 2002:a05:6102:2b86:b0:4e5:9323:d2b9 with SMTP id
+ ada2fe7eead31-4f160fbc067mr1302267137.2.1751460139870; Wed, 02 Jul 2025
+ 05:42:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] can: rcar_canfd: Drop unused macros
-To: Biju Das <biju.das.jz@bp.renesas.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>,
- Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Biju Das <biju.das.au@gmail.com>, Magnus Damm <magnus.damm@gmail.com>
 References: <20250702120539.98490-1-biju.das.jz@bp.renesas.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
 In-Reply-To: <20250702120539.98490-1-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 2 Jul 2025 14:42:08 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXKoxsaq3y4aD6CY13LHZ5cOuZMXEKBGqthTxxm2EWhFw@mail.gmail.com>
+X-Gm-Features: Ac12FXx0oWmYUpn6ud4HLq8dVewZuGgIKHGLmd7HxxYP_2inOB9rBWt5CLAlmz4
+Message-ID: <CAMuHMdXKoxsaq3y4aD6CY13LHZ5cOuZMXEKBGqthTxxm2EWhFw@mail.gmail.com>
+Subject: Re: [PATCH v2] can: rcar_canfd: Drop unused macros
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Magnus Damm <magnus.damm@gmail.com>, linux-can@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 02/07/2025 at 21:05, Biju Das wrote:
+On Wed, 2 Jul 2025 at 14:05, Biju Das <biju.das.jz@bp.renesas.com> wrote:
 > Drop unused macros from the rcar_canfd.c.
-> 
+>
 > Reported-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 > Closes: https://lore.kernel.org/all/7ff93ff9-f578-4be2-bdc6-5b09eab64fe6@wanadoo.fr/
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
 > ---
 > v1->v2:
 >  * Dropped the Rb tags.
@@ -98,15 +99,16 @@ Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 >  * Restored register offsets will become anonymous gaps when the register
 >    offsets are replaced by C structs.
 
-When you refactor into the C structs, there is no problem to give a proper name
-to a field which is unused. First, the struct clearly shows that this field is
-part of a group whereas this relation is less obvious with the macros, second,
-it takes little real estate: just one field name (less distraction when a human
-parses the code compared to the macro) and finally, as a bonus point, you do not
-get a W=2 warning spam.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+Gr{oetje,eeting}s,
 
-Yours sincerely,
-Vincent Mailhol
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
