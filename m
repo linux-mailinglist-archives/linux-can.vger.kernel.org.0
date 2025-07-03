@@ -1,112 +1,84 @@
-Return-Path: <linux-can+bounces-3940-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3941-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8816AF682A
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 04:44:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD3BCAF801C
+	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 20:34:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACCA17AF232
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 02:43:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BD88583A03
+	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 18:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D691EF391;
-	Thu,  3 Jul 2025 02:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="iXQRXRKL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2AD12F2C73;
+	Thu,  3 Jul 2025 18:34:22 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-70.smtpout.orange.fr [193.252.22.70])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB891E51EB;
-	Thu,  3 Jul 2025 02:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.70
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D9B32F2C6B;
+	Thu,  3 Jul 2025 18:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751510686; cv=none; b=LbetmefWeHabBSnu7g7UeQqflV8/7qQqb4dCu7gPOEv1/Sa97dYYunZ/j4er1gSXgeZADqcqdG6w2czWftT9izP10cwqdIvmIQdqRML0pW+rsrTPfTdK9G2HvFyvmoYbCDJf4lnb0XfzlJ6bcPGmM5ETttgBi1L8VjJcQXHhsB8=
+	t=1751567662; cv=none; b=ik3MssmLoo7g4iq/bAl0NTiBPg/kkxhifS/+HGzHFuhfLUe/gjXEFqXlNiegkyaLlZOqq0f/8CdYOGq5J4qfYwFzAYtCKduIEPI+Iall6qDHL7UcmPB6qnCoMP/vpjF0bmL1wvnAy9fgD9OGaDkrm2zTMuS1v8YO1Oa9IjQg8zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751510686; c=relaxed/simple;
-	bh=WgbSXIsjCcwNK+L/EUnxevkdq+CUcqhuSViQKFcXTjw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XBbY5gRh31/SRBM6h5z2jB79SVosGiF0+g7lzFNQkum0S/SzYbECPwhBD5jMBmUGglXYP0/rRWbYxHl/4l6pVQTHs5qMnEhMZSp5ZCtCFMedd+MG570PdY7fUUHk42Zq7PrZEpOJloEe96KSdHO6DZfhzlTl7+VfPdflDCyUX9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=iXQRXRKL; arc=none smtp.client-ip=193.252.22.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id X9w4uFmBje9b2X9w5ufiLf; Thu, 03 Jul 2025 04:44:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1751510679;
-	bh=6u4dQwo3U5CVNhb6hsocU5gXqojJ+ccC7r8jooA/t4w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=iXQRXRKLyqFhiDoWzZ4/cZ3rhPOqFo2X1WYTGinZ4rICj+IyL+vqDaXboDyyr0Z//
-	 LwRAGJ5KcZInhwjhI4s7dqP4FkeYA5CSovuyJ5djeYoZlSYfbdEMIPEudIjYHj48KL
-	 UA4WbyPAI70FpPFXeSvl43wLPyiyrF9aX9b22E/3cQNHhswOGXQPJ/ZV7YoqdQeeZf
-	 NuB9yP+fEgfrJNzo9m3ndWoGP+SG3Xcs1Bphx9MSjb3n7EyilA14PUh2I+pbhLR1Fs
-	 HnLB+ueM9kGix6pOSNobbxBmv7APRg/dMAu2VEc5wr6jUEqc3nhIwg7kKv53PPDEs/
-	 32YSrY7dwvHcw==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 03 Jul 2025 04:44:39 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <0360d2e0-e071-4259-a7c7-23c31e52e563@wanadoo.fr>
-Date: Thu, 3 Jul 2025 11:44:27 +0900
+	s=arc-20240116; t=1751567662; c=relaxed/simple;
+	bh=JIYPEoh6dphXPyN/j/1HYem+qD2zUpQid13Os3rleAo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AoZk3W1B+oNxJkjUCziWMTVfqH8WUuDY+Vfcv6YTG7DHgYe1tLZhdKCcA0jRqe+3zwr5H5SzHi1YDF7flSf4BF1vvcxQPJG7GmAg9z792wFvkg/D9kafT7pFqJ9VepH/Xx7xglnXTQJthd9/4lbxZvx+AuLSqrTYEOb1U7CupY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-CSE-ConnectionGUID: TisQh2Z3TBi8gtPN3S7e4g==
+X-CSE-MsgGUID: jZWZiK+pRWKox50tV2YDgg==
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 04 Jul 2025 03:34:17 +0900
+Received: from localhost.localdomain (unknown [10.226.92.64])
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 13E91401D15C;
+	Fri,  4 Jul 2025 03:34:13 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	linux-can@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH 0/4] R-Car CANFD Improvements
+Date: Thu,  3 Jul 2025 19:33:58 +0100
+Message-ID: <20250703183411.332828-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Ming Yu <a0282524688@gmail.com>, Lee Jones <lee@kernel.org>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
- andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
- jdelvare@suse.com, alexandre.belloni@bootlin.com,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250627102730.71222-1-a0282524688@gmail.com>
- <20250627102730.71222-2-a0282524688@gmail.com>
- <20250702161513.GX10134@google.com>
- <CAOoeyxXWbjWvOgsSvXb9u2y6yFExq347ceZe96bm9w+GQAp2Rg@mail.gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <CAOoeyxXWbjWvOgsSvXb9u2y6yFExq347ceZe96bm9w+GQAp2Rg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 03/07/2025 à 11:39, Ming Yu wrote:
-> Dear Lee,
-> 
-> Thanks for your feedback and review.
-> Currently, the status of the sub-device drivers is as follows (A/R/T):
->     [v13,1/7] mfd: Add core driver for Nuvoton NCT6694 (- - -)
->     [v13,2/7] gpio: Add Nuvoton NCT6694 GPIO support (1 1 -)
->     [v13,3/7] i2c: Add Nuvoton NCT6694 I2C support (1 - -)
->     [v13,4/7] can: Add Nuvoton NCT6694 CANFD support (- 2 -)
+The calculation formula for nominal bit rate of classical CAN is same as
+that of nominal bit rate of CANFD on the RZ/G3E SoC compared to other SoCs.
+Add shared_bittiming variable to struct rcar_canfd_hw_info to handle this
+difference.
 
-For the CAN driver, my Reviewed-by can be interpreted as an Acked-by :)
+Added the patch "Drop unused macros" to this serires.
 
->     [v13,5/7] watchdog: Add Nuvoton NCT6694 WDT support (1 - -)
->     [v13,6/7] hwmon: Add Nuvoton NCT6694 HWMON support (- 1 -)
->     [v13,7/7] rtc: Add Nuvoton NCT6694 RTC support (1 - -)
+Apart from this, replaced the RCANFD_NCFG_* and RCANFD_DCFG_* macros
+with simple functions and replaced RCANFD_CFG_* macros with FIELD_PREP
+macro.
 
+Biju Das (4):
+  can: rcar_canfd: Add shared_bittiming variable to struct
+    rcar_canfd_hw_info
+  can: rcar_canfd: Drop unused macros
+  can: rcar_canfd: Replace RCANFD_NCFG_* and RCANFD_DCFG_* macros
+  can: rcar_canfd: Replace RCANFD_CFG_* macros with FIELD_PREP
 
-Yours sincerely,
-Vincent Mailhol
+ drivers/net/can/rcar/rcar_canfd.c | 170 +++++++-----------------------
+ 1 file changed, 39 insertions(+), 131 deletions(-)
+
+-- 
+2.43.0
 
 
