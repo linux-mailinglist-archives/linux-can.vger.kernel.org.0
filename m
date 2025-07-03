@@ -1,38 +1,39 @@
-Return-Path: <linux-can+bounces-3941-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3942-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD3BCAF801C
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 20:34:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08FA0AF8022
+	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 20:35:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BD88583A03
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 18:35:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D36731CA2844
+	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 18:35:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2AD12F2C73;
-	Thu,  3 Jul 2025 18:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924902F235D;
+	Thu,  3 Jul 2025 18:34:30 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D9B32F2C6B;
-	Thu,  3 Jul 2025 18:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2738D2F2C70;
+	Thu,  3 Jul 2025 18:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751567662; cv=none; b=ik3MssmLoo7g4iq/bAl0NTiBPg/kkxhifS/+HGzHFuhfLUe/gjXEFqXlNiegkyaLlZOqq0f/8CdYOGq5J4qfYwFzAYtCKduIEPI+Iall6qDHL7UcmPB6qnCoMP/vpjF0bmL1wvnAy9fgD9OGaDkrm2zTMuS1v8YO1Oa9IjQg8zs=
+	t=1751567670; cv=none; b=jkfmVm4kxmrJBtfRqa2bl38W9qnbL+0Uqqs1BOPwEsLb2J8ehj7xlLKA/5B3fheBe0HiZ9akNXmjkwwWbmF4Sk4LoB2sxg10cfNcGQRXL35YelnACSYpcGBqYEEQM+7SjpGbuIvgWF9p54xvTMWa0gUc3AqV7Hdhq5fhwJiZqVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751567662; c=relaxed/simple;
-	bh=JIYPEoh6dphXPyN/j/1HYem+qD2zUpQid13Os3rleAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AoZk3W1B+oNxJkjUCziWMTVfqH8WUuDY+Vfcv6YTG7DHgYe1tLZhdKCcA0jRqe+3zwr5H5SzHi1YDF7flSf4BF1vvcxQPJG7GmAg9z792wFvkg/D9kafT7pFqJ9VepH/Xx7xglnXTQJthd9/4lbxZvx+AuLSqrTYEOb1U7CupY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+	s=arc-20240116; t=1751567670; c=relaxed/simple;
+	bh=U5+QNp9Zh4q1QTX45unamveKVhZ71+n+5d57KeDbi8s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eAn2QfYUwpA6MFUQgAQDkJebczYlv26uucshn1ACo6E3RK8ruvel3Keu7CEAmZXIivbtEIZOlqRERkcyXMPOKi3YPitWcH1ps2bN3G9T2XpdKhOW+7lQiLYgzRQgtECOEAN5igdNJfCKxjIMTkF3/FQhIhQ3WvA4a13myjY1YiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: TisQh2Z3TBi8gtPN3S7e4g==
-X-CSE-MsgGUID: jZWZiK+pRWKox50tV2YDgg==
+X-CSE-ConnectionGUID: Jd3e6QMBT8+4hP7rB0xCDg==
+X-CSE-MsgGUID: BJnG3SYuQxCrY0GWu7Vf0A==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 04 Jul 2025 03:34:17 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 04 Jul 2025 03:34:20 +0900
 Received: from localhost.localdomain (unknown [10.226.92.64])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 13E91401D15C;
-	Fri,  4 Jul 2025 03:34:13 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id A4D43401D165;
+	Fri,  4 Jul 2025 03:34:17 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -45,10 +46,12 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	linux-kernel@vger.kernel.org,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH 0/4] R-Car CANFD Improvements
-Date: Thu,  3 Jul 2025 19:33:58 +0100
-Message-ID: <20250703183411.332828-1-biju.das.jz@bp.renesas.com>
+Subject: [PATCH 1/4] can: rcar_canfd: Add shared_bittiming variable to struct rcar_canfd_hw_info
+Date: Thu,  3 Jul 2025 19:33:59 +0100
+Message-ID: <20250703183411.332828-2-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250703183411.332828-1-biju.das.jz@bp.renesas.com>
+References: <20250703183411.332828-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -62,22 +65,68 @@ that of nominal bit rate of CANFD on the RZ/G3E SoC compared to other SoCs.
 Add shared_bittiming variable to struct rcar_canfd_hw_info to handle this
 difference.
 
-Added the patch "Drop unused macros" to this serires.
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+---
+ drivers/net/can/rcar/rcar_canfd.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Apart from this, replaced the RCANFD_NCFG_* and RCANFD_DCFG_* macros
-with simple functions and replaced RCANFD_CFG_* macros with FIELD_PREP
-macro.
-
-Biju Das (4):
-  can: rcar_canfd: Add shared_bittiming variable to struct
-    rcar_canfd_hw_info
-  can: rcar_canfd: Drop unused macros
-  can: rcar_canfd: Replace RCANFD_NCFG_* and RCANFD_DCFG_* macros
-  can: rcar_canfd: Replace RCANFD_CFG_* macros with FIELD_PREP
-
- drivers/net/can/rcar/rcar_canfd.c | 170 +++++++-----------------------
- 1 file changed, 39 insertions(+), 131 deletions(-)
-
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index 417d9196f41e..48eea9045691 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -554,6 +554,7 @@ struct rcar_canfd_hw_info {
+ 	unsigned ch_interface_mode:1;	/* Has channel interface mode */
+ 	unsigned shared_can_regs:1;	/* Has shared classical can registers */
+ 	unsigned external_clk:1;	/* Has external clock */
++	unsigned shared_bittiming:1;	/* Has shared nominal bittiming constants */
+ };
+ 
+ /* Channel priv data */
+@@ -725,6 +726,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
+ 	.ch_interface_mode = 0,
+ 	.shared_can_regs = 0,
+ 	.external_clk = 1,
++	.shared_bittiming = 0,
+ };
+ 
+ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
+@@ -742,6 +744,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
+ 	.ch_interface_mode = 1,
+ 	.shared_can_regs = 1,
+ 	.external_clk = 1,
++	.shared_bittiming = 0,
+ };
+ 
+ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
+@@ -759,6 +762,7 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
+ 	.ch_interface_mode = 0,
+ 	.shared_can_regs = 0,
+ 	.external_clk = 1,
++	.shared_bittiming = 0,
+ };
+ 
+ static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
+@@ -776,6 +780,7 @@ static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
+ 	.ch_interface_mode = 1,
+ 	.shared_can_regs = 1,
+ 	.external_clk = 0,
++	.shared_bittiming = 1,
+ };
+ 
+ /* Helper functions */
+@@ -2005,7 +2010,10 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
+ 		priv->can.fd.do_get_auto_tdcv = rcar_canfd_get_auto_tdcv;
+ 	} else {
+ 		/* Controller starts in Classical CAN only mode */
+-		priv->can.bittiming_const = &rcar_canfd_bittiming_const;
++		if (gpriv->info->shared_bittiming)
++			priv->can.bittiming_const = gpriv->info->nom_bittiming;
++		else
++			priv->can.bittiming_const = &rcar_canfd_bittiming_const;
+ 		priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING;
+ 	}
+ 
 -- 
 2.43.0
 
