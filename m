@@ -1,39 +1,39 @@
-Return-Path: <linux-can+bounces-3942-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3943-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08FA0AF8022
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 20:35:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BD39AF8025
+	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 20:35:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D36731CA2844
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 18:35:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D9FD7B81D5
+	for <lists+linux-can@lfdr.de>; Thu,  3 Jul 2025 18:33:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924902F235D;
-	Thu,  3 Jul 2025 18:34:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 402F12F365D;
+	Thu,  3 Jul 2025 18:34:32 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2738D2F2C70;
-	Thu,  3 Jul 2025 18:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 758D22F3620;
+	Thu,  3 Jul 2025 18:34:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751567670; cv=none; b=jkfmVm4kxmrJBtfRqa2bl38W9qnbL+0Uqqs1BOPwEsLb2J8ehj7xlLKA/5B3fheBe0HiZ9akNXmjkwwWbmF4Sk4LoB2sxg10cfNcGQRXL35YelnACSYpcGBqYEEQM+7SjpGbuIvgWF9p54xvTMWa0gUc3AqV7Hdhq5fhwJiZqVE=
+	t=1751567672; cv=none; b=uYQiDqYrIiee95vruBEXm0iqBCSWDxK/QrS4V+J+UZEq7jEMpAQgYa2CLaMUtTt2tdxiMhP6szAOid25ZpLnWIVyPrCeQ3BzfX6D1cmdyEsGXtR2BP6J3gdk7LrQ4/sFL6K/gKSX+JuB0c38/2aPJWFLQuZEjSKW+/pS4tF107A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751567670; c=relaxed/simple;
-	bh=U5+QNp9Zh4q1QTX45unamveKVhZ71+n+5d57KeDbi8s=;
+	s=arc-20240116; t=1751567672; c=relaxed/simple;
+	bh=29ZBydfU6f6AHsp/HJTX1ZJTXHSv39V/r7CHhGPxDEM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eAn2QfYUwpA6MFUQgAQDkJebczYlv26uucshn1ACo6E3RK8ruvel3Keu7CEAmZXIivbtEIZOlqRERkcyXMPOKi3YPitWcH1ps2bN3G9T2XpdKhOW+7lQiLYgzRQgtECOEAN5igdNJfCKxjIMTkF3/FQhIhQ3WvA4a13myjY1YiQ=
+	 MIME-Version; b=oVSJ2Z4yeGF0HiiEiIi/EDkZ13E6yrhDWqvFUhRy6hgEYtG+v7Z/ffpVXTRaJUc1eqlC7ZO8BRB5nBC0qBYJnmuA8LRqRYhREBYUz4Riwd9NnrkMgw6s8bgacQuaWCjxFO3Sat3+wO9Nm6Z5etyY/JU3WsApEmfeRjzHapZ17gk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: Jd3e6QMBT8+4hP7rB0xCDg==
-X-CSE-MsgGUID: BJnG3SYuQxCrY0GWu7Vf0A==
+X-CSE-ConnectionGUID: v127nDTeT/m9gpKOoU9FOg==
+X-CSE-MsgGUID: 6EDH0ihMTm6u9m5BbM+9CA==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 04 Jul 2025 03:34:20 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 04 Jul 2025 03:34:24 +0900
 Received: from localhost.localdomain (unknown [10.226.92.64])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id A4D43401D165;
-	Fri,  4 Jul 2025 03:34:17 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 42E70401D15C;
+	Fri,  4 Jul 2025 03:34:21 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -46,9 +46,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	linux-kernel@vger.kernel.org,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH 1/4] can: rcar_canfd: Add shared_bittiming variable to struct rcar_canfd_hw_info
-Date: Thu,  3 Jul 2025 19:33:59 +0100
-Message-ID: <20250703183411.332828-2-biju.das.jz@bp.renesas.com>
+Subject: [PATCH 2/4] can: rcar_canfd: Drop unused macros
+Date: Thu,  3 Jul 2025 19:34:00 +0100
+Message-ID: <20250703183411.332828-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250703183411.332828-1-biju.das.jz@bp.renesas.com>
 References: <20250703183411.332828-1-biju.das.jz@bp.renesas.com>
@@ -60,73 +60,179 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The calculation formula for nominal bit rate of classical CAN is same as
-that of nominal bit rate of CANFD on the RZ/G3E SoC compared to other SoCs.
-Add shared_bittiming variable to struct rcar_canfd_hw_info to handle this
-difference.
+Drop unused macros from the rcar_canfd.c.
 
+Reported-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Closes: https://lore.kernel.org/all/7ff93ff9-f578-4be2-bdc6-5b09eab64fe6@wanadoo.fr/
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 ---
- drivers/net/can/rcar/rcar_canfd.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+v2->v3:
+ * Added Rb tag from Geert and Vincent.
+v1->v2:
+ * Dropped the Rb tags.
+ * Restored simple bit definitions as it serve as documentation.
+ * Restored register offsets, as it will become anonymous gaps when the
+   register offsets are replaced by C structs.
+---
+ drivers/net/can/rcar/rcar_canfd.c | 93 -------------------------------
+ 1 file changed, 93 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 417d9196f41e..48eea9045691 100644
+index 48eea9045691..ce355f79e6b6 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -554,6 +554,7 @@ struct rcar_canfd_hw_info {
- 	unsigned ch_interface_mode:1;	/* Has channel interface mode */
- 	unsigned shared_can_regs:1;	/* Has shared classical can registers */
- 	unsigned external_clk:1;	/* Has external clock */
-+	unsigned shared_bittiming:1;	/* Has shared nominal bittiming constants */
- };
+@@ -224,8 +224,6 @@
  
- /* Channel priv data */
-@@ -725,6 +726,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- 	.ch_interface_mode = 0,
- 	.shared_can_regs = 0,
- 	.external_clk = 1,
-+	.shared_bittiming = 0,
- };
+ /* RSCFDnCFDRFPTRx */
+ #define RCANFD_RFPTR_RFDLC(x)		(((x) >> 28) & 0xf)
+-#define RCANFD_RFPTR_RFPTR(x)		(((x) >> 16) & 0xfff)
+-#define RCANFD_RFPTR_RFTS(x)		(((x) >> 0) & 0xffff)
  
- static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
-@@ -742,6 +744,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
- 	.ch_interface_mode = 1,
- 	.shared_can_regs = 1,
- 	.external_clk = 1,
-+	.shared_bittiming = 0,
- };
+ /* RSCFDnCFDRFFDSTSx */
+ #define RCANFD_RFFDSTS_RFFDF		BIT(2)
+@@ -257,12 +255,9 @@
+ /* RSCFDnCFDCFIDk */
+ #define RCANFD_CFID_CFIDE		BIT(31)
+ #define RCANFD_CFID_CFRTR		BIT(30)
+-#define RCANFD_CFID_CFID_MASK(x)	((x) & 0x1fffffff)
  
- static const struct rcar_canfd_hw_info rzg2l_hw_info = {
-@@ -759,6 +762,7 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
- 	.ch_interface_mode = 0,
- 	.shared_can_regs = 0,
- 	.external_clk = 1,
-+	.shared_bittiming = 0,
- };
+ /* RSCFDnCFDCFPTRk */
+ #define RCANFD_CFPTR_CFDLC(x)		(((x) & 0xf) << 28)
+-#define RCANFD_CFPTR_CFPTR(x)		(((x) & 0xfff) << 16)
+-#define RCANFD_CFPTR_CFTS(x)		(((x) & 0xff) << 0)
  
- static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
-@@ -776,6 +780,7 @@ static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
- 	.ch_interface_mode = 1,
- 	.shared_can_regs = 1,
- 	.external_clk = 0,
-+	.shared_bittiming = 1,
- };
+ /* RSCFDnCFDCFFDCSTSk */
+ #define RCANFD_CFFDCSTS_CFFDF		BIT(2)
+@@ -328,59 +323,6 @@
+ #define RCANFD_CFPCTR(gpriv, ch, idx) \
+ 	((gpriv)->info->regs->cfpctr + (0x0c * (ch)) + (0x04 * (idx)))
  
- /* Helper functions */
-@@ -2005,7 +2010,10 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 		priv->can.fd.do_get_auto_tdcv = rcar_canfd_get_auto_tdcv;
- 	} else {
- 		/* Controller starts in Classical CAN only mode */
--		priv->can.bittiming_const = &rcar_canfd_bittiming_const;
-+		if (gpriv->info->shared_bittiming)
-+			priv->can.bittiming_const = gpriv->info->nom_bittiming;
-+		else
-+			priv->can.bittiming_const = &rcar_canfd_bittiming_const;
- 		priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING;
- 	}
+-/* RSCFDnCFDFESTS / RSCFDnFESTS */
+-#define RCANFD_FESTS			(0x0238)
+-/* RSCFDnCFDFFSTS / RSCFDnFFSTS */
+-#define RCANFD_FFSTS			(0x023c)
+-/* RSCFDnCFDFMSTS / RSCFDnFMSTS */
+-#define RCANFD_FMSTS			(0x0240)
+-/* RSCFDnCFDRFISTS / RSCFDnRFISTS */
+-#define RCANFD_RFISTS			(0x0244)
+-/* RSCFDnCFDCFRISTS / RSCFDnCFRISTS */
+-#define RCANFD_CFRISTS			(0x0248)
+-/* RSCFDnCFDCFTISTS / RSCFDnCFTISTS */
+-#define RCANFD_CFTISTS			(0x024c)
+-
+-/* RSCFDnCFDTMCp / RSCFDnTMCp */
+-#define RCANFD_TMC(p)			(0x0250 + (0x01 * (p)))
+-/* RSCFDnCFDTMSTSp / RSCFDnTMSTSp */
+-#define RCANFD_TMSTS(p)			(0x02d0 + (0x01 * (p)))
+-
+-/* RSCFDnCFDTMTRSTSp / RSCFDnTMTRSTSp */
+-#define RCANFD_TMTRSTS(y)		(0x0350 + (0x04 * (y)))
+-/* RSCFDnCFDTMTARSTSp / RSCFDnTMTARSTSp */
+-#define RCANFD_TMTARSTS(y)		(0x0360 + (0x04 * (y)))
+-/* RSCFDnCFDTMTCSTSp / RSCFDnTMTCSTSp */
+-#define RCANFD_TMTCSTS(y)		(0x0370 + (0x04 * (y)))
+-/* RSCFDnCFDTMTASTSp / RSCFDnTMTASTSp */
+-#define RCANFD_TMTASTS(y)		(0x0380 + (0x04 * (y)))
+-/* RSCFDnCFDTMIECy / RSCFDnTMIECy */
+-#define RCANFD_TMIEC(y)			(0x0390 + (0x04 * (y)))
+-
+-/* RSCFDnCFDTXQCCm / RSCFDnTXQCCm */
+-#define RCANFD_TXQCC(m)			(0x03a0 + (0x04 * (m)))
+-/* RSCFDnCFDTXQSTSm / RSCFDnTXQSTSm */
+-#define RCANFD_TXQSTS(m)		(0x03c0 + (0x04 * (m)))
+-/* RSCFDnCFDTXQPCTRm / RSCFDnTXQPCTRm */
+-#define RCANFD_TXQPCTR(m)		(0x03e0 + (0x04 * (m)))
+-
+-/* RSCFDnCFDTHLCCm / RSCFDnTHLCCm */
+-#define RCANFD_THLCC(m)			(0x0400 + (0x04 * (m)))
+-/* RSCFDnCFDTHLSTSm / RSCFDnTHLSTSm */
+-#define RCANFD_THLSTS(m)		(0x0420 + (0x04 * (m)))
+-/* RSCFDnCFDTHLPCTRm / RSCFDnTHLPCTRm */
+-#define RCANFD_THLPCTR(m)		(0x0440 + (0x04 * (m)))
+-
+-/* RSCFDnCFDGTINTSTS0 / RSCFDnGTINTSTS0 */
+-#define RCANFD_GTINTSTS0		(0x0460)
+-/* RSCFDnCFDGTINTSTS1 / RSCFDnGTINTSTS1 */
+-#define RCANFD_GTINTSTS1		(0x0464)
+-/* RSCFDnCFDGTSTCFG / RSCFDnGTSTCFG */
+-#define RCANFD_GTSTCFG			(0x0468)
+-/* RSCFDnCFDGTSTCTR / RSCFDnGTSTCTR */
+-#define RCANFD_GTSTCTR			(0x046c)
+-/* RSCFDnCFDGLOCKK / RSCFDnGLOCKK */
+-#define RCANFD_GLOCKK			(0x047c)
+ /* RSCFDnCFDGRMCFG */
+ #define RCANFD_GRMCFG			(0x04fc)
  
+@@ -398,12 +340,6 @@
+ /* RSCFDnGAFLXXXj offset */
+ #define RCANFD_C_GAFL_OFFSET		(0x0500)
+ 
+-/* RSCFDnRMXXXq -> RCANFD_C_RMXXX(q) */
+-#define RCANFD_C_RMID(q)		(0x0600 + (0x10 * (q)))
+-#define RCANFD_C_RMPTR(q)		(0x0604 + (0x10 * (q)))
+-#define RCANFD_C_RMDF0(q)		(0x0608 + (0x10 * (q)))
+-#define RCANFD_C_RMDF1(q)		(0x060c + (0x10 * (q)))
+-
+ /* RSCFDnRFXXx -> RCANFD_C_RFXX(x) */
+ #define RCANFD_C_RFOFFSET	(0x0e00)
+ #define RCANFD_C_RFID(x)	(RCANFD_C_RFOFFSET + (0x10 * (x)))
+@@ -423,17 +359,6 @@
+ #define RCANFD_C_CFDF(ch, idx, df) \
+ 	(RCANFD_C_CFOFFSET + 0x08 + (0x30 * (ch)) + (0x10 * (idx)) + (0x04 * (df)))
+ 
+-/* RSCFDnTMXXp -> RCANFD_C_TMXX(p) */
+-#define RCANFD_C_TMID(p)		(0x1000 + (0x10 * (p)))
+-#define RCANFD_C_TMPTR(p)		(0x1004 + (0x10 * (p)))
+-#define RCANFD_C_TMDF0(p)		(0x1008 + (0x10 * (p)))
+-#define RCANFD_C_TMDF1(p)		(0x100c + (0x10 * (p)))
+-
+-/* RSCFDnTHLACCm */
+-#define RCANFD_C_THLACC(m)		(0x1800 + (0x04 * (m)))
+-/* RSCFDnRPGACCr */
+-#define RCANFD_C_RPGACC(r)		(0x1900 + (0x04 * (r)))
+-
+ /* R-Car Gen4 Classical and CAN FD mode specific register map */
+ #define RCANFD_GEN4_GAFL_OFFSET		(0x1800)
+ 
+@@ -452,12 +377,6 @@ struct rcar_canfd_f_c {
+ /* RSCFDnCFDGAFLXXXj offset */
+ #define RCANFD_F_GAFL_OFFSET		(0x1000)
+ 
+-/* RSCFDnCFDRMXXXq -> RCANFD_F_RMXXX(q) */
+-#define RCANFD_F_RMID(q)		(0x2000 + (0x20 * (q)))
+-#define RCANFD_F_RMPTR(q)		(0x2004 + (0x20 * (q)))
+-#define RCANFD_F_RMFDSTS(q)		(0x2008 + (0x20 * (q)))
+-#define RCANFD_F_RMDF(q, b)		(0x200c + (0x04 * (b)) + (0x20 * (q)))
+-
+ /* RSCFDnCFDRFXXx -> RCANFD_F_RFXX(x) */
+ #define RCANFD_F_RFOFFSET(gpriv)	((gpriv)->info->regs->rfoffset)
+ #define RCANFD_F_RFID(gpriv, x)		(RCANFD_F_RFOFFSET(gpriv) + (0x80 * (x)))
+@@ -482,23 +401,11 @@ struct rcar_canfd_f_c {
+ 	(RCANFD_F_CFOFFSET(gpriv) + 0x0c + (0x180 * (ch)) + (0x80 * (idx)) + \
+ 	 (0x04 * (df)))
+ 
+-/* RSCFDnCFDTMXXp -> RCANFD_F_TMXX(p) */
+-#define RCANFD_F_TMID(p)		(0x4000 + (0x20 * (p)))
+-#define RCANFD_F_TMPTR(p)		(0x4004 + (0x20 * (p)))
+-#define RCANFD_F_TMFDCTR(p)		(0x4008 + (0x20 * (p)))
+-#define RCANFD_F_TMDF(p, b)		(0x400c + (0x20 * (p)) + (0x04 * (b)))
+-
+-/* RSCFDnCFDTHLACCm */
+-#define RCANFD_F_THLACC(m)		(0x6000 + (0x04 * (m)))
+-/* RSCFDnCFDRPGACCr */
+-#define RCANFD_F_RPGACC(r)		(0x6400 + (0x04 * (r)))
+-
+ /* Constants */
+ #define RCANFD_FIFO_DEPTH		8	/* Tx FIFO depth */
+ #define RCANFD_NAPI_WEIGHT		8	/* Rx poll quota */
+ 
+ #define RCANFD_NUM_CHANNELS		8	/* Eight channels max */
+-#define RCANFD_CHANNELS_MASK		BIT((RCANFD_NUM_CHANNELS) - 1)
+ 
+ #define RCANFD_GAFL_PAGENUM(entry)	((entry) / 16)
+ #define RCANFD_CHANNEL_NUMRULES		1	/* only one rule per channel */
 -- 
 2.43.0
 
