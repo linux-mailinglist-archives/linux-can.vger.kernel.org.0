@@ -1,130 +1,111 @@
-Return-Path: <linux-can+bounces-3960-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3961-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E617B01944
-	for <lists+linux-can@lfdr.de>; Fri, 11 Jul 2025 12:04:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0CA4B01972
+	for <lists+linux-can@lfdr.de>; Fri, 11 Jul 2025 12:13:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF0611620E3
-	for <lists+linux-can@lfdr.de>; Fri, 11 Jul 2025 10:04:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 571637A97BD
+	for <lists+linux-can@lfdr.de>; Fri, 11 Jul 2025 10:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF619279DA0;
-	Fri, 11 Jul 2025 10:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE8A8219A91;
+	Fri, 11 Jul 2025 10:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="pTDSpAMf"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mail-106113.protonmail.ch (mail-106113.protonmail.ch [79.135.106.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8DA1CD215
-	for <linux-can@vger.kernel.org>; Fri, 11 Jul 2025 10:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DEF0279DC6
+	for <linux-can@vger.kernel.org>; Fri, 11 Jul 2025 10:12:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752228271; cv=none; b=cTtyG2Hu+x4RQxiMZa0OZv07S/pF6moKGSSKIDpjg7I9YlS4YK1osdjoQFeufZy0qVf6wpMkY3cwZiCFrXpOBTJ4P74ebZ8JY0kn8F3JKZneH5OFuKhuOQEQx/z8siMHk4yaLGKnuTxIq8P7YwCosFpM3FdWLZCxXwTtyROxjnM=
+	t=1752228754; cv=none; b=X9O6B7gHETmHtErTLRr2TEhWKq1Sm4PaE0MWuBNR/kBBp9wh1XoqsBjwwI+VT2ZpWO3ilq+MPmBq9bqj6hLe8I66Psw/6W5dD/3MfxFiY/2V8gUIo/PmQqfAsOj89b+UHyYC9ZJtNXIUMcSgqlx5IxlAmoWKqGpn0WYC2BGgFgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752228271; c=relaxed/simple;
-	bh=bvLqlRYQdA4HPfEvOl7SrdrZwNiykoEAA+WLD/Pep3E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rQXI41ALxxzKHJQ/4mw8NuZeNyB++mbrSKSLcH48FBXWnUuluCOYR/zWyjyii+Mfj/cEEcx2/Q+QHeOtInjpNJbMaEpnzjc4VKpMDcdCUbOaAEbdBM7JiJy2aaziz2qH1eBczyvm1vc9rYckSQbJ2pfyLjJh4YVcEUmLOcOE1jA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uaAc9-0002yy-Lf; Fri, 11 Jul 2025 12:04:21 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uaAc8-007u4P-0E;
-	Fri, 11 Jul 2025 12:04:20 +0200
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id B1F5C43C7BD;
-	Fri, 11 Jul 2025 10:04:19 +0000 (UTC)
-Date: Fri, 11 Jul 2025 12:04:19 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sean Nyekjaer <sean@geanix.com>
-Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Fengguang Wu <fengguang.wu@intel.com>, 
-	Varka Bhadram <varkabhadram@gmail.com>, Dong Aisheng <b29396@freescale.com>, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] can: m_can: apply rate-limiting to lost msg in rx
-Message-ID: <20250711-sloppy-righteous-falcon-db09cc-mkl@pengutronix.de>
-References: <20250630-mcan_ratelimit-v2-1-6b7a01341ea9@geanix.com>
- <20250711-astonishing-tentacled-tench-9fe229-mkl@pengutronix.de>
- <ku5336aidq5j24dswy5egbuse6a6jpfmf5j7ochenifxzy7he7@lth6f55c4nz4>
+	s=arc-20240116; t=1752228754; c=relaxed/simple;
+	bh=GsJAktsLzBSkUqKxmNyIud2QtPzK59Ps032nisqaXu0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=T4MINLzpAd22JkJV6Vk1bzvNARkdpY0qL2ef11ya/84a+hpawVAODfeW+kIqvWjSAF4JRvf5K8a/9o1ur29TT4tXw10i+dhUtUlLJKjgGq+8gPhuz+R7XhJS2feSM8qJMtXocIbZrYXy2WUafgwimkfJYSHQ3D79a5tZsqUythY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=pTDSpAMf; arc=none smtp.client-ip=79.135.106.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=geanix.com;
+	s=protonmail; t=1752228744; x=1752487944;
+	bh=gMuCuy0ZhjOIihQTRLQbxSG+m/8hn34n3LWqYdrlNPk=;
+	h=From:Date:Subject:Message-Id:To:Cc:From:To:Cc:Date:Subject:
+	 Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=pTDSpAMfodAxao3eYwYXrRQoLzPvdrajvr+A08h8oVD5ntwzcEm5t9bjgHW0Py8oZ
+	 E5DC2dTisyoPyOGgkUe5DH17Ks+L+6FwMrPJmE/jshsQ5YnyLrQcxSeOfjm/qEJo0S
+	 0SDP7V0GmVvH0HBDrGCCVVzE9PtoJx4M9APMcYbmkzVrI1Q1eAyX6a/2bKRljZd/j8
+	 sdsoBjspcPO5mjanH1nWNSVG8V0p+O8u5tcwazSHRFIPElPRfP/ZVRAMtudilxhShu
+	 WsfTbjuF1iXk6zV754N+NWWSesvLLntGTILcxYvgSc7KDRXqZobJmVrQyeCbNPZnz1
+	 xUfXv3NvyX5Rw==
+X-Pm-Submission-Id: 4bdnZY6dcxz1DDX1
+From: Sean Nyekjaer <sean@geanix.com>
+Date: Fri, 11 Jul 2025 12:12:02 +0200
+Subject: [PATCH v3] can: m_can: downgrade msg lost in rx to debug level
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gacxx7ldutkahecw"
-Content-Disposition: inline
-In-Reply-To: <ku5336aidq5j24dswy5egbuse6a6jpfmf5j7ochenifxzy7he7@lth6f55c4nz4>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250711-mcan_ratelimit-v3-1-7413e8e21b84@geanix.com>
+X-B4-Tracking: v=1; b=H4sIAHHjcGgC/3XM0QqCMBTG8VeRXbfY2cxlV71HRKx5pgdyxibDE
+ N+96VURXX4f/H8zixgIIzsVMwuYKNLg81C7gtnO+BY5NXkzKeRBVFLw3hp/C2bEB/U0ctQIrm6
+ OztSW5egZ0NG0gZdr3h3FcQivzU+wvn+pBByyV2pEJZwGd27ReJr2dujZaiX50avfXua+umsjQ
+ JWApv7ql2V5AxL9yxTtAAAA
+X-Change-ID: 20250620-mcan_ratelimit-e7e1f9d8fa9c
+To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ Fengguang Wu <fengguang.wu@intel.com>, 
+ Varka Bhadram <varkabhadram@gmail.com>, Dong Aisheng <b29396@freescale.com>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Sean Nyekjaer <sean@geanix.com>
+X-Mailer: b4 0.14.2
 
+Prevent flooding the kernel log with error messages.
 
---gacxx7ldutkahecw
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] can: m_can: apply rate-limiting to lost msg in rx
-MIME-Version: 1.0
+Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+---
+Changes in v3:
+- Removed ratelimit as it still would output  "... output lines suppressed
+  due to ratelimiting", but no message is shown.
+- Link to v2: https://lore.kernel.org/r/20250630-mcan_ratelimit-v2-1-6b7a01341ea9@geanix.com
 
-On 11.07.2025 09:58:53, Sean Nyekjaer wrote:
-> > What about replacing the netdev_err() by netdev_dbg()?
-> >=20
-> > --- a/drivers/net/can/m_can/m_can.c
-> > +++ b/drivers/net/can/m_can/m_can.c
-> > @@ -665,7 +665,7 @@ static int m_can_handle_lost_msg(struct net_device =
-*dev)
-> >         struct can_frame *frame;
-> >         u32 timestamp =3D 0;
-> >=20
-> > -       netdev_err(dev, "msg lost in rxf0\n");
-> > +       netdev_dbg(dev, "msg lost in rxf0\n");
-> >=20
-> >         stats->rx_errors++;
-> >         stats->rx_over_errors++;
-> >=20
->=20
-> Yeah that will do. V3 or?
+Changes in v2:
+- Changed to dbg msg
+- Link to v1: https://lore.kernel.org/r/20250620-mcan_ratelimit-v1-1-e747ee30f71f@geanix.com
+---
+ drivers/net/can/m_can/m_can.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, please.
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 6c656bfdb3235e1f5d6405c49b07b821ddacc1b9..fe74dbd2c9663b7090678ab78318698d50ffb481 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -665,7 +665,7 @@ static int m_can_handle_lost_msg(struct net_device *dev)
+ 	struct can_frame *frame;
+ 	u32 timestamp = 0;
+ 
+-	netdev_err(dev, "msg lost in rxf0\n");
++	netdev_dbg(dev, "msg lost in rxf0\n");
+ 
+ 	stats->rx_errors++;
+ 	stats->rx_over_errors++;
 
-Marc
+---
+base-commit: db22720545207f734aaa9d9f71637bfc8b0155e0
+change-id: 20250620-mcan_ratelimit-e7e1f9d8fa9c
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Best regards,
+-- 
+Sean Nyekjaer <sean@geanix.com>
 
---gacxx7ldutkahecw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmhw4aAACgkQDHRl3/mQ
-kZyQogf/U0p+sFC7xemKEG/fMP5ySKQTGKI1ZAec2lh0dnVmEIq0x/HQw6WGDlSa
-G872Tf59DPZSFynCSkIv9c7ivjBpLjGjNfwPpbZHDKirIvL3cxMkdy+gzf30vG68
-7IHa0hO0bZFY9omZqmCqRfstdAzDUkrTdw0m+G6hVbMv3tL6DTZz4AP5YLN+nAyr
-+qCN5JBtqYIP4KcDYwUd2SQg79Yt/gMe4Tyrbjt0jPnTVSGIWr+fzgKoVNOJu+3K
-89Jm+SaeXtSXzEgK5NmflyyeRbPnpOhjaxKIzPdVPIawJ0R5BPni/5dPiCcgTtCo
-N4oihy/OYjg2DeCvpFt5CnvAK49ZMQ==
-=Dmlr
------END PGP SIGNATURE-----
-
---gacxx7ldutkahecw--
 
