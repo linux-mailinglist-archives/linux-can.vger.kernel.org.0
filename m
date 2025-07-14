@@ -1,349 +1,195 @@
-Return-Path: <linux-can+bounces-3976-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3977-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E7B5B03829
-	for <lists+linux-can@lfdr.de>; Mon, 14 Jul 2025 09:41:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F323B046F7
+	for <lists+linux-can@lfdr.de>; Mon, 14 Jul 2025 19:55:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A39017A3D0
-	for <lists+linux-can@lfdr.de>; Mon, 14 Jul 2025 07:41:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 618201896715
+	for <lists+linux-can@lfdr.de>; Mon, 14 Jul 2025 17:56:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26DAB23506E;
-	Mon, 14 Jul 2025 07:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F93626772A;
+	Mon, 14 Jul 2025 17:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O8WxH4jp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WOndj+ab"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC1F1F0994;
-	Mon, 14 Jul 2025 07:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960521C683;
+	Mon, 14 Jul 2025 17:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752478887; cv=none; b=jMoWnWxGGGO53cxJjrm7ULK5mr+bJ8z2YL0PbVDjqSrFla4fERaJcnROGrOzj7gnrVp7UitHuC6wMOoOcjV5qm/yN3J7++ZIzMj4RdxzE1wNTpKdg4TN0ynHl6gbLoiH+rngaVxmqxJQIrCA77jYfJ9DE0R/GJ8XUc4HOeb25y0=
+	t=1752515755; cv=none; b=qEK8L+FGJCc33KDfOXm19yDv/gtdOXzilG0plI8hxJ/AQ7u6v0Y5PBGgw9szOXpzZub/Fr4JuOGAR8CtZxv8e5S6eu2SCfLiXmca8MSglR4moYUjsiCtnOlDRqFzC2Y4DDTcBaBTTYjydk3zqTTnVidNfxMkRhd2hsf7bycmbrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752478887; c=relaxed/simple;
-	bh=5e5RQmuI6QLwg7c3Xg/Mm5DxMg6eElClvZSIdk0WH5o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JKotvaVJcJiHAT527OP2jkKYZ4LGr60xrNDYkFcrDE93f1fGd5FttLn9d5KwoRQwrctwQEsCVeYfGN4atnwF8vFPusSRJoNy3If92sKA20j7ZbVd62TkZtkFJLfwDGwqWQkHaJCt8AZX0MXyQOSTo4pxvgQdv4xGnBdD9MWGIqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O8WxH4jp; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752478885; x=1784014885;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5e5RQmuI6QLwg7c3Xg/Mm5DxMg6eElClvZSIdk0WH5o=;
-  b=O8WxH4jpFjjUiXDi47CVLEYayo8dVgpRhGgei9gELOIDKY9IlK6pOW/9
-   mD0nUTASn2GsM1ngBKhsQsSJAr2v7yQg4/nD7OPC1L12nkD8wDKKfx7JO
-   f4j+Yw7BRxSvd1LaL8m7/kyTGLH/5Nr4jtK8v/wpJhjEz6+SMi6bJCmSS
-   VO+GmQR/oCx/Rc/kYSUShBpROch1n2cigbam8vQyoZKDd0enN9s/PEDxx
-   9O7pJWhchPl3go7O6QgN0n8f56fDwo4HDZmmG6TaynmxQ3yDje1BApfq+
-   reD5W0WiUW0f56uKPEQ3Ye7umTU0bIz8q+vB6XBX5gaP4U3x4FFw1L6Gp
-   Q==;
-X-CSE-ConnectionGUID: bLKe1tJTRSqOINebS0caZA==
-X-CSE-MsgGUID: 5IJUi5KpSwSibHIni5T86A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="57274066"
-X-IronPort-AV: E=Sophos;i="6.16,310,1744095600"; 
-   d="scan'208";a="57274066"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 00:41:24 -0700
-X-CSE-ConnectionGUID: qsBQGGHeS/ecmausZCxVLw==
-X-CSE-MsgGUID: +F0b9SFhRSOnipvhJMFmFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,310,1744095600"; 
-   d="scan'208";a="156496992"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 14 Jul 2025 00:41:21 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubDoO-0008eN-0h;
-	Mon, 14 Jul 2025 07:41:20 +0000
-Date: Mon, 14 Jul 2025 15:40:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH 3/3] can: tscan1: Kconfig: add COMPILE_TEST
-Message-ID: <202507141417.qAMrchyV-lkp@intel.com>
-References: <20250713-can-compile-test-v1-3-b4485e057375@wanadoo.fr>
+	s=arc-20240116; t=1752515755; c=relaxed/simple;
+	bh=mwU5zOE/XJ1F1jzWeRupxHRSzxRVlATaw8iXNosKdOs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bUOgiQ1nUfR014Rgus4Da3QpP1/X5+iDh7G+qZkcY1rbRbO7QXfGWwzs/kUhUc9WelDiDNAzDYwaGm7XyqNCVL8ezTjq16FYIVe4yLatqF6Md/PM806juU1vuZz4wD859NwLDDKIuV3zX+s+cXo7KfxOAGAbM3c1+Pqmnmbf8wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WOndj+ab; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3b45edf2303so3971636f8f.2;
+        Mon, 14 Jul 2025 10:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752515752; x=1753120552; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fgw6uDOHjrf813uBjrfn70QGqdTxwVqRHSQB2eclZEU=;
+        b=WOndj+absvQK+fc2czfxYn6uHf0fVUHXQsLLnjzrdnyZ92832R23STFWD9FCGzPhtM
+         TnAaGaUYQyc0VWs20fzXT5zBHEcMxLJ/EUdK1tiI2M8tyEwduYrCPbQBIhpv8zjl4pEr
+         NO07RzwmEQZDmyySMVwalPWOVyEvgIK+Quf/1HifahU2ujP5u3eGVH9xF77/hmH+/L0n
+         3+p4csE8mIWj9X3MBr8Ob76EmEO20pd/SBNdOYUJSpF7F3/775rO9695yLIG6W4qU2Im
+         V7thId8dr1y/8uq53sd5fDBOyckwaCZ5weqKaesxOVj1GbnB0UtA5O3HiBGXcWq5ljDB
+         YJJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752515752; x=1753120552;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fgw6uDOHjrf813uBjrfn70QGqdTxwVqRHSQB2eclZEU=;
+        b=vzPAIIQR9Xky6L1XX4+ojV/BjVQAzv1+seupKrU1aj2W6YN8jgZZJaLT8OHWvR+UHp
+         HEOguHiD8ELhotyOwncEBgnsHoO4H1l2ShQZnsashoABTZ6AtU3A03G4RbSrnovpjFcw
+         KbpaCHGqhPaUIh0AgJWzLCAHHE9xAKA+DeM0jIqEx3pAdG6PvgErcQZwFYuiKsHeAJ7m
+         orvtPujX4tTOrPZ+sT9MqFxvmhpyizubcRAZnRl1M7vajzWqDi2BosnOF/sBh8SDPQpH
+         cgKwT7C+tVicIdtTRvaEstnA8anHJELqhCERlrAsw/94EhnXzHMAysZLKOhkjnDc5f1O
+         lZhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV2BuJxYEv2i76G3uNDPoSCNQYM5HsH39Kdt35SWxWzF9jlGGOS8J5pkQVBo9YhmY+qrbyuZNbFD1Y=@vger.kernel.org, AJvYcCXg3cGUFkX+6Z182ruWnmDxOym+bM5Ci901juPEvNyAPRj38VRF1qE7YoavS9TDT0caZxZcf6HhMH6S2Ur7@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN7q/eINx+qdG30AEA1G99oobWPokFszjtSDZ1i2fs7XmbY62V
+	fl9MnU4mlUoI87xQGNE2xDBeYcLLMnwLtCmsOHnV77TnXunfS7tvlDl2
+X-Gm-Gg: ASbGncvKZr7xrgYtwjJuir5Ye9/IRlyuUdudq7IMTR1V2mni9pr/gU2R8+LHVQNdd3r
+	Py8RHutVzlL1RQyWfaHx+PpuO77II3d5XLxyEumnKMD2agCseyMvAeo0pJQnHoRdW44VQn6NORh
+	rfK6gQYReKwNcpikEkpZCHwd4NP4dWtcWX8iM0jBjZHdkKy3/zF9xtMTG3TvJ46WRQLSXw+LWUw
+	9VQF2lBrD6kOvew+K37UR8dxsg33UpOge1b3zEU0dHoBjXwvEqfHdYJYnz72lkiq8N8SUoWP2D5
+	od7IAaEATtmTagFNHZlDDBgJJWZqUg2rb4DNxisPI0/x8yColSZg9lJj3/y0e5PFHfASSpoSvgb
+	OnqtKCAB7QAoxp8Pcd0PY6qkb9C168dYJ29qbbYRmzAFrkUPFYRShWjsKE49Ps5ynA/EUyT/IDR
+	RCdG8jDt/dQLW/wS0BMZkoxjo8HrO/oS5ujwQ6mhJEkRcLw0HnCMxKqZt1kpAqcQ==
+X-Google-Smtp-Source: AGHT+IH21izMW/E1VReIQp5vspYpCuKuPI3c1UGz9OrPUhXi8Y1/QLjvtD3kcdezPtmx93SqstvmXQ==
+X-Received: by 2002:a5d:588f:0:b0:3a5:2ef8:34f9 with SMTP id ffacd0b85a97d-3b5f188ea1fmr11952183f8f.27.1752515751481;
+        Mon, 14 Jul 2025 10:55:51 -0700 (PDT)
+Received: from thinkpad-p52.telekom.ip (2a02-8388-e103-2700-ebc0-27a3-cde8-9846.cable.dynamic.v6.surfer.at. [2a02:8388:e103:2700:ebc0:27a3:cde8:9846])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b600722780sm5338628f8f.23.2025.07.14.10.55.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jul 2025 10:55:51 -0700 (PDT)
+From: Andrei Lalaev <andrey.lalaev@gmail.com>
+To: mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr
+Cc: andrey.lalaev@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-can@vger.kernel.org
+Subject: [RFC PATCH] can: gs_usb: fix kernel oops during restart
+Date: Mon, 14 Jul 2025 19:55:02 +0200
+Message-ID: <20250714175520.307467-1-andrey.lalaev@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250713-can-compile-test-v1-3-b4485e057375@wanadoo.fr>
+Content-Transfer-Encoding: 8bit
 
-Hi Vincent,
+When CAN adapter in BUS_OFF state and "can_restart" is called,
+it causes the following kernel oops:
 
-kernel test robot noticed the following build errors:
+  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+  Internal error: Oops: 0000000086000005 [#1] PREEMPT SMP
+  CPU: 0 UID: 0 PID: 725 Comm: ip Not tainted 6.12.37-v8-16k+ #2
+  Hardware name: Raspberry Pi 5 Model B Rev 1.0 (DT)
+  pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+  pc : 0x0
+  lr : can_restart+0x80/0xf8 [can_dev]
+  sp : ffffc000844f3700
+  x29: ffffc000844f3710 x28: ffffd06fcf3389f8 x27: 0000000000000000
+  x26: ffff800080ba0000 x25: 0000000000000000 x24: ffffd06f58730268
+  x23: 0000000000000000 x22: 0000000000000001 x21: ffff8001001ef210
+  x20: ffffc000844f3a10 x19: ffff800080ba0000 x18: 0000000000000000
+  x17: 0000000000000002 x16: 000000005b38ca14 x15: 0000000000000400
+  x14: 0000000000000800 x13: 000000005b482df7 x12: ffff800002d84280
+  x11: 000000005b482df7 x10: ffff800002d84290 x9 : ffffd06fcf01f6ec
+  x8 : 0000000000000000 x7 : 0000000000000000 x6 : 000000000000003f
+  x5 : ffffd06fcef8ab30 x4 : 0000000000000008 x3 : 016b3b57a19d7300
+  x2 : 0000000000000088 x1 : 0000000000000001 x0 : ffff800080ba0000
+  Call trace:
+   0x0
+   can_restart_now+0x4c/0x70 [can_dev]
+   can_changelink+0x258/0x458 [can_dev]
+   rtnl_newlink+0x52c/0xa38
+   rtnetlink_rcv_msg+0x238/0x338
+   netlink_rcv_skb+0x128/0x148
+   rtnetlink_rcv+0x24/0x38
+   netlink_unicast+0x24c/0x408
+   netlink_sendmsg+0x288/0x378
+   ____sys_sendmsg+0x1bc/0x2a0
+   __sys_sendmsg+0x144/0x1a0
+   __arm64_sys_sendmsg+0x30/0x48
+   invoke_syscall+0x4c/0x110
+   el0_svc_common+0x8c/0xf0
+   do_el0_svc+0x28/0x40
+   el0_svc+0x34/0xa0
+   el0t_64_sync_handler+0x84/0x100
+   el0t_64_sync+0x190/0x198
 
-[auto build test ERROR on a52f9f0d77f20efc285908a28b5697603b6597c7]
+Provide a "do_set_mode" callback to overcome the issue.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/can-ti_hecc-fix-Woverflow-compiler-warning/20250713-160616
-base:   a52f9f0d77f20efc285908a28b5697603b6597c7
-patch link:    https://lore.kernel.org/r/20250713-can-compile-test-v1-3-b4485e057375%40wanadoo.fr
-patch subject: [PATCH 3/3] can: tscan1: Kconfig: add COMPILE_TEST
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250714/202507141417.qAMrchyV-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250714/202507141417.qAMrchyV-lkp@intel.com/reproduce)
+Signed-off-by: Andrei Lalaev <andrey.lalaev@gmail.com>
+---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507141417.qAMrchyV-lkp@intel.com/
+The issue can be easily reproduced:
+    ip link set can0 type can bitrate 100000
+    ip link set up can0
+    cangen can0
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/can/sja1000/tscan1.c:14:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/net/can/sja1000/tscan1.c:89:6: error: call to '_inb' declared with 'error' attribute: inb()) requires CONFIG_HAS_IOPORT
-      89 |         if (inb(pld_base + TSCAN1_ID1) != TSCAN1_ID1_VALUE ||
-         |             ^
-   include/asm-generic/io.h:643:13: note: expanded from macro 'inb'
-     643 | #define inb _inb
-         |             ^
-   include/asm-generic/io.h:542:14: note: expanded from macro '_inb'
-     542 | #define _inb _inb
-         |              ^
-   drivers/net/can/sja1000/tscan1.c:90:6: error: call to '_inb' declared with 'error' attribute: inb()) requires CONFIG_HAS_IOPORT
-      90 |             inb(pld_base + TSCAN1_ID2) != TSCAN1_ID2_VALUE) {
-         |             ^
-   include/asm-generic/io.h:643:13: note: expanded from macro 'inb'
-     643 | #define inb _inb
-         |             ^
-   include/asm-generic/io.h:542:14: note: expanded from macro '_inb'
-     542 | #define _inb _inb
-         |              ^
-   drivers/net/can/sja1000/tscan1.c:95:10: error: call to '_inb' declared with 'error' attribute: inb()) requires CONFIG_HAS_IOPORT
-      95 |         switch (inb(pld_base + TSCAN1_JUMPERS) & (TSCAN1_JP4 | TSCAN1_JP5)) {
-         |                 ^
-   include/asm-generic/io.h:643:13: note: expanded from macro 'inb'
-     643 | #define inb _inb
-         |             ^
-   include/asm-generic/io.h:542:14: note: expanded from macro '_inb'
-     542 | #define _inb _inb
-         |              ^
->> drivers/net/can/sja1000/tscan1.c:138:3: error: call to '_outb' declared with 'error' attribute: outb() requires CONFIG_HAS_IOPORT
-     138 |                 outb(TSCAN1_MODE_ENABLE | i, pld_base + TSCAN1_MODE);
-         |                 ^
-   include/asm-generic/io.h:655:14: note: expanded from macro 'outb'
-     655 | #define outb _outb
-         |              ^
-   include/asm-generic/io.h:596:15: note: expanded from macro '_outb'
-     596 | #define _outb _outb
-         |               ^
-   drivers/net/can/sja1000/tscan1.c:150:3: error: call to '_outb' declared with 'error' attribute: outb() requires CONFIG_HAS_IOPORT
-     150 |                 outb(0, pld_base + TSCAN1_MODE);
-         |                 ^
-   include/asm-generic/io.h:655:14: note: expanded from macro 'outb'
-     655 | #define outb _outb
-         |              ^
-   include/asm-generic/io.h:596:15: note: expanded from macro '_outb'
-     596 | #define _outb _outb
-         |               ^
-   drivers/net/can/sja1000/tscan1.c:143:4: error: call to '_outb' declared with 'error' attribute: outb() requires CONFIG_HAS_IOPORT
-     143 |                         outb(0, pld_base + TSCAN1_LED);
-         |                         ^
-   include/asm-generic/io.h:655:14: note: expanded from macro 'outb'
-     655 | #define outb _outb
-         |              ^
-   include/asm-generic/io.h:596:15: note: expanded from macro '_outb'
-     596 | #define _outb _outb
-         |               ^
-   drivers/net/can/sja1000/tscan1.c:175:2: error: call to '_outb' declared with 'error' attribute: outb() requires CONFIG_HAS_IOPORT
-     175 |         outb(0, pld_base + TSCAN1_MODE);        /* disable SJA1000 IO space */
-         |         ^
-   include/asm-generic/io.h:655:14: note: expanded from macro 'outb'
-     655 | #define outb _outb
-         |              ^
-   include/asm-generic/io.h:596:15: note: expanded from macro '_outb'
-     596 | #define _outb _outb
-         |               ^
-   drivers/net/can/sja1000/tscan1.c:68:9: error: call to '_inb' declared with 'error' attribute: inb()) requires CONFIG_HAS_IOPORT
-      68 |         return inb((unsigned long)priv->reg_base + reg);
-         |                ^
-   include/asm-generic/io.h:643:13: note: expanded from macro 'inb'
-     643 | #define inb _inb
-         |             ^
-   include/asm-generic/io.h:542:14: note: expanded from macro '_inb'
-     542 | #define _inb _inb
-         |              ^
-   drivers/net/can/sja1000/tscan1.c:74:2: error: call to '_outb' declared with 'error' attribute: outb() requires CONFIG_HAS_IOPORT
-      74 |         outb(val, (unsigned long)priv->reg_base + reg);
-         |         ^
-   include/asm-generic/io.h:655:14: note: expanded from macro 'outb'
-     655 | #define outb _outb
-         |              ^
-   include/asm-generic/io.h:596:15: note: expanded from macro '_outb'
-     596 | #define _outb _outb
-         |               ^
-   1 warning and 9 errors generated.
+Then I force "BUS_OFF" by connecting CAN_HIGH to CAN_LOW.
+And restart the interface:
+    ip link set can0 type can restart
 
 
-vim +89 drivers/net/can/sja1000/tscan1.c
+My knowledge about CAN is pretty limited, so I am not sure
+if it is a correct or complete solution.
 
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  @14  #include <linux/io.h>
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   15  #include <linux/ioport.h>
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   16  #include <linux/isa.h>
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   17  #include <linux/module.h>
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   18  #include <linux/netdevice.h>
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   19  #include "sja1000.h"
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   20  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   21  MODULE_DESCRIPTION("Driver for Technologic Systems TS-CAN1 PC104 boards");
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   22  MODULE_AUTHOR("Andre B. Oliveira <anbadeol@gmail.com>");
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   23  MODULE_LICENSE("GPL");
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   24  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   25  /* Maximum number of boards (one in each JP1:JP2 setting of IO address) */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   26  #define TSCAN1_MAXDEV 4
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   27  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   28  /* PLD registers address offsets */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   29  #define TSCAN1_ID1	0
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   30  #define TSCAN1_ID2	1
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   31  #define TSCAN1_VERSION	2
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   32  #define TSCAN1_LED	3
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   33  #define TSCAN1_PAGE	4
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   34  #define TSCAN1_MODE	5
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   35  #define TSCAN1_JUMPERS	6
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   36  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   37  /* PLD board identifier registers magic values */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   38  #define TSCAN1_ID1_VALUE 0xf6
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   39  #define TSCAN1_ID2_VALUE 0xb9
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   40  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   41  /* PLD mode register SJA1000 IO enable bit */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   42  #define TSCAN1_MODE_ENABLE 0x40
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   43  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   44  /* PLD jumpers register bits */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   45  #define TSCAN1_JP4 0x10
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   46  #define TSCAN1_JP5 0x20
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   47  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   48  /* PLD IO base addresses start */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   49  #define TSCAN1_PLD_ADDRESS 0x150
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   50  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   51  /* PLD register space size */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   52  #define TSCAN1_PLD_SIZE 8
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   53  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   54  /* SJA1000 register space size */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   55  #define TSCAN1_SJA1000_SIZE 32
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   56  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   57  /* SJA1000 crystal frequency (16MHz) */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   58  #define TSCAN1_SJA1000_XTAL 16000000
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   59  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   60  /* SJA1000 IO base addresses */
-3c8ac0f2ad53a9 Bill Pemberton    2012-12-03   61  static const unsigned short tscan1_sja1000_addresses[] = {
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   62  	0x100, 0x120, 0x180, 0x1a0, 0x200, 0x240, 0x280, 0x320
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   63  };
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   64  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   65  /* Read SJA1000 register */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   66  static u8 tscan1_read(const struct sja1000_priv *priv, int reg)
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   67  {
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   68  	return inb((unsigned long)priv->reg_base + reg);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   69  }
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   70  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   71  /* Write SJA1000 register */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   72  static void tscan1_write(const struct sja1000_priv *priv, int reg, u8 val)
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   73  {
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   74  	outb(val, (unsigned long)priv->reg_base + reg);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   75  }
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   76  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   77  /* Probe for a TS-CAN1 board with JP2:JP1 jumper setting ID */
-3c8ac0f2ad53a9 Bill Pemberton    2012-12-03   78  static int tscan1_probe(struct device *dev, unsigned id)
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   79  {
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   80  	struct net_device *netdev;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   81  	struct sja1000_priv *priv;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   82  	unsigned long pld_base, sja1000_base;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   83  	int irq, i;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   84  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   85  	pld_base = TSCAN1_PLD_ADDRESS + id * TSCAN1_PLD_SIZE;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   86  	if (!request_region(pld_base, TSCAN1_PLD_SIZE, dev_name(dev)))
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   87  		return -EBUSY;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   88  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  @89  	if (inb(pld_base + TSCAN1_ID1) != TSCAN1_ID1_VALUE ||
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   90  	    inb(pld_base + TSCAN1_ID2) != TSCAN1_ID2_VALUE) {
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   91  		release_region(pld_base, TSCAN1_PLD_SIZE);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   92  		return -ENODEV;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   93  	}
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   94  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  @95  	switch (inb(pld_base + TSCAN1_JUMPERS) & (TSCAN1_JP4 | TSCAN1_JP5)) {
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   96  	case TSCAN1_JP4:
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   97  		irq = 6;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   98  		break;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18   99  	case TSCAN1_JP5:
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  100  		irq = 7;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  101  		break;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  102  	case TSCAN1_JP4 | TSCAN1_JP5:
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  103  		irq = 5;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  104  		break;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  105  	default:
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  106  		dev_err(dev, "invalid JP4:JP5 setting (no IRQ)\n");
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  107  		release_region(pld_base, TSCAN1_PLD_SIZE);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  108  		return -EINVAL;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  109  	}
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  110  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  111  	netdev = alloc_sja1000dev(0);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  112  	if (!netdev) {
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  113  		release_region(pld_base, TSCAN1_PLD_SIZE);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  114  		return -ENOMEM;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  115  	}
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  116  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  117  	dev_set_drvdata(dev, netdev);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  118  	SET_NETDEV_DEV(netdev, dev);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  119  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  120  	netdev->base_addr = pld_base;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  121  	netdev->irq = irq;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  122  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  123  	priv = netdev_priv(netdev);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  124  	priv->read_reg = tscan1_read;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  125  	priv->write_reg = tscan1_write;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  126  	priv->can.clock.freq = TSCAN1_SJA1000_XTAL / 2;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  127  	priv->cdr = CDR_CBP | CDR_CLK_OFF;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  128  	priv->ocr = OCR_TX0_PUSHPULL;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  129  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  130  	/* Select the first SJA1000 IO address that is free and that works */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  131  	for (i = 0; i < ARRAY_SIZE(tscan1_sja1000_addresses); i++) {
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  132  		sja1000_base = tscan1_sja1000_addresses[i];
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  133  		if (!request_region(sja1000_base, TSCAN1_SJA1000_SIZE,
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  134  								dev_name(dev)))
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  135  			continue;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  136  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  137  		/* Set SJA1000 IO base address and enable it */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18 @138  		outb(TSCAN1_MODE_ENABLE | i, pld_base + TSCAN1_MODE);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  139  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  140  		priv->reg_base = (void __iomem *)sja1000_base;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  141  		if (!register_sja1000dev(netdev)) {
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  142  			/* SJA1000 probe succeeded; turn LED off and return */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  143  			outb(0, pld_base + TSCAN1_LED);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  144  			netdev_info(netdev, "TS-CAN1 at 0x%lx 0x%lx irq %d\n",
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  145  						pld_base, sja1000_base, irq);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  146  			return 0;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  147  		}
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  148  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  149  		/* SJA1000 probe failed; release and try next address */
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  150  		outb(0, pld_base + TSCAN1_MODE);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  151  		release_region(sja1000_base, TSCAN1_SJA1000_SIZE);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  152  	}
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  153  
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  154  	dev_err(dev, "failed to assign SJA1000 IO address\n");
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  155  	dev_set_drvdata(dev, NULL);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  156  	free_sja1000dev(netdev);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  157  	release_region(pld_base, TSCAN1_PLD_SIZE);
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  158  	return -ENXIO;
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  159  }
-2d3359f8b9e6b3 Andre B. Oliveira 2010-10-18  160  
+Could someone with more experience in CAN or the gs_usb driver confirm
+whether this should be addressed by implementing the do_set_mode in gs_usb,
+or if there's a better approach?
 
+Thanks in advance!
+---
+ drivers/net/can/usb/gs_usb.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index bb6335278e46..0d66d843c1e3 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -748,6 +748,18 @@ static int gs_usb_set_data_bittiming(struct net_device *netdev)
+ 				    GFP_KERNEL);
+ }
+ 
++static int gs_usb_do_set_mode(struct net_device *netdev, enum can_mode mode)
++{
++	switch (mode) {
++	case CAN_MODE_START:
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
+ static void gs_usb_xmit_callback(struct urb *urb)
+ {
+ 	struct gs_tx_context *txc = urb->context;
+@@ -1278,6 +1290,7 @@ static struct gs_can *gs_make_candev(unsigned int channel,
+ 	dev->can.clock.freq = le32_to_cpu(bt_const.fclk_can);
+ 	dev->can.bittiming_const = &dev->bt_const;
+ 	dev->can.do_set_bittiming = gs_usb_set_bittiming;
++	dev->can.do_set_mode = gs_usb_do_set_mode;
+ 
+ 	dev->can.ctrlmode_supported = CAN_CTRLMODE_CC_LEN8_DLC;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.1
+
 
