@@ -1,56 +1,56 @@
-Return-Path: <linux-can+bounces-3998-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3997-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B816B058CB
-	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 13:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18DD7B058C8
+	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 13:29:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A0B917D843
-	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 11:30:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BB8616CDB4
+	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 11:29:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EBBA2D9EDA;
-	Tue, 15 Jul 2025 11:29:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CA9E2D6401;
+	Tue, 15 Jul 2025 11:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="qEuPkBuH"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="S1YBLmZy"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (outm-53.smtpout.orange.fr [193.252.22.53])
+Received: from out.smtpout.orange.fr (outm-52.smtpout.orange.fr [193.252.22.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83692DCBF3;
-	Tue, 15 Jul 2025 11:29:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4782DE6E2;
+	Tue, 15 Jul 2025 11:28:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752578990; cv=none; b=XbwWop8vRVGtkT6WsmF5ZOC1y96AtW5TX/LHHvS4NRCY2VkYHOd8kiWJJQmeZ/glGfrSe9+iMUHXOElcuP1c1Dzp4ypvTh8j9k7FvHiBBPf1ZOttHV1UMAS4onkjp8vY/2bEmwoA12howVmtbRkGCDaPV9lgARfdGmrBTWSTLUo=
+	t=1752578934; cv=none; b=j1U4X7NXqkSbOl1F6fKk0LR4EYT+1t7nxI0AJv5yfxPpQkxu1xBnAAKvJPDL2DRO7IMAuQcowSAphUdBBVnalXPFvYbJMiFhQbQ+KFu3v5w+725NKPLwp+YnPHvTjl0lRtN1T/24rjQW0cwSuSt6zFEERy+ht8IJBJqrOObN6eI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752578990; c=relaxed/simple;
-	bh=u+wWC3/DzZTGABh9YY/C+ERaQcTmDqogs0K00hiDc9k=;
+	s=arc-20240116; t=1752578934; c=relaxed/simple;
+	bh=mQb8BSEcdMpDMvEvXGXSKEFuvif2JXaZOk/FMKXmeZE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jpBOpvRR/zo18nFq4WALO+n9grK5+0VaAiV4jSuh6l3J2223qyrJjq+ns0tzAv4/+KWAXd5oPjNOy2CTJA6dAQ3hxBkGAUGlXT8H3rLObQ8w+eyPYBo/unpZYup3Wup2b6X8qwkXNMnftZv3wxrtpHmGv1w0cJETsoKLvGa4cJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=qEuPkBuH; arc=none smtp.client-ip=193.252.22.53
+	 In-Reply-To:To:Cc; b=hl9VPXVzIZYN/Ay+FGIUA9/m34R+yXgVgCtkDwKduk65cuqQkUAKUM94ca6DY3BVJNYcT8cYUYT/G2RDV7tIK08ZrHb2snUH4mrHwNcmq7dsf1Qfrri4Df+GcjfZr/rbibJJ+C3c9XUQrf5IQrMUlFakq3fcie+4Ja51CW3suEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=S1YBLmZy; arc=none smtp.client-ip=193.252.22.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from [172.16.82.72] ([124.33.176.97])
 	by smtp.orange.fr with ESMTPA
-	id bdpWuN5ypJXJvbdpvuiCqi; Tue, 15 Jul 2025 13:28:40 +0200
+	id bdpWuN5ypJXJvbdpwuiCur; Tue, 15 Jul 2025 13:28:42 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1752578920;
-	bh=GgTPVK+rkm4R0WLYzeG2cjIOMr6ZRnv+/aEAV0K4FCE=;
+	s=t20230301; t=1752578922;
+	bh=TQzmhPXh/jjtULqW/3CmqqSt4V5tF2Pz2aim4vtMs7o=;
 	h=From:Date:Subject:MIME-Version:Message-Id:To;
-	b=qEuPkBuHDw9nAggK3RCvFNFP/NIHA6ob5AyT+efXJxdZ2XvZgoIGZnjkEJ+/LF66V
-	 3uKYyiMh6dhyxbWahMWL7DHcet/liog2IYj6aPn4FxgLXqlmq46SstRA9H9kIr9hMI
-	 oDQCDpp7Z6njm5KJnmPdApEZoww9ZuOjP+N9Z5RiwRYY4augybODYlKwVWkgYek19h
-	 e3P82xJByUnFa+jrhcFOe/LmE1CSJqp7B2al0ZMz/EAK0zSqWj2qM/FdTWLUDs/dfy
-	 YLO1K2qGEWXIQNLtCE8wR+jt95D7ooSKXWR9J6s2y8zNpm7ZUDxX45RYjq6v71Ijo2
-	 LImTBgilA8dbQ==
+	b=S1YBLmZyKg5j6eIdeoDq+3LKyfXEBbd7+3P6IALsL+REBpUn95tsmQVHwu3++xCGL
+	 IdxlGo4B3rhbQH2OxUJizffecFCYI6QJbKCJcFLezhReHEfWgM39fD6kdP8t5fwwM3
+	 Repp+XscYCvJIuU2dyYHBss7c9Tv4ExupE7q4yTYgM9uKlVH+9qw6WzRsZcWzlN1Ms
+	 TZq8QeNnFmBn93AEXnrVikoBz5HmvkfKV979eOLZGBeLebNIDbwOkLCIJgLZTaY2Pa
+	 bcbLNQNkl7Fbyja8XjfQTDxzgVFPUEFhQk+SYkcQXUU5/08WyqA9b1FMt/FVOSkeh6
+	 1vYbQe7gHQydA==
 X-ME-Helo: [172.16.82.72]
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 15 Jul 2025 13:28:40 +0200
+X-ME-Date: Tue, 15 Jul 2025 13:28:42 +0200
 X-ME-IP: 124.33.176.97
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Tue, 15 Jul 2025 20:28:11 +0900
-Subject: [PATCH v2 1/3] can: ti_hecc: fix -Woverflow compiler warning
+Date: Tue, 15 Jul 2025 20:28:12 +0900
+Subject: [PATCH v2 2/3] can: ti_hecc: Kconfig: add COMPILE_TEST
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -59,48 +59,44 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250715-can-compile-test-v2-1-f7fd566db86f@wanadoo.fr>
+Message-Id: <20250715-can-compile-test-v2-2-f7fd566db86f@wanadoo.fr>
 References: <20250715-can-compile-test-v2-0-f7fd566db86f@wanadoo.fr>
 In-Reply-To: <20250715-can-compile-test-v2-0-f7fd566db86f@wanadoo.fr>
 To: Marc Kleine-Budde <mkl@pengutronix.de>
 Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1077;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=727;
  i=mailhol.vincent@wanadoo.fr; h=from:subject:message-id;
- bh=u+wWC3/DzZTGABh9YY/C+ERaQcTmDqogs0K00hiDc9k=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDBll1tFOvZOyXOLubXtvHfBmeZdEhnXANNFDuieKvrtdl
- Zz1t2xCRwkLgxgXg6yYIsuyck5uhY5C77BDfy1h5rAygQxh4OIUgIl8vsLw47eoMPPklH3Wl/Y7
- xP0My6oNdzc7HfXIskjm2YPL6bVKDP8j85Meu5X84PWNOqrpfXQll4RFaOr/5GMX5be4ncq5eoc
- XAA==
+ bh=mQb8BSEcdMpDMvEvXGXSKEFuvif2JXaZOk/FMKXmeZE=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDBll1nGsbkelkwQ6ssQeT3co0544O3ir/pMmwdfL4sNjn
+ uXx9k/tKGVhEONikBVTZFlWzsmt0FHoHXboryXMHFYmkCEMXJwCMJEVrQz/K++rT7Z4JP/n3Wa/
+ SZms1myyRz9FfXFd++xCz/uaZ/1N7xgZ5q5fFG/3wOu6s5nlrPB1az40P1c1+Do75J3Uoi9blmV
+ IMQMA
 X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-Fix below default (W=0) warning:
-
-  drivers/net/can/ti_hecc.c: In function 'ti_hecc_start':
-  drivers/net/can/ti_hecc.c:386:20: warning: conversion from 'long unsigned int' to 'u32' {aka 'unsigned int'} changes value from '18446744073709551599' to '4294967279' [-Woverflow]
-    386 |         mbx_mask = ~BIT(HECC_RX_LAST_MBOX);
-        |                    ^
+ti_hecc depends on ARM. Add COMPILE_TEST to the dependency list so
+that this driver can also be built on other platforms.
 
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/ti_hecc.c | 2 +-
+ drivers/net/can/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
-index 644e8b8eb91e74eec050841491f20d3e6796e9b7..e6d6661a908ab12eb4c7ec61c162848c18ef20f4 100644
---- a/drivers/net/can/ti_hecc.c
-+++ b/drivers/net/can/ti_hecc.c
-@@ -383,7 +383,7 @@ static void ti_hecc_start(struct net_device *ndev)
- 	 * overflows instead of the hardware silently dropping the
- 	 * messages.
- 	 */
--	mbx_mask = ~BIT(HECC_RX_LAST_MBOX);
-+	mbx_mask = ~BIT_U32(HECC_RX_LAST_MBOX);
- 	hecc_write(priv, HECC_CANOPC, mbx_mask);
+diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+index cf989bea9aa33356a94a9bb495d4c22ae907d436..d58fab0161b3ea6e12047c3fa0f884d0142002e7 100644
+--- a/drivers/net/can/Kconfig
++++ b/drivers/net/can/Kconfig
+@@ -201,7 +201,7 @@ config CAN_SUN4I
+ 	  be called sun4i_can.
  
- 	/* Enable interrupts */
+ config CAN_TI_HECC
+-	depends on ARM
++	depends on ARM || COMPILE_TEST
+ 	tristate "TI High End CAN Controller"
+ 	select CAN_RX_OFFLOAD
+ 	help
 
 -- 
 2.49.1
