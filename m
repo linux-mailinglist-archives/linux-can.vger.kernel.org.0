@@ -1,218 +1,149 @@
-Return-Path: <linux-can+bounces-3993-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-3994-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B597DB05797
-	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 12:16:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4096AB05840
+	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 13:00:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEAB31C21FDA
-	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 10:16:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 659C417E881
+	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 11:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590AF2D5C8E;
-	Tue, 15 Jul 2025 10:16:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 088651F0E47;
+	Tue, 15 Jul 2025 10:59:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="OfR2cNv7"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-69.smtpout.orange.fr [193.252.22.69])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383F924167B
-	for <linux-can@vger.kernel.org>; Tue, 15 Jul 2025 10:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D8B1D5ABA
+	for <linux-can@vger.kernel.org>; Tue, 15 Jul 2025 10:59:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752574593; cv=none; b=pQc2dDF9MtKiU/EKKMUCoeMQL1r2XTFKlgEuWUccTK1bQ50UJBmarEYePVeNB7UlObh2TlE75t0TWgGRcNKzHYWoHvASqhLtv8m2P1S/BTHX1wkSvEwu6tTxzkBLDDDa/7yOkslcalTVb/i3Fmi/zKi8bXspIL+B23+ydqBkJNs=
+	t=1752577190; cv=none; b=QWJKjpYM9dHrqXtUYgWKn7C/iv5dZEPDUvmXxMTGSvSFhhypXUo9WeM+VmwQRkWhcwjM3K0El3MKBP7J8SXUm2IAObKCa2H7xUlc+o+LD1fuvJRAbgz03BlRaOJrZk85xs7/CRDt+s4B6f2nd5xW3KuYhakn9AVNbkIEbp30BH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752574593; c=relaxed/simple;
-	bh=gD+GeB+lf8v2O5O56DTadj/7H5+Tvqc7ZbMei6Dhv5M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z80XLaU1PYMJzLQ7xMe+QK8A69+B3moRYdifihNbyhSdBBWZLtvGwF6iV+81QBrv3xld97gc/zdeuOVvz18AmzVVDPnjvFFGYWkqFeSUXpgnz10+JqSy6+1upkW25CWIY5AYyrwOlllLTnq+hwDTYBxXfPBLv8+Xol1hy3aZCpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ubci5-0008Kz-K1
-	for linux-can@vger.kernel.org; Tue, 15 Jul 2025 12:16:29 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ubci5-008Z0p-1J
-	for linux-can@vger.kernel.org;
-	Tue, 15 Jul 2025 12:16:29 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 1BA3A4422FA
-	for <linux-can@vger.kernel.org>; Tue, 15 Jul 2025 10:16:29 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 728A74422EB;
-	Tue, 15 Jul 2025 10:16:27 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 372304e2;
-	Tue, 15 Jul 2025 10:16:26 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	Brett Werling <brett.werling@garmin.com>,
-	Markus Schneider-Pargmann <msp@baylibre.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net] can: tcan4x5x: fix reset gpio usage during probe
-Date: Tue, 15 Jul 2025 12:13:39 +0200
-Message-ID: <20250715101625.3202690-2-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250715101625.3202690-1-mkl@pengutronix.de>
-References: <20250715101625.3202690-1-mkl@pengutronix.de>
+	s=arc-20240116; t=1752577190; c=relaxed/simple;
+	bh=oVoJADOOiA13M2ohLe40YpBChaWHBpPYGjic8PtFjmU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qgcmLjh/mWt9s/1kO2Z7+xte+NvJ4X5uhQrhqgwfPEZ6vvohZ5judTJzKh8BMDyi2yK2PhjteRjCCMMcNOiHMNc+sIL51KF3IyoKr5o0dXLUG+XC59PkksrW2UUd5lqtzBXYed+Cq+Up7K6h4NbamJHFfjDjgu/TGO4TP/aqc8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=OfR2cNv7; arc=none smtp.client-ip=193.252.22.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id bdMguF3eG03JcbdMouvpRG; Tue, 15 Jul 2025 12:58:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1752577116;
+	bh=1jhDd6dc0+beRQcPRk7Oc7X4pE0LcNfWedEkFS4RZdo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=OfR2cNv7Ckk/z+3eRY+MUl+ebgNuMGHLIPhvBw0eKuqoa6sV/q14I9AzRFnc2GG1C
+	 tNjbQdk6IXEWnRoyAiuuz5SEm/B22tBB608hUQ8n5CYYat31YiWJ4+qtEnpQbPIbHF
+	 +92k8VUV+V0lZF6nZaFoByaIcccATuZohzKzxHLxqDS9GR9tYx2v4N1ECuXumT3sYg
+	 CqmmRG2HoQExntN2BL8G4jfM6wRJZ7Pf5e5rYaDMXel/0/yc2scuf8vSsBkKpzTXzw
+	 GLHGCiLJXkoxJMcSPLXCO8aTDm/SJTpOseT+w1Fb5kH944xlJH4NgVjQIOnfC/aGL9
+	 dY7vQBZezcc7A==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 15 Jul 2025 12:58:36 +0200
+X-ME-IP: 124.33.176.97
+Message-ID: <11f81602-4eee-4c11-ae24-4bc5951dad91@wanadoo.fr>
+Date: Tue, 15 Jul 2025 19:58:25 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH can-next/b4 2/2] dummyxl: print ctrlmode and PWM values
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+References: <20250706133550.47369-1-socketcan@hartkopp.net>
+ <20250706133550.47369-2-socketcan@hartkopp.net>
+ <CAMZ6RqJaYY_ZDOo-V_+4mDPZvp0WU4K=iWL44sd0_hYhMLOP_A@mail.gmail.com>
+ <20250715-futuristic-tricky-raptor-9f9195-mkl@pengutronix.de>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250715-futuristic-tricky-raptor-9f9195-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Brett Werling <brett.werling@garmin.com>
+On 15/07/2025 at 19:06, Marc Kleine-Budde wrote:
+> On 14.07.2025 02:25:01, Vincent Mailhol wrote:
+>> On Sun. 6 juil. 2025 at 22:36, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
 
-Fixes reset GPIO usage during probe by ensuring we retrieve the GPIO and
-take the device out of reset (if it defaults to being in reset) before
-we attempt to communicate with the device. This is achieved by moving
-the call to tcan4x5x_get_gpios() before tcan4x5x_find_version() and
-avoiding any device communication while getting the GPIOs. Once we
-determine the version, we can then take the knowledge of which GPIOs we
-obtained and use it to decide whether we need to disable the wake or
-state pin functions within the device.
+(...)
 
-This change is necessary in a situation where the reset GPIO is pulled
-high externally before the CPU takes control of it, meaning we need to
-explicitly bring the device out of reset before we can start
-communicating with it at all.
+>> I rewrote it as below:
+>>
+>>   static void dummyxl_print_ctrlmode(struct net_device *dev)
+>>   {
+>>           static const char *names[] = {
+>>                   [ilog2(CAN_CTRLMODE_LOOPBACK)] = "loopback",
+>>                   [ilog2(CAN_CTRLMODE_LISTENONLY)] = "listen-only",
+>>                   [ilog2(CAN_CTRLMODE_3_SAMPLES)] = "triple-sampling",
+>>                   [ilog2(CAN_CTRLMODE_ONE_SHOT)] = "one-shot",
+>>                   [ilog2(CAN_CTRLMODE_BERR_REPORTING)] = "berr-reporting",
+>>                   [ilog2(CAN_CTRLMODE_FD)] = "fd",
+>>                   [ilog2(CAN_CTRLMODE_PRESUME_ACK)] = "presume-ack",
+>>                   [ilog2(CAN_CTRLMODE_FD_NON_ISO)] = "fd-non-iso",
+>>                   [ilog2(CAN_CTRLMODE_CC_LEN8_DLC)] = "cc-len8-dlc",
+>>                   [ilog2(CAN_CTRLMODE_TDC_AUTO)] = "fd-tdc-auto",
+>>                   [ilog2(CAN_CTRLMODE_TDC_MANUAL)] = "fd-tdc-manual",
+>>                   [ilog2(CAN_CTRLMODE_XL)] = "xl",
+>>                   [ilog2(CAN_CTRLMODE_XL_TDC_AUTO)] = "xl-tdc-auto",
+>>                   [ilog2(CAN_CTRLMODE_XL_TDC_MANUAL)] = "xl-tdc-manual",
+>>                   [ilog2(CAN_CTRLMODE_XL_RRS)] = "xl-rrs",
+>>                   [ilog2(CAN_CTRLMODE_XL_TRX)] = "xl-trx",
+>>                   [ilog2(CAN_CTRLMODE_XL_ERR_SIGNAL)] = "xl-err-signal",
+>>                   [ilog2(CAN_CTRLMODE_XL_PWM)] = "pmw",
+>>           };
+> 
+> Is the compiler clever enough, or do you have to use const_ilog2()?
 
-This also has the effect of fixing an issue where a reset of the device
-would occur after having called tcan4x5x_disable_wake(), making the
-original behavior not actually disable the wake. This patch should now
-disable wake or state pin functions well after the reset occurs.
+Yes, the code above compiles and runs without issue. ilog2() expands into
+const_ilog2() if its argument is an integer constant expression (which is the
+case here).
 
-Signed-off-by: Brett Werling <brett.werling@garmin.com>
-Link: https://patch.msgid.link/20250711141728.1826073-1-brett.werling@garmin.com
-Cc: Markus Schneider-Pargmann <msp@baylibre.com>
-Fixes: 142c6dc6d9d7 ("can: tcan4x5x: Add support for tcan4552/4553")
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/m_can/tcan4x5x-core.c | 61 ++++++++++++++++++---------
- 1 file changed, 41 insertions(+), 20 deletions(-)
+Also, note that the [ilog2(CAN_CTRLMODE_XXXXX)] thing is optional. Doing:
 
-diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
-index 8edaa339d590..39b0b5277b11 100644
---- a/drivers/net/can/m_can/tcan4x5x-core.c
-+++ b/drivers/net/can/m_can/tcan4x5x-core.c
-@@ -343,21 +343,19 @@ static void tcan4x5x_get_dt_data(struct m_can_classdev *cdev)
- 		of_property_read_bool(cdev->dev->of_node, "ti,nwkrq-voltage-vio");
- }
- 
--static int tcan4x5x_get_gpios(struct m_can_classdev *cdev,
--			      const struct tcan4x5x_version_info *version_info)
-+static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
- {
- 	struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
- 	int ret;
- 
--	if (version_info->has_wake_pin) {
--		tcan4x5x->device_wake_gpio = devm_gpiod_get(cdev->dev, "device-wake",
--							    GPIOD_OUT_HIGH);
--		if (IS_ERR(tcan4x5x->device_wake_gpio)) {
--			if (PTR_ERR(tcan4x5x->device_wake_gpio) == -EPROBE_DEFER)
--				return -EPROBE_DEFER;
-+	tcan4x5x->device_wake_gpio = devm_gpiod_get_optional(cdev->dev,
-+							     "device-wake",
-+							     GPIOD_OUT_HIGH);
-+	if (IS_ERR(tcan4x5x->device_wake_gpio)) {
-+		if (PTR_ERR(tcan4x5x->device_wake_gpio) == -EPROBE_DEFER)
-+			return -EPROBE_DEFER;
- 
--			tcan4x5x_disable_wake(cdev);
--		}
-+		tcan4x5x->device_wake_gpio = NULL;
- 	}
- 
- 	tcan4x5x->reset_gpio = devm_gpiod_get_optional(cdev->dev, "reset",
-@@ -369,14 +367,31 @@ static int tcan4x5x_get_gpios(struct m_can_classdev *cdev,
- 	if (ret)
- 		return ret;
- 
--	if (version_info->has_state_pin) {
--		tcan4x5x->device_state_gpio = devm_gpiod_get_optional(cdev->dev,
--								      "device-state",
--								      GPIOD_IN);
--		if (IS_ERR(tcan4x5x->device_state_gpio)) {
--			tcan4x5x->device_state_gpio = NULL;
--			tcan4x5x_disable_state(cdev);
--		}
-+	tcan4x5x->device_state_gpio = devm_gpiod_get_optional(cdev->dev,
-+							      "device-state",
-+							      GPIOD_IN);
-+	if (IS_ERR(tcan4x5x->device_state_gpio))
-+		tcan4x5x->device_state_gpio = NULL;
-+
-+	return 0;
-+}
-+
-+static int tcan4x5x_check_gpios(struct m_can_classdev *cdev,
-+				const struct tcan4x5x_version_info *version_info)
-+{
-+	struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
-+	int ret;
-+
-+	if (version_info->has_wake_pin && !tcan4x5x->device_wake_gpio) {
-+		ret = tcan4x5x_disable_wake(cdev);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (version_info->has_state_pin && !tcan4x5x->device_state_gpio) {
-+		ret = tcan4x5x_disable_state(cdev);
-+		if (ret)
-+			return ret;
- 	}
- 
- 	return 0;
-@@ -468,15 +483,21 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
- 		goto out_m_can_class_free_dev;
- 	}
- 
-+	ret = tcan4x5x_get_gpios(mcan_class);
-+	if (ret) {
-+		dev_err(&spi->dev, "Getting gpios failed %pe\n", ERR_PTR(ret));
-+		goto out_power;
-+	}
-+
- 	version_info = tcan4x5x_find_version(priv);
- 	if (IS_ERR(version_info)) {
- 		ret = PTR_ERR(version_info);
- 		goto out_power;
- 	}
- 
--	ret = tcan4x5x_get_gpios(mcan_class, version_info);
-+	ret = tcan4x5x_check_gpios(mcan_class, version_info);
- 	if (ret) {
--		dev_err(&spi->dev, "Getting gpios failed %pe\n", ERR_PTR(ret));
-+		dev_err(&spi->dev, "Checking gpios failed %pe\n", ERR_PTR(ret));
- 		goto out_power;
- 	}
- 
+  static const char *names[] = {
+  	"loopback",
+  	"listen-only",
+  	"triple-sampling",
+  	"one-shot",
+  	"berr-reporting",
+  	"fd",
+  	"presume-ack",
+  	"fd-non-iso",
+  	"cc-len8-dlc",
+  	"fd-tdc-auto",
+  	"fd-tdc-manual",
+  	"xl",
+  	"xl-tdc-auto",
+  	"xl-tdc-manual",
+  	"xl-rrs",
+  	"xl-trx",
+  	"xl-err-signal",
+  	"pmw",
+  };
 
-base-commit: f0f2b992d8185a0366be951685e08643aae17d6d
--- 
-2.47.2
+also works. But the above is more prone to silly mistakes. The ilog2() trick
+prevents any index mismatch.
 
 
+Yours sincerely,
+Vincent Mailhol
 
