@@ -1,158 +1,162 @@
-Return-Path: <linux-can+bounces-4001-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4002-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6537B061AB
-	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 16:46:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42702B061B0
+	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 16:46:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B888E586AB4
-	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 14:29:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89D40176DD4
+	for <lists+linux-can@lfdr.de>; Tue, 15 Jul 2025 14:32:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20CD91D79BE;
-	Tue, 15 Jul 2025 14:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W42KgHv8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBDD1D7E31;
+	Tue, 15 Jul 2025 14:29:20 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B52174BE1;
-	Tue, 15 Jul 2025 14:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD73F1D63C7
+	for <linux-can@vger.kernel.org>; Tue, 15 Jul 2025 14:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752589468; cv=none; b=MKPI6a+lEgOpY9uTmeDjpeej+3KRn1G2eq38rUzgu/4jF5D7teBV0WCBKGfkpVuUiysbj37Onk0vIM63kK79cwtQWep8BhoXKiP3Zkm2izD7kXzv2lahVyOVySbwvGZFACLIT/+kYO0/da7of8nsRAQcZ1gEoF/WryuImQhcuJ0=
+	t=1752589760; cv=none; b=rYyWbSCzM6QWaXy3y68HOUGMfmYwdUI4gYHJ22BwoQzUPCD3FoZ52c3O5RLwNN7+IqSRBQN5k2HYIykw98VnE/zGtyWKNMAd1yb/qUfFL06qsOlypiUjEW6AEj1veHe6LzHsgk3cSRxuc9Lwp4/vAhtTLjkAYqqw/JWIFozN94A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752589468; c=relaxed/simple;
-	bh=tvcG8BkIeDgNMPjNLaM4nJWMewFH5e7W4sw1HSgJiP0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lR7S4+Si4P0KMeH9KpgwqU3vesbZoQm0Ofj6lQtK81Ke0NjI4PN52C4dR8NiCrcGpOgtGlaxzDRt5APRjombyN4XkHKys0/8FLZfuU5Bt+D0wQuPzEvgOMrtzBGoGf4B1HkP0qiLAuprZfTv9zxdjXZYjFjLKRp1ZjuqidNcl9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W42KgHv8; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4537edf2c3cso57696605e9.3;
-        Tue, 15 Jul 2025 07:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752589464; x=1753194264; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iSxra2qSvkUH4C8FcWMO1mkXXQA40nE+NViMoOLJVjE=;
-        b=W42KgHv8XtYici7/aduJs0DI6grBtrfLRX1Wy83pwGmG2Q7vBHaNqfEs7PBNIWDP4M
-         dhP7rdUSuf70TvG6orNx6iEpLzVf1AfE/Oml9bL8YwUcd0v8zcMRwmwRYHZW15HqL9iF
-         /yjj9GZB9ReuNgj6tv9e8JJekytViDRYJhhVD+sLaPTY8Upzyt1e9O2UPKqXxezPK7qf
-         OwzO7vcy+UZl8HYOG6BIsh1gp55VTYc8Uc26bnZxXgbAStyssGDcnMB3ad/8R0fUVY9H
-         QbNT/YS1FlIef35D3Xa1ponj+iD5unC21YkzN5nr8bINblKchdVt7zAywwQ6X5jLhVru
-         d+Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752589464; x=1753194264;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iSxra2qSvkUH4C8FcWMO1mkXXQA40nE+NViMoOLJVjE=;
-        b=b7RxTqIoGGCrb3IRQHpfAaAs46YtdW18bK3QqGzt7vwooj7dhohpVbcsL0cAjS7sRf
-         1mYYNiZRuh5dx/iy+f3o011cFhATzsBm5xt5/nPEVE1EpcUhwnfaDf08yTZCsOyWKPKm
-         c60R9p6GMAPE/P1CfoGlBmRy1D1uNfknI/SM65zVH4wZ9BahNH6e14HsyQR1aGIEc2g7
-         Qn8RNstVYkT+Dh8NFz4wiw3WTia8GFPmmaaWc2h4OAGQ6LGb8Dpdx/lYr8tcu+GwYIcq
-         XjgaqDAwVV+FPBH45W56H8UZ0KeqdsexH+X6UwLwfRgcnf57fe1Ppzu82n9QKSgA82Ck
-         ArnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUconfW8OweJRXfpryjp4S24yAn8CfCHxh7+i3kLeaekoNmKsyCXafUpOQ4JSldA/miEBjA8ZZuiI8=@vger.kernel.org, AJvYcCWTj88oC7CX7qHEvoe6Jr2KLHNJkfUxT5nqmfWBJF6N43Vs5+2wcjgVB96KFF0avaVEsU6035BfMd0mBx6l@vger.kernel.org
-X-Gm-Message-State: AOJu0YycjDHV16lxKAGmgl1Zei3UjQEAMLobmssiD7yZ3+dsgJZxKGri
-	NlI+RsmwlsDv+5y29jyySsNKPKaRk+mXcajkcE6K8goUm6/OSwQrKx8DpXn+0SCA
-X-Gm-Gg: ASbGncuUajhcHyFvtfMDA7Xtxez/cDQ5zr2qK/gNgnw2KRWNDlV7lpocwgshfT5tuIW
-	mapLENKjRSgXvOQJHGrLAKwDRtTBDpWQ0weWq2kLSpDp18r+DniL1MUr+c5UM6Z788NBc+BZe3h
-	gryU4TKYWqzfERJi+6uajJTWBhNafNRMCa1+YYmvjXtnDSFQ9nGwV2b/y41G0b77yzRkoQkNC0x
-	+m90SoIdCBomFkk6jhHZyTf6WwZy15/sGCZrqfc8O8E3fH1SFok5KUZfKAWbUo8yG7g/+1p52At
-	gsds/cJ5eJ4v9DJUzdd6BM1cJYEQibG8xn/qujf/NoGJWMsirRh622wYvSqk3N00AMgkDQCO8uZ
-	yE5Hctx50PXqC5P3/2xawuyhHBdOuFJ4uQX4LS4JvtW7mS+j09ZpsZg13MqqQ1XMy2i5ELEpb0m
-	IBik2PLroYVUcL2ukMqG+NXa+gSVPAZYBYCZ/1TNsYsEiwUQdfSxGYG4+zKJq/vGrBmqlr2GPL3
-	s36P3KPkuoyxo+6hC70k0PteHidlDoxsoSfZQ==
-X-Google-Smtp-Source: AGHT+IHyNbNP+Oa/8R9trX36pUDEdxOvlB4n47aAPoN7MLAqKPF0AeX4+tNgnxK4GCbkpt+1TiK1EQ==
-X-Received: by 2002:a05:600c:8211:b0:455:f59e:fdaa with SMTP id 5b1f17b1804b1-45627417addmr26997435e9.21.1752589464282;
-        Tue, 15 Jul 2025 07:24:24 -0700 (PDT)
-Received: from ?IPV6:2a02:8388:e103:2700:a09a:f854:4544:3d0d? (2a02-8388-e103-2700-a09a-f854-4544-3d0d.cable.dynamic.v6.surfer.at. [2a02:8388:e103:2700:a09a:f854:4544:3d0d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45626cde7aasm13247185e9.1.2025.07.15.07.24.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Jul 2025 07:24:24 -0700 (PDT)
-Message-ID: <b8221fe9-a167-4bcc-81bf-fb793712b48e@gmail.com>
-Date: Tue, 15 Jul 2025 16:24:22 +0200
+	s=arc-20240116; t=1752589760; c=relaxed/simple;
+	bh=1VZzoaymuieyPmi3zmkGTg2NKfaJ1Upfu5llFVSXoAc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LQz7MZTl7zysZ5WKAvLaea12LFVrz7OOJvBi4v8xFmkte/Wn8+Kd6wgcCGNQ/81KXTU2MNJm7m9vBrGy8zmkGQQw2JyUgqcGfKdIqzVifcMlq2t//WG3neUeIKn6kZrwrZDxdpkffYEsdNPQzMCsdLruFBBlXWr6IuzLd8Ic2n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ubgeh-0005Oy-KP; Tue, 15 Jul 2025 16:29:15 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ubgeh-008at9-0R;
+	Tue, 15 Jul 2025 16:29:15 +0200
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id CB8C04425BD;
+	Tue, 15 Jul 2025 14:29:14 +0000 (UTC)
+Date: Tue, 15 Jul 2025 16:29:14 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Andrei Lalaev <andrey.lalaev@gmail.com>
+Cc: mailhol.vincent@wanadoo.fr, linux-kernel@vger.kernel.org, 
+	linux-can@vger.kernel.org
+Subject: Re: [RFC PATCH] can: gs_usb: fix kernel oops during restart
+Message-ID: <20250715-smart-ultra-avocet-d7937a-mkl@pengutronix.de>
+References: <20250714175520.307467-1-andrey.lalaev@gmail.com>
+ <20250715-almond-zebra-of-perception-9d2e6c-mkl@pengutronix.de>
+ <b8221fe9-a167-4bcc-81bf-fb793712b48e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uprcwe72mjwulkb5"
+Content-Disposition: inline
+In-Reply-To: <b8221fe9-a167-4bcc-81bf-fb793712b48e@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+
+--uprcwe72mjwulkb5
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 Subject: Re: [RFC PATCH] can: gs_usb: fix kernel oops during restart
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: mailhol.vincent@wanadoo.fr, linux-kernel@vger.kernel.org,
- linux-can@vger.kernel.org
-References: <20250714175520.307467-1-andrey.lalaev@gmail.com>
- <20250715-almond-zebra-of-perception-9d2e6c-mkl@pengutronix.de>
-Content-Language: en-GB
-From: Andrei Lalaev <andrey.lalaev@gmail.com>
-In-Reply-To: <20250715-almond-zebra-of-perception-9d2e6c-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
 
-On 15.07.2025 11:37, Marc Kleine-Budde wrote:
-> On 14.07.2025 19:55:02, Andrei Lalaev wrote:
->> When CAN adapter in BUS_OFF state and "can_restart" is called,
->> it causes the following kernel oops:
-> 
-> Doh!
-> 
-> I wonder why no one stumbled over this before. That's a systematic
-> problem for all CAN drivers that don't implement this callback.
+On 15.07.2025 16:24:22, Andrei Lalaev wrote:
+> I was also surprised because this callback isn't marked as mandatory
+> and that there are no additional checks.
+>=20
+> >=20
+> > What about this fix?
+> >=20
+> > diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlin=
+k.c
+> > index 13826e8a707b..94603c9eb4aa 100644
+> > --- a/drivers/net/can/dev/netlink.c
+> > +++ b/drivers/net/can/dev/netlink.c
+> > @@ -285,6 +285,12 @@ static int can_changelink(struct net_device *dev, =
+struct nlattr *tb[],
+> >          }
+> > =20
+> >          if (data[IFLA_CAN_RESTART_MS]) {
+> > +                if (!priv->do_set_mode) {
+> > +                        NL_SET_ERR_MSG(extack,
+> > +                                       "device doesn't support restart=
+ from Bus Off");
+> > +                        return -EOPNOTSUPP;
+> > +                }
+> > +
+> >                  /* Do not allow changing restart delay while running */
+> >                  if (dev->flags & IFF_UP)
+> >                          return -EBUSY;
+> > @@ -292,6 +298,12 @@ static int can_changelink(struct net_device *dev, =
+struct nlattr *tb[],
+> >          }
+> > =20
+> >          if (data[IFLA_CAN_RESTART]) {
+> > +                if (!priv->do_set_mode) {
+> > +                        NL_SET_ERR_MSG(extack,
+> > +                                       "device doesn't support restart=
+ from Bus Off");
+> > +                        return -EOPNOTSUPP;
+> > +                }
+> > +
+> >                  /* Do not allow a restart while not running */
+> >                  if (!(dev->flags & IFF_UP))
+> >                          return -EINVAL;
+>=20
+> Thanks for the patch. As expected, it fixes the kernel OOPS,
+> but the interface never leaves the BUS_OFF state.
 
-Hi Mark,
+Which device and which firmware are you using?
 
-I was also surprised because this callback isn't marked as mandatory
-and that there are no additional checks.
+The gs_usb/candlelight interface is un(der)defined when it comes to
+bus-off handling.
 
-> 
-> What about this fix?
-> 
-> diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-> index 13826e8a707b..94603c9eb4aa 100644
-> --- a/drivers/net/can/dev/netlink.c
-> +++ b/drivers/net/can/dev/netlink.c
-> @@ -285,6 +285,12 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
->          }
->  
->          if (data[IFLA_CAN_RESTART_MS]) {
-> +                if (!priv->do_set_mode) {
-> +                        NL_SET_ERR_MSG(extack,
-> +                                       "device doesn't support restart from Bus Off");
-> +                        return -EOPNOTSUPP;
-> +                }
-> +
->                  /* Do not allow changing restart delay while running */
->                  if (dev->flags & IFF_UP)
->                          return -EBUSY;
-> @@ -292,6 +298,12 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
->          }
->  
->          if (data[IFLA_CAN_RESTART]) {
-> +                if (!priv->do_set_mode) {
-> +                        NL_SET_ERR_MSG(extack,
-> +                                       "device doesn't support restart from Bus Off");
-> +                        return -EOPNOTSUPP;
-> +                }
-> +
->                  /* Do not allow a restart while not running */
->                  if (!(dev->flags & IFF_UP))
->                          return -EINVAL;
-> 
-> regards,
-> Marc
-> 
+I think the original candlelight with the stm32f072 does auto bus-off
+recovery. Not sure about the candlelight on stm32g0b1.
 
-Thanks for the patch. As expected, it fixes the kernel OOPS,
-but the interface never leaves the BUS_OFF state.
+regards,
+Marc
 
--- 
-Best regards,
-Andrei Lalaev
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--uprcwe72mjwulkb5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmh2ZbYACgkQDHRl3/mQ
+kZwkUQgAjo4Axu9yo94qLhfXhgrAn3QjOBCbcH0jCFtXRnpFa+HnuFYNNpvbCIgg
+I03VI9lG9E+SU8tcdTQub9DNMDUY/P8/xhh+GJ0V9i54dfIa6/pgfkTDNdn8mVhZ
+g8uffCc3t0jET1s2y7YOD23UtBIJ/K1IVd2ZB9CvRxy3Cnptjo61NVk5dTVmaV6d
+YysXAiJuTxbRH8BFE6dBXHjdlnsCI35tMEiTGUSuU+6Nn72AyR74w1eJpQBpJJgK
+tUHiI3tS7U8b7Guf3bttdFHF7mRMhgmMmsZpc0XekQVgDhno10T4paLqH8iBto46
+kcmXpIp5uL9sosSLwp+bH0yv8p92qA==
+=OSOz
+-----END PGP SIGNATURE-----
+
+--uprcwe72mjwulkb5--
 
