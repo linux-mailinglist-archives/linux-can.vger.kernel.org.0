@@ -1,88 +1,124 @@
-Return-Path: <linux-can+bounces-4015-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4017-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3E2CB0BDC2
-	for <lists+linux-can@lfdr.de>; Mon, 21 Jul 2025 09:36:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E73D3B0BE0C
+	for <lists+linux-can@lfdr.de>; Mon, 21 Jul 2025 09:48:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B39A188496D
-	for <lists+linux-can@lfdr.de>; Mon, 21 Jul 2025 07:36:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B4EC7AC828
+	for <lists+linux-can@lfdr.de>; Mon, 21 Jul 2025 07:47:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34234190072;
-	Mon, 21 Jul 2025 07:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0491F199947;
+	Mon, 21 Jul 2025 07:48:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=growora.pl header.i=@growora.pl header.b="wZPIwRE4"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="rGZ4Ex8f"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail.growora.pl (mail.growora.pl [51.254.119.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-72.smtpout.orange.fr [193.252.22.72])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0650126BF7
-	for <linux-can@vger.kernel.org>; Mon, 21 Jul 2025 07:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.254.119.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA28222590;
+	Mon, 21 Jul 2025 07:48:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753083367; cv=none; b=YcI1Y5yPBpdziDRT4I+9a2nM+8C9eEbe5KLNXJx5b5AMcx9Yc/amDz2fOjuF6KyGSgDr393lVsHXMLLWMOpV+Ypg1o9sON2wzYjU1gpWV1o8MWlto+Xly+SAdXA8Gd1FBs/U8ra3Kkkp1JK6H9mOqo84FrTp60sWriyxFBMlgvo=
+	t=1753084113; cv=none; b=aGD/LMNSU+3Zx0wcqjsAD7I2JMrYnReaz834vQj86+rEd8n0GaDhYZ6Sc0iIAQL+PYS/Be7s4IXI5kGRZtd63/FRRtah/up6d1Do5jbnkklsH7agNQboxQDcZqAqUcHHWfNB21JhWi1LNz7M9RlACVNXM34xBb9Au5GRVb5ZQqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753083367; c=relaxed/simple;
-	bh=RSy3akR1+Z0TK1MqUcCTAhuNDshd4oA9g7Cu4aFIABY=;
-	h=Message-ID:Date:From:To:Subject:MIME-Version:Content-Type; b=EZvHSmgthNwcSG+tIGHKbzPrOJAvMW5Fq+SO4Y1EVoIbWUxNDlD9Zwu9XMgbmk5clbWlXseTg8ByajEcoS5669oiAfQQP80IgBodtYKpO3Epvy/8/yj0tHISeSL2QfmlYWMVP3o98xJn0eFibuTM1wVMg7euDfYblIPd6WRVyYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=growora.pl; spf=pass smtp.mailfrom=growora.pl; dkim=pass (2048-bit key) header.d=growora.pl header.i=@growora.pl header.b=wZPIwRE4; arc=none smtp.client-ip=51.254.119.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=growora.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=growora.pl
-Received: by mail.growora.pl (Postfix, from userid 1002)
-	id C7D702270C; Mon, 21 Jul 2025 09:35:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=growora.pl; s=mail;
-	t=1753083361; bh=RSy3akR1+Z0TK1MqUcCTAhuNDshd4oA9g7Cu4aFIABY=;
-	h=Date:From:To:Subject:From;
-	b=wZPIwRE4eMy7PJNkS/KWjxopmt8x36U5h4Y/vjHz3YB7p4808tSLxm8tvomBW/v7/
-	 rnuOvjF9yP5v81pkslSChcJlISMhwz7pVBPl+8DNySZd33ftX0G+Co2Z7KxUgGWbBx
-	 HrcyvcsbZ1dTl1L35kpnS6rBlJS2nLMKcDZ1AuwL3gm1+qmgFO9HK+oEGycYbJLeGB
-	 CSUmoAWnrUjsf5v8iGSfqGZPkXBUX5Io6IV77cEFTRa4LOVGM8FykiyzfNXWaDssVR
-	 llwqBJ1pGjM8hgF5I7ktJzvHySasIi9n4ljEXFinkOmTgXJp4IOxjDWWN5fdZLHBeC
-	 3iL18biO17o2g==
-Received: by mail.growora.pl for <linux-can@vger.kernel.org>; Mon, 21 Jul 2025 07:35:59 GMT
-Message-ID: <20250721084500-0.1.kq.29pt5.0.9g8gl814mg@growora.pl>
-Date: Mon, 21 Jul 2025 07:35:59 GMT
-From: "Mateusz Hopczak" <mateusz.hopczak@growora.pl>
-To: <linux-can@vger.kernel.org>
-Subject: Wsparcie programistyczne - termin spotkania 
-X-Mailer: mail.growora.pl
+	s=arc-20240116; t=1753084113; c=relaxed/simple;
+	bh=nDLgxabm1d7xOeJPLKicTvI/q87/XFoWr/jFEv4SLzM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KNBrQtJS+QX2ZyRvhslcayT0o3htYlZaiRZ+0d1ApyIzrUR5r3BlUsmk6GRw1FehNv5+Zw7U20Bj/yxKyDSuVq3b0rzOlJHRFcAZRcMc6mwwRgnSciZY7Wye903rdyyEoB75VudFfqjLVDSsIj/lYACVz6SZO3Q3B1bZBwhjN/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=rGZ4Ex8f; arc=none smtp.client-ip=193.252.22.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id dlFuuyWYqLTrpdlFvuXW2h; Mon, 21 Jul 2025 09:48:24 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1753084104;
+	bh=gJRVz/YEJYxqdLyzBaVoa58GpKVWf1l4S/w8WDWxRrI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=rGZ4Ex8fUiy7IILm6R6Je7lCOpG2jm3/iBBWnBq0npkX0GUJlNlEvI6SEAVWa5Xvt
+	 MvADXtgfypf1wX6WWfrJ5GqudiA6waPsDWuLfm4At9zoEyUqaudBSK6e7Si0YPVNr2
+	 3iqPoi7fovIpv5/4EcE4QJVQPxpuBRX/mGNw+FMUV6d1IJ8BLzKi+1fUUkkq15HfbP
+	 SLmBXJogUoDl76w3LMu8rRhZWnkoNp0oYZ8I23O820g5EGVxcHUnbZFkrft9jC8pay
+	 hs3aO/fsMgFo8joV1Xuhdish8r/UTUu68V8FAH0u7uZGB+nmNM0d2bNZ4tpkkb0PWL
+	 wDECYDekjweXA==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 21 Jul 2025 09:48:24 +0200
+X-ME-IP: 124.33.176.97
+Message-ID: <c0cac011-cc07-42f8-bdac-620f3faeebf2@wanadoo.fr>
+Date: Mon, 21 Jul 2025 16:48:13 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] docs: Fix kernel-doc indentation errors
+To: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>, Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+ Ondrej Ille <ondrej.ille@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ dri-devel@lists.freedesktop.org, linux-i3c@lists.infradead.org,
+ linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+References: <20250720152401.70720-1-luis.hernandez093@gmail.com>
+ <20250720152401.70720-2-luis.hernandez093@gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250720152401.70720-2-luis.hernandez093@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Szanowni Pa=C5=84stwo,
+On 21/07/2025 at 00:24, Luis Felipe Hernandez wrote:
+> Fix kernel-doc issues that reported Unexpected indentation errors
+> durring documentation build (make htmldocs) in CAN, I3C and GPU drivers.
+  ^^^^^^^
+during
 
-czy w Pa=C5=84stwa firmie rozwa=C5=BCaj=C4=85 Pa=C5=84stwo rozw=C3=B3j no=
-wego oprogramowania lub potrzebuj=C4=85 zaufanego zespo=C5=82u, kt=C3=B3r=
-y przejmie odpowiedzialno=C5=9B=C4=87 za stron=C4=99 technologiczn=C4=85 =
-projektu?
+> Convert formatting to proper ReST list syntax to resolve warning.
+> 
+> Changes since v1:
+> - Convert return value descriptions to proper ReST format
+> - Fix code block introduction with :: syntax  
+> - Add GPU driver fixes
+> - Remove SCSI driver (already fixed)At
 
-Jeste=C5=9Bmy butikowym software housem z 20-osobowym zespo=C5=82em in=C5=
-=BCynier=C3=B3w. Specjalizujemy si=C4=99 w projektach high-tech i deeptec=
-h =E2=80=93 od zaawansowanych system=C3=B3w AI/ML, przez blockchain i IoT=
-, a=C5=BC po aplikacje mobilne, webowe i symulacyjne (m.in. Unreal Engine=
-).
+The change log does not need to appear in the patch main body.
 
-Wspieramy firmy technologiczne oraz startupy na r=C3=B3=C5=BCnych etapach=
-: od koncepcji, przez development, po skalowanie i optymalizacj=C4=99. Dz=
-ia=C5=82amy elastycznie =E2=80=93 jako partnerzy, podwykonawcy lub ventur=
-e builderzy.
+Add a --- cutter after your signature and put the change log after that cutter.
+This way, the change log will automatically be discarded when the patch is picked.
 
-Je=C5=9Bli szukaj=C4=85 Pa=C5=84stwo zespo=C5=82u, kt=C3=B3ry rozumie z=C5=
-=82o=C5=BCono=C5=9B=C4=87 projekt=C3=B3w i wnosi realn=C4=85 warto=C5=9B=C4=
-=87 technologiczn=C4=85 =E2=80=93 ch=C4=99tnie porozmawiamy.
+> Link: https://lore.kernel.org/all/20250703023511.82768-1-luis.hernandez093@gmail.com/
+> 
+> Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+> ---
+>  drivers/gpu/drm/drm_gpuvm.c              | 16 ++++++++--------
+>  drivers/i3c/device.c                     | 13 ++++++++-----
+>  drivers/net/can/ctucanfd/ctucanfd_base.c | 12 +++++++-----
 
-Czy mogliby=C5=9Bmy um=C3=B3wi=C4=87 si=C4=99 na kr=C3=B3tk=C4=85 rozmow=C4=
-=99, by sprawdzi=C4=87 potencja=C5=82 wsp=C3=B3=C5=82pracy?
+Can you do one patch per sub-domains and send them separately? The maintainers
+of drivers/i3c/ are not the same as the maintainers of drivers/net/can/. And
+there is no dependencies preventing you to split.
 
 
-Z pozdrowieniami
-Mateusz Hopczak
+Yours sincerely,
+Vincent Mailhol
+
 
