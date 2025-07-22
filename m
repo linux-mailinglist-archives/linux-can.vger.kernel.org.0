@@ -1,194 +1,128 @@
-Return-Path: <linux-can+bounces-4030-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4031-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E7D2B0D79F
-	for <lists+linux-can@lfdr.de>; Tue, 22 Jul 2025 13:01:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B222B0D91C
+	for <lists+linux-can@lfdr.de>; Tue, 22 Jul 2025 14:13:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AFD4E7AC87F
-	for <lists+linux-can@lfdr.de>; Tue, 22 Jul 2025 10:59:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B91B5188AD0A
+	for <lists+linux-can@lfdr.de>; Tue, 22 Jul 2025 12:13:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C83A2E173E;
-	Tue, 22 Jul 2025 11:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF1D2E8E05;
+	Tue, 22 Jul 2025 12:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="pUs++OLI"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-68.smtpout.orange.fr [193.252.22.68])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8656E242D89
-	for <linux-can@vger.kernel.org>; Tue, 22 Jul 2025 11:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098D52E8E0C;
+	Tue, 22 Jul 2025 12:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753182066; cv=none; b=Khh3VIopbVYV+6Zhl5zEqUaDXLH+arL4unbhKrzr1kXYyBFfF0HwN3O8+q4W91wJJTCd3evWwDrzHTWvV1a52qelx9ODoBKMLTmay6y4K4zYpNy46ZtXi9auOdxV4XAC+u0sZ4zl7QbbyygslLoBhJ9d22IVQzgxIjmUSiQF6Ss=
+	t=1753186404; cv=none; b=qIteektGCgoN5kQenqBZANzHrYJtDQ+f1VB8PCTWipDacTUgzwZNr2dSJIUmLISUM3DlJEOARQsly1AhevFEsbOUOeOtWdRMll8B/YiSG18GgFXDscYxzyfA2u/JJhyV9EzUs30diHNoTwWwPjdGzO1TrcEO4OorXEpDfK7/+4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753182066; c=relaxed/simple;
-	bh=r/D80LyCQidnBXuEys1YtSjehDBissaGOtZYa7JwICA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KZTta5MjfwsXyzDrp7Q6cvT0GSOrQgqb5a3tW5uc8i70o9WQGBkT5D/ltVLZNFuzBohM0KOYjII3ULP3fzWA9UJGXh/3Rgmb+spOH7JRi+2w+tICgSakaefCT08uujNtqRB4tOw0oE0hQnQYYig0DveY3/Rx5R2iyBaO95X+Tj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ueAk2-0000Fo-US
-	for linux-can@vger.kernel.org; Tue, 22 Jul 2025 13:01:02 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ueAk2-009i4O-2N
-	for linux-can@vger.kernel.org;
-	Tue, 22 Jul 2025 13:01:02 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 6A7914463E5
-	for <linux-can@vger.kernel.org>; Tue, 22 Jul 2025 11:01:02 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 015B54463DA;
-	Tue, 22 Jul 2025 11:01:01 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id e86680c1;
-	Tue, 22 Jul 2025 11:01:00 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Andrei Lalaev <andrey.lalaev@gmail.com>
-Subject: [PATCH net] can: netlink: can_changelink(): fix NULL pointer deref of struct can_priv::do_set_mode
-Date: Tue, 22 Jul 2025 12:58:32 +0200
-Message-ID: <20250722110059.3664104-2-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250722110059.3664104-1-mkl@pengutronix.de>
-References: <20250722110059.3664104-1-mkl@pengutronix.de>
+	s=arc-20240116; t=1753186404; c=relaxed/simple;
+	bh=u9CymTeGhHwmHEThjnJA9ifjHjtLz4Cw4C1+RHVvYaw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=q9t7qFdT2iHnCcFz+SsvYd55Ch8aqoFBZseLVa7oGTiKQ/oMOwC08PuX3bnRHM/n+BqbAWxK6DeI46G/rthgfZH6QNprQfD2qZuWmh/yMBPhypxQ0v0/ELsfWZaJ9hrsKREcHclj6l2L4/0BIE6QP7jBj0RUsg5vIK1ag8QR/VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=pUs++OLI; arc=none smtp.client-ip=193.252.22.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id eBqkutpDDZLLzeBqmuiq1m; Tue, 22 Jul 2025 14:12:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1753186330;
+	bh=BInXK0aUIElWXF88CRcdt6heGhuFFOkNCbpfQ3hACD8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=pUs++OLI0bks4sCHIpdkls7A0Welf5n+B01rBxZOJ1c1ZJT/vzC4R5O0UQ3h87B6x
+	 u+nggmHvHFP+ahn/TzBguJHv6JJ9Cm8Ucgu9UxbyXivK4+FDfp0T4rT/N/gqxMIeau
+	 uFNORvAVM4tkU2RNQ2XmYbucTkOrPIAs92vLwPFBuRay1+sUhd7z+P/G38ADLJXt3g
+	 QBKgNHGd9kh3XOM8QOY5JpfuYlrBaYRZT/pb9y4+amqcrhk8r2WSx0A1SHYYCoBRew
+	 K/UYY1YIczMYLAbOBawx8H6lTvUmUJVfDjB11zd+tHb/3Tw4RmDMH4rEcbaFm/jWyD
+	 0ABBiu68VEeFw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 22 Jul 2025 14:12:10 +0200
+X-ME-IP: 124.33.176.97
+Message-ID: <266ff6cc-82f6-4e5f-84c5-39a1ff0aa8a2@wanadoo.fr>
+Date: Tue, 22 Jul 2025 21:12:02 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] can: tscan1: CAN_TSCAN1 can depend on PC104
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, "Andre B. Oliveira" <anbadeol@gmail.com>,
+ linux-can@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Randy Dunlap <rdunlap@infradead.org>
+References: <20250721002823.3548945-1-rdunlap@infradead.org>
+ <20250722-delectable-porcelain-partridge-a87134-mkl@pengutronix.de>
+ <20250722-godlike-discerning-weasel-fbec72-mkl@pengutronix.de>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250722-godlike-discerning-weasel-fbec72-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Andrei Lalaev reported a NULL pointer deref when a CAN device is
-restarted from Bus Off and the driver does not implement the struct
-can_priv::do_set_mode callback.
+On 22/07/2025 at 19:52, Marc Kleine-Budde a écrit :
+> On 22.07.2025 12:48:41, Marc Kleine-Budde wrote:
+>> On 20.07.2025 17:28:23, Randy Dunlap wrote:
+>>> Add a dependency on PC104 to limit (restrict) this driver kconfig
+>>> prompt to kernel configs that have PC104 set.
+>>>
+>>> Add COMPILE_TEST as a possibility for more complete build coverage.
+>>> I tested this build config on x86_64 5 times without problems.
+>>
+>> I've already Vincent's patch [1] on my tree.
+>>
+>> [1] https://lore.kernel.org/all/20250715-can-compile-test-v2-3-f7fd566db86f@wanadoo.fr/
 
-There are 2 code path that call struct can_priv::do_set_mode:
-- directly by a manual restart from the user space, via
-  can_changelink()
-- delayed automatic restart after bus off (deactivated by default)
+Don't know how I did not realize the conflict when reviewing :D
 
-To prevent the NULL pointer deference, refuse a manual restart or
-configure the automatic restart delay in can_changelink() and report
-the error via extack to user space.
+>> So this doesn't apply any more. Fixing the merge conflicts result in:
+>>
+>> index ba16d7bc09ef..e061e35769bf 100644
+>> --- a/drivers/net/can/sja1000/Kconfig
+>> +++ b/drivers/net/can/sja1000/Kconfig
+>> @@ -105,7 +105,7 @@ config CAN_SJA1000_PLATFORM
+>>  
+>>  config CAN_TSCAN1
+>>          tristate "TS-CAN1 PC104 boards"
+>> -        depends on ISA || (COMPILE_TEST && HAS_IOPORT)
+>> +        depends on (ISA && PC104) || (COMPILE_TEST && HAS_IOPORT)
+>>          help
+>>            This driver is for Technologic Systems' TSCAN-1 PC104 boards.
+>>            https://www.embeddedts.com/products/TS-CAN1
+>>
+>> Should be ok?
+> 
+> If no-one complains I'll add this to my can-next tree and remove the
+> Fixes tag. Otherwise stable will pick this up, but it won't apply
+> without Vincent's patch.
 
-As an additional safety measure let can_restart() return an error if
-can_priv::do_set_mode is not set instead of dereferencing it
-unchecked.
+I do not really mind if those are not backported. No issue for me to drop the
+fix tag.
 
-Reported-by: Andrei Lalaev <andrey.lalaev@gmail.com>
-Closes: https://lore.kernel.org/all/20250714175520.307467-1-andrey.lalaev@gmail.com
-Fixes: 39549eef3587 ("can: CAN Network device driver and Netlink interface")
-Link: https://patch.msgid.link/20250718-fix-nullptr-deref-do_set_mode-v1-1-0b520097bb96@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/dev/dev.c     | 12 +++++++++---
- drivers/net/can/dev/netlink.c | 12 ++++++++++++
- 2 files changed, 21 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index ea8c807af4d8..3913971125de 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -145,13 +145,16 @@ void can_change_state(struct net_device *dev, struct can_frame *cf,
- EXPORT_SYMBOL_GPL(can_change_state);
- 
- /* CAN device restart for bus-off recovery */
--static void can_restart(struct net_device *dev)
-+static int can_restart(struct net_device *dev)
- {
- 	struct can_priv *priv = netdev_priv(dev);
- 	struct sk_buff *skb;
- 	struct can_frame *cf;
- 	int err;
- 
-+	if (!priv->do_set_mode)
-+		return -EOPNOTSUPP;
-+
- 	if (netif_carrier_ok(dev))
- 		netdev_err(dev, "Attempt to restart for bus-off recovery, but carrier is OK?\n");
- 
-@@ -173,10 +176,14 @@ static void can_restart(struct net_device *dev)
- 	if (err) {
- 		netdev_err(dev, "Restart failed, error %pe\n", ERR_PTR(err));
- 		netif_carrier_off(dev);
-+
-+		return err;
- 	} else {
- 		netdev_dbg(dev, "Restarted\n");
- 		priv->can_stats.restarts++;
- 	}
-+
-+	return 0;
- }
- 
- static void can_restart_work(struct work_struct *work)
-@@ -201,9 +208,8 @@ int can_restart_now(struct net_device *dev)
- 		return -EBUSY;
- 
- 	cancel_delayed_work_sync(&priv->restart_work);
--	can_restart(dev);
- 
--	return 0;
-+	return can_restart(dev);
- }
- 
- /* CAN bus-off
-diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index a36842ace084..f0e3f0d538fb 100644
---- a/drivers/net/can/dev/netlink.c
-+++ b/drivers/net/can/dev/netlink.c
-@@ -285,6 +285,12 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
- 	}
- 
- 	if (data[IFLA_CAN_RESTART_MS]) {
-+		if (!priv->do_set_mode) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Device doesn't support restart from Bus Off");
-+			return -EOPNOTSUPP;
-+		}
-+
- 		/* Do not allow changing restart delay while running */
- 		if (dev->flags & IFF_UP)
- 			return -EBUSY;
-@@ -292,6 +298,12 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
- 	}
- 
- 	if (data[IFLA_CAN_RESTART]) {
-+		if (!priv->do_set_mode) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Device doesn't support restart from Bus Off");
-+			return -EOPNOTSUPP;
-+		}
-+
- 		/* Do not allow a restart while not running */
- 		if (!(dev->flags & IFF_UP))
- 			return -EINVAL;
-
-base-commit: b03f15c0192b184078206760c839054ae6eb4eaa
--- 
-2.47.2
-
+Yours sincerely,
+Vincent Mailhol
 
 
