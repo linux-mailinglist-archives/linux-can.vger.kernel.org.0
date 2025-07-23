@@ -1,55 +1,55 @@
-Return-Path: <linux-can+bounces-4062-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4063-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CB88B0F20D
-	for <lists+linux-can@lfdr.de>; Wed, 23 Jul 2025 14:17:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AADF0B0F235
+	for <lists+linux-can@lfdr.de>; Wed, 23 Jul 2025 14:27:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26D943BC041
-	for <lists+linux-can@lfdr.de>; Wed, 23 Jul 2025 12:17:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96044188690C
+	for <lists+linux-can@lfdr.de>; Wed, 23 Jul 2025 12:28:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D3A1D63C5;
-	Wed, 23 Jul 2025 12:17:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BF4B210F4A;
+	Wed, 23 Jul 2025 12:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="lEHySWc9"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="qJgZy68P"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-73.smtpout.orange.fr [193.252.22.73])
+Received: from out.smtpout.orange.fr (out-70.smtpout.orange.fr [193.252.22.70])
 	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF7416FF37
-	for <linux-can@vger.kernel.org>; Wed, 23 Jul 2025 12:17:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABE827A928
+	for <linux-can@vger.kernel.org>; Wed, 23 Jul 2025 12:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753273068; cv=none; b=BgDQBK2Sk4YM4+tatBRRu8azvX1yRzmO5bg5XKj+jYOcyGwSdSDWWk0DEAfu5wmjITXjwWoKpIkHbDrhuHoO7vBLYHe1MYCMYqRL/L+DDLWJlQhnDVATF8hix1gD7+vRwn2EjUBQxGytTLWeAFyAkbO90n1C5vGp2imHVKUEv+M=
+	t=1753273664; cv=none; b=q9Red7G2rXlgoKBFWnKRuQbVmcra2Pg74wLQVIdrRTHup30hTpLvH1GdyqomH9GHKAUJk/tIPuojhYJ+FvW5jToICLPpmUIFuRYxeG6pSN0t+bHYF7rX7/NXYVUh2Tc9lAZvo1hWI9SpldN3YjFykBrlo6sHkc9Q7j4Mb4UmhHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753273068; c=relaxed/simple;
-	bh=vh1I3/K9vr3q9fnT0IDElmE5XpPB3aqSy4pvEDr4IY0=;
+	s=arc-20240116; t=1753273664; c=relaxed/simple;
+	bh=yN7LiF3pXtSRldj1j3XnfzAELp4PwgvNtR6X6IzoR/o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XF0wwrruYSY1ByjohqbrUz8tiGlupiTH+Jr54pSVU8wFyIaactR1a/S3u5gi5Cb9Vcs7Jr7PvQat0ZAvnQnwBidU1WwUMXRXb89HqQsYMpZQh7pb6AmtAEzar/8jpWFmEpZWEO+tEQ8Tx/e/+nR3JD266uDMX+qktSmhQW+cZmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=lEHySWc9; arc=none smtp.client-ip=193.252.22.73
+	 In-Reply-To:Content-Type; b=hNa7zueZHfp99VznWeo3kdSlufwSh9ReeMbElfrj/p/rWrqtE4pqeoc0YCzmt/oNXtkGVnOLNjk8uLwt+Qr64fCXxaRkv5thlR5ImDov9fr4h/ONetdlDCFOqo9mks7oVqy0nt0cqBR85SzA4gHmkmOLH6xA8EDPATt0n3IPQqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=qJgZy68P; arc=none smtp.client-ip=193.252.22.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from [172.16.82.72] ([124.33.176.97])
 	by smtp.orange.fr with ESMTPA
-	id eYPkuTY7LXbdFeYPlux7wp; Wed, 23 Jul 2025 14:17:43 +0200
+	id eYZEuoUhzQ4MmeYZFuW3fo; Wed, 23 Jul 2025 14:27:31 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1753273063;
-	bh=4/jE4c9wc7/LxvNAt/czgq/BtEXwxoCfuWNAQT6UnQI=;
+	s=t20230301; t=1753273651;
+	bh=id5Bn3NPZmaQCry4LSsJQhDPNeNVLe5QXHeUBUuHF+E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=lEHySWc9LVS7cvfVjsXkx7VL189AkoZpbxXWm1ZrWTTH+FjBdzc+IbdKIvrcRG4bn
-	 K9AB8h+4YNl7gtXA0gTZgufBe6Spnok/a9RD+ijVxyDyEVjsvv7yRotNiTFqL9vbDt
-	 U59Fvp0yURIkpeW7d/x0hjzsvtf40nKMBeBaY17Mp9Aia6CYvKkkU6SlRvEsigwN0f
-	 ExB6cbGUaBX/iKJACNCeQlLrEdq1hUHYSy+j2Op1r2Es44/4c0xFEfODlZkuT+Wcq8
-	 WVQFHE6HLqxeeBDheJyFJlWJUHbpo1q0t72Znn8ox0kIKtwJjLhY6Un9IOWnjp+tkm
-	 0E4tS1lokSIPg==
+	b=qJgZy68PiZwmG7SkiUbsFc3CT0jdGsdgfiD3ogRPXiVZjJiNytvLgVq8by1uR7rFB
+	 F3mWqQVAOZSIJtg7DiZpQNec6kRP/XOJC5SwqvvvqIQn4IjIdF/xN597NhgBL5WIpU
+	 MJFUs0BNrpaN/beyKZfgg/z7DSeyzL+BcnXNmLH7sEDJrqYTdglp1ZX2Te4YtAKFy9
+	 pSNJLeG4z16CxUmUkdNdtmrNYGEHcG63SuuBucIgsJIS/rsEPNIEQ+Cw74tou2L5Bk
+	 CEoCaLXKYdxFfKoP2Iyid2FXl6ehrcBxKPXtx/+0LJ7Ua0V4laj7WZQ+AsYCQsXhpv
+	 08vTiXNqDUK3g==
 X-ME-Helo: [172.16.82.72]
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 23 Jul 2025 14:17:43 +0200
+X-ME-Date: Wed, 23 Jul 2025 14:27:31 +0200
 X-ME-IP: 124.33.176.97
-Message-ID: <ba6700b9-a2e4-44a3-b64c-91826188e845@wanadoo.fr>
-Date: Wed, 23 Jul 2025 21:17:40 +0900
+Message-ID: <64db0624-d267-4ec5-ba2e-fdff0023fb21@wanadoo.fr>
+Date: Wed, 23 Jul 2025 21:27:28 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -57,13 +57,12 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/9] can: kvaser_pciefd: Store the different firmware
- version components in a struct
+Subject: Re: [PATCH 5/9] can: kvaser_pciefd: Store device channel index
 To: Jimmy Assarsson <extja@kvaser.com>, linux-can@vger.kernel.org
 Cc: Jimmy Assarsson <jimmyassarsson@gmail.com>,
  Marc Kleine-Budde <mkl@pengutronix.de>
 References: <20250723083236.9-1-extja@kvaser.com>
- <20250723083236.9-5-extja@kvaser.com>
+ <20250723083236.9-6-extja@kvaser.com>
 Content-Language: en-US
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
@@ -76,71 +75,68 @@ Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
  yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
  CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
  ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250723083236.9-5-extja@kvaser.com>
+In-Reply-To: <20250723083236.9-6-extja@kvaser.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/07/2025 at 17:32, Jimmy Assarsson wrote:
-> Store firmware version in kvaser_pciefd_fw_version struct, specifying the
-> different components of the version number.
+> Store device channel index in netdev.dev_id.
 > 
 > Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 > ---
->  drivers/net/can/kvaser_pciefd.c | 21 +++++++++++++++------
->  1 file changed, 15 insertions(+), 6 deletions(-)
+>  drivers/net/can/kvaser_pciefd.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 > diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-> index f2722473b865..eba19819ca43 100644
+> index eba19819ca43..7feece6d1d41 100644
 > --- a/drivers/net/can/kvaser_pciefd.c
 > +++ b/drivers/net/can/kvaser_pciefd.c
-> @@ -325,6 +325,12 @@ struct kvaser_pciefd_driver_data {
->  	const struct kvaser_pciefd_dev_ops *ops;
->  };
->  
-> +struct kvaser_pciefd_fw_version {
-> +	u8 major;
-> +	u8 minor;
-> +	u16 build;
-> +};
-> +
->  static const struct kvaser_pciefd_address_offset kvaser_pciefd_altera_address_offset = {
->  	.serdes = 0x1000,
->  	.pci_ien = 0x50,
-> @@ -437,6 +443,7 @@ struct kvaser_pciefd {
->  	u32 bus_freq;
->  	u32 freq;
->  	u32 freq_to_ticks_div;
-> +	struct kvaser_pciefd_fw_version fw_version;
->  };
->  
->  struct kvaser_pciefd_rx_packet {
-> @@ -1207,14 +1214,16 @@ static int kvaser_pciefd_setup_board(struct kvaser_pciefd *pcie)
->  	u32 version, srb_status, build;
->  
->  	version = ioread32(KVASER_PCIEFD_SYSID_ADDR(pcie) + KVASER_PCIEFD_SYSID_VERSION_REG);
-> +	build = ioread32(KVASER_PCIEFD_SYSID_ADDR(pcie) + KVASER_PCIEFD_SYSID_BUILD_REG);
->  	pcie->nr_channels = min(KVASER_PCIEFD_MAX_CAN_CHANNELS,
->  				FIELD_GET(KVASER_PCIEFD_SYSID_VERSION_NR_CHAN_MASK, version));
-> -
-> -	build = ioread32(KVASER_PCIEFD_SYSID_ADDR(pcie) + KVASER_PCIEFD_SYSID_BUILD_REG);
-> -	dev_dbg(&pcie->pci->dev, "Version %lu.%lu.%lu\n",
-> -		FIELD_GET(KVASER_PCIEFD_SYSID_VERSION_MAJOR_MASK, version),
-> -		FIELD_GET(KVASER_PCIEFD_SYSID_VERSION_MINOR_MASK, version),
-> -		FIELD_GET(KVASER_PCIEFD_SYSID_BUILD_SEQ_MASK, build));
-> +	pcie->fw_version.major = FIELD_GET(KVASER_PCIEFD_SYSID_VERSION_MAJOR_MASK, version);
-> +	pcie->fw_version.minor = FIELD_GET(KVASER_PCIEFD_SYSID_VERSION_MINOR_MASK, version);
-> +	pcie->fw_version.build = FIELD_GET(KVASER_PCIEFD_SYSID_BUILD_SEQ_MASK, build);
-> +	dev_dbg(&pcie->pci->dev, "Version %u.%u.%u\n",
-> +		pcie->fw_version.major,
-> +		pcie->fw_version.minor,
-> +		pcie->fw_version.build);
+> @@ -1030,6 +1030,7 @@ static int kvaser_pciefd_setup_can_ctrls(struct kvaser_pciefd *pcie)
+>  		can->completed_tx_bytes = 0;
+>  		can->bec.txerr = 0;
+>  		can->bec.rxerr = 0;
+> +		can->can.dev->dev_id = i;
 
-At the end of this series, the firmware version will be available through the
-devlink interface, so this debug message loses it purpose. If you do not mind,
-better to remove that dev_dbg().
+Isn't dev_port a better fit here?
 
->  	srb_status = ioread32(KVASER_PCIEFD_SRB_ADDR(pcie) + KVASER_PCIEFD_SRB_STAT_REG);
->  	if (!(srb_status & KVASER_PCIEFD_SRB_STAT_DMA)) {
+See the description here:
+
+  https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-net
+
+  What:		/sys/class/net/<iface>/dev_id
+  Date:		April 2008
+  KernelVersion:	2.6.26
+  Contact:	netdev@vger.kernel.org
+  Description:
+  		Indicates the device unique identifier. Format is an hexadecimal
+  		value. This is used to disambiguate interfaces which might be
+  		stacked (e.g: VLAN interfaces) but still have the same MAC
+  		address as their parent device.
+
+  What:		/sys/class/net/<iface>/dev_port
+  Date:		February 2014
+  KernelVersion:	3.15
+  Contact:	netdev@vger.kernel.org
+  Description:
+  		Indicates the port number of this network device, formatted
+  		as a decimal value. Some NICs have multiple independent ports
+  		on the same PCI bus, device and function. This attribute allows
+  		userspace to distinguish the respective interfaces.
+
+  		Note: some device drivers started to use 'dev_id' for this
+  		purpose since long before 3.15 and have not adopted the new
+  		attribute ever since. To query the port number, some tools look
+  		exclusively at 'dev_port', while others only consult 'dev_id'.
+  		If a network device has multiple client adapter ports as
+  		described in the previous paragraph and does not set this
+  		attribute to its port number, it's a kernel bug.
+
+Also, not populating dev_port is a kernel bug, meaning that you should probably
+add a fix tag.
+
+>  		init_completion(&can->start_comp);
+>  		init_completion(&can->flush_comp);
+
 
 Yours sincerely,
 Vincent Mailhol
