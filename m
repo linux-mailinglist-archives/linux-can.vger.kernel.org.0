@@ -1,114 +1,129 @@
-Return-Path: <linux-can+bounces-4097-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4098-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E522B10277
-	for <lists+linux-can@lfdr.de>; Thu, 24 Jul 2025 09:56:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2CD6B10339
+	for <lists+linux-can@lfdr.de>; Thu, 24 Jul 2025 10:18:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29B741CE187E
-	for <lists+linux-can@lfdr.de>; Thu, 24 Jul 2025 07:55:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F03FF5600B4
+	for <lists+linux-can@lfdr.de>; Thu, 24 Jul 2025 08:17:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1BE026FA5A;
-	Thu, 24 Jul 2025 07:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4895027602E;
+	Thu, 24 Jul 2025 08:16:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="EG1CoS/4"
+	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="Gnz/OdC3"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-18.smtpout.orange.fr [193.252.22.18])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75BA2459D7;
-	Thu, 24 Jul 2025 07:55:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9B7274FEF
+	for <linux-can@vger.kernel.org>; Thu, 24 Jul 2025 08:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.27.42.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753343734; cv=none; b=ZyP6+V2rbxCt/3yjcA26/fk1rAOUcdwN1CCR7a7NO3rI+cbv+ueVdpUlmGy0A1Pz29p0UO36fVBoSmeKSaV9urs1niBCSbjzhFDg/GDuM3TEkTFSj12fmREaZFREbNUJL327YL0gEEgKpBdP8JPc2lflOZQ2VrYUOJ994GGGS90=
+	t=1753344975; cv=none; b=X/AJ6pNvDI5ejrRSHMmbsErnOucn19+rWc4aym9O/lqumTIgSZ/MORoQIt7e6UwjdUFRmUutTnkLxf8j7segHfCSiK/hpSYlYOGREnHfjDTUtAEzKFXnYhHbWKDfDtpQPirIjkyT/ZItFnaec1G4gFPTWW349ZwWypDhpeV2ZRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753343734; c=relaxed/simple;
-	bh=cDTS6SYvBpPoIL6qy2wUnozxKfGX2b9UFGGUmOYX9E8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JuV0mvsiDTILBm2A/uUse66llnF2qMPou8impfwvnzsfaCbRY7kQJhSwGOYPtYLyMYJZa/+dOJSBtkOQGe4jZ1nahpeNESwGEJ1eSm3yHW2KNKeGiN4ulnRNaY/wY0EptaEgRqcSKalVpbPYKR2bBhzEGugyOhDjGnIsNWHoBFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=EG1CoS/4; arc=none smtp.client-ip=193.252.22.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from mail-ed1-f49.google.com ([209.85.208.49])
-	by smtp.orange.fr with ESMTPA
-	id eqmPuEdCwpTm4eqmPudItl; Thu, 24 Jul 2025 09:54:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1753343657;
-	bh=14MnTsuJbjYYjuvpSxaOGuOPMJUCYT5/HxNBySMFn6s=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=EG1CoS/4cW00UU2VHatFDn+scY1jNyJIfImzfiybNl0SOdfiWPJNp8uBsmJhT+xWA
-	 HMkSOw4FfKc3+HgqVfwB2vX+CPRarbdXwd4SgdROoE2gp9KFDizXNHTaUO1kVt6Cvz
-	 c91boGFK1TT6FRMxgxGRyRKCY/f11yck1+MOt+cGzGtkmgYVsN9voey2lV8g6HGH4p
-	 Q4PiJxaifsL/saOfStBI0PkErUtdPx27+sbGKHbF8b+hdFXWxuMoqm5UBpFt9Esfi7
-	 D7R6R5/9QAw/NRLJL1L0JL+hNgEVc+GgnZ9j28cBoEnkxR/rJBm50F9oopPNOj1NGc
-	 vwwVtDKf+Nu0w==
-X-ME-Helo: mail-ed1-f49.google.com
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 24 Jul 2025 09:54:17 +0200
-X-ME-IP: 209.85.208.49
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-60c9d8a169bso1249524a12.1;
-        Thu, 24 Jul 2025 00:54:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUK9EvTKcyM+i6s8YfbHe6+6fOp4vr26PmkTKEwym3J7tSlv4nBtsH5oLJxUo7cDdfutwBPn6pn@vger.kernel.org, AJvYcCXK65NsBuAaSm9XHZmjn+2A0Kf4LEA6Wykw2namWRKCHS4EA2UNcMnjHipYEf3WNDwaFAyrVlH6XrM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpqhXqrF+4BW4nA33VygUYwfpNILAawrv9xksMd7Y9gJPzqMaj
-	L8Q5cSlkXLfECJeChrmSXvSZyLD4p9EZZft+pZyhgGLEQOkwXF7PQZceeGjMlwb1nJpoTu8PlJn
-	c8bMLPJngWzrJsMJoE7/y0UmLQfl+pqU=
-X-Google-Smtp-Source: AGHT+IEnYtNYk9rHB5umYhZiK5re5ZuGyEu0gh8JHlA3YimeF4fDr+Y1nEvKG5Kr5gjN4v2Px9e8kskJSrWe4wO7Pvw=
-X-Received: by 2002:a17:907:2d0e:b0:af2:aa60:90c with SMTP id
- a640c23a62f3a-af2f917a878mr594584066b.53.1753343656906; Thu, 24 Jul 2025
- 00:54:16 -0700 (PDT)
+	s=arc-20240116; t=1753344975; c=relaxed/simple;
+	bh=hoLjzdlhF9fle7dQGkLZT07586YYJJ3B//87Lj/hj7M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pMjDLYioVx/c4dbTu1/6RuXsOZfrdTqu+pWhQXfR4RMf/6RqzztH2p1vKwcYwNb09LZ/shgriVUnC3dXAf0MglpykdwMkJ0VWt+6VIPgsP/5CVCUEVq0tGl07YL5tc0ZWtI6GfU4JwTuRjpPcW4ECSuHW+LfDQA8DG1e1PA7YzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=Gnz/OdC3; arc=none smtp.client-ip=212.27.42.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=free.fr
+Received: from stf-laptop.box.freepro.com (unknown [IPv6:2a05:6e02:1102:5710:5084:4ff2:f1ab:fa40])
+	(Authenticated sender: stephane.grosjean@free.fr)
+	by smtp6-g21.free.fr (Postfix) with ESMTPSA id 4BD5378035B;
+	Thu, 24 Jul 2025 10:16:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+	s=smtp-20201208; t=1753344968;
+	bh=hoLjzdlhF9fle7dQGkLZT07586YYJJ3B//87Lj/hj7M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Gnz/OdC3VrOV7YaGqlctU3lITEE1MM1LW7UksQ+sUtTE94i06UozSUgaB8rjW0Ysq
+	 SWxDyoQWphtHGcAIb7EUB/rtap6ctBQsoUvSWjcBla/+UxwkTeoGIY8mUIp3NO6T8o
+	 3CWzAIh48qoOrA8nJ1IMLYMYEafu9oaL2scWWJbPdA5XCLn3bRgmCb677gCLcTsjB9
+	 40LjuHGJWGbnGj/UhUOeoL96WA/c280aVTKWXaP76ehliKFQZBlltLhkPBk5pYlwt4
+	 cF4iQSnxXZ2hIJM0i5ANuFdaMgYqouM5kcgXL1zo4uJHyw7bITxntIUStYTnsyNZF1
+	 vYSmK6Xwc5JIw==
+From: Stephane Grosjean <stephane.grosjean@free.fr>
+To: linux-can Mailing List <linux-can@vger.kernel.org>
+Cc: Stephane Grosjean <stephane.grosjean@hms-networks.com>
+Subject: [PATCH v2] can: peak_usb: fix USB FD devices potential malfunction
+Date: Thu, 24 Jul 2025 10:13:19 +0200
+Message-ID: <20250724081550.11694-1-stephane.grosjean@free.fr>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250724063651.8-1-extja@kvaser.com> <20250724063651.8-6-extja@kvaser.com>
- <a88f2cfa-69e1-400e-ad67-01ae83f3f9f6@gmail.com>
-In-Reply-To: <a88f2cfa-69e1-400e-ad67-01ae83f3f9f6@gmail.com>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Thu, 24 Jul 2025 16:54:04 +0900
-X-Gmail-Original-Message-ID: <CAMZ6RqKdTX0++J_TKGkK8=1mLwC3xE3ZZws85tvzv9bmvZRM0w@mail.gmail.com>
-X-Gm-Features: Ac12FXyesHczDBDxjhk8yCZQ22LKEQJyryYbN5LEtfcIsyXouvLlVlz3AX4v46o
-Message-ID: <CAMZ6RqKdTX0++J_TKGkK8=1mLwC3xE3ZZws85tvzv9bmvZRM0w@mail.gmail.com>
-Subject: Re: [PATCH v2 05/10] can: kvaser_pciefd: Store device channel index
-To: Jimmy Assarsson <jimmyassarsson@gmail.com>
-Cc: Jimmy Assarsson <extja@kvaser.com>, linux-can@vger.kernel.org, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu. 24 Jul. 2025 at 16:09, Jimmy Assarsson <jimmyassarsson@gmail.com> wrote:
-> On 7/24/25 8:36 AM, Jimmy Assarsson wrote:
-> > Store device channel index in netdev.dev_port.
-> >
-> > Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan devices")
-> > Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
-> > ---
-> > Changes in v2:
-> >    - Add Fixes tag.
-> >
-> >   drivers/net/can/kvaser_pciefd.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-> > index 7153b9ea0d3d..8dcb1d1c67e4 100644
-> > --- a/drivers/net/can/kvaser_pciefd.c
-> > +++ b/drivers/net/can/kvaser_pciefd.c
-> > @@ -1028,6 +1028,7 @@ static int kvaser_pciefd_setup_can_ctrls(struct kvaser_pciefd *pcie)
-> >               can->completed_tx_bytes = 0;
-> >               can->bec.txerr = 0;
-> >               can->bec.rxerr = 0;
-> > +             can->can.dev->dev_port = i;
-> >
-> >               init_completion(&can->start_comp);
-> >               init_completion(&can->flush_comp);
->
-> Would it be better to submit this as a separate patch, or keep it within
-> this patch series?
+From: Stephane Grosjean <stephane.grosjean@hms-networks.com>
 
-Even if this is a bug, I see no urgency to it, so I am happy to have
-this goes first to netdev-next and is picked-up by stable later on.
-Doing the opposite would require you to split and seems more
-troublesome.
+The latest firmware versions of USB CAN FD interfaces export the EP numbers
+to be used to dialog with the device via the "type" field of a response to
+a vendor request structure, particularly when its value is greater than or
+equal to 2.
+
+This patch corrects the driver's test of this field.
+
+Fixes: 4f232482467a ("can: peak_usb: include support for a new MCU")
+Signed-off-by: Stephane Grosjean <stephane.grosjean@hms-networks.com>
+---
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+v2: Added "Fixes:" tag
+    Fixed comments around new way of how "type" is handled
+    Added 2nd correction to "type" handling, which had been forgotten in v1
+
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+index aa0b68c1ae81..ec77aa29a8c5 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+@@ -49,7 +49,7 @@ struct __packed pcan_ufd_fw_info {
+ 	__le32	ser_no;		/* S/N */
+ 	__le32	flags;		/* special functions */
+ 
+-	/* extended data when type == PCAN_USBFD_TYPE_EXT */
++	/* extended data when type >= PCAN_USBFD_TYPE_EXT */
+ 	u8	cmd_out_ep;	/* ep for cmd */
+ 	u8	cmd_in_ep;	/* ep for replies */
+ 	u8	data_out_ep[2];	/* ep for CANx TX */
+@@ -1003,10 +1003,11 @@ static int pcan_usb_fd_init(struct peak_usb_device *dev)
+ 			dev->can.ctrlmode |= CAN_CTRLMODE_FD_NON_ISO;
+ 		}
+ 
+-		/* if vendor rsp is of type 2, then it contains EP numbers to
+-		 * use for cmds pipes. If not, then default EP should be used.
++		/* if vendor rsp type is greater than or equal to 2, then it
++		 * contains EP numbers to use for cmds pipes. If not, then
++		 * default EP should be used.
+ 		 */
+-		if (fw_info->type != cpu_to_le16(PCAN_USBFD_TYPE_EXT)) {
++		if (le16_to_cpu(fw_info->type) < PCAN_USBFD_TYPE_EXT) {
+ 			fw_info->cmd_out_ep = PCAN_USBPRO_EP_CMDOUT;
+ 			fw_info->cmd_in_ep = PCAN_USBPRO_EP_CMDIN;
+ 		}
+@@ -1039,11 +1040,11 @@ static int pcan_usb_fd_init(struct peak_usb_device *dev)
+ 	dev->can_channel_id =
+ 		le32_to_cpu(pdev->usb_if->fw_info.dev_id[dev->ctrl_idx]);
+ 
+-	/* if vendor rsp is of type 2, then it contains EP numbers to
+-	 * use for data pipes. If not, then statically defined EP are used
+-	 * (see peak_usb_create_dev()).
++	/* if vendor rsp type is greater than or equal to 2, then it contains EP
++	 * numbers to use for data pipes. If not, then statically defined EP are
++	 * used (see peak_usb_create_dev()).
+ 	 */
+-	if (fw_info->type == cpu_to_le16(PCAN_USBFD_TYPE_EXT)) {
++	if (le16_to_cpu(fw_info->type) >= PCAN_USBFD_TYPE_EXT) {
+ 		dev->ep_msg_in = fw_info->data_in_ep;
+ 		dev->ep_msg_out = fw_info->data_out_ep[dev->ctrl_idx];
+ 	}
+-- 
+2.43.0
+
 
