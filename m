@@ -1,234 +1,134 @@
-Return-Path: <linux-can+bounces-4145-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4146-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56636B11ECC
-	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 14:37:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8595EB11ED8
+	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 14:40:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C2B17AC105
-	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 12:35:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93CAD1CE4332
+	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 12:41:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 431392EE27E;
-	Fri, 25 Jul 2025 12:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD1222EBDC9;
+	Fri, 25 Jul 2025 12:39:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b="IRtLU86i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H5+c4i90"
 X-Original-To: linux-can@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2109.outbound.protection.outlook.com [40.107.20.109])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5977E2EE260;
-	Fri, 25 Jul 2025 12:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.109
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753446919; cv=fail; b=cjK1h+tw06uq2RWFTPCPoaHHAPSZHxYZ4l20wkXmbzT176vS6uCfm/3vz78Ai1IK5HGivIlEnXuh5sBaWnZxA5rsF8wBWYPYOZbcftTTgi2RGxboxVjrb+fKzudKQOMDGiuIAay8nTLKbmlyNhRa+1ovf6lnAN3Bxmue6V5MApg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753446919; c=relaxed/simple;
-	bh=M9ahDl7oF75tDaexbcYZATGRGcqK3kLQYGJ4B0sEGTc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tXRmwCvfp4E083W1SMTG+8Y8wL3Iau4Y1rQrvwbr+Q+/713y5uULpoQQMqgMeymJqFD6t0T8FER/9WwYlk5wypHs7FOcCpMo0wIaB5Z28CWOPsU10cl8MA8YoVrm2LGEOsE9H6A7ao+ZOlubeeWXEAH+vxxo2LCl3KeDAY/kOIs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com; spf=pass smtp.mailfrom=kvaser.com; dkim=pass (1024-bit key) header.d=kvaser.com header.i=@kvaser.com header.b=IRtLU86i; arc=fail smtp.client-ip=40.107.20.109
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvaser.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvaser.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gqocTF+QNrhqO7V83hDClpu+k0y9Zy5RKlDAZb51QXtIMzFiV3hctInW8wR0y2tQ+EzpBuzaN+PdBHycJJ1jKikUxv2mroK5x4wPKxoDMjqcvWvbzubh982p6AtKyNYnxltwYQZeK1PRY3taKsme6DEJ2GGwz7u1+WiLH1wwu3RhutJHzeuoGju5t99YkKdXcEYXpuQ0Nw5uv8NrEe0n6S+WsYRxinOXxH1gQjS/eWmgNCG1sVTXO+cjl3hkZ1kusk7o+eXnA+Y5oH0INgFqfzwQWnce1iZ07IUO31y4I7G+EPWDwZDkhc29gGl/SrVMELfEjOipj/0Im3469MohRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zfuYwtPYhQOlSR6TxYVvnDHXGO6kBsHjjcLC/IobrUE=;
- b=X9ldPy/NHwdbnVm9UvX4udsF+Ilp8Nfzuht+OhRL4CSBB2MW7PU1UirFmOzpN4cesTEU9vroIk/lEQG5YNOL60rdZX9xCj4PSGtz9FyQ8WbY+tc92EiwfuMDm9vA+r5k/nHHQT7gC3C2+YoKqfzBEa+usRQFYoJxfurzyTGwr/+WMkwPMoRaGX/hbYxqRjjftSGCt0AC75OiiYADPem99fIZ6RvYkp0sn45sGBYgsXLw82N0lV7RZe3KaXUv3YKXmc/ZiP+FcWATDeQaUYLMAWDJVGSN9NOFpmpIq0p5U10Vn3kKbOQG+6x99qPsC5sua5A132p/DiXWQyaTRVI/cQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kvaser.com; dmarc=pass action=none header.from=kvaser.com;
- dkim=pass header.d=kvaser.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kvaser.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zfuYwtPYhQOlSR6TxYVvnDHXGO6kBsHjjcLC/IobrUE=;
- b=IRtLU86iCbOWLmTbWQnaSokJ8DjxHdi98KE04LnXojbIK0V0HEU9FelJ0HkueZOaSxIFsW05y8EjF/IXc8/68O+dTYV+4t2uLipGCUy5Q62JApxZOTcRRAFM2uf3BN84I8j3MyEZSdV3qgYLNqkvePWNxqjioAFCCi7Yh38kRz0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kvaser.com;
-Received: from AS8P193MB2014.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:40d::20)
- by AM8P193MB1219.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:36a::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.24; Fri, 25 Jul
- 2025 12:35:07 +0000
-Received: from AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
- ([fe80::7f84:ce8a:8fc2:fdc]) by AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
- ([fe80::7f84:ce8a:8fc2:fdc%3]) with mapi id 15.20.8964.021; Fri, 25 Jul 2025
- 12:35:07 +0000
-From: Jimmy Assarsson <extja@kvaser.com>
-To: linux-can@vger.kernel.org
-Cc: Jimmy Assarsson <jimmyassarsson@gmail.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org
-Subject: [PATCH v3 11/11] Documentation: devlink: add devlink documentation for the kvaser_usb driver
-Date: Fri, 25 Jul 2025 14:34:52 +0200
-Message-ID: <20250725123452.41-12-extja@kvaser.com>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250725123452.41-1-extja@kvaser.com>
-References: <20250725123452.41-1-extja@kvaser.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MM0P280CA0087.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:190:8::33) To AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:20b:40d::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F892EBB80;
+	Fri, 25 Jul 2025 12:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753447183; cv=none; b=di2YbGxGeh3CbCS38grhTN4thdTC2VuKU8wOWrPx6U2hr64a8e8bsK9Ae/PBcI9UXVAI9wiHC3LODx+JCEj46OnXNmkI45Jo6TfPyOP29k9d1SYRnU2RlBRxlRJaRYut6ngCxoj9id3a6RExhy/7qdAk15utU1cAcsKImGntpN0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753447183; c=relaxed/simple;
+	bh=PU8jxNdlyHOWPaTq8T0o4bVvfRiJB5fDz6xUvMrVv6A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MHCumxcWyqjdX7jjOn9hzuUk76VVlRib5bF1WPcx19q9ampbWxqiIJ51UUX5p1cg0PfOUbBMdT/S0yh3OcRxePVuJuNG10VCgFkpwbWTFEm2vi4nLnwVQCa/z+KRA+U3BQ26WuYU84v1YHkR4gfvrQrZsl1NS4uQ4RyVvnk8gAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H5+c4i90; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-32b2f5d91c8so18142591fa.0;
+        Fri, 25 Jul 2025 05:39:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753447180; x=1754051980; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JN2ivuhljKzLFWe0MvjwcxrDNR4GqFN61OIq2ilMzLw=;
+        b=H5+c4i90uaeAtYl43/C+57k5a+J9r1FmezinhVkU4+a6R0BOUqdJExWx9P8ENzIlUV
+         TBvHQ5CFlMFz+fr4pf63hweSrNEDWOCDs+92TKRZjm2Sd3a9sCyYgAbm6YXZKKENTsTz
+         vqrcPSPoA5Ymd1o9a3ygz98TGNB6Phy2qn9h/icS7bPiBL84LWUddpy1NazitgOAOQBK
+         +IqoHz53AQL9T53NEvjSYBFgCDTePPE+tAHhsam5W2ToeMKO8MUOHZ98BlZPQFyrm+no
+         Gn1m90e550liZuQy3z0U+xTTl8ORQm9fiZz3iJZd7LLc+mPSSWzXcMZriS73XLiWwjIe
+         Gb4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753447180; x=1754051980;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JN2ivuhljKzLFWe0MvjwcxrDNR4GqFN61OIq2ilMzLw=;
+        b=HULdrB3URuoq7nNDJAg9VFubbXzyQfEJDD+CY9SXU+GpdOpHc13E95dS65cTQedT5Z
+         E39X7wKbexpo28GbWNtI6ec4OVU3rKSa9JFuO87/bKQteKrGdjtBYsWRZVRYWWBqO3HU
+         WFI0QS1jk6h9YQGsKvNO/LGH4yIgBx8/ZubJ7Qr2u7QF2Ta2dy8LewIb0jCvU8kl72fv
+         7YjZFzRIR7NQlH3EerCY0TE0ZyJSy0TnWZhfhds31QjSl+x3QbBlGB8iY4VNGeySzGXf
+         L/Sau1/LJ+7160c+ybBif/8BoSGLyVtj3oUnOQjRo5GUoKOl4gD7E0qhGHsaYPdEQn2C
+         zmQw==
+X-Forwarded-Encrypted: i=1; AJvYcCWkwBJjI8SZ4ZidITChhRStbxvv7C0GJ0cmY3x+GtzjjbbJGuA+TPFxmP767Yq6arjLiMSyhLc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6Da68mI1JG/dkx7NpUGctGzEAMMq8AStm5FN/1nzwGsjaeO/C
+	nhxdXmYhfIJJvuX3QGACOs6iAa4VoRXQbnvMPE1YlKhC0MdtSMRumtKE
+X-Gm-Gg: ASbGnct3upPGOLOOACyz7Dv5eDy6HWyUglGodWDpdYqzOfPwOxm9mUGKzAwNQPIvaKv
+	xNQ9TPOzgX/yopqH2Zy2OJrVJE9MzvWVCOo6IrF6hqRTgxt2rGdJ3q8GFCR1su8Tqe6/c25iriN
+	lRpi7waN5/M8cqJd/leE6XESmXLe3A5ZoZ/fLnrRibgf0hxxT+rNyMgVYiq1tmvnQWiM5X2y9Ri
+	D81t2yuV5M65ktTIvFXX7PtHfcVzTZlP485/7C5Gr/aD2luQPsK5VsN/fxXlvLRRkL8OYbTbocn
+	3jD7SlsrcqTYE12LWEcWGlgyjlfWCmQT7LSiLXUI8MagoZwuaN0qkT0VBnTmZkSkOeaRynjVCLt
+	piZ7ExBJLuEfjfJjHdsC3+CWK6XMXD4BbnXNIkBTF40xc8C0OXNiZPUeHzio61mP546ImA1BaTq
+	Ab
+X-Google-Smtp-Source: AGHT+IGPcH999lkOf64IeBZvVPYzxnMdGrpLSM6aThjm2ALpphK9DknXowr8Y55TygUqOJd76KhN+g==
+X-Received: by 2002:a05:651c:889:b0:32a:7d61:ded0 with SMTP id 38308e7fff4ca-331ee7c5762mr5925501fa.19.1753447179864;
+        Fri, 25 Jul 2025 05:39:39 -0700 (PDT)
+Received: from [192.168.66.199] (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
+        by smtp.googlemail.com with ESMTPSA id 38308e7fff4ca-331e0912287sm7151741fa.77.2025.07.25.05.39.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Jul 2025 05:39:39 -0700 (PDT)
+Message-ID: <96b9da59-bf24-460a-bccf-5761b8c2e87a@gmail.com>
+Date: Fri, 25 Jul 2025 14:39:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8P193MB2014:EE_|AM8P193MB1219:EE_
-X-MS-Office365-Filtering-Correlation-Id: 991be7b9-3aea-46bd-520f-08ddcb77afe3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?6ZRd+q5SvmNYiQEk4XUrapumxzgxqxCBb4dV5KFEJ7v1xMA0A1QxZ5n3uipy?=
- =?us-ascii?Q?jugORZf6EhpGmN3uAHBmKbDrrWL9fuIsy4hnSHhRkxjsX2UxGIqPvd+2sPao?=
- =?us-ascii?Q?PvbG8giySq374FRjPcVdI17PcepY8H73MUhm/r5Jk22NMUhoxe3KBmIDBLjM?=
- =?us-ascii?Q?wNlJtgZ5mI5qHFcaPezk6x0At1w7KJCfmw0BwTCyQLYr1y0F1dWrKjbAOTZp?=
- =?us-ascii?Q?isdGPUlHmrfCDzycYNzNDWrAtG+jMW/cPU0AvrDPkGf9sU/Esm8xPgf3al2A?=
- =?us-ascii?Q?w5PDeBeQf0OiGIUKKYFyMf8Mom2JJOwuuKmgPCWIXjkd7WkaJIc37TM4lULd?=
- =?us-ascii?Q?Or5cvhaOsY5MLenIr1J0YqhCFDb5ib7OEUxWEC5nKfkuqQ1UoTL13RhRzxNg?=
- =?us-ascii?Q?nGerIIV4TaLGoKpo+N8DAcr8g0/lRC5L+PFqyH3U83Qc2K2EK9yHjYUDcTy9?=
- =?us-ascii?Q?MuJopkPHX4u6R8dJ7K4D858dOy4caL47BvSdG6C9nJVEcFwUnpxFis/jy69V?=
- =?us-ascii?Q?nLtpkgBSRrnqtv3tqc3qLFW8JrxYWgvSZ3csDkh3UwvjNWS8Zucvfwyd2uVH?=
- =?us-ascii?Q?w1MUcpJniI24mCUgy9dIAbt5izRuVCF/jhLpPJhfPz/wvjv5YJKQw+JyqRii?=
- =?us-ascii?Q?SCzWNX15TnS3jo997MFvkrhEfwmv4u6XHVz/jhfB8HCgPsgg6MhDVnVDLeo0?=
- =?us-ascii?Q?sjSBrKM+etzWQk8iHUsnSuRmxdQAD6ZbtuYOdTAyKClPXL5ziI5hDSZOqRri?=
- =?us-ascii?Q?jeyPHPQStjTmK6+nJmtqs9pbVM8DgpP6P8ilGZp6X5TnjcjGQKaFXILkIbjY?=
- =?us-ascii?Q?04SjpHQnCx0xt0pVCMAnqIqER8dj9XJrgbrwvbPsD/t3hIb15dp2kAsHxp3c?=
- =?us-ascii?Q?8Jfmqvji9yreEtlfzSwtSdZt5kx9/2ER6Ggojib+cihVjTMZroro0o5nfBkj?=
- =?us-ascii?Q?XNvkYhSvXubZWTd3HnW+SbhdASknmgBd2RltTLfHTRjDlhRybUki+n4XrLu3?=
- =?us-ascii?Q?wL0SwflivvPbalxyvKcZXKhZp1nnDcxtxe9JrEQsSG6b5kwrCNBGTOA1G2BO?=
- =?us-ascii?Q?hOb8z7ur8D4x/bo8LtW5QtQs2jf0AdWWZW/CurHQqo5hUAumwgpCYSprymTo?=
- =?us-ascii?Q?37R3UVcfzy5eHsA0YQReUM/ZpnLz1C9tN97N2f4OL/7YikMr6WDHAmSFigy+?=
- =?us-ascii?Q?Dj/LMkvrOIdYeDOLRzeeR95g+bD/Cf/YOBDq3DKCDY7tNQD6OeuJB61sWsX4?=
- =?us-ascii?Q?mRILNxDAWU8RXxmLb7jNJNgphPEau0hv9km7+WhsP867PXqSc2I0XQvBctbM?=
- =?us-ascii?Q?z5S+xcah9zvDqC4yNtmy2e+u21RTM45nsuiRWlYZ3AJxvU5bUNCurUc1y7xO?=
- =?us-ascii?Q?uN0njYsZdT0TXiu0Ns9pyHQaO/YrQhARuXgjGJ2O7PF6wm1/KlJdPsLXLQQU?=
- =?us-ascii?Q?czA5bRVUOu4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P193MB2014.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?kuF+q1vPZGhyPGR5S1+VWgrdjMYKLzuKQdbV+gGP+CtQMQ81IlYsnOpjx4jw?=
- =?us-ascii?Q?y8fZeto/A3efIlBCQj81dAvu/1Cun0UZY8o8aiUVcDQodNKRwtcGtGkzJiXb?=
- =?us-ascii?Q?+fSwjhUPvP2aV7zZ5+wc//+nT3NA+ULs6HWey/dZV79wE2XWn4TOlDA/IT69?=
- =?us-ascii?Q?jFw+gGftkAqlKyRZL4GUf08zc5vqjHUBS70//v6vz0vlm/dS1+HYxg1IH76Q?=
- =?us-ascii?Q?uHee/bI6pxVW5uWf7uVD4l+XC/tkvjwbcXE/8WQn1ipeU2xhQbHz7MI7ehNO?=
- =?us-ascii?Q?/HeQoCOL0ampXtJP2yjXbX9HIbIVlcMWqPE5K60atXiiDBdDgwPGvVCMt1gA?=
- =?us-ascii?Q?4OrI+yJAR8PWiYj+XYNNoN+T0GDC3vB67ZOB4moTIrdlHJ7uhFE7c1L9A2cJ?=
- =?us-ascii?Q?Mbs2Jtm78NKs9hnXJnO/TfD9cxZEYUWQJBUTQRfq9GErQuZx6/1AbpecTLfi?=
- =?us-ascii?Q?VzT8GZmBHcN+jFT3OdyKjpJXlC7Li2s+ZRhTK+9nnp08LPwWhlgEpEYuwbhh?=
- =?us-ascii?Q?SPX+QLqKStgAgisJwM35/YlTaxL9uIJYdMsoUAPE9oe+WUGPZAtZO+yN49cW?=
- =?us-ascii?Q?6e6TqTp5PfkurQNr/YkhMPuiUJO9HVDM8So7QBsf8Oj6w5XTZMxlRVwoqOGC?=
- =?us-ascii?Q?YUqcIVG7518iYC0k2Ocz5cdRx7u1s/OQC0fcB+zJNS3x7baM4GMPXYy0ga5H?=
- =?us-ascii?Q?GLga3PJ+/MOmRYudgs4sxw8BOIQz+U6kmZcq0fEXV2kZVNs4oLtMpiBSgAZl?=
- =?us-ascii?Q?ZLyP2lZ7VkdebERLrE9K392UnFWadrE3c6+vdsIRRyKuloFW5R1Rten06mlx?=
- =?us-ascii?Q?0b4U2StFBBcXV8Nq5lAHlRMkK9YT+tvUdYOhMNU3qDlIOMWPKcuKRt/rTs0S?=
- =?us-ascii?Q?D/5D9bOpvScb1kdJ+Re8qIftFLOtU3LG8NS8YHXfrtgiSKXCmYIi/KINd3fu?=
- =?us-ascii?Q?rhCCp7xmDxIm6XKOrRsaYrnxaPD3lVkWEO3nDy1Nhjj68pwUptDPojyHznYM?=
- =?us-ascii?Q?XNk46NWeK1I01VGFhdh1r+sqlrGmEfWajMYTuu0qtnyP4CcG5N61dmsZ2Aw3?=
- =?us-ascii?Q?ssDDOiFZGVUwB9B++w20af2LmgTQsUThk/3P+K6Bgdj/SogMBOSd967n9KoR?=
- =?us-ascii?Q?Pq4Kw16Ic6X9ZD0eCAsULypMdxnuKcTy2IAHEBY/iyfzhvdyNlQ/xdokZg8V?=
- =?us-ascii?Q?T2FRno59bTuOpucI6Lz6wDVzrs2Ap2HCLFAJNk4fNvoIiY9hAio0/IQ7xNkl?=
- =?us-ascii?Q?5bhORCB74pO2Dm1Bd/T1DQJXnMOsT80lv1SAABs5hYzfQP5DwHwUFor3ECBS?=
- =?us-ascii?Q?QiYtaYlIT5krrcc+q2d72ycE8wqC35GHVpNCsW+dLNo8X+EwKsDH9GSkU6cu?=
- =?us-ascii?Q?eeFchPKWpGB3CMU+ZelXWH1FAcba3UtnSnbfpwTdtdMy9+AM211jiCfutF0z?=
- =?us-ascii?Q?y1gVKpXrHxBIKSfu9/Oif8Aqxs+QpLkDtQoe3OTFn53KhWAT7lghDrevG1lK?=
- =?us-ascii?Q?A+LCn0hlYPm61yjNnIby/HJvf0Wawlgnh5PoU8Lah5dLknqExU8HEoFUvVXz?=
- =?us-ascii?Q?/0xuiIk5jc6viJhrZF6JJKU8w4gVweghsWX6T99/3fG62ZAee8PqUbHp27ft?=
- =?us-ascii?Q?8w=3D=3D?=
-X-OriginatorOrg: kvaser.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 991be7b9-3aea-46bd-520f-08ddcb77afe3
-X-MS-Exchange-CrossTenant-AuthSource: AS8P193MB2014.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2025 12:35:07.0723
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 73c42141-e364-4232-a80b-d96bd34367f3
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Hqi1uHSQ83qvwaGgxzQgZUI3x/jCPS6h0eahV0+S+XRjPCSp2tBDOnFb3OUpCxjuG/srZOsd++Bf5JaE7udwni1WOCeXa9ugf+TixczInmI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8P193MB1219
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 08/10] can: kvaser_pciefd: Expose device firmware
+ version via devlink info_get()
+To: Simon Horman <horms@kernel.org>, Jimmy Assarsson <extja@kvaser.com>
+Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>, netdev@vger.kernel.org
+References: <20250724073021.8-1-extja@kvaser.com>
+ <20250724073021.8-9-extja@kvaser.com>
+ <20250724135224.GA1266901@horms.kernel.org>
+Content-Language: en-US
+From: Jimmy Assarsson <jimmyassarsson@gmail.com>
+In-Reply-To: <20250724135224.GA1266901@horms.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-List the version information reported by the kvaser_usb driver
-through devlink.
+On 7/24/25 3:52 PM, Simon Horman wrote:
+> On Thu, Jul 24, 2025 at 09:30:19AM +0200, Jimmy Assarsson wrote:
+> 
+> ...
+> 
+>> diff --git a/drivers/net/can/kvaser_pciefd/kvaser_pciefd_devlink.c b/drivers/net/can/kvaser_pciefd/kvaser_pciefd_devlink.c
+>> index 8145d25943de..4e4550115368 100644
+>> --- a/drivers/net/can/kvaser_pciefd/kvaser_pciefd_devlink.c
+>> +++ b/drivers/net/can/kvaser_pciefd/kvaser_pciefd_devlink.c
+>> @@ -4,7 +4,33 @@
+>>    * Copyright (C) 2025 KVASER AB, Sweden. All rights reserved.
+>>    */
+>>   
+>> +#include "kvaser_pciefd.h"
+>> +
+>>   #include <net/devlink.h>
+> 
+> Hi Jimmy,
+> 
+> Please consider squashing the two-line change above into
+> the previous patch in this series to avoid the following
+> transient Sparse warning.
+> 
+>    .../kvaser_pciefd_devlink.c:9:26: warning: symbol 'kvaser_pciefd_devlink_ops' was not declared. Should it be static?
+> 
+> Thanks!
 
-Suggested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
----
-Changes in v3:
-  - Add tags {Reviewed,Suggested}-by Vincent Mailhol
+Hi Simon!
 
-Changes in v2:
-  - New in v2. Suggested by Vincent Mailhol [1]
+Sure, I'll fix it in v4.
+Thanks for reviewing!
 
-[1] https://lore.kernel.org/linux-can/5cdca1d7-c875-40ee-b44d-51a161f42761@wanadoo.fr/T/#mb9ede2edcf5f7adcb76bc6331f5f27bafb79294f
----
- Documentation/networking/devlink/index.rst    |  1 +
- .../networking/devlink/kvaser_usb.rst         | 33 +++++++++++++++++++
- 2 files changed, 34 insertions(+)
- create mode 100644 Documentation/networking/devlink/kvaser_usb.rst
-
-diff --git a/Documentation/networking/devlink/index.rst b/Documentation/networking/devlink/index.rst
-index ef3dd3c2a724..9be7247f81d2 100644
---- a/Documentation/networking/devlink/index.rst
-+++ b/Documentation/networking/devlink/index.rst
-@@ -86,6 +86,7 @@ parameters, info versions, and other features it supports.
-    ice
-    ixgbe
-    kvaser_pciefd
-+   kvaser_usb
-    mlx4
-    mlx5
-    mlxsw
-diff --git a/Documentation/networking/devlink/kvaser_usb.rst b/Documentation/networking/devlink/kvaser_usb.rst
-new file mode 100644
-index 000000000000..403db3766cb4
---- /dev/null
-+++ b/Documentation/networking/devlink/kvaser_usb.rst
-@@ -0,0 +1,33 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==========================
-+kvaser_usb devlink support
-+==========================
-+
-+This document describes the devlink features implemented by the
-+``kvaser_usb`` device driver.
-+
-+Info versions
-+=============
-+
-+The ``kvaser_usb`` driver reports the following versions
-+
-+.. list-table:: devlink info versions implemented
-+   :widths: 5 5 90
-+
-+   * - Name
-+     - Type
-+     - Description
-+   * - ``fw``
-+     - running
-+     - Version of the firmware running on the device. Also available
-+       through ``ethtool -i`` as ``firmware-version``.
-+   * - ``board.rev``
-+     - fixed
-+     - The device hardware revision.
-+   * - ``board.id``
-+     - fixed
-+     - The device EAN (product number).
-+   * - ``serial_number``
-+     - fixed
-+     - The device serial number.
--- 
-2.49.0
-
+Best regards,
+jimmy
 
