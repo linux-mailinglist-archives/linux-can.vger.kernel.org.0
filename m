@@ -1,97 +1,128 @@
-Return-Path: <linux-can+bounces-4117-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4118-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F36D9B11712
-	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 05:29:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E6CAB119DF
+	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 10:33:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF82BAE2A54
-	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 03:29:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18F981C84046
+	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 08:34:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49607231845;
-	Fri, 25 Jul 2025 03:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="cE5XeK5G"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3EA2BE7AC;
+	Fri, 25 Jul 2025 08:33:39 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-69.smtpout.orange.fr [193.252.22.69])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA772E36F2;
-	Fri, 25 Jul 2025 03:29:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273572C033B
+	for <linux-can@vger.kernel.org>; Fri, 25 Jul 2025 08:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753414177; cv=none; b=X5mBsTmq70eTDQ8NaEoRIqwOByquzTQTu57t0rvxr3k59Z7ZrjHt6VXBtlWHscK/W70UgJVIw+E2CjeTr7XuF1kSzH4U5VDhy9hG8abCqXZjsP/7XEXtqd4g1JhOYYLdvT2xOcAtW7gRzeAFKrLJ+2rImOkBx8CW6wVK2OP/cYM=
+	t=1753432419; cv=none; b=R77RYFQUCJqeGRIAPakU+vrmBzEHmpw2i4F33XA6mDJ7My1H1EF6zYJE7KgoXTWgl2mPx1XRYSrZTrFiuGU85GdkSkUYmfe1ABxCvXqtaU7a4mnwGEZVxaq1iGw0rME0CXM6Gh2/dFtvW6H/AdJVsbpfCiFdGt/H7RvUAJINQEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753414177; c=relaxed/simple;
-	bh=9zxhTRXdrEdIPOvJY79pLHplYutW1EPSgTtwEVYpHyk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RdJL/nB6ugvX8ItbK1OA9xTVXAqGkhJP9VUxPlBimgA/lX2mJLdi0d0NqTPAhUC2zrKvhVwJ9i8ouQoPREby0vs6Z8n/a5Q9YRzSLipFva8JvgmPbEXPK0ZlSFBcEWNYelGyaU9QOI+v3qX+DMt4pnxvMA81f2GYKBFXcslXpMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=cE5XeK5G; arc=none smtp.client-ip=193.252.22.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id f97iuvTcO4EFhf97jufGL9; Fri, 25 Jul 2025 05:29:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1753414173;
-	bh=9zxhTRXdrEdIPOvJY79pLHplYutW1EPSgTtwEVYpHyk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=cE5XeK5GZEXrkvjbUnxAOBsKjvNFI9HtiJUAoJW40vBiZruFQWJG1Z9a8AogxiIcl
-	 oy/w/JXHnd2lYMtDizT37nwzNbQsQSZWtApJPLQefFiL8TRA7JdDIjYnranyI7RzyH
-	 i0b7O5lCBL81ZTkSRgkt/1ziQyeEh6KfF0ch+LrDzU4KQ5gKc0RlnGI1do2vpix+Ts
-	 D4Uhbilw4mqZ6+2nAZ0U5Rn/evGhG85Cshh0AUwP2tvgVHxbvk/JQYlLbf16KZscWE
-	 Ew5rrXC2KtbR/R6Qlp3xJgfyFbrJMQbjCxp2R58ss6B9trDqrk1uZene/YXExllQUe
-	 tM38oijO9j7ag==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 25 Jul 2025 05:29:33 +0200
-X-ME-IP: 124.33.176.97
-Message-ID: <aa90e02d-25d5-4f76-bd91-26795825c8a6@wanadoo.fr>
-Date: Fri, 25 Jul 2025 12:29:29 +0900
+	s=arc-20240116; t=1753432419; c=relaxed/simple;
+	bh=QlvAmP4lpuRNJ72tT7uEW+KAYOHIlXPy0UR8uyqwblA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GI7wobCwrcPp5paOfw2HApqp69diMNZO+8ErbKIhl3dY6fonOLFSo0p0ot6MKLg2NQaqgDwVbUiJco8mWEAbXpB+euQax6BUchKk9ln8t8Oy1qPAGs9+dgy9FZZFfZXWXG810uXyOTzm4v3/aKrt7s/N2vxEBB4L//DP6PtvMF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ufDrq-00026u-IR; Fri, 25 Jul 2025 10:33:26 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ufDrq-00ABlQ-0V;
+	Fri, 25 Jul 2025 10:33:26 +0200
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id CC8BB4492D1;
+	Fri, 25 Jul 2025 08:33:25 +0000 (UTC)
+Date: Fri, 25 Jul 2025 10:33:25 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Stephane Grosjean <stephane.grosjean@free.fr>
+Cc: linux-can Mailing List <linux-can@vger.kernel.org>, 
+	Stephane Grosjean <stephane.grosjean@hms-networks.com>
+Subject: Re: [PATCH v2] can: peak_usb: fix USB FD devices potential
+ malfunction
+Message-ID: <20250725-whimsical-finicky-sambar-5202a2-mkl@pengutronix.de>
+References: <20250724081550.11694-1-stephane.grosjean@free.fr>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/11] can: kvaser_usb: Simplify identification of
- physical CAN interfaces
-To: Jimmy Assarsson <extja@kvaser.com>, linux-can@vger.kernel.org
-Cc: Jimmy Assarsson <jimmyassarsson@gmail.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org
-References: <20250724092505.8-1-extja@kvaser.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250724092505.8-1-extja@kvaser.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 24/07/2025 at 18:24, Jimmy Assarsson wrote:
-> This patch series simplifies the process of identifying which network
-> interface (can0..canX) corresponds to which physical CAN channel on
-> Kvaser USB based CAN interfaces.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mvff4ihlaeibwvsa"
+Content-Disposition: inline
+In-Reply-To: <20250724081550.11694-1-stephane.grosjean@free.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
-Same as for the kvaser_pciefd, there is a tiny transient issue on a missing
-header include. The rest is OK, so, for the full series:
+--mvff4ihlaeibwvsa
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] can: peak_usb: fix USB FD devices potential
+ malfunction
+MIME-Version: 1.0
 
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+On 24.07.2025 10:13:19, Stephane Grosjean wrote:
+> From: Stephane Grosjean <stephane.grosjean@hms-networks.com>
+>=20
+> The latest firmware versions of USB CAN FD interfaces export the EP numbe=
+rs
+> to be used to dialog with the device via the "type" field of a response to
+> a vendor request structure, particularly when its value is greater than or
+> equal to 2.
+>=20
+> This patch corrects the driver's test of this field.
+>=20
+> Fixes: 4f232482467a ("can: peak_usb: include support for a new MCU")
+> Signed-off-by: Stephane Grosjean <stephane.grosjean@hms-networks.com>
 
+Added to linux-can, don't know it if makes it into the v6.16.
 
-Yours sincerely,
-Vincent Mailhol
+I've included Vincent's R-b from:
+https://lore.kernel.org/CAMZ6Rq+FH99xRNqndUVqFQwBMjutdrYsrvpJn_n6gTOC7zsAkg=
+@mail.gmail.com
 
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--mvff4ihlaeibwvsa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmiDQVEACgkQDHRl3/mQ
+kZzupwf9HJ7nFIqmC8C5E9x85V9qSHyiXPHNvH1zyZ2leD07fEu8E4Iao6miEUEL
+iWkqTI9WSmoiDOsjKNus4/ZzFeIoNk7R6IPMvNtgRDGY8rKaK/XzdftWLGUUpPjm
+FkkSos7uqp5jwlDF+Ppe2JZITrkB+hwAP4ZbhOUZdWmKlIz/Af6y3HeRe/dPfnKd
+rhEq8XE5Oi0jGEvTgs5/9gx3fpI+2l8RfY7SIUaXHK6A/QAY+eFx9INrKDgLfmTv
+32/1/coqm9JA2v4xECoDog2DGmiLniq+8km+s3VPRrbE+NlAOlgH1dBQudp/gLHd
+ci5ZByVAt8vhtCFiN0yZpiyp2Nj4zg==
+=ZXqm
+-----END PGP SIGNATURE-----
+
+--mvff4ihlaeibwvsa--
 
