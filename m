@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-4166-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4169-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E80BFB121A5
-	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 18:16:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74D04B121AA
+	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 18:16:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC59C584259
-	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 16:15:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BE5D1CE5E4E
+	for <lists+linux-can@lfdr.de>; Fri, 25 Jul 2025 16:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2C1C2F0C46;
-	Fri, 25 Jul 2025 16:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 171702F0C55;
+	Fri, 25 Jul 2025 16:13:46 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDB32F0037
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C6C2F0038
 	for <linux-can@vger.kernel.org>; Fri, 25 Jul 2025 16:13:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753460024; cv=none; b=kblu6ovDI9gIUglBIb3vf2cauDVMInSK089M9iLUkREaQcFKC3qw0RdLJe5dTdnz89E+gX17EmtKUzRHMAOnNSIhu09Y8YhM1GZUINYg27Afj7sqQS+KFuovBg8NztQSX7vAPBy4yXGsNUXEdTgqMR6w8K0tvUBl5ERKCsL7qYE=
+	t=1753460025; cv=none; b=DHb8WDfdhI3ZstzbQCo6B9AwJlqjrMFXLsBnzwP2zjPZu4pW9D56TcgBZj8rz2HodWLaOr40fNcrCfqv7Tk5CDcVdTuG9ZdcqWPZCuRdfPemM5telQYxR5nHuzdFu7NyHGdCv4IZRZlwBoK1YLd7GpgdUURqOL5LXMLbJfqiPok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753460024; c=relaxed/simple;
-	bh=7iTuLrU8ZoVy3zqWMY/i818AZPaFYYqdOjWlYCAeTeM=;
+	s=arc-20240116; t=1753460025; c=relaxed/simple;
+	bh=qcdWp0AWh4XqM3PY71qvRLZaBquraQQGgZHAx2d6/bc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QiGvwR3Rhx4VVy7r4Qs8k1DZ1qi+FwqIpS3IltBShIedXWgFP4BXUv5dwiTTVBiT0qu8Efn3msxNENVeiQyHnGzE5U9IlwR32W6o/IyaBLUXYP2/5Dbh0eDYgcTcXXzys59BoXXFlTiBPp6GOJx1FsAQ+ONS9Yv+c27Jc3lAx/8=
+	 MIME-Version; b=F2xqk8NL5kZrpY334FNCAvBBmQp4Tf8jvjtzvzvuVNN9NibzSiye5CiAV0W65/XYPhYA4Jm0c/xR1VUvBV2j/AuS/l4DHjEsppjKqDU1a57LeQRMOCToPRrDYaO1p67CwVDy1y61B4jAXY3RKOd11QujZf3NPmWPUfleXRkzZQw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,26 +33,26 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1ufL3E-0006jI-Ni
+	id 1ufL3E-0006il-R8
 	for linux-can@vger.kernel.org; Fri, 25 Jul 2025 18:13:40 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1ufL3A-00AFc0-1i
+	id 1ufL3A-00AFc5-1R
 	for linux-can@vger.kernel.org;
 	Fri, 25 Jul 2025 18:13:36 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 187474498D4
+	by bjornoya.blackshift.org (Postfix) with SMTP id 2336B4498D7
 	for <linux-can@vger.kernel.org>; Fri, 25 Jul 2025 16:13:35 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 0B6A444982E;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 16E10449830;
 	Fri, 25 Jul 2025 16:13:31 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ae327742;
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 8442222a;
 	Fri, 25 Jul 2025 16:13:30 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
@@ -63,9 +63,9 @@ Cc: davem@davemloft.net,
 	Jimmy Assarsson <extja@kvaser.com>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 18/27] can: kvaser_usb: Add support for ethtool set_phys_id()
-Date: Fri, 25 Jul 2025 18:05:28 +0200
-Message-ID: <20250725161327.4165174-19-mkl@pengutronix.de>
+Subject: [PATCH net-next 19/27] can: kvaser_usb: Assign netdev.dev_port based on device channel index
+Date: Fri, 25 Jul 2025 18:05:29 +0200
+Message-ID: <20250725161327.4165174-20-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250725161327.4165174-1-mkl@pengutronix.de>
 References: <20250725161327.4165174-1-mkl@pengutronix.de>
@@ -83,61 +83,32 @@ X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 From: Jimmy Assarsson <extja@kvaser.com>
 
-Add support for ethtool set_phys_id(), to physically locate devices by
-flashing a LED on the device.
+Assign netdev.dev_port based on the device channel index, to indicate the
+port number of the network device.
+While this driver already uses netdev.dev_id for that purpose, dev_port is
+more appropriate. However, retain dev_id to avoid potential regressions.
 
+Fixes: 3e66d0138c05 ("can: populate netdev::dev_id for udev discrimination")
 Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
-Link: https://patch.msgid.link/20250725123452.41-3-extja@kvaser.com
+Link: https://patch.msgid.link/20250725123452.41-4-extja@kvaser.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- .../net/can/usb/kvaser_usb/kvaser_usb_core.c  | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-index daf42080f942..c74875f978c4 100644
+index c74875f978c4..7be8604bf760 100644
 --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
 +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-@@ -753,6 +753,31 @@ static netdev_tx_t kvaser_usb_start_xmit(struct sk_buff *skb,
- 	return ret;
- }
+@@ -878,6 +878,7 @@ static int kvaser_usb_init_one(struct kvaser_usb *dev, int channel)
+ 	netdev->ethtool_ops = &kvaser_usb_ethtool_ops;
+ 	SET_NETDEV_DEV(netdev, &dev->intf->dev);
+ 	netdev->dev_id = channel;
++	netdev->dev_port = channel;
  
-+static int kvaser_usb_set_phys_id(struct net_device *netdev,
-+				  enum ethtool_phys_id_state state)
-+{
-+	struct kvaser_usb_net_priv *priv = netdev_priv(netdev);
-+	const struct kvaser_usb_dev_ops *ops = priv->dev->driver_info->ops;
-+
-+	switch (state) {
-+	case ETHTOOL_ID_ACTIVE:
-+		return 3; /* 3 On/Off cycles per second */
-+
-+	case ETHTOOL_ID_ON:
-+		return ops->dev_set_led(priv, KVASER_USB_LED_ON, 1000);
-+
-+	case ETHTOOL_ID_OFF:
-+		return ops->dev_set_led(priv, KVASER_USB_LED_OFF, 1000);
-+
-+	case ETHTOOL_ID_INACTIVE:
-+		/* Turn LED off and restore standard function after 1ms */
-+		return ops->dev_set_led(priv, KVASER_USB_LED_OFF, 1);
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
- static const struct net_device_ops kvaser_usb_netdev_ops = {
- 	.ndo_open = kvaser_usb_open,
- 	.ndo_stop = kvaser_usb_close,
-@@ -763,6 +788,7 @@ static const struct net_device_ops kvaser_usb_netdev_ops = {
+ 	dev->nets[channel] = priv;
  
- static const struct ethtool_ops kvaser_usb_ethtool_ops = {
- 	.get_ts_info = can_ethtool_op_get_ts_info_hwts,
-+	.set_phys_id = kvaser_usb_set_phys_id,
- };
- 
- static void kvaser_usb_remove_interfaces(struct kvaser_usb *dev)
 -- 
 2.47.2
 
