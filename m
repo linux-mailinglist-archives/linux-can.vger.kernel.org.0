@@ -1,93 +1,97 @@
-Return-Path: <linux-can+bounces-4182-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4183-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42B93B127D4
-	for <lists+linux-can@lfdr.de>; Sat, 26 Jul 2025 02:09:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AFCEB12C15
+	for <lists+linux-can@lfdr.de>; Sat, 26 Jul 2025 21:48:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01CBCAA7528
-	for <lists+linux-can@lfdr.de>; Sat, 26 Jul 2025 00:09:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C26091686FD
+	for <lists+linux-can@lfdr.de>; Sat, 26 Jul 2025 19:48:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02828383;
-	Sat, 26 Jul 2025 00:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 196BE155C97;
+	Sat, 26 Jul 2025 19:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WRv8iQJ5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fx1SkluW"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF15C747F;
-	Sat, 26 Jul 2025 00:09:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4662FBF0;
+	Sat, 26 Jul 2025 19:48:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753488589; cv=none; b=PlT4Isd5TC1FGFPoV9W5OjyzMrpYWqAAvRxy+bjuml/5ptMclPjx88DyyTZav++lxzlC8zPso0FsAYjNjac92YrviKZ9LSwV+ZCQSwTxAvKTyomnpD+kRrbd+1J+jq0h5h1JczUgIjYMkgz8Uj8pWkMD69BNgnbfYkReAdLSBtY=
+	t=1753559298; cv=none; b=Zl/ZNwa47hT/mtjkixgxa9NyL3Z3gedoynCjPFtJ3MrP2QVXgvtanOWa4Pabc1DwKxHFJKc36MuXgYab0Xo7DuVDVFuhCz6wTVBjNRqIqTOrnbH9iLZazy+RSSwTPsyL2q2MyO+ues+4CVza4uVyL31+ql0Fba9fpPjXbhZSixM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753488589; c=relaxed/simple;
-	bh=nwyoOPQGUi0JLQynVVdWam4Kw12SpVNUpo9ZaA4uy7g=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qnmHtfKr65JJXwXwe8C3vOf2zfHQlrPP1vFI2rqjv+JR+NG5Wd96q2FVjtk+zSuZjCCVOvyFwXkymD0dcP6Wc6vie+TNoDwAOf6W3rTtuMaV7Sf46wfp8vCBTBy/bqCscnxutz+AbnwhoNjBptXmuNrgGqCilfcGs/S8iZT6GU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WRv8iQJ5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A390C4CEE7;
-	Sat, 26 Jul 2025 00:09:49 +0000 (UTC)
+	s=arc-20240116; t=1753559298; c=relaxed/simple;
+	bh=Eu7mCczLCzH4Q++ee3PkwjTBB0+cpzTWGw87b1bP/2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RlIyAsLsmCVUDCFs5s7i7b5b1KnqRg42qZaQpdwUZKdl7vM670YB7iKxEBjnogpmmxcYp0eJ8JCz8UVg1oEv6vOfmV4rzuBlzD8gALYzBxxubI1YEoKXZuEwW8rTeLudZ09Mcb3W4gUCb694IycKyukCBXg87WNWz4VxyfqIqZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fx1SkluW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2644EC4CEED;
+	Sat, 26 Jul 2025 19:48:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753488589;
-	bh=nwyoOPQGUi0JLQynVVdWam4Kw12SpVNUpo9ZaA4uy7g=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WRv8iQJ5A+ZLK3IPj93apemMC6VHgarhlnvqB/wPqJP9CDfhXpZYI17dH0eU3kydS
-	 hZ+TM3vs0bC4ayvCq23Zv/Sn0ReymaqMRGNP6T5OhdnjsWXuL98y671sEEH4iQxO69
-	 GjZSgfSsGf5bs/U/Cu1uz5ak2A9OeSLh2srE3uXxTgXGn+vwcXlUBgmTCuAJ5/zTWv
-	 /Bz/hyo1ZDFO7aHvSt21jcZWSEazz6xTjZ8IGlOhd6a7h8tdDsWg5hWt3u9IbemIl3
-	 TElbYsL+OflMHhQWvC/Z1bZzHRvMqXsUqVISCuQIMAd+oS70Szv8TXgDjvK/LFoXEr
-	 ilbCc/1UhffxA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EADC9383BF4E;
-	Sat, 26 Jul 2025 00:10:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1753559297;
+	bh=Eu7mCczLCzH4Q++ee3PkwjTBB0+cpzTWGw87b1bP/2Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fx1SkluWSqFlrJ6xNeC4nmRiNW2A5DeYy4E0nBF0AuaQeKL0eLY9cF3ZNCvQu49a5
+	 VQ7Vk9a4CL7NmSflTqBo+07ufSkJlyjEIzmoYwzACM/+YAstceA842zro+d74tHhGl
+	 wRRWxlrtdHX8QxM6JFt0rJmQTKeFmFid7eHRgqbVxfSjOpJjVzY+iW0tr4DDkZdYki
+	 j9Ou4a5FvgZDoL/3z8qr0koiPRf2SEP/4MFcdKNeuMcY/wo0WhldwokQmboO+4O4j8
+	 1gpfBm4+dFaHxOMYSeg7FEZ0kDjSLdJqO8D9WqlY3imCxHzVEadAUfwM1M/zsMy/sv
+	 yJY0yEqHIKL2A==
+Date: Sat, 26 Jul 2025 20:48:13 +0100
+From: Simon Horman <horms@kernel.org>
+To: Jimmy Assarsson <jimmyassarsson@gmail.com>
+Cc: Jimmy Assarsson <extja@kvaser.com>, linux-can@vger.kernel.org,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH v2 01/11] can: kvaser_usb: Add support to control CAN
+ LEDs on device
+Message-ID: <20250726194813.GN1367887@horms.kernel.org>
+References: <20250724092505.8-1-extja@kvaser.com>
+ <20250724092505.8-2-extja@kvaser.com>
+ <20250724182611.GC1266901@horms.kernel.org>
+ <a07d995f-0fdf-4773-8cc4-4db6f72ce398@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] can: peak_usb: fix USB FD devices potential
- malfunction
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175348860653.3454240.14640633468593276215.git-patchwork-notify@kernel.org>
-Date: Sat, 26 Jul 2025 00:10:06 +0000
-References: <20250725101619.4095105-2-mkl@pengutronix.de>
-In-Reply-To: <20250725101619.4095105-2-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de,
- stephane.grosjean@hms-networks.com, mailhol.vincent@wanadoo.fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a07d995f-0fdf-4773-8cc4-4db6f72ce398@gmail.com>
 
-Hello:
+On Fri, Jul 25, 2025 at 02:44:52PM +0200, Jimmy Assarsson wrote:
+> On 7/24/25 8:26 PM, Simon Horman wrote:
+> > On Thu, Jul 24, 2025 at 11:24:55AM +0200, Jimmy Assarsson wrote:
 
-This patch was applied to netdev/net.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+...
 
-On Fri, 25 Jul 2025 12:13:49 +0200 you wrote:
-> From: Stephane Grosjean <stephane.grosjean@hms-networks.com>
+> > GCC seems to know that:
+> > * cmd was allocated sizeof(*cmd) = 32 bytes
+> > * struct kvaser_cmd_ext is larger than this (96 bytes)
+> > 
+> > And it thinks that cmd->header.cmd_no might be CMD_EXTENDED.
+> > This is not true, becuae .cmd_no is set to CMD_LED_ACTION_REQ
+> > earlier in kvaser_usb_hydra_set_led. But still, GCC produces
+> > a big fat warning.
+> > 
+> > On the one hand we might say this is a shortcoming in GCC,
+> > a position I agree with. But on the other hand, we might follow
+> > the pattern used elsewhere in this file for similar functions,
+> > which seems to make GCC happy, I guess, and it is strictly a guess,
+> > because less context is needed for it to analyse things correctly.
 > 
-> The latest firmware versions of USB CAN FD interfaces export the EP numbers
-> to be used to dialog with the device via the "type" field of a response to
-> a vendor request structure, particularly when its value is greater than or
-> equal to 2.
+> Thanks for finding this!
 > 
-> [...]
+> Marc Kleine-Budde actually sorted this out for other commands some years ago [1],
+> but I had completely forgotten.
+> 
+> [1] https://lore.kernel.org/all/20221219110104.1073881-1-mkl@pengutronix.de
 
-Here is the summary with links:
-  - [net] can: peak_usb: fix USB FD devices potential malfunction
-    https://git.kernel.org/netdev/net/c/788199b73b6e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Nice, thanks for digging that up.
 
