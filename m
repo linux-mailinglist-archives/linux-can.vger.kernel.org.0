@@ -1,115 +1,153 @@
-Return-Path: <linux-can+bounces-4185-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4186-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7900EB1360D
-	for <lists+linux-can@lfdr.de>; Mon, 28 Jul 2025 10:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B26E4B1403E
+	for <lists+linux-can@lfdr.de>; Mon, 28 Jul 2025 18:25:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B309D18987D9
-	for <lists+linux-can@lfdr.de>; Mon, 28 Jul 2025 08:07:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BF541882775
+	for <lists+linux-can@lfdr.de>; Mon, 28 Jul 2025 16:25:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFBE621171D;
-	Mon, 28 Jul 2025 08:07:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D9C26FDB2;
+	Mon, 28 Jul 2025 16:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="tDzDbQNq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lOF3PHoL"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49F6188006
-	for <linux-can@vger.kernel.org>; Mon, 28 Jul 2025 08:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A2C269D18;
+	Mon, 28 Jul 2025 16:23:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753690022; cv=none; b=GG1XixDOd5a+ZT34fp5BVo7EqnxRG/w1c0YashO9aLP6YAjknjqFiQwiow/C3arMztsH2uNeFHmltbn3giNvyrRqgrsi4qdII+1uhzydM0yutJ35xaUVYW5JWdh3sG/jwK82Y8a13uDt4Rp2pNjYK1CTK4IIXzfN9oSr2pafask=
+	t=1753719834; cv=none; b=L3bvekL0jOVdsvw7/QLSDFyCnrpAGR5nYLHxumBE2Cj7ds1xw6LnZtxpJO7AdZmR+/W6v3IjMKXf63xfg5W+VgDH23/OXx1byqwDvmKzud9e4soaGOIiWI4WlOhqXUKM8flDfJy0aL2HUAFnQLd9AkmyEPF+BPQykyBV17Sg1tU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753690022; c=relaxed/simple;
-	bh=il6F1V3EZvaPgxXuexkA60ipkgxSFbEms1cYfVuykjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iFpLExZSWtDF9uerN141qeNY1+eJgf3TzL7zNtYIQXAWrOR6QFS6SkxScVlhONDjMkb/SM1CUW8DiVg4x1M0l966FUOjIA4Rof1eB3k+rAIa62w3lfI87DzGOVc8bYoqVN/0urqFENA6hoRjagUduImTjE/0B98MUdIgQjl48Qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=tDzDbQNq; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-ae9c2754a00so838128166b.2
-        for <linux-can@vger.kernel.org>; Mon, 28 Jul 2025 01:07:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1753690019; x=1754294819; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pEoNvXLK4SEQ+X3J17Qj8vDT7ozZpc00fO4Rtvit2Lo=;
-        b=tDzDbQNqOgAdBHLygZmJhm1HkFQrsVF0T5czwpZyMaHtCOJFylqaxVEBsugghLbJGt
-         qtcicVTi+RwKNBm2y6rEXBFRM1m9/lGm2Txu5p8TbySfhlzqQLe3jgqdNL7yY7DqFCk7
-         Rs05CI4AwN+qV4yj6/MyyKJ9KLSC4Lck50RR3qntJV6g/05eRNbpgLLjwmoYwlpVWNDC
-         N2+KKNIE4qKwiMQoW8lzBC6CPDNFsP6Nlss75eQ//8pMC6FpKfR+u99Ms9crBSzyn2Gs
-         QZpVCws+ETv+k7AJGYP5S89mB1+wda9qXe6DsL4Ar6fwe8ybUqObZDUBYhJ7TfJCzPiX
-         R3xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753690019; x=1754294819;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pEoNvXLK4SEQ+X3J17Qj8vDT7ozZpc00fO4Rtvit2Lo=;
-        b=Xvk20K+AUuT3KtIsPAiAqOEVXNCdMFNG/D+J2XhqHZRVo/s3A859Berjvzr8QoFO/v
-         UqyhgCaoGbWNs1aydet4gwyGtG2Lndf06Ih9TpW+PvYwnrNbP0+LjfVaZBZV3pqf0Wqt
-         KNwF2hnJ22TFsAmdJmBA9U5OMQgZQYqZ3RVh32JkP8xpLS2Owv33PhvmNzPCyYG/m/4T
-         Bjn0Tk62tur7eLO++T4+UXDhu8KHfxGM3MaeNsFEB++FMM/TzjwERqv8Qcldr5fz5ieD
-         mwxSID2WRDz3aYyLJ2lLWph7YNfJpVMBL/2j1MiBZBTNvY7fR583qGbqDd7y1S9TZ4PE
-         PKAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWO+QOMhgBTahExDyK80LFPjYSzNdknQZgfTGmNzgACH7hRe3s5pPwfbVjH/HfPHP3JqL74sD4tQ8Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydfqVUxae7QOwt6SboOrQiIqeAL94WEwOKTj1nOikbYOW/2sAM
-	cI52DCxPUSC4YqQMCMQkDq22RMvuYRKrHwMBvZpAm7JdNDBF9ALjoKhYTX+3askrwQo=
-X-Gm-Gg: ASbGncsUkyP785RplihgfckRIc6bKjYkmq7VLTHdwQFmAbHKEG1VAa3cK7BlsFaON9C
-	BQpjcNx7iOB4UFmL07lUQn1KaCU6TUObREOfzV46hwD7q+8M5QfhuHga7SqK2/7ZeH/8rUfofc9
-	mgVqNdTIIED1kVIXePG9QfDqQ/xt7XMJfhAXYLeMiLDeT4FISHPEFBEFx/3Up1SOBHp2aaOy82J
-	lkJRBVtcKhaSz3KpdndpM13oFaHC9xj6frstHzaMAIFJo6E4O8RIt/QAavJK8AUId4sV9xFkmTC
-	YfirmwPtnobf8RVsjRmJen0U89xqkJMND+PsM9kmGPEroiqf3acx/z4PRgTx09ahLB+pNFtlHwo
-	pwrUDVQWRjAfSNgY2ZW2hDUYQGEcNHW29ae1zkaQ=
-X-Google-Smtp-Source: AGHT+IERxblnoOCYOHAQiO6rqytlBsYokSKccm9wl4WU+Wi8aQMeTB+VQcGSWt1hqYjD8PuGuUuIDg==
-X-Received: by 2002:a17:907:2d28:b0:af2:5229:bd74 with SMTP id a640c23a62f3a-af617d0491dmr1281521166b.26.1753690018504;
-        Mon, 28 Jul 2025 01:06:58 -0700 (PDT)
-Received: from jiri-mlt ([85.163.81.98])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af63585ff45sm391864266b.5.2025.07.28.01.06.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jul 2025 01:06:57 -0700 (PDT)
-Date: Mon, 28 Jul 2025 10:06:56 +0200
-From: Jiri Pirko <jiri@resnulli.us>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org, 
-	linux-can@vger.kernel.org, kernel@pengutronix.de, Jimmy Assarsson <extja@kvaser.com>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH net-next 26/27] can: kvaser_usb: Add devlink port support
-Message-ID: <hjhpopnmorqqo65mw7psmlzmqvzhn2d6x22y2aq5miqsevdkmi@oak2s6kxfght>
-References: <20250725161327.4165174-1-mkl@pengutronix.de>
- <20250725161327.4165174-27-mkl@pengutronix.de>
+	s=arc-20240116; t=1753719834; c=relaxed/simple;
+	bh=DYX7A3/YZVVtNkT3oxxllNojSjEoxwFhWIFQA/m7loU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Q/ln3STEmuERub0FsoDu4ktmhAr4KCjRnzzHJe2BTvE1b3NoTVSaD0zPzvOARnG0+sBLO1hScQYz2nk5G9idHBo2S51ojTpTcdJtDzENhyq9x0t6S32AJWf8gaRLjeel4C4RpIUfEsNjM8HCqXlF1IiPnoucCJBqP3ePR9LJqJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lOF3PHoL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC16C4CEEF;
+	Mon, 28 Jul 2025 16:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753719833;
+	bh=DYX7A3/YZVVtNkT3oxxllNojSjEoxwFhWIFQA/m7loU=;
+	h=From:Date:Subject:To:Cc:From;
+	b=lOF3PHoLYcSc80KNnx2MyeIgA1ZqVtOrQ+TgJkgFjM1lSOpfxbl4Z/m960apnBfb7
+	 5TC8J5ebY57GU1yXYlplnU5laFNY5rWLGxwMFrRWKzoVbDo7IzpxkcGonzhQrJDhps
+	 6xSPQR8CLj3HzwUHv35CMiXHvPY2dHP+wpN4AitsdlFrCjClwqfmH1Z5MMq1etSVOq
+	 QjVoDvx3O2XwCrw7sCd/jofNFjVABy5HDffRAWYnYSw9i+gPWuCYiOXBZJd0q1i9o1
+	 nX5D5GI97f34mFNz8H2kYHlDu4/tJRQwXtnZPsAKHV90TIGkHz6BglZA/I4ik+G6Lk
+	 4QIZv5t+bdzTQ==
+From: Vincent Mailhol <mailhol@kernel.org>
+Date: Tue, 29 Jul 2025 01:23:18 +0900
+Subject: [PATCH] can: canxl: add CANXL_PMS flag
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250725161327.4165174-27-mkl@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250729-can_tms-v1-1-21d0195d1dd0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPWjh2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDcyNz3eTEvPiS3GJdk6QUC1NDg6Rky+RUJaDqgqLUtMwKsEnRsbW1AMB
+ 3+bJZAAAA
+X-Change-ID: 20250727-can_tms-4bd8510bc9ce
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Oliver Hartkopp <socketcan@hartkopp.net>, 
+ =?utf-8?q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+ Robert Nawrath <mbro1689@gmail.com>, linux-can@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3701; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=DYX7A3/YZVVtNkT3oxxllNojSjEoxwFhWIFQA/m7loU=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDBntS0SqVI1+2KUfW614f118ymLHluIbZu9vPJCaE/7jz
+ smJCj/ZO0pZGMS4GGTFFFmWlXNyK3QUeocd+msJM4eVCWQIAxenAExkLhPD/8JnW1KcVL/aL1l1
+ 9eLPfk21HQt+/PDaPIG3Y/mVZxky34IYGS5NWrZa1K7fc13lN+trPrknMjgv+qftdN/dxTb72Be
+ jRF4A
+X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
+ fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-Fri, Jul 25, 2025 at 06:05:36PM +0200, mkl@pengutronix.de wrote:
->From: Jimmy Assarsson <extja@kvaser.com>
->
->Register each CAN channel of the device as an devlink physical port.
->This makes it easier to get device information for a given network
->interface (i.e. can2).
->
->Example output:
->  $ devlink dev
->  usb/1-1.3:1.0
->
->  $ devlink port
->  usb/1-1.3:1.0/0: type eth netdev can0 flavour physical port 0 splittable false
->  usb/1-1.3:1.0/1: type eth netdev can1 flavour physical port 1 splittable false
->
->  $ devlink port show can1
->  usb/1-1.3:1.0/1: type eth netdev can1 flavour physical port 0 splittable false
+The Transceiver Mode Switching (TMS) indicates whether the CAN XL
+controller shall use the PWM or NRZ encoding during the data phase.
 
-Looks fine to me. Out of curiosity, do you have some plans to extend use
-of devlink port in the future, or this is it?
+Contrarily to CAN FD's BRS flag, CAN XL does not have an explicit bit
+on the bus to indicate the TMS. Instead, this is done implicitly: the
+transceiver will automatically detect TMS on the fly if the frequency
+on the ADH bit is higher than the nominal frequency and this until the
+DAH bit on which the frequency returns to back normal. For this
+reason, the TMS is something which, same as the BRS, should be
+configurable at the frame level and not at the netlink level.
+
+The term "transceiver mode switching" is used in both ISO 11898-1 and
+CiA 612-2 (although only the latter one uses the abbreviation TMS). We
+adopt the same naming convention here for consistency.
+
+Add the CANXL_TMS flag to the canxl_frame->flags list.
+
+Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+---
+The CAN XL did not make it on time for the 6.17 merge windows, sorry
+for that. Regardless, I finally went through the CiA 612-2 document. I
+have the PWM verification and automatic calculation working fine
+locally.
+
+But before that, I want to sort out this TMS thing. That is why I am
+sending this unique patch. Once this discussion reaches an end, I will
+fine tune my work-in-progress accordingly.
+
+Looking at the past exchanges, this TMS was the missing piece. I was
+already troubled by this when reading ISO 11898-1. That document makes
+it clear that the TMS can be deactivated but does not clearly point
+out at which level (netlink or frame). The CiA 612-2 clarified this.
+
+So this CANXL_TMS flag partially replaces the CAN_CTRLMODE_XL_TRX. I
+say partially because I still do not fully understand if there should
+be an option to fully deactivate the TMS at the netlink level.
+
+My gut felling is that the TMS is intended to work in a similar
+fashion as the CAN FD's BRS. In CAN FD, we do not have a
+CAN_CTRLMODE_FD_BRS to tell that FD should operate only using the
+nominal bittiming. And so, I do not get why CAN XL should be different
+and have a CAN_CTRLMODE_XL_TMS (or CAN_CTRLMODE_XL_TRX).
+
+Stéphane and Oliver: maybe the datasheet of your CAN XL board have
+some additional insights? Did you see a register allowing to globally
+deactivate the TMS (i.e. not only at the frame level)?
+
+Finally, on a side not, now that I have my kernel.org account, I am
+changing my e-mail address from mailhol.vincent@wanadoo.fr to
+mailhol@kernel.org. The wanadoo.fr address was my first email which I
+created when I was a kid and have a special meaning to me, but it is
+restricted to maximum 50 messages per hour which starts to be
+problematic on threads with many people CC-ed.
+---
+ include/uapi/linux/can.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/uapi/linux/can.h b/include/uapi/linux/can.h
+index 42abf0679fb4854cfa4f29a575e49527461a20f3..4a81500c1a06a69707accbf66224da7285d9d282 100644
+--- a/include/uapi/linux/can.h
++++ b/include/uapi/linux/can.h
+@@ -193,6 +193,7 @@ struct canfd_frame {
+ #define CANXL_XLF 0x80 /* mandatory CAN XL frame flag (must always be set!) */
+ #define CANXL_SEC 0x01 /* Simple Extended Content (security/segmentation) */
+ #define CANXL_RRS 0x02 /* Remote Request Substitution */
++#define CANXL_TMS 0x04 /* Transceiver Mode Switching (fast mode using PWM encoding) */
+ 
+ /* the 8-bit VCID is optionally placed in the canxl_frame.prio element */
+ #define CANXL_VCID_OFFSET 16 /* bit offset of VCID in prio element */
+
+---
+base-commit: fa582ca7e187a15e772e6a72fe035f649b387a60
+change-id: 20250727-can_tms-4bd8510bc9ce
+
+Best regards,
+-- 
+Vincent Mailhol <mailhol@kernel.org>
+
 
