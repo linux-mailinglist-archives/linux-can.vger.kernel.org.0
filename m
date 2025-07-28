@@ -1,153 +1,224 @@
-Return-Path: <linux-can+bounces-4186-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4187-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B26E4B1403E
-	for <lists+linux-can@lfdr.de>; Mon, 28 Jul 2025 18:25:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4FDEB141DF
+	for <lists+linux-can@lfdr.de>; Mon, 28 Jul 2025 20:20:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BF541882775
-	for <lists+linux-can@lfdr.de>; Mon, 28 Jul 2025 16:25:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE0313A89BB
+	for <lists+linux-can@lfdr.de>; Mon, 28 Jul 2025 18:20:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D9C26FDB2;
-	Mon, 28 Jul 2025 16:23:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E8A226E175;
+	Mon, 28 Jul 2025 18:20:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lOF3PHoL"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="SQBrfcrV";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="N+7ulSw0"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A2C269D18;
-	Mon, 28 Jul 2025 16:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753719834; cv=none; b=L3bvekL0jOVdsvw7/QLSDFyCnrpAGR5nYLHxumBE2Cj7ds1xw6LnZtxpJO7AdZmR+/W6v3IjMKXf63xfg5W+VgDH23/OXx1byqwDvmKzud9e4soaGOIiWI4WlOhqXUKM8flDfJy0aL2HUAFnQLd9AkmyEPF+BPQykyBV17Sg1tU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753719834; c=relaxed/simple;
-	bh=DYX7A3/YZVVtNkT3oxxllNojSjEoxwFhWIFQA/m7loU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Q/ln3STEmuERub0FsoDu4ktmhAr4KCjRnzzHJe2BTvE1b3NoTVSaD0zPzvOARnG0+sBLO1hScQYz2nk5G9idHBo2S51ojTpTcdJtDzENhyq9x0t6S32AJWf8gaRLjeel4C4RpIUfEsNjM8HCqXlF1IiPnoucCJBqP3ePR9LJqJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lOF3PHoL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC16C4CEEF;
-	Mon, 28 Jul 2025 16:23:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753719833;
-	bh=DYX7A3/YZVVtNkT3oxxllNojSjEoxwFhWIFQA/m7loU=;
-	h=From:Date:Subject:To:Cc:From;
-	b=lOF3PHoLYcSc80KNnx2MyeIgA1ZqVtOrQ+TgJkgFjM1lSOpfxbl4Z/m960apnBfb7
-	 5TC8J5ebY57GU1yXYlplnU5laFNY5rWLGxwMFrRWKzoVbDo7IzpxkcGonzhQrJDhps
-	 6xSPQR8CLj3HzwUHv35CMiXHvPY2dHP+wpN4AitsdlFrCjClwqfmH1Z5MMq1etSVOq
-	 QjVoDvx3O2XwCrw7sCd/jofNFjVABy5HDffRAWYnYSw9i+gPWuCYiOXBZJd0q1i9o1
-	 nX5D5GI97f34mFNz8H2kYHlDu4/tJRQwXtnZPsAKHV90TIGkHz6BglZA/I4ik+G6Lk
-	 4QIZv5t+bdzTQ==
-From: Vincent Mailhol <mailhol@kernel.org>
-Date: Tue, 29 Jul 2025 01:23:18 +0900
-Subject: [PATCH] can: canxl: add CANXL_PMS flag
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4132727E2;
+	Mon, 28 Jul 2025 18:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753726833; cv=pass; b=bh+mnBuMsEiuTdQbpTg1VTQbwOGWxBaZEykkoTFvtpbZ+codVOg/Qoqf/l880BgQwg5Wg01OzWNBlZTKAE1eURH2W8pnD9xaUI0TLhvKE7GeIxykam1W4qHaOdy3KCFiCBVmWK4SyWNkCxzFLs9RK8mP1bXKiOp582h89wqD764=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753726833; c=relaxed/simple;
+	bh=peVXsReusycOnb60wcU5g2Pmht2uVreS4gunlIyTQCs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SO1haX+cUBbBz7JFxqIVoPq+pClboPgWNTcnZHCbmwcQEp3l3NM0QHEmavqYz9di3tgIZYSFPkn9xWEmk/kv9d99/IuuL1hAbcKSJPT9oIG7E+dI0fVkgUkYMvLs2+yBK32L1+RTcFm/mfIdxT1DJXhsrDzLFInn48Yk8y0He3g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=SQBrfcrV; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=N+7ulSw0; arc=pass smtp.client-ip=85.215.255.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1753726468; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=lZpnOZQrZn1Pjw1yOKWSEntVg8Vt7DjFPvXcPVf9sd8x4BqoFZDqNrOFGJKoo4u5J8
+    hzsDhZRLVyIGynzvdfA8/onktUI7+y+x8dHDU1jQbM0qqAnlOig+DQnKyxnUFLmtHpx8
+    ZysFGbl0aYzXD42vgOgkSi6zLdfmInvCGLkzimW7Xx39kftw8BpR0j7HU4BO74gCrlEu
+    4Wv7tjBnsnpVSfKAyIMRM9zyXBMqobURNSpuUHptB/fvnfrF2g6jd8lBiFBFWF9KCWqA
+    JKBe/MeckwIwLdFnbRS3OlwPJ3YO/MaCgDcdC/fCEApKJz5uBhunvXSj/Sgw25Z76mpc
+    HHHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1753726468;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=Jo9ABBVKaruYbcZF77K2Rm0WfGuIMVjPhor2fl7eV2Y=;
+    b=kMmmBccU09AS4uPZQcvOMFh2eTGsme5UIMmgC7U/CfDM8fI/seL2EH+6/qwnspy2jy
+    p2n+vl4Zcn680ySP+8dK/3JuNqUxfEU/i84Vjn7RjULUJpSu1jnG4vqCIGEvJD9JXHXA
+    5qTbc5uQMT0hAmLn1eVKrpMGdjH2O/o37ouE8O9TR9wnzYBJs4reBFb9PCNSdZSVtTAE
+    EbCPM0wfnHcVZ1CZoqjZkbZ96nK4YDybirhLE4HBNdCAc5iH+Jh5G12dkL0ledqpM7/G
+    GdcO1sDqLQ+FXQFfZYq8dRZCbqeUY2m/X72f8SGTx2fonK/DN+AXtVks/vc9pyq2X4xP
+    1ttA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1753726468;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=Jo9ABBVKaruYbcZF77K2Rm0WfGuIMVjPhor2fl7eV2Y=;
+    b=SQBrfcrVnwSXHdKooYDaxUacXKX4RzrdWwMq8kzRNlGw9Bu2+GuSbgbVY+la2yAlOH
+    6covTImoQFVChxO0IeNhIGE4EKWu5JHFJsFVWbqLIShIAgwpXyh2Svq4eVpr41gDsJto
+    ZNMz/2vK0MgBDG6BQ9qGeyqJs5Ch7isYXHA8J4vzxRbio+5lHYYE3Qclr0LRtCv5nkh4
+    sm2EuRj8aO3f/p8bCtr+CeSXlkCoKaU0WKq5frxblmX1QpXzoYmnRuq8zomhaUNjvRZx
+    q+5Ijsxp51e59PUgoedGJEAWXsokXNQ12oqCT8VKsaEAyCu8RxVij10Sp0iXPRCQqCnv
+    8Ewg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1753726468;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=Jo9ABBVKaruYbcZF77K2Rm0WfGuIMVjPhor2fl7eV2Y=;
+    b=N+7ulSw09WyYo8oNE/QAfBhmyloYq4qokHDgLXiK3T6zcQDl1W01JSKWbsJzaiqijD
+    yd/2ZIUbv30YCHeg+iBg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/vMMcFB+4xtv9aJntXA=="
+Received: from [IPV6:2a00:6020:4a8e:5010::9ae]
+    by smtp.strato.de (RZmta 52.1.2 AUTH)
+    with ESMTPSA id K5d36116SIERlk9
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Mon, 28 Jul 2025 20:14:27 +0200 (CEST)
+Message-ID: <64bf8703-c80c-4a96-a5ad-0efc48bf0541@hartkopp.net>
+Date: Mon, 28 Jul 2025 20:14:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] can: canxl: add CANXL_PMS flag
+To: Vincent Mailhol <mailhol@kernel.org>,
+ Marc Kleine-Budde <mkl@pengutronix.de>,
+ =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+ Robert Nawrath <mbro1689@gmail.com>, linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250729-can_tms-v1-1-21d0195d1dd0@kernel.org>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20250729-can_tms-v1-1-21d0195d1dd0@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250729-can_tms-v1-1-21d0195d1dd0@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAPWjh2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDcyNz3eTEvPiS3GJdk6QUC1NDg6Rky+RUJaDqgqLUtMwKsEnRsbW1AMB
- 3+bJZAAAA
-X-Change-ID: 20250727-can_tms-4bd8510bc9ce
-To: Marc Kleine-Budde <mkl@pengutronix.de>, 
- Oliver Hartkopp <socketcan@hartkopp.net>, 
- =?utf-8?q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
- Robert Nawrath <mbro1689@gmail.com>, linux-can@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3701; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=DYX7A3/YZVVtNkT3oxxllNojSjEoxwFhWIFQA/m7loU=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDBntS0SqVI1+2KUfW614f118ymLHluIbZu9vPJCaE/7jz
- smJCj/ZO0pZGMS4GGTFFFmWlXNyK3QUeocd+msJM4eVCWQIAxenAExkLhPD/8JnW1KcVL/aL1l1
- 9eLPfk21HQt+/PDaPIG3Y/mVZxky34IYGS5NWrZa1K7fc13lN+trPrknMjgv+qftdN/dxTb72Be
- jRF4A
-X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
- fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-The Transceiver Mode Switching (TMS) indicates whether the CAN XL
-controller shall use the PWM or NRZ encoding during the data phase.
+Hi Vincent,
 
-Contrarily to CAN FD's BRS flag, CAN XL does not have an explicit bit
-on the bus to indicate the TMS. Instead, this is done implicitly: the
-transceiver will automatically detect TMS on the fly if the frequency
-on the ADH bit is higher than the nominal frequency and this until the
-DAH bit on which the frequency returns to back normal. For this
-reason, the TMS is something which, same as the BRS, should be
-configurable at the frame level and not at the netlink level.
+On 28.07.25 18:23, Vincent Mailhol wrote:
+> The Transceiver Mode Switching (TMS) indicates whether the CAN XL
+> controller shall use the PWM or NRZ encoding during the data phase.
+> 
+> Contrarily to CAN FD's BRS flag, CAN XL does not have an explicit bit
+> on the bus to indicate the TMS. Instead, this is done implicitly: the
+> transceiver will automatically detect TMS on the fly if the frequency
+> on the ADH bit is higher than the nominal frequency and this until the
+> DAH bit on which the frequency returns to back normal. For this
+> reason, the TMS is something which, same as the BRS, should be
+> configurable at the frame level and not at the netlink level.
+> 
+> The term "transceiver mode switching" is used in both ISO 11898-1 and
+> CiA 612-2 (although only the latter one uses the abbreviation TMS). We
+> adopt the same naming convention here for consistency.
+> 
+> Add the CANXL_TMS flag to the canxl_frame->flags list.
+> 
+> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+> ---
+> The CAN XL did not make it on time for the 6.17 merge windows, sorry
+> for that.
 
-The term "transceiver mode switching" is used in both ISO 11898-1 and
-CiA 612-2 (although only the latter one uses the abbreviation TMS). We
-adopt the same naming convention here for consistency.
+Yes. I'm a bit sad about that.
 
-Add the CANXL_TMS flag to the canxl_frame->flags list.
+> Regardless, I finally went through the CiA 612-2 document. I
+> have the PWM verification and automatic calculation working fine
+> locally.
+> 
+> But before that, I want to sort out this TMS thing. That is why I am
+> sending this unique patch. Once this discussion reaches an end, I will
+> fine tune my work-in-progress accordingly.
+> 
+> Looking at the past exchanges, this TMS was the missing piece. I was
+> already troubled by this when reading ISO 11898-1. That document makes
+> it clear that the TMS can be deactivated but does not clearly point
+> out at which level (netlink or frame). The CiA 612-2 clarified this.
+> 
+> So this CANXL_TMS flag partially replaces the CAN_CTRLMODE_XL_TRX. I
+> say partially because I still do not fully understand if there should
+> be an option to fully deactivate the TMS at the netlink level.
+> 
+> My gut felling is that the TMS is intended to work in a similar
+> fashion as the CAN FD's BRS. In CAN FD, we do not have a
+> CAN_CTRLMODE_FD_BRS to tell that FD should operate only using the
+> nominal bittiming. And so, I do not get why CAN XL should be different
+> and have a CAN_CTRLMODE_XL_TMS (or CAN_CTRLMODE_XL_TRX).
+> 
+> Stéphane and Oliver: maybe the datasheet of your CAN XL board have
+> some additional insights? Did you see a register allowing to globally
+> deactivate the TMS (i.e. not only at the frame level)?
 
-Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
----
-The CAN XL did not make it on time for the 6.17 merge windows, sorry
-for that. Regardless, I finally went through the CiA 612-2 document. I
-have the PWM verification and automatic calculation working fine
-locally.
+You can take a look at the XCAN manual 
+https://github.com/linux-can/can-doc/blob/master/x_can/xcan_user_manual_v350.pdf
 
-But before that, I want to sort out this TMS thing. That is why I am
-sending this unique patch. Once this discussion reaches an end, I will
-fine tune my work-in-progress accordingly.
+And I have a XCANB specification which is a simple (non-DMA) CAN XL 
+controller.
 
-Looking at the past exchanges, this TMS was the missing piece. I was
-already troubled by this when reading ISO 11898-1. That document makes
-it clear that the TMS can be deactivated but does not clearly point
-out at which level (netlink or frame). The CiA 612-2 clarified this.
+The TMS switching is only possible in netlink level and there's no 
+TMS-style bit in the CAN XL frame layout that is pushed into the 
+controller to send a CAN XL frame => there is not TMS-bit analogue to 
+the BRS-bit your were searching for.
 
-So this CANXL_TMS flag partially replaces the CAN_CTRLMODE_XL_TRX. I
-say partially because I still do not fully understand if there should
-be an option to fully deactivate the TMS at the netlink level.
+Therefore this patch is obsolete.
 
-My gut felling is that the TMS is intended to work in a similar
-fashion as the CAN FD's BRS. In CAN FD, we do not have a
-CAN_CTRLMODE_FD_BRS to tell that FD should operate only using the
-nominal bittiming. And so, I do not get why CAN XL should be different
-and have a CAN_CTRLMODE_XL_TMS (or CAN_CTRLMODE_XL_TRX).
+Btw. while we are at it: I would suggest for a name change of
 
-Stéphane and Oliver: maybe the datasheet of your CAN XL board have
-some additional insights? Did you see a register allowing to globally
-deactivate the TMS (i.e. not only at the frame level)?
+CAN_CTRLMODE_XL_TRX
 
-Finally, on a side not, now that I have my kernel.org account, I am
-changing my e-mail address from mailhol.vincent@wanadoo.fr to
-mailhol@kernel.org. The wanadoo.fr address was my first email which I
-created when I was a kid and have a special meaning to me, but it is
-restricted to maximum 50 messages per hour which starts to be
-problematic on threads with many people CC-ed.
----
- include/uapi/linux/can.h | 1 +
- 1 file changed, 1 insertion(+)
+to
 
-diff --git a/include/uapi/linux/can.h b/include/uapi/linux/can.h
-index 42abf0679fb4854cfa4f29a575e49527461a20f3..4a81500c1a06a69707accbf66224da7285d9d282 100644
---- a/include/uapi/linux/can.h
-+++ b/include/uapi/linux/can.h
-@@ -193,6 +193,7 @@ struct canfd_frame {
- #define CANXL_XLF 0x80 /* mandatory CAN XL frame flag (must always be set!) */
- #define CANXL_SEC 0x01 /* Simple Extended Content (security/segmentation) */
- #define CANXL_RRS 0x02 /* Remote Request Substitution */
-+#define CANXL_TMS 0x04 /* Transceiver Mode Switching (fast mode using PWM encoding) */
- 
- /* the 8-bit VCID is optionally placed in the canxl_frame.prio element */
- #define CANXL_VCID_OFFSET 16 /* bit offset of VCID in prio element */
+CAN_CTRLMODE_XL_TMS
 
----
-base-commit: fa582ca7e187a15e772e6a72fe035f649b387a60
-change-id: 20250727-can_tms-4bd8510bc9ce
+as it makes clear how the controller should manage the PWM mode.
+
+"CAN_CTRLMODE_XL_TRX" would mean "there is a CAN XL PWM enabled 
+transceiver" available which tells nothing about whether the PWM mode is 
+used or not.
 
 Best regards,
--- 
-Vincent Mailhol <mailhol@kernel.org>
+Oliver
+
+> 
+> Finally, on a side not, now that I have my kernel.org account, I am
+> changing my e-mail address from mailhol.vincent@wanadoo.fr to
+> mailhol@kernel.org. 
+
+Nice!
+
+> The wanadoo.fr address was my first email which I
+> created when I was a kid and have a special meaning to me, but it is
+> restricted to maximum 50 messages per hour which starts to be
+> problematic on threads with many people CC-ed.
+> ---
+>   include/uapi/linux/can.h | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/uapi/linux/can.h b/include/uapi/linux/can.h
+> index 42abf0679fb4854cfa4f29a575e49527461a20f3..4a81500c1a06a69707accbf66224da7285d9d282 100644
+> --- a/include/uapi/linux/can.h
+> +++ b/include/uapi/linux/can.h
+> @@ -193,6 +193,7 @@ struct canfd_frame {
+>   #define CANXL_XLF 0x80 /* mandatory CAN XL frame flag (must always be set!) */
+>   #define CANXL_SEC 0x01 /* Simple Extended Content (security/segmentation) */
+>   #define CANXL_RRS 0x02 /* Remote Request Substitution */
+> +#define CANXL_TMS 0x04 /* Transceiver Mode Switching (fast mode using PWM encoding) */
+>   
+>   /* the 8-bit VCID is optionally placed in the canxl_frame.prio element */
+>   #define CANXL_VCID_OFFSET 16 /* bit offset of VCID in prio element */
+> 
+> ---
+> base-commit: fa582ca7e187a15e772e6a72fe035f649b387a60
+> change-id: 20250727-can_tms-4bd8510bc9ce
+> 
+> Best regards,
 
 
