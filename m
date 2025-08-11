@@ -1,43 +1,43 @@
-Return-Path: <linux-can+bounces-4196-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4197-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 160F9B216F2
-	for <lists+linux-can@lfdr.de>; Mon, 11 Aug 2025 23:06:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B5B6B216F8
+	for <lists+linux-can@lfdr.de>; Mon, 11 Aug 2025 23:07:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F51D1A24623
-	for <lists+linux-can@lfdr.de>; Mon, 11 Aug 2025 21:07:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F11FF46478C
+	for <lists+linux-can@lfdr.de>; Mon, 11 Aug 2025 21:07:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CAC32E2F01;
-	Mon, 11 Aug 2025 21:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 220E02E3AE6;
+	Mon, 11 Aug 2025 21:06:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="HAfdd6sU"
+	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="mv/5okgB"
 X-Original-To: linux-can@vger.kernel.org
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11023108.outbound.protection.outlook.com [52.101.72.108])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11022130.outbound.protection.outlook.com [52.101.66.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6202F2E2EFD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60BC2E2F02;
 	Mon, 11 Aug 2025 21:06:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.108
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.130
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754946378; cv=fail; b=EvqYSq5a1nJdJAeJX2mA5g8EXJhC+Iw/2VVEw0Mm9g41B1GXm8lBJ0J1RT9pQHUIqd4qHwJbyedFHTsa+RuhHXPnOMpMUwf8XfPOpNirnKjeeVkwjmXpvIobH8tn1HI1Ic0HWUKdgYSOJ1J/iShu+MzSXW0i8cRykv513nbD20g=
+	t=1754946379; cv=fail; b=Nae9ZjPitITeiXjTnRO4vWKzofaMjy9MBiiiFZVqsIXW7jWT07AjgzP8ZY0asnWAWIKmJJt0GDC8PwfkUMdiJs5au8aGeDYXwC829CXA6Iv0OGeiQWLuV5UTMczAPr+SvwAv/OeLdf7lJHTruZLCshpTeYmo8FGK5WnSeE19Ub4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754946378; c=relaxed/simple;
-	bh=P7t9qu7c4KHhx3Y+Jm6XHf4AWodnscV0Ieqdrrasqg4=;
+	s=arc-20240116; t=1754946379; c=relaxed/simple;
+	bh=Q5ZBauqYTT/cgN0beWCwNj2KufPgMg7A+o1hfXgoSks=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qV85K7/mY4Y8lBL2Nej58j2mlItZUFSfv1m8ueHDgHqXu1ssUalwMJxTeVLLzybHgGqjGbrkS4GMReuOyzBtQ5AbESEKM3i5kIh0Ef7pcONUWNwlVsJ8Lks4CPt12FBsjDmevlm7RdVPUwAjOchHFmgYLHvy1/pTGr88hDYJhC0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu; spf=pass smtp.mailfrom=esd.eu; dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b=HAfdd6sU; arc=fail smtp.client-ip=52.101.72.108
+	 MIME-Version:Content-Type; b=EFPmZYrGcQFOzGn0egQZwalOVaeVynSSsJZBUoLhY2XpR5UCY9FXlxVQTPNPletsXup4q75/2OZeM5hzJCd6Aq0GuxXg/m5Ii0UoGIEnTvEyRkaAN/tM584q93FGfQwcfyy0PmSX4eua3SokBdQ4YSHD5jmTjT6kSSIhCNWsgEQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu; spf=pass smtp.mailfrom=esd.eu; dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b=mv/5okgB; arc=fail smtp.client-ip=52.101.66.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esd.eu
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dJCiO9A1TlaMfCe2nVJnuYjZ1voV0TmhHvrS7Q8/RiWHDkYTGy3aDzt5EbrjApcSgorXiZTTcc+pRTRqHxNWBejl5g4QPCBkI0Lkb8AeFG5jaZboNbHmVBiiZhroit6cz2w/sFoRYINeX5A8i4Ixg3laAYpmfyJlSoOwkcUQLLep7kK8QYb8VMCUOCmr61Mke5EOnS+GhiMp56g8XC8gJFo6zBmUsccZWDrO6xeYREnCQhizpwrPKiSynbR609TucomjnEA+hFoyUOz8f73e771sIY4MyaL5/+fQFK/VTRXHjqf01l1ad+z2OJIiv1i8Fu+yR0u4itopK9fqcyDfog==
+ b=qYw0vEDQ1RuwEwaJg8z0BPI4ddkcc0Mm3OCWjDdPUyXHaW4UV68CLbDNTufXFIMkI76BZ31N3yH3pNDgQ4qQbVUdLuKxn8Zrr5T9CWPsQvQT2cgjLw3LJOYfKEwG6F3GSnu1QfEPUYw27qHHQBcDriQE6ZTnY2aeDc8GL7Nd1HZBF9mbnZysR71aSbl4XvODYmbZdw3mSpIR1R4jZAXEpUJI8Z+p/mjIp/j7Ly601XaK9+INV+ryp8qBHEJdZyKySQ2fK2f8M9dlOcVKtZK4/CuV9T1rgcGOm3Caj+iO3qxnaHF7ljSFeHFzuCGCoufpW+TJ4VKZkmzjYO6wH3tUrQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xkfXdh6rBk6Ow1r8nxN3cuLrzmEpCHu24ogGMQ9iUc8=;
- b=uXWg99M2TZ23f8fUXZJBmONA0+gP0/W+Q0xTAtv+DxlpF4zimODlzy+3nujMg1Yjqa5HpYoMDSXYZViozwfWTEEZr292mSlUXxywbIADDmBmeqy5eHP3fNu8E12TPTt3YBC4Y5RDCdqdClHTCo7Fww6JqDrJMaGhjQkEMysv8FT+OOrhZn+hlK2xwdcGCiEWHroBlHTPfXdp30ZfP3TFYOZEe2tVqeiU7BK4ueO8b692WjZQmij6puHxFwLggkTF6qDUx6Jt1e5YoBoTQJstY1G1FxFwyaWUEJc900Nzj4aiU0OG8Jb5Lj4NI0rZnoIK/QAM5rs2Ug6W22QFC40arQ==
+ bh=Mbi+DxdYo81CJ9iJZKQdXvP5u+HDJWzYMVM6eEWvWbg=;
+ b=ZGDBu1f4sg41eT27w9YNHWpxlB62cX1CQWFz5cMLNUY8GEFT3Zm7c9jKUMLJcPxMTYR0f40PWw2lW/5KvI9MSmHjWwfuu/jAM9qDi++iH4pktdtNkBJRPPiwQpR2+vO3rU4iD06M9fC8mIMKwEO/w9DN2romM9HvScylRLvVZwYyvgbHLWBLpSPdQ0tL0XnZ7X4+nP5c59pJHPUdCSJPt1KvCIGI/RRAVVhQiVf5GttywElVGkeDGKgkMZWzNFmqbV/KA5dYpI8ihTCLUw/NEZl3bYks+Tp3ab2PmQAAvFn2deTVnyOIvS+jQvTeLVU/iBopnEWgREKPw9zwgorJ1g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
  is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=fail
  (p=none sp=none pct=100) action=none header.from=esd.eu; dkim=none (message
@@ -45,32 +45,32 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xkfXdh6rBk6Ow1r8nxN3cuLrzmEpCHu24ogGMQ9iUc8=;
- b=HAfdd6sU+xRrEFyRcvbtFxAUvDndLG2kc+7HthaWNa7B4yHPn8N3MiLhF6b3Rwjfk0tETC/LcRiHfBU7td7gOwbk5DpWnc1HdQjW9fquetDYI2VqOeJSwiO8moevWrcBuLA1aAGil8DNQ9LW4xDqFruwzOIqdZuTELk2k2/+IXo=
-Received: from DU2PR04CA0154.eurprd04.prod.outlook.com (2603:10a6:10:2b0::9)
- by DB4PR03MB8612.eurprd03.prod.outlook.com (2603:10a6:10:388::17) with
+ bh=Mbi+DxdYo81CJ9iJZKQdXvP5u+HDJWzYMVM6eEWvWbg=;
+ b=mv/5okgBceHYZkrJRK+RFhBVWLvxVqTHYgWifJ3whokT1vZaisLCN2flYFOyzHQ6XY97oqfjLy5uyf6jbN4Q9t/vLI1G/OL4UfErTJbLtxYz2PJ61nqT+75ssNwakeIjjoU74zxAaA7blEHXm+lDQ+IObFTczdMAOsljohTYSGM=
+Received: from DU7P189CA0017.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:552::31)
+ by AS2PR03MB9564.eurprd03.prod.outlook.com (2603:10a6:20b:597::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.21; Mon, 11 Aug
- 2025 21:06:13 +0000
-Received: from DB5PEPF00014B96.eurprd02.prod.outlook.com
- (2603:10a6:10:2b0:cafe::2d) by DU2PR04CA0154.outlook.office365.com
- (2603:10a6:10:2b0::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9009.21 via Frontend Transport; Mon,
- 11 Aug 2025 21:06:13 +0000
+ 2025 21:06:12 +0000
+Received: from DB5PEPF00014B91.eurprd02.prod.outlook.com
+ (2603:10a6:10:552:cafe::24) by DU7P189CA0017.outlook.office365.com
+ (2603:10a6:10:552::31) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9009.22 via Frontend Transport; Mon,
+ 11 Aug 2025 21:06:12 +0000
 X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
  80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
  header.d=none;dmarc=fail action=none header.from=esd.eu;
 Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
  discourages use of 80.151.164.27 as permitted sender)
 Received: from esd-s7.esd (80.151.164.27) by
- DB5PEPF00014B96.mail.protection.outlook.com (10.167.8.234) with Microsoft
+ DB5PEPF00014B91.mail.protection.outlook.com (10.167.8.229) with Microsoft
  SMTP Server id 15.20.9031.11 via Frontend Transport; Mon, 11 Aug 2025
  21:06:12 +0000
-Received: from debby.esd.local (debby [10.0.0.190])
-	by esd-s7.esd (Postfix) with ESMTPS id 0244B7C16CD;
-	Mon, 11 Aug 2025 23:06:11 +0200 (CEST)
+Received: from debby.esd.local (jenkins.esd [10.0.0.190])
+	by esd-s7.esd (Postfix) with ESMTPS id 024947C16CE;
+	Mon, 11 Aug 2025 23:06:12 +0200 (CEST)
 Received: by debby.esd.local (Postfix, from userid 2044)
-	id EEC1D2EC3E4; Mon, 11 Aug 2025 23:06:11 +0200 (CEST)
+	id F21E02EC1DC; Mon, 11 Aug 2025 23:06:11 +0200 (CEST)
 From: =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -81,9 +81,9 @@ Cc: Simon Horman <horms@kernel.org>,
 	Olivier Sobrie <olivier@sobrie.be>,
 	Oliver Hartkopp <socketcan@hartkopp.net>,
 	netdev@vger.kernel.org
-Subject: [PATCH 4/6] can: esd_usb: Add watermark handling for TX jobs
-Date: Mon, 11 Aug 2025 23:06:09 +0200
-Message-Id: <20250811210611.3233202-5-stefan.maetje@esd.eu>
+Subject: [PATCH 5/6] can: esd_usb: Rework display of error messages
+Date: Mon, 11 Aug 2025 23:06:10 +0200
+Message-Id: <20250811210611.3233202-6-stefan.maetje@esd.eu>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250811210611.3233202-1-stefan.maetje@esd.eu>
 References: <20250811210611.3233202-1-stefan.maetje@esd.eu>
@@ -97,129 +97,154 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB5PEPF00014B96:EE_|DB4PR03MB8612:EE_
-X-MS-Office365-Filtering-Correlation-Id: ffcc833c-d9f0-4ffa-07dd-08ddd91ae75b
+X-MS-TrafficTypeDiagnostic: DB5PEPF00014B91:EE_|AS2PR03MB9564:EE_
+X-MS-Office365-Filtering-Correlation-Id: b5b5cda9-18f6-4db3-12fc-08ddd91ae6fe
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|1800799024|19092799006|82310400026;
+	BCL:0;ARA:13230040|376014|82310400026|19092799006|36860700013|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cXl0bk5UU0ViQUN3Y2lhRDlJSXY3MER2eVl6ZU0yU0VyUks5eVBFVTN1d0Nh?=
- =?utf-8?B?Wk9aTEhqTHAzRlhLOWkyVkltVGtNdjVUSGYrNmtaYVZ3UWNRL2VHLzQ1T3ZW?=
- =?utf-8?B?QnBHVWIyNlk0T3NSaFMzKzVYQzErRUs2TnBmUDhna3l5QUlvWldSRUI2cTZT?=
- =?utf-8?B?MENZRGdpWU8yZWRVaVIzcEZtK29YRWU3K3ltT05EcXFYcXdMYUVjajdJSlU4?=
- =?utf-8?B?Z2trRDJHeUNZenFzamtudlFTbExXMmxvMzhBNVNnYTZndFdCN1c4N251ZDlL?=
- =?utf-8?B?UTJ3cko5TTNMQ0tWWDh5NWJKUkZuSis3eHphNGI2V1MxZjF3aTFtR3ZIWXhz?=
- =?utf-8?B?OXhUdjBKUEQraStXNlRtMGZqNWhmSHJ4S3cyUlB3d1FVN3phT1VJRWMzMVAy?=
- =?utf-8?B?dWV4WU1iYjZBR0UrcndGeTVNaVJJc3REVDdrVFFqZVNQUHhFTkFsSE8yQ3gy?=
- =?utf-8?B?RXlQOXRnVWl5dVR2TldJY3g5OXg0TW5Ja1NicmpwVVBkRXBuRGxiSG9IY0pP?=
- =?utf-8?B?ZDN1WVlPZndHNWpkYmxqT1F2NVdXKzVTVkVwejZab1o3d2t6bmhURUZRTHUy?=
- =?utf-8?B?U2t6THRLQytCOXJ4OHdDTTZMMkJVc3RRSUVsb01aYjVac1BXRXR0UW5PdzNC?=
- =?utf-8?B?bWpHOXNlWms3Ni9lWm10aml2YXNRTFlNcDFnd2JNNlhMMUlmdEVFSmluVWRZ?=
- =?utf-8?B?QnUyb2R6UE1wbDRwWm82MUh0eXkvUFRoSnZJRXFrTjJOMkdDOEJUejc4M294?=
- =?utf-8?B?Q2NDZ2p2TDRYMWV5Zm1Na29icDZKQ1lLMkZqdVRzdUdWaHM4VG1udDlrMGY0?=
- =?utf-8?B?czR0OHlTSjdoWStPT1BPTEJPUkk3b1dWcjdVNEZsa25rM3lya0laK2dqanI3?=
- =?utf-8?B?THZrQmNhYW1ZVTRWYkVKQ01sUlh4ZmNsZ3RocVFkekNWQ2VUZmJWNnBaU3JQ?=
- =?utf-8?B?Z3F1WUtPZjFRNUlZL3VJVXdrcjNYU2Y3Y2xhOXo0aDVSeHpPbzI0SFlabnRX?=
- =?utf-8?B?SU1SOGcxTGVpUjE1V0tncWhYbmZTMHRPaWpJRWcvRVdYc3Q4WGJIRmRUM1ZH?=
- =?utf-8?B?ZmNMTTBEVStHb0toTE52Q01yYmRNVVhkWkEzV1BkREMxS0dQblRsNUlTdmxE?=
- =?utf-8?B?N1JKNHkvTnVtbmpORFVhRW1aUDVRVzVPQmhFZWFsek9QcWlTOEFIR2c5cVZD?=
- =?utf-8?B?WkxERGVaVkFQK2dVd3d1TytqcEkvZTBMTmxhSjJDZzNZYTMwdEZuTlpld3Jl?=
- =?utf-8?B?RGltbXJtcDFndzhJeWh5YmtmT2o1RkJ1RENZSVdzU3JtSGhFeEVaMmRmb0t2?=
- =?utf-8?B?S1kwTXRQOEpyMHJZSmFJeDh1ZTFvbXgrUUJ0QnZ3eW9MNnFkcVkwcENHZnV5?=
- =?utf-8?B?TTlFOTB3VDQ4dUc3akluQmZNUmxYd1FxeVB5M0UvZ3BKdmJlS0VBZjR3MDhP?=
- =?utf-8?B?QVNYdk9ZRGp1Z0FGbDlNY3V0eDB1b3l4MXhCOEdTdThnVmhhZXBqMnNmSGFp?=
- =?utf-8?B?eFlFOXNrMzJ1OVdORjJybzZlcFJlMUdWVnNrUnhtUllnd0M4aTRNbTgrNGxr?=
- =?utf-8?B?WGhSdHdlTUpHNlg1QWQzanRVZ2JibVZpRFBBQTNrby9qM2xtdXRJNXM4N3RO?=
- =?utf-8?B?OWFUTVAxNUs0VVpuajRYSzhmMlNXUlRPa1JnR3Q3WE5JMUhnbUluazRiVmhh?=
- =?utf-8?B?S3MyaWppeWs5Y1FsVkZWY2ZZRHplTFhjY1NtemtwS3pwbEFlaXltNWErREhQ?=
- =?utf-8?B?ZmlDNStiU0hSKzhaUzdwUVhIRVpVaTVEZnp1QzZ6WVZKQUFBVUNOTk9GZE5t?=
- =?utf-8?B?UEwvK0xsMHlISTJCNGszWnJjMUxZZStmZEt0Q1VTemY1dVp1UE5lVWdUQ05P?=
- =?utf-8?B?SFYxaWFGMGxnZjFSQ050MDFncnlhQjdsR0UzYjI2anRQSWpqT1c2a0JjVGQ4?=
- =?utf-8?B?QkRrNHZmMzV0M3I5QStOK0hpRmlHR3pIc1JtY1J0TUE2a012NXgvME5VMzlr?=
- =?utf-8?B?TWt1d2ZPYkNOR3VmdWVwNDRTTW51MXVnZHY4SGpQTWFhS3RsZit5ZkFUa1Iw?=
- =?utf-8?Q?NdJtje?=
+	=?utf-8?B?UmpkcWpnYm81TkExYjMyV25xZEVMbDU3MzBlOG8wVE4wN1pIa2NqbE9YWDd3?=
+ =?utf-8?B?QngwRWxpVksxczFySnpyTE8yRVZBS1g5dWM1RmJoWjZWQTV1bHN3Ym9mYk0x?=
+ =?utf-8?B?YXd2Q0JVcVZWcmViUXFuY0hiS3BEcktMQVpJVEE5b1BxS0J1b1pya2FHZldn?=
+ =?utf-8?B?ZXlDTm8rT0NvMUpsVENVMG5uU2hXSkNiVFJISTR2d2VVZkNkVnF0NGMzcjJF?=
+ =?utf-8?B?YlplTktsQ0hXK0hDRDd1UHRsZ0VvWTdGTGFicVZnM3cxQU5SdWYwVUFTd2dB?=
+ =?utf-8?B?KzJDVFBHY213a1ZoTkZQZm8yeXRRV2l3cy84dXVXZW9PbXU1a1c2d2wvblNV?=
+ =?utf-8?B?d3B1cTBONHdtTGdWajU0MUJEZmpJMVVPcGo2aFA4TlRmV0UwYkRNcVkzZHJS?=
+ =?utf-8?B?U1ZWaWUyZ1N0a1lZSjQ1Yy9WZnV6RVM2T1B0dnVIZDVlbWV3WUwxS1o2MWhM?=
+ =?utf-8?B?cFhtY0dQTEF2R0JpcEVCMlBoeTV2dzlvcHArOUVUL3BWNmNQTWphWnBWSmtP?=
+ =?utf-8?B?ZFJ3aDN6Rmt5Nnk5RjNYTkcxbEN2Mkp1U0tTNmtldTh4OE0wak1qc3dqcGF3?=
+ =?utf-8?B?WnhYTGZuQllNZTVTQ2t0azlUdnR0RWM3YlBPbGxCQmlRdSs3SGwzVGR0bmlh?=
+ =?utf-8?B?Si9GVFFQUjNBOW1CM3h4N3k1cVAzM1NZdHlHNDMxdVpSeWcrWFprcHlQbTVY?=
+ =?utf-8?B?V0lsQVllb1prV3d0M2NuS3BWZE1GL29XSVlTNmx6Wmd1STQyendESXIwdEtV?=
+ =?utf-8?B?dWFjblh4WWErbk12TGdCeGVwU0NpYWoxOGZKNk92eDRmdmVBL0tVMkNXTWZz?=
+ =?utf-8?B?YWswUWd4L3dMWGVrdnB5TWxBdmh1MEN0aWFBajRqdnZuVUp5WGJxMGFrYXZw?=
+ =?utf-8?B?ZG4vUG04Tk8vTXFBNnBWT2cwajVqSjNBNmpGNGM1cjI2R0RURlg2b09taWdR?=
+ =?utf-8?B?YW5jT0JJUXpaY3ROQk5seHg3elRWSGd0YldHNFRmL2RWS1BZcVpocGlVbk5C?=
+ =?utf-8?B?MUlkb01NOGFodGRHMmFUTi8yejVLSGM3N3pIb25RdlFCNmQwMzFOSXMwM2Z5?=
+ =?utf-8?B?RGJsbGwvbVN4aUU1aGc4a29wekNtUDBncGhnR2w3dTdXTHNxOUNrczZ6aC8z?=
+ =?utf-8?B?dkl6NUZPYWF4c1N0OHJLdzVXQzZCVzlhWnZHbCtMQjQzeGRGbmlhOC9pWDJ2?=
+ =?utf-8?B?SFpNM0FlNHFrYXF2WXlxUFlFK3U3L1FWdTkvYkwyVU8wY25TcHFjeHdjejJz?=
+ =?utf-8?B?VHFLQm9RMVNpVmw3U3oyWGlNeHdOVXU0eG1YdTI5Nis4VFduaDlaTytyaHlH?=
+ =?utf-8?B?bS84UjduenBrTStMMXBYb24rd3JiNGZIa0lDQmwyeFl6amUxMmRQaWlsak5M?=
+ =?utf-8?B?eFlFTmt6OW5vWjd2UmdYSGpML01CZ1ZHWnVrdlhEYnZuRFc0MW5wR1UzR2pk?=
+ =?utf-8?B?TUpOaTFpeXpnaU55a0lFQmJWSmx6dEhBbVMxQlhEc242bm1xdXlrVGdicW1U?=
+ =?utf-8?B?alJoRkVhOFhXeThYSFZPT040QWxrbEx3WDBmSEQ5dFI4UEtieWFNMFh1NHV3?=
+ =?utf-8?B?ck5nSUdscFBFRTh0ZlVjdkpzcWVQNDhIM1FrN0Z6RUlmOVladEJaZmtRM2M2?=
+ =?utf-8?B?Q1dtTklOUTRjUVZ0YW9jOFFiWkpGV2JoWCs2UHIzVkNDdzU5RFhUVDBkanhn?=
+ =?utf-8?B?bVl2NEE3ODVxT0NOU0JxNG0xOVR2VW05T09MMWM2NkoyN2V5MVFTTWlyTFVs?=
+ =?utf-8?B?S1BnaTAyWWxyU3UyUWZTYlAwTUwvekw2eDJjaG9jUVZleEZzYlM4cFJhMjlk?=
+ =?utf-8?B?V2w4amExcG8vbS9sVzNrSFluL0FrZStYb3dQMkJLYnpiQm1rY3dTNG5UajZr?=
+ =?utf-8?B?UUdubmVxNlc5RmxZVnQrZDZKNmNlMkkzQ2J3WS92cVBMMjBZYjR3dHhPYW9L?=
+ =?utf-8?B?L3Y3M25kMUczRThoOXl1RCsxeGpTOC8wbHNpaXJPUkVPUXYrbGQyZC9BclBG?=
+ =?utf-8?B?YXBPMnZWcGIwWkUxbHRVRTB4WmVtVDJDd2J6REc2RnFpcDBzamZtWndHbS94?=
+ =?utf-8?Q?F48wdU?=
 X-Forefront-Antispam-Report:
-	CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230040)(36860700013)(376014)(1800799024)(19092799006)(82310400026);DIR:OUT;SFP:1102;
+	CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230040)(376014)(82310400026)(19092799006)(36860700013)(1800799024);DIR:OUT;SFP:1102;
 X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2025 21:06:12.9280
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2025 21:06:12.3169
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffcc833c-d9f0-4ffa-07dd-08ddd91ae75b
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5b5cda9-18f6-4db3-12fc-08ddd91ae6fe
 X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DB5PEPF00014B96.eurprd02.prod.outlook.com
+	DB5PEPF00014B91.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR03MB8612
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR03MB9564
 
-The driver tried to keep as much CAN frames as possible submitted to the
-USB device (ESD_USB_MAX_TX_URBS). This has led to occasional "No free
-context" error messages in high load situations like with
-"cangen -g 0 -p 10 canX".
-
-This patch now calls netif_stop_queue() already if the number of active
-jobs reaches ESD_USB_TX_URBS_HI_WM which is < ESD_USB_MAX_TX_URBS.
-The netif_start_queue() is called in esd_usb_tx_done_msg() only if
-the number of active jobs is <= ESD_USB_TX_URBS_LO_WM.
-
-This change eliminates the occasional error messages and significantly
-reduces the number of calls to netif_start_queue() and
-netif_stop_queue().
-
-The watermark limits have been chosen with the CAN-USB/Micro in mind to
-not to compromise its TX throughput. This device is running on USB 1.1
-only with its 1ms USB polling cycle where a ESD_USB_TX_URBS_LO_WM
-value below 9 decreases the TX throughput.
+- esd_usb_open(): Get rid of duplicate "couldn't start device: %d\n"
+  message already printed from esd_usb_start().
+- Added the printout of error codes together with the error messages
+  in esd_usb_close() and some in esd_usb_probe(). The additional error
+  codes should lead to a better understanding what is really going
+  wrong.
+- Fix duplicate printout of network device name when network device
+  is registered. Add an unregister message for the network device
+  as counterpart to the register message.
 
 Signed-off-by: Stefan Mätje <stefan.maetje@esd.eu>
 ---
- drivers/net/can/usb/esd_usb.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/net/can/usb/esd_usb.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-index fc28fb52564c..41ff453f87b8 100644
+index 41ff453f87b8..3c348af566ec 100644
 --- a/drivers/net/can/usb/esd_usb.c
 +++ b/drivers/net/can/usb/esd_usb.c
-@@ -98,6 +98,8 @@ MODULE_LICENSE("GPL v2");
- #define ESD_USB_RX_BUFFER_SIZE		1024
- #define ESD_USB_MAX_RX_URBS		4
- #define ESD_USB_MAX_TX_URBS		16 /* must be power of 2 */
-+#define ESD_USB_TX_URBS_HI_WM		((15 * ESD_USB_MAX_TX_URBS) / 16)
-+#define ESD_USB_TX_URBS_LO_WM		((9 * ESD_USB_MAX_TX_URBS) / 16)
- #define ESD_USB_DRAIN_TIMEOUT_MS	100
+@@ -882,7 +882,6 @@ static int esd_usb_open(struct net_device *netdev)
+ 	/* finally start device */
+ 	err = esd_usb_start(priv);
+ 	if (err) {
+-		netdev_warn(netdev, "couldn't start device: %d\n", err);
+ 		close_candev(netdev);
+ 		return err;
+ 	}
+@@ -1037,6 +1036,7 @@ static int esd_usb_close(struct net_device *netdev)
+ {
+ 	struct esd_usb_net_priv *priv = netdev_priv(netdev);
+ 	union esd_usb_msg *msg;
++	int err;
+ 	int i;
  
- /* Modes for CAN-USB/3, to be used for esd_usb_3_set_baudrate_msg_x.mode */
-@@ -478,7 +480,8 @@ static void esd_usb_tx_done_msg(struct esd_usb_net_priv *priv,
- 	if (!netif_device_present(netdev))
- 		return;
+ 	msg = kmalloc(sizeof(*msg), GFP_KERNEL);
+@@ -1050,8 +1050,9 @@ static int esd_usb_close(struct net_device *netdev)
+ 	msg->filter.option = ESD_USB_ID_ENABLE; /* start with segment 0 */
+ 	for (i = 0; i <= ESD_USB_MAX_ID_SEGMENT; i++)
+ 		msg->filter.mask[i] = 0;
+-	if (esd_usb_send_msg(priv->usb, msg) < 0)
+-		netdev_err(netdev, "sending idadd message failed\n");
++	err = esd_usb_send_msg(priv->usb, msg);
++	if (err < 0)
++		netdev_err(netdev, "sending idadd message failed: %d\n", err);
  
--	netif_wake_queue(netdev);
-+	if (atomic_read(&priv->active_tx_jobs) <= ESD_USB_TX_URBS_LO_WM)
-+		netif_wake_queue(netdev);
- }
+ 	/* set CAN controller to reset mode */
+ 	msg->hdr.len = sizeof(struct esd_usb_set_baudrate_msg) / sizeof(u32); /* # of 32bit words */
+@@ -1059,8 +1060,9 @@ static int esd_usb_close(struct net_device *netdev)
+ 	msg->setbaud.net = priv->index;
+ 	msg->setbaud.rsvd = 0;
+ 	msg->setbaud.baud = cpu_to_le32(ESD_USB_NO_BAUDRATE);
+-	if (esd_usb_send_msg(priv->usb, msg) < 0)
+-		netdev_err(netdev, "sending setbaud message failed\n");
++	err = esd_usb_send_msg(priv->usb, msg);
++	if (err < 0)
++		netdev_err(netdev, "sending setbaud message failed: %d\n", err);
  
- static void esd_usb_read_bulk_callback(struct urb *urb)
-@@ -973,7 +976,7 @@ static netdev_tx_t esd_usb_start_xmit(struct sk_buff *skb,
- 	context->priv = priv;
- 	context->echo_index = i;
+ 	priv->can.state = CAN_STATE_STOPPED;
  
--	/* hnd must not be 0 - MSB is stripped in txdone handling */
-+	/* hnd must not be 0 - MSB is stripped in TX done handling */
- 	msg->tx.hnd = BIT(31) | i; /* returned in TX done message */
+@@ -1344,7 +1346,7 @@ static int esd_usb_probe_one_net(struct usb_interface *intf, int index)
+ 	}
  
- 	usb_fill_bulk_urb(urb, dev->udev, usb_sndbulkpipe(dev->udev, 2), buf,
-@@ -988,8 +991,8 @@ static netdev_tx_t esd_usb_start_xmit(struct sk_buff *skb,
+ 	dev->nets[index] = priv;
+-	netdev_info(netdev, "device %s registered\n", netdev->name);
++	netdev_info(netdev, "registered\n");
  
- 	atomic_inc(&priv->active_tx_jobs);
+ done:
+ 	return err;
+@@ -1383,13 +1385,13 @@ static int esd_usb_probe(struct usb_interface *intf,
+ 	/* query number of CAN interfaces (nets) */
+ 	err = esd_usb_req_version(dev, buf);
+ 	if (err < 0) {
+-		dev_err(&intf->dev, "sending version message failed\n");
++		dev_err(&intf->dev, "sending version message failed: %d\n", err);
+ 		goto free_buf;
+ 	}
  
--	/* Slow down tx path */
--	if (atomic_read(&priv->active_tx_jobs) >= ESD_USB_MAX_TX_URBS)
-+	/* Slow down TX path */
-+	if (atomic_read(&priv->active_tx_jobs) >= ESD_USB_TX_URBS_HI_WM)
- 		netif_stop_queue(netdev);
+ 	err = esd_usb_recv_version(dev, buf);
+ 	if (err < 0) {
+-		dev_err(&intf->dev, "no version message answer\n");
++		dev_err(&intf->dev, "no version message answer: %d\n", err);
+ 		goto free_buf;
+ 	}
  
- 	err = usb_submit_urb(urb, GFP_ATOMIC);
+@@ -1435,6 +1437,7 @@ static void esd_usb_disconnect(struct usb_interface *intf)
+ 		for (i = 0; i < dev->net_count; i++) {
+ 			if (dev->nets[i]) {
+ 				netdev = dev->nets[i]->netdev;
++				netdev_info(netdev, "unregister\n");
+ 				unregister_netdev(netdev);
+ 				free_candev(netdev);
+ 			}
 -- 
 2.34.1
 
