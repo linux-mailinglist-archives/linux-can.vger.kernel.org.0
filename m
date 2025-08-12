@@ -1,267 +1,264 @@
-Return-Path: <linux-can+bounces-4199-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4202-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EFB2B216FE
-	for <lists+linux-can@lfdr.de>; Mon, 11 Aug 2025 23:08:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D772EB2227B
+	for <lists+linux-can@lfdr.de>; Tue, 12 Aug 2025 11:13:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F034E427B2B
-	for <lists+linux-can@lfdr.de>; Mon, 11 Aug 2025 21:07:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3205C1627F2
+	for <lists+linux-can@lfdr.de>; Tue, 12 Aug 2025 09:11:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CAA2E4279;
-	Mon, 11 Aug 2025 21:06:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EF092E7F09;
+	Tue, 12 Aug 2025 09:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="aUEDuqog"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="nhqI5Kcq"
 X-Original-To: linux-can@vger.kernel.org
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11021098.outbound.protection.outlook.com [52.101.70.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BCC62E3718;
-	Mon, 11 Aug 2025 21:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.98
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754946380; cv=fail; b=uNxXTl1YFJsJ1g+xCbsyi8era2p4l8TwD+7UxuNQc52VxKkj0qCktxErOvdFeix3ocQc3NIjpow2Ze1jzO/5UMv0f4Olf+xqNRo6Q83xZ3AvFgPxnD5+KRLk14ZXM0RbzI9V6QGqsy7ctA22Rw5LYfhQTiMz568wZ2EKzpEWR+o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754946380; c=relaxed/simple;
-	bh=Lnt+AzbuehWYqItoiXEoLVVnU4T0ynEwM5PNItkuLFA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HQfIO0SA6AQrMvjKAYbn0ozUEE4HfZ6oQkPzMFc+8wV6OEhibHJhaWrkyn6dpHpcuNG5GB30vHRHUBQd3dk9gfiz3xsqtnFrD7w8QPqOO697BSg3ibeSmBu/NRHmFEhPLQGcZRegjYJvuVxrAZrBn4+Ner3bUmqFUCkKOxxsVe8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu; spf=pass smtp.mailfrom=esd.eu; dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b=aUEDuqog; arc=fail smtp.client-ip=52.101.70.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esd.eu
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=m0NjoIkScKIU+Vc5x/T2eo/oCh2c7YtJoS31d+dx4C2IN1ZBT1Lz0wYDph0gjc/k5WgThwtkQfO+mytnA9GNDN0CGm/DsOyEd2rtWey2UZBhvZ8mvlWh7yR5heQExcsLITJYqL4S65ziJAnvLFCGhWF4QNrczTBmmtXoEWImDQCaUKoQqOsiNOigpkb/gHj/IT3p26dGRPNuW/2/pgYMdr4qy/LauLh1mQb6Hy+oIXYfSaLjIppehnbFQZI22ESUCpGTwGOthT6GTcJaPNuKDc5kmZTF13hkQRgnjjIclKYht7uZR8AHYox4+Tuk6M8YUbIUttbDSj1YmqPDromJWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vt5Id6YLdp8N4cOxMqXPHaub+VuzeAbm/DuNkdL3cBo=;
- b=HPMHLr0qxXYj5kWQwJJgm1x93khRlOOMHHrN90CqhbmLckFzF3EA+JLxFubJDeVrg75RNOagcDoDRK2dtSI49zR+AgnLH7OaAkCUvXGA4QLyEuZRSr+h+g1YMayO3kNcOsMGaBVODaP03hVIr9vvjFfF6mHECt0QQumcOdIIJB1VqOiuHOE9C0vCEz5sIWQH4aA8ECyF0VM7QXjYxAj62Hr+GkUMDLTqn7eyWrZgD/qPzdmN9jJEMTVeUydQK1rWvBuURALPDHgLnQaXf69nD657crzrwemkm0EDwrPrqeaOu6YXuwY5ll2dEOnnAJmR6StsqTKQ7e3nRZ0XitxG8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=fail
- (p=none sp=none pct=100) action=none header.from=esd.eu; dkim=none (message
- not signed); arc=none (0)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8A81D52B
+	for <linux-can@vger.kernel.org>; Tue, 12 Aug 2025 09:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754989884; cv=none; b=pFVWZ5O0f1ML/XeSHJl6u4I/9ArpLpsmGJcWkECheWEbckK2UPraF6DQl5+mB9hCWIgs+7+MSL5qQnyDmzqnsLBFppY4zO03bluySILbkls/bYTjVfKS4GuK1zMZdyBEWOo7wML2iprJny5keuoNrzGr2HDaixah0NlrkEEMvjo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754989884; c=relaxed/simple;
+	bh=wJRcB9iKJfhnbb2n63x+d/ZeHBTTHljaUJ5xihZ5lds=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HkGqkTZ8RfKD+RBRmhRoLWPMVhpSCJn6pjP1Z6xKp08pftHtskv+ZYc2cHzsFZYM6NJegv6t3Vwj6keWfnhtw37gc6iKHHpkfBqgKWQcTXTu4613YXHpWQMLvNprwBSTtd33ZPA+nLmSRzRyd0xUrYhBiVn72tXJzrLkDZfQ80U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=nhqI5Kcq; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ae6f8d3bcd4so917843866b.1
+        for <linux-can@vger.kernel.org>; Tue, 12 Aug 2025 02:11:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vt5Id6YLdp8N4cOxMqXPHaub+VuzeAbm/DuNkdL3cBo=;
- b=aUEDuqoglQvM4XxI+Ko2qLHUwY+8sUEM82ibZe3h/ej61b6pfpD/+xAD8XDNxMSIB880utGcxidJWrwVorHDxCuCNZjbCz5G6PcbzuZeDBoe9QRJrA2IaQoP7XMceJ4eDZuVVVaeRdsR9hUVE+uChEUN35Rw4ukF0EBmBkOMsb8=
-Received: from PR1P264CA0201.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:34d::12)
- by GV1PR03MB10702.eurprd03.prod.outlook.com (2603:10a6:150:207::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.21; Mon, 11 Aug
- 2025 21:06:13 +0000
-Received: from AM3PEPF0000A791.eurprd04.prod.outlook.com
- (2603:10a6:102:34d:cafe::cb) by PR1P264CA0201.outlook.office365.com
- (2603:10a6:102:34d::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9009.22 via Frontend Transport; Mon,
- 11 Aug 2025 21:06:12 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=esd.eu;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
- discourages use of 80.151.164.27 as permitted sender)
-Received: from esd-s7.esd (80.151.164.27) by
- AM3PEPF0000A791.mail.protection.outlook.com (10.167.16.120) with Microsoft
- SMTP Server id 15.20.9031.11 via Frontend Transport; Mon, 11 Aug 2025
- 21:06:12 +0000
-Received: from debby.esd.local (jenkins.esd.local [10.0.0.190])
-	by esd-s7.esd (Postfix) with ESMTPS id 05BD67C16CF;
-	Mon, 11 Aug 2025 23:06:12 +0200 (CEST)
-Received: by debby.esd.local (Postfix, from userid 2044)
-	id 01B7B2EC3E2; Mon, 11 Aug 2025 23:06:11 +0200 (CEST)
-From: =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Frank Jungclaus <frank.jungclaus@esd.eu>,
-	linux-can@vger.kernel.org,
-	socketcan@esd.eu
-Cc: Simon Horman <horms@kernel.org>,
-	Olivier Sobrie <olivier@sobrie.be>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	netdev@vger.kernel.org
-Subject: [PATCH 6/6] can: esd_usb: Avoid errors triggered from USB disconnect
-Date: Mon, 11 Aug 2025 23:06:11 +0200
-Message-Id: <20250811210611.3233202-7-stefan.maetje@esd.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250811210611.3233202-1-stefan.maetje@esd.eu>
-References: <20250811210611.3233202-1-stefan.maetje@esd.eu>
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1754989879; x=1755594679; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u3YK1wgh0Xaudz6PXgONh4lyUuda9f4BVBUrVFzVbPk=;
+        b=nhqI5KcqtxaxnRSkymtNAWnJFsq2qdSKmkAhIJdtL0SJyLwvykjEWDs+yGNCdMN12x
+         2RmK8uSNx7LP47f829jHl+7ObtC+xJ5rLwvCh5V2/cKFvAAni/37fBYfg0PVlyeGz1qo
+         9+uDGyJp6fSgFKsEXJ7soRYxeaQ4ci6OMPafFKTZ+qp7LFz6rq+imIvvGSWoUumg7MfA
+         aJoaRt/LbJRBouCegvHpsgTzxPb+04YBWrYUmUFiOiroVRPqWNmqc4JHKMGdq1bwfuAF
+         26ey6w2KCMgLzs/5EhrEnMlZz8gi7P/yvp1P6xnDEAPQU2oOYE0QeDSmmbd7WwTVn9qJ
+         enwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754989879; x=1755594679;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u3YK1wgh0Xaudz6PXgONh4lyUuda9f4BVBUrVFzVbPk=;
+        b=atpNG+rFRDtPNgS9UYxcot9Z2ViFc2FMz6tvKoBgxEBeFjc7zVl1lbxDCwvF6KEQQT
+         ME0Y9yNdHuEe0g4CFbeD2bjYSmsNVfmP6n30FswwvSUskoJUP+ufdRIK0eunavZ34tv2
+         sTSviP5r15Ao5wXNFrdCMvk5h7s+8Dsqq57EeWeMBlY5Ag7tibcgGiirLxmBSuF8Ol75
+         6W8+lM6Xzek5xD9YtE+9Guujw4En4o+8JylbGAfw8EKGCkqoWnJaNeo8NK3151ZNkETa
+         91K8cucUqjXySWeNRziL7nt98LAIh/9OFrMLRUCBdibM0lUFbg58lF/TOCW7jUUAtSaY
+         sygA==
+X-Forwarded-Encrypted: i=1; AJvYcCWW7wPxh3MCH8yPk9Is/y01IOzB7DM/Ry4NcIHhbBlMXXcRkAmgo5rbqWb1Ok3WKteD92KLtngRdi8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLUoWO4S8a5RYv3Rk/+PpOY1eLP1CyOsLC9FGTP6EBLcGBoB+T
+	FTHH63wP038dZWazYtq/FCd6mZUUhJs++KOeRBYrKwqZJV9z5VTN58XyIoo/X43zSHg=
+X-Gm-Gg: ASbGncs1vVaH2e7YfIXmGtC+mkT2YrOVSLKrkS/g6qua3IkQ06iDIkIafoBI8G830KM
+	kghIfxcjqqTQ5TBkuP6GXXJjgsZUsgtquxuLxhBHBTzMaLSy3r+LL8LOvk1piXgVZZjuEAgC7FM
+	d+z37FYKAJEr9xRRaYgOW1NbDdbHig7ELVbMEZaRKbKiq1n1Rh0wV1+KEN+N302w/zVfullhk0p
+	DYTD7kRMOQ8GSPSOaR7eGXPEEHI/zdY6IiWFSJylFaIA/FY59V+DdiVR2qkKbsHOk00NpeF71Q4
+	Y9SdAO2TkxYfj9zqG0id3CMmjwKzf4J0l9sGMkYdZyZAJUYvt5vNUP1rBecM1P/2POHLJje0Qey
+	sokEvTGTkpG9mYOIljA==
+X-Google-Smtp-Source: AGHT+IHC6ducbDviao5cWzKPIMr1D56B/HQY8RrexDTYgUoZog0Pr4PqbNwo2llWarBSzzZxONTPFg==
+X-Received: by 2002:a17:907:1c0f:b0:ade:9b6d:779f with SMTP id a640c23a62f3a-afa1e12ec39mr223705566b.32.1754989879094;
+        Tue, 12 Aug 2025 02:11:19 -0700 (PDT)
+Received: from localhost ([2001:4090:a244:8691:4b7a:7bbd:bac:c56e])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-af91a0766f9sm2214188166b.24.2025.08.12.02.11.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Aug 2025 02:11:18 -0700 (PDT)
+From: Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH v8 0/4] can: m_can: Add am62 wakeup support
+Date: Tue, 12 Aug 2025 11:10:21 +0200
+Message-Id: <20250812-topic-mcan-wakeup-source-v6-12-v8-0-6972a810d63b@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM3PEPF0000A791:EE_|GV1PR03MB10702:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2a10e989-087b-4307-dad9-08ddd91ae740
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|19092799006|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?V2lMUXNBZGoxY1ZRb205bVdkVFY4VkVBMkNoRzEyU3cwMC9ac25WRGVJUnJu?=
- =?utf-8?B?VFR0NndxdjdnZExkTTg4eUpuQTJDTFNGNlEvTmt4N213bzAzSXllcHJZVzJ3?=
- =?utf-8?B?a3VhTzYvZUluUUdRKzZWNnZzb3VxRHFOK0JESmdaclpsQ252a2t4ZGZSUkJW?=
- =?utf-8?B?VmpONmtNYVhnTW90SzJjT2dJamMxeWhVbzJ6YTgxT0Y3VWplYXJIY0lTdW5T?=
- =?utf-8?B?VHprY1AvRnBNTDFRNDI3YmJCYUdHU0N1Zi9TS1dxUjkxMlFqOHhCd3lvNSty?=
- =?utf-8?B?UldRUm11Z29LbWJXTm1hNjByMFFLVFdXamk1RVlEL1dlb1BwTWZXOEsrU29C?=
- =?utf-8?B?MVNob1NSTmZiK2FVbHFTV2FJU1RDbk83Sm9pVVhYc3djTHpvUjAyQXlYS1FJ?=
- =?utf-8?B?SlBrNlFGV2N0dm1wL01jeFd3RW5tVFNGQ0Y3MkRFT29qSUN0QVBDU2hNY3l5?=
- =?utf-8?B?VVpnZmN4dnhMTjdwQ2xyeVhPYVBnTmd2VmtHZVBKVHZFcGloeGZxRlVxcnV2?=
- =?utf-8?B?WjAzV1dYQ2gvNUtDY2RBdWpwaGhyV0dHRTFBTElzWFlEQm5zSTFrdTN1eWZQ?=
- =?utf-8?B?RnBTNDQ1UlM5ME15TUs3VGZ2SDNEcEt0Y1dmUzVvbWRCbWNwamN6ZklzOVlF?=
- =?utf-8?B?N1RKWk5EWGdXS04xUldTTDJGWjlaRS9VUmlhTzNnd0hPVkhQdU9wTGZlMGl0?=
- =?utf-8?B?VUQ5SUZwM0NSL3drWTMwV0k4QS9TYlZwcVhmRnBvcjVid0dxRHA2Y1JUY2Ni?=
- =?utf-8?B?ZVRVQXQvSkhSVU5qcmhzSm9CVlRkZG8wOGR5RUZvSVU2MDgwZU9aVnUzL1Z4?=
- =?utf-8?B?VXVmc0E2STdWbnduWWQxRnpTblZLOHFUOHFCMy93bjhudWNsR3p4c0JvdXVs?=
- =?utf-8?B?djFWcHJoemlSOU16VFBmU1BYUFVqUDZrUDJ4WTU2WGhVcnk1WHNtN3hiNXBG?=
- =?utf-8?B?RlpqUkZpdGg5Q1l4VGdLeEdLdUprZzE1MFhXcW1oVUtsb3dOOTlVZ2RsL2xM?=
- =?utf-8?B?c2tBbys4UEtmS09jckE3R2Z3dlBvT0g4ZCtaSkh0bkwvL1V1S0VTS25ZM0tC?=
- =?utf-8?B?aDExdEZuZ21hclZsVlRSM1QzckZ5dThrT01IRFdYUHlzZW5pMytMcDJCSUdt?=
- =?utf-8?B?R08vS2ZuR0JnN3o0aU95TGJ4blhpQWhLTW5aVlh2U2N4MEJxTHhES094c3pj?=
- =?utf-8?B?Q2Y4UnAwb1RpQmY0cTNHL1NkOUtUZS96a1hNQTZLZnoxVWNVeGRrL3BlOUFE?=
- =?utf-8?B?aEIxZzd4RDBJOFJSU1BRQjAyaG5vUkt2STltZFhWSDczMXFNT2VXY2RSWkdP?=
- =?utf-8?B?L09UeUQrZG5XUzJXWlpXa3QrZmVObkRGQlEyT1VaLzJoZWdGWVVZSkhwamho?=
- =?utf-8?B?d2tSQ2U3L0QrT3hzWlRpUzkvNTZqV29ST2pENjc4c0RKU2FUaEZJOVF5V2JQ?=
- =?utf-8?B?SGtuWE55SzFCSmFBK3JIdXdjVEx0ak1TSUVaeHRJNXg0aW1CeEcxcmExckRR?=
- =?utf-8?B?NFRMUmJiV0RuWlp2azJENjhuVFJYdWtaRlljK1VESmQ2di9Sd1B4V3ZabVF0?=
- =?utf-8?B?ZUg1ZGNDVDM2MXJUSExvVlRqRGJCY1RYVFMzZCtxRWhlSElMNWgxWXhMdkdy?=
- =?utf-8?B?OXljdVlRaERzUjVzQTkrcm1wbTZwN1VwUWkwUFg2bXpLRUxDQWxWOWpLMm9C?=
- =?utf-8?B?eE0vV2RTYUttWk5YQ2JUQ2RLYk9CcktxZDA0R3JaRmw1RmFKN0FjcFdORzdz?=
- =?utf-8?B?TVZZNjRPcHl3c2dEWHZhNWtlWnA0b2RzV25aODhRVkVINWFmTzhnYlpEUlRt?=
- =?utf-8?B?S2xDU2RRcW9wT2lVTjR1a3RZaDJJMFNlTVluRjF6VnlmN09KSVlCUjQ2dk9x?=
- =?utf-8?B?OGJ0SDh1emp2TDVZQ0sxUTVTTWNBeStoYW9NRUI1Z1RyWEFISEgrc2hzekMr?=
- =?utf-8?B?enRxOUdveHROdUNRQzF2UDRSeHIyZVM4Q2lSaWFmWmt6cUsrVWh2ajhnYVIr?=
- =?utf-8?B?RWNTRkVucitTQ2JmNklva1hkOFh5WTlrOTBlb0dxMVJpd1hTNk8zK2xQdmpY?=
- =?utf-8?Q?YnyIY/?=
-X-Forefront-Antispam-Report:
-	CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(19092799006)(376014);DIR:OUT;SFP:1102;
-X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2025 21:06:12.7819
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a10e989-087b-4307-dad9-08ddd91ae740
-X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM3PEPF0000A791.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR03MB10702
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAP0Em2gC/4XQwWrDMAwG4FcpPk/DsmM73mnvMXawZWc1W+Pgt
+ GlLybvPKRsrI5CL4Nfhk/hvbIwlxZG97G6sxCmNKfc1tE87RnvXf0RIoWYmuGiQcwvHPCSCA7k
+ ezu4zngYY86lQhEkDCmgJg7ZWog8tq8hQYpcu9wNv7zXv03jM5Xq/N8ll+0MjbtGTBA7WKEEGG
+ xdQvHp3/Uq+xGfKB7boU/Moqk2xqWIXXP0Zo3FOr4jqQRTtpqiqKGUMxJ13WtgVUf+JAjcLrZM
+ DSqXJdIbqsyui+RUVb8R2j2YRvfEWNdlW/u9xnudveWipBxcCAAA=
+X-Change-ID: 20241009-topic-mcan-wakeup-source-v6-12-8c1d69931bd8
+To: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Vishal Mahaveer <vishalm@ti.com>, Kevin Hilman <khilman@baylibre.com>, 
+ Dhruva Gole <d-gole@ti.com>, Sebin Francis <sebin.francis@ti.com>, 
+ Kendall Willis <k-willis@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Vincent MAILHOL <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Markus Schneider-Pargmann <msp@baylibre.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6503; i=msp@baylibre.com;
+ h=from:subject:message-id; bh=wJRcB9iKJfhnbb2n63x+d/ZeHBTTHljaUJ5xihZ5lds=;
+ b=owGbwMvMwCXWejAsc4KoVzDjabUkhozZrJKfnyvM1t0S/ZBn7u6n4Qw9mlPWV/55MX3+AjHWr
+ 5nNzpNcOkpZGMS4GGTFFFk6E0PT/svvPJa8aNlmmDmsTCBDGLg4BWAi59QZ/ulMjFms9OzPiQMO
+ 7i5d9m1feb8ardg9N2/tzT9rzsql31nL8D9uu6/u3UKvZv1FPtxrNuQ7/HGeVr1lR/QG5scz2Bw
+ 8I3kA
+X-Developer-Key: i=msp@baylibre.com; a=openpgp;
+ fpr=BADD88DB889FDC3E8A3D5FE612FA6A01E0A45B41
 
-The USB stack calls during disconnect the esd_usb_disconnect() callback.
-esd_usb_disconnect() calls netdev_unregister() for each network which
-in turn calls the net_device_ops::ndo_stop callback esd_usb_close() if
-the net device is up.
+Hi,
 
-The esd_usb_close() callback tries to disable all CAN Ids and to reset
-the CAN controller of the device sending appropriate control messages.
+This series adds support for wakeup capabilities to the m_can driver, which 
+is necessary for enabling Partial-IO functionality on am62, am62a, and am62p 
+SoCs. It implements the wake-on-lan interface for m_can devices and handles 
+the pinctrl states needed for wakeup functionality.
 
-Sending these messages in .disconnect() is moot and always fails because
-either the device is gone or the USB communication is already torn down
-by the USB stack in the course of a rmmod operation.
+am62, am62a and am62p support Partial-IO, a low power system state in which 
+nearly everything is turned off except the pins of the CANUART group. This group
+contains mcu_mcan0, mcu_mcan1, wkup_uart0 and mcu_uart0 devices.
 
-This patch moves the code that sends these control messages to a new
-function esd_usb_stop() which is approximately the counterpart of
-esd_usb_start() to make code structure less convoluted.
+To support mcu_mcan0 and mcu_mcan1 wakeup for the mentioned SoCs, the
+series introduces a notion of wake-on-lan for m_can. If the user decides
+to enable wake-on-lan for a m_can device, the device is set to wakeup
+enabled. A 'wakeup' pinctrl state is selected to enable wakeup flags for
+the relevant pins. If wake-on-lan is disabled the default pinctrl is
+selected.
 
-It then changes esd_usb_close() not to send the control messages at
-all if the ndo_stop() callback is executed from the USB .disconnect()
-callback. A new flag in_usb_disconnect is added to the struct esd_usb
-device structure to mark this condition which is checked by
-esd_usb_close() whether to skip the send operations in esd_usb_start().
+Partial-IO Overview
+------------------
+Partial-IO is a low power system state in which nearly everything is
+turned off except the pins of the CANUART group (mcu_mcan0, mcu_mcan1, 
+wkup_uart0 and mcu_uart0). These devices can trigger a wakeup of the system 
+on pin activity. Note that this does not resume the system as the DDR is 
+off as well. So this state can be considered a power-off state with wakeup 
+capabilities.
 
-Signed-off-by: Stefan Mätje <stefan.maetje@esd.eu>
+A documentation can also be found in section 6.2.4 in the TRM:
+  https://www.ti.com/lit/pdf/spruiv7
+
+Implementation Details
+----------------------
+The complete Partial-IO feature requires three coordinated series, each handling
+a different aspect of the implementation:
+
+1. This series (m_can driver): Implements device-specific wakeup functionality
+   for m_can devices, allowing them to be set as wakeup sources.
+
+2. Devicetree series: Defines system states and wakeup sources in the
+   devicetree for am62, am62a and am62p.
+   https://gitlab.baylibre.com/msp8/linux/-/tree/topic/am62-dt-partialio/v6.17?ref_type=heads
+
+3. TI-SCI firmware series: Implements the firmware interface to enter Partial-IO
+   mode when appropriate wakeup sources are enabled.
+   https://gitlab.baylibre.com/msp8/linux/-/tree/topic/tisci-partialio/v6.17?ref_type=heads
+
+Devicetree Bindings
+-------------------
+The wakeup-source property is used with references to
+system-idle-states. This depends on the dt-schema pull request that adds
+bindings for system-idle-states and updates the binding for wakeup-source:
+  https://github.com/devicetree-org/dt-schema/pull/150
+
+This is merged now and upstream in dt-schema.
+
+Testing
+-------
+A test branch is available here that includes all patches required to
+test Partial-IO:
+
+https://gitlab.baylibre.com/msp8/linux/-/tree/integration/am62-partialio/v6.17?ref_type=heads
+
+After enabling Wake-on-LAN the system can be powered off and will enter
+the Partial-IO state in which it can be woken up by activity on the
+specific pins:
+    ethtool -s can0 wol p
+    ethtool -s can1 wol p
+    poweroff
+
+I tested these patches on am62-lp-sk.
+
+Best,
+Markus
+
+Previous versions:
+ v1: https://lore.kernel.org/lkml/20240523075347.1282395-1-msp@baylibre.com/
+ v2: https://lore.kernel.org/lkml/20240729074135.3850634-1-msp@baylibre.com/
+ v3: https://lore.kernel.org/lkml/20241011-topic-mcan-wakeup-source-v6-12-v3-0-9752c714ad12@baylibre.com
+ v4: https://lore.kernel.org/r/20241015-topic-mcan-wakeup-source-v6-12-v4-0-fdac1d1e7aa6@baylibre.com
+ v5: https://lore.kernel.org/r/20241028-topic-mcan-wakeup-source-v6-12-v5-0-33edc0aba629@baylibre.com
+ v6: https://lore.kernel.org/r/20241219-topic-mcan-wakeup-source-v6-12-v6-0-1356c7f7cfda@baylibre.com
+ v7: https://lore.kernel.org/r/20250421-topic-mcan-wakeup-source-v6-12-v7-0-1b7b916c9832@baylibre.com
+
+Changes in v8:
+ - Rebase to v6.17-rc1
+
+Changes in v7:
+ - Separate this series from "firmware: ti_sci: Partial-IO support"
+   again as was requested internally
+ - All DT changes are now in their own series to avoid conflicts
+ - wakeup-source definition in the m_can binding is now only an
+   extension to the dt-schema binding and a pull request was created
+
+Changes in v6:
+ - Rebased to v6.13-rc1
+ - After feedback of the other Partial-IO series, I updated this series
+   and removed all use of regulator-related patches.
+ - wakeup-source is now not only a boolean property but can also be a
+   list of power states in which the device is wakeup capable.
+
+Changes in v5:
+ - Make the check of wol options nicer to read
+
+Changes in v4:
+ - Remove leftover testing code that always returned -EIO in a specific
+ - Redesign pincontrol setup to be easier understandable and less nested
+ - Fix missing parantheses around wol_enable expression
+ - Remove | from binding description
+
+Changes in v3:
+ - Rebase to v6.12-rc1
+ - Change 'wakeup-source' to only 'true'
+ - Simplify m_can_set_wol by returning early on error
+ - Add vio-suuply binding and handling of this optional property.
+   vio-supply is used to reflect the SoC architecture and which power
+   line powers the m_can unit. This is important as some units are
+   powered in special low power modes.
+
+Changes in v2:
+ - Rebase to v6.11-rc1
+ - Squash these two patches for the binding into one:
+   dt-bindings: can: m_can: Add wakeup-source property
+   dt-bindings: can: m_can: Add wakeup pinctrl state
+ - Add error handling to multiple patches of the m_can driver
+ - Add error handling in m_can_class_allocate_dev(). This also required
+   to add a new patch to return error pointers from
+   m_can_class_allocate_dev().
+
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 ---
- drivers/net/can/usb/esd_usb.c | 34 ++++++++++++++++++++++++++--------
- 1 file changed, 26 insertions(+), 8 deletions(-)
+Markus Schneider-Pargmann (4):
+      dt-bindings: can: m_can: Add wakeup properties
+      can: m_can: Map WoL to device_set_wakeup_enable
+      can: m_can: Return ERR_PTR on error in allocation
+      can: m_can: Support pinctrl wakeup state
 
-diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-index 3c348af566ec..70c0e7b96b8c 100644
---- a/drivers/net/can/usb/esd_usb.c
-+++ b/drivers/net/can/usb/esd_usb.c
-@@ -280,6 +280,7 @@ struct esd_usb {
- 	int net_count;
- 	u32 version;
- 	int rxinitdone;
-+	int in_usb_disconnect;
- 	void *rxbuf[ESD_USB_MAX_RX_URBS];
- 	dma_addr_t rxbuf_dma[ESD_USB_MAX_RX_URBS];
- };
-@@ -1032,9 +1033,9 @@ static netdev_tx_t esd_usb_start_xmit(struct sk_buff *skb,
- 	return ret;
- }
- 
--static int esd_usb_close(struct net_device *netdev)
-+/* Stop interface */
-+static int esd_usb_stop(struct esd_usb_net_priv *priv)
- {
--	struct esd_usb_net_priv *priv = netdev_priv(netdev);
- 	union esd_usb_msg *msg;
- 	int err;
- 	int i;
-@@ -1051,8 +1052,10 @@ static int esd_usb_close(struct net_device *netdev)
- 	for (i = 0; i <= ESD_USB_MAX_ID_SEGMENT; i++)
- 		msg->filter.mask[i] = 0;
- 	err = esd_usb_send_msg(priv->usb, msg);
--	if (err < 0)
--		netdev_err(netdev, "sending idadd message failed: %d\n", err);
-+	if (err < 0) {
-+		netdev_err(priv->netdev, "sending idadd message failed: %d\n", err);
-+		goto bail;
-+	}
- 
- 	/* set CAN controller to reset mode */
- 	msg->hdr.len = sizeof(struct esd_usb_set_baudrate_msg) / sizeof(u32); /* # of 32bit words */
-@@ -1062,7 +1065,23 @@ static int esd_usb_close(struct net_device *netdev)
- 	msg->setbaud.baud = cpu_to_le32(ESD_USB_NO_BAUDRATE);
- 	err = esd_usb_send_msg(priv->usb, msg);
- 	if (err < 0)
--		netdev_err(netdev, "sending setbaud message failed: %d\n", err);
-+		netdev_err(priv->netdev, "sending setbaud message failed: %d\n", err);
-+
-+bail:
-+	kfree(msg);
-+
-+	return err;
-+}
-+
-+static int esd_usb_close(struct net_device *netdev)
-+{
-+	struct esd_usb_net_priv *priv = netdev_priv(netdev);
-+	int err = 0;
-+
-+	if (!priv->usb->in_usb_disconnect) {
-+		/* It's moot to try this in usb_disconnect()! */
-+		err = esd_usb_stop(priv);
-+	}
- 
- 	priv->can.state = CAN_STATE_STOPPED;
- 
-@@ -1070,9 +1089,7 @@ static int esd_usb_close(struct net_device *netdev)
- 
- 	close_candev(netdev);
- 
--	kfree(msg);
--
--	return 0;
-+	return err;
- }
- 
- static const struct net_device_ops esd_usb_netdev_ops = {
-@@ -1434,6 +1451,7 @@ static void esd_usb_disconnect(struct usb_interface *intf)
- 	usb_set_intfdata(intf, NULL);
- 
- 	if (dev) {
-+		dev->in_usb_disconnect = 1;
- 		for (i = 0; i < dev->net_count; i++) {
- 			if (dev->nets[i]) {
- 				netdev = dev->nets[i]->netdev;
+ .../devicetree/bindings/net/can/bosch,m_can.yaml   |  22 ++++
+ drivers/net/can/m_can/m_can.c                      | 111 ++++++++++++++++++++-
+ drivers/net/can/m_can/m_can.h                      |   4 +
+ drivers/net/can/m_can/m_can_pci.c                  |   4 +-
+ drivers/net/can/m_can/m_can_platform.c             |   4 +-
+ drivers/net/can/m_can/tcan4x5x-core.c              |   4 +-
+ 6 files changed, 140 insertions(+), 9 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20241009-topic-mcan-wakeup-source-v6-12-8c1d69931bd8
+
+Best regards,
 -- 
-2.34.1
+Markus Schneider-Pargmann <msp@baylibre.com>
 
 
