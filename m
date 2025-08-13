@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-4215-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4216-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0460B242AB
-	for <lists+linux-can@lfdr.de>; Wed, 13 Aug 2025 09:28:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F09F4B242E0
+	for <lists+linux-can@lfdr.de>; Wed, 13 Aug 2025 09:37:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC63818952EF
-	for <lists+linux-can@lfdr.de>; Wed, 13 Aug 2025 07:25:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6ACC67ADB52
+	for <lists+linux-can@lfdr.de>; Wed, 13 Aug 2025 07:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43C082C326D;
-	Wed, 13 Aug 2025 07:24:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D2DA18B12;
+	Wed, 13 Aug 2025 07:37:24 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8CC62DCF42
-	for <linux-can@vger.kernel.org>; Wed, 13 Aug 2025 07:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94FA928640A
+	for <linux-can@vger.kernel.org>; Wed, 13 Aug 2025 07:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755069849; cv=none; b=WnLkvrZ4gS9AYNyOQlqWe2HlmbZoeVUtumZX0/Ci/DfZDnZT/wzDdBRrfD92H4SyAEg4YrWkNwiSPjWH6LIvvUThZmE92AfYmzuJcwGVfkMpceNr6nbbXPatXWVq2Zd+Mxh0NbX3CijvAUJE1cUE6sHivNiaPDRSYT5dAbGVktI=
+	t=1755070644; cv=none; b=IqH54JR6k5lCM8/ypmDH7hZeE70wljibzWKK+c0AaRB1fnftDzVwPBhYMXg1+HS/SBr5hYOLZ3CNkhpgyaMmhP5MB8f4eUpUMeISU4KkEmzgVa2YTv2tYEFFJenj0yfsd6cCLOwCmQPyYHV+ktzIzpU4n/arR+9lYlu2Z369JPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755069849; c=relaxed/simple;
-	bh=LTp9h4E8z/4gVVB70sS+uyodcHcZqU3Ib72DtMoUEeg=;
+	s=arc-20240116; t=1755070644; c=relaxed/simple;
+	bh=yRKQ/qj20C5/lqHEMd0hzLsxmQNgetkTkCMhlz7c524=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bwuZ4ioHtCXmS+TFZF+0yALTo3M9zjHe+8/3/0/dxHgeUXSfieib0MvlqrbP4J2N7y7EVt1Hlyeb38JwSMGEceWyEVbnKD5/6JOjvkJjU2QFvfm2D58qLXmBsxQEmsZpw7zuYeKvRgNVX7fXbU1UXj6rtnww0QMb/Fj4GTkN8rQ=
+	 Content-Type:Content-Disposition:In-Reply-To; b=rE0550uFEh9efeJ4kjWWbQBh9N90fzwp343xBoiD7s/yrpOtWE11G4CMHNmdZBI6eFyBZyFoF4WR8BOSZwTYs88MyCd2bKzsf2hzSC3R7XIqbGZyov190m3foxUzUcRUkB5X3HeXhsnuof5JouO+swXWa+gMgDVNy/8SGRB8tpM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,21 +33,21 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1um5pP-00031i-Bb; Wed, 13 Aug 2025 09:23:19 +0200
+	id 1um62h-0004jV-88; Wed, 13 Aug 2025 09:37:03 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1um5pN-0003LF-1a;
-	Wed, 13 Aug 2025 09:23:17 +0200
+	id 1um62f-0003R6-2V;
+	Wed, 13 Aug 2025 09:37:01 +0200
 Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 1C5FD4567D0;
-	Wed, 13 Aug 2025 07:23:17 +0000 (UTC)
-Date: Wed, 13 Aug 2025 09:23:16 +0200
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 549B04567EC;
+	Wed, 13 Aug 2025 07:37:01 +0000 (UTC)
+Date: Wed, 13 Aug 2025 09:37:00 +0200
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Markus Schneider-Pargmann <msp@baylibre.com>
 Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
@@ -58,7 +58,7 @@ Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
 	Simon Horman <horms@kernel.org>, Vincent MAILHOL <mailhol.vincent@wanadoo.fr>, 
 	linux-can@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v8 1/4] dt-bindings: can: m_can: Add wakeup properties
-Message-ID: <20250813-energetic-hare-of-pizza-6ad6df-mkl@pengutronix.de>
+Message-ID: <20250813-shaggy-notorious-octopus-718ca6-mkl@pengutronix.de>
 References: <20250812-topic-mcan-wakeup-source-v6-12-v8-0-6972a810d63b@baylibre.com>
  <20250812-topic-mcan-wakeup-source-v6-12-v8-1-6972a810d63b@baylibre.com>
 Precedence: bulk
@@ -68,7 +68,7 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nfqkg2ypmiobsl4a"
+	protocol="application/pgp-signature"; boundary="7i4a7r5obmubacha"
 Content-Disposition: inline
 In-Reply-To: <20250812-topic-mcan-wakeup-source-v6-12-v8-1-6972a810d63b@baylibre.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -77,7 +77,7 @@ X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expand
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
---nfqkg2ypmiobsl4a
+--7i4a7r5obmubacha
 Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -126,17 +126,6 @@ ir
 > +      - const: default
 > +      - const: wakeup
 > +
-
-This breaks at least the stm32mp15 SoCs that define a sleep state:
-
-&m_can1 {
-	resets =3D <&rcc FDCAN_R>;
-	pinctrl-names =3D "default", "sleep";
-	pinctrl-0 =3D <&m_can1_pins_b>;
-	pinctrl-1 =3D <&m_can1_sleep_pins_b>;
-	status =3D "okay";
-};
-
 >    power-domains:
 >      description:
 >        Power domain provider node and an args specifier containing
@@ -149,20 +138,9 @@ This breaks at least the stm32mp15 SoCs that define a sleep state:
 > +    description:
 > +      List of phandles to system idle states in which mcan can wakeup th=
 e system.
-> +
-> +
 
-One newline should be enough.
-
->  required:
->    - compatible
->    - reg
->=20
-> --=20
-> 2.50.1
->=20
->=20
->=20
+What non TI SoCs that don't have partial IO and want regular Wake-On-CAN
+and don't define system idle states?
 
 Marc
 
@@ -172,20 +150,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---nfqkg2ypmiobsl4a
+--7i4a7r5obmubacha
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmicPWEACgkQDHRl3/mQ
-kZxZ6ggAndbI3imPTI4yTppaCqGe0O0ugEouNouvoXOSLMDIPzSYMNem3/ug/wMQ
-RdnIkPTCILVaBDpWLamA5J8ZIJRQuaXxDUdiSHZNV+MnHAwvKQ9RTlSAX6O0EYa0
-wtz0KbvyR5MoaJ7VeQMPi3cZ4r3Z3Jkn76nLYLqk0W8ONEm79Qc/BdAsigDNP/A0
-C/taLXRROfu8IlwfXhMjGrRxjbpsdek/JOyqujbbPhAH+JdhDN+aqVxMAi72ht1d
-lHIHUkUGLlPFqGny9yAYtOZumuEJPMJQRMTG/t9ZuI9LyTKfUgalb2/bQGsYGp/5
-KG2dR4+6OGFm1HkZu3vFb6QJW5qPtQ==
-=mzQ8
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmicQJkACgkQDHRl3/mQ
+kZz6nwgAi53j+yYe5CkMZo/2NhANMlLaJCSU/7JNOdJpbcCFzdd67T+qnQRnOtf1
+iod8yJPTBy57d3WB9NHqcXNHXwT0QiqJDisHkR2noDGC0UY2dfiM3nDY3GeX3Llg
+fedlqD9BCl3xJkBAMPMcg81Wqs1Dh0AlYFYRn3MPJHmdxNqQI33hKaNZaEYlmfnx
+dUdHCPW6VB2GwJv739v1dDgqrwHM2ZlwRwwicSAun0sfw87un6PcyY61PAcQzkXR
+iY5ZAG3E2srVsvhjldOpXtPH2PNMR3EtaaKf0xsGvS7L1aBOklupQmTlg8os44w9
+9d9rc78A8vAPmw/qDup9ZGHJsP/ENw==
+=bHMV
 -----END PGP SIGNATURE-----
 
---nfqkg2ypmiobsl4a--
+--7i4a7r5obmubacha--
 
