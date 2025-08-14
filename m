@@ -1,105 +1,151 @@
-Return-Path: <linux-can+bounces-4241-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4242-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACFBBB264E4
-	for <lists+linux-can@lfdr.de>; Thu, 14 Aug 2025 14:02:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4501B264FE
+	for <lists+linux-can@lfdr.de>; Thu, 14 Aug 2025 14:08:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4753A7A7957
-	for <lists+linux-can@lfdr.de>; Thu, 14 Aug 2025 12:01:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05C682A3838
+	for <lists+linux-can@lfdr.de>; Thu, 14 Aug 2025 12:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 285FC2FC86B;
-	Thu, 14 Aug 2025 12:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2987B2FC88E;
+	Thu, 14 Aug 2025 12:08:09 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDE52EBBAC;
-	Thu, 14 Aug 2025 12:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C372FC889
+	for <linux-can@vger.kernel.org>; Thu, 14 Aug 2025 12:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755172954; cv=none; b=bQpPunl9JB/WTgNkHMCBXwgGpi2EtHux4mL58p2lrWy9zHeARSt9vIjbUOxEk1jrgRa0zaiBGCAS2ccElwRR2MqRbu5E8Xr6NKK7grFuyyOVzVclLLm/0IVUBfJ9Np1debj2UWfVZ8MxbILzNrTP7XPGoNvK2EukIKx5yjf9lQ4=
+	t=1755173289; cv=none; b=Ss1bSKfKmrtSgo0otzfIABBcaBofoGhXntYJORk6lOIU0Ls9sFPEEnxuykyzka4CnX9f6tQltwUfDHOAqZTEWIQdaeHJXPH2j/+VMTLswQwpr8oh24Yi2gF+EDMAPYtRk69w4IbZJMn1ppLqneCDiuLxX8yVc87kaKFNyx8ijF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755172954; c=relaxed/simple;
-	bh=iRhd2H1KSmoIbNxxgnPvdVKF7js/9FWzl00CSZu/k0k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EUgCDrwfocMeBJ3oBlgSy1ozdc2PqUitobXQCXhrpSetCbmXkeA/mvdDRLNYfBOl4kBoNmIJc3BpEw40x3qe4AxJZwV+JS7teKcBX3l8FsYUtyKr71WNjJZ3t44PBSIPaJOWuXF9y87C55kKqHvifFoGy8XHDmGpb4S9VvMrffg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63E2FC4CEEF;
-	Thu, 14 Aug 2025 12:02:32 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-can@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 9/9] can: rcar_can: Mailbox bitfield conversion
-Date: Thu, 14 Aug 2025 14:02:07 +0200
-Message-ID: <fc5f681a2d8011a6fa8e128da213b479bcdf88cc.1755172404.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1755172404.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1755173289; c=relaxed/simple;
+	bh=FgJxivcfmejqzId/i4toPWx5SbvfpkCG3xzUcmUTftU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qtFB9N4J6IrbkQ27xkvKoIv5L8Qx2SKnAkKE6uG8QIBPNwkt5VAeqJJ7sdSK4FecS3MEnaearNExBOyIPeZOg4rANm47PNoHyA18DOrzv5ctHLpv0C3GbR71KksKwHhE7M6kVFgHz6SdRd2QKr2BZQEl/gP60HTE8rD+vEy3ua0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1umWkW-0000ak-0j; Thu, 14 Aug 2025 14:08:04 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1umWkV-000FUn-1x;
+	Thu, 14 Aug 2025 14:08:03 +0200
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 08EDA457702;
+	Thu, 14 Aug 2025 12:06:33 +0000 (UTC)
+Date: Thu, 14 Aug 2025 14:06:31 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 3/9] can: rcar_can: Convert to Runtime PM
+Message-ID: <20250814-incredible-cordial-coot-5f9fc9-mkl@pengutronix.de>
 References: <cover.1755172404.git.geert+renesas@glider.be>
+ <ae8fdd96d926ddd2c699ec2795a4c9937c3f3bc3.1755172404.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="l3y752wfrreepeej"
+Content-Disposition: inline
+In-Reply-To: <ae8fdd96d926ddd2c699ec2795a4c9937c3f3bc3.1755172404.git.geert+renesas@glider.be>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Convert CAN Mailbox Register field accesses to use the FIELD_PREP() and
-FIELD_GET() bitfield access macro.
 
-This gets rid of explicit shifts, and keeps a clear separation between
-hardware register layouts and offical CAN definitions.
+--l3y752wfrreepeej
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 3/9] can: rcar_can: Convert to Runtime PM
+MIME-Version: 1.0
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/net/can/rcar/rcar_can.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+On 14.08.2025 14:02:01, Geert Uytterhoeven wrote:
+> The R-Car CAN module is part of a Clock Domain on all supported SoCs.
+> Hence convert its driver from explicit clock management to Runtime PM.
 
-diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
-index e4ad18f3be9bcf72..9ef4dacd49fdc944 100644
---- a/drivers/net/can/rcar/rcar_can.c
-+++ b/drivers/net/can/rcar/rcar_can.c
-@@ -160,7 +160,8 @@ static const struct can_bittiming_const rcar_can_bittiming_const = {
- /* Mailbox and Mask Registers bits */
- #define RCAR_CAN_IDE		BIT(31)		/* ID Extension */
- #define RCAR_CAN_RTR		BIT(30)		/* Remote Transmission Request */
--#define RCAR_CAN_SID_SHIFT	18
-+#define RCAR_CAN_SID		GENMASK(28, 18)	/* Standard ID */
-+#define RCAR_CAN_EID		GENMASK(28, 0)	/* Extended ID */
- 
- /* Mailbox Interrupt Enable Register 1 bits */
- #define RCAR_CAN_MIER1_RXFIE	BIT(28)		/* Receive  FIFO Interrupt Enable */
-@@ -600,9 +601,10 @@ static netdev_tx_t rcar_can_start_xmit(struct sk_buff *skb,
- 		return NETDEV_TX_OK;
- 
- 	if (cf->can_id & CAN_EFF_FLAG)	/* Extended frame format */
--		data = (cf->can_id & CAN_EFF_MASK) | RCAR_CAN_IDE;
-+		data = FIELD_PREP(RCAR_CAN_EID, cf->can_id & CAN_EFF_MASK) |
-+		       RCAR_CAN_IDE;
- 	else				/* Standard frame format */
--		data = (cf->can_id & CAN_SFF_MASK) << RCAR_CAN_SID_SHIFT;
-+		data = FIELD_PREP(RCAR_CAN_SID, cf->can_id & CAN_SFF_MASK);
- 
- 	if (cf->can_id & CAN_RTR_FLAG) { /* Remote transmission request */
- 		data |= RCAR_CAN_RTR;
-@@ -657,9 +659,9 @@ static void rcar_can_rx_pkt(struct rcar_can_priv *priv)
- 
- 	data = readl(&priv->regs->mb[RCAR_CAN_RX_FIFO_MBX].id);
- 	if (data & RCAR_CAN_IDE)
--		cf->can_id = (data & CAN_EFF_MASK) | CAN_EFF_FLAG;
-+		cf->can_id = FIELD_GET(RCAR_CAN_EID, data) | CAN_EFF_FLAG;
- 	else
--		cf->can_id = (data >> RCAR_CAN_SID_SHIFT) & CAN_SFF_MASK;
-+		cf->can_id = FIELD_GET(RCAR_CAN_SID, data);
- 
- 	dlc = readb(&priv->regs->mb[RCAR_CAN_RX_FIFO_MBX].dlc);
- 	cf->len = can_cc_dlc2len(dlc);
--- 
-2.43.0
+Does kconfig ensure that Runtime PM is selected?
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/net/can/rcar/rcar_can.c | 46 +++++++++++++++++----------------
+>  1 file changed, 24 insertions(+), 22 deletions(-)
+>=20
+> diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_=
+can.c
+> index 57030992141cc523..aecbb02c7dc9c90a 100644
+> --- a/drivers/net/can/rcar/rcar_can.c
+> +++ b/drivers/net/can/rcar/rcar_can.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/can/dev.h>
+>  #include <linux/clk.h>
+>  #include <linux/of.h>
+> +#include <linux/pm_runtime.h>
+> =20
+>  #define RCAR_CAN_DRV_NAME	"rcar_can"
+> =20
+> @@ -92,7 +93,6 @@ struct rcar_can_priv {
+>  	struct net_device *ndev;
+>  	struct napi_struct napi;
+>  	struct rcar_can_regs __iomem *regs;
+> -	struct clk *clk;
+>  	struct clk *can_clk;
+>  	u32 tx_head;
+>  	u32 tx_tail;
+> @@ -506,10 +506,10 @@ static int rcar_can_open(struct net_device *ndev)
+>  	struct rcar_can_priv *priv =3D netdev_priv(ndev);
+>  	int err;
+> =20
+> -	err =3D clk_prepare_enable(priv->clk);
+> +	err =3D pm_runtime_resume_and_get(ndev->dev.parent);
+>  	if (err) {
+>  		netdev_err(ndev,
+> -			   "failed to enable peripheral clock, error %d\n",
+> +			   "pm_runtime_resume_and_get() failed, error %d\n",
 
+Can you convert the errors to %pE?
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--l3y752wfrreepeej
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmid0UIACgkQDHRl3/mQ
+kZx0KQf/ckmcqCHYustGVHLmBldbhuyp7xajpIuNi0ECf3de3XjIW198vNz4mRsg
+Qe+ZJ35nAjyayYcVOsd5+YM92kZXf6jDadvRWa6704syR4eYCucbeF1TxrM6q5ib
+5oaNIVlDqx691jFlAiMWldfm6xiZA8ToBCLh22vk8jiEYvY74tOpIo+RDvQGH3OI
+SIw50FACtukSpd5lqGpCXJwB1olcByoiWdfrfeQECuKc0NkGBBsYqYyM4vDR1IHA
+e8lIsLvXUjLkwMxynQcleofMSb6gwVJCeen1QtJRgbpamfJf5g/QEcwZjcUQ6ulP
+CDW3phlbQmBb+jR4wDTYcCZPeKpP4Q==
+=3Vd9
+-----END PGP SIGNATURE-----
+
+--l3y752wfrreepeej--
 
