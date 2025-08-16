@@ -1,1256 +1,227 @@
-Return-Path: <linux-can+bounces-4253-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4254-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2775B28B33
-	for <lists+linux-can@lfdr.de>; Sat, 16 Aug 2025 08:53:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68882B28E06
+	for <lists+linux-can@lfdr.de>; Sat, 16 Aug 2025 15:12:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFEDA582775
-	for <lists+linux-can@lfdr.de>; Sat, 16 Aug 2025 06:52:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A3AD188F556
+	for <lists+linux-can@lfdr.de>; Sat, 16 Aug 2025 13:11:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C87E3211491;
-	Sat, 16 Aug 2025 06:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55014285066;
+	Sat, 16 Aug 2025 13:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b="Gj8RGqMV"
 X-Original-To: linux-can@vger.kernel.org
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11020090.outbound.protection.outlook.com [52.101.84.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847923176F0;
-	Sat, 16 Aug 2025 06:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755327162; cv=none; b=WCJdNX1tq0WfWgNPS6oAupDsL+NEFBAq66ygvrOdVgAUmhnZ/gQAM9jqyX5MEUpD6k/KgoWYB0PgBWltNB0/X1dIc9z7hNjChUmN091KQxJAgebOefoavyivYDdFc9QPSxNX+DzKt4Mwlm6zKrysnlzqwtPV+EGRhez6e9w7jEQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755327162; c=relaxed/simple;
-	bh=7WoApCz/wQ+jEPdiCChN86sku/zTZ7miR+SksKZFPrc=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=Rm3K6fXjUkdCxs9vyfPCW9BolUv6vxdI8LbImzJAS73zSXsz9pcnf6fFt9qHx0BJhf6pImgBERa1zoshgT6oVMCPcA990pCBVWfwhbSbnDL9JFVoYjpDYD9fUqnkbuz5Lf5fHGj6NPIba3PPt7quemEqc9l6VE49aqKC6m7LKa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 57G6q0po050490;
-	Sat, 16 Aug 2025 15:52:00 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.10] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 57G6ptEB050421
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Sat, 16 Aug 2025 15:52:00 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <50055a40-6fd9-468f-8e59-26d1b5b3c23d@I-love.SAKURA.ne.jp>
-Date: Sat, 16 Aug 2025 15:51:54 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C9F23ABA8;
+	Sat, 16 Aug 2025 13:11:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.90
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755349875; cv=fail; b=hREsAC0zKhNYkMqkK+mFWXFqhQ4YGSx8TKN0ALtySSEakjmWpgF9JhOjJuUO+NDa2aeVjaXx6xq7a2hGZy0T+jk/ILTrzbYHqLG1ml1zwIj/ye+G85+pG/slFp5jnTI4VQ5KfSCUagamJBOlVwmCOThjDcpGmILuVxi+P1k/YQ0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755349875; c=relaxed/simple;
+	bh=1AlrVyjIaB6yE385pOav8ZNtdmbhMJ7kEib9k6ICF0g=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=hRIGbpWGz7RIK3O4zH1/G6OW901C9as4nd5dHZwQ1g6uZRWT4MBL18uPiXZYU+fT7WlSIQVDRjZ/GkDpbHBQpXLp0yvykf5Sfd4WYUTHbCyZ31/8ucLorYbr5AIu4YTO8+Q6yrzCBhy0GKjKQ6j8fPpyYDsnuf7ih7koy10pcwI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu; spf=pass smtp.mailfrom=esd.eu; dkim=pass (1024-bit key) header.d=esdhannover.onmicrosoft.com header.i=@esdhannover.onmicrosoft.com header.b=Gj8RGqMV; arc=fail smtp.client-ip=52.101.84.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=esd.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esd.eu
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CCyMgztOQ9Bmu+GkI/BDt3uSOivB3m8NOw9fPL4Up1m1MKVWFLTlrnqE6pr02By1aInqIZ3ZPog8YGNQ6U8wcZxiKVaXAHfvECJK03NS6bctbp8rLstGtPfIqFQB3DXGqDZd728siqGO0rTnOHO5GmeJUvkfBY2O82cPt/EZ0np7rng6RUS5lsNXWLxorxoChb9kCN5XJ6aOauGNRlHyPogw44C5EfRztPBvo8YWi/5VAkFfRbpkjSRttAlg2mpMYpztXFxc4APvBbbmasMbvt3WUvqoTxJLxNxuf4n8fUtamES9MdphkENRAhGErgMuDvbs4zccYxuF4IazuEJA5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1AlrVyjIaB6yE385pOav8ZNtdmbhMJ7kEib9k6ICF0g=;
+ b=RdGkc6wJ3KeXP6JEN5e8XVoWuO2Hhr/tNYOp36JJGLCkREysPSuFQPrKLCluQU4uPV3Nl24Ob6122MmaJ/lVdkvWo5auVBWiz5Mfr6PM5iEXQb5RpP46WiJfk+1XtYqJQF0zoHCriIhwD/glqTXE9hUKBIyiZq6g2Dk7jLjMcSzA4xIMSPcQwOOsvhkn3i9uCXzjVuosW1kp9HUvAU+1UUW3sdnZTWkW6NOlY/18oGQ01xK8rsky2yxXP3ogUn2ttW89qJRUCrQiUpTVoBovZojPLjqbh7NTW0XrffQ7wkRfIuCnAMjM1QFszu1aAiMsIz0u5uB13NhS307+2Wqcvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=esd.eu; dmarc=pass action=none header.from=esd.eu; dkim=pass
+ header.d=esd.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1AlrVyjIaB6yE385pOav8ZNtdmbhMJ7kEib9k6ICF0g=;
+ b=Gj8RGqMVsdAieIWhLb7zxydj2ivMJa8KoG0yMTdCQokm5W9GnAfQfxt8WeysaqTi7o/6Icok+EKH6vLYjmXdGAupb7B3j92uGqc1hDggbvCnrpa97phXK+BFC/7cmmvOAoE+rn7Gcsir/es5e6nXX/4nheGumoeuNrjBex2yo78=
+Received: from GV1PR03MB10517.eurprd03.prod.outlook.com
+ (2603:10a6:150:161::17) by VI2PR03MB11002.eurprd03.prod.outlook.com
+ (2603:10a6:800:299::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.19; Sat, 16 Aug
+ 2025 13:11:07 +0000
+Received: from GV1PR03MB10517.eurprd03.prod.outlook.com
+ ([fe80::cfd2:a2c3:aa8:a57f]) by GV1PR03MB10517.eurprd03.prod.outlook.com
+ ([fe80::cfd2:a2c3:aa8:a57f%6]) with mapi id 15.20.9031.018; Sat, 16 Aug 2025
+ 13:11:07 +0000
+From: =?utf-8?B?U3RlZmFuIE3DpHRqZQ==?= <stefan.maetje@esd.eu>
+To: "mkl@pengutronix.de" <mkl@pengutronix.de>
+CC: "mailhol@kernel.org" <mailhol@kernel.org>, "socketcan@hartkopp.net"
+	<socketcan@hartkopp.net>, "linux-can@vger.kernel.org"
+	<linux-can@vger.kernel.org>, socketcan <socketcan@esd.eu>, Frank Jungclaus
+	<frank.jungclaus@esd.eu>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"horms@kernel.org" <horms@kernel.org>, "olivier@sobrie.be"
+	<olivier@sobrie.be>
+Subject: Re: [PATCH 6/6] can: esd_usb: Avoid errors triggered from USB
+ disconnect
+Thread-Topic: [PATCH 6/6] can: esd_usb: Avoid errors triggered from USB
+ disconnect
+Thread-Index: AQHcCwPHkFnx9vO9JEe6dF2O5eCDo7RgPUGAgAULKYA=
+Date: Sat, 16 Aug 2025 13:11:06 +0000
+Message-ID: <10424c1b13dccadfcdb9fb8b6c0f32f5da37457a.camel@esd.eu>
+References: <20250811210611.3233202-1-stefan.maetje@esd.eu>
+	 <20250811210611.3233202-7-stefan.maetje@esd.eu>
+	 <20250813-tiny-bird-of-painting-999c89-mkl@pengutronix.de>
+In-Reply-To: <20250813-tiny-bird-of-painting-999c89-mkl@pengutronix.de>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Evolution 3.46.4-2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=esd.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: GV1PR03MB10517:EE_|VI2PR03MB11002:EE_
+x-ms-office365-filtering-correlation-id: be7c16d6-90da-476a-a76c-08dddcc65c82
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|10070799003|1800799024|376014|366016|19092799006|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?TFhCTnRHREhTQ2MzRkF3aTArMW5SbVFYeDVrWVZyZGc2bTlsZ1VtY0FWam1Z?=
+ =?utf-8?B?NGpDU2FoTnRqSHdZTzZkaU1wcmpzR3licW92dCtmU0Y3K0xJUy9WczJjZFVj?=
+ =?utf-8?B?Z2tHREZxK0N3YjFjay9zWE9OZmdOYkUvM2NQTmhXL284d1EzaXV2RksvMnN6?=
+ =?utf-8?B?UVRpK3prY3Y1d0grMnhWaTNnZlBwS0Z6SDd3VmtJWWFaOE91TVJ3cEVpK0RS?=
+ =?utf-8?B?Nmt0WXRTR1ZBclZBc0JDc043Q1YrdTVoeFRCL21NYWZ1OEgraE80UlIvU0FV?=
+ =?utf-8?B?UHNVYzFBNW4xeWZpR3ZRdHFrbWxpTUxRZFNOc1docnorU1VXSjQ0NjBpcnBK?=
+ =?utf-8?B?NWEveXYrL1JWYzlBNVFpVlJlMDRVUUFZcU1oYWM0WGdUSjhicW5NVmcrV1VW?=
+ =?utf-8?B?NUUwYUtVd2NZL3BncXc1dWM1UGFySENsSEVudjI5UlU4Nm40L0VoaEtLRSt4?=
+ =?utf-8?B?QzhsY2NTbGRnS1NrOWp2bkRsenRPWGpsYlFLWDJVdGlIT28xbis4N2dHeTUz?=
+ =?utf-8?B?TThlOTRjRldTUVpTRHVubmI5REhGZVQ3TlBrRDRScU8wVXFrbEY2Z0g2MmdI?=
+ =?utf-8?B?eW40YTRBcDZxTEp3QkVBWXZ3UktVVnJEcVJsWkJrRklxakgwUnpRQzhFdDBD?=
+ =?utf-8?B?dWVBMW9ucE5oR3ZPa1BIR1NtdlFYVHFvd215dG5VUHRlYW9hQ29UenkwNzBx?=
+ =?utf-8?B?S3VYWVl1K1BkVXBMSWxTRHV3RXJWcnhydnJRVzBveDJQa3ZuV0o4aFR5amRF?=
+ =?utf-8?B?ZlVlSXY0MVJDOGFRZ1dNMFNLdElwbnl3VGJUSDRLWU1WaUxrOGk5V3pKL3Vp?=
+ =?utf-8?B?WEozVGR2b1NTMldUZ0RiL1FyRG9TNVl1QVFEcEZIUVpSbHJMNGZIOXk2VUVQ?=
+ =?utf-8?B?R0FiWlJTcEZrbHg1Vy9pUFNmeDdTYVE1YmdTZERWNURnTTRVOE9ybXRSM2xM?=
+ =?utf-8?B?WnV2Ylg3QWdUOE9zS2lkVkdOeStUOFJDc1FVKzlKS1pwdUZaZzFpMlpRaXoy?=
+ =?utf-8?B?SHk3QjdPdzdST2JlbFhac0Nyd0psOFk5UzFUNzZyeU9qeGxuV1BZbmt1L2k0?=
+ =?utf-8?B?a0ljUGE5UkxYaDZ3Uy95di92ZEZLdGNhRjFRRWhka0JHb0ZTbDR5dWNicFIw?=
+ =?utf-8?B?OFh5SG1jZGVmWWliSnl6eTNtbnJyZit4WXROa0hkYUM4dUNzSUQ4OUdmUEpy?=
+ =?utf-8?B?TXFmb05Hc2paN0pQc050YmNkODRQOVd2VlFRMVh3LzVaMmFEbzlwMTJla1Vs?=
+ =?utf-8?B?OW5vSm9qUjc5UGp3cEVLK2kyMUp2bmVjelAvQ016dTV1djNnS3lvTzE4eGpR?=
+ =?utf-8?B?ZkZ6UFpRaEJ6TDRLZlFmWFBlSHg3RmhucUpLN2NpNC96eE1na0pobnNBRTdu?=
+ =?utf-8?B?blhaOGZCNW16UjRGSTVKMU9mMVFFSE9FUmNHMlZWL0NqSS8rSzBGSDNpUHcr?=
+ =?utf-8?B?OW1QWndGa2dFMDJNaEhvQ1VNUktoc3B1ZGNNeDhMbnIydlRic1RzQTdYa0NN?=
+ =?utf-8?B?R0ExUlJ0bWRycWEvZUxkaGdEM3hXK0tEZDNjTmxNenRPTlhyR2JqQ3hsbGZl?=
+ =?utf-8?B?ZEtnTHJPUDUrUTgrWExlVXBCNVpCMDJoa0hNYW1Yc3o3Zzh4a1NKOEtNaStT?=
+ =?utf-8?B?WkluU2lvd2RRZG1hVlpwMTZYbCtjZHliek9sWlRlMzlCMnFsZGpKNE1aOWFq?=
+ =?utf-8?B?dVQ2bHBtYXFDWFVyZWQyd09Ub0ZzZ21ZNEJtM1N2T2lNZWYwRTlPbE1ZOVYx?=
+ =?utf-8?B?VTlVSmtxQWZQMnFIeXlNanJPSDBSc2VJRzJkZWxwQU5CbUkwNXdPNjVCdDRo?=
+ =?utf-8?B?V3kya05aU1BhMldoT3BsRHBJL1Rnb20xcVViTXppMFc4YjhpSXZ4T1ZKcnV4?=
+ =?utf-8?B?OFE1MWFlN3JKa3c3aU9WTC9YaGIrRE9hbDdSQ25BcnBFNDFnemE2eTJqRFR4?=
+ =?utf-8?B?blRLWU9aSG1pSTU2MXBxeDBOejlBSHhHd0laQ2czRGpYSFZhUWFYSk1DSUpw?=
+ =?utf-8?B?VlBsMHB5c0ZRPT0=?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR03MB10517.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(376014)(366016)(19092799006)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?T1MxT0Rkd1VUaGpFNEp4dWhOQUYybzFoVWhINEdBbzFYVUxuOWZ0TXdMUFFW?=
+ =?utf-8?B?UG5wM1hOMlJnOVY2cWJwbzhkNkhwWERoVTNUT1I5TkN2Q2RyN1BEcElNbjhk?=
+ =?utf-8?B?ZjliTXhsSVBObFNOdldmOTVQUEduUnhpL2prSWxTMzFkamZPU052RWlOcDJU?=
+ =?utf-8?B?TkhaTXpOR3FoU2pTV2lxb2pOemtvSlhMM08yZis1MXozT3hpWlNrRG85ajZl?=
+ =?utf-8?B?NWZVKzBQTVdZcGJ0VGcvTTZETFZoSzYyb3BkNU5XMThvcWJka2pWVHQzOHN6?=
+ =?utf-8?B?Nk5MUmJaempvRnk0TVo4ZHFGVkZVZVNqNUxZMGJSYXFoQ3hsL3Eycmg2SG41?=
+ =?utf-8?B?NWNBczNlc3A4ZlpVdDdEemZDNnRvbWxtMjNRRjhGOVY4ZXc5eGtVSXAvbGV2?=
+ =?utf-8?B?LytnWjBZd2l2ZUlScnl4SzFIejlldzlURkZIMFMyZlh5QVg5YnMxUHRUeDdh?=
+ =?utf-8?B?TmZTUDVEdEVZbURMOWVmTHowcFFENFhtRkI4U0V4SC83dytSK1ZMRFMvZW4z?=
+ =?utf-8?B?VWRJb0pUTVFIV24wSkR2Yis5RG1KUHdGZTZOS1ZmUXFTeC8rNnkvZHM4OUY1?=
+ =?utf-8?B?MDc2NHlxSXpwNkVBb1FoR3NmSTBjM2xYUE9yQ3kxUUFMZGlRc25jYlpibFcw?=
+ =?utf-8?B?WGlTSmNHdnE3WWNEenh1VEhxZzh4eWxZS2l0NlhIelg5R0gzQk1RQWxDdWdn?=
+ =?utf-8?B?Y1hhZHBrSGgvRFBvaU1qYzZmU0g0TEtzOUVpTjZVWU1KMWovdjVVUm0yRDgv?=
+ =?utf-8?B?NmR1TFZ4eGl0TkVOT0c2dVpUWXl6Wlc5SnpjY0U3WlNBZkVsamhweDZ6UCt5?=
+ =?utf-8?B?aWM5aU01Rm9oRERKUWVHMlU1Rm45VDVaWVZZdXBDQVVyS0lFbDZXU3R3OU5m?=
+ =?utf-8?B?QTRTMStNTW1ZWHZUWUYrSVBDTkR5WURiNFpEcm5VbWxlWEp3ejVINHJWZ2lw?=
+ =?utf-8?B?ODI5bUhZOGlkT25BdGhUdUZQZWl0UGYzL2tUdEFaZmkvbDhWK3lmS2dpdnIz?=
+ =?utf-8?B?ZlFBUzJLZnE2bVZRR2EwRVY4bGNDcXpNczk1bEdWeXRYMDVsekpwaDN1Q09q?=
+ =?utf-8?B?Nko3U3hBaWpkVFdKMUZRTUdUaS8xQk0ycE1wSVo3Ri9KaWdWVEs3dW9sTzEz?=
+ =?utf-8?B?eHBCVFBhb2dqSzlianI0bjFrNHdnVTRQS0FDYXVQRG9tYlJSQzh2MGRhSVJm?=
+ =?utf-8?B?NDc4aU9ySEJRYVJHelloSk5Fc1ROaG0rSWdSK1IwQXZGSWRTdE44Y0tWaDYw?=
+ =?utf-8?B?K1E3SmdQbG42SFEzZ25Ea0NNZTNBc2xUeXNWem15RldVZ09HYmpodm5JWmFq?=
+ =?utf-8?B?UzVPcHJCYTJIM1ZVSlJzMGY0TzQ4MHFkbFVveDBPQ0ZGYmdDdDlSL1loeFJq?=
+ =?utf-8?B?ek1TcGQzdUtTWDFCN2NHWEp6VDZ1WXNWc1Rxb2JMMmMrdE9LYXJGZUkzOVNh?=
+ =?utf-8?B?eFI3bUxSNmxDZUxiUW5kNFU1S25qc1FhanZoVzh5TzlVd3NWMEo4amVwZ0ls?=
+ =?utf-8?B?bXFhRG1kMW5Bc1N3YmFJTGtGN0t5azJzTXRpS2h2blE5RURhdkpVWkZ4Y3d6?=
+ =?utf-8?B?WEFpazJkaHFvcWduRnkvRTdJbUtZU0tyWm5LcGI1NmQrUHFxT0srUHBHelJz?=
+ =?utf-8?B?T2tidVQzNlFwMkZTZ09hMWlXeGxaaFNkODFtaGZraHUwOUpmWkVUYVVTeEJy?=
+ =?utf-8?B?T2FuTmF2Mll3RVh3bG9hQ1NudnJxT0J0MVdxbGJEcmovN01raEEvcmIzOVl5?=
+ =?utf-8?B?QzdxblM5ZEF5dE9vSkM4Wmd1N21jQ2VDRysxTVlFcS92YmpjQ2NCNUpPYTFK?=
+ =?utf-8?B?STNpNjlPMXBTamQrQ1BUc05BYnBwUktrL2ZTYUFtVXBoYjNQUzhEa2FlZmR4?=
+ =?utf-8?B?akV1TElUanltbFplSEx4NWVmbVJOQzZqbXpnRitKeGlrN2Q5b001RjVWVUlR?=
+ =?utf-8?B?bWVmaTFiZzY0MlFMZ3YrM3pldVJJSkVUdzZTY1VGMlFRWnhBbVJVQyt6LzNw?=
+ =?utf-8?B?bE9OWkVsUm9DVlJMbXoxWERud2hQaTlDZGNhQnQ0cmxhcEFHaVZFUllIZ0I3?=
+ =?utf-8?B?Y0hVV1JxQ0hCK2c3ZHdRUGo0SHArcEoxMXEwYmlnTVlLYkp2Vis4QlEwNjB6?=
+ =?utf-8?B?MjhmZHFsSTRXdzVFTWxlOVJCcTdpeVVqUmRBclh3cGFiZG9seVE3RFpmUjYy?=
+ =?utf-8?Q?elzjiWxwBdOKlZQPaFyrBiLO4CH2qIP0eYArpJLgKhS7?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <24DF60A28B7CAB418FCDC1FF81C5A3E1@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: can/j1939: hung inside rtnl_dellink()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Anti-Virus-Server: fsav304.rs.sakura.ne.jp
-X-Virus-Status: clean
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: GV1PR03MB10517.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: be7c16d6-90da-476a-a76c-08dddcc65c82
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2025 13:11:06.9800
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2hMrZPLfjK2WYImQiq6Eev7UJiqY84FkwIN7LPSYHvlejzU1GU/S+wLoKB66ZUlJaI5HypO1vNmn8WCcLJ0qcg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR03MB11002
 
-Hello.
-
-I made a minimized C reproducer for
-
-  unregister_netdevice: waiting for vcan0 to become free. Usage count = 2
-
-problem at https://syzkaller.appspot.com/bug?extid=881d65229ca4f9ae8c84 , and
-obtained some data using debug printk() patch. It seems that the cause is
-net/can/j1939/ does not handle NETDEV_UNREGISTER notification
-while net/can/j1939/ can directly call rtnl_dellink() via sendmsg().
-
-The minimized C reproducer is shown below.
-
----------- minimized C reproducer start ----------
-// https://syzkaller.appspot.com/bug?id=b1f88a7644e9f89d278921e020d254f531567dc2
-// autogenerated by syzkaller (https://github.com/google/syzkaller)
-
-#define _GNU_SOURCE
-
-#include <arpa/inet.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <net/if.h>
-#include <net/if_arp.h>
-#include <netinet/in.h>
-#include <sched.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/syscall.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <linux/netlink.h>
-#include <linux/rtnetlink.h>
-
-struct nlmsg {
-	char* pos;
-	int nesting;
-	struct nlattr* nested[8];
-	char buf[4096];
-};
-
-static void netlink_init(struct nlmsg* nlmsg, int typ, int flags,
-                         const void* data, int size)
-{
-	memset(nlmsg, 0, sizeof(*nlmsg));
-	struct nlmsghdr* hdr = (struct nlmsghdr*)nlmsg->buf;
-	hdr->nlmsg_type = typ;
-	hdr->nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK | flags;
-	memcpy(hdr + 1, data, size);
-	nlmsg->pos = (char*)(hdr + 1) + NLMSG_ALIGN(size);
-}
-
-static void netlink_attr(struct nlmsg* nlmsg, int typ, const void* data,
-                         int size)
-{
-	struct nlattr* attr = (struct nlattr*)nlmsg->pos;
-	attr->nla_len = sizeof(*attr) + size;
-	attr->nla_type = typ;
-	if (size > 0)
-		memcpy(attr + 1, data, size);
-	nlmsg->pos += NLMSG_ALIGN(attr->nla_len);
-}
-
-static void netlink_nest(struct nlmsg* nlmsg, int typ)
-{
-	struct nlattr* attr = (struct nlattr*)nlmsg->pos;
-	attr->nla_type = typ;
-	nlmsg->pos += sizeof(*attr);
-	nlmsg->nested[nlmsg->nesting++] = attr;
-}
-
-static void netlink_done(struct nlmsg* nlmsg)
-{
-	struct nlattr* attr = nlmsg->nested[--nlmsg->nesting];
-	attr->nla_len = nlmsg->pos - (char*)attr;
-}
-
-static int netlink_send_ext(struct nlmsg* nlmsg, int sock, uint16_t reply_type,
-                            int* reply_len, bool dofail)
-{
-	if (nlmsg->pos > nlmsg->buf + sizeof(nlmsg->buf) || nlmsg->nesting)
-		exit(1);
-	struct nlmsghdr* hdr = (struct nlmsghdr*)nlmsg->buf;
-	hdr->nlmsg_len = nlmsg->pos - nlmsg->buf;
-	struct sockaddr_nl addr;
-	memset(&addr, 0, sizeof(addr));
-	addr.nl_family = AF_NETLINK;
-	ssize_t n = sendto(sock, nlmsg->buf, hdr->nlmsg_len, 0,
-			   (struct sockaddr*)&addr, sizeof(addr));
-	if (n != (ssize_t)hdr->nlmsg_len) {
-		if (dofail)
-			exit(1);
-		return -1;
-	}
-	n = recv(sock, nlmsg->buf, sizeof(nlmsg->buf), 0);
-	if (reply_len)
-		*reply_len = 0;
-	if (n < 0) {
-		if (dofail)
-			exit(1);
-		return -1;
-	}
-	if (n < (ssize_t)sizeof(struct nlmsghdr)) {
-		errno = EINVAL;
-		if (dofail)
-			exit(1);
-		return -1;
-	}
-	if (hdr->nlmsg_type == NLMSG_DONE)
-		return 0;
-	if (reply_len && hdr->nlmsg_type == reply_type) {
-		*reply_len = n;
-		return 0;
-	}
-	if (n < (ssize_t)(sizeof(struct nlmsghdr) + sizeof(struct nlmsgerr))) {
-		errno = EINVAL;
-		if (dofail)
-			exit(1);
-		return -1;
-	}
-	if (hdr->nlmsg_type != NLMSG_ERROR) {
-		errno = EINVAL;
-		if (dofail)
-			exit(1);
-		return -1;
-	}
-	errno = -((struct nlmsgerr*)(hdr + 1))->error;
-	return -errno;
-}
-
-static int netlink_send(struct nlmsg* nlmsg, int sock)
-{
-	return netlink_send_ext(nlmsg, sock, 0, NULL, true);
-}
-
-static void netlink_add_device_impl(struct nlmsg* nlmsg, const char* type,
-                                    const char* name, bool up)
-{
-	struct ifinfomsg hdr;
-	memset(&hdr, 0, sizeof(hdr));
-	if (up)
-		hdr.ifi_flags = hdr.ifi_change = IFF_UP;
-	netlink_init(nlmsg, RTM_NEWLINK, NLM_F_EXCL | NLM_F_CREATE, &hdr,
-		     sizeof(hdr));
-	if (name)
-		netlink_attr(nlmsg, IFLA_IFNAME, name, strlen(name));
-	netlink_nest(nlmsg, IFLA_LINKINFO);
-	netlink_attr(nlmsg, IFLA_INFO_KIND, type, strlen(type));
-}
-
-static void netlink_add_device(struct nlmsg* nlmsg, int sock, const char* type,
-                               const char* name)
-{
-	netlink_add_device_impl(nlmsg, type, name, false);
-	netlink_done(nlmsg);
-	int err = netlink_send(nlmsg, sock);
-	if (err < 0) {
-		fprintf(stderr, "netlink_device_change=%d\n", err);
-	}
-}
-
-static void netlink_device_change(struct nlmsg* nlmsg, int sock,
-                                  const char* name, bool up)
-{
-	struct ifinfomsg hdr;
-	memset(&hdr, 0, sizeof(hdr));
-	if (up)
-		hdr.ifi_flags = hdr.ifi_change = IFF_UP;
-	hdr.ifi_index = if_nametoindex(name);
-	netlink_init(nlmsg, RTM_NEWLINK, 0, &hdr, sizeof(hdr));
-	int err = netlink_send(nlmsg, sock);
-	if (err < 0) {
-		fprintf(stderr, "netlink_add_device=%d\n", err);
-	}
-}
-
-static void initialize_netdevices(void)
-{
-	struct nlmsg nlmsg = { };
-	int sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
-	if (sock == -1)
-		exit(1);
-	netlink_add_device(&nlmsg, sock, "vcan", "vcan0");
-	netlink_device_change(&nlmsg, sock, "vcan0", true);
-	close(sock);
-}
-
-static int do_sendmsg;
-
-static void execute_one(void)
-{
-	//  socket$nl_route arguments: [
-	//    domain: const = 0x10 (8 bytes)
-	//    type: const = 0x3 (8 bytes)
-	//    proto: const = 0x0 (4 bytes)
-	//  ]
-	//  returns sock_nl_route
-	const int fd0 = socket(0x10, 3, 0);
-	//  ioctl$ifreq_SIOCGIFINDEX_vcan arguments: [
-	//    fd: sock (resource)
-	//    cmd: const = 0x8933 (4 bytes)
-	//    arg: ptr[out, ifreq_dev_t[vcan_device_names, ifindex_vcan]] {
-	//      ifreq_dev_t[vcan_device_names, ifindex_vcan] {
-	//        ifr_ifrn: buffer: {76 63 61 6e 30 00 00 00 00 00 00 00 00 00 00 00}
-	//        (length 0x10) elem: ifindex_vcan (resource) pad = 0x0 (20 bytes)
-	//      }
-	//    }
-	//  ]
-	char buf[128] = "vcan0";
-	int idx = 0;
-	if (ioctl(fd0, 0x8933, buf) != EOF)
-		idx = *(uint32_t*) (buf + 16);
-	//  socket$can_j1939 arguments: [
-	//    domain: const = 0x1d (8 bytes)
-	//    type: const = 0x2 (8 bytes)
-	//    proto: const = 0x7 (4 bytes)
-	//  ]
-	//  returns sock_can_j1939
-	const int fd1 = socket(0x1d, 2, 7);
-	//  bind$can_j1939 arguments: [
-	//    fd: sock_can_j1939 (resource)
-	//    addr: ptr[in, sockaddr_can_j1939] {
-	//      sockaddr_can_j1939 {
-	//        can_family: const = 0x1d (2 bytes)
-	//        pad = 0x0 (2 bytes)
-	//        can_ifindex: ifindex_vcan (resource)
-	//        name: int64 = 0x0 (8 bytes)
-	//        pgn: can_j1939_pgn {
-	//          pgn_ps: can_j1939_pgn_ps = 0x0 (1 bytes)
-	//          pgn_pf: can_j1939_pgn_pf = 0x0 (1 bytes)
-	//          pgn_flags: can_j1939_pgn_flags = 0x4 (1 bytes)
-	//          pgn_unused: const = 0x0 (1 bytes)
-	//        }
-	//        addr: can_j1939_addrs = 0x0 (1 bytes)
-	//        pad = 0x0 (3 bytes)
-	//      }
-	//    }
-	//    len: bytesize = 0x18 (8 bytes)
-	//  ]
-	*(uint16_t*)0x200000000240 = 0x1d;
-	*(uint32_t*)0x200000000244 = idx;
-	*(uint64_t*)0x200000000248 = 0;
-	*(uint8_t*)0x200000000250 = 0;
-	*(uint8_t*)0x200000000251 = 0;
-	*(uint8_t*)0x200000000252 = 4;
-	*(uint8_t*)0x200000000253 = 0;
-	*(uint8_t*)0x200000000254 = 0;
-	bind(fd1, (struct sockaddr *) 0x200000000240, 0x18);
-	//  sendmsg$nl_route_sched arguments: [
-	//    fd: sock_nl_route (resource)
-	//    msg: ptr[in, msghdr_netlink[netlink_msg_route_sched]] {
-	//      msghdr_netlink[netlink_msg_route_sched] {
-	//        addr: nil
-	//        addrlen: len = 0x0 (4 bytes)
-	//        pad = 0x0 (4 bytes)
-	//        vec: ptr[in, iovec[in, netlink_msg_route_sched]] {
-	//          iovec[in, netlink_msg_route_sched] {
-	//            addr: ptr[in, netlink_msg_route_sched] {
-	//              union netlink_msg_route_sched {
-	//                newtfilter: netlink_msg_t[const[RTM_NEWTFILTER, int16],
-	//                tcmsg[AF_UNSPEC], filter_policy] {
-	//                  len: len = 0x24 (4 bytes)
-	//                  type: const = 0x11 (2 bytes)
-	//                  flags: netlink_msg_flags = 0x1 (2 bytes)
-	//                  seq: int32 = 0xfffffffe (4 bytes)
-	//                  pid: int32 = 0x0 (4 bytes)
-	//                  payload: tcmsg[AF_UNSPEC] {
-	//                    family: const = 0x0 (1 bytes)
-	//                    tcm__pad1: const = 0x0 (1 bytes)
-	//                    tcm__pad2: const = 0x74 (2 bytes)
-	//                    ifindex: ifindex (resource)
-	//                    tcm_handle: tcm_handle {
-	//                      minor: tcm_handle_offsets = 0x0 (2 bytes)
-	//                      major: tcm_handle_offsets = 0x0 (2 bytes)
-	//                    }
-	//                    tcm_parent: tcm_handle {
-	//                      minor: tcm_handle_offsets = 0x0 (2 bytes)
-	//                      major: tcm_handle_offsets = 0x0 (2 bytes)
-	//                    }
-	//                    tcm_info: tcm_handle {
-	//                      minor: tcm_handle_offsets = 0x0 (2 bytes)
-	//                      major: tcm_handle_offsets = 0x6 (2 bytes)
-	//                    }
-	//                  }
-	//                  attrs: array[filter_policy] {
-	//                  }
-	//                }
-	//              }
-	//            }
-	//            len: len = 0x24 (8 bytes)
-	//          }
-	//        }
-	//        vlen: const = 0x1 (8 bytes)
-	//        ctrl: const = 0xf0ffffffffffff (8 bytes)
-	//        ctrllen: const = 0x0 (8 bytes)
-	//        f: send_flags = 0x0 (4 bytes)
-	//        pad = 0x0 (4 bytes)
-	//      }
-	//    }
-	//    f: send_flags = 0x0 (8 bytes)
-	//  ]
-	*(uint64_t*)0x200000000140 = 0;
-	*(uint32_t*)0x200000000148 = 0;
-	*(uint64_t*)0x200000000150 = 0x200000000240;
-	*(uint64_t*)0x200000000240 = 0x200000000f00;
-	*(uint32_t*)0x200000000f00 = 0x24;
-	*(uint16_t*)0x200000000f04 = 0x11;
-	*(uint16_t*)0x200000000f06 = 1;
-	*(uint32_t*)0x200000000f08 = 0xfffffffe;
-	*(uint32_t*)0x200000000f0c = 0;
-	*(uint8_t*)0x200000000f10 = 0;
-	*(uint8_t*)0x200000000f11 = 0;
-	*(uint16_t*)0x200000000f12 = 0x74;
-	*(uint32_t*)0x200000000f14 = idx;
-	*(uint16_t*)0x200000000f18 = 0;
-	*(uint16_t*)0x200000000f1a = 0;
-	*(uint16_t*)0x200000000f1c = 0;
-	*(uint16_t*)0x200000000f1e = 0;
-	*(uint16_t*)0x200000000f20 = 0;
-	*(uint16_t*)0x200000000f22 = 6;
-	*(uint64_t*)0x200000000248 = 0x24;
-	*(uint64_t*)0x200000000158 = 1;
-	*(uint64_t*)0x200000000160 = 0xf0ffffffffffff;
-	*(uint64_t*)0x200000000168 = 0;
-	*(uint32_t*)0x200000000170 = 0;
-	if (do_sendmsg)
-		sendmsg(fd0, (const struct msghdr *) 0x200000000140, 0);
-}
-
-int main(int argc, char *argv[])
-{
-	do_sendmsg = (argc == 1);
-	syscall(__NR_mmap, /*addr=*/0x200000000000ul, /*len=*/0x1000000ul,
-		/*prot=PROT_WRITE|PROT_READ|PROT_EXEC*/ 7ul,
-		/*flags=MAP_FIXED|MAP_ANONYMOUS|MAP_PRIVATE*/ 0x32ul,
-		/*fd=*/(intptr_t)-1, /*offset=*/0ul);
-	if (unshare(CLONE_NEWNET))
-		return 1;
-	initialize_netdevices();
-	execute_one();
-	return 0;
-}
----------- minimized C reproducer end ----------
-
-The minimized C reproducer hung at sendmsg(), and the backtrace
-indicates that rtnl_dellink() from sendmsg() cannot return.
-
----------- strace output of C reproducer with argc == 1 case start ----------
-mmap(0x200000000000, 16777216, PROT_READ|PROT_WRITE|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x200000000000
-unshare(CLONE_NEWNET)                   = 0
-socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE) = 3
-sendto(3, [{nlmsg_len=56, nlmsg_type=0x10 /* NLMSG_??? */, nlmsg_flags=NLM_F_REQUEST|NLM_F_ACK|0x600, nlmsg_seq=0, nlmsg_pid=0}, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x09\x00\x03\x00\x76\x63\x61\x6e\x30\x00\x00\x00\x0c\x00\x12\x00"...], 56, 0, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 56
-recvfrom(3, [{nlmsg_len=36, nlmsg_type=NLMSG_ERROR, nlmsg_flags=NLM_F_CAPPED, nlmsg_seq=0, nlmsg_pid=1363}, {error=0, msg={nlmsg_len=56, nlmsg_type=0x10 /* NLMSG_??? */, nlmsg_flags=NLM_F_REQUEST|NLM_F_ACK|0x600, nlmsg_seq=0, nlmsg_pid=0}}], 4096, 0, NULL, NULL) = 36
-socket(AF_UNIX, SOCK_DGRAM|SOCK_CLOEXEC, 0) = 4
-ioctl(4, SIOCGIFINDEX, {ifr_name="vcan0", ifr_ifindex=2}) = 0
-close(4)                                = 0
-sendto(3, [{nlmsg_len=32, nlmsg_type=0x10 /* NLMSG_??? */, nlmsg_flags=NLM_F_REQUEST|NLM_F_ACK, nlmsg_seq=0, nlmsg_pid=0}, "\x00\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00"], 32, 0, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 32
-recvfrom(3, [{nlmsg_len=36, nlmsg_type=NLMSG_ERROR, nlmsg_flags=NLM_F_CAPPED, nlmsg_seq=0, nlmsg_pid=1363}, {error=0, msg={nlmsg_len=32, nlmsg_type=0x10 /* NLMSG_??? */, nlmsg_flags=NLM_F_REQUEST|NLM_F_ACK, nlmsg_seq=0, nlmsg_pid=0}}], 4096, 0, NULL, NULL) = 36
-close(3)                                = 0
-socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE) = 3
-ioctl(3, SIOCGIFINDEX, {ifr_name="vcan0", ifr_ifindex=2}) = 0
-socket(AF_CAN, SOCK_DGRAM, CAN_J1939)   = 4
-bind(4, {sa_family=AF_CAN, sa_data="\0\0\2\0\0\0\0\0\0\0\0\0\0\0\0\0\4\0\0\0\0\0"}, 24) = 0
-sendmsg(3, {msg_name=NULL, msg_namelen=0, msg_iov=[{iov_base=[{nlmsg_len=36, nlmsg_type=0x11 /* NLMSG_??? */, nlmsg_flags=NLM_F_REQUEST, nlmsg_seq=4294967294, nlmsg_pid=0}, "\x00\x00\x74\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x06\x00"], iov_len=36}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0 // hung inside sendmsg() call
----------- strace output of C reproducer with argc == 1 case end ----------
-
----------- stack output of C reproducer with argc == 1 case (when hung inside sendmsg() call) start ----------
-# cat /proc/$(pidof a.out)/stack
-[<0>] msleep+0x31/0x50
-[<0>] netdev_wait_allrefs_any+0x1c0/0x2c0
-[<0>] netdev_run_todo+0x188/0x3e0
-[<0>] rtnl_dellink+0x18a/0x3d0
-[<0>] rtnetlink_rcv_msg+0x410/0x670
-[<0>] netlink_rcv_skb+0x59/0x110
-[<0>] netlink_unicast+0x200/0x2e0
-[<0>] netlink_sendmsg+0x222/0x460
-[<0>] ____sys_sendmsg+0x3a2/0x3d0
-[<0>] ___sys_sendmsg+0x99/0xe0
-[<0>] __sys_sendmsg+0x8a/0xf0
-[<0>] do_syscall_64+0x94/0x370
-[<0>] entry_SYSCALL_64_after_hwframe+0x76/0x7e
----------- stack output of C reproducer with argc == 1 case (when hung inside sendmsg() call) end ----------
-
-I collected some kernel messages using debug printk() patch shown below.
-
----------- debug print patch start ----------
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index f3a3b761abfb..0532a757627c 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -4319,27 +4319,8 @@ static inline bool dev_nit_active(const struct net_device *dev)
- 
- void dev_queue_xmit_nit(struct sk_buff *skb, struct net_device *dev);
- 
--static inline void __dev_put(struct net_device *dev)
--{
--	if (dev) {
--#ifdef CONFIG_PCPU_DEV_REFCNT
--		this_cpu_dec(*dev->pcpu_refcnt);
--#else
--		refcount_dec(&dev->dev_refcnt);
--#endif
--	}
--}
--
--static inline void __dev_hold(struct net_device *dev)
--{
--	if (dev) {
--#ifdef CONFIG_PCPU_DEV_REFCNT
--		this_cpu_inc(*dev->pcpu_refcnt);
--#else
--		refcount_inc(&dev->dev_refcnt);
--#endif
--	}
--}
-+void __dev_put(struct net_device *dev);
-+void __dev_hold(struct net_device *dev);
- 
- static inline void __netdev_tracker_alloc(struct net_device *dev,
- 					  netdevice_tracker *tracker,
-diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
-index 7e8a20f2fc42..e73f508d1af1 100644
---- a/net/can/j1939/main.c
-+++ b/net/can/j1939/main.c
-@@ -377,6 +377,9 @@ static int j1939_netdev_notify(struct notifier_block *nb,
- 		j1939_sk_netdev_event_netdown(priv);
- 		j1939_ecu_unmap_all(priv);
- 		break;
-+	case NETDEV_UNREGISTER:
-+		pr_info("NETDEV_UNREGISTER notification on %px\n", ndev);
-+		break;
- 	}
- 
- 	j1939_priv_put(priv);
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index 3d8b588822f9..936d9f6056e6 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -77,6 +77,8 @@ void j1939_sock_pending_del(struct sock *sk)
- 
- static void j1939_jsk_add(struct j1939_priv *priv, struct j1939_sock *jsk)
- {
-+	BUG_ON(jsk->state & J1939_SOCK_BOUND);
-+	pr_info("Setting J1939_SOCK_BOUND\n");
- 	jsk->state |= J1939_SOCK_BOUND;
- 	j1939_priv_get(priv);
- 
-@@ -92,6 +94,8 @@ static void j1939_jsk_del(struct j1939_priv *priv, struct j1939_sock *jsk)
- 	write_unlock_bh(&priv->j1939_socks_lock);
- 
- 	j1939_priv_put(priv);
-+	BUG_ON(!(jsk->state & J1939_SOCK_BOUND));
-+	pr_info("Clearing J1939_SOCK_BOUND\n");
- 	jsk->state &= ~J1939_SOCK_BOUND;
- }
- 
-@@ -472,6 +476,7 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 		/* drop old references */
- 		j1939_jsk_del(priv, jsk);
- 		j1939_local_ecu_put(priv, jsk->addr.src_name, jsk->addr.sa);
-+		pr_info("Unbound %px\n", sock);
- 	} else {
- 		struct can_ml_priv *can_ml;
- 		struct net_device *ndev;
-@@ -509,6 +514,7 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 		 */
- 		j1939_priv_get(priv);
- 		jsk->priv = priv;
-+		pr_info("Bound %px\n", sock);
- 	}
- 
- 	/* set default transmit pgn */
-@@ -520,6 +526,7 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 	/* get new references */
- 	ret = j1939_local_ecu_get(priv, jsk->addr.src_name, jsk->addr.sa);
- 	if (ret) {
-+		pr_info("Failed %px\n", sock);
- 		j1939_netdev_stop(priv);
- 		goto out_release_sock;
- 	}
-@@ -628,12 +635,15 @@ static int j1939_sk_release(struct socket *sock)
- 	struct sock *sk = sock->sk;
- 	struct j1939_sock *jsk;
- 
--	if (!sk)
-+	if (!sk) {
-+		pr_info("%s sk == NULL\n", __func__);
- 		return 0;
-+	}
- 
- 	lock_sock(sk);
- 	jsk = j1939_sk(sk);
- 
-+	pr_info("%s %px %ld\n", __func__, sock, jsk->state & J1939_SOCK_BOUND);
- 	if (jsk->state & J1939_SOCK_BOUND) {
- 		struct j1939_priv *priv = jsk->priv;
- 
-@@ -649,6 +659,7 @@ static int j1939_sk_release(struct socket *sock)
- 				    jsk->addr.sa);
- 
- 		j1939_netdev_stop(priv);
-+		pr_info("Stopped %px\n", sock);
- 	}
- 
- 	kfree(jsk->filters);
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 5a3c0f40a93f..746a44c6da47 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -11329,6 +11329,29 @@ int netdev_refcnt_read(const struct net_device *dev)
- }
- EXPORT_SYMBOL(netdev_refcnt_read);
- 
-+#define NETDEV_TRACE_BUFFER_SIZE 32768
-+
-+static struct netdev_trace {
-+	struct net_device *dev; // no-ref
-+	int before;
-+	int after;
-+	unsigned long entries[20];
-+	int nr_entries;
-+} netdev_trace_buffers[NETDEV_TRACE_BUFFER_SIZE];
-+
-+static void dump_netdev_trace(const struct net_device *dev) {
-+	int i;
-+
-+	for (i = 0; i < NETDEV_TRACE_BUFFER_SIZE; i++) {
-+		if (dev != netdev_trace_buffers[i].dev)
-+			continue;
-+		pr_info("usage %d->%d at\n", netdev_trace_buffers[i].before,
-+			netdev_trace_buffers[i].after);
-+		stack_trace_print(netdev_trace_buffers[i].entries,
-+				  netdev_trace_buffers[i].nr_entries, 4);
-+	}
-+}
-+
- int netdev_unregister_timeout_secs __read_mostly = 10;
- 
- #define WAIT_REFS_MIN_MSECS 1
-@@ -11354,8 +11377,10 @@ static struct net_device *netdev_wait_allrefs_any(struct list_head *list)
- 	rebroadcast_time = warning_time = jiffies;
- 
- 	list_for_each_entry(dev, list, todo_list)
--		if (netdev_refcnt_read(dev) == 1)
-+		if (netdev_refcnt_read(dev) == 1) {
-+			dump_netdev_trace(dev);
- 			return dev;
-+		}
- 
- 	while (true) {
- 		if (time_after(jiffies, rebroadcast_time + 1 * HZ)) {
-@@ -11406,6 +11431,7 @@ static struct net_device *netdev_wait_allrefs_any(struct list_head *list)
- 				pr_emerg("unregister_netdevice: waiting for %s to become free. Usage count = %d\n",
- 					 dev->name, netdev_refcnt_read(dev));
- 				ref_tracker_dir_print(&dev->refcnt_tracker, 10);
-+				dump_netdev_trace(dev);
- 			}
- 
- 			warning_time = jiffies;
-@@ -11976,6 +12002,14 @@ void free_netdev(struct net_device *dev)
- 
- 	mutex_destroy(&dev->lock);
- 
-+	{
-+		int i;
-+
-+		for (i = 0; i < NETDEV_TRACE_BUFFER_SIZE; i++)
-+			if (dev == netdev_trace_buffers[i].dev)
-+				netdev_trace_buffers[i].dev = NULL;
-+	}
-+
- 	/*  Compatibility with error handling in drivers */
- 	if (dev->reg_state == NETREG_UNINITIALIZED ||
- 	    dev->reg_state == NETREG_DUMMY) {
-@@ -12956,3 +12990,53 @@ static int __init net_dev_init(void)
- }
- 
- subsys_initcall(net_dev_init);
-+
-+void __dev_put(struct net_device *dev)
-+{
-+	if (dev) {
-+		int i;
-+
-+		for (i = 0; i < NETDEV_TRACE_BUFFER_SIZE; i++) {
-+			if (netdev_trace_buffers[i].dev ||
-+			    cmpxchg(&netdev_trace_buffers[i].dev, NULL, dev))
-+				continue;
-+			netdev_trace_buffers[i].before = netdev_refcnt_read(dev);
-+			netdev_trace_buffers[i].after = netdev_trace_buffers[i].before - 1;
-+			netdev_trace_buffers[i].nr_entries =
-+				stack_trace_save(netdev_trace_buffers[i].entries,
-+						 ARRAY_SIZE(netdev_trace_buffers[i].entries), 0);
-+			break;
-+		}
-+#ifdef CONFIG_PCPU_DEV_REFCNT
-+		this_cpu_dec(*dev->pcpu_refcnt);
-+#else
-+		refcount_dec(&dev->dev_refcnt);
-+#endif
-+	}
-+}
-+EXPORT_SYMBOL(__dev_put);
-+
-+void __dev_hold(struct net_device *dev)
-+{
-+	if (dev) {
-+		int i;
-+
-+		for (i = 0; i < NETDEV_TRACE_BUFFER_SIZE; i++) {
-+			if (netdev_trace_buffers[i].dev ||
-+			    cmpxchg(&netdev_trace_buffers[i].dev, NULL, dev))
-+				continue;
-+			netdev_trace_buffers[i].before = netdev_refcnt_read(dev);
-+			netdev_trace_buffers[i].after = netdev_trace_buffers[i].before + 1;
-+			netdev_trace_buffers[i].nr_entries =
-+				stack_trace_save(netdev_trace_buffers[i].entries,
-+						 ARRAY_SIZE(netdev_trace_buffers[i].entries), 0);
-+			break;
-+		}
-+#ifdef CONFIG_PCPU_DEV_REFCNT
-+		this_cpu_inc(*dev->pcpu_refcnt);
-+#else
-+		refcount_inc(&dev->dev_refcnt);
-+#endif
-+	}
-+}
-+EXPORT_SYMBOL(__dev_hold);
-diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
-index 1b6f3826dd0e..118d3805c34d 100644
---- a/net/core/net_namespace.c
-+++ b/net/core/net_namespace.c
-@@ -725,8 +725,10 @@ void __put_net(struct net *net)
- {
- 	ref_tracker_dir_exit(&net->refcnt_tracker);
- 	/* Cleanup the network namespace in process context */
--	if (llist_add(&net->cleanup_list, &cleanup_list))
-+	if (llist_add(&net->cleanup_list, &cleanup_list)) {
-+		dump_stack();
- 		queue_work(netns_wq, &net_cleanup_work);
-+	}
- }
- EXPORT_SYMBOL_GPL(__put_net);
- 
----------- debug print patch end ----------
-
-The result is that NETDEV_UNREGISTER notification is passed to
-j1939_netdev_notify(), but j1939_netdev_notify() does not handle
-NETDEV_UNREGISTER notification; preventing the usage count from
-dropping to 1.
-
----------- printk() output of C reproducer with argc == 1 case start ----------
-[   50.413233] [   T1364] CAN device driver interface
-[   50.422638] [   T1364] vcan: Virtual CAN interface driver
-[   50.468223] [   T1367] can: controller area network core
-[   50.468598] [   T1367] NET: Registered PF_CAN protocol family
-[   50.495102] [   T1368] can: SAE J1939
-[   50.498501] [   T1363] can_j1939: Bound ffff8bc6d8dad080
-[   50.498585] [   T1363] can_j1939: Setting J1939_SOCK_BOUND
-[   50.503166] [   T1363] netlink: 4 bytes leftover after parsing attributes in process `a.out'.
-[   50.507675] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   51.561673] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   52.585773] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   53.609829] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   54.633586] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   55.657592] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   56.681708] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   57.705443] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   58.729637] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   59.753659] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   60.521723] [   T1363] unregister_netdevice: waiting for vcan0 to become free. Usage count = 2
-[   60.526689] [   T1363] usage 1->2 at
-[   60.526702] [   T1363]      __dev_hold.part.0+0xc2/0x210
-[   60.526727] [   T1363]      net_rx_queue_update_kobjects+0x11d/0x270
-[   60.526736] [   T1363]      netdev_register_kobject+0xf4/0x190
-[   60.526744] [   T1363]      register_netdevice+0x51e/0x880
-[   60.526750] [   T1363]      rtnl_newlink_create+0x299/0x300
-[   60.526757] [   T1363]      __rtnl_newlink+0xe2/0x3a0
-[   60.526763] [   T1363]      rtnl_newlink+0x46f/0x8a0
-[   60.526769] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.526776] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.526785] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.526792] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.526800] [   T1363]      __sys_sendto+0x1f5/0x200
-[   60.526808] [   T1363]      __x64_sys_sendto+0x24/0x30
-[   60.526816] [   T1363]      do_syscall_64+0x94/0x370
-[   60.526825] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.526832] [   T1363] usage 2->3 at
-[   60.526836] [   T1363]      __dev_hold.part.0+0xc2/0x210
-[   60.526844] [   T1363]      netdev_queue_update_kobjects+0xeb/0x210
-[   60.526852] [   T1363]      netdev_register_kobject+0x107/0x190
-[   60.526859] [   T1363]      register_netdevice+0x51e/0x880
-[   60.526865] [   T1363]      rtnl_newlink_create+0x299/0x300
-[   60.526872] [   T1363]      __rtnl_newlink+0xe2/0x3a0
-[   60.526877] [   T1363]      rtnl_newlink+0x46f/0x8a0
-[   60.526883] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.526890] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.526897] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.526904] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.526911] [   T1363]      __sys_sendto+0x1f5/0x200
-[   60.526920] [   T1363]      __x64_sys_sendto+0x24/0x30
-[   60.526927] [   T1363]      do_syscall_64+0x94/0x370
-[   60.526935] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.526941] [   T1363] usage 3->4 at
-[   60.526944] [   T1363]      __dev_hold.part.0+0xc2/0x210
-[   60.526951] [   T1363]      register_netdevice+0x5e2/0x880
-[   60.526957] [   T1363]      rtnl_newlink_create+0x299/0x300
-[   60.526963] [   T1363]      __rtnl_newlink+0xe2/0x3a0
-[   60.526969] [   T1363]      rtnl_newlink+0x46f/0x8a0
-[   60.526975] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.526981] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.526988] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.526995] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.527002] [   T1363]      __sys_sendto+0x1f5/0x200
-[   60.527010] [   T1363]      __x64_sys_sendto+0x24/0x30
-[   60.527017] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527025] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527030] [   T1363] usage 4->5 at
-[   60.527034] [   T1363]      __dev_hold.part.0+0xc2/0x210
-[   60.527041] [   T1363]      neigh_parms_alloc+0x86/0x180
-[   60.527047] [   T1363]      inetdev_init+0xa2/0x1f0
-[   60.527056] [   T1363]      inetdev_event+0x26c/0x490
-[   60.527063] [   T1363]      notifier_call_chain+0x41/0x100
-[   60.527072] [   T1363]      register_netdevice+0x679/0x880
-[   60.527078] [   T1363]      rtnl_newlink_create+0x299/0x300
-[   60.527084] [   T1363]      __rtnl_newlink+0xe2/0x3a0
-[   60.527090] [   T1363]      rtnl_newlink+0x46f/0x8a0
-[   60.527096] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.527103] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.527110] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.527117] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.527124] [   T1363]      __sys_sendto+0x1f5/0x200
-[   60.527131] [   T1363]      __x64_sys_sendto+0x24/0x30
-[   60.527139] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527147] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527152] [   T1363] usage 5->6 at
-[   60.527155] [   T1363]      __dev_hold.part.0+0xc2/0x210
-[   60.527162] [   T1363]      inetdev_init+0xc9/0x1f0
-[   60.527170] [   T1363]      inetdev_event+0x26c/0x490
-[   60.527177] [   T1363]      notifier_call_chain+0x41/0x100
-[   60.527184] [   T1363]      register_netdevice+0x679/0x880
-[   60.527190] [   T1363]      rtnl_newlink_create+0x299/0x300
-[   60.527196] [   T1363]      __rtnl_newlink+0xe2/0x3a0
-[   60.527331] [   T1363]      rtnl_newlink+0x46f/0x8a0
-[   60.527343] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.527350] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.527357] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.527364] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.527371] [   T1363]      __sys_sendto+0x1f5/0x200
-[   60.527379] [   T1363]      __x64_sys_sendto+0x24/0x30
-[   60.527386] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527394] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527400] [   T1363] usage 6->7 at
-[   60.527403] [   T1363]      __dev_hold.part.0+0xc2/0x210
-[   60.527411] [   T1363]      qdisc_alloc+0x278/0x330
-[   60.527419] [   T1363]      qdisc_create_dflt+0x52/0x1a0
-[   60.527427] [   T1363]      attach_default_qdiscs+0x8c/0x220
-[   60.527435] [   T1363]      dev_activate+0x1be/0x220
-[   60.527510] [   T1363]      __dev_open+0x1a6/0x2f0
-[   60.527518] [   T1363]      __dev_change_flags+0x22e/0x270
-[   60.527524] [   T1363]      netif_change_flags+0x27/0x70
-[   60.527529] [   T1363]      do_setlink.isra.0+0x32c/0xd10
-[   60.527535] [   T1363]      rtnl_newlink+0x46f/0x8a0
-[   60.527541] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.527548] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.527555] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.527563] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.527570] [   T1363]      __sys_sendto+0x1f5/0x200
-[   60.527577] [   T1363]      __x64_sys_sendto+0x24/0x30
-[   60.527585] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527593] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527599] [   T1363] usage 7->8 at
-[   60.527603] [   T1363]      __dev_hold.part.0+0xc2/0x210
-[   60.527610] [   T1363]      dev_get_by_index+0xb0/0x160
-[   60.527616] [   T1363]      j1939_sk_bind+0xcc/0x260 [can_j1939]
-[   60.527641] [   T1363]      __sys_bind+0xe3/0x110
-[   60.527649] [   T1363]      __x64_sys_bind+0x18/0x20
-[   60.527656] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527664] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527669] [   T1363] usage 8->9 at
-[   60.527670] [   T1363]      __dev_hold.part.0+0xc2/0x210
-[   60.527673] [   T1363]      j1939_netdev_start+0x110/0x3c0 [can_j1939]
-[   60.527678] [   T1363]      j1939_sk_bind+0x10c/0x260 [can_j1939]
-[   60.527683] [   T1363]      __sys_bind+0xe3/0x110
-[   60.527686] [   T1363]      __x64_sys_bind+0x18/0x20
-[   60.527689] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527693] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527695] [   T1363] usage 9->8 at
-[   60.527696] [   T1363]      __dev_put.part.0+0xc2/0x200
-[   60.527700] [   T1363]      j1939_sk_bind+0x12d/0x260 [can_j1939]
-[   60.527704] [   T1363]      __sys_bind+0xe3/0x110
-[   60.527707] [   T1363]      __x64_sys_bind+0x18/0x20
-[   60.527710] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527714] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527716] [   T1363] usage 8->7 at
-[   60.527718] [   T1363]      __dev_put.part.0+0xc2/0x200
-[   60.527721] [   T1363]      __qdisc_destroy+0xa0/0x190
-[   60.527724] [   T1363]      dev_shutdown+0x8b/0x190
-[   60.527728] [   T1363]      unregister_netdevice_many_notify+0x299/0xa90
-[   60.527731] [   T1363]      rtnl_dellink+0x185/0x3d0
-[   60.527733] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.527736] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.527740] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.527743] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.527746] [   T1363]      ____sys_sendmsg+0x3a2/0x3d0
-[   60.527749] [   T1363]      ___sys_sendmsg+0x99/0xe0
-[   60.527752] [   T1363]      __sys_sendmsg+0x8a/0xf0
-[   60.527755] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527759] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527762] [   T1363] usage 7->6 at
-[   60.527763] [   T1363]      __dev_put.part.0+0xc2/0x200
-[   60.527766] [   T1363]      neigh_parms_release+0xa5/0xc0
-[   60.527769] [   T1363]      inetdev_destroy+0x131/0x1c0
-[   60.527772] [   T1363]      inetdev_event+0x13c/0x490
-[   60.527775] [   T1363]      notifier_call_chain+0x41/0x100
-[   60.527779] [   T1363]      unregister_netdevice_many_notify+0x43a/0xa90
-[   60.527782] [   T1363]      rtnl_dellink+0x185/0x3d0
-[   60.527784] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.527787] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.527792] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.527800] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.527807] [   T1363]      ____sys_sendmsg+0x3a2/0x3d0
-[   60.527813] [   T1363]      ___sys_sendmsg+0x99/0xe0
-[   60.527819] [   T1363]      __sys_sendmsg+0x8a/0xf0
-[   60.527827] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527835] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527841] [   T1363] usage 6->5 at
-[   60.527844] [   T1363]      __dev_put.part.0+0xc2/0x200
-[   60.527851] [   T1363]      in_dev_finish_destroy+0x48/0x80
-[   60.527858] [   T1363]      inetdev_event+0x13c/0x490
-[   60.527865] [   T1363]      notifier_call_chain+0x41/0x100
-[   60.527873] [   T1363]      unregister_netdevice_many_notify+0x43a/0xa90
-[   60.527879] [   T1363]      rtnl_dellink+0x185/0x3d0
-[   60.527885] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.527892] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.527900] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.527907] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.527912] [   T1363]      ____sys_sendmsg+0x3a2/0x3d0
-[   60.527915] [   T1363]      ___sys_sendmsg+0x99/0xe0
-[   60.527918] [   T1363]      __sys_sendmsg+0x8a/0xf0
-[   60.527923] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527927] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527930] [   T1363] usage 5->4 at
-[   60.527931] [   T1363]      __dev_put.part.0+0xc2/0x200
-[   60.527935] [   T1363]      kobject_cleanup+0x3c/0x130
-[   60.527940] [   T1363]      net_rx_queue_update_kobjects+0x1d4/0x270
-[   60.527944] [   T1363]      netdev_unregister_kobject+0x50/0x110
-[   60.527948] [   T1363]      unregister_netdevice_many_notify+0x68b/0xa90
-[   60.527951] [   T1363]      rtnl_dellink+0x185/0x3d0
-[   60.527954] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.527957] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.527961] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.527965] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.527968] [   T1363]      ____sys_sendmsg+0x3a2/0x3d0
-[   60.527971] [   T1363]      ___sys_sendmsg+0x99/0xe0
-[   60.527974] [   T1363]      __sys_sendmsg+0x8a/0xf0
-[   60.527979] [   T1363]      do_syscall_64+0x94/0x370
-[   60.527983] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.527985] [   T1363] usage 4->3 at
-[   60.527987] [   T1363]      __dev_put.part.0+0xc2/0x200
-[   60.527991] [   T1363]      kobject_cleanup+0x3c/0x130
-[   60.528000] [   T1363]      netdev_queue_update_kobjects+0x1a1/0x210
-[   60.528008] [   T1363]      netdev_unregister_kobject+0x5d/0x110
-[   60.528016] [   T1363]      unregister_netdevice_many_notify+0x68b/0xa90
-[   60.528022] [   T1363]      rtnl_dellink+0x185/0x3d0
-[   60.528028] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.528035] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.528042] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.528049] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.528056] [   T1363]      ____sys_sendmsg+0x3a2/0x3d0
-[   60.528060] [   T1363]      ___sys_sendmsg+0x99/0xe0
-[   60.528063] [   T1363]      __sys_sendmsg+0x8a/0xf0
-[   60.528067] [   T1363]      do_syscall_64+0x94/0x370
-[   60.528071] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.528074] [   T1363] usage 3->2 at
-[   60.528076] [   T1363]      __dev_put.part.0+0xc2/0x200
-[   60.528079] [   T1363]      unregister_netdevice_many_notify+0x71b/0xa90
-[   60.528082] [   T1363]      rtnl_dellink+0x185/0x3d0
-[   60.528086] [   T1363]      rtnetlink_rcv_msg+0x410/0x670
-[   60.528089] [   T1363]      netlink_rcv_skb+0x59/0x110
-[   60.528093] [   T1363]      netlink_unicast+0x200/0x2e0
-[   60.528096] [   T1363]      netlink_sendmsg+0x222/0x460
-[   60.528099] [   T1363]      ____sys_sendmsg+0x3a2/0x3d0
-[   60.528102] [   T1363]      ___sys_sendmsg+0x99/0xe0
-[   60.528105] [   T1363]      __sys_sendmsg+0x8a/0xf0
-[   60.528109] [   T1363]      do_syscall_64+0x94/0x370
-[   60.528112] [   T1363]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   60.785514] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   61.809634] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   62.833592] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   63.857622] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   64.881689] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   65.905492] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   66.929608] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   67.953381] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   68.977506] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   70.001452] [   T1363] NETDEV_UNREGISTER notification on ffff8bc6c9818000
-[   70.769394] [   T1363] unregister_netdevice: waiting for vcan0 to become free. Usage count = 2
----------- printk() output of C reproducer with argc == 1 case end ----------
-
-If sendmsg() is not called, j1939 socket is closed due to the termination of
-the C reproducer, and the net namespace is released, and the usage count
-drops to 1.
-
----------- printk() output of C reproducer with argc != 1 case start ----------
-[   58.891859] [   T1357] CAN device driver interface
-[   58.905335] [   T1357] vcan: Virtual CAN interface driver
-[   58.940159] [   T1360] can: controller area network core
-[   58.940838] [   T1360] NET: Registered PF_CAN protocol family
-[   58.967389] [   T1361] can: SAE J1939
-[   58.971657] [   T1356] can_j1939: Bound ffff8d1c47ff2840
-[   58.971709] [   T1356] can_j1939: Setting J1939_SOCK_BOUND
-[   58.972024] [   T1356] can_j1939: j1939_sk_release ffff8d1c47ff2840 1
-[   58.972040] [   T1356] can_j1939: Clearing J1939_SOCK_BOUND
-[   58.972061] [   T1356] can_j1939: Stopped ffff8d1c47ff2840
-[   58.993626] [     C10] CPU: 10 UID: 0 PID: 0 Comm: swapper/10 Not tainted 6.17.0-rc1+ #90 PREEMPT(voluntary)
-[   58.993633] [     C10] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
-[   58.993634] [     C10] Call Trace:
-[   58.993636] [     C10]  <IRQ>
-[   58.993641] [     C10]  dump_stack_lvl+0x6e/0xa0
-[   58.993648] [     C10]  __put_net.part.0+0xa/0x22
-[   58.993652] [     C10]  __sk_destruct+0x1e3/0x2b0
-[   58.993656] [     C10]  ? rcu_do_batch+0x1c9/0xaf0
-[   58.993659] [     C10]  ? rcu_do_batch+0x1a3/0xaf0
-[   58.993660] [     C10]  rcu_do_batch+0x1ce/0xaf0
-[   58.993667] [     C10]  rcu_core+0x294/0x3e0
-[   58.993670] [     C10]  handle_softirqs+0xde/0x470
-[   58.993677] [     C10]  __irq_exit_rcu+0xe7/0x110
-[   58.993680] [     C10]  irq_exit_rcu+0xe/0x20
-[   58.993682] [     C10]  sysvec_apic_timer_interrupt+0x69/0x80
-[   58.993686] [     C10]  </IRQ>
-[   58.993686] [     C10]  <TASK>
-[   58.993688] [     C10]  asm_sysvec_apic_timer_interrupt+0x1a/0x20
-[   58.993690] [     C10] RIP: 0010:pv_native_safe_halt+0xf/0x20
-[   58.993694] [     C10] Code: 20 d0 c3 cc cc cc cc 0f 1f 40 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa eb 07 0f 00 2d 63 fc 13 00 fb f4 <e9> fc 83 01 00 66 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90
-[   58.993695] [     C10] RSP: 0018:ffffcdc600127eb0 EFLAGS: 00000286
-[   58.993697] [     C10] RAX: 0000000000031899 RBX: 0000000000000000 RCX: ffffffff9344be7a
-[   58.993699] [     C10] RDX: ffff8d1c418c3380 RSI: 0000000000000000 RDI: ffffffff9344be7a
-[   58.993700] [     C10] RBP: ffff8d1c418c3380 R08: 0000000000000000 R09: 0000000000000001
-[   58.993700] [     C10] R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
-[   58.993701] [     C10] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-[   58.993706] [     C10]  ? cpuidle_idle_call+0x12a/0x160
-[   58.993710] [     C10]  ? cpuidle_idle_call+0x12a/0x160
-[   58.993715] [     C10]  default_idle+0x9/0x20
-[   58.993717] [     C10]  default_idle_call+0x7a/0x1d0
-[   58.993719] [     C10]  cpuidle_idle_call+0x12a/0x160
-[   58.993721] [     C10]  ? tsc_verify_tsc_adjust+0x35/0xc0
-[   58.993725] [     C10]  do_idle+0x91/0xe0
-[   58.993728] [     C10]  cpu_startup_entry+0x29/0x30
-[   58.993731] [     C10]  start_secondary+0x12b/0x170
-[   58.993734] [     C10]  common_startup_64+0x13e/0x141
-[   58.993744] [     C10]  </TASK>
-[   59.007143] [     T14] usage 1->2 at
-[   59.007163] [     T14]      __dev_hold.part.0+0xc2/0x210
-[   59.007175] [     T14]      net_rx_queue_update_kobjects+0x11d/0x270
-[   59.007182] [     T14]      netdev_register_kobject+0xf4/0x190
-[   59.007187] [     T14]      register_netdevice+0x51e/0x880
-[   59.007192] [     T14]      rtnl_newlink_create+0x299/0x300
-[   59.007197] [     T14]      __rtnl_newlink+0xe2/0x3a0
-[   59.007201] [     T14]      rtnl_newlink+0x46f/0x8a0
-[   59.007205] [     T14]      rtnetlink_rcv_msg+0x410/0x670
-[   59.007210] [     T14]      netlink_rcv_skb+0x59/0x110
-[   59.007216] [     T14]      netlink_unicast+0x200/0x2e0
-[   59.007221] [     T14]      netlink_sendmsg+0x222/0x460
-[   59.007226] [     T14]      __sys_sendto+0x1f5/0x200
-[   59.007231] [     T14]      __x64_sys_sendto+0x24/0x30
-[   59.007236] [     T14]      do_syscall_64+0x94/0x370
-[   59.007243] [     T14]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   59.007314] [     T14] usage 2->3 at
-[   59.007320] [     T14]      __dev_hold.part.0+0xc2/0x210
-[   59.007327] [     T14]      netdev_queue_update_kobjects+0xeb/0x210
-[   59.007332] [     T14]      netdev_register_kobject+0x107/0x190
-[   59.007337] [     T14]      register_netdevice+0x51e/0x880
-[   59.007341] [     T14]      rtnl_newlink_create+0x299/0x300
-[   59.007345] [     T14]      __rtnl_newlink+0xe2/0x3a0
-[   59.007349] [     T14]      rtnl_newlink+0x46f/0x8a0
-[   59.007353] [     T14]      rtnetlink_rcv_msg+0x410/0x670
-[   59.007357] [     T14]      netlink_rcv_skb+0x59/0x110
-[   59.007362] [     T14]      netlink_unicast+0x200/0x2e0
-[   59.007367] [     T14]      netlink_sendmsg+0x222/0x460
-[   59.007371] [     T14]      __sys_sendto+0x1f5/0x200
-[   59.007376] [     T14]      __x64_sys_sendto+0x24/0x30
-[   59.007381] [     T14]      do_syscall_64+0x94/0x370
-[   59.007387] [     T14]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   59.007390] [     T14] usage 3->4 at
-[   59.007393] [     T14]      __dev_hold.part.0+0xc2/0x210
-[   59.007398] [     T14]      register_netdevice+0x5e2/0x880
-[   59.007402] [     T14]      rtnl_newlink_create+0x299/0x300
-[   59.007406] [     T14]      __rtnl_newlink+0xe2/0x3a0
-[   59.007409] [     T14]      rtnl_newlink+0x46f/0x8a0
-[   59.007413] [     T14]      rtnetlink_rcv_msg+0x410/0x670
-[   59.007418] [     T14]      netlink_rcv_skb+0x59/0x110
-[   59.007422] [     T14]      netlink_unicast+0x200/0x2e0
-[   59.007427] [     T14]      netlink_sendmsg+0x222/0x460
-[   59.007431] [     T14]      __sys_sendto+0x1f5/0x200
-[   59.007436] [     T14]      __x64_sys_sendto+0x24/0x30
-[   59.007440] [     T14]      do_syscall_64+0x94/0x370
-[   59.007592] [     T14]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   59.007601] [     T14] usage 4->5 at
-[   59.007604] [     T14]      __dev_hold.part.0+0xc2/0x210
-[   59.007609] [     T14]      neigh_parms_alloc+0x86/0x180
-[   59.007613] [     T14]      inetdev_init+0xa2/0x1f0
-[   59.007619] [     T14]      inetdev_event+0x26c/0x490
-[   59.007624] [     T14]      notifier_call_chain+0x41/0x100
-[   59.007632] [     T14]      register_netdevice+0x679/0x880
-[   59.007636] [     T14]      rtnl_newlink_create+0x299/0x300
-[   59.007640] [     T14]      __rtnl_newlink+0xe2/0x3a0
-[   59.007644] [     T14]      rtnl_newlink+0x46f/0x8a0
-[   59.007648] [     T14]      rtnetlink_rcv_msg+0x410/0x670
-[   59.007652] [     T14]      netlink_rcv_skb+0x59/0x110
-[   59.007657] [     T14]      netlink_unicast+0x200/0x2e0
-[   59.007662] [     T14]      netlink_sendmsg+0x222/0x460
-[   59.007667] [     T14]      __sys_sendto+0x1f5/0x200
-[   59.007672] [     T14]      __x64_sys_sendto+0x24/0x30
-[   59.007677] [     T14]      do_syscall_64+0x94/0x370
-[   59.007682] [     T14]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   59.007686] [     T14] usage 5->6 at
-[   59.007688] [     T14]      __dev_hold.part.0+0xc2/0x210
-[   59.007693] [     T14]      inetdev_init+0xc9/0x1f0
-[   59.007698] [     T14]      inetdev_event+0x26c/0x490
-[   59.007702] [     T14]      notifier_call_chain+0x41/0x100
-[   59.007707] [     T14]      register_netdevice+0x679/0x880
-[   59.007711] [     T14]      rtnl_newlink_create+0x299/0x300
-[   59.007715] [     T14]      __rtnl_newlink+0xe2/0x3a0
-[   59.007719] [     T14]      rtnl_newlink+0x46f/0x8a0
-[   59.007723] [     T14]      rtnetlink_rcv_msg+0x410/0x670
-[   59.007728] [     T14]      netlink_rcv_skb+0x59/0x110
-[   59.007732] [     T14]      netlink_unicast+0x200/0x2e0
-[   59.007737] [     T14]      netlink_sendmsg+0x222/0x460
-[   59.008071] [     T14]      __sys_sendto+0x1f5/0x200
-[   59.008079] [     T14]      __x64_sys_sendto+0x24/0x30
-[   59.008084] [     T14]      do_syscall_64+0x94/0x370
-[   59.008089] [     T14]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   59.008093] [     T14] usage 6->7 at
-[   59.008096] [     T14]      __dev_hold.part.0+0xc2/0x210
-[   59.008101] [     T14]      qdisc_alloc+0x278/0x330
-[   59.008108] [     T14]      qdisc_create_dflt+0x52/0x1a0
-[   59.008113] [     T14]      attach_default_qdiscs+0x8c/0x220
-[   59.008118] [     T14]      dev_activate+0x1be/0x220
-[   59.008123] [     T14]      __dev_open+0x1a6/0x2f0
-[   59.008126] [     T14]      __dev_change_flags+0x22e/0x270
-[   59.008129] [     T14]      netif_change_flags+0x27/0x70
-[   59.008132] [     T14]      do_setlink.isra.0+0x32c/0xd10
-[   59.008136] [     T14]      rtnl_newlink+0x46f/0x8a0
-[   59.008140] [     T14]      rtnetlink_rcv_msg+0x410/0x670
-[   59.008144] [     T14]      netlink_rcv_skb+0x59/0x110
-[   59.008149] [     T14]      netlink_unicast+0x200/0x2e0
-[   59.008154] [     T14]      netlink_sendmsg+0x222/0x460
-[   59.008158] [     T14]      __sys_sendto+0x1f5/0x200
-[   59.008163] [     T14]      __x64_sys_sendto+0x24/0x30
-[   59.008167] [     T14]      do_syscall_64+0x94/0x370
-[   59.008173] [     T14]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   59.008176] [     T14] usage 7->8 at
-[   59.008179] [     T14]      __dev_hold.part.0+0xc2/0x210
-[   59.008183] [     T14]      dev_get_by_index+0xb0/0x160
-[   59.008187] [     T14]      j1939_sk_bind+0xcc/0x260 [can_j1939]
-[   59.008206] [     T14]      __sys_bind+0xe3/0x110
-[   59.008211] [     T14]      __x64_sys_bind+0x18/0x20
-[   59.008216] [     T14]      do_syscall_64+0x94/0x370
-[   59.008221] [     T14]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   59.008224] [     T14] usage 8->9 at
-[   59.008227] [     T14]      __dev_hold.part.0+0xc2/0x210
-[   59.008231] [     T14]      j1939_netdev_start+0x110/0x3c0 [can_j1939]
-[   59.008239] [     T14]      j1939_sk_bind+0x10c/0x260 [can_j1939]
-[   59.008245] [     T14]      __sys_bind+0xe3/0x110
-[   59.008249] [     T14]      __x64_sys_bind+0x18/0x20
-[   59.008254] [     T14]      do_syscall_64+0x94/0x370
-[   59.008259] [     T14]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   59.008262] [     T14] usage 9->8 at
-[   59.008264] [     T14]      __dev_put.part.0+0xc2/0x200
-[   59.008269] [     T14]      j1939_sk_bind+0x12d/0x260 [can_j1939]
-[   59.008275] [     T14]      __sys_bind+0xe3/0x110
-[   59.008279] [     T14]      __x64_sys_bind+0x18/0x20
-[   59.008283] [     T14]      do_syscall_64+0x94/0x370
-[   59.008289] [     T14]      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   59.008292] [     T14] usage 8->7 at
-[   59.008294] [     T14]      __dev_put.part.0+0xc2/0x200
-[   59.008298] [     T14]      __j1939_priv_release+0x64/0xc0 [can_j1939]
-[   59.008305] [     T14]      j1939_sk_sock_destruct+0x25/0x50 [can_j1939]
-[   59.008312] [     T14]      __sk_destruct+0x36/0x2b0
-[   59.008316] [     T14]      rcu_do_batch+0x1ce/0xaf0
-[   59.008321] [     T14]      rcu_core+0x294/0x3e0
-[   59.008324] [     T14]      handle_softirqs+0xde/0x470
-[   59.008330] [     T14]      __irq_exit_rcu+0xe7/0x110
-[   59.008334] [     T14]      irq_exit_rcu+0xe/0x20
-[   59.008339] [     T14]      sysvec_apic_timer_interrupt+0x69/0x80
-[   59.008345] [     T14]      asm_sysvec_apic_timer_interrupt+0x1a/0x20
-[   59.008350] [     T14]      pv_native_safe_halt+0xf/0x20
-[   59.008355] [     T14]      default_idle+0x9/0x20
-[   59.008359] [     T14]      default_idle_call+0x7a/0x1d0
-[   59.008363] [     T14]      cpuidle_idle_call+0x12a/0x160
-[   59.008370] [     T14]      do_idle+0x91/0xe0
-[   59.008375] [     T14]      cpu_startup_entry+0x29/0x30
-[   59.008380] [     T14]      start_secondary+0x12b/0x170
-[   59.009636] [     T14]      common_startup_64+0x13e/0x141
-[   59.009953] [     T14] usage 7->6 at
-[   59.009961] [     T14]      __dev_put.part.0+0xc2/0x200
-[   59.009971] [     T14]      __qdisc_destroy+0xa0/0x190
-[   59.009979] [     T14]      dev_shutdown+0x8b/0x190
-[   59.009984] [     T14]      unregister_netdevice_many_notify+0x299/0xa90
-[   59.009989] [     T14]      default_device_exit_batch+0xed/0x120
-[   59.009994] [     T14]      ops_undo_list+0x10d/0x3b0
-[   59.009999] [     T14]      cleanup_net+0x1f8/0x370
-[   59.010003] [     T14]      process_one_work+0x223/0x590
-[   59.010008] [     T14]      worker_thread+0x1cb/0x3a0
-[   59.010012] [     T14]      kthread+0xfc/0x240
-[   59.010018] [     T14]      ret_from_fork+0x1d5/0x230
-[   59.010022] [     T14]      ret_from_fork_asm+0x1a/0x30
-[   59.010027] [     T14] usage 6->5 at
-[   59.010029] [     T14]      __dev_put.part.0+0xc2/0x200
-[   59.010034] [     T14]      neigh_parms_release+0xa5/0xc0
-[   59.010038] [     T14]      inetdev_destroy+0x131/0x1c0
-[   59.010044] [     T14]      inetdev_event+0x13c/0x490
-[   59.010048] [     T14]      notifier_call_chain+0x41/0x100
-[   59.010054] [     T14]      unregister_netdevice_many_notify+0x43a/0xa90
-[   59.010058] [     T14]      default_device_exit_batch+0xed/0x120
-[   59.010062] [     T14]      ops_undo_list+0x10d/0x3b0
-[   59.010065] [     T14]      cleanup_net+0x1f8/0x370
-[   59.010069] [     T14]      process_one_work+0x223/0x590
-[   59.010072] [     T14]      worker_thread+0x1cb/0x3a0
-[   59.010076] [     T14]      kthread+0xfc/0x240
-[   59.010080] [     T14]      ret_from_fork+0x1d5/0x230
-[   59.010084] [     T14]      ret_from_fork_asm+0x1a/0x30
-[   59.010087] [     T14] usage 5->4 at
-[   59.010090] [     T14]      __dev_put.part.0+0xc2/0x200
-[   59.010094] [     T14]      in_dev_finish_destroy+0x48/0x80
-[   59.010098] [     T14]      inetdev_event+0x13c/0x490
-[   59.010103] [     T14]      notifier_call_chain+0x41/0x100
-[   59.010108] [     T14]      unregister_netdevice_many_notify+0x43a/0xa90
-[   59.010112] [     T14]      default_device_exit_batch+0xed/0x120
-[   59.010115] [     T14]      ops_undo_list+0x10d/0x3b0
-[   59.010119] [     T14]      cleanup_net+0x1f8/0x370
-[   59.010122] [     T14]      process_one_work+0x223/0x590
-[   59.010126] [     T14]      worker_thread+0x1cb/0x3a0
-[   59.010129] [     T14]      kthread+0xfc/0x240
-[   59.010134] [     T14]      ret_from_fork+0x1d5/0x230
-[   59.010137] [     T14]      ret_from_fork_asm+0x1a/0x30
-[   59.010140] [     T14] usage 4->3 at
-[   59.010143] [     T14]      __dev_put.part.0+0xc2/0x200
-[   59.010147] [     T14]      kobject_cleanup+0x3c/0x130
-[   59.010153] [     T14]      net_rx_queue_update_kobjects+0x1d4/0x270
-[   59.010159] [     T14]      netdev_unregister_kobject+0x50/0x110
-[   59.010164] [     T14]      unregister_netdevice_many_notify+0x68b/0xa90
-[   59.010169] [     T14]      default_device_exit_batch+0xed/0x120
-[   59.010172] [     T14]      ops_undo_list+0x10d/0x3b0
-[   59.010176] [     T14]      cleanup_net+0x1f8/0x370
-[   59.010181] [     T14]      process_one_work+0x223/0x590
-[   59.010184] [     T14]      worker_thread+0x1cb/0x3a0
-[   59.010187] [     T14]      kthread+0xfc/0x240
-[   59.010192] [     T14]      ret_from_fork+0x1d5/0x230
-[   59.010195] [     T14]      ret_from_fork_asm+0x1a/0x30
-[   59.010198] [     T14] usage 3->2 at
-[   59.010201] [     T14]      __dev_put.part.0+0xc2/0x200
-[   59.010205] [     T14]      kobject_cleanup+0x3c/0x130
-[   59.010210] [     T14]      netdev_queue_update_kobjects+0x1a1/0x210
-[   59.010215] [     T14]      netdev_unregister_kobject+0x5d/0x110
-[   59.010220] [     T14]      unregister_netdevice_many_notify+0x68b/0xa90
-[   59.010224] [     T14]      default_device_exit_batch+0xed/0x120
-[   59.010228] [     T14]      ops_undo_list+0x10d/0x3b0
-[   59.010231] [     T14]      cleanup_net+0x1f8/0x370
-[   59.010235] [     T14]      process_one_work+0x223/0x590
-[   59.010238] [     T14]      worker_thread+0x1cb/0x3a0
-[   59.010242] [     T14]      kthread+0xfc/0x240
-[   59.010247] [     T14]      ret_from_fork+0x1d5/0x230
-[   59.010251] [     T14]      ret_from_fork_asm+0x1a/0x30
-[   59.010254] [     T14] usage 2->1 at
-[   59.010257] [     T14]      __dev_put.part.0+0xc2/0x200
-[   59.010261] [     T14]      unregister_netdevice_many_notify+0x71b/0xa90
-[   59.010265] [     T14]      default_device_exit_batch+0xed/0x120
-[   59.010269] [     T14]      ops_undo_list+0x10d/0x3b0
-[   59.010272] [     T14]      cleanup_net+0x1f8/0x370
-[   59.010276] [     T14]      process_one_work+0x223/0x590
-[   59.010279] [     T14]      worker_thread+0x1cb/0x3a0
-[   59.010282] [     T14]      kthread+0xfc/0x240
-[   59.010287] [     T14]      ret_from_fork+0x1d5/0x230
-[   59.010290] [     T14]      ret_from_fork_asm+0x1a/0x30
----------- printk() output of C reproducer with argc != 1 case end ----------
-
-Therefore, I guess that either
-
-  j1939_netdev_notify() is handling NETDEV_UNREGISTER notification
-
-or
-
-  rtnl_dellink() can be called via sendmsg() despite the j1939 socket
-  are in use
-
-is wrong. How to fix this problem?
+QW0gTWl0dHdvY2gsIGRlbSAxMy4wOC4yMDI1IHVtIDEwOjA5ICswMjAwIHNjaHJpZWIgTWFyYyBL
+bGVpbmUtQnVkZGU6DQo+IE9uIDExLjA4LjIwMjUgMjM6MDY6MTEsIFN0ZWZhbiBNw6R0amUgd3Jv
+dGU6DQo+ID4gVGhlIFVTQiBzdGFjayBjYWxscyBkdXJpbmcgZGlzY29ubmVjdCB0aGUgZXNkX3Vz
+Yl9kaXNjb25uZWN0KCkgY2FsbGJhY2suDQo+ID4gZXNkX3VzYl9kaXNjb25uZWN0KCkgY2FsbHMg
+bmV0ZGV2X3VucmVnaXN0ZXIoKSBmb3IgZWFjaCBuZXR3b3JrIHdoaWNoDQo+ID4gaW4gdHVybiBj
+YWxscyB0aGUgbmV0X2RldmljZV9vcHM6Om5kb19zdG9wIGNhbGxiYWNrIGVzZF91c2JfY2xvc2Uo
+KSBpZg0KPiA+IHRoZSBuZXQgZGV2aWNlIGlzIHVwLg0KPiA+IA0KPiA+IFRoZSBlc2RfdXNiX2Ns
+b3NlKCkgY2FsbGJhY2sgdHJpZXMgdG8gZGlzYWJsZSBhbGwgQ0FOIElkcyBhbmQgdG8gcmVzZXQN
+Cj4gPiB0aGUgQ0FOIGNvbnRyb2xsZXIgb2YgdGhlIGRldmljZSBzZW5kaW5nIGFwcHJvcHJpYXRl
+IGNvbnRyb2wgbWVzc2FnZXMuDQo+ID4gDQo+ID4gU2VuZGluZyB0aGVzZSBtZXNzYWdlcyBpbiAu
+ZGlzY29ubmVjdCgpIGlzIG1vb3QgYW5kIGFsd2F5cyBmYWlscyBiZWNhdXNlDQo+ID4gZWl0aGVy
+IHRoZSBkZXZpY2UgaXMgZ29uZSBvciB0aGUgVVNCIGNvbW11bmljYXRpb24gaXMgYWxyZWFkeSB0
+b3JuIGRvd24NCj4gPiBieSB0aGUgVVNCIHN0YWNrIGluIHRoZSBjb3Vyc2Ugb2YgYSBybW1vZCBv
+cGVyYXRpb24uDQo+ID4gDQo+ID4gVGhpcyBwYXRjaCBtb3ZlcyB0aGUgY29kZSB0aGF0IHNlbmRz
+IHRoZXNlIGNvbnRyb2wgbWVzc2FnZXMgdG8gYSBuZXcNCj4gPiBmdW5jdGlvbiBlc2RfdXNiX3N0
+b3AoKSB3aGljaCBpcyBhcHByb3hpbWF0ZWx5IHRoZSBjb3VudGVycGFydCBvZg0KPiA+IGVzZF91
+c2Jfc3RhcnQoKSB0byBtYWtlIGNvZGUgc3RydWN0dXJlIGxlc3MgY29udm9sdXRlZC4NCj4gPiAN
+Cj4gPiBJdCB0aGVuIGNoYW5nZXMgZXNkX3VzYl9jbG9zZSgpIG5vdCB0byBzZW5kIHRoZSBjb250
+cm9sIG1lc3NhZ2VzIGF0DQo+ID4gYWxsIGlmIHRoZSBuZG9fc3RvcCgpIGNhbGxiYWNrIGlzIGV4
+ZWN1dGVkIGZyb20gdGhlIFVTQiAuZGlzY29ubmVjdCgpDQo+ID4gY2FsbGJhY2suIEEgbmV3IGZs
+YWcgaW5fdXNiX2Rpc2Nvbm5lY3QgaXMgYWRkZWQgdG8gdGhlIHN0cnVjdCBlc2RfdXNiDQo+ID4g
+ZGV2aWNlIHN0cnVjdHVyZSB0byBtYXJrIHRoaXMgY29uZGl0aW9uIHdoaWNoIGlzIGNoZWNrZWQg
+YnkNCj4gPiBlc2RfdXNiX2Nsb3NlKCkgd2hldGhlciB0byBza2lwIHRoZSBzZW5kIG9wZXJhdGlv
+bnMgaW4gZXNkX3VzYl9zdGFydCgpLg0KPiANCj4gSSBjYW5ub3QgZmluZCB0aGUgcmVmZXJlbmNl
+IGFueW1vcmUsIGJ1dCBJIHJlbWVtYmVyIHRoYXQgR3JlZyBzYWlkLCB0aGF0DQo+IFVTQiBkZXZp
+Y2VzIHNob3VsZCBqdXN0IGJlIHF1aWV0IHdoZW4gYmVpbmcgdW5wbHVnZ2VkLiBJIHJlbW92ZWQg
+dGhlDQo+IGVycm9yIHByaW50cyBmcm9tIHRoZSBnc191c2IncyBjbG9zZSBmdW5jdGlvbiwgc2Vl
+OiA1YzZjMzEzYWNkZmMgKCJjYW46DQo+IGdzX3VzYjogZ3NfY2FuX2Nsb3NlKCk6IGRvbid0IGNv
+bXBsYWluIGFib3V0IGZhaWxlZCBkZXZpY2UgcmVzZXQgZHVyaW5nDQo+IG5kb19zdG9wIikNCg0K
+SGVsbG8gTWFyYywNCg0KSSB0aGluayB0aGlzIHBhdGNoIGZ1bGZpbGxzIHRoZSByZXF1aXJlbWVu
+dCBub3QgdG8gcHJpbnQgKGJvZ3VzKSBlcnJvcg0KbWVzc2FnZXMgZHVyaW5nIGRldmljZSBkaXNj
+b25ubmVjdC4gVGhpcyBpcyB0aGUgcHVycG9zZSBvZiB0aGUgcGF0Y2guDQoNCkl0IGRvZXMgdGhp
+cyBieSBub3QgdHJ5aW5nIHRvIGNvbW11bmljYXRlIHdpdGggdGhlIGRldmljZSBkdXJpbmcgVVNC
+DQpkaXNjb25uZWN0IGF0IGFsbC4gVGhlcmVmb3JlIG5vIGVycm9yIG1lc3NhZ2VzIGNhbiBiZSB0
+cmlnZ2VyZWQuDQoNCk9uIHRoZSBvdGhlciBoYW5kIEkgd291bGQgbGlrZSB0byBicmluZyB0aGUg
+ZGV2aWNlIGluIGFuIGlkbGUgc3RhdGUgZHVyaW5nDQoiaXAgbGluayBzZXQgZG93biIgZ29pbmcg
+dGhyb3VnaCBuZG9fc3RvcCgpLiBJbiB0aGlzIGNhc2UgdGhlIFVTQg0KY29tbXVuaWNhdGlvbiBz
+aG91bGQgc3RpbGwgYmUgb2sgYW5kIGFueSBlcnJvcnMgc2hvdWxkIGJlIHByaW50ZWQgaW4gbXkN
+Cm9waW5pb24uDQoNCldoYXQgZG8geW91IHRoaW5rPw0KDQpTdGVmYW4NCg0K
 
