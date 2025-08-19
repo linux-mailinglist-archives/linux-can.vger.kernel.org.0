@@ -1,158 +1,151 @@
-Return-Path: <linux-can+bounces-4263-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4264-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73E3AB2BBDD
-	for <lists+linux-can@lfdr.de>; Tue, 19 Aug 2025 10:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF25EB2C44D
+	for <lists+linux-can@lfdr.de>; Tue, 19 Aug 2025 14:55:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F1DE16670C
-	for <lists+linux-can@lfdr.de>; Tue, 19 Aug 2025 08:29:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 490BC173206
+	for <lists+linux-can@lfdr.de>; Tue, 19 Aug 2025 12:53:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4C3311965;
-	Tue, 19 Aug 2025 08:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B17933769F;
+	Tue, 19 Aug 2025 12:53:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="DA/HfZBB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="spVV9/Af"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17EC3115BD
-	for <linux-can@vger.kernel.org>; Tue, 19 Aug 2025 08:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05EAE322DCF;
+	Tue, 19 Aug 2025 12:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755592161; cv=none; b=L5Ok/MRGoUxePbuETZ/BEvYaHR7pYWjZKBRAcAn7L1vZ6VKCzdbkF0vSovye2zfq6WNdPXOvxyfga4glCZAvb92wUV9w0BufTJnuqNh+Mce4TwAGJG1250SI2W34Wjyr5lpZQbWCF7rQn4cTc660ij1/roForCujj4Ct0ytimXQ=
+	t=1755607990; cv=none; b=nMSD8pIYTjvGWw3eRlIAXsFOQ9MfzvN2/necniu1kVsxW4bhnmmemCBXMr5Fpj7UkY+BgfDHvP6y3/oTgEvXmb2NhvK2fZiFn0JW/THHUWedot0UfyS+R/HugCmaPBkWr4ZXbpYk3y70dRlIAF+jCot/r1A8oWCmHgEO59GE6jE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755592161; c=relaxed/simple;
-	bh=wM9xXC+D294Q3NUdde5c9ksE9RETsJFMNAGdmuAyQLA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=hJ/X2IyuaCU7tdQeeA1+Jxo71ORow9WfCH1rst7SIPnKr4tY32e9b6ZRYHPhvUz195nCYLy4/jbp1g0i8ofOh/Kl5i8eyEAUJouvy+nG+51FFdYc8tUSB5H6rzWOY68TC0zgCD5LwQmzGTSyPKe0SpQMqv6WVk6rMNFC3qKreho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=DA/HfZBB; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-afcb61f6044so837486066b.0
-        for <linux-can@vger.kernel.org>; Tue, 19 Aug 2025 01:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1755592156; x=1756196956; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TCI9o6Ocmammodx0PX+9MIbgr0tFJH9KqExrAza1lZA=;
-        b=DA/HfZBB5gN8xVgBBJCfet2WqbDHktgESdTtS3HN8YTz+5l0o/541QYyEPUDcTvRnj
-         +kRUu/UQIRxBVgI/AyctXq+bjkE9GV6xbUd/vNY92B8JNOUc9DNYu5S0j5rgI2DU/ddT
-         uWWQlRgEsil/fRUS8r+a7qhkLcpQpdEziAkjs9nFn6l55rFw4UEiY6OnHIVnb7UlT//Y
-         Jt93eFyffEReKCCd2i9ypqlNxjZ2ZMa0rJxiMbehxVZJKqYpmburhMacf7G5n9hd7k8Z
-         /dIdkvRonaZHOCfZ3ERfvoVLeb4wKWQSTSALD4Cs6+I0uxEx20wMTwTVQkXtWQtohzh2
-         gwfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755592156; x=1756196956;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TCI9o6Ocmammodx0PX+9MIbgr0tFJH9KqExrAza1lZA=;
-        b=Q9oUdjV3rKgiIDiSv4lykhWXDxqGsOjBp5nO9x7wEPvgjo5SZMGn/StFVOfg2kqI/q
-         chKef9ND7/x9Qh2z3wRCesMirytROQKVL93g0UnJNbt8P7dVpjpkPaP9akhTjKCBxKG0
-         HiR3cQtcwcCqwEY5LYKT2T1N7ASqX6LXlvJV50o5Y+EsqiIYiSYCtqGCP08oc5L1Doaq
-         vim+Y1KbPxUJAnegFQBo5QBLFlRNshX/H+PwUUww1TCWCrHSUtwhL3VwyBwSPr3Co9aa
-         vy5UuazFmQzaztJ3w1Afy/d+BzKiCvgnUCRD6D8hEZdgD0o9sdkDJRWuo6nvyANMNnTK
-         kYcw==
-X-Gm-Message-State: AOJu0YyaAn/go9LFk6fpnkYP2oMtVrvv7gjmzio8e0lF+Lp8O9XpMAVR
-	bZvyAgK1ol6kqY+kqDmh+W1XELCfcqTeZ1BWuaobKYMnOkX+c9oJXmR2R2taT9+Lr8E=
-X-Gm-Gg: ASbGncufJJaHYOPtV6MNqaUNqNTsRQwOjpBtKfe98dJwwqD52pFDx/Lj/popw8jf3cW
-	Sf8nawRQeHgWtxgGFoehYNt7DCWuwiDl6YmD4ErB2NmClOzkPSlNEcf+19oXFQYKlRkTtVaantS
-	Ri+JhdYzLLe/rYpJ0Yq5xL9Rg04JwpfopZxKMx99UOz1ootbY9iF7Qy0eSHJKFXN1zX8OXTQpPe
-	kopdGPU/jjwHnO20GW3cmXW/43kxAQpqz+Ysvgi7Z6rbZJrcxH9NCJ24NMqtFUd5fLg1yjrF3x5
-	O9Xe3sPk4b5oSFSsfm1j8cevy4l657msp5cyix6LLmQiM5ntyhXdM+C5o8yZBvwz8S7V3EsT+hP
-	7ow9zsNG+8x/aUg==
-X-Google-Smtp-Source: AGHT+IEpf0xkM4Fy64K7iYsZpzlLtHAWLLw9UAj4WJRT9U5fr7fAn7CUDHHuzyYNHqv1utE6AIxlJw==
-X-Received: by 2002:a17:907:9807:b0:af9:41a4:25b3 with SMTP id a640c23a62f3a-afdded8e7f6mr142953466b.29.1755592156089;
-        Tue, 19 Aug 2025 01:29:16 -0700 (PDT)
-Received: from localhost ([195.52.61.108])
-        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-61a75794ba2sm1329676a12.45.2025.08.19.01.29.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 01:29:15 -0700 (PDT)
+	s=arc-20240116; t=1755607990; c=relaxed/simple;
+	bh=13a7n6Pb3jFNNT/Scy0A653um0mNmwq9IdUUvB5tTjQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H+J3BTg3lHNBpgxDP5HGd+Y6dDXJDkpv5cAGVr3fK8AayR0VdPYIDdvVvuWFt6OWU3UnXtXoxhUza5IRSaf2xt2WIqyP7bKFO2Ap3R/6fGYKEXOvfe2beTppwQtWSBzCS1wMR9GzLifeV5/qR6uDHP8bA/QdWmFu5VCv1krfY+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=spVV9/Af; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FBAFC4CEF1;
+	Tue, 19 Aug 2025 12:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755607989;
+	bh=13a7n6Pb3jFNNT/Scy0A653um0mNmwq9IdUUvB5tTjQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=spVV9/Af14lsdKsEZzbIRCmuw1himyJY4e7hGmujx6tF/7/m5++G9iGLOygy4mLKK
+	 S3J0KyX5OveutjN6wX9q+olCFVfEW+RtiFd90uA2fBALfHpIoO2gvh1X7xJmn11zPS
+	 cHbkb3kVoE7YsPG9I3nHOXmYlSNgyHu8ps6sjLOxTwTiS2vLuVvDIPR9x/OmYT7UZj
+	 Ie+zJQHk1Cuu7QYMDBH4Q5bGdHH0Hl3nILAiihBXXc6LghGbcjKtDV9MF5jWrfGU3y
+	 WEpk42jqv8EdikF6bgDuKfqpBwvz+8UyHAlvKxs+Cb41i9692F/9qkZJGnwJ1yq5Qf
+	 u8aKBTIzufhmQ==
+Date: Tue, 19 Aug 2025 13:53:02 +0100
+From: Lee Jones <lee@kernel.org>
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v14 0/7] Add Nuvoton NCT6694 MFD drivers
+Message-ID: <20250819125302.GE7508@google.com>
+References: <20250715025626.968466-1-a0282524688@gmail.com>
+ <20250723095856.GT11056@google.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed;
- boundary=6d44b553a7c7e2e2a2c9164fc3dbefb8444bd5baec51a0f82cba40b40ec1;
- micalg=pgp-sha512; protocol="application/pgp-signature"
-Date: Tue, 19 Aug 2025 10:29:09 +0200
-Message-Id: <DC69H7OUANQR.ZVMFRCS8UF4D@baylibre.com>
-To: "Marc Kleine-Budde" <mkl@pengutronix.de>, "Chandrasekar Ramakrishnan"
- <rcsekar@samsung.com>, "Vincent Mailhol" <mailhol.vincent@wanadoo.fr>,
- "Patrik Flykt" <patrik.flykt@linux.intel.com>, "Dong Aisheng"
- <b29396@freescale.com>, "Fengguang Wu" <fengguang.wu@intel.com>, "Varka
- Bhadram" <varkabhadram@gmail.com>, "Wu Bo" <wubo.oduw@gmail.com>, "Philipp
- Zabel" <p.zabel@pengutronix.de>
-Cc: <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <kernel@pengutronix.de>
-Subject: Re: [PATCH 2/7] can: m_can: m_can_rx_handler(): only handle active
- interrupts
-From: "Markus Schneider-Pargmann" <msp@baylibre.com>
-X-Mailer: aerc 0.20.1
-References: <20250812-m_can-fix-state-handling-v1-0-b739e06c0a3b@pengutronix.de> <20250812-m_can-fix-state-handling-v1-2-b739e06c0a3b@pengutronix.de>
-In-Reply-To: <20250812-m_can-fix-state-handling-v1-2-b739e06c0a3b@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250723095856.GT11056@google.com>
 
---6d44b553a7c7e2e2a2c9164fc3dbefb8444bd5baec51a0f82cba40b40ec1
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+On Wed, 23 Jul 2025, Lee Jones wrote:
 
-On Tue Aug 12, 2025 at 7:36 PM CEST, Marc Kleine-Budde wrote:
-> Among other things, the M_CAN IP core has an Interrupt Register (IR)
-> and an Interrupt Enable (IE) register. An interrupt is triggered if at
-> least 1 bit is set in the bitwise and of IR and IE.
->
-> Depending on the configuration not all interrupts are enabled in the
-> IE register. However the m_can_rx_handler() IRQ handler looks at all
-> interrupts not just the enabled ones. This may lead to handling of not
-> activated interrupts.
+> On Tue, 15 Jul 2025, a0282524688@gmail.com wrote:
+> 
+> > From: Ming Yu <a0282524688@gmail.com>
+> > 
+> > This patch series introduces support for Nuvoton NCT6694, a peripheral
+> > expander based on USB interface. It models the chip as an MFD driver
+> > (1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+> > WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
+> > 
+> > The MFD driver implements USB device functionality to issue
+> > custom-define USB bulk pipe packets for NCT6694. Each child device can
+> > use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+> > a command. They can also request interrupt that will be called when the
+> > USB device receives its interrupt pipe.
+> > 
+> > The following introduces the custom-define USB transactions:
+> > 	nct6694_read_msg - Send bulk-out pipe to write request packet
+> > 			   Receive bulk-in pipe to read response packet
+> > 			   Receive bulk-in pipe to read data packet
+> > 
+> > 	nct6694_write_msg - Send bulk-out pipe to write request packet
+> > 			    Send bulk-out pipe to write data packet
+> > 			    Receive bulk-in pipe to read response packet
+> 
+> [...]
+> 
+> > Ming Yu (7):
+> >   mfd: Add core driver for Nuvoton NCT6694
+> >   gpio: Add Nuvoton NCT6694 GPIO support
+> >   i2c: Add Nuvoton NCT6694 I2C support
+> >   can: Add Nuvoton NCT6694 CANFD support
+> >   watchdog: Add Nuvoton NCT6694 WDT support
+> >   hwmon: Add Nuvoton NCT6694 HWMON support
+> >   rtc: Add Nuvoton NCT6694 RTC support
+> > 
+> >  MAINTAINERS                         |  12 +
+> >  drivers/gpio/Kconfig                |  12 +
+> >  drivers/gpio/Makefile               |   1 +
+> >  drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++
+> >  drivers/hwmon/Kconfig               |  10 +
+> >  drivers/hwmon/Makefile              |   1 +
+> >  drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
+> >  drivers/i2c/busses/Kconfig          |  10 +
+> >  drivers/i2c/busses/Makefile         |   1 +
+> >  drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++
+> >  drivers/mfd/Kconfig                 |  15 +
+> >  drivers/mfd/Makefile                |   2 +
+> >  drivers/mfd/nct6694.c               | 388 ++++++++++++
+> >  drivers/net/can/usb/Kconfig         |  11 +
+> >  drivers/net/can/usb/Makefile        |   1 +
+> >  drivers/net/can/usb/nct6694_canfd.c | 832 ++++++++++++++++++++++++
+> >  drivers/rtc/Kconfig                 |  10 +
+> >  drivers/rtc/Makefile                |   1 +
+> >  drivers/rtc/rtc-nct6694.c           | 297 +++++++++
+> >  drivers/watchdog/Kconfig            |  11 +
+> >  drivers/watchdog/Makefile           |   1 +
+> >  drivers/watchdog/nct6694_wdt.c      | 307 +++++++++
+> >  include/linux/mfd/nct6694.h         | 102 +++
+> >  23 files changed, 3669 insertions(+)
+> >  create mode 100644 drivers/gpio/gpio-nct6694.c
+> >  create mode 100644 drivers/hwmon/nct6694-hwmon.c
+> >  create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+> >  create mode 100644 drivers/mfd/nct6694.c
+> >  create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+> >  create mode 100644 drivers/rtc/rtc-nct6694.c
+> >  create mode 100644 drivers/watchdog/nct6694_wdt.c
+> >  create mode 100644 include/linux/mfd/nct6694.h
+> 
+> I will apply this the other side of the pending merge-window.
 
-But isn't that happening for m_can_interrupt_handler() in general then?
+Doesn't apply.  Please rebase on top of v6.17-rc1.
 
-Best
-Markus
+When you resubmit do so as a [RESEND].
 
->
-> Fix the problem and mask the irqstatus (IR register) with the
-> active_interrupts (cache value of IE register).
->
-> Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  drivers/net/can/m_can/m_can.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.=
-c
-> index fe74dbd2c966..a51dc0bb8124 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1006,6 +1006,7 @@ static int m_can_rx_handler(struct net_device *dev,=
- int quota, u32 irqstatus)
->  	int rx_work_or_err;
->  	int work_done =3D 0;
-> =20
-> +	irqstatus &=3D cdev->active_interrupts;
->  	if (!irqstatus)
->  		goto end;
-> =20
-
-
---6d44b553a7c7e2e2a2c9164fc3dbefb8444bd5baec51a0f82cba40b40ec1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaKQ11RsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlNB
-7wD/cIXNFNL3XdWS815Jyw2Qf29KhK0qlWvUInVXRI9txwQA/0Jwxk5x8pj4Cwaj
-bAJFDc2KKCrNe8rgxRBKzRgVU9oI
-=unW3
------END PGP SIGNATURE-----
-
---6d44b553a7c7e2e2a2c9164fc3dbefb8444bd5baec51a0f82cba40b40ec1--
+-- 
+Lee Jones [李琼斯]
 
