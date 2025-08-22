@@ -1,43 +1,43 @@
-Return-Path: <linux-can+bounces-4317-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4318-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 120EBB314FF
-	for <lists+linux-can@lfdr.de>; Fri, 22 Aug 2025 12:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 94EEFB31503
+	for <lists+linux-can@lfdr.de>; Fri, 22 Aug 2025 12:18:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA5BE6051E9
-	for <lists+linux-can@lfdr.de>; Fri, 22 Aug 2025 10:17:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97CBC605288
+	for <lists+linux-can@lfdr.de>; Fri, 22 Aug 2025 10:17:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F6332C08D4;
-	Fri, 22 Aug 2025 10:17:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91DC32D027F;
+	Fri, 22 Aug 2025 10:17:31 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242722D3A97;
-	Fri, 22 Aug 2025 10:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774112C21DA;
+	Fri, 22 Aug 2025 10:17:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755857850; cv=none; b=eVbyiLxDn3+N+d6+BHTN5getEB7vJuBlh2Mr6+3RTfbYqPSrtBIwY8EaKjUt31rkYHs36dlH7q4Mf1MoEZrnq8BCl45kvsTKobNj2OIg45EBAXlEZZKN4OvZzK7wiL9IupYzh7oea5r/9woBHI5IYZuYkPEEaHDZRRsndrweLuU=
+	t=1755857851; cv=none; b=sZM2rJ18ODDgVD06juIOUf1KPdrctvnyMDKsGKF8Nwdrp/oyTeap9izNI+Z1o9p+zOrtCBeP11Nudf2DSJlIVH681/nrEzdst06ib1Hzmtugicz+j3US56JwwGUnCwurG+wLSfeZLsH9UviwX7+slz6xTv4kj0zJbSrTcYYkYFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755857850; c=relaxed/simple;
-	bh=xV67ul0j5uDMgxIB4+qh9eXTzcCdvRsO387GL8j1ELE=;
+	s=arc-20240116; t=1755857851; c=relaxed/simple;
+	bh=yFtXoZG+t8CZvUeZev3M2tncy9uEoOS5+8OWJRLZ4zE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VJGfT0dSHR4Y0DQbhqirupBRc2SbixDSLRa4m9LJDxoZGldaXw/bZvzpf5TjvChxCQtKYuna8ynS776ib2pHP3QunI5iglBTkfCM1FcOpBSSLbRgDJf1MZXcOQ57b4Im6UrT7Uci+mrvvQ5wEnSw0tCkKjadfnN0+qpcKyZHMRw=
+	 MIME-Version; b=IfWsmPtVQ/ixIFsg6Mut4Ac3Dapa4py3QjpWZEjbpysjOcQJ2LPJZ21aoWj6Y/EZpzvMCc2BaSv9f3/26iRny+FRfh61iHR60+s+RkFM4KSQEgc+eoTgRhPAzCa1hfzaPu/UQteJhG+GQGdKhVMaQRCSRgRwfpY/8IivY2KXv04=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855BDC4CEF1;
-	Fri, 22 Aug 2025 10:17:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 119F8C4CEED;
+	Fri, 22 Aug 2025 10:17:29 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Cc: linux-can@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 07/11] can: rcar_can: TFCR bitfield conversion
-Date: Fri, 22 Aug 2025 12:17:08 +0200
-Message-ID: <a8b1dc6f1249a01af9b691ca59e2e5cc2dba6d44.1755857536.git.geert+renesas@glider.be>
+Subject: [PATCH v2 08/11] can: rcar_can: BCR bitfield conversion
+Date: Fri, 22 Aug 2025 12:17:09 +0200
+Message-ID: <01cfaedba2be22515ba8700893ea7f113df959c0.1755857536.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1755857536.git.geert+renesas@glider.be>
 References: <cover.1755857536.git.geert+renesas@glider.be>
@@ -49,45 +49,53 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Convert CAN Transmit FIFO Control Register field accesses to use the
-FIELD_GET() bitfield access macro.
+Convert CAN Bit Configuration Register field accesses to use the
+FIELD_PREP() bitfield access macro.  While at it, fix the misspelling of
+BRP.
 
-This gets rid of an explicit shift.
+This gets rid of custom function-like field preparation macros.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 v2:
   - No changes.
 ---
- drivers/net/can/rcar/rcar_can.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/net/can/rcar/rcar_can.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
-index 8b4356fcd7d2fddb..6f28dc9354511120 100644
+index 6f28dc9354511120..4c5c1f0446913d37 100644
 --- a/drivers/net/can/rcar/rcar_can.c
 +++ b/drivers/net/can/rcar/rcar_can.c
-@@ -145,8 +145,6 @@ static const struct can_bittiming_const rcar_can_bittiming_const = {
- /* Transmit FIFO Control Register bits */
- #define RCAR_CAN_TFCR_TFUST	GENMASK(3, 1)	/* Transmit FIFO Unsent Message */
- 						/* Number Status Bits */
--#define RCAR_CAN_TFCR_TFUST_SHIFT 1		/* Offset of Transmit FIFO Unsent */
--						/* Message Number Status Bits */
- #define RCAR_CAN_TFCR_TFE	BIT(0)		/* Transmit FIFO Enable */
+@@ -152,10 +152,10 @@ static const struct can_bittiming_const rcar_can_bittiming_const = {
+ #define RCAR_CAN_N_RX_MKREGS2	8
  
- #define RCAR_CAN_N_RX_MKREGS1	2		/* Number of mask registers */
-@@ -377,10 +375,9 @@ static void rcar_can_tx_done(struct net_device *ndev)
- 	u8 isr;
+ /* Bit Configuration Register settings */
+-#define RCAR_CAN_BCR_TSEG1(x)	(((x) & 0x0f) << 20)
+-#define RCAR_CAN_BCR_BPR(x)	(((x) & 0x3ff) << 8)
+-#define RCAR_CAN_BCR_SJW(x)	(((x) & 0x3) << 4)
+-#define RCAR_CAN_BCR_TSEG2(x)	((x) & 0x07)
++#define RCAR_CAN_BCR_TSEG1	GENMASK(23, 20)
++#define RCAR_CAN_BCR_BRP	GENMASK(17, 8)
++#define RCAR_CAN_BCR_SJW	GENMASK(5, 4)
++#define RCAR_CAN_BCR_TSEG2	GENMASK(2, 0)
  
- 	while (1) {
--		u8 unsent = readb(&priv->regs->tfcr);
-+		u8 unsent = FIELD_GET(RCAR_CAN_TFCR_TFUST,
-+			    readb(&priv->regs->tfcr));
+ /* Mailbox and Mask Registers bits */
+ #define RCAR_CAN_IDE		BIT(31)		/* ID Extension */
+@@ -428,9 +428,10 @@ static void rcar_can_set_bittiming(struct net_device *ndev)
+ 	struct can_bittiming *bt = &priv->can.bittiming;
+ 	u32 bcr;
  
--		unsent = (unsent & RCAR_CAN_TFCR_TFUST) >>
--			  RCAR_CAN_TFCR_TFUST_SHIFT;
- 		if (priv->tx_head - priv->tx_tail <= unsent)
- 			break;
- 		stats->tx_packets++;
+-	bcr = RCAR_CAN_BCR_TSEG1(bt->phase_seg1 + bt->prop_seg - 1) |
+-	      RCAR_CAN_BCR_BPR(bt->brp - 1) | RCAR_CAN_BCR_SJW(bt->sjw - 1) |
+-	      RCAR_CAN_BCR_TSEG2(bt->phase_seg2 - 1);
++	bcr = FIELD_PREP(RCAR_CAN_BCR_TSEG1, bt->phase_seg1 + bt->prop_seg - 1) |
++	      FIELD_PREP(RCAR_CAN_BCR_BRP, bt->brp - 1) |
++	      FIELD_PREP(RCAR_CAN_BCR_SJW, bt->sjw - 1) |
++	      FIELD_PREP(RCAR_CAN_BCR_TSEG2, bt->phase_seg2 - 1);
+ 	/* Don't overwrite CLKR with 32-bit BCR access; CLKR has 8-bit access.
+ 	 * All the registers are big-endian but they get byte-swapped on 32-bit
+ 	 * read/write (but not on 8-bit, contrary to the manuals)...
 -- 
 2.43.0
 
