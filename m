@@ -1,46 +1,87 @@
-Return-Path: <linux-can+bounces-4339-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4340-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B94C0B33025
-	for <lists+linux-can@lfdr.de>; Sun, 24 Aug 2025 15:37:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B8ACB332A3
+	for <lists+linux-can@lfdr.de>; Sun, 24 Aug 2025 22:49:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4B7E1B26278
-	for <lists+linux-can@lfdr.de>; Sun, 24 Aug 2025 13:37:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D6352047B1
+	for <lists+linux-can@lfdr.de>; Sun, 24 Aug 2025 20:49:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1C83263899;
-	Sun, 24 Aug 2025 13:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36E5B1F099C;
+	Sun, 24 Aug 2025 20:48:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="fYqrfrFk";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="H/m0R0WD"
 X-Original-To: linux-can@vger.kernel.org
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575ED20A5F3;
-	Sun, 24 Aug 2025 13:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756042639; cv=none; b=r5eGEeKCLB4tgdFmNE4AykGfTRXrehIgBFVeyel+gif5LeX9/XoaLARo/UOq2jiCnvL9cNmfx98sXa7gmkaP7szuiEOAQ5EIOu0JjKplmuM0ABtKxnTB+V890EbIvAq2NIbK+8oNcRXQHCv+dL0g91thGsla84vdtMp5WaNuZRs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756042639; c=relaxed/simple;
-	bh=jJpnNVnVSjvXNRhL+EF1mdScXF3xgLUy9PyyWPapu+I=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=mU6UCmvncOLMzM3yrt2PgMnvaAhstn1ZvbIAGUjLM+Kh0B0aeTgwmpJnarcbS7uoEFZ1tJDq6tvwO2xQVw8ekmP1FSfIuuHJew5UYrcTKCYCa5Ufp6FxjMxIxctRgJq8l6Pn0ki6huU0fo3Zhqq0gUpHmtdJlPKzh3H5OSr5/Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 57ODatCm013651;
-	Sun, 24 Aug 2025 22:36:55 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.10] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 57ODasg3013648
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Sun, 24 Aug 2025 22:36:55 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <c1e50f41-da30-4cea-859c-05db0ab8040b@I-love.SAKURA.ne.jp>
-Date: Sun, 24 Aug 2025 22:36:51 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78E31F95C
+	for <linux-can@vger.kernel.org>; Sun, 24 Aug 2025 20:48:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.24
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756068538; cv=pass; b=XFW4j/Mg/OIzde4mXXbEcwHoSXabtchdQxM//DyAwL0+W0tIbRI4BwCKgSXWR2bZSKEjZ9NGNioxAqeTEM03tIMC3SecgnDmzguAXlYUw+x6sPubTX5ESOFKaA/TRW7qPfdqyQXo0r28h4ypBEUtFzNdBk6NrevUgw4K0l4FChc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756068538; c=relaxed/simple;
+	bh=TqK5k08QsbCEd+gI0Wr96K+QpvxU+RDG0FQG6DiF9KE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NHS6rRs4pe8RTMpXy9owCvS5Ve8K7Rp/UBO3jJBIfPdFMH4WVNmkLiOrMmErCzg6OHIv5lg53/fAGNwDNav0Vvv59ZKqo3rJhnol3AMp4yU0s9zA0aWvvcaKVfkxxlgWkwm3C3aajCV1IxbepJRjl0gZXabGqGE30MziTAX0ZIg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=fYqrfrFk; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=H/m0R0WD; arc=pass smtp.client-ip=85.215.255.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1756067088; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Z2X0xd4Z5/xItQUyKjLuHATkfqB0H4/EqAgux0iSLICCNMmOgEX8oz76dhBZTyRsdo
+    6W2TVW2XPajSWUeyOeH84J0hHyrN91rlosHRCSUDYMmueQihUrW3bC3hnmpcvWS7IhuX
+    hQGLeEacvm9ltvVPz5dboERJMaSWWDj936l6XfGzNbrA7uTcD4ggWGMQOyHaKQRWZLpK
+    ZNaCvlQLm49PejloelFsOG564/9HGmRwupOGqguj/Wq4O5JbksDwANd38lmFHatHSJck
+    WvSMgTveRPQGfyM08Ps/an/I8bQkWlQ+H8y+tjt/SFRNm/rxjYAeELJctfEsKC9t7KqB
+    IACg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1756067088;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=EKWa7hwTxYCdEwyWfTmsUaBcNPgdRXRS6dLQeghgYH4=;
+    b=C5m5mvbbEoJo3aHxRWc0WxPXRJIV5DBrBxVnqW+2KJDvxNprC9fPf/h4HwEuYodrPm
+    2SvQy/664y97QxmqMK0Wj+MXZSKKGzCPiP4VovZ9mns9Qw3sI6OG/vT6adSGT9JFec9Y
+    GhCIp7KHXj16BdAapEplzb5bvvhlruCFJI89vjA2WrdGlG6MVMKHm9K7ZU0f9hKAbxak
+    WsJSsVVZj+rH8iot0gqJLD9K5Hno0ICeJzwGIia/BAg3xRz5U2ltcdNwbKr2I/cJF9oQ
+    vJED0v7qKu4Vv/s9Ft+f9qEU5ZypcBmSptaGdj43GTxf804BxHjtZFN7qxgjwwbdP1Uj
+    mE0A==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1756067088;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=EKWa7hwTxYCdEwyWfTmsUaBcNPgdRXRS6dLQeghgYH4=;
+    b=fYqrfrFk3/HwTEdavY/wgynQs6e5OJbsuPMJgZyhQ5/I+QWP9S/iDSNs/4HbdKBzX4
+    x9slxrlabyCIQDQjzSgBMj8nbFq+LbvEkNYK2v7Ei7l9xgOu3oJRyydDSHUipQ9Z8Qyp
+    aZF4LGEQULtT+UPaTWLKcXB7cL0QMWLeXhqbBvoNjlFNOmcsK5wtyktK1CJU7aHJlro8
+    qtolLFvAdrT7icrs0/oQkAM08GxNP6bChGAEzBu5pSwITUyxKpuejAzNlrLN/W7qxEdO
+    BS8poz2XaERDAivMHLYMjI3WoHnmmAkQok3f+zhLrZYam9ektVlObKWdbhOnI0udMhQG
+    wukA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1756067088;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=EKWa7hwTxYCdEwyWfTmsUaBcNPgdRXRS6dLQeghgYH4=;
+    b=H/m0R0WD57iHBn3jk2ghriHCxzl7nyAFGK9rXlifnrVBhcYKJlD2rYq2jnBrEGDOpJ
+    IRT1C8c142zN5Rtd5JBA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/vMMcFB+4xtv9aJ67XA=="
+Received: from [IPV6:2a00:6020:4a8e:5010::9f3]
+    by smtp.strato.de (RZmta 52.1.2 AUTH)
+    with ESMTPSA id K5d36117OKOmfOR
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sun, 24 Aug 2025 22:24:48 +0200 (CEST)
+Message-ID: <d2ce032e-cca5-4050-ae1a-6fe5f8a0b25f@hartkopp.net>
+Date: Sun, 24 Aug 2025 22:24:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -48,116 +89,82 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: can/j1939: hung inside rtnl_dellink()
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>
-References: <50055a40-6fd9-468f-8e59-26d1b5b3c23d@I-love.SAKURA.ne.jp>
- <aKg9mTaSxzBVpTVI@pengutronix.de>
- <bb595640-0597-4d18-a9e1-f6eb8e6bb50e@I-love.SAKURA.ne.jp>
+Subject: Re: [PATCH] can: canxl: add CANXL_PMS flag
+To: Vincent Mailhol <mailhol@kernel.org>
+Cc: linux-can@vger.kernel.org,
+ =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, Robert Nawrath <mbro1689@gmail.com>
+References: <20250729-can_tms-v1-1-21d0195d1dd0@kernel.org>
+ <64bf8703-c80c-4a96-a5ad-0efc48bf0541@hartkopp.net>
+ <d2610541-ba04-4a80-b3e6-c9c75bb1a486@kernel.org>
+ <a1a752e8-63ac-4a2c-998c-c88a223dd57a@hartkopp.net>
+ <d73d326f-0c49-4e21-8d59-2f54e2be5f0e@kernel.org>
 Content-Language: en-US
-In-Reply-To: <bb595640-0597-4d18-a9e1-f6eb8e6bb50e@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <d73d326f-0c49-4e21-8d59-2f54e2be5f0e@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Virus-Status: clean
-X-Anti-Virus-Server: fsav203.rs.sakura.ne.jp
 
-On 2025/08/22 19:23, Tetsuo Handa wrote:
-> I think we need to somehow make it possible to logically close j1939
-> sockets without actually closing. Maybe something like 
-> "struct in_device"->dead flag which is set by inetdev_destroy() upon
-> NETDEV_UNREGISTER event is needed by j1939 sockets...
+Hi Vincent,
 
-This change seems to fix the hung problem syzbot is reporting.
-Does this change look correct?
----
- net/can/j1939/j1939-priv.h |  1 +
- net/can/j1939/main.c       |  3 +++
- net/can/j1939/socket.c     | 40 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+)
+On 21.08.25 17:47, Vincent Mailhol wrote:
+> Hi Oliver,
+> 
+> On 18/08/2025 at 21:35, Oliver Hartkopp wrote:
+>> Hi Vincent,
+>>
+>> On 30.07.25 16:15, Vincent Mailhol wrote:
+>>> On Tue. 29 Jul. 2025 at 03:20, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+>>
+>>>> Btw. while we are at it: I would suggest for a name change of
+>>>>
+>>>> CAN_CTRLMODE_XL_TRX
+>>>>
+>>>> to
+>>>>
+>>>> CAN_CTRLMODE_XL_TMS
+>>>>
+>>>> as it makes clear how the controller should manage the PWM mode.
+>>>>
+>>>> "CAN_CTRLMODE_XL_TRX" would mean "there is a CAN XL PWM enabled transceiver"
+>>>> available which tells nothing about whether the PWM mode is used or not.
+>>>
+>>> Ack. I have the same opinion.
+>>>
+>>
+>> We are already in 6.17-rc2 and I would definitely like to have the CAN XL driver
+>> support finalized in this net-next merge window phase.
+>>
+>> What is your plan? Do you have an updated patch set to be posted for the
+>> discussion?
+> 
+> I uploaded my current WIP here:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/mailhol/linux.git/log/?h=b4/canxl-netlink
+> 
+> As you will be able to see, most of the features are here. Now, I am trying to
+> think of all the edge cases and make sure that any incorrect configuration is
+> correctly rejected.
+> 
+> I am just sharing this to reassure everyone on the progress. The patches are not
+> yet ready for discussion. You can have a look if you want, but no need to do a
+> review as I am still making changes.
 
-diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
-index 31a93cae5111..81f58924b4ac 100644
---- a/net/can/j1939/j1939-priv.h
-+++ b/net/can/j1939/j1939-priv.h
-@@ -212,6 +212,7 @@ void j1939_priv_get(struct j1939_priv *priv);
- 
- /* notify/alert all j1939 sockets bound to ifindex */
- void j1939_sk_netdev_event_netdown(struct j1939_priv *priv);
-+void j1939_sk_netdev_event_unregister(struct j1939_priv *priv);
- int j1939_cancel_active_session(struct j1939_priv *priv, struct sock *sk);
- void j1939_tp_init(struct j1939_priv *priv);
- 
-diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
-index 7e8a20f2fc42..3706a872ecaf 100644
---- a/net/can/j1939/main.c
-+++ b/net/can/j1939/main.c
-@@ -377,6 +377,9 @@ static int j1939_netdev_notify(struct notifier_block *nb,
- 		j1939_sk_netdev_event_netdown(priv);
- 		j1939_ecu_unmap_all(priv);
- 		break;
-+	case NETDEV_UNREGISTER:
-+		j1939_sk_netdev_event_unregister(priv);
-+		break;
- 	}
- 
- 	j1939_priv_put(priv);
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index 493f49bfaf5d..0fbfdffdfc24 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -1303,6 +1303,46 @@ void j1939_sk_netdev_event_netdown(struct j1939_priv *priv)
- 	read_unlock_bh(&priv->j1939_socks_lock);
- }
- 
-+void j1939_sk_netdev_event_unregister(struct j1939_priv *priv)
-+{
-+	struct sock *sk;
-+	struct j1939_sock *jsk;
-+
-+ rescan: /* The caller is holding a ref on this "priv" via j1939_priv_get_by_ndev(). */
-+	read_lock_bh(&priv->j1939_socks_lock);
-+	list_for_each_entry(jsk, &priv->j1939_socks, list) {
-+		/* Skip if j1939_jsk_add() is not called on this socket. */
-+		if (!(jsk->state & J1939_SOCK_BOUND))
-+			continue;
-+		sk = &jsk->sk;
-+		sock_hold(sk);
-+		read_unlock_bh(&priv->j1939_socks_lock);
-+		/* Check if j1939_jsk_del() is not yet called on this socket after holding
-+		 * socket's lock, for both j1939_sk_bind() and j1939_sk_release() call
-+		 * j1939_jsk_del() with socket's lock held.
-+		 */
-+		lock_sock(sk);
-+		if (jsk->state & J1939_SOCK_BOUND) {
-+			/* Neither j1939_sk_bind() nor j1939_sk_release() called j1939_jsk_del().
-+			 * Make this socket no longer bound, by pretending as if j1939_sk_bind()
-+			 * dropped old references but did not get new references.
-+			 */
-+			j1939_jsk_del(priv, jsk);
-+			j1939_local_ecu_put(priv, jsk->addr.src_name, jsk->addr.sa);
-+			j1939_netdev_stop(priv);
-+			/* Call j1939_priv_put() now and prevent j1939_sk_sock_destruct() from
-+			 * calling the corresponding j1939_priv_put().
-+			 */
-+			j1939_priv_put(priv);
-+			jsk->priv = NULL;
-+		}
-+		release_sock(sk);
-+		sock_put(sk);
-+		goto rescan;
-+	}
-+	read_unlock_bh(&priv->j1939_socks_lock);
-+}
-+
- static int j1939_sk_no_ioctlcmd(struct socket *sock, unsigned int cmd,
- 				unsigned long arg)
- {
--- 
-2.51.0
+I upgraded my hardware test setup to 6.17-rc3 with the patches from your 
+b4/canxl-netlink branch.
+
+Most things were easy to adapt but the netlink PWM API.
+
+Two questions:
+1. Why did you make the PWM values u32 as the 6 bit will always fit into 
+a u8 value?
+
+2. Can you share some PWM code for the iproute2 package or do I need to 
+adapt this code myself?
+
+https://github.com/hartkopp/canxl-nl/blob/main/iproute2/0005-iplink_can-canxl-add-PWM-config-support.patch
+
+Best regards,
+Oliver
 
 
