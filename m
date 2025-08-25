@@ -1,107 +1,296 @@
-Return-Path: <linux-can+bounces-4351-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4352-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5650EB33A92
-	for <lists+linux-can@lfdr.de>; Mon, 25 Aug 2025 11:19:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ABA2B33ABF
+	for <lists+linux-can@lfdr.de>; Mon, 25 Aug 2025 11:24:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51E5B7A6C55
-	for <lists+linux-can@lfdr.de>; Mon, 25 Aug 2025 09:18:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28AC71886ACA
+	for <lists+linux-can@lfdr.de>; Mon, 25 Aug 2025 09:24:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A3929BDBA;
-	Mon, 25 Aug 2025 09:17:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D2B02C0F9E;
+	Mon, 25 Aug 2025 09:24:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XKcKupfF"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9DF2C0F9E
-	for <linux-can@vger.kernel.org>; Mon, 25 Aug 2025 09:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0422BE050;
+	Mon, 25 Aug 2025 09:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756113426; cv=none; b=u2ghm14Co8Vzw+C5kYOwGoWu8/iJjXGlH9cWLdWgBOUvAHvUT+u0F1eNgbspI9+66pck9BB2dmrEotIih8Ty3iGSOww9l9LlbnNtx4kENeqLPV/6+Zfaa+OcFZ+8/JLaNkRrysfQCFO+tAr3yc4mAB0JVpA45vVIy3N2Y1+8Vfw=
+	t=1756113863; cv=none; b=bx1aL0dVArgodLiLYaBzSc/uudgumXWhSsgtvGtAQA1FfPNuBiConyLAQeLtcJ7BzmRNLfIFpEz3MJKKmt1hfBdNqQogl62sdQV5e9GvXcsp6IxZXpCi3HUOpvIUvZ/PmYtyt86Hw3A7kLSRww7SH3kKYwS75NyK+ZrAssdfM0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756113426; c=relaxed/simple;
-	bh=hWlQwJf739nOZCZ47ZjgBgtWqVQ+WRTlDa9eNxq8WYI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ai8hrXBcfGx0AaiPiH4S/OO3Y0y3eP3sFb1tmWr8DnNkALUT73hQLaw2L/6cGgS08r01wtc/YGzaUrSZEXTGBgui1e2pCxDsKlxmTIRxebMrzVC4TIp0L511SRjsMzrxVZ6PCfYLcEjEFTe59uDtEjkB2P4ZdN2FXQvP8hIa9XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uqTJz-00081g-Sk; Mon, 25 Aug 2025 11:16:59 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uqTJx-0022l3-2P;
-	Mon, 25 Aug 2025 11:16:57 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uqTJx-00GI5h-25;
-	Mon, 25 Aug 2025 11:16:57 +0200
-Date: Mon, 25 Aug 2025 11:16:57 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] can: j1939: call j1939_priv_put() immediately when
- j1939_local_ecu_get() failed
-Message-ID: <aKwqCYaDf-zYzbtT@pengutronix.de>
-References: <4f49a1bc-a528-42ad-86c0-187268ab6535@I-love.SAKURA.ne.jp>
+	s=arc-20240116; t=1756113863; c=relaxed/simple;
+	bh=yeRhDsRyul2rhgasdmDojf7VV7trGI3LYC52TIhdIPE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NNdCzyJVHoabZtDjDmI+6kPiK3Ng2X6jKc2Gy6Q1Z4m0LRf2tgSjE/Uh4KJ9JHE6DBtYbcQhbmHB5ILZkbtedsk747IQWkRs66adGYYxgXF+eB4+buMr61Lzyw2FHfKDjkarWlCS8aHJbTaJkskrU4tkEbz0Ojv7qIttBhvfkJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XKcKupfF; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3252589a4afso2121604a91.0;
+        Mon, 25 Aug 2025 02:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756113857; x=1756718657; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f147Qd0AA3LCVTQfAmoCbYqxwyHUS9rW1ALRVUDAnsI=;
+        b=XKcKupfFsZlaS5XBMx3+PfTSe0fjjBGur+gGtqiNtiMFl4UYXyLvOX8TE43FgpbtOE
+         PWn6dS0f8BJTxSq01EpsoM1NbFO5k0ikc7pYV2+OwPdSO9NTDsML1Dezrfkx2arG9N/K
+         WDAKnwGCEMvRH0GrDw/ngEfpjfxzK/tr2yTnMoiJY+vyZtupQVLq+Lu8VIB7KPNgAdJX
+         QVH6XIivCKYXIO1iLQDFKa4JM3rVJToPd6dJTjo1fR2N/ztVKdKUKVigzR91K8+QgLtP
+         KJUxWUQslGAmN0V1PDUUcxLCSKkSTchMwypXxjUufERMd/JeULY9lzuM+AfCYmfWsj5u
+         2ekQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756113857; x=1756718657;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f147Qd0AA3LCVTQfAmoCbYqxwyHUS9rW1ALRVUDAnsI=;
+        b=MHqfDDM3nH/VS7Sl6bTh0GX7XzlLDCTI7qG8geyiLhos3yAzIwCfTRebTky8LoN/W3
+         Cr2Pi1sQzJ4yQ3DQgBnEZhb4O4D+qK09tto4/a5vnnLqu8ETvtvz7FaKtjSrQyJ7JlhB
+         Bo9zggr0TL/SZvFSjjn50YRhZTREXLPHY8mpHzVCf58HjkbQDRIVtm51JheH727Q4/pW
+         jo11m20o9p7HtU8eOOlLueyCi78FTBenAdNvrZXfHYGueyYOlsIN0lkvAnnJPn8LW90g
+         17z44lSO/CphRK+TWFpTCfTByrdxa8fgwhI6RDEFv8ql++Y5QshAp4nnxPDSxfxgZEbT
+         +s+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUAu/2lJ8cnhNEXh4I/cACO6XK88jivIEO0UB+o82eR60Pi+hler0hYTbxnIIkoQxUUt3C+CAz3wXFX@vger.kernel.org, AJvYcCUd+gsUYpsA0OioOqGazdDjGMZeh0H1IoPYNntauISS3pAdvRnpp6VP0u6+41/Y0Iv7CprgtB/uA40b@vger.kernel.org, AJvYcCUkXGSZxPgn2oiSyNFqogkBqg6vuQjBIntctS2KcHuJoFeDy2nrry/MEUcjyhEfPJu1Z7EL0+Zj@vger.kernel.org, AJvYcCUvVWhQutCfrfuelSi7MP5+UwPz9BK40eXvm/xltJT2bdjBqR/25Q0kSBrOrcLSh4CQnTHewKjahXV92vI=@vger.kernel.org, AJvYcCVlL8pVToG7njCTMy3Y4+FsFVAM16Ken8FidcbNR3PrmgPVSa2jyNKMa544hjtgQQFy1wm+OV/QKYgmjQ==@vger.kernel.org, AJvYcCWvlNNzIZZjWVXa2tWy+8luncPeuElx2gqi7Vmr5Mxjqvd1cK6yjjkIjT3AdG5sdpyk9vJiMfNXwQyuTYeFW7E=@vger.kernel.org, AJvYcCX3O+gBA6Gv2CPiEzkTKPrMmsqOfnQGBZJagRXOgtxEV29aUhXDBA1rjpqJF8Hftu9uFLxpnwDxZ0DY@vger.kernel.org, AJvYcCXEXjT1hLDtwNe4Ya1v7+caHD07LBxglA4vDYHE/RsiDvo6qpU4I3sfd+hTs+DTeeYjLTncDtFb/6Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzax3CDxN89JKAecWeBBZwfFSYYuY5GnYneTDySbaPr5AkPkNSa
+	GSegCucstWbVdiwk+hvGSickHLqBYBCN3bK48vH+aiUZBzy4EMs+P8U4
+X-Gm-Gg: ASbGnctqQfY0TR+mCIlfge2Tm2zBU6MH7DijWiUrkKAKYhvurM8WsdGRXreOQBmTwfn
+	/2/i/fnJg2uG5Yka4X67DgDefvLsN2X8JbaW9bEVH2/Dxk7r+3ljSFK1DvhvY76PKNr0LwZMbXE
+	PMZNdXUbRaN3oztPat9CSRnUbnR9sNm6Fsc0G+Iu/RdoFsMQfAgjynpVzGMknoGboxC1aMIgrOB
+	ED+MtG3D4Qw/eTxrRV5y9+9z5PFu/07BI6Te2XLiNGHEatcu3P8GKhl6XPOfkL7SUh7VL54bEjB
+	8hi+DKZ7D7q+c7V42oDyaxFjgyNqcgQPFVmtIaSxEnx36apDeKfXKuY3OaoT/dBr8nCbVh+dUcs
+	55vTjSuBo0ual7adHZK5ohuq0622EwDxX0uMZoWHzcsU5den+slw2WWEOwAOZ+3OJ7Q==
+X-Google-Smtp-Source: AGHT+IFsYf4I5GHTXNSjneEKp14RTUOyB6PrVnIlC57zD24myDpAuQQcBYFxuDawBb65QCLOrxRb+A==
+X-Received: by 2002:a17:90b:5624:b0:31e:c8fc:e630 with SMTP id 98e67ed59e1d1-32515ebeb2emr14399701a91.26.1756113856849;
+        Mon, 25 Aug 2025 02:24:16 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3254ae8a2d9sm6552747a91.8.2025.08.25.02.24.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Aug 2025 02:24:16 -0700 (PDT)
+From: a0282524688@gmail.com
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH RESEND v14 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Mon, 25 Aug 2025 17:23:56 +0800
+Message-Id: <20250825092403.3301266-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4f49a1bc-a528-42ad-86c0-187268ab6535@I-love.SAKURA.ne.jp>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
-Hi Tetsuo,
+From: Ming Yu <a0282524688@gmail.com>
 
-On Sun, Aug 24, 2025 at 07:30:09PM +0900, Tetsuo Handa wrote:
-> Commit 25fe97cb7620 ("can: j1939: move j1939_priv_put() into sk_destruct
-> callback") expects that a call to j1939_priv_put() can be unconditionally
-> delayed until j1939_sk_sock_destruct() is called. But a refcount leak will
-> happen when j1939_sk_bind() is called again after j1939_local_ecu_get()
->  from previous j1939_sk_bind() call returned an error. We need to call
-> j1939_priv_put() before j1939_sk_bind() returns an error.
-> 
-> Fixes: 25fe97cb7620 ("can: j1939: move j1939_priv_put() into sk_destruct callback")
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> ---
-> The change made by commit 25fe97cb7620 might be relevant to my result
-> 
->   As far as I tested, the only way that can drop the refcount to 1 is to
->   call j1939_sk_release() (which involves sock_put()) on all j1939 sockets
-> 
-> in https://lkml.kernel.org/r/bb595640-0597-4d18-a9e1-f6eb8e6bb50e@I-love.SAKURA.ne.jp .
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-Thank you for your work!
-Right now I'm on open source summit and can't quickly respond/test your
-patches. I'll try to do my best ASAP next week. 
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
 
-Best Regards,
-Oleksij
+The following introduces the custom-define USB transactions:
+	nct6694_read_msg - Send bulk-out pipe to write request packet
+			   Receive bulk-in pipe to read response packet
+			   Receive bulk-in pipe to read data packet
+
+	nct6694_write_msg - Send bulk-out pipe to write request packet
+			    Send bulk-out pipe to write data packet
+			    Receive bulk-in pipe to read response packet
+			    Receive bulk-in pipe to read data packet
+
+Changes since version 13:
+- Update to guard(spinlock_irqsave)() in nct6694.c
+- Add struct i2c_adapter_quirks in i2c-nct6694.c
+- Rebased on top of v6.17-rc3 as requested
+
+Changes since version 12:
+- Implement IDA in MFD driver to handle per-device IDs
+- Use spinlock to replace irq mutex lock
+- Use same email address in the signature
+
+Changes since version 11:
+- Use platform_device's id to replace IDA
+- Modify the irq_domain_add_simple() to irq_domain_create_simple() in
+  nct6694.c
+- Update struct data_bittiming_params related part in nct6694_canfd.c
+- Fix the typo in the header in nct6694-hwmon.c
+
+Changes since version 10:
+- Add change log for each patch
+- Fix mfd_cell to MFD_CELL_NAME() in nct6694.c
+- Implement IDA to allocate id in gpio-nct6694.c, i2c-nct6694.c,
+  nct6694_canfd.c and nct6694_wdt.c
+- Add header <linux/bitfield.h> in nct6694_canfd.c
+- Add support to config tdc in nct6694_canfd.c
+- Add module parameters to configure WDT's timeout and pretimeout value
+  in nct6694_wdt.c
+
+Changes since version 9:
+- Add devm_add_action_or_reset() to dispose irq mapping
+- Add KernelDoc to exported functions in nct6694.c
+
+Changes since version 8:
+- Modify the signed-off-by with my work address
+- Rename all MFD cell names to "nct6694-xxx"
+- Add irq_dispose_mapping() in the error handling path and in the remove
+  function
+- Fix some comments in nct6694.c and in nct6694.h
+- Add module parameters to configure I2C's baudrate in i2c-nct6694.c
+- Rename all function names nct6694_can_xxx to nct6694_canfd_xxx in
+  nct6694_canfd.c
+- Fix nct6694_canfd_handle_state_change() in nct6694_canfd.c
+- Fix nct6694_canfd_start() to configure NBTP and DBTP in nct6694_canfd.c
+- Add can_set_static_ctrlmode() in nct6694_canfd.c
+
+Changes since version 7:
+- Add error handling for devm_mutex_init()
+- Modify the name of the child devices CAN1 and CAN2 to CAN0 and CAN1.
+- Fix multiline comments to net-dev style in nct6694_canfd.c
+
+Changes since version 6:
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+- Fix warnings in nct6694_canfd.c
+- Move the nct6694_can_priv's bec to the end in nct6694_canfd.c
+- Fix warning in nct6694_wdt.c
+- Fix temp_hyst's data type to signed variable in nct6694-hwmon.c
+
+Changes since version 5:
+- Modify the module name and the driver name consistently
+- Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
+- Drop unnecessary macros in nct6694.c
+- Update private data and drop mutex in nct6694_canfd.c
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+
+Changes since version 4:
+- Modify arguments in read/write function to a pointer to cmd_header
+- Modify all callers that call the read/write function
+- Move the nct6694_canfd.c to drivers/net/can/usb/
+- Fix the missing rx offload function in nct6694_canfd.c
+- Fix warngings in nct6694-hwmon.c
+
+Changes since version 3:
+- Modify array buffer to structure for each drivers
+- Fix defines and comments for each drivers
+- Add header <linux/bits.h> and use BIT macro in nct6694.c and
+  gpio-nct6694.c
+- Modify mutex_init() to devm_mutex_init()
+- Add rx-offload helper in nct6694_canfd.c
+- Drop watchdog_init_timeout() in nct6694_wdt.c
+- Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
+- Drop private mutex and use rtc core lock in rtc-nct6694.c
+- Modify device_set_wakeup_capable() to device_init_wakeup() in
+  rtc-nct6694.c
+
+Changes since version 2:
+- Add MODULE_ALIAS() for each child driver
+- Modify gpio line names be a local variable in gpio-nct6694.c
+- Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
+- Rename each command in nct6694_canfd.c
+- Modify each function name consistently in nct6694_canfd.c
+- Modify the pretimeout validation procedure in nct6694_wdt.c
+- Fix warnings in nct6694-hwmon.c
+
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
+
+
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CANFD support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                         |  12 +
+ drivers/gpio/Kconfig                |  12 +
+ drivers/gpio/Makefile               |   1 +
+ drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig          |  10 +
+ drivers/i2c/busses/Makefile         |   1 +
+ drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++
+ drivers/mfd/Kconfig                 |  15 +
+ drivers/mfd/Makefile                |   2 +
+ drivers/mfd/nct6694.c               | 388 ++++++++++++
+ drivers/net/can/usb/Kconfig         |  11 +
+ drivers/net/can/usb/Makefile        |   1 +
+ drivers/net/can/usb/nct6694_canfd.c | 832 ++++++++++++++++++++++++
+ drivers/rtc/Kconfig                 |  10 +
+ drivers/rtc/Makefile                |   1 +
+ drivers/rtc/rtc-nct6694.c           | 297 +++++++++
+ drivers/watchdog/Kconfig            |  11 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/nct6694_wdt.c      | 307 +++++++++
+ include/linux/mfd/nct6694.h         | 102 +++
+ 23 files changed, 3669 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
+
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.34.1
+
 
