@@ -1,62 +1,62 @@
-Return-Path: <linux-can+bounces-4363-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4364-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2CA3B34656
-	for <lists+linux-can@lfdr.de>; Mon, 25 Aug 2025 17:53:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8879AB34659
+	for <lists+linux-can@lfdr.de>; Mon, 25 Aug 2025 17:53:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5826B3A5370
-	for <lists+linux-can@lfdr.de>; Mon, 25 Aug 2025 15:53:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65C8E1B2025F
+	for <lists+linux-can@lfdr.de>; Mon, 25 Aug 2025 15:54:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD562FC008;
-	Mon, 25 Aug 2025 15:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FBD82FCC02;
+	Mon, 25 Aug 2025 15:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="cq/dojPt"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="eGG8BoYy"
 X-Original-To: linux-can@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010038.outbound.protection.outlook.com [52.101.84.38])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010044.outbound.protection.outlook.com [52.101.84.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6972F2914;
-	Mon, 25 Aug 2025 15:52:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91FF7145FE0;
+	Mon, 25 Aug 2025 15:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756137182; cv=fail; b=RNw1NS3EjIIF71iBC+85E4i0qH4FmspmnAhHReskElcCjUt/StXRFZjIiAtFuwQT1luCaaaqmjCh60dmgh0a3u3XKqrN8vGw2PPKx+NsFlC089mZ3GsYRyB+sM5x443eJSxMoIZMm8dN1UTXHJC6AbVDzju+poi/d3SxZUfoQJg=
+	t=1756137233; cv=fail; b=CvCivFFfK/1+wOVekmK08YFo3yujcP+6pEAldnBAQpcVv0zScQ1pt1SVZCtM3i33rvqzvZd/junwHfcIQfl4QFsL5W6wgR8X8nDk04OaF7NoWrugQZ0/uVRjM/5SzQYEpY73NJJ1YODalEVmud5FQZMgCK7SwFVSgUoNw3cYOtw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756137182; c=relaxed/simple;
-	bh=jSmXK386oMhuFeFLRW+uUdqypw9F0w36cmIbMazL/VY=;
+	s=arc-20240116; t=1756137233; c=relaxed/simple;
+	bh=C7zPiANJuMdqElsm6nT/gBqC+NFy/yc9WMJr7TXejVI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Llc2WoueLAooR62zp7UNbYoyh74BYYdj4A5lj1FKEZv2H4B7S7x0Bw8E7cVMer9Xel9KkONyb8HgP/1k5fW58slStFMrqPemE1T0Zwub+d3H0B/8HDaZAU+go8wEuTufvHkhy6iKhWwU259QRPz7AL5VD84p0XqJG+caRr02Bf0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=cq/dojPt; arc=fail smtp.client-ip=52.101.84.38
+	 Content-Disposition:In-Reply-To:MIME-Version; b=VjlQMk7RSoGZs+3JUpaMfhiot2RF6y602oFhEwN0aG9cldgDPjFb6jrug3SLeNu0vswuMZ1+vibKu6l1CaLMRV6SaL+N6ddEjdT4jr0Ex/if8t654aG0G69rOlV2qpiew6Odf9NcAuM28gFlBqJIIVZp59qY8hgTnlVAndI4ZSc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=eGG8BoYy; arc=fail smtp.client-ip=52.101.84.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vAW2iCyjwFYop6IKnA71uYlTyYNOI9zUQl8yEzzJK6kyLjPGE5Ut8qZfgQRqzcSaS0p67yQMleBwh1wymvoJvJfSMGZjwmCJLmgcgLHdRxvtpoYzd5n+VYiOorEb5OX6VBchavB8qAauQUrHPUz8iM/OQRWo3RBG7hc+3KiEXyRgI3ScYk46yZjX/fEz97DJacNFvnh/s7RU4M739VmXGnCoFmspYhR5UjkzCS324jAh7uG9yt1mwnf9hzectRwbHswkb8Rd2ztUauCNVHNMfjA77G2m+DwUADuF8+NZ27AS2dzDVTj/KIGBNnWFdqBtaio8cgQBd0V/CrdVQHF35g==
+ b=CG7Z+ja4Acf8C1ukxlS4PfiGJ+WZVowHz09yiLc/Iaz5I77uSX5K0SHYlU7ro1kclIgXQy7pOf24F9GzcdpjI+xL/vxRXWNpsdT8upYmpOlJsTybVlbPCjOqHLqtuOeVTHJRXDGAkKaBottywwP2NQBtWZZFDgSaBnfQeIx/sulog8CIUojHrPzoakcWod6mT4BedZ/omMe+9vCSi3470UeuEoMwN74ZH3pfcbb5XvQBjsTvZa00M+0Hgg9uCO/aWByTHgunafOGWcg1fKqRO5O0DOXWOAFRcbFClvStni0oE+ZrG4o4EaMOUNeG89viyfR5bye26ibIGxS5X0hSGA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F3DrOc2Ad6FUPHEneZ/jpVbmxs8aYEMV8KAxru+BCk0=;
- b=gjeqPsKAbJaP5yCgOG6Yz+Zk2lGNJrJuEcVGJWNhfOlLJ+qSBc0MP/wMb9wblJdabrVkYUq3QFOLaZLIhH1BG2hrH4jJLHjoLe6WH1/D12hOvvHAfg9Zibb49ut3p0YUP5bEWGLpSTorndYyl82G0xa2kTgeW6qrHlzmf629uxGlOAOEIm242Io2I1htN4sqMXNhRdp1mvEKpqOOu5WIRL73gOrVmRVa/AH5oGW9q1+7g+FUbTUmjW/rxDQgL37u9PoZJXvDA4BqQLy/bw5InNX8h67SXrzxAHjmRdprGpV+QoAuv3/KuJGRUDrSj8QdNMFlDNm4i7D1ku8KVAKAYA==
+ bh=8vVlSV55pG6kwzqGYXdMSZJdmiHsquJ/TnqXl8lFzzM=;
+ b=iynWIE9tCDbTcCnI3+OzP+BJQunbwXLn/jxyy3NxJxgNMFnCKfM226px+z8BtGWiCuwbYEzggAx+bfBNfqMKzNmUboSBXi1zTipbARcz7VNk8cuLZYExAlB7hPGRhFTm962KriOYhvKFMFppyOmyVi1B1nT1aBXcyHCSX8GVtz+S8EkPoyT5eMyPquhu0cgDWqnS9LB3HXLnE+9EkMZj4TrAIImXIS/phUH40j2JKCTPSC97Amsf9DRUmZ6KL4zYv0oRbwpaLeBwNkfVxxIrcQbHkZg4YHSuvJdF6ngLLiEGG03tdN3vqNV03TwsjBv4ld8Yt7JZv2rD0ognFlO1pA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F3DrOc2Ad6FUPHEneZ/jpVbmxs8aYEMV8KAxru+BCk0=;
- b=cq/dojPtnN/DsiU4xvJLX8GkkDu87YZsxeK1u3Cpoq2Arg0RRUFbM4czDP11CxxRWfOWk3mHfPLMVZ6813WbskDyyPNwek0gc/TsX5J4wk1AGsIjXNm6QCVHszlRYLsUDC74Z6gapzuSaYD3/4vohhNQzDf526BocktquI19JSzFt0MexNuoija9o0dRuKbRIrF7nwH3HIISlKVgbwhof4ek12duC6LDmqNAZXqFeFHl5IuYVS3OEyaOKLoCv9M1td8ob7iLD2ZES0kHfAjE/e2Ul5aVnTaaJUy2h4Q5KcUhC4aVgYqv8B8AH8G4eM+XmOVtBrhZOVA4SJ5WqdoaBQ==
+ bh=8vVlSV55pG6kwzqGYXdMSZJdmiHsquJ/TnqXl8lFzzM=;
+ b=eGG8BoYySF6lCkw37Xh0SxeBiQQcslxfhI16Bntzq5Siu6UCfKggGeNrdieKjP1R5EQqG9CchmZo8FcDoSxJe5JWBNoghYzivOMYvZIUWk6Gq2GhY50Vx37uG7ROCIqz4QplgUjTz+oHLFaDMMgFnCI+b3OuJR1iNdQGfh8/eveCoiCmrOj3dv0hAk/zrlNYrP+PxbVHA1m3dNARRb5wn3gcwocT6hbWnigzoKCGntDi2N0ShwokEQb9xs/fqEF1ag+ZzXIorjUm7arac1XJnRTS+/P2D/UmH3shmRkJ5Kx4qVv+G4FhRfz8l3MFrhcq6hqAYmX2rppcArw7A81ZQQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18)
  by AM0PR04MB7171.eurprd04.prod.outlook.com (2603:10a6:208:19c::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.13; Mon, 25 Aug
- 2025 15:52:56 +0000
+ 2025 15:53:48 +0000
 Received: from DB9PR04MB9626.eurprd04.prod.outlook.com
  ([fe80::e81:b393:ebc5:bc3d]) by DB9PR04MB9626.eurprd04.prod.outlook.com
  ([fe80::e81:b393:ebc5:bc3d%5]) with mapi id 15.20.9073.009; Mon, 25 Aug 2025
- 15:52:56 +0000
-Date: Mon, 25 Aug 2025 11:52:47 -0400
+ 15:53:48 +0000
+Date: Mon, 25 Aug 2025 11:53:42 -0400
 From: Frank Li <Frank.li@nxp.com>
 To: Peng Fan <peng.fan@nxp.com>
 Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -74,16 +74,16 @@ Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
 	linux-can@vger.kernel.org, linux-phy@lists.infradead.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/5] phy: phy-can-transceiver: Add dual channel
- support for TJA1048
-Message-ID: <aKyGzza24CqIwuwn@lizhi-Precision-Tower-5810>
+Subject: Re: [PATCH v2 3/5] arm64: dts: imx95-15x15-evk: Use phys to replace
+ xceiver-supply
+Message-ID: <aKyHBqT+VG2e7PNf@lizhi-Precision-Tower-5810>
 References: <20250825-can-v2-0-c461e9fcbc14@nxp.com>
- <20250825-can-v2-2-c461e9fcbc14@nxp.com>
+ <20250825-can-v2-3-c461e9fcbc14@nxp.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250825-can-v2-2-c461e9fcbc14@nxp.com>
-X-ClientProxiedBy: SJ0PR13CA0010.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::15) To DB9PR04MB9626.eurprd04.prod.outlook.com
+In-Reply-To: <20250825-can-v2-3-c461e9fcbc14@nxp.com>
+X-ClientProxiedBy: AS4P250CA0018.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e3::13) To DB9PR04MB9626.eurprd04.prod.outlook.com
  (2603:10a6:10:309::18)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -93,298 +93,123 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|AM0PR04MB7171:EE_
-X-MS-Office365-Filtering-Correlation-Id: 37eebd0e-ef41-42df-ab1f-08dde3ef7587
+X-MS-Office365-Filtering-Correlation-Id: e5f047ef-4dec-4d3b-e55a-08dde3ef9494
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|19092799006|1800799024|376014|52116014|7416014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?JjEc8APjCMT/0mkpZtR1Skdeng/Wui4C8YngfOT4FKmY1jepFbnqoFFg+Y1J?=
- =?us-ascii?Q?+xRkdpJZWWJA7XvqbsnSBPWsel7WeRgCVzY5d0SC95hsYC24rmzPfUXMhRtF?=
- =?us-ascii?Q?Ix28FkG+0mL9hDKROFD5jv9cCOQTYQfVicw5zA9fd0nWAWfsQZrq7JhTUqDv?=
- =?us-ascii?Q?WTlp+QCPqljvddopur4D27egKMr57+ODunijQvJnF7S9s6LYUSadmW+7uvOz?=
- =?us-ascii?Q?HIjDCZSXUlZKsvw3n0gJheGhSN+RSMS5CtNnqEWUnhOP8XusCeFz2fLy6xSk?=
- =?us-ascii?Q?d9AgioxGN3mfYWWMUkbzY9czQV3k0IoldqM988k0EswWqwsp7aGQRU/mWlr1?=
- =?us-ascii?Q?hgSTmyj21vJbmwsQgq26ItET40wO8pbVr1/ddV8I+Aw0JT9oyjx76Gs6pTIv?=
- =?us-ascii?Q?LI9ht0o8TCx2jXqonUzwwFnhVGfN96vj1znEk+6nBfKzMuieydw37QfybqWA?=
- =?us-ascii?Q?lTh2K3WD5QobKStfcbkHqEEAbyS4IefZRRrqruMkPDn0iyO9pCwGwly9xViS?=
- =?us-ascii?Q?g1WJQHtFEYi6ydh4adjUq4BEPctjmGAib/juNz+lm+dYbUxFrXHaXuSUFQo7?=
- =?us-ascii?Q?xOcOyoiTzXVymN390jvdl7pOA/MerI8S/rixPaROMF3ilLY+/3g5LyJqI+J/?=
- =?us-ascii?Q?mAGBMFyl5mB3XJzN4hEJhQE026q2skVjrfeRwSfd4j0hgX4M4v+wJohiBZyy?=
- =?us-ascii?Q?DxwW9rR0Xr7SD93Pxih+CCCmQahfQ/OA/vZbVc5N2lCjJCj6fLToNPtjHW9U?=
- =?us-ascii?Q?KvjRzikTEaGYQTRo8JH4++BOY+6jZYl29RZ38tPrsfIlOwwnCKLlr6I3fzT1?=
- =?us-ascii?Q?hSMFxMqROgm7hmwdjLWXHpkI/UDa2shpIqXv6t+TCagiCQLExlzeydIJJrha?=
- =?us-ascii?Q?ZmuQt74tKt7v5g2qwJj2JmUjR90lJXsdxJOGSlUqwK+akzYsVrYeQqMHgfz2?=
- =?us-ascii?Q?AR6qY4eWCG4zQQIThaeOwsDxbVXfxdi/GgnpY/s6Y5WvPT6JZEnSug4kMy27?=
- =?us-ascii?Q?DSmMA3DuRkQFH3Lu+FFxp0F2imq3YB7inzJoTfIwU96RnlV4dDjkHGfeO/sZ?=
- =?us-ascii?Q?8DZ7J5Tp+D3PTiyXDX7+D6+tw0rK02heXeBtMbPQg36zr1eaX2IUkWC0xIQA?=
- =?us-ascii?Q?hzXDRzkh8c7a3QpK7pCE0xSPD5tBcKqVVfnCGgopC6aqOUMfXWxaRaBGaiqI?=
- =?us-ascii?Q?p5vNPPWxlwBFW46pG1qj/kfnigkb4Z11UeqIKVW3OGCkXKXBD/buSoe93dEL?=
- =?us-ascii?Q?jfiszqjziOT9R1JIxmTUTDzklCvVLLc18ERX9lXBChD1PQd14zGEgC3i9Vnv?=
- =?us-ascii?Q?y3C1Or7F8T/9Ikr5wAEFngylvObI9IIuyubFAs09R4RPLiLL4idx8MPB/0ka?=
- =?us-ascii?Q?HZq2QZcKA7TQRx0w1tfZNr374rxsiaN/PqJM7DGLSU8MHXkNbWagF7v3BmIT?=
- =?us-ascii?Q?373JG5OIo3/kOC4A1gDu1CFunKAL6HXHWYp9unDVDMdTSlpH10nGbw=3D=3D?=
+	=?us-ascii?Q?8YT1awrY7SU5oAxfHAXxSwED2P0cqsUY/4e5hjg8Ix+yeRyL3ph1o2G3V9y1?=
+ =?us-ascii?Q?LU9K8jjGOMc2B8XIO9vXftiiptoAt9vMXUyd+NnrDrStlPJBOCO75b7VBtyG?=
+ =?us-ascii?Q?b+9cs+S7syTcC1aWDY9q4BUTL3Gxu0s4D3B2bfGBfaXSnOtEBgKJvRsAe+N9?=
+ =?us-ascii?Q?NV9JKR8NZzme/nuU6i66fqEzMTW4WJIPYty04fu1+rm6jY3RMHpq8fFc92Yc?=
+ =?us-ascii?Q?IvyyB4J3eS+9KfiDRnlxCsYU+aI1PJjecJJ/8XJCk+p/mO2mJh5HMt5c5uEA?=
+ =?us-ascii?Q?pNz48JJa0g/+rxG8+Ip5olO7/o+LWdh6ebckv3yIQpAkvGZdI0ZIh1/B1KEi?=
+ =?us-ascii?Q?nf83ZGXVw0pwfKEcx4AvpqZom3vGVM4LhI8a0yuRQmrLe1im57v3EATh+kBE?=
+ =?us-ascii?Q?X5vpt8S5b85bQFnPoxgPiovbdmcxkl3QQg1UiOUW9M+TVHrSExDvU3cf7mTg?=
+ =?us-ascii?Q?2FAI9bOgM10ttDfeLx/ByiJ8NK5VL8d+hoeWxxyzOM4h2m5BGMwuSm21XSZo?=
+ =?us-ascii?Q?1W3U6GTrcLIJCwpWJ6Syu5aGBNIUPVjoiJOCl0c6jf63qEg2vkW2S/qw1w1x?=
+ =?us-ascii?Q?/van/xbYGKN84Gvt0Emr5aBS6eswGXoaXt4vfbfgZV63A2XLhnggOHopb+2+?=
+ =?us-ascii?Q?8Kc/CEDAIPzOs29qHscDys11ORl4rcoXC7IE7VojNVI8GLbmeM7wZluvcYPo?=
+ =?us-ascii?Q?wwbK5pHaXH3aDpTP/eI8wKVKkvBDkmN+GJPJh/ulu7CjEFajz99s481eeclD?=
+ =?us-ascii?Q?Basnsyn96vpvKQbFKJZqa8Wzv9ILN5/BCoti1FnIyT+pzX4HnWXb5zcpDW4y?=
+ =?us-ascii?Q?8C3F00AQf3/yQlI9pcpYDx13XqQE8eE2+M7UOATQUoSK1KFsN16LEVP7D7Pg?=
+ =?us-ascii?Q?lF2iHN1zHRc13CtcYNuR9Y4uZKWVo0CGHgkjb97wXXru+vGX2Bth+R1VqS3e?=
+ =?us-ascii?Q?g22epcpO52YAU2rzO3SjO7Qq2qxIvUIALyepdAxkkZmE7ZRK0y043zhphupx?=
+ =?us-ascii?Q?tkfTvCYGQOACOfROBaOHrWVRCx3NwLLVa5vs4UNEQSrenEyd9C/OlGurUo/G?=
+ =?us-ascii?Q?u6izHKkc0Beu432hVJrX1Nclls3aSHYEiTEIjRkeN5GzcK0gTzO/biEqsbM4?=
+ =?us-ascii?Q?yd4Mle8EubfReKDUeNGy+S1lbJUOMk0bwBlapiOMBnCIqg0yfh3nM6EOs/+d?=
+ =?us-ascii?Q?9smmVm4k80BAh5CtRZKpuB0Iq8nh+b8hXf1scviux2pom9p1+0ixnBmIalDF?=
+ =?us-ascii?Q?EvIh3LuVkBVDHNO7aS8ElzSpUOMI/mdbj37JOjpBy+TWkR+E0FHVyquRR4Mo?=
+ =?us-ascii?Q?+83EE19XhHX9p6aXPvdvDe3K4Hq0k98+z0OoEwAym3QtNG4oh0lQtox8/b0Y?=
+ =?us-ascii?Q?3RO6WPPMsIOY9OJn1Lq+PnXI1J3bZJQZbzIz+KiHpJIFpTfYEmxslikV7emd?=
+ =?us-ascii?Q?mTWJCCfd5u9NAoGbyenEGQ09YuSkR5CiF4DMc3B0W3r6RNVPsN5RlQ=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(1800799024)(376014)(52116014)(7416014)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?bOZceR+0O5OY8PPymFTIJBUE5Sard4mM/xwKVSipX0QJ1japBImg/7hkoZkC?=
- =?us-ascii?Q?kJEjcSOAVRu9cgJ8D7l3DNNyMb+KHwzrHHOgZsm7hKG3qZT8O5gRrLs4iy0L?=
- =?us-ascii?Q?uYdJEXZ7yPZQvw3SeYj6W1zhtd7DhK/mgyLDiDt2Lmw2Krfg0O8LO7Mb2NLy?=
- =?us-ascii?Q?Z7f1VABYlrYptO1Z8hIcJTolBrxtjUxR4GDgJXxYIKgDPtgSY/RPzrb+ys9Q?=
- =?us-ascii?Q?QBlWag4zq/bAsGK3tVsfv/808IwKbJTErL9ZF5F6Ee0uBfJuKcWrf+u2gYw/?=
- =?us-ascii?Q?MVOufXahUzIbI3ImKKEbyQ9noz+P27U9mkl3trjr/dLP1YDzpVjiTeUxOOR5?=
- =?us-ascii?Q?rHTl9TJKPWxpv9GQ0g8ul3bIaO/rQ7VzuMkWVdEGbREkSj2nHfHZjyDBwL6J?=
- =?us-ascii?Q?ZC3HESNCIrlpdUEW3Ad5tgP9B766sgdQHpf6tK9JeeK7ozLDixgE3KhutyVN?=
- =?us-ascii?Q?i2zi8yzR8gkLogYL2P9otoyZAi23eA0zGLkb5gBGmX9KWL2KvagTyWww88Xu?=
- =?us-ascii?Q?JUhboAN1YKci29SXgBuCIo+ES4+vVWQw37J46vsCz9v+9cN4ym8Q84uSuFzl?=
- =?us-ascii?Q?fsAA0bhysjQNPa44T1bs0Vtny8IrTkyykFptmdebaKNRzyJZLyTrpVA4qSg3?=
- =?us-ascii?Q?u5yaz8y7V4zi9VGZUennOHw8qvuN4bbXd7kNSzLGmualHVQmNgKi/IztWEqu?=
- =?us-ascii?Q?nAN+2tKWAXpUWxcE2l8WbhCx4JD6XF7EhWilJZnAW01wbMr+ILIX5OSUPjQr?=
- =?us-ascii?Q?wjeDfCsNVdDGBvJxtHvdrZJ7kRcLBdJ+oDcAi1/1jMxPNRD5WT+PSfyzCvHh?=
- =?us-ascii?Q?CtZ3lPzyO+4kJwQ/i8Bw9Y55Arw588BkH0L5eFl6QfNesN1fhvGY3KghM9kL?=
- =?us-ascii?Q?Vex7eGPsWPo1ycfhMabGW9YY4G+HCwLBG+R6zyTurPyfgBJT+iFmnwhjJXpU?=
- =?us-ascii?Q?obxJH2fHOJASqqV8+9bNNaKXaHrG4/1UOYliLljtRYPHqPcdAPJ3AkjFhHCq?=
- =?us-ascii?Q?jHhJfbepX0aBslS3Y2a7kD+mUmJp5hLQgX0lzDzI1K9Ag8URio3N+ZevIqXI?=
- =?us-ascii?Q?2QTl0OZJNX8laimPUy53At8wjwdAL0160ypXySb/Sra92HBOCvKJkhgmobbU?=
- =?us-ascii?Q?5+A5AYAPs6EnDIYoT0NxXi6cGXWtIvkgTn08IlAGgkmjzvWc1u4nzOzQBkpT?=
- =?us-ascii?Q?9coS+Yzot8OLmQvgnHQvXXpFjz3fa+X/f8v3lbJP2EbSPb5j1iyh+09VkyRq?=
- =?us-ascii?Q?CTwtJSmlTBB4axrl7/E7rJEUSCNzArnwvDfqHTw13NwuyraDcg7cSSDChV5d?=
- =?us-ascii?Q?fU8JeooxF1FvoHnQoj15O32rJkJuEweXdC5RmBAZNo+fyQk++DDArCf88bZY?=
- =?us-ascii?Q?zcq3P6jsyNqJVI7C2MJPksXiZQ/rgHDUrhoeyzw/hZngdTcQVGJnK6XBLT9I?=
- =?us-ascii?Q?oCU3f/Eyza6GBB10QcSYUL+gD8hPpQ+70L62QNuBiCqlKyWGARr6GYwF33SR?=
- =?us-ascii?Q?TVGY/KCRMa02x7C+widNMv/6okFLtFbBYs+NdQ+/vVflnyGqRWTpNK1bHXh1?=
- =?us-ascii?Q?kNf75E0vTGtYRykEzUk=3D?=
+	=?us-ascii?Q?t9r5qqqwKUqQLSXw1+led3divjbFjrYlT2HNzq+Zc4VpB/iA4QRIn3Mu2DNy?=
+ =?us-ascii?Q?tqbRQPLbMLYxuS+dJMguW6ZnWVGxY1ymAqL1r/J5MdQ51yB1SIq/uQRoDauj?=
+ =?us-ascii?Q?dF6auykgOper5/hGEQIii8uwWoDVTotujBzwwnnB+/Bl5CpAr1IlbOEJS0tQ?=
+ =?us-ascii?Q?wKdGATQ+6MSp1pQoCsoGpHRnAukKcKn+XcI4bSEp4pV3g2WtPiQmWRw8kThz?=
+ =?us-ascii?Q?yv81qyzWXyOXF73id1Uly6s0x+GN4rU5DnvfpAPMgAfRuObr8UVqDwNShecw?=
+ =?us-ascii?Q?kcn8Y/XKMYgqHbglPEZqDNz0bGCDdYGh3mmb2K2YNUXEj3stjI+3gJbNE40V?=
+ =?us-ascii?Q?Tp5cBzEEmAhvObWZhWbEsaPlQEmaK27hec3ZGi4Ea9Z5qGgSqVfklK5/ZdP6?=
+ =?us-ascii?Q?RAKnyi37dSl4hx2E3fuzIJ9trbG3siC1nOuouwPMFX444H8BpjWTh3c90B1z?=
+ =?us-ascii?Q?2dGSZIi+MihV6fP686cnhPcfumCgBhO2lWMZb9lJ5sfh1vP2kn5TBcBH4BcR?=
+ =?us-ascii?Q?hP2BgndHFTcGL/3iMayk47OPwj7s8JA9A9EIEsjMwIn5CrXo3ufSRpJXSg9W?=
+ =?us-ascii?Q?9hNSAzpF20c6pRQ/thbhPMnenkOlpka89PMyVkUwko/LMgop4J3c/V/3EqRk?=
+ =?us-ascii?Q?Q9UBuNSNh7uGdVq70RfnwwazjtIHYboXpwCT8vG+PtrnIAV/N8TS7kIpiw/5?=
+ =?us-ascii?Q?B57fNKVpYPYxQKrePB8EW9slKxefyeqd50XeIYD0IEbHuR15MN1T8BvDb1gE?=
+ =?us-ascii?Q?5/68EhiUyLn9RXH7MneTFuiwv8djsHxa1Gu+Y+C5Ia7OatQYpPwUQYhF6wOJ?=
+ =?us-ascii?Q?5fLXLWxhu4I56+xFD4yFioMcQ7jMAwjOKcsAZqn7ZjSsXi+OYVNbX+XCqcX2?=
+ =?us-ascii?Q?Ne4U6gV54cM4apKn8rPcmrQ9N8NQI5miyc5i1yh7UfiDZ4lDLtmRdPB+M3CB?=
+ =?us-ascii?Q?Xa724q/AFRPCOrtp9vLA20OfVi65yJ3pcPEGlyy10aE4k5ayecBu9zuoHD4l?=
+ =?us-ascii?Q?YAc3c6gwjDLfdEpRF+Fbfl/DmcxEyy5JGeNSPDS+VIFQTFUZNVbG3NWFlSS7?=
+ =?us-ascii?Q?iyn2XJYD8ZmLQuj/ut+XDuUJHaUfpJnGTVEWXQCevcRvPEXVE157VGNmAFOy?=
+ =?us-ascii?Q?IVn4VCFerHWJfdakYGsgUYvvdK6+XCux5fwfrfjMJ1NS6Tz3k9rV/ykjkxzk?=
+ =?us-ascii?Q?+LgnjfIsmempIF7M1CqHrVb69PV7/ks9j7PlDgdiMFPTWRuC3JS/HZRmN2wT?=
+ =?us-ascii?Q?r/fT6LlA3HQ0/iKeXgonQfr/7tZ1H19/c1AOzSFer4woKFMYTePrtpP/OcEW?=
+ =?us-ascii?Q?eA9Y5TzNDf5O4lb5SUmfv/UsExBgUj4Ra6Zrfgm9K+UY0AoiAQh9ALXUDyQs?=
+ =?us-ascii?Q?HmoVDQEJ7zDm4CxZK3g3d2JvoX8qoYTMNzdOD8PtFkwjEXCn2XI8uYRM0IVo?=
+ =?us-ascii?Q?xqt0XPn6n3snCA0C1ckwkq1oi8ub+SooqSv0aigxFNYAzPCx12os2Lp9X1Ry?=
+ =?us-ascii?Q?LhiWqgRVW9B0/90guYobaTvTMV6DwvB3zLvi8utzff8gM/o3qhw7jhOJ5qrB?=
+ =?us-ascii?Q?aJOdqMvkOgMvQ+qmxrGDBDAyfTcqfKMrZp49Qg27?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37eebd0e-ef41-42df-ab1f-08dde3ef7587
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5f047ef-4dec-4d3b-e55a-08dde3ef9494
 X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9626.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2025 15:52:56.6627
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2025 15:53:48.7307
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2NA20u0hbkM5BiDBiTP9Z0kObjh0OjjYFxknWrorL6359dpW2y6ucyPACD9GiOgLZmWs/l4Pb3ssSlSGDbF3aA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: lfCR7DkwaNED+ixnnBCNrVKPHcUP7XXy3gRQ9LFbzjzj/ZJhb24OVhQ2lfxxH3txZXLoOPmpozs/+achnxSgbg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7171
 
-On Mon, Aug 25, 2025 at 04:36:43PM +0800, Peng Fan wrote:
-> - Introduce new flag CAN_TRANSCEIVER_DUAL_CH to indicate the phy
->   has two channels.
-> - Introduce can_transceiver_priv as a higher level encapsulation for
->   phy, mux_state, num_ch.
-> - Alloc a phy for each channel
-> - Support TJA1048 which is a dual high-speed CAN transceiver with
->   Sleep mode supported.
+On Mon, Aug 25, 2025 at 04:36:44PM +0800, Peng Fan wrote:
+> The TJA1051T/3 used on i.MX95-15x15-EVK is actually high-speed CAN
+> transceiver, not a regulator supply. So use phys to reflect the truth.
 >
 > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+
 > ---
->  drivers/phy/phy-can-transceiver.c | 117 +++++++++++++++++++++++++++-----------
->  1 file changed, 83 insertions(+), 34 deletions(-)
+>  arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
 >
-> diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
-> index f59caff4b3d4c267feca4220bf1547b6fad08f95..8f0baf0d29536d2b18c5839d6275f020f9af7e45 100644
-> --- a/drivers/phy/phy-can-transceiver.c
-> +++ b/drivers/phy/phy-can-transceiver.c
-> @@ -17,13 +17,20 @@ struct can_transceiver_data {
->  	u32 flags;
->  #define CAN_TRANSCEIVER_STB_PRESENT	BIT(0)
->  #define CAN_TRANSCEIVER_EN_PRESENT	BIT(1)
-> +#define CAN_TRANSCEIVER_DUAL_CH		BIT(2)
+> diff --git a/arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts b/arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts
+> index 46f6e0fbf2b09106e6e726ff8b61522d1359cfa4..f6197ba356d49b97bf7287c3f0f86ef84f89bac9 100644
+> --- a/arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts
+> @@ -89,12 +89,11 @@ reg_audio_switch1: regulator-audio-switch1 {
+>  		gpio = <&pcal6524 0 GPIO_ACTIVE_LOW>;
+>  	};
+>
+> -	reg_can2_stby: regulator-can2-stby {
+> -		compatible = "regulator-fixed";
+> -		regulator-max-microvolt = <3300000>;
+> -		regulator-min-microvolt = <3300000>;
+> -		regulator-name = "can2-stby";
+> -		gpio = <&pcal6524 14 GPIO_ACTIVE_LOW>;
+> +	flexcan2_phy: can-phy {
+> +		compatible = "nxp,tja1051", "ti,tcan1043";
+> +		#phy-cells = <0>;
+> +		max-bitrate = <1000000>;
+> +		standby-gpios = <&pcal6524 14 GPIO_ACTIVE_HIGH>;
+>  	};
+>
+>  	reg_m2_pwr: regulator-m2-pwr {
+> @@ -300,7 +299,7 @@ &enetc_port1 {
+>  &flexcan2 {
+>  	pinctrl-0 = <&pinctrl_flexcan2>;
+>  	pinctrl-names = "default";
+> -	xceiver-supply = <&reg_can2_stby>;
+> +	phys = <&flexcan2_phy>;
+>  	status = "okay";
 >  };
 >
->  struct can_transceiver_phy {
->  	struct phy *generic_phy;
->  	struct gpio_desc *standby_gpio;
->  	struct gpio_desc *enable_gpio;
-> +	struct can_transceiver_priv *priv;
-> +};
-
-I suggest create new patch, just add priv (without num_ch), which simple
-straight forward. Then add num_ch, which will be easy to review.
-
-Frank
-
-> +
-> +struct can_transceiver_priv {
-> +	struct can_transceiver_phy *can_transceiver_phy;
->  	struct mux_state *mux_state;
-> +	int num_ch;
->  };
->
->  /* Power on function */
-> @@ -32,8 +39,8 @@ static int can_transceiver_phy_power_on(struct phy *phy)
->  	struct can_transceiver_phy *can_transceiver_phy = phy_get_drvdata(phy);
->  	int ret;
->
-> -	if (can_transceiver_phy->mux_state) {
-> -		ret = mux_state_select(can_transceiver_phy->mux_state);
-> +	if (can_transceiver_phy->priv->mux_state) {
-> +		ret = mux_state_select(can_transceiver_phy->priv->mux_state);
->  		if (ret) {
->  			dev_err(&phy->dev, "Failed to select CAN mux: %d\n", ret);
->  			return ret;
-> @@ -56,8 +63,8 @@ static int can_transceiver_phy_power_off(struct phy *phy)
->  		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 1);
->  	if (can_transceiver_phy->enable_gpio)
->  		gpiod_set_value_cansleep(can_transceiver_phy->enable_gpio, 0);
-> -	if (can_transceiver_phy->mux_state)
-> -		mux_state_deselect(can_transceiver_phy->mux_state);
-> +	if (can_transceiver_phy->priv->mux_state)
-> +		mux_state_deselect(can_transceiver_phy->priv->mux_state);
->
->  	return 0;
->  }
-> @@ -76,6 +83,10 @@ static const struct can_transceiver_data tcan1043_drvdata = {
->  	.flags = CAN_TRANSCEIVER_STB_PRESENT | CAN_TRANSCEIVER_EN_PRESENT,
->  };
->
-> +static const struct can_transceiver_data tja1048_drvdata = {
-> +	.flags = CAN_TRANSCEIVER_STB_PRESENT | CAN_TRANSCEIVER_DUAL_CH,
-> +};
-> +
->  static const struct of_device_id can_transceiver_phy_ids[] = {
->  	{
->  		.compatible = "ti,tcan1042",
-> @@ -85,6 +96,10 @@ static const struct of_device_id can_transceiver_phy_ids[] = {
->  		.compatible = "ti,tcan1043",
->  		.data = &tcan1043_drvdata
->  	},
-> +	{
-> +		.compatible = "nxp,tja1048",
-> +		.data = &tja1048_drvdata
-> +	},
->  	{
->  		.compatible = "nxp,tjr1443",
->  		.data = &tcan1043_drvdata
-> @@ -103,11 +118,27 @@ devm_mux_state_get_optional(struct device *dev, const char *mux_name)
->  	return devm_mux_state_get(dev, mux_name);
->  }
->
-> +static struct phy *can_transceiver_phy_xlate(struct device *dev, const struct of_phandle_args *args)
-> +{
-> +	struct can_transceiver_priv *priv = dev_get_drvdata(dev);
-> +	u32 idx;
-> +
-> +	if (priv->num_ch == 1)
-> +		return priv->can_transceiver_phy[0].generic_phy;
-> +
-> +	if (args->args_count != 1)
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	idx = args->args[0];
-> +
-> +	return priv->can_transceiver_phy[idx].generic_phy;
-> +}
-> +
->  static int can_transceiver_phy_probe(struct platform_device *pdev)
->  {
->  	struct phy_provider *phy_provider;
->  	struct device *dev = &pdev->dev;
-> -	struct can_transceiver_phy *can_transceiver_phy;
-> +	struct can_transceiver_priv *priv;
->  	const struct can_transceiver_data *drvdata;
->  	const struct of_device_id *match;
->  	struct phy *phy;
-> @@ -115,52 +146,70 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
->  	struct gpio_desc *enable_gpio;
->  	struct mux_state *mux_state;
->  	u32 max_bitrate = 0;
-> -	int err;
-> -
-> -	can_transceiver_phy = devm_kzalloc(dev, sizeof(struct can_transceiver_phy), GFP_KERNEL);
-> -	if (!can_transceiver_phy)
-> -		return -ENOMEM;
-> +	int num_ch = 1;
-> +	int err, i;
->
->  	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
->  	drvdata = match->data;
->
-> +	priv = devm_kzalloc(dev, sizeof(struct can_transceiver_priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	if (drvdata->flags & CAN_TRANSCEIVER_DUAL_CH)
-> +		num_ch = 2;
-> +
-> +	priv->num_ch = num_ch;
-> +	priv->can_transceiver_phy = devm_kcalloc(dev, num_ch, sizeof(struct can_transceiver_phy),
-> +						 GFP_KERNEL);
-> +	if (!priv->can_transceiver_phy)
-> +		return -ENOMEM;
-> +
->  	mux_state = devm_mux_state_get_optional(dev, NULL);
->  	if (IS_ERR(mux_state))
->  		return PTR_ERR(mux_state);
->
-> -	can_transceiver_phy->mux_state = mux_state;
-> -
-> -	phy = devm_phy_create(dev, dev->of_node,
-> -			      &can_transceiver_phy_ops);
-> -	if (IS_ERR(phy)) {
-> -		dev_err(dev, "failed to create can transceiver phy\n");
-> -		return PTR_ERR(phy);
-> -	}
-> +	priv->mux_state = mux_state;
->
->  	err = device_property_read_u32(dev, "max-bitrate", &max_bitrate);
->  	if ((err != -EINVAL) && !max_bitrate)
->  		dev_warn(dev, "Invalid value for transceiver max bitrate. Ignoring bitrate limit\n");
-> -	phy->attrs.max_link_rate = max_bitrate;
->
-> -	can_transceiver_phy->generic_phy = phy;
-> +	for (i = 0; i < num_ch; i++) {
-> +		phy = devm_phy_create(dev, dev->of_node, &can_transceiver_phy_ops);
-> +		if (IS_ERR(phy)) {
-> +			dev_err(dev, "failed to create can transceiver phy\n");
-> +			return PTR_ERR(phy);
-> +		}
->
-> -	if (drvdata->flags & CAN_TRANSCEIVER_STB_PRESENT) {
-> -		standby_gpio = devm_gpiod_get_optional(dev, "standby", GPIOD_OUT_HIGH);
-> -		if (IS_ERR(standby_gpio))
-> -			return PTR_ERR(standby_gpio);
-> -		can_transceiver_phy->standby_gpio = standby_gpio;
-> -	}
-> +		phy->attrs.max_link_rate = max_bitrate;
->
-> -	if (drvdata->flags & CAN_TRANSCEIVER_EN_PRESENT) {
-> -		enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
-> -		if (IS_ERR(enable_gpio))
-> -			return PTR_ERR(enable_gpio);
-> -		can_transceiver_phy->enable_gpio = enable_gpio;
-> -	}
-> +		priv->can_transceiver_phy[i].generic_phy = phy;
-> +		priv->can_transceiver_phy[i].priv = priv;
-> +
-> +		if (drvdata->flags & CAN_TRANSCEIVER_STB_PRESENT) {
-> +			standby_gpio = devm_gpiod_get_index_optional(dev, "standby", i,
-> +								     GPIOD_OUT_HIGH);
-> +			if (IS_ERR(standby_gpio))
-> +				return PTR_ERR(standby_gpio);
-> +			priv->can_transceiver_phy[i].standby_gpio = standby_gpio;
-> +		}
-> +
-> +		if (drvdata->flags & CAN_TRANSCEIVER_EN_PRESENT) {
-> +			enable_gpio = devm_gpiod_get_index_optional(dev, "enable", i,
-> +								    GPIOD_OUT_LOW);
-> +			if (IS_ERR(enable_gpio))
-> +				return PTR_ERR(enable_gpio);
-> +			priv->can_transceiver_phy[i].enable_gpio = enable_gpio;
-> +		}
->
-> -	phy_set_drvdata(can_transceiver_phy->generic_phy, can_transceiver_phy);
-> +		phy_set_drvdata(priv->can_transceiver_phy[i].generic_phy,
-> +				&priv->can_transceiver_phy[i]);
-> +	}
->
-> -	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-> +	phy_provider = devm_of_phy_provider_register(dev, can_transceiver_phy_xlate);
->
->  	return PTR_ERR_OR_ZERO(phy_provider);
->  }
 >
 > --
 > 2.37.1
