@@ -1,204 +1,107 @@
-Return-Path: <linux-can+bounces-4380-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4381-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1164B37CDA
-	for <lists+linux-can@lfdr.de>; Wed, 27 Aug 2025 10:05:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1637EB37D4E
+	for <lists+linux-can@lfdr.de>; Wed, 27 Aug 2025 10:14:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 029C35E6FF7
-	for <lists+linux-can@lfdr.de>; Wed, 27 Aug 2025 08:05:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B68B1BA1164
+	for <lists+linux-can@lfdr.de>; Wed, 27 Aug 2025 08:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1DA732145C;
-	Wed, 27 Aug 2025 08:04:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD7B322C7A;
+	Wed, 27 Aug 2025 08:14:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="fDMVk27s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KLDnWe8Q"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BEE32A3FD
-	for <linux-can@vger.kernel.org>; Wed, 27 Aug 2025 08:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960821DFF0;
+	Wed, 27 Aug 2025 08:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756281897; cv=none; b=CuW1D7A0PkIFcCAfldOXTpRBSjIJb1RoLilmjq6p34Ls+zKyjR1HrGBQvt1aWEXvGD+ZMXrFuVqJ6463DsMFFF/rn+N24ZB0kFSmJRJ/wHgpoaC8vzQ7SlkRiwUPbiMYXMOqGP1+l3uaPzhPnCN5X/anV/h+/ebpkzr3xB162ZE=
+	t=1756282466; cv=none; b=BG5MF4i4yZEBepWzcA8SpIOq0Q7mIY+0vz9CZaW4HPXLFQHrqQ26Ziu+tDU6dnuNbJz78s8xKiBB2Qk7j0sB66PKxa/BFTB0KdC7Q2hFFB8ZTmZzxjBXxlvILLAkFg90h902iLOx7+Ic5n3dU6sp6vZsWp36Vr3Oxyzrr/y7hJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756281897; c=relaxed/simple;
-	bh=g+KW9TEeVGqYphEisf/ETPbXzv+fd0lBq6e6n0plR/M=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=aukj5UIIAkDjECafrBjsWU6q6tV9PRiQsT7uKuuthDQL5fHATctKlcwzW52NvVNHuqZcPMeCffq6L/9MJvD8SdCeZ0ag54DYqAGKKg14S5xBSWuAGl5uhDLvogo35sw/1dwlY3SATiW1OpYuI0x1IBazep7RHf2olNjxUDoBcIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=fDMVk27s; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-61c3360bbaeso5311277a12.1
-        for <linux-can@vger.kernel.org>; Wed, 27 Aug 2025 01:04:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1756281893; x=1756886693; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o38urx3Y5liCjRZycGC30h3AxkEKhcqPAFepRrs3ec0=;
-        b=fDMVk27sioxSQfUj+NERtZPfo0GlsETGlORLyy3ZT+lzjJ+z7XeF8r4tSxc0W5mxVb
-         bR1216Db1cFXjPU5M+QfdPo42l5ADMzwKKtiJSdV6Fzzs7dsUwQ2krYvIYga30Mke6pJ
-         g/Ua8WLE5hc34IjEPCvocqcCgC0bkFTVsmDc65dVV3mPsBGaT+9RvfqapaXrOncOp27b
-         HtG1x7KsEuupa8heo31rfFHSHwaCO4TXQAHNi3x7A0UQYPGE2cXCGG6xDS51QUFul2yn
-         T+zhWRtcrR5mDXVvKWIl9r0pVwu9/G2MdYTgH/5kGxriNy196EG+AssHwdv9TkZkmC1v
-         JeKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756281893; x=1756886693;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o38urx3Y5liCjRZycGC30h3AxkEKhcqPAFepRrs3ec0=;
-        b=fvZsvAWzTrFQLJqoijSsVsS2XUJbhennwiMQWfkLqB8qncgaWoZeD+P1Paj5VdiCUd
-         68DQhCFoh9K5lKE6aWtjjwfG9r4TLbgb0LztKyM+zavHhsVqUcYEJlHO+QIpVhQ5+Vud
-         748H7F7rL7JVaSkapWXeBwNHglQniTBdj7gSt0oA/p9Y6/XdP+cg+FiZr6144QW4dH25
-         nuPtB1rdpcggNW8Iw9SyfjtKNupNkfviizN4vFRRXcMnOuWaplU6hM5gNB9yPgpQlgFo
-         /1Nn7tbbOXC7sjns/2QxP7mqyhjJ5+1QH3liUJaNOm/hwxANAdyhs3SO80ZuYF0fs+6K
-         8nuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVYE+aiG0meDD4rDL9ldVMECwhswZa/HfO8hPOUPEcEk3nZaw8h0JZQDP+UeT7AmB8jbRLjyaFUgj8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWWi5V7COK4DIOJHiZnY4DW4Z4HgCuk1Qu7dSyGaemQWcXpWhN
-	xvyAw3Muv9xmCTtlrYeJhpKFoXYQvxY0LyEJU9keiRfrfS9f4mio3gZKfXbm2EY6Ak8=
-X-Gm-Gg: ASbGnctcPTlFzuCuOaOzNbtw/dh7OaYMeCbtkpBbX01OeLffaeOWq0B7JN4UME6jWwH
-	F1m6hK4edTvcNs4L95FdFQ/00aN2Lvgj1XxdilisgKP5l4WJwRuodMJd0IGMQCJkQiMtm4OzAmA
-	GBkubOUc34LIQmPEXvTk+NjcRgIEJCNVr6zBMV7IHX34uk21o85t2lR9xuh9VAiY6Gb02srzIft
-	OVItYOCP7igsLboR6uxGu6sYmmzvpGguSn/WSAgGGsdUiuspGJF/BcrgX7U9ayVlDmNlYl+zUK+
-	E8r25ZotPztlnipNfpDesUWHICVrvCHT3EhAUzjBGcDypbDTFXO9/EKoyhj4Osz5B1qe1VOdfSb
-	RGDot1oHOt5ZMI/Zn2LAH4yyJmmEvnk3gQXJeZC3ouI8cWxMi
-X-Google-Smtp-Source: AGHT+IHAZruNO8PxiQDS6YA+oxemi3oPab4ygrNWQ7snhZ/72+NK1dE4fWGZyqEZWKw8iTnURGRP8A==
-X-Received: by 2002:a17:907:6096:b0:afe:7d3b:8463 with SMTP id a640c23a62f3a-afe7d4ace6fmr1003276666b.62.1756281892878;
-        Wed, 27 Aug 2025 01:04:52 -0700 (PDT)
-Received: from localhost (83-97-14-186.biz.kpn.net. [83.97.14.186])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-afeaf41dc6fsm283102066b.18.2025.08.27.01.04.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 01:04:52 -0700 (PDT)
+	s=arc-20240116; t=1756282466; c=relaxed/simple;
+	bh=WEfVTlwhN12P2iqpeiMXMEx2DULAa/9N/0mrwn60IkE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hOzJ53sy1LA5RtGuthoPn6jUY958czz8hjX6eHNMvQFC0lNGcVWCzfDXr2mSb73iMGPBG/NKRkN3J9bWvU2JEh6U6W2xjpqr0STUUrDkCx0qX2g1RN6NIAYBB172Sy70WK9dJZ0A87Las5nE1T4sZe4F6ALRIUwvleFZ8tI4xm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KLDnWe8Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7877C4CEEB;
+	Wed, 27 Aug 2025 08:14:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756282466;
+	bh=WEfVTlwhN12P2iqpeiMXMEx2DULAa/9N/0mrwn60IkE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KLDnWe8QAr5v/3DWBBCUZx8xX5fZbxZpYX2pPfUkvMyFJuXm7+/8hETRW7J6pn8qy
+	 4D+p8OIc4Oa6Ci0unL7bMJTBCGwRLn7QwDXgZDAM5jNPg1i/9zZg7dRemrkZ+5/rjw
+	 4nQxem5WhhCFxdHUvUtIY4+DAQoYL1OehGnSewdwfzKyxgwL07bzQR46pJNq041+zC
+	 1vsTcYM/f1goIas8pluIbkn9coXTb9VrW7VkI+DyugG7Uw0Jdjci8yl01WvT6sK0JS
+	 B1D2TMncWB6IDfOa8aU9TW/F7cxrsSRyrjp5Z0mgBsfpHwLlTQ9ebjWyICyR1CUpGo
+	 oImveyAR1jv2A==
+Message-ID: <1e8b20dd-1afa-46ed-81a6-52614a43056e@kernel.org>
+Date: Wed, 27 Aug 2025 17:14:24 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed;
- boundary=41c8a4c6eaeda649630e38b4e0028da409cd67aaf3a4c32373d96e5bca68;
- micalg=pgp-sha512; protocol="application/pgp-signature"
-Date: Wed, 27 Aug 2025 10:04:32 +0200
-Message-Id: <DCD1YPX4T779.ADK4JCGW1MU7@baylibre.com>
-From: "Markus Schneider-Pargmann" <msp@baylibre.com>
-To: "Rob Herring" <robh@kernel.org>
-Cc: "Chandrasekar Ramakrishnan" <rcsekar@samsung.com>, "Marc Kleine-Budde"
- <mkl@pengutronix.de>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor
- Dooley" <conor+dt@kernel.org>, "Vishal Mahaveer" <vishalm@ti.com>, "Kevin
- Hilman" <khilman@baylibre.com>, "Dhruva Gole" <d-gole@ti.com>, "Sebin
- Francis" <sebin.francis@ti.com>, "Kendall Willis" <k-willis@ti.com>,
- "Akashdeep Kaur" <a-kaur@ti.com>, "Simon Horman" <horms@kernel.org>,
- "Vincent MAILHOL" <mailhol.vincent@wanadoo.fr>,
- <linux-can@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v9 1/4] dt-bindings: can: m_can: Add wakeup properties
-X-Mailer: aerc 0.20.1
-References: <20250820-topic-mcan-wakeup-source-v6-12-v9-0-0ac13f2ddd67@baylibre.com> <20250820-topic-mcan-wakeup-source-v6-12-v9-1-0ac13f2ddd67@baylibre.com> <20250822143549.GA3664230-robh@kernel.org>
-In-Reply-To: <20250822143549.GA3664230-robh@kernel.org>
-
---41c8a4c6eaeda649630e38b4e0028da409cd67aaf3a4c32373d96e5bca68
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MAINTAINERS: update Vincent Mailhol's email address
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250826105255.35501-2-mailhol@kernel.org>
+ <20250827-winged-bizarre-mackerel-a91272-mkl@pengutronix.de>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol@kernel.org>
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250827-winged-bizarre-mackerel-a91272-mkl@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Rob,
+On 27/08/2025 at 16:40, Marc Kleine-Budde wrote:
+> On 26.08.2025 19:48:39, mailhol@kernel.org wrote:
+>> From: Vincent Mailhol <mailhol@kernel.org>
+>>
+>> Now that I have received my kernel.org account, I am changing my email
+>> address from mailhol.vincent@wanadoo.fr to mailhol@kernel.org. The
+>> wanadoo.fr address was my first email which I created when I was a kid
+>> and has a special meaning to me, but it is restricted to a maximum of
+>> 50 messages per hour which starts to be problematic on threads where
+>> many people are CC-ed.
+>>
+>> Update all the MAINTAINERS entries accordingly and map the old address
+>> to the new one.
+>>
+>> I remain reachable from my old address. The different copyright
+>> notices mentioning my old address are kept as-is for the moment. I
+>> will update those one at a time only if I need to touch those files.
+>>
+>> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+> 
+> Applied to linux-can-next.
 
-On Fri Aug 22, 2025 at 4:35 PM CEST, Rob Herring wrote:
-> On Wed, Aug 20, 2025 at 02:42:25PM +0200, Markus Schneider-Pargmann wrote=
-:
->> The pins associated with m_can have to have a special configuration to
->> be able to wakeup the SoC from some system states. This configuration is
->> described in the wakeup pinctrl state while the default state describes
->> the default configuration. Also add the sleep state which is already in
->> use by some devicetrees.
->>=20
->> Also m_can can be a wakeup-source if capable of wakeup.
->>=20
->> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
->> ---
->>  .../devicetree/bindings/net/can/bosch,m_can.yaml   | 25 +++++++++++++++=
-+++++++
->>  1 file changed, 25 insertions(+)
->>=20
->> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml =
-b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
->> index c4887522e8fe97c3947357b4dbd4ecf20ee8100a..0e00be18a8be681634f25378=
-bb2cdef034dc4e6b 100644
->> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
->> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
->> @@ -106,6 +106,26 @@ properties:
->>          maximum: 32
->>      minItems: 1
->> =20
->> +  pinctrl-0:
->> +    description: Default pinctrl state
->> +
->> +  pinctrl-1:
->> +    description: Can be Sleep or Wakeup pinctrl state
->> +
->> +  pinctrl-2:
->> +    description: Can be Sleep or Wakeup pinctrl state
->> +
->> +  pinctrl-names:
->> +    description:
->> +      When present should contain at least "default" describing the def=
-ault pin
->> +      states. Other states are "sleep" which describes the pinstate whe=
-n
->> +      sleeping and "wakeup" describing the pins if wakeup is enabled.
->> +    minItems: 1
->> +    items:
->> +      - const: default
->> +      - const: sleep
->> +      - const: wakeup
->
-> This doesn't allow '"default", "wakeup"' which I think you want.
->
-> "sleep" and "wakeup" seem mutually exclusive and really are just the=20
-> same thing. Both apply to the same mode/state. Whether you can wake from=
-=20
-> it is just an additional property (of the state).=20
->
-> So I think you want:
->
-> items:
->   - const: default
->   - enum: [ sleep, wakeup ]
->
->
-> Or you should just drop 'wakeup' and just support wakeup with 'sleep'=20
-> when 'wakeup-source' is present.
+Thanks!
 
-Thanks for your feedback. I see they seem to be mutually exclusive, but
-I think they serve different purposes. The sleep state describes the
-pins when sleeping with wakeup disabled. The wakeup state describes the
-pins when sleeping or off and wakeup is enabled.
+> BTW: The "From" header of your mail only contains you e-mail address,
+> not your real name.
 
-Only allowing one of the two states or only using the sleep state will
-enable or disable wakeup statically, there is no way to choose one or
-the other.
+Yes, I did not properly set the from field in my .gitconfig and because this is
+the very first email which I sent using my new email and git send-email I
+couldn't notice it. I spotted the issue just after sending and it is already fixed.
 
-For my specific setup, the name of a sleep state is also kind of
-misleading. The SoC is in a poweroff state and sensitive to activity on
-the pins configured for wakeup. It is not just sleeping, it will do a
-fresh boot once woken up.=20
 
-Best
-Markus
-
---41c8a4c6eaeda649630e38b4e0028da409cd67aaf3a4c32373d96e5bca68
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaK68EhsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlN4
-dwEAmJszUShVvXfS2LCmLmEu7BZUsJ2zzz7SGnnInFEs3FEBAOcxPEuvnj7hWYdH
-3c/Loa6iaWxbVEoBV2+H35Z3algJ
-=jiEZ
------END PGP SIGNATURE-----
-
---41c8a4c6eaeda649630e38b4e0028da409cd67aaf3a4c32373d96e5bca68--
+Yours sincerely,
+Vincent Mailhol
 
