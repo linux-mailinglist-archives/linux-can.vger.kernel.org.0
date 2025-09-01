@@ -1,124 +1,128 @@
-Return-Path: <linux-can+bounces-4412-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4413-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19C9AB3E5C2
-	for <lists+linux-can@lfdr.de>; Mon,  1 Sep 2025 15:43:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61239B3EBE3
+	for <lists+linux-can@lfdr.de>; Mon,  1 Sep 2025 18:07:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26A527AE208
-	for <lists+linux-can@lfdr.de>; Mon,  1 Sep 2025 13:41:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21C433B4BFE
+	for <lists+linux-can@lfdr.de>; Mon,  1 Sep 2025 16:07:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 459913375AB;
-	Mon,  1 Sep 2025 13:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEDA6156677;
+	Mon,  1 Sep 2025 16:07:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fwSadp99"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB07335BD5;
-	Mon,  1 Sep 2025 13:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6FD13E02A
+	for <linux-can@vger.kernel.org>; Mon,  1 Sep 2025 16:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756734156; cv=none; b=mXb689yVacouj3g4CKlws0s76HWCIF0ual59eKZDtmNQJ1sZu5M/JFgTED5hIqZjNXEM36lT5xqOBUCfrvPpM6w/OTdUoyGExdtXWtyXebNt6uSju9Xw21qO8+IfCDGaAWYHcil7+w/4/55geZozGoTr/K9tu0WyImF8Y66XWZY=
+	t=1756742856; cv=none; b=kiwCzaWGrgYr29KWosMQyhfcLg5cxmMnuWcUczLcsQz5fKYhyzI+DO+DeLZhmW10CnUiTkJXWZkZLz+JfwNv/actwgcAzB9dqB6yHQoQ1VWDi9I8p8QcIXjyTS94xMuK+uEPXaNm29lLV3ueqXHlykwjn2F1vVyw+Pxdc/V7ZpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756734156; c=relaxed/simple;
-	bh=RiR2llBXC0RIPKr7xaiaC53t2ZL4gXL/WiWADRkCq/Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vo4bsNVnQbnEWISdHSd4c/CN/F5Hvj6yHVxPr7KeVhJWNgDg/CnQVNhWH3z2rasnNX0WkWaXRn2YfTLZzNRQ3FyEVjQEYhHoccpYMfLwYN/1hqknfrl58lcdz+DpOrb1qUh+irdSPvQ/54YI+hzQCMgBVVhViL+yhtfKBqz6PPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-52a73cc9f97so751344137.3;
-        Mon, 01 Sep 2025 06:42:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756734153; x=1757338953;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vocq/+HcTHTmphWd6zOzklSWl3IX57j4LspmV5YVnH8=;
-        b=FtTEsw3jw2ythJ4Rgnr/WsaL9JUK8tJ99wxS5f8E9fguzxcRj3w4fGJ9ECBmEN33y/
-         u0+k+XbH/ozT3KLw1TVs8GI43LVbL9A+OY6t5EnhOQEGONzWhC1dIC1I2XcZTgTRcj01
-         tiSdLJy5eR+EoCBgbbmYqZfDJcYGoT4UeKzt8qRaliCdjJu5FhzSPdLsVHL6wf/I6tAr
-         ELFnD6yS4lFQMMo0aRmyF4o1M85bu3uzR0RJtvZGhfdkG9HwWLRsqlJjvnY1RJOTy/ru
-         eulDBQXLy/Gv9RdP5cMig7p3VpMnagrKPMgjtY/nF8JE7W/EC/8wMO4enEbpCeRHfIRh
-         fUaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUFSCBWWpTO9btlKaaRLyZdi5WlOKAXO4JnzLyzsV3upynN7e1UAR1SEWJKHcHthFb9hdLogKikFC0=@vger.kernel.org, AJvYcCUfusu1F1CGwdrdOE+aNt6ErWPz8wwgFwTT5/e66KkiLlukNrM8URiLx6kcLmJthxkKroS3oMmoNNZLQ+/7ipBEEXI=@vger.kernel.org, AJvYcCVWARpHhl2yndQsRAkD10602VvQRo8d+Bia3m490/1jK0YcM97vTOeqRhOXaiqIedseKxPEc6G9cpknl0SY@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWL57RbHlbjDUjnR9N5Q/5ClOrFO9eFcBoa4VJdpct9N/AiV5Q
-	g+82aIKJCjriiuJGVFdfz8hUCvLUb4EWGZoAHT7uaL0jUjiYZwZOKuMjr7eZ54R8
-X-Gm-Gg: ASbGnctVHjO83K50vW7EA9uCflmaijtTAzeLeCGJ0exUXl1u7s9caOLvpkU7kxrscrL
-	+waskpgXRBF+EP4g4nQFV77dEC/1DfNYlrOeRP/YIx/mW/A7eF3ZUUZgyikjYsxJU67DoV60Xjh
-	E0kG2D8KVMz50X1tkLJv63ymIA8l6F06+tINEXQ9UcmFaN/hFdGwn+rBcloyrYZB+ZjBU+3bxAo
-	BnO/ue1UaBDfqTZjJ8UGL3v7YAxMDFw1yOOtyx1KIqsoqbMlgUABd0GqIAZQtHNx5oP7xPbeWjR
-	+Q+mfrsn9GaxiUs5HfzR7SFbIau+yihU232rtVT6TgX1LdYkFlUhyvxTSCkF6HnyhfmJqIywyJQ
-	4dEfpjjIvw9FkCh5csGWWbXPolRGao+uZvTYtdpQ1oSC5NjeUkG+FGHqp8gzwYtlgRoSQQTs=
-X-Google-Smtp-Source: AGHT+IEbLs5kgSXJJUR9pdGBnxmcVEfqPOqKeIQWpSCeI0Zra1Jtu6uB0pm71eUifEmjjfyfZuKsAQ==
-X-Received: by 2002:a05:6102:5127:b0:4e6:d911:dd84 with SMTP id ada2fe7eead31-52b1b6f5b9dmr1905877137.22.1756734153073;
-        Mon, 01 Sep 2025 06:42:33 -0700 (PDT)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-8943b7c2c42sm3774794241.4.2025.09.01.06.42.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Sep 2025 06:42:32 -0700 (PDT)
-Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-890190c7912so855230241.2;
-        Mon, 01 Sep 2025 06:42:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUj9C2ZrjxqzbAFdWHdaQdFwPQP6mcF9g49XViA/IBmRY0DoID9FKZZfHFeyyCJ6+sveM8wCN1WaFzHEXt0@vger.kernel.org, AJvYcCV0VLGNiFao/5v+uYS02iiuy+ffX1444nDCe547yjr2fXJ8nSxE1j8g3fsS1/Athfw6KRLQnwKc8U4=@vger.kernel.org, AJvYcCWZVD+yoWsoqDZlN3p9OdfFZnQqHBKBflPu7FNr2DV9+jHWrFhg64F3pj0Vlh1pPCg646PVr6SbzG8Yn5k2smL3zN0=@vger.kernel.org
-X-Received: by 2002:a05:6102:5687:b0:523:95bb:b63a with SMTP id
- ada2fe7eead31-52b1b6fbbc8mr1571895137.21.1756734152397; Mon, 01 Sep 2025
- 06:42:32 -0700 (PDT)
+	s=arc-20240116; t=1756742856; c=relaxed/simple;
+	bh=sFBSosYT+A1SiBP360Yt88lm5+8DmXtwbTCRAR9siUw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=CHqbtritQVU/ALvR5CqDhBR68Jl4d1xrDyyIWg6cUCenR4cZLpDEscz8KOqwInutnXFMwqtH/D458sgOmGdcFAuQMxe7wdFjETc22yKdXh0ucfJK/YlWw5bY7SpG1WK0oQnK6llPj0XHXWvyPMQ7H5a4wI+Xgleske7+Dnl2sYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fwSadp99; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756742853;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZtjLfywhy5X3DydOu3T3NKZA2RhjF5jxdZ6SzJcWXXM=;
+	b=fwSadp99vsFWJFOC3NK65as1DO7imRwjL5ZXx78ic58+72KxDno/9YcfhTROhxfN1A2XQX
+	CwWlO0QGlONVWpeQQD7zOqPo+oGUq7wXTQ5meloj9CKqgrWVIzYriUcpp6LijkTyhdY4Q2
+	RjwjkwKsQhjwjjYbyZ+zO4uD6eX18Qg=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-509-HHV4c3EjNJiF01CFpnOXDw-1; Mon,
+ 01 Sep 2025 12:07:30 -0400
+X-MC-Unique: HHV4c3EjNJiF01CFpnOXDw-1
+X-Mimecast-MFC-AGG-ID: HHV4c3EjNJiF01CFpnOXDw_1756742849
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7CD56195C27C;
+	Mon,  1 Sep 2025 16:07:29 +0000 (UTC)
+Received: from dcaratti.users.ipa.redhat.com (unknown [10.44.33.118])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1A08219560AB;
+	Mon,  1 Sep 2025 16:07:26 +0000 (UTC)
+From: Davide Caratti <dcaratti@redhat.com>
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Felix Maurer <fmaurer@redhat.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	linux-can@vger.kernel.org
+Subject: [PATCH v2] selftests: can: enable CONFIG_CAN_VCAN as a module
+Date: Mon,  1 Sep 2025 18:07:20 +0200
+Message-ID: <3424bff9cf34d66633ef410ba506f005a94e310e.1756742645.git.dcaratti@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250821141429.298324-1-biju.das.jz@bp.renesas.com> <20250821141429.298324-5-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20250821141429.298324-5-biju.das.jz@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 1 Sep 2025 15:42:21 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUNZag2kf9Dq_sv++6DtU-2tWAgQa5vi36duBx77=a+KA@mail.gmail.com>
-X-Gm-Features: Ac12FXycAaiDbDiLCPFnnKNCCOpZihQqU0phzOqdDOsQ8ZbBu8u1JL5pNL2VgP8
-Message-ID: <CAMuHMdUNZag2kf9Dq_sv++6DtU-2tWAgQa5vi36duBx77=a+KA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] can: rcar_canfd: Simplify data bit rate config
-To: Biju <biju.das.au@gmail.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Magnus Damm <magnus.damm@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
-	linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Hi Biju,
+A proper kernel configuration for running kselftest can be obtained with:
 
-On Thu, 21 Aug 2025 at 16:14, Biju <biju.das.au@gmail.com> wrote:
-> From: Biju Das <biju.das.jz@bp.renesas.com>
->
-> Introduce rcar_canfd_compute_data_bit_rate_cfg() for simplifying data bit
-> rate configuration by replacing function-like macros.
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v1->v2:
->  * Split from patch#3 for computing data bit rate config separate.
->    separate.
->  * Replaced RCANFD_DCFG_DBRP->RCANFD_DCFG_DBRP_MASK and used FIELD_PREP to
->    extract value.
+ $ yes | make kselftest-merge
 
-Thanks for your patch!
+Build of 'vcan' driver is currently missing, while the other required knobs
+are already there because of net/link_netns.py [1]. Add a config file in
+selftests/net/can to store the minimum set of kconfig needed for CAN
+selftests. While at it, move existing CAN-related knobs from selftests/net
+to selftests/net/can.
 
-For correctness:
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+[1] https://patch.msgid.link/20250219125039.18024-14-shaw.leon@gmail.com
 
-But I have the same comments as for "[PATCH v2 3/4] can: rcar_canfd:
-Simplify nominal bit rate config".
+V2:
+ - move CAN-related knobs needed by [1] into selftests/net/can (thanks
+   Vincent Mailhol); remove enabling of CAN_RAW and CAN_NETLINK since
+   Kconfig already implies them
 
-Gr{oetje,eeting}s,
+Fixes: 77442ffa83e8 ("selftests: can: Import tst-filter from can-tests")
+Signed-off-by: Davide Caratti <dcaratti@redhat.com>
+---
+ tools/testing/selftests/net/can/config | 4 ++++
+ tools/testing/selftests/net/config     | 3 ---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/net/can/config
 
-                        Geert
-
+diff --git a/tools/testing/selftests/net/can/config b/tools/testing/selftests/net/can/config
+new file mode 100644
+index 000000000000..0cb5598eb702
+--- /dev/null
++++ b/tools/testing/selftests/net/can/config
+@@ -0,0 +1,4 @@
++CONFIG_CAN=m
++CONFIG_CAN_DEV=m
++CONFIG_CAN_VXCAN=m
++CONFIG_CAN_VCAN=m
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index c24417d0047b..18bec89c77b9 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -120,9 +120,6 @@ CONFIG_XFRM_USER=m
+ CONFIG_IP_NF_MATCH_RPFILTER=m
+ CONFIG_IP6_NF_MATCH_RPFILTER=m
+ CONFIG_IPVLAN=m
+-CONFIG_CAN=m
+-CONFIG_CAN_DEV=m
+-CONFIG_CAN_VXCAN=m
+ CONFIG_NETKIT=y
+ CONFIG_NET_PKTGEN=m
+ CONFIG_IPV6_ILA=m
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.47.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
