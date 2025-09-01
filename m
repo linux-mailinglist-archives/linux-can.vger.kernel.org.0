@@ -1,68 +1,68 @@
-Return-Path: <linux-can+bounces-4404-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4405-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19711B3D725
-	for <lists+linux-can@lfdr.de>; Mon,  1 Sep 2025 05:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 35826B3D728
+	for <lists+linux-can@lfdr.de>; Mon,  1 Sep 2025 05:19:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 660D8189803B
-	for <lists+linux-can@lfdr.de>; Mon,  1 Sep 2025 03:19:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 895411898955
+	for <lists+linux-can@lfdr.de>; Mon,  1 Sep 2025 03:19:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B340222590;
-	Mon,  1 Sep 2025 03:18:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16EAA224245;
+	Mon,  1 Sep 2025 03:19:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="JutD1CME"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="kEpPAao0"
 X-Original-To: linux-can@vger.kernel.org
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013071.outbound.protection.outlook.com [52.101.83.71])
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013021.outbound.protection.outlook.com [52.101.83.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137D021CC43;
-	Mon,  1 Sep 2025 03:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E2821E0AD;
+	Mon,  1 Sep 2025 03:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.21
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756696739; cv=fail; b=GlCDOZXDdOMQmHxUcnbFxdDHPLA/EhO/7UBE5iTgMA9mAWckvaBn/j8jzWwG0ZHPdbsLMXaNA2YthDe00egZTvSjKs4eTwYkV+Boq/E33B55vlX5ccLmY687hAmczPmkscheV0jS8fkI9oF7h1PDq51ydJKI7aOfO+GBKGFjIPw=
+	t=1756696746; cv=fail; b=m5A8Wlzl7se39bHqqrR87dKPAWz/a8uM5UH85OtDSVbu0hc68jFLmvtusB6V2uL5KyXGHVufTqU088Wnyi1U81pEmUOd5Bl7m9T223z00vWZRFn8Pcb9r2PfwYu3S651rxmokJrTak+/6RxunK6wWubBxwLLSvMuLIguRpX7ORc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756696739; c=relaxed/simple;
-	bh=FY4pPZ1aDEMyqYllvZTAPBnGkv/MTxPgh/KCOmnd5ew=;
+	s=arc-20240116; t=1756696746; c=relaxed/simple;
+	bh=/DEKToE9khI/IF64bz3dyJTnpv6u0rxFEBM5LAt0TbY=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=utn1GtP8txZRmDWKoW4ktc2eJ3fv6joEngmkuFaAgGE4Y2e0pc2KtVpreadAhXlGVHJ5Pdvqwbz00ihSNHd47PhjWnM9848GQqRt2HolURUwL+ZTJynbXXKlUKwfCKNA0KjeUi7fsFelrqCNGb20xLCI/aAzFMj660mry0hcd3c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=JutD1CME; arc=fail smtp.client-ip=52.101.83.71
+	 To:Cc:MIME-Version; b=n7HEQKRmh5d/9zKD5cMnfiuepD6wdH+TvWmbGdoQg+f4lfOq4AmjruL7bwV+CyCvAEwcsKxFU1/i5Cm+cLPaXze7lfnBvqHdEeO5tA7yuwnqe+iWgzX4hIdlHm51+X48+4ClCzTqaw1GtqkamDnC1PqamsOPj7/2YIzYhtF7haY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=kEpPAao0; arc=fail smtp.client-ip=52.101.83.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QX0CI63GNg8K+7MdZ7IxOTL9Yn/gqd+uYG6Q/JMtdeebkqNOoiN0Z7uq1iI0aop2EsxvHdikXFUcU3nF4vC2KHsQOxRsuqAUzNRgbgeYXQMJDymj0pJj1qYemox7OVKZswHrs0LD3FV5Zkw7Yv7h4O7QVwmhfs5Oc6lDLaKuzgvKUyh8FIKk9to+9QDqHxuuiOTgm5lLB7/Y97e/OVxJC5yCA2KR3DIPoqSrMvQVtMyud+DMEHdnFxy22zDXq0gWnDSciQnYjrZwf6YHQ89PIxanJO9Pf8YM5lsNhmzRTZPXTAqKicohrr0A+7fpNuecf83RwwGGDWS4zJpOokoSmQ==
+ b=IyeMcxd3ZIIzRjavY1YER57TMKKcCseQFao16Nykv8u6pb/5ReOw6TR5gv7A2ZZsNKq+dRBltdzeOK1newfhEVnc0H7khbMl7rPM7YCtxQUPu97paO5jLHh78aroCAZ9tO8SbRxaOzH1bqbFiEdgmTVgt2pX77iuxbX4O//FtoI+cdfGUjcEiF5/TrFKBtbOYvLCU0ArdH74khkw3EoqwLzYgmZfIZj9BSXWKlV6A1vEbJHABIolPzXpHYWjpxjmOsWl9/F4sFf4/Ivq1Hez2Q0OrZ0JQYL4k4kUDXj+e/zuh6jBIUrTuKB3V+hSkTa/B0/WOGKg87RT17HRW60JSA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NoupLKXdR+Z7rmxKgymA6UFa1Dro42TjvfEoLuUf82Y=;
- b=ZMDURWrsx5aGBdYdHvGkbWBpMxOfNADH9rNR09IcbYtJU14WHf850+eMpL0tqsz9LzST/Gs0ZUof7K/NHZ4hTpzeBqezHEY1A1+CYCXBFJz3xXyES9We6csLngA5ULRagyofOIPGnJ4MUEswv6mJxmi4Tj487hUHiW8kiQfTusw0T028jySqnY4F5n5TpM0d8uWpyhwlfINWyoU3oXuElIu4IFRpVj+3xcs96RzOpb09D5F932mbsA1oJgo/n3vL8eC9JbB1omI9vvkqX/a5BZrpvfTLJS48YYwX6QRTqegIAKNVGPTdHYqyq7DsTXUqpEdqDhvwk83ejNuHpcgTiw==
+ bh=KHCj9HHteqFAp4t4kZFMVgMbZE3pIlCwTeH5w7sEo9o=;
+ b=xVZwUs2pcLE9PIu9YZn6wb/u6FHir62O9wuVsrXZqu42fIbJNVU8MgzkhPIvTwtQD4xsnxd5OJxInOE+vyLtgAZDnlzWgVQEzwlHxA8uxmy5XnjMPMEPiy75s4COdqWF2ypznOlcePE6WmJcVfZLve+go07pD8IbNiE+sJDWfBgP/eohIBixEVHbR8/qG/IVd6XJN/0VppuB5viy8zf8X1yd8vb+vU3DFD93dD5xaAYtwrViosoTvauor1J/b/p+PGQYte3GLaxo2d7RZs865JifdtLga9vY7AFr7EA2J9Py4Q7bQPhGQvEkcafX0Uj3TDDGb1xDt6xTBnClyHbQrg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NoupLKXdR+Z7rmxKgymA6UFa1Dro42TjvfEoLuUf82Y=;
- b=JutD1CME6NHPHMA+akoe60f8DoOfG2cG9XGBwqjHvdS/IZo7UV4tupPZmht1CrBsKPsiz7srALW/4TwJgTphmzwFx046sA4xogH9EBCuYBtIWzi42XKJ3cy+oS6nIvDrFbTPOnbYDpbO0sRb5Tm8cnCu64y2GYWWiu3DZqZnyE+P649Bw3c2uFc9aC6vdI9Tv+7u5AjVcH1X1/S94oPIvQTGGvZLVwTtfvgA61CwgsjvLACvPKGKbf1RUmiqCthgL6EmAmuLOZozTodfgtsH4+wUYadwyZ8HEQx2M5VsowFHX2Vc/1uc1Ia1t6C4ROZ+Kif6+AIQsk0/af/f9fOMjQ==
+ bh=KHCj9HHteqFAp4t4kZFMVgMbZE3pIlCwTeH5w7sEo9o=;
+ b=kEpPAao0yqzlQnxwYDei0VQaPrGWSTnB5+ecm5HSIfpHqUdRM6bEcc9HoLjDdqYrnKAl7yvQxgnnvOPxfwvaT01c7wPQp9XZALsT3mhJyLoqEyNIJjG6x6khSXuk4oePhga6qzI/AjDDTA14wxpPYsgBIGny+UsKSEbWTgEW9ZNeNH/BHjeMtnv2wmSQJz2UhcwH6BruP7mE0ZeOOSRLBjCIX10tUvoX5HxNlVHXRPr2F322JJdrgfuqMItVZMUY58aKlPu81XXw6cqPV/l7MKzZN+kW1P+UfWm1NVnCc4e0lWjPKqUaSnNT1/qWYrNGepUeXdF3WEW+988VaLo6dQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
  by PA1PR04MB10321.eurprd04.prod.outlook.com (2603:10a6:102:44f::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.21; Mon, 1 Sep
- 2025 03:18:54 +0000
+ 2025 03:19:02 +0000
 Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
  ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
  ([fe80::165a:30a2:5835:9630%7]) with mapi id 15.20.9094.015; Mon, 1 Sep 2025
- 03:18:54 +0000
+ 03:19:02 +0000
 From: Peng Fan <peng.fan@nxp.com>
-Date: Mon, 01 Sep 2025 11:18:13 +0800
-Subject: [PATCH v4 3/6] phy: phy-can-transceiver: Add dual channel support
- for TJA1048
+Date: Mon, 01 Sep 2025 11:18:14 +0800
+Subject: [PATCH v4 4/6] arm64: dts: imx95-15x15-evk: Use phys to replace
+ xceiver-supply
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250901-can-v4-3-e42b5fe2cf9e@nxp.com>
+Message-Id: <20250901-can-v4-4-e42b5fe2cf9e@nxp.com>
 References: <20250901-can-v4-0-e42b5fe2cf9e@nxp.com>
 In-Reply-To: <20250901-can-v4-0-e42b5fe2cf9e@nxp.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>, 
@@ -79,11 +79,11 @@ Cc: linux-can@vger.kernel.org, linux-phy@lists.infradead.org,
  imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
  Peng Fan <peng.fan@nxp.com>, Frank Li <Frank.Li@nxp.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756696708; l=5981;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756696708; l=1482;
  i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
- bh=FY4pPZ1aDEMyqYllvZTAPBnGkv/MTxPgh/KCOmnd5ew=;
- b=htKf+5UpZXUP9pJ3qpVHmgoH6kCgpTvbYc2rfJHqDa1I3R8Y3vxWOzkum3+fy0cVT0EV/XV/+
- ceLe2S/8bjqBqSI6tia9F53ZWpre535y48Lz9wbHoppoWV/Td8dXkYz
+ bh=/DEKToE9khI/IF64bz3dyJTnpv6u0rxFEBM5LAt0TbY=;
+ b=1liP+r75O3Hv76g9YNIJZ4nQCxoUeWflBPqvCytid+fIwH8i6SPApXhWqc9LHzJhxyTFdXo3L
+ FCtsNcCFmKpAzK3io3ZSpsuK1pkkdmqvdCE7kZQearTpuyPQQS8LV/2
 X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
  pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
 X-ClientProxiedBy: SG3P274CA0012.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::24)
@@ -96,270 +96,138 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|PA1PR04MB10321:EE_
-X-MS-Office365-Filtering-Correlation-Id: 31002ea5-9a46-4681-803d-08dde90647a3
+X-MS-Office365-Filtering-Correlation-Id: 0135cd9b-404e-4956-c874-08dde9064c1d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|366016|19092799006|376014|7416014|52116014|921020|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VDM3NWJVUHZiYzJtMUlTRlpHZTlNaWhndmp6d3ZHY3UwdDhxTW5VUys5S1lD?=
- =?utf-8?B?MlRPUUhSRytXZnFUTTA0ZFNYaktucS9GUUJRcDVIUlI3TnJvQmZ5c01peTN2?=
- =?utf-8?B?N0E0ZzFINGpOU01QS0FPWmpNTWpiZ3c3NjhFMGJlblpuZWd3ZzZGOHViV1F5?=
- =?utf-8?B?VU1KWUhDYlZEcnlrbXdzVDJ3OFFYV3hqTG40UWV5QlZneFhaY3dZNHhXTHo0?=
- =?utf-8?B?bFZuYnc2Y0IwVkljVE9PaEJoQTA4eTV6emRSYkEwd3FSakY5M3BJb0dYbHF4?=
- =?utf-8?B?OGlCZFBkMnp2ZURCZ2RLMUF6djFsdWZlN2RibVVrRFZiVVl1UllUalJXRjlw?=
- =?utf-8?B?NDJHRkVXeHJHMGRZTXIxOXp5STBOWEhzTHF2dTlqc3hnN3E0eDZNMHNhb1dD?=
- =?utf-8?B?OHVWaTNJZmtqeWdJWmJOSjRyNkZ3RGY1OEl5N01GQXpTbmhCN3pOc2VTTk9N?=
- =?utf-8?B?b1lpVjRCdTdmUXBvWittOHIrTlZmVzRTYTJMQk95L2k4eTVXWWtCVkZkKzQ5?=
- =?utf-8?B?di8rN0xTY1VOL1E1dGV0dzNDTkJ4emNqZVlQS3cxeVp2NVR1RUMydG04RHhJ?=
- =?utf-8?B?aDJZYmc0Zm5BWFpZNzZORHREUHA0TjhMNmNia2pWRFhWcnU3cFVZbmJHK0px?=
- =?utf-8?B?Zy9NTk9zYXlyTTZrcTFEanBabUJSMkN3Y1RhYk83MVpuYk82OFpYUXBySTNU?=
- =?utf-8?B?ekk4NENuNTQwMTZvLzJHR2w5UmFnc0k1WklIckE1NHp5ZkJiM21mQkZtR0ZM?=
- =?utf-8?B?Q1RxV0NOYkN2d1hyRE5pSTJ3WDc1V2RpMFJkcXYvSmw2djhDQTZMRjd3MEFK?=
- =?utf-8?B?TEYrY3VpVFhsQUZqblp0cjQxM1FOM2JVRVVvY1NwbGM2dUhYbkMrdFpsK3Nm?=
- =?utf-8?B?SzZQRmxzZEI0TS9oSHZWVnNzT0RBckh3NWFaWFdkNVZUdkZ6a0ZZc2Rnc3Zv?=
- =?utf-8?B?enBzTXoxR0QvaVovM1VBRXZFd0lURGxnUG5hbG4xMlRmUmxqZDRKTEJjU0Nw?=
- =?utf-8?B?ejJtWTVhTnN3N096aFlRbjRidHZabHQ3QStFd2s5eWtCYnpYaUx6L2t6dVF2?=
- =?utf-8?B?cHVnclBMdHNEeHc1VlRWS1JBL0tVdUlVWUZWZkNvYkVCVE9WNDFlL3VKZGw4?=
- =?utf-8?B?RitXYnVZRi9OVUQ2TE5Ud0EyVWliaktneS9SQ0xPaU1ZR3Z3azFmZGY0dTVY?=
- =?utf-8?B?ZGlTczhscFdSUnpUaHYwVW9oNlRvbU5jOEYvbTdOdFV1cGZLUjNqTzR3UDBv?=
- =?utf-8?B?WGhqMFBYMmRUNzRMeWtSaEh3SFBkL0NJcDhJVWsxNFZIVmZzTC80YmtOSWxB?=
- =?utf-8?B?QUlneVJTeVhnRzI0SEtGdFovTTRxRmFONmU0dWlreFVMQ1hTaGo2TkFmMGJW?=
- =?utf-8?B?UTV4d0owSFJqYUdMNEJidEpwdkhIbXgwY2s3elovS1U3UjlhQUdDNFVvT1NK?=
- =?utf-8?B?NWF3QjFTd1ZkOThXMUlXaFpkNnhvdGVBd3gwR2lkL1RjZndicTRTeVBXZHBB?=
- =?utf-8?B?Syt1V3FYeDI5VlRzNHE3dlc5OEx4T0lDYXN2VFFCV0VuaXh2QmM1TU1NWmxt?=
- =?utf-8?B?emlZQmFTTTFSNjFnYzMrTWV4Y2JJQkxOUkxlaEJCU1ZzRlcwVXVBcXkzcUkw?=
- =?utf-8?B?YSt1VUd1MkNRZHhFU2JkcHFiNGdFeGJJZTJTRTF6T1h1QTU4N0prM1VpQUJs?=
- =?utf-8?B?d2lTcVB1WXkwYlIyMDhTeVZ6T0ExMUZlWnpzREJxN2RMTXNWNk5maTQwOHRE?=
- =?utf-8?B?Mm00bEdxRDFENTJjVytxOGg1eWpUNlNkLzNSNmRRS01uaG1JYlJzVTdKYVFT?=
- =?utf-8?B?M0U0elRLYjNIZUI2TWNNU25neHJMWFNCeTdVK3RrZ2ExeEYxdlVTdStSZVRh?=
- =?utf-8?B?M2xHdnkvZWM4NFFReUo5b3RiRGtBeTdYWFVESnkvUUhGbDduMWR1Uko0ZlpD?=
- =?utf-8?B?QVhoM2pjQm1Qek5WV1BBQkx1YXdCZjFJMEo5cnNyc0huU0RZN0hHRHJtNG1U?=
- =?utf-8?Q?u9PAkjlu6lrJ/L09AsIFpULN2NxoUg=3D?=
+	=?utf-8?B?QUo3K09iamxSWGFUWlIyVkVKVkRCd0R1eTV0MHRsb1B2aWV4N3RPSDV6K2lt?=
+ =?utf-8?B?TkxGSlRoWEdpVE45NTd2Q2RaNW5wWG1mODN6VVRkZGEzZGdYQ051QU1aNjU1?=
+ =?utf-8?B?dk9INitCbTNhOWIyai9jVUhqZ1BGV2laeGVFNyt4Y3oycmwvc1pVL0VwUGts?=
+ =?utf-8?B?SExXclg5N1YzbFEyd1JmdGhsV3p3cFhBRU5YMEdJWFFwWmlNbWk2NWZ4YWZv?=
+ =?utf-8?B?Rm81a2NLY21Vc2JNWU1Ya0dpR1d3MGJ4WC94V0toTExDblBYUlQ3V29haGJJ?=
+ =?utf-8?B?clhlQjNwYTdReXBLV0xtOUpaYUxGNTFoWktsTG1UY0ZvYjFndTlOb2FZeFRz?=
+ =?utf-8?B?WVc1N0lCckdVV3F4OXQ1OTBmRW01aHoyMU1YK2ZPVDd2aEE0aTBlM3U4ZkVZ?=
+ =?utf-8?B?TzJkdDc1K0taWWlESHlwMGtwVStpaFh6VTlwT1A5Q080UE9GQllHRk1KaXFj?=
+ =?utf-8?B?dEx0NlprSFpHYnEreWVuK3lFZWVXNmUzK0RVRnpSR2JRUlZETHRLVjNTcCs0?=
+ =?utf-8?B?MG9PRDUwSWVJd3FlOURILzRtZHN3bjR6TVlqVjhlaHpWcldKZlJlMXZIbEpF?=
+ =?utf-8?B?NEthek05MjhZREFXZEJWYVJySDJhZWx0SkFmUjhUV2gvNW9hcnp3NUljS0Nw?=
+ =?utf-8?B?d0ZnNUpWWVRvbUFTbFMrU1J2MXlTZkJKNHlGZ0VMZWJwa3BwcVQ2aGRhSG1n?=
+ =?utf-8?B?cm1HTkdwTndTSmFQWWlVbUw3SGRVTmpvcXkyb2ZnQTBlTjAvbDNGQzJ4K1VV?=
+ =?utf-8?B?eEdvQWVPeWY4L0t0SVl0d3RHN2hwMExLalUxdVg5Z2hDZjZsVFU5dnpvc05z?=
+ =?utf-8?B?SGsrMGZRV0hSMlpBYVRpRVpiWEJybDVEWllDOHdOejNKeWM4eGR1TjZZNlll?=
+ =?utf-8?B?MlJSK0dCNFdsVWw2VW9pcDlNYm1TS2pSemR2NklySklBTzc1dVBrdjF6Y1la?=
+ =?utf-8?B?QjNwOStjamZxaGd0c25rbFhmd3Zkcjcrdzh3Tko5MGUrdElnRTY3b1BiV0Fx?=
+ =?utf-8?B?ejdUT1pYUDNQWTZScVlHd0xmblVJMW5veDFFd1VXL2hVWktnNVkwSlpnYnAr?=
+ =?utf-8?B?WEJDNlJ5VzJYbkF1UWlBWW01ZmNmQ0RCT1p2S1htOFJhRmxKL1FySHhjaXJE?=
+ =?utf-8?B?dUtEQmVaQ01lOThIQkNXeHRvUXRsVVQ3T3ZFSkZyempqUFRxZk8zejF1eE5U?=
+ =?utf-8?B?YytkdGpCQlhpZ0dyUThzSTBIeGRQa0xxVk80eVZuMFlaZGE3dFdCZDR0VllI?=
+ =?utf-8?B?MFNabG5qRUd6QVFWc0crTUwrVWVqQzZVdjJDbmRjT1RXSW1LL0NRTjR6WDVX?=
+ =?utf-8?B?ZFljc2E5T3lXYkkwcVdBL1JuY0pJemJnWUxjWTFqMEV0Y1FGR3BFK1JXUlo3?=
+ =?utf-8?B?N0NaRmFXb3NUUzhwbzRoMHppT1plR2NWNi92bGdRL3JRV2d0L2FTNnVKcGJQ?=
+ =?utf-8?B?Y2s0a1M2eURDQnprdENpMWJpaFphcDhES2NNRWJZK2FyL1Z0dmRwN2F5N01q?=
+ =?utf-8?B?NjZkbzF6NEJEZVFnL1ArbjROdUJ2c0lSbVdHaEFVMFYvRklBNU1kaVNIdzBB?=
+ =?utf-8?B?QVdPSjk3V3NvdS9tUzNYdUhZM2ZOSWVmdlpmQ2FGV3ZGbHlhbkxGOUlFL0tX?=
+ =?utf-8?B?Vm9NcjlPTmROM2dCM2FKKzlnWWNuVGxNb0ZDaXYzR3o5ODNFRmg4RzJjQ3FI?=
+ =?utf-8?B?cWNHdUd6Sy9tK2hRVGRaUzVjQ1BENXJ2MzI1Tm9oejJOTUxhcVhudUNpalMx?=
+ =?utf-8?B?c25PNFIrcEN5Q0JnVU5MZ3lDYXpLZmxFNlorUVV0eGpRNjZWeUdrTzl1eHFX?=
+ =?utf-8?B?RjBFMER2aVhSaGJIZFRpdlp4Z1pUQzl4MWNLWHloaTVWNmxvN0c1Z2k2ZHRp?=
+ =?utf-8?B?NlV3bmoxZFMvc1hGQldIRG5CbVRpQW4rNHozcjkrZ3AzbXBDYUpXd3Zwc0RB?=
+ =?utf-8?B?TU5iMkZzcFhGREVBZHVtbUc3dkI4TnN2c3pCQU4rRjNMUksxNlVCZnZiQWhY?=
+ =?utf-8?Q?ghraz5nt5nLH3MgHnWjOy2KOwSXzwo=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(376014)(7416014)(52116014)(921020)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WWlNeWg4eXpsbzdYVE9pbVpxS0FiNlRYdmVXYjN2K09KZ3EwUE1uUmt5V09v?=
- =?utf-8?B?MFhpbjY3bW14RzVVS2RPSEYwVU5hSHBna3JpS0xGQ1dGZnN4S25yQjlHV0RK?=
- =?utf-8?B?MmxMMHFiVXBSUG5rMVdRdDM2aTk1STdvTjVmUHphd1hJTWd6ellTMlFuTitK?=
- =?utf-8?B?bnFRdTNjcnlDbStJTjhzVWQySjdzUmNhTkdQT0UwekIraFRMQ3NVTDdxdjBt?=
- =?utf-8?B?SEpkL0c1eVJ4aGJzOVJPY05sUjlVQ3N5OUw3V0NiaVBraTV6em04c1gvUXEx?=
- =?utf-8?B?YllNbHNXSnBMdFN6N1VwU3dsb2piUGVCdzdGYmRJTFNpSnpZaEtqY29pUkdL?=
- =?utf-8?B?eW95cHdOdzRIVEpodTlRV0FETzZqUWZXZkc1dm5JVEZIYjhsMFZ6RmZPVVJH?=
- =?utf-8?B?V3o1WC9jZmdiVEtXMHdLK1o4WDFvYUcrb1ZkUUlVZ3pDN0EzQWQ1d0tOOXhI?=
- =?utf-8?B?UUowMytvRVlBRnFNU2JVK1FjZlBpaVc3Nkw0TS8wR09EZkdnWjN0UHZleDhT?=
- =?utf-8?B?VkpXVVZTSmg0VWd1ejJZRUE4ekxwWmk3K3NtNzhOZG9uaWllN0Z4MmlML3E3?=
- =?utf-8?B?N29nYTNlK21VdTFSUzYxMnh6cjZySWR5ZzlGc2srRW9Kb0xIbnlOTWFQcUZ4?=
- =?utf-8?B?OGdxYS9aZEI3d3JkN1RqSmxRTnR4RXhsZ01GSnpnOXFkOVkyU0JXMFkvMTNq?=
- =?utf-8?B?VGFyUmR6OEZFNm5oaldqSWxJREU4UEZxYnBBaFRmMUk1YjY1R1RjYkxTemUy?=
- =?utf-8?B?TEpZS1pUMURTaXdxRk5JZkNCNWJZWHVyUjk1VFBqd0t3NjVyWVI0cExsS3VG?=
- =?utf-8?B?U3RneEF2SWcyMUJ0Um5JVC9OTUJ0YWNHK0hZVUVhZTNZN2RuUE56TlJEbEJa?=
- =?utf-8?B?dW55ZlBab2cwVHBBSDBudGQwMGxhM1dQNjdiNEpNbG91QnZ5aWJWUXFIZWY5?=
- =?utf-8?B?QWVEMHVTY2toeTVlU3BBcVlXdEdRT3lvanBpdVc1bEYyaDAwM25sUXVLckJ6?=
- =?utf-8?B?OHRXUUJBVjQzOHFMMk50UzRCQUhZVkF4QWlwVUczbDJkRnlPMmtvU0tmaHJl?=
- =?utf-8?B?eTFUWlI3WlpWUjc4UVA4U29taXBwQm9XczZUaU50V0FwcVdXbW1YTUg0Ry9M?=
- =?utf-8?B?cENJaENXcWpCdkRuTjZYQVR5TUcrS013Ym1vc1Bwc2xSU2wxb3VDMG1JRFNt?=
- =?utf-8?B?eHEvNVloS0RRQ2M0TTdEMmxLaWdYeGc1bS8rVlBzUTN0VjdDUVdtbVlPNFRY?=
- =?utf-8?B?SVY1c0p5WUptQ05NcmgyeFMxeU9ERzE0K0tid09FbExkUUlVdndEU1VoOVZq?=
- =?utf-8?B?MHdwVXpqbC9nVk9INmNVcDBmY3hRYzRnSzd1WGk0MG1kelZlY0lMSGdSYzR4?=
- =?utf-8?B?RVM0eDNsZUpoNWFNcDR5WXdMa1ErbWVKTW1keGxEOEtKUlBxRGdaSDBkRENt?=
- =?utf-8?B?RkhsaFpCYWxkbzVMdXVQeVdOY0xlRHBtYTZ0TWpFWlk1UFQxTUhvcitlMllI?=
- =?utf-8?B?ejZ3d29kREVQTnBMN0ZNRGhDcERON2dIZTBTc2pTNTUyeEJPUVl3L3JadFJv?=
- =?utf-8?B?UEZDR0ZmV1h3K0dmRWFSM0x3M2xnd0ZXbHlkbEQwTDVEOGQwVWRnQVYyUTA1?=
- =?utf-8?B?V05saitIOVFuMmNoYXFtditSL0RuWndIZ2NOZTE5RFhyM29vNzNzMld1M3Jk?=
- =?utf-8?B?NEd5NDhXa3B1bTd4QmdqdkxaMDB0enFSdnA3WlZUMldkY3VmMFpqS25saFRO?=
- =?utf-8?B?SEplWjB0ZXRJREwvdlIzWk91ZGJXMWNGVG5FYVdSUFdlKzgvSlQrT1RsdGor?=
- =?utf-8?B?aDV0ZkdSL0VaQlVzaW5TOXpCcWVPZU9CeVdVREozdDBPZUF1d3d0eGlBY1lh?=
- =?utf-8?B?Qk9vb1FPTzdwVVhOOXR5TkI4RDlPTHpYcTFCNGMrZUdQa3A5OXJkc0V5Zzg0?=
- =?utf-8?B?UkwrbTNxeThNRktOZE5Va1JyamhGbVo3UjVEeUh1U3hOVEZxRmdIVnBVMEUr?=
- =?utf-8?B?Zk92S2xENm10WTQzb1RFamZITmVhb0pxQVlJVloyYllpcFVCbllZZ1pVdi9F?=
- =?utf-8?B?a1JweEJlQ3h6aUFpbHAwd1RlQldzaFA0a2RSLzV2MGxrT1pndFNUaTAvMm1W?=
- =?utf-8?Q?H7TkHqnVxQJBf8PetvYwLRYPw?=
+	=?utf-8?B?VnpBSElxSjZyQ0w5Qk1IN0t1aGtIM1I1TTQrVzhNa01PeERkNTJJeFlrOG9K?=
+ =?utf-8?B?Z0RxV1BadUpaMkNNbWxXbloyUStKZjl5ZWV4RjQ4Um1mOHd0dW50bm9zRGto?=
+ =?utf-8?B?RDM0cU01aTlNRDREQysvSmdBdHRUNzNVUFNpU0F1NmlRSEoySGc5dnF1QmJ3?=
+ =?utf-8?B?OWtiUnl0WkdoQnA4U3BXbmxxUkFLbitkRVRzaXpXY3N1Z0pIZE84NFdBclNF?=
+ =?utf-8?B?byszemcvYnUwZUljY052V1o1YUVPajRUdDltOEdNZjFMeGo0OEVzZnZOT3lM?=
+ =?utf-8?B?elV3QlhHNkplWFpKZDRFM0V0UWJ0NElQZS9NV0RQWW0vdEhvZnlYekpzNDJ1?=
+ =?utf-8?B?aUtZTGVGWEZCZytZU2dsVFZnYkp0UDBPbGdpTExrbkFLOUppZDh1YXVEdVNZ?=
+ =?utf-8?B?S0FDeWZpSFNOa0FBYXR3UUwzSWkvVHZUK2Y4TEIvYzRvVUVMU21oN2RLMXJU?=
+ =?utf-8?B?SC80R1ZPQmhQa2Z6cUhrK0lBV1ZsM3JnSDBaMG4rbEdkZ0RFb1hCOWp4VEVJ?=
+ =?utf-8?B?OHdRRkRKZDRXblpFN2s0VlJpYTNteXNaeERIejJIMzhmalRlK3EyTDdNc0NO?=
+ =?utf-8?B?UG56QXU3WlpEMjNhQStvSWFXb3IxSTZlKzVLQTNsZ3dvRzBOVUJZQm5jY0Nm?=
+ =?utf-8?B?NUpBKzFuZHc2dDRQdDhKS09DVHk4STFiRG5FN29YVDBhYlloSzRGcS90cUNK?=
+ =?utf-8?B?aysydmdveHNQLyt5N2xscGhLeUpjL1VDdkVYOXNyZ2xNeWJRWDhTUFhSdzB1?=
+ =?utf-8?B?U0hzcWVtRTVUMEdqeThFeWZLRDIyQlZ4LzlFajBhWnkrR1RNamVTMGF0bTZC?=
+ =?utf-8?B?NWIxSmNJVENaWHhOMDRsdnVJZVJGaG5JQlN4VWxkWnNFbEpndTRhZDRLU0Vo?=
+ =?utf-8?B?MHVISUx1ZEpLZmE0K0paN2UwUDQrUW82Y0hZdG0rN1dZYmt6Mm4xcEswVFdO?=
+ =?utf-8?B?K0lOd1Rsc1dlT1NrMHp1bGtoQ1lZMnJJSDBwNitFOFdWU1VzMUhUL3IzRXYx?=
+ =?utf-8?B?KzlpMFE0V0tuT05uWnRYMHN6cWdDQ2pzVmFXalJtNTRlbzVmRDdCNlFsNzJl?=
+ =?utf-8?B?eHh3Tm1TTmpDSkNMdFd4RytzRnZuWi9ma1pSNXZyWVZlQWNWVk8vRE9CWS9s?=
+ =?utf-8?B?SDJmdkE0YWRET1lLMzkxK2R2c2ZpMERVWnZJUnRyMk9taGpuRG9ITGYrY1Rt?=
+ =?utf-8?B?aVlOMGxJc3Q4SEFJamMwRXR5RHBhdGZCSGdsay9aTjVzRjNab1dmL0plTnk2?=
+ =?utf-8?B?VktwaWZpdG8yYWhaQkRhSWVZMFo5bEFjc3BDQVlQanRvWHh2NHdJajEycXF1?=
+ =?utf-8?B?VHg2Q1pkWXFLV0hJbWY0bG5XMEpXOHYxSEhaVUh3VzZFR1VLZEw4T1lHY0dH?=
+ =?utf-8?B?aWlpdEUrbEZFNlFrWDBBVXphUmQ5NG1KMnppcXBqVUdBKytHdFY0aytlY21J?=
+ =?utf-8?B?VnRWbGsxWjVMalBnQTkwMHVFWDBFSUdHeG1mTGNmb0RNelFtcUYyaEt0SXpl?=
+ =?utf-8?B?TFdHWmNDUGhhUEMrRnFzbWExMC9IQnFZRHZyR3F2ZkozZ1FuQ2VBUGxhdGFI?=
+ =?utf-8?B?L1g4YTJ1NGhGS3VNWTF3VUcyYzRnSHRmelJxK3NCNU9OVllWNVN5R1ZaR1Bt?=
+ =?utf-8?B?a1FHOWp1VzhFSnE0bjM5TkFmSnlvRGh6d09GWXFYQk1tYk9VQVhzMnFmSnF2?=
+ =?utf-8?B?ek0zNUVlOXhuYW85d0xQUmhzNnBoK2s3QkxqVXhnMlByVmtLbTlucDI3T3Fz?=
+ =?utf-8?B?QkZMOFpqdlVHNytXVkZIZkV2QmV3UWFpZkJUSjlHaHRFTEpGdFB1c25iWHlB?=
+ =?utf-8?B?QVlqMTJ0VVdKOWpqOWhBd2JoVWFTeW1meUs4L0JUZmEwcDJRWVFkOW9TR1JT?=
+ =?utf-8?B?UjdyaVgvc1hFZzcvTTFXaStGWGFUUkExTkN4T2lsUWNnelFLOS9FRklmT01w?=
+ =?utf-8?B?ckMwd2tkUXdIY09xdjdLRUJ4MlhOMHZsZHRPa3ZDZWV3eGxRdThHekt6ZEFX?=
+ =?utf-8?B?L2hhdlUzbXFDdUlGKzAxbGY5RWpycWRhTjVjQmdja09KZU9UcEh2QTdpbldr?=
+ =?utf-8?B?MHE1dUZwb0VuR0NzS3htMzBvOERvYlBkOFViVGtkUmJOM1hHdVNmQ0NBR0dv?=
+ =?utf-8?Q?Wd3e4pGVYqgwQUgGwEmFFt3/V?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31002ea5-9a46-4681-803d-08dde90647a3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0135cd9b-404e-4956-c874-08dde9064c1d
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2025 03:18:54.4147
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2025 03:19:02.0504
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: N/Bmm5bzkMZY5YPr+SJWOTi1aU0Mjqn3typXmNAojEmSasAfmP4c5u8vY/sPowyZ7GLJkYo/77REzM1SfY7ZFg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: CBlNv/ztOf7S2j4PoChIg4VQ0uff2d4ojved4hoY0lgJJoM8uiF7atDX4plpyXMrq1ulM5rk8m9Nd42o4P0nlw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB10321
 
-- Introduce new flag CAN_TRANSCEIVER_DUAL_CH to indicate the phy has two
-  channels.
-- Alloc a phy for each channel
-- Support TJA1048 which is a dual high-speed CAN transceiver with sleep
-  mode supported.
-- Add can_transceiver_phy_xlate for parsing phy
+The TJA1051T/3 used on i.MX95-15x15-EVK is actually high-speed CAN
+transceiver, not a regulator supply. So use phys to reflect the truth.
 
 Reviewed-by: Frank Li <Frank.Li@nxp.com>
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/phy/phy-can-transceiver.c | 91 ++++++++++++++++++++++++++++-----------
- 1 file changed, 65 insertions(+), 26 deletions(-)
+ arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
-index 6415c6af0e8414a6cc8d15958a17ee749a3f28e9..f06b1df76ada023f432dce892c3346f45397ab54 100644
---- a/drivers/phy/phy-can-transceiver.c
-+++ b/drivers/phy/phy-can-transceiver.c
-@@ -17,6 +17,7 @@ struct can_transceiver_data {
- 	u32 flags;
- #define CAN_TRANSCEIVER_STB_PRESENT	BIT(0)
- #define CAN_TRANSCEIVER_EN_PRESENT	BIT(1)
-+#define CAN_TRANSCEIVER_DUAL_CH		BIT(2)
+diff --git a/arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts b/arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts
+index 148243470dd4ab03afdae949c8316f31467d1377..c229b748ca7aba2dc8cabe14d66e3d1dcd704c9a 100644
+--- a/arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts
+@@ -106,12 +106,11 @@ reg_audio_switch1: regulator-audio-switch1 {
+ 		gpio = <&pcal6524 0 GPIO_ACTIVE_LOW>;
+ 	};
+ 
+-	reg_can2_stby: regulator-can2-stby {
+-		compatible = "regulator-fixed";
+-		regulator-max-microvolt = <3300000>;
+-		regulator-min-microvolt = <3300000>;
+-		regulator-name = "can2-stby";
+-		gpio = <&pcal6524 14 GPIO_ACTIVE_LOW>;
++	flexcan2_phy: can-phy {
++		compatible = "nxp,tja1051", "ti,tcan1043";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		standby-gpios = <&pcal6524 14 GPIO_ACTIVE_HIGH>;
+ 	};
+ 
+ 	reg_m2_pwr: regulator-m2-pwr {
+@@ -317,7 +316,7 @@ &enetc_port1 {
+ &flexcan2 {
+ 	pinctrl-0 = <&pinctrl_flexcan2>;
+ 	pinctrl-names = "default";
+-	xceiver-supply = <&reg_can2_stby>;
++	phys = <&flexcan2_phy>;
+ 	status = "okay";
  };
  
- struct can_transceiver_phy {
-@@ -29,6 +30,7 @@ struct can_transceiver_phy {
- struct can_transceiver_priv {
- 	struct can_transceiver_phy *can_transceiver_phy;
- 	struct mux_state *mux_state;
-+	int num_ch;
- };
- 
- /* Power on function */
-@@ -81,6 +83,10 @@ static const struct can_transceiver_data tcan1043_drvdata = {
- 	.flags = CAN_TRANSCEIVER_STB_PRESENT | CAN_TRANSCEIVER_EN_PRESENT,
- };
- 
-+static const struct can_transceiver_data tja1048_drvdata = {
-+	.flags = CAN_TRANSCEIVER_STB_PRESENT | CAN_TRANSCEIVER_DUAL_CH,
-+};
-+
- static const struct of_device_id can_transceiver_phy_ids[] = {
- 	{
- 		.compatible = "ti,tcan1042",
-@@ -90,6 +96,10 @@ static const struct of_device_id can_transceiver_phy_ids[] = {
- 		.compatible = "ti,tcan1043",
- 		.data = &tcan1043_drvdata
- 	},
-+	{
-+		.compatible = "nxp,tja1048",
-+		.data = &tja1048_drvdata
-+	},
- 	{
- 		.compatible = "nxp,tjr1443",
- 		.data = &tcan1043_drvdata
-@@ -108,6 +118,25 @@ devm_mux_state_get_optional(struct device *dev, const char *mux_name)
- 	return devm_mux_state_get(dev, mux_name);
- }
- 
-+static struct phy *can_transceiver_phy_xlate(struct device *dev,
-+					     const struct of_phandle_args *args)
-+{
-+	struct can_transceiver_priv *priv = dev_get_drvdata(dev);
-+	u32 idx;
-+
-+	if (priv->num_ch == 1)
-+		return priv->can_transceiver_phy[0].generic_phy;
-+
-+	if (args->args_count != 1)
-+		return ERR_PTR(-EINVAL);
-+
-+	idx = args->args[0];
-+	if (idx >= priv->num_ch)
-+		return ERR_PTR(-EINVAL);
-+
-+	return priv->can_transceiver_phy[idx].generic_phy;
-+}
-+
- static int can_transceiver_phy_probe(struct platform_device *pdev)
- {
- 	struct phy_provider *phy_provider;
-@@ -120,7 +149,8 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
- 	struct gpio_desc *enable_gpio;
- 	struct mux_state *mux_state;
- 	u32 max_bitrate = 0;
--	int err;
-+	int num_ch = 1;
-+	int err, i;
- 
- 	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
- 	drvdata = match->data;
-@@ -131,7 +161,11 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, priv);
- 
--	priv->can_transceiver_phy = devm_kzalloc(dev, sizeof(struct can_transceiver_phy),
-+	if (drvdata->flags & CAN_TRANSCEIVER_DUAL_CH)
-+		num_ch = 2;
-+
-+	priv->num_ch = num_ch;
-+	priv->can_transceiver_phy = devm_kcalloc(dev, num_ch, sizeof(struct can_transceiver_phy),
- 						 GFP_KERNEL);
- 	if (!priv->can_transceiver_phy)
- 		return -ENOMEM;
-@@ -142,38 +176,43 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
- 
- 	priv->mux_state = mux_state;
- 
--	phy = devm_phy_create(dev, dev->of_node,
--			      &can_transceiver_phy_ops);
--	if (IS_ERR(phy)) {
--		dev_err(dev, "failed to create can transceiver phy\n");
--		return PTR_ERR(phy);
--	}
--
- 	err = device_property_read_u32(dev, "max-bitrate", &max_bitrate);
- 	if ((err != -EINVAL) && !max_bitrate)
- 		dev_warn(dev, "Invalid value for transceiver max bitrate. Ignoring bitrate limit\n");
--	phy->attrs.max_link_rate = max_bitrate;
- 
--	priv->can_transceiver_phy->generic_phy = phy;
--	priv->can_transceiver_phy->priv = priv;
-+	for (i = 0; i < num_ch; i++) {
-+		phy = devm_phy_create(dev, dev->of_node, &can_transceiver_phy_ops);
-+		if (IS_ERR(phy)) {
-+			dev_err(dev, "failed to create can transceiver phy\n");
-+			return PTR_ERR(phy);
-+		}
- 
--	if (drvdata->flags & CAN_TRANSCEIVER_STB_PRESENT) {
--		standby_gpio = devm_gpiod_get_optional(dev, "standby", GPIOD_OUT_HIGH);
--		if (IS_ERR(standby_gpio))
--			return PTR_ERR(standby_gpio);
--		priv->can_transceiver_phy->standby_gpio = standby_gpio;
--	}
-+		phy->attrs.max_link_rate = max_bitrate;
- 
--	if (drvdata->flags & CAN_TRANSCEIVER_EN_PRESENT) {
--		enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
--		if (IS_ERR(enable_gpio))
--			return PTR_ERR(enable_gpio);
--		priv->can_transceiver_phy->enable_gpio = enable_gpio;
--	}
-+		priv->can_transceiver_phy[i].generic_phy = phy;
-+		priv->can_transceiver_phy[i].priv = priv;
- 
--	phy_set_drvdata(priv->can_transceiver_phy->generic_phy, priv->can_transceiver_phy);
-+		if (drvdata->flags & CAN_TRANSCEIVER_STB_PRESENT) {
-+			standby_gpio = devm_gpiod_get_index_optional(dev, "standby", i,
-+								     GPIOD_OUT_HIGH);
-+			if (IS_ERR(standby_gpio))
-+				return PTR_ERR(standby_gpio);
-+			priv->can_transceiver_phy[i].standby_gpio = standby_gpio;
-+		}
-+
-+		if (drvdata->flags & CAN_TRANSCEIVER_EN_PRESENT) {
-+			enable_gpio = devm_gpiod_get_index_optional(dev, "enable", i,
-+								    GPIOD_OUT_LOW);
-+			if (IS_ERR(enable_gpio))
-+				return PTR_ERR(enable_gpio);
-+			priv->can_transceiver_phy[i].enable_gpio = enable_gpio;
-+		}
-+
-+		phy_set_drvdata(priv->can_transceiver_phy[i].generic_phy,
-+				&priv->can_transceiver_phy[i]);
-+	}
- 
--	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-+	phy_provider = devm_of_phy_provider_register(dev, can_transceiver_phy_xlate);
- 
- 	return PTR_ERR_OR_ZERO(phy_provider);
- }
 
 -- 
 2.37.1
