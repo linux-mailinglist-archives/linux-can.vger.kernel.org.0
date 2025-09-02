@@ -1,230 +1,160 @@
-Return-Path: <linux-can+bounces-4421-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4422-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E03CDB40DE6
-	for <lists+linux-can@lfdr.de>; Tue,  2 Sep 2025 21:31:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE8DAB40E45
+	for <lists+linux-can@lfdr.de>; Tue,  2 Sep 2025 22:00:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 575411B62E3A
-	for <lists+linux-can@lfdr.de>; Tue,  2 Sep 2025 19:32:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78D6D3A6464
+	for <lists+linux-can@lfdr.de>; Tue,  2 Sep 2025 20:00:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D281D286D71;
-	Tue,  2 Sep 2025 19:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE414352068;
+	Tue,  2 Sep 2025 20:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iFs/A14m"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="hBEgUw2u"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8641865FA;
-	Tue,  2 Sep 2025 19:31:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DE5350D58;
+	Tue,  2 Sep 2025 19:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756841494; cv=none; b=EZeVEqsTZ4o2500gtb6lrIzj7Bj2LIZ6VSfXodvSwPoY/u1PG2kbnXupqFv0tOP3LHCC9Cfr/ym6DDishrXNIFqElua8BjPPsLMR5sL7OC6x0MRThNvGZ5Baip9afBb3rzh7pfLhMroF5TwwiO8bi+TGt1ZuVEqUJD5n1/SOd5M=
+	t=1756843201; cv=none; b=aVLO1sffH0Utk9X2uPhSHv4AvV0FZaqDw6kNDTbAgp/EhD9Peb3FVdGhWMVGpWPqcXMP5/i8b08R0iG5tXk3+rIh8a98VmWk4wLq+jpxh4dwYg5hM+lXTBUMpxey1zj6Wx7A8eO/44W0be3o6pioxgXTUIT00UO+e/AvhA6IqyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756841494; c=relaxed/simple;
-	bh=F14nPORs8JdgFQl33HfGRKc+FkO94g/5nNmkQ7R1MBg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z3Zv4HJnURnuUe1m6jkGrGyxX3Jf5HQbnhzcJbsy/aPRNiIlQyamjDCW7K9Gg3TueUD8Y4B0/D1knqRsv8rqw4REK0Xs9iuHiVBqSXSAMbBKNGWiYolSrEP98uAO4c9CkDMcDRHETDJRoAeunnrId2ZMvi0O2HtzTh6ditOPi8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iFs/A14m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FDCDC4CEED;
-	Tue,  2 Sep 2025 19:31:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756841494;
-	bh=F14nPORs8JdgFQl33HfGRKc+FkO94g/5nNmkQ7R1MBg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iFs/A14ma2YVWf6Xfo5kNA4paBdeW7hQYYdbujdC/+mCv7+Q5Se86rzNwGS6MwaiD
-	 UVG3Q0qBHF38bpOg7jcYZRztAC2ZopUFHOVbZGmU0KSC8UUGldGv+XC0rsyc1UmsQ9
-	 p8/0tlsdKvL4rMgNass/Y3Sdo9/tIzN2+43azvH4Yl/1XqWOsrYbDRENCmAd5sl2ap
-	 1ERo9tzWZJzYwNgOpMfrlVq4zxtSNL6g6HGu7qv0L4+9/Sq/IpQ2c/tDAnBEF2hbtt
-	 9SsLq0fQZD/Yec0fwRiovHKo4WJhrIMhBVnwvLJ4ipIyndd7jV3lyFXDR2gRrCbdj2
-	 VTUYFM+98bPRA==
-Date: Tue, 2 Sep 2025 20:31:28 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Peng Fan <peng.fan@nxp.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Aswath Govindraju <a-govindraju@ti.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Frank Li <frank.li@nxp.com>,
-	Bough Chen <haibo.chen@nxp.com>,
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v4 1/6] dt-bindings: phy: ti,tcan104x-can: Document NXP
- TJA105X/1048
-Message-ID: <20250902-dastardly-truth-fb2be9f68e4a@spud>
-References: <20250901-can-v4-0-e42b5fe2cf9e@nxp.com>
- <20250901-can-v4-1-e42b5fe2cf9e@nxp.com>
- <20250901-diligent-dreaded-59b9ad5c3976@spud>
- <20250901-uproar-shrill-07d51ea21a29@spud>
- <PAXPR04MB845991442136C0BEF0540D6A8806A@PAXPR04MB8459.eurprd04.prod.outlook.com>
+	s=arc-20240116; t=1756843201; c=relaxed/simple;
+	bh=K8PqE6yD7VyVJpbq451PthNDx+WFiPWgsV2846fPfes=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=gthMVcL68U18VyvrUI/t0J+1VFIGePeY96KuoJuSILam3YiKtDo9NplbFm4hjQlPCJAsXOn5hkhSsY/i7xueuU1y8RBcUXXGd9kzBCV3yItlf2g062dFpm8/VThU4hJTnLFn5QS9hT+tUyBNmjh7/543SzQYzAC4fqui5JADsZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=hBEgUw2u; arc=none smtp.client-ip=198.47.19.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 582JxhRU3060822;
+	Tue, 2 Sep 2025 14:59:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1756843183;
+	bh=PeB7J67e77B/FVOBsTZYzVHCuZ3ynnlku78M2GFf46w=;
+	h=Date:From:Subject:To:CC:References:In-Reply-To;
+	b=hBEgUw2u5TY4JawQtMAWEIYOO9VdwSOgzIFRsquAhINjD1blO0ZY0ni5wQbmS+zbl
+	 2ar4L7JWm/+LQ1lK2/xRyvLboggYKPQSMEPSBvSy3omB/k35YIVsXk4c32t38j/XIB
+	 8nQ8DELuEvBC583K6SDXw3fcKJoS7885EXKfJ+tM=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 582JxhGG2507031
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Tue, 2 Sep 2025 14:59:43 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Tue, 2
+ Sep 2025 14:59:42 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Tue, 2 Sep 2025 14:59:42 -0500
+Received: from [128.247.81.19] (uda0506412.dhcp.ti.com [128.247.81.19])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 582JxgZ7136329;
+	Tue, 2 Sep 2025 14:59:42 -0500
+Message-ID: <33a285bc-2fbe-4ff6-ae09-e4c13a098647@ti.com>
+Date: Tue, 2 Sep 2025 14:59:42 -0500
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="emYz2NOh8U/FtcyF"
-Content-Disposition: inline
-In-Reply-To: <PAXPR04MB845991442136C0BEF0540D6A8806A@PAXPR04MB8459.eurprd04.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+From: Kendall Willis <k-willis@ti.com>
+Subject: Re: [PATCH v9 1/4] dt-bindings: can: m_can: Add wakeup properties
+To: Markus Schneider-Pargmann <msp@baylibre.com>,
+        Chandrasekar Ramakrishnan
+	<rcsekar@samsung.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>
+CC: Vishal Mahaveer <vishalm@ti.com>, Kevin Hilman <khilman@baylibre.com>,
+        Dhruva Gole <d-gole@ti.com>, Sebin Francis <sebin.francis@ti.com>,
+        Akashdeep
+ Kaur <a-kaur@ti.com>, Simon Horman <horms@kernel.org>,
+        Vincent MAILHOL
+	<mailhol.vincent@wanadoo.fr>,
+        <linux-can@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20250820-topic-mcan-wakeup-source-v6-12-v9-0-0ac13f2ddd67@baylibre.com>
+ <20250820-topic-mcan-wakeup-source-v6-12-v9-1-0ac13f2ddd67@baylibre.com>
+Content-Language: en-US
+In-Reply-To: <20250820-topic-mcan-wakeup-source-v6-12-v9-1-0ac13f2ddd67@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
+On 8/20/25 07:42, Markus Schneider-Pargmann wrote:
+> The pins associated with m_can have to have a special configuration to
+> be able to wakeup the SoC from some system states. This configuration is
+> described in the wakeup pinctrl state while the default state describes
+> the default configuration. Also add the sleep state which is already in
+> use by some devicetrees.
+> 
+> Also m_can can be a wakeup-source if capable of wakeup.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> ---
+>   .../devicetree/bindings/net/can/bosch,m_can.yaml   | 25 ++++++++++++++++++++++
+>   1 file changed, 25 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index c4887522e8fe97c3947357b4dbd4ecf20ee8100a..0e00be18a8be681634f25378bb2cdef034dc4e6b 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -106,6 +106,26 @@ properties:
+>           maximum: 32
+>       minItems: 1
+>   
+> +  pinctrl-0:
+> +    description: Default pinctrl state
+> +
+> +  pinctrl-1:
+> +    description: Can be Sleep or Wakeup pinctrl state
+> +
+> +  pinctrl-2:
+> +    description: Can be Sleep or Wakeup pinctrl state
 
---emYz2NOh8U/FtcyF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+nit: change Sleep and Wakeup to be in quotes, i.e. "wakeup", "sleep"
 
-On Tue, Sep 02, 2025 at 02:24:49AM +0000, Peng Fan wrote:
-> Hi Conor,
->=20
-> > Subject: Re: [PATCH v4 1/6] dt-bindings: phy: ti,tcan104x-can:
-> > Document NXP TJA105X/1048
-> >=20
-> > On Mon, Sep 01, 2025 at 07:54:01PM +0100, Conor Dooley wrote:
-> > > On Mon, Sep 01, 2025 at 11:18:11AM +0800, Peng Fan wrote:
-> > > > The TJA105[1,7] is a high-speed CAN transceiver which is a
-> > > > pin-compatible alternative for TI TCAN1043 with sleep mode
-> > > > supported, and has a compatible programming model, therefore
-> > use ti,tcan1043 as fallback compatible.
-> > > >
-> > > > The TJA1048 is a dual high-speed CAN transceiver with sleep mode
-> > supported.
-> > > >
-> > > > Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> > > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > > > ---
-> > > >  .../devicetree/bindings/phy/ti,tcan104x-can.yaml   | 30
-> > ++++++++++++++++++++--
-> > > >  1 file changed, 28 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-> > > > b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-> > > > index
-> > > >
-> > 4a8c3829d85d3c4a4963750d03567c1c345beb91..f8e0c24856a2ba83
-> > b5c988b246
-> > > > 464f47e11a032f 100644
-> > > > --- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-> > > > +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-
-> > can.yaml
-> > > > @@ -19,18 +19,25 @@ properties:
-> > > >            - enum:
-> > > >                - microchip,ata6561
-> > > >            - const: ti,tcan1042
-> > > > +      - items:
-> > > > +          - enum:
-> > > > +              - nxp,tja1051
-> > > > +              - nxp,tja1057
-> > > > +          - const: ti,tcan1043
-> > > >        - enum:
-> > > >            - ti,tcan1042
-> > > >            - ti,tcan1043
-> > > > +          - nxp,tja1048
-> > > >            - nxp,tjr1443
-> > > >
-> > > >    '#phy-cells':
-> > > > -    const: 0
-> > > > +    enum: [0, 1]
-> > > >
-> > > >    standby-gpios:
-> > > >      description:
-> > > >        gpio node to toggle standby signal on transceiver
-> > > > -    maxItems: 1
-> > > > +    minItems: 1
-> > > > +    maxItems: 2
-> > >
-> > > You're adding a second standby gpio, which one is which?
-> > > I assume you mean that item 1 is stbn1 and item 2 is stbn 2 for
-> > tja1048.
->=20
-> Yes. There are two standby pins.
->=20
-> > > Might be kinda obvious, but I think it should be mentioned.
->=20
-> I could update description as below.
-> "
-> description:
->   gpio node to toggle standby signal on transceiver. For two Items,
->   item 1 is for stbn1, item 2 is for stbn2.
+Other than that, LTGM
 
-Sure.
+Reviewed-by: Kendall Willis <k-willis@ti.com>
 
->=20
-> > >
-> > > tja105{1,7} don't have a standby gpio, but they do have a silent
-> > mode.
->=20
-> Right. Tja105{1,7} has a pin S for silent mode.
->=20
-> > > silent mode seems fundamentally different to standby, since the
-> > > receiver still works. Seems like that should be handled differently, =
-no?
-> >=20
-> > The docs for standby mode for the tcan1043 don't match with the
-> > tja1051, "Standby mode is a low power mode where the driver and
-> > receiver are disabled," so does the fallback compatible even make
-> > sense? Seems like a combination of enable and standby gpios are used
-> > to put the tcan device into silent mode but the tja1051 has a pin for
-> > that alone and seemingly does not support standby at all?
->=20
-> Thanks for looking into the details. I also read more into the datasheet.
->=20
-> Tcan1043:
-> EN   nSTB
-> H       H    ---> normal mode
-> L        H   ---> slient mode
-> H       L    ---> standby mode
-> L        X    --->off mode
->=20
-> TJA1051
-> EN   S
-> H     L   --> normal mode
-> H     H  --> slient mode
-> L      X  --> off mode
->=20
-> Your analysis is correct. silent is different with standby,
-> but we only wanna to use normal and off mode
+> +
+> +  pinctrl-names:
+> +    description:
+> +      When present should contain at least "default" describing the default pin
+> +      states. Other states are "sleep" which describes the pinstate when
+> +      sleeping and "wakeup" describing the pins if wakeup is enabled.
+> +    minItems: 1
+> +    items:
+> +      - const: default
+> +      - const: sleep
+> +      - const: wakeup
+> +
+>     power-domains:
+>       description:
+>         Power domain provider node and an args specifier containing
+> @@ -122,6 +142,11 @@ properties:
+>       minItems: 1
+>       maxItems: 2
+>   
+> +  wakeup-source:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description:
+> +      List of phandles to system idle states in which mcan can wakeup the system.
+> +
+>   required:
+>     - compatible
+>     - reg
+> 
 
-In addition, it looks like there are some tja1051 devices that don't
-even have the enable pin? Of the 4 SKUs, there are 2 that use pin5 as
-Vio and 1 that has it n/c. Only the T/E device has an enable there.
-
-> If we need to handle differently, I need
-> to add a new optional property
->=20
-> silent-gpios:
->   description:
->     gpio node to toggle silent signal on transceiver
->   minItems: 1
-
-Ye, I think so. And probably add some if/then to use it instead of
-standby on the relevant chips.
-
---emYz2NOh8U/FtcyF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaLdGEAAKCRB4tDGHoIJi
-0mVdAQDC4R/uDobfYX0MlIc7P3VN7g19AM8wzxvWSJ27EwGhBgEA12JCMoHxPor9
-peA9L92m9adGEyaiB2fIMSJnYILwrQM=
-=7Ezu
------END PGP SIGNATURE-----
-
---emYz2NOh8U/FtcyF--
 
