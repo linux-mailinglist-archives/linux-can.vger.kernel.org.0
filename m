@@ -1,87 +1,87 @@
-Return-Path: <linux-can+bounces-4461-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4463-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B07F7B4328B
-	for <lists+linux-can@lfdr.de>; Thu,  4 Sep 2025 08:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 346E4B433B0
+	for <lists+linux-can@lfdr.de>; Thu,  4 Sep 2025 09:21:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7841416D46E
-	for <lists+linux-can@lfdr.de>; Thu,  4 Sep 2025 06:36:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6864316EFCB
+	for <lists+linux-can@lfdr.de>; Thu,  4 Sep 2025 07:21:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A1F227586B;
-	Thu,  4 Sep 2025 06:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5265E29ACFD;
+	Thu,  4 Sep 2025 07:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="lr2KS+kO";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="kHdwSRig"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="saRGw1uu";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="EWpAf+ne"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5CB27586E;
-	Thu,  4 Sep 2025 06:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A591F29B8EF;
+	Thu,  4 Sep 2025 07:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756967780; cv=pass; b=cnIN00tCcUcPkFNiZ9bLkgYNXUwqrL+8EVbTOSNICOp+XZ0tIDUYbff28UkY4nnHuZbSoB5cyYOCcnfwtL9/ys/SYE+YESd4TMkdStqRfPPKrQodMb93fztsVuWdtt1eXNQBF3Qry4LyJmVILPDSMkHh9oi02wvr3QlrgVqFL4s=
+	t=1756970472; cv=pass; b=rY8UQMJUSuXwr8iEUJVF8UUHd6wZI8bGTYluvGcMS4R0g6eCsnnpF1C/S1dxGxOnsSUISv6JaEcNcRjqMWStHytfWL3rxJdT75yCvNdR3gTcF3sRea59X9pCbqXyVWv0gH+NGyj0ju+hU3GVMcSK16LVjQrD4500B6mYtg+aTtY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756967780; c=relaxed/simple;
-	bh=KWfuWOndEi6XDR/nOG2EFgdxEYeuXl+rJvfeJ5e2TEs=;
+	s=arc-20240116; t=1756970472; c=relaxed/simple;
+	bh=d5Je983Zpm6ZxezaW99TgfVmvsNsRMqV4eFaF2on/Lo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MNod7oXX36zPXVlGiIGOI9p3MnwLnJAgdQ0v7O0aYfg3U/CyEVdT1wHK7XhEyfcQCLHtUXZVxh+YS+DOq+OZ54hXyk2yYeY3RG5jwn5GZuw3zLBZRx3dilhchEAjHIPpJ1qBCRLQ2ZTlw0GSNh/e0Rp141QQ1v5gnzD2LVTAOS4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=lr2KS+kO; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=kHdwSRig; arc=pass smtp.client-ip=85.215.255.50
+	 In-Reply-To:Content-Type; b=TRaqnjvwyAM9HYzGDaYZq5FK46TSyugpmHGnDy4k5wc0Th8mboAD/2aSi2Dg+iwpx3a/s8rzqyJ2dmEsuZbDwy00T5GhAJws0Tw9htYHXybzegdhqWIF99BdfqU4SHAAo/JwjhAhLx6xT+Lf/Qt9tsBqhY0WErNMZkWvfO56BeQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=saRGw1uu; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=EWpAf+ne; arc=pass smtp.client-ip=81.169.146.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1756967774; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1756968663; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=C8QI5EsKrAzo5XU+uSLOXRlfbljCWUBlI0LDmUuFYJUUvU2ZydXY/mV0OaEQLuRZwL
-    bJZjfuxcsDc7e3QXn8miwdMOYyGfTsFwbpikd5I3oj+aUffU/s/Ve7abYtAa6hiW0n/o
-    1Bn5yX0YGbKtgUHQ9rM02YuQz4qiVVVa3NDuo69RV0qWxsuqr3/KMAZYyTs19U4HluUn
-    FS2whBq/dxo5ElyCnLwgMPR/Oleg6zbX7Gzr+9tE9mBky/4mKqFuxjp5SQIy0ISbdAjr
-    iMjFQhlOd7v9JnKuquP/5oZ+BCsAwv8GYx6fGyLCY79NTNYRgXtSQWY8EiAzX8AL62Lx
-    Rr7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1756967774;
+    b=JJOC8H7ALT2yV0Fz2I5MOisD5ds6rjyny4m5m2+30I9SZNJ4SYpAY7aWkuWIyEkuq/
+    1qQ18ESSdWSDXTWLR/Fd5UZGT5uClr2BB8nZ6ZD070oiIkR+NkjoW1j8tzS+mRg26Rxt
+    rhktBhB41UWEhmHt2n5i2iFqbBTQo8941bXEuuxETqbnuUrUrZ9WRElDhRF/xD0BKtrQ
+    D/Eyd0Bn/uODqhNQv5ECsjLuRuTPRqKczslkhIEOlRMh2gAfANw2HlEwsKSXuxtzenlQ
+    N5SLTNVlyFpR5I4nVnAon3rvQ6U/IJi76sOAEqW4KGc7jHzcYO8awcAFq0wVgWE2U70p
+    H6Dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1756968663;
     s=strato-dkim-0002; d=strato.com;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=WNLLBL8ARyJnydp9YLJ9ekRET3L+HhY4TBjwGIKOOSE=;
-    b=H95n7BoltTJqbIeY77zMIWi8aKooU3YNLE9cn6Oo30aTf0ftKVGVONFiaW7ofVaB36
-    bSKnak2RqgYJ3VUskg2x1EtpyxwhDje52lnJRKzi+2Hty8TDG0iMoy0vTWyrcRYUouB1
-    ginv/wZpjeIIdOgp+ZfpKIX2IDoxyVq0vAKWFIfZWPeAIlUBcrNvNTv5Lb3oVTOoDLg7
-    /PXe16gzk/7SFG8xqTyW5T+1gQ70E6CgCYmZgImwO82N+PqY4KUcqLy1YSSklC1md/yh
-    XuU+aTP1jq+KeckBPY9sOoRoKeS2d8VmXZ8aHO2NY0RJ2NUiLoEqPJP37xUG8LgCeqpF
-    le3w==
+    bh=q/8yqkRcNNGInyNpRQZmjg/AxxUKBcbXWsOam492Sws=;
+    b=qip2UErn3WsyKTGGp5lhHvm4WPFkWSRdi4KS/XknCdDXMtSi/nBpbOnYIxN5to8KVj
+    Gu8cjq4GeHW5aGjow8gl7Bnu1lfKaWGmKn60qyc9qtarB2LRjg2HSiD1z6XKVtIVN30Q
+    GSxH6HUsX85b5vxoCrOEWL8YFIvSGzdPzQdadmnj6vG7iwNR270GQlKsc4UbluuMqvnF
+    O3xyHfCEKWhBKksu1qiz6wsFUOrUSHHcDd63cAUSX+3D9ivWdh/OB3H4JKoHr2Nbl1Bo
+    EiWJJ9QH0d3Ei6SA0BdQdWP8Wlpg075WQM8ux02/L6DThcdSdjjvLKekW1t2qoIlpwxr
+    4sOA==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1756967774;
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1756968663;
     s=strato-dkim-0002; d=hartkopp.net;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=WNLLBL8ARyJnydp9YLJ9ekRET3L+HhY4TBjwGIKOOSE=;
-    b=lr2KS+kOd5oazMYJLd4G24yqyrebWCkOMqH9Kyd8AURrALRIQvMSkyMOPFlssMuOXz
-    +BpUd1DsFxQLkLQy1/IKhrGCUV4ZFXtgDOQdchcXa0GDHJdxz0/6hqGvZG7hcUjrjQWX
-    glrOtT5FI/U0+nmi6uhbsORSzMzd3XQma/edj41nqGtpToi2kAl7/4GJQnMaMkz8BSnK
-    jIGSQ5CWDqO/JdlLPKOYU5WuekEF7V/tFdC2k0p6wkYB54qWsnATOPinJiIpayn3MM2t
-    2K7hzO3BKuim1l2RLOaMCKGWNa7gUlLYh9zG0kUD4/XOAmKXPZSb0SiuWKfoiBiQHUke
-    A2Fg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1756967774;
+    bh=q/8yqkRcNNGInyNpRQZmjg/AxxUKBcbXWsOam492Sws=;
+    b=saRGw1uuSHB2hEjrbwPS071Ksl8doTkt4ocZc1QKFkhjQJL2k3+icmVoDUzqurhujm
+    x5xJl7iM+jgRUYG/0cQRTTxfRE3MAsT+uCPTOVOYT0TMLZdAeBSBE/hGArYmeBq1bCek
+    OZgBQbxlpKm00IUrGNVgRZW9FijxZ7WFL9jjmxwKv5ykxzG/zBzFEOlT2jIcMIPE4ube
+    PWb3pxgFXp60MJH+IQMS7sPUHSdGe4RLdogOBHXGTTQvENO/xJW9JtbGmv6Ag+PhpUo2
+    sL/4ntfCaYp7cJH0ae2H+KZvrYCpTKOfvWp6AhvKK478Ajtro3IVy495Ts2MjBbB3HMh
+    ioLg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1756968663;
     s=strato-dkim-0003; d=hartkopp.net;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=WNLLBL8ARyJnydp9YLJ9ekRET3L+HhY4TBjwGIKOOSE=;
-    b=kHdwSRigsZPrZxHsLnHpP0cxSTqa7xTYf0e+W7Wz2AHr3C9XCycMhofkELsgdB8QuE
-    nD3K/9+HsX37fAluNcCw==
+    bh=q/8yqkRcNNGInyNpRQZmjg/AxxUKBcbXWsOam492Sws=;
+    b=EWpAf+neZHnmBy7L7T7MiwEhatoOqHtWKj+FX09CV5jvczK6L0O7gx7kVZ9FT8tnx9
+    ZfPAOY5m9pABz6GzMdBw==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
 Received: from [IPV6:2a00:6020:4a38:6810::9f3]
     by smtp.strato.de (RZmta 52.1.2 AUTH)
-    with ESMTPSA id K5d3611846aELiJ
+    with ESMTPSA id K5d3611846p2LlS
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Thu, 4 Sep 2025 08:36:14 +0200 (CEST)
-Message-ID: <e37c9890-823f-4a38-bdcc-c170dbe67e13@hartkopp.net>
-Date: Thu, 4 Sep 2025 08:36:13 +0200
+    Thu, 4 Sep 2025 08:51:02 +0200 (CEST)
+Message-ID: <b1bf6cc5-f972-4163-8619-e04b887e2d32@hartkopp.net>
+Date: Thu, 4 Sep 2025 08:51:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -89,8 +89,7 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/21] can: netlink: preparation before introduction of
- CAN XL step 2/2
+Subject: Re: [PATCH 07/21] can: netlink: remove comment in can_validate()
 To: Vincent Mailhol <mailhol@kernel.org>,
  Marc Kleine-Budde <mkl@pengutronix.de>
 Cc: =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>,
@@ -98,58 +97,68 @@ Cc: =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>,
  Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250903-canxl-netlink-prep-v1-0-904bd6037cd9@kernel.org>
- <6e4dcab9-d3d7-4c8b-99c1-f472bb7caa07@kernel.org>
+ <20250903-canxl-netlink-prep-v1-7-904bd6037cd9@kernel.org>
 Content-Language: en-US
 From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <6e4dcab9-d3d7-4c8b-99c1-f472bb7caa07@kernel.org>
+In-Reply-To: <20250903-canxl-netlink-prep-v1-7-904bd6037cd9@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+Hi Vincent,
 
+On 03.09.25 10:50, Vincent Mailhol wrote:
+> The comment in can_validate() is just paraphrasing the code. When
+> adding CAN XL, updating this comment would add some overhead work for
+> no clear benefit.
 
-On 03.09.25 11:26, Vincent Mailhol wrote:
-> On 03/09/2025 à 17:49, Vincent Mailhol wrote:
-> 
-> (...)
-> 
->> The follow up series which introduces CAN XL is nearly completed but
->> will be sent only once this one is approved: one thing at a time, I do
->> not want to overwhelm people (including myself).
-> 
-> If you want a preview of the full CAN XL, you can have a look at my work in
-> progress here:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mailhol/linux.git/
-> log/?h=b4/canxl-netlink
-> https://git.kernel.org/pub/scm/linux/kernel/git/mailhol/iproute2-next.git/log/?h=canxl-netlink
-> 
-> The kernel part is nearly completed, but I am still playing some whack-a-mole to
-> find potential gaps in the configuration validation. I also need to rewrite or
-> fine tune the commit description.
-> 
-> The iproute2 part is still under development. It has the PWM interface but I
-> have not added all the control modes yet.
-> 
+I generally see that the code introduced by yourself has nearly no comments.
 
-Thanks Vincent!
+E.g. if you look at the [PATCH 12/21] can: netlink: add 
+can_ctrlmode_changelink() the comments introduced by myself document the 
+different steps as we had problems with the complexity there and it was 
+hard to review either.
 
-The repos are very helpful.
+I would like to motivate you to generally add more comments.
 
-With "missing" control modes you refer to CAN_CTRLMODE_XL_ERR_SIGNAL, 
-CAN_CTRLMODE_XL_RRS and CAN_CTRLMODE_RESTRICTED, right?
+When people (like me) look into that code that they haven't written 
+themselves and there is not even a hint of "what's the idea of what we 
+are doing here" then the code is hard to follow and to review.
+
+We definitely don't need a full blown documentation on top of each 
+function. But I like this comment you want to remove here and I would 
+like to have more of it, so that people get an impression what they will 
+see in the following code.
 
 Best regards,
 Oliver
 
-> Regardless, the two links above are just an FYI. Beware that there will be some
-> random force pushes without any notice. You can play with it but it is
-> *not* opened for comments until the preparation series is approved.
 > 
-> Looking forward for your comments on this CAN XL preparation series, it took me
-> a fair amount of effort :)
+> Now that the function has been refactored and split into smaller
+> pieces, let the code speak for itself. Remove the comment.
 > 
+> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+> ---
+>   drivers/net/can/dev/netlink.c | 7 -------
+>   1 file changed, 7 deletions(-)
 > 
-> Yours sincerely,
-> Vincent Mailhol
+> diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+> index f7b12057bc9c6c286aa0c4341d565a497254296d..6ea629331d20483c5e70567eb1be226a3b09882c 100644
+> --- a/drivers/net/can/dev/netlink.c
+> +++ b/drivers/net/can/dev/netlink.c
+> @@ -143,13 +143,6 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+>   	u32 flags = 0;
+>   	int err;
+>   
+> -	/* Make sure that valid CAN FD configurations always consist of
+> -	 * - nominal/arbitration bittiming
+> -	 * - data bittiming
+> -	 * - control mode with CAN_CTRLMODE_FD set
+> -	 * - TDC parameters are coherent (details below)
+> -	 */
+> -
+>   	if (!data)
+>   		return 0;
+>   
+> 
 
 
