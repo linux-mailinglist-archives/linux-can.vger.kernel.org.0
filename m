@@ -1,63 +1,66 @@
-Return-Path: <linux-can+bounces-4487-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4489-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5C9AB45052
-	for <lists+linux-can@lfdr.de>; Fri,  5 Sep 2025 09:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AFA9FB4518E
+	for <lists+linux-can@lfdr.de>; Fri,  5 Sep 2025 10:34:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA1A53A6E3C
-	for <lists+linux-can@lfdr.de>; Fri,  5 Sep 2025 07:52:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64146A62593
+	for <lists+linux-can@lfdr.de>; Fri,  5 Sep 2025 08:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188792F0671;
-	Fri,  5 Sep 2025 07:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PokDf1fI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59F8A301484;
+	Fri,  5 Sep 2025 08:29:52 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E1F2EAD05;
-	Fri,  5 Sep 2025 07:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442D52FD1A4
+	for <linux-can@vger.kernel.org>; Fri,  5 Sep 2025 08:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757058743; cv=none; b=gWi216H1EmlIjarCdA5zr0heHIuHvMpTaDPDmWCREP0xwGNy0vTa6Ej0q3zEW9bR/P0DICT4KCaxbh8rz1QrmfLy9pjJvG3T3uA1z9Hu7cG/NXndoIZBHi1ZvUgBP5Wk1Tp+LzPoun8FXH95ucDsz0Sj2sO271rv7Xmj8vMe+fY=
+	t=1757060992; cv=none; b=bSqC4iVo0VCgGuTTcYiK3D116PXWzz8wgBfcElL3TxWRxeNAl7RcRNhFFt7ul5m/d59keB0ZVgHR5yPsapck/BDQtkINVWpw+2++RjlNXn752Zmt9ANMPKn9HzBOw/nuWG2yT46gFJIzBNbSD8lbo7hM4FCEGbVeVxygDxfo9XY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757058743; c=relaxed/simple;
-	bh=Wf9m/dqTEtlJyt6WAhKzaW88Y/FSRjgusk/yxfNl3ME=;
+	s=arc-20240116; t=1757060992; c=relaxed/simple;
+	bh=9rdfJyKG2DUhxz14oH6OZktd5zK8IUdQCnL8L2Q9QpU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EzoXWqb1gFmUlwOjk2xI6q3K8tk1AlsfzpUj9XRuUARy16Rcjn2jvg+j+DldPrtRpBEQB+H2MwfNO+tgSNxECcUSx8+2wg5/G/5KS/wASxBcFtTBPnayQGz6qn+41l0DGPvNw9kxcE7mfnvI5CIj4oQFQFRGdTOcIGct8VBG7YI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PokDf1fI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED12C4CEF1;
-	Fri,  5 Sep 2025 07:52:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757058742;
-	bh=Wf9m/dqTEtlJyt6WAhKzaW88Y/FSRjgusk/yxfNl3ME=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PokDf1fI8lHcYnnnNnkfnD9eoHOYMme+d8PieowgfYCm9lyo9OhHIWdNyJE/kG3iS
-	 jBVU3qgdWWjJrfWp6A/rBLe/N7EtGRlFbCdnK/qWMgu/rRDnOY19eXHccJr3i5kzLF
-	 lImkVOyL9X26QNefgqUwFufn2m0NDqi3keOdQJHQRKzJ3328h4c7lXSvSFpfPxNjX1
-	 VFDJ4o0kaeVF6vk6ZD3voU2kPzrle/4E167LSxC4+gCH+xqIMKP3aOPkIc1XKkrwkH
-	 5JaDBIpSE2dS23NmcHzh1b0Heyb/86/ljIE2DHlsab2SRsq0O75Lqt5aq80KPT0l6d
-	 yZHerR9GLaj3Q==
-Date: Fri, 5 Sep 2025 09:52:19 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Peng Fan <peng.fan@nxp.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Aswath Govindraju <a-govindraju@ti.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Frank Li <frank.li@nxp.com>, Haibo Chen <haibo.chen@nxp.com>, 
-	linux-can@vger.kernel.org, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 1/9] dt-bindings: phy: ti,tcan104x-can: Document NXP
- TJA105X/1048
-Message-ID: <20250905-elite-enthusiastic-zebu-fec55c@kuoka>
-References: <20250904-can-v5-0-23d8129b5e5d@nxp.com>
- <20250904-can-v5-1-23d8129b5e5d@nxp.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QxRVZDpoewRRjXkzNb/c+EphwDBWxGnIq5w7d5CbaIzyLdmmejOkU6t+dvG+8mXkMs38M6L2MYEtoROrndEwBOpvi1RXw5OqVU39P8BlU01OYLScTIP+4TN6dpDY4/mbu/CJzzK2QqehmU3KHDyi/aqfH5tX7Dlmmojbb8BEiN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uuRpA-0006ET-8M; Fri, 05 Sep 2025 10:29:36 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uuRp8-003rTW-20;
+	Fri, 05 Sep 2025 10:29:34 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uuRp8-004GpZ-1T;
+	Fri, 05 Sep 2025 10:29:34 +0200
+Date: Fri, 5 Sep 2025 10:29:34 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Network Development <netdev@vger.kernel.org>,
+	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Subject: Re: [PATCH] can: j1939: implement NETDEV_UNREGISTER notification
+ handler
+Message-ID: <aLqfbnVEdoS1whkR@pengutronix.de>
+References: <50055a40-6fd9-468f-8e59-26d1b5b3c23d@I-love.SAKURA.ne.jp>
+ <aKg9mTaSxzBVpTVI@pengutronix.de>
+ <bb595640-0597-4d18-a9e1-f6eb8e6bb50e@I-love.SAKURA.ne.jp>
+ <c1e50f41-da30-4cea-859c-05db0ab8040b@I-love.SAKURA.ne.jp>
+ <ac9db9a4-6c30-416e-8b94-96e6559d55b2@I-love.SAKURA.ne.jp>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -66,130 +69,49 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250904-can-v5-1-23d8129b5e5d@nxp.com>
+In-Reply-To: <ac9db9a4-6c30-416e-8b94-96e6559d55b2@I-love.SAKURA.ne.jp>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On Thu, Sep 04, 2025 at 04:36:44PM +0800, Peng Fan wrote:
-> The TJA1048 is a dual high-speed CAN transceiver with sleep mode supported
-> and no EN pin.
+On Mon, Aug 25, 2025 at 11:07:24PM +0900, Tetsuo Handa wrote:
+> syzbot is reporting
 > 
-> The TJA1051 is a high-speed CAN transceiver with slient mode supported,
-> but only TJA1051T/E has EN pin. To make it simple, make enable-gpios as
-> optional for TJA1051.
+>   unregister_netdevice: waiting for vcan0 to become free. Usage count = 2
 > 
-> The TJA1057 is a high-speed CAN transceiver with slient mode supported
-> and no EN pin.
+> problem, for j1939 protocol did not have NETDEV_UNREGISTER notification
+> handler for undoing changes made by j1939_sk_bind().
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../devicetree/bindings/phy/ti,tcan104x-can.yaml   | 69 +++++++++++++++++++++-
->  1 file changed, 66 insertions(+), 3 deletions(-)
+> Commit 25fe97cb7620 ("can: j1939: move j1939_priv_put() into sk_destruct
+> callback") expects that a call to j1939_priv_put() can be unconditionally
+> delayed until j1939_sk_sock_destruct() is called. But we need to call
+> j1939_priv_put() against an extra ref held by j1939_sk_bind() call
+> (as a part of undoing changes made by j1939_sk_bind()) as soon as
+> NETDEV_UNREGISTER notification fires (i.e. before j1939_sk_sock_destruct()
+> is called via j1939_sk_release()). Otherwise, the extra ref on "struct
+> j1939_priv" held by j1939_sk_bind() call prevents "struct net_device" from
+> dropping the usage count to 1; making it impossible for
+> unregister_netdevice() to continue.
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-> index 4a8c3829d85d3c4a4963750d03567c1c345beb91..124493f360516eb203e8711cb96789258dd01119 100644
-> --- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-> +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-> @@ -22,16 +22,26 @@ properties:
->        - enum:
->            - ti,tcan1042
->            - ti,tcan1043
-> +          - nxp,tja1048
-> +          - nxp,tja1051
-> +          - nxp,tja1057
->            - nxp,tjr1443
->  
->    '#phy-cells':
-> -    const: 0
-> +    enum: [0, 1]
->  
-> -  standby-gpios:
-> +  silent-gpios:
->      description:
-> -      gpio node to toggle standby signal on transceiver
-> +      gpio node to toggle silent signal on transceiver
->      maxItems: 1
->  
-> +  standby-gpios:
-> +    description:
-> +      gpio node to toggle standby signal on transceiver. For two Items, item 1
-> +      is for stbn1, item 2 is for stbn2.
-> +    minItems: 1
-> +    maxItems: 2
-> +
->    enable-gpios:
->      description:
->        gpio node to toggle enable signal on transceiver
-> @@ -53,6 +63,59 @@ required:
->    - compatible
->    - '#phy-cells'
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: nxp,tja1048
-> +    then:
-> +      properties:
-> +        '#phy-cells':
-> +          const: 1
-> +        enable-gpios: false
-> +        silent-gpios: false
-> +        standby-gpios:
-> +          minItems: 2
-> +    else:
-> +      properties:
-> +        '#phy-cells':
-> +          const: 0
-> +        standby-gpios:
-> +          maxItems: 1
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - nxp,tja1051
-> +            - nxp,tja1057
-> +    then:
-> +      properties:
-> +        silent-gpios: true
-> +    else:
-> +      properties:
-> +        silent-gpios: false
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: nxp,tja1051
+> Reported-by: syzbot <syzbot+881d65229ca4f9ae8c84@syzkaller.appspotmail.com>
+> Closes: https://syzkaller.appspot.com/bug?extid=881d65229ca4f9ae8c84
+> Tested-by: syzbot <syzbot+881d65229ca4f9ae8c84@syzkaller.appspotmail.com>
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Fixes: 25fe97cb7620 ("can: j1939: move j1939_priv_put() into sk_destruct callback")
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-This is here and in if earlier. Just keep in only one place. Also
-earlier else also touches standby-gpios, so you basically have it in
-multiple places.
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Just define if:then:, without any else:, for each variant.
-
-> +    then:
-> +      properties:
-> +        standby-gpios: false
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: nxp,tja1057
-
-This as well.
-
-> +    then:
-> +      properties:
-> +        enable-gpios: false
-> +        standby-gpios: false
-> +
->  additionalProperties: false
->  
->  examples:
-> 
-> -- 
-> 2.37.1
-> 
+Thank you!
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
