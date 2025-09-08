@@ -1,161 +1,254 @@
-Return-Path: <linux-can+bounces-4524-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4525-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62516B490B2
-	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 16:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 95571B49232
+	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 16:59:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 298FE189B4C2
-	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 14:06:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37DB518946DC
+	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 14:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B351D30C609;
-	Mon,  8 Sep 2025 14:06:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7117630C633;
+	Mon,  8 Sep 2025 14:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="hmg9VXIk";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="7Ki6fehZ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE02305E08;
-	Mon,  8 Sep 2025 14:06:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757340382; cv=none; b=YkBrCAlj2sjKlQjJvHFO9eSkhMemck2JgQf4B4nXFkI37uED2MaZ69pRdSzeLH8O+lfjNzGxzc389axTpNoELN655fGFgGnAx5yEZIWrPL8F8UuWtklbWk6z+VOPhnhOk3HTOPp/69mXD48zEoJkflQiiikTHDD3JbKOmtId4lU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757340382; c=relaxed/simple;
-	bh=nsHHpYJhfoaQE+96FQ9vEdyAgK10r3TUb9rTZT4aEkE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tEPKHIT4i4uzuSWykdTsYaDA4DaHT6iFYrd3jNWC9nLSzH2ntD/7MqdT2mX2mSHxv2kl+aO+cCzg096qx5FOBT4jvVskv6L+E0OhbfipuLSm91T9W/hgJ3eFClyWBN3+u6T66ThPREyWlQX5nSulyVz1DxVP3HLGuh+Cvuhh3GI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-5300b29615cso3044171137.0;
-        Mon, 08 Sep 2025 07:06:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757340379; x=1757945179;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xqm94pKffQZoz70TtbaIogbnRj6qTp5eT6nUGqQViEE=;
-        b=ss3LOlxvJf1VaUFeVa/8vCw2+YOBDlNvrXWudpK2w/L5ZkzLiXLYrGFJtxlvoKK96D
-         zNR39G2BbnNMm7ZjMaAkTer1THAU9zP/eb1cKPPLs9JKf22vTvClglkCJGP2MbGDyFQZ
-         CH4kdCsqJmJ46qBEmEnFuLyYxXQ8Gxss6XmGFR7wptdiihW+E8w2/+h5Wxma/Fxvd1XW
-         7Sp48rS6DhWVLWi/jJeKYG0tjePwFMfl1KralxvBuyPHrgLzW9RCiQUgNAdbJzh4OVSK
-         nx2SX7bATcyjqwS7+11AmcbGN8nkh5icGF8nQZNeg7Vf7eFNnDHTG+IhsHUyXezgonXA
-         VFOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVHk4pjbTWE9LxQG3zgzQyiK8PWMiSY2cgtbqJ1psdjYR5A9X5NWweyM9VYaBHKpcGM2AztJFM8i28=@vger.kernel.org, AJvYcCWPrsJqJFEZG4195ITu45QQzdTWtsl6j7oFG99/sMwpKiAR+OYu/VeTUer1Ggq0hTLf6a7Tcl02WbUz0RXCPTfF/Rc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3y4DcC/7x/Gp81g05WN/qSePpCgQRHzw0MU8m0gNt3Bpx6bEP
-	5Yn1hsmbBjCOrTLHwFrTXYBwUVGeH6HR7AnCng0tOosDZCQwVYaNzbZwwki23mYZ
-X-Gm-Gg: ASbGncsoXeT+Q9ly/ULQObOvP8hQfUaioAZYHdMVg15u8RvFw9HQSyqrPro2IzgyMlI
-	zgj6Tf8F5P5zFoRUZgSZUpwEU3+MG2IqGBSlB35Ho9hoDB88kbA6P9Z9msT4+MZPNbJ2sUeuCpx
-	RUuYMH+cRZ6EiaRwkZy5hFsUcfAWhxaIEk6bwcPRxcjuTnOl6Fzgv1IRRYjWPbkG+7OimjpANlB
-	RW68Gq/LMrR03FkC37WEAbgKoRAkeDaJGIjMGUQJH2RrDuWiK2JTI5d4jgovbBHYXp3ad8oYb5O
-	EwfizKo9YneUmkXcWosFiQ+uGLBMnfZI44bjt6MB0F9mXm60ekJp0eBiWiv/mUWzYzC537bL7zL
-	2Tw58j4PnsPbIabbm8zQQwo/DKpC9sp5pym5xhEdb/hcbjmBXBmKy6A55W9vcK7BXfLtOsdA=
-X-Google-Smtp-Source: AGHT+IF/s/FjtC8Eu6Q5+qXjoqSPWvtwn2dJ+1ahH9K3RB6x054f51m2YoLzsBmo0gnHVKQ801GG0A==
-X-Received: by 2002:a05:6102:f09:b0:4f3:1d:6b47 with SMTP id ada2fe7eead31-53d231f8e83mr2463433137.25.1757340378976;
-        Mon, 08 Sep 2025 07:06:18 -0700 (PDT)
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com. [209.85.217.52])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-89608759c3bsm8127007241.9.2025.09.08.07.06.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Sep 2025 07:06:18 -0700 (PDT)
-Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-53042807be7so3463493137.3;
-        Mon, 08 Sep 2025 07:06:18 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV1g4bHbmQcLq44wJQ1U6iuIMH0R51NAIDX3AGskptedmLCsBHwzVQrxFCdHSegA66BcFvN31nOEvc=@vger.kernel.org, AJvYcCXnvLojQJjyuiZFoXxuWN5p+DoWI1oqwKzOtFQoNreSq1+eu4OtSlfsgyayhEgwkz8qrHdHo4TVEn4aDjFdz1o8Q4E=@vger.kernel.org
-X-Received: by 2002:a05:6102:809f:b0:4e4:5ed0:19b2 with SMTP id
- ada2fe7eead31-53d1c3d661cmr2639083137.9.1757340378447; Mon, 08 Sep 2025
- 07:06:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E5712DDA1
+	for <linux-can@vger.kernel.org>; Mon,  8 Sep 2025 14:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.163
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757343560; cv=pass; b=Xa60E+P6sbmcCjdwuUDRsVOKiJj44ZFXt6P5VXHzM23iLN9srTxvvVh0hyPHxVJmpH15UMUT5bfHZfOUwCVW3jiBUi8OIWW/JlrQ3nfCnTSMuWq7CoNlQ+qeEOBDd9Cda5cX2lrDehCuat4bDQn117a8DSGeAF/du5SlOBPVLV8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757343560; c=relaxed/simple;
+	bh=qTcnIZurWKvIRoWzyM26ts6E+mQAon9lZAO+q+whOpY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RVuEptxn8ftri15eMdDUjPyX0Tg7fZIpTqm3HCiB197byxCF7q5cVeDLWdZPIRkeMjSjGfnLWIPIRiK+nGgJBRSpKGwV/oq9N3VBWyXXR5DLiD1xvgr4KC8dB9IZR5cKIfwybz+mrOB/D32ZTC8KRo00J+VdR2JwKU1re5DOzAQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=hmg9VXIk; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=7Ki6fehZ; arc=pass smtp.client-ip=81.169.146.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1757343554; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Es5jCMwa5o/vbbKlP8coN8J7pIahz7Sv0+jjsusUUCmZ70ziebgItTm+AspKBfsTFt
+    ewGJ2ILc+KPXJVZV3AWXu9DJxcyk1qkgFoWtk7Scg3lc9CsE1An3aankKAv/1uh3JR1b
+    Ifp8elHNGio5nJr2va23w2YBSGu9nIVXfh1I5b5ngj95shxEmPBoMw/rg4DbCKOVDYaz
+    Id/3vC317rEzsOv9o/TiXcHIRoUnKi0QxbczNyHN2frgEGHVxpDrjpGgnINIaBsibsLQ
+    lVFSa3+knw+EK+TBrbB0Qp6rH9Dp/JrdAv2+0F/cfcn888rpLMsQNQvA/Rq27b0E4v53
+    GxyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1757343554;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=rxQDlDd36328QmDHpuA8rU42xLoZDW54ov0I8tElm4c=;
+    b=ii55eT3TeLtwZRTtfP+X4040CuvdkBVFIQpiPv0YLExmZPLpmZKEzrwOIEZGKdiACF
+    OIIf9NAjb5ad8e7Cgux/IGyZNPtcdnh453EVhaNbl9ShBv2WC396fqmnHi+5yiPl3qAZ
+    vWbjk8E88SLTmEQ1MrxQmSmH16WUvXAjxNVbj5xbsMK8fXp9K0X5nBLDNtn3x1BaswKY
+    AIFzesF5zKZhuDueRO5434+YccloV8GLC6PlpiivuvxHp8RQDfFFFWbfLOorx7C9RcsC
+    iwhtyw8reKWmiHXN4HhP3wCkKIijfETkLwalnobAr0jct6pmEeGUNfwyG4UT0X/XmoQU
+    emSg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1757343554;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=rxQDlDd36328QmDHpuA8rU42xLoZDW54ov0I8tElm4c=;
+    b=hmg9VXIkid8uGgWi4SSjptFUXrLP8CSaqzTbW74zsN2abgtMGIiMmZD2BMB/NrQcQH
+    KJaQ//KaunMVpiQuIJcbyE5CO+0x1CLuG41MU93CykxpaMHzl8tMJqXxgtp6zB70CYiR
+    q3HcczuGI80hCK6s3+xw0yFZE2TvicQvT88IvO2fXlvXhsjSlEsBnIBhqJzt9Pt5b6RL
+    aq6GS5aEH3urU3/+sSBW6UIzS/kDdO9Kx7bXurifJy/aDwnoYa7ev2818W/o3Nw1eJlh
+    R8OLKRA9V8R8PIN41bgvTpdxq2cWtShhxQvixRmhMDY8svkvi3wJ8sLdYOjm+hX1M2ju
+    Kj5A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1757343554;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=rxQDlDd36328QmDHpuA8rU42xLoZDW54ov0I8tElm4c=;
+    b=7Ki6fehZDwXZ2DixBiCRmnaAzzCMjTO0EEF4aRXV3jbXgCDWICxW18b3wpZ/outGmL
+    clpkXDlhbl2EscNrOLCw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
+    by smtp.strato.de (RZmta 52.1.2 AUTH)
+    with ESMTPSA id K5d361188ExEafZ
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Mon, 8 Sep 2025 16:59:14 +0200 (CEST)
+Message-ID: <fc1dfbf6-33e1-47a1-943d-806f146c5be6@hartkopp.net>
+Date: Mon, 8 Sep 2025 16:59:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1755855779.git.geert+renesas@glider.be> <f9198ea3be46f1eb2e27d046e51293df7fb67f46.1755855779.git.geert+renesas@glider.be>
- <TY3PR01MB113463B58C2110A8BC108072A863DA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <TY3PR01MB113463800F4EBB1762FE96DBF863DA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <CAMuHMdXJpJ7YOUJo1O9JqrQyevf=gZsFTbU9DZG8feHonuJ4LQ@mail.gmail.com> <TY3PR01MB1134626F5A623880365AFF246860CA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY3PR01MB1134626F5A623880365AFF246860CA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 8 Sep 2025 16:06:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXBfe3525dTmDdPzSuDfzEGGF-FyeQdRvVFt-r_bYPAJA@mail.gmail.com>
-X-Gm-Features: AS18NWDP6yLg5H8QEcFZNsyxgwWZjOUkfQhMNYhWbADox3MoIkuTCzLHsNkFMxc
-Message-ID: <CAMuHMdXBfe3525dTmDdPzSuDfzEGGF-FyeQdRvVFt-r_bYPAJA@mail.gmail.com>
-Subject: Re: [PATCH/RFC 6/6] can: rcar_canfd: Add suspend/resume support
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Minh Le <minh.le.aj@renesas.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] can: dev: can_dev_dropped_skb: drop CAN FD skbs if FD
+ is off
+To: Vincent Mailhol <mailhol@kernel.org>,
+ Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-can@vger.kernel.org
+References: <20250907080504.598419-2-mailhol@kernel.org>
+ <49e0970f-1a10-438f-b9ae-afcc75edaccd@hartkopp.net>
+ <5edbe004-767f-4a41-9454-f4bbf8f5b590@kernel.org>
+ <4e380c2b-f48d-4bd5-bc8d-3bfd85fc0d2f@hartkopp.net>
+ <cc56cf68-49d4-4c94-844c-ec413307dedf@kernel.org>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <cc56cf68-49d4-4c94-844c-ec413307dedf@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Biju,
 
-On Mon, 8 Sept 2025 at 15:56, Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > From: Geert Uytterhoeven <geert@linux-m68k.org>
-> > On Fri, 22 Aug 2025 at 18:19, Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > > From: Biju Das
-> > > > > From: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > > Sent: 22 August 2025 10:51
-> > > > > To: Marc Kleine-Budde <mkl@pengutronix.de>; Vincent Mailhol
-> > > > > <mailhol.vincent@wanadoo.fr>; Biju Das
-> > > > > <biju.das.jz@bp.renesas.com>
-> > > > > Cc: linux-can@vger.kernel.org; linux-renesas-soc@vger.kernel.org;
-> > > > > Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > > Subject: [PATCH/RFC 6/6] can: rcar_canfd: Add suspend/resume
-> > > > > support
-> > > > >
-> > > > > On R-Car Gen3 using PSCI, s2ram powers down the SoC.  After
-> > > > > resume, the CAN-FD interface no longer works.  Trying to bring it up again fails:
-> > > > >
-> > > > >     # ip link set can0 up
-> > > > >     RTNETLINK answers: Connection timed out
-> > > > >
-> > > > >     # dmesg
-> > > > >     ...
-> > > > >     channel 0 communication state failed
-> > > > >
-> > > > > Fix this by populating the (currently empty) suspend and resume
-> > > > > callbacks, to stop/start the individual CAN-FD channels, and (de)initialize the CAN-FD
-> > controller.
-> > > > >
-> > > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > > ---
-> > > > > While this fixes CAN-FD after resume from s2ram on R-Car E3
-> > > > > (Ebisu-4D), it does introduce a regression on R-Car V4H (White Hawk):
-> > > > > after resume from s2idle (White Hawk does not support s2ram), CAN
-> > > > > frames sent by other devices are no
-> > > > longer received, and the other side sometimes reports a "bus-off".
-> > > > >
-> > > > > However, the underlying issue is pre-existing, and can be
-> > > > > reproduced without this patch: the CAN-FD controller fails in the
-> > > > > same way after driver unbind/rebind.  So something must be missing
-> > > > > in the (de)initialization sequence for the R-Car
-> > > > Gen4 CAN-FD register layout.
-> > > > > Note that it keeps on working after ifdown/ifup, which does not reinitialize the full controller.
-> > > > > ---
-> > > > >  drivers/net/can/rcar/rcar_canfd.c | 53
-> >
-> > > STR is now working on G3E based on BSP code with the following
-> > > modifications[1]
-> >
-> > Thanks for looking into this!
-> > Unfortunately your changes do not fix s2idle on R-Car V4H.
->
-> Is "bus-off" issue related to can transceiver, Maybe after s2idle transceiver may be down?
 
-No, it also happens after unbind/rebind.
-Both Ebisu and White Hawk ch3 use MCP2558FD transceivers, which
-don't have standby lines (the silent signal is wired to reset).
+On 08.09.25 15:30, Vincent Mailhol wrote:
+> On 08/09/2025 at 18:00, Oliver Hartkopp wrote:
+>> On 08.09.25 06:07, Vincent Mailhol wrote:
+>>> On 08/09/2025 at 04:03, Oliver Hartkopp wrote:
+>>>> Hi Vincent,
+>>>>
+>>>> can_dev_dropped_skb() is not what you are looking for.
+>>>>
+>>>> Whether a CAN frame fits to the CAN device is checked in raw_check_txframe()
+>>>> here:
+>>>>
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/can/
+>>>> raw.c#n884
+>>>>
+>>>> Or do I miss anything?
+>>>
+>>> My point is not if it fits or not. Of course, if CAN XL is activated, CAN FD
+>>> frames would fit.
+>>>
+>>> My point is that activating CAN XL should not imply that CAN FD is also
+>>> activated. Having CAN FD off and CAN XL on is a valid configuration.
+>>>
+>>> Let me take an example, imagine that I configure my device with CAN FD off and
+>>> CAN XL on, for example:
+>>>
+>>>     ip link set can0 up type can bitrate 500000 \
+>>>        fd off \
+>>>        xl on xbitrate 10000000 tms on
+>>>
+>>
+>> Ah, ok.
+>>
+>>> Where is the check that, with this configuration, the device is not CAN FD
+>>> capable and that the FD frames should be dropped? When I try this under my dummy
+>>> driver, the FD frames pass the raw_check_txframe() check, reach the driver's
+>>> xmit function and pass the can_dev_dropped_skb() checks. And that is the problem.
+>>>
+>>> So, yes, the frame "fits" in above configuration and no buffer overflows nor any
+>>> other security problems occurred. But CAN FD is off so the frame should have
+>>> been discarded at some point.
+>>
+>> Yes. I think your original patch with
+>>
+>>> +    if (!(priv->ctrlmode & CAN_CTRLMODE_FD) && can_is_canfd_skb(skb))
+>>> +        goto invalid_skb;
+>>
+>> should do that job. Btw. I would also add a netdev_info_once() here too, so that
+>> we can give a heads up to the user.
+> 
+> Ack. This patch will now go to my CAN XL WIP with the netdev_info_once() added
+> to it ;)
+> 
+>>> The same issue goes for probing. How do you detect if an interface is CAN FD
+>>> capable? By checking that its MTU is at least CANFD_MTU? For example like this
+>>> in cangen?
+>>>
+>>>     https://github.com/linux-can/can-utils/blob/master/cangen.c#L802-L805
+>>>
+>>> If I do this check, it would wrongly detect that my interface is CAN FD capable
+>>> when in fact, it is turned off in the configuration. So, under my previous
+>>> example, cangen is also fooled into believing that it can send CAN FD frames
+>>> when in reality the option is turned off.
+>>>
+>>> So, these are my point:
+>>>
+>>>     - how do you configure a vcan so that CAN FD is off and CAN XL is on?
+>>
+>> This is not possible due to the missing flags (netlink) infrastructure known
+>> from the real hardware drivers. And IMHO this is also not needed to be
+>> implemented for a virtual CAN interface which does not have those restrictions.
+> 
+> I would say that it is not strictly needed but would have been a nice to have.
+> If you want to proxy between a virtual interface and a real hardware, I can see
+> how this can become annoying.
+> 
+> But I concede that there is not much that we can do and that it is probably
+> better to just say that having a virtual interface with CAN FD off and CAN XL on
+> is just impossible.
+> 
+>>>     - when CAN FD is off and CAN XL is on, how do you drop CAN FD frames in the
+>>>       kernel TX path ?
+>>
+>> As you proposed in your extension for can_dev_dropped_skb() - with some more
+>> comments and a netdev_info_once(), of course ;-)
+>>
+>> We might also try to access the CAN flags from the device in the network layer
+>> but this will become very ugly for a comparably unimportant use-case IMO. And it
+>> won't help for PF_PACKET users creating their own SKB content either.
+>>
+>>>     - in the userland, how do you probe that an interface is CAN FD capable or
+>>>       not?
+>>
+>> Test ifr.ifr_mtu for
+>>
+>> == CAN_MTU -> CC IF -> CAN CC
+>> == CANFD_MTU -> FD IF -> CAN CC & CAN FD
+>>> = CANXL_MIN_MTU -> XL IF -> CAN CC & CAN FD & CAN XL
+>>
+>> There is no way to have CAN CC with CAN XL without CAN FD right now as we can
+>> not detect this without accessing the netlink configuration.
+> 
+> This brings us to the next point I wanted to discuss. As you say, the only
+> solution is to access the ctlrmode flags which, at the moment, are only exposed
+> through the netlink interface.
+> 
+> But using the netlink interface directly in your program is a bit troublesome,
+> to say the least, because of all the boilerplate code needed as illustrated in
+> the libsocketcan:
+> 
+>    https://github.com/linux-can/libsocketcan/blob/master/src/libsocketcan.c
+> 
+> So, my other idea would be to add a new socket option that would act as a
+> shortcut to priv->ctrlmode.
+> 
+>    getsockopt(s, SOL_CAN_RAW, CAN_RAW_CTRLMODE, &ctrlmode, sizeof(ctrlmode));
+> 
+> The interface would return an error if the interface is a virtual interface.
+> Otherwise, it would return the flags, allowing for an easier way to probe. As a
+> bonus, all the flags become easily accessible.
+> 
+> It means that we would have two different ways to do the same thing (netlink and
+> getsockopt) but I do not see this as an issue.
+> 
+> What do you think?
 
-Gr{oetje,eeting}s,
+You are right with having two APIs for the same thing ...
 
-                        Geert
+If we would have such a getsockopt() I would suggest to provide the 
+ctrlmode and the ctrlmode_supported to the user space.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+And the bits are only valid when the interface is up. So additional to 
+e.g. -EOPNOTSUPP for vcan's we should also be able to return -ENETDOWN.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+My biggest concern is whether such a getsockopt() is really needed.
+
+Today you can enable CANFD and CANXL with setsockopt() and when you send 
+frames that can not be sent to the interface you get an error.
+
+The only thing that is "not that nice" is the CANXL-only (without FD) 
+possibility.
+
+Best regards,
+Oliver
+
 
