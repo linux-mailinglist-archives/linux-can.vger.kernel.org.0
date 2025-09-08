@@ -1,123 +1,144 @@
-Return-Path: <linux-can+bounces-4515-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4516-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A013DB48C44
-	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 13:33:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C725FB48CE7
+	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 14:09:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5F191B25170
-	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 11:34:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CECB1667F5
+	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 12:09:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5A8522FDE8;
-	Mon,  8 Sep 2025 11:33:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1455F2F8BF7;
+	Mon,  8 Sep 2025 12:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VKXrX9Ps"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D3822A4F4
-	for <linux-can@vger.kernel.org>; Mon,  8 Sep 2025 11:33:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2FE2F0C51;
+	Mon,  8 Sep 2025 12:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757331223; cv=none; b=braJmOAcGVWCwuYyH2C6qsQbTiTmnB4EarVWFhzIE61b3nH4xwDycsFTxskD1e3kWz0nqgQCiNsjQ+oiSokaMtci4DH6wbrjkorGOI7Uckh7anVuMiZ9y3fU6yLYBXkToojZ/xU5IpXXW9dMJX5IhpYeM0+qwJxBPtSwSRxwN5o=
+	t=1757333387; cv=none; b=GjIsf2F1BTbbiWhIV3PaCmb/TxzYtTdpznRtBmY7KGkBnq7ynxpyot3+P/6nLYs08uWBArUMlVCGC6JI3nGj6uqSaGV5WM2BNMlZZlRDq3etSoRy3EfGMMatrAP5ZroltKlqdJxVdX2jr4c/EzyARWQHuslevlgOkBYKg2syK1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757331223; c=relaxed/simple;
-	bh=o4uMpmacUmTqj8LQOpsuWStPCxahpVbiMopQUGKhJzA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QWrxX5sT4Z3ENiiXwbrohHqApHI+W7cK4DL7d05j8xMETdZSb0N3hy1wG6n8eUvgWwyEQOUIwFFxOADiQV7h+mlRI5G7G7lc9MoxnDkcFKG/ouy4FOPHdCfmLtiqqcAVg4CXx8v82mKlxbxR3HQMo68HnBXJIrmbb7ANeuNIZVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uva7v-0005QP-MO; Mon, 08 Sep 2025 13:33:39 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uva7v-000EwQ-1I;
-	Mon, 08 Sep 2025 13:33:39 +0200
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 169C84690F1;
-	Mon, 08 Sep 2025 11:33:39 +0000 (UTC)
-Date: Mon, 8 Sep 2025 13:33:38 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org
-Subject: Re: [PATCH can-utils] cangen: allow to use -m on classical CAN
- interfaces
-Message-ID: <20250908-attentive-walrus-of-snow-0433f5-mkl@pengutronix.de>
-References: <20250907060330.441165-1-mailhol@kernel.org>
- <20250908-hilarious-myna-of-relaxation-f26357-mkl@pengutronix.de>
- <4242f299-64c2-47f1-90d5-6381752bc1f3@hartkopp.net>
+	s=arc-20240116; t=1757333387; c=relaxed/simple;
+	bh=tLBf2x0aUy7Pj20wyMSFrIn59yfzdxdn0mzULMoSMYI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ast/k63qSwqVmv1IgrvrZBlw1PFrQ3jhNl4MYqgHaS173dDcvqTHUFJikZE31glYZogdpp6FoDZvPqtT7j49BhaVP0zy5TNCxpbnkgP8HKbpWEW6MBxskH/czmq25qtnJ9pgsmQ9OFsPxcqpqPipfLFgGXJ70V7M/SRsXMjGhQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VKXrX9Ps; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-45de221da9cso7075615e9.0;
+        Mon, 08 Sep 2025 05:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757333383; x=1757938183; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aF29gDbaZScA9f9y5T30f4pz/ssTg3xynxQbJY2OyqY=;
+        b=VKXrX9PsTIm1woOS6njJdDUerppENAAgjSo1obsz9WCLdDc4OgEaIJWf11/HHjnhXp
+         La7MLs11+IvOUU1Ngqc/a68tR/Zx/be2kvqkcU9ePxtFee9r7wWlTekcpvkKZwOJv3d/
+         cdlgsullya8zwHEw69trCEyq6GNNFa7Cgv9DYUCnYJU999VzCZ6FYezVOZX0Vl8MPIg+
+         L2jxEdrVBOzs1pphgQ8aRdOYU9EvrmKbEtWNUwknwtkDgLIe8intHxonLXMsmyOGY0Rc
+         imWQGy6tFEvPhcxJ3W7DSZ0UOV/WV60nNsgwSNeQnoMB0q0JOUqsEicoztpELTfGghKa
+         R7Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757333383; x=1757938183;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aF29gDbaZScA9f9y5T30f4pz/ssTg3xynxQbJY2OyqY=;
+        b=mvMy9Q4Vu8ZseQi+7RgfkAXdEiwc4c/x/pP7dXZ5ZwOpUrmtVlUJRPbzde0+xyfXve
+         KVSi1DH6U08yS0p8cKIYDpcC81je0r9+SDR+CB8279JFxWBG40NdWXLApw+nVUckPING
+         ppYMlA+lYe65YNUowKzkrf14+ZBBUIqaN4owOjKUg9mUo0dXFI70hhMcWznoqXFfv1QR
+         D3TLLX+fiWbpslSL7NOb0U7xoC3PGbtZeRqsBxED78E3bSz6Q1bmVtGAzFi8modOY7Wd
+         VAzm7YFDawtSIXUWgcMViVsJ3NPFQtOUYJkSb9cHLKsRVXsT2VdMvdyAkdf3jCInxpKj
+         vryQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2wZsYPfb+EvkeENUTDDxMAJ+hVsqhK3t1FQG/TOqadkYVyqKQyawIKR2av3BiON3FnJFt2OWObrw=@vger.kernel.org, AJvYcCUWJTfCmeN7KFIGtMyKB8w/f58cBiv1LrwG3yG1ZptEC8cW/TXPD9Kbn2uT+KkA8AvCP9KxXgXZUl6RAANEKFCAdSQ=@vger.kernel.org, AJvYcCXlrQ1hTRoO/kufjyWPNed0sSXEI216MGjtt1rJm8NFujSQV12plY9IIkccZGJCmViQeyHC0pnAroGgoJS5@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy89rVYMSM5htE1TmiSXsoJi5pO0j13656TJJixl2fr9o05hGor
+	Tq4sB/fHt8jSVTbvAIyTxqJyuCGt9jyWN5ZTP8kIbRHbJR46PiJH5LED
+X-Gm-Gg: ASbGnctIncqEuJ9Od36CUO08Iw8XWpqc54MIS+ROcQoiuXbsdxuBCmLH5jxfNrvTccX
+	IhfgWroavF+AB+B0l7zABizqSUfpM0Kw8RkXskDhCDIGiDb4Gk8MAOZw76zK/DnlXY3zy/kRl19
+	7Op3xn+GdhcWSm3lmsw15EQj7AE7IFe8O7eRyq0UCTJTGN2nHCDjkvAg6Hju7aAwwI51r5sf2Vv
+	4tgql1JoaYz+cx+vJMLHjwd/GVM4Qt9dF7HSxW05ocNysgjiOSqAuchYYv6Tux5IlyL97rpFSEW
+	ieCs7xobW1twpEZmeeitDqCyBtIk7Sz11iI+0w8SUe7J8HUAjIce5cqHwolincyNrAf3UjwLTiE
+	qALcJZfj5gtd3FJ9DlyuN77ATcxi15nsMnRg33I7tW22U0mJFhbd6qDMtqaYYLVWwstf8/DSdew
+	EH+TH2N8sgHNi8
+X-Google-Smtp-Source: AGHT+IFl2ArUlZoUmXDMr1mr7YRCZ/zsPphU4IX2kB2gggELowbCYeT8py2xc4M+Qu0EKDQ0cb31ug==
+X-Received: by 2002:a05:600c:1f16:b0:45d:d5c6:482 with SMTP id 5b1f17b1804b1-45dddec845bmr66816655e9.18.1757333383238;
+        Mon, 08 Sep 2025 05:09:43 -0700 (PDT)
+Received: from biju.lan (host86-139-30-37.range86-139.btcentralplus.com. [86.139.30.37])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e543e9f444sm9646415f8f.60.2025.09.08.05.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Sep 2025 05:09:42 -0700 (PDT)
+From: Biju <biju.das.au@gmail.com>
+X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	linux-can@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH v3 0/4] R-Car CANFD Improvements
+Date: Mon,  8 Sep 2025 13:09:29 +0100
+Message-ID: <20250908120940.147196-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="j77z7znnli5gmx2t"
-Content-Disposition: inline
-In-Reply-To: <4242f299-64c2-47f1-90d5-6381752bc1f3@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
---j77z7znnli5gmx2t
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH can-utils] cangen: allow to use -m on classical CAN
- interfaces
-MIME-Version: 1.0
+The calculation formula for nominal bit rate of classical CAN is same as
+that of nominal bit rate of CANFD on the RZ/G3E SoC and R-Car Gen4
+compared to other SoCs. Update the nominal bit rate constants.
 
-On 08.09.2025 13:27:46, Oliver Hartkopp wrote:
-> Me too :-D
->=20
-> https://github.com/linux-can/can-utils/pull/600
+Apart from this, for replacing function-like macros, introduced
+rcar_canfd_compute_{nominal,data}_bit_rate_cfg().
 
-One PR should be enough.
+v2->v3:
+ * Replaced "shared_bittiming"->"shared_can_regs" as it is same for RZ/G3E
+   and R-Car Gen4.
+ * Updated commit header and description for patch#1.
+ * Added Rb tag from Geert for patch #2,#3 and #4.
+ * Dropped _MASK suffix from RCANFD_CFG_* macros.
+ * Dropped _MASK suffix from RCANFD_NCFG_NBRP_MASK macro.
+ * Dropped _MASK suffix from the macro RCANFD_DCFG_DBRP_MASK.
+ * Followed the order as used in struct can_bittiming{_const} for easy
+   maintenance.
+v1->v2:
+ * Dropped patch#2 as it is accepted.
+ * Moved patch#4 to patch#2.
+ * Updated commit header and description for patch#2.
+ * Kept RCANFD_CFG* macro definitions to give a meaning to the magic
+   number using GENMASK macro and used FIELD_PREP to extract value.
+ * Split patch#3 for computing nominal  and data bit rate config separate.
+ * Updated rcar_canfd_compute_nominal_bit_rate_cfg() to handle
+   nominal bit rate configuration for both classical CAN and CANFD.
+ * Replaced RCANFD_NCFG_NBRP->RCANFD_NCFG_NBRP_MASK and used FIELD_PREP to
+   extract value.
+ * Replaced RCANFD_DCFG_DBRP->RCANFD_DCFG_DBRP_MASK and used FIELD_PREP to
+   extract value.
 
-> The former concept mixed the actual frame format (canfd canxl) with the
-> switch whether FD/XL is enabled and operable.
->=20
-> So I reworked the idea from Vincent.
+Biju Das (4):
+  can: rcar_canfd: Update bit rate constants for RZ/G3E and R-Car Gen4
+  can: rcar_canfd: Update RCANFD_CFG_* macros
+  can: rcar_canfd: Simplify nominal bit rate config
+  can: rcar_canfd: Simplify data bit rate config
 
-You should be able to force push your code to my branch ("Maintainers
-are allowed to edit this pull request.").
+ drivers/net/can/rcar/rcar_canfd.c | 84 +++++++++++++++++--------------
+ 1 file changed, 47 insertions(+), 37 deletions(-)
 
-Marc
+-- 
+2.43.0
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---j77z7znnli5gmx2t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmi+vw8ACgkQDHRl3/mQ
-kZz89gf+MmELbjc1OjJ7NWvv151soPeCPssUZDq3jxYTjTAN5z4olE4bJPEZaVck
-vF0AxgveI2gzn3PFx0tSCXkK+V/7NxdtVL3+Tm5p30aSE+Enq8M9VE5DkU79+Os6
-sh/XXOlfkBdUHKgc1eF/wqaco1VzZIBzEzxwGIktU3ERGyVU4wz3rblL/6pYzeM2
-ckB8fL794EzULyX93QgQeW3SZw7YHSCs4jYY2k8HuSCjDscEvjU1pwKaZcPM2yjH
-KA3dm5p1mJNDDJZ+Xxm0Bm1OB0gt+MHIyedcoxyjolcnLeg1gmFcmaAEGOqXDswZ
-EEFgWtyTEHcZdl+8V3Sa/oWOywvPOQ==
-=+p8s
------END PGP SIGNATURE-----
-
---j77z7znnli5gmx2t--
 
