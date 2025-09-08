@@ -1,134 +1,106 @@
-Return-Path: <linux-can+bounces-4504-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4505-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DB75B48319
-	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 06:07:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41A16B48379
+	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 06:57:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E6A4177332
-	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 04:07:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0F563BEEA4
+	for <lists+linux-can@lfdr.de>; Mon,  8 Sep 2025 04:57:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A1EC21B19D;
-	Mon,  8 Sep 2025 04:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/909U4r"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B58C81386C9;
+	Mon,  8 Sep 2025 04:57:19 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F3921B199
-	for <linux-can@vger.kernel.org>; Mon,  8 Sep 2025 04:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E29A2206A9
+	for <linux-can@vger.kernel.org>; Mon,  8 Sep 2025 04:57:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757304476; cv=none; b=URcLtMUIgxHVjN5XXnrcc6an1msYhuCOMybignZzX1aZCDuJWHbkwBiI2zQV1XsyMffFGwfbdj4W8w+UKeohVK+n8xmeSDwR9qS1Ee1Pcf1mOdSLfYthWP/BIvZD0IQFQ8uTLs3H72ORcsES43tUH5mBBF040+wmeBhJbvNbk9E=
+	t=1757307439; cv=none; b=Y4j8QJVxoS1XAx1oTb8xnQJXP0ioUYeDhPz7gdOahz+Pl4BSRovNdm28PCJXvWK6MqDjUAHk0jv1PuMtsFRz/z8a9DZ75F9lulwZc+YPcCv9/W0jxKnHpzPcO6BzXniAADO82mRwL2BVYB2DR9/6fniKrtE5kHpCwSTFy8+rWiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757304476; c=relaxed/simple;
-	bh=VQzDLEcNyjCMjre+Mil+rRn1B4xNwJupXeWv7nbgh/c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E+yEvQ3kM3NkrIzVSpFqsY3dsHsR1KgX0XobQXden+DhmafaH9oYmesxP3l1ilssrRUs/O+CvG3xvqfmLQ3reVU05nENASeh94wG+ykjgINTy2udZ0fIU0bFBJD1xRFs4oAZpCgLsgoJ8eXS9NKrjcymBdRZVN0/5dVX1Q4272s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/909U4r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66D0CC4CEF5;
-	Mon,  8 Sep 2025 04:07:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757304474;
-	bh=VQzDLEcNyjCMjre+Mil+rRn1B4xNwJupXeWv7nbgh/c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=m/909U4roaaOR0qCjJCV1VkSYQg0XOcLZPNTWS2fpsLPMZN8fxuXBS4JAFZ3ho7Xh
-	 c2ljidN5WtmhM8sjGHLdFFOkCaibTQWYHZJNmbixVnqsop1nAFnbyZCKDPhIwfLgFY
-	 FTMQAjzr70jQRuN8Al7xkE1c3a2eCl0zjqPO6ZmG+kOa2/QPVm1VQNzTz2yEfR5Rpl
-	 kQlCaZYZ5WtM6zAm1RMZyWl1B6ZCCXASNZuJhte/EJ+v2sexV3014PHrX1dAOnCqQv
-	 1RMQkAfDPUSUWJ9r4vVJjWEgAEBH/7RbA5vv+6hcuhTt1qaQzxM2Ns5NNkSIl0oZn7
-	 Lc3xxgSETyI6w==
-Message-ID: <5edbe004-767f-4a41-9454-f4bbf8f5b590@kernel.org>
-Date: Mon, 8 Sep 2025 13:07:52 +0900
+	s=arc-20240116; t=1757307439; c=relaxed/simple;
+	bh=+Yj/8DvTkJae7lsB9tgfHbReVRXpaosKtsfWGMj9iAY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lr3RtiBPHFaJpOB5xoqR1PGT9sXSFBD3MCLuWHB7IY64vJUViS6SGncOOFlTsyAIUlAurAi8BRUFIWD/QA0eW9O7/4an0f6Q8XiMVrQTq72JTWz2p5gzIl6wCxiDtGRVeTo8qjASikasjUgSsqA6Q/fu5Do+qVcbw0JtkqTcJec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uvTwJ-0007RD-RY; Mon, 08 Sep 2025 06:57:15 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uvTwI-000Bta-23;
+	Mon, 08 Sep 2025 06:57:14 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uvTwI-00BiAg-1h;
+	Mon, 08 Sep 2025 06:57:14 +0200
+Date: Mon, 8 Sep 2025 06:57:14 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: j1939: undo increment when j1939_local_ecu_get()
+ fails
+Message-ID: <aL5iKvYG6CijWsEF@pengutronix.de>
+References: <e7f80046-4ff7-4ce2-8ad8-7c3c678a42c9@I-love.SAKURA.ne.jp>
+ <aLqf0-WGRA8-Qb15@pengutronix.de>
+ <40478f86-3de1-44c1-ba6f-6de3ed40bdeb@I-love.SAKURA.ne.jp>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] can: dev: can_dev_dropped_skb: drop CAN FD skbs if FD
- is off
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
- Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: linux-can@vger.kernel.org
-References: <20250907080504.598419-2-mailhol@kernel.org>
- <49e0970f-1a10-438f-b9ae-afcc75edaccd@hartkopp.net>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol@kernel.org>
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <49e0970f-1a10-438f-b9ae-afcc75edaccd@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <40478f86-3de1-44c1-ba6f-6de3ed40bdeb@I-love.SAKURA.ne.jp>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On 08/09/2025 at 04:03, Oliver Hartkopp wrote:
-> Hi Vincent,
+On Sun, Sep 07, 2025 at 04:42:33PM +0900, Tetsuo Handa wrote:
+> On 2025/09/05 17:31, Oleksij Rempel wrote:
+> > On Sun, Aug 24, 2025 at 07:27:40PM +0900, Tetsuo Handa wrote:
+> >> Since j1939_sk_bind() and j1939_sk_release() call j1939_local_ecu_put()
+> >> when J1939_SOCK_BOUND was already set, but the error handling path for
+> >> j1939_sk_bind() will not set J1939_SOCK_BOUND when j1939_local_ecu_get()
+> >> fails, j1939_local_ecu_get() needs to undo priv->ents[sa].nusers++ when
+> >> j1939_local_ecu_get() returns an error.
+> >>
+> >> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> >> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > 
+> > Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>                                                                                                             
+> > Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > 
+> > Thank you!
 > 
-> can_dev_dropped_skb() is not what you are looking for.
-> 
-> Whether a CAN frame fits to the CAN device is checked in raw_check_txframe() here:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/can/
-> raw.c#n884
-> 
-> Or do I miss anything?
+> Thank you for responding.
+> Do I need to take some action (e.g. sending to netdev@vger.kernel.org )
+> on these three patches?
 
-My point is not if it fits or not. Of course, if CAN XL is activated, CAN FD
-frames would fit.
+Nothing is needed for now. As soon as CAN maintainers will have time to
+take look at it, the patches will be taken or changes may be requested.
 
-My point is that activating CAN XL should not imply that CAN FD is also
-activated. Having CAN FD off and CAN XL on is a valid configuration.
-
-Let me take an example, imagine that I configure my device with CAN FD off and
-CAN XL on, for example:
-
-  ip link set can0 up type can bitrate 500000 \
-     fd off \
-     xl on xbitrate 10000000 tms on
-
-Where is the check that, with this configuration, the device is not CAN FD
-capable and that the FD frames should be dropped? When I try this under my dummy
-driver, the FD frames pass the raw_check_txframe() check, reach the driver's
-xmit function and pass the can_dev_dropped_skb() checks. And that is the problem.
-
-So, yes, the frame "fits" in above configuration and no buffer overflows nor any
-other security problems occurred. But CAN FD is off so the frame should have
-been discarded at some point.
-
-The same issue goes for probing. How do you detect if an interface is CAN FD
-capable? By checking that its MTU is at least CANFD_MTU? For example like this
-in cangen?
-
-  https://github.com/linux-can/can-utils/blob/master/cangen.c#L802-L805
-
-If I do this check, it would wrongly detect that my interface is CAN FD capable
-when in fact, it is turned off in the configuration. So, under my previous
-example, cangen is also fooled into believing that it can send CAN FD frames
-when in reality the option is turned off.
-
-So, these are my point:
-
-  - how do you configure a vcan so that CAN FD is off and CAN XL is on?
-  - when CAN FD is off and CAN XL is on, how do you drop CAN FD frames in the
-    kernel TX path ?
-  - in the userland, how do you probe that an interface is CAN FD capable or
-    not?
-
-Does this clarify the problem?
-
-
-Yours sincerely,
-Vincent Mailhol
-
+Best Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
