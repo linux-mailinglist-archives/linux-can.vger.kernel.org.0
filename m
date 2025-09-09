@@ -1,31 +1,30 @@
-Return-Path: <linux-can+bounces-4565-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4566-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6719B4FAD4
-	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 14:29:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5593B4FDF6
+	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 15:49:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 840A05E164A
-	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 12:29:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D0C27B6596
+	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 13:47:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11821322C63;
-	Tue,  9 Sep 2025 12:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99E443431F0;
+	Tue,  9 Sep 2025 13:48:48 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90EAB334720
-	for <linux-can@vger.kernel.org>; Tue,  9 Sep 2025 12:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2288342C8D
+	for <linux-can@vger.kernel.org>; Tue,  9 Sep 2025 13:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757420953; cv=none; b=SyLShUzrKJ90tNeMvRhHPda0snVyNxVHd/57/zQIFku8bRdz9yRw9tUBKjnGSpCWGbcLIU0Op0tdKarBvDFQXqn3ZkB4bodPo5zyAnsJokqG+8jdead+unYtSwokDkKtPfYZl2SC1OPxHMqp85zoovC9PFl9xKfm10yG/1ch5UU=
+	t=1757425728; cv=none; b=LGUJLRT6CGmZkul/jNZ+Hcv4Smv+nthBCwz1yeHPoVchQ0Cfp+xJXCVxYJlR8JF/1RI6Wpb9+CMdap3Puid3UuMH1YC5942Oog8l3o3cURtmrO1rr4OCMFQNvIbvmRSrbk+6sokPVqMoGxDVcI+qrb5afDs3tzOmXADfi2uGD3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757420953; c=relaxed/simple;
-	bh=zoA+6GRK757ofKkAJffnVbvBntGS22T8pEj03B31h8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SO8WpAbFE6eygRwZ/s2mpaWfKf/ySqLvO+CkESeNyLVpB39F0QYgfQaaR8lMcTrld/n13JBGia+zl3OwYmy5oTf1Ipl+RLEIK4L3OOc0/l8rMQrwa0U017oAIp7nneTqgVGo1gj76UDWYZuhSD33/m+4QJTLRCaawnv9r3TMo0Q=
+	s=arc-20240116; t=1757425728; c=relaxed/simple;
+	bh=ENZBonPpkHIXZjduXOGlH5Jt3VfTDhsFHwZfOoaLocE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=syGV3/TArkjn120NOGl+osyW5YxfkL+N4cDcabs690qxz6T224By1U5AkhCD2aYUp2LmoLJQtJ4c1PQSRVYPuuelRS9ZBRkKMtYG6/JhPjmkZSczVALtTfV3+3STso/+HKXPktSAgXo225IZqIBGCs+HgLf2VuQg5NtToxikDQ8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,105 +32,116 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uvxT9-000457-W9; Tue, 09 Sep 2025 14:29:08 +0200
+	id 1uvyiB-0002hc-TC
+	for linux-can@vger.kernel.org; Tue, 09 Sep 2025 15:48:43 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uvxT9-000Pz5-2K;
-	Tue, 09 Sep 2025 14:29:07 +0200
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	id 1uvyiB-000QkZ-1u
+	for linux-can@vger.kernel.org;
+	Tue, 09 Sep 2025 15:48:43 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 44EAA46A038
+	for <linux-can@vger.kernel.org>; Tue, 09 Sep 2025 13:48:43 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 63C76469F17;
-	Tue, 09 Sep 2025 12:29:07 +0000 (UTC)
-Date: Tue, 9 Sep 2025 14:29:07 +0200
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 3BAB046A023;
+	Tue, 09 Sep 2025 13:48:42 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 0e1bf272;
+	Tue, 9 Sep 2025 13:48:41 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Chen Yufeng <chenyufeng@iie.ac.cn>
-Cc: mailhol.vincent@wanadoo.fr, dario.binacchi@amarulasolutions.com, 
-	linux-can@vger.kernel.org
-Subject: Re: [PATCH] can: hi311x: fix null pointer dereference when resuming
- from sleep before interface was enabled
-Message-ID: <20250909-premium-lobster-of-happiness-e39176-mkl@pengutronix.de>
-References: <20250906075019.124-1-chenyufeng@iie.ac.cn>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH net 0/7] pull-request: can 2025-09-09
+Date: Tue,  9 Sep 2025 15:34:53 +0200
+Message-ID: <20250909134840.783785-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="upnumg63pywgaioh"
-Content-Disposition: inline
-In-Reply-To: <20250906075019.124-1-chenyufeng@iie.ac.cn>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+Hello netdev-team,
 
---upnumg63pywgaioh
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] can: hi311x: fix null pointer dereference when resuming
- from sleep before interface was enabled
-MIME-Version: 1.0
+this is a pull request of 7 patches for net/main.
 
-On 06.09.2025 15:50:19, Chen Yufeng wrote:
-> This issue is similar to the vulnerability in the `mcp251x` driver, which=
-=20
-> was fixed in  03c427147b2d("can: mcp251x: fix resume from sleep before=20
->  interface was brought up").
->=20
-> In the `hi311x` driver, when the device resumes from sleep, the driver=20
-> schedules `priv->restart_work`. However, if the network interface was=20
-> not previously enabled, the `priv->wq` (workqueue) is not allocated and=
-=20
-> initialized, leading to a null pointer dereference.
->=20
-> To fix this, we move the allocation and initialization of the workqueue=
-=20
-> from the `hi3110_open` function to the `hi3110_can_probe` function.=20
-> This ensures that the workqueue is properly initialized before it is=20
-> used during device resume. And added logic to destroy the workqueue=20
-> in the error handling paths of `hi3110_can_probe` and in the=20
-> `hi3110_can_remove` function to prevent resource leaks.
->=20
-> Signed-off-by: Chen Yufeng <chenyufeng@iie.ac.cn>
+The 1st patch is by Alex Tran and fixes the Documentation of the
+struct bcm_msg_head.
 
-This does not compile.
+Davide Caratti's patch enabled the VCAN driver as a module for the
+Linux self tests.
 
-| drivers/net/can/spi/hi311x.c:902:8: error: use of undeclared label 'out_f=
-ree_irq'
-|   902 |                 goto out_free_irq;
-|       |                      ^
-| 1 error generated.
+Tetsuo Handa contributes 3 patches that fix various problems in the
+CAN j1939 protocol.
 
+Anssi Hannula's patch fixes a potential use-after-free in the
+xilinx_can driver.
+
+Geert Uytterhoeven's patch fixes the rcan_can's suspend to RAM on
+R-Car Gen3 using PSCI.
+
+regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+---
 
---upnumg63pywgaioh
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit d3b28612bc5500133260aaf36794a0a0c287d61b:
 
------BEGIN PGP SIGNATURE-----
+  net: phy: NXP_TJA11XX: Update Kconfig with TJA1102 support (2025-09-08 18:24:19 -0700)
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmjAHZAACgkQDHRl3/mQ
-kZzIqAgAtFFQuAZvDbTCnwI/h6xANVlgOdqL7UglckAT/bCXqTHP3Xia8MgkGly3
-l/EOU9OhBrSZNfmlTvOtSdq7BN+WOqbjwjtpWzezjKGZk+TZGq1PydcXEeKMkYEr
-GpRw7X/IepirdUcDF8iqHIM6TQm39FnRqc7yGUu7Eo0KGw7/ZQVSag7pJSYgN4XJ
-ynm2Rq5MuF7osOE/SJxv+io0mHJEd241eZ4tB6Hu6hIcAzTUgojf666N8Cn3iQ2i
-ZZ+1F945UGE4NQyRYbYo17YB3pP+QyTJxlVN0PfdEGVTRw+Xx4WWjGvkgpofdM3f
-IUpEmOc2pOpOH1dGdVMa4JVbDsLpbg==
-=NwLj
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---upnumg63pywgaioh--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.17-20250909
+
+for you to fetch changes up to 74485647e0f97a39417a5d993aaf65e378ca3e13:
+
+  can: rcar_can: rcar_can_resume(): fix s2ram with PSCI (2025-09-09 14:30:15 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.17-20250909
+
+----------------------------------------------------------------
+Alex Tran (1):
+      docs: networking: can: change bcm_msg_head frames member to support flexible array
+
+Anssi Hannula (1):
+      can: xilinx_can: xcan_write_frame(): fix use-after-free of transmitted SKB
+
+Davide Caratti (1):
+      selftests: can: enable CONFIG_CAN_VCAN as a module
+
+Geert Uytterhoeven (1):
+      can: rcar_can: rcar_can_resume(): fix s2ram with PSCI
+
+Tetsuo Handa (3):
+      can: j1939: implement NETDEV_UNREGISTER notification handler
+      can: j1939: j1939_sk_bind(): call j1939_priv_put() immediately when j1939_local_ecu_get() failed
+      can: j1939: j1939_local_ecu_get(): undo increment when j1939_local_ecu_get() fails
+
+ Documentation/networking/can.rst       |  2 +-
+ drivers/net/can/rcar/rcar_can.c        |  8 +-----
+ drivers/net/can/xilinx_can.c           | 16 +++++------
+ net/can/j1939/bus.c                    |  5 +++-
+ net/can/j1939/j1939-priv.h             |  1 +
+ net/can/j1939/main.c                   |  3 ++
+ net/can/j1939/socket.c                 | 52 ++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/net/can/config |  4 +++
+ tools/testing/selftests/net/config     |  3 --
+ 9 files changed, 74 insertions(+), 20 deletions(-)
+ create mode 100644 tools/testing/selftests/net/can/config
+
 
