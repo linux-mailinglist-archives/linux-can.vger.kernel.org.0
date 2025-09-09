@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-4573-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4574-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5F62B4FE0A
-	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 15:50:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 968ECB4FEE3
+	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 16:10:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 054297B6357
-	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 13:47:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C7AE1BC1AD2
+	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 14:10:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B076B33EB0D;
-	Tue,  9 Sep 2025 13:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88BC2345739;
+	Tue,  9 Sep 2025 14:07:48 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999A13431EC
-	for <linux-can@vger.kernel.org>; Tue,  9 Sep 2025 13:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A19345755
+	for <linux-can@vger.kernel.org>; Tue,  9 Sep 2025 14:07:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757425730; cv=none; b=mefDPcJytCc73P2trG+9tYyRGTjevHBo4d7663aNFg8iAsrLCHsO80OFg/6A2Xz+n46KJzvF6crEvyCmBqPWpuaJwP46pTrB41zX4lYfu7T9oHp/xKqkYVJuPAbTnmq8el/ksuTqkQv42qxDgbMwBZZ0IyrTo7kVr4Y75Of0B1o=
+	t=1757426868; cv=none; b=Ofm77LvYY8Dgo9p0ceuEEFwZc10NvKjJKkPmVqDwM1g+n4MxWBG8wKmtJPGNBKNjFa7ZN//NjMbWSaYOIzQkfSuoAcHw3jwNlIm6WLmaHdTvXG6I4arsHh3ymLJdZzDrfumfprXACVN1PWJxa3t4xSgSB3iDyEuR8unphwmGFAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757425730; c=relaxed/simple;
-	bh=PWw7kxGjjyBaniHEDao8hyYw8Cp4BRCCrpx3D4940+Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DpJgyvTykPGXfpDeG6/5iHlRE+PROqdM9iOY5X0qqdp3pjJTHEwZeJZU/QoRNix0D/lWnLxIT+9C+m4jqht0JvwRrQ7sJQkFaaotjP6SMTxe3HhqIVtdE8vhwqZZwdHGGPiePXR/JKCXL3BxRJECT2XZH6/G6zqrr+jubwr7gqw=
+	s=arc-20240116; t=1757426868; c=relaxed/simple;
+	bh=VhoA4haQCmodoJykqHwx55yQ5Wpyj38vfJVNz5fWeEQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=btdjBLstpnCGt8y5GorcWQRW8mLzf42dsz9BaAIKSVN1XKg6D1/X0CfcasTrjS3Rrs286mWWCMbMxSphCGhfqKH88p6PYJ027qiP9tKZs4LsL0q895l//GWOOxMzj5bIt2RjnJaS95b4eOgN9MhfRSYrH9VSey88mD1XbZ4o1WQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,96 +33,96 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uvyiE-0002qN-R1
-	for linux-can@vger.kernel.org; Tue, 09 Sep 2025 15:48:46 +0200
+	id 1uvz0L-0007xJ-4u; Tue, 09 Sep 2025 16:07:29 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uvyiE-000QnY-0u
-	for linux-can@vger.kernel.org;
-	Tue, 09 Sep 2025 15:48:46 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id EDA5A46A065
-	for <linux-can@vger.kernel.org>; Tue, 09 Sep 2025 13:48:45 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	id 1uvz0J-000Qts-0q;
+	Tue, 09 Sep 2025 16:07:27 +0200
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id CF9D146A02E;
-	Tue, 09 Sep 2025 13:48:42 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 457f661e;
-	Tue, 9 Sep 2025 13:48:41 +0000 (UTC)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id E55C346A0F7;
+	Tue, 09 Sep 2025 14:07:26 +0000 (UTC)
+Date: Tue, 9 Sep 2025 16:07:26 +0200
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 7/7] can: rcar_can: rcar_can_resume(): fix s2ram with PSCI
-Date: Tue,  9 Sep 2025 15:35:00 +0200
-Message-ID: <20250909134840.783785-8-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250909134840.783785-1-mkl@pengutronix.de>
-References: <20250909134840.783785-1-mkl@pengutronix.de>
+To: Markus Schneider-Pargmann <msp@baylibre.com>
+Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Patrik Flykt <patrik.flykt@linux.intel.com>, 
+	Dong Aisheng <b29396@freescale.com>, Fengguang Wu <fengguang.wu@intel.com>, 
+	Varka Bhadram <varkabhadram@gmail.com>, Wu Bo <wubo.oduw@gmail.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel@pengutronix.de
+Subject: Re: [PATCH 2/7] can: m_can: m_can_rx_handler(): only handle active
+ interrupts
+Message-ID: <20250909-warping-blue-pigeon-8522c3-mkl@pengutronix.de>
+References: <20250812-m_can-fix-state-handling-v1-0-b739e06c0a3b@pengutronix.de>
+ <20250812-m_can-fix-state-handling-v1-2-b739e06c0a3b@pengutronix.de>
+ <DC69H7OUANQR.ZVMFRCS8UF4D@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="76gxjfhmdqyff52s"
+Content-Disposition: inline
+In-Reply-To: <DC69H7OUANQR.ZVMFRCS8UF4D@baylibre.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On R-Car Gen3 using PSCI, s2ram powers down the SoC.  After resume, the
-CAN interface no longer works, until it is brought down and up again.
+--76gxjfhmdqyff52s
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 2/7] can: m_can: m_can_rx_handler(): only handle active
+ interrupts
+MIME-Version: 1.0
 
-Fix this by calling rcar_can_start() from the PM resume callback, to
-fully initialize the controller instead of just restarting it.
+On 19.08.2025 10:29:09, Markus Schneider-Pargmann wrote:
+> On Tue Aug 12, 2025 at 7:36 PM CEST, Marc Kleine-Budde wrote:
+> > Among other things, the M_CAN IP core has an Interrupt Register (IR)
+> > and an Interrupt Enable (IE) register. An interrupt is triggered if at
+> > least 1 bit is set in the bitwise and of IR and IE.
+> >
+> > Depending on the configuration not all interrupts are enabled in the
+> > IE register. However the m_can_rx_handler() IRQ handler looks at all
+> > interrupts not just the enabled ones. This may lead to handling of not
+> > activated interrupts.
+>=20
+> But isn't that happening for m_can_interrupt_handler() in general then?
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://patch.msgid.link/699b2f7fcb60b31b6f976a37f08ce99c5ffccb31.1755165227.git.geert+renesas@glider.be
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/rcar/rcar_can.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+Yes, I'll add it to the m_can_interrupt_handler(), too.
 
-diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
-index 64e664f5adcc..87c134bcd48d 100644
---- a/drivers/net/can/rcar/rcar_can.c
-+++ b/drivers/net/can/rcar/rcar_can.c
-@@ -861,7 +861,6 @@ static int rcar_can_resume(struct device *dev)
- {
- 	struct net_device *ndev = dev_get_drvdata(dev);
- 	struct rcar_can_priv *priv = netdev_priv(ndev);
--	u16 ctlr;
- 	int err;
- 
- 	if (!netif_running(ndev))
-@@ -873,12 +872,7 @@ static int rcar_can_resume(struct device *dev)
- 		return err;
- 	}
- 
--	ctlr = readw(&priv->regs->ctlr);
--	ctlr &= ~RCAR_CAN_CTLR_SLPM;
--	writew(ctlr, &priv->regs->ctlr);
--	ctlr &= ~RCAR_CAN_CTLR_CANM;
--	writew(ctlr, &priv->regs->ctlr);
--	priv->can.state = CAN_STATE_ERROR_ACTIVE;
-+	rcar_can_start(ndev);
- 
- 	netif_device_attach(ndev);
- 	netif_start_queue(ndev);
--- 
-2.51.0
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--76gxjfhmdqyff52s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmjANJsACgkQDHRl3/mQ
+kZxGZgf/WVi/7W01tVsCCw89JpwOrdg3e4GisljifLdyZOJuOZ3+BMQ8Gp/1PVpK
+nEpF3dXzxO8VjmN1XW2PVjszLeZAhGpHZNE++d6CQ0LwgKuq8f3AEej+olbcUIfg
+Yz4OQrdSgL7KBNaDosG4o21NU0/u1deoFACW01KsTIFe0azwlWz3YqmZBKahG+5C
+ckoWVtHHLiRp6TuMJQS9r2z/iiS0LVxZf8E1nHt6DqeBYA6mktWG3uE62LNHPjEc
+yHQ0qDJ6JZjpJmy3tyxG/dedNI4QTpT2X+j4XoAsVEBqLK9v0uhBnWM17fliQ9HA
+LScA81E/kq0bzc+qe5gS3opGRkView==
+=G+CG
+-----END PGP SIGNATURE-----
+
+--76gxjfhmdqyff52s--
 
