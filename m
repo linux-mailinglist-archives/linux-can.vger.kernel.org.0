@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-4563-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4564-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97CADB4D60D
-	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 14:09:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37584B4FA1A
+	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 14:15:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 528CA16D97C
-	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 12:09:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9735161867
+	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 12:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3112C0F60;
-	Tue,  9 Sep 2025 12:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66F0A32C318;
+	Tue,  9 Sep 2025 12:14:16 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6F824503B
-	for <linux-can@vger.kernel.org>; Tue,  9 Sep 2025 12:09:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C050F33472E
+	for <linux-can@vger.kernel.org>; Tue,  9 Sep 2025 12:14:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757419749; cv=none; b=sGs2krX2ak7npOLEtHoBBgHI3dnC0K1AjqGlljQcu1QTwvRZx+mp5BYbbFDsbw+fHRNJgLxIKjZcu1I7fLvBVc3H0NyK2D7a49Er8F79oldaxgYvhKsS7Dszc5jf1qBvSlMw8L0Ge1H5qlR80oi1h/qafdVOTJDgfMYKSGFMQPk=
+	t=1757420056; cv=none; b=AnDdnFsVWDaLRsE6DJUNICBCjFrCWj3j1k5VgWnA/GJjKTmjf7y9LS362uMIB5kTqO3XtQePfq45U2Y6+a6UG0gnbacJAUr7XyZoLaxRBmwxPGHf0CcAmAWX1pXbEbxNbEYeFMRL3b7Ss8bXswX6zKava8yAjInA1koiqm/aP9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757419749; c=relaxed/simple;
-	bh=pmi9z2rNOsL9GtbWEhdGdsyMfwgTgS60FBSTZt6GaC8=;
+	s=arc-20240116; t=1757420056; c=relaxed/simple;
+	bh=dEHJUaGdqOj0wwxzcSq+sTrQBGkuclNcnirwe7VygyQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qe3igqBUsl7fpmGrQZ/9gynuFp/kV8zTgwS2PswT7LjRV0sdITbMlYggWOra1dvkeVo0Tf7ksEybfAikvIMHHH7D7v56ra/4ugofsVQgvdByQ0UB3GWLBPqgXItqTaZcdlwdBSLy2VvdIKlzAf7F/qMawS3zmFojQaASb2kUOQM=
+	 Content-Type:Content-Disposition:In-Reply-To; b=qTuyOaMA/QDcZhS8SsQ+u4ZMXSjG5R7SepRWhhZhfkDDzq+nWP6bPEdNoQOwvWUvAClhfIGgReuXOp5tL7EAyD4wdhrVirsQdsRR38zoGL/FKLqWJMlTTlvPHl27Y/dCCJN3FW1bGlkk8M3j4SzMf8FA4AJbhN5eal//GPGoquI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,28 +33,28 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uvx9k-0000BT-M7; Tue, 09 Sep 2025 14:09:04 +0200
+	id 1uvxEi-0001QS-2C; Tue, 09 Sep 2025 14:14:12 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uvx9j-000Pw9-37;
-	Tue, 09 Sep 2025 14:09:03 +0200
+	id 1uvxEh-000Px1-1C;
+	Tue, 09 Sep 2025 14:14:11 +0200
 Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id A7087469EC6;
-	Tue, 09 Sep 2025 12:09:03 +0000 (UTC)
-Date: Tue, 9 Sep 2025 14:09:03 +0200
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 0A85B469EEB;
+	Tue, 09 Sep 2025 12:14:11 +0000 (UTC)
+Date: Tue, 9 Sep 2025 14:14:10 +0200
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Anssi Hannula <anssi.hannula@bitwise.fi>
-Cc: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>, 
-	linux-can@vger.kernel.org
-Subject: Re: [PATCH] can: xilinx_can: fix use-after-free of transmitted SKB
-Message-ID: <20250909-flounder-of-scientific-perception-f9f8d6-mkl@pengutronix.de>
-References: <20250822095002.168389-1-anssi.hannula@bitwise.fi>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] can: rcar_can: Fix s2ram with PSCI
+Message-ID: <20250909-hissing-chihuahua-of-awe-401aed-mkl@pengutronix.de>
+References: <699b2f7fcb60b31b6f976a37f08ce99c5ffccb31.1755165227.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -62,92 +62,32 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="o2b2bnpr7fdclbza"
+	protocol="application/pgp-signature"; boundary="r4buc7pw526xrp7m"
 Content-Disposition: inline
-In-Reply-To: <20250822095002.168389-1-anssi.hannula@bitwise.fi>
+In-Reply-To: <699b2f7fcb60b31b6f976a37f08ce99c5ffccb31.1755165227.git.geert+renesas@glider.be>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
---o2b2bnpr7fdclbza
+--r4buc7pw526xrp7m
 Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] can: xilinx_can: fix use-after-free of transmitted SKB
+Subject: Re: [PATCH] can: rcar_can: Fix s2ram with PSCI
 MIME-Version: 1.0
 
-On 22.08.2025 12:50:02, Anssi Hannula wrote:
-> can_put_echo_skb() takes ownership of the SKB and it may be freed
-> during or after the call.
+On 14.08.2025 13:26:37, Geert Uytterhoeven wrote:
+> On R-Car Gen3 using PSCI, s2ram powers down the SoC.  After resume, the
+> CAN interface no longer works, until it is brought down and up again.
 >=20
-> However, xilinx_can xcan_write_frame() keeps using SKB after the call.
+> Fix this by calling rcar_can_start() from the PM resume callback, to
+> fully initialize the controller instead of just restarting it.
 >=20
-> Fix that by only calling can_put_echo_skb() after the code is done
-> touching the SKB.
->=20
-> The tx_lock is held for the entire xcan_write_frame() execution and
-> also on the can_get_echo_skb() side so the order of operations does not
-> matter.
->=20
-> An earlier fix 3d3c817c3a40 ("can: xilinx_can: Fix usage of skb memory")
-               ^^^
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-added missing "commit"
-
-> did not move the can_put_echo_skb() call far enough.
->=20
-> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-> Fixes: 1598efe57b3e ("can: xilinx_can: refactor code in preparation for C=
-AN FD support")
-> ---
->  drivers/net/can/xilinx_can.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-> index 3f2e378199abb..c14ffbe8e501a 100644
-> --- a/drivers/net/can/xilinx_can.c
-> +++ b/drivers/net/can/xilinx_can.c
-> @@ -690,14 +690,6 @@ static void xcan_write_frame(struct net_device *ndev=
-, struct sk_buff *skb,
->  		dlc |=3D XCAN_DLCR_EDL_MASK;
->  	}
-> =20
-> -	if (!(priv->devtype.flags & XCAN_FLAG_TX_MAILBOXES) &&
-> -	    (priv->devtype.flags & XCAN_FLAG_TXFEMP))
-> -		can_put_echo_skb(skb, ndev, priv->tx_head % priv->tx_max, 0);
-> -	else
-> -		can_put_echo_skb(skb, ndev, 0, 0);
-> -
-> -	priv->tx_head++;
-> -
->  	priv->write_reg(priv, XCAN_FRAME_ID_OFFSET(frame_offset), id);
->  	/* If the CAN frame is RTR frame this write triggers transmission
->  	 * (not on CAN FD)
-> @@ -730,6 +722,14 @@ static void xcan_write_frame(struct net_device *ndev=
-, struct sk_buff *skb,
->  					data[1]);
->  		}
->  	}
-> +
-> +	if (!(priv->devtype.flags & XCAN_FLAG_TX_MAILBOXES) &&
-> +		(priv->devtype.flags & XCAN_FLAG_TXFEMP))
-           ^^^^^^
-
-I've fixed the indention.
-
-> +		can_put_echo_skb(skb, ndev, priv->tx_head % priv->tx_max, 0);
-> +	else
-> +		can_put_echo_skb(skb, ndev, 0, 0);
-> +
-> +	priv->tx_head++;
->  }
-> =20
->  /**
-> --=20
-
-Applied to linux-can.
+Applied to linux-can. (w/o the Fixes tag)
 
 regards,
 Marc
@@ -158,20 +98,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---o2b2bnpr7fdclbza
+--r4buc7pw526xrp7m
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmjAGNsACgkQDHRl3/mQ
-kZw3uQf9HNWhs5bGDGClO4lVaJkYVYf7BQrJez9yqqqYWSYYbioPaJP0dwM4JKtS
-cqd5nfFcfFpHcZP2tyJazNNMl3oMdK2KRaT6dh/jiJGo25a53daZ5TWNlRBg4KZx
-kU3H/1C8yYRYqx4p0v5+jmopq+ACyOgsHbUMe1fEyRPgCDmjWY+Ygdducj5J75Kk
-HXZdv76I+w9IfiV8cfyTzaU1s7IS+tOrkf4hEL43PljJe07YB7vrOh7hnCXsKaaX
-gD2CBEDxr9C80QhByh8Es43PXVs2cnFTD8datlZbjwsMMxQiG07cYnfnj4wmhNXm
-yLNsHKJojEWWM6wD0Ml2OVMrEQRZ6w==
-=oAwD
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmjAGg8ACgkQDHRl3/mQ
+kZwpCgf+IxKllq3gU5imD0BKlb9kbcqOABHbEqE/HAW16J18mmePLY+CSRMcVKEl
+ydLzK+7vJBFpmnRrPjCFEHPm3SpToI/m9mbK8vk6S+50YJg6r+s5eM80se0Zrq/t
+TJH+R3j6DSejkb5n1A1N89tM/7ehL4QTgWuM8c1as04YFgnEmxt+0D4VH0CjZAcd
+nxpCQB4RFWWFRkz56WGB3OjhxWgTPR2gtxI0m7wIGiZVZR5YCzJRk7jiE/lBvMD+
+VFvvWaUd/PcTCvZdLmCfx62tC4JqPq/8Z50rfOXQzrcWuO3HGAAvi4l89O/AfDZS
+yCUR4Xkl6BlgNj8MjyE+YPt/qWN5pQ==
+=FvBo
 -----END PGP SIGNATURE-----
 
---o2b2bnpr7fdclbza--
+--r4buc7pw526xrp7m--
 
