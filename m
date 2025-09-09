@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-4564-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4565-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37584B4FA1A
-	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 14:15:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6719B4FAD4
+	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 14:29:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9735161867
-	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 12:14:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 840A05E164A
+	for <lists+linux-can@lfdr.de>; Tue,  9 Sep 2025 12:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66F0A32C318;
-	Tue,  9 Sep 2025 12:14:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11821322C63;
+	Tue,  9 Sep 2025 12:29:13 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C050F33472E
-	for <linux-can@vger.kernel.org>; Tue,  9 Sep 2025 12:14:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90EAB334720
+	for <linux-can@vger.kernel.org>; Tue,  9 Sep 2025 12:29:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757420056; cv=none; b=AnDdnFsVWDaLRsE6DJUNICBCjFrCWj3j1k5VgWnA/GJjKTmjf7y9LS362uMIB5kTqO3XtQePfq45U2Y6+a6UG0gnbacJAUr7XyZoLaxRBmwxPGHf0CcAmAWX1pXbEbxNbEYeFMRL3b7Ss8bXswX6zKava8yAjInA1koiqm/aP9I=
+	t=1757420953; cv=none; b=SyLShUzrKJ90tNeMvRhHPda0snVyNxVHd/57/zQIFku8bRdz9yRw9tUBKjnGSpCWGbcLIU0Op0tdKarBvDFQXqn3ZkB4bodPo5zyAnsJokqG+8jdead+unYtSwokDkKtPfYZl2SC1OPxHMqp85zoovC9PFl9xKfm10yG/1ch5UU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757420056; c=relaxed/simple;
-	bh=dEHJUaGdqOj0wwxzcSq+sTrQBGkuclNcnirwe7VygyQ=;
+	s=arc-20240116; t=1757420953; c=relaxed/simple;
+	bh=zoA+6GRK757ofKkAJffnVbvBntGS22T8pEj03B31h8M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qTuyOaMA/QDcZhS8SsQ+u4ZMXSjG5R7SepRWhhZhfkDDzq+nWP6bPEdNoQOwvWUvAClhfIGgReuXOp5tL7EAyD4wdhrVirsQdsRR38zoGL/FKLqWJMlTTlvPHl27Y/dCCJN3FW1bGlkk8M3j4SzMf8FA4AJbhN5eal//GPGoquI=
+	 Content-Type:Content-Disposition:In-Reply-To; b=SO8WpAbFE6eygRwZ/s2mpaWfKf/ySqLvO+CkESeNyLVpB39F0QYgfQaaR8lMcTrld/n13JBGia+zl3OwYmy5oTf1Ipl+RLEIK4L3OOc0/l8rMQrwa0U017oAIp7nneTqgVGo1gj76UDWYZuhSD33/m+4QJTLRCaawnv9r3TMo0Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,28 +33,29 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uvxEi-0001QS-2C; Tue, 09 Sep 2025 14:14:12 +0200
+	id 1uvxT9-000457-W9; Tue, 09 Sep 2025 14:29:08 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uvxEh-000Px1-1C;
-	Tue, 09 Sep 2025 14:14:11 +0200
+	id 1uvxT9-000Pz5-2K;
+	Tue, 09 Sep 2025 14:29:07 +0200
 Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 0A85B469EEB;
-	Tue, 09 Sep 2025 12:14:11 +0000 (UTC)
-Date: Tue, 9 Sep 2025 14:14:10 +0200
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 63C76469F17;
+	Tue, 09 Sep 2025 12:29:07 +0000 (UTC)
+Date: Tue, 9 Sep 2025 14:29:07 +0200
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] can: rcar_can: Fix s2ram with PSCI
-Message-ID: <20250909-hissing-chihuahua-of-awe-401aed-mkl@pengutronix.de>
-References: <699b2f7fcb60b31b6f976a37f08ce99c5ffccb31.1755165227.git.geert+renesas@glider.be>
+To: Chen Yufeng <chenyufeng@iie.ac.cn>
+Cc: mailhol.vincent@wanadoo.fr, dario.binacchi@amarulasolutions.com, 
+	linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: hi311x: fix null pointer dereference when resuming
+ from sleep before interface was enabled
+Message-ID: <20250909-premium-lobster-of-happiness-e39176-mkl@pengutronix.de>
+References: <20250906075019.124-1-chenyufeng@iie.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -62,34 +63,53 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="r4buc7pw526xrp7m"
+	protocol="application/pgp-signature"; boundary="upnumg63pywgaioh"
 Content-Disposition: inline
-In-Reply-To: <699b2f7fcb60b31b6f976a37f08ce99c5ffccb31.1755165227.git.geert+renesas@glider.be>
+In-Reply-To: <20250906075019.124-1-chenyufeng@iie.ac.cn>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
---r4buc7pw526xrp7m
+--upnumg63pywgaioh
 Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] can: rcar_can: Fix s2ram with PSCI
+Subject: Re: [PATCH] can: hi311x: fix null pointer dereference when resuming
+ from sleep before interface was enabled
 MIME-Version: 1.0
 
-On 14.08.2025 13:26:37, Geert Uytterhoeven wrote:
-> On R-Car Gen3 using PSCI, s2ram powers down the SoC.  After resume, the
-> CAN interface no longer works, until it is brought down and up again.
+On 06.09.2025 15:50:19, Chen Yufeng wrote:
+> This issue is similar to the vulnerability in the `mcp251x` driver, which=
+=20
+> was fixed in  03c427147b2d("can: mcp251x: fix resume from sleep before=20
+>  interface was brought up").
 >=20
-> Fix this by calling rcar_can_start() from the PM resume callback, to
-> fully initialize the controller instead of just restarting it.
+> In the `hi311x` driver, when the device resumes from sleep, the driver=20
+> schedules `priv->restart_work`. However, if the network interface was=20
+> not previously enabled, the `priv->wq` (workqueue) is not allocated and=
+=20
+> initialized, leading to a null pointer dereference.
 >=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> To fix this, we move the allocation and initialization of the workqueue=
+=20
+> from the `hi3110_open` function to the `hi3110_can_probe` function.=20
+> This ensures that the workqueue is properly initialized before it is=20
+> used during device resume. And added logic to destroy the workqueue=20
+> in the error handling paths of `hi3110_can_probe` and in the=20
+> `hi3110_can_remove` function to prevent resource leaks.
+>=20
+> Signed-off-by: Chen Yufeng <chenyufeng@iie.ac.cn>
 
-Applied to linux-can. (w/o the Fixes tag)
+This does not compile.
 
-regards,
+| drivers/net/can/spi/hi311x.c:902:8: error: use of undeclared label 'out_f=
+ree_irq'
+|   902 |                 goto out_free_irq;
+|       |                      ^
+| 1 error generated.
+
 Marc
 
 --=20
@@ -98,20 +118,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---r4buc7pw526xrp7m
+--upnumg63pywgaioh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmjAGg8ACgkQDHRl3/mQ
-kZwpCgf+IxKllq3gU5imD0BKlb9kbcqOABHbEqE/HAW16J18mmePLY+CSRMcVKEl
-ydLzK+7vJBFpmnRrPjCFEHPm3SpToI/m9mbK8vk6S+50YJg6r+s5eM80se0Zrq/t
-TJH+R3j6DSejkb5n1A1N89tM/7ehL4QTgWuM8c1as04YFgnEmxt+0D4VH0CjZAcd
-nxpCQB4RFWWFRkz56WGB3OjhxWgTPR2gtxI0m7wIGiZVZR5YCzJRk7jiE/lBvMD+
-VFvvWaUd/PcTCvZdLmCfx62tC4JqPq/8Z50rfOXQzrcWuO3HGAAvi4l89O/AfDZS
-yCUR4Xkl6BlgNj8MjyE+YPt/qWN5pQ==
-=FvBo
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmjAHZAACgkQDHRl3/mQ
+kZzIqAgAtFFQuAZvDbTCnwI/h6xANVlgOdqL7UglckAT/bCXqTHP3Xia8MgkGly3
+l/EOU9OhBrSZNfmlTvOtSdq7BN+WOqbjwjtpWzezjKGZk+TZGq1PydcXEeKMkYEr
+GpRw7X/IepirdUcDF8iqHIM6TQm39FnRqc7yGUu7Eo0KGw7/ZQVSag7pJSYgN4XJ
+ynm2Rq5MuF7osOE/SJxv+io0mHJEd241eZ4tB6Hu6hIcAzTUgojf666N8Cn3iQ2i
+ZZ+1F945UGE4NQyRYbYo17YB3pP+QyTJxlVN0PfdEGVTRw+Xx4WWjGvkgpofdM3f
+IUpEmOc2pOpOH1dGdVMa4JVbDsLpbg==
+=NwLj
 -----END PGP SIGNATURE-----
 
---r4buc7pw526xrp7m--
+--upnumg63pywgaioh--
 
