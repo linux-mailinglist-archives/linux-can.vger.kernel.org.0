@@ -1,76 +1,76 @@
-Return-Path: <linux-can+bounces-4627-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4628-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0E29B511AC
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 10:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 395E7B511C4
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 10:48:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AEAC448046
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 08:42:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E68333B7D4D
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 08:48:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8FD03101DE;
-	Wed, 10 Sep 2025 08:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A80A230DEA6;
+	Wed, 10 Sep 2025 08:47:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="xG3wBtqw"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="VuE9AfxW"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34192BF3CC
-	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 08:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2C1289E0B
+	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 08:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757493712; cv=none; b=H6IJRypxVq1bF+OU3D5a94zNRN5r9a7gPQurJ3qlhGXMw0rooiaSWi49WqmwTG7STXw6kqKC31BA+Iw3OdX1Vcjpnk+lJwmNB9BhrCahE4TUQLVedH7s6RvnaI49RFfdC5pgT0OgoeVwJNqL5cewN2faiCghIdW+tZSfYwC0cAE=
+	t=1757494078; cv=none; b=XGzZ3JQCuwRp9V2/cFQP89tENlEP9IfOnL+Zt7IHrNbp4bNvyuwcjBlY2uN4OmHYJneJzpdOY1c1mqBnP0abw/tDCb77elnTj3ZczSDta0E851inwjikGePqsThMwcjcNaaHQLtYNoIRadkbfFJhMHxTZerjr93AL7pV9bptkRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757493712; c=relaxed/simple;
-	bh=8BYfSHtHTpHBWXb4w05N17dIDEdh483y9XhV1TMwVBA=;
+	s=arc-20240116; t=1757494078; c=relaxed/simple;
+	bh=5Wxy+cByCfGdHHb4M2ZsMYsBI19fkHCRvTB58Mup2WI=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=pLXijYi2UO8ugMVGYSCk34Ci4fz7PWRsuUz8CeNElYU1GF6estX/Yir+IT7R3QDhHhSi5BigGDHHSvW10DccDZgc1SPhMyKi2jRbSZzoXi7M1ZAQKqiHr4I30/okiJtSnGjBtZ8uriVoF3f4fLgtKJQBPR+UX+bPC5yA/oOqrOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=xG3wBtqw; arc=none smtp.client-ip=209.85.218.47
+	 References:In-Reply-To; b=EFSflwWNaWnVpsXOUJicuCytZI0YqXfBDG8FNJPKAS2vk3vLpZdB9dN1oEHbqQof0b/YvCFb2hgEhIUfAgsELYnlXKefbqR/RznZFog3uaN00eVcBHHdbDwuZhF4RGUKohmQsxeAf7dmJvOrsAbArulk0R1cRyMIbu8nWpfFTCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=VuE9AfxW; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b0787fc3008so81068466b.3
-        for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 01:41:49 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aff0775410eso86254566b.0
+        for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 01:47:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1757493708; x=1758098508; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1757494074; x=1758098874; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qSif0aXJJp0kSU7OZvdmQspKrVD0dDMIeIyzSM258Dg=;
-        b=xG3wBtqwXx8nj6SiOXx6dmAmsucmcNhpQm2FaIrsjkQuRPJpRoGNegce4BYcA2nC3f
-         OpJ+EFfZZGV7fx1j0ynfQEF/falPddtxS37NEfc02bIj54tB8oJMF8Dg2OzDaYBCYr4n
-         5L9gaK72nVYY6GD0214GOXrSsbiRahVRZ9+pNUuTXjDXmZsZGaSnGKlazILjzhCrLgeL
-         1pKKSFYEyoC2xszzUTobsL4dYJ7mkba7AaRE7rUqmr6dc0OXy11e1FSbWB6yIbnEeTfg
-         uZ5OsX3JIk2nu8WU+EtqhnmU1GscYE7TJIvTjgBf4eHXotNoY0bLm3EkGve++HOOqfzo
-         ohHQ==
+        bh=Np8jfN3sYCP+UmiGDdyhOB20Mr6qqzZDL1HeGBXkwGc=;
+        b=VuE9AfxW7MCHGW9SdJp/vK5WvuLsuvgOaUFfhpanXsdr+ocKybKrppHJUfKkRZy8yy
+         bR+8XctnRcM8W2H+9vP80pKpEaor1gikmPEzehCYPvFHPJpznoi8GTqzoSz/2y7XKIXz
+         DnlDdUX2/rSG7Jo+aTptGjH4wBmYgnX/zDsN2klgZGbBsDXlL1poSktyvbc/Oc/73D7f
+         aRRnrWSlfzS7lB7kGRE5nUwFFPsknjYJHJ1x7ys1I/8VR/W8H6JEcYPGTTwf5f9FWDDq
+         JXDPWEhpM766/up/yLNi/MxRZAbtL5XQHGoOI5x96+LsQrCtvxCaByuuqwvXM/J0ZZbB
+         EsUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757493708; x=1758098508;
+        d=1e100.net; s=20230601; t=1757494074; x=1758098874;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qSif0aXJJp0kSU7OZvdmQspKrVD0dDMIeIyzSM258Dg=;
-        b=XWsBcY3AGIV+tIUwnxZG68eRX56d3wRrSfVjw+9S+P5Va6d7szXkzXZEpvJNCnMvkF
-         Vs2vq0uulngBTqmEfi/63/vOWWRzDeZtPoJnjABgAPl8Q8RL7mA/lT8jFf90CJm3L4FI
-         6iz1Bx4b8a1M2GPKMxoxVhd0nn+DjGwXHVvY90aWyH8aFqs/O3u3fnpDflaibgy4+2lJ
-         8/vHUF11HKsW3jPDQnbeQOqcom1ZADgwK5yiDymg4XissHbBgqCSF8KRzy2uCkaaG+ny
-         ZIn3Id28v2Xx4Mn2jGd2hZpnt1vrgOoE0iWWjPY4h7qp6rMZZmAGzzVYca3va4fT1gCo
-         WN/w==
-X-Gm-Message-State: AOJu0Yxky5pvrvtmRSJ8HvkhhKGV4/Ka7LdOdIsiKyiv5rIgetIkLlGD
-	dHHQ6I4RhbIC++afIYnK4/qd8kiNMX4njwpZK5JELCoNM14U/gfxjrM/kw9fHvGy2U0=
-X-Gm-Gg: ASbGncub69By8g+hLgNpi+cpU2Oce319i+urKlm2Ez9FD4FLol3rtD/6Z4wAwDBTE1m
-	TMlMbhMTZ/5uqHzimA/xgl+Xt1mbHVXFCPzFp3CY5SWFAwB2XQeEFc3cPLABwND19/267dcrvqe
-	tgjRWcmIVEEUe2W6AoVuZZqpw0w0oND8I4s95vhP1hhRPoU+Og9C01maoGYzIOYI6wX1SHaBc4l
-	3TVD8xk9pVITnwlbFt/OCQ/L/Gd9jbgJJl0EkAkMz6QdBMVVVndhyGafKQws/Tm2el8skRzLLZa
-	0UHu1ugEOkdw83GlqKwzkBsfcsyzNpyL7ZE1n2NLsvE0F+5LlC3dGfowlgRb/QwWqgbYoUli6At
-	gvJNQMBs+AzSp4bI=
-X-Google-Smtp-Source: AGHT+IExNmOsAnAJtqdj679s6TGYzo8sTv/XkpvZFopED68H/ezdLpRsIanj2ZU7Y2gRe1TpbDGmjQ==
-X-Received: by 2002:a17:907:6092:b0:b04:6a58:560b with SMTP id a640c23a62f3a-b04b1545011mr1444007166b.39.1757493705475;
-        Wed, 10 Sep 2025 01:41:45 -0700 (PDT)
+        bh=Np8jfN3sYCP+UmiGDdyhOB20Mr6qqzZDL1HeGBXkwGc=;
+        b=LS3uKFU1aMjUfvKDALQuwzW/esA7wLUVr0lWqzo9oeFNCIZtHRONgp+npfqjvgWblU
+         zrNdE+2IdFJQH9oqVmxc5vN+MsDCzP/pSTw6E5AJPynsJwQ8tcGxx2D4cYy3zWQjeaZD
+         iXK3lh9BzSMW17Qvc6riVMNfF0t/i5prPXrg5oJ04XT/r2fGmEf0mevl0Pq3ZVJCDT2f
+         Ki2901Zdm8N0JvTy4HIS5BeMh+IkACSSXuDzRkBLT/vatm1/wk7pjJpze7aGEpZCw7Le
+         E9PGTMp72nDnh/kRQUEQns32t9SmSmoN3Sf1KTjmYysnh0NCu01u2DUcTQ5ULxhzcfZI
+         Xm3Q==
+X-Gm-Message-State: AOJu0YyAIhywUPMcYorCiw49xAXnfXiH4aaD6zNCPyRbfiNNdEq1mlEA
+	y4PDTuMDUAi9Y48zh4QUl0LjUvin+F8Eyz1SmqoOSglPf7qZ936o8bY85QAOW0oVN6o=
+X-Gm-Gg: ASbGncvtCvOwKpdWwedyf217CdjPWSCoIgeiVPkRbalc7CFw/aoXNV2vVxTro0fz6Ko
+	EfJEtM6SqrDYZvclw9aqm9SvtrpIzHDAa8hVNcI7wg7RpwLPOr6O8BseQK47FANItfKW6oisLEb
+	Xsz8/rwWqDCb/K9bckLwLvLpkCf9S4CTOsloR9tTZi2wwIYBnaLqZzb+aqVen+QVcCyvVDYRAJO
+	VT1pI516VuECDe/peck++U43veC3E8iRF5ewXjAd2P92JUpEzdGKDtAG7fIiULqy1Wym1uj1zgG
+	jT3+9qREFG/yIV6WvEoO4VOVRizPSZXlYiZ8g+FHdNhZSKqvcBN6PB7ErVkQsnza+2edtzOeGuH
+	eMXkWqEpXwaTiORo=
+X-Google-Smtp-Source: AGHT+IFFXA9GkG6+WLmmoEATkhmBMPCC6WdDDdJFkTbluD5Nd2yRv1fYzfd/AlqQM/vXH5uJHFTLTg==
+X-Received: by 2002:a17:906:ef04:b0:af9:8739:10ca with SMTP id a640c23a62f3a-b0493282aecmr1879849966b.28.1757494074240;
+        Wed, 10 Sep 2025 01:47:54 -0700 (PDT)
 Received: from localhost ([195.52.61.108])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b07833a7cb3sm131465466b.81.2025.09.10.01.41.44
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b078340ddb3sm126731466b.96.2025.09.10.01.47.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Sep 2025 01:41:44 -0700 (PDT)
+        Wed, 10 Sep 2025 01:47:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -78,13 +78,14 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Type: multipart/signed;
- boundary=2e38c85892acb2a28aa9c9c170304678bd4f0f3265d646caeeeb3f8e67ff;
+ boundary=8030d55e11177121433a9ebb9e4a605ad54d0a0699010de488929059151e;
  micalg=pgp-sha512; protocol="application/pgp-signature"
-Date: Wed, 10 Sep 2025 10:41:28 +0200
-Message-Id: <DCOZIMAYLN8P.23PQEAFQ26ADZ@baylibre.com>
+Date: Wed, 10 Sep 2025 10:47:45 +0200
+Message-Id: <DCOZNFLPYZFH.2EWPVI5X452IJ@baylibre.com>
 Cc: <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
  <kernel@pengutronix.de>
-Subject: Re: [PATCH v2 2/7] can: m_can: only handle active interrupts
+Subject: Re: [PATCH v2 3/7] can: m_can: m_can_handle_state_errors(): fix CAN
+ state transition to Error Active
 From: "Markus Schneider-Pargmann" <msp@baylibre.com>
 To: "Marc Kleine-Budde" <mkl@pengutronix.de>, "Chandrasekar Ramakrishnan"
  <rcsekar@samsung.com>, "Vincent Mailhol" <mailhol.vincent@wanadoo.fr>,
@@ -92,78 +93,146 @@ To: "Marc Kleine-Budde" <mkl@pengutronix.de>, "Chandrasekar Ramakrishnan"
  <b29396@freescale.com>, "Varka Bhadram" <varkabhadram@gmail.com>, "Wu Bo"
  <wubo.oduw@gmail.com>, "Philipp Zabel" <p.zabel@pengutronix.de>
 X-Mailer: aerc 0.20.1
-References: <20250909-m_can-fix-state-handling-v2-0-af9fa240b68a@pengutronix.de> <20250909-m_can-fix-state-handling-v2-2-af9fa240b68a@pengutronix.de>
-In-Reply-To: <20250909-m_can-fix-state-handling-v2-2-af9fa240b68a@pengutronix.de>
+References: <20250909-m_can-fix-state-handling-v2-0-af9fa240b68a@pengutronix.de> <20250909-m_can-fix-state-handling-v2-3-af9fa240b68a@pengutronix.de>
+In-Reply-To: <20250909-m_can-fix-state-handling-v2-3-af9fa240b68a@pengutronix.de>
 
---2e38c85892acb2a28aa9c9c170304678bd4f0f3265d646caeeeb3f8e67ff
+--8030d55e11177121433a9ebb9e4a605ad54d0a0699010de488929059151e
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
 
 On Tue Sep 9, 2025 at 7:53 PM CEST, Marc Kleine-Budde wrote:
-> The M_CAN IP core has an Interrupt Register (IR) and an Interrupt
-> Enable (IE) register. An interrupt is triggered if at least 1 bit is
-> set in the bitwise and of IR and IE.
+> The CAN Error State is determined by the receive and transmit error
+> counters. The CAN error counters decrease when reception/transmission
+> is successful, so that a status transition back to the Error Active
+> status is possible. This transition is not handled by
+> m_can_handle_state_errors().
 >
-> Depending on the configuration not all interrupts are enabled in the
-> IE register. However the m_can_rx_handler() IRQ handler looks at all
-> interrupts not just the enabled ones. This may lead to handling of not
-> activated interrupts.
->
-> Fix the problem and mask the irqstatus (IR register) with the
-> active_interrupts (cached value of IE register).
+> Add the missing detection of the Error Active state to
+> m_can_handle_state_errors() and extend the handling of this state in
+> m_can_handle_state_change().
 >
 > Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
+> Fixes: cd0d83eab2e0 ("can: m_can: m_can_handle_state_change(): fix state =
+change")
 > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+
+Reviewed-by: Markus Schneider-Pargmann <msp@baylibre.com>
+
 > ---
->  drivers/net/can/m_can/m_can.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/net/can/m_can/m_can.c | 55 ++++++++++++++++++++++++++-----------=
+------
+>  1 file changed, 33 insertions(+), 22 deletions(-)
 >
 > diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.=
 c
-> index fe74dbd2c966..16b38e6c3985 100644
+> index 16b38e6c3985..3edf01b098a4 100644
 > --- a/drivers/net/can/m_can/m_can.c
 > +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1057,6 +1057,7 @@ static int m_can_poll(struct napi_struct *napi, int=
- quota)
->  	u32 irqstatus;
+> @@ -812,6 +812,9 @@ static int m_can_handle_state_change(struct net_devic=
+e *dev,
+>  	u32 timestamp =3D 0;
 > =20
->  	irqstatus =3D cdev->irqstatus | m_can_read(cdev, M_CAN_IR);
-> +	irqstatus &=3D cdev->active_interrupts;
+>  	switch (new_state) {
+> +	case CAN_STATE_ERROR_ACTIVE:
+> +		cdev->can.state =3D CAN_STATE_ERROR_ACTIVE;
+> +		break;
+>  	case CAN_STATE_ERROR_WARNING:
+>  		/* error warning state */
+>  		cdev->can.can_stats.error_warning++;
+> @@ -841,6 +844,12 @@ static int m_can_handle_state_change(struct net_devi=
+ce *dev,
+>  	__m_can_get_berr_counter(dev, &bec);
 > =20
->  	work_done =3D m_can_rx_handler(dev, quota, irqstatus);
+>  	switch (new_state) {
+> +	case CAN_STATE_ERROR_ACTIVE:
+> +		cf->can_id |=3D CAN_ERR_CRTL | CAN_ERR_CNT;
+> +		cf->data[1] =3D CAN_ERR_CRTL_ACTIVE;
+> +		cf->data[6] =3D bec.txerr;
+> +		cf->data[7] =3D bec.rxerr;
+> +		break;
+>  	case CAN_STATE_ERROR_WARNING:
+>  		/* error warning state */
+>  		cf->can_id |=3D CAN_ERR_CRTL | CAN_ERR_CNT;
+> @@ -877,30 +886,33 @@ static int m_can_handle_state_change(struct net_dev=
+ice *dev,
+>  	return 1;
+>  }
 > =20
-> @@ -1243,6 +1244,8 @@ static int m_can_interrupt_handler(struct m_can_cla=
-ssdev *cdev)
+> -static int m_can_handle_state_errors(struct net_device *dev, u32 psr)
+> +static enum can_state
+> +m_can_state_get_by_psr(struct m_can_classdev *cdev)
+> +{
+> +	u32 reg_psr;
+> +
+> +	reg_psr =3D m_can_read(cdev, M_CAN_PSR);
+> +
+> +	if (reg_psr & PSR_BO)
+> +		return CAN_STATE_BUS_OFF;
+> +	if (reg_psr & PSR_EP)
+> +		return CAN_STATE_ERROR_PASSIVE;
+> +	if (reg_psr & PSR_EW)
+> +		return CAN_STATE_ERROR_WARNING;
+> +
+> +	return CAN_STATE_ERROR_ACTIVE;
+> +}
+> +
+> +static int m_can_handle_state_errors(struct net_device *dev)
+>  {
+>  	struct m_can_classdev *cdev =3D netdev_priv(dev);
+> -	int work_done =3D 0;
+> +	enum can_state new_state;
+> =20
+> -	if (psr & PSR_EW && cdev->can.state !=3D CAN_STATE_ERROR_WARNING) {
+> -		netdev_dbg(dev, "entered error warning state\n");
+> -		work_done +=3D m_can_handle_state_change(dev,
+> -						       CAN_STATE_ERROR_WARNING);
+> -	}
+> +	new_state =3D m_can_state_get_by_psr(cdev);
+> +	if (new_state =3D=3D cdev->can.state)
+> +		return 0;
+> =20
+> -	if (psr & PSR_EP && cdev->can.state !=3D CAN_STATE_ERROR_PASSIVE) {
+> -		netdev_dbg(dev, "entered error passive state\n");
+> -		work_done +=3D m_can_handle_state_change(dev,
+> -						       CAN_STATE_ERROR_PASSIVE);
+> -	}
+> -
+> -	if (psr & PSR_BO && cdev->can.state !=3D CAN_STATE_BUS_OFF) {
+> -		netdev_dbg(dev, "entered error bus off state\n");
+> -		work_done +=3D m_can_handle_state_change(dev,
+> -						       CAN_STATE_BUS_OFF);
+> -	}
+> -
+> -	return work_done;
+> +	return m_can_handle_state_change(dev, new_state);
+>  }
+> =20
+>  static void m_can_handle_other_err(struct net_device *dev, u32 irqstatus=
+)
+> @@ -1031,8 +1043,7 @@ static int m_can_rx_handler(struct net_device *dev,=
+ int quota, u32 irqstatus)
 >  	}
 > =20
->  	m_can_coalescing_update(cdev, ir);
-> +
-> +	ir &=3D cdev->active_interrupts;
-
-m_can_coalescing_update() can change active_interrupts, meaning the
-interrupt that caused the interrupt handler to run may be disabled in
-active_interrupts above and then masked in this added line. Would that
-still work or does it confuse the hardware?
-
-Best
-Markus
-
->  	if (!ir)
->  		return IRQ_NONE;
+>  	if (irqstatus & IR_ERR_STATE)
+> -		work_done +=3D m_can_handle_state_errors(dev,
+> -						       m_can_read(cdev, M_CAN_PSR));
+> +		work_done +=3D m_can_handle_state_errors(dev);
 > =20
+>  	if (irqstatus & IR_ERR_BUS_30X)
+>  		work_done +=3D m_can_handle_bus_errors(dev, irqstatus,
 
 
---2e38c85892acb2a28aa9c9c170304678bd4f0f3265d646caeeeb3f8e67ff
+--8030d55e11177121433a9ebb9e4a605ad54d0a0699010de488929059151e
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaME5uBsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlPh
-JwD+O882FfXxbmgBdEqU131VdRliujOf0g8vLBYeCBmbUP8BAMU2SEytkBNKdis0
-htuDc2xS83czxVfU4r/5EMimHwcD
-=ewUL
+iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaME7MRsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMSwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlOS
+8AEA/Cz2GJhok5svEAkYHHWsmzLyszwnF5r0b55RL8ER42MBAMfpsfCTPI8cu+0P
+6IlWMBIo+cSY4NQOgdHs7ffWTvIK
+=cVYp
 -----END PGP SIGNATURE-----
 
---2e38c85892acb2a28aa9c9c170304678bd4f0f3265d646caeeeb3f8e67ff--
+--8030d55e11177121433a9ebb9e4a605ad54d0a0699010de488929059151e--
 
