@@ -1,48 +1,87 @@
-Return-Path: <linux-can+bounces-4636-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4637-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04A9CB51535
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 13:14:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A556B515A7
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 13:28:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB36C1758EE
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 11:13:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 359613B5F57
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 11:28:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4532631CA7E;
-	Wed, 10 Sep 2025 11:12:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6879A27E7EB;
+	Wed, 10 Sep 2025 11:28:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DcDqAues"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NzVBvk0x"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CEB431CA56;
-	Wed, 10 Sep 2025 11:12:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49C0279DCB
+	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 11:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757502751; cv=none; b=Qhh57p6bcNbi84WTeW/v1xixOTOmvlek524GmmN+cA2RNmJqgMDGLOL33NjUTtpFzz5qvOcSn3GXJXY9vwSqfZxKg0forZieKzgyA+IAp6fKC3QvaZP26i61a4GCIMNt4GwZtN8fudXF1RPfFLVBCOSlWg/SciwsD7Ci4S7FLQE=
+	t=1757503705; cv=none; b=KhlDuXtc+0nRpdQuGnlwBPJ3RehJ2Br4v3S4laU1uP85+XBnUfau0HMw29mnlOLcxPjNTb/8XHt3p++qo0ZjvLxdWsKCbAYkofe7NoA0gkeO8ipGfgGeJUmwcid7cAr8o48SVjkR1n6KsdYO0oRnwhdfX9tVKdP5lm7fagEmZXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757502751; c=relaxed/simple;
-	bh=n59Dbh4oSSuthhXX8IsAwVjZfG6Ul64POly2My1uQhk=;
+	s=arc-20240116; t=1757503705; c=relaxed/simple;
+	bh=gzm3F8ivWRsE+wMhk0jcUcCb5z8TdXLB+FZi3iYut9o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ceWZFBjlShrKjz1Iv05HgPHNV0NDNsajR9itPfpKPOz3DcOfRoksAa7CAnsa3jLuWOfL2fLy/R1jU8yRBnWdxkbsDHW8Cn9CVYQfqk/RtiyFYj0ZGau08k8lARApR13sJZTcoV5iZk9gtVzjXK08JXULh2aBF7M+ub0XrczIbX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DcDqAues; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BE66C4CEF8;
-	Wed, 10 Sep 2025 11:12:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757502750;
-	bh=n59Dbh4oSSuthhXX8IsAwVjZfG6Ul64POly2My1uQhk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DcDqAuesmMWu+u16cziwPbVd1dqBmO0MWp/Ya0RaIJmpVzH//z1Q5uCafk7lVqdJP
-	 hebe7CfiVOPyamL368EkBcBNx1AEoGYGT7xmDTilPl24foxtYOhn59q8VriWVqgK1e
-	 W1zZCyjzvSXFkirA9FoHT569kpzthfKmZI+ycL1twBu3FT6eIyWXd8QxyUnevkD1CC
-	 im+2gZmOfysMNGF79GwgrzjL7hlekiC8y8XZf96n3q3Ce9yV0/B2RLfCB6nMj3Gaxq
-	 jsJis4rXax0q9nErFkGSJlEHFe8izyvuygeIIzDjb+VDBmvOVCebwny11YdMZcqGhL
-	 MjdFlFrnIXv+A==
-Message-ID: <f6fbc5cc-392d-4914-a08c-e70091ca3371@kernel.org>
-Date: Wed, 10 Sep 2025 20:12:27 +0900
+	 In-Reply-To:Content-Type; b=RPPT9twWDIrls/yW8JqaQySMgFSAi81gIt/B+6XDSDOF/F6r2ob7LfbQ5Sa/z43x2fiwTAGdvf1Z+WRID00kVVUYms38GFCOGhtMj59F9xkYstJ6CfAy9Hpja3+ej7YMiMwX3POFecrfoAojwQIhp984FMT7EKfxpj6vYwVLQig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NzVBvk0x; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757503702;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=s/xLdEa9NYg82axRGOeMagzWxKZkX5+y179Pb1sa7+E=;
+	b=NzVBvk0xOjp7z19nEVXEzrXFF7OPQJlePMYZeDkW3xjztJgnrJdK1IDBl85B3twMM7AMP4
+	rpeJJSAfKZDt/+2vAJ7LEj5qX2ODMcFwZxho3KnaN0BLS1l/QdITLGsliv0kkpRZ6q8ad9
+	UbWCAzDzgOCNFvDrfDhYL0Gv/MT55cA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-76-bG4XET_WNgCEAZdPWiaytA-1; Wed, 10 Sep 2025 07:28:21 -0400
+X-MC-Unique: bG4XET_WNgCEAZdPWiaytA-1
+X-Mimecast-MFC-AGG-ID: bG4XET_WNgCEAZdPWiaytA_1757503700
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-45dd9a66cfbso48115755e9.1
+        for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 04:28:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757503700; x=1758108500;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s/xLdEa9NYg82axRGOeMagzWxKZkX5+y179Pb1sa7+E=;
+        b=VHSHRXLYj7OH7t2dnHoLms99bhrDGAbN3IMy3EQJAE3hzzoeK6WRGwAe+MmaLMGS6X
+         iSP+YVNT4DXhgb4mGIb+p8Fb20EGIm0+dyF5Nsgjnz08909CQNoY9DEs2CR5hO4ijXVR
+         pShQ+uiduTGKYIrxcR6F2vCuuSqDpfovHdf+kfgIh0i7vkzYojyJ9a4PwSCM8p7dxOP1
+         iYdenGvzbVkXfVS0Mcz9pPw4uE7tg8YZo4MH4nvleoq6MUNZ5bZijuL5C7F9w2FZuQts
+         zYfCIcPL5NTmEl3MF6t0DrhLu67fjBALPQgYQK5gmOESzYDWDP8g9vEaK2mzqrgALFA6
+         zwAw==
+X-Forwarded-Encrypted: i=1; AJvYcCXt0D/drcrHAMixnA/tf2w6+MQMAYtlctEMeoIfl1phtU3DZtd9+SqEz8o20AD5imvHjrsehaGh9mE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwE+fZGuR4Jv3LbkudwfC2W7LPlHAg6/AFeF1QXmPS0BjUpJyUN
+	SskqTD1mVrYEeQPBLW/HO0BlitCe7cXW5xFEmYR5+2ZVUmHFP4QsqBSpbLvIc7rprYJWQCBFr9K
+	GbT3UC8e350JYmhkqMjD1ZaLoc6Tu7wDCnqLe4TanQKhrf6qH9IT+N+j/D9SqIg==
+X-Gm-Gg: ASbGncsJVcz89A9NUhH4iIAhusbtY6WNiyrBXTtrZWmdRb2A3Fhyu8aBP0I39eJFJvB
+	7AEP73xIEd0+ADUnRw7ual5o5xzkhVviZvJEmdtaQaBGQKXS9V+YybmSCjYkspJpgcvcHQR62Sr
+	mfHmk8XIkkHBzGSiqCamgDNqxgNDPi33EoFCqajRw/T3OPlsKjj1zk0/pgccI1b0gXy3eCdQeLE
+	3fz9uIl7tXrUOO6rgnvn46qx0HIPkB2D5JsDTEZZCimP/ylH3cy2SLgc7L9lP+uBmXDF20igDBh
+	zhIzqSAxsbINCbpFY51Ds67ichk3v4EL8JOCPnFddPOp/A+XtQu55vof4TLCWiYjUngTfBsnqiV
+	evkiZP6eKFoQ9
+X-Received: by 2002:a5d:5848:0:b0:3e0:152a:87b7 with SMTP id ffacd0b85a97d-3e643ff65a8mr11134655f8f.41.1757503700125;
+        Wed, 10 Sep 2025 04:28:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFTBQtFcvzi2V8WZkeFurWwi1Ly/HO/upO55NveOTrwxl4mWUJUFpXmy+dZri82kAe4vbD1pg==
+X-Received: by 2002:a5d:5848:0:b0:3e0:152a:87b7 with SMTP id ffacd0b85a97d-3e643ff65a8mr11134635f8f.41.1757503699706;
+        Wed, 10 Sep 2025 04:28:19 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e75223f5d7sm6402712f8f.53.2025.09.10.04.28.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Sep 2025 04:28:19 -0700 (PDT)
+Message-ID: <0ab052de-5187-467d-974b-aa9f9533621c@redhat.com>
+Date: Wed, 10 Sep 2025 13:28:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -50,70 +89,34 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 04/20] can: netlink: refactor can_validate_bittiming()
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
- =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>,
- Robert Nawrath <mbro1689@gmail.com>, Minh Le <minh.le.aj@renesas.com>,
- Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250910-canxl-netlink-prep-v2-0-f128d4083721@kernel.org>
- <20250910-canxl-netlink-prep-v2-4-f128d4083721@kernel.org>
- <20250910-outrageous-liberal-falcon-9215d3-mkl@pengutronix.de>
- <1c7024ba-60fc-472d-982a-ab45b4f23748@kernel.org>
- <20250910-quaint-weightless-narwhal-658e26-mkl@pengutronix.de>
+Subject: Re: [PATCH net 2/7] selftests: can: enable CONFIG_CAN_VCAN as a
+ module
+To: Davide Caratti <dcaratti@redhat.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ linux-can@vger.kernel.org, kernel@pengutronix.de,
+ Vincent Mailhol <mailhol@kernel.org>
+References: <20250909134840.783785-1-mkl@pengutronix.de>
+ <20250909134840.783785-3-mkl@pengutronix.de>
+ <00a9d5cc-5ca2-4eef-b50a-81681292760a@ovn.org>
+ <aMEq1-IZmzUH9ytu@dcaratti.users.ipa.redhat.com>
+ <aME2mCZRagWbhhiG@dcaratti.users.ipa.redhat.com>
 Content-Language: en-US
-From: Vincent Mailhol <mailhol@kernel.org>
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250910-quaint-weightless-narwhal-658e26-mkl@pengutronix.de>
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <aME2mCZRagWbhhiG@dcaratti.users.ipa.redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/09/2025 at 19:55, Marc Kleine-Budde wrote:
-> On 10.09.2025 15:43:00, Vincent Mailhol wrote:
->> On 10/09/2025 at 15:13, Marc Kleine-Budde wrote:
->>> On 10.09.2025 15:03:29, Vincent Mailhol wrote:
->>>> Whenever can_validate_bittiming() is called, it is always preceded by
->>>> some boilerplate code which was copy pasted all over the place. Move
->>>> that repeated code directly inside can_validate_bittiming().
->>>>
->>>> Finally, the mempcy() is not needed. Just use the pointer returned by
->>>> nla_data() as-is.
->>>
->>> The memcpy()'ed struct is guaranteed to be properly aligned, is this
->>> also the case for the casted nla_data() pointer?
->>
->> The NLA attributes are aligned on 4 bytes, c.f. NLA_ALIGNTO:
->>
->> https://elixir.bootlin.com/linux/v6.16.5/source/include/uapi/linux/netlink.h#L248
->>
->> Which is sufficient for struct can_bittiming which also requires just 4 bytes of
->> alignment as proven by the fact the the code would still compile if I add this
->> static assert:
->>
->>   static_assert(_Alignof(typeof(*bt)) <= NLA_ALIGNTO);
->>
->> But I have to admit that you caught me off guard. I did not think of that. Maybe
->> I should add above static assertions to the code to document that what we are
->> doing is correct?
-> 
-> Yes, make it so!
+On 9/10/25 10:28 AM, Davide Caratti wrote:
+> while the enablement of CONFIG_CAN_VCAN is still necessary, the contents of selftests/net/config need to be preserved.
+> @Jakub,  @Marc, we can drop this patch from the series and I will respin to linux-can ? or you can adjust things in other ways?
 
-I applied the changes locally.
+@Marc, IDK if you usually rebase your tree. If that happens, I guess the
+better option would be squashing the fix into the CAN tree and send a
+new revision for the PR including the modified commit.
 
-Let me know when you are done with the review of the other patches. I will wait
-for your other comments (if any) before sending v3.
+Cheers,
 
-
-Yours sincerely,
-Vincent Mailhol
+Paolo
 
 
