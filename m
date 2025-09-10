@@ -1,227 +1,159 @@
-Return-Path: <linux-can+bounces-4623-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4624-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AD43B50F50
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 09:28:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D06C8B50F9C
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 09:38:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B68774E0CF0
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 07:28:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 856074434BE
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 07:38:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72CE2307482;
-	Wed, 10 Sep 2025 07:28:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 504D730BF60;
+	Wed, 10 Sep 2025 07:38:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="ZOc1kUBr";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="QlY1AK/R"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IU07zJzz"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.219])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F912C2368
-	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 07:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.219
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757489290; cv=pass; b=VtVt8wL2Iv19YAND2QO1+T41x06Yew5N0CW+3PldeO4fmXE9GUtSQ/s7hN1py40e1kQ9HEYSn+zV3AZwCwru3lHuls9YG0anjeAqCiWokP/6oO3aikVHL5jEwHDFeUeXKHX4IWXYmyRy9yKIEEPxztCPHToc9D8XNnnXulCj2G4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757489290; c=relaxed/simple;
-	bh=d6j3uwcWJeHAD3u5Fu5KH+SDIu/ObMlP3O9ZqWu7qFQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=XYm/x1rjPk7pe+ivXRhTrovIUWWNUHQ5nPmfgKqtftV0+NKcxtbzGIm0aOHRY2I2Zh91btdlbtLMNkFCueUw5go68kbTHHSfdxyov+WBLDntH26OPHJzsJdZu1a1nS3kFiaFm7l3YONHI2jTblEgEZhK2s3hq+MzDnpap3pDRmY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=ZOc1kUBr; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=QlY1AK/R; arc=pass smtp.client-ip=81.169.146.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1757489280; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=IjGYcmeAECvOmGwDW2YZRhr8HMf2s05VLUjV218MA9qbnKnSooYoPc/ERIdDr+/5gc
-    dUozguLAkE57DyEZdn7qkbukSv9q260kvucR0hL8gnvr6y5IEIZjhxXzxm7KpztN1brp
-    +DGYhhu7lTCynGM90HAj9KKv+uVtyYJl8ksZSilcW70gP5NrijruWLDlobaxNJPvk+8K
-    wzoaBZNJkyLWLFfGlv81Qv+q07wUpcFj3FjAEyXD07Ebe77GkGYoulY2VBmwAChAlUVe
-    By48s/jwv+KzsBcTXKa52Pa74HrauhzCy2B+P/qnKFBd3x8shkR9DOCnwXeWlNr5z9lG
-    XEvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1757489280;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=L1nDd/9kuk6mEBFcBdBlRBH92QCDuu24E0B4/UcnuJg=;
-    b=dxCViuTeSTXyQsEZXNc4Fu+nyifvIAgQa1UqeGwYnc3aBBPgnVesNhE5BLOVqrmfix
-    9FO/TCSPT/bOcdByXcJuUVYcGj8K2NAKTwG9kXktWYhS86ShsIKiJXpMcLcWGy4qBxKs
-    azo4R0OHHPi1WDfsV8dvxVznjRHQUVQSkQwLBSMihkVFEijQmfDTEsMBKdBPpPjYm7K0
-    0lkTwXGNIkYAa1uQs7TWHJAKefk9XsT9BggVVKnLsmhPE8ZsVdU4hWoHlXP82wk4cibb
-    QTIBgSvDb5IrdOhWa0lSAvKwYlnu+oAweJFBd+K17kENd/8Qi5ywCeOorWnoXLh2x2Jv
-    cGRw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1757489280;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=L1nDd/9kuk6mEBFcBdBlRBH92QCDuu24E0B4/UcnuJg=;
-    b=ZOc1kUBrsI2iwM7fpcp6yveBkz8YQo2ftaqh9p0hm+pFK5wWr6E8CKmXDS9PbLQhuR
-    7vW52i/oOK6xlmMjDynUw3GPXQJsmKP5W0yh3AlCrZqVrA/X7seakfSyoyv2Zox/Zh6a
-    UVRDJLd3JPG+LswZdjYsc74oCD/lSM0hh2B8W3blMecq3cVB5kpAktRvnSCn1sNs8uj8
-    A9tb+Fx5syoBy+ghpLCtNE5+I73XxIWevotasSF0+lp6X6vxYjgztP6/rzTgG/HP7rAH
-    TrEzDnRxA9zp4bgos+iVB8v4xc8xB1osUwmok/y8KEPgrUwPv1lOutMh86f45I8CrnkO
-    mySw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1757489280;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=L1nDd/9kuk6mEBFcBdBlRBH92QCDuu24E0B4/UcnuJg=;
-    b=QlY1AK/R/VDOm7tlm4GSwlSCdEwHP7O1yO9/AnPvy74zPa/NxNlNOT/Mz+5naTFuqW
-    /w9uWfRBg8TG85gkMKAw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 52.1.2 AUTH)
-    with ESMTPSA id K5d36118A7S0nnZ
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Wed, 10 Sep 2025 09:28:00 +0200 (CEST)
-Message-ID: <20c5c885-0bab-4c42-82c6-e98571a5d19d@hartkopp.net>
-Date: Wed, 10 Sep 2025 09:27:59 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698E63090E5
+	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 07:38:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757489887; cv=none; b=ipzHgbUxZ5ESXgrU9beeLdhR9+0BcEWmyvIPlm7K7e/zFc15eEsYe0wCZ3F5VLOVVeZ0MM4Bonm0SohnBVALyNy+j4dn0ZhxvEjyf9cmesuqR6/Pg34FEpXGwu+FUe0VFxcC0Q595vZvfPtkRNEqEdKXJ4S4NjdxTWJVsYiSdvs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757489887; c=relaxed/simple;
+	bh=L4oGK3PeESdOUWBAPXytjrHYWvgkxLGGvD9Z9Ir4ITA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IAVm7FOmADiIxTovKD0ifB8gQ8KwfuCu/sjN0JplMiV1PQdm1bFxDTerEVrCTmG1BrOMfvH+vy0m4XKqWwhzhYdoKSXr7NIB48o/JHONRlKsMjC75GrY4P5vpdsn3Zu5apk/3XR6eEc5l73AHwR2IqZkP/35Cz5zmz5HYxQSdX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IU07zJzz; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757489884;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=otk6o+qV+/FMnKKwMq2caJgygHkIl+S0Kye0WkDEbiU=;
+	b=IU07zJzzmzek2lE0S8GKgs1AbL5bXUSswdA4/9vkvmASWV653jx50J+UClC3J6Ncyvk5YQ
+	Nbi84Cd2bv50I5TfPIRWAYt7IBFpgKnQNSCJQJNfpAeFkuT4qQjNhaOCKUkDPcYvridR6X
+	fghMoaCuSkH1SXpFWSCTDqcPrNXe1j8=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-252-nIPAkX-MM0qV3HDBksJVCw-1; Wed, 10 Sep 2025 03:38:02 -0400
+X-MC-Unique: nIPAkX-MM0qV3HDBksJVCw-1
+X-Mimecast-MFC-AGG-ID: nIPAkX-MM0qV3HDBksJVCw_1757489881
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3e2055ce94bso3942374f8f.2
+        for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 00:38:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757489881; x=1758094681;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=otk6o+qV+/FMnKKwMq2caJgygHkIl+S0Kye0WkDEbiU=;
+        b=CtX3ix6ENOHXvWItLABlat3jwH3DtNq+QluVmMJZxRSV6JtM3iAdy5oT20yGfRh67j
+         NuMeEosREp+G6ug2ZAGd18W4ywTy4gVx466NZvJMa5gHeCbu/MXjB2gX+GVq8ImisOW4
+         5M34IOc9S0X/yRSn+C1r5dUFbpOri0g4xQtgh/jzuWAgT0A9Zdyjwrh9WpWMCGaJfD3l
+         ZMdrusqJLNyNUZnMyJbQiVRPiNZo0JyVUQQ2g2e7NESejlbWoEIJx/kTP1XreARiAeVl
+         UQf6B8hs/ruNFb3J9eGFm+gCBNixcWUBNsruOM7DxHstFeevQHeAtLwi+8EwJq7sXSp5
+         /NxA==
+X-Forwarded-Encrypted: i=1; AJvYcCVSxXqT9FW55bYtIIwHo9vjJRejPdiyKw+MZngxkWdi44E6NoO+wLLqrLfJcz5qvq/ZVjaf92R6sp4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzw2iu9wMwljaXFOY0TqwalJ8TcdOMllKpjlOcw2ZuF4K4cX9Dr
+	7wMA+A29AOFBBbdJKYGteKo9env06wDgNu0lncmwUYw9UMaVVOZnTbWm1whKFieIRcXXX1bitnH
+	E5NNpLXM/U4i7Jgzt/zHTlbKSBOxoIaeYmbTzoICxvuenKxNWaAH8bW0P9PwEUg==
+X-Gm-Gg: ASbGncsdfl5qJgvXDinxHTEi+fKhhigi1y/Cn9dKlhvpq5I3cnDiSKH3RKARqFkT5Ka
+	U9tehMy98lUQiLBimQJ3DfhI4AEuzNmnFwfqyx7jaw6zJEXjlKf/xjAMGylHWfFxayKuS53NurD
+	3WoEwQ7/QO7v6vHweOmxp9nx1G0OoE14OeHlEYc/6ktLHS46zTK29xp8ZRS8HTm7KGTusKzmzX6
+	4CXQtYImhU/QNUqOw24HBrG6unMBKpnR3W0Rz8LXgPJcbP7O/4YK16dbvFZ78Ie79abtod7bVRS
+	kFdV7QyjPCopiecDmap1rVBVz2/ilIyac5D0Jw==
+X-Received: by 2002:a05:6000:22c2:b0:3e4:d981:e31f with SMTP id ffacd0b85a97d-3e643b19aabmr11528070f8f.60.1757489881243;
+        Wed, 10 Sep 2025 00:38:01 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEyP8y3KVJ6zMVMB9gGFAjF8KANG8pbRqLn4LVXUxF7YZBu4M7nOCpMolRLtn28VeTTuaiB0A==
+X-Received: by 2002:a05:6000:22c2:b0:3e4:d981:e31f with SMTP id ffacd0b85a97d-3e643b19aabmr11528046f8f.60.1757489880842;
+        Wed, 10 Sep 2025 00:38:00 -0700 (PDT)
+Received: from localhost ([2a01:e11:1007:ea0:8374:5c74:dd98:a7b2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e75223e932sm5645025f8f.42.2025.09.10.00.37.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Sep 2025 00:38:00 -0700 (PDT)
+Date: Wed, 10 Sep 2025 09:37:59 +0200
+From: Davide Caratti <dcaratti@redhat.com>
+To: Ilya Maximets <i.maximets@ovn.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+	davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+	kernel@pengutronix.de, Vincent Mailhol <mailhol@kernel.org>
+Subject: Re: [PATCH net 2/7] selftests: can: enable CONFIG_CAN_VCAN as a
+ module
+Message-ID: <aMEq1-IZmzUH9ytu@dcaratti.users.ipa.redhat.com>
+References: <20250909134840.783785-1-mkl@pengutronix.de>
+ <20250909134840.783785-3-mkl@pengutronix.de>
+ <00a9d5cc-5ca2-4eef-b50a-81681292760a@ovn.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v5 2/2] can: reject CAN FD content when disabled on
- CAN XL interfaces
-To: Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org
-References: <20250909092433.30546-1-socketcan@hartkopp.net>
- <20250909092433.30546-2-socketcan@hartkopp.net>
- <f7b59c7c-30ad-4cf4-ad0e-bff0e39b3337@hartkopp.net>
- <7578f44d-d85c-473e-8e7a-65d1fc974e68@kernel.org>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <7578f44d-d85c-473e-8e7a-65d1fc974e68@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00a9d5cc-5ca2-4eef-b50a-81681292760a@ovn.org>
 
+On Tue, Sep 09, 2025 at 09:32:49PM +0200, Ilya Maximets wrote:
+> On 9/9/25 3:34 PM, Marc Kleine-Budde wrote:
+> > From: Davide Caratti <dcaratti@redhat.com>
+> > 
+> > diff --git a/tools/testing/selftests/net/can/config b/tools/testing/selftests/net/can/config
+> > new file mode 100644
+> > index 000000000000..3326cba75799
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/net/can/config
+> > @@ -0,0 +1,4 @@
+> > +CONFIG_CAN=m
+> > +CONFIG_CAN_DEV=m
+> > +CONFIG_CAN_VCAN=m
+> > +CONFIG_CAN_VXCAN=m
+> > diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+> > index c24417d0047b..18bec89c77b9 100644
+> > --- a/tools/testing/selftests/net/config
+> > +++ b/tools/testing/selftests/net/config
+> > @@ -120,9 +120,6 @@ CONFIG_XFRM_USER=m
+> >  CONFIG_IP_NF_MATCH_RPFILTER=m
+> >  CONFIG_IP6_NF_MATCH_RPFILTER=m
+> >  CONFIG_IPVLAN=m
+> > -CONFIG_CAN=m
+> > -CONFIG_CAN_DEV=m
+> > -CONFIG_CAN_VXCAN=m
+> 
+> Not an expert in the CI infra, but the link_netns test clearly
+> still needs these configs enabled in the common config file:
+> 
+> https://netdev-3.bots.linux.dev/vmksft-net/results/290682/56-link-netns-py/stdout
+> 
+> # selftests: net: link_netns.py
+> # 0.12 [+0.12] TAP version 13
+> # 0.12 [+0.00] 1..3
+> # 1.44 [+1.32] ok 1 link_netns.test_event
+> # 3.99 [+2.56] ok 2 link_netns.test_link_net
+> ...
+> # 4.13 [+0.00] # Exception| lib.py.utils.CmdExitFailure: Command failed:
+>         ['ip', '-netns', 'rhsbrszn', 'link', 'add', 'foo', 'type', 'vxcan']
+> # 4.14 [+0.00] # Exception| STDERR: b'Error: Unknown device type.\n'
+> 
 
+> Best regards, Ilya Maximets.
 
-On 10.09.25 07:13, Vincent Mailhol wrote:
-> On 10/09/2025 at 01:36, Oliver Hartkopp wrote:
->> Hi Vincent,
->>
->> On 09.09.25 11:24, Oliver Hartkopp wrote:
->>
->>
->>> -static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff
->>> *skb, int mtu)
->>> +static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb,
->>> +                      struct net_device *dev)
->>>    {
->>>        /* Classical CAN -> no checks for flags and device capabilities */
->>>        if (can_is_can_skb(skb))
->>>            return CAN_MTU;
->>>    -    /* CAN FD -> needs to be enabled and a CAN FD or CAN XL device */
->>> -    if (ro->fd_frames && can_is_canfd_skb_mtu_len(skb) &&
->>> -        (mtu == CANFD_MTU || can_is_canxl_dev_mtu(mtu)))
->>> -        return CANFD_MTU;
->>> +    /* CAN FD -> needs to be enabled in a CAN FD or CAN XL device */
->>> +    if (ro->fd_frames && can_is_canfd_skb_mtu_len(skb)) {
->>> +        /* real/virtual CAN FD interface */
->>> +        if (dev->mtu == CANFD_MTU)
->>> +            return CANFD_MTU;
->>> +        if (can_is_canxl_dev_mtu(dev->mtu) &&
->>> +            can_dev_ctrlmode_fd_on(dev))
->>> +            return CANFD_MTU;
->>> +    }
->>
->> I've simplified the above code and rewrote the commit message in v6
->>
->>>        /* CAN XL -> needs to be enabled and a CAN XL device */
->>>        if (ro->xl_frames && can_is_canxl_skb(skb) &&
->>> -        can_is_canxl_dev_mtu(mtu))
->>> +        can_is_canxl_dev_mtu(dev->mtu))
->>>            return CANXL_MTU;
->>
->> We might also discuss if we create a can_dev_ctrlmode_xl_on(dev) function to
->> check if the CAN XL interface has CAN_CTRLMODE_XL enabled.
-> 
-> I checked ISO 11898-1:2024 again and the relevant wording I can found is in
-> §6.6.21.4.1:
-> 
->    When error signalling is disabled, the node shall transmit and
->    receive only XLFF frames. It shall not transmit EF, OF and RF, nor
->    DFs in CBFF, CEFF, FBFF and FEFF.
-> 
-> TLDR; Classical CAN is deactivated when error signaling is off.
-> 
-> So, I think that we also need the same logic for the Classical CAN. The nuance
-> is that instead of using CAN_CTRLMODE_CC (which does not exist), we can check
-> CAN_CTRLMODE_XL_ERR_SIGNAL. Note that CAN_CTRLMODE_XL_TMS implies that error
-> signalling is off, so no need for extra checks on TMS. This is what I have in
-> mind at the moment.
-> 
->    static inline bool can_dev_cc_on(struct net_device *dev)
->    {
->    	struct can_priv *priv = safe_candev_priv(dev);
-> 
->    	/* Classical CAN frames are always allowed on virtual interfaces */
->    	if (!priv)
->    		return true;
-> 
->    	/* When error signalling is off only CAN XL frames are allowed */
->    	return !(priv->ctrlmode & CAN_CTRLMODE_XL) ||
->    		(priv->ctrlmode & CAN_CTRLMODE_XL_ERR_SIGNAL);
->    }
-> 
->    static inline bool can_dev_fd_on(struct net_device *dev)
->    {
->    	struct can_priv *priv = safe_candev_priv(dev);
-> 
-> 	/* CAN FD is allowed on virtual interfaces if it fits the MTU */
->    	if (!priv)
->    		return dev->mtu == CANFD_MTU;
-> 
->    	return can_dev_cc_on(dev) && (priv->ctrlmode & CAN_CTRLMODE_FD);
->    }
-> 
->    static inline bool can_dev_xl_on(struct net_device *dev)
->    {
->    	struct can_priv *priv = safe_candev_priv(dev);
-> 
-> 	/* CAN XL is allowed on virtual interfaces if it fits the MTU */
->    	if (!priv)
->    		return dev->mtu == CANXL_MTU;
+thanks for spotting this, I was testing the patch with:
 
-		return can_is_canxl_dev_mtu(mtu);
+ # vng --kconfig
+ # yes | make kselftest-merge
+ # grep ^CONFIG_CAN .config
 
-The MTU of CAN XL interfaces might vary.
+Then it's probably safer to drop the first hunk - or restore to v1
 
-> 
->    	return priv->ctrlmode & CAN_CTRLMODE_XL;
->    }
-> 
-> (the above is not yet tested, so beware of silly errors!)
-> 
->> Currently my patches are based on Linus' rc5 tree where CAN_CTRLMODE_XL is not
->> defined. But I can rebase it on your b4/canxl-netlink branch if you like it.
-> 
-> I still want to finish the XL preparation series before moving to the actual thing.
-> 
-> You can do what is convinient for you:
-> 
->    1/ rebase on b4/canxl-netlink branch but I take no claims if your code breaks
->       after one of my force push.
-
-I will do this with my next attempt.
-
->    2/ add the flags you need in netlink.h. I will then chery pick your patches in
->       my series when ready and take care of any conflict for you!
-> 
-> I am going to send the v2 of my XL preparation series. Hopefully we can finalyse
-> it soon so that we can focus on one sigle topic :)
-
-ACK.
-
-Best regards,
-Oliver
+https://lore.kernel.org/linux-can/fdab0848a377969142f5ff9aea79c4e357a72474.1755276597.git.dcaratti@redhat.com/
+-- 
+davide
 
 
