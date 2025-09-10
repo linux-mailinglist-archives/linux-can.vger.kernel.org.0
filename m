@@ -1,49 +1,49 @@
-Return-Path: <linux-can+bounces-4614-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4615-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47708B50DC3
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 08:07:48 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F338B50DC0
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 08:07:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 120AA1C25D86
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 06:07:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 90EA94E1F8F
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 06:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8C730C601;
-	Wed, 10 Sep 2025 06:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB42630C62F;
+	Wed, 10 Sep 2025 06:05:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QWXnwgdM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DdlfD03h"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2532630C378;
-	Wed, 10 Sep 2025 06:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D2730C62E;
+	Wed, 10 Sep 2025 06:05:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757484310; cv=none; b=otBUVvp4KUH6RYYlnFsfE1wSR0WbxfxoFZL6RPQde5XXU6i1yp88cKEkfciWTTLgd7ohYPR5SIqXLSC4lW0TLOjGArlaWeYJmLuan1Z/hcqst6a/+X2yfBUv+LULUXzEZxQFQ7UxjL4lGMcc4SLXhRI+Otfm0mMzV6IIfgMcsT4=
+	t=1757484311; cv=none; b=EjhOzA86myAuNI7PbWQ3EGXxUyGn1v7JbRM5fj47yp+7Itoe3H8I+2whP8FTq6X7m40yxUGJbivnQNHcFM5SRQ4cckLL9+qVevyCRM04Q4G47BfiWiC3Xu2pHMRu/Z+1kHXGU6kxZf2S5kHdFfRzZQ5bZw//uO09ybksZpT9lPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757484310; c=relaxed/simple;
-	bh=929EtOm6sQD4/p82XQBc5sAI4DNI3zMGcd+VcIf3Fp4=;
+	s=arc-20240116; t=1757484311; c=relaxed/simple;
+	bh=TwzsJia/6Wex+hAdgCL3nGxx7qXiznIvPUUS1MM0RVM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FHnsdR0Tpz8uRMZP9pn+rMcPj7IfvcEiflaLKR+/E8hYk8BTmOUpQgsuvOZAU/PxSL7bnt/cxRVb2Dz8OF3JC0w3PIlTcxTTlwWaVph/vqRuMvzFU6m92AnGJ6lMEk61xaS47PPWKtnEAdvBl4FqefReBuHLR+UsMyX516m5LkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QWXnwgdM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 719F8C4CEFA;
-	Wed, 10 Sep 2025 06:05:08 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=ty0J38i2UdVmBVcq2XZpuyyVBfjCCthtkPZ77oadQDw+y++KFocn1e8xfLlVATuvOSgBVdCjtQk5Z3iPBkILijS8e5K9oqnBsTrO//DdL8DczppAA2/vq8AGmlHLl3/P4QQrQesWTJjN1lgiRydNtS00aQqadwJvk6A+qKZVaoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DdlfD03h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 046BFC4CEF0;
+	Wed, 10 Sep 2025 06:05:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757484309;
-	bh=929EtOm6sQD4/p82XQBc5sAI4DNI3zMGcd+VcIf3Fp4=;
+	s=k20201202; t=1757484311;
+	bh=TwzsJia/6Wex+hAdgCL3nGxx7qXiznIvPUUS1MM0RVM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=QWXnwgdMyeFG9HT9PoBcDVzfR+rP6ISiu0CM9E5cY5bCK/fTZ1mGDXpZDBXKYK0e2
-	 sapzHcgscSTlLi8cAOzlrksM/6GniM9HP5LIiImeY/s3EGG/83MOau6TqDGuyO9bbR
-	 yQ3lnDd8pA6i3PdoGu9SDKNjfH/FfukcZtr09a0gzkJBUWyewTuYa5Egg1otZcFlcn
-	 bWIJnV8D36+L8/jw0a6k91IolcnaemKtyoiG86y+Hz3Dtt6iKkc+fxiEwvqUU/Vm1q
-	 HBU1U6i0ICX1neX2zvNjXZDVPna4NPAuDlx2zxR0F3Du2iRn2duHEbm/Zd7wkDdqWU
-	 m7DQ0rrxzejSA==
+	b=DdlfD03hEupONDiJMXVXoUI+XltpS0LUedR2TFkW4DkdcYYDlucBBGSQPY/IRAanu
+	 oR6Elcuv9McCBj61BexcUmhCrLsP2WLAR4ociLO0JT7evPBmwa6JBLQKQm3MU9mJjY
+	 3rKjLJs+B66Lpg00NqzFaFtu9tGz678tcvDYLmJ0sPdo2re36cUR3KgUNfCB3Eu4+I
+	 GG8eJoSrGDHmm+4pEyTSgbIA1i25g4V3WHzgkLbkJECC1AhUspf1SxuCV0StY6bfRD
+	 BKxz5QyOXPPeyUDfS/hcZcXfJxqMN1l+OmaRwifQmN9MdfuzX5HQG5pGoqT3f3Q/JI
+	 MUamijbL2gdwQ==
 From: Vincent Mailhol <mailhol@kernel.org>
-Date: Wed, 10 Sep 2025 15:03:40 +0900
-Subject: [PATCH v2 15/20] can: netlink: add can_bittiming_const_fill_info()
+Date: Wed, 10 Sep 2025 15:03:41 +0900
+Subject: [PATCH v2 16/20] can: netlink: add can_bitrate_const_fill_info()
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250910-canxl-netlink-prep-v2-15-f128d4083721@kernel.org>
+Message-Id: <20250910-canxl-netlink-prep-v2-16-f128d4083721@kernel.org>
 References: <20250910-canxl-netlink-prep-v2-0-f128d4083721@kernel.org>
 In-Reply-To: <20250910-canxl-netlink-prep-v2-0-f128d4083721@kernel.org>
 To: Marc Kleine-Budde <mkl@pengutronix.de>, 
@@ -63,69 +63,68 @@ Cc: Vincent Mailhol <mailhol@kernel.org>,
  Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org, 
  linux-kernel@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2383; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=929EtOm6sQD4/p82XQBc5sAI4DNI3zMGcd+VcIf3Fp4=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDBkHRd52qGdf9xc26mUP/9K4Uu3Yx64iSen2L7WbqjSqd
- zlp2+zvKGVhEONikBVTZFlWzsmt0FHoHXboryXMHFYmkCEMXJwCMBGRPkaGv/0+R7xmX/Vi2V2x
- g2Gtu+Fj3UaW7NDb5zrm+32bLOd/iZFhtuR3pgge127VskOnl6dLll8riWGP2FK67wwjx1KzvdL
- sAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2111; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=TwzsJia/6Wex+hAdgCL3nGxx7qXiznIvPUUS1MM0RVM=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDBkHRd4ffJd+9oxZ8IrI5+I/1vEkMbWs6ixtyytqN/kRF
+ CHi8PhERykLgxgXg6yYIsuyck5uhY5C77BDfy1h5rAygQxh4OIUgInI/GL4X/x3u/cdtRaHPVwn
+ fj04VrOa3/h2vKDtt8953asZmqZ7zGRkmLasdkPGRu7Epyclduy6/WLr//yvF6S2BkWt/73kuun
+ nlewA
 X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-Add function can_bittiming_fill_info() to factorise the logic when
-filling the bittiming constant information for Classical CAN and CAN
-FD. This function will be reused later on for CAN XL.
+Add can_bitrate_const_fill_info() to factorise the logic when filling
+the bitrate constant information for Classical CAN and CAN FD. This
+function will be reused later on for CAN XL.
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
 ---
- drivers/net/can/dev/netlink.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ drivers/net/can/dev/netlink.c | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index e2f26898b83be8df8d2c4d0cd64b505f3c4a9b7d..39b7b0a0f5f48ce1765c201e7c3e56a85fd58740 100644
+index 39b7b0a0f5f48ce1765c201e7c3e56a85fd58740..d79a1559ca76dbff8dd1043bfd964fbbe82b1b9c 100644
 --- a/drivers/net/can/dev/netlink.c
 +++ b/drivers/net/can/dev/netlink.c
-@@ -567,6 +567,15 @@ static int can_bittiming_fill_info(struct sk_buff *skb, int ifla_can_bittiming,
- 		nla_put(skb, ifla_can_bittiming, sizeof(*bittiming), bittiming);
+@@ -576,6 +576,15 @@ static int can_bittiming_const_fill_info(struct sk_buff *skb,
+ 			sizeof(*bittiming_const), bittiming_const);
  }
  
-+static int can_bittiming_const_fill_info(struct sk_buff *skb,
-+					 int ifla_can_bittiming_const,
-+					 const struct can_bittiming_const *bittiming_const)
++static int can_bitrate_const_fill_info(struct sk_buff *skb,
++				       int ifla_can_bitrate_const,
++				       const u32 *bitrate_const, unsigned int cnt)
 +{
-+	return bittiming_const &&
-+		nla_put(skb, ifla_can_bittiming_const,
-+			sizeof(*bittiming_const), bittiming_const);
++	return bitrate_const &&
++		nla_put(skb, ifla_can_bitrate_const,
++			sizeof(*bitrate_const) * cnt, bitrate_const);
 +}
 +
  static int can_tdc_fill_info(struct sk_buff *skb, const struct net_device *dev)
  {
  	struct nlattr *nest;
-@@ -652,9 +661,8 @@ static int can_fill_info(struct sk_buff *skb, const struct net_device *dev)
- 	if (can_bittiming_fill_info(skb, IFLA_CAN_BITTIMING,
- 				    &priv->bittiming) ||
+@@ -686,17 +695,13 @@ static int can_fill_info(struct sk_buff *skb, const struct net_device *dev)
+ 		      priv->termination_const_cnt,
+ 		      priv->termination_const))) ||
  
--	    (priv->bittiming_const &&
--	     nla_put(skb, IFLA_CAN_BITTIMING_CONST,
--		     sizeof(*priv->bittiming_const), priv->bittiming_const)) ||
-+	    can_bittiming_const_fill_info(skb, IFLA_CAN_BITTIMING_CONST,
-+					  priv->bittiming_const) ||
+-	    (priv->bitrate_const &&
+-	     nla_put(skb, IFLA_CAN_BITRATE_CONST,
+-		     sizeof(*priv->bitrate_const) *
+-		     priv->bitrate_const_cnt,
+-		     priv->bitrate_const)) ||
++	    can_bitrate_const_fill_info(skb, IFLA_CAN_BITRATE_CONST,
++					priv->bitrate_const,
++					priv->bitrate_const_cnt) ||
  
- 	    nla_put(skb, IFLA_CAN_CLOCK, sizeof(priv->clock), &priv->clock) ||
- 	    nla_put_u32(skb, IFLA_CAN_STATE, state) ||
-@@ -668,10 +676,8 @@ static int can_fill_info(struct sk_buff *skb, const struct net_device *dev)
- 	    can_bittiming_fill_info(skb, IFLA_CAN_DATA_BITTIMING,
- 				    &priv->fd.data_bittiming) ||
+-	    (priv->fd.data_bitrate_const &&
+-	     nla_put(skb, IFLA_CAN_DATA_BITRATE_CONST,
+-		     sizeof(*priv->fd.data_bitrate_const) *
+-		     priv->fd.data_bitrate_const_cnt,
+-		     priv->fd.data_bitrate_const)) ||
++	    can_bitrate_const_fill_info(skb, IFLA_CAN_DATA_BITRATE_CONST,
++					priv->fd.data_bitrate_const,
++					priv->fd.data_bitrate_const_cnt) ||
  
--	    (priv->fd.data_bittiming_const &&
--	     nla_put(skb, IFLA_CAN_DATA_BITTIMING_CONST,
--		     sizeof(*priv->fd.data_bittiming_const),
--		     priv->fd.data_bittiming_const)) ||
-+	    can_bittiming_const_fill_info(skb, IFLA_CAN_DATA_BITTIMING_CONST,
-+					  priv->fd.data_bittiming_const) ||
- 
- 	    (priv->termination_const &&
- 	     (nla_put_u16(skb, IFLA_CAN_TERMINATION, priv->termination) ||
+ 	    (nla_put(skb, IFLA_CAN_BITRATE_MAX,
+ 		     sizeof(priv->bitrate_max),
 
 -- 
 2.49.1
