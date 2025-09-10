@@ -1,179 +1,140 @@
-Return-Path: <linux-can+bounces-4625-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4626-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83D57B50FBB
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 09:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 284A1B51139
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 10:28:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26BC217B5F4
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 07:40:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D29B4160D0D
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 08:28:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B53EA30CDB7;
-	Wed, 10 Sep 2025 07:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5267E30FC3F;
+	Wed, 10 Sep 2025 08:28:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ru+PpJXn"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SnC/5uog"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9051730CDA8
-	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 07:40:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAE430FC0C
+	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 08:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757490036; cv=none; b=JAbmlK0Xt0syMH/PFGlcS9Qa7OyLZ5F0cQex0xzf2ZAxcj3bjNUTEgYVMQQbfmkcT6BJj85ni55Yh+DtpxZKX2865IlnvL/ZhUwH2lJOPRz+S0/tucRRuTtSSLrSKEGAVVKotQi4KQeVGjcL5byVxCRUSdwY5EjMDJZ9eYJ3/xQ=
+	t=1757492896; cv=none; b=ObUnJcfMi7OjjT5kqR0V+qmB7PoqDF44bBF/JbrP7d+1eRXb4/Z50paqWTueCC5c0dlwmsLKuHp/tP8U+Hn/CCSvhk2HmyG2BnrcpQrr5Qr/7wgtJz+V/quUYudjEAUlrY34muYzr7UqoRC0zNBPv6W2W/DIJ3rcdK/3Q/IKGVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757490036; c=relaxed/simple;
-	bh=Ml8NTp7KsG8b6D9mcypD7vS7eJPxgdxlSH47q+uPPH0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Q9lcucaV3BWuXeb8itz7N8wPvhQk7NqmN0jYFS1dtQjJBeBwrQDFUn1bkBj+d6mwCPm1JaC1nqNOWzgwYE8GKZ3xZkWxIy25UBFBG0tUYXdLkKCxORxzkdhysi2updp/xhLyMzepHZ+qzKO9In9FhJPWocokbLfp7/akdY6YzKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ru+PpJXn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF1BC4CEF0;
-	Wed, 10 Sep 2025 07:40:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757490036;
-	bh=Ml8NTp7KsG8b6D9mcypD7vS7eJPxgdxlSH47q+uPPH0=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=ru+PpJXnupzh3oUAF9mFdWFXEMdGNR3Ffda8JnZLak6fcwJ/tT8kpcRKLHVbaj19j
-	 7FTVVPZPOh8I1zC6Z0cLSMQjQt8VflvLwmOWvGKLUNQNvhf/EZXCh/MjS6fPrKeWsj
-	 gqkksH2BXlvJYSLkVIjFQfDR1To8kFAHijt9yASGjcXuR0Z0ouDkQ1GLrgFw/19DLc
-	 TXeHKpLedY6xsL/aQH/U+cEciVf8M44RqcxZ9o6uuMb5dqEGqKIx2+l+/A3FReQf5e
-	 HpIpxn4N4WKpQbuF9aZROD3OrtXX4YgegcjVHAyTRjypBklkr6sm4RwN0kRIdDSWS6
-	 vH3AfziHVxncw==
-Message-ID: <552631f3-15fe-4bb3-a512-1eaca57be5ca@kernel.org>
-Date: Wed, 10 Sep 2025 16:40:34 +0900
+	s=arc-20240116; t=1757492896; c=relaxed/simple;
+	bh=vaX7Ju+p+Z3MWIpBaMIHx9c7/gUB47qSlUxX61hFoPc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=di7QspJow/qG3IKUmB5DKRdJ/cUkgcvNkBvRJDOxg1IQutHKGJBTzDD974d+IWiIl0ZeitInLFeDO3USV2KjX00Z9zhvROo2yHbcODsLol649THgI0e5UlWYCm6hV35pmHfmrQz1TpOMiozVHsgv9YQvOWKSOgEfpDQmJ83unfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SnC/5uog; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757492893;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lyl88Wjtp1RCxQS+mXtK5muxD+C3zmjvgsqdrJfM01s=;
+	b=SnC/5uogLEJ0/LsdWmaacPWyOPv1cxVPX7CNW4CNAdm0R+mTxVo3tJhmp+bVsjrv4+/SFM
+	wDZ/RpVhds6c0+lOVq2jP3WEcm1CF/bR3mYVEZwtd23WxC5d0/O3vQ9SJ3VKASuxaW+MT5
+	IfmHqnQvLpZqO6nrtcyQ7+i+wY83kPA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-21-HfCl9NBiPPWt4WRsCJV4sw-1; Wed, 10 Sep 2025 04:28:11 -0400
+X-MC-Unique: HfCl9NBiPPWt4WRsCJV4sw-1
+X-Mimecast-MFC-AGG-ID: HfCl9NBiPPWt4WRsCJV4sw_1757492890
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-45deddf34b9so2333135e9.1
+        for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 01:28:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757492890; x=1758097690;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lyl88Wjtp1RCxQS+mXtK5muxD+C3zmjvgsqdrJfM01s=;
+        b=nVa99K1qEr+4bZCAfyNge8/Xz/hPNyNVAzhswK/lfK6rm5sKYDSdFycL11YYx/sASp
+         bHQUcF8tx6me0z2prB4CrIm7s47YWScINW+VprEiXlf86r4S+Qn78WVrflxMdP0c+VCo
+         6dqrfur/xXj/I4A1WqWeGycrORDUZKcsMf+BamwGwiIg/4WybLssqeH+OWR9i3lOvSsD
+         7eDGZl5UMsmnv99U1WFh8bVdMqmAx988QnPjm7FhoECVlNkbbDxKAhNNm5JBuSAoIQ7J
+         r8IVRlPwbLetMoRWRjVc1F3nC0NS5kTy3Y6xm3mCQZ/1iCxpLozmb8XcusdQ8F53crri
+         HoIg==
+X-Forwarded-Encrypted: i=1; AJvYcCWbuRoyNx9jo6hIKpDFG0THgmz+UERWACd43SDTfCHfkFr8YBIKXzocXV2zDdaPmLY7oplq7T46AS4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvAq6bDSrsZcCR1eWEFHeZRSxjB0c5iGeU81ShShjl0KNoa+FA
+	JHeh0OIqjR5Z9MI64wIMfYdE9K4c/Jp46Xrp5FWqGxRkx+nmGqyd+XeLWfbemwTapZoguZwYU5/
+	VCrM0efCzFnSOGsoh7jEhoNpn0/fBwYD0evCR7Lu8yquEAvqmCRxQdScOI/lMhQ==
+X-Gm-Gg: ASbGncsq6FMP3aQXs42w/ekbU1p/Pn3cK4gecKQmIJETUMbztf46jA1Z3FCM6gOWkLD
+	pjgqGFxvaJsmhzDOPfMgRUjcD/YG9Y8wG20OePcvh4Cq3aV9PmCoOYLJZbyCoosnQr+5gzroold
+	g56KMtB5XOFph5ntfTd8KMAYXqv8Cx6GKwkHcFARY1NACet0Tqq6d5HRXPO24959I/v62rHo/EC
+	nZ2xjMG6dZzYzaV51puulykdnBoECmJ5fz8TChFxteq7R6QNkoDViYFJU/aKsj7WBaPVCasDxoe
+	B8kmRnUzduEbKvZtEIx7iha5xWoMD1j3KL+cdg==
+X-Received: by 2002:a05:600c:354f:b0:45c:b61a:b1bd with SMTP id 5b1f17b1804b1-45dde220a2emr138989925e9.18.1757492890028;
+        Wed, 10 Sep 2025 01:28:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGpcTkn0wW4LsqJDafwujpAjLDY5EPkSvu6F/qT+LDRJgx5vEptRBgEGFHxNaolEYNmPJYzww==
+X-Received: by 2002:a05:600c:354f:b0:45c:b61a:b1bd with SMTP id 5b1f17b1804b1-45dde220a2emr138989665e9.18.1757492889566;
+        Wed, 10 Sep 2025 01:28:09 -0700 (PDT)
+Received: from localhost ([2a01:e11:1007:ea0:8374:5c74:dd98:a7b2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45df821f714sm18713505e9.16.2025.09.10.01.28.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Sep 2025 01:28:09 -0700 (PDT)
+Date: Wed, 10 Sep 2025 10:28:08 +0200
+From: Davide Caratti <dcaratti@redhat.com>
+To: Ilya Maximets <i.maximets@ovn.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+	davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+	kernel@pengutronix.de, Vincent Mailhol <mailhol@kernel.org>
+Subject: Re: [PATCH net 2/7] selftests: can: enable CONFIG_CAN_VCAN as a
+ module
+Message-ID: <aME2mCZRagWbhhiG@dcaratti.users.ipa.redhat.com>
+References: <20250909134840.783785-1-mkl@pengutronix.de>
+ <20250909134840.783785-3-mkl@pengutronix.de>
+ <00a9d5cc-5ca2-4eef-b50a-81681292760a@ovn.org>
+ <aMEq1-IZmzUH9ytu@dcaratti.users.ipa.redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v5 2/2] can: reject CAN FD content when disabled on
- CAN XL interfaces
-To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-References: <20250909092433.30546-1-socketcan@hartkopp.net>
- <20250909092433.30546-2-socketcan@hartkopp.net>
- <f7b59c7c-30ad-4cf4-ad0e-bff0e39b3337@hartkopp.net>
- <7578f44d-d85c-473e-8e7a-65d1fc974e68@kernel.org>
- <20c5c885-0bab-4c42-82c6-e98571a5d19d@hartkopp.net>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol@kernel.org>
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20c5c885-0bab-4c42-82c6-e98571a5d19d@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aMEq1-IZmzUH9ytu@dcaratti.users.ipa.redhat.com>
 
-On 10/09/2025 at 16:27, Oliver Hartkopp wrote:
-> On 10.09.25 07:13, Vincent Mailhol wrote:
->> On 10/09/2025 at 01:36, Oliver Hartkopp wrote:
->>> Hi Vincent,
->>>
->>> On 09.09.25 11:24, Oliver Hartkopp wrote:
->>>
->>>
->>>> -static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff
->>>> *skb, int mtu)
->>>> +static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff
->>>> *skb,
->>>> +                      struct net_device *dev)
->>>>    {
->>>>        /* Classical CAN -> no checks for flags and device capabilities */
->>>>        if (can_is_can_skb(skb))
->>>>            return CAN_MTU;
->>>>    -    /* CAN FD -> needs to be enabled and a CAN FD or CAN XL device */
->>>> -    if (ro->fd_frames && can_is_canfd_skb_mtu_len(skb) &&
->>>> -        (mtu == CANFD_MTU || can_is_canxl_dev_mtu(mtu)))
->>>> -        return CANFD_MTU;
->>>> +    /* CAN FD -> needs to be enabled in a CAN FD or CAN XL device */
->>>> +    if (ro->fd_frames && can_is_canfd_skb_mtu_len(skb)) {
->>>> +        /* real/virtual CAN FD interface */
->>>> +        if (dev->mtu == CANFD_MTU)
->>>> +            return CANFD_MTU;
->>>> +        if (can_is_canxl_dev_mtu(dev->mtu) &&
->>>> +            can_dev_ctrlmode_fd_on(dev))
->>>> +            return CANFD_MTU;
->>>> +    }
->>>
->>> I've simplified the above code and rewrote the commit message in v6
->>>
->>>>        /* CAN XL -> needs to be enabled and a CAN XL device */
->>>>        if (ro->xl_frames && can_is_canxl_skb(skb) &&
->>>> -        can_is_canxl_dev_mtu(mtu))
->>>> +        can_is_canxl_dev_mtu(dev->mtu))
->>>>            return CANXL_MTU;
->>>
->>> We might also discuss if we create a can_dev_ctrlmode_xl_on(dev) function to
->>> check if the CAN XL interface has CAN_CTRLMODE_XL enabled.
->>
->> I checked ISO 11898-1:2024 again and the relevant wording I can found is in
->> §6.6.21.4.1:
->>
->>    When error signalling is disabled, the node shall transmit and
->>    receive only XLFF frames. It shall not transmit EF, OF and RF, nor
->>    DFs in CBFF, CEFF, FBFF and FEFF.
->>
->> TLDR; Classical CAN is deactivated when error signaling is off.
->>
->> So, I think that we also need the same logic for the Classical CAN. The nuance
->> is that instead of using CAN_CTRLMODE_CC (which does not exist), we can check
->> CAN_CTRLMODE_XL_ERR_SIGNAL. Note that CAN_CTRLMODE_XL_TMS implies that error
->> signalling is off, so no need for extra checks on TMS. This is what I have in
->> mind at the moment.
->>
->>    static inline bool can_dev_cc_on(struct net_device *dev)
->>    {
->>        struct can_priv *priv = safe_candev_priv(dev);
->>
->>        /* Classical CAN frames are always allowed on virtual interfaces */
->>        if (!priv)
->>            return true;
->>
->>        /* When error signalling is off only CAN XL frames are allowed */
->>        return !(priv->ctrlmode & CAN_CTRLMODE_XL) ||
->>            (priv->ctrlmode & CAN_CTRLMODE_XL_ERR_SIGNAL);
->>    }
->>
->>    static inline bool can_dev_fd_on(struct net_device *dev)
->>    {
->>        struct can_priv *priv = safe_candev_priv(dev);
->>
->>     /* CAN FD is allowed on virtual interfaces if it fits the MTU */
->>        if (!priv)
->>            return dev->mtu == CANFD_MTU;
->>
->>        return can_dev_cc_on(dev) && (priv->ctrlmode & CAN_CTRLMODE_FD);
->>    }
->>
->>    static inline bool can_dev_xl_on(struct net_device *dev)
->>    {
->>        struct can_priv *priv = safe_candev_priv(dev);
->>
->>     /* CAN XL is allowed on virtual interfaces if it fits the MTU */
->>        if (!priv)
->>            return dev->mtu == CANXL_MTU;
+hi,
+
+On Wed, Sep 10, 2025 at 09:37:59AM +0200, Davide Caratti wrote:
+> > ...
+> > # 4.13 [+0.00] # Exception| lib.py.utils.CmdExitFailure: Command failed:
+> >         ['ip', '-netns', 'rhsbrszn', 'link', 'add', 'foo', 'type', 'vxcan']
+> > # 4.14 [+0.00] # Exception| STDERR: b'Error: Unknown device type.\n'
+> > 
 > 
->         return can_is_canxl_dev_mtu(mtu);
+> > Best regards, Ilya Maximets.
 > 
-> The MTU of CAN XL interfaces might vary.
+> thanks for spotting this, I was testing the patch with:
+> 
+>  # vng --kconfig
+>  # yes | make kselftest-merge
+>  # grep ^CONFIG_CAN .config
+> 
+> Then it's probably safer to drop the first hunk - or restore to v1
+> 
+> https://lore.kernel.org/linux-can/fdab0848a377969142f5ff9aea79c4e357a72474.1755276597.git.dcaratti@redhat.com/
 
-Maybe this is something that we discussed before, I do not remember, but how is
-it that the MTU can vary?
+And I see that the build [1] is doing:
 
-MTU is the *Maximum* Transmission Unit. I understand that the size of a CAN XL
-frame is variable, but the MTU should be constant, right? Why can it vary?
+  CLEAN   scripts
+  CLEAN   include/config include/generated arch/x86/include/generated .config .config.old .version Module.symvers
+> TREE CMD: vng -v -b -f tools/testing/selftests/net/config -f tools/testing/selftests/net/af_unix/config
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
 
+[1] https://netdev-3.bots.linux.dev/vmksft-net/results/291401/build/stdout 
 
-Yours sincerely,
-Vincent Mailhol
+while the enablement of CONFIG_CAN_VCAN is still necessary, the contents of selftests/net/config need to be preserved.
+@Jakub,  @Marc, we can drop this patch from the series and I will respin to linux-can ? or you can adjust things in other ways?
+-- 
+davide
 
 
