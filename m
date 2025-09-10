@@ -1,152 +1,121 @@
-Return-Path: <linux-can+bounces-4630-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4631-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9C22B511E5
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 10:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 16674B5121E
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 11:05:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B235C3A541E
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 08:57:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 079E43A01AF
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 09:05:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E4E311955;
-	Wed, 10 Sep 2025 08:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="WjVvp14w"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E4523115BC;
+	Wed, 10 Sep 2025 09:05:03 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4A231194F
-	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 08:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A8B24169F;
+	Wed, 10 Sep 2025 09:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757494647; cv=none; b=IYveTGqseVw/0czMf/Syj1u3Z2scGbwClPegn+QsavHIs1mv9as3Y+5C3GJRMo7ha2vt9tPuB1gpZzy/lOhuY3MFcQNtCIC1pdIiVMLoqR01GFA6LSNUMQVTMLshIoD69xMWb/Nxy3KLA3OT/cTS/K0dLsTqVrt1EluLrE9CRfw=
+	t=1757495102; cv=none; b=bwfI4FgC1+hTx0s8lf7jQwylZgl8D/iLTwKOTMhEroZzyCWgOnG9UU66Mt6AwK6qBsPoXa6t/IV7cY7eZ/RKiVTJP0JTl11FTAHjaOXOJpM7/lMC+ez3oPdM823taqARLP7N1iDAHBenUQZjhL7yqMN29w/aCzSCjUUgu98MoS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757494647; c=relaxed/simple;
-	bh=qoU3pKTQTic8pv+RfjHcpe00Wy+NEhUJEG/5b653yUM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=Qaq5dj1giTImiXIoR2ag6J8k0Gl0UcgJCMpvPg7l+kjf/m29I1SeWRJObTQT5i+LpkbjcBYTU5qu6X/ICcW4N5IXzx57DTO6DHS9X4Nx/1NpQU1bd/0j9WF/7/aXr67WOtX9Vxa5ZclUmPv7rDyqW6tT6ipSUPeHSdVuTUXZhMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=WjVvp14w; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b07883a5feeso83904066b.1
-        for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 01:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1757494643; x=1758099443; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=heZhxHLHkvE/mBdXQ2bJ/hfBM5y74AYhJs78IlNsTHo=;
-        b=WjVvp14wZZ1DaTZ/bSlVHnr3h1ulIADB8FMF9bn2IL+5AXYsAIrCjU8wKACgwXAQKA
-         O+5HfVNBDLwETPn94bb84f2fukiLG517lwvxlifn/EPQaKivwEt1+Tzjjk0gZAsrLRgG
-         MXMkD8rxoGm4PNW4tdYewzk7mWu+lmTjGTbM9tF4mYLgLFIK3oh3WHNmCR4ETzmCEqui
-         QTqdr6GvED4o7V7Q29oiL0p33TzHC+I0O2qDwXoojAYeMQfVdHIp5+sjARD3noDErDYm
-         DaABmS0znOfKT7G89uaPI/MtXvS4AsZKj10O3HiLt3adCj6kt8H2GbQumETarvxCxLLp
-         YWTQ==
+	s=arc-20240116; t=1757495102; c=relaxed/simple;
+	bh=ULFWEXXpgGK0E2bpHLUDxT3rhQSjMHmb6+xT2tdZ5Fk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pC+GueDDC+DpHDMvhd2dffaDwTuO35tBJ8He6v2wbKFaRdSAreryrExba1ozn6eluFatiDjh4xFbyuQV/xM7HPKDoLnKB3ba8dwwP5/68T46L4QlrDPtkvTej7ghRLZv2PFSIfBhKpCZpEiAwH8ZrZ2/cUl/iwqq2UG6BM/24Vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-8a756436f44so2634583241.3;
+        Wed, 10 Sep 2025 02:05:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757494643; x=1758099443;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20230601; t=1757495100; x=1758099900;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=heZhxHLHkvE/mBdXQ2bJ/hfBM5y74AYhJs78IlNsTHo=;
-        b=oGpwjW+z5Vrn00QSmQ1MTMl/lqxjntADxkyGJHsRmclnOxdFjFv0Zm8htldoFUkYQD
-         cK+XpLLclXtvBEdo60OfbFwmaCqg/eApjlJ63D6XbzQlh31S6xS1rslsjM89KZuxm/ny
-         UCRsPVihOcngSGkcTiodFtuOn/3O/lXej8RvxpTyQ94hL0piHWCPS7mcTyvk5SYvxQcW
-         CscEn/L0slA2+yplU+YkPkBQtGSD7dHD3P1USinbkrfoGWC++Qhl7roK7abvFdjvAG/G
-         fQ4ypYZKtiv40oO5ZJyE3JRAmNAY/Z20yK4UZON4pjL5713UdQKXzIrZVfrJEJiXICZC
-         x4fQ==
-X-Gm-Message-State: AOJu0YzOG2NpXHJDMiH2Jg+PnorQUAs7Xmox98AYQLsEiksUyqGUlM55
-	QWQTaF+B8epSczVLHyFpW0YBcLNHxvEIQ9kF8lwZnxj9rJnl0Mhb0WvxtRA92jUM4SI=
-X-Gm-Gg: ASbGncvKQJxPPG3ZAaWVPZB4hotxFQu1zsKKmqRUR0B2RzEJ5hAJp+waYgTExB7sJCR
-	za9TIHfUreFPrgixLYFzZ8Q4YyqyfXa75rw33SpNAqNddsU7Z11MgxNFbZNTzEG1LcXeErTqpOb
-	CI/sPZ9uM+U+T8CpSvMN5R/7YsRFoKCTm4CmGUQpspGVCmzFG4p3INxRzfDrEqnvmg5A8y5tdv1
-	KbPxvs5WkITvizsBgJvcX9h2r20vLndNAXG1LD9ipAVt2kvaO0T/Pu0U2PCfA0NRZktjGkNMKzl
-	sHLxqHnnd4aO7tUrkadCiJmhc97YUw3aEkDPKSQGlRdeJOc2F9tVavm39v7YdoTsJyb7xuhC3PZ
-	bfQtb+ZTbw32ZNDFCRX1tbT6Uyw==
-X-Google-Smtp-Source: AGHT+IEt2vwUHtHjKBZF2us6O9DmadgnAagqk9KkLFli/Ox9nZChWE5tuK6SmcWYPMKeP8iB58R8VQ==
-X-Received: by 2002:a17:906:6a17:b0:b04:25e6:2dc7 with SMTP id a640c23a62f3a-b04b140a60dmr1468322066b.18.1757494642610;
-        Wed, 10 Sep 2025 01:57:22 -0700 (PDT)
-Received: from localhost ([195.52.61.108])
-        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-62c01bdb977sm2946470a12.53.2025.09.10.01.57.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Sep 2025 01:57:21 -0700 (PDT)
+        bh=ZtJrr9PTITmK7BGrapAXxCBLg6i3ssIvP9U7oMzULN0=;
+        b=VXIayjO71E4SnzNbp5qLqU7M45cDRA7R7o1k/+OOAvw7+DlAyQ3IDTdzAnO/qLByPM
+         hWxFwK4o3zQokqwkMZyF06+6AvG7bVgPjDeXMapr3XEo0UCiNVnjhqQ62ER1HzMo/FRy
+         7Nk42jz0ihBgeXfyUn4l4C7uqdnv18OlksBnL4PlH2zWIrXHT/iDykpgYvFfqpuaFuKx
+         p0WSeHVy/LbhvyMDW7Atx/bGTxeaqPvDc+T6pjUj/kizid+aX83cZorZWJezHssZ52fS
+         lTdBvXB4QYSyEpWu1aRaYVp3icgfxJsmaRyWHkxTludUgLRHQVntJjCPQ1+cgqy1Vvfh
+         rtlg==
+X-Forwarded-Encrypted: i=1; AJvYcCVR32dYATwS23Pf1frd3ykDo759CsoBFgS421i0cgU0l06GQpoe9HydN++oqj3R3y/GAgMTelVqQr0=@vger.kernel.org, AJvYcCWo9jRvqtLUrXXldAnV2OxNqdNNqIJwqiu+MGLE8VH/PshWFTj+dkk1D9PebXSWQoO2Hl7kuJk9KZo0aDO/@vger.kernel.org, AJvYcCWs/UiUCNJFKOn6pus5CiLD2MLb8kAWPv8BjbfZ5G7VghIocxIL+5/UPcHnCQnCr0Sw/M6z+MQFDAYyI4C3YjLU1/s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyAsWeAS7asP4j/XJMpO7azCC31akKYIxzk2rKCpbiN3RhQr1B
+	Uh4L1LWLQsVIILFIAw2i31qTt7yunjJdoT8tpldSw6w4LnCi0NczN++pNE8uvgRh
+X-Gm-Gg: ASbGnctmUYlhU6NeRnYZ7p6UHQbPdd7RKDkc55WEk0lZZQI8KaY6laueX1o6pD90tjG
+	IZ0Ppelh/SJmI1+OMeJ2uRJjXTNUzNavpNePzIFU89tNvEL4cuWEs8r/sGudG/KfSoaC91+N+Z/
+	IwCU8Bx4B4Vu/uvip7gBv90+xiEzgX+2lKgeQjpczKlLOntGNWOMFXysNtzNKitGH5Zp2hMVVwy
+	yaaVc3+vvMLGomiwhm9KvInLMMFn2IHU8nISHEZvQhgWljILkQKJDbupszK4rudi1Nd4tdDdgis
+	Fy85+FD11sEQS8mDpZQY8or7wYKJ24wwLi+M7PcEjGXd64xaLOcfU2+R0nGzJgKnIkJQzeRBhSC
+	PgIIyd4Lqxn6paoEJcyVxP4AgDlRPW4qe+AQnQvx/52TKrCLAiiv7XyeaT+ZxykJ77bErXk0=
+X-Google-Smtp-Source: AGHT+IFeP7J+jcxHryU7Ykdq0/lcNDAds1tRRlGC0Q7rlDHspoim6c7+evYte/axaBH/cs8crxGTcw==
+X-Received: by 2002:a05:6102:f0d:b0:51e:609d:316c with SMTP id ada2fe7eead31-53d1afa353fmr5371444137.4.1757495099942;
+        Wed, 10 Sep 2025 02:04:59 -0700 (PDT)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-52aef459c9asm12131364137.1.2025.09.10.02.04.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Sep 2025 02:04:59 -0700 (PDT)
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-8a00c77a62dso3839682241.1;
+        Wed, 10 Sep 2025 02:04:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUiWozjvuVzoCN+FbTF+DA5sSaT075eHn6y2k3ATFirh9wMpbhJkUKgOUoKA6aIOKQ4HL0AWOjnwvc=@vger.kernel.org, AJvYcCUwrZ6YkkiSUqGSG+Lx0wnxs27MSfrVMhbGsGX3DVOT00pFE38ua3VVY/Mp7eekio+7kMMiYSAKcZRdOlvz3+5PNL0=@vger.kernel.org, AJvYcCXmjkHTKZmjh6EIgWh55Pp3Vqid7Pba24caXPI1XtV034nxhwsslhcZ2eVAdn4VZJRYm93NMdEMW8e38Gn+@vger.kernel.org
+X-Received: by 2002:a05:6102:54a4:b0:52d:110:a920 with SMTP id
+ ada2fe7eead31-53d2490d703mr4945344137.33.1757495098987; Wed, 10 Sep 2025
+ 02:04:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed;
- boundary=e839a8b678f6ec040c6f11d995a891083537e68a99b38219f0c9d06ab188;
- micalg=pgp-sha512; protocol="application/pgp-signature"
-Date: Wed, 10 Sep 2025 10:57:13 +0200
-Message-Id: <DCOZUOS67P02.1SZS876C49XTP@baylibre.com>
-Subject: Re: [PATCH v2 4/7] can: m_can: m_can_chip_config(): bring up
- interface in correct state
-From: "Markus Schneider-Pargmann" <msp@baylibre.com>
-To: "Marc Kleine-Budde" <mkl@pengutronix.de>, "Chandrasekar Ramakrishnan"
- <rcsekar@samsung.com>, "Vincent Mailhol" <mailhol.vincent@wanadoo.fr>,
- "Patrik Flykt" <patrik.flykt@linux.intel.com>, "Dong Aisheng"
- <b29396@freescale.com>, "Varka Bhadram" <varkabhadram@gmail.com>, "Wu Bo"
- <wubo.oduw@gmail.com>, "Philipp Zabel" <p.zabel@pengutronix.de>
-Cc: <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <kernel@pengutronix.de>
-X-Mailer: aerc 0.20.1
-References: <20250909-m_can-fix-state-handling-v2-0-af9fa240b68a@pengutronix.de> <20250909-m_can-fix-state-handling-v2-4-af9fa240b68a@pengutronix.de>
-In-Reply-To: <20250909-m_can-fix-state-handling-v2-4-af9fa240b68a@pengutronix.de>
+MIME-Version: 1.0
+References: <20250908120940.147196-1-biju.das.jz@bp.renesas.com> <20250908120940.147196-2-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20250908120940.147196-2-biju.das.jz@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 10 Sep 2025 11:04:48 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWmMzZ0gCNVAsBOGKDTO4kAF5TTcSo4V+m-_MGfsTo63Q@mail.gmail.com>
+X-Gm-Features: AS18NWDiRMennMrQ7xPzz4lgIRsCHjEKRxOXPU6o84iwg9AC9bKttdHY3Q8dbvg
+Message-ID: <CAMuHMdWmMzZ0gCNVAsBOGKDTO4kAF5TTcSo4V+m-_MGfsTo63Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] can: rcar_canfd: Update bit rate constants for
+ RZ/G3E and R-Car Gen4
+To: Biju <biju.das.au@gmail.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Magnus Damm <magnus.damm@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
---e839a8b678f6ec040c6f11d995a891083537e68a99b38219f0c9d06ab188
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-
-On Tue Sep 9, 2025 at 7:53 PM CEST, Marc Kleine-Budde wrote:
-> In some SoCs (observed on the STM32MP15) the M_CAN IP core keeps the
-> CAN state and CAN error counters over an internal reset cycle. An
-> external reset is not always possible, due to the shared reset with
-> the other CAN core. This caused the core not always be in Error Active
-> state when bringing up the controller.
+On Mon, 8 Sept 2025 at 14:09, Biju <biju.das.au@gmail.com> wrote:
+> From: Biju Das <biju.das.jz@bp.renesas.com>
 >
-> Instead of always setting the CAN state to Error Active in
-> m_can_chip_config(), fix this by reading and decoding the Protocol
-> Status Regitser (PSR) and set the CAN state accordingly.
+> The calculation formula for nominal bit rate of classical CAN is same as
+
+the same
+
+> that of nominal bit rate of CANFD on the RZ/G3E and R-Car Gen4 SoCs
+> compared to other SoCs. Update nominal bit rate constants.
 >
-> Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-
-Reviewed-by: Markus Schneider-Pargmann <msp@baylibre.com>
-
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 > ---
->  drivers/net/can/m_can/m_can.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.=
-c
-> index 3edf01b098a4..efd9c23edd4a 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1620,7 +1620,7 @@ static int m_can_start(struct net_device *dev)
->  	netdev_queue_set_dql_min_limit(netdev_get_tx_queue(cdev->net, 0),
->  				       cdev->tx_max_coalesced_frames);
-> =20
-> -	cdev->can.state =3D CAN_STATE_ERROR_ACTIVE;
-> +	cdev->can.state =3D m_can_state_get_by_psr(cdev);
-> =20
->  	m_can_enable_all_interrupts(cdev);
-> =20
+> v2->v3:
+>  * Replaced "shared_bittiming"->"shared_can_regs" as it is same for RZ/G3E
+>    and R-Car Gen4.
+>  * Dropped the tags as it is new change.
+>  * Updated commit header and description.
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
---e839a8b678f6ec040c6f11d995a891083537e68a99b38219f0c9d06ab188
-Content-Type: application/pgp-signature; name="signature.asc"
+Gr{oetje,eeting}s,
 
------BEGIN PGP SIGNATURE-----
+                        Geert
 
-iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaME9aRsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlOP
-pAEA/xv1ypzQcN1eVWohScU7gQS0TJo8V0ZWJ2NMrajS0FQBAKSDGYrugKKXCpN/
-5Ie6QRWTjmoM1bXa34OObYQzZK0G
-=z0YW
------END PGP SIGNATURE-----
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---e839a8b678f6ec040c6f11d995a891083537e68a99b38219f0c9d06ab188--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
