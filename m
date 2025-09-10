@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-4654-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4653-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F5D5B51DAE
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 18:29:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 929C4B51DB2
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 18:30:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A66A4482E6
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 16:29:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A923F17C368
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 16:29:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03A9F33A02F;
-	Wed, 10 Sep 2025 16:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C2C3314BC;
+	Wed, 10 Sep 2025 16:29:18 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BDC337694
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6187E3375D3
 	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 16:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757521758; cv=none; b=fz8JInQCFOiaagccV41kG6D1hzGdncbpWUyqah4FyOHbWOLbgIG1ldH7mNue8fypz8IyxFVp4drsNFc9hvLwcw/DeAc1pk+w79oGGXmZGBEX7BPvEV+L9+E0m35gKtEoT9lS6cqAOL8i/sdPVRoD9s+rBIhrbAidhZKvE6Or/nY=
+	t=1757521758; cv=none; b=b82OllJ+xhenB++vb7LWUPSFm/JaGThsxMTk6bYzt0lhuUOj6n7ljQQ24dpWtKk20QDooXY1Qo7tEuNEadu24PkiGS39cmwQlzeGuQrLwO4QUi2dTsmUK14PNImmzzMwFRs8KPVflhE6PQgcBhf0TUCJg7nDGkQ2uKSsbMZuYFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1757521758; c=relaxed/simple;
-	bh=+S7C9aIw3yqZIQsWpmOrBszZHbDSw995M0nFcs6DKy8=;
+	bh=f8Xw2Ag63ubhhZolri6MAHXX0klnntUY84aYWu7T+4k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o18+ruiz68HVmSRDBgJlkJUhWJ6oKMObac4K5TKNsZGFv4NHUYxhsAr/+7M3tYYrBpyo77QnpIeXuTHkgQC1bxpQ9RpHq0Uz+X/Nt+NBqzzDOfeQNrH2TOIVIWLlrk6+y50QVw8zTc9t6G8qmhfeA37AG2O51EulTpvDER1mqnU=
+	 MIME-Version; b=PDhZA16foXrn0fpU4+WzMG+fPnIXaCZeRNizGTA5FgHaxc+7YbDqv37IzdOvX+n6mSDKFdr1JP/66768tUBQvWWQDsERasNI1WbvdftH0bq1Y+m9xMKXCIusbAlJJkS2PW1zXM/33fK4d+LjNhoIBLVS5F5tneNyqpFuvukwOhY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,26 +33,26 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uwNh5-0004rs-4Y
-	for linux-can@vger.kernel.org; Wed, 10 Sep 2025 18:29:15 +0200
+	id 1uwNh4-0004qx-Jb
+	for linux-can@vger.kernel.org; Wed, 10 Sep 2025 18:29:14 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1uwNh3-000cX3-30
+	id 1uwNh3-000cWw-2P
 	for linux-can@vger.kernel.org;
 	Wed, 10 Sep 2025 18:29:13 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 9A91D46B200
+	by bjornoya.blackshift.org (Postfix) with SMTP id 6F9A746B1FF
 	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 16:29:13 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 02FF546B1CA;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 0FF8446B1CB;
 	Wed, 10 Sep 2025 16:29:11 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d102903c;
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d9e09faf;
 	Wed, 10 Sep 2025 16:29:09 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
@@ -60,12 +60,11 @@ Cc: davem@davemloft.net,
 	kuba@kernel.org,
 	linux-can@vger.kernel.org,
 	kernel@pengutronix.de,
-	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Anssi Hannula <anssi.hannula@bitwise.fi>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 5/7] can: j1939: j1939_local_ecu_get(): undo increment when j1939_local_ecu_get() fails
-Date: Wed, 10 Sep 2025 18:20:25 +0200
-Message-ID: <20250910162907.948454-6-mkl@pengutronix.de>
+Subject: [PATCH net 6/7] can: xilinx_can: xcan_write_frame(): fix use-after-free of transmitted SKB
+Date: Wed, 10 Sep 2025 18:20:26 +0200
+Message-ID: <20250910162907.948454-7-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250910162907.948454-1-mkl@pengutronix.de>
 References: <20250910162907.948454-1-mkl@pengutronix.de>
@@ -81,41 +80,67 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: Anssi Hannula <anssi.hannula@bitwise.fi>
 
-Since j1939_sk_bind() and j1939_sk_release() call j1939_local_ecu_put()
-when J1939_SOCK_BOUND was already set, but the error handling path for
-j1939_sk_bind() will not set J1939_SOCK_BOUND when j1939_local_ecu_get()
-fails, j1939_local_ecu_get() needs to undo priv->ents[sa].nusers++ when
-j1939_local_ecu_get() returns an error.
+can_put_echo_skb() takes ownership of the SKB and it may be freed
+during or after the call.
 
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Link: https://patch.msgid.link/e7f80046-4ff7-4ce2-8ad8-7c3c678a42c9@I-love.SAKURA.ne.jp
+However, xilinx_can xcan_write_frame() keeps using SKB after the call.
+
+Fix that by only calling can_put_echo_skb() after the code is done
+touching the SKB.
+
+The tx_lock is held for the entire xcan_write_frame() execution and
+also on the can_get_echo_skb() side so the order of operations does not
+matter.
+
+An earlier fix commit 3d3c817c3a40 ("can: xilinx_can: Fix usage of skb
+memory") did not move the can_put_echo_skb() call far enough.
+
+Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+Fixes: 1598efe57b3e ("can: xilinx_can: refactor code in preparation for CAN FD support")
+Link: https://patch.msgid.link/20250822095002.168389-1-anssi.hannula@bitwise.fi
+[mkl: add "commit" in front of sha1 in patch description]
+[mkl: fix indention]
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- net/can/j1939/bus.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/can/xilinx_can.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/net/can/j1939/bus.c b/net/can/j1939/bus.c
-index 39844f14eed8..797719cb227e 100644
---- a/net/can/j1939/bus.c
-+++ b/net/can/j1939/bus.c
-@@ -290,8 +290,11 @@ int j1939_local_ecu_get(struct j1939_priv *priv, name_t name, u8 sa)
- 	if (!ecu)
- 		ecu = j1939_ecu_create_locked(priv, name);
- 	err = PTR_ERR_OR_ZERO(ecu);
--	if (err)
-+	if (err) {
-+		if (j1939_address_is_unicast(sa))
-+			priv->ents[sa].nusers--;
- 		goto done;
-+	}
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index 81baec8eb1e5..a25a3ca62c12 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -690,14 +690,6 @@ static void xcan_write_frame(struct net_device *ndev, struct sk_buff *skb,
+ 		dlc |= XCAN_DLCR_EDL_MASK;
+ 	}
  
- 	ecu->nusers++;
- 	/* TODO: do we care if ecu->addr != sa? */
+-	if (!(priv->devtype.flags & XCAN_FLAG_TX_MAILBOXES) &&
+-	    (priv->devtype.flags & XCAN_FLAG_TXFEMP))
+-		can_put_echo_skb(skb, ndev, priv->tx_head % priv->tx_max, 0);
+-	else
+-		can_put_echo_skb(skb, ndev, 0, 0);
+-
+-	priv->tx_head++;
+-
+ 	priv->write_reg(priv, XCAN_FRAME_ID_OFFSET(frame_offset), id);
+ 	/* If the CAN frame is RTR frame this write triggers transmission
+ 	 * (not on CAN FD)
+@@ -730,6 +722,14 @@ static void xcan_write_frame(struct net_device *ndev, struct sk_buff *skb,
+ 					data[1]);
+ 		}
+ 	}
++
++	if (!(priv->devtype.flags & XCAN_FLAG_TX_MAILBOXES) &&
++	    (priv->devtype.flags & XCAN_FLAG_TXFEMP))
++		can_put_echo_skb(skb, ndev, priv->tx_head % priv->tx_max, 0);
++	else
++		can_put_echo_skb(skb, ndev, 0, 0);
++
++	priv->tx_head++;
+ }
+ 
+ /**
 -- 
 2.51.0
 
