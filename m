@@ -1,122 +1,120 @@
-Return-Path: <linux-can+bounces-4637-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4638-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A556B515A7
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 13:28:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACD81B5160A
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 13:44:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 359613B5F57
-	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 11:28:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23EDB1888DBE
+	for <lists+linux-can@lfdr.de>; Wed, 10 Sep 2025 11:45:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6879A27E7EB;
-	Wed, 10 Sep 2025 11:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NzVBvk0x"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9255730E85A;
+	Wed, 10 Sep 2025 11:44:50 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49C0279DCB
-	for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 11:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D4325FA1D;
+	Wed, 10 Sep 2025 11:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757503705; cv=none; b=KhlDuXtc+0nRpdQuGnlwBPJ3RehJ2Br4v3S4laU1uP85+XBnUfau0HMw29mnlOLcxPjNTb/8XHt3p++qo0ZjvLxdWsKCbAYkofe7NoA0gkeO8ipGfgGeJUmwcid7cAr8o48SVjkR1n6KsdYO0oRnwhdfX9tVKdP5lm7fagEmZXU=
+	t=1757504690; cv=none; b=mJpUifLXtcC1aRPi4cQk0i7a0LwZYNgCncBneppI1WThuzBv4XZ9QHKOJkjRhSg+2iwze5qoGFAJDMWPPYStTW/Um90eTpg4Nf6HokSbjnywA9QvSWLkz8gAXVOwgZmiJvog6jBjzTNvEKrReL4KKNmtoLs0pduWzUdFg3z5PMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757503705; c=relaxed/simple;
-	bh=gzm3F8ivWRsE+wMhk0jcUcCb5z8TdXLB+FZi3iYut9o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RPPT9twWDIrls/yW8JqaQySMgFSAi81gIt/B+6XDSDOF/F6r2ob7LfbQ5Sa/z43x2fiwTAGdvf1Z+WRID00kVVUYms38GFCOGhtMj59F9xkYstJ6CfAy9Hpja3+ej7YMiMwX3POFecrfoAojwQIhp984FMT7EKfxpj6vYwVLQig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NzVBvk0x; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757503702;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s/xLdEa9NYg82axRGOeMagzWxKZkX5+y179Pb1sa7+E=;
-	b=NzVBvk0xOjp7z19nEVXEzrXFF7OPQJlePMYZeDkW3xjztJgnrJdK1IDBl85B3twMM7AMP4
-	rpeJJSAfKZDt/+2vAJ7LEj5qX2ODMcFwZxho3KnaN0BLS1l/QdITLGsliv0kkpRZ6q8ad9
-	UbWCAzDzgOCNFvDrfDhYL0Gv/MT55cA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-76-bG4XET_WNgCEAZdPWiaytA-1; Wed, 10 Sep 2025 07:28:21 -0400
-X-MC-Unique: bG4XET_WNgCEAZdPWiaytA-1
-X-Mimecast-MFC-AGG-ID: bG4XET_WNgCEAZdPWiaytA_1757503700
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-45dd9a66cfbso48115755e9.1
-        for <linux-can@vger.kernel.org>; Wed, 10 Sep 2025 04:28:21 -0700 (PDT)
+	s=arc-20240116; t=1757504690; c=relaxed/simple;
+	bh=qFOKzwSy4+/kMNuPnqqV/VxLFFXu9ArvHPf88847BXM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hXrPHeLBzZGg/JEOg+o4INfzStK0HPnxczWNxyEBK5tONFgl2BD3YIdhZ9z/Godw933YLI7mWk2Vz7DXFc751322YcvqTalmLXYtDPCRcvtpycyT1E1pgQfavTNhLOZviaZ5ZjeVryxtpacNetRQS8PfkFhJwsgbYAqxyWyhZK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-545f4b31600so1419963e0c.1;
+        Wed, 10 Sep 2025 04:44:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757503700; x=1758108500;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s/xLdEa9NYg82axRGOeMagzWxKZkX5+y179Pb1sa7+E=;
-        b=VHSHRXLYj7OH7t2dnHoLms99bhrDGAbN3IMy3EQJAE3hzzoeK6WRGwAe+MmaLMGS6X
-         iSP+YVNT4DXhgb4mGIb+p8Fb20EGIm0+dyF5Nsgjnz08909CQNoY9DEs2CR5hO4ijXVR
-         pShQ+uiduTGKYIrxcR6F2vCuuSqDpfovHdf+kfgIh0i7vkzYojyJ9a4PwSCM8p7dxOP1
-         iYdenGvzbVkXfVS0Mcz9pPw4uE7tg8YZo4MH4nvleoq6MUNZ5bZijuL5C7F9w2FZuQts
-         zYfCIcPL5NTmEl3MF6t0DrhLu67fjBALPQgYQK5gmOESzYDWDP8g9vEaK2mzqrgALFA6
-         zwAw==
-X-Forwarded-Encrypted: i=1; AJvYcCXt0D/drcrHAMixnA/tf2w6+MQMAYtlctEMeoIfl1phtU3DZtd9+SqEz8o20AD5imvHjrsehaGh9mE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwE+fZGuR4Jv3LbkudwfC2W7LPlHAg6/AFeF1QXmPS0BjUpJyUN
-	SskqTD1mVrYEeQPBLW/HO0BlitCe7cXW5xFEmYR5+2ZVUmHFP4QsqBSpbLvIc7rprYJWQCBFr9K
-	GbT3UC8e350JYmhkqMjD1ZaLoc6Tu7wDCnqLe4TanQKhrf6qH9IT+N+j/D9SqIg==
-X-Gm-Gg: ASbGncsJVcz89A9NUhH4iIAhusbtY6WNiyrBXTtrZWmdRb2A3Fhyu8aBP0I39eJFJvB
-	7AEP73xIEd0+ADUnRw7ual5o5xzkhVviZvJEmdtaQaBGQKXS9V+YybmSCjYkspJpgcvcHQR62Sr
-	mfHmk8XIkkHBzGSiqCamgDNqxgNDPi33EoFCqajRw/T3OPlsKjj1zk0/pgccI1b0gXy3eCdQeLE
-	3fz9uIl7tXrUOO6rgnvn46qx0HIPkB2D5JsDTEZZCimP/ylH3cy2SLgc7L9lP+uBmXDF20igDBh
-	zhIzqSAxsbINCbpFY51Ds67ichk3v4EL8JOCPnFddPOp/A+XtQu55vof4TLCWiYjUngTfBsnqiV
-	evkiZP6eKFoQ9
-X-Received: by 2002:a5d:5848:0:b0:3e0:152a:87b7 with SMTP id ffacd0b85a97d-3e643ff65a8mr11134655f8f.41.1757503700125;
-        Wed, 10 Sep 2025 04:28:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFTBQtFcvzi2V8WZkeFurWwi1Ly/HO/upO55NveOTrwxl4mWUJUFpXmy+dZri82kAe4vbD1pg==
-X-Received: by 2002:a5d:5848:0:b0:3e0:152a:87b7 with SMTP id ffacd0b85a97d-3e643ff65a8mr11134635f8f.41.1757503699706;
-        Wed, 10 Sep 2025 04:28:19 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e75223f5d7sm6402712f8f.53.2025.09.10.04.28.18
+        d=1e100.net; s=20230601; t=1757504687; x=1758109487;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hMxHFFLSbMKBh562LQ05IQOcfgi5loSAFXBEfhNF46E=;
+        b=QlYSVnUWLwyXsB5p9M78S+BNfn+QHbGud6E4YZzI5uAm9m1qwd5QRDKCkPFf9Wr27c
+         ilTeTT9fLZqDb3MGoNWX9zraAceSGXlzHUELeLQBcEvAyGL+ml3wwxbGFe0blwoEa8K9
+         8ZYRBm8KO6isR5sHD546KOM87gSO6Mqou0EgTvyLkWaxYhTfouRRAy+YwEWl91j5be4x
+         wj46uWq5cyBR9UMV5hiFlyB8XWgOjm5UlZ/tWLoMK78vhltIQmuBDcjrXYLKQn6gxNNf
+         QPjyNqdWeo5oVmwOav8uFlwwSYecbidOdfvRrlR2v35tcys+fDXtXUX0DPxIEgyfSKJo
+         zyGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUJeipF0LEylKNzG5tgU6Z3m3Bq12fKRJbLtRNUn5Z9A9RJ8DGkbqAQm9+CJTsE7AALeLxNJ0PQgEqtkgjKw0qBtOc=@vger.kernel.org, AJvYcCUVAq2Q1AUzkK/Lwkk9d+KJi5GBaViU0K0U1BL48gIpbBeWswSyqoFvBYWrXRdv/WNca8lEl8lj1SOVjOSx@vger.kernel.org, AJvYcCXBCGBaUlqP4+B+/hK71xXlBxUZgLdwOFYNxLKZqXHQy7ezbEnncOnT0L+DoYozza6jCqJ6yLnkTKM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylRWbaaToFC32fkJlP6su4r4ILdNt+wahupOhNUjB8a0NM95LU
+	gMQP4vxCAsKk8I29NFPAprW0twLtm+Ho+Z/w6oSg23buufKTQQLWwDDWZbx/UAnG
+X-Gm-Gg: ASbGnctF5nkW6VqlILhNP+iDgB2FeJGVsy57DjsjH4Lo01afxOtgq8jTU/ALXd9PNDG
+	JRPkpY3sREUvem0Aq6EOl/lunQOSoVc7rpgHX5JiOflfrefKUMTlazvu6x1cZtT06yRIZqiACgD
+	c9idM1re041IvfNnG6Pzm9LCDSKK8pnPFhf17zecXv4dUoB/MXm3oHlgkeLpNh+V+o/5WmmT3zi
+	qxjmcQgynClvygijI7/N7moY8JzM0J6qBurGGny9Cq24SXFkWoGM/IWCx39HDuqvRg4XGWXbnek
+	cRCkhdXpcOufSfzy12QibY4/BIuz0YnZcIA5ctaSjbpFq/QB4FYVi8KmghdWfZjIFZ+Iix2NWLe
+	La5+xt/+d5QOqL0aljmKRPc3n5bmby+xmpBB5gno6KxrB8aZd6fyjZExX9srBR4SlIUlq3g0=
+X-Google-Smtp-Source: AGHT+IGujZeqaM1OvPxB9FCumirrb+WtfTdoHmVJwgpGcx9DaxNwVsH6881radgG18HW/NpXjBvkAg==
+X-Received: by 2002:a05:6122:8c06:b0:531:236f:1295 with SMTP id 71dfb90a1353d-5473aabff31mr3610774e0c.5.1757504687437;
+        Wed, 10 Sep 2025 04:44:47 -0700 (PDT)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-544912c7d07sm14080923e0c.4.2025.09.10.04.44.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Sep 2025 04:28:19 -0700 (PDT)
-Message-ID: <0ab052de-5187-467d-974b-aa9f9533621c@redhat.com>
-Date: Wed, 10 Sep 2025 13:28:17 +0200
+        Wed, 10 Sep 2025 04:44:46 -0700 (PDT)
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-8980d75995dso1879191241.3;
+        Wed, 10 Sep 2025 04:44:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCULDC8HHJjFMDNHTwMRWUK7xmNOrnIouhdzBqtA1i/IA9Ok72HVEzwC7dN1T/QvfZoLvH3LPg0QancKkK24@vger.kernel.org, AJvYcCVZMyx7isURuhuo/NnwSF4T74ELU/AwTTU9D++iiyEoBdf8NR10TsZWSphsAOipxs0p5RW9uU7ehxse0BDpCcFKk+4=@vger.kernel.org, AJvYcCWinZI8m/7zWGUJRJQtE+FgoAOoiLqzS5WC0t/e6jCGuHeD7vxpuzUiWYali/3NPAcV1FYXZniX1lU=@vger.kernel.org
+X-Received: by 2002:a05:6102:5cc8:b0:522:4c98:17e with SMTP id
+ ada2fe7eead31-53d0c98bd16mr4600297137.4.1757504686481; Wed, 10 Sep 2025
+ 04:44:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 2/7] selftests: can: enable CONFIG_CAN_VCAN as a
- module
-To: Davide Caratti <dcaratti@redhat.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de,
- Vincent Mailhol <mailhol@kernel.org>
-References: <20250909134840.783785-1-mkl@pengutronix.de>
- <20250909134840.783785-3-mkl@pengutronix.de>
- <00a9d5cc-5ca2-4eef-b50a-81681292760a@ovn.org>
- <aMEq1-IZmzUH9ytu@dcaratti.users.ipa.redhat.com>
- <aME2mCZRagWbhhiG@dcaratti.users.ipa.redhat.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <aME2mCZRagWbhhiG@dcaratti.users.ipa.redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250908120940.147196-1-biju.das.jz@bp.renesas.com>
+ <20250908120940.147196-2-biju.das.jz@bp.renesas.com> <CAMuHMdWmMzZ0gCNVAsBOGKDTO4kAF5TTcSo4V+m-_MGfsTo63Q@mail.gmail.com>
+ <TY3PR01MB11346BE5957318E1805CF9E7F860EA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY3PR01MB11346BE5957318E1805CF9E7F860EA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 10 Sep 2025 13:44:35 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU7oqTfpGr38FU6GcbaRjF_Ku5yPyFmA2PpVW-zSyVP4A@mail.gmail.com>
+X-Gm-Features: AS18NWApLmcM5nGc9hI5H5IM6Rq4E_LNCl90o3m6Gh62XYg4OyMWJhX1g9RyiaM
+Message-ID: <CAMuHMdU7oqTfpGr38FU6GcbaRjF_Ku5yPyFmA2PpVW-zSyVP4A@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] can: rcar_canfd: Update bit rate constants for
+ RZ/G3E and R-Car Gen4
+To: Biju Das <biju.das.jz@bp.renesas.com>, Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: "biju.das.au" <biju.das.au@gmail.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"magnus.damm" <magnus.damm@gmail.com>, 
+	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 9/10/25 10:28 AM, Davide Caratti wrote:
-> while the enablement of CONFIG_CAN_VCAN is still necessary, the contents of selftests/net/config need to be preserved.
-> @Jakub,  @Marc, we can drop this patch from the series and I will respin to linux-can ? or you can adjust things in other ways?
+Hi Biju,
 
-@Marc, IDK if you usually rebase your tree. If that happens, I guess the
-better option would be squashing the fix into the CAN tree and send a
-new revision for the PR including the modified commit.
+On Wed, 10 Sept 2025 at 12:50, Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > From: Geert Uytterhoeven <geert@linux-m68k.org>
+Mon, 8 Sept 2025 at 14:09, Biju <biju.das.au@gmail.com> wrote:
+> > > From: Biju Das <biju.das.jz@bp.renesas.com>
+> > >
+> > > The calculation formula for nominal bit rate of classical CAN is same
+> > > as
+> >
+> > the same
+>
+> OK, will send new version fixing this.
 
-Cheers,
+I don't think you have to resend the series just for this. Marc?
 
-Paolo
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
