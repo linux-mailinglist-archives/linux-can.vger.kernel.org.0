@@ -1,110 +1,180 @@
-Return-Path: <linux-can+bounces-4666-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4667-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E638B535DD
-	for <lists+linux-can@lfdr.de>; Thu, 11 Sep 2025 16:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E28A7B536F6
+	for <lists+linux-can@lfdr.de>; Thu, 11 Sep 2025 17:08:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C2A65A7805
-	for <lists+linux-can@lfdr.de>; Thu, 11 Sep 2025 14:38:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A22A05822A4
+	for <lists+linux-can@lfdr.de>; Thu, 11 Sep 2025 15:08:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34065340DB6;
-	Thu, 11 Sep 2025 14:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="poEx3AVu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9E5934572E;
+	Thu, 11 Sep 2025 15:08:41 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DEB189906;
-	Thu, 11 Sep 2025 14:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D863D76
+	for <linux-can@vger.kernel.org>; Thu, 11 Sep 2025 15:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757601436; cv=none; b=qR6i1SKnIxD5uUs5lB2wpp95uqRQ275NIrE2Rx4v0lR01yzczfuu3TDDkYujU4yJOWnvpBy/2qChlKTJPLcJYreYoCCq4plgWbCfZARqvKmXDzSD8Uh2d7zBnV/vtsUL6YKNGYp7QJyc6uKvoTIz6bcg3oNnrpWvanhqmXdrNqw=
+	t=1757603321; cv=none; b=gElA+ZQ4VRlNXxyoAyk5mVlaL7ijb5V7uiaB3h6TeoT8D/CDvxbjrfMnhHy2tyAUy+E4ycGSgOBbyXzBYV+HRrBjN7yo2Ob3pkI0smSkk+uSnEyvFdGlNZMGvCRFkMpnfbCnLrYDq227phrk2ooH0qL9YzXThGzqiQ63UT1dtAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757601436; c=relaxed/simple;
-	bh=1uq3j5GPcDQePdt4YoD1jR895AQejZTyfOLzC81OMs0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fq51Y7utL0VCpiVe++8KsTm3IC+hnWh+/LRKMZ7j8/eZp0ai4Le2N9yTt/ydIX4EQ/nuLmB9/xUd4D+n1c3ELxs+HwJ377O0fdJFTKwXInnd/55aQYbKwM7lr/FAwjjtj0PeI0drEzIo/WJrrN419G+CVAh3zFQVlL3JSmVg4qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=poEx3AVu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C23FBC4CEF0;
-	Thu, 11 Sep 2025 14:37:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757601433;
-	bh=1uq3j5GPcDQePdt4YoD1jR895AQejZTyfOLzC81OMs0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=poEx3AVukISUDuuoOMtMsnSAs1SQT+F2uLTaYOHF4r9RFtr7aE/0aW43XZL0R3mXe
-	 fYEp9v0FUb0LCkuk4SvqQ/PoPO9rVnw1799b0CzgIpc29qR+cglMq/hwhyDqAuYrAI
-	 PzTFASlK5cJKfcsKu5pkQSPAaTNNZv1IOGf+uE+zika+GoMKEfYEwR9YVTDUHBWpkW
-	 V976XgpLzNcasNt6ohIUUvuF44PYCQlxMVImFMuNYYNZvTiamdrynAdzRM4bRvtDxg
-	 l60kqKL25Vu8MAchG+h3z6MvklCdiexV5rdRolRgjM9avaIHoFhJDOqFggIhQv8YcA
-	 jh7okJEY3wgRg==
-Date: Thu, 11 Sep 2025 15:37:06 +0100
-From: Lee Jones <lee@kernel.org>
-To: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	a0282524688@gmail.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH RESEND v14 0/7] Add Nuvoton NCT6694 MFD drivers
-Message-ID: <20250911143706.GL9224@google.com>
-References: <20250825092403.3301266-1-a0282524688@gmail.com>
- <175760120875.1552180.9512711135722714327.b4-ty@kernel.org>
+	s=arc-20240116; t=1757603321; c=relaxed/simple;
+	bh=UgQMB6QTzrAO9fWGc+nthuK5Hive2S2mYZGFMi2rt+c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XNRFLSOnUyNETLF8TacUF03q3SHGVcAXIAaNKcwoXvxaMh3bRgtNpxixiIMEgS/IuMvkhTFiiUYf7zLvfzzipp1KTM6OItZYO0urFyeYwOYuQh+AuxaODXauYxIhlhGXi7bNtIdLm5yvUY03gDpnhTWqVpqY8MANafg9uHP9lKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iie.ac.cn; spf=pass smtp.mailfrom=iie.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iie.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iie.ac.cn
+Received: from localhost.localdomain (unknown [159.226.95.28])
+	by APP-01 (Coremail) with SMTP id qwCowABnvqDv5cJoxNZMAg--.1317S2;
+	Thu, 11 Sep 2025 23:08:31 +0800 (CST)
+From: Chen Yufeng <chenyufeng@iie.ac.cn>
+To: mkl@pengutronix.de
+Cc: linux-can@vger.kernel.org,
+	Chen Yufeng <chenyufeng@iie.ac.cn>
+Subject: [PATCH v2] can: hi311x: fix null pointer dereference when resuming from sleep before interface was enabled
+Date: Thu, 11 Sep 2025 23:08:20 +0800
+Message-ID: <20250911150820.250-1-chenyufeng@iie.ac.cn>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <175760120875.1552180.9512711135722714327.b4-ty@kernel.org>
+X-CM-TRANSID:qwCowABnvqDv5cJoxNZMAg--.1317S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF1DGw47CFyUAw1kZw47urg_yoW5ZFWUpw
+	sIvryFyrZ7Jr409an5Xw4UXFn8Wa18W3W8CFy7Ww48Xw13CFyvga40vFWjqrZ3AFWFvFWa
+	kFWDX39xGF1DZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j
+	6r4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_XrWl
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+	4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+	6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU1uWlUUUUU
+X-CM-SenderInfo: xfkh05xxih0wo6llvhldfou0/1tbiCQ4CEmjCjOv+IgABsH
 
-On Thu, 11 Sep 2025, Lee Jones wrote:
+This issue is similar to the vulnerability in the `mcp251x` driver, which 
+was fixed in commit 03c427147b2d ("can: mcp251x: fix resume from sleep before 
+ interface was brought up").
 
-> On Mon, 25 Aug 2025 17:23:56 +0800, a0282524688@gmail.com wrote:
-> > From: Ming Yu <a0282524688@gmail.com>
-> > 
-> > This patch series introduces support for Nuvoton NCT6694, a peripheral
-> > expander based on USB interface. It models the chip as an MFD driver
-> > (1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
-> > WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
-> > 
-> > [...]
-> 
-> Applied, thanks!
-> 
-> [1/7] mfd: Add core driver for Nuvoton NCT6694
->       commit: 8c13787893fde313190b7dc844a24114dcc172a2
-> [2/7] gpio: Add Nuvoton NCT6694 GPIO support
->       (no commit info)
-> [3/7] i2c: Add Nuvoton NCT6694 I2C support
->       (no commit info)
-> [4/7] can: Add Nuvoton NCT6694 CANFD support
->       (no commit info)
-> [5/7] watchdog: Add Nuvoton NCT6694 WDT support
->       (no commit info)
-> [6/7] hwmon: Add Nuvoton NCT6694 HWMON support
->       (no commit info)
-> [7/7] rtc: Add Nuvoton NCT6694 RTC support
->       (no commit info)
+In the `hi311x` driver, when the device resumes from sleep, the driver 
+schedules `priv->restart_work`. However, if the network interface was 
+not previously enabled, the `priv->wq` (workqueue) is not allocated and 
+initialized, leading to a null pointer dereference.
 
-I have no idea what this is about!
+To fix this, we move the allocation and initialization of the workqueue 
+from the `hi3110_open` function to the `hi3110_can_probe` function. 
+This ensures that the workqueue is properly initialized before it is 
+used during device resume. And added logic to destroy the workqueue 
+in the error handling paths of `hi3110_can_probe` and in the 
+`hi3110_can_remove` function to prevent resource leaks.
 
-Looks like b4 just had some kind of breakdown!
+Signed-off-by: Chen Yufeng <chenyufeng@iie.ac.cn>
+---
+Changes in v2:
+- Use the right goto label in hi3110_can_probe()
 
-To be clear, none of these have been applied.
+ drivers/net/can/spi/hi311x.c | 33 +++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
 
+diff --git a/drivers/net/can/spi/hi311x.c b/drivers/net/can/spi/hi311x.c
+index 09ae218315d7..96bef8f384c4 100644
+--- a/drivers/net/can/spi/hi311x.c
++++ b/drivers/net/can/spi/hi311x.c
+@@ -545,8 +545,6 @@ static int hi3110_stop(struct net_device *net)
+ 
+ 	priv->force_quit = 1;
+ 	free_irq(spi->irq, priv);
+-	destroy_workqueue(priv->wq);
+-	priv->wq = NULL;
+ 
+ 	mutex_lock(&priv->hi3110_lock);
+ 
+@@ -770,34 +768,23 @@ static int hi3110_open(struct net_device *net)
+ 		goto out_close;
+ 	}
+ 
+-	priv->wq = alloc_workqueue("hi3110_wq", WQ_FREEZABLE | WQ_MEM_RECLAIM,
+-				   0);
+-	if (!priv->wq) {
+-		ret = -ENOMEM;
+-		goto out_free_irq;
+-	}
+-	INIT_WORK(&priv->tx_work, hi3110_tx_work_handler);
+-	INIT_WORK(&priv->restart_work, hi3110_restart_work_handler);
+-
+ 	ret = hi3110_hw_reset(spi);
+ 	if (ret)
+-		goto out_free_wq;
++		goto out_free_irq;
+ 
+ 	ret = hi3110_setup(net);
+ 	if (ret)
+-		goto out_free_wq;
++		goto out_free_irq;
+ 
+ 	ret = hi3110_set_normal_mode(spi);
+ 	if (ret)
+-		goto out_free_wq;
++		goto out_free_irq;
+ 
+ 	netif_wake_queue(net);
+ 	mutex_unlock(&priv->hi3110_lock);
+ 
+ 	return 0;
+ 
+- out_free_wq:
+-	destroy_workqueue(priv->wq);
+  out_free_irq:
+ 	free_irq(spi->irq, priv);
+ 	hi3110_hw_sleep(spi);
+@@ -908,6 +895,15 @@ static int hi3110_can_probe(struct spi_device *spi)
+ 	if (ret)
+ 		goto out_clk;
+ 
++	priv->wq = alloc_workqueue("hi3110_wq", WQ_FREEZABLE | WQ_MEM_RECLAIM,
++				   0);
++	if (!priv->wq) {
++		ret = -ENOMEM;
++		goto out_clk;
++	}
++	INIT_WORK(&priv->tx_work, hi3110_tx_work_handler);
++	INIT_WORK(&priv->restart_work, hi3110_restart_work_handler);
++
+ 	priv->spi = spi;
+ 	mutex_init(&priv->hi3110_lock);
+ 
+@@ -943,6 +939,8 @@ static int hi3110_can_probe(struct spi_device *spi)
+ 	return 0;
+ 
+  error_probe:
++	destroy_workqueue(priv->wq);
++	priv->wq = NULL;
+ 	hi3110_power_enable(priv->power, 0);
+ 
+  out_clk:
+@@ -963,6 +961,9 @@ static void hi3110_can_remove(struct spi_device *spi)
+ 
+ 	hi3110_power_enable(priv->power, 0);
+ 
++	destroy_workqueue(priv->wq);
++	priv->wq = NULL;
++
+ 	clk_disable_unprepare(priv->clk);
+ 
+ 	free_candev(net);
 -- 
-Lee Jones [李琼斯]
+2.34.1
+
 
