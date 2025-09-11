@@ -1,90 +1,107 @@
-Return-Path: <linux-can+bounces-4658-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4659-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 066AFB5257E
-	for <lists+linux-can@lfdr.de>; Thu, 11 Sep 2025 03:09:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7EC4B52696
+	for <lists+linux-can@lfdr.de>; Thu, 11 Sep 2025 04:40:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B22CF4634FD
-	for <lists+linux-can@lfdr.de>; Thu, 11 Sep 2025 01:09:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CAA24480F6
+	for <lists+linux-can@lfdr.de>; Thu, 11 Sep 2025 02:40:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBA218DB02;
-	Thu, 11 Sep 2025 01:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7C5721D3F5;
+	Thu, 11 Sep 2025 02:40:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="hehXzZHc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mrHMwxra"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE30B2AD22;
-	Thu, 11 Sep 2025 01:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBE621C19D;
+	Thu, 11 Sep 2025 02:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757552943; cv=none; b=t/y+yrFj6v/0jKBZe3dYY0lhfBOH+tEayueOJ0RA2rbuW0xyuBKr6JSIH4ggWaWVZMhIuYtANb5LqSY/qGWfYc/NdNtS1mIpN7FCttbFPpT56iURGATN9u6LIVvfcaRpqv22TADm6g/43SRR7FWphL9aRB6qEFVBgq1fscqHgBU=
+	t=1757558420; cv=none; b=OSQB7WhylzBrXbc9jfRX7mE7+t6RV9rA1Ma0/phGJqihfW9wqsvU89bz0iDsz5pfE5ZWSXnxgZkXFzdgcHRss8jZOdEr6duuhuVGcw19oogD4sLh5GxmLs1r8X8oCvc+mnS10MmjKwfFJoRQZlrmm7Li6tDLoNhgCu6R1XC+qnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757552943; c=relaxed/simple;
-	bh=R0GnnVvbLQRW/twqc40DEoUJo6aMtOo76EEaZfqmJXk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A6VxFnC+gMRM0BIY/Y63Zp4XlNh1sM6R9RdubflgysP7vG3k7FmZ8eOAaztMrkNM3Y1VfvES7jI4JfeVhrvnOx1hL99A7sugHlaO1/usLbyMMAgIKGYFPMopxxWm0++M60EAhBupoekSF12+uM01o27NkYwmWBm/ku2eRQMmCXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=hehXzZHc; arc=none smtp.client-ip=220.197.32.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=CsNsiG3pc8pWG7MUbtRJFCqC5DA+Sce6zLpMwj1ZxEQ=;
-	b=hehXzZHcto3G4TRvJ+zg/nlos1kK4ej4LIxxm7qsKs1H3wmwWPA2uD8ONtASQ1
-	ZLIdo6sKL8mhnm0Rf0zMN+dd0euvQYtKTVrYttKUFtbh6Q+sXS3OeUn5PMnsumbt
-	mpDcZDF4Tkqq5GuWpFKB7foki46XqiU/pXFOrAvMOs9Hc=
-Received: from dragon (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id Ms8vCgDnjyT9IMJo2QdfBA--.19610S3;
-	Thu, 11 Sep 2025 09:08:15 +0800 (CST)
-Date: Thu, 11 Sep 2025 09:08:12 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: maudspierings@gocontroll.com
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Aswath Govindraju <a-govindraju@ti.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-can@vger.kernel.org,
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] arm64: dts: freescale: imx8mp-moduline-display-106:
- Use phys to replace xceiver-supply
-Message-ID: <aMIg_PPSZehzEyJD@dragon>
-References: <20250822-can_phy3-v1-0-73b3ba1690ee@gocontroll.com>
- <20250822-can_phy3-v1-2-73b3ba1690ee@gocontroll.com>
+	s=arc-20240116; t=1757558420; c=relaxed/simple;
+	bh=yXX0ciaOgTLlGLfQZM4ao6VRjuogvEm4zpBWRGse8jw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=IucGIAvpM8+ey6N+GHvkQag5VKdlF0Fmes56J6YEE2vbEQBJB2vZSXDrZSUTybtxDkf4b0/h0b7GTz+Dafse2PoGfo5ljqSqIZ3iFE81ANbRUoZsAEmMKiaZYdHBno/aTYyedVw5PKuVS9eqku2KIhM/r+4MkenkZd3g5pfsC1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mrHMwxra; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64412C4CEF0;
+	Thu, 11 Sep 2025 02:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757558420;
+	bh=yXX0ciaOgTLlGLfQZM4ao6VRjuogvEm4zpBWRGse8jw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=mrHMwxraLQimqiYHkOhQVy9Niqv4ytL+r76uQMvZ7irGRNiPQsPj+Y7+V6NsoKPgT
+	 sj4/iZL2/5S+CqmmUEdhNmihuu7jgHwE9xV3SA3I5FCWZedUltNDfHc9UEjRx5Ddse
+	 Jzv0H2yxr1C0o4LNK28InZeN2IPQ1JfVUBogLIvmC7MAbelruQuTpEnAG870EUwBZO
+	 e7qoV/XCCkELAHMncHJp/Uvj/RnT4X6KtlNIvx8SnTcL6OlYUsnYbtw7WGPe0wDfb8
+	 bhdT3FHi9++Xv+atDkMpi7xjnFeIFILQgTOAPnQyFQKyfq04fphbiAfg4yuYFkDRRi
+	 ewB1b0k91xohQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70B80383BF69;
+	Thu, 11 Sep 2025 02:40:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250822-can_phy3-v1-2-73b3ba1690ee@gocontroll.com>
-X-CM-TRANSID:Ms8vCgDnjyT9IMJo2QdfBA--.19610S3
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxU5l1vUUUUU
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiBAfFZWjCB7k19wAAs1
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/7] docs: networking: can: change bcm_msg_head frames
+ member to support flexible array
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175755842299.1636514.17401384189174035494.git-patchwork-notify@kernel.org>
+Date: Thu, 11 Sep 2025 02:40:22 +0000
+References: <20250910162907.948454-2-mkl@pengutronix.de>
+In-Reply-To: <20250910162907.948454-2-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ linux-can@vger.kernel.org, kernel@pengutronix.de, alex.t.tran@gmail.com,
+ socketcan@hartkopp.net
 
-On Fri, Aug 22, 2025 at 11:20:06AM +0200, Maud Spierings via B4 Relay wrote:
-> From: Maud Spierings <maudspierings@gocontroll.com>
-> 
-> Fix the can tranceivers to actually use the new phy description instead
-> of the regulator tweak.
-> 
-> Signed-off-by: Maud Spierings <maudspierings@gocontroll.com>
+Hello:
 
-Applied, thanks!
+This series was applied to netdev/net.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
+
+On Wed, 10 Sep 2025 18:20:21 +0200 you wrote:
+> From: Alex Tran <alex.t.tran@gmail.com>
+> 
+> The documentation of the 'bcm_msg_head' struct does not match how
+> it is defined in 'bcm.h'. Changed the frames member to a flexible array,
+> matching the definition in the header file.
+> 
+> See commit 94dfc73e7cf4 ("treewide: uapi: Replace zero-length arrays with
+> flexible-array members")
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,1/7] docs: networking: can: change bcm_msg_head frames member to support flexible array
+    https://git.kernel.org/netdev/net/c/641427d5bf90
+  - [net,2/7] selftests: can: enable CONFIG_CAN_VCAN as a module
+    https://git.kernel.org/netdev/net/c/d013ebc3499f
+  - [net,3/7] can: j1939: implement NETDEV_UNREGISTER notification handler
+    https://git.kernel.org/netdev/net/c/7fcbe5b2c6a4
+  - [net,4/7] can: j1939: j1939_sk_bind(): call j1939_priv_put() immediately when j1939_local_ecu_get() failed
+    https://git.kernel.org/netdev/net/c/f214744c8a27
+  - [net,5/7] can: j1939: j1939_local_ecu_get(): undo increment when j1939_local_ecu_get() fails
+    https://git.kernel.org/netdev/net/c/06e02da29f6f
+  - [net,6/7] can: xilinx_can: xcan_write_frame(): fix use-after-free of transmitted SKB
+    https://git.kernel.org/netdev/net/c/ef79f00be72b
+  - [net,7/7] can: rcar_can: rcar_can_resume(): fix s2ram with PSCI
+    https://git.kernel.org/netdev/net/c/5c793afa07da
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
