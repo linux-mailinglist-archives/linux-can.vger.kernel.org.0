@@ -1,79 +1,48 @@
-Return-Path: <linux-can+bounces-4698-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4699-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FA11B57610
-	for <lists+linux-can@lfdr.de>; Mon, 15 Sep 2025 12:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 07C0DB57707
+	for <lists+linux-can@lfdr.de>; Mon, 15 Sep 2025 12:48:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 963237AF07B
-	for <lists+linux-can@lfdr.de>; Mon, 15 Sep 2025 10:16:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3218B7A6B24
+	for <lists+linux-can@lfdr.de>; Mon, 15 Sep 2025 10:47:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D0902FB089;
-	Mon, 15 Sep 2025 10:18:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD7482FDC58;
+	Mon, 15 Sep 2025 10:47:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="A2FbFR0v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V8GUuZND"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139672FB63A;
-	Mon, 15 Sep 2025 10:18:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757931500; cv=pass; b=colnFcqbm6+omY8refKqjJfApYvuntIs1vy1vRhWfKHzpXUJkKzEjHevufG4w+HmshHKGERhvrNlQEOe36jSfZHoFnJBg9GM3aJ7e/0Fhcfxbro1jdh9De5MoMxDlwlcu7kQ2qXeknmWaQw0zhkJU8l7YbwNd2O/NOdLbu2xcPc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757931500; c=relaxed/simple;
-	bh=yq7M6JP3Oq+d/cbP5IGvtLG+k2CbFjlMFdkIARemTlY=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AD82DA776;
+	Mon, 15 Sep 2025 10:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757933222; cv=none; b=dD1gYCyxOL7IB87HR4w6rlpLsbehOZxmsnfoCeuyjqnU/CSNHVW2a6BsTfZJIHOY+l23QS0iQrhMAI0ktRK7weAPeSCyW+NVJGZ/qeppUOC0oDFzuA6L+EasDJX/LKKmlkZQwDYOMhXO9rh4PEGpLpN1V0B+qE1Bl6FOFd50SrI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757933222; c=relaxed/simple;
+	bh=avsto3QNk6qIWfGwz4s5xOHibcyjdg9CFwNBjQsN5dQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HqS4WEGIEj88uAM5ZTUIdAA5BWSmTKtKixpamSRIo6kMqAvCZVo/n8O8W41yQOZsHKdd515Cltn5ThMjckwr9JXovjQ9zELFUVscHTCqOjA7NabaABfw4EtUsFovuHh71A8uCN5md/Sv8bqwjD/Z9rhTpGMg1Ybi5kzCp1hEteE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=A2FbFR0v; arc=pass smtp.client-ip=85.215.255.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1757931489; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=mttNDOFfLygc3gNw+UETJm0YwNQLjt+EOZViHG5dv42/4lv1eQu8ExYuUUPhqDMZfE
-    HQAnfYQTXrOscecwnvHoUEfex1aWoA8c4TaJb8Ijcwd9Qb5hSQq/E+dPM2kgsO8SQaHC
-    v4LLJJeHxyXGvU3c0KAsrQu/YOJolBMYI7m+uf3krPx4/9fXlati4/Q73Ak43xLr2g41
-    g/JWmhf0fKs09uep77Onziy1Sj3C7cTThHutWqDIfzrWSQL69DIYuT9P0mu+Dsyk07XU
-    qlxnJ9ee5CuomJTLA3+tTuv0Geg3ycAlBDNh+DuTaIdFamPzUleD/mZfDnQaJjg1ySjq
-    cG4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1757931489;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=tIy57BRWTHlMjXj/FqYvAxp04YX3tnZ0XeC2iuc8VC0=;
-    b=t1L3aeQlYepQRgchZjAvOvOCDbY3blXlNKuh/yAefISxpSjDPg64kEuH75MhQ/omKT
-    WNu7sE8bOVYTrSkgRsSYb7zc98cRsRRNoteJ4pXDj3pc7PaNrpBKlc4pH2cYFL3kgv/U
-    P3sIJdXEZf3DlcdHjD2Hy+tqnegn/RhTYCwbNrerYU315SdSA3Cz8MrMl7EaBiBH0ozm
-    ctFzwcx0q0gMXWxvgpFW5nG3u2APfN0+YCjntmpAXr12oiyGe7Srilksex2DuG9gV8m4
-    e//SXcDcVfH4htTnWU1XuCUQdCY2Kk/gbhqHMZwCLKAYeLKlck+9q4plPKt2NClX3FMe
-    XpWQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1757931489;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=tIy57BRWTHlMjXj/FqYvAxp04YX3tnZ0XeC2iuc8VC0=;
-    b=A2FbFR0vstMHSzHFLI/RmtlCzyIo9bWdFcbZNzqFB/DqfHwWdWoZpuysbTPvKv/gQS
-    L4M/DwsJgd2igIMmZVgB99GdyKYf0lJU0Vg92z/X4ciDkMgX2Q8C0GFQVqNN7uVZZgBD
-    yGxq2GtsSbNi45xlEXLLRZskdOYnJmSNNqbTt/CpNde4Za1/ASCXqPtJaOx0/vDEiAZL
-    LY2DZkbTQFh8Q11uCoI9HrO/xfUolmjck0a6gS/lltN9ztTXjsc0Fv4J3iuQO2JyV3d3
-    n4a3qxVzZ1ZVqPghK8Sr+DauzyRYGcbDzb4j7hvfrmG+YHPHLI5XFJ4vHxCJQ4tc5sco
-    fBNQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMr5owMnk64sm8VF6OpcIrgdno+M3mNGEGSIofQp0UJwtSeLY="
-Received: from [IPV6:2a02:b98:8b0e:d800:856:bd03:6d59:abd2]
-    by smtp.strato.de (RZmta 52.1.2 AUTH)
-    with ESMTPSA id K2a23218FAI90n8
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Mon, 15 Sep 2025 12:18:09 +0200 (CEST)
-Message-ID: <9b0309f9-803c-41e0-b456-bd9ac20e2277@hartkopp.net>
-Date: Mon, 15 Sep 2025 12:18:09 +0200
+	 In-Reply-To:Content-Type; b=NNtOMwY3IkmfR+TmH+3GN7AdJ050/wfM/mjgLZNEHJcAIU8DOEvY8jpAlj3kZ1TFeCtsCpfYeMhPH3rsUhGEQ9L9xVTw1A4AxnXeVZDPydRsrMlWNXfRRYHmxB5afnoPaedDSw9RxMzqqBH3cWgtFlauYDk+kv9Gyf77smP1tkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V8GUuZND; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8DCC4CEF1;
+	Mon, 15 Sep 2025 10:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757933222;
+	bh=avsto3QNk6qIWfGwz4s5xOHibcyjdg9CFwNBjQsN5dQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=V8GUuZNDRXJWH+csFpxRySlEaGxHPM1wv2EB4Q2EiTEtWYe6vRrtznX8TBjYg6+Kc
+	 EYGZP31esjXS511n24JlKdPKKEh4PhVuyJVonhaA+OnjQDxMHO/hiAIoD3OocIRDS7
+	 /DHxTpNwq0zDYrKd3mr9ByHnvtsrkNSiRYhRKEC+u/Ll7aIbbQXDRKw0R15nd0IE2j
+	 YWon+KVteNNHpC+H9ElCVIs/ogx+ARDcmRk55ciThwnvEnZ3jscpl5N41PobwGS/UJ
+	 VZHLFiMhoaqXlrcwycy0xMmjxbkeoR2ABmqryCrPnYqBig4meuPGwYi0wzkkzm2SeP
+	 patWrdkfYenVQ==
+Message-ID: <f0a34514-19da-4c73-9cd4-ae220fed6447@kernel.org>
+Date: Mon, 15 Sep 2025 19:47:00 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -81,74 +50,122 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] can: raw: reorder struct uniqframe's members to
- optimise packing
-To: Vincent Mailhol <mailhol@kernel.org>,
+Subject: Re: [PATCH 2/3] can: raw: use bitfields to store flags in struct
+ raw_sock
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
  Marc Kleine-Budde <mkl@pengutronix.de>
 Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250915-can-raw-repack-v1-0-5ea293bc6d33@kernel.org>
- <20250915-can-raw-repack-v1-1-5ea293bc6d33@kernel.org>
+ <20250915-can-raw-repack-v1-2-5ea293bc6d33@kernel.org>
+ <f96cd163-0364-4c14-882b-48c3f8e0f05a@hartkopp.net>
 Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20250915-can-raw-repack-v1-1-5ea293bc6d33@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Vincent Mailhol <mailhol@kernel.org>
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <f96cd163-0364-4c14-882b-48c3f8e0f05a@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+On 15/09/2025 at 19:16, Oliver Hartkopp wrote:
+> On 15.09.25 11:23, Vincent Mailhol wrote:
+>> The loopback, recv_own_msgs, fd_frames and xl_frames fields of struct
+>> raw_sock just need to store one bit of information.
+>>
+>> Declare all those members as a bitfields of type unsigned int and
+>> width one bit.
+>>
+>> Add a temporary variable to raw_setsockopt() and raw_getsockopt() to
+>> make the conversion between the stored bits and the socket interface.
+>>
+>> This reduces struct raw_sock by eight bytes.
+>>
+>> Statistics before:
+>>
+>>    $ pahole --class_name=raw_sock net/can/raw.o
+>>    struct raw_sock {
+>>        struct sock                sk __attribute__((__aligned__(8))); /*    
+>> 0   776 */
+>>
+>>        /* XXX last struct has 1 bit hole */
+>>
+>>        /* --- cacheline 12 boundary (768 bytes) was 8 bytes ago --- */
+>>        int                        bound;                /*   776     4 */
+>>        int                        ifindex;              /*   780     4 */
+>>        struct net_device *        dev;                  /*   784     8 */
+>>        netdevice_tracker          dev_tracker;          /*   792     0 */
+>>        struct list_head           notifier;             /*   792    16 */
+>>        int                        loopback;             /*   808     4 */
+>>        int                        recv_own_msgs;        /*   812     4 */
+>>        int                        fd_frames;            /*   816     4 */
+>>        int                        xl_frames;            /*   820     4 */
+>>        struct can_raw_vcid_options raw_vcid_opts;       /*   824     4 */
+>>        canid_t                    tx_vcid_shifted;      /*   828     4 */
+>>        /* --- cacheline 13 boundary (832 bytes) --- */
+>>        canid_t                    rx_vcid_shifted;      /*   832     4 */
+>>        canid_t                    rx_vcid_mask_shifted; /*   836     4 */
+>>        int                        join_filters;         /*   840     4 */
+>>        int                        count;                /*   844     4 */
+>>        struct can_filter          dfilter;              /*   848     8 */
+>>        struct can_filter *        filter;               /*   856     8 */
+>>        can_err_mask_t             err_mask;             /*   864     4 */
+>>
+>>        /* XXX 4 bytes hole, try to pack */
+>>
+>>        struct uniqframe *         uniq;                 /*   872     8 */
+>>
+>>        /* size: 880, cachelines: 14, members: 20 */
+>>        /* sum members: 876, holes: 1, sum holes: 4 */
+>>        /* member types with bit holes: 1, total: 1 */
+>>        /* forced alignments: 1 */
+>>        /* last cacheline: 48 bytes */
+>>    } __attribute__((__aligned__(8)));
+>>
+>> ...and after:
+>>
+>>    $ pahole --class_name=raw_sock net/can/raw.o
+>>    struct raw_sock {
+>>        struct sock                sk __attribute__((__aligned__(8))); /*    
+>> 0   776 */
+>>
+>>        /* XXX last struct has 1 bit hole */
+>>
+>>        /* --- cacheline 12 boundary (768 bytes) was 8 bytes ago --- */
+>>        int                        bound;                /*   776     4 */
+>>        int                        ifindex;              /*   780     4 */
+>>        struct net_device *        dev;                  /*   784     8 */
+>>        netdevice_tracker          dev_tracker;          /*   792     0 */
+>>        struct list_head           notifier;             /*   792    16 */
+>>        unsigned int               loopback:1;           /*   808: 0  4 */
+>>        unsigned int               recv_own_msgs:1;      /*   808: 1  4 */
+>>        unsigned int               fd_frames:1;          /*   808: 2  4 */
+>>        unsigned int               xl_frames:1;          /*   808: 3  4 */
+> 
+> This means that the former data structures (int) are not copied but bits are set
+> (shifted, ANDed, ORed, etc) right?
+> 
+> So what's the difference in the code the CPU has to process for this
+> improvement? Is implementing this bitmap more efficient or similar to copy the
+> (unsigned ints) as-is?
+
+It will indeed have to add a couple assembly instructions. But this is peanuts.
+In the best case, the out of order execution might very well optimize this so
+that not even a CPU tick is wasted. In the worst case, it is a couple CPU ticks.
+
+On the other hands, reducing the size by 16 bytes lowers the risk to have a
+cache miss. And removing one cache miss outperforms by an order of magnitude the
+penalty of adding a couple assembly instructions.
+
+Well, I did not benchmark it, but this is a commonly accepted trade off.
 
 
-
-On 15.09.25 11:23, Vincent Mailhol wrote:
-> struct uniqframe has one hole. Reorder the fields to save 8 bytes.
-> 
-> Statistics before:
-> 
->    $ pahole --class_name=uniqframe net/can/raw.o
->    struct uniqframe {
->    	int                        skbcnt;               /*     0     4 */
-> 
->    	/* XXX 4 bytes hole, try to pack */
-> 
->    	const struct sk_buff  *    skb;                  /*     8     8 */
->    	unsigned int               join_rx_count;        /*    16     4 */
-> 
->    	/* size: 24, cachelines: 1, members: 3 */
->    	/* sum members: 16, holes: 1, sum holes: 4 */
->    	/* padding: 4 */
->    	/* last cacheline: 24 bytes */
->    };
-> 
-> ...and after:
-> 
->    $ pahole --class_name=uniqframe net/can/raw.o
->    struct uniqframe {
->    	const struct sk_buff  *    skb;                  /*     0     8 */
->    	int                        skbcnt;               /*     8     4 */
->    	unsigned int               join_rx_count;        /*    12     4 */
-> 
->    	/* size: 16, cachelines: 1, members: 3 */
->    	/* last cacheline: 16 bytes */
->    };
-> 
-> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
-
-> ---
->   net/can/raw.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/can/raw.c b/net/can/raw.c
-> index 76b867d21def209f5c6d236604c0e434a1c55a4d..db21d8a8c54d1b6a25a72c7a9d11d5c94f3187b5 100644
-> --- a/net/can/raw.c
-> +++ b/net/can/raw.c
-> @@ -75,8 +75,8 @@ MODULE_ALIAS("can-proto-1");
->    */
->   
->   struct uniqframe {
-> -	int skbcnt;
->   	const struct sk_buff *skb;
-> +	int skbcnt;
->   	unsigned int join_rx_count;
->   };
->   
-> 
+Yours sincerely,
+Vincent Mailhol
 
 
