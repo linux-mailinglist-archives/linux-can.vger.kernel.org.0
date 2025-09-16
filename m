@@ -1,141 +1,213 @@
-Return-Path: <linux-can+bounces-4715-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4716-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D768DB59A99
-	for <lists+linux-can@lfdr.de>; Tue, 16 Sep 2025 16:43:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 043ABB5A098
+	for <lists+linux-can@lfdr.de>; Tue, 16 Sep 2025 20:36:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 908753B7F4C
-	for <lists+linux-can@lfdr.de>; Tue, 16 Sep 2025 14:39:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86DFD1C04AAC
+	for <lists+linux-can@lfdr.de>; Tue, 16 Sep 2025 18:37:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3106A3375B5;
-	Tue, 16 Sep 2025 14:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9282C11F0;
+	Tue, 16 Sep 2025 18:36:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mL2ctDOg"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Oiv5S6dK"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-70.smtpout.orange.fr [80.12.242.70])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31CC30C357;
-	Tue, 16 Sep 2025 14:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF94D14E2E2;
+	Tue, 16 Sep 2025 18:36:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758033592; cv=none; b=jijTMJvdKffBUY2YhjiT1AeO7sTXZ9h3E/iFzbcPK4Y2OFHm+TLE10SYxJJRU+K0qiLpS7ziQobpxoa2YRrAFKyVDDVThYNI5F8s/GQjROZOnMaY98PYUo9IiVd6boGbiPVcS1ocO9h2yewm6CdvExEdw8X6YA1ZcK6KcjcfE5o=
+	t=1758047808; cv=none; b=ULh0skkc/UIfg8JWKXr/jTyA3gPPpz3KnDDhPhtupm+KzCnz98UBzZiqgypZeO/KYMvHyYdUrbwZFZ+6YRCBoYSOORw3NfnJbvB7NwK0vhYfkTkJKF/dfem6neEjk0+Ff0lnXrVAUKq5weEcblbWHODidtuTS9wF4bhbW0OlPRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758033592; c=relaxed/simple;
-	bh=EDfRX0RIkPJUTOzyTgi+O83Ih7FSf4+t7TnGTIzv5YY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C/33kfJolMkdU6A3P0qQmtB0tV0ZbXMb9PslMtStFtskhhPgPXcqueepuc0PneGweOkVL6TLN9o9bhj2LI7L9Imvf8/s/PDoWEd0WCtNtSTEkxmFIhPMlBf0rCLYQeE0VHuPEElLNlQrqFHzZvf63rOjXqASiHDK+1b8YSvg+uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mL2ctDOg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4495C4CEEB;
-	Tue, 16 Sep 2025 14:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758033591;
-	bh=EDfRX0RIkPJUTOzyTgi+O83Ih7FSf4+t7TnGTIzv5YY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mL2ctDOgNiUrtib5Onat+P6I+mOGVVODkCpHQQYsGq98p2Yv+8VmQRrnw7PKghuWy
-	 N938OCWn3kYfO2X0JmKhWohOjBvAoYP5k2oH4Q/5Xwsl0TWQIsLs4TnO7/A8ocIHLn
-	 r444P8KtJASp2xl4+ZhYXRlqNT+EeYV7MC4wQc+m9WnLMCN+skLBEwl3vzB7ykxERE
-	 oCYgzPNR7BQnJfyA2/UMW0juU4iKyKH1eZD/sIwahhSeIkhCeZH8ycgyM4NReAvoUH
-	 CUQya1qaY/ZXD1n5oXZGHdw38FWd21saHMt+hG/NKpKQMjO5sCz9qfXxLPuvhspFnq
-	 TfeRsjdJS5F7Q==
-Date: Tue, 16 Sep 2025 15:39:44 +0100
-From: Lee Jones <lee@kernel.org>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] Immutable branch between MFD, GPIO, HWMON, I2C, CAN, RTC
- and Watchdog due for the v6.18 merge window
-Message-ID: <20250916143944.GG3585920@google.com>
-References: <20250912091952.1169369-1-a0282524688@gmail.com>
- <20250916143847.GF3585920@google.com>
+	s=arc-20240116; t=1758047808; c=relaxed/simple;
+	bh=T1kePwdeNQXNVSEeE9ckLT57VuktYjKYkdyxWbs1t04=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VB1vYAyCHEETLeBQoA7ExrH7538gtzkXf4Adeu1CHMJurNK31TbLEw+HyINf+nVmUjn2XTYt2VblvvWGZwhyOXs4KhD7KG8QNGGlZ1AvX7xe/W74rSJljkftrxPKbemb5aqDyqyobSDkFKnxlPbEQCZIc3Lwh56hcp7Swyc8gx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Oiv5S6dK; arc=none smtp.client-ip=80.12.242.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
+ ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
+	by smtp.orange.fr with ESMTPA
+	id yaWWu64lLqEwUyaWXuWKCx; Tue, 16 Sep 2025 20:35:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1758047730;
+	bh=zv/XOsxsCMorm9VtcC5Pc/3O++i5spJT7NpfLDn0xng=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=Oiv5S6dKfmgpQV8zzdeifbLa1pbHT2OihN6tvDgB5BYtpe74lstadanLVy3YUyuA5
+	 s4FGbeP9bXtBde9WNSD/uCpzAFNl2b5xTY4McdZMKL9fjBM7xveO4E9LkxuMo5B/fj
+	 Ud2XavwPgQGgYZfI7SOAKWNFA8WzvKGOC0Oz+hKa/NwefkDECvuohmTZ+NbKy+IUhA
+	 a8R6ouNYtA4G8vAE0WTRnDEpairy/Gfh38/stHkn4iQgnSMsjLc1ocOlWqraTE9gfx
+	 Sq655ek9al7L+YStFOyvxT144kIa4nE/3kiSaBLga9N7rz+i7sU9dVD1OgUTVCpJv0
+	 uWjEN0Kh0pcug==
+X-ME-Helo: [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Tue, 16 Sep 2025 20:35:30 +0200
+X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
+Message-ID: <ed2a1b51-782b-4ee1-be75-06a0a742525c@wanadoo.fr>
+Date: Tue, 16 Sep 2025 20:35:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] can: raw: use bitfields to store flags in struct
+ raw_sock
+To: Vincent Mailhol <mailhol@kernel.org>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250915-can-raw-repack-v1-0-5ea293bc6d33@kernel.org>
+ <20250915-can-raw-repack-v1-2-5ea293bc6d33@kernel.org>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Content-Language: en-US, fr-FR
+In-Reply-To: <20250915-can-raw-repack-v1-2-5ea293bc6d33@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250916143847.GF3585920@google.com>
 
-Sorry, fingers faster than brain!  With the corrected subject this time.
+Le 15/09/2025 à 11:23, Vincent Mailhol a écrit :
+> The loopback, recv_own_msgs, fd_frames and xl_frames fields of struct
+> raw_sock just need to store one bit of information.
+> 
+> Declare all those members as a bitfields of type unsigned int and
+> width one bit.
+> 
+> Add a temporary variable to raw_setsockopt() and raw_getsockopt() to
+> make the conversion between the stored bits and the socket interface.
+> 
+> This reduces struct raw_sock by eight bytes.
+> 
+> Statistics before:
+> 
+>    $ pahole --class_name=raw_sock net/can/raw.o
+>    struct raw_sock {
+>    	struct sock                sk __attribute__((__aligned__(8))); /*     0   776 */
+> 
+>    	/* XXX last struct has 1 bit hole */
+> 
+>    	/* --- cacheline 12 boundary (768 bytes) was 8 bytes ago --- */
+>    	int                        bound;                /*   776     4 */
+>    	int                        ifindex;              /*   780     4 */
+>    	struct net_device *        dev;                  /*   784     8 */
+>    	netdevice_tracker          dev_tracker;          /*   792     0 */
+>    	struct list_head           notifier;             /*   792    16 */
+>    	int                        loopback;             /*   808     4 */
+>    	int                        recv_own_msgs;        /*   812     4 */
+>    	int                        fd_frames;            /*   816     4 */
+>    	int                        xl_frames;            /*   820     4 */
+>    	struct can_raw_vcid_options raw_vcid_opts;       /*   824     4 */
+>    	canid_t                    tx_vcid_shifted;      /*   828     4 */
+>    	/* --- cacheline 13 boundary (832 bytes) --- */
+>    	canid_t                    rx_vcid_shifted;      /*   832     4 */
+>    	canid_t                    rx_vcid_mask_shifted; /*   836     4 */
+>    	int                        join_filters;         /*   840     4 */
+>    	int                        count;                /*   844     4 */
+>    	struct can_filter          dfilter;              /*   848     8 */
+>    	struct can_filter *        filter;               /*   856     8 */
+>    	can_err_mask_t             err_mask;             /*   864     4 */
+> 
+>    	/* XXX 4 bytes hole, try to pack */
+> 
+>    	struct uniqframe *         uniq;                 /*   872     8 */
+> 
+>    	/* size: 880, cachelines: 14, members: 20 */
+>    	/* sum members: 876, holes: 1, sum holes: 4 */
+>    	/* member types with bit holes: 1, total: 1 */
+>    	/* forced alignments: 1 */
+>    	/* last cacheline: 48 bytes */
+>    } __attribute__((__aligned__(8)));
+> 
+> ...and after:
+> 
+>    $ pahole --class_name=raw_sock net/can/raw.o
+>    struct raw_sock {
+>    	struct sock                sk __attribute__((__aligned__(8))); /*     0   776 */
+> 
+>    	/* XXX last struct has 1 bit hole */
+> 
+>    	/* --- cacheline 12 boundary (768 bytes) was 8 bytes ago --- */
+>    	int                        bound;                /*   776     4 */
+>    	int                        ifindex;              /*   780     4 */
+>    	struct net_device *        dev;                  /*   784     8 */
+>    	netdevice_tracker          dev_tracker;          /*   792     0 */
+>    	struct list_head           notifier;             /*   792    16 */
+>    	unsigned int               loopback:1;           /*   808: 0  4 */
+>    	unsigned int               recv_own_msgs:1;      /*   808: 1  4 */
+>    	unsigned int               fd_frames:1;          /*   808: 2  4 */
+>    	unsigned int               xl_frames:1;          /*   808: 3  4 */
+> 
+>    	/* XXX 4 bits hole, try to pack */
+>    	/* Bitfield combined with next fields */
+> 
+>    	struct can_raw_vcid_options raw_vcid_opts;       /*   809     4 */
+> 
+>    	/* XXX 3 bytes hole, try to pack */
+> 
+>    	canid_t                    tx_vcid_shifted;      /*   816     4 */
+>    	canid_t                    rx_vcid_shifted;      /*   820     4 */
+>    	canid_t                    rx_vcid_mask_shifted; /*   824     4 */
+>    	int                        join_filters;         /*   828     4 */
+>    	/* --- cacheline 13 boundary (832 bytes) --- */
+>    	int                        count;                /*   832     4 */
+>    	struct can_filter          dfilter;              /*   836     8 */
+> 
+>    	/* XXX 4 bytes hole, try to pack */
+> 
+>    	struct can_filter *        filter;               /*   848     8 */
+>    	can_err_mask_t             err_mask;             /*   856     4 */
+> 
+>    	/* XXX 4 bytes hole, try to pack */
+> 
+>    	struct uniqframe *         uniq;                 /*   864     8 */
+> 
+>    	/* size: 872, cachelines: 14, members: 20 */
+>    	/* sum members: 860, holes: 3, sum holes: 11 */
+>    	/* sum bitfield members: 4 bits, bit holes: 1, sum bit holes: 4 bits */
+>    	/* member types with bit holes: 1, total: 1 */
+>    	/* forced alignments: 1 */
+>    	/* last cacheline: 40 bytes */
+>    } __attribute__((__aligned__(8)));
+> 
+> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+> ---
+>   net/can/raw.c | 47 ++++++++++++++++++++++++++++-------------------
+>   1 file changed, 28 insertions(+), 19 deletions(-)
+> 
+> diff --git a/net/can/raw.c b/net/can/raw.c
+> index db21d8a8c54d1b6a25a72c7a9d11d5c94f3187b5..cec580ecd58e36931d1be05716e6beb9c93aa271 100644
+> --- a/net/can/raw.c
+> +++ b/net/can/raw.c
+> @@ -87,10 +87,10 @@ struct raw_sock {
+>   	struct net_device *dev;
+>   	netdevice_tracker dev_tracker;
+>   	struct list_head notifier;
+> -	int loopback;
+> -	int recv_own_msgs;
+> -	int fd_frames;
+> -	int xl_frames;
+> +	unsigned int loopback:1;
+> +	unsigned int recv_own_msgs:1;
+> +	unsigned int fd_frames:1;
+> +	unsigned int xl_frames:1;
+>   	struct can_raw_vcid_options raw_vcid_opts;
+>   	canid_t tx_vcid_shifted;
+>   	canid_t rx_vcid_shifted;
 
-> Enjoy!
-> 
-> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
-> 
->   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-gpio-hwmon-i2c-can-rtc-watchdog-v6.18
-> 
-> for you to fetch changes up to d463bb140583609f78f61d48c3dfb6f46c5cb062:
-> 
->   rtc: Add Nuvoton NCT6694 RTC support (2025-09-16 14:41:58 +0100)
-> 
-> ----------------------------------------------------------------
-> Immutable branch between MFD, GPIO, HWMON, I2C, CAN, RTC and Watchdog due for the v6.18 merge window
-> 
-> ----------------------------------------------------------------
-> Ming Yu (7):
->       mfd: Add core driver for Nuvoton NCT6694
->       gpio: Add Nuvoton NCT6694 GPIO support
->       i2c: Add Nuvoton NCT6694 I2C support
->       can: Add Nuvoton NCT6694 CANFD support
->       watchdog: Add Nuvoton NCT6694 WDT support
->       hwmon: Add Nuvoton NCT6694 HWMON support
->       rtc: Add Nuvoton NCT6694 RTC support
-> 
->  MAINTAINERS                         |  12 +
->  drivers/gpio/Kconfig                |  12 +
->  drivers/gpio/Makefile               |   1 +
->  drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++++++
->  drivers/hwmon/Kconfig               |  10 +
->  drivers/hwmon/Makefile              |   1 +
->  drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++++++++++
->  drivers/i2c/busses/Kconfig          |  10 +
->  drivers/i2c/busses/Makefile         |   1 +
->  drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++++
->  drivers/mfd/Kconfig                 |  15 +
->  drivers/mfd/Makefile                |   2 +
->  drivers/mfd/nct6694.c               | 388 +++++++++++++++
->  drivers/net/can/usb/Kconfig         |  11 +
->  drivers/net/can/usb/Makefile        |   1 +
->  drivers/net/can/usb/nct6694_canfd.c | 832 +++++++++++++++++++++++++++++++
->  drivers/rtc/Kconfig                 |  10 +
->  drivers/rtc/Makefile                |   1 +
->  drivers/rtc/rtc-nct6694.c           | 297 +++++++++++
->  drivers/watchdog/Kconfig            |  11 +
->  drivers/watchdog/Makefile           |   1 +
->  drivers/watchdog/nct6694_wdt.c      | 307 ++++++++++++
->  include/linux/mfd/nct6694.h         | 102 ++++
->  23 files changed, 3669 insertions(+)
->  create mode 100644 drivers/gpio/gpio-nct6694.c
->  create mode 100644 drivers/hwmon/nct6694-hwmon.c
->  create mode 100644 drivers/i2c/busses/i2c-nct6694.c
->  create mode 100644 drivers/mfd/nct6694.c
->  create mode 100644 drivers/net/can/usb/nct6694_canfd.c
->  create mode 100644 drivers/rtc/rtc-nct6694.c
->  create mode 100644 drivers/watchdog/nct6694_wdt.c
->  create mode 100644 include/linux/mfd/nct6694.h
-> 
-> -- 
-> Lee Jones [李琼斯]
+[...]
 
--- 
-Lee Jones [李琼斯]
+Hi,
+
+just in case, it looks like bound and join_filters could also be defined 
+in the bitfield.
+
+just my 2c.
+
+CJ
 
