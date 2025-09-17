@@ -1,210 +1,151 @@
-Return-Path: <linux-can+bounces-4721-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4722-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EF7FB80401
-	for <lists+linux-can@lfdr.de>; Wed, 17 Sep 2025 16:50:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC442B7DD50
+	for <lists+linux-can@lfdr.de>; Wed, 17 Sep 2025 14:35:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED8181C01706
-	for <lists+linux-can@lfdr.de>; Wed, 17 Sep 2025 04:49:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6EB55811AE
+	for <lists+linux-can@lfdr.de>; Wed, 17 Sep 2025 05:30:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F066A2877D8;
-	Wed, 17 Sep 2025 04:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41095264609;
+	Wed, 17 Sep 2025 05:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AWCmQsFn"
+	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="cfitw200"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azolkn19010095.outbound.protection.outlook.com [52.103.10.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83FB2853ED;
-	Wed, 17 Sep 2025 04:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758084538; cv=none; b=Hi6yV2Ef1xxBAnVQVzQc0Ny3Yg9UoJq0VV0c6S1ZFYzbfiVNyem8niJp4s6ZCjAIWyJ2bV6gHnUjyp17uYIkL+gbHnlh3RGk2oW+tGep6p7omt5953wk7XxWhZer+irE2apnEUNSUUFq5L3yF4NxuuT7NBp/+o8BaolqgEkvpEU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758084538; c=relaxed/simple;
-	bh=PqBU4lww/+186uiwZ0u17g3aZEZ98fu4Q3fznlo6ETw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uuHm5L/Eyq22ZSnkPh+Ge2DOPOwX1sQQvIId1+naj0/PhopSmZEOCbaSsyoKjIt3NcgQ3Rj7ht2olc7rmsPJ+aeY7hp40FMbNhbiycSKphiFRBPaYqPL7+jSZLwqf8NChFaeFgEwEXjUw43jrtO+PheWmuIebBf0sw5XmYXZVuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AWCmQsFn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91ECEC4CEF0;
-	Wed, 17 Sep 2025 04:48:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758084538;
-	bh=PqBU4lww/+186uiwZ0u17g3aZEZ98fu4Q3fznlo6ETw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=AWCmQsFnk7zrtgRqzbuzPE4wBTI33NUziSghiv/um0+Qw6n2BhUQkxwuAOBAoTYoq
-	 gABl7a3TSSyVcPnDpMeHcdRUnMoP+Sgro8Xo0aVj9Udvi3J1wmdxZZW3LJeCvlZKbe
-	 /uKGlfNH/w+qJQ5violzgo6MknrnlkW+EdRA67a2hEDCAJTxQZn0nxG+BRLH1ta/7u
-	 JvcvXbwrb70kcBOy3rGBMqL098eD4YKsPh0hvCNrCzZ8GN9g9iF56fwSfZIoOlrQrQ
-	 RDYCjQK3DKLdnmFGSpe/eT0lacFdl5ruNqfQoY7I1TVtJsQpDSW8X0JBTCMKKb3c5q
-	 2hBf+HIByXlNw==
-From: Vincent Mailhol <mailhol@kernel.org>
-Date: Wed, 17 Sep 2025 13:48:26 +0900
-Subject: [PATCH v2 3/3] can: raw: reorder struct raw_sock's members to
- optimise packing
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4EC21578F;
+	Wed, 17 Sep 2025 05:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.10.95
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758087002; cv=fail; b=RuqSLWxQo56jPtfmW9h9q65dvAycTLiBBZWqlxpBDbesHp/9IuwnHKzEa0XMQK8fbUlaqGTPc4bO6hjJIq89sssBiTXfuaqE9du7LF6/f7TBeIN2U/8PKcVSA4zfinU4fCfBe3YKto/8aoKIrhSXllYr1c9TZR8YTJ/P+SwoxWs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758087002; c=relaxed/simple;
+	bh=YtH8n9QdP0+DMmlNy8GyHh2RgAzR+JXVlDGLYKlH0fQ=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=WkOohiOhcrMUBdlW1uGJqbKLxTA2Gx9S/wzGswoM5lyJ2Lzm+GjtnQ5lu81VRBlesSLKZy+5ayPu6odJ5j4/1MZ6/VHlGmCEOXQKcjt5wtbnu+bp9kjiuZ8H3XmDFp2ltGqq132lf7HIE6i8zgTbiV7rFLlc5NKgxvL4RU66Fsg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=cfitw200; arc=fail smtp.client-ip=52.103.10.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=M5JPo2L026jA9qoK9FSSKijIau2cjB45yJYKDGldnrOSgiMfG9g+wk0XTAKhRVSTktmxxTdJjrZGaE9PSwzjDCZc30EhiAOCqWKrlijDYVK7X4Am7tUatYsreGU4TkaKC8vpxKtXCxEo3o+2b8C65P6Vl28sbUbf3Lnexmg3QO7pbwQmoe0Tic/F70620Ct+065mKfGpRICM4ZmLYKkZ4dm2dE9IOuR/f6ccHOZrSBJTidA/qNOLiX+0MDiiXgFhuGhVS+FIqCVq88PNDuLmCVS9H1IysRSYHYhWjpQS4a49/NtUC3mVjnY84zoCGzHTiSufnSugO5j/xejo3UOOHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YtH8n9QdP0+DMmlNy8GyHh2RgAzR+JXVlDGLYKlH0fQ=;
+ b=CtBbnT4NkaAFXf8K+MkJHxdhFdBHc/q/+LRL4pwtLCIHfCAPyof1rGIVfxbgrgnNGrS+/u/wJGCfCyVfGNOKbRDAQD4zQMCNKUBf9adJCSLUZQrpPwScHE+lwxeg3XpAlaFGijWSdm2+hQwHRdubzfNbUAWMJUo2IUKbuN/vTO+H0LbkVw+3igDPRXOSDMIbW5QkhhUhg8ofxRfURSM1tetIhDyGmFqwZIJTt4rAdy4BBoLbIEO+Qoanm9glendJzAlJJxVD9OvOAfN4uKP9RMDYiVdooa266Djo52qO347JrVpVO5WOtW8TPyMCkLFhZOEDWjqZXFoZVwhJwhf1tQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YtH8n9QdP0+DMmlNy8GyHh2RgAzR+JXVlDGLYKlH0fQ=;
+ b=cfitw200uqr3hp58VLdBdtOy2eNkp/yUfuxnBcF32+WtshluEPySmHKFIIqQv3sqdyeDAtTD+Ui31jSsssY0GxYWlZrPu/t1QKoksHowfdq05F4XSdDJM08scyOGOF2tg62KSRRfBrQ4VM0sIG6I/39W7ZtnBXf3KpTpVXL8dq6TLxJE0nnWuOR4d1mVOACLXnq6LCNt2lfeh+9WkiI2Cu3XsisBhcYiL6g2iMy3L5GOBWpzlR5/vvqK+zELogSDyQWH+2kKgEARxjT9BNZhP5BTmbAIsFpg/RT5JRxYbvUbKCqtAdW7Ixc5EF9x2njASMD92VNDViD6EEtP5eSGZQ==
+Received: from PH7PR10MB6531.namprd10.prod.outlook.com (2603:10b6:510:202::5)
+ by DS7PR10MB5022.namprd10.prod.outlook.com (2603:10b6:5:3a3::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.13; Wed, 17 Sep
+ 2025 05:29:59 +0000
+Received: from PH7PR10MB6531.namprd10.prod.outlook.com
+ ([fe80::459d:2445:2e8b:26cd]) by PH7PR10MB6531.namprd10.prod.outlook.com
+ ([fe80::459d:2445:2e8b:26cd%7]) with mapi id 15.20.9094.018; Wed, 17 Sep 2025
+ 05:29:58 +0000
+From: Da Shi Cao <dscao999@hotmail.com>
+To: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Configure CAN port using NETLINK messages
+Thread-Topic: Configure CAN port using NETLINK messages
+Thread-Index: AQHcJ5PgVeyE9tTzzkWYcTIqTLk3Ug==
+Date: Wed, 17 Sep 2025 05:29:58 +0000
+Message-ID:
+ <PH7PR10MB65312C84F0B6A652BB3A34178C17A@PH7PR10MB6531.namprd10.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR10MB6531:EE_|DS7PR10MB5022:EE_
+x-ms-office365-filtering-correlation-id: b3525837-c90b-489d-bc0b-08ddf5ab3e1c
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|15080799012|15030799006|8062599012|8060799015|461199028|31061999003|19110799012|102099032|39105399003|40105399003|51005399003|440099028|3412199025|26104999006;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?fihBeX+wRTRwcK6vSHSgtGraWNaRPFwaCU0oLcrOe9kreriY186NpGiq3O?=
+ =?iso-8859-1?Q?b1WQ1Vyw/wLKx7YLmf+2CKOaAZJWLcHa2McrSpkWVEH1Rw0xS6PqJq8krI?=
+ =?iso-8859-1?Q?bj+BcX2rJAO5LwGmj6j2yKjHhaFQF/LE3q8J7B3pxJpAwN1elgl1ox4MLN?=
+ =?iso-8859-1?Q?xSN9I3IslJ0zylpPtUFWQQMbQ5fxgfvnFJsWzzUYHS8p8Aa/1SKIZIl/T6?=
+ =?iso-8859-1?Q?W9IQ5iCY+i4lYl3wQtBYcuBXLo/F2/8cHEwUqRJvqwafQ7lXWJUWiVCNrW?=
+ =?iso-8859-1?Q?40AKwTNI2ovq4UU2NySyYkABaWOxkmbBKtDj6C5jBIJYYe2dOgEd7uI0kh?=
+ =?iso-8859-1?Q?DlHmkIgm+bz9CRS/Eg5VZ1QXCK/cJJEdUG66tHG8+1kYyIRCjfv/MnzmGs?=
+ =?iso-8859-1?Q?/6lNYSBVJDDcm+2kdjxyKjzTpEYZq0I0ok2dcyGUCS23NwnLIoQMeMCLXE?=
+ =?iso-8859-1?Q?HAgFid3tpEkUZ5W2y3kBx0IwLk9Gl/dkoC3tQcID7/SmZ92HYbu+8bv5Xc?=
+ =?iso-8859-1?Q?m8COjPCbd7XP1GCG4cTlbZRPzE28E6SkyNmXafdov/Te1u2u7GEtM2m4qP?=
+ =?iso-8859-1?Q?R57l7QKcUzWLlhGozzEPfsfV2wsXBNEqTwHj83kPRlKhfIUDe0gnl4w2t+?=
+ =?iso-8859-1?Q?ivUu4rJ6r/8mrOKGit/bl9Fs2eptoUlUsQNPYvRrdx0Wq3XCJwtcRlF6WF?=
+ =?iso-8859-1?Q?xMUyrG0FZL2MsoyXAat2nKSDeRRs4mCx/1ipT6WLIeyUE1WGLTaNpC+rwC?=
+ =?iso-8859-1?Q?oH/g04MHxnVW8vAVpWu+pgTDeV1/7w/aQYPODgilG1BZrNjSzw820Mt3UJ?=
+ =?iso-8859-1?Q?JtnmuiA/kM+uWVO/9+wpVupHrPfg/NzwOwyq+YkDNrea1oid0K5r1RBd2w?=
+ =?iso-8859-1?Q?qSTcryZzNGYi9FqnGH2oXvh4lIBPR5Nn9W09A6Dm5sAb0fF4Shx2+9JjJO?=
+ =?iso-8859-1?Q?9fELRt5MpdK/bCgQoIFErDXMxCtEeRD4xoxwJxoGYh+ckiVgfNIjxWyfu9?=
+ =?iso-8859-1?Q?gaJfRDMAVrd+DewURNy8j+g82EIRsikB6ptu/OU/JjxOblh+qWKYCxt0Id?=
+ =?iso-8859-1?Q?vnE4Mqw6UQbkfNuA9jDtBScEplZdL9drpgwtTN8c0MnxL/boAE2Ze6wETa?=
+ =?iso-8859-1?Q?8vYy4kAQC9/NFryHSETulNR/xAQ/SXH61IfPLKEm/niZaN3nwxCtmyzu2K?=
+ =?iso-8859-1?Q?w2IOKuZXoy3oWk03gIBQihdlKTchpiA+7dwVT2XI8tTB8P+/kftHmScj/t?=
+ =?iso-8859-1?Q?kdbXI+EObAb77mYJzAE39wY8TeP3YYRdstyb7DfHT3VNxyi+5iS0sv2uES?=
+ =?iso-8859-1?Q?/+yESzJM4PPqh/qK5aoBA+D3gw=3D=3D?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?b7QVqBw8B1Yg38sRWqD+8D6VmY7x/QIFgZaIdRuVtIrvnCg5gRu1lwyhiC?=
+ =?iso-8859-1?Q?CsgJ7GAvCe/zJ98dajjjIMHVnU7OODFrf4oLEegSwMLL8oQ/O8xTly3QJV?=
+ =?iso-8859-1?Q?Fp8DB6u+CMTVgLM99bZqrpfc32N4JyVsJaOM9O7vZdoRkqlExOaKiztrL0?=
+ =?iso-8859-1?Q?Xsf8EIBQAGwttu8gQs5XJQeZuxbfUHQLy2t7HsjycfaWUg+eU9KOwPt+TC?=
+ =?iso-8859-1?Q?wAXoMuG6/flMPs0eD3veBdjlKOH9jb/hsFFhFx8JOuwIAzXqse+vuco4A4?=
+ =?iso-8859-1?Q?pkuhzVgpCzFnmUbFcvA0R9/xa/vig72frHiW2BxhmXEXZfZ18JE1utmvwY?=
+ =?iso-8859-1?Q?r3Ri1O0nJm0q0SvQv2hM8Im87ze4a2jv7x4tOJdbyARR2/brv8EPX+6Fuv?=
+ =?iso-8859-1?Q?iKqS2gqA37xvOZ5zIv+ih5VLsO8/oBdFSOeSRAjr6jVfRHW+Cqym3JErKZ?=
+ =?iso-8859-1?Q?xG6tgaVCqiUrxJac7wqHeq5Cbn1wxn3Rsbfa6FMJsLqB2Iw0JVuPKEAEg+?=
+ =?iso-8859-1?Q?Z50DVlyKbZ+AlJ/JOhX1lrVLPvm/MfiOjd7I3FvEKV4OV/eP6ir03chvrt?=
+ =?iso-8859-1?Q?P4XU7686e2vWs7zyG7Fcf1uGECn6gxdfRBEebDnzcu6XicFNUDwAosrfqY?=
+ =?iso-8859-1?Q?nq5fPjWQVgE7qheWJ68CSMgB2JELweSuvYIe6uYmZNXZkDozdhIPaHH9lY?=
+ =?iso-8859-1?Q?JSGa9NFdHYzF8UZ43AsBRKicoMrdSXV7WRv0lxpML8hWERfZDdj+6kz9ol?=
+ =?iso-8859-1?Q?VwB9vvbfCWyhu8HHuUsrGgnChLxTIopF8daVY9mIZXuytwp42UieuB8DdN?=
+ =?iso-8859-1?Q?vF1xrb+6VZlUHQhoWuSGIInDzTqLaf4FlAsKevEZGfV2JH9qBHtonBWTrA?=
+ =?iso-8859-1?Q?UGGS1C9NeWFOulnQPyMBidaRV1BGLi3HG2Ca3F63oYn3av8yqvK5espfFg?=
+ =?iso-8859-1?Q?hrLrvLDTWV3yJ8bR5msex8ukgrCrYdoCemyCMDj5SC92vDU0YljG2b/35g?=
+ =?iso-8859-1?Q?O1JYUVdd5FC4xqIjQ+4Dx1ixeM/4kQLEaYaQ+L92SaYrQ4eQq1pZSc8Pbl?=
+ =?iso-8859-1?Q?2IexmLwVS0AqLS8C1+JBkXSrMEMoFM+4T9ixX5NHsGdR2ImNmasKYTsLQF?=
+ =?iso-8859-1?Q?tU2jlg0bFINW++Rir9Sp91glI4HqgbCFUYZnQfgTteXaEJZN9F9E2bzQz2?=
+ =?iso-8859-1?Q?pLVuH8Ct6Jb6LEmimQKlOHCXljRNm/fXYQ2zuXwe4SfP12jEfBobBI5cvu?=
+ =?iso-8859-1?Q?GgmrfCnshHFMUZCBp9JQ=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250917-can-raw-repack-v2-3-395e8b3a4437@kernel.org>
-References: <20250917-can-raw-repack-v2-0-395e8b3a4437@kernel.org>
-In-Reply-To: <20250917-can-raw-repack-v2-0-395e8b3a4437@kernel.org>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, 
- Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Christophe Jaillet <christophe.jaillet@wanadoo.fr>, 
- Vincent Mailhol <mailhol@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5552; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=PqBU4lww/+186uiwZ0u17g3aZEZ98fu4Q3fznlo6ETw=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDBmnbDf7NBwOz9n869FB5jIpW2HlbU8PNQnfkdh8zbaqK
- 1NqW+KUjlIWBjEuBlkxRZZl5ZzcCh2F3mGH/lrCzGFlAhnCwMUpABM58ZaR4VGx5GsZE4ubXB7y
- e5U7mfaYXPYP0VN6sXP1zD2ddqFCGowMDQu+tV+v0r0WJMipqvX7P/ej7H2CPb+sqz04IxhZRJw
- YAA==
-X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
- fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
+X-OriginatorOrg: sct-15-20-8534-20-msonline-outlook-1700c.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR10MB6531.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3525837-c90b-489d-bc0b-08ddf5ab3e1c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Sep 2025 05:29:58.6602
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5022
 
-struct raw_sock has several holes. Reorder the fields to save 8 bytes.
-
-Statistics before:
-
-  $ pahole --class_name=raw_sock net/can/raw.o
-  struct raw_sock {
-  	struct sock                sk __attribute__((__aligned__(8))); /*     0   776 */
-
-  	/* XXX last struct has 1 bit hole */
-
-  	/* --- cacheline 12 boundary (768 bytes) was 8 bytes ago --- */
-  	int                        ifindex;              /*   776     4 */
-
-  	/* XXX 4 bytes hole, try to pack */
-
-  	struct net_device *        dev;                  /*   784     8 */
-  	netdevice_tracker          dev_tracker;          /*   792     0 */
-  	struct list_head           notifier;             /*   792    16 */
-  	unsigned int               bound:1;              /*   808: 0  4 */
-  	unsigned int               loopback:1;           /*   808: 1  4 */
-  	unsigned int               recv_own_msgs:1;      /*   808: 2  4 */
-  	unsigned int               fd_frames:1;          /*   808: 3  4 */
-  	unsigned int               xl_frames:1;          /*   808: 4  4 */
-  	unsigned int               join_filters:1;       /*   808: 5  4 */
-
-  	/* XXX 2 bits hole, try to pack */
-  	/* Bitfield combined with next fields */
-
-  	struct can_raw_vcid_options raw_vcid_opts;       /*   809     4 */
-
-  	/* XXX 3 bytes hole, try to pack */
-
-  	canid_t                    tx_vcid_shifted;      /*   816     4 */
-  	canid_t                    rx_vcid_shifted;      /*   820     4 */
-  	canid_t                    rx_vcid_mask_shifted; /*   824     4 */
-  	int                        count;                /*   828     4 */
-  	/* --- cacheline 13 boundary (832 bytes) --- */
-  	struct can_filter          dfilter;              /*   832     8 */
-  	struct can_filter *        filter;               /*   840     8 */
-  	can_err_mask_t             err_mask;             /*   848     4 */
-
-  	/* XXX 4 bytes hole, try to pack */
-
-  	struct uniqframe *         uniq;                 /*   856     8 */
-
-  	/* size: 864, cachelines: 14, members: 20 */
-  	/* sum members: 852, holes: 3, sum holes: 11 */
-  	/* sum bitfield members: 6 bits, bit holes: 1, sum bit holes: 2 bits */
-  	/* member types with bit holes: 1, total: 1 */
-  	/* forced alignments: 1 */
-  	/* last cacheline: 32 bytes */
-  } __attribute__((__aligned__(8)));
-
-...and after:
-
-  $ pahole --class_name=raw_sock net/can/raw.o
-  struct raw_sock {
-  	struct sock                sk __attribute__((__aligned__(8))); /*     0   776 */
-
-  	/* XXX last struct has 1 bit hole */
-
-  	/* --- cacheline 12 boundary (768 bytes) was 8 bytes ago --- */
-  	struct net_device *        dev;                  /*   776     8 */
-  	netdevice_tracker          dev_tracker;          /*   784     0 */
-  	struct list_head           notifier;             /*   784    16 */
-  	int                        ifindex;              /*   800     4 */
-  	unsigned int               bound:1;              /*   804: 0  4 */
-  	unsigned int               loopback:1;           /*   804: 1  4 */
-  	unsigned int               recv_own_msgs:1;      /*   804: 2  4 */
-  	unsigned int               fd_frames:1;          /*   804: 3  4 */
-  	unsigned int               xl_frames:1;          /*   804: 4  4 */
-  	unsigned int               join_filters:1;       /*   804: 5  4 */
-
-  	/* XXX 2 bits hole, try to pack */
-  	/* Bitfield combined with next fields */
-
-  	struct can_raw_vcid_options raw_vcid_opts;       /*   805     4 */
-
-  	/* XXX 3 bytes hole, try to pack */
-
-  	canid_t                    tx_vcid_shifted;      /*   812     4 */
-  	canid_t                    rx_vcid_shifted;      /*   816     4 */
-  	canid_t                    rx_vcid_mask_shifted; /*   820     4 */
-  	can_err_mask_t             err_mask;             /*   824     4 */
-  	int                        count;                /*   828     4 */
-  	/* --- cacheline 13 boundary (832 bytes) --- */
-  	struct can_filter          dfilter;              /*   832     8 */
-  	struct can_filter *        filter;               /*   840     8 */
-  	struct uniqframe *         uniq;                 /*   848     8 */
-
-  	/* size: 856, cachelines: 14, members: 20 */
-  	/* sum members: 852, holes: 1, sum holes: 3 */
-  	/* sum bitfield members: 6 bits, bit holes: 1, sum bit holes: 2 bits */
-  	/* member types with bit holes: 1, total: 1 */
-  	/* forced alignments: 1 */
-  	/* last cacheline: 24 bytes */
-  } __attribute__((__aligned__(8)));
-
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
----
- net/can/raw.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/can/raw.c b/net/can/raw.c
-index 5a5ded519cd1768456c234c42dc4e865f7350dab..bf65d67b5df0135bf02d90c5e1070898a4f5592e 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -82,10 +82,10 @@ struct uniqframe {
- 
- struct raw_sock {
- 	struct sock sk;
--	int ifindex;
- 	struct net_device *dev;
- 	netdevice_tracker dev_tracker;
- 	struct list_head notifier;
-+	int ifindex;
- 	unsigned int bound:1;
- 	unsigned int loopback:1;
- 	unsigned int recv_own_msgs:1;
-@@ -96,10 +96,10 @@ struct raw_sock {
- 	canid_t tx_vcid_shifted;
- 	canid_t rx_vcid_shifted;
- 	canid_t rx_vcid_mask_shifted;
-+	can_err_mask_t err_mask;
- 	int count;                 /* number of active filters */
- 	struct can_filter dfilter; /* default/single filter */
- 	struct can_filter *filter; /* pointer to filter(s) */
--	can_err_mask_t err_mask;
- 	struct uniqframe __percpu *uniq;
- };
- 
-
--- 
-2.49.1
-
+Dear all,=0A=
+To set CAN port attributes, command RTM_NEWLINK must be used. RTM_SETLINK w=
+ill not do the job.=0A=
+Why?=0A=
+=0A=
+Thanks,=0A=
+Dashi Cao=
 
