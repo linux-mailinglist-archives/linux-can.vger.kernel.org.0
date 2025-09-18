@@ -1,361 +1,191 @@
-Return-Path: <linux-can+bounces-4725-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4726-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84B9AB81F85
-	for <lists+linux-can@lfdr.de>; Wed, 17 Sep 2025 23:29:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7914B83310
+	for <lists+linux-can@lfdr.de>; Thu, 18 Sep 2025 08:49:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 382937212AB
-	for <lists+linux-can@lfdr.de>; Wed, 17 Sep 2025 21:29:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5C031C8123B
+	for <lists+linux-can@lfdr.de>; Thu, 18 Sep 2025 06:49:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4C72749CE;
-	Wed, 17 Sep 2025 21:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E10F82DF717;
+	Thu, 18 Sep 2025 06:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="UtVKNtDB"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Fq1ZLBeY"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1966817BB21
-	for <linux-can@vger.kernel.org>; Wed, 17 Sep 2025 21:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.221
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758144564; cv=pass; b=Nbw1aHsf7e3h/ps9N1KMnaPm+TjU1sGZC+PvT1N12ACGuFvxgZ9eETAwM/l5QmR5xaatUx57K9aLETChFwco7I7SWV32cmBTovanKZjvM1TLaRla2Y01UIYK7ZFFDs3CKIS7rlHSc/va6wb9RrWLNCtjOEFdYbA34F7cSdVZZLA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758144564; c=relaxed/simple;
-	bh=qSYRO+xeuDBJauXGNUvEisprRWbZA9EWSbXHUNykNbE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OxoMdVBAKJsTsOqmqnzKaXIGdj45om9xuTm/FRWs45tHztR35oTWNYdtblTFFNPXeJ1o2yCguAHVZBdU3NAYYYirsqyX9Xt911/jTPFPR2/Wy8aN+fV+3gMMXe4IEUNQ7sZSl20f8TW65r4mA73B4+nVpG6tR619T33VLWgER2I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=UtVKNtDB; arc=pass smtp.client-ip=81.169.146.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1758144551; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=JxZ4YrUczp6hjwD2ZCtVuhC2QIoptO9a3URzG92jna73oJqflEVxPByzL3CTcwUDNN
-    aamxYeTfv/Hi+BrhepMSDmjSWgErHbd94xrRlDthJ8lnrPuwFxU1WoWTBihPAyhOkuDP
-    g6KqgWqGHRwMM42GwXyu9k2h2ZW0GX+EZsbLNdFmbDTd/QaxwZr/c6g852Ca47rTY/MY
-    eR1AXD1xVPPPevD+yyBLSQ0VyYZOrwm5u3vFumQ4cXdiuJmsJWEkJbJAN50Por1L9ubm
-    /M3aDjjJ+zOrRbd/jxMJg5eDjOj6f0y9OUt5YnajVJYCTUB7QGNCptFVTrdApdVnqA3U
-    mSsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1758144551;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=bXlRHXE7l7fApGcCbA69C6cEbgjAmGL7tMAyQ2KiEzQ=;
-    b=B+fxm9wyPBK2Y8Uh4sKlQhdxp5KywOYorOA2Zar79o7M5RIDetZmCCpf0J0j47Ft16
-    99QGP2C/e2IACVXcY/h1azeKdtbQmMwkYUiPko9N2VEQCDI10XwcuvDz6JoABaw9gmYo
-    WbUY6SJR0aD6wfHk4mX+qz9TTv4ABlhv7mykIXD1AP2HoMjQbNbL+yAOj+aNWwe6rH/m
-    33hl37BOeip3ReVMl+qpUif0XN+rVZPQowqAg9WFzfMEiqUHziIFqeuVCXV6zzP1moZW
-    dOCP5ocOhvY6ZaZdCq7RIV7NSRfeyC/SPMd5+0nHU2VGsw5cQxDIFd/8ZGAgrU5rtaCv
-    AETQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1758144551;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=bXlRHXE7l7fApGcCbA69C6cEbgjAmGL7tMAyQ2KiEzQ=;
-    b=UtVKNtDBTR2hHZUzBVzQ8I55MALNrnUUVgAr2bON/3O4Fu1Aq3cxMdI/C4C2I0sygK
-    FHNmZkMxqNJsm8vSnt/w2RdMCMaZYjmuN4IhYgg8EAa/xMWSNWZtPHZEM78vKbr2UXHa
-    ibcdjneMNzWD0nZkPPdHbHUotn257JFFe7C3uKq3wUnVdM0L+Z/hAQYjE67T6IDolrow
-    DtuUO9htQdhTl+XB4F6GNJKQE2+M4jxzjMKxRw/tW3v7/Gd45wu2Qg9eDDldEhClerWC
-    aXGFCdZbDbbXiLbsP5butIAsJv4cYNY2Pr4xh8cgNcBQlY3mY7buxHDFA+Hrzwr5Ky81
-    yl7A==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tR5FgtOb3TQGXSU4="
-Received: from [192.168.23.131]
-    by smtp.strato.de (RZmta 52.1.2 AUTH)
-    with ESMTPSA id K2a23218HLTBCEY
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Wed, 17 Sep 2025 23:29:11 +0200 (CEST)
-Message-ID: <a85dec20-e638-4069-8355-9cbf4d2d278e@hartkopp.net>
-Date: Wed, 17 Sep 2025 23:29:04 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FEC78F58
+	for <linux-can@vger.kernel.org>; Thu, 18 Sep 2025 06:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758178156; cv=none; b=CZWmqARUYGX9oBzH6IkMaqj+kdxi2ZvdLDcnSuWy5zPzgPBqoT0RCY6SDp5B9cNnoF0+OxxbkW/eIH1wYToEVWA+9L6tNYq1t63TNhWeZt6rIgm3WAQJdF6qVm4MW5sqyRaAgAlM2ojc5UpbX/AYHLcDchEaqyZ8zuD03bY5uts=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758178156; c=relaxed/simple;
+	bh=ErcDCir/FL2L27V2yhCvXo9PV0YbnBMQYjljKFP6sN4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UCjew2u5Uotn72YSyX6NOQcN73q9yWrEFtjavm/ps7CyNTyfhR2wCUdJA/oFYkBUOGvnzWoRGABhEDDmy2XyARMGlcnwWcchGzmRoJyNCo2WwyJ9WvWX9ib4oqczxTeAI/d48eDgIuRL2QEnhfRBNwBem5etlLRyna1UXe4USbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Fq1ZLBeY; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58I53H8p017023
+	for <linux-can@vger.kernel.org>; Thu, 18 Sep 2025 06:49:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=oIn4sFdMvxF9JDi10QHzfu83QzlIJxyUB2t
+	s4/QNXqI=; b=Fq1ZLBeYlag9+wqxoNVEt/DMXQGYMfkrk/3sfP/PP+be+o1ojAf
+	vkEthibH226hUUW22oI6qSbzxDId41hBM/VXmVZIwQdZdtPLQhnCteDg9G/ByIN2
+	bN2f2zoU6XweTnylEhNe8C/rjt/1iFRA0LF2wRpPYIXhNNLxzwINLW2MoP7KdaeO
+	6ITUMnPUCzMDusK/aw6QMm/Kh7uvDQXCwZtTN2GeUz5Ag8eX7dNBS39aIjq56jDZ
+	yXkQ3B8pl+5mhulqVaZetsW6HJnjSSv4gQNtlhQZIuzu71rJQRpdz2MlaXTbzevH
+	o1X9Lm0mTWvTW9R+wjOoXPSNwQSsgeJMRrA==
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4982de9s3m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-can@vger.kernel.org>; Thu, 18 Sep 2025 06:49:13 +0000 (GMT)
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-b54f6a4bf11so413600a12.0
+        for <linux-can@vger.kernel.org>; Wed, 17 Sep 2025 23:49:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758178152; x=1758782952;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oIn4sFdMvxF9JDi10QHzfu83QzlIJxyUB2ts4/QNXqI=;
+        b=Pilzg0KrkQl0Ccj0iGIinraJ7yYSvzOHnycTSXiEe0RfuREswWCgePPCTlq5EBhukO
+         dfP9ja3VghLnKASaqcByMqJ4FOst/FN7eB658KiRXSDcVImq1KlcWcJoRbeXSuLHV3Zh
+         gk8sepNjhD/C1Oak4eW39AhvyUwQtPIioqXDGEZREA6i1DiWfZIH9ChZ/CSkCDV0ONoc
+         Hkr3hNxRNRfJIurfb0dCVBa+5CGib41zd5QmxNXS+Kl89CM92sTHJOo7ly7br7p0M15+
+         kLo+WMgDiwxVRHSl71A+BvH4pEb4EWZsjq1ebSybnKZPvqBxWFxQSAzbmf66xDOfajos
+         RU6w==
+X-Forwarded-Encrypted: i=1; AJvYcCU2bapuoiZW4/tibt8PlizuPDOmfteK3jYJInQ1fFs+hsEbjsG5ci1X7lhUqdqKSgnAIODQtqfw2i8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8tWZASpT2mDIm1C+2v4R88VUPYHdridNhZqqSV/6MaQwXwnSP
+	eqOG8U5y9A8DcKDh8bdDAG8vYfdi8W4H9m30BXydw6eGA3GPFN/RPiuLN+iEm2obnT1RRRU+DVT
+	ObaQTW42C3O/gPy4B/Tet22hiU4XdMiGPVdL0XWjmiab44qGCf6+oaRCaXVw2Zk4=
+X-Gm-Gg: ASbGncvwyXnn+slSGsBcYCawEq7LbXlAFyU49E4+UMACmHDbTqaNdmqLUlxbpeZEdZM
+	fQxI/JlzxtA35SaLjgPh9ZblIqwrQDi8gZ7T7Xv9mjX3oW9zECdmW4pJyAn/N6QTqkr11CbzGQV
+	zmP5n9RsNYRMJBQVKTAGf2qI8R36kY3EAXrFZ2NL2h4POCXDO2bhloU7KvY32X9lOPJO384+QVZ
+	YOQviJlPj5yecO9si1d0q7bLg9Tq+gIXlITRj+X2Vaqf+IGmEN+GsaqUgdWSRy+nbJXfqQhlvqT
+	Zv2jF74sGe6mhiA7ekwd7dZNGzhrjzlLbd8bpveT4U4jE8lUGFQmOHyYWoTB606zHf9m2OowXLS
+	k
+X-Received: by 2002:a05:6a21:9988:b0:24d:56d5:369e with SMTP id adf61e73a8af0-27a9303eedfmr7041388637.3.1758178151919;
+        Wed, 17 Sep 2025 23:49:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE4ZviaMBDQpPBzymkzbRdb3vIBqhk21yMuf1H3uqYvz9E+DUhiRUnBAG+10J0W1XlZwNOlmQ==
+X-Received: by 2002:a05:6a21:9988:b0:24d:56d5:369e with SMTP id adf61e73a8af0-27a9303eedfmr7041357637.3.1758178151501;
+        Wed, 17 Sep 2025 23:49:11 -0700 (PDT)
+Received: from hu-vdadhani-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77cff22bdb5sm1356789b3a.94.2025.09.17.23.49.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Sep 2025 23:49:11 -0700 (PDT)
+From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+To: mkl@pengutronix.de, mani@kernel.org, thomas.kopp@microchip.com,
+        mailhol.vincent@wanadoo.fr, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: mukesh.savaliya@oss.qualcomm.com, anup.kulkarni@oss.qualcomm.com,
+        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Subject: [PATCH v4 0/6] can: mcp251xfd: add gpio functionality
+Date: Thu, 18 Sep 2025 12:18:57 +0530
+Message-Id: <20250918064903.241372-1-viken.dadhaniya@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v5 2/2] can: reject CAN FD content when disabled on
- CAN XL interfaces
-To: Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org
-Cc: =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
-References: <20250909092433.30546-1-socketcan@hartkopp.net>
- <20250909092433.30546-2-socketcan@hartkopp.net>
- <f7b59c7c-30ad-4cf4-ad0e-bff0e39b3337@hartkopp.net>
- <7578f44d-d85c-473e-8e7a-65d1fc974e68@kernel.org>
- <20c5c885-0bab-4c42-82c6-e98571a5d19d@hartkopp.net>
- <552631f3-15fe-4bb3-a512-1eaca57be5ca@kernel.org>
- <3a963548-faa9-4611-a3cf-e41b425968a8@hartkopp.net>
- <b6637b79-6377-4038-967f-0354a32eb2c3@kernel.org>
- <6afc7e2d-eecf-4c47-bcef-0e2cdd7f4a89@hartkopp.net>
- <67e0351c-b478-4938-a42d-77764b27b9d1@kernel.org>
- <3979cf15-6a08-44e3-a620-fe97d8218713@kernel.org>
- <1618e271-e052-4667-9a7f-c6672fe582c4@hartkopp.net>
- <fa15357e-4d08-4192-a0d7-46315cba6610@kernel.org>
- <034cad19-d04d-4b14-87b2-e8b2b7b14099@hartkopp.net>
- <204b2bbf-eeb6-492d-9842-4720ba6c055b@kernel.org>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <204b2bbf-eeb6-492d-9842-4720ba6c055b@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=YfO95xRf c=1 sm=1 tr=0 ts=68cbab69 cx=c_pps
+ a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=8f9FM25-AAAA:8 a=Do27b2NNzWYMqhJ2O6UA:9
+ a=_Vgx9l1VpLgwpw_dHYaR:22 a=uSNRK0Bqq4PXrUp6LDpb:22
+X-Proofpoint-GUID: 34ltAt70p5yZS9Fv9_5g84nHdUBoo1QH
+X-Proofpoint-ORIG-GUID: 34ltAt70p5yZS9Fv9_5g84nHdUBoo1QH
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE3MDE4MiBTYWx0ZWRfX2MxpcDnNVdKh
+ j5AtIM5YRwi4SujQXIX9idDb2I54mOFn/zBevZDG9F+OSiUiljg7jHzbz4bbSdnw++pc8yB9KHd
+ /QODFGC6tzS8S1ANkd4qaHW4hLfnR4xMfcbR751upkvvtKqhcloHtSjuHb2azEdWOfChgfbkALa
+ eS9omKNO9IVRoN8fYsCaUDYo5If62nF5izSnI09wyaJiO0oeCIe6jXP37t+qEeURxDQUgzlearj
+ abtWs+vjCo0FVQtcNDo1KvpDxQJ4XqX0uFla2Og7xSdNXdQJeapY7i0/QJf88kmO8tNN6sweLHV
+ vVtnLoFvOEDmCTVKBESlVQlPEltFqxtkwZzW1ukTzwCqmCWv8eTyk/KfleR9ZYAgBQwHmAApeU7
+ rW8Cs7tV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-17_01,2025-09-18_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 impostorscore=0 suspectscore=0 clxscore=1011 priorityscore=1501
+ spamscore=0 phishscore=0 malwarescore=0 bulkscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2509170182
 
+Hi all,
 
+The mcp251xfd allows two pins to be configured as GPIOs. This series
+adds support for this feature.
 
-On 16.09.25 15:17, Vincent Mailhol wrote:
-> On 16/09/2025 at 18:14, Oliver Hartkopp wrote:
->> On 15.09.25 20:54, Vincent Mailhol wrote:
->>> On 16/09/2025 at 03:08, Oliver Hartkopp wrote:
->>
->>>> I think the interface to set the MTU lacks a clear separation of how to set the
->>>> MTU for real (hardware) CAN interfaces and virtual CAN interfaces.
->>>
->>> Ack.
->>>
->>>> 1. IMO we should be able to set the MTUs on virtual and real interfaces when the
->>>> interface is down (as those MTUs have no effect at this time).
->>>
->>> Mostly agreed. It should not be possible to switch between the Classical CAN,
->>> CAN FD or CAN XL MTUs. But I do not yet see an issue to change the MTU to
->>> something in between CANXL_MIN_MTU and CANXL_MAX_MTU while a CAN XL node is
->>> running.
->>
->> No, not while it is running (== up).
->> My point was that you can set the MTU as long as the interface is not "up".
->> Together with the default initial values (see below) this makes perfect sense to
->> me.
->>
->>> I want to first study the other interfaces (e.g. ethernet) and the core net
->>> infrastructure in order to make my mind. For the moment, I am just undecided.
->>
->> I'm not sure if ethernet is a good example for our use-case with different CAN
->> protocols types (CC/FD/XL) which is more than having ethernet frames of
->> different length.
-> 
-> I agree that we should not switch between MTUs of different protocols while the
-> interface is up.
-> 
-> My point is just to allow switching the MTU to anything between CANXL_MIN_MTU
-> and CANXL_MAX_MTU on a CAN XL interface which is up. So the use case is also
-> just one protocol type (CAN XL). And that, I think, is comparable to Ethernet
-> frames.
+The GPIO functionality is controlled with the IOCON register which has
+an erratum.
 
-Ok. I did not know that it is possible to change the ethernet MTU on the 
-fly when the interface is up. But this would indeed match the CAN XL 
-MIN/MAX MTU pattern then. I'm fine with it.
+Patch 1 from https://lore.kernel.org/linux-can/20240429-mcp251xfd-runtime_pm-v1-3-c26a93a66544@pengutronix.de/
+Patch 2 refactor of no-crc functions to prepare workaround for non-crc writes
+Patch 3 is the fix/workaround for the aforementioned erratum
+Patch 4 only configure pin1 for rx-int
+Patch 5 adds the gpio support
+Patch 6 updates dt-binding
 
->>>> 2. When a virtual interface is set to "up" the MTU is used and fixed.
->>>
->>> Same as above, mostly agreed aside from the CAN XL on which I do not yet have my
->>> final opinion.
->>>
->>>> 3. When a real interface is set to up the mtu is set to ...
->>>>     a. mtu = CAN_MTU when fd off and xl off
->>>>     b. mtu = CANFD_MTU when fd on and xl off
->>>>     c. mtu = the configured CAN XL MTU (*) when xl on
->>>>
->>>> (*) when the configured mtu is not in the range of CANXL_MIN_MTU and
->>>> CANXL_MAX_MTU the mtu is set to CANXL_MAX_MTU.
->>>>
->>>> By default the initial MTU of virtual CAN interfaces should be set to CANXL_MTU.
->>>>
->>>> By default the initial MTU of real CAN interfaces should be set to the maximum
->>>> value which the real CAN interface is capable too:
->>>>    a. CAN_CTRLMODE_XL supported -> CANXL_MTU.
->>>>    b. CAN_CTRLMODE_FD supported -> CANFD_MTU.
->>>>    c. default CAN_MTU
->>>
->>> I was thinking of the opposite:
->>>
->>>     a. if the device is CAN FD static it is CANFD_MTU
->>>     b. if the device is CAN XL static it is CANXL_MTU
->>>     c. otherwise, it is the CAN_MTU by default
->>>
->>> which, if you remove point b., happens to be the current logic. I do not see a
->>> need to change this.
->>
->> I like that approach of having the supported MTUs as default and later reduce
->> the MTU based on fd=off and xl=off, because it would be similar with the virtual
->> CAN configuration then.
-> 
-> vcan's MTU is set to CANFD_MTU. You still need to manually increase it to enable
-> xl. But fair enough, we could modify the vcan default to CANXL_MTU so that it
-> works as you just described.
+As per Marc's comment on below patch, we aim to get this series into
+linux-next since the functionality is essential for CAN on the RB3 Gen2
+board. As progress has stalled, Take this series forward with minor code
+adjustments. Include a Tested-by tag to reflect validation performed on the
+target hardware.
 
-Yes. I changed to initial value from CC to FD here:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=97edec3a11cf6f73f2e45c3035b5ff8e4c3543dd
+https://lore.kernel.org/all/20240806-industrious-augmented-crane-44239a-mkl@pengutronix.de/
+---
+Changes in v4:
+- Moved GPIO register initialization into mcp251xfd_register after enabling
+  runtime PM to avoid GPIO request failures when using the gpio-hog
+  property to set default GPIO state.
+- Added Tested-by and Signed-off-by tags.
+- Dropped the 1st and 2nd patches from the v3 series as they have already been merged.
+- Link to v3: https://lore.kernel.org/linux-can/20240522-mcp251xfd-gpio-feature-v3-0-8829970269c5@ew.tq-group.com/
 
-Therefore it makes sense to do this for CAN XL again.
+Changes in v3:
+- Implement workaround for non-crc writes
+- Configure only Pin1 for rx-int feature
+- moved errata check to .gather_write callback function
+- Added MCP251XFD_REG_IOCON_*() macros
+- Added Marcs suggestions
+- Collect Krzysztofs Acked-By
+- Link to v2: https://lore.kernel.org/r/20240506-mcp251xfd-gpio-feature-v2-0-615b16fa8789@ew.tq-group.com
 
-> But I do not see the parallel. On vcan, FD is turned on by default. On real
-> interfaces, CAN_CTRLMODE_FD is turned off by default. Why should we be trying to
-> spot similarities on something which is different in the first place?
+Changes in v2:
+- picked Marcs patches from https://lore.kernel.org/linux-can/20240429-mcp251xfd-runtime_pm-v1-0-c26a93a66544@pengutronix.de/
+- Drop regcache
+- Add pm_runtime in mcp251xfd_gpio_request/mcp251xfd_gpio_free
+- Implement mcp251xfd_gpio_get_multiple/mcp251xfd_gpio_set_multiple
+- Move check for rx_int/gpio conflict to mcp251xfd_gpio_request
+- Link to v1: https://lore.kernel.org/r/20240417-mcp251xfd-gpio-feature-v1-0-bc0c61fd0c80@ew.tq-group.com
 
-We should generally separate the configuration of interfaces with 
-netlink ctrlmode support (real CAN interfaces) from virtual CAN 
-interfaces that don't know about  CAN_CTRLMODE_FD. See my personal 
-summary below.
+---
+Gregor Herburger (5):
+  can: mcp251xfd: utilize gather_write function for all non-CRC writes
+  can: mcp251xfd: add workaround for errata 5
+  can: mcp251xfd: only configure PIN1 when rx_int is set
+  can: mcp251xfd: add gpio functionality
+  dt-bindings: can: mcp251xfd: add gpio-controller property
 
-> What I dislike the most is that there is an existing logic for the real
-> interfaces. The MTU is set by default to CAN_MTU here:
-> 
->    https://elixir.bootlin.com/linux/v6.16/source/drivers/net/can/dev/dev.c#L242
-> 
-> and is modified only if the device is CAN FD static here:
-> 
->    https://elixir.bootlin.com/linux/v6.16/source/include/linux/can/dev.h#L144
-> 
-> Here, we are not adding a new feature, but extending an existing one. So you
-> would need a strong argument to justify a change going in the opposite direction
-> of the current logic.
+Marc Kleine-Budde (1):
+  can: mcp251xfd: move chip sleep mode into runtime pm
 
-Ok. You convinced me. Please follow the current approach.
-Every CAN interface starts with CAN_MTU unless they are static FD/XL 
-interfaces.
+ .../bindings/net/can/microchip,mcp251xfd.yaml |   5 +
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 292 +++++++++++++++---
+ .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  | 114 +++++--
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  10 +
+ 4 files changed, 355 insertions(+), 66 deletions(-)
 
-> I see that can_change_mtu() is currently broken, so that's a strong enough
-> reason to change it. But the default MTU logic looks coherent to me so I do not
-> get why that should change.
-> 
->> I assume the initial MTU isn't looked at by the users anyway.
-> 
-> The user may look at it. It is better not to make assumptions here.
-> 
-> The design must be such that the netlink always reports a coherent configuration
-> at any point in time.
-> 
->>> If we set CANXL_MTU by default on XL capable devices, it means that at a moment
->>> in time, we have a device with the CAN_CTRLMODE_XL off but with a CAN XL MTU.
->>
->> ???
->>
->> Maybe I was not clear enough:
->>
->> You intitialize the MTU to CANXL_MTU when CAN_CTRLMODE_XL is a "supported mode".
->> The interface is not "up" at this time and therefore the MTU is not on active
->> service.
->>
->> Then you configure the interface with bitrates and xl/fd on/off.
->>
->> And then you set the interface to "up" and in this process the MTU is set as a
->> valid and activated value with a MTU based on the xl/fd on/off settings. This
->> was my idea.
-> 
-> Then, why do we need to set an MTU in the first place? The user must call the
-> netlink interface at least once.
-> 
-> If I follow your point, we might as well set it to zero at the beginning to just
-> signal that the interface is not ready and that the MTU is unknown.
-> 
-> Also, consider the following. If I connect a real device and do right away a:
-> 
->    ip link set can0 type can xl off
-> 
-> then, what is supposed to happen?
-
-Nothing. There is no bitrate configured.
-
-> This is supposed to be NOP (the CAN_CTRLMODE_XL is off at the beginning).
-> 
-> But then, should the MTU change? If yes, should it change to the CANFD_MTU or to
-> the CAN_MTU?
-> 
-> That's why I am saying that having a disconnection between the MTU and the
-> control modes is bad. Your logic creates some edge cases for no valid reason.
-> 
-> The simple logic would be this:
-> 
-> 		fd off, xl off		fd on, xl off		fd any, xl on
->    ---------------------------------------------------------------------------
->    default mtu	CAN_MTU			CANFD_MTU		CANXL_MTU
->    min mtu	CAN_MTU			CANFD_MTU		CANXL_MIN_MTU
->    max mtu	CAN_MTU			CANFD_MTU		CANXL_MAX_MTU
-> 
-> Each time the user touches the fd and xl flags, the MTU, MTU MIN and MTU_MAX
-> triplet is modified accordingly in can_changelink() to the values in above table
-> and this way, you are always in a coherent state in which the MTU matches the
-> control mode flags.
-> 
-
-Yes, that's fine.
-
-Will the user defined MTU for CAN XL survive the settings when xl is set 
-to off and then set to on again?
-
->>> And this is inconsistent. For me, the MTU should always match the control mode
->>> flags. Because all control modes are off at the beginning, the MTU is thus the
->>> Classical CAN one.
->>>
->>>> I think this should make it clearer and fix the current inconsistency.
->>>>
->>>> Setting the CANFD_MTU via the ip set mtu feature and expect "fd on" being set at
->>>> the same time is bad.
->>>
->>> OK. Aside of a few details, I think we agree on the big lines. The good thing is
->>> that the current can_change_mtu() only targets the real interfaces. The virtual
->>> ones already have their own functions and so will not get impacted.
->>
->> Right. The virtual CAN stuff can stay as-is.
->>
->>> So I am just thinking of doing a full rewrite of can_change_mtu(). The old logic
->>> of being able to implicitly set the fd flag by providing an MTU will go to the
->>> trash can.
->>
->> Yes. That was not consistent and clear in the usage.
->>
->> With my suggestion the can_change_mtu() will be just a simple setting of values
->> which is the same for real and virtual interfaces.
->> For real interfaces we might make some additional checks against the "supported
->> modes" for FD and XL.
->>
->> And when the real interface is set to "up" the MTU is adjusted to the real cc/
->> fd/xl configuration values. I hope this makes it clear now.
->>
->>> The new logic will try to follow as much as possible the intended MTU
->>> logic of the core net framework (which I am still studying).
->>
->> Don't expect too much for our use-case there ;-)
-> 
-> There is one feature that I would really like to use:
-> 
->    net_device->min_mtu
-> 
-> and
-> 
->    net_device->max_mtu
-> 
-> Once you set those, you automatically get:
-> 
->    - validation by the core infrastructure that the user's inputs are in range
->    - reporting of those min and max MTU values through the netlink interface
-> 
-> The first point is a nice to have. This way, the devices are not forced anymore
-> to populate net_device_ops->ndo_change_mtu.
-> 
-> The second point is what looks the most important to me. I am incapable of
-> remembering what are the actual values of CANXL_MIN_MTU and CANXL_MAX_MTU. If we
-> advertise those through netlink, then I can easily confirm the range.
-
-Ok. Nice.
-
-To sum it up for myself:
-
-1. Setting the MTU from user space is only relevant for virtual CAN 
-interfaces and CAN XL interfaces for values between CANXL_MIN_MTU and 
-CANXL_MAX_MTU.
-
-2. Usually the MTU is set automatically by the netlink configuration 
-process when fd/xl on/off are set.
-
-Right?
-
-Best regards,
-Oliver
+-- 
+2.34.1
 
 
