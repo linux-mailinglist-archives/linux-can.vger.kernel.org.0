@@ -1,150 +1,112 @@
-Return-Path: <linux-can+bounces-4742-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4744-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 823E2B843FB
-	for <lists+linux-can@lfdr.de>; Thu, 18 Sep 2025 12:59:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CFD6B84B62
+	for <lists+linux-can@lfdr.de>; Thu, 18 Sep 2025 14:58:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3420622E3F
-	for <lists+linux-can@lfdr.de>; Thu, 18 Sep 2025 10:59:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 470CD1C232C2
+	for <lists+linux-can@lfdr.de>; Thu, 18 Sep 2025 12:59:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA7B2FFF8A;
-	Thu, 18 Sep 2025 10:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861B0304969;
+	Thu, 18 Sep 2025 12:58:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NXnGKhAL"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f65.google.com (mail-ed1-f65.google.com [209.85.208.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0D62F5A1A
-	for <linux-can@vger.kernel.org>; Thu, 18 Sep 2025 10:59:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1D2303CBE
+	for <linux-can@vger.kernel.org>; Thu, 18 Sep 2025 12:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758193168; cv=none; b=mOG4sO5bJGf2APX0o0GEBUivXiGzpSrkN2NZLTFndY0w6BxnMT0p6iR3vS+oZ4FXwakzDAcj9qUnqWh8SUlOcahXCNG/eLetB3z5NDGaRF67LGsJK5kNaqeXLsA5/6vYzmA5gI9SEXxX0C6MkQ0tRCQKn7czRxn7zH+hqBOFmiI=
+	t=1758200328; cv=none; b=eCtthdvyB/vhWKv9JwgC6nGuDx6ZsU+p6/pMh4g9gxgEA/2e58Z3HR9rvqd2lOCUfZ+tzAAUPkiSRS5ktYJpVZ+p+4/gPTBG+xaN2bBPvyOkAcMZE/cT22oV8ZC7jsIpfyIJKMFjd+wTsnP2SlDbSOcfhA0zA9Fsbk87xNWklNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758193168; c=relaxed/simple;
-	bh=uQ0qyw5c8o/+colPeKujxDOwIHdwYhxWGqbj0nq87f4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AVV050VbNHbC8HL2Urf72cKuYnsprSlrpsf8uu6Pe+FEjVHpMsnMXDi3ynWwu7ntgZpL1l50NNOedAAaB6OWBo+sLUk4spi2g2JMiuj9gmuXMFoQmBtiEwN6EeIhh2PreMxiTkFH8UP/FSSpqxDzEkPogEAmT3AFo9CXu3Gb0dA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uzCLp-0003qI-WA; Thu, 18 Sep 2025 12:58:58 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uzCLo-001vOk-1I;
-	Thu, 18 Sep 2025 12:58:56 +0200
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 0A18D473F21;
-	Thu, 18 Sep 2025 10:58:56 +0000 (UTC)
-Date: Thu, 18 Sep 2025 12:58:54 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>, 
-	mukesh.savaliya@oss.qualcomm.com, anup.kulkarni@oss.qualcomm.com, 
-	Gregor Herburger <gregor.herburger@ew.tq-group.com>, mani@kernel.org, thomas.kopp@microchip.com, 
-	mailhol.vincent@wanadoo.fr, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	linus.walleij@linaro.org, linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 5/6] can: mcp251xfd: add gpio functionality
-Message-ID: <20250918-daffy-steady-griffin-5299ac-mkl@pengutronix.de>
-References: <20250918064903.241372-1-viken.dadhaniya@oss.qualcomm.com>
- <20250918064903.241372-6-viken.dadhaniya@oss.qualcomm.com>
- <CAMRc=Mf2ycyKbL35bdy5m1WBEap7Bu8OO2Q9AdZYgc04Uynf8g@mail.gmail.com>
+	s=arc-20240116; t=1758200328; c=relaxed/simple;
+	bh=lvcQGE6zMqa3RPKmZjZH5zBkLah9vgbD3X7rCwM3Uvs=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=LguCSHaosgSljiiYHdOeDle3GKkhhkisPt21kyVWGPsvE+gsAp4E/briEGbBgyy5dSTn0zz0728/Jr41slJdOEWDiV5KqfFOEEUEKSDj8H9o1FWrZEPbvEUtOCK9Erqo421DNPpGDvaPQDAlpfBjk97mE/NWaF09RU0xLlZKJaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NXnGKhAL; arc=none smtp.client-ip=209.85.208.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f65.google.com with SMTP id 4fb4d7f45d1cf-62f0702ef0dso3926818a12.1
+        for <linux-can@vger.kernel.org>; Thu, 18 Sep 2025 05:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758200325; x=1758805125; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lvcQGE6zMqa3RPKmZjZH5zBkLah9vgbD3X7rCwM3Uvs=;
+        b=NXnGKhALfj6DlKeOHQ2Bg5ICvOLXQRL87q2c4Dyfau+W0hglTwwzaKOaqY507QyHnk
+         9Ki6JEkZw+W8uT7xLGegNVOiM3eJsB4Qsfno57q+yr9fZEhK1DF72giefaYlvQnbRh4q
+         T1bxVw5tDGdpoNO6bNIBIx8zPnlS61+y/zkFtld7loynoTEUfDnADlYz8fSqBMuGhpsR
+         4imNkTluKLs0F4YMvhlWkf3xFjPiE6DOAv4yj/VlZdgGAyWQdtqMAI4zg3Uqnbqibm4l
+         IZvoXM2f6DyscJIoOV3AnJdAiOJiz7VFf/Nd/fIqK8gmn59ywBUTodIKGvjbjP/rBw1W
+         uNTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758200325; x=1758805125;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lvcQGE6zMqa3RPKmZjZH5zBkLah9vgbD3X7rCwM3Uvs=;
+        b=lI45VHFVNXiycATQJY9Vbi7bSNXvNJsmDwrWaHvEnaErcW1HveJNIL3zaxUaUGx6gZ
+         tM33qM53ko67eKOIp43F5rLQ8a0DcD/hoqqWDyuF4Qy+gw+X2sJ+e3w/VFuH6FoCmC1N
+         SoGQzPgqlIPo2pWeiNFJq8p22fuN+HVt5iDEcz6c1ajIls6zIUBHEK2BED9KdpDjSbma
+         puCxTZuk+Ak4z3PVBoqE3Aek7Cc7ufCozdiwVQm26TxBuhXk1+pkNeyWE/NJwe0/MQaa
+         z3YYdFVN3th63hH1kb5t86LdIYn+PrZ5HCdSfg2RlhssfdTcDJNYcCZ7/KkZTZ9KTQDp
+         3DyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVksl1RHnm9lG/fqgcm9hYZgrxapW0QgURpv+q4NDshPHFjhiq0kG6J+AGBQjUg6UhY9n5RsMlHOzY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpprUQbakRr+QyJmFF2xpRqKnqe3XeKfjtCW3OmUKrkY1Q1vIh
+	Nz/nGqirh6SGiyiNtx2D8zvvhl3tRu43VgaIfZHgLsKVBmFxsA2IbO2J56CsfvH1uHeO6gtkZwA
+	5MCLF0BmuJooIdzZjIIfJVqN6GeaPHBc=
+X-Gm-Gg: ASbGncsbsVuDkmlkMYQC7y73/nSSmYIRQGBEgSTJ85TGhMlLw6d9kOCZ1jlm+vBfXBM
+	P48rjZF9/Nj6KPVcwO27Vzl6oENEgt2B/e2wNsZgkrzpmRmWqC9DtdnvrUTFwpTl1VH4OUteey3
+	gg+upEma/GlgoPf1FvGmdZVR1cWy9N5Gsv5ou719TC3RtB/HICBHFT8iyU0yWO9d1BgspO+HKdz
+	NEuZy1jcjFSQVc9/kYGgdFOJA==
+X-Google-Smtp-Source: AGHT+IHG8sk3bcUaHQwBrZoLncnJChfwaJcuvBt6nfYyVTZWygm5etjUbCmo0srSUZFjiTWBAdZCH1hJ4cgs9M5FLD4=
+X-Received: by 2002:a17:907:6d06:b0:b0d:400:9182 with SMTP id
+ a640c23a62f3a-b1fac4e0b80mr343825666b.22.1758200324771; Thu, 18 Sep 2025
+ 05:58:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ngvdfwkgcmvnjorf"
-Content-Disposition: inline
-In-Reply-To: <CAMRc=Mf2ycyKbL35bdy5m1WBEap7Bu8OO2Q9AdZYgc04Uynf8g@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+From: Andrea Daoud <andreadaoud6@gmail.com>
+Date: Thu, 18 Sep 2025 20:58:33 +0800
+X-Gm-Features: AS18NWCEXBGAyDTuAdYfLyOIr8P8xtqgcUaqAsI0KK0ysqpeO0oKN9Ycaxuqg4o
+Message-ID: <CAOprWosSvBmORh9NKk-uxoWZpD6zdnF=dODS-uxVnTDjmofL6g@mail.gmail.com>
+Subject: Possible race condition of the rockchip_canfd driver
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Heiko Stuebner <heiko@sntech.de>, Elaine Zhang <zhangqing@rock-chips.com>, kernel@pengutronix.de, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Marc,
 
---ngvdfwkgcmvnjorf
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 5/6] can: mcp251xfd: add gpio functionality
-MIME-Version: 1.0
+I'm using the rockchip_canfd driver on an RK3568. When under high bus
+load, I get
+the following logs [1] in rkcanfd_tx_tail_is_eff, and the CAN bus is unable to
+communicate properly under this condition. The exact cause is currently not
+entirely clear, and it's not reliably reproducible.
 
-On 18.09.2025 05:46:44, Bartosz Golaszewski wrote:
-> > diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/n=
-et/can/spi/mcp251xfd/mcp251xfd-core.c
-> > index ea41f04ae1a6..8c253091f498 100644
-> > --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> > +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/bitfield.h>
-> >  #include <linux/clk.h>
-> >  #include <linux/device.h>
-> > +#include <linux/gpio/driver.h>
-> >  #include <linux/mod_devicetable.h>
-> >  #include <linux/module.h>
-> >  #include <linux/pm_runtime.h>
-> > @@ -1797,6 +1798,178 @@ static int mcp251xfd_register_check_rx_int(stru=
-ct mcp251xfd_priv *priv)
-> >  	return 0;
-> >  }
-> >
-> > +#ifdef CONFIG_GPIOLIB
->=20
-> Any reason why you don't just depend on GPIOLIB in Kconfig? There's no
-> reason to make it optional if the device always has the GPIO pins.
+In the logs we can spot some strange points:
 
-I don't mind having the ifdef. But it's up to you.
+1. Line 24, tx_head == tx_tail. This should have been rejected by the if
+(!rkcanfd_get_tx_pending) clause.
 
-[...]
+2. Line 26, the last bit of priv->tx_tail (0x0185dbb3) is 1. This means that the
+tx_tail should be 1, because rkcanfd_get_tx_tail is essentially mod the
+priv->tx_tail by two. But the printed tx_tail is 0.
 
-> > +static void mcp251xfd_gpio_set(struct gpio_chip *chip, unsigned int of=
-fset,
-> > +			       int value)
->=20
-> You must be rebased on pre v6.17 code, this will not compile with current
-> mainline.
+I believe these problems could mean that the code is suffering from some race
+condition. It seems that, in the whole IRQ processing chain of the driver,
+there's no lock protection. Maybe some IRQ happens within the execution of
+rkcanfd_tx_tail_is_eff, and touches the state of the tx_head and tx_tail?
 
-You mean "post" v6.17? Best rebase to latest net-next/main, which
-already contains the new signatures for the GPIO callbacks.
+Could you please have a look at the code, and check if some locking is needed?
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---ngvdfwkgcmvnjorf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmjL5esACgkQDHRl3/mQ
-kZxWLAf9H29wR6UqS6bdRKZ4KlZYkl/42mdy3IWhfZlWgaDGqn3LdFB+d+Qo3N3d
-+Nq7YwbrAlnoFmWKeGDyORPEBHK6gswUuVo2MKrkm4zMqMAUa6df5SauSk2t4Vxd
-ooKnMVKZGpe5QvAvS44Uafb3CblPAkOs/l5zVaVUV2YmB+TL/GDmLHImdUgpuJte
-/PoK5bAuzMY/O5pFgC/bX2PLpZehnqMQcBULmn9vSWroleMiSgiOCWCgd4jyC6HH
-QBUN0Pn+KbCK+xoVcsInanEMZNX9Ygzv5BiEeFiSzXO4rahpb3m7Kvf23NkTnVJA
-Das1wTaBuKioOE1vXP46xAzFbfaatA==
-=U1R1
------END PGP SIGNATURE-----
-
---ngvdfwkgcmvnjorf--
+[1]: https://pastebin.com/R7uuEKEz
 
