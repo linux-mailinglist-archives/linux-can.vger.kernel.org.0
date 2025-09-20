@@ -1,166 +1,166 @@
-Return-Path: <linux-can+bounces-4768-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4769-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C7C9B8CB24
-	for <lists+linux-can@lfdr.de>; Sat, 20 Sep 2025 17:05:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8C95B8CE0A
+	for <lists+linux-can@lfdr.de>; Sat, 20 Sep 2025 19:38:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B4993A91AD
-	for <lists+linux-can@lfdr.de>; Sat, 20 Sep 2025 15:05:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF4B0171CC1
+	for <lists+linux-can@lfdr.de>; Sat, 20 Sep 2025 17:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A75DD2FB63B;
-	Sat, 20 Sep 2025 15:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D1C6205ABA;
+	Sat, 20 Sep 2025 17:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EFrFFbYI"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Lb1Wp9O3"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A1618BBAE;
-	Sat, 20 Sep 2025 15:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758380715; cv=none; b=Rz/2q3Lt2Tkthg9Umq/Zjs67HZm6pSeb9ZjNdg4dcPyaOfHW2r5CRKEH8e8l1XLnQkKv4kQ9XcqfIcScV2DeHkDPEU2I0cOKKFsxNGZyOZydrQ4AGFt9esv3K3uZGCH1YCFKxlxHT1UFjXqkjeMQNp2p1LExTYvU1uJ4pS/tuBo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758380715; c=relaxed/simple;
-	bh=S/kIsn8Xdn5ahWxA0vX3rwBX17DpSAj9iWA6E0xz1pM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y2uAr6ru2/1YhHLxb9VNH1wQAw9KDti48BhBh2UI0zq9yPQFMstHowVbVGStgdHL8la3NueifQV8Auh+YeMf/ivG29NuMaZFukIJciTpXieJWiYFShHwb6XEKm5V2NvkW6IzD1ebL3fOBE5d9vaOVyZ3w1Tll7/2Z9vpPHroHqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EFrFFbYI; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758380714; x=1789916714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S/kIsn8Xdn5ahWxA0vX3rwBX17DpSAj9iWA6E0xz1pM=;
-  b=EFrFFbYI7TuoEfZC6afRN6prOH+Sg9d6E49SWHkMlycT/GnijFIgbTux
-   W7UOChw+8G7jshepRgpJ98ulUjPUMyb5UW4lF0wgT5b0N6oQmWzl+XKdp
-   5afSHCsPY2WYppuwk3+nzdZgHbPSUQyZuEiOwRmSFNpUq8v7Txc9Zi12a
-   nY3rct1+Edty8C3BldANLF67iQxyz4ofM015MXg8Hcz5cKiAdZSy6KK5w
-   qLrMlRp0oZZf3m6ByLzgOTHede4NACOqrMIO67KY5DmeLRcfcg9G+qWnK
-   E3ijdMsbF8cTlYaFCgqMvkZu3gvSw0mJ6Faf8Abpe7LIZysB7fL+G2Ufr
-   Q==;
-X-CSE-ConnectionGUID: tohuCIweR5mD4LC1W2W1sQ==
-X-CSE-MsgGUID: GrHQufwhTwmTC20xbnybDA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64507614"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="64507614"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2025 08:05:13 -0700
-X-CSE-ConnectionGUID: QVLWmORtT9Kz1OzN9qG+2w==
-X-CSE-MsgGUID: 7bZrQKh9SpaIKU9RTiACeg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,281,1751266800"; 
-   d="scan'208";a="181344706"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 20 Sep 2025 08:05:09 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uzz98-0005P9-1B;
-	Sat, 20 Sep 2025 15:05:06 +0000
-Date: Sat, 20 Sep 2025 23:04:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>, mkl@pengutronix.de,
-	mani@kernel.org, thomas.kopp@microchip.com,
-	mailhol.vincent@wanadoo.fr, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
-	linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, mukesh.savaliya@oss.qualcomm.com,
-	anup.kulkarni@oss.qualcomm.com,
-	Gregor Herburger <gregor.herburger@ew.tq-group.com>,
-	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
-Subject: Re: [PATCH v4 4/6] can: mcp251xfd: only configure PIN1 when rx_int
- is set
-Message-ID: <202509210053.BtsqeDKp-lkp@intel.com>
-References: <20250918064903.241372-5-viken.dadhaniya@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A496780C02
+	for <linux-can@vger.kernel.org>; Sat, 20 Sep 2025 17:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.218
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758389929; cv=pass; b=KKO+Jx1DgmoKLgg4RGGs8VpNr2DKHN2pgt++k8Mgbp8ri5C1nScKVvil7o4xk4TREjb1BxL82NV7OmdAhRNMy5ZuxE/moTEjEbe9Vfe54i+12hlw/Ch2Z1I7tVXLB1V5KLqKTys9yVVbEF/Rc1z2IiR0qGpGaKox1toFkFrb0To=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758389929; c=relaxed/simple;
+	bh=Gb24bFu98iqU2XKXPjBBESVbt4WWowoXZz0qPOj0qYU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F+hLucPFmSy6T1TM2dH3dTGTRMnkWALYSRHKrFzvU+GfHgq2kseiCCh6Ih63SlN5zCEXyRnJYoPwORaos17856lZQMOxk0K79/DoAVU5/a6ERyiviPkZZbFlmpvjf3oqNdEsRG4EZShqkpDXAvoM0Dfhc6zzSIpaLSBmE82tMCM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Lb1Wp9O3; arc=pass smtp.client-ip=81.169.146.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1758389918; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=IDd6jmsxIcpIgLw2DQkCKdIkAe+7KFMXd4VnB0Uuyig9xFrJGF5hI3maZmGccH3EvX
+    8sfsGIqzHaEVDbV6MwRvaq+x3CnrVwecU5yZwzW7YwxdcitFXuoo0awch5vRUuVEcZaz
+    YBmigB4ieNhF2HgbqthC0C6GJPuqV+lRWTW4CpZC6HlZuLWFtFP9BJ/6oZ71surf08vt
+    KCryqAbWDr6pIBu2lqR21QBJMbHFPbP/+36rzV4s00peHvGgGZCD+gSRo6m0WePDg+UH
+    SkraKeMjVe/+ARx6PNrsML1xlcFi5E/QSxh7/NfS86tTAf1jec6nUXt503favklxwxJH
+    Vq3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1758389918;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=A50dRTk5BLf3BT1euIHWKwB/lqZu7qBCm6DApELOjeY=;
+    b=q2MDz8oaCa1Oecc2Np9/N6XdQc85xaz3iR6m8CMMNMlhtUH5FkTfmU5fwjP8fxwOzd
+    nUHp97rdbIeLfsxbE8djlHz9KmN5NUw+BWusBHs8NEFHfVJiXFRK8Zf5wsDSq6tkGl4U
+    TTyb3X/7Bu+LaqZMruidxBQFEN4TrxOx30nY8uPYTuE4uTzr9eaFokNLoglPZqoMjHov
+    CVwGaMT2ZWTqJB5d3HSuAHtpzybtFuVskbF3Fp/J7owCWEi6FolqOjyjrr2Jz2oS1n0N
+    L8ecJ0/mf02jIUS9emECtkOiPCj5fXrcMfxBiUacIZymQlAO54iYJCjpBqR8Ac4yckmT
+    XsdA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1758389918;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=A50dRTk5BLf3BT1euIHWKwB/lqZu7qBCm6DApELOjeY=;
+    b=Lb1Wp9O3aleju3rpM3jHVoTf2mS/5IS1h94tGAH3EUgBzbq2/1/uzRqKTXL3Za8o6u
+    MmRKe6PndzKi5qkrv5PgZFM+wEiApcelTLQSd99dHvTB4I0cff9fXDHk+rmCo01w4WAx
+    SA12L3zTcJCcpc5E8TIi7rwNUcnp3DGstqtLvhaDdwufDqz7ljX9HBSuIeHgYqCs7C+E
+    b2eQYx9ORn4h761Rl9cWe0Uv9qqNIGGimxxSX8j/JWZ0ebFiE+3wLMOe8oRo2ZlLnWUF
+    Wb3QQNREtsDVzuQ2WUSCOYDUAqSlstntxDEmxdmj+m3oSSRRlLf5dTmEkC3m14cCmsem
+    YLQg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMr5phO3IzIIYldT81bUUIsmLN7SHydkyMKQvXKPCtWFy/0tzt"
+Received: from [IPV6:2a02:3033:268:776a:ab6a:78e4:9901:b595]
+    by smtp.strato.de (RZmta 52.1.2 AUTH)
+    with ESMTPSA id K2a23218KHcbP54
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sat, 20 Sep 2025 19:38:37 +0200 (CEST)
+Message-ID: <e845bb4d-32db-4a73-a4c0-2e43af3bc861@hartkopp.net>
+Date: Sat, 20 Sep 2025 19:38:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250918064903.241372-5-viken.dadhaniya@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v5 2/2] can: reject CAN FD content when disabled on
+ CAN XL interfaces
+To: Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org
+Cc: =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
+References: <20250909092433.30546-1-socketcan@hartkopp.net>
+ <20250909092433.30546-2-socketcan@hartkopp.net>
+ <f7b59c7c-30ad-4cf4-ad0e-bff0e39b3337@hartkopp.net>
+ <7578f44d-d85c-473e-8e7a-65d1fc974e68@kernel.org>
+ <20c5c885-0bab-4c42-82c6-e98571a5d19d@hartkopp.net>
+ <552631f3-15fe-4bb3-a512-1eaca57be5ca@kernel.org>
+ <3a963548-faa9-4611-a3cf-e41b425968a8@hartkopp.net>
+ <b6637b79-6377-4038-967f-0354a32eb2c3@kernel.org>
+ <6afc7e2d-eecf-4c47-bcef-0e2cdd7f4a89@hartkopp.net>
+ <67e0351c-b478-4938-a42d-77764b27b9d1@kernel.org>
+ <3979cf15-6a08-44e3-a620-fe97d8218713@kernel.org>
+ <1618e271-e052-4667-9a7f-c6672fe582c4@hartkopp.net>
+ <fa15357e-4d08-4192-a0d7-46315cba6610@kernel.org>
+ <034cad19-d04d-4b14-87b2-e8b2b7b14099@hartkopp.net>
+ <204b2bbf-eeb6-492d-9842-4720ba6c055b@kernel.org>
+ <a85dec20-e638-4069-8355-9cbf4d2d278e@hartkopp.net>
+ <4430c1a1-5c03-45bb-a687-66e0a41050f6@kernel.org>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <4430c1a1-5c03-45bb-a687-66e0a41050f6@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Viken,
 
-kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on mkl-can-next/testing]
-[also build test WARNING on linus/master v6.17-rc6 next-20250919]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 18.09.25 11:18, Vincent Mailhol wrote:
+> On 18/09/2025 at 06:29, Oliver Hartkopp wrote:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Viken-Dadhaniya/can-mcp251xfd-move-chip-sleep-mode-into-runtime-pm/20250918-145404
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-patch link:    https://lore.kernel.org/r/20250918064903.241372-5-viken.dadhaniya%40oss.qualcomm.com
-patch subject: [PATCH v4 4/6] can: mcp251xfd: only configure PIN1 when rx_int is set
-config: x86_64-randconfig-123-20250920 (https://download.01.org/0day-ci/archive/20250921/202509210053.BtsqeDKp-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250921/202509210053.BtsqeDKp-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509210053.BtsqeDKp-lkp@intel.com/
+>> Will the user defined MTU for CAN XL survive the settings when xl is set to off
+>> and then set to on again?
+> 
+> Unfortunately no. Or at least not without adding one additional field to save
+> the old value.
+> 
+> But after turning FD or XL off, none on the bittiming parameters would survive
+> either. So I think it is coherent to say that the user has to set everything
+> again each time XL is switched on.
+> 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c:49:19: sparse: sparse: cast to restricted __be16
->> drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c:71:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [assigned] [usertype] reg @@     got restricted __be16 [usertype] @@
-   drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c:71:21: sparse:     expected unsigned short [assigned] [usertype] reg
-   drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c:71:21: sparse:     got restricted __be16 [usertype]
+Ok. IMO setting the CAN XL MTU lower than CANXL_MTU_MAX is a power user 
+feature anyway. So setting the bitrates and the MTU in one sequence 
+should be no problem.
 
-vim +49 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
 
-875347fe575636 drivers/net/can/spi/mcp25xxfd/mcp25xxfd-regmap.c Marc Kleine-Budde 2020-09-18  41  
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  42  static int
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  43  mcp251xfd_regmap_nocrc_gather_write(void *context,
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  44  				    const void *reg_p, size_t reg_len,
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  45  				    const void *val, size_t val_len)
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  46  {
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  47  	const u16 byte_exclude = MCP251XFD_REG_IOCON +
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  48  				 mcp251xfd_first_byte_set(MCP251XFD_REG_IOCON_GPIO_MASK);
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18 @49  	u16 reg = be16_to_cpu(*(u16 *)reg_p) & MCP251XFD_SPI_ADDRESS_MASK;
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  50  	int ret;
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  51  
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  52  	/* Never write to bits 16..23 of IOCON register to avoid clearing of LAT0/LAT1
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  53  	 *
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  54  	 * According to MCP2518FD Errata DS80000789E 5 writing IOCON register using one
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  55  	 * SPI write command clears LAT0/LAT1.
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  56  	 *
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  57  	 * Errata Fix/Work Around suggests to write registers with single byte
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  58  	 * write instructions. However, it seems that the byte at 0xe06(IOCON[23:16])
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  59  	 * is for read-only access and writing to it causes the clearing of LAT0/LAT1.
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  60  	 */
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  61  	if (reg <= byte_exclude && reg + val_len > byte_exclude) {
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  62  		size_t len = byte_exclude - reg;
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  63  
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  64  		/* Write up to 0xe05 */
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  65  		ret = _mcp251xfd_regmap_nocrc_gather_write(context, reg_p, reg_len, val, len);
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  66  		if (ret)
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  67  			return ret;
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  68  
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  69  		/* Write from 0xe07 on */
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  70  		reg += len + 1;
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18 @71  		reg = cpu_to_be16(MCP251XFD_SPI_INSTRUCTION_WRITE | reg);
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  72  		return _mcp251xfd_regmap_nocrc_gather_write(context, &reg, reg_len,
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  73  							    val + len + 1,
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  74  							    val_len - len - 1);
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  75  	}
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  76  
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  77  	return _mcp251xfd_regmap_nocrc_gather_write(context, reg_p, reg_len,
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  78  						  val, val_len);
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  79  }
-182c647943b5c0 drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c Gregor Herburger  2025-09-18  80  
+>> To sum it up for myself:
+>>
+>> 1. Setting the MTU from user space is only relevant for virtual CAN interfaces
+>> and CAN XL interfaces for values between CANXL_MIN_MTU and CANXL_MAX_MTU.
+> 
+> Ack.
+> 
+>> 2. Usually the MTU is set automatically by the netlink configuration process
+>> when fd/xl on/off are set.
+> 
+> Ack.
+> 
+> As you will see, I found some bug because a few drivers forgot to set their
+> can_change_mtu() and addressed the issue here:
+> 
+> https://lore.kernel.org/linux-can/20250918-can-fix-mtu-v1-0-0d1cada9393b@kernel.org/
+> 
+> That series is just to fix things and is meant to be back ported to stable.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nice cleanup!
+
+> I will send a couple more patches as an RFC which will implement the actual
+> logic which we discussed here.
+
+Fine!
+
+I assume we will miss this merge window for the CAN XL support then.
+With all the things that need to be looked at carefully the next merge 
+window is probably the better choice.
+
+Best regards,
+Oliver
+
 
