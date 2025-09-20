@@ -1,79 +1,48 @@
-Return-Path: <linux-can+bounces-4769-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4770-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8C95B8CE0A
-	for <lists+linux-can@lfdr.de>; Sat, 20 Sep 2025 19:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A90A4B8CE59
+	for <lists+linux-can@lfdr.de>; Sat, 20 Sep 2025 19:57:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF4B0171CC1
-	for <lists+linux-can@lfdr.de>; Sat, 20 Sep 2025 17:38:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F73D163E13
+	for <lists+linux-can@lfdr.de>; Sat, 20 Sep 2025 17:57:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D1C6205ABA;
-	Sat, 20 Sep 2025 17:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6925A21FF4D;
+	Sat, 20 Sep 2025 17:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Lb1Wp9O3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2BQjxan"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A496780C02
-	for <linux-can@vger.kernel.org>; Sat, 20 Sep 2025 17:38:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.218
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758389929; cv=pass; b=KKO+Jx1DgmoKLgg4RGGs8VpNr2DKHN2pgt++k8Mgbp8ri5C1nScKVvil7o4xk4TREjb1BxL82NV7OmdAhRNMy5ZuxE/moTEjEbe9Vfe54i+12hlw/Ch2Z1I7tVXLB1V5KLqKTys9yVVbEF/Rc1z2IiR0qGpGaKox1toFkFrb0To=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758389929; c=relaxed/simple;
-	bh=Gb24bFu98iqU2XKXPjBBESVbt4WWowoXZz0qPOj0qYU=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444821E8836
+	for <linux-can@vger.kernel.org>; Sat, 20 Sep 2025 17:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758391042; cv=none; b=X35kPWGasaPjc4Tr+eh8Rb4RwV50gm0QQuMi0Z5ExJsH9f6gne/JFzGqlNLl1WWEzzlohS2/nqdA7bSxTiHeHmW5lu6MYJgZOFoP/kTUkMXXrioGQ/0V8X1GHIgPHRomRhYLfDhsPHo9KK74jVxeSpRLrXT32AIb2xycyx4llhs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758391042; c=relaxed/simple;
+	bh=U5i+RuZ2HiMXEzANf8mIX2bIEkCFATZkvoryE4m1cjs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F+hLucPFmSy6T1TM2dH3dTGTRMnkWALYSRHKrFzvU+GfHgq2kseiCCh6Ih63SlN5zCEXyRnJYoPwORaos17856lZQMOxk0K79/DoAVU5/a6ERyiviPkZZbFlmpvjf3oqNdEsRG4EZShqkpDXAvoM0Dfhc6zzSIpaLSBmE82tMCM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Lb1Wp9O3; arc=pass smtp.client-ip=81.169.146.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1758389918; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=IDd6jmsxIcpIgLw2DQkCKdIkAe+7KFMXd4VnB0Uuyig9xFrJGF5hI3maZmGccH3EvX
-    8sfsGIqzHaEVDbV6MwRvaq+x3CnrVwecU5yZwzW7YwxdcitFXuoo0awch5vRUuVEcZaz
-    YBmigB4ieNhF2HgbqthC0C6GJPuqV+lRWTW4CpZC6HlZuLWFtFP9BJ/6oZ71surf08vt
-    KCryqAbWDr6pIBu2lqR21QBJMbHFPbP/+36rzV4s00peHvGgGZCD+gSRo6m0WePDg+UH
-    SkraKeMjVe/+ARx6PNrsML1xlcFi5E/QSxh7/NfS86tTAf1jec6nUXt503favklxwxJH
-    Vq3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1758389918;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=A50dRTk5BLf3BT1euIHWKwB/lqZu7qBCm6DApELOjeY=;
-    b=q2MDz8oaCa1Oecc2Np9/N6XdQc85xaz3iR6m8CMMNMlhtUH5FkTfmU5fwjP8fxwOzd
-    nUHp97rdbIeLfsxbE8djlHz9KmN5NUw+BWusBHs8NEFHfVJiXFRK8Zf5wsDSq6tkGl4U
-    TTyb3X/7Bu+LaqZMruidxBQFEN4TrxOx30nY8uPYTuE4uTzr9eaFokNLoglPZqoMjHov
-    CVwGaMT2ZWTqJB5d3HSuAHtpzybtFuVskbF3Fp/J7owCWEi6FolqOjyjrr2Jz2oS1n0N
-    L8ecJ0/mf02jIUS9emECtkOiPCj5fXrcMfxBiUacIZymQlAO54iYJCjpBqR8Ac4yckmT
-    XsdA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1758389918;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=A50dRTk5BLf3BT1euIHWKwB/lqZu7qBCm6DApELOjeY=;
-    b=Lb1Wp9O3aleju3rpM3jHVoTf2mS/5IS1h94tGAH3EUgBzbq2/1/uzRqKTXL3Za8o6u
-    MmRKe6PndzKi5qkrv5PgZFM+wEiApcelTLQSd99dHvTB4I0cff9fXDHk+rmCo01w4WAx
-    SA12L3zTcJCcpc5E8TIi7rwNUcnp3DGstqtLvhaDdwufDqz7ljX9HBSuIeHgYqCs7C+E
-    b2eQYx9ORn4h761Rl9cWe0Uv9qqNIGGimxxSX8j/JWZ0ebFiE+3wLMOe8oRo2ZlLnWUF
-    Wb3QQNREtsDVzuQ2WUSCOYDUAqSlstntxDEmxdmj+m3oSSRRlLf5dTmEkC3m14cCmsem
-    YLQg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMr5phO3IzIIYldT81bUUIsmLN7SHydkyMKQvXKPCtWFy/0tzt"
-Received: from [IPV6:2a02:3033:268:776a:ab6a:78e4:9901:b595]
-    by smtp.strato.de (RZmta 52.1.2 AUTH)
-    with ESMTPSA id K2a23218KHcbP54
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sat, 20 Sep 2025 19:38:37 +0200 (CEST)
-Message-ID: <e845bb4d-32db-4a73-a4c0-2e43af3bc861@hartkopp.net>
-Date: Sat, 20 Sep 2025 19:38:30 +0200
+	 In-Reply-To:Content-Type; b=mWTBpRdsNGNrO0BAilYqTp+V6NidEjj326M87sSyfE82WffbIz2eL3ERjYxuC6K9ZzMTfDmbfHAFbkCTn6UcJZAWys9qYClgALqnz1WKEBamOuJXHq+je3szLyAK9xEDX3AuXymzbgpt497xADLRNSRzvxC5EPaMnc1X+JFExIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2BQjxan; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B06C4CEEB;
+	Sat, 20 Sep 2025 17:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758391041;
+	bh=U5i+RuZ2HiMXEzANf8mIX2bIEkCFATZkvoryE4m1cjs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=F2BQjxanEdkEMrhHnXxvPvW3Jo3fvCr8tkDBdrAiSfuTGYGR1hkLlPFXsXwNJqaak
+	 UjXWH1E0CiwRTPXMFi+ZPZqEMw/0VsA4zpQ9sbZBBZY11jOpttSUBQLSGGNiISULl3
+	 +Ogh9dlxM+KIdU48x91/Mv6fZwv762NEbvF8cMlh2DACiOYabPSaAb7iA2p2gTqBIm
+	 p5lFaq3nulGkYvPzvXGZmi73jf4H0MWNf+fH/V0EpzFho3yaJNZJgI4fflBbjxY0mb
+	 FaxZO2KNUBalSQQvRTKmiPyIUFbFD+hBEEfhcsAt31gy9wBsSbB8bcplFxUOU4Fhcn
+	 cje6X09u4MQmw==
+Message-ID: <bb4e0c44-1eb5-4df3-873c-9e666c8354ad@kernel.org>
+Date: Sun, 21 Sep 2025 02:57:19 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -83,7 +52,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC PATCH v5 2/2] can: reject CAN FD content when disabled on
  CAN XL interfaces
-To: Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
+ Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org
 Cc: =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
 References: <20250909092433.30546-1-socketcan@hartkopp.net>
  <20250909092433.30546-2-socketcan@hartkopp.net>
@@ -102,65 +72,104 @@ References: <20250909092433.30546-1-socketcan@hartkopp.net>
  <204b2bbf-eeb6-492d-9842-4720ba6c055b@kernel.org>
  <a85dec20-e638-4069-8355-9cbf4d2d278e@hartkopp.net>
  <4430c1a1-5c03-45bb-a687-66e0a41050f6@kernel.org>
+ <e845bb4d-32db-4a73-a4c0-2e43af3bc861@hartkopp.net>
 Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <4430c1a1-5c03-45bb-a687-66e0a41050f6@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Vincent Mailhol <mailhol@kernel.org>
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <e845bb4d-32db-4a73-a4c0-2e43af3bc861@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 18.09.25 11:18, Vincent Mailhol wrote:
-> On 18/09/2025 at 06:29, Oliver Hartkopp wrote:
-
-
->> Will the user defined MTU for CAN XL survive the settings when xl is set to off
->> and then set to on again?
+On 21/09/2025 at 02:38, Oliver Hartkopp wrote:
+> On 18.09.25 11:18, Vincent Mailhol wrote:
+>> On 18/09/2025 at 06:29, Oliver Hartkopp wrote:
 > 
-> Unfortunately no. Or at least not without adding one additional field to save
-> the old value.
 > 
-> But after turning FD or XL off, none on the bittiming parameters would survive
-> either. So I think it is coherent to say that the user has to set everything
-> again each time XL is switched on.
-> 
-
-Ok. IMO setting the CAN XL MTU lower than CANXL_MTU_MAX is a power user 
-feature anyway. So setting the bitrates and the MTU in one sequence 
-should be no problem.
-
-
->> To sum it up for myself:
+>>> Will the user defined MTU for CAN XL survive the settings when xl is set to off
+>>> and then set to on again?
 >>
->> 1. Setting the MTU from user space is only relevant for virtual CAN interfaces
->> and CAN XL interfaces for values between CANXL_MIN_MTU and CANXL_MAX_MTU.
+>> Unfortunately no. Or at least not without adding one additional field to save
+>> the old value.
+>>
+>> But after turning FD or XL off, none on the bittiming parameters would survive
+>> either. So I think it is coherent to say that the user has to set everything
+>> again each time XL is switched on.
+>>
 > 
-> Ack.
+> Ok. IMO setting the CAN XL MTU lower than CANXL_MTU_MAX is a power user feature
+> anyway. So setting the bitrates and the MTU in one sequence should be no problem.
 > 
->> 2. Usually the MTU is set automatically by the netlink configuration process
->> when fd/xl on/off are set.
 > 
-> Ack.
+>>> To sum it up for myself:
+>>>
+>>> 1. Setting the MTU from user space is only relevant for virtual CAN interfaces
+>>> and CAN XL interfaces for values between CANXL_MIN_MTU and CANXL_MAX_MTU.
+>>
+>> Ack.
+>>
+>>> 2. Usually the MTU is set automatically by the netlink configuration process
+>>> when fd/xl on/off are set.
+>>
+>> Ack.
+>>
+>> As you will see, I found some bug because a few drivers forgot to set their
+>> can_change_mtu() and addressed the issue here:
+>>
+>> https://lore.kernel.org/linux-can/20250918-can-fix-mtu-
+>> v1-0-0d1cada9393b@kernel.org/
+>>
+>> That series is just to fix things and is meant to be back ported to stable.
 > 
-> As you will see, I found some bug because a few drivers forgot to set their
-> can_change_mtu() and addressed the issue here:
+> Nice cleanup!
 > 
-> https://lore.kernel.org/linux-can/20250918-can-fix-mtu-v1-0-0d1cada9393b@kernel.org/
+>> I will send a couple more patches as an RFC which will implement the actual
+>> logic which we discussed here.
 > 
-> That series is just to fix things and is meant to be back ported to stable.
+> Fine!
+> 
+> I assume we will miss this merge window for the CAN XL support then.
 
-Nice cleanup!
+Yes, but I hope that to have the preparation series merged. Marc already picked
+the MTU fix series:
 
-> I will send a couple more patches as an RFC which will implement the actual
-> logic which we discussed here.
+https://lore.kernel.org/linux-can/20250918-can-fix-mtu-v1-0-0d1cada9393b@kernel.org/
 
-Fine!
+Next week, I would like to merge the MTU rework:
 
-I assume we will miss this merge window for the CAN XL support then.
-With all the things that need to be looked at carefully the next merge 
-window is probably the better choice.
+https://lore.kernel.org/linux-can/20250918-can-fix-mtu-v1-0-471edb942295@kernel.org/
 
-Best regards,
-Oliver
+as well as the XL preparation:
+
+https://lore.kernel.org/linux-can/20250910-canxl-netlink-prep-v2-0-f128d4083721@kernel.org/
+
+Both are ready locally, but I first need to wait for the MTU fix to appear in
+net-next before re-sending.
+
+> With all the things that need to be looked at carefully the next merge window is
+> probably the better choice.
+
+By the way, my latest test are all green.
+
+I updated my WIP
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mailhol/linux.git/log/?h=b4/canxl-netlink
+
+I may still refactor a few things and I still need to write the patch comments,
+but feature wise, I now implemented all what I had in mind.
+
+But for next week, let's focus on the preparation series first, the discussion
+on the actual XL code will be for the next merge window ;)
+
+
+Yours sincerely,
+Vincent Mailhol
 
 
