@@ -1,49 +1,50 @@
-Return-Path: <linux-can+bounces-4771-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4772-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 669D6B8D690
-	for <lists+linux-can@lfdr.de>; Sun, 21 Sep 2025 09:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7A38B8D69C
+	for <lists+linux-can@lfdr.de>; Sun, 21 Sep 2025 09:33:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 271B244130D
-	for <lists+linux-can@lfdr.de>; Sun, 21 Sep 2025 07:33:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 835F6442A77
+	for <lists+linux-can@lfdr.de>; Sun, 21 Sep 2025 07:33:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 135A02376FD;
-	Sun, 21 Sep 2025 07:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 674452D29AA;
+	Sun, 21 Sep 2025 07:33:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cMZ/8AB1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fX6xxtlq"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84801BF58;
-	Sun, 21 Sep 2025 07:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7362D249D;
+	Sun, 21 Sep 2025 07:33:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758439989; cv=none; b=WLXYVIVjVPh5QSke1FDqae+Pa6yJ53nqvELSlVNDBicJtyASEI9YWAqkqv/y6eMbEvJ2my6GEMDUF3RJOdpDjZqJHG0MSj+VLjpKItl2YKGZtCbDhF3yyXXHb7aOUoTXTstcB95STwVDZ0hJ6+5z89tCu/mjOiv9r56P4PwRmYI=
+	t=1758439990; cv=none; b=nO+cmndyg5q9ccCIQJvtrMrB3AEb5qTI4asTU+j0F9abV81HOkbU05twFjWfvCP8uM6L00+mjbiyKXWEcqF+QDQcFI+MRrCPapg7AzRaozPMEcMPGMM7rqLaDrsl8bJxaKp+AXQqeQQlmkTGZnbzQWbdlN2nrNU8PrhPuYtV/Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758439989; c=relaxed/simple;
-	bh=rgvlCGWJgxQtna0rGORmWRGCmS8XGEFNOobwOFZsJ34=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ptaZgGmPzksh0CsFUqmupa4kv8p6VzVpL02nOYVVKhwq/97bKC/Om+BvvleqcDc8Ev/yTnC5Fh8PM48TmC617/ROHCl89i57+VJclYWijdQgIRvBEuDVcDxbkujsYMpxgwCkSbrONMBD91i55CCDEbG/b87U/GGAR1rGdGaHyD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cMZ/8AB1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A21C4CEE7;
-	Sun, 21 Sep 2025 07:33:07 +0000 (UTC)
+	s=arc-20240116; t=1758439990; c=relaxed/simple;
+	bh=eXD1/uAXZPU4hdZy7YBqqH2R/cekJAyMpjS9zHYrNZY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=CrwCB6khn6ADVI6YIbliYU1LYy2Argpq6G1JHerWJloygWPF/LhdiJ0mudgR+KS2F+orq4wf/f9py9Z8M6TQxqguxDx/JlRn1OVVzYc08dUhm14MAvCGTV5/zZovw0FHyRIZNjY6mddB2EFOjyr9914keMmOpOEdgSCEaPYw558=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fX6xxtlq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE7EAC116B1;
+	Sun, 21 Sep 2025 07:33:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758439988;
-	bh=rgvlCGWJgxQtna0rGORmWRGCmS8XGEFNOobwOFZsJ34=;
-	h=From:Subject:Date:To:Cc:From;
-	b=cMZ/8AB1m56IINYIibfXHxrHAOuMfZbBoHgIeRfMicqWbB5nH8f3moTsYjiSCBy4E
-	 Zz+cONf8qHUrLzi8J0Us872HGcs6dIcLHl+6qLj/y4ZSDWGpN5lC2ktskevo3XsUX4
-	 oJDATeadxeY/vy/98uxyqt1HdfPk39gw/zsHC3TYM8GMVqaI5609QTgBgbvvcyj42w
-	 javl94BEU7JHG/5IDTfvDgy/mE/h9Nd8Z5xqZ7bkvbxtA1nt2KJEOta7f/IOW5xkaB
-	 4lJeNfWIDAEFO0vghpeEXNzpkxqF87mmtd/yI1QNKmR8nzFVFo8heczQdaUOTL8Sm5
-	 wQuVPt9pfEeWg==
+	s=k20201202; t=1758439989;
+	bh=eXD1/uAXZPU4hdZy7YBqqH2R/cekJAyMpjS9zHYrNZY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=fX6xxtlqrEiGPu2hkafYZXgsoBymPhdH+KDThVueqhTUKO7HP9CHyOiQvF1XXMTPi
+	 TWjYhXvWOsOSpooVi6QXTG9YM50V5uQx8GbKImbqX7zeBxQTMrLY4JErY5bd4ULT8Q
+	 CkzMKPaE+rJswI19GyhIuBQCZDt2ARZX8F6BSXL53CNx1m7SxictgveDuPGUAm9IXc
+	 HwOM5PhT6/aWu1TQztoR+EIwL4P6aNKpUzUvbM3Dymk5r+qcBAogeiFMEuOwEnrpvf
+	 C1kXe2G9MrALb5cEssACIk9ICiJJ6YXOvns85Mks67Qh6irG6aiJr1mjzqi9bDNLNG
+	 UM3ouLkkRs6bQ==
 From: Vincent Mailhol <mailhol@kernel.org>
-Subject: [PATCH iproute2-next 0/3] iplink_can: fix checkpatch.pl warnings
-Date: Sun, 21 Sep 2025 16:32:29 +0900
-Message-Id: <20250921-iplink_can-checkpatch-fixes-v1-0-1ddab98560cd@kernel.org>
+Date: Sun, 21 Sep 2025 16:32:30 +0900
+Subject: [PATCH iproute2-next 1/3] iplink_can: fix coding style for pointer
+ format
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -52,53 +53,66 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAA2qz2gC/y2NUQqDMBAFryL73aUaLLRepUhZ11UXa5ImsQji3
- Rvafg7zmLdDlKASoSl2CPLWqM5mqE4F8ER2FNQ+M5jSXMqbqVD9U+38YLLIk/DsKfGEg24SsWK
- 6lnXX1wPVkAs+yFfkwB3UB7cmMWhlS9D+dJDXmj/Tf9NRFGS3LJqawgUd1Z4XUgvtcXwAQ0+WB
- asAAAA=
-X-Change-ID: 20250921-iplink_can-checkpatch-fixes-1ca804bd4fa4
+Message-Id: <20250921-iplink_can-checkpatch-fixes-v1-1-1ddab98560cd@kernel.org>
+References: <20250921-iplink_can-checkpatch-fixes-v1-0-1ddab98560cd@kernel.org>
+In-Reply-To: <20250921-iplink_can-checkpatch-fixes-v1-0-1ddab98560cd@kernel.org>
 To: netdev@vger.kernel.org, Stephen Hemminger <stephen@networkplumber.org>, 
  David Ahern <dsahern@gmail.com>
 Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
  Oliver Hartkopp <socketcan@hartkopp.net>, linux-kernel@vger.kernel.org, 
  linux-can@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=959; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=rgvlCGWJgxQtna0rGORmWRGCmS8XGEFNOobwOFZsJ34=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDBnnV2mKHfD4tVru1eQKxyfhE9oXi6xbozrvqJPvMqX5r
- ztKN37Z1lHKwiDGxSArpsiyrJyTW6Gj0Dvs0F9LmDmsTCBDGLg4BWAiun8Z/vvde/JdP3hZws5H
- M5WNrrAd+RXy5PeD6XOFZs9/8+LYVn8hhv+JZm+idzGbx77ljBLfUvnoU8UC5pVVEnuf8l5d9jl
- y7WZOAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1304; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=eXD1/uAXZPU4hdZy7YBqqH2R/cekJAyMpjS9zHYrNZY=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDBnnV+lMEracfVB6z0+rhMaKjUv2Sr1zbHl5f9HlxoWZE
+ kUX3qjM6ChlYRDjYpAVU2RZVs7JrdBR6B126K8lzBxWJpAhDFycAjCRLB1GhhMO07d9krt37GIN
+ /9WjmjlVmxv8Z53c8pRFOGr6Sg/n2wcY/hl38Z46zJ/wV+YY97ona6c0Vn2dvWFlbGzvqvKDsuG
+ aX/kA
 X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-This is a clean up series which goes through all the checkpatch
-warnings on ip/iplink_can.c and fixes them one by one. By the end on
-this series, there is only one warning left:
+checkpatch.pl complains about the pointer symbol * being attached to the
+type instead of being attached to the variable:
 
-  WARNING: Prefer __printf(2, 0) over __attribute__((format(printf, 2, 0)))
-  #320: FILE: ip/iplink_can.c:320:
-  +static void __attribute__((format(printf, 2, 0)))
+  ERROR: "foo* bar" should be "foo *bar"
+  #85: FILE: ip/iplink_can.c:85:
+  +		       const char* name)
 
-Because iproute2 does not declare the __printf() macro, that last one
-can not be fixed.
+  ERROR: "foo* bar" should be "foo *bar"
+  #93: FILE: ip/iplink_can.c:93:
+  +static void print_ctrlmode(enum output_type t, __u32 flags, const char* key)
+
+Fix those two warnings.
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-
 ---
-Vincent Mailhol (3):
-      iplink_can: fix coding style for pointer format
-      iplink_can: fix SPDX-License-Identifier tag format
-      iplink_can: factorise the calls to usage()
+ ip/iplink_can.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- ip/iplink_can.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
----
-base-commit: afceddf61037440628a5612f15a6eaefd28d9fd3
-change-id: 20250921-iplink_can-checkpatch-fixes-1ca804bd4fa4
+diff --git a/ip/iplink_can.c b/ip/iplink_can.c
+index 9f6084e63986bd05d25a050176f4640c30596b85..1afdf08825f3d9cbbb0454592d2ed7dc1388a6de 100644
+--- a/ip/iplink_can.c
++++ b/ip/iplink_can.c
+@@ -82,7 +82,7 @@ static void set_ctrlmode(char *name, char *arg,
+ }
+ 
+ static void print_flag(enum output_type t, __u32 *flags, __u32 flag,
+-		       const char* name)
++		       const char *name)
+ {
+ 	if (*flags & flag) {
+ 		*flags &= ~flag;
+@@ -90,7 +90,7 @@ static void print_flag(enum output_type t, __u32 *flags, __u32 flag,
+ 	}
+ }
+ 
+-static void print_ctrlmode(enum output_type t, __u32 flags, const char* key)
++static void print_ctrlmode(enum output_type t, __u32 flags, const char *key)
+ {
+ 	if (!flags)
+ 		return;
 
-Best regards,
 -- 
-Vincent Mailhol <mailhol@kernel.org>
+2.49.1
 
 
