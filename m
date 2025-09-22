@@ -1,155 +1,119 @@
-Return-Path: <linux-can+bounces-4820-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4821-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B563B9349D
-	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 22:55:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA13CB936E1
+	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 00:08:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C2AD1907E86
-	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 20:55:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A25032A5846
+	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 22:08:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D06927F010;
-	Mon, 22 Sep 2025 20:55:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3FB2F7477;
+	Mon, 22 Sep 2025 22:08:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btMCe4pJ"
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="DiP2mvyJ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF6426F28B;
-	Mon, 22 Sep 2025 20:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675222F617C
+	for <linux-can@vger.kernel.org>; Mon, 22 Sep 2025 22:08:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758574525; cv=none; b=qvRjTFRIyrSN6tPD1HlCtUj7c6BAiAtbVyVcjyVqQuZkm041RZ+HkGaPAsxekzrBweK+vc0BD98HSInCRIVFYrEzGNYf/U3o9jN348l+haKkfPBB0w47xx2BYS57BJSm4HkGqzOQvotMZCCLJA2Sey0JLarMEnqK1necfwb3R2k=
+	t=1758578910; cv=none; b=r5ApqiF0fQg6qdTQZynFQzDVMjerL0CtvZvma0DvTkN+G0D9E65LNpFWonrxv9PFQxtRjc4+mVoSebtF259DpxkCgEFJWZ2cThm5rw9OcQ4A3SrA7kp4rGXxDEiFsuaI/AHO3Xd4LmLIo4TlOhRVtZpupBjMXCRG6ny5/jihN8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758574525; c=relaxed/simple;
-	bh=tYpOjofHpW9mWp+Pr+zwn20aiOFBJXMUD80BxBDT1OE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mJIY3Ydj5UcuSoZ9/SnkJRNbLhNQaGhjpdKI89OmOFdG7M9AiaeuOQi3dhHK2INV4Qo9Tbf7MVBr03boEA7C/MOZ7aODNZzAHKL2LshVTHuPI9PpEoXdZkSfSgHbOCrJovKBvC7nUhOrVZ2zvVrSeHQlU8Xy/B/hBqimLk46Ftk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btMCe4pJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5211C4CEF0;
-	Mon, 22 Sep 2025 20:55:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758574524;
-	bh=tYpOjofHpW9mWp+Pr+zwn20aiOFBJXMUD80BxBDT1OE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=btMCe4pJzrjEFcSIlChfqpHzRKX9nmREvFuQo1txXzAfXiMm7dqUgVYz/Yg24jZfh
-	 oEC0lhquRT3S7V6O3w4AhmbeOIoeL8PEjKvTuf9hYNW3DLFeoNTjSxSkZvta8koKyN
-	 LXm5t6Kbm0VC1PdnmcRy/++FJf3w3qG5pOJYGUGf2wr2YowDAUyHurGLKeI6XZ6PwB
-	 Qttw6vo5oui+LCk5cciNBbSNLP8Z/+yvxIQGRQ8bdkk9ytAxiuFaZRQtIXHpkPh1sN
-	 HvoJimqkW8ltIgE5weKxlHGjBkju03NhQdRKOJ71ZfuCQERW+3wBIu9gPl3p041Bxy
-	 XvQr5ridOkuaw==
-Date: Mon, 22 Sep 2025 15:55:21 -0500
-From: Rob Herring <robh@kernel.org>
-To: Elaine Zhang <zhangqing@rock-chips.com>
-Cc: mkl@pengutronix.de, kernel@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de,
-	cl@rock-chips.com, kever.yang@rock-chips.com,
-	linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 1/4] dt-bindings: can: rockchip_canfd: add rk3576
- CAN-FD controller
-Message-ID: <20250922205521.GA1307111-robh@kernel.org>
-References: <20250922071543.73923-1-zhangqing@rock-chips.com>
- <20250922071543.73923-2-zhangqing@rock-chips.com>
+	s=arc-20240116; t=1758578910; c=relaxed/simple;
+	bh=Avq2y8MdAwK0oH1I3MtgdoQ7iSmzzMmfx5BVuSNgHcA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QWiwydbW/PButC52pVW9GidzCkgTROIT9bRxo6xyjzoV3RGkGOgnUAcC8zNONnK6awv3DPnnUgkFzM/yRdUbSrLCaVIW+wH8zht1OHe2lV0ja32aZ72mYNyGTbWeU48mPZC0as/4oDi9A1YeIMkGfREob7Ko3S+KJGJhfKLoiHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=DiP2mvyJ; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4b5eee40cc0so48800301cf.0
+        for <linux-can@vger.kernel.org>; Mon, 22 Sep 2025 15:08:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1758578907; x=1759183707; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qUjK8kSlRwyRA71ulpxBj11meZbRhX9iUJHgvPDIzMg=;
+        b=DiP2mvyJuIZZFK+eJLPbZUHCc6UaBSc9TK3FZS151JBFLCG/GX9fPPQxPy0Sp4k1Fn
+         53or6umbFGNkReYKf4u5ZcpusSmNM3dS3SqV22/YMulrgkPl59n0gbOZNKUdXgs5zczh
+         KalQ9xJdgzNZbv7jbaHUSrjiuy47Oei0gsJjj23pSwIFD/2v1Ea1xU/SRxr+bH80UtEn
+         h+dELNBmfhpx4lHWlWHZ+ChXXQdNQkgQV5+7vE0I3NA7HbLAk5yzx1cJYFtZvzr8AuCQ
+         7fnBqcmkzX/GwV61QVDcge6Yruf3aynVZU+U7Bo/bx+EXeT9+N6WS8fEf14JKt0QZZbl
+         aswA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758578907; x=1759183707;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qUjK8kSlRwyRA71ulpxBj11meZbRhX9iUJHgvPDIzMg=;
+        b=DyrMj0MDSMacYn9AS7zjG0iIto8WMhxZS09FwmfY+Ge/6DfYp0FJejQdhZ9b81A7WP
+         0vBeW5PYUq94XXbVCfr7OuT3QTGXAEOHEAugz0WeUJUYDvIYvHHJ5yhbhy31qjyv8WB/
+         GdJlp4XWzdelDXoySREcHYrEcZKr6sif+rbbazmIj07ruoubA3zl4fN3FlUKsLDSisn/
+         7+vE430pkR6/My9RNf8yTwiZpoVcz/FimFAs4ZLQ+pf/YeWXp4nxkD6crTQ6wCMwHMn+
+         yBkHIYh70pC/MYSLmO0H8ESZfH947keHSncmy76SxQK9Ystm6AQuZmomQlUWlFNskPDk
+         31tA==
+X-Forwarded-Encrypted: i=1; AJvYcCW0GC3JgEJFZ6S2AmaeIbJd3gTF3F/D2YU79W4jXmH29Im4Y6raLX1050grrOYhIj2Nwk/Ju+NiUx8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrYPW+z8+IpZJexfoEmVdORME+gW06hmXbVy8hBJMY/MU9mPQe
+	HB2lFdmECa/clT2bmUISibbkGE0ORZ+kc4pzkW+Y+fiP49GhJnsEooGRQkWvzAwGI/k=
+X-Gm-Gg: ASbGncsQbPh6bGjHCq4RR75P7HmnU9KZ/ra1S57Bo4ZjwmA9r75+c7j3tkhd1W2WdA4
+	JiCwPpIeuGtm7z4QqItjsq1qlRhgvfycVHnyg3Az9iWqqjq+8ifk/kktWqZXp+gcYtPDgkyH9ly
+	vWH60KUETs7lLbb6mgkEu/kCV/ke+/LyzeGEl7h4J7DF2bK5ni8HA1GOKbN7UgdnzpipO5ux/Za
+	RiYClUl8zh/YQqbbfHZklfmS/BFpzBNLYYw4QgFRMJgEZA3Y8E75okDp0Z/MXdEhYvkhJSMyD6m
+	B3UquTF+OP4IiDDSY7T3g75kCs3Q/reFnEbQWkl/mMlH/FZy/0Y1tuasRLi7XgEP77AropZB8gE
+	EaNmA0emfnrMMrcasz5pkOKCKdp/KyHJJLV7QBM2fhN69NoSmHCR/9XCvI+uw0FOkvTNLKTxiQx
+	k=
+X-Google-Smtp-Source: AGHT+IEz0icBL4xjkfXiOd9WdBXGddBAYbpiDBXZ680UQhfkHWQJ/JZKh5CbDmMzNtrP9ERLzyDGHA==
+X-Received: by 2002:a05:622a:450:b0:4b5:d586:d74a with SMTP id d75a77b69052e-4d369db6905mr5212111cf.37.1758578907176;
+        Mon, 22 Sep 2025 15:08:27 -0700 (PDT)
+Received: from hermes.local (204-195-96-226.wavecable.com. [204.195.96.226])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4cfdd34b180sm13096701cf.34.2025.09.22.15.08.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Sep 2025 15:08:26 -0700 (PDT)
+Date: Mon, 22 Sep 2025 15:08:22 -0700
+From: Stephen Hemminger <stephen@networkplumber.org>
+To: Vincent Mailhol <mailhol@kernel.org>
+Cc: netdev@vger.kernel.org, David Ahern <dsahern@gmail.com>, Marc
+ Kleine-Budde <mkl@pengutronix.de>, Oliver Hartkopp
+ <socketcan@hartkopp.net>, linux-kernel@vger.kernel.org,
+ linux-can@vger.kernel.org
+Subject: Re: [PATCH iproute2-next 2/3] iplink_can: fix
+ SPDX-License-Identifier tag format
+Message-ID: <20250922150822.3fce0568@hermes.local>
+In-Reply-To: <20250921-iplink_can-checkpatch-fixes-v1-2-1ddab98560cd@kernel.org>
+References: <20250921-iplink_can-checkpatch-fixes-v1-0-1ddab98560cd@kernel.org>
+	<20250921-iplink_can-checkpatch-fixes-v1-2-1ddab98560cd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250922071543.73923-2-zhangqing@rock-chips.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 22, 2025 at 03:15:40PM +0800, Elaine Zhang wrote:
-> Add documentation for the rockchip rk3576 CAN-FD controller.
-> 
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> ---
->  .../net/can/rockchip,rk3568v2-canfd.yaml      | 47 +++++++++++++++++--
->  1 file changed, 44 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml b/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
-> index a077c0330013..74b1a502f0b7 100644
-> --- a/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
-> @@ -10,13 +10,11 @@ title:
->  maintainers:
->    - Marc Kleine-Budde <mkl@pengutronix.de>
->  
-> -allOf:
-> -  - $ref: can-controller.yaml#
-> -
->  properties:
->    compatible:
->      oneOf:
->        - const: rockchip,rk3568v2-canfd
-> +      - const: rockchip,rk3576-canfd
+On Sun, 21 Sep 2025 16:32:31 +0900
+Vincent Mailhol <mailhol@kernel.org> wrote:
 
-Combine these 2 into an enum.
-
->        - items:
->            - const: rockchip,rk3568v3-canfd
->            - const: rockchip,rk3568v2-canfd
-> @@ -43,6 +41,31 @@ properties:
->        - const: core
->        - const: apb
->  
-> +  dmas:
-> +    maxItems: 1
-> +
-> +  dma-names:
-> +    items:
-> +      - const: rx
-> +
-> +allOf:
-> +  - $ref: can-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: rockchip,rk3576-canfd
-> +      required:
-> +        - compatible
-> +    then:
-> +      required:
-> +        - dmas
-> +        - dma-names
-> +    else:
-> +      properties:
-> +        dmas: false
-> +        dma-names: false
-> +
->  required:
->    - compatible
->    - reg
-> @@ -72,3 +95,21 @@ examples:
->              reset-names = "core", "apb";
->          };
->      };
-> +
-> +  - |
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        can@2ac00000 {
-> +            compatible = "rockchip,rk3576-canfd";
-> +            reg = <0x0 0x2ac00000 0x0 0x1000>;
-> +            interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>;
-> +            clocks = <&cru CLK_CAN0>, <&cru PCLK_CAN0>;
-> +            clock-names = "baud", "pclk";
-> +            resets = <&cru SRST_CAN0>, <&cru SRST_P_CAN0>;
-> +            reset-names = "core", "apb";
-> +            dmas = <&dmac0 20>;
-> +            dma-names = "rx";
-> +        };
-> +    };
-> -- 
-> 2.34.1
+> In .c files, the SPDX tag uses the C++ comment style.
 > 
+> Fix below checkpatch.pl warning:
+> 
+>   WARNING: Improper SPDX comment style for 'ip/iplink_can.c', please use '//' instead
+>   #1: FILE: ip/iplink_can.c:1:
+>   +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> 
+>   WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
+>   #1: FILE: ip/iplink_can.c:1:
+>   +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> 
+> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+
+NAK
+Iproute2 excepts both formats and both are used in several
+places.
 
