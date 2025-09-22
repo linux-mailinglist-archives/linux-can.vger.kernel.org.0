@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-4789-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4788-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82B9FB8FEEC
-	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 12:10:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1FD7B8FEE1
+	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 12:09:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8228518A2905
-	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 10:10:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9325416B7F0
+	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 10:09:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 532E12FFDC6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7962D9EED;
 	Mon, 22 Sep 2025 10:09:25 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B802FD1CB
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8922FD1B1
 	for <linux-can@vger.kernel.org>; Mon, 22 Sep 2025 10:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758535765; cv=none; b=oYTOjYqBxbAsIXjyuSpgIhH73ZwGEwuY8tGt83flEe5vXMCYQiRfMvUoIlihQw7+j2kZwd8j4Eck/aAEj9wbl0TTC01H8jgJHZQpFN3C3sP0SZ5gKiWJXhIF8/BLmX+p3fOHY7f6Oau4d6FYmhHzjJCA++cNgZnAYtyRvbOCpMQ=
+	t=1758535765; cv=none; b=BfD+AIIrqBD4ZxeG/VbIFSQ4nH3yP4nO1cclihBdpB4ZvH3E3iFwttPzJhIwnWJtHWY7VP3JGcORCIqxOCKOK4FqfIf2BDlCOWEwusXxYg0r6WXPCx4VaHJ5+3bJwXYJpJXFJ6pa9CpiMGqr4kZsjvvA+RuATQLrYcfAK7yHzR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758535765; c=relaxed/simple;
-	bh=x9PHoQptfGAMvVaAjTnOmTUgWsR/Z+37UUR9LJ1czeM=;
+	bh=3m9eC7t0D0zlyp+Qb62ggaSqoqeHcwSN8r6+vJRKhAI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MZfOLhT10Q6K554TpZL8CAnlhO3KHyn+9+gjIz1rnvwZV1uHXSzWtv7dWos9DhiI5gsta6YR8HqqqSqKzcFxTL7IJAKHsBob4aHxKOZlIO9yo6/LufJqFbETpZsO6w5t795veZTHIwFKVIJwLqqH9hmA80uyK/cSNUNhzbUhtBs=
+	 MIME-Version; b=u0iJw0zOBcbyO4rIVmGwA8xTddDtuk8P0XZUfuPr9FdEPDgHA9wEqWObTwWP5mUXlWZJmUCk/5kb/6ZJtuqLdYUWOCoOWDmANLYEYkXG7fW3Z9jTGK5NF3A2XeyVxJ9LGofAlwwVmfKyZyaosZmPZf6xm79oLYKwNZ+Iu97ZdjY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,26 +33,26 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v0dU1-0006xK-GY
+	id 1v0dU1-0006xT-EE
 	for linux-can@vger.kernel.org; Mon, 22 Sep 2025 12:09:21 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v0dTz-002ZW6-3D
+	id 1v0dTz-002ZW7-3D
 	for linux-can@vger.kernel.org;
 	Mon, 22 Sep 2025 12:09:20 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 9AB1F476D1C
+	by bjornoya.blackshift.org (Postfix) with SMTP id 9AAB8476D1B
 	for <linux-can@vger.kernel.org>; Mon, 22 Sep 2025 10:09:19 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 38DC4476CE3;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 5F25A476CE6;
 	Mon, 22 Sep 2025 10:09:17 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 317ed7d0;
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id da8dc72b;
 	Mon, 22 Sep 2025 10:09:16 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
@@ -62,9 +62,9 @@ Cc: davem@davemloft.net,
 	kernel@pengutronix.de,
 	Vincent Mailhol <mailhol@kernel.org>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 05/10] can: sun4i_can: populate ndo_change_mtu() to prevent buffer overflow
-Date: Mon, 22 Sep 2025 12:07:35 +0200
-Message-ID: <20250922100913.392916-6-mkl@pengutronix.de>
+Subject: [PATCH net 06/10] can: mcba_usb: populate ndo_change_mtu() to prevent buffer overflow
+Date: Mon, 22 Sep 2025 12:07:36 +0200
+Message-ID: <20250922100913.392916-7-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250922100913.392916-1-mkl@pengutronix.de>
 References: <20250922100913.392916-1-mkl@pengutronix.de>
@@ -87,7 +87,7 @@ directly reach the xmit() function of a CAN driver. The only check
 which is performed by the PF_PACKET framework is to make sure that
 skb->len fits the interface's MTU.
 
-Unfortunately, because the sun4i_can driver does not populate its
+Unfortunately, because the mcba_usb driver does not populate its
 net_device_ops->ndo_change_mtu(), it is possible for an attacker to
 configure an invalid MTU by doing, for example:
 
@@ -114,46 +114,44 @@ malicious packet is able to go through can_dev_dropped_skb() checks:
 
   2. the length is a valid CAN XL length.
 
-And so, sun4ican_start_xmit() receives a CAN XL frame which it is not
+And so, mcba_usb_start_xmit() receives a CAN XL frame which it is not
 able to correctly handle and will thus misinterpret it as a CAN frame.
 
 This can result in a buffer overflow. The driver will consume cf->len
-as-is with no further checks on this line:
+as-is with no further checks on these lines:
 
-	dlc = cf->len;
+	usb_msg.dlc = cf->len;
+
+	memcpy(usb_msg.data, cf->data, usb_msg.dlc);
 
 Here, cf->len corresponds to the flags field of the CAN XL frame. In
 our previous example, we set canxl_frame->flags to 0xff. Because the
-maximum expected length is 8, a buffer overflow of 247 bytes occurs a
-couple line below when doing:
-
-	for (i = 0; i < dlc; i++)
-		writel(cf->data[i], priv->base + (dreg + i * 4));
+maximum expected length is 8, a buffer overflow of 247 bytes occurs!
 
 Populate net_device_ops->ndo_change_mtu() to ensure that the
 interface's MTU can not be set to anything bigger than CAN_MTU. By
 fixing the root cause, this prevents the buffer overflow.
 
-Fixes: 0738eff14d81 ("can: Allwinner A10/A20 CAN Controller support - Kernel module")
+Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-Link: https://patch.msgid.link/20250918-can-fix-mtu-v1-3-0d1cada9393b@kernel.org
+Link: https://patch.msgid.link/20250918-can-fix-mtu-v1-4-0d1cada9393b@kernel.org
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/sun4i_can.c | 1 +
+ drivers/net/can/usb/mcba_usb.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/can/sun4i_can.c b/drivers/net/can/sun4i_can.c
-index 6fcb301ef611..53bfd873de9b 100644
---- a/drivers/net/can/sun4i_can.c
-+++ b/drivers/net/can/sun4i_can.c
-@@ -768,6 +768,7 @@ static const struct net_device_ops sun4ican_netdev_ops = {
- 	.ndo_open = sun4ican_open,
- 	.ndo_stop = sun4ican_close,
- 	.ndo_start_xmit = sun4ican_start_xmit,
+diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
+index 41c0a1c399bf..1f9b915094e6 100644
+--- a/drivers/net/can/usb/mcba_usb.c
++++ b/drivers/net/can/usb/mcba_usb.c
+@@ -761,6 +761,7 @@ static const struct net_device_ops mcba_netdev_ops = {
+ 	.ndo_open = mcba_usb_open,
+ 	.ndo_stop = mcba_usb_close,
+ 	.ndo_start_xmit = mcba_usb_start_xmit,
 +	.ndo_change_mtu = can_change_mtu,
  };
  
- static const struct ethtool_ops sun4ican_ethtool_ops = {
+ static const struct ethtool_ops mcba_ethtool_ops = {
 -- 
 2.51.0
 
