@@ -1,172 +1,139 @@
-Return-Path: <linux-can+bounces-4782-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4811-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9F4FB8FD0B
-	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 11:44:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69A20B908C8
+	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 13:52:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71C2C178B2A
-	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 09:44:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6956118A287D
+	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 11:52:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D43AD26E715;
-	Mon, 22 Sep 2025 09:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1739B302CDF;
+	Mon, 22 Sep 2025 11:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="KE7Rv2CE"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mail-m3271.qiye.163.com (mail-m3271.qiye.163.com [220.197.32.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55051459F7
-	for <linux-can@vger.kernel.org>; Mon, 22 Sep 2025 09:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF53223E32D;
+	Mon, 22 Sep 2025 11:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758534246; cv=none; b=kUyCo+V81+40CH2oo2zK/hBFg/E6kQRCqzsqtP7Cpe2lQKFj5x6UZ7GCKm3xRgJR/m7DHUkk9G4hdW7PXjOhe7Nf6JbB1mmodW8OVdGQW0Q9MO5Ai9FXTVlfEYnhvk+yB0PJwQhAHWCYBOYX099L943uWfyuUnfLlpfXaHZq2oM=
+	t=1758541919; cv=none; b=PZdOt4xsQHx20IneGMKLPspbBwMWOZjxouGfVIkMjoOO6ZsRhlPG8lkj+sTPJ81XNh21B4SAnpGoW3AzF/n4vLnvSPltH4DYRy/VNZrHz/GJHhEVTVtI2cjHtGmuyrcwZrEoP1gf8GrtkrGl1XPpHeWYluJloqZlnl8kUrs29xQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758534246; c=relaxed/simple;
-	bh=Op2SVDJIe/UqVXLX0hU5fJrbWehPyFq8PPlw17qHjNc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GY0Tva/moBnhZ3ynPffQgvSOAz9LBnQXJ+QAtBPIPNN9XCSxAR3V/N3j7ZgYQu9a4f7c0HLLuCgWtN7RHAHwBcR2+iP0iMGS1CAS8zvSlp/FAA72CinDBrzFOHme0xwAP10l2it3yQhSCQ+egPom9c6QfBrSPsBqSTZzZS0oBFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1v0d5P-0002lt-6t; Mon, 22 Sep 2025 11:43:55 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1v0d5O-002ZM8-0p;
-	Mon, 22 Sep 2025 11:43:54 +0200
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id DEF40476CA3;
-	Mon, 22 Sep 2025 09:43:53 +0000 (UTC)
-Date: Mon, 22 Sep 2025 11:43:53 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol@kernel.org>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, 
-	=?utf-8?B?U3TDqXBoYW5l?= Grosjean <stephane.grosjean@hms-networks.com>, Robert Nawrath <mbro1689@gmail.com>, 
-	Minh Le <minh.le.aj@renesas.com>, Duy Nguyen <duy.nguyen.rh@renesas.com>, 
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 07/20] can: netlink: refactor
- CAN_CTRLMODE_TDC_{AUTO,MANUAL} flag reset logic
-Message-ID: <20250922-amber-spider-of-control-90be7c-mkl@pengutronix.de>
-References: <20250910-canxl-netlink-prep-v2-0-f128d4083721@kernel.org>
- <20250910-canxl-netlink-prep-v2-7-f128d4083721@kernel.org>
- <f9854748-78c1-4852-a610-e839e9c91df3@kernel.org>
+	s=arc-20240116; t=1758541919; c=relaxed/simple;
+	bh=jGUYp96OUiZR0rWQVpSSIEGvho1XxUO+BLPXG5l9y3A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jKYOpdSJO/ucdO75bfTWP3A2xXccbjMUPdV1z5MtrQDmLdD7I7xw/w9+gH09jTxFvezNo7Pj3Y9KbLkfE+hR98nIjTs1gMxvb4V7kmpYqpYh7g81j9Wt7nvksORThiE8m3rkRcjfoJzmp8dxWYA27roKenv0KvpwH4kkEIHtbZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=KE7Rv2CE; arc=none smtp.client-ip=220.197.32.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from rockchip.. (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 239b62a99;
+	Mon, 22 Sep 2025 15:15:45 +0800 (GMT+08:00)
+From: Elaine Zhang <zhangqing@rock-chips.com>
+To: zhangqing@rock-chips.com,
+	mkl@pengutronix.de,
+	kernel@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	heiko@sntech.de,
+	cl@rock-chips.com,
+	kever.yang@rock-chips.com
+Cc: linux-can@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: [PATCH v7 0/4] rockchip: add can for RK3576 Soc
+Date: Mon, 22 Sep 2025 15:15:39 +0800
+Message-Id: <20250922071543.73923-1-zhangqing@rock-chips.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="d5aff4qmd2lfxgtx"
-Content-Disposition: inline
-In-Reply-To: <f9854748-78c1-4852-a610-e839e9c91df3@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9970474f0903a3kunm864fae2f2315c8
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGkNNTVZMSB1KTkMYGRpPGh1WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=KE7Rv2CE+ZXC/KBCM4fcVt3eygVCR275X14zH9jCE3LBjvNIH1+Z+VnJp4NBuEx5nqV7loP2/xFcQEC09+AopRbniEd2Fe3cEHBsg5a12U/53Yt7KwR2aSZ6/Jrme0a5aQaB1G8wge7jsgPE9J8gU8GiEmhUUwLHuMAto7k/RUo=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=LfXJiKVd7yQ24BTS+n3MbyE5ZCs02XLEVPDFXxi839A=;
+	h=date:mime-version:subject:message-id:from;
+
+rk3576 can is a new controller,new register layout and Bit position
+definition:
+Support CAN and CANFD protocol.
+Support Dma.
+
+There are major differences from the previous rk3568.
+All errata on the rk3568 have been fixed and redesigned.
+
+Change in V7:
+[PATCH v7 1/4]: Correction format warning.
+[PATCH v7 2/4]: No change.
+[PATCH v7 3/4]: Correct the writing of some registers and
+		correct the annotations.
+[PATCH v7 4/4]: Optimize the structure parameters and
+		ensure error handling.
+
+Change in V6:
+[PATCH v6 1/4]: Fix dma is support only for rk3576.
+[PATCH v6 2/4]: Fix the compilation warning.
+[PATCH v6 3/4]: Fix the compilation warning.
+[PATCH v6 4/4]: Fix the compilation warning.
+
+Change in V5:
+[PATCH v5 1/4]: Add rk3576 canfd to rockchip,rk3568v2-canfd.yaml, remove
+                rockchip,rk3576-canfd.yaml
+[PATCH v5 2/4]: Encapsulate some hardware operation functions into
+                rkcanfd_devtype_data to provide differentiated
+                implementations for different models
+                (such as RK3568v2/v3)..
+[PATCH v5 3/4]: Add rk3576 canfd,fix the register naming rule,
+                Delete the variables used by rockchip itself.
+[PATCH v5 4/4]: Fix .h sorting.
 
 
---d5aff4qmd2lfxgtx
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 07/20] can: netlink: refactor
- CAN_CTRLMODE_TDC_{AUTO,MANUAL} flag reset logic
-MIME-Version: 1.0
+Change in V4:
+[PATCH v4 1/3]: Correct the format and add explanations.
+[PATCH v4 2/3]: No change.
+[PATCH v4 3/3]: No change.
 
-On 20.09.2025 16:24:42, Vincent Mailhol wrote:
-> On 10/09/2025 at 15:03, Vincent Mailhol wrote:
-> > CAN_CTRLMODE_TDC_AUTO and CAN_CTRLMODE_TDC_MANUAL are mutually
-> > exclusive. This means that whenever the user switches from auto to
-> > manual mode (or vice versa), the other flag which was set previously
-> > needs to be cleared.
-> >=20
-> > Currently, this is handled with a masking operation. It can be done in
-> > a simpler manner by clearing any of the previous TDC flags before
-> > copying netlink attributes. The code becomes easier to understand and
-> > will make it easier to add the new upcoming CAN XL flags which will
-> > have a similar reset logic as the current TDC flags.
-> >=20
-> > Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-> > ---
-> >  drivers/net/can/dev/netlink.c | 9 ++++-----
-> >  1 file changed, 4 insertions(+), 5 deletions(-)
-> >=20
-> > diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlin=
-k.c
-> > index 274eaab10796b601d565c32f6315727a578970bb..72a82d4e9d6494771320ea0=
-35ed6f6098c0e8ce6 100644
-> > --- a/drivers/net/can/dev/netlink.c
-> > +++ b/drivers/net/can/dev/netlink.c
-> > @@ -254,6 +254,10 @@ static int can_changelink(struct net_device *dev, =
-struct nlattr *tb[],
-> >  		if ((maskedflags & ctrlstatic) !=3D ctrlstatic)
-> >  			return -EOPNOTSUPP;
-> > =20
-> > +		/* If a top dependency flag is provided, reset all its dependencies =
-*/
-> > +		if (cm->mask & CAN_CTRLMODE_FD)
-> > +			priv->ctrlmode &=3D !CAN_CTRLMODE_FD_TDC_MASK;
->                                           ^
->=20
-> This is a bug. The correct operation to unset the flag is:
->=20
-> 		priv->ctrlmode &=3D ~CAN_CTRLMODE_FD_TDC_MASK;
->=20
-> (replace the ! operator by ~).
->=20
-> @Marc, do you think you can send your next PR to net soonish?
->=20
-> I would like to rebase this series and the "rework the CAN MTU logic" ser=
-ies on
-> top of the MTU fix:
->=20
-> https://lore.kernel.org/linux-can/20250918-can-fix-mtu-v1-0-0d1cada9393b@=
-kernel.org/
->=20
-> But to do so, I first need to wait for the MTU fix to appear on net-next =
-and
-> there is not so much time left before the end of the development windows.
+Change in V3:
+[PATCH v3 1/3]: Add documentation for the rk3576 CAN-FD.
+[PATCH v3 2/3]: Adjust the differentiated code section and
+                add dma function.
+[PATCH v3 3/3]: Remove dma, no use dma by default.
 
-This series looks fine to me. After -rc1, please check for any
-ndo_change_mtu, because the Nuvoton CAN-FD driver will go mainline, but
-not via the net-next tree.
+Change in V2:
+[PATCH v2 1/2]: remove rk3576_canfd.c, use the rockchip_canfd driver
+[PATCH v2 2/2]: code style.
 
-> If the schedule is too short, let me know and I will adjust accordingly by
-> dropping whatever patches are in conflict.
+Elaine Zhang (4):
+  dt-bindings: can: rockchip_canfd: add rk3576 CAN-FD controller
+  net: can: rockchip: Refactor the rkcanfd_devtype_data structure
+  net: can: rockchip: add can for RK3576 Soc
+  net: can: rockchip: support dma for rk3576 rx
 
-Marc
+ .../net/can/rockchip,rk3568v2-canfd.yaml      |  47 +-
+ .../net/can/rockchip/rockchip_canfd-core.c    | 586 ++++++++++++++++--
+ drivers/net/can/rockchip/rockchip_canfd-rx.c  | 212 +++++++
+ drivers/net/can/rockchip/rockchip_canfd-tx.c  |  20 +
+ drivers/net/can/rockchip/rockchip_canfd.h     | 278 +++++++++
+ 5 files changed, 1095 insertions(+), 48 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+-- 
+2.34.1
 
---d5aff4qmd2lfxgtx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmjRGlUACgkQDHRl3/mQ
-kZzjZwf/YVBw13aS+uX4OutqD6C3ihMaJhnkeBAwGlJ/eJZ3/dYyEhhbZKnEF8XZ
-L3bqB1K2+s6L9c6JoKPXsRVyBt/XO//yCO3ElgvRYSIvdq//iH5RxB8jyJTw8YLc
-OwRQKyu6g7CdYx9ocXAcYS5Kh00p/d+td4z//MG21elnj4V8HiAd/zlpEIRWWG2p
-q1jlh9/c+1n8aWW4HaPmKDlIvyN1WecEn408FUAHgB//jWHY2utmO9IjqvK2VJvL
-eadcqxK8/tu5UP4QHZX8gSGwbK2vPyPXjx8hweuz5jE4cudE/mrvII4+gBTIWQrc
-nduNusLYlCuebi4mE0nGopAMiWGvAw==
-=EcZb
------END PGP SIGNATURE-----
-
---d5aff4qmd2lfxgtx--
 
