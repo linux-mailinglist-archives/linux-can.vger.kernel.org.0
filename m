@@ -1,139 +1,153 @@
-Return-Path: <linux-can+bounces-4811-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4783-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69A20B908C8
-	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 13:52:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42A96B8FEBF
+	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 12:09:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6956118A287D
-	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 11:52:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1A8A3A396A
+	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 10:09:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1739B302CDF;
-	Mon, 22 Sep 2025 11:51:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="KE7Rv2CE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9993C2F39BC;
+	Mon, 22 Sep 2025 10:09:22 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-m3271.qiye.163.com (mail-m3271.qiye.163.com [220.197.32.71])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF53223E32D;
-	Mon, 22 Sep 2025 11:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E0A12AEE4
+	for <linux-can@vger.kernel.org>; Mon, 22 Sep 2025 10:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758541919; cv=none; b=PZdOt4xsQHx20IneGMKLPspbBwMWOZjxouGfVIkMjoOO6ZsRhlPG8lkj+sTPJ81XNh21B4SAnpGoW3AzF/n4vLnvSPltH4DYRy/VNZrHz/GJHhEVTVtI2cjHtGmuyrcwZrEoP1gf8GrtkrGl1XPpHeWYluJloqZlnl8kUrs29xQ=
+	t=1758535762; cv=none; b=DIe9H0l0++wOKswxeJjfoxR7GsKYzG86O3bfnqORXujx4AeSB/5/ccHTWa1T8X5CmlybAnxFsHR8lO1QUpT1zh3XsczKDrbeLkvFaqGrhyrs6Pj6VzNtyVwNwGKaUYCybayQPbmUWv10d+/i5nXOK+vbFMe6LH7oR04YCRK+lyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758541919; c=relaxed/simple;
-	bh=jGUYp96OUiZR0rWQVpSSIEGvho1XxUO+BLPXG5l9y3A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jKYOpdSJO/ucdO75bfTWP3A2xXccbjMUPdV1z5MtrQDmLdD7I7xw/w9+gH09jTxFvezNo7Pj3Y9KbLkfE+hR98nIjTs1gMxvb4V7kmpYqpYh7g81j9Wt7nvksORThiE8m3rkRcjfoJzmp8dxWYA27roKenv0KvpwH4kkEIHtbZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=KE7Rv2CE; arc=none smtp.client-ip=220.197.32.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from rockchip.. (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 239b62a99;
-	Mon, 22 Sep 2025 15:15:45 +0800 (GMT+08:00)
-From: Elaine Zhang <zhangqing@rock-chips.com>
-To: zhangqing@rock-chips.com,
-	mkl@pengutronix.de,
-	kernel@pengutronix.de,
-	mailhol.vincent@wanadoo.fr,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	heiko@sntech.de,
-	cl@rock-chips.com,
-	kever.yang@rock-chips.com
-Cc: linux-can@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [PATCH v7 0/4] rockchip: add can for RK3576 Soc
-Date: Mon, 22 Sep 2025 15:15:39 +0800
-Message-Id: <20250922071543.73923-1-zhangqing@rock-chips.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1758535762; c=relaxed/simple;
+	bh=bw+WqNchB4ZjZUhbZqcZCfGidO11HCSigkll0DOet6Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MxKD+vmvz+FmU4PBEjDKxNX6NegNZHVGIHx0koGqBOFpgDhNzey188gwRih8wfT9HFkzux2ZSaNoDOkfHraMEiJlyXE+Yf4kvGoCihG4YwNXupFg4hbIHPwH82l5hKx+qRSiVWsfATQZelA83wkdYLZjxGTspyquLzplSeQOjwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1v0dTy-0006tx-MR
+	for linux-can@vger.kernel.org; Mon, 22 Sep 2025 12:09:18 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1v0dTy-002ZTd-0k
+	for linux-can@vger.kernel.org;
+	Mon, 22 Sep 2025 12:09:18 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id D61F4476CF4
+	for <linux-can@vger.kernel.org>; Mon, 22 Sep 2025 10:09:17 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id B0C76476CDB;
+	Mon, 22 Sep 2025 10:09:16 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 524a53d0;
+	Mon, 22 Sep 2025 10:09:16 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH net 0/10] pull-request: can 2025-09-22
+Date: Mon, 22 Sep 2025 12:07:30 +0200
+Message-ID: <20250922100913.392916-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf8
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9970474f0903a3kunm864fae2f2315c8
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGkNNTVZMSB1KTkMYGRpPGh1WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=KE7Rv2CE+ZXC/KBCM4fcVt3eygVCR275X14zH9jCE3LBjvNIH1+Z+VnJp4NBuEx5nqV7loP2/xFcQEC09+AopRbniEd2Fe3cEHBsg5a12U/53Yt7KwR2aSZ6/Jrme0a5aQaB1G8wge7jsgPE9J8gU8GiEmhUUwLHuMAto7k/RUo=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=LfXJiKVd7yQ24BTS+n3MbyE5ZCs02XLEVPDFXxi839A=;
-	h=date:mime-version:subject:message-id:from;
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-rk3576 can is a new controller,new register layout and Bit position
-definition:
-Support CAN and CANFD protocol.
-Support Dma.
+Hello netdev-team,
 
-There are major differences from the previous rk3568.
-All errata on the rk3568 have been fixed and redesigned.
+this is a pull request of 10 patches for net/main.
 
-Change in V7:
-[PATCH v7 1/4]: Correction format warning.
-[PATCH v7 2/4]: No change.
-[PATCH v7 3/4]: Correct the writing of some registers and
-		correct the annotations.
-[PATCH v7 4/4]: Optimize the structure parameters and
-		ensure error handling.
+The 1st patch is by Chen Yufeng and fixes a potential NULL pointer
+deref in the hi311x driver.
 
-Change in V6:
-[PATCH v6 1/4]: Fix dma is support only for rk3576.
-[PATCH v6 2/4]: Fix the compilation warning.
-[PATCH v6 3/4]: Fix the compilation warning.
-[PATCH v6 4/4]: Fix the compilation warning.
+Duy Nguyen contributes a patch for the rcar_canfd driver to fix the
+controller mode setting.
 
-Change in V5:
-[PATCH v5 1/4]: Add rk3576 canfd to rockchip,rk3568v2-canfd.yaml, remove
-                rockchip,rk3576-canfd.yaml
-[PATCH v5 2/4]: Encapsulate some hardware operation functions into
-                rkcanfd_devtype_data to provide differentiated
-                implementations for different models
-                (such as RK3568v2/v3)..
-[PATCH v5 3/4]: Add rk3576 canfd,fix the register naming rule,
-                Delete the variables used by rockchip itself.
-[PATCH v5 4/4]: Fix .h sorting.
+The next 4 patches are by Vincent Mailhol and populate the
+ndo_change_mtu(( callback in the etas_es58x, hi311x, sun4i_can and
+mcba_usb driver to prevent buffer overflows.
 
+Stéphane Grosjean's patch for the peak_usb driver fixes a
+shift-out-of-bounds issue.
 
-Change in V4:
-[PATCH v4 1/3]: Correct the format and add explanations.
-[PATCH v4 2/3]: No change.
-[PATCH v4 3/3]: No change.
+The last 3 patches are by Stefan Mätje and fix the version detection
+and TX handling of the esd_usb driver.
 
-Change in V3:
-[PATCH v3 1/3]: Add documentation for the rk3576 CAN-FD.
-[PATCH v3 2/3]: Adjust the differentiated code section and
-                add dma function.
-[PATCH v3 3/3]: Remove dma, no use dma by default.
+regards,
+Marc
 
-Change in V2:
-[PATCH v2 1/2]: remove rk3576_canfd.c, use the rockchip_canfd driver
-[PATCH v2 2/2]: code style.
+---
 
-Elaine Zhang (4):
-  dt-bindings: can: rockchip_canfd: add rk3576 CAN-FD controller
-  net: can: rockchip: Refactor the rkcanfd_devtype_data structure
-  net: can: rockchip: add can for RK3576 Soc
-  net: can: rockchip: support dma for rk3576 rx
+The following changes since commit cbf658dd09419f1ef9de11b9604e950bdd5c170b:
 
- .../net/can/rockchip,rk3568v2-canfd.yaml      |  47 +-
- .../net/can/rockchip/rockchip_canfd-core.c    | 586 ++++++++++++++++--
- drivers/net/can/rockchip/rockchip_canfd-rx.c  | 212 +++++++
- drivers/net/can/rockchip/rockchip_canfd-tx.c  |  20 +
- drivers/net/can/rockchip/rockchip_canfd.h     | 278 +++++++++
- 5 files changed, 1095 insertions(+), 48 deletions(-)
+  Merge tag 'net-6.17-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2025-09-18 10:22:02 -0700)
 
--- 
-2.34.1
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.17-20250922
+
+for you to fetch changes up to 0141811a10a0116e00ece2d0181f8eb8788ce054:
+
+  Merge patch series "can: esd_usb: fixes" (2025-09-22 12:05:14 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.17-20250922
+
+----------------------------------------------------------------
+Chen Yufeng (1):
+      can: hi311x: fix null pointer dereference when resuming from sleep before interface was enabled
+
+Duy Nguyen (1):
+      can: rcar_canfd: Fix controller mode setting
+
+Marc Kleine-Budde (2):
+      Merge patch series "can: populate ndo_change_mtu() to prevent buffer overflow"
+      Merge patch series "can: esd_usb: fixes"
+
+Stefan Mätje (3):
+      can: esd_usb: Fix not detecting version reply in probe routine
+      can: esd_usb: Fix handling of TX context objects
+      can: esd_usb: Add watermark handling for TX jobs
+
+Stéphane Grosjean (1):
+      can: peak_usb: fix shift-out-of-bounds issue
+
+Vincent Mailhol (4):
+      can: etas_es58x: populate ndo_change_mtu() to prevent buffer overflow
+      can: hi311x: populate ndo_change_mtu() to prevent buffer overflow
+      can: sun4i_can: populate ndo_change_mtu() to prevent buffer overflow
+      can: mcba_usb: populate ndo_change_mtu() to prevent buffer overflow
+
+ drivers/net/can/rcar/rcar_canfd.c            |   7 +-
+ drivers/net/can/spi/hi311x.c                 |  34 +++---
+ drivers/net/can/sun4i_can.c                  |   1 +
+ drivers/net/can/usb/esd_usb.c                | 174 ++++++++++++++++++++-------
+ drivers/net/can/usb/etas_es58x/es58x_core.c  |   3 +-
+ drivers/net/can/usb/mcba_usb.c               |   1 +
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c |   2 +-
+ 7 files changed, 155 insertions(+), 67 deletions(-)
 
 
