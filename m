@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-4787-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4784-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB0CDB8FECB
-	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 12:09:34 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91807B8FEC2
+	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 12:09:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BDAC18A271E
-	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 10:09:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 560634E2035
+	for <lists+linux-can@lfdr.de>; Mon, 22 Sep 2025 10:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C472FDC22;
-	Mon, 22 Sep 2025 10:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A3E2AEE4;
+	Mon, 22 Sep 2025 10:09:22 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90882D94AC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D0D28727C
 	for <linux-can@vger.kernel.org>; Mon, 22 Sep 2025 10:09:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758535763; cv=none; b=iLKQ3gK4hJX363ZDAAFokM3RTQoTGJAissr2DwECzOnKXTEbvxNeDBoDbZLpk3+B7YG+myxppDF4tXyCGqmZXsqQw+nAp5tO/K/iB/RW9s5As3A6PHcjVQ46itpTMJKRGQyBFqWelSxY6rlADRE4q4UOa1Yil2Vt0Hx4P81NXMM=
+	t=1758535762; cv=none; b=Rn9CxtzPCT3DFQb+N39V6cKWggFDAnMtXpD38t/QBYDRejRlbDoPssGYzo3DMpJzBhrDTj3dkmW41MCY02P1kvYcpdUhNmU1Wl1O1m6cyPYKvTJANgrPrwEc9JwYUTRUHmOtny/qq3Xt8xoP8up9ODP4iZpHiGFWV0wj+Bbmb24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758535763; c=relaxed/simple;
-	bh=1EoobT2+Dzml2fjU142cQZpj8fDvHuvbhqFud8I75Z4=;
+	s=arc-20240116; t=1758535762; c=relaxed/simple;
+	bh=rd32eBhFiAAJLcDnvaafjRB6AVqo9CCTAgAfyMBrfAM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aZGJRRbTGaHUj2yD1q1e1CxpG2c69lQfxZ5k13Ux0ixpF+P7wKoO9/sKhPamhC6vjYnm67BvYFCmj8S5hloTMrs8JTN5vaNIip9Wza6qQuL45wtlpGCpewMZbfehefA9bqq3p+ZfphQ8fL/Inbg5fCyn9lH3YCkm9/S1dLQhct4=
+	 MIME-Version; b=ap0ndF5Dkkyt2t9hH4X9CkpsI0t9w+XVg/3bAkw2JAh9uzeBcBgOWIPfh+lFIkHZsTOEuQKKis8F0FG//TcsHusGWotqZ685U3aoJGZzwG19hI2ZLTUhxsLBseLoReLrs1Q11hkTGX9SR8cw0SL3KnXQpIDXGDxMQu6U1Q8x5kw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,26 +33,26 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v0dU0-0006vg-3u
-	for linux-can@vger.kernel.org; Mon, 22 Sep 2025 12:09:20 +0200
+	id 1v0dTz-0006vL-J0
+	for linux-can@vger.kernel.org; Mon, 22 Sep 2025 12:09:19 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v0dTz-002ZUs-0A
+	id 1v0dTy-002ZUa-34
 	for linux-can@vger.kernel.org;
-	Mon, 22 Sep 2025 12:09:19 +0200
+	Mon, 22 Sep 2025 12:09:18 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id B73D5476D08
+	by bjornoya.blackshift.org (Postfix) with SMTP id 9659F476D04
 	for <linux-can@vger.kernel.org>; Mon, 22 Sep 2025 10:09:18 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id E0265476CDD;
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id F1729476CDE;
 	Mon, 22 Sep 2025 10:09:16 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 74046016;
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id df03a408;
 	Mon, 22 Sep 2025 10:09:16 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
@@ -60,12 +60,11 @@ Cc: davem@davemloft.net,
 	kuba@kernel.org,
 	linux-can@vger.kernel.org,
 	kernel@pengutronix.de,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>,
-	Tranh Ha <tranh.ha.xb@renesas.com>,
+	Vincent Mailhol <mailhol@kernel.org>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 02/10] can: rcar_canfd: Fix controller mode setting
-Date: Mon, 22 Sep 2025 12:07:32 +0200
-Message-ID: <20250922100913.392916-3-mkl@pengutronix.de>
+Subject: [PATCH net 03/10] can: etas_es58x: populate ndo_change_mtu() to prevent buffer overflow
+Date: Mon, 22 Sep 2025 12:07:33 +0200
+Message-ID: <20250922100913.392916-4-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250922100913.392916-1-mkl@pengutronix.de>
 References: <20250922100913.392916-1-mkl@pengutronix.de>
@@ -81,45 +80,93 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-From: Duy Nguyen <duy.nguyen.rh@renesas.com>
+From: Vincent Mailhol <mailhol@kernel.org>
 
-Driver configures register to choose controller mode before
-setting all channels to reset mode leading to failure.
-The patch corrects operation of mode setting.
+Sending an PF_PACKET allows to bypass the CAN framework logic and to
+directly reach the xmit() function of a CAN driver. The only check
+which is performed by the PF_PACKET framework is to make sure that
+skb->len fits the interface's MTU.
 
-Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
-Signed-off-by: Tranh Ha <tranh.ha.xb@renesas.com>
-Link: https://patch.msgid.link/TYWPR01MB87434739F83E27EDCD23DF44B416A@TYWPR01MB8743.jpnprd01.prod.outlook.com
+Unfortunately, because the etas_es58x driver does not populate its
+net_device_ops->ndo_change_mtu(), it is possible for an attacker to
+configure an invalid MTU by doing, for example:
+
+  $ ip link set can0 mtu 9999
+
+After doing so, the attacker could open a PF_PACKET socket using the
+ETH_P_CANXL protocol:
+
+	socket(PF_PACKET, SOCK_RAW, htons(ETH_P_CANXL));
+
+to inject a malicious CAN XL frames. For example:
+
+	struct canxl_frame frame = {
+		.flags = 0xff,
+		.len = 2048,
+	};
+
+The CAN drivers' xmit() function are calling can_dev_dropped_skb() to
+check that the skb is valid, unfortunately under above conditions, the
+malicious packet is able to go through can_dev_dropped_skb() checks:
+
+  1. the skb->protocol is set to ETH_P_CANXL which is valid (the
+     function does not check the actual device capabilities).
+
+  2. the length is a valid CAN XL length.
+
+And so, es58x_start_xmit() receives a CAN XL frame which it is not
+able to correctly handle and will thus misinterpret it as a CAN(FD)
+frame.
+
+This can result in a buffer overflow. For example, using the es581.4
+variant, the frame will be dispatched to es581_4_tx_can_msg(), go
+through the last check at the beginning of this function:
+
+	if (can_is_canfd_skb(skb))
+		return -EMSGSIZE;
+
+and reach this line:
+
+	memcpy(tx_can_msg->data, cf->data, cf->len);
+
+Here, cf->len corresponds to the flags field of the CAN XL frame. In
+our previous example, we set canxl_frame->flags to 0xff. Because the
+maximum expected length is 8, a buffer overflow of 247 bytes occurs!
+
+Populate net_device_ops->ndo_change_mtu() to ensure that the
+interface's MTU can not be set to anything bigger than CAN_MTU or
+CANFD_MTU (depending on the device capabilities). By fixing the root
+cause, this prevents the buffer overflow.
+
+Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
+Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+Link: https://patch.msgid.link/20250918-can-fix-mtu-v1-1-0d1cada9393b@kernel.org
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/rcar/rcar_canfd.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index b3c8c592fb0e..7e8b1d2f1af6 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -823,9 +823,6 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
- 	/* Reset Global error flags */
- 	rcar_canfd_write(gpriv->base, RCANFD_GERFL, 0x0);
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index db1acf6d504c..adc91873c083 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -7,7 +7,7 @@
+  *
+  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
+  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
+- * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
++ * Copyright (c) 2020-2025 Vincent Mailhol <mailhol@kernel.org>
+  */
  
--	/* Set the controller into appropriate mode */
--	rcar_canfd_set_mode(gpriv);
--
- 	/* Transition all Channels to reset mode */
- 	for_each_set_bit(ch, &gpriv->channels_mask, gpriv->info->max_channels) {
- 		rcar_canfd_clear_bit(gpriv->base,
-@@ -844,6 +841,10 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
- 			return err;
- 		}
- 	}
-+
-+	/* Set the controller into appropriate mode */
-+	rcar_canfd_set_mode(gpriv);
-+
- 	return 0;
- }
+ #include <linux/unaligned.h>
+@@ -1977,6 +1977,7 @@ static const struct net_device_ops es58x_netdev_ops = {
+ 	.ndo_stop = es58x_stop,
+ 	.ndo_start_xmit = es58x_start_xmit,
+ 	.ndo_eth_ioctl = can_eth_ioctl_hwts,
++	.ndo_change_mtu = can_change_mtu,
+ };
  
+ static const struct ethtool_ops es58x_ethtool_ops = {
 -- 
 2.51.0
 
