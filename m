@@ -1,50 +1,50 @@
-Return-Path: <linux-can+bounces-4841-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4842-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BC2FB9471A
-	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 07:42:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E24EB9471D
+	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 07:42:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D2491779E8
-	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 05:42:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA7AF3BF01E
+	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 05:42:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4527830FF1E;
-	Tue, 23 Sep 2025 05:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 199523101DF;
+	Tue, 23 Sep 2025 05:41:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="loizxqwO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pCbUY1m1"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2F230FF10;
-	Tue, 23 Sep 2025 05:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF713101D2;
+	Tue, 23 Sep 2025 05:40:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758606058; cv=none; b=lwImWc/CwJc9uXRbdh80z3n/SUCM1GuPafyVSP/QfMKE8I37TH1fkLsZRBS6Yt6XgonUFkQ0DLxLIz9GO6pEGJuXj0xQqT+ep02AXEmpDz1xVdxIO55ufh6JfrNEKetiBJYDKBYKRIEie0u4jlMukleVC/DEGTp2YG0YIDTiTI0=
+	t=1758606060; cv=none; b=DgRScIQgfgKE95X3uy/MXAHb5+0V65UQ2vLEmTYvluIhaiWcpHh5zXkRGTjHqNJ0xvaulrzayOoB8KSams0PzoPFH4Vvy2Jg4lKo5AlmF+4+yIcGfYNJ61vrBQmcLIJCZ7BJADprJ41zdpG/+IzBJSzAkls5qrDqVJIgFxf66QE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758606058; c=relaxed/simple;
-	bh=M9/FIIXWlcfUEEFfRYD4MlOKBHufakUc+q8CDcjTqY0=;
+	s=arc-20240116; t=1758606060; c=relaxed/simple;
+	bh=WAKm5KoMoYNrq4ugY2CVCp2v6gFNBH2vldJXBcaEOHI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QLn7BQasg4Vuqjrhqhk+4DOIsFuCG7OLZiCWFRRrru0t7JjNTJbIflWa1t7LYn7Eu/881smw9B85jiLcte6qCptSrkfjo7Wmkug1X51Bk4W2SBAQrUSlKyumRPb13iYdctzlMl+RfMc5/3e1ttOudgoUfaDDcimK0+dQgKL7k6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=loizxqwO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5BE2C116B1;
-	Tue, 23 Sep 2025 05:40:56 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=toHqWS+BuYH8YjjA8qm+dwOQke4ozm/MNy3DANHH0CRPFkBtVjkLySoAtnvl090wmhL3VcZ5X1f78sVCJuZyoHxuA9HQ0NFKAczo6TNLScuz4EYKjNLAyOPRZaVfO0UgCVVFOrNoldsj4yxdUhTsXFAH9nNZtiS9Fs1fUXhotCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pCbUY1m1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4347AC116B1;
+	Tue, 23 Sep 2025 05:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758606057;
-	bh=M9/FIIXWlcfUEEFfRYD4MlOKBHufakUc+q8CDcjTqY0=;
+	s=k20201202; t=1758606059;
+	bh=WAKm5KoMoYNrq4ugY2CVCp2v6gFNBH2vldJXBcaEOHI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=loizxqwOOF3dEH/RoxEWplvOcLfeU1fD9RXWBV4SRS2Sqdd7Ic5yngUXd50KQvCdP
-	 /F9ExcBUmQjDiHdKW8m/2Kzx7mKA3tefD6nuXDB6btEo+O3aMnINVRr9O+w0G2ZKVp
-	 OSwn3xagLDy8GwmxrUd41cRdeqFF+lyjmaIqpyr9F06kceMlZ3YxSvHavAQHVQgv9j
-	 pxYrSlD82Q8o53fDA8vG+dDINjplJA4udkRAsubvCPWMboPUZ3pI3/QP3ghWw12Nmu
-	 SlR5WIpfIMBEbhP/kIF2cU2eHUQQNxzQfDO0oJYoNzl6wCQsZadmxoioa4zvscAp01
-	 SUL5w/1ctTA5A==
+	b=pCbUY1m1e71Lfb2EDyxWEb5Rz0OoqkhnE+2v0KsyOtnRD62JOjJG68LEvaV1OkDhk
+	 OuLb3t5BA1rPWZ1hRiav4+eqtIakr+6Jhh1keZKtJxIuAmumgaCrC/GQkL8YRyre02
+	 PzOzMBl142AN1yKoUEj4HJEF6EUIzDYJvKlOdiLMwtvF9MTXTUnU7vhTsArZzIwLvO
+	 +GAUUEbehp4LGGNuzJ3vFdXQl7ahcl4m5H/F/CrR1D4pQtZKYMDuzdZHkTopg6eXeC
+	 oEKJwLgTqcCRdqtf7hIvO+VYvQN806Tdt0JBH5Ynxiqy6nnl1VG2imdcMe0wbCYRGs
+	 kZZET+sA4gwEg==
 From: Vincent Mailhol <mailhol@kernel.org>
-Date: Tue, 23 Sep 2025 14:39:42 +0900
-Subject: [PATCH v3 07/20] can: netlink: refactor
- CAN_CTRLMODE_TDC_{AUTO,MANUAL} flag reset logic
+Date: Tue, 23 Sep 2025 14:39:43 +0900
+Subject: [PATCH v3 08/20] can: netlink: remove useless check in
+ can_tdc_changelink()
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250923-canxl-netlink-prep-v3-7-87a7684333f3@kernel.org>
+Message-Id: <20250923-canxl-netlink-prep-v3-8-87a7684333f3@kernel.org>
 References: <20250923-canxl-netlink-prep-v3-0-87a7684333f3@kernel.org>
 In-Reply-To: <20250923-canxl-netlink-prep-v3-0-87a7684333f3@kernel.org>
 To: Marc Kleine-Budde <mkl@pengutronix.de>, 
@@ -64,70 +64,45 @@ Cc: Vincent Mailhol <mailhol@kernel.org>,
  Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org, 
  linux-kernel@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2060; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=M9/FIIXWlcfUEEFfRYD4MlOKBHufakUc+q8CDcjTqY0=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDBmXjHZuT/7+/+evu0L5r9ccfbM+hffz9kmZ+ZOjzYT/+
- QtrRJXt6ChlYRDjYpAVU2RZVs7JrdBR6B126K8lzBxWJpAhDFycAjCRa+GMDIe+6StJHHS8NnNe
- 9MLnz28tlNw+4bHetM9Vv6pNWNgcTeQZGXbx+Or+ye/3uMdwPvD6rbcs+3LvzG8IiAmos1/21aH
- sBxcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1203; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=WAKm5KoMoYNrq4ugY2CVCp2v6gFNBH2vldJXBcaEOHI=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDBmXjHbf7DcVt2WacP3CoRna9eV2nrUr9BwnbvIz8Lpbd
+ dP6ildRRykLgxgXg6yYIsuyck5uhY5C77BDfy1h5rAygQxh4OIUgInw2zP8M/gb7DVRd5vFjJc2
+ gav82DOvClxdZfJE7vHJb4xPzQ/J+DH8s76WzH5c8VzmpQ19wRkSHu+t1+/5pKSutPLnxBvP5rd
+ +4gYA
 X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-CAN_CTRLMODE_TDC_AUTO and CAN_CTRLMODE_TDC_MANUAL are mutually
-exclusive. This means that whenever the user switches from auto to
-manual mode (or vice versa), the other flag which was set previously
-needs to be cleared.
+can_tdc_changelink() return -EOPNOTSUPP under this condition:
 
-Currently, this is handled with a masking operation. It can be done in
-a simpler manner by clearing any of the previous TDC flags before
-copying netlink attributes. The code becomes easier to understand and
-will make it easier to add the new upcoming CAN XL flags which will
-have a similar reset logic as the current TDC flags.
+  !tdc_const || !can_fd_tdc_is_enabled(priv)
+
+But this function is only called if the data[IFLA_CAN_TDC] parameters
+are provided. At this point, can_validate_tdc() already checked that
+either of the tdc auto or tdc manual control modes were provided, that
+is to say, can_fd_tdc_is_enabled(priv) must be true.
+
+Because the right hand operand of this condition is always true,
+remove it.
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
 ---
-Changelog:
-
-v2 -> v3:
-
-  - Fix a bug in the masking. Replace
-
-	priv->ctrlmode &= !CAN_CTRLMODE_FD_TDC_MASK;
-
-    by
-
-	priv->ctrlmode &= ~CAN_CTRLMODE_FD_TDC_MASK;
----
- drivers/net/can/dev/netlink.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/can/dev/netlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index 549a2247d847dd26c8cb8c76ecb609256f549eb2..c212c7ff26cd3367d2014db99de7534077a1a841 100644
+index c212c7ff26cd3367d2014db99de7534077a1a841..17ed52d238e3a17e946116a94c7c5f503e184c3d 100644
 --- a/drivers/net/can/dev/netlink.c
 +++ b/drivers/net/can/dev/netlink.c
-@@ -255,6 +255,10 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
- 		if ((maskedflags & ctrlstatic) != ctrlstatic)
- 			return -EOPNOTSUPP;
+@@ -180,7 +180,7 @@ static int can_tdc_changelink(struct can_priv *priv, const struct nlattr *nla,
+ 	const struct can_tdc_const *tdc_const = priv->fd.tdc_const;
+ 	int err;
  
-+		/* If a top dependency flag is provided, reset all its dependencies */
-+		if (cm->mask & CAN_CTRLMODE_FD)
-+			priv->ctrlmode &= ~CAN_CTRLMODE_FD_TDC_MASK;
-+
- 		/* clear bits to be modified and copy the flag values */
- 		priv->ctrlmode &= ~cm->mask;
- 		priv->ctrlmode |= maskedflags;
-@@ -270,11 +274,6 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
- 		can_set_default_mtu(dev);
+-	if (!tdc_const || !can_fd_tdc_is_enabled(priv))
++	if (!tdc_const)
+ 		return -EOPNOTSUPP;
  
- 		fd_tdc_flag_provided = cm->mask & CAN_CTRLMODE_FD_TDC_MASK;
--		/* CAN_CTRLMODE_TDC_{AUTO,MANUAL} are mutually
--		 * exclusive: make sure to turn the other one off
--		 */
--		if (fd_tdc_flag_provided)
--			priv->ctrlmode &= cm->flags | ~CAN_CTRLMODE_FD_TDC_MASK;
- 	}
- 
- 	if (data[IFLA_CAN_BITTIMING]) {
+ 	err = nla_parse_nested(tb_tdc, IFLA_CAN_TDC_MAX, nla,
 
 -- 
 2.49.1
