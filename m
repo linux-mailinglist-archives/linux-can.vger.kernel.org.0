@@ -1,111 +1,135 @@
-Return-Path: <linux-can+bounces-4882-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4883-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54EE5B94B1F
-	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 09:08:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A60DB94D3C
+	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 09:43:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70FF13ABFB2
-	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 07:08:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37BE37B4D4B
+	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 07:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD84311C0C;
-	Tue, 23 Sep 2025 07:04:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQXKRbJn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D263164CB;
+	Tue, 23 Sep 2025 07:42:57 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A6931985E;
-	Tue, 23 Sep 2025 07:04:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8763A316194
+	for <linux-can@vger.kernel.org>; Tue, 23 Sep 2025 07:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758611084; cv=none; b=nn1U+xlImAlzidVdpF0g/assHPmyZ0dga5unSNE6xCfBcbek/v/aARPvQrDUai21TRh5NeFmMdSm0KDsY1I/3ZCHyXWN6/AkwuCWZmAao4xXp/zSrhR+qu/p29q7iLXPWExAQ1GcpDFClELt0BUsR63kHm9Mb10ty/cpsyhmy8o=
+	t=1758613377; cv=none; b=mgrkwuK+H4upyghBianIg+HdBnKrAfjSw4pwF/VLOWPOeXR2BpR3mM9PWNwjjVZHpA2xYULffAglGoXKbh+kM9xGvgR2Ofe1gr8bR8nCoRzQhg640jVatTE+W2AfsnFGm/nqfCMhHYMyWvKjiDuHJZ4vM7S7YCcKS1VYtbPFg50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758611084; c=relaxed/simple;
-	bh=SAj2JDGdBOudCi5ktyNIUJ+f4ekf1Bg5F5+I4mHetv8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vwx8JMChy5Yi35imBzC7oaqvLWXd1fSSCojssjFlCtsDI6YRhwx9DgjZPsFaVTErhhCTl5leDTs3P4nSHrZwVW7mxSXNR5UiAtmspdH3+FOANbuZEG6pKapaxKr6vuMDelOlJf7UwjocxxdhUtpBf1m62izxmErwjLRXT1UgUPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQXKRbJn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11A0EC4CEF5;
-	Tue, 23 Sep 2025 07:04:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758611084;
-	bh=SAj2JDGdBOudCi5ktyNIUJ+f4ekf1Bg5F5+I4mHetv8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NQXKRbJnYyEeYkKAYjblcMdBEfXoFpxV39UHJfPJsiNL52OVGQ84/gAKBx28wbyOk
-	 IILmMuTzWorqZ4AkCiGX3AbFqcbhUL/PH3TvtYk0TSTpBOfhz0XfplbxtJWyJR/tUt
-	 wfzq8MNO5Dw9s4US0PbCwbiOzKQN4uqTS72PFPAv7Vc2E6YoarPdYRfUUzFZhs0V1V
-	 ZpWj+wfABjEXtSJJf4Zre8WIfq70011zNA4dZB5orPu+hw6ABANlTG6pMXnNrGLK0p
-	 DbrmeHUMxagkB9yOsZJYlOqpsG8YGVz4DYgXzfmXIrc17yK3apFJ5cdy6tq250HKyD
-	 zNVnknwIAbgUA==
-Message-ID: <2528d3d7-2807-4ef6-8269-5e20de57cc41@kernel.org>
-Date: Tue, 23 Sep 2025 16:04:41 +0900
+	s=arc-20240116; t=1758613377; c=relaxed/simple;
+	bh=7+xUfCB1aKwd8F9tPQYDfPP0+KThw87QTnZkmMsFrCg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ad1FD70X8uVs0WJb++zUjvD0bC9pAkl1lmz9BkbaZCmXbwC6qGUGrsv1Oa8G2ReS0vHXT2pEmYZjDyH/BDr0skuebaw5TRYk4t0PI5/4Dk1Ukf9UvuzsVIJWZ3fNSUqSWSUAMjx95ywsBE/OVt9BhFRLVvVZRCDPO0sAu7MZVgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1v0xfg-0003ck-QX; Tue, 23 Sep 2025 09:42:44 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1v0xff-0003Nb-3D;
+	Tue, 23 Sep 2025 09:42:44 +0200
+Received: from blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 94B19477A82;
+	Tue, 23 Sep 2025 07:34:31 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH net 0/7] pull-request: can 2025-09-23
+Date: Tue, 23 Sep 2025 09:32:46 +0200
+Message-ID: <20250923073427.493034-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/20] can: netlink: refactor
- CAN_CTRLMODE_TDC_{AUTO,MANUAL} flag reset logic
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
- =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>,
- Robert Nawrath <mbro1689@gmail.com>, Minh Le <minh.le.aj@renesas.com>,
- Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250910-canxl-netlink-prep-v2-0-f128d4083721@kernel.org>
- <20250910-canxl-netlink-prep-v2-7-f128d4083721@kernel.org>
- <f9854748-78c1-4852-a610-e839e9c91df3@kernel.org>
- <20250922-amber-spider-of-control-90be7c-mkl@pengutronix.de>
- <9cfdcf56-2f47-4cfd-9fd6-2c6fa4476752@kernel.org>
- <20250922-rational-mastodon-of-sufficiency-6b49f1-mkl@pengutronix.de>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol@kernel.org>
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250922-rational-mastodon-of-sufficiency-6b49f1-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On 22/09/2025 at 22:06, Marc Kleine-Budde a écrit :
-> On 22.09.2025 20:14:16, Vincent Mailhol wrote:
+Hello netdev-team,
 
-(...)
+this is a pull request of 7 patches for net/main.
 
->> I will resend my two series in the next few days as soon as the MTU fix appears
->> in net-next.
-> 
-> I don't know how much time we have between the merge of net into
-> net-next and the acceptance of the last PR by the network team for the
-> next merge window. We will see.
+The 1st patch is by Chen Yufeng and fixes a potential NULL pointer
+deref in the hi311x driver.
 
-With the pull request to net/main being delayed, I decided to finally remove the
-patch which was in conflict and send the rest:
+Duy Nguyen contributes a patch for the rcar_canfd driver to fix the
+controller mode setting.
 
-https://lore.kernel.org/linux-can/20250923-can-fix-mtu-v3-0-581bde113f52@kernel.org/
+The next 4 patches are by Vincent Mailhol and populate the
+ndo_change_mtu(( callback in the etas_es58x, hi311x, sun4i_can and
+mcba_usb driver to prevent buffer overflows.
 
-and:
+Stéphane Grosjean's patch for the peak_usb driver fixes a
+shift-out-of-bounds issue.
 
-https://lore.kernel.org/linux-can/20250923-canxl-netlink-prep-v4-0-e720d28f66fe@kernel.org/
+regards,
+Marc
 
-These are my last two series for this development window (to be applied in order).
+---
 
-Also, sorry for the noise when sending those twice.
+The following changes since commit cbf658dd09419f1ef9de11b9604e950bdd5c170b:
 
+  Merge tag 'net-6.17-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2025-09-18 10:22:02 -0700)
 
-Yours sincerely,
-Vincent Mailhol
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.17-20250923
+
+for you to fetch changes up to c443be70aaee42c2d1d251e0329e0a69dd96ae54:
+
+  can: peak_usb: fix shift-out-of-bounds issue (2025-09-19 19:17:37 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.17-20250923
+
+----------------------------------------------------------------
+Chen Yufeng (1):
+      can: hi311x: fix null pointer dereference when resuming from sleep before interface was enabled
+
+Duy Nguyen (1):
+      can: rcar_canfd: Fix controller mode setting
+
+Marc Kleine-Budde (1):
+      Merge patch series "can: populate ndo_change_mtu() to prevent buffer overflow"
+
+Stéphane Grosjean (1):
+      can: peak_usb: fix shift-out-of-bounds issue
+
+Vincent Mailhol (4):
+      can: etas_es58x: populate ndo_change_mtu() to prevent buffer overflow
+      can: hi311x: populate ndo_change_mtu() to prevent buffer overflow
+      can: sun4i_can: populate ndo_change_mtu() to prevent buffer overflow
+      can: mcba_usb: populate ndo_change_mtu() to prevent buffer overflow
+
+ drivers/net/can/rcar/rcar_canfd.c            |  7 +++---
+ drivers/net/can/spi/hi311x.c                 | 34 +++++++++++++++-------------
+ drivers/net/can/sun4i_can.c                  |  1 +
+ drivers/net/can/usb/etas_es58x/es58x_core.c  |  3 ++-
+ drivers/net/can/usb/mcba_usb.c               |  1 +
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c |  2 +-
+ 6 files changed, 27 insertions(+), 21 deletions(-)
 
