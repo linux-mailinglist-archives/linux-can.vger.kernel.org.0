@@ -1,49 +1,50 @@
-Return-Path: <linux-can+bounces-4857-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4858-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1CAEB94935
-	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 08:37:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 179E7B9493B
+	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 08:37:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D553018A45AD
-	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 06:37:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C80453B9F60
+	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 06:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A2430F936;
-	Tue, 23 Sep 2025 06:37:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1984A30FC0D;
+	Tue, 23 Sep 2025 06:37:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlukZXZg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JtFkcKMp"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924E830F7FD;
-	Tue, 23 Sep 2025 06:37:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E042E30FC06;
+	Tue, 23 Sep 2025 06:37:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758609452; cv=none; b=YQaWo8qS8b7JZWS1590lzf5Tzex4dyIBfBPxnZtLX00PO3uiQKn3WH4R5cZ5/oOo9G9utchXx2XJba7bF/HwrIJ9mq4wJsEWN/QC8lWBLgfPocUn8OCV4oWxk/v0MRwj2ywYWv9rXcAg58iz3SJMaHIVgTDJLZnFJXZInDymjaI=
+	t=1758609454; cv=none; b=ErMlLDnY7aPtwtF+HYxCK6g7TrOtTZr/7gLE1+JzPtqYfedtgZoLjZbVlLQtXzH5nPPqOV+L8MKYEisiEZv0eazlvIm90LDdrBGb7mQXnA9ZTq/6K+h0D8wLVkQBzV77j0twYrA0LXiU2FpyFm/dIyHF0O22JC4T0Thdn0e8o3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758609452; c=relaxed/simple;
-	bh=drdc6vhp0itUxR+RtAgDkGEMcboFw0v8IhKD5qU7Q48=;
+	s=arc-20240116; t=1758609454; c=relaxed/simple;
+	bh=DneGXtD8h1Dl78Xv228aP26RFX4kDLuiIxklWvQi2F0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cwz+y4bSC9wL7drOJ27YJBGO22Hz4n//RWJLnOoJmLBHdbtFcpZ4x8s7Vr1FI6vYUs+dKLj15YxRPWlDV79Ndt4aFOSX1hOMm6cx3Pmtdyi0ag2aSUF4DMyGxn7gYhDZ2rrEu4yf6NKk960CMyQXqQccSEPeSNSgpvpUMOPgJbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlukZXZg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB890C4CEF7;
-	Tue, 23 Sep 2025 06:37:31 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=bc7hiaNmQe88NDrnV9GRv7ci3226lNHEU8KOq4m1T4ntHJDwxBlSGro8pIZYr7c0sjnfuY0w/T55i34UCmhgZwL3eOssSeX1CIIEnOImPaK8F0vlDJ/rjIvajq90sdHvJHERomcBjr1bmvSs9gcLwhfIz6cp1ers1Yv9hX/tk48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JtFkcKMp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9140C116B1;
+	Tue, 23 Sep 2025 06:37:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758609452;
-	bh=drdc6vhp0itUxR+RtAgDkGEMcboFw0v8IhKD5qU7Q48=;
+	s=k20201202; t=1758609453;
+	bh=DneGXtD8h1Dl78Xv228aP26RFX4kDLuiIxklWvQi2F0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=YlukZXZgC0+6P60oTZMuEfX5mGELp3e0pSWPSnAMJ30tLRxb1HasEIwHs9bmz/pi+
-	 uJb37ZR8HC5EnX8v6wC8m1dtLMv0YWDeoVVDMs8+CaLrHAtsT6awppwrbzmMS9ERrZ
-	 VdF26bApfWJ3o951iDsXq+sqGSiYx3dRF2PnTro6s5E5FqY6PaSYSZEWiiE8zkPI+5
-	 NCSbJkNhXFzDiKxXyzr7SF8rSX3nHwtgUVOnS15sMG1SzEM7RFKK6r+1BxCgtFUPL0
-	 apFNB3+SA6lTa39oZDNE9+Ru7eU34kzHH3oPWrQeAji4JSDsZWCtQ7G0ISTVFSmORL
-	 nSvlct/fIM7qQ==
+	b=JtFkcKMp371j+R6Q7m+c+mwBRYLuT/uIaXSOYSuiZUKCsjt07bjVv9/LSGzHwh8cM
+	 wFKUfrn5uz2bhWhyAJRn/Omy3PQkNAllQkl+DdF4WsyocwsFgovgTKKlfi51v/ImLB
+	 +sYI6gh20A94jsr37MGphMTDaOJ+8DFc63Dd0I6MyurlzDjITrfLfW9ncYLphVVzd2
+	 n5+NgpfddlLxMw+PMflIm3o7N7+LHqYaB7MW2GX9sRtwhfy4JwX62eERVNeGg2wNIb
+	 R+Y+UDmrMU2NBoz+gSdw9WPYioxpjDUb3LypkbkJdK5W+Ekyu3JK5ViqX4Edvo0DkY
+	 r+aPKGpuFsK0g==
 From: Vincent Mailhol <mailhol@kernel.org>
-Date: Tue, 23 Sep 2025 15:37:08 +0900
-Subject: [PATCH v3 1/4] can: annotate mtu accesses with READ_ONCE()
+Date: Tue, 23 Sep 2025 15:37:09 +0900
+Subject: [PATCH v3 2/4] can: dev: turn can_set_static_ctrlmode() into a
+ non-inline function
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250923-can-fix-mtu-v3-1-581bde113f52@kernel.org>
+Message-Id: <20250923-can-fix-mtu-v3-2-581bde113f52@kernel.org>
 References: <20250923-can-fix-mtu-v3-0-581bde113f52@kernel.org>
 In-Reply-To: <20250923-can-fix-mtu-v3-0-581bde113f52@kernel.org>
 To: Oliver Hartkopp <socketcan@hartkopp.net>, 
@@ -60,77 +61,113 @@ To: Oliver Hartkopp <socketcan@hartkopp.net>,
 Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Vincent Mailhol <mailhol@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2365; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=drdc6vhp0itUxR+RtAgDkGEMcboFw0v8IhKD5qU7Q48=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDBmXHOSarosW6u833eFd9PWDSPgJ6UUrg6xE9qpxLX2ym
- ZFjW+brjlIWBjEuBlkxRZZl5ZzcCh2F3mGH/lrCzGFlAhnCwMUpABOR2MLwP9zqYYzCtaczQyyN
- a4TtslZmT3TeffbVKkZD/yiR577u5gx/hbVZdqwteLHSY/H0x789/lh3mW8K3FEw6evSOJH/mZ+
- u8wAA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3911; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=DneGXtD8h1Dl78Xv228aP26RFX4kDLuiIxklWvQi2F0=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDBmXHBRXbgjVnBB3bYa52f6vpl58p05ceNP60aNh17m1p
+ 56e+vniVUcpC4MYF4OsmCLLsnJOboWOQu+wQ38tYeawMoEMYeDiFICJGEgy/E/52Z5xe9bmOTum
+ vpvG3SL7pig2YMbxlXVm5T85TZ/N0PZjZFi0Vf/45vj75gufP280ZdshnakVVB9lbvDRaMvXL1e
+ OMnIBAA==
 X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-As hinted in commit 501a90c94510 ("inet: protect against too small mtu
-values."), net_device->mtu is vulnerable to race conditions if it is
-written and read without holding the RTNL.
+can_set_static_ctrlmode() is declared as a static inline. But it is
+only called in the probe function of the devices and so does not
+really benefit from any kind of optimization.
 
-At the moment, all the writes are done while the interface is down,
-either in the devices' probe() function or in can_changelink(). So
-there are no such issues yet. But upcoming changes will allow to
-modify the MTU while the CAN XL devices are up.
+Transform it into a "normal" function by moving it to
 
-In preparation to the introduction of CAN XL, annotate all the
-net_device->mtu accesses which are not yet guarded by the RTNL with a
-READ_ONCE().
-
-Note that all the write accesses are already either guarded by the
-RTNL or are already annotated and thus need no changes.
+  drivers/net/can/dev/dev.c
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
 ---
- net/can/af_can.c | 2 +-
- net/can/isotp.c  | 2 +-
- net/can/raw.c    | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+This also serves as a preparation for the next patch in which we are
+adding can_set_default_mtu(). That function will only be used by the
+can_dev.ko module and so we do not need to export its GPL
+symbol. However, if can_set_static_ctrlmode() stays as a static
+inline, then the call to set_default_mtu(), which we plan to add in
+can_set_static_ctrlmode(), would also be inlined and thus would become
+visible to the users of can_set_static_ctrlmode().
 
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index b2387a46794a576973f3d865a5ca8e2ba696d167..770173d8db42813d5c085248d1bcf5fbe717955b 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -221,7 +221,7 @@ int can_send(struct sk_buff *skb, int loop)
- 	}
+Making can_set_static_ctrlmode() a non-inline function resolves this
+dependency.
+---
+ drivers/net/can/dev/dev.c | 21 +++++++++++++++++++++
+ include/linux/can/dev.h   | 23 ++---------------------
+ 2 files changed, 23 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+index 3913971125de0ab16b4ad9f36712954141014ddf..a0ae659beedcd1fa0979662c12614ae7846032c0 100644
+--- a/drivers/net/can/dev/dev.c
++++ b/drivers/net/can/dev/dev.c
+@@ -347,6 +347,27 @@ int can_change_mtu(struct net_device *dev, int new_mtu)
+ }
+ EXPORT_SYMBOL_GPL(can_change_mtu);
  
- 	/* Make sure the CAN frame can pass the selected CAN netdevice. */
--	if (unlikely(skb->len > skb->dev->mtu)) {
-+	if (unlikely(skb->len > READ_ONCE(skb->dev->mtu))) {
- 		err = -EMSGSIZE;
- 		goto inval_skb;
- 	}
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index dee1412b3c9c1ffcfc43a109b448701459fcf8b9..74ee1e52249b232813a06c5d2c6e404a38dce990 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1313,7 +1313,7 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 		err = -ENODEV;
- 		goto out;
- 	}
--	if (dev->mtu < so->ll.mtu) {
-+	if (READ_ONCE(dev->mtu) < so->ll.mtu) {
- 		dev_put(dev);
- 		err = -EINVAL;
- 		goto out;
-diff --git a/net/can/raw.c b/net/can/raw.c
-index 76b867d21def209f5c6d236604c0e434a1c55a4d..6cb959e3dcd3e54972628ee59572a749009d1323 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -950,7 +950,7 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	err = -EINVAL;
++/* helper to define static CAN controller features at device creation time */
++int can_set_static_ctrlmode(struct net_device *dev, u32 static_mode)
++{
++	struct can_priv *priv = netdev_priv(dev);
++
++	/* alloc_candev() succeeded => netdev_priv() is valid at this point */
++	if (priv->ctrlmode_supported & static_mode) {
++		netdev_warn(dev,
++			    "Controller features can not be supported and static at the same time\n");
++		return -EINVAL;
++	}
++	priv->ctrlmode = static_mode;
++
++	/* override MTU which was set by default in can_setup()? */
++	if (static_mode & CAN_CTRLMODE_FD)
++		dev->mtu = CANFD_MTU;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(can_set_static_ctrlmode);
++
+ /* generic implementation of netdev_ops::ndo_eth_ioctl for CAN devices
+  * supporting hardware timestamps
+  */
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index 9a92cbe5b2cb7ccdfca3121718856d096e9ecfa6..5dc58360c2d74a1711d4e02d28fe52ae20b146e0 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -125,27 +125,6 @@ static inline s32 can_get_relative_tdco(const struct can_priv *priv)
+ 	return (s32)priv->fd.tdc.tdco - sample_point_in_tc;
+ }
  
- 	/* check for valid CAN (CC/FD/XL) frame content */
--	txmtu = raw_check_txframe(ro, skb, dev->mtu);
-+	txmtu = raw_check_txframe(ro, skb, READ_ONCE(dev->mtu));
- 	if (!txmtu)
- 		goto free_skb;
- 
+-/* helper to define static CAN controller features at device creation time */
+-static inline int __must_check can_set_static_ctrlmode(struct net_device *dev,
+-						       u32 static_mode)
+-{
+-	struct can_priv *priv = netdev_priv(dev);
+-
+-	/* alloc_candev() succeeded => netdev_priv() is valid at this point */
+-	if (priv->ctrlmode_supported & static_mode) {
+-		netdev_warn(dev,
+-			    "Controller features can not be supported and static at the same time\n");
+-		return -EINVAL;
+-	}
+-	priv->ctrlmode = static_mode;
+-
+-	/* override MTU which was set by default in can_setup()? */
+-	if (static_mode & CAN_CTRLMODE_FD)
+-		dev->mtu = CANFD_MTU;
+-
+-	return 0;
+-}
+-
+ static inline u32 can_get_static_ctrlmode(struct can_priv *priv)
+ {
+ 	return priv->ctrlmode & ~priv->ctrlmode_supported;
+@@ -188,6 +167,8 @@ struct can_priv *safe_candev_priv(struct net_device *dev);
+ int open_candev(struct net_device *dev);
+ void close_candev(struct net_device *dev);
+ int can_change_mtu(struct net_device *dev, int new_mtu);
++int __must_check can_set_static_ctrlmode(struct net_device *dev,
++					 u32 static_mode);
+ int can_eth_ioctl_hwts(struct net_device *netdev, struct ifreq *ifr, int cmd);
+ int can_ethtool_op_get_ts_info_hwts(struct net_device *dev,
+ 				    struct kernel_ethtool_ts_info *info);
 
 -- 
 2.49.1
