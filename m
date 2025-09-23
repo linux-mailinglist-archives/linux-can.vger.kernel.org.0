@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-4887-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4884-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D091B94D45
-	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 09:43:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46785B94D3F
+	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 09:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E7693AF170
-	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 07:43:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDFC2190341D
+	for <lists+linux-can@lfdr.de>; Tue, 23 Sep 2025 07:43:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C97318136;
-	Tue, 23 Sep 2025 07:43:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15CEE3176F2;
+	Tue, 23 Sep 2025 07:42:59 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5436C3168E0
-	for <linux-can@vger.kernel.org>; Tue, 23 Sep 2025 07:42:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE422E9721
+	for <linux-can@vger.kernel.org>; Tue, 23 Sep 2025 07:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758613380; cv=none; b=NoqB/XluK+ykc5rS5M0/fnzFMk5FKPihH+EGfyCvMW8q7CD58koXddXQBbUk50tYxtea8vJWJCmieXj9xt8PPQBrbK20Ec8WxOsBSCi3HPab44OsCImD4TG/rutFCKIYTVKGi3T7TmQ2WvEhiVtMhf9UZUfO39kpobuCTZnCngk=
+	t=1758613379; cv=none; b=H8vTClPBezzHJpTnph2wsQXz75ioJLOyxeBIu+pi9MQl/6WRqpCgguRbfO15oswNuA3noXOjmZ9mTfZ2Bd2gtw5ffBod6EmFXovBI/K1oGDVPoExPqKptXCxk9uUl+nDfTP0Jdh/Fu9hWadXTI+XLY06Ns1L8XI+gznxG3gM4Kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758613380; c=relaxed/simple;
-	bh=3m9eC7t0D0zlyp+Qb62ggaSqoqeHcwSN8r6+vJRKhAI=;
+	s=arc-20240116; t=1758613379; c=relaxed/simple;
+	bh=eZ1rB1SCdSOKWTqVlkIB/eBXgXG5Ss0vxgjBOmyl2Yc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bu2lR5ymSNr+gxhyViO4hYiALHdkh9QEKdgmhgS0Cu2Fv/y/q5shB6WZTfCQs6gHLWKBss885m9Qd/eY3MVoI09coTZ6E8fmuwSNmK6mbC6e5LdHkZV2QobAeNqoccWwFsmqmGgxpa0odfGXeKIFhDqs6UbSVfnyf3Ne06qbqU8=
+	 MIME-Version:Content-Type; b=AnbnzqgxFtBprZ3oco4S6IU8uwGhMVZQhYE1vdN862vLzTD0r7hdpU2D9Y5XDQCahqwcFtesJUP8fF7QmyqeuDX4VDy7BgRx0/iDrm3hNSZV8NR72AhEiWyHwxcWAdrN6iEZQpnDw+UvYjfdfkw+BwDJ/IKUVfWqPB1gavZynBg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,19 +33,19 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v0xfg-0003cf-QX; Tue, 23 Sep 2025 09:42:44 +0200
+	id 1v0xfg-0003ch-Sx; Tue, 23 Sep 2025 09:42:44 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v0xff-0003NR-2D;
+	id 1v0xff-0003NT-2Z;
 	Tue, 23 Sep 2025 09:42:43 +0200
 Received: from blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 19A40477A8D;
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 29AC8477A8F;
 	Tue, 23 Sep 2025 07:34:32 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
@@ -53,11 +53,11 @@ Cc: davem@davemloft.net,
 	kuba@kernel.org,
 	linux-can@vger.kernel.org,
 	kernel@pengutronix.de,
-	Vincent Mailhol <mailhol@kernel.org>,
+	=?UTF-8?q?St=C3=A9phane=20Grosjean?= <stephane.grosjean@hms-networks.com>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 6/7] can: mcba_usb: populate ndo_change_mtu() to prevent buffer overflow
-Date: Tue, 23 Sep 2025 09:32:52 +0200
-Message-ID: <20250923073427.493034-7-mkl@pengutronix.de>
+Subject: [PATCH net 7/7] can: peak_usb: fix shift-out-of-bounds issue
+Date: Tue, 23 Sep 2025 09:32:53 +0200
+Message-ID: <20250923073427.493034-8-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250923073427.493034-1-mkl@pengutronix.de>
 References: <20250923073427.493034-1-mkl@pengutronix.de>
@@ -67,84 +67,43 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-From: Vincent Mailhol <mailhol@kernel.org>
+From: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
 
-Sending an PF_PACKET allows to bypass the CAN framework logic and to
-directly reach the xmit() function of a CAN driver. The only check
-which is performed by the PF_PACKET framework is to make sure that
-skb->len fits the interface's MTU.
+Explicitly uses a 64-bit constant when the number of bits used for its
+shifting is 32 (which is the case for PC CAN FD interfaces supported by
+this driver).
 
-Unfortunately, because the mcba_usb driver does not populate its
-net_device_ops->ndo_change_mtu(), it is possible for an attacker to
-configure an invalid MTU by doing, for example:
-
-  $ ip link set can0 mtu 9999
-
-After doing so, the attacker could open a PF_PACKET socket using the
-ETH_P_CANXL protocol:
-
-	socket(PF_PACKET, SOCK_RAW, htons(ETH_P_CANXL))
-
-to inject a malicious CAN XL frames. For example:
-
-	struct canxl_frame frame = {
-		.flags = 0xff,
-		.len = 2048,
-	};
-
-The CAN drivers' xmit() function are calling can_dev_dropped_skb() to
-check that the skb is valid, unfortunately under above conditions, the
-malicious packet is able to go through can_dev_dropped_skb() checks:
-
-  1. the skb->protocol is set to ETH_P_CANXL which is valid (the
-     function does not check the actual device capabilities).
-
-  2. the length is a valid CAN XL length.
-
-And so, mcba_usb_start_xmit() receives a CAN XL frame which it is not
-able to correctly handle and will thus misinterpret it as a CAN frame.
-
-This can result in a buffer overflow. The driver will consume cf->len
-as-is with no further checks on these lines:
-
-	usb_msg.dlc = cf->len;
-
-	memcpy(usb_msg.data, cf->data, usb_msg.dlc);
-
-Here, cf->len corresponds to the flags field of the CAN XL frame. In
-our previous example, we set canxl_frame->flags to 0xff. Because the
-maximum expected length is 8, a buffer overflow of 247 bytes occurs!
-
-Populate net_device_ops->ndo_change_mtu() to ensure that the
-interface's MTU can not be set to anything bigger than CAN_MTU. By
-fixing the root cause, this prevents the buffer overflow.
-
-Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
-Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-Link: https://patch.msgid.link/20250918-can-fix-mtu-v1-4-0d1cada9393b@kernel.org
+Signed-off-by: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
+Link: https://patch.msgid.link/20250918132413.30071-1-stephane.grosjean@free.fr
+Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Closes: https://lore.kernel.org/20250917-aboriginal-refined-honeybee-82b1aa-mkl@pengutronix.de
+Fixes: bb4785551f64 ("can: usb: PEAK-System Technik USB adapters driver core")
+[mkl: update subject, apply manually]
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/usb/mcba_usb.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
-index 41c0a1c399bf..1f9b915094e6 100644
---- a/drivers/net/can/usb/mcba_usb.c
-+++ b/drivers/net/can/usb/mcba_usb.c
-@@ -761,6 +761,7 @@ static const struct net_device_ops mcba_netdev_ops = {
- 	.ndo_open = mcba_usb_open,
- 	.ndo_stop = mcba_usb_close,
- 	.ndo_start_xmit = mcba_usb_start_xmit,
-+	.ndo_change_mtu = can_change_mtu,
- };
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+index 117637b9b995..dd5caa1c302b 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -111,7 +111,7 @@ void peak_usb_update_ts_now(struct peak_time_ref *time_ref, u32 ts_now)
+ 		u32 delta_ts = time_ref->ts_dev_2 - time_ref->ts_dev_1;
  
- static const struct ethtool_ops mcba_ethtool_ops = {
+ 		if (time_ref->ts_dev_2 < time_ref->ts_dev_1)
+-			delta_ts &= (1 << time_ref->adapter->ts_used_bits) - 1;
++			delta_ts &= (1ULL << time_ref->adapter->ts_used_bits) - 1;
+ 
+ 		time_ref->ts_total += delta_ts;
+ 	}
 -- 
 2.51.0
 
