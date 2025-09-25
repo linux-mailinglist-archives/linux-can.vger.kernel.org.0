@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-5003-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5006-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCB20B9F1F7
-	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 14:14:32 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5259B9F1DE
+	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 14:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D26FC4E4D99
-	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 12:14:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BB5954E34B7
+	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 12:14:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D3EB3016F9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 218FF2FC87B;
 	Thu, 25 Sep 2025 12:14:06 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956092FF668
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3B82FE59C
 	for <linux-can@vger.kernel.org>; Thu, 25 Sep 2025 12:13:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758802444; cv=none; b=MiRGFiZmCuNHsFxgfB5ny/Oh4xjvCTDWPXjP7O5N1LeUe30I+QDa3WbbmwwZahPi44B3jRW+clutuLwimLwgkUIjaHXlCobAZl+y9XHt6Pbu6IkPnlWG6I0phoMtiw+nsIKBkVoqiptTBWhBOAavvk619pj/LRAtCwzR6fvHmVQ=
+	t=1758802444; cv=none; b=opkXv3xE42svSZqpGh/+pOn9qDSp4FqnCYEo1Kxupq6B6GN2w+CsahozJ2SHNFxwRax+jh9QB5jMOg4AK8/UiZyqjRKovF0cVDs2GdsMUx2etWcaHrjInbeIfuefh/b921JqC02o2zKbb5RluH+AyFJmaozmT/0Abio/T1Og4uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758802444; c=relaxed/simple;
-	bh=CkIj3HLmKf5jbUZiyRR0DSk//7gm34O50sX2+Lqsmvo=;
+	bh=mexw+6/QkPDCqTEUy0EXdc2mcDcdrWUzyQaUleqEZ9k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tBM4+8v6CfiiXOT7mxuCcTWYsNu8gWwctOZz6kVyYn+9tuFROYX0wJXPcjToFEORQpLuLXbvtMrDcLsdxyVQYETwFEAJmiZpaR2dgwvndRbUP53kgUciy12kTIg9U+Mop3njWfVaAIOavrFKyUW/Q/G2Gjny7hKGamCzz8HhqxA=
+	 MIME-Version; b=RHRzUaMAzpARjyuLMd22cntXlWU0+n0ftp5DQr5m4RzJPlp1KOBQPJa2vugP1tQ0zXzBwC25N8Ud2pe8uf9Q3GwOl6oO9mO+GTH2p6CO6bdmz89IC5BByDWxkl1XTKCX7Poi4TlZqfdI9yrExwehUo8nvDQHiAiAnca3rtCM7Uo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,19 +33,19 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v1kqw-0000YN-KS; Thu, 25 Sep 2025 14:13:38 +0200
+	id 1v1kqw-0000YQ-Ku; Thu, 25 Sep 2025 14:13:38 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v1kqv-000Pwj-0N;
+	id 1v1kqv-000Pwm-0V;
 	Thu, 25 Sep 2025 14:13:37 +0200
 Received: from blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id D5CC147998A;
+	by smtp.blackshift.org (Postfix) with ESMTPSA id E3A8947998B;
 	Thu, 25 Sep 2025 12:13:36 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
@@ -55,9 +55,9 @@ Cc: davem@davemloft.net,
 	kernel@pengutronix.de,
 	Vincent Mailhol <mailhol@kernel.org>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 30/48] can: dev: make can_get_relative_tdco() FD agnostic and move it to bittiming.h
-Date: Thu, 25 Sep 2025 14:08:07 +0200
-Message-ID: <20250925121332.848157-31-mkl@pengutronix.de>
+Subject: [PATCH net-next 31/48] can: netlink: document which symbols are FD specific
+Date: Thu, 25 Sep 2025 14:08:08 +0200
+Message-ID: <20250925121332.848157-32-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250925121332.848157-1-mkl@pengutronix.de>
 References: <20250925121332.848157-1-mkl@pengutronix.de>
@@ -75,103 +75,67 @@ X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 From: Vincent Mailhol <mailhol@kernel.org>
 
-can_get_relative_tdco() needs to access can_priv->fd making it
-specific to CAN FD. Change the function parameter from struct can_priv
-to struct data_bittiming_params. This way, the function becomes CAN FD
-agnostic and can be reused later on for the CAN XL TDC.
+The CAN XL netlink interface will also have data bitrate and TDC
+parameters. The current FD parameters do not have a prefix in their
+names to differentiate them.
 
-Now that we dropped the dependency on struct can_priv, also move
-can_get_relative_tdco() back to bittiming.h where it was meant to
-belong to.
+Because the netlink interface is part of the UAPI, it is unfortunately
+not feasible to rename the existing symbols to add an FD_ prefix. The
+best alternative is to add a comment for each of the symbols to notify
+the reader of which parts are CAN FD specific.
+
+While at it, fix a typo: transiver -> transceiver.
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-Link: https://patch.msgid.link/20250923-canxl-netlink-prep-v4-2-e720d28f66fe@kernel.org
+Link: https://patch.msgid.link/20250923-canxl-netlink-prep-v4-3-e720d28f66fe@kernel.org
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- include/linux/can/bittiming.h | 29 +++++++++++++++++++++++++++++
- include/linux/can/dev.h       | 29 -----------------------------
- 2 files changed, 29 insertions(+), 29 deletions(-)
+ include/uapi/linux/can/netlink.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.h
-index 6572ec1712ca..4d5f7794194a 100644
---- a/include/linux/can/bittiming.h
-+++ b/include/linux/can/bittiming.h
-@@ -160,6 +160,35 @@ int can_get_bittiming(const struct net_device *dev, struct can_bittiming *bt,
- 		      const unsigned int bitrate_const_cnt,
- 		      struct netlink_ext_ack *extack);
+diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
+index 02ec32d69474..ef62f56eaaef 100644
+--- a/include/uapi/linux/can/netlink.h
++++ b/include/uapi/linux/can/netlink.h
+@@ -101,8 +101,8 @@ struct can_ctrlmode {
+ #define CAN_CTRLMODE_PRESUME_ACK	0x40	/* Ignore missing CAN ACKs */
+ #define CAN_CTRLMODE_FD_NON_ISO		0x80	/* CAN FD in non-ISO mode */
+ #define CAN_CTRLMODE_CC_LEN8_DLC	0x100	/* Classic CAN DLC option */
+-#define CAN_CTRLMODE_TDC_AUTO		0x200	/* CAN transiver automatically calculates TDCV */
+-#define CAN_CTRLMODE_TDC_MANUAL		0x400	/* TDCV is manually set up by user */
++#define CAN_CTRLMODE_TDC_AUTO		0x200	/* FD transceiver automatically calculates TDCV */
++#define CAN_CTRLMODE_TDC_MANUAL		0x400	/* FD TDCV is manually set up by user */
  
-+/*
-+ * can_get_relative_tdco() - TDCO relative to the sample point
-+ *
-+ * struct can_tdc::tdco represents the absolute offset from TDCV. Some
-+ * controllers use instead an offset relative to the Sample Point (SP)
-+ * such that:
-+ *
-+ * SSP = TDCV + absolute TDCO
-+ *     = TDCV + SP + relative TDCO
-+ *
-+ * -+----------- one bit ----------+-- TX pin
-+ *  |<--- Sample Point --->|
-+ *
-+ *                         --+----------- one bit ----------+-- RX pin
-+ *  |<-------- TDCV -------->|
-+ *                           |<------------------------>| absolute TDCO
-+ *                           |<--- Sample Point --->|
-+ *                           |                      |<->| relative TDCO
-+ *  |<------------- Secondary Sample Point ------------>|
-+ */
-+static inline s32 can_get_relative_tdco(const struct data_bittiming_params *dbt_params)
-+{
-+	const struct can_bittiming *dbt = &dbt_params->data_bittiming;
-+	s32 sample_point_in_tc = (CAN_SYNC_SEG + dbt->prop_seg +
-+				  dbt->phase_seg1) * dbt->brp;
-+
-+	return (s32)dbt_params->tdc.tdco - sample_point_in_tc;
-+}
-+
  /*
-  * can_bit_time() - Duration of one bit
-  *
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index c2fe956ab776..8e75e9b3830a 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -85,35 +85,6 @@ static inline bool can_fd_tdc_is_enabled(const struct can_priv *priv)
- 	return !!(priv->ctrlmode & CAN_CTRLMODE_FD_TDC_MASK);
- }
+  * CAN device statistics
+@@ -129,14 +129,14 @@ enum {
+ 	IFLA_CAN_RESTART_MS,
+ 	IFLA_CAN_RESTART,
+ 	IFLA_CAN_BERR_COUNTER,
+-	IFLA_CAN_DATA_BITTIMING,
+-	IFLA_CAN_DATA_BITTIMING_CONST,
++	IFLA_CAN_DATA_BITTIMING, /* FD */
++	IFLA_CAN_DATA_BITTIMING_CONST, /* FD */
+ 	IFLA_CAN_TERMINATION,
+ 	IFLA_CAN_TERMINATION_CONST,
+ 	IFLA_CAN_BITRATE_CONST,
+-	IFLA_CAN_DATA_BITRATE_CONST,
++	IFLA_CAN_DATA_BITRATE_CONST, /* FD */
+ 	IFLA_CAN_BITRATE_MAX,
+-	IFLA_CAN_TDC,
++	IFLA_CAN_TDC, /* FD */
+ 	IFLA_CAN_CTRLMODE_EXT,
  
--/*
-- * can_get_relative_tdco() - TDCO relative to the sample point
-- *
-- * struct can_tdc::tdco represents the absolute offset from TDCV. Some
-- * controllers use instead an offset relative to the Sample Point (SP)
-- * such that:
-- *
-- * SSP = TDCV + absolute TDCO
-- *     = TDCV + SP + relative TDCO
-- *
-- * -+----------- one bit ----------+-- TX pin
-- *  |<--- Sample Point --->|
-- *
-- *                         --+----------- one bit ----------+-- RX pin
-- *  |<-------- TDCV -------->|
-- *                           |<------------------------>| absolute TDCO
-- *                           |<--- Sample Point --->|
-- *                           |                      |<->| relative TDCO
-- *  |<------------- Secondary Sample Point ------------>|
-- */
--static inline s32 can_get_relative_tdco(const struct can_priv *priv)
--{
--	const struct can_bittiming *dbt = &priv->fd.data_bittiming;
--	s32 sample_point_in_tc = (CAN_SYNC_SEG + dbt->prop_seg +
--				  dbt->phase_seg1) * dbt->brp;
--
--	return (s32)priv->fd.tdc.tdco - sample_point_in_tc;
--}
--
- static inline u32 can_get_static_ctrlmode(struct can_priv *priv)
- {
- 	return priv->ctrlmode & ~priv->ctrlmode_supported;
+ 	/* add new constants above here */
+@@ -145,7 +145,7 @@ enum {
+ };
+ 
+ /*
+- * CAN FD Transmitter Delay Compensation (TDC)
++ * CAN FD/XL Transmitter Delay Compensation (TDC)
+  *
+  * Please refer to struct can_tdc_const and can_tdc in
+  * include/linux/can/bittiming.h for further details.
 -- 
 2.51.0
 
