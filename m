@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-4980-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-4991-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11046B9F1A7
-	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 14:14:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45AA0B9F1BA
+	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 14:14:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D4AF189F97D
-	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 12:14:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AF2F326419
+	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 12:14:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D8452FD1CF;
-	Thu, 25 Sep 2025 12:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AED092FFFAD;
+	Thu, 25 Sep 2025 12:14:02 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2542FDC49
-	for <linux-can@vger.kernel.org>; Thu, 25 Sep 2025 12:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989352FE566
+	for <linux-can@vger.kernel.org>; Thu, 25 Sep 2025 12:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758802438; cv=none; b=a1LRPYzEsAq4cLqnDaM6fGyzbEKuBYPzcB77xvIBc4MMYedNDP4OyW4gT+r+GeMXTgmdCWcrXRenHrezWUNB0GFwut4stpqvXySrouWi2S00NwiVAirOzx7JSDXxj8Ps6oujQx78A1cS+jGUwtO5keUJu+xa72osUJorw6WVNbc=
+	t=1758802441; cv=none; b=B9c5dKsufILwPoA9ImZzisA1NQIAj036OsynDsxpJWi53GW2K6DrgqGf+vu9n+yBI5g81LpOINuHJGmyxpL5Le2xrokUtlOOFJOkK88KmISXNO1fWrn5AJfbTx2vjCo8NLBO9umD0CCdNWXST+/t0CjcI3BrPaRf+Mw84Mgovrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758802438; c=relaxed/simple;
-	bh=L4kVkseMvnicAWlbMp6SLkaM3wED+vrIdK9517ZqFtk=;
+	s=arc-20240116; t=1758802441; c=relaxed/simple;
+	bh=bcH/uHOd9zw7q0y3QEzwVum6jYZiiWlUjxls3Q1qReY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gJp1swAGOmEPqvko7qFYWPUmJ5cuuEiQagMXglposqowmBsmPu5YUKcFLXqyQp5sB89m3m9TIKoka0tjVYBznuYCjAyI6Yn11SbYRJJ4rnB69FigSbJ8H+oqj0hSCkuqfEcWPet1/x5asQ53+6d7+6RxxgDWcm6LsdqFu4naa18=
+	 MIME-Version; b=Po0teqTt3SNw9ZP4NpJyY3M0EoY6w/BMCt9XyRfsy0YB73TSDgG/3vqIrdxDarIi5wLP1fXzd2jQPGb/fC6eEqWMOtP8HNresX67yy/6f7JUDkCt+zqWtKycNJ1PDp1HBUTDvdVa7r86CYNGpGA8her6fBP0iIbLSWyf9xw1kiQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,20 +33,20 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v1kqu-0000Vv-Hr; Thu, 25 Sep 2025 14:13:36 +0200
+	id 1v1kqu-0000Vz-Vu; Thu, 25 Sep 2025 14:13:37 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v1kqu-000Pvm-0g;
+	id 1v1kqu-000Pvq-0x;
 	Thu, 25 Sep 2025 14:13:36 +0200
 Received: from blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id EF72A47997D;
-	Thu, 25 Sep 2025 12:13:35 +0000 (UTC)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 0824B47997E;
+	Thu, 25 Sep 2025 12:13:36 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -54,10 +54,11 @@ Cc: davem@davemloft.net,
 	linux-can@vger.kernel.org,
 	kernel@pengutronix.de,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 17/48] can: rcar_can: Mailbox bitfield conversion
-Date: Thu, 25 Sep 2025 14:07:54 +0200
-Message-ID: <20250925121332.848157-18-mkl@pengutronix.de>
+Subject: [PATCH net-next 18/48] can: rcar_can: Do not print alloc_candev() failures
+Date: Thu, 25 Sep 2025 14:07:55 +0200
+Message-ID: <20250925121332.848157-19-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250925121332.848157-1-mkl@pengutronix.de>
 References: <20250925121332.848157-1-mkl@pengutronix.de>
@@ -75,58 +76,31 @@ X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Convert CAN Mailbox Register field accesses to use the FIELD_PREP() and
-FIELD_GET() bitfield access macro.
-
-This gets rid of explicit shifts, and keeps a clear separation between
-hardware register layouts and offical CAN definitions.
+If alloc_candev() failed due to out-of-memory, the core memory
+allocation code has already printed an error message.
+If alloc_candev() failed for a different reason, alloc_netdev_mqs() has
+already printed an error message.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://patch.msgid.link/c75c7d6ed5929c4becf7c9178cec04a0731e8ab1.1755857536.git.geert+renesas@glider.be
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Link: https://patch.msgid.link/2d6ad4be211a35492570fd7219ca7a89b384bfad.1755857536.git.geert+renesas@glider.be
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/rcar/rcar_can.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/net/can/rcar/rcar_can.c | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
-index 4c5c1f044691..de1829477659 100644
+index de1829477659..51bf8f7e7182 100644
 --- a/drivers/net/can/rcar/rcar_can.c
 +++ b/drivers/net/can/rcar/rcar_can.c
-@@ -160,7 +160,8 @@ static const struct can_bittiming_const rcar_can_bittiming_const = {
- /* Mailbox and Mask Registers bits */
- #define RCAR_CAN_IDE		BIT(31)		/* ID Extension */
- #define RCAR_CAN_RTR		BIT(30)		/* Remote Transmission Request */
--#define RCAR_CAN_SID_SHIFT	18
-+#define RCAR_CAN_SID		GENMASK(28, 18)	/* Standard ID */
-+#define RCAR_CAN_EID		GENMASK(28, 0)	/* Extended ID */
+@@ -773,7 +773,6 @@ static int rcar_can_probe(struct platform_device *pdev)
  
- /* Mailbox Interrupt Enable Register 1 bits */
- #define RCAR_CAN_MIER1_RXFIE	BIT(28)		/* Receive  FIFO Interrupt Enable */
-@@ -599,9 +600,10 @@ static netdev_tx_t rcar_can_start_xmit(struct sk_buff *skb,
- 		return NETDEV_TX_OK;
- 
- 	if (cf->can_id & CAN_EFF_FLAG)	/* Extended frame format */
--		data = (cf->can_id & CAN_EFF_MASK) | RCAR_CAN_IDE;
-+		data = FIELD_PREP(RCAR_CAN_EID, cf->can_id & CAN_EFF_MASK) |
-+		       RCAR_CAN_IDE;
- 	else				/* Standard frame format */
--		data = (cf->can_id & CAN_SFF_MASK) << RCAR_CAN_SID_SHIFT;
-+		data = FIELD_PREP(RCAR_CAN_SID, cf->can_id & CAN_SFF_MASK);
- 
- 	if (cf->can_id & CAN_RTR_FLAG) { /* Remote transmission request */
- 		data |= RCAR_CAN_RTR;
-@@ -656,9 +658,9 @@ static void rcar_can_rx_pkt(struct rcar_can_priv *priv)
- 
- 	data = readl(&priv->regs->mb[RCAR_CAN_RX_FIFO_MBX].id);
- 	if (data & RCAR_CAN_IDE)
--		cf->can_id = (data & CAN_EFF_MASK) | CAN_EFF_FLAG;
-+		cf->can_id = FIELD_GET(RCAR_CAN_EID, data) | CAN_EFF_FLAG;
- 	else
--		cf->can_id = (data >> RCAR_CAN_SID_SHIFT) & CAN_SFF_MASK;
-+		cf->can_id = FIELD_GET(RCAR_CAN_SID, data);
- 
- 	dlc = readb(&priv->regs->mb[RCAR_CAN_RX_FIFO_MBX].dlc);
- 	cf->len = can_cc_dlc2len(dlc);
+ 	ndev = alloc_candev(sizeof(struct rcar_can_priv), RCAR_CAN_FIFO_DEPTH);
+ 	if (!ndev) {
+-		dev_err(dev, "alloc_candev() failed\n");
+ 		err = -ENOMEM;
+ 		goto fail;
+ 	}
 -- 
 2.51.0
 
