@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-5008-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5024-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C318CB9F1E1
-	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 14:14:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66F6CB9F285
+	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 14:16:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E789C32636C
-	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 12:14:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9F203A1574
+	for <lists+linux-can@lfdr.de>; Thu, 25 Sep 2025 12:15:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2637630149E;
-	Thu, 25 Sep 2025 12:14:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52F32306B0A;
+	Thu, 25 Sep 2025 12:14:14 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787E22FE595
-	for <linux-can@vger.kernel.org>; Thu, 25 Sep 2025 12:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17BA301015
+	for <linux-can@vger.kernel.org>; Thu, 25 Sep 2025 12:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758802445; cv=none; b=U9xd24Lh7bC8pNaix3lTdhaHdrlzi2Ru4hKKk7oomHXOJ3+dKKSRc+w68+7D1v6L5XLfKaTqdNsvva4xUpVV3HCQ3+OTJtXD5n+sT0UfEY/7EFbg3fcdEUBnoPLs6rq7VgJikwHcDrbcJcYPOgKdr7iI9sRJGz5cmbi0hWbgQVI=
+	t=1758802454; cv=none; b=T2mfloQzLOJJJJFJUalcFSfS117f7bh4MWJd88UEqSmgrKTqHECRhQsF9VRgCrbw7NNbPPjm2+HYusShOgSPfdgrt/b+90bj6LuqevvTqtddMpcY/LPGa32bHtKVizDgX7WTzDguzk22CTrFt8cX+JcKfYSZwbACLn342wvKADg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758802445; c=relaxed/simple;
-	bh=TFmehwCjjPT1uv+G/Y+wI/HAxAG1kdYiXPRU/g+zkz0=;
+	s=arc-20240116; t=1758802454; c=relaxed/simple;
+	bh=9wXVXM5CbsvZTKk/q914b/XH6oNxY5+kix4Gv+qO5AU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ITrtX9/N3frXD3gDWn3nVb8zGzre7MiN9++ogB2psA+Xtn8GMqRrQMFgmlIYG8Bk9lmhdmp720eRB7TqzDh2I/DiOEvbN+acCfmDf/8hjqkZFSXdwdXBST7yMq6j5xGPYQzkbZCMuBaa0rumws7/N6/rdnOzaWO6GWWtFYAA7/A=
+	 MIME-Version; b=OB06hdLI4tWNzG1Hnf/WYXa/0tH7OYzbfvpkE0Etj4iY+vLsi1gIr8ENBPKjW0SF/1Q8W9vWkMeklixCzxj9w8BUetwEIbThI0zu3F+06oqMvWTUngWMVy6stDj8nXPQTziB76sitxOwZFt7kQ4nH7x1UsFh0/ThWsY7UqVdmXo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,20 +33,20 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v1kqw-0000YV-RG; Thu, 25 Sep 2025 14:13:38 +0200
+	id 1v1kqw-0000YW-L1; Thu, 25 Sep 2025 14:13:38 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1v1kqv-000Pwr-0q;
+	id 1v1kqv-000Pwt-0y;
 	Thu, 25 Sep 2025 14:13:37 +0200
 Received: from blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id EE4FA47998C;
-	Thu, 25 Sep 2025 12:13:36 +0000 (UTC)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 10F9047998D;
+	Thu, 25 Sep 2025 12:13:37 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -55,9 +55,9 @@ Cc: davem@davemloft.net,
 	kernel@pengutronix.de,
 	Vincent Mailhol <mailhol@kernel.org>,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 32/48] can: netlink: refactor can_validate_bittiming()
-Date: Thu, 25 Sep 2025 14:08:09 +0200
-Message-ID: <20250925121332.848157-33-mkl@pengutronix.de>
+Subject: [PATCH net-next 33/48] can: netlink: add can_validate_tdc()
+Date: Thu, 25 Sep 2025 14:08:10 +0200
+Message-ID: <20250925121332.848157-34-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250925121332.848157-1-mkl@pengutronix.de>
 References: <20250925121332.848157-1-mkl@pengutronix.de>
@@ -75,87 +75,144 @@ X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 From: Vincent Mailhol <mailhol@kernel.org>
 
-Whenever can_validate_bittiming() is called, it is always preceded by
-some boilerplate code which was copy pasted all over the place. Move
-that repeated code directly inside can_validate_bittiming().
-
-Finally, the mempcy() is not needed: the nla attributes are four bytes
-aligned which is just enough for struct can_bittiming. Add a
-static_assert() to document that the alignment is correct and just use
-the pointer returned by nla_data() as-is.
+Factorise the TDC validation out of can_validate() and move it in the
+new can_validate_tdc() function. This is a preparation patch for the
+introduction of CAN XL because this TDC validation will be reused
+later on.
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-Link: https://patch.msgid.link/20250923-canxl-netlink-prep-v4-4-e720d28f66fe@kernel.org
+Link: https://patch.msgid.link/20250923-canxl-netlink-prep-v4-5-e720d28f66fe@kernel.org
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/dev/netlink.c | 36 +++++++++++++++++------------------
- 1 file changed, 17 insertions(+), 19 deletions(-)
+ drivers/net/can/dev/netlink.c | 82 ++++++++++++++++++++---------------
+ include/linux/can/bittiming.h |  4 ++
+ 2 files changed, 52 insertions(+), 34 deletions(-)
 
 diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index 248f607e3864..13555253e789 100644
+index 13555253e789..25c08adee9ad 100644
 --- a/drivers/net/can/dev/netlink.c
 +++ b/drivers/net/can/dev/netlink.c
-@@ -36,13 +36,21 @@ static const struct nla_policy can_tdc_policy[IFLA_CAN_TDC_MAX + 1] = {
- 	[IFLA_CAN_TDC_TDCF] = { .type = NLA_U32 },
- };
- 
--static int can_validate_bittiming(const struct can_bittiming *bt,
--				  struct netlink_ext_ack *extack)
-+static int can_validate_bittiming(struct nlattr *data[],
-+				  struct netlink_ext_ack *extack,
-+				  int ifla_can_bittiming)
- {
-+	struct can_bittiming *bt;
-+
-+	if (!data[ifla_can_bittiming])
-+		return 0;
-+
-+	static_assert(__alignof__(*bt) <= NLA_ALIGNTO);
-+	bt = nla_data(data[ifla_can_bittiming]);
-+
- 	/* sample point is in one-tenth of a percent */
- 	if (bt->sample_point >= 1000) {
- 		NL_SET_ERR_MSG(extack, "sample point must be between 0 and 100%");
--
- 		return -EINVAL;
- 	}
- 
-@@ -105,14 +113,9 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
- 		}
- 	}
- 
--	if (data[IFLA_CAN_BITTIMING]) {
--		struct can_bittiming bt;
--
--		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
--		err = can_validate_bittiming(&bt, extack);
--		if (err)
--			return err;
--	}
-+	err = can_validate_bittiming(data, extack, IFLA_CAN_BITTIMING);
-+	if (err)
-+		return err;
- 
- 	if (is_can_fd) {
- 		if (!data[IFLA_CAN_BITTIMING] || !data[IFLA_CAN_DATA_BITTIMING])
-@@ -124,14 +127,9 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
- 			return -EOPNOTSUPP;
- 	}
- 
--	if (data[IFLA_CAN_DATA_BITTIMING]) {
--		struct can_bittiming bt;
--
--		memcpy(&bt, nla_data(data[IFLA_CAN_DATA_BITTIMING]), sizeof(bt));
--		err = can_validate_bittiming(&bt, extack);
--		if (err)
--			return err;
--	}
-+	err = can_validate_bittiming(data, extack, IFLA_CAN_DATA_BITTIMING);
-+	if (err)
-+		return err;
- 
+@@ -57,6 +57,49 @@ static int can_validate_bittiming(struct nlattr *data[],
  	return 0;
  }
+ 
++static int can_validate_tdc(struct nlattr *data_tdc,
++			    struct netlink_ext_ack *extack, u32 tdc_flags)
++{
++	bool tdc_manual = tdc_flags & CAN_CTRLMODE_TDC_MANUAL_MASK;
++	bool tdc_auto = tdc_flags & CAN_CTRLMODE_TDC_AUTO_MASK;
++	int err;
++
++	/* CAN_CTRLMODE_TDC_{AUTO,MANUAL} are mutually exclusive */
++	if (tdc_auto && tdc_manual)
++		return -EOPNOTSUPP;
++
++	/* If one of the CAN_CTRLMODE_TDC_* flag is set then TDC
++	 * must be set and vice-versa
++	 */
++	if ((tdc_auto || tdc_manual) != !!data_tdc)
++		return -EOPNOTSUPP;
++
++	/* If providing TDC parameters, at least TDCO is needed. TDCV
++	 * is needed if and only if CAN_CTRLMODE_TDC_MANUAL is set
++	 */
++	if (data_tdc) {
++		struct nlattr *tb_tdc[IFLA_CAN_TDC_MAX + 1];
++
++		err = nla_parse_nested(tb_tdc, IFLA_CAN_TDC_MAX,
++				       data_tdc, can_tdc_policy, extack);
++		if (err)
++			return err;
++
++		if (tb_tdc[IFLA_CAN_TDC_TDCV]) {
++			if (tdc_auto)
++				return -EOPNOTSUPP;
++		} else {
++			if (tdc_manual)
++				return -EOPNOTSUPP;
++		}
++
++		if (!tb_tdc[IFLA_CAN_TDC_TDCO])
++			return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
+ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+ 			struct netlink_ext_ack *extack)
+ {
+@@ -67,7 +110,7 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+ 	 * - nominal/arbitration bittiming
+ 	 * - data bittiming
+ 	 * - control mode with CAN_CTRLMODE_FD set
+-	 * - TDC parameters are coherent (details below)
++	 * - TDC parameters are coherent (details in can_validate_tdc())
+ 	 */
+ 
+ 	if (!data)
+@@ -75,42 +118,13 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+ 
+ 	if (data[IFLA_CAN_CTRLMODE]) {
+ 		struct can_ctrlmode *cm = nla_data(data[IFLA_CAN_CTRLMODE]);
+-		u32 tdc_flags = cm->flags & CAN_CTRLMODE_FD_TDC_MASK;
+ 
+ 		is_can_fd = cm->flags & cm->mask & CAN_CTRLMODE_FD;
+ 
+-		/* CAN_CTRLMODE_TDC_{AUTO,MANUAL} are mutually exclusive */
+-		if (tdc_flags == CAN_CTRLMODE_FD_TDC_MASK)
+-			return -EOPNOTSUPP;
+-		/* If one of the CAN_CTRLMODE_TDC_* flag is set then
+-		 * TDC must be set and vice-versa
+-		 */
+-		if (!!tdc_flags != !!data[IFLA_CAN_TDC])
+-			return -EOPNOTSUPP;
+-		/* If providing TDC parameters, at least TDCO is
+-		 * needed. TDCV is needed if and only if
+-		 * CAN_CTRLMODE_TDC_MANUAL is set
+-		 */
+-		if (data[IFLA_CAN_TDC]) {
+-			struct nlattr *tb_tdc[IFLA_CAN_TDC_MAX + 1];
+-
+-			err = nla_parse_nested(tb_tdc, IFLA_CAN_TDC_MAX,
+-					       data[IFLA_CAN_TDC],
+-					       can_tdc_policy, extack);
+-			if (err)
+-				return err;
+-
+-			if (tb_tdc[IFLA_CAN_TDC_TDCV]) {
+-				if (tdc_flags & CAN_CTRLMODE_TDC_AUTO)
+-					return -EOPNOTSUPP;
+-			} else {
+-				if (tdc_flags & CAN_CTRLMODE_TDC_MANUAL)
+-					return -EOPNOTSUPP;
+-			}
+-
+-			if (!tb_tdc[IFLA_CAN_TDC_TDCO])
+-				return -EOPNOTSUPP;
+-		}
++		err = can_validate_tdc(data[IFLA_CAN_TDC], extack,
++				       cm->flags & CAN_CTRLMODE_FD_TDC_MASK);
++		if (err)
++			return err;
+ 	}
+ 
+ 	err = can_validate_bittiming(data, extack, IFLA_CAN_BITTIMING);
+diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.h
+index 4d5f7794194a..71f839c3f032 100644
+--- a/include/linux/can/bittiming.h
++++ b/include/linux/can/bittiming.h
+@@ -16,6 +16,10 @@
+ 
+ #define CAN_CTRLMODE_FD_TDC_MASK				\
+ 	(CAN_CTRLMODE_TDC_AUTO | CAN_CTRLMODE_TDC_MANUAL)
++#define CAN_CTRLMODE_TDC_AUTO_MASK				\
++	(CAN_CTRLMODE_TDC_AUTO)
++#define CAN_CTRLMODE_TDC_MANUAL_MASK				\
++	(CAN_CTRLMODE_TDC_MANUAL)
+ 
+ /*
+  * struct can_tdc - CAN FD Transmission Delay Compensation parameters
 -- 
 2.51.0
 
