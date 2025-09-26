@@ -1,85 +1,85 @@
-Return-Path: <linux-can+bounces-5037-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5038-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2DE8BA3E60
-	for <lists+linux-can@lfdr.de>; Fri, 26 Sep 2025 15:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9990ABA3E67
+	for <lists+linux-can@lfdr.de>; Fri, 26 Sep 2025 15:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7471516CFA1
-	for <lists+linux-can@lfdr.de>; Fri, 26 Sep 2025 13:31:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DCBA324E4B
+	for <lists+linux-can@lfdr.de>; Fri, 26 Sep 2025 13:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 667BA2F83C0;
-	Fri, 26 Sep 2025 13:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D4C32F7AA7;
+	Fri, 26 Sep 2025 13:30:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="m/gCVSxJ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MKGJL4ZY"
 X-Original-To: linux-can@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97DC2F83AC
-	for <linux-can@vger.kernel.org>; Fri, 26 Sep 2025 13:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C6C2F90D5
+	for <linux-can@vger.kernel.org>; Fri, 26 Sep 2025 13:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758893442; cv=none; b=rKtnjOk09RwzBwCnKkvfYfZmAGUjBg9AEQ3G4sO3iXCP8iKMuDwDcE5Xn+qn4DBpjMzLhLIp2ecwYRNdlOqXkTlBkeRPVk+YnjlhDcT8cZWqOYDx3LECyVveEhH6DclR0v7y/c2QPxYwV8eItXkd8O+Qh34tHhZTYpF5mr15kNg=
+	t=1758893447; cv=none; b=nfpe0P7ZUHfrq8Y/XjVjr+0OvAHSaAOMgdzhOGiMnnNfZ9Jd1P32+H98gAT7tmz5UmzRbJdAvdpbtgVpq0mqG9/Pvv2CJNCXiYQtFyxfdSoWv19xBt1sS9nefPp6z0sJvBRXnGdlkBaWQ/VWWKakTYC1pvGagotv264p1NjLrBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758893442; c=relaxed/simple;
-	bh=+IOLF0XPvUULiaKZhdl3sSn55zuFmc8DaivaubnewwY=;
+	s=arc-20240116; t=1758893447; c=relaxed/simple;
+	bh=qKSG5ADsXNKPjV3nlzlHBiIYrmbuMHtoYqrl7DKLOKU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UJaPaROrx5br1Nm0N/T6UN/GbF/MaA0aU3lRuA7AvgwcmnoQM8JRYm0GVASE7rvibzNKDKjuhg01yr1hmLdwlh0zhPC/daHzLA7METRtAOCQDBRGGKLunNl6nWmRItWP7MQIfDdjuznE1OXrXW7LeG40yMKV4wgQFkD0wKHytVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=m/gCVSxJ; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version; b=HdTwxJJQg4cNDwi+XqLo3Zs0VxAHJ108QXoRFjcm//hg/piuRBmdOLeS88A9Ojjr7pEKUqLUuYg4fpduEBacf3cGrBqRMM5yx1jweSV8MrzjSPPOiyHCs6pYR0V7W1KgCafDVZU2Pt9ec2lvkfQEPn7w0f1ZYQOSNLfJjU1D98A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MKGJL4ZY; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58Q8vqMF021014
-	for <linux-can@vger.kernel.org>; Fri, 26 Sep 2025 13:30:40 GMT
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58Q9jxnZ024957
+	for <linux-can@vger.kernel.org>; Fri, 26 Sep 2025 13:30:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=QmS6oCHS+MH
-	N39AhLGTMSeGEuEf2T3uv/XWwxaYqPAw=; b=m/gCVSxJp/vkvDWz9f6l6NsLaBp
-	w3+bkwbPE1iXtmIXIOb/CyKcHbmhXFdZ+FtlRDT75wFX2YdNzkXRImMlhIBA2/BX
-	XvtWn8OBLbpoyah2nsrVCCSNjdomXWYQwol2ObeHLKnGkJM8q1E7wcKFpStIbVUj
-	zWPamctQjQcA16xWuGECMvu9VbDCbnwo0iveauX2HAoypNmRK/+cnbEaT39uGxz3
-	5M86cCAH9FcBC9RBjqUmOcAr7gXzrUfc9c/QXzgCT3EsvwB2eY+rkusILFoHlZcs
-	eF0gGRM8PuIV0o7uij7XO/VsensQAFLwCm5EM0VcU+NyhYnLV4gRhGX7d3w==
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49db0qu0en-1
+	:mime-version:references:subject:to; s=qcppdkim1; bh=o0FOP3SERm0
+	lzOQVjmAaIk/cr88mu/vSl0/yi1Gxue0=; b=MKGJL4ZY9DYmg2Rq+RX6U6jG4qh
+	n5E+DFPnGRCw/6nCRkZik+aZpMICxOatsep2wUpLunfbj7OjW+sclZCKrN2x/8QS
+	cArenclZSmBfgUO0p+fqaBHZkBaqOTjR1XpcmBgaHKgtI4opZyj+wWL1zZif42cI
+	zSDxcjzFA/B9NhZo57aTdy7+yB5cOHaHVPrrIzuMCXh6266MqEiUxhemB6ySZcMm
+	JeC3spIQ0RjTiWG+qvxyTWtvJiWjhfPY1yuBXd1LDYK1F3VU607ME0o8JeN3iXTX
+	hEPlj2MBAPDmKqH5ZEXdjiH26HBiQJd0Xing0OCpndxksRKXNub+Om+kW6g==
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49drfwgkvx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-can@vger.kernel.org>; Fri, 26 Sep 2025 13:30:39 +0000 (GMT)
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-781044c8791so1783050b3a.3
-        for <linux-can@vger.kernel.org>; Fri, 26 Sep 2025 06:30:39 -0700 (PDT)
+	for <linux-can@vger.kernel.org>; Fri, 26 Sep 2025 13:30:45 +0000 (GMT)
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-78117b8e49fso1051682b3a.3
+        for <linux-can@vger.kernel.org>; Fri, 26 Sep 2025 06:30:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758893439; x=1759498239;
+        d=1e100.net; s=20230601; t=1758893445; x=1759498245;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QmS6oCHS+MHN39AhLGTMSeGEuEf2T3uv/XWwxaYqPAw=;
-        b=OZOEzQ8l5zBhU5DE7oUHx5cy5256xJDencUkI6NT55B3yRNV8NMSN9dB+8zKPxH8fx
-         cfMld2EmDpa79U0GY0p01W4tyArnFfaB/IicGaJHvoS0T7bb1mp8cYfuI/+8ym2v2WEW
-         fOuyOdi66l3siQkvR5LoH6KCM0iH5uLY4gBMxl1wKKmn6bId/GmHHxtqdZFsBf2/41Bo
-         e+vQDwtRD2ncIxTnMbLIv6JHkvq7oEqpBBjboJroKu46btxIU6eBrXQLNihLWhA6PIH0
-         FSGBDA6rLJhIXIM5Z6orwahTePFrLoV4bxHZsVQA949wXbPx8OQIO5Pf2mZU927pBxkY
-         CE8w==
-X-Forwarded-Encrypted: i=1; AJvYcCXbfLqERYCfjnaWDLlajnHfp96k36rI98YOUrqm/qIPJwfWnUw+SJ/nsxlYdcOWk03ScRgPg5lxUQ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTmdRZtAHO5uTa0QXzBpI4qB/Ga9Ea4QZsgYEO+RWfTuLyMMyU
-	7WRT65GmVPuJ8nLMRimQSSIsvuv9pcgs86vhTJgs92GiB0vapf+QMzFfunuUpaDUpoCuAsU7w2m
-	csdWo+DTiWIgMhsZgB/97dGsByU7cRHRI3fBzC6ckx0+zMhEZ+bDiXC5mkDRKRNs=
-X-Gm-Gg: ASbGncsqxMFjP793Dqdzfk/WOpwNIZ8JyxGUHUDGP4HfTdFvIOs+qnyhhHN/KtEYMPs
-	x0RUSzd8ROr1TGkn4SDQQoZlmgljK/fOb0340l7PgtnEX9OTPv/Y5wopQwaCtJxjZxtBbIvy0s1
-	iHg11ohj2Wtj8avddNAMPeaV/Hpz5NkvCtk3Ug2OG9v/WNqeBpgzVy+12qDbUZxC/DY4rDTrf+d
-	vUPOUqBsNBoF5I7SkoMU9XSPxu6QTpTQ4j3wwhwe37eMbFHzWwENWPVcwwYmOhMNzGl12eeUqLp
-	r64v4hbjY3fYUJYLx2QTs+lTk3QiwkcWFg1uvgHeehAA6fgo0HadWwOIq7sqtuf9vky+5n9qkY6
-	U
-X-Received: by 2002:a05:6a00:2d88:b0:781:21db:4e16 with SMTP id d2e1a72fcca58-78121db4f59mr624975b3a.4.1758893438929;
-        Fri, 26 Sep 2025 06:30:38 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHsielPPomP21N2Fqm4F4onXqE5w84lbLbYWd6SPPbSs5v9gEnLj3E/5yVmC9Upkyo6oZ+pXg==
-X-Received: by 2002:a05:6a00:2d88:b0:781:21db:4e16 with SMTP id d2e1a72fcca58-78121db4f59mr624916b3a.4.1758893438284;
-        Fri, 26 Sep 2025 06:30:38 -0700 (PDT)
+        bh=o0FOP3SERm0lzOQVjmAaIk/cr88mu/vSl0/yi1Gxue0=;
+        b=ssiqmMt/wdK+LtSfjFqV3geYWVVl9XlZ2iB2Drm7UkIPXmG606eWu6UswZeCG2743p
+         RqnboarZpeOYjsN4up9TF+uOO1De/yu+nWxOBqy0H1qJiUKdHd6wNzYPFglhfuBqMxr3
+         8+Tqnj6fv5nW4iQTuP2VKbpzbECNZnnjJbuSQPrgENYsm5mDf5OSM8M2hQw699Ztus6K
+         XQiANdbDB5TqtMhrN0hh5wHAwRfyPipa/SYZaInyg3gJOFSbKhRjdcSQHD6q1XdwrOfm
+         2gi3WQRnR0pbKYQqfGU5kVHzhyeC0gyMZhq8hBJws9ZOYU6Fa4Xbzi40ohItNBYVA/98
+         lzbw==
+X-Forwarded-Encrypted: i=1; AJvYcCWNSmn7HPuDyQ504ftdRZw2JTkiFkozeJSNhJFG39UJ8C6iymRmXxKV6T7wDQnKXUFOCeK3jmlQGrM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoU94kbf93Gc6h3DndS7inWHCBikVH/SqTEHK7DSdC2z1Ahz/8
+	AQYWuOfAseapLls9dr58C5AxYtwd3lcr8LcXQWdsHAftR4S0hWnL7zVG2ua8LPz1PBRc6iBPRpB
+	pkTH0A+TI5su+AFg+ZOzChLObujl3y0Tw9BeMicnKeu0jWiI/tjDmOiuty+lQvTU=
+X-Gm-Gg: ASbGncvsByx9f9Fy3qWLgG3bOrXxYIViqIFrZJE6SqdFpZOZdauprNRPGNFg9QlORdO
+	mfmQlgz7C9u9P1M0CKkBkupEXB5T7MQU36Y8sW2VxQ1AH1QRkNcPRG+pKQjNBMdg7YeSQ2rLwgh
+	7AhTHLrprBeRFFOClPJhJjtgssxK5izQFr/Ab9zABPrLSZNopKrlwQzThx4PyVMoFKDzkFKv4YP
+	trm1Mo4Qy75o0h9S8XwirE26IudmTK6n8kY3KQUNMs7Cz5I/Kdhn7hHHuliBD0JA0Dwd8HTvhlf
+	8JwJ4kgR+PHwDmWW2UW0p3tFEwMPcSMFOxmJPD6VRW/Q2QkR66npyPnCYXeeWUuLl5tImXCICIe
+	a
+X-Received: by 2002:a05:6a21:7e82:b0:2ef:4635:4fff with SMTP id adf61e73a8af0-2ef46a02466mr4953110637.26.1758893444620;
+        Fri, 26 Sep 2025 06:30:44 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHcuC+aAxAqTlMVdk/vbhfZoaMeOoObmULAxinRGBkkAoWtjCKdTkyKJEMeKLUyDVjwVByb6g==
+X-Received: by 2002:a05:6a21:7e82:b0:2ef:4635:4fff with SMTP id adf61e73a8af0-2ef46a02466mr4953037637.26.1758893443806;
+        Fri, 26 Sep 2025 06:30:43 -0700 (PDT)
 Received: from hu-vdadhani-hyd.qualcomm.com ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7810238d321sm4504174b3a.17.2025.09.26.06.30.33
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7810238d321sm4504174b3a.17.2025.09.26.06.30.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Sep 2025 06:30:37 -0700 (PDT)
+        Fri, 26 Sep 2025 06:30:43 -0700 (PDT)
 From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
 To: mkl@pengutronix.de, mani@kernel.org, thomas.kopp@microchip.com,
         mailhol.vincent@wanadoo.fr, robh@kernel.org, krzk+dt@kernel.org,
@@ -89,9 +89,9 @@ To: mkl@pengutronix.de, mani@kernel.org, thomas.kopp@microchip.com,
 Cc: mukesh.savaliya@oss.qualcomm.com, anup.kulkarni@oss.qualcomm.com,
         Gregor Herburger <gregor.herburger@ew.tq-group.com>,
         Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
-Subject: [PATCH v5 2/6] can: mcp251xfd: utilize gather_write function for all non-CRC writes
-Date: Fri, 26 Sep 2025 19:00:14 +0530
-Message-Id: <20250926133018.3071446-3-viken.dadhaniya@oss.qualcomm.com>
+Subject: [PATCH v5 3/6] can: mcp251xfd: add workaround for errata 5
+Date: Fri, 26 Sep 2025 19:00:15 +0530
+Message-Id: <20250926133018.3071446-4-viken.dadhaniya@oss.qualcomm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250926133018.3071446-1-viken.dadhaniya@oss.qualcomm.com>
 References: <20250926133018.3071446-1-viken.dadhaniya@oss.qualcomm.com>
@@ -102,103 +102,168 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: KpMtD7TmG9E-nw2LchcwjHtPTdZowx8h
-X-Proofpoint-ORIG-GUID: KpMtD7TmG9E-nw2LchcwjHtPTdZowx8h
-X-Authority-Analysis: v=2.4 cv=api/yCZV c=1 sm=1 tr=0 ts=68d69580 cx=c_pps
- a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=yJojWOMRYYMA:10 a=8f9FM25-AAAA:8 a=EUspDBNiAAAA:8 a=lCqp9tVl3zhOgjhhuWQA:9
- a=zc0IvFSfCIW2DFIPzwfm:22 a=uSNRK0Bqq4PXrUp6LDpb:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI1MDE3MSBTYWx0ZWRfXx/I3p2pX7sGD
- L3KrBaztTDROhaFv4E+iISu4tpMZ95bL9st0yh8dCKNKwhadJ8Cza/tbg0+1dhPGkz/na8hq2l4
- N3ZlWiDa6ZX7UGbCWCu8DKkRKTeQTor/jxZwAWyYp7+iboqik+X0Qb97wBCer+xmHnc62cU7dT/
- aKMIijzw8LkHQvQ/874hqtQuWnHET3GOdgI2mWUwenzsq921ZBG0/v0n9jEkCJqLzBtu4J0z1RJ
- DUVTm/n/e9pnlVdabsXEZF1o2tPGz+aN+X1YhHl/gZjKmD5xQ78YrNydN6O5ROLoYq1tf29vGUp
- FMWZq38IebjI3IR0T9iiFlu5gtoICT7l8iS00kLNgqeeApqUySsDvYYA2+4XYkY4NDCvXYxGgGB
- 4s5+TDvTheyvnnkcoprB6P2Mb8Z22A==
+X-Proofpoint-ORIG-GUID: N7xo-i11AGnJdDeXFPn0FJwAjauqYAEq
+X-Authority-Analysis: v=2.4 cv=JKA2csKb c=1 sm=1 tr=0 ts=68d69585 cx=c_pps
+ a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=yJojWOMRYYMA:10 a=8f9FM25-AAAA:8 a=EUspDBNiAAAA:8 a=-2jKClcn1S1UO4fOL_0A:9
+ a=2VI0MkxyNR6bbpdq8BZq:22 a=uSNRK0Bqq4PXrUp6LDpb:22
+X-Proofpoint-GUID: N7xo-i11AGnJdDeXFPn0FJwAjauqYAEq
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI2MDA4OSBTYWx0ZWRfX7yTG2KORNmAL
+ l688PzNsbtPIWcPx6EAaHlKLpifSjieivZX8SsQBJeI7c3wvuPDEGpSlBOSjvHZlOXKSlLuZeJ6
+ hNX8uvm3otVvk2/S0Cr3t5nYNRFPPVVKt6PbC8LsKfsmIVVHZ6pGbhp8r34nyY2HCS0kaLZjVBo
+ oycL5pCKxjnWpAXFhqpbGv/bNEygQhzea/Y+tqjGrvBXvoMlNLiHrs5ArtvW3b0LSRByRD7D3iJ
+ YaBdg7j+Hb6VXNOobwMWNxJe/jUCC+4TnJ7lBrSTZ7MCis+CE+IpCjRWlzXDsnTEr61hHiJSC8d
+ hfJwqxUtCbUjVOl3lxNPoEJVnRvvpge89oy8eideYnlPkyYYNdMVljNo77pVhI3IQPHvwyoVfbX
+ d0FXKFBvg7swE21DQeMRLW6HrvjO/A==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-26_04,2025-09-26_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 adultscore=0 spamscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509250171
+ priorityscore=1501 impostorscore=0 clxscore=1015 lowpriorityscore=0
+ phishscore=0 suspectscore=0 bulkscore=0 spamscore=0 malwarescore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
+ definitions=main-2509260089
 
 From: Gregor Herburger <gregor.herburger@ew.tq-group.com>
 
-This is a preparation patch to add errata workaround for non crc writes.
+According to Errata DS80000789E 5 writing IOCON register using one SPI
+write command clears LAT0/LAT1.
 
-Currently for non-crc writes to the chip can go through the
-.gather_write, .write or the reg_update_bits callback.
+Errata Fix/Work Around suggests to write registers with single byte write
+instructions. However, it seems that every write to the second byte
+causes the overwrite of LAT0/LAT1.
 
-To allow the addition of the errata fix at a single location use
-mcp251xfd_regmap_nocrc_gather_write for all non-CRC write instructions,
-similar to the crc regmap.
+Never write byte 2 of IOCON register to avoid clearing of LAT0/LAT1.
 
 Signed-off-by: Gregor Herburger <gregor.herburger@ew.tq-group.com>
 Tested-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
 Signed-off-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
 ---
- .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  | 25 ++++++++++---------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+ .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  | 89 +++++++++++++++++--
+ 1 file changed, 83 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-index 8c5be8d1c519..e61cbd209955 100644
+index e61cbd209955..70d5ff0ae7ac 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-@@ -12,14 +12,6 @@
- 
+@@ -13,9 +13,9 @@
  static const struct regmap_config mcp251xfd_regmap_crc;
  
--static int
--mcp251xfd_regmap_nocrc_write(void *context, const void *data, size_t count)
--{
--	struct spi_device *spi = context;
--
--	return spi_write(spi, data, count);
--}
--
  static int
- mcp251xfd_regmap_nocrc_gather_write(void *context,
- 				    const void *reg, size_t reg_len,
-@@ -47,6 +39,15 @@ mcp251xfd_regmap_nocrc_gather_write(void *context,
+-mcp251xfd_regmap_nocrc_gather_write(void *context,
+-				    const void *reg, size_t reg_len,
+-				    const void *val, size_t val_len)
++_mcp251xfd_regmap_nocrc_gather_write(void *context,
++				     const void *reg, size_t reg_len,
++				     const void *val, size_t val_len)
+ {
+ 	struct spi_device *spi = context;
+ 	struct mcp251xfd_priv *priv = spi_get_drvdata(spi);
+@@ -39,6 +39,45 @@ mcp251xfd_regmap_nocrc_gather_write(void *context,
  	return spi_sync_transfer(spi, xfer, ARRAY_SIZE(xfer));
  }
  
 +static int
-+mcp251xfd_regmap_nocrc_write(void *context, const void *data, size_t count)
++mcp251xfd_regmap_nocrc_gather_write(void *context,
++				    const void *reg_p, size_t reg_len,
++				    const void *val, size_t val_len)
 +{
-+	const size_t data_offset = sizeof(__be16);
++	const u16 byte_exclude = MCP251XFD_REG_IOCON +
++				 mcp251xfd_first_byte_set(MCP251XFD_REG_IOCON_GPIO_MASK);
++	u16 reg = be16_to_cpu(*(__be16 *)reg_p) & MCP251XFD_SPI_ADDRESS_MASK;
++	int ret;
 +
-+	return mcp251xfd_regmap_nocrc_gather_write(context, data, data_offset,
-+						   data + data_offset, count - data_offset);
++	/* Never write to bits 16..23 of IOCON register to avoid clearing of LAT0/LAT1
++	 *
++	 * According to MCP2518FD Errata DS80000789E 5 writing IOCON register using one
++	 * SPI write command clears LAT0/LAT1.
++	 *
++	 * Errata Fix/Work Around suggests to write registers with single byte
++	 * write instructions. However, it seems that the byte at 0xe06(IOCON[23:16])
++	 * is for read-only access and writing to it causes the clearing of LAT0/LAT1.
++	 */
++	if (reg <= byte_exclude && reg + val_len > byte_exclude) {
++		size_t len = byte_exclude - reg;
++
++		/* Write up to 0xe05 */
++		ret = _mcp251xfd_regmap_nocrc_gather_write(context, reg_p, reg_len, val, len);
++		if (ret)
++			return ret;
++
++		/* Write from 0xe07 on */
++		reg += len + 1;
++		reg = (__force unsigned short)cpu_to_be16(MCP251XFD_SPI_INSTRUCTION_WRITE | reg);
++		return _mcp251xfd_regmap_nocrc_gather_write(context, &reg, reg_len,
++							    val + len + 1,
++							    val_len - len - 1);
++	}
++
++	return _mcp251xfd_regmap_nocrc_gather_write(context, reg_p, reg_len,
++						  val, val_len);
 +}
 +
- static inline bool
- mcp251xfd_update_bits_read_reg(const struct mcp251xfd_priv *priv,
- 			       unsigned int reg)
-@@ -64,6 +65,7 @@ mcp251xfd_update_bits_read_reg(const struct mcp251xfd_priv *priv,
- 	case MCP251XFD_REG_CON:
- 	case MCP251XFD_REG_OSC:
- 	case MCP251XFD_REG_ECCCON:
-+	case MCP251XFD_REG_IOCON:
- 		return true;
- 	default:
- 		mcp251xfd_for_each_rx_ring(priv, ring, n) {
-@@ -139,10 +141,9 @@ mcp251xfd_regmap_nocrc_update_bits(void *context, unsigned int reg,
- 	tmp_le32 = orig_le32 & ~mask_le32;
- 	tmp_le32 |= val_le32 & mask_le32;
- 
--	mcp251xfd_spi_cmd_write_nocrc(&buf_tx->cmd, reg + first_byte);
--	memcpy(buf_tx->data, &tmp_le32, len);
--
--	return spi_write(spi, buf_tx, sizeof(buf_tx->cmd) + len);
-+	reg += first_byte;
-+	mcp251xfd_spi_cmd_write_nocrc(&buf_tx->cmd, reg);
-+	return mcp251xfd_regmap_nocrc_gather_write(context, &buf_tx->cmd, 2, &tmp_le32, len);
+ static int
+ mcp251xfd_regmap_nocrc_write(void *context, const void *data, size_t count)
+ {
+@@ -197,9 +236,9 @@ mcp251xfd_regmap_nocrc_read(void *context,
  }
  
  static int
+-mcp251xfd_regmap_crc_gather_write(void *context,
+-				  const void *reg_p, size_t reg_len,
+-				  const void *val, size_t val_len)
++_mcp251xfd_regmap_crc_gather_write(void *context,
++				   const void *reg_p, size_t reg_len,
++				   const void *val, size_t val_len)
+ {
+ 	struct spi_device *spi = context;
+ 	struct mcp251xfd_priv *priv = spi_get_drvdata(spi);
+@@ -230,6 +269,44 @@ mcp251xfd_regmap_crc_gather_write(void *context,
+ 	return spi_sync_transfer(spi, xfer, ARRAY_SIZE(xfer));
+ }
+ 
++static int
++mcp251xfd_regmap_crc_gather_write(void *context,
++				  const void *reg_p, size_t reg_len,
++				  const void *val, size_t val_len)
++{
++	const u16 byte_exclude = MCP251XFD_REG_IOCON +
++				 mcp251xfd_first_byte_set(MCP251XFD_REG_IOCON_GPIO_MASK);
++	u16 reg = *(u16 *)reg_p;
++	int ret;
++
++	/* Never write to bits 16..23 of IOCON register to avoid clearing of LAT0/LAT1
++	 *
++	 * According to MCP2518FD Errata DS80000789E 5 writing IOCON register using one
++	 * SPI write command clears LAT0/LAT1.
++	 *
++	 * Errata Fix/Work Around suggests to write registers with single byte
++	 * write instructions. However, it seems that the byte at 0xe06(IOCON[23:16])
++	 * is for read-only access and writing to it causes the clearing of LAT0/LAT1.
++	 */
++	if (reg <= byte_exclude  && reg + val_len > byte_exclude) {
++		size_t len = byte_exclude - reg;
++
++		/* Write up to 0xe05 */
++		ret = _mcp251xfd_regmap_crc_gather_write(context, &reg, reg_len, val, len);
++		if (ret)
++			return ret;
++
++		/* Write from 0xe07 on */
++		reg += len + 1;
++		return _mcp251xfd_regmap_crc_gather_write(context, &reg, reg_len,
++							  val + len + 1,
++							  val_len - len - 1);
++	}
++
++	return _mcp251xfd_regmap_crc_gather_write(context, reg_p, reg_len,
++						  val, val_len);
++}
++
+ static int
+ mcp251xfd_regmap_crc_write(void *context,
+ 			   const void *data, size_t count)
 -- 
 2.34.1
 
