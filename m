@@ -1,192 +1,108 @@
-Return-Path: <linux-can+bounces-5043-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5044-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 709A1BA5468
-	for <lists+linux-can@lfdr.de>; Sat, 27 Sep 2025 00:01:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F5BCBA5EA8
+	for <lists+linux-can@lfdr.de>; Sat, 27 Sep 2025 14:12:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CE457AAD90
-	for <lists+linux-can@lfdr.de>; Fri, 26 Sep 2025 21:59:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84F007B160C
+	for <lists+linux-can@lfdr.de>; Sat, 27 Sep 2025 12:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B38E27702D;
-	Fri, 26 Sep 2025 22:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Anw9x5cC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534C02DF14A;
+	Sat, 27 Sep 2025 12:12:05 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634162367CC;
-	Fri, 26 Sep 2025 22:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFA42882D0
+	for <linux-can@vger.kernel.org>; Sat, 27 Sep 2025 12:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758924079; cv=none; b=aobPUjMGYe3jSa7uM3LFrI5rVQMO+7+T2EbgNOTQsy+kOgVohovd2ODM9SEexssENdJT99xh9plHSoZdX5t0XdIA7zz8brvszb7mZA/T/pP3zZ0jDYe7CRcIKveELc6mU8LtCad6LJLYBJQ9H+1LKmgb/jmzh2ODRXpnS748eSg=
+	t=1758975125; cv=none; b=pp9YAVkBSzmhDqOlPo2mXaA+xVHFYX7bRLnV2LZLmDpttSTlh7sRUNDSPB8ZhxwaaFruQTxm5R6kOxamaWFo65mAGePJzI0Nd5U5oXUA0ZP0UeTNIzoFNF5qYbfplZStHY9lb/zvCpjRP7N+3IlRaZTGg34CDcYLyGYYReQV65Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758924079; c=relaxed/simple;
-	bh=3fKdGwxJfddl3y0Wsp+aZkE/h5XIh7Po0ZOWIhUTxLc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=SGeG5tu3BONvOhrZe91gk11fPGTLz5PHI6Sf91jr6J8wDJ6lQCxGbLBiy9QCtRIyRo4AvJ0cXBHlNLsfJ4oCJ16P2xY3OaXM/pUIWnPSaLm580lgm48pgAcjHNd5xCKO/RIi0CK/lM0/B4vHnhH/lGA9DX7VNoaA54guR/qrZCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Anw9x5cC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D4FC4CEF4;
-	Fri, 26 Sep 2025 22:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758924079;
-	bh=3fKdGwxJfddl3y0Wsp+aZkE/h5XIh7Po0ZOWIhUTxLc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Anw9x5cCyfd3gEcsXSbFoyz2WWsddL4bZ68buUU7ItLJd7B/Pg5GsAWpn2NWB+g92
-	 LBPGCDGLYS/cbDTxRMucYgypxrXuHJcVL6lC5I7wyTPpEfO88q7/C4Q4PUwUtPTdQQ
-	 VGdJta5h156gTEHYO3PilS1zOQBPSTefTMOe6S+zt5P8rcTwY3KdML8/abXjtGIQZU
-	 HE7m8VoiD0+wS/NyofsrbUUyzg445/mxnCsjtSEWs2kg7wlLB65E4B/3R+sqe8RZwS
-	 jrvHUayo1lMjIPxm6kOCjJUGeWzCSQKERGN4y7uvSCP2PdtxGdUQCkFCKbuteqEvx4
-	 2qYriJk44Lsfg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70FDA39D0C3F;
-	Fri, 26 Sep 2025 22:01:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1758975125; c=relaxed/simple;
+	bh=2/pCkzHzoBBgmrbX2QEEb/ya8THCztM0q/sHLRJGybA=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=UU3fnUox+cVVVMX6/3utrQ4naAN/Ll0ICuyxZ7nGAmfukNTs691WFlvaHup7nrMo0q57ge8b5OXflZ1oGbIAaaf+LtqAztmcniZZpbUVtIZ4sbn+6L5Z72yF8zVN9eHd3CZFEmnHkAwVeZrTY6ziyhzcZUPr5l42fwSxo19uHKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 58RCBUFV069064;
+	Sat, 27 Sep 2025 21:11:30 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from [192.168.1.10] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 58RCBJNA069002
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Sat, 27 Sep 2025 21:11:30 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <3ad3c7f8-5a74-4b07-a193-cb0725823558@I-love.SAKURA.ne.jp>
+Date: Sat, 27 Sep 2025 21:11:16 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 01/48] can: m_can: use us_to_ktime() where
- appropriate
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175892407426.73145.15479318496670639138.git-patchwork-notify@kernel.org>
-Date: Fri, 26 Sep 2025 22:01:14 +0000
-References: <20250925121332.848157-2-mkl@pengutronix.de>
-In-Reply-To: <20250925121332.848157-2-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de, zhao.xichao@vivo.com,
- mailhol@kernel.org
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH] can: j1939: add missing calls in NETDEV_UNREGISTER
+ notification handler
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Anti-Virus-Server: fsav105.rs.sakura.ne.jp
+X-Virus-Status: clean
 
-Hello:
+Currently NETDEV_UNREGISTER event handler is not calling
+j1939_cancel_active_session() and j1939_sk_queue_drop_all().
+This will result in these calls being skipped when j1939_sk_release() is
+called. And I guess that the reason syzbot is still reporting
 
-This series was applied to netdev/net-next.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+  unregister_netdevice: waiting for vcan0 to become free. Usage count = 2
 
-On Thu, 25 Sep 2025 14:07:38 +0200 you wrote:
-> From: Xichao Zhao <zhao.xichao@vivo.com>
-> 
-> The tx_coalesce_usecs_irq are more suitable for using the
-> us_to_ktime(). This can make the code more concise and
-> enhance readability.
-> 
-> Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
-> Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
-> Link: https://patch.msgid.link/20250825090904.248927-1-zhao.xichao@vivo.com
-> [mkl: remove not needed line break]
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> 
-> [...]
+is caused by lack of these calls.
 
-Here is the summary with links:
-  - [net-next,01/48] can: m_can: use us_to_ktime() where appropriate
-    https://git.kernel.org/netdev/net-next/c/646cb48d4477
-  - [net-next,02/48] MAINTAINERS: update Vincent Mailhol's email address
-    https://git.kernel.org/netdev/net-next/c/39b8e0fef155
-  - [net-next,03/48] can: dev: sort includes by alphabetical order
-    https://git.kernel.org/netdev/net-next/c/4827dcc19cc7
-  - [net-next,04/48] can: peak: Modification of references to email accounts being deleted
-    https://git.kernel.org/netdev/net-next/c/f1880f9cc147
-  - [net-next,05/48] can: rcar_canfd: Update bit rate constants for RZ/G3E and R-Car Gen4
-    https://git.kernel.org/netdev/net-next/c/100fafc3e461
-  - [net-next,06/48] can: rcar_canfd: Update RCANFD_CFG_* macros
-    https://git.kernel.org/netdev/net-next/c/726213c8e79a
-  - [net-next,07/48] can: rcar_canfd: Simplify nominal bit rate config
-    https://git.kernel.org/netdev/net-next/c/02d274adf485
-  - [net-next,08/48] can: rcar_canfd: Simplify data bit rate config
-    https://git.kernel.org/netdev/net-next/c/33815032b0a6
-  - [net-next,09/48] can: rcar_can: Consistently use ndev for net_device pointers
-    https://git.kernel.org/netdev/net-next/c/7abf70449369
-  - [net-next,10/48] can: rcar_can: Add helper variable dev to rcar_can_probe()
-    https://git.kernel.org/netdev/net-next/c/f7844496cba4
-  - [net-next,11/48] can: rcar_can: Convert to Runtime PM
-    https://git.kernel.org/netdev/net-next/c/1bbff1762638
-  - [net-next,12/48] can: rcar_can: Convert to BIT()
-    https://git.kernel.org/netdev/net-next/c/bcf4dee47fdf
-  - [net-next,13/48] can: rcar_can: Convert to GENMASK()
-    https://git.kernel.org/netdev/net-next/c/28f3617c392a
-  - [net-next,14/48] can: rcar_can: CTLR bitfield conversion
-    https://git.kernel.org/netdev/net-next/c/669abc406812
-  - [net-next,15/48] can: rcar_can: TFCR bitfield conversion
-    https://git.kernel.org/netdev/net-next/c/75f319455d05
-  - [net-next,16/48] can: rcar_can: BCR bitfield conversion
-    https://git.kernel.org/netdev/net-next/c/8d930226d3e5
-  - [net-next,17/48] can: rcar_can: Mailbox bitfield conversion
-    https://git.kernel.org/netdev/net-next/c/729b1c69b8fa
-  - [net-next,18/48] can: rcar_can: Do not print alloc_candev() failures
-    https://git.kernel.org/netdev/net-next/c/5317225e015c
-  - [net-next,19/48] can: rcar_can: Convert to %pe
-    https://git.kernel.org/netdev/net-next/c/7207788031b9
-  - [net-next,20/48] can: esd_usb: Rework display of error messages
-    https://git.kernel.org/netdev/net-next/c/c6e07521431c
-  - [net-next,21/48] can: esd_usb: Avoid errors triggered from USB disconnect
-    https://git.kernel.org/netdev/net-next/c/37dc3ea4d2a2
-  - [net-next,22/48] can: raw: reorder struct uniqframe's members to optimise packing
-    https://git.kernel.org/netdev/net-next/c/fc8418eca43d
-  - [net-next,23/48] can: raw: use bitfields to store flags in struct raw_sock
-    https://git.kernel.org/netdev/net-next/c/890e5198a6e5
-  - [net-next,24/48] can: raw: reorder struct raw_sock's members to optimise packing
-    https://git.kernel.org/netdev/net-next/c/a146cfaaa0dd
-  - [net-next,25/48] can: annotate mtu accesses with READ_ONCE()
-    https://git.kernel.org/netdev/net-next/c/c67732d06786
-  - [net-next,26/48] can: dev: turn can_set_static_ctrlmode() into a non-inline function
-    https://git.kernel.org/netdev/net-next/c/7c7da8aa3fd6
-  - [net-next,27/48] can: populate the minimum and maximum MTU values
-    https://git.kernel.org/netdev/net-next/c/23049938605b
-  - [net-next,28/48] can: enable CAN XL for virtual CAN devices by default
-    https://git.kernel.org/netdev/net-next/c/b98aceb65e2c
-  - [net-next,29/48] can: dev: move struct data_bittiming_params to linux/can/bittiming.h
-    https://git.kernel.org/netdev/net-next/c/cc470fcf1d59
-  - [net-next,30/48] can: dev: make can_get_relative_tdco() FD agnostic and move it to bittiming.h
-    https://git.kernel.org/netdev/net-next/c/7208385df784
-  - [net-next,31/48] can: netlink: document which symbols are FD specific
-    https://git.kernel.org/netdev/net-next/c/94040a8f4845
-  - [net-next,32/48] can: netlink: refactor can_validate_bittiming()
-    https://git.kernel.org/netdev/net-next/c/f5ae5a75412d
-  - [net-next,33/48] can: netlink: add can_validate_tdc()
-    https://git.kernel.org/netdev/net-next/c/b23a8425cba5
-  - [net-next,34/48] can: netlink: add can_validate_databittiming()
-    https://git.kernel.org/netdev/net-next/c/3820a415bece
-  - [net-next,35/48] can: netlink: refactor CAN_CTRLMODE_TDC_{AUTO,MANUAL} flag reset logic
-    https://git.kernel.org/netdev/net-next/c/45be26b7e35a
-  - [net-next,36/48] can: netlink: remove useless check in can_tdc_changelink()
-    https://git.kernel.org/netdev/net-next/c/2b0a6930ae7c
-  - [net-next,37/48] can: netlink: make can_tdc_changelink() FD agnostic
-    https://git.kernel.org/netdev/net-next/c/530c918f8cf6
-  - [net-next,38/48] can: netlink: add can_dtb_changelink()
-    https://git.kernel.org/netdev/net-next/c/2e543af483a9
-  - [net-next,39/48] can: netlink: add can_ctrlmode_changelink()
-    https://git.kernel.org/netdev/net-next/c/e1a5cd9d6665
-  - [net-next,40/48] can: netlink: make can_tdc_get_size() FD agnostic
-    https://git.kernel.org/netdev/net-next/c/63888a578016
-  - [net-next,41/48] can: netlink: add can_data_bittiming_get_size()
-    https://git.kernel.org/netdev/net-next/c/d5f45ef88ba4
-  - [net-next,42/48] can: netlink: add can_bittiming_fill_info()
-    https://git.kernel.org/netdev/net-next/c/e1a2be5a6967
-  - [net-next,43/48] can: netlink: add can_bittiming_const_fill_info()
-    https://git.kernel.org/netdev/net-next/c/aaeebdb7a723
-  - [net-next,44/48] can: netlink: add can_bitrate_const_fill_info()
-    https://git.kernel.org/netdev/net-next/c/d5ee934ee19b
-  - [net-next,45/48] can: netlink: make can_tdc_fill_info() FD agnostic
-    https://git.kernel.org/netdev/net-next/c/e72f1ba700e3
-  - [net-next,46/48] can: calc_bittiming: make can_calc_tdco() FD agnostic
-    https://git.kernel.org/netdev/net-next/c/6ffc1230d3a7
-  - [net-next,47/48] can: dev: add can_get_ctrlmode_str()
-    https://git.kernel.org/netdev/net-next/c/7de54546fff1
-  - [net-next,48/48] can: netlink: add userland error messages
-    https://git.kernel.org/netdev/net-next/c/6742ca18cb41
+Calling j1939_cancel_active_session(priv, sk) from j1939_sk_release() can
+be covered by calling j1939_cancel_active_session(priv, NULL) from
+j1939_netdev_notify().
 
-You are awesome, thank you!
+Calling j1939_sk_queue_drop_all() from j1939_sk_release() can be covered
+by calling j1939_sk_netdev_event_netdown() from j1939_netdev_notify().
+
+Therefore, we can reuse j1939_cancel_active_session(priv, NULL) and
+j1939_sk_netdev_event_netdown(priv) for NETDEV_UNREGISTER event handler.
+
+Fixes: 7fcbe5b2c6a4 ("can: j1939: implement NETDEV_UNREGISTER notification handler")
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+---
+I couldn't tell whether NETDEV_UNREGISTER event handler should also call
+j1939_ecu_unmap_all(), for there seems to be no corresponding call in
+j1939_sk_release()...
+
+ net/can/j1939/main.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
+index 3706a872ecaf..a93af55df5fd 100644
+--- a/net/can/j1939/main.c
++++ b/net/can/j1939/main.c
+@@ -378,6 +378,8 @@ static int j1939_netdev_notify(struct notifier_block *nb,
+ 		j1939_ecu_unmap_all(priv);
+ 		break;
+ 	case NETDEV_UNREGISTER:
++		j1939_cancel_active_session(priv, NULL);
++		j1939_sk_netdev_event_netdown(priv);
+ 		j1939_sk_netdev_event_unregister(priv);
+ 		break;
+ 	}
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.47.3
 
 
