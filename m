@@ -1,366 +1,164 @@
-Return-Path: <linux-can+bounces-5054-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5055-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40FC9BA95EA
-	for <lists+linux-can@lfdr.de>; Mon, 29 Sep 2025 15:39:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9EF0BAAEA8
+	for <lists+linux-can@lfdr.de>; Tue, 30 Sep 2025 03:49:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95C0F7A1CE8
-	for <lists+linux-can@lfdr.de>; Mon, 29 Sep 2025 13:37:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 463BD18986C8
+	for <lists+linux-can@lfdr.de>; Tue, 30 Sep 2025 01:50:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986693054CB;
-	Mon, 29 Sep 2025 13:39:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B38B19FA93;
+	Tue, 30 Sep 2025 01:49:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="SBq24Yem"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLFUpLC4"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B22D29BDA5
-	for <linux-can@vger.kernel.org>; Mon, 29 Sep 2025 13:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AA454654;
+	Tue, 30 Sep 2025 01:49:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759153143; cv=none; b=MWlKOSS3KiHVgPYbsYBvv0b7jV8jYKiLiGZ3ckmQ4R1fojw4VC1qQTTa+bMAnZoT29OqjjQMTmUGc3JMWmfbPN0+MajNUNRbkGtp/JEl3Om/uElJ4iXunyshLsCcn6p+4dks7ocORIbRttwZ147ZASAY8WqUYGYTHsDnUOe0bg4=
+	t=1759196987; cv=none; b=OlEFoBijmuwgQj6eBmSMRkcRVXnallU2CGed4n1mPC/pL/jCqEdEZgq5gAZ4Xh7hZmH0AQLMTqH2Gy70lafDXu8GCOCYOZPYnAALw1z+9/SdTEohHDPdmA5YrlQDwlg+h9TWAIGWsU6t0cIz/D0Ynx2tHvetrVKnHGU/mvLAkCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759153143; c=relaxed/simple;
-	bh=GxXuokvAtnmaEn8/rpv/3ncdXcd1Q0lWARJXebhbVec=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r+0GDKQfqFc+7el1XpefgR6kJYops3bkguvrUVzocEVA2Hm2jJt4jeOxjz3xFrXS6rQSe7s+6U6ad50YFO++LuOjlwmg5aakfXO3sCZ9IkATzaWKGYGtXq58jZyWjzZ6XNXOow/ECdnPDpDHvRfUU+6bcdK9YDTSuqIxWDxBsoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=SBq24Yem; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-57b35e176dbso5895713e87.1
-        for <linux-can@vger.kernel.org>; Mon, 29 Sep 2025 06:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1759153140; x=1759757940; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lS3eioe7CJxJtEOaOrkwbEIXaTQ8eyc+tHV3n/WSLDQ=;
-        b=SBq24YemD4/gv34QddNWJHg8+QrZBNpA4TgEzRHKaL1VFQy/6i17n36ZmzZIE6SRr/
-         /CAVzqH2nwq8ZvdqBsyb60OGsHPQgw2EVI7aeM3TbKMDh5LMjUhHN8nSFO7sCb8dHQ31
-         mg7PJZniOXrO/Ca0Wn4qPYC/lNDFmxdHBdY2OSW1c+IdHtvFaKXeLB2stFZORr6izkdV
-         uT30AbZib6PzfHIM2BzGnlZM2ou15fmy8HdgKri3c7KVFHH7ApWUefOKeJzwvQzxkDc1
-         g2ZyqeXga9VoLZlSGfIMWlsKQGZ2ANjFdj9FVN4TicgZVtI0/uABG18r0GyAPc96SurB
-         F0rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759153140; x=1759757940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lS3eioe7CJxJtEOaOrkwbEIXaTQ8eyc+tHV3n/WSLDQ=;
-        b=PiFIfQXhL1GY1qjJNy5NMim86yMzJFclv9Xzs+E4JwHdTDNkBaPSfUxnNZ2nKIieKY
-         IN1We/iuOe+F8tKUePXyV9hMmdLIKbtknaio67GPIxH9tDUaqsCOolybTFmrTpZi1dQx
-         ttLdinz+5psktg/IQoufNJZnHbVYdg3NYQ90d+lBNnhhL+COBQ8hUP5MDDohZiel3GLo
-         JyE/0EiBrkgmJv9OzQWD+jYIMhUn5I2VfVfXvoECHx6mjDz1NX1r18dsME6koU2j6L87
-         Z4VOBdxTGAyQXmP5RyDasFNY9D7m+Ian0IeuiFc2g39r6mgJp0v+glno+nli/gE7Z2bD
-         Ps8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVFMnmV5Pj9uwY4HWqwHEmohV2eJMFPV3BIuXUbJqyTYd+WEJgz/hAkBD8qFndR18BPK0GPC8H8Ylc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5m2rVuTBlS9umtMQ+jgop8Rv3XMQbfJoBcH1NmiecsG/eXrVN
-	VGeAKwFSHMFrhyLZPoj+5I7rShBuup9iaSETBXn7rZM1IU7TKvhXaH9nFRbNb5gkjOm8k+qihn4
-	9pxDrWjiuq6Zhhzhe2IIsRpCTMWnBk3VpzTK2/RrvCg==
-X-Gm-Gg: ASbGnct+E96k5n9EYQeT/dxaCatpzppX9r5W6wQJ4dN+9vCQUlPbgvAL3edMNI1gu0/
-	YXnNLP/rszGjbT71/zJP2Sv1Svq3qjVX2l91bTD6r5YV92XrROs6B0Cf2A5Tq1JIPgHENbMBP+E
-	ocPEI4KBxfESQcvQI+86fRUu2EZOB5AtIHfwu5I+dPKfZitNUD6ey51TXdsNoNWhJUDtWmGPdZo
-	hTRUlSbXnsJWeWJOB4oVKyUeSA3aTXdNNicFkE96RuTbv28hA==
-X-Google-Smtp-Source: AGHT+IHLESQnR0/a1ubhbqVngyqF+al2NcCLg3vZTZL0h+Zy9+UoR6X6WZWMygoXEdkq7/GVTWvNW8rTouhIyIVhB38=
-X-Received: by 2002:a05:6512:6192:b0:55f:4c1d:47f3 with SMTP id
- 2adb3069b0e04-582d39b5bc6mr5014386e87.28.1759153138685; Mon, 29 Sep 2025
- 06:38:58 -0700 (PDT)
+	s=arc-20240116; t=1759196987; c=relaxed/simple;
+	bh=5DWDovaZ/kYcbmtsLR5w4gN0CKRv0IvrEFhAaV3B16c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V72KgAWJBzZdQ9bcpKUvfDa3i5AIEZDQmGIV3Xo0hl3+qAudmaF8e7jxPXqEBQpukqI5FT4aNJ6juDDLfu9ekAolM5/XfjSBHPJ4Bpz4eAj1jg9N4vopdcjT/sEZtN+20sih4HpkOJKP4de3pZwb1xoT7vfRZfNa71bRFQfevTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLFUpLC4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5791AC4CEF4;
+	Tue, 30 Sep 2025 01:49:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759196986;
+	bh=5DWDovaZ/kYcbmtsLR5w4gN0CKRv0IvrEFhAaV3B16c=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=TLFUpLC4ry8Fi5dwh9Qlk/iiiYf8L7Ig8kPxCBPsKZ9Fr5QLs4z/H0f9HN+WZf4oi
+	 DVRqkRIGz3hk5RvlspAY2hU4GFrHxGTItxHM9dL6dIx+eBVk6QyzXXXzFWmiBXHF8x
+	 BW7TOEKioyZzi29V7yjGst25aZEH8dhOHkCKIO5Ogf9der7QTssiF3oj+cxDN+b8Lx
+	 ok1hVqQFoQehdO26stfr4LmThPM2EVHZ1aQOX8RwMSIY4v/yDNJ/q4ik+3InJ6W2L2
+	 1HqgZnKIE8k7cBxJmoWjedC64CyJ87XZ3KfuwShVpiS31ILndYw3uNLZ9TsZLqxzrd
+	 98CAy2g0wX5cQ==
+Message-ID: <69a0a8fa-854c-4498-a0cb-6176d8d7dd98@kernel.org>
+Date: Mon, 29 Sep 2025 23:52:41 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250926133018.3071446-1-viken.dadhaniya@oss.qualcomm.com> <20250926133018.3071446-6-viken.dadhaniya@oss.qualcomm.com>
-In-Reply-To: <20250926133018.3071446-6-viken.dadhaniya@oss.qualcomm.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 29 Sep 2025 15:38:47 +0200
-X-Gm-Features: AS18NWD_GBLBSuJOCDUvB8CFJ5kgAQoSfaG5MkJKwxnsUJToXX1xfdnUToRgKxs
-Message-ID: <CAMRc=Md2pW1YBNk1PLV+A6rHET4WbHDQf9P_Y4FeoVAgVsxUEA@mail.gmail.com>
-Subject: Re: [PATCH v5 5/6] can: mcp251xfd: add gpio functionality
-To: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
-Cc: mkl@pengutronix.de, mani@kernel.org, thomas.kopp@microchip.com, 
-	mailhol.vincent@wanadoo.fr, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, linus.walleij@linaro.org, linux-can@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	mukesh.savaliya@oss.qualcomm.com, anup.kulkarni@oss.qualcomm.com, 
-	Gregor Herburger <gregor.herburger@ew.tq-group.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net/can/gs_usb: increase max interface to 255
+To: Celeste Liu <uwu@coelacanthus.name>,
+ Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Maximilian Schneider <max@schneidersoft.net>,
+ Henrik Brix Andersen <henrik@brixandersen.dk>,
+ Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Runcheng Lu <runcheng.lu@hpmicro.com>
+References: <20250929-gs-usb-max-if-v1-1-e41b5c09133a@coelacanthus.name>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol@kernel.org>
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250929-gs-usb-max-if-v1-1-e41b5c09133a@coelacanthus.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 26, 2025 at 3:30=E2=80=AFPM Viken Dadhaniya
-<viken.dadhaniya@oss.qualcomm.com> wrote:
->
-> From: Gregor Herburger <gregor.herburger@ew.tq-group.com>
->
-> The mcp251xfd devices allow two pins to be configured as gpio. Add this
-> functionality to driver.
->
-> Signed-off-by: Gregor Herburger <gregor.herburger@ew.tq-group.com>
-> Tested-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
-> Signed-off-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Hi Celeste,
+
+Thank you for your patch. Here are my comments.
+
+On 9/29/25 8:10 PM, Celeste Liu wrote:
+> This issue was found by Runcheng Lu when develop HSCanT USB to CAN FD
+> converter[1]. The original developers may have only 3 intefaces device to
+> test so they write 3 here and wait for future change.
+> 
+> During the HSCanT development, we actually used 4 interfaces, so the
+> limitation of 3 is not enough now. But just increase one is not
+> future-proofed. Since the channel type in gs_host_frame is u8, use 255
+> as max interface number should be safe.
+> 
+> [1]: https://github.com/cherry-embedded/HSCanT-hardware
+> 
+> Reported-by: Runcheng Lu <runcheng.lu@hpmicro.com>
+
+If you have any links where Runcheng reported the issue, you can add it here as:
+
+  Closes: <URL to the bug report>
+
+(Ignore if such message does not exist).
+
+Also add a Fixes tag so that the fix can be backported to stable.
+
+> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
 > ---
->  drivers/net/can/spi/mcp251xfd/Kconfig         |   1 +
->  .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 172 ++++++++++++++++++
->  drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |   2 +
->  3 files changed, 175 insertions(+)
->
-> diff --git a/drivers/net/can/spi/mcp251xfd/Kconfig b/drivers/net/can/spi/=
-mcp251xfd/Kconfig
-> index 877e4356010d..7c29846e6051 100644
-> --- a/drivers/net/can/spi/mcp251xfd/Kconfig
-> +++ b/drivers/net/can/spi/mcp251xfd/Kconfig
-> @@ -5,6 +5,7 @@ config CAN_MCP251XFD
->         select CAN_RX_OFFLOAD
->         select REGMAP
->         select WANT_DEV_COREDUMP
-> +       select GPIOLIB
->         help
->           Driver for the Microchip MCP251XFD SPI FD-CAN controller
->           family.
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net=
-/can/spi/mcp251xfd/mcp251xfd-core.c
-> index ea41f04ae1a6..88035d4404b5 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> @@ -1797,6 +1797,172 @@ static int mcp251xfd_register_check_rx_int(struct=
- mcp251xfd_priv *priv)
->         return 0;
->  }
->
-> +static const char * const mcp251xfd_gpio_names[] =3D { "GPIO0", "GPIO1" =
-};
-> +
-> +static int mcp251xfd_gpio_request(struct gpio_chip *chip, unsigned int o=
-ffset)
-> +{
-> +       struct mcp251xfd_priv *priv =3D gpiochip_get_data(chip);
-> +       u32 pin_mask =3D MCP251XFD_REG_IOCON_PM(offset);
-> +       int ret;
-> +
-> +       if (priv->rx_int && offset =3D=3D 1) {
-> +               netdev_err(priv->ndev, "Can't use GPIO 1 with RX-INT!\n")=
-;
-> +               return -EINVAL;
-> +       }
-> +
-> +       ret =3D pm_runtime_resume_and_get(priv->ndev->dev.parent);
-> +       if (ret)
-> +               return ret;
-> +
-> +       return regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON,
-> +                                 pin_mask, pin_mask);
-> +}
-> +
-> +static void mcp251xfd_gpio_free(struct gpio_chip *chip, unsigned int off=
-set)
-> +{
-> +       struct mcp251xfd_priv *priv =3D gpiochip_get_data(chip);
-> +
-> +       pm_runtime_put(priv->ndev->dev.parent);
-> +}
-> +
-> +static int mcp251xfd_gpio_get_direction(struct gpio_chip *chip,
-> +                                       unsigned int offset)
-> +{
-> +       struct mcp251xfd_priv *priv =3D gpiochip_get_data(chip);
-> +       u32 mask =3D MCP251XFD_REG_IOCON_TRIS(offset);
-> +       u32 val;
-> +       int ret;
-> +
-> +       ret =3D regmap_read(priv->map_reg, MCP251XFD_REG_IOCON, &val);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (mask & val)
-> +               return GPIO_LINE_DIRECTION_IN;
-> +
-> +       return GPIO_LINE_DIRECTION_OUT;
-> +}
-> +
-> +static int mcp251xfd_gpio_get(struct gpio_chip *chip, unsigned int offse=
-t)
-> +{
-> +       struct mcp251xfd_priv *priv =3D gpiochip_get_data(chip);
-> +       u32 mask =3D MCP251XFD_REG_IOCON_GPIO(offset);
-> +       u32 val;
-> +       int ret;
-> +
-> +       ret =3D regmap_read(priv->map_reg, MCP251XFD_REG_IOCON, &val);
-> +       if (ret)
-> +               return ret;
-> +
-> +       return !!(mask & val);
-> +}
-> +
-> +static int mcp251xfd_gpio_get_multiple(struct gpio_chip *chip, unsigned =
-long *mask,
-> +                                      unsigned long *bit)
-> +{
-> +       struct mcp251xfd_priv *priv =3D gpiochip_get_data(chip);
-> +       u32 val;
-> +       int ret;
-> +
-> +       ret =3D regmap_read(priv->map_reg, MCP251XFD_REG_IOCON, &val);
-> +       if (ret)
-> +               return ret;
-> +
-> +       *bit =3D FIELD_GET(MCP251XFD_REG_IOCON_GPIO_MASK, val) & *mask;
-> +
-> +       return 0;
-> +}
-> +
-> +static int mcp251xfd_gpio_direction_output(struct gpio_chip *chip,
-> +                                          unsigned int offset, int value=
-)
-> +{
-> +       struct mcp251xfd_priv *priv =3D gpiochip_get_data(chip);
-> +       u32 dir_mask =3D MCP251XFD_REG_IOCON_TRIS(offset);
-> +       u32 val_mask =3D MCP251XFD_REG_IOCON_LAT(offset);
-> +       u32 val;
-> +
-> +       if (value)
-> +               val =3D val_mask;
-> +       else
-> +               val =3D 0;
-> +
-> +       return regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON,
-> +                                 dir_mask | val_mask, val);
-> +}
-> +
-> +static int mcp251xfd_gpio_direction_input(struct gpio_chip *chip,
-> +                                         unsigned int offset)
-> +{
-> +       struct mcp251xfd_priv *priv =3D gpiochip_get_data(chip);
-> +       u32 dir_mask =3D MCP251XFD_REG_IOCON_TRIS(offset);
-> +
-> +       return regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON,
-> +                                 dir_mask, dir_mask);
-> +}
-> +
-> +static int mcp251xfd_gpio_set(struct gpio_chip *chip, unsigned int offse=
-t, int value)
-> +{
-> +       struct mcp251xfd_priv *priv =3D gpiochip_get_data(chip);
-> +       u32 val_mask =3D MCP251XFD_REG_IOCON_LAT(offset);
-> +       u32 val;
-> +       int ret;
-> +
-> +       if (value)
-> +               val =3D val_mask;
-> +       else
-> +               val =3D 0;
-> +
-> +       ret =3D regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON, va=
-l_mask, val);
-> +       if (ret)
-> +               dev_err(&priv->spi->dev, "Failed to set GPIO %u: %d\n", o=
-ffset, ret);
+>  drivers/net/can/usb/gs_usb.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+> index c9482d6e947b0c7b033dc4f0c35f5b111e1bfd92..35fc257c19e57c1f33e03e7c86ea908d22400254 100644
+> --- a/drivers/net/can/usb/gs_usb.c
+> +++ b/drivers/net/can/usb/gs_usb.c
+> @@ -290,9 +290,9 @@ struct gs_host_frame {
+>  #define GS_NAPI_WEIGHT 32
+>  
+>  /* Maximum number of interfaces the driver supports per device.
+> - * Current hardware only supports 3 interfaces. The future may vary.
+> + * The channel number type of gs_host_frame is u8, so max interfaces can be 255.
+>   */
+> -#define GS_MAX_INTF 3
+> +#define GS_MAX_INTF 255
 
-Why do you loudly complain here but not in other callbacks? I assume
-it's because you had a log here in your previous version (the one
-rebased on v6.16) and just didn't remove it when you switched to the
-new API? Maybe just do `return regmap_update...`?
+After doing this, you are left with an array of 255 pointers in struct gs_usb
+(which represents 2 kilobytes of memory on a 64 bits machine). You also have two
+loops iterating from 0 to 255. This is a bit of a waste of both space and
+processing power.
 
-Otherwise looks good. With that addressed:
+It is better to use a flexible array member, like this:
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+-----8<-----
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index c9482d6e947b..459a956ac0d9 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -324,7 +324,6 @@ struct gs_can {
 
-> +
-> +       return ret;
-> +}
-> +
-> +static int mcp251xfd_gpio_set_multiple(struct gpio_chip *chip, unsigned =
-long *mask,
-> +                                      unsigned long *bits)
-> +{
-> +       struct mcp251xfd_priv *priv =3D gpiochip_get_data(chip);
-> +       u32 val;
-> +       int ret;
-> +
-> +       val =3D FIELD_PREP(MCP251XFD_REG_IOCON_LAT_MASK, *bits);
-> +
-> +       ret =3D regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON,
-> +                                MCP251XFD_REG_IOCON_LAT_MASK, val);
-> +       if (ret)
-> +               dev_err(&priv->spi->dev, "Failed to set GPIOs %d\n", ret)=
-;
-> +
-> +       return ret;
-> +}
-> +
-> +static int mcp251fdx_gpio_setup(struct mcp251xfd_priv *priv)
-> +{
-> +       struct gpio_chip *gc =3D &priv->gc;
-> +
-> +       if (!device_property_present(&priv->spi->dev, "gpio-controller"))
-> +               return 0;
-> +
-> +       gc->label =3D dev_name(&priv->spi->dev);
-> +       gc->parent =3D &priv->spi->dev;
-> +       gc->owner =3D THIS_MODULE;
-> +       gc->request =3D mcp251xfd_gpio_request;
-> +       gc->free =3D mcp251xfd_gpio_free;
-> +       gc->get_direction =3D mcp251xfd_gpio_get_direction;
-> +       gc->direction_output =3D mcp251xfd_gpio_direction_output;
-> +       gc->direction_input =3D mcp251xfd_gpio_direction_input;
-> +       gc->get =3D mcp251xfd_gpio_get;
-> +       gc->get_multiple =3D mcp251xfd_gpio_get_multiple;
-> +       gc->set =3D mcp251xfd_gpio_set;
-> +       gc->set_multiple =3D mcp251xfd_gpio_set_multiple;
-> +       gc->base =3D -1;
-> +       gc->can_sleep =3D true;
-> +       gc->ngpio =3D ARRAY_SIZE(mcp251xfd_gpio_names);
-> +       gc->names =3D mcp251xfd_gpio_names;
-> +
-> +       return devm_gpiochip_add_data(&priv->spi->dev, gc, priv);
-> +}
-> +
->  static int
->  mcp251xfd_register_get_dev_id(const struct mcp251xfd_priv *priv, u32 *de=
-v_id,
->                               u32 *effective_speed_hz_slow,
-> @@ -1930,6 +2096,12 @@ static int mcp251xfd_register(struct mcp251xfd_pri=
-v *priv)
->
->         mcp251xfd_ethtool_init(priv);
->
-> +       err =3D mcp251fdx_gpio_setup(priv);
-> +       if (err) {
-> +               dev_err_probe(&priv->spi->dev, err, "Failed to register g=
-pio-controller.\n");
-> +               goto out_runtime_disable;
-> +       }
-> +
->         err =3D register_candev(ndev);
->         if (err)
->                 goto out_runtime_disable;
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/=
-spi/mcp251xfd/mcp251xfd.h
-> index bd28510a6583..085d7101e595 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-> @@ -15,6 +15,7 @@
->  #include <linux/can/dev.h>
->  #include <linux/can/rx-offload.h>
->  #include <linux/gpio/consumer.h>
-> +#include <linux/gpio/driver.h>
->  #include <linux/kernel.h>
->  #include <linux/netdevice.h>
->  #include <linux/regmap.h>
-> @@ -676,6 +677,7 @@ struct mcp251xfd_priv {
->
->         struct mcp251xfd_devtype_data devtype_data;
->         struct can_berr_counter bec;
-> +       struct gpio_chip gc;
->  };
->
->  #define MCP251XFD_IS(_model) \
-> --
-> 2.34.1
->
+ /* usb interface struct */
+ struct gs_usb {
+-       struct gs_can *canch[GS_MAX_INTF];
+        struct usb_anchor rx_submitted;
+        struct usb_device *udev;
+
+@@ -336,9 +335,11 @@ struct gs_usb {
+
+        unsigned int hf_size_rx;
+        u8 active_channels;
++       u8 channel_cnt;
+
+        unsigned int pipe_in;
+        unsigned int pipe_out;
++       struct gs_can *canch[] __counted_by(channel_cnt);
+ };
+
+ /* 'allocate' a tx context.
+----->8-----
+
+Then all the instances of GS_MAX_INTF are replaced by gs_usb->channel_cnt except
+from the check on dfconf.icount which can be replaced by a:
+
+  type_max(typeof(gs_usb->channel_cnt))
+
+
+Yours sincerely,
+Vincent Mailhol
+
 
