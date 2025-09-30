@@ -1,393 +1,261 @@
-Return-Path: <linux-can+bounces-5066-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5067-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3002FBACAD0
-	for <lists+linux-can@lfdr.de>; Tue, 30 Sep 2025 13:25:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A0B8BACB24
+	for <lists+linux-can@lfdr.de>; Tue, 30 Sep 2025 13:34:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF3903AF981
-	for <lists+linux-can@lfdr.de>; Tue, 30 Sep 2025 11:25:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C51CF7A8B45
+	for <lists+linux-can@lfdr.de>; Tue, 30 Sep 2025 11:33:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709502F3C3D;
-	Tue, 30 Sep 2025 11:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3810F25C81F;
+	Tue, 30 Sep 2025 11:34:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dFwZdirq"
+	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="RZoAkK0y";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NRQLRm54"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892A41D8A10
-	for <linux-can@vger.kernel.org>; Tue, 30 Sep 2025 11:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E7525C82E;
+	Tue, 30 Sep 2025 11:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759231553; cv=none; b=sIfFtqygXao//L7RODy8/ZI+xQ3tfhDTblw6Gx9uKcQTj3luZGiXCvude/jiim+Og5WG4B16zu5nxUyrL5Qer7/nTC94o+n07fCN8VH6Vlb8nGu/aTfs7tpCCcYtTrOYuHgLAYMdyYrG839Jo8cvtPa1qs+/o1nGZNdyQALdsGA=
+	t=1759232085; cv=none; b=P6joSTx/nsUq/kv+2gE3QoR9a9eIexeLQrysTyQixIZ/whAdXvI+DRKdupKAPXD/omAiEwGafBj6ofM70Rj80Bqy7mLp3nhIPVt2xzqoj+vCKokI3GuwXL60Qxo5992KIt4sL0YvlzF0j9u3dpwk1dAmO0C6XUO593WNeDQiE3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759231553; c=relaxed/simple;
-	bh=LRRZo+WT2xP6CFwmsKi7m761K4DaPFkni8XtdzN9t7E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z+vn19EZtNGX7eB9IvOzE/ELv7EAqpWWYn2CKsvZCZqyYw16prj+3/zJlb3P1qPY8RzXL1YDoiTZltsNwZs1uDlMhlZCkxNYZK1LSpuJ+yT0kD17h1gOiVY7/MI2ZQwjr2jXn0t0sSxGcNbVv8XNPyExFSsTBSyzKgJ1GlTlsPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dFwZdirq; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58U4HfEo001106
-	for <linux-can@vger.kernel.org>; Tue, 30 Sep 2025 11:25:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	nZmbRUIgjQnJaBNXO8k2s7Ar5zCROndbpUISKQygcl4=; b=dFwZdirqMB4th1KH
-	SXS9KalXIO2Ns/HlaaFOtYCOndVLh8SO1IVRBDudkItaW7QlTm4XVFh/QHk6n/kO
-	4x/gIE5UfVwHNgeIEDeZEEsxweQxpsAti9IEUo0H7teLRiYtCAMSEPCmsoUXN+fq
-	fAKIcr7pUpaxUowzv/jzQEgVZVSdyZyJBHmeEclBe9yca40A5Kfwp9hv2Ve6eH2O
-	tFZUZAELHmtZG7zoX5M7dIt5TX36/al7vYFcaSrd0xiZphItRnvw9BetBYZnUrKN
-	cXIeu25ySp32mb9+Z8ZYXn2ef3tflgafHwA0ci28ycX1cOzeuKulZh68l+x51rX7
-	LQuVEw==
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49fppr486h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-can@vger.kernel.org>; Tue, 30 Sep 2025 11:25:50 +0000 (GMT)
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-781171fe1c5so3910247b3a.0
-        for <linux-can@vger.kernel.org>; Tue, 30 Sep 2025 04:25:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759231549; x=1759836349;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nZmbRUIgjQnJaBNXO8k2s7Ar5zCROndbpUISKQygcl4=;
-        b=EshdMWfAro6zxPxTBZMP1Yz7AeKSBT17K4M1BywfSMNThaOiMqZMfBxSMT+Br9+MRs
-         2f/framp76xYIgyzqZdaPUZj9cEg9LVHeGr9O5o+f3ifoyEVn1y6iQ6wAIE7V7v+IItI
-         tHtLGcMe8O2L0nDUGeIvKfi+2PEluA5JZmkk1SAk8APMmjXMIymCytfWBHJnF5Z3UUoa
-         poQJGe12rZLBfV5n4GaQVAXLVvg6pnD+oa/MnaufBgysDwylVjesUUoSSsELl1neBw2b
-         dJNtaNCbmpEj8XzVhsqCBPhs+cuqFXJaXBFbkl78XjOGWZJsry/6hLyQohFcSNfdhr9L
-         jFIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWYDqN0ZA0kmodEKgp0QIqQFsJNlushFrl4nCExofDdcI0jYv2nd3a4kitz71ARYdIl+wB4tAp3nyQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw36Jym9/DRG08YSSjYllz8Dq86xHiFAbioLqPhL1IHLfwKU3y5
-	XA4beIz9RsVYFtKSEfPkqI+2q3kaHmdMjjPkt9Mrx4PSkBJ9CS9DIPR8/PZ/a84tsinivXAyyLo
-	zqJ/WvBXwjJzQbmKZUeiVDx0ekr6k7paKr9iY/EqOnbm6m2dWsMOOUE88B5eDYpQ=
-X-Gm-Gg: ASbGncv3pnONO3U55IAxq2bepFslT81QwiOoLKu6aJ6+f8UtZW2siguuqhNqW4WJ3ni
-	dTs60nGghqm3IteGYE9mWtkIVVcX1OlhC31jG7zEMOJNClWZxCvpRzjQCSfoDubztTId7z7XVFI
-	UeiFokBk//PS3/pjnqRCgQSDLlM+rN0D2QWYgRpUOAOKUdcX5/bZBkpsSILqqF/P4VRWNzJhF5L
-	sc3jlBD31SKlN9upMaSq66mw1syUCe/XLR7uN33jsXCsCf4SMrqsFewdR25U4vlylCr0J0f6uwW
-	IPvMm7YRMXxL7jbYbFbMqycR+okwkFGjx40ngMxzUr18sUKm0UxORZFa7P7hQkcYGPVbT1GHpN6
-	8gQ==
-X-Received: by 2002:a05:6a20:a121:b0:247:b1d9:774 with SMTP id adf61e73a8af0-2e7be066ae2mr26632106637.5.1759231549041;
-        Tue, 30 Sep 2025 04:25:49 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEwkhgfyGvhj+bA5hFJW75FNK7qSzTO6ggvNH3y8HKIDf7EE+2tkPsEFmTQBxSe5dDAeV7kNw==
-X-Received: by 2002:a05:6a20:a121:b0:247:b1d9:774 with SMTP id adf61e73a8af0-2e7be066ae2mr26632063637.5.1759231548547;
-        Tue, 30 Sep 2025 04:25:48 -0700 (PDT)
-Received: from [10.218.4.221] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b57c55741dbsm13545086a12.31.2025.09.30.04.25.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Sep 2025 04:25:48 -0700 (PDT)
-Message-ID: <f162fe7e-3615-3514-0fd8-a3b76fe9d44e@oss.qualcomm.com>
-Date: Tue, 30 Sep 2025 16:55:42 +0530
+	s=arc-20240116; t=1759232085; c=relaxed/simple;
+	bh=iKF972freU2WK3d86MrwzDv4ZOGu/rXvo4kqRTZxEdk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AjtOEdR4b9TCfvGRYDi9FjFHFNKdto0VW/gK0GQcY6rC/qKqEAxoNLgnV8lC+HQdG4B/hakDjFZHe2CVciUf7XLtkVTv7XIE3CRlo9giuSEAfj2//BSTYwJB3AQGgLxoiFtOKGQKrLS5J0qMbB7PH4V7zcm0wP2CDu45wMikLBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=RZoAkK0y; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NRQLRm54; arc=none smtp.client-ip=202.12.124.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coelacanthus.name
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 6804F7A0093;
+	Tue, 30 Sep 2025 07:34:41 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-10.internal (MEProxy); Tue, 30 Sep 2025 07:34:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	coelacanthus.name; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm3;
+	 t=1759232081; x=1759318481; bh=eybtdOVK+vTAmRCYicSe7Uey/Y/LUrU7
+	ciW87ZmzgN8=; b=RZoAkK0yb3TBAgefAlsfJwWZJkHc8peiG+v4/q2mTI210ivl
+	8Ho/4GL/gDRm1vGOxBD9c5LUBa2sXdolqUq+qkCdn5tnRzV3XJAOcVitUfBXoYaW
+	18RT1PzB9h/iLrjNMRh1WFJY03s+/QbkMh9vaYouZ1rcsRdvpOntY8gMgTv2Zf9/
+	8l+kd29e08wm1/IiriJCCScoeI4kTmpZ3etiOfNMqM/kHNuCA/I97LkgaNdMPnvF
+	vASGLWAcXHCHZkO9XPsTSBpEOUWr5hXNuYKA6aU6ooHUanJ1lMrCMzcjbpuho1OK
+	bsNy8Kdc8CYV3aa6N6M0P3AxlSrffuoOqPB8kg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1759232081; x=1759318481; bh=eybtdOVK+vTAmRCYicSe7Uey/Y/L
+	UrU7ciW87ZmzgN8=; b=NRQLRm54ur1cIs42Sot7ahfiVae1oJ74zA0BaVRQxsaN
+	DHWrb3l+S1uKAPuSeHQQg432RrlfwRukUuXMipXpVTut7IVmwANajxdjUojOA1Mj
+	k3aGVL6zPnpL5kfvx9ZQQSXSzWLYIzQgpiBlfqlU/vRpDAZ26zyj8jJsNU50opj/
+	TXK0mL684un+tddOA01bx32jKyXIHp1Ghukb9C9F4MaFb3T9ryTzP8EtlzCn8ftl
+	sxQUaTYLp8VBwztlaW6L8GpOuKNNnmXNJBfeRTsFW/7AhJxGmxOvA1io3E7PIOre
+	geEQH8MOT16Ojg1dyrxiwWNKVcNTmP5kdPsjoGwACw==
+X-ME-Sender: <xms:T8DbaH33bcHdF5klCMqXpS7ZdGMc0hz4-XfAE-3C_1HCMQson7r3LQ>
+    <xme:T8DbaCz6EsMNFXBXbtnhdpR_-jrkjyjP5sQYhVBZ8dlr0wFE9RQl5jHRvPUPYZQut
+    shPO1cJYdwH0esoYr0F0X4Ngf_qHyR4Czl2LTtoQUu49U8hL7V2pd0>
+X-ME-Received: <xmr:T8DbaLzvVV7empd_nUWq67PeynjhzpJ4uKA16ZB3MuV18ao3qR6CpIGR3J6nHA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdektdejiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefhfffugggtgffkvfevofesthejredtredtjeenucfhrhhomhepvegvlhgvshhtvgcu
+    nfhiuhcuoehufihusegtohgvlhgrtggrnhhthhhushdrnhgrmhgvqeenucggtffrrghtth
+    gvrhhnpedtgfehkeeuveekvdeuueeiteehgfeitdekudekgeeiteduudeufeelheejgeei
+    ueenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehufihusegtohgv
+    lhgrtggrnhhthhhushdrnhgrmhgvpdhnsggprhgtphhtthhopedufedpmhhouggvpehsmh
+    htphhouhhtpdhrtghpthhtohepfihgsehgrhgrnhguvghgghgvrhdrtghomhdprhgtphht
+    thhopehruhhntghhvghnghdrlhhusehhphhmihgtrhhordgtohhmpdhrtghpthhtohepkh
+    gvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehufihusegtohgvlhgrtggrnhht
+    hhhushdrnhgrmhgvpdhrtghpthhtohephhgvnhhrihhksegsrhhigigrnhguvghrshgvnh
+    drughkpdhrtghpthhtohepmhgrihhlhhholhdrvhhinhgtvghnthesfigrnhgrughoohdr
+    fhhrpdhrtghpthhtohepmhgrgiesshgthhhnvghiuggvrhhsohhfthdrnhgvthdprhgtph
+    htthhopehmkhhlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehlihhnuhig
+    qdgtrghnsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:T8DbaG_uDwcio5vCk2cZK9DI9Hkl4dLhL7wQhZJcGDGdVrqrVFKuFw>
+    <xmx:T8DbaN-MyylTaIU9gsnibQvXHOuWiQyy7rT3x4TdfLEzolwtpU4zwg>
+    <xmx:T8DbaG6cTxznaiZpUBlt3FH1dIvfxwlNB4sEaRKeAkbOF_ur6DzDiQ>
+    <xmx:T8DbaOb2Qk1eGziXYJPk2VqcLLWlrrSfS3HU3OtdOxhtjGi05LYtlg>
+    <xmx:UcDbaN83L39SOhMRnIlliJV9twTVrB2b-odmb57-e79IAl4XH_moIO6i>
+Feedback-ID: i95c648bc:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 Sep 2025 07:34:38 -0400 (EDT)
+From: Celeste Liu <uwu@coelacanthus.name>
+Date: Tue, 30 Sep 2025 19:34:28 +0800
+Subject: [PATCH v5] net/can/gs_usb: increase max interface to U8_MAX
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v5 5/6] can: mcp251xfd: add gpio functionality
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: mkl@pengutronix.de, mani@kernel.org, thomas.kopp@microchip.com,
-        mailhol.vincent@wanadoo.fr, robh@kernel.org, krzk+dt@kernel.org,
-        conor+dt@kernel.org, linus.walleij@linaro.org,
-        linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mukesh.savaliya@oss.qualcomm.com,
-        anup.kulkarni@oss.qualcomm.com,
-        Gregor Herburger <gregor.herburger@ew.tq-group.com>
-References: <20250926133018.3071446-1-viken.dadhaniya@oss.qualcomm.com>
- <20250926133018.3071446-6-viken.dadhaniya@oss.qualcomm.com>
- <CAMRc=Md2pW1YBNk1PLV+A6rHET4WbHDQf9P_Y4FeoVAgVsxUEA@mail.gmail.com>
-Content-Language: en-US
-From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
-In-Reply-To: <CAMRc=Md2pW1YBNk1PLV+A6rHET4WbHDQf9P_Y4FeoVAgVsxUEA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI5MDA4MiBTYWx0ZWRfX8rvdbs0jGU1b
- E4YimRO3+YHCNSjm/IjJ9zFPd9Iorw8/cPf04cs0iSajvyP72ttTb0IPCo5w7mKctc+4AdlZypn
- WGbyOAVSLrlcKKjKGriYe6KrMGs/JVkqYtl1iA5tvI4mlMj5X+jWVcxNhpS/lBXSDPE1w6JGax2
- njNt7UWqdI3VpZWBAt3vTe/sdvYX1BhuXBcXer2JC/6G2LOzTqvdiA0XCTyEtio+rYTiL66OXd3
- ueEu+EXmFUPridb7euCfJ8hiB1U8CsBvKa4bgDm3KM97yrttCOkhs2JdyY6gnz5aXZknVeuAUkw
- P56q5+auw2A0s/2hTDhFQfzwfEpY4jHf5cmMbuv+//41i11PYe5QNdqfJ2+8HnTU1KA8jv1PluH
- LocVZyhwlWwqchUFp8MShQrEgKOTqg==
-X-Proofpoint-ORIG-GUID: UNn8bF0-Cqi6Hq2udlHkvqsbSIeA68Kw
-X-Authority-Analysis: v=2.4 cv=GLoF0+NK c=1 sm=1 tr=0 ts=68dbbe3e cx=c_pps
- a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=8f9FM25-AAAA:8
- a=KKAkSRfTAAAA:8 a=oC8yqeNgLv2HgbuJSHoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=2VI0MkxyNR6bbpdq8BZq:22 a=uSNRK0Bqq4PXrUp6LDpb:22 a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-GUID: UNn8bF0-Cqi6Hq2udlHkvqsbSIeA68Kw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-30_02,2025-09-29_04,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 suspectscore=0
- impostorscore=0 spamscore=0 bulkscore=0 clxscore=1015 phishscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
- definitions=main-2509290082
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250930-gs-usb-max-if-v5-1-863330bf6666@coelacanthus.name>
+X-B4-Tracking: v=1; b=H4sIAEPA22gC/33PQQ6CMBCF4auYrq3pdFqgrryHcVHKIE0ETItEQ
+ 7i7hZUx4vJ/yXzJTCxS8BTZcTexQKOPvu9S6P2OucZ2V+K+Ss2kkFoYafg18kcseWuf3NfcolC
+ uQKmQNEs390C1f67e+ZK68XHow2vlR1jWLWkEDpwUlNoJA4j25Hq6WWe7oXnEQ2dbYos4yg8Fx
+ bcikyJdbaxSlBUZbCn4V8FFgcrkVV6DQ7WlqL+KSkpBkCGVusDq50fzPL8BXSJSNIQBAAA=
+X-Change-ID: 20250929-gs-usb-max-if-a304c83243e5
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Maximilian Schneider <max@schneidersoft.net>, 
+ Henrik Brix Andersen <henrik@brixandersen.dk>, 
+ Wolfgang Grandegger <wg@grandegger.com>, Kees Cook <kees@kernel.org>, 
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-can@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Runcheng Lu <runcheng.lu@hpmicro.com>, 
+ stable@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>, 
+ Celeste Liu <uwu@coelacanthus.name>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4499; i=uwu@coelacanthus.name;
+ h=from:subject:message-id; bh=iKF972freU2WK3d86MrwzDv4ZOGu/rXvo4kqRTZxEdk=;
+ b=owJ4nJvAy8zAJeafov85RWVtBeNptSSGjNsHPMun3C6vF3bQzP0/fVvfjo4vr+/k696LM1ncc
+ vi1hdnc/p8dpSwMYlwMsmKKLHklLD85L53t3tuxvQtmDisTyBAGLk4BmIj4NkaGmwl373c4TQjY
+ cCX43KXfrJ2fZsW7LFmZeV65VbNZ6WVDCSPDl5bj21795Vr7eIrV7OJFDz/c/Mpy30ZwrvRK3ow
+ u1u0FTADvYE9C
+X-Developer-Key: i=uwu@coelacanthus.name; a=openpgp;
+ fpr=892EBC7DC392DFF9C9C03F1D15F4180E73787863
 
+This issue was found by Runcheng Lu when develop HSCanT USB to CAN FD
+converter[1]. The original developers may have only 3 interfaces device to
+test so they write 3 here and wait for future change.
 
+During the HSCanT development, we actually used 4 interfaces, so the
+limitation of 3 is not enough now. But just increase one is not
+future-proofed. Since the channel index type in gs_host_frame is u8, just
+make canch[] become a flexible array with a u8 index, so it naturally
+constraint by U8_MAX and avoid statically allocate 256 pointer for
+every gs_usb device.
 
-On 9/29/2025 7:08 PM, Bartosz Golaszewski wrote:
-> On Fri, Sep 26, 2025 at 3:30 PM Viken Dadhaniya
-> <viken.dadhaniya@oss.qualcomm.com> wrote:
->>
->> From: Gregor Herburger <gregor.herburger@ew.tq-group.com>
->>
->> The mcp251xfd devices allow two pins to be configured as gpio. Add this
->> functionality to driver.
->>
->> Signed-off-by: Gregor Herburger <gregor.herburger@ew.tq-group.com>
->> Tested-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
->> Signed-off-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
->> ---
->>  drivers/net/can/spi/mcp251xfd/Kconfig         |   1 +
->>  .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 172 ++++++++++++++++++
->>  drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |   2 +
->>  3 files changed, 175 insertions(+)
->>
->> diff --git a/drivers/net/can/spi/mcp251xfd/Kconfig b/drivers/net/can/spi/mcp251xfd/Kconfig
->> index 877e4356010d..7c29846e6051 100644
->> --- a/drivers/net/can/spi/mcp251xfd/Kconfig
->> +++ b/drivers/net/can/spi/mcp251xfd/Kconfig
->> @@ -5,6 +5,7 @@ config CAN_MCP251XFD
->>         select CAN_RX_OFFLOAD
->>         select REGMAP
->>         select WANT_DEV_COREDUMP
->> +       select GPIOLIB
->>         help
->>           Driver for the Microchip MCP251XFD SPI FD-CAN controller
->>           family.
->> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
->> index ea41f04ae1a6..88035d4404b5 100644
->> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
->> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
->> @@ -1797,6 +1797,172 @@ static int mcp251xfd_register_check_rx_int(struct mcp251xfd_priv *priv)
->>         return 0;
->>  }
->>
->> +static const char * const mcp251xfd_gpio_names[] = { "GPIO0", "GPIO1" };
->> +
->> +static int mcp251xfd_gpio_request(struct gpio_chip *chip, unsigned int offset)
->> +{
->> +       struct mcp251xfd_priv *priv = gpiochip_get_data(chip);
->> +       u32 pin_mask = MCP251XFD_REG_IOCON_PM(offset);
->> +       int ret;
->> +
->> +       if (priv->rx_int && offset == 1) {
->> +               netdev_err(priv->ndev, "Can't use GPIO 1 with RX-INT!\n");
->> +               return -EINVAL;
->> +       }
->> +
->> +       ret = pm_runtime_resume_and_get(priv->ndev->dev.parent);
->> +       if (ret)
->> +               return ret;
->> +
->> +       return regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON,
->> +                                 pin_mask, pin_mask);
->> +}
->> +
->> +static void mcp251xfd_gpio_free(struct gpio_chip *chip, unsigned int offset)
->> +{
->> +       struct mcp251xfd_priv *priv = gpiochip_get_data(chip);
->> +
->> +       pm_runtime_put(priv->ndev->dev.parent);
->> +}
->> +
->> +static int mcp251xfd_gpio_get_direction(struct gpio_chip *chip,
->> +                                       unsigned int offset)
->> +{
->> +       struct mcp251xfd_priv *priv = gpiochip_get_data(chip);
->> +       u32 mask = MCP251XFD_REG_IOCON_TRIS(offset);
->> +       u32 val;
->> +       int ret;
->> +
->> +       ret = regmap_read(priv->map_reg, MCP251XFD_REG_IOCON, &val);
->> +       if (ret)
->> +               return ret;
->> +
->> +       if (mask & val)
->> +               return GPIO_LINE_DIRECTION_IN;
->> +
->> +       return GPIO_LINE_DIRECTION_OUT;
->> +}
->> +
->> +static int mcp251xfd_gpio_get(struct gpio_chip *chip, unsigned int offset)
->> +{
->> +       struct mcp251xfd_priv *priv = gpiochip_get_data(chip);
->> +       u32 mask = MCP251XFD_REG_IOCON_GPIO(offset);
->> +       u32 val;
->> +       int ret;
->> +
->> +       ret = regmap_read(priv->map_reg, MCP251XFD_REG_IOCON, &val);
->> +       if (ret)
->> +               return ret;
->> +
->> +       return !!(mask & val);
->> +}
->> +
->> +static int mcp251xfd_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask,
->> +                                      unsigned long *bit)
->> +{
->> +       struct mcp251xfd_priv *priv = gpiochip_get_data(chip);
->> +       u32 val;
->> +       int ret;
->> +
->> +       ret = regmap_read(priv->map_reg, MCP251XFD_REG_IOCON, &val);
->> +       if (ret)
->> +               return ret;
->> +
->> +       *bit = FIELD_GET(MCP251XFD_REG_IOCON_GPIO_MASK, val) & *mask;
->> +
->> +       return 0;
->> +}
->> +
->> +static int mcp251xfd_gpio_direction_output(struct gpio_chip *chip,
->> +                                          unsigned int offset, int value)
->> +{
->> +       struct mcp251xfd_priv *priv = gpiochip_get_data(chip);
->> +       u32 dir_mask = MCP251XFD_REG_IOCON_TRIS(offset);
->> +       u32 val_mask = MCP251XFD_REG_IOCON_LAT(offset);
->> +       u32 val;
->> +
->> +       if (value)
->> +               val = val_mask;
->> +       else
->> +               val = 0;
->> +
->> +       return regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON,
->> +                                 dir_mask | val_mask, val);
->> +}
->> +
->> +static int mcp251xfd_gpio_direction_input(struct gpio_chip *chip,
->> +                                         unsigned int offset)
->> +{
->> +       struct mcp251xfd_priv *priv = gpiochip_get_data(chip);
->> +       u32 dir_mask = MCP251XFD_REG_IOCON_TRIS(offset);
->> +
->> +       return regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON,
->> +                                 dir_mask, dir_mask);
->> +}
->> +
->> +static int mcp251xfd_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
->> +{
->> +       struct mcp251xfd_priv *priv = gpiochip_get_data(chip);
->> +       u32 val_mask = MCP251XFD_REG_IOCON_LAT(offset);
->> +       u32 val;
->> +       int ret;
->> +
->> +       if (value)
->> +               val = val_mask;
->> +       else
->> +               val = 0;
->> +
->> +       ret = regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON, val_mask, val);
->> +       if (ret)
->> +               dev_err(&priv->spi->dev, "Failed to set GPIO %u: %d\n", offset, ret);
-> 
-> Why do you loudly complain here but not in other callbacks? I assume
-> it's because you had a log here in your previous version (the one
-> rebased on v6.16) and just didn't remove it when you switched to the
-> new API? Maybe just do `return regmap_update...`?
+[1]: https://github.com/cherry-embedded/HSCanT-hardware
 
-Sure, I’ll update and post v6.
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Reported-by: Runcheng Lu <runcheng.lu@hpmicro.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
+Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
+---
+Changes in v5:
+- Reword commit message to match the code better.
+- Link to v4: https://lore.kernel.org/r/20250930-gs-usb-max-if-v4-1-8e163eb583da@coelacanthus.name
 
-> 
-> Otherwise looks good. With that addressed:
-> 
-> Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
->> +
->> +       return ret;
->> +}
->> +
->> +static int mcp251xfd_gpio_set_multiple(struct gpio_chip *chip, unsigned long *mask,
->> +                                      unsigned long *bits)
->> +{
->> +       struct mcp251xfd_priv *priv = gpiochip_get_data(chip);
->> +       u32 val;
->> +       int ret;
->> +
->> +       val = FIELD_PREP(MCP251XFD_REG_IOCON_LAT_MASK, *bits);
->> +
->> +       ret = regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON,
->> +                                MCP251XFD_REG_IOCON_LAT_MASK, val);
->> +       if (ret)
->> +               dev_err(&priv->spi->dev, "Failed to set GPIOs %d\n", ret);
->> +
->> +       return ret;
->> +}
->> +
->> +static int mcp251fdx_gpio_setup(struct mcp251xfd_priv *priv)
->> +{
->> +       struct gpio_chip *gc = &priv->gc;
->> +
->> +       if (!device_property_present(&priv->spi->dev, "gpio-controller"))
->> +               return 0;
->> +
->> +       gc->label = dev_name(&priv->spi->dev);
->> +       gc->parent = &priv->spi->dev;
->> +       gc->owner = THIS_MODULE;
->> +       gc->request = mcp251xfd_gpio_request;
->> +       gc->free = mcp251xfd_gpio_free;
->> +       gc->get_direction = mcp251xfd_gpio_get_direction;
->> +       gc->direction_output = mcp251xfd_gpio_direction_output;
->> +       gc->direction_input = mcp251xfd_gpio_direction_input;
->> +       gc->get = mcp251xfd_gpio_get;
->> +       gc->get_multiple = mcp251xfd_gpio_get_multiple;
->> +       gc->set = mcp251xfd_gpio_set;
->> +       gc->set_multiple = mcp251xfd_gpio_set_multiple;
->> +       gc->base = -1;
->> +       gc->can_sleep = true;
->> +       gc->ngpio = ARRAY_SIZE(mcp251xfd_gpio_names);
->> +       gc->names = mcp251xfd_gpio_names;
->> +
->> +       return devm_gpiochip_add_data(&priv->spi->dev, gc, priv);
->> +}
->> +
->>  static int
->>  mcp251xfd_register_get_dev_id(const struct mcp251xfd_priv *priv, u32 *dev_id,
->>                               u32 *effective_speed_hz_slow,
->> @@ -1930,6 +2096,12 @@ static int mcp251xfd_register(struct mcp251xfd_priv *priv)
->>
->>         mcp251xfd_ethtool_init(priv);
->>
->> +       err = mcp251fdx_gpio_setup(priv);
->> +       if (err) {
->> +               dev_err_probe(&priv->spi->dev, err, "Failed to register gpio-controller.\n");
->> +               goto out_runtime_disable;
->> +       }
->> +
->>         err = register_candev(ndev);
->>         if (err)
->>                 goto out_runtime_disable;
->> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
->> index bd28510a6583..085d7101e595 100644
->> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
->> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
->> @@ -15,6 +15,7 @@
->>  #include <linux/can/dev.h>
->>  #include <linux/can/rx-offload.h>
->>  #include <linux/gpio/consumer.h>
->> +#include <linux/gpio/driver.h>
->>  #include <linux/kernel.h>
->>  #include <linux/netdevice.h>
->>  #include <linux/regmap.h>
->> @@ -676,6 +677,7 @@ struct mcp251xfd_priv {
->>
->>         struct mcp251xfd_devtype_data devtype_data;
->>         struct can_berr_counter bec;
->> +       struct gpio_chip gc;
->>  };
->>
->>  #define MCP251XFD_IS(_model) \
->> --
->> 2.34.1
->>
+Changes in v4:
+- Remove redudant typeof().
+- Fix type: inteface -> interface.
+- Link to v3: https://lore.kernel.org/r/20250930-gs-usb-max-if-v3-1-21d97d7f1c34@coelacanthus.name
+
+Changes in v3:
+- Cc stable should in patch instead of cover letter.
+- Link to v2: https://lore.kernel.org/r/20250930-gs-usb-max-if-v2-1-2cf9a44e6861@coelacanthus.name
+
+Changes in v2:
+- Use flexible array member instead of fixed array.
+- Link to v1: https://lore.kernel.org/r/20250929-gs-usb-max-if-v1-1-e41b5c09133a@coelacanthus.name
+---
+ drivers/net/can/usb/gs_usb.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index c9482d6e947b0c7b033dc4f0c35f5b111e1bfd92..9fb4cbbd6d6dc88f433020eb0417ea53cd0c4d5f 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -289,11 +289,6 @@ struct gs_host_frame {
+ #define GS_MAX_RX_URBS 30
+ #define GS_NAPI_WEIGHT 32
+ 
+-/* Maximum number of interfaces the driver supports per device.
+- * Current hardware only supports 3 interfaces. The future may vary.
+- */
+-#define GS_MAX_INTF 3
+-
+ struct gs_tx_context {
+ 	struct gs_can *dev;
+ 	unsigned int echo_id;
+@@ -324,7 +319,6 @@ struct gs_can {
+ 
+ /* usb interface struct */
+ struct gs_usb {
+-	struct gs_can *canch[GS_MAX_INTF];
+ 	struct usb_anchor rx_submitted;
+ 	struct usb_device *udev;
+ 
+@@ -336,9 +330,11 @@ struct gs_usb {
+ 
+ 	unsigned int hf_size_rx;
+ 	u8 active_channels;
++	u8 channel_cnt;
+ 
+ 	unsigned int pipe_in;
+ 	unsigned int pipe_out;
++	struct gs_can *canch[] __counted_by(channel_cnt);
+ };
+ 
+ /* 'allocate' a tx context.
+@@ -599,7 +595,7 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 	}
+ 
+ 	/* device reports out of range channel id */
+-	if (hf->channel >= GS_MAX_INTF)
++	if (hf->channel >= parent->channel_cnt)
+ 		goto device_detach;
+ 
+ 	dev = parent->canch[hf->channel];
+@@ -699,7 +695,7 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 	/* USB failure take down all interfaces */
+ 	if (rc == -ENODEV) {
+ device_detach:
+-		for (rc = 0; rc < GS_MAX_INTF; rc++) {
++		for (rc = 0; rc < parent->channel_cnt; rc++) {
+ 			if (parent->canch[rc])
+ 				netif_device_detach(parent->canch[rc]->netdev);
+ 		}
+@@ -1460,17 +1456,19 @@ static int gs_usb_probe(struct usb_interface *intf,
+ 	icount = dconf.icount + 1;
+ 	dev_info(&intf->dev, "Configuring for %u interfaces\n", icount);
+ 
+-	if (icount > GS_MAX_INTF) {
++	if (icount > type_max(parent->channel_cnt)) {
+ 		dev_err(&intf->dev,
+ 			"Driver cannot handle more that %u CAN interfaces\n",
+-			GS_MAX_INTF);
++			type_max(parent->channel_cnt));
+ 		return -EINVAL;
+ 	}
+ 
+-	parent = kzalloc(sizeof(*parent), GFP_KERNEL);
++	parent = kzalloc(struct_size(parent, canch, icount), GFP_KERNEL);
+ 	if (!parent)
+ 		return -ENOMEM;
+ 
++	parent->channel_cnt = icount;
++
+ 	init_usb_anchor(&parent->rx_submitted);
+ 
+ 	usb_set_intfdata(intf, parent);
+@@ -1531,7 +1529,7 @@ static void gs_usb_disconnect(struct usb_interface *intf)
+ 		return;
+ 	}
+ 
+-	for (i = 0; i < GS_MAX_INTF; i++)
++	for (i = 0; i < parent->channel_cnt; i++)
+ 		if (parent->canch[i])
+ 			gs_destroy_candev(parent->canch[i]);
+ 
+
+---
+base-commit: e5f0a698b34ed76002dc5cff3804a61c80233a7a
+change-id: 20250929-gs-usb-max-if-a304c83243e5
+
+Best regards,
+-- 
+Celeste Liu <uwu@coelacanthus.name>
+
 
