@@ -1,203 +1,156 @@
-Return-Path: <linux-can+bounces-5063-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5064-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A355BABA6D
-	for <lists+linux-can@lfdr.de>; Tue, 30 Sep 2025 08:20:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7784BABB53
+	for <lists+linux-can@lfdr.de>; Tue, 30 Sep 2025 08:53:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CACB01C612F
-	for <lists+linux-can@lfdr.de>; Tue, 30 Sep 2025 06:20:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 710ED162817
+	for <lists+linux-can@lfdr.de>; Tue, 30 Sep 2025 06:53:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92CDF219A8D;
-	Tue, 30 Sep 2025 06:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 777F026FA53;
+	Tue, 30 Sep 2025 06:53:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="ttu7SvgV";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="yzV+FFfg"
+	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="Wwm3h4TL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="p9kq53Fg"
 X-Original-To: linux-can@vger.kernel.org
 Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5822145B16;
-	Tue, 30 Sep 2025 06:20:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7343427E1B1;
+	Tue, 30 Sep 2025 06:53:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759213206; cv=none; b=tY6xY67Gbp7JiihT0yleX4FhP9TRrfxvkqez9r+g0Xxt5aKNiFrF7HuWotuh/6SYZ/Vj8oh0JlMwsN/VyhhuzqGti6J5SQvtkGyBQAn+bffxGF0lTZrnY1ChRXjrQ6YXjUwIL1/KyQSOI5GIw0YDDUc/aWhNpgWnNCctHA9scgU=
+	t=1759215228; cv=none; b=ILYCN4Jj0xmlv5+MpDOkRG8HdgWhhOd2POPb+snRHNvNKtYJCDSkZ6Szqyel85aQFCJ9REH1kZjQ2NxQtiLwRp4bXtKMz+X+SHT//YoRADkdcZ5SS9ApmVN4Sq0W05t30PfygZF0pOz22W41FA7jaOISs2bmA+HuMBZ+8DcgKKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759213206; c=relaxed/simple;
-	bh=+fOvrxmlq5Or0IYrnUZSVE6+5ipx5T1jWLQg6EwgnxI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oxbI3cSDXuYMqBflXeT6F2/On5JThrzftbSluvkmTc2LUYnzckn/wTkjRk4iTgiouK+Kw4ZUh2sNK6CTW7QolgUivl90juXSs7Qk8enQ+hW5dsBwGWP+6yJqVcQfM3wtuT9CdlhEjuxJdKa3W1e5n5VkXj4WpiZSPkKQWvz6e2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=ttu7SvgV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=yzV+FFfg; arc=none smtp.client-ip=202.12.124.150
+	s=arc-20240116; t=1759215228; c=relaxed/simple;
+	bh=USG8lenE4OmXYzm1tUnfdT2zeBwOkzOgEoVpjZDEcHg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KcM3IkpvsIcXQtsRYlBx40gON5TyFoj9TEC88WnNdTn1t74q7TD66BaIQaXVu9t8Tip8+wsElAMLz4rIadluzNpFJA3QSloHPZVHmoxyHTLqSF48+vwggXs0VcyMv9YT/zeNQ9vJcjSCZd7ewl7lACyP9nzCill2SAcsRndoYM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=Wwm3h4TL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=p9kq53Fg; arc=none smtp.client-ip=202.12.124.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coelacanthus.name
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id A93581D000F6;
-	Tue, 30 Sep 2025 02:20:03 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Tue, 30 Sep 2025 02:20:03 -0400
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfout.stl.internal (Postfix) with ESMTP id 5EAFF1D000A3;
+	Tue, 30 Sep 2025 02:53:45 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-03.internal (MEProxy); Tue, 30 Sep 2025 02:53:45 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	coelacanthus.name; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1759213203; x=1759299603; bh=ge4hq/SFxg
-	UzjxsHg+aQ10niqT2LXy5vgIQDGLng6fY=; b=ttu7SvgVBvS4An/9+E7TzBvLWg
-	Jn01/OgJAPn/1gz8X9ZcLzYlV8b9VpHTnMthdMpT3GFP1TMZaNKnEpDLB2+xbM/5
-	GWzD6mlrEue9C7EoxvySoBjfXdKLISsoKthC/hbmasoDBIETo42v6s4vZyZplb9J
-	bqvRc2j3k/9PiPhSUqACVJaUoJMJlzXH8yEhuWfakgFZ40RGLk51n6+P+HGi4U4/
-	PtYHTpCWjB9COXo6Pc2Nwdb9cfpoxESXiZuwK20KCLOSFcLj9kYmEussribQultF
-	Uq3+nSGWG1oA8pGwX5y3N5O0DUVkGnPXLTdpSzMvtgmuFtY5aTVsWiWhXzcA==
+	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm3;
+	 t=1759215225; x=1759301625; bh=EMtFpG+Bb1tLZ/pMnCpLyyl10Wvnkg0U
+	0h/ZqbI05EY=; b=Wwm3h4TLnCWzfr2Uf5RWbsb3RZOCS7WFYPAZ8LmwQlpQOBbD
+	EbpoVRQcZ6gOtNcLRSza4gzpA0wTU70Sue0n0OzChM80PwmP7eEhowZA8oILdDDy
+	leomtSg58S77D1wirkp+CUmcu7MvtFhIoSRdLnGYlF0XSf1qaOyx4GABN21VNeay
+	0vEYykUJ9bj9GEzOiVXgTTqnCL3wUr6eGK5WNJHo7ShT6D4Sc4qwkB1B9+Fw47LK
+	IOTtlwpTPKRgavMwSAsQzo1zWqZkgfKaMWCrJw7HzYh77D+32NjgEtpqIleQizK6
+	IAK98eRvR4re9mMAYyNALSsjUWulRTbdOUCYKw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1759213203; x=
-	1759299603; bh=ge4hq/SFxgUzjxsHg+aQ10niqT2LXy5vgIQDGLng6fY=; b=y
-	zV+FFfgSvrgl70qhk1LYuJdmKLMWfx9fkUt0i3FHW78CcYOMIl6hpUENCpSr8pm+
-	EJDmk3K4BW2uk4WOC8HfoWzaS/3y5aOzsFQFcCkhEWo5GoJ5d0uHFETAVB0JTw2w
-	Sbf+6q9tGPP8Xy6bnGjiiGHyfIQwRkGb8/VsSYlbHXXo0VpEgF7YfIBam//7Ik/V
-	gSaydMh6DtUvM1xyJ5i9K813ZKgVZ9t1mFtgUEH8blbb4T6RsvEhKRjO4Kv8rXVh
-	UZWlk+H+/66IhMVpCqBAEi88/wYTNdPdiNeNbuot5LXH1whXdAba/F18wm2oNfoU
-	SEOb+7SLjnNKDdMQaoxlw==
-X-ME-Sender: <xms:knbbaBq6fKPo0uhIm5Wv9ZGqlfbLPfLGzmWeBmiLcEabeR9h4yCvxQ>
-    <xme:knbbaC20EZeYgWTD27R3V0D4yW1epPu9diMIZ1nXj_JvTwZWM7nYmFRMz_SNi5Qvy
-    k0XZEvIp-JdDsxNU580qujFUsX-Ap_JLXdBs6cdlbhtiH2q6haYUw4>
-X-ME-Received: <xmr:knbbaA6QFxe5ajxI071s7mUfJuuBFzqsmjfccb-CvjpfDw0fr91XzJr0q60hElyO>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdektddugecutefuodetggdotefrod
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1759215225; x=1759301625; bh=EMtFpG+Bb1tLZ/pMnCpLyyl10Wvn
+	kg0U0h/ZqbI05EY=; b=p9kq53Fg02uxrNOFTSm88uYA3bLcw3KULnlArq79OR9f
+	13HKnPO9iM6vUsvIEuDls+0O3M+K3u1Lh1pt+zhVDahckD3sMLd48UYmO3woPQGg
+	KJrHFbKfPsUwxjotUs66eNpNuJJ/XCnHFfC8Hd8AHkzLNX8Ie++vhNjGIcznEx//
+	lQ63mbCwmZqYNcWrFfJ1dYMBEvMS/dagRECjxYsLstK16K2GaZraHh7DcgrwD1kE
+	r2MxBOCn/DdadCnyqGH3VlVhksOeCLNFQ9QW9bfUT6AGTU14n7o9hr16+zHX8Pf+
+	7ZkBB9NbFc01Z9RvRJQTfVdKaXahArJu0cQPx+yiKw==
+X-ME-Sender: <xms:eH7baJJGuveAd2e2htkwwdqI77YK8qK4dvr4bE6woA7C1QXya7MV8A>
+    <xme:eH7baPOXnNIBSRc0tSdGrcoi99bRrU1rKQC1e8i-W7sIRrui9exKhPIRkQtLCQTxU
+    e3ueacDmbSV8ydzbeMV1ofC9UK_dNtKcVDaBH1n0iaqwoTy9JJhq1Q>
+X-ME-Received: <xmr:eH7baBlgD59ysbGa_LM5Ns_oLbZ_hjtvyutMXcb7jJVnTN7GuXDJZa6XOI9qag>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdektddvudcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomhepvegvlhgvshht
-    vgcunfhiuhcuoehufihusegtohgvlhgrtggrnhhthhhushdrnhgrmhgvqeenucggtffrrg
-    htthgvrhhnpeeftdetudehtdehgfelfefhfeffffffvedvtdetfedvveevhfeffeelhfeh
-    veegtdenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehufihusegt
-    ohgvlhgrtggrnhhthhhushdrnhgrmhgvpdhnsggprhgtphhtthhopeduuddpmhhouggvpe
-    hsmhhtphhouhhtpdhrtghpthhtohepmhgrihhlhhholheskhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtohepmhgrgiesshgthhhnvghiuggvrhhsohhfthdrnhgvthdprhgtphhtthhope
-    hhvghnrhhikhessghrihigrghnuggvrhhsvghnrdgukhdprhgtphhtthhopeifghesghhr
-    rghnuggvghhgvghrrdgtohhmpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdrohhrgh
-    dprhgtphhtthhopehguhhsthgrvhhorghrsheskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    oheplhhinhhugidqtggrnhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhope
-    hlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthho
-    pehruhhntghhvghnghdrlhhusehhphhmihgtrhhordgtohhm
-X-ME-Proxy: <xmx:k3bbaGQjrrmwZKoMRHnWQTb8Tt6Ws5t3ArbIdTDY8X_eU0HtjhZnFw>
-    <xmx:k3bbaNUmzw1oq-lx17Aj2hY-aF8T7A6SGswSOVZh1GC6gdGNLPVIig>
-    <xmx:k3bbaDF9_cYqBBc18ySnHTQxb3JaOn0584YMDewKbrj-Wgx327ETYQ>
-    <xmx:k3bbaIclk4oWCN__vR3cog4VrC7oJ_lTzMp6CfNZq4KOQAz-qlIZ0g>
-    <xmx:k3bbaNWcMGP9274hm-Dpl2OxytJb05u48aFXgjvY2-vQmXv1qSyPhgZi>
+    hrpefhfffugggtgffkvfevofesthejredtredtjeenucfhrhhomhepvegvlhgvshhtvgcu
+    nfhiuhcuoehufihusegtohgvlhgrtggrnhhthhhushdrnhgrmhgvqeenucggtffrrghtth
+    gvrhhnpeefteegleevudeiteefheetfffgtedugffgjeeigfejffduhedugffgkeeufeev
+    ueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehufi
+    husegtohgvlhgrtggrnhhthhhushdrnhgrmhgvpdhnsggprhgtphhtthhopeejpdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopehsthgrsghlvgesvhhgvghrrdhkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehmrghilhhhohhlrdhvihhntggvnhhtseifrghnrgguoh
+    hordhfrhdprhgtphhtthhopehlihhnuhigqdgtrghnsehvghgvrhdrkhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtohepmhgrgiesshgthhhnvghiuggvrhhsohhfthdrnhgvthdprhgtph
+    htthhopehmkhhlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehufihusegt
+    ohgvlhgrtggrnhhthhhushdrnhgrmhgv
+X-ME-Proxy: <xmx:eH7baL5bV11s4NXn-Mhs7J8ajMzNZBayZag7kQ8G-3saGMQb0YdDbw>
+    <xmx:eH7baN2BUyXnFyqSNobakIstYZ64nJYWVuXEc0Ly-yXMibc46dL94g>
+    <xmx:eH7baOH2371aKz-m9CiwFbjGPtdAI4r56NOhDaLgANqCnsRmlFQNYA>
+    <xmx:eH7baEjS1O0EPAya3Tl1C3w66r3LPbMWWnnj8vFbN8YyS-RURBOT_g>
+    <xmx:eH7baPaZxgEQG0YJww2BBnUEtuCBL7zZ0Jj6DuFW4lB7l67dB7j51SCs>
 Feedback-ID: i95c648bc:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 Sep 2025 02:19:58 -0400 (EDT)
-Message-ID: <63b1bd2d-fa5c-40f6-8e27-ada79dd196f2@coelacanthus.name>
-Date: Tue, 30 Sep 2025 14:19:56 +0800
+ 30 Sep 2025 02:53:43 -0400 (EDT)
+From: Celeste Liu <uwu@coelacanthus.name>
+Date: Tue, 30 Sep 2025 14:53:39 +0800
+Subject: [PATCH] net/can/gs_usb: populate net_device->dev_port
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] net/can/gs_usb: increase max interface to U8_MAX
-Content-Language: en-GB-large
-To: Vincent Mailhol <mailhol@kernel.org>
-Cc: Maximilian Schneider <max@schneidersoft.net>,
- Henrik Brix Andersen <henrik@brixandersen.dk>,
- Wolfgang Grandegger <wg@grandegger.com>, Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org, Runcheng Lu <runcheng.lu@hpmicro.com>,
- stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-References: <20250930-gs-usb-max-if-v3-1-21d97d7f1c34@coelacanthus.name>
- <7d35d8ca-f711-41b2-b058-08a19a207160@kernel.org>
-From: Celeste Liu <uwu@coelacanthus.name>
-In-Reply-To: <7d35d8ca-f711-41b2-b058-08a19a207160@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250930-gs-usb-populate-net_device-dev_port-v1-1-68a065de6937@coelacanthus.name>
+X-B4-Tracking: v=1; b=H4sIAHJ+22gC/x2NQQqDMBBFryKz7kASK5hepRSxyWgHShIyUQri3
+ Tu4erzF+/8Aocok8OgOqLSzcE4q9tZB+MxpJeSoDs64wfje4Cq4yRtLLtt3boSJ2hQ1DISKqeT
+ a0N/t4qIN/Th60KVSaeHf9fJ8necf8HILjXUAAAA=
+X-Change-ID: 20250930-gs-usb-populate-net_device-dev_port-941f2d1c3889
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Maximilian Schneider <max@schneidersoft.net>, linux-can@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+ Celeste Liu <uwu@coelacanthus.name>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1421; i=uwu@coelacanthus.name;
+ h=from:subject:message-id; bh=USG8lenE4OmXYzm1tUnfdT2zeBwOkzOgEoVpjZDEcHg=;
+ b=owJ4nJvAy8zAJeafov85RWVtBeNptSSGjNt1JVNErWQ1lleJ+zMbrdz+0O6FmaS103rJ9ux50
+ /kPx/V7RnSUsjCIcTHIiimy5JWw/OS8dLZ7b8f2Lpg5rEwgQxi4OAXgJksy/OHlaW9T2vHxUrBa
+ RePZQuNalvNsDW7Z1oJG8w/G6ppMrGb4Z97f6xf+s7x2+V2Nu1s+72HdvTD7bt3sL/LTPJbcv+B
+ szw8A4hRF9w==
+X-Developer-Key: i=uwu@coelacanthus.name; a=openpgp;
+ fpr=892EBC7DC392DFF9C9C03F1D15F4180E73787863
 
-On 2025-09-30 13:44, Vincent Mailhol wrote:
-> On 9/30/25 12:06 PM, Celeste Liu wrote:
->> This issue was found by Runcheng Lu when develop HSCanT USB to CAN FD
->> converter[1]. The original developers may have only 3 intefaces device to
->                                                         ^^^^^^^^^
-> interfaces (missing "r")
+The gs_usb driver supports USB devices with more than 1 CAN channel. In
+old kernel before 3.15, it uses net_device->dev_id to distinguish
+different channel in userspace, which was done in commit
+acff76fa45b4 ("can: gs_usb: gs_make_candev(): set netdev->dev_id").
+But since 3.15, the correct way is populating net_device->dev_port. And
+according to documentation, if network device support multiple interface,
+lack of net_device->dev_port SHALL be treated as a bug.
 
-Fixed in v4. Redundant typeof() was removed as well.
+Fixes: acff76fa45b4 ("can: gs_usb: gs_make_candev(): set netdev->dev_id")
+Cc: stable@vger.kernel.org
+Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
+---
+ drivers/net/can/usb/gs_usb.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
->> test so they write 3 here and wait for future change.
->>
->> During the HSCanT development, we actually used 4 interfaces, so the
->> limitation of 3 is not enough now. But just increase one is not
->> future-proofed. Since the channel type in gs_host_frame is u8, just
->> increase interface number limit to max size of u8 safely.
->>
->> [1]: https://github.com/cherry-embedded/HSCanT-hardware
->>
->> Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
->> Reported-by: Runcheng Lu <runcheng.lu@hpmicro.com>
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
-> 
-> Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
-> 
-> The patch is good as-is. However, speaking of the interface numbers, there is
-> another issue in this gs_usb driver: net_device->dev_port is not populated, and
-> according to the documentation, this is a bug.
-> 
-> 
-> See the description here:
-> 
-> 
-> 
->   https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-net
-> 
-> 
-> 
->   What:		/sys/class/net/<iface>/dev_port
-> 
->   Date:		February 2014
-> 
->   KernelVersion:	3.15
-> 
->   Contact:	netdev@vger.kernel.org
-> 
->   Description:
-> 
->   		Indicates the port number of this network device, formatted
-> 
->   		as a decimal value. Some NICs have multiple independent ports
-> 
->   		on the same PCI bus, device and function. This attribute allows
-> 
->   		userspace to distinguish the respective interfaces.
-> 
-> 
-> 
->   		Note: some device drivers started to use 'dev_id' for this
-> 
->   		purpose since long before 3.15 and have not adopted the new
-> 
->   		attribute ever since. To query the port number, some tools look
-> 
->   		exclusively at 'dev_port', while others only consult 'dev_id'.
-> 
->   		If a network device has multiple client adapter ports as
-> 
->   		described in the previous paragraph and does not set this
-> 
->   		attribute to its port number, it's a kernel bug.
-> 
-> 
-> 
-> Would you mind sending a separate patch (with a Fixes: tag) to resolve this?
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index c9482d6e947b0c7b033dc4f0c35f5b111e1bfd92..7ee68b47b569a142ffed3981edcaa9a1943ef0c2 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -1249,6 +1249,7 @@ static struct gs_can *gs_make_candev(unsigned int channel,
+ 
+ 	netdev->flags |= IFF_ECHO; /* we support full roundtrip echo */
+ 	netdev->dev_id = channel;
++	netdev->dev_port = channel;
+ 
+ 	/* dev setup */
+ 	strcpy(dev->bt_const.name, KBUILD_MODNAME);
 
-Ok. I will send a patch for it later.
+---
+base-commit: 30d4efb2f5a515a60fe6b0ca85362cbebea21e2f
+change-id: 20250930-gs-usb-populate-net_device-dev_port-941f2d1c3889
 
-> 
-> 
-> Yours sincerely,
-> Vincent Mailhol
-> 
+Best regards,
+-- 
+Celeste Liu <uwu@coelacanthus.name>
 
 
