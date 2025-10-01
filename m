@@ -1,84 +1,85 @@
-Return-Path: <linux-can+bounces-5073-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5074-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEE90BAFCA9
-	for <lists+linux-can@lfdr.de>; Wed, 01 Oct 2025 11:10:25 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8FDEBAFCAF
+	for <lists+linux-can@lfdr.de>; Wed, 01 Oct 2025 11:10:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A24644E29A7
-	for <lists+linux-can@lfdr.de>; Wed,  1 Oct 2025 09:10:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 63C464E299D
+	for <lists+linux-can@lfdr.de>; Wed,  1 Oct 2025 09:10:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C6AA2D8DD4;
-	Wed,  1 Oct 2025 09:10:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D268279782;
+	Wed,  1 Oct 2025 09:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cs3KW9wy"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="W7RVZ9uT"
 X-Original-To: linux-can@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044AF283FEE
-	for <linux-can@vger.kernel.org>; Wed,  1 Oct 2025 09:10:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612FF2D94B8
+	for <linux-can@vger.kernel.org>; Wed,  1 Oct 2025 09:10:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759309820; cv=none; b=Hbu2I6byTD/6CMqIJaxAMdP1dLzEVFZ0aZUWE5o6wkSL7meUMlkmx34Y0xXA3NeuhmvmOUKxkmYQ3tTcN5u8VIS26Az7u/RGrY8ly+liBQKLJ9rMms2Vmgrv7rEqhfdGv8kqnDxVIp3ia1Cw5czCaz3WNBObKazW3+NLg5lwYAg=
+	t=1759309825; cv=none; b=bJdflQj7YwDLXuoe3d4Hsjgj7wA5e0A5wDL/j6pa/9zMs6IZdSIhQe1OqEaNlwsX4R2zgrY4U6KafdIzFsBGFKotTkgHV5H9jkp0tH98ScOAxK46SckN3v/2AyU9YaEs3BnWDwluu57lc6Lt+yQe8QIcclBrkOZ4BA4qKKg60uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759309820; c=relaxed/simple;
-	bh=UyVEvwAYo4fSvnzb0e/4dzS8EsEpGI3fDXNtQzwqMU4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kp/gKBx0GUXNKK7mNg02DBajcUd7d8q9D9rOqgTYB3sTjcoxajvguj7sxTeqvmXY8zxKhteRqGso7T9tIMn0EWpgIofwnyMpg7FoDFagMiadiNFDSqeS1jnL3JiZUoS+1VoPfI4CGDymqsZz4c7e+QPbBfQ8abtVovl2+RoUmnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cs3KW9wy; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1759309825; c=relaxed/simple;
+	bh=9tMx3D8608utTcEpPMnkdtIuK+d8YCm/4QGWcLPlEvU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=sxE9Fj2i7RYZJ2iQaXdH7Qyad2D+wX52/HB8UIpu1opDqPkyWGUv0solKql9YhcG6iTPA1uUbDEyda+8m/uzqtIMFqFeEwO2aOGOYITpXXvP1TOf5gv1aOQmGYEjrrgjhtTxKeSPS73qLbMdga2cB8jouEJ9zMbbWANkrXKm8g0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=W7RVZ9uT; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58UMII3Q017533
-	for <linux-can@vger.kernel.org>; Wed, 1 Oct 2025 09:10:18 GMT
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5918VQdi020359
+	for <linux-can@vger.kernel.org>; Wed, 1 Oct 2025 09:10:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=lNeRLPEUYWV5BSZQOFcWupcqoxEfdoUY9Dt
-	Rc7VMxGo=; b=cs3KW9wyJxuoqwMzScpV8dL+thIIjvu4hqq0lU8UHHZDID0Squf
-	u0f6v2bf5PAtCCUa7usQ6Tc8IozfVwPXE6RqPoKyXblRhpfy9YVtbQhXrsOFU0Ju
-	WbLrMmJEdeOMjYYiKuMFLKpcxQ/A+G4g8EFm+1aApDri3bdDLBDEDsnYjIFuVGHX
-	4/6TO+AWtB0bc3i366FBqi+u7uC5iUV6dEIk5q4YXog18MySutsy+47AlE1WKI42
-	+LqyZCCzK2DZ6qmcZ8UJ+Fw0Bqa5d9q5f/JuP0iyYwDJ69uPbQG4F+5xJPsmM+Ie
-	5//HKF+une5/7fOn8OsFXwEm1MrxMNXcKDw==
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e80tv5ew-1
+	cc:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=qcppdkim1; bh=52JKwdjjF6T
+	43Z0oK2sV6asg8JQDNCAzfJwR0DaXYts=; b=W7RVZ9uTkEWPeGuNSdU/UbDlt5i
+	MOwWudfsyR7Wg02jsFmdurV2DAj6sEMqmXvJ/aIZCkPNl/q0A9ZO9jGo9LTBy8lb
+	qLdzzHvwkDHS9stBLVtMKsVS/x+yvZlnt4CWDILxcGshKzTlPWJu2N3si252gafJ
+	iU5hHUw0+E4GbsmSZDiR1hsw3P/v59zfNnQzwVQUD5/QoPm5uqn5OBw0USKrG+wg
+	3ffhMnYfK11WIooWbcuuH7/c1SqhCdJG4AKNq66Zp5ggeoC2ooZIq+9eh4OW51OM
+	Ipa3SJg4HEGeT5kFwfsmlqfmXdVq/fnAQtD02ILuCO4+MLAZO86p14Ngk+w==
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e6x5v45a-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-can@vger.kernel.org>; Wed, 01 Oct 2025 09:10:17 +0000 (GMT)
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-b557abaad02so9029995a12.3
-        for <linux-can@vger.kernel.org>; Wed, 01 Oct 2025 02:10:17 -0700 (PDT)
+	for <linux-can@vger.kernel.org>; Wed, 01 Oct 2025 09:10:22 +0000 (GMT)
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-33428befc08so13615213a91.2
+        for <linux-can@vger.kernel.org>; Wed, 01 Oct 2025 02:10:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759309815; x=1759914615;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lNeRLPEUYWV5BSZQOFcWupcqoxEfdoUY9DtRc7VMxGo=;
-        b=NxquRQxX0FrHFxYanzgkZ4Pg9oRf+LoD8f5BO5r756RMq5zzbnnUYJtJdMhQB5gPGW
-         CAxkJaL5a+G+t0N/oKhS0+Mc1wUXoGDn/w9NNK5OMTSZsxFKkNCEWmlwdV3SxdDQ0A0F
-         nSSkhK+bUJgxDOT0bYTo0x6yqmTcMd/btPXUbENdud3jTofgq4T478JM1/U0t6HD/ckJ
-         ZmNO+09p0NEWuluwOx00QqqJfEUy9pUjwSH5QJ5+IhmPVn6SDla2ZfoOsazerDgMU2Jt
-         bhQ/2inSvu9X+TQcNefPB6WtfmuojYAFKqzpYk7Rtfaqr3SykRFz1WiigdYxWOddHzIF
-         5Sbw==
-X-Forwarded-Encrypted: i=1; AJvYcCVBwFakm9hPRFgM6+8UkG24gswFHpSASnN+lGEvpoQ7UhJRd1qDKEPdWzZ4AAcA6/IuiYpGSzV1YEY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrGt6HIMZUexP+WhZuAjP6RIv8bSzKmCjeQl6Gz+kr8LRwmhRR
-	32yhMuoBMYl/HRMY8CNXPiRoXN4yqFZel0VWuk3zy0P0QOkEvIjB+wGZaHlejyYish06pYGWY4q
-	3T7ZRCsReVIvjcmwnMRyIfMiQIWicUYfSAsbO3CEQ12Ev1CRrM0/JrYPA0Kf2/s0=
-X-Gm-Gg: ASbGncug734Y0hyF0+C62qVgKURLfqaqLROogNdENgkiePrwEK4NlkSAMF+EBATe+w0
-	gYdKhccmW1ltSgPr4jaVKV9BzBn7DmnIfjVd/ERyc6TClIUOTbaKABfTovY5uagDr9mEHSVOEeH
-	DsqO7Yx/+74Rls3VhAQIGNUnYXoiDpbQQTcYFqaxcDyVY/ypiVlnBp3CYQl+CX/yYyLfKM+X6VV
-	bMamW3oEQ+oQJo+SCtol3rnOlkITVpPo31t8nfJ5F4OlKAx/yh87EIIRs18Ahz68ynHvzkDuy7U
-	2+tIbJG6PP2niR7xf1fHtbK/xJNKYoAg4wf06AexuMqTZOoe2zevw97OvSCISvJN3+y4J+tdcJO
-	589gmgw==
-X-Received: by 2002:a17:902:cecd:b0:25e:37ed:d15d with SMTP id d9443c01a7336-28e7ecaf7e2mr34346145ad.0.1759309814975;
-        Wed, 01 Oct 2025 02:10:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEfNj7f557yGS4zV0OIPzKADeCcll3WFCIzqLMSWFr6e1FWj582ctC461ZTnDu2IPH09h6TZw==
-X-Received: by 2002:a17:902:cecd:b0:25e:37ed:d15d with SMTP id d9443c01a7336-28e7ecaf7e2mr34345945ad.0.1759309814463;
-        Wed, 01 Oct 2025 02:10:14 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759309821; x=1759914621;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=52JKwdjjF6T43Z0oK2sV6asg8JQDNCAzfJwR0DaXYts=;
+        b=LGvXalDkiKc3ng/2PVSq3+HhSFfrdCnf6ZryCB2sokGoRrKCQF84N40fvm/EJRq9wf
+         HbtMNAhPz3giFNoo4TBSgGLiHhb2Cm1wb3Rc3IZZZ16hxQUozMMJoOr//KjUtsX7iyS/
+         puTvgAVex0rcRUlLodb3yZuplal9B/dZPWrErxXCFJ0ZNKwe8aSsEXDlDQKJoCCEGGM9
+         ssMnJm4XIqHVNbl/lbAVnZnxy1PxHNVvAFaGAst3EJeO6gNA88FWcEy8BUDCvYd8BidS
+         5F/ZMgn1JRsWrMkwAriAzar0G9zqRrJeu+CCbyL6xWGNmo2iojLla372tePMTZ3KpzMC
+         3A7A==
+X-Forwarded-Encrypted: i=1; AJvYcCXvQW1n1kQkW3TkSc/3JvswLdX77BBG34M/OpCd6pe7RjauRS7TsE6mYUaS2SITvLUQhtbrImilAmA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8vhPUT21XOD825ruPKSLXxKpo9HNAA1sgYBktpCpt1NOTMocB
+	MZvw/YFvo4oEkII/I/uzKIYqYBG1I+yBNyWBPN0x+wIC1pUr93r+2lo4xksn/uNytcSSZRnIrVf
+	d/677NwEAiNQGasHdDS8MXMt3ua81zCm6jGNSe+yND/ZE7IBXJn50LWSMi26EkmI=
+X-Gm-Gg: ASbGncuwNmgKKgq222OSWHD8S1CafZilIg5LwVz3Mm75BlIf84VJUrOzcq0eEzx4eeK
+	GaudYqvM4iRyQh97TXaDPstYc++8vFvRvx8OdxvLkDP3Pe9J3F30chld2ftG+MsC6L29dOPyrqf
+	qrdXgF4fh7dxon+z7K4oD+QcKLiZLnwu6cf6GfePifQxQ2OUFHYOkm/Y2IT1vxlwl0hvHDNl3kC
+	uk1jjCxkJr/nS6Ac0t2fwtMbnGspsG3azcONCGUToSU2cbDqmo5Q/TnThwJZ6eLfO51pP+dkKMy
+	oiCYBU9t7SAu4IVMpb7udrFOkZVpD4jMXiNwZphJPq1141/RK9fuKNl19S0b5P0WdGlbE9E1M8f
+	DKM6X0A==
+X-Received: by 2002:a17:90b:4d08:b0:330:6d5e:f174 with SMTP id 98e67ed59e1d1-339a6f06b08mr3062001a91.20.1759309820949;
+        Wed, 01 Oct 2025 02:10:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHsrXCTkq3psKB6+I+bWAbfu5LwIg87pKujroiTHO2dk0PZb6/apF564mWpnjDjLNtmtKwaBA==
+X-Received: by 2002:a17:90b:4d08:b0:330:6d5e:f174 with SMTP id 98e67ed59e1d1-339a6f06b08mr3061968a91.20.1759309820490;
+        Wed, 01 Oct 2025 02:10:20 -0700 (PDT)
 Received: from hu-vdadhani-hyd.qualcomm.com ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-339a6ea09ebsm1859315a91.2.2025.10.01.02.10.10
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-339a6ea09ebsm1859315a91.2.2025.10.01.02.10.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Oct 2025 02:10:14 -0700 (PDT)
+        Wed, 01 Oct 2025 02:10:20 -0700 (PDT)
 From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
 To: mkl@pengutronix.de, mani@kernel.org, thomas.kopp@microchip.com,
         mailhol.vincent@wanadoo.fr, robh@kernel.org, krzk+dt@kernel.org,
@@ -86,11 +87,14 @@ To: mkl@pengutronix.de, mani@kernel.org, thomas.kopp@microchip.com,
         linux-can@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc: mukesh.savaliya@oss.qualcomm.com, anup.kulkarni@oss.qualcomm.com,
+        Gregor Herburger <gregor.herburger@ew.tq-group.com>,
         Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
-Subject: [PATCH v6 0/6] can: mcp251xfd: add gpio functionality
-Date: Wed,  1 Oct 2025 14:40:00 +0530
-Message-Id: <20251001091006.4003841-1-viken.dadhaniya@oss.qualcomm.com>
+Subject: [PATCH v6 1/6] can: mcp251xfd: move chip sleep mode into runtime pm
+Date: Wed,  1 Oct 2025 14:40:01 +0530
+Message-Id: <20251001091006.4003841-2-viken.dadhaniya@oss.qualcomm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251001091006.4003841-1-viken.dadhaniya@oss.qualcomm.com>
+References: <20251001091006.4003841-1-viken.dadhaniya@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -98,98 +102,243 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAyOSBTYWx0ZWRfX9G84JyGxEUvu
- F2ojTpIDxpWg/ijH16oPey8bS2pVEuOala0BSuKjPCPrn/e9AyUIc/9woRDO58yE5o6tNZP71jD
- ls5R7fBtC3p++jqPbMqTaR3BTwJAO4eQQNRs9221IbVFTBvMbfhI5jlCyEbLj0G0bzonuXU+OgN
- 78IteUznQ2Ld/c/XLi5RoKxwA6d16Ou5EWA+lGnyt7B32lsGu2HIJCsP9U1qWtzZrFtTqQuk3h5
- cC3Ao1YaiM+p/KktYMBgd4jgUf+Nc82xd/VIP2kFZQ6BBvdS/TsOmebTZ64pxw/MpJQK+SrNIds
- hXE0eqRCHYD6B/AQPIoFyD9l2RHchw788n7q/pMUVerhuFRViL4LMf78UDHIqCARwP+zGkoulrR
- ivem810CnEGAsC3ilcpVZF6u9kKbVg==
-X-Proofpoint-GUID: JFDYwQTd6wwYYKkJXsjMaLPRfj4Uh4F3
-X-Authority-Analysis: v=2.4 cv=OMkqHCaB c=1 sm=1 tr=0 ts=68dceff9 cx=c_pps
- a=rz3CxIlbcmazkYymdCej/Q==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=x6icFKpwvdMA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=8f9FM25-AAAA:8
- a=O1qDPIM8N228WRSNLNwA:9 a=bFCP_H2QrGi7Okbo017w:22 a=uSNRK0Bqq4PXrUp6LDpb:22
-X-Proofpoint-ORIG-GUID: JFDYwQTd6wwYYKkJXsjMaLPRfj4Uh4F3
+X-Proofpoint-GUID: mnvXLoPd4a8mLMOvlJzyRuWJ68U-scd4
+X-Proofpoint-ORIG-GUID: mnvXLoPd4a8mLMOvlJzyRuWJ68U-scd4
+X-Authority-Analysis: v=2.4 cv=ZtPg6t7G c=1 sm=1 tr=0 ts=68dceffe cx=c_pps
+ a=RP+M6JBNLl+fLTcSJhASfg==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=x6icFKpwvdMA:10 a=8f9FM25-AAAA:8 a=EUspDBNiAAAA:8 a=6KGlMJUpO0AhJANn3KQA:9
+ a=iS9zxrgQBfv6-_F4QbHw:22 a=uSNRK0Bqq4PXrUp6LDpb:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAxOCBTYWx0ZWRfX3q5CdYBMpJ4k
+ NsTnWPWPL0kQ7+W7hVgeZy1X6/pOWUObDRHXwUIQEVzVHe74zjoTCMp0YXlY5exdpG2jUcrBDFI
+ 5s7CTgR9WgA/+4rtdN+EeC6D/9cp+BlDsXcfNWLNMn93/UYbgWXSAovGOxAKhLxAiaiTMscSy9T
+ 4uZ+N2d2b0W4s3Kmunf49hlls+fNKvTiM8LsZDYILC3afgKuCk7+bfQNTmH2M4Te72uig/QkccJ
+ QsUXCx8CglzKUWVw28m65K+1AT3err7yMAZHPRx4mHSmgX3Az+33oJW7dy4ZZoULgFv9fmW74E1
+ Zw2urDgLQVEjXUTtPqqSJ3OvZ0O4Rngt89/K8Pc+hU6voPjA180we/kUcZUKoMZVysuLOcck5Sa
+ 3JGw0dtbPR8iv/cwZCiRzTDn/8j6IQ==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-10-01_02,2025-09-29_04,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1015 spamscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
- definitions=main-2509270029
+ impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
+ suspectscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509270018
 
-Hi all,
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-The mcp251xfd allows two pins to be configured as GPIOs. This series
-adds support for this feature.
+This is a preparation patch to add GPIO support.
 
-The GPIO functionality is controlled with the IOCON register which has
-an erratum.
+Up to now, the Vdd regulator and the clocks have been managed by
+Runtime-PM (on systems without CONFIG_PM these remain permanently
+switched on).
 
-Patch 1 from https://lore.kernel.org/linux-can/20240429-mcp251xfd-runtime_pm-v1-3-c26a93a66544@pengutronix.de/
-Patch 2 refactor of no-crc functions to prepare workaround for non-crc writes
-Patch 3 is the fix/workaround for the aforementioned erratum
-Patch 4 only configure pin1 for rx-int
-Patch 5 adds the gpio support
-Patch 6 updates dt-binding
+During the mcp251xfd_open() callback the mcp251xfd is powered,
+soft-reset and configured. In mcp251xfd_stop() the chip is shut down
+again. To support the on-chip GPIOs, the chip must be supplied with
+power while GPIOs are being requested, even if the networking
+interface is down.
 
-As per Marc's comment on below patch, we aim to get this series into
-linux-next since the functionality is essential for CAN on the RB3 Gen2
-board. As progress has stalled, Take this series forward with minor code
-adjustments. Include a Tested-by tag to reflect validation performed on the
-target hardware.
+To support this, move the functions mcp251xfd_chip_softreset() and
+mcp251xfd_chip_clock_init() from mcp251xfd_chip_start() to
+mcp251xfd_runtime_resume(). Instead of setting the controller to sleep
+mode in mcp251xfd_chip_stop(), bring it into configuration mode. This
+way it doesn't take part in bus activity and doesn't enter sleep mode.
 
-https://lore.kernel.org/all/20240806-industrious-augmented-crane-44239a-mkl@pengutronix.de/
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Gregor Herburger <gregor.herburger@ew.tq-group.com>
+Tested-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Signed-off-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
 ---
-Changes in v6:
-- Simplified error handling by directly returning regmap_update_bits() result.
-- Added Acked-By tag.
-- Link to v5: https://lore.kernel.org/all/20250926133018.3071446-1-viken.dadhaniya@oss.qualcomm.com/
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 91 ++++++++++++-------
+ 1 file changed, 57 insertions(+), 34 deletions(-)
 
-Changes in v5:
-- Removed #ifdef GPIOLIB and added select GPIOLIB in Kconfig
-- Rebased patch on latest baseline
-- Resolved Kernel Test Robot warnings
-- Link to v4: https://lore.kernel.org/all/20250918064903.241372-1-viken.dadhaniya@oss.qualcomm.com/
-
-Changes in v4:
-- Moved GPIO register initialization into mcp251xfd_register after enabling
-  runtime PM to avoid GPIO request failures when using the gpio-hog
-  property to set default GPIO state.
-- Added Tested-by and Signed-off-by tags.
-- Dropped the 1st and 2nd patches from the v3 series as they have already been merged.
-- Link to v3: https://lore.kernel.org/linux-can/20240522-mcp251xfd-gpio-feature-v3-0-8829970269c5@ew.tq-group.com/
-
-Changes in v3:
-- Implement workaround for non-crc writes
-- Configure only Pin1 for rx-int feature
-- moved errata check to .gather_write callback function
-- Added MCP251XFD_REG_IOCON_*() macros
-- Added Marcs suggestions
-- Collect Krzysztofs Acked-By
-- Link to v2: https://lore.kernel.org/r/20240506-mcp251xfd-gpio-feature-v2-0-615b16fa8789@ew.tq-group.com
-
----
-Gregor Herburger (5):
-  can: mcp251xfd: utilize gather_write function for all non-CRC writes
-  can: mcp251xfd: add workaround for errata 5
-  can: mcp251xfd: only configure PIN1 when rx_int is set
-  can: mcp251xfd: add gpio functionality
-  dt-bindings: can: mcp251xfd: add gpio-controller property
-
-Marc Kleine-Budde (1):
-  can: mcp251xfd: move chip sleep mode into runtime pm
-
- .../bindings/net/can/microchip,mcp251xfd.yaml |   5 +
- drivers/net/can/spi/mcp251xfd/Kconfig         |   1 +
- .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 273 +++++++++++++++---
- .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  | 114 ++++++--
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |   8 +
- 5 files changed, 335 insertions(+), 66 deletions(-)
-
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 7450ea42c1ea..f9eabb1810cf 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -767,21 +767,13 @@ static void mcp251xfd_chip_stop(struct mcp251xfd_priv *priv,
+ 	mcp251xfd_chip_interrupts_disable(priv);
+ 	mcp251xfd_chip_rx_int_disable(priv);
+ 	mcp251xfd_timestamp_stop(priv);
+-	mcp251xfd_chip_sleep(priv);
++	mcp251xfd_chip_set_mode(priv, MCP251XFD_REG_CON_MODE_CONFIG);
+ }
+ 
+ static int mcp251xfd_chip_start(struct mcp251xfd_priv *priv)
+ {
+ 	int err;
+ 
+-	err = mcp251xfd_chip_softreset(priv);
+-	if (err)
+-		goto out_chip_stop;
+-
+-	err = mcp251xfd_chip_clock_init(priv);
+-	if (err)
+-		goto out_chip_stop;
+-
+ 	err = mcp251xfd_chip_timestamp_init(priv);
+ 	if (err)
+ 		goto out_chip_stop;
+@@ -1625,8 +1617,11 @@ static int mcp251xfd_open(struct net_device *ndev)
+ 		return err;
+ 
+ 	err = pm_runtime_resume_and_get(ndev->dev.parent);
+-	if (err)
++	if (err) {
++		if (err == -ETIMEDOUT || err == -ENODEV)
++			pm_runtime_set_suspended(ndev->dev.parent);
+ 		goto out_close_candev;
++	}
+ 
+ 	err = mcp251xfd_ring_alloc(priv);
+ 	if (err)
+@@ -1907,53 +1902,53 @@ static int mcp251xfd_register(struct mcp251xfd_priv *priv)
+ 	struct net_device *ndev = priv->ndev;
+ 	int err;
+ 
++	mcp251xfd_register_quirks(priv);
++
+ 	err = mcp251xfd_clks_and_vdd_enable(priv);
+ 	if (err)
+ 		return err;
+ 
+-	pm_runtime_get_noresume(ndev->dev.parent);
+-	err = pm_runtime_set_active(ndev->dev.parent);
+-	if (err)
+-		goto out_runtime_put_noidle;
+-	pm_runtime_enable(ndev->dev.parent);
+-
+-	mcp251xfd_register_quirks(priv);
+-
+ 	err = mcp251xfd_chip_softreset(priv);
+ 	if (err == -ENODEV)
+-		goto out_runtime_disable;
++		goto out_clks_and_vdd_disable;
+ 	if (err)
+ 		goto out_chip_sleep;
+ 
+ 	err = mcp251xfd_chip_clock_init(priv);
+ 	if (err == -ENODEV)
+-		goto out_runtime_disable;
++		goto out_clks_and_vdd_disable;
+ 	if (err)
+ 		goto out_chip_sleep;
+ 
++	pm_runtime_get_noresume(ndev->dev.parent);
++	err = pm_runtime_set_active(ndev->dev.parent);
++	if (err)
++		goto out_runtime_put_noidle;
++	pm_runtime_enable(ndev->dev.parent);
++
+ 	err = mcp251xfd_register_chip_detect(priv);
+ 	if (err)
+-		goto out_chip_sleep;
++		goto out_runtime_disable;
+ 
+ 	err = mcp251xfd_register_check_rx_int(priv);
+ 	if (err)
+-		goto out_chip_sleep;
++		goto out_runtime_disable;
+ 
+ 	mcp251xfd_ethtool_init(priv);
+ 
+ 	err = register_candev(ndev);
+ 	if (err)
+-		goto out_chip_sleep;
++		goto out_runtime_disable;
+ 
+ 	err = mcp251xfd_register_done(priv);
+ 	if (err)
+ 		goto out_unregister_candev;
+ 
+-	/* Put controller into sleep mode and let pm_runtime_put()
+-	 * disable the clocks and vdd. If CONFIG_PM is not enabled,
+-	 * the clocks and vdd will stay powered.
++	/* Put controller into Config mode and let pm_runtime_put()
++	 * put in sleep mode, disable the clocks and vdd. If CONFIG_PM
++	 * is not enabled, the clocks and vdd will stay powered.
+ 	 */
+-	err = mcp251xfd_chip_sleep(priv);
++	err = mcp251xfd_chip_set_mode(priv, MCP251XFD_REG_CON_MODE_CONFIG);
+ 	if (err)
+ 		goto out_unregister_candev;
+ 
+@@ -1963,12 +1958,13 @@ static int mcp251xfd_register(struct mcp251xfd_priv *priv)
+ 
+ out_unregister_candev:
+ 	unregister_candev(ndev);
+-out_chip_sleep:
+-	mcp251xfd_chip_sleep(priv);
+ out_runtime_disable:
+ 	pm_runtime_disable(ndev->dev.parent);
+ out_runtime_put_noidle:
+ 	pm_runtime_put_noidle(ndev->dev.parent);
++out_chip_sleep:
++	mcp251xfd_chip_sleep(priv);
++out_clks_and_vdd_disable:
+ 	mcp251xfd_clks_and_vdd_disable(priv);
+ 
+ 	return err;
+@@ -1980,10 +1976,12 @@ static inline void mcp251xfd_unregister(struct mcp251xfd_priv *priv)
+ 
+ 	unregister_candev(ndev);
+ 
+-	if (pm_runtime_enabled(ndev->dev.parent))
++	if (pm_runtime_enabled(ndev->dev.parent)) {
+ 		pm_runtime_disable(ndev->dev.parent);
+-	else
++	} else {
++		mcp251xfd_chip_sleep(priv);
+ 		mcp251xfd_clks_and_vdd_disable(priv);
++	}
+ }
+ 
+ static const struct of_device_id mcp251xfd_of_match[] = {
+@@ -2206,16 +2204,41 @@ static void mcp251xfd_remove(struct spi_device *spi)
+ 
+ static int __maybe_unused mcp251xfd_runtime_suspend(struct device *device)
+ {
+-	const struct mcp251xfd_priv *priv = dev_get_drvdata(device);
++	struct mcp251xfd_priv *priv = dev_get_drvdata(device);
+ 
++	mcp251xfd_chip_sleep(priv);
+ 	return mcp251xfd_clks_and_vdd_disable(priv);
+ }
+ 
+ static int __maybe_unused mcp251xfd_runtime_resume(struct device *device)
+ {
+-	const struct mcp251xfd_priv *priv = dev_get_drvdata(device);
++	struct mcp251xfd_priv *priv = dev_get_drvdata(device);
++	int err;
++
++	err = mcp251xfd_clks_and_vdd_enable(priv);
++	if (err)
++		return err;
+ 
+-	return mcp251xfd_clks_and_vdd_enable(priv);
++	err = mcp251xfd_chip_softreset(priv);
++	if (err == -ENODEV)
++		goto out_clks_and_vdd_disable;
++	if (err)
++		goto out_chip_sleep;
++
++	err = mcp251xfd_chip_clock_init(priv);
++	if (err == -ENODEV)
++		goto out_clks_and_vdd_disable;
++	if (err)
++		goto out_chip_sleep;
++
++	return 0;
++
++out_chip_sleep:
++	mcp251xfd_chip_sleep(priv);
++out_clks_and_vdd_disable:
++	mcp251xfd_clks_and_vdd_disable(priv);
++
++	return err;
+ }
+ 
+ static const struct dev_pm_ops mcp251xfd_pm_ops = {
 -- 
 2.34.1
 
