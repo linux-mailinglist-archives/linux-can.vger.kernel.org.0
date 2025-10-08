@@ -1,118 +1,123 @@
-Return-Path: <linux-can+bounces-5100-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5101-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52ED2BC36F8
-	for <lists+linux-can@lfdr.de>; Wed, 08 Oct 2025 08:09:05 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C76E5BC3B6A
+	for <lists+linux-can@lfdr.de>; Wed, 08 Oct 2025 09:41:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DCF5F34B76C
-	for <lists+linux-can@lfdr.de>; Wed,  8 Oct 2025 06:09:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ABE074FA008
+	for <lists+linux-can@lfdr.de>; Wed,  8 Oct 2025 07:39:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA392246BA8;
-	Wed,  8 Oct 2025 06:08:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=csselectronics.com header.i=@csselectronics.com header.b="sKon2T+J";
-	dkim=permerror (0-bit key) header.d=csselectronics.com header.i=@csselectronics.com header.b="LjPLCMpM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E57832F49F9;
+	Wed,  8 Oct 2025 07:36:38 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mailrelay-egress11.pub.mailoutpod3-cph3.one.com (mailrelay-egress11.pub.mailoutpod3-cph3.one.com [46.30.211.250])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280522EAB66
-	for <linux-can@vger.kernel.org>; Wed,  8 Oct 2025 06:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.30.211.250
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F9E2F5A1D
+	for <linux-can@vger.kernel.org>; Wed,  8 Oct 2025 07:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759903732; cv=none; b=lBu+sXoOK5NKGn5ONF7+xf6aUS0NTF7xxRuFAuYRvoHXYSRGRzBOtUw2c67ha+KWkzFR0B/pkPJWC/j0tX/53Tuj4XUbXJsGi9b7Nk09LuFSUhiTwSCiuLeg/gKPW8WclGqfcS81AzcpayYorV4hQzduwGaSts2/6nqw6JFeLT4=
+	t=1759908998; cv=none; b=bhzwr0KCpZv9x4s1F2sFren/FxsivYdtwzuJlKr06JK9pl8VeyGq044EPqc13bJp6L1LG4sOGmJY1FG+L7WGOp9POvtxZu23xMNTWJvrr+qqJ4ywR4ROnFYvoqr6epEMv9+pKT10heiUJVaWJyg+inkA7RSoIpP9V6QdrTdUiA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759903732; c=relaxed/simple;
-	bh=YbephDjOIqzfhBImfDmW60sos+am3ahj74uo8VIfGn8=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Content-Type; b=hHE9AbdVPnLd0UCjfEgPE90CkcJCIOhuBIJCCsIrQpBu4NKmqzFmAaZsIYwZUm0zAlw3Yv7GFSyySbekgqrxsVZNMfIQ6RjZJXOqhZPxlNG6XQLZs4EFFCmMHWVs+9gQDq8mrEK+b03QP0Q6JNkRr+ejqdFUNXqLi4nNKaAuFqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=csselectronics.com; spf=pass smtp.mailfrom=csselectronics.com; dkim=pass (2048-bit key) header.d=csselectronics.com header.i=@csselectronics.com header.b=sKon2T+J; dkim=permerror (0-bit key) header.d=csselectronics.com header.i=@csselectronics.com header.b=LjPLCMpM; arc=none smtp.client-ip=46.30.211.250
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=csselectronics.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csselectronics.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1759903725; x=1760508525;
-	d=csselectronics.com; s=rsa1;
-	h=content-transfer-encoding:content-type:to:subject:from:mime-version:date:
-	 message-id:from;
-	bh=teE+2wXzdFUYRVYWl2Mad54N3UcmKDxYfmCqQU4kzmE=;
-	b=sKon2T+Jfi7awG9yVAsxIkFl6ZlcpTni5fca10jUtCEghNOPB3DkLaUl5QUieIi/vo5EM6ThsytPl
-	 86a3pa35v2cGXdngloRXyHShsLrW1Xt1JNpCi71GLD0cTUgHZbNZYRpZNoyCUgrgbgfOpeaoOuknfs
-	 5kWiGSrRTJyTzEdyHY6uEpmRDFZI+oqMeNFg3gWZKCHkVlF68Xxwgp19RkDGRq7wmyIdtvPRFKc507
-	 tCKhIoPy3wYv8IGTz0Uvwubxk3zN0P/8ePEQfyMaCa+dbn9PCKF9NI6osynzwU6kl+8VwBs0pxVirz
-	 7IbqJwHVdNRXKXAGPsWpa5QoPziaxzw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1759903725; x=1760508525;
-	d=csselectronics.com; s=ed1;
-	h=content-transfer-encoding:content-type:to:subject:from:mime-version:date:
-	 message-id:from;
-	bh=teE+2wXzdFUYRVYWl2Mad54N3UcmKDxYfmCqQU4kzmE=;
-	b=LjPLCMpMuHu38RePC46LVaOoTkg6t4VPpgMVnzr/M0dqBOVpGv2loO7AinNn7+iPQCWfQjT6lYEAX
-	 HwEuY5aDw==
-X-HalOne-ID: 3ea47e39-a40d-11f0-9076-d510462faafc
-Received: from [192.168.1.152] (unknown [5.103.118.41])
-	by mailrelay4.pub.mailoutpod3-cph3.one.com (Halon) with ESMTPSA
-	id 3ea47e39-a40d-11f0-9076-d510462faafc;
-	Wed, 08 Oct 2025 06:08:45 +0000 (UTC)
-Message-ID: <ef30ff2e-a283-4aa2-be7c-902acfced35e@csselectronics.com>
-Date: Wed, 8 Oct 2025 08:08:43 +0200
+	s=arc-20240116; t=1759908998; c=relaxed/simple;
+	bh=ZvB41AVtgiRBPBxAsCGR9bmG3uM6Im22kHN3Yl3n6xo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=h4NvY7DmlE96ZmJ4mC/smoKgwaomWtmavT8ujbdppekMJWpB0eRq41MJFJnKwnDnGzi3blIeBBO9xAW24VgiVAhCt26veZzHtILkiMLNIv/bbM0HeyvziZ3c9MeTs66+QIfhFmFIsPIdNIYfzEDRtNVU3Z8gssC3kdUSR//EfyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1v6Ois-0000tP-PC; Wed, 08 Oct 2025 09:36:30 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1v6Ois-002X58-1O;
+	Wed, 08 Oct 2025 09:36:30 +0200
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 64EDF481B4C;
+	Wed, 08 Oct 2025 07:35:11 +0000 (UTC)
+Date: Wed, 8 Oct 2025 09:35:10 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: linux-can@vger.kernel.org, Dong Aisheng <aisheng.dong@nxp.com>
+Cc: Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: m_can and old email address
+Message-ID: <20251008-invaluable-amigurumi-deer-76c105-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-From: =?UTF-8?Q?Magnus_Aagaard_S=C3=B8rensen?= <mas@csselectronics.com>
-Subject: Exposing CAN hardware from userspace
-To: linux-can@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="fojl2vlyu7tltinv"
+Content-Disposition: inline
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hi,
 
-I am attempting to interface with the CAN hardware in a remote device 
-over a network and expose it locally as a SocketCAN bus. The remote 
-device does not run Linux, but I am able to fully expose the CAN 
-hardware over the network using a custom protocol. Latency in itself is 
-not an issue for this use case, but accurate timestamping and reliable 
-transmission to the remote is.
+--fojl2vlyu7tltinv
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: m_can and old email address
+MIME-Version: 1.0
 
-So far I have found a few userspace tools which could handle the network 
-communication aspect (such as socketcand[1] and cannelloni[2]), but 
-these all seem to expose the remote side as a local node on a SocketCAN 
-bus and not a bus in itself.
+Hello Dong Aisheng,
 
-As there is no CAN hardware locally in my use case, the only option is 
-to create a virtual CAN bus via vcan if using the above userspace tools. 
-This presents a few issues:
-* The remote timestamp information is not propagated to the local 
-SocketCAN bus. I.e. the accurate remote hardware timestamp is replaced 
-by a local software timestamp.
-* The direction of messages is lost, as all messages are sent into the 
-vcan bus and thus marked as tx in e.g. candump.
-* Flow control from the remote side is lost, such that local nodes can 
-send CAN frames even though the remote side is fully loaded.
+someone with the name Dong Aisheng, but a different email address is
+listed in the m_can driver:
 
-Overall, vcan is likely the wrong tool for this job, but I am not aware 
-of any alternatives. Are there any options I have missed which can solve 
-the above issues without providing a new kernel module? The use case 
-seems closely related to the tun/tap driver in the networking stack in 
-general, but I am unsure if these could be extended to handle the 
-SocketCAN case.
+| drivers/net/can/m_can/m_can.c:4://      Dong Aisheng <b29396@freescale.co=
+m>
+| drivers/net/can/m_can/m_can.c:2559:MODULE_AUTHOR("Dong Aisheng <b29396@fr=
+eescale.com>");
+| drivers/net/can/m_can/m_can_platform.c:4://      Dong Aisheng <b29396@fre=
+escale.com>
+| drivers/net/can/m_can/m_can_platform.c:239:MODULE_AUTHOR("Dong Aisheng <b=
+29396@freescale.com>");
 
-If I were to take the route of a new kernel module, what options do I 
-have for exposing the data and control structures of a SocketCAN bus to 
-userspace? So far I know of file descriptors as in the tun/tap case, but 
-I am not knowledgeable enough in the kernel systems in general to see if 
-there are other options which would be a better fit for bidirectional 
-data and/or asynchronous messages?
+Is this you old email or is this a different person?
 
-Any advice is appreciated.
+b4's --auto-to-cc feature regularly picks up that address and mails will
+bounce. I would like to update or remove this address to get rid of the
+bounces.
 
-Regards,
-Magnus.
+regards,
+Marc
 
-[1]: https://github.com/linux-can/socketcand
-[2]: https://github.com/mguentner/cannelloni
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--fojl2vlyu7tltinv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmjmFCsACgkQDHRl3/mQ
+kZyc6wgAieEXLW0A8Ofeb0kOf/pu++x+LyIeRS2+MurHz0FPoctvZy5p1hlGKnrt
+pf3lh7rEyGZjVbbo50o48MOq3Z80uzEocT7gR1agvLC9/6gu2uE1EGJIlZp8eXg0
+5AKgyybeDhtaXp4c2/VoAalgbTQbq5/sQzBis759xHofeuWIg4YjFvnXieiwBefH
+XOeWRmY1XHudJ53PONgmp7NPvcpbLmn/6arl7tBBLK4RadUlD33n5DLKrWhL36/9
+PPNw5vNlYAulZg1M64GbTgcrx17VbnJ2u433+ATrguwDqLE/xPNjZGdSOnVh31dh
+SIVqZxobXE31hMeN0EP7dBL6zJmciw==
+=tFAP
+-----END PGP SIGNATURE-----
+
+--fojl2vlyu7tltinv--
 
