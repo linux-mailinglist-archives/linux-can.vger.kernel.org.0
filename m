@@ -1,163 +1,101 @@
-Return-Path: <linux-can+bounces-5167-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5168-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B73B2BD2D40
-	for <lists+linux-can@lfdr.de>; Mon, 13 Oct 2025 13:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A7E0BD2ED9
+	for <lists+linux-can@lfdr.de>; Mon, 13 Oct 2025 14:13:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 63A5434B05A
-	for <lists+linux-can@lfdr.de>; Mon, 13 Oct 2025 11:45:07 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C01E634B6D1
+	for <lists+linux-can@lfdr.de>; Mon, 13 Oct 2025 12:13:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04F7F264A7F;
-	Mon, 13 Oct 2025 11:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97AEB26E154;
+	Mon, 13 Oct 2025 12:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sww275n2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jOyWdX+U"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF5326463B;
-	Mon, 13 Oct 2025 11:45:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650CC24468D;
+	Mon, 13 Oct 2025 12:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760355902; cv=none; b=RYdTdtXxpfAvzttt4mgVA81Sh2WBBomaRko8+uZmsBeS6g1vtOjVz0ZW+axe9H2vltn0EUCZowFI5chD4r7BXZgBsyHXnWc95QoMWdP5ChOEP51Hly7NCLogAigMyvvAmcVIBoAIaYY4db9n/eN3z+VHNpiVNcba7hmn+EMJaF0=
+	t=1760357594; cv=none; b=OQHkrgIzx0K+NQypZe0zUxCbIxZ84oNkOch7ntWupsosSQtf8Gs4k1JnTE7iNKptproJm6qafEyOGTYe9ovUwk5v9e2vdlxgsYbWjv7GuO988IFGtrDA4BoxLQQSY7SW6NqrlYcLghpgUOdU/Az+/A8G1hksJMxDRMeilW9WGd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760355902; c=relaxed/simple;
-	bh=zuhK6RhM0NvTiKfZF7CmXJBASTipPPGDGdDjCXE2Gow=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZqdPcKEyKUf1YRpoylpLrPmQJI/fU9c3hBH1huaZVF/K3reTMOpEf9y1SYEShHNceuiKvrilZTt8YBl+SlHBexeiuK8EkFutofThq/Xp3hGyscXf6n8P4CM7jzds4UHKaYnd9tzXJCB+rAczalytdN6Ygvw21xYsbZz3MVsL6TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sww275n2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DEC9C4CEE7;
-	Mon, 13 Oct 2025 11:45:01 +0000 (UTC)
+	s=arc-20240116; t=1760357594; c=relaxed/simple;
+	bh=Ve9/iWpbfn/kX74iNG2Ij6hQmnMR/JIdGPX40kr4Y6E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u+jxA33WH6ih0XuphT3XVDJ5uUKzxqnvK2lgpniZED8MGVUur7va4D3yzSHpi0i3e8WGN3u5xjH2SIzp/QAbQBV4CJ5nzvxavVK2/5O8iGMHFcPtPi6gN01xmjOPZV3TVSV2DBh0j2SvqdYRN4wjFNUO8uIgP7rzVKgGcuTEHuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jOyWdX+U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1528C4CEE7;
+	Mon, 13 Oct 2025 12:13:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760355902;
-	bh=zuhK6RhM0NvTiKfZF7CmXJBASTipPPGDGdDjCXE2Gow=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sww275n21mv+GCkMclyU+wzSUkg8/hW4s6qi2bjA/MlJt+snPvrjvfYcN40tXtQUO
-	 7Ajrdn+BaxJZdEEQbkLio9LqFsNwMRCmpsUpxqWH4P87nH79Rruy7csI+Ka2oALbkd
-	 0iZcd8jW26WaYOeIac0B+B6yTdlVGpTd6G8hK7wAP9wH3A+g7c9E1q+Ue3uq9C36PI
-	 orYNNFQd6ZdGRdGBiOvC4ffCywBHR4Te+32XxckTD8ZZeCMRLUy539E5Xq0NWUWRnO
-	 yarnbW4aIVzT2UMXfl/KcuhTBdLLnikM/taqSJIQ+d80H/tErCuCGwIdt1f/7KFeFS
-	 3E4cXzl5INREw==
-Message-ID: <0a56ad59-d83c-4697-a1ee-db25585050e3@kernel.org>
-Date: Mon, 13 Oct 2025 20:44:59 +0900
+	s=k20201202; t=1760357594;
+	bh=Ve9/iWpbfn/kX74iNG2Ij6hQmnMR/JIdGPX40kr4Y6E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jOyWdX+U00ecIVdoFM2BjCh5Fz7HURlWY4AqFsk/7lfbDVHgBICtfA/PoODLzRP4O
+	 dD7+8DiiYmOWp3dBoZJZR9DV4S7fnR2KZ+yNTiJrK5mPvK1UgeUUuhAZS2KqwpHVy/
+	 XboQtny2cW9/xwPPiPLRU6XcJcDTPIzuauwFSYhbfD4g51CEXHxv4Lcb/GhdX/K7JM
+	 WJPAPCi2lmEA0i1kqEA8qZdgRTXMYcYIkQK2aLgAzl2VKYlZDGZRuSrPxyHt4xAPzY
+	 vlVMU/fn/1DGRRLgB2Vl13fKMyb/Yf2jY95IquhezkSU5gxK0OOpvL5CgC3l10kNtA
+	 +7YIxrhwnLKEg==
+Date: Mon, 13 Oct 2025 13:13:09 +0100
+From: Simon Horman <horms@kernel.org>
+To: Vincent Mailhol <mailhol@kernel.org>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Paolo Abeni <pabeni@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] can: add Transmitter Delay Compensation (TDC)
+ documentation
+Message-ID: <aOzs1TjdaqZqNW8M@horms.kernel.org>
+References: <20251013-can-fd-doc-v2-0-5d53bdc8f2ad@kernel.org>
+ <20251013-can-fd-doc-v2-2-5d53bdc8f2ad@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/9] can: netlink: add CAN XL
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
- Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>,
- Robert Nawrath <mbro1689@gmail.com>, Minh Le <minh.le.aj@renesas.com>,
- Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251013-canxl-netlink-v1-0-f422b7e2729f@kernel.org>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol@kernel.org>
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20251013-canxl-netlink-v1-0-f422b7e2729f@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251013-can-fd-doc-v2-2-5d53bdc8f2ad@kernel.org>
 
-On 13/10/2025 at 20:01, Vincent Mailhol wrote:
-> Following all the refactoring on the CAN netlink done in series [1],
-> [2] and [3], this is now time to finally introduce the CAN XL netlink
-> interface.
+On Mon, Oct 13, 2025 at 07:10:23PM +0900, Vincent Mailhol wrote:
+> Back in 2021, support for CAN TDC was added to the kernel in series [1]
+> and in iproute2 in series [2]. However, the documentation was never
+> updated.
+> 
+> Add a new sub-section under CAN-FD driver support to document how to
+> configure the TDC using the "ip tool".
+> 
+> [1] add the netlink interface for CAN-FD Transmitter Delay Compensation (TDC)
+> Link: https://lore.kernel.org/all/20210918095637.20108-1-mailhol.vincent@wanadoo.fr/
+> 
+> [2] iplink_can: cleaning, fixes and adding TDC support
+> Link: https://lore.kernel.org/all/20211103164428.692722-1-mailhol.vincent@wanadoo.fr/
+> 
+> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+> ---
+> Changes in v2:
+> 
+>   - Fix below "make htmldocs" error:
+> 
+>       can.rst:1484: ERROR: Unexpected indentation. [docutils]
 
-I am sending this extra message to give a few additional hints on how
-to test.
+Thanks, I confirmed that "make htmldocs" is happy now.
 
-In addition to the mailing list, I also push this series and the
-dummy_can driver to:
+> 
+>   - Change from "Bullet lists" to "Definition lists" format.
+> 
+> Link to v1: https://lore.kernel.org/all/20251012-can-fd-doc-v1-2-86cc7d130026@kernel.org/
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mailhol/linux.git/log/?h=b4/canxl-netlink
-
-I also have a work in progress for iproute2 here:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mailhol/iproute2-next.git/log/?h=canxl-netlink
-
-I will submit the iproute2 series later on, after receiving comments
-on this series. For the moment, the iproute2 canxl is only available
-through the link above.
-
-To test, after cloning and compiling above branches, do:
-
-  modprobe dummy-can
-
-to load the driver. Then configure it, for example, this is a 500 KB/s
-nominal bittiming and a 10 MB/s XL databittiming with TMS on:
-
-  ./ip/ip link set can0 up type can bitrate 500000 xl on xbitrate 10000000 tms on
-
-If you have debug log enabled (e.g. with CONFIG_CAN_DEBUG_DEVICES),
-this is what you should see in the kernel log:
-
-  can0: Clock frequency: 160000000
-  can0: Maximum bitrate: 20000000
-  can0: MTU: 2060
-  can0: 
-  can0: Control modes:
-  can0: 	supported: 0x0001ba22
-  can0: 	enabled: 0x00009000
-  can0: 	list:
-  can0: 		listen-only: off
-  can0: 		fd: off
-  can0: 		fd-tdc-auto: off
-  can0: 		restricted-operation: off
-  can0: 		xl: on
-  can0: 		xl-tdc-auto: off
-  can0: 		xl-tms: on
-  can0: 		xl-error-signalling: off
-  can0: 
-  can0: Classical CAN nominal bittiming:
-  can0: 	bitrate: 500000
-  can0: 	sample_point: 875
-  can0: 	tq: 12
-  can0: 	prop_seg: 69
-  can0: 	phase_seg1: 70
-  can0: 	phase_seg2: 20
-  can0: 	sjw: 10
-  can0: 	brp: 2
-  can0: 
-  can0: 
-  can0: CAN XL databittiming:
-  can0: 	bitrate: 10000000
-  can0: 	sample_point: 750
-  can0: 	tq: 6
-  can0: 	prop_seg: 5
-  can0: 	phase_seg1: 6
-  can0: 	phase_seg2: 4
-  can0: 	sjw: 2
-  can0: 	brp: 1
-  can0: 	CAN XL PWM:
-  can0: 		pwms: 4
-  can0: 		pwml: 12
-  can0: 		pwmo: 0
-  can0: 
-  can0: dummy-can is up
-
-Finally, you can use a recent version of can-utils to generate some
-traffic. The driver will echo back anything it receives.
-
-I will continue to update the above branches according to the comments
-received. See these as work in progress. Use the series as posted on
-the mailing if you want something more stable.
-
-
-Yours sincerely,
-Vincent Mailhol
+...
 
