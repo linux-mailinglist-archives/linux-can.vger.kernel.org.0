@@ -1,84 +1,84 @@
-Return-Path: <linux-can+bounces-5179-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5180-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76961BD8B4F
-	for <lists+linux-can@lfdr.de>; Tue, 14 Oct 2025 12:17:33 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09644BD8C21
+	for <lists+linux-can@lfdr.de>; Tue, 14 Oct 2025 12:26:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3A453AF5C1
-	for <lists+linux-can@lfdr.de>; Tue, 14 Oct 2025 10:15:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 287304FE8B6
+	for <lists+linux-can@lfdr.de>; Tue, 14 Oct 2025 10:26:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3FB2E8B71;
-	Tue, 14 Oct 2025 10:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A262F067A;
+	Tue, 14 Oct 2025 10:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WiHzu7Rj"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QlhNIhal"
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9EB2F28F0
-	for <linux-can@vger.kernel.org>; Tue, 14 Oct 2025 10:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192EF2DC768
+	for <linux-can@vger.kernel.org>; Tue, 14 Oct 2025 10:25:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760436922; cv=none; b=tfTBiysB6dV81hkExIximTr60a9hBPT5Bx4DXha6UIQxbFO3N+ctr7rZ0w9g4AYHTcO5YSmyMkst05/fByWFZyiCxFKuKfchuN53eNyLBhDqI9U2nxWq0fQsb02aVVLCxkX3SSkjBTLJguedUkf+pxbvbf/gQtbR/EvXcDOVmvc=
+	t=1760437562; cv=none; b=kVZXNyBQzsEivZSeillcbCHJpsEuMg4W3g6mq1eHujTX8Q087SxFHJJmaq1JXXvZh9629ly87jjHyym/RUl2/RYs2VQLbcAo6VRgDhwwuOTC8V3iYBlW57HIehbWAkKAiWNcFTm936NOtcJ7P7QgO//hZhhd6LPVkNg5kuHBzHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760436922; c=relaxed/simple;
-	bh=NwcckHy8o9d7dQH0xLue2IE8AkT8Ch5YfNOzsyUfxZ4=;
+	s=arc-20240116; t=1760437562; c=relaxed/simple;
+	bh=F5BQ6feJXKRKN6PMW+YPScwn/Q7NLnrJFrJekbrCkvE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PMkM1K3sP8dNX0ISBVQzDPBRIBrH5rgMByYJQw01V7oGmVcbCw1Dgh4PWudwrM+N3FFCs4qLb8+YkP3gxHl5d5j6w817z5FwlTNX1OjR9VsNf2OUFt+4Ot4IkCoxjglMryU5XYuyPe2gEjK+79eCAazBFkp5oY7mUp1P/PWBmls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WiHzu7Rj; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=XToTi6yZudc+Y2qyjSQ4a1PFf3KPMmaNh+4tUzgzMSF6HIo9MiDJi0uJHdgVBd4S7exH9jCeMjoxdH4s9C7C9dGro0U3b1meBiHX87dhWURdAGb3e1gIL/tLTIr2oXew7J320mhLomHOfwGdMfcDfHXDC2YHoqvmf/t5+yPUEmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QlhNIhal; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760436918;
+	s=mimecast20190719; t=1760437559;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=10BGsZqBfx67gqRETn13bNS/Puo4azPAw3HcckQ2HC8=;
-	b=WiHzu7RjHLVfu7pZOWSuwK8pSpi5ZnAortJRE3/T007uEqsK42izdtczbJet5SNU+cd59j
-	iXzk6Xu4D111v2IOw4ZE/0jzFeEdBVOcgtbZHHDh8fzMpG+1m5fiGrL87CzrWKXvZW4i7I
-	G3zV0ifSAzTco035YW1ssox6nyvlPew=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=+mGJZKe0r9xFe+XcIuCATkykLFXSKhtL9KoIxgPQSZY=;
+	b=QlhNIhalH9XyttFn0NomVqsfhb3pyZYam63rY6N+1zZymP2k9gXVirqXUH7ZAue6yQZZZ0
+	qKwfJbANfuEm9l5/o0oFiDcdb4q+jbKQuBzu/kAkuKKJBCltr/OqdqZ/9ZriiX2eQnvUPf
+	APUtx38WQR3FTMKNzOMO0x2KXGM+dDk=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-648-JWB5slFEMPGp8XkI8p_g_A-1; Tue, 14 Oct 2025 06:15:17 -0400
-X-MC-Unique: JWB5slFEMPGp8XkI8p_g_A-1
-X-Mimecast-MFC-AGG-ID: JWB5slFEMPGp8XkI8p_g_A_1760436916
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3ecdfe971abso4204522f8f.2
-        for <linux-can@vger.kernel.org>; Tue, 14 Oct 2025 03:15:17 -0700 (PDT)
+ us-mta-689-BD9jgyNAOjOA_rcyoII20A-1; Tue, 14 Oct 2025 06:25:58 -0400
+X-MC-Unique: BD9jgyNAOjOA_rcyoII20A-1
+X-Mimecast-MFC-AGG-ID: BD9jgyNAOjOA_rcyoII20A_1760437557
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-46e3a049abaso37250785e9.0
+        for <linux-can@vger.kernel.org>; Tue, 14 Oct 2025 03:25:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760436916; x=1761041716;
+        d=1e100.net; s=20230601; t=1760437557; x=1761042357;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=10BGsZqBfx67gqRETn13bNS/Puo4azPAw3HcckQ2HC8=;
-        b=qCA/d0llMm1UdNIAvqKqxgBOBVS3dMpE2Pu2n7+5hQBys3mhPRpM9YP1+xSfRQnn8N
-         m0vOU/we8adFRRFinOcnc4aifycb0K1Ruk5j5SXtjr5RxMx4YnLkv1BPSAHZa+IQoRuq
-         dsEZJBf/407o7vnCE0kkl2yg/6x+DiCWQ7XLaewUTQIujQFoyzhSoEmicxPTVpaL7VCp
-         Wnp1sY2S7rynCoRBImoucF1E4avWFqP8p/o/EZE0JEMFAGG6SGD7DN6xH/GqWFqHtm5r
-         PvpbrBVZ4yYcCY5Y/xuf9+MLmBJQuuu4WtcAF+TIcClyJyBi8KwJsdeowJ11pz2JG5Dx
-         pyVg==
-X-Forwarded-Encrypted: i=1; AJvYcCWZDOAZNFM0AJk5CMj13IWTCtV0jTu6LDgQr9rei4n/RFgzKv6aPgs34ZpwSRwLkYX+oDvGOaI+jJE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXBN9/lZdwBhezhWfmMzffL5BT1MyT3Dcj99cwQ9OluDTzH8uU
-	tlqv8K1vBWf2Zlp0VFH3MS2mF8/jrn7O/5pA45uFgD9owwxPrh6lkVSffSPEJnaG7DeXvW/Yz+Y
-	U4me2HWVVOIQG+bm5E6eta3t/4X1ZLtg+8sMRUtKJw4HKamldMR85zE2/+67cHQ==
-X-Gm-Gg: ASbGncuH9toekgVI28rQ56Xp+lwpW1HYwpyafHzvszz7LmNOnDhuxAa76EIoH+ARFib
-	wJMmNZ7zYQL8/JLqBeh2ChvtylZIAoWJmg2yIVMnadxNxEH1YN0VHCjx+57FppjgdfafjUpgAGj
-	FZYbLk1vzM6ELAFLhiKjsIE0WCPtMOLCpMtutIr+FtVtHbyGVanPEYsJBJ43rWdX06lE4dV1pz2
-	vu9Q5Uuv+earXm/PYvVxVya/7Okq/ykN7OmKFcf9B1YeNQXxsTvrYMQK7wR2cpm3EHIY9/A0wbm
-	q4reJEFQp+9UFlRbTZJwvv2vO1ZkKLXOAQ==
-X-Received: by 2002:a05:6000:1a87:b0:3ee:b126:6b6 with SMTP id ffacd0b85a97d-4266e7dfee2mr14270099f8f.34.1760436915693;
-        Tue, 14 Oct 2025 03:15:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFeRwgZHxensKDf9pyRs4j2o5BaQIKepX/rgZHfU4bLxsJ0FWDug2Sf3lPEReohX5TG1I2+6g==
-X-Received: by 2002:a05:6000:1a87:b0:3ee:b126:6b6 with SMTP id ffacd0b85a97d-4266e7dfee2mr14270064f8f.34.1760436915116;
-        Tue, 14 Oct 2025 03:15:15 -0700 (PDT)
+        bh=+mGJZKe0r9xFe+XcIuCATkykLFXSKhtL9KoIxgPQSZY=;
+        b=v9uc3GllkadfnyTi6RDp95/kfLK8PoFvkjneWltZJLZxZ99g9OA3shJNVnn6J2a9mD
+         Dw2ObSKId/eJ5yRnmXaXavkP68jybZYQbNVSI0gz01JwoClpDe0nHcU1tRoRaT+ZsNuT
+         UhUQwZWfdNJJkFVXTOalryzJlaK37l8L7tElSAzRw1Sl9fN+j3vC0Dy5DpyvCiCWa8aI
+         7d9yDXE8vRfQJN2/79OWfxBcY1Y9fHgkPwNb98kUtt9CnK8GNtsCAKvQxOCsjWR+c2N0
+         /LstmsffHv/AwoUOjRfLlfOpNoRN3S+8urbFYMjOPjQjjDUBgq/jSL36JKjdbgayOp8L
+         eVsA==
+X-Forwarded-Encrypted: i=1; AJvYcCWkGG1M0Eh1dSk8Xta0JeqEPrLN4RIgtqWMdEgyOI7XUuDRS/8QFaj4SG8P7rH1NZ621iqE8XRxiS8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTCCst48EIzjtHrSpBAcktXyYugoGdBI00ZqgTVclEWutijGID
+	wZo+Zm3RUoSU6iYE4TkbviXyR2spPw2dXK0AT5j/TVS6lP2nvB+BKsxLE5SiBxIYyarR1OOPk4a
+	CymwHroEze/Vl8fmllV4CGFqdZ7DNOaqWkYAnw6EgxDuPccpgUK3cjk88oeyCrg==
+X-Gm-Gg: ASbGncsWl6+RYhNrj0SQspvuLP/Jpo+ZPSoHWg2O49zIZVH03lOWZXh244IuWEHsrqR
+	8cLlymvUFWAW/Qad7LUqhQBWX2bq32aXhroT+ZGTEw4SnoXlq+/CpcE9LR0f9nK8u5PJGKfTeIL
+	98VIes7Zp3craM3XC0bj+rV02m5k9v1VKHWGLW8KUV5Eajzl0VRCLbKLhh/PYVjsvpSrsBDIS4Z
+	enS/yzsgFXuI7Y7OD6np5A1XsvygAcL6ClRbMkHm3AseyQXIPGxDN8B5n4NTvm5uDf4HeRowuDR
+	uWdqI/5gVbxXnmzX1H1j5hjzzDERzVOuzw==
+X-Received: by 2002:a05:600c:1394:b0:45d:d1a3:ba6a with SMTP id 5b1f17b1804b1-46fa9b1706amr176266845e9.33.1760437556538;
+        Tue, 14 Oct 2025 03:25:56 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHLo5rfwRv5WIdMSKvWTz9yfTxup8QUpf/LO/LbX2rkpp+8+XeSpTgqG8g8lIi+lc/e7nscYw==
+X-Received: by 2002:a05:600c:1394:b0:45d:d1a3:ba6a with SMTP id 5b1f17b1804b1-46fa9b1706amr176266415e9.33.1760437555958;
+        Tue, 14 Oct 2025 03:25:55 -0700 (PDT)
 Received: from fedora ([2a01:e0a:257:8c60:80f1:cdf8:48d0:b0a1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-426ce57ccb1sm22821362f8f.8.2025.10.14.03.15.14
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fab3d2d65sm146559885e9.2.2025.10.14.03.25.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 03:15:14 -0700 (PDT)
-Date: Tue, 14 Oct 2025 12:15:12 +0200
+        Tue, 14 Oct 2025 03:25:55 -0700 (PDT)
+Date: Tue, 14 Oct 2025 12:25:53 +0200
 From: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
 To: Francesco Valla <francesco@valla.it>
 Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Paolo Abeni <pabeni@redhat.com>,
@@ -95,7 +95,7 @@ Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Paolo Abeni <pabeni@redhat.com>,
 	netdev@vger.kernel.org, virtualization@lists.linux.dev,
 	development@redaril.me
 Subject: Re: [PATCH v5] can: virtio: Initial virtio CAN driver.
-Message-ID: <aO4isIfRbgKuCvRX@fedora>
+Message-ID: <aO4lMSxarh7NCMPS@fedora>
 References: <20240108131039.2234044-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
  <2243144.yiUUSuA9gR@fedora.fritz.box>
 Precedence: bulk
@@ -406,16 +406,11 @@ On Thu, Sep 11, 2025 at 10:59:40PM +0200, Francesco Valla wrote:
 > 
 > Maybe an error frame reporting CAN_ERR_CRTL_UNSPEC would be better?
 > 
-I am not sure. In xilinx_can.c, CAN_ERR_CRTL_UNSPEC is indicated during
-a problem in the rx path and this is the tx path. I think the comment
-refers to improving the way the driver informs this error to the user
-but I may be wrong.
-
 > For sure, counting the known errors as valid tx_packets and tx_bytes
 > is misleading.
 > 
-
-I'll remove the counters below.
+Rethinking about this, I think counters are OK since we are getting
+buffers that are in the used ring of tx queue so they are actually sent. 
 
 > > +
 > > +		stats->tx_bytes += can_get_echo_skb(dev, can_tx_msg->putidx,
