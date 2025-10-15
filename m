@@ -1,324 +1,192 @@
-Return-Path: <linux-can+bounces-5197-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5198-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7973DBDD259
-	for <lists+linux-can@lfdr.de>; Wed, 15 Oct 2025 09:38:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 638CABDDD62
+	for <lists+linux-can@lfdr.de>; Wed, 15 Oct 2025 11:44:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29C123C65B8
-	for <lists+linux-can@lfdr.de>; Wed, 15 Oct 2025 07:37:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DEE93B68D5
+	for <lists+linux-can@lfdr.de>; Wed, 15 Oct 2025 09:44:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB5E6313E2A;
-	Wed, 15 Oct 2025 07:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fn5DEYRT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A87A2C2359;
+	Wed, 15 Oct 2025 09:44:06 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881DC3126C4;
-	Wed, 15 Oct 2025 07:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F18126B2D2
+	for <linux-can@vger.kernel.org>; Wed, 15 Oct 2025 09:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760513846; cv=none; b=IUwLm1DFE/aIUz6kszDZxUcRGvJtO6LOQ6Kpt94w1kyEeb3stmXf5LRD2lUedbTP5TwInJVQUO/vL558FRXAZZClED7shDW7QQR9hpln8MRv30KosI8cubQps5ACWs9annuUcp8CcgmFm+/fFH4AuNZMDYHWno4fFysMrdT53CY=
+	t=1760521445; cv=none; b=WAIGKQVJgBWkYrAK8tlY/cscpSnehD2zXnSglSedoE9pEx3hSI5h28xNZfgED4b6TbjeXtuTGaialRpt9RQM8smrlufIysnESyC1YTHwt0lM7YQJPaGY2klxPtSLtM5wxtl9pBvcBeqy38vBUCPaLywIT/S7cPumszxwzPclTMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760513846; c=relaxed/simple;
-	bh=wltatUyz9Wl8ozSWa81zpqe62Qnhf16qfz8QUtMOkVg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fckncFMWEQY3yywj5ESqFOLcvj9qSxKNczcZGnXsyLveVNBS8F0wo/ey5UuJy+V/Tvtc3IlYZm5es612uiQ1e0VjNRCq55Mz4djuAYnJ1UY50VV9Mmq70CdxYlLxAvprhsArJm4VsIRPcj9pY7hG/vdPFDviLeH8Hz9x19SB8yQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fn5DEYRT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C57F0C4AF0D;
-	Wed, 15 Oct 2025 07:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760513845;
-	bh=wltatUyz9Wl8ozSWa81zpqe62Qnhf16qfz8QUtMOkVg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Fn5DEYRTgiC5meDGsJFKr2BtLndAwJ73y2MpePuHWJSSmFkfAe77QCUj/r8Mh5mtd
-	 OxBmBJJUo0Gqf/Xutam9WpQ8HmfRUylWNCFa9iydkEAv+BSCkZHYoDhSThZvL9X00Y
-	 ipLEltFz0Mej3yBTYBiJO1W6xtg12zduH2jVC/HQhpA3LfHk15xUQ4c+xSJe3cvGA4
-	 jbsCZdEGY3MJ9P35XFxLDlZYKpe+rKbtdI1l0tzzcLFbghXs4N3+RLtBJUc+EGgX34
-	 cFmOqYzmnxOtWI9KaXT4a7jLhw8FDXfHNRLHZ6FIpAcapOfSoow5ApJUOnWuVa6VMy
-	 /Bge2IW2wXwHA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B815FCCD193;
-	Wed, 15 Oct 2025 07:37:25 +0000 (UTC)
-From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
-Date: Wed, 15 Oct 2025 09:37:09 +0200
-Subject: [PATCH v4 2/2] phy: add basic support for NXPs TJA1145 CAN
- transceiver
+	s=arc-20240116; t=1760521445; c=relaxed/simple;
+	bh=9U3ZA08veq4NXFeHs6p2Z960sdKDOmRWTGa8oh9oEz4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BCi2CNEJAdnT9uYNyEIXaXwpLrgEiA9O8xy/8yipBes6QeKk0sysrx7Mtny96P3eLDGKFeAPbIxSXrgd7svS5j+gDI9rxnXejquLg1xJcP3JgAoVSxo6A+CZmHZG9p+diktQc+iq5vnrOMPsWmxF0YczMcuU1DyGcsqXc6LIj6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1v8y2y-0001Vg-No; Wed, 15 Oct 2025 11:43:52 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1v8y2x-003hd7-23;
+	Wed, 15 Oct 2025 11:43:51 +0200
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 4B7DC486878;
+	Wed, 15 Oct 2025 09:43:51 +0000 (UTC)
+Date: Wed, 15 Oct 2025 11:43:50 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>, 
+	davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org, 
+	kernel@pengutronix.de
+Subject: Re: [PATCH net 9/9] can: add Transmitter Delay Compensation (TDC)
+ documentation
+Message-ID: <20251015-electric-cyber-goshawk-19e7fc-mkl@pengutronix.de>
+References: <20251012142836.285370-1-mkl@pengutronix.de>
+ <20251012142836.285370-10-mkl@pengutronix.de>
+ <1157f3fe-f88b-449f-a4c2-aac9d27c95ea@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251015-tja1145-support-v4-2-4d3ca13c8881@liebherr.com>
-References: <20251015-tja1145-support-v4-0-4d3ca13c8881@liebherr.com>
-In-Reply-To: <20251015-tja1145-support-v4-0-4d3ca13c8881@liebherr.com>
-To: Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Dimitri Fedrau <dimitri.fedrau@liebherr.com>, 
- Dimitri Fedrau <dima.fedrau@gmail.com>, 
- Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760513844; l=7311;
- i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
- bh=etRzUAokyiIO5VsXUjtaCu+a0jwy+EldKdj3ZXdoY38=;
- b=VQS+km9hckXak4nXGQkE8re8L+vHk6IXer5ONEB82r9bS2uFIsFtsSDisDtmSAsFUqu4rzCO1
- /67JXiAvt9zD4b5TDlZTWEQVMyLC9JyxbqjfJydtFVs+1afUpmexeEE
-X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
- pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
-X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
- with auth_id=290
-X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-Reply-To: dimitri.fedrau@liebherr.com
-
-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-
-Add basic driver support for NXPs TJA1145 CAN transceiver which brings the
-PHY up/down by switching to normal/standby mode using SPI commands.
-
-Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
----
- drivers/phy/Kconfig           |  10 +++
- drivers/phy/Makefile          |   1 +
- drivers/phy/phy-nxp-tja1145.c | 184 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 195 insertions(+)
-
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index 678dd0452f0aa0597773433f04d2a9ba77474d2a..2f2c8f29cce2beb20c584adfe8acfe23de14e128 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -101,6 +101,16 @@ config PHY_NXP_PTN3222
- 	  schemes. It supports all three USB 2.0 data rates: Low Speed, Full
- 	  Speed and High Speed.
- 
-+config PHY_NXP_TJA1145
-+	tristate "NXP TJA1145 CAN transceiver PHY"
-+	select GENERIC_PHY
-+	select REGMAP_SPI
-+	depends on SPI
-+	help
-+	  This option enables support for NXPs TJA1145 CAN transceiver as a PHY.
-+	  This driver provides function for putting the transceiver in various
-+	  functional modes using SPI commands.
-+
- source "drivers/phy/allwinner/Kconfig"
- source "drivers/phy/amlogic/Kconfig"
- source "drivers/phy/broadcom/Kconfig"
-diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-index bfb27fb5a494283d7fd05dd670ebd1b12df8b1a1..48eac644d1e2b20f986f80de95b40c26d080358b 100644
---- a/drivers/phy/Makefile
-+++ b/drivers/phy/Makefile
-@@ -13,6 +13,7 @@ obj-$(CONFIG_PHY_SNPS_EUSB2)		+= phy-snps-eusb2.o
- obj-$(CONFIG_USB_LGM_PHY)		+= phy-lgm-usb.o
- obj-$(CONFIG_PHY_AIROHA_PCIE)		+= phy-airoha-pcie.o
- obj-$(CONFIG_PHY_NXP_PTN3222)		+= phy-nxp-ptn3222.o
-+obj-$(CONFIG_PHY_NXP_TJA1145)		+= phy-nxp-tja1145.o
- obj-y					+= allwinner/	\
- 					   amlogic/	\
- 					   broadcom/	\
-diff --git a/drivers/phy/phy-nxp-tja1145.c b/drivers/phy/phy-nxp-tja1145.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..56b5b47f6eb23945d9116c41a25d9b6daccdcefa
---- /dev/null
-+++ b/drivers/phy/phy-nxp-tja1145.c
-@@ -0,0 +1,184 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2025 Liebherr-Electronics and Drives GmbH
-+ */
-+#include <linux/bitfield.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+
-+#include <linux/phy/phy.h>
-+#include <linux/spi/spi.h>
-+
-+#define TJA1145_MODE_CTRL		0x01
-+#define TJA1145_MODE_CTRL_MC		GENMASK(2, 0)
-+#define TJA1145_MODE_CRTL_STBY		BIT(2)
-+#define TJA1145_MODE_CRTL_NORMAL	TJA1145_MODE_CTRL_MC
-+
-+#define TJA1145_CAN_CTRL		0x20
-+#define TJA1145_CAN_CTRL_CMC		GENMASK(1, 0)
-+#define TJA1145_CAN_CTRL_ACTIVE		BIT(1)
-+
-+#define TJA1145_IDENT			0x7e
-+#define TJA1145_IDENT_TJA1145T		0x70
-+
-+#define TJA1145_SPI_READ_BIT		BIT(0)
-+#define TJA1145T_MAX_BITRATE		1000000
-+
-+static int tja1145_phy_power_on(struct phy *phy)
-+{
-+	struct regmap *map = phy_get_drvdata(phy);
-+	int ret;
-+
-+	/*
-+	 * Switch operating mode to normal which is the active operating mode.
-+	 * In this mode, the device is fully operational.
-+	 */
-+	ret = regmap_update_bits(map, TJA1145_MODE_CTRL, TJA1145_MODE_CTRL_MC,
-+				 TJA1145_MODE_CRTL_NORMAL);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Switch to CAN operating mode active where the PHY can transmit and
-+	 * receive data.
-+	 */
-+	return regmap_update_bits(map, TJA1145_CAN_CTRL, TJA1145_CAN_CTRL_CMC,
-+				  TJA1145_CAN_CTRL_ACTIVE);
-+}
-+
-+static int tja1145_phy_power_off(struct phy *phy)
-+{
-+	struct regmap *map = phy_get_drvdata(phy);
-+
-+	/*
-+	 * Switch to operating mode standby, the PHY is unable to transmit or
-+	 * receive data in standby mode.
-+	 */
-+	return regmap_update_bits(map, TJA1145_MODE_CTRL, TJA1145_MODE_CTRL_MC,
-+				  TJA1145_MODE_CRTL_STBY);
-+}
-+
-+static const struct phy_ops tja1145_phy_ops = {
-+	.power_on = tja1145_phy_power_on,
-+	.power_off = tja1145_phy_power_off,
-+};
-+
-+static const struct regmap_range tja1145_wr_holes_ranges[] = {
-+	regmap_reg_range(0x00, 0x00),
-+	regmap_reg_range(0x02, 0x03),
-+	regmap_reg_range(0x05, 0x05),
-+	regmap_reg_range(0x0b, 0x1f),
-+	regmap_reg_range(0x21, 0x22),
-+	regmap_reg_range(0x24, 0x25),
-+	regmap_reg_range(0x30, 0x4b),
-+	regmap_reg_range(0x4d, 0x60),
-+	regmap_reg_range(0x62, 0x62),
-+	regmap_reg_range(0x65, 0x67),
-+	regmap_reg_range(0x70, 0xff),
-+};
-+
-+static const struct regmap_access_table tja1145_wr_table = {
-+	.no_ranges = tja1145_wr_holes_ranges,
-+	.n_no_ranges = ARRAY_SIZE(tja1145_wr_holes_ranges),
-+};
-+
-+static const struct regmap_range tja1145_rd_holes_ranges[] = {
-+	regmap_reg_range(0x00, 0x00),
-+	regmap_reg_range(0x02, 0x02),
-+	regmap_reg_range(0x05, 0x05),
-+	regmap_reg_range(0x0b, 0x1f),
-+	regmap_reg_range(0x21, 0x21),
-+	regmap_reg_range(0x24, 0x25),
-+	regmap_reg_range(0x30, 0x4a),
-+	regmap_reg_range(0x4d, 0x5f),
-+	regmap_reg_range(0x62, 0x62),
-+	regmap_reg_range(0x65, 0x67),
-+	regmap_reg_range(0x70, 0x7d),
-+	regmap_reg_range(0x7f, 0xff),
-+};
-+
-+static const struct regmap_access_table tja1145_rd_table = {
-+	.no_ranges = tja1145_rd_holes_ranges,
-+	.n_no_ranges = ARRAY_SIZE(tja1145_rd_holes_ranges),
-+};
-+
-+static const struct regmap_config tja1145_regmap_config = {
-+	.reg_bits = 8,
-+	.reg_shift = -1,
-+	.val_bits = 8,
-+	.wr_table = &tja1145_wr_table,
-+	.rd_table = &tja1145_rd_table,
-+	.read_flag_mask = TJA1145_SPI_READ_BIT,
-+	.max_register = TJA1145_IDENT,
-+};
-+
-+static int tja1145_check_ident(struct device *dev, struct regmap *map)
-+{
-+	unsigned int val;
-+	int ret;
-+
-+	ret = regmap_read(map, TJA1145_IDENT, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val != TJA1145_IDENT_TJA1145T) {
-+		dev_err(dev, "Expected device id: 0x%02x, got: 0x%02x\n",
-+			TJA1145_IDENT_TJA1145T, val);
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
-+static int tja1145_probe(struct spi_device *spi)
-+{
-+	struct phy_provider *phy_provider;
-+	struct device *dev = &spi->dev;
-+	struct regmap *map;
-+	struct phy *phy;
-+	int ret;
-+
-+	map = devm_regmap_init_spi(spi, &tja1145_regmap_config);
-+	if (IS_ERR(map))
-+		return dev_err_probe(dev, PTR_ERR(map), "failed to init regmap\n");
-+
-+	ret = tja1145_check_ident(dev, map);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to identify device\n");
-+
-+	phy = devm_phy_create(dev, dev->of_node, &tja1145_phy_ops);
-+	if (IS_ERR(phy))
-+		return dev_err_probe(dev, PTR_ERR(phy), "failed to create PHY\n");
-+
-+	phy->attrs.max_link_rate = TJA1145T_MAX_BITRATE;
-+	phy_set_drvdata(phy, map);
-+	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-+
-+	return PTR_ERR_OR_ZERO(phy_provider);
-+}
-+
-+static const struct spi_device_id tja1145_spi_id[] = {
-+	{ "tja1145" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(spi, tja1145_spi_id);
-+
-+static const struct of_device_id tja1145_of_match[] = {
-+	{ .compatible = "nxp,tja1145" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, tja1145_of_match);
-+
-+static struct spi_driver tja1145_driver = {
-+	.driver = {
-+		.name = "tja1145",
-+		.of_match_table = tja1145_of_match,
-+	},
-+	.probe = tja1145_probe,
-+	.id_table = tja1145_spi_id,
-+};
-+module_spi_driver(tja1145_driver);
-+
-+MODULE_DESCRIPTION("NXP TJA1145 CAN transceiver PHY driver");
-+MODULE_AUTHOR("Dimitri Fedrau <dimitri.fedrau@liebherr.com>");
-+MODULE_LICENSE("GPL");
-
--- 
-2.39.5
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="prdkwz2v2jdr6y4b"
+Content-Disposition: inline
+In-Reply-To: <1157f3fe-f88b-449f-a4c2-aac9d27c95ea@redhat.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
+--prdkwz2v2jdr6y4b
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH net 9/9] can: add Transmitter Delay Compensation (TDC)
+ documentation
+MIME-Version: 1.0
+
+On 13.10.2025 09:45:14, Paolo Abeni wrote:
+> Ni,
+>=20
+> On 10/12/25 4:20 PM, Marc Kleine-Budde wrote:
+> > From: Vincent Mailhol <mailhol@kernel.org>
+> >=20
+> > Back in 2021, support for CAN TDC was added to the kernel in series [1]
+> > and in iproute2 in series [2]. However, the documentation was never
+> > updated.
+> >=20
+> > Add a new sub-section under CAN-FD driver support to document how to
+> > configure the TDC using the "ip tool".
+> >=20
+> > [1] add the netlink interface for CAN-FD Transmitter Delay Compensation=
+ (TDC)
+> > Link: https://lore.kernel.org/all/20210918095637.20108-1-mailhol.vincen=
+t@wanadoo.fr/
+> >=20
+> > [2] iplink_can: cleaning, fixes and adding TDC support
+> > Link: https://lore.kernel.org/all/20211103164428.692722-1-mailhol.vince=
+nt@wanadoo.fr/
+> >=20
+> > Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+> > Link: https://patch.msgid.link/20251012-can-fd-doc-v1-2-86cc7d130026@ke=
+rnel.org
+> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > ---
+> >  Documentation/networking/can.rst | 60 ++++++++++++++++++++++++++++++++
+> >  1 file changed, 60 insertions(+)
+> >=20
+> > diff --git a/Documentation/networking/can.rst b/Documentation/networkin=
+g/can.rst
+> > index ccd321d29a8a..402fefae0c2f 100644
+> > --- a/Documentation/networking/can.rst
+> > +++ b/Documentation/networking/can.rst
+> > @@ -1464,6 +1464,66 @@ Example when 'fd-non-iso on' is added on this sw=
+itchable CAN FD adapter::
+> >     can <FD,FD-NON-ISO> state ERROR-ACTIVE (berr-counter tx 0 rx 0) res=
+tart-ms 0
+> > =20
+> > =20
+> > +Transmitter Delay Compensation
+> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > +
+> > +At high bit rates, the propagation delay from the TX pin to the RX pin=
+ of
+> > +the transceiver might become greater than the actual bit time causing
+> > +measurement errors: the RX pin would still be measuring the previous b=
+it.
+> > +
+> > +The Transmitter Delay Compensation (thereafter, TDC) resolves this pro=
+blem
+> > +by introducing a Secondary Sample Point (SSP) equal to the distance, in
+> > +minimum time quantum, from the start of the bit time on the TX pin to =
+the
+> > +actual measurement on the RX pin. The SSP is calculated as the sum of =
+two
+> > +configurable values: the TDC Value (TDCV) and the TDC offset (TDCO).
+> > +
+> > +TDC, if supported by the device, can be configured together with CAN-FD
+> > +using the ip tool's "tdc-mode" argument as follow::
+> > +
+> > +- **omitted**: when no "tdc-mode" option is provided, the kernel will
+> > +  automatically decide whether TDC should be turned on, in which case =
+it
+>=20
+> The above apparently makes htmldoc unhappy:
+>=20
+> New errors added
+> --- /tmp/tmp.ZsYbmUst3Y	2025-10-12 14:23:45.746737362 -0700
+> +++ /tmp/tmp.8o1xOCQtDp	2025-10-12 14:58:29.920405220 -0700
+> @@ -15,0 +16 @@
+> +/home/doc-build/testing/Documentation/networking/can.rst:1484: ERROR:
+> Unexpected indentation.
+>=20
+> Could you please address the above and send a v2?
+
+Here you go:
+
+| https://lore.kernel.org/all/20251014122140.990472-1-mkl@pengutronix.de/
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--prdkwz2v2jdr6y4b
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmjvbNMACgkQDHRl3/mQ
+kZybHAf9HvokYfPsneDaXItKrsldILolFTyJE/48jgBscL7KHD5kjEjAJtRz+l93
+GDXy+8xqmTLRnH6dkQClv/UUvMTJbCcssLVMOYgHXeaWR7BlV0o9n9zH8M4eSSsn
+a4sEaUj2SJe61gj6Ia5V84G9ExVkZbcKHbcmIcADk/Tb+3rLRW5/04MJeMYtO8Kv
+t8moyV1P5ouF7tA4AbvdVRb5Ga+BLbjeEdVIZzHTKp6uSEj+o9Zxhkz+CkuDEbw0
+Psd5vbfozEAgiZLRP+owN9kvNuDnpJs/N8J7Q53nwwN5SBBBb9e7ieyMjip8aSMO
+TReCCxr2e+YvWVxXlPQXC8Zv0XckNA==
+=7TL/
+-----END PGP SIGNATURE-----
+
+--prdkwz2v2jdr6y4b--
 
