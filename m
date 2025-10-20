@@ -1,31 +1,30 @@
-Return-Path: <linux-can+bounces-5236-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5241-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5322FBF20F9
-	for <lists+linux-can@lfdr.de>; Mon, 20 Oct 2025 17:19:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A937BF2171
+	for <lists+linux-can@lfdr.de>; Mon, 20 Oct 2025 17:26:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 417F0423472
-	for <lists+linux-can@lfdr.de>; Mon, 20 Oct 2025 15:19:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F05E918C0483
+	for <lists+linux-can@lfdr.de>; Mon, 20 Oct 2025 15:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0AA87260B;
-	Mon, 20 Oct 2025 15:19:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF4FA264A97;
+	Mon, 20 Oct 2025 15:25:28 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9092367D7
-	for <linux-can@vger.kernel.org>; Mon, 20 Oct 2025 15:19:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C1B268C40
+	for <linux-can@vger.kernel.org>; Mon, 20 Oct 2025 15:25:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760973579; cv=none; b=o5HB9eVyG9qkOAkpAn33uPbFAEYoTCUdEXeFOqx8mQM+NC2QR35jE0pF2ZmzEK5RdDmiBZMz/xzOc1pshzPmrf2hsQjYEgu7ZmfOswniZAfANpy8O/Akwpo96/3IYLRKFj/NO/Y4oLTzJg5JtAk8ew8iiMLwnTeAklb0wxkL00o=
+	t=1760973928; cv=none; b=m3glxATxQIGTuF3g9l6bUu4QsMhjyMZsSNGoaIFQCZmfAet4NXL+L0uRhxeJdHWs64w2X4A5tf9W1+PzkJMOJTayOYbpj/2aPiZoULq5UxRCj7ZLdIbPlGLtn8xnx5WrbYff+nFH2PUPCPNiih08XhUeXTIZe/PMryRI8rbik0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760973579; c=relaxed/simple;
-	bh=uMdCdtg2XwrNpIZ0CZDdsSCMjnFtL/9gXjdaZQV05ic=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gSuLtYJ7imRtrzD0OnpvPrihexomttunMGw7vBvaaWwng/YDTynFCMGFrhXaTjpB3SkNIqiHQFOEUn3G+Mi7VqtGUvq1/bLTc9le1uu5rbzPD4N0A9oB2KEVu10KpbK6I9WlEQ/B5jMUHRM1p0ugFSgB4PlbSJsiuos8LIS61A0=
+	s=arc-20240116; t=1760973928; c=relaxed/simple;
+	bh=qxm53sqAQ1YP5kM3q6760h0jQq14Lb5gX9n2ss8yOk0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uGiKGLN87yF9sisxe0rqHgzSeQAWa6WItq4U00r83vVfaUWCR+w/ZtANQ9rHoyO5XthsuY0dUFgDYQNk/UGsRWnrSTOqQR+l7I/k/GT1RrtyyFPLesPbmn49UqiI4Sw7fGrzBH5YYCDJsBaY3rxoc1E2RZvy7JPqdwq0KnYFVzc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,88 +32,83 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1vArfT-0003vB-7G; Mon, 20 Oct 2025 17:19:27 +0200
+	id 1vArlC-0005Ac-8S; Mon, 20 Oct 2025 17:25:22 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1vArfS-004ZTW-1I;
-	Mon, 20 Oct 2025 17:19:26 +0200
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	id 1vArlB-004ZUF-0d;
+	Mon, 20 Oct 2025 17:25:21 +0200
+Received: from blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 1DBDB48B56C;
-	Mon, 20 Oct 2025 15:19:26 +0000 (UTC)
-Date: Mon, 20 Oct 2025 17:19:24 +0200
+	by smtp.blackshift.org (Postfix) with ESMTPSA id D7F1A48B598;
+	Mon, 20 Oct 2025 15:25:20 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>, 
-	Vincent Mailhol <mailhol@kernel.org>, Oliver Hartkopp <socketcan@hartkopp.net>, 
-	Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>, socketcan@esd.eu, Heiko Stuebner <heiko@sntech.de>
-Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH can 0/3] can: drivers: drop skb in xmit if device is in
- listen only mode
-Message-ID: <20251020-electric-dramatic-cow-e8178b-mkl@pengutronix.de>
-References: <20251017-fix-skb-drop-check-v1-0-556665793fa4@pengutronix.de>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH net 0/4] pull-request: can 2025-10-20
+Date: Mon, 20 Oct 2025 17:22:21 +0200
+Message-ID: <20251020152516.1590553-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l5m4fvbx7vmqre5l"
-Content-Disposition: inline
-In-Reply-To: <20251017-fix-skb-drop-check-v1-0-556665793fa4@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+Hello netdev-team,
 
---l5m4fvbx7vmqre5l
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH can 0/3] can: drivers: drop skb in xmit if device is in
- listen only mode
-MIME-Version: 1.0
+this is a pull request of 4 patches for net/main.
 
-On 17.10.2025 16:59:58, Marc Kleine-Budde wrote:
-> I notived that 3 drivers (bxcan, esd and rockchip) use the function
-> can_dropped_invalid_skb(), that doesn't check if the device is in listen
-> only mode. This series converts these driver to use the new
-> can_dev_dropped_skb() function.
->=20
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+All patches are by me. The first 3 update the bxcan, esd and rockchip
+driver to drop skbs in xmit of the device is in listen only mode.
 
-Applied to linux-can.
+The last patch targets the CAN netlink implementation to allow the
+disabling of automatic restart after Bus-Off, even if the a driver
+doesn't implement that callback.
 
+regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+---
+The following changes since commit ffff5c8fc2af2218a3332b3d5b97654599d50cde:
 
---l5m4fvbx7vmqre5l
-Content-Type: application/pgp-signature; name="signature.asc"
+  net: phy: realtek: fix rtl8221b-vm-cg name (2025-10-17 16:34:37 -0700)
 
------BEGIN PGP SIGNATURE-----
+are available in the Git repository at:
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmj2UvgACgkQDHRl3/mQ
-kZwysQf7BA83gk3POJDewYtZEMQHNZnob1qHnopUO8DyF+bSAr7qCymLLwpj2R7p
-shOie/EQ8QeEeWPeVYQS4u1kjbO5xRtQ8bmQCgDcOnpg6JXX/zZ9/8yGgeJhzMoo
-aE7MnZEV1C9jA5MVXNVyfCGtAJizWWPHyf5R8mwDSqAJmm3UlXtx8UEL8b7tCaEB
-Hhg/LmIL2BLWZC9l+IS78R8CUFRKVq3RjLK2nyzCb4SYGJfuxXzoF2rQUBGseTL+
-MFPb1SW/15f2f2GJzdqPdgW2nhy2S7NxGrWCqs+J27GTySr20aW4poTMBtU7+KvL
-U+/LpZDPJ1qd4ljdZ8WxHeUiaWQ++A==
-=5pMM
------END PGP SIGNATURE-----
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.18-20251020
 
---l5m4fvbx7vmqre5l--
+for you to fetch changes up to 8e93ac51e4c6dc399fad59ec21f55f2cfb46d27c:
+
+  can: netlink: can_changelink(): allow disabling of automatic restart (2025-10-20 17:20:12 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.18-20251020
+
+----------------------------------------------------------------
+Marc Kleine-Budde (5):
+      can: bxcan: bxcan_start_xmit(): use can_dev_dropped_skb() instead of can_dropped_invalid_skb()
+      can: esd: acc_start_xmit(): use can_dev_dropped_skb() instead of can_dropped_invalid_skb()
+      can: rockchip-canfd: rkcanfd_start_xmit(): use can_dev_dropped_skb() instead of can_dropped_invalid_skb()
+      Merge patch series "can: drivers: drop skb in xmit if device is in listen only mode"
+      can: netlink: can_changelink(): allow disabling of automatic restart
+
+ drivers/net/can/bxcan.c                      | 2 +-
+ drivers/net/can/dev/netlink.c                | 6 ++++--
+ drivers/net/can/esd/esdacc.c                 | 2 +-
+ drivers/net/can/rockchip/rockchip_canfd-tx.c | 2 +-
+ 4 files changed, 7 insertions(+), 5 deletions(-)
 
