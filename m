@@ -1,55 +1,65 @@
-Return-Path: <linux-can+bounces-5233-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5232-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB389BF0830
-	for <lists+linux-can@lfdr.de>; Mon, 20 Oct 2025 12:22:04 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8EC8BF07F1
+	for <lists+linux-can@lfdr.de>; Mon, 20 Oct 2025 12:18:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65E7F1881782
-	for <lists+linux-can@lfdr.de>; Mon, 20 Oct 2025 10:22:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 69B554F13A6
+	for <lists+linux-can@lfdr.de>; Mon, 20 Oct 2025 10:18:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBCA41E9919;
-	Mon, 20 Oct 2025 10:21:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50BF42F5A02;
+	Mon, 20 Oct 2025 10:17:47 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from glittertind.blackshift.org (glittertind.blackshift.org [116.203.23.228])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0221E5714;
-	Mon, 20 Oct 2025 10:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.23.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5682F6579
+	for <linux-can@vger.kernel.org>; Mon, 20 Oct 2025 10:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760955719; cv=none; b=nrw9Kk3kg0HqA1ATSG6hiXO/YxDfblZ8QkKlIRE1p3tsB+7xhcXyVo8LrZrx4hlh+NtwnGNiwkq9/5AhpqLXAL/jw7mKstcGPii4wPtc3K180vvXeMOYMjcbBP789k24h4K+Qp+0/WEKGy6eNg4IqIdP7Lmj12nohNdOtKMGJG4=
+	t=1760955467; cv=none; b=jatczHF5kbIOB5M/56CUkyj8g3M4r3IY+LDb+D9OPZ1+CEIPXDMRPWImuWU0odnvgHihZI0x5gSlmJKLe/KnAo43GVb9eiPmbPHERcbIu5+BOBu4EdBWbLoXjUVIhZ31N925ou3ldBSQYd/ZUHqaMwCCIig2wc0g3IU9+QCd6kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760955719; c=relaxed/simple;
+	s=arc-20240116; t=1760955467; c=relaxed/simple;
 	bh=dsoMH9dpVO4k1M1W6qBL5U7xyB+KeAg4WZc1Ph2feA4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cBf+svzo953YhWobci1IznmDs+f8VpATsogVcVqd4gIM3KBGDtNWHWEwB4IMJPuyqEtOv0hxeDV4NtXTIHYMNwk0CRzc7+WiUdySM5VSGfaKvqc/dj+Dhz6jwevu3RyyZK3WogBtrxVMozxIk9ti+qCIIiarH0uDdFsNd8IJu18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackshift.org; spf=pass smtp.mailfrom=blackshift.org; arc=none smtp.client-ip=116.203.23.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackshift.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blackshift.org
-Received: from bjornoya.blackshift.org (unknown [IPv6:2003:102:af0a:700:2ac1:489:378:697b])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (secp384r1) server-digest SHA384
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "bjornoya.blackshift.org", Issuer "R10" (verified OK))
-	by glittertind.blackshift.org (Postfix) with ESMTPS id D714A76465F;
-	Mon, 20 Oct 2025 10:12:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ni2Qm1NWU0rdH9f65AWsWCtsg6EIs+NuBfXLAhA9+b1tJFH4C5Z4FPGDNE0gGrOb5x9Qax8/aCGQQ3DGRVWZ6NKSAC5F7KHLGRXs8TjjDMGFqokJsnhGI6vrCqi3aPi2WhuoA5DasU5pYiron1mA98vOeIIDRXLZKlxkWcFmtTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vAmxQ-0001Qk-Qy
+	for linux-can@vger.kernel.org; Mon, 20 Oct 2025 12:17:40 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vAmxQ-004Wt2-21
+	for linux-can@vger.kernel.org;
+	Mon, 20 Oct 2025 12:17:40 +0200
 Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 5AEE848B06D;
-	Mon, 20 Oct 2025 10:12:17 +0000 (UTC)
-Date: Mon, 20 Oct 2025 12:12:15 +0200
-From: Marc Kleine-Budde <mkl@blackshift.org>
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 5C39B48B07D
+	for <linux-can@vger.kernel.org>; Mon, 20 Oct 2025 10:17:40 +0000 (UTC)
+Resent-From: Marc Kleine-Budde <mkl@pengutronix.de>
+Resent-Date: Mon, 20 Oct 2025 12:17:40 +0200
+Resent-Message-ID: <sbvpia5cndz4tm2yh7wczrz7q3jpud4k3ifl636bb5ymuzcyhx@6bmzdq3mv3p6>
+Resent-To: linux-can@vger.kernel.org
+Date: Mon, 20 Oct 2025 12:12:17 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Marc Kleine-Budde <mkl@pengutronix.de>
 Cc: Andrei Lalaev <andrey.lalaev@gmail.com>, mailhol.vincent@wanadoo.fr, 
 	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org
 Subject: Re: [RFC PATCH] can: gs_usb: fix kernel oops during restart
-Message-ID: <20251020-aspiring-agama-of-agreement-6d1727-mkl@blackshift.org>
+Message-ID: <20251020-certain-arrogant-vole-of-sunshine-141841-mkl@pengutronix.de>
 References: <20250714175520.307467-1-andrey.lalaev@gmail.com>
  <20250715-almond-zebra-of-perception-9d2e6c-mkl@pengutronix.de>
 Precedence: bulk
@@ -62,6 +72,10 @@ Content-Type: multipart/signed; micalg=pgp-sha512;
 	protocol="application/pgp-signature"; boundary="6flxl23ofa67og72"
 Content-Disposition: inline
 In-Reply-To: <20250715-almond-zebra-of-perception-9d2e6c-mkl@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
 --6flxl23ofa67og72
