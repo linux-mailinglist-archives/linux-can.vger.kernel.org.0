@@ -1,131 +1,137 @@
-Return-Path: <linux-can+bounces-5266-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5267-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80ACEBFDB58
-	for <lists+linux-can@lfdr.de>; Wed, 22 Oct 2025 19:51:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2020BBFEC15
+	for <lists+linux-can@lfdr.de>; Thu, 23 Oct 2025 02:41:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2DBC3B1162
-	for <lists+linux-can@lfdr.de>; Wed, 22 Oct 2025 17:50:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8CDF18C4A40
+	for <lists+linux-can@lfdr.de>; Thu, 23 Oct 2025 00:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C37262DF147;
-	Wed, 22 Oct 2025 17:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E40E618CC13;
+	Thu, 23 Oct 2025 00:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BqDmdwHd"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141982DEA67
-	for <linux-can@vger.kernel.org>; Wed, 22 Oct 2025 17:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3987E1A073F
+	for <linux-can@vger.kernel.org>; Thu, 23 Oct 2025 00:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761155220; cv=none; b=nc+mIrBuYFGcCXVdeJIl6OXRw4PU6h+eQjEflXpAxxmlG7BF6wF9bktHQd4IPxZYExoPJ6R5/CrlUMGx/3eTR6DLogBpSzrxGi0U7RvZqxdHqB5LbHcFIw4dJ/Vy6swubVzc83+ksgrSvBlNloT0Dv41yMiBftwapn1KLPWnZPM=
+	t=1761180066; cv=none; b=HvlKUWUEW8RZ/foZxskSHuV0M+5DT7EuW8xGSz2V9D5oZtWvEzdXbspybPH7uhwFR0uah9RPpHA03GpBd+aCnjhUXhQMUWJ1YGhPJ6FjzGIAT0xls0J7i4ipmw1je88EhDgggtRgQo4aJP99bA8p3Y1PlvDrGHCc6d38Z5o1lFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761155220; c=relaxed/simple;
-	bh=YFJDQxVXGIt2EVvzI4UDLWngSrJVYknKXX4lJa0qIvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hGir5QOv3YOLYRGr9NF1vq68kOtpCAIsJNGCPV5s6V/9DaKf3en3a209aTlZGsrMbP0H9Wut78Vm8DoFccb0ZF7dLKu+KywIXhJ6jb50zIQUwudIqj0qsNOdATNuOlf3fMzPAqeRNEG1qVBAjbNWOSJFFCLlDnjaSmutSxMDvl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vBcvD-0005QR-OG; Wed, 22 Oct 2025 19:46:51 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vBcvA-004vcd-2A;
-	Wed, 22 Oct 2025 19:46:48 +0200
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 5D05048D5D9;
-	Wed, 22 Oct 2025 17:46:48 +0000 (UTC)
-Date: Wed, 22 Oct 2025 19:46:47 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>, 
-	Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Add myself as m_can reviewer
-Message-ID: <20251022-lorikeet-of-fortunate-plenty-43e085-mkl@pengutronix.de>
-References: <20251022-topic-mcan-reviewer-v6-18-v1-1-885ec5e43493@baylibre.com>
+	s=arc-20240116; t=1761180066; c=relaxed/simple;
+	bh=7DgO2ExysMIKV0mplHDEQtusRwR+3gXIIcUSPZ9a3qc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mMvEHnvAqj4WPl7QjuvOApaQuZHoxP0+1rDK0au0I61TO+IfFrEYGzvPmdFqdSmHfRhnL7purjC8+arvJAGG4feYjGBOy56AgI11K229oxE6wLtKVAQcbFc5XwwnSeHSdKsH5L/UjnG5dnrnHsDvGrruEuQXKxLMnYG/FHmwyhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BqDmdwHd; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-87dfba1b278so2643306d6.1
+        for <linux-can@vger.kernel.org>; Wed, 22 Oct 2025 17:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761180064; x=1761784864; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=71zx8jf+73P/W+rkuTFme2ni0Pfhc1L1pq1AvB/zgt4=;
+        b=BqDmdwHd7gFJWo2QKoOh7yaVribh00aKVf/VUBa7z1OWQgp3JHJrRQliS7mHwjxnmJ
+         oMLGdpj66SF9EIbwwIMQ8nUR8/4nVrzP6Bxxj461cb/PtVDHsxIHiGErTvvc44f6yH+f
+         DOHBL8olqsLk3LnhRHBrd7s7YRx/Y2VkS2OHZ4t66Yvavu5Wkeo9L9AMhJal8DFHAHnh
+         iqP7O7/fjBpi5/G/zpHwH41e5aqpD3c8krbqQQOi5VIX4EFAkguIXihx9P9odc6Ppbgt
+         3AwOdiIadaF2JfpsC/mOBA6VnGcE4jWY1vAXVyPfQG7n6G2zG6LPqTTqFeBMOy4Yp5f4
+         ho7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761180064; x=1761784864;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=71zx8jf+73P/W+rkuTFme2ni0Pfhc1L1pq1AvB/zgt4=;
+        b=JAL8q8rViuaL+QhJ9yTejGrLCAD4g4XYZegOwapRF6xXd5Go+dg/08CH4ylJ3R/TgN
+         9hSbWHYVdyW89Sj5J61hMDWTGBr/5Fv19rloDdXC7/wJxOHmMjpQ0ohdw2cZVzZhQuH2
+         J+E9RwVj2HhJ1FrLa0HDhWtkW0zLRzgalpTzOQ/OgxMhnbvzkSsS+/iOcliTgztetdRG
+         efvTi1/MYtizMTQfCo10qtGap5XRolO+wyblv/RqBRsWRLTMFXE7xYj6BsPgl5vb835D
+         Is8b7WTtuUZbtX+YQlhO7/bjKEm+zxy+kO72L5zA3joe/UWT3FOGqQN/yYN/tdELBL7g
+         C69A==
+X-Forwarded-Encrypted: i=1; AJvYcCWxDDDKNTbAUdI29h8Uw0eV7yYkfH3Rqz4bQ60P3Z+PMjZHUPw15GPgwt7b6NmjT2OID3qKOtxuGBI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywc89DejW4OIsvU1y4KVe+zsTxW+qlh5d7IrKgvdf0aOVikKHl6
+	H0qpzpszZSE14P2kbRzaAzoOYqsr56PsgnMdsfZXdTe4t9R9pKVdTbdpzTLbFOmKSNc=
+X-Gm-Gg: ASbGncv/JbGWMniV+MJkZagHvleTeMqjQviQDO218YRz7oIMEEr44PxTwXnBOS0TNqP
+	FheRQFfY7OmzZW9Xeoa4fHa/UIBzbxpwg1siY0z2d7yKAeGGq344HGPSqDLJ87WSjaonYciGfpg
+	+PS9QQjM14Dh/kaieYDZhpTcvmD6qANwYe1zDp7APEUmZlLG8Qu+qU86g9rERzu4mIhJsFTSseC
+	RlO5aOnJ7YhBqYu3DsoY33tMPR/+N2qoek4q7K7bsfE/Iqg4pjo5ZrRowTehZpnaNjXWrRy3Nk/
+	8zMgB4HgbdJo1hmRnQTSwSAU+T4/iMafSWLbBewAQpX4TjFpBjtilP3WchvUs8JiHNfnGIRCZPR
+	XjxIbb5btcdjD3POYGNQRDjsrzu9I1ooyd9f76+olhIJTr3aykbo5ErEBiBgmSTzeW5yP0Q8iFz
+	xx0NaCKVsj7oTy1b4Io+GHkl/5zBjTzQDA7PtMMvf07ysYLd5kCINZpGHeleG7Q5XQm1Xc2k8qD
+	9x7ep/Y3sSA5sKOhmRyz8zCO900FP7yRJoJ4IzmWw0=
+X-Google-Smtp-Source: AGHT+IGd8qBUBkaazKZiy+1ZSStUtxhkxZdsF9kAwOsi+CRvWAqsTZFDBarOPynXY9b02PeUXMHAzA==
+X-Received: by 2002:ad4:5741:0:b0:87e:d590:89b7 with SMTP id 6a1803df08f44-87f9eda1e5emr11114336d6.19.1761180064043;
+        Wed, 22 Oct 2025 17:41:04 -0700 (PDT)
+Received: from seungjin-HP-ENVY-Desktop-TE02-0xxx.dartmouth.edu ([129.170.197.114])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87f9f8ede50sm3442506d6.49.2025.10.22.17.41.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Oct 2025 17:41:03 -0700 (PDT)
+From: pip-izony <eeodqql09@gmail.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>
+Cc: Seungjin Bae <eeodqql09@gmail.com>,
+	Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>,
+	Jimmy Assarsson <extja@kvaser.com>,
+	linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] can: kvaser_usb: leaf: Fix infinite loop on zero-length cmd
+Date: Wed, 22 Oct 2025 20:39:09 -0400
+Message-ID: <20251023003908.130468-2-eeodqql09@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zocc6mbgpq6p4hwg"
-Content-Disposition: inline
-In-Reply-To: <20251022-topic-mcan-reviewer-v6-18-v1-1-885ec5e43493@baylibre.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+From: Seungjin Bae <eeodqql09@gmail.com>
 
---zocc6mbgpq6p4hwg
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] MAINTAINERS: Add myself as m_can reviewer
-MIME-Version: 1.0
+The `kvaser_usb_leaf_read_bulk_callback()` function parse received
+command buffers from the device. The firmware may insert zero-length
+placeholder commands to handle alignment with the USB endpoint's
+wMaxPacketSize.
 
-Hello Chandrasekar,
+The driver attempts to skip these placeholders by aligning the buffer
+position `pos` to the next packet boundary using `round_up()` function.
 
-I've seen not much review feedback from you....
+However, if zero-length command is found exactly on a packet boundary
+(i.e., `pos` is a multiple of wMaxPacketSize, including 0), `round_up`
+function will return the unchanged value of `pos`. This prevents `pos`
+to be increased, causing an infinite loop in the parsing logic.
 
-On 22.10.2025 11:10:09, Markus Schneider-Pargmann wrote:
-> As I have contributed to the m_can driver over the past years, I would
-> like to continue reviewing new patches.
->=20
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 46126ce2f968e4f9260263f1574ee29f5ff0de1c..835dfe1a16c975fb3ab46bc7e=
-d736cde61ec0bf5 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15394,6 +15394,7 @@ F:	drivers/net/phy/mxl-gpy.c
-> =20
->  MCAN MMIO DEVICE DRIVER
->  M:	Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-> +R:	Markus Schneider-Pargmann <msp@baylibre.com>
+I fixed this in the function by using `pos + 1` instead. This ensures
+that even if `pos` is on a boundary, the calculation is based on
+`pos + 1`, forcing `round_up()` to always return the next aligned
+boundary.
 
-=2E..Maybe you want to give the maintainer hat to Markus?
+Fixes: 7259124eac7d ("can: kvaser_usb: Split driver into kvaser_usb_core.c and kvaser_usb_leaf.c")
+Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
+---
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---zocc6mbgpq6p4hwg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmj5GIQACgkQDHRl3/mQ
-kZw6ZQf8DfrpXASMNYTe0xbgYAb39s9gFmgnVNWr2BZn9Awhy5+jhDvkhtk/5zdi
-Lx9wJRkKCTimAnTmk6YRSHtUlnxfBeax3swLWUQ4vGI5twAudHyeJgoOfIcoGLQd
-9gQ9/LxDWvGq/T96LRTJq3O2+VHDfPxz9U70o+CGIzZcHRFLqadIt/gJPV6zmbex
-hsY9YQfhR1nVRQJhBSb9SSR725SUPs3qEIqDZ5Z7QycPMvk8OxSdVJ87UeMvvnng
-gNZWP0U7dkUSQSxNyP86CmCUJV/dwXqkhR84rAy+s22xCueCgVrYV884GlpZ4UPm
-ZZKl0FbFpNxihlhKbmv5d+7HAYU20w==
-=MIld
------END PGP SIGNATURE-----
-
---zocc6mbgpq6p4hwg--
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+index c29828a94ad0..4da6d4ba4e1e 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@ -1732,7 +1732,7 @@ static void kvaser_usb_leaf_read_bulk_callback(struct kvaser_usb *dev,
+ 		 * number of events in case of a heavy rx load on the bus.
+ 		 */
+ 		if (cmd->len == 0) {
+-			pos = round_up(pos, le16_to_cpu
++			pos = round_up(pos + 1, le16_to_cpu
+ 						(dev->bulk_in->wMaxPacketSize));
+ 			continue;
+ 		}
+-- 
+2.43.0
 
