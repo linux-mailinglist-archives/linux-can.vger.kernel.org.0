@@ -1,149 +1,123 @@
-Return-Path: <linux-can+bounces-5268-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5269-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46206BFF3D7
-	for <lists+linux-can@lfdr.de>; Thu, 23 Oct 2025 07:17:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90277BFF506
+	for <lists+linux-can@lfdr.de>; Thu, 23 Oct 2025 08:16:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07C281A02965
-	for <lists+linux-can@lfdr.de>; Thu, 23 Oct 2025 05:17:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E867419A5755
+	for <lists+linux-can@lfdr.de>; Thu, 23 Oct 2025 06:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 195EE23C8CD;
-	Thu, 23 Oct 2025 05:17:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BUvUYYEx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8B621348;
+	Thu, 23 Oct 2025 06:16:31 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBFE157A5A;
-	Thu, 23 Oct 2025 05:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7257BA59
+	for <linux-can@vger.kernel.org>; Thu, 23 Oct 2025 06:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761196630; cv=none; b=a8l/GIsrBp5Ka3tZAOs2cgq6CGJprOtgwA/oLN2+IvWI0vi7KogIGDnvoEJs0iBVoZFcJaPRJVwmZrrp965A9deUX5J1F3Q/Emi3IKS/hsITSWLbStacMv8OyNoePFyI8g3YIpcgfHEvQFV0/Fr6TSMuh1aCTlSpISbuvsSczhI=
+	t=1761200191; cv=none; b=GDQ1h6SkdkfKZpLKqJTtH5FJX9zAK2e7+wnHM/3NvEllJ5d8F1WHJ0PskSqDPHag9Z36AsuhM1rf53qBAkvQEyiMfVe9ujCxDtcBhazV+RgE8Vv1AgeiLpGm6Rar3RlMHLVFGON4IbH+qaos5TNpX+8ZYjb9vaz5Sdj48OTtdLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761196630; c=relaxed/simple;
-	bh=wSiU4i1VN6HLtvNowK3/ZRUnH7MHzaLbuZNOUkxiTJ4=;
+	s=arc-20240116; t=1761200191; c=relaxed/simple;
+	bh=SmHagdJi/kc0HWBalielOXNb19n2G+e+fA4gmDpx0X4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j2MD5PS+gI4mxlOioh4l+pCr1mB2mVA2PyLTJAOrZRXBt+c4kiFErIVsoDIdU4M+SoBuJ/Wq2YoS/ddQ6RPYZzCUTMidtI0Lfrq+gfmYV35xDZ5UyXcFz3pMqW2iRPXocoWum6Yf87n4hd+3mgaHVAIv7BKmnvkN+RPAeiVbDFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BUvUYYEx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4679EC4CEE7;
-	Thu, 23 Oct 2025 05:16:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761196627;
-	bh=wSiU4i1VN6HLtvNowK3/ZRUnH7MHzaLbuZNOUkxiTJ4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BUvUYYExFEEvOcUyuuJO6p108bLwD4CukVdAL3YICXBCWps9S2wk92BsmQDzO+o6c
-	 pDGTxIh3KbKx5I6LH0trzh4mceVbI+LUHjc6JLTw+/8PjAw2zufRbNJhMmdvdcpshw
-	 c32W0R2Uwl9lYGthoBTv+5YT9BzWGVdybisEwqcDwawdgpUV+VUqv5kX2xKAKHpTb8
-	 6PNeRu/JUVuk6ZIFtAsklv2zZ7FSJiF9mlO/+wr/ylOl1uXGgWQ0+QM5PqzYcMsHCV
-	 es5EavQ/UvWm13sERH8B5xejbY1cwv1NeghauHXjBb5BwR36eP/5CMgkUgsyXhT6CL
-	 82QvKNHZNb7GQ==
-Date: Thu, 23 Oct 2025 10:46:50 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
-Cc: mkl@pengutronix.de, thomas.kopp@microchip.com, 
-	mailhol.vincent@wanadoo.fr, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	linus.walleij@linaro.org, brgl@bgdev.pl, linux-can@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, mukesh.savaliya@oss.qualcomm.com, 
-	anup.kulkarni@oss.qualcomm.com
-Subject: Re: [PATCH v6 0/6] can: mcp251xfd: add gpio functionality
-Message-ID: <dvqn5hwvoi36djxkfte2sw2o2nnk7irh6tgt5vmtqgm6t2dbyc@snde7uwlzbia>
-References: <20251001091006.4003841-1-viken.dadhaniya@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uIiqCVv6oL+M1zvqiH5f/Xy3EnI7dzZRjgY7Yq6W2bxKVlgqIY9kaPf2Mr8d7gv0wHdfXx5lBz7oCCBqbuwg/4sUvoczyIC3NWjZFOosOrqYPaJMUq/eOpvacX4/MDpgVKZhCLCkL7/ahwKteltn8OkBN8szNPa+SStwIAkHQzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vBocY-0005f6-LT; Thu, 23 Oct 2025 08:16:22 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vBocY-0050so-06;
+	Thu, 23 Oct 2025 08:16:22 +0200
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id A9E7D48DABA;
+	Thu, 23 Oct 2025 06:16:21 +0000 (UTC)
+Date: Thu, 23 Oct 2025 08:16:19 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: pip-izony <eeodqql09@gmail.com>
+Cc: Vincent Mailhol <mailhol@kernel.org>, 
+	Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>, Jimmy Assarsson <extja@kvaser.com>, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: kvaser_usb: leaf: Fix infinite loop on zero-length
+ cmd
+Message-ID: <20251023-athletic-courageous-pogona-1405d3-mkl@pengutronix.de>
+References: <20251023003908.130468-2-eeodqql09@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bbbqbdtk5slbsqab"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251001091006.4003841-1-viken.dadhaniya@oss.qualcomm.com>
+In-Reply-To: <20251023003908.130468-2-eeodqql09@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On Wed, Oct 01, 2025 at 02:40:00PM +0530, Viken Dadhaniya wrote:
-> Hi all,
-> 
-> The mcp251xfd allows two pins to be configured as GPIOs. This series
-> adds support for this feature.
-> 
-> The GPIO functionality is controlled with the IOCON register which has
-> an erratum.
-> 
-> Patch 1 from https://lore.kernel.org/linux-can/20240429-mcp251xfd-runtime_pm-v1-3-c26a93a66544@pengutronix.de/
-> Patch 2 refactor of no-crc functions to prepare workaround for non-crc writes
-> Patch 3 is the fix/workaround for the aforementioned erratum
-> Patch 4 only configure pin1 for rx-int
-> Patch 5 adds the gpio support
-> Patch 6 updates dt-binding
-> 
-> As per Marc's comment on below patch, we aim to get this series into
-> linux-next since the functionality is essential for CAN on the RB3 Gen2
-> board. As progress has stalled, Take this series forward with minor code
-> adjustments. Include a Tested-by tag to reflect validation performed on the
-> target hardware.
-> 
 
-LGTM! For the series,
+--bbbqbdtk5slbsqab
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] can: kvaser_usb: leaf: Fix infinite loop on zero-length
+ cmd
+MIME-Version: 1.0
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+On 22.10.2025 20:39:09, pip-izony wrote:
+> From: Seungjin Bae <eeodqql09@gmail.com>
+>=20
+> The `kvaser_usb_leaf_read_bulk_callback()` function parse received
+> command buffers from the device. The firmware may insert zero-length
+> placeholder commands to handle alignment with the USB endpoint's
+> wMaxPacketSize.
+>=20
+> The driver attempts to skip these placeholders by aligning the buffer
+> position `pos` to the next packet boundary using `round_up()`
+> function.
 
-- Mani
+What about the round_up() in kvaser_usb_leaf_wait_cmd()? Is it also
+affected by this problem?
 
-> https://lore.kernel.org/all/20240806-industrious-augmented-crane-44239a-mkl@pengutronix.de/
-> ---
-> Changes in v6:
-> - Simplified error handling by directly returning regmap_update_bits() result.
-> - Added Acked-By tag.
-> - Link to v5: https://lore.kernel.org/all/20250926133018.3071446-1-viken.dadhaniya@oss.qualcomm.com/
-> 
-> Changes in v5:
-> - Removed #ifdef GPIOLIB and added select GPIOLIB in Kconfig
-> - Rebased patch on latest baseline
-> - Resolved Kernel Test Robot warnings
-> - Link to v4: https://lore.kernel.org/all/20250918064903.241372-1-viken.dadhaniya@oss.qualcomm.com/
-> 
-> Changes in v4:
-> - Moved GPIO register initialization into mcp251xfd_register after enabling
->   runtime PM to avoid GPIO request failures when using the gpio-hog
->   property to set default GPIO state.
-> - Added Tested-by and Signed-off-by tags.
-> - Dropped the 1st and 2nd patches from the v3 series as they have already been merged.
-> - Link to v3: https://lore.kernel.org/linux-can/20240522-mcp251xfd-gpio-feature-v3-0-8829970269c5@ew.tq-group.com/
-> 
-> Changes in v3:
-> - Implement workaround for non-crc writes
-> - Configure only Pin1 for rx-int feature
-> - moved errata check to .gather_write callback function
-> - Added MCP251XFD_REG_IOCON_*() macros
-> - Added Marcs suggestions
-> - Collect Krzysztofs Acked-By
-> - Link to v2: https://lore.kernel.org/r/20240506-mcp251xfd-gpio-feature-v2-0-615b16fa8789@ew.tq-group.com
-> 
-> ---
-> Gregor Herburger (5):
->   can: mcp251xfd: utilize gather_write function for all non-CRC writes
->   can: mcp251xfd: add workaround for errata 5
->   can: mcp251xfd: only configure PIN1 when rx_int is set
->   can: mcp251xfd: add gpio functionality
->   dt-bindings: can: mcp251xfd: add gpio-controller property
-> 
-> Marc Kleine-Budde (1):
->   can: mcp251xfd: move chip sleep mode into runtime pm
-> 
->  .../bindings/net/can/microchip,mcp251xfd.yaml |   5 +
->  drivers/net/can/spi/mcp251xfd/Kconfig         |   1 +
->  .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 273 +++++++++++++++---
->  .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  | 114 ++++++--
->  drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |   8 +
->  5 files changed, 335 insertions(+), 66 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+Marc
 
--- 
-மணிவண்ணன் சதாசிவம்
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--bbbqbdtk5slbsqab
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmj5yC8ACgkQDHRl3/mQ
+kZyeHwf/bEq5HYbfAU+fAT0wwWb+pPjm0XS/MCMb4NMWIsdvF09IPWx9AEWw7YJ3
+AxNwcEIlFXO6IxyfwdBucPZGI2h4YAT4ALDFecin/Kbbu5CCzxN1H08whveBTWXJ
+glgN+UJQknnMs7pgRJTZja7PNs5+2+1XkykwK3skOTYznJGGfOX6+4YDULYwKqac
+MgsOZwD/qO8s9qTdU8FPFbq0AoQeslfimNqNmoPSB4FgqupF1CxmCMlyS1vqrter
+QBVaaSmDoHfwibSNZpLmyCx5FuJfH+THcuEDua2n022md+0s4v5LWxxYQX2v1u5O
+2s+q5S8oTG4AvdDtdtzmrH6bBrdOHQ==
+=KfyH
+-----END PGP SIGNATURE-----
+
+--bbbqbdtk5slbsqab--
 
