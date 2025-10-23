@@ -1,137 +1,149 @@
-Return-Path: <linux-can+bounces-5267-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5268-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2020BBFEC15
-	for <lists+linux-can@lfdr.de>; Thu, 23 Oct 2025 02:41:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46206BFF3D7
+	for <lists+linux-can@lfdr.de>; Thu, 23 Oct 2025 07:17:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8CDF18C4A40
-	for <lists+linux-can@lfdr.de>; Thu, 23 Oct 2025 00:41:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07C281A02965
+	for <lists+linux-can@lfdr.de>; Thu, 23 Oct 2025 05:17:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E40E618CC13;
-	Thu, 23 Oct 2025 00:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 195EE23C8CD;
+	Thu, 23 Oct 2025 05:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BqDmdwHd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BUvUYYEx"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3987E1A073F
-	for <linux-can@vger.kernel.org>; Thu, 23 Oct 2025 00:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBFE157A5A;
+	Thu, 23 Oct 2025 05:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761180066; cv=none; b=HvlKUWUEW8RZ/foZxskSHuV0M+5DT7EuW8xGSz2V9D5oZtWvEzdXbspybPH7uhwFR0uah9RPpHA03GpBd+aCnjhUXhQMUWJ1YGhPJ6FjzGIAT0xls0J7i4ipmw1je88EhDgggtRgQo4aJP99bA8p3Y1PlvDrGHCc6d38Z5o1lFs=
+	t=1761196630; cv=none; b=a8l/GIsrBp5Ka3tZAOs2cgq6CGJprOtgwA/oLN2+IvWI0vi7KogIGDnvoEJs0iBVoZFcJaPRJVwmZrrp965A9deUX5J1F3Q/Emi3IKS/hsITSWLbStacMv8OyNoePFyI8g3YIpcgfHEvQFV0/Fr6TSMuh1aCTlSpISbuvsSczhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761180066; c=relaxed/simple;
-	bh=7DgO2ExysMIKV0mplHDEQtusRwR+3gXIIcUSPZ9a3qc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mMvEHnvAqj4WPl7QjuvOApaQuZHoxP0+1rDK0au0I61TO+IfFrEYGzvPmdFqdSmHfRhnL7purjC8+arvJAGG4feYjGBOy56AgI11K229oxE6wLtKVAQcbFc5XwwnSeHSdKsH5L/UjnG5dnrnHsDvGrruEuQXKxLMnYG/FHmwyhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BqDmdwHd; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-87dfba1b278so2643306d6.1
-        for <linux-can@vger.kernel.org>; Wed, 22 Oct 2025 17:41:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761180064; x=1761784864; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=71zx8jf+73P/W+rkuTFme2ni0Pfhc1L1pq1AvB/zgt4=;
-        b=BqDmdwHd7gFJWo2QKoOh7yaVribh00aKVf/VUBa7z1OWQgp3JHJrRQliS7mHwjxnmJ
-         oMLGdpj66SF9EIbwwIMQ8nUR8/4nVrzP6Bxxj461cb/PtVDHsxIHiGErTvvc44f6yH+f
-         DOHBL8olqsLk3LnhRHBrd7s7YRx/Y2VkS2OHZ4t66Yvavu5Wkeo9L9AMhJal8DFHAHnh
-         iqP7O7/fjBpi5/G/zpHwH41e5aqpD3c8krbqQQOi5VIX4EFAkguIXihx9P9odc6Ppbgt
-         3AwOdiIadaF2JfpsC/mOBA6VnGcE4jWY1vAXVyPfQG7n6G2zG6LPqTTqFeBMOy4Yp5f4
-         ho7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761180064; x=1761784864;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=71zx8jf+73P/W+rkuTFme2ni0Pfhc1L1pq1AvB/zgt4=;
-        b=JAL8q8rViuaL+QhJ9yTejGrLCAD4g4XYZegOwapRF6xXd5Go+dg/08CH4ylJ3R/TgN
-         9hSbWHYVdyW89Sj5J61hMDWTGBr/5Fv19rloDdXC7/wJxOHmMjpQ0ohdw2cZVzZhQuH2
-         J+E9RwVj2HhJ1FrLa0HDhWtkW0zLRzgalpTzOQ/OgxMhnbvzkSsS+/iOcliTgztetdRG
-         efvTi1/MYtizMTQfCo10qtGap5XRolO+wyblv/RqBRsWRLTMFXE7xYj6BsPgl5vb835D
-         Is8b7WTtuUZbtX+YQlhO7/bjKEm+zxy+kO72L5zA3joe/UWT3FOGqQN/yYN/tdELBL7g
-         C69A==
-X-Forwarded-Encrypted: i=1; AJvYcCWxDDDKNTbAUdI29h8Uw0eV7yYkfH3Rqz4bQ60P3Z+PMjZHUPw15GPgwt7b6NmjT2OID3qKOtxuGBI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywc89DejW4OIsvU1y4KVe+zsTxW+qlh5d7IrKgvdf0aOVikKHl6
-	H0qpzpszZSE14P2kbRzaAzoOYqsr56PsgnMdsfZXdTe4t9R9pKVdTbdpzTLbFOmKSNc=
-X-Gm-Gg: ASbGncv/JbGWMniV+MJkZagHvleTeMqjQviQDO218YRz7oIMEEr44PxTwXnBOS0TNqP
-	FheRQFfY7OmzZW9Xeoa4fHa/UIBzbxpwg1siY0z2d7yKAeGGq344HGPSqDLJ87WSjaonYciGfpg
-	+PS9QQjM14Dh/kaieYDZhpTcvmD6qANwYe1zDp7APEUmZlLG8Qu+qU86g9rERzu4mIhJsFTSseC
-	RlO5aOnJ7YhBqYu3DsoY33tMPR/+N2qoek4q7K7bsfE/Iqg4pjo5ZrRowTehZpnaNjXWrRy3Nk/
-	8zMgB4HgbdJo1hmRnQTSwSAU+T4/iMafSWLbBewAQpX4TjFpBjtilP3WchvUs8JiHNfnGIRCZPR
-	XjxIbb5btcdjD3POYGNQRDjsrzu9I1ooyd9f76+olhIJTr3aykbo5ErEBiBgmSTzeW5yP0Q8iFz
-	xx0NaCKVsj7oTy1b4Io+GHkl/5zBjTzQDA7PtMMvf07ysYLd5kCINZpGHeleG7Q5XQm1Xc2k8qD
-	9x7ep/Y3sSA5sKOhmRyz8zCO900FP7yRJoJ4IzmWw0=
-X-Google-Smtp-Source: AGHT+IGd8qBUBkaazKZiy+1ZSStUtxhkxZdsF9kAwOsi+CRvWAqsTZFDBarOPynXY9b02PeUXMHAzA==
-X-Received: by 2002:ad4:5741:0:b0:87e:d590:89b7 with SMTP id 6a1803df08f44-87f9eda1e5emr11114336d6.19.1761180064043;
-        Wed, 22 Oct 2025 17:41:04 -0700 (PDT)
-Received: from seungjin-HP-ENVY-Desktop-TE02-0xxx.dartmouth.edu ([129.170.197.114])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87f9f8ede50sm3442506d6.49.2025.10.22.17.41.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 17:41:03 -0700 (PDT)
-From: pip-izony <eeodqql09@gmail.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>
-Cc: Seungjin Bae <eeodqql09@gmail.com>,
-	Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>,
-	Jimmy Assarsson <extja@kvaser.com>,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] can: kvaser_usb: leaf: Fix infinite loop on zero-length cmd
-Date: Wed, 22 Oct 2025 20:39:09 -0400
-Message-ID: <20251023003908.130468-2-eeodqql09@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1761196630; c=relaxed/simple;
+	bh=wSiU4i1VN6HLtvNowK3/ZRUnH7MHzaLbuZNOUkxiTJ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j2MD5PS+gI4mxlOioh4l+pCr1mB2mVA2PyLTJAOrZRXBt+c4kiFErIVsoDIdU4M+SoBuJ/Wq2YoS/ddQ6RPYZzCUTMidtI0Lfrq+gfmYV35xDZ5UyXcFz3pMqW2iRPXocoWum6Yf87n4hd+3mgaHVAIv7BKmnvkN+RPAeiVbDFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BUvUYYEx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4679EC4CEE7;
+	Thu, 23 Oct 2025 05:16:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761196627;
+	bh=wSiU4i1VN6HLtvNowK3/ZRUnH7MHzaLbuZNOUkxiTJ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BUvUYYExFEEvOcUyuuJO6p108bLwD4CukVdAL3YICXBCWps9S2wk92BsmQDzO+o6c
+	 pDGTxIh3KbKx5I6LH0trzh4mceVbI+LUHjc6JLTw+/8PjAw2zufRbNJhMmdvdcpshw
+	 c32W0R2Uwl9lYGthoBTv+5YT9BzWGVdybisEwqcDwawdgpUV+VUqv5kX2xKAKHpTb8
+	 6PNeRu/JUVuk6ZIFtAsklv2zZ7FSJiF9mlO/+wr/ylOl1uXGgWQ0+QM5PqzYcMsHCV
+	 es5EavQ/UvWm13sERH8B5xejbY1cwv1NeghauHXjBb5BwR36eP/5CMgkUgsyXhT6CL
+	 82QvKNHZNb7GQ==
+Date: Thu, 23 Oct 2025 10:46:50 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Cc: mkl@pengutronix.de, thomas.kopp@microchip.com, 
+	mailhol.vincent@wanadoo.fr, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	linus.walleij@linaro.org, brgl@bgdev.pl, linux-can@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, mukesh.savaliya@oss.qualcomm.com, 
+	anup.kulkarni@oss.qualcomm.com
+Subject: Re: [PATCH v6 0/6] can: mcp251xfd: add gpio functionality
+Message-ID: <dvqn5hwvoi36djxkfte2sw2o2nnk7irh6tgt5vmtqgm6t2dbyc@snde7uwlzbia>
+References: <20251001091006.4003841-1-viken.dadhaniya@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251001091006.4003841-1-viken.dadhaniya@oss.qualcomm.com>
 
-From: Seungjin Bae <eeodqql09@gmail.com>
+On Wed, Oct 01, 2025 at 02:40:00PM +0530, Viken Dadhaniya wrote:
+> Hi all,
+> 
+> The mcp251xfd allows two pins to be configured as GPIOs. This series
+> adds support for this feature.
+> 
+> The GPIO functionality is controlled with the IOCON register which has
+> an erratum.
+> 
+> Patch 1 from https://lore.kernel.org/linux-can/20240429-mcp251xfd-runtime_pm-v1-3-c26a93a66544@pengutronix.de/
+> Patch 2 refactor of no-crc functions to prepare workaround for non-crc writes
+> Patch 3 is the fix/workaround for the aforementioned erratum
+> Patch 4 only configure pin1 for rx-int
+> Patch 5 adds the gpio support
+> Patch 6 updates dt-binding
+> 
+> As per Marc's comment on below patch, we aim to get this series into
+> linux-next since the functionality is essential for CAN on the RB3 Gen2
+> board. As progress has stalled, Take this series forward with minor code
+> adjustments. Include a Tested-by tag to reflect validation performed on the
+> target hardware.
+> 
 
-The `kvaser_usb_leaf_read_bulk_callback()` function parse received
-command buffers from the device. The firmware may insert zero-length
-placeholder commands to handle alignment with the USB endpoint's
-wMaxPacketSize.
+LGTM! For the series,
 
-The driver attempts to skip these placeholders by aligning the buffer
-position `pos` to the next packet boundary using `round_up()` function.
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-However, if zero-length command is found exactly on a packet boundary
-(i.e., `pos` is a multiple of wMaxPacketSize, including 0), `round_up`
-function will return the unchanged value of `pos`. This prevents `pos`
-to be increased, causing an infinite loop in the parsing logic.
+- Mani
 
-I fixed this in the function by using `pos + 1` instead. This ensures
-that even if `pos` is on a boundary, the calculation is based on
-`pos + 1`, forcing `round_up()` to always return the next aligned
-boundary.
+> https://lore.kernel.org/all/20240806-industrious-augmented-crane-44239a-mkl@pengutronix.de/
+> ---
+> Changes in v6:
+> - Simplified error handling by directly returning regmap_update_bits() result.
+> - Added Acked-By tag.
+> - Link to v5: https://lore.kernel.org/all/20250926133018.3071446-1-viken.dadhaniya@oss.qualcomm.com/
+> 
+> Changes in v5:
+> - Removed #ifdef GPIOLIB and added select GPIOLIB in Kconfig
+> - Rebased patch on latest baseline
+> - Resolved Kernel Test Robot warnings
+> - Link to v4: https://lore.kernel.org/all/20250918064903.241372-1-viken.dadhaniya@oss.qualcomm.com/
+> 
+> Changes in v4:
+> - Moved GPIO register initialization into mcp251xfd_register after enabling
+>   runtime PM to avoid GPIO request failures when using the gpio-hog
+>   property to set default GPIO state.
+> - Added Tested-by and Signed-off-by tags.
+> - Dropped the 1st and 2nd patches from the v3 series as they have already been merged.
+> - Link to v3: https://lore.kernel.org/linux-can/20240522-mcp251xfd-gpio-feature-v3-0-8829970269c5@ew.tq-group.com/
+> 
+> Changes in v3:
+> - Implement workaround for non-crc writes
+> - Configure only Pin1 for rx-int feature
+> - moved errata check to .gather_write callback function
+> - Added MCP251XFD_REG_IOCON_*() macros
+> - Added Marcs suggestions
+> - Collect Krzysztofs Acked-By
+> - Link to v2: https://lore.kernel.org/r/20240506-mcp251xfd-gpio-feature-v2-0-615b16fa8789@ew.tq-group.com
+> 
+> ---
+> Gregor Herburger (5):
+>   can: mcp251xfd: utilize gather_write function for all non-CRC writes
+>   can: mcp251xfd: add workaround for errata 5
+>   can: mcp251xfd: only configure PIN1 when rx_int is set
+>   can: mcp251xfd: add gpio functionality
+>   dt-bindings: can: mcp251xfd: add gpio-controller property
+> 
+> Marc Kleine-Budde (1):
+>   can: mcp251xfd: move chip sleep mode into runtime pm
+> 
+>  .../bindings/net/can/microchip,mcp251xfd.yaml |   5 +
+>  drivers/net/can/spi/mcp251xfd/Kconfig         |   1 +
+>  .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 273 +++++++++++++++---
+>  .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  | 114 ++++++--
+>  drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |   8 +
+>  5 files changed, 335 insertions(+), 66 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
 
-Fixes: 7259124eac7d ("can: kvaser_usb: Split driver into kvaser_usb_core.c and kvaser_usb_leaf.c")
-Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
----
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-index c29828a94ad0..4da6d4ba4e1e 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -1732,7 +1732,7 @@ static void kvaser_usb_leaf_read_bulk_callback(struct kvaser_usb *dev,
- 		 * number of events in case of a heavy rx load on the bus.
- 		 */
- 		if (cmd->len == 0) {
--			pos = round_up(pos, le16_to_cpu
-+			pos = round_up(pos + 1, le16_to_cpu
- 						(dev->bulk_in->wMaxPacketSize));
- 			continue;
- 		}
 -- 
-2.43.0
+மணிவண்ணன் சதாசிவம்
 
