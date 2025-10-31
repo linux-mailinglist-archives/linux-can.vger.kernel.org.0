@@ -1,265 +1,278 @@
-Return-Path: <linux-can+bounces-5291-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5292-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FC4BC24F89
-	for <lists+linux-can@lfdr.de>; Fri, 31 Oct 2025 13:22:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A482C27049
+	for <lists+linux-can@lfdr.de>; Fri, 31 Oct 2025 22:24:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C1F344F3D61
-	for <lists+linux-can@lfdr.de>; Fri, 31 Oct 2025 12:21:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 021ED4E6454
+	for <lists+linux-can@lfdr.de>; Fri, 31 Oct 2025 21:23:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98EA34847C;
-	Fri, 31 Oct 2025 12:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38D1E301482;
+	Fri, 31 Oct 2025 21:23:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iGDgFdEz"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="pQo3KuuU"
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68AB348446
-	for <linux-can@vger.kernel.org>; Fri, 31 Oct 2025 12:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761913280; cv=none; b=NJdDh6bhC+3fQYkCUxi8G9VYNXyN9WMflwS2UQ6GtvxJ6Vs/jQrcFxDS6eM3bvwRPUnSI/ag7JwfHC9GH9dqanH6Zr4URyAFGO05jr1ZafDUJqfpiEqS39XpyLLfiV2J50Ls9wur9sojwSt7TrlHEw/IVquS0JkKVH9D1uIhK7Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761913280; c=relaxed/simple;
-	bh=dNEsyz9/fjHmgiXJALdzGhqysk9Jy/a3WOK15fNNKck=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OWdgn0CFHs0QKiusdqchs+a8Nc8niPr07tXwE9o70bIBogGnLLV4Pv+AWwdd3+M7Sj6uysAdqvamiWu11VaHs9XzhMo1yb7D55RrmyOq/kn9P8JZtJ77JQ6rzSSg4Y0iaFYjqFRK6c2XSOOBFiExWzVx7PURg69YHZ9OPA+sCCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iGDgFdEz; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761913277;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sUwKOyluTKFUudeOxZ3owrromDAOtIhl6Ta/vPwuydw=;
-	b=iGDgFdEzp7fiqY4ffXPLt0ffu32UazVO2HEdi6IieiIMUuiY7XGf1vPdw5qvbbUzDHhjRO
-	pN9KBRGOTc1XVYbBfC3bHIM8VzkZ8bs/XQJg7NiPCxdFB3ZG7dP635M1QyZMqvS8qbFpZd
-	CUCtGxbbrhcVxL7/E1l1/x88rr0+8KM=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-328-jEWQYegmNvCykt-KULQyzw-1; Fri, 31 Oct 2025 08:21:16 -0400
-X-MC-Unique: jEWQYegmNvCykt-KULQyzw-1
-X-Mimecast-MFC-AGG-ID: jEWQYegmNvCykt-KULQyzw_1761913274
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-6305c385adbso2590051a12.1
-        for <linux-can@vger.kernel.org>; Fri, 31 Oct 2025 05:21:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761913274; x=1762518074;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sUwKOyluTKFUudeOxZ3owrromDAOtIhl6Ta/vPwuydw=;
-        b=Dc5kbFX7ftA4mU3DWP9UG1Otds0BbH1McduBiKmkd5tWSn39g6Idef0UdeMBSG4yHk
-         a+QBcyAgu0xL3epyGNhaApch7J3KuABIayU4ZvJFbTHyss+vLK75mQXBxhqNe2V3brnq
-         BSs5sRHSCPhP2lsf6FxxUyU6RN7hIfBvcqEm8eEWCmL/Q9jAUd/2UsZsLPOX0S0A9oQz
-         ms/PLMsRAn+yeXMp8GNcxhaelt5NdgAuwu/mLf5eMa/xJ9xlFKc4qPya19VFjTTI3OQi
-         EjpmEauEjIXb6MZlh8WNyNYB7/7F9TKAAE/2npLj66tKf3+o8SeMtWJREC8IwbClWQqf
-         sn6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUNeRfGysP79GG8BDfziBGCqUvGpymUFy8qE3r2wc6DaoCf9IevXxaKJDkUmd+6iB9LmNNsIO1iTN0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9iuuoci3FyaRekGDB+hwJb4yroAN2otkYczUJ+Ke///5RPaWN
-	D6ab53RjUx8ylmElcW9A2Cra1dy4e/dXiac9h80qVEdXadVu6HeTXX83/iCPpkC5ZA/59C8stDm
-	j/qdUfT0KYbCW/iPPqWauyRW0SSR4pZNGiVQuiqsj4l1HJ31wwk9DCn07ti19BsANc66yJ2A6zu
-	0bs2UXT4NNHnRHpeQtZYT/upY7we74RfyFMOF/
-X-Gm-Gg: ASbGncuMl10Hv4xQrUhNSiSLB++0E7xmTq09uNny3HoRFaRsQysIeS5PQorhK99QWy5
-	OpOeyJ3I+SUfEWi/mPd8a52gsfiZQ9xe31Qx5ayJZ1ahydevZe8vl2j85bVGjal/zkMJw4ARzkY
-	vVjEozqOjCKUiq/6duMKG7bzM/kE7EYQ7RADnVdNJcznMvwZ7tHW27JQ==
-X-Received: by 2002:a05:6402:268e:b0:63e:2d46:cc5d with SMTP id 4fb4d7f45d1cf-64076f71156mr2639087a12.7.1761913274263;
-        Fri, 31 Oct 2025 05:21:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE/Fg/d8n1FygAt9C8iITIr/MFTt7Px6ZvAbp5bcXhaAojwuNapTMQWGvKPz3qAk5AhCrGGK2uxWoEXbc58yYM=
-X-Received: by 2002:a05:6402:268e:b0:63e:2d46:cc5d with SMTP id
- 4fb4d7f45d1cf-64076f71156mr2639055a12.7.1761913273764; Fri, 31 Oct 2025
- 05:21:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43A927280B
+	for <linux-can@vger.kernel.org>; Fri, 31 Oct 2025 21:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.164
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761945835; cv=pass; b=i/fSFMfomzsnY7B/E2fOuw7lCKenM3pLNpYQZJNyXLzZooWgbHE8GLjPr8yNicXED/x2huG35CgIKow8iO4UG9aPcDqGtm9uBzZVZh2ucC5AdvNZ8pH6HhmUMS2ta+O67j3qia6+KGFiFMaEFKuJLwVid6Ie3hxmDRvpGDOgMaI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761945835; c=relaxed/simple;
+	bh=3jPuaMrhWx9SOM4t9C4H2/fUVpCtKDKYbJ4/Qa4LKPY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tobkiwnYvKF01d9+Mkoy059/H/UuzmH3iqU5M0KVjCbrIchEnndAo9EReMeeAGtQ1Ww4k0EsUMHXVQgUGXy6dTUpFqU5GBX/Fw0/+Qq4yrZ9DoOm+gtUvaCBXilZdJ+Ns5hqPHDGFl9pcV0SpbAZQagesF6wZzyFT1OCKPg098M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=pQo3KuuU; arc=pass smtp.client-ip=81.169.146.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1761945464; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=J9vX1zcZScDvr6GXZ5E7q2BydqkdZ0J2lhNF5BUIKDgORcD98dGo8ptsupt82l2t/B
+    amGfUuhQrlYRZZBHAqfZxtiiOe87tfNDAJJmkkdTEy+TybDHtzsTO0y0ygAnDrSHCwXE
+    zZHoR6/nrPdlCfue0sZe0XVg1ui47xPCam/TeKcGcgR/9WcD3aueM5Qztp63n5BEdf/4
+    Q8wbt5xnqeyGKxoNw4OMmyBZDMmAl/w9NeTDvO8yIc9a51majb2oMbEMAPwh/DPy70No
+    T+zfdvZOd6L4Wjye7T7ZoXkl51Dg7zyVzTR7xEyugRlF2oTh05NA/i3K/DS+jr4CKIiA
+    kjXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1761945464;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=u9jf4jJVbH2HwGmlQHqFyWMPOspKXIvKCXTZW435rkA=;
+    b=imBUhdIHWBwaub87UngnuJGHtxR3BY4bY0Dbma7yriN0mGveBVwaRalrRjxk1RgAIa
+    bE/yOJsI2a27jZ4EefeGd8cG+2nvcR58MmH5ivqLXOSFBfkwHgP2AzP0BQvnD2k06iMD
+    bhga+tB87YikmNDmb5/JbMdVkF4lRyxClkwFWgaT2NCE1fTQOYoGEqpsz3atgQeEmmkI
+    QwF30qxupJpTaLPivmeDswI8tpoUFgAvMV+OuH7WLCOcKKyNJFaUizGYz9nCcAOKVFAy
+    hiHkTNnqa6xvWwstkCjluimlP63DYpaT7dnSWQpB5RkzmU0yvwaxo67/nYW5GL70P6+n
+    e3GQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1761945464;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=u9jf4jJVbH2HwGmlQHqFyWMPOspKXIvKCXTZW435rkA=;
+    b=pQo3KuuUuZYP2kbNRvvGTojCncWlm3KijwD8CrAMZE11OT3z3x84bGi7yADVTAEupp
+    EmjfPYV/KFpW15rb3+u8P5tyZwOFlLF2Ljxucn0Wp/enVqpQy3O7NRc1QkxX1vRbHIUc
+    K23YaVnvkp4aFHXL8n306uxyZGbsCVlZ9AEexQ+NwYnsPfOgcYKkEnOKKH7VocSYLNdP
+    MGHM5myXVNnqRajx/Yq+qaEvi8DApLKkYI1F7wD7aoopnF1Epsq4w3nmXWTlyhjZKZ4w
+    R8ifPs/rGPbeCbeiHFaH3R4LQmM5nxr+zRP61GNZGXarHnXBkjBn2KYgxwDYGgDj+fDY
+    NhNA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
+    by smtp.strato.de (RZmta 53.4.2 AUTH)
+    with ESMTPSA id Kf23d019VLHhs7r
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Fri, 31 Oct 2025 22:17:43 +0100 (CET)
+Message-ID: <743ba133-3735-48fd-994a-9727cfe8c114@hartkopp.net>
+Date: Fri, 31 Oct 2025 22:17:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240108131039.2234044-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
- <27327622.1r3eYUQgxm@fedora.fritz.box> <aPdU93e2RQy5MHQr@fedora>
- <28156189.1r3eYUQgxm@fedora.fritz.box> <aPeHbKES6yHkh5Rj@fedora>
-In-Reply-To: <aPeHbKES6yHkh5Rj@fedora>
-From: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-Date: Fri, 31 Oct 2025 13:21:02 +0100
-X-Gm-Features: AWmQ_bmWfyMfD1zverJ1ufhNFgKPX2AvwLjdAsskFXlhQ-Z7R9j1OZE63m7EKMI
-Message-ID: <CAHYGQ0x9ZDZ9R3s_X7irXkQ0dCGbe7CQa_-zOcf19-QqDrapRw@mail.gmail.com>
-Subject: Re: [PATCH v5] can: virtio: Initial virtio CAN driver.
-To: Francesco Valla <francesco@valla.it>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Paolo Abeni <pabeni@redhat.com>, 
-	Harald Mommer <harald.mommer@opensynergy.com>, 
-	Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>, 
-	Wolfgang Grandegger <wg@grandegger.com>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>, linux-kernel@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	virtualization@lists.linux.dev, development@redaril.me
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/10] can: netlink: add CAN XL
+To: Vincent Mailhol <mailhol@kernel.org>,
+ Marc Kleine-Budde <mkl@pengutronix.de>,
+ =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
+Cc: Robert Nawrath <mbro1689@gmail.com>, Minh Le <minh.le.aj@renesas.com>,
+ Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org
+References: <20251021-canxl-netlink-v2-0-8b8f58257ab6@kernel.org>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20251021-canxl-netlink-v2-0-8b8f58257ab6@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 21, 2025 at 3:15=E2=80=AFPM Matias Ezequiel Vara Larsen
-<mvaralar@redhat.com> wrote:
->
-> On Tue, Oct 21, 2025 at 02:08:35PM +0200, Francesco Valla wrote:
-> > On Tuesday, 21 October 2025 at 11:40:07 Matias Ezequiel Vara Larsen <mv=
-aralar@redhat.com> wrote:
-> > > On Mon, Oct 20, 2025 at 11:24:15PM +0200, Francesco Valla wrote:
-> > > > On Monday, 20 October 2025 at 16:56:08 Matias Ezequiel Vara Larsen =
-<mvaralar@redhat.com> wrote:
-> > > > > On Tue, Oct 14, 2025 at 06:01:07PM +0200, Francesco Valla wrote:
-> > > > > > On Tuesday, 14 October 2025 at 12:15:12 Matias Ezequiel Vara La=
-rsen <mvaralar@redhat.com> wrote:
-> > > > > > > On Thu, Sep 11, 2025 at 10:59:40PM +0200, Francesco Valla wro=
-te:
-> > > > > > > > Hello Mikhail, Harald,
-> > > > > > > >
-> > > > > > > > hoping there will be a v6 of this patch soon, a few comment=
-s:
-> > > > > > > >
-> > > > > > > > On Monday, 8 January 2024 at 14:10:35 Mikhail Golubev-Ciuch=
-ea <Mikhail.Golubev-Ciuchea@opensynergy.com> wrote:
-> > > > > > > >
-> > > > > > > > [...]
-> > > > > > > > > +
-> > > > > > > > > +/* Compare with m_can.c/m_can_echo_tx_event() */
-> > > > > > > > > +static int virtio_can_read_tx_queue(struct virtqueue *vq=
-)
-> > > > > > > > > +{
-> > > > > > > > > +       struct virtio_can_priv *can_priv =3D vq->vdev->pr=
-iv;
-> > > > > > > > > +       struct net_device *dev =3D can_priv->dev;
-> > > > > > > > > +       struct virtio_can_tx *can_tx_msg;
-> > > > > > > > > +       struct net_device_stats *stats;
-> > > > > > > > > +       unsigned long flags;
-> > > > > > > > > +       unsigned int len;
-> > > > > > > > > +       u8 result;
-> > > > > > > > > +
-> > > > > > > > > +       stats =3D &dev->stats;
-> > > > > > > > > +
-> > > > > > > > > +       /* Protect list and virtio queue operations */
-> > > > > > > > > +       spin_lock_irqsave(&can_priv->tx_lock, flags);
-> > > > > > > > > +
-> > > > > > > > > +       can_tx_msg =3D virtqueue_get_buf(vq, &len);
-> > > > > > > > > +       if (!can_tx_msg) {
-> > > > > > > > > +               spin_unlock_irqrestore(&can_priv->tx_lock=
-, flags);
-> > > > > > > > > +               return 0; /* No more data */
-> > > > > > > > > +       }
-> > > > > > > > > +
-> > > > > > > > > +       if (unlikely(len < sizeof(struct virtio_can_tx_in=
-))) {
-> > > > > > > > > +               netdev_err(dev, "TX ACK: Device sent no r=
-esult code\n");
-> > > > > > > > > +               result =3D VIRTIO_CAN_RESULT_NOT_OK; /* K=
-eep things going */
-> > > > > > > > > +       } else {
-> > > > > > > > > +               result =3D can_tx_msg->tx_in.result;
-> > > > > > > > > +       }
-> > > > > > > > > +
-> > > > > > > > > +       if (can_priv->can.state < CAN_STATE_BUS_OFF) {
-> > > > > > > > > +               /* Here also frames with result !=3D VIRT=
-IO_CAN_RESULT_OK are
-> > > > > > > > > +                * echoed. Intentional to bring a waiting=
- process in an upper
-> > > > > > > > > +                * layer to an end.
-> > > > > > > > > +                * TODO: Any better means to indicate a p=
-roblem here?
-> > > > > > > > > +                */
-> > > > > > > > > +               if (result !=3D VIRTIO_CAN_RESULT_OK)
-> > > > > > > > > +                       netdev_warn(dev, "TX ACK: Result =
-=3D %u\n", result);
-> > > > > > > >
-> > > > > > > > Maybe an error frame reporting CAN_ERR_CRTL_UNSPEC would be=
- better?
-> > > > > > > >
-> > > > > > > I am not sure. In xilinx_can.c, CAN_ERR_CRTL_UNSPEC is indica=
-ted during
-> > > > > > > a problem in the rx path and this is the tx path. I think the=
- comment
-> > > > > > > refers to improving the way the driver informs this error to =
-the user
-> > > > > > > but I may be wrong.
-> > > > > > >
-> > > > > >
-> > > > > > Since we have no detail of what went wrong here, I suggested
-> > > > > > CAN_ERR_CRTL_UNSPEC as it is "unspecified error", to be coupled=
- with a
-> > > > > > controller error with id CAN_ERR_CRTL; however, a different err=
-or might be
-> > > > > > more appropriate.
-> > > > > >
-> > > > > > For sure, at least in my experience, having a warn printed to k=
-msg is *not*
-> > > > > > enough, as the application sending the message(s) would not be =
-able to detect
-> > > > > > the error.
-> > > > > >
-> > > > > >
-> > > > > > > > For sure, counting the known errors as valid tx_packets and=
- tx_bytes
-> > > > > > > > is misleading.
-> > > > > > > >
-> > > > > > >
-> > > > > > > I'll remove the counters below.
-> > > > > > >
-> > > > > >
-> > > > > > We don't really know what's wrong here - the packet might have =
-been sent and
-> > > > > > and then not ACK'ed, as well as any other error condition (as i=
-t happens in the
-> > > > > > reference implementation from the original authors [1]). Echoin=
-g the packet
-> > > > > > only "to bring a waiting process in an upper layer to an end" a=
-nd incrementing
-> > > > > > counters feels wrong, but maybe someone more expert than me can=
- advise better
-> > > > > > here.
-> > > > > >
-> > > > > >
-> > > > >
-> > > > > I agree. IIUC, in case there has been a problem during transmissi=
-on, I
-> > > > > should 1) indicate this by injecting a CAN_ERR_CRTL_UNSPEC packag=
-e with
-> > > > > netif_rx() and 2) use can_free_echo_skb() and increment the tx_er=
-ror
-> > > > > stats. Is this correct?
-> > > > >
-> > > > > Matias
-> > > > >
-> > > > >
-> > > >
-> > > > That's my understanding too! stats->tx_dropped should be the right =
-value to
-> > > > increment (see for example [1]).
-> > > >
-> > > > [1] https://elixir.bootlin.com/linux/v6.17.3/source/drivers/net/can=
-/ctucanfd/ctucanfd_base.c#L1035
-> > > >
-> > >
-> > > I think the counter to increment would be stats->tx_errors in this ca=
-se ...
-> > >
-> >
-> > I don't fully agree. tx_errors is for CAN frames that got transmitted b=
-ut then
-> > lead to an error (e.g.: no ACK), while here we might be dealing with fr=
-ames
-> > that didn't even manage to reach the transmission queue [1].
-> >
-> Let's use tx_dropped then, I honestly do not have an strong opinion
-> about it. We can change that later if we are not happy.
->
-> Matias
+Hi Vincent,
 
-Just sent v6 in https://lore.kernel.org/all/aQJRnX7OpFRY%2F1+H@fedora/
+I managed to have my DE1SoC FPGA boards working including TMS after 
+fixing a weird typo with the help from Bosch colleagues, the PCAN USB XL 
+from Stephane (which worked as a correct node) and my scope.
 
-Matias
+First of all: The configuration and features are great any easy to use 
+and give excellent feedback now.
+
+Things that need to be changed:
+
+1. The xsample-point calculation follows the standard CiA sample-points:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mailhol/linux.git/tree/drivers/net/can/dev/calc_bittiming.c?h=b4/canxl-netlink#n82
+
+         /* Use CiA recommended sample points */
+         if (bt->sample_point) {
+                 sample_point_nominal = bt->sample_point;
+         } else {
+                 if (bt->bitrate > 800 * KILO /* BPS */)
+                         sample_point_nominal = 750;
+                 else if (bt->bitrate > 500 * KILO /* BPS */)
+                         sample_point_nominal = 800;
+                 else
+                         sample_point_nominal = 875;
+         }
+
+But with "TMS on" the PWM method is used to transfer the bit-values.
+Therefore the sample-points are near to 50% - 60%, see Table 3 here:
+
+https://www.can-cia.org/fileadmin/cia/documents/publications/cnlm/december_2024/cnlm_24-4_p18_can_xl_system_design_clock_tolerances_and_edge_deviations_dr_arthur_mutter_bosch.pdf
+
+In my case I used ...
+
+# ip link set can0 type can bitrate 1000000 sample-point 0.80 fd off 
+xbitrate 10000000 xsample-point 0.57 xl on tms on err-signal off
+
+... to get the correct xsample-point 0.562:
+
+# ip -det link show can0
+11: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 2060 qdisc pfifo_fast state UP 
+mode DEFAULT group default qlen 10
+     link/can  promiscuity 0 allmulti 0 minmtu 16 maxmtu 16
+     can <XL,XL-TMS> state STOPPED restart-ms 0
+	  bitrate 1000000 sample-point 0.800
+	  tq 6 prop-seg 63 phase-seg1 64 phase-seg2 32 sjw 16 brp 1
+	  xcanb_can_nl: tseg1 2..512 tseg2 2..128 sjw 1..128 brp 1..32 brp_inc 1
+	  xcanb_can_nl: dtseg1 1..256 dtseg2 2..128 dsjw 1..128 dbrp 1..32 
+dbrp_inc 1
+	  tdco 0..255 tdcf 0..255
+	  xbitrate 10000000 xsample-point 0.562
+	  xtq 6 xprop-seg 4 xphase-seg1 4 xphase-seg2 7 xsjw 3 xbrp 1
+	  pwms 4 pwml 12 pwmo 0
+	  xcanb_can_nl: xtseg1 1..256 xtseg2 2..128 xsjw 1..128 xbrp 1..32 
+xbrp_inc 1
+	  xtdco 0..255 xtdcf 0..255
+	  pwms 1..8 pwml 2..24 pwmo 0..16
+	  clock 160000000 addrgenmode eui64 numtxqueues 1 numrxqueues 1 
+gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 
+65535 gro_max_size 65536 gso_ipv4_max_size 65536 gro_ipv4_max_size 65536
+
+
+2. In the "xl on" "tms on" mode only CAN XL frames can be sent. So we 
+need to drop CC and FD frames when they are sent, e.g. via CAN_RAW sockets.
+
+Therefore
+
+[PATCH v2 02/10] can: dev: can_dev_dropped_skb: drop CAN FD skbs if FD 
+is off
+
+has to be extended. And my proposed patch too:
+
+[RFC PATCH v5 2/2] can: reject CAN FD content when disabled on CAN XL 
+interfaces
+
+https://lore.kernel.org/linux-can/20250909092433.30546-1-socketcan@hartkopp.net/T/#mcb0ebd94e45c34a2d0590ded2dfeed97edd05adf
+
+I'll continue testing next week.
+
+Best regards,
+Oliver
+
+On 21.10.25 17:47, Vincent Mailhol wrote:
+> Following all the refactoring on the CAN netlink done in series [1],
+> [2] and [3], this is now time to finally introduce the CAN XL netlink
+> interface.
+> 
+> Similarly to how CAN FD reuses the bittiming logic of Classical CAN,
+> CAN XL also reuses the entirety of CAN FD features, and, on top of
+> that, adds new features which are specific to CAN XL.
+> 
+> Patch #1 is a small clean-up which makes can_calc_bittiming() use
+> NL_SET_ERR_MSG() instead of netdev_err().
+> 
+> Patch #2 adds a check in can_dev_dropped_skb() to drop CAN FD frames
+> when CAN FD is turned off.
+> 
+> Patch #3 adds CAN_CTRLMODE_RESTRICTED. Note that contrary to the other
+> CAN_CTRL_MODE_XL_* that are introduced in the later patches, this
+> control mode is not specific to CAN XL. The nuance is that because
+> this restricted mode was only added in ISO 11898-1:2024, it is made
+> mandatory for CAN XL devices but optional for other protocols. This is
+> why this patch is added as a preparation before introducing the core
+> CAN XL logic.
+> 
+> Patch #4 adds all the CAN XL features which are inherited from CAN FD:
+> the nominal bittiming, the data bittiming and the TDC.
+> 
+> Patch #5 and #6 add two new CAN control modes which are specific to
+> CAN XL: CAN_CTRLMODE_XL_TMS, CAN_CTRLMODE_XL_ERR_SIGNAL respectively.
+> 
+> Finally, patch #7 to #10 add the PWM logic.
+> 
+> [1] can: netlink: preparation before introduction of CAN XL
+> Link: https://lore.kernel.org/linux-can/20241112165118.586613-7-mailhol.vincent@wanadoo.fr/
+> 
+> [2] can: rework the CAN MTU logic (CAN XL preparation step 2/3)
+> Link: https://lore.kernel.org/linux-can/20250923-can-fix-mtu-v3-0-581bde113f52@kernel.org/
+> 
+> [3] can: netlink: preparation before introduction of CAN XL step 3/3
+> Link: https://lore.kernel.org/linux-can/20250923-canxl-netlink-prep-v4-0-e720d28f66fe@kernel.org/
+> 
+> ---
+> Changes in v2:
+> 
+>    - Add a new patch #1.
+> 
+>    - In patch #9, add a return statement to can_calc_tdco() when
+>      CONFIG_CAN_CALC_BITTIMING is not set. This fixes a warning as
+>      reported by the kernel test robot:
+> 
+>        Link: https://lore.kernel.org/linux-can/202510140553.qo3f0I9s-lkp@intel.com/
+> 
+>      While at it, add an error message.
+> 
+> Link to v1: https://lore.kernel.org/r/20251013-canxl-netlink-v1-0-f422b7e2729f@kernel.org
+> 
+> Changes in v1:
+> 
+>     - Add PWM
+> 
+>     - Add the CAN_CTRLMODE_RESTRICTED, CAN_CTRLMODE_XL_TMS and
+>       CAN_CTRLMODE_XL_ERR_SIGNAL control modes.
+> 
+>     - A lot has changed since the original RFC was sent in November
+>       last year.  The preparation patches went in a separate series as
+>       explained in the cover letter, and what used to be a single patch
+>       to introduce CAN XL is now a full series. A few additional
+>       details are added to the individual patches, but overall I did
+>       not keep track of all the changes over the last year. You may as
+>       well consider this as a new series.
+>     
+> Link to RFC: https://lore.kernel.org/linux-can/20241110155902.72807-16-mailhol.vincent@wanadoo.fr/
+> 
+> ---
+> Vincent Mailhol (10):
+>        can: bittiming: apply NL_SET_ERR_MSG() to can_calc_bittiming()
+>        can: dev: can_dev_dropped_skb: drop CAN FD skbs if FD is off
+>        can: netlink: add CAN_CTRLMODE_RESTRICTED
+>        can: netlink: add initial CAN XL support
+>        can: netlink: add CAN_CTRLMODE_XL_TMS flag
+>        can: netlink: add CAN_CTRLMODE_XL_ERR_SIGNAL
+>        can: bittiming: add PWM parameters
+>        can: bittiming: add PWM validation
+>        can: calc_bittiming: add PWM calculation
+>        can: netlink: add PWM netlink interface
+> 
+>   drivers/net/can/dev/bittiming.c      |  63 +++++++
+>   drivers/net/can/dev/calc_bittiming.c |  36 ++++
+>   drivers/net/can/dev/dev.c            |  20 +-
+>   drivers/net/can/dev/netlink.c        | 357 +++++++++++++++++++++++++++++++++--
+>   include/linux/can/bittiming.h        |  81 +++++++-
+>   include/linux/can/dev.h              |  49 +++--
+>   include/uapi/linux/can/netlink.h     |  35 ++++
+>   7 files changed, 599 insertions(+), 42 deletions(-)
+> ---
+> base-commit: ffee675aceb9f44b0502a8bec912abb0c4f4af62
+> change-id: 20241229-canxl-netlink-bc640af10673
+> 
+> Best regards,
 
 
