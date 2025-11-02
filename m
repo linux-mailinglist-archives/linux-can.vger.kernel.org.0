@@ -1,120 +1,117 @@
-Return-Path: <linux-can+bounces-5295-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5296-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDB69C28FF8
-	for <lists+linux-can@lfdr.de>; Sun, 02 Nov 2025 14:55:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B1F4C2980B
+	for <lists+linux-can@lfdr.de>; Sun, 02 Nov 2025 23:02:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 91B4E4E47D3
-	for <lists+linux-can@lfdr.de>; Sun,  2 Nov 2025 13:55:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 728231889661
+	for <lists+linux-can@lfdr.de>; Sun,  2 Nov 2025 22:02:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161B61F582E;
-	Sun,  2 Nov 2025 13:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7281921B191;
+	Sun,  2 Nov 2025 22:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r2dD78wd"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BB31E98E3
-	for <linux-can@vger.kernel.org>; Sun,  2 Nov 2025 13:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496AF212FB3;
+	Sun,  2 Nov 2025 22:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762091727; cv=none; b=FYmBvZWe3O3xwn1kLgVG3pAtDOlzto/VIdf+BOJ11rrlI5VgM3JfN3FYLNwDM7q7Xv1qbmkbnIyYlblv0IFMtLDQenx8mFn+9T/hSoXmOwuK5e3NbzjTwMy42YZ9Ys76QLPxp6qh4IOGGIqL5A+jLyYX45K4IyBVadLQV3g9/Cg=
+	t=1762120944; cv=none; b=g8HXPlKxThvvxxdjMCfTX+rRUj0GfhUtsIBkkGL6iJzoIkZ8K8t1QGQ/ZN2qrIUR0drXcdD2GEErHNOSKtaYRKW1rv/gM+ioE6Hah1TJiAEbEjHTNI/iaZIQbOvpAM7S5p2cMV/hf8nS15WyI4+zlIN6NKKIi5AfCrDr9gSfCMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762091727; c=relaxed/simple;
-	bh=M2IisSCTvrkgv5ctIyTrkxVp3NrBj65m8a0MhyuYjpU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VG609TdenhmIP7NEtk6wpGurIzl98YqxzLY53CHVXEey1XAkvmcyie2erXTsI8gnjuSI9tiQ1IDd/k3c+h1RqC5lE8iQ0zhGOFgltDc1d72JAPnrQ05VGjc+U8M/FPZZrw1sJVssDicsEF/yGfxVfv0i5tMU4KsyBjUEAcJaLtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vFYXv-0007Xl-0u; Sun, 02 Nov 2025 14:55:03 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vFYXt-006ha3-0A;
-	Sun, 02 Nov 2025 14:55:01 +0100
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id C5D33494550;
-	Fri, 31 Oct 2025 12:19:54 +0000 (UTC)
-Date: Fri, 31 Oct 2025 13:19:51 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Cc: Vincent Mailhol <mailhol@kernel.org>, 
-	Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>, socketcan@esd.eu, Manivannan Sadhasivam <mani@kernel.org>, 
-	Thomas Kopp <thomas.kopp@microchip.com>, Oliver Hartkopp <socketcan@hartkopp.net>, 
-	Jimmy Assarsson <extja@kvaser.com>, Axel Forsman <axfo@kvaser.com>, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
-	Vladimir Oltean <vladimir.oltean@nxp.com>, Kory Maincent <kory.maincent@bootlin.com>, 
-	Jacob Keller <jacob.e.keller@intel.com>
-Subject: Re: [PATCH net-next 0/3] convert can drivers to use ndo_hwtstamp
- callbacks
-Message-ID: <20251031-fierce-laughing-hummingbird-208a89-mkl@pengutronix.de>
-References: <20251029231620.1135640-1-vadim.fedorenko@linux.dev>
+	s=arc-20240116; t=1762120944; c=relaxed/simple;
+	bh=I3VUIZBrzTnSKzceauS1D6vvM8dyX5gyoyosn+e2Ye4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NNP1TNCZvhlZdw1ZVcsNFWwDZB7YQOFm/l97FdXjEf2+Ea0b+FWwnEyNwCvZkiKobMxZLZsQp6odIKJYzjeyQ2S1kfimnEw3eMUlbmkMudxUcdv6jwxJwnjIuUAMXKJZgmdaRjrFPNqetc9I/qYGiVR9SLfNHWBMJiFTd/j8Ef0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r2dD78wd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91EEAC4CEF7;
+	Sun,  2 Nov 2025 22:02:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762120943;
+	bh=I3VUIZBrzTnSKzceauS1D6vvM8dyX5gyoyosn+e2Ye4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=r2dD78wdaTbmnnTX+9vtBBAnsTkeD6PVYUPIRsPuzz+BijpZyb3irXGhQNkxqYXaq
+	 uN4h296C1PEf+jT3OuIX5D4u/JH3585Fq0bjFAlGErlcX4bj/ddImcwKT6neUyHhdI
+	 9Cz/kTFrpP5dkuXXKOhqxlWOvzh82VvlrkvZVSTy+90fBP9y0tkIXbMWsGz/k00ncw
+	 uFwvro7bUIOm0ENBvq6E/3krakvD51Rn8/rNZnCrOZt1S1MDYSdBK6xsLhVMwwQPQC
+	 jXWAHr/bh4exvCJktZS+A/vFQRD+tAPp8pQUOg/jDRdQOonmARAin3Li5bd17eemke
+	 sDkAdI4FBXPGg==
+From: Vincent Mailhol <mailhol@kernel.org>
+Subject: [PATCH RFC 0/3] can: calc_bittiming: add sample point calculation
+ for PWM encoding
+Date: Sun, 02 Nov 2025 23:01:21 +0100
+Message-Id: <20251102-pwm_sample_point-v1-0-3bbea180f59e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uok4emd47n6jmrxq"
-Content-Disposition: inline
-In-Reply-To: <20251029231620.1135640-1-vadim.fedorenko@linux.dev>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALLUB2kC/z3Myw6CMBQE0F8hd21NWx5ityZ+gFtDSCkXbaQF2
+ 4okhH+3PuJyZjJnAY9OoweRLOBw0l4PNga2SUBdpb0g0W3MwCnPGaOcjE9Te2nGHutx0DaQsuS
+ palLVZvke4m102On5Q57hdDxA9S0d3h+RD7/lr4sk2hnjfE+UtHNPLIZe2xtpVJFR2TFa7FIx8
+ bfdSI9EDcboIJKp2LKSOMWhWtcXIeUBOckAAAA=
+X-Change-ID: 20251102-pwm_sample_point-8823cb3cd459
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Vincent Mailhol <mailhol@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1959; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=I3VUIZBrzTnSKzceauS1D6vvM8dyX5gyoyosn+e2Ye4=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDJnsVx6IKp/2bbya9GanxHRDPmMDX8ljNpweC3vaHrCx7
+ 3fez7mko5SFQYyLQVZMkWVZOSe3Qkehd9ihv5Ywc1iZQIYwcHEKwES+zGBk+CMUkG3xtatc3iD6
+ 0kK3F10C+w5+7KuQfPHjFo87W0IxF8P/3B0Ce+N+irlIZd/T2CAptF3J9sqlhIlP275sKXY9+Y+
+ TBQA=
+X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
+ fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
+I wrote this series in response to Oliver's feedback in [1]. I am
+sending this as an RFC based on top of [2] for the moment so that we
+can discuss this separately. The plan is to merge this to the CAN XL
+branch once we reach a consensus on this part.
 
---uok4emd47n6jmrxq
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH net-next 0/3] convert can drivers to use ndo_hwtstamp
- callbacks
-MIME-Version: 1.0
+Patch #1 and #2 are refactors, patch #3 introduces a dedicated
+function for the PWM sample point calculation.
 
-On 29.10.2025 23:16:17, Vadim Fedorenko wrote:
-> The patchset converts generic ioctl implementation into a pair of
-> ndo_hwtstamp_get/ndo_hwtstamp_set generic callbacks and replaces
-> callbacks in drivers.
+[1] https://lore.kernel.org/linux-can/743ba133-3735-48fd-994a-9727cfe8c114@hartkopp.net/
 
-applied to linux-can-next
+[2] [PATCH v2 00/10] can: netlink: add CAN XL
+Link: https://lore.kernel.org/linux-can/20251021-canxl-netlink-v2-0-8b8f58257ab6@kernel.org/
 
-Thanks,
-Marc
+Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+---
+Vincent Mailhol (3):
+      can: calc_bittiming: get rid of the incorrect "nominal" word
+      can: calc_bittiming: add can_calc_sample_point_nrz()
+      can: calc_bittiming: add can_calc_sample_point_pwm()
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+ drivers/net/can/dev/calc_bittiming.c | 68 ++++++++++++++++++++++++------------
+ 1 file changed, 45 insertions(+), 23 deletions(-)
+---
+base-commit: ffee675aceb9f44b0502a8bec912abb0c4f4af62
+change-id: 20251102-pwm_sample_point-8823cb3cd459
+prerequisite-change-id: 20241229-canxl-netlink-bc640af10673:v2
+prerequisite-patch-id: 6b3294205bd76b38257516c63b7001ab242c9b62
+prerequisite-patch-id: 56431d12edcc0f325cf5204bb6868742c462c0ed
+prerequisite-patch-id: 1547fd7ea8f1937f0491cfc0996b09890f850991
+prerequisite-patch-id: 1dae270b0454352e46b927f71d1b47ff2bf7a49e
+prerequisite-patch-id: e4d43de873dfdefc023a0b86e397b37ea2b9e9a3
+prerequisite-patch-id: 4f3db477ff411effe70075c59ae6eac04fc65600
+prerequisite-patch-id: 148dbfce9d3bb09537087ee93e60bb7819bdadee
+prerequisite-patch-id: 7996539e26d449e8db260425c7287b4dce8cdf35
+prerequisite-patch-id: 42215044df6a63fff07c7a7d771d7dc375cc8b0e
+prerequisite-patch-id: 640ebf8ac8a1d114dcb91e6c05b9414bd09416fc
+prerequisite-patch-id: 84ee5e4f937f8e4cd97833d601affea78fe55914
 
---uok4emd47n6jmrxq
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+-- 
+Vincent Mailhol <mailhol@kernel.org>
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmkEqWQACgkQDHRl3/mQ
-kZyKaAf/dkrC1Ni82GV4fZJYaXVJXi6U1naARUVYLKAvPCoVAem6NU/tGcrd79G1
-gMKlMmStFT/lai3orSbSLvrgFqpFbwOBJ7BtbMJMhGabU8/DJAS+QdsoSw3ADLNN
-6ontAErIFaHHQn55gM3lQhoYvy8D4gMDEGOaPcvkFPx8tglI5BJllKfOjjQ8+eXb
-kpbw1rNmui+yHLWe4YE8MsCrZ4ZpZmjOZB2YuBBF+m39JvCmo60/DyVwciT3tEhK
-2KLh8mX7T9nMSwOTA+QiI3Hvin8QhcZYV9V5WEyZ2Q7xlMlPmK6U1ITxoX7SuuSP
-On7+XGNvkJ1pUsuAHXPj/Z+8/PTTfQ==
-=jOya
------END PGP SIGNATURE-----
-
---uok4emd47n6jmrxq--
 
