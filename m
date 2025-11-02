@@ -1,50 +1,50 @@
-Return-Path: <linux-can+bounces-5298-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5299-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90A2BC2981A
-	for <lists+linux-can@lfdr.de>; Sun, 02 Nov 2025 23:03:26 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9020C29814
+	for <lists+linux-can@lfdr.de>; Sun, 02 Nov 2025 23:02:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A75503A41E3
-	for <lists+linux-can@lfdr.de>; Sun,  2 Nov 2025 22:02:38 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 616BF347094
+	for <lists+linux-can@lfdr.de>; Sun,  2 Nov 2025 22:02:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F79C24DCE6;
-	Sun,  2 Nov 2025 22:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B02525484B;
+	Sun,  2 Nov 2025 22:02:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fQIdkl0s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vMWbf1++"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CBF24BD04;
-	Sun,  2 Nov 2025 22:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F6C238D52;
+	Sun,  2 Nov 2025 22:02:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762120948; cv=none; b=PlH3PWZQPWGV4AvA+0EdnXPBz675NuzRASrc7rPavuxyh78SCah1w+UY3HEMdJvkwUvVsn41BulytBOzCmictjtG6QSp4GpMM0s+k2vy2fpYLeQgMSx/YD5lGghVdXWLQqa24LmprwA5Um+7QLaBNviqG6d3e2Lj+1Akr8C4H4k=
+	t=1762120950; cv=none; b=cW4s82nK1FJ0yDjyLt/o+rC7bXLUHXo4Q1tV+0/5RvaF5AAFMN++RlzLrrMTbx7p4tBIfdPHK+TaWak7vBvZ+kbt5RDxJ398uJDZ2q/oFlufD/uI+XV6xOSpV4kYcqBMVVukDMULslQMYu3d4HjCUSuJu5TxzN2DKl81yavsTP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762120948; c=relaxed/simple;
-	bh=iwfVHvGnDcHWXBErKl2dZ5emFhyZ5/kSEItrfe34yyY=;
+	s=arc-20240116; t=1762120950; c=relaxed/simple;
+	bh=XO1jxK3wpk3B6QjmDfGFENG9FHZAlijBivkjQ2ozt0Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uBGX0LKFDbh/CZP+y0+e0+0p0NgvqMTKNHongUCR4uOmh1VfKbCDZYVHE2+PUHSzaqXXa02k6UvXq1ewaa4rbIYlgErpo1hBnQoMQ5Mp6pvKmOSVBCpHgPYlmU6BwpYoE7mnHVCgSCjLT1oU6WIFq/JlbWVXK8MqFnpYPoG8wuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fQIdkl0s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2838CC116C6;
-	Sun,  2 Nov 2025 22:02:25 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=OHJXnFX/zeMb3HPBsjZqxJ+5QgW1djlDHaDGDRs6Zmaf8MJHnBJx/qA0zcYzdS6V5c+GrayeXaaw2ULof+JSfJC0al5p8oPvfcbLALvD+vwGIQ2baExb+eVxFJWo6snq9cqwAfD7tQxESrEAHBXzKPzkXtZoN6ZkQnBjm+n/q2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vMWbf1++; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337B0C4CEF7;
+	Sun,  2 Nov 2025 22:02:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762120947;
-	bh=iwfVHvGnDcHWXBErKl2dZ5emFhyZ5/kSEItrfe34yyY=;
+	s=k20201202; t=1762120949;
+	bh=XO1jxK3wpk3B6QjmDfGFENG9FHZAlijBivkjQ2ozt0Y=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=fQIdkl0smLbCYUAMfjMuQeQnrR1XB2jHvzecA0jUNvhwrdDegJ4P0C63bhScwshNh
-	 G+mI0DFYaFErR0XXkTRz3xJjsY/b6jxWxYNcibWCrJSCz/sxO8T5bxvj0WbGz61Iah
-	 aKl7i5rfC8BCwQ7j87LQoCtGywSel77fnCyLXGiy6zNBfRZTDP0flNKgMI6WVK4d4w
-	 XFYvdWR/EBjXFBseu/AEs0/rfcs9YhkBwXHcM2aaXte8lW9E+xLKuVjRKYssi2mVRi
-	 W4AToxEoU+GM5sqLADbWXPPgqutCLlLifJMPBwEJKUKavykPmZDP/XuknT9tZtfKvh
-	 KeJueDHqGfLhA==
+	b=vMWbf1++15n+uIQxaFdYe35bpBijFwfYQ7ZdgiTPJYpb4z9tGNaqagmNaxLB04aa9
+	 rZTS+6Jitw5ELb+50P+Z+20Ay5QcnNBt1jaNQEaE+ZbZtQ7YEUmSw9S3cgqPB+C7DJ
+	 o0ULcC0eYZQOM+O4lF6ud7Wr8Yh6PLaygSUH49dEG/rp4JmMS3tuBKq5P/i1+q8N2o
+	 irJhbcSYIfMlsZ1/y1324wNRNIEsNZWvJkQw+in92zAEnpzJpSnaVTF+brPXRPwGZW
+	 mvIQtS0Dcv2U5ubRThJ9qtHtgcYQZvQjgD7f1OOWYwapk0MfhfI+mHQRCJQu/2ro85
+	 Rhm/zynmr2itw==
 From: Vincent Mailhol <mailhol@kernel.org>
-Date: Sun, 02 Nov 2025 23:01:23 +0100
-Subject: [PATCH RFC 2/3] can: calc_bittiming: add
- can_calc_sample_point_nrz()
+Date: Sun, 02 Nov 2025 23:01:24 +0100
+Subject: [PATCH RFC 3/3] can: calc_bittiming: add
+ can_calc_sample_point_pwm()
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251102-pwm_sample_point-v1-2-3bbea180f59e@kernel.org>
+Message-Id: <20251102-pwm_sample_point-v1-3-3bbea180f59e@kernel.org>
 References: <20251102-pwm_sample_point-v1-0-3bbea180f59e@kernel.org>
 In-Reply-To: <20251102-pwm_sample_point-v1-0-3bbea180f59e@kernel.org>
 To: Marc Kleine-Budde <mkl@pengutronix.de>, 
@@ -61,75 +61,96 @@ To: Marc Kleine-Budde <mkl@pengutronix.de>,
 Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Vincent Mailhol <mailhol@kernel.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1961; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=iwfVHvGnDcHWXBErKl2dZ5emFhyZ5/kSEItrfe34yyY=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDJnsV14IGpbXSlTx623jy70tM8czUF6Bde4sqQMBUx8Y3
- pO65hTeUcrCIMbFICumyLKsnJNboaPQO+zQX0uYOaxMIEMYuDgFYCIFBYwM0w7/WbL5yzX7lQaR
- HO/+WnE55had5FJlkf9wamqKVG/aV0aGH84VT99++bdCfJvKDMGIyuWM3KvX3JezXLNihsenaM9
- NvAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3006; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=XO1jxK3wpk3B6QjmDfGFENG9FHZAlijBivkjQ2ozt0Y=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDJnsV17fnCorNXd26c/dEr4HeBNzxYrXrxa1nsUS0ZE15
+ ZJfN093RykLgxgXg6yYIsuyck5uhY5C77BDfy1h5rAygQxh4OIUgImE5TMynNafntm+ZJ7DNk3J
+ SUqzyg5I/exM9N4w+8+5hu1lEa/snzD8s376IvZW5LL++A/Vp6R/aPI4ePZevCp64W1otNLLSnY
+ NdgA=
 X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-CAN XL optimal sample point for PWM encoding (when TMS is on) differs
-from the NRZ optimal one. There is thus a need to calculate a
-different sample point depending whether TMS is on or off.
+The optimum sample point value depends on the bit symmetry. The more
+asymmetric the bit is, the more the sample point would be located
+towards the end of the bit. On the contrary, if the transceiver only
+has a small asymmetry, the optimal sample point would be slightly
+after the centre of the bit.
 
-This is a preparation change: move the sample point calculation from
-can_calc_bittiming() into the new can_calc_sample_point_nrz()
-function.
+For NRZ encoding (used by Classical CAN, CAN FD and CAN XL with TMS
+off), the optimum sample points values are above 70% as implemented in
+can_calc_sample_point_nrz().
 
-In an upcoming change, a function will be added to calculate the
-sample point for PWM encoding.
+When TMS is on, CAN XL optimum sample points are near to 50% or
+60% [1]. Add can_calc_sample_point_pwm() which returns a sample point
+which is suitable for PWM encoding. We crafted the formula to make it
+return the same values as below table (source: table 3 of [1]).
+
+       Bit rate (Mbits/s)	Sample point
+       -------------------------------------
+         2.0			 51.3%
+         5.0			 53.1%
+         8.0			 55.0%
+        10.0			 56.3%
+        12.3			 53.8%
+        13.3			 58.3%
+        14.5			 54.5%
+        16.0			 60.0%
+        17.7			 55.6%
+        20.0			 62.5%
+
+The calculation simply consists of setting a slightly too high sample
+point and then letting can_update_sample_point() correct the values.
+
+For now, it is just a formula up our sleeves which matches the
+empirical observations of [1]. Once CiA recommendations become
+available, can_calc_sample_point_pwm() should be updated accordingly.
+
+[1] CAN XL system design: Clock tolerances and edge deviations edge
+    deviations
+Link: https://www.can-cia.org/fileadmin/cia/documents/publications/cnlm/december_2024/cnlm_24-4_p18_can_xl_system_design_clock_tolerances_and_edge_deviations_dr_arthur_mutter_bosch.pdf
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
 ---
- drivers/net/can/dev/calc_bittiming.c | 25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ drivers/net/can/dev/calc_bittiming.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
 diff --git a/drivers/net/can/dev/calc_bittiming.c b/drivers/net/can/dev/calc_bittiming.c
-index 222117596704..9b2d0e458518 100644
+index 9b2d0e458518..be6726dcd7e7 100644
 --- a/drivers/net/can/dev/calc_bittiming.c
 +++ b/drivers/net/can/dev/calc_bittiming.c
-@@ -10,6 +10,18 @@
+@@ -22,6 +22,21 @@ static int can_calc_sample_point_nrz(const struct can_bittiming *bt)
+ 	return 875;
+ }
  
- #define CAN_CALC_MAX_ERROR 50 /* in one-tenth of a percent */
- 
-+/* CiA recommended sample points for Non Return to Zero encoding. */
-+static int can_calc_sample_point_nrz(const struct can_bittiming *bt)
++/* Sample points for Pulse-Width Modulation encoding. */
++static int can_calc_sample_point_pwm(const struct can_bittiming *bt)
 +{
-+	if (bt->bitrate > 800 * KILO /* BPS */)
-+		return 750;
++	if (bt->bitrate > 15 * MEGA /* BPS */)
++		return 625;
 +
-+	if (bt->bitrate > 500 * KILO /* BPS */)
-+		return 800;
++	if (bt->bitrate > 9 * MEGA /* BPS */)
++		return 600;
 +
-+	return 875;
++	if (bt->bitrate > 4 * MEGA /* BPS */)
++		return 560;
++
++	return 520;
 +}
 +
  /* Bit-timing calculation derived from:
   *
   * Code based on LinCAN sources and H8S2638 project
-@@ -78,17 +90,10 @@ int can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
- 	u64 v64;
- 	int err;
+@@ -92,6 +107,10 @@ int can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
  
--	/* Use CiA recommended sample points */
--	if (bt->sample_point) {
-+	if (bt->sample_point)
+ 	if (bt->sample_point)
  		sample_point = bt->sample_point;
--	} else {
--		if (bt->bitrate > 800 * KILO /* BPS */)
--			sample_point = 750;
--		else if (bt->bitrate > 500 * KILO /* BPS */)
--			sample_point = 800;
--		else
--			sample_point = 875;
--	}
-+	else
-+		sample_point = can_calc_sample_point_nrz(bt);
++
++	else if (btc == priv->xl.data_bittiming_const &&
++		 (priv->ctrlmode & CAN_CTRLMODE_XL_TMS))
++		sample_point = can_calc_sample_point_pwm(bt);
+ 	else
+ 		sample_point = can_calc_sample_point_nrz(bt);
  
- 	/* tseg even = round down, odd = round up */
- 	for (tseg = (btc->tseg1_max + btc->tseg2_max) * 2 + 1;
 
 -- 
 2.51.0
