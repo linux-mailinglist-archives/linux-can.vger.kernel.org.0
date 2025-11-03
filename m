@@ -1,253 +1,190 @@
-Return-Path: <linux-can+bounces-5307-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5308-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15E77C2DCBC
-	for <lists+linux-can@lfdr.de>; Mon, 03 Nov 2025 20:06:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65CA6C2DE12
+	for <lists+linux-can@lfdr.de>; Mon, 03 Nov 2025 20:21:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC6033BD2D3
-	for <lists+linux-can@lfdr.de>; Mon,  3 Nov 2025 19:06:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63579420120
+	for <lists+linux-can@lfdr.de>; Mon,  3 Nov 2025 19:18:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A32742A96;
-	Mon,  3 Nov 2025 19:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBDDD347C3;
+	Mon,  3 Nov 2025 19:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="LWKnnfrZ"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Lr7njc1q"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE32BA45
-	for <linux-can@vger.kernel.org>; Mon,  3 Nov 2025 19:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BABD1F91D6
+	for <linux-can@vger.kernel.org>; Mon,  3 Nov 2025 19:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762196765; cv=pass; b=LxEqVNq8j3o1J2nOSQzdR0bHazPkIqbrRQ442FCnDpJNxgghJmMDLyesuoZotq4SAO2y1oKD1nXjrVNQ89v/Cf5uu6AvH2RN3aRWg+EfH6ZBXKPYQDIRAUrHczV+hbgtCqkHi/6RI3rO0EdkVm3NcJvZh5sL9YUKPSCP1qOIddU=
+	t=1762197380; cv=pass; b=TiVnDdAMvEEXQ9OeChp84o2vGYcYwUzPXZjtIHaRw/Wf0XK11oBiSK8+FPIAX4XCfWd3Brjk85pYoOzg8cvc+WyNQ29kLrEj+CpMwYZiqYlA5/AGKmuar69v8lJ9pxFdnqEnLTMnXkcZY2QJLsy+i5uMnOkdptf+TUWk2urNyqw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762196765; c=relaxed/simple;
-	bh=FOopW0xEmyZk10lU70Zl1feNBX4Js4Kp2qs5kQ/ERFE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WcL22eAKWR6NMSFviKtlcDAAhWSo3Jf2jcPMhat6f0wN4xtZdPGUMbDWN+esmTIbtTLPDen9WeyheKNdkibL1HwKYEl/cUx2EHQpSDdDrbYKbN4Ep6zBtVrN0+0/cNA5eB8PWSbkiOkG9ZSIoJeXuMaVs7AlyltQsur821Ppwso=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=LWKnnfrZ; arc=pass smtp.client-ip=85.215.255.22
+	s=arc-20240116; t=1762197380; c=relaxed/simple;
+	bh=mK4QroItEe1nEUhRvDqNtHTF6gyFvMbAdvnrXnWjX/w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=phEjTOXOguRL6ngj8ikTdTPAwk5s0pSwzswHaSJrpblAoOJTQMku6buU1VQYB7zJiuX6ncTyuh/hYFPOVkt0j1qaVyLIgdJCaKiVrRpREkSglqa6RiMsGf1R09LUjWKdyOBq3hkm0NZbuz7M6wce3OtVhX/+lcqU4LPQuEmyo70=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Lr7njc1q; arc=pass smtp.client-ip=85.215.255.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1762196027; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1762197366; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=i/w2HnvkExcom6FXQkO41h/IrffrWG8get/nkrI0tPoAkL2l532eIwMOH9HiB/v1hV
-    tknVGRReJpadgH4bY5xq1TOfy/LEEtQv/2y6BNcZCFsfAx4rM/raAeqKTOF6Gyvamr6w
-    xcUwjFWUBz9KaH6bNiwq2+vkBDnLzc3EudO4oH8b6gn4ga63pHite/+u5o30/bYysGNe
-    ihLGlg/lZ+DUWQ2cs4hU0DaXg1qjqUZ5yblwgV+s9It6O6mMDDMBFwS3HDCbXeoKka5/
-    BRXMqqcBz7Kxnts/+lQHp4IEWn5bfel6jzhk/sIU2iP/qhcNBpT2aEOlJ6XLLWvAwJSF
-    tQ5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1762196027;
+    b=L21Dmyb/Fs4B5cvI+z0Rx0h0mXPSWZJXYD13a9Zj/XASD49uxcrIrWTNT76XyB6HdM
+    aTQYkfQga5MXuP0VfBXbJhleanMbraGFyspKaf56wFKMj9vIInL6EabrDOV748dzMPeN
+    VCpyQZxMZS+uO5cipWrXDW+BpSjbS7f5WO3RnWymjTtgY/ajY075McWUkwtY4h822XZW
+    kMwm37TAUmsyM4MmpOOLPcR3i1ndKgviFkw6vzbQUEsv38BLsLjivZg6SstKbvVRm0Ig
+    q+ZWsLHJ0IDtbrTvJEEmxSTehtpNscLLN0u+jsqAzn0S6dVmiJgxL0V3Bb54YVbmGEJv
+    aqlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1762197366;
     s=strato-dkim-0002; d=strato.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=dympGOfxqsOcRKzWojq2HWg1tQSIk2x85kbdpWmOGB0=;
-    b=AGXdFXycdXM6tBrK/fho25/gOJ+9KpoF1qBMI04orXplN0myVdpT0i+4oOZjHFnLks
-    ftH4Wymy212Xm0Pm2B0ZxCCSRZYWNKzNh0jT1jG4x+aO5BP2348n7wUEiZGIK/NXS5s9
-    YM9vWNmghmJwVFdQq3e+NgLaMdiZoTQ60Fov0XnhhOeNLhs/hhwQqy1pVHtxjghXunnP
-    862jTTKtEO70ejV6y5ALf/mQ3j4dYmqXKrRVWtjF7gC7T5aEA5v6KdzwCm1XHUzzoL2Y
-    UU6tROASY9lY6Sz4mgSnUykr8KoFopigzlq4FdtLLymHdYKK+aSPieTV2hTl5MOmLSP+
-    EJwA==
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=92GZVwmSMcMDtWWNCQfkFSu58FrTHooxFT+qGdplXTs=;
+    b=GY1E9kf/3PkawbayR/xUiAAacz0LmtXLLD1V0OzABpgKvyUUMqaSkvV57QORfYbC3h
+    d4Mw1pdwhffPwLSNLLMVntf5pGW7BNNVjp3eZVXnmzoHeLhQSsPhyvhKRpA0OnMRu9HR
+    teB4XHnyVcmlwQeF8TiJmi5rwk7nJFVwm6iDw1mP8Aa2Z5r8BISZa0m8aQxDnrQyJTmK
+    KmIHtNIxbKAas3iyxnEJiCKUa5b+HmcZ/kzyEBk+hpAz8GJuaG1i+QsOO8eqAwELXrJ1
+    GQKfuAvUuJIL8V1h9Txb41Xrkk8gaaMACnGepPStZ+b0F2nToHhOuIZoAeQFU6Z/3jym
+    ED0g==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1762196027;
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1762197366;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=dympGOfxqsOcRKzWojq2HWg1tQSIk2x85kbdpWmOGB0=;
-    b=LWKnnfrZrS9XesUk8axxGx3mNOVvwyDZWo+qTPss2OBpwkiwf/K3h6qJwbpEugpheU
-    Tw4CjQkWPUn9Hhs4cjQosz3je/xHnSkFwYQBISulxaGYyIHalMeTThghvbTFicLj+EaC
-    7EI8TjHs9tf2yJJzV7+z+AKISSI9hOCKwiilVV1MO2n4D5bcMRBoL/1CpHwKQ++ZIdHz
-    PJJ2h4c9fMjkp/wlD6swpl2txRFZ1e8jbxnryKjQ19KsdfnUTXSE5f53X4UNCb2W8MQp
-    CJtheIX+BAon5DcuWqopUlnlgwIiQDvhl+h63vK5ccyKlroO9419/1lV0DfNTtsIWYWT
-    KnCg==
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=92GZVwmSMcMDtWWNCQfkFSu58FrTHooxFT+qGdplXTs=;
+    b=Lr7njc1qga8MjAUCIVFiPZuTAo5Ou9xNMjnJYqEvahosL4SAFUlTZl6g+/S1rgC3Vz
+    +EiM5kstHpo/8qlmkff9nRJKZqBvfULsU64nvf2nILjyxOIA52slSJhEUud3QjuuEgzC
+    3Pz47EEqQB4EZkaIK+Pq5DQ6wq2vyCKVBRWYRwh968CvHXhk8S9k4CmzOxg1K721IhWi
+    SOV3Yax0DYbDiUc8K7YDmYs2+bOsBZylbISIA+IWedFyxJXb+p+vzH7gfsJhGd9xqoz4
+    SgtGxUxguDULgkqsql+VAdQFJggTQXabFIya5DED5aO3W1Wk+tlCQVXVE8MmJd8zQLUu
+    B4Bw==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from lenov17.lan
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
     by smtp.strato.de (RZmta 53.4.2 AUTH)
-    with ESMTPSA id Kf23d01A3Irl5uc
+    with ESMTPSA id Kf23d01A3JG65wt
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Mon, 3 Nov 2025 19:53:47 +0100 (CET)
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org,
-	mailhol@kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH b4/canxl-netlink v2] can: drop unsupported CAN frames on socket and netdev level
-Date: Mon,  3 Nov 2025 19:53:36 +0100
-Message-ID: <20251103185336.32772-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.47.3
+    Mon, 3 Nov 2025 20:16:06 +0100 (CET)
+Message-ID: <3d7521ba-bd71-46b0-9642-728a5222f2d6@hartkopp.net>
+Date: Mon, 3 Nov 2025 20:15:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/10] can: netlink: add CAN XL
+To: Vincent Mailhol <mailhol@kernel.org>
+Cc: Robert Nawrath <mbro1689@gmail.com>, Minh Le <minh.le.aj@renesas.com>,
+ Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
+ Marc Kleine-Budde <mkl@pengutronix.de>,
+ =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
+References: <20251021-canxl-netlink-v2-0-8b8f58257ab6@kernel.org>
+ <743ba133-3735-48fd-994a-9727cfe8c114@hartkopp.net>
+ <69303466-a9ed-44cb-a1a9-30ac1451e7cb@kernel.org>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <69303466-a9ed-44cb-a1a9-30ac1451e7cb@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Rework the checks for skbs containing CAN CC/FD/XL frames.
+Hi Vincent,
 
-For real CAN interfaces the CAN_CTRLMODE_FD and CAN_CTRLMODE_XL control
-modes indicate whether an interface can handle those CAN FD/XL frames.
+On 02.11.25 23:11, Vincent Mailhol wrote:
 
-In the case a CAN XL interface is used with "TMS on" or "ERR_SIGNAL off"
-neither CAN CC nor CAN FD frames are supported to be sent. Add a check
-for the so-called 'mixed mode' (CC/FD/XL) in can_dev_cc_enabled().
+> I just sent
+> 
+> https://lore.kernel.org/linux-can/20251102-pwm_sample_point-v1-0-3bbea180f59e@kernel.org/
+> 
+> to address the problem. Let me know if this works in your test environment and I
+> will merge it to the main series.
 
-CAN_CTRLMODE_FD is ensured to be disabled when TMS is enabled or
-ERR_SIGNAL is off.
+Very elegant solution. I started some coding into this direction too.
+Good that I didn't post it ;-)
 
-The checks are performed on CAN_RAW sockets to give an instant feedback
-to the user when writing unsupported CAN frames to the interface.
+Tested-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Reviewed-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-Additionally we check for correct skbs on CAN netdev level in the case
-the CAN frames are provided via PF_PACKET sockets.
+For the series. The 'nominal' left over was also a good improvement.
 
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- include/linux/can/dev.h | 57 ++++++++++++++++++++++++++++++++++++++++-
- net/can/raw.c           | 19 +++++++-------
- 2 files changed, 65 insertions(+), 11 deletions(-)
+>> 2. In the "xl on" "tms on" mode only CAN XL frames can be sent. So we need to
+>> drop CC and FD frames when they are sent, e.g. via CAN_RAW sockets.
+>>
+>> Therefore
+>>
+>> [PATCH v2 02/10] can: dev: can_dev_dropped_skb: drop CAN FD skbs if FD is off
+>>
+>> has to be extended. And my proposed patch too:
+>>
+>> [RFC PATCH v5 2/2] can: reject CAN FD content when disabled on CAN XL interfaces
+>>
+>> https://lore.kernel.org/linux-can/20250909092433.30546-1-socketcan@hartkopp.net/
+>> T/#mcb0ebd94e45c34a2d0590ded2dfeed97edd05adf
+> 
+> Thanks for re-sending the patch! I remember we discussed this in September but
+> it somehow went out of my mind. I just have a quick look so far on the new patch
+> and so far it looks good. I will do a few more tests next week before adding it
+> to the XL main series.
+I just sent a V2 patch for it:
 
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index 945c16743702..23743c44d300 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -129,10 +129,52 @@ int can_restart_now(struct net_device *dev);
- void can_bus_off(struct net_device *dev);
- 
- const char *can_get_state_str(const enum can_state state);
- const char *can_get_ctrlmode_str(u32 ctrlmode);
- 
-+static inline bool can_dev_cc_enabled(struct net_device *dev)
-+{
-+	struct can_priv *priv = safe_candev_priv(dev);
-+
-+#define MIXED_MODE (CAN_CTRLMODE_FD | CAN_CTRLMODE_XL)
-+
-+	/* When CAN XL is enabled but FD is disabled we are not running in the
-+	 * so-called 'mixed mode' (CC/FD/XL with TMS OFF and ERR_SIGNAL ON).
-+	 * Then either TMS is ON or ERR_SIGNAL is OFF in which cases the
-+	 * resulting XL-only mode does not allow the sending of CC/FD frames.
-+	 */
-+	if (priv)
-+		return !((priv->ctrlmode & MIXED_MODE) == CAN_CTRLMODE_XL);
-+
-+	/* virtual CAN interfaces always support CAN CC */
-+	return true;
-+}
-+
-+static inline bool can_dev_fd_enabled(struct net_device *dev)
-+{
-+	struct can_priv *priv = safe_candev_priv(dev);
-+
-+	/* check FD ctrlmode on real CAN interfaces */
-+	if (priv)
-+		return (priv->ctrlmode & CAN_CTRLMODE_FD);
-+
-+	/* check MTU for virtual CAN FD interfaces */
-+	return (READ_ONCE(dev->mtu) >= CANFD_MTU);
-+}
-+
-+static inline bool can_dev_xl_enabled(struct net_device *dev)
-+{
-+	struct can_priv *priv = safe_candev_priv(dev);
-+
-+	/* check XL ctrlmode on real CAN interfaces */
-+	if (priv)
-+		return (priv->ctrlmode & CAN_CTRLMODE_XL);
-+
-+	/* check MTU for virtual CAN XL interfaces */
-+	return (READ_ONCE(dev->mtu) >= CANXL_MIN_MTU);
-+}
-+
- /* drop skb if it does not contain a valid CAN frame for sending */
- static inline bool can_dev_dropped_skb(struct net_device *dev, struct sk_buff *skb)
- {
- 	struct can_priv *priv = netdev_priv(dev);
- 	u32 silent_mode = priv->ctrlmode & (CAN_CTRLMODE_LISTENONLY |
-@@ -142,15 +184,28 @@ static inline bool can_dev_dropped_skb(struct net_device *dev, struct sk_buff *s
- 		netdev_info_once(dev, "interface in %s mode, dropping skb\n",
- 				 can_get_ctrlmode_str(silent_mode));
- 		goto invalid_skb;
- 	}
- 
--	if (!(priv->ctrlmode & CAN_CTRLMODE_FD) && can_is_canfd_skb(skb)) {
-+	/* Classical CAN */
-+	if (can_is_can_skb(skb) && !can_dev_cc_enabled(dev)) {
-+		netdev_info_once(dev, "CAN CC with TMS on, dropping skb\n");
-+		goto invalid_skb;
-+	}
-+
-+	/* CAN FD */
-+	if (can_is_canfd_skb(skb) && !can_dev_fd_enabled(dev)) {
- 		netdev_info_once(dev, "CAN FD is disabled, dropping skb\n");
- 		goto invalid_skb;
- 	}
- 
-+	/* CAN XL */
-+	if (can_is_canxl_skb(skb) && !can_dev_xl_enabled(dev)) {
-+		netdev_info_once(dev, "CAN XL is disabled, dropping skb\n");
-+		goto invalid_skb;
-+	}
-+
- 	return can_dropped_invalid_skb(dev, skb);
- 
- invalid_skb:
- 	kfree_skb(skb);
- 	dev->stats.tx_dropped++;
-diff --git a/net/can/raw.c b/net/can/raw.c
-index a53853f5e9af..645f1e0b2555 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -890,24 +890,23 @@ static void raw_put_canxl_vcid(struct raw_sock *ro, struct sk_buff *skb)
- 		cxl->prio &= CANXL_PRIO_MASK;
- 		cxl->prio |= ro->tx_vcid_shifted;
- 	}
- }
- 
--static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb, int mtu)
-+static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb,
-+				      struct net_device *dev)
- {
--	/* Classical CAN -> no checks for flags and device capabilities */
--	if (can_is_can_skb(skb))
-+	/* Classical CAN */
-+	if (can_is_can_skb(skb) && can_dev_cc_enabled(dev))
- 		return CAN_MTU;
- 
--	/* CAN FD -> needs to be enabled and a CAN FD or CAN XL device */
--	if (ro->fd_frames && can_is_canfd_skb(skb) &&
--	    (mtu == CANFD_MTU || can_is_canxl_dev_mtu(mtu)))
-+	/* CAN FD */
-+	if (ro->fd_frames && can_is_canfd_skb(skb) && can_dev_fd_enabled(dev))
- 		return CANFD_MTU;
- 
--	/* CAN XL -> needs to be enabled and a CAN XL device */
--	if (ro->xl_frames && can_is_canxl_skb(skb) &&
--	    can_is_canxl_dev_mtu(mtu))
-+	/* CAN XL */
-+	if (ro->xl_frames && can_is_canxl_skb(skb) && can_dev_xl_enabled(dev))
- 		return CANXL_MTU;
- 
- 	return 0;
- }
- 
-@@ -959,11 +958,11 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 		goto free_skb;
- 
- 	err = -EINVAL;
- 
- 	/* check for valid CAN (CC/FD/XL) frame content */
--	txmtu = raw_check_txframe(ro, skb, READ_ONCE(dev->mtu));
-+	txmtu = raw_check_txframe(ro, skb, dev);
- 	if (!txmtu)
- 		goto free_skb;
- 
- 	/* only CANXL: clear/forward/set VCID value */
- 	if (txmtu == CANXL_MTU)
--- 
-2.47.3
+https://lore.kernel.org/linux-can/20251103185336.32772-1-socketcan@hartkopp.net/T/#u
+
+The so-called 'mixed mode' with TMS off and ERR_SIGNAL on allows the 
+transmission of CC/FD/XL frames.
+But it looks like, that the combination CC/XL is not intended for the 
+'mixed mode'. In all the documentations and videos it is the combination 
+of FD and XL.
+
+The CANXL-only modes are TMS on OR ERR_SIGNAL off. Both cases currently 
+correctly force FD off. But it also should force CAN CC to be disabled.
+
+Long story short:
+
+# ip link set can0 type can bitrate 1000000 fd off xbitrate 4000000 xl 
+on tms off
+
+is currently allowed and leads to
+
+# ip -det link show can0
+8: can0: <NOARP,ECHO> mtu 2060 qdisc pfifo_fast state DOWN mode DEFAULT 
+group default qlen 10
+     link/can  promiscuity 0 allmulti 0 minmtu 16 maxmtu 16
+     can <XL,XL-TDC-AUTO,XL-ERR-SIGNAL> state STOPPED restart-ms 0
+	  bitrate 1000000 sample-point 0.750
+	  tq 6 prop-seg 59 phase-seg1 60 phase-seg2 40 sjw 20 brp 1
+	  xcanb_can_nl: tseg1 2..512 tseg2 2..128 sjw 1..128 brp 1..32 brp_inc 1
+	  xcanb_can_nl: dtseg1 1..256 dtseg2 2..128 dsjw 1..128 dbrp 1..32 
+dbrp_inc 1
+	  tdco 0..255 tdcf 0..255
+	  xbitrate 4000000 xsample-point 0.750
+	  xtq 6 xprop-seg 14 xphase-seg1 15 xphase-seg2 10 xsjw 5 xbrp 1
+	  xtdco 30 xtdcf 0
+	  xcanb_can_nl: xtseg1 1..256 xtseg2 2..128 xsjw 1..128 xbrp 1..32 
+xbrp_inc 1
+	  xtdco 0..255 xtdcf 0..255
+	  pwms 1..8 pwml 2..24 pwmo 0..16
+	  clock 160000000 addrgenmode eui64 numtxqueues 1 numrxqueues 1 
+gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 
+65535 gro_max_size 65536 gso_ipv4_max_size 65536 gro_ipv4_max_size 65536
+
+But IMO the 'mixed-mode' must have a CAN FD mode too:
+
+# ip link set can0 type can bitrate 1000000 dbitrate 2000000 fd on 
+xbitrate 4000000 xl on tms off
+
+Which is currently not enforced.
+
+And then my V2 patch also works as intended.
+
+Best regards,
+Oliver
 
 
