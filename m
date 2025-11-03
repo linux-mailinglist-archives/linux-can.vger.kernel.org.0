@@ -1,111 +1,136 @@
-Return-Path: <linux-can+bounces-5304-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5305-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73A4CC2A620
-	for <lists+linux-can@lfdr.de>; Mon, 03 Nov 2025 08:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E77FC2A6C5
+	for <lists+linux-can@lfdr.de>; Mon, 03 Nov 2025 08:55:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DAB03AB7DE
-	for <lists+linux-can@lfdr.de>; Mon,  3 Nov 2025 07:42:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3656C3AF987
+	for <lists+linux-can@lfdr.de>; Mon,  3 Nov 2025 07:52:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5996C2C027C;
-	Mon,  3 Nov 2025 07:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF5CE2C08D9;
+	Mon,  3 Nov 2025 07:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="rO9IiVFx"
 X-Original-To: linux-can@vger.kernel.org
-Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729BF232395;
-	Mon,  3 Nov 2025 07:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.26.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A8923EA82
+	for <linux-can@vger.kernel.org>; Mon,  3 Nov 2025 07:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762155725; cv=none; b=fQrYeVPAlxb8hwMj5QcRKsaDqS+nIcoyOiJnHCC1EzoNqnVG71fVrU6uX1Nm5trSbCWLWSjD5kuQO6GLV8QGB1kenziBfF1xftu7CmckfUUXEwqAVTAh1RKOo3sppbOLsxkUYxwSd2JWOad3/NS9/pUwGROios0UYwtONyJ2VY8=
+	t=1762156338; cv=none; b=BCP0sRCcRVqM/zH6jc6N/qT75PoTfxgFzb6PlxcrCaYWid9HaF8su+3RiL1Cync5CSLYAQLALyzkGntbhe7gjp9Wfou06aF0uh1tfIussy1mPOXCtulcon3ONDRL0dSvHRXUNDIt12evlvN1n56e70zDQTg4HydrCTiD1MPQ3Q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762155725; c=relaxed/simple;
-	bh=8jVk7in61RXpS246U2Z4bBDD2OdJJ6KiqtiqI6EDdLI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ALxwcwhb4o+n1s3ywlCQe0KjKss34vCVS8nZcZtGC6uVUPGwna+cuJlNuM2AFHkmLVA5U+2qYPyMB/bV7KSleYJXp+4ppFAuPjRRH+ECSJ14QgCR0L5/k0l+58Eljp9Aui1aQbxCBcYSXfNO4qnsoe2nWHfaV8Oz/PE+6wTFkA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.26.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
-Received: from Jtjnmail201614.home.langchao.com
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id 202511031541519835;
-        Mon, 03 Nov 2025 15:41:51 +0800
-Received: from jtjnmailAR02.home.langchao.com (10.100.2.43) by
- Jtjnmail201614.home.langchao.com (10.100.2.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Mon, 3 Nov 2025 15:41:52 +0800
-Received: from inspur.com (10.100.2.107) by jtjnmailAR02.home.langchao.com
- (10.100.2.43) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Mon, 3 Nov 2025 15:41:52 +0800
-Received: from localhost.com (unknown [10.94.13.117])
-	by app3 (Coremail) with SMTP id awJkCsDwEPm+XAhpt8MJAA--.13981S4;
-	Mon, 03 Nov 2025 15:41:52 +0800 (CST)
-From: Chu Guangqing <chuguangqing@inspur.com>
-To: <dario.binacchi@amarulasolutions.com>, <mkl@pengutronix.de>,
-	<mailhol@kernel.org>
-CC: <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Chu Guangqing
-	<chuguangqing@inspur.com>
-Subject: [PATCH] can: bxcan: Fix a typo error for assign
-Date: Mon, 3 Nov 2025 15:40:09 +0800
-Message-ID: <20251103074009.4708-1-chuguangqing@inspur.com>
-X-Mailer: git-send-email 2.43.7
+	s=arc-20240116; t=1762156338; c=relaxed/simple;
+	bh=xPw/EkaLjlYdn9ZRdoZnxkDOXDBERxtHMo4O7WD9kas=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X6PdvWivr3+u8h/s7nVWHgxfAkY7bg3ZHQ8KZzcCbdon3rGkDo/TS6PYmY/fPF9huDC4rSMYH5ii58mNdkyBIMcHK89+HssnUApbSuhTwaPKIlKx4a71X/Uz8jVREasWztmmCmkxn6cwVHzcu/3l4G3SLsZMNLenibQF2aWR+Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=rO9IiVFx; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7866dcf50b1so7874287b3.3
+        for <linux-can@vger.kernel.org>; Sun, 02 Nov 2025 23:52:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1762156336; x=1762761136; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PTPGXxwQZWvCNLJWtuoJDZzQORR3WU9efpFiIKez7WU=;
+        b=rO9IiVFxmaSjqsEn2pFNiGITE1/Zj5oaL/wZ2GWhQ2DTHLaM+MmUHcGKUgwZy3XY7S
+         jObW1RWJXBw9DbkIw9aGsGWs7G8iUkQ+6APstUadYfmfV8duAuykBpZBgIuc3fz+oic4
+         t6cSa9II69jiAsnBCQeHJOk3J5+vuOsFC+DqM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762156336; x=1762761136;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PTPGXxwQZWvCNLJWtuoJDZzQORR3WU9efpFiIKez7WU=;
+        b=sdyVwhbXKOVSnKlQ2TsAXRCG/7NAwRkiKoq287eZF0piwTZc6fw4Xqi2KvhMAVRxsd
+         XBdygW4u84ZYjeorqQ9URF9GRmDucvgIlpQidihcnyEvuIvY4TJgB2BvaRutRn7M5B5m
+         JKyJzSKD5ocD9CyLfsckjq0XtNY9xiekQYfUIfEba8n8jv5axxIiaXvqBC2lCHF3mYkN
+         gykg4cIjiz4EvDWvsq294l+yMjt90HJvWB8s5KlDQ2Qm8cnXH0AeYBWt8btn+SZdo34c
+         iFC8sVmYmnNstjcQoo5r6rB28IvrAktCqd6eyLkmgfjGQMWBLlDd9wSNKJR/SxLLXHt6
+         LHKA==
+X-Forwarded-Encrypted: i=1; AJvYcCU60it9hxJN65cM8vmRNBp0MBfto+uyqsBPrUaT0Mhih03LBVGt2ZUUj4YJLajToqQ3xv8mZYvDB4s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycOhLt6wLsLHiQDICgCjdmVLpalQV4uvwZPz7D7kk4agNXmr6f
+	Q3rDjWXmx0c8zPdRz4c7TNvYjXzoDI5Na1XpwlqoBSzenZDFRQYpYImmn9AlH6FDeBdR2IvuTmy
+	STCq9lsJD1Q7w6uuycFF8WGQUq66eWYlSWc3S1yr+Fg==
+X-Gm-Gg: ASbGncsixh6hGM1ceLitqHrDl8hWS2SJmgyo8lkWYU8PRJ4nUvOgETkcbDpihRBjdYf
+	bIf/TrtP4bvkFZh38atRfQ+BAbr8I2sAtgS5C75Mw/U1Wz3qbe01QanLdsn0c8Wfw1uP71Bhx/x
+	aQFEolN9byRq+zY/6newWwED9XofQsHwNxK3ijKisMBa9bSlDkHbjmKyfs0z1oi0504NjoQLHIG
+	M+QbTwtBlzDN8CuN2yViSEoMsf0/JzW7pBIP9CmHWh9KRJbmzgobnN+cS02FYYc1s7G4w==
+X-Google-Smtp-Source: AGHT+IGAfPzDZnSjcBo5Myj2OK8PIIoNEoQ7eah85P2JO/xYi8s9Xp3EhC8UeEUW1VJ503f9rhh6wA8w2vjiPiymoIo=
+X-Received: by 2002:a05:690c:6009:b0:783:7143:d825 with SMTP id
+ 00721157ae682-78648435e5amr116889117b3.25.1762156335783; Sun, 02 Nov 2025
+ 23:52:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: awJkCsDwEPm+XAhpt8MJAA--.13981S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFy7JrWrtFyfAF1kAryrWFg_yoWxtwb_Gr
-	sYkw42qa4qkr12kw47Ka17ZryYyF4UXFn3WrnaqrWaqF4UAr1Fkrs29r17t3Z8GrW8G3s3
-	WwsIyr1Fk34UKjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_GcCE
-	3s1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
-	1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
-	cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
-	ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_Jw0_
-	GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
-	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
-	42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUb8hL5UUUU
-	U==
-X-CM-SenderInfo: 5fkxw35dqj1xlqj6x0hvsx2hhfrp/
-X-CM-DELIVERINFO: =?B?2wxDSZRRTeOiUs3aOqHZ50hzsfHKF9Ds6CbXmDm38RucXu3DYXJR7Zlh9zE0nt/Iac
-	D+KXEmPGh6ji6U83mB7njQLXcQ/51zyjXsDLAUWvI3FwgIcOVfIRTp3KBrfCkATJcLCgwx
-	0O7vqPzoo6RFZjxdDsk=
-Content-Type: text/plain
-tUid: 202511031541514f60e46379bf04c2a9b023f060d66907
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
+References: <20251103074009.4708-1-chuguangqing@inspur.com>
+In-Reply-To: <20251103074009.4708-1-chuguangqing@inspur.com>
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Mon, 3 Nov 2025 08:52:05 +0100
+X-Gm-Features: AWmQ_bkybyhH8oApHqkt8s9JknLUAj7abzsc0GKdxF_HV51l07GhZgwMyQ-_55Y
+Message-ID: <CABGWkvr0qA+xCLgfU37agbSS7O78u-GGpLjakcWjozR4QWYv=Q@mail.gmail.com>
+Subject: Re: [PATCH] can: bxcan: Fix a typo error for assign
+To: Chu Guangqing <chuguangqing@inspur.com>
+Cc: mkl@pengutronix.de, mailhol@kernel.org, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fix the spelling error of "assign".
+On Mon, Nov 3, 2025 at 8:42=E2=80=AFAM Chu Guangqing <chuguangqing@inspur.c=
+om> wrote:
+>
+> Fix the spelling error of "assign".
+>
+> Signed-off-by: Chu Guangqing <chuguangqing@inspur.com>
+> ---
+>  drivers/net/can/bxcan.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/can/bxcan.c b/drivers/net/can/bxcan.c
+> index 0b579e7bb3b6..baf494d20bef 100644
+> --- a/drivers/net/can/bxcan.c
+> +++ b/drivers/net/can/bxcan.c
+> @@ -227,7 +227,7 @@ static void bxcan_enable_filters(struct bxcan_priv *p=
+riv, enum bxcan_cfg cfg)
+>          * mask mode with 32 bits width.
+>          */
+>
+> -       /* Enter filter initialization mode and assing filters to CAN
+> +       /* Enter filter initialization mode and assign filters to CAN
+>          * controllers.
+>          */
+>         regmap_update_bits(priv->gcan, BXCAN_FMR_REG,
+> --
+> 2.43.7
+>
 
-Signed-off-by: Chu Guangqing <chuguangqing@inspur.com>
----
- drivers/net/can/bxcan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+--=20
 
-diff --git a/drivers/net/can/bxcan.c b/drivers/net/can/bxcan.c
-index 0b579e7bb3b6..baf494d20bef 100644
---- a/drivers/net/can/bxcan.c
-+++ b/drivers/net/can/bxcan.c
-@@ -227,7 +227,7 @@ static void bxcan_enable_filters(struct bxcan_priv *priv, enum bxcan_cfg cfg)
- 	 * mask mode with 32 bits width.
- 	 */
- 
--	/* Enter filter initialization mode and assing filters to CAN
-+	/* Enter filter initialization mode and assign filters to CAN
- 	 * controllers.
- 	 */
- 	regmap_update_bits(priv->gcan, BXCAN_FMR_REG,
--- 
-2.43.7
+Dario Binacchi
 
+Senior Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
 
