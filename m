@@ -1,369 +1,235 @@
-Return-Path: <linux-can+bounces-5327-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5328-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BF34C45693
-	for <lists+linux-can@lfdr.de>; Mon, 10 Nov 2025 09:45:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7886BC45D0A
+	for <lists+linux-can@lfdr.de>; Mon, 10 Nov 2025 11:08:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0BB124E8972
-	for <lists+linux-can@lfdr.de>; Mon, 10 Nov 2025 08:45:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 237161883BF0
+	for <lists+linux-can@lfdr.de>; Mon, 10 Nov 2025 10:09:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA64A2F6937;
-	Mon, 10 Nov 2025 08:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04FB530216A;
+	Mon, 10 Nov 2025 10:08:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VlcVhNfb"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="F3IgI36c";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BeHTpw9H"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754492F549D
-	for <linux-can@vger.kernel.org>; Mon, 10 Nov 2025 08:45:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1AE2EB847
+	for <linux-can@vger.kernel.org>; Mon, 10 Nov 2025 10:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762764330; cv=none; b=Mu5t5nJoJsx86u99aISFq0FJz4T+CkeecsfnQ/a+ndjpXs3DlDshqOsFibdERGMqkCjBOTHoNEnHxYIJvHnmr+5RaYE4+kw/+HOX8rYvr/ao8wo51JUGVR+8Kg8BstIJ5TZtsRZB//iVM8jEmXdFolKUgG9ifP/c4Gtfq6jN5NQ=
+	t=1762769313; cv=none; b=DDT8DWGnh1a9HWkHkGP5YG0SfY1lb1pzvGGtJbLFXnYKSwOpbmuVWwQpSWCUIuj/siPepg8Azy0GOZIB1E3pPK0/aLhaC+Ym9i5OZFTK3AwtA+xt+iYPOIXlAu/C05i6Tsyg6mgTPmKgFCwYQu0f8fLOenEQEZ+WclCYY9a1ajw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762764330; c=relaxed/simple;
-	bh=zqKdTXLiwN0fcb7WkcsKTjqpng93a7VC/tOEh4dTlmU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cEpIHyeVxVaP46jy4QqsibbtadPw10XitJgqahQBGU4esxhuY2vbTooPzPfThrDnIlFTSqYJN3iJnxNHj7iVUrDy6AwlqMP+putfuwcydANYQUEdP/GlFx1/+uEDaF5c948dJNo9fNiTTwKppb9mjEBs83qum5237ypU7gFhjlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VlcVhNfb; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-786a822e73aso28475667b3.3
-        for <linux-can@vger.kernel.org>; Mon, 10 Nov 2025 00:45:28 -0800 (PST)
+	s=arc-20240116; t=1762769313; c=relaxed/simple;
+	bh=0dbOoM1JgFEw8FONGDy+H2SN6rDl1TPboIDJvPZ2RZg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=on1EdfMGBy6kKs75hmBPMGaJ9FciUfoBJ+4aISjCjnlRgLjwybBH7rlITskI0pPvBxyMEmu5IQxdZuQiF/Ise6iEbklWotbllql8sldFybdcABz70Syo1q29Z76av4G8WEuaCL/UZgfr5gSgopt5WutE4HxF65/mkXpt2HKbVu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=F3IgI36c; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BeHTpw9H; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AA8qLuL1795143
+	for <linux-can@vger.kernel.org>; Mon, 10 Nov 2025 10:08:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	z3KAbPP/h+63EoRNBS2Ni6wBbFMkQ1zOPX3P54o6wtg=; b=F3IgI36cgE4ZJveP
+	6RqM7bB3ScGFaZBzdgUpY7E9W4zUIIAOHAJkL39s1F6BaecBQvwQQEhZVCtRsxyn
+	U98hIFKeNaEFCxcpuSJi/5GIeWh2XSH8YOPr6dI9/56/A58hOjs8e87ReC0JJUTB
+	D08ieNxQ4mXOerb+pbcK8Xlom8/gBpunMeeCjQdiLHKuSrC8u6vkoqN9dMi3TRNn
+	SP7v9535gIbMp1q+4qvV47Wo8GYUtr7EDPncBqQyDloJIo+9xOfYJBsxj5SuIAjM
+	0BmEurNNYL69GKw4FFmsY93gsJU/lOklJejP0oji6fqlwJdsDA0yaDvy3YV4K/kZ
+	oNFqPQ==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a9xvjcagv-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-can@vger.kernel.org>; Mon, 10 Nov 2025 10:08:30 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-298389232c4so1400765ad.2
+        for <linux-can@vger.kernel.org>; Mon, 10 Nov 2025 02:08:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762764327; x=1763369127; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QzsbNcBLm2Xpzoo9GhZtU8EgZBenA7zGN5vz1SKOorc=;
-        b=VlcVhNfbwG02XDd8pIzOT6lfy9kujYyzs49ItLwNIvOamRGuW39FihYbmOdps3lctC
-         kcfVt+xREl3/X7t8UEhsyDcP6BJcVC9ts1csu8a7RlTTzYoP2LJZAEZKQY1a0WWh5JQ5
-         Z/hhUgJs1Ofz6r96/QC6HkV6IoAe7rgEQCu/ukcksqJk55C725VVAa2uGBVI1b2GweXS
-         FYiNPot8wRmd1/q3QWV1cL7loI/RwO4nJ+Kmui9HhxOJCO3y6lST1Gye7x0hPqArEo+y
-         hxPP97+Y5pxPpsTaqE3eJs+RIWvW3RQqu5ev1FzV57kh9ZDVTMX4m5uw+dFndoI4WbXF
-         bxng==
+        d=oss.qualcomm.com; s=google; t=1762769310; x=1763374110; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z3KAbPP/h+63EoRNBS2Ni6wBbFMkQ1zOPX3P54o6wtg=;
+        b=BeHTpw9HgXOl1iWo2PzWMRmPdZ/MIfx78AllhM+/Pg48ukksMAFsZKVFaHns0A77Uc
+         Ro6TCEGoRiR6HBXaICHUICVxrOUgBKQiFk1dsipNaX4f4CVX5/gK6xnAV6U3LEFFEgp/
+         wPEg45CBQTVx6zDLgN4AqIk0mBgkZRUX0NfaYJtv6O+3xCu31+uYKIuAHtMgfEuf0Zhb
+         zuxeLWBf8JmOrd8BDlk1e6actpZ+pjIN4bwo7DUli0OVqUZRasDL/6Ax+O02jO6EDwwH
+         wP67Ed0N29/HepJxPKxfIMl7jcRR9y+g+Ndmnf3xbHK+ZfqWeQpY56QqkltfjGZHlPY4
+         qPIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762764327; x=1763369127;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QzsbNcBLm2Xpzoo9GhZtU8EgZBenA7zGN5vz1SKOorc=;
-        b=UHZ6a0DazRCEvmucZ4tyoJK9mqOvAkXdtG1qBO6BpZJ94fqK/o5GFRvCziEavZVazu
-         AS3CHb0NTPPaIKL4+s5HZdCklrxR0LIxuiT/huoVn5X+F4+szM3lRzrDICTwBpTTaRUc
-         6dzXslWUbY4uuxJ+dXPUduYYmRu5odCeIvxgaAWmI8vOBVqz21ewgt7e/4A4p/PbrfvS
-         gnmnLJEYDSaSnZ/cbUyc3C9Xh0PcqzbxX/r0hca39uDMKJLtxi7Vsflu56B0hayoUFnE
-         hxzZBmzBeF9S0Gte0poPRt4rYbQbveRRHRT17cYAct2554hngckQcxYPf2u2mZv8BFUl
-         ZfrA==
-X-Forwarded-Encrypted: i=1; AJvYcCX+B7bNqQ6Q72zyqvsJRHYHbjR4AYLr9e3GSVMVOEpqygjmxood11Xh25bQY7RFqYXIXFnwC9lF02c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/E6GrnvYuG4NsAODYmbJin6db5P0Z/WhEsjjYP6wwEKJUTfuD
-	QGWX/9MCty+ye2lXVCytMLu6pYv1L5IDAEgalEO02diSPCgl5uD9aifemh0r4/iRIjUDegekh3j
-	g3wNvSJwwmzPOrc6fYvviBpPw3qwt7QU=
-X-Gm-Gg: ASbGncsfsw//cE0bIBU4bEotoV8+f2PnZnzcWAjI/JhcMFmaWKoie2Stqdac5s65wfL
-	90BXANpcfTf2a22E0LLBMbLw27ce0wlaVBjZLRkc7PNFH85SiSBWN36hkawv7IRk0iatDcLjl8n
-	qbubWhtWRLs9B+OLFgqb+94PjizSihS952v9RsvW9EBio9zCbhESrAQU0jxA7Uq18j9Ar3S+3JF
-	SI113q4kFc23zKJCydHdfH7Z47HleJn6deH59ZEJzHmJ0PQssY0rHfxIk5tGw==
-X-Google-Smtp-Source: AGHT+IEuMmt95Cqu+sfIrJi6S6D7HS6xkJqyIluRYQtiIAhynzSXoHyExqFSloU7VZgk7jYy2QP8ya0HfQIfaqMhb1o=
-X-Received: by 2002:a05:690c:4d41:b0:786:9774:a39c with SMTP id
- 00721157ae682-787d5376709mr69585247b3.9.1762764326984; Mon, 10 Nov 2025
- 00:45:26 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762769310; x=1763374110;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z3KAbPP/h+63EoRNBS2Ni6wBbFMkQ1zOPX3P54o6wtg=;
+        b=WnUkZSkr/XQ4Y4OWcc833e7GVeDzTQkyzVwoDqTO+/Ws2fqpYhtkE4rB5z/TUJQtQA
+         Ja9l+TsfMtb3hvMBcudq3d4khaXW3vWkIPTbS6csy7nIAFZiLA5kyKcyRb2jTI7vkPFr
+         PcwYy8GVSsM683wluv73aIYaijhDX3cGkGDI5d9P8Ea8nm6xGj2a3bzYPEwRrjwr0C47
+         qvB5kRC2UC8PrmlHKdxN04RyVjfmocQSIHgsasj0YjbWCx5M2F5cciC/tAZuCCxRjh4A
+         J6X6XzC0SiEIxFZ0iMAIwR+A4IskcX/Nv9eG1Z7/QKUEL1Wrc0tfNl/LV04QBCVenZ5x
+         oRoA==
+X-Forwarded-Encrypted: i=1; AJvYcCX1ILgJVZJ9kvpaTOMkf3+ikWjQNeB2MuqNpiCxhNJ/nIUVUasC8jAK6382knf5G4EvLlKRB7fwmO0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi/gGVathOTzuZROz1701CLFwWJ0N1M7Z7q+eDJy/RQwb+Yp1z
+	LOg94aSH6GUC3Yt9tupUrxxiPxopez1sotHnRJEUBA+basHvgHWD5d8wAtrGVJTXcneDtuJb0Q9
+	+qugq9pAgJ5u081ybRkJDi0RZeDuyYZ64KTs8ZlWT4UtAKeVq0JVVenArbFVSXt4=
+X-Gm-Gg: ASbGncsHqrR+EDgBZ0MvhMNUOunvhI0gRvemPibeagoo3TelyrD982AhLm+BhzJGvaO
+	w6STReI7VbWB6JAljPR6p5Up8heHf4NFcVtG4W5JhJ0upeURVUMkeaykhqbreeMqCqOpX0oL0U3
+	cnDWrcHxY9CVi3En0nKrIqfXwQJvAZ89F7pcGMVtlz3Cft5NU4lNBU+GpEV6Eow9zQHYbb4o9ce
+	z/aQoTJJqhPUvicBMdAmoLEAP6fFj8UESFj56h54NZ0Rw9rZexKGCPWqvMbVk+NSBih8ijJ820M
+	DqzqqrHTFkRlj03p1DbTnUWz0oGp+yIYXtbru4Vwl/EWUCZ5FqtD6ZOyipyH1Dh9mcrEj75I9dD
+	RVFUk3HO4ndJc+W5Ic28LpiHORK7L9+A=
+X-Received: by 2002:a17:903:40c9:b0:297:d741:d28a with SMTP id d9443c01a7336-297e56c9eb4mr84302475ad.31.1762769309734;
+        Mon, 10 Nov 2025 02:08:29 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHyXqPJFzXxIoU0geQ41zcRiNCHrftpqqkDVpgzXcbP6SifdSRX3i0G9WOKxg+fHf1fYfI9Hw==
+X-Received: by 2002:a17:903:40c9:b0:297:d741:d28a with SMTP id d9443c01a7336-297e56c9eb4mr84302105ad.31.1762769309152;
+        Mon, 10 Nov 2025 02:08:29 -0800 (PST)
+Received: from [10.218.4.221] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29651c93cebsm140244045ad.90.2025.11.10.02.08.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Nov 2025 02:08:28 -0800 (PST)
+Message-ID: <8776d2ca-90b9-7e14-a278-01f20e81297a@oss.qualcomm.com>
+Date: Mon, 10 Nov 2025 15:38:22 +0530
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251015-tja1145-support-v4-0-4d3ca13c8881@liebherr.com> <20251015-tja1145-support-v4-2-4d3ca13c8881@liebherr.com>
-In-Reply-To: <20251015-tja1145-support-v4-2-4d3ca13c8881@liebherr.com>
-From: Luoxi Li <lee.lockhey@gmail.com>
-Date: Mon, 10 Nov 2025 16:45:15 +0800
-X-Gm-Features: AWmQ_bkMNQv3RkM-zo57uNjTl11Gs6OZU97cOXivYKBV4sePGC3_nO_h8CxXLhE
-Message-ID: <CAL7siYPsuB3g1-KRkjJx00Yhg6ZjOvyvv5H=8bo53bV9N21E3g@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] phy: add basic support for NXPs TJA1145 CAN transceiver
-To: dimitri.fedrau@liebherr.com
-Cc: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Dimitri Fedrau <dima.fedrau@gmail.com>, Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v6 0/6] can: mcp251xfd: add gpio functionality
+To: Manivannan Sadhasivam <mani@kernel.org>, mkl@pengutronix.de
+Cc: thomas.kopp@microchip.com, mailhol.vincent@wanadoo.fr, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, linus.walleij@linaro.org,
+        brgl@bgdev.pl, linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mukesh.savaliya@oss.qualcomm.com,
+        anup.kulkarni@oss.qualcomm.com
+References: <20251001091006.4003841-1-viken.dadhaniya@oss.qualcomm.com>
+ <dvqn5hwvoi36djxkfte2sw2o2nnk7irh6tgt5vmtqgm6t2dbyc@snde7uwlzbia>
+Content-Language: en-US
+From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+In-Reply-To: <dvqn5hwvoi36djxkfte2sw2o2nnk7irh6tgt5vmtqgm6t2dbyc@snde7uwlzbia>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=QuxTHFyd c=1 sm=1 tr=0 ts=6911b99e cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=8f9FM25-AAAA:8
+ a=JNVGp1IlC4mDD8BcjtkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=uG9DUKGECoFWVXl0Dc02:22 a=uSNRK0Bqq4PXrUp6LDpb:22
+X-Proofpoint-ORIG-GUID: ZAOddxJP6wwTTE7A16Exa5fq7vfTy-_e
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEwMDA4OCBTYWx0ZWRfX0AXSzBETALem
+ jRDXFHnAel5eLFgG6cgUX11Mn9rYiSfQK5gZfL32ZgkeWA3xV1rghbSppSj4R7GtnMTCuhWFZ9g
+ sbOixRvgn1XJ69E4685Mp9HDOgUX74eh+WhOWTsbj4pJCcpWzCjiuI4Upxhs+NLiRcCJWUs6hxd
+ xiCCKf2LdZOeVl2Fy8mJqxbg3GGER7vrR0Wf50s+1yBmgijx1KdgvquuecBknm7LqJQE3sczTLu
+ stz8mCP+KeZsJmA0RwG/vKlOEVplUhE8ABc/Pxrvvono+q13ccqQKI05/7QOGzLV4CgQMd1CtU4
+ w/VCA5iczxmK1BCTbq+thLR9l9du8igE4uBof7KyCInrUirVrURhXrghS7N1jitovBN2FEvsKo1
+ nvg8WorwCNl14Pl3qt3ohs4k1mrA6g==
+X-Proofpoint-GUID: ZAOddxJP6wwTTE7A16Exa5fq7vfTy-_e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-10_04,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 clxscore=1015 priorityscore=1501 adultscore=0 phishscore=0
+ spamscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511100088
 
-I tested in ST platform. Now everything works. Thank you!
+Hi Marc
 
-Tested-By: <lee.lockhey@gmail.com>
+I wanted to follow up on this patch series. I noticed it hasn’t been picked up yet,
+so I wanted to check if there are any remaining concerns or comments that need to be addressed.
 
-    --
-    With Best Regards,
-    Lockhey Lee
+Thanks
+Viken Dadhaniya
 
-On Wed, Oct 15, 2025 at 3:37=E2=80=AFPM Dimitri Fedrau via B4 Relay
-<devnull+dimitri.fedrau.liebherr.com@kernel.org> wrote:
->
-> From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
->
-> Add basic driver support for NXPs TJA1145 CAN transceiver which brings th=
-e
-> PHY up/down by switching to normal/standby mode using SPI commands.
->
-> Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-> ---
->  drivers/phy/Kconfig           |  10 +++
->  drivers/phy/Makefile          |   1 +
->  drivers/phy/phy-nxp-tja1145.c | 184 ++++++++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 195 insertions(+)
->
-> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-> index 678dd0452f0aa0597773433f04d2a9ba77474d2a..2f2c8f29cce2beb20c584adfe=
-8acfe23de14e128 100644
-> --- a/drivers/phy/Kconfig
-> +++ b/drivers/phy/Kconfig
-> @@ -101,6 +101,16 @@ config PHY_NXP_PTN3222
->           schemes. It supports all three USB 2.0 data rates: Low Speed, F=
-ull
->           Speed and High Speed.
->
-> +config PHY_NXP_TJA1145
-> +       tristate "NXP TJA1145 CAN transceiver PHY"
-> +       select GENERIC_PHY
-> +       select REGMAP_SPI
-> +       depends on SPI
-> +       help
-> +         This option enables support for NXPs TJA1145 CAN transceiver as=
- a PHY.
-> +         This driver provides function for putting the transceiver in va=
-rious
-> +         functional modes using SPI commands.
-> +
->  source "drivers/phy/allwinner/Kconfig"
->  source "drivers/phy/amlogic/Kconfig"
->  source "drivers/phy/broadcom/Kconfig"
-> diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-> index bfb27fb5a494283d7fd05dd670ebd1b12df8b1a1..48eac644d1e2b20f986f80de9=
-5b40c26d080358b 100644
-> --- a/drivers/phy/Makefile
-> +++ b/drivers/phy/Makefile
-> @@ -13,6 +13,7 @@ obj-$(CONFIG_PHY_SNPS_EUSB2)          +=3D phy-snps-eus=
-b2.o
->  obj-$(CONFIG_USB_LGM_PHY)              +=3D phy-lgm-usb.o
->  obj-$(CONFIG_PHY_AIROHA_PCIE)          +=3D phy-airoha-pcie.o
->  obj-$(CONFIG_PHY_NXP_PTN3222)          +=3D phy-nxp-ptn3222.o
-> +obj-$(CONFIG_PHY_NXP_TJA1145)          +=3D phy-nxp-tja1145.o
->  obj-y                                  +=3D allwinner/   \
->                                            amlogic/     \
->                                            broadcom/    \
-> diff --git a/drivers/phy/phy-nxp-tja1145.c b/drivers/phy/phy-nxp-tja1145.=
-c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..56b5b47f6eb23945d9116c41a=
-25d9b6daccdcefa
-> --- /dev/null
-> +++ b/drivers/phy/phy-nxp-tja1145.c
-> @@ -0,0 +1,184 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2025 Liebherr-Electronics and Drives GmbH
-> + */
-> +#include <linux/bitfield.h>
-> +#include <linux/module.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <linux/phy/phy.h>
-> +#include <linux/spi/spi.h>
-> +
-> +#define TJA1145_MODE_CTRL              0x01
-> +#define TJA1145_MODE_CTRL_MC           GENMASK(2, 0)
-> +#define TJA1145_MODE_CRTL_STBY         BIT(2)
-> +#define TJA1145_MODE_CRTL_NORMAL       TJA1145_MODE_CTRL_MC
-> +
-> +#define TJA1145_CAN_CTRL               0x20
-> +#define TJA1145_CAN_CTRL_CMC           GENMASK(1, 0)
-> +#define TJA1145_CAN_CTRL_ACTIVE                BIT(1)
-> +
-> +#define TJA1145_IDENT                  0x7e
-> +#define TJA1145_IDENT_TJA1145T         0x70
-> +
-> +#define TJA1145_SPI_READ_BIT           BIT(0)
-> +#define TJA1145T_MAX_BITRATE           1000000
-> +
-> +static int tja1145_phy_power_on(struct phy *phy)
-> +{
-> +       struct regmap *map =3D phy_get_drvdata(phy);
-> +       int ret;
-> +
-> +       /*
-> +        * Switch operating mode to normal which is the active operating =
-mode.
-> +        * In this mode, the device is fully operational.
-> +        */
-> +       ret =3D regmap_update_bits(map, TJA1145_MODE_CTRL, TJA1145_MODE_C=
-TRL_MC,
-> +                                TJA1145_MODE_CRTL_NORMAL);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /*
-> +        * Switch to CAN operating mode active where the PHY can transmit=
- and
-> +        * receive data.
-> +        */
-> +       return regmap_update_bits(map, TJA1145_CAN_CTRL, TJA1145_CAN_CTRL=
-_CMC,
-> +                                 TJA1145_CAN_CTRL_ACTIVE);
-> +}
-> +
-> +static int tja1145_phy_power_off(struct phy *phy)
-> +{
-> +       struct regmap *map =3D phy_get_drvdata(phy);
-> +
-> +       /*
-> +        * Switch to operating mode standby, the PHY is unable to transmi=
-t or
-> +        * receive data in standby mode.
-> +        */
-> +       return regmap_update_bits(map, TJA1145_MODE_CTRL, TJA1145_MODE_CT=
-RL_MC,
-> +                                 TJA1145_MODE_CRTL_STBY);
-> +}
-> +
-> +static const struct phy_ops tja1145_phy_ops =3D {
-> +       .power_on =3D tja1145_phy_power_on,
-> +       .power_off =3D tja1145_phy_power_off,
-> +};
-> +
-> +static const struct regmap_range tja1145_wr_holes_ranges[] =3D {
-> +       regmap_reg_range(0x00, 0x00),
-> +       regmap_reg_range(0x02, 0x03),
-> +       regmap_reg_range(0x05, 0x05),
-> +       regmap_reg_range(0x0b, 0x1f),
-> +       regmap_reg_range(0x21, 0x22),
-> +       regmap_reg_range(0x24, 0x25),
-> +       regmap_reg_range(0x30, 0x4b),
-> +       regmap_reg_range(0x4d, 0x60),
-> +       regmap_reg_range(0x62, 0x62),
-> +       regmap_reg_range(0x65, 0x67),
-> +       regmap_reg_range(0x70, 0xff),
-> +};
-> +
-> +static const struct regmap_access_table tja1145_wr_table =3D {
-> +       .no_ranges =3D tja1145_wr_holes_ranges,
-> +       .n_no_ranges =3D ARRAY_SIZE(tja1145_wr_holes_ranges),
-> +};
-> +
-> +static const struct regmap_range tja1145_rd_holes_ranges[] =3D {
-> +       regmap_reg_range(0x00, 0x00),
-> +       regmap_reg_range(0x02, 0x02),
-> +       regmap_reg_range(0x05, 0x05),
-> +       regmap_reg_range(0x0b, 0x1f),
-> +       regmap_reg_range(0x21, 0x21),
-> +       regmap_reg_range(0x24, 0x25),
-> +       regmap_reg_range(0x30, 0x4a),
-> +       regmap_reg_range(0x4d, 0x5f),
-> +       regmap_reg_range(0x62, 0x62),
-> +       regmap_reg_range(0x65, 0x67),
-> +       regmap_reg_range(0x70, 0x7d),
-> +       regmap_reg_range(0x7f, 0xff),
-> +};
-> +
-> +static const struct regmap_access_table tja1145_rd_table =3D {
-> +       .no_ranges =3D tja1145_rd_holes_ranges,
-> +       .n_no_ranges =3D ARRAY_SIZE(tja1145_rd_holes_ranges),
-> +};
-> +
-> +static const struct regmap_config tja1145_regmap_config =3D {
-> +       .reg_bits =3D 8,
-> +       .reg_shift =3D -1,
-> +       .val_bits =3D 8,
-> +       .wr_table =3D &tja1145_wr_table,
-> +       .rd_table =3D &tja1145_rd_table,
-> +       .read_flag_mask =3D TJA1145_SPI_READ_BIT,
-> +       .max_register =3D TJA1145_IDENT,
-> +};
-> +
-> +static int tja1145_check_ident(struct device *dev, struct regmap *map)
-> +{
-> +       unsigned int val;
-> +       int ret;
-> +
-> +       ret =3D regmap_read(map, TJA1145_IDENT, &val);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (val !=3D TJA1145_IDENT_TJA1145T) {
-> +               dev_err(dev, "Expected device id: 0x%02x, got: 0x%02x\n",
-> +                       TJA1145_IDENT_TJA1145T, val);
-> +               return -ENODEV;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int tja1145_probe(struct spi_device *spi)
-> +{
-> +       struct phy_provider *phy_provider;
-> +       struct device *dev =3D &spi->dev;
-> +       struct regmap *map;
-> +       struct phy *phy;
-> +       int ret;
-> +
-> +       map =3D devm_regmap_init_spi(spi, &tja1145_regmap_config);
-> +       if (IS_ERR(map))
-> +               return dev_err_probe(dev, PTR_ERR(map), "failed to init r=
-egmap\n");
-> +
-> +       ret =3D tja1145_check_ident(dev, map);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret, "failed to identify device=
-\n");
-> +
-> +       phy =3D devm_phy_create(dev, dev->of_node, &tja1145_phy_ops);
-> +       if (IS_ERR(phy))
-> +               return dev_err_probe(dev, PTR_ERR(phy), "failed to create=
- PHY\n");
-> +
-> +       phy->attrs.max_link_rate =3D TJA1145T_MAX_BITRATE;
-> +       phy_set_drvdata(phy, map);
-> +       phy_provider =3D devm_of_phy_provider_register(dev, of_phy_simple=
-_xlate);
-> +
-> +       return PTR_ERR_OR_ZERO(phy_provider);
-> +}
-> +
-> +static const struct spi_device_id tja1145_spi_id[] =3D {
-> +       { "tja1145" },
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(spi, tja1145_spi_id);
-> +
-> +static const struct of_device_id tja1145_of_match[] =3D {
-> +       { .compatible =3D "nxp,tja1145" },
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(of, tja1145_of_match);
-> +
-> +static struct spi_driver tja1145_driver =3D {
-> +       .driver =3D {
-> +               .name =3D "tja1145",
-> +               .of_match_table =3D tja1145_of_match,
-> +       },
-> +       .probe =3D tja1145_probe,
-> +       .id_table =3D tja1145_spi_id,
-> +};
-> +module_spi_driver(tja1145_driver);
-> +
-> +MODULE_DESCRIPTION("NXP TJA1145 CAN transceiver PHY driver");
-> +MODULE_AUTHOR("Dimitri Fedrau <dimitri.fedrau@liebherr.com>");
-> +MODULE_LICENSE("GPL");
->
-> --
-> 2.39.5
->
->
->
-
-
---
+On 10/23/2025 10:46 AM, Manivannan Sadhasivam wrote:
+> On Wed, Oct 01, 2025 at 02:40:00PM +0530, Viken Dadhaniya wrote:
+>> Hi all,
+>>
+>> The mcp251xfd allows two pins to be configured as GPIOs. This series
+>> adds support for this feature.
+>>
+>> The GPIO functionality is controlled with the IOCON register which has
+>> an erratum.
+>>
+>> Patch 1 from https://lore.kernel.org/linux-can/20240429-mcp251xfd-runtime_pm-v1-3-c26a93a66544@pengutronix.de/
+>> Patch 2 refactor of no-crc functions to prepare workaround for non-crc writes
+>> Patch 3 is the fix/workaround for the aforementioned erratum
+>> Patch 4 only configure pin1 for rx-int
+>> Patch 5 adds the gpio support
+>> Patch 6 updates dt-binding
+>>
+>> As per Marc's comment on below patch, we aim to get this series into
+>> linux-next since the functionality is essential for CAN on the RB3 Gen2
+>> board. As progress has stalled, Take this series forward with minor code
+>> adjustments. Include a Tested-by tag to reflect validation performed on the
+>> target hardware.
+>>
+> 
+> LGTM! For the series,
+> 
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> 
+> - Mani> 
+>> https://lore.kernel.org/all/20240806-industrious-augmented-crane-44239a-mkl@pengutronix.de/
+>> ---
+>> Changes in v6:
+>> - Simplified error handling by directly returning regmap_update_bits() result.
+>> - Added Acked-By tag.
+>> - Link to v5: https://lore.kernel.org/all/20250926133018.3071446-1-viken.dadhaniya@oss.qualcomm.com/
+>>
+>> Changes in v5:
+>> - Removed #ifdef GPIOLIB and added select GPIOLIB in Kconfig
+>> - Rebased patch on latest baseline
+>> - Resolved Kernel Test Robot warnings
+>> - Link to v4: https://lore.kernel.org/all/20250918064903.241372-1-viken.dadhaniya@oss.qualcomm.com/
+>>
+>> Changes in v4:
+>> - Moved GPIO register initialization into mcp251xfd_register after enabling
+>>   runtime PM to avoid GPIO request failures when using the gpio-hog
+>>   property to set default GPIO state.
+>> - Added Tested-by and Signed-off-by tags.
+>> - Dropped the 1st and 2nd patches from the v3 series as they have already been merged.
+>> - Link to v3: https://lore.kernel.org/linux-can/20240522-mcp251xfd-gpio-feature-v3-0-8829970269c5@ew.tq-group.com/
+>>
+>> Changes in v3:
+>> - Implement workaround for non-crc writes
+>> - Configure only Pin1 for rx-int feature
+>> - moved errata check to .gather_write callback function
+>> - Added MCP251XFD_REG_IOCON_*() macros
+>> - Added Marcs suggestions
+>> - Collect Krzysztofs Acked-By
+>> - Link to v2: https://lore.kernel.org/r/20240506-mcp251xfd-gpio-feature-v2-0-615b16fa8789@ew.tq-group.com
+>>
+>> ---
+>> Gregor Herburger (5):
+>>   can: mcp251xfd: utilize gather_write function for all non-CRC writes
+>>   can: mcp251xfd: add workaround for errata 5
+>>   can: mcp251xfd: only configure PIN1 when rx_int is set
+>>   can: mcp251xfd: add gpio functionality
+>>   dt-bindings: can: mcp251xfd: add gpio-controller property
+>>
+>> Marc Kleine-Budde (1):
+>>   can: mcp251xfd: move chip sleep mode into runtime pm
+>>
+>>  .../bindings/net/can/microchip,mcp251xfd.yaml |   5 +
+>>  drivers/net/can/spi/mcp251xfd/Kconfig         |   1 +
+>>  .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 273 +++++++++++++++---
+>>  .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  | 114 ++++++--
+>>  drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |   8 +
+>>  5 files changed, 335 insertions(+), 66 deletions(-)
+>>
+>> -- 
+>> 2.34.1
+>>
+> 
 
