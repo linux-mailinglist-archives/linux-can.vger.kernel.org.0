@@ -1,200 +1,186 @@
-Return-Path: <linux-can+bounces-5332-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5333-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3917C4CA4E
-	for <lists+linux-can@lfdr.de>; Tue, 11 Nov 2025 10:26:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C8A3C4DE33
+	for <lists+linux-can@lfdr.de>; Tue, 11 Nov 2025 13:53:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C19DD1882131
-	for <lists+linux-can@lfdr.de>; Tue, 11 Nov 2025 09:26:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 563341884327
+	for <lists+linux-can@lfdr.de>; Tue, 11 Nov 2025 12:47:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0262B2ECEBC;
-	Tue, 11 Nov 2025 09:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5464339E909;
+	Tue, 11 Nov 2025 12:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G7AWKwMx"
+	dkim=pass (2048-bit key) header.d=brixandersen.dk header.i=@brixandersen.dk header.b="Gsl68v2U";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JhkKIiK4"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66252877CB;
-	Tue, 11 Nov 2025 09:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72BD39E904;
+	Tue, 11 Nov 2025 12:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762853178; cv=none; b=KTwqYnzv87CCHgyUaYdvaaamVlxxxON/9iXgkgt8H5i4qRVoTT4CCacL48WTKaRkaZMDXq2eIs0pywTcrp6kvN8o8X/v5l6CZ06pN+1f93566v80yA0jlBF/X5QJDSDXOSnmMyYGLTonppmweU3yTx5FusXFRxJ8X5+Qmq7PV+E=
+	t=1762864284; cv=none; b=pngNE7NPv78bUPx2XwRFdzIfUmONZoudob9hgDjJKRUEOENuHDCl6jyDkeEQzZDaWS3tGk2D1THhWOzOTTp2JMghUQLlMTXNTH0mtINYljhKcBE4LLPizFi5UwVMg6TmCY9GFe0ZLqqEVDFTN8+lEp38knUeWEIH3Z7htl8LaBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762853178; c=relaxed/simple;
-	bh=dxJl6J2CtbaTteGybNjKa4QQeR/lRzB/xgCS77moFk0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kby417pA4mtYAtMtPwk/Onv+LFHvJHTTIiNUbQgppaueGKG9lFzATEaggIO9SZi7BYR5uuI+Tnoz5pAHShxvxDkSB8YOCWMU+XX8w/sKTkB03GEMLGd1DIZbV7ZDLVpeMr9+XgA8FTrWRTa7Ld2bv9HO6kTCbi7Nu1adsmailJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G7AWKwMx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F55DC19423;
-	Tue, 11 Nov 2025 09:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762853178;
-	bh=dxJl6J2CtbaTteGybNjKa4QQeR/lRzB/xgCS77moFk0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G7AWKwMx+XHNG2jtALJxzbBvu8Iw+J5g+YdRdNQJWMH2/gICiKw0G9GUPhrZ9pXny
-	 FygxxivVJd10zpR+gi/DpqTMvC0viB1T7s91ruKpNtlGhAC9wkxiUBNu3H/SyZWbc6
-	 Q0jxU8sQnD8yK90KitrN9fJmWpBHtp3JUmxZWGkGbyi3nf10zKD0N5tOS+vc7R94UV
-	 fw1vUg+FdTuk0rAxqE9bXfyHhNMudbOJVwnbe+b1PBEfdqvluXrIzBnTbeoHkhurCd
-	 J5YVAx8MZdZn9xi1E7wBOLpzQzcNeSrJnRHnHY+ZYQ7fNsWN2V0t5uqn9Plc43hmZh
-	 JrZTtXu6WOA3A==
-Message-ID: <7d663aee-d77f-4553-a173-af9c2d75da50@kernel.org>
-Date: Tue, 11 Nov 2025 10:26:13 +0100
+	s=arc-20240116; t=1762864284; c=relaxed/simple;
+	bh=TmJRb1KT87eh5kVIbHv4RzXHvWB2Z1EOf5JFuIxHdNg=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=fRcT3EQ851MqrIak/ICzae0vDMOaSep2xMdWjVQAr+/Tj0V/bl2otesX9JZkhRLVve4l5mNTQFwiOP5dTojIy6ZqJ3JKxPymfychgZLu2XFcT8XyypN+gwRsN2bVdKTZGKjzpjfGOWdKF2zzomPzs6sZzpp3/3QcNUHbtEECY8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=brixandersen.dk; spf=pass smtp.mailfrom=brixandersen.dk; dkim=pass (2048-bit key) header.d=brixandersen.dk header.i=@brixandersen.dk header.b=Gsl68v2U; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JhkKIiK4; arc=none smtp.client-ip=202.12.124.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=brixandersen.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=brixandersen.dk
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 7E9697A00AA;
+	Tue, 11 Nov 2025 07:31:20 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Tue, 11 Nov 2025 07:31:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=brixandersen.dk;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
+	 t=1762864280; x=1762950680; bh=cMVsMMso39Iyr5Nm1ahF4xCRfNObqn0u
+	gVq5DxetITw=; b=Gsl68v2ULqSQezyBS/egyZrb8bFowrLPxsn6bBuY9TfRpW9Y
+	EGRGLSA/Fq+qfxDBZ+TBiafdFNbQg0JQQeJO6P+z4AC/QTrUhzgE8TBTusqPGMQI
+	RsGR3I0S/X4aSZoqQij7am6Sj8S7pI6LnYNItEKsmCioixphFVpA6FjGregAvL46
+	viIjTtaKhLNya7fYG4ri1/vknPGvB/5zkPazVDVEnQewIVWNdufz+yIxM/ihU3yU
+	iWNMQpIK3+mV8f4CrsHb9+ljIGrRU52NuLaaW1OkmcciZJacYD7/XLTDTlZFn66t
+	j5dfpq4S1l18gDm1EB2m9L8xHa6s606btFBR1g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762864280; x=
+	1762950680; bh=cMVsMMso39Iyr5Nm1ahF4xCRfNObqn0ugVq5DxetITw=; b=J
+	hkKIiK49lyRhGrteTxL2/AYF3zxmijapVzdQfJt/XpNYmQJdi+3UVX+Dp9X7Tl71
+	w/VwkDzB+bluLOeFXNRRwcz83IL9vvC/LmMo5fTtlIV97T2AA0fN8zo1/KFfwrTT
+	KrTIGvQAFiiFcGjPM1zaL4G/QjFobeZa30093FcxsLcR78njbcFf4PsfHFlUoOic
+	dopSE4g8ewzXlcuwA1ARkqZB6Cvnim+GBNRV9KUCdrGVNIZV/J0t4cs+ejQQzWhH
+	H2rYll4njP8XYK1dqfiylM0xHGyHdULazRrfDL+BUhhy6dc9czdWpS78ULoj0Y20
+	j9DMZopZrtu0gkK2UV/9Q==
+X-ME-Sender: <xms:lywTaTBbLBNal4SFtc407ozd-zJ3cYIOAMLxqCUSLPWhhjGmUNFQAg>
+    <xme:lywTaaNhv0L1DEDc_z3NxjJBv1c63TZkrUwuhMNieIo-4xSJXR1nfSBlMpacLHvrR
+    5NuzyBwc5gaj1sAuK7HTPTuxR74HJ0a3647AmJWWvTGaukOeYYK8-s>
+X-ME-Received: <xmr:lywTaczYLQFYfc_02gV3ik9RIym336pn2ZALcH-o58Ynig1jJZ4v0YSwq2wCWmhBexc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtdduvddtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtddvnecuhfhrohhmpefjvghnrhhi
+    khcuuehrihigucetnhguvghrshgvnhcuoehhvghnrhhikhessghrihigrghnuggvrhhsvg
+    hnrdgukheqnecuggftrfgrthhtvghrnhepleetfeevffejlefgueejhfetieelfeelfffg
+    ueevvedtheethfdvuefhfeekhfegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhephhgvnhhrihhksegsrhhigigrnhguvghrshgvnhdrughkpdhn
+    sggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmkhhlse
+    hpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehmrghilhhhohhlsehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehmrgigsehstghhnhgvihguvghrshhofhhtrdhnvghtpd
+    hrtghpthhtohepfihgsehgrhgrnhguvghgghgvrhdrtghomhdprhgtphhtthhopehkvghr
+    nhgvlhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtoheplhhinhhugidqtggrnh
+    esvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgv
+    lhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:lywTaaX2qccP0p8nBk4LIdH9Ajim4FzPJ2m5SOB3HtJk5unGQgoyng>
+    <xmx:lywTaeOd7KCW3vEBawkqsx24rjrA59SWPhbq0U3yWryHSXdUgsM1cQ>
+    <xmx:lywTacAmRhBrfHn1PxSanGz01mHOhxd3LEJv9jCNeJvoM7UmPgGH6Q>
+    <xmx:lywTabe9O8FOd72UymDMTuuRdpBV_3cBk5lgz6HIa8sOl46WUFerIA>
+    <xmx:mCwTad41i03KJmCt_KLbXChpWmBXg1_DWkF3DNV1fWzLT_bwTANtWenH>
+Feedback-ID: i203040d0:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Nov 2025 07:31:18 -0500 (EST)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH v8 1/4] dt-bindings: can: rockchip_canfd: add
- rk3576 CAN controller
-To: Elaine Zhang <zhangqing@rock-chips.com>, mkl@pengutronix.de,
- kernel@pengutronix.de, mailhol.vincent@wanadoo.fr, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de, cl@rock-chips.com
-Cc: linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <20251111080511.2923069-1-zhangqing@rock-chips.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251111080511.2923069-1-zhangqing@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.100.1.1.5\))
+Subject: Re: [PATCH can 3/3] can: gs_usb: gs_usb_receive_bulk_callback():
+ check actual_length before accessing data
+From: Henrik Brix Andersen <henrik@brixandersen.dk>
+In-Reply-To: <20251108-gs_usb-fix-usb-callbacks-v1-3-8a2534a7ea05@pengutronix.de>
+Date: Tue, 11 Nov 2025 13:31:06 +0100
+Cc: Vincent Mailhol <mailhol@kernel.org>,
+ Maximilian Schneider <max@schneidersoft.net>,
+ Wolfgang Grandegger <wg@grandegger.com>,
+ kernel@pengutronix.de,
+ linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A5BD68A4-076C-4ADD-B2A8-5D8A128D0473@brixandersen.dk>
+References: <20251108-gs_usb-fix-usb-callbacks-v1-0-8a2534a7ea05@pengutronix.de>
+ <20251108-gs_usb-fix-usb-callbacks-v1-3-8a2534a7ea05@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: Apple Mail (2.3864.100.1.1.5)
 
-On 11/11/2025 09:05, Elaine Zhang wrote:
-> Add documentation for the rockchip rk3576 CAN controller.
-> 
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+Hi,
+
+> On 8 Nov 2025, at 10.01, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>=20
+> The URB received in gs_usb_receive_bulk_callback() contains a struct
+> gs_host_frame. The length of the data after the header depends on the
+> gs_host_frame hf::flags and the active device features (e.g. time
+> stamping).
+>=20
+> Introduce a new function gs_usb_get_minimum_length() and check that we =
+have
+> at least received the required amount of data before accessing it. =
+Only
+> copy the data to that skb that has actually been received.
+>=20
+> Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN =
+devices")
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 > ---
->  .../net/can/rockchip,rk3568v2-canfd.yaml      | 52 +++++++++++++++++--
->  1 file changed, 48 insertions(+), 4 deletions(-)
-
-Your threading is completely broken. I don't see any other patches here.
-
-That's v8, resend and still not correct :(
-
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml b/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
-> index a077c0330013..30782218728e 100644
-> --- a/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
-> @@ -10,13 +10,12 @@ title:
->  maintainers:
->    - Marc Kleine-Budde <mkl@pengutronix.de>
->  
-> -allOf:
-> -  - $ref: can-controller.yaml#
-> -
->  properties:
->    compatible:
->      oneOf:
-> -      - const: rockchip,rk3568v2-canfd
-> +      - enum:
-> +          - rockchip,rk3568v2-canfd
-> +          - rockchip,rk3576-can
->        - items:
->            - const: rockchip,rk3568v3-canfd
->            - const: rockchip,rk3568v2-canfd
-> @@ -43,6 +42,33 @@ properties:
->        - const: core
->        - const: apb
->  
-> +  dmas:
-> +    maxItems: 1
+> drivers/net/can/usb/gs_usb.c | 65 =
+++++++++++++++++++++++++++++++++++++++++----
+> 1 file changed, 60 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/net/can/usb/gs_usb.c =
+b/drivers/net/can/usb/gs_usb.c
+> index 51f8d694104d..8524d423b029 100644
+> --- a/drivers/net/can/usb/gs_usb.c
+> +++ b/drivers/net/can/usb/gs_usb.c
+> @@ -261,6 +261,11 @@ struct canfd_quirk {
+> u8 quirk;
+> } __packed;
+>=20
+> +/* struct gs_host_frame::echo_id =3D=3D GS_HOST_FRAME_ECHO_ID_RX =
+indicates
+> + * a regular RX'ed CAN frame
+> + */
+> +#define GS_HOST_FRAME_ECHO_ID_RX 0xffffffff
 > +
-> +  dma-names:
-> +    items:
-> +      - const: rx
+> struct gs_host_frame {
+> struct_group(header,
+> u32 echo_id;
+> @@ -570,6 +575,43 @@ gs_usb_get_echo_skb(struct gs_can *dev, struct =
+sk_buff *skb,
+> return len;
+> }
+>=20
+> +static unsigned int
+> +gs_usb_get_minimum_length(const struct gs_can *dev, const struct =
+gs_host_frame *hf,
+> +  unsigned int *data_length_p)
+> +{
+> + unsigned int minimum_length, data_length;
 > +
-> +allOf:
-> +  - $ref: can-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: rockchip,rk3576-can
-> +    then:
-> +      properties:
-> +        dmas:
-> +          minItems: 1
-> +          maxItems: 1
-> +        dma-names:
-> +          minItems: 1
-> +          maxItems: 1
+> + /* TX echo only uses the header */
+> + if (hf->echo_id !=3D GS_HOST_FRAME_ECHO_ID_RX) {
+> + *data_length_p =3D 0;
+> + return sizeof(hf->header);
+> + }
 
-Drop both, no need to duplicate what is in top level.
+Is this correct? The embedded timestamp is also used in the =
+gs_usb_get_echo_skb() function.
+
+Regards,
+Brix
+--=20
+Henrik Brix Andersen
 
 
-> +    else:
-> +      properties:
-> +        dmas: false
-> +        dma-names: false
-> +
->  required:
->    - compatible
->    - reg
-> @@ -72,3 +98,21 @@ examples:
->              reset-names = "core", "apb";
->          };
->      };
-> +
-> +  - |
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        can@2ac00000 {
 
-Difference in one property usually does not justify new example.
-
-
-Best regards,
-Krzysztof
 
