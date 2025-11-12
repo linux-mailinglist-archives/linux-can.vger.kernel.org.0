@@ -1,135 +1,140 @@
-Return-Path: <linux-can+bounces-5365-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5366-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD252C51701
-	for <lists+linux-can@lfdr.de>; Wed, 12 Nov 2025 10:47:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3823C51977
+	for <lists+linux-can@lfdr.de>; Wed, 12 Nov 2025 11:14:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D67684FA2D1
-	for <lists+linux-can@lfdr.de>; Wed, 12 Nov 2025 09:37:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63F9118875EF
+	for <lists+linux-can@lfdr.de>; Wed, 12 Nov 2025 10:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE13C221282;
-	Wed, 12 Nov 2025 09:36:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 227C22FFFA7;
+	Wed, 12 Nov 2025 10:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="CUikGddO"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mail-m3269.qiye.163.com (mail-m3269.qiye.163.com [220.197.32.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53354274B55
-	for <linux-can@vger.kernel.org>; Wed, 12 Nov 2025 09:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFADB2FE579;
+	Wed, 12 Nov 2025 10:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762940196; cv=none; b=S42LIBG4r4EZHyLI3S6ROK24bc4N052lo6+Imyt2v2eMy/2BJyXHjrtaOEhXCMUbFu9BLqsoPdHYK2PhC5tPHQSnbtOMmJTkc3zn9h9KEt8gazqy7qkeyYlDaWxnap43Zu3mMfEMB1PVmImVf84sae7uHlUbNKpVOSCWHko8HHI=
+	t=1762942304; cv=none; b=UVCSUbP7pdmU1XnsREA7Qyg+dc7IO0qzwqMYdc9P37RJF0y06YVRb0hQDq0z0RJ57wHXQ5hwgCKyXGpjgI3GZ4qHt/dEbQUgeZOjELpM9vcE5VTGYI1qekGZ0eWFRApt/H93oq8LgNeG4JfZF8BgpfMjsfhVfha0aN+kMry9APM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762940196; c=relaxed/simple;
-	bh=BgxKsCr5lQNnJC/eyEecLuMCdeTpY2TtT1U3lIZmlsE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aeESlU7mumTwIx00MtZtPLoGpGsdJ/7z88DRYyH9rBXohSgGN/NJFvUvTWi58LyJUCtTOXdt56t5afwNJxizRS+RjOuwhCzLdBLexqzGXRwGWctxcofWrHytkUOi6RkNW+bF+hzilpfLtRi5zaXAum4qZl9zKI1qWFW5Mwu8t6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vJ7HD-0002M2-VA; Wed, 12 Nov 2025 10:36:31 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vJ7HD-0003km-1b;
-	Wed, 12 Nov 2025 10:36:31 +0100
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 2F48A49DA2D;
-	Wed, 12 Nov 2025 09:36:31 +0000 (UTC)
-Date: Wed, 12 Nov 2025 10:36:29 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: kuba@kernel.org, davem@davemloft.net, kernel@pengutronix.de, 
-	linux-can@vger.kernel.org
-Subject: Re: [PATCH net-next 0/11] pull-request: can-next 2025-11-12
-Message-ID: <20251112-fanatic-cricket-of-efficiency-0c305b-mkl@pengutronix.de>
-References: <20251112091734.74315-1-mkl@pengutronix.de>
+	s=arc-20240116; t=1762942304; c=relaxed/simple;
+	bh=8Zg3/sAelgEsfuI8Ay2dOVaGCjjKJg7Cb8Yt2m9i36A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UHmKZyHpQwaWioePP+4YJTBgTngyPvEkYiYMNJePq0RQeHzAzuLZ2VtoqT0nXhLpsaZLWxFdtgcwVsw+LaoFbZetop0Qp+8NfuSpSFYhVTPuGXqRJ67AuoXID3noMop2ApyNB8YuAev3m83DLeMgkC3djoZLrPIxbAe23G+/KiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=CUikGddO; arc=none smtp.client-ip=220.197.32.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.30] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 295429862;
+	Wed, 12 Nov 2025 18:06:27 +0800 (GMT+08:00)
+Message-ID: <65ff0185-e471-40ba-8991-43b1a42b1d30@rock-chips.com>
+Date: Wed, 12 Nov 2025 18:06:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lgk4dvrlchuf4ccl"
-Content-Disposition: inline
-In-Reply-To: <20251112091734.74315-1-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND PATCH v8 1/4] dt-bindings: can: rockchip_canfd: add
+ rk3576 CAN controller
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: kernel@pengutronix.de, mailhol.vincent@wanadoo.fr, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de, cl@rock-chips.com,
+ linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20251112015940.3695638-1-zhangqing@rock-chips.com>
+ <20251112015940.3695638-2-zhangqing@rock-chips.com>
+ <20251112-faithful-olive-orangutan-0dd207-mkl@pengutronix.de>
+From: zhangqing <zhangqing@rock-chips.com>
+In-Reply-To: <20251112-faithful-olive-orangutan-0dd207-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9a7787ea7c03a3kunmc052c1ea2aa6e8
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGkMYTVZPSRhDT0IeSU0eQktWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=CUikGddO+ZN7whhA7uNkqz4Av3a3h3ecRTM839aDoNwjuOT1rwIvlBvuulvGqith6x6wghvs//J4PEegTy0+yeZjxi8SwbDF5kIi21lFqzQibcnJjjIhx3cu0PbBFOG9OjhGdhUCKwYl/KKZQSOJBth+Om6cVQWjzRsmv01d2KI=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=9n0Y+NoH+kvwHdRXyYxizd4Ni80WNG4fVyyRdV90H6M=;
+	h=date:mime-version:subject:message-id:from;
 
 
---lgk4dvrlchuf4ccl
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH net-next 0/11] pull-request: can-next 2025-11-12
-MIME-Version: 1.0
-
-On 12.11.2025 10:13:40, Marc Kleine-Budde wrote:
-> Hello netdev-team,
+在 2025/11/12 16:53, Marc Kleine-Budde 写道:
+> On 12.11.2025 09:59:37, Elaine Zhang wrote:
+>> Add documentation for the rockchip rk3576 CAN controller.
+>>
+>> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+>> ---
+>>   .../bindings/net/can/rockchip,rk3568v2-canfd.yaml  | 14 ++++++++++----
+>>   1 file changed, 10 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml b/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
+>> index a077c0330013..22e10494e7d1 100644
+>> --- a/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
+>> +++ b/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
+>> @@ -10,13 +10,12 @@ title:
+>>   maintainers:
+>>     - Marc Kleine-Budde <mkl@pengutronix.de>
+>>
+>> -allOf:
+>> -  - $ref: can-controller.yaml#
+>> -
+> What happened to the allOf?
+This is a misoperation and will be corrected in version V9.
+To speed up the review of the current version, V9 will also remove dma.
 >
-> this is a pull request of 11 patches for net-next/main.
+>>   properties:
+>>     compatible:
+>>       oneOf:
+>> -      - const: rockchip,rk3568v2-canfd
+>> +      - enum:
+>> +          - rockchip,rk3568v2-canfd
+>> +          - rockchip,rk3576-can
+>>         - items:
+>>             - const: rockchip,rk3568v3-canfd
+>>             - const: rockchip,rk3568v2-canfd
+>> @@ -43,6 +42,13 @@ properties:
+>>         - const: core
+>>         - const: apb
+>>
+>> +  dmas:
+>> +    maxItems: 1
+>> +
+>> +  dma-names:
+>> +    items:
+>> +      - const: rx
+>> +
+>>   required:
+>>     - compatible
+>>     - reg
+> regards,
+> Marc
 >
-> The first 3 patches are by Vadim Fedorenko and convert the CAN drivers
-> to use the ndo_hwtstamp callbacks.
->
-> Maud Spierings contributes a patch to the mcp251x driver that converts
-> it to use dev_err_probe()
->
-> The remaining patches target the mcp251xfd driver and are by Gregor
-> Herburger and me. They add GPIO controller functionality to the
-> driver.
+-- 
+张晴
+瑞芯微电子股份有限公司
+Rockchip Electronics Co.,Ltd
+地址：福建省福州市铜盘路软件大道89号软件园A区21号楼
+Add:No.21 Building, A District, No.89 Software Boulevard Fuzhou, Fujian 350003, P.R.China
+Tel:+86-0591-83991906-8601
+邮编：350003
+E-mail:elaine.zhang@rock-chips.com
+****************************************************************************
+保密提示：本邮件及其附件含有机密信息，仅发送给本邮件所指特定收件人。若非该特定收件人，请勿复制、使用或披露本邮件的任何内容。若误收本邮件，请从系统中永久性删除本邮件及所有附件，并以回复邮件或其他方式即刻告知发件人。福州瑞芯微电子有限公司拥有本邮件信息的著作权及解释权，禁止任何未经授权许可的侵权行为。
 
-Doh! I missed the last patch, here's an updated description:
+IMPORTANT NOTICE: This email is from Fuzhou Rockchip Electronics Co., Ltd .The contents of this email and any attachments may contain information that is privileged, confidential and/or exempt from disclosure under applicable law and relevant NDA. If you are not the intended recipient, you are hereby notified that any disclosure, copying, distribution, or use of the information is STRICTLY PROHIBITED. Please immediately contact the sender as soon as possible and destroy the material in its entirety in any format. Thank you.
 
+****************************************************************************
 
-The first 3 patches are by Vadim Fedorenko and convert the CAN drivers
-to use the ndo_hwtstamp callbacks.
-
-Maud Spierings contributes a patch to the mcp251x driver that converts
-it to use dev_err_probe()
-
-The next 6 patches target the mcp251xfd driver and are by Gregor
-Herburger and me. They add GPIO controller functionality to the driver.
-
-The final patch is by Chu Guangqing and fixes a typo in the bxcan
-driver.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---lgk4dvrlchuf4ccl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmkUVRkACgkQDHRl3/mQ
-kZwBBAgAo8aoUHYOBppge88PZwWboQomqG2WQe0takgm0bg1FOcASAbKeLOtKg7F
-II/Cz3ru6XaClW9Fzoh1pfVEWR5VFGJ6/HEZMT6a1Do51m64cvfojvwAMXfWlK6V
-tU28bz/ySzn7/alBWq84v3anwTuMzY2+o64y5Fk/sB9604OlLthvMGoVOgPr9hYj
-43XqUMB7+ncT09UAP28JgMS4Fp3yVXHHXa/L9+krqQZrLhL45gdy8Ox3+BOf7h2m
-t9FZyMTwpAh8IzwiolZZDAWIz99+mrMz+S/Rmn/7zVUwXLV5A1x+YJqUNsnQmmXP
-OQaAxdDsu7bKq7yb/M7d9MHwECNyjg==
-=2zV+
------END PGP SIGNATURE-----
-
---lgk4dvrlchuf4ccl--
 
