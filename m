@@ -1,134 +1,132 @@
-Return-Path: <linux-can+bounces-5343-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5344-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 021BFC511A0
-	for <lists+linux-can@lfdr.de>; Wed, 12 Nov 2025 09:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B138CC51287
+	for <lists+linux-can@lfdr.de>; Wed, 12 Nov 2025 09:45:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 381004ECEC9
-	for <lists+linux-can@lfdr.de>; Wed, 12 Nov 2025 08:25:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CF4754E50A0
+	for <lists+linux-can@lfdr.de>; Wed, 12 Nov 2025 08:45:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADB132D9EC4;
-	Wed, 12 Nov 2025 08:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bk1nBRkn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66DE22F5484;
+	Wed, 12 Nov 2025 08:45:09 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E95D2D5C7A;
-	Wed, 12 Nov 2025 08:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879C72D1F7B
+	for <linux-can@vger.kernel.org>; Wed, 12 Nov 2025 08:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762935898; cv=none; b=hlpU8rvJCsps8XX8//ieVl1hV8MVN3dlUmofKJCjVSsbXzCPYorY9x57P0oRf1iuRhgxJwectWVbrBGchorBVa+5lOPWXRWbMvFpPadSg3icC5H87wBwiQkrEas5Si8KKWl8wj2c1lruUozHB+2YmXj2rnxWu0zrcPQHCyf67fE=
+	t=1762937109; cv=none; b=h3SUJSRe3NcH+fzRZNlwfFKZVqMOcYC7PjFieMvBVqw1T/ma4+moDInDDVi2I+YSSDvn0fPvQ8vHfBuH+hPTAI9nBKHRna5MPgltpP8apC8wxeDUYyoQvVUch5Zzp+s2IVm0lou/csKidpoL/tdDnfqi8sDjFZRqTt8wL0Z/CO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762935898; c=relaxed/simple;
-	bh=Q/QyHaLAgaVdBMtPSmk8J58WVVg01wAiuM4riboMwNE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NMK0XeMahHmKfwNmNMkKsc0gLL77i4zhi9eAR2mejNtCNPJyJW53aR4mgySmLj3Ev0khL6sgsL9rJOkUk75RSGJmEQJFkLCqOxGwBjJiGNEphvk8YHPSmHNQcEKz4jF7M/H+nLkIZ5NXMAsLMVZEsTZ661a5O+W01rw2hQWPj+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bk1nBRkn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E58ADC4CEF8;
-	Wed, 12 Nov 2025 08:24:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762935898;
-	bh=Q/QyHaLAgaVdBMtPSmk8J58WVVg01wAiuM4riboMwNE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Bk1nBRkn4iZ264APmYkNPG3UpTT+VxqzQ3S7XK0HGOv8tN2fl5iuotfFGjNHHW898
-	 PYj2AtbbPEHsRbc//iachZqeHCqk2H07y7dVUcD+rXeWdB9Ab9xACldsCWHm5AY9gn
-	 +8ZLOtLorSQs7FhWmeoZeGyFi4RxfTuqI5NpOYY3yISH9IJw+CpQ0cmq6crBLX2J31
-	 pvdkARjyVsyTZZk2bZKr/eQZS2wriMZhfYdgrYDN5hYN75//NTd8wXeefcHpFiiL6o
-	 HHSJbWw7Nvj0kX69kA/dOF1PAvzwyW/nXbakvp4DTTVnWFLMxpDS16Iy8kuopL/Kdf
-	 rYxhfJ8VtVqKQ==
-Message-ID: <177ca4e1-fa11-4b24-b72d-1af6c7c2f1c6@kernel.org>
-Date: Wed, 12 Nov 2025 09:24:52 +0100
+	s=arc-20240116; t=1762937109; c=relaxed/simple;
+	bh=dbthEIOvDC6vM52YAMeye5jTlYYAk8oYzKbjEca+jc8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QIRQCCDm2wiDyf4BrKhpuuFdW0CX/wpxJ21hq1K0nwkD22p7qgJS7LeB/1bLAlKwsmGxSNHGo2TSRgqQl8bAftMKfxm61umIICkojK2M0FXccZjNwU6f6v3ZqZ8toIGSegACPDE/XkhMuP5wViEvnqpoAxlaF5k+04YedYE/7mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vJ6T8-0001qQ-9X; Wed, 12 Nov 2025 09:44:46 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vJ6T6-0003Hx-34;
+	Wed, 12 Nov 2025 09:44:44 +0100
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 8D2B349D91F;
+	Wed, 12 Nov 2025 08:44:44 +0000 (UTC)
+Date: Wed, 12 Nov 2025 09:44:44 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Peng Fan <peng.fan@nxp.com>
+Cc: Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Aswath Govindraju <a-govindraju@ti.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Frank Li <frank.li@nxp.com>, Haibo Chen <haibo.chen@nxp.com>, 
+	linux-can@vger.kernel.org, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 0/8] phy: phy-can-transceiver: Support TJA1048/TJA1051
+Message-ID: <20251112-vivid-mysterious-guppy-3bc98a-mkl@pengutronix.de>
+References: <20251001-can-v7-0-fad29efc3884@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH v8 0/4] rockchip: add can for RK3576 Soc
-To: Elaine Zhang <zhangqing@rock-chips.com>, mkl@pengutronix.de,
- kernel@pengutronix.de, mailhol.vincent@wanadoo.fr, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de, cl@rock-chips.com
-Cc: linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <20251112015940.3695638-1-zhangqing@rock-chips.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251112015940.3695638-1-zhangqing@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 12/11/2025 02:59, Elaine Zhang wrote:
-> rk3576 can is a new controller,new register layout and Bit position
-> definition:
-> Support CAN protocol.
-> Support Dma.
-> 
-> There are major differences from the previous rk3568.
-> All errata on the rk3568 have been fixed and redesigned.
-> 
-> RK3576 CANFD requires authorization and permission. The software
-> code is not open by default and needs to be authorized separately.
-> 
-> Change in V8:
-> [PATCH v8 1/4]: Drop CANFD, correction format warning.
-> [PATCH v8 2/4]: Drop fifo_setup of rkcanfd_devtype_data.
-> [PATCH v8 3/4]: Drop CANFD.
-> [PATCH v8 4/4]: Drop CANFD.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ybnlldmwtejuzxbv"
+Content-Disposition: inline
+In-Reply-To: <20251001-can-v7-0-fad29efc3884@nxp.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
-Please implement the feedback I asked at v8. Stop resending the same
-over and over, bypassing people's review.
+--ybnlldmwtejuzxbv
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v7 0/8] phy: phy-can-transceiver: Support TJA1048/TJA1051
+MIME-Version: 1.0
 
-Best regards,
-Krzysztof
+On 01.10.2025 21:22:31, Peng Fan wrote:
+> TJA1048 is a Dual channel can transceiver with Sleep mode supported.
+> TJA105{1,7} is a Single Channel can transceiver with Sleep mode supported.
+>
+> To support them:
+> patch 1: add binding doc
+> patch 2/3: To support dual channel,
+>    - Introduce new flag CAN_TRANSCEIVER_DUAL_CH to indicate the phy
+>      has two channels.
+>    - Introduce can_transceiver_priv as a higher level encapsulation for
+>      phy, mux_state, num_ch.
+>    - Alloc a phy for each channel
+> patch 4: Simplify code
+> patch 5: Add TJA1051,7 support
+> Others: Update dts to use phys.
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--ybnlldmwtejuzxbv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmkUSPkACgkQDHRl3/mQ
+kZySvAf+OFcIv9Q1NDa53XdFIdOJfnQshUo1IZMggqNsuPNzMQKJ6R564JfdKSe+
+SDr8+3X7K7je0ZNjGNwBlqG67+AUU/WGW2v4ZOEkabVxnNEVbPHz7qJwLmYUs9b3
+vOSIMe0uxsXGVN3aFHsbC6kOB3wahwNp/1IDYdmZa/z6YOwA3bQ3eJAiqnbEuQWW
+leNCXauhnCw+WTtCdSLzQN7vLWnWKnRFWmuGfFTAK4S8/vEqOc6Y1p/ThTv8wOIh
+4UfcCqqRvH6zUWh5SbhQyANm9bO/qbbs4P4qRGEH+0X3/7oCKWc2VAI0lGQ1ndtf
+5G51bBe28y6IHAGpb2c1rGNXLw8Cgg==
+=tFN5
+-----END PGP SIGNATURE-----
+
+--ybnlldmwtejuzxbv--
 
