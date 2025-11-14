@@ -1,62 +1,58 @@
-Return-Path: <linux-can+bounces-5400-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5401-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AEFCC5D64D
-	for <lists+linux-can@lfdr.de>; Fri, 14 Nov 2025 14:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 901F7C5DEA1
+	for <lists+linux-can@lfdr.de>; Fri, 14 Nov 2025 16:37:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C77343B7F4B
-	for <lists+linux-can@lfdr.de>; Fri, 14 Nov 2025 13:41:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ABCF426383
+	for <lists+linux-can@lfdr.de>; Fri, 14 Nov 2025 15:27:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02D2531B82E;
-	Fri, 14 Nov 2025 13:40:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D5CD32E681;
+	Fri, 14 Nov 2025 15:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="CBPpRDWo"
+	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="ZwowTvsH"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtpfb1-g21.free.fr (smtpfb1-g21.free.fr [212.27.42.9])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C06D3315D52;
-	Fri, 14 Nov 2025 13:40:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E0932E141
+	for <linux-can@vger.kernel.org>; Fri, 14 Nov 2025 15:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.27.42.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763127631; cv=none; b=FnGfkpbeJuvMmQQCI9Z+LURscUrplccl3PruYdtBycFDCp+9rVGbo0RRAJraWkvfyzjneaZmJ8TlxdSnI6llNyKePV1378ovVYGBw+tKbz/BP26yh5qxrVxwpbkxhrvPoTvXNGHXYS4u5tAKRphX3ZMc/aDyEkvWWzK52PDWRLQ=
+	t=1763133434; cv=none; b=IzrK6dsQqMNGpnevT4VZak4oLH6kbGyrHCswE6WUQFwmrVh2bhGzPHr5kjJgzJMo+WjhifSeJoEfvwL0EuD+1lL0zxNCueAl7ohTAyTUOMLa5GySMrlLstnLiA7din25J8uR/nIGTMNZb3hey4zT7eFF4h7CqL6bfaGu54Ov5sQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763127631; c=relaxed/simple;
-	bh=4cOJY4dO3sEZMCBdI2nn9UZcEUub7LgNXjQuUo4QFlc=;
+	s=arc-20240116; t=1763133434; c=relaxed/simple;
+	bh=wJPFLst4ZrtWgRpIw/mdvQKCmvtK9tTnHfK/Te0ijA0=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:Subject:MIME-Version:
-	 Content-Type; b=A1vJhSMdieASFuIFEubK61BadXxQ+Rc+kzJqkPZBbhEpgOOvzh+xdu+s4Bl/HTYmBFxI9KqANTG9W+XIv1+MPaRcbnMqT3qMgZu+UqhGp27ZTJ/cA4uiN85CMJ7z5snkMA/R8Js0p2D/aNWXuETSKreAHkpfjnjAkCI3HcuTWmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=CBPpRDWo; arc=none smtp.client-ip=212.27.42.9
+	 Content-Type; b=W10C5fZV6RkjbVXiPJliwMEzDRrzjjw7TVHRt0zlrxmBiHwSilTMXGcoCd5CvaVWzgH2Toju8DectVsYDpS1NSzC53e47JiipTQFlGZSLheDacT64aDa8utrIZWzxdHWyqdfhRrwbz+bsWUZJ0sQG8uvwNWxsrVMhdAUj9/XAdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=ZwowTvsH; arc=none smtp.client-ip=212.27.42.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=free.fr
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
-	by smtpfb1-g21.free.fr (Postfix) with ESMTP id A90D6DF8E28;
-	Fri, 14 Nov 2025 14:34:24 +0100 (CET)
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+	by smtpfb1-g21.free.fr (Postfix) with ESMTP id 7B8DEDF85D6
+	for <linux-can@vger.kernel.org>; Fri, 14 Nov 2025 16:17:07 +0100 (CET)
 Received: from zimbra65-e11.priv.proxad.net (unknown [172.20.243.215])
-	by smtp6-g21.free.fr (Postfix) with ESMTP id 2DD27780389;
-	Fri, 14 Nov 2025 14:34:17 +0100 (CET)
+	by smtp4-g21.free.fr (Postfix) with ESMTP id 9923719F733;
+	Fri, 14 Nov 2025 16:17:00 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-	s=smtp-20201208; t=1763127257;
-	bh=4cOJY4dO3sEZMCBdI2nn9UZcEUub7LgNXjQuUo4QFlc=;
+	s=smtp-20201208; t=1763133420;
+	bh=wJPFLst4ZrtWgRpIw/mdvQKCmvtK9tTnHfK/Te0ijA0=;
 	h=Date:From:To:Cc:In-Reply-To:Subject:From;
-	b=CBPpRDWo2MW1LX9q3xUlDc4LBOTCNcMLakW9p5bRIK7DuEjrNwzpoCOnb/0unbh86
-	 mzl1Rv2TIoDeEETFS1m2aogcgL3iqbsNlQn37B3X51r/J7JPVFICog9+op1ZfaGGLK
-	 eVOWpX6adt1YZpI6HiknAp4QgCOyjZbIRkltwUEcud3/QCVw5i5gJ04yzeZBkAiqrp
-	 cIieeoMXnESAL5MNkf3SOrOtkfQu+MiUc0B9SB1jPXNm6IcmJJJd5iUrMChpm7WWfJ
-	 ivnc1+uNE0pg8MLvsVg1D2pqXEIJAY94feMK0ZW7Wps8uGKMIWxw28G6DD/1j8kchs
-	 ODKPrGs/BOhzg==
-Date: Fri, 14 Nov 2025 14:34:17 +0100 (CET)
+	b=ZwowTvsHjBh4gzuMaEreFj0BRHkW84yzz8QTSWC8UCFJJ2m/ytk/ZGrvoScHjt3gi
+	 NowhNkgapgrXEKFLLP3jn8ecV2exAH7T2r2k9nl6xjUTql8g0zGRvRYexQFCYcYHSY
+	 FHk4y/OVn34bkdgDh6w7Pl699u5DUl9FfU4nCj21r4l16UmpICk1/RKNR0eXkelYMG
+	 3W2ewilgK9OLkeS7Tt1Zh31pcugU6fwxUSy98OSybJuoyA0FlOh6Mmg+ggemilYtjR
+	 sXsPlaP6Fj5AcGalSVvCmRjAVVm9fwG0zHO/74CSrthDCTslpQHXnzURZQM4P3XqTk
+	 JzG0uXVlHDLgA==
+Date: Fri, 14 Nov 2025 16:17:00 +0100 (CET)
 From: =?utf-8?Q?St=C3=A9phane?= Grosjean <stephane.grosjean@free.fr>
 To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: =?utf-8?Q?St=C3=A9phane?= Grosjean <stephane.grosjean@hms-networks.com>, 
-	Robert Nawrath <mbro1689@gmail.com>, 
-	Minh Le <minh.le.aj@renesas.com>, 
-	Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>
-Message-ID: <664236749.640139017.1763127257039.JavaMail.root@zimbra65-e11.priv.proxad.net>
-In-Reply-To: <e58c90a8-c9e3-4f9b-99cb-09b87c18d657@hartkopp.net>
-Subject: Re: [PATCH 3/9] can: netlink: add initial CAN XL support
+Cc: linux-can@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>, 
+	=?utf-8?Q?St=C3=A9phane?= Grosjean <stephane.grosjean@hms-networks.com>
+Message-ID: <1567529787.640577701.1763133420441.JavaMail.root@zimbra65-e11.priv.proxad.net>
+In-Reply-To: <13906d6a-34be-47ff-bedf-c25a2d755aba@hartkopp.net>
+Subject: Re: RFC remove CAN_CTRLMODE_XL_ERR_SIGNAL
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -68,447 +64,247 @@ Content-Transfer-Encoding: quoted-printable
 X-Mailer: Zimbra 7.2.0-GA2598 (ZimbraWebClient - GC142 (Linux)/7.2.0-GA2598)
 X-Authenticated-User: stephane.grosjean@free.fr
 
-Hi all,
+Hi,
 
-I completely agree with Oliver: an error or warning message should only app=
-ear when the feature is requested but not supported.
+If I may say so:
 
-In the opposite case, displaying a warning about an unsupported feature whe=
-n it has not been requested=E2=80=94but still configuring the interface=E2=
-=80=94leaves the user (me ;-) ) in doubt (speaking from experience ;-)).
+>> Why isn't=20
+>>=20
+>> 4. Providing only CC/XL bitrates =3D> ES on, TMS off=20
+>>=20
+>> a valid option?=20
 
-Best regards,
+It works... But when only CANXL controllers (all configured in this way) ar=
+e stuck to the wire! They communicate in a kind of CANFD++ protocol that al=
+lows the same (high) data rates but with 2KB frames.
+
+When such 2KB CANXL frames are written to the bus, any CAN 2.0 controller w=
+ill indicate frame errors, whereas a controller configured for CANFD will n=
+ot be affected (no error or frames raised)
+
+On the other hand, writing CANFD frames *without* BRS but DLC>8 is OK (the =
+CANXL node reads them as CAN_CC frames of course) while writing CANFD frame=
+s with BRS obviously turns to error on the bus. CAN 2.0 node turns into err=
+or in every case.
+
+Finally, writing CAN 2.0 frames is ok for everyone in that configuration.
+
+I've tried to summarize all of this in the following tables:
+
+CC/XL bitrates + ES=3Don TMS=3Doff
+                  =20
+CANXL1             CANXL2            CANFD1             CANFD2             =
+CANCC
+writes 2KB frames  reads 2KB frames  no error/no frame  no error/no frame  =
+frm errors
+reads DLC>8        reads DLC>8       writes DLC>8       reads DLC>8        =
+not connected
+frm errors         frm errors        writes DLC>8       frm errors         =
+frm errors
+reads frames       reads frames      reads frames       reads frames       =
+writes frames
+
+Once ES is turned off, then you obviously enters a new protocol, so communi=
+cation is less mixed:
+
+CC/XL bitrates + ES=3Doff TMS=3Doff
+
+CANXL1             CANXL2            CANFD1             CANFD2             =
+CANCC
+writes 2KB frames  reads 2KB frames  no error/no frame  no error/no frame  =
+not connected
+stuff error        stuff error       writes DLC>8       reads DLC>8        =
+not connected
+stuff error        stuff error       reads frames       reads frames       =
+writes frames
+
+CC/XL bitrates + ES=3Doff TMS=3Don (aka pure CANXL)
+
+CANXL1             CANXL2            CANFD1             CANFD2             =
+CANCC
+writes 2KB frames  reads 2KB frames  no error/no frame  no error/no frame  =
+not connected
+stuff error        stuff error       writes DLC>8       reads DLC>8        =
+not connected
+stuff error        stuff error       reads frames       reads frames       =
+writes frames
+
+Hope this helps,
 
 -- St=C3=A9phane
+
 
 ----- Mail original -----=20
 
 De: "Oliver Hartkopp" <socketcan@hartkopp.net>=20
-=C3=80: "Vincent Mailhol" <mailhol@kernel.org>, "Marc Kleine-Budde" <mkl@pe=
-ngutronix.de>=20
-Cc: "St=C3=A9phane Grosjean" <stephane.grosjean@hms-networks.com>, "Robert =
-Nawrath" <mbro1689@gmail.com>, "Minh Le" <minh.le.aj@renesas.com>, "Duy Ngu=
-yen" <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org, linux-kernel@v=
-ger.kernel.org=20
-Envoy=C3=A9: Vendredi 14 Novembre 2025 14:19:04=20
-Objet: Re: [PATCH 3/9] can: netlink: add initial CAN XL support=20
+=C3=80: "Vincent Mailhol" <mailhol@kernel.org>, "St=C3=A9phane Grosjean" <s=
+tephane.grosjean@hms-networks.com>=20
+Cc: linux-can@vger.kernel.org=20
+Envoy=C3=A9: Mardi 11 Novembre 2025 15:12:56=20
+Objet: Re: RFC remove CAN_CTRLMODE_XL_ERR_SIGNAL=20
 
 Hi Vincent,=20
 
-On 13.10.25 13:01, Vincent Mailhol wrote:=20
-> CAN XL uses bittiming parameters different from Classical CAN and CAN=20
-> FD. Thus, all the data bittiming parameters, including TDC, need to be=20
-> duplicated for CAN XL.=20
+On 10.11.25 22:22, Vincent Mailhol wrote:=20
+> On 09/11/2025 at 22:07, Oliver Hartkopp wrote:=20
+>> I've been playing with the PEAK CAN XL bitrate tool again and it gave me=
+ a new=20
+>> idea:=20
+>>=20
+>> There were settings for different bitrates and the belonging/resulting f=
+lags for=20
+>> TMS and ES (error-signalling).=20
+>>=20
+>> Staring at the options we have only three options for the CAN XL support=
+ aka "xl=20
+>> on":=20
+>>=20
+>> 1. Providing CC/FD/XL bitrates =3D> ES on, TMS off (mixed-mode)=20
+>>=20
+>> 2. Providing only CC/XL bitrates =3D> ES off, TMS off (CANXL-only)=20
+>>=20
+>> 3. Providing only CC/XL bitrates =3D> ES off, TMS on (CANXL-only)=20
 >=20
-> Add the CAN XL netlink interface for all the features which are common=20
-> with CAN FD. Any new CAN XL specific features are added later on.=20
+> Why isn't=20
 >=20
-> Add a check that CAN XL capable nodes correctly provide=20
-> CAN_CTRLMODE_RESTRIC_OP as mandated by ISO 11898-1:2024 =C2=A76.6.19.=20
+> 4. Providing only CC/XL bitrates =3D> ES on, TMS off=20
 >=20
-> The first time CAN XL is activated, the MTU is set by default to=20
-> CANXL_MAX_MTU. The user may then configure a custom MTU within the=20
-> CANXL_MIN_MTU to CANXL_MIN_MTU range, in which case, the custom MTU=20
-> value will be kept as long as CAN XL remains active.=20
->=20
-> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>=20
-> ---=20
-> Changelog:=20
->=20
-> RFC -> v1:=20
->=20
-> - Correctly wipe out the CAN XL data bittiming and TDC parameters=20
-> when switching CAN_CTRLMODE_XL off.=20
->=20
-> - Add one level on nesting for xl parameters so that:=20
->=20
-> - bittiming are under priv->xl.data_bittiming{,_const}=C2=A8=20
-> - pwm are under priv->xl.pwm{,_const}=20
->=20
-> - Many other code refactors.=20
-> ---=20
-> drivers/net/can/dev/dev.c | 14 ++++++-=20
-> drivers/net/can/dev/netlink.c | 87 ++++++++++++++++++++++++++++++++------=
---=20
-> include/linux/can/bittiming.h | 6 ++-=20
-> include/linux/can/dev.h | 7 +++-=20
-> include/uapi/linux/can/netlink.h | 7 ++++=20
-> 5 files changed, 100 insertions(+), 21 deletions(-)=20
->=20
-> diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c=20
-> index 3377afb6f1c4..32f11db88295 100644=20
-> --- a/drivers/net/can/dev/dev.c=20
-> +++ b/drivers/net/can/dev/dev.c=20
-> @@ -117,6 +117,12 @@ const char *can_get_ctrlmode_str(u32 ctrlmode)=20
-> return "fd-tdc-manual";=20
-> case CAN_CTRLMODE_RESTRICTED:=20
-> return "restricted-operation";=20
-> + case CAN_CTRLMODE_XL:=20
-> + return "xl";=20
-> + case CAN_CTRLMODE_XL_TDC_AUTO:=20
-> + return "xl-tdc-auto";=20
-> + case CAN_CTRLMODE_XL_TDC_MANUAL:=20
-> + return "xl-tdc-manual";=20
-> default:=20
-> return "<unknown>";=20
-> }=20
-> @@ -350,7 +356,13 @@ void can_set_default_mtu(struct net_device *dev)=20
-> {=20
-> struct can_priv *priv =3D netdev_priv(dev);=20
->=20
-> - if (priv->ctrlmode & CAN_CTRLMODE_FD) {=20
-> + if (priv->ctrlmode & CAN_CTRLMODE_XL) {=20
-> + if (can_is_canxl_dev_mtu(dev->mtu))=20
-> + return;=20
-> + dev->mtu =3D CANXL_MTU;=20
-> + dev->min_mtu =3D CANXL_MIN_MTU;=20
-> + dev->max_mtu =3D CANXL_MAX_MTU;=20
-> + } else if (priv->ctrlmode & CAN_CTRLMODE_FD) {=20
-> dev->mtu =3D CANFD_MTU;=20
-> dev->min_mtu =3D CANFD_MTU;=20
-> dev->max_mtu =3D CANFD_MTU;=20
-> diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.=
-c=20
-> index f44b5dffa176..2405f1265488 100644=20
-> --- a/drivers/net/can/dev/netlink.c=20
-> +++ b/drivers/net/can/dev/netlink.c=20
-> @@ -2,7 +2,7 @@=20
-> /* Copyright (C) 2005 Marc Kleine-Budde, Pengutronix=20
-> * Copyright (C) 2006 Andrey Volkov, Varma Electronics=20
-> * Copyright (C) 2008-2009 Wolfgang Grandegger <wg@grandegger.com>=20
-> - * Copyright (C) 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>=20
-> + * Copyright (C) 2021-2025 Vincent Mailhol <mailhol@kernel.org>=20
-> */=20
->=20
-> #include <linux/can/dev.h>=20
-> @@ -22,6 +22,9 @@ static const struct nla_policy can_policy[IFLA_CAN_MAX =
-+ 1] =3D {=20
-> [IFLA_CAN_TERMINATION] =3D { .type =3D NLA_U16 },=20
-> [IFLA_CAN_TDC] =3D { .type =3D NLA_NESTED },=20
-> [IFLA_CAN_CTRLMODE_EXT] =3D { .type =3D NLA_NESTED },=20
-> + [IFLA_CAN_XL_DATA_BITTIMING] =3D { .len =3D sizeof(struct can_bittiming=
-) },=20
-> + [IFLA_CAN_XL_DATA_BITTIMING_CONST] =3D { .len =3D sizeof(struct can_bit=
-timing_const) },=20
-> + [IFLA_CAN_XL_TDC] =3D { .type =3D NLA_NESTED },=20
-> };=20
->=20
-> static const struct nla_policy can_tdc_policy[IFLA_CAN_TDC_MAX + 1] =3D {=
-=20
-> @@ -70,7 +73,7 @@ static int can_validate_tdc(struct nlattr *data_tdc,=20
-> return -EOPNOTSUPP;=20
-> }=20
->=20
-> - /* If one of the CAN_CTRLMODE_TDC_* flag is set then TDC=20
-> + /* If one of the CAN_CTRLMODE_{,XL}_TDC_* flags is set then TDC=20
-> * must be set and vice-versa=20
-> */=20
-> if ((tdc_auto || tdc_manual) && !data_tdc) {=20
-> @@ -82,8 +85,8 @@ static int can_validate_tdc(struct nlattr *data_tdc,=20
-> return -EOPNOTSUPP;=20
-> }=20
->=20
-> - /* If providing TDC parameters, at least TDCO is needed. TDCV=20
-> - * is needed if and only if CAN_CTRLMODE_TDC_MANUAL is set=20
-> + /* If providing TDC parameters, at least TDCO is needed. TDCV is=20
-> + * needed if and only if CAN_CTRLMODE_{,XL}_TDC_MANUAL is set=20
-> */=20
-> if (data_tdc) {=20
-> struct nlattr *tb_tdc[IFLA_CAN_TDC_MAX + 1];=20
-> @@ -126,10 +129,10 @@ static int can_validate_databittiming(struct nlattr=
- *data[],=20
-> bool is_on;=20
-> int err;=20
->=20
-> - /* Make sure that valid CAN FD configurations always consist of=20
-> + /* Make sure that valid CAN FD/XL configurations always consist of=20
-> * - nominal/arbitration bittiming=20
-> * - data bittiming=20
-> - * - control mode with CAN_CTRLMODE_FD set=20
-> + * - control mode with CAN_CTRLMODE_{FD,XL} set=20
-> * - TDC parameters are coherent (details in can_validate_tdc())=20
-> */=20
->=20
-> @@ -139,7 +142,10 @@ static int can_validate_databittiming(struct nlattr =
-*data[],=20
-> is_on =3D flags & CAN_CTRLMODE_FD;=20
-> type =3D "FD";=20
-> } else {=20
-> - return -EOPNOTSUPP; /* Place holder for CAN XL */=20
-> + data_tdc =3D data[IFLA_CAN_XL_TDC];=20
-> + tdc_flags =3D flags & CAN_CTRLMODE_XL_TDC_MASK;=20
-> + is_on =3D flags & CAN_CTRLMODE_XL;=20
-> + type =3D "XL";=20
-> }=20
->=20
-> if (is_on) {=20
-> @@ -206,6 +212,11 @@ static int can_validate(struct nlattr *tb[], struct =
-nlattr *data[],=20
-> if (err)=20
-> return err;=20
->=20
-> + err =3D can_validate_databittiming(data, extack,=20
-> + IFLA_CAN_XL_DATA_BITTIMING, flags);=20
-> + if (err)=20
-> + return err;=20
-> +=20
-> return 0;=20
-> }=20
->=20
-> @@ -215,7 +226,8 @@ static int can_ctrlmode_changelink(struct net_device =
-*dev,=20
-> {=20
-> struct can_priv *priv =3D netdev_priv(dev);=20
-> struct can_ctrlmode *cm;=20
-> - u32 ctrlstatic, maskedflags, notsupp, ctrlstatic_missing;=20
-> + const u32 xl_mandatory =3D CAN_CTRLMODE_RESTRICTED;=20
-> + u32 ctrlstatic, maskedflags, notsupp, ctrlstatic_missing, xl_missing;=
-=20
->=20
-> if (!data[IFLA_CAN_CTRLMODE])=20
-> return 0;=20
-> @@ -229,6 +241,7 @@ static int can_ctrlmode_changelink(struct net_device =
-*dev,=20
-> maskedflags =3D cm->flags & cm->mask;=20
-> notsupp =3D maskedflags & ~(priv->ctrlmode_supported | ctrlstatic);=20
-> ctrlstatic_missing =3D (maskedflags & ctrlstatic) ^ ctrlstatic;=20
-> + xl_missing =3D (priv->ctrlmode_supported & xl_mandatory) ^ xl_mandatory=
-;=20
->=20
-> if (notsupp) {=20
-> NL_SET_ERR_MSG_FMT(extack,=20
-> @@ -248,21 +261,36 @@ static int can_ctrlmode_changelink(struct net_devic=
-e *dev,=20
-> return -EOPNOTSUPP;=20
-> }=20
->=20
-> + if ((priv->ctrlmode_supported & CAN_CTRLMODE_XL) && xl_missing) {=20
-> + NL_SET_ERR_MSG_FMT(extack,=20
-> + "bad device: CAN XL capable nodes must support the %s mode",=20
-> + can_get_ctrlmode_str(xl_missing));=20
-> + return -EOPNOTSUPP;=20
-> + }=20
-> +=20
+> a valid option?=20
 
-I'm not sure if it is our job to check for ISO 11898-1:2024 compliance=20
-of CAN controllers when CAN_CTRLMODE_RESTRICTED is not supported.=20
+I had an off-list discussion with St=C3=A9phane and other PEAK System exper=
+ts=20
+in June and the outcome was that CC/XL bitrates with ES on and TMS off=20
+is possible (only with the PEAK CAN XL IP core!) but will result in a=20
+nightmare for support teams.=20
 
-IMO an appropriate error message (only) when the user requests this=20
-feature would be better and that is already the standard behaviour.=20
+The CAN bus will crash if it receives a CAN FD frame.=20
+
+This is basically the same with the Bosch X_CAN IP core where you need=20
+to enable CAN FD for performing the mixed-mode. What would you set as a=20
+FD bitrate there? There is no "nothing" to be set into the registers.=20
+You might set 2MBit/s as default but that might crash either when it=20
+doesn't fit.=20
+
+Looking back in our older discussions with St=C3=A9phane I found this:=20
+
+https://lore.kernel.org/linux-can/DBAPR10MB41879125DC7369359E4AB256D467A@DB=
+APR10MB4187.EURPRD10.PROD.OUTLOOK.COM/#t=20
+
+St=C3=A9phane wrote:=20
+
+---=20
+
+According to [3] lines 170-184, the CAN_CTRLMODE_FD and CAN_CTRLMODE_XL=20
+flags are not mutually exclusive, so why introduce=20
+CAN_CTRLMODE_XL_ERR_SIGNAL [2] when the combinations of CAN_CTRLMODE_FD=20
+and CAN_CTRLMODE_XL would allow us to deduce this?=20
+
+Indeed:=20
+
+can_priv->ctrlmode & (CAN_CTRLMODE_FD|CAN_CTRLMODE_XL) =3D=3D=20
+
+CAN_CTRLMODE_FD CANFD mode (n/a)=20
+CAN_CTRLMODE_XL|CAN_CTRLMODE_FD mixed-CANXL =3D> error_signaling=3DON=20
+CAN_CTRLMODE_XL pure-CANXL =3D> error_signaling=3DOFF=20
+
+---=20
+
+With the CAN_CTRLMODE_XL (pure-CANXL) the ES is always off and the TMS=20
+becomes an option to be switched on (default off).=20
+
+And the more I think about it, the more I would like to go for this=20
+solution.=20
+
+This setup covers all Bosch use-case slides and Bosch CAN XL IP core=20
+documentations (e.g. with the 1.5.5.3 Operating Mode table).=20
+
+And we can omit the introduction of the CAN_CTRLMODE_XL_ERR_SIGNAL flag=20
+as this can be retrieved internally from CTRLMODE_XL and CAN_CTRLMODE_FD=20
+to be set into the controller registers.=20
+
+Not defining the FD bitrate in the mixed-mode causes more harm (to the=20
+system and the CAN bus itself) than urging the user to define it. Even=20
+if he doesn't use CAN FD frames.=20
+
+In the (really unlikely) case that someone shows up with a valid=20
+use-case (like len8_dlc) and separately wants to fiddle with the ES=20
+flags, we might introduce such a flag later. But I bet this will not happen=
+.=20
+
+>> Therefore we only need "tms" as an additional option when xl is on.=20
+>>=20
+>> The error signalling "on" automatically results from the availability of=
+ "fd on"=20
+>> and the FD bitrate.=20
+>>=20
+>> Examples:=20
+>>=20
+>> 1. Providing CC/FD/XL bitrates =3D> ES on, TMS off=20
+>>=20
+>> ip link set can0 type can bitrate 500000 fd on dbitrate 2000000 xl on xb=
+itrate=20
+>> 4000000=20
+>>=20
+>> 2. Providing only CC/XL bitrates =3D> ES off, TMS off=20
+>>=20
+>> ip link set can0 type can bitrate 500000 xl on xbitrate 4000000=20
+>>=20
+>> 3. Providing only CC/XL bitrates =3D> ES off, TMS on=20
+>>=20
+>> ip link set can0 type can bitrate 500000 xl on xbitrate 10000000 tms on=
+=20
+>>=20
+>> That's simple and provides only the needed switches, which makes=20
+>> CAN_CTRLMODE_XL_ERR_SIGNAL obsolete in the netlink API.=20
+>>=20
+>> What do you think about this approach?=20
+>=20
+> What really bothers me here is that the ISO standard explicitly state tha=
+t error=20
+> signaling is a configurable option. Making this an implicit option would =
+result=20
+> in a somehow non-compliant implementation.=20
+
+Yes. According to all the Bosch slides ES=3Don results in mixed-mode and=20
+ES=3Doff results in CANXL-only. You need this bit to distinguish these two=
+=20
+operation modes when using CAN XL (mixed or pure).=20
+
+The fact that we need an arbitration bitrate for the CANXL-only modes=20
+does not imply we can send or receive CC frames (with ES off).=20
+
+> I appreciate that for most of the use cases the error signaling can be in=
+ferred=20
+> from the other values, and this is what I tried to implement (c.f. the ta=
+ble of=20
+> default values which I put in my patch).=20
+>=20
+> But I want to leave room so that people who wants to push the standard to=
+ its=20
+> limits can.=20
+
+Either CAN CC or CAN FD with ES=3Doff are marked as an "invalid=20
+configuration" in the 1.5.5.3 Operating Mode table. And I'm pretty sure=20
+the CAN XL inventor's implementation of the CAN XL IP core is compliant=20
+with the standard here. Maybe the standard is unclear in this topic or=20
+left some details.=20
+
+What is your interpretation of the standard here?=20
+What do you think has to be supported beyond the features that St=C3=A9phan=
+e=20
+and I suggest?=20
+
+> I see this a bit like the can_frame->len8_dlc thing. Should you use DLCs =
+greater=20
+> than 8 in production code? Hell no! But I still want the implementation t=
+o give=20
+> me this option so that I can do my weird tests.=20
+
+Ack. But so far I do not see such weird options. And introducing code=20
+into the kernel there is no user for and that's potentially only adding=20
+complexity in the API that might lead to misconfiguration is not=20
+well-received.=20
 
 Best regards,=20
-Oliver=20
-
-> /* If a top dependency flag is provided, reset all its dependencies */=20
-> if (cm->mask & CAN_CTRLMODE_FD)=20
-> priv->ctrlmode &=3D ~CAN_CTRLMODE_FD_TDC_MASK;=20
-> + if (cm->mask & CAN_CTRLMODE_XL)=20
-> + priv->ctrlmode &=3D ~(CAN_CTRLMODE_XL_TDC_MASK);=20
->=20
-> /* clear bits to be modified and copy the flag values */=20
-> priv->ctrlmode &=3D ~cm->mask;=20
-> priv->ctrlmode |=3D maskedflags;=20
->=20
-> - /* Wipe potential leftovers from previous CAN FD config */=20
-> + /* Wipe potential leftovers from previous CAN FD/XL config */=20
-> if (!(priv->ctrlmode & CAN_CTRLMODE_FD)) {=20
-> memset(&priv->fd.data_bittiming, 0,=20
-> sizeof(priv->fd.data_bittiming));=20
-> priv->ctrlmode &=3D ~CAN_CTRLMODE_FD_TDC_MASK;=20
-> memset(&priv->fd.tdc, 0, sizeof(priv->fd.tdc));=20
-> }=20
-> + if (!(priv->ctrlmode & CAN_CTRLMODE_XL)) {=20
-> + memset(&priv->xl.data_bittiming, 0,=20
-> + sizeof(priv->fd.data_bittiming));=20
-> + priv->ctrlmode &=3D ~CAN_CTRLMODE_XL_TDC_MASK;=20
-> + memset(&priv->xl.tdc, 0, sizeof(priv->xl.tdc));=20
-> + }=20
->=20
-> can_set_default_mtu(dev);=20
->=20
-> @@ -337,7 +365,10 @@ static int can_dbt_changelink(struct net_device *dev=
-, struct nlattr *data[],=20
-> dbt_params =3D &priv->fd;=20
-> tdc_mask =3D CAN_CTRLMODE_FD_TDC_MASK;=20
-> } else {=20
-> - return -EOPNOTSUPP; /* Place holder for CAN XL */=20
-> + data_bittiming =3D data[IFLA_CAN_XL_DATA_BITTIMING];=20
-> + data_tdc =3D data[IFLA_CAN_XL_TDC];=20
-> + dbt_params =3D &priv->xl;=20
-> + tdc_mask =3D CAN_CTRLMODE_XL_TDC_MASK;=20
-> }=20
->=20
-> if (!data_bittiming)=20
-> @@ -388,7 +419,7 @@ static int can_dbt_changelink(struct net_device *dev,=
- struct nlattr *data[],=20
-> */=20
-> can_calc_tdco(&dbt_params->tdc, dbt_params->tdc_const, &dbt,=20
-> tdc_mask, &priv->ctrlmode, priv->ctrlmode_supported);=20
-> - } /* else: both CAN_CTRLMODE_TDC_{AUTO,MANUAL} are explicitly=20
-> + } /* else: both CAN_CTRLMODE_{,XL}_TDC_{AUTO,MANUAL} are explicitly=20
-> * turned off. TDC is disabled: do nothing=20
-> */=20
->=20
-> @@ -491,6 +522,11 @@ static int can_changelink(struct net_device *dev, st=
-ruct nlattr *tb[],=20
-> if (err)=20
-> return err;=20
->=20
-> + /* CAN XL */=20
-> + err =3D can_dbt_changelink(dev, data, false, extack);=20
-> + if (err)=20
-> + return err;=20
-> +=20
-> if (data[IFLA_CAN_TERMINATION]) {=20
-> const u16 termval =3D nla_get_u16(data[IFLA_CAN_TERMINATION]);=20
-> const unsigned int num_term =3D priv->termination_const_cnt;=20
-> @@ -558,14 +594,14 @@ static size_t can_data_bittiming_get_size(struct da=
-ta_bittiming_params *dbt_para=20
-> {=20
-> size_t size =3D 0;=20
->=20
-> - if (dbt_params->data_bittiming.bitrate) /* IFLA_CAN_DATA_BITTIMING */=
-=20
-> + if (dbt_params->data_bittiming.bitrate) /* IFLA_CAN_{,XL}_DATA_BITTIMIN=
-G */=20
-> size +=3D nla_total_size(sizeof(dbt_params->data_bittiming));=20
-> - if (dbt_params->data_bittiming_const) /* IFLA_CAN_DATA_BITTIMING_CONST =
-*/=20
-> + if (dbt_params->data_bittiming_const) /* IFLA_CAN_{,XL}_DATA_BITTIMING_=
-CONST */=20
-> size +=3D nla_total_size(sizeof(*dbt_params->data_bittiming_const));=20
-> - if (dbt_params->data_bitrate_const) /* IFLA_CAN_DATA_BITRATE_CONST */=
-=20
-> + if (dbt_params->data_bitrate_const) /* IFLA_CAN_{,XL}_DATA_BITRATE_CONS=
-T */=20
-> size +=3D nla_total_size(sizeof(*dbt_params->data_bitrate_const) *=20
-> dbt_params->data_bitrate_const_cnt);=20
-> - size +=3D can_tdc_get_size(dbt_params, tdc_flags);/* IFLA_CAN_TDC */=20
-> + size +=3D can_tdc_get_size(dbt_params, tdc_flags);/* IFLA_CAN_{,XL}_TDC=
- */=20
->=20
-> return size;=20
-> }=20
-> @@ -605,6 +641,9 @@ static size_t can_get_size(const struct net_device *d=
-ev)=20
-> size +=3D can_data_bittiming_get_size(&priv->fd,=20
-> priv->ctrlmode & CAN_CTRLMODE_FD_TDC_MASK);=20
->=20
-> + size +=3D can_data_bittiming_get_size(&priv->xl,=20
-> + priv->ctrlmode & CAN_CTRLMODE_XL_TDC_MASK);=20
-> +=20
-> return size;=20
-> }=20
->=20
-> @@ -649,7 +688,9 @@ static int can_tdc_fill_info(struct sk_buff *skb, con=
-st struct net_device *dev,=20
-> tdc_is_enabled =3D can_fd_tdc_is_enabled(priv);=20
-> tdc_manual =3D priv->ctrlmode & CAN_CTRLMODE_TDC_MANUAL;=20
-> } else {=20
-> - return -EOPNOTSUPP; /* Place holder for CAN XL */=20
-> + dbt_params =3D &priv->xl;=20
-> + tdc_is_enabled =3D can_xl_tdc_is_enabled(priv);=20
-> + tdc_manual =3D priv->ctrlmode & CAN_CTRLMODE_XL_TDC_MANUAL;=20
-> }=20
-> tdc_const =3D dbt_params->tdc_const;=20
-> tdc =3D &dbt_params->tdc;=20
-> @@ -771,7 +812,19 @@ static int can_fill_info(struct sk_buff *skb, const =
-struct net_device *dev)=20
->=20
-> can_tdc_fill_info(skb, dev, IFLA_CAN_TDC) ||=20
->=20
-> - can_ctrlmode_ext_fill_info(skb, priv)=20
-> + can_ctrlmode_ext_fill_info(skb, priv) ||=20
-> +=20
-> + can_bittiming_fill_info(skb, IFLA_CAN_XL_DATA_BITTIMING,=20
-> + &priv->xl.data_bittiming) ||=20
-> +=20
-> + can_bittiming_const_fill_info(skb, IFLA_CAN_XL_DATA_BITTIMING_CONST,=20
-> + priv->xl.data_bittiming_const) ||=20
-> +=20
-> + can_bitrate_const_fill_info(skb, IFLA_CAN_XL_DATA_BITRATE_CONST,=20
-> + priv->xl.data_bitrate_const,=20
-> + priv->xl.data_bitrate_const_cnt) ||=20
-> +=20
-> + can_tdc_fill_info(skb, dev, IFLA_CAN_XL_TDC)=20
-> )=20
->=20
-> return -EMSGSIZE;=20
-> diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.=
-h=20
-> index d30816dd93c7..68d533bb7856 100644=20
-> --- a/include/linux/can/bittiming.h=20
-> +++ b/include/linux/can/bittiming.h=20
-> @@ -16,10 +16,12 @@=20
->=20
-> #define CAN_CTRLMODE_FD_TDC_MASK \=20
-> (CAN_CTRLMODE_TDC_AUTO | CAN_CTRLMODE_TDC_MANUAL)=20
-> +#define CAN_CTRLMODE_XL_TDC_MASK \=20
-> + (CAN_CTRLMODE_XL_TDC_AUTO | CAN_CTRLMODE_XL_TDC_MANUAL)=20
-> #define CAN_CTRLMODE_TDC_AUTO_MASK \=20
-> - (CAN_CTRLMODE_TDC_AUTO)=20
-> + (CAN_CTRLMODE_TDC_AUTO | CAN_CTRLMODE_XL_TDC_AUTO)=20
-> #define CAN_CTRLMODE_TDC_MANUAL_MASK \=20
-> - (CAN_CTRLMODE_TDC_MANUAL)=20
-> + (CAN_CTRLMODE_TDC_MANUAL | CAN_CTRLMODE_XL_TDC_MANUAL)=20
->=20
-> /*=20
-> * struct can_tdc - CAN FD Transmission Delay Compensation parameters=20
-> diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h=20
-> index 9de8fde3ec9d..945c16743702 100644=20
-> --- a/include/linux/can/dev.h=20
-> +++ b/include/linux/can/dev.h=20
-> @@ -47,7 +47,7 @@ struct can_priv {=20
->=20
-> const struct can_bittiming_const *bittiming_const;=20
-> struct can_bittiming bittiming;=20
-> - struct data_bittiming_params fd;=20
-> + struct data_bittiming_params fd, xl;=20
-> unsigned int bitrate_const_cnt;=20
-> const u32 *bitrate_const;=20
-> u32 bitrate_max;=20
-> @@ -85,6 +85,11 @@ static inline bool can_fd_tdc_is_enabled(const struct =
-can_priv *priv)=20
-> return !!(priv->ctrlmode & CAN_CTRLMODE_FD_TDC_MASK);=20
-> }=20
->=20
-> +static inline bool can_xl_tdc_is_enabled(const struct can_priv *priv)=20
-> +{=20
-> + return !!(priv->ctrlmode & CAN_CTRLMODE_XL_TDC_MASK);=20
-> +}=20
-> +=20
-> static inline u32 can_get_static_ctrlmode(struct can_priv *priv)=20
-> {=20
-> return priv->ctrlmode & ~priv->ctrlmode_supported;=20
-> diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/ne=
-tlink.h=20
-> index fafd1cce4798..c2c96c5978a8 100644=20
-> --- a/include/uapi/linux/can/netlink.h=20
-> +++ b/include/uapi/linux/can/netlink.h=20
-> @@ -104,6 +104,9 @@ struct can_ctrlmode {=20
-> #define CAN_CTRLMODE_TDC_AUTO 0x200 /* FD transceiver automatically calcu=
-lates TDCV */=20
-> #define CAN_CTRLMODE_TDC_MANUAL 0x400 /* FD TDCV is manually set up by us=
-er */=20
-> #define CAN_CTRLMODE_RESTRICTED 0x800 /* Restricted operation mode */=20
-> +#define CAN_CTRLMODE_XL 0x1000 /* CAN XL mode */=20
-> +#define CAN_CTRLMODE_XL_TDC_AUTO 0x2000 /* XL transceiver automatically =
-calculates TDCV */=20
-> +#define CAN_CTRLMODE_XL_TDC_MANUAL 0x4000 /* XL TDCV is manually set up =
-by user */=20
->=20
-> /*=20
-> * CAN device statistics=20
-> @@ -139,6 +142,10 @@ enum {=20
-> IFLA_CAN_BITRATE_MAX,=20
-> IFLA_CAN_TDC, /* FD */=20
-> IFLA_CAN_CTRLMODE_EXT,=20
-> + IFLA_CAN_XL_DATA_BITTIMING,=20
-> + IFLA_CAN_XL_DATA_BITTIMING_CONST,=20
-> + IFLA_CAN_XL_DATA_BITRATE_CONST,=20
-> + IFLA_CAN_XL_TDC,=20
->=20
-> /* add new constants above here */=20
-> __IFLA_CAN_MAX,=20
->
+Oliver
 
