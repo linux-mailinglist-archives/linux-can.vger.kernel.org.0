@@ -1,205 +1,296 @@
-Return-Path: <linux-can+bounces-5417-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5419-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32F7AC6055F
-	for <lists+linux-can@lfdr.de>; Sat, 15 Nov 2025 14:05:07 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE22AC60565
+	for <lists+linux-can@lfdr.de>; Sat, 15 Nov 2025 14:06:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 72C3E35DE20
-	for <lists+linux-can@lfdr.de>; Sat, 15 Nov 2025 13:05:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6133935DE15
+	for <lists+linux-can@lfdr.de>; Sat, 15 Nov 2025 13:06:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D4C255F2C;
-	Sat, 15 Nov 2025 13:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E5B9209F43;
+	Sat, 15 Nov 2025 13:06:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="KRlxWiDq";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Dj7NK8d9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sjS8CUSD"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29F9209F43
-	for <linux-can@vger.kernel.org>; Sat, 15 Nov 2025 13:05:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763211903; cv=pass; b=aa0v31MqCiZAmwBeHJXP71xKhFjKrBP/oACahTbYhcqZlDx2RpB7Fa5tSLYtOvOBLlX+zujUCKHdKNntAdkQpvtIpr/nTCgTzMhYOY+8CYbyQAHm1r0lURwQSA0MmtlHmuvH4tQ9PpowYU/wHRgpS6S2N3XNYIOS4WDsfOJl9+4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763211903; c=relaxed/simple;
-	bh=nKb8rv2lOZolhnl18V9lPJZC55QIQoYwqlTb8eq+AEA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Nt9Z18MnTZ4RK2m5FmAojEfrNFr6nfijUEJoxc5cbxpw1gNA2gR7eafc2BB2yXMAfRp9HjGbDP1N9EyDa1sp7y4/IORLvnqr0NSMGmPBOgzI4NOqjC/G6D4e03mcq1SWtbF2hpKO5ScOzdFnf6EmwwlcQ1claNxUeSlmsrhPkxs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=KRlxWiDq; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Dj7NK8d9; arc=pass smtp.client-ip=85.215.255.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1763211893; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=IibL9fSY8xxczYLoIixLKxCieF9UWe/5t7wVWRx8qobrzDMEdCWSlRsJlFd+9tZYuB
-    a4rQr1bA2LfnprJWBeeqWGubkPHzYkfPiuqHDWEIO/TR5VQKm3UfhvEjrQwdZ4fJwvC1
-    qSAjKPLThzossAskYe5PKccm3dN6Xkahn4i+KEKlB/Vyiz1gn2x6F93LnOHb+zCs73Bn
-    SpxIoxTfyE0dfZTFiAJYNA2+YFrcQrJ887/ljdKLfYUGJgHudoUEp2jX77PlPBVu/vE8
-    E/0EZDuOR2/9kH51hkWpR9m+2lkJ/pbpVtzlVv0oWpa3uMMtNTg5Bf/+yqLiXCCju4nX
-    wH/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763211893;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=Pbj1yoQIeYF/uVG0rF+2jU+s/BQlu5rO/4DLMsB0vaY=;
-    b=MPAl81T+8HDJ9RuhXUhgStw/2qe8uoZ0ipUwwG7hJcqTY3pyNZkUvsDX1shFtG3Eht
-    sHRl1wTHLzBPqGYpsaIKbRxBQWwb8eJ7hGrzoHf5mFuyrcKkHMPqyXnBgT1eCGpEdriK
-    vpdNyq071xP1wOfAsI5lhhpZybqku/ADbF/GeskuNCEt+zWSzPIrjY8AfIF5KMuaGUV2
-    6Xni2qoVfwlWDRrYOWENrpz8jW9gulCr5lSTkqFP28J7FmRMbYeVBpkt7/1Ytqlcp1o1
-    kpHFFFFO7ZPbjnyaI6qcm+RwXoxq2I8ftgWLyhahLS2d5qX5wCdoVHvGYBrW5NWnrX4J
-    3oJQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763211893;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=Pbj1yoQIeYF/uVG0rF+2jU+s/BQlu5rO/4DLMsB0vaY=;
-    b=KRlxWiDqCUtLKVQvQ/9MTGnjykTtbX/82M26oV4864q+JTpe+fVOCjvtmvC/cbeOSy
-    ODMC9tTRC16BHRl8H3JC7ElYaFkYgPZ3HmK55QRC6V1+dcaaqTLyvFr1fr8BYCqnqmeN
-    ilvhWpMyV1H7AOPZpyrisWSD5as3iLuyRzvyePJK8XQe7ncU//vghfHbKJzCxskMs+WW
-    hxqicy8ibA6EzJcrIQzNhwdtUHHshpgtFlFr5HYEiN0ZtjPidh7CwNxbvlowyOxSuIRG
-    DWq+4BigwdcyXF5sdN7lKe0HKxNqrAKVbJBuSIFp0DSHtEKe6Xu56oZevex/V9RTT0wi
-    C2rg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763211893;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=Pbj1yoQIeYF/uVG0rF+2jU+s/BQlu5rO/4DLMsB0vaY=;
-    b=Dj7NK8d9AEyV2lAaQKH3RSmg7xU6j/rtRHZANgQW9keh1Ofgf449JtPS15l4funIXo
-    5YFxdlNkCADAb/3zRRAQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from lenov17.lan
-    by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461AFD4rdhT
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sat, 15 Nov 2025 14:04:53 +0100 (CET)
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [canxl 2/2] can: raw: instantly reject unsupported CAN frames
-Date: Sat, 15 Nov 2025 14:04:45 +0100
-Message-ID: <20251115130445.9009-2-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251115130445.9009-1-socketcan@hartkopp.net>
-References: <20251115130445.9009-1-socketcan@hartkopp.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED83E2EB10
+	for <linux-can@vger.kernel.org>; Sat, 15 Nov 2025 13:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763211995; cv=none; b=Pclr1nmZlpqlql0sjSfsV7JAE4kI2DNL7SWm0TxqRvf2fEMfpxgdwVOxASuJgv4hM/iTywvhMPLRY2C9p7vx0fSangcw+ez5ofT/wDqggOW4YSOcqnguTAiCT2cBFAImWjzLcADH9b2EioAAS+QpRI2rN1Esp2JTlsGNug0+Qmc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763211995; c=relaxed/simple;
+	bh=qNp5BR6t+6JYkW/mM9k06B7Oi2fnj2JIsn3q9ZWskjQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=t6CdSNoEjpyr5HZiIVr7WVZ3cNdh//Eh+VrEoc/fmdRbTiRC+2HvkoUePntTJ9lUk2pEbQRq96w9iVMwJOJ2ZSn463QSEpn0htAp8/TE8djvYvzfu1c3tI2/OYnOhwOoVEQgEQz3FyXsZ+e/nTY3udQJOip96HdX7I4saTsy0Ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sjS8CUSD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A17F1C4CEF8;
+	Sat, 15 Nov 2025 13:06:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763211994;
+	bh=qNp5BR6t+6JYkW/mM9k06B7Oi2fnj2JIsn3q9ZWskjQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sjS8CUSDQwa6bboHUSEJdkEy4IivrbswhUsGS9PnrR3xbiY4KnJlMtr/Tf+c2opqh
+	 GLUX/EO3cIOXobsMJK0/bXJuakTHyI1iWSv/7YmnZeVEOIi8a1Ng+ewDo+F5hnO1Ds
+	 5JBZg86wTmZbiEs//AtoqE+FAvavI2PrfYA93aCtv3oe6izTYLGoqeRA2oct6Ejrwd
+	 kaZRteDZUfK+rQleSTVDFvWIxByWRvl/WJ1WRFfHFJUk9zcMa47xyvNGs2ru+TGs6t
+	 tKgahO/y6onPOEbrnnseTDOBypWnhby9DeMXhZbwXihN+xNeeFvUS+Wybk+7rDpoS3
+	 bG+fVwqscoNcA==
+Message-ID: <67564299-c929-4eed-991c-90c311d6b90d@kernel.org>
+Date: Sat, 15 Nov 2025 14:06:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: RFC remove CAN_CTRLMODE_XL_ERR_SIGNAL
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
+ =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
+Cc: linux-can@vger.kernel.org
+References: <84cb473f-be5b-464b-a5d9-10c6f643f145@hartkopp.net>
+ <ee2ecbeb-eb88-45a5-b13d-0616383e0987@kernel.org>
+ <13906d6a-34be-47ff-bedf-c25a2d755aba@hartkopp.net>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol@kernel.org>
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <13906d6a-34be-47ff-bedf-c25a2d755aba@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
 
-For real CAN interfaces the CAN_CTRLMODE_FD and CAN_CTRLMODE_XL control
-modes indicate whether an interface can handle those CAN FD/XL frames.
+Hi Oliver,
 
-In the case a CAN XL interface is configured in CANXL-only mode with
-disabled error-signalling neither CAN CC nor CAN FD frames can be sent.
+I was very confused by your message and I spent the week thinking about it. What
+bothered me the most is that the standard and the X_CAN's 1.5.5.3 table just
+contradicted each other.
 
-The checks are performed on CAN_RAW sockets to give an instant feedback
-to the user when writing unsupported CAN frames to the interface.
+And so, I did my best to investigate and find which one is incorrect. Reading
+some other sections of the X_CAN datasheet gave me the answer.
 
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- net/can/raw.c | 54 +++++++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 46 insertions(+), 8 deletions(-)
+On 11/11/2025 at 15:12, Oliver Hartkopp wrote:
+> Hi Vincent,
+> 
+> On 10.11.25 22:22, Vincent Mailhol wrote:
+>> On 09/11/2025 at 22:07, Oliver Hartkopp wrote:
+>>> I've been playing with the PEAK CAN XL bitrate tool again and it gave me a new
+>>> idea:
+>>>
+>>> There were settings for different bitrates and the belonging/resulting flags for
+>>> TMS and ES (error-signalling).
+>>>
+>>> Staring at the options we have only three options for the CAN XL support aka "xl
+>>> on":
+>>>
+>>> 1. Providing CC/FD/XL bitrates => ES on, TMS off (mixed-mode)
+>>>
+>>> 2. Providing only CC/XL bitrates => ES off, TMS off (CANXL-only)
+>>>
+>>> 3. Providing only CC/XL bitrates => ES off, TMS on (CANXL-only)
+>>
+>> Why isn't
+>>
+>>    4. Providing only CC/XL bitrates => ES on, TMS off
+>>
+>> a valid option?
+> 
+> I had an off-list discussion with Stéphane and other PEAK System experts in June
+> and the outcome was that CC/XL bitrates with ES on and TMS off is possible (only
+> with the PEAK CAN XL IP core!) but will result in a nightmare for support teams.
 
-diff --git a/net/can/raw.c b/net/can/raw.c
-index f36a83d3447c..be1ef7cf4204 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -890,24 +890,62 @@ static void raw_put_canxl_vcid(struct raw_sock *ro, struct sk_buff *skb)
- 		cxl->prio &= CANXL_PRIO_MASK;
- 		cxl->prio |= ro->tx_vcid_shifted;
- 	}
- }
- 
--static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb, int mtu)
-+static inline bool raw_dev_cc_enabled(struct net_device *dev,
-+				      struct can_priv *priv)
- {
--	/* Classical CAN -> no checks for flags and device capabilities */
--	if (can_is_can_skb(skb))
-+	/* The CANXL-only mode disables error-signalling on the CAN bus
-+	 * which is needed to send CAN CC/FD frames
-+	 */
-+	if (priv)
-+		return !can_dev_in_xl_only_mode(priv);
-+
-+	/* virtual CAN interfaces always support CAN CC */
-+	return true;
-+}
-+
-+static inline bool raw_dev_fd_enabled(struct net_device *dev,
-+				      struct can_priv *priv)
-+{
-+	/* check FD ctrlmode on real CAN interfaces */
-+	if (priv)
-+		return (priv->ctrlmode & CAN_CTRLMODE_FD);
-+
-+	/* check MTU for virtual CAN FD interfaces */
-+	return (READ_ONCE(dev->mtu) >= CANFD_MTU);
-+}
-+
-+static inline bool raw_dev_xl_enabled(struct net_device *dev,
-+				      struct can_priv *priv)
-+{
-+	/* check XL ctrlmode on real CAN interfaces */
-+	if (priv)
-+		return (priv->ctrlmode & CAN_CTRLMODE_XL);
-+
-+	/* check MTU for virtual CAN XL interfaces */
-+	return can_is_canxl_dev_mtu(READ_ONCE(dev->mtu));
-+}
-+
-+static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb,
-+				      struct net_device *dev)
-+{
-+	struct can_priv *priv = safe_candev_priv(dev);
-+
-+	/* Classical CAN */
-+	if (can_is_can_skb(skb) && raw_dev_cc_enabled(dev, priv))
- 		return CAN_MTU;
- 
--	/* CAN FD -> needs to be enabled and a CAN FD or CAN XL device */
-+	/* CAN FD */
- 	if (ro->fd_frames && can_is_canfd_skb(skb) &&
--	    (mtu == CANFD_MTU || can_is_canxl_dev_mtu(mtu)))
-+	    raw_dev_fd_enabled(dev, priv))
- 		return CANFD_MTU;
- 
--	/* CAN XL -> needs to be enabled and a CAN XL device */
-+	/* CAN XL */
- 	if (ro->xl_frames && can_is_canxl_skb(skb) &&
--	    can_is_canxl_dev_mtu(mtu))
-+	    raw_dev_xl_enabled(dev, priv))
- 		return CANXL_MTU;
- 
- 	return 0;
- }
- 
-@@ -959,11 +997,11 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 		goto free_skb;
- 
- 	err = -EINVAL;
- 
- 	/* check for valid CAN (CC/FD/XL) frame content */
--	txmtu = raw_check_txframe(ro, skb, READ_ONCE(dev->mtu));
-+	txmtu = raw_check_txframe(ro, skb, dev);
- 	if (!txmtu)
- 		goto free_skb;
- 
- 	/* only CANXL: clear/forward/set VCID value */
- 	if (txmtu == CANXL_MTU)
--- 
-2.47.3
+I will start by challenging this assertion.
+
+Looking at the X_CAN datasheet, I see:
+
+  1.4.5.22.2 Classical CAN
+
+  All Classical CAN TX messages are either accepted or rejected, see
+  TX_FILTER_CTRL0.CC_CAN bit register. There is no other option for such
+  Classical CAN protocol. The TX filter elements are only used
+  for the CAN XL protocol.
+
+  1.4.5.22.3 CAN FD
+
+  All CAN FD messages are either accepted or rejected, see
+  TX_FILTER_CTRL0.CAN_FD bit register. There is no other option for the CAN FD
+  protocol. The TX filter elements are only used for the CAN XL
+  protocol.
+
+Did you try those?
+
+> The CAN bus will crash if it receives a CAN FD frame.
+
+I do not understand what you want to prove here. Isn't this the expected behaviour?
+If you are in XL with error signaling off and receive a CAN FD frame, does it
+crash the bus?
+
+If you are in XL with TMS on and receive a CAN FD frame, does it crash the bus?
+
+The same goes with Stéphane's observation. Where is the problem? Which
+observation does not meet the expectations?
+
+> This is basically the same with the Bosch X_CAN IP core where you need to enable
+> CAN FD for performing the mixed-mode. What would you set as a FD bitrate there?
+> There is no "nothing" to be set into the registers. You might set 2MBit/s as
+> default but that might crash either when it doesn't fit.
+
+Once you set the TX_FILTER_CTRL0.CAN_FD bit, all the CAN FD frames will be
+discarded and the FD bitrate will never be used. What should you put in the
+register? That is not my problem. If the X_CAN is well designed, it should be OK
+to leave those to zero. If you still need to put some dummy values, complain to
+the X_CAN team, not to me.
+
+> Looking back in our older discussions with Stéphane I found this:
+> 
+> https://lore.kernel.org/linux-can/
+> DBAPR10MB41879125DC7369359E4AB256D467A@DBAPR10MB4187.EURPRD10.PROD.OUTLOOK.COM/#t
+> 
+> Stéphane wrote:
+> 
+> ---
+> 
+> According to [3] lines 170-184, the CAN_CTRLMODE_FD and CAN_CTRLMODE_XL flags
+> are not mutually exclusive, so why introduce CAN_CTRLMODE_XL_ERR_SIGNAL [2] when
+> the combinations of CAN_CTRLMODE_FD and CAN_CTRLMODE_XL would allow us to deduce
+> this?
+> 
+> Indeed:
+> 
+> can_priv->ctrlmode & (CAN_CTRLMODE_FD|CAN_CTRLMODE_XL) ==
+> 
+> CAN_CTRLMODE_FD                    CANFD mode (n/a)
+> CAN_CTRLMODE_XL|CAN_CTRLMODE_FD    mixed-CANXL => error_signaling=ON
+> CAN_CTRLMODE_XL                    pure-CANXL => error_signaling=OFF
+> 
+> ---
+> 
+> With the CAN_CTRLMODE_XL (pure-CANXL) the ES is always off and the TMS becomes
+> an option to be switched on (default off).
+> 
+> And the more I think about it, the more I would like to go for this solution.
+> 
+> This setup covers all Bosch use-case slides and Bosch CAN XL IP core
+> documentations (e.g. with the 1.5.5.3 Operating Mode table).
+
+You are referring to those slides, right?
+
+https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/can_xl_1/20230717_can_xl_overview.pdf
+
+I see in slide 16:
+
+  Error Signaling: Software Configurable: ON/OFF
+
+If you are just referring to the example use cases of slide 24, then no. You
+should not be tunnel-visioned on a single slide when some other slide clearly
+states differently.
+
+And in which world does an *example* use case in a slide deck take precedence on
+the ISO standard? I am sorry, but taking a random slide to disprove what the
+standard requires is not a receivable argument.
+
+> And we can omit the introduction of the CAN_CTRLMODE_XL_ERR_SIGNAL flag as this
+> can be retrieved internally from CTRLMODE_XL and CAN_CTRLMODE_FD to be set into
+> the controller registers.
+> 
+> Not defining the FD bitrate in the mixed-mode causes more harm (to the system
+> and the CAN bus itself) than urging the user to define it. Even if he doesn't
+> use CAN FD frames.
+
+I also want to challenge this. You are claiming that the error signaling should
+be an implicit value. What if someone requires error signaling because of some
+safety requirements?
+
+Here you are just silently turning off a safety feature. How is the end user
+meant to see the connection between disabling CAN FD and error signaling? By
+dropping the flag, we also loss the reporting. No more way to see in the netlink
+interface if error signaling is on or off.
+
+The more I think about it, the more I am getting convinced that silently turning
+off a safety feature and hiding its value is nothing but a bad decision.
+
+> In the (really unlikely) case that someone shows up with a valid use-case (like
+> len8_dlc) and separately wants to fiddle with the ES flags, we might introduce
+> such a flag later. But I bet this will not happen.
+The reality is that the people on the linux-can are a small community and the
+security/safety researcher is another small community. And the intersection of
+those two communities is rather small.
+
+Before joining the linux-can mailing list, I was well aware of the lack of the
+len8_dlc and the TDC, and so were the people around me. But no one reported the
+problem, mostly because none of us were familiar with open source communities
+and we were all using some alternatives (proprietary drivers…)
+
+Once I showed up and implemented those features, we saw people using those.
+
+My point here is that taking the request on the linux-can mailing list is not a
+good benchmark to measure if people use a feature or not. At least, this is what
+occurred for the len8_dlc and the TDC and I see no reason for this to be
+different here.
+
+(...)
+
+> Either CAN CC or CAN FD with ES=off are marked as an "invalid configuration" in
+> the 1.5.5.3 Operating Mode table. And I'm pretty sure the CAN XL inventor's
+> implementation of the CAN XL IP core is compliant with the standard here. Maybe
+> the standard is unclear in this topic or left some details.
+
+1.5.5.3 also shows that FDOE is on whenever XLOE is on (even if error signaling
+is off or if TMS is on). Does it mean that you can always send FD frames? No.
+
+That table can just not be used in isolation.
+
+What is not clear here is the 1.5.5.3 Operating Mode table, not the standard.
+
+> What is your interpretation of the standard here?
+
+It is not an interpretation. The standard clearly require that error signaling
+should be configurable.
+
+> What do you think has to be supported beyond the features that Stéphane and I
+> suggest?
+
+FD off + XL on + error signaling on.
+
+>> I see this a bit like the can_frame->len8_dlc thing. Should you use DLCs greater
+>> than 8 in production code? Hell no! But I still want the implementation to give
+>> me this option so that I can do my weird tests.
+> 
+> Ack. But so far I do not see such weird options. And introducing code into the
+> kernel there is no user for and that's potentially only adding complexity in the
+> API that might lead to misconfiguration is not well-received.
+
+It seems to me that Stéphane is able to use it and that you should also be able
+to by using TX_FILTER_CTRL0.CAN_FD. And I could also test it with my dummy-can
+driver. That should be enough testing, right?
+
+
+I made my mind here. It seems to me that you are tunneled-visioned on table
+1.5.5.3 when the other sections of your datasheet clearly point out that you can
+deactivate CAN FD using TX_FILTER_CTRL0.CAN_FD. If you just partially read your
+datasheet to then jump to some conclusion, I would not feel confident to follow
+this.
+
+The process to publish an ISO standard is strict with many domain expert
+involved. I do not think that any of us here is smarter that the combined
+mindset of the ISO 11898 committee. I would need a stronger argument to convince
+me that the ISO committee did a wrong design choice into making this error
+signaling configurable.
+
+
+Yours sincerely,
+Vincent Mailhol
 
 
