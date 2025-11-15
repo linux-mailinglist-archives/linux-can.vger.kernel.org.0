@@ -1,399 +1,232 @@
-Return-Path: <linux-can+bounces-5421-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5422-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32C4BC60660
-	for <lists+linux-can@lfdr.de>; Sat, 15 Nov 2025 14:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31CF2C6066C
+	for <lists+linux-can@lfdr.de>; Sat, 15 Nov 2025 14:57:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9675B4E15E9
-	for <lists+linux-can@lfdr.de>; Sat, 15 Nov 2025 13:52:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0E1BC4E30A6
+	for <lists+linux-can@lfdr.de>; Sat, 15 Nov 2025 13:57:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EFFE28AB0B;
-	Sat, 15 Nov 2025 13:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF152FB0AE;
+	Sat, 15 Nov 2025 13:57:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="UNSu6u+9";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="weJ+oUNg"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="S5oZlXNR"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
+Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011061.outbound.protection.outlook.com [40.107.74.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31AA92222B6
-	for <linux-can@vger.kernel.org>; Sat, 15 Nov 2025 13:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999E726CE1E;
+	Sat, 15 Nov 2025 13:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.61
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763214761; cv=pass; b=qvK21spE/DU+WM3ROxY8hdxtemUMxv3eQ7roFULQ0WUaQwpRLr4Nr08HWfWo+vTsijAEXBCbMwGzfvus0iQsAckuUtajA72fd3bt66DLVYb/Jn+qyePYki0sdtwUZwkEaFvCeKPVmUd+qqSiU0UH2JXmg76yR0EsZmFMsJLeTts=
+	t=1763215049; cv=fail; b=GdFEugmIDJLc+UQ0gDJT6N6/TcNqpCWrHsyPhbWFgBwBiXyx3cYWm/5lEBTOnY7LxTj8sQKdxwk3nbBXs4QqAaOzdTsNa1OISEQ4Nca2+pPheM9s82iAb766DaCz9BCmQqHOEeHLcqenm0jOBbT2fQPY39K3JDC1IKzexfqUK2k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763214761; c=relaxed/simple;
-	bh=ikLYCUEy5POuDI9RdT33Hum3GoE3SnQF9kGZCsrx9Jc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aqjsPSDfLNt+wejty2lVWmZ/ZjGQU1Oa7oCnxSpBqCXwWFxPYZgiCk8vvY2233PiJY8EjcNwFEkbKaa7dARL5HRwQGRSSXoEg+5Vj1vAWhNBkSq0VZ9WhLxsBlwFeEL8WL2JedwboPYyIEjZXNO4uBky9zQf6XmJivgOP8Pc0SA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=UNSu6u+9; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=weJ+oUNg; arc=pass smtp.client-ip=85.215.255.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1763214756; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Wxe5g2g4epbfnJplHZ/29BqBFw4uywLnMhaCQ5+NrVObrQLlANUd3e2OwR7Sjnocv9
-    jLGjRDuM52OUxk4vCiX+B+sTT7+4dBtzSecMSwAMe4/T5lWuq0AmPEdRLEBVLqI6Wb8i
-    oik+ht9ltj4XCjKJyIu2GfZRxPoJh1RzuTND+/cevBhvqIr99ErDEhR3c3npI5W2Nw42
-    IhSAIHhFLRxI7jgjrs16H/uoeLsWBpncA5Ul/TxD1qKt5wU7ZYqz3mCluQVXhSViR5iF
-    mSc83VcOfkTuCFZIHMT/PFxZn5jPC/jtAVdKSQG/DlvY4/qnS/6JskIuI9SoUDzXnYQg
-    umkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763214756;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=orzsR24lW5ynK1LrlWqCYRzXAxKhPPKurHJsDUfWtMI=;
-    b=gV0AgUymdJ7mIAkTpcObj4qvACq091r0GqP5emDKa1PPTxGkGJjW9oxsCcZ72/nrZO
-    E2yZ/Tzm+1uYijOGQjBnIx59XcKPuF3aqJfMwANCwC3pM0w2rNvy9V3J7hV0ay5riLhW
-    ewEk+BduTyEEqdh+iGPvusCn8I4n1TSACeqrWTrp0cj5FrpjZR37VMEKtTPwfud2QU+J
-    7Xh2hOKuGg1De16cWEilAP7tYafnI6x0aYYF/M94XvG13pDgonXq3YKiDWmiJTH+C0yn
-    4TAgVpQWgWyuZwXIAlWG/p2Qy7bunWotserND+XxNKNeFO01NnK82ReZtKgbNkXl/Ro8
-    ODVQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763214756;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=orzsR24lW5ynK1LrlWqCYRzXAxKhPPKurHJsDUfWtMI=;
-    b=UNSu6u+9HbrtWNp8LxoLVut6GQML6TB4GbGlEzDQfn3GSBjJARlhzyNtYL8y2gVxSo
-    Cbm0T167uKld59shTdqt+jdTMBGmfPkbwQU0mFzwJGvlaVSX33rHcEosmedVUUcGFA+m
-    2HBqgur2pgLOMv+5biThaAPAvoX0JJ2eouw94OlCWb2NvQEJ+KYYUZKxKZh/Iuq06Ec6
-    tVQ4tfJTNEMM8M32UEvJMhJL/J4yCE3gRqfVUFeJxVMGp0xW9exzeGg7jnzUZOzPCAQ+
-    yV2/MFYeqe/mqMY5q9SRVcoB2y94WukZRk0O8cnQmYFGT28AnbjYcqo2mCsG4tHr2COD
-    SdHg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763214756;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=orzsR24lW5ynK1LrlWqCYRzXAxKhPPKurHJsDUfWtMI=;
-    b=weJ+oUNgBWffa/QWW1XSP8a1XnwD/gcRLDetmqUc8jdqsV2adDlZptIuHHSLKLp1Lg
-    HN8jbZ6JKL5r7vPgR2Dw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461AFDqZdnc
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sat, 15 Nov 2025 14:52:35 +0100 (CET)
-Message-ID: <61f731ac-3876-45e8-a5dc-6cfa24f2739d@hartkopp.net>
-Date: Sat, 15 Nov 2025 14:52:30 +0100
+	s=arc-20240116; t=1763215049; c=relaxed/simple;
+	bh=7a3GZHon/aMw3eZ0iUBKNdvZC2hjxrAf3B1Gidw+MBA=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=l1s2DjJWNKJrKBOSHZXw+LLThBJgHnz5eM3rXma0Kcj/PR6G91hLalw9RpbrqfyARYaqI6/bW8HSw14WfdWrCWHFtoqAYZe5fC4UEssVOtP7ONNcdf1yj4aJ1UujrY/Iu7fogl86XQa8zRFNid2zUBNXehQslTatFcLpX7kzj7A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=S5oZlXNR; arc=fail smtp.client-ip=40.107.74.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BF9B/dIsERD1GPbjuOKY9ICS66N4JNepmHrMEs1A5cxpKy4cDcXLk5q2q/2jDOf06qg6KaSZeE8hlXy0Rd/+yCZck6sYam/4tvTSYMj+KivCKP8iSTbCzsFEE2axBspiVTaifbWHeIxUtW1UFYtPI4UJXzKuGXbH9rJEdGavsoQWYqsjrsjdah3D8IB3UMYSxu0QylNU/BcxDiwVkuetxsgWN0bOW0Bde6tiRUSKdOERz31hA4djpRWLuzTDvidyrG5dvkdf5BqxD5a64+ZruCqNSoZa89UboFL5OKhHwYlq9eNzG02z/bOAJOnrtDSX/SCZlQDNbSzDQnVFOA55YA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7a3GZHon/aMw3eZ0iUBKNdvZC2hjxrAf3B1Gidw+MBA=;
+ b=atX71FNf4YvheO0AhMTfdH/gfVcmEXuvq/8SdRFqDeC4MO7oXcw/0YtHXULfAtUJRxNz41yv2+qJa8WrDa4URWfAn8q2OVGApAYDKrtDgfFK+7SMhiCHbuva8ue3zvJG0MekgJ2DK1h1j6PSa2Et4Gc9fntNYGkHKUon5+dgMVySuvYFstj3PirJxz8zW/mFGfwdAtvTuhqHhUjnTD6rRREV9dcCUBvzEv+EzkANwx5yHgR2tIZ+T2TUU9cM8/wgrGcVF6mJJAQu+d+TcrcG2uhU8HeAQp5PUaOk+q5ehxt9xjoDXsuEq1SV2DmPROh9KZx5JldBuGSGIEFo9Dz1gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7a3GZHon/aMw3eZ0iUBKNdvZC2hjxrAf3B1Gidw+MBA=;
+ b=S5oZlXNRK8By83lX92Ri+pJMw5U/qYIRAdOLKD/sOTbaJVVYfJ4xP0cQQHCGCMw9Wrut3723qCy66LhWAXPcyPfY4XXh4uaQDplJrL8iIfXEQl7E1MPC1OujnyHXr3uT+CyGqZEdtc75cIC2kV6vJBAEd03P+8+it/5OGaCSOF4=
+Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
+ by TYWPR01MB8839.jpnprd01.prod.outlook.com (2603:1096:400:16e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.8; Sat, 15 Nov
+ 2025 13:57:19 +0000
+Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
+ ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
+ ([fe80::86ef:ca98:234d:60e1%6]) with mapi id 15.20.9343.008; Sat, 15 Nov 2025
+ 13:57:13 +0000
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>, Geert Uytterhoeven
+	<geert+renesas@glider.be>
+CC: Vincent Mailhol <mailhol@kernel.org>, Geert Uytterhoeven
+	<geert+renesas@glider.be>, magnus.damm <magnus.damm@gmail.com>, Tranh Ha
+	<tranh.ha.xb@renesas.com>, Duy Nguyen <duy.nguyen.rh@renesas.com>,
+	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Prabhakar
+ Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] can: rcar_canfd: Fix controller mode setting for RZ/G2L
+ SoCs
+Thread-Topic: [PATCH] can: rcar_canfd: Fix controller mode setting for RZ/G2L
+ SoCs
+Thread-Index: AQHcSZVzMv+xB+/yKU6ldKbXUm40nLTuzr2AgAUCCvA=
+Date: Sat, 15 Nov 2025 13:57:13 +0000
+Message-ID:
+ <TY3PR01MB11346974232A057A7D5B6EBAD86CBA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+References: <20251030120508.420377-1-biju.das.jz@bp.renesas.com>
+ <20251112-warping-ninja-jaybird-22edde-mkl@pengutronix.de>
+In-Reply-To: <20251112-warping-ninja-jaybird-22edde-mkl@pengutronix.de>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYWPR01MB8839:EE_
+x-ms-office365-filtering-correlation-id: 10ce797c-db1e-4262-1c5b-08de244ee100
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700021;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?M2FGOVV5cFZaT1g2U1hWaEtTZnVjSm8xT0VuNkRzcEVxcDluemJwc0dyaWQ5?=
+ =?utf-8?B?M1dIVnY2dkJtUnVJT0RRL2g2ZUJYUGV5MG5Pck5wUDl1YmhkQlZKWlhYS0RO?=
+ =?utf-8?B?SkgzbVl1aXNLNDgyYnYzTy9iS1FQeFg0dE12MGl5cWJmNWhxQTdtb1dkQXov?=
+ =?utf-8?B?cDRqYUJKQ3l6a0t6ODgrbHlSamxJdXcwVG9WaExKZXphaWI5aEFKUzAybW9p?=
+ =?utf-8?B?Q20vV1ErVkdKSHJ0VlpGdjFoZ2hhRjRydkJSWG1XUHJ0dDNhUm1EempEc3Iz?=
+ =?utf-8?B?cWwzUjRRdUo0eUw2T1NvUTVibWFxM1RkMHhpbG00em9pTFZZUlM3Vy9UOUp4?=
+ =?utf-8?B?dDhRbFFCUEJORFZuT0YwYzFZZnh5UXRPajYzeTBiNXBvb0VjcytaeElZZy9u?=
+ =?utf-8?B?QmNnUHpxYnVTUkZ4NHFTNXZkZk90NjFodGtpemRMU3ZBdk1PZ2xuK1FTdVF0?=
+ =?utf-8?B?S0VQQjRlRHZ3M04zY0JRS0dlM2p2ZGhZSjVTcWpCSnQ3Ny9QUWt6bzAyODBa?=
+ =?utf-8?B?aUQwb21YN3NLQ0NyZWlBOEh6Z2NCMlRyaC9GWXAzeXlBOURUWVlZNXNiUUtK?=
+ =?utf-8?B?RkZmRDRGbWFrNU1lZnVxN2NKS2lOQW1leEU2TjA5eXlHYlR4ZkxhUENvMUQy?=
+ =?utf-8?B?QnBQSzBqSHZaeEMxMG9BaC91cVplV3VxUGMrczE1c1VyTHNFUkt4RUEybkxB?=
+ =?utf-8?B?aTdvTVNnRFd6eVRzNm5DYmNZbDllQVVVZ2RkUWVmcEJGaGRrZGRiM0o1bExF?=
+ =?utf-8?B?elZWOEF3dUcyWW5PRTV5MWFuNEQ2NkhmMVNFNGt6eG5wMWQ3TWk1b0lRN2Qx?=
+ =?utf-8?B?bzlneVMwc1BQbTZ4WFNGcUFvY0xmQXlCNEplajU5MVNNWlJEejZ1eC9sRzBU?=
+ =?utf-8?B?QVMvVjhobGNibFlYdUE0dnl1YTFWUWVQOE9UdlpndUx3amxKaUs0KzVWd2Fn?=
+ =?utf-8?B?RGd0R3hyb1NVZjROaGkvczhIMDlQZWxERXVoNFRudzN0YnFNTzllSEJLOTVT?=
+ =?utf-8?B?OGYxTk05d1dCOTZjYXNnMnRwT3VmVmZraGVLdGZXU2F0eTlwaGs0TzRtVjRZ?=
+ =?utf-8?B?K2hFYitFNVk2Qzk1VEFlVERnY2FOenNETU00NWZGdGtVYUZBMklmVEY2NkRs?=
+ =?utf-8?B?NXVnZmg4U2xFNE1mQ2hCdTUvZ1hyYUZRYWZvYjNoQXZsV1FyTjdVQVlubVc0?=
+ =?utf-8?B?RmdUWitWaUhxYThla2tVekVlWW50NUsraXNJc1hoRGkrWXVOWlVlL3ducmh6?=
+ =?utf-8?B?M0s2ZFpPWEpKRUdUMFVmSDZKTHZBa2p5cjh4eDJzRkZmNUc5S09sNzg2Qy85?=
+ =?utf-8?B?TlBxdnNKNlJkc2ZMckc0QlhMWGNxbVU1amVObE0rZStnQ1Zqb0QwTU55b01M?=
+ =?utf-8?B?OWR0QzU0MXh2OVVRMkV6NDJNUUZqWnNiVkZ5Rjg3S0UwZzA5U0NVUGVvQmJi?=
+ =?utf-8?B?a0RyMkdnMEdUMjR2VjhVdTV2N3Q2cnpoaDFJZUNWU2VQZFBmRlhoR0FJVXlE?=
+ =?utf-8?B?NEVQL2lkYlo4NXpPRXEzU3RMNmlOeExkZk9yMVBBbUNMSFVqRDA1WnorSFdE?=
+ =?utf-8?B?WU9FajN4VnB2V1Fkb0U0Q0JGenpNRCtvMDRYSkx5N1F0S2hodEhZWFhZTTlz?=
+ =?utf-8?B?OStNVUpnVmZPTldyRUVTT2xWdGk2UFVMUmowVFExSWt1SVhzb004dDRmN2ZE?=
+ =?utf-8?B?WnpNbUxueHhzbEhHSy9tQUVqMCtiVTUzMWRnUVFvWGZGMHdZQk84RWsvYUpO?=
+ =?utf-8?B?cllwZW1ZVzFYM0o0QkNaTDNZdTdKWGVKVDFWTExncG9BUExlRXE3d1NrbmJP?=
+ =?utf-8?B?ck9LMEhMcmUvN3pmSWJtc2RkYTcwN1g1REFRbyt5TGs4WEVRMzk4WS8wUmxL?=
+ =?utf-8?B?TGxGZE14SUovcFRyZ3ViV00wRmNSYk56WHdFTys1UFJDUUlzaXFUSGdZRVdL?=
+ =?utf-8?B?Tk5jZ3lobmlOakFHU0VDVjBBR2FNVzNiaVBwcXZwZlN5Uk0xQUZrODFWTno4?=
+ =?utf-8?B?ZzFtamJEeGM3MDlsUGNyT3FCb1dlYjFzOGYzWVh0dFE5ZmdJNU1TaCtTdGZY?=
+ =?utf-8?Q?rJ9WFT?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?eUtwV0JYKy9pQXJ0ZmJYdmJMS0VGeFhxN2ZDK1dlYXZ3aTZQS2xMSGVhS0pt?=
+ =?utf-8?B?M2RLSjlvYnpFUjVMUzEyN0wzK3dtUTVqaWlnLzNaMktveWQvekF5UTV5YjJQ?=
+ =?utf-8?B?Y0lkRXh0VXh6bVpBQ3hzcldsQ25QWU9MMEZuVUxDY2lNVVFoaURHc2doNFFu?=
+ =?utf-8?B?Q1ZmQmpsMnNJT1BOOXhLdmZTcW40WnNCdTlrVEI2WmlwQ0lRYlpBcEFuZCsz?=
+ =?utf-8?B?NU9XUkNwVGU4a2dUWDdsODY3TGtQaTVHazVYVXFPNk9wV3FGN3RZdVhWTnVW?=
+ =?utf-8?B?dmlJUDFQaE13ZXFPcmJmY0Y2bnJLYVExYmVCcGZsNTR6a2FGTGtuaFBzbXQv?=
+ =?utf-8?B?VUg1VEU3MVZYcGR2bGovMzhZbzV4NWxFQ0oyb2RqMmhsU2hqbkxXd0dRMUta?=
+ =?utf-8?B?VmFZUDZrajFXSkZiL2ZYQmNXRE4vKzhOTWtVNy9GSHJFVVJnSXgyaUFlYktu?=
+ =?utf-8?B?RWpKNSt1N1dOVFJEOHJOQkdmVVdTOGVHZlp5ZjJjRkMzNWhsSHVwbzR3NkUx?=
+ =?utf-8?B?NFF6UkRXc21XTW5Ub0lLZUtsdU13RTNNZ3ppSFdxNGt6VWZ3d1JKZnpMd2cz?=
+ =?utf-8?B?WFk3YXRNcExBM0pheU54Qm0wWXJ6cHU0T2kwV3Z5ZklBODJCZkQ0dW83L3dP?=
+ =?utf-8?B?eFlTZmQ3WlA1L2s1ZzUyYU9vUzNEeTBDVjd3NkFKcHNIZUVEN3o1c0RpaEZx?=
+ =?utf-8?B?ZVY4dyswQ25nYnpFdzl5cXdaOU01SVpGRVV6STFIY1hhdlA1T1NsVnAvVWN2?=
+ =?utf-8?B?b0ZGTlVSWTRGZ2hYZTlwT3d1SlRTeGJVVnpDMm4yMkVhc25WRC90VlhMRU9i?=
+ =?utf-8?B?TUk3NkVrbzVuSlBES3Ird1pPb2huZE8rNHBJL2Jpcyt5U2pDbGtCd0Q4V1JL?=
+ =?utf-8?B?WWE3U1ZVMXBkZ3pMZWFrM0ROZmVRR2doeGV5VHVoQm5ycTROYWRvRmZoMVNw?=
+ =?utf-8?B?Q3dVWFVTOGw0SXU5R2Z2YUg0Q2xCcUh2em1LUC91aHhnTStBSXIzS3hsQWVj?=
+ =?utf-8?B?ZXFUQlhoRmdmemdpZEUyTGVaaW5QTUh4N2gzRU1wSjhmdFdObm9qbEVEN1hK?=
+ =?utf-8?B?ZjcwcU5yNkcvVytzbXcxeWFFczQ5dk5WM1BVWkdvbVpydFB5WXdnOFlIYXU4?=
+ =?utf-8?B?dUpjL2tYejlSNXlOQjZsLzNxMVl2ZkxHNk02MERNeVYyVklWLzZLVlJnVmlK?=
+ =?utf-8?B?Yzd5WDkyL21TRDM1Z1FJZmlHamtVL2pKd0lrSzVyQ0RNZVV0OVJnM3ZreVBx?=
+ =?utf-8?B?YnliVDB3cURjKzlSMTYrQkE3TUIyK1hYY29EQ2tycEF6OFIvNGJkUWwrczZC?=
+ =?utf-8?B?VGVrQzF1dWtydmowRkszdXl2U3h3NkpMSzhCL2pqNWFTR0tJWG5zMlF2RFE3?=
+ =?utf-8?B?NzBsQ1JiTFRZaGVaZktrbm5IcDBmczlsWjVIcmEvanIrM3JzcExLNlVuL2NM?=
+ =?utf-8?B?NnhROFZoRm5uczJXMEhZMlpBSTlIa1JQRDRhT2Ztak1kcFhsdVdTSXNaQ3I5?=
+ =?utf-8?B?aTFLdDVGRTJpdURzTTAwWkoyZlp5TzcveFpNWjZpVGs3TGtjMXcwK1BtcXVF?=
+ =?utf-8?B?LzNqT2NMbzY1TXpyK21MOXNabFRNalVQdmxZL3JHVnk0VWNKQ0ZMY1R0RmZy?=
+ =?utf-8?B?aHEzTldBVDZ3eGYvTXc3K3ZuNndwRUhXQXF5a0dMWm9VVkkwa0hBQnJ1T3dJ?=
+ =?utf-8?B?Vm5xWVlQUjFUaVpaclN1OE5xc3ZuSTErTGNqSlFxRCtTUERnTjdieWR6ZlBi?=
+ =?utf-8?B?bFBMdEhVQ09nYk5WVW0rV01HVXVUWXNDbE5PQWwrOFdvc0RjUHVQTDNWcFFB?=
+ =?utf-8?B?MnFRelM2cXlIa1llQmxlU2Q0eUNWR1A2RDdzM2t3UHNPakVRVERzU0hjYWZa?=
+ =?utf-8?B?WmNFVzBUVDFhZEZkQk53cnphaytvTHJiMkhVL09aOXdQeDA4YjUxRE5NcmNa?=
+ =?utf-8?B?T3NhNmRFNHVuOGpkK28welZnTHJ3NFJyOGtqTmVmSEgyL25jKzNpaDdUV1RK?=
+ =?utf-8?B?VElrUHM5MlFmK0VIZytHSzVPWVc3MG9tYjhUMG82dHFaTTUraWZlUC85UGg0?=
+ =?utf-8?B?RUFja3orUFRhVDNuVzEya0YrMHgra1QzZ3hJLy9DUkw1NU5CRGt5cTNyYnZu?=
+ =?utf-8?B?NVV6R0x3TWFSV1lYZlBxbzY2UWF3bDZBQm4wWFQwaVVJMWdlc3k3SnJsaEto?=
+ =?utf-8?B?MEE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: RFC remove CAN_CTRLMODE_XL_ERR_SIGNAL
-To: Vincent Mailhol <mailhol@kernel.org>,
- =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
-Cc: linux-can@vger.kernel.org
-References: <84cb473f-be5b-464b-a5d9-10c6f643f145@hartkopp.net>
- <ee2ecbeb-eb88-45a5-b13d-0616383e0987@kernel.org>
- <13906d6a-34be-47ff-bedf-c25a2d755aba@hartkopp.net>
- <67564299-c929-4eed-991c-90c311d6b90d@kernel.org>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <67564299-c929-4eed-991c-90c311d6b90d@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10ce797c-db1e-4262-1c5b-08de244ee100
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2025 13:57:13.3565
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +qFzCt5+dWpnQIEe3NRp4zdSgeTxp8FOfrC23F9maqf51f2mMMoSY37ajC7U2BGCHm1G0f8mjrGmPER/zBBnTfI4VDtpVjTfitAhYHXVuhc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB8839
 
-Hi Vincent,
-
-On 15.11.25 14:06, Vincent Mailhol wrote:
-> Hi Oliver,
-> 
-> I was very confused by your message and I spent the week thinking about it. What
-> bothered me the most is that the standard and the X_CAN's 1.5.5.3 table just
-> contradicted each other.
-> 
-> And so, I did my best to investigate and find which one is incorrect. Reading
-> some other sections of the X_CAN datasheet gave me the answer.
-> 
-> On 11/11/2025 at 15:12, Oliver Hartkopp wrote:
->> Hi Vincent,
->>
->> On 10.11.25 22:22, Vincent Mailhol wrote:
->>> On 09/11/2025 at 22:07, Oliver Hartkopp wrote:
->>>> I've been playing with the PEAK CAN XL bitrate tool again and it gave me a new
->>>> idea:
->>>>
->>>> There were settings for different bitrates and the belonging/resulting flags for
->>>> TMS and ES (error-signalling).
->>>>
->>>> Staring at the options we have only three options for the CAN XL support aka "xl
->>>> on":
->>>>
->>>> 1. Providing CC/FD/XL bitrates => ES on, TMS off (mixed-mode)
->>>>
->>>> 2. Providing only CC/XL bitrates => ES off, TMS off (CANXL-only)
->>>>
->>>> 3. Providing only CC/XL bitrates => ES off, TMS on (CANXL-only)
->>>
->>> Why isn't
->>>
->>>     4. Providing only CC/XL bitrates => ES on, TMS off
->>>
->>> a valid option?
->>
->> I had an off-list discussion with Stéphane and other PEAK System experts in June
->> and the outcome was that CC/XL bitrates with ES on and TMS off is possible (only
->> with the PEAK CAN XL IP core!) but will result in a nightmare for support teams.
-> 
-> I will start by challenging this assertion.
-> 
-> Looking at the X_CAN datasheet, I see:
-> 
->    1.4.5.22.2 Classical CAN
-> 
->    All Classical CAN TX messages are either accepted or rejected, see
->    TX_FILTER_CTRL0.CC_CAN bit register. There is no other option for such
->    Classical CAN protocol. The TX filter elements are only used
->    for the CAN XL protocol.
-> 
->    1.4.5.22.3 CAN FD
-> 
->    All CAN FD messages are either accepted or rejected, see
->    TX_FILTER_CTRL0.CAN_FD bit register. There is no other option for the CAN FD
->    protocol. The TX filter elements are only used for the CAN XL
->    protocol.
-> 
-> Did you try those?
-> 
-
-For what reason? This is a detail of how Bosch creates there filtering 
-but has nothing to do with what makes sense on the bus.
-
->> The CAN bus will crash if it receives a CAN FD frame.
-> 
-> I do not understand what you want to prove here. Isn't this the expected behaviour?
-> If you are in XL with error signaling off and receive a CAN FD frame, does it
-> crash the bus?
-
-The point is: If you have no valid FD bitrate setting and the controller 
-receives a FD frame with BRS=on how can this work? It does not work. Simply.
-
-> If you are in XL with TMS on and receive a CAN FD frame, does it crash the bus?
-
-See the table from Stéphane.
-
-> The same goes with Stéphane's observation. Where is the problem? Which
-> observation does not meet the expectations?
-> 
->> This is basically the same with the Bosch X_CAN IP core where you need to enable
->> CAN FD for performing the mixed-mode. What would you set as a FD bitrate there?
->> There is no "nothing" to be set into the registers. You might set 2MBit/s as
->> default but that might crash either when it doesn't fit.
-> 
-> Once you set the TX_FILTER_CTRL0.CAN_FD bit, all the CAN FD frames will be
-> discarded and the FD bitrate will never be used. What should you put in the
-> register? That is not my problem. If the X_CAN is well designed, it should be OK
-> to leave those to zero. If you still need to put some dummy values, complain to
-> the X_CAN team, not to me.
-> 
->> Looking back in our older discussions with Stéphane I found this:
->>
->> https://lore.kernel.org/linux-can/
->> DBAPR10MB41879125DC7369359E4AB256D467A@DBAPR10MB4187.EURPRD10.PROD.OUTLOOK.COM/#t
->>
->> Stéphane wrote:
->>
->> ---
->>
->> According to [3] lines 170-184, the CAN_CTRLMODE_FD and CAN_CTRLMODE_XL flags
->> are not mutually exclusive, so why introduce CAN_CTRLMODE_XL_ERR_SIGNAL [2] when
->> the combinations of CAN_CTRLMODE_FD and CAN_CTRLMODE_XL would allow us to deduce
->> this?
->>
->> Indeed:
->>
->> can_priv->ctrlmode & (CAN_CTRLMODE_FD|CAN_CTRLMODE_XL) ==
->>
->> CAN_CTRLMODE_FD                    CANFD mode (n/a)
->> CAN_CTRLMODE_XL|CAN_CTRLMODE_FD    mixed-CANXL => error_signaling=ON
->> CAN_CTRLMODE_XL                    pure-CANXL => error_signaling=OFF
->>
->> ---
->>
->> With the CAN_CTRLMODE_XL (pure-CANXL) the ES is always off and the TMS becomes
->> an option to be switched on (default off).
->>
->> And the more I think about it, the more I would like to go for this solution.
->>
->> This setup covers all Bosch use-case slides and Bosch CAN XL IP core
->> documentations (e.g. with the 1.5.5.3 Operating Mode table).
-> 
-> You are referring to those slides, right?
-> 
-> https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/can_xl_1/20230717_can_xl_overview.pdf
-> 
-> I see in slide 16:
-> 
->    Error Signaling: Software Configurable: ON/OFF
-
-Yes. Of course! As CAN XL can be used in mixed-mode together with CAN FD 
-and in CANXL-only mode. And for those two cases you need to set that bit 
-in the controller accordingly.
-
-But you are mixing different thing here:
-
-1. The API to configure CAN FD and CAN XL in Linux
-2. The API of the CAN XL controller
-
-Item 1 is on a different level.
-
-> If you are just referring to the example use cases of slide 24, then no. You
-> should not be tunnel-visioned on a single slide when some other slide clearly
-> states differently.
-
-It does not. And please do not name me tunnel-visioned.
-You have no such system on your desk to work with and you are 
-over-engineering the CANXL-support with useless options trying to 
-interpret the ISO specification.
-
-Also the fact that the restricted mode is required for the CAN XL 
-controller. The Linux kernel is not an ISO 11898 compliance checking tool.
-
-> And in which world does an *example* use case in a slide deck take precedence on
-> the ISO standard? I am sorry, but taking a random slide to disprove what the
-> standard requires is not a receivable argument.
-> 
->> And we can omit the introduction of the CAN_CTRLMODE_XL_ERR_SIGNAL flag as this
->> can be retrieved internally from CTRLMODE_XL and CAN_CTRLMODE_FD to be set into
->> the controller registers.
->>
->> Not defining the FD bitrate in the mixed-mode causes more harm (to the system
->> and the CAN bus itself) than urging the user to define it. Even if he doesn't
->> use CAN FD frames.
-> 
-> I also want to challenge this. You are claiming that the error signaling should
-> be an implicit value. What if someone requires error signaling because of some
-> safety requirements?
-> 
-> Here you are just silently turning off a safety feature. How is the end user
-> meant to see the connection between disabling CAN FD and error signaling? By
-> dropping the flag, we also loss the reporting. No more way to see in the netlink
-> interface if error signaling is on or off.
-
-You have no idea what you are talking about when you reference a safety 
-feature here. There is a mixed mode with error-signalling and we have a 
-CANXL-only mode which used an improved error recognition.
-
-https://can-cia.org/fileadmin/cia/documents/proceedings/2020_mutter.pdf
-
-And this has nothing to do with safety.
-
-> The more I think about it, the more I am getting convinced that silently turning
-> off a safety feature and hiding its value is nothing but a bad decision.
-
-No.
-
->> In the (really unlikely) case that someone shows up with a valid use-case (like
->> len8_dlc) and separately wants to fiddle with the ES flags, we might introduce
->> such a flag later. But I bet this will not happen.
-> The reality is that the people on the linux-can are a small community and the
-> security/safety researcher is another small community. And the intersection of
-> those two communities is rather small.
-> 
-> Before joining the linux-can mailing list, I was well aware of the lack of the
-> len8_dlc and the TDC, and so were the people around me. But no one reported the
-> problem, mostly because none of us were familiar with open source communities
-> and we were all using some alternatives (proprietary drivers…)
-> 
-> Once I showed up and implemented those features, we saw people using those.
-
-Great. Then lets wait if people need more than the implicit 
-error-signalling.
-
-> My point here is that taking the request on the linux-can mailing list is not a
-> good benchmark to measure if people use a feature or not. At least, this is what
-> occurred for the len8_dlc and the TDC and I see no reason for this to be
-> different here.
-> 
-> (...)
-> 
->> Either CAN CC or CAN FD with ES=off are marked as an "invalid configuration" in
->> the 1.5.5.3 Operating Mode table. And I'm pretty sure the CAN XL inventor's
->> implementation of the CAN XL IP core is compliant with the standard here. Maybe
->> the standard is unclear in this topic or left some details.
-> 
-> 1.5.5.3 also shows that FDOE is on whenever XLOE is on (even if error signaling
-> is off or if TMS is on). Does it mean that you can always send FD frames? No.
-
-Maybe the Bosch controller goes into an error, when the FDF bit is 
-active on the bus without having FD enabled. You have to keep the 
-bitstream in mind that has an FDF bit before getting to the XLF bit.
-
-> That table can just not be used in isolation.
-> 
-> What is not clear here is the 1.5.5.3 Operating Mode table, not the standard.
-> 
-
-No, but it clearly shows invalid configurations. Maybe you can focus on 
-those.
-
->> What is your interpretation of the standard here?
-> 
-> It is not an interpretation. The standard clearly require that error signaling
-> should be configurable.
-> 
->> What do you think has to be supported beyond the features that Stéphane and I
->> suggest?
-> 
-> FD off + XL on + error signaling on.
-
-This is mixed-mode. Mixed-mode is FD/XL controllers sharing the same 
-segment and can talk CC/FD (FD-controllers) and CC/FD/XL (XL-controllers).
-
-Removing the FD bitrate in this setup leads to problems, when BRS is 
-used by anyone.
-
->>> I see this a bit like the can_frame->len8_dlc thing. Should you use DLCs greater
->>> than 8 in production code? Hell no! But I still want the implementation to give
->>> me this option so that I can do my weird tests.
->>
->> Ack. But so far I do not see such weird options. And introducing code into the
->> kernel there is no user for and that's potentially only adding complexity in the
->> API that might lead to misconfiguration is not well-received.
-> 
-> It seems to me that Stéphane is able to use it and that you should also be able
-> to by using TX_FILTER_CTRL0.CAN_FD. And I could also test it with my dummy-can
-> driver. That should be enough testing, right?
-> 
-> 
-> I made my mind here. It seems to me that you are tunneled-visioned on table
-> 1.5.5.3 when the other sections of your datasheet clearly point out that you can
-> deactivate CAN FD using TX_FILTER_CTRL0.CAN_FD. If you just partially read your
-> datasheet to then jump to some conclusion, I would not feel confident to follow
-> this.
-> 
-> The process to publish an ISO standard is strict with many domain expert
-> involved. I do not think that any of us here is smarter that the combined
-> mindset of the ISO 11898 committee. I would need a stronger argument to convince
-> me that the ISO committee did a wrong design choice into making this error
-> signaling configurable.
-
-I'm also working in ISO committees. And some things sometimes are left 
-undocumented as those domain experts simply could not imagine why 
-someone would discuss not configuring the FD bitrate in the mixed-mode, 
-like you do it here. You are exaggerating the discussion.
-
-And again: Error-signalling is configurable in the CAN controller. Not 
-to play with weird options but to differentiate between mixed-mode and 
-CANXL-only mode.
-
-And the different invalid configurations on the X_CAN mode register 
-show, what works together and what does not work.
-
-I'm really wondering if I am tunneled-visioned or if you are hunting a 
-white rabbit.
-
-Best regards,
-Oliver
-
+SGkgTWFyYywgR2VlcnQsDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTog
+TWFyYyBLbGVpbmUtQnVkZGUgPG1rbEBwZW5ndXRyb25peC5kZT4NCj4gU2VudDogMTIgTm92ZW1i
+ZXIgMjAyNSAwODo0Nw0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBjYW46IHJjYXJfY2FuZmQ6IEZp
+eCBjb250cm9sbGVyIG1vZGUgc2V0dGluZyBmb3IgUlovRzJMIFNvQ3MNCj4gDQo+IE9uIDMwLjEw
+LjIwMjUgMTI6MDU6MDQsIEJpanUgd3JvdGU6DQo+ID4gRnJvbTogQmlqdSBEYXMgPGJpanUuZGFz
+Lmp6QGJwLnJlbmVzYXMuY29tPg0KPiA+DQo+ID4gVGhlIGNvbW1pdCA1Y2ZmMjYzNjA2YTEgKCJj
+YW46IHJjYXJfY2FuZmQ6IEZpeCBjb250cm9sbGVyIG1vZGUNCj4gPiBzZXR0aW5nIikgYXBwbGll
+cyB0byBhbGwgU29DcyBleGNlcHQgdGhlIFJaL0cyTCBmYW1pbHkgb2YgU29Dcy4gQXMgcGVyDQo+
+ID4gUlovRzJMIGhhcmR3YXJlIG1hbnVhbCAiRmlndXJlIDI4LjE2IENBTiBTZXR0aW5nIFByb2Nl
+ZHVyZSBhZnRlciB0aGUNCj4gPiBNQ1UgaXMgUmVzZXQiIENBTiBtb2RlIG5lZWRzIHRvIGJlIHNl
+dCBiZWZvcmUgY2hhbm5lbCByZXNldC4gQWRkIHRoZQ0KPiA+IG1vZGVfYmVmb3JlX2NoX3JzdCB2
+YXJpYWJsZSB0byBzdHJ1Y3QgcmNhcl9jYW5mZF9od19pbmZvIHRvIGhhbmRsZQ0KPiA+IHRoaXMg
+ZGlmZmVyZW5jZS4NCj4gPg0KPiA+IFRoZSBhYm92ZSBjb21taXQgYWxzbyBicmVha3MgQ0FORkQg
+ZnVuY3Rpb25hbGl0eSBvbiBSWi9HM0UuIEFkYXB0IHRoaXMNCj4gPiBjaGFuZ2UgdG8gUlovRzNF
+LCBhcyB3ZWxswqBhcyBpdCB3b3JrcyBvayBieSBmb2xsb3dpbmcgdGhlDQo+ID4gaW5pdGlhbGlz
+YXRpb24gc2VxdWVuY2Ugb2YgUlovRzJMLg0KPiA+DQo+ID4gRml4ZXM6IDVjZmYyNjM2MDZhMSAo
+ImNhbjogcmNhcl9jYW5mZDogRml4IGNvbnRyb2xsZXIgbW9kZSBzZXR0aW5nIikNCj4gPiBDYzog
+c3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPiA+IFNpZ25lZC1vZmYtYnk6IEJpanUgRGFzIDxiaWp1
+LmRhcy5qekBicC5yZW5lc2FzLmNvbT4NCj4gDQo+IEFwcGxpZWQgdG8gbGludXgtY2FuLg0KDQpU
+aGVyZSBhcmUgMyBtb2RlcyBmb3IgQ0FORkQgb24gUlovRzNFDQoNCjEpIENBTi1GRCBtb2RlDQoy
+KSBGRCBvbmx5IG1vZGUNCjMpIENsYXNzaWNhbCBDQU4gb25seSBtb2RlDQoNCkluIHRoZSAiRkQg
+b25seSBtb2RlIiwgdGhlIEZET0UgYml0IGVuYWJsZXMgdGhlIHJlY2VwdGlvbiBhbmQgdHJhbnNt
+aXNzaW9uIG9mIENBTi1GRC1vbmx5IGZyYW1lcy4NCklmIGVuYWJsZWQsIGNvbW11bmljYXRpb24g
+aW4gdGhlIENsYXNzaWNhbCBDQU4gZnJhbWUgZm9ybWF0IGlzIGRpc2FibGVkLg0KwqANCk9uIFJa
+L0cyTCwgY3VycmVudGx5LCBDQU4tRkQgbW9kZSBpcyBlbmFibGVkIGJ5IGRlZmF1bHQgYW5kDQpP
+biBSWi9HM0UgYW5kIFItQ2FyIEdlbjQsIGN1cnJlbnRseSBGRC1vbmx5IG1vZGUgaXMgdGhlIGRl
+ZmF1bHQuDQoNClByaW9yIHRvIGNvbW1pdCA1Y2ZmMjYzNjA2YTEwMTAgKCJjYW46IHJjYXJfY2Fu
+ZmQ6IEZpeCBjb250cm9sbGVyIG1vZGUgc2V0dGluZykNClJaL0czRSBhbmQgUi1DYXIgR2VuNCBh
+cmUgdXNpbmcgaW5jb3JyZWN0IGNvZGUgZm9yIHNldHRpbmcgQ0FOLUZEIG1vZGUuIEJ1dCBmb3J0
+dW5hdGVseSwNCml0IHNldHMgdGhlIG1vZGUgYXMgQ0FOLUZEIG5vZGUsIGFzIHRoZSBjaGFubmVs
+IHJlc2V0IHdhcyBleGVjdXRlZCBhZnRlcg0Kc2V0dGluZyB0aGUgbW9kZSwgdGhhdCByZXNldHMg
+dGhlIHJlZ2lzdGVycyB0byBDQU4tRkQgbW9kZS4oR2xvYmFsIHJlc2V0LCBzZXQgbW9kZSwgY2hh
+bm5lbCByZXNldCkNCg0KVGhlIGNvbW1pdCA1Y2ZmMjYzNjA2YTEwMTAgbWFrZXMgKEdsb2JhbCBy
+ZXNldCwgY2hhbm5lbCByZXNldCwgc2V0IG1vZGUpLCBub3cNCmFsaWduIHdpdGggdGhlIGZsb3cg
+bWVudGlvbmVkIGluIHRoZSBoYXJkd2FyZSBtYW51YWwgZm9yIGFsbCBTb0NzIGV4Y2VwdCBSWi9H
+MkwuDQpCdXQgYmVjYXVzZSBvZiB0aGUgZWFybGllciB3cm9uZyBjb2RlLCBpdCBzZXRzIHRvIEZE
+LW9ubHkgbW9kZSBpbnN0ZWFkIG9mIENBTi1GRCBtb2RlLg0KDQpJcyBpdCBva2F5IHRvIGRyb3Ag
+dGhpcyBwYXRjaCBzbyBJIGNhbiBzZW5kIGFub3RoZXIgcGF0Y2ggdG8gbWFrZSBDQU4tRkQgbW9k
+ZQ0KYXMgdGhlIGRlZmF1bHQgZm9yIFJaL0czRSBhbmQgUi1DYXIgR2VuND8NCg0KQXMgYW4gZW5o
+YW5jZW1lbnQsIHdlIG5lZWQgdG8gZGVmaW5lIGEgZGV2aWNlIHRyZWUgcHJvcGVydHkgdG8gc3Vw
+cG9ydCBGRC1vbmx5IG1vZGUNCmZvciBSWi9HMkwsIFJaL0czRSBhbmQgUi1DYXIgR2VuNC4gUGxl
+YXNlIHNoYXJlIHlvdXIgdGhvdWdodHMgb24gdGhpcy4NCg0KQ2hlZXJzLA0KQmlqdQ0K
 
