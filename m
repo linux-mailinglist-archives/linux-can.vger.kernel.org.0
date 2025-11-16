@@ -1,48 +1,48 @@
-Return-Path: <linux-can+bounces-5454-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5455-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3650C61D60
-	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 22:34:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DAF5C61DED
+	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 22:54:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 53AF44E0233
-	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 21:34:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEFE33AEBCD
+	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 21:54:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3946F21FF2E;
-	Sun, 16 Nov 2025 21:34:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19F9C2690C0;
+	Sun, 16 Nov 2025 21:54:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mB9VB8hi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c6NV9CqH"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4DE1DD9AD
-	for <linux-can@vger.kernel.org>; Sun, 16 Nov 2025 21:34:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A3D1F0E34
+	for <linux-can@vger.kernel.org>; Sun, 16 Nov 2025 21:54:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763328861; cv=none; b=BTYxlJ935tQAb4AzlQrb+VRiyNR6LPgS64veERGSLUaseEbmprdzblpi4gAQlM+ZB5RXAw7h4eeHqpXEtOSNojXdpbH+UYji37opKko3Ibz+zyhZIv79BSu38xTQCRePaYMMtLh1TaQ5HMfX/LuooeR+AO8y1T1J9+L0tWOaxKE=
+	t=1763330087; cv=none; b=ErpI7UUb4kX+F/Eb6gaSOZSs2FOZSi+2CeIlkdv3GhUYH+9SyJ2cWB/2Sp44BMR7VUfvg3YIygtQI9CQQdkEhDN0odQy8kcGElmsAxjh8D6WWV0OMOQFBv9cgKWzH4NzhMhOdAFsIlWmV6FTlpbfITYIenL+wL7uUCXi3lZOWto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763328861; c=relaxed/simple;
-	bh=DuluFJLeP1A0bpVywv9rZXwtLK1PdcHZ8yFpRGM2r9E=;
+	s=arc-20240116; t=1763330087; c=relaxed/simple;
+	bh=zn+2t3HCokrvlE3MNCZ2FC02ky/HjIw2Dr2SvVO/akw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ft2c5aPrtPM9vnS/Sb/pp9FTwWFJGv/OL7MbUSHz43Je1hlNQZ5bwBULbSChCXu1xpmVfD9Vtxx9Tps9jIBOU2G+CmpiHk70T9BWiPJitkihnFkwe1n9tdwl6Aq6OlmIJ74Ony9BXHsDu/WvMahe8xJK0QUGPbtnMzEDnVmk1tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mB9VB8hi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE540C4CEF1;
-	Sun, 16 Nov 2025 21:34:19 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ltdQFznmtM2QYf8WtweObHWhacpyUqkg182Fpal5x703EMAWjev//TFE4M+mLeiPAK4xNYB03MI6iFNQAPLb+2kR4epqPEbzpGfL7PPPFxw7Q8bnps9P8PBl2eB8vxtx5bPO/cOIgUMMF9nLURvWubFdu1i6z13RDey1iHJMP6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c6NV9CqH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F4E4C4CEFB;
+	Sun, 16 Nov 2025 21:54:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763328860;
-	bh=DuluFJLeP1A0bpVywv9rZXwtLK1PdcHZ8yFpRGM2r9E=;
+	s=k20201202; t=1763330086;
+	bh=zn+2t3HCokrvlE3MNCZ2FC02ky/HjIw2Dr2SvVO/akw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mB9VB8hirGtLm7D198KMcLrMWdPoVQ0DKdQyWgymMu0sqpks677j3ZMj18bGb6MVz
-	 cxENWvSizxbtcnWNnkpFbjbyBeIi4jIN4DF4iSugZsCiGZDKy1QC/RWoTOOuwtzmlK
-	 0uVVNmd3ZfQgntIxDji7CNjJvL38UUraf6gmd9pBTY/YclgTRKWIhiDzIxSVdR01xq
-	 //ONH6XMsAVmRRiW2Ls9dYcYsyQoGGgMddcAu+e2Wl9v2VRlvWf5fMmGwRhv2pKAVT
-	 sEuUTTCE1FV4GiFGX388tskMPDyCmvsRfCgsIbVzbLpJDBA2i/N9nTZYBXEwnLAYjS
-	 8pj69vquMYzCQ==
-Message-ID: <48fae6ee-94cf-444a-a6f1-53dc6fb44c34@kernel.org>
-Date: Sun, 16 Nov 2025 22:34:17 +0100
+	b=c6NV9CqHDQnSQjXcqZIkBMmSQjpsarRuMU+hmp1GBEOb31KMYOGLjBt2fRZfoZDhB
+	 fq23pSUyhaCJVXjDyP+AmBjfDbcF8wumx+n6ALBdIhM0NUAKUuSEvEKrKfdNDaSns/
+	 PlE3cPm4NOceLoVgL16Bc8sWSIjt1K1b8pU/ZfotkZLxO/pk+QZ7PGrv8m/jz/kC54
+	 lltU5XWyzrT0ZjYNvMR3+yGKa2XVirgEKAV3Kkk31UKm93+y2KQdnIrwMwhyol0In2
+	 PvhPLFZoABoOgKNgL5KIhGTkeoYqUtxlCPaVjLHNf9c2uoPX5/fyiXWg8ImLklrIst
+	 5tHsE7l7UoWNw==
+Message-ID: <8788fd27-8998-4dbc-98e9-1bd9557d15e9@kernel.org>
+Date: Sun, 16 Nov 2025 22:54:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -50,15 +50,12 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: RFC remove CAN_CTRLMODE_XL_ERR_SIGNAL
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
- =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
+Subject: Re: [canxl v2 05/15] can: netlink: add CAN_CTRLMODE_XL_TMS flag
+To: Oliver Hartkopp <socketcan@hartkopp.net>
 Cc: linux-can@vger.kernel.org
-References: <84cb473f-be5b-464b-a5d9-10c6f643f145@hartkopp.net>
- <ee2ecbeb-eb88-45a5-b13d-0616383e0987@kernel.org>
- <13906d6a-34be-47ff-bedf-c25a2d755aba@hartkopp.net>
- <67564299-c929-4eed-991c-90c311d6b90d@kernel.org>
- <61f731ac-3876-45e8-a5dc-6cfa24f2739d@hartkopp.net>
+References: <20251115163740.7875-1-socketcan@hartkopp.net>
+ <20251115163740.7875-6-socketcan@hartkopp.net>
+ <c77caed0-5d88-4b2c-b371-3e2870324b4d@hartkopp.net>
 Content-Language: en-US
 From: Vincent Mailhol <mailhol@kernel.org>
 Autocrypt: addr=mailhol@kernel.org; keydata=
@@ -70,242 +67,186 @@ Autocrypt: addr=mailhol@kernel.org; keydata=
  YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
  dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
  zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <61f731ac-3876-45e8-a5dc-6cfa24f2739d@hartkopp.net>
+In-Reply-To: <c77caed0-5d88-4b2c-b371-3e2870324b4d@hartkopp.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Hi Oliver,
 
-On 15/11/2025 at 14:52, Oliver Hartkopp wrote:
-
-(...)
-
->>>> Why isn't
->>>>
->>>>     4. Providing only CC/XL bitrates => ES on, TMS off
->>>>
->>>> a valid option?
->>>
->>> I had an off-list discussion with Stéphane and other PEAK System experts in June
->>> and the outcome was that CC/XL bitrates with ES on and TMS off is possible (only
->>> with the PEAK CAN XL IP core!) but will result in a nightmare for support teams.
->>
->> I will start by challenging this assertion.
->>
->> Looking at the X_CAN datasheet, I see:
->>
->>    1.4.5.22.2 Classical CAN
->>
->>    All Classical CAN TX messages are either accepted or rejected, see
->>    TX_FILTER_CTRL0.CC_CAN bit register. There is no other option for such
->>    Classical CAN protocol. The TX filter elements are only used
->>    for the CAN XL protocol.
->>
->>    1.4.5.22.3 CAN FD
->>
->>    All CAN FD messages are either accepted or rejected, see
->>    TX_FILTER_CTRL0.CAN_FD bit register. There is no other option for the CAN FD
->>    protocol. The TX filter elements are only used for the CAN XL
->>    protocol.
->>
->> Did you try those?
->>
+On 16/11/2025 à 20:31, Oliver Hartkopp wrote:
+> Hi Vincent,
 > 
-> For what reason? This is a detail of how Bosch creates there filtering but has
-> nothing to do with what makes sense on the bus.
-
-The reason is that we are discussing how to deactivate CAN FD on your device
-when it is in mixed mode and it appears that your device has a CAN XL specific
-feature to filter out CAN FD frames.
-
-Why does your device have a CAN FD filter which can be used only under CAN XL
-then? If it is not to disable CAN FD under mixed mode, what is it for?
-
-(...)
-
->>> This setup covers all Bosch use-case slides and Bosch CAN XL IP core
->>> documentations (e.g. with the 1.5.5.3 Operating Mode table).
+> On 15.11.25 17:37, Oliver Hartkopp wrote:
+>> From: Vincent Mailhol <mailhol@kernel.org>
 >>
->> You are referring to those slides, right?
+>> The Transceiver Mode Switching (TMS) indicates whether the CAN XL
+>> controller shall use the PWM or NRZ encoding during the data phase.
 >>
->> https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/
->> can_xl_1/20230717_can_xl_overview.pdf
+>> The term "transceiver mode switching" is used in both ISO 11898-1 and
+>> CiA 612-2 (although only the latter one uses the abbreviation TMS). We
+>> adopt the same naming convention here for consistency.
 >>
->> I see in slide 16:
+>> Add the CAN_CTRLMODE_XL_TMS flag to the list of the CAN control modes.
 >>
->>    Error Signaling: Software Configurable: ON/OFF
-> 
-> Yes. Of course! As CAN XL can be used in mixed-mode together with CAN FD and in
-> CANXL-only mode. And for those two cases you need to set that bit in the
-> controller accordingly.
-> 
-> But you are mixing different thing here:
-> 
-> 1. The API to configure CAN FD and CAN XL in Linux
-> 2. The API of the CAN XL controller
-> 
-> Item 1 is on a different level.
-No, 1. and 2. are on the same layer. It is just that 1. is an abstraction of 2.
-Also TMS and error signaling are at the same layer so if error signaling is only
-at 2., where does TMS configuration go?
-
->> If you are just referring to the example use cases of slide 24, then no. You
->> should not be tunnel-visioned on a single slide when some other slide clearly
->> states differently.
-> 
-> It does not. And please do not name me tunnel-visioned.
-> You have no such system on your desk to work with and you are over-engineering
-> the CANXL-support with useless options trying to interpret the ISO specification.
-> 
-> Also the fact that the restricted mode is required for the CAN XL controller.
-> The Linux kernel is not an ISO 11898 compliance checking tool.
-> 
->> And in which world does an *example* use case in a slide deck take precedence on
->> the ISO standard? I am sorry, but taking a random slide to disprove what the
->> standard requires is not a receivable argument.
+>> Add can_validate_xl_flags() to check the coherency of the TMS flag.
+>> That function will be reused in upcoming changes to validate the other
+>> CAN XL flags.
 >>
->>> And we can omit the introduction of the CAN_CTRLMODE_XL_ERR_SIGNAL flag as this
->>> can be retrieved internally from CTRLMODE_XL and CAN_CTRLMODE_FD to be set into
->>> the controller registers.
->>>
->>> Not defining the FD bitrate in the mixed-mode causes more harm (to the system
->>> and the CAN bus itself) than urging the user to define it. Even if he doesn't
->>> use CAN FD frames.
+>> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+>> ---
+>>   drivers/net/can/dev/dev.c        |  2 ++
+>>   drivers/net/can/dev/netlink.c    | 48 ++++++++++++++++++++++++++++++--
+>>   include/uapi/linux/can/netlink.h |  1 +
+>>   3 files changed, 48 insertions(+), 3 deletions(-)
 >>
->> I also want to challenge this. You are claiming that the error signaling should
->> be an implicit value. What if someone requires error signaling because of some
->> safety requirements?
->>
->> Here you are just silently turning off a safety feature. How is the end user
->> meant to see the connection between disabling CAN FD and error signaling? By
->> dropping the flag, we also loss the reporting. No more way to see in the netlink
->> interface if error signaling is on or off.
+>> diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+>> index 443692587217..9da3da8c6225 100644
+>> --- a/drivers/net/can/dev/dev.c
+>> +++ b/drivers/net/can/dev/dev.c
+>> @@ -121,10 +121,12 @@ const char *can_get_ctrlmode_str(u32 ctrlmode)
+>>           return "xl";
+>>       case CAN_CTRLMODE_XL_TDC_AUTO:
+>>           return "xl-tdc-auto";
+>>       case CAN_CTRLMODE_XL_TDC_MANUAL:
+>>           return "xl-tdc-manual";
+>> +    case CAN_CTRLMODE_XL_TMS:
+>> +        return "xl-tms";
+>>       default:
+>>           return "<unknown>";
+>>       }
+>>   }
+>>   EXPORT_SYMBOL_GPL(can_get_ctrlmode_str);
+>> diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+>> index 26c25e660e31..5a628c629109 100644
+>> --- a/drivers/net/can/dev/netlink.c
+>> +++ b/drivers/net/can/dev/netlink.c
+>> @@ -179,10 +179,36 @@ static int can_validate_databittiming(struct nlattr
+>> *data[],
+>>           return err;
+>>         return 0;
+>>   }
+>>   +static int can_validate_xl_flags(struct netlink_ext_ack *extack,
+>> +                 u32 masked_flags, u32 mask)
+>> +{
+>> +    if (masked_flags & CAN_CTRLMODE_XL) {
+>> +        if (masked_flags & CAN_CTRLMODE_XL_TMS) {
+>> +            const u32 tms_conflicts_mask = CAN_CTRLMODE_FD |
+>> +                CAN_CTRLMODE_XL_TDC_MASK;
+>> +            u32 tms_conflicts = masked_flags & tms_conflicts_mask;
+>> +
+>> +            if (tms_conflicts) {
+>> +                NL_SET_ERR_MSG_FMT(extack,
+>> +                           "TMS and %s are mutually exclusive",
+>> +                           can_get_ctrlmode_str(tms_conflicts));
 > 
-> You have no idea what you are talking about when you reference a safety feature
-> here. There is a mixed mode with error-signalling and we have a CANXL-only mode
-> which used an improved error recognition.
+> root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 dbitrate 2000000 fd
+> on xbitrate 4000000 xl on tms on
+> Error: TMS and fd are mutually exclusive.
 > 
-> https://can-cia.org/fileadmin/cia/documents/proceedings/2020_mutter.pdf
-
-You are saying that the CANXL *only* mode uses an improved error recognition?
-Can you quote the relevant text in the paper?
-
-The new error detection features are introduced at the CAN XL frame level,
-namely: Header CRC, Frame CRC and fixed stuff bits. You do not have to disable
-error signaling nor to be in "XL-only mode" to enable the new CAN XL safety
-features. The only requirement is to send a CAN XL frame.
-
-To me, the relevant paragraph is:
-
-  §2.1 Bit Monitoring
-
-  (...)
-
-  A detailed explanation of the bit monitoring in CAN FD can be found in [10].
-  If error signaling (via Error Frames) is enabled in CAN XL, bit monitoring is
-  nearly equal to that in CAN FD. For the case that error signaling is disabled,
-  bit monitoring is not yet fully specified in the current CiA610-1 draft.
-
-I do not have access to CiA610-1, but my understanding here is that once error
-signaling is disabled, you lose that bit monitoring (as defined in §2.1). And
-so, the user is given the option to enable the error signaling on top of the
-other CAN XL new error detection features.
-
-It is not a
-
-  error signaling
-  vs.
-  Header CRC + Frame CRC + fixed stuff bits
-
-but rather:
-
-  error signaling + Header CRC + Frame CRC + fixed stuff bits
-  vs.
-  Header CRC + Frame CRC + fixed stuff bits
-
-Which brings us to my point: the CAN XL mode with error signaling has one
-additional safety feature when compared to without error signaling. I never said
-that CAN XL without error signaling is unsafe. I mean that it is less safe when
-error signaling is turned off than it is when turned on.
-
-And silently turning off *a* safety feature is bad (note the singular here and
-in my previous message: I never claimed that turning off error signaling will
-turn off all the other features).
-
-> And this has nothing to do with safety.
-
-In my research, I was looking at the AUTOSAR specification for CAN XL driver:
-
-https://www.autosar.org/fileadmin/standards/R22-11/CP/AUTOSAR_SWS_CANXLDriver.pdf
-
-In §7.2.3 "BusOff Handling without error signaling", they have a requirement to
-emulate a error counter when error signaling is off.
-
-  [CP_SWS_CanXL_00005] If error signaling is disabled, a basic CAN busoff
-  handling with TEC (Transmission Error Counter) and REC (Reception
-  Error Counter) shall be emulated in software.
-
-If this is not related to safety, why is AUTOSAR requiring some software
-workaround to compensate when error signaling is off?
-
->> The more I think about it, the more I am getting convinced that silently turning
->> off a safety feature and hiding its value is nothing but a bad decision.
+> The error messages should look consistent in terms of capitalization.
 > 
-> No.
+> Maybe can_get_ctrlmode_str() should deliver capitalized strings as we see it in
+> the 'ip' tool output:
+
+In a full English sentence, I tend to see ALL CAPITALIZED WORDS as kind of
+aggressive. Whereas I find this to be OK in other things which are not sentences
+(like the ip link show). So I opted for the lower case option in
+can_get_ctrlmode_str(). And then, I messed up here by mixing both as you pointed
+here…
+
+This is not really something I care about. The thing is that
+can_get_ctrlmode_str() is already upstream, so fixing this would require a
+separate patch, which is a tiny bit more work, but not a blocker either.
+
+> root@de1soc1:~# ./ip -det link show can0
+> 11: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 2060 qdisc pfifo_fast state UP mode
+> DEFAULT group default qlen 10
+>     link/can  promiscuity 0 allmulti 0 minmtu 16 maxmtu 16
+>     can <FD,TDC-AUTO,XL,XL-TDC-AUTO> state STOPPED restart-ms 0
 > 
-
-(...)
-
->> What is not clear here is the 1.5.5.3 Operating Mode table, not the standard.
->>
+>> +                return -EOPNOTSUPP;
+>> +            }
+>> +        }
+>> +    } else {
+>> +        if (mask & CAN_CTRLMODE_XL_TMS) {
+>> +            NL_SET_ERR_MSG(extack, "TMS requires CAN XL");
 > 
-> No, but it clearly shows invalid configurations. Maybe you can focus on those.
-
-Then explain me why:
-
-  FDOE = 0, XLOE = 1, XLTR = 1, EFDI = 1
-
-is invalid and why you must do:
-
-  FDOE = 1, XLOE = 1, XLTR = 1, EFDI = 1
-
-instead. We know that FD must be turned off when TMS is on, yet FDOE must be set
-to 1.
-
-
-The reality is that in your datasheet, FDOE = 1 does not mean that FD is on.
-
-So:
-
-  FDOE = 0, XLOE = 1, XLTR = 0, EFDI = 0
-
-is invalid the same way
-
-  FDOE = 0, XLOE = 1, XLTR = 1, EFDI = 1
-
-is invalid.
-
->>> What is your interpretation of the standard here?
->>
->> It is not an interpretation. The standard clearly require that error signaling
->> should be configurable.
->>
->>> What do you think has to be supported beyond the features that Stéphane and I
->>> suggest?
->>
->> FD off + XL on + error signaling on.
+> This looks good btw.
 > 
-> This is mixed-mode. Mixed-mode is FD/XL controllers sharing the same segment and
-> can talk CC/FD (FD-controllers) and CC/FD/XL (XL-controllers).
+>> +            return -EOPNOTSUPP;
+>> +        }
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>>   static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+>>               struct netlink_ext_ack *extack)
+>>   {
+>>       u32 flags = 0;
+>>       int err;
+>> @@ -199,10 +225,14 @@ static int can_validate(struct nlattr *tb[], struct
+>> nlattr *data[],
+>>               (flags & CAN_CTRLMODE_RESTRICTED)) {
+>>               NL_SET_ERR_MSG(extack,
+>>                          "Listen-only and restricted modes are mutually
+>> exclusive");
 > 
-> Removing the FD bitrate in this setup leads to problems, when BRS is used by
-> anyone.
+> IMO this should also be capitalized ...
+> 
+> "LISTEN-MODE and RESTRICTED modes are mutually exclusive");
 
-And one more time, why do you want to send FD frames when FD is off? It is
-*normal* to get errors when receiving FD frames while FD is turned off. If FD is
-off, there should be no FD nodes on the bus, period. Everything else is bogus.
+This is typically the kind of thing where I prefer the lower case. The above
+seems as if the error message is shouting at me.
 
-This is really what I can not understand in your reasoning.
+Well, if you still prefer upper case after my explanation, I will change.
+
+>>               return -EOPNOTSUPP;
+>>           }
+>> +
+>> +        err = can_validate_xl_flags(extack, flags, cm->mask);
+>> +        if (err)
+>> +            return err;
+>>       }
+>>         err = can_validate_bittiming(data, extack, IFLA_CAN_BITTIMING);
+>>       if (err)
+>>           return err;
+>> @@ -224,11 +254,11 @@ static int can_ctrlmode_changelink(struct net_device *dev,
+>>                      struct nlattr *data[],
+>>                      struct netlink_ext_ack *extack)
+>>   {
+>>       struct can_priv *priv = netdev_priv(dev);
+>>       struct can_ctrlmode *cm;
+>> -    u32 ctrlstatic, maskedflags, notsupp, ctrlstatic_missing;
+>> +    u32 ctrlstatic, maskedflags, deactivated, notsupp, ctrlstatic_missing;
+>>         if (!data[IFLA_CAN_CTRLMODE])
+>>           return 0;
+>>         /* Do not allow changing controller mode while running */
+>> @@ -236,10 +266,11 @@ static int can_ctrlmode_changelink(struct net_device *dev,
+>>           return -EBUSY;
+>>         cm = nla_data(data[IFLA_CAN_CTRLMODE]);
+>>       ctrlstatic = can_get_static_ctrlmode(priv);
+>>       maskedflags = cm->flags & cm->mask;
+>> +    deactivated = ~cm->flags & cm->mask;
+>>       notsupp = maskedflags & ~(priv->ctrlmode_supported | ctrlstatic);
+>>       ctrlstatic_missing = (maskedflags & ctrlstatic) ^ ctrlstatic;
+>>         if (notsupp) {
+>>           NL_SET_ERR_MSG_FMT(extack,
+>> @@ -257,15 +288,25 @@ static int can_ctrlmode_changelink(struct net_device *dev,
+>>                      "missing required %s static control mode",
+>>                      can_get_ctrlmode_str(ctrlstatic_missing));
+>>           return -EOPNOTSUPP;
+>>       }
+>>   +    /* If FD was active and is not turned off, check for XL conflicts */
+>> +    if (priv->ctrlmode & CAN_CTRLMODE_FD & ~deactivated) {
+>> +        if (maskedflags & CAN_CTRLMODE_XL_TMS) {
+>> +            NL_SET_ERR_MSG(extack,
+>> +                       "TMS can not be activated while CAN FD is on");
+> "TMS can not be activated while FD is on");
+> 
+> And this also.
+
+Ack.
 
 
 Yours sincerely,
