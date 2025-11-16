@@ -1,142 +1,130 @@
-Return-Path: <linux-can+bounces-5447-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5448-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC6EC6181B
-	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 17:09:33 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0601C61867
+	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 17:20:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ED2C84E6EFF
-	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 16:09:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id C0C70290B3
+	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 16:20:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7953D19D8A8;
-	Sun, 16 Nov 2025 16:09:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BEB530DD21;
+	Sun, 16 Nov 2025 16:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aknmoqcs"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA59D29E0E5
-	for <linux-can@vger.kernel.org>; Sun, 16 Nov 2025 16:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A894A30C63E
+	for <linux-can@vger.kernel.org>; Sun, 16 Nov 2025 16:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763309368; cv=none; b=FHLdP09u4b6xneknNmJFusybf4TpEbAn7NxBDstfGXnyrm1EqmzgqGREtaEF3q8JAfwPzVhiVxeLIWg0nh5DgyP256qTVQL+aJWcTw9hOoiyvv8upTB3WEF+MLuGngCWTQwH1+11tDNDwYO3ZoQIZuwIR+ahK2IW+WQw4oWDuOo=
+	t=1763310043; cv=none; b=jtotqeRjODP/vb27f+OVMpXFVbygStXFOVFIiwG+LCqy9yowJmQYgwHUO0OgntQtx0J5EjhGfgz7D5gJdRynrmap4OS9u2+nEV222SDy0FI6gcc/JBEBdWET52lTorcDIY3x8I3WwI0khVx84uRSmkXW0iKsfVBVkKFLwOQ0x3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763309368; c=relaxed/simple;
-	bh=AJy8VwbOWsonSaCRtzcqVx/zMF34QG0Ezi0xv1K3/h4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O3e748oqhP181eOMXtSw8tA6Bo5meVF5tg9xnN/XaUkRHliycCIvLs1FKKeSDZlEyfK5yHil+oA4OBApRW1ah6KwwxaGSmn45gAMQBU568iMAu44pZpm6OqzsJeyNJ8BWMMSQXWaodlbniAxppkQJGIbsbh3tPXG+LDqa3pa4q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vKfJa-0007cq-5p; Sun, 16 Nov 2025 17:09:22 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vKfJZ-000lxB-05;
-	Sun, 16 Nov 2025 17:09:21 +0100
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id B1A244A0D8C;
-	Sun, 16 Nov 2025 16:09:20 +0000 (UTC)
-Date: Sun, 16 Nov 2025 17:09:20 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Markus Schneider-Pargmann <msp@baylibre.com>, 
-	Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-Cc: Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Add myself as m_can reviewer
-Message-ID: <20251116-rustling-tapir-of-health-03361a-mkl@pengutronix.de>
-References: <20251022-topic-mcan-reviewer-v6-18-v1-1-885ec5e43493@baylibre.com>
- <20251022-lorikeet-of-fortunate-plenty-43e085-mkl@pengutronix.de>
+	s=arc-20240116; t=1763310043; c=relaxed/simple;
+	bh=IcWG0c7Ap4vHQVKjcGsS3wLPIyj8+cOECPrxfy8qqX8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dJZOX5rrz29N4pVWJNp+aAZ2KcjRhvjyGHnd5dgI4CQNT4jmrUORFlVN8nTSTe0c4Mlm5OguiIzX2NBCn/ylk8XY8GRNwQQ9jeTA76RlkpN22aaftPkafTJUV6KdsRonutKhnQFvJn8TmfDPmXUAdMVg4aTMAW8X1O03VYwVbuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aknmoqcs; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b739ef3f739so28250466b.1
+        for <linux-can@vger.kernel.org>; Sun, 16 Nov 2025 08:20:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763310039; x=1763914839; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IcWG0c7Ap4vHQVKjcGsS3wLPIyj8+cOECPrxfy8qqX8=;
+        b=aknmoqcsJdOe5Kp9laS8fEBxGyp/YzrI9hVWDh+RQ0fJnC32dYSnW20Ed4aUm3EeCH
+         ZJB7+FIt2yYtyNoPQ64z4+VpNe3U9wP0Jyfw6xEVKUjPtIv/6xknlpdZG3P7ZAK9f9mu
+         cFheUJRrUeJh/86ZI0eGZfXL/wuDRJxEJ6KhMDgMAZo0m5VbqqzIhqJ8Y0hXndkNxqdV
+         IG/ir4YRJwZYQzXmz1eDooCV6gAMmw9Q3ZMUKme0ToU8rHjcO2Z/BbmUywkN+Ficesk7
+         UXnQxPdD9sAl5OpCGibBNdCNj5Lde0PBTv1EIOHzmHMqgkHJvPocDg9tjI7FVjfJ3xGH
+         NMxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763310039; x=1763914839;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IcWG0c7Ap4vHQVKjcGsS3wLPIyj8+cOECPrxfy8qqX8=;
+        b=C5a7SD8lLnZtra0D8jxn+4qePoD4ghHT/wTtLRCY/3TuQLIBPXgz0nfvDf0aDzeXtK
+         juytTv3iiFS1uU8ugaa49FEzZbCeFfmQeSkxMO4uIXZFZKeprM6fwp4eanY/d5ZQ6gCN
+         GlUszc4tWyAJHfbjy+reGdPhK9oZgXEpiAyegb6P2OmqxBP8GO4BtjvhzklELWC3hMlk
+         JUUdHj52cvsNDREB6dUYygiZhOXmSTks/kvhw75O2pgZVMHWE4cl+3cBHvhoH8mBXy5v
+         j0paw0FyAZcNwJJ49zf8bmmymTMDatf7ZgwBW/wllIaILjHRjH8GToL2GoPBqcyc81EG
+         Zq4A==
+X-Forwarded-Encrypted: i=1; AJvYcCVr9Iaf+U1mBl9EihWT/t16JRT5xIVyoqQ3pQ2f7wkAblUWGWcu0z+PL0MyX8UUr7lVLS//ORsLCsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqS24DjEEW8fqxOTap/2ZkE5QxVBvlTZQP2lcAAtNzCWMeKLQS
+	Zg67A0lA+yjPvVm1yffhpQ2nVREAv08nXJIy5rzlf4Tws/V+zpm01p4/
+X-Gm-Gg: ASbGncu1X2z9jH7hdiSlYpa9J74ytph5Zl+EFPkEG614XuBi+/ZNFWb9L3UsuzsT++Z
+	8djzzKI98vgXBnNgEEV8nBUEY2/urR/V3f84qLm7yGAh1/AERG4hy5N5VdDKhl58jMrpsFmvtgr
+	VMShHqERS3KoIJSC4BBYZ2rWvWak0AgeK6l+bb2S24Fs4JkUHYt6BAaUrZFo/EFZo8/mLXRab3+
+	zAUPT2UawmcqS23cuGDNhjMKoPjg8987Kk2JtQdCM9yNeTUoTtuTQbWDwqWLJdwibEHTzJ4NyF/
+	Ill6+18D0pI+182JyibuL2pyCMvtYX0IOUSqZ2tDZfsDXUQOsIcdETmYPqOq2u5XFJFkr3RtTST
+	T6YDNTrvj2QMm1broqzVvGzWLPHQJCEucQaSL39Sjeu++XG3ZcSGDxloxHzAaaBe9g6LSKL8dUB
+	ame9yo4SSwTqQODjAd2K2paSLyREv58/watSyZDIP+kAh87X4Cr/cblZfDNCw4sHL5em7mHP0aA
+	78Vdw==
+X-Google-Smtp-Source: AGHT+IGimZSxkgoIOpfCKAWCHgTmcdkmEWm6/VMebPbmR8mxODGAMWNDh5ErsjYw3DRmDL/5wQcxSw==
+X-Received: by 2002:a17:907:1c81:b0:b71:2145:dfc8 with SMTP id a640c23a62f3a-b7367962422mr1083057166b.39.1763310038731;
+        Sun, 16 Nov 2025 08:20:38 -0800 (PST)
+Received: from jernej-laptop.localnet (178-79-73-218.dynamic.telemach.net. [178.79.73.218])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734fdae69fsm852257866b.51.2025.11.16.08.20.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Nov 2025 08:20:38 -0800 (PST)
+From: Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: Vincent Mailhol <mailhol@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Samuel Holland <samuel@sholland.org>,
+ Gerhard Bertelsmann <info@gerhard-bertelsmann.de>,
+ Maxime Ripard <mripard@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: kernel@pengutronix.de, linux-can@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+ Thomas =?UTF-8?B?TcO8aGxiYWNoZXI=?= <tmuehlbacher@posteo.net>,
+ Marc Kleine-Budde <mkl@pengutronix.de>
+Subject:
+ Re: [PATCH can] can: sun4i_can: sun4i_can_interrupt(): fix max irq loop
+ handling
+Date: Sun, 16 Nov 2025 17:20:37 +0100
+Message-ID: <2804881.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <20251116-sun4i-fix-loop-v1-1-3d76d3f81950@pengutronix.de>
+References: <20251116-sun4i-fix-loop-v1-1-3d76d3f81950@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ebvl6csdtzaoujck"
-Content-Disposition: inline
-In-Reply-To: <20251022-lorikeet-of-fortunate-plenty-43e085-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---ebvl6csdtzaoujck
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] MAINTAINERS: Add myself as m_can reviewer
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 
-Hello Chandrasekar,
+Dne nedelja, 16. november 2025 ob 16:55:26 Srednjeevropski standardni =C4=
+=8Das je Marc Kleine-Budde napisal(a):
+> Reading the interrupt register `SUN4I_REG_INT_ADDR` causes all of its bits
+> to be reset. If we ever reach the condition of handling more than
+> `SUN4I_CAN_MAX_IRQ` IRQs, we will have read the register and reset all its
+> bits but without actually handling the interrupt inside of the loop body.
+>=20
+> This may, among other issues, cause us to never `netif_wake_queue()` again
+> after a transmission interrupt.
+>=20
+> Fixes: 0738eff14d81 ("can: Allwinner A10/A20 CAN Controller support - Ker=
+nel module")
+> Cc: stable@vger.kernel.org
+> Co-developed-by: Thomas M=C3=BChlbacher <tmuehlbacher@posteo.net>
+> Signed-off-by: Thomas M=C3=BChlbacher <tmuehlbacher@posteo.net>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+> I've ported the fix from the sja1000 driver to the sun4i_can, which based
+> on the sja1000 driver.
 
-On 22.10.2025 19:46:47, Marc Kleine-Budde wrote:
-> Hello Chandrasekar,
->
-> I've seen not much review feedback from you....
->
-> On 22.10.2025 11:10:09, Markus Schneider-Pargmann wrote:
-> > As I have contributed to the m_can driver over the past years, I would
-> > like to continue reviewing new patches.
-> >
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > ---
-> >  MAINTAINERS | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 46126ce2f968e4f9260263f1574ee29f5ff0de1c..835dfe1a16c975fb3ab46bc=
-7ed736cde61ec0bf5 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -15394,6 +15394,7 @@ F:	drivers/net/phy/mxl-gpy.c
-> >
-> >  MCAN MMIO DEVICE DRIVER
-> >  M:	Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-> > +R:	Markus Schneider-Pargmann <msp@baylibre.com>
->
-> ...Maybe you want to give the maintainer hat to Markus?
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Since I haven't heard from you, I'll pass the maintainer hat on to
-Markus if he wants to take it over.
+Best regards,
+Jernej
 
-Markus, what do you think?
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---ebvl6csdtzaoujck
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmkZ9y0ACgkQDHRl3/mQ
-kZzA3ggArsGl0ZphU4TzW+CeaNUy91GtzdNl3fGG7J4lHTx4uz6TYwgfelsFkJy5
-roCYUI/c5I2dYvMDxgkEWj0hAuRFGNWt9QXSIPZnDPPD3MOc53tEijFLDQDhvkvs
-RLF61FKNw+yEM3uYA74YEkqfO/+1QloSmAC6eazJayvDhtmZ0QhCTsDMtVVQDtKz
-uVDzWGVlGdI0Vl3a3mKHFhf2kc4lTQt0q5qcEjl1zvGw2yNCCQDb9W3SI2KXinV7
-dztFdp710QBcqz0IBgaI8v1gP+HNE9ZqbGFNo5QT9GVwy/vffhskivWgpGAzZP0g
-ShEdmd7yZrl6z1Av1h5XCmPz9F1J6A==
-=u23y
------END PGP SIGNATURE-----
-
---ebvl6csdtzaoujck--
 
