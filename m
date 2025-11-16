@@ -1,87 +1,48 @@
-Return-Path: <linux-can+bounces-5453-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5454-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41F72C61C22
-	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 21:06:11 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3650C61D60
+	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 22:34:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BA23535B645
-	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 20:06:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 53AF44E0233
+	for <lists+linux-can@lfdr.de>; Sun, 16 Nov 2025 21:34:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236C8D531;
-	Sun, 16 Nov 2025 20:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3946F21FF2E;
+	Sun, 16 Nov 2025 21:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="IlVFIGtg";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="JAWCLxT3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mB9VB8hi"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EFD23EAA3
-	for <linux-can@vger.kernel.org>; Sun, 16 Nov 2025 20:06:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763323566; cv=pass; b=U84k9C/CienycvScFHj3VgtY001v/exFfNxMDrWCN7tJXlQjy33/ew7lmi/DFonO6AnnyAfGv34xwmvXJCbHyjhWgbQh1VsR1MWtMrOZBEs1BZAQv6bUjLfm0/t0a0v6MNyi2kgripz0Uyo0AJXfvSvn7ot0xXOnisEFxi7auKE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763323566; c=relaxed/simple;
-	bh=7Qh6OF6Pqq3tEWGmlpfbawsGjLp7D3BurkIJ1XDxlu4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=BF+gy0DqmZpvgG66igRZJyxyTT0kaqSzBermhtiKm9VBpWC6Knt18cIavqmDTvhrTjwQub3wtOwZNJKICnHAH9q3K7eDRgNq/n0yvMGHSKjpeQvaeZhUg5Ci/uRCX5i5PULR/h2hZsXJ7G2Qd3QxlHj0CAYdpQysx8KJ7+XP5v8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=IlVFIGtg; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=JAWCLxT3; arc=pass smtp.client-ip=85.215.255.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1763323544; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=d2lAl02rhT0B/4J/u7It5y8ufynOZ54/WprLIi8qe/7EtHSq5IALoKdATXXxU8/SPu
-    /tVs8CPnsJkyK7Fnf1t4ZfXK7P/wSlOpWqcVlqJJObaN4uca4ctddAQnmgEfrG7rvS9B
-    FxkCj6pmMZ6JxfJkxervBEzIea21jUzGADUx3GRsuQpSNZKIHZ0CifWvXpUzvWiSgppF
-    Op9E2P8TVQ1C+KNwp1YzCi8tAiKxmu4GJ5OWy8uQvGC8Nk95J3LfIF5yIEZgBjeuC9lH
-    eBAtO6WiXKAWNvJb/jy3U+PQkj/fyG4l9D6zLLo149QDqOvak6PFzb+9wQdc6NQrpSH0
-    igMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763323544;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=sgSMgljdTyFwB7YRS8K0gwlUxVuZw+ijCSRxgTTRM9k=;
-    b=XiA/8v3MddRKxiBA/ilm2ZfmYsQDUtpjCDaMromQyq5sPwzMjGgwYLee2mT2KPbyKc
-    IKtsOyNs081BWYmrP2faqNI1khVj+O+0agpmENCen+J0H8wyW6wp5YRmvYDQGG4Nq7m+
-    vu+guJVKsMXxcjrXzm4v7lUZUVgUzMtKrR2fqP9+v1k289V+ncJxFJCZ0VNcpChBeltl
-    8tsNtOLNBJNroxb/1nLLAUwYAu3wdbEP4ypXqB+vsrNrevEt7NLt0mZDshWlsoP5Uu/v
-    RHTOMu9QmQex2FNoyPFpqIvlz6DVE/1aOIp65Y5RqrPKjeO604kvEsDICkjGdI9g+r90
-    UmiA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763323544;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=sgSMgljdTyFwB7YRS8K0gwlUxVuZw+ijCSRxgTTRM9k=;
-    b=IlVFIGtgtJIoslni4vljWy1xhehf6uFT4NYrJktDI6fpoAy5RyUXp9ReLC3OKw48xt
-    c8BnD8m+A6SB2zPoCzBg1YiR7CWR+FxzsPhFXpmQmTEc0f7jpL0jxcFYroL0ryCZQiIv
-    kBdUSq939uCoemRINN3tYF7uaDsx4YPpSTBPiO+oCa/LxYuMt5ErR+rMWS6qgt3kLlV/
-    s7qQf1q9jgzfxLAKmgDF5qoQ9WiRu4yIPyQsR5xQ3OvjbRYS7uepWxdJRysHqzSes9k1
-    Ah3CH1V/MpWpaO35gl5crfySucX/NSMfPoL3CYgxzJieyykIB1TQsE7jY4Z3CIoOHkUU
-    1SSw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763323544;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=sgSMgljdTyFwB7YRS8K0gwlUxVuZw+ijCSRxgTTRM9k=;
-    b=JAWCLxT3LKWwvido8rmA7/Vfn3j+7QAvdiBrf5jIwCyMBwK6zsBqAl8CH9sDt9qUqF
-    gQTiWBKck7e5dJs37fCw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461AGK5ihPr
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sun, 16 Nov 2025 21:05:44 +0100 (CET)
-Message-ID: <69fb9682-82ab-4a3b-a79e-74fa24da23be@hartkopp.net>
-Date: Sun, 16 Nov 2025 21:05:44 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4DE1DD9AD
+	for <linux-can@vger.kernel.org>; Sun, 16 Nov 2025 21:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763328861; cv=none; b=BTYxlJ935tQAb4AzlQrb+VRiyNR6LPgS64veERGSLUaseEbmprdzblpi4gAQlM+ZB5RXAw7h4eeHqpXEtOSNojXdpbH+UYji37opKko3Ibz+zyhZIv79BSu38xTQCRePaYMMtLh1TaQ5HMfX/LuooeR+AO8y1T1J9+L0tWOaxKE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763328861; c=relaxed/simple;
+	bh=DuluFJLeP1A0bpVywv9rZXwtLK1PdcHZ8yFpRGM2r9E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ft2c5aPrtPM9vnS/Sb/pp9FTwWFJGv/OL7MbUSHz43Je1hlNQZ5bwBULbSChCXu1xpmVfD9Vtxx9Tps9jIBOU2G+CmpiHk70T9BWiPJitkihnFkwe1n9tdwl6Aq6OlmIJ74Ony9BXHsDu/WvMahe8xJK0QUGPbtnMzEDnVmk1tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mB9VB8hi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE540C4CEF1;
+	Sun, 16 Nov 2025 21:34:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763328860;
+	bh=DuluFJLeP1A0bpVywv9rZXwtLK1PdcHZ8yFpRGM2r9E=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mB9VB8hirGtLm7D198KMcLrMWdPoVQ0DKdQyWgymMu0sqpks677j3ZMj18bGb6MVz
+	 cxENWvSizxbtcnWNnkpFbjbyBeIi4jIN4DF4iSugZsCiGZDKy1QC/RWoTOOuwtzmlK
+	 0uVVNmd3ZfQgntIxDji7CNjJvL38UUraf6gmd9pBTY/YclgTRKWIhiDzIxSVdR01xq
+	 //ONH6XMsAVmRRiW2Ls9dYcYsyQoGGgMddcAu+e2Wl9v2VRlvWf5fMmGwRhv2pKAVT
+	 sEuUTTCE1FV4GiFGX388tskMPDyCmvsRfCgsIbVzbLpJDBA2i/N9nTZYBXEwnLAYjS
+	 8pj69vquMYzCQ==
+Message-ID: <48fae6ee-94cf-444a-a6f1-53dc6fb44c34@kernel.org>
+Date: Sun, 16 Nov 2025 22:34:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -89,169 +50,265 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [canxl v2 13/15] can: calc_bittiming: add
- can_calc_sample_point_pwm()
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: Vincent Mailhol <mailhol@kernel.org>
-References: <20251115163740.7875-1-socketcan@hartkopp.net>
- <20251115163740.7875-14-socketcan@hartkopp.net>
+Subject: Re: RFC remove CAN_CTRLMODE_XL_ERR_SIGNAL
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
+ =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
+Cc: linux-can@vger.kernel.org
+References: <84cb473f-be5b-464b-a5d9-10c6f643f145@hartkopp.net>
+ <ee2ecbeb-eb88-45a5-b13d-0616383e0987@kernel.org>
+ <13906d6a-34be-47ff-bedf-c25a2d755aba@hartkopp.net>
+ <67564299-c929-4eed-991c-90c311d6b90d@kernel.org>
+ <61f731ac-3876-45e8-a5dc-6cfa24f2739d@hartkopp.net>
 Content-Language: en-US
-In-Reply-To: <20251115163740.7875-14-socketcan@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Vincent Mailhol <mailhol@kernel.org>
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <61f731ac-3876-45e8-a5dc-6cfa24f2739d@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Vincent,
+Hi Oliver,
 
-On 15.11.25 17:37, Oliver Hartkopp wrote:
-> From: Vincent Mailhol <mailhol@kernel.org>
+On 15/11/2025 at 14:52, Oliver Hartkopp wrote:
+
+(...)
+
+>>>> Why isn't
+>>>>
+>>>>     4. Providing only CC/XL bitrates => ES on, TMS off
+>>>>
+>>>> a valid option?
+>>>
+>>> I had an off-list discussion with Stéphane and other PEAK System experts in June
+>>> and the outcome was that CC/XL bitrates with ES on and TMS off is possible (only
+>>> with the PEAK CAN XL IP core!) but will result in a nightmare for support teams.
+>>
+>> I will start by challenging this assertion.
+>>
+>> Looking at the X_CAN datasheet, I see:
+>>
+>>    1.4.5.22.2 Classical CAN
+>>
+>>    All Classical CAN TX messages are either accepted or rejected, see
+>>    TX_FILTER_CTRL0.CC_CAN bit register. There is no other option for such
+>>    Classical CAN protocol. The TX filter elements are only used
+>>    for the CAN XL protocol.
+>>
+>>    1.4.5.22.3 CAN FD
+>>
+>>    All CAN FD messages are either accepted or rejected, see
+>>    TX_FILTER_CTRL0.CAN_FD bit register. There is no other option for the CAN FD
+>>    protocol. The TX filter elements are only used for the CAN XL
+>>    protocol.
+>>
+>> Did you try those?
+>>
 > 
-> The optimum sample point value depends on the bit symmetry. The more
-> asymmetric the bit is, the more the sample point would be located
-> towards the end of the bit. On the contrary, if the transceiver only
-> has a small asymmetry, the optimal sample point would be slightly
-> after the centre of the bit.
+> For what reason? This is a detail of how Bosch creates there filtering but has
+> nothing to do with what makes sense on the bus.
+
+The reason is that we are discussing how to deactivate CAN FD on your device
+when it is in mixed mode and it appears that your device has a CAN XL specific
+feature to filter out CAN FD frames.
+
+Why does your device have a CAN FD filter which can be used only under CAN XL
+then? If it is not to disable CAN FD under mixed mode, what is it for?
+
+(...)
+
+>>> This setup covers all Bosch use-case slides and Bosch CAN XL IP core
+>>> documentations (e.g. with the 1.5.5.3 Operating Mode table).
+>>
+>> You are referring to those slides, right?
+>>
+>> https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/
+>> can_xl_1/20230717_can_xl_overview.pdf
+>>
+>> I see in slide 16:
+>>
+>>    Error Signaling: Software Configurable: ON/OFF
 > 
-> For NRZ encoding (used by Classical CAN, CAN FD and CAN XL with TMS
-> off), the optimum sample points values are above 70% as implemented in
-> can_calc_sample_point_nrz().
+> Yes. Of course! As CAN XL can be used in mixed-mode together with CAN FD and in
+> CANXL-only mode. And for those two cases you need to set that bit in the
+> controller accordingly.
 > 
-> When TMS is on, CAN XL optimum sample points are near to 50% or
-> 60% [1]. Add can_calc_sample_point_pwm() which returns a sample point
-> which is suitable for PWM encoding. We crafted the formula to make it
-> return the same values as below table (source: table 3 of [1]).
+> But you are mixing different thing here:
 > 
->         Bit rate (Mbits/s)	Sample point
->         -------------------------------------
->           2.0			 51.3%
->           5.0			 53.1%
->           8.0			 55.0%
->          10.0			 56.3%
->          12.3			 53.8%
->          13.3			 58.3%
->          14.5			 54.5%
->          16.0			 60.0%
->          17.7			 55.6%
->          20.0			 62.5%
-
-I tested all these examples.
-
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-4000000 xl on tms on
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-2000000 xl on tms on
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-5000000 xl on tms on
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-8000000 xl on tms on
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-10000000 xl on tms on
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-12300000 xl on tms on
-Warning: bitrate error: 0.0%.
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-13300000 xl on tms on
-Warning: bitrate error: 0.2%.
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-14500000 xl on tms on
-Warning: bitrate error: 0.3%.
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-16000000 xl on tms on
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-17700000 xl on tms on
-Warning: bitrate error: 0.4%.
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-20000000 xl on tms on
-root@de1soc1:~#
-
-In the case of xbitrate 12300000 the feedback is
-Warning: bitrate error: 0.0%.
-
-The calculated bitrate is:
-xbitrate 12307692 xsample-point 0.538
-
-12307692/12300000 = 1.00062536585
-
-So it is 0.06%
-
-root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 
-13300000 xl on tms on
-Warning: bitrate error: 0.2%.
-
-The calculated bitrate is:
-xbitrate 13333333 xsample-point 0.583
-
-13333333/13300000 = 1.0025062406
-
-So it is 0.25%
-
-Would it make sense to add another digit and probably additionally some 
-round-up to omit a 0.0% warning?
-
-Best regards,
-Oliver
-
+> 1. The API to configure CAN FD and CAN XL in Linux
+> 2. The API of the CAN XL controller
 > 
-> The calculation simply consists of setting a slightly too high sample
-> point and then letting can_update_sample_point() correct the values.
+> Item 1 is on a different level.
+No, 1. and 2. are on the same layer. It is just that 1. is an abstraction of 2.
+Also TMS and error signaling are at the same layer so if error signaling is only
+at 2., where does TMS configuration go?
+
+>> If you are just referring to the example use cases of slide 24, then no. You
+>> should not be tunnel-visioned on a single slide when some other slide clearly
+>> states differently.
 > 
-> For now, it is just a formula up our sleeves which matches the
-> empirical observations of [1]. Once CiA recommendations become
-> available, can_calc_sample_point_pwm() should be updated accordingly.
+> It does not. And please do not name me tunnel-visioned.
+> You have no such system on your desk to work with and you are over-engineering
+> the CANXL-support with useless options trying to interpret the ISO specification.
 > 
-> [1] CAN XL system design: Clock tolerances and edge deviations edge
->      deviations
-> Link: https://www.can-cia.org/fileadmin/cia/documents/publications/cnlm/december_2024/cnlm_24-4_p18_can_xl_system_design_clock_tolerances_and_edge_deviations_dr_arthur_mutter_bosch.pdf
+> Also the fact that the restricted mode is required for the CAN XL controller.
+> The Linux kernel is not an ISO 11898 compliance checking tool.
 > 
-> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-> ---
->   drivers/net/can/dev/calc_bittiming.c | 19 +++++++++++++++++++
->   1 file changed, 19 insertions(+)
+>> And in which world does an *example* use case in a slide deck take precedence on
+>> the ISO standard? I am sorry, but taking a random slide to disprove what the
+>> standard requires is not a receivable argument.
+>>
+>>> And we can omit the introduction of the CAN_CTRLMODE_XL_ERR_SIGNAL flag as this
+>>> can be retrieved internally from CTRLMODE_XL and CAN_CTRLMODE_FD to be set into
+>>> the controller registers.
+>>>
+>>> Not defining the FD bitrate in the mixed-mode causes more harm (to the system
+>>> and the CAN bus itself) than urging the user to define it. Even if he doesn't
+>>> use CAN FD frames.
+>>
+>> I also want to challenge this. You are claiming that the error signaling should
+>> be an implicit value. What if someone requires error signaling because of some
+>> safety requirements?
+>>
+>> Here you are just silently turning off a safety feature. How is the end user
+>> meant to see the connection between disabling CAN FD and error signaling? By
+>> dropping the flag, we also loss the reporting. No more way to see in the netlink
+>> interface if error signaling is on or off.
 > 
-> diff --git a/drivers/net/can/dev/calc_bittiming.c b/drivers/net/can/dev/calc_bittiming.c
-> index 9b2d0e458518..be6726dcd7e7 100644
-> --- a/drivers/net/can/dev/calc_bittiming.c
-> +++ b/drivers/net/can/dev/calc_bittiming.c
-> @@ -20,10 +20,25 @@ static int can_calc_sample_point_nrz(const struct can_bittiming *bt)
->   		return 800;
->   
->   	return 875;
->   }
->   
-> +/* Sample points for Pulse-Width Modulation encoding. */
-> +static int can_calc_sample_point_pwm(const struct can_bittiming *bt)
-> +{
-> +	if (bt->bitrate > 15 * MEGA /* BPS */)
-> +		return 625;
-> +
-> +	if (bt->bitrate > 9 * MEGA /* BPS */)
-> +		return 600;
-> +
-> +	if (bt->bitrate > 4 * MEGA /* BPS */)
-> +		return 560;
-> +
-> +	return 520;
-> +}
-> +
->   /* Bit-timing calculation derived from:
->    *
->    * Code based on LinCAN sources and H8S2638 project
->    * Copyright 2004-2006 Pavel Pisa - DCE FELK CVUT cz
->    * Copyright 2005      Stanislav Marek
-> @@ -90,10 +105,14 @@ int can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
->   	u64 v64;
->   	int err;
->   
->   	if (bt->sample_point)
->   		sample_point = bt->sample_point;
-> +
-> +	else if (btc == priv->xl.data_bittiming_const &&
-> +		 (priv->ctrlmode & CAN_CTRLMODE_XL_TMS))
-> +		sample_point = can_calc_sample_point_pwm(bt);
->   	else
->   		sample_point = can_calc_sample_point_nrz(bt);
->   
->   	/* tseg even = round down, odd = round up */
->   	for (tseg = (btc->tseg1_max + btc->tseg2_max) * 2 + 1;
+> You have no idea what you are talking about when you reference a safety feature
+> here. There is a mixed mode with error-signalling and we have a CANXL-only mode
+> which used an improved error recognition.
+> 
+> https://can-cia.org/fileadmin/cia/documents/proceedings/2020_mutter.pdf
+
+You are saying that the CANXL *only* mode uses an improved error recognition?
+Can you quote the relevant text in the paper?
+
+The new error detection features are introduced at the CAN XL frame level,
+namely: Header CRC, Frame CRC and fixed stuff bits. You do not have to disable
+error signaling nor to be in "XL-only mode" to enable the new CAN XL safety
+features. The only requirement is to send a CAN XL frame.
+
+To me, the relevant paragraph is:
+
+  §2.1 Bit Monitoring
+
+  (...)
+
+  A detailed explanation of the bit monitoring in CAN FD can be found in [10].
+  If error signaling (via Error Frames) is enabled in CAN XL, bit monitoring is
+  nearly equal to that in CAN FD. For the case that error signaling is disabled,
+  bit monitoring is not yet fully specified in the current CiA610-1 draft.
+
+I do not have access to CiA610-1, but my understanding here is that once error
+signaling is disabled, you lose that bit monitoring (as defined in §2.1). And
+so, the user is given the option to enable the error signaling on top of the
+other CAN XL new error detection features.
+
+It is not a
+
+  error signaling
+  vs.
+  Header CRC + Frame CRC + fixed stuff bits
+
+but rather:
+
+  error signaling + Header CRC + Frame CRC + fixed stuff bits
+  vs.
+  Header CRC + Frame CRC + fixed stuff bits
+
+Which brings us to my point: the CAN XL mode with error signaling has one
+additional safety feature when compared to without error signaling. I never said
+that CAN XL without error signaling is unsafe. I mean that it is less safe when
+error signaling is turned off than it is when turned on.
+
+And silently turning off *a* safety feature is bad (note the singular here and
+in my previous message: I never claimed that turning off error signaling will
+turn off all the other features).
+
+> And this has nothing to do with safety.
+
+In my research, I was looking at the AUTOSAR specification for CAN XL driver:
+
+https://www.autosar.org/fileadmin/standards/R22-11/CP/AUTOSAR_SWS_CANXLDriver.pdf
+
+In §7.2.3 "BusOff Handling without error signaling", they have a requirement to
+emulate a error counter when error signaling is off.
+
+  [CP_SWS_CanXL_00005] If error signaling is disabled, a basic CAN busoff
+  handling with TEC (Transmission Error Counter) and REC (Reception
+  Error Counter) shall be emulated in software.
+
+If this is not related to safety, why is AUTOSAR requiring some software
+workaround to compensate when error signaling is off?
+
+>> The more I think about it, the more I am getting convinced that silently turning
+>> off a safety feature and hiding its value is nothing but a bad decision.
+> 
+> No.
+> 
+
+(...)
+
+>> What is not clear here is the 1.5.5.3 Operating Mode table, not the standard.
+>>
+> 
+> No, but it clearly shows invalid configurations. Maybe you can focus on those.
+
+Then explain me why:
+
+  FDOE = 0, XLOE = 1, XLTR = 1, EFDI = 1
+
+is invalid and why you must do:
+
+  FDOE = 1, XLOE = 1, XLTR = 1, EFDI = 1
+
+instead. We know that FD must be turned off when TMS is on, yet FDOE must be set
+to 1.
+
+
+The reality is that in your datasheet, FDOE = 1 does not mean that FD is on.
+
+So:
+
+  FDOE = 0, XLOE = 1, XLTR = 0, EFDI = 0
+
+is invalid the same way
+
+  FDOE = 0, XLOE = 1, XLTR = 1, EFDI = 1
+
+is invalid.
+
+>>> What is your interpretation of the standard here?
+>>
+>> It is not an interpretation. The standard clearly require that error signaling
+>> should be configurable.
+>>
+>>> What do you think has to be supported beyond the features that Stéphane and I
+>>> suggest?
+>>
+>> FD off + XL on + error signaling on.
+> 
+> This is mixed-mode. Mixed-mode is FD/XL controllers sharing the same segment and
+> can talk CC/FD (FD-controllers) and CC/FD/XL (XL-controllers).
+> 
+> Removing the FD bitrate in this setup leads to problems, when BRS is used by
+> anyone.
+
+And one more time, why do you want to send FD frames when FD is off? It is
+*normal* to get errors when receiving FD frames while FD is turned off. If FD is
+off, there should be no FD nodes on the bus, period. Everything else is bogus.
+
+This is really what I can not understand in your reasoning.
+
+
+Yours sincerely,
+Vincent Mailhol
 
 
