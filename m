@@ -1,87 +1,87 @@
-Return-Path: <linux-can+bounces-5458-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5459-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBC11C62F21
-	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 09:45:00 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E9DFC63040
+	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 10:00:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DB1534E8215
-	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 08:43:35 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DB9A934AB09
+	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 08:59:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 772912EA15C;
-	Mon, 17 Nov 2025 08:43:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965F2320CC2;
+	Mon, 17 Nov 2025 08:59:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="PIkcDPjz";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Zz5nn+f8"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Pdspk5eu";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="JqmczHvh"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEAA30C631
-	for <linux-can@vger.kernel.org>; Mon, 17 Nov 2025 08:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02A532142A
+	for <linux-can@vger.kernel.org>; Mon, 17 Nov 2025 08:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.21
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763369012; cv=pass; b=BthfErULU8TqAsxpEUDfVrnADvlq4so1W7RgxeRyi3V83hzGTGyt2LuHc4bTnIBUwL9w1nxODcdQYjr062wZJELfHE+v62j6y53kWDBOfQOWxjCfvVxXfeHC3hwxssX8zqogvYpmPldqiqTw8F9Ql4XvdOZu8F2wvWEAlbv17ag=
+	t=1763369961; cv=pass; b=c0GqN9SOTrtG635UDBJFnnLLXi4MjHmAcXO8AaoayLOeMZJ9WxlzLWLrIZnzmbeUdmfaIzNNAYrBOu+G/Yt74d5PRMwLFS3/IZstAcb4ZyGiV6DPKsXI47sToaecSEUvJEOw57NkOEqJs1pGOToR+hRtTS4U1QCKAAm3IiY+xsw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763369012; c=relaxed/simple;
-	bh=cRuOWQUKIP4GD3HQEpvm3zvbjS7zO7UduKSUSXtbrxg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iLeWfaI4OOqIB8nDYoZgr4cTTzcPNtx/ouk6j2Jw5jeQKbckSiA7drLQw5HAuujR16BopNiVEGXFFadRqgU/HSXZyC4RXJ61gEvAHUmsQXH15UZ+LjMPBR1SjZ091DR71CblF2nHBddF7cfArpyb9dR05oCtx+AAVs67Rh300aE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=PIkcDPjz; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Zz5nn+f8; arc=pass smtp.client-ip=85.215.255.24
+	s=arc-20240116; t=1763369961; c=relaxed/simple;
+	bh=fXW+vclstD1l7UP9iYGdnMg/pdtMj1W006kFJofwjB0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Cn5pCeKu8wVU4X2bfIbkwSL3OWKVQasNF0ynNEcEO/QR/EbL0ojDasZBJ5+H1+PdrDU9oaEi4j5cXbTz7WNq4tF7xGZgMp0KOyvqYL9cIs/SxD7ld4PP4C58/GUDkNa0xbmPFMIM9FZ+ucBsxnPmL7lFtfW7hUljsrAQAZxjWRk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Pdspk5eu; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=JqmczHvh; arc=pass smtp.client-ip=85.215.255.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1763368821; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1763369951; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=dMV96i4FH3uys1yQpWyA8+Idcxkq0jK9cXlIo2Ug9isAL4PcFFd5mfnKoVe+JykRUT
-    SYdy2WOlfYgTdohmg4RGuu1NxGWazVE5Yvj67YJjIK0iL1H8wOQjmpA46xmlAPkUs8jb
-    XeVMo+z3fWkFl4MVKJHfVQMx0MydZDI0XjPJdyadJwIirjxRSiAvZCYU2CPpFiWZRnXe
-    6VgvNCu5mvezo3RJct0q7IjQxBfWnRrkGwm4XIqWzFUqV1/Yt4PAxIzHyHzDdaLsxPFX
-    Ul81mbuAU5ad2XM96pDHRDr91U7aFEb9uc7y1/knUL73Ght7ctQAxo0ie9aUfJJs9O5W
-    +C1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763368821;
+    b=Uyrlp37Op+SNbo7YOKooYwAO1sJn0XbMTUQnn9/HVUg4T9XbyG3KZRY8De/V1lJFHp
+    yVYXgkNDDBwNo+TmkRCwns3y4PVa0fiuR33bJ2U/A/cs69Gq3BI8Ysq1/O8CJhAArAWZ
+    zSktyMFMOodxvmIQIWO+D3GpthiWb4gKfK+BGQk8cDM9aBrCr4nl+6xlDEiQSE+EMKEN
+    kip9nsZOJ76iGzwe1XGZ4YLJy+9ghJVHD0lVXrG7UFNFiOU5MBboJ/fHrM4TEeBbkOHn
+    ohf64lSolD5vuEFyPRsOXiblfHpuFKh8qg+XylJ1i7z0GqcO+vilUpRYSwtH5fuWApaq
+    qkAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763369951;
     s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=jTwVZbKkkjiP6AKGIkVNj7Ue7bEM9V36Qxf7qwyM+t0=;
-    b=JVn2qxz+yuaGJKOBJnS8HCnXCal5TCth5IpDerjLxAxDgfMb9LxD9c1rE5wTnN26OC
-    jl7txJ8bjO5biSi8weeCXkoNi85HZux719UUXALDJMwqBp6MiUCwx9YtmDlUj6o3UC3g
-    LYOXnVD+D62c6ud8h4bDAv5uX73VBgEyh5X9g5YElEoIwpOqUPh2mNjUgIAeOamYwvSX
-    Zlh0qijuxcyRgZdy52zxdToO+JFJH+dyiTgUo+jpcpDlse8hLH8X/Ay6GrVugde61LXf
-    Jl8ev2FbtXjQFSKwQfNCPZcdkgkY7KoEdsa2UKc1OP6q43umh2yHoLbxQMNF8c7OrTQq
-    jfkQ==
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=HDa+kzPPIZA60W33RwLy7T1y4EuPU+xE8yHENIi41Q4=;
+    b=egvHnEdBLvDwCHLRkUWtKDIPnNPO7Uib81fRQaY9Pg3ua3AHKjGVGF+TUdKSD24X18
+    XxMUPemwyyFE/BvMxf6wCI8tSJzdCp3ZZm0jI4ipV3JcF4Plyk0Ifb2CEvihXtcp+U6E
+    KXlycOmH9NHKZnym9+Ic+tKRKHBysQVVTOhixbY3hS2GF+5aUmpOK89cJwRvbZ5wBgp0
+    f2zLL/iU8rmHrTIQs9JakPFfRJznIunz1jHg10ICcy7h+dsNeWt+wXOOil7xyeC0YaG6
+    sRJEm8cwLqIQ5UOIEJTsVS5pU27H4dBHJH53VBNS0QrMfQu+Liq5QWXt7yI3ZCdW55Rq
+    5bWg==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763368821;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763369951;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=jTwVZbKkkjiP6AKGIkVNj7Ue7bEM9V36Qxf7qwyM+t0=;
-    b=PIkcDPjzJwraIG0WMtdKKN7Rdj8ubxpgPm8RhbEedldh41dlg8+AAoB9hmQdLLRCxu
-    y279ElMk09kBm9UnnxaJsv8nNhqwE8Z1tMB7YUZhTTPdi2NbA7jQH5DJG+qm/QyOG6lA
-    Y5k9ZWXrOu+GLclw9vM+kkoS1rLZxNybI6uChb0CigidgrSCGBEvBt5AVIIFQXknf18Z
-    ogsnlrRWp6UyXTQOIlxjuoi4orDx4Gkv7x+UcIQ59lznouxXfR7SBVIyz0wtwpR8wDdW
-    RlGJ8Orl/6Z4KhEaPgIZl1qwNvp0QPD7jl5qiBSGPwKdTK5NL525SkQwuOeWKXambkvc
-    +RYg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763368821;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=HDa+kzPPIZA60W33RwLy7T1y4EuPU+xE8yHENIi41Q4=;
+    b=Pdspk5eu6jY2H0si2ZBVwROIW7DNoJ/vEC9o+yxWAI9OlzTnbIj5Au2k0atu+SfJSd
+    uAunsIVb0Ov7dVPVMOLkTHFGcYMljmbzNwPDTalkIiqoGOClptq4a3QO/kKqx4SvyAFZ
+    Htv2gklH8eUT8EqobwyddQzv7lPri3H7gk19LV+TQbVZsRxvKqZdQeFDYTH+sshdXf29
+    biKUxNECiuKw9u6pqoN9m+be6GlQ90vzDjEQY6XIHqgSz+R04kCi0lZF5V5p+/Bh2g9F
+    qlrhotQC5LttM7oMjqGudr22qgUfAt6INGE0bjUp5x1pSK5vPuMJVRaXj1L216OW0Udw
+    //rw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763369951;
     s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=jTwVZbKkkjiP6AKGIkVNj7Ue7bEM9V36Qxf7qwyM+t0=;
-    b=Zz5nn+f8FJFNqglOs8WAhqwq6ym/BcF7HzVAn3VWXlYnUfLKxS97Tm1Fl2OaRKfwtz
-    vWazGvAgjOeED09+57DA==
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=HDa+kzPPIZA60W33RwLy7T1y4EuPU+xE8yHENIi41Q4=;
+    b=JqmczHvhJkGhhBCA+lx84N4Kx01qIsri/llfDmcqvI+lmseBWiGae7pSaNYQU4hDhu
+    1Ym2PgcCtJ380WFZS6BQ==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
 Received: from [IPV6:2a00:6020:4a38:6810::9f3]
     by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461AH8eLjaI
+    with ESMTPSA id Ke2b461AH8xBjhC
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Mon, 17 Nov 2025 09:40:21 +0100 (CET)
-Message-ID: <cf86b798-c8d5-42fb-a03a-1235720c7ee9@hartkopp.net>
-Date: Mon, 17 Nov 2025 09:40:15 +0100
+    Mon, 17 Nov 2025 09:59:11 +0100 (CET)
+Message-ID: <78c98b06-366a-4d4b-b943-1dbac9c72525@hartkopp.net>
+Date: Mon, 17 Nov 2025 09:59:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -89,77 +89,121 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [canxl v2 05/15] can: netlink: add CAN_CTRLMODE_XL_TMS flag
-To: Vincent Mailhol <mailhol@kernel.org>
-Cc: linux-can@vger.kernel.org
+Subject: Re: [canxl v2 13/15] can: calc_bittiming: add
+ can_calc_sample_point_pwm()
+To: Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org
 References: <20251115163740.7875-1-socketcan@hartkopp.net>
- <20251115163740.7875-6-socketcan@hartkopp.net>
- <c77caed0-5d88-4b2c-b371-3e2870324b4d@hartkopp.net>
- <8788fd27-8998-4dbc-98e9-1bd9557d15e9@kernel.org>
+ <20251115163740.7875-14-socketcan@hartkopp.net>
+ <69fb9682-82ab-4a3b-a79e-74fa24da23be@hartkopp.net>
+ <a6a2ecfa-3caa-4a4d-90e6-16e031e68f73@kernel.org>
 Content-Language: en-US
 From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <8788fd27-8998-4dbc-98e9-1bd9557d15e9@kernel.org>
+In-Reply-To: <a6a2ecfa-3caa-4a4d-90e6-16e031e68f73@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 Hi Vincent,
 
-On 16.11.25 22:54, Vincent Mailhol wrote:
+On 16.11.25 23:18, Vincent Mailhol wrote:
 
->>> +            if (tms_conflicts) {
->>> +                NL_SET_ERR_MSG_FMT(extack,
->>> +                           "TMS and %s are mutually exclusive",
->>> +                           can_get_ctrlmode_str(tms_conflicts));
 >>
->> root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 dbitrate 2000000 fd
->> on xbitrate 4000000 xl on tms on
->> Error: TMS and fd are mutually exclusive.
+>> In the case of xbitrate 12300000 the feedback is
+>> Warning: bitrate error: 0.0%.
 >>
->> The error messages should look consistent in terms of capitalization.
+>> The calculated bitrate is:
+>> xbitrate 12307692 xsample-point 0.538
 >>
->> Maybe can_get_ctrlmode_str() should deliver capitalized strings as we see it in
->> the 'ip' tool output:
+>> 12307692/12300000 = 1.00062536585
+>>
+>> So it is 0.06%
+>>
+>> root@de1soc1:~# ./ip link set can0 type can bitrate 1000000 xbitrate 13300000 xl
+>> on tms on
+>> Warning: bitrate error: 0.2%.
 > 
-> In a full English sentence, I tend to see ALL CAPITALIZED WORDS as kind of
-> aggressive. 
+> Random unrelated comment: I figured out that if you have both a
+> NL_SET_ERR_MSG_FMT() Warning and a NL_SET_ERR_MSG() Error message (note the _FMT
+> suffix only on the warning side), the warning may take precedence over the
+> Error. Because netlink can only carry one message, it would be better to only
+> report the error when both error and warning occurs. Note that this is not an
+> issue in our tree. I wanted to look at it in more details once the CAN XL is
+> merged (although I do not expect the fix to be complex).
+> 
+>> The calculated bitrate is:
+>> xbitrate 13333333 xsample-point 0.583
+>>
+>> 13333333/13300000 = 1.0025062406
+>>
+>> So it is 0.25%
+>>
+>> Would it make sense to add another digit and probably additionally some round-up
+>> to omit a 0.0% warning?
+> 
+> I drafted this:
+> 
+> ------------8<------------
+> can: calc_bittiming: add one decimal place in bitrate error messages
+> ---
+>   drivers/net/can/dev/calc_bittiming.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/can/dev/calc_bittiming.c
+> b/drivers/net/can/dev/calc_bittiming.c
+> index 9c8154859513..45d1dc286197 100644
+> --- a/drivers/net/can/dev/calc_bittiming.c
+> +++ b/drivers/net/can/dev/calc_bittiming.c
+> @@ -152,19 +152,19 @@ int can_calc_bittiming(const struct net_device *dev,
+> struct can_bittiming *bt,
+>   	}
+> 
+>   	if (best_bitrate_error) {
+> -		/* Error in one-tenth of a percent */
+> -		v64 = (u64)best_bitrate_error * 1000;
+> +		/* Error in one-hundredth of a percent */
+> +		v64 = (u64)best_bitrate_error * 10000;
+>   		do_div(v64, bt->bitrate);
+>   		bitrate_error = (u32)v64;
+>   		if (bitrate_error > CAN_CALC_MAX_ERROR) {
+>   			NL_SET_ERR_MSG_FMT(extack,
+>   					   "bitrate error: %u.%u%% too high",
+> -					   bitrate_error / 10, bitrate_error % 10);
+> +					   bitrate_error / 100, bitrate_error % 100);
+>   			return -EINVAL;
+>   		}
+>   		NL_SET_ERR_MSG_FMT(extack,
+>   				   "bitrate error: %u.%u%%",
+> -				   bitrate_error / 10, bitrate_error % 10);
+> +				   bitrate_error / 100, bitrate_error % 100);
+>   	}
+> 
+>   	/* real sample point */
+> ------------8<------------
+> 
+> No time to test at the moment (maybe I will be able to test in a couple days),
+> but does it look good to you?
 
-Really? Kind of aggressive?
+Yes. I will test it.
 
-This is not a poetry contest here.
-We are talking about error messages and warnings from the ip tool, that 
-already shows the specified defines in capital letters:
+I was thinking of this for a round-up so that we never get a 0.00%:
 
-	can <FD,TDC-AUTO,XL,XL-TDC-AUTO>
-
-Take a look at:
-
-"TMS and fd are mutually exclusive."
-
-fd = file descriptor? It gets lost in the text.
-
-or
-
-"Listen-only and restricted modes are mutually exclusive"
-
-Where do you find the defines you know from 'ip -det link show can0' ?
-
-"LISTEN-MODE and RESTRICTED modes are mutually exclusive"
-
-(..)
-
-> This is typically the kind of thing where I prefer the lower case. The above
-> seems as if the error message is shouting at me.
-
-Maybe the problem is on your side then. For me it looks fine. I'm robust 
-against error messages shouting at me to clearly show the defined key words.
-
-> Well, if you still prefer upper case after my explanation, I will change.
-
-It is not about my personal opinion. Not finding the known defines in 
-the text gets an usability score of -10000.
+NL_SET_ERR_MSG_FMT(extack,
+	"bitrate error: %u.%02u%%", // always 2 digits
+	bitrate_error / 100,
+	((bitrate_error / 100) || (bitrate_error % 100))?(bitrate_error % 100):1);
 
 Best regards,
 Oliver
 
+> 
+> Also, this isn't the only place in which we are getting out of significant
+> digit. This was already a couple months ago, but when I started calculating the
+> PWM symbols, I figured out that on very high bitrates, can_bittiming->tq will
+> lack some significant digits because of the decimal truncation. Using this in
+> CAN XL can become problematic. That's another TODO…
+> 
+> 
+> Yours sincerely,
+> Vincent Mailhol
+> 
 
 
