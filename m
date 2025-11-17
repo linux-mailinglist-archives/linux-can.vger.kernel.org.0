@@ -1,118 +1,126 @@
-Return-Path: <linux-can+bounces-5469-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5470-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46AD0C65951
-	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 18:44:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9072C65B72
+	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 19:27:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 152FB3A021A
-	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 17:30:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 9A19928B29
+	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 18:27:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188A22E8B62;
-	Mon, 17 Nov 2025 17:30:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2AD2D6E64;
+	Mon, 17 Nov 2025 18:27:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KePt7xJj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t4JNfmpC"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9595E23D7FD
-	for <linux-can@vger.kernel.org>; Mon, 17 Nov 2025 17:30:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE99268C42;
+	Mon, 17 Nov 2025 18:27:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763400636; cv=none; b=p0lyAdN3HxYg9SHzx8rFjbeGtRlHO7p9m0AiMDRl84txfIV2DmSd8bA3YyvK3uJRakhWxDfHNc/8VzFSo/tssM4sHhjm6G7F1yA0XvjyFdI6MIPEg3pIEwFQ1I5LzhMRlthIqZNiqlI5clTNQysrVMIVMVzA6qjx8g9sonHmE9Y=
+	t=1763404067; cv=none; b=OZhNoZQcocVI/ruFFHRFJKpnSN4rGG8rvekznX7Ws6mXRz/78GKhOzmQ7qYOK+EGKgpPXJehqpvX4Z5DpuriJ8/PT4iTX47Qp79MLZjg+eZ/xazXyV5VmNqK0yAKCIDX2IVP7Qo9ooc9JqUS6qB+4KO0coEfhJWy1CbeVKRZygU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763400636; c=relaxed/simple;
-	bh=w4CIjNZ1605si4lfku8gD0WaSIuSJ0mIYmzzxkOiGMU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CN04Bg+jVBkuvOilDrDLKMVEIMdR/jfoTstHHkyIn+/swSu5NJbGXUWBucON2ndl5oYyMcQPW/YU81r+4mBOseLVDSmJNvK0yZdKMJynuQLNrYtERzE2JzYDRPczcTX4fgKzOaDsOfa/0pi4c49zY2Iun5KXTWEUMFeL3TBIRtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KePt7xJj; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7ba92341f83so372287b3a.0
-        for <linux-can@vger.kernel.org>; Mon, 17 Nov 2025 09:30:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763400634; x=1764005434; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yLRfQs0wWjDMt4ZR8Ou2KlvzNHuxRbwkp7eOWLdaSCA=;
-        b=KePt7xJjOgrGGydsaJZemyFPoB29kOA3vkkHZio4rOw6VUmc66M6RIBh1FeGGcou3q
-         QRruayVCBJwfEcKbIVsEzCNCfNOBfdH9CzZlqulGe0Z3WWAmcDjSpuQ5Ud1BD+rpWTrt
-         KnK4dwanHtnF4sYUzWC3jTy4sdI7LKZF1pdPdPFlZ+0rJlhjI8gBl9rLp617ukDyZQ0V
-         Jqk9JTFRs6H0XqJ7tSNxNnTbEaPzDaCKQ5VVRaH3SotF68EHwmjYJIFDsKLXO2Xm4GQH
-         xsnt6W+8zbT6kkJM3sS4W8VRAL/6VlbEBryJ+T0qiJA+eZ+mrywk4Er2no2yVk5xZZIT
-         Lg/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763400634; x=1764005434;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=yLRfQs0wWjDMt4ZR8Ou2KlvzNHuxRbwkp7eOWLdaSCA=;
-        b=WlST/mLnddIP75zMsYMH9VHAxMNfVKDWHRnXw+2YsvBgx6wS1Z86F2tY9GIgepPY8Z
-         HuzV95lcRQHG+ecSeYrvdZjwO2TZ5iSKYdJtuRBGPky8iEdPerkzFghAe6UIrNmu2LpI
-         tkHtk8WNfCqxPXQG1D+Coh5DD0l+/kmJYQuaUODVmmM4claXNjCMKz3Rympvu1FcA56d
-         lvWNEHmi4vJjz7NRZWArBPUp0zf22BH7pCm/ST6tfqb+VetjwgkIkechk0WpA+MsP10I
-         BfSqg2eE4jURxi43CB3lL08zsSjEpPKvEQT9x6+p1WqWSO5ND8FfK8/XvkYDGmbXnD/2
-         ncfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUg5hM0+xWI/uO8WgtPZCsYJtxTZgYTAR0+DHvXeYzDDXPuALL7Jbka/VlSa0AE6nyCCxsPjRNeCBE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxnj70vCxRzghmcT8vE60M8MVsC/PDEAC/t8b1LMJl7o0oN0V9a
-	t0dVodthWfQNZkOtup0Ni5x36NFPlOlMTv9R7vo/wwjc2Ox3Dkw+ksGu
-X-Gm-Gg: ASbGncty1IkBpkahM50yQ1j6P3b8Zn1JUKz4zRC+AehlxUQaURvGRcnwnubfCrh11OF
-	geqtcYAiGJj4gwXWAEYLDJZHAl2O7vsaubmY/IJPg9alnKKKsCmwOZv93EoEhu/xL/WsXLdW/U8
-	kVWy4wuWMDHUa8tSVh7kOtTUlVzNAvD0zz5v997EGNkzkNfpae6aQV7DWEAmGsLBup2YNe/s06k
-	v1mh8Xlle7idLHfToLvYmCwIqV6XNRk+mhTuxjpKSOFlOxu5otqsi2dk0yMWj1lP6G4DQasf3Fz
-	BEG3xrjZlHTRS81zNSfx0eWCZwO3bTHDIg9lwZtfyAHppWncFhWiT52gEZljhZU5akfvK8bEEg9
-	uUOw3T7zK2Dv2ddOZk2eM1TN5InZwgkBFW2nf+9VFrK5cl/FITRanKpW6xotd3nWBsqGaebbS9K
-	u3Al6DbFk3DDadRR2uh5K4rnKLago=
-X-Google-Smtp-Source: AGHT+IHxcHbYLyxGHkkMTrm/9p2ZR9u/2hNozbN4KKPL2qiL7l+8pQd/jgrPZ0GUj6AXL5V5qcqAgA==
-X-Received: by 2002:a05:6a00:4fcf:b0:7b9:d7c2:fdf6 with SMTP id d2e1a72fcca58-7ba3b89ed15mr17413944b3a.24.1763400633752;
-        Mon, 17 Nov 2025 09:30:33 -0800 (PST)
-Received: from localhost.localdomain ([114.79.136.157])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b9251c99aasm13948208b3a.28.2025.11.17.09.30.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 09:30:33 -0800 (PST)
-From: Prithvi Tambewagh <activprithvi@gmail.com>
-To: mkl@pengutronix.de,
-	socketcan@hartkopp.net
-Cc: Prithvi Tambewagh <activprithvi@gmail.com>,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: Question about to KMSAN: uninit-value in can_receive
-Date: Mon, 17 Nov 2025 23:00:12 +0530
-Message-Id: <20251117173012.230731-1-activprithvi@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <68bae75b.050a0220.192772.0190.GAE@google.com>
-References: 
+	s=arc-20240116; t=1763404067; c=relaxed/simple;
+	bh=KgWGDtm7Lix+RRL3J6skSv7OaO3bi5ZBiY3XQ0yIU/s=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=jY+PGbfJufhDRIqSKO1sHM4Qw66pzFlcpEoUp9yz/F1jlrgn2HSgMx6uovnYDZlz6elzls59djRaF7wsWzBnvRCpbRzs5xig9cyihHtWIi+Yjmc1BUh4mlIYM0zobDJnevtXPbQ3yYKwc2sxPf/1gUxZBGzzuRyqJAj2itpBlvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t4JNfmpC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31F8BC2BCB1;
+	Mon, 17 Nov 2025 18:27:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763404067;
+	bh=KgWGDtm7Lix+RRL3J6skSv7OaO3bi5ZBiY3XQ0yIU/s=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=t4JNfmpCwKuVCmYdu9cVztWn9iyvXZS9loTn2vM3pB1nQgTmPISqZGejupmoyD+cO
+	 MrVmKcRm/aarV0ejHW5T3vhKw65MvtdIEyDYCaJi/Or9xAVFkyiRTraUQvckhDVwVS
+	 Nn1xCcXwAY4Z3p207Eo0p7XwkvotHG9vu3f5gHg+Kf3ha5sqqjqr8Kc6CYI5AcYWNK
+	 JnV+LyZg85LiDnxpmMX8CT/zM0iaWzCuBaA3tfmWxfHWEgDdn6pIn+GWdzNQn6CXpy
+	 x+JyeoTqqP35At36EHG4mwplB3ULvKFNCJOS3loNb3V4wFElgWZ7YbclJgwCH5n0FW
+	 uKSTFmjPE7Neg==
+Date: Mon, 17 Nov 2025 12:27:44 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Conor Dooley <conor.dooley@microchip.com>, devicetree@vger.kernel.org, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol@kernel.org>, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-can@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Daire McNamara <daire.mcnamara@microchip.com>
+To: Conor Dooley <conor@kernel.org>
+In-Reply-To: <20251117-twitter-sternness-f2b3a1506a6f@spud>
+References: <20251117-twitter-sternness-f2b3a1506a6f@spud>
+Message-Id: <176340406423.422791.14985477842686606616.robh@kernel.org>
+Subject: Re: [net-next v1] dt-bindings: can: mpfs: document resets
 
-Hello,
 
-The call trace suggests that the bug appears to be due to effect of change
-in headroom by pskb_header_expand(). The new headroom remains uninitialized 
-and when can_receive tries accessing can_skb_prv(skb)->skbcnt, indirectly 
-skb->head is accessed which causes KMSAN uninitialized value read bug.
+On Mon, 17 Nov 2025 16:38:18 +0000, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> The CAN cores on Polarfire SoC both have a reset. The platform firmware
+> brings both cores out of reset, but the linux driver must use them
+> during normal operation. The resets should have been made required, but
+> this is one of the things that can happen when the binding is written
+> without driver support.
+> 
+> Fixes: c878d518d7b6 ("dt-bindings: can: mpfs: document the mpfs CAN controller")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> This is the second mistake in this binding, both spotted because of the
+> driver being written (although this one sat downstream for a while for
+> w/e reason). I wish I could say that I'd send the driver soon, but I am
+> busy upstreaming things I wrote and therefore understand at the moment,
+> so a driver that I'd have to go understand and review before sending is
+> low priority, sorry!
+> 
+> CC: Conor Dooley <conor.dooley@microchip.com>
+> CC: Daire McNamara <daire.mcnamara@microchip.com>
+> CC: Marc Kleine-Budde <mkl@pengutronix.de>
+> CC: Vincent Mailhol <mailhol@kernel.org>
+> CC: Rob Herring <robh@kernel.org>
+> CC: Krzysztof Kozlowski <krzk+dt@kernel.org>
+> CC: linux-riscv@lists.infradead.org
+> CC: linux-can@vger.kernel.org
+> CC: devicetree@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> ---
+>  .../devicetree/bindings/net/can/microchip,mpfs-can.yaml       | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-To fix this bug, I think we can call can_dropped_invalid_skb() in can_rcv() 
-just before calling can_receive(). Further, we can add a condition for these 
-sk_buff with uninitialized headroom to initialize the skb, the way it had 
-been done in the patch for an earlier packet injection case in a similar 
-KMSAN bug:
-https://lore.kernel.org/linux-can/20191207183418.28868-1-socketcan@hartkopp.net/
+My bot found errors running 'make dt_binding_check' on your patch:
 
-However, I am not getting on what basis can I filter the sk_buff so that 
-only those with an uninitialized headroom will be initialized via this path. 
-Is this the correct approach?
+yamllint warnings/errors:
 
-Thank you,
-Prithvi
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.example.dtb: can@2010c000 (microchip,mpfs-can): 'resets' is a required property
+	from schema $id: http://devicetree.org/schemas/net/can/microchip,mpfs-can.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20251117-twitter-sternness-f2b3a1506a6f@spud
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
