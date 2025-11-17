@@ -1,261 +1,182 @@
-Return-Path: <linux-can+bounces-5461-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5462-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 870E7C635F3
-	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 10:55:19 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9995CC637C1
+	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 11:19:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 524D9361063
-	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 09:49:46 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 56D8F4EED43
+	for <lists+linux-can@lfdr.de>; Mon, 17 Nov 2025 10:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCBB3271F0;
-	Mon, 17 Nov 2025 09:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EI9bjO6D";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="geY7MCV+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C992B329E66;
+	Mon, 17 Nov 2025 10:12:58 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9312D3246E6
-	for <linux-can@vger.kernel.org>; Mon, 17 Nov 2025 09:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C7F32937E
+	for <linux-can@vger.kernel.org>; Mon, 17 Nov 2025 10:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763372966; cv=none; b=gmt5qO7HwGs3oDOcfAPwc28sBSFZ1ts/z8dcBI+mLtxY0WmgT4JFWPpwMF5UpWGn4Uxne+HY6jYtyxKYXHibCbRtax5Q6pco2AiQ9UPop49k5HCQa/E50PxGKaCDlAJEZPpNmX+HHOmnaJZfdxhoRSXk3kEGvG8QQolBuHAxuzo=
+	t=1763374378; cv=none; b=KlVsFwsYN3LVZrzwwm22/8Uug7eDXEC0p3jzk7akS1lFRB1Z3OtXDAnfhav56yD/epQ4rCWTIAiw5+hbzIaWmifEQJax3MrrVyGZtjimNh2tnl3mdxQmiJ65mcvzV1M6z7Tc6I0GdApgV1YdfBZ/TcHG9cDC1fxQu1Yocxdb8b4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763372966; c=relaxed/simple;
-	bh=dBKncLAfLPD35FCtFg92ZOBStcGEGQKThYtANcwXxqc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bmfLfUanZs2QUCK0CW4KuWujxGt6SkFq3EXTeHSJqIGVGTAec9QPneZkG8pgrJ/bKwdy+ifBxScpAqroNGsaTXDHaWA0eG3XAcC01BR3AW5XjG3cnF2BUUiWIbwgqHmP4Lzqgonn6hb23i/jkj1dCn3J7G2J5CcfNIibmyODEvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EI9bjO6D; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=geY7MCV+; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763372963;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ue/8Mu6C0fbuTuTFY+eYuDcpN83UaVJV3kS18weTXRM=;
-	b=EI9bjO6Dtl6WCz7mdUuDQpByCaCs1rqLY+8uiZKmUctewnmTSn86q1eqBlFN0HRLbF3v1T
-	nhGI6PC23wmWgiZBAabrYVewEjs9Smu5lPMc/MRrwxpY77ayfVjInqFv+m2/ytW4tu5zCY
-	SonCHEfZjPSYvutHY4T+8La8u2nARTI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-269-tJqBVWMkM3GfruU3VaMQ2g-1; Mon, 17 Nov 2025 04:49:21 -0500
-X-MC-Unique: tJqBVWMkM3GfruU3VaMQ2g-1
-X-Mimecast-MFC-AGG-ID: tJqBVWMkM3GfruU3VaMQ2g_1763372961
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4779d8fd4ecso4193865e9.1
-        for <linux-can@vger.kernel.org>; Mon, 17 Nov 2025 01:49:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1763372960; x=1763977760; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ue/8Mu6C0fbuTuTFY+eYuDcpN83UaVJV3kS18weTXRM=;
-        b=geY7MCV+rSweSsElPvNju8iTuG6eSLfH0Vq0DXC/JFdiTvlgV80ydRIoSCzAqGtOLt
-         AGkIw0USnGUmDRNSr79XJuGvnChNkvAZ0Hr5/ZUCcBNFNzNZqo5qG0PWR4zkfNQa4GVg
-         QghuvFCGoNNz4ZWDH1jR9OXYWzBTcLNP5GgVrMgtWYblXjSSa7We+xSvyKSYsL4StXhh
-         Hp1VAHsOdVP2NzjpNrlLXQd6AeJdaBgC26uB6lt9JQ1ZpBK06RqE8ziu/BpY+aeDTP79
-         ZOT1DT0+ex6gz8K1GhWYTExFuyfvWf7L9QcuhzHtBvx5MfOEp8XlNczos1Dl1ue7JYF+
-         gSaw==
+	s=arc-20240116; t=1763374378; c=relaxed/simple;
+	bh=GDOM+0gYiKkhyCkDjVnvHjHMXUKJ91og6WK5WoSGmVs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BvN22phyCC/zcSt7GODxBeioIrgmpS+1UXyB6qmBU5NqfHLTsCa7+FYbB6/aXvSn7BtIlBpimlD57BLWy1ahYSbv+pIGju7NEmuR3znARduZ9GM2PfmYeUcu79teR3zM0APMNME6jbiJbecrpGrra8P0s7DpZRqpvMeEKlDRa0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-559748bcf99so3302464e0c.3
+        for <linux-can@vger.kernel.org>; Mon, 17 Nov 2025 02:12:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763372960; x=1763977760;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ue/8Mu6C0fbuTuTFY+eYuDcpN83UaVJV3kS18weTXRM=;
-        b=stwGD9M7903MXt7GetFdKfzBRR+pKJDJedtVUHqNy9h39trvo0zk1uA6mhq6KRw1dL
-         OQOUqvkhaLjkkyjvBdbsS6SVHYsa0dkBIico+tGA8XQjOuXzYQUK4+siMR1lfyHm6dTI
-         Q1folMwv+HmrM1pidSw5SsJwmHbqUxWnOCCmeWtw8cxbl1jZK5FsHlYLw0uu73nHzaUN
-         3QhZiHCLq12ZP5Z+fGyD9+2sUi1hB+HlUnFbDG653pzUnIzBzHzNJYYIP5Q/GIIkhJuw
-         EHIDS0qHvHqUhlKuZpF+3IWWXqMd1E7wopn/kgI4GIlyYtakmUMLpc0zQFr3vutH0KlW
-         bLkw==
-X-Forwarded-Encrypted: i=1; AJvYcCVM0ExzOeshhwi/jBEA75O9mxGbFQmgE0eTFEvEJvXBLCMdZ+YLN0ITzzuX1g72P2Cdpvgp0Nw52Ps=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQsioIB5oSCn8g8z14IuG5IQLnwoXPgccPaH+gGes53WFNjsXQ
-	KfqxnprsfVzjDpVunaHDpES/PIUODtoYHkPlfMfmJNpOK+AJJ3GHT5WlXt9f73ITRSt93968PTx
-	InPDKt2JYoH5S4AZqhfb46EEGmHAIU7MNU9/SIRqXaKDqVvwc0dnJuTTLmqSF6A==
-X-Gm-Gg: ASbGnctLblLd8XsyLcSECG1nYNfp9mGzAUGJvbVBow/aFY+CBperdhI8QMTqhQVb/Sv
-	Sg4MQQoG/+JGtv/ZKYxh1ErgsTqXjFw9P8XOGioYn8Ab37OTS/5DwgO+RG0EIFzV1kIq4E+VLg3
-	MYuNxqH8I3DM9Eko9yCcHKHgDZj97Zr3A5h57p2Lqpr1LfdSBevqbWgjxryIjUSdSSnoQSwLrIq
-	+/4L1EAdad0mjs9ziuANJQgK9hm6SLMeXi3QvkRvZE0bKDn7B1jH/tywn0c0fab01zaQAKuErgA
-	+u/ryPq0Ggmt5z0KR+Y+ZyAkVAKvjCzpR8k4GK3pedQ01m231U6TROmbriVxdh+n1yv5BPw3/+m
-	BIVbeA/Zsce7P/QB4OKs=
-X-Received: by 2002:a05:600c:1ca8:b0:475:d9de:952e with SMTP id 5b1f17b1804b1-4778fd80818mr121160995e9.1.1763372960441;
-        Mon, 17 Nov 2025 01:49:20 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IER4dzoBaarF26xyWh4JNOPOaGIw3MrHVYkmRoNunV6sBZ7i2cCsa4sdybrELIeo7Kvgya9uA==
-X-Received: by 2002:a05:600c:1ca8:b0:475:d9de:952e with SMTP id 5b1f17b1804b1-4778fd80818mr121160705e9.1.1763372959915;
-        Mon, 17 Nov 2025 01:49:19 -0800 (PST)
-Received: from redhat.com (IGLD-80-230-39-63.inter.net.il. [80.230.39.63])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477a04157c2sm71758645e9.1.2025.11.17.01.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 01:49:18 -0800 (PST)
-Date: Mon, 17 Nov 2025 04:49:16 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Harald Mommer <harald.mommer@oss.qualcomm.com>,
-	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: [PATCH v6] can: virtio: Add virtio CAN driver
-Message-ID: <20251117044156-mutt-send-email-mst@kernel.org>
-References: <aQJRnX7OpFRY/1+H@fedora>
+        d=1e100.net; s=20230601; t=1763374375; x=1763979175;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uwmIm0bgwineetBBRefqzkv/ZlLUD6Hn/jhQ8fYgpUo=;
+        b=FjArrQqLTsdhOgh3thpjaL6kZRrsbBmSvh/bjDUvrJcjLVB6uSnFK2zTHpJrUqAhIY
+         qsJlswY4Sr7hc4CZ5HL//Z6lblIDBScb1DC0Thq0+Av76fKFQYYAr8AL9zHSizVJW5n4
+         8TWOhKKjBhFI6HfuQcJtWXkVXkryAxVGjASRj3rNIZtDCIvp3yyfP4+j3eips7ATGboE
+         Bli4sjhFmJBrB5lGnsR1dHojVPgaPpNwYS1NcrQICJGuLDFmOvdeOmUY42qS/7NW5pPE
+         oIm5etDRR7otq5rpq+0J39AFhNrDHjXfUkgT+pkiyzZRwUCYNxnYmhTA0MAZqb/n0iQZ
+         rhmA==
+X-Forwarded-Encrypted: i=1; AJvYcCXnau3yUHzvlPCS4MOu4EB/+tiH38NjSK7k9vr+3Pk7uCuNmcNGC8+fJaXIO+99E2UKas9hM1k6cjs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzad4cuoZssxoAMbL/Deqo6rUy6zQ5fGiMrmOhy7jk7QWqRC13H
+	1BkNuEj61D2YF1jV/b34Whe9ckhplUE31SACGkrzU0cMUd3bZBb1+tLC2Ru3JAFA
+X-Gm-Gg: ASbGncuzd3ODdXXFkfJp/Q3qmoGgop3+WuBH2tkYW0JIjUzatDlNOfbyjNiCaoI9n6+
+	Nm+bpUNYZREjNzvNGPWT2NQ1+h1vZcwBJaBU7KTRAIEFq7Zo7I5N2bJk8JxmBOuPQrAQr4/vvwz
+	2HY8WX/ptZG9SYSRn0fpwReW61h5OtxdQSdBB18sw39+w98GEdhr8fZAXHuIEuuQsy2n3SpNstE
+	iWa4rqTcZfqRRWQuNJHk1wmTFetHcTok1q9//t+nN2hkivwakBNxEHA970/plrYabui7viuDyUJ
+	/02dvvLS5P9DYGbKMEFHK719bpRuJ3IMscg2y1YlwTWzwna+ib4W43wAtgPmHofcj4HwTj+1p8/
+	LnTHVScAILmTUmoRMtBHta+RlRNoVayq1aF3fH3yGpHinfK0Sg3Os1fZVqkw8X6m6aWhrviCVJj
+	zw/5slr5KhoeTZkHVu2Lgrg/OSZwRBxvIp3N4os7X3dKFZyszDlFIZ
+X-Google-Smtp-Source: AGHT+IHmHHe5eT1ckiaqbLQDy9z3eDBpIvImt15KtBF/LndmfUh/Xl3ME1/eIxhJu3K2VTx+1/jccA==
+X-Received: by 2002:a05:6122:8d6:b0:55b:305b:4e40 with SMTP id 71dfb90a1353d-55b305b7368mr1824509e0c.17.1763374375241;
+        Mon, 17 Nov 2025 02:12:55 -0800 (PST)
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-55b0f32e47asm4150930e0c.1.2025.11.17.02.12.54
+        for <linux-can@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Nov 2025 02:12:54 -0800 (PST)
+Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-5dfccb35b10so1733054137.3
+        for <linux-can@vger.kernel.org>; Mon, 17 Nov 2025 02:12:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVtUrYkEYuOP7OoaQoOrbG1qF94Ha99X/sGC9b1hxUI5szyJYWOaWZ+Axw6/07mxRhbcG7GZw3LkMg=@vger.kernel.org
+X-Received: by 2002:a05:6102:290c:b0:5db:32dc:f05b with SMTP id
+ ada2fe7eead31-5dfc5bf1b06mr4258951137.42.1763374374287; Mon, 17 Nov 2025
+ 02:12:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aQJRnX7OpFRY/1+H@fedora>
+References: <20251030120508.420377-1-biju.das.jz@bp.renesas.com>
+ <20251112-warping-ninja-jaybird-22edde-mkl@pengutronix.de>
+ <TY3PR01MB11346974232A057A7D5B6EBAD86CBA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <TY3PR01MB1134632B48784F5D72721611D86C8A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY3PR01MB1134632B48784F5D72721611D86C8A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 17 Nov 2025 11:12:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVXSaaoOaECmBQmPyWQA7Z30BVBLfVoF-Uz01GfbFZNGw@mail.gmail.com>
+X-Gm-Features: AWmQ_blx-TSIXOAD1fL3P2E09fREtqUZGsBV4Ry1Ow-eJhOSBFBGV1F1fuwPF-E
+Message-ID: <CAMuHMdVXSaaoOaECmBQmPyWQA7Z30BVBLfVoF-Uz01GfbFZNGw@mail.gmail.com>
+Subject: Re: [PATCH] can: rcar_canfd: Fix controller mode setting for RZ/G2L SoCs
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, 
+	"magnus.damm" <magnus.damm@gmail.com>, Tranh Ha <tranh.ha.xb@renesas.com>, 
+	Duy Nguyen <duy.nguyen.rh@renesas.com>, 
+	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Oct 29, 2025 at 06:40:45PM +0100, Matias Ezequiel Vara Larsen wrote:
-> Add virtio CAN driver based on Virtio 1.4 specification (see
-> https://github.com/oasis-tcs/virtio-spec/tree/virtio-1.4). The driver
-> implements a complete CAN bus interface over Virtio transport,
-> supporting both CAN Classic and CAN-FD Ids. In term of frames, it
-> supports classic and CAN FD. RTR frames are only supported with classic
-> CAN.
-> 
-> Usage:
-> - "ip link set up can0" - start controller
-> - "ip link set down can0" - stop controller
-> - "candump can0" - receive frames
-> - "cansend can0 123#DEADBEEF" - send frames
-> 
-> Signed-off-by: Harald Mommer <harald.mommer@oss.qualcomm.com>
-> Signed-off-by: Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>
-> Co-developed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>
-> Signed-off-by: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-> ---
-> V6:
-> * Address nits (see
->   https://lore.kernel.org/all/aO0JjDGk2zLlzB1E@fedora/T/#mc7221192856d557da9c0da2b47e4343dfea0ca2f)
-> * Check for error during register_virtio_can()
-> * Remove virtio_device_ready()
-> * Allocate virtio_can_rx rpkt[] at probe
-> * Define virtio_can_control struct
-> * Return VIRTIO_CAN_RESULT_NOT_OK after unlocking
-> * Define sdu[] as a flex array for both tx and rx. For rx, use
->   VIRTIO_CAN_F_CAN_FD to figure out the max len for sdu
-> * Fix statistics in virtio_can_read_tx_queue() and
->   how we indicate error to the user when getting
->   VIRTIO_CAN_RESULT_NOT_OK
-> * Fix syntax of virtio_find_vqs()
-> * Drop tx_list
-> * Fix values of VIRTIO_CAN_F_LATE_TX_ACK and VIRTIO_CAN_F_RTR_FRAMES
-> * Tested with vhost-device-can
->   (see
->   https://github.com/rust-vmm/vhost-device/tree/main/vhost-device-can)
->   and qemu (see
->   https://github.com/virtualopensystems/qemu/tree/vhu-can-rfc) 
-> 
-> V5:
-> * Re-base on top of linux-next (next-20240103)
-> * Tested with https://github.com/OpenSynergy/qemu/tree/virtio-can-spec-rfc-v3
-> 
-> RFC V4:
-> * Apply reverse Christmas tree style
-> * Add member *classic_dlc to RX and TX CAN frames
-> * Fix race causing a NETDEV_TX_BUSY return
-> * Fix TX queue going stuck on -ENOMEM
-> * Update stats.tx_dropped on kzalloc() failure
-> * Replace "(err != 0)" with "(unlikely(err))"
-> * Use "ARRAY_SIZE(sgs)"
-> * Refactor SGs in virtio_can_send_ctrl_msg()
-> * Tested with https://github.com/OpenSynergy/qemu/tree/virtio-can-spec-rfc-v3
-> 
-> RFC V3:
-> * Incorporate patch "[PATCH] can: virtio-can: cleanups" from
->   https://lore.kernel.org/all/20230424-footwear-daily-9339bd0ec428-mkl@pengutronix.de/
-> * Add missing can_free_echo_skb()
-> * Replace home-brewed ID allocator with the standard one from kernel
-> * Simplify flow control
-> * Tested with https://github.com/OpenSynergy/qemu/tree/virtio-can-spec-rfc-v3
-> 
-> RFC V2:
-> * Remove the event indication queue and use the config space instead, to
->   indicate a bus off condition
-> * Rework RX and TX messages having a length field and some more fields for CAN
->   EXT
-> ---
->  MAINTAINERS                     |    7 +
->  drivers/net/can/Kconfig         |   12 +
->  drivers/net/can/Makefile        |    1 +
->  drivers/net/can/virtio_can.c    | 1022 +++++++++++++++++++++++++++++++
->  include/uapi/linux/virtio_can.h |   78 +++
->  5 files changed, 1120 insertions(+)
->  create mode 100644 drivers/net/can/virtio_can.c
->  create mode 100644 include/uapi/linux/virtio_can.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 80cd3498c293..14a738b8ecb2 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -27068,6 +27068,13 @@ F:	drivers/scsi/virtio_scsi.c
->  F:	include/uapi/linux/virtio_blk.h
->  F:	include/uapi/linux/virtio_scsi.h
->  
-> +VIRTIO CAN DRIVER
-> +M:	"Harald Mommer" <harald.mommer@oss.qualcomm.com>
-> +L:	linux-can@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/net/can/virtio_can.c
-> +F:	include/uapi/linux/virtio_can.h
-> +
+Hi Biju,
 
-So how will maintainance look like for this?
-Don't you want to co-maintain it, given you are submitting it?
-The maintainer is supposed to interact with linux.
+On Sun, 16 Nov 2025 at 11:31, Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > From: Biju Das
+> > > Sent: 12 November 2025 08:47
+> > > On 30.10.2025 12:05:04, Biju wrote:
+> > > > The commit 5cff263606a1 ("can: rcar_canfd: Fix controller mode
+> > > > setting") applies to all SoCs except the RZ/G2L family of SoCs. As
+> > > > per RZ/G2L hardware manual "Figure 28.16 CAN Setting Procedure after
+> > > > the MCU is Reset" CAN mode needs to be set before channel reset. Add
+> > > > the mode_before_ch_rst variable to struct rcar_canfd_hw_info to
+> > > > handle this difference.
+> > > >
+> > > > The above commit also breaks CANFD functionality on RZ/G3E. Adapt
+> > > > this change to RZ/G3E, as well as it works ok by following the
+> > > > initialisation sequence of RZ/G2L.
+> > > >
+> > > > Fixes: 5cff263606a1 ("can: rcar_canfd: Fix controller mode setting")
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > >
+> > > Applied to linux-can.
+> >
+> > There are 3 modes for CANFD on RZ/G3E
+> >
+> > 1) CAN-FD mode
+> > 2) FD only mode
+> > 3) Classical CAN only mode
+> >
+> > In the "FD only mode", the FDOE bit enables the reception and transmission of CAN-FD-only frames.
+> > If enabled, communication in the Classical CAN frame format is disabled.
+> >
+> > On RZ/G2L, currently, CAN-FD mode is enabled by default and On RZ/G3E and R-Car Gen4, currently FD-
+> > only mode is the default.
+> >
+> > Prior to commit 5cff263606a1010 ("can: rcar_canfd: Fix controller mode setting) RZ/G3E and R-Car Gen4
+> > are using incorrect code for setting CAN-FD mode. But fortunately, it sets the mode as CAN-FD node, as
+> > the channel reset was executed after setting the mode, that resets the registers to CAN-FD
+> > mode.(Global reset, set mode, channel reset)
+> >
+> > The commit 5cff263606a1010 makes (Global reset, channel reset, set mode), now align with the flow
+> > mentioned in the hardware manual for all SoCs except RZ/G2L.
+> > But because of the earlier wrong code, it sets to FD-only mode instead of CAN-FD mode.
+> >
+> > Is it okay to drop this patch so I can send another patch to make CAN-FD mode as the default for
+> > RZ/G3E and R-Car Gen4?
+> >
+> > As an enhancement, we need to define a device tree property to support FD-only mode for RZ/G2L, RZ/G3E
+> > and R-Car Gen4. Please share your thoughts on this.
 
+Hmm, Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml:
 
-Probably a good idea to have this under
-VIRTIO CORE AND NET DRIVERS
+  renesas,no-can-fd:
+    $ref: /schemas/types.yaml#/definitions/flag
+    description:
+      The controller can operate in either CAN FD only mode (default) or
+      Classical CAN only mode.  The mode is global to all channels.
+      Specify this property to put the controller in Classical CAN only mode.
 
-at least additionally, or alternatively add
-L:	virtualization@lists.linux.dev
+> The patch I posted "can: rcar_canfd: Fix controller mode setting for RZ/G2L SoCs" and
+> commit 5cff263606a1010 ("can: rcar_canfd: Fix controller mode setting) is wrong for
+> R-Car Gen3.
+>
+> R-Car Gen3 has only 2 modes: CAN-FD and Classical CAN (there is no FD-only mode).
+> All other SoCs has 3 modes, CAN-FD, Classical CAN and FD-only mode
+>
+> R-Can Gen3, RZ/G2L (CAN-FD and Classical modes): Modify the RSCFDnCFDGRMCFG register only in global reset mode.
+> (Here the flow is global reset, set mode, channel reset)
+>
+> Selection of FD-only mode for RZ/G2L: Modify the FDOE bit in RSCFDnCFDCmFDCFG only in channel reset
+>
+> RZ/G3E and R-Car Gen4: Modify the FDOE/CLOE bit in CFDCnFDCFG only in channel reset
+>                       (Here flow is global reset, set mode, channel reset)
 
+Gr{oetje,eeting}s,
 
+                        Geert
 
->  VIRTIO CONSOLE DRIVER
->  M:	Amit Shah <amit@kernel.org>
->  L:	virtualization@lists.linux.dev
-> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-> index d43d56694667..7b5806f11853 100644
-> --- a/drivers/net/can/Kconfig
-> +++ b/drivers/net/can/Kconfig
-> @@ -217,6 +217,18 @@ config CAN_XILINXCAN
->  	  Xilinx CAN driver. This driver supports both soft AXI CAN IP and
->  	  Zynq CANPS IP.
->  
-> +config CAN_VIRTIO_CAN
-> +	depends on VIRTIO
-> +	tristate "Virtio CAN device support"
-> +	default n
-> +	help
-> +	  Say Y here if you want to support for Virtio CAN.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called virtio-can.
-> +
-> +	  If unsure, say N.
-> +
->  source "drivers/net/can/c_can/Kconfig"
->  source "drivers/net/can/cc770/Kconfig"
->  source "drivers/net/can/ctucanfd/Kconfig"
-> diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
-> index 56138d8ddfd2..2ddea733ed5d 100644
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
