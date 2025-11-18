@@ -1,156 +1,111 @@
-Return-Path: <linux-can+bounces-5498-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5499-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9011BC6A0D2
-	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 15:41:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9503C6AEDC
+	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 18:24:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 391DC4EF39A
-	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 14:26:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id A93F52D4D0
+	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 17:23:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03AF341649;
-	Tue, 18 Nov 2025 14:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C59D35FF7F;
+	Tue, 18 Nov 2025 17:18:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="N6Cf6Br6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LRCAJX0o"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5FF307ACC
-	for <linux-can@vger.kernel.org>; Tue, 18 Nov 2025 14:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DED35A954;
+	Tue, 18 Nov 2025 17:18:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763475969; cv=none; b=jNrv48f5YLp0jdIRk5ys3ZcuBuryrGL60OXTxL0D/16SxEpaW5h7zf/7rffMx5sQ0XEzeJz8YavwkHj09EE/2J3dnyfyu2HESxVLXwmw+bOx7gbqb8+XtI2xNr1gtk7gZ9f9AuLZLpH+fNAcNJ4uKPAt9IZUzyNMftXlDyUslgA=
+	t=1763486298; cv=none; b=ucmLC20sjsLRf737NfdNjM2V6DcnKcmi6NTI+9y0xczreENKzVYTlM3zNNJcHGbr0L2bAMGAp+vvPk7hvCuI+cUD6W+rNGyJ0VOQD1krmxU5QE4QSM5GBxBVXS+NzBRk4bVVG3fkowcQYZriMLPW/HtFPGunZYzHYteGyde/h2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763475969; c=relaxed/simple;
-	bh=dtSqGWkc1ldKnpUb2C9k4amtBC6lYv94GuNGENLTcDw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=QHNBJ8tQsZAcleck6+uA8AZ6Em6/botbF8Kg6FUFncPYt+jdoO9jRPguCc2ooWEnGFJMiAoN4uNFWcwOqKdeFfSZdE8ahdFXaVj1TKJUUmzYa14E6S8cEq6mfgikuWsHQPpisIA5asQN/HsdsN5agih6YNUoZsSUd2F9gMcjc50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=N6Cf6Br6; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-47789cd2083so38523535e9.2
-        for <linux-can@vger.kernel.org>; Tue, 18 Nov 2025 06:26:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1763475965; x=1764080765; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6eFSRf/0mUdKLKkQtjEzRCovKGRdnNFa4p+AWg8ohLw=;
-        b=N6Cf6Br6mdaTCZAzc0oFZ2gAOjd94OzyPx0R4kQg9gjh9/wAOqpWune6Ab90pu/vu7
-         yZyvIjh9uk4uPMtu47saUKpJF/Kel640ffjYUgjThL7dFojaaPdOxwQDqJMIBzLocLOf
-         YM3CtatC9QZA2TtrgZC7L4437PvJGyvvX6ctYY/c1vm3nyPVlge0r6LyXCaPGRthyCJ8
-         v7NA3IH5cV9mwKeXCKab75mYfENT+J9l4vNPnLue2xAm6ybjaCQmI22Sq2+5Dc8h1WPg
-         Kv3HTLXtN3YFMsI3W62kAu6oZdIEhM43k3I4NYxlaAm5iT/Hw+CG2lZ/Ilhj43zF/537
-         brzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763475965; x=1764080765;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6eFSRf/0mUdKLKkQtjEzRCovKGRdnNFa4p+AWg8ohLw=;
-        b=bG4bqTSgpP11rEuvJI7K3Agsactgb/L+3k/5Dp/er8aL79iqovY5uegivWX1Nm6n5h
-         z76IjGkU6H6zlitBIEybx4+uYvbd+8shss4rOiAoIzxf/NldVqE/Hwlmss8NdbrKj8vd
-         mMeHGKu38hkOW+F/V2LnSfUJYgm6zdngJ74fcOro1gUXonaaZVQzeic+lFy16j9KcKic
-         rG6oPe22mJP7MLcm25MvpvHGolGkZogI7loaThyt7OKSqIsXvwaHGKYaX1U1qVzAJ7hz
-         45M95AjBDEmvNRQ6mOo45uVGuUM8Djfnf6mC3x0MisDPEUdGGMRmvBtQ9YALVsEoUc1+
-         OjZA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqtT8dWmmUQReFMuO7k6tcAHg7ZUn43I04ucHK+IQDM+EPebiANBwPWhFGGaSPHgfMTLGX5awpbkk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyntDvhRGiQkE9QRwx9OnADDO1AHG3L/L1krjJHfOKDHs3voqiN
-	THznowSsDA/ndAA8YD4Dq1AXhrS+Kb84WKMbgW2v7NfYPC71nmiwr4EQ1rSrK57jrxU=
-X-Gm-Gg: ASbGncsbRZeZHVlJylFgx3Hpt3GHl5dQyiN/ObB7hdzF8VDXrIGq9dwKI2Q4ku34m6O
-	wiLW8tb6XWYVWzWWnTNYjBJzDJ7nhBkSPCTtD8p+2GzNDokQdrZuQHuTn7jaNZKaOF6e+yNgHLr
-	aRMtRweJZqtiD3p6vmnNBI0we5sn6qNifObJzo+23nP5cJ/v2Qk4DasKkf7g2CmV55PMQOmeJBy
-	NJFS39rYy9tyJ0/PxlgVxYH9VL3VIAgXwvUQfMRUwA5y4YxCmZKMfzl5v4PSHY+r4MFrjDqIKTO
-	vC62dx0SdwmFRqmfQe4L+jqoyoCPHSRYK8VBDPG1A+ZakX2RA5sEqNSXu6FWTpL59gcTT7EQ+ME
-	RgFwx9p34IWOKPGnQFtdWuDh3/JVxJh0S68QDiEa8t8hPU2ewbD8KYqR6Sr9pw8+79JP/IR7A8D
-	0dlZbh
-X-Google-Smtp-Source: AGHT+IG6x/lhK+h5GasR1mA9rEpN12PdK10sIRGdHQM9KNZCS+hGxybPvmTIla/49tFBusYMBKM3uA==
-X-Received: by 2002:a05:600c:1f12:b0:477:1ae1:fa5d with SMTP id 5b1f17b1804b1-4778fe9b250mr147607805e9.20.1763475964709;
-        Tue, 18 Nov 2025 06:26:04 -0800 (PST)
-Received: from localhost ([62.246.248.122])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4779d722bc5sm191235735e9.2.2025.11.18.06.26.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Nov 2025 06:26:03 -0800 (PST)
+	s=arc-20240116; t=1763486298; c=relaxed/simple;
+	bh=1wHwuQs+KyZl1yodXT0yg2BEqvi1f1TTUhu+LxUU8GQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ObOw0t/6Udx9569Ow2UusoBHAgx0KImnNqqkgFCbqr9cQYA84Fed2/GdA7x4cQpEREKQ0DadeH7W8Yi5s1kORhgOLK/RIM0EAK9LnbieZwo9jiBAk/QsOw1htqtEDcmDwumDRKiS0eA6xMAwSQ5Hl/9t1WkRo5SBGrpy1DixElg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LRCAJX0o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1A7C4CEF1;
+	Tue, 18 Nov 2025 17:18:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763486298;
+	bh=1wHwuQs+KyZl1yodXT0yg2BEqvi1f1TTUhu+LxUU8GQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=LRCAJX0oKd0lqfZIIz9qm2DQH9x++4W0Rqi4wLfSn7Gaeiu3LgztD6PqX4xut/MP4
+	 pc8KyM8sEBvZ3zG0x/UBt7gSHiElvE4IThaggzpADKhINojZkohQXHkJLRa+w/oojJ
+	 KTEbmVeTN3E32VSabX+mxr7/CjiJ7kAv0xysHrovD8PdGs7/3/nGsTeSbtsttNeZdK
+	 SA7HohyzyJ2x5xKotD6EBSFbiq3Zo63zThivF8bfzoJTq2Wz/rWOjXXYd/5SY6jK71
+	 DeT5rTgq7uLGNdhlEXUgOgQvYErjn7mpbLGjIPBR//zGRnREFKT8aWy0okkz9c7ad9
+	 CDLTaHo3ttjDA==
+From: Vinod Koul <vkoul@kernel.org>
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Aswath Govindraju <a-govindraju@ti.com>, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Frank Li <frank.li@nxp.com>, 
+ Haibo Chen <haibo.chen@nxp.com>, Peng Fan <peng.fan@nxp.com>
+Cc: linux-can@vger.kernel.org, linux-phy@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ Frank Li <Frank.Li@nxp.com>
+In-Reply-To: <20251001-can-v7-0-fad29efc3884@nxp.com>
+References: <20251001-can-v7-0-fad29efc3884@nxp.com>
+Subject: Re: (subset) [PATCH v7 0/8] phy: phy-can-transceiver: Support
+ TJA1048/TJA1051
+Message-Id: <176348629150.62598.2560301627293635701.b4-ty@kernel.org>
+Date: Tue, 18 Nov 2025 22:48:11 +0530
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed;
- boundary=4ee8043362d364b1fe436053fe1886ae328261158bc2d2b8a53591aebd05;
- micalg=pgp-sha512; protocol="application/pgp-signature"
-Date: Tue, 18 Nov 2025 15:25:58 +0100
-Message-Id: <DEBW1ZAX5AHE.319VIBB6A654P@baylibre.com>
-Cc: "Vincent Mailhol" <mailhol@kernel.org>, <linux-can@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MAINTAINERS: Add myself as m_can reviewer
-From: "Markus Schneider-Pargmann" <msp@baylibre.com>
-To: "Marc Kleine-Budde" <mkl@pengutronix.de>, "Markus Schneider-Pargmann"
- <msp@baylibre.com>, "Chandrasekar Ramakrishnan" <rcsekar@samsung.com>
-X-Mailer: aerc 0.21.0
-References: <20251022-topic-mcan-reviewer-v6-18-v1-1-885ec5e43493@baylibre.com> <20251022-lorikeet-of-fortunate-plenty-43e085-mkl@pengutronix.de> <20251116-rustling-tapir-of-health-03361a-mkl@pengutronix.de>
-In-Reply-To: <20251116-rustling-tapir-of-health-03361a-mkl@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
---4ee8043362d364b1fe436053fe1886ae328261158bc2d2b8a53591aebd05
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
 
-Hi Marc,
+On Wed, 01 Oct 2025 21:22:31 +0800, Peng Fan wrote:
+> TJA1048 is a Dual channel can transceiver with Sleep mode supported.
+> TJA105{1,7} is a Single Channel can transceiver with Sleep mode supported.
+> 
+> To support them:
+> patch 1: add binding doc
+> patch 2/3: To support dual channel,
+>    - Introduce new flag CAN_TRANSCEIVER_DUAL_CH to indicate the phy
+>      has two channels.
+>    - Introduce can_transceiver_priv as a higher level encapsulation for
+>      phy, mux_state, num_ch.
+>    - Alloc a phy for each channel
+> patch 4: Simplify code
+> patch 5: Add TJA1051,7 support
+> Others: Update dts to use phys.
+> 
+> [...]
 
-On Sun Nov 16, 2025 at 5:09 PM CET, Marc Kleine-Budde wrote:
-> Hello Chandrasekar,
->
-> On 22.10.2025 19:46:47, Marc Kleine-Budde wrote:
->> Hello Chandrasekar,
->>
->> I've seen not much review feedback from you....
->>
->> On 22.10.2025 11:10:09, Markus Schneider-Pargmann wrote:
->> > As I have contributed to the m_can driver over the past years, I would
->> > like to continue reviewing new patches.
->> >
->> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
->> > ---
->> >  MAINTAINERS | 1 +
->> >  1 file changed, 1 insertion(+)
->> >
->> > diff --git a/MAINTAINERS b/MAINTAINERS
->> > index 46126ce2f968e4f9260263f1574ee29f5ff0de1c..835dfe1a16c975fb3ab46b=
-c7ed736cde61ec0bf5 100644
->> > --- a/MAINTAINERS
->> > +++ b/MAINTAINERS
->> > @@ -15394,6 +15394,7 @@ F:	drivers/net/phy/mxl-gpy.c
->> >
->> >  MCAN MMIO DEVICE DRIVER
->> >  M:	Chandrasekar Ramakrishnan <rcsekar@samsung.com>
->> > +R:	Markus Schneider-Pargmann <msp@baylibre.com>
->>
->> ...Maybe you want to give the maintainer hat to Markus?
->
-> Since I haven't heard from you, I'll pass the maintainer hat on to
-> Markus if he wants to take it over.
->
-> Markus, what do you think?
+Applied, thanks!
 
-Yes, I would like to take over, thanks. I will send a patch later.
+[1/8] dt-bindings: phy: ti,tcan104x-can: Document NXP TJA105X/1048
+      commit: 05ace63d0bcfe131e741923394c7ce03322a141e
+[2/8] phy: phy-can-transceiver: Introduce can_transceiver_priv
+      commit: c77464bd9b4155891a135e51f8e916e1ab94fc14
+[3/8] phy: phy-can-transceiver: Add dual channel support for TJA1048
+      commit: 6e9fe9409e10ed25b43928062832037752630979
+[4/8] phy: phy-can-transceiver: Drop the gpio desc check
+      commit: d02a7eb12924b7473a62d5a6c9e670fe5bf6e4b7
+[5/8] phy: phy-can-transceiver: Add support for TJA105{1,7}
+      commit: b817f505926b8ffbdea8aa87b66a622acb9b96e9
 
-Best
-Markus
+Best regards,
+-- 
+~Vinod
 
---4ee8043362d364b1fe436053fe1886ae328261158bc2d2b8a53591aebd05
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaRyB9hsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlN1
-TQD+MBSpggicm+2fg2LGb8X6UDvrS+TopTtInG7gDq8UP8cBAOzj40u751c9npgC
-ZIIqHTpyQW3Vz7gXWsYTA99aHugG
-=Nidz
------END PGP SIGNATURE-----
-
---4ee8043362d364b1fe436053fe1886ae328261158bc2d2b8a53591aebd05--
 
