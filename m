@@ -1,48 +1,48 @@
-Return-Path: <linux-can+bounces-5492-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5493-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id E32C9C68F79
-	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 12:03:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CBFFC68F64
+	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 12:02:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E904F368113
-	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 11:01:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id C22922A859
+	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 11:02:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FBD34EEE5;
-	Tue, 18 Nov 2025 11:01:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7193D34EF0B;
+	Tue, 18 Nov 2025 11:02:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XlsEO2EG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QhDNvYMh"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0631E30F93D;
-	Tue, 18 Nov 2025 11:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3968C34E774;
+	Tue, 18 Nov 2025 11:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763463689; cv=none; b=ht4GNvpJa7JA0BbkuhyJxlW5iDr3D70brF4lj3THA9nvRdIZDMGVyUnUhMN/TvStp0iqIEPAmyTtNHQKxJHAAxvMcw2D/QVAEFRyQoB5+lGZsUAhCusBKG5T2QKphIExjy3vfVsYdXOg+I8cO7JqdZ4Qo6pmJggMLGxuPoK4XmU=
+	t=1763463724; cv=none; b=OkHmgiCY8CjLqcScCyWqvPMO3LxPEoaO5UanXkYEcmoR7P5iDbipcbeiYh2FUsaiBwfHu3zYWE/cSOulhEmbS5HaA40KbpMsV8x/uOupNIns4IrqFePOZQ7ph4qfOE7MrbtA3eco8QPuzMGdCjo/U+IceM5xh34wzwpXeV/X+zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763463689; c=relaxed/simple;
-	bh=uok+B2Z7XE3AZp+57kOj9hdVIWnfU4Y4NqGvngz1qdM=;
+	s=arc-20240116; t=1763463724; c=relaxed/simple;
+	bh=p9G1AuwrXzJ8uUzJo71ELUnYUG6l6+Rk4NCsPI9Xse4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=htX83tWTT4tydISvlHYlJxmtrhSeBto0JMxieQED529tkgokYGqcNxhGZtArbo6urwE9XsBWh2mTm1u+k3lRbX2FNYPB9NbBF5JHe088LENhc0Wo1iv6GadYHVdd1TJzh8WiXEewXGAaQqbLkXhMvIYpQg3H5mgkJC8i3K7eong=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XlsEO2EG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B9FC4AF09;
-	Tue, 18 Nov 2025 11:01:25 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bs8Ph2RbhRM/3uUJpTxg2ihzAIMVzsXEzK22OYg6L1J2BheOFhR8J6fAL1cZg6ycxlgb3AgWCmYtz9OKRh51grd9qvzRKqWiu1ig1wZ+4+2ZOI27v0x3yUrb61cfQqFNOrdAMoczgaeGHbuXmFAIcYdmteHKeAjRaOMHCqW8dGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QhDNvYMh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDCFBC2BCB1;
+	Tue, 18 Nov 2025 11:02:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763463688;
-	bh=uok+B2Z7XE3AZp+57kOj9hdVIWnfU4Y4NqGvngz1qdM=;
+	s=k20201202; t=1763463723;
+	bh=p9G1AuwrXzJ8uUzJo71ELUnYUG6l6+Rk4NCsPI9Xse4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XlsEO2EG7fv1K3vRIutWVDb1QBZDeDWaXOaOphQNnnx1rx9/5/fFizMeRcBXSE2qi
-	 icH+cx1XQVDvTZV5D7uqaRyOX6UFMvUsqy5x7ep2m624o86tlioa6tftAx/4Or/ZoU
-	 xdc6i82qdXkW3QTqFh2wX8KMl+K0LmurUpzpsCbsFe86LuKxvAaWTEGMryATgvEGuU
-	 tC4v0NaSo8GamUHBpmc4KbrcqmdfCl8wiecD6d1pXRrzONaEqkcccOR76KOQZT8yK+
-	 FUwMkIOrqYsGlJRROkODoZUEVdo2V1b2tF/xHIXH/HBgDZEg6eDX6mBROnIkg86mXF
-	 F/i786AIR8B8Q==
-Message-ID: <c80ff180-b7f1-4f39-b39d-2953ef75a7ad@kernel.org>
-Date: Tue, 18 Nov 2025 12:01:23 +0100
+	b=QhDNvYMhIglNDfRX3rsIIhj3QQgGdHpmz9URtPadNYubVTQ/vvAj5TFsSkZmLpZq0
+	 7/l5cooK/+yUMEb6WBP7lkk7gc5NutrOKzd/aynynKUxdNQMdMs2EfXlTChMWti4fl
+	 gdQ1J36qj+1q1bEUlhGMRQCf77StTB7Y0ky+755EROikBmk6ythda79odz8YKt9yOz
+	 7pAyyTnTAUJ9it64zCzd4A3TjUP/5/DGb3T6LDCaNDaEuBLi7bBE08H2hirp0RdnQW
+	 +YBsUHlPThLg8AS7eqXUiYjOLARmKt7EwgoXleurToeeJX3LVS1DVb3K/3v/KvSXpd
+	 MSceHG084EHUA==
+Message-ID: <bd81118a-5ee3-476e-a7bc-61684a362eea@kernel.org>
+Date: Tue, 18 Nov 2025 12:01:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -50,15 +50,14 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/10] dt-bindings: net: can: grcan: Convert GRCAN CAN
- controllers binding from txt to YAML
+Subject: Re: [PATCH 04/10] can: grcan: Add clock handling
 To: Arun Muthusamy <arun.muthusamy@gaisler.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, mkl@pengutronix.de,
  mailhol@kernel.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-can@vger.kernel.org
+ linux-can@vger.kernel.org, Daniel Hellstrom <daniel@gaisler.com>
 References: <20251118092115.3455-1-arun.muthusamy@gaisler.com>
- <20251118092115.3455-3-arun.muthusamy@gaisler.com>
+ <20251118092115.3455-5-arun.muthusamy@gaisler.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,168 +103,54 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251118092115.3455-3-arun.muthusamy@gaisler.com>
+In-Reply-To: <20251118092115.3455-5-arun.muthusamy@gaisler.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/11/2025 10:21, Arun Muthusamy wrote:
-> Migrate device tree bindings for Gaisler GRCAN, GRHCAN
-> and GRCANFD CAN controllers from a text format to YAML format.
->     - Add properties such as `compatible`, `reg`, `interrupts`
-
-Odd indentation. Please write readable commit msgs.
-
-Also:
-1. Why? You need to explain why you are changing binding during conversion.
-2. Reg was already there, so I don't understand why you need to add it.
-
-
->     and `clocks` for the CAN controllers.
->     - Removal of the old `grcan.txt` file as its contents have
->     been fully migrated to the YAML file.
-
-Drop, that's not relevant.
-
->     - YAML file includes examples of device tree bindings for
->     the CAN controllers
-
-Drop, not relevant. Please look at git history how commits are written.
-
+> From: Daniel Hellstrom <daniel@gaisler.com>
+> 
+> Add clock handling and add error messages for missing 'freq' DT property.
 > 
 > Signed-off-by: Arun Muthusamy <arun.muthusamy@gaisler.com>
+> Signed-off-by: Daniel Hellstrom <daniel@gaisler.com>
 > ---
->  .../bindings/net/can/gaisler,grcan.yaml       | 85 +++++++++++++++++++
->  .../devicetree/bindings/net/can/grcan.txt     | 28 ------
->  2 files changed, 85 insertions(+), 28 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
->  delete mode 100644 Documentation/devicetree/bindings/net/can/grcan.txt
+>  drivers/net/can/grcan.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml b/Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
-> new file mode 100644
-> index 000000000000..521bdd89f130
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
-> @@ -0,0 +1,85 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/can/gaisler,grcan.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title:
-> +  Aeroflex Gaisler GRCAN, GRHCAN and GRCANFD CAN controllers.
-> +
-> +description: |
-> +  GRCAN, GRCANFD, GRHCAN controllers are available in the GRLIB VHDL IP core
-> +  library.
-> +
-> +  For further information look in the documentation for the GRLIB IP library:
-> +  https://download.gaisler.com/products/GRLIB/doc/grip.pdf
-> +
-> +maintainers:
-> +  - Arun Muthusamy <arun.muthusamy@gaisler.com>
-> +  - Andreas Larsson <andreas@gaisler.com>
-> +
-> +allOf:
-> +  - $ref: can-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - gaisler,grcan
-> +      - gaisler,grcanfd
+> diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+> index 3b1b09943436..538a9b4f82ab 100644
+> --- a/drivers/net/can/grcan.c
+> +++ b/drivers/net/can/grcan.c
+> @@ -34,7 +34,7 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/of.h>
+>  #include <linux/of_irq.h>
+> -
+> +#include <linux/clk.h>
+>  #include <linux/dma-mapping.h>
+>  
+>  #define DRV_NAME	"grcan"
+> @@ -1644,6 +1644,7 @@ static int grcan_probe(struct platform_device *ofdev)
+>  {
+>  	struct device_node *np = ofdev->dev.of_node;
+>  	struct device_node *sysid_parent;
+> +	struct clk *clk;
+>  	u32 sysid, ambafreq;
+>  	int irq, err;
+>  	void __iomem *base;
+> @@ -1663,8 +1664,20 @@ static int grcan_probe(struct platform_device *ofdev)
+>  
+>  	err = of_property_read_u32(np, "freq", &ambafreq);
+>  	if (err) {
+> -		dev_err(&ofdev->dev, "unable to fetch \"freq\" property\n");
+> -		goto exit_error;
+> +		clk = devm_clk_get(&ofdev->dev, NULL);
 
-Blank line
+Nope, your binding said there is no clock... you cannot add undocumented
+ABI.
 
-> +  name:
-> +    description: |
 
-Do not need '|' unless you need to preserve formatting.
-
-> +      Fallback on node name matching for systems that don't provide compatible.
-> +    enum:
-> +      - GAISLER_GRCAN
-> +      - 01_03d
-> +      - GAISLER_GRHCAN
-> +      - "01_034"
-
-This does not really work. Are you really defining here "name" property?
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  freq:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Frequency of the external oscillator clock in Hz (the frequency of the
-> +      amba bus in the ordinary case).
-> +      This property should be used by systems that utilize the common clock
-> +      framework is not supported.
-
-Missing systemid. Your commit msg must explain any changes done to the
-binding during conversion.
-
-> +
-> +unevaluatedProperties: false
-
-This goes after required block.
-
-> +
-> +required:
-
-compatible as well
-
-> +  - reg
-> +  - interrupts
-
-Where is freq? It was required in the old binding. Again, you need to
-explain the changes.
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    can@ff400000 {
-> +        compatible = "gaisler,grcanfd";
-> +        clocks = <&sysclock>;
-> +        reg = <0xff400000 0x400>;
-> +        interrupt-parent = <&plic0>;
-> +        interrupts = <6>;
-> +    };
-
-One example is enough
-
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    can@ff400000 {
-> +        compatible = "gaisler,grcan";
-> +        clocks = <&sysclock>;
-> +        reg = <0xff400000 0x400>;
-> +        interrupt-parent = <&plic0>;
-> +        interrupts = <6>;
-> +    };
-> +  - |
-> +    GAISLER_GRCAN@ff840000 {
-
-Especially no such examples. Please read DTS coding style.
-
-> +        reg = <0xff840000 0x400>;
-> +        freq = <50000000>;
-> +        interrupts = <16>;
-> +    };
-> diff --git a/Documentation/devicetree/bindings/net/can/grcan.txt b/Documentation/devicetree/bindings/net/can/grcan.txt
-> deleted file mode 100644
-> index 34ef3498f887..000000000000
-> --- a/Documentation/devicetree/bindings/net/can/grcan.txt
-> +++ /dev/null
-> @@ -1,28 +0,0 @@
 Best regards,
 Krzysztof
 
