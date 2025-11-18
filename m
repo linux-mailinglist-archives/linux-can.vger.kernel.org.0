@@ -1,48 +1,48 @@
-Return-Path: <linux-can+bounces-5490-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5491-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 709FAC68EE8
-	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 11:56:24 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 298DBC68EFD
+	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 11:57:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 77CF52ACF3
-	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 10:56:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4F5DE4E3850
+	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 10:56:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B770631D723;
-	Tue, 18 Nov 2025 10:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B503148D6;
+	Tue, 18 Nov 2025 10:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VCMVGrpV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZOMYR3n"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 894A62356C7;
-	Tue, 18 Nov 2025 10:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE8D29B20A;
+	Tue, 18 Nov 2025 10:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763463378; cv=none; b=O48INUnfdPu+uCO+JsNkqbgSbDDorKDEf8VXM3NpeKnYkMwVTfRbwVDkEFUHFIX1mCNzmdRjYBrpbTrMykA6K2KciifniLZUTArZn713/fR3rG9FhLwFJIHATUw7uWy/EbPTTeE9n3MNyBVALgiuJhJwb5H33UWCwbN5D8vdROA=
+	t=1763463410; cv=none; b=bd194b7zXT92gUbFCDGZBahRoB1BLTHmFIIkSJYoyyK8vMJobMl2JPEK+GVjGXPJqNGvZkmonZY8Bwr0EzNYyEpJrfXl5JlHgYiDKJxynwKX0gAtoIbfy5r4e0BxKb/8gZntWJ0HvlW9j4ks7xCPAD5jEJA+gMlBPcOU3tPKiEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763463378; c=relaxed/simple;
-	bh=kN5A5nchMr9dZ7DonNdZCkkA/A2gRIO1e/YSitOVs4w=;
+	s=arc-20240116; t=1763463410; c=relaxed/simple;
+	bh=/Q3fSfjOuhTezRpugbl1eDbwuH5K9oCOTKHAd/rwRLg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fPItwU4PTB+ovq/3rfc+t5zE1vZE39y964ncC3icBU0XkfQUt9hsMCQMYBTA9dDAPqRYpADs3cjEpPCBoUGiINITv8r4b4oCiL+gNIZl3KSIVs/f88vFO9OHX6cvoCopey9XFjOwAeHllIul3n3aeWjZOPLrDQL3bJFWz04s+6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VCMVGrpV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE30AC116D0;
-	Tue, 18 Nov 2025 10:56:14 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=K8r2qlk1/e5/UaD30odk06jFULTuPBpXsx9gJa6r8iIeaKd3WFy3q5gBK1Ubi9qfYD7lRfCOJ6Uu0lmDzyH+Ko7/ycuYEd5rmRknVtBl1Bt12gJ0XLSxjf4JIfsmBH7xiFbKzUMdDoJXCnumXpXSW2vmbiZA+MN6pa+G5BLhHUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZOMYR3n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6185C19421;
+	Tue, 18 Nov 2025 10:56:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763463377;
-	bh=kN5A5nchMr9dZ7DonNdZCkkA/A2gRIO1e/YSitOVs4w=;
+	s=k20201202; t=1763463409;
+	bh=/Q3fSfjOuhTezRpugbl1eDbwuH5K9oCOTKHAd/rwRLg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VCMVGrpVX3k0S7jfC9BggsUD0nADIoaYe4pNecAmvDP1cOxDk/0pzhFJwldVWoWne
-	 cRbPoYJbSzR4lVDtUU6y4OgbRvddtglUzQzq18mTkBCm3Q7lw2cGTFNCUkJWfVl9U4
-	 fneXL/lOlSmtdDakkNgHpGxS7cZMpdICuSZR1QbEqZAN9/KkdJESgLenpHKsxq4uOY
-	 4D7MgBxbJ+TLm86WySyy1nejM5WJJjDPdrI/+BMfOY8Q6ulwjcErXULEya5mPWb8ig
-	 3VZfbBaioDV5jYnDYXar82xblVyEGLua3JghtKPTxlPJFely0HorAwaKwBqLbOkga/
-	 Mem15EitVRcSg==
-Message-ID: <e3f4cb54-1fa4-483d-92e3-9c9de5016fb9@kernel.org>
-Date: Tue, 18 Nov 2025 11:56:12 +0100
+	b=hZOMYR3ncZI2KGjN17w2icmnS8TkP1+BMCuQb26ALmtM5mqnZTmZOEyU4heS7o2tR
+	 2DkhgNkHiTWBdo1FaUNVT+V+tDkapt8ffm42H8prbxAUjlEiGjq/Nx1PpYMBeJrG+G
+	 AF03kINuXQgW3tg+tnk+Hg/ajlbdJSuhle7q8sB6wNuyE2x7v8V90xWyL+F+AT4gCM
+	 Ph6Rff9PDeQnIV+46fkDRCRxwjViC191nxgxOSYbSNd0UW+700OKotZ9O9jEQnlOza
+	 mAHpudF4pw3pAmkG/FYSmB0GUaUELnO/Qb2L4unhtyaPexkjtJX66HKn9+VZ5U9w+7
+	 d5Jzm01Zyw6Fg==
+Message-ID: <7cba8bd9-eba0-400f-adf8-38df2c770507@kernel.org>
+Date: Tue, 18 Nov 2025 11:56:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -57,7 +57,8 @@ To: Arun Muthusamy <arun.muthusamy@gaisler.com>, robh@kernel.org,
  mailhol@kernel.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-can@vger.kernel.org, Ludwig Rydberg <ludwig.rydberg@gaisler.com>
-References: <20251118092634.3576-1-arun.muthusamy@gaisler.com>
+References: <20251118092115.3455-1-arun.muthusamy@gaisler.com>
+ <20251118092115.3455-2-arun.muthusamy@gaisler.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -103,11 +104,11 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251118092634.3576-1-arun.muthusamy@gaisler.com>
+In-Reply-To: <20251118092115.3455-2-arun.muthusamy@gaisler.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 18/11/2025 10:26, Arun Muthusamy wrote:
+On 18/11/2025 10:21, Arun Muthusamy wrote:
 > From: Ludwig Rydberg <ludwig.rydberg@gaisler.com>
 > 
 > Frontgrade Gaisler AB provides IP cores and supporting development tools
@@ -119,19 +120,9 @@ On 18/11/2025 10:26, Arun Muthusamy wrote:
 > The company specializes in digital hardware design (ASIC/FPGA) for both
 > commercial and aerospace applications.
 > 
-> Web site: https://www.gaisler.com/
-> 
-> Signed-off-by: Ludwig Rydberg <ludwig.rydberg@gaisler.com>
 
-Missing SoB.
-
-Please run scripts/checkpatch.pl on the patches and fix reported
-warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
-patches and (probably) fix more warnings. Some warnings can be ignored,
-especially from --strict run, but the code here looks like it needs a
-fix. Feel free to get in touch if the warning is not clear.
-
-Also, incorrectly threaded - where is the rest?
+So here is the rest... but I already responded to this email. Don't send
+duplicates. Other feedback applies.
 
 Best regards,
 Krzysztof
