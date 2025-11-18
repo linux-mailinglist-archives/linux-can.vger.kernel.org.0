@@ -1,52 +1,52 @@
-Return-Path: <linux-can+bounces-5489-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5478-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59380C688E1
-	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 10:32:51 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 567A5C687CF
+	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 10:22:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 22B6A380814
-	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 09:30:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 4EEC32A5E4
+	for <lists+linux-can@lfdr.de>; Tue, 18 Nov 2025 09:21:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB173126DB;
-	Tue, 18 Nov 2025 09:30:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D42F314D00;
+	Tue, 18 Nov 2025 09:21:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="kKTuKmxc"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="CSfDiocX"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E112FC862;
-	Tue, 18 Nov 2025 09:30:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A6B262FC0;
+	Tue, 18 Nov 2025 09:21:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763458218; cv=none; b=dh4nrX2FCHXrX4cdTCvL/ETR1itahv2dxNfp6p+jLE8KIIZL+2z1P4z8VwkQwmdWNDmpKB/0Oex54orfykgEBUkcEDLk96M6MDlThegU4GtE5I3MR+RNGbDMzqwgqE3TLRttR/hH8+6nAkAFz4wlag/OZ74AIrssU/D6BRZ4lts=
+	t=1763457696; cv=none; b=aOvvXt0ee3N0Ir+KKqD7TjdtkKxr7xRlrR6/8WRZCq8dMsT7NkClgbtTel/L685ZDlxXE7VZdiOSeKx3/rcKQjePSCbKHKBsKn9+AZXvJeyGkV6kx0j69lFqDYp9htvT8zBDaxfkxCwRYA5FtdQCZnW+rT3HydIIEMzSAdNAPyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763458218; c=relaxed/simple;
-	bh=o/ioPXXZYh/dgl1Zd0IL9GbLfli276QgGGru0OCthHw=;
+	s=arc-20240116; t=1763457696; c=relaxed/simple;
+	bh=qsq70m9aoOeIKPhV+zDdYMShngSTVeO/RN0J0OIkiZQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y5qcat2EmJqBNPBHpv1nQM9IIXgRSsxiyWl3VrjRWv81SBrfkGLaYa+0WlyrwabcVTKi/HY87a6EYOAmvFKcGkbJZDD7kRsYlcabIjiLmrf9xwYsa1v0luS/3/HvPFXyyWQcCDaT6ckXsXGJ7DMyY0/tmZv0DlrjKXWSV6P17Jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=kKTuKmxc reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+	 MIME-Version; b=t9+ubQ44oFhO5F6GlFNee71+PN/mLULuKyv8iUt2zKG73XjvQg7bTRvodnXSeyogfqK2oxVYEHOmT3rDgKtTU6v+uyoxKI4wjIsHh4fPfA0C7bAAeI56sJciZiBEK+cv7zi2zOaZXsW1xtIb3UmUrP6Fli0jZy+puwKAhWlmbEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=CSfDiocX reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
 Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4d9fHq5vp8z1DQqY;
-	Tue, 18 Nov 2025 10:21:27 +0100 (CET)
+	by smtp.simply.com (Simply.com) with ESMTP id 4d9fHs747bz1DDXm;
+	Tue, 18 Nov 2025 10:21:29 +0100 (CET)
 Received: from d-5xj5g74.got.gaisler.com.com (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	by smtp.simply.com (Simply.com) with ESMTPA id 4d9fHq3fw3z1DDqw;
-	Tue, 18 Nov 2025 10:21:27 +0100 (CET)
+	by smtp.simply.com (Simply.com) with ESMTPA id 4d9fHs4gx7z1DHYP;
+	Tue, 18 Nov 2025 10:21:29 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
-	s=simplycom2; t=1763457687;
-	bh=/e4X68xG1gU6FLZnmngS77rn9PhpDpT87XyNVAA8OuY=;
+	s=simplycom2; t=1763457689;
+	bh=QIto6meMbgfhU+k/5Zes9dtjfsi03cPshAM6CMpt0ic=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=kKTuKmxc2dfYbaIgbHEwzd+xYMHf2X5cDd4nU9B/iwUQvqqe3VeX1ffkrkuOVl1em
-	 kM7bcbYTbe/J609JgJ6NJ9jMVL+w/uT6b5VjwX95beQqESxwl5Rl1axrAiTdKX4Jod
-	 pm28QW8kGIRTe6u1BWH9CInS6n3KUNNaLx3C69Yum+j1gmT2mM0yxkLUA7vWY5JUUC
-	 Iq0rnkQ4WF3FOG5skYHjI66qIZmQb4KdwQjVnNJ4W+7K8T9/Bw8HapK5oAZ27fqh1l
-	 LHs6fM2/JnJ/RppL5Tdr87EhzfFNJxMFrmwwDPQfemwqcuapIRKqn3EBGtUoWkjOg5
-	 j+ZRe4pmURcwA==
+	b=CSfDiocXNSrBkQFgGLnL1lUUe7KMmmXYMQRWZlLGL01di4/IC6WMi11Nmwdx74mPV
+	 Cn+DZzAmvaJP3q01YXtf5gH88ycMFvSHZOYQ+jfFBI/vES6TbVDxfRdcOuxxdqO1gG
+	 sxemoadA9KpasLJ6bZqDO9grhXT+Axig1LsowhxUedRzWb/I1/NKSVFGHh1yQHt7Bf
+	 jeXAVApTydeItUR4gjYZKc92GeMqaXrnQLbGQxhPRUWK9v9JJ3exi2eIO6wWm+mcla
+	 rD9Qcdx/yn/WCb3NexniyBge6SObZVApbKUMCQ3sd1wqBgdk7lyqOdiUGusalGKJ25
+	 YWT89CG9URrYw==
 From: Arun Muthusamy <arun.muthusamy@gaisler.com>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -56,10 +56,10 @@ To: robh@kernel.org,
 Cc: devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-can@vger.kernel.org,
-	Ludwig Rydberg <ludwig.rydberg@gaisler.com>
-Subject: [PATCH 01/10] dt-bindings: Add vendor prefix for Frontgrade Gaisler AB
-Date: Tue, 18 Nov 2025 10:21:06 +0100
-Message-ID: <20251118092115.3455-2-arun.muthusamy@gaisler.com>
+	Arun Muthusamy <arun.muthusamy@gaisler.com>
+Subject: [PATCH 02/10] dt-bindings: net: can: grcan: Convert GRCAN CAN controllers binding from txt to YAML
+Date: Tue, 18 Nov 2025 10:21:07 +0100
+Message-ID: <20251118092115.3455-3-arun.muthusamy@gaisler.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251118092115.3455-1-arun.muthusamy@gaisler.com>
 References: <20251118092115.3455-1-arun.muthusamy@gaisler.com>
@@ -71,38 +71,149 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Ludwig Rydberg <ludwig.rydberg@gaisler.com>
+Migrate device tree bindings for Gaisler GRCAN, GRHCAN
+and GRCANFD CAN controllers from a text format to YAML format.
+    - Add properties such as `compatible`, `reg`, `interrupts`
+    and `clocks` for the CAN controllers.
+    - Removal of the old `grcan.txt` file as its contents have
+    been fully migrated to the YAML file.
+    - YAML file includes examples of device tree bindings for
+    the CAN controllers
 
-Frontgrade Gaisler AB provides IP cores and supporting development tools
-for embedded processors based on the SPARC and RISC-V architectures.
-Some essential products are the LEON and NOEL synthesizable processor
-models together with a complete development environment and a library of
-IP cores (GRLIB).
-
-The company specializes in digital hardware design (ASIC/FPGA) for both
-commercial and aerospace applications.
-
-Web site: https://www.gaisler.com/
-
-Signed-off-by: Ludwig Rydberg <ludwig.rydberg@gaisler.com>
+Signed-off-by: Arun Muthusamy <arun.muthusamy@gaisler.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/net/can/gaisler,grcan.yaml       | 85 +++++++++++++++++++
+ .../devicetree/bindings/net/can/grcan.txt     | 28 ------
+ 2 files changed, 85 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/can/grcan.txt
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 424aa7b911a7..4e1b4eeff9ff 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -594,6 +594,8 @@ patternProperties:
-     description: Fujitsu Ltd.
-   "^fxtec,.*":
-     description: FX Technology Ltd.
-+  "^gaisler,.*":
-+    description: Frontgrade Gaisler AB
-   "^galaxycore,.*":
-     description: GalaxyCore Inc.
-   "^gameforce,.*":
---
+diff --git a/Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml b/Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
+new file mode 100644
+index 000000000000..521bdd89f130
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
+@@ -0,0 +1,85 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/can/gaisler,grcan.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title:
++  Aeroflex Gaisler GRCAN, GRHCAN and GRCANFD CAN controllers.
++
++description: |
++  GRCAN, GRCANFD, GRHCAN controllers are available in the GRLIB VHDL IP core
++  library.
++
++  For further information look in the documentation for the GRLIB IP library:
++  https://download.gaisler.com/products/GRLIB/doc/grip.pdf
++
++maintainers:
++  - Arun Muthusamy <arun.muthusamy@gaisler.com>
++  - Andreas Larsson <andreas@gaisler.com>
++
++allOf:
++  - $ref: can-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - gaisler,grcan
++      - gaisler,grcanfd
++  name:
++    description: |
++      Fallback on node name matching for systems that don't provide compatible.
++    enum:
++      - GAISLER_GRCAN
++      - 01_03d
++      - GAISLER_GRHCAN
++      - "01_034"
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  freq:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Frequency of the external oscillator clock in Hz (the frequency of the
++      amba bus in the ordinary case).
++      This property should be used by systems that utilize the common clock
++      framework is not supported.
++
++unevaluatedProperties: false
++
++required:
++  - reg
++  - interrupts
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    can@ff400000 {
++        compatible = "gaisler,grcanfd";
++        clocks = <&sysclock>;
++        reg = <0xff400000 0x400>;
++        interrupt-parent = <&plic0>;
++        interrupts = <6>;
++    };
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    can@ff400000 {
++        compatible = "gaisler,grcan";
++        clocks = <&sysclock>;
++        reg = <0xff400000 0x400>;
++        interrupt-parent = <&plic0>;
++        interrupts = <6>;
++    };
++  - |
++    GAISLER_GRCAN@ff840000 {
++        reg = <0xff840000 0x400>;
++        freq = <50000000>;
++        interrupts = <16>;
++    };
+diff --git a/Documentation/devicetree/bindings/net/can/grcan.txt b/Documentation/devicetree/bindings/net/can/grcan.txt
+deleted file mode 100644
+index 34ef3498f887..000000000000
+--- a/Documentation/devicetree/bindings/net/can/grcan.txt
++++ /dev/null
+@@ -1,28 +0,0 @@
+-Aeroflex Gaisler GRCAN and GRHCAN CAN controllers.
+-
+-The GRCAN and CRHCAN CAN controllers are available in the GRLIB VHDL IP core
+-library.
+-
+-Note: These properties are built from the AMBA plug&play in a Leon SPARC system
+-(the ordinary environment for GRCAN and GRHCAN). There are no dts files for
+-sparc.
+-
+-Required properties:
+-
+-- name : Should be "GAISLER_GRCAN", "01_03d", "GAISLER_GRHCAN" or "01_034"
+-
+-- reg : Address and length of the register set for the device
+-
+-- freq : Frequency of the external oscillator clock in Hz (the frequency of
+-	the amba bus in the ordinary case)
+-
+-- interrupts : Interrupt number for this device
+-
+-Optional properties:
+-
+-- systemid : If not present or if the value of the least significant 16 bits
+-	of this 32-bit property is smaller than GRCAN_TXBUG_SAFE_GRLIB_VERSION
+-	a bug workaround is activated.
+-
+-For further information look in the documentation for the GLIB IP core library:
+-http://www.gaisler.com/products/grlib/grip.pdf
+-- 
 2.51.0
 
 
