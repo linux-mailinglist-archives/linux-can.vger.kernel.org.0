@@ -1,220 +1,180 @@
-Return-Path: <linux-can+bounces-5507-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5508-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB4D7C737A9
-	for <lists+linux-can@lfdr.de>; Thu, 20 Nov 2025 11:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BC6A7C73B3C
+	for <lists+linux-can@lfdr.de>; Thu, 20 Nov 2025 12:25:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id A2AD62A5B7
-	for <lists+linux-can@lfdr.de>; Thu, 20 Nov 2025 10:34:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id BF3102AB94
+	for <lists+linux-can@lfdr.de>; Thu, 20 Nov 2025 11:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44EE1372AB7;
-	Thu, 20 Nov 2025 10:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E62D331A44;
+	Thu, 20 Nov 2025 11:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="THYJMOAe"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="nHnpA4Nr";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="SO8KsC7K"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5D1205E25
-	for <linux-can@vger.kernel.org>; Thu, 20 Nov 2025 10:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.27.42.3
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763634866; cv=none; b=Lsnu1YZtSIzNlelXlohmmoU0155lOhTdgrqrNX9TAyjjw861VqdgVCT2q1X6heOCtwALG4bZKR87hcs4owtMg+RTRaH4QJIcXJVgkNkFTinO3e9bYQpmOIXh9Y11bjMcZ7W4tCEItycPG7bjZqRrv/qFbXmjfLRuk4r74wlOOtM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763634866; c=relaxed/simple;
-	bh=X9Uk6my+2oWSmDNBBejfGv3hDlCyxPluPCdIxbdQG5c=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:Subject:MIME-Version:
-	 Content-Type; b=sVC0Y9C2DC2TGLlY+3386NSxDPHE8bz3jmEtJLLy04IoNtdwWD9i9yxk36Rrig5gGqtYt3kmTWMYJfUwzpLtl+0zF6elXzMuW0fELDdyxBPn64kt45+4O7VkeI6W0JlY7U6lHvHLAcTG9jVl0PrRKstMmE5gu9ajBeO2TF9PfHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=THYJMOAe; arc=none smtp.client-ip=212.27.42.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=free.fr
-Received: from zimbra65-e11.priv.proxad.net (unknown [172.20.243.215])
-	by smtp3-g21.free.fr (Postfix) with ESMTP id 7090713F899;
-	Thu, 20 Nov 2025 11:34:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-	s=smtp-20201208; t=1763634855;
-	bh=X9Uk6my+2oWSmDNBBejfGv3hDlCyxPluPCdIxbdQG5c=;
-	h=Date:From:To:Cc:In-Reply-To:Subject:From;
-	b=THYJMOAeuHjc27l9vOE+2X6+8TQfBtx8dwcCCa9ZfhHu/yTXwM/8pCerLKmdbhDwE
-	 e4ojyv1M4fENNe7H2U8N7ygYQ/NsxFfzpTF6OYx/nEQWXMetqKr7GQ6wrI9uWTNKFx
-	 nM60+prIU83A8oAR9jzXA/pEFx6yoI7VEvGIUpO9rpAH2IoEx1LyT4D86ktPqpegNb
-	 tadH7wxNf/HteVjMouZHyJJNSsgl/K9+y0MamWR1bQ0oYdxbCFKT/la/ieKHHvsZ2Q
-	 jRDXZB8u154QSbFQ9OqcpLpc35QNDB4sDem/VY9rHT885kaTZRR/xZpYYBGdnoa1nX
-	 4+pW23cibVsyQ==
-Date: Thu, 20 Nov 2025 11:34:14 +0100 (CET)
-From: =?utf-8?Q?St=C3=A9phane?= Grosjean <stephane.grosjean@free.fr>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol@kernel.org>, 
-	=?utf-8?Q?St=C3=A9phane?= Grosjean <stephane.grosjean@hms-networks.com>
-Message-ID: <473832673.673623427.1763634854731.JavaMail.root@zimbra65-e11.priv.proxad.net>
-In-Reply-To: <cedee756-ae5b-456c-96b0-9263177a647a@hartkopp.net>
-Subject: Re: Mainlining of [canxl v2 00/15] CAN XL support for review (full
- series)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E138032B9BD
+	for <linux-can@vger.kernel.org>; Thu, 20 Nov 2025 11:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763637715; cv=pass; b=PLqEUhPqnoYEmxZkQsFFHZRhdqyT1ioBek7Nno4YSz7cfbJBwGBWYPwW9l7YX1uGn6AgtG1rKGH4Hif41l9g+JBNKAXme4X5xct6hHnah6+yMKO+D0jhOIclgEJoss/SQLrhs+idh5Xs/7wAC+rs/EDqvyESykGkxLPEki4+mfM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763637715; c=relaxed/simple;
+	bh=ZPvsNgfLQRpaDRsxrz/4JC4FzLEc1urcdk7c/ksOHtw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CV84/L2IH+ZXCn0EqKIdIhyKbpXbR7VMxGTZk1MS0E5ybyg4a6y/p1kbNBWuXhUsdZcd6ai72WzSE2pDcjMKPtqGo0/+Vhe+sPhUinhQbbLTigmzI7R9Tg8TNcxel5cO+8VmHadRGK+dZ38JCueD29Jm8OF3fZ42BC15veIuphM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=nHnpA4Nr; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=SO8KsC7K; arc=pass smtp.client-ip=85.215.255.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1763637694; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=r0hJa0VLa5hADcsOIYgIiB+kINm3JuswhdEmJPxMkCq5I5ga428bvLu+3wGciuXk9P
+    sFwxSrr0ObWUcfuAFqwqiKEz2anvmNUXPb8AbVAxQ4tONhBuqSB+BHJp13QB2k8+ejwI
+    5KrxaCvTKX0lQ/kF8v0Cd9r/PgmYXWxFZaNr94L19nw7hQE35Y3LxjTjlSzvg+QnPZkS
+    I+5Hn6BeVvh0qCp+j2DR0DuUW9jFcpqPYrgJ6Pt+1FtPcYVGHa9Dl+i12nx1qEFOzOEE
+    zHlY0LvNTFhwum9OcErb6waZ759i0VlzS9td479mCj/U9fKNZ66UDHJJar2aXQYoGaOL
+    slUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763637694;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=BK9baou2gHF94FcUWE80A1b4N/oI2mjffMSo234NJ/M=;
+    b=YAwlXDZgog/lI6FMOP8o+dyAct2JD8OSOpdUBPIoYwvAATKfHB+utP30iCsGIZAW+Y
+    VFP7gKKmUEiULxjUfx6Mf5R60iP38GrS2K6CBQuwKnD1YBosXRUh0gTiyOMObdGnVWZF
+    KZZMyD9Dq63AI7BtNSbPezgCWLDLqsNfv83USM/kgUUf33mAOAGXr874GJjMZY1vB8Z3
+    9msra1EvzBeFP4kWvEFzT31CPlvZ1IFC9OiuVOffZd9jhukP2PwffUrT2GKx1XZHxsi1
+    78IJXrNRfkXHe17r7qTYd+ukaTWkYuhencdY0KJpOk3v5SFnmj9N2F5qfzuGb/cxMedB
+    MkZQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763637694;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=BK9baou2gHF94FcUWE80A1b4N/oI2mjffMSo234NJ/M=;
+    b=nHnpA4Nry0nW15KGap1ETRxKFzJcMOVRViP0lYYRsm0P0q1jWMhddE5AYkv17n35fA
+    elTBF+P4e1U1/O2HV1N/4kJM0AXtPmbLblRWCzJdwqbFa8tyGCd/rx7f5faDd4hwuot7
+    UIvhtsymkmhp0e7Evnd6y5Ius+h9RW6CCq9QrHcFmIznNYi/7rUHfXtnuPfVsGMbCsEZ
+    e/k1aGnFHdpbGisAXQJqJC04Fn0eJtQMmDFeL58OkcbiwluxQgpLxcNF7odhBVrbYj++
+    cLXRKVVBKt6R+l4/MQrrh8kWoJKtl/mQcLqfCuKaYBivGrMV5DPa2Q3H5AbWdPD/jB9f
+    XX7A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763637694;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=BK9baou2gHF94FcUWE80A1b4N/oI2mjffMSo234NJ/M=;
+    b=SO8KsC7KOiwz+l3WmzGWyIiSBXUbrVWIveuFP7j6Yy9tWP4SNji8LAg5WS07q0OA7c
+    E+ZtPh24pljgOM9r2vAQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
+    by smtp.strato.de (RZmta 54.0.0 AUTH)
+    with ESMTPSA id Ke2b461AKBLY6Xg
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Thu, 20 Nov 2025 12:21:34 +0100 (CET)
+Message-ID: <8dd16828-97cc-4562-b460-a9c76fca716c@hartkopp.net>
+Date: Thu, 20 Nov 2025 12:21:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Zimbra 7.2.0-GA2598 (ZimbraWebClient - GC142 (Linux)/7.2.0-GA2598)
-X-Authenticated-User: stephane.grosjean@free.fr
+User-Agent: Mozilla Thunderbird
+Subject: Re: Mainlining of [canxl v2 00/15] CAN XL support for review (full
+ series)
+To: =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@free.fr>
+Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+ Vincent Mailhol <mailhol@kernel.org>,
+ =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
+References: <473832673.673623427.1763634854731.JavaMail.root@zimbra65-e11.priv.proxad.net>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <473832673.673623427.1763634854731.JavaMail.root@zimbra65-e11.priv.proxad.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Hi Stéphane,
 
-Only small nitpicks from my side:
+On 20.11.25 11:34, Stéphane Grosjean wrote:
 
-> - make RESTRICTED a normal ctrlmode_supported option
-> - make TMS a normal ctrlmode_supported option
+> Only small nitpicks from my side:
+> 
+>> - make RESTRICTED a normal ctrlmode_supported option
+>> - make TMS a normal ctrlmode_supported option
+> 
+> If I understand “normal” (for RESTRICTED) as an option that is not solely linked to CANXL, I no longer understand it for TMS. Could you explain please?
 
-If I understand =E2=80=9Cnormal=E2=80=9D (for RESTRICTED) as an option that=
- is not solely linked to CANXL, I no longer understand it for TMS. Could yo=
-u explain please?
+Right. The RESTRICTED mode is not linked to CAN XL but is intended to be 
+mandatory for XL nodes. See Vincent's commit message:
 
-The BOSCH communication refers to =E2=80=9Cpure-CANXL=E2=80=9D mode rather =
-than =E2=80=9CCANXL-only=E2=80=9D mode as used here. Is this an intentional=
- choice on your part?
+https://lore.kernel.org/linux-can/20251115163740.7875-4-socketcan@hartkopp.net/T/#u
 
-> Open discussions / review results:
-> - not removing "const" in can_update_sample_point()
+OTOH the TMS option only works in the CANXL-only mode.
 
-This topic has nothing to do with CANXL, and I have already expressed my op=
-inion on it: =E2=80=9Cconst=E2=80=9D has its place in the parameter declara=
-tion of a function in C.
+My change to the original TMS patch from Vincent
 
-> - have the ctrlmode names in ip feedback messages capitalized
+https://git.kernel.org/pub/scm/linux/kernel/git/mailhol/linux.git/commit/?h=b4/canxl-netlink&id=c931f5efd2ec0e6cdabc968d67f8a758519e736e
 
-The use of capital letters here is simply a matter of adopting the formalis=
-m generally used in C for constant symbols. Which itself is inspired by the=
- formalism generally used for acronyms. I don't see anything else to add he=
-re. IMHO.
+is, that I removed that TMS always has to be set on the ip command line.
+You needed to specify either "tms on" or "tms off" when "xl on" is set.
 
-And finally, as little as my opinion on the various patches in the v2 serie=
-s may be of use, I didn't see anything terrible. I did have some doubts abo=
-ut:
+Now TMS has the default behavior again. Like any other ctrlmode flag it 
+is default "off" and can be set with "tms on".
 
-[canxl v2 08/15] can: bittiming: add PWM validation
+> The BOSCH communication refers to “pure-CANXL” mode rather than “CANXL-only” mode as used here. Is this an intentional choice on your part?
 
-+        if (pwm->pwmo >=3D pwm->pwms + pwm->pwml) {
+I have no strong opinions about the naming here. But "pure" sounds like 
+pure water to me ;-D
 
-but it turns out that >=3D is actually more sensible than >
+>> Open discussions / review results:
+>> - not removing "const" in can_update_sample_point()
+> 
+> This topic has nothing to do with CANXL, and I have already expressed my opinion on it: “const” has its place in the parameter declaration of a function in C.
 
-Regards,
+Right. But this was a discussion when Vincent removed the "const" 
+statement where Marc and you wanted to change that back.
 
--- St=C3=A9phane
+https://lore.kernel.org/linux-can/20251117-transparent-exotic-myna-bd77c9-mkl@pengutronix.de/T/#u
 
------ Mail original -----
-> Hello Marc/Vincent/St=C3=A9phane!
->=20
-> We are right before Linux 6.18-rc7 and I would like to have the CAN
-> XL
-> support ready for the 6.19 merge window.
->=20
-> Unfortunately the reaction time and feedback from Vincent is
-> currently
-> very intermittent. This is no criticism but risky for catching the
-> 6.19
-> merge window.
->=20
-> This v2 patch set is feature complete and tested.
->=20
-> Finalized discussions (code complete in v2 patch set and tested):
-> - make RESTRICTED a normal ctrlmode_supported option
-> - make TMS a normal ctrlmode_supported option
-> - omit CAN_CTRLMODE_XL_ERR_SIGNAL in netlink API
->=20
-> Open discussions / review results:
-> - not removing "const" in can_update_sample_point()
-> - have the ctrlmode names in ip feedback messages capitalized
-> - increase the resolution to two decimal places in
-> can_calc_bittiming()
-> - can_calc_pwm() has no return value (kernel test robot report)
->=20
-> The latter are tiny fixes and beautifications that potentially can
-> also
-> be done after the merge window.
->=20
-> Therefore I would propose to mainline the current v2 patch set right
-> now
-> and see what we can improve until the merge window closes.
->=20
-> @Vincent: If you are currently busy I can offer to work on the open
-> points for you. So it would just be a review-job for you and I would
-> send a v3 patch set until Friday (latest).
->=20
-> Best regards,
-> Oliver
->=20
-> On 15.11.25 17:37, Oliver Hartkopp wrote:
-> > This series is based on Vincents CAN XL patches 2025-10-13 11:01
-> >=20
-> > https://lore.kernel.org/linux-can/20251017-enchanted-quiet-civet-84dd47=
--mkl@pengutronix.de/T/#mdecc959e0ef7c16c64f35e9dd3d687954e15c8ac
-> >=20
-> > For a better review here is the complete series of available
-> > patches with
-> > some changes, especially the error-signalling handling.
-> >=20
-> > The changes to Vincents original patches are documented below:
-> >=20
-> > Oliver Hartkopp (2):
-> >    can: dev: can_dev_dropped_skb: drop CC/FD frames in CANXL-only
-> >    mode
-> >    (replaces can: netlink: add CAN_CTRLMODE_XL_ERR_SIGNAL flag
-> >    patch)
-> >    can: raw: instantly reject unsupported CAN frames
-> >    (the adapted version using can_dev_in_xl_only_mode() helper)
-> >=20
-> > Vincent Mailhol (13):
-> >    can: bittiming: apply NL_SET_ERR_MSG() to can_calc_bittiming()
-> >    (no change)
-> >    can: dev: can_dev_dropped_skb: drop CAN FD skbs if FD is off
-> >    (no change)
-> >    can: netlink: add CAN_CTRLMODE_RESTRICTED
-> >    (no change)
-> >    can: netlink: add initial CAN XL support
-> >    (remove the "bad device" warning for CAN_CTRLMODE_RESTRICTED)
-> >    can: netlink: add CAN_CTRLMODE_XL_TMS flag
-> >    (remove the requirement that TMS MUST be set. Use defaults: off)
-> >    can: bittiming: add PWM parameters
-> >    (no change)
-> >    can: bittiming: add PWM validation
-> >    (no change)
-> >    can: calc_bittiming: add PWM calculation
-> >    (no change)
-> >    can: netlink: add PWM netlink interface
-> >    (no change)
-> >    can: calc_bittiming: get rid of the incorrect "nominal" word
-> >    (no change)
-> >    can: calc_bittiming: add can_calc_sample_point_nrz()
-> >    (no change)
-> >    can: calc_bittiming: add can_calc_sample_point_pwm()
-> >    (no change)
-> >    can: add dummy_can driver
-> >    (remove CAN_CTRLMODE_XL_ERR_SIGNAL but print error-signalling
-> >    state)
-> >=20
-> >   drivers/net/can/Kconfig              |  17 ++
-> >   drivers/net/can/Makefile             |   1 +
-> >   drivers/net/can/dev/bittiming.c      |  63 ++++++
-> >   drivers/net/can/dev/calc_bittiming.c | 104 +++++++--
-> >   drivers/net/can/dev/dev.c            |  18 +-
-> >   drivers/net/can/dev/netlink.c        | 319
-> >   +++++++++++++++++++++++++--
-> >   drivers/net/can/dummy_can.c          | 284
-> >   ++++++++++++++++++++++++
-> >   include/linux/can/bittiming.h        |  81 ++++++-
-> >   include/linux/can/dev.h              |  68 ++++--
-> >   include/uapi/linux/can/netlink.h     |  34 +++
-> >   net/can/raw.c                        |  54 ++++-
-> >   11 files changed, 970 insertions(+), 73 deletions(-)
-> >   create mode 100644 drivers/net/can/dummy_can.c
-> >=20
->=20
->=20
+>> - have the ctrlmode names in ip feedback messages capitalized
+> 
+> The use of capital letters here is simply a matter of adopting the formalism generally used in C for constant symbols. Which itself is inspired by the formalism generally used for acronyms. I don't see anything else to add here. IMHO.
+
+Agreed! Thx!
+
+> And finally, as little as my opinion on the various patches in the v2 series may be of use, I didn't see anything terrible. I did have some doubts about:
+> 
+> [canxl v2 08/15] can: bittiming: add PWM validation
+> 
+> +        if (pwm->pwmo >= pwm->pwms + pwm->pwml) {
+> 
+> but it turns out that >= is actually more sensible than >
+
+??
+
+Would you suggest
+
+if (pwm->pwmo > pwm->pwms + pwm->pwml)
+
+instead of
+
+if (pwm->pwmo >= pwm->pwms + pwm->pwml)
+
+which would also fit the error message?
+
+"PWMO: %u tqmin can not be greater than PWMS + PWML: %u tqmin",
+
+Best regards,
+Oliver
+
+
 
