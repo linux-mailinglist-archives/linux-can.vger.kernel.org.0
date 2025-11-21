@@ -1,168 +1,131 @@
-Return-Path: <linux-can+bounces-5559-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5560-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18699C78339
-	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 10:40:53 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E807C786FF
+	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 11:17:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9635B3449E2
-	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 09:40:52 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 785F232E87
+	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 10:05:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0964433F8C6;
-	Fri, 21 Nov 2025 09:40:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="ojVtJJ+2";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="j0uYIwJQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D00305953;
+	Fri, 21 Nov 2025 10:00:11 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4D7306B00
-	for <linux-can@vger.kernel.org>; Fri, 21 Nov 2025 09:40:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763718048; cv=pass; b=PfQR6qsC/ejaI6bQzQLqkMG0ysYZQloWCXvvY+sA62VIhS+9ctYy6Rv4XG+tYubO1dxTQYHzji57JQKNxspv5H/2dMWpXpmvx1aqk5Ft/zp9H9dim9GxsuYHTTn+OUoajYVEWZA0zo4LpZm5NLx+dM16nEomXuYYidvvtRcGBGc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763718048; c=relaxed/simple;
-	bh=NJqutpjJGlXTaVtOOXbBrFY5cLjeY7kBqBhG0FYZPCs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UYpuZhJs3/vWE3dZYDciqi62eoluSUxKEWQZGBra6q/qlmLBtl6y1DJyumaIGjisheC/bawqoyCStstuRx0qQJHJ5+t+Pvm9B+827ZV5fyayCSTWfJPQ40Kv8HiFaS0kNIOb/CdXOxKcW+r9BNFewORINpR+MnM/epTo2+6gGM8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=ojVtJJ+2; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=j0uYIwJQ; arc=pass smtp.client-ip=85.215.255.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1763718040; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=L9JVmbfN+kOKOAJazzxqITu2aoxNwU58LZLlEFSqXGhUHOgCNOkv7SZPAH9w15QNGK
-    JoGU0prONc64ZjraMZKmuQhV+NrxLmr3QljhUVbFzEGWJcxaQx+RsQP2WytiCsjCrzrL
-    +X6hdqDhmbMbn9JCIAXc7f1Jp8UzJ5nqwdB/Bl4P03DzU0TYI/9aRfneVYX+9kY6rqRX
-    h0Qf1B7jH+BkAsqnLJtWrphEMd40ARg3nclW0J4jaqVa08r7GlpDvhmkCHPN9X+TE/Pa
-    ZBGHtPWO6yso1payUha1OrDzD6ybfK2pK65v5aXb64T30dyO0qboNX5iHYqpMoq9leMq
-    +qYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763718040;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=wQIasBlHM6JpsZ4STk6qSxjLtZabnPl0SFKsChS4J9M=;
-    b=L0hJsIokwmvrwRSv3S+oc7tuF/mf+ouOcLec5Qun0yD/LQIkreBWba+e2U2GLKwsp4
-    U4XO5R7pP4NT2YWFgH6XJ5ezKrJHz9YIxAphjpcExjgasldWz16v4L+oTQy716hvz/EM
-    EWqneM1U2CXeA7/ydzNlApC1fIMBrGS9zVFXo+yU7AOX2gNwOZLIUPWDe4m/jg6j3uF7
-    /OpKU49/SPxNNVYRcc4L6Cjpp7lczIZP/Erv7kKD+jDt7pdBHwzx3pp/xFzPRIpgulCh
-    MJ6ysG6lQ3UC7E0dUFSMwgplEI5bNW95Ef2YpliIZyZkBySyj9m9ZozNPlY+tD+rhbYE
-    L2vA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763718040;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=wQIasBlHM6JpsZ4STk6qSxjLtZabnPl0SFKsChS4J9M=;
-    b=ojVtJJ+2V3L75rcDt1vV+iVztJMoWVxtHp89LDIwWXqy3Pj3w6YBgNnPPUUO3cxyz+
-    hgvTO5RqNeTqEFP9v034aBFjlCK+NhnaEtF0zbNKujHIhseWieNNwQYn55oHcmLpecxT
-    Er/4X80FNIkmaszY7eMveZhS/+5fCvqYI1c0wt1TwZJQByGSlhuo4udPYOXAIup4mjhv
-    LIPvaOI8I8zu84HPgyzUsi9g7xf03zBaqL0pYfeXBUEzIMAtjGDXgbYsC3iDZ5zeji29
-    2GF0IbGuT8/sOEj2M774IClsGht1wugNfPD0em3okpBLq9OpzCYu2/8Ty1WTiA7yXHhc
-    HeyA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763718040;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=wQIasBlHM6JpsZ4STk6qSxjLtZabnPl0SFKsChS4J9M=;
-    b=j0uYIwJQ7vrQjfscLqcGBFhemRnoOqMjENzKEyMMkxhJlHUgaWboVzqGnjfo2zV2bB
-    JgAwAR7Dya1ZjYWDETAg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461AL9eeBXx
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Fri, 21 Nov 2025 10:40:40 +0100 (CET)
-Message-ID: <5020fe6d-aebc-40ae-8067-eeef4ea4c9cc@hartkopp.net>
-Date: Fri, 21 Nov 2025 10:40:39 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FD334A3DB
+	for <linux-can@vger.kernel.org>; Fri, 21 Nov 2025 10:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763719211; cv=none; b=LuBrF+r3XP/UHk+TzZX1jLUd95ygbSu8jCOs+Ir1+x1RdGPlh6cKx7Y8xDFrKYXKIDuHq/WArwM80dz4Xf86kLUx/slh1/Jh2R8IPNnloFUXFRKKwElcQ5iCSUUd8NVGK0JqZQtwJh9PsF9wBr65HFy6O2g+kYoA8p9hgs/c8ao=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763719211; c=relaxed/simple;
+	bh=d3E2DBFCGY5iQ48f4ruG2bjD+doCHzz4kxBZlDCuG0Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ECC2ft7Uu1KD7T4zDkcHrzmPoE76rcZnmk8GN814ovi5QgBixPL45tgdntwj+0hyLgKtYrX/L2aaooOcDV6YvaRhFKKSZFYs9qSmgu9Z+mMNf8wXW1rPESYPKhel6+ETHqIrIOAhLE5P2+AVclLxXVsow1R7Ic/01CoC5z1prfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vMNvw-0007Rl-CS; Fri, 21 Nov 2025 11:00:04 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vMNvw-001YyZ-0e;
+	Fri, 21 Nov 2025 11:00:04 +0100
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vMNvw-00Fs20-0I;
+	Fri, 21 Nov 2025 11:00:04 +0100
+Date: Fri, 21 Nov 2025 11:00:04 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: linux-can@vger.kernel.org, Network Development <netdev@vger.kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [can/j1939] unregister_netdevice: waiting for vcan0 to become
+ free. Usage count = 2
+Message-ID: <aSA4JMyFNdliTpli@pengutronix.de>
+References: <d2be2d6a-6cbb-4b13-9f86-a6b7fe94983a@I-love.SAKURA.ne.jp>
+ <aSArkb7-JNW-BjrG@pengutronix.de>
+ <3679c610-5795-4ddf-81ad-a9a043bab3fc@I-love.SAKURA.ne.jp>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [canxl v4 16/17] can: dev: can_get_ctrlmode_str: use capitalized
- ctrlmode strings
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: linux-can@vger.kernel.org,
- Stephane Grosjean <stephane.grosjean@hms-networks.com>
-References: <20251121083414.3642-1-socketcan@hartkopp.net>
- <20251121083414.3642-17-socketcan@hartkopp.net>
- <20251121-meticulous-authentic-hippo-a88adc-mkl@pengutronix.de>
- <c16bbec8-f4ad-4eb6-9e0f-362c3e6261df@hartkopp.net>
- <20251121-neon-wildebeest-of-contentment-fbad44-mkl@pengutronix.de>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20251121-neon-wildebeest-of-contentment-fbad44-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3679c610-5795-4ddf-81ad-a9a043bab3fc@I-love.SAKURA.ne.jp>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-
-
-On 21.11.25 10:30, Marc Kleine-Budde wrote:
-> On 21.11.2025 10:19:39, Oliver Hartkopp wrote:
->>> Here the prefix "XL-" is dropped. Was that intentional?
->>
->> Yes. The patches for iproute2-next and for the kernel are inconsistent.
->>
->> The command line (and its help text) uses:
->>
->> [ tms { on | off } ]
->>
->> The ctrlmode is named:
->>
->> CAN_CTRLMODE_XL_TMS
->>
->> And the output of 'ip -det -link show can0' currently prints:
->>
->> can <XL,XL-TMS> state STOPPED restart-ms 0
->>
->> Which needs to be changed to <XL,TMS> IMO.
+On Fri, Nov 21, 2025 at 06:33:02PM +0900, Tetsuo Handa wrote:
+> On 2025/11/21 18:06, Oleksij Rempel wrote:
+> > Hm, looks like we have a race where new session is created in
+> > j1939_xtp_rx_rts(), just at the moment where we call
+> > j1939_can_rx_unregister().
+> > 
+> > Haw about following change:
+> > 
+> > --- a/net/can/j1939/main.c
+> > +++ b/net/can/j1939/main.c
+> > @@ -214,6 +214,7 @@ static void __j1939_rx_release(struct kref *kref)
+> >                                                rx_kref);
+> >  
+> >         j1939_can_rx_unregister(priv);
+> > +       j1939_cancel_active_session(priv, NULL);
+> >         j1939_ecu_unmap_all(priv);
+> >         j1939_priv_set(priv->ndev, NULL);
+> >         mutex_unlock(&j1939_netdev_lock);
+> > 
 > 
-> That's iproute2, it can be patched later.
+> Well, j1939_cancel_active_session(priv, NULL) is already called from
+> j1939_netdev_notify(NETDEV_UNREGISTER). Unless a session is recreated
+> after NETDEV_UNREGISTER event was handled, I can't imagine such race.
 > 
->> I think 'tms' is better in the command line than xl-tms as it is clear that
->> tms only works with XL-only and if you try it otherwise you get an error.
->>
->>>>    	case CAN_CTRLMODE_3_SAMPLES:
->>>> -		return "triple-sampling";
->>>> +		return "TRIPLE-SAMPLING";
->>
->> There's not always a 1:1 name mapping.
->>
->> IMO CAN_CTRLMODE_XL_TMS together with "TMS" looks fine for the internal and
->> external representation.
->>
->>> We should move this patch to the front, so that new members could be
->>> added in uppercase from the beginning.
->>
->> This is a useless effort IMO.
+> We can see that there are three j1939_session_new() calls but only
+> two j1939_session_destroy() calls. There might be a refcount leak on
+> j1939_session which prevents j1939_priv from dropping final refcount.
 > 
-> It's really bad practice to change things in a series that has been
-> added in the same series. If you don't want to do it, I'll do that.
+>   Call trace for vcan0@ffff888031c9c000 +2 at
+>        j1939_session_new+0x127/0x450 net/can/j1939/transport.c:1503
+>        j1939_tp_send+0x338/0x8c0 net/can/j1939/transport.c:2018
+> 
+>   Call trace for vcan0@ffff888031c9c000 +1 at
+>        j1939_session_new+0x127/0x450 net/can/j1939/transport.c:1503
+>        j1939_session_fresh_new net/can/j1939/transport.c:1543 [inline]
+>        j1939_xtp_rx_rts_session_new net/can/j1939/transport.c:1628 [inline]
+>        j1939_xtp_rx_rts+0xd16/0x18b0 net/can/j1939/transport.c:1749
+> 
+>   Call trace for vcan0@ffff888031c9c000 -2 at
+>        j1939_priv_put+0x23/0x370 net/can/j1939/main.c:184
+>        j1939_session_destroy net/can/j1939/transport.c:285 [inline]
+>        __j1939_session_release net/can/j1939/transport.c:294 [inline]
+>        kref_put include/linux/kref.h:65 [inline]
+> 
+> Do we want to update
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/net/can/j1939?id=5ac798f79b48065b0284216c7a0057271185a882
+> in order to also try tracing refcount for j1939_session ?
 
-No, it's ok.
+Ack.
 
-Will do.
-
-Best regards,
-Oliver
-
-> 
->> When we decided to unify the capitalization as a clean-up four weeks later
->> (what we did) than the patch sequence would look like this in the tree.
-> 
-> As long as you mean "upstream tree" - yes.
-> 
-> Marc
-> 
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
