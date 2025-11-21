@@ -1,134 +1,135 @@
-Return-Path: <linux-can+bounces-5568-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5586-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB6B6C799CE
-	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 14:46:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 747D2C7B8FA
+	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 20:38:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 7DC3B2DF80
-	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 13:46:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12B493A54F6
+	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 19:38:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B921B350D63;
-	Fri, 21 Nov 2025 13:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 253472FFF81;
+	Fri, 21 Nov 2025 19:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UabFJLBB"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="WD+SEtf0";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="tLTdn+pw"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD4034B415;
-	Fri, 21 Nov 2025 13:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763732568; cv=none; b=Rdkj4Uv/cU/rxq9HWm/QHzVczfOQe9YrO3Jfvk8dKwtClpgjDfyK/c63aOfHBjx4APwTL+vZGIx8RJjkFh317GNyBYlIf4aNIVqivpGqi5eS+nVDYXkMzjDzzgDgdLXm+Z+37DNpfBC86Z7VP6Q2IgIgu/Y7hQuIcz31Ew7S+Hk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763732568; c=relaxed/simple;
-	bh=JWEH0EEiu3HL+mQccorOdCZ3B7sTUWJsB+/8RXQUlrs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UvOVc9H+pc1SanDJO9Wg6wgLqyEI/SQO9rjWmJuSFiZq/9uZVSSCRs7nrkAVGQgnrOHJ2PiFXK9nt1vHfhpD3UBR15scTQ0IzYy4WRU/faL5ZQffSrHpojOCgYti2Om1RZ/Y9GWO78lsbzNMeXyU4ejsE8QmIoiNvErjBVVun6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UabFJLBB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28347C116D0;
-	Fri, 21 Nov 2025 13:42:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763732568;
-	bh=JWEH0EEiu3HL+mQccorOdCZ3B7sTUWJsB+/8RXQUlrs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=UabFJLBBCAFml7+qNgB7VXXI+lMl4ffeKvg0NjnLbrVK8MBlQ7LWX5R+WQQW1XQMg
-	 wZTyx1BS7vLTdOH8v9vyBF+pt5ne2kJiPW5+MyyC9fw8eCK1cUOKkeddAtLpAWorrK
-	 OAnweA3HAYb1yLcQt4eTVtrKkkS3JorBNmsfj5d7SYHBBonaYyRuOGXJi+8ikntByy
-	 yWcG9p+oDcIOL6xvWKwQf+kOBhblY4rHsxunnPVWUDjgjLMR3VEP4afkatmJhQ6PXe
-	 QMISijh/2yAGqZwBXbGa+1TADN1bbeRRKfRzOHU2JOX1Iy+LD8A2SEYFdFf+ywzgem
-	 Fr2Bjqsu9CoTA==
-From: Conor Dooley <conor@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: conor@kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-riscv@lists.infradead.org,
-	linux-can@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [net-next v2] dt-bindings: can: mpfs: document resets
-Date: Fri, 21 Nov 2025 13:42:30 +0000
-Message-ID: <20251121-sample-footsore-743d81772efc@spud>
-X-Mailer: git-send-email 2.51.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88308156F45
+	for <linux-can@vger.kernel.org>; Fri, 21 Nov 2025 19:38:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.219
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763753911; cv=pass; b=FbgUyA0GFQ44BLBKewisogIOb/utoq+QPDsn0bKzPOGNWDgoSbqBXGGrh4Fp3GPmLrarZgIXAakN7ZvyYfdPVADl8HLgokmfMNedt3JDCUSlqo/7UD0QUMp4Q0n1D1BXFPyTDrP6kKE14wwU0Qk+9mZn4gsQNGzCRr6dCQpEpRI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763753911; c=relaxed/simple;
+	bh=6mDZVwzEnFJ59N4nY2yC4/tp9eJSSzGFmr8GiPScwII=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CQVuOkwXrxUGuIHTnWEZvHqGbHuSnBdsJZtsj1bgyaL0zdiifmGmoxLgOncLdnLgRrchz3IFNSbExICDloI2GLpnoaK5iPVI4DNufdfJafBuMe2dsROzdDqa5gnkCHawnDr7fieuMH7rckmjTz0EowNnUh9fnaMhjDHGuTfIli0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=WD+SEtf0; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=tLTdn+pw; arc=pass smtp.client-ip=81.169.146.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1763753726; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=YKfl+7XDvmtk2stHNXAwiFtaenNNCALs4I9vZi8MtWvQl0c67HJD8yOLgFZqWxoCip
+    3x+VDBxN+lNZITHZY9Vp28kty4QPgzllnacPSBN0qL4ESdfMXREdq/bdVwx514KWNf4i
+    5iGWi5fMhOwBD8chlNR0N4hzPzHwglMTpZQE51xLJCxql60rVGo92pYA71vsTUoWugA3
+    wXinUzcnavaZ41LPgGxgdilPpdD+aL+S3hP7uuvnVEx5cdBGc/xZtqW1037d2xEEnBlG
+    bzljnnDuXe7PF9DKdfIOZR91tRQa/XvZc9+E6utBp7f5ElyHAIvB8yolRd2B2eMFQWe4
+    rhJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763753726;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=Q+mamv5w9FD8TZ90JE8yhuXNRbxExewklWl42wj0/O8=;
+    b=Oy0zsv20Ri6cTOIEM8GJpUk3YgW/BvulixmQZ94uv1BW4jpEV4uC0ieQZkmVJj+1uR
+    t4JdzQFNjkb0pgVPpb5u2aHF/Q6xsxGgm/rq/wG0nlD39tXWSOgWN+KcZ+F+PIZN8Dr9
+    NZRH78zf0AFa4vxHrilPcySPgDbxW9NW/35BpqIHzlG5OXSQINKPS+xhSbzJUA5muSvs
+    3kPxp2LdU5lv3JLYoMBzg0IwvgJfjJyg9xupSz51GEqhssMnzDLJIB/4sfLF3m/9PWB+
+    Go6+DURK2bbUG1qfeNWRty/jfQtJJ0AMAG2BZRPM6NiqdKrqrZtO6ZvEA+Uob4QE2Ihv
+    bh3g==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763753726;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=Q+mamv5w9FD8TZ90JE8yhuXNRbxExewklWl42wj0/O8=;
+    b=WD+SEtf0HRz18nR4yAYL2hfb4fBkT1fV/H+4r8kXsc7b4kHm2EF6bQDwj0OkNA/Nut
+    Vw9dD6yO9pgZZcw+AYFU9kdFslnGlZlgukqRWKYIauULDfoHlRTdaR697mb382SPmv/Z
+    mwmXwP/SkKF4qmkn18RY5V9W5hv76L8xeFYnu9x6Cw4HIZW0l50HRuE9ZNe1SlYedBrA
+    9xqJ3qRsjPKh3tv8LJf1lybAVm2QGnz2ovrj//wbjtNcADkXZkb3bjRF9vop/qo+n5Pu
+    njHNC1yyq9lHD9UGoUjlQSpXYVGlBZ0HqidlqZxzBzKu6qui0KAwPNE2xW+dz3/edesu
+    QKQg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763753726;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=Q+mamv5w9FD8TZ90JE8yhuXNRbxExewklWl42wj0/O8=;
+    b=tLTdn+pwaWFp9piVt8N2p01ZrY/He95xCPEXu0PiUy6frH3XqIEngX65cNkn8Q1zVa
+    2xayENg3ZLtzulB5B3DQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from lenov17.lan
+    by smtp.strato.de (RZmta 54.0.0 AUTH)
+    with ESMTPSA id Ke2b461ALJZQEn1
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Fri, 21 Nov 2025 20:35:26 +0100 (CET)
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+To: linux-can@vger.kernel.org
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [canxl v5 00/17] CAN XL support for review (full series)
+Date: Fri, 21 Nov 2025 20:34:56 +0100
+Message-ID: <20251121193513.2097-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2274; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=H1pKxRw0xn3sBjDfosi1NAZI2A1U748fyOaF5di6rGM=; b=owGbwMvMwCVWscWwfUFT0iXG02pJDJkKOS7plyf6zE2cUSiwcmn0ydYIp5y9R/vrlGd1uBpvY d/Zd1Klo5SFQYyLQVZMkSXxdl+L1Po/Ljuce97CzGFlAhnCwMUpABOp3s3wP3CxyI2GIAn/zrf1 1dXP9kfUWJ3akd1+syop0e/KC/WfIYwMq7Mns0xpWu75Q7jba9tao2TNxJ4Zvzwn5X6VO6ejIXy bFwA=
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Updates according to Marc's feedback from v4 patch set.
 
-The CAN cores on Polarfire SoC both have a reset. The platform firmware
-brings both cores out of reset, but the linux driver must use them
-during normal operation. The resets should have been made required, but
-this is one of the things that can happen when the binding is written
-without driver support.
+Oliver Hartkopp (4):
+  can: dev: can_get_ctrlmode_str: use capitalized ctrlmode strings
+  can: dev: can_dev_dropped_skb: drop CC/FD frames in CANXL-only mode
+  can: raw: instantly reject unsupported CAN frames
+  can: dev: print bitrate error with two decimal digits
 
-Fixes: c878d518d7b6 ("dt-bindings: can: mpfs: document the mpfs CAN controller")
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-This is the second mistake in this binding, both spotted because of the
-driver being written (although this one sat downstream for a while for
-w/e reason). I wish I could say that I'd send the driver soon, but I am
-busy upstreaming things I wrote and therefore understand at the moment,
-so a driver that I'd have to go understand and review before sending is
-low priority, sorry!
+Vincent Mailhol (13):
+  can: bittiming: apply NL_SET_ERR_MSG() to can_calc_bittiming()
+  can: dev: can_dev_dropped_skb: drop CAN FD skbs if FD is off
+  can: netlink: add CAN_CTRLMODE_RESTRICTED
+  can: netlink: add initial CAN XL support
+  can: netlink: add CAN_CTRLMODE_XL_TMS flag
+  can: bittiming: add PWM parameters
+  can: bittiming: add PWM validation
+  can: calc_bittiming: add PWM calculation
+  can: netlink: add PWM netlink interface
+  can: calc_bittiming: get rid of the incorrect "nominal" word
+  can: calc_bittiming: add can_calc_sample_point_nrz()
+  can: calc_bittiming: add can_calc_sample_point_pwm()
+  can: add dummy_can driver
 
-v2: update the example too...
+ drivers/net/can/Kconfig              |  17 ++
+ drivers/net/can/Makefile             |   1 +
+ drivers/net/can/dev/bittiming.c      |  63 ++++++
+ drivers/net/can/dev/calc_bittiming.c | 118 +++++++---
+ drivers/net/can/dev/dev.c            |  42 ++--
+ drivers/net/can/dev/netlink.c        | 319 +++++++++++++++++++++++++--
+ drivers/net/can/dummy_can.c          | 285 ++++++++++++++++++++++++
+ include/linux/can/bittiming.h        |  81 ++++++-
+ include/linux/can/dev.h              |  68 ++++--
+ include/uapi/linux/can/netlink.h     |  34 +++
+ net/can/raw.c                        |  54 ++++-
+ 11 files changed, 991 insertions(+), 91 deletions(-)
+ create mode 100644 drivers/net/can/dummy_can.c
 
-CC: Conor Dooley <conor.dooley@microchip.com>
-CC: Daire McNamara <daire.mcnamara@microchip.com>
-CC: Marc Kleine-Budde <mkl@pengutronix.de>
-CC: Vincent Mailhol <mailhol@kernel.org>
-CC: Rob Herring <robh@kernel.org>
-CC: Krzysztof Kozlowski <krzk+dt@kernel.org>
-CC: linux-riscv@lists.infradead.org
-CC: linux-can@vger.kernel.org
-CC: devicetree@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
----
- .../devicetree/bindings/net/can/microchip,mpfs-can.yaml      | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.yaml b/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.yaml
-index 1219c5cb601f..519a11fbe972 100644
---- a/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.yaml
-+++ b/Documentation/devicetree/bindings/net/can/microchip,mpfs-can.yaml
-@@ -32,11 +32,15 @@ properties:
-       - description: AHB peripheral clock
-       - description: CAN bus clock
- 
-+  resets:
-+    maxItems: 1
-+
- required:
-   - compatible
-   - reg
-   - interrupts
-   - clocks
-+  - resets
- 
- additionalProperties: false
- 
-@@ -46,6 +50,7 @@ examples:
-         compatible = "microchip,mpfs-can";
-         reg = <0x2010c000 0x1000>;
-         clocks = <&clkcfg 17>, <&clkcfg 37>;
-+        resets = <&clkcfg 17>;
-         interrupt-parent = <&plic>;
-         interrupts = <56>;
-     };
 -- 
-2.51.0
+2.47.3
 
 
