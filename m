@@ -1,56 +1,56 @@
-Return-Path: <linux-can+bounces-5536-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5541-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16A15C77F39
-	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 09:40:16 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75792C77EFD
+	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 09:36:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 49683332E0
-	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 08:34:48 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 16B1F35A835
+	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 08:34:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491F9277818;
-	Fri, 21 Nov 2025 08:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E917334C3E;
+	Fri, 21 Nov 2025 08:34:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="KI+qL/Ei";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="AIrPaog9"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="TO9auufp";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="tJ9SDzJ2"
 X-Original-To: linux-can@vger.kernel.org
 Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C702836B5
-	for <linux-can@vger.kernel.org>; Fri, 21 Nov 2025 08:34:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB37F22541B
+	for <linux-can@vger.kernel.org>; Fri, 21 Nov 2025 08:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763714085; cv=pass; b=u2OVxRuCCPHtUzyug0HhB0vcQkq8Nbs5U6+xe4DnXuquoHyXaTs7toZTTDCdHZEetTdKdMt2Ut6KjOuLUFHGEKlxBRYESyYM+W8htN1KeW9aJdOkv1NWvz9ArgUNX23oI7ixKswymYqG9WfH8xI15/AYmQFpAFVMZRG1Mc5ODto=
+	t=1763714086; cv=pass; b=eTvmr5ez9+/Bdkx5PLpiNjX/TJUqiieZYHFGlI0Kb4MwgvXdOs1gJSt6BNzwmHgcl6JTrxsAFnt/n1iZDnIkqqC2885vUc4lpy7mvWw3qN0nHRETf53QJ555r7vfropmbOTxU2LrB2u3oInWomh2hO85df4neVgTnhmm/n8CVJ4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763714085; c=relaxed/simple;
-	bh=7TQOmpvACKM9dhv3EZGbrAA+qfytcUjxratiPnm89W4=;
+	s=arc-20240116; t=1763714086; c=relaxed/simple;
+	bh=o2oKKCEreUKQGQHhogJ++oMK7KGQ+kOjaZon6oRYvtQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UJYIzDZ9dcJAyzbCSR4hHigHbHjkXhw6x8Q7VR5XQo+rMGl0+hxKMbLgiR+eSHJmxnY2k/tyDsyMvS9txvwc+xC9zqOaiustXBd+txV/0PD8ayiy2DCcFTTumHp6mbxxWqMxD7RHrgFQhJ7QsqlvLHPzAC/6m1na20gMGg++huw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=KI+qL/Ei; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=AIrPaog9; arc=pass smtp.client-ip=85.215.255.50
+	 MIME-Version:Content-Type; b=UULErVQJkb0FzPi7RgzF8PfnTKVzmtxcWSRtwwdw5FeXZ1wqoEuLIkOCpPHB5Fc3jl1lbRYX23pcxw6gtgKx01UNcEpNqi8Uc224SWlDq1aWZGM2l0hK0g0DqUAzEhnnqXPAbOp50MQKoR/TaWj37KnAwxO0AjXY9/Ops45lor0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=TO9auufp; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=tJ9SDzJ2; arc=pass smtp.client-ip=85.215.255.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
 ARC-Seal: i=1; a=rsa-sha256; t=1763714070; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=srK3ZBsgr3H00JwFmqNXDaJsN2hLoB19CyZgkPNft5+X+qYwfgB8Rd8ts72fhRkotl
-    x5V/cJWojXWdwQElsLoejoaxmEXUpgWoD4P6cLRsNmnE3DmbDruxkyFM0KxN6uUqMgYe
-    OvmxCuojNc5vaCDTab6odolUKW+ipBDe6p9rjJEnnfLqOiFGWQ9h+/bsgHce1dv36tMw
-    zSCWbpc3kaNlcSXmVwBZrojNnFwLsukCjSvd5ZNXwd87fbdyKVF+CAnrPv80dahOrvTI
-    JFzvCcmg5RW62sHHR1eKcLXGbPgPOXY6OfhT9P5d0JcSv0xqb52E1tMhicZsoW8561oz
-    O7eQ==
+    b=BMWZP9SVZ4ZYW+VIfzMeKIKyGAWPXPdmtVhV3CMItFm2VG5KZ+re0jl4brsq4N/tJJ
+    KtK4XBMgdA0PCx/NRzg1g8yloGMTNnLQzgeHS4gHPG3dMVWitSsQ9XUFc094yHfwDQKW
+    b3bxq7FWUOR217c7QqmqCe9vOU0cLEp0OOV0oze52EyS2nHxETyoqBIy7qVFhllNeGQV
+    RJ3tYadPDgV9iVpEmRPEOIEunSGklgouG2RHLWw36l37D/cVPT3+uYIH49QGQWbZYQBG
+    Hcb/0DW6c6BJqrk9DIfN784ObH4y0xM8l4Akv7myysI92bsxrD+NBIcKlaJAjLJ7/Uvr
+    S8RA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763714070;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=OecnmCr6VTW3Mcb+HgMmAnPusrZgoIdEFzXPGvhkA40=;
-    b=GSwIpLpFmdJrt9lL0gn0B+FCLwyR0+CqTIkW7B04KjH5nrUoz9RWVd647jOU0pg9vt
-    Wv5V7kGaYseg2Xbc6I/q9OeM5tfCUWQ3yKEeYSTSVhYIXuKyijjxz7KHpaVkI4rDzCOe
-    BDUC3PbXKR4R8Dxvtf4R0YCP5IVpgILdmzu/Py8l80N8shlN1nEufx4YEpuLGOa6aNOF
-    OwN1B82m/ggIFuBbdqrqJKNylzt6vuRFI8RTSHc+QLT3tDjH6ve7kg5GVu4WHRHy7f/9
-    fkcSjPIhFkKNA9bj/q3v59yA1AJmfNL3G2EcuLfmuBChWfWlZy5Yi+xnG3noi7a0y431
-    pQtg==
+    bh=Krnu38X0Tg3QBihGnYypdDGFMGs4kJcBXgCNI12wrqc=;
+    b=CKXaZJ99nl2g2FZLoef9//rFb3uW6d0Id00FyeCfK1/klcPGpOFCKSdc6db9Nkvhtg
+    EvUKGpbur2FcYhtR0xS/n9MM7oBtuE1CHHSOLw0hBarVVCvjPwGetIxc/KN3accGiVKc
+    f9sKPnSDwFvLzwQT2QqmE9MnjwL8h+KPZBvCP5JYXbxd1raBrzvtICJws/RHHYNoeJZX
+    B+DC++ThnkW8UpROhBV5kzDUmIwlKSV4t97ulFWN6V0++xXQTHlc7qtIwL8bs3BsvuV4
+    BBrCGgGAU5+WiUMFB8K8aGcXZLD3AfOVYROCPKDv6Oz+Whms7aF+fHBGIK3GsLbY+IIt
+    khFQ==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
@@ -59,34 +59,34 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763714070;
     s=strato-dkim-0002; d=hartkopp.net;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=OecnmCr6VTW3Mcb+HgMmAnPusrZgoIdEFzXPGvhkA40=;
-    b=KI+qL/Ei3GGpQg/hNC+FqS8MJyjCqngeBiz2u43IesIfcROIZEn2hZ+ApfC0k8Ltju
-    G+gZ+BsPPVjko6t6EwF+xXtcdR4Omt0+3dbM1sXNztmorwhmhQr9dpIWXz9lpMfqkxzZ
-    2QOD3LqVmYO+2fvoOf27qSQiZ8UWoSC5U8FHwi7NfIMZOtJogHNAiIp5GfTtXhgJ3Wgw
-    qmQtLv+BQvc15MOWSa52ViGL0sV9oYA3oI/OoKvnWKg1muyE8kWvxwWWMK8VuHajDbkp
-    ka4PCkNqrMMKo8zb8mgcbfE3C/beZ8rjiUNyh4cPXNKT5qgefdDPgJK1f2wnyDbxrTg4
-    SgLw==
+    bh=Krnu38X0Tg3QBihGnYypdDGFMGs4kJcBXgCNI12wrqc=;
+    b=TO9auufphN5RmwGylVELDfRoVMK+qPxjzzjrGLlMK+O9Y7VvbQlza5f4zJqWgE9YS9
+    MbuqywY+l9s1eN+VIKHpH2RRePQNM/gfHKdoVDo0koW+SloQ4FFWSrORAFrSHKwIxZs7
+    yF6JF8n+EeAXOWn0kLwG7LatsrK9SX/dwIYEw8MboNbQ7WDCrAVi0o8o2T2nFRdBqcTD
+    hh8y0BDskzXOM+bkAVY3d3ldFKk4W/sRlCF1SqrCNnMgpa3J5aDkG5nDERcrjg4GM+sv
+    u74fXDUtzGzhmJ5gkccNuTWzViS0cpIUE0vioIFmQGo7z9STAUF+Lh2uMWAmiIrywE4F
+    rdIQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763714070;
     s=strato-dkim-0003; d=hartkopp.net;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=OecnmCr6VTW3Mcb+HgMmAnPusrZgoIdEFzXPGvhkA40=;
-    b=AIrPaog97Pl6QWOS4M/cDil8pw7Cfbqe/iqlJCI6uu2WpGt1Q+4LAQst5ojXZCUdKl
-    54GIlunvqNVzghM14pDw==
+    bh=Krnu38X0Tg3QBihGnYypdDGFMGs4kJcBXgCNI12wrqc=;
+    b=tJ9SDzJ2WXTXRZlkVUPcE1UtFQ7fMkFy2lAvwnNKqfuDHkktaO0OhFTmOoGjeYJGGl
+    SZd+Qru5UgROFIIUkUCQ==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
 Received: from lenov17.lan
     by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461AL8YTAfx
+    with ESMTPSA id Ke2b461AL8YUAfy
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Fri, 21 Nov 2025 09:34:29 +0100 (CET)
+    Fri, 21 Nov 2025 09:34:30 +0100 (CET)
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 To: linux-can@vger.kernel.org
 Cc: Vincent Mailhol <mailhol@kernel.org>,
 	Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [canxl v4 09/17] can: calc_bittiming: add PWM calculation
-Date: Fri, 21 Nov 2025 09:34:06 +0100
-Message-ID: <20251121083414.3642-10-socketcan@hartkopp.net>
+Subject: [canxl v4 10/17] can: netlink: add PWM netlink interface
+Date: Fri, 21 Nov 2025 09:34:07 +0100
+Message-ID: <20251121083414.3642-11-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251121083414.3642-1-socketcan@hartkopp.net>
 References: <20251121083414.3642-1-socketcan@hartkopp.net>
@@ -101,118 +101,423 @@ Content-Type: text/plain; charset="us-ascii"
 
 From: Vincent Mailhol <mailhol@kernel.org>
 
-Perform the PWM calculation according to CiA recommendations.
+When the TMS is switched on, the node uses PWM (Pulse Width
+Modulation) during the data phase instead of the classic NRZ (Non
+Return to Zero) encoding.
 
-Note that for databitrates greater than 5 MBPS, tqmin is less than
-CAN_PWM_NS_MAX (which is defined to 200 nano seconds), consequently,
-the result of the division:
+PWM is configured by three parameters:
 
-  DIV_ROUND_UP(xl_ns, CAN_PWM_NS_MAX)
+  - PWMS: Pulse Width Modulation Short phase
+  - PWML: Pulse Width Modulation Long phase
+  - PWMO: Pulse Width Modulation Offset time
 
-is one and thus the for loop automatically stops on the first
-iteration giving a single PWM symbol per bit as expected. Because of
-that, there is no actual need for a separate conditional branch for
-when the databitrate is greater than 5 MBPS.
+For each of these parameters, define three IFLA symbols:
+
+  - IFLA_CAN_PWM_PWM*_MIN: the minimum allowed value.
+  - IFLA_CAN_PWM_PWM*_MAX: the maximum allowed value.
+  - IFLA_CAN_PWM_PWM*: the runtime value.
+
+This results in a total of nine IFLA symbols which are all nested in a
+parent IFLA_CAN_XL_PWM symbol.
+
+IFLA_CAN_PWM_PWM*_MIN and IFLA_CAN_PWM_PWM*_MAX define the range of
+allowed values and will match the value statically configured by the
+device in struct can_pwm_const.
+
+IFLA_CAN_PWM_PWM* match the runtime values stored in struct can_pwm.
+Those parameters may only be configured when the tms mode is on. If
+the PWMS, PWML and PWMO parameters are provided, check that all the
+needed parameters are present using can_validate_pwm(), then check
+their value using can_validate_pwm_bittiming(). PWMO defaults to zero
+if omitted. Otherwise, if CAN_CTRLMODE_XL_TMS is true but none of the
+PWM parameters are provided, calculate them using can_calc_pwm().
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- drivers/net/can/dev/calc_bittiming.c | 36 ++++++++++++++++++++++++++++
- include/linux/can/bittiming.h        | 10 ++++++++
- 2 files changed, 46 insertions(+)
+ drivers/net/can/dev/netlink.c    | 192 ++++++++++++++++++++++++++++++-
+ include/uapi/linux/can/netlink.h |  25 ++++
+ 2 files changed, 215 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/dev/calc_bittiming.c b/drivers/net/can/dev/calc_bittiming.c
-index 394d6974f481..268ec6fa7c49 100644
---- a/drivers/net/can/dev/calc_bittiming.c
-+++ b/drivers/net/can/dev/calc_bittiming.c
-@@ -1,9 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /* Copyright (C) 2005 Marc Kleine-Budde, Pengutronix
-  * Copyright (C) 2006 Andrey Volkov, Varma Electronics
-  * Copyright (C) 2008-2009 Wolfgang Grandegger <wg@grandegger.com>
-+ * Copyright (C) 2021-2025 Vincent Mailhol <mailhol@kernel.org>
-  */
+diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+index 5a628c629109..72b9a094ea83 100644
+--- a/drivers/net/can/dev/netlink.c
++++ b/drivers/net/can/dev/netlink.c
+@@ -23,10 +23,11 @@ static const struct nla_policy can_policy[IFLA_CAN_MAX + 1] = {
+ 	[IFLA_CAN_TDC] = { .type = NLA_NESTED },
+ 	[IFLA_CAN_CTRLMODE_EXT] = { .type = NLA_NESTED },
+ 	[IFLA_CAN_XL_DATA_BITTIMING] = { .len = sizeof(struct can_bittiming) },
+ 	[IFLA_CAN_XL_DATA_BITTIMING_CONST] = { .len = sizeof(struct can_bittiming_const) },
+ 	[IFLA_CAN_XL_TDC] = { .type = NLA_NESTED },
++	[IFLA_CAN_XL_PWM] = { .type = NLA_NESTED },
+ };
  
- #include <linux/units.h>
- #include <linux/can/dev.h>
+ static const struct nla_policy can_tdc_policy[IFLA_CAN_TDC_MAX + 1] = {
+ 	[IFLA_CAN_TDC_TDCV_MIN] = { .type = NLA_U32 },
+ 	[IFLA_CAN_TDC_TDCV_MAX] = { .type = NLA_U32 },
+@@ -37,10 +38,22 @@ static const struct nla_policy can_tdc_policy[IFLA_CAN_TDC_MAX + 1] = {
+ 	[IFLA_CAN_TDC_TDCV] = { .type = NLA_U32 },
+ 	[IFLA_CAN_TDC_TDCO] = { .type = NLA_U32 },
+ 	[IFLA_CAN_TDC_TDCF] = { .type = NLA_U32 },
+ };
  
-@@ -196,5 +197,40 @@ void can_calc_tdco(struct can_tdc *tdc, const struct can_tdc_const *tdc_const,
- 			return;
- 		tdc->tdco = min(sample_point_in_tc, tdc_const->tdco_max);
- 		*ctrlmode |= tdc_auto;
++static const struct nla_policy can_pwm_policy[IFLA_CAN_PWM_MAX + 1] = {
++	[IFLA_CAN_PWM_PWMS_MIN] = { .type = NLA_U32 },
++	[IFLA_CAN_PWM_PWMS_MAX] = { .type = NLA_U32 },
++	[IFLA_CAN_PWM_PWML_MIN] = { .type = NLA_U32 },
++	[IFLA_CAN_PWM_PWML_MAX] = { .type = NLA_U32 },
++	[IFLA_CAN_PWM_PWMO_MIN] = { .type = NLA_U32 },
++	[IFLA_CAN_PWM_PWMO_MAX] = { .type = NLA_U32 },
++	[IFLA_CAN_PWM_PWMS] = { .type = NLA_U32 },
++	[IFLA_CAN_PWM_PWML] = { .type = NLA_U32 },
++	[IFLA_CAN_PWM_PWMO] = { .type = NLA_U32 },
++};
++
+ static int can_validate_bittiming(struct nlattr *data[],
+ 				  struct netlink_ext_ack *extack,
+ 				  int ifla_can_bittiming)
+ {
+ 	struct can_bittiming *bt;
+@@ -117,10 +130,44 @@ static int can_validate_tdc(struct nlattr *data_tdc,
  	}
+ 
+ 	return 0;
  }
-+
-+int can_calc_pwm(struct net_device *dev, struct netlink_ext_ack *extack)
+ 
++static int can_validate_pwm(struct nlattr *data[],
++			    struct netlink_ext_ack *extack, u32 flags)
 +{
-+	struct can_priv *priv = netdev_priv(dev);
-+	const struct can_pwm_const *pwm_const = priv->xl.pwm_const;
-+	struct can_pwm *pwm = &priv->xl.pwm;
-+	u32 xl_tqmin = can_bit_time_tqmin(&priv->xl.data_bittiming);
-+	u32 xl_ns = can_tqmin_to_ns(xl_tqmin, priv->clock.freq);
-+	u32 nom_tqmin = can_bit_time_tqmin(&priv->bittiming);
-+	int pwm_per_bit_max = xl_tqmin / (pwm_const->pwms_min + pwm_const->pwml_min);
-+	int pwm_per_bit;
-+	u32 pwm_tqmin;
++	struct nlattr *tb_pwm[IFLA_CAN_PWM_MAX + 1];
++	int err;
 +
-+	/* For 5 MB/s databitrate or greater, xl_ns < CAN_PWM_NS_MAX
-+	 * giving us a pwm_per_bit of 1 and the loop immediately breaks
-+	 */
-+	for (pwm_per_bit = DIV_ROUND_UP(xl_ns, CAN_PWM_NS_MAX);
-+	     pwm_per_bit <= pwm_per_bit_max; pwm_per_bit++)
-+		if (xl_tqmin % pwm_per_bit == 0)
-+			break;
++	if (!data[IFLA_CAN_XL_PWM])
++		return 0;
 +
-+	if (pwm_per_bit > pwm_per_bit_max) {
-+		NL_SET_ERR_MSG_FMT(extack,
-+				   "Can not divide the XL data phase's bit time: %u tqmin into multiple PWM symbols",
-+				   xl_tqmin);
-+		return -EINVAL;
++	if (!(flags & CAN_CTRLMODE_XL_TMS)) {
++		NL_SET_ERR_MSG(extack, "PWM requires TMS");
++		return -EOPNOTSUPP;
 +	}
 +
-+	pwm_tqmin = xl_tqmin / pwm_per_bit;
-+	pwm->pwms = DIV_ROUND_UP_POW2(pwm_tqmin, 4);
-+	pwm->pwml = pwm_tqmin - pwm->pwms;
-+	pwm->pwmo = nom_tqmin % pwm_tqmin;
++	err = nla_parse_nested(tb_pwm, IFLA_CAN_PWM_MAX, data[IFLA_CAN_XL_PWM],
++			       can_pwm_policy, extack);
++	if (err)
++		return err;
++
++	if (!tb_pwm[IFLA_CAN_PWM_PWMS] != !tb_pwm[IFLA_CAN_PWM_PWML]) {
++		NL_SET_ERR_MSG(extack,
++			       "Provide either both PWMS and PWML, or none for automic calculation");
++		return -EOPNOTSUPP;
++	}
++
++	if (tb_pwm[IFLA_CAN_PWM_PWMO] &&
++	    (!tb_pwm[IFLA_CAN_PWM_PWMS] || !tb_pwm[IFLA_CAN_PWM_PWML])) {
++		NL_SET_ERR_MSG(extack, "PWMO requires both PWMS and PWML");
++		return -EOPNOTSUPP;
++	}
 +
 +	return 0;
 +}
-diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.h
-index 2504fafc72e4..726d909e87ce 100644
---- a/include/linux/can/bittiming.h
-+++ b/include/linux/can/bittiming.h
-@@ -178,10 +178,12 @@ int can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
- 		       const struct can_bittiming_const *btc, struct netlink_ext_ack *extack);
- 
- void can_calc_tdco(struct can_tdc *tdc, const struct can_tdc_const *tdc_const,
- 		   const struct can_bittiming *dbt,
- 		   u32 tdc_mask, u32 *ctrlmode, u32 ctrlmode_supported);
 +
-+int can_calc_pwm(struct net_device *dev, struct netlink_ext_ack *extack);
- #else /* !CONFIG_CAN_CALC_BITTIMING */
- static inline int
- can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
- 		   const struct can_bittiming_const *btc, struct netlink_ext_ack *extack)
+ static int can_validate_databittiming(struct nlattr *data[],
+ 				      struct netlink_ext_ack *extack,
+ 				      int ifla_can_data_bittiming, u32 flags)
  {
-@@ -193,10 +195,18 @@ static inline void
- can_calc_tdco(struct can_tdc *tdc, const struct can_tdc_const *tdc_const,
- 	      const struct can_bittiming *dbt,
- 	      u32 tdc_mask, u32 *ctrlmode, u32 ctrlmode_supported)
- {
+ 	struct nlattr *data_tdc;
+@@ -245,10 +292,14 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+ 	err = can_validate_databittiming(data, extack,
+ 					 IFLA_CAN_XL_DATA_BITTIMING, flags);
+ 	if (err)
+ 		return err;
+ 
++	err = can_validate_pwm(data, extack, flags);
++	if (err)
++		return err;
++
+ 	return 0;
  }
-+
-+static inline int
-+can_calc_pwm(struct net_device *dev, struct netlink_ext_ack *extack)
+ 
+ static int can_ctrlmode_changelink(struct net_device *dev,
+ 				   struct nlattr *data[],
+@@ -320,10 +371,11 @@ static int can_ctrlmode_changelink(struct net_device *dev,
+ 	if (!(priv->ctrlmode & CAN_CTRLMODE_XL)) {
+ 		memset(&priv->xl.data_bittiming, 0,
+ 		       sizeof(priv->fd.data_bittiming));
+ 		priv->ctrlmode &= ~CAN_CTRLMODE_XL_TDC_MASK;
+ 		memset(&priv->xl.tdc, 0, sizeof(priv->xl.tdc));
++		memset(&priv->xl.pwm, 0, sizeof(priv->xl.pwm));
+ 	}
+ 
+ 	can_set_default_mtu(dev);
+ 
+ 	return 0;
+@@ -466,10 +518,80 @@ static int can_dbt_changelink(struct net_device *dev, struct nlattr *data[],
+ 	}
+ 
+ 	return 0;
+ }
+ 
++static int can_pwm_changelink(struct net_device *dev,
++			      const struct nlattr *pwm_nla,
++			      struct netlink_ext_ack *extack)
 +{
-+	NL_SET_ERR_MSG(extack,
-+		       "bit-timing calculation not available: manually provide PWML and PWMS\n");
-+	return -EINVAL;
++	struct can_priv *priv = netdev_priv(dev);
++	const struct can_pwm_const *pwm_const = priv->xl.pwm_const;
++	struct nlattr *tb_pwm[IFLA_CAN_PWM_MAX + 1];
++	struct can_pwm pwm = { 0 };
++	int err;
++
++	if (!(priv->ctrlmode & CAN_CTRLMODE_XL_TMS))
++		return 0;
++
++	if (!pwm_const) {
++		NL_SET_ERR_MSG(extack, "The device does not support PWM");
++		return -EOPNOTSUPP;
++	}
++
++	if (!pwm_nla)
++		return can_calc_pwm(dev, extack);
++
++	err = nla_parse_nested(tb_pwm, IFLA_CAN_PWM_MAX, pwm_nla,
++			       can_pwm_policy, extack);
++	if (err)
++		return err;
++
++	if (tb_pwm[IFLA_CAN_PWM_PWMS]) {
++		pwm.pwms = nla_get_u32(tb_pwm[IFLA_CAN_PWM_PWMS]);
++		if (pwm.pwms < pwm_const->pwms_min ||
++		    pwm.pwms > pwm_const->pwms_max) {
++			NL_SET_ERR_MSG_FMT(extack,
++					   "PWMS: %u tqmin is out of range: %u...%u",
++					   pwm.pwms, pwm_const->pwms_min,
++					   pwm_const->pwms_max);
++			return -EINVAL;
++		}
++	}
++
++	if (tb_pwm[IFLA_CAN_PWM_PWML]) {
++		pwm.pwml = nla_get_u32(tb_pwm[IFLA_CAN_PWM_PWML]);
++		if (pwm.pwml < pwm_const->pwml_min ||
++		    pwm.pwml > pwm_const->pwml_max) {
++			NL_SET_ERR_MSG_FMT(extack,
++					   "PWML: %u tqmin is out of range: %u...%u",
++					   pwm.pwml, pwm_const->pwml_min,
++					   pwm_const->pwml_max);
++			return -EINVAL;
++		}
++	}
++
++	if (tb_pwm[IFLA_CAN_PWM_PWMO]) {
++		pwm.pwmo = nla_get_u32(tb_pwm[IFLA_CAN_PWM_PWMO]);
++		if (pwm.pwmo < pwm_const->pwmo_min ||
++		    pwm.pwmo > pwm_const->pwmo_max) {
++			NL_SET_ERR_MSG_FMT(extack,
++					   "PWMO: %u tqmin is out of range: %u...%u",
++					   pwm.pwmo, pwm_const->pwmo_min,
++					   pwm_const->pwmo_max);
++			return -EINVAL;
++		}
++	}
++
++	err = can_validate_pwm_bittiming(dev, &pwm, extack);
++	if (err)
++		return err;
++
++	priv->xl.pwm = pwm;
++	return 0;
 +}
- #endif /* CONFIG_CAN_CALC_BITTIMING */
++
+ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 			  struct nlattr *data[],
+ 			  struct netlink_ext_ack *extack)
+ {
+ 	struct can_priv *priv = netdev_priv(dev);
+@@ -557,10 +679,13 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 	if (err)
+ 		return err;
  
- void can_sjw_set_default(struct can_bittiming *bt);
+ 	/* CAN XL */
+ 	err = can_dbt_changelink(dev, data, false, extack);
++	if (err)
++		return err;
++	err = can_pwm_changelink(dev, data[IFLA_CAN_XL_PWM], extack);
+ 	if (err)
+ 		return err;
  
- int can_sjw_check(const struct net_device *dev, const struct can_bittiming *bt,
+ 	if (data[IFLA_CAN_TERMINATION]) {
+ 		const u16 termval = nla_get_u16(data[IFLA_CAN_TERMINATION]);
+@@ -645,10 +770,34 @@ static size_t can_ctrlmode_ext_get_size(void)
+ {
+ 	return nla_total_size(0) +		/* nest IFLA_CAN_CTRLMODE_EXT */
+ 		nla_total_size(sizeof(u32));	/* IFLA_CAN_CTRLMODE_SUPPORTED */
+ }
+ 
++static size_t can_pwm_get_size(const struct can_pwm_const *pwm_const,
++			       bool pwm_on)
++{
++	size_t size;
++
++	if (!pwm_const || !pwm_on)
++		return 0;
++
++	size = nla_total_size(0);			/* nest IFLA_CAN_PWM */
++
++	size += nla_total_size(sizeof(u32));		/* IFLA_CAN_PWM_PWMS_MIN */
++	size += nla_total_size(sizeof(u32));		/* IFLA_CAN_PWM_PWMS_MAX */
++	size += nla_total_size(sizeof(u32));		/* IFLA_CAN_PWM_PWML_MIN */
++	size += nla_total_size(sizeof(u32));		/* IFLA_CAN_PWM_PWML_MAX */
++	size += nla_total_size(sizeof(u32));		/* IFLA_CAN_PWM_PWMO_MIN */
++	size += nla_total_size(sizeof(u32));		/* IFLA_CAN_PWM_PWMO_MAX */
++
++	size += nla_total_size(sizeof(u32));		/* IFLA_CAN_PWM_PWMS */
++	size += nla_total_size(sizeof(u32));		/* IFLA_CAN_PWM_PWML */
++	size += nla_total_size(sizeof(u32));		/* IFLA_CAN_PWM_PWMO */
++
++	return size;
++}
++
+ static size_t can_get_size(const struct net_device *dev)
+ {
+ 	struct can_priv *priv = netdev_priv(dev);
+ 	size_t size = 0;
+ 
+@@ -676,10 +825,12 @@ static size_t can_get_size(const struct net_device *dev)
+ 	size += can_data_bittiming_get_size(&priv->fd,
+ 					    priv->ctrlmode & CAN_CTRLMODE_FD_TDC_MASK);
+ 
+ 	size += can_data_bittiming_get_size(&priv->xl,
+ 					    priv->ctrlmode & CAN_CTRLMODE_XL_TDC_MASK);
++	size += can_pwm_get_size(priv->xl.pwm_const,		/* IFLA_CAN_XL_PWM */
++				 priv->ctrlmode & CAN_CTRLMODE_XL_TMS);
+ 
+ 	return size;
+ }
+ 
+ static int can_bittiming_fill_info(struct sk_buff *skb, int ifla_can_bittiming,
+@@ -774,10 +925,46 @@ static int can_tdc_fill_info(struct sk_buff *skb, const struct net_device *dev,
+ err_cancel:
+ 	nla_nest_cancel(skb, nest);
+ 	return -EMSGSIZE;
+ }
+ 
++static int can_pwm_fill_info(struct sk_buff *skb, const struct can_priv *priv)
++{
++	const struct can_pwm_const *pwm_const = priv->xl.pwm_const;
++	const struct can_pwm *pwm = &priv->xl.pwm;
++	struct nlattr *nest;
++
++	if (!pwm_const)
++		return 0;
++
++	nest = nla_nest_start(skb, IFLA_CAN_XL_PWM);
++	if (!nest)
++		return -EMSGSIZE;
++
++	if (nla_put_u32(skb, IFLA_CAN_PWM_PWMS_MIN, pwm_const->pwms_min) ||
++	    nla_put_u32(skb, IFLA_CAN_PWM_PWMS_MAX, pwm_const->pwms_max) ||
++	    nla_put_u32(skb, IFLA_CAN_PWM_PWML_MIN, pwm_const->pwml_min) ||
++	    nla_put_u32(skb, IFLA_CAN_PWM_PWML_MAX, pwm_const->pwml_max) ||
++	    nla_put_u32(skb, IFLA_CAN_PWM_PWMO_MIN, pwm_const->pwmo_min) ||
++	    nla_put_u32(skb, IFLA_CAN_PWM_PWMO_MAX, pwm_const->pwmo_max))
++		goto err_cancel;
++
++	if (priv->ctrlmode & CAN_CTRLMODE_XL_TMS) {
++		if (nla_put_u32(skb, IFLA_CAN_PWM_PWMS, pwm->pwms) ||
++		    nla_put_u32(skb, IFLA_CAN_PWM_PWML, pwm->pwml) ||
++		    nla_put_u32(skb, IFLA_CAN_PWM_PWMO, pwm->pwmo))
++			goto err_cancel;
++	}
++
++	nla_nest_end(skb, nest);
++	return 0;
++
++err_cancel:
++	nla_nest_cancel(skb, nest);
++	return -EMSGSIZE;
++}
++
+ static int can_ctrlmode_ext_fill_info(struct sk_buff *skb,
+ 				      const struct can_priv *priv)
+ {
+ 	struct nlattr *nest;
+ 
+@@ -857,13 +1044,14 @@ static int can_fill_info(struct sk_buff *skb, const struct net_device *dev)
+ 
+ 	    can_bitrate_const_fill_info(skb, IFLA_CAN_XL_DATA_BITRATE_CONST,
+ 					priv->xl.data_bitrate_const,
+ 					priv->xl.data_bitrate_const_cnt) ||
+ 
+-	    can_tdc_fill_info(skb, dev, IFLA_CAN_XL_TDC)
+-	    )
++	    can_tdc_fill_info(skb, dev, IFLA_CAN_XL_TDC) ||
+ 
++	    can_pwm_fill_info(skb, priv)
++	    )
+ 		return -EMSGSIZE;
+ 
+ 	return 0;
+ }
+ 
+diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
+index ebafb091d80f..c30d16746159 100644
+--- a/include/uapi/linux/can/netlink.h
++++ b/include/uapi/linux/can/netlink.h
+@@ -3,10 +3,11 @@
+  * linux/can/netlink.h
+  *
+  * Definitions for the CAN netlink interface
+  *
+  * Copyright (c) 2009 Wolfgang Grandegger <wg@grandegger.com>
++ * Copyright (c) 2021-2025 Vincent Mailhol <mailhol@kernel.org>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the version 2 of the GNU General Public License
+  * as published by the Free Software Foundation
+  *
+@@ -145,10 +146,11 @@ enum {
+ 	IFLA_CAN_CTRLMODE_EXT,
+ 	IFLA_CAN_XL_DATA_BITTIMING,
+ 	IFLA_CAN_XL_DATA_BITTIMING_CONST,
+ 	IFLA_CAN_XL_DATA_BITRATE_CONST,
+ 	IFLA_CAN_XL_TDC,
++	IFLA_CAN_XL_PWM,
+ 
+ 	/* add new constants above here */
+ 	__IFLA_CAN_MAX,
+ 	IFLA_CAN_MAX = __IFLA_CAN_MAX - 1
+ };
+@@ -186,9 +188,32 @@ enum {
+ 	/* add new constants above here */
+ 	__IFLA_CAN_CTRLMODE,
+ 	IFLA_CAN_CTRLMODE_MAX = __IFLA_CAN_CTRLMODE - 1
+ };
+ 
++/*
++ * CAN FD/XL Pulse-Width Modulation (PWM)
++ *
++ * Please refer to struct can_pwm_const and can_pwm in
++ * include/linux/can/bittiming.h for further details.
++ */
++enum {
++	IFLA_CAN_PWM_UNSPEC,
++	IFLA_CAN_PWM_PWMS_MIN,	/* u32 */
++	IFLA_CAN_PWM_PWMS_MAX,	/* u32 */
++	IFLA_CAN_PWM_PWML_MIN,	/* u32 */
++	IFLA_CAN_PWM_PWML_MAX,	/* u32 */
++	IFLA_CAN_PWM_PWMO_MIN,	/* u32 */
++	IFLA_CAN_PWM_PWMO_MAX,	/* u32 */
++	IFLA_CAN_PWM_PWMS,	/* u32 */
++	IFLA_CAN_PWM_PWML,	/* u32 */
++	IFLA_CAN_PWM_PWMO,	/* u32 */
++
++	/* add new constants above here */
++	__IFLA_CAN_PWM,
++	IFLA_CAN_PWM_MAX = __IFLA_CAN_PWM - 1
++};
++
+ /* u16 termination range: 1..65535 Ohms */
+ #define CAN_TERMINATION_DISABLED 0
+ 
+ #endif /* !_UAPI_CAN_NETLINK_H */
 -- 
 2.47.3
 
