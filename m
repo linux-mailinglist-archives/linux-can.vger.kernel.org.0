@@ -1,227 +1,239 @@
-Return-Path: <linux-can+bounces-5550-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5553-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 312A4C7829D
-	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 10:32:18 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCE9EC78252
+	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 10:27:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id A22E335E81
-	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 09:23:08 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 34D7E3633CC
+	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 09:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F5D234165F;
-	Fri, 21 Nov 2025 09:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76D2332EBB;
+	Fri, 21 Nov 2025 09:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="QQz6QqBU";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="+aTQuyI6"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0BF3396E9
-	for <linux-can@vger.kernel.org>; Fri, 21 Nov 2025 09:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763716771; cv=none; b=AR++DiwFKaq67+ak3ppJAefx0gLf6QOfzEUkDIgFKmWnBOVT91tiBiI2mAuVuZW1cl4zyKA1XSJqE+JbEwzEcjeXHRFAbr6H+I1y0LSneTKFgDKsu8wl/y6iaHuNR0t1MsfSqkH3NKh/3ptWWt27+iX1Xg0NyLoHs23JtQ6igkE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763716771; c=relaxed/simple;
-	bh=DPN8J3jed+ss/8dL1dWFUq2QyhreEa1fpDlZQvSCcOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HsrMBReFgxQ8b6E09/EUpnFIpWExyEjCT/5kheuNR+XC5UYASQ2hYbGnak5UxzKgSdsebk9hpwz6r/6kKZ5p6Z+BILKqXMT37+CjAIFNnsCoCo7MCqlihbxFlIShZOH0QWysbDV2qYWUqlNTNrl+4PDYPwRArTdGJB+69goY5d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vMNId-0003Jv-Vk; Fri, 21 Nov 2025 10:19:27 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vMNId-001YqI-1w;
-	Fri, 21 Nov 2025 10:19:27 +0100
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 35ADE4A45F9;
-	Fri, 21 Nov 2025 09:19:27 +0000 (UTC)
-Date: Fri, 21 Nov 2025 10:19:26 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>
-Subject: Re: [canxl v4 10/17] can: netlink: add PWM netlink interface
-Message-ID: <20251121-cherubic-pearl-bittern-e54ab2-mkl@pengutronix.de>
-References: <20251121083414.3642-1-socketcan@hartkopp.net>
- <20251121083414.3642-11-socketcan@hartkopp.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A50133F8C9
+	for <linux-can@vger.kernel.org>; Fri, 21 Nov 2025 09:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763716986; cv=pass; b=YVg+N+wmBuOWxDiFeg17Nacu6LV469megHS5whkuVP4obdLKGWAGqUzceK3FTu57Pq5DeP3Yg3t+U6ChKolZI3e9NZdenho0HgO+K2GvApS6ixHC2yVEARyByd+grj20amMWntSbaQwijWGOZLGEGZtTQ2xtGvkvB9QunKDYKh0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763716986; c=relaxed/simple;
+	bh=qB5KHt+OI/yRa95U/E8HScVP/9Cm3AISZyWxo7CgQUo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ww9l1I3k97l82kKBLkot1J4YMCEX465nq/WYEgjMEx98VKv+cQBOMrfJHJQTeRcEGUfktpp+wGjkvOPd1c4PDTw+oR3rbp46RstUVCOP+Ccl+CEUZQvXMOIZ3Mf3PHUMlLGxlQpFdtvzAcXSIYAEHuO3iChEWpLVTtUqbKuhAuc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=QQz6QqBU; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=+aTQuyI6; arc=pass smtp.client-ip=85.215.255.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1763716785; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=QoYO2XT7Ass/YYOEUb/ERAJAT214EAQ/aNjw9sZ9V5dYKcj5JiVdP+Ou+uisBRAFu1
+    1U1v+Is9jEFLjfGxqmzAW0VLnw27H0qWzfQ/wdYX7qTZq5F+R0UBKWncZL0wQ7JLHQ2o
+    fxTrYQkJsZwsAcl4dz2r2DiDJKTaGCsv5fwgIWiAwl+3Xjhvn+GGx9/q6e/s59mdcvVg
+    mcMycT+DcgprYl7PtQkC4VMsLJBfvd6cnHHQoUaiGywAJ04k0iNbn7mA9NNZTQ6FaP0s
+    Y8my+lSKo443rZQt2yQ9uP4N7jl53uYcdIkNpXqPFqJTWLiXa11VPEGa7UaeVI7+sDQu
+    l0PQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763716785;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=ygQ/aleTv9uUFHfKKa/8z46x2MkZ9jH7oofzIMzRZ2w=;
+    b=GoRvleDY+HYWG4ybJA6YiwgFmBlGDV/BC0K1lHg4Oxbm2+LhEutfabWkPT9ADJXJit
+    IKj3itu0ZMobgpBESJoo/Og//hSRWzfLs3uNFRiSxGUnwQImfFdqdUC10NDTY/3/+I7q
+    oXzGN8pTBRVFiYFvbckafXcnH9z3TWu6Z7vPKRuk4VYu13eL6JcjLP8J7glpnFgTrCR1
+    Y/EkQP7Fl40xbU+fcgkm/n7JvXaFdDOKLZzMNFLvlz2baDKADxLNMLkxIOHCBSs5YdYT
+    7kug1QH+btCcNAunslrlvpKSkRE/gwKRUw8tzpwVyAMfYjeOJsnKEUfzYUWflkSFIxHC
+    l+qA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763716785;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=ygQ/aleTv9uUFHfKKa/8z46x2MkZ9jH7oofzIMzRZ2w=;
+    b=QQz6QqBUISYROgYXavhAf1zQX01/JnIM9Mq79ZkJlt5o7P31s+Yv7atMSOFNahDDsk
+    iTxdmPzCe+Qm/cLXsOvWgQvY/ZocYDhwtjvLg548N1K+G0FFvnRTJUcAAa6eZGxY7+xo
+    1zLjXgPf4yh/IK0Fn0yQe4FSuMM4N+1Dp9j+O5KA6YeuCxYLybESJa9TBIgAhb6AUrVX
+    578JPGaguxFJiEcIrSHQIz1RbwkENNbOiZm6NrmjG7V+rA0IiW+ZJkNQl31rkZ4iCjBh
+    bcDW5xaa1IqWwDhmbkBpuuhIR5kOeiEW8MWFVQkLDD3S0VOnn8z17B/b8MVCd83RQbov
+    dUzA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763716785;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=ygQ/aleTv9uUFHfKKa/8z46x2MkZ9jH7oofzIMzRZ2w=;
+    b=+aTQuyI62FKm99gxRI98idAI9+ETfs9d+QS8qsqysQxk3+YLulILXvmgg3rvO/sOzq
+    2a2phH6SYG33W4KBpmAQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
+    by smtp.strato.de (RZmta 54.0.0 AUTH)
+    with ESMTPSA id Ke2b461AL9JjAvN
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Fri, 21 Nov 2025 10:19:45 +0100 (CET)
+Message-ID: <c16bbec8-f4ad-4eb6-9e0f-362c3e6261df@hartkopp.net>
+Date: Fri, 21 Nov 2025 10:19:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jeqef6rf4fcyy7s4"
-Content-Disposition: inline
-In-Reply-To: <20251121083414.3642-11-socketcan@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [canxl v4 16/17] can: dev: can_get_ctrlmode_str: use capitalized
+ ctrlmode strings
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-can@vger.kernel.org,
+ Stephane Grosjean <stephane.grosjean@hms-networks.com>
+References: <20251121083414.3642-1-socketcan@hartkopp.net>
+ <20251121083414.3642-17-socketcan@hartkopp.net>
+ <20251121-meticulous-authentic-hippo-a88adc-mkl@pengutronix.de>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20251121-meticulous-authentic-hippo-a88adc-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---jeqef6rf4fcyy7s4
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [canxl v4 10/17] can: netlink: add PWM netlink interface
-MIME-Version: 1.0
 
-On 21.11.2025 09:34:07, Oliver Hartkopp wrote:
-> From: Vincent Mailhol <mailhol@kernel.org>
->
-> When the TMS is switched on, the node uses PWM (Pulse Width
-> Modulation) during the data phase instead of the classic NRZ (Non
-> Return to Zero) encoding.
->
-> PWM is configured by three parameters:
->
->   - PWMS: Pulse Width Modulation Short phase
->   - PWML: Pulse Width Modulation Long phase
->   - PWMO: Pulse Width Modulation Offset time
->
-> For each of these parameters, define three IFLA symbols:
->
->   - IFLA_CAN_PWM_PWM*_MIN: the minimum allowed value.
->   - IFLA_CAN_PWM_PWM*_MAX: the maximum allowed value.
->   - IFLA_CAN_PWM_PWM*: the runtime value.
->
-> This results in a total of nine IFLA symbols which are all nested in a
-> parent IFLA_CAN_XL_PWM symbol.
->
-> IFLA_CAN_PWM_PWM*_MIN and IFLA_CAN_PWM_PWM*_MAX define the range of
-> allowed values and will match the value statically configured by the
-> device in struct can_pwm_const.
->
-> IFLA_CAN_PWM_PWM* match the runtime values stored in struct can_pwm.
-> Those parameters may only be configured when the tms mode is on. If
-> the PWMS, PWML and PWMO parameters are provided, check that all the
-> needed parameters are present using can_validate_pwm(), then check
-> their value using can_validate_pwm_bittiming(). PWMO defaults to zero
-> if omitted. Otherwise, if CAN_CTRLMODE_XL_TMS is true but none of the
-> PWM parameters are provided, calculate them using can_calc_pwm().
->
-> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> ---
->  drivers/net/can/dev/netlink.c    | 192 ++++++++++++++++++++++++++++++-
->  include/uapi/linux/can/netlink.h |  25 ++++
->  2 files changed, 215 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-> index 5a628c629109..72b9a094ea83 100644
-> --- a/drivers/net/can/dev/netlink.c
-> +++ b/drivers/net/can/dev/netlink.c
-> @@ -23,10 +23,11 @@ static const struct nla_policy can_policy[IFLA_CAN_MA=
-X + 1] =3D {
->  	[IFLA_CAN_TDC] =3D { .type =3D NLA_NESTED },
->  	[IFLA_CAN_CTRLMODE_EXT] =3D { .type =3D NLA_NESTED },
->  	[IFLA_CAN_XL_DATA_BITTIMING] =3D { .len =3D sizeof(struct can_bittiming=
-) },
->  	[IFLA_CAN_XL_DATA_BITTIMING_CONST] =3D { .len =3D sizeof(struct can_bit=
-timing_const) },
->  	[IFLA_CAN_XL_TDC] =3D { .type =3D NLA_NESTED },
-> +	[IFLA_CAN_XL_PWM] =3D { .type =3D NLA_NESTED },
->  };
->
->  static const struct nla_policy can_tdc_policy[IFLA_CAN_TDC_MAX + 1] =3D {
->  	[IFLA_CAN_TDC_TDCV_MIN] =3D { .type =3D NLA_U32 },
->  	[IFLA_CAN_TDC_TDCV_MAX] =3D { .type =3D NLA_U32 },
-> @@ -37,10 +38,22 @@ static const struct nla_policy can_tdc_policy[IFLA_CA=
-N_TDC_MAX + 1] =3D {
->  	[IFLA_CAN_TDC_TDCV] =3D { .type =3D NLA_U32 },
->  	[IFLA_CAN_TDC_TDCO] =3D { .type =3D NLA_U32 },
->  	[IFLA_CAN_TDC_TDCF] =3D { .type =3D NLA_U32 },
->  };
->
-> +static const struct nla_policy can_pwm_policy[IFLA_CAN_PWM_MAX + 1] =3D {
-> +	[IFLA_CAN_PWM_PWMS_MIN] =3D { .type =3D NLA_U32 },
-> +	[IFLA_CAN_PWM_PWMS_MAX] =3D { .type =3D NLA_U32 },
-> +	[IFLA_CAN_PWM_PWML_MIN] =3D { .type =3D NLA_U32 },
-> +	[IFLA_CAN_PWM_PWML_MAX] =3D { .type =3D NLA_U32 },
-> +	[IFLA_CAN_PWM_PWMO_MIN] =3D { .type =3D NLA_U32 },
-> +	[IFLA_CAN_PWM_PWMO_MAX] =3D { .type =3D NLA_U32 },
-> +	[IFLA_CAN_PWM_PWMS] =3D { .type =3D NLA_U32 },
-> +	[IFLA_CAN_PWM_PWML] =3D { .type =3D NLA_U32 },
-> +	[IFLA_CAN_PWM_PWMO] =3D { .type =3D NLA_U32 },
-> +};
-> +
->  static int can_validate_bittiming(struct nlattr *data[],
->  				  struct netlink_ext_ack *extack,
->  				  int ifla_can_bittiming)
->  {
->  	struct can_bittiming *bt;
-> @@ -117,10 +130,44 @@ static int can_validate_tdc(struct nlattr *data_tdc,
->  	}
->
->  	return 0;
->  }
->
-> +static int can_validate_pwm(struct nlattr *data[],
-> +			    struct netlink_ext_ack *extack, u32 flags)
-> +{
-> +	struct nlattr *tb_pwm[IFLA_CAN_PWM_MAX + 1];
-> +	int err;
-> +
-> +	if (!data[IFLA_CAN_XL_PWM])
-> +		return 0;
-> +
-> +	if (!(flags & CAN_CTRLMODE_XL_TMS)) {
-> +		NL_SET_ERR_MSG(extack, "PWM requires TMS");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	err =3D nla_parse_nested(tb_pwm, IFLA_CAN_PWM_MAX, data[IFLA_CAN_XL_PWM=
-],
-> +			       can_pwm_policy, extack);
-> +	if (err)
-> +		return err;
-> +
-> +	if (!tb_pwm[IFLA_CAN_PWM_PWMS] !=3D !tb_pwm[IFLA_CAN_PWM_PWML]) {
-> +		NL_SET_ERR_MSG(extack,
-> +			       "Provide either both PWMS and PWML, or none for automic calcul=
-ation");
+On 21.11.25 09:47, Marc Kleine-Budde wrote:
+> On 21.11.2025 09:34:13, Oliver Hartkopp wrote:
+>> Unify the ctrlmode related strings to the command line options of the
+>> 'ip' tool from the iproute2 package. The capitalized strings are also
+>> shown when the detailed interface configuration is printed by 'ip'.
+>>
+>> Suggested-by: Stephane Grosjean <stephane.grosjean@hms-networks.com>
+>> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+>> ---
+>>   drivers/net/can/dev/dev.c | 34 +++++++++++++++++-----------------
+>>   1 file changed, 17 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+>> index 1de5babcc4f3..32db9f69844d 100644
+>> --- a/drivers/net/can/dev/dev.c
+>> +++ b/drivers/net/can/dev/dev.c
+>> @@ -90,43 +90,43 @@ EXPORT_SYMBOL_GPL(can_get_state_str);
+>>
+>>   const char *can_get_ctrlmode_str(u32 ctrlmode)
+>>   {
+>>   	switch (ctrlmode & ~(ctrlmode - 1)) {
+>>   	case 0:
+>> -		return "none";
+>> +		return "(none)";
+>>   	case CAN_CTRLMODE_LOOPBACK:
+>> -		return "loopback";
+>> +		return "LOOPBACK";
+>>   	case CAN_CTRLMODE_LISTENONLY:
+>> -		return "listen-only";
+>> +		return "LISTEN-ONLY";
+>>   	case CAN_CTRLMODE_3_SAMPLES:
+>> -		return "triple-sampling";
+>> +		return "TRIPLE-SAMPLING";
+>>   	case CAN_CTRLMODE_ONE_SHOT:
+>> -		return "one-shot";
+>> +		return "ONE-SHOT";
+>>   	case CAN_CTRLMODE_BERR_REPORTING:
+>> -		return "berr-reporting";
+>> +		return "BERR-REPORTING";
+>>   	case CAN_CTRLMODE_FD:
+>> -		return "fd";
+>> +		return "FD";
+>>   	case CAN_CTRLMODE_PRESUME_ACK:
+>> -		return "presume-ack";
+>> +		return "PRESUME-ACK";
+>>   	case CAN_CTRLMODE_FD_NON_ISO:
+>> -		return "fd-non-iso";
+>> +		return "FD-NON-ISO";
+>>   	case CAN_CTRLMODE_CC_LEN8_DLC:
+>> -		return "cc-len8-dlc";
+>> +		return "CC-LEN8-DLC";
+>>   	case CAN_CTRLMODE_TDC_AUTO:
+>> -		return "fd-tdc-auto";
+>> +		return "TDC-AUTO";
+>>   	case CAN_CTRLMODE_TDC_MANUAL:
+>> -		return "fd-tdc-manual";
+>> +		return "TDC-MANUAL";
+>>   	case CAN_CTRLMODE_RESTRICTED:
+>> -		return "restricted-operation";
+>> +		return "RESTRICTED";
+>>   	case CAN_CTRLMODE_XL:
+>> -		return "xl";
+>> +		return "XL";
+>>   	case CAN_CTRLMODE_XL_TDC_AUTO:
+>> -		return "xl-tdc-auto";
+>> +		return "XL-TDC-AUTO";
+>>   	case CAN_CTRLMODE_XL_TDC_MANUAL:
+>> -		return "xl-tdc-manual";
+>> +		return "XL-TDC-MANUAL";
+>>   	case CAN_CTRLMODE_XL_TMS:
+>> -		return "xl-tms";
+>> +		return "TMS";
+> 
+> Here the prefix "XL-" is dropped. Was that intentional?
 
-    =E2=97=8F checkpatch.pl: WARNING: 'automic' may be misspelled - perhaps=
- 'atomic'?
-    =E2=97=8F checkpatch.pl: #188: FILE: drivers/net/can/dev/netlink.c:156:
-    =E2=97=8F checkpatch.pl: +                         "Provide either both=
- PWMS and PWML, or none for automic calculation");
-    =E2=97=8F checkpatch.pl:
+Yes. The patches for iproute2-next and for the kernel are inconsistent.
 
-Marc
+The command line (and its help text) uses:
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+[ tms { on | off } ]
 
---jeqef6rf4fcyy7s4
-Content-Type: application/pgp-signature; name="signature.asc"
+The ctrlmode is named:
 
------BEGIN PGP SIGNATURE-----
+CAN_CTRLMODE_XL_TMS
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmkgLpsACgkQDHRl3/mQ
-kZz5eQf9GO3Xa+NA9yY9A144wWPfeq4fS7IcIlPGoX7Q+0YgAE40TI23wqEWLsdh
-fl5z1kUQq2ZSVMzOEtm2MZLJspe8al+FTDR/mXSwRius5hYSCtSoaoaQQD2cjRRg
-L2ig9+fRLmvpbKb6wpmyA4e1kaQVlOTV/l6w8xqxPm9BcJ1JMlYNhf96kK1jp6ui
-vpMLZDTpbVKbfq4zo4g0XsBitE/yy8goQcLoMOARKlYUUPl1y66QKKrDKNWmttn5
-ee7hjgJh5RyEtoYB9yUEPL/HI0bCJMl5E1n0cr0tbsvdp8FSU+qi6ptGgorjpbYE
-anRrieT5zvF7LIXx/q6bcC9IF/ayPA==
-=a2BV
------END PGP SIGNATURE-----
+And the output of 'ip -det -link show can0' currently prints:
 
---jeqef6rf4fcyy7s4--
+can <XL,XL-TMS> state STOPPED restart-ms 0
+
+Which needs to be changed to <XL,TMS> IMO.
+
+I think 'tms' is better in the command line than xl-tms as it is clear 
+that tms only works with XL-only and if you try it otherwise you get an 
+error.
+
+ >>   	case CAN_CTRLMODE_3_SAMPLES:
+ >> -		return "triple-sampling";
+ >> +		return "TRIPLE-SAMPLING";
+
+There's not always a 1:1 name mapping.
+
+IMO CAN_CTRLMODE_XL_TMS together with "TMS" looks fine for the internal 
+and external representation.
+
+> We should move this patch to the front, so that new members could be
+> added in uppercase from the beginning.
+
+This is a useless effort IMO.
+
+When we decided to unify the capitalization as a clean-up four weeks 
+later (what we did) than the patch sequence would look like this in the 
+tree.
+
+Best regards,
+Oliver
+
+> 
+> Marc
+> 
+>>   	default:
+>>   		return "<unknown>";
+>>   	}
+>>   }
+>>   EXPORT_SYMBOL_GPL(can_get_ctrlmode_str);
+>> --
+>> 2.47.3
+>>
+>>
+>>
+> 
+
 
