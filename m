@@ -1,158 +1,113 @@
-Return-Path: <linux-can+bounces-5557-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5558-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6B2EC78381
-	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 10:47:10 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9837C782B2
+	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 10:33:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id E639733813
-	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 09:31:00 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0121334549B
+	for <lists+linux-can@lfdr.de>; Fri, 21 Nov 2025 09:33:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08F83396FE;
-	Fri, 21 Nov 2025 09:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F193242D6;
+	Fri, 21 Nov 2025 09:33:20 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C2C2D5937
-	for <linux-can@vger.kernel.org>; Fri, 21 Nov 2025 09:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E495D2E0917;
+	Fri, 21 Nov 2025 09:33:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763717456; cv=none; b=prFLWCUczKmDvnyp9hEE7QvTIs2loIKL73I7a/sGEvJeHXcICbS8D8jTAPAnwf37MwCU5DQ+iK8joaI/HS4qpSVuGliRO3m4vPPrsCGdEsmxOpKA4tqhTETyC1YIX4gakF+Nv6LN57EvrVaziyfhAwCli4we70Q2BMHohIK8boM=
+	t=1763717599; cv=none; b=mVyUh4ibfqfELuJ1srXDXgoMEPOe7PZglxLBCrxl232LxTKkoy8GAne0D0FrVPMPaoYtI/KisAwSvlx8O/bKPX8rQRmjeRCsJq+vOFdKY8S+99Bgm7E3hDtYe4Gda8ToXLS67VQu/eENPIyrNlyeP6GFY7NvojtVytTh3+bFxpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763717456; c=relaxed/simple;
-	bh=QSPptq2d7PCQbQMcbngp8F87nnzbNct6gc/5c3d3l14=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C3mrdSjeygMPlk4hjKFwfFJYoEkFxRynlO+75is6aENanTacj3KJkYOswoRy0VRWo8T8tw5pT8X64NfBHvJ+I31CaZ95oVjgbnOaj5AWKkUEv866EMMbYjbUJxjEX1Csvtg2It4zvtmiUeVfiIAv35FYQzvG76ZHciYK3XCNFOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vMNTg-0004gX-EE; Fri, 21 Nov 2025 10:30:52 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vMNTf-001Yrg-3B;
-	Fri, 21 Nov 2025 10:30:52 +0100
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id B50EC4A4630;
-	Fri, 21 Nov 2025 09:30:51 +0000 (UTC)
-Date: Fri, 21 Nov 2025 10:30:50 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, 
-	Stephane Grosjean <stephane.grosjean@hms-networks.com>
-Subject: Re: [canxl v4 16/17] can: dev: can_get_ctrlmode_str: use capitalized
- ctrlmode strings
-Message-ID: <20251121-neon-wildebeest-of-contentment-fbad44-mkl@pengutronix.de>
-References: <20251121083414.3642-1-socketcan@hartkopp.net>
- <20251121083414.3642-17-socketcan@hartkopp.net>
- <20251121-meticulous-authentic-hippo-a88adc-mkl@pengutronix.de>
- <c16bbec8-f4ad-4eb6-9e0f-362c3e6261df@hartkopp.net>
+	s=arc-20240116; t=1763717599; c=relaxed/simple;
+	bh=vGKQkkuuwDoqk0Ib3IZAIvL6Iua7SbpQo0wMFE8rYbI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GRUIDLZ4MYCV4YtRfFjjoTir82Tc7rOXP7qDVz3B4hNvPzgtjSi8Fduw6HsINFO3uDy34e3NAWyM5mdC1fmJrbdrWQdlZdXh5F4GsaRNrqkNTno7yVIN8ZKG2MxRQ8G9uGO8TP/lbCYniVEO7FFaVRRFEwY2SdLeSPR8a9dxzN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 5AL9X2JI020186;
+	Fri, 21 Nov 2025 18:33:02 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from [192.168.1.10] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 5AL9X2PY020180
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 21 Nov 2025 18:33:02 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <3679c610-5795-4ddf-81ad-a9a043bab3fc@I-love.SAKURA.ne.jp>
+Date: Fri, 21 Nov 2025 18:33:02 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="oxzrdw2bnwhgmmtz"
-Content-Disposition: inline
-In-Reply-To: <c16bbec8-f4ad-4eb6-9e0f-362c3e6261df@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [can/j1939] unregister_netdevice: waiting for vcan0 to become
+ free. Usage count = 2
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: linux-can@vger.kernel.org, Network Development <netdev@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+References: <d2be2d6a-6cbb-4b13-9f86-a6b7fe94983a@I-love.SAKURA.ne.jp>
+ <aSArkb7-JNW-BjrG@pengutronix.de>
+Content-Language: en-US
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <aSArkb7-JNW-BjrG@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Virus-Status: clean
+X-Anti-Virus-Server: fsav101.rs.sakura.ne.jp
 
+On 2025/11/21 18:06, Oleksij Rempel wrote:
+> Hm, looks like we have a race where new session is created in
+> j1939_xtp_rx_rts(), just at the moment where we call
+> j1939_can_rx_unregister().
+> 
+> Haw about following change:
+> 
+> --- a/net/can/j1939/main.c
+> +++ b/net/can/j1939/main.c
+> @@ -214,6 +214,7 @@ static void __j1939_rx_release(struct kref *kref)
+>                                                rx_kref);
+>  
+>         j1939_can_rx_unregister(priv);
+> +       j1939_cancel_active_session(priv, NULL);
+>         j1939_ecu_unmap_all(priv);
+>         j1939_priv_set(priv->ndev, NULL);
+>         mutex_unlock(&j1939_netdev_lock);
+> 
 
---oxzrdw2bnwhgmmtz
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [canxl v4 16/17] can: dev: can_get_ctrlmode_str: use capitalized
- ctrlmode strings
-MIME-Version: 1.0
+Well, j1939_cancel_active_session(priv, NULL) is already called from
+j1939_netdev_notify(NETDEV_UNREGISTER). Unless a session is recreated
+after NETDEV_UNREGISTER event was handled, I can't imagine such race.
 
-On 21.11.2025 10:19:39, Oliver Hartkopp wrote:
-> > Here the prefix "XL-" is dropped. Was that intentional?
->
-> Yes. The patches for iproute2-next and for the kernel are inconsistent.
->
-> The command line (and its help text) uses:
->
-> [ tms { on | off } ]
->
-> The ctrlmode is named:
->
-> CAN_CTRLMODE_XL_TMS
->
-> And the output of 'ip -det -link show can0' currently prints:
->
-> can <XL,XL-TMS> state STOPPED restart-ms 0
->
-> Which needs to be changed to <XL,TMS> IMO.
+We can see that there are three j1939_session_new() calls but only
+two j1939_session_destroy() calls. There might be a refcount leak on
+j1939_session which prevents j1939_priv from dropping final refcount.
 
-That's iproute2, it can be patched later.
+  Call trace for vcan0@ffff888031c9c000 +2 at
+       j1939_session_new+0x127/0x450 net/can/j1939/transport.c:1503
+       j1939_tp_send+0x338/0x8c0 net/can/j1939/transport.c:2018
 
-> I think 'tms' is better in the command line than xl-tms as it is clear th=
-at
-> tms only works with XL-only and if you try it otherwise you get an error.
->
-> >>   	case CAN_CTRLMODE_3_SAMPLES:
-> >> -		return "triple-sampling";
-> >> +		return "TRIPLE-SAMPLING";
->
-> There's not always a 1:1 name mapping.
->
-> IMO CAN_CTRLMODE_XL_TMS together with "TMS" looks fine for the internal a=
-nd
-> external representation.
->
-> > We should move this patch to the front, so that new members could be
-> > added in uppercase from the beginning.
->
-> This is a useless effort IMO.
+  Call trace for vcan0@ffff888031c9c000 +1 at
+       j1939_session_new+0x127/0x450 net/can/j1939/transport.c:1503
+       j1939_session_fresh_new net/can/j1939/transport.c:1543 [inline]
+       j1939_xtp_rx_rts_session_new net/can/j1939/transport.c:1628 [inline]
+       j1939_xtp_rx_rts+0xd16/0x18b0 net/can/j1939/transport.c:1749
 
-It's really bad practice to change things in a series that has been
-added in the same series. If you don't want to do it, I'll do that.
+  Call trace for vcan0@ffff888031c9c000 -2 at
+       j1939_priv_put+0x23/0x370 net/can/j1939/main.c:184
+       j1939_session_destroy net/can/j1939/transport.c:285 [inline]
+       __j1939_session_release net/can/j1939/transport.c:294 [inline]
+       kref_put include/linux/kref.h:65 [inline]
 
-> When we decided to unify the capitalization as a clean-up four weeks later
-> (what we did) than the patch sequence would look like this in the tree.
+Do we want to update
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/net/can/j1939?id=5ac798f79b48065b0284216c7a0057271185a882
+in order to also try tracing refcount for j1939_session ?
 
-As long as you mean "upstream tree" - yes.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---oxzrdw2bnwhgmmtz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmkgMUYACgkQDHRl3/mQ
-kZz+tgf+OgyMVIOWYaPmFXjiMzo1KXN89ysEVISdg+usVe2fiieVDJCGtBZ9tvh2
-H+X1o5gJmIFEc+s/5Wko6gMez8Ld0iucEhwx/ipw51mKCuf7UJufCoBrXJYwDiAA
-tKRd+RLYWYaEwCKYQK9qK4YDWIw5XtiLE1iGGzXwyqJuXcG13MQqjILBXHcregv5
-0/tQeuO5LAHP1syub43STDjZhyh3Ur/R8jR1WWZi0LggEFE1DNB6tAWe+FN98VcT
-Rq+82NBZb44crOqEj2PWGLiaUxw0osX36aISiWSvx1kxW9D/BesFuxxX6H7NXYK0
-FKkxsG2R+9JBD3ogLN3rKqKKoHIJQw==
-=1iV2
------END PGP SIGNATURE-----
-
---oxzrdw2bnwhgmmtz--
 
