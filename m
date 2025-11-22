@@ -1,92 +1,92 @@
-Return-Path: <linux-can+bounces-5594-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5602-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31D55C7CBD0
-	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 10:36:26 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7745C7CBE5
+	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 10:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBE4D3A8B05
-	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 09:36:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E1AF14E43C8
+	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 09:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCE20221F0A;
-	Sat, 22 Nov 2025 09:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A0C2F3C13;
+	Sat, 22 Nov 2025 09:36:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Shy4Z9yh";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="5uUKyKEL"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="ISIBwrcE";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Xe5nrCPp"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F072DD60F
-	for <linux-can@vger.kernel.org>; Sat, 22 Nov 2025 09:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA28622A4CC
+	for <linux-can@vger.kernel.org>; Sat, 22 Nov 2025 09:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.163
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763804182; cv=pass; b=uKUVSQoooYyskDWx+EmVw7iBvQJ29khdeEI+botnIHsDXfwxkdFICx4RP4nA8wbyvX2vLrNdojhoEx7n9GWdOaXYZomZ/YPZv8T6wBwbIJSm8XFN7GzpynrTrP7e9/z40LezgfjVJC37REZNMKiZRUr+YyPX5kzLgUWxPPk+f14=
+	t=1763804187; cv=pass; b=eIUgRB4sJ+GaNIiAzugGHF1Q2zg1YI+R+XKo29avCORmoIuRCFrBXkgdzpvlir6zTeBs7mmfz5xGgnrmcEO/zNjbh9uIjlS+a1kIk2uzicA5ZXXUGec4FIOZoZnj3uswipbF5YjvGk2Ev3UnZnxyc1Ub/gJWnFGhu4mSHzg6HP4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763804182; c=relaxed/simple;
-	bh=Hxof2O3UdzpM1ttMczPgbAMZ5GEMQTpZxZBjKp1EMEs=;
+	s=arc-20240116; t=1763804187; c=relaxed/simple;
+	bh=s+lADGieyXp5NWDUjGmEQumpNZetzYKO0b2m4eFKE7o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PGHLrAL4+nRdCnMQZU0e/1FKGTWNyTLG2I8gCkXK8n8Br64dsxT1Ir+KoKCNnu7ZrOsl7h73nA/n1XOgBr69N4miS83DU/2o6IWwJUe/xhZIfRQcf7pCWdIgiFmqa5qBm9SjXu+7oe4wgrBzIIfxLEZKJ8cr7I+EqXA0yd9zcbQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Shy4Z9yh; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=5uUKyKEL; arc=pass smtp.client-ip=85.215.255.23
+	 MIME-Version:Content-Type; b=ar5GPvzO5oMByhqIMpFFzA3svmwZRvb1FrtDQdQR5ZrWk+JYFyPQXcBOLr52w4F+HWNWdHexOPLHOcVu7uAgYPup8VgEpzpI6PO8aFXk+z9W2Do3pldY1uYoZHoZ2Wu7jUROtUj1Vbg94+9/Jha+BgfktJgPyw/R3ai05C5SMH0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=ISIBwrcE; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Xe5nrCPp; arc=pass smtp.client-ip=81.169.146.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1763804168; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1763804169; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=X7rDRwP/kTK2HC2URpkQgl94QrErqhByOQzAGLEQN58HSIUzPvmkmN/AwqNot0bPvI
-    xqLY3iiBOE9jW1TJrs/pDzU9TWm/NvZ31engG4lH2uBiTRZre4V3eAbLoeqvxgPl5ixR
-    CY4fnMkz4DMrpQQNZV+x2ofhFgFXyOk+PXvgx4KygJY1+AT9dZIZy9NaOylW2FQA+67B
-    RP0hWOAjYNQIRfdxpjRw/Rol7uaQXosDAguH5kli4GnoqZHkCt30gHmNBSqrGo3lDY1d
-    iHlkmNUcHJruSupJJV5pILixlbONkM5FixuXDwNYFfG5OCWNo7HOXZs+H3rmN8WVK5Ic
-    0l+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763804168;
+    b=EzdGGEKrwWfzxw9SEKolisNWad1ifyZfNM1vaVg06imDqJF+rGx8201+QMP3/5LdWv
+    FdPlHvkl8cUStj1xua4tmRYu7LovHjDC/gFdsjFf/vzBvuMFL2/wOSsKLG5A3D7ulxyX
+    wjJNtL5vDe1YdS229VvNZHA9s75j6UMYeCwkm91iEVpKh28nwLtKzNbmTqvF9rUkYqJe
+    LCQLBi5yi0QigA226Uhc6/BY3U35S7zx96ua6VkgaxRsYqJ6sQMWIG80tEOblFDnbb6o
+    BlBqBgKpfV6tVn/nRevEUYeRfRH+lJ1hWkrFrisNEjvXxUNyGT8Quph6SbpoHM+F0TWF
+    Jwow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763804169;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=z1K8d1Zvz4kmnl8uZijeDNjm5gkR4HlXB9xOBvjElzc=;
-    b=AbmtHCbRAge7QYIu23DGTojkre64oMHUYNohIozOki4jznRj8EYuYTQqDH+6okvLAt
-    YHkVZebREYLJ+viGCUictEhzAr4kgfFS9axrpqXsM8qIgmgCCwExH+0RuxcrE9rV8mH+
-    g+6XaUx3Fm4TzdnmCFpdRlQ7kbyunZ+wdeM2dD2BxFgd1lyBwBJo/yIJdynnYVKyf2Rd
-    U7UAsdsv+zy9IUJ7g5HcxjW3vmxLpjGDkkmkaTcOqVWhIaehyR8sE8jtwgGGv1DJ4TtN
-    7DkQaGEf4Fj4Qude8Fe7dmU/ZkTg1Fxf0+NbIrOx3UfFHV28xjgtI9uuyYqBVvWOyIQD
-    nZKw==
+    bh=Vn4gsB8kwb7mn6S98lacK3xTSI77EQiiURCmYom8g/E=;
+    b=Wlvy2QLw8g6xoL2BXWkYfZWrtZX9npT4UCVGd/HTz+1UklZyOSgJHs+a29D+4OsRh6
+    HyYkediam20MySUQlXNnytPBcsOgfG5vMvypbgjL4ffe5mDcifMeoQ2aJbmUwsiBLwe+
+    h0T+COu7oat7mu4BIs8E7DuvcVkgHN0ULikbJPIGLWw9hsqpE75fMxfxOkreyCW8JJtM
+    ekczVOl45HMzqYVu/sef9of4GZeHYsvwBL4HRxqGOrRbD4VQCVBOBuWvlaUgA0IGw/Al
+    al9NOkZvyItMhvy2gG6+VWz+aB4E2FGco7f0YKmU5nxEjpBTPUhshbNQl3U0JMKLcN/C
+    T3aw==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763804168;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763804169;
     s=strato-dkim-0002; d=hartkopp.net;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=z1K8d1Zvz4kmnl8uZijeDNjm5gkR4HlXB9xOBvjElzc=;
-    b=Shy4Z9yh2IZKfBtp9qESDh0fLDfVDindyfQrNggB50GxExYIHHgHadvQoO+Qv3sbJG
-    enZ6qiptOSbXmWT4CPvq95q+JwAA+14BHqMefzDGp1PwJSAUqCbrICZR6hNIusRJZ9Wa
-    +IGsB/zVwzKCBfLgoqwgNlNxv79ESVGBSvVD2lkiJv/kigDEXtthTeXapCnQ2EQ90VwE
-    yLHvOIwaB/wHOF0IQBVgfpLRlPSrKOzUq6z8NQQ2rhtvD4wj1kg9qh8GoXUuquBoE9hr
-    4KmVoocdejahNyVeCPg/nk+AED6jcU5WRj70mpYLybnvihRZhu6HjjNa27m31DIp7oLO
-    h+gQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763804168;
+    bh=Vn4gsB8kwb7mn6S98lacK3xTSI77EQiiURCmYom8g/E=;
+    b=ISIBwrcEN30QDBWt5GrOuxWM1j8foj7fQUe53o5g8Exux8+QFsyfcpVZ5Kifq6TgzX
+    2CUNz25VkGalMrGTtPglqI+yvQyoUHLFxsnFZdGnyRVQLIP206DsDrjOyEmd8MhV9YeF
+    68QqKeTD60zdmx7KCZca8HfSXtriMr9JmdMMPNnpMUpDmYcIlL3LCczsjT05sRGkvRZX
+    wd0T6bo+p3wDjOlnPcQ0Um9fP8K9eROuXlrGGA/bqDGd9KJ/KMHz1wyKWQvvWHxHZyK3
+    AE9YHJP1QbvowKmwWqU/15JmeA4NCOArEFTqeYRiDGDDOUoWK5KN1ayj/ppUh6Hk03CF
+    AKbA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763804169;
     s=strato-dkim-0003; d=hartkopp.net;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=z1K8d1Zvz4kmnl8uZijeDNjm5gkR4HlXB9xOBvjElzc=;
-    b=5uUKyKEL8hKvk53HECJJnleThz8Yk2rXybUcgAKj4+t5jAFyuSuBVH9XTzh1IFI13H
-    ILWkEceeR5n0pVWLOdCA==
+    bh=Vn4gsB8kwb7mn6S98lacK3xTSI77EQiiURCmYom8g/E=;
+    b=Xe5nrCPpEyZE/mdblVPfKvOsfp0NsLFUB09JCEet0FDkVQiLwXXrA96LmLKOKkCn1D
+    MUefv7JcnxwDm20MatAw==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
 Received: from lenov17.lan
     by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461AM9a8Fdl
+    with ESMTPSA id Ke2b461AM9a8Fdm
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
     Sat, 22 Nov 2025 10:36:08 +0100 (CET)
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
-	Stephane Grosjean <stephane.grosjean@hms-networks.com>
-Subject: [canxl v6 01/17] can: dev: can_get_ctrlmode_str: use capitalized ctrlmode strings
-Date: Sat, 22 Nov 2025 10:35:45 +0100
-Message-ID: <20251122093602.1660-2-socketcan@hartkopp.net>
+Cc: Vincent Mailhol <mailhol@kernel.org>,
+	Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [canxl v6 02/17] can: bittiming: apply NL_SET_ERR_MSG() to can_calc_bittiming()
+Date: Sat, 22 Nov 2025 10:35:46 +0100
+Message-ID: <20251122093602.1660-3-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251122093602.1660-1-socketcan@hartkopp.net>
 References: <20251122093602.1660-1-socketcan@hartkopp.net>
@@ -99,66 +99,39 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
 
-Unify the ctrlmode related strings to the command line options of the
-'ip' tool from the iproute2 package. The capitalized strings are also
-shown when the detailed interface configuration is printed by 'ip'.
+From: Vincent Mailhol <mailhol@kernel.org>
 
-Suggested-by: Stephane Grosjean <stephane.grosjean@hms-networks.com>
+When CONFIG_CAN_CALC_BITTIMING is disabled, the can_calc_bittiming()
+functions can not be used and the user needs to provide all the
+bittiming parameters.
+
+Currently, can_calc_bittiming() prints an error message to the kernel
+log. Instead use NL_SET_ERR_MSG() to make it return the error message
+through the netlink interface so that the user can directly see it.
+
+Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- drivers/net/can/dev/dev.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ include/linux/can/bittiming.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index 0cc3d008adb3..735faa888886 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -90,33 +90,33 @@ EXPORT_SYMBOL_GPL(can_get_state_str);
- 
- const char *can_get_ctrlmode_str(u32 ctrlmode)
+diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.h
+index d30816dd93c7..3926c78b2222 100644
+--- a/include/linux/can/bittiming.h
++++ b/include/linux/can/bittiming.h
+@@ -139,11 +139,11 @@ void can_calc_tdco(struct can_tdc *tdc, const struct can_tdc_const *tdc_const,
+ #else /* !CONFIG_CAN_CALC_BITTIMING */
+ static inline int
+ can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
+ 		   const struct can_bittiming_const *btc, struct netlink_ext_ack *extack)
  {
- 	switch (ctrlmode & ~(ctrlmode - 1)) {
- 	case 0:
--		return "none";
-+		return "(none)";
- 	case CAN_CTRLMODE_LOOPBACK:
--		return "loopback";
-+		return "LOOPBACK";
- 	case CAN_CTRLMODE_LISTENONLY:
--		return "listen-only";
-+		return "LISTEN-ONLY";
- 	case CAN_CTRLMODE_3_SAMPLES:
--		return "triple-sampling";
-+		return "TRIPLE-SAMPLING";
- 	case CAN_CTRLMODE_ONE_SHOT:
--		return "one-shot";
-+		return "ONE-SHOT";
- 	case CAN_CTRLMODE_BERR_REPORTING:
--		return "berr-reporting";
-+		return "BERR-REPORTING";
- 	case CAN_CTRLMODE_FD:
--		return "fd";
-+		return "FD";
- 	case CAN_CTRLMODE_PRESUME_ACK:
--		return "presume-ack";
-+		return "PRESUME-ACK";
- 	case CAN_CTRLMODE_FD_NON_ISO:
--		return "fd-non-iso";
-+		return "FD-NON-ISO";
- 	case CAN_CTRLMODE_CC_LEN8_DLC:
--		return "cc-len8-dlc";
-+		return "CC-LEN8-DLC";
- 	case CAN_CTRLMODE_TDC_AUTO:
--		return "fd-tdc-auto";
-+		return "TDC-AUTO";
- 	case CAN_CTRLMODE_TDC_MANUAL:
--		return "fd-tdc-manual";
-+		return "TDC-MANUAL";
- 	default:
- 		return "<unknown>";
- 	}
+-	netdev_err(dev, "bit-timing calculation not available\n");
++	NL_SET_ERR_MSG(extack, "bit-timing calculation not available\n");
+ 	return -EINVAL;
  }
- EXPORT_SYMBOL_GPL(can_get_ctrlmode_str);
+ 
+ static inline void
+ can_calc_tdco(struct can_tdc *tdc, const struct can_tdc_const *tdc_const,
 -- 
 2.47.3
 
