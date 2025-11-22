@@ -1,92 +1,91 @@
-Return-Path: <linux-can+bounces-5592-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5590-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id F4206C7CBE8
-	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 10:36:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FF89C7CBC7
+	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 10:36:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 91253346E9E
-	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 09:36:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 140E24E34EB
+	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 09:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 650762F49E3;
-	Sat, 22 Nov 2025 09:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4C25221F0A;
+	Sat, 22 Nov 2025 09:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Yy+uKwr8";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="0x2RkJIU"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="LvTiWh30";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Rm+LJdlv"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C77277013
-	for <linux-can@vger.kernel.org>; Sat, 22 Nov 2025 09:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978631E8826
+	for <linux-can@vger.kernel.org>; Sat, 22 Nov 2025 09:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.84
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763804182; cv=pass; b=KKUDQMCsCJm3Od6c6NcpeXy+uPtnkNzzHQAA4lEDCrcWcj1JaSTjxjX4Nt4CZWervT2mpBtRgA3kYTqGwMkJPUIBK0PBwKoMbYG8LjU2hGzMEJ3qd+DtgpcUsPNyer+kLvAm8GDPYA+diQl19xopevjWS2+G4SHQXyuFznI/muU=
+	t=1763804177; cv=pass; b=ueaptp8Dfpnj/N4ml/7PGQQ54RwI1D+uEX7omLoenGR8n8QQJ3KZ5RpTdUuKry0zBMeTyZ+jYBWneZiMQN/a2FIU5dId7pGyENdwPk2ZPg6L6zHSqVJtxGH1wUX3Enk97+JkSgvbvRTEXrxLVIlhN753/7DHI3810VaLUsrmbbE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763804182; c=relaxed/simple;
-	bh=vVkfFlF0mujiNYbZ4oOulmhmT9vFYQp2s4iC63qUcsU=;
+	s=arc-20240116; t=1763804177; c=relaxed/simple;
+	bh=kFo+cWd3FsEA77InQXoAwGerQqlnV47knYv1zjqj/9Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Jw1/Nx8qHlU10p+CMEjM+p90+dUL0+jNcsKXulRM8vyNAIrzkesORA2ekify/LtnnH6Rt9fHe5Sg699WfST2RYtXNev4mXMGFVECr0Q6Bi22V90vC7dRv+61v0MOaCJDeYaCz+86BpYErr4iRRtj5ehBYcEK5EYB48V66xh0O6E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Yy+uKwr8; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=0x2RkJIU; arc=pass smtp.client-ip=85.215.255.80
+	 MIME-Version:Content-Type; b=jc/hp7Udr7Re29jiy6LvtMvm5pDWzHI+Di+4EPw6dOm52fuTEEHtEhZPC95yPOSKxwWTKszgQmzKmL5KlzOSuEsmMaG5gnZUb1pHwITauWQsg7C5+HMs76d+QbzYF9hyXlFiiVf9D4E8wX0vzPxZAdVwrVRnxOQGPn9GeL0kR0g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=LvTiWh30; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Rm+LJdlv; arc=pass smtp.client-ip=85.215.255.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1763804172; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1763804173; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=pFK52nBbsnWyQ/1vE0+h5tlbASbf63McpN947a4jFOcIqtEnlx53+syP8PtVe1yP3N
-    +y6k8YPZ9QoofEDM9ZLknCR1S48yC4/WWki/UJFMIYItsVOjM7O2PkQFUX4sGBK85iC3
-    BsC+CVGvbfvFiAfUpBm9RyDEt2Mz7PoByAnvaWU0UESg52yaUe7GNQiBH837dZ59lipp
-    FLouvnctPZAHZ02is0KY8PcjvtNtNp9MiVTaQ8LFHMZYycotKO2tRDukeUbRnqGVAMg7
-    3ps4WZGUQOwMvF7ALcyDBlIYgixcw7FU3C5Z8NA4sgdMHJim0x+O+/D0XxOo076pgWJy
-    CnWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763804172;
+    b=V3k421HVoo3aBWCFJc7L3gxeFFQC4nuceZEmvPGOtCMnH7UruVl7trYRD+k6uW8EWQ
+    3jhgyRBVq9RaXNcTgK4tokuDbJNd5yzQxCMkjmtOad2e7rUn/sOTLje3E1NgcTsUUk49
+    S94IQBjYV3V6rauxlQxpjTkCTOwbPtiHxb9e12cRqxtbeNJIiSxDCYDO78rpnz0v0MHK
+    PprewqIXJNaJHBsWSCUcpTtb5DACYBmIEzPHElUraK6tgGIAkEpr/du+X2sQ86RxM3q+
+    mCizIafILqi3h0PCFpTtaW/3nHFcBpZUAcuv4J6PlPHCXy1kPN+ftExVRnsvfIZWRYz+
+    3SIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763804173;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=+mG6k9h0phFqxAgEn/Vgfx7Bk4IQa5/gpF7Q14Vm94k=;
-    b=QLG5y8ntNFKyAzBB04fxpPwOkp2lorHOP2cOfnoKJnETcQIvijCeyxq5f9EtKwKC2t
-    ljVxC5BCv0s9Xu53wRCkL01aYKnXoTIXlFwVe/Wi/YnIdxMlL9Q5YsCckZRkEoECj/wG
-    cSWJowmT4i4tctAFfkCqd5RPjK3wbARAGGr/Fg/5TX1UWquoumxA7RUnUw8lkZdOnz8C
-    o5pR2lp4mljbfE6K8E59wB3PTLIIlIhb+W/DKRjeFtrK7jEWHHe8B8AcT31xGuGsntHI
-    XVaRi7t8n2wFi3ckEp1IssP2RKIG1muN3ppU7udsJPcxkQ8xQz7GWPOistrRF8YF90Ow
-    esfg==
+    bh=BVTOWs4g5KEdda5lO51oBHxVDDNtA9WS5KpPLtm1fEc=;
+    b=QCLpYIO5/kJXxFkyT569oD5SShElZo6RHWrwgIEJlqZM1ZUHI3jJ84VG9Pp2uEN+kr
+    E+v5h8Z5O1fSjnjiEr9bgmuIrlPlsUdGfmjxAVM1t9tg1jdsEFcwCG2JLj7Megdow/ds
+    3Z9HfzatAH5r6d8z5t1m7KXEwHNiOJsd5errGRxwQYs3cGqijSQQ2SDoyw0W4tCDmxl9
+    IZylKNZWLuxq6L5lokJpqs93UuaNsleu8E0nUTl2pRh8aOqWbNCdMRFC9c2t707FYjPf
+    nIsZ+Z5a2618QuhaxDMtn7mem2cyQ+1htoIEgewXvC++q8DlM+vHAAvsFyLx2WeFQcuf
+    GLCg==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763804172;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763804173;
     s=strato-dkim-0002; d=hartkopp.net;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=+mG6k9h0phFqxAgEn/Vgfx7Bk4IQa5/gpF7Q14Vm94k=;
-    b=Yy+uKwr8sxeH1QxOjKJZrMevy8yQVoaoWaHPRotP5BJ3C3ae9N7Ji3UQX72RGmu4Mi
-    /LmucvF23EoFsbcPeylQrNnt5GGnk1xpnU50aANeiiajHz9Za1zIsjDPe0urrPXB7cAz
-    h5v4u+uMM25uBaAdxJAB9nmRLuj8dLVRZMDLkhkQSTboW7Ianz8OH1leECv/915v4pIv
-    IAEycP8U8PF4vrt5zTBdJw/vHaJxUDE880QC7Blvjp+ewp2gtAOIKtLrCHWcbs+UuK29
-    Mm4NDt9Y00YGxbNDU3KfXRjrB761ZS9BiNLK76jQimlsBgGqpwcU1NsqvvORKYMosigf
-    3WfA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763804172;
+    bh=BVTOWs4g5KEdda5lO51oBHxVDDNtA9WS5KpPLtm1fEc=;
+    b=LvTiWh30Yd3RuGOhZOckhnk0UwKub2JYuvCPIt4aO7C4e2i/cG7Ay8MKxFUUJT3hLS
+    fz0dWLr2ZTrIDSY69J6fn5k0JGyAZqwtLqJI7bRErtLusoEbrxgpMiv7XmZfVfsKFJwk
+    ET1oxSHj3JbI8HnWpVNo+I7TN75aebxXXB04Pu3g5L7jaopyvILkOa9orLwIqlhNm35n
+    iOv7Nv0YI62ccc7mQYJkNwu+r9IWQyLwVZ1MjWt6i0DuamI+eU/0jvE151YW+GynKw48
+    QoYN8u1OYbfdOcgzcjclcaM4ZW0mVyCoVRN1U7P6K0C5L22zt/8mpplCX3EtcrwvA7yd
+    xMDQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763804173;
     s=strato-dkim-0003; d=hartkopp.net;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=+mG6k9h0phFqxAgEn/Vgfx7Bk4IQa5/gpF7Q14Vm94k=;
-    b=0x2RkJIUwZVqLJuIdcTwPAUhrVB6rvILv4YLjYJw5XuUy3sIMezPfHrZ//1PTAKwmG
-    k+u6t/L4L0+/1fFOWJCQ==
+    bh=BVTOWs4g5KEdda5lO51oBHxVDDNtA9WS5KpPLtm1fEc=;
+    b=Rm+LJdlvWgAmt2bcC+G497D0TDgzh/XaNUl9lzUPpO8EfA+FavYjsvAx2LhYtzHmx0
+    buNO7Mh2dk82N+feP2AQ==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
 Received: from lenov17.lan
     by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461AM9aCFdz
+    with ESMTPSA id Ke2b461AM9aDFe0
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Sat, 22 Nov 2025 10:36:12 +0100 (CET)
+    Sat, 22 Nov 2025 10:36:13 +0100 (CET)
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 To: linux-can@vger.kernel.org
-Cc: Vincent Mailhol <mailhol@kernel.org>,
-	Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [canxl v6 15/17] can: add dummy_can driver
-Date: Sat, 22 Nov 2025 10:35:59 +0100
-Message-ID: <20251122093602.1660-16-socketcan@hartkopp.net>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [canxl v6 16/17] can: raw: instantly reject unsupported CAN frames
+Date: Sat, 22 Nov 2025 10:36:00 +0100
+Message-ID: <20251122093602.1660-17-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251122093602.1660-1-socketcan@hartkopp.net>
 References: <20251122093602.1660-1-socketcan@hartkopp.net>
@@ -99,379 +98,107 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
 
-From: Vincent Mailhol <mailhol@kernel.org>
+For real CAN interfaces the CAN_CTRLMODE_FD and CAN_CTRLMODE_XL control
+modes indicate whether an interface can handle those CAN FD/XL frames.
 
-During the development of CAN XL, we found the need of creating a
-dummy CAN XL driver in order to test the new netlink interface. While
-this code was initially intended to be some throwaway, it received
-some positive feedback.
+In the case a CAN XL interface is configured in CANXL-only mode with
+disabled error-signalling neither CAN CC nor CAN FD frames can be sent.
 
-Add the dummy_can driver. This driver acts similarly to the vcan
-interface in the sense that it will echo back any packet it receives.
-The difference is that it exposes a set on bittiming parameters as a
-real device would and thus must be configured as if it was a real
-physical interface.
+The checks are performed on CAN_RAW sockets to give an instant feedback
+to the user when writing unsupported CAN frames to the interface.
 
-The driver comes with a debug mode. If debug message are enabled (for
-example by enabling CONFIG_CAN_DEBUG_DEVICES), it will print in the
-kernel log all the bittiming values, similar to what a:
-
-  ip --details link show can0
-
-would do.
-
-This driver is mostly intended for debugging and testing, but some
-developers also may want to look at it as a simple reference
-implementation.
-
-Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- drivers/net/can/Kconfig     |  17 +++
- drivers/net/can/Makefile    |   1 +
- drivers/net/can/dummy_can.c | 285 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 303 insertions(+)
- create mode 100644 drivers/net/can/dummy_can.c
+ net/can/raw.c | 54 +++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 46 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-index d43d56694667..e15e320db476 100644
---- a/drivers/net/can/Kconfig
-+++ b/drivers/net/can/Kconfig
-@@ -122,10 +122,27 @@ config CAN_CAN327
- 	  Please refer to the documentation for information on how to use it:
- 	  Documentation/networking/device_drivers/can/can327.rst
+diff --git a/net/can/raw.c b/net/can/raw.c
+index a53853f5e9af..223630f0f9e9 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -890,24 +890,62 @@ static void raw_put_canxl_vcid(struct raw_sock *ro, struct sk_buff *skb)
+ 		cxl->prio &= CANXL_PRIO_MASK;
+ 		cxl->prio |= ro->tx_vcid_shifted;
+ 	}
+ }
  
- 	  If this driver is built as a module, it will be called can327.
+-static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb, int mtu)
++static inline bool raw_dev_cc_enabled(struct net_device *dev,
++				      struct can_priv *priv)
+ {
+-	/* Classical CAN -> no checks for flags and device capabilities */
+-	if (can_is_can_skb(skb))
++	/* The CANXL-only mode disables error-signalling on the CAN bus
++	 * which is needed to send CAN CC/FD frames
++	 */
++	if (priv)
++		return !can_dev_in_xl_only_mode(priv);
++
++	/* virtual CAN interfaces always support CAN CC */
++	return true;
++}
++
++static inline bool raw_dev_fd_enabled(struct net_device *dev,
++				      struct can_priv *priv)
++{
++	/* check FD ctrlmode on real CAN interfaces */
++	if (priv)
++		return (priv->ctrlmode & CAN_CTRLMODE_FD);
++
++	/* check MTU for virtual CAN FD interfaces */
++	return (READ_ONCE(dev->mtu) >= CANFD_MTU);
++}
++
++static inline bool raw_dev_xl_enabled(struct net_device *dev,
++				      struct can_priv *priv)
++{
++	/* check XL ctrlmode on real CAN interfaces */
++	if (priv)
++		return (priv->ctrlmode & CAN_CTRLMODE_XL);
++
++	/* check MTU for virtual CAN XL interfaces */
++	return can_is_canxl_dev_mtu(READ_ONCE(dev->mtu));
++}
++
++static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb,
++				      struct net_device *dev)
++{
++	struct can_priv *priv = safe_candev_priv(dev);
++
++	/* Classical CAN */
++	if (can_is_can_skb(skb) && raw_dev_cc_enabled(dev, priv))
+ 		return CAN_MTU;
  
-+config CAN_DUMMY
-+	tristate "Dummy CAN"
-+	help
-+	  A dummy CAN module supporting Classical CAN, CAN FD and CAN XL. It
-+	  exposes bittiming values which can be configured through the netlink
-+	  interface.
-+
-+	  The module will simply echo any frame sent to it. If debug messages
-+	  are activated, it prints all the CAN bittiming information in the
-+	  kernel log. Aside from that it does nothing.
-+
-+	  This is convenient for testing the CAN netlink interface. Most of the
-+	  users will never need this. If unsure, say NO.
-+
-+	  To compile this driver as a module, choose M here: the module will be
-+	  called dummy-can.
-+
- config CAN_FLEXCAN
- 	tristate "Support for Freescale FLEXCAN based chips"
- 	depends on OF || COLDFIRE || COMPILE_TEST
- 	depends on HAS_IOMEM
- 	select CAN_RX_OFFLOAD
-diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
-index 56138d8ddfd2..d7bc10a6b8ea 100644
---- a/drivers/net/can/Makefile
-+++ b/drivers/net/can/Makefile
-@@ -19,10 +19,11 @@ obj-$(CONFIG_CAN_AT91)		+= at91_can.o
- obj-$(CONFIG_CAN_BXCAN)		+= bxcan.o
- obj-$(CONFIG_CAN_CAN327)	+= can327.o
- obj-$(CONFIG_CAN_CC770)		+= cc770/
- obj-$(CONFIG_CAN_C_CAN)		+= c_can/
- obj-$(CONFIG_CAN_CTUCANFD)	+= ctucanfd/
-+obj-$(CONFIG_CAN_DUMMY)		+= dummy_can.o
- obj-$(CONFIG_CAN_FLEXCAN)	+= flexcan/
- obj-$(CONFIG_CAN_GRCAN)		+= grcan.o
- obj-$(CONFIG_CAN_IFI_CANFD)	+= ifi_canfd/
- obj-$(CONFIG_CAN_JANZ_ICAN3)	+= janz-ican3.o
- obj-$(CONFIG_CAN_KVASER_PCIEFD)	+= kvaser_pciefd/
-diff --git a/drivers/net/can/dummy_can.c b/drivers/net/can/dummy_can.c
-new file mode 100644
-index 000000000000..41953655e3d3
---- /dev/null
-+++ b/drivers/net/can/dummy_can.c
-@@ -0,0 +1,285 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/* Copyright (c) 2025 Vincent Mailhol <mailhol@kernel.org> */
-+
-+#include <linux/array_size.h>
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/netdevice.h>
-+#include <linux/units.h>
-+#include <linux/string_choices.h>
-+
-+#include <linux/can.h>
-+#include <linux/can/bittiming.h>
-+#include <linux/can/dev.h>
-+#include <linux/can/skb.h>
-+
-+struct dummy_can {
-+	struct can_priv can;
-+	struct net_device *dev;
-+};
-+
-+static struct dummy_can *dummy_can;
-+
-+static const struct can_bittiming_const dummy_can_bittiming_const = {
-+	.name = "dummy_can CC",
-+	.tseg1_min = 2,
-+	.tseg1_max = 256,
-+	.tseg2_min = 2,
-+	.tseg2_max = 128,
-+	.sjw_max = 128,
-+	.brp_min = 1,
-+	.brp_max = 512,
-+	.brp_inc = 1
-+};
-+
-+static const struct can_bittiming_const dummy_can_fd_databittiming_const = {
-+	.name = "dummy_can FD",
-+	.tseg1_min = 2,
-+	.tseg1_max = 256,
-+	.tseg2_min = 2,
-+	.tseg2_max = 128,
-+	.sjw_max = 128,
-+	.brp_min = 1,
-+	.brp_max = 512,
-+	.brp_inc = 1
-+};
-+
-+static const struct can_tdc_const dummy_can_fd_tdc_const = {
-+	.tdcv_min = 0,
-+	.tdcv_max = 0, /* Manual mode not supported. */
-+	.tdco_min = 0,
-+	.tdco_max = 127,
-+	.tdcf_min = 0,
-+	.tdcf_max = 127
-+};
-+
-+static const struct can_bittiming_const dummy_can_xl_databittiming_const = {
-+	.name = "dummy_can XL",
-+	.tseg1_min = 2,
-+	.tseg1_max = 256,
-+	.tseg2_min = 2,
-+	.tseg2_max = 128,
-+	.sjw_max = 128,
-+	.brp_min = 1,
-+	.brp_max = 512,
-+	.brp_inc = 1
-+};
-+
-+static const struct can_tdc_const dummy_can_xl_tdc_const = {
-+	.tdcv_min = 0,
-+	.tdcv_max = 0, /* Manual mode not supported. */
-+	.tdco_min = 0,
-+	.tdco_max = 127,
-+	.tdcf_min = 0,
-+	.tdcf_max = 127
-+};
-+
-+static const struct can_pwm_const dummy_can_pwm_const = {
-+	.pwms_min = 1,
-+	.pwms_max = 8,
-+	.pwml_min = 2,
-+	.pwml_max = 24,
-+	.pwmo_min = 0,
-+	.pwmo_max = 16,
-+};
-+
-+static void dummy_can_print_bittiming(struct net_device *dev,
-+				      struct can_bittiming *bt)
-+{
-+	netdev_dbg(dev, "\tbitrate: %u\n", bt->bitrate);
-+	netdev_dbg(dev, "\tsample_point: %u\n", bt->sample_point);
-+	netdev_dbg(dev, "\ttq: %u\n", bt->tq);
-+	netdev_dbg(dev, "\tprop_seg: %u\n", bt->prop_seg);
-+	netdev_dbg(dev, "\tphase_seg1: %u\n", bt->phase_seg1);
-+	netdev_dbg(dev, "\tphase_seg2: %u\n", bt->phase_seg2);
-+	netdev_dbg(dev, "\tsjw: %u\n", bt->sjw);
-+	netdev_dbg(dev, "\tbrp: %u\n", bt->brp);
-+}
-+
-+static void dummy_can_print_tdc(struct net_device *dev, struct can_tdc *tdc)
-+{
-+	netdev_dbg(dev, "\t\ttdcv: %u\n", tdc->tdcv);
-+	netdev_dbg(dev, "\t\ttdco: %u\n", tdc->tdco);
-+	netdev_dbg(dev, "\t\ttdcf: %u\n", tdc->tdcf);
-+}
-+
-+static void dummy_can_print_pwm(struct net_device *dev, struct can_pwm *pwm,
-+				struct can_bittiming *dbt)
-+{
-+	netdev_dbg(dev, "\t\tpwms: %u\n", pwm->pwms);
-+	netdev_dbg(dev, "\t\tpwml: %u\n", pwm->pwml);
-+	netdev_dbg(dev, "\t\tpwmo: %u\n", pwm->pwmo);
-+}
-+
-+static void dummy_can_print_ctrlmode(struct net_device *dev)
-+{
-+	struct dummy_can *priv = netdev_priv(dev);
-+	struct can_priv *can_priv = &priv->can;
-+	unsigned long supported = can_priv->ctrlmode_supported;
-+	u32 enabled = can_priv->ctrlmode;
-+
-+	netdev_dbg(dev, "Control modes:\n");
-+	netdev_dbg(dev, "\tsupported: 0x%08x\n", (u32)supported);
-+	netdev_dbg(dev, "\tenabled: 0x%08x\n", enabled);
-+
-+	if (supported) {
-+		int idx;
-+
-+		netdev_dbg(dev, "\tlist:");
-+		for_each_set_bit(idx, &supported, BITS_PER_TYPE(u32))
-+			netdev_dbg(dev, "\t\t%s: %s\n",
-+				   can_get_ctrlmode_str(BIT(idx)),
-+				   enabled & BIT(idx) ? "on" : "off");
-+	}
-+}
-+
-+static void dummy_can_print_bittiming_info(struct net_device *dev)
-+{
-+	struct dummy_can *priv = netdev_priv(dev);
-+	struct can_priv *can_priv = &priv->can;
-+
-+	netdev_dbg(dev, "Clock frequency: %u\n", can_priv->clock.freq);
-+	netdev_dbg(dev, "Maximum bitrate: %u\n", can_priv->bitrate_max);
-+	netdev_dbg(dev, "MTU: %u\n", dev->mtu);
-+	netdev_dbg(dev, "\n");
-+
-+	dummy_can_print_ctrlmode(dev);
-+	netdev_dbg(dev, "\n");
-+
-+	netdev_dbg(dev, "Classical CAN nominal bittiming:\n");
-+	dummy_can_print_bittiming(dev, &can_priv->bittiming);
-+	netdev_dbg(dev, "\n");
-+
-+	if (can_priv->ctrlmode & CAN_CTRLMODE_FD) {
-+		netdev_dbg(dev, "CAN FD databittiming:\n");
-+		dummy_can_print_bittiming(dev, &can_priv->fd.data_bittiming);
-+		if (can_fd_tdc_is_enabled(can_priv)) {
-+			netdev_dbg(dev, "\tCAN FD TDC:\n");
-+			dummy_can_print_tdc(dev, &can_priv->fd.tdc);
-+		}
-+	}
-+	netdev_dbg(dev, "\n");
-+
-+	if (can_priv->ctrlmode & CAN_CTRLMODE_XL) {
-+		netdev_dbg(dev, "CAN XL databittiming:\n");
-+		dummy_can_print_bittiming(dev, &can_priv->xl.data_bittiming);
-+		if (can_xl_tdc_is_enabled(can_priv)) {
-+			netdev_dbg(dev, "\tCAN XL TDC:\n");
-+			dummy_can_print_tdc(dev, &can_priv->xl.tdc);
-+		}
-+		if (can_priv->ctrlmode & CAN_CTRLMODE_XL_TMS) {
-+			netdev_dbg(dev, "\tCAN XL PWM:\n");
-+			dummy_can_print_pwm(dev, &can_priv->xl.pwm,
-+					    &can_priv->xl.data_bittiming);
-+		}
-+	}
-+	netdev_dbg(dev, "\n");
-+}
-+
-+static int dummy_can_netdev_open(struct net_device *dev)
-+{
-+	int ret;
-+	struct can_priv *priv = netdev_priv(dev);
-+
-+	dummy_can_print_bittiming_info(dev);
-+	netdev_dbg(dev, "error-signalling is %s\n",
-+		   str_enabled_disabled(!can_dev_in_xl_only_mode(priv)));
-+
-+	ret = open_candev(dev);
-+	if (ret)
-+		return ret;
-+	netif_start_queue(dev);
-+	netdev_dbg(dev, "dummy-can is up\n");
-+
-+	return 0;
-+}
-+
-+static int dummy_can_netdev_close(struct net_device *dev)
-+{
-+	netif_stop_queue(dev);
-+	close_candev(dev);
-+	netdev_dbg(dev, "dummy-can is down\n");
-+
-+	return 0;
-+}
-+
-+static netdev_tx_t dummy_can_start_xmit(struct sk_buff *skb,
-+					struct net_device *dev)
-+{
-+	if (can_dev_dropped_skb(dev, skb))
-+		return NETDEV_TX_OK;
-+
-+	can_put_echo_skb(skb, dev, 0, 0);
-+	dev->stats.tx_packets++;
-+	dev->stats.tx_bytes += can_get_echo_skb(dev, 0, NULL);
-+
-+	return NETDEV_TX_OK;
-+}
-+
-+static const struct net_device_ops dummy_can_netdev_ops = {
-+	.ndo_open = dummy_can_netdev_open,
-+	.ndo_stop = dummy_can_netdev_close,
-+	.ndo_start_xmit = dummy_can_start_xmit,
-+};
-+
-+static const struct ethtool_ops dummy_can_ethtool_ops = {
-+	.get_ts_info = ethtool_op_get_ts_info,
-+};
-+
-+static int __init dummy_can_init(void)
-+{
-+	struct net_device *dev;
-+	struct dummy_can *priv;
-+	int ret;
-+
-+	dev = alloc_candev(sizeof(*priv), 1);
-+	if (!dev)
-+		return -ENOMEM;
-+
-+	dev->netdev_ops = &dummy_can_netdev_ops;
-+	dev->ethtool_ops = &dummy_can_ethtool_ops;
-+	priv = netdev_priv(dev);
-+	priv->can.bittiming_const = &dummy_can_bittiming_const;
-+	priv->can.bitrate_max = 20 * MEGA /* BPS */;
-+	priv->can.clock.freq = 160 * MEGA /* Hz */;
-+	priv->can.fd.data_bittiming_const = &dummy_can_fd_databittiming_const;
-+	priv->can.fd.tdc_const = &dummy_can_fd_tdc_const;
-+	priv->can.xl.data_bittiming_const = &dummy_can_xl_databittiming_const;
-+	priv->can.xl.tdc_const = &dummy_can_xl_tdc_const;
-+	priv->can.xl.pwm_const = &dummy_can_pwm_const;
-+	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
-+		CAN_CTRLMODE_FD | CAN_CTRLMODE_TDC_AUTO |
-+		CAN_CTRLMODE_RESTRICTED | CAN_CTRLMODE_XL |
-+		CAN_CTRLMODE_XL_TDC_AUTO | CAN_CTRLMODE_XL_TMS;
-+	priv->dev = dev;
-+
-+	ret = register_candev(priv->dev);
-+	if (ret) {
-+		free_candev(priv->dev);
-+		return ret;
-+	}
-+
-+	dummy_can = priv;
-+	netdev_dbg(dev, "dummy-can ready\n");
-+
-+	return 0;
-+}
-+
-+static void __exit dummy_can_exit(void)
-+{
-+	struct net_device *dev = dummy_can->dev;
-+
-+	netdev_dbg(dev, "dummy-can bye bye\n");
-+	unregister_candev(dev);
-+	free_candev(dev);
-+}
-+
-+module_init(dummy_can_init);
-+module_exit(dummy_can_exit);
-+
-+MODULE_DESCRIPTION("A dummy CAN driver, mainly to test the netlink interface");
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Vincent Mailhol <mailhol@kernel.org>");
+-	/* CAN FD -> needs to be enabled and a CAN FD or CAN XL device */
++	/* CAN FD */
+ 	if (ro->fd_frames && can_is_canfd_skb(skb) &&
+-	    (mtu == CANFD_MTU || can_is_canxl_dev_mtu(mtu)))
++	    raw_dev_fd_enabled(dev, priv))
+ 		return CANFD_MTU;
+ 
+-	/* CAN XL -> needs to be enabled and a CAN XL device */
++	/* CAN XL */
+ 	if (ro->xl_frames && can_is_canxl_skb(skb) &&
+-	    can_is_canxl_dev_mtu(mtu))
++	    raw_dev_xl_enabled(dev, priv))
+ 		return CANXL_MTU;
+ 
+ 	return 0;
+ }
+ 
+@@ -959,11 +997,11 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 		goto free_skb;
+ 
+ 	err = -EINVAL;
+ 
+ 	/* check for valid CAN (CC/FD/XL) frame content */
+-	txmtu = raw_check_txframe(ro, skb, READ_ONCE(dev->mtu));
++	txmtu = raw_check_txframe(ro, skb, dev);
+ 	if (!txmtu)
+ 		goto free_skb;
+ 
+ 	/* only CANXL: clear/forward/set VCID value */
+ 	if (txmtu == CANXL_MTU)
 -- 
 2.47.3
 
