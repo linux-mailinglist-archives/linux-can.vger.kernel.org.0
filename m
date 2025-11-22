@@ -1,92 +1,92 @@
-Return-Path: <linux-can+bounces-5602-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5593-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7745C7CBE5
-	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 10:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ACFA1C7CBCD
+	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 10:36:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E1AF14E43C8
-	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 09:36:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 645DF4E43DF
+	for <lists+linux-can@lfdr.de>; Sat, 22 Nov 2025 09:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A0C2F3C13;
-	Sat, 22 Nov 2025 09:36:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6EAC277013;
+	Sat, 22 Nov 2025 09:36:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="ISIBwrcE";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Xe5nrCPp"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="E17AGp7u";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="/grerpCV"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.163])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA28622A4CC
-	for <linux-can@vger.kernel.org>; Sat, 22 Nov 2025 09:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCF92BE7C0
+	for <linux-can@vger.kernel.org>; Sat, 22 Nov 2025 09:36:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763804187; cv=pass; b=eIUgRB4sJ+GaNIiAzugGHF1Q2zg1YI+R+XKo29avCORmoIuRCFrBXkgdzpvlir6zTeBs7mmfz5xGgnrmcEO/zNjbh9uIjlS+a1kIk2uzicA5ZXXUGec4FIOZoZnj3uswipbF5YjvGk2Ev3UnZnxyc1Ub/gJWnFGhu4mSHzg6HP4=
+	t=1763804182; cv=pass; b=lO668XLV6rzA5kMTHKgc8upRU5tVQHpp1vgB8uUwXvjA65o/3VA6Ytt9519nZAPU4OzsumMYg+hTaaVCZJzPUutfcQ7OTE5Tb212Vjc3gcQxXGeqFlbuWj9Agog84Fo8THpFrgAbhfAJW3w2qkIEXbiSvpzGpBolaBRfEiAVWNE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763804187; c=relaxed/simple;
-	bh=s+lADGieyXp5NWDUjGmEQumpNZetzYKO0b2m4eFKE7o=;
+	s=arc-20240116; t=1763804182; c=relaxed/simple;
+	bh=763O7b50HhSXxC0PWYbJMawZSqyGGOShMQL2VLkUu3Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ar5GPvzO5oMByhqIMpFFzA3svmwZRvb1FrtDQdQR5ZrWk+JYFyPQXcBOLr52w4F+HWNWdHexOPLHOcVu7uAgYPup8VgEpzpI6PO8aFXk+z9W2Do3pldY1uYoZHoZ2Wu7jUROtUj1Vbg94+9/Jha+BgfktJgPyw/R3ai05C5SMH0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=ISIBwrcE; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Xe5nrCPp; arc=pass smtp.client-ip=81.169.146.163
+	 MIME-Version:Content-Type; b=Wu13PZvfaUBl0eEEfry8Nx09UTjOElmL90GqgY3XS8ayWTMCuJBcw9NqfX0evQKHk4C1ItGXazjDifkJbterdSkUKn3zjzPzpiFCQm/RGcvD1WcByy2K6e59JjGGBVwReFyHhtk1dNbTzDwSTDFl7HIm6UWm/ArtGASbd2ScdBo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=E17AGp7u; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=/grerpCV; arc=pass smtp.client-ip=85.215.255.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
 ARC-Seal: i=1; a=rsa-sha256; t=1763804169; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=EzdGGEKrwWfzxw9SEKolisNWad1ifyZfNM1vaVg06imDqJF+rGx8201+QMP3/5LdWv
-    FdPlHvkl8cUStj1xua4tmRYu7LovHjDC/gFdsjFf/vzBvuMFL2/wOSsKLG5A3D7ulxyX
-    wjJNtL5vDe1YdS229VvNZHA9s75j6UMYeCwkm91iEVpKh28nwLtKzNbmTqvF9rUkYqJe
-    LCQLBi5yi0QigA226Uhc6/BY3U35S7zx96ua6VkgaxRsYqJ6sQMWIG80tEOblFDnbb6o
-    BlBqBgKpfV6tVn/nRevEUYeRfRH+lJ1hWkrFrisNEjvXxUNyGT8Quph6SbpoHM+F0TWF
-    Jwow==
+    b=nJop202HiZ65bvis6jdo0eD/gHJGGsaYdJbe+t0RCwCTD/rfQaoM5tXaW4Vl3SE38j
+    IgiNxomrOHfjj+lfQQrfFqNDtDWUV+IZojYujMOaXsPm4Xgpt+KWc50gZ6qEEZIUAPAa
+    uX6ehVjpUwlc3G5q++8KfqP5+/u5uEhDjvpVDh7xAam/kaXANnbm9P4/dOniURE8Zk+j
+    1vP75KdASSG1tQds8x9iQrgj657KfqhKcDTwam6mpfNANNO24enRHzkS4V57m7/q8Ljo
+    Re6SZHNqfJZ7bincY8aSiL5ktDKi1kR/SRQFRnSqNYmzqcKKgpXyZt5x+8FbeNbT7jof
+    qFOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763804169;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=Vn4gsB8kwb7mn6S98lacK3xTSI77EQiiURCmYom8g/E=;
-    b=Wlvy2QLw8g6xoL2BXWkYfZWrtZX9npT4UCVGd/HTz+1UklZyOSgJHs+a29D+4OsRh6
-    HyYkediam20MySUQlXNnytPBcsOgfG5vMvypbgjL4ffe5mDcifMeoQ2aJbmUwsiBLwe+
-    h0T+COu7oat7mu4BIs8E7DuvcVkgHN0ULikbJPIGLWw9hsqpE75fMxfxOkreyCW8JJtM
-    ekczVOl45HMzqYVu/sef9of4GZeHYsvwBL4HRxqGOrRbD4VQCVBOBuWvlaUgA0IGw/Al
-    al9NOkZvyItMhvy2gG6+VWz+aB4E2FGco7f0YKmU5nxEjpBTPUhshbNQl3U0JMKLcN/C
-    T3aw==
+    bh=LG3Urxe8pmGbWGjgXk2KNAQtE01ZON6ODg6OQ1bmVnM=;
+    b=o62xCuU7GSc4PqiRGTqv4e0Ru7JgFk+fSHBmFfvqvVxjht6IplDorsVpRiaLC7bifZ
+    DXfiCrfED4QSi58nTp6vRqYNGiLHEKj2rSIm+lLvFw6CBypc+koYmHyVLYfm2yPInFuH
+    S8PUm6Iz+BYM4Wwk1SpeU1tgHPp3/8jOTrTCf29QDGtx3PTun2ivxgVqZizKbsraQ0i4
+    WYBx74UlqmM0k0K46vE5QENLvTwz5xS2hIhsyXSZz3nLaH+olXhkJZdLPcxam1Fn9Ghb
+    W3m8CRiBakMcdaqRy4cHG9S/rpvuT+T/B2DSmCQGdw1HGCx862M2knieBeN75RBpX4g9
+    J1gQ==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo00
+X-RZG-CLASS-ID: mo01
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763804169;
     s=strato-dkim-0002; d=hartkopp.net;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=Vn4gsB8kwb7mn6S98lacK3xTSI77EQiiURCmYom8g/E=;
-    b=ISIBwrcEN30QDBWt5GrOuxWM1j8foj7fQUe53o5g8Exux8+QFsyfcpVZ5Kifq6TgzX
-    2CUNz25VkGalMrGTtPglqI+yvQyoUHLFxsnFZdGnyRVQLIP206DsDrjOyEmd8MhV9YeF
-    68QqKeTD60zdmx7KCZca8HfSXtriMr9JmdMMPNnpMUpDmYcIlL3LCczsjT05sRGkvRZX
-    wd0T6bo+p3wDjOlnPcQ0Um9fP8K9eROuXlrGGA/bqDGd9KJ/KMHz1wyKWQvvWHxHZyK3
-    AE9YHJP1QbvowKmwWqU/15JmeA4NCOArEFTqeYRiDGDDOUoWK5KN1ayj/ppUh6Hk03CF
-    AKbA==
+    bh=LG3Urxe8pmGbWGjgXk2KNAQtE01ZON6ODg6OQ1bmVnM=;
+    b=E17AGp7urjaOM+JZ5eeDxzFzjA/ENTlSmLjx2sLy+ppi5exaXMGpf8UoEbxAewSit0
+    bGDLYWvbOkNW95SEq2NU14JjK7rJBIWrna/sM1LpQOtOlqSPITtFkQ1s61DmquVGioZb
+    e5x46Bz6Jhrmn7RhwBP9AiQXYEKQn3PtjAHhiQ4s3Bw9+K8Lakt0/FPCvs2hrC1p/dnO
+    8x+IJtzbmT5aN8v+8HIn0vxKTSJ+EXYfE73vSYap9tFI4YnIkhMzsDV/pkMu3JDY2MzD
+    BMfb35eGxD4/oxW11k8LTYvCCT0HXtdDNoRwYpLbR0CSbs4krmOk9nlEBGZJGudvB4x6
+    Hi8Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763804169;
     s=strato-dkim-0003; d=hartkopp.net;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=Vn4gsB8kwb7mn6S98lacK3xTSI77EQiiURCmYom8g/E=;
-    b=Xe5nrCPpEyZE/mdblVPfKvOsfp0NsLFUB09JCEet0FDkVQiLwXXrA96LmLKOKkCn1D
-    MUefv7JcnxwDm20MatAw==
+    bh=LG3Urxe8pmGbWGjgXk2KNAQtE01ZON6ODg6OQ1bmVnM=;
+    b=/grerpCV/zulV4rrqfyjhUqDiMjejHxEaFmkNcv7R/gWwEi40AStcYGa+TdlWzGkOe
+    f8DbvB+RRzw1ciDVV/Dg==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
 Received: from lenov17.lan
     by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461AM9a8Fdm
+    with ESMTPSA id Ke2b461AM9a9Fdn
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Sat, 22 Nov 2025 10:36:08 +0100 (CET)
+    Sat, 22 Nov 2025 10:36:09 +0100 (CET)
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 To: linux-can@vger.kernel.org
 Cc: Vincent Mailhol <mailhol@kernel.org>,
 	Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [canxl v6 02/17] can: bittiming: apply NL_SET_ERR_MSG() to can_calc_bittiming()
-Date: Sat, 22 Nov 2025 10:35:46 +0100
-Message-ID: <20251122093602.1660-3-socketcan@hartkopp.net>
+Subject: [canxl v6 03/17] can: dev: can_dev_dropped_skb: drop CAN FD skbs if FD is off
+Date: Sat, 22 Nov 2025 10:35:47 +0100
+Message-ID: <20251122093602.1660-4-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251122093602.1660-1-socketcan@hartkopp.net>
 References: <20251122093602.1660-1-socketcan@hartkopp.net>
@@ -101,37 +101,70 @@ Content-Type: text/plain; charset="us-ascii"
 
 From: Vincent Mailhol <mailhol@kernel.org>
 
-When CONFIG_CAN_CALC_BITTIMING is disabled, the can_calc_bittiming()
-functions can not be used and the user needs to provide all the
-bittiming parameters.
+Currently, the CAN FD skb validation logic is based on the MTU: the
+interface is deemed FD capable if and only if its MTU is greater or
+equal to CANFD_MTU.
 
-Currently, can_calc_bittiming() prints an error message to the kernel
-log. Instead use NL_SET_ERR_MSG() to make it return the error message
-through the netlink interface so that the user can directly see it.
+This logic is showing its limit with the introduction of CAN XL. For
+example, consider the two scenarios below:
+
+  1. An interface configured with CAN FD on and CAN XL on
+
+  2. An interface configured with CAN FD off and CAN XL on
+
+In those two scenarios, the interfaces would have the same MTU:
+
+  CANXL_MTU
+
+making it impossible to differentiate which one has CAN FD turned on
+and which one has it off.
+
+Because of the limitation, the only non-UAPI-breaking workaround is to
+do the check at the device level using the can_priv->ctrlmode flags.
+Unfortunately, the virtual interfaces (vcan, vxcan), which do not have
+a can_priv, are left behind.
+
+Add a check on the CAN_CTRLMODE_FD flag in can_dev_dropped_skb() and
+drop FD frames whenever the feature is turned off.
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- include/linux/can/bittiming.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/can/dev.h | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.h
-index d30816dd93c7..3926c78b2222 100644
---- a/include/linux/can/bittiming.h
-+++ b/include/linux/can/bittiming.h
-@@ -139,11 +139,11 @@ void can_calc_tdco(struct can_tdc *tdc, const struct can_tdc_const *tdc_const,
- #else /* !CONFIG_CAN_CALC_BITTIMING */
- static inline int
- can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
- 		   const struct can_bittiming_const *btc, struct netlink_ext_ack *extack)
- {
--	netdev_err(dev, "bit-timing calculation not available\n");
-+	NL_SET_ERR_MSG(extack, "bit-timing calculation not available\n");
- 	return -EINVAL;
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index 0fe8f80f223e..d59b283c981a 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -101,16 +101,24 @@ static inline bool can_dev_dropped_skb(struct net_device *dev, struct sk_buff *s
+ 	struct can_priv *priv = netdev_priv(dev);
+ 
+ 	if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
+ 		netdev_info_once(dev,
+ 				 "interface in listen only mode, dropping skb\n");
+-		kfree_skb(skb);
+-		dev->stats.tx_dropped++;
+-		return true;
++		goto invalid_skb;
++	}
++
++	if (!(priv->ctrlmode & CAN_CTRLMODE_FD) && can_is_canfd_skb(skb)) {
++		netdev_info_once(dev, "CAN FD is disabled, dropping skb\n");
++		goto invalid_skb;
+ 	}
+ 
+ 	return can_dropped_invalid_skb(dev, skb);
++
++invalid_skb:
++	kfree_skb(skb);
++	dev->stats.tx_dropped++;
++	return true;
  }
  
- static inline void
- can_calc_tdco(struct can_tdc *tdc, const struct can_tdc_const *tdc_const,
+ void can_setup(struct net_device *dev);
+ 
+ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
 -- 
 2.47.3
 
