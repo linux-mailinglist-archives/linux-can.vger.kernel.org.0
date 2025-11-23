@@ -1,173 +1,152 @@
-Return-Path: <linux-can+bounces-5613-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5614-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 858D9C7E017
-	for <lists+linux-can@lfdr.de>; Sun, 23 Nov 2025 12:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3749EC7E142
+	for <lists+linux-can@lfdr.de>; Sun, 23 Nov 2025 14:17:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 46F1B4E29DE
-	for <lists+linux-can@lfdr.de>; Sun, 23 Nov 2025 11:23:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2955F4E1368
+	for <lists+linux-can@lfdr.de>; Sun, 23 Nov 2025 13:17:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 183342D661D;
-	Sun, 23 Nov 2025 11:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA19821CC47;
+	Sun, 23 Nov 2025 13:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jY+YIp8/"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="tqZmft/I";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="V6M1twmT"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFCE2882B6
-	for <linux-can@vger.kernel.org>; Sun, 23 Nov 2025 11:23:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763897016; cv=none; b=bQddCtAu3aHRANdTs8/Z1ulf8E1abhrf0kOrljY6llJbueqfFXXiJ8KfMkRjimKM3La9Mor8QBcWwWw2zW+OD/EQb//MEo6P9KoYFlBisxa8ld2K3hym/GqGrMewErJFY6dTfmjWyzrL9sw8R09cOUXPxNekNoaRk0s4X0Vt2fM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763897016; c=relaxed/simple;
-	bh=judJf37ugx+9XxEA6+cURHD2HCi2BGwiplPtaY8oOCU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nlJ3hsfwNZT/fmssLz+C+gudC99JHcQwP8vTomwkZS9mzfAQix8TMeyNX0f3IbZoWja/SFwaG6wrUKuA132RQGs73/Kqfn6Hpwx63u+9RPAoAQz8eWzK/Cx6F0mQZuJsFk+RGQ+pRWtFY8lyt2b7y/5ulSAKJl05lda3eDlCsZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jY+YIp8/; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-477ba2c1ca2so34527275e9.2
-        for <linux-can@vger.kernel.org>; Sun, 23 Nov 2025 03:23:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763897010; x=1764501810; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Emr/+4aLXcwA6DEHvcDwnUuj4foIIDMHEYBSGGBEokE=;
-        b=jY+YIp8/cagtNgQnz0l8HNppUimTsVbREcRm6HFrbH11+wJy2+wbl6Zb4JQm8p7v2B
-         SdEgXRljd1Mf5jq11TTM/FS+obi17ENWAM1MDkgEzT8w2DW6TUnV2AYC172Jrk0tw5i0
-         gQJRcEeZfJOVd7f4MLPjLcfHYqkbVSKd+N38bwpFRzg23WKub6EKkBhlA7tNQmQeF3TQ
-         aqIgggQpvm8BfTyH+y8ystpvpAPokNGvr8BhNnyF4etAUwFodMU81t7C0BCsNCqIrXXd
-         eNZzG8htzKdr9xQT3nZuSwc/3xm23B5I7iD+Rf6QvLWF8SA9XhJuhdHg6vlbIUEAsMTz
-         k8sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763897010; x=1764501810;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Emr/+4aLXcwA6DEHvcDwnUuj4foIIDMHEYBSGGBEokE=;
-        b=fEzuDyKyQKzfq9X06Id6IUoSNHukLndY4/NTytqbY9vrReiDMIkJFCFXSa944KbHFH
-         Co7YwcrgiYWAkJpAH6i12x4WSavmaOXx0aPfkY/7HHjoM37ZOGkzxrTyI16JE4LTvv5b
-         yy3zysOvsWEieUHR/MU5/zbwTaCd0mu75EzaTp+a2WM5o8oKnjgYgOrepcuBLrbZQI/6
-         BlskkYahstYneFla5d3pSAovh8Vd+XNtHl4LZ6uKO9IRqi2V80fkRT5yO7FyfFk7vnwg
-         uqgUCq+ZufcPPzubk36FempZwwhMIOC/68Kc6FEPCZTi5TEnX3OzlA+lfpvF0FZCt58z
-         GbJA==
-X-Forwarded-Encrypted: i=1; AJvYcCXb0Ait/nkyGVa5iqKMXeAZewXJOsxEEokBiXBvaH1a4zLdIfowSNr9VFitathpkaPO0Z77HcUH4j8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLr7Y2rylMake9Auv5pX8rWe2CsnmrmP9iSKcX9RoRs4pe2X/r
-	oPB78rQ9JURTO+qa6kJo60slqW85V7YAmweIWsJC3T5LHijcXDrw9f7gdsFihA==
-X-Gm-Gg: ASbGncshv6paoTjCYs94zqUrcnfamq1GhtkKU2kqKgRsMJM3x4glcE1mQaFO5arRKmg
-	rJ+qfWB4OBXIHG9miBIBzA2ccNHYjt7Dr7Me3tRIMILe7v2nPTYhKVe1kIBqQVFMTKe9tZG2QAH
-	Wmai1gmshOaJ3ckP9SBfpUFKv6lkuEVAN+NO2CPvXG55Akijsr1JsFhFwggiMws2iWWZibqK84g
-	K8TH93YlBJ+u3KzjeWKTTBFNn4OBULeQ7AvukGggWp0n5sOYqvnlwdNrsOCbHyQ/YZS+iC2sI+y
-	W0FS+DECvYK1VmBIDRh4WJGLS7gJVkFh16j+diruTBABfrWxmE+N6RoRVMXOBqBlzFvS5/mWAXb
-	FrkFTY7lUTb+1h5SQb34imLz5TkiW8aiRkJI4V09rbJl52dpBa/XQMyzuWxR/osX2IqYUSWVhor
-	EavKQ/0V27/0N9mKKfXnx7+vJ7KKSGaD0y3fLXxnT6oyjvSiy1ysN9Cygx7zJbeIDGMBDO9nk=
-X-Google-Smtp-Source: AGHT+IGTTftybiQ2Gt6OA2V2ockpQieSM4HqvkIUoh8tdMLZ7vPfFmd2LOncO8JPMOWOsk/IZByI7w==
-X-Received: by 2002:a05:600c:4f48:b0:46e:761b:e7ff with SMTP id 5b1f17b1804b1-477c01e02e5mr76829755e9.28.1763897010101;
-        Sun, 23 Nov 2025 03:23:30 -0800 (PST)
-Received: from biju.lan (host86-162-200-138.range86-162.btcentralplus.com. [86.162.200.138])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7f49a7bsm21765703f8f.19.2025.11.23.03.23.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Nov 2025 03:23:29 -0800 (PST)
-From: Biju <biju.das.au@gmail.com>
-X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	linux-can@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v2 2/2] can: rcar_canfd: Add support for FD-Only mode
-Date: Sun, 23 Nov 2025 11:23:21 +0000
-Message-ID: <20251123112326.128448-3-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251123112326.128448-1-biju.das.jz@bp.renesas.com>
-References: <20251123112326.128448-1-biju.das.jz@bp.renesas.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A5A1096F
+	for <linux-can@vger.kernel.org>; Sun, 23 Nov 2025 13:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.218
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763903831; cv=pass; b=IVm2r4GEpMjFa9bNIrS9IhbIKAuzLMl8rqX9KQpgKKOvHKf/PteyEwSRy0Af4EHtN++R1s4GxpvKhTM5bUXYaqC5sLJPhRs4eS7SaaRRl0+PKMnBNUbJptbIdtS+9KhycWYX6qR3Ms6DXxI/GJ9mia0jUNom2gaGKn4pF0XecuA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763903831; c=relaxed/simple;
+	bh=ImTYYqpSpXsBuOswFm7Pz1WYBA5HdVMMd2nm1hQnKq8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TEpE1yZBUovJ5tkG4WSKqPdKOS45RtncieRYmTkQwkddOhySwUdAK7LFIL9m6wP1MXIGjC5I7WcVLfdmhdB2GpKI8NVw8jX3S6iKBjEAh+t2JDVodCQHHeTE1v/xrbzRhGtL4rrzz2IqlaCgTg19mhOeSD60R5Bh+pxkMOA9PoI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=tqZmft/I; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=V6M1twmT; arc=pass smtp.client-ip=81.169.146.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1763903643; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=tcEWrcofT1BxxEM46KKB6vFw24J2hamJksIf9E86gP7jBvI2N6DyNfQ2sV8pEY427L
+    EwMZpbWbNpyWG22xZXkm/d+U0EmnhpSeUaxca/me62612kbCeFe35AUSqJcEDKbXGfWs
+    /v2AZt9RaAaoYBG4cUQrKBHWhppZGJXyqyBdPQ5b5zXuBna1M5hkF6H3ACHo6NUG6B7J
+    FrC0fvybwjrTSR18sCQ3DE43Ib05sl6/bwWzFepFP2sWnOdyjL2/b7lQIBVPZy1xgRyo
+    K/HmL3wBBDtRttXPYZaQ96q4sedhTn5kxDPuPdjlzodGVrIDsnvwOndghYLQpjAYM6GY
+    pb+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763903643;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=0RJ4vPJR46fWHU6GqZphWROJPd5LO4a7ejckjYhW43A=;
+    b=SKitpUHriNUwNYTvjn+OXNi76ZH7UP4Udd8bkrM/FUClrUIKgEVU9hR6Xua9SJD0Lb
+    phEMpNriP+iJ8YZzYYD1d0brAfX6/wpjNOR8hUorMkkeu0tXJKKlutcdpWG+yzjIuVdg
+    AE7L9m5xdjGSsYMgmAMWzlGIGlmhJCldIgcQNLur6AJxJ9A94xE9IsdaSULrTMDe6aY2
+    mayeE54N3c+zd4pq9b2EwS0eRYEwNNiphS4ptS+pJaq50bQNekFpYm0PpxJr6kHuRclG
+    ZY+Lgu0GZ0WiaGz45m1CrRMc0e3MGKxh19OpZ4IIREQd6XfTqqglSWwKcvxiu3korBqJ
+    b2CA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763903643;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=0RJ4vPJR46fWHU6GqZphWROJPd5LO4a7ejckjYhW43A=;
+    b=tqZmft/IaTaXOVYG46g3lkLXuauvN6t7sHQCYZB9W1NVkg705ROs3XT41lUHssqPLT
+    QDmznq+qlXwqN/s0D0icFRQGli2BqNg9/80TPzOa/Ayb6rampsfsB1daA7yh/VujzBOs
+    ei+/Zx4sO2haHRLtzt1H1mGfw6Q8EFp+GvbFAAPfJqTEjw2kKq4yOdj/lQHyA4EH1CyR
+    Sy1TGzMNoBEhE9SKzfBlEiASjBnr3ayiTQBfCT1GOxiXAVgM5Tx/2VgTkPmLd/tuoWaD
+    ITQiOHSzD+43bMKZbIFTfpyJBLVG7x9RBRgMgp3O99OcpxptxZiuuYatE6s8ZoX27yfu
+    K4XA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763903643;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=0RJ4vPJR46fWHU6GqZphWROJPd5LO4a7ejckjYhW43A=;
+    b=V6M1twmTqqWDmwcIuKbVuTD16Ct098Ah/r3CxqAVVKpwdQVfxz5Nchu8T8F0JbB5BM
+    6BJsd1ttOAgor0k2m7CA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTRoMrpo2Pns16vpLmpxA3b1slG7I0aZONkW6smX3kvVXGLKH4aQ="
+Received: from [IPV6:2003:d5:5708:3c00:3380:d761:962f:4fec]
+    by smtp.strato.de (RZmta 54.0.0 AUTH)
+    with ESMTPSA id Ke2b461ANDE3He3
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sun, 23 Nov 2025 14:14:03 +0100 (CET)
+Message-ID: <41d895e6-1ef5-4658-910f-e1e5fe312702@hartkopp.net>
+Date: Sun, 23 Nov 2025 14:13:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [canxl v6 05/17] can: netlink: add initial CAN XL support
+To: Rakuram Eswaran <rakuram.e96@gmail.com>
+Cc: linux-can@vger.kernel.org, mailhol@kernel.org
+References: <20251122093602.1660-6-socketcan@hartkopp.net>
+ <20251123065230.7869-1-rakuram.e96@gmail.com>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20251123065230.7869-1-rakuram.e96@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+Hello Rakuram,
 
-The RZ/{G2L,G3E} and R-Car Gen4 SoCs support additional CAN FD mode called
-FD-only mode. In this mode, communication in Classical CAN frame format is
-disabled.
+thanks for your offer to test the CAN XL support!
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v1->v2:
- * Dropped has_fd_only_mode variable from the struct rcar_canfd_hw_info
-   as it is checked by the dt schema validation.
----
- drivers/net/can/rcar/rcar_canfd.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+On 23.11.25 07:52, Rakuram Eswaran wrote:
+> On Sat, 22 Nov 2025 at 15:06, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+>>
+>> From: Vincent Mailhol <mailhol@kernel.org>
+>>
+>> CAN XL uses bittiming parameters different from Classical CAN and CAN
+>> FD. Thus, all the data bittiming parameters, including TDC, need to be
+>> duplicated for CAN XL.
+>>
+>> Add the CAN XL netlink interface for all the features which are common
+>> with CAN FD. Any new CAN XL specific features are added later on.
+>>
+>> The first time CAN XL is activated, the MTU is set by default to
+>> CANXL_MAX_MTU. The user may then configure a custom MTU within the
+>> CANXL_MIN_MTU to CANXL_MIN_MTU range, in which case, the custom MTU
+>                      ^^^^^^^^
+> Minor nit in this description. It has to be CANXL_MIN_MTU to CANXL_MAX_MTU range.
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 05dbdf46dd6f..00c3462fc975 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -471,6 +471,7 @@ struct rcar_canfd_global {
- 	unsigned long channels_mask;	/* Enabled channels mask */
- 	bool extclk;			/* CANFD or Ext clock */
- 	bool fdmode;			/* CAN FD or Classical CAN only mode */
-+	bool fd_only_mode;		/* FD-Only mode for CAN-FD */
- 	struct reset_control *rstc1;
- 	struct reset_control *rstc2;
- 	const struct rcar_canfd_hw_info *info;
-@@ -828,12 +829,20 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
- 							 RCANFD_GEN4_FDCFG_FDOE);
- 				rcar_canfd_set_bit_reg(&gpriv->fcbase[ch].cfdcfg,
- 						       RCANFD_GEN4_FDCFG_CLOE);
-+			} else if (gpriv->fd_only_mode) {
-+				rcar_canfd_clear_bit_reg(&gpriv->fcbase[ch].cfdcfg,
-+							 RCANFD_GEN4_FDCFG_CLOE);
-+				rcar_canfd_set_bit_reg(&gpriv->fcbase[ch].cfdcfg,
-+						       RCANFD_GEN4_FDCFG_FDOE);
- 			} else {
- 				rcar_canfd_clear_bit_reg(&gpriv->fcbase[ch].cfdcfg,
- 							 RCANFD_GEN4_FDCFG_FDOE);
- 				rcar_canfd_clear_bit_reg(&gpriv->fcbase[ch].cfdcfg,
- 							 RCANFD_GEN4_FDCFG_CLOE);
- 			}
-+		} else if (gpriv->fd_only_mode) {
-+			rcar_canfd_set_bit_reg(&gpriv->fcbase[ch].cfdcfg,
-+					       RCANFD_GEN4_FDCFG_FDOE);
- 		}
- 	}
- 
-@@ -2041,6 +2050,9 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	gpriv->fdmode = fdmode;
- 	gpriv->info = info;
- 
-+	if (of_property_read_bool(dev->of_node, "renesas,fd-only"))
-+		gpriv->fd_only_mode = true; /* FD-Only mode for CAN-FD */
-+
- 	gpriv->rstc1 = devm_reset_control_get_optional_exclusive(dev, "rstp_n");
- 	if (IS_ERR(gpriv->rstc1))
- 		return dev_err_probe(dev, PTR_ERR(gpriv->rstc1),
-@@ -2190,7 +2202,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, gpriv);
- 	dev_info(dev, "global operational state (%s clk, %s mode)\n",
- 		 gpriv->extclk ? "ext" : "canfd",
--		 gpriv->fdmode ? "fd" : "classical");
-+		 gpriv->fdmode ? (gpriv->fd_only_mode ? "fd-only" : "fd") : "classical");
- 	return 0;
- 
- fail_channel:
--- 
-2.43.0
+Definitely ;-D
 
+Thanks for the feedback!
+
+> 
+>> value will be kept as long as CAN XL remains active.
+>>
+> 
+> At the moment, I'm going through the mail series. I would like to apply
+> patch series in a local branch and test with dummy module. For that
+> purpose, if I apply this series on top of linux-mainline will it work?
+> 
+> If not, please share the base commit details to experiment locally.
+
+The patch set applies on the net-next tree:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+
+Alternatively you can also apply the patches to the current Linux 
+mainline tree after you applied this patch here:
+
+can: treewide: remove can_change_mtu()
+
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=f968a24cad3da72
+
+Best regards,
+Oliver
 
