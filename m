@@ -1,206 +1,130 @@
-Return-Path: <linux-can+bounces-5634-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5635-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D201DC7FE3A
-	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 11:29:15 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96206C800F9
+	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 12:03:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 075154E4AAE
-	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 10:29:07 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3B911343195
+	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 11:03:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70D542FB97E;
-	Mon, 24 Nov 2025 10:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cVh2Exk0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50C02255F28;
+	Mon, 24 Nov 2025 11:03:21 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DFE2FABEE
-	for <linux-can@vger.kernel.org>; Mon, 24 Nov 2025 10:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9CE238C1B
+	for <linux-can@vger.kernel.org>; Mon, 24 Nov 2025 11:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763980130; cv=none; b=l+wORgViamazXr1L94iOQfh3LoBcyZyW1m9NerlQZj2puGE4pf5JidVkXFhGiZLYEwBUur3Si5vY+lWjrNmSD9fs3Sh5AWaerctRT8VbYPwVxDZOZImXXeHWxf1QE5Yqh2Y+uf+ZwR5rS6PedCREIwdH2hF6QsMJl1uV2bZLODE=
+	t=1763982201; cv=none; b=YncpC8n8in3YC+biZRnQ9KUFoDTp/Z4aG68eVS124jw0b0cVpj18DEEZ+QKv+uqm2gSx5+2sBR46uNKxn/lchg/3n8PomW3s+jJLL8ANRTy3HRAyJBVRswhkHQHlKYjTOaTD9nDDiKPn7DPBNjmwvF0S3/LX/vArCADD/Ea50nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763980130; c=relaxed/simple;
-	bh=rPyNl3IXKetzOLBOyKPO8g0EGzeg1E0yIt+StmCCebY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bgR14SA57hoc5JTwNEMBurwaC/ku8jeunVGr39Y+P92TVH1uVzk2gDZO37aZYbby/d5HAPfJWfqC/b7MFaqkq3YZhiS5XmHHBOn3e4cTrDz9Cr94mfc6bnu8MgECQOZK3UhP6g+GsBA2GKCuI0EZheoXBtkdpG2egvkC/5ztQ4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cVh2Exk0; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4779ce2a624so36544715e9.2
-        for <linux-can@vger.kernel.org>; Mon, 24 Nov 2025 02:28:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763980125; x=1764584925; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WgtID0nFX3nGFRlE1VlQTXM54bzqiyChn12CU60+xHU=;
-        b=cVh2Exk0kdpfHBpQzoRTAAoqyObCeHVYdZEaR0HVcowQPhVc97J5zLWVx5EYn8sVwS
-         JBs9LVSyd2bDukM5lIKj+ciA/Dw6TBlmD0u+AEPWT1YmDlRguKHrg7G0sNj5nZ6+R6UZ
-         k7ToFbUaZQD5BHbyOXjMRAmI+rL6Y8AWVfsC1l1/+6WlqXc/lfxHfrcDxb8WgHgQnoDC
-         XJSk6aKTYNnpS2FSHGaGvgzMSe8hWYH2NV5atjHbfp/iGLWrbxAqMCC3BwLKaCivxsQ6
-         7VBjWB5v22GMT9gzYYJJ8TZCPqPB/eNWNH2YM9TEa+MQkggrvdbnxLoFyShKXCVRl5XU
-         YMug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763980125; x=1764584925;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WgtID0nFX3nGFRlE1VlQTXM54bzqiyChn12CU60+xHU=;
-        b=Oje5tfIkgargT7RQNUpVSAS3DFaHnBeonhbgo4uDr/G6+usw31jjtndT+PWcgIQU5D
-         5Y83Mq3KAE2zVPaMXAo03GA7w+0sTWtRUtlH800S6gOoVmO/Veqez1Jsh1N4tUqjgY4U
-         yARDME3G3a2nI0uvKCedyyRMbJ5R8m86Vr3laJ2Zg1YAoObYhTvp8ebw3OapeRbT+32I
-         S3ZOGQU9ubvWQFDY8XQbXsFRbIxSveL3lUIyFIaznDE9JUJqrNMKBc/ebZGJ1RS8Dn32
-         Inlw96LdFOnn+bKOaL5nLlUDyX/LEMKDh5wFC3dG/fQl98L9azU35A8IiFYB/XriSYvh
-         IVKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWSW3BJgKwwC6dJLPSIjjoy6AC4GMy4p7zU7y8QvW1jdmLc31Cw87vk6teEu5iepPZzm9sj4fdTFoI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCfwfJdoXwdJWUq5woUMYml+AukxuN/bUrtkQkYuPNrNm0oikU
-	YBX7oJB+1W9N8opz/SPyj2r/A5m4J1pO5oU1xaa6xhZA3fcl2YpnaKGl
-X-Gm-Gg: ASbGncs8lJPmUk8yjPqav7cuP8VuLweqOfIftowR0CJkhzqNXJfhP7UhbIvTMZ2k0vp
-	qHsunOrDI0nqHpRUz3MGwFPNEUaoLHS+/o/WD6I/OEHODENu81ecsHAc8wQaReBnCM+V9wLbNKn
-	P5euQrgfDpz3T5a+OgjlMLbjt7Ci2N/jo2hS9roIwToy2G6EVfmBPYSQnY4mpP2yk4CVIhEzr9+
-	6PyyWRHM6IKG1/uhTb9gOmTKHn1aA5E8R1pmSL7qBtsGGP9tux0ugxkuBbvaDoWyoBg/MvNCWi+
-	Q2L1ikzIHLZlkBJ3H3/mHAVDsUAtTodi8crWoX+79A1eSrqCraEoH+g/Nv6sNf+S0pwadnNZbj3
-	dTj2Lpiq63D6OGRVGOIfZiBZ0mKXkSyY2D+sFv2868voy49rXjphshZa1rgYhsnAPPtX/0tdNY9
-	ie5eEKE4AkOrDnqyYY5K7bS7/uK5D/US1uokgb5V4RF5eXXWPIA90uaEQJVVuSDD+ZDvn4cvVKd
-	YMYrHHiOnJiUYxw
-X-Google-Smtp-Source: AGHT+IGyTyi4ltNsVDvmhl+/roG3AiodjJTRXbT98h+eS1FAwZ4STCcD5g+TawJPyCHRDRFgKtjvvg==
-X-Received: by 2002:a05:600c:1c0c:b0:46e:7e22:ff6a with SMTP id 5b1f17b1804b1-477c018a099mr148973035e9.15.1763980124606;
-        Mon, 24 Nov 2025 02:28:44 -0800 (PST)
-Received: from localhost.localdomain (host86-162-200-138.range86-162.btcentralplus.com. [86.162.200.138])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477bf1df334sm186753945e9.3.2025.11.24.02.28.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Nov 2025 02:28:44 -0800 (PST)
-From: Biju <biju.das.au@gmail.com>
-X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	linux-can@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v3 7/7] can: rcar_canfd: Add suspend/resume support
-Date: Mon, 24 Nov 2025 10:28:32 +0000
-Message-ID: <20251124102837.106973-8-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251124102837.106973-1-biju.das.jz@bp.renesas.com>
-References: <20251124102837.106973-1-biju.das.jz@bp.renesas.com>
+	s=arc-20240116; t=1763982201; c=relaxed/simple;
+	bh=rEhQ0kChvoW135zoDbu5Vz/F/y9BKhr5QRudslmrQ7A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UeRYKn7zKrx6zRWncTBshaw4D7K6rSGRdAO3NMtNzXeJaJdzZ8j+sFWlL1CDWeAODy+13tbE9kSfR3HlIZadaKR8YySIs63ICwsXyMh59KJyRTBg7NSVZJ4gzvNtm7AQFVvS8ZbUAQBPJyQpWMUr75tv79QM0ySaP3X8UpXIHgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vNULh-0007NK-EJ; Mon, 24 Nov 2025 12:03:13 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vNULg-0029iX-2l;
+	Mon, 24 Nov 2025 12:03:12 +0100
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 998244A6F1A;
+	Mon, 24 Nov 2025 10:59:42 +0000 (UTC)
+Date: Mon, 24 Nov 2025 11:59:40 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Thomas =?utf-8?Q?M=C3=BChlbacher?= <tmuehlbacher@posteo.net>
+Cc: linux-can@vger.kernel.org, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: Re: [RFC PATCH 0/1] can: sja1000: try to enable NAPI
+Message-ID: <20251124-wild-grouse-of-influence-3314f5-mkl@pengutronix.de>
+References: <20251123181820.19233-1-tmuehlbacher@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mlg7rdfiy6lkqmxl"
+Content-Disposition: inline
+In-Reply-To: <20251123181820.19233-1-tmuehlbacher@posteo.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On R-Car Gen3 using PSCI, s2ram powers down the SoC.  After resume, the
-CAN-FD interface no longer works.  Trying to bring it up again fails:
+--mlg7rdfiy6lkqmxl
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [RFC PATCH 0/1] can: sja1000: try to enable NAPI
+MIME-Version: 1.0
 
-    # ip link set can0 up
-    RTNETLINK answers: Connection timed out
+On 23.11.2025 18:18:27, Thomas M=C3=BChlbacher wrote:
+> I think there could be some benefit in avoiding the unbounded while loop
+> for RX in the ISR. On a system with slow IO between controller and host,
+> we can end up staying inside of the ISR for much too long if a more
+> capable bus participant causes a lot of traffic.
 
-    # dmesg
-    ...
-    channel 0 communication state failed
+If you go for NAPI, you have to disable the IRQ you want to handle in
+NAPI in the IRQ handler and re-enable it, if you're done.
 
-Fix this by populating the (currently empty) suspend and resume
-callbacks, to stop/start the individual CAN-FD channels, and
-(de)initialize the CAN-FD controller.
+In the past (before threaded NAPI was a thing) there was the problem
+that the latency from IRQ handler to NAPI was too big, leading to RX
+overflows.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Biju Das <biju.das.jz@bp.renesas.com>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v2->v3:
- * No change.
-v1->v2:
- * Collected tag
- * Fixed the typo in error path of rcar_canfd_resume().
----
- drivers/net/can/rcar/rcar_canfd.c | 53 +++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+This is why some newer CAN drivers read from the hardware in the IRQ
+handler and push the skbs into the networking stack in NAPI. There is
+the small "rx-offload" handler for the NAPI side.
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 5a555b01ffbb..4a653d8978ba 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -2278,11 +2278,64 @@ static void rcar_canfd_remove(struct platform_device *pdev)
- 
- static int rcar_canfd_suspend(struct device *dev)
- {
-+	struct rcar_canfd_global *gpriv = dev_get_drvdata(dev);
-+	int err;
-+	u32 ch;
-+
-+	for_each_set_bit(ch, &gpriv->channels_mask, gpriv->info->max_channels) {
-+		struct rcar_canfd_channel *priv = gpriv->ch[ch];
-+		struct net_device *ndev = priv->ndev;
-+
-+		if (!netif_running(ndev))
-+			continue;
-+
-+		netif_device_detach(ndev);
-+
-+		err = rcar_canfd_close(ndev);
-+		if (err) {
-+			netdev_err(ndev, "rcar_canfd_close() failed %pe\n",
-+				   ERR_PTR(err));
-+			return err;
-+		}
-+
-+		priv->can.state = CAN_STATE_SLEEPING;
-+	}
-+
-+	/* TODO Skip if wake-up (which is not yet supported) is enabled */
-+	rcar_canfd_global_deinit(gpriv, false);
-+
- 	return 0;
- }
- 
- static int rcar_canfd_resume(struct device *dev)
- {
-+	struct rcar_canfd_global *gpriv = dev_get_drvdata(dev);
-+	int err;
-+	u32 ch;
-+
-+	err = rcar_canfd_global_init(gpriv);
-+	if (err) {
-+		dev_err(dev, "rcar_canfd_global_init() failed %pe\n", ERR_PTR(err));
-+		return err;
-+	}
-+
-+	for_each_set_bit(ch, &gpriv->channels_mask, gpriv->info->max_channels) {
-+		struct rcar_canfd_channel *priv = gpriv->ch[ch];
-+		struct net_device *ndev = priv->ndev;
-+
-+		if (!netif_running(ndev))
-+			continue;
-+
-+		err = rcar_canfd_open(ndev);
-+		if (err) {
-+			netdev_err(ndev, "rcar_canfd_open() failed %pe\n",
-+				   ERR_PTR(err));
-+			return err;
-+		}
-+
-+		netif_device_attach(ndev);
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.43.0
+Another option is to make the IRQ handler threaded, which allows you to
+prioritize it against the other threads in the system.
 
+In general you don't want to push skbs into the networking stack in the
+IRQ handler, because this approach may lead to out-of-order reception of
+CAN packet, especially on SMP systems.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--mlg7rdfiy6lkqmxl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmkkOpkACgkQDHRl3/mQ
+kZwWVAgAocyzoqt9LDbQGxXYHGtF6aFIRjrgoXkSCkgYeTpPRSQMwl9CmCWwKLns
+GkVCUoaVfOFnW8+bYKk0LSn/cUzpgOMUI+VKjhIFXg5dyIM9paarZoXARtXw7Fw1
+nLU0FZi1guHz3AaHncPABz+KV+rWg4Hzy7b89tVxmpuWGHkkPnMm+YLvfjLwegKb
+u4AACvxW7ldDZI4/eNJn1a4mamLBUjKjQoilCU4kU+J/E2Bnf+G3P59VABFFKYKe
+QViIuFLA1SWxKCK79OwYsZkahe6bbl/XO3CeJXvX++ThN0kzTMZzoOVkTMI8XtnQ
+Qi3c4Vy4Xh/ISxN2/UMJRpsmcvw24w==
+=uEfW
+-----END PGP SIGNATURE-----
+
+--mlg7rdfiy6lkqmxl--
 
