@@ -1,76 +1,76 @@
-Return-Path: <linux-can+bounces-5628-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5629-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04922C7FE1D
-	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 11:28:56 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DB16C7FE1A
+	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 11:28:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CC6D24E445D
-	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 10:28:49 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E6840345080
+	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 10:28:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD092FA0DD;
-	Mon, 24 Nov 2025 10:28:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508212FABED;
+	Mon, 24 Nov 2025 10:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EC+gxzE7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YvXfwvqj"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20BB221DB3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204622EFD9F
 	for <linux-can@vger.kernel.org>; Mon, 24 Nov 2025 10:28:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763980126; cv=none; b=opP+BR9XCpqmWeRzEEWScceIQpwSVAEfWr6yas/zABvchgcPvsGFY+P3LUjaXKSQpz4It+x4ZBsyfZFIUQTr5htIfr607CrMFCraj30586fQuO5VLFTr+SmmYVOwrQcNR0MVHKtalJPMUySCAMqZNe357ywg7BtbW4TqSW/v8BA=
+	t=1763980126; cv=none; b=Ph5BdWrIFKbJjBPmKISsF9W3oGYLZSX1BXGsmoSsHGAN4z0lK39JmC94tehCcfp4LB61d/eliGNz6/9tEOYizHzIoYMzPJM4odCLDSCTRO2uYLfdS3jkUs2S5kAKKEEaFBihkfDPCw9UXtVIbF8egmY+rmNXO/XbnVUMD7GB344=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763980126; c=relaxed/simple;
-	bh=3+nnF588T378GBA+9QQgUACjWK+jYS7zewBllPyBRO8=;
+	bh=E/A8VrtH51z0lvb8lkMZcyZT4EdZZmFfF1gv521yMRM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DDRvOcyvHwc9xoSLcxJw/II3OUIMpmpiCdNBClmLiMHssijPUswgP0yU9pfyZphoatjSkWiE//1eISXTWDqn+CIVXA4L/6fiqPSL/BG+OkK6BvsOds+YHW+B5WS3jxI0GgPuaNBByrHvLfyRUkQda2YI7e1X6qVSV2qlOmTHPAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EC+gxzE7; arc=none smtp.client-ip=209.85.128.44
+	 MIME-Version; b=e5TFFb3IBcNQ6dKTuKJefSn+C9S1NXd6CsU64WK7MAs6wtqF4LYc9OThVhA0guhj4VCns7IjNv6Z4dpsW7yg4VQDK9K7eRcNfpccZLsWLVaRz5qn0tINIucMvXzpFnxgiPUzPHeKZmUPIBrz85vDH/pYHllrGHNJ8/vrlIYZj0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YvXfwvqj; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-477770019e4so36213495e9.3
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-477a219db05so24460825e9.2
         for <linux-can@vger.kernel.org>; Mon, 24 Nov 2025 02:28:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20230601; t=1763980122; x=1764584922; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=E5oBZG16/wN6GG9AM2JpUrMbboYKvUgGXIP4x48mO+I=;
-        b=EC+gxzE7haF0S9RkQtrNX6HqYjPMR1G02Ts1FT7iyQ+S/mwxsk+ZCAYouuoWDmCgzA
-         csP2hDwyZ0G5ri1+9MRJYnNYC56SSGbZObvP6iSO2KZrY2sP+6GcyIT0uwd1omY1RvHw
-         y2C4aHx+AK+k8hKR6oyDO4lPVmCqqfTQfreWndATg3gbzmZjOlzvf9RxyTkJ7QHVUtgS
-         CaRjDUqesHlIKWC4EHPUlLrsDavSpw9uPUkhnC/kHO0T4sknFQR9mGRjAQGdNnnzF6VM
-         gR53s3PWM7R4fnScWOkKDZKN+n3t2BDLMEkpdz9C5s5n8PfSA+a5C+rrjyDVWPCp70aK
-         nOmw==
+        bh=P3EGBpm7Z4624Ma2B0L7glleYByz0KLJbb7xFZAvoyY=;
+        b=YvXfwvqjP/+/OCgDTLh4SvzDBHzl0JW86ZFdJ14cOcLyYl+EBZmzJSh1mr3GnLWkDK
+         T0DSRIMESVYClMy+On5LN+3ifBuyGQQN9dIFBtaHhuU5WBoPThxQrSIAzBwJ7cBIM44G
+         f7fJSTpoGAqlDXhYy0PxYY/XHScpatkOC4iSS2InGi4XOFQFuyPatABWMIrwV9pHTF0d
+         dmFQhN45+tHFX/4pn5v2CxC1RY60ai2E2nOwJ96eUpCUmPKanlMMc3SY43zb5FTdDHQm
+         z1IHjUQMIKikgMFR0JtU+r+qrWYPVfycNDYB2LUArzXg2EI4VaQrG33YZZhxkGFpDtYr
+         35dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1763980122; x=1764584922;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=E5oBZG16/wN6GG9AM2JpUrMbboYKvUgGXIP4x48mO+I=;
-        b=FV6uNWbE0GufegsB2yomUcw75V8O9na8zbmHDDXqvs8/RUFlWNAnZe2n0cLcQC3SgC
-         GszDnABdx8PkKcMciT7i/Q1ncmgvjaDVTOMlbZ5wS+/Tv778JKc17g4TB+KH5CF0QsYF
-         4/oxWpx9Hz6t1kSo6xgqq/tAZdNBekDASXw+p9PJBW65isn2mEqbFaXM+5orOpmOqS4K
-         32+8hyP+WDjYqCYiloNezV6EEKjlAMpkx6Qu0QaPCpbEhoeFw8tgnXFRV1fNQGK0yPAx
-         e6CtJsWOLxrd9khJorPurMrvmY1j9l7y9k8X64aF0ZOLAgAGwYQxx4uVfVVZHm/PPDGK
-         l9lQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXxlGRSdl3g7DuHXkTWoFClAikDnaz4QbH7S8PZMWXddPWPO87SiqRMxxS7WmJU6Q7S3sNg+PWySVA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxduofaM1Mq2IgdZwbIjY1aXyulK3h6+UadD8MNvJByI/+mRjgk
-	ir8p2cm8d7b0eX8pOl5epMtCJL42UgU4aZIIp9tbEmRlh6MSj1ri/zzr
-X-Gm-Gg: ASbGncsoQbQL1W9CUHByc3XFwrxHPmvnKxInjMI1UH39aKQ6u/obaFMy3w25n/5bMoC
-	unEDJersBG40RE/D+wyIYdQyN15krb0PZ3CL7G/Mc+rFCWof9G7HYel4JeEWUPiZI7PQw+P2hEt
-	ExGeozjUifAdv6hflfsvZSZlzhZoYaIqOfyfAwLj67KKCXgbbSPYHp9XXsN20BBXc5h5UfvVprs
-	eA6VmloT4RSAIblzJ3O0FogWVUzBNChh5NTpyuo+B/Xe3jFBHNOSGpy+mNi/x04atEh9QOGwb5K
-	Pu7P68JmGKXUYlVf1x69jxD8Bi3yLq32EfzqARsLBblt8K1YPKac14EF5T4z+Il0HQFHXL3IzZL
-	Br/rXoln0tjro9bJO98gBWg2+iZ1EE03vT2DY68+BKZBd/cwuY0mZU+v57jzL6Bb//rUygtOp9k
-	F7+wArU5e0C5lhrvwvIXWaL44B+L8JcCHhOOwu+uTdQQSRgySaCy7FqEPvhwZVkslPV2nz8S2ce
-	mR0LLBZkPdkMvxO
-X-Google-Smtp-Source: AGHT+IGo1CVZwZ/FAWJme7Zy+9NRmnO4ycz8303KaODH2VEd772twsOxKeh/e9ysRmPRF1JNLoWrmg==
-X-Received: by 2002:a05:600c:1381:b0:477:7a95:b971 with SMTP id 5b1f17b1804b1-477c01f55damr116622105e9.31.1763980121578;
-        Mon, 24 Nov 2025 02:28:41 -0800 (PST)
+        bh=P3EGBpm7Z4624Ma2B0L7glleYByz0KLJbb7xFZAvoyY=;
+        b=dq8ysvxxecIuz/cZPithJeO/EqlsEbwgpOR9kFVkvMlv6rIM+XnkxfeuND/oSqbgBo
+         hPVU3cM5Lt1PDCF9brZ8AGeoHSQ+dX4kHn27N9rZ4yR93YRFm4TDp9YejUh7arSLaReb
+         CKLt+DpNPD46txHbxt/ghuDtUC9SbzvJfziMNskwAykfJ1NdokZC3ry0dt01IdAfD3g2
+         tsL5EHO3LEXUFpArCCaOSd0hGG0ILvi2lsL4/QUJ56WnjM36mZYh98jzX6oyStKFGSnL
+         7lDpzGfmzSZWOgULjF0g9E7VgVG2nQ7X0VC4vnNpXAGhgSt5bjutp92pjzFNRrDWYgqO
+         cxuA==
+X-Forwarded-Encrypted: i=1; AJvYcCWKicJ27BxVv/35tuXoLbg+4QaI8L95dUq/t6RyfagfaKHCO+d/btxuxG5RTr4MvrS/54BI+jvmoPs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRlHIcIVqc8QDk/FA4KA4PLoRrnEFRNF7BAfaeCZPn3cNCa728
+	1HeIpAyvjC2Ar7zaWHEhII0awYNSD/FMThQtD+34Tmdu9JDdfr/agDcH
+X-Gm-Gg: ASbGncvxaAkrs3qGLjEY4zEkpX1Uai8CBN2dQHi14Y1sIs2LsImOf2efF+C3yjp/ekm
+	TfVK9kLO+dXF0aJw3oBbZBl+ebycUphePh+Gcy/254gE0ESGHKqSvW6GJLGUxNEDy6fvgtZdBPG
+	UDURkGscKVdQOqlZzD58VNiqvfbh4oM9hAxlqvPRypMxwv1XtlbdbSRH6u6QtaE2M2ErfgDIq00
+	CXlL5K5e2e0X/71X6BwMZMvClrCGiMDXucjIWQ994NCnEmTkFu3Rbc5nuZSuyf6sB68EbaHNhLd
+	n8gGvDe5pDuBrXgRghbI2KD5kJ/TYO2NLo5vtAgqBNFr/aUWiklNLOFByoMA2Dt6KlfEKD1YA9u
+	UQqbhxl/QtL34F7IfGB13iPX9yotEBB74q1/xHTTKwh3i9jlXE/CQWctmQ/afz2eabX+pGy7tD3
+	FQk6dzZWiY+8hAvB56e8SI3hVq1Kc5RO8ihYlGJywWmqZS+NBdpVlXjFHu11o8uVGF/OMKijX/A
+	+sdiyFtNsO8sjI/0YD1T5qpeM8=
+X-Google-Smtp-Source: AGHT+IFpGKBj0WQRrF358OhLtccWrXcXV0btkWFGpcKOuCTzthrxs/C2CByHNJsGuuLvUcAyiaXsyQ==
+X-Received: by 2002:a05:600c:310f:b0:475:de14:db1e with SMTP id 5b1f17b1804b1-477c1125568mr131901425e9.24.1763980122229;
+        Mon, 24 Nov 2025 02:28:42 -0800 (PST)
 Received: from localhost.localdomain (host86-162-200-138.range86-162.btcentralplus.com. [86.162.200.138])
         by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477bf1df334sm186753945e9.3.2025.11.24.02.28.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
@@ -88,9 +88,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	linux-kernel@vger.kernel.org,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v3 2/7] can: rcar_canfd: Invert global vs. channel teardown
-Date: Mon, 24 Nov 2025 10:28:27 +0000
-Message-ID: <20251124102837.106973-3-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v3 3/7] can: rcar_canfd: Use devm_clk_get_optional() for RAM clk
+Date: Mon, 24 Nov 2025 10:28:28 +0000
+Message-ID: <20251124102837.106973-4-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251124102837.106973-1-biju.das.jz@bp.renesas.com>
 References: <20251124102837.106973-1-biju.das.jz@bp.renesas.com>
@@ -102,46 +102,96 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-Global state is initialized and torn down before per-channel state.
-Invert the order to restore symmetry.
+Replace devm_clk_get_optional_enabled()->devm_clk_get_optional() as the
+RAM clk needs to be enabled in resume for proper operation in STR mode
+for RZ/G3E SoC.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 v2->v3:
- * No Change.
-v1->v2:
- * Collected tags.
+ * Collected tag
+ * Updated commit header and description.
+v2:
+ * New patch.
 ---
- drivers/net/can/rcar/rcar_canfd.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 6098a3eebc43..c03e8dff6a20 100644
+index c03e8dff6a20..a127c0845a3b 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -2224,14 +2224,14 @@ static void rcar_canfd_remove(struct platform_device *pdev)
- 	struct rcar_canfd_global *gpriv = platform_get_drvdata(pdev);
- 	u32 ch;
+@@ -468,6 +468,7 @@ struct rcar_canfd_global {
+ 	struct platform_device *pdev;	/* Respective platform device */
+ 	struct clk *clkp;		/* Peripheral clock */
+ 	struct clk *can_clk;		/* fCAN clock */
++	struct clk *clk_ram;		/* Clock RAM */
+ 	unsigned long channels_mask;	/* Enabled channels mask */
+ 	bool extclk;			/* CANFD or Ext clock */
+ 	bool fdmode;			/* CAN FD or Classical CAN only mode */
+@@ -1993,7 +1994,6 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 	u32 rule_entry = 0;
+ 	bool fdmode = true;			/* CAN FD only mode - default */
+ 	char name[9] = "channelX";
+-	struct clk *clk_ram;
+ 	int i;
  
--	rcar_canfd_reset_controller(gpriv);
--	rcar_canfd_disable_global_interrupts(gpriv);
--
- 	for_each_set_bit(ch, &gpriv->channels_mask, gpriv->info->max_channels) {
- 		rcar_canfd_disable_channel_interrupts(gpriv->ch[ch]);
- 		rcar_canfd_channel_remove(gpriv, ch);
+ 	info = of_device_get_match_data(dev);
+@@ -2086,10 +2086,10 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 		gpriv->extclk = gpriv->info->external_clk;
  	}
  
-+	rcar_canfd_disable_global_interrupts(gpriv);
-+	rcar_canfd_reset_controller(gpriv);
+-	clk_ram = devm_clk_get_optional_enabled(dev, "ram_clk");
+-	if (IS_ERR(clk_ram))
+-		return dev_err_probe(dev, PTR_ERR(clk_ram),
+-				     "cannot get enabled ram clock\n");
++	gpriv->clk_ram = devm_clk_get_optional(dev, "ram_clk");
++	if (IS_ERR(gpriv->clk_ram))
++		return dev_err_probe(dev, PTR_ERR(gpriv->clk_ram),
++				     "cannot get ram clock\n");
+ 
+ 	addr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(addr)) {
+@@ -2155,10 +2155,18 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 		goto fail_reset;
+ 	}
+ 
++	/* Enable RAM clock  */
++	err = clk_prepare_enable(gpriv->clk_ram);
++	if (err) {
++		dev_err(dev, "failed to enable RAM clock: %pe\n",
++			ERR_PTR(err));
++		goto fail_clk;
++	}
 +
+ 	err = rcar_canfd_reset_controller(gpriv);
+ 	if (err) {
+ 		dev_err(dev, "reset controller failed: %pe\n", ERR_PTR(err));
+-		goto fail_clk;
++		goto fail_ram_clk;
+ 	}
+ 
+ 	/* Controller in Global reset & Channel reset mode */
+@@ -2210,6 +2218,8 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 		rcar_canfd_channel_remove(gpriv, ch);
+ fail_mode:
+ 	rcar_canfd_disable_global_interrupts(gpriv);
++fail_ram_clk:
++	clk_disable_unprepare(gpriv->clk_ram);
+ fail_clk:
+ 	clk_disable_unprepare(gpriv->clkp);
+ fail_reset:
+@@ -2234,6 +2244,7 @@ static void rcar_canfd_remove(struct platform_device *pdev)
+ 
  	/* Enter global sleep mode */
  	rcar_canfd_set_bit(gpriv->base, RCANFD_GCTR, RCANFD_GCTR_GSLPR);
++	clk_disable_unprepare(gpriv->clk_ram);
  	clk_disable_unprepare(gpriv->clkp);
+ 	reset_control_assert(gpriv->rstc2);
+ 	reset_control_assert(gpriv->rstc1);
 -- 
 2.43.0
 
