@@ -1,48 +1,48 @@
-Return-Path: <linux-can+bounces-5636-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5637-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81B7AC80298
-	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 12:17:49 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1415EC8033D
+	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 12:29:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 506E33A4E94
-	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 11:16:47 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 656D5344604
+	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 11:28:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A3482FC88B;
-	Mon, 24 Nov 2025 11:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024292FB99F;
+	Mon, 24 Nov 2025 11:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R5ykBlnE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DPikX6h5"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A84D2FC873;
-	Mon, 24 Nov 2025 11:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6052FC880;
+	Mon, 24 Nov 2025 11:28:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763982641; cv=none; b=Rp9V0XdeknFY00d+5bHOhfBqBcMcdmy7GmoQjSwD994HF2N16jGNgn97k9FVL0ynBYcsb8LQ3ZZRPgCrKz7uxhBvniDcibMAgHzFbVxgHAtrZWkxgLmkOr5SxrTAJxxO23w4J1bi51eAAUAHCDV2uzzxz/u1DIqckOjKMuOJTvU=
+	t=1763983717; cv=none; b=XDPIuTdyc9hRZLwNnI6Ww1ai+efBJEiEPtTMHXz8XFiTTrD2v3wdUTEed7nuLyzxZSnDGHiIgUW4uVIL3W4WCF3OPPO86QV0xmImCjSgUXIGtxvRxKtiZEy2i3VvHocTl/4/PiCkrWgqY1VHqJ9ZCHV1cKs0X5DHFA59ETQmRM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763982641; c=relaxed/simple;
-	bh=1osdwILS0/DuvjvzDfoQmO+Wy8XcHsNyHWTYBwOrCrM=;
+	s=arc-20240116; t=1763983717; c=relaxed/simple;
+	bh=bdcL2rO7TQRXGCfjuw9L2Tv3QH9jCcVCKrFREsSNct8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r9/JfUUUXP18c/ql/ssj2Hla5kSHQ1M/T9K0WwbuztwPP80ck8GCXIqQBwIP0e9/O2L7EwPhXn2cK0weQb3o4M+Dzke/t98SDtygsxv3NoUzetf9bJtFZ8QZsjo0PHLMQDF7VC3Dh+BIEzNcuj1hcFbYGyJh93a5pBKK1RLTUCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R5ykBlnE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE9B2C4CEF1;
-	Mon, 24 Nov 2025 11:10:38 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=e0xP5aQ7dweYMTNZK93bkJh0ajMYFpwbAGt8US/OorS0QxTT6c4doNpZULPqQLYdb7FzBE089LQKC4gdebZAbFtc0GZPktdOeo6GnW8zzxqJLCX9YGJDEAlGBIRFIP8IJeksoqjERi9B1KjiK95POcOMpvCKivofx4ocJx8tksM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DPikX6h5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53B0CC4CEF1;
+	Mon, 24 Nov 2025 11:28:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763982640;
-	bh=1osdwILS0/DuvjvzDfoQmO+Wy8XcHsNyHWTYBwOrCrM=;
+	s=k20201202; t=1763983717;
+	bh=bdcL2rO7TQRXGCfjuw9L2Tv3QH9jCcVCKrFREsSNct8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=R5ykBlnEkVh3KUsD9uh1LVT19CjZxNt2Ehp5CwfQC581r6wawT8D/U0voMJs/6BbJ
-	 fUVnvWVyFHx2FYohVt6QFD4EYG5ldVCK/IHZCveQQf0qTyXAzj4iqMBxJUxBxzaf8k
-	 jKfiASP4grddtcnH+mOW4nnHvX+QbWyCAaTnf175uyd0ZczCfI9wyJs2wGNuQyoIFp
-	 nMzyNFuUXsBIq/bnKT9uFua9s8CLVWMOqYwiGjyHMkwWkHa0dYJYkYFRz1ZrvWdiSJ
-	 aiDOCXfLwVlxVPR6fr4n144p87sJoVc1fUB0AVgA1Y3mCsM61Xr+wPTHmTvNPOnLoW
-	 2MbWQybiajw/Q==
-Message-ID: <d5828e7f-6d35-4031-82fd-b055ec1eafe5@kernel.org>
-Date: Mon, 24 Nov 2025 12:10:37 +0100
+	b=DPikX6h5/01KuVC0o3Rx+0RehHBnKRZ2sqQVBa7hK6FhhVOpWs9p7WVU3qYuMeaa6
+	 TqJ10xUgfMnGs0NkW7OLLJbMCfx7O2+5fbScNh3viczaQ0KGTf8np52d1kVOCvZuwU
+	 KNTb0WpY1tkAONpl3eDiXOLnSrWq5ot3TI0DvCl+MHDxSpyTMxbU1zvT/yOP4p/fRR
+	 H56oYRDjWkNhJO/30Cew4yc2cNggxDdX4J7K/xibBT92DAaoPGP425OZ0XjOiLWpe6
+	 5t4RqvJi0MkcCcpccjFAKLjFbhS4VXa+axH4Hek7WyC8nfdBjIPWTV7sYwhtajhHsq
+	 5BbNpo0Y0Na2g==
+Message-ID: <faa97777-666c-4443-8ced-1a17db0c0945@kernel.org>
+Date: Mon, 24 Nov 2025 12:28:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -50,16 +50,16 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/10] can: grcan: Add clock handling
+Subject: Re: [PATCH 02/10] dt-bindings: net: can: grcan: Convert GRCAN CAN
+ controllers binding from txt to YAML
 To: Arun Muthusamy <arun.muthusamy@gaisler.com>
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- mkl@pengutronix.de, mailhol@kernel.org, Cc <devicetree@vger.kernel.org>,
- linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
- Daniel Hellstrom <daniel@gaisler.com>
+ mkl@pengutronix.de, mailhol@kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-can@vger.kernel.org
 References: <20251118092115.3455-1-arun.muthusamy@gaisler.com>
- <20251118092115.3455-5-arun.muthusamy@gaisler.com>
- <bd81118a-5ee3-476e-a7bc-61684a362eea@kernel.org>
- <43591fac5bf0df7c6c7c5426f00a2437@gaisler.com>
+ <20251118092115.3455-3-arun.muthusamy@gaisler.com>
+ <c80ff180-b7f1-4f39-b39d-2953ef75a7ad@kernel.org>
+ <a5d8543b27adc6adf8bec2f3548f13b0@gaisler.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,35 +105,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <43591fac5bf0df7c6c7c5426f00a2437@gaisler.com>
+In-Reply-To: <a5d8543b27adc6adf8bec2f3548f13b0@gaisler.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 24/11/2025 10:46, Arun Muthusamy wrote:
+On 24/11/2025 10:37, Arun Muthusamy wrote:
 > Hi Krzysztof,
 > 
-> Thank you for your thorough review. I wanted to get your guidance 
-> regarding the clock property in the DT binding.
+> Thank you for your thorough review and insightful questions. I’d like to 
+> clarify a few points regarding the DT binding and get your guidance.
 > 
-> In the binding, I included the clocks property with maxItems: 1 to 
-> indicate that a clock should be described. The driver calls:
+> Node name vs. compatible matching:
 
-Ah, you added clocks, I completely missed it.
+I don't understand what you are referring to. You cut everything and
+pasted something, which I have no clue what is that. I read many patches
+per day, so you are not helping here to understand the context.
 
-> 
-> clk = devm_clk_get(dev, NULL);
-> 
-> Since we pass NULL, the driver always requests the first (and only) 
-> clock from the clocks property
-
-Yes this is correct.
-
-.
-> 
-> I want to ensure the binding is fully compliant with the Linux DT ABI. 
-
-It is fine, please ignore my comment. It was a mistake.
-
+Please do not top-post.
 
 Best regards,
 Krzysztof
