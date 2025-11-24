@@ -1,283 +1,304 @@
-Return-Path: <linux-can+bounces-5624-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5625-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07FBFC7E605
-	for <lists+linux-can@lfdr.de>; Sun, 23 Nov 2025 20:02:11 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B82F4C7FAA9
+	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 10:37:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 360EE3A1C71
-	for <lists+linux-can@lfdr.de>; Sun, 23 Nov 2025 19:01:59 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 976854E1F46
+	for <lists+linux-can@lfdr.de>; Mon, 24 Nov 2025 09:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 028741A295;
-	Sun, 23 Nov 2025 19:01:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14B4E2F5A2E;
+	Mon, 24 Nov 2025 09:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Xbtpp2Kj";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="FbJPplAf"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="RMnZiwRB"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.162])
+Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C728436D4F1
-	for <linux-can@vger.kernel.org>; Sun, 23 Nov 2025 19:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.162
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763924512; cv=pass; b=MHGnoIjlb/YWdGdUh0mPrkGAf6dw2+yctLzedise3SgUE2F4FAM9PugjQfRVK7ov9ZB/YzWXeHTVN0dk41wRohmTYPOLud/dVCnbJ/kG3kuTJahAMj7zdrgxSgXvKmlWXEgL4avqr5S2xt4Yx7w/yAbg6jKuUiy/81eGPQg8ylY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763924512; c=relaxed/simple;
-	bh=I4PE+825LJhzzpnIzP3G2TKpC3yc0maN3yWVxUw57yQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ixDWbXYpM6aVGBlyKGvpyFw+C9zrNQ1nQXdCnkwVBQIRIVt6C0CRLx2j+YbyI31i1gehT0ZqH0DjU2Qk0HfNSvjizXpimOrDwAYUBHBOeXkKVIe3xU/chkO4Fh6Fzq0zivuVKrfOWJuha3CJJW91ukzn2qJc68ti5k3Wwaz+YuA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Xbtpp2Kj; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=FbJPplAf; arc=pass smtp.client-ip=81.169.146.162
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1763924314; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=gw7sDvT0g2a4QNeyDGR8W1wAI46lGZg6JTFSnhJhj1NWcTNjC+hu5eESA1JCq6eGmj
-    OQi7eKFWM5kPKDWW9GGmZS0IQGaUBhIn8Og4u6nRvtd6fyCuWVLH6V6uk8Tmuo7Dt2CA
-    w0Pn+NgGnOouDFbbJnSGmrzYzz7VUsV1Vw7K2AXVovbK7NTF8hu2kGL1vMTvqNB9k7xF
-    TtjSVipGqG+irYQj3s25QgsUHdWnDjNo1bzzlgbCibLqS6ZJCRo6F1Gfjb2j2ta23wok
-    qnfTtkwO9q9IH1w5jhD9+yMjy+5bjCvQ6SNhV+fGUFk/RHkCWXzEMOArz7SYk0f/+9Ya
-    9UrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1763924314;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=gWLC70103HcPilb976PSi0RlJiP+q8aEau5k1PN5pyg=;
-    b=Xz/vzW4DNrjLJM3Hdm2BnrGFC0KSQKnqXD6qXXqHz5M6gCc8/HyuhWAWs7H2yjcCPp
-    4XpQxRI2zZIlt/ASDIMe6v+2V1624ZPahKO+Xr6MSliBhfRyEaLh08LJJhYTlRCF7Pr4
-    3sXfWdkAC8Zu1czfbjvvMz2eETU6hxP2sYZw/XA2w9lRgTGPVbJyCQxufb3G3rlSakmh
-    XSmXveaYX3OLOE9/cKL9qGPoHNqTX1ep+ZtY9t2wpxnRUPjlWCL4bi5YEkYFx2nXLzXa
-    RubndPJgGPL988H2pbSkzxJF2FLzyZE/sjZvPqKD2dq6YbNvV+7vatd7M31yxex/xgqv
-    pguw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1763924314;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=gWLC70103HcPilb976PSi0RlJiP+q8aEau5k1PN5pyg=;
-    b=Xbtpp2Kj+bNvr4Ks7x7nQpg4CwdYlJGHLUvPp+b6ifHbebdSvmO/mN1FJVp6MC5DcH
-    yEa/Lxcrf7T+XNbs4yrWprkhnjkqfxELuzDGOiNkQ6gwDP21893mPvZi/8Quda0dGRVt
-    I4YXiEQADbZMpK4Cff1MuuaUL5szFkP2EPgs8KXUk5XhACSsnlSiQXjI2B0P7SyjlqpY
-    kK8EsCdwXDzJsPD4/St7LEMxmflrf+pOEfQbbNH3wPNXmaOd32UhNFPdkFLVzxcoRgkE
-    u1g0bSTv8AtJM0O2pGP3nD9A/AXaIKCV3pyY/WzBHaSRR96x3qBoCj9y5gddKML5Fn3F
-    JMUA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1763924314;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=gWLC70103HcPilb976PSi0RlJiP+q8aEau5k1PN5pyg=;
-    b=FbJPplAfITVVZXU3raQ+YdFPzQhXzuZXnWoGJYYgUuV2032cdaGUaZldXXowhodLTi
-    mCHw1cvwXmq4ZfoqcZAQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461ANIwYIEG
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sun, 23 Nov 2025 19:58:34 +0100 (CET)
-Message-ID: <feca32b7-9067-4877-ad64-5d4771ca0149@hartkopp.net>
-Date: Sun, 23 Nov 2025 19:58:26 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1516298CDE;
+	Mon, 24 Nov 2025 09:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763977072; cv=none; b=mO40HiUpshP3yckypW1+p0dkENZmCJemDFFIOaFwtc4vUViZs7J54dV/SPwRmqKWfFxUjHyUeyxdCItRbecUbaWNxc4aDKJxtAN0qJ9PfWUD6nF/bl3AYkeE8MnezFMVcQauBx2LNfmhm3bEvkHc62p3d7WwMkH6Pyktaxt9wss=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763977072; c=relaxed/simple;
+	bh=OUcqUXgGbP6eAxa1vKyXPabf+sNbu+8uQMnb93koNbQ=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=MHGoMryv60cPDs9TK2GMnjEvTq48jKFS8/ulfPF68Wb7XW99qzCEk4PiM6xix88A0jYhrkTl1k/LtxPyS1zH3QiM3oLMalkPIfxwzinFJ273SeXHpxFICGhoLikM+G0qbJ6NASoJ3rvqNTSD57bFVnAg+qU69OayCMv+KGm445I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=RMnZiwRB reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.simply.com (Simply.com) with ESMTP id 4dFLMm4mFQz1DQqj;
+	Mon, 24 Nov 2025 10:37:40 +0100 (CET)
+Received: from webmail.unoeuro.com (webmail.unoeuro.com [94.231.108.230])
+	by smtp.simply.com (Simply.com) with ESMTPA id 4dFLMm2JG5z1DDMw;
+	Mon, 24 Nov 2025 10:37:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
+	s=simplycom2; t=1763977060;
+	bh=0vnLtD++Kf5gEEMlvyKAgAvSHBCasjk67eNgc0nbTjM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=RMnZiwRBdYZtC6h0oOjCFotdHY8S5D1MMptKfgN9cjHRUlIF3AzDg+ybacd5YlAgw
+	 XRa1YwN4N4/7dk5Ua7Ts4KajoKJMsx4jCZHhyYs1CmYY9Nll82aAYky+/PI7THG57t
+	 f3JRJniGRWA3AaqPu4rVQdS8oOsit8rRUIGJ2yyRgpTcznUZRpVe5+n1lzoOrS2zU3
+	 JjZv1aQWbgwucgIa3DTvM8D9Djlxp1/BSoyXqohRYxQihKwiT3389IZTEno5TVeH3M
+	 l5gcEa8ukjxi28tkBZZIw4cYPI2YIXYtCSmSHNpLhc1zpvKkvWnAO64aCJfkdW71Vs
+	 /eCamRoSvDUGQ==
+Received: from h-98-128-223-123.NA.cust.bahnhof.se ([98.128.223.123])
+ by webmail.simply.com
+ with HTTP (HTTP/2.0 POST); Mon, 24 Nov 2025 10:37:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [canxl v6 05/17] can: netlink: add initial CAN XL support
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: Rakuram Eswaran <rakuram.e96@gmail.com>
-Cc: linux-can@vger.kernel.org, mailhol@kernel.org
-References: <20251122093602.1660-6-socketcan@hartkopp.net>
- <20251123065230.7869-1-rakuram.e96@gmail.com>
- <41d895e6-1ef5-4658-910f-e1e5fe312702@hartkopp.net>
-Content-Language: en-US
-In-Reply-To: <41d895e6-1ef5-4658-910f-e1e5fe312702@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date: Mon, 24 Nov 2025 10:37:40 +0100
+From: Arun Muthusamy <arun.muthusamy@gaisler.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ mkl@pengutronix.de, mailhol@kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-can@vger.kernel.org
+Subject: Re: [PATCH 02/10] dt-bindings: net: can: grcan: Convert GRCAN CAN
+ controllers binding from txt to YAML
+In-Reply-To: <c80ff180-b7f1-4f39-b39d-2953ef75a7ad@kernel.org>
+References: <20251118092115.3455-1-arun.muthusamy@gaisler.com>
+ <20251118092115.3455-3-arun.muthusamy@gaisler.com>
+ <c80ff180-b7f1-4f39-b39d-2953ef75a7ad@kernel.org>
+User-Agent: Simply.com webmail
+Message-ID: <a5d8543b27adc6adf8bec2f3548f13b0@gaisler.com>
+X-Sender: arun.muthusamy@gaisler.com
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hello Rakuram,
+Hi Krzysztof,
 
-some hints how to create a test setup for the CAN XL patches:
+Thank you for your thorough review and insightful questions. I’d like to 
+clarify a few points regarding the DT binding and get your guidance.
 
-You need to build your own CAN XL enabled "ip" tool from the iproute2 
-package. This new code can be found in Vincents iproute2-next tree:
+Node name vs. compatible matching:
+SPARC systems do not use DTS files; the device tree is generated by the 
+PROM. On LEON (SPARC32), AMBA Plug & Play information creates the DT 
+properties, and drivers historically match devices based on node names.
+For DTS-based systems such as NOEL, this patch series adds 
+compatible-string matching. To reflect this, I updated the $nodename 
+pattern to support LEON-style node names:
+properties:
+   $nodename:
+     pattern: "^(GAISLER_GRCAN|01_03d|GAISLER_GRHCAN|01_034)$"
+I’d appreciate any suggestions on the preferred way to describe this 
+dual matching approach: node name for PROM-based LEON, compatible string 
+for DTS-based NOEL.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mailhol/iproute2-next.git/
 
-You need to check out the canxl-netlink branch there:
+Freq and Clocks:
+The driver needs to support both LEON and NOEL platforms:
+LEON: relies on the freq property
+NOEL: uses a standard clocks binding
+Because of this dual approach, the freq property is no longer required 
+in the DTS binding itself.
+It is only relevant for LEON/PROM-based systems and is handled 
+internally by the driver
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mailhol/iproute2-next.git/log/?h=canxl-netlink
 
-Once you've built that branch
+Systemid:
+The driver now reads systemid directly from /ambapp0, so the property no 
+longer needs to be defined in the DTS. The previous documentation was 
+outdated and should have been updated after commit:
+1e93ed26acf0 ("can: grcan: grcan_probe(): fix broken system id check for 
+errata workaround needs")
 
-./ip link set can0 type can help
 
-shows the new XL specific options.
+Thanks,
 
-Of course you need the "can0" interface first:
+-- 
+BR,
 
-Load the dummy CAN driver:
+Arun Muthusamy
+Software Engineer
+Frontgrade Gaisler
+T : +46 (0) 700 558 528
+arun.muthusamy@gaisler.com
 
-# modprobe dummy_can
+Frontgrade Gaisler AB, Kungsgatan 12, SE-411 19 GÖTEBORG, Sweden.
++46 (0) 31 775 8650, www.gaisler.com
 
-Enable the debugging to see the output in dmesg :
-
-# echo 'file drivers/net/can/dummy_can.c +p' > 
-/sys/kernel/debug/dynamic_debug/control
-
-Then you can e.g. enable the CC/FD/XL mixed-mode without transceiver 
-mode switching (TMS):
-
-# ./ip link set can0 type can bitrate 1000000 dbitrate 2000000 fd on 
-xbitrate 4000000 xl on
-
-Or e.g. use the CANXL-only mode with TMS enabled:
-
-# ./ip link set can0 type can bitrate 1000000 xbitrate 12308000 xl on 
-tms on fd off
-
-After setting the interface to 'up' with
-
-./ip link set can0 up
-
-You can see the settings in dmesg, e.g.
-
-[ 2850.574758] can0: Clock frequency: 160000000
-[ 2850.574762] can0: Maximum bitrate: 20000000
-[ 2850.574763] can0: MTU: 2060
-[ 2850.574764] can0:
-[ 2850.574765] can0: Control modes:
-[ 2850.574766] can0: 	supported: 0x0000ba22
-[ 2850.574767] can0: 	enabled: 0x00003220
-[ 2850.574768] can0: 	list:
-[ 2850.574769] can0: 		LISTEN-ONLY: off
-[ 2850.574771] can0: 		FD: on
-[ 2850.574772] can0: 		TDC-AUTO: on
-[ 2850.574773] can0: 		RESTRICTED: off
-[ 2850.574774] can0: 		XL: on
-[ 2850.574775] can0: 		XL-TDC-AUTO: on
-[ 2850.574776] can0: 		TMS: off
-[ 2850.574777] can0:
-[ 2850.574778] can0: Classical CAN nominal bittiming:
-[ 2850.574779] can0: 	bitrate: 1000000
-[ 2850.574780] can0: 	sample_point: 750
-[ 2850.574781] can0: 	tq: 6
-[ 2850.574782] can0: 	prop_seg: 59
-[ 2850.574783] can0: 	phase_seg1: 60
-[ 2850.574784] can0: 	phase_seg2: 40
-[ 2850.574785] can0: 	sjw: 20
-[ 2850.574786] can0: 	brp: 1
-[ 2850.574787] can0:
-[ 2850.574788] can0: CAN FD databittiming:
-[ 2850.574789] can0: 	bitrate: 2000000
-[ 2850.574790] can0: 	sample_point: 750
-[ 2850.574790] can0: 	tq: 6
-[ 2850.574791] can0: 	prop_seg: 29
-[ 2850.574792] can0: 	phase_seg1: 30
-[ 2850.574793] can0: 	phase_seg2: 20
-[ 2850.574794] can0: 	sjw: 10
-[ 2850.574795] can0: 	brp: 1
-[ 2850.574796] can0: 	CAN FD TDC:
-[ 2850.574797] can0: 		tdcv: 0
-[ 2850.574798] can0: 		tdco: 60
-[ 2850.574799] can0: 		tdcf: 0
-[ 2850.574800] can0:
-[ 2850.574801] can0: CAN XL databittiming:
-[ 2850.574802] can0: 	bitrate: 4000000
-[ 2850.574802] can0: 	sample_point: 750
-[ 2850.574803] can0: 	tq: 6
-[ 2850.574804] can0: 	prop_seg: 14
-[ 2850.574805] can0: 	phase_seg1: 15
-[ 2850.574806] can0: 	phase_seg2: 10
-[ 2850.574807] can0: 	sjw: 5
-[ 2850.574808] can0: 	brp: 1
-[ 2850.574809] can0: 	CAN XL TDC:
-[ 2850.574810] can0: 		tdcv: 0
-[ 2850.574811] can0: 		tdco: 30
-[ 2850.574812] can0: 		tdcf: 0
-[ 2850.574813] can0:
-[ 2850.574813] can0: error-signalling is enabled
-[ 2850.574818] can0: dummy-can is up
-
-# ./ip link set can0 type can help
-
-still shows an option
-
-	[ err-signal { on | off } ]
-
-which has been removed in the patches as this setting is automatically 
-retrieved from the mixed-mode/CANXL-only mode setting, see reason here:
-
-https://lore.kernel.org/linux-can/20251122093602.1660-8-socketcan@hartkopp.net/T/#u
-
-The state can be seen in the dmesg output:
-
-(..)
-[ 2850.574813] can0: error-signalling is enabled
-[ 2850.574818] can0: dummy-can is up
-
-Have fun!
-Oliver
-
-On 23.11.25 14:13, Oliver Hartkopp wrote:
-> Hello Rakuram,
+On 18.11.2025 12:01, Krzysztof Kozlowski wrote:
+> On 18/11/2025 10:21, Arun Muthusamy wrote:
+>> Migrate device tree bindings for Gaisler GRCAN, GRHCAN
+>> and GRCANFD CAN controllers from a text format to YAML format.
+>>     - Add properties such as `compatible`, `reg`, `interrupts`
 > 
-> thanks for your offer to test the CAN XL support!
+> Odd indentation. Please write readable commit msgs.
 > 
-> On 23.11.25 07:52, Rakuram Eswaran wrote:
->> On Sat, 22 Nov 2025 at 15:06, Oliver Hartkopp <socketcan@hartkopp.net> 
->> wrote:
->>>
->>> From: Vincent Mailhol <mailhol@kernel.org>
->>>
->>> CAN XL uses bittiming parameters different from Classical CAN and CAN
->>> FD. Thus, all the data bittiming parameters, including TDC, need to be
->>> duplicated for CAN XL.
->>>
->>> Add the CAN XL netlink interface for all the features which are common
->>> with CAN FD. Any new CAN XL specific features are added later on.
->>>
->>> The first time CAN XL is activated, the MTU is set by default to
->>> CANXL_MAX_MTU. The user may then configure a custom MTU within the
->>> CANXL_MIN_MTU to CANXL_MIN_MTU range, in which case, the custom MTU
->>                      ^^^^^^^^
->> Minor nit in this description. It has to be CANXL_MIN_MTU to 
->> CANXL_MAX_MTU range.
+> Also:
+> 1. Why? You need to explain why you are changing binding during 
+> conversion.
+> 2. Reg was already there, so I don't understand why you need to add it.
 > 
-> Definitely ;-D
 > 
-> Thanks for the feedback!
+>>     and `clocks` for the CAN controllers.
+>>     - Removal of the old `grcan.txt` file as its contents have
+>>     been fully migrated to the YAML file.
 > 
->>
->>> value will be kept as long as CAN XL remains active.
->>>
->>
->> At the moment, I'm going through the mail series. I would like to apply
->> patch series in a local branch and test with dummy module. For that
->> purpose, if I apply this series on top of linux-mainline will it work?
->>
->> If not, please share the base commit details to experiment locally.
+> Drop, that's not relevant.
 > 
-> The patch set applies on the net-next tree:
+>>     - YAML file includes examples of device tree bindings for
+>>     the CAN controllers
 > 
-> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+> Drop, not relevant. Please look at git history how commits are written.
 > 
-> Alternatively you can also apply the patches to the current Linux 
-> mainline tree after you applied this patch here:
+>> 
+>> Signed-off-by: Arun Muthusamy <arun.muthusamy@gaisler.com>
+>> ---
+>>  .../bindings/net/can/gaisler,grcan.yaml       | 85 
+>> +++++++++++++++++++
+>>  .../devicetree/bindings/net/can/grcan.txt     | 28 ------
+>>  2 files changed, 85 insertions(+), 28 deletions(-)
+>>  create mode 100644 
+>> Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
+>>  delete mode 100644 
+>> Documentation/devicetree/bindings/net/can/grcan.txt
+>> 
+>> diff --git 
+>> a/Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml 
+>> b/Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
+>> new file mode 100644
+>> index 000000000000..521bdd89f130
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
+>> @@ -0,0 +1,85 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/net/can/gaisler,grcan.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title:
+>> +  Aeroflex Gaisler GRCAN, GRHCAN and GRCANFD CAN controllers.
+>> +
+>> +description: |
+>> +  GRCAN, GRCANFD, GRHCAN controllers are available in the GRLIB VHDL 
+>> IP core
+>> +  library.
+>> +
+>> +  For further information look in the documentation for the GRLIB IP 
+>> library:
+>> +  https://download.gaisler.com/products/GRLIB/doc/grip.pdf
+>> +
+>> +maintainers:
+>> +  - Arun Muthusamy <arun.muthusamy@gaisler.com>
+>> +  - Andreas Larsson <andreas@gaisler.com>
+>> +
+>> +allOf:
+>> +  - $ref: can-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - gaisler,grcan
+>> +      - gaisler,grcanfd
 > 
-> can: treewide: remove can_change_mtu()
+> Blank line
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/ 
-> commit/?id=f968a24cad3da72
+>> +  name:
+>> +    description: |
 > 
+> Do not need '|' unless you need to preserve formatting.
+> 
+>> +      Fallback on node name matching for systems that don't provide 
+>> compatible.
+>> +    enum:
+>> +      - GAISLER_GRCAN
+>> +      - 01_03d
+>> +      - GAISLER_GRHCAN
+>> +      - "01_034"
+> 
+> This does not really work. Are you really defining here "name" 
+> property?
+> 
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  freq:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: |
+>> +      Frequency of the external oscillator clock in Hz (the frequency 
+>> of the
+>> +      amba bus in the ordinary case).
+>> +      This property should be used by systems that utilize the common 
+>> clock
+>> +      framework is not supported.
+> 
+> Missing systemid. Your commit msg must explain any changes done to the
+> binding during conversion.
+> 
+>> +
+>> +unevaluatedProperties: false
+> 
+> This goes after required block.
+> 
+>> +
+>> +required:
+> 
+> compatible as well
+> 
+>> +  - reg
+>> +  - interrupts
+> 
+> Where is freq? It was required in the old binding. Again, you need to
+> explain the changes.
+> 
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    can@ff400000 {
+>> +        compatible = "gaisler,grcanfd";
+>> +        clocks = <&sysclock>;
+>> +        reg = <0xff400000 0x400>;
+>> +        interrupt-parent = <&plic0>;
+>> +        interrupts = <6>;
+>> +    };
+> 
+> One example is enough
+> 
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    can@ff400000 {
+>> +        compatible = "gaisler,grcan";
+>> +        clocks = <&sysclock>;
+>> +        reg = <0xff400000 0x400>;
+>> +        interrupt-parent = <&plic0>;
+>> +        interrupts = <6>;
+>> +    };
+>> +  - |
+>> +    GAISLER_GRCAN@ff840000 {
+> 
+> Especially no such examples. Please read DTS coding style.
+> 
+>> +        reg = <0xff840000 0x400>;
+>> +        freq = <50000000>;
+>> +        interrupts = <16>;
+>> +    };
+>> diff --git a/Documentation/devicetree/bindings/net/can/grcan.txt 
+>> b/Documentation/devicetree/bindings/net/can/grcan.txt
+>> deleted file mode 100644
+>> index 34ef3498f887..000000000000
+>> --- a/Documentation/devicetree/bindings/net/can/grcan.txt
+>> +++ /dev/null
+>> @@ -1,28 +0,0 @@
 > Best regards,
-> Oliver
-> 
-
+> Krzysztof
 
