@@ -1,151 +1,180 @@
-Return-Path: <linux-can+bounces-5660-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5661-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 172B2C861EA
-	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 18:06:16 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2740C86DD4
+	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 20:50:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1B07B4EB1D6
-	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 17:03:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4A5C34E073F
+	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 19:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E847D32ABFE;
-	Tue, 25 Nov 2025 16:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="ZMf/QTt8";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="+Y3qLYee"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCE8B33A70E;
+	Tue, 25 Nov 2025 19:50:29 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.217])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BA933342E
-	for <linux-can@vger.kernel.org>; Tue, 25 Nov 2025 16:59:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.217
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764089995; cv=pass; b=jK8oGRCUFgqUrfFmfS8+Q0p3qHWmfDqW5n2lgHq/zauXrn5X7M1kcI+sdUHjA90Vbcakh9o0zbGpg+ZXHb7P61Iwj//CXVqzu2UYrq86Jl/B54pZTNdCPXGttXbcM81/Esdkya81NWF706CecXgo11C6yZPtqbRpIfbAfgs7590=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764089995; c=relaxed/simple;
-	bh=AdN3rQ6rTc7EftucMDryB6ZLQQ2V4t3SNBXHARfu3ws=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sgBdX0SDT+reJInwxJY0Fjkb2VY1XkwAR1Eg4Qt410u/BpCQcQluEkE9e8RhIyxVwK8D3+9DSUn2qNFupi5GqwYelCmn0xoxvhG48D/xDtEGTDs5QCizl84ecr/nL2g7BTgafL8q92unxP4ZvQDT+bBVAhZzhr+wlwKAUYq3JpM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=ZMf/QTt8; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=+Y3qLYee; arc=pass smtp.client-ip=81.169.146.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1764089983; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=LJ7tnYuutmR1x063bK/A3W8ozsZJmWq50W1TyfTqpzDaIp3Ix53V7OtmRIJFYHL9yj
-    cGHCNf/H3ZkJwZFUK7mI/o9r1+0gJv4EL8iFHCfWcyYIo7gM4nwqTQNjOirU/C5j80Hu
-    0EnCMFlOZYZVz6Zn6gXQB0TOOl9QZLW2WX6sJhPwPQAHY7l2EEdJHYvuKNgtNSfYMrIJ
-    aoCHJ0uzCK9vofdP7eNENwxjbZDJvhndxSi33sdQSzBFaxvhe2q9inN1N7anfauNrf/a
-    HozcHLgELzUGU2BCiZUg0v38E9Mnr4ef80sa+wqdEqY6NswhGBcWP1G9wa991S9VLIX4
-    0Kgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1764089983;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=U7Kps7pEmrm1klQKbEZJva9lm0MRPLb6zXsQF1G4GdY=;
-    b=Zg3pI7x6kIU4ykU+KLxGd0PFUEjn8siHxzzlNDJbxHz8SEmxu5Ec5AgrENqG2h11nE
-    7+vDLKqSUaPW2Pv1samiLftIJMVi8D8gP4X9G+CaaqjjP1VIh1VGCWGYRdzuLyMmtaER
-    DdK4rPR1DqTWMv+NzSToFvudiKmVhizgGb4JV2D/+9iQU1YkL2EZiV07FZoD0eEfJjcx
-    qrDn5LdY604YxQqTcNugl+p18hPu4cAJLiH0XSWf4UvfmmhF9R7UqOWiVbrwYTHCT0n0
-    R6GOKtKJt86m/Wx0r3eQGfevIbm5Tyw46RvcsZ5yhkDzLZ8pM8e/ZaBCMhW2SCkIrqm9
-    SLHA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1764089983;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=U7Kps7pEmrm1klQKbEZJva9lm0MRPLb6zXsQF1G4GdY=;
-    b=ZMf/QTt8sY7SCnEicreZ92yxGmVRw9laE/K4QUbx3CC/buXbRvCI7S4Un8asUpJ0wz
-    gd6wfwRSn5TQfnEDotuNAw/5zgao407BwF+e91H5AkKJ0hPDJ4lnDsgVOBtyipDDbgeE
-    ysTTdz06PDEPEPmtJ5HJa1480UevVO/r3lFGOdcy8ThvQwqJI50x6fQG6kRJUT5oRrTe
-    sYQQQ3x1UJYHeYxITmZXudnPzGwwct2QP74XiLmd83VuC9x6ad3Zhi5NonIkfXT7i1g8
-    mUsO1E1+ya8GtLbsxH5QQHxr1I/o/zAUCciIU8+8+ImrssHsAVvqGFp7hErgh+TCuW4l
-    mKjw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1764089983;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=U7Kps7pEmrm1klQKbEZJva9lm0MRPLb6zXsQF1G4GdY=;
-    b=+Y3qLYee7fkRRt3wmGeutrvNqa1gaYw6i4wQ0RVnVwGSY4iJxplKcNLwUvKPaVGbZ6
-    RVEp8IAkqYyGMPzha6Dg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461APGxhUX7
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 25 Nov 2025 17:59:43 +0100 (CET)
-Message-ID: <c6b03bd3-572d-463f-a21c-55e413128b00@hartkopp.net>
-Date: Tue, 25 Nov 2025 17:59:37 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C9433AD8B
+	for <linux-can@vger.kernel.org>; Tue, 25 Nov 2025 19:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764100229; cv=none; b=JG3lCOLb5hr0ju8/sJqsqEsHoZVW20CRJNzuBhQm5cPcHY/G35I8OlDyBSISoYscUfoM3jb6HiNrrmppP0tX94flMuQPHWLiE0jf1+2oKEUPut3J0IbWBo0bEw6Pk60heWjDn7UnX0M3bif73+RQn4C12jFDciibUBNC0RsqqmI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764100229; c=relaxed/simple;
+	bh=kcHfv/w1thHUu+kM28yyVnV7qJuVu+8vXz5EmX5dU0c=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=qvYogXIHjhjXzDkLd3RhuGkid/d7Sb7qoq/nYY6A/KU8fIVBV2bAV4+iDBXvcpo0t57J43g0wG1eb2Gh5FqU0n++5Up1R72JcXNepmf4JLjuW7nS93VqM/5usBbLR61qOIOmlV4p6Ux36SDj39zX8+phYgx14TeTv0dP/O0SrqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-433312ee468so1673525ab.1
+        for <linux-can@vger.kernel.org>; Tue, 25 Nov 2025 11:50:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764100227; x=1764705027;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bTq1C08jxLq0mjK/fkl1LEJjL3jX06dpWDp2JZxDY9Y=;
+        b=T5dVRm5revXl83xkOPNzoAN1DpbDV7o177pjK8ZqhWvc2vXNhGke8pboUAtAMqKlDU
+         yfGIM206wo7OHXAB4DGeTp0VpYhXsgT8a8RsE8s1JBbgTVIJGfEo/HqpfWZGWWSy3lMb
+         daEfalw2UQ3n/sjn5XMSNT2y0RruDyKtJJFRDilfo26Y4lBt8t1/88tgA/R0vgoNRh9y
+         CC6z9wslt6d7n/L6ymQQdyodk0ZoqmIEaNwzEVvaeNYTp99uCW9wFrc0mdPs7yBIabkI
+         +j/DaAp1ZyOgJ0oq6QHtrk+LBjpjmsypxrlbXgatw57hiCz6Xj53NrRqcsW0MFoy0vKf
+         31QQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV/wRmQxvRgMsMg1fZFE7jXaE0CJr1qCiYm55PaPgvNlLbvICplAvlUdflHCWNrORSF//H10vxhCCU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzAb8tMMsuwSgCHLd4JtrX+mIZ/mU91VibhpikM1QRgZSX/J2s
+	+XDeH/PQFp4SdDf6okr/c3WND2Oy8VfDeq1DGNr0MRBgkVtzaxQzvkJldM9VVwKGjCeCFUHbzOW
+	2bl7FtK9EDcyV/Gyz1J0W0f50ysMGpY44bBYZWCkRMgVe2FFPD02nLE7OcNs=
+X-Google-Smtp-Source: AGHT+IFCRAfw28e98qC/9ugvEMowkcuK8yggxpTve8KozzLys5D6kuQDwQvvWthTuc0dKuCHWiDon8FCqdVF3WHFHA8px5N7LapV
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [canxl v7 00/17] can: netlink: add CAN XL support
-To: Rakuram Eswaran <rakuram.e96@gmail.com>
-Cc: linux-can@vger.kernel.org
-References: <20251125123859.3924-1-socketcan@hartkopp.net>
- <20251125161346.412538-1-rakuram.e96@gmail.com>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20251125161346.412538-1-rakuram.e96@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:178a:b0:434:96ea:ca19 with SMTP id
+ e9e14a558f8ab-435b913657cmr136188375ab.17.1764100227216; Tue, 25 Nov 2025
+ 11:50:27 -0800 (PST)
+Date: Tue, 25 Nov 2025 11:50:27 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69260883.a70a0220.d98e3.00b5.GAE@google.com>
+Subject: [syzbot] [net?] [can?] KMSAN: uninit-value in em_canid_match
+From: syzbot <syzbot+5d8269a1e099279152bc@syzkaller.appspotmail.com>
+To: davem@davemloft.net, edumazet@google.com, horms@kernel.org, 
+	jhs@mojatatu.com, jiri@resnulli.us, kuba@kernel.org, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, mkl@pengutronix.de, 
+	netdev@vger.kernel.org, pabeni@redhat.com, socketcan@hartkopp.net, 
+	syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Rakuram,
+Hello,
 
-On 25.11.25 17:13, Rakuram Eswaran wrote:
+syzbot found the following issue on:
 
-> I tested the v7 branch and below are my observations.
-> 
-> Static analysis: Smatch reports no warnings.
+HEAD commit:    ac3fd01e4c1e Linux 6.18-rc7
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1703e612580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=61a9bf3cc5d17a01
+dashboard link: https://syzkaller.appspot.com/bug?extid=5d8269a1e099279152bc
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12040e58580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=117d797c580000
 
-Excellent!
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/227434a45737/disk-ac3fd01e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d8117003dbb5/vmlinux-ac3fd01e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a13125fb7a7d/bzImage-ac3fd01e.xz
 
-> I also executed the sequence mentioned in (1). I had one question regarding
-> the XL data-phase bitrate: Does the ISO specification define a minimum
-> bit rate for CAN XL? When I set an xbitrate of 1230, the command was accepted
-> without any warning or error:
-> 
-> ./iproute2-next/ip/ip link set can0 type can bitrate 1000000 xbitrate 1230 xl on tms on fd off
-> 
-> This value probably doesn't make sense in practice, so would it be useful to
-> enforce a default or minimum bitrate in the kernel or iproute2?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5d8269a1e099279152bc@syzkaller.appspotmail.com
 
-I double-checked with some tools from Vector and PEAK. And although it 
-doesn't make much sense was there no constrain that such a configuration 
-is forbidden. The CAN XL controllers with their 160MHz clock and their 
-very capable baud rate prescaler are able to deliver even such weird 
-bitrates.
+syzkaller0: entered promiscuous mode
+syzkaller0: entered allmulticast mode
+=====================================================
+BUG: KMSAN: uninit-value in em_canid_match+0x2f0/0x360 net/sched/em_canid.c:104
+ em_canid_match+0x2f0/0x360 net/sched/em_canid.c:104
+ tcf_em_match net/sched/ematch.c:494 [inline]
+ __tcf_em_tree_match+0x215/0xc70 net/sched/ematch.c:520
+ tcf_em_tree_match include/net/pkt_cls.h:512 [inline]
+ basic_classify+0x154/0x480 net/sched/cls_basic.c:50
+ tc_classify include/net/tc_wrapper.h:197 [inline]
+ __tcf_classify net/sched/cls_api.c:1764 [inline]
+ tcf_classify+0x855/0x1cb0 net/sched/cls_api.c:1860
+ multiq_classify net/sched/sch_multiq.c:39 [inline]
+ multiq_enqueue+0x82/0x590 net/sched/sch_multiq.c:66
+ dev_qdisc_enqueue net/core/dev.c:4118 [inline]
+ __dev_xmit_skb net/core/dev.c:4214 [inline]
+ __dev_queue_xmit+0x1d91/0x5e60 net/core/dev.c:4729
+ dev_queue_xmit include/linux/netdevice.h:3365 [inline]
+ packet_xmit+0x8f/0x710 net/packet/af_packet.c:275
+ packet_snd net/packet/af_packet.c:3076 [inline]
+ packet_sendmsg+0x9173/0xa2a0 net/packet/af_packet.c:3108
+ sock_sendmsg_nosec net/socket.c:727 [inline]
+ __sock_sendmsg+0x333/0x3d0 net/socket.c:742
+ ____sys_sendmsg+0x7e0/0xd80 net/socket.c:2630
+ ___sys_sendmsg+0x271/0x3b0 net/socket.c:2684
+ __sys_sendmsg net/socket.c:2716 [inline]
+ __do_sys_sendmsg net/socket.c:2721 [inline]
+ __se_sys_sendmsg net/socket.c:2719 [inline]
+ __x64_sys_sendmsg+0x211/0x3e0 net/socket.c:2719
+ x64_sys_call+0x1dfd/0x3e30 arch/x86/include/generated/asm/syscalls_64.h:47
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xd9/0xfa0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-Therefore we better do what the user configures.
+Uninit was created at:
+ slab_post_alloc_hook mm/slub.c:4985 [inline]
+ slab_alloc_node mm/slub.c:5288 [inline]
+ kmem_cache_alloc_node_noprof+0x989/0x16b0 mm/slub.c:5340
+ kmalloc_reserve+0x13c/0x4b0 net/core/skbuff.c:579
+ __alloc_skb+0x347/0x7d0 net/core/skbuff.c:670
+ alloc_skb include/linux/skbuff.h:1383 [inline]
+ alloc_skb_with_frags+0xc5/0xa60 net/core/skbuff.c:6671
+ sock_alloc_send_pskb+0xacc/0xc60 net/core/sock.c:2965
+ packet_alloc_skb net/packet/af_packet.c:2926 [inline]
+ packet_snd net/packet/af_packet.c:3019 [inline]
+ packet_sendmsg+0x743d/0xa2a0 net/packet/af_packet.c:3108
+ sock_sendmsg_nosec net/socket.c:727 [inline]
+ __sock_sendmsg+0x333/0x3d0 net/socket.c:742
+ ____sys_sendmsg+0x7e0/0xd80 net/socket.c:2630
+ ___sys_sendmsg+0x271/0x3b0 net/socket.c:2684
+ __sys_sendmsg net/socket.c:2716 [inline]
+ __do_sys_sendmsg net/socket.c:2721 [inline]
+ __se_sys_sendmsg net/socket.c:2719 [inline]
+ __x64_sys_sendmsg+0x211/0x3e0 net/socket.c:2719
+ x64_sys_call+0x1dfd/0x3e30 arch/x86/include/generated/asm/syscalls_64.h:47
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xd9/0xfa0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-Or do you have a reference why this should not be allowed?
+CPU: 0 UID: 0 PID: 6067 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(none) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+=====================================================
 
-> I have another question regarding Documentation updates for the recent CAN XL
-> changes. Would updating only Documentation/networking/can.rst be sufficient,
-> or are there other places that should be updated?
-> I'd be happy to help with improving the CAN documentation if needed.
 
-AFAIK there is currently no updated documentation for can.rst in progress.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Feel free to contribute some patches for can.rst
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Many thanks!
-Oliver
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-> 
-> (1) https://lore.kernel.org/linux-can/20251122093602.1660-1-socketcan@hartkopp.net/T/#maab93b52afce096b03c2cefd955795d43ce810ff
-> 
-> Best Regards,
-> Rakuram
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
