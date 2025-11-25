@@ -1,151 +1,103 @@
-Return-Path: <linux-can+bounces-5644-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5657-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E78EC84FFF
-	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 13:39:51 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70D4DC85370
+	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 14:40:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C46A3B272B
-	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 12:39:38 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id ACE633469A4
+	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 13:40:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA411320A22;
-	Tue, 25 Nov 2025 12:39:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="BsvuhD1y";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="t+/glEXd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B36BB223DD0;
+	Tue, 25 Nov 2025 13:40:31 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69F1320A1A
-	for <linux-can@vger.kernel.org>; Tue, 25 Nov 2025 12:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764074370; cv=pass; b=N3CMsMYjCn32fle8YSahXcoa7yMfkxZTR5XWFwX71CrPTtw2qyhoJBV8RkNABd9mu89ANYg7qHo8mI/GFGgxci3kRLOie3P3WKf8crH8G5VYNIJHoKK9ucy2+2DOoibx3pDiiHtcQeydzTJaKR01S1cvPf7lWXdLNOP2fbacEko=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764074370; c=relaxed/simple;
-	bh=m7EeSy2+xKqgnXdooRw95j4Mc3UdRErVYKrMnhFrMio=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TTnv9IMpYUsAC6LTZxkNN2UnrTw8AJAUdb6pC4JB+fvt03Kln4AA59uKqkX2CP523kdcjDdXgFfH7cVY3/2G4OulHCRtMWkZwLFy/VJoCqyzfwhU0rnmKKnVK9zDvtfcQtBO+vtQT5Cj3gbguVrlfmyQbdeeowZfKGlYScg4qiU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=BsvuhD1y; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=t+/glEXd; arc=pass smtp.client-ip=81.169.146.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1764074357; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Sa+BD0dvcNjvu8I9NaTTF927E1KIEKwnT9K7f172EOXDwgNPCMJOl3ZfL62w3qldCy
-    og5Cjeqb0yY3KK2N1B/UQpBU9KXEwzERf91T6UgEQSHPIYhoe2FY3A62B9naTuLIB5y/
-    arMbaZfY6/bt6CXoXSq1a8+paVk+0hAypGVGAXyWzUO2hTeA5SJxk/Db1p40A1p3C4I2
-    VVEjiCgYh1fL9mFJ4L+DeJjvBLgLCgPv32S8w5lOv15r1AXDkYwaPqFWC/3A5uW0AZjI
-    Q7rCSwGE7EEun12fLS8A4u+mvTWFYIvVKwLlMUsiruqkwP9g4OxmfOCN4oJYSlgcXN9C
-    Um0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1764074357;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=mv4MJQA7KSzTFdvYxdDLGEQT/672EB+06RsOc+u97Q0=;
-    b=m9lbbGFPcL/ZmitfIEBq5vtqeoODU28nZlF8M0XWCUohKw6/reSnGYBJFnXRuGv7x4
-    xGzgUipoJGBOxyRxFhlmt6mPQbpPtu7LalQuPRO1zgL2RSrtXX1Ki8/8b9KxoQF3mZcL
-    v4Fw9ABdx8v5oiQS58eu72o4fA0nBtOZGDfG2+Lzf116xIoJLzyxjuEIZXkH5UCxdXJu
-    SdCCuhH0gDYMW4bwHeQAC2ZvrchKZlNdYvl2Q1X1HWx47EON5KhvKGtHzuHr6DqMXqnE
-    VyXRtRi75pLi21t1yZaXxan1g088ABHC12JjJvPGe7xllriX+O75vpN/a+9mBHpBX9RM
-    TfWw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1764074357;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=mv4MJQA7KSzTFdvYxdDLGEQT/672EB+06RsOc+u97Q0=;
-    b=BsvuhD1y6y83NO+VXX89L5ovOkVRRX+lF0u7/3iGnCc792obsjUXyfItROCXB/oeyD
-    H3pP2lGrTtebt1y30dPuKUdC8qBCX1k1oUdHdUOgPbDbYXqTfhtmMDQvkHya5pcfJj66
-    tGImalR5+GhgPh/BVIxGfwv4gYBo2Ti21b6KcSMUt8HbZkUbccPG9mi6HzCWlfZ5Nfkj
-    Lmf8gqm959jPPrLZuJYnYyvNoqhSTUb64/c5aQ+obEyZZw1nSZhCUP9JYR0VxhJNcKl8
-    44FodDgf4rKRwOMWWAzZeAIinITNYO27e4adpnriKNNyAEoE74jDLc+mAQ7t67i6JOBA
-    GOWw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1764074357;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=mv4MJQA7KSzTFdvYxdDLGEQT/672EB+06RsOc+u97Q0=;
-    b=t+/glEXdhHkjyQtfJPBey7W69bONRLzDSsgaqmMvDvIDXCev9bYiHbc7Gn70hk48z+
-    lle/fuIi9a+BJA4EWZAw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from lenov17.lan
-    by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461APCdHT8b
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 25 Nov 2025 13:39:17 +0100 (CET)
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
-	Vincent Mailhol <mailhol@kernel.org>
-Subject: [canxl v7 17/17] can: dev: print bitrate error with two decimal digits
-Date: Tue, 25 Nov 2025 13:38:59 +0100
-Message-ID: <20251125123859.3924-18-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251125123859.3924-1-socketcan@hartkopp.net>
-References: <20251125123859.3924-1-socketcan@hartkopp.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4BB221DB6
+	for <linux-can@vger.kernel.org>; Tue, 25 Nov 2025 13:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764078031; cv=none; b=QMwoIO0eg9PE5Tz+U7jILlIK839zVWgKn91MINz+xPSZfXdpC74YjJsIClGBaBBmyBCym/wRLFutYeZnIQ4S6EujyqVphSGX7/0zpc1FI6Jv2y17DTs/vcLconkFHXb4g0g1o6lzqzyQ+99hrxTG2+uDpqCFeW3Q0GV72u249Tg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764078031; c=relaxed/simple;
+	bh=IdbgtGAjYU3GMjBOV7FRsCMLgU0iuStQQBW7ZA6OsPc=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=cTb7VzYC3TwGuLqIipbV9ODhz7YJBeuO77Fet9ZAIANZmv6MUCw6yE12vWlfzdZueZBatuqluRr/xPC79ltAp40qmBS4mPcIH04TRYRlnrxn0XqdMX3AATmVXiZ9LBdtb9hnWdKAAoCDnV0sob7mBEd13vFXYMrXmU0YI3CKMUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 5APDdxtv005881;
+	Tue, 25 Nov 2025 22:39:59 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from [192.168.1.10] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 5APDdxGx005878
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Tue, 25 Nov 2025 22:39:59 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <b9653191-d479-4c8b-8536-1326d028db5c@I-love.SAKURA.ne.jp>
+Date: Tue, 25 Nov 2025 22:39:59 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH] can: j1939: make j1939_session_activate() fail if device is
+ no longer registered
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Anti-Virus-Server: fsav402.rs.sakura.ne.jp
+X-Virus-Status: clean
 
-Increase the resolution when printing the bitrate error and round-up the
-value to 0.01% in the case the resolution would still provide values
-which would lead to 0.00%.
+syzbot is still reporting
 
-Suggested-by: Vincent Mailhol <mailhol@kernel.org>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+  unregister_netdevice: waiting for vcan0 to become free. Usage count = 2
+
+even after commit 93a27b5891b8 ("can: j1939: add missing calls in
+NETDEV_UNREGISTER notification handler") was added. A debug printk() patch
+found that j1939_session_activate() can succeed even after
+j1939_cancel_active_session() from j1939_netdev_notify(NETDEV_UNREGISTER)
+has completed.
+
+Since j1939_cancel_active_session() is processed with the session list lock
+held, checking ndev->reg_state in j1939_session_activate() with the session
+list lock held can reliably close the race window.
+
+Reported-by: syzbot <syzbot+881d65229ca4f9ae8c84@syzkaller.appspotmail.com>
+Closes: https://syzkaller.appspot.com/bug?extid=881d65229ca4f9ae8c84
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 ---
- drivers/net/can/dev/calc_bittiming.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+Should we also make j1939_sk_queue_activate_next_locked() and
+j1939_xtp_rx_rts_session_new() not to emit bogus warning message?
+Is this error case rare enough to tolerate bogus warning message?
 
-diff --git a/drivers/net/can/dev/calc_bittiming.c b/drivers/net/can/dev/calc_bittiming.c
-index 0b11c4e98172..e232993a5138 100644
---- a/drivers/net/can/dev/calc_bittiming.c
-+++ b/drivers/net/can/dev/calc_bittiming.c
-@@ -150,23 +150,26 @@ int can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
- 		if (bitrate_error == 0 && sample_point_error == 0)
- 			break;
- 	}
- 
- 	if (best_bitrate_error) {
--		/* Error in one-tenth of a percent */
--		v64 = (u64)best_bitrate_error * 1000;
-+		/* Error in one-hundredth of a percent */
-+		v64 = (u64)best_bitrate_error * 10000;
- 		do_div(v64, bt->bitrate);
- 		bitrate_error = (u32)v64;
-+		/* print at least 0.01% if the error is smaller */
-+		bitrate_error = max(bitrate_error, 1U);
- 		if (bitrate_error > CAN_CALC_MAX_ERROR) {
- 			NL_SET_ERR_MSG_FMT(extack,
--					   "bitrate error: %u.%u%% too high",
--					   bitrate_error / 10, bitrate_error % 10);
-+					   "bitrate error: %u.%02u%% too high",
-+					   bitrate_error / 100,
-+					   bitrate_error % 100);
- 			return -EINVAL;
- 		}
- 		NL_SET_ERR_MSG_FMT(extack,
--				   "bitrate error: %u.%u%%",
--				   bitrate_error / 10, bitrate_error % 10);
-+				   "bitrate error: %u.%02u%%",
-+				   bitrate_error / 100, bitrate_error % 100);
- 	}
- 
- 	/* real sample point */
- 	bt->sample_point = can_update_sample_point(btc, sample_point, best_tseg,
- 						   &tseg1, &tseg2, NULL);
+ net/can/j1939/transport.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index fbf5c8001c9d..613a911dda10 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -1567,6 +1567,8 @@ int j1939_session_activate(struct j1939_session *session)
+ 	if (active) {
+ 		j1939_session_put(active);
+ 		ret = -EAGAIN;
++	} else if (priv->ndev->reg_state != NETREG_REGISTERED) {
++		ret = -ENODEV;
+ 	} else {
+ 		WARN_ON_ONCE(session->state != J1939_SESSION_NEW);
+ 		list_add_tail(&session->active_session_list_entry,
 -- 
 2.47.3
 
