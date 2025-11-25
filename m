@@ -1,56 +1,56 @@
-Return-Path: <linux-can+bounces-5639-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5644-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A944FC84FDE
-	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 13:39:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E78EC84FFF
+	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 13:39:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6181B3B170E
-	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 12:39:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C46A3B272B
+	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 12:39:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF642D8363;
-	Tue, 25 Nov 2025 12:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA411320A22;
+	Tue, 25 Nov 2025 12:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="s5z6loFf";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="xIc6kEEf"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="BsvuhD1y";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="t+/glEXd"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D0018DB1E
-	for <linux-can@vger.kernel.org>; Tue, 25 Nov 2025 12:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69F1320A1A
+	for <linux-can@vger.kernel.org>; Tue, 25 Nov 2025 12:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764074361; cv=pass; b=g1/FIudskwJUQwCoLPnNNXASqzRb/spe1yYIB9pY2/dB98P8q+XSvBJLwA8QE+yTrNNxVk58kyB4T7cDN2D6XskYw3+Wn3TkpCInLNztR1bamHUyTcIqsRaLK0jKxkUqwUhBskPZlPDwjVTdcAdLstcN89ZTr7Da7ewRd/K3iew=
+	t=1764074370; cv=pass; b=N3CMsMYjCn32fle8YSahXcoa7yMfkxZTR5XWFwX71CrPTtw2qyhoJBV8RkNABd9mu89ANYg7qHo8mI/GFGgxci3kRLOie3P3WKf8crH8G5VYNIJHoKK9ucy2+2DOoibx3pDiiHtcQeydzTJaKR01S1cvPf7lWXdLNOP2fbacEko=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764074361; c=relaxed/simple;
-	bh=kFo+cWd3FsEA77InQXoAwGerQqlnV47knYv1zjqj/9Q=;
+	s=arc-20240116; t=1764074370; c=relaxed/simple;
+	bh=m7EeSy2+xKqgnXdooRw95j4Mc3UdRErVYKrMnhFrMio=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eymTh4Y7WRPxIgCfx/e51nOUI4GE5+LAhSYmZ4tgG50w4X9wsGFDJwk0r06VpLircH+mQye60lyjoeOxfXAQR3av5GFkPeGDR29S7dy/RgcDwq1TyKywQgcDf7qn8RuQDZ7ybfajJYMub/YFINPPMuOTQfV+HTvlBgQMnZViKNU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=s5z6loFf; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=xIc6kEEf; arc=pass smtp.client-ip=85.215.255.80
+	 MIME-Version:Content-Type; b=TTnv9IMpYUsAC6LTZxkNN2UnrTw8AJAUdb6pC4JB+fvt03Kln4AA59uKqkX2CP523kdcjDdXgFfH7cVY3/2G4OulHCRtMWkZwLFy/VJoCqyzfwhU0rnmKKnVK9zDvtfcQtBO+vtQT5Cj3gbguVrlfmyQbdeeowZfKGlYScg4qiU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=BsvuhD1y; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=t+/glEXd; arc=pass smtp.client-ip=81.169.146.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
 ARC-Seal: i=1; a=rsa-sha256; t=1764074357; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=W5e8J6y6bTyOVVU0VI5K87fNdVnUHDm8LZ+qwlGQWpQSOC67okc977QyT4zdZ9CfKH
-    gRiQ6V3n8MHg02Ay6xpjbvYozl81Yxhz0KphCRxf4pV6xh2J0E1lg2NbWZ3KB+q6DjH6
-    S1tFcugTA8yBeLIgUx1BGKCYv+YRgHfC82xdx2pIfFmTCfpCota5JivFff0jBMDZoBW0
-    qufY27Pf5FKwLTftb7cWBt0F9ttfbC/nPvICpkzUqYnXIbc3T70BLYuL58+JB59SAdZu
-    A30vWjX/JYEJZFRUGsWsf+qhkEw+kvEg8zaq6sZwmuHi/1fmiCJQ8zxTZY1J4GXAbdFM
-    sNhQ==
+    b=Sa+BD0dvcNjvu8I9NaTTF927E1KIEKwnT9K7f172EOXDwgNPCMJOl3ZfL62w3qldCy
+    og5Cjeqb0yY3KK2N1B/UQpBU9KXEwzERf91T6UgEQSHPIYhoe2FY3A62B9naTuLIB5y/
+    arMbaZfY6/bt6CXoXSq1a8+paVk+0hAypGVGAXyWzUO2hTeA5SJxk/Db1p40A1p3C4I2
+    VVEjiCgYh1fL9mFJ4L+DeJjvBLgLCgPv32S8w5lOv15r1AXDkYwaPqFWC/3A5uW0AZjI
+    Q7rCSwGE7EEun12fLS8A4u+mvTWFYIvVKwLlMUsiruqkwP9g4OxmfOCN4oJYSlgcXN9C
+    Um0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1764074357;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=BVTOWs4g5KEdda5lO51oBHxVDDNtA9WS5KpPLtm1fEc=;
-    b=q3NwiFE5yPYB6ZNSaiyYXU8BTy/7mn5GaL/njMBBwKu6t5tTrHcWmTpSYoTYPX3Kej
-    r6V9bvXdBiPNiZ2EM50Tpyt4P4uwTer4I9+OHlGDE9LeV87RDCrwLrFmolD88WK/Tn6y
-    FxtUZUDmKNwvAlq25o1VceivnqOA7ZjpJ6ZXYDVZ3NgceHNs6YA77LOxCfLzMZScMc88
-    z56scV+Szy2+QY0ak/0RjS52lbASqRWw+LdfEITf+LQaCI0GvvoDA0DaWcPxuRpX7R8I
-    mCzBFeryNU81qVMHLeEasEIF3Xu6+m507bai7bGOHmtmeD4SRGxswzM6aHGJWufCsydD
-    6hhw==
+    bh=mv4MJQA7KSzTFdvYxdDLGEQT/672EB+06RsOc+u97Q0=;
+    b=m9lbbGFPcL/ZmitfIEBq5vtqeoODU28nZlF8M0XWCUohKw6/reSnGYBJFnXRuGv7x4
+    xGzgUipoJGBOxyRxFhlmt6mPQbpPtu7LalQuPRO1zgL2RSrtXX1Ki8/8b9KxoQF3mZcL
+    v4Fw9ABdx8v5oiQS58eu72o4fA0nBtOZGDfG2+Lzf116xIoJLzyxjuEIZXkH5UCxdXJu
+    SdCCuhH0gDYMW4bwHeQAC2ZvrchKZlNdYvl2Q1X1HWx47EON5KhvKGtHzuHr6DqMXqnE
+    VyXRtRi75pLi21t1yZaXxan1g088ABHC12JjJvPGe7xllriX+O75vpN/a+9mBHpBX9RM
+    TfWw==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
@@ -59,33 +59,34 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1764074357;
     s=strato-dkim-0002; d=hartkopp.net;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=BVTOWs4g5KEdda5lO51oBHxVDDNtA9WS5KpPLtm1fEc=;
-    b=s5z6loFfW+Hxae3nDPd1iqGt1gbG6QQLoYFhcgArP/Y7BObZBOw9vmqI+L/+ZukkN5
-    dyP7t9dCQ42UavZmF/QBGMQzaUgv6Vsjd2QZHiC8YhnENaN8fijFe5Ay70AJxNO4W6Wv
-    H4oCCQdAZLW5v7Cyg752x+OMJfUn3oqN83i/nfLpd4tFV0xj7O0+D6DFQmmlfgGyTwuU
-    63LRYRZQHyq5SPOKa0kzZk/JqmDW6cTx/pUleC7bntcERsltxzjErlABP1ziqS9rrh8L
-    wdosL+Asv9BBWsx9CCRw/Mk0CWa4TC7mW0VB5IhFqnEa6kugevdvM7xCmO1uEN80nXrr
-    UK9g==
+    bh=mv4MJQA7KSzTFdvYxdDLGEQT/672EB+06RsOc+u97Q0=;
+    b=BsvuhD1y6y83NO+VXX89L5ovOkVRRX+lF0u7/3iGnCc792obsjUXyfItROCXB/oeyD
+    H3pP2lGrTtebt1y30dPuKUdC8qBCX1k1oUdHdUOgPbDbYXqTfhtmMDQvkHya5pcfJj66
+    tGImalR5+GhgPh/BVIxGfwv4gYBo2Ti21b6KcSMUt8HbZkUbccPG9mi6HzCWlfZ5Nfkj
+    Lmf8gqm959jPPrLZuJYnYyvNoqhSTUb64/c5aQ+obEyZZw1nSZhCUP9JYR0VxhJNcKl8
+    44FodDgf4rKRwOMWWAzZeAIinITNYO27e4adpnriKNNyAEoE74jDLc+mAQ7t67i6JOBA
+    GOWw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1764074357;
     s=strato-dkim-0003; d=hartkopp.net;
     h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=BVTOWs4g5KEdda5lO51oBHxVDDNtA9WS5KpPLtm1fEc=;
-    b=xIc6kEEf3ikjtlPLP2N9lZdJ0y/fA4Ra8x2CvwyHySafl921dVi6oMdSer/Q81cyOH
-    7ty5PThRdubjSuMfoaBg==
+    bh=mv4MJQA7KSzTFdvYxdDLGEQT/672EB+06RsOc+u97Q0=;
+    b=t+/glEXdhHkjyQtfJPBey7W69bONRLzDSsgaqmMvDvIDXCev9bYiHbc7Gn70hk48z+
+    lle/fuIi9a+BJA4EWZAw==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
 Received: from lenov17.lan
     by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461APCdHT8a
+    with ESMTPSA id Ke2b461APCdHT8b
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
     Tue, 25 Nov 2025 13:39:17 +0100 (CET)
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [canxl v7 16/17] can: raw: instantly reject unsupported CAN frames
-Date: Tue, 25 Nov 2025 13:38:58 +0100
-Message-ID: <20251125123859.3924-17-socketcan@hartkopp.net>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Vincent Mailhol <mailhol@kernel.org>
+Subject: [canxl v7 17/17] can: dev: print bitrate error with two decimal digits
+Date: Tue, 25 Nov 2025 13:38:59 +0100
+Message-ID: <20251125123859.3924-18-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251125123859.3924-1-socketcan@hartkopp.net>
 References: <20251125123859.3924-1-socketcan@hartkopp.net>
@@ -98,107 +99,53 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
 
-For real CAN interfaces the CAN_CTRLMODE_FD and CAN_CTRLMODE_XL control
-modes indicate whether an interface can handle those CAN FD/XL frames.
+Increase the resolution when printing the bitrate error and round-up the
+value to 0.01% in the case the resolution would still provide values
+which would lead to 0.00%.
 
-In the case a CAN XL interface is configured in CANXL-only mode with
-disabled error-signalling neither CAN CC nor CAN FD frames can be sent.
-
-The checks are performed on CAN_RAW sockets to give an instant feedback
-to the user when writing unsupported CAN frames to the interface.
-
+Suggested-by: Vincent Mailhol <mailhol@kernel.org>
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- net/can/raw.c | 54 +++++++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 46 insertions(+), 8 deletions(-)
+ drivers/net/can/dev/calc_bittiming.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/net/can/raw.c b/net/can/raw.c
-index a53853f5e9af..223630f0f9e9 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -890,24 +890,62 @@ static void raw_put_canxl_vcid(struct raw_sock *ro, struct sk_buff *skb)
- 		cxl->prio &= CANXL_PRIO_MASK;
- 		cxl->prio |= ro->tx_vcid_shifted;
+diff --git a/drivers/net/can/dev/calc_bittiming.c b/drivers/net/can/dev/calc_bittiming.c
+index 0b11c4e98172..e232993a5138 100644
+--- a/drivers/net/can/dev/calc_bittiming.c
++++ b/drivers/net/can/dev/calc_bittiming.c
+@@ -150,23 +150,26 @@ int can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
+ 		if (bitrate_error == 0 && sample_point_error == 0)
+ 			break;
  	}
- }
  
--static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb, int mtu)
-+static inline bool raw_dev_cc_enabled(struct net_device *dev,
-+				      struct can_priv *priv)
- {
--	/* Classical CAN -> no checks for flags and device capabilities */
--	if (can_is_can_skb(skb))
-+	/* The CANXL-only mode disables error-signalling on the CAN bus
-+	 * which is needed to send CAN CC/FD frames
-+	 */
-+	if (priv)
-+		return !can_dev_in_xl_only_mode(priv);
-+
-+	/* virtual CAN interfaces always support CAN CC */
-+	return true;
-+}
-+
-+static inline bool raw_dev_fd_enabled(struct net_device *dev,
-+				      struct can_priv *priv)
-+{
-+	/* check FD ctrlmode on real CAN interfaces */
-+	if (priv)
-+		return (priv->ctrlmode & CAN_CTRLMODE_FD);
-+
-+	/* check MTU for virtual CAN FD interfaces */
-+	return (READ_ONCE(dev->mtu) >= CANFD_MTU);
-+}
-+
-+static inline bool raw_dev_xl_enabled(struct net_device *dev,
-+				      struct can_priv *priv)
-+{
-+	/* check XL ctrlmode on real CAN interfaces */
-+	if (priv)
-+		return (priv->ctrlmode & CAN_CTRLMODE_XL);
-+
-+	/* check MTU for virtual CAN XL interfaces */
-+	return can_is_canxl_dev_mtu(READ_ONCE(dev->mtu));
-+}
-+
-+static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb,
-+				      struct net_device *dev)
-+{
-+	struct can_priv *priv = safe_candev_priv(dev);
-+
-+	/* Classical CAN */
-+	if (can_is_can_skb(skb) && raw_dev_cc_enabled(dev, priv))
- 		return CAN_MTU;
+ 	if (best_bitrate_error) {
+-		/* Error in one-tenth of a percent */
+-		v64 = (u64)best_bitrate_error * 1000;
++		/* Error in one-hundredth of a percent */
++		v64 = (u64)best_bitrate_error * 10000;
+ 		do_div(v64, bt->bitrate);
+ 		bitrate_error = (u32)v64;
++		/* print at least 0.01% if the error is smaller */
++		bitrate_error = max(bitrate_error, 1U);
+ 		if (bitrate_error > CAN_CALC_MAX_ERROR) {
+ 			NL_SET_ERR_MSG_FMT(extack,
+-					   "bitrate error: %u.%u%% too high",
+-					   bitrate_error / 10, bitrate_error % 10);
++					   "bitrate error: %u.%02u%% too high",
++					   bitrate_error / 100,
++					   bitrate_error % 100);
+ 			return -EINVAL;
+ 		}
+ 		NL_SET_ERR_MSG_FMT(extack,
+-				   "bitrate error: %u.%u%%",
+-				   bitrate_error / 10, bitrate_error % 10);
++				   "bitrate error: %u.%02u%%",
++				   bitrate_error / 100, bitrate_error % 100);
+ 	}
  
--	/* CAN FD -> needs to be enabled and a CAN FD or CAN XL device */
-+	/* CAN FD */
- 	if (ro->fd_frames && can_is_canfd_skb(skb) &&
--	    (mtu == CANFD_MTU || can_is_canxl_dev_mtu(mtu)))
-+	    raw_dev_fd_enabled(dev, priv))
- 		return CANFD_MTU;
- 
--	/* CAN XL -> needs to be enabled and a CAN XL device */
-+	/* CAN XL */
- 	if (ro->xl_frames && can_is_canxl_skb(skb) &&
--	    can_is_canxl_dev_mtu(mtu))
-+	    raw_dev_xl_enabled(dev, priv))
- 		return CANXL_MTU;
- 
- 	return 0;
- }
- 
-@@ -959,11 +997,11 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 		goto free_skb;
- 
- 	err = -EINVAL;
- 
- 	/* check for valid CAN (CC/FD/XL) frame content */
--	txmtu = raw_check_txframe(ro, skb, READ_ONCE(dev->mtu));
-+	txmtu = raw_check_txframe(ro, skb, dev);
- 	if (!txmtu)
- 		goto free_skb;
- 
- 	/* only CANXL: clear/forward/set VCID value */
- 	if (txmtu == CANXL_MTU)
+ 	/* real sample point */
+ 	bt->sample_point = can_update_sample_point(btc, sample_point, best_tseg,
+ 						   &tseg1, &tseg2, NULL);
 -- 
 2.47.3
 
