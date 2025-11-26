@@ -1,87 +1,137 @@
-Return-Path: <linux-can+bounces-5663-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5664-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DCDCC8747A
-	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 22:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FE20C87FC3
+	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 04:46:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0EA233531BC
-	for <lists+linux-can@lfdr.de>; Tue, 25 Nov 2025 21:57:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id ECA90354370
+	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 03:46:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8AF02FDC4B;
-	Tue, 25 Nov 2025 21:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5D9B308F09;
+	Wed, 26 Nov 2025 03:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=vjti.ac.in header.i=@vjti.ac.in header.b="XHP2KBa8"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF462D23BC
-	for <linux-can@vger.kernel.org>; Tue, 25 Nov 2025 21:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1991632DD
+	for <linux-can@vger.kernel.org>; Wed, 26 Nov 2025 03:46:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764107824; cv=none; b=PyBg202CZsvVFWmlBGO+7XR/A9UpAI98xqsvdDg0UOvt6hdaz3zeh6NVBQnttkFAzwsYgzhBtCvtVAIdJjcPviJISsD3U76+dF9ab7Af4x47r7fe2S6cbTiCgs27nDr4ZX6eOm+yVDQgg7L/xKz2ypGQQazqpCzSPfHp9CwLO8c=
+	t=1764128773; cv=none; b=YsFc4OGQbZuUbFlEitn8PqKyiqeg42dAYlgpZ8tKWTuEfZRM+tbwJr/xg3QjCalzKZ4SeNS0s2FhsI9YgWi7MGHd0TI55ppkXeZfEljDAIQQ7DJe8sEWu25uiEv5Cg7COvpjFZNwHCgwTqIMF8RKPKaIlvAmciNBEU4HoQBcvJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764107824; c=relaxed/simple;
-	bh=/2HDgATv3ct8ZJWOt0qr5TSE8QGRIX3SoHWTcWoS5u0=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=Tzkt37pebJyKCjTM65vI9Ep+I39ZjROq8HSYllzKwhRN2HfVeyVb7QZYROxrHWJrHoeigA35SAIeG9zFuFHrmrWtOVLNBfyVvv5PFUdmLaAQMX4lFArv6z5DDSxpNaqomu3walBUZdUVOP3JCDhXE3AY1Kk/5oMRtnnHDnkb/QQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-434a83cd402so58901305ab.3
-        for <linux-can@vger.kernel.org>; Tue, 25 Nov 2025 13:57:03 -0800 (PST)
+	s=arc-20240116; t=1764128773; c=relaxed/simple;
+	bh=YTJTsaHQmUL99NvK8+4VZBxoWMvT0DJLWraueRWowDQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=USMLS0N510KLOaTVFdJWKhRO9gtqv0wx+quWenyOcM9QDWYntlodv8xKsl3eJUyBT0lf2J9oiTJSH7orv4zr3tJgLPJlWx9uzZFqlZ2GXVd11aou6IdhXLwnAXSlpkxtp+kRYu4sqw5d1VymI9w6lJN2+mDP7Tbn1janm1Sfj9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ee.vjti.ac.in; spf=none smtp.mailfrom=ee.vjti.ac.in; dkim=pass (1024-bit key) header.d=vjti.ac.in header.i=@vjti.ac.in header.b=XHP2KBa8; arc=none smtp.client-ip=209.85.216.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ee.vjti.ac.in
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ee.vjti.ac.in
+Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-343ee44d89aso8890066a91.2
+        for <linux-can@vger.kernel.org>; Tue, 25 Nov 2025 19:46:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vjti.ac.in; s=google; t=1764128771; x=1764733571; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/0OQa00OisAI9Yf2BGn0QlVHZWUx/PRSa3ljqdERpcQ=;
+        b=XHP2KBa8J45PHqk4TG0AZi6qTrM1tPDokkLlQWViQ0+szwHvxDwNOuJE7pPI4qIr8m
+         6iRdvbfNZyo8iYTz7LQgd7k5LrB8hR/rBtUoLcG4VmRl/XsXXNeI2wpyqw1RwTyx449I
+         8E/rman10kBGMCPL6SCJZ1J91v2B1NAEaT12k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764107822; x=1764712622;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jT+4XkWR7efaDH0BcJaZyxh+BxXocscIcRlgONxMTWw=;
-        b=lxbVuDCNdcVqxiZiA1D0rZXao39EMAQ9c5ObLzJjAS0OufJMphGw9QG43vgW9Xxs+7
-         PHNgkClsGyad3z3jy21KrlS92XZC+spA4bGN3cP4P9zSwe2i0si/wyI/3t9oONC8izhX
-         831L54mrFO9+NXRro7pFyscKrZvbSKcmyoLbrBeMbnF5s2khI2Cz3ihi5VWWWSeVeKf8
-         c48sDNeX4RGzy9eKLCQ8UPSw63WJxwBlcS8sBbtFLgeGvYdBxucU+QM2SSkivF7u0ZUf
-         AtlE08BacSMNrnG0vPQyvZ0ULBcMBxj9z/L9J/5TfvgpT/vr7htTwIzZI08vT4cyOX8I
-         J7rQ==
-X-Gm-Message-State: AOJu0YxrAm5crJKW2FIWfmyRzTOX/gyg1/JJeUcfx+xp9S11faEbp5q/
-	r7RCOjDbK7x0AX+8sIb2pn8KRb7agtZcNbmMSclXNwTbqO4yx529RQEfVL8xq7xvpae/rLo8mt3
-	Nr5Hsdx7Y+uIydGbyft7VbVglK7fMHt9dHfDomqhRjmsqI3xGDE6oMJVOxxA=
-X-Google-Smtp-Source: AGHT+IG3wqjvbKfB2hfB4MeW4puzDDSRkS/RKgAh9Rbe/CaU1DCK2BO1zOrnYry0L1ycMdJdMU6YEb2LFZJVDVeXRJ3lnzUO1OIA
+        d=1e100.net; s=20230601; t=1764128771; x=1764733571;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/0OQa00OisAI9Yf2BGn0QlVHZWUx/PRSa3ljqdERpcQ=;
+        b=eaYEaj3jXjAIM0JbOytMMHhP3rS0+qUMdbh5Q5k1B1Qd5O5ROhud1n8arevPwW77hU
+         9hb6swpenkyCQxvmIuEEu9NMbCBAr852hk5IiM3nfjPsgFhSuySU65mwz5y3ZrJH6okf
+         5cguE5J1aTB7C/b8mGm9O8Q39AoNTWzLTucEu6DUVij6WbipF6OQLIVQ+XQfiYlHoPbE
+         Mg0e5ggyoK3yQvC0T9Kmm1seUVVlwuhOoRaASDE8a3wlVlRV3+1fCoHFzgYz7xqk3TCb
+         BCvPoMflTZ77QeGW/rVSWWDLWdzlxgbMSfLdsYNuoIV2IAAmq0LDAwCdyN9T2oymKeZy
+         Vpcw==
+X-Forwarded-Encrypted: i=1; AJvYcCXu+nlJx49Gwy5AXMS45LeJjoy2MEhUSvUIsUmX8zeuJue5Swth2X3/Iuq0aLbtkTzSF3OFWBogPs0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjmU1hAoRRmYo31v5G1vpfSS2drNk5/2O7OPwLX2KlsOiq4ZNa
+	uy9J1df7xZHYfDE3H1BeIi8yxp9B/I8a7+OiwmXOw69085VPOgBWeQxR+1Kf3aqlJqI=
+X-Gm-Gg: ASbGncvPwudkq22DzsnZFddTNv2xTEiuuElaiNk+RmK46nCGG5LdIyEB5GpA5UYHSFB
+	SmK0NNA/MSTiSURyZ0Be76FKrspZ89D+hEe8fhMblYgIEcjHABVNkUJ01A1Mwv6rH4whT6V+G4v
+	Syr0TEqti5NwnoNltAwN5ato60PyZKgc5pvIh5Iu98ArtT2R5eXJKfMmAq6iYNvOSOz9XWYmoUt
+	IAbn+bScMzMsnYfMxSDSWobFd2eIpvGnhn9LCDWFWfdT8fqd0rMJr8g5BHrpZJi75v+kSq31J3r
+	IGkebksEljRjI++EfVpVtJ9f2ioihmINGfH8IjseDOxKu/z/C5qIjm+dnFrqlnTMaDxiaijGKcV
+	zdAVFIdDVZ15jxfKNwXvyrt1bnaCoaIiuKfz6R38oMNscH+yU4xp4PtBzO6FR5tjgDDrdYbWJJA
+	+E26MK/I+hpPERkX+uGn8cmxAIAo5GbYqDuRHkv2rDQEg9z89sKV7xRH4m
+X-Google-Smtp-Source: AGHT+IGdbZpTaNhkORvuwsJtkl/0aqTP4Z+/MfLQ2cdKMWZ8EnjRZs396Kq3PBwRLHF0A7Z5HsdZeA==
+X-Received: by 2002:a17:90b:53c3:b0:33b:b020:597a with SMTP id 98e67ed59e1d1-34733d68a15mr15410786a91.0.1764128771454;
+        Tue, 25 Nov 2025 19:46:11 -0800 (PST)
+Received: from ranegod-HP-ENVY-x360-Convertible-13-bd0xxx.. ([2405:201:31:d869:f53f:2666:7529:e5cd])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3475ea1b3e8sm1509638a91.5.2025.11.25.19.46.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Nov 2025 19:46:10 -0800 (PST)
+From: ssrane_b23@ee.vjti.ac.in
+X-Google-Original-From: ssranevjti@gmail.com
+To: socketcan@hartkopp.net
+Cc: mkl@pengutronix.de,
+	jhs@mojatatu.com,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linux.dev,
+	david.hunter.linux@gmail.com,
+	khalid@kernel.org,
+	Shaurya Rane <ssrane_b23@ee.vjti.ac.in>,
+	syzbot+5d8269a1e099279152bc@syzkaller.appspotmail.com
+Subject: [PATCH net] net/sched: em_canid: add length check before reading CAN ID
+Date: Wed, 26 Nov 2025 09:16:01 +0530
+Message-Id: <20251126034601.236922-1-ssranevjti@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3a07:b0:433:2eec:66f7 with SMTP id
- e9e14a558f8ab-435dd065403mr35481365ab.15.1764107822418; Tue, 25 Nov 2025
- 13:57:02 -0800 (PST)
-Date: Tue, 25 Nov 2025 13:57:02 -0800
-In-Reply-To: <9a2b03dc-acd0-467d-a4e6-feb5cf6165f9@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6926262e.a70a0220.d98e3.00c0.GAE@google.com>
-Subject: Re: [syzbot] [net?] [can?] KMSAN: uninit-value in em_canid_match
-From: syzbot <syzbot+5d8269a1e099279152bc@syzkaller.appspotmail.com>
-To: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, ssranevjti@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello,
+From: Shaurya Rane <ssrane_b23@ee.vjti.ac.in>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Add a check to verify that the skb has at least sizeof(canid_t) bytes
+before reading the CAN ID from skb->data. This prevents reading
+uninitialized memory when processing malformed packets that don't
+contain a valid CAN frame.
 
 Reported-by: syzbot+5d8269a1e099279152bc@syzkaller.appspotmail.com
-Tested-by: syzbot+5d8269a1e099279152bc@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=5d8269a1e099279152bc
+Fixes: f057bbb6f9ed ("net: em_canid: Ematch rule to match CAN frames according to their identifiers")
+Signed-off-by: Shaurya Rane <ssrane_b23@ee.vjti.ac.in>
+---
+ net/sched/em_canid.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Tested on:
+diff --git a/net/sched/em_canid.c b/net/sched/em_canid.c
+index 5337bc462755..a9b6cab70ff1 100644
+--- a/net/sched/em_canid.c
++++ b/net/sched/em_canid.c
+@@ -99,6 +99,9 @@ static int em_canid_match(struct sk_buff *skb, struct tcf_ematch *m,
+ 	int i;
+ 	const struct can_filter *lp;
+ 
++	if (skb->len < sizeof(canid_t))
++		return 0;
++
+ 	can_id = em_canid_get_id(skb);
+ 
+ 	if (can_id & CAN_EFF_FLAG) {
+-- 
+2.34.1
 
-commit:         30f09200 Merge tag 'arm64-fixes' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13236e92580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=61a9bf3cc5d17a01
-dashboard link: https://syzkaller.appspot.com/bug?extid=5d8269a1e099279152bc
-compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1230257c580000
-
-Note: testing is done by a robot and is best-effort only.
 
