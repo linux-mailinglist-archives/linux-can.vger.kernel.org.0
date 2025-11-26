@@ -1,154 +1,128 @@
-Return-Path: <linux-can+bounces-5671-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5672-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5635C88D34
-	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 10:04:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3E23C89353
+	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 11:14:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8D3DE3478EF
-	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 09:04:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 569EC3A27E5
+	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 10:14:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5242B30171E;
-	Wed, 26 Nov 2025 09:04:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sOpxJnGv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1748270ED9;
+	Wed, 26 Nov 2025 10:14:11 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B753112DC
-	for <linux-can@vger.kernel.org>; Wed, 26 Nov 2025 09:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307E52701B6
+	for <linux-can@vger.kernel.org>; Wed, 26 Nov 2025 10:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764147851; cv=none; b=QyH8oOVQWE5zaktG+QhnG5+85OYn58wqF9Gn75idBVobOiR5W/GWXvw+pHdsCfzEIamAaeTBFHmhqwX7feaifUCwLnPRyzK4et+1wOwPIO5+Suz50dlT/vcgy+1nKDtFe3BGM6rY0LkqwFSz1p3/4YOyBTZ4bFdBGTuMOfry9ZQ=
+	t=1764152051; cv=none; b=EPYCy8XLvXCk8EeHe4Uk0hOVKD5CS5fY9uiCcTVgW4u3ie+2Wi4lOxn3qEPQxSRA0Ei8Jp+PQW3zgEMWR1p3m2+omY2VB2jRf/JW69fj1Ze02EOU1ioCNgJMEsPprdd6Q8aH6dQXE9I86XXK0kzGi0vAiSPkfUmAebNARJOJ54g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764147851; c=relaxed/simple;
-	bh=msA1Bmidu73lv6UgIPfMu/uKxgKN3WMlHd0YJZqFXso=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DTWjn8+GfGrpXQcEQXesbfO+Pn03a8PlNBrNDBhZZJrjIUjUJQgphXQObVhgGaC5uMHBiHwXSyccQ9CciRf8aflAjXZo/dDJtp8GGVAW4IHMhAgjO/8DHCRQD/ncPJA82qgsubFV+cd9cUKhW2J8wA4gh9ReDLta7c4OiV6Bae4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sOpxJnGv; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4ed75832448so87838741cf.2
-        for <linux-can@vger.kernel.org>; Wed, 26 Nov 2025 01:04:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764147842; x=1764752642; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hyRh8xXL0L8kVbM1qWyCLwjKZ6UbKVPw2m1+P8OYNlQ=;
-        b=sOpxJnGv3ACf/h6aEZtQTVsMLfcSr1mRWlVQTJ09a2bfIw55plRjSMIcfHnZiHVW6s
-         b2PtvVfB3gtWUvCQMXd2b6E6Ed94wtJ4sIywer91pv+L+W0adMBP1MgYqu4gCSeNLEek
-         KUO1XhdZnbh5/SA/tix+WvQ1HyofMlw2mFpGJBJIo02SPWyHT1AfQdbyJ8AT97LYVVW0
-         yYYGH4DI+y6fq7LRGn4gLXubfIt3+BXmNGOXVoMC8vi03Rol9fzaMIaBViclYeOpT843
-         qiuJXRQKuzqlZFcSbTheevlOH0bB7Ku5CyNWvKiJQcGe6MPLs2UR13/Uwt7DuaaH6906
-         p5Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764147842; x=1764752642;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hyRh8xXL0L8kVbM1qWyCLwjKZ6UbKVPw2m1+P8OYNlQ=;
-        b=vxouCZZ8BkEbUhhCGmdIsQCwAZb/6QX55rklBBJqS/ay46hxGfxuXTGGpbz1it3EQX
-         JAdzQhYPRg3nQ5PntO9CvwEgmgbnwxDAVoZbhe/vJq794JWNtxrVAzW/oYTaNhJxZTTy
-         Vy5XOzeuo2rq49u3vnr3l7OFhbvk+MrsgqMNEx7vVd0L6gGVm7pS3N5yAs68xD9gvPr8
-         m/QIqsC6MwZ9evbDi16vHQNxhUX/a937mc2rmYAaS+dxOe04KWV8L3QL5daWOF9zDkYH
-         7RrNowoOF6/phvHorXSwWhuer1h0H3Uq9lyqEIQfsrYyh/WrA6oWYz+sKNBMHa1/Oi4Z
-         LrqA==
-X-Forwarded-Encrypted: i=1; AJvYcCXtYoqxmd1lRLOrZHTWV/8SjYtg/22c4a5KWgXEGaQX7ExxSiZ21HggIJuMUP1sCXk655L3qZ+0Dno=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDmdP2wrPa5IuwbLf/wXUxudK/pwVcNIexyLlDjWrrzIBZiiyo
-	r+jtRSYTlI0Ws/k1nqE3w2Aa+7XneyF8xJEOkiM6e1h0IXjyAUtdcydiAnrlulJPSaYENESlJcg
-	1ZPBgkj560p6khqVSImRCA3WJz8l/W7Cu4D0uRi0D
-X-Gm-Gg: ASbGncu1wcEeGOIikImZWYGzVYFQz8bAao2NNjaHJ3T0qzt7hvwcQgdZJs3kRVYLsrN
-	oPD1r5xW9eMaAsDhpOZlTLCQTqcJYwO9ZkF5tinQrzV777wUr5ybMkctqBDQhRnt2AwMHjjVvTQ
-	N/RNFBlVUK7+tKlMsh7Fe72L+vEyEQ4r2q7JboN+JH3a7/pFwtkAHib8ph/9TT2FnI7L+Dj95If
-	Q76EHOXGKl4Q4HF122TM9LMP+2oeNzkWwlMOOaAFQ8iycIcUW3jJiVF91cOxrW7FioG/A==
-X-Google-Smtp-Source: AGHT+IEPVELKVM1cwUwrfGMntJ3piYPimKdkJDSl5UF5isYNXZBNp4wQ/L7Ai4Aqn4fzrw9sl0QMSXAAIJOZ5vJ9tYw=
-X-Received: by 2002:ac8:58d4:0:b0:4ee:1db1:a61b with SMTP id
- d75a77b69052e-4ee58b04acbmr253389301cf.75.1764147841940; Wed, 26 Nov 2025
- 01:04:01 -0800 (PST)
+	s=arc-20240116; t=1764152051; c=relaxed/simple;
+	bh=HqZWikfj7wkG+IQoeD0AdDRHrOy5dmHHVt/AQDO3Nag=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V35ECotDFR2rRl3f5Gc7N3TrEt+Up7CyRICFIGH1Awco6zvrsxrXuxrgneXbFvQJi+WhOuVZFeUMWLK2FW9PAI20x4OQnd4Qlya00P9467Bx3CFBRuOMX9bUYAa9ffIbaH8smcpPmGRj93tRyo9EtFAByyFSnm/JyNcFVlsEutQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vOCXD-0000EM-NF; Wed, 26 Nov 2025 11:14:03 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vOCXD-002aE2-1H;
+	Wed, 26 Nov 2025 11:14:03 +0100
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 25E614A88C9;
+	Wed, 26 Nov 2025 10:14:03 +0000 (UTC)
+Date: Wed, 26 Nov 2025 11:14:02 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>
+Subject: Re: [canxl v7 12/17] can: calc_bittiming: get rid of the incorrect
+ "nominal" word
+Message-ID: <20251126-smoky-masked-salmon-a7880c-mkl@pengutronix.de>
+References: <20251125123859.3924-1-socketcan@hartkopp.net>
+ <20251125123859.3924-13-socketcan@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126085718.50808-1-ssranevjti@gmail.com>
-In-Reply-To: <20251126085718.50808-1-ssranevjti@gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Wed, 26 Nov 2025 01:03:50 -0800
-X-Gm-Features: AWmQ_bmE9KDgoqH9fUKEjaUj9BjCwLFusadkTUuVGXRtTtcEL0ewy5b2wK6n-kg
-Message-ID: <CANn89iKRYHaYS_wC0CzxsFD6pCHv126xKDbVgozBKvZyK-j7Yw@mail.gmail.com>
-Subject: Re: [PATCH v3] net/sched: em_canid: fix uninit-value in em_canid_match
-To: ssrane_b23@ee.vjti.ac.in
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>, 
-	Jiri Pirko <jiri@resnulli.us>, "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Rostislav Lisovy <lisovy@gmail.com>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
-	linux-kernel-mentees@lists.linux.dev, david.hunter.linux@gmail.com, 
-	khalid@kernel.org, syzbot+5d8269a1e099279152bc@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kn67tzx5mvvswdo3"
+Content-Disposition: inline
+In-Reply-To: <20251125123859.3924-13-socketcan@hartkopp.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+
+--kn67tzx5mvvswdo3
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [canxl v7 12/17] can: calc_bittiming: get rid of the incorrect
+ "nominal" word
+MIME-Version: 1.0
 
-On Wed, Nov 26, 2025 at 12:57=E2=80=AFAM <ssrane_b23@ee.vjti.ac.in> wrote:
+On 25.11.2025 13:38:54, Oliver Hartkopp wrote:
+> From: Vincent Mailhol <mailhol@kernel.org>
 >
-> From: Shaurya Rane <ssrane_b23@ee.vjti.ac.in>
+> The functions can_update_sample_point() and can_calc_bittiming() are
+> generic and meant to be used for both the nominal and the data
+> bittiming calculation.
 >
-> Use pskb_may_pull() to ensure a complete CAN frame is present in the
-> linear data buffer before reading the CAN ID. A simple skb->len check
-> is insufficient because it only verifies the total data length but does
-> not guarantee the data is present in skb->data (it could be in
-> fragments).
+> However, those functions use terminologies such as "bitrate nominal"
+> or "sample point nominal". This is a leftover from when only Classical
+> CAN was supported and now became incorrect.
 >
-> pskb_may_pull() both validates the length and pulls fragmented data
-> into the linear buffer if necessary, making it safe to directly
-> access skb->data.
->
-> Reported-by: syzbot+5d8269a1e099279152bc@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=3D5d8269a1e099279152bc
-> Fixes: f057bbb6f9ed ("net: em_canid: Ematch rule to match CAN frames acco=
-rding to their identifiers")
-> Signed-off-by: Shaurya Rane <ssrane_b23@ee.vjti.ac.in>
-> ---
-> v3: Use CAN_MTU to validate a complete CAN frame is present
-> v2: Use pskb_may_pull() instead of skb->len check to properly
->     handle fragmented skbs
-> ---
->  net/sched/em_canid.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/net/sched/em_canid.c b/net/sched/em_canid.c
-> index 5337bc462755..2d27f91d8441 100644
-> --- a/net/sched/em_canid.c
-> +++ b/net/sched/em_canid.c
-> @@ -99,6 +99,9 @@ static int em_canid_match(struct sk_buff *skb, struct t=
-cf_ematch *m,
->         int i;
->         const struct can_filter *lp;
->
-> +       if (!pskb_may_pull(skb, CAN_MTU))
-> +               return 0;
-> +
->         can_id =3D em_canid_get_id(skb);
->
->         if (can_id & CAN_EFF_FLAG) {
+> Remove or replace any occurrences of the word "nominal" with something
+> more accurate.
 
-For your next netdev patches, please read
-Documentation/process/maintainer-netdev.rst
+I've replaced "nominal" by "reference" as discussed with Vincent in
+https://lore.kernel.org/all/20251112-remarkable-puzzling-fox-3b3202-mkl@pen=
+gutronix.de/
 
-Resending after review
-~~~~~~~~~~~~~~~~~~~~~~
+I'll send a v8.
 
-Allow at least 24 hours to pass between postings. This will ensure reviewer=
-s
-from all geographical locations have a chance to chime in. Do not wait
-too long (weeks) between postings either as it will make it harder for revi=
-ewers
-to recall all the context.
+regards,
+Marc
 
-Thank you.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--kn67tzx5mvvswdo3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmkm0ucACgkQDHRl3/mQ
+kZy0vwf+KCMzocBR1AaDY8VQINJXnskpPYdwLHWU5pLSC1fJPdsp6mDhyX15MKtJ
+/EjTAc0xn0dIupPAITl2ulGJUPNjK8/RUj3ebYS0xdqo3ZqbJnksQ66QrRuHI4IQ
+dv0K230gszmqAlLKfKRvyecrp1ujU+AgW1trTGY0DNkRxvS3AX+iYJFc6MmMue8R
+kqct5BPVz2MtemHWunTuqZqssKrwzxhTpL6q60br8qnF0RjCZSu566FFlMBi/Fpx
+m+/LFPCNmYwYYNspHX8dwlxsYYoi3kmqWbWc11y+JRzQHgtC4K14suRDnnSJRMNa
+92VZ2USzTmrA5BqPtL8ZOAlatNHlwg==
+=x5+R
+-----END PGP SIGNATURE-----
+
+--kn67tzx5mvvswdo3--
 
