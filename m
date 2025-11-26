@@ -1,31 +1,31 @@
-Return-Path: <linux-can+bounces-5680-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5678-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31104C89390
-	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 11:17:14 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1436EC89384
+	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 11:17:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F6823B52A1
-	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 10:17:08 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8C3E635003E
+	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 10:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037012DF137;
-	Wed, 26 Nov 2025 10:17:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BFD22FB997;
+	Wed, 26 Nov 2025 10:17:02 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1AF32BEC41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343CE218845
 	for <linux-can@vger.kernel.org>; Wed, 26 Nov 2025 10:17:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764152222; cv=none; b=GlChAs6jbD1oB7SsuJvxkL+FaTqEk8aZZp3b5lG1hu67uvlWCUFBmx327EfeJdTpB2YKlTVpvYySHmVzdFeM2nfgty5DecGw0xyK6llc6Pb8NTha+XoBD8+bfpo6bvjLMWYCRjdCRGoAxeHyYXBApBXSPm1rsGjbWsl5m3u3lBI=
+	t=1764152222; cv=none; b=NkZaBNDtmxtlQKOAMpvFdcdKBQvwt+63tAoW0KHBy3a7ixzqnzqrNiZSUKYy1AL0+j8uT/XU12aWYcVPYvshwBbJ12jU8qi0JtugGWj0mLORYCND7cS84nlyYUoJSOXKE5ZdVavUok0Co6O/QA8FR9KnGduOjU9f5TJyzCZ5wpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1764152222; c=relaxed/simple;
-	bh=W884lVKQwWsf/tja4shHUArOad+EqepbzgqQ3lgcujc=;
+	bh=MudyV2+Az6NVUbd0rFJJ79+x63NERXYJcrD/ldU2anA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GThZqyC5N5uw1dNl4rdN53mn9F8dHmeuODW4oFkkvGEkd1qw0pXTpDT7WpSjfx4Rl71OwT3IUkBmcrE09rYg95NrN+Q/MXUwdH8iFtYZLCnWDezDUK32IGim77b/P0q0nT1jPcf7JTz3sy8wma5G4RsDW7NyxrPRmLPDoGu2bys=
+	 In-Reply-To:To:Cc; b=SHTjw7JvFJEpW+qsBW2LucPo0mWaKSYjVSns5pD8fYhZxLxiUV6e6KdbaZ538NodvfWUygtdRX8XgLUWmnyoL6cqqBgGq6vdd9qQMwKgNUyPTi783EszhnGszRucF8PNh96vLNgbirfgly3P0Ler0+6bWyEDHPbb8Zy0ewt3jao=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,24 +33,24 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1vOCZv-0000Qi-7Y; Wed, 26 Nov 2025 11:16:51 +0100
+	id 1vOCZv-0000Qj-85; Wed, 26 Nov 2025 11:16:51 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1vOCZu-002aSc-36;
-	Wed, 26 Nov 2025 11:16:50 +0100
+	id 1vOCZv-002aSd-01;
+	Wed, 26 Nov 2025 11:16:51 +0100
 Received: from hardanger.blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id AD5094A88D4;
+	by smtp.blackshift.org (Postfix) with ESMTPSA id B60BD4A88D5;
 	Wed, 26 Nov 2025 10:16:50 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-Date: Wed, 26 Nov 2025 11:16:04 +0100
-Subject: [PATCH can-next v8 03/17] can: dev: can_dev_dropped_skb: drop CAN
- FD skbs if FD is off
+Date: Wed, 26 Nov 2025 11:16:05 +0100
+Subject: [PATCH can-next v8 04/17] can: netlink: add
+ CAN_CTRLMODE_RESTRICTED
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -59,7 +59,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251126-canxl-v8-3-e7e3eb74f889@pengutronix.de>
+Message-Id: <20251126-canxl-v8-4-e7e3eb74f889@pengutronix.de>
 References: <20251126-canxl-v8-0-e7e3eb74f889@pengutronix.de>
 In-Reply-To: <20251126-canxl-v8-0-e7e3eb74f889@pengutronix.de>
 To: Marc Kleine-Budde <mkl@pengutronix.de>, 
@@ -69,15 +69,15 @@ Cc: kernel@pengutronix.de, linux-can@vger.kernel.org,
  linux-kernel@vger.kernel.org, 
  =?utf-8?q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>
 X-Mailer: b4 0.15-dev-a6db3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2077; i=mkl@pengutronix.de;
- h=from:subject:message-id; bh=rf6FlRWB6bK0fuKEFXr+UILKSuqKX6sPqVaAFGkTCss=;
- b=owEBbQGS/pANAwAKAQx0Zd/5kJGcAcsmYgBpJtN3n3PPLyAE+5JOXvX72EyjXcSURlFssV+WA
- i4T9sXWbYiJATMEAAEKAB0WIQSf+wzYr2eoX/wVbPMMdGXf+ZCRnAUCaSbTdwAKCRAMdGXf+ZCR
- nEJQB/4/TmLaglNqLvK0JyAqFnlkXGL+PcR+4F5hn42Uf+Y2wJyOz4n6+slJrBX1DALbmlarHoi
- lbcHdjxQcsr1AbhAVsyhfMCESd5MZmUEEXHjKr4MahNlYqGMaJ987w7AaxvUNILkhFTC7dXNSp6
- 42ebz1Lu1CBW1QMRmqRc1LoD6AjzAzM27TvYeCxdZatvHk5Rjuu3YEfDTkr7AV7XsUPUH7u9eg9
- RdMbV2/GH/+tKKjOmIRKqDl+efbIgRAE53lkDdrAhzWuUveDrsbnWirgxIQyCI8wS41Vdq1Ponj
- 0DmEr5324WemwWGLQ+zVEsV3mMhnlholrq9+9qkljQM8+wSg
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5361; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=vv6La5M2jV8ebLvbWsVz47qHm5ZFMKT4yraL+I9/B4o=;
+ b=owEBbAGT/pANAwAKAQx0Zd/5kJGcAcsmYgBpJtN5vlHQdCoZLKWUzHP/d9o6+AHk9+3c2UnmO
+ 3CoyzMLPE+JATIEAAEKAB0WIQSf+wzYr2eoX/wVbPMMdGXf+ZCRnAUCaSbTeQAKCRAMdGXf+ZCR
+ nIGAB/UbDw91mU3jusTyWgEFXXOTFggA5ZBUPj2rIM7LYHuLHXXWghTumiHoP3AgrjqrvrLfcs5
+ V7KCXRJQSmJEjIA+g48MVyLWMccbUkvjQdl0e2YebbsSG7STVUasH12mRqXyjaJgemwa6GXK6fa
+ 0FirW9dPeKtKKESWnxdqrkjlOql7alYpmg8XBeGEwtKX/18fOUQufn7gV+pKPvC/ym06T4CvTg6
+ kA+TKSWCTeNZU7Abt/dvSGx5yXNsZgYoOLcoig5s9HBIhf7Z5UCQIHBcmrOWKrjtGdWJo7Vk413
+ PZYm36oZFSCKLZ4ufolDmIt8oT6UDARlYQiScgJHQkcxn80=
 X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
  fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -87,67 +87,147 @@ X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 From: Vincent Mailhol <mailhol@kernel.org>
 
-Currently, the CAN FD skb validation logic is based on the MTU: the
-interface is deemed FD capable if and only if its MTU is greater or
-equal to CANFD_MTU.
+ISO 11898-1:2024 adds a new restricted operation mode. This mode is
+added as a mandatory feature for nodes which support CAN XL and is
+retrofitted as optional for legacy nodes (i.e. the ones which only
+support Classical CAN and CAN FD).
 
-This logic is showing its limit with the introduction of CAN XL. For
-example, consider the two scenarios below:
+The restricted operation mode is nearly the same as the listen only
+mode: the node can not send data frames or remote frames and can not
+send dominant bits if an error occurs. The only exception is that the
+node shall still send the acknowledgment bit. A second niche exception
+is that the node may still send a data frame containing a time
+reference message if the node is a primary time provider, but because
+the time provider feature is not yet implemented in the kernel, this
+second exception is not relevant to us at the moment.
 
-  1. An interface configured with CAN FD on and CAN XL on
+Add the CAN_CTRLMODE_RESTRICTED control mode flag and update the
+can_dev_dropped_skb() helper function accordingly.
 
-  2. An interface configured with CAN FD off and CAN XL on
-
-In those two scenarios, the interfaces would have the same MTU:
-
-  CANXL_MTU
-
-making it impossible to differentiate which one has CAN FD turned on
-and which one has it off.
-
-Because of the limitation, the only non-UAPI-breaking workaround is to
-do the check at the device level using the can_priv->ctrlmode flags.
-Unfortunately, the virtual interfaces (vcan, vxcan), which do not have
-a can_priv, are left behind.
-
-Add a check on the CAN_CTRLMODE_FD flag in can_dev_dropped_skb() and
-drop FD frames whenever the feature is turned off.
+Finally, bail out if both CAN_CTRLMODE_LISTENONLY and
+CAN_CTRLMODE_RESTRICTED are provided.
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- include/linux/can/dev.h | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/net/can/dev/dev.c        |  2 ++
+ drivers/net/can/dev/netlink.c    |  7 ++++++
+ include/linux/can/dev.h          | 50 +++++++++++++++++++++-------------------
+ include/uapi/linux/can/netlink.h |  1 +
+ 4 files changed, 36 insertions(+), 24 deletions(-)
 
+diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+index b392483e4499..b6980d32e5b4 100644
+--- a/drivers/net/can/dev/dev.c
++++ b/drivers/net/can/dev/dev.c
+@@ -115,6 +115,8 @@ const char *can_get_ctrlmode_str(u32 ctrlmode)
+ 		return "TDC-AUTO";
+ 	case CAN_CTRLMODE_TDC_MANUAL:
+ 		return "TDC-MANUAL";
++	case CAN_CTRLMODE_RESTRICTED:
++		return "RESTRICTED";
+ 	default:
+ 		return "<unknown>";
+ 	}
+diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+index 6f83b87d54fc..87e731527dd7 100644
+--- a/drivers/net/can/dev/netlink.c
++++ b/drivers/net/can/dev/netlink.c
+@@ -188,6 +188,13 @@ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+ 		struct can_ctrlmode *cm = nla_data(data[IFLA_CAN_CTRLMODE]);
+ 
+ 		flags = cm->flags & cm->mask;
++
++		if ((flags & CAN_CTRLMODE_LISTENONLY) &&
++		    (flags & CAN_CTRLMODE_RESTRICTED)) {
++			NL_SET_ERR_MSG(extack,
++				       "LISTEN-ONLY and RESTRICTED modes are mutually exclusive");
++			return -EOPNOTSUPP;
++		}
+ 	}
+ 
+ 	err = can_validate_bittiming(data, extack, IFLA_CAN_BITTIMING);
 diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index bd7410b5d8a6..a7a39a6101d9 100644
+index a7a39a6101d9..ab11c0e9111b 100644
 --- a/include/linux/can/dev.h
 +++ b/include/linux/can/dev.h
-@@ -103,12 +103,20 @@ static inline bool can_dev_dropped_skb(struct net_device *dev, struct sk_buff *s
- 	if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
- 		netdev_info_once(dev,
- 				 "interface in listen only mode, dropping skb\n");
--		kfree_skb(skb);
--		dev->stats.tx_dropped++;
--		return true;
+@@ -95,30 +95,6 @@ static inline bool can_is_canxl_dev_mtu(unsigned int mtu)
+ 	return (mtu >= CANXL_MIN_MTU && mtu <= CANXL_MAX_MTU);
+ }
+ 
+-/* drop skb if it does not contain a valid CAN frame for sending */
+-static inline bool can_dev_dropped_skb(struct net_device *dev, struct sk_buff *skb)
+-{
+-	struct can_priv *priv = netdev_priv(dev);
+-
+-	if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
+-		netdev_info_once(dev,
+-				 "interface in listen only mode, dropping skb\n");
+-		goto invalid_skb;
+-	}
+-
+-	if (!(priv->ctrlmode & CAN_CTRLMODE_FD) && can_is_canfd_skb(skb)) {
+-		netdev_info_once(dev, "CAN FD is disabled, dropping skb\n");
+-		goto invalid_skb;
+-	}
+-
+-	return can_dropped_invalid_skb(dev, skb);
+-
+-invalid_skb:
+-	kfree_skb(skb);
+-	dev->stats.tx_dropped++;
+-	return true;
+-}
+-
+ void can_setup(struct net_device *dev);
+ 
+ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+@@ -154,6 +130,32 @@ void can_bus_off(struct net_device *dev);
+ const char *can_get_state_str(const enum can_state state);
+ const char *can_get_ctrlmode_str(u32 ctrlmode);
+ 
++/* drop skb if it does not contain a valid CAN frame for sending */
++static inline bool can_dev_dropped_skb(struct net_device *dev, struct sk_buff *skb)
++{
++	struct can_priv *priv = netdev_priv(dev);
++	u32 silent_mode = priv->ctrlmode & (CAN_CTRLMODE_LISTENONLY |
++					    CAN_CTRLMODE_RESTRICTED);
++
++	if (silent_mode) {
++		netdev_info_once(dev, "interface in %s mode, dropping skb\n",
++				 can_get_ctrlmode_str(silent_mode));
 +		goto invalid_skb;
 +	}
 +
 +	if (!(priv->ctrlmode & CAN_CTRLMODE_FD) && can_is_canfd_skb(skb)) {
 +		netdev_info_once(dev, "CAN FD is disabled, dropping skb\n");
 +		goto invalid_skb;
- 	}
- 
- 	return can_dropped_invalid_skb(dev, skb);
++	}
++
++	return can_dropped_invalid_skb(dev, skb);
 +
 +invalid_skb:
 +	kfree_skb(skb);
 +	dev->stats.tx_dropped++;
 +	return true;
- }
++}
++
+ void can_state_get_by_berr_counter(const struct net_device *dev,
+ 				   const struct can_berr_counter *bec,
+ 				   enum can_state *tx_state,
+diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
+index ef62f56eaaef..fafd1cce4798 100644
+--- a/include/uapi/linux/can/netlink.h
++++ b/include/uapi/linux/can/netlink.h
+@@ -103,6 +103,7 @@ struct can_ctrlmode {
+ #define CAN_CTRLMODE_CC_LEN8_DLC	0x100	/* Classic CAN DLC option */
+ #define CAN_CTRLMODE_TDC_AUTO		0x200	/* FD transceiver automatically calculates TDCV */
+ #define CAN_CTRLMODE_TDC_MANUAL		0x400	/* FD TDCV is manually set up by user */
++#define CAN_CTRLMODE_RESTRICTED		0x800	/* Restricted operation mode */
  
- void can_setup(struct net_device *dev);
+ /*
+  * CAN device statistics
 
 -- 
 2.51.0
