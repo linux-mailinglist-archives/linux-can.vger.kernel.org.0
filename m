@@ -1,99 +1,94 @@
-Return-Path: <linux-can+bounces-5743-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5744-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CA18C8ACA8
-	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 17:00:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEDCEC8ACAC
+	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 17:00:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 161213B7189
-	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 15:59:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 260863B725A
+	for <lists+linux-can@lfdr.de>; Wed, 26 Nov 2025 15:59:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D4B333C1BA;
-	Wed, 26 Nov 2025 15:59:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1945733C508;
+	Wed, 26 Nov 2025 15:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="faU8sh3L"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgNzWl2I"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372E23043C6
-	for <linux-can@vger.kernel.org>; Wed, 26 Nov 2025 15:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B4433BBCB
+	for <linux-can@vger.kernel.org>; Wed, 26 Nov 2025 15:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764172758; cv=none; b=KyJE2pfrqlPImI2NY1LbZ7BNgRIKBO3dqCJxZlwFRcFTPwg+ZrDhINqgArcnqIvUjrPBWj6plLZvrytXfmd8VR205AcXoEQPgntki1Qvvzhy6im5lnKqn/V1B3Krd3ZllQZ6h0WARCfIvef00aqmO8ulOOzKc5DpWwW11r+y2hI=
+	t=1764172760; cv=none; b=UL1PyZJh7pxxGTzfO+JQ2aPrRYiGVMTw9y9/AzBxsDdUnHyknXmOJcGSLnuzLILDIVhopuDCrmpIZh4KWDGPNcO/HPJe5xac4m/cm3x1TO1oI9rQzcVyk+MytRm1lEqbv8J+mGeM63uFWhn80QbvZClahwRs2wC2mQFF9ESkiTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764172758; c=relaxed/simple;
-	bh=sBUk2K+LyWxsZ50kZXqzevdzeTfhAWsRwpcwQmtD5xA=;
+	s=arc-20240116; t=1764172760; c=relaxed/simple;
+	bh=ydjOpRaxNg7YwCkCtWQyF8hCOLVtl98EpZSQZcqLxvQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L9PxQcKj5RiXGCaEIVpBBZreaioFrsj/tx+VXOQx+lIWQI85GRkEjHVEDeknM7jd0b+VMGtX48fNhK8pKre1qBCEEb6qbe62I1x71AkGcTJDLwhxAkL8dfhFgNMR3vIo585kB+bDaLokxh6RV5umg2IuNj3b4EBv9OQdE29bxoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=faU8sh3L; arc=none smtp.client-ip=209.85.221.41
+	 MIME-Version; b=dM1DXhUvFAkau708IbI38n4/v6zeg4ayYA+Pw04bP1WIqOIQ0DVOB0smiU/QBuRVkS4owpm8Vw0G3+4p9Nk7vyUJhe/p3nHT4EXk49IGKdK4EedatryiPB0EwBRQLOcLuXDMDueMDfAAt9fZxZzRW2N9Kl8iNChFYdGG/A4rvZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OgNzWl2I; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42bb288c219so5848956f8f.1
-        for <linux-can@vger.kernel.org>; Wed, 26 Nov 2025 07:59:15 -0800 (PST)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-477a2ab455fso73607335e9.3
+        for <linux-can@vger.kernel.org>; Wed, 26 Nov 2025 07:59:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764172754; x=1764777554; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764172755; x=1764777555; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fxqp4M5X4tgd8J3YZl7+OJdfIMx5GV6b0qSx7EidnZM=;
-        b=faU8sh3LrH0MVhS5dDYQWjGIDqG4B7cZa3R/tAywZnuMbLIJc57FELzUgJNaEQv75o
-         sz9tTghyeAtDy4qxjOjCq0uFIBdfg5A9k5skQCtz3pUt8NKzxZY7xFbO+iyv8AdryvXS
-         gwC1WIr9h56rXzjq45oPZ+4+3QgFIBON24IbSs9yxMpqtbHH5YkHYhbtql1YxkBDZwIy
-         4Bn51naBafwtY/FO2+ROHgCkrOqb+2VeEplV8rIG3UUIIQ43QcCDnflde+v86eqYV5Wj
-         F2TfYSZ4cGL2s4trZKBDxz4flqq4mB/V3Cu88i/JhRPftIuOfYM/3gk8cZ7bL3L5yEVU
-         UuRQ==
+        bh=l5fvguYl1zizKX5NssUxSVoIdbxzR3UiqnQ1nTNgMuk=;
+        b=OgNzWl2IIZ1ZVOK7VKWsj2mrkmqMgrLr6NfCUDhgjcbIC8eIgCw84dNRjbgNk3D/yN
+         30KoONBjYg6nEdik6Yg9qVqnwxtkhUaDq9zGysleCTVqDaQh/tjYZfWhv5DCB5My4tEh
+         1E76qEGk84U5Fh3rSiau38jcu4lE0daZ5RlktuSaPhPbPIfYYfwz6ZTsaAQb4otIJtAV
+         V5dpqKSuOtZkyqVtV9Nfef/WHVADAmaK2iRftgDc3nbC6571onix35Nd10M8aQw5dk7x
+         FjiOnxVG+F23gLh2qayQtXirw9K1Mpl8zv98nqA0ScceC5Zl5eOd0HzSHXD8ZhZGJMcA
+         4fOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764172754; x=1764777554;
+        d=1e100.net; s=20230601; t=1764172755; x=1764777555;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=fxqp4M5X4tgd8J3YZl7+OJdfIMx5GV6b0qSx7EidnZM=;
-        b=tDGFu01TH7WHgQrxBIVh5N5YFh56rwoiCpxdjluz7MyBA9bIqMsgfjBK8qSqDJifVy
-         5IE/UgwmT6HMVfJYRi8Mb/qhgH8r8MEO3e8RSLWbCPu+8CgS7TAjBlucAZuUNK/JAquo
-         YWwMmj9VWifCAp3GZu4Eu1Ip0NUQmxf0p2E0zyNxdwENtvB8IKBNUEpQF1Bs3m8eO5Ih
-         3LILMECNdGTnHzgRQw8KwIRvzLIrUMcGGeWEkiZlUjiSAfjgaPqUquHrT6YwmZawTpzT
-         j5Mh5sI4LaOBm0QVT43XCSa41Ae/gDRuYndzwwlyPzbIyoD+ZA7AfVy9j8zO+ifgewAq
-         GYEg==
-X-Forwarded-Encrypted: i=1; AJvYcCWK2GPp7cPrXGty2NuscP4Vxqt04Jw2Pm2NpLpava55+kO212bTC2VGLoVPA0KWw7W5rOvEI9KeBYU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVIHY1C5XHu11GbuaABRfMf3jXmUlVC5hFklpmwQNQwN2DVTd1
-	zZC6GLhQwRxj8HYeuNCsLHeEkaAKtFdmY8na3+hqlyuMhVQ41rnkujY9
-X-Gm-Gg: ASbGncudCmjVawjjF9hcBCkjXsS+8Ju0GYQd9oqLdv0e3DfUSTsnHf/Nsj11xZTaljL
-	VIeUKfPJJ1/nQuW5eMWxO7zxJ3LXj3wAaMjf2l0NAzq5k9xb8Tc4M3L100osHIboX42dP4E8idz
-	BvTOjcFacJUJKYN6R1S84ht+MtjbdB0CkMQWcaG0S+en3o2XszymCNPtnz9omV6jsd7wIbRNXVM
-	WvukShinoIT0hJHpokN1y6Pp54C4odwXjrd7bl3kXRweDX6pafEP91Ik7tgPn00+zdSxjyy3+4N
-	BaelHna7u0hCfqCRxWch3F2k7Cq4W/SiY+/IwJ63yCPx5JwyGLs8aMFUaqjAweql0m7g0SoEEum
-	EtSbQCagT96iRwQyd3vM3FYlT6lY9W878IOs6IDpUY70WNbybaAxe+gOiRISkmpepkGeobBxGMv
-	TSvmB7JKrRjJwnZbr9YqL1PtVtQyrTS0fpkBCBFnHHdShCV0u1kwbaRNS2JGpimylZtaW5Srw=
-X-Google-Smtp-Source: AGHT+IGsHAyvJKxk7IgZs6cADiBilbwV9eEwOI5jq20QUYAnEsvLcBpBixq8p6RYLJIqdLmoTspabg==
-X-Received: by 2002:a05:6000:2410:b0:42b:396e:2817 with SMTP id ffacd0b85a97d-42cc1d199cdmr20649023f8f.40.1764172754101;
+        bh=l5fvguYl1zizKX5NssUxSVoIdbxzR3UiqnQ1nTNgMuk=;
+        b=nB70/QOC5xDKYKgOI90RQMJ09M9FhCBFskFbOiDeerM1Lj23/IYExtS25a+wfA0hGj
+         cZfx5zEsJAy0uWGJJZed36Hj1w+icvycyZGy3u/dalSBwuvK+WFN7wXj+sUgK2RaqhoV
+         A0BJHdMkxLSHyx96yklJls34nHomNLpmAMs4KT9LkXqgug5ULlSxS36gR6/9szsn3Q/1
+         b7GQVJlyYyTG7elSbwSccdkFBepJerVm+zYbBB1pWbeLyA/t5k8B/zH/EaXqhaEgGEoX
+         KjFezEKRmok72BL96a80jzyGhjfJxPg/9MMMMOR86VUYRezfjAo3UAioRCo1XsqJ0H9R
+         3THg==
+X-Forwarded-Encrypted: i=1; AJvYcCVvByr4BdssCDlV2joXQUqTnP/OoiBpR7D35CFeDHlZ9+ejlTEagaU+NdLYK1J8vNHKTVrstJz9bmY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAbAlPS02EzHjf1RxVKK2DfvuBfM5G6RonVkfBpuE8k9EPb6El
+	vCJGYJJ6UeGNT9DsOh4Mqf+HqU6hXmN06642WydS+F+m6o6JyZvkk5Op
+X-Gm-Gg: ASbGncs2tWrfRBNOECZfx+V5TslzN9zEQa+hAt0MkoI09SLAupJk2r3qKrV1dB6k446
+	ijdpg/MTDhHd/IPPsCs2r9vHGxASnuU1v23Os8KxCKl7IluLMcdk4knRQvB3mj9W5wN8TJHwgSH
+	YF+pTAQxpmEupDKoxVGi4VA5fg07YhY9kEMpBa2AcJJIFBVPSPgdPQfxJoqjEibu0cmJhKi5z9I
+	E4F+rUM3MyhZmdBzvt7z1pjki1H9iQvk1WQvJiMxgdYOj0c5gLkUswvbSEUiJtgv8Amgn5/LmXr
+	QODzrOouliPwwpYghQJB/7KDNZ+HtH8Y3EDcnNr7dhTPouakiVkAjWCM8/fgSfVZRPYW32Mcc3U
+	rU/MWnNmKZe3Hw0VDL9dLstsADF2ULLL2HkJRC8YYrdoP1dfxmDvLWsbWgb60MHisxUPA1BtcYn
+	gl05Pv2lVTz2VpKamzfOeRNT2UtTOwugQwQIeDaPZRfozpVYBQWamzUc/e48k1y220MA6Ln28=
+X-Google-Smtp-Source: AGHT+IGyt3DEYJ79rUQUGpCk+m0qe0BU3xv0UEECi0UxrG2a3LOAONqj/7nbU56S+XYd/VMVJgekrw==
+X-Received: by 2002:a05:600c:46cd:b0:475:dc5c:3a89 with SMTP id 5b1f17b1804b1-477c1136b7fmr186322025e9.34.1764172754641;
         Wed, 26 Nov 2025 07:59:14 -0800 (PST)
 Received: from biju.lan (host86-162-200-138.range86-162.btcentralplus.com. [86.162.200.138])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cbd764dbesm38197188f8f.27.2025.11.26.07.59.13
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cbd764dbesm38197188f8f.27.2025.11.26.07.59.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 07:59:13 -0800 (PST)
+        Wed, 26 Nov 2025 07:59:14 -0800 (PST)
 From: Biju <biju.das.au@gmail.com>
 X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	Vincent Mailhol <mailhol@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Magnus Damm <magnus.damm@gmail.com>
 Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	linux-can@vger.kernel.org,
-	devicetree@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v4 1/2] dt-bindings: can: renesas,rcar-canfd: Document renesas,fd-only property
-Date: Wed, 26 Nov 2025 15:59:06 +0000
-Message-ID: <20251126155911.320563-2-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v4 2/2] can: rcar_canfd: Add support for FD-Only mode
+Date: Wed, 26 Nov 2025 15:59:07 +0000
+Message-ID: <20251126155911.320563-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251126155911.320563-1-biju.das.jz@bp.renesas.com>
 References: <20251126155911.320563-1-biju.das.jz@bp.renesas.com>
@@ -107,80 +102,75 @@ Content-Transfer-Encoding: 8bit
 
 From: Biju Das <biju.das.jz@bp.renesas.com>
 
-The CANFD on RZ/{G2L,G3E} and R-Car Gen4 support 3 modes FD-Only mode,
-Classical CAN mode and CAN-FD mode. In FD-Only mode, communication in
-Classical CAN frame format is disabled. Document renesas,fd-only to handle
-this mode. As these SoCs support 3 modes, update the description of
-renesas,no-can-fd property and disallow it for R-Car Gen3.
+The RZ/{G2L,G3E} and R-Car Gen4 SoCs support additional CAN FD mode called
+FD-only mode. In this mode, communication in Classical CAN frame format is
+disabled.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v3->v4:
- * Dropped the node added in example for just testing.
+ * No change.
 v2->v3:
- * Added check to disallow the usage of both fd-only and no-can-fd.
+ * No change.
 v1->v2:
- * Added conditional check to disallow fd-only mode for R-Car Gen3.
+ * Dropped has_fd_only_mode variable from the struct rcar_canfd_hw_info
+   as it is checked by the dt schema validation.
 ---
- .../bindings/net/can/renesas,rcar-canfd.yaml  | 38 +++++++++++++++++--
- 1 file changed, 35 insertions(+), 3 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-index f4ac21c68427..e129bdceef84 100644
---- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-+++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-@@ -125,9 +125,17 @@ properties:
-   renesas,no-can-fd:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description:
--      The controller can operate in either CAN FD only mode (default) or
--      Classical CAN only mode.  The mode is global to all channels.
--      Specify this property to put the controller in Classical CAN only mode.
-+      The controller can operate in either CAN-FD mode (default) or FD-Only
-+      mode (RZ/{G2L,G3E} and R-Car Gen4) or Classical CAN mode. Specify this
-+      property to put the controller in Classical CAN mode.
-+
-+  renesas,fd-only:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      The CANFD on RZ/{G2L,G3E} and R-Car Gen4 SoCs support 3 modes FD-Only
-+      mode, Classical CAN mode and CAN-FD mode (default). In FD-Only mode,
-+      communication in Classical CAN frame format is disabled. Specify this
-+      property to put the controller in FD-Only mode.
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index 7895e1fdea1c..4a653d8978ba 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -472,6 +472,7 @@ struct rcar_canfd_global {
+ 	unsigned long channels_mask;	/* Enabled channels mask */
+ 	bool extclk;			/* CANFD or Ext clock */
+ 	bool fdmode;			/* CAN FD or Classical CAN only mode */
++	bool fd_only_mode;		/* FD-Only mode for CAN-FD */
+ 	struct reset_control *rstc1;
+ 	struct reset_control *rstc2;
+ 	const struct rcar_canfd_hw_info *info;
+@@ -829,12 +830,20 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
+ 							 RCANFD_GEN4_FDCFG_FDOE);
+ 				rcar_canfd_set_bit_reg(&gpriv->fcbase[ch].cfdcfg,
+ 						       RCANFD_GEN4_FDCFG_CLOE);
++			} else if (gpriv->fd_only_mode) {
++				rcar_canfd_clear_bit_reg(&gpriv->fcbase[ch].cfdcfg,
++							 RCANFD_GEN4_FDCFG_CLOE);
++				rcar_canfd_set_bit_reg(&gpriv->fcbase[ch].cfdcfg,
++						       RCANFD_GEN4_FDCFG_FDOE);
+ 			} else {
+ 				rcar_canfd_clear_bit_reg(&gpriv->fcbase[ch].cfdcfg,
+ 							 RCANFD_GEN4_FDCFG_FDOE);
+ 				rcar_canfd_clear_bit_reg(&gpriv->fcbase[ch].cfdcfg,
+ 							 RCANFD_GEN4_FDCFG_CLOE);
+ 			}
++		} else if (gpriv->fd_only_mode) {
++			rcar_canfd_set_bit_reg(&gpriv->fcbase[ch].cfdcfg,
++					       RCANFD_GEN4_FDCFG_FDOE);
+ 		}
+ 	}
  
-   assigned-clocks:
-     description:
-@@ -267,6 +275,30 @@ allOf:
-       patternProperties:
-         "^channel[6-7]$": false
+@@ -2140,6 +2149,9 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 	gpriv->fdmode = fdmode;
+ 	gpriv->info = info;
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,rcar-gen3-canfd
-+    then:
-+      properties:
-+        renesas,fd-only: false
++	if (of_property_read_bool(dev->of_node, "renesas,fd-only"))
++		gpriv->fd_only_mode = true; /* FD-Only mode for CAN-FD */
 +
-+  - if:
-+      required:
-+        - renesas,no-can-fd
-+    then:
-+      properties:
-+        renesas,fd-only: false
-+
-+  - if:
-+      required:
-+        - renesas,fd-only
-+    then:
-+      properties:
-+        renesas,no-can-fd: false
-+
- unevaluatedProperties: false
+ 	gpriv->rstc1 = devm_reset_control_get_optional_exclusive(dev, "rstp_n");
+ 	if (IS_ERR(gpriv->rstc1))
+ 		return dev_err_probe(dev, PTR_ERR(gpriv->rstc1),
+@@ -2239,7 +2251,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, gpriv);
+ 	dev_info(dev, "global operational state (%s clk, %s mode)\n",
+ 		 gpriv->extclk ? "ext" : "canfd",
+-		 gpriv->fdmode ? "fd" : "classical");
++		 gpriv->fdmode ? (gpriv->fd_only_mode ? "fd-only" : "fd") : "classical");
+ 	return 0;
  
- examples:
+ fail_channel:
 -- 
 2.43.0
 
