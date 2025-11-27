@@ -1,110 +1,86 @@
-Return-Path: <linux-can+bounces-5747-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5748-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17AE3C8CC72
-	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 05:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EF2FC8D1FC
+	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 08:34:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B6B1134D737
-	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 04:01:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0926F3432D0
+	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 07:34:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77FF529ACDD;
-	Thu, 27 Nov 2025 04:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B6831A553;
+	Thu, 27 Nov 2025 07:34:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KBAJJbsE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q+WudnWX"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5A31E9B22;
-	Thu, 27 Nov 2025 04:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E72C2318120;
+	Thu, 27 Nov 2025 07:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764216059; cv=none; b=KdMWe3n+iDeg9ml/4faEVPQFxpdCn7DpNXwG80Y1VZNVA60KWSIm8UvQktk9cNvCHs9Errn5v6il0/pwfidLbgCZFEf+Q7714BGg2pZ+DlSM4u0fN/9PFBgVTuoV4Fj2vNezuolG8EztQhjelTWPGQRPY5I8HTL4rjjooVQvj/Q=
+	t=1764228874; cv=none; b=vFBwQrR8c7MHQuRi9IdXXSo51EZC8gFzxrvPzQLKK0K3EnOWDH1W45as2amrRRgRtDHG/L+zRLIf8pRCZV3BJgPotryUBD9eoAKxDKOnOhjiOkXa22JF378o59XZLVcK2ivwdmCMzPvUyNyoVgmlPE577iKSMhhdInzlMLtEC4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764216059; c=relaxed/simple;
-	bh=pTrVoHNCoqlghXKp0rth5p2LvoOyvpfZTGzC0j7v+Io=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ckDVo0blVVd8Eh+4yVJ4/28XEw7y/20qMgB9gtwoQtyCzR8bUzNvl8IBYkTZIpE4dwxVPMHUUgHFQJbOtw2n5kTI0YdudO0Hef2Y8asCr/tiujXnh48KaI757svOZCB+G5JooQ7l28e4WutmVCYmyYE1gw11ffEN39iy4RWCPa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KBAJJbsE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB7EDC4CEF8;
-	Thu, 27 Nov 2025 04:00:58 +0000 (UTC)
+	s=arc-20240116; t=1764228874; c=relaxed/simple;
+	bh=Ga+FJCbC00Akhz3GHnbVsaNaqYZYDlsC+n1uas0CBr0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LYM//GX6TuHkZkaYcdzrJP8PMNu/yC3PGzCltTmwwTtb1bxcjAnZ8q8rVthgd8hNv272Be1LYM5IN54t96iNySVIYJNnNFSXPeDMcIFWVAbi1Ktqn5aZ+06kbVLCPzKyV1MwkY+rPe/wzH/QbCY5eT/T1X8fuTnF1mPIcnWXJyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q+WudnWX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB266C4CEF8;
+	Thu, 27 Nov 2025 07:34:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764216058;
-	bh=pTrVoHNCoqlghXKp0rth5p2LvoOyvpfZTGzC0j7v+Io=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=KBAJJbsESum0Zvtf2U4wNCfQdJQBmfvU+4HyNzAwljAunVcv17DQnRmNb7N08LUJB
-	 9nChuzK7GinpX0Quwi7PVR0sC0NR233VYjp8JmxADUXlUyuYzXV7Y8gE316DJ3decK
-	 Par9sGP2EFclMam8AA5f6bCf1XCTRiLNkX5QhuhclSPIUg3TTCV0K9cGjLlZFSmS7t
-	 qGAZWfBr1bZ/vPdp9dpQgVC/Db1EyY5E37Jh4tU1eV++PjfDio7nx4Lu+jlSwaibxQ
-	 SowmGWhxI021fe4E1Ev16tphu9g0VN8zt4W0cdX4awM0MkG2D9HvvpZfmWtdjTSEz1
-	 RSlpwg33w4HLA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE39380CEF8;
-	Thu, 27 Nov 2025 04:00:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1764228872;
+	bh=Ga+FJCbC00Akhz3GHnbVsaNaqYZYDlsC+n1uas0CBr0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q+WudnWXCAUiy4Q76XSwvHwSXKDlADqUmdKROPXmfj7NlBptdJwzSPVMxUs/cGEAT
+	 qECTfmDoWy8+IST7Fs+x1fHL3vwsVQTPOI4JWItBax7mf7yqBru5926Uhh468Dwaay
+	 9OJRS9ocDPR278GEUiy2kOdY/TybSkQDK/c/ucvFmsllN1hITJ5kl0gCHLKMLfw2XF
+	 MhJWtNIIvi1t4CGyQ2aOA6aAVDgRFXiFf+nTWYySmwS+lQnFRnHgxtDCmA8fXkYHmc
+	 WYbphBphy2/nVwBDsyRPW4WhvPvqFUqCRkrCbGcZaJJc0IsZIrOabnZrFISFvbinKm
+	 lArmUNNccMm2w==
+Date: Thu, 27 Nov 2025 08:34:30 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Biju <biju.das.au@gmail.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	linux-can@vger.kernel.org, devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: can: renesas,rcar-canfd: Document
+ renesas,fd-only property
+Message-ID: <20251127-imported-colorful-wren-dfd4d5@kuoka>
+References: <20251126155911.320563-1-biju.das.jz@bp.renesas.com>
+ <20251126155911.320563-2-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/8] can: kvaser_usb: leaf: Fix potential infinite
- loop in
- command parsers
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176421602051.2412149.15004873997876598906.git-patchwork-notify@kernel.org>
-Date: Thu, 27 Nov 2025 04:00:20 +0000
-References: <20251126155713.217105-2-mkl@pengutronix.de>
-In-Reply-To: <20251126155713.217105-2-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de, eeodqql09@gmail.com,
- extja@kvaser.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251126155911.320563-2-biju.das.jz@bp.renesas.com>
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
-
-On Wed, 26 Nov 2025 16:41:11 +0100 you wrote:
-> From: Seungjin Bae <eeodqql09@gmail.com>
+On Wed, Nov 26, 2025 at 03:59:06PM +0000, Biju wrote:
+> From: Biju Das <biju.das.jz@bp.renesas.com>
 > 
-> The `kvaser_usb_leaf_wait_cmd()` and `kvaser_usb_leaf_read_bulk_callback`
-> functions contain logic to zero-length commands. These commands are used
-> to align data to the USB endpoint's wMaxPacketSize boundary.
+> The CANFD on RZ/{G2L,G3E} and R-Car Gen4 support 3 modes FD-Only mode,
+> Classical CAN mode and CAN-FD mode. In FD-Only mode, communication in
+> Classical CAN frame format is disabled. Document renesas,fd-only to handle
+> this mode. As these SoCs support 3 modes, update the description of
+> renesas,no-can-fd property and disallow it for R-Car Gen3.
 > 
-> The driver attempts to skip these placeholders by aligning the buffer
-> position `pos` to the next packet boundary using `round_up()` function.
-> 
-> [...]
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
 
-Here is the summary with links:
-  - [net,1/8] can: kvaser_usb: leaf: Fix potential infinite loop in command parsers
-    https://git.kernel.org/netdev/net/c/0c73772cd2b8
-  - [net,2/8] can: sja1000: fix max irq loop handling
-    https://git.kernel.org/netdev/net/c/30db4451c7f6
-  - [net,3/8] can: gs_usb: gs_usb_xmit_callback(): fix handling of failed transmitted URBs
-    https://git.kernel.org/netdev/net/c/516a0cd1c03f
-  - [net,4/8] can: gs_usb: gs_usb_receive_bulk_callback(): check actual_length before accessing header
-    https://git.kernel.org/netdev/net/c/6fe9f3279f7d
-  - [net,5/8] can: gs_usb: gs_usb_receive_bulk_callback(): check actual_length before accessing data
-    https://git.kernel.org/netdev/net/c/395d988f9386
-  - [net,6/8] can: sun4i_can: sun4i_can_interrupt(): fix max irq loop handling
-    https://git.kernel.org/netdev/net/c/76544beea7cf
-  - [net,7/8] can: rcar_canfd: Fix CAN-FD mode as default
-    https://git.kernel.org/netdev/net/c/6d849ff57372
-  - [net,8/8] net/sched: em_canid: fix uninit-value in em_canid_match
-    https://git.kernel.org/netdev/net/c/0c922106d7a5
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Best regards,
+Krzysztof
 
 
