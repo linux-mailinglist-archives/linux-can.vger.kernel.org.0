@@ -1,117 +1,144 @@
-Return-Path: <linux-can+bounces-5758-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5759-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21233C904DD
-	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 23:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68973C9051B
+	for <lists+linux-can@lfdr.de>; Fri, 28 Nov 2025 00:04:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A48EF3A8746
-	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 22:43:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F11AB3AAC87
+	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 23:04:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 514433254B2;
-	Thu, 27 Nov 2025 22:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C69B2FE05F;
+	Thu, 27 Nov 2025 23:04:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="RPoRKEoK";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Ficm2aUs"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278802C158D
-	for <linux-can@vger.kernel.org>; Thu, 27 Nov 2025 22:43:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764283420; cv=none; b=gFLRV0hAKpEWb01Kc6BNXKElkFQFDJIYDuyFazT3nt/JrEYqPQaugqnF+lWEfJZwTUZyZ0DoTOD9VYJ1QCLnfZg7HWb0Bv6q4VcBVdbPboAUnUoo1gXFqsKQ0cIraCgOL3pQ9tZQnqz/6XfOcp28y384njSjww8BdAGXIW4Bd5c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764283420; c=relaxed/simple;
-	bh=PjxhVKOUp8R55MRbCsak0DY4y/bys1LtPrrpAtI4SEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WnGcYsTQ+V/TtEmIT7L+pMdtXY+LyZPU8D8kJ3jpxHMMk9EdW7KWJK6x3Q9ZV2HR4r/ATwJdgcGYRYpQi8JFRty3Ib01bkk+BZIhXvUIvA3O2hdqtLi7zVmLJyetpexrMhjIPoF6UeayALXL1beM7zbEDWHEOpvdgl5UuvFnsLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vOki3-0007mp-K9; Thu, 27 Nov 2025 23:43:31 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vOki3-002rKv-03;
-	Thu, 27 Nov 2025 23:43:31 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:2260:2009::])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 69F334A9E0D;
-	Thu, 27 Nov 2025 22:43:30 +0000 (UTC)
-Date: Thu, 27 Nov 2025 23:43:29 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net, 
-	kuba@kernel.org, kernel@pengutronix.de, Vincent Mailhol <mailhol@kernel.org>
-Subject: Re: [net-next] can: raw: fix build without CONFIG_CAN_DEV
-Message-ID: <20251127-hypnotic-platinum-snake-041707-mkl@pengutronix.de>
-References: <20251127210710.25800-1-socketcan@hartkopp.net>
- <20251127-inquisitive-vegan-boobook-abac0e-mkl@pengutronix.de>
- <f3393f50-02a8-4076-9129-6e8a1b8356f2@hartkopp.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871DB2BE630;
+	Thu, 27 Nov 2025 23:04:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764284658; cv=pass; b=PnqnbVmQkbzVs0AqIFYMtWlVkFy1Xo+ufXOxVz01csphjhCXHOLDbDIjk/X95LT+swMK1ZRGLWP6h/pwMm3rgjqgunw3Ysz+dbj8BG8u6cau4+fvv6+olFMywzg4nkJTrT1DKb0OZOxQF3U9mInsiMKQcrGdpBJiqEy/wTbB+UA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764284658; c=relaxed/simple;
+	bh=C2p6qOebRpgTDw06fgGq6TMQSoBDCcB73rqcZe+fnMQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r84jR5NDMdewavSmhSZqQDH63W5Sig3uV1EvA1ZKOw2dCPEJGl0SJBM7xC7mpZbdZLwPWDsiDBxNO9ASkTCN4q9t+ge9JIeWdkx1ECAhpAWGdiDRJO82A68Ka4o14GkZRKBEE7Qoj6gsn1gG1J4w3rHL1542vNgfaBEPzWi18as=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=RPoRKEoK; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Ficm2aUs; arc=pass smtp.client-ip=81.169.146.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1764284633; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=dRyIm3bx048Q2Lt8NtKiNfKFYdP4qm7ToJ8MCajJWlkWSRDmJG66lFNR/ZS/eaFzbn
+    RpXUZxPV3LUa5QtHv/vpNeu6GaINBecFvsCV/UUBBwsLddVG2H0o5MoPPTydtFgPizyf
+    hWwk4NJORAJw/QkCqGYj7GRdMFgEsdB9bPWIsOfPQLmZ//RTU86S0bXfxFrFIS602yKp
+    q8mz/YRgAfkxeU2c3oMeEHzm++omVdeMMvEI4kaBhe3HMJfaFAMxhrap2KNxqvgAXDXE
+    EZLMgipwtCSMyLZ2jqciFVrBu3Cll7u34YeRwndSys51yPNAzwfSmyiOUqMqVGpu6Wyy
+    BFBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1764284633;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=AecRqHznbtlc5GuSqFfuKz0yT4OMKTlkV8Ilc3sLOWY=;
+    b=ihZ34opnUNuGrlPseCQ7RQuNnuSZ23aqUgeU+AhLpEo3dd69WzMRo/FloxV1tYUQsN
+    WqChUSrAHVnEWkP8Wa7nAnVH6xm2XUMIfnvqaADeeDZPEP+BtCa0atJw59syzMELhhIH
+    V86cO5qHP6jBbUbX/hxmZQ8dW4YhVK7+kc8U5xeuTp1vSkeiiLq8dXrTuk+jDqCwJXfe
+    1+t0woSbH26L2rl66ubaHdfqBWHy25E3GeTC0azV6YR0JBpAX7ErCi0/abTeebaInXm+
+    E3bAYKfMJTLIvPvPqS7/1Feo8DDhOp0StAud8v4FOIJe4NcigjS5cFfFfbEEJQqVn857
+    hIJQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1764284633;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=AecRqHznbtlc5GuSqFfuKz0yT4OMKTlkV8Ilc3sLOWY=;
+    b=RPoRKEoKJVORwUt9bpmWj8mi3Dy6L2D/v5fdLc+QjVoXxs5k/6H7f/Nvvgga/ZKbLK
+    vE+DCVmS71VGhWCp8GVRC4RX6nZREc5ogbfD30/tMqx4EoFPbPTD6gmT1Ko+BF+GVTF2
+    Zc0ZcLblHq4bIJKhTpJUbDlVZSvidA8eaYE/4tqft+zyWaVX6Q6ZVQK3YrPrlKM2yKts
+    CkfTU4JXULatCfbCsGuOsBPbZSXpDcbuMM3DHLvEOaiQ8uXFOxpTLWtcJJEiQwVt9XIU
+    bzAQuTyFj3iRHNDskkAd2Wosd1why2qeIH0e0bRlbCDPZ6CxcuHaDnbjFYtZeJdVVF2i
+    m4jQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1764284633;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=AecRqHznbtlc5GuSqFfuKz0yT4OMKTlkV8Ilc3sLOWY=;
+    b=Ficm2aUsT4x4RU+IN+1zv1IzsABP5LuX4KhgqMZf861Chq6nfb0LgzdobtTqdpQXWd
+    DpIj/yypo5Su1p8vYVBg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
+    by smtp.strato.de (RZmta 54.0.0 AUTH)
+    with ESMTPSA id Ke2b461ARN3rdLO
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Fri, 28 Nov 2025 00:03:53 +0100 (CET)
+Message-ID: <7e2f6939-2528-41c8-aa55-6631ca0b936c@hartkopp.net>
+Date: Fri, 28 Nov 2025 00:03:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dwxvbnk54ez3jwoq"
-Content-Disposition: inline
-In-Reply-To: <f3393f50-02a8-4076-9129-6e8a1b8356f2@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---dwxvbnk54ez3jwoq
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
 Subject: Re: [net-next] can: raw: fix build without CONFIG_CAN_DEV
-MIME-Version: 1.0
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
+ kuba@kernel.org, kernel@pengutronix.de, Vincent Mailhol <mailhol@kernel.org>
+References: <20251127210710.25800-1-socketcan@hartkopp.net>
+ <20251127-inquisitive-vegan-boobook-abac0e-mkl@pengutronix.de>
+ <f3393f50-02a8-4076-9129-6e8a1b8356f2@hartkopp.net>
+ <20251127-hypnotic-platinum-snake-041707-mkl@pengutronix.de>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20251127-hypnotic-platinum-snake-041707-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 27.11.2025 23:35:48, Oliver Hartkopp wrote:
-> > That's not sufficient. We can build the CAN_DEV as a module but compile
-> > CAN_RAW into the kernel.
+Hello Marc,
 
-> Oh, yes that's better.
+On 27.11.25 23:43, Marc Kleine-Budde wrote:
+> On 27.11.2025 23:35:48, Oliver Hartkopp wrote:
+>>> That's not sufficient. We can build the CAN_DEV as a module but compile
+>>> CAN_RAW into the kernel.
+> 
+>> Oh, yes that's better.
+> 
+> It's nicer, but it will not work if you build CAN_RAW into the kernel
+> and CAN_DEV as a module....Let me think of the right kconfig magic to
+> workaround this...
 
-It's nicer, but it will not work if you build CAN_RAW into the kernel
-and CAN_DEV as a module....Let me think of the right kconfig magic to
-workaround this...
+No need for it IMO.
 
-Marc
+I built my kernel with the CAN netlayer stuff into the kernel and 
+disabled the CAN_DEV stuff.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+As you defined
 
---dwxvbnk54ez3jwoq
-Content-Type: application/pgp-signature; name="signature.asc"
+static inline struct can_priv *safe_candev_priv(struct net_device *dev) {
+	return NULL;
+}
 
------BEGIN PGP SIGNATURE-----
+in
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmko1A0ACgkQDHRl3/mQ
-kZzZKQgAj34ZnwkWHuOxB0XvDIfP6S8Mn1sqJ+Kw+f+fZINI2jtMjri09qrC+KXH
-JyZ66Edw9SpB9l93Ga9le+xsIUJpysYKusEZdW3SQTdJ2Ss8YYH1ESGwuxeShWLe
-hhGwo3/Spk4NOZsYbBzHk1TpBBFOLN1AfTzxZ8DW6elaQkBcqOO8W/vc9s6g2Ff5
-LSbFNfozz9+r2zXoDIuBbkDE/NhJwFdkG2i5c7a2wA2byG/CYXYUTnnTnvakoLaw
-/xWPItrtkyq/xeji4WuGVSqpI4Hhc1Wynt3BlDjS8AzW0HQSmLcajGS4+CzBov/J
-8CCKroFpxFf2iYJW4+NdJZF327zvyw==
-=oY23
------END PGP SIGNATURE-----
+include/linux/can/dev.h
 
---dwxvbnk54ez3jwoq--
+this function is now inside raw.c which compiles excellent.
+
+Building without CONFIG_CAN_DEV is not a valid use-case anyway.
+
+It would only make sense, if someone wants to create an out-of-tree CAN 
+driver without netlink ...
+
+Best regards,
+Oliver
+
 
