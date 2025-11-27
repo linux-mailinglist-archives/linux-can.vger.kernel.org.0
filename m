@@ -1,207 +1,160 @@
-Return-Path: <linux-can+bounces-5756-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5757-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 352FBC904C8
-	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 23:33:00 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22DF8C904CE
+	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 23:36:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C18623AAB03
-	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 22:32:58 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C1F014E3366
+	for <lists+linux-can@lfdr.de>; Thu, 27 Nov 2025 22:36:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7412D2264CF;
-	Thu, 27 Nov 2025 22:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6501131771B;
+	Thu, 27 Nov 2025 22:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="c064vL0G";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="DcJFnJkp"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="o0nzz5NX";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="+MiMqUEV"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878F62AD37;
-	Thu, 27 Nov 2025 22:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9746730DECA;
+	Thu, 27 Nov 2025 22:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.167
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764282776; cv=pass; b=evl26T7MTJffyG5HX1xoH7tPn05P0IRDpQdRT1qGI/tL62EuxSDyVtLOu/mV4EOoXyzrrloivwW7imTUbQrV2AW/h08iuUx+Hq3/+FcyX0bIp3ZEHY18KihuIGwfIHqiAxgrK9gGLICS7XqjJTFVTqKBuz11sXaKaJLLTRFiwt0=
+	t=1764282978; cv=pass; b=XyGGaO67mRGr+zxvebc06bhhEzSQxT9pkYU6ENEB6uWfRzll4jLBxhG6D90ytbrVYyGmyx5nJxcmWEhlioYhZvhaIMjHscdYVWcDVgLWYdvq+jeC36jwdctp59MmraJ4r+YRnFok2jUWz5nwHEx3iN+e4QjrfgRvKoV1SCmrDO0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764282776; c=relaxed/simple;
-	bh=Fq33HfNND6G1xxJXqjOm5at2w4I4Ie6isCNy8BB0R74=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tLp5reuWCmXYwyuqhMGb8fVz29DIn8l4a5SEOFTTKWKK5Mw53+xPkD09F6DQfeh8EgPugValTtzpyHunXuG8UIljuBHKNHPzKzRejFJJzluYmLoIk3ZEYeAgJGV+rwWlxjRHEAcbLJLqCES3VYjaXEvCDPtgqI8dhp27tlJHSbM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=c064vL0G; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=DcJFnJkp; arc=pass smtp.client-ip=85.215.255.51
+	s=arc-20240116; t=1764282978; c=relaxed/simple;
+	bh=u6mJN2vjdct+Bs6RnxMQNlulsQMLJcsDOD9vRrxNFUg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T7a7STGO2Tlbi2opgXTWMqR11GmFYb5ybRbpbVoDKoiAzG7aWIGRqi+rVaEHZee+uMtMfnxnxbQ9CLLfKiAqNFXUUU47YwQI6nEOmqSWAIh9/m4h8uD/4v97uxM8+1ZitE1cuNVcUISo5q5/XHH+HGE5RePyXEFSsCGsnwLiLDY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=o0nzz5NX; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=+MiMqUEV; arc=pass smtp.client-ip=81.169.146.167
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1764282756; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1764282954; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=QOkl1VxvSNMS72DK+qx/hnxhCERavGRB0rti+lfAImuVRKBOBfPbBo1FgBXXsaca8p
-    4zg2Ur/4kRMelC9mmo+khHvY+bZ0VxCWYFfzT7yEHaBbfYx7QALVJ4bbPj3Ve8o36eNh
-    +cLERjy+7bZkelV1u+yPbiHgCFQhnyPamK5/Z2WFDHtaFv5ceXEzAX1vYFvlwisc1+9w
-    Uhe1KBE4TSndlugI4mD5RpT/aKvu1XuN5P7y4XyfH5qMXRuY/tNbNGXAhr8Hyr8FuKot
-    F/X9IMCi6PvIb60ilUCN0rGotPMEhGIkDYpVoV6uLCbJ7ixEA0CiDw99reabHn/gKmlS
-    FnhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1764282756;
+    b=fPpuMGqAtIUwBdunNeFqVDnZam/eaBEknZg4DO7xlyLT4uA74nK19BYA/mXsC6UBiM
+    0OzlgooEc0l9AaNHoTNcTzjKzmsiTccH0uOwqVUBmXKUmCdHt93SvHBHQ2OgXizUbX3m
+    Iop5xu3vGb+TS/2iCzZZEkn6cpD1LVekLljkred0GT+odGzVUbv6uVlkR4/+PdETW2j1
+    XLXGRkYqqUXN4wVXD0DTKDtMOyR4BVgRmtsiJEKs8gRXDqSIXk1zGW4M4IdBWWVHKYbX
+    fnNXXZUbbMV8LHkMTxsAuUJRCjVnBlMZxCJ+vXhPQdt/0TDtMNlE8IQmyLaHkZ+C5CnE
+    ssFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1764282954;
     s=strato-dkim-0002; d=strato.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=r1AiexZ+ipNQk9X6+TfKeVlGKEbFrXMA4XPpeRseuH8=;
-    b=BbO1+dsOXmT/H2f9nKiM9OPKeCPqBuIdI8tuOvdwFiKLoLH4HSFRCfYEX8zJcYhkZl
-    isnwJtvbkMgy4IInmpzLnfw+uFfHsE1Xr6FTDYHbL2UiwztL9b2RvYEPBTKlIunosa6F
-    +baIjM07ItKtDOkstEJinSg91kVnAZm7RaA86oJQxGW93lpD9lfaPsnvBfk8WRpw1/A7
-    rlO1tIausBunXKUWSEQjkuCiP9aF+CTM32DvIQ3yUVu1/uTTlbWzIZg+3V8GzBoApS3Z
-    0sli4cYlqdwq8zMxDNMT314hr92xZNzxS41TWRUSi0Z6+o/Ktl4b0d+mMaOlcpsQKvfC
-    RBQQ==
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=d/2qhAn7ChobYccm13YIzYEeCkPvjItIpj3cWZ3sdc8=;
+    b=Sls7dCrmmAyHNvx11SWrQvdi2M1Fl8KwBMVEbyRy6f9+yycY2r21Wx4x03/oDEX3tc
+    kR+EdByeHKEfjzFrzDiJOCBt7iNIavnJR+P3L0wWVLkoymNMMv7Uw4Ek3PKGTJRg76gi
+    hlBr/HcGfIDf1l6LFQHgZ6fPnp3hj7aWIThejFbvlePhg6P6bJ7jKbHOVzGtF/QnyWRL
+    6zVnE0WGh58mTwU3aH5UCsEgx2sZnPGjlWkGdp4lYgnrTfouh00HSEcjOY+7FcRX5raw
+    WCQNSSAu1riZzNzaIdk7ZM6jlhxvUwKhMNqiOclcri+kptwNW99HfcVWIpQ4o8C2i/UI
+    gY5w==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1764282756;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1764282954;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=r1AiexZ+ipNQk9X6+TfKeVlGKEbFrXMA4XPpeRseuH8=;
-    b=c064vL0GSM0eSQgSbEYF9qfOCY4wgtYFuJY0bejReJwCz2ZogE3uibo8mUihOWf2Bf
-    Bsmhshn53QHV9xVibP04afQ2eqdJAiYVP279yGmVt9GPAbXFs1GyX+pEJ8RPcNI+JUjI
-    TlsrT5z7acPAIi1m/HBWEbMgZ1xsB9Fbm2oUXAinMP1oBQkvHkmp9V7cNnll6RYgQlaO
-    A4rlpuyGA1EvFqBK28b45Qn33q4eyaQo0HLCc/gasaxRdFrRTP3POtpM06Ou5ZH01LvA
-    Cy7lQTdv2c+72aU1StW5Y9skOosC6Q6RFD4JznA/KhTiZWwX0etuJY25PDtn+aYGzvha
-    t5vQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1764282756;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=d/2qhAn7ChobYccm13YIzYEeCkPvjItIpj3cWZ3sdc8=;
+    b=o0nzz5NXjkPiCZT2gTcf0O8mcu8QJhU83gmrrj2avkgS/Eh8q7ICK4jgEUYmIAZDq5
+    UCEC0yB3e8RsYiHXcyuWwLwsNTv5iJMGiuIBDwP/lvavFmbBN1FQCiC3wm6FaHK6qBgm
+    /FBazA6LdTd6Y6dr/C6r1KUG6KenK1GqkK1vRx9bXX46JU5IC5/HGMH90lpijUrpGXOW
+    pRc876Jn+7zz6Bvd3znaJqP30B9DhTFWFrGqkxn6WRwTci9Cu9I97hsaoiFnGdjI5kYS
+    S3+48VzvS6BgvfcvilmyXLm0YD8EsXgDsOFy9scbOwD2xJXSnm9+av+AdqE+k2JsADR1
+    g9aQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1764282954;
     s=strato-dkim-0003; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=r1AiexZ+ipNQk9X6+TfKeVlGKEbFrXMA4XPpeRseuH8=;
-    b=DcJFnJkpwTTO4MNpaDbs4JMbceLp/V+8fziTwwx2WYPfuDCXV1l93OEie8uqoceEIW
-    Fwrw8JLLsniMI+6dAgBg==
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=d/2qhAn7ChobYccm13YIzYEeCkPvjItIpj3cWZ3sdc8=;
+    b=+MiMqUEVHNwHJVgxUJFMfxULpM3t1X+aWECtzbJGvD6C/1HW/AEMyVI/e66zYDJHJV
+    fPAw7BfFR8qxPGPPp6AA==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from lenov17.lan
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
     by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id Ke2b461ARMWZdHv
+    with ESMTPSA id Ke2b461ARMZsdI8
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Thu, 27 Nov 2025 23:32:35 +0100 (CET)
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	kernel@pengutronix.de,
-	mkl@pengutronix.de,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Vincent Mailhol <mailhol@kernel.org>
-Subject: [net-next v2] can: raw: fix build without CONFIG_CAN_DEV
-Date: Thu, 27 Nov 2025 23:32:26 +0100
-Message-ID: <20251127223226.59150-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.47.3
+    Thu, 27 Nov 2025 23:35:54 +0100 (CET)
+Message-ID: <f3393f50-02a8-4076-9129-6e8a1b8356f2@hartkopp.net>
+Date: Thu, 27 Nov 2025 23:35:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [net-next] can: raw: fix build without CONFIG_CAN_DEV
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
+ kuba@kernel.org, kernel@pengutronix.de, Vincent Mailhol <mailhol@kernel.org>
+References: <20251127210710.25800-1-socketcan@hartkopp.net>
+ <20251127-inquisitive-vegan-boobook-abac0e-mkl@pengutronix.de>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20251127-inquisitive-vegan-boobook-abac0e-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The feature to instantly reject unsupported CAN frames makes use of CAN
-netdevice specific flags which are only accessible when the CAN device
-driver infrastructure is built.
 
-Therefore check for CONFIG_CAN_DEV and fall back to MTU testing when the
-CAN device driver infrastructure is absent.
 
-Fixes: 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
-Reported-by: Vincent Mailhol <mailhol@kernel.org>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
+On 27.11.25 23:22, Marc Kleine-Budde wrote:
+> On 27.11.2025 22:07:10, Oliver Hartkopp wrote:
+>> The feature to instantly reject unsupported CAN frames makes use of CAN
+>> netdevice specific flags which are only accessible when the CAN device
+>> driver infrastructure is built.
+>>
+>> Therefore check for CONFIG_CAN_DEV and fall back to MTU testing when the
+>> CAN device driver infrastructure is absent.
+>>
+>> Fixes: 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
+>> Reported-by: Vincent Mailhol <mailhol@kernel.org>
+>> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> 
+> That's not sufficient. We can build the CAN_DEV as a module but compile
+> CAN_RAW into the kernel.
 
-v2: use #if IS_ENABLED(CONFIG_CAN_DEV) instead of #ifdev CONFIG_CAN_DEV
+Oh, yes that's better.
 
----
- net/can/raw.c | 32 ++++++++++++++++++--------------
- 1 file changed, 18 insertions(+), 14 deletions(-)
+I had a fight with CONFIG_CAN_DEV with my first patch too.
+That's why I sent a v2 some seconds ago.
 
-diff --git a/net/can/raw.c b/net/can/raw.c
-index 223630f0f9e9..ccd93d3a6115 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -890,62 +890,66 @@ static void raw_put_canxl_vcid(struct raw_sock *ro, struct sk_buff *skb)
- 		cxl->prio &= CANXL_PRIO_MASK;
- 		cxl->prio |= ro->tx_vcid_shifted;
- 	}
- }
- 
--static inline bool raw_dev_cc_enabled(struct net_device *dev,
--				      struct can_priv *priv)
-+static bool raw_dev_cc_enabled(struct net_device *dev)
- {
-+#if IS_ENABLED(CONFIG_CAN_DEV)
-+	struct can_priv *priv = safe_candev_priv(dev);
-+
- 	/* The CANXL-only mode disables error-signalling on the CAN bus
- 	 * which is needed to send CAN CC/FD frames
- 	 */
- 	if (priv)
- 		return !can_dev_in_xl_only_mode(priv);
--
-+#endif
- 	/* virtual CAN interfaces always support CAN CC */
- 	return true;
- }
- 
--static inline bool raw_dev_fd_enabled(struct net_device *dev,
--				      struct can_priv *priv)
-+static bool raw_dev_fd_enabled(struct net_device *dev)
- {
-+#if IS_ENABLED(CONFIG_CAN_DEV)
-+	struct can_priv *priv = safe_candev_priv(dev);
-+
- 	/* check FD ctrlmode on real CAN interfaces */
- 	if (priv)
- 		return (priv->ctrlmode & CAN_CTRLMODE_FD);
--
-+#endif
- 	/* check MTU for virtual CAN FD interfaces */
- 	return (READ_ONCE(dev->mtu) >= CANFD_MTU);
- }
- 
--static inline bool raw_dev_xl_enabled(struct net_device *dev,
--				      struct can_priv *priv)
-+static bool raw_dev_xl_enabled(struct net_device *dev)
- {
-+#if IS_ENABLED(CONFIG_CAN_DEV)
-+	struct can_priv *priv = safe_candev_priv(dev);
-+
- 	/* check XL ctrlmode on real CAN interfaces */
- 	if (priv)
- 		return (priv->ctrlmode & CAN_CTRLMODE_XL);
--
-+#endif
- 	/* check MTU for virtual CAN XL interfaces */
- 	return can_is_canxl_dev_mtu(READ_ONCE(dev->mtu));
- }
- 
- static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb,
- 				      struct net_device *dev)
- {
--	struct can_priv *priv = safe_candev_priv(dev);
--
- 	/* Classical CAN */
--	if (can_is_can_skb(skb) && raw_dev_cc_enabled(dev, priv))
-+	if (can_is_can_skb(skb) && raw_dev_cc_enabled(dev))
- 		return CAN_MTU;
- 
- 	/* CAN FD */
- 	if (ro->fd_frames && can_is_canfd_skb(skb) &&
--	    raw_dev_fd_enabled(dev, priv))
-+	    raw_dev_fd_enabled(dev))
- 		return CANFD_MTU;
- 
- 	/* CAN XL */
- 	if (ro->xl_frames && can_is_canxl_skb(skb) &&
--	    raw_dev_xl_enabled(dev, priv))
-+	    raw_dev_xl_enabled(dev))
- 		return CANXL_MTU;
- 
- 	return 0;
- }
- 
--- 
-2.47.3
+> 
+> This patch does the same as your's but only with a single ifdef in the
+> header file.
+> 
+> diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+> index 52c8be5c160e..14d58461430e 100644
+> --- a/include/linux/can/dev.h
+> +++ b/include/linux/can/dev.h
+> @@ -111,7 +111,14 @@ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+>   void free_candev(struct net_device *dev);
+> 
+>   /* a candev safe wrapper around netdev_priv */
+> +#ifdef CONFIG_CAN_DEV
+>   struct can_priv *safe_candev_priv(struct net_device *dev);
+> +#else
+> +static inline struct can_priv *safe_candev_priv(struct net_device *dev)
+> +{
+> +        return NULL;
+> +}
+> +#endif
+
+Will send a v3 with your suggestion.
+
+Many thanks,
+Oliver
+
+> 
+>   int open_candev(struct net_device *dev);
+>   void close_candev(struct net_device *dev);
+> 
+> Marc
+> 
 
 
