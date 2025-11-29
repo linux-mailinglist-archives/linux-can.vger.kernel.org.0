@@ -1,92 +1,95 @@
-Return-Path: <linux-can+bounces-5766-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5767-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B9D6C92D48
-	for <lists+linux-can@lfdr.de>; Fri, 28 Nov 2025 18:48:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03278C93ACD
+	for <lists+linux-can@lfdr.de>; Sat, 29 Nov 2025 10:05:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59E533A92A9
-	for <lists+linux-can@lfdr.de>; Fri, 28 Nov 2025 17:48:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 965CB3A5844
+	for <lists+linux-can@lfdr.de>; Sat, 29 Nov 2025 09:05:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7383228C5D9;
-	Fri, 28 Nov 2025 17:48:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9C31E3DDB;
+	Sat, 29 Nov 2025 09:05:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NBxOAq4o"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="eI9oXloz";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="pUFSeI7e"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A0927EC7C
-	for <linux-can@vger.kernel.org>; Fri, 28 Nov 2025 17:48:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764352134; cv=none; b=mKXqoaRziqSN9EfNa/KgCyqUCILemfm7uSH3iMJ1V92TMiKjg3JMAic+ljaJ1wWt0ZB1TBsLGyR2xvZQjkPelmHLZJTIbD32I0LcUGvY9RmAlJRPo7I/vQESUXuYYBlZT+xB0v4OR7/m0uJsgrqSMCE4mJBZZaefoNWHQACENxc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764352134; c=relaxed/simple;
-	bh=PeLfNagr8bbCWo3x0R27Qo10YYvWfKbDul1cWPk2gGs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=T0U6A2RQFfPpo78heqQ5BwZVorA4OjmmqYr4IBk0BTo6K3UXMWPU3PYYvYSeLASmOL2Pdrdoxcj+uxQWFQUF6p9Tj89UmbZQfwEzZTQscUC0j+BgYouABK+K5n3v19zRnLaT48pS1K+6Qy7dNJ3i1wP70ussjm7GAPb3LpO9uE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NBxOAq4o; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7aace33b75bso2043653b3a.1
-        for <linux-can@vger.kernel.org>; Fri, 28 Nov 2025 09:48:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764352132; x=1764956932; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eQSCgy88jUFBUBQD7anBVmHOK3ox7teRQN/7h3qNsK0=;
-        b=NBxOAq4oqAUE6ZkntLnWBbFSasE5wbysubkl0EXC8mDfPoJcEIr5bbqHz5kTmGT7gS
-         sbUPLzJvbUGBXb0mxwGUm152s5bkL2Cv2f1H09utQ2GPHWBGNxdoCPANMwXLAw6H1JA9
-         zG/rxt6pbI2JCCyk5hDTOwGfb/aiIZ6dSA0AYOtX+6jGPSUijD1ZEcA+Y04aFFQuKfKg
-         W/ZYfUaVPJpWkl8O+UNOskatElgiySSfI2yMgXzcUDxSTmAIj5v18iz8h33bT4M8J4GF
-         UUsxnKNqj11St8043/OqcRUJSGfqqgW5a1Lm/HeHbl/kjkyip7otx5yTjweF0NJcZ1q5
-         ozHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764352132; x=1764956932;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=eQSCgy88jUFBUBQD7anBVmHOK3ox7teRQN/7h3qNsK0=;
-        b=lj2royJCMZltRqPSoociPHu/noXXFg2vcTbJqFwJ5DJEAEepGu0f9lSyOT3TxqPukS
-         MZa5wVZrZSpVHVPdzmo4Wnu6vJ/pTL5vkiy2/+jDF8b4kbLYjc0c79CL7RI8F9arSmB5
-         8T24GX4CBN3KhjlVb2WK1nFZanh1fv9LjOWAnP+k716/tmYcAomosdDK1l5SNdkpv0l3
-         b0Evs71jOp38+pCamZX/WEPhrtAlLx3CDKHwvrhWpAsV5ngaHj5QtePTIsXKZSG8kyVA
-         V/P6mKgjihFRmjgh0wZDWlLJ8SZY1Y8s2m3t5VmW93C6KlCDlNe0PzDHIlnVXQCgKk5W
-         cHoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUe5E+DN+fDgZg7C4PmxihWslJjoyIV6jZ8aPWBZb47oyfYjNH+kSI1aIByfBymrSxl5mHWcJYtCK4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnU/51jZc/fjnJSBiLVp6Aa04f0Lr2dI/qhsGXHGHQngKrys8s
-	Mx9lWfMaRzWzBElj6v3Ggd+Sho8Fpl8LKnpI3Y4iy6/XQiDNZzGFz/u8
-X-Gm-Gg: ASbGncs+D4vyVbVnD+YlGBXoAKd6SzjguRFb443KsAPIzeHu43e5pD3aAU0QUkOourA
-	G0dFXJIqV+qPdd4dbYdhLm9+gmyQd3zikB1bpkN2tsq1U8JTxGdYdbh9xsNJzd2WA4lMlt9KM8K
-	lPG6+rqYxdKW9JyJ5AmMaEymDBXAHSGSPLn+uOBpWrFr4I2ZXSCSUXfyYEs78JCTqm9HKMNFwbs
-	Q7hbjDo1INOvmugT5tMo8QDQsbeegjDSruLokUD68LkhXVWg0bMIsF7Kn8x4hyqNlR44mT8bJm/
-	4uGSeZhYHiPvTnb03m9Xeep2JmrDe8Tbb5IH65bwjWh+a1IFzm3Hk3BXBQ+7noiglWdzDK+WYi9
-	FppzUixIAl3EyzvZqI3Utt2zASkmU2P+efw4FtB+FLc2OoHp1C6P/XQTYR+NJt1roaU/LeQybJh
-	DVILXIgQZtcwiLbP0Aa/d3Jty0CaSZvr4YYg/HmA==
-X-Google-Smtp-Source: AGHT+IHr4vLpLy5HTyT7pP+UTHL/e+zP6PbW1p5PI91eby2Wk62TA7pldEAQpyVu3l4oFIKXasfnxg==
-X-Received: by 2002:a05:6a00:114b:b0:7a2:8529:259 with SMTP id d2e1a72fcca58-7c58c2b20d7mr28976570b3a.9.1764352132238;
-        Fri, 28 Nov 2025 09:48:52 -0800 (PST)
-Received: from localhost.localdomain ([114.79.136.226])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d150b68805sm5655155b3a.9.2025.11.28.09.48.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Nov 2025 09:48:51 -0800 (PST)
-From: Prithvi Tambewagh <activprithvi@gmail.com>
-To: mkl@pengutronix.de,
-	socketcan@hartkopp.net
-Cc: Prithvi Tambewagh <activprithvi@gmail.com>,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: Feedback on question about KMSAN: uninit-value in can_receive
-Date: Fri, 28 Nov 2025 23:18:02 +0530
-Message-Id: <20251128174802.369044-1-activprithvi@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <68bae75b.050a0220.192772.0190.GAE@google.com>
-References: 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E520C182B7;
+	Sat, 29 Nov 2025 09:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.167
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764407144; cv=pass; b=hMEIrky4o2vQu9CwHC9Lqmu+2Xn0ND+O3F2C8HnleSF9078PtSWA6LMVeWKeq4To4pKCosX6CW9E1ipiHmD17xg2gk1YF5nMYoBRhISlCV69/Rq9/Xn+xpG61BcxNPOY4S++I0igeHip7R7oQhD7ahLgImPvunOEnIyyxMSyTAo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764407144; c=relaxed/simple;
+	bh=bfMBh4mimLEPfGPDi75INKA79yyZVuJeabO1DwElFPM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ruWFw92MayRNtvoP2PkRRQMg0EfDfgU9i+hUpc12bcfvVDCijdV/OyG1WyKJtUMmrwz6raD6QPMfShPzBIbtuh4iCoPmG/vje6/wvYrSrYBoLHKvJA2yWIEFJczFEWyh08ddd+9BMeRVY+iwb3iP2pDYmdwyp21R9k8y14N9BJg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=eI9oXloz; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=pUFSeI7e; arc=pass smtp.client-ip=81.169.146.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1764407120; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=efE7kTKabNBm82ie9wqEguihMXevEEj4taeX8DYM9MtQCowfZibngzDAZ6oAnWKcWB
+    R+7AQBBLVW1fQ6SjQoV92qxLnfere6C9YqWoxuy0QxDmmqAPcx+nxvDpr/OSeBHR2XxX
+    aS41J1ZYlumyDjXfsS+UqtZmnuGwjEHboAPtwZBZsfXk47j7W40FNCT6Z5qa5JHPNjx1
+    PQr+xgilnTntGkthVDbl+t3i0aZm1EexBmyuesLMbilnS3HcSa/LwZThzs9Y3GvpHRBd
+    d0sq+P3tck9Tks9aVo4glmY1b9r3sNsdqhYiGQTAGZCsgoHB2sVF4SyGmw4KFB2WAboy
+    f5JQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1764407120;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=Ozjv4i0J+m53PPTrH8/6rc/sa1uDjmueK5DsDlPmUYY=;
+    b=f0ViQELnIkW78lblQbdeKNfVdfGimrMpJ4AClEp5COgxjgZpN9tfXUST5y04Gts2rU
+    bYiyKMgYlr4C0XTMvWRdcFrqdRtxh2lM2LRSek7y9PAt2XUu3nhiu3yrLHHa2KiWVLBW
+    7I8xhmR1Ph6aW9BQFfNzBw8onuZtleZnKenvAPU8Cy/qshEACcqa3SVwWsELlZHVnrsq
+    Kga0TFclYhvZUuB+JkexonZd/tC77mgq5OVa1edWc9cw8L1J7q0Uc961aSGhihCf3WU6
+    Ddrw+oaxijKxcYQ6uHHpFC/QTv+QQnv7ZhtPO7OSlenbpT53HwUSET8uwIWGJ5qWaG9H
+    OF5A==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1764407120;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=Ozjv4i0J+m53PPTrH8/6rc/sa1uDjmueK5DsDlPmUYY=;
+    b=eI9oXlozKQin2YljHHEQ5ZU3jSKHbG9p9voB3+b+imG7e2gw/GHT2WlBgY3hfQ8kX7
+    I/zbJULvh3gKwKdIcXtKS49+OpunQgLBNyLjswrpZWwbCeXHSOMhZ1vYAlXNhRQVgO5K
+    M2oobY2XwJH+MMA11NJ3RuhgxnRVJ/q+EuG/KpPw1JTGpDTdfu4rkGjHPAzeGa6coKDQ
+    720rH4OQu8NeUZhxTb3f5s1EYgd2Wh4m9KLv40767GObKZ6rLVluIf3qc/08aCiSv62d
+    OF06f0W0D9qw9WTO7HcqttMjyDRiYG7TOk9fBPHp8aadirjiTOhrBc492e5Tv331Vr6s
+    48gQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1764407120;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=Ozjv4i0J+m53PPTrH8/6rc/sa1uDjmueK5DsDlPmUYY=;
+    b=pUFSeI7eDzmWLsJLUWffY/2YKiWhHcd4KdHbJAlabZwZclgrHafnzWcfF0j6S79RlI
+    Q3niX1oEZTK2X6pBjPAw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from lenov17.lan
+    by smtp.strato.de (RZmta 54.0.0 AUTH)
+    with ESMTPSA id Ke2b461AT95IiQW
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sat, 29 Nov 2025 10:05:18 +0100 (CET)
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+To: linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	kernel@pengutronix.de,
+	mkl@pengutronix.de,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: [can-next v3] can: Kconfig: select CAN driver infrastructure by default
+Date: Sat, 29 Nov 2025 10:05:00 +0100
+Message-ID: <20251129090500.17484-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -94,13 +97,79 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hello,
+The CAN bus support enabled with CONFIG_CAN provides a socket-based
+access to CAN interfaces. With the introduction of the latest CAN protocol
+CAN XL additional configuration status information needs to be exposed to
+the network layer than formerly provided by standard Linux network drivers.
 
-I wanted to seek feedback about this proposed approach for solving the
-KMSAN: uninit-value in can_receive bug, can you please guide and share 
-your feedback?
+This requires the CAN driver infrastructure to be selected by default.
+As the CAN network layer can only operate on CAN interfaces anyway all
+distributions and common default configs enable at least one CAN driver.
 
-Thank you,
-Prithvi Tambewagh
+So selecting CONFIG_CAN_DEV when CONFIG_CAN is selected by the user has
+no effect on established configurations but solves potential build issues
+when CONFIG_CAN[_XXX]=y is set together with CANFIG_CAN_DEV=m
+
+Fixes: 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
+Reported-by: Vincent Mailhol <mailhol@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202511282325.uVQFRTkA-lkp@intel.com/
+Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+
+v2: In fact CONFIG_CAN_NETLINK was missing too. Reported by kernel test robot.
+v3: With the change in dev.h the compilation of the of the netlink code can be
+    avoided when only virtual CAN interfaces (vcan, vxcan) are required.
+
+---
+
+ include/linux/can/dev.h | 7 +++++++
+ net/can/Kconfig         | 1 +
+ 2 files changed, 8 insertions(+)
+
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index 13b25b0dceeb..2514a5c942e5 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -109,11 +109,18 @@ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+ #define alloc_candev_mq(sizeof_priv, echo_skb_max, count) \
+ 	alloc_candev_mqs(sizeof_priv, echo_skb_max, count, count)
+ void free_candev(struct net_device *dev);
+ 
+ /* a candev safe wrapper around netdev_priv */
++#if IS_ENABLED(CONFIG_CAN_NETLINK)
+ struct can_priv *safe_candev_priv(struct net_device *dev);
++#else
++static inline struct can_priv *safe_candev_priv(struct net_device *dev)
++{
++	return NULL;
++}
++#endif
+ 
+ int open_candev(struct net_device *dev);
+ void close_candev(struct net_device *dev);
+ void can_set_default_mtu(struct net_device *dev);
+ int __must_check can_set_static_ctrlmode(struct net_device *dev,
+diff --git a/net/can/Kconfig b/net/can/Kconfig
+index af64a6f76458..e4ccf731a24c 100644
+--- a/net/can/Kconfig
++++ b/net/can/Kconfig
+@@ -3,10 +3,11 @@
+ # Controller Area Network (CAN) network layer core configuration
+ #
+ 
+ menuconfig CAN
+ 	tristate "CAN bus subsystem support"
++	select CAN_DEV
+ 	help
+ 	  Controller Area Network (CAN) is a slow (up to 1Mbit/s) serial
+ 	  communications protocol. Development of the CAN bus started in
+ 	  1983 at Robert Bosch GmbH, and the protocol was officially
+ 	  released in 1986. The CAN bus was originally mainly for automotive,
+-- 
+2.47.3
+
 
