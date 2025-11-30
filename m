@@ -1,288 +1,236 @@
-Return-Path: <linux-can+bounces-5793-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5794-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FC3DC952E7
-	for <lists+linux-can@lfdr.de>; Sun, 30 Nov 2025 18:29:44 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C9D4C953B2
+	for <lists+linux-can@lfdr.de>; Sun, 30 Nov 2025 20:10:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0573834234A
-	for <lists+linux-can@lfdr.de>; Sun, 30 Nov 2025 17:29:44 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9EBB7342463
+	for <lists+linux-can@lfdr.de>; Sun, 30 Nov 2025 19:10:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D0128C2BF;
-	Sun, 30 Nov 2025 17:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF1A42BE65B;
+	Sun, 30 Nov 2025 19:09:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aOe11aQZ"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="OLtF7Q7a";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="kgMmZk+2"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409BD2836F
-	for <linux-can@vger.kernel.org>; Sun, 30 Nov 2025 17:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764523779; cv=none; b=T4t3F/A5PATc156mzk20vB0sxq0TrO82gz4dlV5n2J2OSTJGYwgrXypRagIM5eFxcC+1zOxHkwdL9jAKExSZCvVotHUiFobI2UWezYrSL4+LsaL3wy+r2eK1Et+WvwrNOkBCEpq3Oh9A8kviAUkVXm8V8vbgzyyygiy3nHSCbto=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764523779; c=relaxed/simple;
-	bh=Mu+DZaanwEBg4FEHkyAe6Mn64+PlLTqLU9xScAMTXNY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SNgqJi5trZ6M9ndLQlQelfViXYDAPKdc99iTx/epYAaYDXvDreC90PiTzhpLIGkaqbX/ybK7lnBPFjh3KbZrMuj5awl83EcwSsRsNaebAcZbTppFHdCr5f/41nfPV2JeZwWQmx+vhlneo1nQ0tfhwZ16dNdgznXiRYcG5XuNCb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aOe11aQZ; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-34372216275so3510550a91.2
-        for <linux-can@vger.kernel.org>; Sun, 30 Nov 2025 09:29:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764523777; x=1765128577; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vf5Y6PF0mnQ0gDxdyhdlhJnQdfMfj542mYRZWiFpENU=;
-        b=aOe11aQZkYQeFxL4I4A2kuWeWcFGaywEIirMnY1EnBfCNSYOLUMZSgozNL02Tz933T
-         HZBX0k24UUMfWcxde3Av/S+dvrMAxrhwq1bPmOaFmIYwf3udOrjSQZX4QRTU5DwHNWm6
-         zNBlIvY7lLlct9pdo4ilWlMZ553+wWIUQpCLY04HF31wFhULiBc+HsgEsYInMA1ftzsN
-         9OdoIy+PZ3ojKa+9ZXNi8ssfO6yKslC/ZhKlva+e265b9YSNhNp94MArTxA+JTMQuWKX
-         9v3WHGdPI3jvjEuOyiDW8+fL/7att5Se7udwCPVIqyBcbSwsaFulhVST5rAZ/MNCJjhC
-         lhTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764523777; x=1765128577;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vf5Y6PF0mnQ0gDxdyhdlhJnQdfMfj542mYRZWiFpENU=;
-        b=DDJoWlnB4NYiJvgXqsZdDtyD1w8smbsNwCK7xKkWjh0NLdTV4+djKohlJgL7GclACS
-         ud09OnDLp96ePI37gDLXrnqADZLUCyBBWZqARz5Sbiof3AROkf4qs0z9poP2tk2zkWBL
-         Uab/0PbY+PGBsEAPLgATtI5IZi1ftTJs2HNEgH+orIoJ4IYUR2HAqyg8F2vkxG1Qk8Py
-         KhvrokRvm2ZdWNu0Mv8EIF++yqSthSbbqi3ouTwaQwx38JeQHJbLDZsY5Jxb6j72S/Y2
-         TLUjoeEpTzdXDKXzkRVnu2AIj7iU4JyMzKbg8lMpmfvTKSrQ1KRPolDoQ3PSyWCHJACb
-         e3IA==
-X-Gm-Message-State: AOJu0Ywp4ivSJSwQ0jSq3bbSTWx29AUPn/UUZogUSqME1YhOPFZDdNWo
-	DjF2aQaUqRQ6GwbDPXcyk9DVwX9YhOEY+onx+AmoPA/hU0J8vw7YUAxd
-X-Gm-Gg: ASbGncuNAigL2iTXvmZzkxSYcb9K9oiLGB3TO6seVMTO6N3Vz0f/byEOiCbJ4HsSuLy
-	fOmaHO+fTv17gFXfdBDHeMtkwX7+rDbeEpo+Sqtpu4Y7OUdHFov0BQXrdi9e3Iqpd9ygmHkOG+S
-	lYYYWCpK8j7dHUjyKKcczF3v97fKquwFiqSFtOEtjQU/MCSfi/T+Yjt8nFO+61rfFsSB1r5PAXS
-	aVqXugY0hk1Zr4GrxXfeBJDEkCffuRt5XkiXY6V+k3kC1PquRt4+qMqkmPfTCZJ7zCPWcpJqD6q
-	Za7heFSsaJLsvF6WHdoboFVUzlRsTSPCCnoZcfpOlsPvF6iy0YvKVJfyuEdMcOHs3vRJG5ExGu9
-	Ae6wfrwMvPniIlSmKRAcP13nzqBr6WLOKR2sPynz1R0SVhw1DwCbRJM1Bkk5znEdx51vTWfIEuY
-	P3q0vYzw9nE8QfM6BNxdU6
-X-Google-Smtp-Source: AGHT+IHYodHXs9x9NXGCPLYUYzvf/eA37WxLpZ6dYfV4pmUOmeNy3dSjPJJZM8NPqCP/wRPJleggCw==
-X-Received: by 2002:a17:90b:510a:b0:340:f05a:3ec3 with SMTP id 98e67ed59e1d1-34733f5b79bmr34695562a91.33.1764523777428;
-        Sun, 30 Nov 2025 09:29:37 -0800 (PST)
-Received: from inspiron ([114.79.136.226])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d15e9c3f23sm11016850b3a.36.2025.11.30.09.29.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Nov 2025 09:29:36 -0800 (PST)
-Date: Sun, 30 Nov 2025 22:59:31 +0530
-From: Prithvi Tambewagh <activprithvi@gmail.com>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, mkl@pungutronix.de
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org
-Subject: Re: Question about to KMSAN: uninit-value in can_receive
-Message-ID: <aSx++4VrGOm8zHDb@inspiron>
-References: <20251117173012.230731-1-activprithvi@gmail.com>
- <0c98b1c4-3975-4bf5-9049-9d7f10d22a6d@hartkopp.net>
- <c2cead0a-06ed-4da4-a4e4-8498908aae3e@hartkopp.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D7B36D510;
+	Sun, 30 Nov 2025 19:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.23
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764529795; cv=pass; b=o6+UH7xL1xyZMJ/SGG5j5uKKCj8e2zFTRBBuKfC8sH5khKj/lXXWMe99wsdu2y57IhePffO3KmqTRU4sWSvfAX7RBmF002NlI6aYg7y4KndAtcRj8/AnZ8vbQki66tfHvoVR+6JbzNFtx3uuykfZjjywsGUdKyc9845kUrZtXWk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764529795; c=relaxed/simple;
+	bh=UPiA3LE5hC+O2zConxOpW9nBiWBBe92XTpcFFFD+8gU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H+swYmOdiFfRVM7wrfkDG3lg/7DVSuiL88+vBeJhLu5q7uSs519JU8bBs3iwRTTXUcQQHncT2RA4KbsRwb3f2mkFvP78k8W4ry4nhbiq5UhtuoC26xTth5GJT/Nxep/UGEK+VqHkL5VS3yBzl/2hJTzl4EuNU+1UXHhgfXAHj74=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=OLtF7Q7a; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=kgMmZk+2; arc=pass smtp.client-ip=85.215.255.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1764529789; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=ixDL2hvWIhWsizWncy/v7JLtTyzPCuLgggCUoN/efMZ04K+5hd/bfYLsiEvTuwhoVW
+    ylUB1h2ylz2L9ZTNMm3/C7PqO8NysTORISKjNrg4PVEf7F5YM2t2zu89GzS5ck/iPFgS
+    qGT25eqG3Yu0xK1YAtQFTUviOs4Syo9mG+wLsiTGW8f54IlE0czO1tdOGyn7neDbewB6
+    EWxt6Gp/bs87/iA74+eP3DIyQatb1VClkyJ35ZJUzqszRHbrOJv7XdvdRnUGCZ4JsfiA
+    UyO8Xo/WjSDKG3JqXJCEtwCFFIxD+OUMWdFq19Ih/F0hyYtBX2lAkGQbX9tq2Q18E8yh
+    7Caw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1764529789;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=H/U65BYu8VYVK/POJqt3lDI2a7KF/fLhF+u64QoDvLo=;
+    b=sB2rqDJjomM+sb92qWVDjalA2L0YHJsKqiibDBlNV1sMru1+4gP1d/t4H6DxQ8w8/b
+    9dxYgrEEE/2eSa3ZEfTacyzZVSRVh+J1vBT0OLsn7AS86z2XBjY7mGNA307rLOgd33Zp
+    DE1LfsWVsSIq7j6S9ihF0wqNNuikl4Y/4lR0jeQzm/8XlSNmCla55oTdDZp4CjhGiuN7
+    DkbUprPFx6XVItTeotzB+QdrIWBZRoL990klGdKqbAJo8mDIlDw0fZo36THwLFDkZ4ro
+    xSWVkCcQ596QohpoPFPYIZAnSkKQtCQV5vn9F6Ezit2sI2eieOTHhpBZh0kA2g1AxFmH
+    9maA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1764529789;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=H/U65BYu8VYVK/POJqt3lDI2a7KF/fLhF+u64QoDvLo=;
+    b=OLtF7Q7a61bNi32IXljB7S7kl7DmPsETgRdMBuWZ5q422S7DrpFksrCyy/bGe7Frtd
+    RQk4hPThhR4uslOKAENmHX4DtiOy+Ptd/wCqtu/BKkIQm+UTW4LewjPXSUEq7VfAajbZ
+    s721xAKrwvclNsDSjs+2DwNPnkQw6WFo862Jm97HKmbD+4BOdN5Oe0m4eD4kH/RGx4pU
+    ioC5rKXsSMgxFhpe67v2kT3XQHoSy0ZeyCSEt+R+4eOlFS8nOIIH57u9/CqR0/ZFeh7O
+    dclor7mmKIsA4QnQvS+ogW6K+/+zHLvDDI6TfIRjv7x74hRtxTHJ2MfnhfQMh//6/09+
+    8rGA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1764529789;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=H/U65BYu8VYVK/POJqt3lDI2a7KF/fLhF+u64QoDvLo=;
+    b=kgMmZk+2Hz8J0KGSSNMcf8tJ3Ccwn92rpl69PPNaqSiO6dew0BvkAMWOU5LLxT+5RP
+    MSggb39h1SnX8PtPeUDA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
+    by smtp.strato.de (RZmta 54.0.0 AUTH)
+    with ESMTPSA id Ke2b461AUJ9nnJw
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sun, 30 Nov 2025 20:09:49 +0100 (CET)
+Message-ID: <d6077d36-93ed-4a6d-9eed-42b1b22cdffb@hartkopp.net>
+Date: Sun, 30 Nov 2025 20:09:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c2cead0a-06ed-4da4-a4e4-8498908aae3e@hartkopp.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Question about to KMSAN: uninit-value in can_receive
+To: Prithvi Tambewagh <activprithvi@gmail.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org
+References: <20251117173012.230731-1-activprithvi@gmail.com>
+ <0c98b1c4-3975-4bf5-9049-9d7f10d22a6d@hartkopp.net>
+ <c2cead0a-06ed-4da4-a4e4-8498908aae3e@hartkopp.net>
+ <aSx++4VrGOm8zHDb@inspiron>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <aSx++4VrGOm8zHDb@inspiron>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Nov 30, 2025 at 01:44:32PM +0100, Oliver Hartkopp wrote:
->
->
->On 29.11.25 18:04, Oliver Hartkopp wrote:
->>Hello Prithvi,
->>
->>thanks for picking up this topic!
->>
->>I had your mail in my open tabs and I was reading some code several 
->>times without having a really good idea how to continue.
->>
->>On 17.11.25 18:30, Prithvi Tambewagh wrote:
->>
->>>The call trace suggests that the bug appears to be due to effect 
->>>of change
->>>in headroom by pskb_header_expand(). The new headroom remains 
->>>uninitialized
->>>and when can_receive tries accessing can_skb_prv(skb)->skbcnt, indirectly
->>>skb->head is accessed which causes KMSAN uninitialized value read bug.
->>
->>Yes.
->>
->>If you take a look at the KMSAN message:
->>
->>https://lore.kernel.org/linux- 
->>can/68bae75b.050a0220.192772.0190.GAE@google.com/T/ 
->>#m0372e223746b9da19cbf39348ab1cda52a5cfadc
->>
->>I wonder why anybody is obviously fiddling with the with the 
->>skb->head here.
->>
->>When initially creating skb for the CAN subsystem we use 
->>can_skb_reserve() which does a
->>
->>skb_reserve(skb, sizeof(struct can_skb_priv));
->>
->>so that we get some headroom for struct can_skb_priv.
->>
->>Then we access this struct by referencing skb->head:
->>
->>static inline struct can_skb_priv *can_skb_prv(struct sk_buff *skb)
->>{
->>     return (struct can_skb_priv *)(skb->head);
->>}
->>
->>If anybody is now extending the headroom skb->head will likely not 
->>pointing to struct can_skb_priv anymore, right?
->>
->>>To fix this bug, I think we can call can_dropped_invalid_skb() in 
->>>can_rcv()
->>>just before calling can_receive(). Further, we can add a condition 
->>>for these
->>>sk_buff with uninitialized headroom to initialize the skb, the way it had
->>>been done in the patch for an earlier packet injection case in a similar
->>>KMSAN bug:
->>>https://lore.kernel.org/linux-can/20191207183418.28868-1- 
->>>socketcan@hartkopp.net/
->>
->>No. This is definitely a wrong approach. You can not wildly poke 
->>values behind skb->head, when the correctly initialized struct 
->>can_skb_priv just sits somewhere else.
->>
->>In opposite to the case in your referenced patch we do not get a skb 
->>from PF_PACKET but we handle a skb that has been properly created in 
->>isotp_sendmsg(). Including can_skb_reserve() and an initialized 
->>struct can_skb_priv.
->>
->>>However, I am not getting on what basis can I filter the sk_buff so that
->>>only those with an uninitialized headroom will be initialized via 
->>>this path.
->>>Is this the correct approach?
->>
->>No.
->>
->>When we are creating CAN skbs with [can_]skb_reserve(), the struct 
->>can_skb_priv is located directly "before" the struct can_frame which 
->>is at skb->data.
->>
->>I'm therefore currently thinking in the direction of using skb->data 
->>instead of skb->head as reference to struct can_skb_priv:
->>
->>diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
->>index 1abc25a8d144..8822d7d2e3df 100644
->>--- a/include/linux/can/skb.h
->>+++ b/include/linux/can/skb.h
->>@@ -60,11 +60,11 @@ struct can_skb_priv {
->>         struct can_frame cf[];
->>  };
->>
->>  static inline struct can_skb_priv *can_skb_prv(struct sk_buff *skb)
->>  {
->>-       return (struct can_skb_priv *)(skb->head);
->>+       return (struct can_skb_priv *)(skb->data - sizeof(struct 
->>can_skb_priv));
->>  }
->>
->>  static inline void can_skb_reserve(struct sk_buff *skb)
->>  {
->>         skb_reserve(skb, sizeof(struct can_skb_priv));
->>
->>I have not checked what effect this might have to this patch
->>
->>https://lore.kernel.org/linux-can/20191207183418.28868-1- 
->>socketcan@hartkopp.net/
->>
->>when we initialize struct can_skb_priv inside skbs we did not create 
->>in the CAN subsystem. The difference would be that we access struct 
->>can_skb_priv via skb->data and not via skb->head. The effect to the 
->>system should be similar.
->>
->>What do you think about such approach?
->>
->>Best regards,
->>Oliver
->>
->
->Hello Prithvi,
->
->I'm answering in this mail thread as you answered on the other thread 
->which does not preserve the discussion above.
+Hi Prithvi,
 
-Hello Oliver,
+On 30.11.25 18:29, Prithvi Tambewagh wrote:
+> On Sun, Nov 30, 2025 at 01:44:32PM +0100, Oliver Hartkopp wrote:
 
-Apologies for this, I was using git send-email and probably messed up with
-the Message ID. I have just set up mutt, this should be correct now.
+>>> shall I send this patch upstream and mention your name in 
+>> Suggested-by tag?
+>>
+>> No. Neither of that - as it will not fix the root cause.
+>>
+>> IMO we need to check who is using the headroom in CAN skbs and for 
+>> what reason first. And when we are not able to safely control the 
+>> headroom for our struct can_skb_priv content we might need to find 
+>> another way to store that content.
+>> E.g. by creating this space behind skb->data or add new attributes to 
+>> struct sk_buff.
+> 
+> I will work in this direction. Just to confirm, what you mean is
+> that first it should be checked where the headroom is used while also
+> checking whether the data from region covered by struct can_skb_priv is 
+> intact, and if not then we need to ensure that it is intact by other 
+> measures, right?
 
->
->On 30.11.25 13:04, Prithvi Tambewagh wrote:
->> Hello Oliver,
->>
->> Thanks for the feedback! I now understand how struct can_skb_priv is
->> reserved in the headroom, more clearly, given that I am relatively new
->> to kernel development. I agree on your patch.
->>
->> I tested it locally  using the reproducer program for this bug 
->provided by
->> syzbot and it didn't crash the kernel. Also, I checked the patch here
->>
->> https://lore.kernel.org/linux-can/20191207183418.28868-1-socketcan@hartkopp.net/
->>
->> looking at it, I think your patch will work fine with the above patch as
->> well, since data will be accessed at
->>
->> skb->data - sizeof(struct can_skb_priv)
->>
->> which is the intended place for it, according to te action of
->> can_skb_reserve() which increases headroom by length
->> sizeof(struct can_skb_priv), reserving the space just before skb->data.
->>
->> I think it solves this specific KMSAN bug. Kindly correct me if I am 
->wrong.
->
->Yes. It solves that specific bug. But IMO we need to fix the root 
->cause of this issue.
->
->The CAN skb is passed to NAPI and XDP code
->
-> kmalloc_reserve+0x23e/0x4a0 net/core/skbuff.c:609
-> pskb_expand_head+0x226/0x1a60 net/core/skbuff.c:2275
-> netif_skb_check_for_xdp net/core/dev.c:5081 [inline]
-> netif_receive_generic_xdp net/core/dev.c:5112 [inline]
-> do_xdp_generic+0x9e3/0x15a0 net/core/dev.c:5180
-> __netif_receive_skb_core+0x25c3/0x6f10 net/core/dev.c:5524
->
->which invoked pskb_expand_head() which manipulates skb->head and 
->therefore removes the reference to our struct can_skb_priv.
->> Would you like to fix this bug by sending your patch upstream? Or else
->> shall I send this patch upstream and mention your name in 
->Suggested-by tag?
->
->No. Neither of that - as it will not fix the root cause.
->
->IMO we need to check who is using the headroom in CAN skbs and for 
->what reason first. And when we are not able to safely control the 
->headroom for our struct can_skb_priv content we might need to find 
->another way to store that content.
->E.g. by creating this space behind skb->data or add new attributes to 
->struct sk_buff.
+I have added skb_dump(KERN_WARNING, skb, true) in my local dummy_can.c
+an sent some CAN frames with cansend.
 
-I will work in this direction. Just to confirm, what you mean is
-that first it should be checked where the headroom is used while also
-checking whether the data from region covered by struct can_skb_priv is 
-intact, and if not then we need to ensure that it is intact by other 
-measures, right? 
+CAN CC:
 
->
->Best regards,
->Oliver
+[ 3351.708018] skb len=16 headroom=16 headlen=16 tailroom=288
+                mac=(16,0) mac_len=0 net=(16,0) trans=16
+                shinfo(txflags=0 nr_frags=0 gso(size=0 type=0 segs=0))
+                csum(0x0 start=0 offset=0 ip_summed=1 complete_sw=0 
+valid=0 level=0)
+                hash(0x0 sw=0 l4=0) proto=0x000c pkttype=5 iif=0
+                priority=0x0 mark=0x0 alloc_cpu=5 vlan_all=0x0
+                encapsulation=0 inner(proto=0x0000, mac=0, net=0, trans=0)
+[ 3351.708151] dev name=can0 feat=0x0000000000004008
+[ 3351.708159] sk family=29 type=3 proto=0
+[ 3351.708166] skb headroom: 00000000: 07 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00
+[ 3351.708173] skb linear:   00000000: 23 01 00 00 04 00 00 00 11 22 33 
+44 00 00 00 00
 
-Thank You,
-Prithvi
+(..)
+
+CAN FD:
+
+[ 3557.069471] skb len=72 headroom=16 headlen=72 tailroom=232
+                mac=(16,0) mac_len=0 net=(16,0) trans=16
+                shinfo(txflags=0 nr_frags=0 gso(size=0 type=0 segs=0))
+                csum(0x0 start=0 offset=0 ip_summed=1 complete_sw=0 
+valid=0 level=0)
+                hash(0x0 sw=0 l4=0) proto=0x000d pkttype=5 iif=0
+                priority=0x0 mark=0x0 alloc_cpu=6 vlan_all=0x0
+                encapsulation=0 inner(proto=0x0000, mac=0, net=0, trans=0)
+[ 3557.069499] dev name=can0 feat=0x0000000000004008
+[ 3557.069507] sk family=29 type=3 proto=0
+[ 3557.069513] skb headroom: 00000000: 07 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00
+[ 3557.069520] skb linear:   00000000: 33 03 00 00 10 05 00 00 00 11 22 
+33 44 55 66 77
+[ 3557.069526] skb linear:   00000010: 88 aa bb cc dd ee ff 00 00 00 00 
+00 00 00 00 00
+
+(..)
+
+CAN XL:
+
+[ 5477.498205] skb len=908 headroom=16 headlen=908 tailroom=804
+                mac=(16,0) mac_len=0 net=(16,0) trans=16
+                shinfo(txflags=0 nr_frags=0 gso(size=0 type=0 segs=0))
+                csum(0x0 start=0 offset=0 ip_summed=1 complete_sw=0 
+valid=0 level=0)
+                hash(0x0 sw=0 l4=0) proto=0x000e pkttype=5 iif=0
+                priority=0x0 mark=0x0 alloc_cpu=6 vlan_all=0x0
+                encapsulation=0 inner(proto=0x0000, mac=0, net=0, trans=0)
+[ 5477.498236] dev name=can0 feat=0x0000000000004008
+[ 5477.498244] sk family=29 type=3 proto=0
+[ 5477.498251] skb headroom: 00000000: 07 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00
+[ 5477.498258] skb linear:   00000000: b0 05 92 00 81 cd 80 03 cd b4 92 
+58 4c a1 f6 0c
+[ 5477.498264] skb linear:   00000010: 1a c9 6d 0a 4c a1 f6 0c 1a c9 6d 
+0a 4c a1 f6 0c
+[ 5477.498269] skb linear:   00000020: 1a c9 6d 0a 4c a1 f6 0c 1a c9 6d 
+0a 4c a1 f6 0c
+[ 5477.498275] skb linear:   00000030: 1a c9 6d 0a 4c a1 f6 0c 1a c9 6d 
+0a 4c a1 f6 0c
+
+
+I will also add skb_dump(KERN_WARNING, skb, true) in the CAN receive 
+path to see what's going on there.
+
+My main problem with the KMSAN message
+https://lore.kernel.org/linux-can/68bae75b.050a0220.192772.0190.GAE@google.com/
+is that it uses
+
+NAPI, XDP and therefore pskb_expand_head():
+
+  kmalloc_reserve+0x23e/0x4a0 net/core/skbuff.c:609
+  pskb_expand_head+0x226/0x1a60 net/core/skbuff.c:2275
+  netif_skb_check_for_xdp net/core/dev.c:5081 [inline]
+  netif_receive_generic_xdp net/core/dev.c:5112 [inline]
+  do_xdp_generic+0x9e3/0x15a0 net/core/dev.c:5180
+  __netif_receive_skb_core+0x25c3/0x6f10 net/core/dev.c:5524
+  __netif_receive_skb_one_core net/core/dev.c:5702 [inline]
+  __netif_receive_skb+0xca/0xa00 net/core/dev.c:5817
+  process_backlog+0x4ad/0xa50 net/core/dev.c:6149
+  __napi_poll+0xe7/0x980 net/core/dev.c:6902
+  napi_poll net/core/dev.c:6971 [inline]
+
+As you can see in
+https://syzkaller.appspot.com/x/log.txt?x=144ece64580000
+
+[pid  5804] socket(AF_CAN, SOCK_DGRAM, CAN_ISOTP) = 5
+[pid  5804] ioctl(5, SIOCGIFINDEX, {ifr_name="vxcan0", ifr_ifindex=20}) = 0
+
+they are using the vxcan driver which is mainly derived from vcan.c and 
+veth.c (~2017). The veth.c driver supports all those GRO, NAPI and XDP 
+features today which vxcan.c still does NOT support.
+
+Therefore I wonder how the NAPI and XDP code can be used together with 
+vxcan. And if this is still the case today, as the syzcaller kernel 
+6.13.0-rc7-syzkaller-00039-gc3812b15000c is already one year old.
+
+Many questions ...
+
+Best regards,
+Oliver
 
