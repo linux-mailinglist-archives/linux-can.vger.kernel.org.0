@@ -1,50 +1,50 @@
-Return-Path: <linux-can+bounces-5800-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5801-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A83DEC9976E
-	for <lists+linux-can@lfdr.de>; Mon, 01 Dec 2025 23:57:34 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC2A3C9976B
+	for <lists+linux-can@lfdr.de>; Mon, 01 Dec 2025 23:57:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 300A03A5B8E
-	for <lists+linux-can@lfdr.de>; Mon,  1 Dec 2025 22:57:04 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5D05A3465AE
+	for <lists+linux-can@lfdr.de>; Mon,  1 Dec 2025 22:57:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A1229E0FD;
-	Mon,  1 Dec 2025 22:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E11082BE642;
+	Mon,  1 Dec 2025 22:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V0i5jrNw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M95tZye8"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B905836D503;
-	Mon,  1 Dec 2025 22:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B482BE620;
+	Mon,  1 Dec 2025 22:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764629795; cv=none; b=Cyl7S/Kd4ViFQ1/QVg7DOlDM92BqtTOr/773pHhTSe51CMz3iXloA4tqZV+TiIY1+jiA+XC3/4I3lukSxqgDcSuggphkye443EC/it4m22XNv3SS2uq8RWMUCQ9RoFLThWV7JxWrn0arKQcXOYbbZjrJRoTsJCQeU4MxWN+BQ6o=
+	t=1764629798; cv=none; b=CqXVcbd4+nzibPkrbOLy+AlCuEqgpc0b052YZ8e0XZ57nhmSjFDW/n1brRBIeBvicUbD2BHsxg7JOKSXwSlosF7PN968tNvNZT2d3AGtHeejzGmF2L5Z/jZYvvgOh9rmHE+5CCLszlnUVWk3YDnB6Z57hQIoUN0PSw+/jo5uUwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764629795; c=relaxed/simple;
-	bh=zu63/HO5H/XHn2gNqdSfG3m9HFKZrZ/TNJWqStmwIjw=;
+	s=arc-20240116; t=1764629798; c=relaxed/simple;
+	bh=QYZzNQBvCFLI2EZ4rvf8uqgFG68QjGj40iNCH+8qleg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jy5E8BcIPYObkLHYiInYb8yq+PmwURPq8fV+h4gwHCuCSEVz/+M88js398LaYGwk8vsFN5X7nB3T0vGxAQ3iEoeICBJV1eQJQ5hiV5JRlv6mY4VxrthhwWG/NfmqkpfZQIp0WzwirEtFVfNw1xAv+yeZfALR5edrKkJOtBxt0VQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V0i5jrNw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8916C116D0;
-	Mon,  1 Dec 2025 22:56:32 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=Ge51qykoCVvazJMUA9qZ4WtT4SGw9Q/sBUtFaodyb3J58in2H8ZE6PoqCFxNtv+njtveIWBypmv3IfqRzNex61mDzr6/HDh31K6v7/LMwQIpGsMdVBR7VfGC1iMBkOmhlebkbd13ae8STPji5pl+Ku0e4EOlrzk3cUqYNKZVYwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M95tZye8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D821DC4CEF1;
+	Mon,  1 Dec 2025 22:56:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764629795;
-	bh=zu63/HO5H/XHn2gNqdSfG3m9HFKZrZ/TNJWqStmwIjw=;
+	s=k20201202; t=1764629798;
+	bh=QYZzNQBvCFLI2EZ4rvf8uqgFG68QjGj40iNCH+8qleg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=V0i5jrNwyipNBR0LaCYl+n5qx6SuUPyBcM0Yc6TnLc+5sQ31LExGHPLMzZP4HUU/8
-	 G/zKEk1MItTj7ORKYffBXVGDY3wPvMkro1r5REhm8b0fcZemIKwzBOQ+kk3I6d8lsg
-	 WAbmSSsYG+mMjv8OpH40sFrJtnOqmbTzpCbl2mfMGWSY3EbvyYM0zIlTmv6qnmKiza
-	 GZh4TCGTWg7mK0ZPo0zyskws2UTMMVh8vD9GycBXsRn/9IA62+Zb3ygD7ScZV/i+E7
-	 DK+XuNlfq6rWCtVkpD7ZKC1/ZgyNdyWOWHROhTqUJRKGRkKKgfjaECJZIz1tC2jgj1
-	 lXbxGFiKDjrwg==
+	b=M95tZye80aXIxis+r6xfNK1/IyInnpLTHgHPyfdiiA1cy4tWltIVKyCgDdGrBwXKI
+	 3wGX0FJNt3G72MZsqsLyU6lyMzggs/QXB9k+Hqg5nz91LAqb/7d1cDL/T5pPQ6e8U5
+	 c1wa5q1FG99yjc1TyWVWcSYxBTAE0zjiqV4j/XAyZc/+3AiZYYnSveYK1r3htOop58
+	 tcWYxUp5qmpfAvVjCAe3ZmoH3vaIB3MTSR3V7LjjOQ+wo4FxJRxodnAXXqDkzphPLP
+	 +Ii8yisyYCwA0NZkLhEtYXxGE6E41QRD6Dk8xv8pCstYZYY9MN/29kwVjfTeb1wGmK
+	 W7Z+wqeEAf8RA==
 From: Vincent Mailhol <mailhol@kernel.org>
-Date: Mon, 01 Dec 2025 23:55:11 +0100
-Subject: [PATCH iproute2-next v2 3/7] iplink_can: print_usage: describe the
- CAN bittiming units
+Date: Mon, 01 Dec 2025 23:55:12 +0100
+Subject: [PATCH iproute2-next v2 4/7] iplink_can: add the "restricted"
+ option
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251201-canxl-netlink-v2-3-dadfac811872@kernel.org>
+Message-Id: <20251201-canxl-netlink-v2-4-dadfac811872@kernel.org>
 References: <20251201-canxl-netlink-v2-0-dadfac811872@kernel.org>
 In-Reply-To: <20251201-canxl-netlink-v2-0-dadfac811872@kernel.org>
 To: netdev@vger.kernel.org, Stephen Hemminger <stephen@networkplumber.org>, 
@@ -64,49 +64,71 @@ Cc: Rakuram Eswaran <rakuram.e96@gmail.com>,
  linux-kernel@vger.kernel.org, linux-can@vger.kernel.org, 
  Vincent Mailhol <mailhol@kernel.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1030; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=zu63/HO5H/XHn2gNqdSfG3m9HFKZrZ/TNJWqStmwIjw=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDJl6siyvkyQ5v0/VSpYwe35wjruuuPjaVRUJDj6J+SECU
- emTzK50lLAwiHExyIopsiwr5+RW6Cj0Djv01xJmDisTyBAGLk4BmEisDsP3uiQGUen/0e9L3+yJ
- 1z4T4c4xYYXi/P7Vp1g0pTTKgs8wMlySLZ269v7h9dsuJ382tHB3N+6x/+8rU1Nc/2tLULrEY24 A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2174; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=QYZzNQBvCFLI2EZ4rvf8uqgFG68QjGj40iNCH+8qleg=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDJl6shwuVx56bN5fzLT8QvKE3UUn0i+VfnGptuipPzpr+
+ w3XbXP2dZSyMIhxMciKKbIsK+fkVugo9A479NcSZg4rE8gQBi5OAZjIjliG/z7pnpc+SLEddVyj
+ GnDHrSDK5KZq7d/sqOk5k/+du+gd94fhN9vHfQxuH3dOZq+bEsPw12Wm6yenuOYtcybteB90+dL
+ eM9wA
 X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-While the meaning of "bps" or "ns" may be relatively easy to understand,
-some of the CAN specific units such as "mtq" (minimum time quanta) may be
-harder to understand.
+This is the iproute2 counterpart of Linux kernel's commit 60f511f443e5
+("can: netlink: add CAN_CTRLMODE_RESTRICTED").
 
-Add a new paragraph to the help menu which describes all the different
-units used for the CAN bittiming parameters.
+ISO 11898-1:2024 adds a new restricted operation mode. This mode is added
+as a mandatory feature for nodes which support CAN XL and is retrofitted as
+optional for legacy nodes (i.e. the ones which only support Classical CAN
+and CAN FD).
+
+The restricted operation mode is nearly the same as the listen only mode:
+the node can not send data frames or remote frames and can not send
+dominant bits if an error occurs. The only exception is that the node shall
+still send the acknowledgment bit.
+
+Add the "restricted" option to iplink_can which controls the
+CAN_CTRLMODE_RESTRICTED flag of the netlink interface.
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
 ---
-Changelog
+Changelog:
 
 v1 -> v2:
 
-  - "s/mili second/milisecond/g" and "s/nano second/nanosecond/g"
+  - s/matches/strcmp/g in can_parse_opt()
 ---
- ip/iplink_can.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ ip/iplink_can.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/ip/iplink_can.c b/ip/iplink_can.c
-index ee27659c..d5abc43a 100644
+index d5abc43a..0ba86550 100644
 --- a/ip/iplink_can.c
 +++ b/ip/iplink_can.c
-@@ -60,6 +60,13 @@ static void print_usage(FILE *f)
- 		"\t	TDCO		:= { NUMBER in mtq }\n"
- 		"\t	TDCF		:= { NUMBER in mtq }\n"
- 		"\t	RESTART-MS	:= { 0 | NUMBER in ms }\n"
-+		"\n"
-+		"\tUnits:\n"
-+		"\t	bps	:= bit per second\n"
-+		"\t	ms	:= millisecond\n"
-+		"\t	mtq	:= minimum time quanta\n"
-+		"\t	ns	:= nanosecond\n"
-+		"\t	tq	:= time quanta\n"
- 		);
- }
+@@ -42,6 +42,7 @@ static void print_usage(FILE *f)
+ 		"\t[ presume-ack { on | off } ]\n"
+ 		"\t[ cc-len8-dlc { on | off } ]\n"
+ 		"\t[ tdc-mode { auto | manual | off } ]\n"
++		"\t[ restricted { on | off } ]\n"
+ 		"\n"
+ 		"\t[ restart-ms TIME-MS ]\n"
+ 		"\t[ restart ]\n"
+@@ -116,6 +117,7 @@ static void print_ctrlmode(enum output_type t, __u32 flags, const char *key)
+ 	print_flag(t, &flags, CAN_CTRLMODE_CC_LEN8_DLC, "CC-LEN8-DLC");
+ 	print_flag(t, &flags, CAN_CTRLMODE_TDC_AUTO, "TDC-AUTO");
+ 	print_flag(t, &flags, CAN_CTRLMODE_TDC_MANUAL, "TDC-MANUAL");
++	print_flag(t, &flags, CAN_CTRLMODE_RESTRICTED, "RESTRICTED");
+ 
+ 	if (flags)
+ 		print_hex(t, NULL, "%x", flags);
+@@ -257,6 +259,9 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
+ 				invarg("\"tdc-mode\" must be either of \"auto\", \"manual\" or \"off\"",
+ 					*argv);
+ 			}
++		} else if (strcmp(*argv, "restricted") == 0) {
++			NEXT_ARG();
++			set_ctrlmode("restricted", *argv, &cm, CAN_CTRLMODE_RESTRICTED);
+ 		} else if (matches(*argv, "restart") == 0) {
+ 			__u32 val = 1;
  
 
 -- 
