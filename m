@@ -1,47 +1,48 @@
-Return-Path: <linux-can+bounces-5810-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5811-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5701ACA14B0
-	for <lists+linux-can@lfdr.de>; Wed, 03 Dec 2025 20:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 08F30CA14A4
+	for <lists+linux-can@lfdr.de>; Wed, 03 Dec 2025 20:10:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 74460320504A
-	for <lists+linux-can@lfdr.de>; Wed,  3 Dec 2025 18:34:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ED72F328DC7D
+	for <lists+linux-can@lfdr.de>; Wed,  3 Dec 2025 18:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F45F3161BA;
-	Wed,  3 Dec 2025 18:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 670E732825C;
+	Wed,  3 Dec 2025 18:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/ue4qte"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fytO8wms"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0124D314B8A;
-	Wed,  3 Dec 2025 18:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309BB3191A8;
+	Wed,  3 Dec 2025 18:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764786354; cv=none; b=FWKyv3G0MWBT1nmXPzQ6bNyi2rkj1d6TJQT1vs0/wPVlT5xPVHrL87AgroL0f3x6eMCDuAItbfeMg6bzAfHxB0kyPZx/J8la7uEPNzNyS0oTBdcjRa97xpXLbkQLcs7tcPy+eNhI1NY8qId9Kdc3eFnVuWBBNazOQ8mz6W2+ET4=
+	t=1764786357; cv=none; b=DM8+2xQe2qz5r4hj99CFqan18S8ufeo0iENriJgBMKzIt6J3hSc0WhyILYZyxLBloeLkygkQkdbPgSzkEgmUUHjGF3d6ZWKAn1HByryB8dlH1NcvDvUqYKoq754bDbZ5qX+npNLcYXWoHmDfKD3bl4OXYgT5UTuwlkdSxFvAzwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764786354; c=relaxed/simple;
-	bh=k1XqMR/MfZi4V/PExqNXtDjOhZZ2W9JTvNV+qxbIOh4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dulNCxr6nn4/r1xlOE1R0iRjYs2MxvIrbiSNLT1eocTlI02pj2K7oeAr6sHGFI6xlZDvQa8QHBnGgbunQHoYvuANs0CrOKWMJAOKiVDGRFnWPIg2wkVfmXkiE5Tvf72hX3AcWifjxDqGghxTmL1J0aUN5HeIhn1dsY8nfaZup5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/ue4qte; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E401AC4CEF5;
-	Wed,  3 Dec 2025 18:25:50 +0000 (UTC)
+	s=arc-20240116; t=1764786357; c=relaxed/simple;
+	bh=buB36Y5Sf5MgYfsXtNeJpE7oy9ZCXNnymdj5sOX4Nkg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=rF6xamb8LWBFHXro0ih9N72emb9nrTJBR65p82HG9thOpX7lljJMqnpIYiJFJDp4z07MnwQdCR5X0EqvHrJg6AmACz7rvnT8z2sOQdeeg4su/oFu2DozMIG5q04TZFRyIXepmvhjw6SJ7FZEksMRz3qTWR4Lc1anL7NxLyFmPJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fytO8wms; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C5D8C116B1;
+	Wed,  3 Dec 2025 18:25:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764786353;
-	bh=k1XqMR/MfZi4V/PExqNXtDjOhZZ2W9JTvNV+qxbIOh4=;
-	h=From:Subject:Date:To:Cc:From;
-	b=o/ue4qte235+FhH3o5nMWImZoWSw+TP8j/7mv//Q8tGA+Z+tgAN+AlOeTk01QNphx
-	 kQ0jObtPjU8HF7SmcgvI44Rzqpq+sNvB0VEorgmMqj62CFtXTWpiatqs+TfB/Bj4WR
-	 ldCbmOxRdKZbHXLf8GID43rX7cBT38IFO6B8eDs7AWMon4Q3ePS3aLjB5YnNqNDZqh
-	 mjz0i1fMWv0edRj3HrPXqklGLrZ6BwP0j89nWlULtB7UVFJoyilj95Hl1OxDo0oQF3
-	 CBsWbmfyf7QaZHXzjZgnt7KWkuUBvsMSp4tOrOAD9QBWa6jYraluKYiG6iWCMgl3GP
-	 B0pTcgjues6ug==
+	s=k20201202; t=1764786356;
+	bh=buB36Y5Sf5MgYfsXtNeJpE7oy9ZCXNnymdj5sOX4Nkg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=fytO8wmsL8eg89d1gs6JQDUfv5MYtH/IBT4iibOY7tA6K9sksQZaqr27h8akUekGG
+	 VqB25Fq9Q5SO9n+Y6CJX8l1RZe4G5/dGgLvgRVTNw5DrMXAwHmrMhKrdIm8VZyesRi
+	 343EyKK2AJ19yDZBPihzNkWXTInJVBclnWFaL5a2UT/tmZjr6cUwOQEQNf6tajb2Oq
+	 KDgeiH9PC9lPWBHNI0xlJqUCjfgsH9gJ6gqNECBY3LbG18zm4d203TPEorq8dG3VuU
+	 f/Lhp/0A++TWY9+LY+2yMG+QY8qrffEaRgss44YOql/ecFSYAr/6Ns9QWVejqAwO7j
+	 TlURp0gkW3a4Q==
 From: Vincent Mailhol <mailhol@kernel.org>
-Subject: [PATCH iproute2-next v3 0/7] iplink_can: add CAN XL support
-Date: Wed, 03 Dec 2025 19:24:27 +0100
-Message-Id: <20251203-canxl-netlink-v3-0-999f38fae8c2@kernel.org>
+Date: Wed, 03 Dec 2025 19:24:28 +0100
+Subject: [PATCH iproute2-next v3 1/7] iplink_can: print_usage: fix the text
+ indentation
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -50,11 +51,9 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFuAMGkC/12OQQ6CMBBFr0K6tqYziIAr72FcNO0ADaSQtjYYw
- t2t3RhZ/vz/3szGPDlDnt2KjTmKxpvZplCeCqYGaXviRqfMUGAlWgSupF0nbilMxo5ca6gllZD
- ahiVmcdSZNfsezCxufgXCtF4De6Z6MD7M7p2vRcijrxgA24M4Ahe8vXaohKouAuA+krM0nWfXZ
- 1XEH47i+FfEhGupO6kagKbGP3zf9w9N8ys5+QAAAA==
-X-Change-ID: 20250921-canxl-netlink-dd17ae310258
+Message-Id: <20251203-canxl-netlink-v3-1-999f38fae8c2@kernel.org>
+References: <20251203-canxl-netlink-v3-0-999f38fae8c2@kernel.org>
+In-Reply-To: <20251203-canxl-netlink-v3-0-999f38fae8c2@kernel.org>
 To: netdev@vger.kernel.org, Stephen Hemminger <stephen@networkplumber.org>, 
  Marc Kleine-Budde <mkl@pengutronix.de>, 
  Oliver Hartkopp <socketcan@hartkopp.net>, David Ahern <dsahern@kernel.org>
@@ -63,71 +62,102 @@ Cc: Rakuram Eswaran <rakuram.e96@gmail.com>,
  linux-kernel@vger.kernel.org, linux-can@vger.kernel.org, 
  Vincent Mailhol <mailhol@kernel.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1941; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=k1XqMR/MfZi4V/PExqNXtDjOhZZ2W9JTvNV+qxbIOh4=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDJkGDZPFGW3ZtTVTV+ryfJl+/739s6qvaV1/nByz/23fu
- C3yyvzyjlIWBjEuBlkxRZZl5ZzcCh2F3mGH/lrCzGFlAhnCwMUpABMxucfwz97Tcm9yo8jC3omm
- X3fWrTv57FeMU+/+ZsbeaV2r3xTcm8Lwv+QSh82a01ODNlYV726aIyc9OXFCvKJEn6N3/AYOuW2
- v+QE=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2576; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=buB36Y5Sf5MgYfsXtNeJpE7oy9ZCXNnymdj5sOX4Nkg=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDJkGDTN9u+uk3ty7X+e5TUzv/OJ3M/VUH3FxfJn+9LvE5
+ SV9X2V/dpSyMIhxMciKKbIsK+fkVugo9A479NcSZg4rE8gQBi5OAZhIhwbDP93v/49GTdXkZ5sj
+ JW9+X/4d7545qZKfkjPDeS/w72D9m8Lwz/DKFrf/Idvt2hZHi/6q7/uxVHE7y79J377y/XSJ47H
+ 0ZwYA
 X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-Support for CAN XL was added to the kernel in [1]. This series is the
-iproute2 counterpart.
+The description of the BITRATE variable is not correctly aligned with the
+other ones. Put it on a new line with the same indentation as the other
+variables.
 
-Patches #1 to #3 are clean-ups. They refactor iplink_can's
-print_usage()'s function.
+This done, reindent everything to only one tabulation (was one tabulation
+and two spaces before).
 
-Patches #4 to #7 add the CAN XL interface to iplink_can.
+Before this patch...:
 
-[1] commit 113aa9101a91 ("Merge patch series "can: netlink: add CAN XL support")
-Link: https://git.kernel.org/netdev/net-next/c/113aa9101a91
+  $ ip link help can
+  Usage: ip link set DEVICE type can
+
+  (...)
+
+  	Where: BITRATE	:= { NUMBER in bps }
+  		  SAMPLE-POINT	:= { 0.000..0.999 }
+  		  TQ		:= { NUMBER in ns }
+  		  PROP-SEG	:= { NUMBER in tq }
+  		  PHASE-SEG1	:= { NUMBER in tq }
+  		  PHASE-SEG2	:= { NUMBER in tq }
+  		  SJW		:= { NUMBER in tq }
+  		  TDCV		:= { NUMBER in tc }
+  		  TDCO		:= { NUMBER in tc }
+  		  TDCF		:= { NUMBER in tc }
+  		  RESTART-MS	:= { 0 | NUMBER in ms }
+
+...and after:
+
+  $ ip link help can
+  Usage: ip link set DEVICE type can
+
+  (...)
+
+  	Where:
+  		BITRATE		:= { NUMBER in bps }
+  		SAMPLE-POINT	:= { 0.000..0.999 }
+  		TQ		:= { NUMBER in ns }
+  		PROP-SEG	:= { NUMBER in tq }
+  		PHASE-SEG1	:= { NUMBER in tq }
+  		PHASE-SEG2	:= { NUMBER in tq }
+  		SJW		:= { NUMBER in tq }
+  		TDCV		:= { NUMBER in tc }
+  		TDCO		:= { NUMBER in tc }
+  		TDCF		:= { NUMBER in tc }
+  		RESTART-MS	:= { 0 | NUMBER in ms }
 
 Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-
 ---
-Changes in v3:
+ ip/iplink_can.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-  - Patch #5: only use string literals in print_uint(). To achieve
-    this, remove the "is_xl" parameter from can_print_xtdc_opt() and
-    instead add can_print_xtdc_opt().
+diff --git a/ip/iplink_can.c b/ip/iplink_can.c
+index 1afdf088..f3640fe0 100644
+--- a/ip/iplink_can.c
++++ b/ip/iplink_can.c
+@@ -48,17 +48,18 @@ static void print_usage(FILE *f)
+ 		"\n"
+ 		"\t[ termination { 0..65535 } ]\n"
+ 		"\n"
+-		"\tWhere: BITRATE	:= { NUMBER in bps }\n"
+-		"\t	  SAMPLE-POINT	:= { 0.000..0.999 }\n"
+-		"\t	  TQ		:= { NUMBER in ns }\n"
+-		"\t	  PROP-SEG	:= { NUMBER in tq }\n"
+-		"\t	  PHASE-SEG1	:= { NUMBER in tq }\n"
+-		"\t	  PHASE-SEG2	:= { NUMBER in tq }\n"
+-		"\t	  SJW		:= { NUMBER in tq }\n"
+-		"\t	  TDCV		:= { NUMBER in tc }\n"
+-		"\t	  TDCO		:= { NUMBER in tc }\n"
+-		"\t	  TDCF		:= { NUMBER in tc }\n"
+-		"\t	  RESTART-MS	:= { 0 | NUMBER in ms }\n"
++		"\tWhere:\n"
++		"\t	BITRATE		:= { NUMBER in bps }\n"
++		"\t	SAMPLE-POINT	:= { 0.000..0.999 }\n"
++		"\t	TQ		:= { NUMBER in ns }\n"
++		"\t	PROP-SEG	:= { NUMBER in tq }\n"
++		"\t	PHASE-SEG1	:= { NUMBER in tq }\n"
++		"\t	PHASE-SEG2	:= { NUMBER in tq }\n"
++		"\t	SJW		:= { NUMBER in tq }\n"
++		"\t	TDCV		:= { NUMBER in tc }\n"
++		"\t	TDCO		:= { NUMBER in tc }\n"
++		"\t	TDCF		:= { NUMBER in tc }\n"
++		"\t	RESTART-MS	:= { 0 | NUMBER in ms }\n"
+ 		);
+ }
+ 
 
-  - Reword patch #4 to #7 subjects.
-
-Link to v2: https://lore.kernel.org/r/20251201-canxl-netlink-v2-0-dadfac811872@kernel.org
-
-Changes in v2:
-
-  - add the "iproute2-next" prefix to the patches
-
-  - s/matches/strcmp/g in can_parse_opt()
-
-  - Patch #3: "s/milli second/millisecond/g" and "s/nano second/nanosecond/g"
-
-  - Patch #6: s/XL-TMS/TMS/g in print_ctrlmode()
-
-  - Patch #7: Remove a double space in patch description
-
-Link to v1: https://lore.kernel.org/r/20251129-canxl-netlink-v1-0-96f2c0c54011@kernel.org
-
----
-Vincent Mailhol (7):
-      iplink_can: print_usage: fix the text indentation
-      iplink_can: print_usage: change unit for minimum time quanta to mtq
-      iplink_can: print_usage: describe the CAN bittiming units
-      iplink_can: add RESTRICTED operation mode support
-      iplink_can: add initial CAN XL support
-      iplink_can: add CAN XL transceiver mode setting (TMS) support
-      iplink_can: add CAN XL TMS PWM configuration support
-
- ip/iplink_can.c | 349 +++++++++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 331 insertions(+), 18 deletions(-)
----
-base-commit: 1a909dbde03c3f53612cd16dc1c8cb8d58931364
-change-id: 20250921-canxl-netlink-dd17ae310258
-
-Best regards,
 -- 
-Vincent Mailhol <mailhol@kernel.org>
+2.51.2
 
 
