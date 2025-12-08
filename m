@@ -1,135 +1,125 @@
-Return-Path: <linux-can+bounces-5825-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5826-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 987A7CAD82E
-	for <lists+linux-can@lfdr.de>; Mon, 08 Dec 2025 15:59:15 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12E52CADAA7
+	for <lists+linux-can@lfdr.de>; Mon, 08 Dec 2025 16:53:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1055B306D5A7
-	for <lists+linux-can@lfdr.de>; Mon,  8 Dec 2025 14:57:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F0545303AC8D
+	for <lists+linux-can@lfdr.de>; Mon,  8 Dec 2025 15:50:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9276319603;
-	Mon,  8 Dec 2025 14:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188342DF12F;
+	Mon,  8 Dec 2025 15:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GZcIpLjk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gXvnbqKy"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5B41E0B9C
-	for <linux-can@vger.kernel.org>; Mon,  8 Dec 2025 14:19:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E072BE630
+	for <linux-can@vger.kernel.org>; Mon,  8 Dec 2025 15:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765203551; cv=none; b=L14V2wla5ArVA3+eSMSKFvYIN7/HJ6j9YZRnIYvRDVROx/j8h+SjD25m09WGJf0kSOZ7HWLpAM2KfGTJr1dQYeKPXHfl53LU4yenkJzCco2xpUOQLkdxbmpcWUZzaajwh81wBLXikGABGhaFwA6nqVVYjTKWSaoWF0i709CXvsw=
+	t=1765209031; cv=none; b=UThgDR7acyUO1SNSsqYqPbZG+ZjcY1Yn9EsVM64NQ1rnQtHG53Hv1XJbq7FZtWSM5ZopG9q9efoumJvyIXntz/qo9vbpSzRrJIL443vE3nXlFjP1BexmuSPBc0xfipjnY7zmPTkCHFGd2IKO7mXFNhEuF+lF3xpWou5YuN+ZiWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765203551; c=relaxed/simple;
-	bh=bAyGbNAjP4ciJGfV+RGobHZis/RzYePdIwxg5l1doqQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PNnItb/lEUvflr+FnBFtUoXF8ytpnJmdyEZYv6jqxzqQ3NHnIumVpUUs/ix7ffZXIdmYhscmVFrzr/2coG+4I32kvieoYlcJWrXnqFIzeXkaZSEPLC70uo6wWv5z44ykUCBSnFtSYJ6bIJ4g6e8XWMJl7d3gUkzwwOBgrsGVjYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GZcIpLjk; arc=none smtp.client-ip=209.85.216.46
+	s=arc-20240116; t=1765209031; c=relaxed/simple;
+	bh=tlOo9dyRdPpU5qGbPx+r7yc55urEIGakEuFBzxg6tNY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a29TMwrJ3HQJ0TMcFX+mKQlrhJgIELxR8XFktvlJ4a5SJICiicX6L1jsmv1QRVl0ZSYsXvvX31mZgBxpNGScMq/npubNcBR/c6byueaitqPuCkUMNwZkGoQu1wRn3fS3WMudA/hdSFi+nZX3fp0fxTnzyGIwjkNsX2BRTlh1qsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gXvnbqKy; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-343ee44d89aso5548589a91.2
-        for <linux-can@vger.kernel.org>; Mon, 08 Dec 2025 06:19:09 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-477aa218f20so29756015e9.0
+        for <linux-can@vger.kernel.org>; Mon, 08 Dec 2025 07:50:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765203549; x=1765808349; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bAyGbNAjP4ciJGfV+RGobHZis/RzYePdIwxg5l1doqQ=;
-        b=GZcIpLjkB1Q3eqJl8GywpfLargy5iIjvmcbD0ZRkLmw4uDb/WX0iSazvR3uohh+L3S
-         HAnY8T+vD0l3iqNSEKMtbSHLFXTYuf57LUBfSeNTT1NJrQZo7aYa1wkLCm9IsiR+sCi1
-         eOs557uM3KvUkRU1YNdWlCFlxTjcMoef0QxwW8vOjQa/0pIA7uPLWCabBFSPJywH4Svw
-         TPOyxjvXbUoXuHo/uuAEGC+z9FGuGW5aGsIs2SKT0VpC/sJOmytgGB6+VwHqaIBWZcYs
-         L/pCoItt/TPL8kbfPlldDMIeF53WB3m80vhRw3sQlT61Fald9xH1J64G6+4Y+XlBhqgE
-         9QpQ==
+        d=gmail.com; s=20230601; t=1765209027; x=1765813827; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0DkeTPkNVXLcIqrE0+vJuuPcS/1UnLmUfSY7lOiFDo8=;
+        b=gXvnbqKyUgjEfClf2bKPQCLEvgkqIa1gDIGeQVGkrimnD2w3f+YAYfHVwcI2Gf4ynW
+         bkVzN0qjPpn2ugDxKbXNWdG2vuvMIDAx8JkixwkeL6EZBAjceyrFsojuK/atAcOq2v97
+         zYHMAIlQORMbubnjnHl+gI8cR4aZKoo3rzO8YA+291NXbEOb6CIYIL9mLFF5Pc8wLHzE
+         TATeA87HItsHbXyP/bfx3B3UrfmuXLDc/XzATlVri3OYbcT7uAzV9My7IMWFQjm/wFwv
+         6LzDgX7ap1rBsaGYo92ZxmGpvLE21Wc7qLhbNMZqdikIOkeTuS8PeeiCCl29aWtk9V/X
+         EEQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765203549; x=1765808349;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bAyGbNAjP4ciJGfV+RGobHZis/RzYePdIwxg5l1doqQ=;
-        b=GYTx2YpvTq+RWj4iSGldjrTtpJSmG/YrsnVZ3pPR24K5aaJ93be62cDXFVj66XkVmr
-         40dxiv6BaxHIVRIKLV/WZlHbCIv7hsX8MmVXZp3nQ14XGmXWLcw9FTbTStsf+bVqOEjK
-         e/liDldP1YMf8Nr4ycrKXmYJkxHWVL9vBaRWlCmAVxUMxPDj+GqylEmz1o4kFo4MT1s8
-         zMzP0O4KmwwoTsV07n27GA7kO6W0iQFOoMzbu8SDTR83HXHaHc/pY+kJwAaFSpHCNBjv
-         70c6H5fE1qmKkDRhMePvXqySPy3m/QnsPx9qsRvgMZOITRnE84xrlvkhf7/CmMUwduVr
-         6ZPQ==
-X-Gm-Message-State: AOJu0Yw2k1aC+GlloLrri5KG4MmruoUi7uWThZfbKJN+lGhJLkqb7jd/
-	LW8kC+1muhaT+c4CaItV2T3HZwONa3VhuCKpjrToYABTbTliTx52moSjipe8fbIF
-X-Gm-Gg: ASbGncuVqUce1jef6KBPVE5kZPB+Z69SOMjSg3NjrWY3YIoET1XH33vna/jEbuo4ctt
-	9gKjljBPYX/5I+HlSoa6ydFCtgWzxbkmivDgepGI02nMHB6hfC8hImZ86GtDEEoIcC8L6owLATr
-	9VcCQvtxZxD2Vlmm1PZLz9KVJZG7qpr+DtsdW229baw3uTvbCCsv2OM8eLxXn15yKVuCToRT36/
-	CL+5FqEF9wS+qxI1sM5fUoxNxrvqROp+8FE3S52MCH70vvSEpw9OF6aw0H2uT9881zUn3C5fGa+
-	asVMe5Vd9IcmPqhyDPH54HnQxd2kRAJK505jtfWpuCXcpn/dU8aKFQ1cH3/FksbbN40v9ApD2jc
-	dMwfA0URSPLmzWtZHK4YqCTz3BcDtOLy+bwhyWrLdzSvI6G7XlH318IYpq6bw+ayoxcrgwBlWjQ
-	+RLT5TqjrvFNfiT2Qu
-X-Google-Smtp-Source: AGHT+IEAWNoOqTDFnhN4eM4XE1SRsVgEFHOOYSD5tnAsTXRycFLHBhdpxoMgU2oFGHTPkonW8YIXjA==
-X-Received: by 2002:a17:90b:3a90:b0:340:f05a:3eca with SMTP id 98e67ed59e1d1-349a25bdf87mr6616761a91.20.1765203549007;
-        Mon, 08 Dec 2025 06:19:09 -0800 (PST)
-Received: from rakuram-MSI ([2405:201:d027:f060:7cf0:6715:586a:9d66])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3494f398f8bsm12112025a91.7.2025.12.08.06.19.06
+        d=1e100.net; s=20230601; t=1765209027; x=1765813827;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0DkeTPkNVXLcIqrE0+vJuuPcS/1UnLmUfSY7lOiFDo8=;
+        b=NcLwGs73p0odfUTWRFM5rUph6C5i9tk18rybJu/vARz3xwsn2LeJGfycA9azGXVbKc
+         YHId9/roK+Sd4c7/oxWdYJTP3XLyhcyJu6lWivZjY5E+3IAUJu5B4DpokP8JX+bsVKwk
+         QeAZo7xsFvLZP1CLDJILQU0sen+9Y6H4AOkal8k0hH+SHXqMmN9K67hM1uLxVNy86i0W
+         yTRBjtqO11zCxBh/HXKI4iR6wDrXKpt7x9/d6Phi5AINhtlb7e3HMUtv4KDLcDsBCfr5
+         20tqIhmullECRLTf+K6t/a8uRxcgu7JWIn0TAqWcbLYH3KedhXvoAfqMOLlldFRTbl4r
+         CfUQ==
+X-Gm-Message-State: AOJu0Ywrerp1TlFbqH6p4qmKEv1JvUIefTwfaasEGtwr+8/pHYlhOQ2V
+	tTUhZS7GQ1S6UuBCMNyF8LQXs7lwDPtZDGF7CBT3UmjNG9hnm86OY/OU
+X-Gm-Gg: ASbGnctUxluDOcxqV6ydyiPVBs5RuCJSfKjN/36qn8c2YTjRD1qDO28/tutHcARSDvM
+	Gx+35Z+/us7Gv556HU0Adg2GhULhJNASlEtVhR96QdRdqpFKNTbCE2gnjaXEVlKk3jdAyVhP0GE
+	39Ns+z9Q92cKKhVnrU3lQNqywIJJJ4m0QClvW6+LcUrFnRFkUH1pTQYyn9SzuYX+4gXqpJUWJp7
+	IYw1UQbuFtZvZSdurC50R8sCJHUEYdVw7KE9vg/HbG9DTwDIdHndJDUimagzy8Sv3aQR+9OcGMh
+	rWDJPVWv6ZER4pkUOatvUI+3hMI4YAVLVBpm3ysvOrjGOGm2T0w07omiv+CHMp+Rzo5H1xus62V
+	N30iF477WuotQFt4dRfwK+ot0qamUa4MINwYtstPOjIOE9HSpnYqd8QEPJ9QJf4zUpHz0e7cTUl
+	ZguVelcYPoW/JMDcLZjMuXweJeoHdlj6sj8g==
+X-Google-Smtp-Source: AGHT+IGcN/kfIKnH8UEIcRMeENYQps70OLTJ0JNHqdRe30a1VCk8EhGuR6GFWFzu2Ojxaxr9I9XRIQ==
+X-Received: by 2002:a05:600c:468a:b0:477:9f34:17b8 with SMTP id 5b1f17b1804b1-47939df129emr76804815e9.1.1765209027313;
+        Mon, 08 Dec 2025 07:50:27 -0800 (PST)
+Received: from iku.Home ([2a06:5906:61b:2d00:9aa6:8a23:82c5:2b7])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4792b150878sm147717845e9.3.2025.12.08.07.50.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Dec 2025 06:19:08 -0800 (PST)
-From: Rakuram Eswaran <rakuram.e96@gmail.com>
-To: linux-can@vger.kernel.org
-Cc: rakuram.e96@gmail.com,
+        Mon, 08 Dec 2025 07:50:26 -0800 (PST)
+From: Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Aswath Govindraju <a-govindraju@ti.com>
+Cc: linux-can@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	mailhol@kernel.org,
-	mkl@pengutronix.de,
-	socketcan@hartkopp.net
-Subject: Re: [RFC PATCH 0/2] can: add dummy_can termination and update SocketCAN docs for CAN XL
-Date: Mon,  8 Dec 2025 19:49:00 +0530
-Message-ID: <20251208141904.8737-1-rakuram.e96@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: 20251127191808.144723-1-rakuram.e96@gmail.com 
-References: <20251127191808.144723-1-rakuram.e96@gmail.com>
+	linux-renesas-soc@vger.kernel.org,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 0/2] Add support for TI TCAN1046 CAN transceiver
+Date: Mon,  8 Dec 2025 15:50:17 +0000
+Message-ID: <20251208155019.136076-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 
-On Fri, 28 Nov 2025 at 00:49, Rakuram Eswaran <rakuram.e96@gmail.com> wrote:
->
-> This RFC series introduces two changes related to CAN XL support:
->
->   1. Add termination configuration support to the dummy_can driver,
->      enabling termination testing with iproute2.
->
->   2. Update the SocketCAN documentation to describe CAN XL operation,
->      including MTU changes, bittiming/XBTR settings, mixed-mode
->      behaviour, error signalling, and example iproute2 usage.
->
-> The goal of this RFC is to validate whether the proposed behaviour and
-> documentation match the expectations for the ongoing CAN XL upstream
-> work. Feedback from the maintainers is highly appreciated.
->
-> Base commit:
-> commit 30f09200cc4a ("Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux")
->
-> For testing, this series was applied on top of the following patchsets:
->
->   * "treewide: remove can_change_mtu()" (Vincent Mailhol)
->         b4 am 20251003-remove-can_change_mtu-v1-1-337f8bc21181@kernel.org
->         git am ./20251003_mailhol_can_treewide_remove_can_change_mtu.mbx
->
->   * "can: netlink: add CAN XL support" (Marc Kleine-Budde)
->         b4 am 20251126-canxl-v8-0-e7e3eb74f889@pengutronix.de
->         git am ./v8_20251126_mkl_can_netlink_add_can_xl_support.mbx
->
-> Testing was performed using the iproute2-next tree (canxl-netlink branch),
-> which contains the required CAN XL netlink support for validating
-> these changes.
->
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Hello,
+Hi All,
 
-Gentle ping — any feedback on this documentation update patch series?
+This patch series adds support for the TI TCAN1046 automotive CAN
+transceiver. The TCAN1046 provides dual high-speed CAN channels and
+includes STB1/2 control lines.
 
-Best Regards,
-Rakuram
+Cheers,
+Prabhakar
+
+Lad Prabhakar (2):
+  dt-bindings: phy: ti,tcan104x-can: Document TI TCAN1046
+  phy: phy-can-transceiver: Add support for TI TCAN1046
+
+ Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml | 5 ++++-
+ drivers/phy/phy-can-transceiver.c                          | 4 ++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+-- 
+2.52.0
+
 
