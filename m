@@ -1,112 +1,133 @@
-Return-Path: <linux-can+bounces-5838-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5840-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9619CB2722
-	for <lists+linux-can@lfdr.de>; Wed, 10 Dec 2025 09:40:26 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55CD4CB2801
+	for <lists+linux-can@lfdr.de>; Wed, 10 Dec 2025 10:10:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1B12031290DE
-	for <lists+linux-can@lfdr.de>; Wed, 10 Dec 2025 08:35:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id EFB973025418
+	for <lists+linux-can@lfdr.de>; Wed, 10 Dec 2025 09:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5369306D40;
-	Wed, 10 Dec 2025 08:34:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16FAB2F5A25;
+	Wed, 10 Dec 2025 09:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="d0TaE5t/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="oPijtTlK"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from flow-b2-smtp.messagingengine.com (flow-b2-smtp.messagingengine.com [202.12.124.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABF622578D
-	for <linux-can@vger.kernel.org>; Wed, 10 Dec 2025 08:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3FA62E229F;
+	Wed, 10 Dec 2025 09:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765355699; cv=none; b=MsM+RXbR61rDpr2JfVbXZn6bqwoLR2JpqUEW2wEGAZH2JDm+TEOdpkqb24PIKyUwOGLTVlQeFA7yQ4KiL+OdAS9+aNKPqOhhZYPUAYryIPoArtveRyvsYCoGKDS2Mkuo4JcbobWrxtssPiiOCexTdjhZPJZt5wz/51x2b642Eb4=
+	t=1765357851; cv=none; b=P+KVkrRsgtqrylmAQMvytuBNou4v0Y69QJn+PbPUHz8q+x9Vfba1EZvt5VQ11hf7fmJz6tfKVI6+EC22S/SGkU1BqZ6JeYaCXoE+fwGJQQtzqtr4IeC5QZUn0C+VKk1xXok1FRggYoR8fH0OAF2THbuTthEqf8WZsNhf+sINhHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765355699; c=relaxed/simple;
-	bh=h66wVx+pDZR9CBJkShCYbUTT6AFbZOddLraapcW4ung=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QkE8Wvtz/90NzxR2GZgryXNGwVhl+8vxkAua4tGyokkv8b6PRbjJdl//gETbGXvLgIuUizs2SREx3OTY6IwqOAIkqagX6ZmFlnPkrrxfszCvQoaRpo+vLuBKvAMjBC7WxaxBYvrn2YQrwcPw7VR0SbNgvuRJX7rydsyYzCi8iGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vTFet-0007fZ-N1; Wed, 10 Dec 2025 09:34:51 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vTFes-004vMi-2X;
-	Wed, 10 Dec 2025 09:34:50 +0100
-Received: from blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 6EF164B3B25;
-	Wed, 10 Dec 2025 08:34:50 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	stable@vger.kernel.org
-Subject: [PATCH net 2/2] can: gs_usb: gs_can_open(): fix error handling
-Date: Wed, 10 Dec 2025 09:32:24 +0100
-Message-ID: <20251210083448.2116869-3-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251210083448.2116869-1-mkl@pengutronix.de>
-References: <20251210083448.2116869-1-mkl@pengutronix.de>
+	s=arc-20240116; t=1765357851; c=relaxed/simple;
+	bh=IMy+644D6GzznKl5SyK98WSeKQJv4NKWmvsjr8Zvb88=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=IHvhAmDAuo3SlEapz8RTYSF/mzrlB+T/uk+2+yn2Yz0yuopyV76Akgy+ZNMuGALSfJWpBSP2h7Dftvh09E5Blbgotl5oy28bdeiSKhgyC0NBm7hKo0z2s97Ll0A/CIVONh96tFSuClS5xyW9k9dQntFX3V3XCboNNtWDhUBgC9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=d0TaE5t/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=oPijtTlK; arc=none smtp.client-ip=202.12.124.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.stl.internal (Postfix) with ESMTP id 897881300979;
+	Wed, 10 Dec 2025 04:10:47 -0500 (EST)
+Received: from phl-imap-17 ([10.202.2.105])
+  by phl-compute-04.internal (MEProxy); Wed, 10 Dec 2025 04:10:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1765357847;
+	 x=1765365047; bh=XKk/mRH0B0YNo//tXqlC9vkADj3PDAWv8CZ+OAr52xk=; b=
+	d0TaE5t/R4LuqxEm9D7uKQOtHWxUkFqPcPDN8STx137UPSg9xkrerCtoseq6ek+C
+	9PaWMwP0nPQMBgkpsybCJHaVO+MLFqVTDr/DK4eOnIqDA8QZ7UXRxRI5f2h0Y7+H
+	33Ijbb7cujPb+dPIhsiUNYw3hLcHDjEX5SZNyRoBpdsGN81mpH24ExzsGVMKmYvF
+	4u9NBSyP3VN4Bqg6ZJII4EFENgjls76kkQj55+BW3RZvFSg9Ks5REcRahn8doX7B
+	XSLhy6JK0IdHCTPpls2VlX65egax8dkR5K/sNHxuFIk/dU4Hok16liH9tNe4/o78
+	3dW9TkI9XAQdYbqbW71tWA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1765357847; x=
+	1765365047; bh=XKk/mRH0B0YNo//tXqlC9vkADj3PDAWv8CZ+OAr52xk=; b=o
+	PijtTlKgWp8b7BvRweYNV7Cey1J0zK+lUU3Q6PX7jNq1uNUBX5I0qcDiTY7WHIaa
+	TjiEe4YR0ETbENp682wqOeK15aicSvbvLFQHVbHb2Lgj0T/rhTJr0+K3WoBUtrCi
+	J3+Maqe1fiXUQP/JEGwD+nm9RWcDvfLiwcbhgyLezLuTkI1oSpnAnMOOzph0xu+T
+	MF36RW7/mA/AdIBihHlwCCkkHs0dIK+Mnsn6SZF0St8LNWF2TEQfJsTWs+aBxrei
+	7lVOy3w4BXisysVtDncbU9MroJpJgCr9mGDs/65qFfydJBG5PU/5AZwh/GKoTZYV
+	PeZlftS+tMtvGfXH7yOkg==
+X-ME-Sender: <xms:Fzk5aWLhqHOCsxwh8t_nd_j5vD4IsBDcbfD1MG-tSr7Lm2NkZlLW7g>
+    <xme:Fzk5aY_WTJdYmiDX1eiGtIsJpmrPkIBwQpZC8qkm_V4HB5b1ym7_XGAKHeQeUvQzr
+    YbXmUlXzX6ZCgpLShr1hN3sciJLs96dSXucjrYJhFRP0RQtNleX4LI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvvddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdp
+    rhgtphhtthhopehsohgtkhgvthgtrghnsehhrghrthhkohhpphdrnhgvthdprhgtphhtth
+    hopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrihhlhhholheskhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtohepvgigthhjrgeskhhvrghsvghrrdgtohhmpdhrtg
+    hpthhtohepmhhklhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtoheplhhinhhu
+    gidqtggrnhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqd
+    hkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:Fzk5aTxZnpH07bXcdIYYhsSZ7BTilryVU-Cb2uzQIaCoNcmYAaXM6w>
+    <xmx:Fzk5aVVGNeKKgwjGle5WhsiEGlBNm2K7LmWrIcb0rrBLDzq60ElQMQ>
+    <xmx:Fzk5adOrFS68XrSis16z0l-AbuZxREU1qDNJgutnE5rB3nTJ6WyOwg>
+    <xmx:Fzk5afC1hgY58tvrgAoIfQdpSxxV0DH8ZtncJ-JZ2OpR4MeTzBJidA>
+    <xmx:Fzk5aYMnV27v1oFzsUIpzqtdi3TXMYyIAFMM1oGEDJt9OqNe244q8UO_>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 2EEB7C40071; Wed, 10 Dec 2025 04:10:47 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-ThreadId: A7rUDe6_ZBCR
+Date: Wed, 10 Dec 2025 10:10:27 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Marc Kleine-Budde" <mkl@pengutronix.de>,
+ "Vincent Mailhol" <mailhol@kernel.org>
+Cc: "Arnd Bergmann" <arnd@kernel.org>,
+ "Oliver Hartkopp" <socketcan@hartkopp.net>,
+ "Jimmy Assarsson" <extja@kvaser.com>, linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <7427949a-ea7d-4854-9fe4-e01db7d878c7@app.fastmail.com>
+In-Reply-To: 
+ <20251210-imported-pelican-from-tartarus-c1084f-mkl@pengutronix.de>
+References: <20251204100015.1033688-1-arnd@kernel.org>
+ <5de9b33e-6129-4765-95a7-e3e12de1f8cd@kernel.org>
+ <20251210-imported-pelican-from-tartarus-c1084f-mkl@pengutronix.de>
+Subject: Re: [PATCH] net: can: fix build dependency
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Commit 2603be9e8167 ("can: gs_usb: gs_can_open(): improve error handling")
-added missing error handling to the gs_can_open() function.
+On Wed, Dec 10, 2025, at 09:16, Marc Kleine-Budde wrote:
+> On 05.12.2025 00:30:14, Vincent Mailhol wrote:
 
-The driver uses 2 USB anchors to track the allocated URBs: the TX URBs in
-struct gs_can::tx_submitted for each netdev and the RX URBs in struct
-gs_usb::rx_submitted for the USB device. gs_can_open() allocates the RX
-URBs, while TX URBs are allocated during gs_can_start_xmit().
+>> >  	  can-dev.> -if CAN_DEV
+>> > +if CAN_DEV && CAN
+>>               ^^^^^^
+>> Is this needed? CAN_DEV depends on CAN, so the condition
+>>
+>>   CAN_DEV && !CAN
+>>
+>> should not be reachable.
+>
+> Removed the '&& CAN' while applying the patch.
 
-The cleanup in gs_can_open() kills all anchored dev->tx_submitted
-URBs (which is not necessary since the netdev is not yet registered), but
-misses the parent->rx_submitted URBs.
+Sorry I forgot to reply here: the '&& CAN' is absolutely
+required here, otherwise you can configure CAN device drivers
+as built-in with CAN_DEV=y CAN=m, and that results in a
+link failure.
 
-Fix the problem by killing the rx_submitted instead of the tx_submitted.
-
-Fixes: 2603be9e8167 ("can: gs_usb: gs_can_open(): improve error handling")
-Cc: stable@vger.kernel.org
-Link: https://patch.msgid.link/20251210-gs_usb-fix-error-handling-v1-1-d6a5a03f10bb@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/usb/gs_usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index e29e85b67fd4..a0233e550a5a 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -1074,7 +1074,7 @@ static int gs_can_open(struct net_device *netdev)
- 	usb_free_urb(urb);
- out_usb_kill_anchored_urbs:
- 	if (!parent->active_channels) {
--		usb_kill_anchored_urbs(&dev->tx_submitted);
-+		usb_kill_anchored_urbs(&parent->rx_submitted);
- 
- 		if (dev->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
- 			gs_usb_timestamp_stop(parent);
--- 
-2.51.0
-
+      Arnd
 
