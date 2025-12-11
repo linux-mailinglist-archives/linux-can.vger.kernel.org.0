@@ -1,94 +1,133 @@
-Return-Path: <linux-can+bounces-5852-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5853-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1176DCB5644
-	for <lists+linux-can@lfdr.de>; Thu, 11 Dec 2025 10:43:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A0D3CB5689
+	for <lists+linux-can@lfdr.de>; Thu, 11 Dec 2025 10:48:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5CAA53007E63
-	for <lists+linux-can@lfdr.de>; Thu, 11 Dec 2025 09:43:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0C9F73010CCA
+	for <lists+linux-can@lfdr.de>; Thu, 11 Dec 2025 09:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 536572FCC0F;
-	Thu, 11 Dec 2025 09:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5gEkJEu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 698662FD67B;
+	Thu, 11 Dec 2025 09:46:54 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2723E381C4;
-	Thu, 11 Dec 2025 09:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58906381C4
+	for <linux-can@vger.kernel.org>; Thu, 11 Dec 2025 09:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765446204; cv=none; b=prQTjLl441rMKJjD8mzvDAZgAvVwwSxNKlM1YpW1Ck4bnMgGTlQ0pLr5eoMCc4l6eW0IUH6oCdM4cEK30nch8E1pz2ibh4K+ypSBBrr6+/XFFzX0NfY3Q7TlpZR4MEo3WqeYfPzbObey8KVVia7vMtcBH3gF050xtt3xZSGUf9U=
+	t=1765446414; cv=none; b=OSZlQG6clopabYK2a01Kx0wrBFGZfvN9zkp/cZ+nMA/Nlk+gCEE9o7uWXY3geY7bIuf9yUHDtMzNnnWfyVP/N/BnIleUcVT+MUT54JU9F6WoTcIlOdl4PZsjFI9AB9BetqwpQiUmAs8L6j8uDg9xRYNtYwTXjYK1NViycR44ZjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765446204; c=relaxed/simple;
-	bh=GJaDJkmnWRTHvmHqWuLfnA/PUIOUXg8pn4fL0gM1KEA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=koMdchAPRlIyoByJQph6HhEnV2oeXCrC8ia63Pkv3PrC821G+BnM6ev0+qRVKoZM2wBkY8c0ukyjCHFTZx/n2H52w3V+XxdGzFauQgg7NX1TTncJDU3jCDEYPRG58DXGjZ5KEGD9HRPylOcSwC2K3X3C31vznUk7/hAwmXcI2tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h5gEkJEu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF3A2C116B1;
-	Thu, 11 Dec 2025 09:43:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765446203;
-	bh=GJaDJkmnWRTHvmHqWuLfnA/PUIOUXg8pn4fL0gM1KEA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=h5gEkJEu/l0tv4J3gyz7VGy7902Sn1LA3BwJ7w3Xcwutl6VfBAt5R2AI1/S+JkAfD
-	 ugDdvqT/FmFn71a0pga6xu8dqkmvNNZCD0XWhynliXU9SdP2gIJRl1jlvu6bXRJ5XD
-	 ZViurZAhSQCFl9yRjLzI36pqII6mqgDW4CQB2nFZ/PuTAYPOxuv+onpBaKthNn/Eh1
-	 blVHz5SpDYIDZZhKPY5uJ0gFPcunPkPe5bmj/8GvXRJW9ruEK5tEoFBNqyifzuQivY
-	 UIFHUxaG23hpH7cZUJzhotYtyUkhDr0rZSNcD/hu4vE3jQ2PqoqlxK8KGr6SrtJ4Lj
-	 KyFqYRvTXoQ/Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F2A0C3809A35;
-	Thu, 11 Dec 2025 09:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1765446414; c=relaxed/simple;
+	bh=wTBujD56NRS3PE4o06xGGSDbop0diyPY+CUVYEqVqEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U1PCSuWxB+oksUvsBK1w6Bi9fSgMeLBKNQe0dHJe9BTHWWyGP2fawzUPWq3bjCSaCkWalvQBAvfMf1/Z2CeKgBXKcAlENs6MUbfqTFNXoaElLY8qEAtdXD8Ij3XJ1jXqGLCRHOHFoJVO2ybYOsKamu++HSEOAh2coZWYejAQGcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vTdFt-0003xy-BU; Thu, 11 Dec 2025 10:46:37 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vTdFr-0056dG-2G;
+	Thu, 11 Dec 2025 10:46:35 +0100
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vTdFr-001J0Y-1w;
+	Thu, 11 Dec 2025 10:46:35 +0100
+Date: Thu, 11 Dec 2025 10:46:35 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: j1939: make j1939_session_activate() fail if device
+ is no longer registered
+Message-ID: <aTqS-6tw1eokG32E@pengutronix.de>
+References: <b9653191-d479-4c8b-8536-1326d028db5c@I-love.SAKURA.ne.jp>
+ <33947a8d-18b2-4aa1-a4f5-5d90c4619b65@I-love.SAKURA.ne.jp>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/2] can: fix build dependency
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176544601752.1308621.3486706619884778020.git-patchwork-notify@kernel.org>
-Date: Thu, 11 Dec 2025 09:40:17 +0000
-References: <20251210083448.2116869-2-mkl@pengutronix.de>
-In-Reply-To: <20251210083448.2116869-2-mkl@pengutronix.de>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de, arnd@arndb.de,
- lkp@intel.com, socketcan@hartkopp.net
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <33947a8d-18b2-4aa1-a4f5-5d90c4619b65@I-love.SAKURA.ne.jp>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hello:
+Hi,
 
-This series was applied to netdev/net.git (main)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+On Tue, Dec 09, 2025 at 06:43:12PM +0900, Tetsuo Handa wrote:
+> Ping?
 
-On Wed, 10 Dec 2025 09:32:23 +0100 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+Sorry for delay.
+
+> On 2025/11/25 22:39, Tetsuo Handa wrote:
+> > Should we also make j1939_sk_queue_activate_next_locked() and
+> > j1939_xtp_rx_rts_session_new() not to emit bogus warning message?
+> linux-next-20251208 has gotten a trace with
+> j1939_sk_queue_activate_next_locked() and j1939_xtp_rx_rts_session_new().
+> Do we want to make these functions not to emit bogus warning message?
 > 
-> A recent bugfix introduced a new problem with Kconfig dependencies:
-> 
-> WARNING: unmet direct dependencies detected for CAN_DEV
->   Depends on [n]: NETDEVICES [=n] && CAN [=m]
->   Selected by [m]:
->   - CAN [=m] && NET [=y]
-> 
-> [...]
+> > Is this error case rare enough to tolerate bogus warning message?
 
-Here is the summary with links:
-  - [net,1/2] can: fix build dependency
-    https://git.kernel.org/netdev/net/c/6abd4577bccc
-  - [net,2/2] can: gs_usb: gs_can_open(): fix error handling
-    https://git.kernel.org/netdev/net/c/3e54d3b4a843
+Good question. You are right, error messages do not reflect the reality.
 
-You are awesome, thank you!
+May be something like this?
+
+j1939_sk_queue_activate_next_locked(struct j1939_session *session)
+
+	ret = j1939_session_activate(first);
+	if (ret) {
+		if (ret == -EAGAIN || ret == -EBUSY)
+			netdev_warn_once(first->priv->ndev,
+					 "%s: 0x%p: Identical session is already activated.\n",
+					 __func__, first);
+		else
+			netdev_warn_once(first->priv->ndev,
+					 "%s: 0x%p: Activation failed with err %i.\n",
+					 __func__, first, ret);
+
+		first->err = ret;
+		goto activate_next;
+	}
+
+
+j1939_xtp_rx_rts_session_new(struct j1939_priv *priv, struct ...
+
+	ret = j1939_session_activate(session);
+	if (ret) {
+		if (ret == -EAGAIN)
+			netdev_alert(priv->ndev, "%s: 0x%p: concurrent session with same addr (%02x %02x) is already active.\n",
+			     __func__, session, skcb.addr.sa, skcb.addr.da);
+		else
+			netdev_warn(priv->ndev, "%s: 0x%p: session activation failed: %i\n",
+				    __func__, session, ret);
+
+		j1939_session_put(session);
+		return NULL;
+
+This can be done in a separate patch later.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
