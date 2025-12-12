@@ -1,118 +1,102 @@
-Return-Path: <linux-can+bounces-5859-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5860-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65DB3CB8A88
-	for <lists+linux-can@lfdr.de>; Fri, 12 Dec 2025 11:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 010EFCB8B3B
+	for <lists+linux-can@lfdr.de>; Fri, 12 Dec 2025 12:21:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 66F643007225
-	for <lists+linux-can@lfdr.de>; Fri, 12 Dec 2025 10:58:42 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F348E300855A
+	for <lists+linux-can@lfdr.de>; Fri, 12 Dec 2025 11:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AAC330FF08;
-	Fri, 12 Dec 2025 10:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lvgDn2ys"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74EA231691C;
+	Fri, 12 Dec 2025 11:21:43 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8292319600
-	for <linux-can@vger.kernel.org>; Fri, 12 Dec 2025 10:58:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8892B231A23
+	for <linux-can@vger.kernel.org>; Fri, 12 Dec 2025 11:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765537120; cv=none; b=I/NmviV3Q+124feEJ3LxoQr6Y1B2PAYXlEMIggPMhaYodAB6sUssGsgQpOJI+bwJFkjeJcpAPlUlQTIHT5d8PjvlokD44JfAoJyiWhyPmGGCRfEViK+h5SfZESCSpzQYQnzRk9ASGCIkw0eWu6rvmlklqLd/tHOLrtQmU5TETso=
+	t=1765538503; cv=none; b=K/eg7KKSgBe0AzkpukYdSwEMjyKgaLlrOe+SunKTjRnrwdB+KI7huShMzxVNoTIwvpdbUnmx6yKZ5CXQ2fAHrYZS5P6z9f+mgOhzMuD8TJUIklLGDKFPY9nFDSw+TeWxU/ncV1NMVPgABIpUqdzdy/CdbrhM7+4m3NdyoTIqGDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765537120; c=relaxed/simple;
-	bh=WqXxoSqrDnwsvdO/PSfoKvUqgPvzTsDKzE39KogF71s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jEuXWilwJHLHw6thfGYpcKKhdnvHsa6nXQuFQHYHuRmOsmzeJ+xbDptXoWVyjVrptxh8lTMFtQfNKaYJt+CNAnrpUyUs1RX4Pg74CplzwqtloHtO97EXeIkPArsRRWrnpbn1FmYrNbkEgovp2DQqUVcd6SgjKr2SfJp8EFS60uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lvgDn2ys; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42e2e40582eso644274f8f.1
-        for <linux-can@vger.kernel.org>; Fri, 12 Dec 2025 02:58:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765537117; x=1766141917; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HqR+IQTeub3ZkC8GS6Wk65+OamU6y/VpkmKlXNe7HxQ=;
-        b=lvgDn2ysJzd39XPqVSstpGi+diianBQxBqw6zBAmxTHcLYzASsB+DmCYp1eD2GeaWX
-         z/5vK+XhzkDmVaxIqK/IaoqPPcuC1wxB8Wmi61huhdFulcrj7rYJ+fUhpcC6/zEq2tCf
-         EdDOWbAVbT2bVA7x1K/R79OGoz5Qg51+ojBpTi+R/PP8rd1g07yu1/zzUuXPSdiJ7eyw
-         UZPx8+fpJyLtWfoghz9zk8o1GSnVx4gXdbtn54v1dtl3YH5i2jd0Ua8CDa2CVhlB0+NF
-         wB8Ge06OxeYpywcbcXSqd+jJWeNGGJqMnrL5MH+QenmgwWWGF8hDHODj0TSx2DfhXWG8
-         10UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765537117; x=1766141917;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HqR+IQTeub3ZkC8GS6Wk65+OamU6y/VpkmKlXNe7HxQ=;
-        b=WNdoh0JoL0W/9n4eSCwqH+uwuXdF9D6Psqf9NVWhCPlinwEvUyo467dOcY6YS5XU+3
-         JR92eNj18+26Icz8LlbbVZr/3P1bnvg5/+8GuJaSCFmBwhUm/S9LMZ4HAeU0LMUBgZhh
-         xIRJYwDxkl5Nfbv+BbygSJE+G+zp5Z5gtUmmyhzxqNIEo0Q7Lj0xMyupQ6OTtRbwEU7D
-         SS2rXUyJCwg2rBaj/bYdrF5ixNLB7vG22MiF9eodO1xIoM8x3EzubRQAxj+9FciGKOxN
-         54dgGKH6WigPvNUGu9QKIAQSvX2/k0fyN4z6geneDjeEdVo69gcmoFcsVMJUwT7zLR+n
-         iCcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXrlo51lnCXeBlKlujF85AdRqt6revGViPR0khekG4GoauY2Av2mRmqtPtdD4FILKPUveZLOCzRX80=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOUscWRRSTzjtgmSvs40ovTbjdqpaXx7uL5U7JliNKdm97LrfX
-	mx/uXqlV6fpdm8wlrPa+ClVjLJ27NVI5jpgjx/D/k6GqtFqWCT/xPm2TKDbo4XaLeA8ZFAIF3CH
-	MZgXAYTxaOXPXgcIjcPX9lwA/2fF6X5o=
-X-Gm-Gg: AY/fxX7NRZzDbA/0AQCjROPqzu/WjKl95WY8LInJAYeNDzmq31XE1dk7iro1P8PFQV5
-	AvYFw2Vv2BKbOIQtZoaxQXTSTzb0bZHahIzs655HHa6fU/3La6SKpu6UMYK8vVHhS0iirpsq+F+
-	XV7NO9SNb91L6fCKh3e7SXD/Pg1KQe7xAoktL5IDKB2c5n+78sJAwV8FhHx4u3W8EhQoS9gbjSV
-	0I9jEyMsKfefhUNCooQPOU3QzNyUJfbk7bBP+szvTqQt0PjC37D4jFBI6aC+76rDu40IfasdnsU
-	otBBTVxgWyzHCYPrPWrmFj3mF14=
-X-Google-Smtp-Source: AGHT+IE+ahrc04Q/jrdoppQwasQ4J1Y0Y9w6+KHjcQu1lJlaMpy7m90wwcJKrOJXxvNDcByIW5d1baSzOlJ31jhyAq4=
-X-Received: by 2002:a05:6000:186d:b0:3eb:c276:a347 with SMTP id
- ffacd0b85a97d-42fb42bb935mr1529919f8f.0.1765537117044; Fri, 12 Dec 2025
- 02:58:37 -0800 (PST)
+	s=arc-20240116; t=1765538503; c=relaxed/simple;
+	bh=dBiEXSXqAe1+bjWPLYEbVWzfCTeFakFmTqGBVAZdykk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DvBadOa3BhHOb9TtNJGSdhV84HNSa6y1PkAaBtT6v6LtQv6cUtkM69GK7CvF4GpNi4fcgXhLmGMk6Y8u7b/mnumjo/jaxv0r08KlGxWlXqzkxHNdhzc6+1VkNngK8sV4dwKxzmD/0r80t06BnyO0mjLheVouV24mEwu/9zd61lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vU1Cs-0004Lc-D5; Fri, 12 Dec 2025 12:21:06 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vU1Cq-005Hin-05;
+	Fri, 12 Dec 2025 12:21:04 +0100
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id A86804B5198;
+	Fri, 12 Dec 2025 11:21:03 +0000 (UTC)
+Date: Fri, 12 Dec 2025 12:21:03 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Conor Dooley <conor@kernel.org>
+Cc: Prabhakar <prabhakar.csengg@gmail.com>, 
+	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Aswath Govindraju <a-govindraju@ti.com>, Frank Li <Frank.li@nxp.com>, linux-can@vger.kernel.org, 
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2] dt-bindings: phy: ti,tcan104x-can: Document TI
+ TCAN1046
+Message-ID: <20251211-wonderful-singing-eel-4e2293-mkl@pengutronix.de>
+References: <20251209162119.2038313-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20251210-mauve-cow-of-hurricane-0f969d-mkl@pengutronix.de>
+ <20251210-persuaded-rewire-8ac93b0cc039@spud>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251209162119.2038313-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20251210-mauve-cow-of-hurricane-0f969d-mkl@pengutronix.de> <20251210-persuaded-rewire-8ac93b0cc039@spud>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7xctq6j2q5icdxbk"
+Content-Disposition: inline
 In-Reply-To: <20251210-persuaded-rewire-8ac93b0cc039@spud>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Fri, 12 Dec 2025 10:58:11 +0000
-X-Gm-Features: AQt7F2qVBwHpP3VeypyTa021PRhJeO9lvQ2ybqJTDVdXUznY1gpLQoN1_DLtzFc
-Message-ID: <CA+V-a8sUPin=r=x6TVvyazqxwfDwW+RsnOfHaTJf1N-VpAPE7g@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: phy: ti,tcan104x-can: Document TI TCAN1046
-To: Conor Dooley <conor@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Aswath Govindraju <a-govindraju@ti.com>, Frank Li <Frank.li@nxp.com>, linux-can@vger.kernel.org, 
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+
+
+--7xctq6j2q5icdxbk
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] dt-bindings: phy: ti,tcan104x-can: Document TI
+ TCAN1046
+MIME-Version: 1.0
 
-Hi Conor,
-
-On Wed, Dec 10, 2025 at 6:21=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
->
+On 10.12.2025 18:21:34, Conor Dooley wrote:
 > On Wed, Dec 10, 2025 at 08:52:58AM +0100, Marc Kleine-Budde wrote:
 > > On 09.12.2025 16:21:19, Prabhakar wrote:
 > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > > >
-> > > Document the TI TCAN1046 automotive CAN transceiver. The TCAN1046 is =
-a
-> > > dual high-speed CAN transceiver with sleep-mode support and no EN pin=
-,
+> > > Document the TI TCAN1046 automotive CAN transceiver. The TCAN1046 is a
+> > > dual high-speed CAN transceiver with sleep-mode support and no EN pin,
 > > > mirroring the behaviour of the NXP TJA1048, which also provides dual
 > > > channels and STB1/2 sleep-control lines.
 > > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com=
->
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > > > ---
 > > > TCAN 1046, https://www.ti.com/lit/ds/symlink/tcan1046v-q1.pdf?ts=3D17=
 65297159307&ref_url=3Dhttps%253A%252F%252Fwww.ti.com%252Fproduct%252FTCAN10=
@@ -128,25 +112,52 @@ a
 >
 > What you're saying seems to contradict the tag you've given, is a
 > fallback really suitable if the standby polarity is not the same?
->
-On the RZ/V2H I have,
 
-    can_phy: can-phy {
-        compatible =3D "ti,tcan1046", "nxp,tja1048";
-        max-bitrate =3D <8000000>;
-        #phy-cells =3D <1>;
-        status =3D "okay";
-        standby-gpios =3D <&pinctrl RZV2H_GPIO(7, 0) GPIO_ACTIVE_HIGH>,
-                                  <&pinctrl RZV2H_GPIO(7, 2) GPIO_ACTIVE_HI=
-GH>;
-    };
+The driver uses _logical_ levels to switch the GPIOs. For example to
+power on the PHY, it disables the standby GPIO by setting the value to
+"0".
 
-When the CAN interface is brought up 0 is written to GPIO which brings
-the CAN transceiver to Normal mode  and when the CAN chip is brought
-down `1` is written to GPIO and it puts the CAN transceiver to Standby
-mode. Which matches to the behaviour of TCAN1046 CAN transceiver. Am I
-missing something?
+| static int can_transceiver_phy_power_on(struct phy *phy)
+| {
+[...]
+|         gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
+[...]
+| }
 
-Cheers,
-Prabhakar
+You have to use GPIO_ACTIVE_HIGH/GPIO_ACTIVE_LOW in the DT to configure
+the actual level of the GPIO.
+
+If you connect the PHY's standby input directly to the SoC's GPIO....
+
+| TJA1048: HIGH =3D Normal mode, LOW =3D Standby mode
+| TCAN1046: High =3D Standby mode, Low =3D Normal Mode
+
+=2E..for the TJA1048 you would use GPIO_ACTIVE_LOW, while for the
+TCAN1046 you would use GPIO_ACTIVE_HIGH.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--7xctq6j2q5icdxbk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmk7+pwACgkQDHRl3/mQ
+kZzoXAf/WppHtgf+xjeHcSDUxWQiT0y/ms86YiQzUQjFGDoc+DrkDvbpuaMAc93u
+Gsxz0QtfwMnzoMRyvd514QpjuacWsRppi+Td6sE70o8P4bOMWqy6oErLNqzHqOMX
+4Z4ouZIL8vy+0uBD2KOicJ4lveWiJikUM4/I1tA3EW/19a0PJraNizbrnhzytasp
+9YkxE/fMQopyYhb7//q4kyyzA/CzNqCS2qvi7RSk9XzXQYfzgSVCvF22USjkTUtH
+J+hBMluDYcw1DAoRTB7YqBrCYsdnjDtokuiY2lvvnnXl3FX4PjmWMrSRnkyFhmtB
+KlwlVtJ9F8qJbQrT0cqukuPBhyOcwA==
+=RGBu
+-----END PGP SIGNATURE-----
+
+--7xctq6j2q5icdxbk--
 
