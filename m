@@ -1,163 +1,161 @@
-Return-Path: <linux-can+bounces-5862-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5863-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CF1ECB9816
-	for <lists+linux-can@lfdr.de>; Fri, 12 Dec 2025 19:03:00 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 421CCCBB741
+	for <lists+linux-can@lfdr.de>; Sun, 14 Dec 2025 08:20:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 862D1303F4D4
-	for <lists+linux-can@lfdr.de>; Fri, 12 Dec 2025 18:00:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9F5723003874
+	for <lists+linux-can@lfdr.de>; Sun, 14 Dec 2025 07:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E04102D3732;
-	Fri, 12 Dec 2025 18:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1132B2773C3;
+	Sun, 14 Dec 2025 07:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c+evEzBh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c5bQuarO";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="trjcPp3k"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A28293B75;
-	Fri, 12 Dec 2025 18:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116983B8D5E
+	for <linux-can@vger.kernel.org>; Sun, 14 Dec 2025 07:20:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765562429; cv=none; b=nCLsMlt5UcfEoojtBazosseJ3atgFXZ4vhZnFPTZQHXUnZYztkGOBTtLFIM4Vz/iNSbrxhQ2bexgvsUvR6Nf3j9q3OdECyxEKID0bHuKVv6Kr1cjio+9us24Z6azOtPyDIWthf40hs6iqUaBbXlkXxACFWZ0bXbqwRc34MTkI4Q=
+	t=1765696847; cv=none; b=RYfcLCLuvvmU3CO1gtdJv2AyygYEtPTwVlkkESa2rBZb+LXkvPefAL2oztxK6Zx50R0CwRYkQO+NXXmGQBnnHBva67iaZ+/TzxxzoVBlflSUglc1uRYQ/x/WSfz83y4RwonnhtmzHUA+4Eopmr+7Pb90ar/Qme+UNLAmcL3FK3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765562429; c=relaxed/simple;
-	bh=bJ2KJCFxwgxmMsSuX7IhdV9rCVpxtdIdE13CWYdQEx4=;
+	s=arc-20240116; t=1765696847; c=relaxed/simple;
+	bh=2Hruo867MnhKMXqnq2iboVj0I9z7FgOsV0vMzjLmKtQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lI5VsU6+1PDqZVVk4C6BESTkAGXflqH1y5/E7nJpsTR0B2G9eBiN/PO+g1TY9ZFiBJqR8bgKUibGUsU8fMxyRD7sq5i2Ug/T6vrdIxh/D4cz2MZSOv5/09VbOgEB+X5KJA9DWzCY1IDMLN0YK/9aGv/K4TI/tLMqxdqueBW0Ivo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c+evEzBh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E51AC4CEF1;
-	Fri, 12 Dec 2025 18:00:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765562429;
-	bh=bJ2KJCFxwgxmMsSuX7IhdV9rCVpxtdIdE13CWYdQEx4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c+evEzBhkPlDbI3BlJdEvZ8AEjftKU/VXIdPPQJWvsCkWhGn0dqBuVSLZ16mXLcK+
-	 OQYy/rRiaQmYlbi8QYxP/qhukPanqLxFBIRQOgUCDqyNpOQhI8JxXsFTEp0EbPxClx
-	 UkxH7VzoYkIwaFc9ouQK5nOVWoqpUzdszERP5MM8ercsEPDYSvBkJfWfDbsjbe0Tyc
-	 uV/YvsLvAAlE+F6xW8hjBaVU4sa1nIcTGpdaz5udHVRAbVeXbkffrWornvbLJlxJuO
-	 myLTdNnURrg6rm4H/SWNmBWTVxv0n6rUtk1280Ij8u5Gnov3A2O5hjDK1iGxgOcKTr
-	 +0hfL/nEmnITw==
-Date: Fri, 12 Dec 2025 18:00:23 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Prabhakar <prabhakar.csengg@gmail.com>,
-	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Aswath Govindraju <a-govindraju@ti.com>,
-	Frank Li <Frank.li@nxp.com>, linux-can@vger.kernel.org,
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2] dt-bindings: phy: ti,tcan104x-can: Document TI
- TCAN1046
-Message-ID: <20251212-thaw-octopus-57e8400506ea@spud>
-References: <20251209162119.2038313-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20251210-mauve-cow-of-hurricane-0f969d-mkl@pengutronix.de>
- <20251210-persuaded-rewire-8ac93b0cc039@spud>
- <20251211-wonderful-singing-eel-4e2293-mkl@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=YvZmhzWfyABzC8aqNYceFVP1cD5c+naKh18x82AFtLhtSWh/awRp3GG0iKkF1oPMlB2lTEyj8+dJ8j0v37UixVU4+D1wQxpZilyXQkDC0/HU2YUQshvXkIS/RFffjDzk56ZveEIN1HuiTufSw22GPXcx4QYbM26qlAL6N4VJZb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c5bQuarO; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=trjcPp3k; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1765696843;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6PBHGYUxi7Ek0lK+0qKl7f29nfdLGn+qwm8GebmaVpY=;
+	b=c5bQuarOpJ2UOlXlohvJdw1NO4O6bK13QQ1oXPMrDf7wDZ9lF6aRfw2HoQ7W3x0I+151JK
+	uemc0/5UOg57/29RC0Rht5ubp7xhiR/16frOP0YM5YUQ/VE8a8/tykS6SJQ5tb4Zm8Ghtz
+	cKyabHTMPXR/MjNN+OLcWKOtJ0ONPu0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-199-vt-8hNaQMc2o5xyOFbqjxw-1; Sun, 14 Dec 2025 02:20:42 -0500
+X-MC-Unique: vt-8hNaQMc2o5xyOFbqjxw-1
+X-Mimecast-MFC-AGG-ID: vt-8hNaQMc2o5xyOFbqjxw_1765696841
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4788112ec09so16216275e9.3
+        for <linux-can@vger.kernel.org>; Sat, 13 Dec 2025 23:20:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1765696841; x=1766301641; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6PBHGYUxi7Ek0lK+0qKl7f29nfdLGn+qwm8GebmaVpY=;
+        b=trjcPp3k9Co9RwAZQf21QOnJPjO0O5oKphSOsvON7lBGWfTM7l5kvyiuMSdr78ebTe
+         7d0fUIfm84kDf02Ld1WIP3TvQZuN4QW8eexhRIKVUA9Fva28k4okwsBKkFMgv7pHq9Es
+         ZKebhskObYdwkb3MQzwK94nUYr8bYpjD39ofxxjG4r+eKJkee1OwyX8z8avXf/MkmJ9l
+         AmtrM+5m1yqYzj3MaPNEZmaYr/iTCnRk2TawqF46FJNGbMXtkeSpmTkyyh3FPOegGi4a
+         c3PC0q3wIOP9lFWz46tX2OX06TZYKWO2Z+WpN+6qMSr39+Hku2J/NYSLo/4ja5oJ7S1R
+         ARhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765696841; x=1766301641;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6PBHGYUxi7Ek0lK+0qKl7f29nfdLGn+qwm8GebmaVpY=;
+        b=APl8acfaroiSOsfVmJ7EpyDe9y4Xw+7DPJKBAryDEDSYL/4TO8vvbXv82Ur2AUCVSd
+         GG32P6caOuUztsGStFnyv4Rf9iOd39u0xJpmOhuYqhzORxOsl08aGQRb/g1VKqQVp3ev
+         KkOBvt5S/hDgeaTRsgNyhQx2EG1BPqDKXevPJIBuEtIzhNt7YDTQuyg7jWp8sHcIMj/h
+         eyZwOIKyDPt9Wx6pGvKgIfCt5OKmXjE4p03H6KHBOXvfw3n/cgM2TCizXtiWIcqvmDr2
+         iJgmTL+3uxTi6ScBHdv3aAeyFcxtg1U72o6mCdfMSTRfrwuwCPniYqYB5Gy5+8bz1A4B
+         jqbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUWZzHuajZ26kgu1hUqqNqyLujKf26UpksisvBFr1zxfdfmE5bjwE8FoMDQf2+gt8qybqyEyrOxIc8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzT+Mw2kusrnoG56FqfyfOiFUQaGV9BWIYrZkkgSXHtFpv00D2+
+	XrVc2FoE+2Bt5+3dcyqZ4O5fV36EnK8c7KPvjeK+5SbwfB6M1dYiUHf8ZDEYWoHkSq/o2zm/VdS
+	vP8MLJA7RNGjfvir9m3KzaTBnyesDU/51ydw/ruNi2tBF9LeYl6gDEua1csNU6A==
+X-Gm-Gg: AY/fxX7w/bKu2YyYHfAV/4ptSq03qBW0MHwRs/ofPgWmdj8LzGA2M4G70SLxcpk9xMg
+	LW+G98ch3S1EPqiwcq3syvRKYZ+fK4LxSCv6e56ZhzOeZQqWhliwS/exwvAfrXML3uTfLji3s1c
+	xS8U2SBp2Hr/LMiYjUDCQ4qqHaOs1e2XbEpQvGhamq1x7Qv16kx5hanQv98WWQSunR9TXH5YLk+
+	B1YmGt8AFL6HlhSJfnkfSJuaaO1EEQ5/HzkHl0vwU5sOM9sfXYD1THfoJl4UtIw9pqrEEmRWVg+
+	X7BGMVDG6mRDQVGfkG+vbQc5khYV8RudA1mqZiat4tykP9LEfxG/vo9M50kHTVR1nqHtTuE+D9Z
+	HfhR3P+YrDK3ritIjc8jsPBczoPkuNdw=
+X-Received: by 2002:a05:600c:1d26:b0:471:700:f281 with SMTP id 5b1f17b1804b1-47a8f90e561mr79551785e9.25.1765696841172;
+        Sat, 13 Dec 2025 23:20:41 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE+6ozxE+070hZaWXBVgyj/BNlykgsLXh8gS1Icmowaak4rF41B8W319InTAiQMPXUtjTWYMQ==
+X-Received: by 2002:a05:600c:1d26:b0:471:700:f281 with SMTP id 5b1f17b1804b1-47a8f90e561mr79551595e9.25.1765696840640;
+        Sat, 13 Dec 2025 23:20:40 -0800 (PST)
+Received: from redhat.com (IGLD-80-230-32-59.inter.net.il. [80.230.32.59])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-430f7475895sm3073017f8f.33.2025.12.13.23.20.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Dec 2025 23:20:40 -0800 (PST)
+Date: Sun, 14 Dec 2025 02:20:36 -0500
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
+Cc: Francesco Valla <francesco@valla.it>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Harald Mommer <harald.mommer@oss.qualcomm.com>,
+	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Stefano Garzarella <sgarzare@redhat.com>
+Subject: Re: [PATCH v6] can: virtio: Add virtio CAN driver
+Message-ID: <20251214022000-mutt-send-email-mst@kernel.org>
+References: <aQJRnX7OpFRY/1+H@fedora>
+ <aQkgsuxa2UaL_qdt@bywater>
+ <aTw2LORF0QiEcgM1@fedora>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ec+kgCN350Y3b0uL"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251211-wonderful-singing-eel-4e2293-mkl@pengutronix.de>
+In-Reply-To: <aTw2LORF0QiEcgM1@fedora>
 
+On Fri, Dec 12, 2025 at 04:35:08PM +0100, Matias Ezequiel Vara Larsen wrote:
+> > > +
+> > > +	priv->can_ctr_msg.cpkt_out.msg_type = cpu_to_le16(msg_type);
+> > > +	sg_init_one(&sg_out, &priv->can_ctr_msg.cpkt_out,
+> > > +		    sizeof(priv->can_ctr_msg.cpkt_out));
+> > > +	sg_init_one(&sg_in, &priv->can_ctr_msg.cpkt_in, sizeof(priv->can_ctr_msg.cpkt_in));
+> > > +
+> > > +	err = virtqueue_add_sgs(vq, sgs, 1u, 1u, priv, GFP_ATOMIC);
+> > > +	if (err != 0) {
+> > > +		/* Not expected to happen */
+> > > +		dev_err(dev, "%s(): virtqueue_add_sgs() failed\n", __func__);
+> > > +		mutex_unlock(&priv->ctrl_lock);
+> > > +		return VIRTIO_CAN_RESULT_NOT_OK;
+> > > +	}
+> > > +
+> > > +	if (!virtqueue_kick(vq)) {
+> > > +		/* Not expected to happen */
+> > > +		dev_err(dev, "%s(): Kick failed\n", __func__);
+> > > +		mutex_unlock(&priv->ctrl_lock);
+> > > +		return VIRTIO_CAN_RESULT_NOT_OK;
+> > > +	}
+> > > +
+> > > +	while (!virtqueue_get_buf(vq, &len) && !virtqueue_is_broken(vq))
+> > > +		wait_for_completion(&priv->ctrl_done);
+> > > +
+> > 
+> > Since the call is synchronous, does can_ctr_msg really need to be part
+> > of priv? Cannot be it allocated from the stack?
+> > 
+> 
+> I tried to allocate in the stack but the guest blocks when during `ip
+> link set up can0`, any idea?
 
---ec+kgCN350Y3b0uL
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+you can not DMA to/from the stack, really.
 
-On Fri, Dec 12, 2025 at 12:21:03PM +0100, Marc Kleine-Budde wrote:
-> On 10.12.2025 18:21:34, Conor Dooley wrote:
-> > On Wed, Dec 10, 2025 at 08:52:58AM +0100, Marc Kleine-Budde wrote:
-> > > On 09.12.2025 16:21:19, Prabhakar wrote:
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > Document the TI TCAN1046 automotive CAN transceiver. The TCAN1046 i=
-s a
-> > > > dual high-speed CAN transceiver with sleep-mode support and no EN p=
-in,
-> > > > mirroring the behaviour of the NXP TJA1048, which also provides dual
-> > > > channels and STB1/2 sleep-control lines.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.c=
-om>
-> > > > ---
-> > > > TCAN 1046, https://www.ti.com/lit/ds/symlink/tcan1046v-q1.pdf?ts=3D=
-1765297159307&ref_url=3Dhttps%253A%252F%252Fwww.ti.com%252Fproduct%252FTCAN=
-1046V-Q1
-> > > > NXP TJA1048, https://www.nxp.com/docs/en/data-sheet/TJA1048.pdf
-> > >
-> > > The polarity of the standby line of the chips is different.
-> > >
-> > > You must set the correct active high/low property for the GPIO, as the
-> > > driver uses logical levels.
-> > >
-> > > Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> >
-> > What you're saying seems to contradict the tag you've given, is a
-> > fallback really suitable if the standby polarity is not the same?
->=20
-> The driver uses _logical_ levels to switch the GPIOs. For example to
-> power on the PHY, it disables the standby GPIO by setting the value to
-> "0".
->=20
-> | static int can_transceiver_phy_power_on(struct phy *phy)
-> | {
-> [...]
-> |         gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
-> [...]
-> | }
->=20
-> You have to use GPIO_ACTIVE_HIGH/GPIO_ACTIVE_LOW in the DT to configure
-> the actual level of the GPIO.
+-- 
+MST
 
-Ah okay, I prob should have looked a bit further into the binding.
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-
->=20
-> If you connect the PHY's standby input directly to the SoC's GPIO....
->=20
-> | TJA1048: HIGH =3D Normal mode, LOW =3D Standby mode
-> | TCAN1046: High =3D Standby mode, Low =3D Normal Mode
->=20
-> ...for the TJA1048 you would use GPIO_ACTIVE_LOW, while for the
-> TCAN1046 you would use GPIO_ACTIVE_HIGH.
->=20
-> regards,
-> Marc
->=20
-> --=20
-> Pengutronix e.K.                 | Marc Kleine-Budde          |
-> Embedded Linux                   | https://www.pengutronix.de |
-> Vertretung N=FCrnberg              | Phone: +49-5121-206917-129 |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
-
-
---ec+kgCN350Y3b0uL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaTxYNwAKCRB4tDGHoIJi
-0u4GAQCKQ0zLIMjJX0Bdhe/NUX9j3cgUy7HrpJmvIB9NveY+mQEA21rq6AEs7yyQ
-5BxDz7hP5JNIAVC+Im1gKpg60Oy2JAs=
-=8+rD
------END PGP SIGNATURE-----
-
---ec+kgCN350Y3b0uL--
 
