@@ -1,512 +1,176 @@
-Return-Path: <linux-can+bounces-5864-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5866-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FD81CBBC7E
-	for <lists+linux-can@lfdr.de>; Sun, 14 Dec 2025 16:26:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1B0ECC6827
+	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 09:16:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3135B3006A81
-	for <lists+linux-can@lfdr.de>; Sun, 14 Dec 2025 15:26:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2B46A3054820
+	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 08:15:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 613632BDC03;
-	Sun, 14 Dec 2025 15:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b="z4lLiGeI";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=valla.it header.i=@valla.it header.b="Mle8mQFF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD14349B11;
+	Wed, 17 Dec 2025 08:15:23 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from delivery.antispam.mailspamprotection.com (delivery.antispam.mailspamprotection.com [185.56.87.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f68.google.com (mail-vs1-f68.google.com [209.85.217.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6942BD586
-	for <linux-can@vger.kernel.org>; Sun, 14 Dec 2025 15:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.56.87.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765725984; cv=pass; b=KPIVtJgGv0ciDIXMKrxqHCIgwLPSEUjtGXPYmr09XW9T0rDwQedneLAhIR0rbdNX4A+KwLVKTJadNb9ufONIvCLL8z9LgMcrdDDe/ESpf9W59th48IWChBXhCVDeX7qGwaTxxocqEfG1qTUjCXZLq7ZwZkFNqKu2Px0kI7hfdV8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765725984; c=relaxed/simple;
-	bh=YQjlAwSHWcd1kxUSnEm9sEjhrE398KSvKBhd7mzuY/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lMNFca8XS3aRjM7sHtb7387nQvSaVF7fOYqQolRtbn2iUKlUXpNUwCcyImHxvp/sOYsBFr5Uz+qeJqhXFJyGJGnU+8EecEPoL2CEAB+yNTmMVHomUn3+zxw49sBWdBAXUQX0DZKEUkNuEAFrsGYR2N6WA724f6u7ZX1ISahW+pM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it; spf=pass smtp.mailfrom=valla.it; dkim=pass (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b=z4lLiGeI; dkim=pass (1024-bit key) header.d=valla.it header.i=@valla.it header.b=Mle8mQFF; arc=pass smtp.client-ip=185.56.87.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valla.it
-ARC-Seal: i=1; cv=none; a=rsa-sha256; d=outgoing.instance-europe-west4-0cck.prod.antispam.mailspamprotection.com; s=arckey; t=1765725981;
-	 b=Ic/U8+f/dJaLm2zUZRvgCHgPFPa/jqaqi20j35qa4UcS/SmB43yTAZ72MaVOvOXAOHnzbCeZJJ
-	  8uK05SNyqpV7IOcqPwYtsGTeQSqaLr/YlAqMHKCgfJod/S7++Ow2x2yVoH/WE7ZcJ9KOPG+gEK
-	  YJ4tokH4aWKdAV7R/SJHfqyrjzLp2djgkwF2j9m7QrIlk3xddXBf0Y80qxIk0c7EQN3YvaPu3J
-	  TUhrv9UiAvia2NYeqkN7/ifawCYyYsfyAj1jwPBioWpq6sBL+4YARqVAyPMkiAJxvH/UD6Gg/1
-	  93NE+i1iWqJkp+PPqvsZ77REPOiGRLzTprUL4QCS5dpVpw==;
-ARC-Authentication-Results: i=1; outgoing.instance-europe-west4-0cck.prod.antispam.mailspamprotection.com; smtp.remote-ip=35.214.173.214;
-	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
-	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
-	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
-	arc=none
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=outgoing.instance-europe-west4-0cck.prod.antispam.mailspamprotection.com; s=arckey; t=1765725981;
-	bh=YQjlAwSHWcd1kxUSnEm9sEjhrE398KSvKBhd7mzuY/Q=;
-	h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:
-	  From:Date:DKIM-Signature:DKIM-Signature;
-	b=ldAslwIeqhh4lfmRQBdqOC7AGm2Eznx2nJDc98RKe4irCJJXV8neqHXARn5wKoo1kjYpxywc/I
-	  T4tzUqDjp6gpEqcygJx3R9jKiYr3rKhKYrSdw3U4fFz+bldME7QRoLRQ2pBeLSHtqnn+SRFoMT
-	  rAvDrE8JqXpQy//CaHntZOR8ojsCJq5npWQtmgitJ7vrxmw1K5mYmPlZ+fYv+ohtUImDUKqe05
-	  8vpXkrR3Ng6tQKmk9yrrODC7oKAadVamos05slaiTZWpNQ3IUGKLBuqpJInq9tu20QISKlE456
-	  thOv5ycQmTV+7CT16Wv0uqGBCe5bFCivIUFFzGzXRSCVKw==;
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=antispam.mailspamprotection.com; s=default; h=CFBL-Feedback-ID:CFBL-Address
-	:Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	List-Unsubscribe:Content-Transfer-Encoding;
-	bh=chDnHXzC7OmgMSvhcFfltAlCclhS52mGTR4eaadE5Jc=; b=z4lLiGeIf9k/WAZpdmLV/9MSsL
-	N6Hrl+VoKvUh8UMd/LW73QyR12zS+BXcI0uTUwYdjvAmYIcI7FfcgTjNV/m/zUOtoysDyn2OdcQX6
-	LdkQMFo8tPqUqYlm+m9xYM3/+WIOU0UiZdY5O6n2oIQ0OxgTBc50AIyykye5H9zE0HHo=;
-Received: from 214.173.214.35.bc.googleusercontent.com ([35.214.173.214] helo=esm19.siteground.biz)
-	by instance-europe-west4-0cck.prod.antispam.mailspamprotection.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.98.1)
-	(envelope-from <francesco@valla.it>)
-	id 1vUnz9-00000002tvr-0Xhk
-	for linux-can@vger.kernel.org;
-	Sun, 14 Dec 2025 15:26:14 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=valla.it;
-	s=default; h=Subject:Cc:To:From:Date:list-help:list-unsubscribe:
-	list-subscribe:list-post:list-owner:list-archive;
-	bh=chDnHXzC7OmgMSvhcFfltAlCclhS52mGTR4eaadE5Jc=; b=Mle8mQFFWFofNTFGoGCzzUniSe
-	pcdySQj2zcOeNOS7vf6fuKkNmIWbaMk8IOj8YrWbZY3sV+s6cJrOrkwBMAssafz67lRWqp9MRrpzM
-	VLf8BNtZBVGHwVcnoXNg2P+QP/sYcfTu1paeXLrvKpxiWd7ZfUcvnnYmajBFBjgiKCGc=;
-Received: from [79.34.194.176] (port=63375 helo=bywater)
-	by esm19.siteground.biz with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.98.1)
-	(envelope-from <francesco@valla.it>)
-	id 1vUnyt-00000000585-3qQ7;
-	Sun, 14 Dec 2025 15:25:55 +0000
-Date: Sun, 14 Dec 2025 16:25:54 +0100
-From: Francesco Valla <francesco@valla.it>
-To: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Harald Mommer <harald.mommer@oss.qualcomm.com>,
-	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: [PATCH v6] can: virtio: Add virtio CAN driver
-Message-ID: <aT7XAsTWr0_yyfx_@bywater>
-References: <aQJRnX7OpFRY/1+H@fedora>
- <aQkgsuxa2UaL_qdt@bywater>
- <aTsE1VIk4V/A49HE@fedora>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215BE1DF73C
+	for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 08:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.68
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765959323; cv=none; b=aYYdM4zXj4HofQey4wdWfWZDzNTHg8wTGr5cAF2+WxxVS06I7vIa52oTZui1mbkGSX9T4stbDTYyzI7/Ru/F1Vlkl4K/xMsn4XEHHPg0PEDkuYKiy5F4wgD/rx3mSJq7UHivmdp79gVQqJUbMEroMSGPF+blSHWz1daxPfSU9CE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765959323; c=relaxed/simple;
+	bh=XjGbtOPnxn5ziPdpc7g6S6MqyGKvLokVPCWE3c8w+yQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M9R3xq9U0T3mfBta9mcgmViIqlg59KCWRsC7t17mztwot6LNiWzgQlXVBlc8nqh+Udzj7qrNW8igElw+1hxcIqcm41vK54rrBlXeM0vipZloZaQDaF3BarfjxPivGBXf5iPkSX7N6jdfq8JnVPyRm7iBwrUrXVEx7rRB94mnNoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f68.google.com with SMTP id ada2fe7eead31-5dfa9bfa9c7so3893474137.1
+        for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 00:15:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765959320; x=1766564120;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rym4p+SQ3MsVDrU2KotDsjjR/+PnxDtYr8m/dR/i6BU=;
+        b=pYEnjhbFhho33ifeBKp+JQ4fMpJz4/TbTws2IgIRJLkCH9oKAtZMqs0qttFwCfWJ6m
+         YfvC9cBoU9H+r3AbooS70a3qB4c42R9qnQS97xuT+YoRXgRme6LVwA9eIGv2dZ0hG59W
+         VplhUoQ0YGkEAEU3LHJrefDEZDQCoat9ysL3F3r3Uv2alZYbtg5hd4wGrUgNW285qjYx
+         jEqKMtPsbIESj3foWpUDU2GkMHa02Um9CkO0ZT6dSClcKrInMuIptiz7qwNC5K+RUag+
+         G/0BiiXj3igWQn/zAW7bodLYx54egQTSxwz0BeWN5ni4StITZXls1KR7BkRsQr3tKInt
+         D4fA==
+X-Forwarded-Encrypted: i=1; AJvYcCUc85NNqeVtq9+alOi5iHHhAHFa2AYgEweDkVNMzFJIwAxRzWI0tbCpMXdQE2oUTC2qXj4qccFvV0E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAZfLsL19IdLWrt0keVfHujJEUYADLDUSScaU0AzFD/06aJQmA
+	3sAZ4NgYCyV55PuKqI+AJXdFuzHy9vVMkH5PfH6YElRD+GnT+yAoKqbpEKfG02ltmfE=
+X-Gm-Gg: AY/fxX5+HhzrG7rD907RrA9rM3lNQHJO/Hy9RaPA2hoRTLPTItErCjtd3RXv/FhFkwx
+	d4LKb+rTC42HJTsdSlLEfXqvjuEn0C0WTXYWZsGs/ZACAxXLKHVWClHsfaB7n914jsf8X2+4nLJ
+	4IxTXOuxRomqGRJKWvOqOSvLbZgYd56od7TRK060QEE0s7J2CT5ffrAc8MfsJaLMSWTJHnex7ph
+	XknQvXWE+Q8Bwx7YhJoHvzXb9vxr5J65lGCoKXNiqj6JofPz8mbeIPuAYNAFu5yGAhy6pH5Pn3u
+	RFdmof3smkxMB/8dv3Dxuxy1a9BXU9ixMSpCpkC35aHK1D1UYPtyXV1/eTSehQqgNFL9RcRjbOg
+	l4wglKsx5NU9IGHoi9N8ke/Tg7uqSuZwdzqB2n1V/uYsU9Rj+/ybvpYCjQstH/B24PpS+HAsL8c
+	/SlWqHa+DU4/1fadtIUWBtvsf1df2tedHQDhiiS1Cb+T4kwZQO
+X-Google-Smtp-Source: AGHT+IGrtb2YvU4gbTIIh4y+GgCyDDmqLRtU5ABvYOIyzUGZoNtm0BpUSTYbGOO3t+Y5p0OtsIQ3LA==
+X-Received: by 2002:a05:6102:549e:b0:5db:f34e:5fa1 with SMTP id ada2fe7eead31-5e8277e5e6bmr6527147137.33.1765959319807;
+        Wed, 17 Dec 2025 00:15:19 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-93f5aefd79csm6631835241.12.2025.12.17.00.15.18
+        for <linux-can@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Dec 2025 00:15:19 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-94121102a54so2953896241.1
+        for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 00:15:18 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXeEnnvXyp/LQ+C2K2bUBc7Qr9SFLK1kcoqQZV2VEVkRIhUaC4g5ED/EVJYgyzBYxWPE9S5L1MdKtw=@vger.kernel.org
+X-Received: by 2002:a05:6102:1611:b0:5e1:866c:4f7c with SMTP id
+ ada2fe7eead31-5e82781ea47mr5731108137.39.1765959318483; Wed, 17 Dec 2025
+ 00:15:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aTsE1VIk4V/A49HE@fedora>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - esm19.siteground.biz
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - valla.it
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-SGantispam-id: 989eecdd16ed4abea096da28ba49d440
-AntiSpam-DLS: false
-AntiSpam-DLSP: 
-AntiSpam-DLSRS: 
-AntiSpam-TS: 1.0
-CFBL-Address: feedback@antispam.mailspamprotection.com; report=arf
-CFBL-Feedback-ID: 1vUnz9-00000002tvr-0Xhk-feedback@antispam.mailspamprotection.com
-Authentication-Results: outgoing.instance-europe-west4-0cck.prod.antispam.mailspamprotection.com;
-	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
-	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
-	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
-	arc=none
+References: <20251209162119.2038313-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20251210-mauve-cow-of-hurricane-0f969d-mkl@pengutronix.de>
+ <20251210-persuaded-rewire-8ac93b0cc039@spud> <20251211-wonderful-singing-eel-4e2293-mkl@pengutronix.de>
+In-Reply-To: <20251211-wonderful-singing-eel-4e2293-mkl@pengutronix.de>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 17 Dec 2025 09:15:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXW2iFQO3vTzMg_ydqZ5YC1EPqyNzkpLRfTAkLhmC+K5g@mail.gmail.com>
+X-Gm-Features: AQt7F2oD50PxDosHDFQJjqw3YErV6WFAJtpUaCLTAZeWlqwHnCeiK6ic6sDkf3A
+Message-ID: <CAMuHMdXW2iFQO3vTzMg_ydqZ5YC1EPqyNzkpLRfTAkLhmC+K5g@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: phy: ti,tcan104x-can: Document TI TCAN1046
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Conor Dooley <conor@kernel.org>, Prabhakar <prabhakar.csengg@gmail.com>, 
+	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Aswath Govindraju <a-govindraju@ti.com>, Frank Li <Frank.li@nxp.com>, linux-can@vger.kernel.org, 
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Matias,
-
-On Thu, Dec 11, 2025 at 06:52:21PM +0100, Matias Ezequiel Vara Larsen wrote:
-> Thanks for your comments, I took most of them. I have some questions
-> though. 
-> 
-
-(snip)
-
-> > > + */
-> > > +static int virtio_can_add_inbuf(struct virtqueue *vq, void *buf,
-> > > +				unsigned int size)
-> > > +{
-> > > +	struct scatterlist sg[1];
-> > > +	int ret;
-> > > +
-> > > +	sg_init_one(sg, buf, size);
-> > > +
-> > > +	ret = virtqueue_add_inbuf(vq, sg, 1, buf, GFP_ATOMIC);
-> > > +	virtqueue_kick(vq);
-> > > +	if (ret == 0)
-> > > +		ret = vq->num_free;
-> > 
-> > The returned value in case of success (i.e.: vq->num_free) is not used.
-> > 
-> 
-> I removed it this but something is not working anymore so I need to
-> investigate.
+On Fri, 12 Dec 2025 at 12:22, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 10.12.2025 18:21:34, Conor Dooley wrote:
+> > On Wed, Dec 10, 2025 at 08:52:58AM +0100, Marc Kleine-Budde wrote:
+> > > On 09.12.2025 16:21:19, Prabhakar wrote:
+> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Document the TI TCAN1046 automotive CAN transceiver. The TCAN1046 is a
+> > > > dual high-speed CAN transceiver with sleep-mode support and no EN pin,
+> > > > mirroring the behaviour of the NXP TJA1048, which also provides dual
+> > > > channels and STB1/2 sleep-control lines.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > ---
+> > > > TCAN 1046, https://www.ti.com/lit/ds/symlink/tcan1046v-q1.pdf?ts=1765297159307&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FTCAN1046V-Q1
+> > > > NXP TJA1048, https://www.nxp.com/docs/en/data-sheet/TJA1048.pdf
+> > >
+> > > The polarity of the standby line of the chips is different.
+> > >
+> > > You must set the correct active high/low property for the GPIO, as the
+> > > driver uses logical levels.
+> > >
+> > > Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> >
+> > What you're saying seems to contradict the tag you've given, is a
+> > fallback really suitable if the standby polarity is not the same?
 >
-
-That should't happen, since vq->num_free is defined as an unsigned int
-and no caller is reacting on return values >= 0.
-
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +/* Send a control message with message type either
-> > > + *
-> > > + * - VIRTIO_CAN_SET_CTRL_MODE_START or
-> > > + * - VIRTIO_CAN_SET_CTRL_MODE_STOP.
-> > > + *
-> > > + * Unlike AUTOSAR CAN Driver Can_SetControllerMode() there is no requirement
-> > > + * for this Linux driver to have an asynchronous implementation of the mode
-> > > + * setting function so in order to keep things simple the function is
-> > > + * implemented as synchronous function. Design pattern is
-> > > + * virtio_console.c/__send_control_msg() & virtio_net.c/virtnet_send_command().
-> > > + */
-> > 
-> > Comment is not really helpful nor informative, at least for me. I'd drop
-> > the AUTOSAR part at least.
-> > 
-> 
-> I removed it.
-> 
-> > > +static u8 virtio_can_send_ctrl_msg(struct net_device *ndev, u16 msg_type)
-> > > +{
-> > > +	struct scatterlist sg_out, sg_in, *sgs[2] = { &sg_out, &sg_in };
-> > > +	struct virtio_can_priv *priv = netdev_priv(ndev);
-> > > +	struct device *dev = &priv->vdev->dev;
-> > > +	struct virtqueue *vq;
-> > > +	unsigned int len;
-> > > +	int err;
-> > > +
-> > > +	vq = priv->vqs[VIRTIO_CAN_QUEUE_CONTROL];
-> > > +
-> > > +	/* The function may be serialized by rtnl lock. Not sure.
-> > > +	 * Better safe than sorry.
-> > > +	 */
-> > > +	mutex_lock(&priv->ctrl_lock);
-> > 
-> > Consider the newer guard() syntax:
-> > 
-> >     guard(mutex)(&priv->ctrl_lock)
-> > 
-> 
-> IIUC this adds the unlock automatically, right?
+> The driver uses _logical_ levels to switch the GPIOs. For example to
+> power on the PHY, it disables the standby GPIO by setting the value to
+> "0".
 >
-
-Yes, as soon as the function returnsi, and even in case of early
-returns.
-
-> > > +
-> > > +	priv->can_ctr_msg.cpkt_out.msg_type = cpu_to_le16(msg_type);
-> > > +	sg_init_one(&sg_out, &priv->can_ctr_msg.cpkt_out,
-> > > +		    sizeof(priv->can_ctr_msg.cpkt_out));
-> > > +	sg_init_one(&sg_in, &priv->can_ctr_msg.cpkt_in, sizeof(priv->can_ctr_msg.cpkt_in));
-> > > +
-> > > +	err = virtqueue_add_sgs(vq, sgs, 1u, 1u, priv, GFP_ATOMIC);
-> > > +	if (err != 0) {
-> > > +		/* Not expected to happen */
-> > > +		dev_err(dev, "%s(): virtqueue_add_sgs() failed\n", __func__);
-> > > +		mutex_unlock(&priv->ctrl_lock);
-> > > +		return VIRTIO_CAN_RESULT_NOT_OK;
-> > > +	}
-> > > +
-> > > +	if (!virtqueue_kick(vq)) {
-> > > +		/* Not expected to happen */
-> > > +		dev_err(dev, "%s(): Kick failed\n", __func__);
-> > > +		mutex_unlock(&priv->ctrl_lock);
-> > > +		return VIRTIO_CAN_RESULT_NOT_OK;
-> > > +	}
-> > > +
-> > > +	while (!virtqueue_get_buf(vq, &len) && !virtqueue_is_broken(vq))
-> > > +		wait_for_completion(&priv->ctrl_done);
-> > > +
-> > 
-> > Since the call is synchronous, does can_ctr_msg really need to be part
-> > of priv? Cannot be it allocated from the stack?
-> > 
-> 
-> I moved it to the stack.
-> 
-
-This was a bad suggestion, as Michael S. Tsirkin suggested in another
-branch of this thread [0]. Sorry.
-
-> > > +	mutex_unlock(&priv->ctrl_lock);
-> > > +
-> > > +	return priv->can_ctr_msg.cpkt_in.result;
-> > > +}
-> > > +
-> > > +static void virtio_can_start(struct net_device *ndev)
-> > > +{
-> > > +	struct virtio_can_priv *priv = netdev_priv(ndev);
-> > > +	u8 result;
-> > > +
-> > > +	result = virtio_can_send_ctrl_msg(ndev, VIRTIO_CAN_SET_CTRL_MODE_START);
-> > > +	if (result != VIRTIO_CAN_RESULT_OK) {
-> > > +		/* Not expected to happen */
-> > > +		netdev_err(ndev, "CAN controller start failed\n");
-> > > +	}
-> > > +
-> > > +	priv->busoff_pending = false;
-> > > +	priv->can.state = CAN_STATE_ERROR_ACTIVE;
-> > > +
-> > > +	/* Switch carrier on if device was not connected to the bus */
-> > > +	if (!netif_carrier_ok(ndev))
-> > > +		netif_carrier_on(ndev);
-> > > +}
-> > > +
-> > > +/* See also m_can.c/m_can_set_mode()
-> > > + *
-> > > + * It is interesting that not only the M-CAN implementation but also all other
-> > > + * implementations I looked into only support CAN_MODE_START.
-> > > + * That CAN_MODE_SLEEP is frequently not found to be supported anywhere did not
-> > > + * come not as surprise but that CAN_MODE_STOP is also never supported was one.
-> > > + * The function is accessible via the method pointer do_set_mode in
-> > > + * struct can_priv. As usual no documentation there.
-> > > + * May not play any role as grepping through the code did not reveal any place
-> > > + * from where the method is actually called.
-> > > + */
-> > 
-> > The do_set_mode method is used e.g. to restart the CAN after a bus-off event.
-> > 
-> 
-> Do you think we need to support CAN_MODE_STOP?
+> | static int can_transceiver_phy_power_on(struct phy *phy)
+> | {
+> [...]
+> |         gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
+> [...]
+> | }
 >
-
-No, I don't think so, but the comment is somewhat misleading and feels
-more like some private notes.
-
-> > > +static int virtio_can_set_mode(struct net_device *dev, enum can_mode mode)
-> > > +{
-> > > +	switch (mode) {
-> > > +	case CAN_MODE_START:
-> > > +		virtio_can_start(dev);
-> > > +		netif_wake_queue(dev);
-> > > +		break;
-> > > +	default:
-> > > +		return -EOPNOTSUPP;
-> > > +	}
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-
-(snip)
-
-> > > +/* Compare with m_can.c/m_can_echo_tx_event() */
-> > > +static int virtio_can_read_tx_queue(struct virtqueue *vq)
-> > > +{
-> > > +	struct virtio_can_priv *can_priv = vq->vdev->priv;
-> > > +	struct net_device *dev = can_priv->dev;
-> > > +	struct virtio_can_tx *can_tx_msg;
-> > > +	struct net_device_stats *stats;
-> > > +	unsigned long flags;
-> > > +	unsigned int len;
-> > > +	u8 result;
-> > > +
-> > > +	stats = &dev->stats;
-> > > +
-> > > +	/* Protect list and virtio queue operations */
-> > > +	spin_lock_irqsave(&can_priv->tx_lock, flags);
-> > 
-> > The section below seems a pretty big one to protect behind a spin lock. 
-> > 
-> 
-> How can I split it? 
-> 
-
-Question here is: what needs to be protected? As far as I can tell, the
-only entity needing some kind of locking here is the queue, while both
-ida_* and tx_inflight operations are already covered (the former by
-design [1], the second because it's implemented using an atomic.
-
-If I'm not wrong (but I might be, so please double check) this can be
-limited to:
-
-	/* Protect queue operations */
-	scoped_guard(spinlock_irqsave, &priv->tx_lock)
-		err = virtqueue_add_sgs(vq, sgs, 1u, 1u, can_tx_msg, GFP_ATOMIC);
-
-
-Maybe the whole locking pattern is a leftover from a previous version, 
-where a list of TX messages was kept?
-
-> > > +
-> > > +	can_tx_msg = virtqueue_get_buf(vq, &len);
-> > > +	if (!can_tx_msg) {
-> > > +		spin_unlock_irqrestore(&can_priv->tx_lock, flags);
-> > > +		return 0; /* No more data */
-> > > +	}
-> > > +
-> > > +	if (unlikely(len < sizeof(struct virtio_can_tx_in))) {
-> > > +		netdev_err(dev, "TX ACK: Device sent no result code\n");
-> > > +		result = VIRTIO_CAN_RESULT_NOT_OK; /* Keep things going */
-> > > +	} else {
-> > > +		result = can_tx_msg->tx_in.result;
-> > > +	}
-> > > +
-
-(snip)
-
-> > > +static int virtio_can_probe(struct virtio_device *vdev)
-> > > +{
-> > > +	struct virtio_can_priv *priv;
-> > > +	struct net_device *dev;
-> > > +	int err;
-> > > +
-> > > +	dev = alloc_candev(sizeof(struct virtio_can_priv),
-> > > +			   VIRTIO_CAN_ECHO_SKB_MAX);
-> > > +	if (!dev)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	priv = netdev_priv(dev);
-> > > +
-> > > +	ida_init(&priv->tx_putidx_ida);
-> > > +
-> > > +	netif_napi_add(dev, &priv->napi, virtio_can_rx_poll);
-> > > +	netif_napi_add(dev, &priv->napi_tx, virtio_can_tx_poll);
-> > > +
-> > > +	SET_NETDEV_DEV(dev, &vdev->dev);
-> > > +
-> > > +	priv->dev = dev;
-> > > +	priv->vdev = vdev;
-> > > +	vdev->priv = priv;
-> > > +
-> > > +	priv->can.do_set_mode = virtio_can_set_mode;
-> > > +	/* Set Virtio CAN supported operations */
-> > > +	priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING;
-> > > +	if (virtio_has_feature(vdev, VIRTIO_CAN_F_CAN_FD)) {
-> > > +		err = can_set_static_ctrlmode(dev, CAN_CTRLMODE_FD);
-> > > +		if (err != 0)
-> > > +			goto on_failure;
-> > > +	}
-> > > +
-> > > +	/* Initialize virtqueues */
-> > > +	err = virtio_can_find_vqs(priv);
-> > > +	if (err != 0)
-> > > +		goto on_failure;
-> > > +
-> > > +	spin_lock_init(&priv->tx_lock);
-> > > +	mutex_init(&priv->ctrl_lock);
-> > > +
-> > > +	init_completion(&priv->ctrl_done);
-> > > +
-> > > +	if (virtio_has_feature(vdev, VIRTIO_CAN_F_CAN_FD))
-> > > +		priv->sdu_len = CANFD_MAX_DLEN;
-> > > +	else
-> > > +		priv->sdu_len = CAN_MAX_DLEN;
-> > 
-> > Consider replacing sdu_len with something like rpkt_len, which is
-> > directly related to priv->rpkt and can make code more readable, here and
-> > in other locations. E.g.:
-> 
-> I replaced it with rpkt_len.
-> 
-> > 
-> > 	priv->rpkt_len = sizeof(struct virtio_can_rx);
-> > 	if (virtio_has_feature(vdev, VIRTIO_CAN_F_CAN_FD))
-> >     		priv->rpkt_len += CANFD_MAX_DLEN;
-> > 	else
-> > 		priv->rpkt_len += CAN_MAX_DLEN;
-> > 
-> > 	priv->rpkt = kzalloc(priv->rpkt_len * ...
-> > 
-> > > +
-> > > +	priv->rpkt = kzalloc((sizeof(struct virtio_can_rx) + priv->sdu_len) *
-> > > +						priv->vqs[VIRTIO_CAN_QUEUE_RX]->num_free,
-> > > +						GFP_KERNEL);
-> > 
-> > If I'm not mistaken, priv->rpkt is never freed. Consider moving to
-> > devm_kzalloc().
-> > 
-> 
-> Done.
-> 
-> > > +	if (!priv->rpkt) {
-> > > +		virtio_can_del_vq(vdev);
-> > > +		goto on_failure;
-> > > +	}
-> > > +	virtio_can_populate_rx_vq(vdev);
-> > > +
-> > > +	err = register_virtio_can_dev(dev);
-> > > +	if (err) {
-> > > +		virtio_can_del_vq(vdev);
-> > > +		goto on_failure;
-> > > +	}
-> > > +
-> > > +	napi_enable(&priv->napi);
-> > > +	napi_enable(&priv->napi_tx);
-> > 
-> > Most of the existing drivers enable the napi(s) during the open() phase,
-> > IIUC to avoid scheduling napi operations for devices that might never
-> > get used. But here maybe there is a specific reason to do it this way?
-> > 
-> 
-> I do not have idea. I moved to open() and something stopped to work. I
-> am investigating it.
+> You have to use GPIO_ACTIVE_HIGH/GPIO_ACTIVE_LOW in the DT to configure
+> the actual level of the GPIO.
 >
-
-On a second thought, it may be wiser to have the napis enabled on probe,
-to drop the incoming messages even when the interface is brought down.
-
-(last snip)
-
-
-While stress testing this, I noticed that flooding the virtio-can
-interface with packets leads to an hang of the interface itself.
-I am seeing this issuing, at host side:
-
-	while true; do cansend can0 123#00; done
-
-with:
-
- - QEMU: the tip of the master branch plus [2]
- - vhost-device: the tip of the main branch
-
-and the following QEMU invocation:
-
-qemu-system-x86_64 -serial mon:stdio \
-    -m 2G -smp 2 \
-    -kernel $(pwd)/BUILD.bin/arch/x86/boot/bzImage \
-    -initrd /home/francesco/SRC/LINUX_KERNEL/initramfs.gz \
-    -append "loglevel=7 console=ttyS0" \
-    -machine memory-backend=pc.ram \
-    -object memory-backend-file,id=pc.ram,size=2G,mem-path=/tmp/pc.ram,share=on \
-    -chardev socket,id=can0,path=/tmp/sock-can0 \
-    -device vhost-user-can-pci,chardev=can0
-
-
-Restarting the interface (i.e.: ip link set down and the up) does not
-fix the situation.
-
-I'll try to do some more testing during the next days.
-
-
-> Thanks for reviewing it!
-> 
-> Matias
-> 
+> If you connect the PHY's standby input directly to the SoC's GPIO....
 >
+> | TJA1048: HIGH = Normal mode, LOW = Standby mode
+> | TCAN1046: High = Standby mode, Low = Normal Mode
+>
+> ...for the TJA1048 you would use GPIO_ACTIVE_LOW, while for the
+> TCAN1046 you would use GPIO_ACTIVE_HIGH.
 
-Regards,
-Francesco
+Exactly.  For most of these CAN transceivers, there are typically two
+almost identical parts (usually differing in the last digit of the part
+number), one with active-high standby, another with active-low standby.
+These differences can be handled perfectly fine using the GPIO_ACTIVE_*
+lags.
 
+Note that there can be other differences: the RZ/V2H board Prabhakar
+works on actually has TCAN1046V.  The "V" variant differs from TCAN1046
+(and TJA1048) in configuration of the two power supply pins:
+  - TCAN1046 has independent supplies for the two channels,
+  - TCAN1046V has separate logic and I/O supplies for the combined
+    channels.
+Since this difference can be handled through *-supply properties
+(when the need arises, and the driver gains regulator support),
+I don't think separate compatible values are needed for "V" variants.
 
-[0] https://lore.kernel.org/linux-can/20251214022000-mutt-send-email-mst@kernel.org/
-[1] https://elixir.bootlin.com/linux/v6.18.1/source/lib/idr.c#L323
-[2] https://lore.kernel.org/qemu-devel/20251031155617.1223248-1-mvaralar@redhat.com/
+BTW, how do I know? Because I had started working on adding support
+for TCAN1046V myself, but Prabhakar beat me to sending out patches ;-)
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
