@@ -1,134 +1,255 @@
-Return-Path: <linux-can+bounces-5869-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5870-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB4ACC6F10
-	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 11:00:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98243CC7F46
+	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 14:49:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 67BB43046D77
-	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 09:57:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 511CD30E9294
+	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 13:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C06344045;
-	Wed, 17 Dec 2025 09:49:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 314C936BCF8;
+	Wed, 17 Dec 2025 13:39:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bvtATVvg"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B43A3446D5
-	for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 09:48:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC3836BCF6
+	for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 13:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765964942; cv=none; b=TaPVsGGZNIHtY98F6GIeu2peypWCjpqoO+wW0OBYywTLGQHKqiypj8p/TC9I0NeF1T3CKYCUi9KR9UPJiQl0uO2DgWpbJRlyg8c89Y5tt2CxpZt8gAzTK0i8VoRpO6XzZ9jM4MESemTlVzeWx7ywEedEe8QsENm/AD0X+3AEcgM=
+	t=1765978766; cv=none; b=S8eNa5IAQb+zLESaBkbQf6JH+ckG0p5OgrAD+LDQxWD2IvPy/P4DdsdJj3BfadHACJ9RarKcubxDDGqYpuzayaCO+IZ6aObaFifZKaQwhDip4webmLmEgxsmnbJxk1XNC5lqTqfT2W4PuwO/87z+KRk6ZapHxrZ/MIMLaXWZbsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765964942; c=relaxed/simple;
-	bh=0Cx8H3lRCBr3OdhAY3NTbw7dA06kKvk9QR8BAA46K2Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LRZpKIsjfzOGJkYkJikosEDlwEgYpVwZ55Wre1378QXQPsKZMTvcxNhD/jXBXUGI8+JwixyE0laeXWcdDv83G02G+ByDiWSlZvENc/EvB3ZOd0eohTE0CCRW31l8knDgLBGKmrxc1uPfUXLDB0WXfgROXF1cDsBujTJ6tlEHwEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vVo9Q-0000Vl-8V; Wed, 17 Dec 2025 10:48:56 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vVo9Q-0065iJ-02;
-	Wed, 17 Dec 2025 10:48:56 +0100
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id AF8A34B771F;
-	Wed, 17 Dec 2025 09:48:55 +0000 (UTC)
-Date: Wed, 17 Dec 2025 10:48:55 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: Robin van der Gracht <robin@protonic.nl>, 
-	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>, 
-	linux-can@vger.kernel.org
-Subject: Re: [PATCH v2] can: j1939: make j1939_sk_bind() fail if device is no
- longer registered
-Message-ID: <20251217-aspiring-dragonfly-of-chivalry-571ccf-mkl@pengutronix.de>
-References: <9a3f9a95-1f58-4d67-9ab4-1ca360f86f79@I-love.SAKURA.ne.jp>
- <5732921e-247e-4957-a364-da74bd7031d7@I-love.SAKURA.ne.jp>
+	s=arc-20240116; t=1765978766; c=relaxed/simple;
+	bh=KDM8RdJKqX77XlrKz+5UWU+q4lTsJFU4kb4mBFZZggY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qaYyAYYgIUDLGftXA+SHlOF8X0c3joSgYMXkZ8LlU/E99D0nSlc/KMJ9oxgFgGcoNlmTORzw+zXN+hmrCt/4yqetgR2IvqfSrDe9R/vdK12jMkkk9WZdOJ7gkMfUsBlV88OQn8x9yxkoe2SavsEqkGfy8uJnehQ86wgiv3XdMSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bvtATVvg; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-37bac34346dso42034751fa.2
+        for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 05:39:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1765978761; x=1766583561; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bnJOOseUNu5bo56mXUg+bkHSCvAL77RptqMYnGxiRP8=;
+        b=bvtATVvgQQUFTTN6CIbZXpjv/7ItgwJnWg4DyfKbxDN5jH9WtzcR4E1aM2patKl7SM
+         mAeCuXIk/5jTTjHK0JJR4MrDmLdtf3xVDwsqPLNuSh3NxDD/tSf5vN9RZ8yvHJkuQRN5
+         YTMscFdaVmBKNEpT/aC/UzmcHCMs8R6AvH02l7fwnuNK20EkSs0B9PCtiA/OdZpmm+CF
+         ynMFI196o2DguNsaXScxvOTpz0kywV5XgfxGdz5CFVYmNSFz5W3pW5HnWXCrMDSpsncJ
+         UlzPdphpUsHlIcuoWAc19k8vLCTel1RCQKapFFaqyO2UgYZUSbNa7DZGbNFLlrHqpav5
+         qtOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765978761; x=1766583561;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bnJOOseUNu5bo56mXUg+bkHSCvAL77RptqMYnGxiRP8=;
+        b=OLZpoiZvPnGUkUPC2qxT0ksQVGuoR1N3m7eDMvbczrllR4eyuH1omLtsVfwEowDJqr
+         xiP72+F/evxffrsiisselAtpTPBq6PvQEJwXJjmF9DSZhNUIKslESIA3b247BEJQZDXS
+         E+VpO30fzUTpnKssfQrwdcL+L+EHdB6VbTzAkfSWBzDQT9z/SoMDmuoE1aqTj0yMEUL/
+         bVyoGt6bUlvsJNSFWqfe6pKcC6waFkEqMK7NBshg+B5/sqtXygsxIYyO3Vj8bmzwGXde
+         TTqFTYDSKd/1S8Qmu72+UO0ks/wpXaB+N10OQm49cdn3hNQWncfj73nsPzt0JFjbxLyB
+         F4uA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrgm+mcGA7pEEZPa7O7WHluS24boGX/DfdltQNRgU+VTLCGqjiT9jBH7+WwqJCfinUtLhfoR9gOSE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YymPdz+tcDzPbqZP8pGkz0QB2jq5GTYsvgQQOdF7FgrDWhPl7er
+	T7zHcHvD+++7J1DvgRh/tFWLEPH9hNmWOr1dVChrckr0xOVdnRH049NnJSKJ0gpfXSIQduOJ734
+	+kw0w0RztXv1Ahk0lkl2hKSESh2y4e2iATTNdjIP9qg==
+X-Gm-Gg: AY/fxX6+CQ2x4gP77Ow/lkcS1tg7VNoalcKZptVBVd5qA+8kvZ0vmTMgWJoUMqkwrOo
+	X/9442hRjNGKVFGnQt0UyDiyGaxqMp6oeYd0WKj9qdzAOsTNgpPRBYXPVlf2hcbuLCCodVJJu/D
+	03h4oOyf4C+ouuAocwR5INMch8pkd6+LHXugcQek24KASx+xt+rZlt8H5Cqj7dFTKj726DQ+pLn
+	EEjoo+g1J9iq7U5sTKxrKDI12wjN32gWfzonf9s9Q1UTqv+2+t9l7K2dtpGoHDxYBiMF7o=
+X-Google-Smtp-Source: AGHT+IE2DrQoKBO7Um5lmI2G8HeKrmSb1aJ3PKObeClJFdA7DTUpv5Z7rJEzp4iMrT0Jn0x5gpN5DVmp8SJGVUL+/c0=
+X-Received: by 2002:a2e:8f88:0:b0:37a:5990:2ba8 with SMTP id
+ 38308e7fff4ca-37fd0877fc9mr48143241fa.23.1765978760510; Wed, 17 Dec 2025
+ 05:39:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="liabczl5po3b6i2b"
-Content-Disposition: inline
-In-Reply-To: <5732921e-247e-4957-a364-da74bd7031d7@I-love.SAKURA.ne.jp>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20251210-rz-sdio-mux-v3-0-ca628db56d60@solid-run.com> <20251210-rz-sdio-mux-v3-2-ca628db56d60@solid-run.com>
+In-Reply-To: <20251210-rz-sdio-mux-v3-2-ca628db56d60@solid-run.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 17 Dec 2025 14:38:43 +0100
+X-Gm-Features: AQt7F2ritzE1FtCn3rFBAb957an6eyRlRiUWdpCCK7X4DKkbiNs7zTdDOI9qhxU
+Message-ID: <CAPDyKFoYd3WKGrjD3DEzZH8EfgZPmRkrqL=rdoKNuAADrvz3Eg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] mux: Add helper functions for getting optional and
+ selected mux-state
+To: Josua Mayer <josua@solid-run.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Peter Rosin <peda@axentia.se>, 
+	Aaro Koskinen <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, 
+	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
+	Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>, 
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Mikhail Anikin <mikhail.anikin@solid-run.com>, Yazan Shhady <yazan.shhady@solid-run.com>, 
+	Jon Nettleton <jon@solid-run.com>, linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-can@vger.kernel.org, linux-phy@lists.infradead.org, 
+	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-
---liabczl5po3b6i2b
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] can: j1939: make j1939_sk_bind() fail if device is no
- longer registered
-MIME-Version: 1.0
-
-On 25.11.2025 22:43:12, Tetsuo Handa wrote:
-> There is a theoretical race window in j1939_sk_netdev_event_unregister()
-> where two j1939_sk_bind() calls jump in between read_unlock_bh() and
-> lock_sock().
+On Wed, 10 Dec 2025 at 18:39, Josua Mayer <josua@solid-run.com> wrote:
 >
-> The assumption jsk->priv =3D=3D priv can fail if the first j1939_sk_bind()
-> call once made jsk->priv =3D=3D NULL due to failed j1939_local_ecu_get() =
-call
-> and the second j1939_sk_bind() call again made jsk->priv !=3D NULL due to
-> successful j1939_local_ecu_get() call.
+> In-tree phy-can-transceiver driver has already implemented a local
+> version of devm_mux_state_get_optional.
 >
-> Since the socket lock is held by both j1939_sk_netdev_event_unregister()
-> and j1939_sk_bind(), checking ndev->reg_state with the socket lock held c=
-an
-> reliably make the second j1939_sk_bind() call fail (and close this race
-> window).
+> The omap-i2c driver gets and selects an optional mux in its probe
+> function without using any helper.
 >
-> Fixes: 7fcbe5b2c6a4 ("can: j1939: implement NETDEV_UNREGISTER notificatio=
-n handler")
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Add new helper functions covering both aforementioned use-cases:
+>
+> - devm_mux_state_get_optional:
+>   Get a mux-state if specified in dt, return NULL otherwise.
+> - devm_mux_state_get_optional_selected:
+>   Get and select a mux-state if specified in dt, return error or NULL.
+>
+> Existing mux_get helper function is changed to return -ENOENT in case dt
+> did not specify a mux-state or -control matching given name (if valid).
+> This matches of_parse_phandle_with_args semantics which also returns
+> -ENOENT if the property does nto exists, or its value is zero.
+>
+> The new helper functions check for ENOENT to return NULL for optional
+> muxes.
+>
+> Commit e153fdea9db04 ("phy: can-transceiver: Re-instate "mux-states"
+> property presence check") noted that "mux_get() always prints an error
+> message in case of an error, including when the property is not present,
+> confusing the user."
+>
+> The first error message covers the case that a mux name is not matched
+> in dt. This is removed as the returned error code (-ENOENT) is clear.
+>
+> The second error message is based on of_parse_phandle_with_args return
+> value. In case mux description is missing from DT, it returns -ENOENT.
+> Print error message only for other error codes.
+>
+> This ensures that the new helper functions will not confuse the user
+> either.
+>
+> Signed-off-by: Josua Mayer <josua@solid-run.com>
+> ---
+>  drivers/mux/core.c           | 67 +++++++++++++++++++++++++++++++++++++++-----
+>  include/linux/mux/consumer.h |  4 +++
+>  2 files changed, 64 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/mux/core.c b/drivers/mux/core.c
+> index a3840fe0995fe..130ca47a8be37 100644
+> --- a/drivers/mux/core.c
+> +++ b/drivers/mux/core.c
+> @@ -542,11 +542,8 @@ static struct mux_control *mux_get(struct device *dev, const char *mux_name,
+>                 else
+>                         index = of_property_match_string(np, "mux-control-names",
+>                                                          mux_name);
+> -               if (index < 0) {
+> -                       dev_err(dev, "mux controller '%s' not found\n",
+> -                               mux_name);
+> -                       return ERR_PTR(index);
+> -               }
+> +               if (index < 0)
+> +                       return ERR_PTR(-ENOENT);
+>         }
+>
+>         if (state)
+> @@ -558,8 +555,10 @@ static struct mux_control *mux_get(struct device *dev, const char *mux_name,
+>                                                  "mux-controls", "#mux-control-cells",
+>                                                  index, &args);
+>         if (ret) {
+> -               dev_err(dev, "%pOF: failed to get mux-%s %s(%i)\n",
+> -                       np, state ? "state" : "control", mux_name ?: "", index);
+> +               if (ret != -ENOENT)
+> +                       dev_err(dev, "%pOF: failed to get mux-%s %s(%i)\n",
+> +                               np, state ? "state" : "control",
+> +                               mux_name ?: "", index);
+>                 return ERR_PTR(ret);
+>         }
+>
+> @@ -745,6 +744,60 @@ struct mux_state *devm_mux_state_get(struct device *dev,
+>  }
+>  EXPORT_SYMBOL_GPL(devm_mux_state_get);
+>
+> +/**
+> + * devm_mux_state_get_optional() - Get the optional mux-state for a device,
+> + *                                with resource management.
+> + * @dev: The device that needs a mux-state.
+> + * @mux_name: The name identifying the mux-state.
+> + *
+> + * Return: Pointer to the mux-state, or an ERR_PTR with a negative errno.
+> + */
+> +struct mux_state *devm_mux_state_get_optional(struct device *dev,
+> +                                             const char *mux_name)
+> +{
+> +       struct mux_state *mux_state = devm_mux_state_get(dev, mux_name);
+> +
+> +       if (IS_ERR(mux_state) && PTR_ERR(mux_state) == -ENOENT)
+> +               return NULL;
+> +
+> +       return mux_state;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_mux_state_get_optional);
+> +
+> +/**
+> + * devm_mux_state_get_optional_selected() - Get the optional mux-state for
+> + *                                         a device, with resource management.
+> + * @dev: The device that needs a mux-state.
+> + * @mux_name: The name identifying the mux-state.
+> + *
+> + * Return: Pointer to the mux-state, or an ERR_PTR with a negative errno.
+> + *
+> + * The returned mux-state (if valid) is already selected.
+> + */
+> +struct mux_state *devm_mux_state_get_optional_selected(struct device *dev,
+> +                                                      const char *mux_name)
+> +{
+> +       struct mux_state *mux_state;
+> +       int ret;
+> +
+> +       mux_state = devm_mux_state_get_optional(dev, mux_name);
+> +       if (IS_ERR_OR_NULL(mux_state))
+> +               return mux_state;
+> +
+> +       ret = mux_state_select(mux_state);
+> +       if (ret) {
+> +               if (ret != -EPROBE_DEFER)
+> +                       dev_err(dev, "failed to select mux-state %s: %d\n",
+> +                               mux_name ?: "", ret);
+> +
+> +               mux_state_put(mux_state);
+> +               return ERR_PTR(ret);
+> +       }
+> +
+> +       return mux_state;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_mux_state_get_optional_selected);
+> +
+>  /*
+>   * Using subsys_initcall instead of module_init here to try to ensure - for
+>   * the non-modular case - that the subsystem is initialized when mux consumers
+> diff --git a/include/linux/mux/consumer.h b/include/linux/mux/consumer.h
+> index 2e25c838f8312..a5da2e33a45c0 100644
+> --- a/include/linux/mux/consumer.h
+> +++ b/include/linux/mux/consumer.h
+> @@ -60,5 +60,9 @@ struct mux_control *devm_mux_control_get(struct device *dev,
+>                                          const char *mux_name);
+>  struct mux_state *devm_mux_state_get(struct device *dev,
+>                                      const char *mux_name);
+> +struct mux_state *devm_mux_state_get_optional(struct device *dev,
+> +                                             const char *mux_name);
+> +struct mux_state *devm_mux_state_get_optional_selected(struct device *dev,
+> +                                                      const char *mux_name);
 
-Applied to linux-can.
+Seems like we need stub-functions of these too. Otherwise
+subsystems/drivers need to have a "depends on MULTIPLEXER" in their
+Kconfigs.
 
-Thanks,
-Marc
-
-P.S.: Don't send a -vN+1 patch as a reply to a -vN. Please start a new thre=
-ad.
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---liabczl5po3b6i2b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlCfIQACgkQDHRl3/mQ
-kZz4GggAjsfRBVAEWCV327hQ9lSngrFDWaDHKFgYtkp8B82SdLyv7+1alAQ7Iyve
-fgdyBdT7ulO6BazLpqDJLd0QhInper8noijIWX04vS0zc7zdCMTMYGjIRm/jurMn
-Iy04ja+v7Hti7ZevwrdV5Nfev3IdJ/CcKKmB3ES9oNkTqZAzp35C0Gp8uXeeyaYP
-naPyrkEgSZJgz+pRzcWjgd6ePuYJqWwMw81hCxt2849/Mh31LvRd66yLf/141Nzx
-Ogqew3f9YicJtfGAVP27cLculJaU4Sd1/Po78Ap/qnDDa1sJ8uneBTbb1t5/lLcS
-uwWcACRdpg0omoEghJYRZmRG0Gst1g==
-=sRzp
------END PGP SIGNATURE-----
-
---liabczl5po3b6i2b--
+Kind regards
+Uffe
 
