@@ -1,28 +1,29 @@
-Return-Path: <linux-can+bounces-5867-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5868-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5087BCC7046
-	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 11:17:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5F51CC6E86
+	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 10:56:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7F96130206A7
-	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 10:11:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 178D93018941
+	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 09:55:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0EE33B6D9;
-	Wed, 17 Dec 2025 09:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D6F33F8AD;
+	Wed, 17 Dec 2025 09:47:14 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA18033BBA8
-	for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 09:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56EAF33EAE6
+	for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 09:47:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765964785; cv=none; b=bWDapBPvaeCNWE2CXH8r4LUdo0DWKeFRFjU+hRYpyyiUN0+td/+XaURresHwh1F3CaMOkJr0hyM8jQ5UHHvhaMjEmO3NpIUwHl0FUOKXol897UDbMAe189tJOBWkM2QmIvis0ABpQIvFy6g/GY+dNrPmd2NIyEC2opPx8gN/CdI=
+	t=1765964834; cv=none; b=nD6FbMgQsYDdVJTSNBIiCrDT12cgRDrtYCwo/E30cub8Amqg6HfVvoEXA4YpqUbDMWH9oklOIiYjRy+xGmXyEmYDO56NsqlTXahYrrT9Hc/lDTaDVWD/Vfmeqgpb5O45aW6KSXPvZ1vBIBK77BG1D5360W12TjrunbC5ufqB40I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765964785; c=relaxed/simple;
-	bh=q8OoYiqggd5kDtsfmWbZRSKAxyXqat3PC+dPKtYgzI0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pDHae0ebwoaPSdobIZYeC60BeLgZxfN6FcEl/jr+lOSTRzaYxSzQ7HiPC4gcKZ20/LBRxiMTFaBF5m9quWZGH/vSY1Q9Y01P7WnFnVVEvUReG+lScE4H3r2dWGqW2O7W8R/u/dgzHwGFEegpVlcvJcMqlgJBGJ2hwtxHDyoCBWM=
+	s=arc-20240116; t=1765964834; c=relaxed/simple;
+	bh=WgtSRbBnw0/M7b2pWLJJj+dAdvtCAkF4Jbxbb+Z0tQg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z2Eb/hsedNj9qs+T3UxDCxvvHUoPvElJZICwbq1NYQVBXti2lR1HRYPCRXsJVqJQse3cvdJrSERCXK9fLEbIbuLf5vNp7yu1aOFXt4QsdZuozV67kJR3ioXoU4c9Hw/omrwydk9A5xUXlcHODxjg1WtElFjaZasHoZMxv7YSB24=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -30,109 +31,102 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1vVo6d-0000BV-Ks; Wed, 17 Dec 2025 10:46:03 +0100
+	id 1vVo7e-0000KS-5a; Wed, 17 Dec 2025 10:47:06 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1vVo6c-0065ht-1g;
-	Wed, 17 Dec 2025 10:46:02 +0100
-Received: from hardanger.blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	id 1vVo7b-0065iA-2I;
+	Wed, 17 Dec 2025 10:47:03 +0100
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 3EDF24B7715;
-	Wed, 17 Dec 2025 09:46:02 +0000 (UTC)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 74AB64B771C;
+	Wed, 17 Dec 2025 09:47:03 +0000 (UTC)
+Date: Wed, 17 Dec 2025 10:47:01 +0100
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-Date: Wed, 17 Dec 2025 10:45:53 +0100
-Subject: [PATCH can] can: fix build dependency
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: Robin van der Gracht <robin@protonic.nl>, 
+	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>, 
+	linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: j1939: make j1939_session_activate() fail if device
+ is no longer registered
+Message-ID: <20251217-mysterious-accomplished-caribou-1e7aae-mkl@pengutronix.de>
+References: <b9653191-d479-4c8b-8536-1326d028db5c@I-love.SAKURA.ne.jp>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251217-can-fix-dependency-v1-1-fd2d4f2a2bf5@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIANB7QmkC/yWMQQ7CMAwEv1LtGUs4KID4CuLQxgbMwVQJRaCqf
- 8fAcVazM6NpNW04dDOqPq3Z3QN41aFce78omQQjrVPmxDsqvdPZXiQ6qot6edN2wznLXgZOgji
- OVcP4RY8IH6f/2KbhpuXxzWFZPn4OXjd7AAAA
-X-Change-ID: 20251217-can-fix-dependency-63155d8db12d
-To: Vincent Mailhol <mailhol@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, 
- Marc Kleine-Budde <mkl@pengutronix.de>
-X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2252; i=mkl@pengutronix.de;
- h=from:subject:message-id; bh=q8OoYiqggd5kDtsfmWbZRSKAxyXqat3PC+dPKtYgzI0=;
- b=owEBbQGS/pANAwAKAQx0Zd/5kJGcAcsmYgBpQnvXgjQE3g9c/QU6HSfM24lXY0KibH2Qa4dkj
- ZvKBRpDWOmJATMEAAEKAB0WIQSf+wzYr2eoX/wVbPMMdGXf+ZCRnAUCaUJ71wAKCRAMdGXf+ZCR
- nGNxB/sGmtPNi3HFXgxJLpQ2KU4z8X8yvSpTihMxlnSfQ87mcn8LsuN039DZEJ7mW/pcMv3Wrym
- 3Wx59611nHplr/6p3/KxbPMXPjNDnFtCvO7I/QOExMLPNH/ns19Bykg6DVI3WgKdA7wYA30MVuN
- gHmOwC3h7mhciB9hQ5oAKDRpO8qpjzrSirZqDK+bB5EBdeEbwtmuFz0PN/+QLDVW6e0sFhKHduv
- N4wHMoUDsv6/+ydIyH357zBABCwiG675DTL3RLyW5zSqCAxp960sVuDK4THxZ9ATniADfLghuJq
- 1gPz3KvKE8nuWF9hPu2iNwBBtqjWQo/Y/iQ7jWnxzns3v9b4
-X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
- fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gtjk5pkjaohevwah"
+Content-Disposition: inline
+In-Reply-To: <b9653191-d479-4c8b-8536-1326d028db5c@I-love.SAKURA.ne.jp>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Arnd Bergmann's patch [1] fixed the build dependency problem introduced by
-bugfix commit cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure
-by default"). This ended up as commit 6abd4577bccc ("can: fix build
-dependency"), but I broke Arnd's fix by removing a dependency that we
-thought was superfluous.
 
-[1] https://lore.kernel.org/all/20251204100015.1033688-1-arnd@kernel.org/
+--gtjk5pkjaohevwah
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] can: j1939: make j1939_session_activate() fail if device
+ is no longer registered
+MIME-Version: 1.0
 
-Meanwhile the problem was also found by intel's kernel test robot,
-complaining about undefined symbols:
+On 25.11.2025 22:39:59, Tetsuo Handa wrote:
+> syzbot is still reporting
+>
+>   unregister_netdevice: waiting for vcan0 to become free. Usage count =3D=
+ 2
+>
+> even after commit 93a27b5891b8 ("can: j1939: add missing calls in
+> NETDEV_UNREGISTER notification handler") was added. A debug printk() patch
+> found that j1939_session_activate() can succeed even after
+> j1939_cancel_active_session() from j1939_netdev_notify(NETDEV_UNREGISTER)
+> has completed.
+>
+> Since j1939_cancel_active_session() is processed with the session list lo=
+ck
+> held, checking ndev->reg_state in j1939_session_activate() with the sessi=
+on
+> list lock held can reliably close the race window.
+>
+> Reported-by: syzbot <syzbot+881d65229ca4f9ae8c84@syzkaller.appspotmail.co=
+m>
+> Closes: https://syzkaller.appspot.com/bug?extid=3D881d65229ca4f9ae8c84
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-| ERROR: modpost: "m_can_class_unregister" [drivers/net/can/m_can/m_can_platform.ko] undefined!
-| ERROR: modpost: "m_can_class_free_dev" [drivers/net/can/m_can/m_can_platform.ko] undefined!
-| ERROR: modpost: "m_can_class_allocate_dev" [drivers/net/can/m_can/m_can_platform.ko] undefined!
-| ERROR: modpost: "m_can_class_get_clocks" [drivers/net/can/m_can/m_can_platform.ko] undefined!
-| ERROR: modpost: "m_can_class_register" [drivers/net/can/m_can/m_can_platform.ko] undefined!
+Applied to linux-can.
 
-To fix this problem, add the missing dependency again.
+Thanks,
+Marc
 
-Cc: Vincent Mailhol <mailhol@kernel.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202512132253.vO9WFDJK-lkp@intel.com/
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Closes: https://lore.kernel.org/all/7427949a-ea7d-4854-9fe4-e01db7d878c7@app.fastmail.com/
-Fixes: 6abd4577bccc ("can: fix build dependency")
-Fixes: cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure by default")
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-index 460a74ae6923..cfaea6178a71 100644
---- a/drivers/net/can/Kconfig
-+++ b/drivers/net/can/Kconfig
-@@ -17,7 +17,7 @@ menuconfig CAN_DEV
- 	  virtual ones. If you own such devices or plan to use the virtual CAN
- 	  interfaces to develop applications, say Y here.
- 
--if CAN_DEV
-+if CAN_DEV && CAN
- 
- config CAN_VCAN
- 	tristate "Virtual Local CAN Interface (vcan)"
+--gtjk5pkjaohevwah
+Content-Type: application/pgp-signature; name="signature.asc"
 
----
-base-commit: 885bebac9909994050bbbeed0829c727e42bd1b7
-change-id: 20251217-can-fix-dependency-63155d8db12d
+-----BEGIN PGP SIGNATURE-----
 
-Best regards,
---  
-Marc Kleine-Budde <mkl@pengutronix.de>
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlCfBIACgkQDHRl3/mQ
+kZx1dAgAhi1H6yVKfFcynEtrB0c6eLVDbTZHt28eJGiYHDJcJfUrVUP/1LZNwhhd
+Nk/un16f/Db8Wn9fCq94oTA4CP6QKVZUOyBzUp4u5yErHr6fWeEmIe552Laj399+
+uVG+se1hFfQCj+U3h8C8gnUWhx56CYEqKV75kHb5dwnHZ6DHl9Qfb0gvjY+uR4f8
+3GbAd3FdfATwRCeTHIFX1sPSRJ3WLUOcqXHSr+GuUZW3ZS2xtR2+IcoCKyLzSdKM
+mY3Xbh5nyGNFWAu/QARK7P8fse23U9oWmhb9pCFmwGs3U+lG4qWCbPAbkZGWi/er
+plAM8/kRQePG5hMPExTqHIaqUy4pRQ==
+=vZ5c
+-----END PGP SIGNATURE-----
 
+--gtjk5pkjaohevwah--
 
