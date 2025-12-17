@@ -1,176 +1,138 @@
-Return-Path: <linux-can+bounces-5866-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5867-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1B0ECC6827
-	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 09:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5087BCC7046
+	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 11:17:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2B46A3054820
-	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 08:15:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7F96130206A7
+	for <lists+linux-can@lfdr.de>; Wed, 17 Dec 2025 10:11:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD14349B11;
-	Wed, 17 Dec 2025 08:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0EE33B6D9;
+	Wed, 17 Dec 2025 09:46:25 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-vs1-f68.google.com (mail-vs1-f68.google.com [209.85.217.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215BE1DF73C
-	for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 08:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA18033BBA8
+	for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 09:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765959323; cv=none; b=aYYdM4zXj4HofQey4wdWfWZDzNTHg8wTGr5cAF2+WxxVS06I7vIa52oTZui1mbkGSX9T4stbDTYyzI7/Ru/F1Vlkl4K/xMsn4XEHHPg0PEDkuYKiy5F4wgD/rx3mSJq7UHivmdp79gVQqJUbMEroMSGPF+blSHWz1daxPfSU9CE=
+	t=1765964785; cv=none; b=bWDapBPvaeCNWE2CXH8r4LUdo0DWKeFRFjU+hRYpyyiUN0+td/+XaURresHwh1F3CaMOkJr0hyM8jQ5UHHvhaMjEmO3NpIUwHl0FUOKXol897UDbMAe189tJOBWkM2QmIvis0ABpQIvFy6g/GY+dNrPmd2NIyEC2opPx8gN/CdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765959323; c=relaxed/simple;
-	bh=XjGbtOPnxn5ziPdpc7g6S6MqyGKvLokVPCWE3c8w+yQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M9R3xq9U0T3mfBta9mcgmViIqlg59KCWRsC7t17mztwot6LNiWzgQlXVBlc8nqh+Udzj7qrNW8igElw+1hxcIqcm41vK54rrBlXeM0vipZloZaQDaF3BarfjxPivGBXf5iPkSX7N6jdfq8JnVPyRm7iBwrUrXVEx7rRB94mnNoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f68.google.com with SMTP id ada2fe7eead31-5dfa9bfa9c7so3893474137.1
-        for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 00:15:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765959320; x=1766564120;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rym4p+SQ3MsVDrU2KotDsjjR/+PnxDtYr8m/dR/i6BU=;
-        b=pYEnjhbFhho33ifeBKp+JQ4fMpJz4/TbTws2IgIRJLkCH9oKAtZMqs0qttFwCfWJ6m
-         YfvC9cBoU9H+r3AbooS70a3qB4c42R9qnQS97xuT+YoRXgRme6LVwA9eIGv2dZ0hG59W
-         VplhUoQ0YGkEAEU3LHJrefDEZDQCoat9ysL3F3r3Uv2alZYbtg5hd4wGrUgNW285qjYx
-         jEqKMtPsbIESj3foWpUDU2GkMHa02Um9CkO0ZT6dSClcKrInMuIptiz7qwNC5K+RUag+
-         G/0BiiXj3igWQn/zAW7bodLYx54egQTSxwz0BeWN5ni4StITZXls1KR7BkRsQr3tKInt
-         D4fA==
-X-Forwarded-Encrypted: i=1; AJvYcCUc85NNqeVtq9+alOi5iHHhAHFa2AYgEweDkVNMzFJIwAxRzWI0tbCpMXdQE2oUTC2qXj4qccFvV0E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAZfLsL19IdLWrt0keVfHujJEUYADLDUSScaU0AzFD/06aJQmA
-	3sAZ4NgYCyV55PuKqI+AJXdFuzHy9vVMkH5PfH6YElRD+GnT+yAoKqbpEKfG02ltmfE=
-X-Gm-Gg: AY/fxX5+HhzrG7rD907RrA9rM3lNQHJO/Hy9RaPA2hoRTLPTItErCjtd3RXv/FhFkwx
-	d4LKb+rTC42HJTsdSlLEfXqvjuEn0C0WTXYWZsGs/ZACAxXLKHVWClHsfaB7n914jsf8X2+4nLJ
-	4IxTXOuxRomqGRJKWvOqOSvLbZgYd56od7TRK060QEE0s7J2CT5ffrAc8MfsJaLMSWTJHnex7ph
-	XknQvXWE+Q8Bwx7YhJoHvzXb9vxr5J65lGCoKXNiqj6JofPz8mbeIPuAYNAFu5yGAhy6pH5Pn3u
-	RFdmof3smkxMB/8dv3Dxuxy1a9BXU9ixMSpCpkC35aHK1D1UYPtyXV1/eTSehQqgNFL9RcRjbOg
-	l4wglKsx5NU9IGHoi9N8ke/Tg7uqSuZwdzqB2n1V/uYsU9Rj+/ybvpYCjQstH/B24PpS+HAsL8c
-	/SlWqHa+DU4/1fadtIUWBtvsf1df2tedHQDhiiS1Cb+T4kwZQO
-X-Google-Smtp-Source: AGHT+IGrtb2YvU4gbTIIh4y+GgCyDDmqLRtU5ABvYOIyzUGZoNtm0BpUSTYbGOO3t+Y5p0OtsIQ3LA==
-X-Received: by 2002:a05:6102:549e:b0:5db:f34e:5fa1 with SMTP id ada2fe7eead31-5e8277e5e6bmr6527147137.33.1765959319807;
-        Wed, 17 Dec 2025 00:15:19 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-93f5aefd79csm6631835241.12.2025.12.17.00.15.18
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Dec 2025 00:15:19 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-94121102a54so2953896241.1
-        for <linux-can@vger.kernel.org>; Wed, 17 Dec 2025 00:15:18 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXeEnnvXyp/LQ+C2K2bUBc7Qr9SFLK1kcoqQZV2VEVkRIhUaC4g5ED/EVJYgyzBYxWPE9S5L1MdKtw=@vger.kernel.org
-X-Received: by 2002:a05:6102:1611:b0:5e1:866c:4f7c with SMTP id
- ada2fe7eead31-5e82781ea47mr5731108137.39.1765959318483; Wed, 17 Dec 2025
- 00:15:18 -0800 (PST)
+	s=arc-20240116; t=1765964785; c=relaxed/simple;
+	bh=q8OoYiqggd5kDtsfmWbZRSKAxyXqat3PC+dPKtYgzI0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pDHae0ebwoaPSdobIZYeC60BeLgZxfN6FcEl/jr+lOSTRzaYxSzQ7HiPC4gcKZ20/LBRxiMTFaBF5m9quWZGH/vSY1Q9Y01P7WnFnVVEvUReG+lScE4H3r2dWGqW2O7W8R/u/dgzHwGFEegpVlcvJcMqlgJBGJ2hwtxHDyoCBWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vVo6d-0000BV-Ks; Wed, 17 Dec 2025 10:46:03 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vVo6c-0065ht-1g;
+	Wed, 17 Dec 2025 10:46:02 +0100
+Received: from hardanger.blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 3EDF24B7715;
+	Wed, 17 Dec 2025 09:46:02 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Date: Wed, 17 Dec 2025 10:45:53 +0100
+Subject: [PATCH can] can: fix build dependency
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251209162119.2038313-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20251210-mauve-cow-of-hurricane-0f969d-mkl@pengutronix.de>
- <20251210-persuaded-rewire-8ac93b0cc039@spud> <20251211-wonderful-singing-eel-4e2293-mkl@pengutronix.de>
-In-Reply-To: <20251211-wonderful-singing-eel-4e2293-mkl@pengutronix.de>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 17 Dec 2025 09:15:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXW2iFQO3vTzMg_ydqZ5YC1EPqyNzkpLRfTAkLhmC+K5g@mail.gmail.com>
-X-Gm-Features: AQt7F2oD50PxDosHDFQJjqw3YErV6WFAJtpUaCLTAZeWlqwHnCeiK6ic6sDkf3A
-Message-ID: <CAMuHMdXW2iFQO3vTzMg_ydqZ5YC1EPqyNzkpLRfTAkLhmC+K5g@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: phy: ti,tcan104x-can: Document TI TCAN1046
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Conor Dooley <conor@kernel.org>, Prabhakar <prabhakar.csengg@gmail.com>, 
-	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Aswath Govindraju <a-govindraju@ti.com>, Frank Li <Frank.li@nxp.com>, linux-can@vger.kernel.org, 
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251217-can-fix-dependency-v1-1-fd2d4f2a2bf5@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIANB7QmkC/yWMQQ7CMAwEv1LtGUs4KID4CuLQxgbMwVQJRaCqf
+ 8fAcVazM6NpNW04dDOqPq3Z3QN41aFce78omQQjrVPmxDsqvdPZXiQ6qot6edN2wznLXgZOgji
+ OVcP4RY8IH6f/2KbhpuXxzWFZPn4OXjd7AAAA
+X-Change-ID: 20251217-can-fix-dependency-63155d8db12d
+To: Vincent Mailhol <mailhol@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2252; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=q8OoYiqggd5kDtsfmWbZRSKAxyXqat3PC+dPKtYgzI0=;
+ b=owEBbQGS/pANAwAKAQx0Zd/5kJGcAcsmYgBpQnvXgjQE3g9c/QU6HSfM24lXY0KibH2Qa4dkj
+ ZvKBRpDWOmJATMEAAEKAB0WIQSf+wzYr2eoX/wVbPMMdGXf+ZCRnAUCaUJ71wAKCRAMdGXf+ZCR
+ nGNxB/sGmtPNi3HFXgxJLpQ2KU4z8X8yvSpTihMxlnSfQ87mcn8LsuN039DZEJ7mW/pcMv3Wrym
+ 3Wx59611nHplr/6p3/KxbPMXPjNDnFtCvO7I/QOExMLPNH/ns19Bykg6DVI3WgKdA7wYA30MVuN
+ gHmOwC3h7mhciB9hQ5oAKDRpO8qpjzrSirZqDK+bB5EBdeEbwtmuFz0PN/+QLDVW6e0sFhKHduv
+ N4wHMoUDsv6/+ydIyH357zBABCwiG675DTL3RLyW5zSqCAxp960sVuDK4THxZ9ATniADfLghuJq
+ 1gPz3KvKE8nuWF9hPu2iNwBBtqjWQo/Y/iQ7jWnxzns3v9b4
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On Fri, 12 Dec 2025 at 12:22, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 10.12.2025 18:21:34, Conor Dooley wrote:
-> > On Wed, Dec 10, 2025 at 08:52:58AM +0100, Marc Kleine-Budde wrote:
-> > > On 09.12.2025 16:21:19, Prabhakar wrote:
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > Document the TI TCAN1046 automotive CAN transceiver. The TCAN1046 is a
-> > > > dual high-speed CAN transceiver with sleep-mode support and no EN pin,
-> > > > mirroring the behaviour of the NXP TJA1048, which also provides dual
-> > > > channels and STB1/2 sleep-control lines.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > ---
-> > > > TCAN 1046, https://www.ti.com/lit/ds/symlink/tcan1046v-q1.pdf?ts=1765297159307&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FTCAN1046V-Q1
-> > > > NXP TJA1048, https://www.nxp.com/docs/en/data-sheet/TJA1048.pdf
-> > >
-> > > The polarity of the standby line of the chips is different.
-> > >
-> > > You must set the correct active high/low property for the GPIO, as the
-> > > driver uses logical levels.
-> > >
-> > > Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> >
-> > What you're saying seems to contradict the tag you've given, is a
-> > fallback really suitable if the standby polarity is not the same?
->
-> The driver uses _logical_ levels to switch the GPIOs. For example to
-> power on the PHY, it disables the standby GPIO by setting the value to
-> "0".
->
-> | static int can_transceiver_phy_power_on(struct phy *phy)
-> | {
-> [...]
-> |         gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
-> [...]
-> | }
->
-> You have to use GPIO_ACTIVE_HIGH/GPIO_ACTIVE_LOW in the DT to configure
-> the actual level of the GPIO.
->
-> If you connect the PHY's standby input directly to the SoC's GPIO....
->
-> | TJA1048: HIGH = Normal mode, LOW = Standby mode
-> | TCAN1046: High = Standby mode, Low = Normal Mode
->
-> ...for the TJA1048 you would use GPIO_ACTIVE_LOW, while for the
-> TCAN1046 you would use GPIO_ACTIVE_HIGH.
+Arnd Bergmann's patch [1] fixed the build dependency problem introduced by
+bugfix commit cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure
+by default"). This ended up as commit 6abd4577bccc ("can: fix build
+dependency"), but I broke Arnd's fix by removing a dependency that we
+thought was superfluous.
 
-Exactly.  For most of these CAN transceivers, there are typically two
-almost identical parts (usually differing in the last digit of the part
-number), one with active-high standby, another with active-low standby.
-These differences can be handled perfectly fine using the GPIO_ACTIVE_*
-lags.
+[1] https://lore.kernel.org/all/20251204100015.1033688-1-arnd@kernel.org/
 
-Note that there can be other differences: the RZ/V2H board Prabhakar
-works on actually has TCAN1046V.  The "V" variant differs from TCAN1046
-(and TJA1048) in configuration of the two power supply pins:
-  - TCAN1046 has independent supplies for the two channels,
-  - TCAN1046V has separate logic and I/O supplies for the combined
-    channels.
-Since this difference can be handled through *-supply properties
-(when the need arises, and the driver gains regulator support),
-I don't think separate compatible values are needed for "V" variants.
+Meanwhile the problem was also found by intel's kernel test robot,
+complaining about undefined symbols:
 
-BTW, how do I know? Because I had started working on adding support
-for TCAN1046V myself, but Prabhakar beat me to sending out patches ;-)
+| ERROR: modpost: "m_can_class_unregister" [drivers/net/can/m_can/m_can_platform.ko] undefined!
+| ERROR: modpost: "m_can_class_free_dev" [drivers/net/can/m_can/m_can_platform.ko] undefined!
+| ERROR: modpost: "m_can_class_allocate_dev" [drivers/net/can/m_can/m_can_platform.ko] undefined!
+| ERROR: modpost: "m_can_class_get_clocks" [drivers/net/can/m_can/m_can_platform.ko] undefined!
+| ERROR: modpost: "m_can_class_register" [drivers/net/can/m_can/m_can_platform.ko] undefined!
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+To fix this problem, add the missing dependency again.
 
-Gr{oetje,eeting}s,
+Cc: Vincent Mailhol <mailhol@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202512132253.vO9WFDJK-lkp@intel.com/
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Closes: https://lore.kernel.org/all/7427949a-ea7d-4854-9fe4-e01db7d878c7@app.fastmail.com/
+Fixes: 6abd4577bccc ("can: fix build dependency")
+Fixes: cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure by default")
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-                        Geert
+diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+index 460a74ae6923..cfaea6178a71 100644
+--- a/drivers/net/can/Kconfig
++++ b/drivers/net/can/Kconfig
+@@ -17,7 +17,7 @@ menuconfig CAN_DEV
+ 	  virtual ones. If you own such devices or plan to use the virtual CAN
+ 	  interfaces to develop applications, say Y here.
+ 
+-if CAN_DEV
++if CAN_DEV && CAN
+ 
+ config CAN_VCAN
+ 	tristate "Virtual Local CAN Interface (vcan)"
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+---
+base-commit: 885bebac9909994050bbbeed0829c727e42bd1b7
+change-id: 20251217-can-fix-dependency-63155d8db12d
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+--  
+Marc Kleine-Budde <mkl@pengutronix.de>
+
 
