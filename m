@@ -1,46 +1,46 @@
-Return-Path: <linux-can+bounces-5873-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5874-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CCC6CCB7D7
-	for <lists+linux-can@lfdr.de>; Thu, 18 Dec 2025 11:51:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E2C7CCB506
+	for <lists+linux-can@lfdr.de>; Thu, 18 Dec 2025 11:13:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D4449303E3E7
-	for <lists+linux-can@lfdr.de>; Thu, 18 Dec 2025 10:46:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0DA703015EE1
+	for <lists+linux-can@lfdr.de>; Thu, 18 Dec 2025 10:12:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 124993396E0;
-	Thu, 18 Dec 2025 10:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A90A33CEA0;
+	Thu, 18 Dec 2025 10:12:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S4/i1cSE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ee45dr8W"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D980C338F54;
-	Thu, 18 Dec 2025 10:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E61533CE8F;
+	Thu, 18 Dec 2025 10:12:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766052663; cv=none; b=jNhOmZ/ICAwmldx5nMiyh/zQYKFHujgsj7tIh7/xNdVG5YEEp2IblJ81BQ2noafz+D7TbD/+9rxnsyNkNeCcqC7enKwqZB4JXHlyh0dXM3bK2EeV0pFY9rmLBo5FK4G+EYu2HlYEeYGPsjCsZ+CHTQhcsqC1HI2DA+SLpK0FCWw=
+	t=1766052765; cv=none; b=RcvR4MPkOzfiVz1SWGWRUr7LMDTrfXckcbWz2H9BmD7vH4cb/EMg6bQi9cvybgpqZEbUafKrNooVmTKmB9LAxfxflgIZ3FRGE1EVbAwWSBE/SabStfPtQ8kbzE8g0DqoC93dMPc3PYMu2EiFiehrQU7loVOhjuGAjRlknZ61WNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766052663; c=relaxed/simple;
-	bh=eXRCeg1JMwF1oC2xb3wzc7YHYIyrnbmRZpmxQH85dSg=;
+	s=arc-20240116; t=1766052765; c=relaxed/simple;
+	bh=6dOHEO/ATrDkn+942USvFxLXBlcYFHToHWASbSwab/c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LI0E4vF6Tx8W28RGrg6MvFqKBpW00FQeMSdlUWMyuF5yYSpuMpCg1UN5r65hsXF8mF/Pn0yUNSgjs5GK0iEw8BYZpmaOdp7zvSE1Pn0CoGCFp2xYtuVFb6/eXezEbxMhRN9r8klIkIUV3ZOQ04IGALNAzI8na8KIrXsoGFdYJM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S4/i1cSE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C83E5C4CEFB;
-	Thu, 18 Dec 2025 10:10:58 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=aeIsugzOMUKqM4Ho3CCV4T7OoxI2BxXSnzhcWgW75RhoXHke4olfjFpfbLVha5L41SJSGkciHVqMdfHltQPqOsvlJJpGzewpSSFgNH2kdhrlo2BBCd1UaI/z2wew2EMr+ZY6nj9gUpAWTyN5fAP7N88wsJ+kCH04V72jW8zSaN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ee45dr8W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57461C4CEFB;
+	Thu, 18 Dec 2025 10:12:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766052661;
-	bh=eXRCeg1JMwF1oC2xb3wzc7YHYIyrnbmRZpmxQH85dSg=;
+	s=k20201202; t=1766052764;
+	bh=6dOHEO/ATrDkn+942USvFxLXBlcYFHToHWASbSwab/c=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=S4/i1cSEokFvw3UgJp7ZVw+7wL7cREgjjfIArJ91IG8GGH4L80abrljrsdDfMH/O7
-	 ohr+WufeGYw9g9w1iTh1KGpuwplDiK/7Cn8DQ7kkDpWZowZc8NxuNOc0y9Iyfu5jhx
-	 aQW9txHU/j1DWrs3Hc4vq403dmL7aY5W78ubWk6P5AbauKtp90tXIaxax2n4shR05g
-	 xYehh3oXwJzpGXJBMSHtW2AYb5rJOqrO2w2Q7+CcHCsqq2LJrmc2jRxvDmNTSmoo9I
-	 JQFTAL07TIZg0QSrHPtJ7b7lzfuY6MmsMwUrQXL+P1hRxZN2rI5ljbxNN5pE0z0A/H
-	 HXX6Jq0zvXv5w==
-Message-ID: <f57ccf4a-b43d-4de2-b745-3591cb18e730@kernel.org>
-Date: Thu, 18 Dec 2025 11:10:56 +0100
+	b=Ee45dr8WWCZPfh7q/vH11+3IHZH4UbFXSiCss5Y/a45Q22Fy1RjBmpMAxrDRDBfjM
+	 WOyWJmCu90cTRaElaHvfv6EzTwWosJHYCBZjk+rMwOTQxl3cVcIe5+vUZE89sw45v9
+	 u8sACM0BsAHj8NlYxHehm1DiOyKbBBVi5RGgNET/eEsAvks2P2gr1oGnUDZmTDLA7+
+	 bUnVRfSLJLhrv7pr8CapTQc8FLdQ+TSGtQE1YDkh3tPkBmLRAIwDyPUeGiVNbjlIuk
+	 /7rN1Up4Y34iHCQUfNiRJQXQjleO9y+MHOsf99d9F9bW8h5RdDe3VwKpmONllYG5/6
+	 Pa7jOXlzyFfdA==
+Message-ID: <b7fdd6d7-fd56-4e3a-84da-191411f9edd6@kernel.org>
+Date: Thu, 18 Dec 2025 11:12:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -57,7 +57,7 @@ Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
 References: <20251118092115.3455-1-arun.muthusamy@gaisler.com>
  <20251118092115.3455-3-arun.muthusamy@gaisler.com>
  <c80ff180-b7f1-4f39-b39d-2953ef75a7ad@kernel.org>
- <0c4a38e1-29e9-4892-ad99-539dd889d4a8@gaisler.com>
+ <13d562aa-3425-4753-a78f-dd268dd78794@gaisler.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -103,53 +103,82 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <0c4a38e1-29e9-4892-ad99-539dd889d4a8@gaisler.com>
+In-Reply-To: <13d562aa-3425-4753-a78f-dd268dd78794@gaisler.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 24/11/2025 16:26, Arun Muthusamy wrote:
-> Thank you for the review. I  wish to clarify a few details concerning 
-> the DT binding and seek your guidance on the preferred approach
+On 11/12/2025 11:11, Arun Muthusamy wrote:
+> Hi Krzysztof,
 > 
-> On 11/18/2025 12:01 PM, Krzysztof Kozlowski wrote:
->>>> +      Fallback on node name matching for systems that don't provide compatible.
->>>> +    enum:
->>>> +      - GAISLER_GRCAN
->>>> +      - 01_03d
->>>> +      - GAISLER_GRHCAN
->>>> +      - "01_034"
->>> This does not really work. Are you really defining here "name" property?
+> Thank you for your thorough review. I’d like to clarify a few points 
+> regarding the DT binding and get your guidance.
 > 
-> PROM-based LEON systems identify uses the "node name" property, while 
-> DTS-based NOEL systems use proper "|compatible"| strings.
+> On 11/18/25 12:01, Krzysztof Kozlowski wrote:
+>> On 18/11/2025 10:21, Arun Muthusamy wrote:
+>>> +      Fallback on node name matching for systems that don't provide compatible.
+>>> +    enum:
+>>> +      - GAISLER_GRCAN
+>>> +      - 01_03d
+>>> +      - GAISLER_GRHCAN
+>>> +      - "01_034"
+>> This does not really work. Are you really defining here "name" property?
 > 
+> The driver supports two of the platforms which are LEON and NOEL 
 
-No, either node name or name property. There is no such thing as node
-name property.
+I don't care much about driver. Please describe here hardware.
 
-> The updated schema now uses:
-> properties:
+> platforms. PROM-based *LEON* systems identify uses the "node name" 
+> property, while DTS based *NOEL* systems use proper "|compatible"|strings. On LEON (SPARC32), AMBA Plug & Play information creates the DT 
+> properties, and drivers historically match devices based on node names.
+> To reflect this, I updated the $nodename pattern to support LEON-style 
+> node names: properties:
 >    $nodename:
->      pattern: "^(GAISLER_GRCAN|01_03d|GAISLER_GRHCAN|01_034)$"
+>      pattern: "^(GAISLER_GRCAN|01_03d|GAISLER_GRHCAN|01_034)$" I’d 
+> appreciate any suggestions on the preferred way to describe this node 
+> name for PROM-based LEON.
+> 
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    maxItems: 1
+>>> +
+>>> +  freq:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description: |
+>>> +      Frequency of the external oscillator clock in Hz (the frequency of the
+>>> +      amba bus in the ordinary case).
+>>> +      This property should be used by systems that utilize the common clock
+>>> +      framework is not supported.
+>> Missing systemid. Your commit msg must explain any changes done to the
+>> binding during conversion.
+> 
+> The driver now reads systemid directly from /ambapp0, so the property no 
+> longer needs to be defined in the DTS. The previous documentation was 
+> outdated and should have been updated after commit:
+> 1e93ed26acf0 ("can: grcan: grcan_probe(): fix broken system id check for 
+> errata workaround needs").
 
-So node name?
-
-Anyway, names are wrong - they do not follow DTS coding style at all.
-You need to come rationale why incorrect style has to be used.
+Read again what I wrote.
 
 > 
->    compatible:
->      enum:
->        - gaisler,grcan
->        - gaisler,grcanfd
+>>> +  - reg
+>>> +  - interrupts
+>> Where is freq? It was required in the old binding. Again, you need to
+>> explain the changes.
 > 
-> Please advice me if its the preferred  is a preferred way to describe or 
-> structure this dual-matching approach.
+> LEON: relies on the freq property
+> NOEL: uses a standard clocks binding
+> Because of this dual approach, the freq property is no longer required 
+> in the DTS binding itself as theAMBA Plug & Play creates the DT properties.
 
-Nothing above usually - you need specific device compatible. I also do
-not know what is the difference between one and another - in terms of
-hardware (don't mention drivers please).
 
+Please read my comment carefully: you need to explain the changes. But
+not to me, to everyone in the commit msg.
 
 Best regards,
 Krzysztof
