@@ -1,99 +1,85 @@
-Return-Path: <linux-can+bounces-5884-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5886-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBE46CCF080
-	for <lists+linux-can@lfdr.de>; Fri, 19 Dec 2025 09:49:27 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3003ACD2BC6
+	for <lists+linux-can@lfdr.de>; Sat, 20 Dec 2025 10:09:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7058D300BB98
-	for <lists+linux-can@lfdr.de>; Fri, 19 Dec 2025 08:49:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 12061300E4D4
+	for <lists+linux-can@lfdr.de>; Sat, 20 Dec 2025 09:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A8E12E540C;
-	Fri, 19 Dec 2025 08:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 154442FBE1C;
+	Sat, 20 Dec 2025 09:09:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EUjki3pC";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ETWZlwCU"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="YXonErfA";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="31vLvB+9"
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C192D6400
-	for <linux-can@vger.kernel.org>; Fri, 19 Dec 2025 08:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766134165; cv=none; b=H7SEV20/bY+TUW/iZrv5ALrB+zTAHJsox4YfvpBmGx+OFpXuzX/SCyXUkDZfKXh5AjvPnQMTf1+WYkXb1BbUkXRd1XeJ1+Pd5U/Kw6tlqnNctSVUTBbtzS1XYoVHkOOUWp5RoCaFvvLhWAJ3DrEBOIL5nnUox0SXgXzy+89aosY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766134165; c=relaxed/simple;
-	bh=uejryCLRQ1VNG1fvpKRtW4mcmwc1LynbGgyohhNlzCg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=atbE3y/9Ed0WVh2I4Y2PQuVwYYLXSzLkLgaJuhjIptr2TmDOOTASEQLlf7i2E4PkRRx9NCWlknb9WGrMclTMcFFYkAGTmQshQ39vQEw2v9CVY5zOfy58VMOV/hzav0VydtTyVjGA9QGXZWboReen18FUqH0f9pxDv2BfQb3waQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EUjki3pC; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ETWZlwCU; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1766134162;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sW5Hrxdsb7GUKzUzVoNy3hjRSNuogwTUTSagfAq9WHk=;
-	b=EUjki3pC8GqFaJBfHwhcK28stfrGS5m1KgPx+qWiHsD4RsmuvhFfYF+ckYw5h+P6VPfiAI
-	zs9+utdJcGKe7nBajY8yw23KvBNkg+p0D5ljY7cwdaLoiF/9AJ/cFgf6fjrzu4OxJ2wmZ2
-	I59yGzXmemg+OrSEb8N3RqAkXQm1Bx8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-426-bOCHpu0FNHOIJJChvY1o3w-1; Fri, 19 Dec 2025 03:49:21 -0500
-X-MC-Unique: bOCHpu0FNHOIJJChvY1o3w-1
-X-Mimecast-MFC-AGG-ID: bOCHpu0FNHOIJJChvY1o3w_1766134160
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-477cf25ceccso14634065e9.0
-        for <linux-can@vger.kernel.org>; Fri, 19 Dec 2025 00:49:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1766134160; x=1766738960; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sW5Hrxdsb7GUKzUzVoNy3hjRSNuogwTUTSagfAq9WHk=;
-        b=ETWZlwCUhoGaH9KlYqe5nEUYN28PxTDf2RLtaWC/qZS1DL11npGnMBGyjVsaRuhItQ
-         7NC3Fmk5GnUs5IIJHSBjKdC7a8p12jUc2+89rJEByE6tI44ZsLaScZQSc900d9ycxS8B
-         3FbuMfvLTKvEkf8hj1fJ0VVDs88D5ZwztBlAMy7Q4Y+0SE8Z/28kPnQIwRjI2vW60Gme
-         6IrJHARFMBDzbI5dfk9w0OOQTr2R9ssKjIO+bkVITt7GBNXuCDFdekX0M9A1+Qgilvlc
-         i8oFwlVHmlYHlnS9faoQHD4aEwyicG04MPBfO5reb0UhSlyi4Z4hk99DKIZ49NJ/Nr+x
-         1ekQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766134160; x=1766738960;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sW5Hrxdsb7GUKzUzVoNy3hjRSNuogwTUTSagfAq9WHk=;
-        b=CUuLMnvzdwiGgX3+THC7CFXPbjEEgEfPn5eWV0U0BdlsGaNZYV/0n5yNZ/QbbwZIdZ
-         zx1wGf3TX1LJd7WJOR6pWrAqHY8Y6itlejjXSKXTwuXJ0uAoTuvYsLsTYIVMlwX4W7OC
-         BXzOVgCHv0oZ0frbzFAqbpKpe/RXAK6s67JLn2BlGDCtiKf6K0FKm9854+IrdaYt8Ljk
-         g3EV1jxiFeDXWsWseSzNf6Wco7dQCnd6VxMFSZi/CmSmORsXv3/jGOEYmZVLSMnzt88q
-         BoesCPECnjWDbIoTM5DWzEA13gfuW+HLQtvldLaDsoVcpvZozHRR9Cne6sJWiYftFoKT
-         rBGA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/RB+Zaj5KKh7+dAHc7qvZOYRT4zGQfF2PUcUy+DcmFEMDPv5YnswX947+KIFW8uRLgK7Q6MZuM64=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmXJCKFpBkYBWWplwsJqPNWswap+CbWlVOto5SwjnT9bVDQ00r
-	sqhSb2vb9l7RiBrzT8Y8wKHzSswErhMDwWfCJ/xgmWRau9hvTegZlZLdo40h5SehWLSCQQEpuR8
-	rKTCZ2Od9FA10sXNYaoyFxdnGtJBmOABNva/WhqqlbBsn7GacrT7fNX7U0ASRyA==
-X-Gm-Gg: AY/fxX74LEDKZuPwlBXr9v5Ok/HY5BzQF4jam9+Bb1vP2ifJxTLlA8kEYr0vKKhe8i8
-	ysAH1mJJ8EaLGujlYejfRndRYS7p2xDesgsOEcGiMHaNgLrtcUdlT7DdzWPiOLcCO2r5owMsz0F
-	PVd6yiYdKCNMR9BrXs7waGEL7bjXqa9yNqzrKq1c6j4xlOQqIlunGY09sz3HBMXvg1NV1ttR9wF
-	U4y+6sZAWnXu8pH7o3i6P6OsLb/GPvhdzDlopV12g+ch06YjmQmG/54UINKivFoKpsGZ2LuOok9
-	fEIN2RZc3MutwdO5rOCZ4dTN7TelTYLNu0RLIPh0BKuLT63Q27WHv7l23kjZPLl0een0UUCSY9g
-	Ts6CTkHtLcb+9
-X-Received: by 2002:a05:600d:108:20b0:477:9986:5e6b with SMTP id 5b1f17b1804b1-47d1c038664mr8170965e9.28.1766134160055;
-        Fri, 19 Dec 2025 00:49:20 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEqUQk++ajFxa4Fltq1nQ3xd1vcqp5ri720kaNVCgS9smnN4G2iaVta3SyM5UhVrO4wmwHRzA==
-X-Received: by 2002:a05:600d:108:20b0:477:9986:5e6b with SMTP id 5b1f17b1804b1-47d1c038664mr8170815e9.28.1766134159715;
-        Fri, 19 Dec 2025 00:49:19 -0800 (PST)
-Received: from [192.168.88.32] ([216.128.11.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea82e9fsm3873617f8f.26.2025.12.19.00.49.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Dec 2025 00:49:19 -0800 (PST)
-Message-ID: <9ebaa762-a12f-4748-9672-05b09706a5ca@redhat.com>
-Date: Fri, 19 Dec 2025 09:49:18 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9392475CF;
+	Sat, 20 Dec 2025 09:09:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.221
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766221784; cv=pass; b=E7EXzkpbbLAJceC0JQm1FeqAITgVuB/oFusXYub0Qbr7uKCzSynoR/VFCtUDyGoCuPFF/2Kktxigs1kdpLwGJlTin/gPrPdu4+IMvgOcTgGkic6/8sON2H8CTV5IaIE3sTioFKDjMDv4chKgNZhOvjWDsMUna00pYm6nxb4uXkE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766221784; c=relaxed/simple;
+	bh=+xYqBQHkOyOeI8mNHLontYHjvXCHHIRJ6MH0GfI7FhE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=rUUrLvFEF208LMwNfVmM+9d0bSQ01Re73POxX0KSxQ4emVBghvAh16CeGgW2dZTacvn13YBUP4fOHFo84Vrtjk8ZTlx5HHo/Sj1s07gN/Z/2YyKyCSpAZoDteGG6XEm9f5DH7T/w/8wzjBWkKr5/wjiSje23OJDodpjTxjrBMmI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=YXonErfA; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=31vLvB+9; arc=pass smtp.client-ip=81.169.146.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1766220695; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=GhJ33Ly58NIHzsLZycMsp7neI86ZNNO+x0PWVmnvf5Bqxvlit07OCfdZdfyh5W9gOk
+    aCzyF7E460/tgbXxFE5eKrVJx+xgnO2QEbtrn8LMukLU9wE97lvDYK+8eq80GNSkPPMn
+    E8+v1nqP5EfMMBw16045XSC9PIPZsTD3vEeRtmPR2RNVYRCHO+Zf+zvYTxE/tCi5uSnt
+    qyWisHfMcfzbiRjkJoO2dNzMOydNZ6g5iv11aQOEyXdhmOmgQouHtWF36gk8lM+c3Anw
+    +ND9gugo9/WzYoFKIRERNZdhxqT4oLD+fcY5FTEorvdNSMgyeke3gucSCH+86NHtfDfd
+    s7lA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1766220695;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=sKbZgoo15K6tCc2NFlCG0/LydYKvQHd139PxdzHvBU8=;
+    b=iVnU3d0jj246Hlp3xN612PG6zaTn3StmDGJsEcUdRCmQzLBiL8BFLXnkte8tI9eH6j
+    re5u7Q++45WzeiKuFMHpnctlM5mimE3inVGmjkqiZTR1B0IC+zTkyTRc0q2Y7BYZWOKq
+    nQD+Z+EQGxR2bp7qLLw6/PgspPTls2IWFP+rJGfEMsyoDwTz4muM4UY4gxA4cmZElBy+
+    RVABZIwmNGrp5cKmxY/CoZ3BuVIk//zxL5e3knYXfkzxzbLKg4EkiYpp9j2Y3J7hnitv
+    h2ca5kiIWFTDgb7ZA0I5FmfeeHHU0CJYkGPNBoll7+waMs+aXc1WOF+5xtmFmi6UneTb
+    aGaA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1766220695;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=sKbZgoo15K6tCc2NFlCG0/LydYKvQHd139PxdzHvBU8=;
+    b=YXonErfAPi80ef4BKlZNZKSX1aGDtNM1YUNm/zOEKLVgTAhnhCjJ6coLIHme29exId
+    bn45ns+x/h/uY60vWWXRkyg4rru3new7OldoyreViHZoLt9nKQAam3xMYFqjTN4dYL/0
+    DBTxZuBL3o+OQM3mW1vJQB+qx3QX2RoT3A2k+GBgrPMG66IpAdU/U58XlDNUTFVLWcKf
+    11LcyR9g9So6drxWjhh1vreS5crg5h1vnDmR99+MjH76AA15wgZfFVMqhZPjOu7uzJ9x
+    UCqXPqME8Wpipe4HTPTgCsIBwt6HIlzTtBIkSrBFNjgCriDEHcEF0a3WrBIGQKpvOTM9
+    mnHQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1766220695;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=sKbZgoo15K6tCc2NFlCG0/LydYKvQHd139PxdzHvBU8=;
+    b=31vLvB+9Fj2WSRLFb3FsoEanbY5GMpVLx8m96/EfmK1e+w856LG/eYdlbrwhQcdxf/
+    4vxXaCJERwhiMBr4i8Dw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
+    by smtp.strato.de (RZmta 54.1.0 AUTH)
+    with ESMTPSA id K0e68b1BK8pYBlr
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sat, 20 Dec 2025 09:51:34 +0100 (CET)
+Message-ID: <380b9c67-dd42-4d3a-9527-63cad648fe43@hartkopp.net>
+Date: Sat, 20 Dec 2025 09:51:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -101,29 +87,93 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 0/3] pull-request: can 2025-12-18
-To: Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org
-Cc: davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
- kernel@pengutronix.de
-References: <20251218123132.664533-1-mkl@pengutronix.de>
+Subject: Re: [syzbot] [can?] INFO: task hung in cangw_pernet_exit_batch (5)
+To: syzbot <syzbot+6461a4c663b104fd1169@syzkaller.appspotmail.com>,
+ linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+ netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <69446029.a70a0220.207337.00f1.GAE@google.com>
 Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20251218123132.664533-1-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <69446029.a70a0220.207337.00f1.GAE@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/18/25 10:27 AM, Marc Kleine-Budde wrote:
-> this is a pull request of 3 patches for net/main.
-> 
-> Tetsuo Handa contributes 2 patches to fix race windows in the j1939
-> protocol to properly handle disappearing network devices.
-> 
-> The last patch is by me, it fixes a build dependency with the CAN
-> drivers, that got introduced while fixing a dependency between the CAN
-> protocol and CAN device code.
+Hi all,
 
-Pulled, thanks!
+the syslog for this issue is full of bluetooth error messages that could 
+be related to this recently reverted patch:
 
-Paolo
+https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git/commit/?id=252714f1e8bdd542025b16321c790458014d6880
+
+Therefore I assume the problem not to be related to the CAN subsystem.
+Let's see if after the bluetooth fix another syzbot splat shows up.
+
+Best regards,
+Oliver
+
+On 18.12.25 21:12, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    8f7aa3d3c732 Merge tag 'net-next-6.19' of git://git.kernel..
+> git tree:       net-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=175489b4580000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=9e5198eaf003f1d1
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6461a4c663b104fd1169
+> compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=139e99c2580000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/5fe312c4cf90/disk-8f7aa3d3.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/c7a1f54ef730/vmlinux-8f7aa3d3.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/64a3779458bb/bzImage-8f7aa3d3.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6461a4c663b104fd1169@syzkaller.appspotmail.com
+> 
+> INFO: task syz.0.17:6104 blocked for more than 148 seconds.
+>        Not tainted syzkaller #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:syz.0.17        state:D stack:25440 pid:6104  tgid:6104  ppid:5956   task_flags:0x400140 flags:0x00080002
+> Call Trace:
+>   <TASK>
+>   context_switch kernel/sched/core.c:5256 [inline]
+>   __schedule+0x14bc/0x5000 kernel/sched/core.c:6863
+>   __schedule_loop kernel/sched/core.c:6945 [inline]
+>   schedule+0x165/0x360 kernel/sched/core.c:6960
+>   schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:7017
+>   __mutex_lock_common kernel/locking/mutex.c:692 [inline]
+>   __mutex_lock+0x7e6/0x1350 kernel/locking/mutex.c:776
+>   cangw_pernet_exit_batch+0x20/0x90 net/can/gw.c:1288
+>   ops_exit_list net/core/net_namespace.c:205 [inline]
+>   ops_undo_list+0x525/0x990 net/core/net_namespace.c:252
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
+> If the report is already addressed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+> 
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+> 
+> If you want to overwrite report's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+> 
+> If the report is a duplicate of another one, reply with:
+> #syz dup: exact-subject-of-another-report
+> 
+> If you want to undo deduplication, reply with:
+> #syz undup
+> 
 
 
