@@ -1,426 +1,152 @@
-Return-Path: <linux-can+bounces-5892-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5893-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8049CCD43F5
-	for <lists+linux-can@lfdr.de>; Sun, 21 Dec 2025 19:33:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3933ECD447A
+	for <lists+linux-can@lfdr.de>; Sun, 21 Dec 2025 20:07:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 17E103000921
-	for <lists+linux-can@lfdr.de>; Sun, 21 Dec 2025 18:33:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B6B143003528
+	for <lists+linux-can@lfdr.de>; Sun, 21 Dec 2025 19:07:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C64327CB04;
-	Sun, 21 Dec 2025 18:33:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="n8kBLuNL";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="P0ZaMWnv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2B40235C01;
+	Sun, 21 Dec 2025 19:06:59 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D77B2253A0;
-	Sun, 21 Dec 2025 18:32:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766341980; cv=pass; b=oaQG0jsF0dUa4SebBg6Ku2Fsh2Jplo5/9yOqAVClM99/cnvlSmtsayKGJo8SD0ebQayv/IMt8WgBOdgTDxpS7oA5N1ksuzhU520RO01Z8uB/3lNdiX4gfQ6bpz5lGK3wSiEzfAsOGgFcFTqtYc8PalT+eJfrCgTHSxxu/N0lqE0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766341980; c=relaxed/simple;
-	bh=GRBv4PxglNVAKp0jLNkgX9bwCGCpNQdv5QiEntFT8eE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rILOKAxx/ZWOR/GtM/+ZlhDeUftyxn4qrbNOheoHeNMZDAYg08xGtNrTP3bgiv8puFLEMJaycXn7zI38PfjQKAW9uR+ukQtvnnZ6Y4x+ecub6l+nnIowkMC81SskhZyIWRnLq5C08A02IqWeYvCZk12z9YHkzAVi5cXHSiggA2k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=n8kBLuNL; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=P0ZaMWnv; arc=pass smtp.client-ip=85.215.255.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1766341784; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=pQjW36HA0jOJ+gK9x221B9TOCIQspuUW9inetocmmAccAsYJgiYUn8JAgCpFQ8RLC+
-    2f1Sox0z5CJmKrM4kQkrXP7h5B7gujHVwFydW748ZrfrbkvENNDaar0VeUF+vjz2fpGB
-    Jvl8zPJHY0pWZld0C/JBsBRJ/WGrldBZyubrcGkkyj3np+xXD5ehqXfvtup215ZQQQeK
-    Wnx0af14RK/CDwDHNl0oJ0uEOFm8DU9Xt/6eS8nDghOAMR9J5ItoSHxxDVpKsSLBSCKI
-    G8nEyks6/yx3tIaZqeqiMZBY9ejWdJqpaIu1k4oPJZdZmVF4lVcg2HOuU+PtbEjvWqsH
-    oFzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1766341784;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=HKwAn7f3+TtsckzLHgRWpWRHke/UNCAnjpKX4WLx6a8=;
-    b=nx0hQJMDbdjgTF1AXB2k21CL+NqAhmMsQVg/G6Yyy/TNHjP/BzCj9joepQRPWD48fy
-    2ZOtoSVSnAvPhnDz+BlkkjMAI7yHEL9vn9+eIDLUAA+4B51v0nG1xk164DWhU2p/5r1U
-    t0BoyvzadCmCr9lhSkWzIjr/Ta3vqDSIK2wDM3WjprSGFFTrX163TWjAutDBBsFlSKVq
-    AvakBRHbDdqAAPGT0yXrMl/+MhVZKm/F6005nkna0KBU3yuFKcGkOyfGiUShzfu1Am3z
-    UcFFMXLvDYprpPkq1/RA5IPhQy7hZy9qzekjUVCO3MG48Za8Ne04uLEXfD2xV3ZgdeDL
-    +bLQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1766341784;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=HKwAn7f3+TtsckzLHgRWpWRHke/UNCAnjpKX4WLx6a8=;
-    b=n8kBLuNLSGvf6Pwb8sgO6jfl0z60B4pXGiqBdfY/xqAh3O1Ajx+f5nuD9V5lUVYIF7
-    QPLW5peIu+7mUq/42gebmvY2LtgBY3lJNN9JS9RM324n8uyQwQpsbjSi2w9ZwjulEUeC
-    sM34+0LKooRdJet05l6nBnNT2AGucOQ2/vVbweChpq4bgIY8mn4dIIGfZa8TiC4oLxh+
-    IWxhw5CullpNbCg0BuYSj3VSnzGGLCra8AC23n3mglKYpPDeIFIukdnq/SFxeV1y9OdJ
-    toRlbl+vMTfy2a3llX/Rd56firktkpNuUDTMOEw1Kp365V60TG0NFp22uU7TdbEa0oQM
-    0hxg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1766341784;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=HKwAn7f3+TtsckzLHgRWpWRHke/UNCAnjpKX4WLx6a8=;
-    b=P0ZaMWnvdZM8hfE24XS5wA289AUyjh/CxgwPl7/O05M/Ax1DbDlNJRDr2r2N5DnKWk
-    yTrRdhP/8BfDqbA9U9DA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6800::9f3]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b1BLITiDpV
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sun, 21 Dec 2025 19:29:44 +0100 (CET)
-Message-ID: <01190c40-d348-4521-a2ab-3e9139cc832e@hartkopp.net>
-Date: Sun, 21 Dec 2025 19:29:37 +0100
-Precedence: bulk
-X-Mailing-List: linux-can@vger.kernel.org
-List-Id: <linux-can.vger.kernel.org>
-List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [bpf, xdp] headroom - was: Re: Question about to KMSAN: uninit-value
- in can_receive
-To: Andrii Nakryiko <andrii@kernel.org>, Prithvi <activprithvi@gmail.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
- netdev@vger.kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDD51E32CF
+	for <linux-can@vger.kernel.org>; Sun, 21 Dec 2025 19:06:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766344019; cv=none; b=bvF4PSKvkB7IKPD4f7T+rxnrLkPlvEsZrNgEJ6hUJMx9ZI9h6iEh/+xd1TRBpOPO4CxJSoHv5qFT6afQZcStp02AHLfxItUwcFki4uqJ1a8XBk4UEPHoKXWjR45flFLVll1vLEXuG8ewF4BeIRK3wnxZfCMX9+4tVQjNwlWmnxo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766344019; c=relaxed/simple;
+	bh=sUKAv7uEe00zZJ4BWIzOiyrzJfaw2w+F8g0SqxlPUhs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Esz7CS6AfD5nGEIPEU+xhLDCMJkEjXt3SN4vmPSiBJbaGLJgXFa0ltHasdH4p78GYnXTY+zuBdU0/XxwbCBKEPrcZyniBTV4z2UOucPkXM8HkphMgDaQz5gfMgLkQ3y5iLt+4JwPpGIC7vlF0VrIgJ5xlBgyfn1mA6QmvN3EKKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vXOlS-000746-Eh; Sun, 21 Dec 2025 20:06:46 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vXOlR-006oiG-2M;
+	Sun, 21 Dec 2025 20:06:45 +0100
+Received: from pengutronix.de (2a02-8206-24ec-9200-ea64-e5e7-d732-eca2.dynamic.ewe-ip-backbone.de [IPv6:2a02:8206:24ec:9200:ea64:e5e7:d732:eca2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 35A934BB416;
+	Sun, 21 Dec 2025 19:06:45 +0000 (UTC)
+Date: Sun, 21 Dec 2025 20:06:44 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Prithvi <activprithvi@gmail.com>, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
+	netdev@vger.kernel.org
+Subject: Re: [bpf, xdp] headroom - was: Re: Question about to KMSAN:
+ uninit-value in can_receive
+Message-ID: <20251221-ochre-macaw-of-serenity-f3ed07-mkl@pengutronix.de>
 References: <20251117173012.230731-1-activprithvi@gmail.com>
  <0c98b1c4-3975-4bf5-9049-9d7f10d22a6d@hartkopp.net>
  <c2cead0a-06ed-4da4-a4e4-8498908aae3e@hartkopp.net>
  <aSx++4VrGOm8zHDb@inspiron>
  <d6077d36-93ed-4a6d-9eed-42b1b22cdffb@hartkopp.net>
  <20251220173338.w7n3n4lkvxwaq6ae@inspiron>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20251220173338.w7n3n4lkvxwaq6ae@inspiron>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <01190c40-d348-4521-a2ab-3e9139cc832e@hartkopp.net>
+Precedence: bulk
+X-Mailing-List: linux-can@vger.kernel.org
+List-Id: <linux-can.vger.kernel.org>
+List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dv742mcs2z62dkh7"
+Content-Disposition: inline
+In-Reply-To: <01190c40-d348-4521-a2ab-3e9139cc832e@hartkopp.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hello Andrii,
 
-we have a "KMSAN: uninit value" problem which is created by 
-netif_skb_check_for_xdp() and later pskb_expand_head().
+--dv742mcs2z62dkh7
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [bpf, xdp] headroom - was: Re: Question about to KMSAN:
+ uninit-value in can_receive
+MIME-Version: 1.0
 
-The CAN netdev interfaces (ARPHRD_CAN) don't have XDP support and the 
-CAN bus related skbs allocate 16 bytes of pricate headroom.
+On 21.12.2025 19:29:37, Oliver Hartkopp wrote:
+> we have a "KMSAN: uninit value" problem which is created by
+> netif_skb_check_for_xdp() and later pskb_expand_head().
+>
+> The CAN netdev interfaces (ARPHRD_CAN) don't have XDP support and the CAN
+> bus related skbs allocate 16 bytes of pricate headroom.
+>
+> Although CAN netdevs don't support XDP the KMSAN issue shows that the
+> headroom is expanded for CAN skbs and a following access to the CAN skb
+> private data via skb->head now reads from the beginning of the XDP expand=
+ed
+> head which is (of course) uninitialized.
+>
+> Prithvi thankfully did some investigation (see below!) which proved my
+> estimation about "someone is expanding our CAN skb headroom".
+>
+> Prithvi also proposed two ways to solve the issue (at the end of his mail
+> below), where I think the first one is a bad hack (although it was my ide=
+a).
+>
+> The second idea is a change for dev_xdp_attach() where your expertise wou=
+ld
+> be necessary.
+>
+> My sugestion would rather go into the direction to extend dev_xdp_mode()
+>
+> https://elixir.bootlin.com/linux/v6.19-rc1/source/net/core/dev.c#L10170
+>
+> in a way that it allows to completely disable XDP for CAN skbs, e.g. with=
+ a
+> new XDP_FLAGS_DISABLED that completely keeps the hands off such skbs.
 
-Although CAN netdevs don't support XDP the KMSAN issue shows that the 
-headroom is expanded for CAN skbs and a following access to the CAN skb 
-private data via skb->head now reads from the beginning of the XDP 
-expanded head which is (of course) uninitialized.
+That sounds not like a good idea to me.
 
-Prithvi thankfully did some investigation (see below!) which proved my 
-estimation about "someone is expanding our CAN skb headroom".
+> Do you have any (better) idea how to preserve the private data in the
+> skb->head of CAN related skbs?
 
-Prithvi also proposed two ways to solve the issue (at the end of his 
-mail below), where I think the first one is a bad hack (although it was 
-my idea).
+We probably have to place the data somewhere else.
 
-The second idea is a change for dev_xdp_attach() where your expertise 
-would be necessary.
+regards,
+Marc
 
-My sugestion would rather go into the direction to extend dev_xdp_mode()
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-https://elixir.bootlin.com/linux/v6.19-rc1/source/net/core/dev.c#L10170
+--dv742mcs2z62dkh7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-in a way that it allows to completely disable XDP for CAN skbs, e.g. 
-with a new XDP_FLAGS_DISABLED that completely keeps the hands off such skbs.
+-----BEGIN PGP SIGNATURE-----
 
-Do you have any (better) idea how to preserve the private data in the 
-skb->head of CAN related skbs?
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlIRUAACgkQDHRl3/mQ
+kZygZQf/UmKaAxPVwzWqndXIpIo1QSUPkdFOJMTQ8pvw0PGRuqmPP2RNDBYmAM7X
+wKbSIp3zW+PuQOIEGlyM9ZfYpWGi2idIdHsWAZiKczQuABsNPDmmljb9mDoEnb3w
+lFzSBq8rZd80qYQwRjwxKeJ78I/QL8S7tWfIMe6jFvJwyDHr/0SNjSZSd36jvknm
+lacNvwviZ6lBbHNWMn/iz0pZ6q98ToeyVaV7uCWKO0WhNe/JULjuW4qyIQIsgjZp
+Eza9x6wYrVRQQydxT2zJMDjRrej4rfbZxXZB23AUAa0vaE9FiutzaFZ8ncBm8wyc
+PE4HEVKhL/zA8DSjuVKroaQvN3VmuA==
+=J3CU
+-----END PGP SIGNATURE-----
 
-Many thanks and best regards,
-Oliver
-
-ps. original mail thread at 
-https://lore.kernel.org/linux-can/68bae75b.050a0220.192772.0190.GAE@google.com/
-
-On 20.12.25 18:33, Prithvi wrote:
-> On Sun, Nov 30, 2025 at 08:09:48PM +0100, Oliver Hartkopp wrote:
->> Hi Prithvi,
->>
->> On 30.11.25 18:29, Prithvi Tambewagh wrote:
->>> On Sun, Nov 30, 2025 at 01:44:32PM +0100, Oliver Hartkopp wrote:
->>
->>>>> shall I send this patch upstream and mention your name in
->>>> Suggested-by tag?
->>>>
->>>> No. Neither of that - as it will not fix the root cause.
->>>>
->>>> IMO we need to check who is using the headroom in CAN skbs and for
->>>> what reason first. And when we are not able to safely control the
->>>> headroom for our struct can_skb_priv content we might need to find
->>>> another way to store that content.
->>>> E.g. by creating this space behind skb->data or add new attributes
->>>> to struct sk_buff.
->>>
->>> I will work in this direction. Just to confirm, what you mean is
->>> that first it should be checked where the headroom is used while also
->>> checking whether the data from region covered by struct can_skb_priv is
->>> intact, and if not then we need to ensure that it is intact by other
->>> measures, right?
->>
->> I have added skb_dump(KERN_WARNING, skb, true) in my local dummy_can.c
->> an sent some CAN frames with cansend.
->>
->> CAN CC:
->>
->> [ 3351.708018] skb len=16 headroom=16 headlen=16 tailroom=288
->>                 mac=(16,0) mac_len=0 net=(16,0) trans=16
->>                 shinfo(txflags=0 nr_frags=0 gso(size=0 type=0 segs=0))
->>                 csum(0x0 start=0 offset=0 ip_summed=1 complete_sw=0 valid=0
->> level=0)
->>                 hash(0x0 sw=0 l4=0) proto=0x000c pkttype=5 iif=0
->>                 priority=0x0 mark=0x0 alloc_cpu=5 vlan_all=0x0
->>                 encapsulation=0 inner(proto=0x0000, mac=0, net=0, trans=0)
->> [ 3351.708151] dev name=can0 feat=0x0000000000004008
->> [ 3351.708159] sk family=29 type=3 proto=0
->> [ 3351.708166] skb headroom: 00000000: 07 00 00 00 00 00 00 00 00 00 00 00
->> 00 00 00 00
->> [ 3351.708173] skb linear:   00000000: 23 01 00 00 04 00 00 00 11 22 33 44
->> 00 00 00 00
->>
->> (..)
->>
->> CAN FD:
->>
->> [ 3557.069471] skb len=72 headroom=16 headlen=72 tailroom=232
->>                 mac=(16,0) mac_len=0 net=(16,0) trans=16
->>                 shinfo(txflags=0 nr_frags=0 gso(size=0 type=0 segs=0))
->>                 csum(0x0 start=0 offset=0 ip_summed=1 complete_sw=0 valid=0
->> level=0)
->>                 hash(0x0 sw=0 l4=0) proto=0x000d pkttype=5 iif=0
->>                 priority=0x0 mark=0x0 alloc_cpu=6 vlan_all=0x0
->>                 encapsulation=0 inner(proto=0x0000, mac=0, net=0, trans=0)
->> [ 3557.069499] dev name=can0 feat=0x0000000000004008
->> [ 3557.069507] sk family=29 type=3 proto=0
->> [ 3557.069513] skb headroom: 00000000: 07 00 00 00 00 00 00 00 00 00 00 00
->> 00 00 00 00
->> [ 3557.069520] skb linear:   00000000: 33 03 00 00 10 05 00 00 00 11 22 33
->> 44 55 66 77
->> [ 3557.069526] skb linear:   00000010: 88 aa bb cc dd ee ff 00 00 00 00 00
->> 00 00 00 00
->>
->> (..)
->>
->> CAN XL:
->>
->> [ 5477.498205] skb len=908 headroom=16 headlen=908 tailroom=804
->>                 mac=(16,0) mac_len=0 net=(16,0) trans=16
->>                 shinfo(txflags=0 nr_frags=0 gso(size=0 type=0 segs=0))
->>                 csum(0x0 start=0 offset=0 ip_summed=1 complete_sw=0 valid=0
->> level=0)
->>                 hash(0x0 sw=0 l4=0) proto=0x000e pkttype=5 iif=0
->>                 priority=0x0 mark=0x0 alloc_cpu=6 vlan_all=0x0
->>                 encapsulation=0 inner(proto=0x0000, mac=0, net=0, trans=0)
->> [ 5477.498236] dev name=can0 feat=0x0000000000004008
->> [ 5477.498244] sk family=29 type=3 proto=0
->> [ 5477.498251] skb headroom: 00000000: 07 00 00 00 00 00 00 00 00 00 00 00
->> 00 00 00 00
->> [ 5477.498258] skb linear:   00000000: b0 05 92 00 81 cd 80 03 cd b4 92 58
->> 4c a1 f6 0c
->> [ 5477.498264] skb linear:   00000010: 1a c9 6d 0a 4c a1 f6 0c 1a c9 6d 0a
->> 4c a1 f6 0c
->> [ 5477.498269] skb linear:   00000020: 1a c9 6d 0a 4c a1 f6 0c 1a c9 6d 0a
->> 4c a1 f6 0c
->> [ 5477.498275] skb linear:   00000030: 1a c9 6d 0a 4c a1 f6 0c 1a c9 6d 0a
->> 4c a1 f6 0c
->>
->>
->> I will also add skb_dump(KERN_WARNING, skb, true) in the CAN receive path to
->> see what's going on there.
->>
->> My main problem with the KMSAN message
->> https://lore.kernel.org/linux-can/68bae75b.050a0220.192772.0190.GAE@google.com/
->> is that it uses
->>
->> NAPI, XDP and therefore pskb_expand_head():
->>
->>   kmalloc_reserve+0x23e/0x4a0 net/core/skbuff.c:609
->>   pskb_expand_head+0x226/0x1a60 net/core/skbuff.c:2275
->>   netif_skb_check_for_xdp net/core/dev.c:5081 [inline]
->>   netif_receive_generic_xdp net/core/dev.c:5112 [inline]
->>   do_xdp_generic+0x9e3/0x15a0 net/core/dev.c:5180
->>   __netif_receive_skb_core+0x25c3/0x6f10 net/core/dev.c:5524
->>   __netif_receive_skb_one_core net/core/dev.c:5702 [inline]
->>   __netif_receive_skb+0xca/0xa00 net/core/dev.c:5817
->>   process_backlog+0x4ad/0xa50 net/core/dev.c:6149
->>   __napi_poll+0xe7/0x980 net/core/dev.c:6902
->>   napi_poll net/core/dev.c:6971 [inline]
->>
->> As you can see in
->> https://syzkaller.appspot.com/x/log.txt?x=144ece64580000
->>
->> [pid  5804] socket(AF_CAN, SOCK_DGRAM, CAN_ISOTP) = 5
->> [pid  5804] ioctl(5, SIOCGIFINDEX, {ifr_name="vxcan0", ifr_ifindex=20}) = 0
->>
->> they are using the vxcan driver which is mainly derived from vcan.c and
->> veth.c (~2017). The veth.c driver supports all those GRO, NAPI and XDP
->> features today which vxcan.c still does NOT support.
->>
->> Therefore I wonder how the NAPI and XDP code can be used together with
->> vxcan. And if this is still the case today, as the syzcaller kernel
->> 6.13.0-rc7-syzkaller-00039-gc3812b15000c is already one year old.
->>
->> Many questions ...
->>
->> Best regards,
->> Oliver
-> 
-> Hello Oliver,
-> 
-> I tried investigating further why the XDP path was chosen inspite of using
-> vxcan. I tried looking for dummy_can.c in upstream tree but could not find
-> it; I might be missing something here - could you please tell where can I
-> find it? Meanwhile, I tried using GDB for the analysis.
-> 
-> I observed in the bug's strace log:
-> 
-> [pid  5804] bpf(BPF_PROG_LOAD, {prog_type=BPF_PROG_TYPE_XDP, insn_cnt=3, insns=0x200000c0, license="syzkaller", log_level=0, log_size=0, log_buf=NULL, kern_version=KERNEL_VERSION(0, 0, 0), prog_flags=0, prog_name="", prog_ifindex=0, expected_attach_type=BPF_XDP, prog_btf_fd=-1, func_info_rec_size=8, func_info=NULL, func_info_cnt=0, line_info_rec_size=16, line_info=NULL, line_info_cnt=0, attach_btf_id=0, attach_prog_fd=0, fd_array=NULL, ...}, 144) = 3
-> [pid  5804] socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE) = 4
-> [pid  5804] sendmsg(4, {msg_name=NULL, msg_namelen=0, msg_iov=[{iov_base="\x34\x00\x00\x00\x10\x00\x01\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80\x40\x01\x00\x00\x00\x01\x00\x0c\x00\x2b\x80\x08\x00\x01\x00\x03\x00\x00\x00\x08\x00\x1b\x00\x00\x00\x00\x00", iov_len=52}], msg_iovlen=1, msg_controllen=0, msg_flags=MSG_DONTWAIT|MSG_FASTOPEN}, 0) = 52
-> [pid  5804] socket(AF_CAN, SOCK_DGRAM, CAN_ISOTP) = 5
-> [pid  5804] ioctl(5, SIOCGIFINDEX, {ifr_name="vxcan0", ifr_ifindex=20}) = 0
-> 
-> Notably, before binding vxcan0 to the CAN socket, a BPF program is loaded.
-> I then tried using GDB to check and got the following insights:
-> 
-> (gdb) b vxcan_xmit
-> Breakpoint 23 at 0xffffffff88ca899e: file drivers/net/can/vxcan.c, line 38.
-> (gdb) delete 23
-> (gdb) b __sys_bpf
-> Breakpoint 24 at 0xffffffff81d2653e: file kernel/bpf/syscall.c, line 5752.
-> (gdb) b bpf_prog_load
-> Breakpoint 25 at 0xffffffff81d2cd80: file kernel/bpf/syscall.c, line 2736.
-> (gdb) b vxcan_xmit if (oskb->dev->name[0]=='v' && ((oskb->dev->name[1]=='x' && oskb->dev->name[2]=='c' && oskb->dev->name[3]=='a' && oskb->dev->name[4]=='n') || (oskb->dev->name[1]=='c' && oskb->dev->name[2]=='a' && oskb->dev->name[3]=='n')))
-> Breakpoint 26 at 0xffffffff88ca899e: file drivers/net/can/vxcan.c, line 38.
-> (gdb) b __netif_receive_skb if (skb->dev->name[0]=='v' && ((skb->dev->name[1]=='x' && skb->dev->name[2]=='c' && skb->dev->name[3]=='a' && skb->dev->name[4]=='n') || (skb->dev->name[1]=='c' && skb->dev->name[2]=='a' && skb->dev->name[3]=='n')))
-> Breakpoint 27 at 0xffffffff8ce3c310: file net/core/dev.c, line 5798.
-> (gdb) b do_xdp_generic if (pskb->dev->name[0]=='v' && ((pskb->dev->name[1]=='x' && pskb->dev->name[2]=='c' && pskb->dev->name[3]=='a' && pskb->dev->name[4]=='n') || (pskb->dev->name[1]=='c' && pskb->dev->name[2]=='a' && pskb->dev->name[3]=='n')))
-> Breakpoint 28 at 0xffffffff8cdfccd7: file net/core/dev.c, line 5171.
-> (gdb) b dev_xdp_attach if (dev->name[0]=='v' && ((dev->name[1]=='x' && dev->name[2]=='c' && dev->name[3]=='a' && dev->name[4]=='n') || (dev->name[1]=='c' && dev->name[2]=='a' && dev->name[3]=='n')))
-> Breakpoint 29 at 0xffffffff8ce18b4e: file net/core/dev.c, line 9610.
-> 
-> Thread 2 hit Breakpoint 24, __sys_bpf (cmd=cmd@entry=BPF_PROG_LOAD, uattr=..., size=size@entry=144) at kernel/bpf/syscall.c:5752
-> 5752    {
-> (gdb) c
-> Continuing.
-> 
-> Thread 2 hit Breakpoint 25, bpf_prog_load (attr=attr@entry=0xffff88811c987d60, uattr=..., uattr_size=144) at kernel/bpf/syscall.c:2736
-> 2736    {
-> (gdb) c
-> Continuing.
-> [Switching to Thread 1.1]
-> 
-> Thread 1 hit Breakpoint 29, dev_xdp_attach (dev=dev@entry=0xffff888124e78000, extack=extack@entry=0xffff88811c987858, link=link@entry=0x0 <fixed_percpu_data>, new_prog=new_prog@entry=0xffffc9000a516000, old_prog=old_prog@entry=0x0 <fixed_percpu_data>, flags=flags@entry=0) at net/core/dev.c:9610
-> 9610    {
-> (gdb) p dev->name
-> $104 = "vcan0\000\000\000\000\000\000\000\000\000\000"
-> (gdb) p dev->xdp_prog
-> $105 = (struct bpf_prog *) 0x0 <fixed_percpu_data>
-> (gdb) c
-> Continuing.
-> 
-> Thread 1 hit Breakpoint 29, dev_xdp_attach (dev=dev@entry=0xffff88818e918000, extack=extack@entry=0xffff88811c987858, link=link@entry=0x0 <fixed_percpu_data>, new_prog=new_prog@entry=0xffffc9000a516000, old_prog=old_prog@entry=0x0 <fixed_percpu_data>, flags=flags@entry=0) at net/core/dev.c:9610
-> 9610    {
-> (gdb) p dev->name
-> $106 = "vxcan0\000\000\000\000\000\000\000\000\000"
-> (gdb) p dev->xdp_prog
-> $107 = (struct bpf_prog *) 0x0 <fixed_percpu_data>
-> (gdb) c
-> Continuing.
-> 
-> Thread 1 hit Breakpoint 29, dev_xdp_attach (dev=dev@entry=0xffff88818e910000, extack=extack@entry=0xffff88811c987858, link=link@entry=0x0 <fixed_percpu_data>, new_prog=new_prog@entry=0xffffc9000a516000, old_prog=old_prog@entry=0x0 <fixed_percpu_data>, flags=flags@entry=0) at net/core/dev.c:9610
-> 9610    {
-> (gdb) p dev->name
-> $108 = "vxcan1\000\000\000\000\000\000\000\000\000"
-> (gdb) p dev->xdp_prog
-> $109 = (struct bpf_prog *) 0x0 <fixed_percpu_data>
-> (gdb) c
-> Continuing.
-> [Switching to Thread 1.2]
-> 
-> Here, it is attempted to attach the eariler BPF program to each of the CAN
-> devices present (I checked only for CAN devices since we are dealing with
-> effect of XDP in CAN networing stack). Earlier they didn't seem to have any
-> BPF program attached due to which  XDP wasn't attempted for these CAN devices
-> earlier.
-> 
-> Thread 2 hit Breakpoint 26, vxcan_xmit (oskb=0xffff888115d8a400, dev=0xffff88818e918000) at drivers/net/can/vxcan.c:38
-> 38      {
-> (gdb) p oskb->dev->name
-> $110 = "vxcan0\000\000\000\000\000\000\000\000\000"
-> (gdb) p oskb->dev->xdp_prog
-> $111 = (struct bpf_prog *) 0xffffc9000a516000
-> (gdb) c
-> Continuing.
-> 
-> Thread 2 hit Breakpoint 27, __netif_receive_skb (skb=skb@entry=0xffff888115d8ab00) at net/core/dev.c:5798
-> 5798    {
-> (gdb) p skb->dev->name
-> $112 = "vxcan1\000\000\000\000\000\000\000\000\000"
-> (gdb) p skb->dev->xdp_prog
-> $113 = (struct bpf_prog *) 0xffffc9000a516000
-> (gdb) c
-> Continuing.
-> 
-> Thread 2 hit Breakpoint 28, do_xdp_generic (xdp_prog=0xffffc9000a516000, pskb=0xffff88843fc05af8) at net/core/dev.c:5171
-> 5171    {
-> (gdb) p pskb->dev->name
-> $114 = "vxcan1\000\000\000\000\000\000\000\000\000"
-> (gdb) p pskb->dev->xdp_prog
-> $115 = (struct bpf_prog *) 0xffffc9000a516000
-> (gdb) c
-> Continuing.
-> 
-> After this, the KMSAN bug is triggered. Hence, we can conclude that due to the
-> BPF program loaded earlier, the CAN device undertakes generic XDP path during RX,
-> which is accessible even if vxcan doesn't support XDP by itself.
-> 
-> It seems that the way CAN devices use the headroom for storing private skb related
-> data might be incompatible for XPD path, due to which the generic networking stack
-> at RX requires to expand the head, and it is done in such a way that the yet
-> uninitialized expanded headroom is accesssed by can_skb_prv() using skb->head.
-> 
-> So, I think we can solve this bug in the following ways:
-> 
-> 1. As you suggested earlier, access struct can_skb_priv using:
-> struct can_skb_priv *)(skb->data - sizeof(struct can_skb_priv)
-> This method ensures that the remaining CAN networking stack, which expects can_skb_priv
-> just before skb->data, as well as maintain compatibility with headroom expamnsion during
-> generic XDP.
-> 
-> 2. Try to find some way so that XDP pathway is rejected by CAN devices at the beginning
-> itself, like for example in function dev_xdp_attach():
-> 
-> /* don't call drivers if the effective program didn't change */
-> if (new_prog != cur_prog) {
-> 	bpf_op = dev_xdp_bpf_op(dev, mode);
-> 	if (!bpf_op) {
-> 		NL_SET_ERR_MSG(extack, "Underlying driver does not support XDP in native mode");
-> 		return -EOPNOTSUPP;
-> 	}
-> 
-> 	err = dev_xdp_install(dev, mode, bpf_op, extack, flags, new_prog);
-> 	if (err)
-> 		return err;
-> }
-> 
-> or in some other appropriate way.
-> 
-> What do you think what should be done ahead?
-> 
-> Best Regards,
-> Prithvi
-> 
-
+--dv742mcs2z62dkh7--
 
