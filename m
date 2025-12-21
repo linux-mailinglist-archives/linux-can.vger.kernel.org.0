@@ -1,59 +1,98 @@
-Return-Path: <linux-can+bounces-5893-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5894-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3933ECD447A
-	for <lists+linux-can@lfdr.de>; Sun, 21 Dec 2025 20:07:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D8DECD450B
+	for <lists+linux-can@lfdr.de>; Sun, 21 Dec 2025 20:45:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B6B143003528
-	for <lists+linux-can@lfdr.de>; Sun, 21 Dec 2025 19:07:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D3EA9300769C
+	for <lists+linux-can@lfdr.de>; Sun, 21 Dec 2025 19:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2B40235C01;
-	Sun, 21 Dec 2025 19:06:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74683286897;
+	Sun, 21 Dec 2025 19:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="VtQxNaAE";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="FgpDFrgJ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDD51E32CF
-	for <linux-can@vger.kernel.org>; Sun, 21 Dec 2025 19:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766344019; cv=none; b=bvF4PSKvkB7IKPD4f7T+rxnrLkPlvEsZrNgEJ6hUJMx9ZI9h6iEh/+xd1TRBpOPO4CxJSoHv5qFT6afQZcStp02AHLfxItUwcFki4uqJ1a8XBk4UEPHoKXWjR45flFLVll1vLEXuG8ewF4BeIRK3wnxZfCMX9+4tVQjNwlWmnxo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766344019; c=relaxed/simple;
-	bh=sUKAv7uEe00zZJ4BWIzOiyrzJfaw2w+F8g0SqxlPUhs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Esz7CS6AfD5nGEIPEU+xhLDCMJkEjXt3SN4vmPSiBJbaGLJgXFa0ltHasdH4p78GYnXTY+zuBdU0/XxwbCBKEPrcZyniBTV4z2UOucPkXM8HkphMgDaQz5gfMgLkQ3y5iLt+4JwPpGIC7vlF0VrIgJ5xlBgyfn1mA6QmvN3EKKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vXOlS-000746-Eh; Sun, 21 Dec 2025 20:06:46 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vXOlR-006oiG-2M;
-	Sun, 21 Dec 2025 20:06:45 +0100
-Received: from pengutronix.de (2a02-8206-24ec-9200-ea64-e5e7-d732-eca2.dynamic.ewe-ip-backbone.de [IPv6:2a02:8206:24ec:9200:ea64:e5e7:d732:eca2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 35A934BB416;
-	Sun, 21 Dec 2025 19:06:45 +0000 (UTC)
-Date: Sun, 21 Dec 2025 20:06:44 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Prithvi <activprithvi@gmail.com>, 
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
-	netdev@vger.kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB33450276;
+	Sun, 21 Dec 2025 19:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766346324; cv=pass; b=pO3BWWfCx47l6fZJA6DOr1PrXHrEZeJADrg46O+78KG2PToWjHTlhvTQgZE9aUV6Pr8DkA1UdgqUJEqGpcLIc/pLqPzh7pN+VxhQbzZrUwjRMtpPHGjAnltqeVRVTnmBo7FXodlv1Igpg/59NaTTOKlBhKr36dV4TkoZAfGrXQE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766346324; c=relaxed/simple;
+	bh=i++1cctCPW5K7SGM/RAotmNGTpyNeau6wRii2AA4gpQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ix1FKa2o5kwJzRLhVgeskiPx2KFfV9NrNurmRP8mYZZpuszdaizZQkQuf5Y70pQSRfSBjJ57nB8uARMSIoRYFleMMP/Bz9IlL/hoN6v662PcqPQQD3yayO9gXNl/xM48zMqsjQ0XnuKpLGFQmill5Ko4ca19UxtM+dNGkN/p6OE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=VtQxNaAE; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=FgpDFrgJ; arc=pass smtp.client-ip=85.215.255.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1766346137; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=aEBxyLqjOrTKNjjQtp9+JI+Uuj+aYgNDYZQurSVUFpk6lTodf++G2qR4QC3ZOktoR1
+    DkkeijDSjn+txRogZyg9FCAcZbhyT7AiVXDO6nRkgHarKg/qdivlTXlzquA7rA3zz5N9
+    8alem3KZ32iofZca7Ujmz6a+hpCXdzw73Cd0EQI1ppDKpKrZH+PSIqwbhUe3PnVFfsjJ
+    M4pkTrBRJBRJnnmwAR+gfD/t8uWiTtq90wTR9LYE53/gcmCdC1aYK2pAn7vyUOGB5RFF
+    PP5bc68XMGPmvksTT2qq5SEiewpM0o9RpGHayCpuZTw1JYN35eImRcvV+OgSEdFoDVLF
+    FCJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1766346137;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=9A23g+fJ13s8kWcxp/C6OaQZwQpjkbSEThho02wFN7Q=;
+    b=I2fu6/MnuB6RMi0iyQ4DKE/oimf9k2CwV1CTX//wm+QCkMGB6CUYzqG1kKNE6odQQl
+    dum0q+HwKlciMsQXSbk8uFNg9ft8h6y3l8bA6dETLQ9wgtZspTYFKdKP4KbFazFQhS5/
+    u6qI/lFBoq5HDfXSnou9FSxgni8vzDfXp8YGB8nQPrgI7YECKIFxXVP4YhXClbVhEsx3
+    q1OrALDKnc53PsXr9lKbyYyaLLZJYFcMX//riVlrjcxNh2B6gEFi7qTb0K0N6oeeGr3I
+    yNpoRt1IPQ93d3o6iypqQucX1bbLWZurwf97epx9XJUI20drvyOqhnjUvD9tObZ25kGI
+    PDNw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1766346137;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=9A23g+fJ13s8kWcxp/C6OaQZwQpjkbSEThho02wFN7Q=;
+    b=VtQxNaAElacSC/iSg2K4Ig++0zncS8C4e21ZZlTv7g0JSaXYor777otArlgvbmDllO
+    gmwJvnT4mg6dOlTNNOELVhfrTWd31r4TcZa+ejQSHbu0kp2iZUfNWdheF7h9najQIMru
+    BguVYfpkNkZ6q1QgPu4ZzH4wwpSKbLDC4ls3PU6G4LSwqVS4RiJj6T8jthdJ94E7/+h3
+    k8JWrqWt8qzR9TqczuXn9Vj4hMNaO+13uYMYO+b+lfxHJoPw3ZC5jQRR+AQdSoqr1Whk
+    BKs2inlFhCOpTiCoctCuzb6RV4PoAj+8PhquoUhaa5NOxglv/ctayXWmd8hYnA+oTKss
+    Q9Kw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1766346137;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=9A23g+fJ13s8kWcxp/C6OaQZwQpjkbSEThho02wFN7Q=;
+    b=FgpDFrgJRJzXFCe8lkfIZH7dk2uvWx3u8SuUyk6i+h6h/z8o0Jya+5d0J9I5b6UNZ5
+    GxxGvoKkOVu5w1Ye0oAA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s8bGWj0Q=="
+Received: from [IPV6:2a00:6020:4a38:6800::9f3]
+    by smtp.strato.de (RZmta 54.1.0 AUTH)
+    with ESMTPSA id K0e68b1BLJgGDvq
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sun, 21 Dec 2025 20:42:16 +0100 (CET)
+Message-ID: <d3fe10bf-1505-4c0d-ab46-5c56615e328a@hartkopp.net>
+Date: Sun, 21 Dec 2025 20:42:10 +0100
+Precedence: bulk
+X-Mailing-List: linux-can@vger.kernel.org
+List-Id: <linux-can.vger.kernel.org>
+List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [bpf, xdp] headroom - was: Re: Question about to KMSAN:
  uninit-value in can_receive
-Message-ID: <20251221-ochre-macaw-of-serenity-f3ed07-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Prithvi <activprithvi@gmail.com>,
+ linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org
 References: <20251117173012.230731-1-activprithvi@gmail.com>
  <0c98b1c4-3975-4bf5-9049-9d7f10d22a6d@hartkopp.net>
  <c2cead0a-06ed-4da4-a4e4-8498908aae3e@hartkopp.net>
@@ -61,92 +100,58 @@ References: <20251117173012.230731-1-activprithvi@gmail.com>
  <d6077d36-93ed-4a6d-9eed-42b1b22cdffb@hartkopp.net>
  <20251220173338.w7n3n4lkvxwaq6ae@inspiron>
  <01190c40-d348-4521-a2ab-3e9139cc832e@hartkopp.net>
-Precedence: bulk
-X-Mailing-List: linux-can@vger.kernel.org
-List-Id: <linux-can.vger.kernel.org>
-List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dv742mcs2z62dkh7"
-Content-Disposition: inline
-In-Reply-To: <01190c40-d348-4521-a2ab-3e9139cc832e@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+ <20251221-ochre-macaw-of-serenity-f3ed07-mkl@pengutronix.de>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20251221-ochre-macaw-of-serenity-f3ed07-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---dv742mcs2z62dkh7
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [bpf, xdp] headroom - was: Re: Question about to KMSAN:
- uninit-value in can_receive
-MIME-Version: 1.0
 
-On 21.12.2025 19:29:37, Oliver Hartkopp wrote:
-> we have a "KMSAN: uninit value" problem which is created by
-> netif_skb_check_for_xdp() and later pskb_expand_head().
->
-> The CAN netdev interfaces (ARPHRD_CAN) don't have XDP support and the CAN
-> bus related skbs allocate 16 bytes of pricate headroom.
->
-> Although CAN netdevs don't support XDP the KMSAN issue shows that the
-> headroom is expanded for CAN skbs and a following access to the CAN skb
-> private data via skb->head now reads from the beginning of the XDP expand=
-ed
-> head which is (of course) uninitialized.
->
-> Prithvi thankfully did some investigation (see below!) which proved my
-> estimation about "someone is expanding our CAN skb headroom".
->
-> Prithvi also proposed two ways to solve the issue (at the end of his mail
-> below), where I think the first one is a bad hack (although it was my ide=
-a).
->
-> The second idea is a change for dev_xdp_attach() where your expertise wou=
-ld
-> be necessary.
->
-> My sugestion would rather go into the direction to extend dev_xdp_mode()
->
-> https://elixir.bootlin.com/linux/v6.19-rc1/source/net/core/dev.c#L10170
->
-> in a way that it allows to completely disable XDP for CAN skbs, e.g. with=
- a
-> new XDP_FLAGS_DISABLED that completely keeps the hands off such skbs.
+On 21.12.25 20:06, Marc Kleine-Budde wrote:
+> On 21.12.2025 19:29:37, Oliver Hartkopp wrote:
+>> we have a "KMSAN: uninit value" problem which is created by
+>> netif_skb_check_for_xdp() and later pskb_expand_head().
+>>
+>> The CAN netdev interfaces (ARPHRD_CAN) don't have XDP support and the CAN
+>> bus related skbs allocate 16 bytes of pricate headroom.
+>>
+>> Although CAN netdevs don't support XDP the KMSAN issue shows that the
+>> headroom is expanded for CAN skbs and a following access to the CAN skb
+>> private data via skb->head now reads from the beginning of the XDP expanded
+>> head which is (of course) uninitialized.
+>>
+>> Prithvi thankfully did some investigation (see below!) which proved my
+>> estimation about "someone is expanding our CAN skb headroom".
+>>
+>> Prithvi also proposed two ways to solve the issue (at the end of his mail
+>> below), where I think the first one is a bad hack (although it was my idea).
+>>
+>> The second idea is a change for dev_xdp_attach() where your expertise would
+>> be necessary.
+>>
+>> My sugestion would rather go into the direction to extend dev_xdp_mode()
+>>
+>> https://elixir.bootlin.com/linux/v6.19-rc1/source/net/core/dev.c#L10170
+>>
+>> in a way that it allows to completely disable XDP for CAN skbs, e.g. with a
+>> new XDP_FLAGS_DISABLED that completely keeps the hands off such skbs.
+> 
+> That sounds not like a good idea to me.
+> 
+>> Do you have any (better) idea how to preserve the private data in the
+>> skb->head of CAN related skbs?
+> 
+> We probably have to place the data somewhere else.
 
-That sounds not like a good idea to me.
+Maybe in the tail room or inside struct sk_buff with some #ifdef 
+CONFIG_CAN handling?
 
-> Do you have any (better) idea how to preserve the private data in the
-> skb->head of CAN related skbs?
+But let's wait for Andrii's feedback first, whether he is generally 
+aware of this XDP behavior effect on CAN skbs.
 
-We probably have to place the data somewhere else.
+Best regards,
+Oliver
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---dv742mcs2z62dkh7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlIRUAACgkQDHRl3/mQ
-kZygZQf/UmKaAxPVwzWqndXIpIo1QSUPkdFOJMTQ8pvw0PGRuqmPP2RNDBYmAM7X
-wKbSIp3zW+PuQOIEGlyM9ZfYpWGi2idIdHsWAZiKczQuABsNPDmmljb9mDoEnb3w
-lFzSBq8rZd80qYQwRjwxKeJ78I/QL8S7tWfIMe6jFvJwyDHr/0SNjSZSd36jvknm
-lacNvwviZ6lBbHNWMn/iz0pZ6q98ToeyVaV7uCWKO0WhNe/JULjuW4qyIQIsgjZp
-Eza9x6wYrVRQQydxT2zJMDjRrej4rfbZxXZB23AUAa0vaE9FiutzaFZ8ncBm8wyc
-PE4HEVKhL/zA8DSjuVKroaQvN3VmuA==
-=J3CU
------END PGP SIGNATURE-----
-
---dv742mcs2z62dkh7--
 
