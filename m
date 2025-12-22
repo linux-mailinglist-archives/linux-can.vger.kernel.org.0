@@ -1,122 +1,114 @@
-Return-Path: <linux-can+bounces-5897-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5898-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C95A8CD5B8C
-	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 12:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 64F11CD6589
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 15:17:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B37B4300BEC4
-	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 11:06:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 61B3E3008540
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 14:17:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78EF31FC0EA;
-	Mon, 22 Dec 2025 11:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B5132BFC85;
+	Mon, 22 Dec 2025 14:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KexmNqb8"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC210295DB8
-	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 11:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB15329BDAE
+	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 14:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766401568; cv=none; b=ER0VpYNWJTcJuloBLZejsExpgYNbTAa6rj4auj1TeZp2sZaX4lmWBZztEZsLKNfnUIjc3M1BwfQp/30EnMk7JuFCpEYAo2FCPV2hOuGhVc7AIgrka9veMs3ifRRVbofdWZS4fIlp9ydzjHcPEe8sieLHRPihsVN+sg1kUODf1Cs=
+	t=1766413048; cv=none; b=hz1sjVmjpCIKS4amnzWOd6lssbdM+5sYdd6voX+bRAftTUNPQBahe3TmtBbwjV/+8iqp4vTziaiT/g8H+toYkGM3YKe379FcUK5zFKibmFtwtTlGUwvzfLUHzT7dq9r3MFdXi4GuXW27dcCPYuvAXVSEe0lKkD9ZVlqVq9ldXKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766401568; c=relaxed/simple;
-	bh=Sa6vRFp+J8CzdQeFDX4yWNCdRt01fLLpAObxTP7lVIs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hQ65rGBYcK+XD/JjSlLXSMnZHc27kOlTGChfDkC1ODBtO0waglN1AApqEBEzX0RSph7NTFeaJx6sbSCqaJ/jiiQ6fIpjcs89byL6Ms5A9DX4hy/LQAMVjD0090NjsT2Vi41HoVWrY5LkB747xKeYcNJ91lHT3LRyWlODVz6e2Yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1766413048; c=relaxed/simple;
+	bh=fM6vqSJBpcbmjfTQAFqFrxzYswihGsVNLl25Qi+1jAI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=roWXOo4OG9346VJjZrulma+iLzAZS5G4EPjV77FA3VC/THbxuPYwj00dq7xX2SZFyhAHL3Hr15GEEyqf7Toe0mL+923dY/VXDsJxNCjotZtsmQAgvyKuYnWtB2AAQduzpAk7VkbbZDsIqhLxqGV5bgGr/c4UlYnBOe1lorzmoak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KexmNqb8; arc=none smtp.client-ip=209.85.218.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-65cfbc56a29so2277096eaf.3
-        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 03:06:06 -0800 (PST)
+Received: by mail-ej1-f67.google.com with SMTP id a640c23a62f3a-b73161849e1so869639866b.2
+        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 06:17:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766413045; x=1767017845; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fM6vqSJBpcbmjfTQAFqFrxzYswihGsVNLl25Qi+1jAI=;
+        b=KexmNqb8hGBBc7XJQiD58uLiW8LnmOtx8xOh1dBCk3Tj4OKGMYLOiJ08mGcehDdEwA
+         FMqR9NkZ7VEDPzK9HiI13oY/yU0C6SpNhDtkfgpapaAd3M5V7EAWLTI36eVSQQCH+4KT
+         e5VbSLT8iuP7bfCLctVWT2iUeMr6oyAIglGqz/lW5R8KsNQ6/9HzK2uo8BVFpkOC3Q87
+         jE0INPdA0TXmmz/+4rKsHpOaKkGUhDQXr/HF7UUbHgWNkQbxjF5RIILgEWa5elNSgGcp
+         Ntjus9jbOKjGBFTWaiW3vUsxTRi6zDdwBt75YXzdOfv3pab8CDeKu39Q8wR+U2p4yHn5
+         r+wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766401566; x=1767006366;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Er9fT5sSTO9v6Ol7FhPUI+D4OHHff+0Re947MEjlztA=;
-        b=Qv6ON0dlUcno0zp/4HhNqhQqHIdrglyYI3Xhy5ZxFg/Me0k+CRtDJf7HmKxJZ2/c2P
-         rMB9gHxwjYucsklyOaYEGt5oVC7tWc9ex/55R/RYkwILoDPsxcUgXL80gqtpdccu9u7N
-         UDWcfvnm+1nYZV3DCG9aA3OnVaKY0vjrdwbz15HtX6WRrqkruvzqV4EE9pBUDN9GdmmB
-         CGibUjquQ4Z9PIsPrTdFTFgMjiuMKoqlpXhPXfhmbAmES4tbpz81TZ88eMRz8QC+/meg
-         HbcZEob1T10H9W2JUppe4doYtwevlHGMdrTFWoDBvbPCvLaHK0bccc4a2t7qy0yjsvhg
-         mJZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGf9QnP6WiTWcr2YwyizFfmjwffwf2/8+QxURUhhcXoXmjQo7SdR6JHWXY3N6lPnatijUMuX5QMFY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIN53lOWy2PudwZqG1auBxqWrBswvsUUUYJ/wx8rTJrdSeui3S
-	ANahm9wbIIfH1HMzU66HIlXLhLEncAbfYrL9LiqI6n3fp0e2Bm5VJUJReUdtDbNr
-X-Gm-Gg: AY/fxX5KCmAJWIFVlnKOVWsG/uNsZhN563MiJ+9IE3CaezU0tOchyW75iL4fK6HSW5Y
-	08+nQ3/M3HkIWP3LLT7nuX7ACv37dmDP6saSdYYMBKsI9/RSjdHmRdH5FRO6XHOYmUxmyP8aaLX
-	3eJkCSlzSgiZQaDhdvUrYnOTiDg7Nlm8WVdUw8ybR1qObXWDfV/8sKOQz8Dh2POY1r7TTIj3FE7
-	4GHW5o0VClh5i9s4mf4HJTB+4sLiKl3z06v5a42MLtZnMCvUxUo0b7lNtuJjswy+KuL7F6trBVB
-	cB6Cn/n5gnDD/3Djs/SDWKpDPc0zb3vCIgDbIYEtmI9b53s8hEgYSrhGP9FJuDnrEWURiqekK9a
-	ZOzSjof1eONJkyNB9r62uFsLDX5PtQVF27ui6WWiQtPij8ldrV3C9txKDMZnSxBo1wGQh0mhH96
-	T3UNQ8l/24o3OiC7abPB+aM2phaF7ZzGlm99r6orX7dkrMeHQU
-X-Google-Smtp-Source: AGHT+IGfgqoqfsiOAcYBu9mBHfnMucsgEje7NsYzJROZvhYDOMoAW+5OHhTW8nxEfqYxAf4A1UsFog==
-X-Received: by 2002:a05:6820:f029:b0:65d:c57:70b3 with SMTP id 006d021491bc7-65d0e94d36bmr5579140eaf.12.1766401565739;
-        Mon, 22 Dec 2025 03:06:05 -0800 (PST)
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com. [209.85.160.54])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-65d0f710763sm6824518eaf.16.2025.12.22.03.06.05
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Dec 2025 03:06:05 -0800 (PST)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-3ec4d494383so2705549fac.3
-        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 03:06:05 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWLHDydCU0KGHPSBjhEig4S2lJIbJgnLdot/aybeWooOQc67tvmdF8Duzd/ebpVO0ZLSx6F2QIGkXg=@vger.kernel.org
-X-Received: by 2002:a05:6102:e0e:b0:5e5:5ed7:60ae with SMTP id
- ada2fe7eead31-5eb1a817635mr3544923137.31.1766401227460; Mon, 22 Dec 2025
- 03:00:27 -0800 (PST)
+        d=1e100.net; s=20230601; t=1766413045; x=1767017845;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fM6vqSJBpcbmjfTQAFqFrxzYswihGsVNLl25Qi+1jAI=;
+        b=r+GFEg83v/6CY+BZskLm7m/AOD2HWexOrV666ayYS0Qdj767OGLBB9a/ItfZ5WhsEK
+         DXnND/5g54qNCVQ2/wpWeBi+qLsUPe9bgGdTF1DuCuAlWax3A1MYR0MCBW0o40qsgW9z
+         YrTFwFy5+MCPKb6WZ0+8V0nIGl7IS/mj+6oB5fUgBjGasQNq9YiA+inaMoAQC8P/wimM
+         jx47Q1VngH3YrBbOfNaiitnOFy/bI+DxD5WxwtO5qZTNcaRvB6dIDOgVTacB9sh+v+ta
+         HVGUWYKpLjulCAKsMapCC8r+FD5KeyLJmbOOqS9g1muKfYXRLuIai6UEViNpkkkz9gW6
+         Va2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVAccmW+Ek6pS1GaCytVa8A1Rt5qbDLmG6cAn/psX7SOHjGTpxXWqr8q1zF978MsPiclcSSoFtgKlI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/KMIly7YEeptG6fgXfHJQwI+rfMmSYuF19t414NMV62nYzlwn
+	YrAIgzAqnYgEXTShMFZ9cFw175DK/K+/e485yA+0UfxBpXsbkljiypZ8+b//nP1w5dt73oOLtPk
+	X91SA0xfIzWDhy7HvE5EMedGFvO8HmW904YrseQQ=
+X-Gm-Gg: AY/fxX5m12iefJLKcWIQJOQBTUGohT0j6Ug8Gq5Fe//0X3dtIaiE2n0vhcdaYPGf9Yp
+	2sCGsoXEm+VDS1o3WHtyjjCtt0grereJ/qhmvBaLjDZNZzFVkuYzsSCx9xhmElB+6nt3qi5xi5D
+	I0RK1P6T9btbRCepJMbpZMfqg5ssbvNx2VX2S1T3+N9fQpQSZi5kkojL18//hILdpbyrWjotRzW
+	PcGIERr/B7DYrABhAbaNove6aUB65VLYkBM+vc2BZpdDsCxNcUL3oumdyrqF9xfowJoAh0I361E
+	A5pm
+X-Google-Smtp-Source: AGHT+IGt3pwiatt0Yk6jGdaNPic8Xi1ZQss5mOsuJ8LTjJWzhmAgDc9m5rtFa1vRZRi1fad8ptew0iSXeiExGnx9xoE=
+X-Received: by 2002:a17:907:7ea2:b0:b79:a827:4c4a with SMTP id
+ a640c23a62f3a-b8036f1308cmr1137766266b.15.1766413044771; Mon, 22 Dec 2025
+ 06:17:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251210-rz-sdio-mux-v3-0-ca628db56d60@solid-run.com> <20251210-rz-sdio-mux-v3-3-ca628db56d60@solid-run.com>
-In-Reply-To: <20251210-rz-sdio-mux-v3-3-ca628db56d60@solid-run.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 22 Dec 2025 12:00:16 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXmKPe6AyfAeD9nObqVhofZ4a5559_=DbDZzJ57A7=k9g@mail.gmail.com>
-X-Gm-Features: AQt7F2qYMU-2Y0vKWd5gUo3SltdOK-02OVX3vIl9B9fuc7xPsFnO8gx3yQGyGmE
-Message-ID: <CAMuHMdXmKPe6AyfAeD9nObqVhofZ4a5559_=DbDZzJ57A7=k9g@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] phy: can-transceiver: drop temporary helper
- getting optional mux-state
-To: Josua Mayer <josua@solid-run.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Peter Rosin <peda@axentia.se>, 
-	Aaro Koskinen <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, 
-	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>, 
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Mikhail Anikin <mikhail.anikin@solid-run.com>, Yazan Shhady <yazan.shhady@solid-run.com>, 
-	Jon Nettleton <jon@solid-run.com>, linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-can@vger.kernel.org, linux-phy@lists.infradead.org, 
-	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org
+From: Andrea Daoud <andreadaoud6@gmail.com>
+Date: Mon, 22 Dec 2025 22:17:13 +0800
+X-Gm-Features: AQt7F2pTgp2gxOhmcyNNHFZAfa_e2lJfepC7YpTFdJD2-jQlo84eDj_laQbHSjg
+Message-ID: <CAOprWotBRv_cvD3GCSe7N2tiLooZBoDisSwbu+VBAmt_2izvwQ@mail.gmail.com>
+Subject: ctucanfd: possible coding error in ctucan_set_secondary_sample_point
+ causing SSP not enabled
+To: Pavel Pisa <pisa@cmp.felk.cvut.cz>, Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc: Wolfgang Grandegger <wg@grandegger.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, netdev@vger.kernel.org, 
+	Ondrej Ille <ondrej.ille@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 10 Dec 2025 at 18:39, Josua Mayer <josua@solid-run.com> wrote:
-> Multiplexer subsystem has now added helpers for getting managed optional
-> mux-state.
->
-> Switch to the new devm_mux_state_get_optional helper.
->
-> This change is only compile-tested.
->
-> Signed-off-by: Josua Mayer <josua@solid-run.com>
+Hi,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+In ctucan_set_secondary_sample_point(), there's a line which runs when
+data bitrate is >1Mbps:
 
-Gr{oetje,eeting}s,
+ssp_cfg |= FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x1);
 
-                        Geert
+In the datasheet [1] of ctucanfd, we can see the meaning of SSP_SRC:
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+SSP_SRC: Source of Secondary sampling point.
+0b00 - SSP_SRC_MEAS_N_OFFSET - SSP position = TRV_DELAY (Measured
+Transmitter delay) + SSP_OFFSET.
+0b01 - SSP_SRC_NO_SSP - SSP is not used. Transmitter uses regular
+Sampling Point during data bit rate.
+0b10 - SSP_SRC_OFFSET - SSP position = SSP_OFFSET. Measured
+Transmitter delay value is ignored.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Therefore, setting it to 1 disables SSP (NO_SSP). We should probably
+set it to 0 (MEAS_N_OFFSET).
+
+Is this correct? Would like to hear some inputs.
+
+Regards,
+
+Andrea
+
+[1]: https://canbus.pages.fel.cvut.cz/ctucanfd_ip_core/doc/Datasheet.pdf
 
