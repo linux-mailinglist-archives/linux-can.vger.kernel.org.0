@@ -1,114 +1,158 @@
-Return-Path: <linux-can+bounces-5898-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5899-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64F11CD6589
-	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 15:17:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87AF0CD674F
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 16:00:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 61B3E3008540
-	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 14:17:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3856C30E925D
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 14:57:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B5132BFC85;
-	Mon, 22 Dec 2025 14:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F93332F755;
+	Mon, 22 Dec 2025 14:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KexmNqb8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DAB/Amyf"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB15329BDAE
-	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 14:17:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F5A32ED55
+	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 14:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766413048; cv=none; b=hz1sjVmjpCIKS4amnzWOd6lssbdM+5sYdd6voX+bRAftTUNPQBahe3TmtBbwjV/+8iqp4vTziaiT/g8H+toYkGM3YKe379FcUK5zFKibmFtwtTlGUwvzfLUHzT7dq9r3MFdXi4GuXW27dcCPYuvAXVSEe0lKkD9ZVlqVq9ldXKQ=
+	t=1766414864; cv=none; b=lcSmlWoRrD+9WDtDs62ZmUuwZ5sE8s6C1ZFBdaiuK8yI9vR1UJFIPrEfSOPCIpSQqQyTeWcI40gKUVeHyxCbouzM6SeZdk7melepmpw7sHPZvShHEXZJGnFzHQyAL2m6YWXvy8dJLAl1XwhSuU/dMJ4RfWz6OXS039Sk+G2dAGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766413048; c=relaxed/simple;
-	bh=fM6vqSJBpcbmjfTQAFqFrxzYswihGsVNLl25Qi+1jAI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=roWXOo4OG9346VJjZrulma+iLzAZS5G4EPjV77FA3VC/THbxuPYwj00dq7xX2SZFyhAHL3Hr15GEEyqf7Toe0mL+923dY/VXDsJxNCjotZtsmQAgvyKuYnWtB2AAQduzpAk7VkbbZDsIqhLxqGV5bgGr/c4UlYnBOe1lorzmoak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KexmNqb8; arc=none smtp.client-ip=209.85.218.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f67.google.com with SMTP id a640c23a62f3a-b73161849e1so869639866b.2
-        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 06:17:26 -0800 (PST)
+	s=arc-20240116; t=1766414864; c=relaxed/simple;
+	bh=IwLjLCoIOYSxZJTADglHFhXYcy2He7W4GE2tlYf0bXA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Xu9sHk3Vlt3hHcjpTcPD+JfK0NmTdOG6u4HKmKGbnuuX9XItZecM22deliDyIDffiNiuTuC4u8prz3282uk3qKJ1oyGoEIZSB89g2qPViZnt1awGmM0qlZwYZLype4Oa5eW5XyU32rQiLR/CommBT+Q2224eF4bfxWhdYOCn48E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DAB/Amyf; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5942bac322dso4514368e87.0
+        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 06:47:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766413045; x=1767017845; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fM6vqSJBpcbmjfTQAFqFrxzYswihGsVNLl25Qi+1jAI=;
-        b=KexmNqb8hGBBc7XJQiD58uLiW8LnmOtx8xOh1dBCk3Tj4OKGMYLOiJ08mGcehDdEwA
-         FMqR9NkZ7VEDPzK9HiI13oY/yU0C6SpNhDtkfgpapaAd3M5V7EAWLTI36eVSQQCH+4KT
-         e5VbSLT8iuP7bfCLctVWT2iUeMr6oyAIglGqz/lW5R8KsNQ6/9HzK2uo8BVFpkOC3Q87
-         jE0INPdA0TXmmz/+4rKsHpOaKkGUhDQXr/HF7UUbHgWNkQbxjF5RIILgEWa5elNSgGcp
-         Ntjus9jbOKjGBFTWaiW3vUsxTRi6zDdwBt75YXzdOfv3pab8CDeKu39Q8wR+U2p4yHn5
-         r+wg==
+        d=linaro.org; s=google; t=1766414860; x=1767019660; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lNpWj6TBvVji/fHBEAyDcOFnMWFot5zrE/hRwsxnXVY=;
+        b=DAB/Amyf1kdMghWpvNsR5yNnMf+GdDvgb0bA4+59mA0CrIcjf0meQgWipWa4qgI0+u
+         QzmXsaKh4CDGdPAVFemA6mB0PY7nYeYTfFKf08TKNBK7/79eZ+/5axG1Oj+c5gAmAFfg
+         T6+CWEWvYf5iQFoFrZGr06kU0xwOi/gsXNB3kQcCCxDDaqnVlheA/H95h4OGQdIrQD1T
+         DuSAeDBryQG0Va3VNcLhpD2f+qW6b93O1bCz7Ls5M2R8ZzuC60dez2dFPM0QaMrYu6X1
+         4TJcc1dZY6C1qQanrLgSyh2HkvSgJUb+rXBU+gv3hnl/FjGW4kxTqLG3nbaKx9Smpezy
+         zmVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766413045; x=1767017845;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fM6vqSJBpcbmjfTQAFqFrxzYswihGsVNLl25Qi+1jAI=;
-        b=r+GFEg83v/6CY+BZskLm7m/AOD2HWexOrV666ayYS0Qdj767OGLBB9a/ItfZ5WhsEK
-         DXnND/5g54qNCVQ2/wpWeBi+qLsUPe9bgGdTF1DuCuAlWax3A1MYR0MCBW0o40qsgW9z
-         YrTFwFy5+MCPKb6WZ0+8V0nIGl7IS/mj+6oB5fUgBjGasQNq9YiA+inaMoAQC8P/wimM
-         jx47Q1VngH3YrBbOfNaiitnOFy/bI+DxD5WxwtO5qZTNcaRvB6dIDOgVTacB9sh+v+ta
-         HVGUWYKpLjulCAKsMapCC8r+FD5KeyLJmbOOqS9g1muKfYXRLuIai6UEViNpkkkz9gW6
-         Va2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVAccmW+Ek6pS1GaCytVa8A1Rt5qbDLmG6cAn/psX7SOHjGTpxXWqr8q1zF978MsPiclcSSoFtgKlI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/KMIly7YEeptG6fgXfHJQwI+rfMmSYuF19t414NMV62nYzlwn
-	YrAIgzAqnYgEXTShMFZ9cFw175DK/K+/e485yA+0UfxBpXsbkljiypZ8+b//nP1w5dt73oOLtPk
-	X91SA0xfIzWDhy7HvE5EMedGFvO8HmW904YrseQQ=
-X-Gm-Gg: AY/fxX5m12iefJLKcWIQJOQBTUGohT0j6Ug8Gq5Fe//0X3dtIaiE2n0vhcdaYPGf9Yp
-	2sCGsoXEm+VDS1o3WHtyjjCtt0grereJ/qhmvBaLjDZNZzFVkuYzsSCx9xhmElB+6nt3qi5xi5D
-	I0RK1P6T9btbRCepJMbpZMfqg5ssbvNx2VX2S1T3+N9fQpQSZi5kkojL18//hILdpbyrWjotRzW
-	PcGIERr/B7DYrABhAbaNove6aUB65VLYkBM+vc2BZpdDsCxNcUL3oumdyrqF9xfowJoAh0I361E
-	A5pm
-X-Google-Smtp-Source: AGHT+IGt3pwiatt0Yk6jGdaNPic8Xi1ZQss5mOsuJ8LTjJWzhmAgDc9m5rtFa1vRZRi1fad8ptew0iSXeiExGnx9xoE=
-X-Received: by 2002:a17:907:7ea2:b0:b79:a827:4c4a with SMTP id
- a640c23a62f3a-b8036f1308cmr1137766266b.15.1766413044771; Mon, 22 Dec 2025
- 06:17:24 -0800 (PST)
+        d=1e100.net; s=20230601; t=1766414860; x=1767019660;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lNpWj6TBvVji/fHBEAyDcOFnMWFot5zrE/hRwsxnXVY=;
+        b=vPzDqgqdNiKQzlGiKvVh2SN2+xopKXkGArduuFzXH7b7t0na0c4xwfPOOEBCjBNVJr
+         NmpN6jMUzfbVKivrXwpqrZ/suokdXWtpZ5AO/HRQIyUK5zRTnujQkAzq2AxWovkWvfCr
+         p77aFCJ5V8LJcdunL+RCpmAq1a7tv87Y146OFqdLSHySaLv/CwecVfZegRa7aKd3F/HH
+         9zrtstHJeLSTVR29OlkZfMjc1qDN62YiUGly72/ZdDWJwKhbi/DbSJrN46tnKt2akTJ0
+         CDMGo5sKwlBjSOVyBcoxtjdc0t3er4tnrE2i5gH69gg0oc2eN6jx3khb/ochaTh37VPf
+         EJAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBFC3FY4nrq4lyZAdLf+0Ijud4kQ43ma4sZuy15A0Da7vVNQsSGzs7eR/UC0OXrh5eQySPYvojQrw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YymXi6MvbQNJT2w+11itIKhFmNAO576yuLoPTfjumRy+NDR9Zgv
+	qpQ8Rjn+tr+ZcE0VMXAKgsstAnDwPrp81u300GE9pqfFHREbgWGAOYJArI+h/+WwfdC4iNkzrR0
+	sEMCuv9tTMHFBdXSVjRoX/CU6EwajtDM5Ocb66Z+m/Q==
+X-Gm-Gg: AY/fxX7eK+nTktB/Ap/BXY9fXRoLXDv0EuvrXlK7QgbYMZmsPLre8N28jxWg5R10aKT
+	SGL2jhVvY9eqdRkpWPIISruU4+yOlberpn5boU5yigKTnUAQskzUGHFEx4g0eJ+JUhpfAxPLLNw
+	4to4+n5ZNtQV3zxAEeSc/KMtCWv+YYWVCWh59+nI4vzJ0AUHBSIK5KlpfHcaxQtu2H/skrp1ktc
+	1wPfbr3SQJet5CMWwlLp4DOSZyqcvmssm+6rWUj+ZWLum5oQlCct7piZYdHtDTB4UwANWxO
+X-Google-Smtp-Source: AGHT+IEmZoekCpdFdxCX6++mG8wezcWmjXxPG5ogJ3p4YsZ2il+JIIqimrrt74JmCImmja/XHDzRdip0knGEk5MWYgo=
+X-Received: by 2002:a05:6512:e9c:b0:598:faba:c8fa with SMTP id
+ 2adb3069b0e04-59a17d006e1mr4286628e87.10.1766414859977; Mon, 22 Dec 2025
+ 06:47:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Andrea Daoud <andreadaoud6@gmail.com>
-Date: Mon, 22 Dec 2025 22:17:13 +0800
-X-Gm-Features: AQt7F2pTgp2gxOhmcyNNHFZAfa_e2lJfepC7YpTFdJD2-jQlo84eDj_laQbHSjg
-Message-ID: <CAOprWotBRv_cvD3GCSe7N2tiLooZBoDisSwbu+VBAmt_2izvwQ@mail.gmail.com>
-Subject: ctucanfd: possible coding error in ctucan_set_secondary_sample_point
- causing SSP not enabled
-To: Pavel Pisa <pisa@cmp.felk.cvut.cz>, Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc: Wolfgang Grandegger <wg@grandegger.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, netdev@vger.kernel.org, 
-	Ondrej Ille <ondrej.ille@gmail.com>
+References: <20251210-rz-sdio-mux-v3-0-ca628db56d60@solid-run.com>
+ <20251210-rz-sdio-mux-v3-2-ca628db56d60@solid-run.com> <CAPDyKFoYd3WKGrjD3DEzZH8EfgZPmRkrqL=rdoKNuAADrvz3Eg@mail.gmail.com>
+ <20f2128c-c6cb-4b13-aa08-b93e540f5bd9@solid-run.com>
+In-Reply-To: <20f2128c-c6cb-4b13-aa08-b93e540f5bd9@solid-run.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 22 Dec 2025 15:47:03 +0100
+X-Gm-Features: AQt7F2pGUIPrw4OqWueh78ppZDBGwQc_mhY3RygUrq6e1L74fXopGZ4K0V_QvZo
+Message-ID: <CAPDyKFo2jsV02qSDBSZTewJjV09AMO8iETU5Uxqz+GBnd0JY6g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] mux: Add helper functions for getting optional and
+ selected mux-state
+To: Josua Mayer <josua@solid-run.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Peter Rosin <peda@axentia.se>, 
+	Aaro Koskinen <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, 
+	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
+	Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>, 
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Mikhail Anikin <mikhail.anikin@solid-run.com>, Yazan Shhady <yazan.shhady@solid-run.com>, 
+	Jon Nettleton <jon@solid-run.com>, "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
+	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>, 
+	"linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>, 
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+On Sun, 21 Dec 2025 at 11:38, Josua Mayer <josua@solid-run.com> wrote:
+>
+> Hi Ulf,
+>
+> Am 17.12.25 um 14:38 schrieb Ulf Hansson:
+> > On Wed, 10 Dec 2025 at 18:39, Josua Mayer <josua@solid-run.com> wrote:
+>
+> cut
+>
+> >>  /*
+> >>   * Using subsys_initcall instead of module_init here to try to ensure - for
+> >>   * the non-modular case - that the subsystem is initialized when mux consumers
+> >> diff --git a/include/linux/mux/consumer.h b/include/linux/mux/consumer.h
+> >> index 2e25c838f8312..a5da2e33a45c0 100644
+> >> --- a/include/linux/mux/consumer.h
+> >> +++ b/include/linux/mux/consumer.h
+> >> @@ -60,5 +60,9 @@ struct mux_control *devm_mux_control_get(struct device *dev,
+> >>                                          const char *mux_name);
+> >>  struct mux_state *devm_mux_state_get(struct device *dev,
+> >>                                      const char *mux_name);
+> >> +struct mux_state *devm_mux_state_get_optional(struct device *dev,
+> >> +                                             const char *mux_name);
+> >> +struct mux_state *devm_mux_state_get_optional_selected(struct device *dev,
+> >> +                                                      const char *mux_name);
+> > Seems like we need stub-functions of these too. Otherwise
+> > subsystems/drivers need to have a "depends on MULTIPLEXER" in their
+> > Kconfigs.
+>
+> Currently the drivers that can use a mux select MULTIPLEXER in Kconfig.
 
-In ctucan_set_secondary_sample_point(), there's a line which runs when
-data bitrate is >1Mbps:
+Yes, but that's not generally how we do this. The driver may not need
+MULTIPLEXER for all platforms that driver is being used on.
 
-ssp_cfg |= FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x1);
+>
+> There already exist a few mux helpers both for mux-state and for mux-control,
+> and they might all need stubs.
 
-In the datasheet [1] of ctucanfd, we can see the meaning of SSP_SRC:
+Correct. I think we should add subs for all of them.
 
-SSP_SRC: Source of Secondary sampling point.
-0b00 - SSP_SRC_MEAS_N_OFFSET - SSP position = TRV_DELAY (Measured
-Transmitter delay) + SSP_OFFSET.
-0b01 - SSP_SRC_NO_SSP - SSP is not used. Transmitter uses regular
-Sampling Point during data bit rate.
-0b10 - SSP_SRC_OFFSET - SSP position = SSP_OFFSET. Measured
-Transmitter delay value is ignored.
+>
+> I'd prefer the restructuring of kconfig dependencies being independent from
+> adding mux-state functionality to renesas sdhi driver.
 
-Therefore, setting it to 1 disables SSP (NO_SSP). We should probably
-set it to 0 (MEAS_N_OFFSET).
+I understand your point, but adding the stubs isn't really a big thing
+- unless someone has some good arguments not to!?
 
-Is this correct? Would like to hear some inputs.
+Moreover, since the series changes the mux-core anyways - and
+subsequent changes depend on it, I don't see an issue to fold in yet
+another patch to add the stubs.
 
-Regards,
-
-Andrea
-
-[1]: https://canbus.pages.fel.cvut.cz/ctucanfd_ip_core/doc/Datasheet.pdf
+Kind regards
+Uffe
 
