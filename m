@@ -1,128 +1,167 @@
-Return-Path: <linux-can+bounces-5901-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5902-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F055FCD6A60
-	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 17:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CE59CD6DC9
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 18:57:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A8A5C3032977
-	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 16:21:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F1570301C3E9
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 17:57:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D24426056A;
-	Mon, 22 Dec 2025 16:21:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA02338595;
+	Mon, 22 Dec 2025 17:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LNa3vbgR"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f65.google.com (mail-ej1-f65.google.com [209.85.218.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6738311953
-	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 16:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87AB531281D
+	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 17:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766420475; cv=none; b=tioUM0JcXnEWW11tXLhx3aOr28Fcg+iXGM7YCHNMtdIK22f+Qpdv2pAGDbK1mIj8YQnrzbVUru8FQgNzpBBH9XpRbPwJGtwPFJqBfTB4Ng77YYjjrnFnBA9HCfLLDE80gbzpFyYRn12ElG4PeDVKRyV/IzqxLeXComcc9dNqrJo=
+	t=1766426250; cv=none; b=ToA0Cpr6zVftDeFEH/7MHHZosRQRvLz/tZeT+q1vYfQCEqMnT90npoFBVT3Q83dOaY2jr+WO0jIkgDq+yNmN9kx5fc+sSz+9U+37TEwjzfkd6YS0zV8VO+dsUSlgxTMoEZFOjCGjLbDE16nl9JFBCjj3SdKvX8odRa7mkCYnThQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766420475; c=relaxed/simple;
-	bh=RHfkqee+3g9nSYlyyUZ23eocZzUqzMj5vznMA7wzwQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X7Q8NmKqVJ2wltD+EQ+zXglhHKcLcdJyGN5EqeOylLMh6P7fsjsGL0iWZHt5T9X4nh28Yuxt7h30gBzPaf/xmeUFn3pHSjLusLZMqidnYoBpWQWtBp60dJGjS71UCyR5TtQo9uNsVhi4UuV+7CRB2v3FkIpZkkYeA6IaYclExAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vXieU-0006q9-Kk; Mon, 22 Dec 2025 17:20:54 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vXieS-006xlV-3D;
-	Mon, 22 Dec 2025 17:20:53 +0100
-Received: from pengutronix.de (2a02-8206-24fb-1700-38f4-91de-2aaa-7f2a.dynamic.ewe-ip-backbone.de [IPv6:2a02:8206:24fb:1700:38f4:91de:2aaa:7f2a])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 50FAD4BCF51;
-	Mon, 22 Dec 2025 16:20:52 +0000 (UTC)
-Date: Mon, 22 Dec 2025 17:20:49 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ondrej Ille <ondrej.ille@gmail.com>
-Cc: Andrea Daoud <andreadaoud6@gmail.com>, 
-	Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org, 
-	Wolfgang Grandegger <wg@grandegger.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	netdev@vger.kernel.org
-Subject: Re: ctucanfd: possible coding error in
- ctucan_set_secondary_sample_point causing SSP not enabled
-Message-ID: <20251222-kickass-oyster-of-sorcery-c39bb7-mkl@pengutronix.de>
-References: <CAOprWotBRv_cvD3GCSe7N2tiLooZBoDisSwbu+VBAmt_2izvwQ@mail.gmail.com>
- <CAA7ZjpY-q6pynoDpo6OwW80zd7rq3dfFjQ1RMGzJR4pKSu7Zzg@mail.gmail.com>
+	s=arc-20240116; t=1766426250; c=relaxed/simple;
+	bh=wBha3d01qjiMew7UlnJKYluL6OwpP6oM7rEy/5DQKRo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dlmV9So6ZfGhuvxckVwODT6O3yQeHDWB17CFZxjdfOFb90OPIR7fWclVMk/11bCmTg8hq7rJ0EVpmUv4Sb0jMtXBPbgdko4giNsNNTeTaZhV9mLvEANGDKMaEGzpfhpHL4UIBBjFTeIReIJ8f5C0D+cq9WhAlR6uvwMjm3v5oDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LNa3vbgR; arc=none smtp.client-ip=209.85.218.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f65.google.com with SMTP id a640c23a62f3a-b736ffc531fso752255266b.1
+        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 09:57:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766426247; x=1767031047; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wBha3d01qjiMew7UlnJKYluL6OwpP6oM7rEy/5DQKRo=;
+        b=LNa3vbgR/8VDkKsgceoMQFQpTBdDrdaU7Ix0pVzNoL1MeQOtmi+a+PQDJi0Ca3XF8q
+         ppxU8XvnRPEihqkwhUIRDYfy+jTu7hrjHD9X1de+Qzmtkd5ulyDu9AS5/7YCXO0ra7/E
+         Q0myErxYccGUCiRDFhCDFK2M+hsYT5qUpMBx/jFLE9KlXcij37RNBBsz+dTt16lB4gsI
+         jVffezsPbNvK++8pGGKoN/Z221V1Ao2pbdLY6VC+WFJrj4wsxbx6KEr7nfJBrxj/wGHQ
+         BblWoKp/04rWMM8Aik1GIgXD8oarLZMnU4h8JYlmqp1QixKO0k3CVpxpPi2trsNVpAoU
+         vA1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766426247; x=1767031047;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=wBha3d01qjiMew7UlnJKYluL6OwpP6oM7rEy/5DQKRo=;
+        b=UXOj3NNuH30NA3XSGlcmRIG9c3dZvEW/jEKzpJJ/M1fZITrwlSCwuw+HuzYIvo3HkG
+         fSVBTNf7S7f3+I6DZGzpz5D9zXEH2VJPI30rdthx7Csp6Q9BPYg/W9jGm5m0IusxOTvr
+         UyKld9R1Ipmm1cDMdUyCfe7dDdpHeZeWi5x3DjKtayGhZdoRShws+nQ+mib0eBpoDcZW
+         6aRW4xZJ5KOnnI55TWX1mP9hilkkK+yZD1hT/NpZXJ+REsGZzgcBJ4gW3qLpiwWxDrLP
+         l/BnU3srZUXx/J/9ceQ3vwZcSFzTs0MDBEfDXeJc1EHzFiuFRg1vMOrmrKMeCsR8e7V8
+         B81A==
+X-Forwarded-Encrypted: i=1; AJvYcCVB50HtaVyrOwm8yH0LxHGYSW4Kn1iBJ9S+46q55IcW+93PMpL+z4QeCihWmCLrwTserltP8b+UU40=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLfY3j13Cw2tzFC0ufy2cyGiUYBCL/B9y5t5355CvD1W2j6/kY
+	LyHc0EckqgwEUETPDR82qsvTy5I3Ta/MexQeZUZc+SNQg5ix0n6xS45GfkpE+O22+YR+VXzKPfL
+	r4ayjKUWbq2v+ms7TGvVz71jqzpj/T0Y=
+X-Gm-Gg: AY/fxX4EAKvCiePgC52YNn/mJrq7Q2FtQWJBXJQbGxQSbvGOY2YubMueZWMqPAFNt+0
+	lhPOjVk+aGm/9kObZbUHx9kuZmLxT5pL/fhd7fCF1QEgNxhUXvG/1b4AdP0s1XEGja2Gu6kCCzq
+	wpu5sfy+J2eYxuS1HazPabalCc8Sya76BAXe9nquf/3bCQKbosHBLefc+HZXBYTHpOCB71CMSSL
+	wTof9bJfvEKEM2+Be535i+bcNcGZvFvwQqSoGM4OKnOiM86BaUBWF2ATi/NUYJer2O3ltQ1gzNR
+	xGeG
+X-Google-Smtp-Source: AGHT+IHGjnM4tssmgrpgdS+QyfppBwGcEa/TtaSTVo3x3z2X4MIp6+nQ00I9y9UQh1U0WtN9dG4OQo1+7sN+Qmf+nvg=
+X-Received: by 2002:a17:907:3f25:b0:b80:117d:46e5 with SMTP id
+ a640c23a62f3a-b8036f62257mr1197264466b.29.1766426246688; Mon, 22 Dec 2025
+ 09:57:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4ialxhezysaxggjo"
-Content-Disposition: inline
+References: <CAOprWotBRv_cvD3GCSe7N2tiLooZBoDisSwbu+VBAmt_2izvwQ@mail.gmail.com>
+ <CAA7ZjpY-q6pynoDpo6OwW80zd7rq3dfFjQ1RMGzJR4pKSu7Zzg@mail.gmail.com>
 In-Reply-To: <CAA7ZjpY-q6pynoDpo6OwW80zd7rq3dfFjQ1RMGzJR4pKSu7Zzg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---4ialxhezysaxggjo
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+From: Andrea Daoud <andreadaoud6@gmail.com>
+Date: Tue, 23 Dec 2025 01:57:15 +0800
+X-Gm-Features: AQt7F2pbRWy0Y3qdReSvX4Mn03sO7NEaq-NkFe6B_tFRTn8ukhodMW_kVgnL2-o
+Message-ID: <CAOprWov+j6V8XmtQD-K6pBj+7CVP_QJM0ODbJxtPZqG=y2RW3w@mail.gmail.com>
+Subject: Re: ctucanfd: possible coding error in ctucan_set_secondary_sample_point
+ causing SSP not enabled
+To: Ondrej Ille <ondrej.ille@gmail.com>
+Cc: Pavel Pisa <pisa@cmp.felk.cvut.cz>, Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org, 
+	Wolfgang Grandegger <wg@grandegger.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: ctucanfd: possible coding error in
- ctucan_set_secondary_sample_point causing SSP not enabled
-MIME-Version: 1.0
 
-On 22.12.2025 16:51:07, Ondrej Ille wrote:
+Thanks for your reply!
+
+On Mon, Dec 22, 2025 at 11:51=E2=80=AFPM Ondrej Ille <ondrej.ille@gmail.com=
+> wrote:
+>
+> Hello Andrea,
+>
 > yes, your thinking is correct, there is a bug there.
 >
-> This was pointed to by another user right in the CTU CAN FD repository
-> where the Linux driver also lives:
+> This was pointed to by another user right in the CTU CAN FD repository wh=
+ere the Linux driver also lives:
 > https://github.com/Blebowski/CTU-CAN-FD/pull/2
 >
 > It is as you say, it should be:
 >
 > -- ssp_cfg |=3D FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x1);
 > ++ ssp_cfg |=3D FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x0);
+>
+> Unfortunately, we have not processed this in the CTU CAN FD repo either.
+> I can send it as a patch, but TBH, I have never done this before (the dri=
+ver was contributed to Kernel by Pavel Pisa, he is the maintainer).
+> If you point me in the right direction to the steps I should follow, I wi=
+ll be glad to do so.
+>
+> With Regards
+> Ondrej Ille
+>
+> PS: The changes are dummy enough that they will likely not cause a large =
+review, so it seems like an ideal case for trying to contribute for the fir=
+st time.
 
-This statement has no effect, as 'ssp_cfg |=3D 0x0' is still 'ssp_cfg'.
-IMHO it's better to add a comment that says, why you don't set
-REG_TRV_DELAY_SSP_SRC. Another option is to add create a define that
-replaces 0x1 and 0x0 for REG_TRV_DELAY_SSP_SRC with a speaking name.
+Unfortunately I do not have an environment right now to make patches
+sent, so it would be better if someone else can send the patch.
 
-regards,
-Marc
+> PPS: I will go on and fix it in CTU CAN FD repo too. However, ATM I don't=
+ have a setup where to really test this.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+I have tested it on my setup. I run this core on a FPGA, with PCIe
+connected to Linux host. After changing this to zero, I can see the
+relative phase of sample_sec has changed to a more ideal phase in the
+received bit.
 
---4ialxhezysaxggjo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlJb9gACgkQDHRl3/mQ
-kZyzfgf/SfPB5HD+R0CUspItF3HhUjEbcFL919kOplwJYBtTpw8OeoZWx8KK7EzU
-YLlJ/pxBOqgvWRaS04/T8mER+4uyzO3XXM06HIH6+weo86uDLSBm5PhVatgsxKD7
-QcDTaw2WNZk78tb+yyMZjQwAoSXIQyFNpM8S/zQYLLoBYygssJXx5AipPdiFFUS2
-IhnFhYFXToQ1XsbHC2Ec0w/Ombsdf5N0ZGb7kyb11ldtEocnLc2UA11XlF70Sqwb
-vSvIK1wA4fbnAObjtICQD4np3VqeaHeRqr+eEizkUIOjj6YJ8mIcaFPIAF6QqQfR
-nDMy7OjY1M2cLhiDyC7CrJdjWNZC6w==
-=F78G
------END PGP SIGNATURE-----
-
---4ialxhezysaxggjo--
+>
+> On Mon, Dec 22, 2025 at 3:17=E2=80=AFPM Andrea Daoud <andreadaoud6@gmail.=
+com> wrote:
+>>
+>> Hi,
+>>
+>> In ctucan_set_secondary_sample_point(), there's a line which runs when
+>> data bitrate is >1Mbps:
+>>
+>> ssp_cfg |=3D FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x1);
+>>
+>> In the datasheet [1] of ctucanfd, we can see the meaning of SSP_SRC:
+>>
+>> SSP_SRC: Source of Secondary sampling point.
+>> 0b00 - SSP_SRC_MEAS_N_OFFSET - SSP position =3D TRV_DELAY (Measured
+>> Transmitter delay) + SSP_OFFSET.
+>> 0b01 - SSP_SRC_NO_SSP - SSP is not used. Transmitter uses regular
+>> Sampling Point during data bit rate.
+>> 0b10 - SSP_SRC_OFFSET - SSP position =3D SSP_OFFSET. Measured
+>> Transmitter delay value is ignored.
+>>
+>> Therefore, setting it to 1 disables SSP (NO_SSP). We should probably
+>> set it to 0 (MEAS_N_OFFSET).
+>>
+>> Is this correct? Would like to hear some inputs.
+>>
+>> Regards,
+>>
+>> Andrea
+>>
+>> [1]: https://canbus.pages.fel.cvut.cz/ctucanfd_ip_core/doc/Datasheet.pdf
 
