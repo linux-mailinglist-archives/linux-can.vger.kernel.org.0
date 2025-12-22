@@ -1,158 +1,128 @@
-Return-Path: <linux-can+bounces-5899-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5900-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87AF0CD674F
-	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 16:00:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 569DBCD6990
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 16:42:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3856C30E925D
-	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 14:57:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DF13330365A6
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 15:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F93332F755;
-	Mon, 22 Dec 2025 14:47:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49AEA3191D9;
+	Mon, 22 Dec 2025 15:42:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DAB/Amyf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ctNIdn9Q"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F5A32ED55
-	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 14:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D470320CCE
+	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 15:42:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766414864; cv=none; b=lcSmlWoRrD+9WDtDs62ZmUuwZ5sE8s6C1ZFBdaiuK8yI9vR1UJFIPrEfSOPCIpSQqQyTeWcI40gKUVeHyxCbouzM6SeZdk7melepmpw7sHPZvShHEXZJGnFzHQyAL2m6YWXvy8dJLAl1XwhSuU/dMJ4RfWz6OXS039Sk+G2dAGM=
+	t=1766418147; cv=none; b=SeNjaCevj5ociBWSivcZVXVgcyY1fj59tFIaVZ3kGNlPulFZft13Q53pGMzpFKGDSePN6WNGAwRrmgYZ52w8/Okm2MfBQSpAWl1OuV4Qat6RMZUuxc32qOmgLJmiBd+VlMxDQrOS1Wc4AkKAtRozZdqeMoknVFbqeL4B2yDtIZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766414864; c=relaxed/simple;
-	bh=IwLjLCoIOYSxZJTADglHFhXYcy2He7W4GE2tlYf0bXA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xu9sHk3Vlt3hHcjpTcPD+JfK0NmTdOG6u4HKmKGbnuuX9XItZecM22deliDyIDffiNiuTuC4u8prz3282uk3qKJ1oyGoEIZSB89g2qPViZnt1awGmM0qlZwYZLype4Oa5eW5XyU32rQiLR/CommBT+Q2224eF4bfxWhdYOCn48E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DAB/Amyf; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5942bac322dso4514368e87.0
-        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 06:47:41 -0800 (PST)
+	s=arc-20240116; t=1766418147; c=relaxed/simple;
+	bh=PK54Vy1SNWF2cozJivqVKZzpFOSBZDESHiOGhjh4Uiw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lzVBnWs6TLQh7f9CDwitMG5fkAGfq5clK7j2GMiCrubGnux4FU2HhLhscnV0mUR44nMwjLIzgT2SMvIJh6iNPGkQCBSNZO/+8hHNwiGiY/uagCu2YbAsawY6L7/41GUQ/AH714o4uHlrnWD28ADmKWVBgaXEd9uhpGY16Fe3wHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ctNIdn9Q; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b72b495aa81so675662366b.2
+        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 07:42:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1766414860; x=1767019660; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lNpWj6TBvVji/fHBEAyDcOFnMWFot5zrE/hRwsxnXVY=;
-        b=DAB/Amyf1kdMghWpvNsR5yNnMf+GdDvgb0bA4+59mA0CrIcjf0meQgWipWa4qgI0+u
-         QzmXsaKh4CDGdPAVFemA6mB0PY7nYeYTfFKf08TKNBK7/79eZ+/5axG1Oj+c5gAmAFfg
-         T6+CWEWvYf5iQFoFrZGr06kU0xwOi/gsXNB3kQcCCxDDaqnVlheA/H95h4OGQdIrQD1T
-         DuSAeDBryQG0Va3VNcLhpD2f+qW6b93O1bCz7Ls5M2R8ZzuC60dez2dFPM0QaMrYu6X1
-         4TJcc1dZY6C1qQanrLgSyh2HkvSgJUb+rXBU+gv3hnl/FjGW4kxTqLG3nbaKx9Smpezy
-         zmVA==
+        d=gmail.com; s=20230601; t=1766418144; x=1767022944; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mblUD38NHDbav+TAFmjVgjtSnMMRCCdvFD/wMYmq7jU=;
+        b=ctNIdn9Qir2RMzR4Ggh0T6zv5NgFuPF4UyUqN386jMixsVrrQVE+u2a5Jk6p2fCMMN
+         Z9KKb6YzcMOv7ALZ8G6Uy5yvreAAzCAcUV+9EWAVQJSfH3f/90Kvcr1we//k7p2uhAFy
+         UOqgLOf07RNUI7bW7WegWPU+YSIK9xKYIOvERqtQ0kSMpv2G1JWctuqnUEf/yvhorDHb
+         TGJDi4qJ1CfI3H1WjjFUDsHp2LLTE5pWR4J392m5SSvB1q89biWVthpKiH0VCXLKLvvh
+         uFwrK+MCC4rSaFQke67xR9FExZyM4b7gRozfZurdWAo7I57PsIRtS59HRVc9kxW032N7
+         4Fog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766414860; x=1767019660;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1766418144; x=1767022944;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lNpWj6TBvVji/fHBEAyDcOFnMWFot5zrE/hRwsxnXVY=;
-        b=vPzDqgqdNiKQzlGiKvVh2SN2+xopKXkGArduuFzXH7b7t0na0c4xwfPOOEBCjBNVJr
-         NmpN6jMUzfbVKivrXwpqrZ/suokdXWtpZ5AO/HRQIyUK5zRTnujQkAzq2AxWovkWvfCr
-         p77aFCJ5V8LJcdunL+RCpmAq1a7tv87Y146OFqdLSHySaLv/CwecVfZegRa7aKd3F/HH
-         9zrtstHJeLSTVR29OlkZfMjc1qDN62YiUGly72/ZdDWJwKhbi/DbSJrN46tnKt2akTJ0
-         CDMGo5sKwlBjSOVyBcoxtjdc0t3er4tnrE2i5gH69gg0oc2eN6jx3khb/ochaTh37VPf
-         EJAw==
-X-Forwarded-Encrypted: i=1; AJvYcCUBFC3FY4nrq4lyZAdLf+0Ijud4kQ43ma4sZuy15A0Da7vVNQsSGzs7eR/UC0OXrh5eQySPYvojQrw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymXi6MvbQNJT2w+11itIKhFmNAO576yuLoPTfjumRy+NDR9Zgv
-	qpQ8Rjn+tr+ZcE0VMXAKgsstAnDwPrp81u300GE9pqfFHREbgWGAOYJArI+h/+WwfdC4iNkzrR0
-	sEMCuv9tTMHFBdXSVjRoX/CU6EwajtDM5Ocb66Z+m/Q==
-X-Gm-Gg: AY/fxX7eK+nTktB/Ap/BXY9fXRoLXDv0EuvrXlK7QgbYMZmsPLre8N28jxWg5R10aKT
-	SGL2jhVvY9eqdRkpWPIISruU4+yOlberpn5boU5yigKTnUAQskzUGHFEx4g0eJ+JUhpfAxPLLNw
-	4to4+n5ZNtQV3zxAEeSc/KMtCWv+YYWVCWh59+nI4vzJ0AUHBSIK5KlpfHcaxQtu2H/skrp1ktc
-	1wPfbr3SQJet5CMWwlLp4DOSZyqcvmssm+6rWUj+ZWLum5oQlCct7piZYdHtDTB4UwANWxO
-X-Google-Smtp-Source: AGHT+IEmZoekCpdFdxCX6++mG8wezcWmjXxPG5ogJ3p4YsZ2il+JIIqimrrt74JmCImmja/XHDzRdip0knGEk5MWYgo=
-X-Received: by 2002:a05:6512:e9c:b0:598:faba:c8fa with SMTP id
- 2adb3069b0e04-59a17d006e1mr4286628e87.10.1766414859977; Mon, 22 Dec 2025
- 06:47:39 -0800 (PST)
+        bh=mblUD38NHDbav+TAFmjVgjtSnMMRCCdvFD/wMYmq7jU=;
+        b=KndI8HmkI50kM4zIqRLdQUunVmz23MXa6+STHXS9FxPHFV4ptR7LvcwhxwanOmSRuR
+         qhHRdXpEfKAOOclYH9uRSVzhQs2GFiRHnQsStJJGvKnQV+nX+FdjxS1Wh95vIdMDPnUN
+         gVOsJMxFGQ5s3+4dvRNdJ86Pwcy8e3FqZbKBMr8b2O4WbtvErgGeelIDSmnEKTVfgPsw
+         xpGvtk92eCNIVYcxyb22rLjc69S7e5ngXV7hMaGF3lDIp0mnh/GvlLLbTgvCZYFxeMDW
+         zKURi+04ixDc5DptiLdNjnAXBwBPccOTh7B0RQBomYaesvXge5jr8KFqP6mAeULp3zhh
+         FmNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUVrE8sXvKHIMDOpHLA0LVOwOd/efWSLPjFqfvnhCHyerHyx/p56Q72T6sKyaGyE4M+f8uCNAVHr48=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAvykNo+LE6ASCpCiKI7ZdP8zYdeJy7ROx50SSP8qTy4AvY+eo
+	Yg78IN82oi4KWmoQRhzpMz616el545i8FcXIDm8agvHZ2zLfQebvmHrU
+X-Gm-Gg: AY/fxX4k82+sdeGLF+c0bgq9pXwwXOYZMgr2IzgzwnkB8rDgWbCswF5SQI6nYZA3yVG
+	3bFsnBNoOIUm+0Ag2KNpHmOlX9zX4OlTSgaNsqux+JG7LXaghnqYhG4KX3FiF772S9/ljBSiowK
+	oKLNV8cQ0oJRBtyvNAEi3RGlEUYgcQnQZJf+5CPteVUSqa1TUZ+99B2SYaq74GTmOnf7Jrcxg9A
+	zvtb//dtfB71K25tu1irRE94r8Hu7Ew8XVFiw18w0h2SrAEtElp0YAE/fHUZmxc7Bzd/T7A2E5/
+	8mVa2Q6qnq1eeKltPmyFGaokml9ntBaqpLUzpcbVWCiqxOb+tFBJY3ihVMwK1oOnYp6jm433FIM
+	02VxgXoLpBUEC55js/TlOnLHVQAAEwNgkVM/b/NK1K/NY5sAEmfd4muK6VKcQ3hvdzcsdv4alJa
+	o=
+X-Google-Smtp-Source: AGHT+IEALuj4P0gRBV3lHJw2QhDugmQDk4nADpDVCK6cv9famhN2Yt9iUEpm+4rfnaEzABbUcDiSAA==
+X-Received: by 2002:a17:907:1c17:b0:b76:31e6:2ee1 with SMTP id a640c23a62f3a-b8036f65331mr1101190866b.18.1766418143545;
+        Mon, 22 Dec 2025 07:42:23 -0800 (PST)
+Received: from prometheus ([85.11.110.37])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037f0b7bcsm1156790966b.49.2025.12.22.07.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Dec 2025 07:42:23 -0800 (PST)
+From: Szymon Wilczek <swilczek.lx@gmail.com>
+To: mailhol@kernel.org,
+	mkl@pengutronix.de
+Cc: arunachalam.santhanam@in.bosch.com,
+	linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Szymon Wilczek <swilczek.lx@gmail.com>,
+	syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com
+Subject: [PATCH] can: etas_es58x: fix memory leak in es58x_open()
+Date: Mon, 22 Dec 2025 16:42:08 +0100
+Message-ID: <20251222154208.22117-1-swilczek.lx@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251210-rz-sdio-mux-v3-0-ca628db56d60@solid-run.com>
- <20251210-rz-sdio-mux-v3-2-ca628db56d60@solid-run.com> <CAPDyKFoYd3WKGrjD3DEzZH8EfgZPmRkrqL=rdoKNuAADrvz3Eg@mail.gmail.com>
- <20f2128c-c6cb-4b13-aa08-b93e540f5bd9@solid-run.com>
-In-Reply-To: <20f2128c-c6cb-4b13-aa08-b93e540f5bd9@solid-run.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 22 Dec 2025 15:47:03 +0100
-X-Gm-Features: AQt7F2pGUIPrw4OqWueh78ppZDBGwQc_mhY3RygUrq6e1L74fXopGZ4K0V_QvZo
-Message-ID: <CAPDyKFo2jsV02qSDBSZTewJjV09AMO8iETU5Uxqz+GBnd0JY6g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] mux: Add helper functions for getting optional and
- selected mux-state
-To: Josua Mayer <josua@solid-run.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Peter Rosin <peda@axentia.se>, 
-	Aaro Koskinen <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, 
-	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>, 
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Mikhail Anikin <mikhail.anikin@solid-run.com>, Yazan Shhady <yazan.shhady@solid-run.com>, 
-	Jon Nettleton <jon@solid-run.com>, "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
-	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>, 
-	"linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>, 
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Sun, 21 Dec 2025 at 11:38, Josua Mayer <josua@solid-run.com> wrote:
->
-> Hi Ulf,
->
-> Am 17.12.25 um 14:38 schrieb Ulf Hansson:
-> > On Wed, 10 Dec 2025 at 18:39, Josua Mayer <josua@solid-run.com> wrote:
->
-> cut
->
-> >>  /*
-> >>   * Using subsys_initcall instead of module_init here to try to ensure - for
-> >>   * the non-modular case - that the subsystem is initialized when mux consumers
-> >> diff --git a/include/linux/mux/consumer.h b/include/linux/mux/consumer.h
-> >> index 2e25c838f8312..a5da2e33a45c0 100644
-> >> --- a/include/linux/mux/consumer.h
-> >> +++ b/include/linux/mux/consumer.h
-> >> @@ -60,5 +60,9 @@ struct mux_control *devm_mux_control_get(struct device *dev,
-> >>                                          const char *mux_name);
-> >>  struct mux_state *devm_mux_state_get(struct device *dev,
-> >>                                      const char *mux_name);
-> >> +struct mux_state *devm_mux_state_get_optional(struct device *dev,
-> >> +                                             const char *mux_name);
-> >> +struct mux_state *devm_mux_state_get_optional_selected(struct device *dev,
-> >> +                                                      const char *mux_name);
-> > Seems like we need stub-functions of these too. Otherwise
-> > subsystems/drivers need to have a "depends on MULTIPLEXER" in their
-> > Kconfigs.
->
-> Currently the drivers that can use a mux select MULTIPLEXER in Kconfig.
+When es58x_alloc_rx_urbs() fails partway through allocating RX URBs
+(e.g., if usb_submit_urb() fails at iteration i), the function returns
+an error but leaves any previously allocated and anchored URBs leaked.
 
-Yes, but that's not generally how we do this. The driver may not need
-MULTIPLEXER for all platforms that driver is being used on.
+The issue is that es58x_open() returns directly on es58x_alloc_rx_urbs()
+failure instead of jumping to the free_urbs label, which would call
+es58x_free_urbs() to clean up any anchored URBs.
 
->
-> There already exist a few mux helpers both for mux-state and for mux-control,
-> and they might all need stubs.
+Fix this by changing 'return ret' to 'goto free_urbs' to ensure proper
+cleanup of all allocated URBs on failure.
 
-Correct. I think we should add subs for all of them.
+Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
+Reported-by: syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=e8cb6691a7cf68256cb8
+Signed-off-by: Szymon Wilczek <swilczek.lx@gmail.com>
+---
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> I'd prefer the restructuring of kconfig dependencies being independent from
-> adding mux-state functionality to renesas sdhi driver.
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index f799233c2b72..d92c37f277d5 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -1784,7 +1784,7 @@ static int es58x_open(struct net_device *netdev)
+ 	if (!es58x_dev->opened_channel_cnt) {
+ 		ret = es58x_alloc_rx_urbs(es58x_dev);
+ 		if (ret)
+-			return ret;
++			goto free_urbs;
+ 
+ 		ret = es58x_set_realtime_diff_ns(es58x_dev);
+ 		if (ret)
+-- 
+2.52.0
 
-I understand your point, but adding the stubs isn't really a big thing
-- unless someone has some good arguments not to!?
-
-Moreover, since the series changes the mux-core anyways - and
-subsequent changes depend on it, I don't see an issue to fold in yet
-another patch to add the stubs.
-
-Kind regards
-Uffe
 
