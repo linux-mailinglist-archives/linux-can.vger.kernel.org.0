@@ -1,157 +1,192 @@
-Return-Path: <linux-can+bounces-5894-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5895-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D8DECD450B
-	for <lists+linux-can@lfdr.de>; Sun, 21 Dec 2025 20:45:32 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9B03CD5995
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 11:31:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D3EA9300769C
-	for <lists+linux-can@lfdr.de>; Sun, 21 Dec 2025 19:45:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 085043002FF0
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 10:31:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74683286897;
-	Sun, 21 Dec 2025 19:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="VtQxNaAE";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="FgpDFrgJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7AC3321CB;
+	Mon, 22 Dec 2025 10:15:41 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB33450276;
-	Sun, 21 Dec 2025 19:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766346324; cv=pass; b=pO3BWWfCx47l6fZJA6DOr1PrXHrEZeJADrg46O+78KG2PToWjHTlhvTQgZE9aUV6Pr8DkA1UdgqUJEqGpcLIc/pLqPzh7pN+VxhQbzZrUwjRMtpPHGjAnltqeVRVTnmBo7FXodlv1Igpg/59NaTTOKlBhKr36dV4TkoZAfGrXQE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766346324; c=relaxed/simple;
-	bh=i++1cctCPW5K7SGM/RAotmNGTpyNeau6wRii2AA4gpQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ix1FKa2o5kwJzRLhVgeskiPx2KFfV9NrNurmRP8mYZZpuszdaizZQkQuf5Y70pQSRfSBjJ57nB8uARMSIoRYFleMMP/Bz9IlL/hoN6v662PcqPQQD3yayO9gXNl/xM48zMqsjQ0XnuKpLGFQmill5Ko4ca19UxtM+dNGkN/p6OE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=VtQxNaAE; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=FgpDFrgJ; arc=pass smtp.client-ip=85.215.255.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1766346137; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=aEBxyLqjOrTKNjjQtp9+JI+Uuj+aYgNDYZQurSVUFpk6lTodf++G2qR4QC3ZOktoR1
-    DkkeijDSjn+txRogZyg9FCAcZbhyT7AiVXDO6nRkgHarKg/qdivlTXlzquA7rA3zz5N9
-    8alem3KZ32iofZca7Ujmz6a+hpCXdzw73Cd0EQI1ppDKpKrZH+PSIqwbhUe3PnVFfsjJ
-    M4pkTrBRJBRJnnmwAR+gfD/t8uWiTtq90wTR9LYE53/gcmCdC1aYK2pAn7vyUOGB5RFF
-    PP5bc68XMGPmvksTT2qq5SEiewpM0o9RpGHayCpuZTw1JYN35eImRcvV+OgSEdFoDVLF
-    FCJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1766346137;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9A23g+fJ13s8kWcxp/C6OaQZwQpjkbSEThho02wFN7Q=;
-    b=I2fu6/MnuB6RMi0iyQ4DKE/oimf9k2CwV1CTX//wm+QCkMGB6CUYzqG1kKNE6odQQl
-    dum0q+HwKlciMsQXSbk8uFNg9ft8h6y3l8bA6dETLQ9wgtZspTYFKdKP4KbFazFQhS5/
-    u6qI/lFBoq5HDfXSnou9FSxgni8vzDfXp8YGB8nQPrgI7YECKIFxXVP4YhXClbVhEsx3
-    q1OrALDKnc53PsXr9lKbyYyaLLZJYFcMX//riVlrjcxNh2B6gEFi7qTb0K0N6oeeGr3I
-    yNpoRt1IPQ93d3o6iypqQucX1bbLWZurwf97epx9XJUI20drvyOqhnjUvD9tObZ25kGI
-    PDNw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1766346137;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9A23g+fJ13s8kWcxp/C6OaQZwQpjkbSEThho02wFN7Q=;
-    b=VtQxNaAElacSC/iSg2K4Ig++0zncS8C4e21ZZlTv7g0JSaXYor777otArlgvbmDllO
-    gmwJvnT4mg6dOlTNNOELVhfrTWd31r4TcZa+ejQSHbu0kp2iZUfNWdheF7h9najQIMru
-    BguVYfpkNkZ6q1QgPu4ZzH4wwpSKbLDC4ls3PU6G4LSwqVS4RiJj6T8jthdJ94E7/+h3
-    k8JWrqWt8qzR9TqczuXn9Vj4hMNaO+13uYMYO+b+lfxHJoPw3ZC5jQRR+AQdSoqr1Whk
-    BKs2inlFhCOpTiCoctCuzb6RV4PoAj+8PhquoUhaa5NOxglv/ctayXWmd8hYnA+oTKss
-    Q9Kw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1766346137;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9A23g+fJ13s8kWcxp/C6OaQZwQpjkbSEThho02wFN7Q=;
-    b=FgpDFrgJRJzXFCe8lkfIZH7dk2uvWx3u8SuUyk6i+h6h/z8o0Jya+5d0J9I5b6UNZ5
-    GxxGvoKkOVu5w1Ye0oAA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6800::9f3]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b1BLJgGDvq
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sun, 21 Dec 2025 20:42:16 +0100 (CET)
-Message-ID: <d3fe10bf-1505-4c0d-ab46-5c56615e328a@hartkopp.net>
-Date: Sun, 21 Dec 2025 20:42:10 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D353321C8
+	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 10:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766398540; cv=none; b=ZhhUTOlTVdkcKaWLp6mMrrePNtIlQfIsOo0ExlFu5qxgHjcUOPB83DHoCIJB6JJ7lZ5klBPCJfUN6Ytu0zFfhogU0wdawXqjgtJtzCc3Csj8gquVhRo5Fs732GxKEIuL+27Kwu2phr89np+J1o3WJCS27/mPDxu5HvlimVYs9sQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766398540; c=relaxed/simple;
+	bh=pYxC0xGJLfaMlKM2nphME9JmmJ1biPNjHd+MZwrmnFM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BxXD2swI2pVisrT3IlR4DfxamQmuhZTHW2O+ZCYqdBsgGhA+hRAfmPNA0JzBXD0PUKSPzZaSr+VB3t7RLurDHaAKf3SCuhpgU+7DEOZvZSymhSfCyGD5PJErHhRMeHPRXfGkQAfWtEzhK3/Fz9WKHkbnKzFY66qGvcnXB/3A2wQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-455dc1cf59aso2539632b6e.0
+        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 02:15:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766398538; x=1767003338;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VEzlntz/A3Digs4sjukIlKb5qv62LH8yawTgFzZ88fo=;
+        b=KD/BFmKOl1GEyPV1u9BkKx++d5eQnoEEvWcjP2c79LpvrWIVZxtFDH9xDHH3k8dufw
+         FpKSGRU9VAQhzugXKVH/JnXh5gpDuDRunnOOjd4L0Hzp40lbzuM8IOfQI+8K7dc9/pDg
+         tMJXPrGY+oqVKuAQ0QZOAV6W2c7Izb7AHb3rIUZrEXFsWhG7m0LHdHJlWUt5WaEnIYCV
+         CemzoYPrbyBYv8FEVvY+cAHasKELOIe0IrSBs6IvxnSTBnecHbnxTgmS5lGqsYttb+gd
+         gRaS55KkuI8C0atM/fmwQQkl6TVh9TNQdve3YnK3M4V2h8HnQ+rkyXOBYCnOcx2KKMej
+         nVrg==
+X-Forwarded-Encrypted: i=1; AJvYcCW0y2YV65iDzt4lMo9m5hWrk2sPdy69OaOGpatCE1XR37X0iDGviNUxPgCGJbSYlve8XERIO7vvIoQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaKkUG4eMDqBtsPZslUCRpFA6cfGMPnwD4p4Pc3Uqfvo2TFEOb
+	n4ubpfyneYFfWq4ayN9TJQIk+uRihS6Vcfb1+Hq3swrIz4gIHUIuHZA8yQlGMcC0
+X-Gm-Gg: AY/fxX5T6DAlTPzViAFaOkAi4fqgG00JhDX0VlMVCxEmERK8Bh3J1YqvRW9rtY+66K6
+	P21vy4m9vl5q3xknHCBlRdkHO/q1niWd0okQ4RJrx71KjUfkBE+wVLLxscQEQV97qQABq+ml+td
+	u0zj0V3aqS+sc2lA5ROrJF046kinrU3SOWzcj8nHQEJxoxpoNQyjcELhWIz+5M97QYClti2TQPZ
+	IHXQs4Kg4V/icmO6JTAIxSTM8E+3LnDQyPhXyRX+vg2cGYi5UuRgLBNYnwLW+Ue8Z8XpO9+cdEb
+	E6ocaN4k4MgcyAsdaV+R8KZHeAh9o93RzUPMYNlLz1msA7UdA4j5AxP46VCebhfG1jOBLvH9SxU
+	RzOXGgF+7CNtYLe9N8iik7vrq+1v1AJAgRMZjHAoZIZvuEwOW+qve1gk50akMUhXq8QkTdHNTD9
+	RozMq0aS/4JCjYXCU1wFJCsXHRhRJcHkrqJO/BsadZyVryjSSBVI872l+FRow=
+X-Google-Smtp-Source: AGHT+IH9klsVS6/lfklqYviBsYPranv1kHHzG0O+pUsshQYIis10VdMMYaNrTqHWb4u0W3m9CWtLSw==
+X-Received: by 2002:a05:6808:e85:b0:450:db06:6079 with SMTP id 5614622812f47-457b20facdemr4674372b6e.53.1766398537961;
+        Mon, 22 Dec 2025 02:15:37 -0800 (PST)
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com. [209.85.161.43])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7cc66645494sm7256245a34.0.2025.12.22.02.15.37
+        for <linux-can@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Dec 2025 02:15:37 -0800 (PST)
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-65745a436f7so2160050eaf.3
+        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 02:15:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUoqsDI7zuZuKlnfU2bZ1LXeg8YlrHSTw3flktEjRdwd8OTi9X3oIJcdei2S+ejUqgrW3mPxQP6DO8=@vger.kernel.org
+X-Received: by 2002:a05:6102:3a0e:b0:5d7:de89:8dc6 with SMTP id
+ ada2fe7eead31-5eb1a616c74mr2760273137.6.1766398102025; Mon, 22 Dec 2025
+ 02:08:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bpf, xdp] headroom - was: Re: Question about to KMSAN:
- uninit-value in can_receive
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Prithvi <activprithvi@gmail.com>,
- linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
- syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org
-References: <20251117173012.230731-1-activprithvi@gmail.com>
- <0c98b1c4-3975-4bf5-9049-9d7f10d22a6d@hartkopp.net>
- <c2cead0a-06ed-4da4-a4e4-8498908aae3e@hartkopp.net>
- <aSx++4VrGOm8zHDb@inspiron>
- <d6077d36-93ed-4a6d-9eed-42b1b22cdffb@hartkopp.net>
- <20251220173338.w7n3n4lkvxwaq6ae@inspiron>
- <01190c40-d348-4521-a2ab-3e9139cc832e@hartkopp.net>
- <20251221-ochre-macaw-of-serenity-f3ed07-mkl@pengutronix.de>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20251221-ochre-macaw-of-serenity-f3ed07-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20251210-rz-sdio-mux-v3-0-ca628db56d60@solid-run.com> <20251210-rz-sdio-mux-v3-2-ca628db56d60@solid-run.com>
+In-Reply-To: <20251210-rz-sdio-mux-v3-2-ca628db56d60@solid-run.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 22 Dec 2025 11:08:11 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXjAS6HOYy5=uxcK0RZL5X6agRoHG67QUw4xh5+ovZaJQ@mail.gmail.com>
+X-Gm-Features: AQt7F2qgJlv5WWEn-8R7_EQWn45G6An5kBRt8R2C89e3bKVxcY7XZ_y43fEdjFs
+Message-ID: <CAMuHMdXjAS6HOYy5=uxcK0RZL5X6agRoHG67QUw4xh5+ovZaJQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] mux: Add helper functions for getting optional and
+ selected mux-state
+To: Josua Mayer <josua@solid-run.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Peter Rosin <peda@axentia.se>, 
+	Aaro Koskinen <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, 
+	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
+	Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>, 
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Mikhail Anikin <mikhail.anikin@solid-run.com>, Yazan Shhady <yazan.shhady@solid-run.com>, 
+	Jon Nettleton <jon@solid-run.com>, linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-can@vger.kernel.org, linux-phy@lists.infradead.org, 
+	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Josua,
 
+On Wed, 10 Dec 2025 at 18:39, Josua Mayer <josua@solid-run.com> wrote:
+> In-tree phy-can-transceiver driver has already implemented a local
+> version of devm_mux_state_get_optional.
+>
+> The omap-i2c driver gets and selects an optional mux in its probe
+> function without using any helper.
+>
+> Add new helper functions covering both aforementioned use-cases:
+>
+> - devm_mux_state_get_optional:
+>   Get a mux-state if specified in dt, return NULL otherwise.
+> - devm_mux_state_get_optional_selected:
+>   Get and select a mux-state if specified in dt, return error or NULL.
+>
+> Existing mux_get helper function is changed to return -ENOENT in case dt
+> did not specify a mux-state or -control matching given name (if valid).
+> This matches of_parse_phandle_with_args semantics which also returns
+> -ENOENT if the property does nto exists, or its value is zero.
+>
+> The new helper functions check for ENOENT to return NULL for optional
+> muxes.
+>
+> Commit e153fdea9db04 ("phy: can-transceiver: Re-instate "mux-states"
+> property presence check") noted that "mux_get() always prints an error
+> message in case of an error, including when the property is not present,
+> confusing the user."
+>
+> The first error message covers the case that a mux name is not matched
+> in dt. This is removed as the returned error code (-ENOENT) is clear.
+>
+> The second error message is based on of_parse_phandle_with_args return
+> value. In case mux description is missing from DT, it returns -ENOENT.
+> Print error message only for other error codes.
+>
+> This ensures that the new helper functions will not confuse the user
+> either.
+>
+> Signed-off-by: Josua Mayer <josua@solid-run.com>
 
-On 21.12.25 20:06, Marc Kleine-Budde wrote:
-> On 21.12.2025 19:29:37, Oliver Hartkopp wrote:
->> we have a "KMSAN: uninit value" problem which is created by
->> netif_skb_check_for_xdp() and later pskb_expand_head().
->>
->> The CAN netdev interfaces (ARPHRD_CAN) don't have XDP support and the CAN
->> bus related skbs allocate 16 bytes of pricate headroom.
->>
->> Although CAN netdevs don't support XDP the KMSAN issue shows that the
->> headroom is expanded for CAN skbs and a following access to the CAN skb
->> private data via skb->head now reads from the beginning of the XDP expanded
->> head which is (of course) uninitialized.
->>
->> Prithvi thankfully did some investigation (see below!) which proved my
->> estimation about "someone is expanding our CAN skb headroom".
->>
->> Prithvi also proposed two ways to solve the issue (at the end of his mail
->> below), where I think the first one is a bad hack (although it was my idea).
->>
->> The second idea is a change for dev_xdp_attach() where your expertise would
->> be necessary.
->>
->> My sugestion would rather go into the direction to extend dev_xdp_mode()
->>
->> https://elixir.bootlin.com/linux/v6.19-rc1/source/net/core/dev.c#L10170
->>
->> in a way that it allows to completely disable XDP for CAN skbs, e.g. with a
->> new XDP_FLAGS_DISABLED that completely keeps the hands off such skbs.
-> 
-> That sounds not like a good idea to me.
-> 
->> Do you have any (better) idea how to preserve the private data in the
->> skb->head of CAN related skbs?
-> 
-> We probably have to place the data somewhere else.
+Thanks for your patch!
 
-Maybe in the tail room or inside struct sk_buff with some #ifdef 
-CONFIG_CAN handling?
+> --- a/drivers/mux/core.c
+> +++ b/drivers/mux/core.c
+> @@ -542,11 +542,8 @@ static struct mux_control *mux_get(struct device *dev, const char *mux_name,
+>                 else
+>                         index = of_property_match_string(np, "mux-control-names",
+>                                                          mux_name);
+> -               if (index < 0) {
+> -                       dev_err(dev, "mux controller '%s' not found\n",
+> -                               mux_name);
+> -                       return ERR_PTR(index);
+> -               }
+> +               if (index < 0)
+> +                       return ERR_PTR(-ENOENT);
+>         }
+>
+>         if (state)
+> @@ -558,8 +555,10 @@ static struct mux_control *mux_get(struct device *dev, const char *mux_name,
+>                                                  "mux-controls", "#mux-control-cells",
+>                                                  index, &args);
+>         if (ret) {
+> -               dev_err(dev, "%pOF: failed to get mux-%s %s(%i)\n",
+> -                       np, state ? "state" : "control", mux_name ?: "", index);
+> +               if (ret != -ENOENT)
 
-But let's wait for Andrii's feedback first, whether he is generally 
-aware of this XDP behavior effect on CAN skbs.
+I think the non-optional variant should still print an error message in
+case of -ENOENT, else this has to be duplicated in all drivers using it.
 
-Best regards,
-Oliver
+This is typically handled by having a non-printing core helper function,
+and having printing non-optional, and non-printing/ignoring optional wrappers
+around the former.
 
+> +                       dev_err(dev, "%pOF: failed to get mux-%s %s(%i)\n",
+> +                               np, state ? "state" : "control",
+> +                               mux_name ?: "", index);
+>                 return ERR_PTR(ret);
+>         }
+>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
