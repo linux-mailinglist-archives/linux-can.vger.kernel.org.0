@@ -1,128 +1,128 @@
-Return-Path: <linux-can+bounces-5900-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5901-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 569DBCD6990
-	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 16:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F055FCD6A60
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 17:21:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DF13330365A6
-	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 15:42:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A8A5C3032977
+	for <lists+linux-can@lfdr.de>; Mon, 22 Dec 2025 16:21:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49AEA3191D9;
-	Mon, 22 Dec 2025 15:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ctNIdn9Q"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D24426056A;
+	Mon, 22 Dec 2025 16:21:15 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D470320CCE
-	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 15:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6738311953
+	for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 16:21:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766418147; cv=none; b=SeNjaCevj5ociBWSivcZVXVgcyY1fj59tFIaVZ3kGNlPulFZft13Q53pGMzpFKGDSePN6WNGAwRrmgYZ52w8/Okm2MfBQSpAWl1OuV4Qat6RMZUuxc32qOmgLJmiBd+VlMxDQrOS1Wc4AkKAtRozZdqeMoknVFbqeL4B2yDtIZY=
+	t=1766420475; cv=none; b=tioUM0JcXnEWW11tXLhx3aOr28Fcg+iXGM7YCHNMtdIK22f+Qpdv2pAGDbK1mIj8YQnrzbVUru8FQgNzpBBH9XpRbPwJGtwPFJqBfTB4Ng77YYjjrnFnBA9HCfLLDE80gbzpFyYRn12ElG4PeDVKRyV/IzqxLeXComcc9dNqrJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766418147; c=relaxed/simple;
-	bh=PK54Vy1SNWF2cozJivqVKZzpFOSBZDESHiOGhjh4Uiw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lzVBnWs6TLQh7f9CDwitMG5fkAGfq5clK7j2GMiCrubGnux4FU2HhLhscnV0mUR44nMwjLIzgT2SMvIJh6iNPGkQCBSNZO/+8hHNwiGiY/uagCu2YbAsawY6L7/41GUQ/AH714o4uHlrnWD28ADmKWVBgaXEd9uhpGY16Fe3wHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ctNIdn9Q; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b72b495aa81so675662366b.2
-        for <linux-can@vger.kernel.org>; Mon, 22 Dec 2025 07:42:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766418144; x=1767022944; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mblUD38NHDbav+TAFmjVgjtSnMMRCCdvFD/wMYmq7jU=;
-        b=ctNIdn9Qir2RMzR4Ggh0T6zv5NgFuPF4UyUqN386jMixsVrrQVE+u2a5Jk6p2fCMMN
-         Z9KKb6YzcMOv7ALZ8G6Uy5yvreAAzCAcUV+9EWAVQJSfH3f/90Kvcr1we//k7p2uhAFy
-         UOqgLOf07RNUI7bW7WegWPU+YSIK9xKYIOvERqtQ0kSMpv2G1JWctuqnUEf/yvhorDHb
-         TGJDi4qJ1CfI3H1WjjFUDsHp2LLTE5pWR4J392m5SSvB1q89biWVthpKiH0VCXLKLvvh
-         uFwrK+MCC4rSaFQke67xR9FExZyM4b7gRozfZurdWAo7I57PsIRtS59HRVc9kxW032N7
-         4Fog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766418144; x=1767022944;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mblUD38NHDbav+TAFmjVgjtSnMMRCCdvFD/wMYmq7jU=;
-        b=KndI8HmkI50kM4zIqRLdQUunVmz23MXa6+STHXS9FxPHFV4ptR7LvcwhxwanOmSRuR
-         qhHRdXpEfKAOOclYH9uRSVzhQs2GFiRHnQsStJJGvKnQV+nX+FdjxS1Wh95vIdMDPnUN
-         gVOsJMxFGQ5s3+4dvRNdJ86Pwcy8e3FqZbKBMr8b2O4WbtvErgGeelIDSmnEKTVfgPsw
-         xpGvtk92eCNIVYcxyb22rLjc69S7e5ngXV7hMaGF3lDIp0mnh/GvlLLbTgvCZYFxeMDW
-         zKURi+04ixDc5DptiLdNjnAXBwBPccOTh7B0RQBomYaesvXge5jr8KFqP6mAeULp3zhh
-         FmNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUVrE8sXvKHIMDOpHLA0LVOwOd/efWSLPjFqfvnhCHyerHyx/p56Q72T6sKyaGyE4M+f8uCNAVHr48=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAvykNo+LE6ASCpCiKI7ZdP8zYdeJy7ROx50SSP8qTy4AvY+eo
-	Yg78IN82oi4KWmoQRhzpMz616el545i8FcXIDm8agvHZ2zLfQebvmHrU
-X-Gm-Gg: AY/fxX4k82+sdeGLF+c0bgq9pXwwXOYZMgr2IzgzwnkB8rDgWbCswF5SQI6nYZA3yVG
-	3bFsnBNoOIUm+0Ag2KNpHmOlX9zX4OlTSgaNsqux+JG7LXaghnqYhG4KX3FiF772S9/ljBSiowK
-	oKLNV8cQ0oJRBtyvNAEi3RGlEUYgcQnQZJf+5CPteVUSqa1TUZ+99B2SYaq74GTmOnf7Jrcxg9A
-	zvtb//dtfB71K25tu1irRE94r8Hu7Ew8XVFiw18w0h2SrAEtElp0YAE/fHUZmxc7Bzd/T7A2E5/
-	8mVa2Q6qnq1eeKltPmyFGaokml9ntBaqpLUzpcbVWCiqxOb+tFBJY3ihVMwK1oOnYp6jm433FIM
-	02VxgXoLpBUEC55js/TlOnLHVQAAEwNgkVM/b/NK1K/NY5sAEmfd4muK6VKcQ3hvdzcsdv4alJa
-	o=
-X-Google-Smtp-Source: AGHT+IEALuj4P0gRBV3lHJw2QhDugmQDk4nADpDVCK6cv9famhN2Yt9iUEpm+4rfnaEzABbUcDiSAA==
-X-Received: by 2002:a17:907:1c17:b0:b76:31e6:2ee1 with SMTP id a640c23a62f3a-b8036f65331mr1101190866b.18.1766418143545;
-        Mon, 22 Dec 2025 07:42:23 -0800 (PST)
-Received: from prometheus ([85.11.110.37])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037f0b7bcsm1156790966b.49.2025.12.22.07.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Dec 2025 07:42:23 -0800 (PST)
-From: Szymon Wilczek <swilczek.lx@gmail.com>
-To: mailhol@kernel.org,
-	mkl@pengutronix.de
-Cc: arunachalam.santhanam@in.bosch.com,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Szymon Wilczek <swilczek.lx@gmail.com>,
-	syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com
-Subject: [PATCH] can: etas_es58x: fix memory leak in es58x_open()
-Date: Mon, 22 Dec 2025 16:42:08 +0100
-Message-ID: <20251222154208.22117-1-swilczek.lx@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1766420475; c=relaxed/simple;
+	bh=RHfkqee+3g9nSYlyyUZ23eocZzUqzMj5vznMA7wzwQU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X7Q8NmKqVJ2wltD+EQ+zXglhHKcLcdJyGN5EqeOylLMh6P7fsjsGL0iWZHt5T9X4nh28Yuxt7h30gBzPaf/xmeUFn3pHSjLusLZMqidnYoBpWQWtBp60dJGjS71UCyR5TtQo9uNsVhi4UuV+7CRB2v3FkIpZkkYeA6IaYclExAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vXieU-0006q9-Kk; Mon, 22 Dec 2025 17:20:54 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vXieS-006xlV-3D;
+	Mon, 22 Dec 2025 17:20:53 +0100
+Received: from pengutronix.de (2a02-8206-24fb-1700-38f4-91de-2aaa-7f2a.dynamic.ewe-ip-backbone.de [IPv6:2a02:8206:24fb:1700:38f4:91de:2aaa:7f2a])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 50FAD4BCF51;
+	Mon, 22 Dec 2025 16:20:52 +0000 (UTC)
+Date: Mon, 22 Dec 2025 17:20:49 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ondrej Ille <ondrej.ille@gmail.com>
+Cc: Andrea Daoud <andreadaoud6@gmail.com>, 
+	Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org, 
+	Wolfgang Grandegger <wg@grandegger.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	netdev@vger.kernel.org
+Subject: Re: ctucanfd: possible coding error in
+ ctucan_set_secondary_sample_point causing SSP not enabled
+Message-ID: <20251222-kickass-oyster-of-sorcery-c39bb7-mkl@pengutronix.de>
+References: <CAOprWotBRv_cvD3GCSe7N2tiLooZBoDisSwbu+VBAmt_2izvwQ@mail.gmail.com>
+ <CAA7ZjpY-q6pynoDpo6OwW80zd7rq3dfFjQ1RMGzJR4pKSu7Zzg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4ialxhezysaxggjo"
+Content-Disposition: inline
+In-Reply-To: <CAA7ZjpY-q6pynoDpo6OwW80zd7rq3dfFjQ1RMGzJR4pKSu7Zzg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-When es58x_alloc_rx_urbs() fails partway through allocating RX URBs
-(e.g., if usb_submit_urb() fails at iteration i), the function returns
-an error but leaves any previously allocated and anchored URBs leaked.
 
-The issue is that es58x_open() returns directly on es58x_alloc_rx_urbs()
-failure instead of jumping to the free_urbs label, which would call
-es58x_free_urbs() to clean up any anchored URBs.
+--4ialxhezysaxggjo
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: ctucanfd: possible coding error in
+ ctucan_set_secondary_sample_point causing SSP not enabled
+MIME-Version: 1.0
 
-Fix this by changing 'return ret' to 'goto free_urbs' to ensure proper
-cleanup of all allocated URBs on failure.
+On 22.12.2025 16:51:07, Ondrej Ille wrote:
+> yes, your thinking is correct, there is a bug there.
+>
+> This was pointed to by another user right in the CTU CAN FD repository
+> where the Linux driver also lives:
+> https://github.com/Blebowski/CTU-CAN-FD/pull/2
+>
+> It is as you say, it should be:
+>
+> -- ssp_cfg |=3D FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x1);
+> ++ ssp_cfg |=3D FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x0);
 
-Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
-Reported-by: syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=e8cb6691a7cf68256cb8
-Signed-off-by: Szymon Wilczek <swilczek.lx@gmail.com>
----
- drivers/net/can/usb/etas_es58x/es58x_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This statement has no effect, as 'ssp_cfg |=3D 0x0' is still 'ssp_cfg'.
+IMHO it's better to add a comment that says, why you don't set
+REG_TRV_DELAY_SSP_SRC. Another option is to add create a define that
+replaces 0x1 and 0x0 for REG_TRV_DELAY_SSP_SRC with a speaking name.
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index f799233c2b72..d92c37f277d5 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -1784,7 +1784,7 @@ static int es58x_open(struct net_device *netdev)
- 	if (!es58x_dev->opened_channel_cnt) {
- 		ret = es58x_alloc_rx_urbs(es58x_dev);
- 		if (ret)
--			return ret;
-+			goto free_urbs;
- 
- 		ret = es58x_set_realtime_diff_ns(es58x_dev);
- 		if (ret)
--- 
-2.52.0
+regards,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--4ialxhezysaxggjo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlJb9gACgkQDHRl3/mQ
+kZyzfgf/SfPB5HD+R0CUspItF3HhUjEbcFL919kOplwJYBtTpw8OeoZWx8KK7EzU
+YLlJ/pxBOqgvWRaS04/T8mER+4uyzO3XXM06HIH6+weo86uDLSBm5PhVatgsxKD7
+QcDTaw2WNZk78tb+yyMZjQwAoSXIQyFNpM8S/zQYLLoBYygssJXx5AipPdiFFUS2
+IhnFhYFXToQ1XsbHC2Ec0w/Ombsdf5N0ZGb7kyb11ldtEocnLc2UA11XlF70Sqwb
+vSvIK1wA4fbnAObjtICQD4np3VqeaHeRqr+eEizkUIOjj6YJ8mIcaFPIAF6QqQfR
+nDMy7OjY1M2cLhiDyC7CrJdjWNZC6w==
+=F78G
+-----END PGP SIGNATURE-----
+
+--4ialxhezysaxggjo--
 
