@@ -1,175 +1,133 @@
-Return-Path: <linux-can+bounces-5907-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5910-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3369CD90F4
-	for <lists+linux-can@lfdr.de>; Tue, 23 Dec 2025 12:16:56 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id B77E6CD8FB4
+	for <lists+linux-can@lfdr.de>; Tue, 23 Dec 2025 11:56:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E60973021477
-	for <lists+linux-can@lfdr.de>; Tue, 23 Dec 2025 11:16:50 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3156830019CB
+	for <lists+linux-can@lfdr.de>; Tue, 23 Dec 2025 10:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BF0535295B;
-	Tue, 23 Dec 2025 10:05:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8C9232ED2F;
+	Tue, 23 Dec 2025 10:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kWaN7fW6"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="SPo0MndN"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C60352931;
-	Tue, 23 Dec 2025 10:05:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC1932E14F;
+	Tue, 23 Dec 2025 10:56:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766484324; cv=none; b=aqsdDXyQ4C8px2UfF5MlBVZTrADr+V+Wvm0lyyVb0Jou90cRY8CPHje0ga033YyVro4DgTSeC+Entw+Fy2SLLzArC9bhYNXfBO9hlZY5+H1hxTxYlggSggURa/cUKVglbmfEFflc1Y8ChMVDxVRcjiLNcXaZab9Y+k8H6nrNvHw=
+	t=1766487396; cv=none; b=U9DDkodj8TGtEq7q9QZ4qEIz5b44JLmuaAIgMEePTeL2jH9HFm0cgGPAXRVt9ckhvtvpjYwCSnJpJcx49E9aKB70hCUCbZ5iSyyNaRsT80T76JyLnrNZdwz0so/YLrBf2dXvGmS5fXOD6nAoxwCDKUaeK7ZSvC+vvVhA5sp6Gbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766484324; c=relaxed/simple;
-	bh=QU3vKK3fAi+EkXtG1LRInpCrVPsy7c3PzEqqyr9a60o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IdA5SrtfkCxpHaa2QdK0WL+ezeYV6jyq85gDiAwkOeiUm7Le02L6YbnxAEFVEb9Ct5fo0jHeBtZ2M35m/HaSNBejmLOnPIxMYL1CMDHSTV7p745QAyoEZ9W5JX8zF/evHIa8plC1BbNabrwHTmA4TVzENjxWj0m3lkcB0UTEdN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kWaN7fW6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E654C113D0;
-	Tue, 23 Dec 2025 10:05:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766484324;
-	bh=QU3vKK3fAi+EkXtG1LRInpCrVPsy7c3PzEqqyr9a60o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kWaN7fW6DhGsHZ03v0aWutGIXIk0AnySLmLRRXy08kCQ5sLNxBbR8K7QccqCJgaHO
-	 pnmnU/UChzLpi3ly3m1cTygs1eSeFC1u+33Av7XTYHwKxpzFAjQbIa67wVTo4Nk7LD
-	 MbsfhwlUDIXUpVyOMKtAQwnh40FJ1KRsufMlUnPbv+2BBMnnvyznhSaUU0Urev364R
-	 WH7K8wa5OwdqGmzLo88/Xyw4MvAeR4oPbzvqeM4Ydiyc0/jU0MappC8LwZdKavtp8v
-	 WVXRlA6DiNYq7vTbW4wBpB0EDzWo8lZrnOtKPF7FZf/nuhpxwZk9smns9YgKl0TbJ0
-	 IB5IydwAqIlKQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-	syzbot <syzbot+881d65229ca4f9ae8c84@syzkaller.appspotmail.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Sasha Levin <sashal@kernel.org>,
-	robin@protonic.nl,
-	linux-can@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18-5.10] can: j1939: make j1939_session_activate() fail if device is no longer registered
-Date: Tue, 23 Dec 2025 05:05:08 -0500
-Message-ID: <20251223100518.2383364-4-sashal@kernel.org>
+	s=arc-20240116; t=1766487396; c=relaxed/simple;
+	bh=iX7OdH4a7pIAa62jl9q9p/7wMMo74peMp686VxD2Nl4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EPGq4r1e0KEmUnxaprWgt9IfkUer4+KgV0mCs1+TsaPAqacepjmAx12pY+qucfrPaLUpvWPZVIS5uE/QwMuF1qiesLeqtHKw+/KUBqMU0BBLyX6uGMsdttmnl00qqVUXqB1RvAEI/0l5FReHR38bTgHqf9dvb2rgJT6nxKqKpOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=SPo0MndN reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.simply.com (Simply.com) with ESMTP id 4dbBlC25p3z1DDSH;
+	Tue, 23 Dec 2025 11:56:23 +0100 (CET)
+Received: from d-5xj5g74.got.gaisler.com.com (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
+	by smtp.simply.com (Simply.com) with ESMTPA id 4dbBlC06L7z1DDXY;
+	Tue, 23 Dec 2025 11:56:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
+	s=simplycom2; t=1766487383;
+	bh=8CkVG3PHqS3kI3uWyaSSWPJ0Gx8T7F8DZSJHRba42dA=;
+	h=From:To:Cc:Subject:Date;
+	b=SPo0MndN5l/y2FyK8wdvRbvDCUkXSKdTpkwvTHeTfTX20+gm4d1FHIt+8CuMtxCUh
+	 DfQwB0W/YQDr6MYI6cG5EGJLNZ7j+fYcX9C0sHf34jZPOx+4I3FiHUlxsLMlvRfR03
+	 o2pHhsjlj45gN/gFZ5T3MrPYvSc1p9FwPG/1nnf2kXe9MJCg7FaRmRAe1v0uxr/u/u
+	 Mvhn1nk/bUu1QiSME1vo11HefnZdUlSrhmWbkd2Hf591INj+01mYrohNi2bKUv0tgd
+	 hmUPExZfIM7LzGEVjHEpZ25werD9RpudrPQJvj5Cq/g2EYoUw2CjqiUiPYYOyAWU9s
+	 JGO59dHKeEYTQ==
+From: Arun Muthusamy <arun.muthusamy@gaisler.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	mkl@pengutronix.de,
+	mailhol@kernel.org
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	Arun Muthusamy <arun.muthusamy@gaisler.com>
+Subject: [PATCH v2 00/10] can: grcan: Enhance driver with CANFD Support and Improvements
+Date: Tue, 23 Dec 2025 11:55:54 +0100
+Message-ID: <20251223105604.12675-1-arun.muthusamy@gaisler.com>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251223100518.2383364-1-sashal@kernel.org>
-References: <20251223100518.2383364-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.18.2
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+This patch series updates the GRCAN driver to support the GRCANFD core
+from the GRLIB IP core library.
 
-[ Upstream commit 5d5602236f5db19e8b337a2cd87a90ace5ea776d ]
+In addition to GRCANFD support, the updates include enhancements for
+compatibility with NOEL-V (RISC-V) systems, such as matching drivers
+using the 'compatible' identifier and adding support for reading clock
+frequency via the common clock framework where available. The series
+also includes improvements like functions for configuring
+nominal bit-timing and optimizations for DMA operations.
 
-syzbot is still reporting
+This series also updates the driver documentation and bindings.
+The old text binding is converted to YAML, a new vendor prefix
+is added to reflect the updated ownership and an entry for the
+driver is added to the MAINTAINERS file.
 
-  unregister_netdevice: waiting for vcan0 to become free. Usage count = 2
+Arun Muthusamy (3):
+  dt-bindings: net: can: grcan: Convert GRCAN CAN controllers binding
+    from txt to YAML
+  MAINTAINERS: Add maintainers for GRCAN CAN network driver
+  can: grcan: Add CANFD support alongside legacy CAN
 
-even after commit 93a27b5891b8 ("can: j1939: add missing calls in
-NETDEV_UNREGISTER notification handler") was added. A debug printk() patch
-found that j1939_session_activate() can succeed even after
-j1939_cancel_active_session() from j1939_netdev_notify(NETDEV_UNREGISTER)
-has completed.
+Daniel Hellstrom (6):
+  can: grcan: Add clock handling
+  can: grcan: add FD capability detection and nominal bit-timing
+  can: grcan: optimize DMA by 32-bit accesses
+  can: grcan: set DMA mask for GRCAN and GRCANFD to 32-bit
+  can: grcan: Add saving and restoring of CAN FD baud-rate registers
+  can: grcan: Reserve space between cap and next register to align with
+    address layout
 
-Since j1939_cancel_active_session() is processed with the session list lock
-held, checking ndev->reg_state in j1939_session_activate() with the session
-list lock held can reliably close the race window.
+Ludwig Rydberg (1):
+  dt-bindings: Add vendor prefix for Frontgrade Gaisler AB
 
-Reported-by: syzbot <syzbot+881d65229ca4f9ae8c84@syzkaller.appspotmail.com>
-Closes: https://syzkaller.appspot.com/bug?extid=881d65229ca4f9ae8c84
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Link: https://patch.msgid.link/b9653191-d479-4c8b-8536-1326d028db5c@I-love.SAKURA.ne.jp
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+Changes in v2:
+- bindings: Updated commit message to explain the removal of freq
+  and systemid in the new binding.
+- can: S-o-b is placed last in commit messages.
+- can: Add values are directly added to the struct can_bittiming_const.
+- can: Replaced custom bit shifting with FIELD_PREP and GENMASK for clarity.
+- can: Drop do_set_bittiming() callback
+- can: Remove forward declarations, unnecessary parentheses, redundant comments
+  and unnecessary debug printouts.
+- can: Refactored variable declarations to follow the reverse-xmas-tree style.
+- can: Adjust line breaks according to new character limits
+- can: Eliminating unnecessary defines
+- can: Enhance code efficiency with memcpy, use standard API to fetch device specific data and
+  error handling.
+- Link to v1: https://lore.kernel.org/all/20251118092115.3455-1-arun.muthusamy@gaisler.com
 
-LLM Generated explanations, may be completely bogus:
+ .../bindings/net/can/gaisler,grcan.yaml       |  62 +++
+ .../devicetree/bindings/net/can/grcan.txt     |  28 -
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   8 +
+ drivers/net/can/Kconfig                       |   6 +-
+ drivers/net/can/grcan.c                       | 508 +++++++++++++-----
+ 6 files changed, 437 insertions(+), 177 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/can/grcan.txt
 
----
 
-## FINAL ANALYSIS SUMMARY
-
-### What the commit fixes:
-A race condition in the CAN J1939 protocol driver where
-`j1939_session_activate()` can succeed even after
-`j1939_cancel_active_session()` from the NETDEV_UNREGISTER handler has
-completed. This leaves orphaned sessions with references to devices
-being unregistered, causing the "waiting for device to become free"
-hang.
-
-### Why it matters to stable users:
-- **System hang**: The bug can cause network device unregistration to
-  hang indefinitely
-- **Syzbot reproducible**: The bug was found by automated fuzzing,
-  meaning it's triggerable in practice
-- **CAN J1939 users**: Affects automotive and industrial systems using
-  the CAN J1939 protocol
-
-### Stable kernel rule compliance:
-
-| Criterion | Assessment |
-|-----------|------------|
-| Obviously correct | ✅ Yes - simple check using established kernel
-pattern |
-| Fixes real bug | ✅ Yes - syzbot-reported hang |
-| Small and contained | ✅ Yes - 2 lines added, 1 file changed |
-| No new features | ✅ Correct - only adds error path |
-| Tested | ✅ Has Acked-by from maintainer |
-
-### Risk assessment:
-- **Very low risk**: The change only adds a conditional check before
-  adding a session to the active list
-- **Uses established pattern**: `dev->reg_state != NETREG_REGISTERED` is
-  used throughout net/can/raw.c and other networking code
-- **Cannot break existing functionality**: Adds a new error return path
-  that's already properly handled (callers handle error returns)
-
-### Dependencies:
-- The fix is logically independent - it adds a safety check that works
-  regardless of other commits
-- The related commit 93a27b5891b8 is about a different part of the fix
-  (adding missing calls in the unregister handler)
-- Both commits are improvements to the same underlying issue but can be
-  applied separately
-
-### Conclusion:
-This is a textbook example of a good stable backport candidate:
-1. Fixes a real, user-visible bug (system hang)
-2. Minimal change (2 lines)
-3. Uses established kernel patterns
-4. Has proper subsystem maintainer review
-5. Low risk of regression
-
-**YES**
-
- net/can/j1939/transport.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index fbf5c8001c9d..613a911dda10 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -1567,6 +1567,8 @@ int j1939_session_activate(struct j1939_session *session)
- 	if (active) {
- 		j1939_session_put(active);
- 		ret = -EAGAIN;
-+	} else if (priv->ndev->reg_state != NETREG_REGISTERED) {
-+		ret = -ENODEV;
- 	} else {
- 		WARN_ON_ONCE(session->state != J1939_SESSION_NEW);
- 		list_add_tail(&session->active_session_list_entry,
--- 
+base-commit: 4001bda0cc911fcdd3dde36963a17f4eac173d7d
+--
 2.51.0
 
 
