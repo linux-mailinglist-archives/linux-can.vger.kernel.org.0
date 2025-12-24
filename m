@@ -1,161 +1,119 @@
-Return-Path: <linux-can+bounces-5927-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5928-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8303CDAAD8
-	for <lists+linux-can@lfdr.de>; Tue, 23 Dec 2025 22:33:59 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB87BCDB2E4
+	for <lists+linux-can@lfdr.de>; Wed, 24 Dec 2025 03:30:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 231203011A44
-	for <lists+linux-can@lfdr.de>; Tue, 23 Dec 2025 21:33:57 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8192D3021E7C
+	for <lists+linux-can@lfdr.de>; Wed, 24 Dec 2025 02:30:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CAD6221554;
-	Tue, 23 Dec 2025 21:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924742882BE;
+	Wed, 24 Dec 2025 02:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="llgJuZfU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FruSbvzs"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF61200C2;
-	Tue, 23 Dec 2025 21:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A464D2857C1;
+	Wed, 24 Dec 2025 02:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766525635; cv=none; b=FQGQCKiB/RbxnWvPeM80Xwg4t+hfcK1mhMLWt/UOWRbMtuKu+8sQ4KBMe1JbyRgwjMTmyj2Lye44bTngUM4haJFd5xo0dJBel7Ssyp5X+IP2IMiYZElfaLoF9lj6xPM/dy2nvdyM44sEv62wIDrNCOmmqXtQgfiKHrsvRw0eMFg=
+	t=1766543452; cv=none; b=OqaunWpB46Gsm/+xjS/hnPTnZtUzY3GHElrcsJ2a8FIuo+/HLLiJldM7D0EgdO+jjvCDIo0mAQwbaExEFQ/QUReVSNL5SL9osNZg0en6T57zTfvPedseCSqyAiq5ejW4bEbz+8oVKaV8KBDetVMQw3j49wV3sx48dvp/BVCgg1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766525635; c=relaxed/simple;
-	bh=Yd1r7EvvwBZDyF74Ev/wcb27opJoUMZE7SnmnADxxmc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i86cJxgoA6XUtnyHWneok7CkOb7hEqx4E6h9el/lPuAvnH2zEHjmrvdQ5KHDpnp+p8Xixrq1Z/emLWmDsxiltj+9nIIgP83TFbucu3JH6cV9GpfVJBMXJ1k4QRfNG99lO+G+8/k1GQogG3Zsec4gZOB3piVHb/IQeYNBCSPxPvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llgJuZfU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F4CC113D0;
-	Tue, 23 Dec 2025 21:33:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766525635;
-	bh=Yd1r7EvvwBZDyF74Ev/wcb27opJoUMZE7SnmnADxxmc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=llgJuZfUrApzkL6ogtqYL7GAX1IabRcyHd4o+3p2Gc9oIOHUECx0loEXLjvE/UfzK
-	 tpfm1vBUT5E4Np82xagzdrOgmqEKgI5jD2wyMQZD21yWIkkDFHU4tFW6FdPOtF0NEU
-	 G/ZJQHX+pL33ku/BjtQ/nmB9fJ9VCPsCJKtUirhgTbFncWBrmHO0vm9XtVBlwsSBZ1
-	 dwMDAjT9LDALuK3N2nihtdajwJhPpS4kXsm9F8gVZmcO/OcTQzlX1T49fErXCQmD7Q
-	 vmJRJof0j80CnfvPnWoLq6EfBm0sTLMyBT8lNKJqHnsje9zRoQZ+ZUrhk+0dnDNIAk
-	 ZAM7CRJMUivZg==
-Message-ID: <a85b8659-d4c8-443b-abb1-ae557a2a9896@kernel.org>
-Date: Tue, 23 Dec 2025 22:33:50 +0100
+	s=arc-20240116; t=1766543452; c=relaxed/simple;
+	bh=w4pwBDpX0ndWKuH8tbElcaiKaQ+mnetkmvCjkt14seo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V0rKLlNO+MQayJY62f03qQhEZm+5/nPX8lSGcRrguz1SN2P1vydDah7mfKATNGK34yRs/09ScKHNjgD7kat6U+UWGuo/+e3VuXzWn1ut5lWUfP4W0iIp3+956HD87ybAISE0V2GwrNxcRLv5rOfWSI7DgkgzNYHCeogyXy3c3ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FruSbvzs; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766543451; x=1798079451;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w4pwBDpX0ndWKuH8tbElcaiKaQ+mnetkmvCjkt14seo=;
+  b=FruSbvzsRG0jXHSaubKXWdyE17VXpxCqCx85sYoPg7mhYCmz6rMzdpp7
+   5wxFctZYFruC/+s1YqE3gOC2iKiqdUUiaqbQ0wdIzGvvjolaFRp79EipE
+   +SiymPX4SeHy0kInx18cZ2IPP8roij2bQMGPLc+u6sfUp3R2D688ZlIo2
+   0/ujuzfH2cwreRo2K3V/DYWlO81NOcBN4V4uNDfCYXcTlzjpwzE7uqocE
+   uxI3ULIiB00kYyKm+UrdWYQJTOxM15sKTvJTozw8lKEMRlsHfEIesswOh
+   X1MhBYqIYcSOEKcC/u1xKwysbhVUKOZvCziMts3pDzrp9OtpBfpHco+vm
+   A==;
+X-CSE-ConnectionGUID: mBFmcMg0Rmire2rNUN1WZA==
+X-CSE-MsgGUID: YqO8dqrKTN2pVWtQ38Hcpg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="55956611"
+X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
+   d="scan'208";a="55956611"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 18:30:50 -0800
+X-CSE-ConnectionGUID: 88GaVRchTY6TIWFj2Rdn2g==
+X-CSE-MsgGUID: 0rB+r1M/TFisMXV6Be13Bg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
+   d="scan'208";a="204456803"
+Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
+  by orviesa004.jf.intel.com with ESMTP; 23 Dec 2025 18:30:47 -0800
+Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vYEeD-0000000065Y-2epx;
+	Wed, 24 Dec 2025 02:30:45 +0000
+Date: Wed, 24 Dec 2025 03:29:53 +0100
+From: kernel test robot <lkp@intel.com>
+To: Arun Muthusamy <arun.muthusamy@gaisler.com>, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, mkl@pengutronix.de,
+	mailhol@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+	Arun Muthusamy <arun.muthusamy@gaisler.com>
+Subject: Re: [PATCH v2 02/10] dt-bindings: net: can: grcan: Convert GRCAN CAN
+ controllers binding from txt to YAML
+Message-ID: <202512240358.V4rXhlja-lkp@intel.com>
+References: <20251223105604.12675-3-arun.muthusamy@gaisler.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/2] can: dummy_can: add CAN termination support
-To: Rakuram Eswaran <rakuram.e96@gmail.com>, linux-can@vger.kernel.org
-Cc: mkl@pengutronix.de, socketcan@hartkopp.net, mailhol@kernel.org,
- khalid@kernel.org, skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
- david.hunter.linux@gmail.com, linux-kernel-mentees@lists.linux.dev
-References: <20251127191808.144723-1-rakuram.e96@gmail.com>
- <20251127191808.144723-2-rakuram.e96@gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol@kernel.org>
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20251127191808.144723-2-rakuram.e96@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251223105604.12675-3-arun.muthusamy@gaisler.com>
 
-Hi Rakuram,
+Hi Arun,
 
-Thanks for the patch. My comments are only on the cosmetic aspect.
+kernel test robot noticed the following build warnings:
 
-Le 27/11/2025 à 20:18, Rakuram Eswaran a écrit :
-> Add support for configuring bus termination in the dummy_can driver.
-> This allows users to emulate a properly terminated CAN bus when
-> setting up virtual test environments.
-> 
-> Signed-off-by: Rakuram Eswaran <rakuram.e96@gmail.com>
-> ---
-> Tested the termination setting using below iproute commands:
-> 
->   ip link set can0 type can termination 120
->   ip link set can0 type can termination off
+[auto build test WARNING on 4001bda0cc911fcdd3dde36963a17f4eac173d7d]
 
-When you test, do not forget to also try incorrect values ;)
+url:    https://github.com/intel-lab-lkp/linux/commits/Arun-Muthusamy/dt-bindings-Add-vendor-prefix-for-Frontgrade-Gaisler-AB/20251223-190933
+base:   4001bda0cc911fcdd3dde36963a17f4eac173d7d
+patch link:    https://lore.kernel.org/r/20251223105604.12675-3-arun.muthusamy%40gaisler.com
+patch subject: [PATCH v2 02/10] dt-bindings: net: can: grcan: Convert GRCAN CAN controllers binding from txt to YAML
+reproduce: (https://download.01.org/0day-ci/archive/20251224/202512240358.V4rXhlja-lkp@intel.com/reproduce)
 
-  ip link set can0 type can termination 100
-  ip link set can0 type can termination potato
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512240358.V4rXhlja-lkp@intel.com/
 
-(I think that the code is correct, just see this as a generic
-comment).
+All warnings (new ones prefixed by >>):
 
->  drivers/net/can/dummy_can.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/drivers/net/can/dummy_can.c b/drivers/net/can/dummy_can.c
-> index 41953655e3d3..2949173547e6 100644
-> --- a/drivers/net/can/dummy_can.c
-> +++ b/drivers/net/can/dummy_can.c
-> @@ -23,6 +23,21 @@ struct dummy_can {
->  
->  static struct dummy_can *dummy_can;
->  
-> +static const u16 dummy_can_termination_const[] = {
-> +	CAN_TERMINATION_DISABLED,	/* 0 = off */
-> +	120,				/* 120 Ohms */
-> +};
-> +
-> +static int dummy_can_set_termination(struct net_device *dev, u16 term)
-> +{
-> +	struct dummy_can *priv = netdev_priv(dev);
-> +
-> +	netdev_dbg(dev, "set termination to %u Ohms\n", term);
-> +	priv->can.termination = term;
-> +
-> +	return 0;
-> +}
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/sphinx/parse-headers.pl
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/display/bridge/megachips-stdpxxxx-ge-b850v3-fw.txt
+   Warning: arch/powerpc/sysdev/mpic.c references a file that doesn't exist: Documentation/devicetree/bindings/powerpc/fsl/mpic.txt
+   Warning: arch/riscv/kernel/kexec_image.c references a file that doesn't exist: Documentation/riscv/boot-image-header.rst
+   Warning: drivers/clocksource/timer-armada-370-xp.c references a file that doesn't exist: Documentation/devicetree/bindings/timer/marvell,armada-370-xp-timer.txt
+>> Warning: drivers/net/can/grcan.c references a file that doesn't exist: Documentation/devicetree/bindings/net/can/grcan.txt
+   Warning: include/rv/da_monitor.h references a file that doesn't exist: Documentation/trace/rv/da_monitor_synthesis.rst
+   Warning: rust/kernel/sync/atomic/ordering.rs references a file that doesn't exist: srctree/tools/memory-model/Documentation/explanation.txt
+   Using alabaster theme
+   ERROR: Cannot find file ./include/linux/pci.h
+   WARNING: No kernel-doc for file ./include/linux/pci.h
 
-The driver has a kind of structure:
-
-  - first the const bittiming struct declarations
-  - then the dummy_can_print_*() functions
-  - finally the actual code
-
-Try to preserve this structure when adding your changes.
-
->  static const struct can_bittiming_const dummy_can_bittiming_const = {
->  	.name = "dummy_can CC",
->  	.tseg1_min = 2,
-> @@ -250,6 +265,12 @@ static int __init dummy_can_init(void)
->  	priv->can.xl.data_bittiming_const = &dummy_can_xl_databittiming_const;
->  	priv->can.xl.tdc_const = &dummy_can_xl_tdc_const;
->  	priv->can.xl.pwm_const = &dummy_can_pwm_const;
-> +	
-> +	/* Advertise software termination support */
-
-This comment doesn't add much value. You may omit it.
-
-> +	priv->can.termination_const = dummy_can_termination_const;
-> +	priv->can.termination_const_cnt = ARRAY_SIZE(dummy_can_termination_const);
-> +	priv->can.do_set_termination = dummy_can_set_termination;
-
-Here also try to maintain so kind of order: your declaration of
-dummy_can_termination_const is before the other const struct
-declarations, but the priv->can assignment is done after the other
-assignments. Not a big deal but it is nicer to keep the declaration
-and the assignments in the same order.
-
->  	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
->  		CAN_CTRLMODE_FD | CAN_CTRLMODE_TDC_AUTO |
->  		CAN_CTRLMODE_RESTRICTED | CAN_CTRLMODE_XL |
-
-
-Yours sincerely,
-Vincent Mailhol
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
