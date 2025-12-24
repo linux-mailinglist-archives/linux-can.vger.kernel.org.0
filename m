@@ -1,119 +1,131 @@
-Return-Path: <linux-can+bounces-5928-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5929-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB87BCDB2E4
-	for <lists+linux-can@lfdr.de>; Wed, 24 Dec 2025 03:30:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10E5BCDC2C7
+	for <lists+linux-can@lfdr.de>; Wed, 24 Dec 2025 13:03:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 8192D3021E7C
-	for <lists+linux-can@lfdr.de>; Wed, 24 Dec 2025 02:30:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 10AA730184D1
+	for <lists+linux-can@lfdr.de>; Wed, 24 Dec 2025 12:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924742882BE;
-	Wed, 24 Dec 2025 02:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FruSbvzs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8215F314B76;
+	Wed, 24 Dec 2025 12:03:06 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A464D2857C1;
-	Wed, 24 Dec 2025 02:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C6E23E356
+	for <linux-can@vger.kernel.org>; Wed, 24 Dec 2025 12:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766543452; cv=none; b=OqaunWpB46Gsm/+xjS/hnPTnZtUzY3GHElrcsJ2a8FIuo+/HLLiJldM7D0EgdO+jjvCDIo0mAQwbaExEFQ/QUReVSNL5SL9osNZg0en6T57zTfvPedseCSqyAiq5ejW4bEbz+8oVKaV8KBDetVMQw3j49wV3sx48dvp/BVCgg1w=
+	t=1766577786; cv=none; b=o0h22Ppa8vtNCGOSynn6lU6oIg/XgHSlyajGFSG1DIknYllRl+IUk4zQh286Ea5r+y2cOhlxXDYRr1aLDamJxm5j5/tjiH3qTa7qCXFx54o/9PFTE4OZaB2LRr4942DeKyZ8c50M8Noxgog5ylzFv7drwW+jI01QBHf+3WsWgFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766543452; c=relaxed/simple;
-	bh=w4pwBDpX0ndWKuH8tbElcaiKaQ+mnetkmvCjkt14seo=;
+	s=arc-20240116; t=1766577786; c=relaxed/simple;
+	bh=NRpVnURBhU4QBVbtsTM99DWWfTpKw6D+I7VLpgW/2SI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V0rKLlNO+MQayJY62f03qQhEZm+5/nPX8lSGcRrguz1SN2P1vydDah7mfKATNGK34yRs/09ScKHNjgD7kat6U+UWGuo/+e3VuXzWn1ut5lWUfP4W0iIp3+956HD87ybAISE0V2GwrNxcRLv5rOfWSI7DgkgzNYHCeogyXy3c3ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FruSbvzs; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766543451; x=1798079451;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w4pwBDpX0ndWKuH8tbElcaiKaQ+mnetkmvCjkt14seo=;
-  b=FruSbvzsRG0jXHSaubKXWdyE17VXpxCqCx85sYoPg7mhYCmz6rMzdpp7
-   5wxFctZYFruC/+s1YqE3gOC2iKiqdUUiaqbQ0wdIzGvvjolaFRp79EipE
-   +SiymPX4SeHy0kInx18cZ2IPP8roij2bQMGPLc+u6sfUp3R2D688ZlIo2
-   0/ujuzfH2cwreRo2K3V/DYWlO81NOcBN4V4uNDfCYXcTlzjpwzE7uqocE
-   uxI3ULIiB00kYyKm+UrdWYQJTOxM15sKTvJTozw8lKEMRlsHfEIesswOh
-   X1MhBYqIYcSOEKcC/u1xKwysbhVUKOZvCziMts3pDzrp9OtpBfpHco+vm
-   A==;
-X-CSE-ConnectionGUID: mBFmcMg0Rmire2rNUN1WZA==
-X-CSE-MsgGUID: YqO8dqrKTN2pVWtQ38Hcpg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="55956611"
-X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
-   d="scan'208";a="55956611"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 18:30:50 -0800
-X-CSE-ConnectionGUID: 88GaVRchTY6TIWFj2Rdn2g==
-X-CSE-MsgGUID: 0rB+r1M/TFisMXV6Be13Bg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
-   d="scan'208";a="204456803"
-Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
-  by orviesa004.jf.intel.com with ESMTP; 23 Dec 2025 18:30:47 -0800
-Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vYEeD-0000000065Y-2epx;
-	Wed, 24 Dec 2025 02:30:45 +0000
-Date: Wed, 24 Dec 2025 03:29:53 +0100
-From: kernel test robot <lkp@intel.com>
-To: Arun Muthusamy <arun.muthusamy@gaisler.com>, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, mkl@pengutronix.de,
-	mailhol@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-	Arun Muthusamy <arun.muthusamy@gaisler.com>
-Subject: Re: [PATCH v2 02/10] dt-bindings: net: can: grcan: Convert GRCAN CAN
- controllers binding from txt to YAML
-Message-ID: <202512240358.V4rXhlja-lkp@intel.com>
-References: <20251223105604.12675-3-arun.muthusamy@gaisler.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=l8Uihcu3XC9liVwv1qd5H4hCglbyGifvHD5zqnnoFshY71vey0c1vx1RXvY4AmfjKV/hLuWe86JJfDCJVzjJzDgI3eh/i4HTbk7gHXKJBCG0sfVh1NWUwZN7a6nOC5KMcLHo7VBFEMVBNCWTPBjRf+23TduLJdWWg1hBuZJoN78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vYNZt-0005NE-7o; Wed, 24 Dec 2025 13:02:53 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vYNZs-007Fg4-2L;
+	Wed, 24 Dec 2025 13:02:52 +0100
+Received: from pengutronix.de (2a02-8206-2419-3200-aee2-ccb5-e6fb-2dd9.dynamic.ewe-ip-backbone.de [IPv6:2a02:8206:2419:3200:aee2:ccb5:e6fb:2dd9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 40A194BDB43;
+	Wed, 24 Dec 2025 12:02:52 +0000 (UTC)
+Date: Wed, 24 Dec 2025 13:02:50 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Szymon Wilczek <swilczek.lx@gmail.com>
+Cc: mailhol@kernel.org, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2] can: etas_es58x: allow partial RX URB allocation to
+ succeed
+Message-ID: <20251224-shrewd-dog-of-focus-f974d2-mkl@pengutronix.de>
+References: <20251222154208.22117-1-swilczek.lx@gmail.com>
+ <20251223011732.39361-1-swilczek.lx@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="l2vchrqzlq5qqkx7"
 Content-Disposition: inline
-In-Reply-To: <20251223105604.12675-3-arun.muthusamy@gaisler.com>
+In-Reply-To: <20251223011732.39361-1-swilczek.lx@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hi Arun,
 
-kernel test robot noticed the following build warnings:
+--l2vchrqzlq5qqkx7
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] can: etas_es58x: allow partial RX URB allocation to
+ succeed
+MIME-Version: 1.0
 
-[auto build test WARNING on 4001bda0cc911fcdd3dde36963a17f4eac173d7d]
+On 23.12.2025 02:17:32, Szymon Wilczek wrote:
+> When es58x_alloc_rx_urbs() fails to allocate the requested number of
+> URBs but succeeds in allocating some, it returns an error code.
+> This causes es58x_open() to return early, skipping the cleanup label
+> 'free_urbs', which leads to the anchored URBs being leaked.
+>
+> As pointed out by maintainer Vincent Mailhol, the driver is designed
+> to handle partial URB allocation gracefully. Therefore, partial
+> allocation should not be treated as a fatal error.
+>
+> Modify es58x_alloc_rx_urbs() to return 0 if at least one URB has been
+> allocated, restoring the intended behavior and preventing the leak
+> in es58x_open().
+>
+> Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CA=
+N USB interfaces")
+> Reported-by: syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3De8cb6691a7cf68256cb8
+> Signed-off-by: Szymon Wilczek <swilczek.lx@gmail.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arun-Muthusamy/dt-bindings-Add-vendor-prefix-for-Frontgrade-Gaisler-AB/20251223-190933
-base:   4001bda0cc911fcdd3dde36963a17f4eac173d7d
-patch link:    https://lore.kernel.org/r/20251223105604.12675-3-arun.muthusamy%40gaisler.com
-patch subject: [PATCH v2 02/10] dt-bindings: net: can: grcan: Convert GRCAN CAN controllers binding from txt to YAML
-reproduce: (https://download.01.org/0day-ci/archive/20251224/202512240358.V4rXhlja-lkp@intel.com/reproduce)
+Applied to linux-can.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512240358.V4rXhlja-lkp@intel.com/
+Thanks,
+Marc
 
-All warnings (new ones prefixed by >>):
+P.S.: There's no need to send a vN+1 patch as reply to vN
 
-   Warning: MAINTAINERS references a file that doesn't exist: Documentation/sphinx/parse-headers.pl
-   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/display/bridge/megachips-stdpxxxx-ge-b850v3-fw.txt
-   Warning: arch/powerpc/sysdev/mpic.c references a file that doesn't exist: Documentation/devicetree/bindings/powerpc/fsl/mpic.txt
-   Warning: arch/riscv/kernel/kexec_image.c references a file that doesn't exist: Documentation/riscv/boot-image-header.rst
-   Warning: drivers/clocksource/timer-armada-370-xp.c references a file that doesn't exist: Documentation/devicetree/bindings/timer/marvell,armada-370-xp-timer.txt
->> Warning: drivers/net/can/grcan.c references a file that doesn't exist: Documentation/devicetree/bindings/net/can/grcan.txt
-   Warning: include/rv/da_monitor.h references a file that doesn't exist: Documentation/trace/rv/da_monitor_synthesis.rst
-   Warning: rust/kernel/sync/atomic/ordering.rs references a file that doesn't exist: srctree/tools/memory-model/Documentation/explanation.txt
-   Using alabaster theme
-   ERROR: Cannot find file ./include/linux/pci.h
-   WARNING: No kernel-doc for file ./include/linux/pci.h
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--l2vchrqzlq5qqkx7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlL1mcACgkQDHRl3/mQ
+kZzP+gf/aP8pVg76LEpyxP8d37BtSH3A1FJi0O2MTPmaUBA2pOCyVGcyxH4YGkfw
+lZfbWqp8hduCXNNktGIhtnqqlIF7SNI9aMXwoEcFsIfNiva5k1wahRjtykAIotuO
+xPf5RWHS1YIo3HexbfVugeGPMoE1u43fKSkQw/4sXTeIdJXypAxYaQ/loyxK5DEZ
+2ii3uwi3YiF0+rg8TmF08opXjvLzUUwt3Zz2Hxb1B/NQajr9hnTWGt3nNIWu26Ps
+4el9yN29CS6dKFNlM5EEZQv3p6P17Qh7EPNXOSwZKIIWOgQ0UKrNlyQaCIt2iS4f
+XA/ZN7mkAwLNqyRV6An0GPHC3EfHBg==
+=zLh8
+-----END PGP SIGNATURE-----
+
+--l2vchrqzlq5qqkx7--
 
