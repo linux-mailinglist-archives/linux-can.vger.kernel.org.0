@@ -1,200 +1,213 @@
-Return-Path: <linux-can+bounces-5942-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5943-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA95ECDF15A
-	for <lists+linux-can@lfdr.de>; Fri, 26 Dec 2025 23:23:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB01DCDF2D9
+	for <lists+linux-can@lfdr.de>; Sat, 27 Dec 2025 01:20:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 533DE3005191
-	for <lists+linux-can@lfdr.de>; Fri, 26 Dec 2025 22:23:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 87DDA3006A88
+	for <lists+linux-can@lfdr.de>; Sat, 27 Dec 2025 00:20:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A35F274658;
-	Fri, 26 Dec 2025 22:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D271E1DB125;
+	Sat, 27 Dec 2025 00:20:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b="H8e+o0yd";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=valla.it header.i=@valla.it header.b="sEyJ3Icc"
+	dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b="S6KJo4cI"
 X-Original-To: linux-can@vger.kernel.org
-Received: from delivery.antispam.mailspamprotection.com (delivery.antispam.mailspamprotection.com [185.56.87.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtpx.fel.cvut.cz (smtpx.feld.cvut.cz [147.32.210.153])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC244347C6
-	for <linux-can@vger.kernel.org>; Fri, 26 Dec 2025 22:22:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.56.87.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766787781; cv=pass; b=uFOGrtMFBgxIXDHOTIfyT6uUCYOkalKDOPFX0lauAKR9YoKbs92zZKxKB7qsvMmo6H2Liuch4KwwHVUrLJDIp6ikKlpgX1MO3E7D9Hq5iazi+pY0DOddCTWMI+6WCwvD9ecL5Db70PH+CTyyRBSmIeLhH4vUeNKEV+b3yUwD/Gk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766787781; c=relaxed/simple;
-	bh=bav4IRLbYgm2lLajgHgDzg+MDRlm47GGHNmgd8nNXJk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b2YZyHxBCmkuLMk/xX7H1joyazjMZtFVJTc6i31odvUnj+UIplVxUCo8arqSQieXyCORGcV/0VDB8Yzqwd26p5kEondSqa2o3mnV67zbTAhmi95lskD/vx0LxJMgX+oxHixZx9+73/sIZiVbkxeWn5tbdmTXfssaokgUVfV9FS4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it; spf=pass smtp.mailfrom=valla.it; dkim=pass (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b=H8e+o0yd; dkim=pass (1024-bit key) header.d=valla.it header.i=@valla.it header.b=sEyJ3Icc; arc=pass smtp.client-ip=185.56.87.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valla.it
-ARC-Seal: i=1; cv=none; a=rsa-sha256; d=outgoing.instance-europe-west4-txfd.prod.antispam.mailspamprotection.com; s=arckey; t=1766787779;
-	 b=qNlZuaxzSbc8LPzEfVQkSDmJd/JHcBW9kR9syi1kgcfx1WDvxhDrQenMQYo9UW2EInuBX9BC2+
-	  lkSOZHZiSmK6s1cbtmv0ZCHOFYTx/4aApRgXTZHMpqzcmlgPlyMavHJr3szk/x23RfraBd9QIr
-	  DQtu8ogksRGPQgUzp7mroOG6d7W5kqJTZWl+yd9u8V0CQEq+N4/nnq9bHsMPDJxATVmZqrttvY
-	  yokGCnbqhzvJ55PbojKMuCqJ+PTNrBz4nCmGi0vpbY+yCy3AvVsNVJqecSUPKHzcXYAXfGdCi9
-	  EYaruDCG4Xjo2r/p4HW3QvHsocUFICFf3Y3ROTLD2cQX4g==;
-ARC-Authentication-Results: i=1; outgoing.instance-europe-west4-txfd.prod.antispam.mailspamprotection.com; smtp.remote-ip=35.214.173.214;
-	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
-	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
-	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
-	arc=none
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=outgoing.instance-europe-west4-txfd.prod.antispam.mailspamprotection.com; s=arckey; t=1766787779;
-	bh=bav4IRLbYgm2lLajgHgDzg+MDRlm47GGHNmgd8nNXJk=;
-	h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:
-	  From:Date:DKIM-Signature:DKIM-Signature;
-	b=B+qBp1lfwkZD0rPVA9CdhVNrCcmEvjiZVMGbCWbl2Q1QcYhFGKwu/LEbGJkrrkdSnJOgTW6TeU
-	  wpw2sLd23VvUAkTcWX5hBlsRuUwmh7HlvUN1XVYS04kST30szM+W5G50rqzHBL6w/FQZIDqlSg
-	  s8sIsnM5nHseSy02nVJ90yJOlDJgpvaRn/ah1KxK8qqF50JmA7iEP3961w5gCJlQTluxH6CId/
-	  6kcGm9pn6QtmPkfyTysHDQ2QktP+iyoJ1ZR1/4H6zk3P5BID6rQl8o1jAuIZB9BnjSL83QapxT
-	  xg0Cfp4m3b8s7i+iAKjS2pNO2uPR1PIqcY6CZ0z9MSXdzA==;
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=antispam.mailspamprotection.com; s=default; h=CFBL-Feedback-ID:CFBL-Address
-	:Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	List-Unsubscribe:Content-Transfer-Encoding;
-	bh=uwxcfM2nIoMiJ/2Cxvig6X/YBuR8saav4O8t3bsIEzg=; b=H8e+o0yd0WstlKyov0g1MtVZ1r
-	vmYNGyeRigMPRvoZVLlFjOKVv1S1jPmMEFYfy4drRY5HaSLq6Ia8Kk+IY9nvD+1i66EyNfSciz7tJ
-	f9wiappLgmY/tIh4/emuq3NviGmTPShG1eURUOfcRKhm7wdarTk6uPwhBBCwlWeL4Lzk=;
-Received: from 214.173.214.35.bc.googleusercontent.com ([35.214.173.214] helo=esm19.siteground.biz)
-	by instance-europe-west4-txfd.prod.antispam.mailspamprotection.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.98.1)
-	(envelope-from <francesco@valla.it>)
-	id 1vZGD1-00000004cjJ-0XEk
-	for linux-can@vger.kernel.org;
-	Fri, 26 Dec 2025 22:22:57 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=valla.it;
-	s=default; h=Subject:Cc:To:From:Date:list-help:list-unsubscribe:
-	list-subscribe:list-post:list-owner:list-archive;
-	bh=uwxcfM2nIoMiJ/2Cxvig6X/YBuR8saav4O8t3bsIEzg=; b=sEyJ3IccJgOLjH0XhYCQHnwT9S
-	ngKkeBgcBkv6Lo//RWEVtIXXHj+1OEYB3m830PyESrBXPOB3TG3SxdwbzYcAS7n4STHsJkUSn/aM0
-	5c1Y/6WrURrnRiUyNCQFp8W+Ijq+ZiYtZ8wp7wg6ejKIFhoZpOqZvVUK8yUHsJp6k64w=;
-Received: from [95.248.141.113] (port=64047 helo=bywater)
-	by esm19.siteground.biz with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.98.1)
-	(envelope-from <francesco@valla.it>)
-	id 1vZGCm-00000000Lwd-0IpK;
-	Fri, 26 Dec 2025 22:22:40 +0000
-Date: Fri, 26 Dec 2025 23:22:38 +0100
-From: Francesco Valla <francesco@valla.it>
-To: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Harald Mommer <harald.mommer@oss.qualcomm.com>,
-	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: [PATCH v6] can: virtio: Add virtio CAN driver
-Message-ID: <aU8Krjsv0_aC3E7A@bywater>
-References: <aQJRnX7OpFRY/1+H@fedora>
- <aQkgsuxa2UaL_qdt@bywater>
- <aTsE1VIk4V/A49HE@fedora>
- <aT7XAsTWr0_yyfx_@bywater>
- <aU71oJScQ8aC0npw@fedora>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D48C3A1E6E;
+	Sat, 27 Dec 2025 00:20:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.32.210.153
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766794814; cv=none; b=RCZPEm4YRC5v4D+X4s+/42sD2/uAiIGwcUR5ky9LUpgG/AWOw6BPlnaCG5cQX5AZL17GD2XEq7n6wKGODxew/dE1kITfhyzvD715vvyTCELw6O6oyY3KpSVdSUJtGQJB13FbZvEJwy5xYC4SCEaGGpc7d+Kh0aTP8UzDBFLODdo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766794814; c=relaxed/simple;
+	bh=mxzYxkFXm1WBNIb5Yog/dRDInADTKBjxopk94N7WIFM=;
+	h=From:To:Subject:Date:Cc:References:In-Reply-To:MIME-Version:
+	 Content-Type:Content-Disposition:Message-Id; b=V9/k7eKjj3WYdN5ikZTVuw+6B+YbAYCgHzNcOBc8ffuo4sCqAamHZCh7jGbyVo5KcV6HW/N/8LybN5CQxwEcRZdxZT+q3SNNoxO7D5pxUkt2YKJnO1NrLdDv/CB0IqhMcymPZNlR3RQBEkeM/9z/BIGSfafbOfY806IhUldIUKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz; spf=pass smtp.mailfrom=fel.cvut.cz; dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b=S6KJo4cI; arc=none smtp.client-ip=147.32.210.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fel.cvut.cz
+Received: from localhost (unknown [192.168.200.27])
+	by smtpx.fel.cvut.cz (Postfix) with ESMTP id E153316404;
+	Sat, 27 Dec 2025 01:20:02 +0100 (CET)
+X-Virus-Scanned: IMAP STYX AMAVIS
+Received: from smtpx.fel.cvut.cz ([192.168.200.2])
+ by localhost (cerokez-250.feld.cvut.cz [192.168.200.27]) (amavis, port 10060)
+ with ESMTP id BqD-eCiLjk-B; Sat, 27 Dec 2025 01:20:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
+	s=felmail; t=1766794342;
+	bh=8OGPj4UIzGsRvEleY+WUlbELMJzYb1fwdxvZmVVR3kE=;
+	h=From:To:Subject:Date:Cc:References:In-Reply-To:From;
+	b=S6KJo4cIytIweL5rd951zqpgPQ7Ltt+wOjYOMDK00eteWf9Qa8tr+M5lV8LgpnvSc
+	 /vVXAoY9et/pm/NjfK1ms32NJA6ZAbYatycXHfRgk/cvNrWod669ZsIGBYQfn8y3eu
+	 9HL5AhUKsxAeY1lDKHdfDiBiCufK2ZTCYI/RJOe3iwBhcW1xzR43SBhlTIyIVope+U
+	 mrj9adJK3Q6AqWsx+hhUYz4ooyd1Rm5CjWqIMUId5eHFkNNwAJAEwjYyr2odIX2U3u
+	 0PxcKQg08xnYrJN7lKxAnVczBFCNn1Y+w5RepdAFT+VE/z5cqiiX3ZifVchq7h7q5U
+	 k/EjPLMVYzwyQ==
+Received: from baree.pikron.com (static-84-242-78-234.bb.vodafone.cz [84.242.78.234])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pisa)
+	by smtpx.fel.cvut.cz (Postfix) with ESMTPSA id 6477216145;
+	Sat, 27 Dec 2025 01:12:21 +0100 (CET)
+From: Pavel Pisa <pisa@fel.cvut.cz>
+To: Ondrej Ille <ondrej.ille@gmail.com>
+Subject: Re: ctucanfd: possible coding error in ctucan_set_secondary_sample_point causing SSP not enabled
+Date: Sat, 27 Dec 2025 01:12:19 +0100
+User-Agent: KMail/1.9.10
+Cc: David Laight <david.laight.linux@gmail.com>,
+ "Marc Kleine-Budde" <mkl@pengutronix.de>,
+ Andrea Daoud <andreadaoud6@gmail.com>,
+ linux-can@vger.kernel.org,
+ Wolfgang Grandegger <wg@grandegger.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ netdev@vger.kernel.org,
+ Jan Altenberg <Jan.Altenberg@osadl.org>
+References: <CAOprWotBRv_cvD3GCSe7N2tiLooZBoDisSwbu+VBAmt_2izvwQ@mail.gmail.com> <202512222355.10509.pisa@fel.cvut.cz> <CAA7ZjpbhWQab77T42URMxQqv4SZwN+5FfDB9VEn0g9-ZKCqdOQ@mail.gmail.com>
+In-Reply-To: <CAA7ZjpbhWQab77T42URMxQqv4SZwN+5FfDB9VEn0g9-ZKCqdOQ@mail.gmail.com>
+X-KMail-QuotePrefix: > 
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
-In-Reply-To: <aU71oJScQ8aC0npw@fedora>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - esm19.siteground.biz
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - valla.it
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-SGantispam-id: d1ca6eb2daf46b6ac41b49029e98e949
-AntiSpam-DLS: false
-AntiSpam-DLSP: 
-AntiSpam-DLSRS: 
-AntiSpam-TS: 1.0
-CFBL-Address: feedback@antispam.mailspamprotection.com; report=arf
-CFBL-Feedback-ID: 1vZGD1-00000004cjJ-0XEk-feedback@antispam.mailspamprotection.com
-Authentication-Results: outgoing.instance-europe-west4-txfd.prod.antispam.mailspamprotection.com;
-	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
-	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
-	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
-	arc=none
+Message-Id: <202512270112.19801.pisa@fel.cvut.cz>
 
-On Fri, Dec 26, 2025 at 09:52:48PM +0100, Matias Ezequiel Vara Larsen wrote:
-> > > > > +static int virtio_can_read_tx_queue(struct virtqueue *vq)
-> > > > > +{
-> > > > > +	struct virtio_can_priv *can_priv = vq->vdev->priv;
-> > > > > +	struct net_device *dev = can_priv->dev;
-> > > > > +	struct virtio_can_tx *can_tx_msg;
-> > > > > +	struct net_device_stats *stats;
-> > > > > +	unsigned long flags;
-> > > > > +	unsigned int len;
-> > > > > +	u8 result;
-> > > > > +
-> > > > > +	stats = &dev->stats;
-> > > > > +
-> > > > > +	/* Protect list and virtio queue operations */
-> > > > > +	spin_lock_irqsave(&can_priv->tx_lock, flags);
-> > > > 
-> > > > The section below seems a pretty big one to protect behind a spin lock. 
-> > > > 
-> > > 
-> > > How can I split it? 
-> > > 
-> > 
-> > Question here is: what needs to be protected? As far as I can tell, the
-> > only entity needing some kind of locking here is the queue, while both
-> > ida_* and tx_inflight operations are already covered (the former by
-> > design [1], the second because it's implemented using an atomic.
-> > 
-> > If I'm not wrong (but I might be, so please double check) this can be
-> > limited to:
-> > 
-> > 	/* Protect queue operations */
-> > 	scoped_guard(spinlock_irqsave, &priv->tx_lock)
-> > 		err = virtqueue_add_sgs(vq, sgs, 1u, 1u, can_tx_msg, GFP_ATOMIC);
-> > 
-> > 
-> > Maybe the whole locking pattern is a leftover from a previous version, 
-> > where a list of TX messages was kept?
-> > 
-> 
-> I followed this approach for the three queues. I wonder why the rx queue
-> and the ctrl queue use a mutex instead of spinlock? I added a mutex for
-> the operations to the rx queue.
+Dear Ondrej Ille,
 
-If I interpreted correctly (but maybe Harald can shine some light on this):
+On Friday 26 of December 2025 23:45:55 Ondrej Ille wrote:
+> Hello everyone,
+>
+> As for this specific case, I am aware of it for longer time
+>
+> > but the last time when we met with Ondrej Ille this part
+> > as been the last one on the table and the firm confirmation
+> > what is the best value have not been stated.
+>
+> Pavel, the sample point should definitely be set to the variant of
+> "measured + offset". That is
+> what why the offset is calculated above the way it is. The aim is to place
+> the sample point
+> on CAN_RX "as-if the same as normal sample point", just with the TX->RX
+> delay accounted for.
+> One only needs to be careful that the value is not in Time Quantas, but in
+> "number of cycles".
+> But AFAICT should be accounted for by the ssp_offset calculation.
+>
+> As for leaving there comment, or leaving it up to the compiler to optimize
+> away since the value is
+> anyway initialized to zero, I don't know what is the preferred way in
+> kernel.
+> Personally, I would not leave any "meaningless code", so, I think comment
+> is better.
 
-- the virtio_can_send_ctrl_msg() uses a mutex because it could be
-  executed in parallel by different actors (read: userspace processes
-  invoking up and down operations); moreover, is the whole control
-  operation that needs to be protected and not only the access to the
-  virtqueue_ functions, so a mutex should make sense;
-- the rx queue shouldn't actually need any locking, since it is accessed
-  only by the poll function and the network framework should guarantee
-  that no multiple parallel poll operations are called on a napi;
-- the tx queue needs instead to be protected, since it could
-  concurrently be accessed by both the start_xmit callback and the poll
-  function; a spinlock there makes more sense, as accesses should be
-  very short.
+I am not sure, I would probably prefer code there because it can be
+easily modified to other value or make it configurable. So this
+would look like
 
-> 
-> Matias
-> 
-> 
+        if (dbt->bitrate > 1000000) {
+                /* Calculate SSP in minimal time quanta */
+                ssp_offset = (priv->can.clock.freq / 1000) * dbt->sample_point / dbt->bitrate;
 
-Thank you
+                if (ssp_offset > 127) {
+                        netdev_warn(ndev, "SSP offset saturated to 127\n");
+                        ssp_offset = 127;
+                }
 
-Regards,
-Francesco
+                ssp_cfg = FIELD_PREP(REG_TRV_DELAY_SSP_OFFSET, ssp_offset);
+                ssp_cfg |= FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x0);
+        }
 
+It matches currents state of the driver in the IP CORE repository where
+you have propagated change lat week
+
+https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core/-/commit/6188ca673f823873f7b37dbb588a2d4c0a0cc98c
+
+But I would suggest to cover even else case for dbt->bitrate <= 1 Mbit/s by else
+statement which should be probably 
+
+        } else {
+                ssp_cfg = FIELD_PREP(REG_TRV_DELAY_SSP_OFFSET, 0);
+                ssp_cfg |= FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x0);
+        }
+
+It is right that ctucan_set_secondary_sample_point() is called from ctucan_chip_start()
+only and it is called from ctucan_do_set_mode() and ctucan_open() only and the chip
+reset is done in both paths prior to ctucan_chip_start() but I think that
+state should be defined there even for case that core is only stopped by
+by REG_MODE_ENA and then re-enabled an no leftover from setup with higher
+data bitrate to some followup change to lower one should be left there.
+
+If there is already some defined way how to control/enable/disable
+SSP from userspace for some of other drivers then I would
+ted to have such option for CTU CAN FD as well to have
+option to test/diagnose and correct (in the case of some problems)
+its behavior without driver recompile.  
+
+> 1) the driver is fixed on 4 Tx Buffers synthesis value
+>
+> > for CTU CAN FD IP core. I am not aware about any other value
+> > in real use (FPGA or silicon) but if the core is synthesized
+> > with other value then driver would fail.  If more are used,
+> > then current driver code stuck on Tx empty infinite interrupt,
+> > if less, messages would be lost.
+> > The option to obtain the number of Tx buffers from hardware
+> > has been added into design and we have proper code in RTEMS
+> > driver
+>
+> Yes, this would be useful, I believe there is a tracking issue for that. I
+> believe querying it
+> at run-time is the simplest way to do it, but I don't know if it is "the
+> right way" in kernel.
+
+I think that it is OK, we have there already option to propagate
+value from PCI and OF specific CTU CAN FD mapping into base code
+but it is fixed on four buffers fr now and no mapping to OF is provided.
+So I would change it such that ntxbufs = 0 specified by PCI or OF
+mapping would result in configuration from info register.
+If the requested ntxbufs from PCI or OF is higher than value reported
+by info register then it should be limited as well and final limit
+should be some define
+
+#define CTUCANFD_NTXBUFS_MAX 8
+
+We have that tested info register reading in RTEMS driver
+for 2.5 as well as older branch so I hope that risk
+of breaking someone's CTU CAN FD specific integration
+is relatively small.
+
+I prepare patches. The SSP one can be considered as bugfix
+if Marc, David or somebody with the need proposes that
+and may it be it can get to 6.19. Or I prepare both
+for the next merge window.
+
+Best wishes,
+
+                Pavel
+
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://control.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    social:     https://social.kernel.org/ppisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    RISC-V education: https://comparch.edu.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
 
