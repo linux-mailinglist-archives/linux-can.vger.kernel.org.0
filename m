@@ -1,178 +1,118 @@
-Return-Path: <linux-can+bounces-5976-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5977-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A212CEC8ED
-	for <lists+linux-can@lfdr.de>; Wed, 31 Dec 2025 22:09:04 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12F2FCECAA6
+	for <lists+linux-can@lfdr.de>; Thu, 01 Jan 2026 00:20:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1947C300ACD3
-	for <lists+linux-can@lfdr.de>; Wed, 31 Dec 2025 21:08:54 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 90D0230036C5
+	for <lists+linux-can@lfdr.de>; Wed, 31 Dec 2025 23:20:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79DAC242D72;
-	Wed, 31 Dec 2025 21:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36CD324E4A1;
+	Wed, 31 Dec 2025 23:20:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iUlLBMmM";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="pg8nOAOG"
+	dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b="NbMpNhl9"
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtpx.fel.cvut.cz (smtpx.feld.cvut.cz [147.32.210.153])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5122F5337
-	for <linux-can@vger.kernel.org>; Wed, 31 Dec 2025 21:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A849123AB87;
+	Wed, 31 Dec 2025 23:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.32.210.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767215333; cv=none; b=vEtqLFr7E9qFCLKvoHFsVlZ6722cj4nyHDs41HFQni12eDxWtYTSf8JfqEd9wKDuw6A1VEUZi3AAeIvWizZyUGgvWkMrPOUEvpocGOay06UvjUywZll79NwDPJpeHIf1z/SjnElREGYcvmuhEM1saX/4U9JwhV7w8rQjDE/V7X0=
+	t=1767223236; cv=none; b=WU2cxHEhvNbrd7v5hX3cdcL3o3ShBSPm6nd9SdXWw5jqhvSgmrcjUzFxiBMCtZdDgrb+C5+CjTuQGs8tHrSO0kM3Iy3kyMqGnVCT3F8T/hUUapsbaaXJrXUoh7gQ8U/UZB1vJcwWYMTgpM9AUaGs3Sz09NiIX6P69uhk9YOfXgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767215333; c=relaxed/simple;
-	bh=NEavsbS+MYgvZbyUEA0n5b+NpFHMUAVVeVoqvcJ/Xe0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GRI+fFI1ymA7yK5jueorkgXpmezJgk5dpIsnqNTxxSSD3nD/W6/2kzA0biHgEZNYd9h8xYeiS777JQTOTsGy0VBdXDr26HGxROt/EPzymhfXZLEg1e8K50boFwFlQ0Rr0/DYtgTPmWiBW/w046eotasBv590GY4ydIp69avbwPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iUlLBMmM; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=pg8nOAOG; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767215330;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=607vL4Qm5Hi1Y96elBHDWEflyHPmZnMU1mQjlKs0Qjg=;
-	b=iUlLBMmMfUz+MG6ivfOR44y++Aqf5d0bio+cSflraU1iMUkjtyX25IDaUd5qq3c7MzGSw0
-	40G3yFz+0bzgWI+9k5vBzLiHaNhElpL29f+sjL8WC2HEj5LuCM8EADcO44VIWdfoSAOV5l
-	Sz/FKheJ62ZdG1ijXqP41JckwkmPKLI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-582-__7jvXwqNeibmeWEotzPJw-1; Wed, 31 Dec 2025 16:08:49 -0500
-X-MC-Unique: __7jvXwqNeibmeWEotzPJw-1
-X-Mimecast-MFC-AGG-ID: __7jvXwqNeibmeWEotzPJw_1767215328
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-4325ddc5babso4418600f8f.0
-        for <linux-can@vger.kernel.org>; Wed, 31 Dec 2025 13:08:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767215328; x=1767820128; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=607vL4Qm5Hi1Y96elBHDWEflyHPmZnMU1mQjlKs0Qjg=;
-        b=pg8nOAOG45SoEgIropvS7JHCn9ANL+WcZoxi0c36LVbLLZM2u/4wz/UpfZJmiGqayD
-         3aBHnaGcjLW7DUFWipXpzBdMqR6bYr7Hs13qm8ktOTxw1ihQ/GjhGO201l3YxGysmm6Q
-         TKM1w7JDa+iZLmLV0PrXGsWOXJv0R8SIWd25s1OAVjqqwmdtukDHc+aDQ+5+2ECauaHh
-         jQjq8RHQuIO0tLkgS8f5kae8wxHulKBjSnwD2CRHK6Pre7cAgs4BVDtlSDEA1SMJTSfn
-         czCABSJ9Am7e7x5Pygc7Xm1UYV46exAXYypLLngWnC5fBM1IROpjTqxDitZMZETp9Fhv
-         eDHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767215328; x=1767820128;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=607vL4Qm5Hi1Y96elBHDWEflyHPmZnMU1mQjlKs0Qjg=;
-        b=JLkOrsRnyvRqVujdLNSkzYOX6RnWAYnC8YoCmQ/NtT5nAvnyPlwsIj1zwcsltt6Ft5
-         /WeABGv5UsnFzqAjOs++s84sR3irZrvBwEhQxbJNv87PqY0NB+AyMo6jnADkEYJ3U/OS
-         umal+uJlt+W+iYWz0yDNsi456u4W7/giSFHOiWUFSHZ9RAeCf3YZ+faG99CDxvpxQBxX
-         Xekc2Qz8yZusQny3opUM15S6posfbKJgqyOjBn9zCqWEGc3hFN2mbMJmO6Ix8F1Ab12s
-         KzfAxV11XuwEJjzGP+Vg5HICT/lwGs4Kqi0vau/nLZ9dA/3Q7qYUVnQRun/XDnvkWORA
-         8taQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW75dFNgUgCprPBkXo8WQwRyjSzF+YAmoQodNsSscFnICIfTg0cAPRzbaFCjvMoO5YQA/gv2J7G6Sw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwN12j9ZTW2IF76HtU21VUNuOr84oXvdHu2Ca0g7NZm+4ugIgO
-	jDlVvE0wssvnQC9svG8okRMkrFGRRIFrCwUgyzVWxa/N5Y1f5Jk/9Ef7/HvNrm1G1+TnKdU0VhJ
-	p0ZnFBxrXwdT6Y+l24Oe/hEGiWCSDfWvcU1om805sMTjDvMhL6A/Id2wk0PX78Q==
-X-Gm-Gg: AY/fxX5qQH5Bn0UfQYXxbuMHNHanuH1Mwc9t/MIbtmdlwV0gKWmcLk8BBkyoNxefLEi
-	4f4JACDYR/WQUeqef5r9pDK9/PJgVFdrz5fMV2ymlBYjLZM2ureeKh3ZLVSofTirUrtH7GEPaAO
-	XqSpqskIpKgSJ/LWdMV/NGeZX9DnH+WtTQPVO87A1/aSMVRBBjxEOB8FaDSAT5cnL7iVSFMm2A3
-	aSmPgfvHYl5D7xWwjw6G/O3bGVqkBMLk+aTScnip0DVgc8q3RkZJdSHQjpR3QJteJo/k9I4Tfm4
-	9mFebKEZvcvMdM8ctA/8FgSB4Ept3DI9QoKfLv8AiUvcTJgj3LFoJhB62yDjARMbKWW816RYpAo
-	=
-X-Received: by 2002:a05:6000:178a:b0:431:c2:c636 with SMTP id ffacd0b85a97d-4324e4ccf5cmr53000699f8f.24.1767215328071;
-        Wed, 31 Dec 2025 13:08:48 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHjZGHdmylBd9EpV00RHddE+SBBivtlR/NvaDmcBP16RKKvt2R5hlqHedlqvszkmMez70DHew==
-X-Received: by 2002:a05:6000:178a:b0:431:c2:c636 with SMTP id ffacd0b85a97d-4324e4ccf5cmr53000668f8f.24.1767215327679;
-        Wed, 31 Dec 2025 13:08:47 -0800 (PST)
-Received: from fedora ([37.168.2.223])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea227casm75349141f8f.15.2025.12.31.13.08.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Dec 2025 13:08:47 -0800 (PST)
-Date: Wed, 31 Dec 2025 22:08:34 +0100
-From: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-To: Francesco Valla <francesco@valla.it>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Harald Mommer <harald.mommer@oss.qualcomm.com>,
-	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	Wolfgang Grandegger <wg@grandegger.com>,
+	s=arc-20240116; t=1767223236; c=relaxed/simple;
+	bh=FYGdSp6czj+0imSdcNgSv3AclAmLyHq2HJLGdWVBaAA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A+X+Jhtqk7Q5LhdulTR7zWbBAVKTDlTO5O9DkH5qBpb9836tv+BLCTgUnDuVrC5i6+9evs2yPJGvayZH6yrQ8Zwaesw8iLM6WtMeuCEPc27OUOfJn7oc3amlPsF5wQu217W5U/bNau/A046YuTDL3e5Y8UcHAIxUl/6XG3LumzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz; spf=pass smtp.mailfrom=fel.cvut.cz; dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b=NbMpNhl9; arc=none smtp.client-ip=147.32.210.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fel.cvut.cz
+Received: from localhost (unknown [192.168.200.27])
+	by smtpx.fel.cvut.cz (Postfix) with ESMTP id D331722685;
+	Thu, 01 Jan 2026 00:20:23 +0100 (CET)
+X-Virus-Scanned: IMAP STYX AMAVIS
+Received: from smtpx.fel.cvut.cz ([192.168.200.2])
+ by localhost (cerokez-250.feld.cvut.cz [192.168.200.27]) (amavis, port 10060)
+ with ESMTP id lcYaQay1hnm5; Thu,  1 Jan 2026 00:20:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
+	s=felmail; t=1767223222;
+	bh=93RrIMjakSwcrq6K5DWbPxQYjGApwXm9Nt8UBxC9kTI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NbMpNhl9OsaBty7wrPCGpnukd3WNOnpFq3pUn42Q5sUQQN8u52d6bxjfAIj0MG8c/
+	 /ULjRETyfaklJC7okNA7FMRU/Ixzi3sDqGJSd86qGlJ2Pl7woitx2I42utpOpNWEzF
+	 xY4NRH1m2iMfHLWj8c/IRYpyFAbTlkLBrF9QxVJAh+DjVC+JxYdsmSiS7OmksRHysb
+	 JaANT4cc43588AgWrvXUNakjs76tWgaH/Tg4kizJpNX0EFH9b918kkZGbACFQgiDni
+	 YDiEPnTOSA7kygsmGgtxWASgvyjtZJLJeAmMoRDUrsWLE9txI3fau5ZkYq8OZy714j
+	 lwy3C+udiAw7A==
+Received: from fel.cvut.cz (static-84-242-78-234.bb.vodafone.cz [84.242.78.234])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pisa)
+	by smtpx.fel.cvut.cz (Postfix) with ESMTPSA id E4749224E6;
+	Thu, 01 Jan 2026 00:20:21 +0100 (CET)
+From: Pavel Pisa <pisa@fel.cvut.cz>
+To: linux-can@vger.kernel.org,
+	"Marc Kleine-Budde" <mkl@pengutronix.de>,
+	David Laight <david.laight.linux@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: [PATCH v6] can: virtio: Add virtio CAN driver
-Message-ID: <aVWQ0laxIdp3fx+p@fedora>
-References: <aQJRnX7OpFRY/1+H@fedora>
- <aQkgsuxa2UaL_qdt@bywater>
- <aTsE1VIk4V/A49HE@fedora>
- <aT7XAsTWr0_yyfx_@bywater>
- <aVLOPMmpvArnVAHZ@fedora>
- <aVLq1ibPcPHk-7Qv@bywater>
+	Andrea Daoud <andreadaoud6@gmail.com>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Cc: Jiri Novak <jnovak@fel.cvut.cz>,
+	Ondrej Ille <ondrej.ille@gmail.com>,
+	Pavel Pisa <pisa@fel.cvut.cz>
+Subject: [PATCH] can: ctucanfd: fix SSP_SRC in cases when bit-rate is higher than 1 MBit.
+Date: Thu,  1 Jan 2026 00:19:26 +0100
+Message-ID: <20251231231926.20043-1-pisa@fel.cvut.cz>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aVLq1ibPcPHk-7Qv@bywater>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 29, 2025 at 09:55:50PM +0100, Francesco Valla wrote:
-> Hi Matias,
-> 
-> On Mon, Dec 29, 2025 at 07:53:48PM +0100, Matias Ezequiel Vara Larsen wrote:
-> > > While stress testing this, I noticed that flooding the virtio-can
-> > > interface with packets leads to an hang of the interface itself.
-> > > I am seeing this issuing, at host side:
-> > > 
-> > > 	while true; do cansend can0 123#00; done
-> > > 
-> > > with:
-> > > 
-> > >  - QEMU: the tip of the master branch plus [2]
-> > >  - vhost-device: the tip of the main branch
-> > > 
-> > > and the following QEMU invocation:
-> > > 
-> > > qemu-system-x86_64 -serial mon:stdio \
-> > >     -m 2G -smp 2 \
-> > >     -kernel $(pwd)/BUILD.bin/arch/x86/boot/bzImage \
-> > >     -initrd /home/francesco/SRC/LINUX_KERNEL/initramfs.gz \
-> > >     -append "loglevel=7 console=ttyS0" \
-> > >     -machine memory-backend=pc.ram \
-> > >     -object memory-backend-file,id=pc.ram,size=2G,mem-path=/tmp/pc.ram,share=on \
-> > >     -chardev socket,id=can0,path=/tmp/sock-can0 \
-> > >     -device vhost-user-can-pci,chardev=can0
-> > > 
-> > > 
-> > > Restarting the interface (i.e.: ip link set down and the up) does not
-> > > fix the situation.
-> > > 
-> > > I'll try to do some more testing during the next days.
-> > 
-> > I tried this and I could not reproduce it. [2] requires a minimal change
-> > to apply, i.e., qdev-properties.h has changed to /core. I'll send a v2
-> > for that. I used latest vhost-device-can. I run `candump can0` in the
-> > guest and `while true; do cangen vcan0; done` in the host. Am I missing
-> > something?
-> 
-> With the plain 'cangen' you are not really flooding the interface, since
-> you are only sending a random CAN frame every 200ms. The only way I can
-> reproduce this behaviour in a consistent manner is running from the host:
-> 
->     while true; do cansend vcan0 134#00; done
-> 
-> which seems to generate the maximum amount of traffic.
-> 
-You were right. I could reproduce it. After a while, I stop to get packets
-in the guest. I'll investigate.
+From: Ondrej Ille <ondrej.ille@gmail.com>
 
-Thanks. 
+The change has been tested on AMD/Xilinx Zynq
+with the next CTU CN FD IP core versions:
+
+ - 2.6 aka master in the "integration with Zynq-7000 system" test
+   6.12.43-rt12+ #1 SMP PREEMPT_RT kernel with CTU CAN FD git
+   driver (change already included in the driver repo)
+ - older 2.5 snapshot with mainline kernels with this patch
+   applied locally in the multiple CAN latency tester nightly runs
+   6.18.0-rc4-rt3-dut #1 SMP PREEMPT_RT
+   6.19.0-rc3-dut
+
+The logs are available at
+
+ https://canbus.pages.fel.cvut.cz/
+
+Signed-off-by: Ondrej Ille <ondrej.ille@gmail.com>
+Signed-off-by: Pavel Pisa <pisa@fel.cvut.cz>
+---
+ drivers/net/can/ctucanfd/ctucanfd_base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/ctucanfd/ctucanfd_base.c b/drivers/net/can/ctucanfd/ctucanfd_base.c
+index 1e6b9e3dc2fe..0ea1ff28dfce 100644
+--- a/drivers/net/can/ctucanfd/ctucanfd_base.c
++++ b/drivers/net/can/ctucanfd/ctucanfd_base.c
+@@ -310,7 +310,7 @@ static int ctucan_set_secondary_sample_point(struct net_device *ndev)
+ 		}
+ 
+ 		ssp_cfg = FIELD_PREP(REG_TRV_DELAY_SSP_OFFSET, ssp_offset);
+-		ssp_cfg |= FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x1);
++		ssp_cfg |= FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x0);
+ 	}
+ 
+ 	ctucan_write32(priv, CTUCANFD_TRV_DELAY, ssp_cfg);
+-- 
+2.47.3
 
 
