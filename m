@@ -1,100 +1,89 @@
-Return-Path: <linux-can+bounces-5968-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5969-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C629FCE99B2
-	for <lists+linux-can@lfdr.de>; Tue, 30 Dec 2025 13:00:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BB4CCEC46F
+	for <lists+linux-can@lfdr.de>; Wed, 31 Dec 2025 17:40:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 846EB30433EA
-	for <lists+linux-can@lfdr.de>; Tue, 30 Dec 2025 11:58:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F158D30076AC
+	for <lists+linux-can@lfdr.de>; Wed, 31 Dec 2025 16:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B23F2EC084;
-	Tue, 30 Dec 2025 11:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FB512820C6;
+	Wed, 31 Dec 2025 16:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="isUNO4Rp"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="QIxlxDj0";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="JokMRjdo"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5B82EB878
-	for <linux-can@vger.kernel.org>; Tue, 30 Dec 2025 11:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767095904; cv=none; b=gXNIO5M0wOc29OEMO19++EV5cliAcHY0+kfHctMTZcEvoNbSdDT+y3ldbtVEbyL7IyHMlEeRQUSI0X+G5E7N2l4ziXzXWdBifNJXE175g8HIWEReYOVuQ/3lyNf/l9wwlcPjxmXPR4/mOWr6DSsXz3YE+rKZ5GkpysRwT0sAb9M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767095904; c=relaxed/simple;
-	bh=fyRh3NDfYI2G2pxDNRqvuJsGnCEa1C3EXnnGh0e8NZ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oMw465ntm+AuUrmGHkRXLauGQKNMVk7Q4S/c8GQAupgIycATvIRooyIqci9hN/nCwNmVAUgFC0lKLhJJtFbYQM1LVjwAJfXbPHqPD7QQCBNd9bLvA7mgruxPWVzj7HIhmUp3xqufCCiMAEfm6tqn6eDCFfp9hGZBTSQ6WGtQ+pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=isUNO4Rp; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43277900fb4so1623419f8f.1
-        for <linux-can@vger.kernel.org>; Tue, 30 Dec 2025 03:58:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767095900; x=1767700700; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1mrVqbtRlpbpcL6kvwA96sNyCMACeAaD1ypExVsExyw=;
-        b=isUNO4RpRvmeBb/SewrfLUxGBVOlt1KNSwulqiSCDd4SU6wPuB7VXvynTj1KLnJWNZ
-         zdZB0JgIgbvJx8tyJ+vo0BlFowcIeAQd/WXrVdBjErz9k2Qn8cqca+ZiQUwSDgekv1dg
-         rGYuNp83MhShxYq3gHazwiwjEgvTgoS8guiaTaSN3XTvt2Wu74f4Y4NV28+rGHFFnVfR
-         B/l+80G6ahiTF0lGEqW8MYlD1AYrTrTlfGSFwAEivdkIdiReomPCCJnzxNL/TCqwmBhl
-         VsRwwQw2AhIdFq8tpwFr5f0eSL6k2pGwgAVXULZ9lAM7Fwz7nzWR1On4vIYarcn8G1rA
-         BEpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767095900; x=1767700700;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1mrVqbtRlpbpcL6kvwA96sNyCMACeAaD1ypExVsExyw=;
-        b=Rk2/DMeMog5obHuIJCuhfs9zw9E7UtCsfMIZpGv9a7bBGbNqWhZwIcwL1FoIsJIPQU
-         8/jLriShCzaWp2Y+GxVW+e+j9Ft+tniEg+zgOTzXqTzbgEVAaoqECvklzKhaeTtyar42
-         x6SG2O7vN7lufIR+CoP+KQTMvPDiGesPKMpCyVDM7LPsTxUwU8KnitLQSaIuYmHP2vz8
-         7gm9pWIk8OtdgSLK/jgAQ/BNaiYm84ohKXONQb92HDEqLWinIBHxVfxeYx4XYtDoE772
-         BZw/BDFitNhrzTSfw+h/XAxYy6DOP/ZKLULdvO7ezG+7XSuTGFR6TwljQWa/YkJqV6v8
-         Qrrw==
-X-Gm-Message-State: AOJu0YzLPuVvNIqW/FEkuKKzv1CamvXP7WzSaR/YClktj0lCOsI9UFgx
-	O0lyqlT9JRehpwvKbSoPBkStdADpKPkW+Ory1vTg+v6KleBKMY2pzJ54
-X-Gm-Gg: AY/fxX7DgxSipBtzDVqImLRJauCDTeqRsKcpMbdwHCyxXQDwifZ2CE/VB4p7k+mGa5k
-	LMJDTDPgQxt7KNzHklVqrsu5am5Vu/FJsFdfh2PsNYQlg03ZiMyxAUXUwZbhQjB6eLiUVIJUaZA
-	1Hx/mzlO5fEt4cI7qdHgst5yy6egWLvT7nU9+5O6MJ4vyZK3Q3PNj/GblcFepohPP29yBQ67oWG
-	4RV34zdiIckrw6YSunzIh+vFawWQTiAXVqDR8cjPDgrUt0SLlnKFFaUS5fFScV1PlUtt+yhj+kl
-	MNkaTK6s70V6piUvBSbXQBvlj13zc7v3dWnKry/aBhs7LNdHXQ45CBLAZw1XmHVJxVK9Gl2/L/Z
-	SyCBBeY3g3PEeLBa7CudwfeOuqOz3J9A2wGH9cE+gFK6RF3YvoLHOkHIvJAVtUEcOIGhst3VfAw
-	swkoVJvw89IuLqCvab9bS8aCiHAYlSWalAMItiFgva4x2qcj2JYDXE4DBZ3vLqSPjn3wCOo6QDr
-	y5+90Pnw4Tsl9qfEv94YX8A
-X-Google-Smtp-Source: AGHT+IFkCky57Uay6sBkG6xB9auHzI69jD1MaNT3gszPM4wT3bxIuOsRBOVRIqN2JH/ov9C69vdqcw==
-X-Received: by 2002:a05:6000:2008:b0:430:ffdb:e9bd with SMTP id ffacd0b85a97d-432447a714amr49360943f8f.10.1767095900408;
-        Tue, 30 Dec 2025 03:58:20 -0800 (PST)
-Received: from iku.Home ([2a06:5906:61b:2d00:efaa:981e:926e:8957])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324eaa64cesm68337227f8f.35.2025.12.30.03.58.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Dec 2025 03:58:19 -0800 (PST)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBFAD280CF6
+	for <linux-can@vger.kernel.org>; Wed, 31 Dec 2025 16:40:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.218
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767199238; cv=pass; b=TfX2VlwOcSHAS9LdyTcDRMDeKJd/X+Bh19dgSLqBoztJexZxQ/q3gN7dx+jlmfGlwg4Uam+BylFHifTtkrhyv5DT8aNJQt6iw6mv5nwjsirrc+gAB88FJ1KyrvTk16CEvU/B3JDTElxnm4XmG5MlbIoRmY8AYx/kvTp+tWAdJJQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767199238; c=relaxed/simple;
+	bh=HEsm+5YURGBmBEK1oXGPq/k3KDXVqkb2ye9BAI0Xo9o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Nq3sPMHh+nEsvQC2VrjvdOoCC263hp4Fcr7Vyy+R26J3G6Q+9GgQXzuFFt0QumGTJZ1Cxbp4sPv8Gh8XFTt4A+GIu/T081X9QdlLto3VS4HTuL1uvlPf2bJ+z7atGf/eSXH3nfxedtcDSpeBKSH7KLTTdtO2R0SHP5BXWVOivyc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=QIxlxDj0; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=JokMRjdo; arc=pass smtp.client-ip=81.169.146.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1767198857; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=q6Q9zxSoftmwgtNFo1GyJ1Ae5j+dPK4naBvRCM7Z+vpP+vv7dJDzT7VzQ2VDD7EfYY
+    VwL6yiZwMu6zOQ/81SaOuqXRdx3oFigCIVh1rmSnYI2rA27+307XOzgxLb2WZMIFbnV5
+    e0rJi0MBj/rBNUKnJWAKiCRlT7Vn4crk+zDdKquVvqVTcQklfNgnfVXSCpwcyrsJa6YC
+    9iL01W1kxT0pk2j+HUW6+6po3pfNJfVk2DMdVytqkINVONPDaAznmfC0XdiaYKDY2QoX
+    gf58xr/WaKDnlPciruC4XHSd15OEfGJWSaeMF1nmO2ukaIy3l1vj4S8tQBNL28cv5pSl
+    SpgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767198857;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=LmP2SNyAvHBBkCRqEMcwToirp33q+fdkd7Lx9WvL33k=;
+    b=i8jGB0FskEDjjgkaBdhFHbAY1fJBkQuqYSjRclEV7BHymP2x9ulmrZNicW3SNpe1Oy
+    PWHFczdVdwgy7VkimodRtSFVKlPnCcbjs6AeWCjdWLyOmSBl7Bh1KaudtyH0DRqCTJVd
+    s9XSf3Ofxh1CnEhofsfreBa5njQdt1jpwKjkssuAKYJN2+0sl65unFRfSIeDW3Be/Hcs
+    b4Iy9bJOWnOx1B63Frj1brtiHPd0UFr1aq6hq1tJxiiS8A1khjAZqjdbvE6I/YCB0+jb
+    U1LD5iFtBdIE7syBEkX2GB7e3fJyMj9MaZw7AjKhOksfNIgeAG26xb0O/PQx7ZCIigJz
+    okbQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767198857;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=LmP2SNyAvHBBkCRqEMcwToirp33q+fdkd7Lx9WvL33k=;
+    b=QIxlxDj0LntIUGERPD6HN6Nte2xCqA6foF+e1+9RWipbwuFSHIDVvXFhPdlccspLrN
+    mbGoZGaYFtS7vZ3cKADleZg+wQum7B5zRtxf7UeoRnJWPK1sm1bh1vVJ1iCXeFTu8il/
+    G2GGXsH4m9GFaaH7/nKcsUyVqg5RkG8770qkwwslD2081yLvlFLUlFfGQaRu7xEblDHR
+    ar+FqZmc0ca7xL75f+zQTsvNxlf7evbhOLF/N8m/stURRmzFoNO1lggzCH0faSt6Y/9j
+    U0t46t3Xc8Tfn9C11EmCv9hi8SpGuNAkFGs+dV0EXtMTHC2uQJyCG1ezyU19eXEY1wAd
+    LTmQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767198857;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=LmP2SNyAvHBBkCRqEMcwToirp33q+fdkd7Lx9WvL33k=;
+    b=JokMRjdo7OpFEdo8J4OI5KrNLqaopTtUfn5i/15BR7NuN+TMgDWsbuWUNGZHyoRmal
+    qHLBGMuCOtNELTLtXGDQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from lenov17.lan
+    by smtp.strato.de (RZmta 54.1.0 AUTH)
+    with ESMTPSA id K0e68b1BVGYHaDQ
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Wed, 31 Dec 2025 17:34:17 +0100 (CET)
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+To: linux-can@vger.kernel.org
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Arnd Bergmann <arnd@arndb.de>,
 	Vincent Mailhol <mailhol@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>
-Cc: linux-can@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 4/4] can: rcar_canfd: Add RZ/T2H support
-Date: Tue, 30 Dec 2025 11:58:14 +0000
-Message-ID: <20251230115814.53536-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251230115814.53536-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20251230115814.53536-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH] can: propagate CAN device capabilities via ml_priv
+Date: Wed, 31 Dec 2025 17:33:56 +0100
+Message-ID: <20251231163356.1978-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -102,57 +91,402 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Commit 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
+caused a sequence of dependency and linker fixes starting with commit
+cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure by default").
 
-The CAN-FD IP on the RZ/T2H SoC is similar to R-Car Gen4, but differs in
-the AFLPN and CFTML bits and supports two channels with eight interrupts.
+The entire problem was caused by the requirement that a new network layer
+feature needed to know about the protocol capabilities of the CAN devices.
+Instead of accessing CAN device internal data structures which caused the
+dependency problems this patch introduces capabilty information into the
+CAN specific ml_priv data which is accessible from both sides.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+With this change the CAN network layer can check the required features and
+the decoupling of the driver layer and network layer is restored.
+Therefore the Kconfig and Makefile changes/fixes are reverted too.
+
+Fixes: 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
+Fixes: cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure by default")
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
-v1->v2:
-- No changes made.
----
- drivers/net/can/rcar/rcar_canfd.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/net/can/Kconfig       |  7 ++++--
+ drivers/net/can/Makefile      |  2 +-
+ drivers/net/can/dev/Makefile  |  5 ++--
+ drivers/net/can/dev/dev.c     | 19 +++++++++++++++
+ drivers/net/can/dev/netlink.c |  1 +
+ drivers/net/can/vcan.c        | 15 ++++++++++++
+ drivers/net/can/vxcan.c       |  1 +
+ include/linux/can/can-ml.h    | 24 +++++++++++++++++++
+ include/linux/can/dev.h       |  8 +------
+ net/can/raw.c                 | 45 ++++-------------------------------
+ 10 files changed, 74 insertions(+), 53 deletions(-)
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 4a653d8978ba..eaf8cac78038 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -670,6 +670,23 @@ static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
- 	.external_clk = 0,
+diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+index cfaea6178a71..e15e320db476 100644
+--- a/drivers/net/can/Kconfig
++++ b/drivers/net/can/Kconfig
+@@ -1,9 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+ menuconfig CAN_DEV
+-	bool "CAN Device Drivers"
++	tristate "CAN Device Drivers"
+ 	default y
+ 	depends on CAN
+ 	help
+ 	  Controller Area Network (CAN) is serial communications protocol up to
+ 	  1Mbit/s for its original release (now known as Classical CAN) and up
+@@ -15,11 +15,14 @@ menuconfig CAN_DEV
+ 
+ 	  This section contains all the CAN(-FD) device drivers including the
+ 	  virtual ones. If you own such devices or plan to use the virtual CAN
+ 	  interfaces to develop applications, say Y here.
+ 
+-if CAN_DEV && CAN
++	  To compile as a module, choose M here: the module will be called
++	  can-dev.
++
++if CAN_DEV
+ 
+ config CAN_VCAN
+ 	tristate "Virtual Local CAN Interface (vcan)"
+ 	help
+ 	  Similar to the network loopback devices, vcan offers a
+diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
+index 37e2f1a2faec..d7bc10a6b8ea 100644
+--- a/drivers/net/can/Makefile
++++ b/drivers/net/can/Makefile
+@@ -5,11 +5,11 @@
+ 
+ obj-$(CONFIG_CAN_VCAN)		+= vcan.o
+ obj-$(CONFIG_CAN_VXCAN)		+= vxcan.o
+ obj-$(CONFIG_CAN_SLCAN)		+= slcan/
+ 
+-obj-$(CONFIG_CAN_DEV)		+= dev/
++obj-y				+= dev/
+ obj-y				+= esd/
+ obj-y				+= rcar/
+ obj-y				+= rockchip/
+ obj-y				+= spi/
+ obj-y				+= usb/
+diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
+index 64226acf0f3d..633687d6b6c0 100644
+--- a/drivers/net/can/dev/Makefile
++++ b/drivers/net/can/dev/Makefile
+@@ -1,10 +1,11 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-obj-$(CONFIG_CAN) += can-dev.o
++obj-$(CONFIG_CAN_DEV) += can-dev.o
++
++can-dev-y += skb.o
+ 
+-can-dev-$(CONFIG_CAN_DEV) += skb.o
+ can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
+ can-dev-$(CONFIG_CAN_NETLINK) += bittiming.o
+ can-dev-$(CONFIG_CAN_NETLINK) += dev.o
+ can-dev-$(CONFIG_CAN_NETLINK) += length.o
+ can-dev-$(CONFIG_CAN_NETLINK) += netlink.o
+diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+index 091f30e94c61..3b726643f0ca 100644
+--- a/drivers/net/can/dev/dev.c
++++ b/drivers/net/can/dev/dev.c
+@@ -373,10 +373,28 @@ void can_set_default_mtu(struct net_device *dev)
+ 		dev->min_mtu = CAN_MTU;
+ 		dev->max_mtu = CAN_MTU;
+ 	}
+ }
+ 
++void can_set_cap_info(struct net_device *dev)
++{
++	struct can_priv *priv = netdev_priv(dev);
++	u32 can_cap = CAN_CAP_CC;
++
++	if (can_dev_in_xl_only_mode(priv)) {
++		/* XL only mode => no CC/FD capability */
++		can_cap = CAN_CAP_XL;
++	} else {
++		if (priv->ctrlmode & CAN_CTRLMODE_FD)
++			can_cap |= CAN_CAP_FD;
++
++		if (priv->ctrlmode & CAN_CTRLMODE_XL)
++			can_cap |= CAN_CAP_XL;
++	}
++	can_set_cap(dev, can_cap);
++}
++
+ /* helper to define static CAN controller features at device creation time */
+ int can_set_static_ctrlmode(struct net_device *dev, u32 static_mode)
+ {
+ 	struct can_priv *priv = netdev_priv(dev);
+ 
+@@ -388,10 +406,11 @@ int can_set_static_ctrlmode(struct net_device *dev, u32 static_mode)
+ 	}
+ 	priv->ctrlmode = static_mode;
+ 
+ 	/* override MTU which was set by default in can_setup()? */
+ 	can_set_default_mtu(dev);
++	can_set_cap_info(dev);
+ 
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(can_set_static_ctrlmode);
+ 
+diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+index d6b0e686fb11..0498198a4696 100644
+--- a/drivers/net/can/dev/netlink.c
++++ b/drivers/net/can/dev/netlink.c
+@@ -375,10 +375,11 @@ static int can_ctrlmode_changelink(struct net_device *dev,
+ 		memset(&priv->xl.tdc, 0, sizeof(priv->xl.tdc));
+ 		memset(&priv->xl.pwm, 0, sizeof(priv->xl.pwm));
+ 	}
+ 
+ 	can_set_default_mtu(dev);
++	can_set_cap_info(dev);
+ 
+ 	return 0;
+ }
+ 
+ static int can_tdc_changelink(struct data_bittiming_params *dbt_params,
+diff --git a/drivers/net/can/vcan.c b/drivers/net/can/vcan.c
+index fdc662aea279..76e6b7b5c6a1 100644
+--- a/drivers/net/can/vcan.c
++++ b/drivers/net/can/vcan.c
+@@ -128,10 +128,23 @@ static netdev_tx_t vcan_tx(struct sk_buff *skb, struct net_device *dev)
+ 		consume_skb(skb);
+ 	}
+ 	return NETDEV_TX_OK;
+ }
+ 
++static void vcan_set_cap_info(struct net_device *dev)
++{
++	u32 can_cap = CAN_CAP_CC;
++
++	if (dev->mtu > CAN_MTU)
++		can_cap |= CAN_CAP_FD;
++
++	if (dev->mtu >= CANXL_MIN_MTU)
++		can_cap |= CAN_CAP_XL;
++
++	can_set_cap(dev, can_cap);
++}
++
+ static int vcan_change_mtu(struct net_device *dev, int new_mtu)
+ {
+ 	/* Do not allow changing the MTU while running */
+ 	if (dev->flags & IFF_UP)
+ 		return -EBUSY;
+@@ -139,10 +152,11 @@ static int vcan_change_mtu(struct net_device *dev, int new_mtu)
+ 	if (new_mtu != CAN_MTU && new_mtu != CANFD_MTU &&
+ 	    !can_is_canxl_dev_mtu(new_mtu))
+ 		return -EINVAL;
+ 
+ 	WRITE_ONCE(dev->mtu, new_mtu);
++	vcan_set_cap_info(dev);
+ 	return 0;
+ }
+ 
+ static const struct net_device_ops vcan_netdev_ops = {
+ 	.ndo_start_xmit = vcan_tx,
+@@ -160,10 +174,11 @@ static void vcan_setup(struct net_device *dev)
+ 	dev->hard_header_len	= 0;
+ 	dev->addr_len		= 0;
+ 	dev->tx_queue_len	= 0;
+ 	dev->flags		= IFF_NOARP;
+ 	can_set_ml_priv(dev, netdev_priv(dev));
++	vcan_set_cap_info(dev);
+ 
+ 	/* set flags according to driver capabilities */
+ 	if (echo)
+ 		dev->flags |= IFF_ECHO;
+ 
+diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
+index b2c19f8c5f8e..3cc53ba0b8ff 100644
+--- a/drivers/net/can/vxcan.c
++++ b/drivers/net/can/vxcan.c
+@@ -165,10 +165,11 @@ static void vxcan_setup(struct net_device *dev)
+ 	dev->ethtool_ops	= &vxcan_ethtool_ops;
+ 	dev->needs_free_netdev	= true;
+ 
+ 	can_ml = netdev_priv(dev) + ALIGN(sizeof(struct vxcan_priv), NETDEV_ALIGN);
+ 	can_set_ml_priv(dev, can_ml);
++	can_set_cap(dev, CAN_CAP_CC | CAN_CAP_FD | CAN_CAP_XL);
+ }
+ 
+ /* forward declaration for rtnl_create_link() */
+ static struct rtnl_link_ops vxcan_link_ops;
+ 
+diff --git a/include/linux/can/can-ml.h b/include/linux/can/can-ml.h
+index 8afa92d15a66..1f58ad3da44f 100644
+--- a/include/linux/can/can-ml.h
++++ b/include/linux/can/can-ml.h
+@@ -44,10 +44,15 @@
+ 
+ #include <linux/can.h>
+ #include <linux/list.h>
+ #include <linux/netdevice.h>
+ 
++/* exposed CAN device capabilities for network layer */
++#define CAN_CAP_CC 0x1U
++#define CAN_CAP_FD 0x2U
++#define CAN_CAP_XL 0x4U
++
+ #define CAN_SFF_RCV_ARRAY_SZ (1 << CAN_SFF_ID_BITS)
+ #define CAN_EFF_RCV_HASH_BITS 10
+ #define CAN_EFF_RCV_ARRAY_SZ (1 << CAN_EFF_RCV_HASH_BITS)
+ 
+ enum { RX_ERR, RX_ALL, RX_FIL, RX_INV, RX_MAX };
+@@ -62,10 +67,11 @@ struct can_dev_rcv_lists {
+ struct can_ml_priv {
+ 	struct can_dev_rcv_lists dev_rcv_lists;
+ #ifdef CAN_J1939
+ 	struct j1939_priv *j1939_priv;
+ #endif
++	u32 can_cap;
  };
  
-+static const struct rcar_canfd_hw_info r9a09g077_hw_info = {
-+	.nom_bittiming = &rcar_canfd_gen4_nom_bittiming_const,
-+	.data_bittiming = &rcar_canfd_gen4_data_bittiming_const,
-+	.tdc_const = &rcar_canfd_gen4_tdc_const,
-+	.regs = &rcar_gen4_regs,
-+	.sh = &rcar_gen4_shift_data,
-+	.rnc_field_width = 16,
-+	.max_aflpn = 15,
-+	.max_cftml = 31,
-+	.max_channels = 2,
-+	.postdiv = 1,
-+	.multi_channel_irqs = 1,
-+	.ch_interface_mode = 1,
-+	.shared_can_regs = 1,
-+	.external_clk = 1,
-+};
-+
- /* Helper functions */
- static inline void rcar_canfd_update(u32 mask, u32 val, u32 __iomem *reg)
+ static inline struct can_ml_priv *can_get_ml_priv(struct net_device *dev)
  {
-@@ -2345,6 +2362,7 @@ static DEFINE_SIMPLE_DEV_PM_OPS(rcar_canfd_pm_ops, rcar_canfd_suspend,
- static const __maybe_unused struct of_device_id rcar_canfd_of_table[] = {
- 	{ .compatible = "renesas,r8a779a0-canfd", .data = &rcar_gen4_hw_info },
- 	{ .compatible = "renesas,r9a09g047-canfd", .data = &r9a09g047_hw_info },
-+	{ .compatible = "renesas,r9a09g077-canfd", .data = &r9a09g077_hw_info },
- 	{ .compatible = "renesas,rcar-gen3-canfd", .data = &rcar_gen3_hw_info },
- 	{ .compatible = "renesas,rcar-gen4-canfd", .data = &rcar_gen4_hw_info },
- 	{ .compatible = "renesas,rzg2l-canfd", .data = &rzg2l_hw_info },
+ 	return netdev_get_ml_priv(dev, ML_PRIV_CAN);
+@@ -75,6 +81,24 @@ static inline void can_set_ml_priv(struct net_device *dev,
+ 				   struct can_ml_priv *ml_priv)
+ {
+ 	netdev_set_ml_priv(dev, ml_priv, ML_PRIV_CAN);
+ }
+ 
++static inline bool can_cap_enabled(struct net_device *dev, u32 cap)
++{
++	struct can_ml_priv *can_ml = can_get_ml_priv(dev);
++
++	if (!can_ml)
++		return true;
++
++	return (can_ml->can_cap & cap);
++}
++
++static inline void can_set_cap(struct net_device *dev, u32 cap)
++{
++	struct can_ml_priv *can_ml = can_get_ml_priv(dev);
++
++	if (can_ml)
++		can_ml->can_cap = cap;
++}
++
+ #endif /* CAN_ML_H */
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index f6416a56e95d..6d0710d6f571 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -109,22 +109,16 @@ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+ #define alloc_candev_mq(sizeof_priv, echo_skb_max, count) \
+ 	alloc_candev_mqs(sizeof_priv, echo_skb_max, count, count)
+ void free_candev(struct net_device *dev);
+ 
+ /* a candev safe wrapper around netdev_priv */
+-#if IS_ENABLED(CONFIG_CAN_NETLINK)
+ struct can_priv *safe_candev_priv(struct net_device *dev);
+-#else
+-static inline struct can_priv *safe_candev_priv(struct net_device *dev)
+-{
+-	return NULL;
+-}
+-#endif
+ 
+ int open_candev(struct net_device *dev);
+ void close_candev(struct net_device *dev);
+ void can_set_default_mtu(struct net_device *dev);
++void can_set_cap_info(struct net_device *dev);
+ int __must_check can_set_static_ctrlmode(struct net_device *dev,
+ 					 u32 static_mode);
+ int can_hwtstamp_get(struct net_device *netdev,
+ 		     struct kernel_hwtstamp_config *cfg);
+ int can_hwtstamp_set(struct net_device *netdev,
+diff --git a/net/can/raw.c b/net/can/raw.c
+index be1ef7cf4204..baa29be9ab8a 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -48,11 +48,11 @@
+ #include <linux/socket.h>
+ #include <linux/if_arp.h>
+ #include <linux/skbuff.h>
+ #include <linux/can.h>
+ #include <linux/can/core.h>
+-#include <linux/can/dev.h> /* for can_is_canxl_dev_mtu() */
++#include <linux/can/can-ml.h> /* for can_cap_enabled() */
+ #include <linux/can/skb.h>
+ #include <linux/can/raw.h>
+ #include <net/sock.h>
+ #include <net/net_namespace.h>
+ 
+@@ -890,62 +890,25 @@ static void raw_put_canxl_vcid(struct raw_sock *ro, struct sk_buff *skb)
+ 		cxl->prio &= CANXL_PRIO_MASK;
+ 		cxl->prio |= ro->tx_vcid_shifted;
+ 	}
+ }
+ 
+-static inline bool raw_dev_cc_enabled(struct net_device *dev,
+-				      struct can_priv *priv)
+-{
+-	/* The CANXL-only mode disables error-signalling on the CAN bus
+-	 * which is needed to send CAN CC/FD frames
+-	 */
+-	if (priv)
+-		return !can_dev_in_xl_only_mode(priv);
+-
+-	/* virtual CAN interfaces always support CAN CC */
+-	return true;
+-}
+-
+-static inline bool raw_dev_fd_enabled(struct net_device *dev,
+-				      struct can_priv *priv)
+-{
+-	/* check FD ctrlmode on real CAN interfaces */
+-	if (priv)
+-		return (priv->ctrlmode & CAN_CTRLMODE_FD);
+-
+-	/* check MTU for virtual CAN FD interfaces */
+-	return (READ_ONCE(dev->mtu) >= CANFD_MTU);
+-}
+-
+-static inline bool raw_dev_xl_enabled(struct net_device *dev,
+-				      struct can_priv *priv)
+-{
+-	/* check XL ctrlmode on real CAN interfaces */
+-	if (priv)
+-		return (priv->ctrlmode & CAN_CTRLMODE_XL);
+-
+-	/* check MTU for virtual CAN XL interfaces */
+-	return can_is_canxl_dev_mtu(READ_ONCE(dev->mtu));
+-}
+-
+ static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb,
+ 				      struct net_device *dev)
+ {
+-	struct can_priv *priv = safe_candev_priv(dev);
+-
+ 	/* Classical CAN */
+-	if (can_is_can_skb(skb) && raw_dev_cc_enabled(dev, priv))
++	if (can_is_can_skb(skb) && can_cap_enabled(dev, CAN_CAP_CC))
+ 		return CAN_MTU;
+ 
+ 	/* CAN FD */
+ 	if (ro->fd_frames && can_is_canfd_skb(skb) &&
+-	    raw_dev_fd_enabled(dev, priv))
++	    can_cap_enabled(dev, CAN_CAP_FD))
+ 		return CANFD_MTU;
+ 
+ 	/* CAN XL */
+ 	if (ro->xl_frames && can_is_canxl_skb(skb) &&
+-	    raw_dev_xl_enabled(dev, priv))
++	    can_cap_enabled(dev, CAN_CAP_XL))
+ 		return CANXL_MTU;
+ 
+ 	return 0;
+ }
+ 
 -- 
-2.52.0
+2.47.3
 
 
