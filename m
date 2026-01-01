@@ -1,118 +1,181 @@
-Return-Path: <linux-can+bounces-5977-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5978-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12F2FCECAA6
-	for <lists+linux-can@lfdr.de>; Thu, 01 Jan 2026 00:20:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70119CECFFC
+	for <lists+linux-can@lfdr.de>; Thu, 01 Jan 2026 13:12:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 90D0230036C5
-	for <lists+linux-can@lfdr.de>; Wed, 31 Dec 2025 23:20:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 31D413005195
+	for <lists+linux-can@lfdr.de>; Thu,  1 Jan 2026 12:12:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36CD324E4A1;
-	Wed, 31 Dec 2025 23:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 361C22C0F62;
+	Thu,  1 Jan 2026 12:12:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b="NbMpNhl9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7yqcYB1"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtpx.fel.cvut.cz (smtpx.feld.cvut.cz [147.32.210.153])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A849123AB87;
-	Wed, 31 Dec 2025 23:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.32.210.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057782773D8;
+	Thu,  1 Jan 2026 12:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767223236; cv=none; b=WU2cxHEhvNbrd7v5hX3cdcL3o3ShBSPm6nd9SdXWw5jqhvSgmrcjUzFxiBMCtZdDgrb+C5+CjTuQGs8tHrSO0kM3Iy3kyMqGnVCT3F8T/hUUapsbaaXJrXUoh7gQ8U/UZB1vJcwWYMTgpM9AUaGs3Sz09NiIX6P69uhk9YOfXgo=
+	t=1767269559; cv=none; b=T66RBO66FSocASR0Aa6JUGaNpG5Pd9IkXc1ecwlJs1UQfRv96g1ZMiJxNjiy6WgdLy6d1PEYP0boHLYHExPdfVupunyuPr8TVowKbA9RUOi1LlgBwLuTLKz9DIStlmeHpQuqTNl8krF94jk4R+3rIxRBZ47Bxp1rLR7iwqhQw+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767223236; c=relaxed/simple;
-	bh=FYGdSp6czj+0imSdcNgSv3AclAmLyHq2HJLGdWVBaAA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A+X+Jhtqk7Q5LhdulTR7zWbBAVKTDlTO5O9DkH5qBpb9836tv+BLCTgUnDuVrC5i6+9evs2yPJGvayZH6yrQ8Zwaesw8iLM6WtMeuCEPc27OUOfJn7oc3amlPsF5wQu217W5U/bNau/A046YuTDL3e5Y8UcHAIxUl/6XG3LumzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz; spf=pass smtp.mailfrom=fel.cvut.cz; dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b=NbMpNhl9; arc=none smtp.client-ip=147.32.210.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fel.cvut.cz
-Received: from localhost (unknown [192.168.200.27])
-	by smtpx.fel.cvut.cz (Postfix) with ESMTP id D331722685;
-	Thu, 01 Jan 2026 00:20:23 +0100 (CET)
-X-Virus-Scanned: IMAP STYX AMAVIS
-Received: from smtpx.fel.cvut.cz ([192.168.200.2])
- by localhost (cerokez-250.feld.cvut.cz [192.168.200.27]) (amavis, port 10060)
- with ESMTP id lcYaQay1hnm5; Thu,  1 Jan 2026 00:20:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
-	s=felmail; t=1767223222;
-	bh=93RrIMjakSwcrq6K5DWbPxQYjGApwXm9Nt8UBxC9kTI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=NbMpNhl9OsaBty7wrPCGpnukd3WNOnpFq3pUn42Q5sUQQN8u52d6bxjfAIj0MG8c/
-	 /ULjRETyfaklJC7okNA7FMRU/Ixzi3sDqGJSd86qGlJ2Pl7woitx2I42utpOpNWEzF
-	 xY4NRH1m2iMfHLWj8c/IRYpyFAbTlkLBrF9QxVJAh+DjVC+JxYdsmSiS7OmksRHysb
-	 JaANT4cc43588AgWrvXUNakjs76tWgaH/Tg4kizJpNX0EFH9b918kkZGbACFQgiDni
-	 YDiEPnTOSA7kygsmGgtxWASgvyjtZJLJeAmMoRDUrsWLE9txI3fau5ZkYq8OZy714j
-	 lwy3C+udiAw7A==
-Received: from fel.cvut.cz (static-84-242-78-234.bb.vodafone.cz [84.242.78.234])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pisa)
-	by smtpx.fel.cvut.cz (Postfix) with ESMTPSA id E4749224E6;
-	Thu, 01 Jan 2026 00:20:21 +0100 (CET)
-From: Pavel Pisa <pisa@fel.cvut.cz>
-To: linux-can@vger.kernel.org,
-	"Marc Kleine-Budde" <mkl@pengutronix.de>,
-	David Laight <david.laight.linux@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andrea Daoud <andreadaoud6@gmail.com>,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org
-Cc: Jiri Novak <jnovak@fel.cvut.cz>,
-	Ondrej Ille <ondrej.ille@gmail.com>,
-	Pavel Pisa <pisa@fel.cvut.cz>
-Subject: [PATCH] can: ctucanfd: fix SSP_SRC in cases when bit-rate is higher than 1 MBit.
-Date: Thu,  1 Jan 2026 00:19:26 +0100
-Message-ID: <20251231231926.20043-1-pisa@fel.cvut.cz>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1767269559; c=relaxed/simple;
+	bh=twTmdX32akwxQI5NUrmsrOlchdtaTJjigYNdzguzqyY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LXvunZ3XXMmIMVHO7vvW6OR1GzcnBqib+fs2JYHXKeF+k5Dt3N9wiWr/6j/vdgncMia0Dx6mbDharXHKH/d7OnSvsxY4/YSPGn0MLjTQEx2poGhFWfeNSHXEV/EQmxSi1WvfiBUJB1IXXWnAlU6yhckNC0XHd9x6bHx6AMqY9Eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7yqcYB1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07044C4CEF7;
+	Thu,  1 Jan 2026 12:12:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767269558;
+	bh=twTmdX32akwxQI5NUrmsrOlchdtaTJjigYNdzguzqyY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=h7yqcYB1+jYcqUlJ76scSrm+NGJoxw1RAu0N7hHs7ZzoRhWMZkuUCIq07xtPUXBkw
+	 lZV4aR8gR+UZ9yI2jrHR210iIgmdryDO+iwT0YZy20TkwReHLAi07Wl+JqcpcwnT1m
+	 w73HfTYgZjWTUoYenkwpcGeraNjWbFKpy6owoUfb59RyYZWuabNpP3w0K/Ua/gClZl
+	 zdAEpaeGiFcT9Km5mhh9ANsHDLHboacFr+ANOTjs0tPGF6R7xtKh4F+6/tEnRPaNS0
+	 wzGF/N9iETezQd+MTdrwdQGqvjkjhzMqkKzLJBToLGtQI9TzvAKl6tl3HsosoYH/te
+	 341MPKI3lVMWA==
+Message-ID: <d058f82b-2e2f-4353-8518-2cc9e15f7a98@kernel.org>
+Date: Thu, 1 Jan 2026 13:12:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] can: dummy_can: add CAN termination support
+To: Rakuram Eswaran <rakuram.e96@gmail.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20251231-can_doc_update_v1-v1-0-97aac5c20a35@gmail.com>
+ <20251231-can_doc_update_v1-v1-1-97aac5c20a35@gmail.com>
+From: Vincent Mailhol <mailhol@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20251231-can_doc_update_v1-v1-1-97aac5c20a35@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Ondrej Ille <ondrej.ille@gmail.com>
+On 31/12/2025 at 19:13, Rakuram Eswaran wrote:
+> Add support for configuring bus termination in the dummy_can driver.
+> This allows users to emulate a properly terminated CAN bus when
+> setting up virtual test environments.
+> 
+> Signed-off-by: Rakuram Eswaran <rakuram.e96@gmail.com>
+> ---
+> Tested the termination setting using below iproute commands:
+> 
+>   ip link set can0 type can termination 120
+>   ip link set can0 type can termination off
+>   ip link set can0 type can termination potato
+>   ip link set can0 type can termination 10000
+>   
+>  drivers/net/can/dummy_can.c | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/can/dummy_can.c b/drivers/net/can/dummy_can.c
+> index 41953655e3d3c9187d6574710e6aa90fc01c92a7..418d9e25bfca1c7af924ad451c8dd8ae1bca78a3 100644
+> --- a/drivers/net/can/dummy_can.c
+> +++ b/drivers/net/can/dummy_can.c
+> @@ -86,6 +86,11 @@ static const struct can_pwm_const dummy_can_pwm_const = {
+>  	.pwmo_max = 16,
+>  };
+>  
+> +static const u16 dummy_can_termination_const[] = {
+> +	CAN_TERMINATION_DISABLED,	/* 0 = off */
+> +	120,				/* 120 Ohms */
 
-The change has been tested on AMD/Xilinx Zynq
-with the next CTU CN FD IP core versions:
+Nitpick: no need to explain that disabled means "off", the first comment
+can be removed. Also, to be consistent with how the can.bitrate_max and
+can.clock.freq are declared, you can add the unit just next to the value.
 
- - 2.6 aka master in the "integration with Zynq-7000 system" test
-   6.12.43-rt12+ #1 SMP PREEMPT_RT kernel with CTU CAN FD git
-   driver (change already included in the driver repo)
- - older 2.5 snapshot with mainline kernels with this patch
-   applied locally in the multiple CAN latency tester nightly runs
-   6.18.0-rc4-rt3-dut #1 SMP PREEMPT_RT
-   6.19.0-rc3-dut
+	static const u16 dummy_can_termination_const[] = {
+		CAN_TERMINATION_DISABLED,
+		120 /* Ohms */,
+	};
 
-The logs are available at
+(above comment is notwithstanding).
 
- https://canbus.pages.fel.cvut.cz/
+> +};
+> +
+>  static void dummy_can_print_bittiming(struct net_device *dev,
+>  				      struct can_bittiming *bt)
+>  {
+> @@ -179,6 +184,16 @@ static void dummy_can_print_bittiming_info(struct net_device *dev)
+>  	netdev_dbg(dev, "\n");
+>  }
+>  
+> +static int dummy_can_set_termination(struct net_device *dev, u16 term)
+> +{
+> +	struct dummy_can *priv = netdev_priv(dev);
+> +
+> +	netdev_dbg(dev, "set termination to %u Ohms\n", term);
+> +	priv->can.termination = term;
+> +
+> +	return 0;
+> +}
+> +
+>  static int dummy_can_netdev_open(struct net_device *dev)
+>  {
+>  	int ret;
+> @@ -243,17 +258,23 @@ static int __init dummy_can_init(void)
+>  	dev->ethtool_ops = &dummy_can_ethtool_ops;
+>  	priv = netdev_priv(dev);
+>  	priv->can.bittiming_const = &dummy_can_bittiming_const;
+> -	priv->can.bitrate_max = 20 * MEGA /* BPS */;
+> -	priv->can.clock.freq = 160 * MEGA /* Hz */;
 
-Signed-off-by: Ondrej Ille <ondrej.ille@gmail.com>
-Signed-off-by: Pavel Pisa <pisa@fel.cvut.cz>
----
- drivers/net/can/ctucanfd/ctucanfd_base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Don't add unrelated changes to your patch. Your patch should do one
+thing (here: add the resistance termination). If you want to reorder the
+existing lines, that should go in a separate clean-up patch. But here,
+there is no need to touch those lines, so just drop this reorder.
 
-diff --git a/drivers/net/can/ctucanfd/ctucanfd_base.c b/drivers/net/can/ctucanfd/ctucanfd_base.c
-index 1e6b9e3dc2fe..0ea1ff28dfce 100644
---- a/drivers/net/can/ctucanfd/ctucanfd_base.c
-+++ b/drivers/net/can/ctucanfd/ctucanfd_base.c
-@@ -310,7 +310,7 @@ static int ctucan_set_secondary_sample_point(struct net_device *ndev)
- 		}
- 
- 		ssp_cfg = FIELD_PREP(REG_TRV_DELAY_SSP_OFFSET, ssp_offset);
--		ssp_cfg |= FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x1);
-+		ssp_cfg |= FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x0);
- 	}
- 
- 	ctucan_write32(priv, CTUCANFD_TRV_DELAY, ssp_cfg);
--- 
-2.47.3
+>  	priv->can.fd.data_bittiming_const = &dummy_can_fd_databittiming_const;
+>  	priv->can.fd.tdc_const = &dummy_can_fd_tdc_const;
+>  	priv->can.xl.data_bittiming_const = &dummy_can_xl_databittiming_const;
+>  	priv->can.xl.tdc_const = &dummy_can_xl_tdc_const;
+>  	priv->can.xl.pwm_const = &dummy_can_pwm_const;
+> +	priv->can.bitrate_max = 20 * MEGA /* BPS */;
+> +	priv->can.clock.freq = 160 * MEGA /* Hz */;
+> +	priv->can.termination_const_cnt = ARRAY_SIZE(dummy_can_termination_const);
+> +	priv->can.termination_const = dummy_can_termination_const;
+> +
+>  	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
+>  		CAN_CTRLMODE_FD | CAN_CTRLMODE_TDC_AUTO |
+>  		CAN_CTRLMODE_RESTRICTED | CAN_CTRLMODE_XL |
+>  		CAN_CTRLMODE_XL_TDC_AUTO | CAN_CTRLMODE_XL_TMS;
+> +
+> +	priv->can.do_set_termination = dummy_can_set_termination;
+> +
+>  	priv->dev = dev;
+>  
+>  	ret = register_candev(priv->dev);
+
+Aside from the above remark this is OK. Please send a v2 with that last
+remark addressed. You can also add my review tag:
+
+Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
+
+
+Yours sincerely,
+Vincent Mailhol
 
 
