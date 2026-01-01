@@ -1,46 +1,46 @@
-Return-Path: <linux-can+bounces-5978-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5979-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70119CECFFC
-	for <lists+linux-can@lfdr.de>; Thu, 01 Jan 2026 13:12:41 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8B28CED015
+	for <lists+linux-can@lfdr.de>; Thu, 01 Jan 2026 13:25:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 31D413005195
-	for <lists+linux-can@lfdr.de>; Thu,  1 Jan 2026 12:12:40 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0AAB13000B31
+	for <lists+linux-can@lfdr.de>; Thu,  1 Jan 2026 12:25:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 361C22C0F62;
-	Thu,  1 Jan 2026 12:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EB8C19DF8D;
+	Thu,  1 Jan 2026 12:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7yqcYB1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wlh3JntF"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057782773D8;
-	Thu,  1 Jan 2026 12:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4610745C0B
+	for <linux-can@vger.kernel.org>; Thu,  1 Jan 2026 12:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767269559; cv=none; b=T66RBO66FSocASR0Aa6JUGaNpG5Pd9IkXc1ecwlJs1UQfRv96g1ZMiJxNjiy6WgdLy6d1PEYP0boHLYHExPdfVupunyuPr8TVowKbA9RUOi1LlgBwLuTLKz9DIStlmeHpQuqTNl8krF94jk4R+3rIxRBZ47Bxp1rLR7iwqhQw+w=
+	t=1767270353; cv=none; b=RlMBZDPgd0w1jW6A0heAQQvXMMpR9Kv9mGnldxtFnSw8xfuafV/eItIBHNwnOC+EhOxKKGTlZzzoV7o0PT+SkKtK83G4wyOVwOhMbIiitX1ghxiqptJQI0W9q/uTDorXWPlxsiSJxnPCFj497xDJyfmc30m3WEWgS+DrP/h5Wh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767269559; c=relaxed/simple;
-	bh=twTmdX32akwxQI5NUrmsrOlchdtaTJjigYNdzguzqyY=;
+	s=arc-20240116; t=1767270353; c=relaxed/simple;
+	bh=4wnQq/X6aSO35U3zVONslqooSHpT+ofmVO5VAZcIzKE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LXvunZ3XXMmIMVHO7vvW6OR1GzcnBqib+fs2JYHXKeF+k5Dt3N9wiWr/6j/vdgncMia0Dx6mbDharXHKH/d7OnSvsxY4/YSPGn0MLjTQEx2poGhFWfeNSHXEV/EQmxSi1WvfiBUJB1IXXWnAlU6yhckNC0XHd9x6bHx6AMqY9Eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7yqcYB1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07044C4CEF7;
-	Thu,  1 Jan 2026 12:12:34 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=lsWHPktJhfUydbuwq686kyHqZqD6sZ1soxxyO4icnLhCUNAYQZMSXJTrfBAQoYM0rHDopOWyf7W4F1aRiCNzXf6trJxKDNZUFS2o0zMS7I9NoV5FVgZvSXDXCwdplGteK+zffxL0G5C0v+bWNYsJe4gBhb28pklzC6h+906NMSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wlh3JntF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A10E5C4CEF7;
+	Thu,  1 Jan 2026 12:25:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767269558;
-	bh=twTmdX32akwxQI5NUrmsrOlchdtaTJjigYNdzguzqyY=;
+	s=k20201202; t=1767270352;
+	bh=4wnQq/X6aSO35U3zVONslqooSHpT+ofmVO5VAZcIzKE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=h7yqcYB1+jYcqUlJ76scSrm+NGJoxw1RAu0N7hHs7ZzoRhWMZkuUCIq07xtPUXBkw
-	 lZV4aR8gR+UZ9yI2jrHR210iIgmdryDO+iwT0YZy20TkwReHLAi07Wl+JqcpcwnT1m
-	 w73HfTYgZjWTUoYenkwpcGeraNjWbFKpy6owoUfb59RyYZWuabNpP3w0K/Ua/gClZl
-	 zdAEpaeGiFcT9Km5mhh9ANsHDLHboacFr+ANOTjs0tPGF6R7xtKh4F+6/tEnRPaNS0
-	 wzGF/N9iETezQd+MTdrwdQGqvjkjhzMqkKzLJBToLGtQI9TzvAKl6tl3HsosoYH/te
-	 341MPKI3lVMWA==
-Message-ID: <d058f82b-2e2f-4353-8518-2cc9e15f7a98@kernel.org>
-Date: Thu, 1 Jan 2026 13:12:32 +0100
+	b=Wlh3JntFKAp4Ow+fF7RGyv27WBFHq80rIOuynF9U/DREdu1aDBWuyeQRIgfAt/tCv
+	 F97txzJ71pm9bRrm640NMS+B7k++Ytti+IP73l8HnbH1Y82kApaBp5x027laXXid6p
+	 +sJgsQc8HMkw3Bds7Gykn65el6VXz5jlLQf5MxzaxJscqUe75Sjs2a90DrJtlHLNoh
+	 31EYZTO6wVUyO6mzHywkuyiYAmMMHO16PDNZAil1cEDEMYk1S1a8p7ljv0e9tyXKFU
+	 JXNgrxrg57yYaICftE3YMLaX/g0sV5VpiYzJLjNAExiKtMZ4ovyEhjqpahQ4+VYV3P
+	 zycPHp2XI8tKw==
+Message-ID: <93df46ef-c1db-4df7-a90f-088dbacf12c6@kernel.org>
+Date: Thu, 1 Jan 2026 13:25:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -48,17 +48,10 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] can: dummy_can: add CAN termination support
-To: Rakuram Eswaran <rakuram.e96@gmail.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>,
- Oliver Hartkopp <socketcan@hartkopp.net>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20251231-can_doc_update_v1-v1-0-97aac5c20a35@gmail.com>
- <20251231-can_doc_update_v1-v1-1-97aac5c20a35@gmail.com>
+Subject: Re: [PATCH v2] can: propagate CAN device capabilities via ml_priv
+To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Arnd Bergmann <arnd@arndb.de>
+References: <20251231165127.4206-1-socketcan@hartkopp.net>
 From: Vincent Mailhol <mailhol@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=mailhol@kernel.org; keydata=
@@ -70,109 +63,59 @@ Autocrypt: addr=mailhol@kernel.org; keydata=
  YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
  dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
  zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20251231-can_doc_update_v1-v1-1-97aac5c20a35@gmail.com>
+In-Reply-To: <20251231165127.4206-1-socketcan@hartkopp.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 31/12/2025 at 19:13, Rakuram Eswaran wrote:
-> Add support for configuring bus termination in the dummy_can driver.
-> This allows users to emulate a properly terminated CAN bus when
-> setting up virtual test environments.
+Hi Oliver,
+
+Happy new year to you and to all the members of the CAN mailing
+list!(and also to Arnd who is listed in CC ;))
+
+On 31/12/2025 at 17:51, Oliver Hartkopp wrote:
+> Commit 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
+> caused a sequence of dependency and linker fixes starting with commit
+> cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure by default").
 > 
-> Signed-off-by: Rakuram Eswaran <rakuram.e96@gmail.com>
+> The entire problem was caused by the requirement that a new network layer
+> feature needed to know about the protocol capabilities of the CAN devices.
+> Instead of accessing CAN device internal data structures which caused the
+> dependency problems this patch introduces capabilty information into the
+> CAN specific ml_priv data which is accessible from both sides.
+> 
+> With this change the CAN network layer can check the required features and
+> the decoupling of the driver layer and network layer is restored.
+> Therefore the Kconfig and Makefile changes/fixes are reverted too.
+> 
+> Fixes: 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
+> Fixes: cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure by default")
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 > ---
-> Tested the termination setting using below iproute commands:
-> 
->   ip link set can0 type can termination 120
->   ip link set can0 type can termination off
->   ip link set can0 type can termination potato
->   ip link set can0 type can termination 10000
->   
->  drivers/net/can/dummy_can.c | 25 +++++++++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/can/dummy_can.c b/drivers/net/can/dummy_can.c
-> index 41953655e3d3c9187d6574710e6aa90fc01c92a7..418d9e25bfca1c7af924ad451c8dd8ae1bca78a3 100644
-> --- a/drivers/net/can/dummy_can.c
-> +++ b/drivers/net/can/dummy_can.c
-> @@ -86,6 +86,11 @@ static const struct can_pwm_const dummy_can_pwm_const = {
->  	.pwmo_max = 16,
->  };
->  
-> +static const u16 dummy_can_termination_const[] = {
-> +	CAN_TERMINATION_DISABLED,	/* 0 = off */
-> +	120,				/* 120 Ohms */
+>  drivers/net/can/Kconfig       |  7 ++++--
+>  drivers/net/can/Makefile      |  2 +-
+>  drivers/net/can/dev/Makefile  |  5 ++--
+>  drivers/net/can/dev/dev.c     | 19 +++++++++++++++
+>  drivers/net/can/dev/netlink.c |  1 +
+>  drivers/net/can/vcan.c        | 15 ++++++++++++
+>  drivers/net/can/vxcan.c       | 15 ++++++++++++
+>  include/linux/can/can-ml.h    | 24 +++++++++++++++++++
+>  include/linux/can/dev.h       |  8 +------
+>  net/can/raw.c                 | 45 ++++-------------------------------
 
-Nitpick: no need to explain that disabled means "off", the first comment
-can be removed. Also, to be consistent with how the can.bitrate_max and
-can.clock.freq are declared, you can add the unit just next to the value.
+This is a huge patch. I think it should be split in smaller pieces with
+the reverts and the new code in different patches. What I would suggest
+is to split it in 3 like this:
 
-	static const u16 dummy_can_termination_const[] = {
-		CAN_TERMINATION_DISABLED,
-		120 /* Ohms */,
-	};
+  Patch #1: revert 1a620a723853 ("can: raw: instantly reject unsupported
+            CAN frames") and all the Kconfig subsequent fix attempts.
 
-(above comment is notwithstanding).
+  Patch #2: Introduce the new logic.
 
-> +};
-> +
->  static void dummy_can_print_bittiming(struct net_device *dev,
->  				      struct can_bittiming *bt)
->  {
-> @@ -179,6 +184,16 @@ static void dummy_can_print_bittiming_info(struct net_device *dev)
->  	netdev_dbg(dev, "\n");
->  }
->  
-> +static int dummy_can_set_termination(struct net_device *dev, u16 term)
-> +{
-> +	struct dummy_can *priv = netdev_priv(dev);
-> +
-> +	netdev_dbg(dev, "set termination to %u Ohms\n", term);
-> +	priv->can.termination = term;
-> +
-> +	return 0;
-> +}
-> +
->  static int dummy_can_netdev_open(struct net_device *dev)
->  {
->  	int ret;
-> @@ -243,17 +258,23 @@ static int __init dummy_can_init(void)
->  	dev->ethtool_ops = &dummy_can_ethtool_ops;
->  	priv = netdev_priv(dev);
->  	priv->can.bittiming_const = &dummy_can_bittiming_const;
-> -	priv->can.bitrate_max = 20 * MEGA /* BPS */;
-> -	priv->can.clock.freq = 160 * MEGA /* Hz */;
+  Patch #3: reintroduce 1a620a723853.
 
-Don't add unrelated changes to your patch. Your patch should do one
-thing (here: add the resistance termination). If you want to reorder the
-existing lines, that should go in a separate clean-up patch. But here,
-there is no need to touch those lines, so just drop this reorder.
 
->  	priv->can.fd.data_bittiming_const = &dummy_can_fd_databittiming_const;
->  	priv->can.fd.tdc_const = &dummy_can_fd_tdc_const;
->  	priv->can.xl.data_bittiming_const = &dummy_can_xl_databittiming_const;
->  	priv->can.xl.tdc_const = &dummy_can_xl_tdc_const;
->  	priv->can.xl.pwm_const = &dummy_can_pwm_const;
-> +	priv->can.bitrate_max = 20 * MEGA /* BPS */;
-> +	priv->can.clock.freq = 160 * MEGA /* Hz */;
-> +	priv->can.termination_const_cnt = ARRAY_SIZE(dummy_can_termination_const);
-> +	priv->can.termination_const = dummy_can_termination_const;
-> +
->  	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
->  		CAN_CTRLMODE_FD | CAN_CTRLMODE_TDC_AUTO |
->  		CAN_CTRLMODE_RESTRICTED | CAN_CTRLMODE_XL |
->  		CAN_CTRLMODE_XL_TDC_AUTO | CAN_CTRLMODE_XL_TMS;
-> +
-> +	priv->can.do_set_termination = dummy_can_set_termination;
-> +
->  	priv->dev = dev;
->  
->  	ret = register_candev(priv->dev);
-
-Aside from the above remark this is OK. Please send a v2 with that last
-remark addressed. You can also add my review tag:
-
-Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
+Reverting 1a620a723853 and reintroducing it later is kind of necessary
+to have each patch of the series in a working state.
 
 
 Yours sincerely,
