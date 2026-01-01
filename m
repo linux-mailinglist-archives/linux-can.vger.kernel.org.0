@@ -1,161 +1,302 @@
-Return-Path: <linux-can+bounces-5982-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5984-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C604CED1A6
-	for <lists+linux-can@lfdr.de>; Thu, 01 Jan 2026 16:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 25BFBCED4B0
+	for <lists+linux-can@lfdr.de>; Thu, 01 Jan 2026 20:14:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A7606300A1C1
-	for <lists+linux-can@lfdr.de>; Thu,  1 Jan 2026 15:21:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5D1F13006A9D
+	for <lists+linux-can@lfdr.de>; Thu,  1 Jan 2026 19:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FBAA2DD60E;
-	Thu,  1 Jan 2026 15:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AB98145348;
+	Thu,  1 Jan 2026 19:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="I3I/V9e4";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="QEdrhu9d"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="XAx2rt3v";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="+kandYcm"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999B52DCBFD
-	for <linux-can@vger.kernel.org>; Thu,  1 Jan 2026 15:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D374421B918
+	for <linux-can@vger.kernel.org>; Thu,  1 Jan 2026 19:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.161
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767280893; cv=pass; b=FOrw0yWCyD0pl5iE5ml5StF06GrW0d0yKmPl8yt5Z1Z8ONtKk50wEb2qugtucXs5Cty/SJnmkJQ4xJukHXHxxZGXlYao57NiIafpNiU2jra+N153M2O5UGSRLRNPmCaaFzspuh09c5zZBqKCOPACY3FV6v1m+aAdgnN6yXUYDxw=
+	t=1767294850; cv=pass; b=rabnSmDbjYc4e+xvm5/8r5K1MKAGegDq1hkFkS3nWdJzrU62/wyCoHQsbaFnWzmSL1MPI51jzCD2/LRKznYaS1RlDuHyD+Mbc7T3ehw6NfLuhF0Zvmr2E7sriAdjm4HvH04lHKqixMb6AuBB3HmyXXOoiGPgtGe4cGa4c57Ibtw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767280893; c=relaxed/simple;
-	bh=yxz5ezQV44KiFd9ljELJAjrG99/u1CGH+K9HwwFFMZQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LRpqVTSg/bCuNqRHfDCp3gwe3sxin32zyr/WNpIu9WUY97hITEJwU65abbyQ3IuhCphnOJQRBnCWiJgd7M95Kt3I4FXH+J6KsFrPtp9wnfiS2eJj9wEYt4cAffPvgWbSs5/JlbwrYZr7RAetg/OAaY/2n+brBao9KBPbWweef64=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=I3I/V9e4; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=QEdrhu9d; arc=pass smtp.client-ip=85.215.255.53
+	s=arc-20240116; t=1767294850; c=relaxed/simple;
+	bh=3ZlvuSGStjzyxQi4wMCX6o3LH9T0K1dtKj3Iy8Vy6DE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PwnXh/q4BpZubLiErCsJg9pzjyJsFA9tAh0qrfcErFaW0KT+uV0xJ62z0FOUF5b/XKh/aXOxQJd6rVIGo712YxVjB9vuW6dCw7g/pV2Kzes/2FixDAdA9gCtpBLhq1wXtrNyFz4b+LpJ1TrcDGfybyjnOZOSS6tdJXyiY0W4888=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=XAx2rt3v; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=+kandYcm; arc=pass smtp.client-ip=81.169.146.161
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1767280880; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1767294827; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=RLh5Dk3Z0i9B0+2aYNtKPT8YZHxWP56euaHVPAA2oAvao25vdUUCmmtPd4YTgwh/VE
-    3hdG9WrnoEs823iwQoSjbJvc1PU8XfHyZodq9S43CPKrjucH+Ml4oc6X94zXziiOc9Yh
-    iokQbpO7bPoXYZ2VStCwLeH+oPyukW0pRRLTuE1CFnTz0qJ5RIXDXlCQLjRbakFNwUHF
-    mOgOLZn+ncYqrV5h8pPD2iIGp0dq69u1Y2zp98xBJAZpKCw6n2mxy1eXEuBsT4fFoo2B
-    Zdyey+TjBAKV2jV5hmfoO27PGd1yvAb8/EjrHZS849mwsAEU90Nu8+aOEBWA0+HDFT/i
-    /MEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767280880;
+    b=TCajq9zYOTDCvZf2hacUCHzQoZ5yvnsavVEhQ5qt6brOW+srpSmgjBZ1Uh0tuJO2q0
+    H+WVv8+nstPGJyXasGL20Jx8qZkq6/iu8LH14tuxVuHfSMvUg1Oy/tndMGId5uUO3pD/
+    f0ajtUIagoNDnAGs0Qd5mkgu4M4V1LN909LMAgSDtgj2vXFnD0HmcM2CgYhC9WvGqAVT
+    NNZbk3OBYjUQs5iquFqcvAZbu1c8V3+cMm7hqnG3PB6WGLJ2kHSkP2P9IZDuWo0vlof4
+    rCFCpbKoDsZ76QTvJupws2Z9p5q6YLvwxzfYxCSCyMOqV7CKnwcBWbI7FmpYnIr6e0pS
+    emeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767294827;
     s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=rwaPQi0vhy9RCbWVDZTHuCoQnwjM6OFUdalRJyc7oS0=;
-    b=ToRf0rbst0sDGxD7zQxZYyKHYXzJ+gjiIJGNEwwKIr4aKwCO17YzbeTybSiYseGrL6
-    Xqa1rI8MysPjsm0OrQC9G6N7OGQBBDmeHlRJT3MMZ9cgoPOWFbs8zoMefE7ds+/HVT46
-    In9des6rnkLefOISS8Q8CKIvNbfur71LoEUhLhBOtdw4z6in9HKomhp8aRW2254J4KDv
-    NNZozgiXWNFnvqEHMuBcVkgtwnf6rs4TX97xeRXonYp2mHCw4qbl7qRFf0S6CO3sUQyZ
-    GmwyW1VsYhzdbBtJJOKsXP08kdNgMvLa54STqv10j5Tv03i1hENCcYNx6tt7/A0aK7mi
-    gqBA==
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=xYFY8G71BYJmYDayFNyuOpEgGseAGVi+V//F9fuuUmU=;
+    b=Ftn+EThs9QlxduuH2+VNfkPI4+qXlTYh+KBIXfBajfWqQeorxDJSmmhhTak4fW2FMC
+    m6NIkK1gimlz+Ft60WFBdfcRN68NYetlCK9cdkuff83Flfcev3f6yU1Q0xlVDmvaRec5
+    vt5cOXh7lQ3ccNmYnKqeAtkgU54pBKUoP3OlksIga/YacgUrh6ON2lZjLzNbncylf24w
+    c3ayel2U833u7ms99zrEUwAHb4tL2iZZ4+79ZbORlU95D4VJeg0ivBDZMGTuI3CDII3o
+    hHLjqx/rnX/8WwPtStt/UZJvR/d/IFpWlkj0o+iipFh7/23/Y4la9pDWZW7wkD4JOKYc
+    np9A==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767280880;
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767294827;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=rwaPQi0vhy9RCbWVDZTHuCoQnwjM6OFUdalRJyc7oS0=;
-    b=I3I/V9e42YS8vQK1mmGlQtpHQ3Mi42Pfifte141YxXFVqqYIZkRwu2fAWa0y5zBIxk
-    iU6PIDrfAwE1kZnYj4wbvdnLprBrPWJV41yEDtNsGoOvqgnHtNomAjV5v8KYFncIqqDt
-    q4gcbUhFNbXwr/ShY7K4Bw+EVt/KMy8mvRYRUJmoSJuDiAfpyl62whaNHeLiKQNbXt0X
-    mKqHBiz0X/WetRIPmiLB7o/srtRPR2fsok+ojMG8Qd1YbUsZgAa0G2m4cAVQuz5irwXJ
-    RLVRrZc5iexrFaPYGNZcT0Ie5QEEEmRRxHAF3vXMrrIQkMV1y5rZx/1lrGDeRhxaqexm
-    G8kA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767280880;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=xYFY8G71BYJmYDayFNyuOpEgGseAGVi+V//F9fuuUmU=;
+    b=XAx2rt3vvAG7nstqYqxB7RMCakM+tMSDx0Xg8xh16iviSU14kPu1JHgAMdNP0wxxD2
+    LaEusPniUQU+fYzvkqpAmNLe1xYIp7z/MidNIpeKTTLC1dKQxvQUCJlNKWd7LThkghvl
+    k6Fgf0WmMcz8vZIbAQjrNBkg3ciYLKcDDhHn8uRjzjNUGVlsFyAYNE5U8Dh3j1acrWQP
+    7BnZSAs/apakLZ9aGowyKYcW+0rOj9xqPxqKClNb98mqfdgbDltJaW36+BrYDgmwfA5J
+    1RLLkbcwKnlaSFrFxzmvsHvAIqvoWcCrdSBxeMVINnT2zNHBS0mELOcblAXeOE10j/Ad
+    WF/w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767294827;
     s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=rwaPQi0vhy9RCbWVDZTHuCoQnwjM6OFUdalRJyc7oS0=;
-    b=QEdrhu9dOrHMekmkhKXgHvVGT9OmPVUyNddgP8t9QnaIFqw0Opnr+audxbxXoDWQja
-    GsImi7pW8NyAKsOkiODw==
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=xYFY8G71BYJmYDayFNyuOpEgGseAGVi+V//F9fuuUmU=;
+    b=+kandYcmKe20PJzY3NdV8d64MugFHFNlZz1qbQgzpuY1I4/0EzYCduTBgcPlYyy/n0
+    MawhlfUJwHYJma1o+nAw==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
+Received: from lenov17.lan
     by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b201FLKdPb
+    with ESMTPSA id K0e68b201JDle41
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Thu, 1 Jan 2026 16:21:20 +0100 (CET)
-Message-ID: <42afa819-1d23-41d8-a763-2e98d52a2810@hartkopp.net>
-Date: Thu, 1 Jan 2026 16:21:20 +0100
+    Thu, 1 Jan 2026 20:13:47 +0100 (CET)
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+To: linux-can@vger.kernel.org
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Vincent Mailhol <mailhol@kernel.org>
+Subject: [PATCH 1/3] Revert "can: raw: instantly reject unsupported CAN frames"
+Date: Thu,  1 Jan 2026 20:13:28 +0100
+Message-ID: <20260101191330.1836-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] can: propagate CAN device capabilities via ml_priv
-To: Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Arnd Bergmann <arnd@arndb.de>
-References: <20251231165127.4206-1-socketcan@hartkopp.net>
- <93df46ef-c1db-4df7-a90f-088dbacf12c6@kernel.org>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <93df46ef-c1db-4df7-a90f-088dbacf12c6@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hi Vincent,
+This reverts commit 1a620a723853a0f49703c317d52dc6b9602cbaa8
 
-On 01.01.26 13:25, Vincent Mailhol wrote:
+and its follow-up fixes for the introduced dependency issues.
 
-> Happy new year to you and to all the members of the CAN mailing
-> list!(and also to Arnd who is listed in CC ;))
+commit 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
+commit cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure by default")
+commit 6abd4577bccc ("can: fix build dependency")
+commit 5a5aff6338c0 ("can: fix build dependency")
 
-Thanks! Happy new year to you too!
+The entire problem was caused by the requirement that a new network layer
+feature needed to know about the protocol capabilities of the CAN devices.
+Instead of accessing CAN device internal data structures which caused the
+dependency problems a better approach has been developed which makes use of
+CAN specific ml_priv data which is accessible from both sides.
 
-This year CAN XL will lift off with a first native CAN XL netdevice 
-driver and likely also with a new ISO-TP variant for CAN XL \o/
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Vincent Mailhol <mailhol@kernel.org>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+ drivers/net/can/Kconfig      |  7 +++--
+ drivers/net/can/Makefile     |  2 +-
+ drivers/net/can/dev/Makefile |  5 ++--
+ include/linux/can/dev.h      |  7 -----
+ net/can/raw.c                | 54 ++++++------------------------------
+ 5 files changed, 17 insertions(+), 58 deletions(-)
 
-Looking forward to both of it!
-
-(..)
-
->> Fixes: 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
->> Fixes: cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure by default")
->> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
->> ---
->>   drivers/net/can/Kconfig       |  7 ++++--
->>   drivers/net/can/Makefile      |  2 +-
->>   drivers/net/can/dev/Makefile  |  5 ++--
->>   drivers/net/can/dev/dev.c     | 19 +++++++++++++++
->>   drivers/net/can/dev/netlink.c |  1 +
->>   drivers/net/can/vcan.c        | 15 ++++++++++++
->>   drivers/net/can/vxcan.c       | 15 ++++++++++++
->>   include/linux/can/can-ml.h    | 24 +++++++++++++++++++
->>   include/linux/can/dev.h       |  8 +------
->>   net/can/raw.c                 | 45 ++++-------------------------------
-> 
-> This is a huge patch.
-
-88 insertions(+), 53 deletions(-) => adding 35 lines.
-Not *that* huge ;-)
-
-> I think it should be split in smaller pieces with
-> the reverts and the new code in different patches. What I would suggest
-> is to split it in 3 like this:
-> 
->    Patch #1: revert 1a620a723853 ("can: raw: instantly reject unsupported
->              CAN frames") and all the Kconfig subsequent fix attempts.
-> 
->    Patch #2: Introduce the new logic.
-> 
->    Patch #3: reintroduce 1a620a723853.
-
-Right, that's at least easier to review.
-
-> Reverting 1a620a723853 and reintroducing it later is kind of necessary
-> to have each patch of the series in a working state.
-
-Hopefully patch #2/#3 will still be accepted to restore the 
-functionality of the 6.19-rc1 kernel then ...
-
-I will send a set of three patches as suggested.
-
-Best regards,
-Oliver
+diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+index cfaea6178a71..e15e320db476 100644
+--- a/drivers/net/can/Kconfig
++++ b/drivers/net/can/Kconfig
+@@ -1,9 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+ menuconfig CAN_DEV
+-	bool "CAN Device Drivers"
++	tristate "CAN Device Drivers"
+ 	default y
+ 	depends on CAN
+ 	help
+ 	  Controller Area Network (CAN) is serial communications protocol up to
+ 	  1Mbit/s for its original release (now known as Classical CAN) and up
+@@ -15,11 +15,14 @@ menuconfig CAN_DEV
+ 
+ 	  This section contains all the CAN(-FD) device drivers including the
+ 	  virtual ones. If you own such devices or plan to use the virtual CAN
+ 	  interfaces to develop applications, say Y here.
+ 
+-if CAN_DEV && CAN
++	  To compile as a module, choose M here: the module will be called
++	  can-dev.
++
++if CAN_DEV
+ 
+ config CAN_VCAN
+ 	tristate "Virtual Local CAN Interface (vcan)"
+ 	help
+ 	  Similar to the network loopback devices, vcan offers a
+diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
+index 37e2f1a2faec..d7bc10a6b8ea 100644
+--- a/drivers/net/can/Makefile
++++ b/drivers/net/can/Makefile
+@@ -5,11 +5,11 @@
+ 
+ obj-$(CONFIG_CAN_VCAN)		+= vcan.o
+ obj-$(CONFIG_CAN_VXCAN)		+= vxcan.o
+ obj-$(CONFIG_CAN_SLCAN)		+= slcan/
+ 
+-obj-$(CONFIG_CAN_DEV)		+= dev/
++obj-y				+= dev/
+ obj-y				+= esd/
+ obj-y				+= rcar/
+ obj-y				+= rockchip/
+ obj-y				+= spi/
+ obj-y				+= usb/
+diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
+index 64226acf0f3d..633687d6b6c0 100644
+--- a/drivers/net/can/dev/Makefile
++++ b/drivers/net/can/dev/Makefile
+@@ -1,10 +1,11 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-obj-$(CONFIG_CAN) += can-dev.o
++obj-$(CONFIG_CAN_DEV) += can-dev.o
++
++can-dev-y += skb.o
+ 
+-can-dev-$(CONFIG_CAN_DEV) += skb.o
+ can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
+ can-dev-$(CONFIG_CAN_NETLINK) += bittiming.o
+ can-dev-$(CONFIG_CAN_NETLINK) += dev.o
+ can-dev-$(CONFIG_CAN_NETLINK) += length.o
+ can-dev-$(CONFIG_CAN_NETLINK) += netlink.o
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index f6416a56e95d..52c8be5c160e 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -109,18 +109,11 @@ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+ #define alloc_candev_mq(sizeof_priv, echo_skb_max, count) \
+ 	alloc_candev_mqs(sizeof_priv, echo_skb_max, count, count)
+ void free_candev(struct net_device *dev);
+ 
+ /* a candev safe wrapper around netdev_priv */
+-#if IS_ENABLED(CONFIG_CAN_NETLINK)
+ struct can_priv *safe_candev_priv(struct net_device *dev);
+-#else
+-static inline struct can_priv *safe_candev_priv(struct net_device *dev)
+-{
+-	return NULL;
+-}
+-#endif
+ 
+ int open_candev(struct net_device *dev);
+ void close_candev(struct net_device *dev);
+ void can_set_default_mtu(struct net_device *dev);
+ int __must_check can_set_static_ctrlmode(struct net_device *dev,
+diff --git a/net/can/raw.c b/net/can/raw.c
+index be1ef7cf4204..f36a83d3447c 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -890,62 +890,24 @@ static void raw_put_canxl_vcid(struct raw_sock *ro, struct sk_buff *skb)
+ 		cxl->prio &= CANXL_PRIO_MASK;
+ 		cxl->prio |= ro->tx_vcid_shifted;
+ 	}
+ }
+ 
+-static inline bool raw_dev_cc_enabled(struct net_device *dev,
+-				      struct can_priv *priv)
++static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb, int mtu)
+ {
+-	/* The CANXL-only mode disables error-signalling on the CAN bus
+-	 * which is needed to send CAN CC/FD frames
+-	 */
+-	if (priv)
+-		return !can_dev_in_xl_only_mode(priv);
+-
+-	/* virtual CAN interfaces always support CAN CC */
+-	return true;
+-}
+-
+-static inline bool raw_dev_fd_enabled(struct net_device *dev,
+-				      struct can_priv *priv)
+-{
+-	/* check FD ctrlmode on real CAN interfaces */
+-	if (priv)
+-		return (priv->ctrlmode & CAN_CTRLMODE_FD);
+-
+-	/* check MTU for virtual CAN FD interfaces */
+-	return (READ_ONCE(dev->mtu) >= CANFD_MTU);
+-}
+-
+-static inline bool raw_dev_xl_enabled(struct net_device *dev,
+-				      struct can_priv *priv)
+-{
+-	/* check XL ctrlmode on real CAN interfaces */
+-	if (priv)
+-		return (priv->ctrlmode & CAN_CTRLMODE_XL);
+-
+-	/* check MTU for virtual CAN XL interfaces */
+-	return can_is_canxl_dev_mtu(READ_ONCE(dev->mtu));
+-}
+-
+-static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb,
+-				      struct net_device *dev)
+-{
+-	struct can_priv *priv = safe_candev_priv(dev);
+-
+-	/* Classical CAN */
+-	if (can_is_can_skb(skb) && raw_dev_cc_enabled(dev, priv))
++	/* Classical CAN -> no checks for flags and device capabilities */
++	if (can_is_can_skb(skb))
+ 		return CAN_MTU;
+ 
+-	/* CAN FD */
++	/* CAN FD -> needs to be enabled and a CAN FD or CAN XL device */
+ 	if (ro->fd_frames && can_is_canfd_skb(skb) &&
+-	    raw_dev_fd_enabled(dev, priv))
++	    (mtu == CANFD_MTU || can_is_canxl_dev_mtu(mtu)))
+ 		return CANFD_MTU;
+ 
+-	/* CAN XL */
++	/* CAN XL -> needs to be enabled and a CAN XL device */
+ 	if (ro->xl_frames && can_is_canxl_skb(skb) &&
+-	    raw_dev_xl_enabled(dev, priv))
++	    can_is_canxl_dev_mtu(mtu))
+ 		return CANXL_MTU;
+ 
+ 	return 0;
+ }
+ 
+@@ -997,11 +959,11 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 		goto free_skb;
+ 
+ 	err = -EINVAL;
+ 
+ 	/* check for valid CAN (CC/FD/XL) frame content */
+-	txmtu = raw_check_txframe(ro, skb, dev);
++	txmtu = raw_check_txframe(ro, skb, READ_ONCE(dev->mtu));
+ 	if (!txmtu)
+ 		goto free_skb;
+ 
+ 	/* only CANXL: clear/forward/set VCID value */
+ 	if (txmtu == CANXL_MTU)
+-- 
+2.47.3
 
 
