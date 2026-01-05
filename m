@@ -1,138 +1,134 @@
-Return-Path: <linux-can+bounces-5994-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-5995-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7399CF3455
-	for <lists+linux-can@lfdr.de>; Mon, 05 Jan 2026 12:32:37 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8676BCF38D6
+	for <lists+linux-can@lfdr.de>; Mon, 05 Jan 2026 13:36:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AE96E3093B00
-	for <lists+linux-can@lfdr.de>; Mon,  5 Jan 2026 11:26:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8535F3009135
+	for <lists+linux-can@lfdr.de>; Mon,  5 Jan 2026 12:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2379F340DA5;
-	Mon,  5 Jan 2026 11:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b="RWjUJ3Qf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26EA3191C8;
+	Mon,  5 Jan 2026 12:36:05 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtpx.fel.cvut.cz (smtpx.feld.cvut.cz [147.32.210.153])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538EF340A6A;
-	Mon,  5 Jan 2026 11:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.32.210.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9680324B0C
+	for <linux-can@vger.kernel.org>; Mon,  5 Jan 2026 12:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767611854; cv=none; b=WY619DVf+nF0aa2uG5dBhjM5t/kzkWYJX/0jYIK35A1XU92CTloTavTy0gpxWPwKv64i1sCIUUO4PXI69EOtdDX8dryIl1askG/gMWy+6yYBcdgQtPM8a076LMcDg0tPW5zol2S2m0yQxw8Pd0HEBoVZCYMii9yE6ja44Z+V71Q=
+	t=1767616565; cv=none; b=o118axm4pqzaMppWt+trFjmA0zeY++XeMnMhVfWvei6SB7pVPR1wXxgIvdTP4+A27hQvtef48FSeo2zlYsCpFKJhAl+aEjcoREuP4PMduAvLgUK7SCbnnFkiL3j/NkvXaHFd8z0DgJ5iwbRJG8ckvfaSjn8j7TA/BvCxfwSztLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767611854; c=relaxed/simple;
-	bh=TGf6Xx6EH00BglDDqkVDcwkNf66EGGQew7JsrhRqn2Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OyYjqAYaLnChhrR3oxJnlucLp4zbTbf76n9GQD983q6WczNjZovlzNajVHU2I44nD66VH1dAxDMukkBMN8YLN5fw0f7zLp11ckwFXZzbOF0OtqOvak7dhyRwZzsKFtIo9kQC0Ndh2zw1eJfiyYRty2NJAU8BLP3n29XdrePA0Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz; spf=pass smtp.mailfrom=fel.cvut.cz; dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b=RWjUJ3Qf; arc=none smtp.client-ip=147.32.210.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fel.cvut.cz
-Received: from localhost (unknown [192.168.200.27])
-	by smtpx.fel.cvut.cz (Postfix) with ESMTP id C40092A6C1;
-	Mon, 05 Jan 2026 12:17:21 +0100 (CET)
-X-Virus-Scanned: IMAP STYX AMAVIS
-Received: from smtpx.fel.cvut.cz ([192.168.200.2])
- by localhost (cerokez-250.feld.cvut.cz [192.168.200.27]) (amavis, port 10060)
- with ESMTP id EmTVYg8_ynXu; Mon,  5 Jan 2026 12:17:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
-	s=felmail; t=1767611840;
-	bh=39GTysQ2XB6nQtWthRK9kPEZbFJ8UXpWexiHu0yeSGc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=RWjUJ3QfZod/XZfb1byB+7qSEAmyXtkxTF9EqiI+pg0N7fufgBAbEIxwgE2x8O49t
-	 rmGRJgtyn4W+KABlLyYWPiSvxKd840fVFYwVe/DlWJhYDoDuIqPrL7VPKlo0paup1N
-	 KAC1mFeqIaTjcS4oZNXlQ1SoLGG7kgrrjUkstx0jWyMEDJKokH8635sLs0tkbgnaNk
-	 P+/880+rQjyJZ1UhFE/BDgYYjl9hkvreDH83AiLdm5aLL+wWRHJnuHx4jOnHOkH33+
-	 CSagkNsEKWnPhihEiDGvJVGw70RrhejwLzKTAeaxkhVB4CZ4+qU6+UlzK4n2+T5YmG
-	 d+cj6XouootYQ==
-Received: from fel.cvut.cz (unknown [147.32.86.152])
+	s=arc-20240116; t=1767616565; c=relaxed/simple;
+	bh=3S6fQNA/wWHdvRZhbZbuHGkM+uaqMWeI6loF/BuCYCA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=WImZLvMOVcIiEm1ITSZc743npmBYf7rUDD7WWyMlI7/2cMqNJPnt9wfvsCj5YKjhNNDY2PWos9MsnqTEh2E86VUcJ76BXFx5NfozZ8kGgMmbcUEHLyXa0bYu4rn/GJ97mKxyFBWa54lF6HlAS7Eh/DZO7gjxBYt9wl8RlNM7FsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vcjoV-0006qP-5Y; Mon, 05 Jan 2026 13:35:59 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vcjoU-009Afx-38;
+	Mon, 05 Jan 2026 13:35:58 +0100
+Received: from hardanger.blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pisa)
-	by smtpx.fel.cvut.cz (Postfix) with ESMTPSA id CB8CD2A9CC;
-	Mon, 05 Jan 2026 12:17:19 +0100 (CET)
-From: Pavel Pisa <pisa@fel.cvut.cz>
-To: linux-can@vger.kernel.org,
-	"Marc Kleine-Budde" <mkl@pengutronix.de>,
-	David Laight <david.laight.linux@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andrea Daoud <andreadaoud6@gmail.com>,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org
-Cc: Jiri Novak <jnovak@fel.cvut.cz>,
-	Ondrej Ille <ondrej.ille@gmail.com>,
-	Pavel Pisa <pisa@fel.cvut.cz>
-Subject: [PATCH v2] can: ctucanfd: fix SSP_SRC in cases when bit-rate is higher than 1 MBit.
-Date: Mon,  5 Jan 2026 12:16:20 +0100
-Message-ID: <20260105111620.16580-1-pisa@fel.cvut.cz>
-X-Mailer: git-send-email 2.47.3
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id AD0BA4C6627;
+	Mon, 05 Jan 2026 12:35:58 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Date: Mon, 05 Jan 2026 13:35:54 +0100
+Subject: [PATCH can v2] can: gs_usb: gs_usb_receive_bulk_callback(): fix
+ URB memory leak
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260105-gs_usb-fix-memory-leak-v2-1-cc6ed6438034@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIACmwW2kC/4WNUQ6CMBBEr0L22zVtIwJ+eQ9DTGlXqEohXSAYw
+ t0teAA/Z/LmzQJMwRHDJVkg0OTYdT4GdUjANNrXhM7GDEqoVCqVYs33kSt8uBlbarvwwTfpF4q
+ zMuqUF7kxBcRxHygiu/gGRnsofyWP1ZPMsCk3rHE8RMd+P8kd/vc0SZSos0oUlAkrpL325OtxC
+ J1389ESlOu6fgGRNkrT2AAAAA==
+X-Change-ID: 20251225-gs_usb-fix-memory-leak-062c24898cc9
+To: Vincent Mailhol <mailhol@kernel.org>
+Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+ Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1769; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=3S6fQNA/wWHdvRZhbZbuHGkM+uaqMWeI6loF/BuCYCA=;
+ b=owEBbQGS/pANAwAKAQx0Zd/5kJGcAcsmYgBpW7ArP9SKnqUJwnmwFAHDJwUeqwTkIrTMuzKJ+
+ rCEP4E4gfKJATMEAAEKAB0WIQSf+wzYr2eoX/wVbPMMdGXf+ZCRnAUCaVuwKwAKCRAMdGXf+ZCR
+ nLBwB/4vYuZO+uOkwme7QuiGATLdcX/FjLP8evzu44vzBWXYIndMPE6zMJOgvOjXc8Tamfc+e4K
+ Oom2n0mUgzW85qkfilpQvu7AoNzeD11NWppWx2QjsqMgYaBGlcM7f3bdb9wtS/6YcyyphxDzeJX
+ Ot10qJBO8yF2aJKOjY91H6F7tkna+AVY9+LGma+5M8fOwi5E1hNYQRrS4i5gAhU3Sd9LZJx2Kvn
+ k4KIZSLBPBUFNX0a9qwYCoEmlOUs9qtk69SZqjDWPqcZknoNPfLHgg5h6MlDKY8yBkJSna+xKC7
+ YmRa0yQaybY+ix+EH64skc1SoXK1DriTfA+TbJsQQyj992A4
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-From: Ondrej Ille <ondrej.ille@gmail.com>
+In gs_can_open(), the URBs for USB-in transfers are allocated, added to the
+parent->rx_submitted anchor and submitted. In the complete callback
+gs_usb_receive_bulk_callback(), the URB is processed and resubmitted. In
+gs_can_close() the URBs are freed by calling
+usb_kill_anchored_urbs(parent->rx_submitted).
 
-The Secondary Sample Point Source field has been
-set to an incorrect value by some mistake in the
-past
+However, this does not take into account that the USB framework
+unanchors the URB before the close function is called. This means that
+once an in-URB has been completed, it is no longer anchored and is
+ultimately not released in gs_can_close().
 
-  0b01 - SSP_SRC_NO_SSP - SSP is not used.
+Fix the memory leak by anchoring the URB in the
+gs_usb_receive_bulk_callback() to the parent->rx_submitted anchor.
 
-for data bitrates above 1 MBit/s. The correct/default
-value already used for lower bitrates is
-
-  0b00 - SSP_SRC_MEAS_N_OFFSET - SSP position = TRV_DELAY
-         (Measured Transmitter delay) + SSP_OFFSET.
-
-The related configuration register structure is described
-in section 3.1.46 SSP_CFG of the CTU CAN FD
-IP CORE Datasheet.
-
-The analysis leading to the proper configuration
-is described in section 2.8.3 Secondary sampling point
-of the datasheet.
-
-The change has been tested on AMD/Xilinx Zynq
-with the next CTU CN FD IP core versions:
-
- - 2.6 aka master in the "integration with Zynq-7000 system" test
-   6.12.43-rt12+ #1 SMP PREEMPT_RT kernel with CTU CAN FD git
-   driver (change already included in the driver repo)
- - older 2.5 snapshot with mainline kernels with this patch
-   applied locally in the multiple CAN latency tester nightly runs
-   6.18.0-rc4-rt3-dut #1 SMP PREEMPT_RT
-   6.19.0-rc3-dut
-
-The logs, the datasheet and sources are available at
-
- https://canbus.pages.fel.cvut.cz/
-
-Signed-off-by: Ondrej Ille <ondrej.ille@gmail.com>
-Signed-off-by: Pavel Pisa <pisa@fel.cvut.cz>
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Cc: stable@vger.kernel.org
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/ctucanfd/ctucanfd_base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+- correct "Fixes" tag
+- add stable@v.k.o on Cc
+- Link to v1: https://patch.msgid.link/20251225-gs_usb-fix-memory-leak-v1-1-a7b09e70d01d@pengutronix.de
+---
+ drivers/net/can/usb/gs_usb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/can/ctucanfd/ctucanfd_base.c b/drivers/net/can/ctucanfd/ctucanfd_base.c
-index 1e6b9e3dc2fe..0ea1ff28dfce 100644
---- a/drivers/net/can/ctucanfd/ctucanfd_base.c
-+++ b/drivers/net/can/ctucanfd/ctucanfd_base.c
-@@ -310,7 +310,7 @@ static int ctucan_set_secondary_sample_point(struct net_device *ndev)
- 		}
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index a0233e550a5a..d093babbc320 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -751,6 +751,8 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 			  hf, parent->hf_size_rx,
+ 			  gs_usb_receive_bulk_callback, parent);
  
- 		ssp_cfg = FIELD_PREP(REG_TRV_DELAY_SSP_OFFSET, ssp_offset);
--		ssp_cfg |= FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x1);
-+		ssp_cfg |= FIELD_PREP(REG_TRV_DELAY_SSP_SRC, 0x0);
- 	}
++	usb_anchor_urb(urb, &parent->rx_submitted);
++
+ 	rc = usb_submit_urb(urb, GFP_ATOMIC);
  
- 	ctucan_write32(priv, CTUCANFD_TRV_DELAY, ssp_cfg);
--- 
-2.47.3
+ 	/* USB failure take down all interfaces */
+
+---
+base-commit: 1806d210e5a8f431ad4711766ae4a333d407d972
+change-id: 20251225-gs_usb-fix-memory-leak-062c24898cc9
+
+Best regards,
+--  
+Marc Kleine-Budde <mkl@pengutronix.de>
 
 
