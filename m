@@ -1,172 +1,251 @@
-Return-Path: <linux-can+bounces-6015-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6016-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83148CFB2C8
-	for <lists+linux-can@lfdr.de>; Tue, 06 Jan 2026 22:55:27 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40ABDCFB3A0
+	for <lists+linux-can@lfdr.de>; Tue, 06 Jan 2026 23:14:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3D3063080F6D
-	for <lists+linux-can@lfdr.de>; Tue,  6 Jan 2026 21:54:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 40D033044201
+	for <lists+linux-can@lfdr.de>; Tue,  6 Jan 2026 22:14:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B25E2D77FF;
-	Tue,  6 Jan 2026 21:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E652130EF90;
+	Tue,  6 Jan 2026 22:14:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kw3oeS3m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YIRL00bp"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C286F2BEFF8
-	for <linux-can@vger.kernel.org>; Tue,  6 Jan 2026 21:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B33431195F;
+	Tue,  6 Jan 2026 22:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767736440; cv=none; b=qycR5hr5MH6+67rw7cgfOnGiV37h/fpp9k1YXK3HSkPYHM1AC3b+AMsQapHcX7gkqKi173SSm0Vy9h0AuG7E2GtTxSA7KVy5tqRM+sfuD/9A7Ngp5RFJGiuJcMOHe087kAp4GNXSH/clDg7qPCeexQqPGT7ym1m1kSBNpsXSgdQ=
+	t=1767737693; cv=none; b=Tz6qAvLjKKrMgsF8tfwL1o3+os8YE6WTTa/VSCQBSf+DL1yKn2iuG8jqbwKvLg0fgYVZfV7BZGrcT+lkiiyVVJKrA8Z6PRUtdCxTCbhgRX0Mu1gpIystITBE8Dz2AEY7W52tQWqGBhihQW4XQoyO20jTvY6lnZbvDbD+xq1cu10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767736440; c=relaxed/simple;
-	bh=d4rGAO0U0TxZ9w2H/WEEN6FL/LfJ8AB9BuS6CwpoOYk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FvQaXfx3KgRdQOtRl3tdup0V6b4oq1709ONUGJOHTFJpYXrf/IbNkOXUMYcUycv0Q69ZA70hbc690vryP+liN0TwfVJDA1c/30hR3v+EX987otPtyMveFWxFw0tAVGGNd2VAVf2N+D/m6pfSFQh8ofXtOnbd4+MxkkIR3L1J7hU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kw3oeS3m; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-477619f8ae5so11579465e9.3
-        for <linux-can@vger.kernel.org>; Tue, 06 Jan 2026 13:53:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767736437; x=1768341237; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6xyVxIYmy3wtOuQL/m2GM7dhtWyBgchh4pfGSSU0ZDI=;
-        b=kw3oeS3mJqcazWm7SyAXLOOvJaSZ3tX0DZDrKzDrPeZsSXXhtoC5Td/mvBfj775JN9
-         l0hAXbXF5LALQAbzCrdtR+fRQDOmUBQ6ovqIZssc3n7/Bb26ojdyNi6l6nH4w9eBIDje
-         bhGmpIkBq5SjRhEcw/F+BLo836kMXY4gz8VPrdCtpzJX2OahmtZ54QBnhRw51jlCDmKv
-         Nw84Del/xHzoY69uLPp4FDAG9yU3CoX4MMkh2Z2CYi1fIfKx+Ls3E7BMPPBKw56yyxqP
-         lU7nVW9g26FcDNUQNhNyyzHi537jS1+ajxaaNj1IIk9NBSWZdJ99nvs+iEX8PKB2l0wd
-         OYVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767736437; x=1768341237;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6xyVxIYmy3wtOuQL/m2GM7dhtWyBgchh4pfGSSU0ZDI=;
-        b=TtH1Sx6fUq8G2Ks5Jng+qTzcecKD95XXQoWrrHj9iF6UKaCihImUGIPYTnpl6o5NYQ
-         CZwCK02aJ+5Xnp4EfWCSA+jfoKUWlAqLgRcYC5oqBu2yljR1oDopaUR80ahGlve8qGYS
-         NKJRQguYwrxNjyn27EJGb8dQu4JwYKNmdtyVjxAM/HbJ8ezSvIz+rltWUyPmDoEOwAaa
-         6WzSOIj0u1+a/G5LHXOZKxKhALXBgNXPV9zwR0ECn2OIeIbpsuDgfB+sJplZtWQ9cfPe
-         rFJ/WjGQW23CQQvbjX3j0AS8DgfpEWzJ6IwFTgXCCgrkschLv0xKkm8mqCFIc/wYfwmY
-         ou6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWbtRW54T29U38TwH0ZdsPsnQfOeVobIXgCJDpjfImjTQDEmZ9B7gHA1GCWDTA1Gqw+oxSyhustR9Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0ycWrroeH/LVjx/GPHs4puXB8j9s9xP1W9jd31glovFlIcD2o
-	Crk8vW2jA7bNKmNAi0MZWfNk9+RsYC5GBzaSTzTcEjlsRtO/7dT34MMTRXGzdN4Q7R8E2bPEVXa
-	SfiUw0jfhT73XAKwQQSE/49Za+Nk2SGI=
-X-Gm-Gg: AY/fxX4+/1uiYdvvHFL6g2W3a56NGOfNY3X5GlOsMK1fhSuAb4Dh+R6fLXovztCaJQL
-	6k6GieBP7RcrgGY60tvciTC8XQuNekWQVbOYsqw5HeYPemVqOMFckMUR6YGfjPjfvAS89fd+JK8
-	fSl1ejo517YoscQg/tC9ods5MVVCYNp9E/DSpos0omB7XjMXk7pcSF9naUgde98ophcf+8yLYE9
-	vv/5WS/BCEO/EHxAzGphNgybOUBiLoePV+JHDUvMPPBBFREwomYMHHtkH7QMCLB0GXa1Uh4UBBw
-	+gOubDU+K6zmeBO+FkcwEDABWGYVucnqYrW2VvzlubYZiHOB69ZRPZep3ABYm8jInipl3YPhtIX
-	6LANoqNNzEiLK
-X-Google-Smtp-Source: AGHT+IHJYyf174/QsrKA4yj9izst/o67M12RhUcvLu8ST8wy8rthqncq05WjMVIhUNkdstK9csgrrZnrP63a4Kf6rMM=
-X-Received: by 2002:a05:600c:c491:b0:471:1774:3003 with SMTP id
- 5b1f17b1804b1-47d84b5b5d4mr3073085e9.29.1767736436903; Tue, 06 Jan 2026
- 13:53:56 -0800 (PST)
+	s=arc-20240116; t=1767737693; c=relaxed/simple;
+	bh=nbmr59PqQ9dbfXlHOVrQowsAVDe2+R1bvbdbICTa28s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HoP8322YNb8lRFgU5J2Ffa25izqK1jAfZSXK1m6OYAnqDCyWdBGYqqD0ls1MWLjtTObwarUGMAqEDXkyy/gUvU75KEmjQY4JrlZ4b5LHHpdwiBQtpNwb2yFtGnTxwGpohG3H9LrHddsVCCosdYsmQ2qW0A5ii+d0IsU4Zw49eoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YIRL00bp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F72C116C6;
+	Tue,  6 Jan 2026 22:14:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767737692;
+	bh=nbmr59PqQ9dbfXlHOVrQowsAVDe2+R1bvbdbICTa28s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YIRL00bpVfUjo9Lz2oKceSjk+gNbeVKsr34Pyens3FMUD7nqqZUgsvXTbP/7r/yKb
+	 dcxcFxm/fNdvHXkLKj2cC/sKRuzJRAYmpLyc+yzJHJIv6FfrAeH3JdNwGw1XViP0kg
+	 JccGySaDSEHklr2oNDbpWXfbLjNq993nEGvKAtxNxKLn4IwGC0dfE5gHkC3y2IwWDD
+	 5M+FrLEdw4O12cyu52B0ML9ji+nrmg7PoLjBo1HM10ERh0ezJ1X5QZjxUjmsKF3mS8
+	 JUiqCIZ4pO7oMPoK9yEy1JSqhynAFzEPQksdqE2JgbuWRXlxnc9Qt3j/LlKKHOgNQA
+	 W6vx0bhjRp4gA==
+Message-ID: <c3dd8234-3a7e-4277-89cf-1f4ccb2c0317@kernel.org>
+Date: Tue, 6 Jan 2026 23:14:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251230115814.53536-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20251230115814.53536-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20260102-quirky-hornet-of-downpour-ddda69@quoll> <CA+V-a8sY0QneUWQ4A0XCKUGPL8VYkU5NQE2h_cOK=06JG_1c2g@mail.gmail.com>
- <20260106173936.GA2345468-robh@kernel.org>
-In-Reply-To: <20260106173936.GA2345468-robh@kernel.org>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Tue, 6 Jan 2026 21:53:30 +0000
-X-Gm-Features: AQt7F2p1qSg94FMvdzlxCyc7AxN9JH-ov8zGg9NHMiITr64SSrfzG_NiapklzBU
-Message-ID: <CA+V-a8tOTrjzTvko7hg14pBmHMbxg7r2jWc-EkQFPtHbwXnaUg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: can: renesas,rcar-canfd: Specify reset-names
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Magnus Damm <magnus.damm@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
-	linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] can: ctucanfd: fix SSP_SRC in cases when bit-rate is
+ higher than 1 MBit.
+To: Pavel Pisa <pisa@fel.cvut.cz>, Ondrej Ille <ondrej.ille@gmail.com>
+Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+ David Laight <david.laight.linux@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andrea Daoud <andreadaoud6@gmail.com>,
+ Wolfgang Grandegger <wg@grandegger.com>, Paolo Abeni <pabeni@redhat.com>,
+ netdev@vger.kernel.org, Jiri Novak <jnovak@fel.cvut.cz>
+References: <20260105111620.16580-1-pisa@fel.cvut.cz>
+ <c5851986-837b-4ffb-9bf7-3131cf9c05d1@kernel.org>
+ <202601060153.21682.pisa@fel.cvut.cz>
+From: Vincent Mailhol <mailhol@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <202601060153.21682.pisa@fel.cvut.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Rob.
+On 06/01/2026 at 01:53, Pavel Pisa wrote:
+> Dear Vincent Mailhol,
+> 
+> thanks for pointing to Transmission Delay Compensation
+> related code introduced in 5.16 kernel. I have noticed it
+> in the past but not considered it yet and I think
+> that we need minimal fixes to help users and
+> allow change to propagate into stable series now.
+> 
+> More details inline
+> 
+> On Monday 05 of January 2026 21:27:11 Vincent Mailhol wrote:
+>> Le 05/01/2026 à 12:16, Pavel Pisa a écrit :
+>>> From: Ondrej Ille <ondrej.ille@gmail.com>
+>>>
+>>> The Secondary Sample Point Source field has been
+>>> set to an incorrect value by some mistake in the
+>>> past
+>>>
+>>>   0b01 - SSP_SRC_NO_SSP - SSP is not used.
+>>>
+>>> for data bitrates above 1 MBit/s. The correct/default
+>>> value already used for lower bitrates is
+>>
+>> Where does this 1 MBit/s threshold come from? Is this an empirical value?
+>>
+>> The check is normally done on the data BRP. For example we had some
+>> problems on the mcp251xfd, c.f. commit 5e1663810e11 ("can: mcp251xfd:
+>> fix TDC setting for low data bit rates").
+> 
+> The CTU CAN FD check is done on data bitrate
+> 
+> https://elixir.bootlin.com/linux/v6.18.3/source/drivers/net/can/ctucanfd/ctucanfd_base.c#L290
+> 
+>   if (dbt->bitrate > 1000000)
+> 
+> the line expands to
+> 
+>   if (priv->can.fd.data_bittiming.bitrate > 1000000)
+> 
+> The value computation has been defined by Ondrej Ille, main author
+> of the CTU CAN FD IP core. The main driver author has been
+> Martin Jerabek and there seems that we have made some mistake,
+> flip in value in the past. But Ondrej Ille is the most competent
+> for the core limits and intended behavior and SW support.
+> He has invested to complete iso-16845 compliance testing
+> framework re-implementation for detailed timing testing.
+> There is even simulated environment with clocks jitters
+> and delays equivalent to linear, start and other typologies
+> run at each core update. The kudos for idea how to implement
+> this without unacceptable time required for simulation
+> goes to Martin Jerabek. But lot of scenarios are tested
+> and Ondrej Ille can specify what is right and has been
+> tested. May it be, even Jiri Novak can provide some input
+> as well, because he uses CTU CAN FD to deliver more generations
+> of CTU tester systems to car makers (mainly SkodaAuto)
+> and the need of configurable IP core for these purposes was initial
+> driver for the CTU CAN FD core design.
+> 
+> The function of SSP is described in the datasheet and implementation
+> in the CTU CAN FD IP CORE System Architecture manual or we can go
+> to HDL design as well.
+> 
+> I extrapolate that 1 Mbit/s has been chosen as the switching point,
+> because controller and transceivers are expected to support
+> arbitration bit rate to at least 1 Mbit/s according to CAN and CAN FD
+> standards and there is no chance to use SSP during nominal bitrate.
+> 
+>> Can you use the TDC framework?
+> 
+> In longer term it would be right direction. But TRV_DELAY
+> measurement is and should be considered as default for
+> data bit rate and BRS set and then the transceiver delay
+> should be fully compensated on CTU CAN FD.
+> 
+> Problem was that the compensation was switched off by mistake
+> in the encoded value.
+> 
+> But when I study manuals and implementation again, I think that
+> there is problem with data bitrate < 1 Mbit/s, because for these
+> the compensation should be switched off or the data rate sample_point
+> should be recomputed to SSP_OFFET because else sampling is done
+> too early. Delay is not added to sampling point. So we should
+> correct this to make case with BRS and switching to
+> higher data rate (but under 1 Mbit/s) to be more reliable.
 
-On Tue, Jan 6, 2026 at 5:39=E2=80=AFPM Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, Jan 06, 2026 at 05:17:17PM +0000, Lad, Prabhakar wrote:
-> > Hi Krzysztof,
-> >
-> > Thank you for the review.
-> >
-> > On Fri, Jan 2, 2026 at 11:16=E2=80=AFAM Krzysztof Kozlowski <krzk@kerne=
-l.org> wrote:
-> > >
-> > > On Tue, Dec 30, 2025 at 11:58:11AM +0000, Prabhakar wrote:
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > Specify the expected reset-names for the Renesas CAN-FD controller =
-on
-> > > > RZ/G2L and RZ/G3E SoCs.
-> > >
-> > > You should explain here from where you got the actual names.
-> > >
-> > > Otherwise you got following review:
-> > >
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.c=
-om>
-> > > > ---
-> > > > v1->v2:
-> > > > - Moved reset-names to top-level properties.
-> > > > ---
-> > > >  .../bindings/net/can/renesas,rcar-canfd.yaml  | 33 +++++++++++----=
-----
-> > > >  1 file changed, 19 insertions(+), 14 deletions(-)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar=
--canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.=
-yaml
-> > > > index e129bdceef84..9bfd4f44e4d4 100644
-> > > > --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.=
-yaml
-> > > > +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.=
-yaml
-> > > > @@ -122,6 +122,11 @@ properties:
-> > > >
-> > > >    resets: true
-> > > >
-> > > > +  reset-names:
-> > > > +    items:
-> > > > +      - const: rstp_n
-> > > > +      - const: rstc_n
-> > >
-> > > rst seems redundant. _n as well. Are these names from datasheet? How =
-are
-> > > they called in this device (not the soc) datasheet exactly? Because i=
-t
-> > > feels you use pin or SoC names which is not useful.
-> > >
-> > rstp_n/rstc_n are coming from the SoC HW manual and is already used by
-> > the driver (since commit 76e9353a80e9 "can: rcar_canfd: Add support
-> > for RZ/G2L family"). The reset-names existed previously but were
-> > dropped as of commit 466c8ef7b66b "dt-bindings: can:
-> > renesas,rcar-canfd: Simplify the conditional schema". Let me know if
-> > you want me to rename them but the driver will have to maintain the
-> > backward compatibility or do you want me to drop this patch.
->
-> The names are fine. The above is useful information that should be in
-> the commit msg. Please help us if we've already reviewed something.
->
-Sure, I'll add the above info in the commit message and re-spin the series.
+Any issue that we witnessed in the past with low bitrates were only on
+the drivers which had an hand coded TDC logic. Migrating those drivers
+to the kernel TDC framework solved those issues without the need of an
+additional check on the bitrate.
 
-Cheers,
-Prabhakar
+If you can show me a bus off condition in your device when using the
+kernel TDC framework or if you can point me to publications from CAN in
+Automation or similar which supports the idea of the 1 Mbit/s check,
+then I can add that extra check to the framework. Otherwise, I would
+like to drop this idea.
+
+> There are some limitations in maximal values which can be
+> set to SSP_OFFET field. It resolution is high, 10 ns typically
+> for our IP CORE FPGA targets with the 100 MHz IP core clock.
+> On silicon version, as I know, 80 MHz has been used in the
+> last integration. So again, limit is around 2.5 usec or a little
+> more for 80 MHz. This matches again mode switch at 1 Mbit/s
+> or the other option could be switch when SSP_OFFET exceeds
+> 250 or some such value.
+
+Do you see any actual incompatibilities with the kernel TDC framework on
+the offset maximum value?
+
+>> Not only would you get a correct 
+>> calculation for when to activate/deactivate TDC, you will also have the
+>> netlink reporting (refer to the above commit for an example).
+> 
+> Yes, I agree that availability of tuning and monitoring over
+> netlink is nice added value. But at this moment I (personally)
+> prefer the minimal fix to help actual users.
+
+We can also backport the fix if using the TDC framework. The ctucanfd
+driver was introduced after the TDC framework so it will apply smoothly
+to stable.
+
+> I add there links to current CAN FD Transmission Delay Compensation
+> support and definition in the Linux kernel code for future integration
+> into CTU CAN FD IP core driver
+> 
+> https://elixir.bootlin.com/linux/v6.18.3/source/include/linux/can/bittiming.h#L25
+> 
+> https://elixir.bootlin.com/linux/v6.18.3/source/drivers/net/can/dev/calc_bittiming.c#L174
+> 
+> https://elixir.bootlin.com/linux/v6.18.3/source/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c#L595
+> 
+> and in the controller features announcement
+> 
+> priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
+> 		CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
+> 		CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO |
+> 		CAN_CTRLMODE_CC_LEN8_DLC | CAN_CTRLMODE_TDC_AUTO |
+> 		CAN_CTRLMODE_TDC_MANUAL;
+> 
+> Best wishes,
+> 
+> Pavel
+> 
+>>>   0b00 - SSP_SRC_MEAS_N_OFFSET - SSP position = TRV_DELAY
+>>>          (Measured Transmitter delay) + SSP_OFFSET.
+>>>
+>>> The related configuration register structure is described
+>>> in section 3.1.46 SSP_CFG of the CTU CAN FD
+>>> IP CORE Datasheet.
+>>>
+>>> The analysis leading to the proper configuration
+>>> is described in section 2.8.3 Secondary sampling point
+>>> of the datasheet.
+>>>
+>>> The change has been tested on AMD/Xilinx Zynq
+>>> with the next CTU CN FD IP core versions:
+>>>
+>>>  - 2.6 aka master in the "integration with Zynq-7000 system" test
+>>>    6.12.43-rt12+ #1 SMP PREEMPT_RT kernel with CTU CAN FD git
+>>>    driver (change already included in the driver repo)
+>>>  - older 2.5 snapshot with mainline kernels with this patch
+>>>    applied locally in the multiple CAN latency tester nightly runs
+>>>    6.18.0-rc4-rt3-dut #1 SMP PREEMPT_RT
+>>>    6.19.0-rc3-dut
+>>>
+>>> The logs, the datasheet and sources are available at
+>>>
+>>>  https://canbus.pages.fel.cvut.cz/
+
+
+Yours sincerely,
+Vincent Mailhol
+
 
