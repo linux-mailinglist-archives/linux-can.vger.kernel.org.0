@@ -1,178 +1,172 @@
-Return-Path: <linux-can+bounces-6014-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6015-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 135B6CFAF75
-	for <lists+linux-can@lfdr.de>; Tue, 06 Jan 2026 21:40:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83148CFB2C8
+	for <lists+linux-can@lfdr.de>; Tue, 06 Jan 2026 22:55:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 18475304A962
-	for <lists+linux-can@lfdr.de>; Tue,  6 Jan 2026 20:40:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3D3063080F6D
+	for <lists+linux-can@lfdr.de>; Tue,  6 Jan 2026 21:54:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694BF3358AF;
-	Tue,  6 Jan 2026 20:40:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B25E2D77FF;
+	Tue,  6 Jan 2026 21:54:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b="qfkDLRXS";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=valla.it header.i=@valla.it header.b="ahoIrKkh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kw3oeS3m"
 X-Original-To: linux-can@vger.kernel.org
-Received: from delivery.antispam.mailspamprotection.com (delivery.antispam.mailspamprotection.com [185.56.87.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B57287247
-	for <linux-can@vger.kernel.org>; Tue,  6 Jan 2026 20:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.56.87.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767732003; cv=pass; b=bv+O8L6sZOmBVPvOX3Bb5NLq0hpUSezCJnI0+4nFKq56zosol2MY1PWc1VVK+KUReqShTJ5EVVdW3gJsFBrMLSfRRyxwjUxkG/G1VhCruXWvKv/ug/7Ha9NNLagSiNP8gnI9OFaqqOj0NAgQH6HKRNaivH53AY4LuWiNtD1Ne3c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767732003; c=relaxed/simple;
-	bh=QzvbJ8y7akSoxlfvziTyU2H26u+gdjsVcxPDRT0Vekc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AAiSn3RkR02RpEEjzffg5/ArlWOXy3XIDTvvaq4ngjNZmgLHZkkZjhCOuoPyrqxCR/pzUA7gHrr6ounlU7GwHr0twLzlw8o0OF5bKiAOx7ooB+0zK5CFzjzEciLnlo5g6rlyKzu7hkt+EHyAIm18vUqm3GNcPx0/maBefHwQDsQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it; spf=pass smtp.mailfrom=valla.it; dkim=pass (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b=qfkDLRXS; dkim=pass (1024-bit key) header.d=valla.it header.i=@valla.it header.b=ahoIrKkh; arc=pass smtp.client-ip=185.56.87.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valla.it
-ARC-Seal: i=1; cv=none; a=rsa-sha256; d=outgoing.instance-europe-west4-bdtp.prod.antispam.mailspamprotection.com; s=arckey; t=1767732001;
-	 b=guKGQ9HkevExo4ekbfqoqLeiolqhfn9Fn0EUeuyGyHJ4UaD8S64A3sujyn2kDpSM4Bq864Dsd/
-	  Ln5JgvWoi30YV9HjWWjVO8O0sdB4CyR2BMnXlYdH/TXPY5yg2o7JNUnETy/lO0ML+Z4dsZYkhs
-	  Syg4B6ahVxyoauqvsA16E46OK0TK5J/wlg0oqziIjOZj3aGNNaRNfm5/SOnYdy1dK6HC2+2VE4
-	  AzYGDz1V+tJYpoeZfIdjWmim6uCDlILvNDiqm4LCQHO+Yg4cc3fCbqE5NZh8Bo8ckjdZeY+uOZ
-	  AICzNyDTuc+grbUBMYYn1TiEFU1bgFiFuSyWcWn43tU8qg==;
-ARC-Authentication-Results: i=1; outgoing.instance-europe-west4-bdtp.prod.antispam.mailspamprotection.com; smtp.remote-ip=35.214.173.214;
-	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
-	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
-	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
-	arc=none
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=outgoing.instance-europe-west4-bdtp.prod.antispam.mailspamprotection.com; s=arckey; t=1767732001;
-	bh=QzvbJ8y7akSoxlfvziTyU2H26u+gdjsVcxPDRT0Vekc=;
-	h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:
-	  From:Date:DKIM-Signature:DKIM-Signature;
-	b=Aq0y3FeuW1cPTQvFhGmGSEeiJ1h+oHHCsWG35d64m3VO7igXmGfjA/bc5bCKIpNsyVVn7nRomh
-	  WfGJOAZqMj06xFkW0yONXHMYVEwUYfoKUUJXo+7PuxEnhRjdW8yM7moFoma1Sm+PeqsLas8pOf
-	  wgGautWeeXX7yrNbucgx5g38z2CdCLP+fQacHC41RgvSj9HcHGZ+ucvYG213ZFaOYH7/4OmIfK
-	  9cvLyIwICIVUGWCD3XFYS26KPTp3KkaCXoAFzBzmpLbJb9EHcHSjyTcl+n8xGpeeuFbTxKNPhm
-	  ZUtkl7XlC7ERCLfZcecfCI5ChKaACSY5u03pRANoAZSxEA==;
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=antispam.mailspamprotection.com; s=default; h=CFBL-Feedback-ID:CFBL-Address
-	:Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	List-Unsubscribe:Content-Transfer-Encoding;
-	bh=Uf1wXDnZEtrch6jvGDnIRLXBqVcbuiKUoyldZJS9XMk=; b=qfkDLRXSY74yzM4uM2whS15htK
-	1EwZ8LFhtfny6ug6q3Ol1zsaC9BKt22+pHfJedQ2/KIjoOBdqpJ8o0YxLk/Q1smD5ECYaiLLsXJlZ
-	IcbZPQVJdlGxroFQKaEwJ8Qf+qHB8ejDfff1IpjbIOyxKsgDn/nUbAZagSZWnNpI6mZ0=;
-Received: from 214.173.214.35.bc.googleusercontent.com ([35.214.173.214] helo=esm19.siteground.biz)
-	by instance-europe-west4-bdtp.prod.antispam.mailspamprotection.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.98.1)
-	(envelope-from <francesco@valla.it>)
-	id 1vdDqO-00000000y6z-14Y1
-	for linux-can@vger.kernel.org;
-	Tue, 06 Jan 2026 20:39:59 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=valla.it;
-	s=default; h=Subject:Cc:To:From:Date:list-help:list-unsubscribe:
-	list-subscribe:list-post:list-owner:list-archive;
-	bh=Uf1wXDnZEtrch6jvGDnIRLXBqVcbuiKUoyldZJS9XMk=; b=ahoIrKkh5XvAojUYOjlLBHZJj9
-	UwKnqiO5GWH0DmIGfHnZl6KzZzoKrvt0mxu34JRXe6dsQqeEckobi6Zf7Org+dq3JRjDFBxmAxZ+8
-	9ZuhEFYl5boFi+ck9u6H3Ria/w1QvyyF2vQlHE5D94dXsDeQSF7O3d3f4XicSpNaj9Yo=;
-Received: from [95.248.141.113] (port=63004 helo=bywater)
-	by esm19.siteground.biz with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.98.1)
-	(envelope-from <francesco@valla.it>)
-	id 1vdDq5-00000000DxZ-2mvq;
-	Tue, 06 Jan 2026 20:39:37 +0000
-Date: Tue, 6 Jan 2026 21:39:35 +0100
-From: Francesco Valla <francesco@valla.it>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Harald Mommer <harald.mommer@oss.qualcomm.com>,
-	Matias Ezequiel Vara Larsen <mvaralar@redhat.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: [PATCH v6] can: virtio: Add virtio CAN driver
-Message-ID: <aV1zB_fYQE_OBZm2@bywater>
-References: <aQJRnX7OpFRY/1+H@fedora>
- <aQkgsuxa2UaL_qdt@bywater>
- <aTsE1VIk4V/A49HE@fedora>
- <aT7XAsTWr0_yyfx_@bywater>
- <aVLOPMmpvArnVAHZ@fedora>
- <aVLq1ibPcPHk-7Qv@bywater>
- <e5bc1353-ed3e-478b-a26e-0bb9a50b3863@oss.qualcomm.com>
- <4cf222cb-e6e3-4d09-a7d8-bc64b8e148bd@hartkopp.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C286F2BEFF8
+	for <linux-can@vger.kernel.org>; Tue,  6 Jan 2026 21:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767736440; cv=none; b=qycR5hr5MH6+67rw7cgfOnGiV37h/fpp9k1YXK3HSkPYHM1AC3b+AMsQapHcX7gkqKi173SSm0Vy9h0AuG7E2GtTxSA7KVy5tqRM+sfuD/9A7Ngp5RFJGiuJcMOHe087kAp4GNXSH/clDg7qPCeexQqPGT7ym1m1kSBNpsXSgdQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767736440; c=relaxed/simple;
+	bh=d4rGAO0U0TxZ9w2H/WEEN6FL/LfJ8AB9BuS6CwpoOYk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FvQaXfx3KgRdQOtRl3tdup0V6b4oq1709ONUGJOHTFJpYXrf/IbNkOXUMYcUycv0Q69ZA70hbc690vryP+liN0TwfVJDA1c/30hR3v+EX987otPtyMveFWxFw0tAVGGNd2VAVf2N+D/m6pfSFQh8ofXtOnbd4+MxkkIR3L1J7hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kw3oeS3m; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-477619f8ae5so11579465e9.3
+        for <linux-can@vger.kernel.org>; Tue, 06 Jan 2026 13:53:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767736437; x=1768341237; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6xyVxIYmy3wtOuQL/m2GM7dhtWyBgchh4pfGSSU0ZDI=;
+        b=kw3oeS3mJqcazWm7SyAXLOOvJaSZ3tX0DZDrKzDrPeZsSXXhtoC5Td/mvBfj775JN9
+         l0hAXbXF5LALQAbzCrdtR+fRQDOmUBQ6ovqIZssc3n7/Bb26ojdyNi6l6nH4w9eBIDje
+         bhGmpIkBq5SjRhEcw/F+BLo836kMXY4gz8VPrdCtpzJX2OahmtZ54QBnhRw51jlCDmKv
+         Nw84Del/xHzoY69uLPp4FDAG9yU3CoX4MMkh2Z2CYi1fIfKx+Ls3E7BMPPBKw56yyxqP
+         lU7nVW9g26FcDNUQNhNyyzHi537jS1+ajxaaNj1IIk9NBSWZdJ99nvs+iEX8PKB2l0wd
+         OYVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767736437; x=1768341237;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6xyVxIYmy3wtOuQL/m2GM7dhtWyBgchh4pfGSSU0ZDI=;
+        b=TtH1Sx6fUq8G2Ks5Jng+qTzcecKD95XXQoWrrHj9iF6UKaCihImUGIPYTnpl6o5NYQ
+         CZwCK02aJ+5Xnp4EfWCSA+jfoKUWlAqLgRcYC5oqBu2yljR1oDopaUR80ahGlve8qGYS
+         NKJRQguYwrxNjyn27EJGb8dQu4JwYKNmdtyVjxAM/HbJ8ezSvIz+rltWUyPmDoEOwAaa
+         6WzSOIj0u1+a/G5LHXOZKxKhALXBgNXPV9zwR0ECn2OIeIbpsuDgfB+sJplZtWQ9cfPe
+         rFJ/WjGQW23CQQvbjX3j0AS8DgfpEWzJ6IwFTgXCCgrkschLv0xKkm8mqCFIc/wYfwmY
+         ou6g==
+X-Forwarded-Encrypted: i=1; AJvYcCWbtRW54T29U38TwH0ZdsPsnQfOeVobIXgCJDpjfImjTQDEmZ9B7gHA1GCWDTA1Gqw+oxSyhustR9Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0ycWrroeH/LVjx/GPHs4puXB8j9s9xP1W9jd31glovFlIcD2o
+	Crk8vW2jA7bNKmNAi0MZWfNk9+RsYC5GBzaSTzTcEjlsRtO/7dT34MMTRXGzdN4Q7R8E2bPEVXa
+	SfiUw0jfhT73XAKwQQSE/49Za+Nk2SGI=
+X-Gm-Gg: AY/fxX4+/1uiYdvvHFL6g2W3a56NGOfNY3X5GlOsMK1fhSuAb4Dh+R6fLXovztCaJQL
+	6k6GieBP7RcrgGY60tvciTC8XQuNekWQVbOYsqw5HeYPemVqOMFckMUR6YGfjPjfvAS89fd+JK8
+	fSl1ejo517YoscQg/tC9ods5MVVCYNp9E/DSpos0omB7XjMXk7pcSF9naUgde98ophcf+8yLYE9
+	vv/5WS/BCEO/EHxAzGphNgybOUBiLoePV+JHDUvMPPBBFREwomYMHHtkH7QMCLB0GXa1Uh4UBBw
+	+gOubDU+K6zmeBO+FkcwEDABWGYVucnqYrW2VvzlubYZiHOB69ZRPZep3ABYm8jInipl3YPhtIX
+	6LANoqNNzEiLK
+X-Google-Smtp-Source: AGHT+IHJYyf174/QsrKA4yj9izst/o67M12RhUcvLu8ST8wy8rthqncq05WjMVIhUNkdstK9csgrrZnrP63a4Kf6rMM=
+X-Received: by 2002:a05:600c:c491:b0:471:1774:3003 with SMTP id
+ 5b1f17b1804b1-47d84b5b5d4mr3073085e9.29.1767736436903; Tue, 06 Jan 2026
+ 13:53:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4cf222cb-e6e3-4d09-a7d8-bc64b8e148bd@hartkopp.net>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - esm19.siteground.biz
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - valla.it
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-SGantispam-id: 996fb4f3e48771fce6f4ba07a23cc385
-AntiSpam-DLS: false
-AntiSpam-DLSP: 
-AntiSpam-DLSRS: 
-AntiSpam-TS: 1.0
-CFBL-Address: feedback@antispam.mailspamprotection.com; report=arf
-CFBL-Feedback-ID: 1vdDqO-00000000y6z-14Y1-feedback@antispam.mailspamprotection.com
-Authentication-Results: outgoing.instance-europe-west4-bdtp.prod.antispam.mailspamprotection.com;
-	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
-	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
-	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
-	arc=none
+References: <20251230115814.53536-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20251230115814.53536-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260102-quirky-hornet-of-downpour-ddda69@quoll> <CA+V-a8sY0QneUWQ4A0XCKUGPL8VYkU5NQE2h_cOK=06JG_1c2g@mail.gmail.com>
+ <20260106173936.GA2345468-robh@kernel.org>
+In-Reply-To: <20260106173936.GA2345468-robh@kernel.org>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Tue, 6 Jan 2026 21:53:30 +0000
+X-Gm-Features: AQt7F2p1qSg94FMvdzlxCyc7AxN9JH-ov8zGg9NHMiITr64SSrfzG_NiapklzBU
+Message-ID: <CA+V-a8tOTrjzTvko7hg14pBmHMbxg7r2jWc-EkQFPtHbwXnaUg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: can: renesas,rcar-canfd: Specify reset-names
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Magnus Damm <magnus.damm@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Harald, Oliver,
+Hi Rob.
 
-On Tue, Jan 06, 2026 at 08:43:42PM +0100, Oliver Hartkopp wrote:
-> 
-> 
-> On 06.01.26 17:50, Harald Mommer wrote:
-> > > With the plain 'cangen' you are not really flooding the interface, since
-> > > you are only sending a random CAN frame every 200ms. The only way I can
-> > > reproduce this behaviour in a consistent manner is running from the host:
-> > > 
-> > >      while true; do cansend vcan0 134#00; done
-> > > 
-> > > which seems to generate the maximum amount of traffic.
-> > > 
-> > > This is not of course a realistic bus load, but is leading the system
-> > > (at least on my setup) to a corner case somewhere.
-> > 
-> > I have no idea how long the shell needs for a loop, always used cangen -g 0 to stress the setup which is most probably faster than the shell interpreter, and sometimes did this for both directions (RX and TX).
-> > 
-> > Full load is a realistic setup. And even if it was not, if something stopped working or worse crashes torturing the setup this was a problem.
-> > 
-> 
-> Yes. cangen -g 0 -i <interface> creates full load - even on real CAN
-> interfaces. You can also generate fixed content if you want to omit the
-> generation of randomized content. 'cangen -?' prints a help text.
-> 
+On Tue, Jan 6, 2026 at 5:39=E2=80=AFPM Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Jan 06, 2026 at 05:17:17PM +0000, Lad, Prabhakar wrote:
+> > Hi Krzysztof,
+> >
+> > Thank you for the review.
+> >
+> > On Fri, Jan 2, 2026 at 11:16=E2=80=AFAM Krzysztof Kozlowski <krzk@kerne=
+l.org> wrote:
+> > >
+> > > On Tue, Dec 30, 2025 at 11:58:11AM +0000, Prabhakar wrote:
+> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Specify the expected reset-names for the Renesas CAN-FD controller =
+on
+> > > > RZ/G2L and RZ/G3E SoCs.
+> > >
+> > > You should explain here from where you got the actual names.
+> > >
+> > > Otherwise you got following review:
+> > >
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.c=
+om>
+> > > > ---
+> > > > v1->v2:
+> > > > - Moved reset-names to top-level properties.
+> > > > ---
+> > > >  .../bindings/net/can/renesas,rcar-canfd.yaml  | 33 +++++++++++----=
+----
+> > > >  1 file changed, 19 insertions(+), 14 deletions(-)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar=
+-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.=
+yaml
+> > > > index e129bdceef84..9bfd4f44e4d4 100644
+> > > > --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.=
+yaml
+> > > > +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.=
+yaml
+> > > > @@ -122,6 +122,11 @@ properties:
+> > > >
+> > > >    resets: true
+> > > >
+> > > > +  reset-names:
+> > > > +    items:
+> > > > +      - const: rstp_n
+> > > > +      - const: rstc_n
+> > >
+> > > rst seems redundant. _n as well. Are these names from datasheet? How =
+are
+> > > they called in this device (not the soc) datasheet exactly? Because i=
+t
+> > > feels you use pin or SoC names which is not useful.
+> > >
+> > rstp_n/rstc_n are coming from the SoC HW manual and is already used by
+> > the driver (since commit 76e9353a80e9 "can: rcar_canfd: Add support
+> > for RZ/G2L family"). The reset-names existed previously but were
+> > dropped as of commit 466c8ef7b66b "dt-bindings: can:
+> > renesas,rcar-canfd: Simplify the conditional schema". Let me know if
+> > you want me to rename them but the driver will have to maintain the
+> > backward compatibility or do you want me to drop this patch.
+>
+> The names are fine. The above is useful information that should be in
+> the commit msg. Please help us if we've already reviewed something.
+>
+Sure, I'll add the above info in the commit message and re-spin the series.
 
-I agree with both of you - I was simply arguing that a plain 'cangen'
-with no parameters is not really loading the interface.
-
-For some reason, I was only able to trigger the unwanted behavior with
-cansend in a while loop and not with cangen -g 0, even with fixed ID and
-payload. However, I suspect the issue is a matter of timing and
-coincidences rather than load level.
-
-> Best regards,
-> Oliver
-> 
-
-Regards,
-Francesco
-
+Cheers,
+Prabhakar
 
