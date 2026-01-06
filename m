@@ -1,152 +1,182 @@
-Return-Path: <linux-can+bounces-6008-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6009-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71D00CF99C0
-	for <lists+linux-can@lfdr.de>; Tue, 06 Jan 2026 18:17:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EE91CF9CAD
+	for <lists+linux-can@lfdr.de>; Tue, 06 Jan 2026 18:43:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 62E0830276BC
-	for <lists+linux-can@lfdr.de>; Tue,  6 Jan 2026 17:17:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0E85C3044B8F
+	for <lists+linux-can@lfdr.de>; Tue,  6 Jan 2026 17:43:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB5132877E8;
-	Tue,  6 Jan 2026 17:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFF6334CFCE;
+	Tue,  6 Jan 2026 17:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hiMocbuo"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="XBes3I3Y";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="kOLe0SjJ"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B8433A717
-	for <linux-can@vger.kernel.org>; Tue,  6 Jan 2026 17:17:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC7734CFC8
+	for <linux-can@vger.kernel.org>; Tue,  6 Jan 2026 17:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767719866; cv=none; b=ZrRWYyf1E1c770oqfYZu4fOJjpoeimUSwwqSNFC+r8sQbvmHAIsvFAFekrrOPquX/rYUXyIEMBe17emr14E/ucrvI4Uqj5w+K7j92PlSIrfJdlQmXlfWST64NVLgs5y9xzRmj7HSbKjPOtfoTU09HklREgaiFtrN+PU7+KBUIkE=
+	t=1767720010; cv=none; b=DzcxCRv81QEawmKFr3jgeEVQCr9zncLA/Z04+pdrgWrKFawZa11P/GZPvPdoilRv/H/MX/iv/r7G2cei1ql+19RFuoDosvxSqPIxPb1hrGu6znxG82v5R1x2pHqv8we+c73EcGNqyMnvemrToGn6QKG/78lypa8Z6VoRxNrnUeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767719866; c=relaxed/simple;
-	bh=+i4yQ/J32R+PT8plwqXy9nxZsppdLI6MyqOJOxsX0UA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C3F/f+SXIMmHh5FyRv1otm8gW5sw2vo/7us4BQb7+Q/6V8xtCXD76EolPaYMG2ltsUeeccUwNsPHcFl/2ktkYsmpYnY2sexhmqhdj2lkuwWZ2nX63Ij6SAuDRcALFe61xk9830xNbIDZ5LeFRPY0xGfxN2yq3vkyKBAsJpGJomk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hiMocbuo; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42fb2314eb0so880845f8f.2
-        for <linux-can@vger.kernel.org>; Tue, 06 Jan 2026 09:17:44 -0800 (PST)
+	s=arc-20240116; t=1767720010; c=relaxed/simple;
+	bh=sTEErpPjp2Z3VcdZBQ3ncsCXdMkyOWbj/MC6CcVmLfE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M3Dk4WaacnDx4z0sTlfnfQM+43xLyXePJrD4PfK6YaJVf24BmS8xvaUWFkSHIO+ITR/ptuCiWjBQG0KwF9TnkkR4EoNDzj4jv84ls6krNv/qE463AbFq6cjB1E8yxg6taZ73OXpgshD/mBrkf7e0Z+yI6O/eGGmzPo1ssnvAd5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=XBes3I3Y; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=kOLe0SjJ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 606EffFT322772
+	for <linux-can@vger.kernel.org>; Tue, 6 Jan 2026 17:20:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	LYQ0RFgsq4v2jX8N+92N2Ml8ilGX8oRxAim8aWpvhaU=; b=XBes3I3YjDgtdZ0W
+	m5LMrh+fHz7ExRrnSc9Iw0cqW3p+05ymBAtDC9LKqCZTE4akwK3p3IuOo+Rc/mpC
+	3eEhsm4TnttzZbd9wmfQ3jDoGuyJuO1SpwbJLkzmoA8j4szWwhWeSQ926AwlH0La
+	OZLiVn4LRIk3Pyn5Kw8a0LgrkhaOcIoJvC7aPJ4VFyxOlzCnQ8t7ADLc4SXtce4O
+	ams8WQoi8xC8soU3314Bf5ZIAP6hAlPJUnJyWL9ixVxZlpjg3VoOZUbTv2SEp1CD
+	s+h1UqTHn5trdEITD8pq1V1xE2lFv8LPAAvsnCd5CX7sNaTBEr1FDZzSORC6uCyF
+	4T/j7Q==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bh4crgg4u-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-can@vger.kernel.org>; Tue, 06 Jan 2026 17:20:05 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4ed69f9ce96so38940871cf.3
+        for <linux-can@vger.kernel.org>; Tue, 06 Jan 2026 09:20:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767719863; x=1768324663; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=omNJI0np8/A37o5k8AFHebpXKnjsjMZumbvdbisQAi0=;
-        b=hiMocbuouq20a4E84kkzcpFy0wTyvjxkb19fqNq8MeOt0YbWw8Q0kVDMst9zcNlhc5
-         DSXmXs1jxCyxMGdojaqqNr96jmonOFPiBRV/8oXllmH6MTbdRnQZXOcol8Hsp6IwmMFj
-         MDFxHZCVakbJof1/o8Z45cKHCFzRCAp7tqS0ZETyLsbsef32GQ8+M6nRR0V+CuNphKD7
-         D5KrlwJx9S2es9QnZgLQl2YPIUS8PukX6U7D5+CLkgcsrbzSnXTXSGrH2VGKSnkcec1u
-         zNI47TMwOnGIKFkqXZjZYe3BK2cXq+ihYKfME1Kw3surlyM1kaGNpjSspwP9zEUeXRs+
-         wC8A==
+        d=oss.qualcomm.com; s=google; t=1767720004; x=1768324804; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LYQ0RFgsq4v2jX8N+92N2Ml8ilGX8oRxAim8aWpvhaU=;
+        b=kOLe0SjJhxZ+bIzA/XReJh2hfNSosym3esMnCKgK4eshLyjvI848YCpQ2KS5XVl8jz
+         uj9OBtk+OZjotVICSwwlx89R7/bsPTrXVrruH4zVlGSQPRF7vzxnmJlpEVTv4YjROZar
+         sXiMud2PSLdqvzcT5loDD2lxy5JVnxgl/VSP9xaCZ85zkFfXP11jlLywMmJ7ig1q6eWj
+         Sy/2WCqgVcn7P5AIV46eJhqmQc+FUQmyOJSf6dCFGQK6lRHJrvbxfIZv7MtFQK09Xtt4
+         iug6Vo93iZKO6OyMcxckFATOq0qPnO2r0N3+n6GPEbhdXdXQ6ztpXJ8uMS70Gl2E8n5j
+         mMzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767719863; x=1768324663;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=omNJI0np8/A37o5k8AFHebpXKnjsjMZumbvdbisQAi0=;
-        b=m4zKow9JLTe1dnuIzxurBKLiP7k4GGGrVzVobhuB3lga/1KiFkpfGrfWuAAWIWgupQ
-         EvEG3fO54L+Yy2OkKT7ylXO4Z5lBYbX0WuOjz2Zoaod/9UaZDrx+t1js0x2dmsGOr0zD
-         2F5FGeFBx4FESw3AQeeuZ6ga7kkNw/LkfHMYJ/5i1JJaij1lhUYOXxYHdjOccD6cJ/Ok
-         SVSRbreFOSJRF4YH+xcCtkMYhidceclHcryKTE6u3GH8JQBOxT6heEejRZ2oVk6E4jWU
-         Wq2O7b9WbWSk/V0i0nwkbKSqtWuF4NkBM6KDooyNYOXIl2aIwcT/3MuB3+hOlQY7J98r
-         g2gg==
-X-Forwarded-Encrypted: i=1; AJvYcCXst2GVOQS3iVHX8FMKBgbPypx0cGRLo9SwWgHJePSx3T/F8uH4xj5Dap3Jb+MnXih0onTyybN9CuQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9lX9eKvkZAmq2pQUOZ8xNKW4FL6zldnhDc/W6lq4WumEEL4WB
-	nXqUEG1BHMA/2TQ/JMcql2WlWZmDmR1SW5gm15xdbIvhNsE6e+2CnbyUx2yO1YAL1xbnDttaNEu
-	Fi7p4BhDl/UiTTaHMUWrKfeNiUeB0blY=
-X-Gm-Gg: AY/fxX5H6rR5xIxY8vbUwWAaQW4cZbtK+IYbX+yxad/gTKyCkJyI1I8ilp8A5yIDQKs
-	f2ZmBnA351/spKchWFlO6NGEHyS11ABixcgG9c6Ra0Io6eCZUaIE06teENj4OwrLxqAbA7biUpu
-	30LRI2fkoI8weNmnpcjshy/evYGrnKpqvwXCC7YiWfhpWLllxQeBdGZbulsutJw0lAziC4aOzhl
-	Q9Fz7BAzaaQwkYjgvytqTagyTSO44aklhBRAny+2/mBKd2xCDqPkBPzj6BHQqbPUPWUMNuqN4ZW
-	CCqcYfGCPhKiqO08YGRhaeRb2E97qY99ZldNR4LEt1wP2M2Vc0H7SapG6Kc1gfxESX4SmycGFme
-	xYI3jeTHZceKI
-X-Google-Smtp-Source: AGHT+IGQllKLGXZw9XFWVTR0oSm/60fESFM2NQBn5PGd7ftNxtYras13avla7VpSZwBYhVejhwO84IWLhs7cyffC9Hk=
-X-Received: by 2002:a05:6000:604:b0:430:fc5a:40ac with SMTP id
- ffacd0b85a97d-432bca566d2mr5730225f8f.54.1767719863134; Tue, 06 Jan 2026
- 09:17:43 -0800 (PST)
+        d=1e100.net; s=20230601; t=1767720004; x=1768324804;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LYQ0RFgsq4v2jX8N+92N2Ml8ilGX8oRxAim8aWpvhaU=;
+        b=E+AzibTzYtnfN8/0nSlDgaWbKRsq8gbVccICzB/HMZIa0hVb7qfhKk3KQKqrdpymu5
+         n6x10AqKs1eT2X1tzQI6iNASispA+X5HAjzmUSX6PTyo8WauGEcPTYTLtvD+eL+0/eBE
+         6K4VWBWLp6rcKFUwoBOJ52r+WYv7cbKZryY0Gp4H7XMq6RxpkXpsrLIOQXAZ4vpRDFKx
+         bH6rEjblr9tA/T1bjXJNtlk6oSlSwS4q3zIol7Sv0mbBjJbwYB+SAxrpjui+5hQF+Mgk
+         OyvmVpcWkFEW2wgPWc7yKtR5hVZVW1NU7+HA5BTWfTJ0i51nttpEYXkVisUZS6fY0VJO
+         borQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVR1Sn/iP/AP02Uqwg2p4WapdIccsqkeUby80r0Y8K6nfgdD6vcHOVbNHedgQwCmS8GnIeDrAfaYG4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4dDWmXCDNsCy9JErVEFlOVzNi7G47MOOoLkL604pM4d2XkqAr
+	TS1A/Fts7yeMOlTjNdFVGXAoGoe/QLTnSFW2GPNCZJ+pHLurKLMRYp2hGe5kpuumBb4UAI2hyQi
+	2xQBKqWe9ZClzPMpBiBtE9dC2UWPCQzxxJKUzFuo+Meyf6UrNwYTX/M5rAuOBy3Q=
+X-Gm-Gg: AY/fxX4yuan1IzlEDxP6GMVXxF2ROD5wnmKouLcn4Wn6cAtPxkLouvpXcJtI0oEcDm0
+	RSab43c/r0J5qlxemMTVdEjE42meX8P5O4mKslrYJs0iwCEm2Hp8O+vyfV859eBD3x6Qv14DNwn
+	iGL//SSrmVEpId6tcFADLKGQ+2kqW96pU8n6NCjcR4reP9exvr5hRr8wZmhmJJOzqufi2oyhBJc
+	vm8hYrsT9Xin0krg6ZcZKQHiHsCQyCEgj7AANsM7tnsfoYj7HNvKZ7sFEExinmM32faQKX/FAdi
+	ZXhzW+4vUTn+SQ7Q73DP4MikjfpPb1NPYL0wPTgVYZmTqMXiU0Gjq+u4hS2x1TZsHu+17hIJAIW
+	J6fybYZA+3LDaePRsIU2XXQ8=
+X-Received: by 2002:a05:622a:13cd:b0:4f1:bd73:ac6f with SMTP id d75a77b69052e-4ffa7833eb3mr49446731cf.74.1767720004357;
+        Tue, 06 Jan 2026 09:20:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEcVKhmSOxrYJdgdUdXOibewTJ5CLkfjpvth8cSPNn9My88somjEwg0WSoJvtWbiqCzlMfSjQ==
+X-Received: by 2002:a05:622a:13cd:b0:4f1:bd73:ac6f with SMTP id d75a77b69052e-4ffa7833eb3mr49446151cf.74.1767720003816;
+        Tue, 06 Jan 2026 09:20:03 -0800 (PST)
+Received: from [172.22.19.48] ([212.136.9.4])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b842a27cc6bsm274657966b.23.2026.01.06.09.20.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jan 2026 09:20:03 -0800 (PST)
+Message-ID: <ad67d007-7e03-4ed1-a163-9c16aee791be@oss.qualcomm.com>
+Date: Tue, 6 Jan 2026 18:20:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251230115814.53536-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20251230115814.53536-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <20260102-quirky-hornet-of-downpour-ddda69@quoll>
-In-Reply-To: <20260102-quirky-hornet-of-downpour-ddda69@quoll>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Tue, 6 Jan 2026 17:17:17 +0000
-X-Gm-Features: AQt7F2q6b-vi36w4beMQgm0yTXwRcoRzoZCOAWuXYi8o96TqepqD1zW847R3kRw
-Message-ID: <CA+V-a8sY0QneUWQ4A0XCKUGPL8VYkU5NQE2h_cOK=06JG_1c2g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: can: renesas,rcar-canfd: Specify reset-names
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, linux-can@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6] can: virtio: Add virtio CAN driver
+To: Francesco Valla <francesco@valla.it>
+Cc: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent Mailhol
+ <mailhol@kernel.org>,
+        Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
+        virtualization@lists.linux.dev,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>
+References: <aQJRnX7OpFRY/1+H@fedora> <aQkgsuxa2UaL_qdt@bywater>
+ <aTsE1VIk4V/A49HE@fedora> <aT7XAsTWr0_yyfx_@bywater>
+ <23c5df0c-48d1-4d3a-8f25-8249b93c9b60@oss.qualcomm.com>
+ <aUSJJtRNOJTohjCS@bywater>
+Content-Language: en-US
+From: Harald Mommer <harald.mommer@oss.qualcomm.com>
+In-Reply-To: <aUSJJtRNOJTohjCS@bywater>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=V9FwEOni c=1 sm=1 tr=0 ts=695d4445 cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=dNlqnMcrdpbb+gQrTujlOQ==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=SXg1PQ7gjAQXpXJ5tqcA:9 a=QEXdDO2ut3YA:10
+ a=uxP6HrT_eTzRwkO_Te1X:22
+X-Proofpoint-ORIG-GUID: 2YCXtwcIgZpJWekbFErfD_cB5MIvfO1l
+X-Proofpoint-GUID: 2YCXtwcIgZpJWekbFErfD_cB5MIvfO1l
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA2MDE1MCBTYWx0ZWRfX5tIiFs3gwhcq
+ NpHd3VdznQpgjAhMR++o0401wd8rX2WV7MRXofKIGMsx/Eojd3I5N6pzsKvdrM6tp7c9MXt3WGA
+ qnFGnPaThDc/UwWkBsoqp5Py5H6NweocsXVxgvP/X8o09iXFarIfhDXYRrvliYsDRS4kUfIrbxD
+ cKYTrhsrhpScHkOGYkZFALDmIVnTWM8sN55JKP7PNGR86fwA8x0DPMLEkuAQHMTh2AFovwWrs7q
+ SRX8CAECO3RWS55lTAVD56K0yyMqu/5fhjc1O26zJ1ZuMdfvdUm91J32u6enpZcOKylZii7jwQE
+ eXSPSCUvoyYbWEW2HU7QHrJTW8e7FkYz2FSCSFoo1QmWCWqUXy27tUrdPuT+TCLSLS9Cq5XQT6N
+ JbTy3RaxQOivhvaEGprJz3tqkrdE++9lr6KxyYHuHgY9dEy/jpfSDo+gOSYXepLKxgPOPycRDJY
+ Xm8swL8DYsz/Zqaxcqg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-06_01,2026-01-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 priorityscore=1501 suspectscore=0 phishscore=0 bulkscore=0
+ adultscore=0 malwarescore=0 spamscore=0 clxscore=1015 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601060150
 
-Hi Krzysztof,
 
-Thank you for the review.
+>>>>> Most of the existing drivers enable the napi(s) during the open() phase,
+>>>>> IIUC to avoid scheduling napi operations for devices that might never
+>>>>> get used. But here maybe there is a specific reason to do it this way?
+>>>>>
+>>>>
+>>>> I do not have idea. I moved to open() and something stopped to work. I
+>>>> am investigating it.
+>>>>
+>>>
+>>> On a second thought, it may be wiser to have the napis enabled on probe,
+>>> to drop the incoming messages even when the interface is brought down.
+>>
+>> It's a while since then but I wanted to drop messages not having lurking a 3 hours old cooling water temperature in some virtio message buffer being misinterpreted as an actual value. May have the disadvantage to cause load when the driver is not open-ed. But I see you also thought about 3 hours old outdated values now which may cause trouble.
+>>
+> 
+> I am stil thinking about this. We are sending a ctrl message with
+> VIRTIO_CAN_SET_CTRL_MODE_STOP, so new frames shouldn't be arriving while
+> the interface is stopped (i.e., once it is brought down). May it be
+> sufficient to consume and re-queue all pending vring elements as part of
+> virtio_can_stop()?
 
-On Fri, Jan 2, 2026 at 11:16=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On Tue, Dec 30, 2025 at 11:58:11AM +0000, Prabhakar wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Specify the expected reset-names for the Renesas CAN-FD controller on
-> > RZ/G2L and RZ/G3E SoCs.
->
-> You should explain here from where you got the actual names.
->
-> Otherwise you got following review:
->
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > v1->v2:
-> > - Moved reset-names to top-level properties.
-> > ---
-> >  .../bindings/net/can/renesas,rcar-canfd.yaml  | 33 +++++++++++--------
-> >  1 file changed, 19 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-can=
-fd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > index e129bdceef84..9bfd4f44e4d4 100644
-> > --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > @@ -122,6 +122,11 @@ properties:
-> >
-> >    resets: true
-> >
-> > +  reset-names:
-> > +    items:
-> > +      - const: rstp_n
-> > +      - const: rstc_n
->
-> rst seems redundant. _n as well. Are these names from datasheet? How are
-> they called in this device (not the soc) datasheet exactly? Because it
-> feels you use pin or SoC names which is not useful.
->
-rstp_n/rstc_n are coming from the SoC HW manual and is already used by
-the driver (since commit 76e9353a80e9 "can: rcar_canfd: Add support
-for RZ/G2L family"). The reset-names existed previously but were
-dropped as of commit 466c8ef7b66b "dt-bindings: can:
-renesas,rcar-canfd: Simplify the conditional schema". Let me know if
-you want me to rename them but the driver will have to maintain the
-backward compatibility or do you want me to drop this patch.
+The NAPI operations are only scheduled by interrupt functions virtio_can_tx_intr() and virtio_can_rx_intr(). When STOPPED, and this is the initial state, there will no TX messages and a well behaving virtio CAN device does also not send RX messages. So no interrupts and no additional load by scheduling NAPI when not STARTED. Having napi_enable() in virtio_can_probe() we conveniently get rid of messages received in a race when transitioning from STARTED to STOPPED and than there should be silence. A misbehaving device may cause RX load in STOPPED but this was a device issue. Under normal circumstances no resources (especially CPU) is wasted.
 
-Cheers,
-Prabhakar
+But to "consume" all queue and re-queue is a bad idea. After made avail the element belongs to the device until the device gives it back to the driver by marking it as used (e.g. putting it into the used queue). It is not possible to steal queue elements from the device during live state. So this "consume" and "re-queue" is something I do not see as being feasible.
+
+Saw in the meantime that a new driver (V7) was sent and was happy not to see some queue stunts just to move napi_enable() around for no really good reason at all.
+
 
