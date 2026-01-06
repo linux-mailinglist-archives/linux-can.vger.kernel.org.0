@@ -1,140 +1,178 @@
-Return-Path: <linux-can+bounces-6013-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6014-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7FAACFAD9D
-	for <lists+linux-can@lfdr.de>; Tue, 06 Jan 2026 21:01:19 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 135B6CFAF75
+	for <lists+linux-can@lfdr.de>; Tue, 06 Jan 2026 21:40:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id ECB923068BE5
-	for <lists+linux-can@lfdr.de>; Tue,  6 Jan 2026 19:59:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 18475304A962
+	for <lists+linux-can@lfdr.de>; Tue,  6 Jan 2026 20:40:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC6F33EB1A;
-	Tue,  6 Jan 2026 19:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694BF3358AF;
+	Tue,  6 Jan 2026 20:40:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="gruy97b3";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="LXs9XWPs"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b="qfkDLRXS";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=valla.it header.i=@valla.it header.b="ahoIrKkh"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+Received: from delivery.antispam.mailspamprotection.com (delivery.antispam.mailspamprotection.com [185.56.87.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989F933F364
-	for <linux-can@vger.kernel.org>; Tue,  6 Jan 2026 19:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B57287247
+	for <linux-can@vger.kernel.org>; Tue,  6 Jan 2026 20:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.56.87.10
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767728828; cv=pass; b=kcrWbmwvi+Eg/wo2EiDIuYmJhab6XmzrpV0tQ5Gq+Z3cG9wJH3L29NwcdFdCRtgWlUY+P0yT6zJ+1erwU9/lQRsTcyEd2W0mLqRzTDleCuOauWsBeQ28jTvJQDsZjpPgsEMLS/cpkIJgQp/larLXHCbQ1lmqEPcuE3MWnyMq//Y=
+	t=1767732003; cv=pass; b=bv+O8L6sZOmBVPvOX3Bb5NLq0hpUSezCJnI0+4nFKq56zosol2MY1PWc1VVK+KUReqShTJ5EVVdW3gJsFBrMLSfRRyxwjUxkG/G1VhCruXWvKv/ug/7Ha9NNLagSiNP8gnI9OFaqqOj0NAgQH6HKRNaivH53AY4LuWiNtD1Ne3c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767728828; c=relaxed/simple;
-	bh=eLJKCMZeavACeG8gllAT7B6hWi87H60u6pW0IFLjwKo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xu0RMAmU7rr/zxsDysrgXDNYjSYi3/VYVSFqJWXhIBo179Oa5JjQSxhOV8Zp9Ra4/ltgSc+9tXGcsVfrYK4tsFBWzPXzQCqhrDUvTWWJna1VsLZCAD/uYFCV3fJ5Pfrcn2lvsr6Ih5lIxkFs1138tJPjaQLX6KTPMR20Vabl3E0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=gruy97b3; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=LXs9XWPs; arc=pass smtp.client-ip=85.215.255.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1767728629; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=RoNmr2PF8J9i8DzFmBfA3L0fMRxNyZgNzZ6lMJy9ysSsyn9HZaJNEp/CRPDKUMWN7g
-    bRYJGI92CBsGlXwxXC7WWC5CuoqZQrqy6jxs735uOw8f8JXWX78j6/LRp+evglibNNEo
-    W4IyGAOJpPBdmIwBu37b4K2Jx+O4RHiQ052S/FbDrKxf5IDTeM+Nl/wX2if3KbuhOYB3
-    jqwT9GJ5MYrw6kkb8+wHVB9h9Xu/VkWy9Y7nMIa1v1J4WT832bGQ644g6+KkBGG8Vj3b
-    ZFlL/fcSZhUkbHNd9zRSdkvTXw5/eQx2+7aTjL1rLIjYo0LyHxfzE0/arRrh/t2eMV/x
-    tfYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767728629;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ResBB95FxK+keR8Mgta1PB4ApDotZa4b+5nSrW73gow=;
-    b=PgCM0utVBclm8IZ+kxvB2AYQ8V4LZjnHpgG3WRXsE3hi/MhCS32rUbOClZqEN2E3vV
-    SV8Arugg/ghFX+B2/LOYRsGLeGPOP/f68DNYieLIUQvNcSj0L1kYCnDS9mkPt+NmDIP8
-    uVTcJIBVWvO6tdz3Xva4viejIyH+nmsTXZpNVQioambZPkaXs+95bhR7bS9gfejL/hFW
-    jmYD/ys8Y8TndMUy1PSEIK8ZL3JodL0ZTZx0RUE6SM5EX8vT2POrEwaUygNX9dNmTQZQ
-    9CMuW0fMzS+aksAxlTt/WONk5ao9twKHB8HvxbXsS5hZ95IjEZKIap/YGe1bmTc1XC+e
-    ilhA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767728629;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ResBB95FxK+keR8Mgta1PB4ApDotZa4b+5nSrW73gow=;
-    b=gruy97b3GO7PEmAcqoHfKWrDL9hGltLJyJFBmgbqS8zpGJxhKn+lM94kt3QXjECME+
-    MDkJ+f0X9BpHxG8b6DNp7RMv0lz0EtmkeZ0k8OI6kumjy7mOnYtv31f7Ujej6Qd3wAj/
-    bPwC5ji06pBET0nmPlafhKY0BSuCSoeL2CipPEs/Ga/0sh4zx1/YinSOhQNiH2YUfVaS
-    iquSH3pRxJ3YRhE+IWUDVCRTIIiej5Nqb6DD2xFdJ8VLbLBxZKRVhcKF5vN2z4Dl7qXO
-    rjsR5In7eLtPOCpMXBciPSUPnJy8i5KHzfEzDzc2yhMqkyzr8allQ4rbjKOXzkn70BBU
-    btPA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767728629;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ResBB95FxK+keR8Mgta1PB4ApDotZa4b+5nSrW73gow=;
-    b=LXs9XWPsidZRMFcOV/+INqlUqdEUxaoNnbz6vS4ohx5jAk5JOm+IAeYy9FFw0dHkqs
-    hR7Tku+oNvkBSFLvuiCA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b206Jhm6Zg
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 6 Jan 2026 20:43:48 +0100 (CET)
-Message-ID: <4cf222cb-e6e3-4d09-a7d8-bc64b8e148bd@hartkopp.net>
-Date: Tue, 6 Jan 2026 20:43:42 +0100
+	s=arc-20240116; t=1767732003; c=relaxed/simple;
+	bh=QzvbJ8y7akSoxlfvziTyU2H26u+gdjsVcxPDRT0Vekc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AAiSn3RkR02RpEEjzffg5/ArlWOXy3XIDTvvaq4ngjNZmgLHZkkZjhCOuoPyrqxCR/pzUA7gHrr6ounlU7GwHr0twLzlw8o0OF5bKiAOx7ooB+0zK5CFzjzEciLnlo5g6rlyKzu7hkt+EHyAIm18vUqm3GNcPx0/maBefHwQDsQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it; spf=pass smtp.mailfrom=valla.it; dkim=pass (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b=qfkDLRXS; dkim=pass (1024-bit key) header.d=valla.it header.i=@valla.it header.b=ahoIrKkh; arc=pass smtp.client-ip=185.56.87.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valla.it
+ARC-Seal: i=1; cv=none; a=rsa-sha256; d=outgoing.instance-europe-west4-bdtp.prod.antispam.mailspamprotection.com; s=arckey; t=1767732001;
+	 b=guKGQ9HkevExo4ekbfqoqLeiolqhfn9Fn0EUeuyGyHJ4UaD8S64A3sujyn2kDpSM4Bq864Dsd/
+	  Ln5JgvWoi30YV9HjWWjVO8O0sdB4CyR2BMnXlYdH/TXPY5yg2o7JNUnETy/lO0ML+Z4dsZYkhs
+	  Syg4B6ahVxyoauqvsA16E46OK0TK5J/wlg0oqziIjOZj3aGNNaRNfm5/SOnYdy1dK6HC2+2VE4
+	  AzYGDz1V+tJYpoeZfIdjWmim6uCDlILvNDiqm4LCQHO+Yg4cc3fCbqE5NZh8Bo8ckjdZeY+uOZ
+	  AICzNyDTuc+grbUBMYYn1TiEFU1bgFiFuSyWcWn43tU8qg==;
+ARC-Authentication-Results: i=1; outgoing.instance-europe-west4-bdtp.prod.antispam.mailspamprotection.com; smtp.remote-ip=35.214.173.214;
+	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
+	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
+	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
+	arc=none
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=outgoing.instance-europe-west4-bdtp.prod.antispam.mailspamprotection.com; s=arckey; t=1767732001;
+	bh=QzvbJ8y7akSoxlfvziTyU2H26u+gdjsVcxPDRT0Vekc=;
+	h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:
+	  From:Date:DKIM-Signature:DKIM-Signature;
+	b=Aq0y3FeuW1cPTQvFhGmGSEeiJ1h+oHHCsWG35d64m3VO7igXmGfjA/bc5bCKIpNsyVVn7nRomh
+	  WfGJOAZqMj06xFkW0yONXHMYVEwUYfoKUUJXo+7PuxEnhRjdW8yM7moFoma1Sm+PeqsLas8pOf
+	  wgGautWeeXX7yrNbucgx5g38z2CdCLP+fQacHC41RgvSj9HcHGZ+ucvYG213ZFaOYH7/4OmIfK
+	  9cvLyIwICIVUGWCD3XFYS26KPTp3KkaCXoAFzBzmpLbJb9EHcHSjyTcl+n8xGpeeuFbTxKNPhm
+	  ZUtkl7XlC7ERCLfZcecfCI5ChKaACSY5u03pRANoAZSxEA==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=antispam.mailspamprotection.com; s=default; h=CFBL-Feedback-ID:CFBL-Address
+	:Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	List-Unsubscribe:Content-Transfer-Encoding;
+	bh=Uf1wXDnZEtrch6jvGDnIRLXBqVcbuiKUoyldZJS9XMk=; b=qfkDLRXSY74yzM4uM2whS15htK
+	1EwZ8LFhtfny6ug6q3Ol1zsaC9BKt22+pHfJedQ2/KIjoOBdqpJ8o0YxLk/Q1smD5ECYaiLLsXJlZ
+	IcbZPQVJdlGxroFQKaEwJ8Qf+qHB8ejDfff1IpjbIOyxKsgDn/nUbAZagSZWnNpI6mZ0=;
+Received: from 214.173.214.35.bc.googleusercontent.com ([35.214.173.214] helo=esm19.siteground.biz)
+	by instance-europe-west4-bdtp.prod.antispam.mailspamprotection.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.1)
+	(envelope-from <francesco@valla.it>)
+	id 1vdDqO-00000000y6z-14Y1
+	for linux-can@vger.kernel.org;
+	Tue, 06 Jan 2026 20:39:59 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=valla.it;
+	s=default; h=Subject:Cc:To:From:Date:list-help:list-unsubscribe:
+	list-subscribe:list-post:list-owner:list-archive;
+	bh=Uf1wXDnZEtrch6jvGDnIRLXBqVcbuiKUoyldZJS9XMk=; b=ahoIrKkh5XvAojUYOjlLBHZJj9
+	UwKnqiO5GWH0DmIGfHnZl6KzZzoKrvt0mxu34JRXe6dsQqeEckobi6Zf7Org+dq3JRjDFBxmAxZ+8
+	9ZuhEFYl5boFi+ck9u6H3Ria/w1QvyyF2vQlHE5D94dXsDeQSF7O3d3f4XicSpNaj9Yo=;
+Received: from [95.248.141.113] (port=63004 helo=bywater)
+	by esm19.siteground.biz with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.1)
+	(envelope-from <francesco@valla.it>)
+	id 1vdDq5-00000000DxZ-2mvq;
+	Tue, 06 Jan 2026 20:39:37 +0000
+Date: Tue, 6 Jan 2026 21:39:35 +0100
+From: Francesco Valla <francesco@valla.it>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: Harald Mommer <harald.mommer@oss.qualcomm.com>,
+	Matias Ezequiel Vara Larsen <mvaralar@redhat.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Stefano Garzarella <sgarzare@redhat.com>
+Subject: Re: [PATCH v6] can: virtio: Add virtio CAN driver
+Message-ID: <aV1zB_fYQE_OBZm2@bywater>
+References: <aQJRnX7OpFRY/1+H@fedora>
+ <aQkgsuxa2UaL_qdt@bywater>
+ <aTsE1VIk4V/A49HE@fedora>
+ <aT7XAsTWr0_yyfx_@bywater>
+ <aVLOPMmpvArnVAHZ@fedora>
+ <aVLq1ibPcPHk-7Qv@bywater>
+ <e5bc1353-ed3e-478b-a26e-0bb9a50b3863@oss.qualcomm.com>
+ <4cf222cb-e6e3-4d09-a7d8-bc64b8e148bd@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6] can: virtio: Add virtio CAN driver
-To: Harald Mommer <harald.mommer@oss.qualcomm.com>,
- Francesco Valla <francesco@valla.it>,
- Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
- Vincent Mailhol <mailhol@kernel.org>,
- Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
- virtualization@lists.linux.dev, Wolfgang Grandegger <wg@grandegger.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Stefano Garzarella <sgarzare@redhat.com>
-References: <aQJRnX7OpFRY/1+H@fedora> <aQkgsuxa2UaL_qdt@bywater>
- <aTsE1VIk4V/A49HE@fedora> <aT7XAsTWr0_yyfx_@bywater>
- <aVLOPMmpvArnVAHZ@fedora> <aVLq1ibPcPHk-7Qv@bywater>
- <e5bc1353-ed3e-478b-a26e-0bb9a50b3863@oss.qualcomm.com>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <e5bc1353-ed3e-478b-a26e-0bb9a50b3863@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4cf222cb-e6e3-4d09-a7d8-bc64b8e148bd@hartkopp.net>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - esm19.siteground.biz
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - valla.it
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-SGantispam-id: 996fb4f3e48771fce6f4ba07a23cc385
+AntiSpam-DLS: false
+AntiSpam-DLSP: 
+AntiSpam-DLSRS: 
+AntiSpam-TS: 1.0
+CFBL-Address: feedback@antispam.mailspamprotection.com; report=arf
+CFBL-Feedback-ID: 1vdDqO-00000000y6z-14Y1-feedback@antispam.mailspamprotection.com
+Authentication-Results: outgoing.instance-europe-west4-bdtp.prod.antispam.mailspamprotection.com;
+	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
+	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
+	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
+	arc=none
 
+Hello Harald, Oliver,
 
-
-On 06.01.26 17:50, Harald Mommer wrote:
->> With the plain 'cangen' you are not really flooding the interface, since
->> you are only sending a random CAN frame every 200ms. The only way I can
->> reproduce this behaviour in a consistent manner is running from the host:
->>
->>      while true; do cansend vcan0 134#00; done
->>
->> which seems to generate the maximum amount of traffic.
->>
->> This is not of course a realistic bus load, but is leading the system
->> (at least on my setup) to a corner case somewhere.
+On Tue, Jan 06, 2026 at 08:43:42PM +0100, Oliver Hartkopp wrote:
 > 
-> I have no idea how long the shell needs for a loop, always used cangen -g 0 to stress the setup which is most probably faster than the shell interpreter, and sometimes did this for both directions (RX and TX).
 > 
-> Full load is a realistic setup. And even if it was not, if something stopped working or worse crashes torturing the setup this was a problem.
+> On 06.01.26 17:50, Harald Mommer wrote:
+> > > With the plain 'cangen' you are not really flooding the interface, since
+> > > you are only sending a random CAN frame every 200ms. The only way I can
+> > > reproduce this behaviour in a consistent manner is running from the host:
+> > > 
+> > >      while true; do cansend vcan0 134#00; done
+> > > 
+> > > which seems to generate the maximum amount of traffic.
+> > > 
+> > > This is not of course a realistic bus load, but is leading the system
+> > > (at least on my setup) to a corner case somewhere.
+> > 
+> > I have no idea how long the shell needs for a loop, always used cangen -g 0 to stress the setup which is most probably faster than the shell interpreter, and sometimes did this for both directions (RX and TX).
+> > 
+> > Full load is a realistic setup. And even if it was not, if something stopped working or worse crashes torturing the setup this was a problem.
+> > 
+> 
+> Yes. cangen -g 0 -i <interface> creates full load - even on real CAN
+> interfaces. You can also generate fixed content if you want to omit the
+> generation of randomized content. 'cangen -?' prints a help text.
 > 
 
-Yes. cangen -g 0 -i <interface> creates full load - even on real CAN 
-interfaces. You can also generate fixed content if you want to omit the 
-generation of randomized content. 'cangen -?' prints a help text.
+I agree with both of you - I was simply arguing that a plain 'cangen'
+with no parameters is not really loading the interface.
 
-Best regards,
-Oliver
+For some reason, I was only able to trigger the unwanted behavior with
+cansend in a while loop and not with cangen -g 0, even with fixed ID and
+payload. However, I suspect the issue is a matter of timing and
+coincidences rather than load level.
 
+> Best regards,
+> Oliver
+> 
+
+Regards,
+Francesco
 
 
