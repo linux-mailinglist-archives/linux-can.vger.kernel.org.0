@@ -1,177 +1,185 @@
-Return-Path: <linux-can+bounces-6020-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6022-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC5DCFEADC
-	for <lists+linux-can@lfdr.de>; Wed, 07 Jan 2026 16:50:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8979BCFEDA4
+	for <lists+linux-can@lfdr.de>; Wed, 07 Jan 2026 17:25:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A4DC730A8646
-	for <lists+linux-can@lfdr.de>; Wed,  7 Jan 2026 15:45:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AEB34305EE51
+	for <lists+linux-can@lfdr.de>; Wed,  7 Jan 2026 16:09:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51C80395DB8;
-	Wed,  7 Jan 2026 15:34:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3DF369234;
+	Wed,  7 Jan 2026 16:01:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="eQ7TJO44";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="LSQQ2Z5j"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bu4QAHOU";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="QlWty0Pg"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE82395D90;
-	Wed,  7 Jan 2026 15:34:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767800071; cv=pass; b=l0R/xKYpQgeuRQ0UHeyO6M3ifbbWdoQnGPx9ZFbWsWVgCkOyqRhrPEy/3R362wNGO2TFO2szHcdyKFZEm8RlWKWbM5FfoD9yDLvv7olVgZFtFZdGMo/oAiEM8QWQ33XZ3VVNPd8qPiWTBxk6Ta1IFJ9v9cyTvJKZO6kRioQu3Xc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767800071; c=relaxed/simple;
-	bh=UZZarDGIHnVTIoQ8enN9Zph0GfAT5H+xlYSwfaS7/b4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JuX3Z8oUjsDXpbHfAz3VqzmKBUyG86UCToK52HxcGBiCH26Yf61ALP8+l7ccsT0XSEDk9DxeWRwtRlyIDQLK6Dr9ZBbt+EkQhwpD3D3sHgzZx0tP84ayiu0Ba87zU3IWVnKSs1Zv8ZwmblgvM+VkMZNRzQHj3MDXKYJyGSRy6yA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=eQ7TJO44; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=LSQQ2Z5j; arc=pass smtp.client-ip=85.215.255.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1767800059; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Y8AqzZECsUtKXD47IaJyz6CUOMhsEeJ2E7JoIdJFvlyNY1UeyMq6GgKvgrE5CLetxA
-    SUdQqWz31eQlqXhxzlQPWoOP08eVUFqhPb70uTGNckwGUvsaYHLo6VzsCcgZ75g6pBTb
-    n3Reh5VFmdDfzBvYU3yJpdjzC0Ld6u7S731RTSW84M7wEWmtSiS/hSzhwJLxn+ORJQvQ
-    AQBWde5p2DgY9QXZhlzR2fQO6nf/KEsuScsnkYIxzNWLN7J6gnpfjV72qTIxjzULOzvk
-    mcEwvBKukPX4uaisENRVIweQD56po/fODN1r+hydZOhmwrzKW/+LBCWlpiBL0cqJsXSm
-    j9Kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767800059;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9NgbAeqzyHQXGFfVjBUF3lSa3PSH4LNlvLsaHRyC/Ro=;
-    b=YWP9OQI1zSmmJP2ITyacR0ZakUnMVU0t+BGVaXtJ8SJLPLVgiVDXyHJA6DWcHL0Z4o
-    zm29yFOtcY4CYQ8S6GxlCa6DJTbzvDfWZusWZA8lToJ6z8lrFjKayfWysWbPQx1jLljP
-    m7EJIf3aTNJY66xmSo1UG02F2IdQZ2LBcNqpdQnxmkjlEZIn9B/NbEND+37omU+Pz6lf
-    bRJAbQXaiWugWSGiRsI6kf4C1knEZN4EVfBcP1ciS+Yj7VJdkBme3vsk8Ak+z2gQ4aV5
-    gcm4dXoHRMBN7dO9IcU9IBMyzq/ityw7xQczMsd/Jj0EPg03SheO/BlHDLlc6U13DksI
-    3lrA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767800059;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9NgbAeqzyHQXGFfVjBUF3lSa3PSH4LNlvLsaHRyC/Ro=;
-    b=eQ7TJO44rUjF23D9lQY1Lna/TzxzECfBfaB6cED4gcnQDlxYWLnk+8DA6fDUUUPPfK
-    j1fmN7f978eJ6LAUTZLOBqsWhjKSIds/9QBDz21ZhLsJ6gDAmYQ/76MLd3oF2zsu6U8V
-    2YPcjxRquEv7Pwq1MeKw6BKqtIuJTiwEgSlELwZokCRuI5x3453hjE6UwgcwY0EdM+js
-    UaTuje/YsIEIgWyFGAt0+86ojGkZ+yNpSwmx+6mDMhvucgyzSY1DGsbAVOljPGItfIRf
-    sQyVCVk3oKZCfALboZzH9UGqOpKmVdP3eVAZQS+lV9NMAkj3Dgn3V3gWyIVM/nn+yaTD
-    Oz8A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767800059;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9NgbAeqzyHQXGFfVjBUF3lSa3PSH4LNlvLsaHRyC/Ro=;
-    b=LSQQ2Z5jZVIUPlGGD3ht5/t24eB9Cxae7AFDLH2XkKZLBAjhvsMGE/Nv/WummSvYVX
-    TmKA2xfY71cTF/2A80AQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6800::9f3]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b207FYJD0i
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Wed, 7 Jan 2026 16:34:19 +0100 (CET)
-Message-ID: <8b55ae26-daba-4b2e-a10b-4be367fb42d0@hartkopp.net>
-Date: Wed, 7 Jan 2026 16:34:13 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60E03557F2
+	for <linux-can@vger.kernel.org>; Wed,  7 Jan 2026 16:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767801700; cv=none; b=gkE/qllkkYSWbw4EMu+f/yKynLbmBd/vmEqosyC5MeD+0lkqSL8SvUmPH/+ZLwTgiMCaK8BgfBeEeCgANbGfxMLwtauX7ifwGQzlzzkLC4lyLn6/4tVdPZrWPtxjrgv8pX3opggA2es8eqmuCCKVikfuJF3vtIZGTE2Qi4MMNQQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767801700; c=relaxed/simple;
+	bh=MdOcdyzquYrZDcCkvAdD4u7MwXhRoEn3mysqAcqq4vo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=psJYSPcfizOYWFmSjBeqd6khYCVbhnFeilmKmD18m8NZF1x0ImsaoPtc/FHZiXM0ngXKLRW0WfVGOYGPM67faN0nh2IrDdCGk1cl9ssWQtgYEdlgoXobVcrWX9X3RQjQRaIq89hAHEvZTe4k87zqAZxwuo9rlBwyT2a+xhF2DYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Bu4QAHOU; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=QlWty0Pg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767801682;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+GCGBIzPMtbCjCRcA/11dyPDvN/EIpJyJO7gZQLRTXU=;
+	b=Bu4QAHOUuemt7HUbZN4ts4FqPV62hrZomoxPYk2u8QuoJkC52dRyWQlF35CnaPgZtZ+TMr
+	FI3EMBP2AozajQkVCLD1UHTLVT2hOnfXwoY2RgJP4x/eUgHEBzZaYy/EN1r05DkgKx+1ns
+	GaaHClfb8JOpFVndC2Dbt+1BwAOO0cw=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-617-ENkJqSF5NiakTiqJg97a4A-1; Wed, 07 Jan 2026 11:01:20 -0500
+X-MC-Unique: ENkJqSF5NiakTiqJg97a4A-1
+X-Mimecast-MFC-AGG-ID: ENkJqSF5NiakTiqJg97a4A_1767801679
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-b802d6ed5b0so269407466b.1
+        for <linux-can@vger.kernel.org>; Wed, 07 Jan 2026 08:01:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1767801678; x=1768406478; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+GCGBIzPMtbCjCRcA/11dyPDvN/EIpJyJO7gZQLRTXU=;
+        b=QlWty0PgrHqY8K/ARbLfQil8a8JOKQFu2ICBOPbTi3FzwSnCPj9dGt7kJyfK2HE0jo
+         kionPTbdtVPoXGtdHc0OtcY5bNQG6+vnWHhnFQx10eWwgzi8OZKJ+PrGjeGy52X2KyrH
+         4lhcybW1CW+OV+Aj+lgpnxcd4VcAKEw9G2MzdBFIu3ehSzQX1WnezeHUbNGf0OOL4rnD
+         xeBRRPV0ZoiloJgJTWd4PLrTaI8H3G/pHapke6lQZwBjwsNdFUIvsfwMt26Q2TuOGdkf
+         CxAqmXon7PDaGUyDY9mPxoIvjjxr0CDs0ylhuTM0YI4PC7U+H7AXzhs56LMDPjNKodYw
+         vcpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767801678; x=1768406478;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+GCGBIzPMtbCjCRcA/11dyPDvN/EIpJyJO7gZQLRTXU=;
+        b=UFqKILH/iwDG+4nOc9uvN4W+ARc2bj3XT1V77BhUk9EeGudjeQyCcxe/q+W+yrMHOO
+         2wFVJF9FWsZPe2dmxWUibLFxSzzbazx1oNqrbxVFRk1+/oIkGZNbmKs+WMdZ+DxvXPjd
+         ZLywhqfTwrfngqGhbe9t77uTtZCaZmk3lv5kaCjLsn5KQLo5TulsbcBtc8Cc9OMlIwV+
+         eXDKLMC26lMboK53cqOBJniDjFlNc+5hUvJYw6kjyOWuKzvbTXlsUPtFRIP75PUt43Ru
+         qDtUVWAjxwAQG3imU6557WttVR5BOrHeGfeCnlHYZ5SwiMUcLilX2aAGLPG214XIZjMY
+         LQUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXZKLziCA1k7lmSXxuKKy0qUDN0ZYFwnkEIlRGhuhoWQicH4IEEuMIxqnp/mhDC7b1avODRJ6tOEQ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDiPKypPZFNmLOHrkNEnR+s8Zc6fRE8BuwIW5ypGfkbrDvglhf
+	wdOhPx/MQDA5iv94xmC5dylUl3WKXCx083rS8uUi+vqgM/Av8bizFxmfN68WIiOl1PDHfqEtRrs
+	WIsQzIr0mFSwOKH8PI4MQME+Npm2y6KbfadAsWCTjUJUOgqDUb4dVKV2z67ZDu08N13wic8Kw3N
+	JvNs6/kIHdSxmUM/bPPDAyml6gTFDjUsgV0r38
+X-Gm-Gg: AY/fxX5IIy1DFnNkEEUYUcJREAy7OLBuQ/MiyQV4/mwIqrZY/O8wr46iV5i9+cejAtf
+	Pk1hfUVM9KJ5yt6IQkYlmMi7ctbS6B0uGoIP03eZqssWsa5O/xkHx55IXTXcdgkjgw38ZBJziMB
+	rrpToh+xGWgop0oXDKXiRVIwynXZU449oShdnuS1S2dunj3pT5CC3iS+VH5TAgJ+kGOnqlXvlIT
+	VJCKyUTCCH4O3VNQWSouKGj
+X-Received: by 2002:a17:907:744:b0:b3a:8070:e269 with SMTP id a640c23a62f3a-b8444cdaca3mr324248666b.14.1767801676936;
+        Wed, 07 Jan 2026 08:01:16 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFyCAq53fyeByL4uwfhi/No4YQ7czygIKiwAQVVyDJqhoFue0IDP5c7aLvHfVLZvRrOyLo5oxdZcQ/tUxmoZNg=
+X-Received: by 2002:a17:907:744:b0:b3a:8070:e269 with SMTP id
+ a640c23a62f3a-b8444cdaca3mr324238066b.14.1767801675603; Wed, 07 Jan 2026
+ 08:01:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bpf, xdp] headroom - was: Re: Question about to KMSAN:
- uninit-value in can_receive
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: mkl@pengutronix.de, Prithvi <activprithvi@gmail.com>, andrii@kernel.org,
- linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
- syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org
-References: <20251117173012.230731-1-activprithvi@gmail.com>
- <0c98b1c4-3975-4bf5-9049-9d7f10d22a6d@hartkopp.net>
- <c2cead0a-06ed-4da4-a4e4-8498908aae3e@hartkopp.net>
- <aSx++4VrGOm8zHDb@inspiron>
- <d6077d36-93ed-4a6d-9eed-42b1b22cdffb@hartkopp.net>
- <20251220173338.w7n3n4lkvxwaq6ae@inspiron>
- <01190c40-d348-4521-a2ab-3e9139cc832e@hartkopp.net>
- <20260102153611.63wipdy2meh3ovel@inspiron>
- <20260102120405.34613b68@kernel.org>
- <63c20aae-e014-44f9-a201-99e0e7abadcb@hartkopp.net>
- <20260104074222.29e660ac@kernel.org>
- <fac5da75-2fc0-464c-be90-34220313af64@hartkopp.net>
- <20260105152638.74cfea6c@kernel.org>
- <904fa297-b657-4f5b-9999-b8cfcc11bfa9@hartkopp.net>
- <20260106162306.0649424c@kernel.org>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20260106162306.0649424c@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <aQJRnX7OpFRY/1+H@fedora> <aQkgsuxa2UaL_qdt@bywater>
+ <aTsE1VIk4V/A49HE@fedora> <aT7XAsTWr0_yyfx_@bywater> <aVLOPMmpvArnVAHZ@fedora>
+ <aVLq1ibPcPHk-7Qv@bywater> <e5bc1353-ed3e-478b-a26e-0bb9a50b3863@oss.qualcomm.com>
+ <4cf222cb-e6e3-4d09-a7d8-bc64b8e148bd@hartkopp.net> <aV1zB_fYQE_OBZm2@bywater>
+ <8134fcf0-9a9d-41be-bcc3-80db23932f9b@hartkopp.net>
+In-Reply-To: <8134fcf0-9a9d-41be-bcc3-80db23932f9b@hartkopp.net>
+From: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
+Date: Wed, 7 Jan 2026 17:01:04 +0100
+X-Gm-Features: AQt7F2rsYl9GEMuxAghLtvGU8Co9nXZ_2-3hri17K1baiVrKZlfsg5jLK74bXDM
+Message-ID: <CAHYGQ0yTNTf3T=FM7B3NcG_BFmUSDS62cO0s=x2Bb7U1j=bq5A@mail.gmail.com>
+Subject: Re: [PATCH v6] can: virtio: Add virtio CAN driver
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: Francesco Valla <francesco@valla.it>, Harald Mommer <harald.mommer@oss.qualcomm.com>, 
+	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, 
+	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org, 
+	virtualization@lists.linux.dev, Wolfgang Grandegger <wg@grandegger.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Stefano Garzarella <sgarzare@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Jakub,
+On Wed, Jan 7, 2026 at 4:45=E2=80=AFPM Oliver Hartkopp <socketcan@hartkopp.=
+net> wrote:
+>
+> Hi Francesco,
+>
+> On 06.01.26 21:39, Francesco Valla wrote:
+> > Hello Harald, Oliver,
+> >
+> > On Tue, Jan 06, 2026 at 08:43:42PM +0100, Oliver Hartkopp wrote:
+> >>
+> >>
+> >> On 06.01.26 17:50, Harald Mommer wrote:
+> >>>> With the plain 'cangen' you are not really flooding the interface, s=
+ince
+> >>>> you are only sending a random CAN frame every 200ms. The only way I =
+can
+> >>>> reproduce this behaviour in a consistent manner is running from the =
+host:
+> >>>>
+> >>>>       while true; do cansend vcan0 134#00; done
+> >>>>
+> >>>> which seems to generate the maximum amount of traffic.
+> >>>>
+> >>>> This is not of course a realistic bus load, but is leading the syste=
+m
+> >>>> (at least on my setup) to a corner case somewhere.
+> >>>
+> >>> I have no idea how long the shell needs for a loop, always used cange=
+n -g 0 to stress the setup which is most probably faster than the shell int=
+erpreter, and sometimes did this for both directions (RX and TX).
+> >>>
+> >>> Full load is a realistic setup. And even if it was not, if something =
+stopped working or worse crashes torturing the setup this was a problem.
+> >>>
+> >>
+> >> Yes. cangen -g 0 -i <interface> creates full load - even on real CAN
+> >> interfaces. You can also generate fixed content if you want to omit th=
+e
+> >> generation of randomized content. 'cangen -?' prints a help text.
+> >>
+> >
+> > I agree with both of you - I was simply arguing that a plain 'cangen'
+> > with no parameters is not really loading the interface.
+> >
+> > For some reason, I was only able to trigger the unwanted behavior with
+> > cansend in a while loop and not with cangen -g 0, even with fixed ID an=
+d
+> > payload. However, I suspect the issue is a matter of timing and
+> > coincidences rather than load level.
+>
+> Yes, the difference is, that you open a new CAN socket each time with
+> cansend, while cangen opens one socket and pushes lots of frames into it.
+>
+> Btw. this should not lead to a stuck CAN interface.
+>
+> Is the interface usable from another terminal (with cansend/candump) or
+> how does this 'stuck interface' look like?
+>
 
-On 07.01.26 01:23, Jakub Kicinski wrote:
-> On Tue, 6 Jan 2026 13:04:41 +0100 Oliver Hartkopp wrote:
->> When such skb is echo'ed back after successful transmission via
->> netif_rx() this leads to skb->skb_iif = skb->dev->ifindex;
->>
->> To prevent a loopback the CAN frame must not be sent back to the
->> originating interface - even when it has been routed to different CAN
->> interfaces in the meantime (which always overwrites skb_iif).
->>
->> Therefore we need to maintain the "real original" incoming interface.
-> 
-> Alternatively perhaps for this particular use case you could use
-> something like metadata_dst to mark the frame as forwarded / annotate
-> with the originating ifindex?
+I reported the issue here:
+https://github.com/rust-vmm/vhost-device/issues/923. It seems it is
+the device implementation. I am working on a fix.
 
-I looked into it and the way how skb_dst is shared in the union behind 
-cb[] does not look very promising for skbs that wander up and down in 
-the network layer. And it is pretty complex to just store a single 
-interface index integer value.
+Matias
 
-While looking into _sk_redir to see how the _skb_refdst union is used, 
-I've seen that the _sk_redir function was removed from struct tcp_skb_cb 
-(commit e3526bb92a208).
-
-Today we use skb->cb only for passing (address) information from the 
-network layer to the socket layer and user space. But the space in cb[] 
-could also hold the content we currently store in the problematic skb 
-headroom.
-
-Would using skb->cb be a good approach for CAN skbs (that do not have 
-any of the Ethernet/TCP/IP requirements/features) or will there still be 
-networking code (besides CAN drivers and CAN network layer) that writes 
-into cb[] when passing the CAN skb up and down in the stack?
-
-/**
-  * struct can_skb_cb - private data inside CAN skb->cb
-  * cb[] is 64 bit aligned which is also recommended for struct sockaddr_can
-  * @magic:	to check if someone wrote to our CAN skb->cb space
-  * @flags:	extra flags for CAN_RAW and CAN_BCM sockets
-  * @can_addr:	socket address information to userspace
-  * @can_iif:	ifindex of the first interface the CAN frame appeared on
-  * @skbcnt:	atomic counter to have an unique id together with skb pointer
-  * @frame_len:	bql length cache of CAN frame in data link layer
-  */
-struct can_skb_cb {
-	u32 magic;
-	u32 flags;
-	struct sockaddr_can can_addr;
-	int can_iif;
-	int skbcnt;
-	unsigned int frame_len;
-};
-
-If not: We also don't have vlans nor inner[protocol|headers] in CAN 
-where we might store the 4 byte can_iif integer ...
-
-Many thanks and best regards,
-Oliver
 
