@@ -1,202 +1,150 @@
-Return-Path: <linux-can+bounces-6043-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6047-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14722D04627
-	for <lists+linux-can@lfdr.de>; Thu, 08 Jan 2026 17:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46BEDD047F0
+	for <lists+linux-can@lfdr.de>; Thu, 08 Jan 2026 17:44:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 99303308C056
-	for <lists+linux-can@lfdr.de>; Thu,  8 Jan 2026 16:08:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9645430AC062
+	for <lists+linux-can@lfdr.de>; Thu,  8 Jan 2026 16:27:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BFD127AC28;
-	Thu,  8 Jan 2026 16:07:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23745262FC0;
+	Thu,  8 Jan 2026 16:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="fc26pdJT";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="F0vPw5qj"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="LcjS5J9R";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="ZAe9Rv//"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A721A256E
-	for <linux-can@vger.kernel.org>; Thu,  8 Jan 2026 16:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F40826F467;
+	Thu,  8 Jan 2026 16:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.168
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767888473; cv=pass; b=emWN0roz1v+DGg444bgn4ZWua6vMcSEEeQq7DVNTzhqmJdyZfvWFKpj2ed4YpfNwG9Y8xLHOWu+xEATa54JmQATNGy/vM7LGDsq67q84FKBzaX14jNiVHsS6D44Af4Gbkl0Kg+mRQf5Zw9Llgx+iI4B0ZZae6P1zC5uxUt/bk+w=
+	t=1767889665; cv=pass; b=B02objL3oiYAT0awuS9eTY1rWBUYWJfB/iP2c+5geLpYJWlcoby9/DB6zVpnbvYFafzo58zGuashw+hW9GwQQZIdAHIP+s4bHVKdLEvJDKan+z7yFr7EPe2BkALb7rJvAx1DixlaD+DAodmgdotc14KRln9fP9emf1tt9GXtEtA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767888473; c=relaxed/simple;
-	bh=+2Q6nKMVI0AlwdefhI5R1cJ9d9LjhFo3ywtAU88N8BQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XNlQe7n0H+Mp02Vpp0X4mHkOFQd2tg/2lQe0ZE6g2lfvo+aAey/GCJb9bxqoD7bTpGMpql65AnPWK9ldXoxWqMcnMwCQHBTibem66Q3btBh9L4B0YWPYNHAGj4vVmD5YunnhWROpGStYEO8RTJI3rss+pwS8y+unSkn7Jss9m3E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=fc26pdJT; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=F0vPw5qj; arc=pass smtp.client-ip=81.169.146.164
+	s=arc-20240116; t=1767889665; c=relaxed/simple;
+	bh=WgzbXX/qK8fzrQlh7m/oURdOZynAuquulT/LNEiIA3c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Zx+qW4ax/P8MYpDoQtu+c2x+8+EmMsc7eY+o4VpOmHJg7P0ZJ4EllF8qQwmtl/Uwm8ho1FqPPLVbNmZtG+Qi3T86VFAU13q3XQyBtLilE/oXCexOyI8PFLNmZzTsJGu5+p2Ztf0lTDTJGnvx80HDanJR1xVvJ279+7CumXAAwz4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=LcjS5J9R; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=ZAe9Rv//; arc=pass smtp.client-ip=81.169.146.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1767888455; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1767889653; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=ByPvzSwgKcnMBlIF9OvKL4fK+IJOZEwusYsgMhpau3x2XP3fypF1ulBo6y1B/EkzLw
-    zqgTUFd7lVtZznybify1/3hYpmNKw0B5x+IX5QS2CFLhGBD5eUUaMS/3UOCw4YXYGkuR
-    +engJfFeO2ITvbFIfkshT+KQjiaeEzpg1/r9KgxTf4lCjRYhUOxK7Mu1OZ0TNSDZ+LWZ
-    /7CCi87tungSkyNQPrjjJkISWkz7mp73jEBud/mgg9zazsJ/1KoacN8eGn5pr5KhXpne
-    nbLYvicRsVMB9dMxHbgD8yJG0ZzRKVdBeoDXGM2qwkFBjv8+uNW5SGCLQ31ZBVmjonQT
-    S0rg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767888455;
+    b=HHEGGLnIt/OkKPaRLWHCE8BUqaKHEGlXRLuJFbHE5dBUNmpmd0B0VX3TyaYMsQ9cuK
+    +M2ITjpOqnV0ZnfYiFq3S9rRp+efmBAvvLZeM0Ue5xvs9VpL9a92zgWirGQiHvmOA3qZ
+    Opd7kdCRBF27YcoLyqn44CvoGn7C8+1ngNgMOTSSh9ZidiNzCENHvqKVVJYZ+Edl8TH3
+    EScAPPR/6YghwH+4aKlLrAmLc9NqSjsIZtMpT5mzgfnr2DdsBoGWMjZ+f4rFpc+Ydomo
+    eWdZ5Axx/tIu60nOnPMZXy3BZoUOBKjMpeMNEmYScDAWZyTTammjFmgtvQC1gyCBr+jn
+    uvqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767889653;
     s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=X1GEkADnt0U5UFC85GRFMRBSc/MNJykvoIdv43adZJw=;
-    b=ckL9gOqiIBakTN0N6U5Dl9CYUUT0tho5yRYJvEK8CwvTG18HKnf64T6DDl9+sCPXeP
-    R6jMmmF0hwycHpBtnztWZQLBm51z2rfIHPmfYxnh6l4jtoUancDcxwEt05nNMjVZdGtA
-    5kVOgEPQbJkbXWDKjlTOtfClfjbGPBXyoWMfuiQnlRxwAG27o0WMoamZdgCcLmmcghTK
-    9qgxLqLEHdUFVERaJFvFIcLBrghSj9qBiMFB+mN/OFlImkk/6vpSZPZOjjtvKgG4W79Y
-    2znu1I1wvjB48bO3aYBsr0Ucv7pNu8N7ufJK87ebr+rF6u1VCVzlXbLUqiVU+uXA7s1j
-    bsfQ==
+    bh=ynMYXxQV8/qp/U7DMUh5F+aC3Hp62DK36evAc9dOffY=;
+    b=qovElqcRnhaKA/TARoyrC1erZedFT1pkLBPiFDizImpy86F+gL+/tr9p9WbTF27nOM
+    K8t3xbTuHJz9RWu0TWBqPPD+WLKeGGSc9tqH2Df0Gwkf9AC8rd5JfySs9PF6gZwGrcRi
+    HxtND41YEF0QdgUWC1pSJ5DkRLz4OBIyBEUuwIjFwKkkbY5NtodJAKXFYsQpOYmAP20w
+    DZlC/K+NcUGOe3tAwkUwhIpI5FPrEWc0vsP/0yjWxhx0N8SLPDyvHAQ5+jXhZltwH8kh
+    s5jzpjd3YEikYpeoanzZ1hJ/2fU9MigeG7d1b1QJvXySRQ7rfdM1MvNEloRT0eCJ/Jb8
+    vGRg==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767888455;
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767889653;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=X1GEkADnt0U5UFC85GRFMRBSc/MNJykvoIdv43adZJw=;
-    b=fc26pdJT3KMacUNRm1EeX7LWyLWzMzBGjbUoHoKu7SVN4aFneya8ALvZUM+GoP9FnY
-    UcIMD9QyPV+17GpAh4xFmclftYAX3oyTxLF1KLYdCOduQDu3L85Q3uXcdmPb6071VdLS
-    VzR5SiX+p2351dXPziifmk7+Hcah0Glo1blMi2qD1Y2vgLmi6ogyjJq7hZyhdLIRCo1v
-    fgHG2Ls0m6HGo1e6kZv6i/HhEzsh5r1bBBK/RkY4P2u9UK/biqvNBOFoviszor5aMSxC
-    m0WmSux362MJUgjJrUvlF3QnowOl6y6iAG92n3qUoyumbyH9JoHpL80wgKOEs6ej8mQG
-    xaQg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767888455;
+    bh=ynMYXxQV8/qp/U7DMUh5F+aC3Hp62DK36evAc9dOffY=;
+    b=LcjS5J9ROBFSLUCp0eNwso2ekLaqxsc6yT4P8S7S4cZ6LtXXmMpP6A04yrM7Mah9rw
+    trse+qQq/ABaKh0IVKjq0kA9ZLlTrA3PUH3TJqwi2N/xvTLFRynkHWABwgx8+V32escY
+    tLDd9IVNhh0PCduVvD7wZ1hd682MG27M/PJgeKgPYX2gAQIzS3sg7BLwEO7dnT1MohQ7
+    TTvvoxTV9hOVXkAUAXxGfKg42ce7CJCNlMjvMMgykB9l4FXyOuFIjK96X0v9IyqzCDas
+    +d/AI/ZOXkEK0L+IxTgsB9TArdBAb/b77glWgGuY9jKw+GoT0jW5+bEnTSpRxyZvRHPX
+    JKBA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767889653;
     s=strato-dkim-0003; d=hartkopp.net;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=X1GEkADnt0U5UFC85GRFMRBSc/MNJykvoIdv43adZJw=;
-    b=F0vPw5qjzlms3L9RCAL65eZtYqhPVM5Gv52MZvmjWTLPR1LPxo8RcOLRd7A23lW4iL
-    EpgRCLYPH28eRC9E27Cg==
+    bh=ynMYXxQV8/qp/U7DMUh5F+aC3Hp62DK36evAc9dOffY=;
+    b=ZAe9Rv//UZ3Mnsmv06h/+h/HfUWu8JKjs0EQK0MafYEJk4UpxDU++obAq+ctOGJn/t
+    bmvZH/XNT8hj2pR4r2DA==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from lenov17.lan
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
     by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b208G7YJrD
+    with ESMTPSA id K0e68b208GRXJxE
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Thu, 8 Jan 2026 17:07:34 +0100 (CET)
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [RFC can-next 5/5] can: gw: use new maxhops variable instead of re-using csum_start
-Date: Thu,  8 Jan 2026 17:07:16 +0100
-Message-ID: <20260108160716.101883-5-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260108160716.101883-1-socketcan@hartkopp.net>
-References: <20260108160716.101883-1-socketcan@hartkopp.net>
+    Thu, 8 Jan 2026 17:27:33 +0100 (CET)
+Message-ID: <af5fd6da-f747-4f34-a866-f489c17dbe5a@hartkopp.net>
+Date: Thu, 8 Jan 2026 17:27:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [bpf, xdp] headroom - was: Re: Question about to KMSAN:
+ uninit-value in can_receive
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: mkl@pengutronix.de, Prithvi <activprithvi@gmail.com>, andrii@kernel.org,
+ linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org
+References: <20251117173012.230731-1-activprithvi@gmail.com>
+ <0c98b1c4-3975-4bf5-9049-9d7f10d22a6d@hartkopp.net>
+ <c2cead0a-06ed-4da4-a4e4-8498908aae3e@hartkopp.net>
+ <aSx++4VrGOm8zHDb@inspiron>
+ <d6077d36-93ed-4a6d-9eed-42b1b22cdffb@hartkopp.net>
+ <20251220173338.w7n3n4lkvxwaq6ae@inspiron>
+ <01190c40-d348-4521-a2ab-3e9139cc832e@hartkopp.net>
+ <20260102153611.63wipdy2meh3ovel@inspiron>
+ <20260102120405.34613b68@kernel.org>
+ <63c20aae-e014-44f9-a201-99e0e7abadcb@hartkopp.net>
+ <20260104074222.29e660ac@kernel.org>
+ <fac5da75-2fc0-464c-be90-34220313af64@hartkopp.net>
+ <20260105152638.74cfea6c@kernel.org>
+ <904fa297-b657-4f5b-9999-b8cfcc11bfa9@hartkopp.net>
+ <20260106162306.0649424c@kernel.org>
+ <8b55ae26-daba-4b2e-a10b-4be367fb42d0@hartkopp.net>
+ <20260108071703.788c67ed@kernel.org>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20260108071703.788c67ed@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- include/linux/skbuff.h |  2 ++
- net/can/gw.c           | 23 ++++++-----------------
- 2 files changed, 8 insertions(+), 17 deletions(-)
+On 08.01.26 16:17, Jakub Kicinski wrote:
+> On Wed, 7 Jan 2026 16:34:13 +0100 Oliver Hartkopp wrote:
+>>> Alternatively perhaps for this particular use case you could use
+>>> something like metadata_dst to mark the frame as forwarded / annotate
+>>> with the originating ifindex?
+>>
+>> I looked into it and the way how skb_dst is shared in the union behind
+>> cb[] does not look very promising for skbs that wander up and down in
+>> the network layer.
+> 
+> Maybe I'm misunderstanding, but skb_dst is only unioned with some
+> socket layer (TCP and sockmsg) fields, not with cb[]. It'd be
+> problematic if CAN gw frames had to traverse routing but I don't
+> think they do?
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 2034d51f6225..f09ce43cc05f 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -863,10 +863,11 @@ enum skb_tstamp_type {
-  *	@vlan_all: vlan fields (proto & tci)
-  *	@vlan_proto: vlan encapsulation protocol
-  *	@vlan_tci: vlan tag control information
-  *	@can_iif: ifindex of the first interface the CAN frame appeared on
-  *	@can_framelen: cached echo CAN frame length for bql
-+ *	@can_gw_maxhops: can-gw CAN frame time-to-live counter
-  *	@inner_protocol: Protocol (encapsulation)
-  *	@inner_ipproto: (aka @inner_protocol) stores ipproto when
-  *		skb->inner_protocol_type == ENCAP_TYPE_IPPROTO;
-  *	@inner_transport_header: Inner transport layer header (encapsulation)
-  *	@inner_network_header: Network layer header (encapsulation)
-@@ -1084,10 +1085,11 @@ struct sk_buff {
- 		};
- 		/* protocols without encapsulation */
- 		struct {
- 			int	can_iif;
- 			__u16	can_framelen;
-+			__u16	can_gw_maxhops;
- 		};
- 	};
- 
- 	__be16			protocol;
- 	__u16			transport_header;
-diff --git a/net/can/gw.c b/net/can/gw.c
-index 74d771a3540c..c7811b9c8e5a 100644
---- a/net/can/gw.c
-+++ b/net/can/gw.c
-@@ -68,12 +68,12 @@ MODULE_ALIAS(CAN_GW_NAME);
- 
- #define CGW_MIN_HOPS 1
- #define CGW_MAX_HOPS 6
- #define CGW_DEFAULT_HOPS 1
- 
--static unsigned int max_hops __read_mostly = CGW_DEFAULT_HOPS;
--module_param(max_hops, uint, 0444);
-+static unsigned short max_hops __read_mostly = CGW_DEFAULT_HOPS;
-+module_param(max_hops, ushort, 0444);
- MODULE_PARM_DESC(max_hops,
- 		 "maximum " CAN_GW_NAME " routing hops for CAN frames "
- 		 "(valid values: " __stringify(CGW_MIN_HOPS) "-"
- 		 __stringify(CGW_MAX_HOPS) " hops, "
- 		 "default: " __stringify(CGW_DEFAULT_HOPS) ")");
-@@ -472,23 +472,12 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
- 	}
- 
- 	/* Do not handle CAN frames routed more than 'max_hops' times.
- 	 * In general we should never catch this delimiter which is intended
- 	 * to cover a misconfiguration protection (e.g. circular CAN routes).
--	 *
--	 * The Controller Area Network controllers only accept CAN frames with
--	 * correct CRCs - which are not visible in the controller registers.
--	 * According to skbuff.h documentation the csum_start element for IP
--	 * checksums is undefined/unused when ip_summed == CHECKSUM_UNNECESSARY.
--	 * Only CAN skbs can be processed here which already have this property.
- 	 */
--
--#define cgw_hops(skb) ((skb)->csum_start)
--
--	BUG_ON(skb->ip_summed != CHECKSUM_UNNECESSARY);
--
--	if (cgw_hops(skb) >= max_hops) {
-+	if (skb->can_gw_maxhops >= max_hops) {
- 		/* indicate deleted frames due to misconfiguration */
- 		gwj->deleted_frames++;
- 		return;
- 	}
- 
-@@ -517,15 +506,15 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
- 		gwj->dropped_frames++;
- 		return;
- 	}
- 
- 	/* put the incremented hop counter in the cloned skb */
--	cgw_hops(nskb) = cgw_hops(skb) + 1;
-+	nskb->can_gw_maxhops = skb->can_gw_maxhops + 1;
- 
- 	/* first processing of this CAN frame -> adjust to private hop limit */
--	if (gwj->limit_hops && cgw_hops(nskb) == 1)
--		cgw_hops(nskb) = max_hops - gwj->limit_hops + 1;
-+	if (gwj->limit_hops && nskb->can_gw_maxhops == 1)
-+		nskb->can_gw_maxhops = max_hops - gwj->limit_hops + 1;
- 
- 	nskb->dev = gwj->dst.dev;
- 
- 	/* pointer to modifiable CAN frame */
- 	cf = (struct canfd_frame *)nskb->data;
--- 
-2.47.3
+We are using skb's that are e.g. created on socket level and only 
+contain fixed struct can[|fd|xl]_frames that are written into CAN 
+controllers registers on netdev level. The skb is just a dumb container, 
+which passes qdiscs and are stored in the CAN device cache until the CAN 
+frame is sent successfully on the CAN bus. And when it was sent, the skb 
+is echo'ed back via netif_rx() so that all local applications can see 
+the real traffic on the CAN bus. So our skb's can go down and up.
 
+I did some more investigation and created 5 RFC patches that solve the 
+issue with the problematic private headroom (struct can_skb_priv) in CAN 
+skbs.
+
+I'll continue testing - but it looks pretty good so far.
+
+Best regards,
+Oliver
 
