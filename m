@@ -1,150 +1,136 @@
-Return-Path: <linux-can+bounces-6047-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6049-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46BEDD047F0
-	for <lists+linux-can@lfdr.de>; Thu, 08 Jan 2026 17:44:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id F130FD0492C
+	for <lists+linux-can@lfdr.de>; Thu, 08 Jan 2026 17:55:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9645430AC062
-	for <lists+linux-can@lfdr.de>; Thu,  8 Jan 2026 16:27:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 914083065E1A
+	for <lists+linux-can@lfdr.de>; Thu,  8 Jan 2026 16:47:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23745262FC0;
-	Thu,  8 Jan 2026 16:27:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2378E2DB78F;
+	Thu,  8 Jan 2026 16:47:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="LcjS5J9R";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="ZAe9Rv//"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GoIU5kVN"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.168])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F40826F467;
-	Thu,  8 Jan 2026 16:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.168
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767889665; cv=pass; b=B02objL3oiYAT0awuS9eTY1rWBUYWJfB/iP2c+5geLpYJWlcoby9/DB6zVpnbvYFafzo58zGuashw+hW9GwQQZIdAHIP+s4bHVKdLEvJDKan+z7yFr7EPe2BkALb7rJvAx1DixlaD+DAodmgdotc14KRln9fP9emf1tt9GXtEtA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767889665; c=relaxed/simple;
-	bh=WgzbXX/qK8fzrQlh7m/oURdOZynAuquulT/LNEiIA3c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zx+qW4ax/P8MYpDoQtu+c2x+8+EmMsc7eY+o4VpOmHJg7P0ZJ4EllF8qQwmtl/Uwm8ho1FqPPLVbNmZtG+Qi3T86VFAU13q3XQyBtLilE/oXCexOyI8PFLNmZzTsJGu5+p2Ztf0lTDTJGnvx80HDanJR1xVvJ279+7CumXAAwz4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=LcjS5J9R; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=ZAe9Rv//; arc=pass smtp.client-ip=81.169.146.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1767889653; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=HHEGGLnIt/OkKPaRLWHCE8BUqaKHEGlXRLuJFbHE5dBUNmpmd0B0VX3TyaYMsQ9cuK
-    +M2ITjpOqnV0ZnfYiFq3S9rRp+efmBAvvLZeM0Ue5xvs9VpL9a92zgWirGQiHvmOA3qZ
-    Opd7kdCRBF27YcoLyqn44CvoGn7C8+1ngNgMOTSSh9ZidiNzCENHvqKVVJYZ+Edl8TH3
-    EScAPPR/6YghwH+4aKlLrAmLc9NqSjsIZtMpT5mzgfnr2DdsBoGWMjZ+f4rFpc+Ydomo
-    eWdZ5Axx/tIu60nOnPMZXy3BZoUOBKjMpeMNEmYScDAWZyTTammjFmgtvQC1gyCBr+jn
-    uvqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767889653;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ynMYXxQV8/qp/U7DMUh5F+aC3Hp62DK36evAc9dOffY=;
-    b=qovElqcRnhaKA/TARoyrC1erZedFT1pkLBPiFDizImpy86F+gL+/tr9p9WbTF27nOM
-    K8t3xbTuHJz9RWu0TWBqPPD+WLKeGGSc9tqH2Df0Gwkf9AC8rd5JfySs9PF6gZwGrcRi
-    HxtND41YEF0QdgUWC1pSJ5DkRLz4OBIyBEUuwIjFwKkkbY5NtodJAKXFYsQpOYmAP20w
-    DZlC/K+NcUGOe3tAwkUwhIpI5FPrEWc0vsP/0yjWxhx0N8SLPDyvHAQ5+jXhZltwH8kh
-    s5jzpjd3YEikYpeoanzZ1hJ/2fU9MigeG7d1b1QJvXySRQ7rfdM1MvNEloRT0eCJ/Jb8
-    vGRg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767889653;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ynMYXxQV8/qp/U7DMUh5F+aC3Hp62DK36evAc9dOffY=;
-    b=LcjS5J9ROBFSLUCp0eNwso2ekLaqxsc6yT4P8S7S4cZ6LtXXmMpP6A04yrM7Mah9rw
-    trse+qQq/ABaKh0IVKjq0kA9ZLlTrA3PUH3TJqwi2N/xvTLFRynkHWABwgx8+V32escY
-    tLDd9IVNhh0PCduVvD7wZ1hd682MG27M/PJgeKgPYX2gAQIzS3sg7BLwEO7dnT1MohQ7
-    TTvvoxTV9hOVXkAUAXxGfKg42ce7CJCNlMjvMMgykB9l4FXyOuFIjK96X0v9IyqzCDas
-    +d/AI/ZOXkEK0L+IxTgsB9TArdBAb/b77glWgGuY9jKw+GoT0jW5+bEnTSpRxyZvRHPX
-    JKBA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767889653;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ynMYXxQV8/qp/U7DMUh5F+aC3Hp62DK36evAc9dOffY=;
-    b=ZAe9Rv//UZ3Mnsmv06h/+h/HfUWu8JKjs0EQK0MafYEJk4UpxDU++obAq+ctOGJn/t
-    bmvZH/XNT8hj2pR4r2DA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b208GRXJxE
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Thu, 8 Jan 2026 17:27:33 +0100 (CET)
-Message-ID: <af5fd6da-f747-4f34-a866-f489c17dbe5a@hartkopp.net>
-Date: Thu, 8 Jan 2026 17:27:27 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A0229827E;
+	Thu,  8 Jan 2026 16:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767890831; cv=none; b=XR5TGJ0eJmxMHEJXQGzjSiwuLmt0tEfnjD7/wD23rNOOOATX3CzsBBx9Wc+rFnFkNO2znANMpTeef6DYWqool2ep8NlqEhTStIQgIfk7OZLebd2xxrNIoPuorgQ4o9g9bQ6/k+e2f4+XZ9N4c/eygQ4yTfgfn6MMwJrTMxLuIvU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767890831; c=relaxed/simple;
+	bh=kJClJX+0V06PtT2MwKiqkzjY9tj2YHDw8mvU6xDhD1Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DnYHuSU18CvvOKygNJnw7HzNuYAgU55XxgT+0sxyXMGfOt++Uc3AX8rSCKGJh6wwYfJlEMO+zPjjO7tsQE+I3zv++lOzeyJHc85iV8ZUFkpftGoKxUF8xI4ipEPjXOZEarvY/lqyZAlq4583OsWAsXTIak/cLqArIznCr7Hx25E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GoIU5kVN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A89C116D0;
+	Thu,  8 Jan 2026 16:47:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767890829;
+	bh=kJClJX+0V06PtT2MwKiqkzjY9tj2YHDw8mvU6xDhD1Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GoIU5kVNsO/nyyxqDl5W5K/cEiUMdfaCK+ELslhSlReM75V+fj1YZ5CCbtCJrlxTR
+	 5o3lkNSc0qdMlUvNTZEsigdUK3NRcDajTDjHwKG09G1bTk3q9AiimIXaDsmlpEuC4e
+	 fAISSNx1aQUEI9ji2Vj4ZFt6YgHP0z8E7q27cSHAFRA3PI6oXubsJJriJ5cJMHxVWB
+	 nngSz4Ta5Y9J4783gxBzFcDyzBACT9bjqHmfJ/J6kPsaGIkMGgNIAUQtGZwltPv48y
+	 JsJWjxM8KsFvkLarp+Ev+wLIFnaOoqer5cXCNgwZEE8OVslPvTd0nprZcN3QIE7CDM
+	 LcOs2dkgrD8Pg==
+Date: Thu, 8 Jan 2026 22:16:59 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Cc: mkl@pengutronix.de, thomas.kopp@microchip.com, mailhol@kernel.org, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, andersson@kernel.org, 
+	konradybcio@kernel.org, linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, mukesh.savaliya@oss.qualcomm.com, 
+	anup.kulkarni@oss.qualcomm.com
+Subject: Re: [PATCH v1 2/2] arm64: dts: qcom: qcs6490-rb3gen2: Enable CAN bus
+ controller
+Message-ID: <jlynppc5lspzcc2pkz7y6jgd6h2l7e6cparntvxnyx5rnfp54n@tymil62yg4go>
+References: <20260108125200.2803112-1-viken.dadhaniya@oss.qualcomm.com>
+ <20260108125200.2803112-3-viken.dadhaniya@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bpf, xdp] headroom - was: Re: Question about to KMSAN:
- uninit-value in can_receive
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: mkl@pengutronix.de, Prithvi <activprithvi@gmail.com>, andrii@kernel.org,
- linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
- syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org
-References: <20251117173012.230731-1-activprithvi@gmail.com>
- <0c98b1c4-3975-4bf5-9049-9d7f10d22a6d@hartkopp.net>
- <c2cead0a-06ed-4da4-a4e4-8498908aae3e@hartkopp.net>
- <aSx++4VrGOm8zHDb@inspiron>
- <d6077d36-93ed-4a6d-9eed-42b1b22cdffb@hartkopp.net>
- <20251220173338.w7n3n4lkvxwaq6ae@inspiron>
- <01190c40-d348-4521-a2ab-3e9139cc832e@hartkopp.net>
- <20260102153611.63wipdy2meh3ovel@inspiron>
- <20260102120405.34613b68@kernel.org>
- <63c20aae-e014-44f9-a201-99e0e7abadcb@hartkopp.net>
- <20260104074222.29e660ac@kernel.org>
- <fac5da75-2fc0-464c-be90-34220313af64@hartkopp.net>
- <20260105152638.74cfea6c@kernel.org>
- <904fa297-b657-4f5b-9999-b8cfcc11bfa9@hartkopp.net>
- <20260106162306.0649424c@kernel.org>
- <8b55ae26-daba-4b2e-a10b-4be367fb42d0@hartkopp.net>
- <20260108071703.788c67ed@kernel.org>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20260108071703.788c67ed@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260108125200.2803112-3-viken.dadhaniya@oss.qualcomm.com>
 
-On 08.01.26 16:17, Jakub Kicinski wrote:
-> On Wed, 7 Jan 2026 16:34:13 +0100 Oliver Hartkopp wrote:
->>> Alternatively perhaps for this particular use case you could use
->>> something like metadata_dst to mark the frame as forwarded / annotate
->>> with the originating ifindex?
->>
->> I looked into it and the way how skb_dst is shared in the union behind
->> cb[] does not look very promising for skbs that wander up and down in
->> the network layer.
+On Thu, Jan 08, 2026 at 06:22:00PM +0530, Viken Dadhaniya wrote:
+> Enable the MCP2518FD CAN controller on the QCS6490 RB3 Gen2 platform.
+> The controller is connected via SPI3 and uses a 40 MHz oscillator.
+> A GPIO hog for GPIO0 is included to configure the CAN transceiver in
+> Normal mode during boot.
 > 
-> Maybe I'm misunderstanding, but skb_dst is only unioned with some
-> socket layer (TCP and sockmsg) fields, not with cb[]. It'd be
-> problematic if CAN gw frames had to traverse routing but I don't
-> think they do?
 
-We are using skb's that are e.g. created on socket level and only 
-contain fixed struct can[|fd|xl]_frames that are written into CAN 
-controllers registers on netdev level. The skb is just a dumb container, 
-which passes qdiscs and are stored in the CAN device cache until the CAN 
-frame is sent successfully on the CAN bus. And when it was sent, the skb 
-is echo'ed back via netif_rx() so that all local applications can see 
-the real traffic on the CAN bus. So our skb's can go down and up.
+It'd be worth mentioning how you tested the controller.
 
-I did some more investigation and created 5 RFC patches that solve the 
-issue with the problematic private headroom (struct can_skb_priv) in CAN 
-skbs.
+- Mani
 
-I'll continue testing - but it looks pretty good so far.
+> Signed-off-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+> ---
+>  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 30 ++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+> index e3d2f01881ae..f2f2925e645a 100644
+> --- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+> +++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+> @@ -44,6 +44,14 @@ chosen {
+>  		stdout-path = "serial0:115200n8";
+>  	};
+>  
+> +	clocks {
+> +		mcp2518fd_osc: can-clk {
+> +			compatible = "fixed-clock";
+> +			clock-frequency = <40000000>;
+> +			#clock-cells = <0>;
+> +		};
+> +	};
+> +
+>  	dp-connector {
+>  		compatible = "dp-connector";
+>  		label = "DP";
+> @@ -1151,6 +1159,28 @@ platform {
+>  	};
+>  };
+>  
+> +&spi3 {
+> +	status = "okay";
+> +
+> +	can@0 {
+> +		compatible = "microchip,mcp2518fd";
+> +		reg = <0>;
+> +		interrupts-extended = <&tlmm 7 IRQ_TYPE_LEVEL_LOW>;
+> +		clocks = <&mcp2518fd_osc>;
+> +		spi-max-frequency = <10000000>;
+> +		vdd-supply = <&vreg_l11c_2p8>;
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +
+> +		gpio0-hog {
+> +			gpio-hog;
+> +			gpios = <0 GPIO_ACTIVE_LOW>;
+> +			output-high;
+> +			line-name = "mcp251xfd-gpio0";
+> +		};
+> +	};
+> +};
+> +
+>  &swr2 {
+>  	status = "okay";
+>  
+> -- 
+> 2.34.1
+> 
 
-Best regards,
-Oliver
+-- 
+மணிவண்ணன் சதாசிவம்
 
