@@ -1,148 +1,120 @@
-Return-Path: <linux-can+bounces-6053-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6054-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0FA4D06504
-	for <lists+linux-can@lfdr.de>; Thu, 08 Jan 2026 22:28:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EFBCD06C12
+	for <lists+linux-can@lfdr.de>; Fri, 09 Jan 2026 02:37:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BBA7130196BF
-	for <lists+linux-can@lfdr.de>; Thu,  8 Jan 2026 21:27:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C465F300B823
+	for <lists+linux-can@lfdr.de>; Fri,  9 Jan 2026 01:37:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 170AE338932;
-	Thu,  8 Jan 2026 21:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CA4D1F30C3;
+	Fri,  9 Jan 2026 01:37:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="DrQoZSZn";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="kAu15dTX"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="UbV5Mcl4"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.20])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D5E33769F
-	for <linux-can@vger.kernel.org>; Thu,  8 Jan 2026 21:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767907657; cv=pass; b=phqS/WLbMBMDKGjhTZlb0rKSEj8qI9xH9sToBwoXiSaAChntcAiFqoZARs3MnMPxZL5e0hW3QMMBy8WvYnjazk+zNxdCcy0qvGstt55L9ZT/CQT7mDzEIv224eFCpBxzUYX+RRrMjvRMm5QivjkkdUus6cE8ff97LUG7dgviTpM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767907657; c=relaxed/simple;
-	bh=izntjT0jC45jSsiZwrNMZz9/ShHvk6xBY+WpMme40fI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KbdpZJsPLMksdeS41foHsIDy4VENIN1xtvyVNwiqJQtA4dIkHtlrgOo0RGWYmngTCdfMRPWC49cvyJUQ3+i4fOdr61Qou3uXhHMY3DH68TYD9hH68pW8xf6wHSTZ5p19xzj5wzLk+/ZHz+09Auw8xiO6RPl7U5ph8J1Wco2RT/8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=DrQoZSZn; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=kAu15dTX; arc=pass smtp.client-ip=85.215.255.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1767907467; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=JYQCEpbxw/GjkjZj0fBfJZqdMG3n3acxJSgIII+s8SDfHCnn+5C23rxLis3l5NqZNh
-    pVOK2qiCkAJTDSHPxJF9VW0Hke1xGqv3RFVUccblhlzzapruWdSZVNg7rNPIZDfYx2WO
-    5MiGsUgv7kM4nWfaN9Ts2d0VIWb6Vwb2Eycf1Ng73AkhmpYIw8rahgk5Uo8jHJwJmXYf
-    J2pLACHDI9onzmqbnNHSKZbHLFxlMC7h1rm0DDg4S3tKpG0q/mRhCEz1RD/3Kt7zOZT1
-    +IlqFROWjZSQJDwnhNavvtLOx8je/2KzjWRZGehHwTWfMka1h9hxnzUEoYoUInHLWp9G
-    zcIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767907467;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9hHmROW4gpSWev55Qb/+RvItutRBD35cmV6U+2YaOjg=;
-    b=qgSSDXNpLkD+sanidCLIWOVU11dC3dh05y1MyaJL+EDkfFS393sIIQfGY/Egmo19wP
-    zYymnjdGM4CrWGQzEnxrMhBjAqElVlzee1lWlpjV8Y32isBXgh87e/Y/0n4lBxI44DTw
-    O5MDyt3aMA5gDuH7nk2RMGPlw60+1LzYLh9BJdnzqkfpsCLd7+qoAlvzRxbXTHTtJOKC
-    UkJRDNKX47jWUd+kVxoVVnLTlOWrZbDcuG3r/8lu14PPfE5kobYtB4IFaGpr3Fsf8jeN
-    CMW9bzYG8Aqsb1DHq2F9Ubl37OrCWjzAL80mNQYZ0F216uz45WBp61UEJeORKPBoxPkL
-    NaGg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767907467;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9hHmROW4gpSWev55Qb/+RvItutRBD35cmV6U+2YaOjg=;
-    b=DrQoZSZnZIjhQHlWRPpfgx3U1EOZHpeTltxIlZ4mvbj0ru21dtdheyJfzPlXsMzb3K
-    D8MvAORt+l9OV8nbrlmeixI0/0pH/ORetWT/QYhze8o8Y/BlsQkx7SeBWr5R1qEDXW8w
-    4H9NdHnhO2QjXIEFRLZYQj8aMTmzZkhq8DLuMcYahVV3cVfchVw9pBBSgCJRxSPAd0LA
-    m3GhNEt6v0VRBIEtxs4I3FxPjUy3KfamoqfH7E/a1DH7tmc2JL9VxYFZb8+os4Zbe3P8
-    9Nl09bzbKZYZaJLQa6wNkRGYDugFlmwoAh0Wm0+KCfKd+8yrV3RBD+FrWxGfEVWiQFOu
-    +sEA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767907467;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9hHmROW4gpSWev55Qb/+RvItutRBD35cmV6U+2YaOjg=;
-    b=kAu15dTXvwiY2f/I7LDvRmfnlkxcAkFEOtCeYey3DaSUyQ6zYNzV3rqcWUzsAhnieM
-    VginulBaYOD7ogMQqUCQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b208LORL1c
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Thu, 8 Jan 2026 22:24:27 +0100 (CET)
-Message-ID: <f7396b0c-44d5-4d5d-b571-0126e0cd078a@hartkopp.net>
-Date: Thu, 8 Jan 2026 22:24:21 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26CB1FBCA7;
+	Fri,  9 Jan 2026 01:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767922634; cv=none; b=I5JVPk6Zef6QUUnosCSR4jiHtaqY/cDSKgp5ItqCz1Xe3p5Q4Z6pVswvEcWP4RRkM/UDQ9dAlwJeCF2jav9wB1bJ5ibbvpkh4neQ6c54sNS55R04lJvi+jMqmRMdDoZTgwtW/c6Cg0CvtnoKQAkAzqZe/iY49y/24/Jg83UksNc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767922634; c=relaxed/simple;
+	bh=vrQFZ60kCD4QItloqTS4yIEdK+yDADC5qDuNejKIoFY=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=OIpII90rJGBs0qLO+g8lVhK77IhDLgr+v+NOmj0UNBOqFz+oryhAHVV3en3OfSOjzFFweUFATXctRYtmkvnNVS0Col5BIuAQ3dSbQ+MHCB2UJjYrseseGOFQ2i9U8HuSTbY3V1NPvikKB/gQcWf+qlcG01+xkzLlprlxhZFUSCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=UbV5Mcl4; arc=none smtp.client-ip=43.163.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1767922621;
+	bh=vOhhGovDEdI7MIiVRYvOwSIIsewzXgqtF+6ZX/55HJs=;
+	h=From:To:Cc:Subject:Date;
+	b=UbV5Mcl4K6+JKlA5mwbtoQfzI8fXiBA2F6qSIz/bauchr0qg33pmy5ausMN+8c7aI
+	 TcJrLRq5xgOw8m7WAo696JL0WZ6WgaN5+lQDsdoNra02/UTsxP8lbMPSLHVrcuEdUY
+	 X+lCwkU9m7mzhnLj/FvfbVNTBiVZ91q+9fvVKums=
+Received: from 7erry.customer.ask4.lan ([31.205.230.119])
+	by newxmesmtplogicsvrszc50-0.qq.com (NewEsmtp) with SMTP
+	id 9381240F; Fri, 09 Jan 2026 09:36:56 +0800
+X-QQ-mid: xmsmtpt1767922616tb59jxuxm
+Message-ID: <tencent_B88CC7093F21BB59E7B4298209F208E02708@qq.com>
+X-QQ-XMAILINFO: OVFdYp27KdlJP7ilj1YbtakSSuxxLEyKtcI22eJaJPW//OvymwtbZJOU2kvvwl
+	 9OmqnYzT8W6vlsBjHCOS6vRE6uhHlOwKBktoVJM/Yzul8A2KRPQBUwIVl+/y7bTUedGqUKOSAy4P
+	 f+I+u37JxCC3znWGxau6juDKjLu96S2nSJJgnThCh3h+hpRttj9eG5biInC2DKStgHd27IFlaZkG
+	 CbS8d51qLqcjfXoxf+OugAa8kmatc5VdmZAEijj2cDjCjoX0yCWU1IPH/mZ1gz0yFBigCFujQv1B
+	 CTvsXaOKJ31OPvtXw298n4JwnxlW3fZlJR6nj+mkb9g6YP1aCv8bfyHqgEknZqvdlSALHIEIgh9o
+	 1sH6/2flUNdP5EkcYSLAHTfkgdL7IQV0IWGhA7vIs/z818vsMlKaEmNHzYlTaUCZSmaAhDWzR+Rk
+	 ONpSi7AS3eNSaT4fc2D5HIGWX6d0vDefp10fx1kYbMogsyoX9+rflSgunNOFev/ukkLP1KsfQCRM
+	 0e3llcp5/ovMabujiM+AvwK3ERHU5XBTPOe6rFt+mfMQapZp/tj1qhH55LVKqYG99HuMz5gtFjRD
+	 cOmg19fx+mHfsennQeRS0KNcjoQydRFl+47i17/0BiK8ySQSvki5SGYeSLBvU1WGB+kJpNgZW5XP
+	 kGHcGh/WmTFkWZ9SQKvKuJdFhAYamMQ4eJiOj3lfNPGd7J/RCvisLtf5et+s6cmlM7qfad9HVhzZ
+	 IPcJtf+zGWZDbnJ4cJpYtqzdyIuBFr3jTk/K3/d/Ih8EX5xiJ5rXpQzjgvPG51K7y7zgrifyqM/I
+	 nGcE5P8hDfj9emRsbGRdKLrrxq/VzdWigxFSGbUhY5YEBMfGboDCCT4Vcbc20UxzWTiKKkY2AjzY
+	 SvUo0MDw7ecy1uZTnlw9aL3h7vvGltGOJQK0jXqOQYBePROmQswJYbJSLeczKRRh2LRBGDcs2pTn
+	 eSLt8MY8JqWM8Nr1KJRyRSH7KvmEfbM/TwX7Uj3xgcy0+ep+LKRy7lV62UVL93Xx45njtLl+YKvB
+	 AL9rNwR4y2AwsUOTMSSAQMija1sJ1L8X72JVmV0K1l0Ejz8Qij
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+From: Jerry Wu <w.7erry@foxmail.com>
+To: mkl@pengutronix.de
+Cc: mailhol@kernel.org,
+	extja@kvaser.com,
+	eeodqql09@gmail.com,
+	linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	w.7erry@foxmail.com
+Subject: [PATCH net] can: kvaser_usb: kvaser_usb_leaf: Fix some info-leaks to USB devices
+Date: Fri,  9 Jan 2026 01:36:48 +0000
+X-OQ-MSGID: <20260109013648.39054-1-w.7erry@foxmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC can-next 2/5] can: move can_iif from private headroom to
- struct sk_buff
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
- Vincent Mailhol <mailhol@kernel.org>
-References: <20260108160716.101883-1-socketcan@hartkopp.net>
- <20260108160716.101883-2-socketcan@hartkopp.net>
- <20260108122516.221e9bc0@kernel.org>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20260108122516.221e9bc0@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hello Jakub,
+Uninitialized Kernel memory can leak to USB devices.
 
-On 08.01.26 21:25, Jakub Kicinski wrote:
-> On Thu,  8 Jan 2026 17:07:13 +0100 Oliver Hartkopp wrote:
->>   	union {
->> -		__be16		inner_protocol;
->> -		__u8		inner_ipproto;
->> -	};
->> +		/* protocols with encapsulation */
->> +		struct {
->> +			union {
->> +				__be16	inner_protocol;
->> +				__u8	inner_ipproto;
->> +			};
->>   
->> -	__u16			inner_transport_header;
->> -	__u16			inner_network_header;
->> -	__u16			inner_mac_header;
->> +			__u16	inner_transport_header;
->> +			__u16	inner_network_header;
->> +			__u16	inner_mac_header;
->> +		};
->> +		/* protocols without encapsulation */
->> +		struct {
->> +			int	can_iif;
->> +		};
->> +	};
-> 
-> I won't accept this patch but it's a matter of taste so maybe you can
-> convince another of the netdev maintainers to take this.
+Fix this by using kzalloc() instead of kmalloc().
 
-The patch set was only for the quick discussion and would need some more 
-documentation and commit message extensions anyway (including CC'ing 
-additional maintainers).
+Fixes: 7259124eac7d ("can: kvaser_usb: Split driver into kvaser_usb_core.c and kvaser_usb_leaf.c")
+Signed-off-by: Jerry Wu <w.7erry@foxmail.com>
+---
+Commit da2311a6385c (can: kvaser_usb: kvaser_usb_leaf: Fix some info-leaks to USB devices) 
+fixed a similar issue, CVE-2019-19947, in the same file. The other functions 
+contain similar logic. Would it make sense to fix them in the same way?
 
-As it is a CAN specific topic it would go upstream via linux-can ML and 
-the CAN maintainer Marc (see CC). So we can discuss and finalize it here.
+Thank you for time reading this. My apologies if I missed anything.
 
-In the end I feel pretty good about using the inner-protocol space. 
-We'll keep you in CC about this.
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Many thanks for your valuable feedback and best regards,
-Oliver
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+index 1167d38344f1..b031e6e42a41 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@ -723,7 +723,7 @@ static int kvaser_usb_leaf_send_simple_cmd(const struct kvaser_usb *dev,
+ 	struct kvaser_cmd *cmd;
+ 	int rc;
+ 
+-	cmd = kmalloc(sizeof(*cmd), GFP_KERNEL);
++	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
+ 	if (!cmd)
+ 		return -ENOMEM;
+ 
+@@ -1881,7 +1881,7 @@ static int kvaser_usb_leaf_set_bittiming(const struct net_device *netdev,
+ 	struct kvaser_cmd *cmd;
+ 	int rc;
+ 
+-	cmd = kmalloc(sizeof(*cmd), GFP_KERNEL);
++	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
+ 	if (!cmd)
+ 		return -ENOMEM;
+ 
+-- 
+2.52.0
 
 
