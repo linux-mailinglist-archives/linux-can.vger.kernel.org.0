@@ -1,91 +1,127 @@
-Return-Path: <linux-can+bounces-6055-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6056-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55019D07A6A
-	for <lists+linux-can@lfdr.de>; Fri, 09 Jan 2026 08:50:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05120D07C0D
+	for <lists+linux-can@lfdr.de>; Fri, 09 Jan 2026 09:18:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C83943058BE3
-	for <lists+linux-can@lfdr.de>; Fri,  9 Jan 2026 07:50:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 56E1B3006A6D
+	for <lists+linux-can@lfdr.de>; Fri,  9 Jan 2026 08:18:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9D852E8B78;
-	Fri,  9 Jan 2026 07:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uGa+e455"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA85D86331;
+	Fri,  9 Jan 2026 08:18:53 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64D723EAAF;
-	Fri,  9 Jan 2026 07:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00396218E91
+	for <linux-can@vger.kernel.org>; Fri,  9 Jan 2026 08:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767945013; cv=none; b=CFKUetu+oyVyfgPNP6KBfb0OY98vUxYtol7y0XAOId7iAJlPCNJYhGETaDpO6Gt3p4KCsxf91fdJ6HDLbL6epuMmLMCP2UchOycs6VkXrVbAtsp3E6LPlBR1xoVn7T5JNLIx9KP/9IcP2DYuHKJ+LvvJithnu7M1rl2vVSCAhKc=
+	t=1767946733; cv=none; b=khNlvvwzp4f+1Jq5bDaNKm/tCizSg99BJb/WdKHD33MVA1ypSR1WjDyOMTUk6b1hIL8nhtN71B4+fUk4IUwJDSQ9wOE58fkOExFa9UvmwC3D3UjVH/4/S9AcaDI/1ZdU3usHB5feQ7todI02nzw5uf0BU3thkslQg/A8UtX0AyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767945013; c=relaxed/simple;
-	bh=Rj3x4q25lUQmxFEdT80Amznetj/Vl1GUcn5k3pHOL9k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CzMTBIfobYry/9hKDhpWBXrUkIBRmTk9zCQ6sN8hXQ5nFq8aw6DqVxT7s5Zcz2aG9r+3v/rM9Y4QVlE6PP1aeNz50xt6ILSfiQMa1pd0IyzHP5FCJWdz0tQAShjmQ2d2yAfVOyFhlX4jJKlR/R5nf/1AXhVUxwyfKV75/eerkfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uGa+e455; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 441F6C4CEF1;
-	Fri,  9 Jan 2026 07:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767945013;
-	bh=Rj3x4q25lUQmxFEdT80Amznetj/Vl1GUcn5k3pHOL9k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=uGa+e455nMoPgw/5qUmUq//pWQDLJutyOkQq+jBqCQ8NVrx6I5oQpBfb0t/iNMeAr
-	 CYsLtTEXfY+VATwVKge+UNoeE6rOY2XdmaG4J5vuHoC6h6Vg1KctFXsimr5XJa3Lpn
-	 YR8n41u8UC8PqK/8X6AgRwTRriSWBmi3WbvbBS0HpOawcheI7KyEjHXcvzgPIzVWBG
-	 /kemSQjsIUR8/Osok2wEI09nDpQ95bU+ktF1gnX+aApIzrxjtmgR97jOGUnsE3rVhd
-	 7wxQtr5WwEz7tXZAbhUgft7jZbWa8ySVIULTXZvTiso2cvCdQJ1X7qGZObkflGWMH0
-	 kfg56yiHHS1+A==
-Message-ID: <df1feb99-2996-4a84-8e04-2a850c05b602@kernel.org>
-Date: Fri, 9 Jan 2026 08:50:03 +0100
+	s=arc-20240116; t=1767946733; c=relaxed/simple;
+	bh=qkFSWehH+nMQ8IXJbdbH6EiZaFh67D/C6ofI0vJ2+/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rdNfx2RLf0Hy/TiPT+f2iXYI0oOjwrHtarF+3EVFpsKwyHTj4OXj0V/pSfJ/aLwFVGRPfpoobNFFOh+nWPwesitrvapyyKFwH3mPVcve8sp3wISudfMe7EjG4DRpV4jSrasT7ipLN7DttAtrJj2SUzAfyfFagc+4OUSbwL6rnhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ve7hf-0005Aw-JE; Fri, 09 Jan 2026 09:18:39 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1ve7he-009oY4-14;
+	Fri, 09 Jan 2026 09:18:38 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:2260:2009::])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id C19804C95F8;
+	Fri, 09 Jan 2026 08:18:37 +0000 (UTC)
+Date: Fri, 9 Jan 2026 09:18:35 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol@kernel.org>
+Cc: Jerry Wu <w.7erry@foxmail.com>, extja@kvaser.com, eeodqql09@gmail.com, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] can: kvaser_usb: kvaser_usb_leaf: Fix some
+ info-leaks to USB devices
+Message-ID: <20260109-wild-whippet-of-unity-a0f2ce-mkl@pengutronix.de>
+References: <tencent_B88CC7093F21BB59E7B4298209F208E02708@qq.com>
+ <df1feb99-2996-4a84-8e04-2a850c05b602@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] can: kvaser_usb: kvaser_usb_leaf: Fix some info-leaks
- to USB devices
-To: Jerry Wu <w.7erry@foxmail.com>, mkl@pengutronix.de
-Cc: mailhol@kernel.org, extja@kvaser.com, eeodqql09@gmail.com,
- linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
- Jimmy Assarsson <extja@kvaser.com>
-References: <tencent_B88CC7093F21BB59E7B4298209F208E02708@qq.com>
-From: Vincent Mailhol <mailhol@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <tencent_B88CC7093F21BB59E7B4298209F208E02708@qq.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="a5ltp35ws52ml7u2"
+Content-Disposition: inline
+In-Reply-To: <df1feb99-2996-4a84-8e04-2a850c05b602@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-+CC: Jimmy
 
-On 09/01/2026 at 02:36, Jerry Wu wrote:
-> Uninitialized Kernel memory can leak to USB devices.
+--a5ltp35ws52ml7u2
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH net] can: kvaser_usb: kvaser_usb_leaf: Fix some
+ info-leaks to USB devices
+MIME-Version: 1.0
 
-Please explain in your description which field(s) is(are) uninitialized
-in cmd.
+On 09.01.2026 08:50:03, Vincent Mailhol wrote:
+> +CC: Jimmy
+>
+> On 09/01/2026 at 02:36, Jerry Wu wrote:
+> > Uninitialized Kernel memory can leak to USB devices.
+>
+> Please explain in your description which field(s) is(are) uninitialized
+> in cmd.
 
-(or attach a report in which you can witness the information leak).
+Some memory at the end of struct kvaser_cmd is uninitialized, but
+usb_bulk_msg() doesn't send the whole struct.
 
-> Fix this by using kzalloc() instead of kmalloc().
-> 
-> Fixes: 7259124eac7d ("can: kvaser_usb: Split driver into kvaser_usb_core.c and kvaser_usb_leaf.c")
-> Signed-off-by: Jerry Wu <w.7erry@foxmail.com>
+regards,
+Marc
 
-Yours sincerely,
-Vincent Mailhol
+P.S.: It may be a coincidence, but Kery Qi's patch [1] had a similar
+form. You take the bug class of an existing CVE and search for the same
+pattern in other drivers. I like the idea. Please take a little more
+time and check whether it really is a bug before sending bug fix
+patches. Otherwise please label the patches accordingly.
 
+[1] https://lore.kernel.org/all/20260108082042.1627-1-qikeyu2017@gmail.com/
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--a5ltp35ws52ml7u2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlgudcACgkQDHRl3/mQ
+kZxsmgf/aqegzNCiWv5eJ10ppgpjJoxhPEFySCqCravNWBLqAJ8V7q4DFQsK84Lw
+J0zNOIuJlSUGb8tHJESCwi98bMddVDQ1ta20WuDXJSEIVQrLxR9yxuiKNXt/aynz
+swFBvvZUe2AsKZUcO+N9aKP53HIfH55YFjIRPiB00fldqZKBPtBmuyswTAFLPzBM
+lM7pY1pi7n1qalzgeO+1rRzn3J2rnCPVxZcPWsH5zvtJ6gWNBOXgLgu2wKSR+/3f
+sKQhb14+fkuSWqydMUzzQJ65Z/16MuZUCoXD7KSK1CxPoy6jdm5tvu/l4H+OQiYY
+KGr9pfVot/A5+Ld7A5Iz7uw8q8p8tA==
+=MVhU
+-----END PGP SIGNATURE-----
+
+--a5ltp35ws52ml7u2--
 
