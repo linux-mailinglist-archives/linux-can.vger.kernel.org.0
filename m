@@ -1,119 +1,93 @@
-Return-Path: <linux-can+bounces-6100-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6101-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77605D0DE92
-	for <lists+linux-can@lfdr.de>; Sat, 10 Jan 2026 23:39:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C795DD0E89E
+	for <lists+linux-can@lfdr.de>; Sun, 11 Jan 2026 11:08:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 92CB3302BABA
-	for <lists+linux-can@lfdr.de>; Sat, 10 Jan 2026 22:38:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4F89D300E141
+	for <lists+linux-can@lfdr.de>; Sun, 11 Jan 2026 10:08:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFFB32BEFFE;
-	Sat, 10 Jan 2026 22:38:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59FC9330D24;
+	Sun, 11 Jan 2026 10:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JWGyJctg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LMlaRMdV"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1FA2139C9;
-	Sat, 10 Jan 2026 22:38:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F9386323;
+	Sun, 11 Jan 2026 10:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768084733; cv=none; b=QS4sxIEWnrmZZlLvtGdBtBWBzs7eGpKSAkJTTJ7ojRbNpgJaSjpfqjcmyRv5LDL0WjQ9NsEyj//+ZZsXCbgOZ6K6/xFlQx6YpPRltl/RU4SgKHkBTXfjrEaamCTLKSeaBiMTzXnFJOZdFjHLzrJzCag5JBCN5PQT6C0+ZdaiuZw=
+	t=1768126089; cv=none; b=j86zahcFYG7PbylkvFuzMvJkqMNNzZQH2yfyHMGHOLzIceddWF2nrfPqG/Py8C6bKkv9NeTUg7vY8akp79fyS4SFM+qUl8rF34B0yf9SWmrlSsW901jfOnNJfR2lxk4JZCAPMWZo7+gdIEu8CvnN564WMhmu7cChVG87WlWYPkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768084733; c=relaxed/simple;
-	bh=cFy/T8mSd2Wo1IgsveCGgRX5Nc2k/3aNLJOImE3w8ps=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hM7FavA2lsfRegZZyvN8QJHI5IzlT/cHE6g69R33PaFBc1XCj94rNpbnf3eFVCzgsWeA5fnsUpv+sbDIX1wdh4agXqoQV5XEMnhdnBSa5I75t7KG7gKdM57y0cXR4w9s6RpJzMSWO+brJ/mKO5nMKwIJKR7pR51jD3KHCTb8pj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JWGyJctg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49B5C4CEF1;
-	Sat, 10 Jan 2026 22:38:52 +0000 (UTC)
+	s=arc-20240116; t=1768126089; c=relaxed/simple;
+	bh=/gFPYwD/Y5WPhrpj0O6BSmAZ9FneNpoyvRuMkaKLOlI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ak1YjjNr7GwA+lJ6xC1HmehNL2Y7PJ5l4/aQTtaV52jmHBCz6oyQmxLV63PbrIrRnfDAumJP6oZ0YHGni5qWUIYeIoPj7WJmhGMqUwxwuWJXCXkgf2HGFe4CvQoisZes6iYKd0TRiHVuZQBg26CTlVDpDwb0S/QRqRIHYg9zmUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LMlaRMdV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A6ABC4CEF7;
+	Sun, 11 Jan 2026 10:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768084733;
-	bh=cFy/T8mSd2Wo1IgsveCGgRX5Nc2k/3aNLJOImE3w8ps=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JWGyJctgiaOTE5J/oaNd6UyEsH3ebSC9qVWBv42kFEYPYZzJ4pSPGcwPHdsOR6mPa
-	 8WT/huszHE3h0a7OlG2vs2+sqGgptCoH2roltntnoX2sPcWYAw6NoT163nMPDlOKKj
-	 6vA8NVU7DBaarPVuQh557RfcRAXU7GNej1I5rqnW5ASqgCOdFxWiMrn0X9ovDhJfUS
-	 Lln/bIjpTCx13vdJwvDTfAxXC38kjr/V8ad0mpLoQluUrwq95VL1lmXQhyUFwtR8Xn
-	 xtoU+O+PzCJWb2GxLFRwTdAqP7MYxQDgCNsZWNQyQ/d3n4nt33nNV48vIA/n45zyD2
-	 zXgLJZnMMd3uw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: mkl@pengutronix.de
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	netdev@vger.kernel.org,
-	mailhol@kernel.org,
-	ondrej.ille@gmail.com,
-	linux-can@vger.kernel.org,
-	davem@davemloft.net,
-	kernel@pengutronix.de,
-	swilczek.lx@gmail.com,
-	pisa@fel.cvut.cz,
-	syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com,
-	stable@vger.kernel.org
-Subject: Re: [net,2/3] can: gs_usb: gs_usb_receive_bulk_callback(): fix URB memory leak
-Date: Sat, 10 Jan 2026 14:38:36 -0800
-Message-ID: <20260110223836.3890248-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260109135311.576033-3-mkl@pengutronix.de>
-References: <20260109135311.576033-3-mkl@pengutronix.de>
+	s=k20201202; t=1768126088;
+	bh=/gFPYwD/Y5WPhrpj0O6BSmAZ9FneNpoyvRuMkaKLOlI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LMlaRMdV9lReX/AZXLFxEn/GI7M+UBfRSpTFWjjWbMxmRg1SCZNcvN3D1PNBdkzS/
+	 UVlx5B2GZ0Fpi5oKoAtGXXCLMQu+KPl+eVGoAPcUKKtPGDvO6/bPB5qYoe8co4CEaV
+	 Qbma/pEUtqsjFLBPNF7O069achQWCX75+NY5+obhi6XvjI8ynw14eoFU6d7OU1YfR9
+	 grezPkQq1i6XE7Nad5PrA09ImtFfInGF/KBYEfKR4DIz+RV1hqyyjB3s4UyTohJhx/
+	 RMH+b9U9DqFYQeN2nZKV/IfaoUiFBfgtSPEM912XS4GcN57diiaXU40EWrvtz9brDc
+	 OmW13XBNMFzNw==
+Date: Sun, 11 Jan 2026 11:08:06 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, linux-can@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: can: renesas,rcar-canfd: Specify
+ reset-names
+Message-ID: <20260111-hysterical-cuddly-swift-2cae53@quoll>
+References: <20260109125128.2474156-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260109125128.2474156-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260109125128.2474156-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-This is an AI-generated review of your patch.
+On Fri, Jan 09, 2026 at 12:51:25PM +0000, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Specify the expected reset-names for the Renesas CAN-FD controller on
+> RZ/G2L and RZ/G3E SoCs.
+> 
+> The reset names rstp_n and rstc_n are defined in the SoC hardware manual
+> and are already used by the driver since commit 76e9353a80e9 ("can:
+> rcar_canfd: Add support for RZ/G2L family"). The reset-names property
+> existed previously but was dropped by commit 466c8ef7b66b ("dt-bindings:
+> can: renesas,rcar-canfd: Simplify the conditional schema").
+> 
+> Restore and constrain reset-names in the binding so DT schema checks
+> match the actual hardware requirements and driver expectations.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v2->v3:
+> - Updated commit message to clarify that reset-names existed previously
+>   but was dropped.
 
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
----
-can: gs_usb: gs_usb_receive_bulk_callback(): fix URB memory leak
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-This patch fixes a memory leak by re-anchoring the URB in
-gs_usb_receive_bulk_callback() before resubmission. The USB framework
-unanchors URBs before calling the completion callback, so the URB needs to
-be re-anchored to be tracked by usb_kill_anchored_urbs() in gs_can_close().
+Best regards,
+Krzysztof
 
-Link: https://patch.msgid.link/20260105-gs_usb-fix-memory-leak-v2-1-cc6ed6438034@pengutronix.de
-
-> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-> index a0233e550a5a..d093babbc320 100644
-> --- a/drivers/net/can/usb/gs_usb.c
-> +++ b/drivers/net/can/usb/gs_usb.c
-> @@ -751,6 +751,8 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
->  			  hf, parent->hf_size_rx,
->  			  gs_usb_receive_bulk_callback, parent);
->
-> +	usb_anchor_urb(urb, &parent->rx_submitted);
-> +
->  	rc = usb_submit_urb(urb, GFP_ATOMIC);
-
-If usb_submit_urb() fails here, the URB remains anchored but is never
-submitted. When gs_can_close() later calls usb_kill_anchored_urbs(), it
-iterates over anchored URBs and calls usb_kill_urb() on each one. For URBs
-that were never successfully submitted, use_count is 0, so usb_kill_urb()
-returns without unanchoring them. This causes usb_kill_anchored_urbs() to
-loop infinitely on the same URB since the anchor list never becomes empty.
-
-Other CAN USB drivers handle this by calling usb_unanchor_urb() when
-submission fails. For example, peak_usb_read_bulk_callback() does:
-
-    usb_anchor_urb(urb, &dev->rx_submitted);
-    err = usb_submit_urb(urb, GFP_ATOMIC);
-    if (!err)
-        return;
-
-    usb_unanchor_urb(urb);
-
-Should similar error handling be added here to avoid potential hangs when
-closing the device after a URB submission failure?
-
->
->  	/* USB failure take down all interfaces */
->  	if (rc == -ENODEV) {
-
-[ ... ]
 
