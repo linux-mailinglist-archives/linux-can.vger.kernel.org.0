@@ -1,260 +1,153 @@
-Return-Path: <linux-can+bounces-6103-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6104-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA867D13027
-	for <lists+linux-can@lfdr.de>; Mon, 12 Jan 2026 15:09:03 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9C3DD1372F
+	for <lists+linux-can@lfdr.de>; Mon, 12 Jan 2026 16:06:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8C12B303ADF4
-	for <lists+linux-can@lfdr.de>; Mon, 12 Jan 2026 14:04:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5306D30BADBE
+	for <lists+linux-can@lfdr.de>; Mon, 12 Jan 2026 14:52:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3E8531AF24;
-	Mon, 12 Jan 2026 14:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eHoJUS7S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A28852DB78D;
+	Mon, 12 Jan 2026 14:52:23 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F65032A3F5
-	for <linux-can@vger.kernel.org>; Mon, 12 Jan 2026 14:04:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94A52D5432;
+	Mon, 12 Jan 2026 14:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768226698; cv=none; b=A6+1XYFxFMGl3TBpSXLlKKeAq2lkPcC9vEDY1xHh4PEmxtBtN73prvQ5z+GxhrQ7LEUSzOFgkb9hyDXCBb2ClIWN5iOQ1xgu1xQFeFCyn/xL6jm4MkbJbLjhDJPy/VOanu0PoY/eVDRrVUtAyawJeYC313w4f7dgmS/238Vz/FE=
+	t=1768229543; cv=none; b=Jg83ABZ7pijt6d4lM7hgftMw5zsdNohNdel5utbVLbtRFz0fm1VeQMZRJqJEMVvEEVRXxFcOnUqjcyz/YVPPCu0r39XghjQF1IG4448IjqYvxiidUqhhYu/NWDQ3vrhXzvQGfE/uPCbr2FX96y9wMx1YP8LMys/lhbaeiRYv3RU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768226698; c=relaxed/simple;
-	bh=LWDLF/0qc2IJAkTfqjMmJwagN0QggUNuy9Vop+kjMsM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q3ONPVbQTgLZ+P8SRvdJq0sWEZFFMC7C20AMkBqAmnKkMI5vDXBLUxE2wWVyYvisND7sQ9Oc7ftIECb5w37Y/h2I7ohlogS9SCIRh4wJaIpGnoFf7lT++AWfhdLNdksUzgEs8G9DGvvENe8xuFDDZ/Yy8bOZEiwlZe/aFEWJBAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eHoJUS7S; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-432d256c2a9so3032790f8f.3
-        for <linux-can@vger.kernel.org>; Mon, 12 Jan 2026 06:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768226695; x=1768831495; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0vII5Iyr4tFx72Sau8GzITZuDHj7rLr9Zb3k5UjDt0I=;
-        b=eHoJUS7SzIJ1OaxGw/9gkY8qBB3mDeK392NAoQBUxpHFgAiwVVYvVwSL/1dFNGWsyy
-         08WPrFtstlz30yOQV7XibGmAvx9l36i2zQVOI4L361W3TYarIAHjcrqq0lSrC8vmNh5e
-         hkbGJnpu6LZZ0BY/I8b6hXNqebtDtovDtBWCJPby5w1Zhb5PjkIciaSBWPXBOqplMz5o
-         gFgk4vWMZjWp4Ba7bGlnzTD0xChFArjnpQo45khGH/Hfa68VrWFXAORCbuQ1ZRjuIGct
-         bBP2Qngvexwxq90hZCZQ1vOd4PIICCvUFBotrIW3LZyqhLSOxRRxnEYWnMqqt9+d0OeH
-         h2Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768226695; x=1768831495;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0vII5Iyr4tFx72Sau8GzITZuDHj7rLr9Zb3k5UjDt0I=;
-        b=btGJ0rY9W/qnONBG8pD5uiMhPFW2d00AuIgMdjsHKO9yFLEORYq5Y3LPbF/W7XPv40
-         Mdq4hGyXIXZYdZzouDj2aT9e/NvUExvXNEvK516e8lBMRf89kRGb28hkBjETHD85TahA
-         SdL8CJhpHpO8LSIH240ps2en64d32+Wda8C/fyEfLih2cCkLChvRaehgGXTzVE9XzkLb
-         su+jU0+X54iKic5KwPGxtYaIgSIPTECiADGW7rG8NVW+9icVw5JIEX9ymdrwVIVhG+Mg
-         aq0Ec27oD7LqqFSfV0uZtV/wM2ovfSUyW/K4Nwu6aHxJrdOtTCo/qUC6x7mZSyw4+kfq
-         0Uzg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEiUEUYk80BGOzwsZaeEdDLkP0+0yrGeXTLrJWDNc2DoMF9Iitl24Rg7ppgnGDw28FYKGuqowM7bA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQkDIPNy9cDqTQwLYQv38ZptCrOyecDue8pS6jT/IMIa9L8gy4
-	KGvs+oOLc/uLuTKZzXyNFGUiqQCej1FWbMEtDIog0qbhKrZoi4eD9ZG8iszm5l0rbV//Pjq6uEy
-	Gd6RnoXCp8RXNRSmP9PlPKv2WKxNfdGk=
-X-Gm-Gg: AY/fxX5UOgkeAHEEfW/Biz7OUKdwlVzKb+mIvpLrffmyfG5kLh1fEYLG52/4OahyC+b
-	mN4cCXHEySJZDR9L7PxH3xhXBWn58GkfLUVMeRLX3HMBDM96woj5DfcWr9QQkrFOL1DUcFZh/NU
-	PTDpU75Ggxi+Vdh+JYo9Ewh2xf0lhLIVM3VF77MaLpOW22kKAiSJTsyRLKHzcPOOwk+/sJX2+9O
-	WX0v6/KmD1Hnp7YKypunaIp3m0AIWkmJ2FZLdAedGGxajHFBvyEuRFmfe/XkgiIkPLqEcKfosuc
-	uM56tQWZFLGnBTroKt3vrj0vVEmK0ukrcP7jluIa9SLiIt+onaswMO82GX8TBrPB+w==
-X-Google-Smtp-Source: AGHT+IFasiQVmiSWN3alevjB2wINY+JZWIZGP+T1vx6rQYLMCTq818PLQDkbeEXyvkByXdaBd2DafMJKteYBkMr6a/k=
-X-Received: by 2002:a05:6000:184a:b0:430:8583:d19b with SMTP id
- ffacd0b85a97d-432c3794fa7mr20770566f8f.33.1768226695062; Mon, 12 Jan 2026
- 06:04:55 -0800 (PST)
+	s=arc-20240116; t=1768229543; c=relaxed/simple;
+	bh=6FsGGpwsZXSBclx9LRhZ4lHtZuEYOyZtvFG9RaggGRs=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=T4de1a2rkcDKoPMXXyZ2oeIwRAL9HmwKx/Ab0OvdGSpA1u5fo0hLT+ICjwlLtk2NJADXHubk/D42xqHLUC9alOkyd9uSp7RMxPAewwbmb81IT0RmbLVRV124jC9k+9LnbG8BCj4EodVGdmV2tLrCp3ej52VHGQWLo+5rujrLeLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 60CEpvYb043406;
+	Mon, 12 Jan 2026 23:51:57 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from [192.168.1.10] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 60CEpvsJ043403
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Mon, 12 Jan 2026 23:51:57 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Content-Type: multipart/mixed; boundary="------------aRZKhr9TM3hQQGUnYLQ90N0C"
+Message-ID: <faee3f3c-b03d-4937-9202-97ec5920d699@I-love.SAKURA.ne.jp>
+Date: Mon, 12 Jan 2026 23:51:57 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260109125128.2474156-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20260109125128.2474156-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <20260111-poetic-dark-butterfly-97993f@quoll>
-In-Reply-To: <20260111-poetic-dark-butterfly-97993f@quoll>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Mon, 12 Jan 2026 14:04:28 +0000
-X-Gm-Features: AZwV_QgBJ-ITSnXEpBvtqgTNJdonFuwpB0mqy1ZeJZ8vITBprryHClwY27DWAJ8
-Message-ID: <CA+V-a8un48Gfqg-K6YToxUgnZawOcb-nQHsBcOfHdpAR7_Uu4Q@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] dt-bindings: can: renesas,rcar-canfd: Document
- RZ/T2H and RZ/N2H SoCs
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc: Network Development <netdev@vger.kernel.org>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: can: j1939: unregister_netdevice: waiting for vcan0 to become free.
+X-Virus-Status: clean
+X-Anti-Virus-Server: fsav101.rs.sakura.ne.jp
 
-Hi Krzysztof,
+This is a multi-part message in MIME format.
+--------------aRZKhr9TM3hQQGUnYLQ90N0C
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for the review.
+Hello.
 
-On Sun, Jan 11, 2026 at 10:14=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.o=
-rg> wrote:
->
-> On Fri, Jan 09, 2026 at 12:51:27PM +0000, Prabhakar wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Document the CAN-FD controller used on the RZ/T2H and RZ/N2H SoCs. The
-> > CAN-FD IP is largely compatible with the R-Car Gen4 block, but differs
-> > in that AFLPN and CFTML are different, there is no reset line for the I=
-P,
-> > and it only supports two channels.
-> >
-> > The schema already enforces reset-names only for RZ/G2L and RZ/G3E and
-> > disallows it for all other SoCs, so only the resets property is explici=
-tly
-> > marked as unsupported for RZ/T2H and RZ/N2H.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > v2->v3:
-> > - Grouped single compatible entries into an enum.
-> > - Updated commit message about disallowing reset-names property.
-> > - Added Reviewed-by tag.
-> >
-> > v1->v2:
-> > - No changes made.
-> > ---
-> >  .../bindings/net/can/renesas,rcar-canfd.yaml  | 29 +++++++++++++++++--
-> >  1 file changed, 27 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-can=
-fd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > index fb709cfd26d7..ceb072e0a304 100644
-> > --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > @@ -42,7 +42,10 @@ properties:
-> >                - renesas,r9a07g054-canfd    # RZ/V2L
-> >            - const: renesas,rzg2l-canfd     # RZ/G2L family
-> >
-> > -      - const: renesas,r9a09g047-canfd     # RZ/G3E
-> > +      - items:
->
-> The convention is enum and that's what I asked. I know it is a nit, but
-> if I give review now for this code which I disagreed, my disagreement
-> won't be ever recorded and people in future work will base on this less
-> preferred syntax.
->
-> So again:
->
-> - enum:
->     - foo
->     - bar
->
-Agreed, I will drop the "-items" and I will also move the single
-compatible list entry to the top based on the feedback [0].
+I found a simplified C reproducer for
+https://syzkaller.appspot.com/bug?extid=881d65229ca4f9ae8c84 from
 
-[0] https://lore.kernel.org/all/CAMuHMdWz6_NzvjZNMLk+Bqoa0NR2CKNFwDXynfmrTZ=
-gOGsqxTA@mail.gmail.com/
+  r1 = socket$can_j1939(0x1d, 0x2, 0x7)
+  ioctl$ifreq_SIOCGIFINDEX_vcan(r1, 0x8933, &(0x7f0000001440)={'vcan0\x00', <r2=>0x0})
+  r3 = socket$can_j1939(0x1d, 0x2, 0x7)
+  ioctl$ifreq_SIOCGIFINDEX_vcan(r3, 0x8933, &(0x7f00000000c0)={'vcan0\x00', <r4=>0x0})
+  bind$can_j1939(r3, &(0x7f0000000340)={0x1d, r4, 0x0, {0x2, 0x0, 0x6}, 0xfe}, 0x18)
+  setsockopt$sock_int(r3, 0x1, 0x6, &(0x7f0000000040)=0x1, 0x4)
+  sendmsg$inet(r3, &(0x7f0000000140)={0x0, 0x0, &(0x7f00000003c0)=[{&(0x7f0000000540)="81b641f1f3843704b6", 0x9}], 0x1}, 0x4048081)
+  bind$can_j1939(r1, &(0x7f0000000100)={0x1d, r2, 0x0, {0x1, 0xf0, 0x4}, 0xfe}, 0x18)
+  setsockopt$sock_int(r1, 0x1, 0x6, &(0x7f0000000040)=0x1, 0x4)
+  sendmsg$inet(r3, &(0x7f0000000080)={0x0, 0x0, &(0x7f0000000a80)=[{&(0x7f0000000000)="81b641f1f3843704b6", 0x9}], 0x1}, 0x48005)
 
-> > +          - enum:
-> > +              - renesas,r9a09g047-canfd    # RZ/G3E
-> > +              - renesas,r9a09g077-canfd    # RZ/T2H
-> >
-> >        - items:
-> >            - enum:
-> > @@ -50,6 +53,10 @@ properties:
-> >                - renesas,r9a09g057-canfd     # RZ/V2H(P)
-> >            - const: renesas,r9a09g047-canfd
-> >
-> > +      - items:
-> > +          - const: renesas,r9a09g087-canfd  # RZ/N2H
-> > +          - const: renesas,r9a09g077-canfd
-> > +
-> >    reg:
-> >      maxItems: 1
-> >
-> > @@ -179,7 +186,6 @@ required:
-> >    - clocks
-> >    - clock-names
-> >    - power-domains
-> > -  - resets
-> >    - assigned-clocks
-> >    - assigned-clock-rates
-> >    - channel0
-> > @@ -243,11 +249,30 @@ allOf:
-> >            minItems: 2
-> >            maxItems: 2
-> >
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: renesas,r9a09g077-canfd
-> > +    then:
-> > +      properties:
-> > +        interrupts:
-> > +          maxItems: 8
-> > +
-> > +        interrupt-names:
-> > +          maxItems: 8
-> > +
-> > +        resets: false
-> > +    else:
-> > +      required:
-> > +        - resets
->
-> I do not think you are making this binding easy to maintain. You have
-> now multiple separate ifs AND two ifs with "else:" condition. Try to
-> understand which condition/description applies to "rcar-gen3". Does it
-> require resets? Let's look for the compatible in the file - you find
-> "if:" block requiring reset-names but no "require" for resets. Odd.
->
-> As I said last time, these should be alwaysy synced.
->
-Does the below look OK? Ive grouped them based on no rests/single
-reset/ two reset.
+lines. Can you find what is wrong?
 
-  - if:
-      properties:
-        compatible:
-          contains:
-            # SoCs WITHOUT resets
-            const: renesas,r9a09g077-canfd
-    then:
-      properties:
-        resets: false
-        reset-names: false
+  [   58.844267] [   T1225] CAN device driver interface
+  [   58.865035] [   T1225] vcan: Virtual CAN interface driver
+  [   58.924043] [   T1227] can: controller area network core
+  [   58.929503] [   T1227] NET: Registered PF_CAN protocol family
+  [   58.959118] [   T1228] can: SAE J1939
+  [   59.215990] [      C0] vcan0: j1939_tp_rxtimer: 0x0000000042028812: rx timeout, send abort
+  [   59.716693] [      C0] vcan0: j1939_tp_rxtimer: 0x0000000041105737: rx timeout, send abort
+  [   59.722127] [      C0] vcan0: j1939_tp_rxtimer: 0x0000000042028812: abort rx timeout. Force session deactivation
+  [   59.742525] [      C0] vcan0: j1939_xtp_rx_rts_session_active: 0x0000000041105737: connection exists (fe ff). last cmd: 20
+  [   59.992638] [      C0] vcan0: j1939_tp_rxtimer: 0x0000000069d7bfc6: rx timeout, send abort
+  [   60.497771] [      C0] vcan0: j1939_tp_rxtimer: 0x0000000069d7bfc6: abort rx timeout. Force session deactivation
+  [   70.677761] [     T12] unregister_netdevice: waiting for vcan0 to become free. Usage count = 2
+--------------aRZKhr9TM3hQQGUnYLQ90N0C
+Content-Type: text/plain; charset=UTF-8; name="repro.c"
+Content-Disposition: attachment; filename="repro.c"
+Content-Transfer-Encoding: base64
 
-  - if:
-      properties:
-        compatible:
-          contains:
-            # SoCs WITH resets and reset-names
-            enum:
-              - renesas,r9a09g047-canfd
-              - renesas,rzg2l-canfd
-    then:
-      required:
-        - resets
-        - reset-names
+I2RlZmluZSBfR05VX1NPVVJDRQojaW5jbHVkZSA8ZXJybm8uaD4KI2luY2x1ZGUgPGZjbnRs
+Lmg+CiNpbmNsdWRlIDxzY2hlZC5oPgojaW5jbHVkZSA8c3RkaW50Lmg+CiNpbmNsdWRlIDxz
+dGRpby5oPgojaW5jbHVkZSA8c3RkbGliLmg+CiNpbmNsdWRlIDxzdHJpbmcuaD4KI2luY2x1
+ZGUgPHN5cy9pb2N0bC5oPgojaW5jbHVkZSA8c3lzL3NvY2tldC5oPgojaW5jbHVkZSA8c3lz
+L3N0YXQuaD4KI2luY2x1ZGUgPHN5cy90eXBlcy5oPgojaW5jbHVkZSA8dW5pc3RkLmg+CiNp
+bmNsdWRlIDxzeXMvbW1hbi5oPgoKc3RhdGljIHZvaWQgZXhlY3V0ZV9vbmUodm9pZCkKewoJ
+aW50IGlkeCA9IDA7Cgljb25zdCBpbnQgT05FID0gMTsKCS8vICBzb2NrZXQkY2FuX2oxOTM5
+IGFyZ3VtZW50czogWwoJLy8gICAgZG9tYWluOiBjb25zdCA9IDB4MWQgKDggYnl0ZXMpCgkv
+LyAgICB0eXBlOiBjb25zdCA9IDB4MiAoOCBieXRlcykKCS8vICAgIHByb3RvOiBjb25zdCA9
+IDB4NyAoNCBieXRlcykKCS8vICBdCgkvLyAgcmV0dXJucyBzb2NrX2Nhbl9qMTkzOQoJY29u
+c3QgaW50IGZkID0gc29ja2V0KDB4MWQsIDIsIDcpOwoJLy8gIGlvY3RsJGlmcmVxX1NJT0NH
+SUZJTkRFWF92Y2FuIGFyZ3VtZW50czogWwoJLy8gICAgZmQ6IHNvY2sgKHJlc291cmNlKQoJ
+Ly8gICAgY21kOiBjb25zdCA9IDB4ODkzMyAoNCBieXRlcykKCS8vICAgIGFyZzogcHRyW291
+dCwgaWZyZXFfZGV2X3RbdmNhbl9kZXZpY2VfbmFtZXMsIGlmaW5kZXhfdmNhbl1dIHsKCS8v
+ICAgICAgaWZyZXFfZGV2X3RbdmNhbl9kZXZpY2VfbmFtZXMsIGlmaW5kZXhfdmNhbl0gewoJ
+Ly8gICAgICAgIGlmcl9pZnJuOiBidWZmZXI6IHs3NiA2MyA2MSA2ZSAzMCAwMCAwMCAwMCAw
+MCAwMCAwMCAwMCAwMCAwMCAwMCAwMH0KCS8vICAgICAgICAobGVuZ3RoIDB4MTApIGVsZW06
+IGlmaW5kZXhfdmNhbiAocmVzb3VyY2UpIHBhZCA9IDB4MCAoMjAgYnl0ZXMpCgkvLyAgICAg
+IH0KCS8vICAgIH0KCS8vICBdCgltZW1jcHkoKHZvaWQqKTB4MjAwMDAwMDAxNDQwLAoJICAg
+ICAgICJ2Y2FuMFwwMDBcMDAwXDAwMFwwMDBcMDAwXDAwMFwwMDBcMDAwXDAwMFwwMDBcMDAw
+IiwgMTYpOwoJaWYgKGlvY3RsKGZkLCAweDg5MzMsIDB4MjAwMDAwMDAxNDQwdWwpICE9IC0x
+KQoJCWlkeCA9ICoodWludDMyX3QqKTB4MjAwMDAwMDAxNDUwOwoJLy8gIGJpbmQkY2FuX2ox
+OTM5IGFyZ3VtZW50czogWwoJLy8gICAgZmQ6IHNvY2tfY2FuX2oxOTM5IChyZXNvdXJjZSkK
+CS8vICAgIGFkZHI6IHB0cltpbiwgc29ja2FkZHJfY2FuX2oxOTM5XSB7CgkvLyAgICAgIHNv
+Y2thZGRyX2Nhbl9qMTkzOSB7CgkvLyAgICAgICAgY2FuX2ZhbWlseTogY29uc3QgPSAweDFk
+ICgyIGJ5dGVzKQoJLy8gICAgICAgIHBhZCA9IDB4MCAoMiBieXRlcykKCS8vICAgICAgICBj
+YW5faWZpbmRleDogaWZpbmRleF92Y2FuIChyZXNvdXJjZSkKCS8vICAgICAgICBuYW1lOiBp
+bnQ2NCA9IDB4MCAoOCBieXRlcykKCS8vICAgICAgICBwZ246IGNhbl9qMTkzOV9wZ24gewoJ
+Ly8gICAgICAgICAgcGduX3BzOiBjYW5fajE5MzlfcGduX3BzID0gMHgxICgxIGJ5dGVzKQoJ
+Ly8gICAgICAgICAgcGduX3BmOiBjYW5fajE5MzlfcGduX3BmID0gMHhmMCAoMSBieXRlcykK
+CS8vICAgICAgICAgIHBnbl9mbGFnczogY2FuX2oxOTM5X3Bnbl9mbGFncyA9IDB4NCAoMSBi
+eXRlcykKCS8vICAgICAgICAgIHBnbl91bnVzZWQ6IGNvbnN0ID0gMHgwICgxIGJ5dGVzKQoJ
+Ly8gICAgICAgIH0KCS8vICAgICAgICBhZGRyOiBjYW5fajE5MzlfYWRkcnMgPSAweGZlICgx
+IGJ5dGVzKQoJLy8gICAgICAgIHBhZCA9IDB4MCAoMyBieXRlcykKCS8vICAgICAgfQoJLy8g
+ICAgfQoJLy8gICAgbGVuOiBieXRlc2l6ZSA9IDB4MTggKDggYnl0ZXMpCgkvLyAgXQoJKih1
+aW50MTZfdCopMHgyMDAwMDAwMDAxMDAgPSAweDFkOwoJKih1aW50MzJfdCopMHgyMDAwMDAw
+MDAxMDQgPSBpZHg7CgkqKHVpbnQ2NF90KikweDIwMDAwMDAwMDEwOCA9IDA7CgkqKHVpbnQ4
+X3QqKTB4MjAwMDAwMDAwMTEwID0gMTsKCSoodWludDhfdCopMHgyMDAwMDAwMDAxMTEgPSAw
+eGYwOwoJKih1aW50OF90KikweDIwMDAwMDAwMDExMiA9IDQ7CgkqKHVpbnQ4X3QqKTB4MjAw
+MDAwMDAwMTEzID0gMDsKCSoodWludDhfdCopMHgyMDAwMDAwMDAxMTQgPSAweGZlOwoJYmlu
+ZChmZCwgKHN0cnVjdCBzb2NrYWRkciAqKSAweDIwMDAwMDAwMDEwMHVsLCAweDE4dWwpOwoJ
+c2V0c29ja29wdChmZCwgU09MX1NPQ0tFVCwgU09fQlJPQURDQVNULCAmT05FLCBzaXplb2Yo
+T05FKSk7CglzZW5kKGZkLCAiXHg4MVx4YjZceDQxXHhmMVx4ZjNceDg0XHgzN1x4MDRceGI2
+IiwgOSwgMCk7CglzZW5kKGZkLCAiXHg4MVx4YjZceDQxXHhmMVx4ZjNceDg0XHgzN1x4MDRc
+eGI2IiwgOSwgMCk7Cn0KCmludCBtYWluKGludCBhcmdjLCBjaGFyICphcmd2W10pCnsKCW1t
+YXAoKHZvaWQgKikgMHgyMDAwMDAwMDAwMDB1bCwgMHgxMDAwMDAwdWwsCgkgICAgIFBST1Rf
+V1JJVEV8UFJPVF9SRUFEfFBST1RfRVhFQywKCSAgICAgTUFQX0ZJWEVEfE1BUF9BTk9OWU1P
+VVN8TUFQX1BSSVZBVEUsIC0xLCAwKTsKCWlmICh1bnNoYXJlKENMT05FX05FV05FVCkpCgkJ
+cmV0dXJuIDE7CglzeXN0ZW0oImlwIGxpbmsgYWRkIG5hbWUgdmNhbjAgdXAgdHlwZSB2Y2Fu
+Iik7CglzeXN0ZW0oImlwIGFkZHIgYWRkIDE3Mi4yMC4yMC4wLzI0IGRldiB2Y2FuMCIpOwoJ
+ZXhlY3V0ZV9vbmUoKTsKCXJldHVybiAwOwp9Cg==
 
-  - if:
-      properties:
-        compatible:
-          contains:
-            # SoCs WITH resets but WITHOUT reset-names
-            enum:
-              - renesas,rcar-gen3-canfd
-              - renesas,rcar-gen4-canfd
-    then:
-      required:
-        - resets
-      properties:
-        reset-names: false
-
-Cheers,
-Prabhakar
+--------------aRZKhr9TM3hQQGUnYLQ90N0C--
 
