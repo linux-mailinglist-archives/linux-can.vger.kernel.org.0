@@ -1,116 +1,130 @@
-Return-Path: <linux-can+bounces-6118-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6119-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07456D168CF
-	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 04:47:00 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4A6ED18005
+	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 11:27:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3749A30169BD
-	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 03:46:57 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5C8BA300384E
+	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 10:27:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99C122F1FDA;
-	Tue, 13 Jan 2026 03:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBF873314DE;
+	Tue, 13 Jan 2026 10:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="K7Fir5jN";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="K7Fir5jN"
 X-Original-To: linux-can@vger.kernel.org
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C9F2F0C62;
-	Tue, 13 Jan 2026 03:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7262938946A
+	for <linux-can@vger.kernel.org>; Tue, 13 Jan 2026 10:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768276016; cv=none; b=VlOLWKRGPqxLyfPRqtNdFystpvdcDUUjG268ABdVPiCuIPb5NsFl5pVmzXI+uesQttkCCGckfOu0X4dtelcUSd5Ca9rI2LOiJnqQYT5LoQ5NPnSlDxE7ttOEzccti7Cv9FMtRjdJ1zT83m+KWY20wacGrMM+UeJXEZ7Qq3OICdY=
+	t=1768300044; cv=none; b=VKJGrlPpDafWRJ7+DeQd4/8tq1EwkiuqnSlh8aCxYUgUfFM8NW5yVAHbcj8NRQ05gf6qSko6TfDDuvTasxmPJUglZkzP9H3muRpjUmtL+vNPqA1h/bKkaAlx2Eha7yIDcOa32luQBKJL1ag6HEagF8cfEk7oETdBrjjJcEY83xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768276016; c=relaxed/simple;
-	bh=VmNIpfC1AQ4hFEMJRZCZ6rIbB8XApUfA7pL8k0q9cMo=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=rpWa7STn6YPG6+wncTkq01Svv74c+U/dBcJi24UfBMaEC9t+uow6HB68NntSHNXg9HDF3U/SAywaTRlsz+LgpWMn/Z9/KDa3TMWwgOAnyphLMQE0F//SGG/rJZSGFGcaTfB5hNRNAn4ODuz8wwJEPlPcikwoJ68anEfp+jAWB58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 60D3kVoG026732;
-	Tue, 13 Jan 2026 12:46:31 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.10] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 60D3kVdI026729
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Tue, 13 Jan 2026 12:46:31 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <4b1fbe9d-5ca2-41e9-b252-1304cc7c215a@I-love.SAKURA.ne.jp>
-Date: Tue, 13 Jan 2026 12:46:30 +0900
+	s=arc-20240116; t=1768300044; c=relaxed/simple;
+	bh=C/bVeNXI9VWr7lQwFhn9Ob/7KFvHoXBtHx8Vtz1vOrA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TFnmohMYr/SRzAHlmbppap5vGYa9O0XCF+l4H7/GmLOR1KuuUrSvgE3sntaHPIRO3IQM2vig0YXRCdgpX7bW6FI2hX/1mh+E36tCipa3EJyoeOm+KTgf7arJmJNv3ctP4SHwsaZ1MOsWf01rsNkNS7VT6rZVd09jkb/CuicWREY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=K7Fir5jN; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=K7Fir5jN; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 8870A5BCC1;
+	Tue, 13 Jan 2026 10:27:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1768300041; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=XLCVHmmRVJC6nRKcu3kPUQ4gpA/y1ofNVULfBxxmA0k=;
+	b=K7Fir5jNJwSDAIIocam2fhisfmzLIve+aHIYiVyalbrvTxA5xC4ZUhThenEXVzcRFTm62e
+	bTTjPAZor0tjxgVpkalOCOdhS+LeLjnSRlkw6dnWrM+RstkEgpUqEBsFUWfI00cZbAX4q7
+	nd7bevc6EJytT/L4qOG0qlH1iTL8h0U=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1768300041; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=XLCVHmmRVJC6nRKcu3kPUQ4gpA/y1ofNVULfBxxmA0k=;
+	b=K7Fir5jNJwSDAIIocam2fhisfmzLIve+aHIYiVyalbrvTxA5xC4ZUhThenEXVzcRFTm62e
+	bTTjPAZor0tjxgVpkalOCOdhS+LeLjnSRlkw6dnWrM+RstkEgpUqEBsFUWfI00cZbAX4q7
+	nd7bevc6EJytT/L4qOG0qlH1iTL8h0U=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5BF163EA63;
+	Tue, 13 Jan 2026 10:27:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id kbIAFQkeZmneWQAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Tue, 13 Jan 2026 10:27:21 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: mailhol@kernel.org,
+	mkl@pengutronix.de,
+	linux-can@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] net: can: etas_es58x: full cleanup in the error case
+Date: Tue, 13 Jan 2026 11:27:18 +0100
+Message-ID: <20260113102718.1018804-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: Re: can: j1939: unregister_netdevice: waiting for vcan0 to become
- free.
-To: Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc: Network Development <netdev@vger.kernel.org>
-References: <faee3f3c-b03d-4937-9202-97ec5920d699@I-love.SAKURA.ne.jp>
-Content-Language: en-US
-In-Reply-To: <faee3f3c-b03d-4937-9202-97ec5920d699@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Anti-Virus-Server: fsav304.rs.sakura.ne.jp
-X-Virus-Status: clean
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -2.80
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:email,imap1.dmz-prg2.suse.org:helo];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-Currently, the (session->last_cmd != 0) path in j1939_xtp_rx_rts_session_active() is
-preventing the (session->state == J1939_SESSION_WAITING_ABORT) path in j1939_tp_rxtimer()
- from being called. This results in two j1939_priv refcounts leak (which in turn results in
-one net_device refcount leak) due to j1939_session_deactivate_activate_next() being not called.
+Memory allocation can fail in the middle. Hence the cleanup
+needs to be called in every case.
 
-This problem goes away if I do either
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -1689,16 +1692,18 @@ static int j1939_xtp_rx_rts_session_active(struct j1939_session *session,
-
-        if (session->last_cmd != 0) {
-                /* we received a second rts on the same connection */
--               netdev_alert(priv->ndev, "%s: 0x%p: connection exists (%02x %02x). last cmd: %x\n",
-+               netdev_alert(priv->ndev, "%s (modified): 0x%p: connection exists (%02x %02x). last cmd: %x\n",
-                             __func__, session, skcb->addr.sa, skcb->addr.da,
-                             session->last_cmd);
-
-+               /*
-                j1939_session_timers_cancel(session);
-                j1939_session_cancel(session, J1939_XTP_ABORT_BUSY);
-                if (session->transmission)
-                        j1939_session_deactivate_activate_next(session);
-
-                return -EBUSY;
-+               */
-        }
-
-        if (session->skcb.addr.sa != skcb->addr.sa ||
-
-or
-
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -1697,6 +1700,11 @@ static int j1939_xtp_rx_rts_session_active(struct j1939_session *session,
-                j1939_session_cancel(session, J1939_XTP_ABORT_BUSY);
-                if (session->transmission)
-                        j1939_session_deactivate_activate_next(session);
-+               else if (session->state == J1939_SESSION_WAITING_ABORT) {
-+                       netdev_alert(priv->ndev, "%s (modified): 0x%p: abort rx timeout. Force session deactivation\n",
-+                                    __func__, session);
-+                       j1939_session_deactivate_activate_next(session);
-+               }
-
-                return -EBUSY;
-        }
-
-. But what is the correct approach?
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index f799233c2b72..8a8764374713 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -1783,8 +1783,9 @@ static int es58x_open(struct net_device *netdev)
+ 
+ 	if (!es58x_dev->opened_channel_cnt) {
+ 		ret = es58x_alloc_rx_urbs(es58x_dev);
++		/* can fail partially */
+ 		if (ret)
+-			return ret;
++			goto free_urbs;
+ 
+ 		ret = es58x_set_realtime_diff_ns(es58x_dev);
+ 		if (ret)
+-- 
+2.52.0
 
 
