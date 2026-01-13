@@ -1,117 +1,153 @@
-Return-Path: <linux-can+bounces-6126-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6127-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA3DED1A4CF
-	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 17:34:45 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6198AD1B07A
+	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 20:26:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 89BA93002952
-	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 16:34:42 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D82553002D36
+	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 19:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C2530B501;
-	Tue, 13 Jan 2026 16:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="bxWRDD06";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="gPULQ4cB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF01535CB66;
+	Tue, 13 Jan 2026 19:26:01 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f194.google.com (mail-vk1-f194.google.com [209.85.221.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D100330BB8C
-	for <linux-can@vger.kernel.org>; Tue, 13 Jan 2026 16:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.164
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768322080; cv=pass; b=CW9v5LUuwqsTVfc4fPIbdHRG/jR9dQjLUd+Bue+w1fViQ272pEFuPBeIOe1OoM5k1RHk7yfYODZjDM6oHVn05hm4jkRsU6xOri/dpFyfcWSz3UCsPJBjr3kFUq4be/Wkw+GIHWDOTzZAIqz3yh0OwItCOloMdc6t4swjAPW14eY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768322080; c=relaxed/simple;
-	bh=/L2Fb/EQFLdkTfqe5pkr7A3ESaNQsE3rTEqS5an/BTo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NJmfxwt+IpsF95ERpyAMGHLM94d/E7gYBu9z0M/bS+DuBLoZHMpeTKznk6g6SphC3Y90gvjc1mAQlOMdyjY/wbn807a5hNQ/aYxbXF2W2BTJSjOdpMYNLUTsROlReusgKKGZFOLB27wZjH1SJU57OltGrDfdAbA6uW7R+KmNMMs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=bxWRDD06; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=gPULQ4cB; arc=pass smtp.client-ip=81.169.146.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1768322071; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=iYyZUO4neE8PF/FupHwWy33Kqktj5CR9G/gtBVjYS8FOpgpImbGJisB5gfbdFAHwum
-    SeQXkDhzY/1F/+tDTv4pQVWJSIiHJGdjIhhAVNtsN/SdxdE80VO84RWFSV5KsgAy9Sz+
-    pGCPSO6SPpT3QDjR7mGhvzf0aqmuzaCB7tme6VVI7LpAgLomT30ARVeoHk11uTONLJjA
-    D2VzaWmLxWcah16lyse0/SaMXh4y4DgFu31TWGlcfVFauDJExIra0Wk3GRSxTL9Yvv2E
-    nZwlxFV/0GV6LY2jiH+GVwZZ0Kf0tslmPgLQr/qb8PgxJEmLLuzIwsFjP+T/eZEbJvGq
-    syWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1768322071;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=2jJSIr0HA0os2M+7OeXMCoQnDvuXdCX19DTaFIfovxI=;
-    b=Rf8hVVBG0u8Ml6eWWZiRpAL1LHhhKzn3f4rRfHi6HReQJTH6huVKbFL6ty4GKJDjk2
-    IS4s8koaeZpkZrQLUBc5TzSlTPe+wHcntj1AhlJz6ZmmEMOgfHRNWaXtd/VU4iu617oj
-    3Uu/8qVC7CiRa4PZA7rH3yAEfFySgb+yas6gaOC2G27Cqh0d+wHq06DgFSB0H1gQqTHa
-    qitDbshlpvVrt6r+n/CduSnmHJEkESZ//Km4VcnttBxuQnYaiIMbX/rPGBM8c5bopeTc
-    LkLke8qeDX5D4QbdlFR4jsawh2n2HUGl+up3V2t96vAGlxShLy/8MKQnbotDV7rXOT/T
-    YO+g==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1768322071;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=2jJSIr0HA0os2M+7OeXMCoQnDvuXdCX19DTaFIfovxI=;
-    b=bxWRDD06KNg2dS/nTl/8SqATA2oXpqzNptnKYKIo8IZlsWD9/p+Lv4i9Yl8qZK0yAQ
-    0UvW4is6efjdqZ2nxoTkml51c1xZUAexTdUCZJWeYZW07xYWKkeZXldNp9LBnGdzRIHH
-    vCXhDXq1UADcVk42l5z9pwMJHmVYcEWhxWhKYTjxBlYvnEM39GRB1TIJmYyQXovxXWNQ
-    YtuPIyb0nv/smWPKL6xsfsXPOwn/dfB9YFjK2iSNqwa76/AWbHQ6U/ymdu4b9hrgNksY
-    qPYHr0wQUpSK6igGBDIM4fgT+EnnG2AY1xwDRmKVmX5LpTQzoHuxtszAq3+WZG5xmsjx
-    2I1Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1768322071;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=2jJSIr0HA0os2M+7OeXMCoQnDvuXdCX19DTaFIfovxI=;
-    b=gPULQ4cBfpK5Hv7TghTx6nyzu76DSsrczXLT0qmuav8SqvTCb4wDUDdId8aKEQcVGx
-    9sWtp2SUNc2SNWuZr8Aw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6800::9f3]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b20DGYVoBH
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 13 Jan 2026 17:34:31 +0100 (CET)
-Message-ID: <7181f618-ea88-4445-bc0d-e8e3b15bbe5d@hartkopp.net>
-Date: Tue, 13 Jan 2026 17:34:31 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D62A342CA7
+	for <linux-can@vger.kernel.org>; Tue, 13 Jan 2026 19:26:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768332361; cv=none; b=VtAf17DPzZ5Fo4t46yWckkeojX166nsy1RLQIvABdiqXqNIVNzbs1dTs1ANeYgHs/sZEkfw8vmjTbUFdv4WLVpKNZzgS7x0Mlj+l/93FHzGzgdF8QOvZRpfM63VsVP9/Q9+oyL6QwGM6xrXEfTFMYFQSmuBJBqhW9fZaDSJq4xU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768332361; c=relaxed/simple;
+	bh=3ZrwEeBiZv2/57vkV16rP297m0IfYLbOdaycMnUgZvA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LNLU1Bg1YhJ1bjsEoP1pWccbdjV0A5Wd9ZsNSsEU4Cb4ykwoBwBZCAQJoVK87zKRPjJsw24xSDTaesIXlgwCtHd1W0efCJ2rdw/ywsJE50bmcEsMGBCC6CCr+syzYlOhd/oVYWMn4xnHAU/mCBG+by1a2KaKG/fs/MUapsiE3kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f194.google.com with SMTP id 71dfb90a1353d-563641b24b9so1477268e0c.3
+        for <linux-can@vger.kernel.org>; Tue, 13 Jan 2026 11:26:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768332359; x=1768937159;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lGxD9M4RQU4+hrSLm2mQz70yQm9QgTmeWCOFRtIxY9c=;
+        b=o+226c1GzyF3J734cvH0FGKzlQDS1uv1pH+3ZaCNUDQ19ecI/i86NGXHsuuw12R2if
+         YnJTuw5gaEZOBIVstN/cAchHwAUJLzHGbKY8CJsfxjX48KdwjugvpzEPUjhEfDHjkpS4
+         skQDaPaO7qldR9tmHYvBUGRK0G8D8FXHGNEL+ajfnz0yzPvQzaJLzBBraEKJsw7toxOt
+         FtycQh6XWmPGckKibarex63hv0lxCVgWTysHzjiuh9PGvEU2geBAd3+43pPqfdCHulb0
+         55FS3I3iSxY0XK5VESI71p5CjD0cx5csEqu/FkmNieJ9pPwgo69+kwQieoyaGq5Lhb+Q
+         mF4A==
+X-Forwarded-Encrypted: i=1; AJvYcCXSZsUCkGCs2ghIVTibmakjipb4X+Hb1pzqaHJLSz+vGllEZmW5PpDuDkvMFTkqjcEWnChedy9fyJY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzado3EOVyF14j+m+OcpV+3KHzj3vRV4sXUmPz30vg2ulNT6yMr
+	333LQPUhnkWd75TFNbgPV8yQ6fFX5d/vTZoKCrNKA4aitDR0RbGqYDvBRCR0F58g7Zs=
+X-Gm-Gg: AY/fxX620t8CvNqvIrA50rUW/vU53hV+uQALXFTyn5KQeO4IEWDGenHTlbe9gLnGksp
+	j33gGNNlkC74tDxduQaQnvVvKnKkgisrtQT3YkWfki9wn1lAcv+1ei4u0mlNtuWqlpTff0oCPu3
+	L8nmP0FpAu3hRwnizWjiuOhD1Q8jIwWcmFK81fTjJz7DSjkZWIH4Xu6iEKol5RQu2OZRFHIPSjy
+	vbqvMfdcQnizvkSIAAJzejgErP8hlmEHANmbgbt/X15fdVRtNYWSCadAdHrA3Yn02Ku/8dzEBAx
+	Ii3oqbMk6sgcprCsZd0VfJMoDXj5VW8VpK5x4bu4dTWSIO8dkTyHy+6SOCA4M/YDijYJr4kBNG0
+	oR9XtyyCUbJBYVO/GZ2x5xDmC9qDGKRCST7EX80MGdopXJrclY0hfrvVczh7r2rvjW5+5WNIZFi
+	H4kKss4ZlBf3ILVps5RbUlwuQWleJz3lfgYl4ZCxfr3HKYSU2/+ScB
+X-Received: by 2002:a05:6122:3114:b0:563:4d66:359c with SMTP id 71dfb90a1353d-563a08046eemr161269e0c.0.1768332359151;
+        Tue, 13 Jan 2026 11:25:59 -0800 (PST)
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com. [209.85.221.175])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-563667cf148sm13351556e0c.2.2026.01.13.11.25.58
+        for <linux-can@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jan 2026 11:25:58 -0800 (PST)
+Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-55999cc2a87so2136936e0c.0
+        for <linux-can@vger.kernel.org>; Tue, 13 Jan 2026 11:25:58 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW6A6hZmcJHqJ71u+fntKM+cvz0OZSklq2lBcpt4OBjHc523CtCLwOQUS2ALkOF6dZ+5xmcaDNS++o=@vger.kernel.org
+X-Received: by 2002:a05:6122:7cd:b0:563:4a93:a5f4 with SMTP id
+ 71dfb90a1353d-563a091550dmr145996e0c.4.1768332358235; Tue, 13 Jan 2026
+ 11:25:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [can-next 4/5] can: remove private skb headroom infrastructure
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: linux-can@vger.kernel.org
-References: <20260112150908.5815-1-socketcan@hartkopp.net>
- <20260112150908.5815-5-socketcan@hartkopp.net>
- <a9af2a4c-340d-4246-b35d-6fe42a419086@hartkopp.net>
- <20260113-subtle-meerkat-from-hell-678184-mkl@pengutronix.de>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20260113-subtle-meerkat-from-hell-678184-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260109125128.2474156-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260109125128.2474156-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260111-poetic-dark-butterfly-97993f@quoll> <CA+V-a8un48Gfqg-K6YToxUgnZawOcb-nQHsBcOfHdpAR7_Uu4Q@mail.gmail.com>
+ <dd053cff-af8f-4378-9550-9f99f91cea20@kernel.org> <CA+V-a8tZAUoPxp7NanALW5HmVLMQAprcDXPME5povLT6nH6bTw@mail.gmail.com>
+In-Reply-To: <CA+V-a8tZAUoPxp7NanALW5HmVLMQAprcDXPME5povLT6nH6bTw@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 13 Jan 2026 20:25:47 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUrSUeOFvyX-RhjFV8HfiGtvOvBT-Wd328C4P-j-N0fHw@mail.gmail.com>
+X-Gm-Features: AZwV_Qi5VDWrgJaVOTjXTW8AVFjCwxmek62R9X6THbS3twvGucCrR-aVI1pn-1o
+Message-ID: <CAMuHMdUrSUeOFvyX-RhjFV8HfiGtvOvBT-Wd328C4P-j-N0fHw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] dt-bindings: can: renesas,rcar-canfd: Document
+ RZ/T2H and RZ/N2H SoCs
+To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, 12 Jan 2026 at 18:22, Lad, Prabhakar <prabhakar.csengg@gmail.com> w=
+rote:
+> On Mon, Jan 12, 2026 at 4:30=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.=
+org> wrote:
+> > On 12/01/2026 15:04, Lad, Prabhakar wrote:
+> > >   - if:
+> > >       properties:
+> > >         compatible:
+> > >           contains:
+> > >             # SoCs WITH resets but WITHOUT reset-names
+> > >             enum:
+> > >               - renesas,rcar-gen3-canfd
+> > >               - renesas,rcar-gen4-canfd
+> > >     then:
+> > >       required:
+> > >         - resets
+> > >       properties:
+> > >         reset-names: false
+> > >
+> >
+> > Yes, although now I wonder why do you have such case... There are no
+> > benefits in disallowing reset-names, even for single entries.
 
+Except that I have no idea which of the two names I should use in
+case of renesas,rcar-gen3-canfd and renesas,rcar-gen4-canfd, as
+the hardware documentation doesn't explain that?  AFAIU it is just
+a single, common reset for the whole block...
 
-On 13.01.26 17:33, Marc Kleine-Budde wrote:
-> On 13.01.2026 17:27:59, Oliver Hartkopp wrote:
->> unfortunately I missed you in CC for this patch set:
-> 
-> You are so sending so many series recently, might be a good time to have
-> a look at "b4". You can automatically populate the Cc with "b4 prep
-> --auto-to-cc".
+> Ok, I will update the resets property in patch 1/4 as below. Would you
+> prefer reset-names as a required property for single resets?
+>
+>   reset-names:
+>     minItems: 1
+>     maxItems: 2
+>     items:
+>       enum:
+>         - rstp_n
+>         - rstc_n
 
-Ok, I'll take a look.
+I.e. which one should I pick?
+<grin>Obviously the first, so dtbs_check succeeds?</grin>
 
-Many thanks!
-Oliver
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
