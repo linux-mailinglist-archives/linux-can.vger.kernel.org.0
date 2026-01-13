@@ -1,130 +1,84 @@
-Return-Path: <linux-can+bounces-6119-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6120-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4A6ED18005
-	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 11:27:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7E9FD185AB
+	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 12:10:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5C8BA300384E
-	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 10:27:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 63390312839A
+	for <lists+linux-can@lfdr.de>; Tue, 13 Jan 2026 11:03:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBF873314DE;
-	Tue, 13 Jan 2026 10:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51FB138A70E;
+	Tue, 13 Jan 2026 11:00:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="K7Fir5jN";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="K7Fir5jN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D+Bh5Oh6"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7262938946A
-	for <linux-can@vger.kernel.org>; Tue, 13 Jan 2026 10:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E841389DFA
+	for <linux-can@vger.kernel.org>; Tue, 13 Jan 2026 11:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768300044; cv=none; b=VKJGrlPpDafWRJ7+DeQd4/8tq1EwkiuqnSlh8aCxYUgUfFM8NW5yVAHbcj8NRQ05gf6qSko6TfDDuvTasxmPJUglZkzP9H3muRpjUmtL+vNPqA1h/bKkaAlx2Eha7yIDcOa32luQBKJL1ag6HEagF8cfEk7oETdBrjjJcEY83xc=
+	t=1768302044; cv=none; b=rWw21/L2mZksJX3n1t9AHP72PIkB/4qG07i34dXKnGuZS6QtY54GK155vU+FnZ/U/1hAdEDlLDecgUsIrKevVdJlpPT6TA8tJpFPj/P5/h7fXdFnzjs91HUm0Xaoo5cueoiieEXNToAvSFAcZd+5quzKMkgsEHxjcZa+DpYTr1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768300044; c=relaxed/simple;
-	bh=C/bVeNXI9VWr7lQwFhn9Ob/7KFvHoXBtHx8Vtz1vOrA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TFnmohMYr/SRzAHlmbppap5vGYa9O0XCF+l4H7/GmLOR1KuuUrSvgE3sntaHPIRO3IQM2vig0YXRCdgpX7bW6FI2hX/1mh+E36tCipa3EJyoeOm+KTgf7arJmJNv3ctP4SHwsaZ1MOsWf01rsNkNS7VT6rZVd09jkb/CuicWREY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=K7Fir5jN; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=K7Fir5jN; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 8870A5BCC1;
-	Tue, 13 Jan 2026 10:27:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1768300041; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=XLCVHmmRVJC6nRKcu3kPUQ4gpA/y1ofNVULfBxxmA0k=;
-	b=K7Fir5jNJwSDAIIocam2fhisfmzLIve+aHIYiVyalbrvTxA5xC4ZUhThenEXVzcRFTm62e
-	bTTjPAZor0tjxgVpkalOCOdhS+LeLjnSRlkw6dnWrM+RstkEgpUqEBsFUWfI00cZbAX4q7
-	nd7bevc6EJytT/L4qOG0qlH1iTL8h0U=
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1768300041; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=XLCVHmmRVJC6nRKcu3kPUQ4gpA/y1ofNVULfBxxmA0k=;
-	b=K7Fir5jNJwSDAIIocam2fhisfmzLIve+aHIYiVyalbrvTxA5xC4ZUhThenEXVzcRFTm62e
-	bTTjPAZor0tjxgVpkalOCOdhS+LeLjnSRlkw6dnWrM+RstkEgpUqEBsFUWfI00cZbAX4q7
-	nd7bevc6EJytT/L4qOG0qlH1iTL8h0U=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5BF163EA63;
-	Tue, 13 Jan 2026 10:27:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id kbIAFQkeZmneWQAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Tue, 13 Jan 2026 10:27:21 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: mailhol@kernel.org,
-	mkl@pengutronix.de,
-	linux-can@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] net: can: etas_es58x: full cleanup in the error case
-Date: Tue, 13 Jan 2026 11:27:18 +0100
-Message-ID: <20260113102718.1018804-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1768302044; c=relaxed/simple;
+	bh=LdtlRR/zPmyqCHUmYKVcI/xXnTeg7ttxnJWhu7f910k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=smlH1q/9pYFwm/NTkwqTxenxirMHIR/dMMSi9oJMAwRlLj1iDTafn2g06000Pfv2CzAAhz+BtkfN5I1AHcLwXvcG57BdcGiszodeyZCVD3P5CTYcK6dbl534ZjTswhC6TpGayEHW9Z/fgJH33chIImqvTFbQcvPomZXuQucV27Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D+Bh5Oh6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCEC7C2BCAF
+	for <linux-can@vger.kernel.org>; Tue, 13 Jan 2026 11:00:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768302043;
+	bh=LdtlRR/zPmyqCHUmYKVcI/xXnTeg7ttxnJWhu7f910k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=D+Bh5Oh6WOtBVHk8OQ5t1BFxhjWeaQIz40Dhd+qzuKREqTRitoebtCy1T+S+rc12s
+	 q5DMV+XxrDayvqqt0Q5hrXbW1cicRU8CflxaiXJ3dp4ptN+cy6NWKjb/4VX20jkGwN
+	 DVnJTIcXxk+4xaw0F8FijVNVKxJd1wf0lmtdOjvVeWdUcUR5G4Q9bcB1s15p1u6O04
+	 YRuxp9uzG1JZ1GoTFt7iv6eHguX7idN3NdfcxOCRzdFS7ztoATD5CjVLa6OWj39o18
+	 P9dYWX+nIbU2g++ePw4n0q0rM1GAHAdAvCLnlDdEcZEY8XeMJmS/v8oB0SmyWM24Mx
+	 AQ4cAK4eO4Gwg==
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6505d141d02so11865799a12.3
+        for <linux-can@vger.kernel.org>; Tue, 13 Jan 2026 03:00:43 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUwxWqgAYYzOHZ2Gmt9LU0rcZQTEMB62GwPpC09GLJ5ZJeS/pQNY5ZrP1xOINIW/RroRIDFSPMTuPk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDWyYH9UBK/ZflnrRCCZYGehJJEEXUs9UZ6qMw+azbouCkfXvg
+	j2/MbgO0QeyYOodKh5ciYKtiLIQqHFRIXDxDUPTI9bXftQ+7mqtPQXgewivWB5l69SWWNLMs6fu
+	xPyGxOVt6pQ58RetrPWD720//cO3k/UY=
+X-Google-Smtp-Source: AGHT+IEPMuWdm/9+TjzNtsmM//veDgH/+XMFYCOMqiz/YLXeXEcfRnRUipeckAEUKaiXtiUzUtb65o0Y8vezFM/f9iw=
+X-Received: by 2002:a17:907:948f:b0:b87:1dad:f71e with SMTP id
+ a640c23a62f3a-b871dadfa6cmr624209666b.54.1768302042659; Tue, 13 Jan 2026
+ 03:00:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:email,imap1.dmz-prg2.suse.org:helo];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Level: 
-X-Spam-Flag: NO
+References: <20260113102718.1018804-1-oneukum@suse.com>
+In-Reply-To: <20260113102718.1018804-1-oneukum@suse.com>
+From: Vincent Mailhol <mailhol@kernel.org>
+Date: Tue, 13 Jan 2026 12:00:31 +0100
+X-Gmail-Original-Message-ID: <CAMZ6Rq+TtQnA-vvmfKhRftOuXyxWOPNZ4uH5ObT884OLDZHyng@mail.gmail.com>
+X-Gm-Features: AZwV_QgAkYfVIWoDRGYqoDJbfRaao1Fl4wmTkiPwQztK7yc-e9UwzH4EiskYeYM
+Message-ID: <CAMZ6Rq+TtQnA-vvmfKhRftOuXyxWOPNZ4uH5ObT884OLDZHyng@mail.gmail.com>
+Subject: Re: [PATCH] net: can: etas_es58x: full cleanup in the error case
+To: Oliver Neukum <oneukum@suse.com>
+Cc: mkl@pengutronix.de, linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Memory allocation can fail in the middle. Hence the cleanup
-needs to be called in every case.
+On Tue. 13 Jan. 2026 =C3=A0 11:29, Oliver Neukum <oneukum@suse.com> wrote:
+> Memory allocation can fail in the middle. Hence the cleanup
+> needs to be called in every case.
+>
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/net/can/usb/etas_es58x/es58x_core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Have you seen this:
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index f799233c2b72..8a8764374713 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -1783,8 +1783,9 @@ static int es58x_open(struct net_device *netdev)
- 
- 	if (!es58x_dev->opened_channel_cnt) {
- 		ret = es58x_alloc_rx_urbs(es58x_dev);
-+		/* can fail partially */
- 		if (ret)
--			return ret;
-+			goto free_urbs;
- 
- 		ret = es58x_set_realtime_diff_ns(es58x_dev);
- 		if (ret)
--- 
-2.52.0
+  commit b1979778e985 ("can: etas_es58x: allow partial RX URB
+allocation to succeed")
+  Link: https://git.kernel.org/netdev/net/c/b1979778e985
 
+?
 
