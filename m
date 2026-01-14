@@ -1,151 +1,151 @@
-Return-Path: <linux-can+bounces-6151-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6152-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4D77D205D2
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 17:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4619DD21544
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 22:26:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 189153009481
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 16:56:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3D643301E6D3
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 21:26:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D78C39E194;
-	Wed, 14 Jan 2026 16:56:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1259A285041;
+	Wed, 14 Jan 2026 21:26:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="eHTlQTgE";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="KzWCT/g5"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b="0oWRm4WD";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=valla.it header.i=@valla.it header.b="oTWbPQLv"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+Received: from delivery.antispam.mailspamprotection.com (delivery.antispam.mailspamprotection.com [185.56.87.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B5E1D5170;
-	Wed, 14 Jan 2026 16:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5CD357A2D
+	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 21:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.56.87.1
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768409770; cv=pass; b=iCUnDmmAdr4pukyiNbY5KwyZQe9BSOY4Z0AuyqE0QFZwxxbHPzGQ1/WFZ/34BdVy6gYqUW6eRQAFIXoTMUMO5L4XweFUI2eiB1rRJUWQ5scCxJOc/4RRWeRQOq4tQ4ZoWzxGRptQEQxQTR/MiBhqeHu51124Kq48MkWxSMDN674=
+	t=1768426014; cv=pass; b=i8CYswmSG50mSuAxpdwY7VpG5ss4EosIKrKtUpHT7vxKo9uzJ66wP21SO9MHwYBuf6TenTKH7o2ytwqje6722QisHrnT2DZKPzZozObBm4tTccICq3pgOK3jjCRApiPqgzz3G8hlSIn4zFwguIYInSP+6Ni23qTipN4EvBYmGvw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768409770; c=relaxed/simple;
-	bh=netvWp8HMu5F68sSUgrtPN31M7VfJJ3V5ro7P6W7kIQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=o78Qqhr7icF9skGcVP5CFJ2otv67PTJQ26+zS4rjuXkn/v1b+1EYM2cFpyAvzrfAgYkpx47GLrpTQRIMtNptvCew7KXRNMor6boFvcwTyntl75oNX/lBmtkIsScvr9JHlbr4VKAlykaHjKwkJsff/h53bC3GDsTZTnMaAQVpCrw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=eHTlQTgE; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=KzWCT/g5; arc=pass smtp.client-ip=85.215.255.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1768409765; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Co5ChP3FeP91Jxb5w9B76w612rcdihF0C079dI30EnOIdYXMkIwNcfRBn+dxWY3+24
-    r/fJuEAgsvCcJAt8KXXFupt/h+iin9DI2pQffNvp8LocBVOP89QVJnVBj/OWVtg8J0un
-    dXx6wQHd5w7VMi1FLtS1MHPHJKEw/fsiT0C7rPaR44U225H38nEdq3I327cbfc2CHhwr
-    87YGEHWFAvqD3ShOT7zGKmDXueA+B73WVullrCW0Vj1n8OGeMqyBnlp9X8XUfwcqN/s/
-    IspeE2WBNIlrEJ+SBF4XXnNNLUU6nLO2+c9Kb9H1q5u/srzuKw12xfFlpCsaQ6DDR4p1
-    wMdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1768409765;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=YRgXCsZkgp987wIF+DINeW4kt6V2borISeBk6YwtmeY=;
-    b=tFhqVquSO34hMd8SsEfBKYq39MmeiOFYE2QefdZpibqOlVoUbfpj8sZ34OnDkOdlCC
-    BAOqWuZ6KjgRlbTxi575FZ2wckr3I35izbfzoRn8iD3k2WjXc3SgQv1BjkOMkfzR85VL
-    bCjYxENCICcAEQ+BZR4P+nN+o7zCfHB0DkD0+wtiK1wqgroLFySc8KaHEH8TUAdOfBmR
-    s8fQ+h/eTq+sdHQJaws0XckLaPI53ztoKtFkMbfUgkDrAR+qEo2hjKbQtEBbIH+jGrXq
-    Vcv5eyUjcrOScOdFEKjxYh6hj2/vEHCxT+TdYre4jxcOYtbMw7jxy8ViEIFABc8eG9WF
-    RnJw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1768409765;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=YRgXCsZkgp987wIF+DINeW4kt6V2borISeBk6YwtmeY=;
-    b=eHTlQTgEE5ZaVPhAkWTw4Qbwk4Ou8Xq4GSvbSJnkI6xhid/Xs+c3OQI+eXVu4gPz+q
-    s1d59bPqgZnsPtbi5vmthYqPAnEZzvrAT+SlA8zN6X1NE15fcjPtNDYLC1+l0qNRCVQ9
-    325flgchGI+QOaIDN5uE2/nTxTHNrEvpnmjoWfuYLjwSfgJBk9x0mGir2fw7DLLBd7G3
-    gYsNeaZlyZKcWsHP3U7cSzePXFu5wPlMCQgSk4tIOCC8xvFUL/x7AqQlylbaUYdqHaN4
-    bGtS6SiYcJnp5C/ki3zZYWDIxTGNTuEOMdDJY/H/QaClug/EOqmjB4UxQtjQo2be9aWA
-    mfTQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1768409765;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=YRgXCsZkgp987wIF+DINeW4kt6V2borISeBk6YwtmeY=;
-    b=KzWCT/g5mDQNBf1JrqcZJJeBR4SwAJqgzy5+sXTtHsWre0tTmyh9y7qRXHkfKBr0wg
-    DoVPgyvvoF9nIRyxSIBA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b20EGu5uCc
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Wed, 14 Jan 2026 17:56:05 +0100 (CET)
-Message-ID: <5d24e045-8ede-4db1-8b0d-a6efd5037704@hartkopp.net>
-Date: Wed, 14 Jan 2026 17:55:59 +0100
+	s=arc-20240116; t=1768426014; c=relaxed/simple;
+	bh=KzXdWwH+9+D8PnE6pliunqNT2ijvf60c5nH3YnFqS34=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cYiIPKw5shvFsWUP3PiToFcWlWwi3QbA0lU7WyhorvCVFce2e2icouOT9qNGMBVjE1OH7jP+BwkugJhjdFOIWcYvBD5GYW+VBcwkwESUda7Pp+TkDB4QpWpnvJdLJKHnxcc81ZCSYVzhzTDoXYneWmd1QTuu7lQT97BMRotk944=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it; spf=pass smtp.mailfrom=valla.it; dkim=pass (1024-bit key) header.d=antispam.mailspamprotection.com header.i=@antispam.mailspamprotection.com header.b=0oWRm4WD; dkim=pass (1024-bit key) header.d=valla.it header.i=@valla.it header.b=oTWbPQLv; arc=pass smtp.client-ip=185.56.87.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valla.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valla.it
+ARC-Seal: i=1; cv=none; a=rsa-sha256; d=outgoing.instance-europe-west4-0c7t.prod.antispam.mailspamprotection.com; s=arckey; t=1768426012;
+	 b=NzQ/YypLX0yjHYjG10m8JQcZAW6BaCc/WXELMeAJjKdx77otgYGkiDmRbhxMrf/2y+/GChxZqU
+	  DIXDf8xsP6U5qhQ62hYtBm6Sje0sHX6JJq9pAhzOatyxLU2sVscqetrtksxIKfPVpjhdQpraPE
+	  /L2RCLH1WDQR6DlXMqHtW8MoXmIwxygFlkRCwGHgG7ENeWYF+hempTDFOB8QomW5J07IPAtz++
+	  BS+GJQtejniMXuaK+FzTzbQujgJMkUuOWyHtWdl+gORwY6Bq98NTSN+pWg+yTANKNAZ2t1T4LM
+	  NmeLmRThYpu6n0JjB1R31FgZxvKG8VaBDjQ96v9UAZKyzQ==;
+ARC-Authentication-Results: i=1; outgoing.instance-europe-west4-0c7t.prod.antispam.mailspamprotection.com; smtp.remote-ip=35.214.173.214;
+	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
+	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
+	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
+	arc=none
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=outgoing.instance-europe-west4-0c7t.prod.antispam.mailspamprotection.com; s=arckey; t=1768426012;
+	bh=KzXdWwH+9+D8PnE6pliunqNT2ijvf60c5nH3YnFqS34=;
+	h=Content-Type:MIME-Version:Message-ID:Subject:To:From:Date:DKIM-Signature:
+	  DKIM-Signature;
+	b=UVay2iDwTu+J0/hrpG3EdyochTEF/O+qDzqmUrTosPQI0EGGNhDIdYJJrFUl5+HHDm5T/G5yOv
+	  FfJx7+8lTF4TluWdOpneXRIAEdnotlEh7NoxNI5kUnZALqM3TvPFUe/AchOOYUlM1cP+z0haoq
+	  jF0NZJn7c1hfldiMvpNw7pPOiNO6B8MvXWu1c1m2h58KXVd2KM/AgT6NWfWG/h++DPgssq4RNi
+	  pnDlL/axD3r8mZQpN4vrQY2DuIR//rYthliywmKmpGldRNbJi8gO/njLjDmGRB+kdkmY/F9yRk
+	  l8BJTUmwHpi9irH0SgYh7So01i1Y5SsLYrwOqvDFKguMYg==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=antispam.mailspamprotection.com; s=default; h=CFBL-Feedback-ID:CFBL-Address
+	:Content-Type:MIME-Version:Message-ID:Subject:To:From:Date:Reply-To:Cc:
+	List-Unsubscribe:Content-Transfer-Encoding;
+	bh=KzXdWwH+9+D8PnE6pliunqNT2ijvf60c5nH3YnFqS34=; b=0oWRm4WD/3a21K6jdKLoU6a+LA
+	iiK8DQ/U/at8EXNcCEsyi9te7dDxikTu0HjNU6eQ/J97hVQBo8BAxOnOQNdN9kkfAl9/7aC+ZYCRD
+	Ycvl3r5xkmUOOAi2jHlrrRz0L7vnTyTBtphigOhx+7IeqOkWP565a4Zihe7RO0QD99l4=;
+Received: from 214.173.214.35.bc.googleusercontent.com ([35.214.173.214] helo=esm19.siteground.biz)
+	by instance-europe-west4-0c7t.prod.antispam.mailspamprotection.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.1)
+	(envelope-from <francesco@valla.it>)
+	id 1vg8O7-00000001uzw-3tqy
+	for linux-can@vger.kernel.org;
+	Wed, 14 Jan 2026 21:26:50 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=valla.it;
+	s=default; h=Subject:To:From:Date:cc:list-help:list-unsubscribe:
+	list-subscribe:list-post:list-owner:list-archive;
+	bh=KzXdWwH+9+D8PnE6pliunqNT2ijvf60c5nH3YnFqS34=; b=oTWbPQLvOih/pBq7fSiZ2DCM1V
+	vq5x8nB/73cIhy4D3efyoOdotfVDPX1UkmDxEUh54qNrlCEsmNcnaX+Qf50QbEd1XjdnIe5AjryWU
+	nTV3JAT1H1T+d/+9yhuVMr8J4EvhN2OPpnS8jT43nvnq45Zg7LOd7jX80E3V5LNnquT4=;
+Received: from [95.248.141.113] (port=62416 helo=bywater)
+	by esm19.siteground.biz with essmtpa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.1)
+	(envelope-from <francesco@valla.it>)
+	id 1vg8O1-00000000AlG-1PrL
+	for linux-can@vger.kernel.org;
+	Wed, 14 Jan 2026 21:26:41 +0000
+Date: Wed, 14 Jan 2026 22:26:39 +0100
+From: Francesco Valla <francesco@valla.it>
+To: linux-can@vger.kernel.org
+Subject: [QUESTION] How to support partial networking
+Message-ID: <aWgKD8AG-C9YlFRe@bywater>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] docs: can: update SocketCAN documentation for CAN XL
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: Rakuram Eswaran <rakuram.e96@gmail.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol
- <mailhol@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20251231-can_doc_update_v1-v1-0-97aac5c20a35@gmail.com>
- <20251231-can_doc_update_v1-v1-2-97aac5c20a35@gmail.com>
- <5f8f17eb-b0d7-4b5d-aa66-31113ee891c5@hartkopp.net>
-Content-Language: en-US
-In-Reply-To: <5f8f17eb-b0d7-4b5d-aa66-31113ee891c5@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - esm19.siteground.biz
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - valla.it
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-SGantispam-id: 905a72da7acaab83b2f961de68e1f7b8
+AntiSpam-DLS: false
+AntiSpam-DLSP: 
+AntiSpam-DLSRS: 
+AntiSpam-TS: 1.0
+CFBL-Address: feedback@antispam.mailspamprotection.com; report=arf
+CFBL-Feedback-ID: 1vg8O7-00000001uzw-3tqy-feedback@antispam.mailspamprotection.com
+Authentication-Results: outgoing.instance-europe-west4-0c7t.prod.antispam.mailspamprotection.com;
+	iprev=pass (214.173.214.35.bc.googleusercontent.com) smtp.remote-ip=35.214.173.214;
+	auth=pass (LOGIN) smtp.auth=esm19.siteground.biz;
+	dkim=pass header.d=valla.it header.s=default header.a=rsa-sha256;
+	arc=none
 
-Hello Rakuram,
+Hello linux-can,
 
-On 13.01.26 17:14, Oliver Hartkopp wrote:
+I am starting to develop a driver for the TJA1465 SIC CAN transceiver
+from NXP [0], which among other things supports partial networking, and
+I was wondering whether it has already been discussed or not how to
+support such a feature.
 
->> +For user space applications the following rules are important when
->> +handling CAN XL:
->> +
->> +- Use ``struct canxl_frame`` as basic data structure when CAN XL traffic
->> +  is expected.
->> +- Set CANXL_XLF in ``canxl_frame.flags`` for all valid CAN XL frames.
->> +- Ensure that undefined bits in ``canxl_frame.flags`` are kept at zero.
->> +- Respect the configured device MTU; do not send frames larger than
->> +  the MTU announced by the kernel.
->> +- For mixed-mode controllers, be prepared to handle Classical CAN,
->> +  CAN FD and CAN XL frames on the same interface and choose the frame
->> +  structure according to the socket/protocol semantics (e.g. dedicated
->> +  CAN XL APIs when available).
-> 
-> There's one big difference between CC/FD and XL frames when you read/ 
-> write it to CAN_RAW sockets:
-> 
-> For CAN CC and CAN FD you write struct can(fd)_frame's with CAN_MTU 
-> resp. CANFD_MTU lengths - no matter about the data length (cf->len).
-> 
-> When you read/write CAN XL frames you are reading and writing the 
-> CANXL_HDR_SIZE + the length of the data.
-> 
-> So only in the case of writing 2048 byte data, you write 2060 bytes.
-> 
-> The minimum size for read/write is CANXL_HDR_SIZE + CANXL_MIN_DLEN == 13
-> 
+For those not familiar, partial networking is an automotive-oriented
+feature that allows to wake-up selectively through CAN traffic some ECUs
+while leaving others in a quiescent state. This can be used for example
+for periodic maintenance tasks, diagnostics or updates. It is typically
+implemented inside a trasceiver, which is always powered and stores in
+a volatile memory a list of CAN IDs (plus masks, much like the SocketCAN
+filtering works) that shall lead to the wake-up of the ECU.
 
-Here is an example that I've been implemented recently that shows a good 
-example how to handle CC/FD/XL frames, when they are all enabled on the 
-CAN_RAW socket:
+In the context of the Linux kernel, this can be probably be implemented
+in a number of ways:
 
-https://github.com/hartkopp/can-utils/commit/bf0cae218af9b1c1f5eabad7f3704b88ab642e00
+ - as a device-specifc capability (accessible e.g. through sysfs)
+ - at phy level
+ - in the generic CAN subsystem
+ - ?
 
-Feel free to pick the code for some example.
+I did not find a previous discussion neither in the mailing list nor in
+public presentations, but maybe some discussion already took place
+privately or I missed something.
 
-But please do not reference the commit as it is in my private repo and 
-not yet integrated in the official can-utils repo.
+Any idea or preference? If not, I'll try to come up with a proposal and
+submit an RFC.
 
-Best regards,
-Oliver
+[0] https://www.nxp.com/products/TJA1465
+
+Thank you in advance!
+
+Regards,
+Francesco
 
 
