@@ -1,102 +1,112 @@
-Return-Path: <linux-can+bounces-6144-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6145-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9EB1D1E968
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 12:57:22 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4225ED1F10B
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 14:27:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D6B0030224A7
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 11:52:28 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 49FAD300B8AB
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 13:27:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BD0396D11;
-	Wed, 14 Jan 2026 11:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="AA8cnIAy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82E0238E120;
+	Wed, 14 Jan 2026 13:27:38 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541FC389E1A
-	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 11:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885811A08AF
+	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 13:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768391540; cv=none; b=QqTHdm1TeN8II3sDWPaHlhmYTc3HnihVSP2vv6CntVssXq+DDG06t6fh+T/OCwNMwpgxLL5WLNq0OKi6ES9uy76+Ay823Ohet7ny0sArAR/hXTuF+/zDCR+MzUxnoPKWLiXCAECCeoeP9hyRmf72qpKL159Vioi0PZYTSpE2u0M=
+	t=1768397258; cv=none; b=b6eBEQQbx4Ra7ArEE8uHqF5kPQ7E+EcIyH9BwJmvbuE9avfnwrCxK+9CP09+WTEzkZ0l+kR3N319A8kYt1fwbj6r7/G+2Sa7TzRynX1X11HHaAj3fEpEGsDqFgfcwdiYywmyf+RgLfcz1TKI236LteGvKBVgXOf7KFeAzJYg6CI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768391540; c=relaxed/simple;
-	bh=x41W9sfytGVKn5Dnw2ED9SlJy9/zuqHB/qFAvmU+OSk=;
+	s=arc-20240116; t=1768397258; c=relaxed/simple;
+	bh=A/e9nV3yJKSm2qZeCSc7FJJQQD3BtHGCLoNf9KegyWM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OcWJ456j/GvARocfirZh1C6Mp9CiuHqbW2lXsMbKwi5T8rvzc/+nCV+GsVUU4gARPADm6Pua5sHfOW3nAGox1kcotbJmmI8VxvuPA8An93nldIeaLmYeKEG36yY99ME15yUU3bIkNBVHbDb/+0LOjMVhWlKK9nCy8x4DafVY6Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=AA8cnIAy; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=BTPE
-	LIS8djx1OvkVEDR+BzQIn/xiv3BxFTaCezloF98=; b=AA8cnIAylx1xeiFkNT4T
-	ZIrmdY27f3LYoZO3GRgu9YyNYNLzRuyeH48q3dx+Ek0PAHENTGgXTSyzrtt7vTQt
-	n5325scCcMepdnx/OYcgu8QMPQSzDguoUnV4dh34+BqqD2S4YDZqMbR6OIkqkT/v
-	OxW4Fx9WoayurfG3rqbz05Td1BBdLEXFVfIIAbFtH8PATca+96Bbmfi0zb9+TNpu
-	hIe2YYAbjs89/lwtJuw0mhom4UPGL0S9inZomLXBsrPNCCRFf76yHn2NmqF4popp
-	LOTgKHK8dQS1+uPIIGLkxC7nZNlt4kjn1fXF2v+J4e2tCtpdmNZVwC6ISSxq5cpp
-	Mw==
-Received: (qmail 2114186 invoked from network); 14 Jan 2026 12:52:12 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jan 2026 12:52:12 +0100
-X-UD-Smtp-Session: l3s3148p1@WQkZvVdI3K8ujnsM
-Date: Wed, 14 Jan 2026 12:52:11 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Josua Mayer <josua@solid-run.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Peter Rosin <peda@axentia.se>, Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Vignesh R <vigneshr@ti.com>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Mikhail Anikin <mikhail.anikin@solid-run.com>,
-	Yazan Shhady <yazan.shhady@solid-run.com>,
-	Jon Nettleton <jon@solid-run.com>, linux-mmc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-can@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 5/7] i2c: omap: switch to new generic helper for
- getting selected mux-state
-Message-ID: <aWeDa6o0fOh1pGW5@ninjato>
-References: <20251229-rz-sdio-mux-v4-0-a023e55758fe@solid-run.com>
- <20251229-rz-sdio-mux-v4-5-a023e55758fe@solid-run.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=q2FKp6FgCT2JSmSA7ySoH7mPZ2XwmOC0nxjo46pat2W8KeKeyCImcNHFhu2fXz46RDL1rFAg4VK+zHl0wBV5d9pMPULlkO4FUec5BuIQXWNIIkyggR3GYUXnJvhtZLAd5Usk/xT4lDpn+rrLASnBxJlczyVrektZvzE4CgmmGyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vg0uL-0004Rg-PC; Wed, 14 Jan 2026 14:27:33 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vg0uM-000azz-0b;
+	Wed, 14 Jan 2026 14:27:33 +0100
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 396634CCD2F;
+	Wed, 14 Jan 2026 13:27:33 +0000 (UTC)
+Date: Wed, 14 Jan 2026 14:27:32 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org
+Subject: Re: [PATCH net 0/4] pull-request: can 2026-01-14
+Message-ID: <20260114-dashing-foamy-eagle-254a4a-mkl@pengutronix.de>
+References: <20260114105212.1034554-1-mkl@pengutronix.de>
+ <91cc5ad6-e877-453c-bfd0-8d5ccaad12c7@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mwbu6favn3eh5e5w"
 Content-Disposition: inline
-In-Reply-To: <20251229-rz-sdio-mux-v4-5-a023e55758fe@solid-run.com>
+In-Reply-To: <91cc5ad6-e877-453c-bfd0-8d5ccaad12c7@hartkopp.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-On Mon, Dec 29, 2025 at 03:27:29PM +0100, Josua Mayer wrote:
-> Multiplexer subsystem has added generic helper functions for getting an
-> already selected mux-state object.
-> 
-> Replace existing logic in probe with the equivalent helper function.
-> 
-> This change is only compile-tested.
-> 
-> Reviewed-by: Andreas Kemnade <andreas@kemnade.info>
-> Signed-off-by: Josua Mayer <josua@solid-run.com>
 
-Despite the pending discussion about the function name, it is clear that
-the final patch will not go via i2c but some other tree. So, already:
+--mwbu6favn3eh5e5w
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH net 0/4] pull-request: can 2026-01-14
+MIME-Version: 1.0
 
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On 14.01.2026 14:09:41, Oliver Hartkopp wrote:
+> Not visible in the linux-can repo!
+>
+> Missing push??
 
+"tags/linux-can-fixes-for-6.19-20260114" was already in linux-can. Now
+I've also pushed the testing branch.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--mwbu6favn3eh5e5w
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlnmcEACgkQDHRl3/mQ
+kZz4ZQgAqhp7tBYGaML5fBZGilVOUEm3ceiL4xDgbpHUI+eKFErEMLzzIO8U6aVP
+an64RMGmlecmFSVgcj6Rx/Cwrwq6mUd+fOXQMtLzMNIBy1SxWoh2qMQKHLr1F+H/
+r/ZaDENTGXDrLwmW0nNoDFl6YpHvgGGoXCJUHLTfJZzkimpkP8iA/ugd3FA5+5MQ
+iUrbuFaULZ/vfizv5cmdD0a3LZFmpbOUsEMl6lpcaaieXHLDJrsImRWp1tAASSp0
+ls4xQ8f89HcqHv/MfN08Z7K4ZXkOXqzNr57AaGhjyhBgpZOxuFLpJicy4c3Nb9Jh
+Npjc9Iq2CqPRewBOCbL8IUk9j97xSA==
+=yUak
+-----END PGP SIGNATURE-----
+
+--mwbu6favn3eh5e5w--
 
