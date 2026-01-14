@@ -1,120 +1,112 @@
-Return-Path: <linux-can+bounces-6142-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6143-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D74B1D1E542
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 12:11:58 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DEE7D1E9AF
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 13:00:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D3823301B80C
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 11:11:09 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D3E98305A03B
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 11:51:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AB8D38E5F1;
-	Wed, 14 Jan 2026 11:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD671399037;
+	Wed, 14 Jan 2026 11:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Z+N4yast"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA34D393DC2
-	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 11:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB804397AC6
+	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 11:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768389069; cv=none; b=WiJo/cYKNSgK6JdmqG0cac+c13mkwgcijj0DbH9Idg2V57pdQqPwuP4zgGni49nwfGR58LlM/oGTfWNC9LpTqhqPpJFctQsj0vpARV1WUDFAoLWkemox5Uc7J5cf4zSZnpVeRkzihvpi6qGkQKwlHWHzu4MVGhmYzFw0DeKmWCE=
+	t=1768391404; cv=none; b=SdmteupcyB5uIHlpwMBQ7OAmjtrj9xTvpSBtXJdn8wOvq1UxI/GFawfzaf6phun2u64EsPdxF78DuG0uF4aPZCVQzkdt1lUbjxAAekENcv46ekyFvU0rQxqfGQVI7s3cGCKlSIjj6MTKNANJJmjR+r++MvgsM+Id/2/OfTv6yuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768389069; c=relaxed/simple;
-	bh=w+p7EAgJ1oDAf7NRZ/VmHVrqYW/Jgd3OQBcXUx5bKTA=;
+	s=arc-20240116; t=1768391404; c=relaxed/simple;
+	bh=5G3bZDFv1qBG7SvPosgBK8cERnxjv6HIzxzWgJHcMAI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C63ZnTY6jxzhsrU0xBUEhHOzziDs901OrL0VuQlnd4N+XmiYTBZgnT1CIMpHfDsFnFjSqhLQjFaTzyW9IpKJJotHagjT2mfuLhjhCjgxnwJRxUzVlB4u8qQ1dTxneujp9XwoxW3J6M06I7OMtuC/fMqjFLD0EWNH9zpSrm+mqtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1vfymA-0001hv-Dm; Wed, 14 Jan 2026 12:10:58 +0100
-Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1vfymA-000ZxT-1N;
-	Wed, 14 Jan 2026 12:10:57 +0100
-Received: from ore by dude04 with local (Exim 4.98.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1vfym9-00000006mp0-2rH6;
-	Wed, 14 Jan 2026 12:10:57 +0100
-Date: Wed, 14 Jan 2026 12:10:57 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Vincent Mailhol <mailhol@kernel.org>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>,
-	Simon Horman <horms@kernel.org>, davem@davemloft.net
-Subject: Re: [can-next 0/5] can: remove private skb headroom infrastructure
-Message-ID: <aWd5wdMhpEuN9NFB@pengutronix.de>
-References: <20260112150908.5815-1-socketcan@hartkopp.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XseXt+8KEh3zEh6B4FplEq7o6eaYEee9abp7HvBJvj/bsjBIN7XBu+Q7BAy/96q2KY1kf3OlWFrAjnXXoyFTKxpX4NcmiK/LQDdfDeBp2IBZsYWqixBRZcRT5SC5yAffDnw6nVeDBQw44Maw3AHdUQM0OFMeNH4IT9ZQUTzJwbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Z+N4yast; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=gNMi
+	hpzhf2NxKZIcbZg7O2NEUbdwfbHtTszJtzgTj5I=; b=Z+N4yastOsG1hmW6/MpE
+	qJn3S1j5gjDiWLbMXPIr5OKNab4rVxTQ1ISuU/PcwKJNFCP4kxxx0cMd9ocJEYwl
+	rBtM208IDnsTl8YCpApJaEv88+NT0Em1NPc6Tbvj3/9uHqA8vQBIxg0QH3KVhUAz
+	SwzHYADFiSMrJvV/ycsNqExqc0zRxVlOU39NKRHInFy+QXnjDjIz30avvFuZ8F5g
+	Gri7hALcq59mlzxXhbANhpN56BlQ/DVpj6Snpm6iAjr2YruLmkQC+vnuhFN6BWmF
+	JGzVQI/FhDVQVlpXXlNU8Dcyl5bl8RnycG1yAVJyIZ51ICoNtHhpMUKvwBQ20Fi/
+	7Q==
+Received: (qmail 2113255 invoked from network); 14 Jan 2026 12:49:58 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jan 2026 12:49:58 +0100
+X-UD-Smtp-Session: l3s3148p1@tokXtVdIoNkujnsM
+Date: Wed, 14 Jan 2026 12:49:57 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Josua Mayer <josua@solid-run.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Peter Rosin <peda@axentia.se>, Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Andreas Kemnade <andreas@kemnade.info>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
+	Vignesh R <vigneshr@ti.com>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Mikhail Anikin <mikhail.anikin@solid-run.com>,
+	Yazan Shhady <yazan.shhady@solid-run.com>,
+	Jon Nettleton <jon@solid-run.com>, linux-mmc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-can@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-omap@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v4 7/7] mmc: host: renesas_sdhi_core: support selecting
+ an optional mux
+Message-ID: <aWeC5brP_KdrCmHz@ninjato>
+References: <20251229-rz-sdio-mux-v4-0-a023e55758fe@solid-run.com>
+ <20251229-rz-sdio-mux-v4-7-a023e55758fe@solid-run.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260112150908.5815-1-socketcan@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20251229-rz-sdio-mux-v4-7-a023e55758fe@solid-run.com>
 
-Hi Oliver,
+Hi Josua,
 
-On Mon, Jan 12, 2026 at 04:09:03PM +0100, Oliver Hartkopp wrote:
-> CAN bus related skbuffs (ETH_P_CAN/ETH_P_CANFD/ETH_P_CANXL) simply contain
-> CAN frame structs for CAN CC/FD/XL of skb->len length at skb->data.
-> Those CAN skbs do not have network/mac/transport headers nor other such
-> references for encapsulated protocols like ethernet/IP protocols.
->
-> To store data for CAN specific use-cases all CAN bus related skbuffs are
-> created with a 16 byte private skb headroom (struct can_skb_priv).
-> Using the skb headroom and accessing skb->head for this private data
-> led to several problems in the past likely due to "The struct can_skb_priv
-> business is highly unconventional for the networking stack." [1]
->
-> This patch set aims to remove the unconventional skb headroom usage for
-> CAN bus related skbuffs. To store the data for CAN specific use-cases
-> unused space in CAN skbs is used, namely the inner protocol space for
-> ethernet/IP encapsulation.
->
-> [1] https://lore.kernel.org/linux-can/20260104074222.29e660ac@kernel.org/
->
-> Oliver Hartkopp (5):
->   can: use skb hash instead of private variable in headroom
->   can: move can_iif from private headroom to struct sk_buff
->   can: move frame length from private headroom to struct sk_buff
->   can: remove private skb headroom infrastructure
->   can: gw: use new can_gw_hops variable instead of re-using csum_start
->
->  drivers/net/can/dev/skb.c | 45 ++++++++++++++++-----------------------
->  include/linux/can/core.h  |  1 +
->  include/linux/can/skb.h   | 33 ----------------------------
->  include/linux/skbuff.h    | 27 +++++++++++++++++------
->  net/can/af_can.c          | 35 +++++++++++++++++++-----------
->  net/can/bcm.c             | 13 ++++-------
->  net/can/gw.c              | 25 ++++++----------------
->  net/can/isotp.c           | 18 ++++++----------
->  net/can/j1939/socket.c    |  7 ++----
->  net/can/j1939/transport.c | 13 ++++-------
->  net/can/raw.c             | 14 ++++++------
->  11 files changed, 92 insertions(+), 139 deletions(-)
+thanks for your work and kudos for striving for a generic solution. It
+seems worthwhile to me to add the helpers. I have questions, though:
 
-J1939 related part seems to work without regressions.
-For j1939:
-Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> +	priv->mux_state = devm_mux_state_get_optional_selected(&pdev->dev, NULL);
 
-Thank you!
+The minor nit (which may be bike-shedding): Maybe the function name
+could be '*_select' instead of '*_selected'. To make more explicit that
+this function is actively changing the selection and not passively
+retrieving the current state?
 
-Best Regards,
-Oleksij
+The bigger thing is that with devm_* I had the expectation that
+deselection is also handled automatically...
+
+> +edselmux:
+> +	if (priv->mux_state)
+> +		mux_state_deselect(priv->mux_state);
+
+... so I was a bit surprised to see this manual cleanup. Has it been
+discussed if that deselection can also be in the helpers?
+
+Happy hacking,
+
+   Wolfram
+
 
