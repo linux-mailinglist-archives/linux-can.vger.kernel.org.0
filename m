@@ -1,28 +1,29 @@
-Return-Path: <linux-can+bounces-6136-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6139-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C84ED1E469
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 12:00:44 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03F67D1E402
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 11:57:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 99D5B3005E92
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 10:54:04 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2706630299F0
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 10:55:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF81304BCB;
-	Wed, 14 Jan 2026 10:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B489A38A719;
+	Wed, 14 Jan 2026 10:55:02 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA62D396D09
-	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 10:52:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9DF396D0F
+	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 10:52:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768388043; cv=none; b=BjE/vIQr5wE7hQWY7n17+qF1RzFTQjx2UzyV2iSTQ2e4+8thhWQuQ+9xDK1aGmnv4vigmWpwJKEffHFs2KHDsbHiJLU+HxgD63YcXfXgD5AIVPtPwYwWqLzLPDolSV6mmkXEKQvKIhKsqz0xInZm0NT0IQ0uqnmiyaMhBMzt7og=
+	t=1768388102; cv=none; b=r03dDyoluusI7llrDPhWHJwclg3/3XpXatnPgWsXRSqMNhWC2r/gJ4L3b3aKztCGmWCZdIDBBrmqZie451gSgmL91yg2ZCrHLM6U3PNC39jxp2J/dLVzRFrGk/Ra/lUvsu0qYGY0tegwLipWtszb4XqtEsT/Q92Q3OeFRBB7IKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768388043; c=relaxed/simple;
-	bh=xslTz0QAsrjmjJhCdA2M85qhDLJ1vcw6JdsnlpToTE0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HuxySo1ENe2/L4xxZe0wZ9K5K1HRk0Ft1nXqlLw58rHG52S+hSXc7vF6RTshgSNYkHaej8GaYctu+girA2mIvWR2jYGx+pE37BE+en+idl1L3KHRBSzflwTwjDUzjpgYLvYC3ZRUeb62NgzGYzaNI/3HqejGXhoYNxtptOn7frA=
+	s=arc-20240116; t=1768388102; c=relaxed/simple;
+	bh=9GWOVNEV8br2nTzOP+u78KJ6hDUBtlCnLU8yhBlT8wY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JyLR44H2KT8Doc2GQylDKBD8Xe5LEjZebyZn2ghlaaNOAv8F+IHw0cL3Vf3fOsg1hJt2WMgvjlnEPDMpv8SZ6oq8WMSEdNqry7KAOcM3xXIpT7vE7eZhORwzwbwJNgRs3krQfWyd7j387rUIud5i63CRHIN6bfLZuoPUbDn5ZrQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -30,30 +31,36 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1vfyU4-0006p1-3t; Wed, 14 Jan 2026 11:52:16 +0100
+	id 1vfyU4-0006p2-5T; Wed, 14 Jan 2026 11:52:16 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1vfyU4-000Zeu-0a;
+	id 1vfyU4-000Zev-0z;
 	Wed, 14 Jan 2026 11:52:15 +0100
 Received: from blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 45B3A4CCB67;
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 5054A4CCB68;
 	Wed, 14 Jan 2026 10:52:15 +0000 (UTC)
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
 	kuba@kernel.org,
 	linux-can@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: [PATCH net 0/4] pull-request: can 2026-01-14
-Date: Wed, 14 Jan 2026 11:44:59 +0100
-Message-ID: <20260114105212.1034554-1-mkl@pengutronix.de>
+	kernel@pengutronix.de,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Vincent Mailhol <mailhol@kernel.org>
+Subject: [PATCH net 1/4] Revert "can: raw: instantly reject unsupported CAN frames"
+Date: Wed, 14 Jan 2026 11:45:00 +0100
+Message-ID: <20260114105212.1034554-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260114105212.1034554-1-mkl@pengutronix.de>
+References: <20260114105212.1034554-1-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -66,60 +73,192 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hello netdev-team,
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-this is a pull request of 4 patches for net/main.
+This reverts commit 1a620a723853a0f49703c317d52dc6b9602cbaa8
 
-The first 3 patches are by Oliver Hartkopp and revert the approach to
-instantly reject unsupported CAN frames introduced in
-net-next-for-v6.19 and replace it by placing the needed data into the
-CAN specific ml_priv.
+and its follow-up fixes for the introduced dependency issues.
 
-The last patch is by Tetsuo Handa and fixes a J1939 refcount leak for
-j1939_session in session deactivation upon receiving the second RTS.
+commit 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
+commit cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure by default")
+commit 6abd4577bccc ("can: fix build dependency")
+commit 5a5aff6338c0 ("can: fix build dependency")
 
-regards,
-Marc
+The entire problem was caused by the requirement that a new network layer
+feature needed to know about the protocol capabilities of the CAN devices.
+Instead of accessing CAN device internal data structures which caused the
+dependency problems a better approach has been developed which makes use of
+CAN specific ml_priv data which is accessible from both sides.
 
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Vincent Mailhol <mailhol@kernel.org>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Link: https://patch.msgid.link/20260109144135.8495-2-socketcan@hartkopp.net
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
+ drivers/net/can/Kconfig      |  7 +++--
+ drivers/net/can/Makefile     |  2 +-
+ drivers/net/can/dev/Makefile |  5 ++--
+ include/linux/can/dev.h      |  7 -----
+ net/can/raw.c                | 54 ++++++------------------------------
+ 5 files changed, 17 insertions(+), 58 deletions(-)
 
-The following changes since commit e707c591a139d1bfa4ddc83036fc820ca006a140:
+diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+index cfaea6178a71..e15e320db476 100644
+--- a/drivers/net/can/Kconfig
++++ b/drivers/net/can/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+ menuconfig CAN_DEV
+-	bool "CAN Device Drivers"
++	tristate "CAN Device Drivers"
+ 	default y
+ 	depends on CAN
+ 	help
+@@ -17,7 +17,10 @@ menuconfig CAN_DEV
+ 	  virtual ones. If you own such devices or plan to use the virtual CAN
+ 	  interfaces to develop applications, say Y here.
+ 
+-if CAN_DEV && CAN
++	  To compile as a module, choose M here: the module will be called
++	  can-dev.
++
++if CAN_DEV
+ 
+ config CAN_VCAN
+ 	tristate "Virtual Local CAN Interface (vcan)"
+diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
+index 37e2f1a2faec..d7bc10a6b8ea 100644
+--- a/drivers/net/can/Makefile
++++ b/drivers/net/can/Makefile
+@@ -7,7 +7,7 @@ obj-$(CONFIG_CAN_VCAN)		+= vcan.o
+ obj-$(CONFIG_CAN_VXCAN)		+= vxcan.o
+ obj-$(CONFIG_CAN_SLCAN)		+= slcan/
+ 
+-obj-$(CONFIG_CAN_DEV)		+= dev/
++obj-y				+= dev/
+ obj-y				+= esd/
+ obj-y				+= rcar/
+ obj-y				+= rockchip/
+diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
+index 64226acf0f3d..633687d6b6c0 100644
+--- a/drivers/net/can/dev/Makefile
++++ b/drivers/net/can/dev/Makefile
+@@ -1,8 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-obj-$(CONFIG_CAN) += can-dev.o
++obj-$(CONFIG_CAN_DEV) += can-dev.o
++
++can-dev-y += skb.o
+ 
+-can-dev-$(CONFIG_CAN_DEV) += skb.o
+ can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
+ can-dev-$(CONFIG_CAN_NETLINK) += bittiming.o
+ can-dev-$(CONFIG_CAN_NETLINK) += dev.o
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index f6416a56e95d..52c8be5c160e 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -111,14 +111,7 @@ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+ void free_candev(struct net_device *dev);
+ 
+ /* a candev safe wrapper around netdev_priv */
+-#if IS_ENABLED(CONFIG_CAN_NETLINK)
+ struct can_priv *safe_candev_priv(struct net_device *dev);
+-#else
+-static inline struct can_priv *safe_candev_priv(struct net_device *dev)
+-{
+-	return NULL;
+-}
+-#endif
+ 
+ int open_candev(struct net_device *dev);
+ void close_candev(struct net_device *dev);
+diff --git a/net/can/raw.c b/net/can/raw.c
+index be1ef7cf4204..f36a83d3447c 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -892,58 +892,20 @@ static void raw_put_canxl_vcid(struct raw_sock *ro, struct sk_buff *skb)
+ 	}
+ }
+ 
+-static inline bool raw_dev_cc_enabled(struct net_device *dev,
+-				      struct can_priv *priv)
++static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb, int mtu)
+ {
+-	/* The CANXL-only mode disables error-signalling on the CAN bus
+-	 * which is needed to send CAN CC/FD frames
+-	 */
+-	if (priv)
+-		return !can_dev_in_xl_only_mode(priv);
+-
+-	/* virtual CAN interfaces always support CAN CC */
+-	return true;
+-}
+-
+-static inline bool raw_dev_fd_enabled(struct net_device *dev,
+-				      struct can_priv *priv)
+-{
+-	/* check FD ctrlmode on real CAN interfaces */
+-	if (priv)
+-		return (priv->ctrlmode & CAN_CTRLMODE_FD);
+-
+-	/* check MTU for virtual CAN FD interfaces */
+-	return (READ_ONCE(dev->mtu) >= CANFD_MTU);
+-}
+-
+-static inline bool raw_dev_xl_enabled(struct net_device *dev,
+-				      struct can_priv *priv)
+-{
+-	/* check XL ctrlmode on real CAN interfaces */
+-	if (priv)
+-		return (priv->ctrlmode & CAN_CTRLMODE_XL);
+-
+-	/* check MTU for virtual CAN XL interfaces */
+-	return can_is_canxl_dev_mtu(READ_ONCE(dev->mtu));
+-}
+-
+-static unsigned int raw_check_txframe(struct raw_sock *ro, struct sk_buff *skb,
+-				      struct net_device *dev)
+-{
+-	struct can_priv *priv = safe_candev_priv(dev);
+-
+-	/* Classical CAN */
+-	if (can_is_can_skb(skb) && raw_dev_cc_enabled(dev, priv))
++	/* Classical CAN -> no checks for flags and device capabilities */
++	if (can_is_can_skb(skb))
+ 		return CAN_MTU;
+ 
+-	/* CAN FD */
++	/* CAN FD -> needs to be enabled and a CAN FD or CAN XL device */
+ 	if (ro->fd_frames && can_is_canfd_skb(skb) &&
+-	    raw_dev_fd_enabled(dev, priv))
++	    (mtu == CANFD_MTU || can_is_canxl_dev_mtu(mtu)))
+ 		return CANFD_MTU;
+ 
+-	/* CAN XL */
++	/* CAN XL -> needs to be enabled and a CAN XL device */
+ 	if (ro->xl_frames && can_is_canxl_skb(skb) &&
+-	    raw_dev_xl_enabled(dev, priv))
++	    can_is_canxl_dev_mtu(mtu))
+ 		return CANXL_MTU;
+ 
+ 	return 0;
+@@ -999,7 +961,7 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	err = -EINVAL;
+ 
+ 	/* check for valid CAN (CC/FD/XL) frame content */
+-	txmtu = raw_check_txframe(ro, skb, dev);
++	txmtu = raw_check_txframe(ro, skb, READ_ONCE(dev->mtu));
+ 	if (!txmtu)
+ 		goto free_skb;
+ 
 
-  can: ctucanfd: fix SSP_SRC in cases when bit-rate is higher than 1 MBit. (2026-01-09 14:26:29 +0100)
+base-commit: e707c591a139d1bfa4ddc83036fc820ca006a140
+-- 
+2.51.0
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.19-20260114
-
-for you to fetch changes up to 426c303c80c2cc220d1477c6ea63bbb183cabd77:
-
-  net: can: j1939: j1939_xtp_rx_rts_session_active(): deactivate session upon receiving the second rts (2026-01-14 11:36:58 +0100)
-
-----------------------------------------------------------------
-linux-can-fixes-for-6.19-20260114
-
-----------------------------------------------------------------
-Marc Kleine-Budde (1):
-      Merge patch series "can: raw: better approach to instantly reject unsupported CAN frames"
-
-Oliver Hartkopp (3):
-      Revert "can: raw: instantly reject unsupported CAN frames"
-      can: propagate CAN device capabilities via ml_priv
-      can: raw: instantly reject disabled CAN frames
-
-Tetsuo Handa (1):
-      net: can: j1939: j1939_xtp_rx_rts_session_active(): deactivate session upon receiving the second rts
-
- drivers/net/can/Kconfig       |  7 +++++--
- drivers/net/can/Makefile      |  2 +-
- drivers/net/can/dev/Makefile  |  5 +++--
- drivers/net/can/dev/dev.c     | 27 ++++++++++++++++++++++++
- drivers/net/can/dev/netlink.c |  1 +
- drivers/net/can/vcan.c        | 15 +++++++++++++
- drivers/net/can/vxcan.c       | 15 +++++++++++++
- include/linux/can/can-ml.h    | 24 +++++++++++++++++++++
- include/linux/can/dev.h       |  8 +------
- net/can/j1939/transport.c     | 10 ++++++++-
- net/can/raw.c                 | 49 +++++++------------------------------------
- 11 files changed, 109 insertions(+), 54 deletions(-)
 
