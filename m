@@ -1,117 +1,120 @@
-Return-Path: <linux-can+bounces-6141-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6142-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3B53D1E3FC
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 11:56:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D74B1D1E542
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 12:11:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 246DC300F079
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 10:56:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D3823301B80C
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 11:11:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB5B38B983;
-	Wed, 14 Jan 2026 10:56:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AB8D38E5F1;
+	Wed, 14 Jan 2026 11:11:09 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D341A396B7D
-	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 10:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA34D393DC2
+	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 11:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768388168; cv=none; b=rfoWYNz9M+Fp62FaWsxY9eDhihY+Mn8bj4ZEpJ6MNqSrYyzNfQhRdGgy6iGgZUTbBmDFlSwxkAXXbe5FLDgEQReMrFm5s8De5EPGHRbbfbfXgEH2vYBl7j4NaPIi/s/+ZD9lIxX9vhzLrUqaBRJzO221rUYX3Dqe40Ifoxtm+qY=
+	t=1768389069; cv=none; b=WiJo/cYKNSgK6JdmqG0cac+c13mkwgcijj0DbH9Idg2V57pdQqPwuP4zgGni49nwfGR58LlM/oGTfWNC9LpTqhqPpJFctQsj0vpARV1WUDFAoLWkemox5Uc7J5cf4zSZnpVeRkzihvpi6qGkQKwlHWHzu4MVGhmYzFw0DeKmWCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768388168; c=relaxed/simple;
-	bh=TFXJPZWGpl54cSTcCYhtipKJO/Lux3C0FWYcL5Vh9l8=;
+	s=arc-20240116; t=1768389069; c=relaxed/simple;
+	bh=w+p7EAgJ1oDAf7NRZ/VmHVrqYW/Jgd3OQBcXUx5bKTA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eTayipanZl3glDTXtTWiJwAGl3Apcw9jFeF5RMBBltA3BemjEkBGshD1CEA80EHRf+g40obCVfAy3n/nDdh5A/8wvo/8zxz6y6D/2WHsHFjBGdSc/ntRakPAGxhG/lcPCb3tP24DXyITr4lFU0x93xweSy3dfpeTpyRD06XRK4A=
+	 Content-Type:Content-Disposition:In-Reply-To; b=C63ZnTY6jxzhsrU0xBUEhHOzziDs901OrL0VuQlnd4N+XmiYTBZgnT1CIMpHfDsFnFjSqhLQjFaTzyW9IpKJJotHagjT2mfuLhjhCjgxnwJRxUzVlB4u8qQ1dTxneujp9XwoxW3J6M06I7OMtuC/fMqjFLD0EWNH9zpSrm+mqtA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vfyVq-0007Hy-3Z; Wed, 14 Jan 2026 11:54:06 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vfymA-0001hv-Dm; Wed, 14 Jan 2026 12:10:58 +0100
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vfyVq-000ZfO-1r;
-	Wed, 14 Jan 2026 11:54:05 +0100
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 981BA4CCB8A;
-	Wed, 14 Jan 2026 10:54:05 +0000 (UTC)
-Date: Wed, 14 Jan 2026 11:54:05 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+	(envelope-from <ore@pengutronix.de>)
+	id 1vfymA-000ZxT-1N;
+	Wed, 14 Jan 2026 12:10:57 +0100
+Received: from ore by dude04 with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vfym9-00000006mp0-2rH6;
+	Wed, 14 Jan 2026 12:10:57 +0100
+Date: Wed, 14 Jan 2026 12:10:57 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH can 0/5] can: usb: fix URB memory leaks
-Message-ID: <20260114-crimson-oryx-of-attraction-db2620-mkl@pengutronix.de>
-References: <20260110-can_usb-fix-memory-leak-v1-0-4a7c082a7081@pengutronix.de>
- <5b5c8a8b-5832-4566-af45-dee6818fa44c@hartkopp.net>
- <20260114-offbeat-impala-of-finesse-df5c4c-mkl@pengutronix.de>
- <e2cadc66-0c11-4651-a2e2-b272d8ed598b@hartkopp.net>
+Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Vincent Mailhol <mailhol@kernel.org>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>,
+	Simon Horman <horms@kernel.org>, davem@davemloft.net
+Subject: Re: [can-next 0/5] can: remove private skb headroom infrastructure
+Message-ID: <aWd5wdMhpEuN9NFB@pengutronix.de>
+References: <20260112150908.5815-1-socketcan@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="a2yivffd5lkjt4x2"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e2cadc66-0c11-4651-a2e2-b272d8ed598b@hartkopp.net>
+In-Reply-To: <20260112150908.5815-1-socketcan@hartkopp.net>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
+Hi Oliver,
 
---a2yivffd5lkjt4x2
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH can 0/5] can: usb: fix URB memory leaks
-MIME-Version: 1.0
-
-On 14.01.2026 11:30:59, Oliver Hartkopp wrote:
-> Can you probably send a linux-can PR for the
+On Mon, Jan 12, 2026 at 04:09:03PM +0100, Oliver Hartkopp wrote:
+> CAN bus related skbuffs (ETH_P_CAN/ETH_P_CANFD/ETH_P_CANXL) simply contain
+> CAN frame structs for CAN CC/FD/XL of skb->len length at skb->data.
+> Those CAN skbs do not have network/mac/transport headers nor other such
+> references for encapsulated protocols like ethernet/IP protocols.
 >
-> Revert "can: raw: instantly reject unsupported CAN frames"
+> To store data for CAN specific use-cases all CAN bus related skbuffs are
+> created with a 16 byte private skb headroom (struct can_skb_priv).
+> Using the skb headroom and accessing skb->head for this private data
+> led to several problems in the past likely due to "The struct can_skb_priv
+> business is highly unconventional for the networking stack." [1]
 >
-> https://lore.kernel.org/linux-can/20260101191330.1836-1-socketcan@hartkop=
-p.net/
+> This patch set aims to remove the unconventional skb headroom usage for
+> CAN bus related skbuffs. To store the data for CAN specific use-cases
+> unused space in CAN skbs is used, namely the inner protocol space for
+> ethernet/IP encapsulation.
 >
-> patch set in the near future?
+> [1] https://lore.kernel.org/linux-can/20260104074222.29e660ac@kernel.org/
+>
+> Oliver Hartkopp (5):
+>   can: use skb hash instead of private variable in headroom
+>   can: move can_iif from private headroom to struct sk_buff
+>   can: move frame length from private headroom to struct sk_buff
+>   can: remove private skb headroom infrastructure
+>   can: gw: use new can_gw_hops variable instead of re-using csum_start
+>
+>  drivers/net/can/dev/skb.c | 45 ++++++++++++++++-----------------------
+>  include/linux/can/core.h  |  1 +
+>  include/linux/can/skb.h   | 33 ----------------------------
+>  include/linux/skbuff.h    | 27 +++++++++++++++++------
+>  net/can/af_can.c          | 35 +++++++++++++++++++-----------
+>  net/can/bcm.c             | 13 ++++-------
+>  net/can/gw.c              | 25 ++++++----------------
+>  net/can/isotp.c           | 18 ++++++----------
+>  net/can/j1939/socket.c    |  7 ++----
+>  net/can/j1939/transport.c | 13 ++++-------
+>  net/can/raw.c             | 14 ++++++------
+>  11 files changed, 92 insertions(+), 139 deletions(-)
 
-done: https://lore.kernel.org/20260114105212.1034554-1-mkl@pengutronix.de
+J1939 related part seems to work without regressions.
+For j1939:
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Marc
+Thank you!
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---a2yivffd5lkjt4x2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlndcoACgkQDHRl3/mQ
-kZyI3wf/UINzOcelXM5ebEFQFj9Z6/x9+Ey/YJoIMbJa2G/crjgx49zg/jUWLA9Q
-1aELjrQmSAzPMBIUcMXJS0hJUHA1921LRUt+UqpPLi3akpakQYvG+J8Kb2lehdls
-ez5PS2ZDsMt54VPQIbphHI++SFaQwGy2QSPgKRS40IfJ4Fhu8ke/WddKGQo1JBZV
-DUZOBaIDDy3/Tvzn2Chmj4zGUK3oMbmpYPwjq2vN86lwGlHJYl/c/68kqB2mNpcU
-7WZOubVXVHNkJ3MdPBx92lFVysn3hdJJADS4Zl+4rWgxsIVYhkiLonisNv4mxI00
-ubqRzWQpZ5cTn+6+V80cljb/1gu7DQ==
-=87CX
------END PGP SIGNATURE-----
-
---a2yivffd5lkjt4x2--
+Best Regards,
+Oleksij
 
