@@ -1,140 +1,128 @@
-Return-Path: <linux-can+bounces-6134-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6135-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38393D1E105
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 11:31:37 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EA68D1E282
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 11:42:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 96A04303F742
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 10:31:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4B130300D152
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jan 2026 10:38:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E602A38B7B2;
-	Wed, 14 Jan 2026 10:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="BMQRPq9r";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="uUmSE+Ci"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B497F37F729;
+	Wed, 14 Jan 2026 10:38:12 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885C03570AE
-	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 10:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768386663; cv=pass; b=kX5Mi6C5mbu1SG0fgaO0Y14P8BcUmETfGGQOi4tzb4mBAuxOK9pNdNPfYfkdL2Bq6v8teAjWnohN14oROn+BYVI81h5kjwL9QUaDVJEg7Fr9sbF48z7hK8XDnajsdVJw9DBYM2DtySrfPW+U+yDqNr4PQBMEs6bW66tPBE6t9/k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768386663; c=relaxed/simple;
-	bh=ubed5J1no5SvfV2+I6qUN7BbUSY7r1W81m1OH+oDfBo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZDeI4UOOj22Dc24dmatHa78HUAbTgEFM06x/7I9YllIRv/xGhXIsV/e5ErvIT2oPYpj3B+Qc0pI+7rFNUHCzyaoBy7EY+iUdP9nyPq2M74UfOmwkBcm0Lxw5Vrrdar80kHqREhbx0vTsDdfZ3mzF3z8jGkzP7W2TT+Rq7K7EmYs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=BMQRPq9r; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=uUmSE+Ci; arc=pass smtp.client-ip=85.215.255.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1768386659; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=LovM+8CW7BTY0VwXP5drB09FE779GgH2oiEorUi9zGQ8xHy9nhouuaOPxUEEHyIpvt
-    gm6uCon56WmTJ3iUdb1dZJbGuFj9kVVnE3o3c10IuPW+DPqJlXgbGSITBNVlg+mSIGAV
-    mvEgLrINFdWvmaN8RnOLXcZU0ygQxkXO1x9rEUUQRxc73RLefAAs7opfrxBGjLeIW5ky
-    PpnAW2O9GqogySdVQAfSzrR0iSJU/3wijFF50RECGPiNw50EYPmhYkKvTdMBdGhXchbO
-    lmZYYkeUr49kVkud20KetC+oq0YcjeEYjQHajE/ShobIXUmbuue8+FWTFPv7pudwGg9e
-    yFRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1768386659;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=fag6HfV8XlblZAuwt28L9Z/i9Za4uvUqwGaf1VH3RH0=;
-    b=lQC90Bi3mp2HDo2SePZTot+kzPSszzGoFDQEk1XunAMKLsuHBMfTyN2hI11aCIDDVJ
-    nz5COQk8oqJ6hfYKgfi3zVrSoZRwYgpRUytb6q2M/THwZ1l19YkAKmsliZQxMCnsRgqF
-    M3a0pysk0xi5InS0DDITS/MyQ0KQERx7XEYgnyX4EjAPnHMKLG7S9SOuCCEmTOVrOl9l
-    8cw1qb2dpv7rlTbg7ByNVcHu3KZfec1Ov/OnawVVs2g0rGhtSFgIxijs3k+XPLD9a945
-    Q0bwX+8vtWT4U1ArpmpEqai+nea8ia5oqp9+UFBsaPWeEugDzU6OBZ6FCciZYLFyEMtH
-    lT1Q==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1768386659;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=fag6HfV8XlblZAuwt28L9Z/i9Za4uvUqwGaf1VH3RH0=;
-    b=BMQRPq9rJGgzIzkikuOCCdj5xFoHMd1iUoqJW7FuiXuu7PUsC9vcy7ZQkZEDJaTtlz
-    hWc+9M8xTNNUnJkUzsuPKF36jIjTk2C1Pp4VxfouxFRATmJJ/WqEoXFO3BX/OPCOqgPk
-    WZWCSjuXLDpMyWaq+1fYtuPB7k7tFWpNysengUPhUGRpQ60sjXpfctoloLNRO8z0r//p
-    khXjwz2rAXqB2JzS4ubMouuAmTIrTj8gwB5bXYyuhjVP3TlN4AvvRwrEJw8UDHdib6TE
-    Q+2xaRx7qROS7bfsTMCrDFQ2t6pFhc5K0PunMvoe09UiTTq9J0PS8gQQwzMy9OMtpAgK
-    UBQQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1768386659;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=fag6HfV8XlblZAuwt28L9Z/i9Za4uvUqwGaf1VH3RH0=;
-    b=uUmSE+CicSQ3aHuZWwZZY/RYJ3A5fEfjfcYkUdTjAJO6rTqM2uqTgRLyD7sUx66b/J
-    Rb8rRJkupEycA731huAw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6800::9f3]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b20EAUxrqy
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Wed, 14 Jan 2026 11:30:59 +0100 (CET)
-Message-ID: <e2cadc66-0c11-4651-a2e2-b272d8ed598b@hartkopp.net>
-Date: Wed, 14 Jan 2026 11:30:59 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D78F1E98E6
+	for <linux-can@vger.kernel.org>; Wed, 14 Jan 2026 10:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768387092; cv=none; b=DZcxHgZlu1eLBYwRVhxU7/Z5h1xNWbUu1/SwI52luRqDej0W08eLLyzDYs6V0cCIUr/id1luccknWbdLP7CNJQ881FlRbLbAMpQlZx5+27PjkOaN6wE0po+lhdiPb/QxsxnxwiJ1uGGjqVuXeN+GW5y+pqh1pG+bPRboN1mksh8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768387092; c=relaxed/simple;
+	bh=ZQRQcXhdqzjm6TfP10qgp8HkEHaeqyb9YyObwwnOqgk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MkMwvbFt99PYVMJLbHk2JSh5E4R8ZLuB9bX37T63lwxa/k1LloyOFmOsOqvWBH3omNGsvrn4Bo7U15YBiRc22W6xoX+OOJFVbzMTTbIZqaNrO/HSpM+Des7UjH0RnA/Q6Wa2wzfw+Uhb+j2CT0TminQQdHr4ir7SQl2/dp46E24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vfyGO-0004oQ-Eh; Wed, 14 Jan 2026 11:38:08 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vfyGO-000Zdb-2U;
+	Wed, 14 Jan 2026 11:38:08 +0100
+Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id C01F14CCB45;
+	Wed, 14 Jan 2026 10:38:07 +0000 (UTC)
+Date: Wed, 14 Jan 2026 11:38:07 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>, 
+	Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>, 
+	linux-can@vger.kernel.org, Network Development <netdev@vger.kernel.org>
+Subject: Re: [PATCH] can: j1939: deactivate session upon receiving the second
+ rts
+Message-ID: <20260114-super-raptor-of-faith-028865-mkl@pengutronix.de>
+References: <faee3f3c-b03d-4937-9202-97ec5920d699@I-love.SAKURA.ne.jp>
+ <4b1fbe9d-5ca2-41e9-b252-1304cc7c215a@I-love.SAKURA.ne.jp>
+ <aWZXX_FWwXu-ejEk@pengutronix.de>
+ <b1212653-8fa1-44e1-be9d-12f950fb3a07@I-love.SAKURA.ne.jp>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH can 0/5] can: usb: fix URB memory leaks
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: linux-can@vger.kernel.org, kernel@pengutronix.de
-References: <20260110-can_usb-fix-memory-leak-v1-0-4a7c082a7081@pengutronix.de>
- <5b5c8a8b-5832-4566-af45-dee6818fa44c@hartkopp.net>
- <20260114-offbeat-impala-of-finesse-df5c4c-mkl@pengutronix.de>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20260114-offbeat-impala-of-finesse-df5c4c-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wulqw52wvyifis3o"
+Content-Disposition: inline
+In-Reply-To: <b1212653-8fa1-44e1-be9d-12f950fb3a07@I-love.SAKURA.ne.jp>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
 
+--wulqw52wvyifis3o
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] can: j1939: deactivate session upon receiving the second
+ rts
+MIME-Version: 1.0
 
-On 14.01.26 11:19, Marc Kleine-Budde wrote:
-> On 14.01.2026 11:04:11, Oliver Hartkopp wrote:
->> does this patch set need to be reworked due to this (AI) feedback from
->> Jakub?
-> 
-> yes
-> 
->> https://lore.kernel.org/linux-can/20260110223836.3890248-1-kuba@kernel.org/
->>
->> The former/referenced PR has been pulled - so that specific patch might to
->> be fixed again, so that usb_unanchor_urb(urb) is called after
->> usb_submit_urb() ??
-> 
-> yes, probably. I'll look into that later this week (hopefully).
+On 14.01.2026 00:28:47, Tetsuo Handa wrote:
+> Since j1939_session_deactivate_activate_next() in j1939_tp_rxtimer() is
+> called only when the timer is enabled, we need to call
+> j1939_session_deactivate_activate_next() if we cancelled the timer.
+> Otherwise, refcount for j1939_session leaks, which will later appear as
+>
+>   unregister_netdevice: waiting for vcan0 to become free. Usage count =3D=
+ 2.
+>
+> problem.
+>
+> Reported-by: syzbot <syzbot+881d65229ca4f9ae8c84@syzkaller.appspotmail.co=
+m>
+> Closes: https://syzkaller.appspot.com/bug?extid=3D881d65229ca4f9ae8c84
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-Thanks.
+Applied to linux-can.
 
-Can you probably send a linux-can PR for the
+Thanks,
+Marc
 
-Revert "can: raw: instantly reject unsupported CAN frames"
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-https://lore.kernel.org/linux-can/20260101191330.1836-1-socketcan@hartkopp.net/
+--wulqw52wvyifis3o
+Content-Type: application/pgp-signature; name="signature.asc"
 
-patch set in the near future?
+-----BEGIN PGP SIGNATURE-----
 
-The
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlncgwACgkQDHRl3/mQ
+kZx//QgAj3nYTf855T00r/TTYBHOdN8gbgn6oTrP6Eg6aJOUvy1x5Gx9As8i2ww+
+Cro13LWdoeiMqBdpPJRXDPNK2rMZmjkLivlEJOJKUEySdecirrlrYfU8lw2zU+XX
+r0deQgJMvk3E4KkQJ6JpS5xRTMguE75R57SJGGGHuLyCZK+QDwOhajYmK46vJ0oQ
+JrQzw8m0K8BpuosCIVzQ+2+swDNloJtuJmvnkKkktHKBf5NfqO7KW0MOwpJAYnHD
+ekY25XtEZ1GuxGDfsSCADwfIlXNByGGPuVWDFKQOPPZweUk20EOH7pH8L8kWEzxs
+FrqcE0AD01YLjEMpZ22DV6TMZsgCNw==
+=Og+g
+-----END PGP SIGNATURE-----
 
-[can-next 0/5] can: remove private skb headroom infrastructure
-https://lore.kernel.org/linux-can/20260112150908.5815-1-socketcan@hartkopp.net/
-
-patches are based on that patch set which needs to be merged into 
-net-next before.
-
-Best regards,
-Oliver
-
+--wulqw52wvyifis3o--
 
