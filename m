@@ -1,202 +1,160 @@
-Return-Path: <linux-can+bounces-6169-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6170-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24192D25245
-	for <lists+linux-can@lfdr.de>; Thu, 15 Jan 2026 16:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CAF9D256AF
+	for <lists+linux-can@lfdr.de>; Thu, 15 Jan 2026 16:40:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 48A703031A35
-	for <lists+linux-can@lfdr.de>; Thu, 15 Jan 2026 14:58:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B3B0230B786C
+	for <lists+linux-can@lfdr.de>; Thu, 15 Jan 2026 15:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EA1B350A09;
-	Thu, 15 Jan 2026 14:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34AC83A9018;
+	Thu, 15 Jan 2026 15:37:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="boiPMRI5";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tBSrzjRB"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B14F343216
-	for <linux-can@vger.kernel.org>; Thu, 15 Jan 2026 14:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E2D2FD7B1
+	for <linux-can@vger.kernel.org>; Thu, 15 Jan 2026 15:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768489133; cv=none; b=rhgNa/taHquKqzQAI38Q37a2/+rLnZo5mbkFME504DWhfYAJGitpD/DzH7AKYvBOM9H4PmzAwA0IueGmEAaBtpWmzdqC3ZqKWy+2XMKiURUGm5WHZUpeuj9aFj5fCBnDfUw665PwZmIGIR9WigNeCowPTp9vY5rZphKmCEHC0ws=
+	t=1768491438; cv=none; b=EdFyh8U9G3ComcHrbND3z6wKM1nVJJdTPYyDFoTq9CDb7jjwy9vEE4ImW9eMMSEOThpjeCAE8rGfuQs5zR7golYjZ0M48Q4eVelvptQKCMECKRogSz+35RhKCuMOMDyx3WX72E3gshLTn42bA8VhPKz/rSfBUGAagB+AqtfY7lI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768489133; c=relaxed/simple;
-	bh=VT44SYXQEX3u4SwLFe8kfJJAddN9qQhAm7tvl8FcLtA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HYAxHXmROPqMqlDWTV/29yNR+ARl6/9+IXiOIs9l2SP+idiBdzxnJYRiXi9HePzkcM6eHvAzYlM0WQ/PbEjM6Lq7ltDxrmSChm2PoUOMGJqTPfhXy0uo99cXLf26ouO5MxwRUCsE0HFiP7XSaOP1dK7cale6fwzQmvx/g00/Vv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vgOoE-0005RB-L1; Thu, 15 Jan 2026 15:58:50 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vgOoE-000lmF-2r;
-	Thu, 15 Jan 2026 15:58:50 +0100
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id E578F4CDB7C;
-	Thu, 15 Jan 2026 14:58:49 +0000 (UTC)
-Date: Thu, 15 Jan 2026 15:58:49 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Francesco Valla <francesco@valla.it>
-Cc: linux-can@vger.kernel.org
-Subject: Re: [QUESTION] How to support partial networking
-Message-ID: <20260115-inventive-quartz-kestrel-4cab43-mkl@pengutronix.de>
-References: <aWgKD8AG-C9YlFRe@bywater>
+	s=arc-20240116; t=1768491438; c=relaxed/simple;
+	bh=XF28RqBi4SlwjxDLGtl+8Jh91wjCxXXEOaqjg2L/k84=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KTx3z6ln57JTBAfbGcIQcEs411q2yQRQhy4tCWkvxeaj5w6nfrzP0d6uHaYBXwM+mB41k+ldQzXxouiRCs71Jxu3YvpCuNYlidQP0Oyipct/3/LgvbLKHErchX8K5Ip1F+ka1wLCpBy4CY0mMp4FhiEiFCsRsxMZ5tqGpo09YYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=boiPMRI5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tBSrzjRB; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768491435;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UpXY7FmDacCa1GA7GmUw8ZF/Yt1FqaToqmro4+kI8Ro=;
+	b=boiPMRI5ck6FPeYT4KZp31E21Wj196CrVXuGxdZEURizT/TdodaRyXceq5bg4dLjZlLMac
+	nUu94F47QsbIbxrdPyaQKvTwqAwBujvfk/D598EsGzdm4hJwS5XpRVoaGIv3IiONFiUB92
+	Jgu/TnAOQKWW0eMBW1BtM/9Ye0hW9OE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-480-XUPxmsF3MV6bFV8mE2y4sQ-1; Thu, 15 Jan 2026 10:37:13 -0500
+X-MC-Unique: XUPxmsF3MV6bFV8mE2y4sQ-1
+X-Mimecast-MFC-AGG-ID: XUPxmsF3MV6bFV8mE2y4sQ_1768491432
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-47ee33324e8so6423025e9.1
+        for <linux-can@vger.kernel.org>; Thu, 15 Jan 2026 07:37:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1768491432; x=1769096232; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UpXY7FmDacCa1GA7GmUw8ZF/Yt1FqaToqmro4+kI8Ro=;
+        b=tBSrzjRBXMbXr1E75zA1re2aVonmd6e1LSfu4gS7jIvXRHbnEG74BY3nYrh8KUhc2m
+         N35QVaboXREXQkBvaDlnA8VBVbx24mLPQfl98Vosfmt5PDXzghj175zgAbz03OZXS5PG
+         7AlD2J5wP2POKOktgfv89jGJlipcjKdWiZjzihAcK/H7IiaVbfZVw4zL0gbx/oxz0bAY
+         3NQEslNUPiI9GG4KIJimAKnfFVYvXIsn+VNogfTRHkR/yz2EeHH4tF9ujFEr7mb7G8wa
+         Enelq6sZa7Ay1fkk/delB2RUFcVCqs7R1orumdvT1QGzEg68WkEK7FHYxe+yl/hNmktX
+         r4ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768491432; x=1769096232;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UpXY7FmDacCa1GA7GmUw8ZF/Yt1FqaToqmro4+kI8Ro=;
+        b=koxtH4Jva8EerOxpDdjdHb79TegCvwoD+apM6OJde67Y4J6HNXfB1a0r6u+4wk/RQW
+         +RjQNpLvd14c5942wKKSKYC+gbXUziS1BXvvtRbUw9cuQbMDP5M3lBi+WBzcRAE+JNcn
+         90PIyelJdB/HuNtzYaA2VzPsLHedyKwonwCxuE3QbyqDF/VBhT8L2rt2KSipHv3ikZo7
+         aMAHGXY5UAh2tb0H96g1RYzXgpwmepuDCp8JuUIQm5i1dzqS0ZWnZaWAJ4+DiSDwTugn
+         wukySV3yCubMN4Yx5b/bKtve5aouq4ZC2zMRZVOgsJF6T/o5eGpfblKb79SkIEXUFFuN
+         DYow==
+X-Forwarded-Encrypted: i=1; AJvYcCXmygrFCuROuLBwTnfdE6/3NeTTtstml0Nf35jZleNfSX0SCLWxXkpyG0vqqbwQM2Y86jG139WQKcQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzH+Ne3Zfb1Ojm07n5DUQ/9vtRURKSeCWw9gm6rWPs8VJKqBJCQ
+	hknokgprVC1BZKX6Xe3U3KZKiUrmPQOo9OhzJevVbyWjyjogYzZpO4dUN6sN9wgm0kMk/K92ndc
+	rmFBujmAth1TUS0SUdPgSHZCc9BjRRHNLiTKAv47jcuvKQSVS/yP8EbmaP4EVvQ==
+X-Gm-Gg: AY/fxX6kNIEo8JNg6lVGxUe7+s/TmrpYjVs27BeuLuPK1jGKZASBbZATpMHsxW4gwtp
+	CMS9C7mRfJrXeYIgVuCMhonUdQzcrrJTpd83LHdZhJngKYvE6tvwxt0sWAFBhiTH9JYLoyHsLZr
+	umU0AyjuYW1OD7WKnth5iDY8YdcKNw/eh4Ck+85UPSzp6af6bG8MyDIDpL/RrirpTUSH8MOs2nk
+	yyLMlZyIZXSakfSOXV3gqbzrvgwS+N09zaGqQJp5cwIrkKsBJH75F/JHGrFSsbMClLN8AXVaUQ9
+	P0KYWhl9dSq7F7MRTGMWc7mj2EXMyG+vIoT1+RarZnW5dMbG5LjZQTCWo+k5gQL5phYFfOSlBue
+	rysfcwkTRUUwaIw==
+X-Received: by 2002:a05:600c:3504:b0:47a:935f:61a0 with SMTP id 5b1f17b1804b1-4801e2a95fcmr2863745e9.0.1768491432435;
+        Thu, 15 Jan 2026 07:37:12 -0800 (PST)
+X-Received: by 2002:a05:600c:3504:b0:47a:935f:61a0 with SMTP id 5b1f17b1804b1-4801e2a95fcmr2863485e9.0.1768491431977;
+        Thu, 15 Jan 2026 07:37:11 -0800 (PST)
+Received: from [192.168.88.32] ([212.105.153.128])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47ee2a5e48asm44798015e9.20.2026.01.15.07.37.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jan 2026 07:37:11 -0800 (PST)
+Message-ID: <a2b9fde3-6c50-4003-bc9b-0d6f359e7ac9@redhat.com>
+Date: Thu, 15 Jan 2026 16:37:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="h7zkbmqs2zfsbpue"
-Content-Disposition: inline
-In-Reply-To: <aWgKD8AG-C9YlFRe@bywater>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [can-next 0/5] can: remove private skb headroom infrastructure
+To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
+ Marc Kleine-Budde <mkl@pengutronix.de>, Jakub Kicinski <kuba@kernel.org>
+Cc: Vincent Mailhol <mailhol@kernel.org>, netdev@vger.kernel.org,
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+ davem@davemloft.net
+References: <20260112150908.5815-1-socketcan@hartkopp.net>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260112150908.5815-1-socketcan@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 1/12/26 4:09 PM, Oliver Hartkopp wrote:
+> This patch set aims to remove the unconventional skb headroom usage for
+> CAN bus related skbuffs. To store the data for CAN specific use-cases
+> unused space in CAN skbs is used, namely the inner protocol space for
+> ethernet/IP encapsulation.
 
---h7zkbmqs2zfsbpue
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [QUESTION] How to support partial networking
-MIME-Version: 1.0
+I don't like much that the CAN information are scattered in different
+places (skb->hash and tunnel header section). Also it's unclear to me if
+a can bus skb could end-up landing (even via completely
+insane/intentionally evil configuration/setup) in a plain netdev interface.
 
-Hey Francesco,
+In the such a case this solution will be problematic.
 
-On 14.01.2026 22:26:39, Francesco Valla wrote:
-> I am starting to develop a driver for the TJA1465 SIC CAN transceiver
-> from NXP [0], which among other things supports partial networking, and
-> I was wondering whether it has already been discussed or not how to
-> support such a feature.
+Could you please explain in details why the metadata_dst option has been
+deemed unsuitable?!? I *think* something vaguely alike the following
+would do?!?
 
-Not yet.
+---
+diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+index 1fc2fb03ce3f..d6ee45631fea 100644
+--- a/include/net/dst_metadata.h
++++ b/include/net/dst_metadata.h
+@@ -13,6 +13,13 @@ enum metadata_type {
+ 	METADATA_HW_PORT_MUX,
+ 	METADATA_MACSEC,
+ 	METADATA_XFRM,
++	METADATA_CAN,
++};
++
++struct can_md_info {
++	int can_iif;
++	int len;
++	int uid;
+ };
 
-> For those not familiar, partial networking is an automotive-oriented
-> feature that allows to wake-up selectively through CAN traffic some ECUs
-> while leaving others in a quiescent state. This can be used for example
-> for periodic maintenance tasks, diagnostics or updates.
+ struct hw_port_info {
+@@ -38,6 +45,7 @@ struct metadata_dst {
+ 		struct hw_port_info	port_info;
+ 		struct macsec_info	macsec_info;
+ 		struct xfrm_md_info	xfrm_info;
++		struct can_md_info	can_info;
+ 	} u;
+ };
 
-The ethtool interface provides an interface to configure wake-on-lan
-settings, see the man page of ethtool:
-
-| wol p|u|m|b|a|g|s|f|d...
-|        Sets Wake-on-LAN options. Not all devices support this. The
-|        argument to this option is a string of characters specifying
-|        which options to enable.
-|        p   Wake on PHY activity
-|        u   Wake on unicast messages
-|        m   Wake on multicast messages
-|        b   Wake on broadcast messages
-|        a   Wake on ARP
-|        g   Wake on MagicPacket=E2=84=A2
-|        s   Enable SecureOn=E2=84=A2 password for MagicPacket=E2=84=A2
-|        f   Wake on filter(s)
-|        d   Disable (wake on nothing).  This option clears all previous op=
-tions.
-
-> It is typically
-> implemented inside a trasceiver, which is always powered and stores in
-> a volatile memory a list of CAN IDs (plus masks, much like the SocketCAN
-> filtering works) that shall lead to the wake-up of the ECU.
-
-Commit 04d5826b074e ("can: m_can: Map WoL to device_set_wakeup_enable")
-extended the m_can driver for WOL support in. In that use case the m_can
-IP core itself is powered and wakes up the system on CAN traffic. The
-driver uses the "Wake on PHY activity" for this.
-
-=46rom your description I think "Wake on filter(s)" would fit for your use
-case. ethtool also provides the interface to configure filters and use
-them for Wake-on-LAN. However the filter interface only supports
-Ethernet and/or IP related filters yet.
-
-A basic CAN transceiver driver is located in
-"drivers/phy/phy-can-transceiver.c"
-
-The TJA1465 PHY driver would be an SPI client driver that implements the
-struct phy provider, similar to "phy-can-transceiver.c".
-
-The ethtool callbacks end up in the CAN driver, but we don't have an
-interface to the PHY to configure CAN PHY specific settings. I think you
-can extended the union phy_configure_opts for this:
-
-| /**
-|  * union phy_configure_opts - Opaque generic phy configuration
-|  *
-|  * @mipi_dphy:	Configuration set applicable for phys supporting
-|  *		the MIPI_DPHY phy mode.
-|  * @dp:		Configuration set applicable for phys supporting
-|  *		the DisplayPort protocol.
-|  * @lvds:	Configuration set applicable for phys supporting
-|  *		the LVDS phy mode.
-|  * @hdmi:	Configuration set applicable for phys supporting
-|  *		the HDMI phy mode.
-|  */
-| union phy_configure_opts {
-| 	struct phy_configure_opts_mipi_dphy	mipi_dphy;
-| 	struct phy_configure_opts_dp		dp;
-| 	struct phy_configure_opts_lvds		lvds;
-| 	struct phy_configure_opts_hdmi		hdmi;
-| };
-
-Let's add a "struct phy_configure_opts_can" here.
-
-What do we need to configure?
-- bitrate (CAN-CC only?)
-- enable/disable WoL
-- set filters
-
-> In the context of the Linux kernel, this can be probably be implemented
-> in a number of ways:
->
->  - as a device-specifc capability (accessible e.g. through sysfs)
->  - at phy level
->  - in the generic CAN subsystem
->  - ?
->
-> I did not find a previous discussion neither in the mailing list nor in
-> public presentations, but maybe some discussion already took place
-> privately or I missed something.
->
-> Any idea or preference? If not, I'll try to come up with a proposal and
-> submit an RFC.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---h7zkbmqs2zfsbpue
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlpAKYACgkQDHRl3/mQ
-kZwkXAf7BhXid4qUq7fvwcB/bkctWR+qVnv8h62LjpFEcIcT1/a+ldPttQKmHByi
-1OE8jR4XKlmgF/RzgiqFO5oO1QizpR1bI7W5dEtosYDX3M5/ZwjcWxpHDW0a2U9x
-oTdZjHeICubQNorlgzmaHhK2ixJWoye4Rd20eEkUD/pHhLg7gzwXw7wcpdMfVMtK
-7IGg1IMJJcoET/MsK4ZikUeZoqCn00YD0GNQeEcnPjCJBsewXVZw9zrsa+97elZK
-65koYDFM0yCP5uMKOJk43MorCWkwmBASEktrGbuBakTAvaPqhiKx1zTePEtwwO2d
-2jMUM4RotTTgzwGyZpEEzGSk/hR8Dg==
-=GbPi
------END PGP SIGNATURE-----
-
---h7zkbmqs2zfsbpue--
 
