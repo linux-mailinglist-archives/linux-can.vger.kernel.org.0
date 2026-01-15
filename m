@@ -1,124 +1,102 @@
-Return-Path: <linux-can+bounces-6164-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6165-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05E3ED23DE8
-	for <lists+linux-can@lfdr.de>; Thu, 15 Jan 2026 11:14:14 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A283CD24702
+	for <lists+linux-can@lfdr.de>; Thu, 15 Jan 2026 13:23:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 39367301919B
-	for <lists+linux-can@lfdr.de>; Thu, 15 Jan 2026 10:12:41 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A50AF30082EE
+	for <lists+linux-can@lfdr.de>; Thu, 15 Jan 2026 12:23:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEB5735502E;
-	Thu, 15 Jan 2026 10:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F136C39446F;
+	Thu, 15 Jan 2026 12:23:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KUTUj/hH"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3725113D891
-	for <linux-can@vger.kernel.org>; Thu, 15 Jan 2026 10:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF8E393DD4;
+	Thu, 15 Jan 2026 12:23:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768471960; cv=none; b=WPgipiv8bbKmexwW8B5bDqYfUXcmY13C6hr2arYyWOHebrxvNW+8xufUtXL5SS7aGqHen5xR+ehdSWy2vRfUuwMClDA4dXspo+vHeNljLECu92S+i2Rhci1qv6Kr96uQHDKyq0mE054U7EoIIDeLnYeZXipwl0yxiSywbKObU5k=
+	t=1768479819; cv=none; b=aESNnNlywnDlAO5HVtr4SWV8PNzXadnNKGGto2TwIUFeyLqPw35jAEJ7ZNpQECQqWGeoyRp9ZT1NhOthLQybvszjDz82zLDjKv5dCauyhecDgypBL/FBqHYv9l0cFflldqcjcTApAguLsZYiRuh1bObHUqbV5crJb//FgEe4tmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768471960; c=relaxed/simple;
-	bh=8N82thDgrk5p6pX6tvbenU7sVXEEobs2da6ZlAwkjnQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tLyFMmnjqQexAMgc/NcUPNKlalisSZdiyRbA6s0t9g8deUXYqcTGYgoXF2afBOlHFaSl89BPcqiszKqr4zXwq52+mszNq44G/O3gUIxvs7UpSfj2Thf9YRFD8z96rOnc5SUOOwngyGvj5XKdVMKNhJPU+002r5Een6X9biAkSEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f67.google.com with SMTP id a640c23a62f3a-b8708930695so125296866b.3
-        for <linux-can@vger.kernel.org>; Thu, 15 Jan 2026 02:12:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768471957; x=1769076757;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NfY7yocCbDQpyXldKITKmah5CeSNudO2PtXu0jreSTc=;
-        b=Eh3o5wx4IdSEaUG+EFu4b2c8fjQ3E18brAR99ZqGA8LctU6wYtxVUpYvki87qfJKQ0
-         NGUgE4Y2blikrDQgd6C90wU9m0Wjlp9a4Gw0MAlCRgCM5+v36r8k7QFCQu/fT4tjf8Pu
-         I3Tj+aH7QOtVER+PfLy5anpO3hJa+OgU6KlGMvl5gaPsQGGW2QS/hynQNzl9MdR5s180
-         oVPjYhGO+MfdDacCvFWensFqwthd+iOfofgfbtLquHcHmN5oUZF2I6tU2/NQCgpYJaXT
-         MYizseVGEGdyr4/Ijdd17qS5+K3/hO5L0UoTXgRjklwCYTiWKDmTWQcmExuYNW/0UOlS
-         fK3w==
-X-Forwarded-Encrypted: i=1; AJvYcCVyjhqFlI1OO6y4k5KvTIZHLP7LsFW4zHHK3Wy3xQ44oRRdID3MF/t45YfdPpZcvrghKvRRYY2bvFg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTFSIUdg0giZ3bWOnW+JbsSOIjFPZbpl6vBhAoc3XEbrwAh5oO
-	z2tye/0NPDoIHfRY+sgCJj+qowB48WMS1qR6FqFqAgZFtLzZhCIHLrv5oGjB9fYNZoJq7w==
-X-Gm-Gg: AY/fxX5x3o/P3tlUmJNMbg0cO/XCinIwWwP2hGtr0yL0Mg00QPpFX24ueuhagD57NYX
-	7sBEASWld8YfZMFfE7IiHP3RVeTg0yO1PXcQ41aVxGPth7HHYRfSt24PwWCxfbHJbREAdIOkp73
-	8OLzGWOikQc6NPJU9K/FQpzVYgKDE7EXX69gLOAxvyJoRIaW/5BiHpVSDpCv7mzbKNed1ndptVz
-	xq4K2Pk6GlSNEpoYHGs3NF4caSh9hVCYJSS8DXAiE6GARa05NysuWud+sMI1WekR2Wfo81solxm
-	OSEgiyv5ijAnapHFEprv+iF+BAMWWcroYGbxgZicA374rXMVTramP3ZPrcWXowHxOjF7E016KmF
-	x6HcneCppS7yoZP9Rn5uHdtkm79V8c4A/rlIZLu9FBjtLLtvYZixkDX6DBVTZLaDdlq3xvdpAo0
-	6eMkookDAZchrk01bQWhPtiFxVTfCEv244Ev8oBvPz2iQDKM0+
-X-Received: by 2002:a17:907:3d8c:b0:b86:e938:1b1c with SMTP id a640c23a62f3a-b8760fdac43mr506705366b.5.1768471957089;
-        Thu, 15 Jan 2026 02:12:37 -0800 (PST)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b876b6865desm378189766b.12.2026.01.15.02.12.36
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jan 2026 02:12:36 -0800 (PST)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-64b791b5584so1223078a12.0
-        for <linux-can@vger.kernel.org>; Thu, 15 Jan 2026 02:12:36 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVpqXmku/7SNvkll6hLJBPPBFZM+UvhGR7gvy4KpAPcE7tx2mbV0JS2YC2lngjNXnXTAKpg9Dnf1MI=@vger.kernel.org
-X-Received: by 2002:a05:6402:234a:b0:64b:4745:11fa with SMTP id
- 4fb4d7f45d1cf-653ec101f96mr4387853a12.6.1768471956067; Thu, 15 Jan 2026
- 02:12:36 -0800 (PST)
+	s=arc-20240116; t=1768479819; c=relaxed/simple;
+	bh=fFmSM/hVjBlWoP/bvoORXUI2Ig1WhL/IDaETPBRXU5M=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=fAb0GU3x/M4WYnBrAwhl/Q5uTqUvmCX+dKWDs8HUrQcOxJXhHaPvxlCHMu9UTTmiEs74Sls1dFT+Qh0jLCa13Q8NKleYBMibtSzbZfQcNhwmtkRNqWeI7GfP4O+3U6MkvOsUq2/oS6M6tAELiX7qluub8d41mPrVD1tcj7wsIIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KUTUj/hH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EB0C116D0;
+	Thu, 15 Jan 2026 12:23:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768479819;
+	bh=fFmSM/hVjBlWoP/bvoORXUI2Ig1WhL/IDaETPBRXU5M=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=KUTUj/hHx12ueidi4Z0SBVs/cDiS5TZZvCU3hzkjtQOqyCE+bgo6sWDjp6e6iq4/v
+	 2DP+WRPgj/+wT7bNBUMhpFsc8gYUc2Pe89nY3v0ZVBK+Kgv65xOtqVs+1InzhmRM6l
+	 yOfIDtm76mgOv28aXW7fv5KgT1R6Ez5nsyY8KAST5QTzkNNT2b52kP0TGeL5F+Z1IM
+	 jBc8j3OtCU/AmpKCFcSkH13IbjEnhqx506NpgO+mhbci9hej9xtQ1JpmtBkGNsxKEH
+	 Dae7maJGd2DPo3tvCt8x6tQ5Hl7NkjHoiIvDnqhZia/uusVP58nIzrn+WB/jSO8DTd
+	 K5hGPuJGu9f6Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F304E3809A82;
+	Thu, 15 Jan 2026 12:20:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260114154525.3169992-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20260114154525.3169992-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20260114154525.3169992-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 15 Jan 2026 11:12:20 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWJhmOcem=Au9xnrUGawjCMEsj=7LJFStcMRH5ZSPpwJw@mail.gmail.com>
-X-Gm-Features: AZwV_QjFtS9gX1t1bcoAdGvEBCAD87MgrBFQL_PM1xjp6VHRWBnRuuHz0IuQFJA
-Message-ID: <CAMuHMdWJhmOcem=Au9xnrUGawjCMEsj=7LJFStcMRH5ZSPpwJw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] dt-bindings: can: renesas,rcar-canfd: Document
- RZ/T2H and RZ/N2H SoCs
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, linux-can@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/4] Revert "can: raw: instantly reject unsupported
+ CAN
+ frames"
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176847961180.3970738.13022780012071262607.git-patchwork-notify@kernel.org>
+Date: Thu, 15 Jan 2026 12:20:11 +0000
+References: <20260115090603.1124860-2-mkl@pengutronix.de>
+In-Reply-To: <20260115090603.1124860-2-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ linux-can@vger.kernel.org, kernel@pengutronix.de, socketcan@hartkopp.net,
+ arnd@arndb.de, mailhol@kernel.org
 
-On Wed, 14 Jan 2026 at 16:45, Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Document the CAN-FD controller used on the RZ/T2H and RZ/N2H SoCs. The
-> CAN-FD IP is largely compatible with the R-Car Gen4 block, but differs
-> in that AFLPN and CFTML are different, there is no reset line for the IP,
-> and it only supports two channels.
->
-> Sync the resets and reset-names schema handling with other CAN-FD SoCs so
-> DT validation stays consistent and maintainable.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v3->v4:
-> - Dropped Reviewed-by from Geert due to below changes.
-> - Updated commit message.
-> - Moved single compatible entries into an enum and to below oneOf.
-> - Synced the resets/reset-names handling with other similar SoCs.
+Hello:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-But I am not sure this is better than v3, as it is 15 lines longer.
+This series was applied to netdev/net.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-Gr{oetje,eeting}s,
+On Thu, 15 Jan 2026 09:57:08 +0100 you wrote:
+> From: Oliver Hartkopp <socketcan@hartkopp.net>
+> 
+> This reverts commit 1a620a723853a0f49703c317d52dc6b9602cbaa8
+> 
+> and its follow-up fixes for the introduced dependency issues.
+> 
+> commit 1a620a723853 ("can: raw: instantly reject unsupported CAN frames")
+> commit cb2dc6d2869a ("can: Kconfig: select CAN driver infrastructure by default")
+> commit 6abd4577bccc ("can: fix build dependency")
+> commit 5a5aff6338c0 ("can: fix build dependency")
+> 
+> [...]
 
-                        Geert
+Here is the summary with links:
+  - [net,1/4] Revert "can: raw: instantly reject unsupported CAN frames"
+    https://git.kernel.org/netdev/net/c/4650ff58a1b9
+  - [net,2/4] can: propagate CAN device capabilities via ml_priv
+    https://git.kernel.org/netdev/net/c/166e87329ce6
+  - [net,3/4] can: raw: instantly reject disabled CAN frames
+    https://git.kernel.org/netdev/net/c/faba5860fcf9
+  - [net,4/4] net: can: j1939: j1939_xtp_rx_rts_session_active(): deactivate session upon receiving the second rts
+    https://git.kernel.org/netdev/net/c/1809c82aa073
 
+You are awesome, thank you!
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
 
