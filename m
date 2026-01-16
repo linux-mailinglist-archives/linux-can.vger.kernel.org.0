@@ -1,214 +1,135 @@
-Return-Path: <linux-can+bounces-6174-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6175-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EDBDD2F964
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 11:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A7D4D3148F
+	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 13:46:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 72FDA300FE33
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 10:31:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6FAC7300D176
+	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 12:44:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC41630DEDC;
-	Fri, 16 Jan 2026 10:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="J9bPJdT8";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="OKn731lL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0726C22A7F1;
+	Fri, 16 Jan 2026 12:44:40 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A83930DD1F;
-	Fri, 16 Jan 2026 10:31:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768559504; cv=pass; b=MCJ8YY0ojjxgukIABB3O1b3I2ogK33BZhLdRCPRRFyJnDOInNdNIMW0f/+td8L10AE8MDnw5+mMIx6tCAb2Uj6R58paNRkugc86RY8xlVSM2fM8BcR+dvBuFke00ZpUuJC2xJODB6EducKnsMlE9RvsR+WeDmmU5E3Znlxu3sNA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768559504; c=relaxed/simple;
-	bh=F+E86gmFwJgzHMYe1opEevnrLt7o5OIpKlmd0HhoCYo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NjZJZItokFhN2IXfqtsig+/MuiswZgr7nZAw4ecvzvLyVYux4dIBuYweFUZxFR5lzq0xyDCj5+LRBQ+8omwoUFxIq2UTOeZYHHdl3KauR5+Gu6Zl9sD0zFX2Iar+M1zxG22AhfmhmzX6lxBwDuJZN2itw5DXGGKerLpSTdchWGI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=J9bPJdT8; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=OKn731lL; arc=pass smtp.client-ip=85.215.255.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1768559480; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=VkbqpgfoGAEG5X17cx6hm+EnpXyhRUP5CP76GjQ6+Ka7P+BcYfvySoaVEX8pBagvch
-    LlMgCaY6MPiOaND/n/ub+ZNI/5i5Kj7IwzmOn0LMIu19M/SBLmV1PnSqKx7CaL0yNQe7
-    0cQStWS71YQ3xW559L4vm55zzRT8Qo/zAdm5PF9lFt23+8xhWnMFhKw2UP2riaM5nlUI
-    m5b2dY3OR2CdP+aBWpkggLW6oldUwmeyyofy8MvBBU6NeB3Wxqt++Sdg8fGtCVyJzSJM
-    MkMbQhchhUXqDPaBfAru97K4qwgHvmObE71SsUvY9rwa5O4eXMHY9SxQvSYnk6YqYOP8
-    XFyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1768559480;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=4Qq9gdM9vprxxFGgf7/BOYBAvs6L7HF7wuAMDd8isSI=;
-    b=cMZrjbYfxEhb2IbC3u2KrFuHmk/QvBt84jwcUfe++qxoCyrlHqUzu2MFYGecPYgs4k
-    mZgotzRcXHHawhroiSRO4DJZ0eHSi+m5KYG7P7pli9BmgLGK4dK/hTGwKQBTXvE2rwry
-    TUYbInYUUa+J9nUVhZLCArMz2ppd9LKK4fJbiMqLG7WOfDCQEMGZ+0dN/c17fQLefOsA
-    8mYMM+i9ueYGskT+eIqvsO3g6qQSmJQeg8MVtn8Xbx1V1qqckW4KSgLv2HtwjW6I3RrV
-    Ck4qQPHI44LE5LCjGxaZoHYawqtbr6hlCZDOUmp+sD/Tsoubb4VIctBbS4pAzARw4jum
-    0isQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1768559480;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=4Qq9gdM9vprxxFGgf7/BOYBAvs6L7HF7wuAMDd8isSI=;
-    b=J9bPJdT856n2KX3eXWgLXIOXpVWQi0WwHRdk4w/0hS8v11422yZxExNTh68VFeYroi
-    qzjBhMQnAOEiqBYoH5DUGqjVTqvCbTb0oa2FjF+3weDTZHhipyX+gKBquO6W22jm5n4p
-    HDTyQXW1Y6I9CEKdxOepMpq0du85jAnj2Y0tWNJIsOWFKdIqHDBcj8tPoaTmnvMpdrtB
-    8tyxMagcRZPoKvZvrWxAeuugHc5nkFz0l89Ve6wDWP4oJgkIkapwX0nOeuc9iyVX/fNJ
-    Tz0WDwJizbEZ4hdFw5lly7CG/x8Js9g1IL4tHusot9Y8O3Ns5pXxsgAfqLgU7QP1BlRN
-    orTg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1768559480;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=4Qq9gdM9vprxxFGgf7/BOYBAvs6L7HF7wuAMDd8isSI=;
-    b=OKn731lLeZsjbtCCngXIr9uYqp0w9zeRbTBjQU7wB8B0P11/k3GLDXZ9G9x2CKDj8e
-    5fuTngaZiYnwmGUGvGCA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::9f3]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b20GAVKAkM
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Fri, 16 Jan 2026 11:31:20 +0100 (CET)
-Message-ID: <f2d293c1-bc6a-4130-b544-2216ec0b0590@hartkopp.net>
-Date: Fri, 16 Jan 2026 11:31:14 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C36221277
+	for <linux-can@vger.kernel.org>; Fri, 16 Jan 2026 12:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768567478; cv=none; b=bLCMmfUa1GCaTZZvfsoZc0Sw0BURK4jU/Wh3+wGM2KOvlPhXvSCzoB0ngU6I5U3oS8SP/+mNXRpPEwBBku0ao/ZFYe28ufOGaYT+0aaH2PwPHEuNLOP4Ep6QSxT3tDR7I5kDhFm+Qf/KDXshHdmnE0xyaZqVVHoOknyCu1JkEn4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768567478; c=relaxed/simple;
+	bh=zb2VeVvEeqMhrQBn5j3z9FcDbi0c1AklqGFjC2EUsUQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=sYZ8A+Ya6LKWN352qPYKxEW/RqDzflpilNgA5kbyPcjIpx9bb1pp4K9csiYZ5UvVvJDkCc+tnLAqB1GkoUbMlQMlcsXXX4Rfo5L35234ApQKH8HvwScN9Mc1/qwdMV+H1YFg8Kd2P9CltrLqvmCjYvBWwtwpQT4yFrdwQlhPzrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vgjBk-0006dX-71; Fri, 16 Jan 2026 13:44:28 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vgjBk-000v4d-1e;
+	Fri, 16 Jan 2026 13:44:27 +0100
+Received: from hardanger.blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 863E04CEA4E;
+	Fri, 16 Jan 2026 12:44:27 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Date: Fri, 16 Jan 2026 13:44:22 +0100
+Subject: [PATCH] can: dev: alloc_candev_mqs(): add missing default CAN
+ capabilitied
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [can-next 0/5] can: remove private skb headroom infrastructure
-To: Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
- Marc Kleine-Budde <mkl@pengutronix.de>, Jakub Kicinski <kuba@kernel.org>
-Cc: Vincent Mailhol <mailhol@kernel.org>, netdev@vger.kernel.org,
- Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
- davem@davemloft.net
-References: <20260112150908.5815-1-socketcan@hartkopp.net>
- <a2b9fde3-6c50-4003-bc9b-0d6f359e7ac9@redhat.com>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <a2b9fde3-6c50-4003-bc9b-0d6f359e7ac9@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260116-can_add_missing_set_caps-v1-1-7525126d8b20@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAKUyamkC/yXMQQqDMBBA0avIrBswEaJ4FSlhmpnqCI2SsaUg3
+ t3ULt/i/x2Us7BCX+2Q+SMqSyqwtwrihGlkI1QMrna+ttabiCkgUXiJqqQxKG8h4qqm6TrvWiZ
+ C20DJ18xP+V7r4f63vh8zx+33g+M4AdMayKV8AAAA
+X-Change-ID: 20260116-can_add_missing_set_caps-388627edda13
+To: Vincent Mailhol <mailhol@kernel.org>, 
+ Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2119; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=zb2VeVvEeqMhrQBn5j3z9FcDbi0c1AklqGFjC2EUsUQ=;
+ b=owEBbQGS/pANAwAKAQx0Zd/5kJGcAcsmYgBpajKoW77ENzD3XV+J2Qp+Tj07glVeIKfGi9waV
+ TLErDZAsuyJATMEAAEKAB0WIQSf+wzYr2eoX/wVbPMMdGXf+ZCRnAUCaWoyqAAKCRAMdGXf+ZCR
+ nEQ3B/wNVRZyhOAOCM8abyWuibmqYgwT/9cQQP4GXfSgI5WEP+kcCn1nEmPDy+Sx0b+/fyr/5Fv
+ /AmduXsT3Ed2fvO5hsVjcvuFnhbLPiN3zNzmFZPDsVKEZJ28jhyeDYZOv9a35DPRJwJoaQDLApO
+ VSlfcmGHSVaq5sdV6vGcaq41r5cdHUDDig52Tqwl9y13/qYeXCwcKrud8oC332b2LnaF4yIzzHV
+ EeEig4R/VySxfd6AfvzVIro7QiduswZXxpxfvvY4k7rU7VMRZ1rT7Ntck38fdUhJc5fsga6e3Xx
+ s4TmTUqy7uEbdROqYJK2NMmG9UWJwcxSrSMuUnSnI+iB+gDo
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 
-Hello Paolo,
+The idea behind series 6c1f5146b214 ("Merge patch series "can: raw: better
+approach to instantly reject unsupported CAN frames"") is to set the
+capabilities of a CAN device (CAN-CC, CAN-FD, CAN-XL, and listen only) [1]
+and, based on these capabilities, reject unsupported CAN frames in the
+CAN-RAW protocol [2].
 
-freshly created CAN skbs only contain a fixed struct can_frame (16 
-byte!) where dev/priority/mark/tstamp are set together with
+This works perfectly for CAN devices configured in CAN-FD or CAN-XL mode.
+CAN devices with static CAN control modes define their capabilities via
+can_set_static_ctrlmode() -> can_set_cap_info(). CAN devices configured by
+the user space for CAN-FD or CAN-XL set their capabilities via
+can_changelink() -> can_ctrlmode_changelink() -> can_set_cap_info().
 
-skb->protocol = htons(ETH_P_CAN);
-skb->ip_summed = CHECKSUM_UNNECESSARY;
-skb->pkt_type = PACKET_LOOPBACK;
+However, in commit 166e87329ce6 ("can: propagate CAN device capabilities
+via ml_priv"), the capabilities of CAN devices are not initialized.
+This results in CAN-RAW rejecting all CAN frames on devices directly
+after ifup if the user space has not changed the CAN control mode.
 
-All other settings that are relevant to ethernet/IP are unused and left 
-at their initialization values (e.g. network/mac/transport headers or 
-inner protocol values).
+Fix this problem by setting the default capabilities to CAN-CC in
+alloc_candev_mqs() as soon as the CAN specific ml_priv is allocated.
 
-A single CAN skb can be passed to the driver layer and back several 
-times. Because we need to place some additional data along with CAN skbs 
-this was formerly stored in a 16 byte private skb headroom (struct 
-can_skb_priv).
+[1] commit 166e87329ce6 ("can: propagate CAN device capabilities via ml_priv")
+[2] commit faba5860fcf9 ("can: raw: instantly reject disabled CAN frames")
 
-IIRC we had three issues (KMSAN, etc) with the headroom as someone 
-between netif_rx() and can_rcv() was using the headroom for his purposes 
-so that the access to struct can_skb_priv via skb->head was broken and 
-not reliable for CAN skbs.
+Fixes: 166e87329ce6 ("can: propagate CAN device capabilities via ml_priv")
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/dev/dev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Skbs are mostly used for ethernet/IP and developers do not really 
-know/care about CAN skbs. That's why this patch set aims to remove 
-private CAN skb headroom infrastructure - and to minimize the (risky) 
-interaction with other ethernet/IP code.
+diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+index 7ab9578f5b89..769745e22a3c 100644
+--- a/drivers/net/can/dev/dev.c
++++ b/drivers/net/can/dev/dev.c
+@@ -332,6 +332,7 @@ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+ 
+ 	can_ml = (void *)priv + ALIGN(sizeof_priv, NETDEV_ALIGN);
+ 	can_set_ml_priv(dev, can_ml);
++	can_set_cap(dev, CAN_CAP_CC);
+ 
+ 	if (echo_skb_max) {
+ 		priv->echo_skb_max = echo_skb_max;
 
-On 15.01.26 16:37, Paolo Abeni wrote:
-
-> Could you please explain in details why the metadata_dst option has been
-> deemed unsuitable?!? I *think* something vaguely alike the following
-> would do?!?
-> 
-> ---
-> diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-> index 1fc2fb03ce3f..d6ee45631fea 100644
-> --- a/include/net/dst_metadata.h
-> +++ b/include/net/dst_metadata.h
-> @@ -13,6 +13,13 @@ enum metadata_type {
->   	METADATA_HW_PORT_MUX,
->   	METADATA_MACSEC,
->   	METADATA_XFRM,
-> +	METADATA_CAN,
-> +};
-> +
-> +struct can_md_info {
-> +	int can_iif;
-> +	int len;
-> +	int uid;
->   };
-> 
->   struct hw_port_info {
-> @@ -38,6 +45,7 @@ struct metadata_dst {
->   		struct hw_port_info	port_info;
->   		struct macsec_info	macsec_info;
->   		struct xfrm_md_info	xfrm_info;
-> +		struct can_md_info	can_info;
->   	} u;
->   };
-> 
-
-Yes. I came to the same simple extensions for data structures but then 
-looked into dst_metadata.h and the users code with mallocs, per_cpu 
-code, unclone, refcounts, etc. - which was hard to understand for me and 
-introduced complexity that is again needed and maintained by ethernet/IP 
-users only. Not really appropriate for a CAN skb that transports 16 byte 
-of data IMO.
-
-For that reason I propose the common pattern to wrap a union around 
-dual-usable skb space, which is simple efficient and easy to understand.
-
-On 15.01.26 16:37, Paolo Abeni wrote:
-
- > I don't like much that the CAN information are scattered in different
- > places (skb->hash and tunnel header section).
-
-This is not the case. According to the documentation the skb->hash is a 
-value used for RPS to identify skbs. We would use it as intended.
-
-And the tunnel header section is marked unused in CAN skbs. By setting 
-"skb->encapsulation" to false (the init value) this section is not read 
-by anyone. Wrapping a union around this dual-usable skb space is a safe 
-solution here.
-
- > Also it's unclear to me if
- > a can bus skb could end-up landing (even via completely
- > insane/intentionally evil configuration/setup) in a plain netdev 
-interface.
- >
- > In the such a case this solution will be problematic.
-
-The CAN drivers and the CAN network layer code always checks the 
-processed skbs for ETH_P_[CAN|CANFD|CANXL] and ARPHDR_CAN. So CAN skbs 
-created by the CAN netlayer can only be sent to ARPHDR_CAN devices.
-
-The only way to create weird CAN skbs is via PF_PACKET sockets that 
-sends ETH_P_CAN skbs to ethernet devices. Beyond such PF_PACKET skbs the 
-now suggested CAN skbs would not harm any driver or network layer as the 
-described skb settings do not have any problematic content.
-
-Netdev drivers can cope with it and the netlayer code using 
-ETH_P_[CAN|CANFD|CANXL] or ETH_P_ALL is fine with it too.
-
-Long story short: Using the common pattern to wrap a union around 
-dual-usable skb space is the most efficient and least risky solution IMHO.
+---
+base-commit: a74c7a58ca2ca1cbb93f4c01421cf24b8642b962
+change-id: 20260116-can_add_missing_set_caps-388627edda13
 
 Best regards,
-Oliver
+--  
+Marc Kleine-Budde <mkl@pengutronix.de>
 
 
