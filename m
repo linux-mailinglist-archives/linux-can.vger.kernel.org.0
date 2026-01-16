@@ -1,152 +1,214 @@
-Return-Path: <linux-can+bounces-6173-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6174-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52FE7D2E83D
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 10:09:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EDBDD2F964
+	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 11:32:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5F2B93033669
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 09:09:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 72FDA300FE33
+	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 10:31:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 401E831B108;
-	Fri, 16 Jan 2026 09:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC41630DEDC;
+	Fri, 16 Jan 2026 10:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KB6qHY9a"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="J9bPJdT8";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="OKn731lL"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7380B31A07C
-	for <linux-can@vger.kernel.org>; Fri, 16 Jan 2026 09:09:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A83930DD1F;
+	Fri, 16 Jan 2026 10:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768554547; cv=pass; b=iWvjR9mC1DOr9hM937XjRH4cwZjWo+BFXqnD+I5iIjgkci0FHbdYh9YG3376irlPGryZEfUB0lO86AcT8Gy9+JTXHSi3mnPg0auVDwzPa6iuxNLsnnE78M35+Q6fqMhr033u92YvxPJn/S0e6K/eDGY+7d+mYrPUCdSvRljnyTo=
+	t=1768559504; cv=pass; b=MCJ8YY0ojjxgukIABB3O1b3I2ogK33BZhLdRCPRRFyJnDOInNdNIMW0f/+td8L10AE8MDnw5+mMIx6tCAb2Uj6R58paNRkugc86RY8xlVSM2fM8BcR+dvBuFke00ZpUuJC2xJODB6EducKnsMlE9RvsR+WeDmmU5E3Znlxu3sNA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768554547; c=relaxed/simple;
-	bh=PjK03eNHVu54e46b4LG7wzxw1HUYYstUJemKKBLfOos=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lmOxcsVe7HvQBnOfdsasBl+AAH8Oph6ZwEcAIOgF4SHN4/2bhvhN1LpQHUyZ8b314Su1EWPgZ5Wv3VOIsQUyxFPjZLmTCbNTpZfAsOqS9sL3g2ID/lkRXAZOf8OUJ4oeMqjYwYBwR+AqswjrYurGJPu+IkbPKkCy0vDz02pVAKQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KB6qHY9a; arc=pass smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47d1d8a49f5so10656965e9.3
-        for <linux-can@vger.kernel.org>; Fri, 16 Jan 2026 01:09:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768554543; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NtxCAsoljS1dyFYI/t0rBjUPlHOSjlnV27AqJXMOd3ui8rF6X1wlsFx488q4WTCuzB
-         oPMa3OmkwM9u44x1EaXqxy9asKHFSosDAxqq9AdAO3sC5oHTivN0l7Sno2MIlgO7z7qs
-         vRpKCIDim0CqKuBUkEO9nsmVr43w0ewi5hR9fBIQBfRnddniWR+0cM3JvEZ2sg9EwUql
-         LFFDu5dAeJvBOGrA2Kgz/7xrV8yJaXn0sqwnxi8xoV8ZZjesEY6YwvcY+wOlP5oJb9x4
-         xRo1WTsMi6BsPnUdtqlPRznQzO9fhwkMX+kTTaEZDKZtlXnXPipbZxKSgduZsZ7FQ8ri
-         gEAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=p3RHWH4ytRePUw0e46MQem9UGA0Z3K6iBpKhJ5leauk=;
-        fh=RcRvOS29w96YzNGhphVbe3lLtAsV2BoNBMsT3p8b29w=;
-        b=Mw5VU7RqIj/BDK/GeOMJQp9Q+cv041k3ahEzGZtcG3BsjX2wEt9bDlH4SKMMRLeD/K
-         tkQTe2y6LoQgOb/f7h+aWb/xPjUExYNKV64xJHNkgVceySqtQov+LhqoijiyHQZQSM67
-         FcdGxz+NXl3TQ5HFMXpIZYZitcOdPOsf4sua30PPFcDvEozAJCFIySKQMNpiAYPPQqft
-         X2w3f0M7vn3ulnkUn7xAC/gAXvTIuIb9z8cw9hvTzvNTjdQJ3p9WmH2/vXwAuuVi1uAZ
-         fc7NLAo9oohu26WqPe4vY8146b/r4jK+TVjuQVrRAShpnzRSizjpmfPXWQQc+9FS4aR7
-         ICIA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768554543; x=1769159343; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p3RHWH4ytRePUw0e46MQem9UGA0Z3K6iBpKhJ5leauk=;
-        b=KB6qHY9aUmTlBw53ee9wvSbISR0dx0CFgMdP0XMBBFcmCw1xuCagmejYQTKbQ4tUGd
-         VvHZJ//mpdIU5xCmnV06hmvqZpZM4ZseEHfzjtKOnGGLQwVhtDj3VAcj72LYErB5yd+b
-         yhDMOO64iHxD+s6nh4Pu7uVuuWqMziMHckk3gnQpYDDCCmzd/yyQjxX7CoWPOnUUxgPL
-         3szzRJDiOqWw6elaFH3jERVKRYmsbwus2VRMfCPDO68b2LR26/ZzjZaW3a0TYxYEOwmB
-         LAY/sMEEBX6tF+4v1u3gud6y/7nepT2Eekh8FWzjhL4g6cqhdX7emL7zivvibYnhOjHa
-         u/mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768554543; x=1769159343;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=p3RHWH4ytRePUw0e46MQem9UGA0Z3K6iBpKhJ5leauk=;
-        b=cfdj5csgYL3UGOvFxlPyAQac80bZlIbfx4/1D8So2Z4dksCSQDQX8/OJToWAZgbHn7
-         oOXVPdtGLk83aeFmke/LYaghS81xyhJiEbgbkqUomLYMQIgK7Qiz92vlWXnPxbBOaH5m
-         2dYwFHieTrEQRF2DyBbXL9/+vzKtZ++coCR39sx/rF2/ylxjZR0bH7KeNDylmPTB9SBL
-         k5jm63VGBESlyZYCq0O22ub28cPtHWk1IXDKgA1TOkb2hG015aDVyq5Cbkgf0ClNusJF
-         IMjyifdD07c6slDCGjdm7CZAJUot0IY/nXM9TkCIOhhCIAS3Ggn4TsYQjYqxIM+Ty3Mj
-         HQSA==
-X-Forwarded-Encrypted: i=1; AJvYcCVHhTS6O6bNbqJOlSKb11gzM4MoLcwxOBIsPLnMjD9ZQg8BfMBbvqo3H1kTpo9CyKbmJNKowc2dZug=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyO08vq/llzc7EqJyXumG8q27LsnldwslFiWuG4/Gu6LV4KaKth
-	FLySYsEQhhLpYym32DOkQURodaTe2uHheZQGJNVxQpMJpbKpWbLSpmfFD+YMiz2G6buNsO8MWiE
-	qTEdWxddUlpSnt3EbhxqxwZkCOhHCbpQ=
-X-Gm-Gg: AY/fxX77p1RSI+REEmcPacDn70213v0my1kZ9NmaWBRgZ9o/w8A9dsinkS+bmysbizA
-	ByMjipGcSooX78DLSL4gTyeD64T/tR8mnwmDm+bqNaPKY9xhkHthEBJeZs+DG3g5ovtb/hKhgkP
-	JGJ6jQ7iuTK61h3aJ/eUIbpltIW7oZnSJYOGmvuKrY+1ph14Z9/wEbiYJMX+InYS1e521kVdmA5
-	WuYuGSmz0P/65FJk3GDeVLI7JwZR2Hvn+PhEa6q4R8/6P3dY+gjbpVv/OrMMt5Lp3X+NWXZYgCm
-	HddQJ9B9AZWWQogJMy5VucphNdNBroZRNzbS15M6cG0h/eXqIflMgCAMAw==
-X-Received: by 2002:a05:6000:1865:b0:431:8f8:7f1e with SMTP id
- ffacd0b85a97d-43569bc7bd8mr2589126f8f.48.1768554543273; Fri, 16 Jan 2026
- 01:09:03 -0800 (PST)
+	s=arc-20240116; t=1768559504; c=relaxed/simple;
+	bh=F+E86gmFwJgzHMYe1opEevnrLt7o5OIpKlmd0HhoCYo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NjZJZItokFhN2IXfqtsig+/MuiswZgr7nZAw4ecvzvLyVYux4dIBuYweFUZxFR5lzq0xyDCj5+LRBQ+8omwoUFxIq2UTOeZYHHdl3KauR5+Gu6Zl9sD0zFX2Iar+M1zxG22AhfmhmzX6lxBwDuJZN2itw5DXGGKerLpSTdchWGI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=J9bPJdT8; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=OKn731lL; arc=pass smtp.client-ip=85.215.255.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1768559480; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=VkbqpgfoGAEG5X17cx6hm+EnpXyhRUP5CP76GjQ6+Ka7P+BcYfvySoaVEX8pBagvch
+    LlMgCaY6MPiOaND/n/ub+ZNI/5i5Kj7IwzmOn0LMIu19M/SBLmV1PnSqKx7CaL0yNQe7
+    0cQStWS71YQ3xW559L4vm55zzRT8Qo/zAdm5PF9lFt23+8xhWnMFhKw2UP2riaM5nlUI
+    m5b2dY3OR2CdP+aBWpkggLW6oldUwmeyyofy8MvBBU6NeB3Wxqt++Sdg8fGtCVyJzSJM
+    MkMbQhchhUXqDPaBfAru97K4qwgHvmObE71SsUvY9rwa5O4eXMHY9SxQvSYnk6YqYOP8
+    XFyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1768559480;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=4Qq9gdM9vprxxFGgf7/BOYBAvs6L7HF7wuAMDd8isSI=;
+    b=cMZrjbYfxEhb2IbC3u2KrFuHmk/QvBt84jwcUfe++qxoCyrlHqUzu2MFYGecPYgs4k
+    mZgotzRcXHHawhroiSRO4DJZ0eHSi+m5KYG7P7pli9BmgLGK4dK/hTGwKQBTXvE2rwry
+    TUYbInYUUa+J9nUVhZLCArMz2ppd9LKK4fJbiMqLG7WOfDCQEMGZ+0dN/c17fQLefOsA
+    8mYMM+i9ueYGskT+eIqvsO3g6qQSmJQeg8MVtn8Xbx1V1qqckW4KSgLv2HtwjW6I3RrV
+    Ck4qQPHI44LE5LCjGxaZoHYawqtbr6hlCZDOUmp+sD/Tsoubb4VIctBbS4pAzARw4jum
+    0isQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1768559480;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=4Qq9gdM9vprxxFGgf7/BOYBAvs6L7HF7wuAMDd8isSI=;
+    b=J9bPJdT856n2KX3eXWgLXIOXpVWQi0WwHRdk4w/0hS8v11422yZxExNTh68VFeYroi
+    qzjBhMQnAOEiqBYoH5DUGqjVTqvCbTb0oa2FjF+3weDTZHhipyX+gKBquO6W22jm5n4p
+    HDTyQXW1Y6I9CEKdxOepMpq0du85jAnj2Y0tWNJIsOWFKdIqHDBcj8tPoaTmnvMpdrtB
+    8tyxMagcRZPoKvZvrWxAeuugHc5nkFz0l89Ve6wDWP4oJgkIkapwX0nOeuc9iyVX/fNJ
+    Tz0WDwJizbEZ4hdFw5lly7CG/x8Js9g1IL4tHusot9Y8O3Ns5pXxsgAfqLgU7QP1BlRN
+    orTg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1768559480;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=4Qq9gdM9vprxxFGgf7/BOYBAvs6L7HF7wuAMDd8isSI=;
+    b=OKn731lLeZsjbtCCngXIr9uYqp0w9zeRbTBjQU7wB8B0P11/k3GLDXZ9G9x2CKDj8e
+    5fuTngaZiYnwmGUGvGCA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::9f3]
+    by smtp.strato.de (RZmta 54.1.0 AUTH)
+    with ESMTPSA id K0e68b20GAVKAkM
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Fri, 16 Jan 2026 11:31:20 +0100 (CET)
+Message-ID: <f2d293c1-bc6a-4130-b544-2216ec0b0590@hartkopp.net>
+Date: Fri, 16 Jan 2026 11:31:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251230115814.53536-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20251230115814.53536-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdX5_TkFmgqv29Nddo4bZzEWQrL87kwqTdiLwfq+qMtsXg@mail.gmail.com>
-In-Reply-To: <CAMuHMdX5_TkFmgqv29Nddo4bZzEWQrL87kwqTdiLwfq+qMtsXg@mail.gmail.com>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Fri, 16 Jan 2026 09:08:33 +0000
-X-Gm-Features: AZwV_QgFbQun55gGsT_2ZrF5-QmyzEueFq5_0nBPjc3PDQivLg_YkXjnYFLjBnE
-Message-ID: <CA+V-a8u4o7=PXjE6nw9Bfo7Tn8dFoMQB-LGEuqk6skK_7zXCcw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] can: rcar_canfd: Add RZ/T2H support
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
-	linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [can-next 0/5] can: remove private skb headroom infrastructure
+To: Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+ Marc Kleine-Budde <mkl@pengutronix.de>, Jakub Kicinski <kuba@kernel.org>
+Cc: Vincent Mailhol <mailhol@kernel.org>, netdev@vger.kernel.org,
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+ davem@davemloft.net
+References: <20260112150908.5815-1-socketcan@hartkopp.net>
+ <a2b9fde3-6c50-4003-bc9b-0d6f359e7ac9@redhat.com>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <a2b9fde3-6c50-4003-bc9b-0d6f359e7ac9@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Geert,
+Hello Paolo,
 
-On Wed, Jan 7, 2026 at 4:37=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68k=
-.org> wrote:
->
-> Hi Prabhakar,
->
-> On Tue, 30 Dec 2025 at 12:58, Prabhakar <prabhakar.csengg@gmail.com> wrot=
-e:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > The CAN-FD IP on the RZ/T2H SoC is similar to R-Car Gen4, but differs i=
-n
-> > the AFLPN and CFTML bits and supports two channels with eight interrupt=
-s.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Thanks for your patch!
->
-> LGTM, so
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> However, compared to other SoCs, CFDCnNCFG.NSJW[6:0] has:
->
->     0x00: Setting prohibited
->
-> Perhaps this is a documentation issue, as the same limitation was
-> dropped in RZ/V2H Hardware User Manual Rev.1.30?
->
-I got confirmation from the HW team that it's a typo. Similar to
-RZ/V2H, setting it to 0x00 results in 1 Tq and this shall be reflected
-in the next UM update.
+freshly created CAN skbs only contain a fixed struct can_frame (16 
+byte!) where dev/priority/mark/tstamp are set together with
 
-Cheers,
-Prabhakar
+skb->protocol = htons(ETH_P_CAN);
+skb->ip_summed = CHECKSUM_UNNECESSARY;
+skb->pkt_type = PACKET_LOOPBACK;
+
+All other settings that are relevant to ethernet/IP are unused and left 
+at their initialization values (e.g. network/mac/transport headers or 
+inner protocol values).
+
+A single CAN skb can be passed to the driver layer and back several 
+times. Because we need to place some additional data along with CAN skbs 
+this was formerly stored in a 16 byte private skb headroom (struct 
+can_skb_priv).
+
+IIRC we had three issues (KMSAN, etc) with the headroom as someone 
+between netif_rx() and can_rcv() was using the headroom for his purposes 
+so that the access to struct can_skb_priv via skb->head was broken and 
+not reliable for CAN skbs.
+
+Skbs are mostly used for ethernet/IP and developers do not really 
+know/care about CAN skbs. That's why this patch set aims to remove 
+private CAN skb headroom infrastructure - and to minimize the (risky) 
+interaction with other ethernet/IP code.
+
+On 15.01.26 16:37, Paolo Abeni wrote:
+
+> Could you please explain in details why the metadata_dst option has been
+> deemed unsuitable?!? I *think* something vaguely alike the following
+> would do?!?
+> 
+> ---
+> diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+> index 1fc2fb03ce3f..d6ee45631fea 100644
+> --- a/include/net/dst_metadata.h
+> +++ b/include/net/dst_metadata.h
+> @@ -13,6 +13,13 @@ enum metadata_type {
+>   	METADATA_HW_PORT_MUX,
+>   	METADATA_MACSEC,
+>   	METADATA_XFRM,
+> +	METADATA_CAN,
+> +};
+> +
+> +struct can_md_info {
+> +	int can_iif;
+> +	int len;
+> +	int uid;
+>   };
+> 
+>   struct hw_port_info {
+> @@ -38,6 +45,7 @@ struct metadata_dst {
+>   		struct hw_port_info	port_info;
+>   		struct macsec_info	macsec_info;
+>   		struct xfrm_md_info	xfrm_info;
+> +		struct can_md_info	can_info;
+>   	} u;
+>   };
+> 
+
+Yes. I came to the same simple extensions for data structures but then 
+looked into dst_metadata.h and the users code with mallocs, per_cpu 
+code, unclone, refcounts, etc. - which was hard to understand for me and 
+introduced complexity that is again needed and maintained by ethernet/IP 
+users only. Not really appropriate for a CAN skb that transports 16 byte 
+of data IMO.
+
+For that reason I propose the common pattern to wrap a union around 
+dual-usable skb space, which is simple efficient and easy to understand.
+
+On 15.01.26 16:37, Paolo Abeni wrote:
+
+ > I don't like much that the CAN information are scattered in different
+ > places (skb->hash and tunnel header section).
+
+This is not the case. According to the documentation the skb->hash is a 
+value used for RPS to identify skbs. We would use it as intended.
+
+And the tunnel header section is marked unused in CAN skbs. By setting 
+"skb->encapsulation" to false (the init value) this section is not read 
+by anyone. Wrapping a union around this dual-usable skb space is a safe 
+solution here.
+
+ > Also it's unclear to me if
+ > a can bus skb could end-up landing (even via completely
+ > insane/intentionally evil configuration/setup) in a plain netdev 
+interface.
+ >
+ > In the such a case this solution will be problematic.
+
+The CAN drivers and the CAN network layer code always checks the 
+processed skbs for ETH_P_[CAN|CANFD|CANXL] and ARPHDR_CAN. So CAN skbs 
+created by the CAN netlayer can only be sent to ARPHDR_CAN devices.
+
+The only way to create weird CAN skbs is via PF_PACKET sockets that 
+sends ETH_P_CAN skbs to ethernet devices. Beyond such PF_PACKET skbs the 
+now suggested CAN skbs would not harm any driver or network layer as the 
+described skb settings do not have any problematic content.
+
+Netdev drivers can cope with it and the netlayer code using 
+ETH_P_[CAN|CANFD|CANXL] or ETH_P_ALL is fine with it too.
+
+Long story short: Using the common pattern to wrap a union around 
+dual-usable skb space is the most efficient and least risky solution IMHO.
+
+Best regards,
+Oliver
+
 
