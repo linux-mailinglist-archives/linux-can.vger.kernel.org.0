@@ -1,114 +1,152 @@
-Return-Path: <linux-can+bounces-6172-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6173-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1EADD2D471
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 08:35:06 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52FE7D2E83D
+	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 10:09:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DEC023011A98
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 07:35:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5F2B93033669
+	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 09:09:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7B481E0E08;
-	Fri, 16 Jan 2026 07:35:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 401E831B108;
+	Fri, 16 Jan 2026 09:09:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KB6qHY9a"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229051DE8BB
-	for <linux-can@vger.kernel.org>; Fri, 16 Jan 2026 07:34:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768548903; cv=none; b=fBrz10qfGyGtLxDBosztHjtyiwZChWCvtVjYVbPyV/h9pE6UzwXf63UeuS2ThXydURX9IOTxExt6arkYVnNiUhNpjvPzMoJI1W0/FQ3dm9bQWW70q7aFbbEXR2deIOj8IgJv6D3qRTW/H1Z26u0add2jBjkJmNgfoVZZDNYnVqA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768548903; c=relaxed/simple;
-	bh=yAOjDOGTZXfNEKxz4CFZPt2LFSvpc6aUtEoQGJaiHPk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AzE+sEkr9QebL1px3HXzyHiXvyR8hIGLkeFwWIsnvIfJ+ET86m7mtstlmHMYrfNbEzU9D00zkD1LPUB32zTPPygd1M2Dix+g4Cn66foR0PVYr+ycvaJFZCHR1Rska/2qiWA42QZCPDUUOSQzUYjJv5LPuii0L+cq9inIIFMBJYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vgeMA-0008Ry-Pm; Fri, 16 Jan 2026 08:34:54 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vgeMA-000slZ-0l;
-	Fri, 16 Jan 2026 08:34:53 +0100
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 417044CE3D1;
-	Fri, 16 Jan 2026 07:34:53 +0000 (UTC)
-Date: Fri, 16 Jan 2026 08:34:52 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, linux-can@vger.kernel.org, 
-	kernel@pengutronix.de
-Subject: Re: [PATCH net 0/4] pull-request: can 2026-01-15
-Message-ID: <20260116-quetzal-of-fantastic-love-d120a3-mkl@pengutronix.de>
-References: <20260115090603.1124860-1-mkl@pengutronix.de>
- <20260115185110.6c4de645@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7380B31A07C
+	for <linux-can@vger.kernel.org>; Fri, 16 Jan 2026 09:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768554547; cv=pass; b=iWvjR9mC1DOr9hM937XjRH4cwZjWo+BFXqnD+I5iIjgkci0FHbdYh9YG3376irlPGryZEfUB0lO86AcT8Gy9+JTXHSi3mnPg0auVDwzPa6iuxNLsnnE78M35+Q6fqMhr033u92YvxPJn/S0e6K/eDGY+7d+mYrPUCdSvRljnyTo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768554547; c=relaxed/simple;
+	bh=PjK03eNHVu54e46b4LG7wzxw1HUYYstUJemKKBLfOos=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lmOxcsVe7HvQBnOfdsasBl+AAH8Oph6ZwEcAIOgF4SHN4/2bhvhN1LpQHUyZ8b314Su1EWPgZ5Wv3VOIsQUyxFPjZLmTCbNTpZfAsOqS9sL3g2ID/lkRXAZOf8OUJ4oeMqjYwYBwR+AqswjrYurGJPu+IkbPKkCy0vDz02pVAKQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KB6qHY9a; arc=pass smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47d1d8a49f5so10656965e9.3
+        for <linux-can@vger.kernel.org>; Fri, 16 Jan 2026 01:09:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768554543; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NtxCAsoljS1dyFYI/t0rBjUPlHOSjlnV27AqJXMOd3ui8rF6X1wlsFx488q4WTCuzB
+         oPMa3OmkwM9u44x1EaXqxy9asKHFSosDAxqq9AdAO3sC5oHTivN0l7Sno2MIlgO7z7qs
+         vRpKCIDim0CqKuBUkEO9nsmVr43w0ewi5hR9fBIQBfRnddniWR+0cM3JvEZ2sg9EwUql
+         LFFDu5dAeJvBOGrA2Kgz/7xrV8yJaXn0sqwnxi8xoV8ZZjesEY6YwvcY+wOlP5oJb9x4
+         xRo1WTsMi6BsPnUdtqlPRznQzO9fhwkMX+kTTaEZDKZtlXnXPipbZxKSgduZsZ7FQ8ri
+         gEAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=p3RHWH4ytRePUw0e46MQem9UGA0Z3K6iBpKhJ5leauk=;
+        fh=RcRvOS29w96YzNGhphVbe3lLtAsV2BoNBMsT3p8b29w=;
+        b=Mw5VU7RqIj/BDK/GeOMJQp9Q+cv041k3ahEzGZtcG3BsjX2wEt9bDlH4SKMMRLeD/K
+         tkQTe2y6LoQgOb/f7h+aWb/xPjUExYNKV64xJHNkgVceySqtQov+LhqoijiyHQZQSM67
+         FcdGxz+NXl3TQ5HFMXpIZYZitcOdPOsf4sua30PPFcDvEozAJCFIySKQMNpiAYPPQqft
+         X2w3f0M7vn3ulnkUn7xAC/gAXvTIuIb9z8cw9hvTzvNTjdQJ3p9WmH2/vXwAuuVi1uAZ
+         fc7NLAo9oohu26WqPe4vY8146b/r4jK+TVjuQVrRAShpnzRSizjpmfPXWQQc+9FS4aR7
+         ICIA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768554543; x=1769159343; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p3RHWH4ytRePUw0e46MQem9UGA0Z3K6iBpKhJ5leauk=;
+        b=KB6qHY9aUmTlBw53ee9wvSbISR0dx0CFgMdP0XMBBFcmCw1xuCagmejYQTKbQ4tUGd
+         VvHZJ//mpdIU5xCmnV06hmvqZpZM4ZseEHfzjtKOnGGLQwVhtDj3VAcj72LYErB5yd+b
+         yhDMOO64iHxD+s6nh4Pu7uVuuWqMziMHckk3gnQpYDDCCmzd/yyQjxX7CoWPOnUUxgPL
+         3szzRJDiOqWw6elaFH3jERVKRYmsbwus2VRMfCPDO68b2LR26/ZzjZaW3a0TYxYEOwmB
+         LAY/sMEEBX6tF+4v1u3gud6y/7nepT2Eekh8FWzjhL4g6cqhdX7emL7zivvibYnhOjHa
+         u/mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768554543; x=1769159343;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=p3RHWH4ytRePUw0e46MQem9UGA0Z3K6iBpKhJ5leauk=;
+        b=cfdj5csgYL3UGOvFxlPyAQac80bZlIbfx4/1D8So2Z4dksCSQDQX8/OJToWAZgbHn7
+         oOXVPdtGLk83aeFmke/LYaghS81xyhJiEbgbkqUomLYMQIgK7Qiz92vlWXnPxbBOaH5m
+         2dYwFHieTrEQRF2DyBbXL9/+vzKtZ++coCR39sx/rF2/ylxjZR0bH7KeNDylmPTB9SBL
+         k5jm63VGBESlyZYCq0O22ub28cPtHWk1IXDKgA1TOkb2hG015aDVyq5Cbkgf0ClNusJF
+         IMjyifdD07c6slDCGjdm7CZAJUot0IY/nXM9TkCIOhhCIAS3Ggn4TsYQjYqxIM+Ty3Mj
+         HQSA==
+X-Forwarded-Encrypted: i=1; AJvYcCVHhTS6O6bNbqJOlSKb11gzM4MoLcwxOBIsPLnMjD9ZQg8BfMBbvqo3H1kTpo9CyKbmJNKowc2dZug=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyO08vq/llzc7EqJyXumG8q27LsnldwslFiWuG4/Gu6LV4KaKth
+	FLySYsEQhhLpYym32DOkQURodaTe2uHheZQGJNVxQpMJpbKpWbLSpmfFD+YMiz2G6buNsO8MWiE
+	qTEdWxddUlpSnt3EbhxqxwZkCOhHCbpQ=
+X-Gm-Gg: AY/fxX77p1RSI+REEmcPacDn70213v0my1kZ9NmaWBRgZ9o/w8A9dsinkS+bmysbizA
+	ByMjipGcSooX78DLSL4gTyeD64T/tR8mnwmDm+bqNaPKY9xhkHthEBJeZs+DG3g5ovtb/hKhgkP
+	JGJ6jQ7iuTK61h3aJ/eUIbpltIW7oZnSJYOGmvuKrY+1ph14Z9/wEbiYJMX+InYS1e521kVdmA5
+	WuYuGSmz0P/65FJk3GDeVLI7JwZR2Hvn+PhEa6q4R8/6P3dY+gjbpVv/OrMMt5Lp3X+NWXZYgCm
+	HddQJ9B9AZWWQogJMy5VucphNdNBroZRNzbS15M6cG0h/eXqIflMgCAMAw==
+X-Received: by 2002:a05:6000:1865:b0:431:8f8:7f1e with SMTP id
+ ffacd0b85a97d-43569bc7bd8mr2589126f8f.48.1768554543273; Fri, 16 Jan 2026
+ 01:09:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xrp23wzamwa3pjsc"
-Content-Disposition: inline
-In-Reply-To: <20260115185110.6c4de645@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-
-
---xrp23wzamwa3pjsc
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+References: <20251230115814.53536-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20251230115814.53536-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdX5_TkFmgqv29Nddo4bZzEWQrL87kwqTdiLwfq+qMtsXg@mail.gmail.com>
+In-Reply-To: <CAMuHMdX5_TkFmgqv29Nddo4bZzEWQrL87kwqTdiLwfq+qMtsXg@mail.gmail.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Fri, 16 Jan 2026 09:08:33 +0000
+X-Gm-Features: AZwV_QgFbQun55gGsT_2ZrF5-QmyzEueFq5_0nBPjc3PDQivLg_YkXjnYFLjBnE
+Message-ID: <CA+V-a8u4o7=PXjE6nw9Bfo7Tn8dFoMQB-LGEuqk6skK_7zXCcw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] can: rcar_canfd: Add RZ/T2H support
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Magnus Damm <magnus.damm@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH net 0/4] pull-request: can 2026-01-15
-MIME-Version: 1.0
 
-Hello Jakub,
+Hi Geert,
 
-On 15.01.2026 18:51:10, Jakub Kicinski wrote:
-> Was the AI wrong here
-> https://lore.kernel.org/all/20260110223836.3890248-1-kuba@kernel.org/
-> or that fix is still in the works?
+On Wed, Jan 7, 2026 at 4:37=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68k=
+.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Tue, 30 Dec 2025 at 12:58, Prabhakar <prabhakar.csengg@gmail.com> wrot=
+e:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > The CAN-FD IP on the RZ/T2H SoC is similar to R-Car Gen4, but differs i=
+n
+> > the AFLPN and CFTML bits and supports two channels with eight interrupt=
+s.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Thanks for your patch!
+>
+> LGTM, so
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> However, compared to other SoCs, CFDCnNCFG.NSJW[6:0] has:
+>
+>     0x00: Setting prohibited
+>
+> Perhaps this is a documentation issue, as the same limitation was
+> dropped in RZ/V2H Hardware User Manual Rev.1.30?
+>
+I got confirmation from the HW team that it's a typo. Similar to
+RZ/V2H, setting it to 0x00 results in 1 Tq and this shall be reflected
+in the next UM update.
 
-The AI was probably right, today I'll look into the issue.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---xrp23wzamwa3pjsc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlp6hkACgkQDHRl3/mQ
-kZzNQgf/RyrLuYi4kVEJH2q4smDJCdTo8B2eu2SkXjsg5JY7yjRMfhPTVNptr/fU
-3qlJAfygOocMlZBJxY/LJjRGUpoGrwTvvyl+1B5h00m+hkNSy3xO0NJJdFnUTrUv
-jgr5keb2KfMbkuUYINoTe6LCJakhLRSAvKdbUa54IOU2CHhjnZ/i0qIUYXDxXH+M
-8jIDfLUVaDtpBJrk4wX5G2WJEUjf8l6S2XPoTeBRsXjigEBbBBM4kF580RLz4NBj
-rEfnBs44v1uza0FhRia6gXUQvjQMwQaPlfi0oo/WJIQQmyRr7C+TpQ7DS0pecKFa
-26KYj0GnnOtY0ZyN9uIl+4RXSbg3PA==
-=LDim
------END PGP SIGNATURE-----
-
---xrp23wzamwa3pjsc--
+Cheers,
+Prabhakar
 
