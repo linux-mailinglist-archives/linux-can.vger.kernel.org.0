@@ -1,64 +1,95 @@
-Return-Path: <linux-can+bounces-6200-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6205-lists+linux-can=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2272FD3866A
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 21:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BC4E2D38EB0
+	for <lists+linux-can@lfdr.de>; Sat, 17 Jan 2026 14:31:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A3F9030B4735
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jan 2026 20:03:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DF62C3012BFC
+	for <lists+linux-can@lfdr.de>; Sat, 17 Jan 2026 13:30:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 527ED3A1E7B;
-	Fri, 16 Jan 2026 20:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2F613376A0;
+	Sat, 17 Jan 2026 13:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Aax9GRSN";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="mFNuVwxM"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F3E2D8384
-	for <linux-can@vger.kernel.org>; Fri, 16 Jan 2026 20:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768593816; cv=none; b=kyLD9AXXW8FvsKcBaJH+lgQwxwujgvXKLKjPVPNm4pm1Gk7xg/DKKG6aZBYCDVNUm4aVnAFNYXPOv5N9OsyuwVISap1lN4mmaZhmW3FX/dmEAipzwGpMloQsHnWOZKtbR+JxLalh5jauRah4unpxUXefGTguo1Yiuxdm+dmHEkk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768593816; c=relaxed/simple;
-	bh=MKb51fT2r25Qsa+wLV8CJV+Cf5vy2b9nLZg7mb9H1rM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o1ad+ljy1O49Kxy86dT2LSrZBmo6tuE3OhK9SFqdb3AA8335iytirzm0sIfNuqadI3aQinsAdiL4X1/c6C1O+aiLLUiPKUauVbDXyqJXSkGY14R+/Zin2aFzRzTH4Ug8yZZgP6EYOPAIHH7Vegg+vxfDJT0B+zIfdXKzH1X14SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vgq2Z-00049H-LV; Fri, 16 Jan 2026 21:03:27 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vgq2a-000yMe-0Q;
-	Fri, 16 Jan 2026 21:03:27 +0100
-Received: from blackshift.org (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 3EAD84CEF74;
-	Fri, 16 Jan 2026 20:03:27 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	linux-can@vger.kernel.org,
-	kernel@pengutronix.de,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB172836F;
+	Sat, 17 Jan 2026 13:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.165
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768656595; cv=pass; b=A8rO6dP1/EsVGPvXGmup9ssnHO+sLwBA/ITFkfNA6vmtE/5WE92kF2sgbqEPhfeMd1Nus/mbiwC9zqdHbuX04WocCJljEZiG77OHXyXbrT9j9SOnYKS3BnZWR6rXH7CHQdd/Gpe4BAsAh1BVDTWeNJOjLQolrtP3pDebSEVhRhA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768656595; c=relaxed/simple;
+	bh=9P+3xlXjxvz9449kzK+nMC1TMX66NiHa3aGhSrkHE7o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pec1maHpOsu8Tz9SQVUfYYdOxzg3jyUp89JccHl9L98ia6pIbSM8USp96eFzZSMW+C9Zjcy0mM/m4Rr9w7wtec9jr3qIKT3154y5Sq1PLjw1KweIa+VQZRUbxW6l3fQVbWlCl0pci8E3J/dktteNe7YWcfPVIh5/7ITAQsfsUcA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Aax9GRSN; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=mFNuVwxM; arc=pass smtp.client-ip=81.169.146.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1768656566; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=TzPizOrCCDqKYUAmSR1KdDh0VF2PDycGyXUQnYEhOcWlznvzhGUktI01y1FT6nDkcn
+    r5KH2zI7gaYuWib2FVCh2+LU2Ya9b9EblfpH4u4SvMOTezM6cyFkN6rBNRgbMecGDV1Q
+    r0r3EdsFue2NGuVl+rsCGeZelrXaq684y8EDmZF8BYByuJG23GymF8Kasz5hRxn6GOmB
+    dG6e0krnzxA0IRDl0wv4hT3ymZuPEDGoLH9QO2KgVJqAmENwx06+yIa+L6IA2dnQ2YMQ
+    abWeGrMGJfpyr6Yc1eWDkSG0Tshl+F+sHi+i/i+WreBRp+d19iJno8P4LQZcTdZaEEzT
+    hrIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1768656566;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=0Hw2zSqE0IESJac2aNRNQF8Msez8V6lAtJ9uWVBEz+8=;
+    b=COazKPwwvH3xDtX02y4OSjp9Jfh4mY4mxnqNGnmHnr/r4sjrZmtjlp8IjT3d5ycAoU
+    odUONUzEZtsvHUEVzejsUOElxS1Yc6eebGqmG/QeMdW3nR7vqI3X/zapKC2g1cRJXbQq
+    jEwH92QPLvQBJXPsYk0/Kv6RajJP4ubpDwk7ODkcqLNltAlKQBg4EmyZvTgv4C6GZNub
+    tBMbqZo8ZiJcWq2vVgQoSqEk1rUxgxUr5fOR+zBXCH1MeuTABNHaT4aK8FmAdyTSJK72
+    79J5AXPFlzcbChI7AzTZmhfTBLdUsWjqvFrISqFRCzmpG4QeToBtG0jIt+zfPyTetAiq
+    E17g==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1768656566;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=0Hw2zSqE0IESJac2aNRNQF8Msez8V6lAtJ9uWVBEz+8=;
+    b=Aax9GRSNR8SFoA0dEwwN0apqRShfbf0yv69QI2XNtLb60Q0Buqb2MEE2rasuGCB7Jw
+    MbksiaUHgRrn64WRUtbd4BR3vNnCS6L3qDdCvmQAq122QBWHlC5Z+/1OGh8gQfqfCc6X
+    j8l+KrJBAZnLliNXi6q9wnMkeDhkRFGvD2mewqhz0XuC/cDClfHZ/q6Bek/zmEe9bMP3
+    ah9H6kaHfGftWyBs5nrRqu6X7C6blDp41estu8EZqIbh40WJ2s9iNHYkWzzeteusitXL
+    lXlqpYTNIvARWdlvD7AH3Yzqf0V1lXIgld+GsBulL579PbBs9fkZZKAK7+kgPuzJ+MiU
+    Yq4g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1768656566;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=0Hw2zSqE0IESJac2aNRNQF8Msez8V6lAtJ9uWVBEz+8=;
+    b=mFNuVwxMJd+drpZVa54Yhl1R3I0kcv8wiqRnrt0I19LloMqrLtLlbfVIApxSKqk+sQ
+    /hFaBbwYN/S26Qr4E+AA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bGWj0Q=="
+Received: from lenov17.lan
+    by smtp.strato.de (RZmta 54.1.0 AUTH)
+    with ESMTPSA id K0e68b20HDTQGRy
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sat, 17 Jan 2026 14:29:26 +0100 (CET)
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+To: linux-can@vger.kernel.org,
 	Marc Kleine-Budde <mkl@pengutronix.de>,
-	stable@vger.kernel.org
-Subject: [PATCH net 7/7] can: usb_8dev: usb_8dev_read_bulk_callback(): fix URB memory leak
-Date: Fri, 16 Jan 2026 20:55:53 +0100
-Message-ID: <20260116200323.366877-8-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260116200323.366877-1-mkl@pengutronix.de>
-References: <20260116200323.366877-1-mkl@pengutronix.de>
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Vincent Mailhol <mailhol@kernel.org>,
+	netdev@vger.kernel.org,
+	Eric Dumazet <edumazet@google.com>,
+	Simon Horman <horms@kernel.org>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	davem@davemloft.net,
+	Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [can-next v2 0/5] can: remove private skb headroom infrastructure
+Date: Sat, 17 Jan 2026 14:28:19 +0100
+Message-ID: <20260117132824.3649-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -66,60 +97,63 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Fix similar memory leak as in commit 7352e1d5932a ("can: gs_usb:
-gs_usb_receive_bulk_callback(): fix URB memory leak").
+CAN bus related skbuffs (ETH_P_CAN/ETH_P_CANFD/ETH_P_CANXL) simply contain
+CAN frame structs for CAN CC/FD/XL of skb->len length at skb->data.
+Those CAN skbs do not have network/mac/transport headers nor other such
+references for encapsulated protocols like ethernet/IP protocols.
 
-In usb_8dev_open() -> usb_8dev_start(), the URBs for USB-in transfers are
-allocated, added to the priv->rx_submitted anchor and submitted. In the
-complete callback usb_8dev_read_bulk_callback(), the URBs are processed and
-resubmitted. In usb_8dev_close() -> unlink_all_urbs() the URBs are freed by
-calling usb_kill_anchored_urbs(&priv->rx_submitted).
+To store data for CAN specific use-cases all CAN bus related skbuffs are
+created with a 16 byte private skb headroom (struct can_skb_priv).
+Using the skb headroom and accessing skb->head for this private data
+led to several problems in the past likely due to "The struct can_skb_priv
+business is highly unconventional for the networking stack." [1]
 
-However, this does not take into account that the USB framework unanchors
-the URB before the complete function is called. This means that once an
-in-URB has been completed, it is no longer anchored and is ultimately not
-released in usb_kill_anchored_urbs().
+This patch set aims to remove the unconventional skb headroom usage for
+CAN bus related skbuffs. To store the data for CAN specific use-cases
+unused space in CAN skbs is used, namely the inner protocol space for
+ethernet/IP encapsulation. The skb->encapsulation flag remains false in
+CAN skbs so that the ethernet/IP encapsulation (tunnel) data is tagged as
+unused/invalid in the case the skb is accidentally routed to non-CAN
+targets (netdev/netlayer).
 
-Fix the memory leak by anchoring the URB in the
-usb_8dev_read_bulk_callback() to the priv->rx_submitted anchor.
+The patch set reduces the potential interactions with ethernet/IP code and
+builds skbs that won't harm the system even if the skb is evaluated or
+modified by other networking components. In such an invalid case the CAN
+skb is dropped in can_rcv, e.g. if skb->encapsulation was set.
 
-Fixes: 0024d8ad1639 ("can: usb_8dev: Add support for USB2CAN interface from 8 devices")
-Cc: stable@vger.kernel.org
-Link: https://patch.msgid.link/20260116-can_usb-fix-memory-leak-v2-5-4b8cb2915571@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/usb/usb_8dev.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+[1] https://lore.kernel.org/linux-can/20260104074222.29e660ac@kernel.org/
 
-diff --git a/drivers/net/can/usb/usb_8dev.c b/drivers/net/can/usb/usb_8dev.c
-index 7449328f7cd7..3125cf59d002 100644
---- a/drivers/net/can/usb/usb_8dev.c
-+++ b/drivers/net/can/usb/usb_8dev.c
-@@ -541,11 +541,17 @@ static void usb_8dev_read_bulk_callback(struct urb *urb)
- 			  urb->transfer_buffer, RX_BUFFER_SIZE,
- 			  usb_8dev_read_bulk_callback, priv);
- 
-+	usb_anchor_urb(urb, &priv->rx_submitted);
-+
- 	retval = usb_submit_urb(urb, GFP_ATOMIC);
-+	if (!retval)
-+		return;
-+
-+	usb_unanchor_urb(urb);
- 
- 	if (retval == -ENODEV)
- 		netif_device_detach(netdev);
--	else if (retval)
-+	else
- 		netdev_err(netdev,
- 			"failed resubmitting read bulk urb: %d\n", retval);
- }
+V2: - net-next rebase due to net/can/raw.c fix in commit faba5860fcf9
+      ("can: raw: instantly reject disabled CAN frames")
+    - extend the cover letter to address concerns raised by Jakub Kicinski
+      and Paolo Abeni regarding the safety of using the shared space for
+      ethernet/IP encapsulation for CAN skbs
+    - extend the commit messages in patches 1/2/5
+    - Added Tested-by: and Acked-by: tags from Oleksij Rempel and me
+
+Oliver Hartkopp (5):
+  can: use skb hash instead of private variable in headroom
+  can: move can_iif from private headroom to struct sk_buff
+  can: move frame length from private headroom to struct sk_buff
+  can: remove private skb headroom infrastructure
+  can: gw: use new can_gw_hops variable instead of re-using csum_start
+
+ drivers/net/can/dev/skb.c | 45 ++++++++++++++++-----------------------
+ include/linux/can/core.h  |  1 +
+ include/linux/can/skb.h   | 33 ----------------------------
+ include/linux/skbuff.h    | 27 +++++++++++++++++------
+ net/can/af_can.c          | 35 +++++++++++++++++++-----------
+ net/can/bcm.c             | 13 ++++-------
+ net/can/gw.c              | 25 ++++++----------------
+ net/can/isotp.c           | 18 ++++++----------
+ net/can/j1939/socket.c    |  7 ++----
+ net/can/j1939/transport.c | 13 ++++-------
+ net/can/raw.c             | 14 ++++++------
+ 11 files changed, 92 insertions(+), 139 deletions(-)
+
 -- 
-2.51.0
+2.47.3
 
 
