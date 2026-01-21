@@ -1,207 +1,168 @@
-Return-Path: <linux-can+bounces-6249-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6250-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QHo/Lgj6cGmgbAAAu9opvQ
-	(envelope-from <linux-can+bounces-6249-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jan 2026 17:08:40 +0100
+	id +A/KKPoAcWmgbAAAu9opvQ
+	(envelope-from <linux-can+bounces-6250-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jan 2026 17:38:18 +0100
 X-Original-To: lists+linux-can@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B10B59B1F
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jan 2026 17:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 36DB05A00B
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jan 2026 17:38:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 14EFEA4DA08
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jan 2026 14:50:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7BC37A26B61
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jan 2026 15:07:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F259633B6EB;
-	Wed, 21 Jan 2026 14:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF4147A0D6;
+	Wed, 21 Jan 2026 14:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QBATCApT"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01BF339873
-	for <linux-can@vger.kernel.org>; Wed, 21 Jan 2026 14:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC203C008E;
+	Wed, 21 Jan 2026 14:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769006239; cv=none; b=UGeF5UfS8JqLc1FzhEXLbyGpJWGN7dSmD0VVwV3PTr9fSMbOUOX81webEBV3T5vIlfiSEKy1y09H3tWSyNejGX815qfpyQiAENNQytLGZzitOt5/w6CtjXifcsFFYBLymUvY0r63M/t5F650sSqTLD5djFyHjOVMO+qsnkS/+nI=
+	t=1769006992; cv=none; b=LO8rMUnWuUtSSwti7Jb6OeONWhxgax1Wfs0ebJEJ9GFpx+s/8BcBaMCFQJVenzA45Ng2f+mCDSYF1vAmcXgwzCc04f42/OAc+R4IPvXV3NUPwrr2/qO8wpOxKeVJPsKEoOHJwIh2y+eKOe6cWvO1Is/+V3AlE1sBL2e+p8X+jM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769006239; c=relaxed/simple;
-	bh=fh4ulMK2PgnUeptZbE85iEPgqObf9eaOvEVm7b8UyUY=;
+	s=arc-20240116; t=1769006992; c=relaxed/simple;
+	bh=6LTNJOg2E8MaKxl1xCHKvy5jwJaoAeaRCG+agnK2yY8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PucXi+HJ8dtPSj/uKBRVDXIroKknssYYgJb/q8pOxjeYf7VxmE6/qZuQyhPn7/ZG2lYYscxRSitoh/VoDEROEDS8CPG1XDk9DlojgfB8CliBAFLFWE4KG2B0lycjxPoh9NzxYUaP3mavSYXej+U1THpz0+Xi5l7U8DR002qfoY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1viZKR-00035b-By; Wed, 21 Jan 2026 15:37:03 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1viZKR-001ljq-06;
-	Wed, 21 Jan 2026 15:37:02 +0100
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 101AB4D4DCD;
-	Wed, 21 Jan 2026 14:37:02 +0000 (UTC)
-Date: Wed, 21 Jan 2026 15:37:01 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	linux-can@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>, 
-	Vincent Mailhol <mailhol@kernel.org>, netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>, 
-	Simon Horman <horms@kernel.org>, davem@davemloft.net
-Subject: Re: [can-next 0/5] can: remove private skb headroom infrastructure
-Message-ID: <20260121-illegal-impetuous-honeybee-e6ef40-mkl@pengutronix.de>
-References: <20260112150908.5815-1-socketcan@hartkopp.net>
- <a2b9fde3-6c50-4003-bc9b-0d6f359e7ac9@redhat.com>
- <f2d293c1-bc6a-4130-b544-2216ec0b0590@hartkopp.net>
- <20260117091543.7881db1a@kernel.org>
- <dfbcab83-095d-4ed1-ae98-baada95d4cad@hartkopp.net>
- <39794159-c0cc-498b-a162-44e77b6c371a@hartkopp.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cauelZZt9Vxe1N2S6Ngyk56pN9PUC6O0OCtowIEN6zgP/vOXI8oNZsxdZ/QzD6kNXzZ833v6wdV4kJw/KXwh0koG6fEuZiHefFTFyu/7KzILCAWI6+VsehDWB1hU+nN6mzoBf8GZ9xTVVl+64wdkseFVeS647XzAvsJOW59p6sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QBATCApT; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769006991; x=1800542991;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6LTNJOg2E8MaKxl1xCHKvy5jwJaoAeaRCG+agnK2yY8=;
+  b=QBATCApTNclQtfCtM8qF18hoPqgLFjfIIFA223ORHq+oq9IdRg7CvTlj
+   3Q8QEIkva4enhUdsOa6C/2Y2OsWLZRvc5StxdQIY89g79oyjWjJXf22Jt
+   naZUCxEeLYte9Y/tHAyFEdy/KJcHvftCRe2C+RfO98JSkYK2E/O/TJeRC
+   LzJX1MSUKwuP9dOFmC++NoJvL1cLk1janrALa4b5gEULV57GwlCovzGPD
+   LDqGBmYaO2h70Gp7FRQ+H93MXsnBKZbp6wt0fAZX55tWfSD82YyaErerR
+   LPs196vcVYskgL4yuaiEBaTpU4g6hgwiZUteVs1gAzk9+n0VhZ0zBQ/OL
+   A==;
+X-CSE-ConnectionGUID: xcqdNcMiS+69pLtcRktYbg==
+X-CSE-MsgGUID: ZApQ79opR9+ZNqLaD6kxRA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="74087018"
+X-IronPort-AV: E=Sophos;i="6.21,242,1763452800"; 
+   d="scan'208";a="74087018"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 06:49:48 -0800
+X-CSE-ConnectionGUID: n3tKdQlJR0Kh2goUKtuKHg==
+X-CSE-MsgGUID: FgiU5irsRD68qf9iNbOS1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,242,1763452800"; 
+   d="scan'208";a="229432837"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 21 Jan 2026 06:49:41 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1viZWc-00000000RJx-31ND;
+	Wed, 21 Jan 2026 14:49:38 +0000
+Date: Wed, 21 Jan 2026 22:49:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josua Mayer <josua@solid-run.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Peter Rosin <peda@axentia.se>, Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Andreas Kemnade <andreas@kemnade.info>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Vignesh R <vigneshr@ti.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Yazan Shhady <yazan.shhady@solid-run.com>,
+	Jon Nettleton <jon@solid-run.com>,
+	Mikhail Anikin <mikhail.anikin@solid-run.com>,
+	linux-can@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 2/7] mux: Add helper functions for getting optional
+ and selected mux-state
+Message-ID: <202601212215.qNGA0wVh-lkp@intel.com>
+References: <20260121-rz-sdio-mux-v6-2-38aa39527928@solid-run.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="x7kgznvc7dv3723j"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <39794159-c0cc-498b-a162-44e77b6c371a@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spamd-Result: default: False [-2.36 / 15.00];
-	SIGNED_PGP(-2.00)[];
+In-Reply-To: <20260121-rz-sdio-mux-v6-2-38aa39527928@solid-run.com>
+X-Spamd-Result: default: False [0.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6249-lists,linux-can=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
+	TAGGED_FROM(0.00)[bounces-6250-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
+	FREEMAIL_TO(0.00)[solid-run.com,pengutronix.de,kernel.org,linaro.org,axentia.se,iki.fi,kemnade.info,baylibre.com,atomide.com,gmail.com,ti.com,glider.be,sang-engineering.com];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	MIME_TRACE(0.00)[0:+];
+	DMARC_POLICY_ALLOW(0.00)[intel.com,none];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,pengutronix.de:mid,pengutronix.de:url]
-X-Rspamd-Queue-Id: 2B10B59B1F
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	TAGGED_RCPT(0.00)[linux-can,dt,renesas];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,01.org:url]
+X-Rspamd-Queue-Id: 36DB05A00B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hi Josua,
 
---x7kgznvc7dv3723j
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [can-next 0/5] can: remove private skb headroom infrastructure
-MIME-Version: 1.0
+kernel test robot noticed the following build warnings:
 
-On 21.01.2026 13:55:47, Oliver Hartkopp wrote:
-> I'm not sure how intense you followed my discussion with Jakub and Paolo
-> about my attempt to move the CAN skb specifc content (8 bytes) away from =
-the
-> problematic skb->head reference an hold it directly in struct sk_buff?
->
-> Meanwhile I sent a v2 patch set which has been dropped from netdev patchw=
-ork
-> because of its can-next mail subject:
->
-> https://lore.kernel.org/linux-can/20260117132824.3649-1-socketcan@hartkop=
-p.net/
->
-> I've been running the patches for quite a while now and feel very confide=
-nt
-> that the solution is very efficient and safe for either CAN skbs and non-=
-CAN
-> skbs.
->
-> To be more clear in the struct sk_buff changes I would change the comments
-> in my next respin like this:
->
-> 	union {
-> 		/* skb->encapsulation =3D true */
-> 		struct {
-> 			/* eth/ip encapsulation / tunneling */
-> 			union {
-> 				__be16	inner_protocol;
-> 				__u8	inner_ipproto;
-> 			};
->
-> 			__u16	inner_transport_header;
-> 			__u16	inner_network_header;
-> 			__u16	inner_mac_header;
-> 		};
->
-> 		/* skb->encapsulation =3D false */
-> #if IS_ENABLED(CONFIG_CAN)
-> 		struct {
-> 			/* CAN skb content (ETH_P_CAN*) */
-> 			int	can_iif;
-> 			__u16	can_framelen;
-> 			__u16	can_gw_hops;
-> 		};
-> #endif
-> 	};
->
-> And I wonder if it would make sense to add a WARN_ON_ONCE() in can_rcv() =
-and
-> friends?
->
-> What is your opinion about the patch set?
+[auto build test WARNING on 8f0b4cce4481fb22653697cced8d0d04027cb1e8]
 
-We have to convince the netdev people why we cannot use metadata_dst or
-skb extentions but put things in other more os less arbitrary places.
+url:    https://github.com/intel-lab-lkp/linux/commits/Josua-Mayer/phy-can-transceiver-rename-temporary-helper-function-to-avoid-conflict/20260121-173607
+base:   8f0b4cce4481fb22653697cced8d0d04027cb1e8
+patch link:    https://lore.kernel.org/r/20260121-rz-sdio-mux-v6-2-38aa39527928%40solid-run.com
+patch subject: [PATCH v6 2/7] mux: Add helper functions for getting optional and selected mux-state
+config: i386-randconfig-001-20260121 (https://download.01.org/0day-ci/archive/20260121/202601212215.qNGA0wVh-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260121/202601212215.qNGA0wVh-lkp@intel.com/reproduce)
 
-> Should I make it a net-next patch set to restart the discussion there?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601212215.qNGA0wVh-lkp@intel.com/
 
-Rather continue the discussion :)
+All warnings (new ones prefixed by >>):
 
-regards,
-Marc
+>> Warning: drivers/mux/core.c:56 struct member 'mstate' not described in 'devm_mux_state_state'
+>> Warning: drivers/mux/core.c:56 struct member 'mstate' not described in 'devm_mux_state_state'
 
---
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---x7kgznvc7dv3723j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlw5IoACgkQDHRl3/mQ
-kZzyCgf/U8Av7tRJ6ot+U/xBySvEwle2DDU5f2VyH6HcW5dHFQGwbl+XPkfRDlt9
-f8uPe13T2QjkZc+rPxut/WgrCs/plJE9TBCvp09OG+Ww7sQgtUdV/Er+gc4ZwaCu
-5cvkbAZEecLQJYzqHvnetluRW/6UtYKL3btP0KQj8Fd8VxMD9VQVd+rQ84s913nI
-I7lemUQ6j/ODEDVdJBERpQ6P4cQRT7Gb6XJGbR4DJWKKiycqQZ6sRhWwoFai4S2H
-YNdn2iLnkokFZZm0pNeGoi5o0l0Zn/Apa4itZ5EHjoMF0ES73Y4fC7zfN2N1590k
-cO4GNWY5Nr3tvFTm/ZKWjn+PJzLCkw==
-=ah/k
------END PGP SIGNATURE-----
-
---x7kgznvc7dv3723j--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
