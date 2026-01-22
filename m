@@ -1,57 +1,57 @@
-Return-Path: <linux-can+bounces-6262-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6264-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mDB2OUkdcmmPdQAAu9opvQ
-	(envelope-from <linux-can+bounces-6262-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 22 Jan 2026 13:51:21 +0100
+	id yAqCI3IYcmksawAAu9opvQ
+	(envelope-from <linux-can+bounces-6264-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 22 Jan 2026 13:30:42 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id C107366DE9
-	for <lists+linux-can@lfdr.de>; Thu, 22 Jan 2026 13:51:21 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id F335A66A6F
+	for <lists+linux-can@lfdr.de>; Thu, 22 Jan 2026 13:30:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A31F960C669
-	for <lists+linux-can@lfdr.de>; Thu, 22 Jan 2026 12:13:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 408197EAB8C
+	for <lists+linux-can@lfdr.de>; Thu, 22 Jan 2026 12:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0D2744A707;
-	Thu, 22 Jan 2026 12:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA3D425CF0;
+	Thu, 22 Jan 2026 12:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="d3OSD8Tq"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="OHP+mcX/"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC9E426EB4;
-	Thu, 22 Jan 2026 12:10:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC4343DA55;
+	Thu, 22 Jan 2026 12:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769083861; cv=none; b=Vq9bt1Y6Ajjk2kRAcXw2jDwhqNOe8pBWtL2NqNH4ma0PTJ+aHVwDnEHflCdbrLsIoS9bm6E/6lldWh2MMTTdPD/W/ZQPzl1k1B3eS1XUjQaSRU+8W93wSvi0aRuUYsx7I4BC56xIDmPEshLNWoxmjNejKRS30ujoI9UbCPUHU/E=
+	t=1769083862; cv=none; b=hpWWxocE9s0e3a2UYIGN87nyhcAW9PyLTDgT+b3TmGOET1FcNVUkmAInAr1vWoYiQsQpetVv7M/BxKJGS+RVHWCAIBnAkfU1ZxVjGUtHb59qjJM0p3X8SWA8Drq4VfN29tuSQGiqraYJktmI0gxsKjYxPHdZRGU263mwmnPyG0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769083861; c=relaxed/simple;
-	bh=r7bUfIsAYLSfpdmydyK3ggHQ+jGjEjFE1oj7Od7EfV8=;
+	s=arc-20240116; t=1769083862; c=relaxed/simple;
+	bh=vd7GadClo/RlrvKYnks9oUL4JQToH3YvUgrlmb9pj/4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vc0Tj7Q5JQFzgPZRaMz4PnAp/wjlc7z9HUdrXuZKYc9y8oaj9Tg1Dg18TlRInf+98piOh3eA2O9iXaGhceuNkNqHDz2jh6sP2C/bCDqKjrS+3kDeodyXJxopD8NMH11Ua+jiQqU0kxnLTKEhwpFipknxuqM1i/DN8/VLthrkEDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=d3OSD8Tq reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+	 MIME-Version; b=MP+Y1/wR++YAo9Zktlo+H77L9G85xD1eGCr2ah544SWCNbO7ZiUXO5T/YXICxJ3iftxlZtrW8zlgbYpO1Cxu6mFS4fjIAVVK8K2sy9lE7Fwrm4bbX9VyHQnR61GkG80x11Q0//NfQ+sKKBbC0iCp93MonttSB94huwr5PScPyVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=OHP+mcX/ reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
 Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4dxfzD43b2z1FlXt;
+	by smtp.simply.com (Simply.com) with ESMTP id 4dxfzD6Mp9z1FlXw;
 	Thu, 22 Jan 2026 13:10:48 +0100 (CET)
 Received: from d-5xj5g74.got.gaisler.com.com (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	by smtp.simply.com (Simply.com) with ESMTPA id 4dxfzC6yrmz1FgdJ;
-	Thu, 22 Jan 2026 13:10:47 +0100 (CET)
+	by smtp.simply.com (Simply.com) with ESMTPA id 4dxfzD3pm5z1Fgcl;
+	Thu, 22 Jan 2026 13:10:48 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
 	s=simplycom2; t=1769083848;
-	bh=WNL2SDl32TrWWln0AQnf0KAmAYNyqjJmTlfmTjZRvt8=;
+	bh=LvNXlj/JjGmCmxw9Wh5XNyDZed3gle08v8TWEGLebtQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=d3OSD8TqbuBaVlW2uMrcFidr1T6O2ddGNKOyTro/EExYvbsKSK7ijV/PAFe3UTweH
-	 KrlYCt/nHAVCdQswRoR5tDt6HS1XdzQMaMzNiz1mVz4KGksAhn1Ic8ha861PXvyGNf
-	 hjJIEHE62BCBcvvXsWlMgzLgSKEsmTdr81qOYepIOZdBQ4zrqFytq0qwl+yb3Eg4ik
-	 R2M7azaDrTwNkre/A5a36R0hZ+TtFvWNU/fbhxqp8AucNYNK2qOecZ3wsQp99huoLq
-	 U6W6r1s62/1PjSP9TtXEJ09ySIb+Ar/4lDlxS9LuxX4hyHc0yA2ymBoH4PGRxYzoqn
-	 ajV9B3c0sSF3A==
+	b=OHP+mcX/8wsU7uZfHoJY6br9vYqjHV5yKd7fKHb4EFcYD7funhlWy6coRB8gqQ/6z
+	 IE2Z78+maYnHksTCcs/Syy7zb1sD/XeC+NmKwx7P9tIZgB+k38kMBPEE3zdrtmpDWa
+	 slG+8freLPdYTxGVnGclp/xNbpXE0+FMc3hMvEyMrPcaKi05U2NpoRTb3Jjxj0TqBH
+	 F9SOo5cPo+9pBZ5T6+ZK4Dpt39vxb0rQK1vh5DeSS1xwBM+Z9xyOqLBcQa+z1hO8ZE
+	 pce/C0TwpGEsBDfqcf2FQKo62m0GFfTEcTOpqEGytShpf6rqfpRILqsjky4oPTUKZd
+	 gxqWqp8gjuWOQ==
 From: Arun Muthusamy <arun.muthusamy@gaisler.com>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -63,9 +63,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-can@vger.kernel.org,
 	Daniel Hellstrom <daniel@gaisler.com>,
 	Arun Muthusamy <arun.muthusamy@gaisler.com>
-Subject: [PATCH v3 08/15] can: grcan: optimize DMA by 32-bit accesses
-Date: Thu, 22 Jan 2026 13:10:31 +0100
-Message-ID: <20260122121038.7910-9-arun.muthusamy@gaisler.com>
+Subject: [PATCH v3 09/15] can: grcan: set DMA mask for GRCAN and GRCANFD to 32-bit
+Date: Thu, 22 Jan 2026 13:10:32 +0100
+Message-ID: <20260122121038.7910-10-arun.muthusamy@gaisler.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260122121038.7910-1-arun.muthusamy@gaisler.com>
 References: <20260122121038.7910-1-arun.muthusamy@gaisler.com>
@@ -87,7 +87,7 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6262-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6264-lists,linux-can=lfdr.de];
 	PRECEDENCE_BULK(0.00)[];
 	R_DKIM_PERMFAIL(0.00)[gaisler.com:s=simplycom2];
 	MIME_TRACE(0.00)[0:+];
@@ -95,7 +95,7 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	TO_DN_SOME(0.00)[];
 	DKIM_TRACE(0.00)[gaisler.com:~];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
 	RCVD_COUNT_FIVE(0.00)[5];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	FROM_NEQ_ENVFROM(0.00)[arun.muthusamy@gaisler.com,linux-can@vger.kernel.org];
@@ -103,87 +103,40 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can,dt];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:helo,ams.mirrors.kernel.org:rdns,gaisler.com:mid,gaisler.com:email]
-X-Rspamd-Queue-Id: C107366DE9
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns,gaisler.com:mid,gaisler.com:email]
+X-Rspamd-Queue-Id: F335A66A6F
 X-Rspamd-Action: no action
 
 From: Daniel Hellstrom <daniel@gaisler.com>
 
-Optimizes DMA transfers in the GRCAN driver by reorganizing
-data handling to use 32-bit accesses instead of individual
-byte accesses.
+Sets the DMA mask for GRCAN and GRCANFD devices to 32-bit.
+Setting the DMA mask and coherent DMA mask to 32-bit ensures proper
+memory addressing during DMA operations
 
 Signed-off-by: Daniel Hellstrom <daniel@gaisler.com>
 Signed-off-by: Arun Muthusamy <arun.muthusamy@gaisler.com>
 ---
- drivers/net/can/grcan.c | 26 ++++++++++----------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
+ drivers/net/can/grcan.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
-index 5d09f61a153c..e2415529db45 100644
+index e2415529db45..a2a5a5c868ff 100644
 --- a/drivers/net/can/grcan.c
 +++ b/drivers/net/can/grcan.c
-@@ -194,9 +194,6 @@ struct grcan_registers {
- #define GRCAN_MSG_OFF		0x00000002
- #define GRCAN_MSG_PASS		0x00000001
+@@ -1747,6 +1747,13 @@ static int grcan_probe(struct platform_device *ofdev)
+ 		goto exit_error;
+ 	}
  
--#define GRCAN_MSG_DATA_SLOT_INDEX(i) (2 + (i) / 4)
--#define GRCAN_MSG_DATA_SHIFT(i) ((3 - (i) % 4) * 8)
--
- #define GRCAN_BUFFER_ALIGNMENT		1024
- #define GRCAN_DEFAULT_BUFFER_SIZE	1024
- #define GRCAN_VALID_TR_SIZE_MASK	0x001fffc0
-@@ -1218,7 +1215,7 @@ static int grcan_receive(struct net_device *dev, int budget)
- 	struct sk_buff *skb;
- 	u32 wr, rd, startrd;
- 	u32 *slot;
--	u32 i, rtr, eff, j, shift;
-+	u32 rtr, eff;
- 	int work_done = 0;
- 
- 	rd = grcan_read_reg(&regs->rxrd);
-@@ -1254,11 +1251,10 @@ static int grcan_receive(struct net_device *dev, int budget)
- 		if (rtr) {
- 			cf->can_id |= CAN_RTR_FLAG;
- 		} else {
--			for (i = 0; i < cf->len; i++) {
--				j = GRCAN_MSG_DATA_SLOT_INDEX(i);
--				shift = GRCAN_MSG_DATA_SHIFT(i);
--				cf->data[i] = (u8)(slot[j] >> shift);
--			}
-+			if (cf->can_dlc > 0)
-+				memcpy(cf->data, &slot[2], sizeof(u32));
-+			if (cf->can_dlc > 4)
-+				memcpy(cf->data + 4, &slot[3], sizeof(u32));
- 
- 			stats->rx_bytes += cf->len;
- 		}
-@@ -1397,8 +1393,7 @@ static netdev_tx_t grcan_start_xmit(struct sk_buff *skb,
- 	u32 id, txwr, txrd, space, txctrl;
- 	int slotindex;
- 	u32 *slot;
--	u32 i, rtr, eff, dlc, tmp, err;
--	int j, shift;
-+	u32 rtr, eff, dlc, tmp, err;
- 	unsigned long flags;
- 	u32 oneshotmode = priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT;
- 
-@@ -1451,11 +1446,10 @@ static netdev_tx_t grcan_start_xmit(struct sk_buff *skb,
- 	slot[1] = ((dlc << GRCAN_MSG_DLC_BIT) & GRCAN_MSG_DLC);
- 	slot[2] = 0;
- 	slot[3] = 0;
--	for (i = 0; i < dlc; i++) {
--		j = GRCAN_MSG_DATA_SLOT_INDEX(i);
--		shift = GRCAN_MSG_DATA_SHIFT(i);
--		slot[j] |= cf->data[i] << shift;
--	}
-+	if (dlc > 0)
-+		memcpy(&slot[2], cf->data, sizeof(u32));
-+	if (dlc > 4)
-+		memcpy(&slot[3], cf->data + 4, sizeof(u32));
- 
- 	/* Checking that channel has not been disabled. These cases
- 	 * should never happen
++	/* On 64-bit systems.. GRCAN and GRCANFD can only address 32-bit */
++	err = dma_set_mask_and_coherent(&ofdev->dev, DMA_BIT_MASK(32));
++	if (err) {
++		dev_err_probe(&ofdev->dev, err, "No usable DMA configuration.\n");
++		goto exit_error;
++	}
++
+ 	irq = irq_of_parse_and_map(np, GRCAN_IRQIX_IRQ);
+ 	if (!irq) {
+ 		dev_err(&ofdev->dev, "no irq found\n");
 -- 
 2.51.0
 
