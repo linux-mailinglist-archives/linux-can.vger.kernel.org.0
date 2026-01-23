@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-6284-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6285-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0MHHLaCDc2kXxAAAu9opvQ
-	(envelope-from <linux-can+bounces-6284-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 23 Jan 2026 15:20:16 +0100
+	id sK6EOuCEc2kDxAAAu9opvQ
+	(envelope-from <linux-can+bounces-6285-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 23 Jan 2026 15:25:36 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47C5376EDC
-	for <lists+linux-can@lfdr.de>; Fri, 23 Jan 2026 15:20:16 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AC0477010
+	for <lists+linux-can@lfdr.de>; Fri, 23 Jan 2026 15:25:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 17897303E2C7
-	for <lists+linux-can@lfdr.de>; Fri, 23 Jan 2026 14:17:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 18BC0301E7FD
+	for <lists+linux-can@lfdr.de>; Fri, 23 Jan 2026 14:25:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23DBB27B352;
-	Fri, 23 Jan 2026 14:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24C91A930;
+	Fri, 23 Jan 2026 14:25:33 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1ABE20C463
-	for <linux-can@vger.kernel.org>; Fri, 23 Jan 2026 14:17:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6B113B5AE
+	for <linux-can@vger.kernel.org>; Fri, 23 Jan 2026 14:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769177863; cv=none; b=QyDf/VLOo+6iGloNCs7wbVTjkncG3OCMd2dO6duceZHfki87EAPSrFyic8SV2ZGSx3JTPvaaze03ciPWz5Xbe+XcID8xZaG8RraNQRqCbflJu+73CZ13t6o6GtkeM00tg/OFMD+/4/BULEEF+gxOp7TiwXU5KR+5B7MFaTDW6Yw=
+	t=1769178333; cv=none; b=IN4Be4VpkPaqwAHz11JQ8jX7DWiQLAPzANtwi+N7DCQbASPYqfb+4aR/xFHnBW7hAmEMwXHRdHvKEv0Ei9Wc+mUexCPxWwSHXbJiBvR+/qRwdLz05409n7VFcrOrEhdtkNWqZLes3C2/KVHFr+LKYoqgF3Ma3/H5+t41XKY9WHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769177863; c=relaxed/simple;
-	bh=tZQdaapFyjK/60l8c6qEELow9aA4TJhUEJgJSERxvHU=;
+	s=arc-20240116; t=1769178333; c=relaxed/simple;
+	bh=fbJTvAegLNy8obdD3xIT8wnMQVwN8ckpnOiiBgFcdxY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rlw7m8iG7v7JbDrC4tsa3FBFh6MFJsIYF+j9gTxvb5cCJyWRY73zOeF1bMDpxq837bqIebOMxvJag63229CK41kKIr7+B0a60NM29iEZMgEYAcnvYFDMfGK8DJHJaAwn0ZFq89sKGDhVczm64zSuCGHQcVsfY24W3vV0jY1nC8g=
+	 Content-Type:Content-Disposition:In-Reply-To; b=N4oYgKKwRjiX6GVFpEGkdNjbqiSLsKgE3D7Ck765p4Ub8uJk7+DDDh8Wjp3yc0BBHUzXx6bar1jTvT6WcC39ZP5STf1q1q1a6fKexRINkC3YOc7Q3J+VVMqlrOhCzYHJG5d2KSQOCOFgU0Algw0xAgptNsBh6nTb2QZzsLf2gKo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -36,31 +36,31 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1vjHyf-0002jI-Ax; Fri, 23 Jan 2026 15:17:33 +0100
+	id 1vjI6F-0003sz-HL; Fri, 23 Jan 2026 15:25:23 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1vjHyf-0026gG-2R;
-	Fri, 23 Jan 2026 15:17:33 +0100
+	id 1vjI6F-0026hu-3C;
+	Fri, 23 Jan 2026 15:25:23 +0100
 Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id C7C524D6F7D;
-	Fri, 23 Jan 2026 14:17:32 +0000 (UTC)
-Date: Fri, 23 Jan 2026 15:17:32 +0100
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 088F54D6F96;
+	Fri, 23 Jan 2026 14:25:23 +0000 (UTC)
+Date: Fri, 23 Jan 2026 15:25:22 +0100
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Arun Muthusamy <arun.muthusamy@gaisler.com>
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
 	mailhol@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-can@vger.kernel.org
-Subject: Re: [PATCH v3 15/15] can: grcan: Update echo skb handling to match
- variable length CANFD frame
-Message-ID: <20260123-jolly-orangutan-of-finesse-5a9bb3-mkl@pengutronix.de>
+Subject: Re: [PATCH v3 13/15] can: grcan: Add CANFD TX support alongside
+ legacy CAN
+Message-ID: <20260123-berserk-crocodile-of-champagne-49d2b0-mkl@pengutronix.de>
 References: <20260122121038.7910-1-arun.muthusamy@gaisler.com>
- <20260122121038.7910-16-arun.muthusamy@gaisler.com>
+ <20260122121038.7910-14-arun.muthusamy@gaisler.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -68,9 +68,9 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="di6szzwy2btquo6k"
+	protocol="application/pgp-signature"; boundary="gfzuvzgifz5pg42n"
 Content-Disposition: inline
-In-Reply-To: <20260122121038.7910-16-arun.muthusamy@gaisler.com>
+In-Reply-To: <20260122121038.7910-14-arun.muthusamy@gaisler.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
@@ -81,14 +81,14 @@ X-Spamd-Result: default: False [-2.56 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6284-lists,linux-can=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-6285-lists,linux-can=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DMARC_NA(0.00)[pengutronix.de];
@@ -98,47 +98,127 @@ X-Spamd-Result: default: False [-2.56 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	NEURAL_HAM(-0.00)[-0.998];
 	RCPT_COUNT_SEVEN(0.00)[8];
 	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 47C5376EDC
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:url,pengutronix.de:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6AC0477010
 X-Rspamd-Action: no action
 
 
---di6szzwy2btquo6k
+--gfzuvzgifz5pg42n
 Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3 15/15] can: grcan: Update echo skb handling to match
- variable length CANFD frame
+Subject: Re: [PATCH v3 13/15] can: grcan: Add CANFD TX support alongside
+ legacy CAN
 MIME-Version: 1.0
 
-On 22.01.2026 13:10:38, Arun Muthusamy wrote:
-[...]
+On 22.01.2026 13:10:36, Arun Muthusamy wrote:
+> Include CANFD TX support with the legacy CAN support, enabling
+> support for extended data payloads to provide higher bit rates.
+>
+> Signed-off-by: Arun Muthusamy <arun.muthusamy@gaisler.com>
+> ---
+>  drivers/net/can/grcan.c | 102 +++++++++++++++++++++++++++++-----------
+>  1 file changed, 74 insertions(+), 28 deletions(-)
+>
+> diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+> index 9fc18064fab1..508ad5320cff 100644
+> --- a/drivers/net/can/grcan.c
+> +++ b/drivers/net/can/grcan.c
+> @@ -174,6 +174,7 @@ struct grcan_registers {
+>  #define GRCAN_IRQ_DEFAULT (GRCAN_IRQ_RX | GRCAN_IRQ_TX | GRCAN_IRQ_ERROR=
+S)
+>
+>  #define GRCAN_MSG_SIZE		16
+> +#define GRCAN_CLASSIC_DATA_SIZE 8
+>
+>  #define GRCAN_MSG_IDE		0x80000000
+>  #define GRCAN_MSG_RTR		0x40000000
+> @@ -195,6 +196,10 @@ struct grcan_registers {
+>  #define GRCAN_MSG_OFF		0x00000002
+>  #define GRCAN_MSG_PASS		0x00000001
+>
+> +#define GRCAN_MSG_EID_MASK      GENMASK(28, 0)
+> +#define GRCAN_MSG_BID_MASK      GENMASK(28, 18)
+> +#define GRCAN_MSG_DLC_MASK      GENMASK(31, 28)
+> +
+>  #define GRCAN_BUFFER_ALIGNMENT		1024
+>  #define GRCAN_DEFAULT_BUFFER_SIZE	1024
+>  #define GRCAN_VALID_TR_SIZE_MASK	0x001fffc0
+> @@ -227,6 +232,9 @@ struct grcan_registers {
+>  #define GRCANFD_FDBTR_PS2_BIT 5
+>  #define GRCANFD_FDBTR_SJW_BIT 0
+>
+> +#define GRCAN_TX_BRS  BIT(25)
+> +#define GRCAN_TX_FDF  BIT(26)
+> +
+>  /* Hardware capabilities */
+>  struct grcan_hwcap {
+>  	/* CAN-FD capable, indicates GRCANFD IP.
+> @@ -1218,6 +1226,13 @@ static void grcan_transmit_catch_up(struct net_dev=
+ice *dev)
+>  	spin_unlock_irqrestore(&priv->lock, flags);
+>  }
+>
+> +static int grcan_numbds(int len)
+> +{
+> +	if (len <=3D GRCAN_CLASSIC_DATA_SIZE)
+> +		return 1;
+> +	return 1 + ((len - GRCAN_CLASSIC_DATA_SIZE + GRCAN_MSG_SIZE) / GRCAN_MS=
+G_SIZE);
 
-> @@ -1575,7 +1591,16 @@ static netdev_tx_t grcan_start_xmit(struct sk_buff=
+This looks strange, what is calculated here? Why is "<=3D
+GRCAN_CLASSIC_DATA_SIZE" a special case?
+
+> +}
+> +
+>  static int grcan_receive(struct net_device *dev, int budget)
+>  {
+>  	struct grcan_priv *priv =3D netdev_priv(dev);
+> @@ -1400,15 +1415,22 @@ static netdev_tx_t grcan_start_xmit(struct sk_buf=
+f *skb,
+>  				    struct net_device *dev)
+>  {
+>  	struct grcan_priv *priv =3D netdev_priv(dev);
+> -	struct grcan_registers __iomem *regs =3D priv->regs;
+> +	struct grcan_registers __iomem *regs;
+> +	u32 eff, rtr, dlc, tmp, err, can_id;
+>  	struct grcan_dma *dma =3D &priv->dma;
+> -	struct can_frame *cf =3D (struct can_frame *)skb->data;
+> +	u32 bds, copy_len, payload_offset;
+>  	u32 id, txwr, txrd, space, txctrl;
+> -	int slotindex;
+> -	u32 *slot;
+> -	u32 rtr, eff, dlc, tmp, err;
+> +	struct canfd_frame *cfd;
+> +	struct can_frame *cf;
+>  	unsigned long flags;
+> -	u32 oneshotmode =3D priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT;
+> +	u32 oneshotmode;
+> +	u8 *payload;
+> +	u32 *slot;
+> +	u8 len;
+> +	int i;
+> +
+> +	regs =3D priv->regs;
+> +	oneshotmode =3D priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT;
+>
+>  	if (can_dev_dropped_skb(dev, skb))
+>  		return NETDEV_TX_OK;
+> @@ -1419,6 +1441,18 @@ static netdev_tx_t grcan_start_xmit(struct sk_buff=
  *skb,
->  	 * can_put_echo_skb would be an error unless other measures are
->  	 * taken.
->  	 */
-> -	can_put_echo_skb(skb, dev, slotindex, 0);
-> +
-> +	priv->echo_skb_idx =3D priv->next_echo_idx;
-> +
-> +	can_put_echo_skb(skb, dev, priv->next_echo_idx, 0);
-> +
-> +	/* Move to the next index in the echo skb buffer */
-> +	priv->next_echo_idx =3D (priv->next_echo_idx + 1) % priv->can.echo_skb_=
-max;
-> +
-> +	if (priv->can.echo_skb[priv->echo_skb_idx])
-> +		netif_stop_queue(dev);
+>  	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+>  		return NETDEV_TX_BUSY;
+>
+> +	cfd =3D (struct canfd_frame *)skb->data;
+> +	len     =3D cfd->len;
+> +	can_id  =3D cfd->can_id;
+> +	payload =3D cfd->data;
 
-You also use "if (unlikely(space =3D=3D 1)) netif_stop_queue(dev);", that
-looks suspicious. Why have 2 independent ways to check if the TX queue
-is full?
+one space in front of the "=3D" please
 
 Marc
 
@@ -148,20 +228,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---di6szzwy2btquo6k
+--gfzuvzgifz5pg42n
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlzgvkACgkQDHRl3/mQ
-kZznWwgAq/9I/ClKJvOD5Q4TVO2sMzbDGU6vs9G82gYb3e/12vfgeNohhG7eyEU8
-4F3CP4Ptf9lHHYcCpCQp7tF9az7eO7MN17lFegXNGJ6L3Qz9fA8JZ5NJWV7rJrZa
-3TsdaJxv5eH/u2/B+9sySlEwOHmt3YAlXGjgoTXPsfm9RCVtgdcoUTIYXAK4DTCr
-cbRjvII8KKRb+KvPqAK2qMnnA6ZCnOUN7+KKRnQ7U69+uLhR+12gEmLpMS7CCzog
-XtSwVhQcKIHLQEh8GFCNX5o061YDtnLyGFr/GNzut+xDMSU4bVh0gMRnkhUtE5e/
-PZlVwgO4q1p6mDOIDQNmMMpPeWHYzw==
-=4o+f
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmlzhM8ACgkQDHRl3/mQ
+kZx90gf9ECnQ9XSNqazfmdERkIKsvpBeY3qmOUiX7l0lE7EY5hIaLzjRSmkWEGqj
+urc0A/f2yPDs1eQucIQ7WfPhuZZRPjLpS/9fAEqpIP7vmk6RjYSrkOBRY4S7ama/
+fERTSxSJqYVnMqjQyiiSTPv1G7u74qp4JEooi/gwzAiPnJMHOwAaFBcsF5bd13gp
+sLNi6hVSJAHTigawoHRTqgnkyCXE+RFFefirgaW0LE4WFbr7JU+5JTYSISGCvjx6
+z5vhgmxR49BN3skl5zuTpLnuoK5RXGrFu5+mV9AAikaZUte5qu/NBZp0DmfBrB91
+YHDfY8ct5Ofl1tj7cHOQcclxWFZBhw==
+=+joU
 -----END PGP SIGNATURE-----
 
---di6szzwy2btquo6k--
+--gfzuvzgifz5pg42n--
 
