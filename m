@@ -1,223 +1,186 @@
-Return-Path: <linux-can+bounces-6293-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6294-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OBDwJqA3dWkqCQEAu9opvQ
-	(envelope-from <linux-can+bounces-6293-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sat, 24 Jan 2026 22:20:32 +0100
+	id eBOWGtTVdWn0IwEAu9opvQ
+	(envelope-from <linux-can+bounces-6294-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sun, 25 Jan 2026 09:35:32 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86BD37F06F
-	for <lists+linux-can@lfdr.de>; Sat, 24 Jan 2026 22:20:31 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E78A78004B
+	for <lists+linux-can@lfdr.de>; Sun, 25 Jan 2026 09:35:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 512BE3002B6C
-	for <lists+linux-can@lfdr.de>; Sat, 24 Jan 2026 21:20:28 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5924E3001328
+	for <lists+linux-can@lfdr.de>; Sun, 25 Jan 2026 08:35:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DEA610F1;
-	Sat, 24 Jan 2026 21:20:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="U9iS5e+O";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="6qRnUUip"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998BF248F4E;
+	Sun, 25 Jan 2026 08:35:29 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.217])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f78.google.com (mail-oo1-f78.google.com [209.85.161.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048D6217722
-	for <linux-can@vger.kernel.org>; Sat, 24 Jan 2026 21:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.217
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769289626; cv=pass; b=DxGx/8xqv6otkM1x4D4mOV+gJ6Od0MRfXerRTFyw19Ej0MxpJujrLGMLNk9OBBMkGBaOy19rRDQedbI1bxCU9SWb3apXeu0jOHMi7HjnBVGPykIxIJISHFF2aJ9Jn9TkDJI8rPZNwqw5KsiCwsRnowmJEiQjc1l8zdQt3kwp47Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769289626; c=relaxed/simple;
-	bh=aAhgxlohdOtQjhqj48JabHB76MDQPcdWO6canHEuAvI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mMaCR3znqqy6hOE3NvRByG4WOd4O3TSVYgLNP+OlJQxuawurij6lTnIdWxtZxDVI9auvViECoKUk42YCgFgVOaPjXL5zbwseVy4z3PkWligKhXlbgtd769DuOLFResfA4hC6qKpRg/1hXECjwdSSlnzZwgsAm6aMuIcIxdJfkJA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=U9iS5e+O; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=6qRnUUip; arc=pass smtp.client-ip=81.169.146.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1769289431; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Rz3gHSJpe2KR8IDL1C0z0MDakOmoMSn3ckIFKCL82AekI77RzeyIf1gBHsEbVXWdwS
-    V6BoNTDScL7QJANurX9HMYT5bH6T7kEIQzoFFD6IrlnWqofVy1AN1FSBBo3oXQ8Iq+Pj
-    WmWtB4n2DSfk9de/8wTGc6drAPFjlNV+aT4rxTABstf0dfinrP6jpvUG7m04YF6Tlj9O
-    xpnrOTE5g1cNGI8mjzPqDf14R6cs7t2l1X1LCTXW0GnunOA7RFtV0GJ6xkckUWwJ7s2C
-    PjHHrEPN+w2og9i1Pc4uKJS19e6l4zc285GQVAbqD3o2jOyr0/4xBc0cfIC8IB0g9+BW
-    2LXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1769289431;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=VlOnmIz6GfXlD7Y0wDFsUE9BCQ5nPgYdBxOA2Thrhs0=;
-    b=TGLLJiiU/mUcEtmkCK9Vh82lNOlnUjTkYSNqKJv2o18wJ3gjqhX82Dfzbmf17nWGqV
-    /wa3JCUBXAHn+KthwU8opC3pTL38k6A3bcm+8Jjpf91N+6QxXJSl2DSZRmxx7ORpGiGX
-    vD++vCssPyhCWNs+J2OoijzQste6MP7WU+HEVdUoEV17Oo8CNJB+CwAiK3PMmqqmrdhQ
-    7RXkPywAOsZ1M6Sw7giBL10x62mcv2tf69qWAlbjsrzw0Ke5Y20zlgeuIfJF6NXDOdAK
-    Jmdxq7oZG+QGBZ1wrLAB8QAJLDS+QHzZZ3RQJwzTl6n8ikwpWjHQmsE7lsGABF9XzTUc
-    ZwHw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1769289431;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=VlOnmIz6GfXlD7Y0wDFsUE9BCQ5nPgYdBxOA2Thrhs0=;
-    b=U9iS5e+O/ppHzTTwY9pRrKd42oHF7UwHN5k9lvfe3H5tnNciEh594PYUkuqroD+njY
-    +ppEEXZuUKkVTdvDVt1l5IJ7evMjEDm58owdXUlD4LWGJFyQlEjk+RI0C9tXp4buW4Ol
-    0nKZsAtwxXEaW61VKL380Lz9cCYGiit6U8FMM58eqahi71O/nmTzw7rdV/BcBaRkfbdF
-    eGIlwPGgs8B1NcuadrIha8qHn0r80+mjU4LP9sud7l9wjJRIPUMjj3t1BRS8tH+IK6Nz
-    ktYP1BaH0uqllWwYZEXscq4969WgWERIEcPYgM3enHkJ6V6jNv4vMBvBcarP2lzKwiIC
-    LguQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1769289431;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=VlOnmIz6GfXlD7Y0wDFsUE9BCQ5nPgYdBxOA2Thrhs0=;
-    b=6qRnUUipBpf1IgWnva1U3KE67jjMjFrBpIFZnHI8fMEFUrOFK1vaYK/HOUMeORX9hp
-    iUxrcrjGB4lDz2szXeCg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7tnMDLztswwlyqon4XDpA0w0c7HaA=="
-Received: from lenov17.lan
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b20OLHBX1C
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sat, 24 Jan 2026 22:17:11 +0100 (CET)
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
-	Vincent Mailhol <mailhol@kernel.org>
-Subject: [PATCH] dummy_can: fix packet statistics
-Date: Sat, 24 Jan 2026 22:17:04 +0100
-Message-ID: <20260124211704.16430-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.47.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DA81482E8
+	for <linux-can@vger.kernel.org>; Sun, 25 Jan 2026 08:35:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.78
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769330129; cv=none; b=P7JHvZHL585HGR2Zt/Kk0+zR/BQcvZeVD9vtxeVYg7fUimKCMn4NFap7NlZuCf+iDnLwQ90dQD2On4Hxhx7iCPctIrCKWQVVjxXHMbxXHmkVkhXEoSBDwcdK1ggjLbTOOJRz1M6FkTjc2HzK+Z+GSRAULpAnVe4u2ZKATAJ0jog=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769330129; c=relaxed/simple;
+	bh=Az+is/AFn37WkDbsnSQSI08Mp9H1ubJiUScdlsH+kIE=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=anm6bPqxABGctPHhfc7fjG5La4MR9b93YphFplNi72rqrARYkS1BH/bWedPEeVDWFM9xbFkLErTHtWUcep3gcF4NT2+8GOHIHf6dyHVdCcuYsUtY3SuJOjFwAbsqysedmng8UCUTNXdLnOxr/WBKmZsSzTYbKjO1Tucv31S+jZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f78.google.com with SMTP id 006d021491bc7-662ca3cb667so4086266eaf.2
+        for <linux-can@vger.kernel.org>; Sun, 25 Jan 2026 00:35:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769330127; x=1769934927;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HJVimj3LwoMN/4DXPtWP7/sOCmqjKaZSVowjkdE5ukU=;
+        b=qQjl+YWhYtyA52Dxf8jTVQN5tAJyolmThoDYZezolk+vfg6F1z7NnkltV7B3HPV/Fs
+         tFx+PaZQKBtQsqkG6AdwZrBR5jY+8pEDkn3PPWznt8OcQqZCaq5pzVYLCXYAnelbw0cS
+         SuMW6m8dhiBOah3zm9qjJVk0nOVcSqb92cBSrPxwFzxNte4II9DCDTlWgefFj1kmUhdz
+         z+yuJH8nylUUbCO8bP/0zNnbvMDry8A5KH53INnbhvin0Udl0RXgX4ZspMuQ7aOkr8+u
+         Bj0+3PY6Ib5MuqySkQ+SxE5ad08GR0djficL/IX6NEltDld/UblLpUT/kzenxZprZgcP
+         ja8Q==
+X-Gm-Message-State: AOJu0Yxr4oBBQBS153M5XoM1DM8OsSmMLin8hHjsZhixezkptUuBKra/
+	2GWvS7ez99tODMzbiqyiRZPih0tWTbvwzMEcS5gMaqKB8P9hx4Aid6abUwfYfMtlDhztvhmRfTu
+	aPI5uulDR4jB7qLKslIdkzfd/FDiWXP5S27KO42oVI4HBjtAHWjLtnFi/Rg/H/A==
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+X-Received: by 2002:a05:6820:c83:b0:662:c1a7:e165 with SMTP id
+ 006d021491bc7-662e04022e4mr575732eaf.30.1769330127040; Sun, 25 Jan 2026
+ 00:35:27 -0800 (PST)
+Date: Sun, 25 Jan 2026 00:35:27 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6975d5cf.a00a0220.33ccc7.0022.GAE@google.com>
+Subject: [syzbot] [can?] KCSAN: data-race in bcm_rx_setup / bcm_rx_update_and_send
+From: syzbot <syzbot+75e5e4ae00c3b4bb544e@syzkaller.appspotmail.com>
+To: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	mkl@pengutronix.de, socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
+X-Spamd-Result: default: False [-0.36 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=676c6f0212d0c041];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6293-lists,linux-can=lfdr.de];
-	DKIM_TRACE(0.00)[hartkopp.net:+];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6294-lists,linux-can=lfdr.de,75e5e4ae00c3b4bb544e];
+	RCVD_TLS_LAST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	SUBJECT_HAS_QUESTION(0.00)[];
+	REDIRECTOR_URL(0.00)[goo.gl];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 86BD37F06F
+	DBL_BLOCKED_OPENRESOLVER(0.00)[goo.gl:url,storage.googleapis.com:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E78A78004B
 X-Rspamd-Action: no action
 
-The former implementation was only counting the tx_packets value.
-Adopt the skb handling from vcan.c to correctly count the statistics
-and fix the packet flow for looped packets.
-The CAN echo support (IFF_ECHO) is enabled in dummy_can_init() to provide
-a more realistic behaviour of real CAN hardware interfaces.
+Hello,
 
-Fixes: 816cf430e84b ("can: add dummy_can driver")
-Cc: Vincent Mailhol <mailhol@kernel.org>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+syzbot found the following issue on:
+
+HEAD commit:    24d479d26b25 Linux 6.19-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=153a9b9a580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=676c6f0212d0c041
+dashboard link: https://syzkaller.appspot.com/bug?extid=75e5e4ae00c3b4bb544e
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e47d2b960e97/disk-24d479d2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/75c59e1fc76a/vmlinux-24d479d2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e42579adf478/bzImage-24d479d2.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+75e5e4ae00c3b4bb544e@syzkaller.appspotmail.com
+
+UDPLite6: UDP-Lite is deprecated and scheduled to be removed in 2025, please contact the netdev mailing list
+==================================================================
+BUG: KCSAN: data-race in bcm_rx_setup / bcm_rx_update_and_send
+
+read to 0xffff88811adccc40 of 16 bytes by interrupt on cpu 1:
+ bcm_rx_changed net/can/bcm.c:500 [inline]
+ bcm_rx_update_and_send+0x37f/0x420 net/can/bcm.c:553
+ bcm_rx_handler+0x2b0/0x580 net/can/bcm.c:739
+ deliver net/can/af_can.c:575 [inline]
+ can_rcv_filter+0x3c6/0x4f0 net/can/af_can.c:636
+ can_receive+0xfb/0x1c0 net/can/af_can.c:662
+ canfd_rcv+0xed/0x190 net/can/af_can.c:705
+ __netif_receive_skb_one_core net/core/dev.c:6152 [inline]
+ __netif_receive_skb+0x120/0x270 net/core/dev.c:6265
+ process_backlog+0x228/0x420 net/core/dev.c:6617
+ __napi_poll+0x5f/0x300 net/core/dev.c:7681
+ napi_poll net/core/dev.c:7744 [inline]
+ net_rx_action+0x452/0x930 net/core/dev.c:7896
+ handle_softirqs+0xb9/0x280 kernel/softirq.c:622
+ run_ksoftirqd+0x1c/0x30 kernel/softirq.c:1063
+ smpboot_thread_fn+0x32a/0x510 kernel/smpboot.c:160
+ kthread+0x488/0x510 kernel/kthread.c:463
+ ret_from_fork+0x148/0x280 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+
+write to 0xffff88811adccc40 of 16 bytes by task 3847 on cpu 0:
+ bcm_rx_setup+0x7c5/0xe00 net/can/bcm.c:1259
+ bcm_sendmsg+0x1bb/0x4a0 net/can/bcm.c:1427
+ sock_sendmsg_nosec net/socket.c:727 [inline]
+ __sock_sendmsg+0x145/0x170 net/socket.c:742
+ ____sys_sendmsg+0x31e/0x4a0 net/socket.c:2592
+ ___sys_sendmsg+0x195/0x1e0 net/socket.c:2646
+ __sys_sendmsg net/socket.c:2678 [inline]
+ __do_sys_sendmsg net/socket.c:2683 [inline]
+ __se_sys_sendmsg net/socket.c:2681 [inline]
+ __x64_sys_sendmsg+0xd4/0x160 net/socket.c:2681
+ x64_sys_call+0x17ba/0x3000 arch/x86/include/generated/asm/syscalls_64.h:47
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xc0/0x2a0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 0 UID: 0 PID: 3847 Comm: syz.0.79 Not tainted syzkaller #0 PREEMPT(voluntary) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+==================================================================
+
+
 ---
- drivers/net/can/dummy_can.c | 50 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 47 insertions(+), 3 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/net/can/dummy_can.c b/drivers/net/can/dummy_can.c
-index 41953655e3d3..a77f5fc5cfda 100644
---- a/drivers/net/can/dummy_can.c
-+++ b/drivers/net/can/dummy_can.c
-@@ -207,17 +207,60 @@ static int dummy_can_netdev_close(struct net_device *dev)
- }
- 
- static netdev_tx_t dummy_can_start_xmit(struct sk_buff *skb,
- 					struct net_device *dev)
- {
-+	struct net_device_stats *stats = &dev->stats;
-+	unsigned int len;
-+	bool loop;
-+
- 	if (can_dev_dropped_skb(dev, skb))
- 		return NETDEV_TX_OK;
- 
--	can_put_echo_skb(skb, dev, 0, 0);
--	dev->stats.tx_packets++;
--	dev->stats.tx_bytes += can_get_echo_skb(dev, 0, NULL);
-+	len = can_skb_get_data_len(skb);
-+	stats->tx_packets++;
-+	stats->tx_bytes += len;
-+
-+	/* set flag whether this packet has to be looped back */
-+	loop = skb->pkt_type == PACKET_LOOPBACK;
-+
-+	skb_tx_timestamp(skb);
-+
-+	/* driver supports echo handling - see dummy_can_init() */
-+	if (!(dev->flags & IFF_ECHO)) {
-+		/* no echo handling available inside this driver */
-+		if (loop) {
-+			/* only count the packets here, because the
-+			 * CAN core already did the echo for us
-+			 */
-+			stats->rx_packets++;
-+			stats->rx_bytes += len;
-+		}
-+		consume_skb(skb);
-+		return NETDEV_TX_OK;
-+	}
-+
-+	/* perform standard echo handling for CAN network interfaces */
-+
-+	if (loop) {
-+		skb = can_create_echo_skb(skb);
-+		if (!skb)
-+			return NETDEV_TX_OK;
- 
-+		/* receive with packet counting */
-+		stats->rx_packets++;
-+		stats->rx_bytes += len;
-+
-+		skb->pkt_type  = PACKET_BROADCAST;
-+		skb->dev       = dev;
-+		skb->ip_summed = CHECKSUM_UNNECESSARY;
-+
-+		netif_rx(skb);
-+	} else {
-+		/* no looped packets => no counting */
-+		consume_skb(skb);
-+	}
- 	return NETDEV_TX_OK;
- }
- 
- static const struct net_device_ops dummy_can_netdev_ops = {
- 	.ndo_open = dummy_can_netdev_open,
-@@ -239,10 +282,11 @@ static int __init dummy_can_init(void)
- 	if (!dev)
- 		return -ENOMEM;
- 
- 	dev->netdev_ops = &dummy_can_netdev_ops;
- 	dev->ethtool_ops = &dummy_can_ethtool_ops;
-+	dev->flags |= IFF_ECHO; /* enable echo handling */
- 	priv = netdev_priv(dev);
- 	priv->can.bittiming_const = &dummy_can_bittiming_const;
- 	priv->can.bitrate_max = 20 * MEGA /* BPS */;
- 	priv->can.clock.freq = 160 * MEGA /* Hz */;
- 	priv->can.fd.data_bittiming_const = &dummy_can_fd_databittiming_const;
--- 
-2.47.3
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
