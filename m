@@ -1,174 +1,175 @@
-Return-Path: <linux-can+bounces-6332-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6333-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WNXUFmPgeWm50gEAu9opvQ
-	(envelope-from <linux-can+bounces-6332-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 11:09:39 +0100
+	id 2Af5OnfieWm50gEAu9opvQ
+	(envelope-from <linux-can+bounces-6333-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 11:18:31 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2A569F42F
-	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 11:09:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B2BF9F5D1
+	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 11:18:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2A4523029E60
-	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 10:04:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F0EC23031319
+	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 10:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0752D0635;
-	Wed, 28 Jan 2026 10:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C41919C546;
+	Wed, 28 Jan 2026 10:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="aFFlQZUP";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="tzKFvR1L"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89BAD2C11E9
-	for <linux-can@vger.kernel.org>; Wed, 28 Jan 2026 10:04:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769594667; cv=none; b=mn1PtnN3cMNFTxXhlg9+lDgOrG52C7rWtEaLahuGsvjPLEMegzrj4KgoOuEohn8G7WvlMGh8FOgmQ0rVHSheT3fXG4NGyb92Cz+teSVJsu+BJcv3hz1f9Qg+J9neN9ll5R64AJBWRx2W+Fl/kh6npStNYUHUh9DsEwwI1PqPGBE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769594667; c=relaxed/simple;
-	bh=cWXOogrWK0vb/sM5Gb08cOEf3p8t+pakkcmTytY6enE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z5sGtEdxNsZKDJ1oIIefGL/Fh0XTLS+MEGlUQeVvVqB4oGW5RzKPOeqypGiiDhsFJBXvs4hDmlDk/oNNWvWC+MA7JjZZ34PBSutQgAk8Rlg0OKnU2jgoZ/4ywtdkZvOwRMifSO0j0r/p65iVMDLv6TOG9EidnIZlIC565OTqCEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vl2PQ-00049x-BJ; Wed, 28 Jan 2026 11:04:24 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vl2PQ-002tnW-2Q;
-	Wed, 28 Jan 2026 11:04:24 +0100
-Received: from pengutronix.de (p54b15bf8.dip0.t-ipconnect.de [84.177.91.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id C04494DA0C6;
-	Wed, 28 Jan 2026 10:04:23 +0000 (UTC)
-Date: Wed, 28 Jan 2026 11:04:23 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, 
-	linux-can@vger.kernel.org
-Subject: Re: [net-next 0/6] move CAN skb headroom content to skb extensions
-Message-ID: <20260128-keen-owl-of-emphasis-ca7f18-mkl@pengutronix.de>
-X-AI: stop_reason: "refusal"
-References: <20260125201601.5018-1-socketcan@hartkopp.net>
- <20260127174937.4c5fc226@kernel.org>
- <67cb17f4-2f72-4847-aa04-3633f3d8df33@hartkopp.net>
- <20260128-booby-of-phenomenal-proficiency-4db5ab-mkl@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345F02DC791;
+	Wed, 28 Jan 2026 10:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.163
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769595451; cv=pass; b=TQZvM6My8fmUnK+g8RxOmWHCvCG2zn2o0mujqe6M5GRVa/KQcBbRlgbAyXfkqHJj7kTJcmgv6XTtxT3pGwnQLjsOMk6U6/BIplHH6QsmU3xJ7cTKQllYr23HXkt5qocFPGMQE50YzVhb1q0WlKM1P7f56qH6Ot73hYLJCoq8NtA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769595451; c=relaxed/simple;
+	bh=xmq+xeoli88jDyA1F0PUrkVYfYeMP0i3gmFODwVQTfQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JRJruZOsPZpcUAVntPJnJbnkZacFvj1LWtrzETZ/gZ2iMo4nT9flL7m2rZeoYzPoLn4YUCWkuceCeFQbGowmtlORKCvhp/ByS0ZyBAPT5PwZM+p0gdZlBENOUWZOYPRbJABjfFIghVohk0Pzd/qVsNw//c9hoQQpk2pLs2zOXv4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=aFFlQZUP; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=tzKFvR1L; arc=pass smtp.client-ip=81.169.146.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1769595440; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=s/E8wWyTMn0xmuGMar5cOpjWI5yiU438dL+JfF30KhHwVQ40U7Ba3TLcMt/OBoe7FZ
+    0L9GrAQPcsVc8hkd+7E3JhfkOx05JZtr/qLcgp0rUZCtl56h4rkQBFnn0z1vM9alGYkd
+    4U24yw7y5niOOpYvDZKHVa5G4r0ITOMu/dzBp0E2Sm+rsu4o8bJHsDfV7XZaz6Y6s6Ix
+    TvsZdtwIX5lxY7U8O8t9rMMFyc5nJAMTo0uHqapa3oYEbMEWoUJaj+fV1A+9ih3iUGEn
+    RGEwyQZTlsJiRDyr5PR6NVdD8LbV4htW4iHRoZtDAoyz/Xba240KPQyWfajsXb2l9QzS
+    Rbhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1769595440;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=+03VpZOpxRwSZDIGepRERpUpATI+KbCQQgYl+eWVP58=;
+    b=D+9uYz938B70iW+HUbfUK91mMSbRnBhS+OxHEHR5EU17cjg/NIhPzWe+x99Kw0btBG
+    JaygbqCTYIJGivvJn5cWTORZx3Dka2ttvQ+QBujFVcqeRfrs4le9LKQWRDImy5y9bkOy
+    209DjmzI3kzxnm6A75VoQ4R5GSABUiXpRwuBtPFa8RxgrDgswJHczSFzZ+dkL3waCj3n
+    JYe8FDYi+DgKIS8TXyEj1zWFfMO9KZSW7s2hHSL87ssbUN4OuGu/5os7fj3ERSp20EBq
+    uijc5lyys53EP+aH9WhvX7IaQeCd6BWzv2T7N8na18mO4WfzL+QOTs3jQPZJkVLzg2Sb
+    5+1Q==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1769595440;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=+03VpZOpxRwSZDIGepRERpUpATI+KbCQQgYl+eWVP58=;
+    b=aFFlQZUPrljmDf8DZIiLS0VG4A3qR4O8FfNVzpafTwIWzArqEBINzwEjm2yLQfm9Gw
+    jn/8XRBIbV01nZJva/CoGM1x+ay19MViXNVR5aTVsjuI5F0ym9PTF9mLUCBIRIYVNnv7
+    JqKikzbdozDz0PVwyfiRHfwlAXOcbl4ppSQXj14DyXTYPKjQvH67Y8Vtbn09P9I0JKNd
+    ZzrdssJosJ2C2M2ho2gLJVGDn/16uCGpsK4BSWKEd9gmHlSfjdPIHIDP2ofMlCzfyer3
+    uY28ncLdUiMUkhgWRACgDmOfajItUoYWA7Ke5bThMd7bA/5R48NSwNXRsWayHurBWnYy
+    9QOA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1769595440;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=+03VpZOpxRwSZDIGepRERpUpATI+KbCQQgYl+eWVP58=;
+    b=tzKFvR1LYmmezXqTpM2MlY0k0KKfiK1A6TqYU8xZnebkbTjROw/48kgqkfIxw9YPOq
+    ufd+USsh3pozi7WojpDQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8YjX10Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::76e]
+    by smtp.strato.de (RZmta 54.1.0 AUTH)
+    with ESMTPSA id K0e68b20SAHKlEU
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Wed, 28 Jan 2026 11:17:20 +0100 (CET)
+Message-ID: <e159066a-d957-4b42-a6ba-2439e837d9cb@hartkopp.net>
+Date: Wed, 28 Jan 2026 11:17:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="oysvqpl4c7f3mvsl"
-Content-Disposition: inline
-In-Reply-To: <20260128-booby-of-phenomenal-proficiency-4db5ab-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [net-next 0/6] move CAN skb headroom content to skb extensions
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+ linux-can@vger.kernel.org
+References: <20260125201601.5018-1-socketcan@hartkopp.net>
+ <20260127174937.4c5fc226@kernel.org>
+ <67cb17f4-2f72-4847-aa04-3633f3d8df33@hartkopp.net>
+ <20260128-booby-of-phenomenal-proficiency-4db5ab-mkl@pengutronix.de>
+ <20260128-keen-owl-of-emphasis-ca7f18-mkl@pengutronix.de>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20260128-keen-owl-of-emphasis-ca7f18-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.56 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
+	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-6332-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6333-lists,linux-can=lfdr.de];
+	DKIM_TRACE(0.00)[hartkopp.net:+];
 	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	R_DKIM_NA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[strato-hosting.co.uk:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,pengutronix.de:url,pengutronix.de:mid]
-X-Rspamd-Queue-Id: C2A569F42F
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[rzone.de:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,hartkopp.net:email,hartkopp.net:dkim,hartkopp.net:mid,pengutronix.de:url,strato-hosting.co.uk:url]
+X-Rspamd-Queue-Id: 9B2BF9F5D1
 X-Rspamd-Action: no action
 
 
---oysvqpl4c7f3mvsl
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [net-next 0/6] move CAN skb headroom content to skb extensions
-MIME-Version: 1.0
 
-On 28.01.2026 10:07:13, Marc Kleine-Budde wrote:
-> > In fact patch 6 stuck in my providers mail system which responded this =
-to
-> > (only) patch 6 =C2=AF\_(=E3=83=84)_/=C2=AF
-> >
-> > 5.7.1 Refused by local policy. No SPAM please! (B-EX
-> > 155302::1769588601-AC38E895-223F95BA/10/71040183929) see https://www.st=
-rato-hosting.co.uk/faq/product/why-are-my-emails-not-being-delivered
-> > [MSG0011]
-> >
-> > As this could not been solved since Sunday I'll kindly ask Marc to send=
- the
-> > attached v2 patchset (including your __u32 remark) to the mailing list,=
- so
-> > that also the AI bot can take a look at it.
->
-> I'll do. In the mean time, please have a look at b4, it has support for
-> sending patches via a web hook.
+On 28.01.26 11:04, Marc Kleine-Budde wrote:
+> On 28.01.2026 10:07:13, Marc Kleine-Budde wrote:
+>>> In fact patch 6 stuck in my providers mail system which responded this to
+>>> (only) patch 6 ¯\_(ツ)_/¯
+>>>
+>>> 5.7.1 Refused by local policy. No SPAM please! (B-EX
+>>> 155302::1769588601-AC38E895-223F95BA/10/71040183929) see https://www.strato-hosting.co.uk/faq/product/why-are-my-emails-not-being-delivered
+>>> [MSG0011]
+>>>
+>>> As this could not been solved since Sunday I'll kindly ask Marc to send the
+>>> attached v2 patchset (including your __u32 remark) to the mailing list, so
+>>> that also the AI bot can take a look at it.
+>>
+>> I'll do. In the mean time, please have a look at b4, it has support for
+>> sending patches via a web hook.
+> 
+> Your ISP's mailserver also classified Patch#6 as spam when I was sending
+> it :/
+> 
+> | Reporting-MTA: dns; metis.whiteo.stw.pengutronix.de
+> |
+> | Action: failed
+> | Final-Recipient: rfc822;socketcan@hartkopp.net
+> | Status: 5.0.0
+> | Remote-MTA: dns; smtpin.rzone.de
+> | Diagnostic-Code: smtp; 550 5.7.1 Refused by local policy. No SPAM please! (B-EX 149500::1769594129-F202EB70-729865BA/10/71040183929) see https://www.strato-hosting.co.uk/faq/product/why-are-my-emails-not-being-delivered [MSG0011]
 
-Your ISP's mailserver also classified Patch#6 as spam when I was sending
-it :/
+Yes. I was looking in my inbox where it was missing too o_O
+Fortunately it showed up in patchwork :-)
 
-| Reporting-MTA: dns; metis.whiteo.stw.pengutronix.de
-|
-| Action: failed
-| Final-Recipient: rfc822;socketcan@hartkopp.net
-| Status: 5.0.0
-| Remote-MTA: dns; smtpin.rzone.de
-| Diagnostic-Code: smtp; 550 5.7.1 Refused by local policy. No SPAM please!=
- (B-EX 149500::1769594129-F202EB70-729865BA/10/71040183929) see https://www=
-=2Estrato-hosting.co.uk/faq/product/why-are-my-emails-not-being-delivered [=
-MSG0011]
+I'll add that to my problem report ...
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---oysvqpl4c7f3mvsl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAml53yMACgkQDHRl3/mQ
-kZy/fwf/VFWWOTWronZ0zENTA9JycJ+ktnG02/TfSrqONArP2/3Ed5YZhggvg3/w
-QZ10DJTRlFHu7MA/tbE0KgBn7qgSxe29MAvzqN6DuFRt8tJtWfj26tr9iDLCxoT1
-dgBbjY21hkITzANUpK/Jvonl1zrrTUcrOs0o+yQcnm6spgnGxwf/3hFmXZ4aGEIR
-cIp+QPi8/Z/wGx4fjqFJgrOUr5YPLqXCqbsMdvAFsI1auYyWtVGYzLyNGWcBiQt3
-CmWuTEIx+c+M8KmmmFm/ZqV2vPENjOB6d61c8HydTSZVbqshpI7zq0fDGBP+rB1w
-bAB1yt51jBeii/1ZQqpeZaivVPqyEQ==
-=7gJi
------END PGP SIGNATURE-----
-
---oysvqpl4c7f3mvsl--
+Best regards,
+Oliver
 
