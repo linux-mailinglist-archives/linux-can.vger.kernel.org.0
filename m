@@ -1,162 +1,180 @@
-Return-Path: <linux-can+bounces-6368-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6371-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2EaIF6FCemmr4wEAu9opvQ
-	(envelope-from <linux-can+bounces-6368-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 18:08:49 +0100
+	id aJX7AZR7emka7AEAu9opvQ
+	(envelope-from <linux-can+bounces-6371-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 22:11:48 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7953DA68DB
-	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 18:08:48 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87971A8FB2
+	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 22:11:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A0A193048BD4
-	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 16:46:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 489E3302DB6C
+	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 21:11:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 711372EBBA4;
-	Wed, 28 Jan 2026 16:46:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7DD37755D;
+	Wed, 28 Jan 2026 21:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="fHKXEejq";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="r3Cb863Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VYx4Sleh"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697BE2DF138;
-	Wed, 28 Jan 2026 16:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769618788; cv=pass; b=FuZqxqgkFQMqIri3KwMYTc3ukn6+TPkEC8A5o24zZ+B/36UH23f2ncv6PjONIicslaEzPpkM9fgZWb75oVD7Nz+LUzh5HQJE/45HWpV8r1ys9oy1ciqUEes9CDAkZ+ku/YGconiLFY6nOvSx4dOR4bQFMlF/4tjPSaJXgBRuuf0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769618788; c=relaxed/simple;
-	bh=TIMZQnaZKcAN7zxE0UIFMI3iHGOH1+6QecVYLaFUL5A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Au8RbZ34tKoGOmqaQjo3Yd1TeIxoz93VJfshJlYyTVXEKNcZ+obHH06mWRE9d3yh08EXU2GLyAUYD8Qx8BnsJz1d/CdI5iPab1ydTDXSFyDOcRpGB39ZNAFLEHm9bLN03Dfaa++4zXhVw93dMSUzImv5LQhqvhX6uE4g6/nQwlc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=pass smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=fHKXEejq; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=r3Cb863Y; arc=pass smtp.client-ip=81.169.146.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1769618062; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=NGuv4URsYM0msn3DbMRfs3RiZo4uYYyRvxEZFZgTiA0AKyPUXXoX0Ux9Y/Uw0p/peE
-    Is5j7TTtH/AR3b/QQXokNDlcCwFhyPutH0XzALneTlybyLyT5i0U0jIgPENHuWUcllgb
-    2pUP+8dQA4CJfcx6ZvfcdFYPVBdwWWm/rROmrVve77WGOehvkjo9bNfN7ilyz+qubm+5
-    X4/+Y2mg7e7W+3lQCGp7C3jqV1qXajbpy9uvQY9AkyfjAviBNk/i01fZB3iaTq3ZqORh
-    OI1irMFIXaQ6YOc/hcWtCQSPF2sb5qdtLjeJTzPt+0QT8HamzLz8R6NDofwdKJ5n9v37
-    64iQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1769618062;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=G9qVzDCPbKtH6SGk3tuleV58irPrH2dcAcJSD91WEXk=;
-    b=G/Fjf6W8T68zevbHn5E40RroP10ek17hQmNmNywR+TqxINF5XfLzHpfaaoSREHC8B0
-    EH6gQwKRWlIZOWM5RBa/FOEpE1ZQQQz/8m5zdNGBNBY+DPMQEjTM3KctniaGWKjh9tXc
-    aktE7hjLbFYImANXkX3yfkJOZGnqzyDUrD085kRg98TlkyPULBHALY+7z8rpULyuMRh4
-    mm5t5F+APaRpuw0HCVpI5OAQLadP30+oZ5WGcPobprDvLysVT0ABDxfCDLHXyGOVFT7X
-    Z2oN5DTZ9vn9zzVR2c7kAOwQzbGO5BhOSh8Ak8F3Pdm3hfrH5kY2/CeCwMSOaXLdmgEJ
-    utxA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1769618062;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=G9qVzDCPbKtH6SGk3tuleV58irPrH2dcAcJSD91WEXk=;
-    b=fHKXEejqTg+jvo1vXO2asx4cetRT1nboknSJZr/fIZjOJI/HwWzjtlEGup0GA2FkgM
-    uaf0USFrgwnvXrEGjbI3lAmIQwy4Q6kZmp+7PpD2c0bAUbzHVTutK0Qtav+oz0vIhIUf
-    cmDKv/4wqItAznb+elWqVldG8y8fw1I/32idwL3rwttCV9hpSmdq0OfQy2mUFlaYAZ6l
-    LQi8ja7muF7D+vrEecGn+xuPYbhfPE/mkxC2zUHLX74ugt8Af7I47XgsoDg9XLydOBoI
-    ftVp6b3+PBCGlNjzuDRcd3mGL/w1COmgZUrkfLX/jJb3teTZUt+dky091QF/d6oZFasT
-    IG1w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1769618062;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=G9qVzDCPbKtH6SGk3tuleV58irPrH2dcAcJSD91WEXk=;
-    b=r3Cb863Yy907u+Ov1z3i/PGd4wH64dnvNaN4jTWIIMTboNA3/znjMyYTcF12NeXqqo
-    YqznsF6ZsNIEcZmaZxBA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8YjX10Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::76e]
-    by smtp.strato.de (RZmta 54.1.0 AUTH)
-    with ESMTPSA id K0e68b20SGYMoAB
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Wed, 28 Jan 2026 17:34:22 +0100 (CET)
-Message-ID: <f131acda-1a26-4f88-96ef-88a419e1170a@hartkopp.net>
-Date: Wed, 28 Jan 2026 17:34:21 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82ED376BF6;
+	Wed, 28 Jan 2026 21:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769634699; cv=none; b=Lgk6mYUv9WBCkNagLzpJw40IfaUPTDIFUqGbRx7jU2q23/qGn/9ZApcyu2c2T37iNqosWrWDVLxYIfS73g82MVVEOdz8VD5BI2U8x0ILC6C+jpdjhIx+x+A1gznPVRSjJv/a8lfdFGNQlqmdijJkOYEEnR6fguY7rba6Ng7JBTQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769634699; c=relaxed/simple;
+	bh=+P7YkhWUYfROFGEk9Uci7jb1bDo4Nx8GaV5SD6PP8tA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mH7AnsjCKstgD+J4eyYBBZc9xfAKFBCvrXCoFFmO1LIhnzdWZvG4OV303+GbzbrWpiWMU2ONIcqVrTizPJEVTjyxZuHY72+A93nT6ht3B5EByTQINZZKcxU3NdyPACbaJaXSC/E5konPbklvhA2KOzrDe/1e7SDP/Fwq0w/83a0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VYx4Sleh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 53370C116C6;
+	Wed, 28 Jan 2026 21:11:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769634699;
+	bh=+P7YkhWUYfROFGEk9Uci7jb1bDo4Nx8GaV5SD6PP8tA=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=VYx4Sleh3s8JEuve3phuoI1rFWCG0WUkr1llTrWgYBJeU0KHqfd46zSwI+cgm7N49
+	 OAgiIOL6y4gm2KwBzdkN/jUl0q4LSs/3d2AzraAGnzeErFioNSyC2OLY95tG9kwglK
+	 B+QGOa6L0Y1W0bNBl302ouOTTG2x9EHFaV50I59k8jVQk5mprbzONDHQRX73ptXaNe
+	 w1b0GWGiLtgg+1Bc+fYDaW0IYRCxSDGACnG85+nUtJApRIILuNOTj+EUX8E8UXS9NT
+	 vtZvvdGf6e+rBCg5OKWmEto3BicXDWuCqrJLEwUT8AfJXbRuZtyuARAmz6qXHD/XK5
+	 jjrWH9YSHZkww==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F854D46BF2;
+	Wed, 28 Jan 2026 21:11:39 +0000 (UTC)
+From: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
+Subject: [PATCH net-next v3 0/7] move CAN skb headroom content to skb
+ extensions
+Date: Wed, 28 Jan 2026 22:10:50 +0100
+Message-Id: <20260128-can_skb_ext-v1-0-71b8bcbfd8cf@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [net-next 0/6] move CAN skb headroom content to skb extensions
-To: Florian Westphal <fw@strlen.de>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
- linux-can@vger.kernel.org
-References: <20260125201601.5018-1-socketcan@hartkopp.net>
- <20260127174937.4c5fc226@kernel.org> <aXn0iLuRqdOdcIBN@strlen.de>
- <4909066f-cf9c-49ac-b02f-d2e16908bbd9@hartkopp.net>
- <aXoMqaA7b2CqJZNA@strlen.de>
- <e2033d96-e900-4013-a18a-c2e0ffa269d3@hartkopp.net>
- <aXo4jP9M0EQPOaeI@strlen.de>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <aXo4jP9M0EQPOaeI@strlen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFp7emkC/x2M0QpAMBRAf2XdZ6sZFj7Ei6SZi5u6tEkr+XfL4
+ 6lzzgMBPWGAVjzg8aZAByfIMwFus7yipDkxaKWNynUtneUx7NOI8ZKmcnNpiqaxroZUnB4Xiv+
+ tB8ZLcrJEV8Dwvh/V86+magAAAA==
+X-Change-ID: 20260128-can_skb_ext-65cd46399ac8
+To: netdev@vger.kernel.org, linux-can@vger.kernel.org
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769634697; l=3019;
+ i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
+ bh=+P7YkhWUYfROFGEk9Uci7jb1bDo4Nx8GaV5SD6PP8tA=;
+ b=jXfNqyLFnxEi14d4Qz8uRT3xnHdFWu3LpCq8QL4gkW+8k+3uFm/g1HixWXY2w3VZww2BAp4V9
+ 2XKc4FLLfaVCish3ofz9UYNpxuAQUUo1FidfUDvWF8c/l9i47d1X9o6
+X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
+ pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
+X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
+ auth_id=620
+X-Original-From: Oliver Hartkopp <socketcan@hartkopp.net>
+Reply-To: socketcan@hartkopp.net
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
-	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6368-lists,linux-can=lfdr.de];
-	DKIM_TRACE(0.00)[hartkopp.net:+];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-6371-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-can];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:email,hartkopp.net:dkim,hartkopp.net:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7953DA68DB
+	HAS_REPLYTO(0.00)[socketcan@hartkopp.net];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[msgid.link:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,hartkopp.net:replyto,hartkopp.net:email,hartkopp.net:mid]
+X-Rspamd-Queue-Id: 87971A8FB2
 X-Rspamd-Action: no action
 
+CAN bus related skbuffs (ETH_P_CAN/ETH_P_CANFD/ETH_P_CANXL) simply contain
+CAN frame structs for CAN CC/FD/XL of skb->len length at skb->data. Those
+CAN skbs do not have network/mac/transport headers nor other such
+references for encapsulated protocols like ethernet/IP protocols.
 
+To store data for CAN specific use-cases all CAN bus related skbuffs are
+created with a 16 byte private skb headroom (struct can_skb_priv). Using
+the skb headroom and accessing skb->head for this private data led to
+several problems in the past likely due to "The struct can_skb_priv
+business is highly unconventional for the networking stack." [1]
 
-On 28.01.26 17:25, Florian Westphal wrote:
-> Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+This patch set aims to remove the unconventional skb headroom usage for CAN
+bus related skbuffs and use the common skb extensions instead.
 
->> But thinking about BUILD_BUG_ON(skb_ext_total_length() > 255):
->>
->> Shouldn't this be SKB_EXT_CHUNKSIZEOF(struct skb_ext) + sum of the skb
->> ext user data which can be up to 255 *  SKB_EXT_ALIGN_VALUE (= 2040) ???
-> 
-> Why?  Its not about the size in bytes, its there to make sure
-> ext->offset[] (u8) won't overflow for any of the extensions.
-> 
-> Maybe a comment would help.
+[1] https://lore.kernel.org/linux-can/20260104074222.29e660ac@kernel.org/
 
-Oh I misread SKB_EXT_CHUNKSIZEOF m(
+---
+Changes in v2:
+- Patch#1: use u32 instead of __u32 for "struct uniqframe::hash"
+- Patch#3: use u{8,16} instead of __u{8,16} for "struct can_skb_ext"
+- Patch#6: add missing patch
+- Link to v1: https://patch.msgid.link/20260125201601.5018-1-socketcan@hartkopp.net
 
-My bad. Sorry for the noise.
+Changes in v3:
+- Patch#2: new patch: rename dev_put() in CAN subsystem suggested by Checkpatch
+- Patch#3: use netdev_put() instead of dev_put() suggested by Checkpatch
+- Patch#3: initialize can_gw_hops in can_skb_ext_add() suggested by AI-bot
+- Patch#6: add linebreak in sock_alloc_send_skb() to fit the 80 columns (Checkpatch)
+- Link to v2: https://lore.kernel.org/linux-can/20260128-can-skb-ext-v2-0-fe64aa152c8a@pengutronix.de/
+
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+
+---
+Oliver Hartkopp (7):
+      can: use skb hash instead of private variable in headroom
+      can: use netdev_put() instead of deprecated dev_put()
+      can: add CAN skb extension infrastructure
+      can: move ifindex to CAN skb extensions
+      can: move frame_len to CAN skb extensions
+      can: remove private CAN skb headroom infrastructure
+      can: gw: use can_gw_hops instead of sk_buff::csum_start
+
+ MAINTAINERS               |   1 +
+ drivers/net/can/dev/skb.c | 123 +++++++++++++++++++++++++++++-----------------
+ include/linux/can/core.h  |   1 +
+ include/linux/can/skb.h   |  38 +++++---------
+ include/linux/skbuff.h    |   3 ++
+ include/net/can.h         |  28 +++++++++++
+ net/can/Kconfig           |   1 +
+ net/can/af_can.c          |  23 ++++++---
+ net/can/bcm.c             |  44 ++++++++++-------
+ net/can/gw.c              |  38 +++++++-------
+ net/can/isotp.c           |  63 +++++++++++++++---------
+ net/can/j1939/main.c      |   6 +--
+ net/can/j1939/socket.c    |  23 +++++----
+ net/can/j1939/transport.c |  28 +++++++----
+ net/can/raw.c             |  28 ++++++-----
+ net/core/skbuff.c         |   4 ++
+ 16 files changed, 283 insertions(+), 169 deletions(-)
+---
+base-commit: 239f09e258b906deced5c2a7c1ac8aed301b558b
+change-id: 20260128-can_skb_ext-65cd46399ac8
 
 Best regards,
-Oliver
+-- 
+Oliver Hartkopp <socketcan@hartkopp.net>
+
 
 
