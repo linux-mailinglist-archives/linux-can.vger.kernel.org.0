@@ -1,153 +1,117 @@
-Return-Path: <linux-can+bounces-6385-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6386-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SIa3FWCXemku8QEAu9opvQ
-	(envelope-from <linux-can+bounces-6385-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 00:10:24 +0100
+	id ILL/LeS6emkr9gEAu9opvQ
+	(envelope-from <linux-can+bounces-6386-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 02:41:56 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C30EDA9DA8
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 00:10:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B47FAADBC
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 02:41:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3BA6830185AD
-	for <lists+linux-can@lfdr.de>; Wed, 28 Jan 2026 23:09:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 876C53019820
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 01:41:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3702C32E724;
-	Wed, 28 Jan 2026 23:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DA46318EE7;
+	Thu, 29 Jan 2026 01:41:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n9vUvmwo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TGyD6dSg"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4AF320CB1;
-	Wed, 28 Jan 2026 23:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A74931355C;
+	Thu, 29 Jan 2026 01:41:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769641794; cv=none; b=pAOo23kLAT5zp18ZsC+wq1Nj8gzciW12hBLHVBbqJ2yjIj1M/cTpk2OgnyRNSxoeYr2RHv01FXvECP4xDhUiiTg8t79O7veP37UOlCr2PZXmR2W0+X9w8s55youHCEnZ0xNMU07eHmdLBNR7dO0xUbr9gYdOD8jxWh6j70YI570=
+	t=1769650899; cv=none; b=DJQM5qq0bamJgFyw/wDIyrYedU1rx+STH/l420NwojitOZUV6b/JlDs8SAh9HjBOCkqnpX3UEEPzxVcdJN4Ve5YFK3oC8mm2ei1r7O1rYPy7/g4cDh6+3X3aw3lk80jLVFK9xWIzbERNs4hNF0ZrMJy3MhNYFh62DP5t/XcF7is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769641794; c=relaxed/simple;
-	bh=o67jrujsjxrXCYiTT2MYB48pD0sWDtqltINhWwNs+4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gGbWQq5/tdzst+e5BFaHWKaDn6U6iuLAyygJK23NkAcpy/N6scG8QzyCzM3z6eV1bvO146jC7Yoi3QmZhQ0r8HW3Bf4SojkIWrZux3p9sNZ2wEeu5gQCtlpM35UiesjRwP7ODMtHw8lacNnw07QeHuBjo8oFocf7ZygGGev8ZjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n9vUvmwo; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769641793; x=1801177793;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o67jrujsjxrXCYiTT2MYB48pD0sWDtqltINhWwNs+4c=;
-  b=n9vUvmwowxtan1HS5LHlaA2M3trgJgmU8hUUERLtsWe5atmsfmvweUxt
-   MI8POmULqUI3hm9w4FaZXMyt7+z9nmtfg+LM98Y0YaCFqZo8VCDpsrACa
-   eAX0rWUvy7T8HDJ3l1pDe7EDuEubOwhxT8tFU1GTmm42sa38pArc0/kO2
-   ZIvMaGmROOgiZsYuHEldLGx5nxvcryclubIPOUsKyQxexAPXHf/wAXDfV
-   TaN9KUL3WHquATwCzo4+g4QExlcHPNsiNWWzLIcw3PhymTMKweIXHwgSH
-   P769Q68KbblvrlC9+qVEDkD8a0EL1dve35Wair9kxFDqOPhdOWoK2LBcQ
-   Q==;
-X-CSE-ConnectionGUID: SdjWPlFoR86QU46cwTyesA==
-X-CSE-MsgGUID: rXQi76CSRg6xoiYu9MTQCw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11685"; a="81185480"
-X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="81185480"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 15:09:52 -0800
-X-CSE-ConnectionGUID: yUgXZ58CRTGI0RjtolXkpw==
-X-CSE-MsgGUID: 0K/wPvbCRKWuv6+pB8QwTw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="239135293"
-Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
-  by orviesa002.jf.intel.com with ESMTP; 28 Jan 2026 15:09:50 -0800
-Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vlEfT-0000000027R-1K0G;
-	Wed, 28 Jan 2026 23:09:47 +0000
-Date: Thu, 29 Jan 2026 00:09:19 +0100
-From: kernel test robot <lkp@intel.com>
-To: Arun Muthusamy <arun.muthusamy@gaisler.com>, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, mkl@pengutronix.de,
-	mailhol@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-	Arun Muthusamy <arun.muthusamy@gaisler.com>
-Subject: Re: [PATCH v4 02/15] net: can: Convert gaisler,grcan to DT schema
-Message-ID: <202601290045.AC0xSS8q-lkp@intel.com>
-References: <20260128144921.5458-3-arun.muthusamy@gaisler.com>
+	s=arc-20240116; t=1769650899; c=relaxed/simple;
+	bh=xDPqYiZQa7TzJ8mSUu1DL8UHnEMsE1fthjzDfHVLDyM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FuHr7ThiZDuw5FFmReiDgUwK4hurWDiIBKP9FL1QBJrjq5Ers25JMketqQvSstiNfYogWnOObYxV9cmSiV9pdwzxkrsUBrKoWExkzlUhtdEO5M29UZn3yISJV7Len6Uef2EHKWwUC8vLZRBsJDXR0DqvntsyFZpXcmGUVie+e+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGyD6dSg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B69CC4CEF1;
+	Thu, 29 Jan 2026 01:41:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769650898;
+	bh=xDPqYiZQa7TzJ8mSUu1DL8UHnEMsE1fthjzDfHVLDyM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TGyD6dSgfJMlRuEck/YRbTZmCy35V0telRLezAySciRZ5rsNPqR35Up8zki6spQOw
+	 IiS4pBSdiXieVP/hdt22dsaSfhcOCgOKfY2fJO8M1WVfOqElpWJc7u/0BoCSJA9yv/
+	 Z+ZUu35lE4sen/mze4yJTKtssVd3WdgAQSacJOWUKVXf7N7eyB3Ypvb6MzjkiPwQlv
+	 hx7aKfC21j9UnAr6gFY9zEBWsYJqLqU/Q6xqq92j5ZgbAhMLpIqLOEBK1yqmlIcgjj
+	 N/aJFAJZtanTKpr90zPSy9P7tf8AYiyA0ZPvT37XNY4mAxiHi9Gkt+kM0eCkBwQCCS
+	 K//SiJb5Cuk+Q==
+Date: Wed, 28 Jan 2026 17:41:37 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
+Cc: socketcan@hartkopp.net, netdev@vger.kernel.org,
+ linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [PATCH net-next v4 0/6] move CAN skb headroom content to skb
+ extensions
+Message-ID: <20260128174137.65929694@kernel.org>
+In-Reply-To: <20260128-can_skb_ext-v1-0-330f60fd5d7e@hartkopp.net>
+References: <20260128-can_skb_ext-v1-0-330f60fd5d7e@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260128144921.5458-3-arun.muthusamy@gaisler.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6386-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6385-lists,linux-can=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-can@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-can,dt];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,intel.com:mid,01.org:url]
-X-Rspamd-Queue-Id: C30EDA9DA8
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can,socketcan.hartkopp.net];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 5B47FAADBC
 X-Rspamd-Action: no action
 
-Hi Arun,
+On Wed, 28 Jan 2026 23:43:39 +0100 Oliver Hartkopp via B4 Relay wrote:
+> CAN bus related skbuffs (ETH_P_CAN/ETH_P_CANFD/ETH_P_CANXL) simply contain
+> CAN frame structs for CAN CC/FD/XL of skb->len length at skb->data. Those
+> CAN skbs do not have network/mac/transport headers nor other such
+> references for encapsulated protocols like ethernet/IP protocols.
+> 
+> To store data for CAN specific use-cases all CAN bus related skbuffs are
+> created with a 16 byte private skb headroom (struct can_skb_priv). Using
+> the skb headroom and accessing skb->head for this private data led to
+> several problems in the past likely due to "The struct can_skb_priv
+> business is highly unconventional for the networking stack." [1]
+> 
+> This patch set aims to remove the unconventional skb headroom usage for CAN
+> bus related skbuffs and use the common skb extensions instead.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 4001bda0cc911fcdd3dde36963a17f4eac173d7d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Arun-Muthusamy/dt-bindings-Add-vendor-prefix-for-Frontgrade-Gaisler-AB/20260128-230131
-base:   4001bda0cc911fcdd3dde36963a17f4eac173d7d
-patch link:    https://lore.kernel.org/r/20260128144921.5458-3-arun.muthusamy%40gaisler.com
-patch subject: [PATCH v4 02/15] net: can: Convert gaisler,grcan to DT schema
-reproduce: (https://download.01.org/0day-ci/archive/20260129/202601290045.AC0xSS8q-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601290045.AC0xSS8q-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   Warning: MAINTAINERS references a file that doesn't exist: Documentation/sphinx/parse-headers.pl
-   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/display/bridge/megachips-stdpxxxx-ge-b850v3-fw.txt
-   Warning: arch/powerpc/sysdev/mpic.c references a file that doesn't exist: Documentation/devicetree/bindings/powerpc/fsl/mpic.txt
-   Warning: arch/riscv/kernel/kexec_image.c references a file that doesn't exist: Documentation/riscv/boot-image-header.rst
-   Warning: drivers/clocksource/timer-armada-370-xp.c references a file that doesn't exist: Documentation/devicetree/bindings/timer/marvell,armada-370-xp-timer.txt
->> Warning: drivers/net/can/grcan.c references a file that doesn't exist: Documentation/devicetree/bindings/net/can/grcan.txt
-   Warning: include/rv/da_monitor.h references a file that doesn't exist: Documentation/trace/rv/da_monitor_synthesis.rst
-   Warning: rust/kernel/sync/atomic/ordering.rs references a file that doesn't exist: srctree/tools/memory-model/Documentation/explanation.txt
-   Using alabaster theme
-   ERROR: Cannot find file ./include/linux/pci.h
-   WARNING: No kernel-doc for file ./include/linux/pci.h
-
+If you're targeting netdev trees please comply with our community
+guidelines:
+https://www.kernel.org/doc/html/next/process/maintainer-netdev.html
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+pv-bot: 24h
 
