@@ -1,64 +1,102 @@
-Return-Path: <linux-can+bounces-6396-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6397-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4OM9F7l8e2kQFAIAu9opvQ
-	(envelope-from <linux-can+bounces-6396-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 16:28:57 +0100
+	id qL8CBOF9e2kQFAIAu9opvQ
+	(envelope-from <linux-can+bounces-6397-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 16:33:53 +0100
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CD79B1726
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 16:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EA6BB17E0
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 16:33:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1F55A3004627
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 15:28:42 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D30C0300442F
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 15:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A87AC27A45C;
-	Thu, 29 Jan 2026 15:28:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7302877DC;
+	Thu, 29 Jan 2026 15:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="sihDlBry";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="zUPhxT9w"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A458D2E7F29
-	for <linux-can@vger.kernel.org>; Thu, 29 Jan 2026 15:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769700519; cv=none; b=ZB1scPLTt8YT8Wnz730BUfBRjirz9NGsg+YAWsDdkggaVhbjsA6fcHytCfhgTnU6isN5J7sjjtTyrvn28X5hN/qVJOGvr9xoB0ZOEWOz/qkSw91KumdCgl1rGvl8U+tWOVrgtgMHrV0BbPtllw4MFT9YFn3Xm0qI2Sw2bMxNU1s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769700519; c=relaxed/simple;
-	bh=p2IA4ldw8jdu/z3fq9qwiG9pvRY93a8SLGooqZTOYPY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZXG2bMHzCUQ+Tgz8xc3VRP4P7PhU0Z9ICjw1FrQtkIIlYH4cm9RuiDZDBbbm1DDClQ4OeKhmTJqsKI1Mka7Gf9/+Oq9TDC8yNH14DWXPmfKItGd5KvFYTtZXsfcNrK76LYevifKeZSZeA5YPjY5PW0xTyxz+7e3CHhToMLmIhqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vlTwa-0003yi-Bc; Thu, 29 Jan 2026 16:28:28 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vlTwa-0036df-1w;
-	Thu, 29 Jan 2026 16:28:27 +0100
-Received: from pengutronix.de (p54b15bf8.dip0.t-ipconnect.de [84.177.91.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 992F04DB377;
-	Thu, 29 Jan 2026 15:28:27 +0000 (UTC)
-Date: Thu, 29 Jan 2026 16:28:27 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, tools@kernel.org, users@kernel.org, 
-	Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1311829C351
+	for <linux-can@vger.kernel.org>; Thu, 29 Jan 2026 15:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769700823; cv=pass; b=Z1Oo2SgcNrylpTj2v+WPg/K/5KH0gEehWiL1ZiXn1659RIZVM391/bofDmNswzOoDsoJTqm9/G9t2MNsMfhDMcLWIOicZz15XanE9arQ90Xx2Cw0Ih2mlGGPUOuMmA3g9+IJOqEFPqyMxm52LQwdi14ELXOQJEolvGjuZ3gGOQc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769700823; c=relaxed/simple;
+	bh=TQt9a3ix2S5yQM8LyCRgsKOEMPQj6s0U4/SI5lsWHtU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qdtbAoZRXaYveQWo6yjIyIkagpBiuELq2RVBcn/sodTdTNBYABxfLOMOO1YD0JrT+HJ51aWmoqMUVnhCQzoZI7D9ry30VMqVpE66IdVPvr4YU1oiXxTMBjTZFJTg6nL1vIArPDUjVdVEeU/SHzSJUAtMflFF0o+PfHqMxiTduNE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=sihDlBry; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=zUPhxT9w; arc=pass smtp.client-ip=85.215.255.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1769700815; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=DyC88Y3B6FJWsuGorl7OEUHqlDzz6K+WfYp6RWLJA5KwXIp10Bihb1EyxaW2XMRenK
+    uwgUTvahSlHNgQAbCFjR0DvY4umR5rxUshszfyN5x9EgTnUVyRCFIgOAr6P8p1Mr0Slv
+    fWOgb4H8glasHh091HGs6EaF5ThO5SBEVzzNwcUEmoiC0attanILpXbcx9K3HVZbn2YL
+    mtQT4DNpAI6WOFsp4u4GJHax0jBdTBKj9kl8Li3TDXiWJLcVSHVS+Fmf7CdKHxR5XSVk
+    mB5qFDPcwJrLN5vGr73kjW5WkD9yqUNjyzgo6NY1aWpKRZ0jUeCkHxi83xqGWdPxcO1H
+    fpfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1769700815;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=jandEmJgYNF78HRNO+iyvoYGyGvRy6M8J6pyZ/X7Mzk=;
+    b=LMejyMxCErJlydB0gxIwaBF8HUpoSKSbYIg4sFSCIocjzaGboEtLycSmEWTUxvxEbO
+    dkHubURHrrXHx9CD7L8peib/16LbZc4oWMcFoli5uKcFLEAa+jaM+2mcm+bq1KbbNo5L
+    NFg9Hpt1zBUQ85B7elDwCYCbjZH6n8HlkY0Bwi204DsuTWVzZ4YfM3vvBa05+km1Av5e
+    IgZvApaYP9eYAEst1O2mie10FzZvjcUUW1jBm81KKkxcNJgkeqy1ugIqkDqwT0e8ocC1
+    GE7Af/cVlvLFYsG7DrDkCZGNsgE+P1I0SCXc82u/8BoLimkxoxUsoboQLMSnJt25jL6c
+    D59Q==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1769700815;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=jandEmJgYNF78HRNO+iyvoYGyGvRy6M8J6pyZ/X7Mzk=;
+    b=sihDlBryRN69yGw2HAKmE+4fWXsjhGR1h0SiHd1y1CTumuJ0ieCDW614OQvv04B5wY
+    OVRdYJdlYAXrEUOtXji2GZhwFEK7dvYtmVdHTat95cP3+IfnlFYAgw9OpUP4RtGmH9zm
+    TAz0cLwVhCOpL2qii/7b9FXu+892tyAZrP2bQGBf+GQOcpunn1W8FEsiPnZMcktClIks
+    jAvbJt4qF/bHnTT06OkkSv+v0wZmdbfPDX9SC1Wxk3kWECLR438ztS8cZvD5ZqjTpXrZ
+    FSYe3jCxhSNX+L1zcLWqGy6TWP3jeh1dNPLKdM7WKhY9cdU9Bsi5NK4XrdlwIyYTS+20
+    KTjg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1769700815;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=jandEmJgYNF78HRNO+iyvoYGyGvRy6M8J6pyZ/X7Mzk=;
+    b=zUPhxT9wY6KE7ZAddWsZTpZ22UfScth8AkzaHWX64OpOIG3QLhLfofoaSLJWuCr+Z6
+    FIUuAnRE4M90hjrpcqAA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8YjX10Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::76e]
+    by smtp.strato.de (RZmta 54.1.0 AUTH)
+    with ESMTPSA id K0e68b20TFXZse1
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Thu, 29 Jan 2026 16:33:35 +0100 (CET)
+Message-ID: <73cd6c37-c586-402e-87e5-66132a38a624@hartkopp.net>
+Date: Thu, 29 Jan 2026 16:33:29 +0100
+Precedence: bulk
+X-Mailing-List: linux-can@vger.kernel.org
+List-Id: <linux-can.vger.kernel.org>
+List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: b4 prep --auto-to-cc fails with 'NoneType' object is not
  subscriptable
-Message-ID: <20260129-arcane-nocturnal-snake-b4f2ca-mkl@pengutronix.de>
-X-AI: stop_reason: "refusal"
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-can@vger.kernel.org, tools@kernel.org, users@kernel.org,
+ Konstantin Ryabitsev <konstantin@linuxfoundation.org>
 References: <67cb17f4-2f72-4847-aa04-3633f3d8df33@hartkopp.net>
  <20260128-booby-of-phenomenal-proficiency-4db5ab-mkl@pengutronix.de>
  <20260129-versatile-tuscan-mongrel-f9b173-mkl@pengutronix.de>
@@ -69,109 +107,83 @@ References: <67cb17f4-2f72-4847-aa04-3633f3d8df33@hartkopp.net>
  <1d9966d9-877f-46d4-a2a8-56b6d621bb36@hartkopp.net>
  <20260129-savvy-vicugna-of-drama-aeefac-mkl@pengutronix.de>
  <437408f7-95b6-472c-9a30-7a3ad647eced@hartkopp.net>
-Precedence: bulk
-X-Mailing-List: linux-can@vger.kernel.org
-List-Id: <linux-can.vger.kernel.org>
-List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kgaeu7ghloy2trt5"
-Content-Disposition: inline
-In-Reply-To: <437408f7-95b6-472c-9a30-7a3ad647eced@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+ <20260129-arcane-nocturnal-snake-b4f2ca-mkl@pengutronix.de>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20260129-arcane-nocturnal-snake-b4f2ca-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.56 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6396-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6397-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[hartkopp.net:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	R_DKIM_NA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7CD79B1726
+X-Rspamd-Queue-Id: 0EA6BB17E0
 X-Rspamd-Action: no action
 
 
---kgaeu7ghloy2trt5
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: b4 prep --auto-to-cc fails with 'NoneType' object is not
- subscriptable
-MIME-Version: 1.0
 
-On 29.01.2026 15:22:47, Oliver Hartkopp wrote:
-> > Hmm, I cannot reproduce the problem with b4.git, maybe you can try
-> > bisecting:
-> >
-> > | git bisect start $(git merge-base origin/master v0.14.3) origin/master
-> >
-> > then
-> >
-> > | b4 prep --auto-to-cc
-> >
-> > followed by:
-> >
-> > | git bisect good
-> > or
-> > | git bisect bad
-> >
-> > depending if auto-to-cc works or not. Then try "b4 prep --auto-to-cc"
-> > again...
->
-> Maybe that was a misunderstanding. It works well with b4 git.
->
-> Only the original Debian b4 packages (apt install b4) do not work.
+On 29.01.26 16:28, Marc Kleine-Budde wrote:
+> On 29.01.2026 15:22:47, Oliver Hartkopp wrote:
+>>> Hmm, I cannot reproduce the problem with b4.git, maybe you can try
+>>> bisecting:
+>>>
+>>> | git bisect start $(git merge-base origin/master v0.14.3) origin/master
+>>>
+>>> then
+>>>
+>>> | b4 prep --auto-to-cc
+>>>
+>>> followed by:
+>>>
+>>> | git bisect good
+>>> or
+>>> | git bisect bad
+>>>
+>>> depending if auto-to-cc works or not. Then try "b4 prep --auto-to-cc"
+>>> again...
+>>
+>> Maybe that was a misunderstanding. It works well with b4 git.
+>>
+>> Only the original Debian b4 packages (apt install b4) do not work.
+> 
+> The question is:
+> 
+> Is the debian-package v0.14.2 broken, or is b4.bit v0.14.2 broken, too?
+> 
 
-The question is:
+I strongly assume it is a Debian problem.
 
-Is the debian-package v0.14.2 broken, or is b4.bit v0.14.2 broken, too?
+I did not work on Debian Trixie with 0.14.2 and neither on Debian Forky 
+with 0.14.3.
 
-Marc
+Besides the line numbers in the error message there was no difference.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Maybe the b4 package generally lacks some dependency.
 
---kgaeu7ghloy2trt5
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+Oliver
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAml7fJgACgkQDHRl3/mQ
-kZzPcQf+NTgHrj4PhhJGyDZQbzn0Rqx4qKGDpVGZt983IPHymE1+F1qxvchNFv5H
-nl7u2zLLXjQchA68a6DVo+p5snkf8SM6ioCJ0JDuy4VS6Blsn1OkxGRwSlpFZFEp
-xgmGDjNPWtAe7KLMIy3ST1Bc8+BrtOWrPdkW/enNn7fq0x6HW34ajq/adAph8Odt
-9tlIddWtQJT9YjtNLd3QhLUBmi/k3em45hPAY4wF1ULVQLn4a4yfaDfWKIWLobOW
-7MBO5zSVI1tw+YaEDTg1WF1KeBCK/bMmwGhm4Y96qOGyP0Jup+PHDk9TjYlj+hyq
-SXVsEhrMXCEjkuWP5AZxhOtKCS7XFA==
-=9c7h
------END PGP SIGNATURE-----
-
---kgaeu7ghloy2trt5--
 
