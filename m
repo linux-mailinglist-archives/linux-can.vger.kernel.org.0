@@ -1,265 +1,199 @@
-Return-Path: <linux-can+bounces-6399-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6400-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id NzVvLriHe2nnFQIAu9opvQ
-	(envelope-from <linux-can+bounces-6399-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 17:15:52 +0100
+	id 0JgkMQ+Le2mlFQIAu9opvQ
+	(envelope-from <linux-can+bounces-6400-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 17:30:07 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58B72B200C
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 17:15:52 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D934CB22F9
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 17:30:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 17E943007977
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 16:15:50 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6BADF3004078
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 16:29:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46CB033F8A8;
-	Thu, 29 Jan 2026 16:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99EE4341057;
+	Thu, 29 Jan 2026 16:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HtWuaZii"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VuyllrGh"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CA433D6D4
-	for <linux-can@vger.kernel.org>; Thu, 29 Jan 2026 16:15:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769703348; cv=pass; b=gFC38QL5iJ3zgU8QEv46k2JtQMJv/SysXZN27DPjD/4GnQLnGVIdFCTGY7iLPCu3YO//ptOZyzRiD8baHRfvT+3Zy0QypvoQELktLuunq60bMfk8L3rtKs7Npf3peHmlVpmY9FEMVt4SPBrIsKP8YCzzim/vcekV0TXrbt5n/1c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769703348; c=relaxed/simple;
-	bh=1a2qdSYst23Ql9WM1gLQFpUCuswuU/Q+CP4seG8rf9k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gkwpTB2ZB+eCswFQyOcqxYZ7in6qqNx6nmWCCNWT01K1r2AQwVzFORrk0t4eQcKEYJbfu0CgaUfir5iyNC9+mLYLIidG93Wu/BpujC+Q+J26xaOi9HNCyCQ26l2VJflPhe0t73OKURBMbA/n8VEe26itH0m468nJ7+byi1JgA20=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HtWuaZii; arc=pass smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59de38466c2so1345909e87.0
-        for <linux-can@vger.kernel.org>; Thu, 29 Jan 2026 08:15:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769703343; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IO87drEkynBqEVA0D+Y3YHPrd7WoYDs0LJMed1o75ZTn/8ykJorWDy/9CGMl3J59gQ
-         twK+5eNsutoikp5yzIj9KKtHzTazxDkuFm8y+YdB9D64YhjnWGPKYNVfxWYOYHlCT3+h
-         Qy+93+rGCsf2saeC+GHWy0Std0TEAoATncyt8elXW3NMcMB7sFkadU8HfNO3oRmpQkaY
-         GKeEHaFhgne34gYck8ZrfjPf0eCOkZciyT+4RTAvs/n/i3kiNR90lXgjQfYbWovNHcGj
-         rkwdrxYTotcuB64zyEUcIWwoqlBayW3EopXwGzBjGS3edGp6G+kGaDaO42YDPzFlN42H
-         Yy6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=mcZyL8rlWiol7qHJKX4MkvpKMN+RPE+vXis8g5P5uMA=;
-        fh=X0uJoj6XYfxqkbBt/ODeh1wWNZgLnII8bkmdtdmbNSU=;
-        b=MaBBjIwHaBRqUZR1W+EbUR0rDyh9NAdSNCZWMyUovJvC5x76r6tBM8HnFSFekCJN2k
-         UHqcJJvSpDRhK3BKqobV5PreFUqZ6RLrm9p21xZPNwsfBfVVDJ7IQK0OMzEMus/ES4SO
-         j5h6LX/LiFWG9OomNZ6x3SX6FVBV4kRgEH1LdG6CbyjJlGE/c/Rq0B2N0gFlc1CsfWAt
-         w41xGOP5qOkrIyOQpQPJNU2y6w+pHJCY7Iunk1fdRjt/5PKCfd7Wsik2eKYpQ3DSkMEY
-         oWVvU16krY5KmtbbqNA/AnjHshhsS6mc1kiL3ZygNa4Xq5u07ZLj6JECp7ICGTavYmbD
-         rKiw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1769703343; x=1770308143; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mcZyL8rlWiol7qHJKX4MkvpKMN+RPE+vXis8g5P5uMA=;
-        b=HtWuaZiiIIttIDYuqQXvc9JwVdhw1g13h/MSl3cj41S1Ogt8ICxBfGSlgrlqdHD960
-         BA4uczgz+WwyE+jKg82BAqrG7+xkY3jnQhPuJcu1EbHIOFz/NefO6ITbSGDtcLkQns0V
-         8NnF7OF/kM498AUmRBINnK6kcgVezpFtE+LVc6uTNltgMhkFWRsaXVde1To+VDiOcaPu
-         qXmRD126R2sDHYcthUEeOtMneu39Rt3sXWal1Ru6EMPB9IE+DrCyQPP4s0ClxvopG0WV
-         7m2sre1fmjyGS/satGxi76j/FH3N2DELjnvIXdj73O6/Y5HuzamIVdXU4VKEhdMFdboG
-         Ugrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769703343; x=1770308143;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mcZyL8rlWiol7qHJKX4MkvpKMN+RPE+vXis8g5P5uMA=;
-        b=oH3yaEUR538Aa7QDcyVnUrxO5lk5wu+Tayxo9bSTqWuRF4yBIevUe1b1InfpvzySCl
-         mOJaIg2yqIF65HGPWUfqtZ/CmP6EyUGofX+JrR5UnOCOudef+sfmpD0V1HPsfVoX4JKL
-         1JCmAYygfwmVUz1XO/zhAR64qxMSBkOk27qW4O9WLMr5aHpOAtAbM3Dh44MxpgBCVIN/
-         +LmRHnYU2nr/+lwjplOVU6FlAoOEO8JpkR8wCSKOQPqKi8K0aSt7XEvHPi9PG+78bU4v
-         z4OuFftVY9TdInh6H9uduU/wlC4HRSdc3NTNss/hwX7+NWmNg78Hu01aQUDvD0h/ZwBn
-         vTtA==
-X-Forwarded-Encrypted: i=1; AJvYcCVQKIdA7+yYahuttAtgs/eQtZellwpAeZxFdMLgStwxIxvLAxhXVSQKSznMdhu8sX0GsKc5jbRNsbA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzv68VrlU1IyT6fJzVn06EK2610qXfubaJER01R+EKNitIpFjcr
-	F4TmrAzS0twFsu+Hel/gteFtynSLQoptdMyBzBPXUo/wV1efqjJnxRKv+kRCvPNNjp9T1yk6NHt
-	pikK8PuuVyydBKjk7Wt6vaV8kocLrxBPPeoGfCn+QPg==
-X-Gm-Gg: AZuq6aJ74V6LJb1pQPGUs/tH0e+nrfWnV0qTmPMb+9RO9tZiNqLLWD+eSb7ed5A5S9m
-	R1Nxvhh8ISFLVu8E5S35Z/d1741zGMx+iMr+MeLFnxp7K7V1NgL84UE2/042ATGY4rauDLkW6DD
-	whj1knxdpGGaN62dX3H8g6IYLGlwrtUqXaBUY0TclanHqN8gyBttwHQQvlxqGAmeF3AK2g14vmy
-	psn+uKORdtVpBtF93LR1zTh8A8+V4GC+4kI8/7U9s9P2iUHuNPRZRe0sgiEp3EKYs7mI2G5
-X-Received: by 2002:a05:6512:1394:b0:59e:15a:d704 with SMTP id
- 2adb3069b0e04-59e04015669mr4368983e87.13.1769703343301; Thu, 29 Jan 2026
- 08:15:43 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E64313281;
+	Thu, 29 Jan 2026 16:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769704193; cv=none; b=tYAUwSDbOltgNRzpon7kvfz83ZtA88J2YuVv9wQxjLZj/iEHJtcEcL/BMIOOgsHKHpT7ic9eEt9c7Qy/lOWC25MS0XrEBdtIE9qLoJEtQxayTChwfSapb2trFfVAch2pvNNV4MWS/4Nz8X+ahqyy4DUS3s4ZKjfBrQCPv0D/0po=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769704193; c=relaxed/simple;
+	bh=zxy8ZTxOQMkZmrBy1Jm4ziPSAhOzUTyddmgqk9oimVc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UqZv/s1cmA9Cik9mGlMlyOKco9eyIf8FeyPbi1hkEbQVFc+BosKJYF6oS9uinuw4rWGotXMu/dIq848oRccxS4vVIsXpmvr9/jD7sWaBgZbWQMwVvGsTqRZ2hZ0dYv4t8cDoJqz0xCiQlqBRGw3UIHiOcMXM+eJfRw3pdQS7k74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VuyllrGh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 213E8C19422;
+	Thu, 29 Jan 2026 16:29:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769704193;
+	bh=zxy8ZTxOQMkZmrBy1Jm4ziPSAhOzUTyddmgqk9oimVc=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=VuyllrGh5sBb9nEGMhi9OyEdb+YFhb9+TwezIhp/jdTbh1MyS4utiUDcPpVdl/0BD
+	 BSpocmg8WTys91mJCw3+iZwNmBga1FnfND/L+8+JVVqzH/do/nWPgZLW7TbnQMhJ9Q
+	 +ypBRHh033WujFs38OYw0uRDvbBKfbWxaMgB3S/sCh4yxkkpYQQKH7HsgXmpN4DUc/
+	 GrxXF3EEuA3wqWWNAjVoP9m2LMwu7NfNDFRuTfXEDI5F0U9lz5YjDxQsRME5+ao5Ji
+	 foY+IaqSqPJStoM9tY9lsMGo7MTDkh+c7+PJugf/MQlqbbr9oRd/HJKD8SBMdjYyx0
+	 M8APJvaZXMkrQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 084A2D6B08C;
+	Thu, 29 Jan 2026 16:29:53 +0000 (UTC)
+From: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
+Subject: [PATCH net-next v5 0/6] move CAN skb headroom content to skb
+ extensions
+Date: Thu, 29 Jan 2026 17:29:06 +0100
+Message-Id: <20260129-can_skb_ext-v5-0-21252fdc8900@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260128-rz-sdio-mux-v7-0-92ebb6da0df8@solid-run.com>
-In-Reply-To: <20260128-rz-sdio-mux-v7-0-92ebb6da0df8@solid-run.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 29 Jan 2026 17:15:06 +0100
-X-Gm-Features: AZwV_Qg3mhJxcxsaaNM16DuqcQOXYrDFWwz2xcBsELVK6E8j4cCnjP0a7TG6aus
-Message-ID: <CAPDyKFp9StNf1eLaSETxC72=7sXYBmGFmHnv0CXysUGcYma5VA@mail.gmail.com>
-Subject: Re: [PATCH v7 0/7] mmc: host: renesas_sdhi_core: support configuring
- an optional sdio mux
-To: Josua Mayer <josua@solid-run.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Peter Rosin <peda@axentia.se>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
-	Andreas Kemnade <andreas@kemnade.info>, Kevin Hilman <khilman@baylibre.com>, 
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>, 
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Vignesh R <vigneshr@ti.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Yazan Shhady <yazan.shhady@solid-run.com>, Jon Nettleton <jon@solid-run.com>, 
-	Mikhail Anikin <mikhail.anikin@solid-run.com>, linux-can@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANKKe2kC/22NywrDIBREfyXcdS1qmodZ9T9KCDbeNBJQUZGU4
+ L9XXHc5nJkzFwT0GgNMzQUekw7amhK6WwPrLs0HiVYlA6e8p4yPZJVmCcd7wTMSioMUAhUT4wP
+ Kwnnc9FltLzAYiSktmAvZdYjWf+tNYpX/NSZGKGlbuvV0U50a8LlLHw/r3L34YM45/wBBDuics
+ wAAAA==
+X-Change-ID: 20260128-can_skb_ext-0e7a99ed1984
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol@kernel.org>, 
+ Oliver Hartkopp <socketcan@hartkopp.net>, 
+ Robin van der Gracht <robin@protonic.nl>, 
+ Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769704191; l=3636;
+ i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
+ bh=zxy8ZTxOQMkZmrBy1Jm4ziPSAhOzUTyddmgqk9oimVc=;
+ b=0FO360njONPSza/y7MeUhhXTSdrc6x+O3jAwaA9ojYiiz0avMmzYbm96Q4qJE8R/+KJIXGtKA
+ XC4v/+PEs05BWlUgaw560r/PGIxAUO3IkY38JapRrQIXXEDA2Hn3f09
+X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
+ pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
+X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
+ auth_id=620
+X-Original-From: Oliver Hartkopp <socketcan@hartkopp.net>
+Reply-To: socketcan@hartkopp.net
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-6400-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6399-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	FREEMAIL_CC(0.00)[pengutronix.de,kernel.org,linaro.org,axentia.se,iki.fi,kemnade.info,baylibre.com,atomide.com,gmail.com,ti.com,glider.be,sang-engineering.com,solid-run.com,vger.kernel.org,lists.infradead.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-can,dt,renesas];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[solid-run.com:email,mail.gmail.com:mid,intel.com:email,linaro.org:email,linaro.org:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,sang-engineering.com:email]
-X-Rspamd-Queue-Id: 58B72B200C
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-can];
+	HAS_REPLYTO(0.00)[socketcan@hartkopp.net];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:replyto,hartkopp.net:email,hartkopp.net:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D934CB22F9
 X-Rspamd-Action: no action
 
-On Wed, 28 Jan 2026 at 15:46, Josua Mayer <josua@solid-run.com> wrote:
->
-> Some Renesas SoC based boards mux SD and eMMC on a single sdio
-> controller, exposing user control by dip switch and software control by
-> gpio.
->
-> Purpose is to simplify development and provisioning by selecting boot
-> media at power-on, and again before starting linux.
->
-> Add binding and driver support for linking a (gpio) mux to renesas sdio
-> controller.
->
-> Introduce generic helper functions for getting managed and selected
-> mux-state objects, and switch i2c-omap and phy-can-transceiver drivers.
->
-> Signed-off-by: Josua Mayer <josua@solid-run.com>
+CAN bus related skbuffs (ETH_P_CAN/ETH_P_CANFD/ETH_P_CANXL) simply contain
+CAN frame structs for CAN CC/FD/XL of skb->len length at skb->data. Those
+CAN skbs do not have network/mac/transport headers nor other such
+references for encapsulated protocols like ethernet/IP protocols.
 
-This series needs to go together in some way. If you like, I can
-funnel it via my mmc tree, unless someone (Wolfram for the i2c part?)
-has objections to this of course.
+To store data for CAN specific use-cases all CAN bus related skbuffs are
+created with a 16 byte private skb headroom (struct can_skb_priv). Using
+the skb headroom and accessing skb->head for this private data led to
+several problems in the past likely due to "The struct can_skb_priv
+business is highly unconventional for the networking stack." [1]
 
-Kind regards
-Uffe
+This patch set aims to remove the unconventional skb headroom usage for CAN
+bus related skbuffs and use the common skb extensions instead.
 
-> ---
-> Changes in v7:
-> - picked up reviewed-tags
-> - fix Kconfig change to add the missing prompt for CONFIG_MULTIPLEXER,
->   and enable it by default when COMPILE_TEST is set.
->   (Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>)
-> - fix another kernel build robot warning: undocumented C struct member
-> - Link to v6: https://lore.kernel.org/r/20260121-rz-sdio-mux-v6-0-38aa39527928@solid-run.com
->
-> Changes in v6:
-> - replaced /* with /** for devm_mux_state_state function description.
-> - collected review tags.
-> - fixed checkpatch warnings (space-before-tab, void-return).
->   (Reported-by: Geert Uytterhoeven)
-> - fixed use-after-free in mux core mux_get function.
->   (Reported-by: Geert Uytterhoeven)
-> - fix mux helper error path uninitialised return code variable.
->   (Reported-by: kernel test robot <lkp@intel.com>)
-> - Link to v5: https://lore.kernel.org/r/20260118-rz-sdio-mux-v5-0-3c37e8872683@solid-run.com
->
-> Changes in v5:
-> - implemented automatic mux deselect for devm_*_selected.
->   (Reported-by: Wolfram Sang <wsa+renesas@sang-engineering.com>)
-> - because of semantic changes I dropped reviewed and acks from omap-i2c
->   patch (Andreas Kemnade / Wolfram Sang).
-> - fix invalid return value in void function for mux helper stubs
->   (Reported-by: kernel test robot <lkp@intel.com>)
-> - Link to v4: https://lore.kernel.org/r/20251229-rz-sdio-mux-v4-0-a023e55758fe@solid-run.com
->
-> Changes in v4:
-> - added MULTIPLEXER Kconfig help text.
-> - removed "select MULTIPLEXER" from renesas sdhi Kconfig, as it is
->   not required for all devices using this driver.
-> - added stubs for all symbols exported by mux core.
->   (Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>)
-> - refactored mux core logic to silence ENOENT errors only on optional
->   code paths, keeping error printing unchanged otherwise.
->   (Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>)
-> - picked up various reviewed- and acked-by tags
-> - Link to v3: https://lore.kernel.org/r/20251210-rz-sdio-mux-v3-0-ca628db56d60@solid-run.com
->
-> Changes in v3:
-> - updated omap-i2c and phy-can-transceiver to use new helpers.
-> - created generic helper functions for getting managed optional mux-state.
->   (Reported-by: Rob Herring <robh@kernel.org>)
-> - picked up binding ack by Rob Herring.
-> - replaced use of "SDIO" with "SD/SDIO/eMMC" in binding document and
->   commit descriptions.
->   (Reported-by: Ulf Hansson <ulf.hansson@linaro.org>)
-> - Link to v2: https://lore.kernel.org/r/20251201-rz-sdio-mux-v2-0-bcb581b88dd7@solid-run.com
->
-> Changes in v2:
-> - dropped mux-controller node from dt binding example
->   (Reported-by: Conor Dooley <conor@kernel.org>
->    Reported-by: Krzysztof Kozlowski <krzk@kernel.org>)
-> - Link to v1: https://lore.kernel.org/r/20251128-rz-sdio-mux-v1-0-1ede318d160f@solid-run.com
->
-> ---
-> Josua Mayer (7):
->       phy: can-transceiver: rename temporary helper function to avoid conflict
->       mux: Add helper functions for getting optional and selected mux-state
->       mux: add help text for MULTIPLEXER config option
->       phy: can-transceiver: drop temporary helper getting optional mux-state
->       i2c: omap: switch to new generic helper for getting selected mux-state
->       dt-bindings: mmc: renesas,sdhi: Add mux-states property
->       mmc: host: renesas_sdhi_core: support selecting an optional mux
->
->  .../devicetree/bindings/mmc/renesas,sdhi.yaml      |   6 +
->  drivers/i2c/busses/i2c-omap.c                      |  24 +--
->  drivers/mmc/host/renesas_sdhi_core.c               |   6 +
->  drivers/mux/Kconfig                                |   8 +-
->  drivers/mux/core.c                                 | 178 +++++++++++++++++----
->  drivers/phy/phy-can-transceiver.c                  |  10 --
->  include/linux/mux/consumer.h                       | 108 ++++++++++++-
->  7 files changed, 277 insertions(+), 63 deletions(-)
-> ---
-> base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-> change-id: 20251128-rz-sdio-mux-acc5137f1618
->
-> Best regards,
-> --
-> Josua Mayer <josua@solid-run.com>
->
->
+[1] https://lore.kernel.org/linux-can/20260104074222.29e660ac@kernel.org/
+
+---
+Changes in v2:
+- Patch#1: use u32 instead of __u32 for "struct uniqframe::hash"
+- Patch#3: use u{8,16} instead of __u{8,16} for "struct can_skb_ext"
+- Patch#6: add missing patch
+- Link to v1: https://patch.msgid.link/20260125201601.5018-1-socketcan@hartkopp.net
+
+Changes in v3:
+- Patch#2: new patch: rename dev_put() in CAN subsystem suggested by Checkpatch
+- Patch#3: use netdev_put() instead of dev_put() suggested by Checkpatch
+- Patch#3: initialize can_gw_hops in can_skb_ext_add() suggested by AI-bot
+- Patch#6: add linebreak in sock_alloc_send_skb() to fit the 80 columns (Checkpatch)
+- Link to v2: https://lore.kernel.org/linux-can/20260128-can-skb-ext-v2-0-fe64aa152c8a@pengutronix.de/
+
+Changes in v4:
+Solve the netdev_put() / dev_put() suggestion from Checkpatch in a separate
+patch set. Therefore these changes are based on V2 again. 
+- Patch#2: initialize can_gw_hops in can_skb_ext_add() suggested by AI-bot
+- Patch#5: add linebreak in sock_alloc_send_skb() to fit the 80 columns
+- Link to v2: https://lore.kernel.org/linux-can/20260128-can-skb-ext-v2-0-fe64aa152c8a@pengutronix.de/
+
+Changes in v5:
+- Patch#2: use skb_ext_add() for the cloned skb suggested by AI-bot
+- Patch#2: use netdev_put() instead of dev_put() suggested by Checkpatch
+- managed to get the receipient list with b4 prep --auto-to-cc
+- Link to v4: https://lore.kernel.org/netdev/20260128-can_skb_ext-v1-0-330f60fd5d7e@hartkopp.net/
+
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+
+---
+Oliver Hartkopp (6):
+      can: use skb hash instead of private variable in headroom
+      can: add CAN skb extension infrastructure
+      can: move ifindex to CAN skb extensions
+      can: move frame_len to CAN skb extensions
+      can: remove private CAN skb headroom infrastructure
+      can: gw: use can_gw_hops instead of sk_buff::csum_start
+
+ MAINTAINERS               |   1 +
+ drivers/net/can/dev/skb.c | 123 +++++++++++++++++++++++++++++-----------------
+ include/linux/can/core.h  |   1 +
+ include/linux/can/skb.h   |  38 +++++---------
+ include/linux/skbuff.h    |   3 ++
+ include/net/can.h         |  28 +++++++++++
+ net/can/Kconfig           |   1 +
+ net/can/af_can.c          |  23 ++++++---
+ net/can/bcm.c             |  26 +++++++---
+ net/can/gw.c              |  42 +++++++++-------
+ net/can/isotp.c           |  45 +++++++++++------
+ net/can/j1939/socket.c    |  15 ++++--
+ net/can/j1939/transport.c |  28 +++++++----
+ net/can/raw.c             |  22 ++++++---
+ net/core/skbuff.c         |   4 ++
+ 15 files changed, 259 insertions(+), 141 deletions(-)
+---
+base-commit: 239f09e258b906deced5c2a7c1ac8aed301b558b
+change-id: 20260128-can_skb_ext-0e7a99ed1984
+
+Best regards,
+--  
+Oliver Hartkopp <socketcan@hartkopp.net>
+
+
 
