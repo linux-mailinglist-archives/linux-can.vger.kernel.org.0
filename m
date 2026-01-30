@@ -1,56 +1,56 @@
-Return-Path: <linux-can+bounces-6411-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6409-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +DpCOvFufGk/MgIAu9opvQ
-	(envelope-from <linux-can+bounces-6411-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 09:42:25 +0100
+	id YFPlIO5ufGk/MgIAu9opvQ
+	(envelope-from <linux-can+bounces-6409-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 09:42:22 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90968B88A6
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 09:42:25 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29735B887A
+	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 09:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A314A300E5E0
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 08:42:22 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 907393002327
+	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 08:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41BE134214A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F62033DEE5;
 	Fri, 30 Jan 2026 08:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NUmtFEjt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tB5lymVU"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB313375C5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAA2335579;
 	Fri, 30 Jan 2026 08:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769762538; cv=none; b=cII6r1RoroAA3y+low06bHv2aQHi6+0wyfP6M3ZlcBJ1BSEvSsx/rzt6xJ+odQaBE2qsRiV+lmKi9jpMKnaqXlKRkfsIugWD52SbqPNdN3B6zZ+9tqnPnS4IsjLWOyK8TB/Yc0fhbx8Dbfh3cCIxOzwWdcQYNHRRrJW+6MlrNfw=
+	t=1769762538; cv=none; b=Y3BNj4/qcioKJlE+C3e3aT4J28dd7i+AMVHaTMNT2etlAbxc8COBrDIT0serpZJgfEc+1668+4oE9p08DHGnBL2fSk8ZDr/n9aP0shaVkOYkj26YVRQGmfFB/6yIcGtkF0rXIY1qdtlYCfaGid8DXXMrtd6c1DOiaW99abFBp8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1769762538; c=relaxed/simple;
-	bh=3cN4HUxsl78AjW6z0M0c4wJiLK6wZOqrgfm0h54baZM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=o5//L0b/3oiCUw2387sXsbeTOBAKYukv5cXosqpWfRFHv25VmMIbf0JV7ZgiW2dzI1GsLrwq1+1oDMiSud+Bfyx4xa+9dztRV/+e1Co4bN5f9HSTas7/COqrtR3sb5SqfJZdEjVVev2C/IPfmGfpAWjkDtnsGNpu31aoAmAyzz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NUmtFEjt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B6750C4CEF7;
+	bh=JBFIByEVATCHIEF3t0UYW6l3zge4t/kRXZbMpYmFA+c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ScWvrl87XGPYi3Orxx3pG2MUrpsg188TrZbBJuEypADXJL69zBrowQkXBjl5BV0rJt7ArcVl9Zhn9Xd2oAA5gwUisRC/j5tcVww3+E5WXByUrFNLPir344J6fbBXR3D4VrImUltgILovN8qzuqZT61oik7fWcCy2L/gwphvrD5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tB5lymVU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C5FE1C19421;
 	Fri, 30 Jan 2026 08:42:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1769762537;
-	bh=3cN4HUxsl78AjW6z0M0c4wJiLK6wZOqrgfm0h54baZM=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=NUmtFEjtwV/sDSV/B9zwd2AXFoR+aw4nxyGjm665Vr3Pp3UlwsL0ycy/9a4H4Myoj
-	 7m4I+lUlW0JBnmMwkAbffIY5m6PzOYRQtTfHmggVqr8BgMZ5BPC2jdDbp5HOIs/E8F
-	 6tvSqRKV4bOKvnRyO+43CBFTbuZPR3HaPN/3MSGvKlXyuLrlw4r9O+9XWQSAAeugt7
-	 ruyWoMekIMlX6ZEQiF8M24sxU5OOF0Y8WZL2LCYtcTltS1WoZbHqK/yBkHZajr1FQu
-	 /vhUA1av78P9u5wZSMcqU6Sy3ltPSzZSJFQz8n/RwwQOCQm7Iy+0MecU9DKW+d4oTh
-	 4XP6OZ2njmVJQ==
+	bh=JBFIByEVATCHIEF3t0UYW6l3zge4t/kRXZbMpYmFA+c=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=tB5lymVUO5JjZHx2Wdp6/r94e5Bsqgorxa/wTLo/TV8XiVAl8wjPSaE238wR1mkg7
+	 B+iPYF+x+s+/xNQeghuV0DF1T1gCdhSHKR7y/umN/qVDE9Xsg8XB3eGdlgVzkBUEWT
+	 BXRaIPc5niKcKWiJTe+rR66ZdEpuioraOR//iJvuhDBvEP9Pk5QE5hmg4XAHozyNrw
+	 tMPqYPCMb9fLqlm3+/ghu4Rvg49DOyszcuiws58ttCvTMYMGbyprautqUzG3p//wSY
+	 SYuGQ43EQG12RWGlOxQfkc8u/cnZ3j4XTIoCXV4eQhMF4UmiMCHPb5pmELR8DK2RUx
+	 7S5EwIpgEJiBQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FF32D49C6B;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B020ED49C7C;
 	Fri, 30 Jan 2026 08:42:17 +0000 (UTC)
 From: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
-Subject: [PATCH net-next v6 0/6] move CAN skb headroom content to skb
- extensions
-Date: Fri, 30 Jan 2026 09:41:54 +0100
-Message-Id: <20260130-can_skb_ext-v6-0-8fceafab7f26@hartkopp.net>
+Date: Fri, 30 Jan 2026 09:41:55 +0100
+Subject: [PATCH net-next v6 1/6] can: use skb hash instead of private
+ variable in headroom
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -59,11 +59,9 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANJufGkC/22NQQrCMBREr1L+2shPatrGlfcQKbH5tUFISxJCp
- fTuhqxUXA4z780GgbylAOdqA0/JBju7HJpDBcOk3YOYNTmDQNEgFx0btOvD897TGhlSq5Uiw1V
- 3gkwsnka7FtsVHEXm8gpuuZlsiLN/lZvES//XmDhDVtc4NjgaaVq6TNrH57wsx+wrqiQ/cfWNy
- 4wLLqQYzdApxB983/c3SHAlovIAAAA=
-X-Change-ID: 20260128-can_skb_ext-0e7a99ed1984
+Message-Id: <20260130-can_skb_ext-v6-1-8fceafab7f26@hartkopp.net>
+References: <20260130-can_skb_ext-v6-0-8fceafab7f26@hartkopp.net>
+In-Reply-To: <20260130-can_skb_ext-v6-0-8fceafab7f26@hartkopp.net>
 To: Marc Kleine-Budde <mkl@pengutronix.de>, 
  Vincent Mailhol <mailhol@kernel.org>, 
  Oliver Hartkopp <socketcan@hartkopp.net>, 
@@ -75,11 +73,11 @@ To: Marc Kleine-Budde <mkl@pengutronix.de>,
 Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
  netdev@vger.kernel.org
 X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769762535; l=3923;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769762535; l=9579;
  i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
- bh=3cN4HUxsl78AjW6z0M0c4wJiLK6wZOqrgfm0h54baZM=;
- b=JkWiAJO+kZrEMjENMWJZTFFXa2HGLFT+XW7E+gNk1t8i9eYt4JFW1SSBDAgCZBYIz4JFMJKo0
- VDM+GPjWGLtCPI3kGV5P76A11dbb5XDzvIQLiXZFSCaitvo4sjzhx6z
+ bh=zxcFoiKJF2100rOz6zKnSRW+KicEl2DYfMk7Y/gmvbI=;
+ b=QL1OZsmGqQCwigE/0hkN7bKolyti2tSOwNyfaDm+JehtMk6+YIIo+o2YV4hteB63hf9++VWwc
+ aA9NcrWqPBjARBvmEWDo8NHWS8A8yLLkEJ7k0XDWwv26Q5D1rDxt8m2
 X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
  pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
 X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
@@ -91,11 +89,11 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6411-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
+	TAGGED_FROM(0.00)[bounces-6409-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -110,96 +108,308 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-can];
 	HAS_REPLYTO(0.00)[socketcan@hartkopp.net];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,msgid.link:url]
-X-Rspamd-Queue-Id: 90968B88A6
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 29735B887A
 X-Rspamd-Action: no action
 
-CAN bus related skbuffs (ETH_P_CAN/ETH_P_CANFD/ETH_P_CANXL) simply contain
-CAN frame structs for CAN CC/FD/XL of skb->len length at skb->data. Those
-CAN skbs do not have network/mac/transport headers nor other such
-references for encapsulated protocols like ethernet/IP protocols.
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-To store data for CAN specific use-cases all CAN bus related skbuffs are
-created with a 16 byte private skb headroom (struct can_skb_priv). Using
-the skb headroom and accessing skb->head for this private data led to
-several problems in the past likely due to "The struct can_skb_priv
-business is highly unconventional for the networking stack." [1]
+The can_skb_priv::skbcnt variable is used to identify CAN skbs in the RX
+path analogue to the skb->hash.
 
-This patch set aims to remove the unconventional skb headroom usage for CAN
-bus related skbuffs and use the common skb extensions instead.
+As the skb hash is not filled in CAN skbs move the private skbcnt value to
+skb->hash and set skb->sw_hash accordingly. The skb->hash is a value used
+for RPS to identify skbs. Use it as intended.
 
-[1] https://lore.kernel.org/linux-can/20260104074222.29e660ac@kernel.org/
-
----
-Changes in v2:
-- Patch#1: use u32 instead of __u32 for "struct uniqframe::hash"
-- Patch#3: use u{8,16} instead of __u{8,16} for "struct can_skb_ext"
-- Patch#6: add missing patch
-- Link to v1: https://patch.msgid.link/20260125201601.5018-1-socketcan@hartkopp.net
-
-Changes in v3:
-- Patch#2: new patch: rename dev_put() in CAN subsystem suggested by Checkpatch
-- Patch#3: use netdev_put() instead of dev_put() suggested by Checkpatch
-- Patch#3: initialize can_gw_hops in can_skb_ext_add() suggested by AI-bot
-- Patch#6: add linebreak in sock_alloc_send_skb() to fit the 80 columns (Checkpatch)
-- Link to v2: https://lore.kernel.org/linux-can/20260128-can-skb-ext-v2-0-fe64aa152c8a@pengutronix.de/
-
-Changes in v4:
-Solve the netdev_put() / dev_put() suggestion from Checkpatch in a separate
-patch set. Therefore these changes are based on V2 again. 
-- Patch#2: initialize can_gw_hops in can_skb_ext_add() suggested by AI-bot
-- Patch#5: add linebreak in sock_alloc_send_skb() to fit the 80 columns
-- Link to v2: https://lore.kernel.org/linux-can/20260128-can-skb-ext-v2-0-fe64aa152c8a@pengutronix.de/
-
-Changes in v5:
-- Patch#2: use skb_ext_add() for the cloned skb suggested by AI-bot
-- Patch#2: use netdev_put() instead of dev_put() suggested by Checkpatch
-- managed to get the receipient list with b4 prep --auto-to-cc
-- Link to v4: https://lore.kernel.org/netdev/20260128-can_skb_ext-v1-0-330f60fd5d7e@hartkopp.net/
-
-Changes in v6:
-- Patch#1: drop extern prototype in header file (Checkpatch)
-- Patch#6: vxcan: correctly reset drop counter with skb extensions (AI-bot)
-- Link to v5: https://patch.msgid.link/20260129-can_skb_ext-v5-0-21252fdc8900@hartkopp.net
-
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-
 ---
-Oliver Hartkopp (6):
-      can: use skb hash instead of private variable in headroom
-      can: add CAN skb extension infrastructure
-      can: move ifindex to CAN skb extensions
-      can: move frame_len to CAN skb extensions
-      can: remove private CAN skb headroom infrastructure
-      can: gw: use can_gw_hops instead of sk_buff::csum_start
+ drivers/net/can/dev/skb.c |  2 --
+ include/linux/can/core.h  |  1 +
+ include/linux/can/skb.h   |  2 --
+ net/can/af_can.c          | 14 +++++++++++---
+ net/can/bcm.c             |  2 --
+ net/can/isotp.c           |  3 ---
+ net/can/j1939/socket.c    |  1 -
+ net/can/j1939/transport.c |  2 --
+ net/can/raw.c             |  7 +++----
+ 9 files changed, 15 insertions(+), 19 deletions(-)
 
- MAINTAINERS               |   1 +
- drivers/net/can/dev/skb.c | 123 +++++++++++++++++++++++++++++-----------------
- drivers/net/can/vxcan.c   |   7 ++-
- include/linux/can/core.h  |   1 +
- include/linux/can/skb.h   |  38 +++++---------
- include/linux/skbuff.h    |   3 ++
- include/net/can.h         |  28 +++++++++++
- net/can/Kconfig           |   1 +
- net/can/af_can.c          |  23 ++++++---
- net/can/bcm.c             |  26 +++++++---
- net/can/gw.c              |  42 +++++++++-------
- net/can/isotp.c           |  45 +++++++++++------
- net/can/j1939/socket.c    |  15 ++++--
- net/can/j1939/transport.c |  28 +++++++----
- net/can/raw.c             |  22 ++++++---
- net/core/skbuff.c         |   4 ++
- 16 files changed, 265 insertions(+), 142 deletions(-)
----
-base-commit: 239f09e258b906deced5c2a7c1ac8aed301b558b
-change-id: 20260128-can_skb_ext-0e7a99ed1984
+diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
+index 3ebd4f779b9b..0da615afa04d 100644
+--- a/drivers/net/can/dev/skb.c
++++ b/drivers/net/can/dev/skb.c
+@@ -200,11 +200,10 @@ static void init_can_skb_reserve(struct sk_buff *skb)
+ 	skb_reset_mac_header(skb);
+ 	skb_reset_network_header(skb);
+ 	skb_reset_transport_header(skb);
+ 
+ 	can_skb_reserve(skb);
+-	can_skb_prv(skb)->skbcnt = 0;
+ }
+ 
+ struct sk_buff *alloc_can_skb(struct net_device *dev, struct can_frame **cf)
+ {
+ 	struct sk_buff *skb;
+@@ -310,11 +309,10 @@ static bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb)
+ 
+ 	/* af_packet does not apply CAN skb specific settings */
+ 	if (skb->ip_summed == CHECKSUM_NONE) {
+ 		/* init headroom */
+ 		can_skb_prv(skb)->ifindex = dev->ifindex;
+-		can_skb_prv(skb)->skbcnt = 0;
+ 
+ 		skb->ip_summed = CHECKSUM_UNNECESSARY;
+ 
+ 		/* perform proper loopback on capable devices */
+ 		if (dev->flags & IFF_ECHO)
+diff --git a/include/linux/can/core.h b/include/linux/can/core.h
+index 5fb8d0e3f9c1..3287232e3cad 100644
+--- a/include/linux/can/core.h
++++ b/include/linux/can/core.h
+@@ -56,8 +56,9 @@ extern void can_rx_unregister(struct net *net, struct net_device *dev,
+ 			      canid_t can_id, canid_t mask,
+ 			      void (*func)(struct sk_buff *, void *),
+ 			      void *data);
+ 
+ extern int can_send(struct sk_buff *skb, int loop);
++void can_set_skb_uid(struct sk_buff *skb);
+ void can_sock_destruct(struct sock *sk);
+ 
+ #endif /* !_CAN_CORE_H */
+diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+index 1abc25a8d144..869ea574a40a 100644
+--- a/include/linux/can/skb.h
++++ b/include/linux/can/skb.h
+@@ -47,17 +47,15 @@ bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb);
+  */
+ 
+ /**
+  * struct can_skb_priv - private additional data inside CAN sk_buffs
+  * @ifindex:	ifindex of the first interface the CAN frame appeared on
+- * @skbcnt:	atomic counter to have an unique id together with skb pointer
+  * @frame_len:	length of CAN frame in data link layer
+  * @cf:		align to the following CAN frame at skb->data
+  */
+ struct can_skb_priv {
+ 	int ifindex;
+-	int skbcnt;
+ 	unsigned int frame_len;
+ 	struct can_frame cf[];
+ };
+ 
+ static inline struct can_skb_priv *can_skb_prv(struct sk_buff *skb)
+diff --git a/net/can/af_can.c b/net/can/af_can.c
+index 770173d8db42..70659987ef4d 100644
+--- a/net/can/af_can.c
++++ b/net/can/af_can.c
+@@ -639,10 +639,20 @@ static int can_rcv_filter(struct can_dev_rcv_lists *dev_rcv_lists, struct sk_buf
+ 	}
+ 
+ 	return matches;
+ }
+ 
++void can_set_skb_uid(struct sk_buff *skb)
++{
++	/* create non-zero unique skb identifier together with *skb */
++	while (!(skb->hash))
++		skb->hash = atomic_inc_return(&skbcounter);
++
++	skb->sw_hash = 1;
++}
++EXPORT_SYMBOL(can_set_skb_uid);
++
+ static void can_receive(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct can_dev_rcv_lists *dev_rcv_lists;
+ 	struct net *net = dev_net(dev);
+ 	struct can_pkg_stats *pkg_stats = net->can.pkg_stats;
+@@ -650,13 +660,11 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
+ 
+ 	/* update statistics */
+ 	atomic_long_inc(&pkg_stats->rx_frames);
+ 	atomic_long_inc(&pkg_stats->rx_frames_delta);
+ 
+-	/* create non-zero unique skb identifier together with *skb */
+-	while (!(can_skb_prv(skb)->skbcnt))
+-		can_skb_prv(skb)->skbcnt = atomic_inc_return(&skbcounter);
++	can_set_skb_uid(skb);
+ 
+ 	rcu_read_lock();
+ 
+ 	/* deliver the packet to sockets listening on all devices */
+ 	matches = can_rcv_filter(net->can.rx_alldev_list, skb);
+diff --git a/net/can/bcm.c b/net/can/bcm.c
+index 7eba8ae01a5b..8ed60f18c2ea 100644
+--- a/net/can/bcm.c
++++ b/net/can/bcm.c
+@@ -314,11 +314,10 @@ static void bcm_can_tx(struct bcm_op *op)
+ 	if (!skb)
+ 		goto out;
+ 
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = dev->ifindex;
+-	can_skb_prv(skb)->skbcnt = 0;
+ 
+ 	skb_put_data(skb, cf, op->cfsiz);
+ 
+ 	/* send with loopback */
+ 	skb->dev = dev;
+@@ -1342,11 +1341,10 @@ static int bcm_tx_send(struct msghdr *msg, int ifindex, struct sock *sk,
+ 		kfree_skb(skb);
+ 		return -ENODEV;
+ 	}
+ 
+ 	can_skb_prv(skb)->ifindex = dev->ifindex;
+-	can_skb_prv(skb)->skbcnt = 0;
+ 	skb->dev = dev;
+ 	can_skb_set_owner(skb, sk);
+ 	err = can_send(skb, 1); /* send with loopback */
+ 	dev_put(dev);
+ 
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index ce588b85665a..4bb60b8f9b96 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -228,11 +228,10 @@ static int isotp_send_fc(struct sock *sk, int ae, u8 flowstatus)
+ 		return 1;
+ 	}
+ 
+ 	can_skb_reserve(nskb);
+ 	can_skb_prv(nskb)->ifindex = dev->ifindex;
+-	can_skb_prv(nskb)->skbcnt = 0;
+ 
+ 	nskb->dev = dev;
+ 	can_skb_set_owner(nskb, sk);
+ 	ncf = (struct canfd_frame *)nskb->data;
+ 	skb_put_zero(nskb, so->ll.mtu);
+@@ -778,11 +777,10 @@ static void isotp_send_cframe(struct isotp_sock *so)
+ 		return;
+ 	}
+ 
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = dev->ifindex;
+-	can_skb_prv(skb)->skbcnt = 0;
+ 
+ 	cf = (struct canfd_frame *)skb->data;
+ 	skb_put_zero(skb, so->ll.mtu);
+ 
+ 	/* create consecutive frame */
+@@ -1007,11 +1005,10 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 		goto err_out_drop;
+ 	}
+ 
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = dev->ifindex;
+-	can_skb_prv(skb)->skbcnt = 0;
+ 
+ 	so->tx.len = size;
+ 	so->tx.idx = 0;
+ 
+ 	cf = (struct canfd_frame *)skb->data;
+diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+index ff9c4fd7b433..1589e8ca634e 100644
+--- a/net/can/j1939/socket.c
++++ b/net/can/j1939/socket.c
+@@ -895,11 +895,10 @@ static struct sk_buff *j1939_sk_alloc_skb(struct net_device *ndev,
+ 	if (!skb)
+ 		goto failure;
+ 
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = ndev->ifindex;
+-	can_skb_prv(skb)->skbcnt = 0;
+ 	skb_reserve(skb, offsetof(struct can_frame, data));
+ 
+ 	ret = memcpy_from_msg(skb_put(skb, size), msg, size);
+ 	if (ret < 0)
+ 		goto free_skb;
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index 8656ab388c83..d5d3e5320f7a 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -599,11 +599,10 @@ sk_buff *j1939_tp_tx_dat_new(struct j1939_priv *priv,
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	skb->dev = priv->ndev;
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = priv->ndev->ifindex;
+-	can_skb_prv(skb)->skbcnt = 0;
+ 	/* reserve CAN header */
+ 	skb_reserve(skb, offsetof(struct can_frame, data));
+ 
+ 	/* skb->cb must be large enough to hold a j1939_sk_buff_cb structure */
+ 	BUILD_BUG_ON(sizeof(skb->cb) < sizeof(*re_skcb));
+@@ -1534,11 +1533,10 @@ j1939_session *j1939_session_fresh_new(struct j1939_priv *priv,
+ 		return NULL;
+ 
+ 	skb->dev = priv->ndev;
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = priv->ndev->ifindex;
+-	can_skb_prv(skb)->skbcnt = 0;
+ 	skcb = j1939_skb_to_cb(skb);
+ 	memcpy(skcb, rel_skcb, sizeof(*skcb));
+ 
+ 	session = j1939_session_new(priv, skb, size);
+ 	if (!session) {
+diff --git a/net/can/raw.c b/net/can/raw.c
+index 12293363413c..fb4f9c854df0 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -74,11 +74,11 @@ MODULE_ALIAS("can-proto-1");
+  * storing the single filter in dfilter, to avoid using dynamic memory.
+  */
+ 
+ struct uniqframe {
+ 	const struct sk_buff *skb;
+-	int skbcnt;
++	u32 hash;
+ 	unsigned int join_rx_count;
+ };
+ 
+ struct raw_sock {
+ 	struct sock sk;
+@@ -162,21 +162,21 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
+ 		}
+ 	}
+ 
+ 	/* eliminate multiple filter matches for the same skb */
+ 	if (this_cpu_ptr(ro->uniq)->skb == oskb &&
+-	    this_cpu_ptr(ro->uniq)->skbcnt == can_skb_prv(oskb)->skbcnt) {
++	    this_cpu_ptr(ro->uniq)->hash == oskb->hash) {
+ 		if (!ro->join_filters)
+ 			return;
+ 
+ 		this_cpu_inc(ro->uniq->join_rx_count);
+ 		/* drop frame until all enabled filters matched */
+ 		if (this_cpu_ptr(ro->uniq)->join_rx_count < ro->count)
+ 			return;
+ 	} else {
+ 		this_cpu_ptr(ro->uniq)->skb = oskb;
+-		this_cpu_ptr(ro->uniq)->skbcnt = can_skb_prv(oskb)->skbcnt;
++		this_cpu_ptr(ro->uniq)->hash = oskb->hash;
+ 		this_cpu_ptr(ro->uniq)->join_rx_count = 1;
+ 		/* drop first frame to check all enabled filters? */
+ 		if (ro->join_filters && ro->count > 1)
+ 			return;
+ 	}
+@@ -956,11 +956,10 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	if (!skb)
+ 		goto put_dev;
+ 
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = dev->ifindex;
+-	can_skb_prv(skb)->skbcnt = 0;
+ 
+ 	/* fill the skb before testing for valid CAN frames */
+ 	err = memcpy_from_msg(skb_put(skb, size), msg, size);
+ 	if (err < 0)
+ 		goto free_skb;
 
-Best regards,
---  
-Oliver Hartkopp <socketcan@hartkopp.net>
+-- 
+2.51.0
 
 
 
