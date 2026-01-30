@@ -1,147 +1,205 @@
-Return-Path: <linux-can+bounces-6408-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6411-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WAucHrCje2kVHgIAu9opvQ
-	(envelope-from <linux-can+bounces-6408-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 19:15:12 +0100
+	id +DpCOvFufGk/MgIAu9opvQ
+	(envelope-from <linux-can+bounces-6411-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 09:42:25 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E774AB372B
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 19:15:11 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90968B88A6
+	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 09:42:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 850B4301981E
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jan 2026 18:15:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A314A300E5E0
+	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 08:42:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 215522F28EB;
-	Thu, 29 Jan 2026 18:15:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41BE134214A;
+	Fri, 30 Jan 2026 08:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="mZrJQ+RD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NUmtFEjt"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CBDB2EC559
-	for <linux-can@vger.kernel.org>; Thu, 29 Jan 2026 18:15:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB313375C5;
+	Fri, 30 Jan 2026 08:42:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769710510; cv=none; b=ssUk4Nognt4VJ78ElTcwiFcPjoLGjGpqAmbyZd3viRn4geq/FOhycciYkr986dHPIjTckpfs9CG1KfC43kMzsWDEWhUkfBX5A2L2x6qbi4SSQsffYUkr2guFfxHR9M8M49A45J/J9Tjw/M2fGS7wOxptD6+P/iuBV7U0Dc5tcWs=
+	t=1769762538; cv=none; b=cII6r1RoroAA3y+low06bHv2aQHi6+0wyfP6M3ZlcBJ1BSEvSsx/rzt6xJ+odQaBE2qsRiV+lmKi9jpMKnaqXlKRkfsIugWD52SbqPNdN3B6zZ+9tqnPnS4IsjLWOyK8TB/Yc0fhbx8Dbfh3cCIxOzwWdcQYNHRRrJW+6MlrNfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769710510; c=relaxed/simple;
-	bh=4MJvj2+fHYfSWTC96lU3fBxhfU5kqQ0zRTEQY/NwItc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fT+mFDgk+ddvPRiaVliCWHU352yDi8P777XhVRn9/rpi/OS3e+8VpsuYmFpeNk9CHzZ5psstznHaywwQOKyDdS5T4ADCKQIFXUkePfW7V1lnQJZ2NocsgyI5DOiJQvXP7wFdKgARfUQX+jzL84Zf/AHUJ1TChohI75XnlCeGouA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=mZrJQ+RD; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=kMwJ
-	sRUTY1+8DlXqwrzudKGi67r8tcF8NN0fyMeA4OI=; b=mZrJQ+RDSMYjGwdVp2wP
-	GzAkcvLuH78nOpPUuIN36eh/2nTSF5H9WVKg1Gmg98Jwk3KE3AUZoOaY9JBtHaGd
-	Frd6gTcLDqOz5v1S0wcpf/bx9u4Xm+FZlru7a6OhVRjpeHbtFEry2iHyQJXKqXY2
-	/B3zB2GINvd41izUXf2jojEJp70bEoY5c5ypI/7SNyTIfZTavHXwVYRki6HuVT7F
-	aUZPwL1Kits1/RJUOAAJQGhN+NZ5MOjw+t/8xMuEaODY+opLGlWzIdKv2HTd98Tq
-	3Gkv3tFwhSZKxdKWUNedaH5aHSJow2GI0M5IvYzVsb6SZgB2pxySgwEnEWqefkVf
-	/A==
-Received: (qmail 4159334 invoked from network); 29 Jan 2026 19:14:56 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Jan 2026 19:14:56 +0100
-X-UD-Smtp-Session: l3s3148p1@5gh11YpJZEVtKXEx
-Date: Thu, 29 Jan 2026 19:14:55 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Josua Mayer <josua@solid-run.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Peter Rosin <peda@axentia.se>, Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Vignesh R <vigneshr@ti.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Yazan Shhady <yazan.shhady@solid-run.com>,
-	Jon Nettleton <jon@solid-run.com>,
-	Mikhail Anikin <mikhail.anikin@solid-run.com>,
-	linux-can@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v7 0/7] mmc: host: renesas_sdhi_core: support configuring
- an optional sdio mux
-Message-ID: <aXujn-jpKLcBeFPE@shikoro>
-References: <20260128-rz-sdio-mux-v7-0-92ebb6da0df8@solid-run.com>
- <CAPDyKFp9StNf1eLaSETxC72=7sXYBmGFmHnv0CXysUGcYma5VA@mail.gmail.com>
+	s=arc-20240116; t=1769762538; c=relaxed/simple;
+	bh=3cN4HUxsl78AjW6z0M0c4wJiLK6wZOqrgfm0h54baZM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=o5//L0b/3oiCUw2387sXsbeTOBAKYukv5cXosqpWfRFHv25VmMIbf0JV7ZgiW2dzI1GsLrwq1+1oDMiSud+Bfyx4xa+9dztRV/+e1Co4bN5f9HSTas7/COqrtR3sb5SqfJZdEjVVev2C/IPfmGfpAWjkDtnsGNpu31aoAmAyzz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NUmtFEjt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B6750C4CEF7;
+	Fri, 30 Jan 2026 08:42:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769762537;
+	bh=3cN4HUxsl78AjW6z0M0c4wJiLK6wZOqrgfm0h54baZM=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=NUmtFEjtwV/sDSV/B9zwd2AXFoR+aw4nxyGjm665Vr3Pp3UlwsL0ycy/9a4H4Myoj
+	 7m4I+lUlW0JBnmMwkAbffIY5m6PzOYRQtTfHmggVqr8BgMZ5BPC2jdDbp5HOIs/E8F
+	 6tvSqRKV4bOKvnRyO+43CBFTbuZPR3HaPN/3MSGvKlXyuLrlw4r9O+9XWQSAAeugt7
+	 ruyWoMekIMlX6ZEQiF8M24sxU5OOF0Y8WZL2LCYtcTltS1WoZbHqK/yBkHZajr1FQu
+	 /vhUA1av78P9u5wZSMcqU6Sy3ltPSzZSJFQz8n/RwwQOCQm7Iy+0MecU9DKW+d4oTh
+	 4XP6OZ2njmVJQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FF32D49C6B;
+	Fri, 30 Jan 2026 08:42:17 +0000 (UTC)
+From: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
+Subject: [PATCH net-next v6 0/6] move CAN skb headroom content to skb
+ extensions
+Date: Fri, 30 Jan 2026 09:41:54 +0100
+Message-Id: <20260130-can_skb_ext-v6-0-8fceafab7f26@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFp9StNf1eLaSETxC72=7sXYBmGFmHnv0CXysUGcYma5VA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANJufGkC/22NQQrCMBREr1L+2shPatrGlfcQKbH5tUFISxJCp
+ fTuhqxUXA4z780GgbylAOdqA0/JBju7HJpDBcOk3YOYNTmDQNEgFx0btOvD897TGhlSq5Uiw1V
+ 3gkwsnka7FtsVHEXm8gpuuZlsiLN/lZvES//XmDhDVtc4NjgaaVq6TNrH57wsx+wrqiQ/cfWNy
+ 4wLLqQYzdApxB983/c3SHAlovIAAAA=
+X-Change-ID: 20260128-can_skb_ext-0e7a99ed1984
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol@kernel.org>, 
+ Oliver Hartkopp <socketcan@hartkopp.net>, 
+ Robin van der Gracht <robin@protonic.nl>, 
+ Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769762535; l=3923;
+ i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
+ bh=3cN4HUxsl78AjW6z0M0c4wJiLK6wZOqrgfm0h54baZM=;
+ b=JkWiAJO+kZrEMjENMWJZTFFXa2HGLFT+XW7E+gNk1t8i9eYt4JFW1SSBDAgCZBYIz4JFMJKo0
+ VDM+GPjWGLtCPI3kGV5P76A11dbb5XDzvIQLiXZFSCaitvo4sjzhx6z
+X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
+ pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
+X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
+ auth_id=620
+X-Original-From: Oliver Hartkopp <socketcan@hartkopp.net>
+Reply-To: socketcan@hartkopp.net
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[sang-engineering.com:s=k1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-6411-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DMARC_NA(0.00)[sang-engineering.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6408-lists,linux-can=lfdr.de,renesas];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[sang-engineering.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wsa@sang-engineering.com,linux-can@vger.kernel.org];
-	FREEMAIL_CC(0.00)[solid-run.com,pengutronix.de,kernel.org,linaro.org,axentia.se,iki.fi,kemnade.info,baylibre.com,atomide.com,gmail.com,ti.com,glider.be,vger.kernel.org,lists.infradead.org];
-	TAGGED_RCPT(0.00)[linux-can,dt,renesas];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,solid-run.com:email,sang-engineering.com:dkim]
-X-Rspamd-Queue-Id: E774AB372B
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-can];
+	HAS_REPLYTO(0.00)[socketcan@hartkopp.net];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,msgid.link:url]
+X-Rspamd-Queue-Id: 90968B88A6
 X-Rspamd-Action: no action
 
-On Thu, Jan 29, 2026 at 05:15:06PM +0100, Ulf Hansson wrote:
-> On Wed, 28 Jan 2026 at 15:46, Josua Mayer <josua@solid-run.com> wrote:
-> >
-> > Some Renesas SoC based boards mux SD and eMMC on a single sdio
-> > controller, exposing user control by dip switch and software control by
-> > gpio.
-> >
-> > Purpose is to simplify development and provisioning by selecting boot
-> > media at power-on, and again before starting linux.
-> >
-> > Add binding and driver support for linking a (gpio) mux to renesas sdio
-> > controller.
-> >
-> > Introduce generic helper functions for getting managed and selected
-> > mux-state objects, and switch i2c-omap and phy-can-transceiver drivers.
-> >
-> > Signed-off-by: Josua Mayer <josua@solid-run.com>
-> 
-> This series needs to go together in some way. If you like, I can
-> funnel it via my mmc tree, unless someone (Wolfram for the i2c part?)
-> has objections to this of course.
+CAN bus related skbuffs (ETH_P_CAN/ETH_P_CANFD/ETH_P_CANXL) simply contain
+CAN frame structs for CAN CC/FD/XL of skb->len length at skb->data. Those
+CAN skbs do not have network/mac/transport headers nor other such
+references for encapsulated protocols like ethernet/IP protocols.
 
-No objections, I even acked the I2C patch in a previous series. Since
-the series changed because of some of my suggestions, I want to have
-another look at it. But yes, your tree sounds very reasonable.
+To store data for CAN specific use-cases all CAN bus related skbuffs are
+created with a 16 byte private skb headroom (struct can_skb_priv). Using
+the skb headroom and accessing skb->head for this private data led to
+several problems in the past likely due to "The struct can_skb_priv
+business is highly unconventional for the networking stack." [1]
+
+This patch set aims to remove the unconventional skb headroom usage for CAN
+bus related skbuffs and use the common skb extensions instead.
+
+[1] https://lore.kernel.org/linux-can/20260104074222.29e660ac@kernel.org/
+
+---
+Changes in v2:
+- Patch#1: use u32 instead of __u32 for "struct uniqframe::hash"
+- Patch#3: use u{8,16} instead of __u{8,16} for "struct can_skb_ext"
+- Patch#6: add missing patch
+- Link to v1: https://patch.msgid.link/20260125201601.5018-1-socketcan@hartkopp.net
+
+Changes in v3:
+- Patch#2: new patch: rename dev_put() in CAN subsystem suggested by Checkpatch
+- Patch#3: use netdev_put() instead of dev_put() suggested by Checkpatch
+- Patch#3: initialize can_gw_hops in can_skb_ext_add() suggested by AI-bot
+- Patch#6: add linebreak in sock_alloc_send_skb() to fit the 80 columns (Checkpatch)
+- Link to v2: https://lore.kernel.org/linux-can/20260128-can-skb-ext-v2-0-fe64aa152c8a@pengutronix.de/
+
+Changes in v4:
+Solve the netdev_put() / dev_put() suggestion from Checkpatch in a separate
+patch set. Therefore these changes are based on V2 again. 
+- Patch#2: initialize can_gw_hops in can_skb_ext_add() suggested by AI-bot
+- Patch#5: add linebreak in sock_alloc_send_skb() to fit the 80 columns
+- Link to v2: https://lore.kernel.org/linux-can/20260128-can-skb-ext-v2-0-fe64aa152c8a@pengutronix.de/
+
+Changes in v5:
+- Patch#2: use skb_ext_add() for the cloned skb suggested by AI-bot
+- Patch#2: use netdev_put() instead of dev_put() suggested by Checkpatch
+- managed to get the receipient list with b4 prep --auto-to-cc
+- Link to v4: https://lore.kernel.org/netdev/20260128-can_skb_ext-v1-0-330f60fd5d7e@hartkopp.net/
+
+Changes in v6:
+- Patch#1: drop extern prototype in header file (Checkpatch)
+- Patch#6: vxcan: correctly reset drop counter with skb extensions (AI-bot)
+- Link to v5: https://patch.msgid.link/20260129-can_skb_ext-v5-0-21252fdc8900@hartkopp.net
+
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+
+---
+Oliver Hartkopp (6):
+      can: use skb hash instead of private variable in headroom
+      can: add CAN skb extension infrastructure
+      can: move ifindex to CAN skb extensions
+      can: move frame_len to CAN skb extensions
+      can: remove private CAN skb headroom infrastructure
+      can: gw: use can_gw_hops instead of sk_buff::csum_start
+
+ MAINTAINERS               |   1 +
+ drivers/net/can/dev/skb.c | 123 +++++++++++++++++++++++++++++-----------------
+ drivers/net/can/vxcan.c   |   7 ++-
+ include/linux/can/core.h  |   1 +
+ include/linux/can/skb.h   |  38 +++++---------
+ include/linux/skbuff.h    |   3 ++
+ include/net/can.h         |  28 +++++++++++
+ net/can/Kconfig           |   1 +
+ net/can/af_can.c          |  23 ++++++---
+ net/can/bcm.c             |  26 +++++++---
+ net/can/gw.c              |  42 +++++++++-------
+ net/can/isotp.c           |  45 +++++++++++------
+ net/can/j1939/socket.c    |  15 ++++--
+ net/can/j1939/transport.c |  28 +++++++----
+ net/can/raw.c             |  22 ++++++---
+ net/core/skbuff.c         |   4 ++
+ 16 files changed, 265 insertions(+), 142 deletions(-)
+---
+base-commit: 239f09e258b906deced5c2a7c1ac8aed301b558b
+change-id: 20260128-can_skb_ext-0e7a99ed1984
+
+Best regards,
+--  
+Oliver Hartkopp <socketcan@hartkopp.net>
+
 
 
