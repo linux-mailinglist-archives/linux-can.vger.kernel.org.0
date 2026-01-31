@@ -1,69 +1,86 @@
-Return-Path: <linux-can+bounces-6441-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6442-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wIZtBZ9DfmndWgIAu9opvQ
-	(envelope-from <linux-can+bounces-6441-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sat, 31 Jan 2026 19:02:07 +0100
+	id hUjjE/BtfmlIYwIAu9opvQ
+	(envelope-from <linux-can+bounces-6442-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sat, 31 Jan 2026 22:02:40 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BC0CC3769
-	for <lists+linux-can@lfdr.de>; Sat, 31 Jan 2026 19:02:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D101C3EEC
+	for <lists+linux-can@lfdr.de>; Sat, 31 Jan 2026 22:02:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6853F3007B10
-	for <lists+linux-can@lfdr.de>; Sat, 31 Jan 2026 18:01:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 002C6300EFB7
+	for <lists+linux-can@lfdr.de>; Sat, 31 Jan 2026 21:02:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B181535CB8B;
-	Sat, 31 Jan 2026 18:01:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD6637648A;
+	Sat, 31 Jan 2026 21:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hxf9mYK+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JfNIfzcB"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879FD2472A5;
-	Sat, 31 Jan 2026 18:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569F336AB61;
+	Sat, 31 Jan 2026 21:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769882509; cv=none; b=YfB71Wg79yRANiQcK0cPvb9Pv0M9tOH8NMsDt4hlvmj3jjIebu+VXkmLo3r5YfTfN25JhV0emB9FAEJ2DS58IMfT47RZk3HjaOKACgw5X6l7cm9tTBTxflcgwRGmMUtHhJgYBXZe0Cy3DCAbIGz8rB868MbJ863/ed+Tf1dCtEA=
+	t=1769893356; cv=none; b=NFB3/kzqretdOaphM/PaCftGxWhlcPQCcEXmEXE5xRzZVYjNtFsysmOQR3tYmoOULUcoK03RXPAktu3KV6pnjvsEvI1ueaUl3SL7VqIwpiYg70erEv2YW8xRDxTS0kg5OnlkiWrkV1TVn38ePhIaDR7IxJYSwaQ3QB+BANqAHZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769882509; c=relaxed/simple;
-	bh=h3sHRNhd6LWAMOJi2q65CpHktFtBLPcu5uN9obg1hB0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=faNxYzC3xJondgzKcNrG+VhCjsOy3l+jRUg3R26rLG1qXsbf6yDBfh/vQ6WNrVEZBWQGfkTKG7jthciQ5IGqE7IQpGire3on3rbzcmNDA5FzBqYsuvNZIi15OwDrpLkPcHHH0hca7r+UVRTS0HHzSItzckPrL22NN5g7gvpsRe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hxf9mYK+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73587C4CEF1;
-	Sat, 31 Jan 2026 18:01:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769882509;
-	bh=h3sHRNhd6LWAMOJi2q65CpHktFtBLPcu5uN9obg1hB0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Hxf9mYK+pu5fN9zy66iZL93zb70NR0akn1q1/VDNc3Ap/nPm8VQcAlLl6X5lEg5dK
-	 UZsaBqgdA2UmjCxF+/pg6CSGQKgOVGTrzZNLPLgQrv6njqG7JqTVd/RuvWiALK+fso
-	 7/d7tCp96ZfPJnuNak2j5/FQMF9oW9Om6xeckRZ73EMScsO2hXIAfcH/1phU+29OFP
-	 lNot9D4wDDRh3oKQQqBiGXuGJcdaLIfSgDTBro3Kl+Tzex8OfQ8aaCwm1erSEp+PE0
-	 lWGWtrN8wTgS2PsTw1at/i5O4oECfGqpRDoIaPbA56sXpn8HWWuDz5NAtOtsE9mI3u
-	 0uZzktbgLipsQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: socketcan@hartkopp.net
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	robin@protonic.nl,
-	netdev@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	davem@davemloft.net,
-	mailhol@kernel.org,
-	linux-kernel@vger.kernel.org,
-	o.rempel@pengutronix.de,
-	kernel@pengutronix.de,
-	mkl@pengutronix.de
-Subject: Re: [net-next,v7,2/6] can: add CAN skb extension infrastructure
-Date: Sat, 31 Jan 2026 10:00:26 -0800
-Message-ID: <20260131180025.1124810-2-kuba@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260131-can_skb_ext-v7-2-dd0f8f84a83d@hartkopp.net>
+	s=arc-20240116; t=1769893356; c=relaxed/simple;
+	bh=iR3gXia+hVbJETXRRDfjflIAiHQgeR3ZuBbE7Rc74zE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LQ568Ywz+b1Ne9jPlWTW9wBJFvladKBJ+3G0UVeUUeeo6Sbn5GsxuHE99Ad9R4tCvcvxZGuRLpymRQzHAfjqwVPjzR1pTGkiHeWze7HBV/nq6vDBD7laAuDG8SBp3mgZtkMYQ8Y5FNx22TdQ8cc45ypwZ5Q58Gl3Hvmouxm4Bww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JfNIfzcB; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769893353; x=1801429353;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iR3gXia+hVbJETXRRDfjflIAiHQgeR3ZuBbE7Rc74zE=;
+  b=JfNIfzcBEtELxGwhKtM7g1MURM5RRwZheXuIl4hwZloNmxUacgS95by/
+   Cfq79XeF7CoLw06hLGWHMc0xvwaRHlng1ZVKLvjetrKNZTvgeKx+oS9hm
+   uM7FaEJYEfx3syHW4GGwfQcfl0IbiJJ+DPgQ+C6IjhLhpPmzm0uBxUxQc
+   v5YT2U42C3qNuhSDtXZg2n48/77REotw6VtiRx13N+n8v/LNx2a9kbN3s
+   Qgenh0pjEpLesv98oe8OdFMAkieatcMuuJJNEZilYLphhZnNHtOiSkyEi
+   sWiumlyfgTAB/rm6dESFgSK72rMn6DiLDNZIo+lvJ3KoUJI2D5kmmaUju
+   w==;
+X-CSE-ConnectionGUID: Nwdd9yvTQkuoOfA6LsMr+Q==
+X-CSE-MsgGUID: odMrv4BtSrOgOR5qQHQukg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11688"; a="81423715"
+X-IronPort-AV: E=Sophos;i="6.21,265,1763452800"; 
+   d="scan'208";a="81423715"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2026 13:02:33 -0800
+X-CSE-ConnectionGUID: v1FQ9Ar0T4Gqym0DqpPsHw==
+X-CSE-MsgGUID: I4iTiqRVTU6RRp4qHn0hmA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,265,1763452800"; 
+   d="scan'208";a="209375112"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 31 Jan 2026 13:02:29 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vmI6t-00000000ePA-0FAa;
+	Sat, 31 Jan 2026 21:02:27 +0000
+Date: Sun, 1 Feb 2026 05:02:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Robin van der Gracht <robin@protonic.nl>,
+	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v7 2/6] can: add CAN skb extension infrastructure
+Message-ID: <202602010426.PnGrYAk3-lkp@intel.com>
 References: <20260131-can_skb_ext-v7-2-dd0f8f84a83d@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -71,172 +88,114 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260131-can_skb_ext-v7-2-dd0f8f84a83d@hartkopp.net>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6441-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6442-lists,linux-can=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[14];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-can@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-can,socketcan.hartkopp.net];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.dev:url]
-X-Rspamd-Queue-Id: 3BC0CC3769
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,01.org:url]
+X-Rspamd-Queue-Id: 7D101C3EEC
 X-Rspamd-Action: no action
 
-This is an AI-generated review of your patch. The human sending this
-email says:
+Hi Oliver,
 
-  Not sure about the first issue, I think you mentioned we have
-  an extra ref? The uninitialized errors should probably be fixed
-  "in net", before this series? :(
+kernel test robot noticed the following build warnings:
 
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
----
-can: add CAN skb extension infrastructure
+[auto build test WARNING on 239f09e258b906deced5c2a7c1ac8aed301b558b]
 
-This patch introduces CAN skb extension infrastructure to store per-frame
-metadata (interface index, frame length, gateway hops, flags) using the
-standard skb_ext mechanism instead of the private CAN bus skb headroom.
+url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Hartkopp-via-B4-Relay/can-use-skb-hash-instead-of-private-variable-in-headroom/20260131-212921
+base:   239f09e258b906deced5c2a7c1ac8aed301b558b
+patch link:    https://lore.kernel.org/r/20260131-can_skb_ext-v7-2-dd0f8f84a83d%40hartkopp.net
+patch subject: [PATCH net-next v7 2/6] can: add CAN skb extension infrastructure
+config: s390-randconfig-r072-20260201 (https://download.01.org/0day-ci/archive/20260201/202602010426.PnGrYAk3-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+smatch version: v0.5.0-8994-gd50c5a4c
 
-> diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
-> index f14c6f02b662..53d7d9046f85 100644
-> --- a/drivers/net/can/vxcan.c
-> +++ b/drivers/net/can/vxcan.c
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602010426.PnGrYAk3-lkp@intel.com/
 
-[ ... ]
+smatch warnings:
+net/can/j1939/transport.c:1073 j1939_simple_txnext() warn: inconsistent indenting
 
-> @@ -39,6 +40,7 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *oskb, struct net_device *dev)
->  	struct vxcan_priv *priv = netdev_priv(dev);
->  	struct net_device *peer;
->  	struct net_device_stats *peerstats, *srcstats = &dev->stats;
-> +	struct can_skb_ext *csx;
->  	struct sk_buff *skb;
->  	unsigned int len;
->
-> @@ -63,6 +65,18 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *oskb, struct net_device *dev)
->  		goto out_unlock;
->  	}
->
-> +	/* the cloned skb points to the skb extension of the original oskb
-> +	 * with an increased refcount. skb_ext_add() creates a copy to
-> +	 * separate the skb extension data which is needed to start with a
-> +	 * fresh can_gw_hops counter in the other namespace.
-> +	 */
-> +	csx = skb_ext_add(skb, SKB_EXT_CAN);
-> +	if (!csx) {
-> +		kfree_skb(skb);
-> +		kfree_skb(oskb);
-                ^^^^^^^^^^^^^^^^
+vim +1073 net/can/j1939/transport.c
 
-Is this a double-free of oskb? Looking at the code flow:
+9d71dd0c700999 The j1939 authors 2018-10-08  1045  
+9d71dd0c700999 The j1939 authors 2018-10-08  1046  static int j1939_simple_txnext(struct j1939_session *session)
+9d71dd0c700999 The j1939 authors 2018-10-08  1047  {
+9d71dd0c700999 The j1939 authors 2018-10-08  1048  	struct j1939_priv *priv = session->priv;
+2030043e616cab Oleksij Rempel    2021-05-21  1049  	struct sk_buff *se_skb = j1939_session_skb_get(session);
+9d71dd0c700999 The j1939 authors 2018-10-08  1050  	struct sk_buff *skb;
+9d71dd0c700999 The j1939 authors 2018-10-08  1051  	int ret;
+9d71dd0c700999 The j1939 authors 2018-10-08  1052  
+9d71dd0c700999 The j1939 authors 2018-10-08  1053  	if (!se_skb)
+9d71dd0c700999 The j1939 authors 2018-10-08  1054  		return 0;
+9d71dd0c700999 The j1939 authors 2018-10-08  1055  
+9d71dd0c700999 The j1939 authors 2018-10-08  1056  	skb = skb_clone(se_skb, GFP_ATOMIC);
+2030043e616cab Oleksij Rempel    2021-05-21  1057  	if (!skb) {
+2030043e616cab Oleksij Rempel    2021-05-21  1058  		ret = -ENOMEM;
+2030043e616cab Oleksij Rempel    2021-05-21  1059  		goto out_free;
+2030043e616cab Oleksij Rempel    2021-05-21  1060  	}
+9d71dd0c700999 The j1939 authors 2018-10-08  1061  
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1062  	/* the cloned skb points to the skb extension of the original se_skb
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1063  	 * with an increased refcount. skb_ext_add() creates a copy to
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1064  	 * separate the skb extension data which is needed to modify the
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1065  	 * can_framelen in can_put_echo_skb().
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1066  	 */
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1067  	if (!skb_ext_add(skb, SKB_EXT_CAN)) {
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1068  		kfree_skb(skb);
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1069  		ret = -ENOMEM;
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1070  		goto out_free;
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1071  	}
+f170b16e1461f2 Oliver Hartkopp   2026-01-31  1072  
+9d71dd0c700999 The j1939 authors 2018-10-08 @1073         can_skb_set_owner(skb, se_skb->sk);
+9d71dd0c700999 The j1939 authors 2018-10-08  1074  
+9d71dd0c700999 The j1939 authors 2018-10-08  1075  	j1939_tp_set_rxtimeout(session, J1939_SIMPLE_ECHO_TIMEOUT_MS);
+9d71dd0c700999 The j1939 authors 2018-10-08  1076  
+9d71dd0c700999 The j1939 authors 2018-10-08  1077  	ret = j1939_send_one(priv, skb);
+9d71dd0c700999 The j1939 authors 2018-10-08  1078  	if (ret)
+2030043e616cab Oleksij Rempel    2021-05-21  1079  		goto out_free;
+9d71dd0c700999 The j1939 authors 2018-10-08  1080  
+cd85d3aed5cf44 Oleksij Rempel    2021-07-07  1081  	j1939_sk_errqueue(session, J1939_ERRQUEUE_TX_SCHED);
+9d71dd0c700999 The j1939 authors 2018-10-08  1082  	j1939_sk_queue_activate_next(session);
+9d71dd0c700999 The j1939 authors 2018-10-08  1083  
+2030043e616cab Oleksij Rempel    2021-05-21  1084   out_free:
+2030043e616cab Oleksij Rempel    2021-05-21  1085  	if (ret)
+2030043e616cab Oleksij Rempel    2021-05-21  1086  		kfree_skb(se_skb);
+2030043e616cab Oleksij Rempel    2021-05-21  1087  	else
+2030043e616cab Oleksij Rempel    2021-05-21  1088  		consume_skb(se_skb);
+2030043e616cab Oleksij Rempel    2021-05-21  1089  
+2030043e616cab Oleksij Rempel    2021-05-21  1090  	return ret;
+9d71dd0c700999 The j1939 authors 2018-10-08  1091  }
+9d71dd0c700999 The j1939 authors 2018-10-08  1092  
 
-    skb = skb_clone(oskb, GFP_ATOMIC);  /* line 60 */
-    if (unlikely(!skb)) { ... }
-    consume_skb(oskb);                   /* line 62 - frees oskb */
-
-At this point oskb has been freed by consume_skb(). If skb_ext_add() then
-fails, the error handler calls kfree_skb(oskb) on the already-freed pointer.
-
-This can occur under memory pressure when skb_clone() succeeds but the
-subsequent skb_ext_add() allocation fails. The kfree_skb(oskb) line should
-be removed from this error path.
-
-> +		goto out_unlock;
-> +	}
-
-[ ... ]
-
-> diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index 4bb60b8f9b96..94103fe654ff 100644
-> --- a/net/can/isotp.c
-> +++ b/net/can/isotp.c
-
-[ ... ]
-
-> @@ -1005,6 +1022,13 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
->  		goto err_out_drop;
->  	}
->
-> +	csx = can_skb_ext_add(skb);
-> +	if (!csx) {
-> +		kfree_skb(skb);
-> +		netdev_put(dev, NULL);
-> +		goto err_out_drop;
-> +	}
-
-Does this error path return an uninitialized value to userspace? The variable
-err is declared without initialization at line 959 and sock_alloc_send_skb()
-only sets it on failure. When can_skb_ext_add() fails after a successful
-sock_alloc_send_skb(), err contains garbage.
-
-Other error paths in this function set err explicitly before jumping to
-err_out_drop. Should this add err = -ENOMEM before the goto?
-
-> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-> index 1589e8ca634e..fc28a7677369 100644
-> --- a/net/can/j1939/socket.c
-> +++ b/net/can/j1939/socket.c
-
-[ ... ]
-
-> @@ -895,6 +897,12 @@ static struct sk_buff *j1939_sk_alloc_skb(struct net_device *ndev,
->  	if (!skb)
->  		goto failure;
->
-> +	csx = can_skb_ext_add(skb);
-> +	if (!csx) {
-> +		kfree_skb(skb);
-> +		goto failure;
-> +	}
-
-Similar concern here: ret is declared without initialization at line 891.
-sock_alloc_send_skb() only writes to ret on failure. When can_skb_ext_add()
-fails after successful allocation, ret is uninitialized when returned via
-*errcode at the failure label.
-
-Should this set ret = -ENOMEM before goto failure?
-
-> diff --git a/net/can/raw.c b/net/can/raw.c
-> index fb4f9c854df0..03438e9bc535 100644
-> --- a/net/can/raw.c
-> +++ b/net/can/raw.c
-
-[ ... ]
-
-> @@ -956,6 +958,12 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
->  	if (!skb)
->  		goto put_dev;
->
-> +	csx = can_skb_ext_add(skb);
-> +	if (!csx) {
-> +		kfree_skb(skb);
-> +		goto put_dev;
-> +	}
-
-This returns -EINVAL (from line 923) when can_skb_ext_add() fails due to
-memory allocation failure. Should this be -ENOMEM instead? The
-sock_alloc_send_skb() above this code returns -ENOMEM for allocation
-failures.
 -- 
-pw-bot: cr
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
