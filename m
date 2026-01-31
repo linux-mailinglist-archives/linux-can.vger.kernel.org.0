@@ -1,232 +1,417 @@
-Return-Path: <linux-can+bounces-6419-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6420-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iIY3BcqrfGkaOQIAu9opvQ
-	(envelope-from <linux-can+bounces-6419-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 14:02:02 +0100
+	id up1vEE9QfWnORQIAu9opvQ
+	(envelope-from <linux-can+bounces-6420-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sat, 31 Jan 2026 01:43:59 +0100
 X-Original-To: lists+linux-can@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B18ABAD62
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 14:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A64CBFADD
+	for <lists+linux-can@lfdr.de>; Sat, 31 Jan 2026 01:43:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4FCAB300D17B
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jan 2026 13:01:46 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 266BF301829D
+	for <lists+linux-can@lfdr.de>; Sat, 31 Jan 2026 00:43:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80546134CF;
-	Fri, 30 Jan 2026 13:01:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1B930FC01;
+	Sat, 31 Jan 2026 00:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="KE/c5SjM";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="qb3jgcOR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EoiHGZOq"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f67.google.com (mail-dl1-f67.google.com [74.125.82.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11EFAD27E
-	for <linux-can@vger.kernel.org>; Fri, 30 Jan 2026 13:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.22
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769778104; cv=pass; b=cAFVa7fziLs/EU2zbr2ACM5Ij6I7KBsZvMerSBcw4j/Cd7htjPCTiJQYlRA1zne8qhNdtRpOZQQxs3R4270n9mC7oGFgMV41RrwZRG0sMIKG0q5owgTa44r4po+1+iDzpY1QCi/5FX7LzdqTMJHIeDh90+clvB6sy4orRCsJHoA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769778104; c=relaxed/simple;
-	bh=JlEMBGsDUgA7BaNj+fVIrBRSZBV0VWeU//QA4gYPgWw=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=UXRN85E2ut26mR2ESXhZ15xt4Y/XonElXPusoyGBhKQJj/6jTWFuC0BMGqTOVRwi3iHIyDVME9nvPHHn8K77ByrlMdZz5SgwA53Aa27aZziMDuutJl9Inm3y6MmP3ZinzH/2LdlZJ1r3ot/sbTxFD2kknBhHhO6GWT7kxzPNjiI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=KE/c5SjM; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=qb3jgcOR; arc=pass smtp.client-ip=85.215.255.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1769778094; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=hVBg+ktz/bxhL4zYk7w+wrJzO9UcQ6JRHdqmvM1sGqdzp6h6178GUs1CHKL/WmBw7Q
-    XkoVrQhQjdw9tWHXqwzph8HmFdBujcVx0WBUzRQl8RSJfdMJAcehWrLzCFy4n6Cbg3Ly
-    vcx4pwnHRzb9rnTUtf9FV4RC0DfParV4yqsOhTFyE9vfKQsh7gWTEEkf3+mSRfmWYkqL
-    Ghow/9K507yYiLsiGWAl2XYF7tOvYP++hxtr7fIabCRHXaN/QkgnCiLWansbQFXLvSrf
-    EUwFnjM94LzyPpMDQNUlh5NbsMmwv8u8bIIjijP2dn604wupOzWG6u6hBASHAjRLaS36
-    TTmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1769778094;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=xfXK8+8EO8kDqHd66OokrqzHC6iaBwCHqhCkNE1EgDM=;
-    b=PCTJQHw1z5w+YDIp67pszkLK52qrd/YKAATS3ANX/sVISUYKw79GOe4Ehm/hNME5ij
-    yBcoEd76ZvvJ4G1AhqaTF2AWBYLPMgnpsl01UcafGI5YIxqmv4zQ0v/Jr2eps3QjXcb2
-    G1YmhL9K5Efi91JM9kutwtnKo7ZWzg5I4LHYdCBPmlBpPiOlcAlyIwjQwgfeQNZmL4XV
-    PMJiYl0ayNNlPdU6JRnLkKl4jUJiRKaaOZpL8ZkBWUagLC0y5xwa/DtwtoewLcBTxWG1
-    /Xvn+YQ9owzG3FIyvf+nsGI3S7UvuoS6cgMSvV9fk7fWV5PsZ7xLXQyheyUg6QPc6DpA
-    9yyg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1769778094;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=xfXK8+8EO8kDqHd66OokrqzHC6iaBwCHqhCkNE1EgDM=;
-    b=KE/c5SjMw/I61jiU4lw49qI3NLnDA4txpMIDCWb44aHFEb8GgPJAyrvzJeGC2WAMYv
-    ZpdelgcvOvlTbV3rlGrjdEkhPqGpbgXLr4wxhgvDZ+rN2sZRhnprfqc2316Gz4KEHJ18
-    1x3797RkE2L4wqPjQpvmVhE/33JhBuDgByf4el7km1Q8PUkqBGL7+HH6+uxtXt4u2zzy
-    iqk40Bg/jlIdfX/kG6YrTtYI/HNsRTlU3i70UJAcX3ld13NLpRhdp6Iu62vDXzno5E3D
-    UWVGAOBM2W1SAdXVTtQ1Uqpfpkz4VoWntMcQUHPWdLYzbmEDp+4Xk47ArrvUDGgwKG9t
-    oSUA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1769778094;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=xfXK8+8EO8kDqHd66OokrqzHC6iaBwCHqhCkNE1EgDM=;
-    b=qb3jgcOROToUNA/w4V3PvhwUk3YNFZKgt5KAjKrIvx9N+vR+5kFnuscrj8fnAs+P7J
-    VQJ/Kc63Exu+MTZKrCCg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7tnMDLztswwlyqon4XDpA0w0c7HaA=="
-Received: from [IPV6:2a00:6020:4a38:6810:ae1c:f386:228b:f98a]
-    by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id Ka861020UD1X55D
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Fri, 30 Jan 2026 14:01:33 +0100 (CET)
-Message-ID: <c057ddbc-02c2-473a-8e52-50945b43e04f@hartkopp.net>
-Date: Fri, 30 Jan 2026 14:01:27 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BFE30C615
+	for <linux-can@vger.kernel.org>; Sat, 31 Jan 2026 00:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.67
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769820234; cv=none; b=Cr+9bRddjajkFr8w4hVD9Qt1uCB9G0GJOO3tcEb1igt61dQvjUf56v8gTh5Clp2g7wx5vtQcpPVERoewffQx+Cs1X4cSx8eECYmEsbI/PriqkWCbDFafl6bkrYP6EN+qLB9QE9msaB1z4ceABvdJtdH8ySmGCctNYXAAH1gGgi8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769820234; c=relaxed/simple;
+	bh=gAMxZn0Bbk69ZZJxMKMKvrwOH+mTYEZ1m8iOZgJYkZE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P60Bmn29UlVshf//hPPtZFA+iL0gGSa5wq9EC9Pg5af7n5zE0XSSwlHTV8tEwasZ8wkjqPvIenGAkrT7v3sqhjvOEMcwpz31bYr9uKaW378mpF1ccSY+/V15/Y0LcBf1Fx4r8nxFKUKOtyX2Epu854zp1PZf5iWsIJTQDHO+Xgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EoiHGZOq; arc=none smtp.client-ip=74.125.82.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dl1-f67.google.com with SMTP id a92af1059eb24-124a95e592fso4764566c88.0
+        for <linux-can@vger.kernel.org>; Fri, 30 Jan 2026 16:43:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769820230; x=1770425030; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lz/w+ViHe1NFxGhmvKw2Td3oBT35x8hZuCkuGLcRPRE=;
+        b=EoiHGZOq1n+YqkmJ8RdCd+vjNLjMRY8d7N0js7XEzTUkM/k4VsCUrOCG8r9Rtltflp
+         SURYEBQwRWjFb/LLK3zls1RwRTQcw6yeyP82KeLblFalF8WOg1kOC++vEb62lgRoy1y3
+         AhCZfU724LbU6Kw6WFzNfGik3fy/yXDXi4982mgcQ/5AvZFn0TfaDWIEM+zNdypUc1sS
+         IxvURZ4X584Lima7TJXbyOmxXA2RHa77Pg4KBmwtN0lC6JBQzfzn2NX4azPIU1awHW/J
+         VwXPcO0KL0i0aKGD8I4RkYUXCoxNjJ5GlQvsO6lNd7K4ZWivXKPKJrjy7dqF2f7P2inL
+         zNDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769820230; x=1770425030;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lz/w+ViHe1NFxGhmvKw2Td3oBT35x8hZuCkuGLcRPRE=;
+        b=uP/CBh5bjRfSouShKWQmvHdHHcCWaLkXPDw4G+Iw7L2V/I+aOvvHtnNBlLPOu/U539
+         NW7yyQlpSeq2B584Dz9dBbC6P1HWiB/PnPbn7T9AouylUy+Lx462VfeZis00eFu0hLb1
+         tr4zIAD/Mx9fHJ8t78HpUHu2IJmUq4e10OISS72Zo/kAHhsLUt1ILNIWWErCRl+dE/z6
+         /U5VgSJ8zUAAcrw2EaSHIow0qvPEszj1o91kfl3yggQZnXGtYee9QDJCNiI+UDDxQQEF
+         J1xZPbEsgmR5GIPgeTNsySGsQLt1ddgY9TvCoznplzMMHCXcqVNVyRoHZgv1nHyNGe1b
+         W1rA==
+X-Forwarded-Encrypted: i=1; AJvYcCXsf8cGMUzhPK7APCn5K56kvhBgZBsPauaAxqEjD68P8V0g3lSpqDuuhUfB8y49JS0mex9WBqUR+mI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyumI8JouMBdNQS+Zfoy61Z11CDoKZJVw/uqMDOz6+YXlj035Wi
+	D6iV+/XCGIQt9a6BBdP5fesTMTFlOU1LwZb8MenP0GiYD3iB1qHY8La0
+X-Gm-Gg: AZuq6aInAe1btrrIxhrflmDMopp8dhqpBkjdUiOgLX9v3V/tBA+SisB5DixxFSdpHMG
+	yJuwIivuuXsXWcfLzRho0cf16Boy72V2hoA7IseQXvyzZ9STIO5uZMkTXuk6M2H1HR1O+KnbK65
+	KAq9eVAJoaZsH5K8aulse5lzp3/kWuGWOJlwpxlH8iLPyxU96TzSUSOFvFSfmDjTDYiQ33lKvmX
+	GgE4xSoD2eiRdKx6b5tY2/EyqXQysakEeXeUfYZEuTBohi+tf0I5GEkfZt2NfdWtFHA5vpkr8cJ
+	wQuKV4NL0MFSvDChj+m2Mr4mbNzE21c8JLiah/AkqPDjxwPzZz8dk9dSN0OWpSwHsbbSIVfgKnf
+	PjRCpgXyTJscpoTMCUoHEpKgOpBBe8JMWTFU3feHAn+Fch4ntX9gyFjGEyZ07tp4IF8s/p85DCy
+	tSQxfjGeB3H7k3hYU/17YW9boedDv8VjIihqLLRjuDbw3rFG4+UxTT2QZIuhSyUp1reIOxeysaz
+	2v9yXz6uxqm/ctKeRpFDiTirfuU/+BBpdhNULrLHrIZoLMGsMLhygrLHowo6T0LRueCeZl7HDDA
+	+ReY
+X-Received: by 2002:a05:7022:e25:b0:11b:9386:a3cf with SMTP id a92af1059eb24-125c10211dbmr2225916c88.48.1769820229772;
+        Fri, 30 Jan 2026 16:43:49 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a16cf8f2sm14710638eec.7.2026.01.30.16.43.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jan 2026 16:43:49 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	linux-wireless@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Petr Machata <petrm@nvidia.com>,
+	Sridhar Samudrala <sridhar.samudrala@intel.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+	Ping-Ke Shih <pkshih@realtek.com>,
+	=?UTF-8?q?Thomas=20M=C3=BChlbacher?= <tmuehlbacher@posteo.net>,
+	Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH net-next] net: remove unnecessary module_init/exit functions
+Date: Fri, 30 Jan 2026 16:42:56 -0800
+Message-ID: <20260131004327.18112-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: CAN ML only - Re: [PATCH net-next v6 6/6] can: gw: use can_gw_hops
- instead of sk_buff::csum_start
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
- Vincent Mailhol <mailhol@kernel.org>,
- Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de
-Cc: linux-can@vger.kernel.org
-References: <20260130-can_skb_ext-v6-0-8fceafab7f26@hartkopp.net>
- <20260130-can_skb_ext-v6-6-8fceafab7f26@hartkopp.net>
- <93d61e1c-5cdf-498e-8699-43e57cbb221b@hartkopp.net>
-Content-Language: en-US
-In-Reply-To: <93d61e1c-5cdf-498e-8699-43e57cbb221b@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6419-lists,linux-can=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[hartkopp.net:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
+	FREEMAIL_CC(0.00)[gmail.com,pengutronix.de,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,nvidia.com,intel.com,toke.dk,realtek.com,posteo.net,hartkopp.net];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	TAGGED_FROM(0.00)[bounces-6420-lists,linux-can=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-can,netdev];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-can];
-	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7B18ABAD62
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,che.eu:email,mellanox.com:email,realtek.com:email]
+X-Rspamd-Queue-Id: 9A64CBFADD
 X-Rspamd-Action: no action
 
--netdev
+Many network drivers have unnecessary empty module_init and module_exit
+functions. Remove them (including some that just print a message). Note
+that if a module_init function exists, a module_exit function must also
+exist; otherwise, the module cannot be unloaded.
 
-Hi all,
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ drivers/net/arcnet/com20020.c                 | 16 ----------
+ drivers/net/can/sja1000/sja1000.c             | 16 ----------
+ drivers/net/ethernet/8390/8390.c              | 14 ---------
+ drivers/net/ethernet/8390/8390p.c             | 11 -------
+ drivers/net/ethernet/mellanox/mlxsw/pci.c     | 12 --------
+ drivers/net/hamradio/hdlcdrv.c                | 20 -------------
+ drivers/net/net_failover.c                    | 13 ---------
+ drivers/net/wireless/ath/ath9k/common.c       | 12 --------
+ .../realtek/rtlwifi/btcoexist/rtl_btc.c       | 13 ---------
+ drivers/net/wireless/rsi/rsi_91x_main.c       | 29 -------------------
+ 10 files changed, 156 deletions(-)
 
-On 30.01.26 10:29, Oliver Hartkopp wrote:
+diff --git a/drivers/net/arcnet/com20020.c b/drivers/net/arcnet/com20020.c
+index a0053e3992a3..b8526805ffac 100644
+--- a/drivers/net/arcnet/com20020.c
++++ b/drivers/net/arcnet/com20020.c
+@@ -401,19 +401,3 @@ EXPORT_SYMBOL(com20020_netdev_ops);
+ 
+ MODULE_DESCRIPTION("ARCnet COM20020 chipset core driver");
+ MODULE_LICENSE("GPL");
+-
+-#ifdef MODULE
+-
+-static int __init com20020_module_init(void)
+-{
+-	if (BUGLVL(D_NORMAL))
+-		pr_info("%s\n", "COM20020 chipset support (by David Woodhouse et al.)");
+-	return 0;
+-}
+-
+-static void __exit com20020_module_exit(void)
+-{
+-}
+-module_init(com20020_module_init);
+-module_exit(com20020_module_exit);
+-#endif				/* MODULE */
+diff --git a/drivers/net/can/sja1000/sja1000.c b/drivers/net/can/sja1000/sja1000.c
+index a8fa0d6516b9..7c5aa8d399d4 100644
+--- a/drivers/net/can/sja1000/sja1000.c
++++ b/drivers/net/can/sja1000/sja1000.c
+@@ -725,19 +725,3 @@ void unregister_sja1000dev(struct net_device *dev)
+ 	unregister_candev(dev);
+ }
+ EXPORT_SYMBOL_GPL(unregister_sja1000dev);
+-
+-static __init int sja1000_init(void)
+-{
+-	printk(KERN_INFO "%s CAN netdevice driver\n", DRV_NAME);
+-
+-	return 0;
+-}
+-
+-module_init(sja1000_init);
+-
+-static __exit void sja1000_exit(void)
+-{
+-	printk(KERN_INFO "%s: driver removed\n", DRV_NAME);
+-}
+-
+-module_exit(sja1000_exit);
+diff --git a/drivers/net/ethernet/8390/8390.c b/drivers/net/ethernet/8390/8390.c
+index c5636245f1ca..8e4354568f04 100644
+--- a/drivers/net/ethernet/8390/8390.c
++++ b/drivers/net/ethernet/8390/8390.c
+@@ -86,19 +86,5 @@ void NS8390_init(struct net_device *dev, int startp)
+ }
+ EXPORT_SYMBOL(NS8390_init);
+ 
+-#if defined(MODULE)
+-
+-static int __init ns8390_module_init(void)
+-{
+-	return 0;
+-}
+-
+-static void __exit ns8390_module_exit(void)
+-{
+-}
+-
+-module_init(ns8390_module_init);
+-module_exit(ns8390_module_exit);
+-#endif /* MODULE */
+ MODULE_DESCRIPTION("National Semiconductor 8390 core driver");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/net/ethernet/8390/8390p.c b/drivers/net/ethernet/8390/8390p.c
+index 6d429b11e9c6..a0bfc8e34f79 100644
+--- a/drivers/net/ethernet/8390/8390p.c
++++ b/drivers/net/ethernet/8390/8390p.c
+@@ -91,16 +91,5 @@ void NS8390p_init(struct net_device *dev, int startp)
+ }
+ EXPORT_SYMBOL(NS8390p_init);
+ 
+-static int __init NS8390p_init_module(void)
+-{
+-	return 0;
+-}
+-
+-static void __exit NS8390p_cleanup_module(void)
+-{
+-}
+-
+-module_init(NS8390p_init_module);
+-module_exit(NS8390p_cleanup_module);
+ MODULE_DESCRIPTION("National Semiconductor 8390 core for ISA driver");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/pci.c b/drivers/net/ethernet/mellanox/mlxsw/pci.c
+index 8769cba2c746..7da9ef254b72 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/pci.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/pci.c
+@@ -2542,18 +2542,6 @@ void mlxsw_pci_driver_unregister(struct pci_driver *pci_driver)
+ }
+ EXPORT_SYMBOL(mlxsw_pci_driver_unregister);
+ 
+-static int __init mlxsw_pci_module_init(void)
+-{
+-	return 0;
+-}
+-
+-static void __exit mlxsw_pci_module_exit(void)
+-{
+-}
+-
+-module_init(mlxsw_pci_module_init);
+-module_exit(mlxsw_pci_module_exit);
+-
+ MODULE_LICENSE("Dual BSD/GPL");
+ MODULE_AUTHOR("Jiri Pirko <jiri@mellanox.com>");
+ MODULE_DESCRIPTION("Mellanox switch PCI interface driver");
+diff --git a/drivers/net/hamradio/hdlcdrv.c b/drivers/net/hamradio/hdlcdrv.c
+index 2263029d1a20..3b88e465d08f 100644
+--- a/drivers/net/hamradio/hdlcdrv.c
++++ b/drivers/net/hamradio/hdlcdrv.c
+@@ -742,26 +742,6 @@ EXPORT_SYMBOL(hdlcdrv_unregister);
+ 
+ /* --------------------------------------------------------------------- */
+ 
+-static int __init hdlcdrv_init_driver(void)
+-{
+-	printk(KERN_INFO "hdlcdrv: (C) 1996-2000 Thomas Sailer HB9JNX/AE4WA\n");
+-	printk(KERN_INFO "hdlcdrv: version 0.8\n");
+-	return 0;
+-}
+-
+-/* --------------------------------------------------------------------- */
+-
+-static void __exit hdlcdrv_cleanup_driver(void)
+-{
+-	printk(KERN_INFO "hdlcdrv: cleanup\n");
+-}
+-
+-/* --------------------------------------------------------------------- */
+-
+ MODULE_AUTHOR("Thomas M. Sailer, sailer@ife.ee.ethz.ch, hb9jnx@hb9w.che.eu");
+ MODULE_DESCRIPTION("Packet Radio network interface HDLC encoder/decoder");
+ MODULE_LICENSE("GPL");
+-module_init(hdlcdrv_init_driver);
+-module_exit(hdlcdrv_cleanup_driver);
+-
+-/* --------------------------------------------------------------------- */
+diff --git a/drivers/net/net_failover.c b/drivers/net/net_failover.c
+index 5b50d9186f12..d0361aaf25ef 100644
+--- a/drivers/net/net_failover.c
++++ b/drivers/net/net_failover.c
+@@ -819,18 +819,5 @@ void net_failover_destroy(struct failover *failover)
+ }
+ EXPORT_SYMBOL_GPL(net_failover_destroy);
+ 
+-static __init int
+-net_failover_init(void)
+-{
+-	return 0;
+-}
+-module_init(net_failover_init);
+-
+-static __exit
+-void net_failover_exit(void)
+-{
+-}
+-module_exit(net_failover_exit);
+-
+ MODULE_DESCRIPTION("Failover driver for Paravirtual drivers");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/net/wireless/ath/ath9k/common.c b/drivers/net/wireless/ath/ath9k/common.c
+index ffcf2276eb92..f55b3afb3777 100644
+--- a/drivers/net/wireless/ath/ath9k/common.c
++++ b/drivers/net/wireless/ath/ath9k/common.c
+@@ -403,15 +403,3 @@ void ath9k_cmn_init_crypto(struct ath_hw *ah)
+ 		ath_hw_keyreset(common, (u16) i);
+ }
+ EXPORT_SYMBOL(ath9k_cmn_init_crypto);
+-
+-static int __init ath9k_cmn_init(void)
+-{
+-	return 0;
+-}
+-module_init(ath9k_cmn_init);
+-
+-static void __exit ath9k_cmn_exit(void)
+-{
+-	return;
+-}
+-module_exit(ath9k_cmn_exit);
+diff --git a/drivers/net/wireless/realtek/rtlwifi/btcoexist/rtl_btc.c b/drivers/net/wireless/realtek/rtlwifi/btcoexist/rtl_btc.c
+index 4641999f3fe9..e88d92d3ae7a 100644
+--- a/drivers/net/wireless/realtek/rtlwifi/btcoexist/rtl_btc.c
++++ b/drivers/net/wireless/realtek/rtlwifi/btcoexist/rtl_btc.c
+@@ -519,16 +519,3 @@ MODULE_AUTHOR("Realtek WlanFAE	<wlanfae@realtek.com>");
+ MODULE_AUTHOR("Larry Finger	<Larry.FInger@lwfinger.net>");
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("Realtek 802.11n PCI wireless core");
+-
+-static int __init rtl_btcoexist_module_init(void)
+-{
+-	return 0;
+-}
+-
+-static void __exit rtl_btcoexist_module_exit(void)
+-{
+-	return;
+-}
+-
+-module_init(rtl_btcoexist_module_init);
+-module_exit(rtl_btcoexist_module_exit);
+diff --git a/drivers/net/wireless/rsi/rsi_91x_main.c b/drivers/net/wireless/rsi/rsi_91x_main.c
+index 2112d8d277a9..a9bb37d5d581 100644
+--- a/drivers/net/wireless/rsi/rsi_91x_main.c
++++ b/drivers/net/wireless/rsi/rsi_91x_main.c
+@@ -425,35 +425,6 @@ void rsi_91x_deinit(struct rsi_hw *adapter)
+ }
+ EXPORT_SYMBOL_GPL(rsi_91x_deinit);
+ 
+-/**
+- * rsi_91x_hal_module_init() - This function is invoked when the module is
+- *			       loaded into the kernel.
+- *			       It registers the client driver.
+- * @void: Void.
+- *
+- * Return: 0 on success, -1 on failure.
+- */
+-static int rsi_91x_hal_module_init(void)
+-{
+-	rsi_dbg(INIT_ZONE, "%s: Module init called\n", __func__);
+-	return 0;
+-}
+-
+-/**
+- * rsi_91x_hal_module_exit() - This function is called at the time of
+- *			       removing/unloading the module.
+- *			       It unregisters the client driver.
+- * @void: Void.
+- *
+- * Return: None.
+- */
+-static void rsi_91x_hal_module_exit(void)
+-{
+-	rsi_dbg(INIT_ZONE, "%s: Module exit called\n", __func__);
+-}
+-
+-module_init(rsi_91x_hal_module_init);
+-module_exit(rsi_91x_hal_module_exit);
+ MODULE_AUTHOR("Redpine Signals Inc");
+ MODULE_DESCRIPTION("Station driver for RSI 91x devices");
+ MODULE_VERSION("0.1");
+-- 
+2.43.0
 
->> @@ -62,11 +64,14 @@ static netdev_tx_t vxcan_xmit(struct sk_buff 
->> *oskb, struct net_device *dev)
->>           kfree_skb(oskb);
->>           goto out_unlock;
->>       }
->>       /* reset CAN GW hop counter */
->> -    skb->csum_start = 0;
->> +    csx = can_skb_ext_find(skb);
->> +    if (csx)
->> +        csx->can_gw_hops = 0;
->> +
-> 
-> We are dealing with a cloned skb here, where we can not be sure that the 
-> original skb ("oskb") was not cloned before too.
-> 
-> Therefore we need to take care that the skb extension can be written 
-> without affecting potential clones of oskb.
-> 
-> csx = can_skb_ext_add(skb) would do a potential cow for us and also sets 
-> can_gw_hops to zero.
-> 
-> Therefore the only change for vxcan.c should look like this:
-> 
-> if (!can_skb_ext_add(skb)) {
->      kfree_skb(skb);
->      goto out_unlock;
-> }
-> 
-
-We have some other CAN code cloning skbs
-
-af_can.c:           newskb = skb_clone(skb, GFP_ATOMIC);
-gw.c:               nskb = skb_clone(skb, GFP_ATOMIC);
-j1939/main.c:       skb = skb_clone(iskb, GFP_ATOMIC);
-j1939/socket.c:     skb = skb_clone(oskb, GFP_ATOMIC);
-j1939/transport.c:  skb = skb_clone(se_skb, GFP_ATOMIC);
-raw.c:              skb = skb_clone(oskb, GFP_ATOMIC);
-
-And especially
-
-include/linux/can/skb.h with
-
-/*
-  * returns an unshared skb owned by the original sock to be echo'ed back
-  */
-static inline struct sk_buff *can_create_echo_skb(struct sk_buff *skb)
-{
-         struct sk_buff *nskb;
-
-         nskb = skb_clone(skb, GFP_ATOMIC);
-         if (unlikely(!nskb)) {
-                 kfree_skb(skb);
-                 return NULL;
-         }
-
-         can_skb_set_owner(nskb, skb->sk);
-         consume_skb(skb);
-         return nskb;
-}
-
-With this patch/change above I would have integrated the skb extensions 
-support for gw.c but after thinking about the cloning and the refcounts
-I think the can_skb_ext_add(skb) or skb_ext_add(skb, SKB_EXT_CAN) has to 
-be applied to some other skb_clone locations in the CAN code too.
-
-In the above can_create_echo_skb() and in can_send() in af_can.c we need 
-to create a (writable) copy of the skb extensions IMO.
-
-In raw.c the skb is only cloned to send it to the user space where skb 
-extensions are not needed as the skb is never routed back down again.
-
-The same seems to be correct for j1939_sk_recv_one() in j1939/socket.c 
-and MIGHT be correct for j1939_can_recv() in j1939/main.c
-
-j1939_simple_txnext() in j1939/transport.c is a open question for me.
-
-Can you (especially Oleksij) please take a look for a short review and 
-advise?
-
-I'm not pushing for getting this CAN skb extensions patch set [1] into 
-this merge window. But if we would catch it, it would be nice.
-
-Best regards,
-Oliver
-
-[1] 
-https://lore.kernel.org/linux-can/20260130-can_skb_ext-v6-0-8fceafab7f26@hartkopp.net/
 
