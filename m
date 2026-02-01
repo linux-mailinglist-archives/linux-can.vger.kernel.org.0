@@ -1,55 +1,56 @@
-Return-Path: <linux-can+bounces-6451-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6452-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CE/jOE5kf2lNpgIAu9opvQ
-	(envelope-from <linux-can+bounces-6451-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sun, 01 Feb 2026 15:33:50 +0100
+	id 4BAWEmpkf2lSpgIAu9opvQ
+	(envelope-from <linux-can+bounces-6452-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sun, 01 Feb 2026 15:34:18 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id F35E4C626B
-	for <lists+linux-can@lfdr.de>; Sun, 01 Feb 2026 15:33:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2609C62B1
+	for <lists+linux-can@lfdr.de>; Sun, 01 Feb 2026 15:34:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D9D2D3001048
-	for <lists+linux-can@lfdr.de>; Sun,  1 Feb 2026 14:33:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4A8E73011C52
+	for <lists+linux-can@lfdr.de>; Sun,  1 Feb 2026 14:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64304350D7E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E31135292F;
 	Sun,  1 Feb 2026 14:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QIv6ORl7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u6ViClRF"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35ECC350A3D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469EF350D4C;
 	Sun,  1 Feb 2026 14:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769956421; cv=none; b=M5rLhdydG8ZHhwKXUoSqGMOyuePQ1hWnYMwpszYv9WzM3tb+J2q97exE8PAArL4el0uawHuMeydY+AJuEK0zQMNtI2JsFP7JqCBq0R9pmBhFKVScASjMGOe+iqDUr8q0jqXTFPrwqKIDqeHzW5ep3Fisql95pKAeTvCnf4ZwXYA=
+	t=1769956421; cv=none; b=C/O85JeoNKmzBLpwUxEVqp9/XbeMtu7NcNhzbD5+Tif4n0+M2kmrtmXx9+2eHNSSEOtEevoR/bZdxS7VH2koDuXtipv6GmlWKhXYsL3QeHKFJ1h31WmYCyVykarV8ZN1lX+TdB1JmUhQFqKnOIh65bf8pG0xyiYa0fwVrcQNZF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1769956421; c=relaxed/simple;
-	bh=SBs/C150pguj/vCEZlWhOTRKiUV8IQgb9NQzwVbQ8vI=;
+	bh=xmJQsKeAEXPc2KJlPZ6gOTv4w+iS/oQIEeKdQFJ06oQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fydjZuj39ghUx+4Wf2OTWhoIi4GYy6VDoh9/LfUwcmaXbV3maLFvfoI8JcR6ntDqcWqKym2plAAPddcN+1Eh77+Iw5nsAcKN7ZrHNmoD7s8CVEPvBPmqFR0AkYPF5HPKhy/dQ5qDpdAPUlLuNwWavDU7prU/zcoNF8fvNjbhck8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QIv6ORl7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B418C116C6;
+	 In-Reply-To:To:Cc; b=ZvaIf50cY9MYus3FB5LjX9kmgjPJ33FacSGitqILETBE9tZRCuFzyexzOnVk3A441sS2wfLBsk4+A54Ao5n4KVI7iVNdQEwCTN14aqg48qV0nNYZt/ropEz/5GxoCQrWRilXE2Ssvv6Bd2OEoc+13kDtYQk8vWNxpgYgCknAShY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u6ViClRF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 249A7C4CEF7;
 	Sun,  1 Feb 2026 14:33:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1769956421;
-	bh=SBs/C150pguj/vCEZlWhOTRKiUV8IQgb9NQzwVbQ8vI=;
+	bh=xmJQsKeAEXPc2KJlPZ6gOTv4w+iS/oQIEeKdQFJ06oQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=QIv6ORl7m6UuDf8UJQdA3OqxD9uB7GngmKIcFpqEzLWvg57YX1O5Ipb7VusMA9yox
-	 8WN1FfGSSIy/nz6I1yk9UHl61Cq2ppFcVqviwkcKOcyprHiidBKtlT1fMqD8M30rYD
-	 yjSx3Gm8X+3UglAeHgOvxPWlMZ6+/Zaz2SoV25boWb50ODQn165rcluQYgE9F4VlhZ
-	 6EU/fPlSgNXI4ncvqrOjZHWzW8n2OjDWcT00AstDw+CyTjmHyyFrIlEcg3uUtCFrNX
-	 mTf4vTRJSLP71X6vXkMYroIYzuYeNYHG6dC7yAm4A5TWGdoNUsLrq2SsqKLrsIrVVa
-	 pGjEM7eEcuMZA==
+	b=u6ViClRF1MkMqBzT1gc6iLAbW1u+CDhaqY1WAxDWQRSN91SgE3iNoM6UuqHazpbYs
+	 NFGY+ou425TksXEm5kuPx57IJg+y27HJ8/oY9MIPpAL2u4p9huc1nZWAxHB0QCIKZW
+	 kOFbtoxhJXpqQNb2kC0C0S5MrJCN5AfvTq0bac7S7q/DfKmuOIRV694SDSrh7GOr+X
+	 wZBE/NH2CHD23gyo04RxOUh5KafyKWlcanGjZbWc5hbF3bMyFSkY2kSU2whliD94I/
+	 0S9b5G3oaC4HOE18yeqeV76vX3GkpFl9/J42zt+kPwekBKK5qQsu2yekyhGRzEmqEP
+	 Mcxdejb/2MxSg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F06D8E6528B;
-	Sun,  1 Feb 2026 14:33:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A910E6528A;
+	Sun,  1 Feb 2026 14:33:41 +0000 (UTC)
 From: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
-Date: Sun, 01 Feb 2026 15:33:19 +0100
-Subject: [PATCH net-next v8 4/6] can: move frame_len to CAN skb extensions
+Date: Sun, 01 Feb 2026 15:33:20 +0100
+Subject: [PATCH net-next v8 5/6] can: remove private CAN skb headroom
+ infrastructure
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -58,7 +59,7 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260201-can_skb_ext-v8-4-3635d790fe8b@hartkopp.net>
+Message-Id: <20260201-can_skb_ext-v8-5-3635d790fe8b@hartkopp.net>
 References: <20260201-can_skb_ext-v8-0-3635d790fe8b@hartkopp.net>
 In-Reply-To: <20260201-can_skb_ext-v8-0-3635d790fe8b@hartkopp.net>
 To: Marc Kleine-Budde <mkl@pengutronix.de>, 
@@ -72,11 +73,11 @@ To: Marc Kleine-Budde <mkl@pengutronix.de>,
 Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
  netdev@vger.kernel.org
 X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769956418; l=3158;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769956418; l=12992;
  i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
- bh=ArF50dGFLTJeKrJinhCvEu9UmJPwPrODNYHzRcVUyg0=;
- b=TIdS5g/KZ3Ligx58NhDD26OUNNDD87+SjOwjneW+1wx7RSHTgcj1vA2DXSWTXQmYaQD6iZ6ak
- jcyoEhl1PUZCB+zrTDR07D17kT6rdTBSlL90Wo47yPRxmKzloMxVwQQ
+ bh=8latfQ42+KWkvgJX7eiG4SXUR1zyD7tvI5xRV1vgLaY=;
+ b=hTNTqc0V4X7aLwK9oZlXmHCU2cF0k5pUrxP+Luth3VLtJ9GgN6RE2C5cYpg/+19KIipgwzmAw
+ 6YK9hnDqjXeC6qc6QzUGsdgjdqPYDHifORACxeQAYbei5abLaAmk09n
 X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
  pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
 X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
@@ -88,11 +89,11 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6451-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
+	TAGGED_FROM(0.00)[bounces-6452-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -107,110 +108,456 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-can];
 	HAS_REPLYTO(0.00)[socketcan@hartkopp.net];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,pengutronix.de:email]
-X-Rspamd-Queue-Id: F35E4C626B
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B2609C62B1
 X-Rspamd-Action: no action
 
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-The can_skb_priv::frame_len variable is used to cache a previous
-calculated CAN frame length to be passed to BQL queueing disciplines.
-
-Move the can_skb_priv::frame_len content to can_skb_ext::can_framelen.
+This patch removes struct can_skb_priv which was stored at skb->head and
+the can_skb_reserve() helper which was used to shift skb->head.
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- drivers/net/can/dev/skb.c | 29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
+ drivers/net/can/dev/skb.c | 31 +++++++++----------------------
+ include/linux/can/skb.h   | 31 -------------------------------
+ net/can/bcm.c             |  7 ++-----
+ net/can/isotp.c           | 12 ++++--------
+ net/can/j1939/socket.c    |  4 +---
+ net/can/j1939/transport.c |  7 ++-----
+ net/can/raw.c             |  5 ++---
+ 7 files changed, 20 insertions(+), 77 deletions(-)
 
 diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
-index 470255fe7367..408ee49abce1 100644
+index 408ee49abce1..95fcdc1026f8 100644
 --- a/drivers/net/can/dev/skb.c
 +++ b/drivers/net/can/dev/skb.c
-@@ -47,10 +47,11 @@ void can_flush_echo_skb(struct net_device *dev)
-  */
- int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
- 		     unsigned int idx, unsigned int frame_len)
+@@ -204,40 +204,33 @@ void can_free_echo_skb(struct net_device *dev, unsigned int idx,
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(can_free_echo_skb);
+ 
+ /* fill common values for CAN sk_buffs */
+-static void init_can_skb_reserve(struct sk_buff *skb)
++static void init_can_skb(struct sk_buff *skb)
  {
- 	struct can_priv *priv = netdev_priv(dev);
-+	struct can_skb_ext *csx;
+ 	skb->pkt_type = PACKET_BROADCAST;
+ 	skb->ip_summed = CHECKSUM_UNNECESSARY;
+-
+-	skb_reset_mac_header(skb);
+-	skb_reset_network_header(skb);
+-	skb_reset_transport_header(skb);
+-
+-	can_skb_reserve(skb);
+ }
  
- 	if (idx >= priv->echo_skb_max) {
- 		netdev_err(dev, "%s: BUG! Trying to access can_priv::echo_skb out of bounds (%u/max %u)\n",
- 			   __func__, idx, priv->echo_skb_max);
- 		return -EINVAL;
-@@ -73,11 +74,13 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
- 		/* make settings for echo to reduce code in irq context */
- 		skb->ip_summed = CHECKSUM_UNNECESSARY;
- 		skb->dev = dev;
+ struct sk_buff *alloc_can_skb(struct net_device *dev, struct can_frame **cf)
+ {
+ 	struct sk_buff *skb;
+ 	struct can_skb_ext *csx;
  
- 		/* save frame_len to reuse it when transmission is completed */
--		can_skb_prv(skb)->frame_len = frame_len;
-+		csx = can_skb_ext_find(skb);
-+		if (csx)
-+			csx->can_framelen = frame_len;
+-	skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
+-			       sizeof(struct can_frame));
++	skb = netdev_alloc_skb(dev, sizeof(struct can_frame));
+ 	if (unlikely(!skb))
+ 		goto out_error_cc;
  
- 		if (skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP)
- 			skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
+ 	csx = can_skb_ext_add(skb);
+ 	if (!csx) {
+ 		kfree_skb(skb);
+ 		goto out_error_cc;
+ 	}
  
- 		skb_tx_timestamp(skb);
-@@ -110,20 +113,25 @@ __can_get_echo_skb(struct net_device *dev, unsigned int idx,
- 	if (priv->echo_skb[idx]) {
- 		/* Using "struct canfd_frame::len" for the frame
- 		 * length is supported on both CAN and CANFD frames.
- 		 */
- 		struct sk_buff *skb = priv->echo_skb[idx];
--		struct can_skb_priv *can_skb_priv = can_skb_prv(skb);
-+		struct can_skb_ext *csx;
+ 	skb->protocol = htons(ETH_P_CAN);
+-	init_can_skb_reserve(skb);
++	init_can_skb(skb);
+ 	csx->can_iif = dev->ifindex;
  
- 		if (skb_shinfo(skb)->tx_flags & SKBTX_IN_PROGRESS)
- 			skb_tstamp_tx(skb, skb_hwtstamps(skb));
+ 	*cf = skb_put_zero(skb, sizeof(struct can_frame));
  
- 		/* get the real payload length for netdev statistics */
- 		*len_ptr = can_skb_get_data_len(skb);
+ 	return skb;
+@@ -253,23 +246,22 @@ struct sk_buff *alloc_canfd_skb(struct net_device *dev,
+ 				struct canfd_frame **cfd)
+ {
+ 	struct sk_buff *skb;
+ 	struct can_skb_ext *csx;
  
--		if (frame_len_ptr)
--			*frame_len_ptr = can_skb_priv->frame_len;
-+		if (frame_len_ptr) {
-+			csx = can_skb_ext_find(skb);
-+			if (csx)
-+				*frame_len_ptr = csx->can_framelen;
-+			else
-+				*frame_len_ptr = 0;
-+		}
+-	skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
+-			       sizeof(struct canfd_frame));
++	skb = netdev_alloc_skb(dev, sizeof(struct canfd_frame));
+ 	if (unlikely(!skb))
+ 		goto out_error_fd;
  
- 		priv->echo_skb[idx] = NULL;
+ 	csx = can_skb_ext_add(skb);
+ 	if (!csx) {
+ 		kfree_skb(skb);
+ 		goto out_error_fd;
+ 	}
  
- 		if (skb->pkt_type == PACKET_LOOPBACK) {
- 			skb->pkt_type = PACKET_BROADCAST;
-@@ -179,14 +187,19 @@ void can_free_echo_skb(struct net_device *dev, unsigned int idx,
+ 	skb->protocol = htons(ETH_P_CANFD);
+-	init_can_skb_reserve(skb);
++	init_can_skb(skb);
+ 	csx->can_iif = dev->ifindex;
+ 
+ 	*cfd = skb_put_zero(skb, sizeof(struct canfd_frame));
+ 
+ 	/* set CAN FD flag by default */
+@@ -292,23 +284,22 @@ struct sk_buff *alloc_canxl_skb(struct net_device *dev,
+ 	struct can_skb_ext *csx;
+ 
+ 	if (data_len < CANXL_MIN_DLEN || data_len > CANXL_MAX_DLEN)
+ 		goto out_error_xl;
+ 
+-	skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
+-			       CANXL_HDR_SIZE + data_len);
++	skb = netdev_alloc_skb(dev, CANXL_HDR_SIZE + data_len);
+ 	if (unlikely(!skb))
+ 		goto out_error_xl;
+ 
+ 	csx = can_skb_ext_add(skb);
+ 	if (!csx) {
+ 		kfree_skb(skb);
+ 		goto out_error_xl;
+ 	}
+ 
+ 	skb->protocol = htons(ETH_P_CANXL);
+-	init_can_skb_reserve(skb);
++	init_can_skb(skb);
+ 	csx->can_iif = dev->ifindex;
+ 
+ 	*cxl = skb_put_zero(skb, CANXL_HDR_SIZE + data_len);
+ 
+ 	/* set CAN XL flag and length information by default */
+@@ -338,18 +329,14 @@ struct sk_buff *alloc_can_err_skb(struct net_device *dev, struct can_frame **cf)
+ 	return skb;
+ }
+ EXPORT_SYMBOL_GPL(alloc_can_err_skb);
+ 
+ /* Check for outgoing skbs that have not been created by the CAN subsystem */
+-static bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb)
++static bool can_skb_init_valid(struct net_device *dev, struct sk_buff *skb)
+ {
+ 	struct can_skb_ext *csx = can_skb_ext_find(skb);
+ 
+-	/* af_packet creates a headroom of HH_DATA_MOD bytes which is fine */
+-	if (WARN_ON_ONCE(skb_headroom(skb) < sizeof(struct can_skb_priv)))
+-		return false;
+-
+ 	/* af_packet does not apply CAN skb specific settings */
+ 	if (skb->ip_summed == CHECKSUM_NONE || !csx) {
+ 		/* init CAN skb content */
+ 		if (!csx) {
+ 			csx = can_skb_ext_add(skb);
+@@ -403,11 +390,11 @@ bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
+ 
+ 	default:
+ 		goto inval_skb;
+ 	}
+ 
+-	if (!can_skb_headroom_valid(dev, skb))
++	if (!can_skb_init_valid(dev, skb))
+ 		goto inval_skb;
+ 
+ 	return false;
+ 
+ inval_skb:
+diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+index 68c0f24e6914..a70a02967071 100644
+--- a/include/linux/can/skb.h
++++ b/include/linux/can/skb.h
+@@ -36,41 +36,10 @@ struct sk_buff *alloc_canxl_skb(struct net_device *dev,
+ 				unsigned int data_len);
+ struct sk_buff *alloc_can_err_skb(struct net_device *dev,
+ 				  struct can_frame **cf);
+ bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb);
+ 
+-/*
+- * The struct can_skb_priv is used to transport additional information along
+- * with the stored struct can(fd)_frame that can not be contained in existing
+- * struct sk_buff elements.
+- * N.B. that this information must not be modified in cloned CAN sk_buffs.
+- * To modify the CAN frame content or the struct can_skb_priv content
+- * skb_copy() needs to be used instead of skb_clone().
+- */
+-
+-/**
+- * struct can_skb_priv - private additional data inside CAN sk_buffs
+- * @ifindex:	ifindex of the first interface the CAN frame appeared on
+- * @frame_len:	length of CAN frame in data link layer
+- * @cf:		align to the following CAN frame at skb->data
+- */
+-struct can_skb_priv {
+-	int ifindex;
+-	unsigned int frame_len;
+-	struct can_frame cf[];
+-};
+-
+-static inline struct can_skb_priv *can_skb_prv(struct sk_buff *skb)
+-{
+-	return (struct can_skb_priv *)(skb->head);
+-}
+-
+-static inline void can_skb_reserve(struct sk_buff *skb)
+-{
+-	skb_reserve(skb, sizeof(struct can_skb_priv));
+-}
+-
+ static inline struct can_skb_ext *can_skb_ext_add(struct sk_buff *skb)
+ {
+ 	struct can_skb_ext *csx = skb_ext_add(skb, SKB_EXT_CAN);
+ 
+ 	/* skb_ext_add() returns uninitialized space */
+diff --git a/net/can/bcm.c b/net/can/bcm.c
+index f102d17e8619..b7324e9c955b 100644
+--- a/net/can/bcm.c
++++ b/net/can/bcm.c
+@@ -310,21 +310,20 @@ static void bcm_can_tx(struct bcm_op *op)
+ 	if (!dev) {
+ 		/* RFC: should this bcm_op remove itself here? */
  		return;
  	}
  
- 	if (priv->echo_skb[idx]) {
- 		struct sk_buff *skb = priv->echo_skb[idx];
--		struct can_skb_priv *can_skb_priv = can_skb_prv(skb);
--
--		if (frame_len_ptr)
--			*frame_len_ptr = can_skb_priv->frame_len;
-+		struct can_skb_ext *csx;
-+
-+		if (frame_len_ptr) {
-+			csx = can_skb_ext_find(skb);
-+			if (csx)
-+				*frame_len_ptr = csx->can_framelen;
-+			else
-+				*frame_len_ptr = 0;
-+		}
+-	skb = alloc_skb(op->cfsiz + sizeof(struct can_skb_priv), gfp_any());
++	skb = alloc_skb(op->cfsiz, gfp_any());
+ 	if (!skb)
+ 		goto out;
  
- 		dev_kfree_skb_any(skb);
- 		priv->echo_skb[idx] = NULL;
+ 	csx = can_skb_ext_add(skb);
+ 	if (!csx) {
+ 		kfree_skb(skb);
+ 		goto out;
  	}
- }
+ 
+-	can_skb_reserve(skb);
+ 	csx->can_iif = dev->ifindex;
+ 
+ 	skb_put_data(skb, cf, op->cfsiz);
+ 
+ 	/* send with loopback */
+@@ -1331,22 +1330,20 @@ static int bcm_tx_send(struct msghdr *msg, int ifindex, struct sock *sk,
+ 
+ 	/* we need a real device to send frames */
+ 	if (!ifindex)
+ 		return -ENODEV;
+ 
+-	skb = alloc_skb(cfsiz + sizeof(struct can_skb_priv), GFP_KERNEL);
++	skb = alloc_skb(cfsiz, GFP_KERNEL);
+ 	if (!skb)
+ 		return -ENOMEM;
+ 
+ 	csx = can_skb_ext_add(skb);
+ 	if (!csx) {
+ 		kfree_skb(skb);
+ 		return -ENOMEM;
+ 	}
+ 
+-	can_skb_reserve(skb);
+-
+ 	err = memcpy_from_msg(skb_put(skb, cfsiz), msg, cfsiz);
+ 	if (err < 0) {
+ 		kfree_skb(skb);
+ 		return err;
+ 	}
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index 164c4fbf3e23..da3b72e7afcc 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -218,11 +218,11 @@ static int isotp_send_fc(struct sock *sk, int ae, u8 flowstatus)
+ 	struct can_skb_ext *csx;
+ 	struct canfd_frame *ncf;
+ 	struct isotp_sock *so = isotp_sk(sk);
+ 	int can_send_ret;
+ 
+-	nskb = alloc_skb(so->ll.mtu + sizeof(struct can_skb_priv), gfp_any());
++	nskb = alloc_skb(so->ll.mtu, gfp_any());
+ 	if (!nskb)
+ 		return 1;
+ 
+ 	csx = can_skb_ext_add(nskb);
+ 	if (!csx) {
+@@ -234,13 +234,11 @@ static int isotp_send_fc(struct sock *sk, int ae, u8 flowstatus)
+ 	if (!dev) {
+ 		kfree_skb(nskb);
+ 		return 1;
+ 	}
+ 
+-	can_skb_reserve(nskb);
+ 	csx->can_iif = dev->ifindex;
+-
+ 	nskb->dev = dev;
+ 	can_skb_set_owner(nskb, sk);
+ 	ncf = (struct canfd_frame *)nskb->data;
+ 	skb_put_zero(nskb, so->ll.mtu);
+ 
+@@ -778,11 +776,11 @@ static void isotp_send_cframe(struct isotp_sock *so)
+ 
+ 	dev = dev_get_by_index(sock_net(sk), so->ifindex);
+ 	if (!dev)
+ 		return;
+ 
+-	skb = alloc_skb(so->ll.mtu + sizeof(struct can_skb_priv), GFP_ATOMIC);
++	skb = alloc_skb(so->ll.mtu, GFP_ATOMIC);
+ 	if (!skb) {
+ 		dev_put(dev);
+ 		return;
+ 	}
+ 
+@@ -791,11 +789,10 @@ static void isotp_send_cframe(struct isotp_sock *so)
+ 		kfree_skb(skb);
+ 		netdev_put(dev, NULL);
+ 		return;
+ 	}
+ 
+-	can_skb_reserve(skb);
+ 	csx->can_iif = dev->ifindex;
+ 
+ 	cf = (struct canfd_frame *)skb->data;
+ 	skb_put_zero(skb, so->ll.mtu);
+ 
+@@ -1013,12 +1010,12 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	if (!dev) {
+ 		err = -ENXIO;
+ 		goto err_out_drop;
+ 	}
+ 
+-	skb = sock_alloc_send_skb(sk, so->ll.mtu + sizeof(struct can_skb_priv),
+-				  msg->msg_flags & MSG_DONTWAIT, &err);
++	skb = sock_alloc_send_skb(sk, so->ll.mtu, msg->msg_flags & MSG_DONTWAIT,
++				  &err);
+ 	if (!skb) {
+ 		dev_put(dev);
+ 		goto err_out_drop;
+ 	}
+ 
+@@ -1028,11 +1025,10 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 		netdev_put(dev, NULL);
+ 		err = -ENOMEM;
+ 		goto err_out_drop;
+ 	}
+ 
+-	can_skb_reserve(skb);
+ 	csx->can_iif = dev->ifindex;
+ 
+ 	so->tx.len = size;
+ 	so->tx.idx = 0;
+ 
+diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+index cc698a6dc363..0502b030d238 100644
+--- a/net/can/j1939/socket.c
++++ b/net/can/j1939/socket.c
+@@ -889,12 +889,11 @@ static struct sk_buff *j1939_sk_alloc_skb(struct net_device *ndev,
+ 	int ret;
+ 
+ 	skb = sock_alloc_send_skb(sk,
+ 				  size +
+ 				  sizeof(struct can_frame) -
+-				  sizeof(((struct can_frame *)NULL)->data) +
+-				  sizeof(struct can_skb_priv),
++				  sizeof(((struct can_frame *)NULL)->data),
+ 				  msg->msg_flags & MSG_DONTWAIT, &ret);
+ 	if (!skb)
+ 		goto failure;
+ 
+ 	csx = can_skb_ext_add(skb);
+@@ -902,11 +901,10 @@ static struct sk_buff *j1939_sk_alloc_skb(struct net_device *ndev,
+ 		kfree_skb(skb);
+ 		ret = -ENOMEM;
+ 		goto failure;
+ 	}
+ 
+-	can_skb_reserve(skb);
+ 	csx->can_iif = ndev->ifindex;
+ 	skb_reserve(skb, offsetof(struct can_frame, data));
+ 
+ 	ret = memcpy_from_msg(skb_put(skb, size), msg, size);
+ 	if (ret < 0)
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index 3456ef481799..2cbe94fc487a 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -593,23 +593,21 @@ sk_buff *j1939_tp_tx_dat_new(struct j1939_priv *priv,
+ {
+ 	struct sk_buff *skb;
+ 	struct can_skb_ext *csx;
+ 	struct j1939_sk_buff_cb *skcb;
+ 
+-	skb = alloc_skb(sizeof(struct can_frame) + sizeof(struct can_skb_priv),
+-			GFP_ATOMIC);
++	skb = alloc_skb(sizeof(struct can_frame), GFP_ATOMIC);
+ 	if (unlikely(!skb))
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	csx = can_skb_ext_add(skb);
+ 	if (!csx) {
+ 		kfree_skb(skb);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
+ 	skb->dev = priv->ndev;
+-	can_skb_reserve(skb);
+ 	csx->can_iif = priv->ndev->ifindex;
+ 	/* reserve CAN header */
+ 	skb_reserve(skb, offsetof(struct can_frame, data));
+ 
+ 	/* skb->cb must be large enough to hold a j1939_sk_buff_cb structure */
+@@ -1546,22 +1544,21 @@ j1939_session *j1939_session_fresh_new(struct j1939_priv *priv,
+ 	struct sk_buff *skb;
+ 	struct can_skb_ext *csx;
+ 	struct j1939_sk_buff_cb *skcb;
+ 	struct j1939_session *session;
+ 
+-	skb = alloc_skb(size + sizeof(struct can_skb_priv), GFP_ATOMIC);
++	skb = alloc_skb(size, GFP_ATOMIC);
+ 	if (unlikely(!skb))
+ 		return NULL;
+ 
+ 	csx = can_skb_ext_add(skb);
+ 	if (!csx) {
+ 		kfree_skb(skb);
+ 		return NULL;
+ 	}
+ 
+ 	skb->dev = priv->ndev;
+-	can_skb_reserve(skb);
+ 	csx->can_iif = priv->ndev->ifindex;
+ 	skcb = j1939_skb_to_cb(skb);
+ 	memcpy(skcb, rel_skcb, sizeof(*skcb));
+ 
+ 	session = j1939_session_new(priv, skb, size);
+diff --git a/net/can/raw.c b/net/can/raw.c
+index 022154b0f6cc..eee244ffc31e 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -951,23 +951,22 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	if (can_cap_enabled(dev, CAN_CAP_RO)) {
+ 		err = -EACCES;
+ 		goto put_dev;
+ 	}
+ 
+-	skb = sock_alloc_send_skb(sk, size + sizeof(struct can_skb_priv),
+-				  msg->msg_flags & MSG_DONTWAIT, &err);
++	skb = sock_alloc_send_skb(sk, size, msg->msg_flags & MSG_DONTWAIT,
++				  &err);
+ 	if (!skb)
+ 		goto put_dev;
+ 
+ 	csx = can_skb_ext_add(skb);
+ 	if (!csx) {
+ 		kfree_skb(skb);
+ 		err = -ENOMEM;
+ 		goto put_dev;
+ 	}
+ 
+-	can_skb_reserve(skb);
+ 	csx->can_iif = dev->ifindex;
+ 
+ 	/* fill the skb before testing for valid CAN frames */
+ 	err = memcpy_from_msg(skb_put(skb, size), msg, size);
+ 	if (err < 0)
 
 -- 
 2.51.0
