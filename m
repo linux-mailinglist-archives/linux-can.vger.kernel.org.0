@@ -1,214 +1,369 @@
-Return-Path: <linux-can+bounces-6483-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6484-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MNl+BHEhgmmQPgMAu9opvQ
-	(envelope-from <linux-can+bounces-6483-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 03 Feb 2026 17:25:21 +0100
+	id GKSgNGFKgmmGRwMAu9opvQ
+	(envelope-from <linux-can+bounces-6484-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 03 Feb 2026 20:20:01 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id E084FDBE6A
-	for <lists+linux-can@lfdr.de>; Tue, 03 Feb 2026 17:25:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42949DE1D7
+	for <lists+linux-can@lfdr.de>; Tue, 03 Feb 2026 20:20:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4778630C27D4
-	for <lists+linux-can@lfdr.de>; Tue,  3 Feb 2026 16:21:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B7C7C3015CAE
+	for <lists+linux-can@lfdr.de>; Tue,  3 Feb 2026 19:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94FB3191B0;
-	Tue,  3 Feb 2026 16:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC75B31AF36;
+	Tue,  3 Feb 2026 19:19:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qc7BAZLY";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Pu3Drpia"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="F4xiqoXv";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="rfX7FFgs"
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E18E175D53
-	for <linux-can@vger.kernel.org>; Tue,  3 Feb 2026 16:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770135644; cv=none; b=QdRSqQCfO0c/wkX4pEhNLM/bCPHmjtyUPAgcknp3UZObADszLfX8CGHVGv3WhIwo/yHj+olZ++QiS89fGC6XBZyyBb7PkCDlL3HI8xDnUB+s+c8hfdLLZTJJw3gG0o33ZerqonMpkM/UmZpMzFRxStP1gAqQErgrSd+5d7S4exc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770135644; c=relaxed/simple;
-	bh=gADRKLw82C+tfxUEYY3hlWKJfxUSp+EMySsSF1+SVkY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P//YVmxevIS0HupTrbONLAxot9fhOPbum8b5eHlJAFYUOMtO0Vvjh/509WNmwyUvy7fQlZVvhg69Xf02kDPc/M+GdaSAp1ut+wXoLEg+LTnqZKrecORKEIDdw1d3DgWixENh7C4SkMYnrNCMlYuclpvloROEo2OWcgwBnEHAvzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qc7BAZLY; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Pu3Drpia; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770135642;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KhlncAUQMkbq0DxIaSpkvI2sfDCod5hPiXP+UVdbqP8=;
-	b=Qc7BAZLYTNGgPWKQ1Feuebd31Adz/BOD4SW0JnIXHQUaS4348402tMc9gNzlvde034qJLv
-	tBqNdkLe5+4iP9adunyhPezy3VZW1LV/8Sv6T+6pJPJOyyj+S4exdlvTaj1S3NR6xhmX86
-	nEQptJOtTtyN51lTQTY/MCYsoVuksqo=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-649-JwvtjEkbMO2EVxLzczkU2w-1; Tue, 03 Feb 2026 11:20:40 -0500
-X-MC-Unique: JwvtjEkbMO2EVxLzczkU2w-1
-X-Mimecast-MFC-AGG-ID: JwvtjEkbMO2EVxLzczkU2w_1770135640
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-659318dbb6fso1401345a12.3
-        for <linux-can@vger.kernel.org>; Tue, 03 Feb 2026 08:20:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770135639; x=1770740439; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KhlncAUQMkbq0DxIaSpkvI2sfDCod5hPiXP+UVdbqP8=;
-        b=Pu3DrpiaMwAWSozatanOCXur3dqnzhOrQOdqmyEI+aKwjBHi2EoUohlepWE9nHVfWz
-         gRUaFf7EyBA3Ko8hW4vEVxyXKgcca3r2WUqogbndGCoAP+RqOdSSc9o3WcRiJNWE/pGK
-         LeBgVZC73s38WSmLoU1c1BjzklJ85UcaQIXXYz6czM/W5FXrq8nnFLLg/vX+a6sFnNwO
-         NjeDt3WbuHg/LD+RO6G02GkTk3V3WtE7lr98xliovmn9eT/w+R96EybqHCqgzMPSbNL8
-         2d5D+GrAgYVLpEksufjxHENtqEdMixCf2DMY7ssEhig/1Nma3UdSsTkqSSde84lBlKdF
-         6Oig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770135640; x=1770740440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KhlncAUQMkbq0DxIaSpkvI2sfDCod5hPiXP+UVdbqP8=;
-        b=bg0liHDWmcROFWbn6EKhA08jIyeTwkQsAiGmLFUmKSN0Y6B2eBRcZIXUCRGo++qshn
-         4m3rLpjU4Mx2X7IVQcP+vs9gpPaxNC9/kriYqJ1SSs/JBlxkzk3ZH+F9ezoLr0yVAPVf
-         FO7F+AeoC7wekp/oiiwc0UrORE+gw4WSt35SfEy6+Ts45ml7Mp3GE5a0KVrHoU3/wMvX
-         GvPW+IxjdV5/vJ8uGowPjPG2WT0twSYWEop0S2tcT9DU6WNYYCrBAr7Vx8FKYrUpG5kS
-         sWOfs9OhJa9nQGUJrKMrLdDHiPpEmtWibChcRlZSvd9GgSl0uUS+nFWLPeeIr/D2r6WT
-         GCUg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzhftb7EvS8NYK6oB19bj54FU/Q737yJRRYtiqo1bkZygBmVZHTa1ei/rKXZvphL8na7k9sojf4rA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzq2urbLSQhC4umJ2cuMl+kRZbP/qoveXqs5hIfn/Gr6nSqXDe+
-	VHdB9shiZQFI8w8mF1OoERFkebLDOoauzlZl7wqBTw0Z9tu5xNhhtM/6obW+JphZw3JcwN6LV6q
-	IzGSot7FnnEzdgLOECYXfOlzw+r//0DcSSj77BPH6DOglP/d+BysGZmvathxcYw==
-X-Gm-Gg: AZuq6aKyY6Ju/ysGXu1JXjj7wKU/BDPvvdK9HLn+lEbYeCAePmhSJEsGQrE+d0ideWl
-	kPYCK9ibBpGvEMZUZF8TjT8AM0g34zvOgwZyu4lKecEFXqmDCXsOmD8KtZ6BSjnY/m0Y+HJ4Try
-	4i4MV6i2lPKCA9XfMczj8ssMFGBWu56tYm5VwOzuWVCPBwmh3mR331kh0WBPuUIN8ZCgULR+JTY
-	g4GmqzVo1aR9hOTLAXunobNZxRadaROA9qNkaEzLmjrp8AMS31bhTRJLOBaxn+TKegOIaFOvg4T
-	E8EMz5l7CdnW2c4rSYO+hfNQRQ1DRXqtRYIROHKu3+/PofRdHNMm6RwhRIlB9h3IpOLVPrMjjkQ
-	zG/9UDh++9ElWBnq1GCyABZm3LOOXse5xSQ==
-X-Received: by 2002:a05:6402:4413:b0:653:7bdc:9561 with SMTP id 4fb4d7f45d1cf-65949bb66d3mr133792a12.15.1770135639545;
-        Tue, 03 Feb 2026 08:20:39 -0800 (PST)
-X-Received: by 2002:a05:6402:4413:b0:653:7bdc:9561 with SMTP id 4fb4d7f45d1cf-65949bb66d3mr133772a12.15.1770135639048;
-        Tue, 03 Feb 2026 08:20:39 -0800 (PST)
-Received: from redhat.com (IGLD-80-230-34-155.inter.net.il. [80.230.34.155])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65949fd80a7sm49935a12.14.2026.02.03.08.20.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 08:20:38 -0800 (PST)
-Date: Tue, 3 Feb 2026 11:20:35 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Harald Mommer <harald.mommer@oss.qualcomm.com>
-Cc: Francesco Valla <francesco@valla.it>,
-	Matias Ezequiel Vara Larsen <mvaralar@redhat.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: [PATCH v7] can: virtio: Add virtio CAN driver
-Message-ID: <20260203111926-mutt-send-email-mst@kernel.org>
-References: <aVwGfOlvRqdv5xj7@fedora>
- <aWE5duyvXCuwsMAn@bywater>
- <eec1a83b-e36f-47bb-9a5b-6888b42e063a@oss.qualcomm.com>
- <20260203070338-mutt-send-email-mst@kernel.org>
- <5d9645ea-41b8-4904-abbf-3b201183e2fc@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF0623D2B1;
+	Tue,  3 Feb 2026 19:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.165
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770146396; cv=pass; b=Zcdc0o7ba/EmplgqtuH0cXbq/FKU3lLxvA61jI/0B/AYc3EWdh5DILRb1nYVCb8VZxRJF3zW1pP7GVnuKHanE5YNbARfGmO2ykVaY4a3xAz4JTQkXRjR7QEhl7F6PgSTdctHrx9KLfGHVUQKzJvxLj7Gl6NWE+U+KSSDo+RpUuM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770146396; c=relaxed/simple;
+	bh=Eu32B2kTrLqGd8xnvrrM3BNC67bXjwiwiB/WLW42Wc8=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=UO2S1Iv9O2MaZPBVB1maU0l0LUwCrznF4Jiwp5jNMkmcWJSJiMsX0MEnbilWHgCswJxeAs8d6OZdnLxoANOAsEW/BMYBB8K6k/TVCeX3uKgVQkfaENQZTPerf43OpmKNQ5ffMHiDzhhesey415KcG8Gt1JZoZIiGdK6o0u1e1eY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=F4xiqoXv; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=rfX7FFgs; arc=pass smtp.client-ip=81.169.146.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1770146380; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=a1TlrfctBhyp3PACtFwVbpgDyATKdQ4RXez+vewnUIp13E40AjwAsKinI2bHKyz+7Y
+    SMl1n8LLBYcU+umZfHwfecPSZWZQXB4jZ3LTb618PWJg1dfc6UCyBK3v0QBqQE4/BACH
+    Pruw3FvyJYUwIg768uBdLkRS9LJLa2KNOsmvWHBUFDUzZNYxngllaCNmQacxxXcN7ncF
+    itMHQoK8akPnPGIZonVhm78jVn3ISobZte09FpwXrxQH0ycGdNBTjePKnY06YTIOjOm2
+    AFoF4tfgUbBVmcCUjbLrJnwOPW48MKMve59wiXmF5arvTwMuOhKr37g+xSw18Ami2JFJ
+    dKBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1770146380;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Cc:To:Subject:From:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=F5jFldpNkmwZqtNurvra9cofNKkaRsKmUCDCcCnHqNc=;
+    b=TfBEYXZ2d5/wTpR4EZf/+MJbhhujtMXzy5SxXWD+WS6pijqJVOvkHPWmy8MTAZTf+U
+    XeNwrZdH1xpcTHCxYGfyK0BsRmcXm80umxqzYYjoncH6tnKXF/0s5wqPolkOntTkYz4M
+    AmqCKaC7/fLVaB9XOkatXRXCfv0eRyJfZ07ealIco878o8VGv+TDMsftZrfFKBfaAY6t
+    P19wKlgjVs6pLAhVh3XS2qIQwA0GOBWsR2dkjVnGAs7mOst8c0FZNVuqHKpNps4mURDN
+    qU6zDBPZ2vYSRTXiyGfiJ/Bvo5XnYiuZtqSX/YrXUBPYcMzQFjUo/f7EMLuPCMQNt/+E
+    OwlQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1770146380;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:References:Cc:To:Subject:From:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=F5jFldpNkmwZqtNurvra9cofNKkaRsKmUCDCcCnHqNc=;
+    b=F4xiqoXvgXXDuFw0EVfApOSSh9iLWtZ6d1tSGjanmMvTHF7DQP0/xhTzHDjYuMWjrJ
+    Rk/z001mwonh4ZTXSdQxLo2G9ApE52vR+3cP0/2gdpM56qovG7tdW4UJ5Ctuf5s94bQN
+    V9XBcNDEE5MMfYC+yKamoHRGv05S4rBm4B+R/19Y5bDlCszmZ5gwjkpwFJpte2Bsltdp
+    IsSe0+LZWnRu8knf6/2GzuzXx9REZvqeUS2oNN8a/CBFpVEgiWl1mo+Fu6iMANa7xIgX
+    sFHw/xa1JcVxCs4hpKWjAXP24vhtj1CtZ2MYrHsruraQgXHvEhGY5y+zDyI7NHuk70Qw
+    u4lg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1770146380;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:References:Cc:To:Subject:From:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=F5jFldpNkmwZqtNurvra9cofNKkaRsKmUCDCcCnHqNc=;
+    b=rfX7FFgsBvHFnsvxr1Pkaw+S0xjleRooWxZBdHgomV9TfOlrHtXGBJLl/B9NOMfoRA
+    uhs6l5dLCw6oj9lLA+Dw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7tnMDLztswwlyqon4XDpA0w0c7HaA=="
+Received: from [IPV6:2a00:6020:4a38:6810:ae1c:f386:228b:f98a]
+    by smtp.strato.de (RZmta 55.0.1 AUTH)
+    with ESMTPSA id Ka8610213JJcRT6
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Tue, 3 Feb 2026 20:19:38 +0100 (CET)
+Message-ID: <c5929461-8da5-4c77-bf3d-796c7645d7f9@hartkopp.net>
+Date: Tue, 3 Feb 2026 20:19:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d9645ea-41b8-4904-abbf-3b201183e2fc@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [PATCH net-next v8 0/6] move CAN skb headroom content to skb
+ extensions
+To: Paolo Abeni <pabeni@redhat.com>, Florian Westphal <fw@strlen.de>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol
+ <mailhol@kernel.org>, Robin van der Gracht <robin@protonic.nl>,
+ Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20260201-can_skb_ext-v8-0-3635d790fe8b@hartkopp.net>
+ <7d544645-8699-409f-89c0-6fc606113627@redhat.com>
+Content-Language: en-US
+In-Reply-To: <7d544645-8699-409f-89c0-6fc606113627@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6483-lists,linux-can=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6484-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	DKIM_TRACE(0.00)[hartkopp.net:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mst@redhat.com,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can];
-	NEURAL_HAM(-0.00)[-0.999];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: E084FDBE6A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:mid,hartkopp.net:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 42949DE1D7
 X-Rspamd-Action: no action
 
-On Tue, Feb 03, 2026 at 04:18:09PM +0100, Harald Mommer wrote:
+Hello Paolo,
+
+On 03.02.26 15:40, Paolo Abeni wrote:
+> On 2/1/26 3:33 PM, Oliver Hartkopp via B4 Relay wrote:
+>> CAN bus related skbuffs (ETH_P_CAN/ETH_P_CANFD/ETH_P_CANXL) simply contain
+>> CAN frame structs for CAN CC/FD/XL of skb->len length at skb->data. Those
+>> CAN skbs do not have network/mac/transport headers nor other such
+>> references for encapsulated protocols like ethernet/IP protocols.
+>>
+>> To store data for CAN specific use-cases all CAN bus related skbuffs are
+>> created with a 16 byte private skb headroom (struct can_skb_priv). Using
+>> the skb headroom and accessing skb->head for this private data led to
+>> several problems in the past likely due to "The struct can_skb_priv
+>> business is highly unconventional for the networking stack." [1]
+>>
+>> This patch set aims to remove the unconventional skb headroom usage for CAN
+>> bus related skbuffs and use the common skb extensions instead.
+>>
+>> [1] https://lore.kernel.org/linux-can/20260104074222.29e660ac@kernel.org/
 > 
+> Could you please share how skb_ext size change with this series?
+> (possibly breaking down the actual size to each separate extension).
 > 
-> On 2/3/26 13:05, Michael S. Tsirkin wrote:
-> > On Tue, Feb 03, 2026 at 12:55:07PM +0100, Harald Mommer wrote:
-> >>
-> >>
-> >> On 1/9/26 18:23, Francesco Valla wrote:
-> >>>> +static u8 virtio_can_send_ctrl_msg(struct net_device *ndev, u16 msg_type)
-> >>>> +{
-> >>>> +	struct scatterlist sg_out, sg_in, *sgs[2] = { &sg_out, &sg_in };
-> >>>> +	struct virtio_can_priv *priv = netdev_priv(ndev);
-> >>>> +	struct device *dev = &priv->vdev->dev;
-> >>>> +	struct virtqueue *vq;
-> >>>> +	unsigned int len;
-> >>>> +	int err;
-> >>>> +
-> >>>> +	vq = priv->vqs[VIRTIO_CAN_QUEUE_CONTROL];
-> >>> Nit: consider initializing this above, while declaring it.
-> >>
-> >> All those "Nit" regarding initialization cause problems. There is a reason why it was done the way it is.
-> >>
-> >> The network people require that the declaration lines are ordered by line length. longest line first. This is called "Reverse Christmas tree". Don't ask me why, this formatting style is what the network people require. Their subsystem, their rules.
-> >>
-> >> To initialize the vq you need now already the priv initialized. If now the vq line becomes longer than the priv line you will violate the special formatting requirements of the network subsystem.
-> >>
-> >> Solution was: What you see above.
-> >>
-> >> Regards
-> >> Harald
-> > 
-> > So you reorder it then:
-> > 
-> > 	struct scatterlist sg_out, sg_in, *sgs[2] = { &sg_out, &sg_in };
-> > 	struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_CONTROL]; // priv not initialized, will be done too late in the next line
-> > 	struct virtio_can_priv *priv = netdev_priv(ndev); // you see it?
-> > 	struct device *dev = &priv->vdev->dev;
-> > 	unsigned int len;
-> > 	int err;
-> > 
-> > 
-> > and where is the problem?
+> Ideally/hopefully the  skbuff_ext_cache size is not going to change, and
+> that would ensure that this change will not cause any indirect regressions.
 > 
-> The problem is that you use priv here to initialize vq in the line before priv is initialized.
+> /P
 
+I'm not really sure what your question is about and how I could actively 
+change the impact of this series.
 
-Got it. Ignore the tree thing then. It's a guideline.
+When CONFIG_CAN is enabled the skbuff_ext_cache element would increase 
+in size by 8 bytes (sizeof(struct can_skb_ext)) on my machine (see 
+pahole output below).
 
+So when everything is enabled it would be
 
-> > 
-> > On the flip size, this guarantees we will not forget to initialize.
-> 
-> Static analysis is your friend.
+CONFIG_SKB_EXTENSIONS
+8  bytes sizeof(struct skb_ext)
+CONFIG_BRIDGE_NETFILTER
+32 bytes sizeof(struct nf_bridge_info)
+CONFIG_XFRM
+88 bytes sizeof(struct sec_path)
+CONFIG_NET_TC_SKB_EXT
+16 bytes sizeof(struct tc_skb_ext)
+CONFIG_MPTCP
+32 bytes sizeof(struct mptcp_ext)
+CONFIG_MCTP_FLOWS
+8  bytes sizeof(struct mctp_flow)
+CONFIG_INET_PSP
+8  bytes sizeof(struct psp_skb_ext)
+CONFIG_CAN
+8  bytes sizeof(struct can_skb_ext)
+---------
+200 bytes total skbuff_ext_cache element size
+(255 * 8 = 2040 bytes max space for skb extension users).
 
-And then someone monkey patches it to = NULL or something else silly.
-I prefer correct by construction.
+Does this answer your question?
 
+Best regards,
+Oliver
+
+static const u8 skb_ext_type_len[] = {
+#if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
+         [SKB_EXT_BRIDGE_NF] = SKB_EXT_CHUNKSIZEOF(struct nf_bridge_info),
+#endif
+#ifdef CONFIG_XFRM
+         [SKB_EXT_SEC_PATH] = SKB_EXT_CHUNKSIZEOF(struct sec_path),
+#endif
+#if IS_ENABLED(CONFIG_NET_TC_SKB_EXT)
+         [TC_SKB_EXT] = SKB_EXT_CHUNKSIZEOF(struct tc_skb_ext),
+#endif
+#if IS_ENABLED(CONFIG_MPTCP)
+         [SKB_EXT_MPTCP] = SKB_EXT_CHUNKSIZEOF(struct mptcp_ext),
+#endif
+#if IS_ENABLED(CONFIG_MCTP_FLOWS)
+         [SKB_EXT_MCTP] = SKB_EXT_CHUNKSIZEOF(struct mctp_flow),
+#endif
+#if IS_ENABLED(CONFIG_INET_PSP)
+         [SKB_EXT_PSP] = SKB_EXT_CHUNKSIZEOF(struct psp_skb_ext),
+#endif
+#if IS_ENABLED(CONFIG_CAN)
+         [SKB_EXT_CAN] = SKB_EXT_CHUNKSIZEOF(struct can_skb_ext),
+#endif
+};
+
+CONFIG_SKB_EXTENSIONS
+struct skb_ext {
+         refcount_t                 refcnt;               /*     0     4 */
+         u8                         offset[3];            /*     4     3 */
+         u8                         chunks;               /*     7     1 */
+         char                       data[] 
+__attribute__((__aligned__(8))); /*     8     0 */
+
+         /* size: 8, cachelines: 1, members: 4 */
+         /* forced alignments: 1 */
+         /* last cacheline: 8 bytes */
+} __attribute__((__aligned__(8)));
+
+CONFIG_BRIDGE_NETFILTER
+struct nf_bridge_info {
+         enum {
+                 BRNF_PROTO_UNCHANGED = 0,
+                 BRNF_PROTO_8021Q     = 1,
+                 BRNF_PROTO_PPPOE     = 2,
+         } orig_proto:8;                                    /*     0: 0 
+4 */
+
+         /* Bitfield combined with next fields */
+
+         u8                         pkt_otherhost:1;      /*     1: 0  1 */
+         u8                         in_prerouting:1;      /*     1: 1  1 */
+         u8                         bridged_dnat:1;       /*     1: 2  1 */
+         u8                         sabotage_in_done:1;   /*     1: 3  1 */
+
+         /* XXX 4 bits hole, try to pack */
+
+         __u16                      frag_max_size;        /*     2     2 */
+         int                        physinif;             /*     4     4 */
+         struct net_device *        physoutdev;           /*     8     8 */
+         union {
+                 __be32             ipv4_daddr;           /*    16     4 */
+                 struct in6_addr    ipv6_daddr;           /*    16    16 */
+                 char               neigh_header[8];      /*    16     8 */
+         };                                               /*    16    16 */
+
+         /* size: 32, cachelines: 1, members: 9 */
+         /* sum members: 30 */
+         /* sum bitfield members: 12 bits, bit holes: 1, sum bit holes: 
+4 bits */
+         /* last cacheline: 32 bytes */
+};
+
+CONFIG_XFRM
+struct sec_path {
+         int                        len;                  /*     0     4 */
+         int                        olen;                 /*     4     4 */
+         int                        verified_cnt;         /*     8     4 */
+
+         /* XXX 4 bytes hole, try to pack */
+
+         struct xfrm_state *        xvec[6];              /*    16    48 */
+         /* --- cacheline 1 boundary (64 bytes) --- */
+         struct xfrm_offload        ovec[1];              /*    64    24 */
+
+         /* size: 88, cachelines: 2, members: 5 */
+         /* sum members: 84, holes: 1, sum holes: 4 */
+         /* last cacheline: 24 bytes */
+};
+
+CONFIG_NET_TC_SKB_EXT
+struct tc_skb_ext {
+         union {
+                 u64                act_miss_cookie;      /*     0     8 */
+                 __u32              chain;                /*     0     4 */
+         };                                               /*     0     8 */
+         __u16                      mru;                  /*     8     2 */
+         __u16                      zone;                 /*    10     2 */
+         u8                         post_ct:1;            /*    12: 0  1 */
+         u8                         post_ct_snat:1;       /*    12: 1  1 */
+         u8                         post_ct_dnat:1;       /*    12: 2  1 */
+         u8                         act_miss:1;           /*    12: 3  1 */
+         u8                         l2_miss:1;            /*    12: 4  1 */
+
+         /* size: 16, cachelines: 1, members: 8 */
+         /* padding: 3 */
+         /* bit_padding: 3 bits */
+         /* last cacheline: 16 bytes */
+};
+
+CONFIG_MPTCP
+struct mptcp_ext {
+         union {
+                 u64                data_ack;             /*     0     8 */
+                 u32                data_ack32;           /*     0     4 */
+         };                                               /*     0     8 */
+         u64                        data_seq;             /*     8     8 */
+         u32                        subflow_seq;          /*    16     4 */
+         u16                        data_len;             /*    20     2 */
+         __sum16                    csum;                 /*    22     2 */
+         u8                         use_map:1;            /*    24: 0  1 */
+         u8                         dsn64:1;              /*    24: 1  1 */
+         u8                         data_fin:1;           /*    24: 2  1 */
+         u8                         use_ack:1;            /*    24: 3  1 */
+         u8                         ack64:1;              /*    24: 4  1 */
+         u8                         mpc_map:1;            /*    24: 5  1 */
+         u8                         frozen:1;             /*    24: 6  1 */
+         u8                         reset_transient:1;    /*    24: 7  1 */
+         u8                         reset_reason:4;       /*    25: 0  1 */
+         u8                         csum_reqd:1;          /*    25: 4  1 */
+         u8                         infinite_map:1;       /*    25: 5  1 */
+
+         /* size: 32, cachelines: 1, members: 16 */
+         /* padding: 6 */
+         /* bit_padding: 2 bits */
+         /* last cacheline: 32 bytes */
+};
+
+CONFIG_MCTP_FLOWS
+struct mctp_flow {
+         struct mctp_sk_key *       key;                  /*     0     8 */
+
+         /* size: 8, cachelines: 1, members: 1 */
+         /* last cacheline: 8 bytes */
+};
+
+CONFIG_INET_PSP
+struct psp_skb_ext {
+         __be32                     spi;                  /*     0     4 */
+         u16                        dev_id;               /*     4     2 */
+         u8                         generation;           /*     6     1 */
+         u8                         version;              /*     7     1 */
+
+         /* size: 8, cachelines: 1, members: 4 */
+         /* last cacheline: 8 bytes */
+};
+
+CONFIG_CAN
+struct can_skb_ext {
+         int                        can_iif;              /*     0     4 */
+         u16                        can_framelen;         /*     4     2 */
+         u8                         can_gw_hops;          /*     6     1 */
+         u8                         can_ext_flags;        /*     7     1 */
+
+         /* size: 8, cachelines: 1, members: 4 */
+         /* last cacheline: 8 bytes */
+};
 
