@@ -1,99 +1,121 @@
-Return-Path: <linux-can+bounces-6482-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6483-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CIEpJRIggmlIPgMAu9opvQ
-	(envelope-from <linux-can+bounces-6482-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 03 Feb 2026 17:19:30 +0100
+	id MNl+BHEhgmmQPgMAu9opvQ
+	(envelope-from <linux-can+bounces-6483-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 03 Feb 2026 17:25:21 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13B5FDBCF4
-	for <lists+linux-can@lfdr.de>; Tue, 03 Feb 2026 17:19:30 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E084FDBE6A
+	for <lists+linux-can@lfdr.de>; Tue, 03 Feb 2026 17:25:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BB48A315CDA8
-	for <lists+linux-can@lfdr.de>; Tue,  3 Feb 2026 16:11:55 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4778630C27D4
+	for <lists+linux-can@lfdr.de>; Tue,  3 Feb 2026 16:21:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B8A63D1CAE;
-	Tue,  3 Feb 2026 16:11:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94FB3191B0;
+	Tue,  3 Feb 2026 16:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="qKAWEqHg";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dHCHn4Fv"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qc7BAZLY";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Pu3Drpia"
 X-Original-To: linux-can@vger.kernel.org
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534843D1CA0;
-	Tue,  3 Feb 2026 16:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E18E175D53
+	for <linux-can@vger.kernel.org>; Tue,  3 Feb 2026 16:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770135113; cv=none; b=GiRCj7THaS/aDKjh1nZyBM782VhIyVgJgIteZXrn12zIFVKRmedW+PwgTrPT74M8MMKTun/iGY7syv16JuYCvrgIlwO+fqz4clEnEIVvtClsbRTT5CbPWfQ8x7l/CeJPTTfyof+4vx6t1D+uoVgQWdWFDU0RMN+yMOMdmoqsgJY=
+	t=1770135644; cv=none; b=QdRSqQCfO0c/wkX4pEhNLM/bCPHmjtyUPAgcknp3UZObADszLfX8CGHVGv3WhIwo/yHj+olZ++QiS89fGC6XBZyyBb7PkCDlL3HI8xDnUB+s+c8hfdLLZTJJw3gG0o33ZerqonMpkM/UmZpMzFRxStP1gAqQErgrSd+5d7S4exc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770135113; c=relaxed/simple;
-	bh=9a6MDBZBr2S7DTcvsZmMvwhafM53LBpFJ/OzmyZ9jzo=;
+	s=arc-20240116; t=1770135644; c=relaxed/simple;
+	bh=gADRKLw82C+tfxUEYY3hlWKJfxUSp+EMySsSF1+SVkY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M4N2Hzyx7mKELZJTx29IxWIrgh3p2QiyjDbj2PizUxQJe/MIYw/OlQh6gzXZLjdZEQ765O03PCpEcGFafyhm8bpGwJ5YrkJ8zJtQNvcDcCM0yGxwEbeBhc2Q3QXMOAYgN7xSGtc+EZR2iylLbYjsDCoqP7Te3kP9/sZIke1rRfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=qKAWEqHg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dHCHn4Fv; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
-	by mailfout.phl.internal (Postfix) with ESMTP id 548C0EC008E;
-	Tue,  3 Feb 2026 11:11:50 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Tue, 03 Feb 2026 11:11:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1770135110; x=1770221510; bh=S8DdY7OHjj
-	q7ubDcTpspMFvxxPIy4NvGM1w3tP/IR74=; b=qKAWEqHgEgF3XeY8GPtEyZ7xwV
-	NTNMWTYphp6Diolc0wISxvpiKowIU9G2cSFmAl0oewdtfFUnl/ccD2gxr900ze1X
-	fnMWAHPsPIdYB96/2v5YW9EYrL7IQUW4wXgVPIdEALiBVwTv33LmZ0BefBTsC7kW
-	kXNBbsfq/dvMvOoyCU5Xb2SpXz7040mbvrAYuPXx3+AWOMurIPDneHTsuRd3l0QA
-	Tf0jzZEdd1B5zbykggsw6aAiwZzJcC5ohj+ueIQJb0mKkN1Rdla4Lo1b074VYq2z
-	l4jpYTYjB4Aacla9P2okZRFzVk4Oz1YVooDWgxhOmQPhDnXL2QVhklUd2WGg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1770135110; x=1770221510; bh=S8DdY7OHjjq7ubDcTpspMFvxxPIy4NvGM1w
-	3tP/IR74=; b=dHCHn4Fv8UUl8m5HwfBsUZbsNj9ZhzNjcrgwmKOr3omviw+dDvg
-	Ferm8XdTRRohnx4jV5zGqQm1k1I2HcaTEpXB1C0mY1H5PZjRHvDJPPUwOAw2rFaG
-	/8DF5YxRh2xTazJ8yJpGM1DBWdS63B81E3PDuMGybGOdXQ4b7ZrOLMCcYqJmGbL5
-	RaGEhq663nLtHawjELkoI3hH1yP/HyRxWNS2P7QUsewiiwpsgXdUy1JhawFGOQO2
-	wazvyz/2G7MHsg90RaZKU8MoX0tXMgh7kxmq/RetBhkYf2OWXpphiJqN+6Hgp+U0
-	hvvSi70YWq0hM7WCeGkN8A7k5UuqCsYjizA==
-X-ME-Sender: <xms:Rh6CacqcbCiZ3bhfjRp--M10Xmg_q3Y0Ty2v5id4A8CgS0bxEX4_-A>
-    <xme:Rh6CaU5CIoBj2tJgntsTHS_cnKHvWgphqB3M5lXTWAXROj47_EnGArubbIhv5eqoP
-    xJblqwH07bO6jhWYRPi2-F5QwWYvAolERNE3w22mfRAocig>
-X-ME-Received: <xmr:Rh6CaTcrVAUkYar6KD6ReAEmQByLDIKbwOdzszkgIkYqk85MA5MdQoiewbUBGZB551e5ECW-B6Ww_OfATJTHSX2SdrGhwOsGqZ3BCw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukedthedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepjeetueehte
-    ekuefhleehkeffffeiffeftedtieegkedviefggfefueffkefgueffnecuffhomhgrihhn
-    pehmshhgihgurdhlihhnkhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhdpnhgspghrtghpthhtohepiedp
-    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhhklhesphgvnhhguhhtrhhonhhigi
-    druggvpdhrtghpthhtohepshhtrggslhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtoheplhhinhhugidqtggrnhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:Rh6CaZ4-DfsGWh1HZUdBAiHK4mSxtM68QBkHdwae-Wcz6N8iRkLs9Q>
-    <xmx:Rh6CaatxQtCqyugr_ydtE0ghdYSAKAB_ArR4589ZFaYzDpTuRpUjaQ>
-    <xmx:Rh6CaZhnW8Q7bZexgi2L6lcrUbqrQv3PwS__56mCynADQG9PWDXUOg>
-    <xmx:Rh6CaVoH-H0nw21lQ0C2udsTVpnlcNDn3du2zZr9PMQUOEJlBWrbnw>
-    <xmx:Rh6Cae7xe2OeTO1dDX5MLfghkYySUYZlfTGcPc8w1hQJezuv9ArTC2OG>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 3 Feb 2026 11:11:49 -0500 (EST)
-Date: Tue, 3 Feb 2026 17:11:47 +0100
-From: Greg KH <greg@kroah.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: stable@vger.kernel.org, linux-can@vger.kernel.org
-Subject: Re: [PATCH 5.15.y] can: gs_usb: gs_usb_receive_bulk_callback(): fix
- URB memory leak
-Message-ID: <2026020342-eats-clamor-2b83@gregkh>
-References: <2026012023-ranged-machinist-edb4@gregkh>
- <20260120132156.746174-1-mkl@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=P//YVmxevIS0HupTrbONLAxot9fhOPbum8b5eHlJAFYUOMtO0Vvjh/509WNmwyUvy7fQlZVvhg69Xf02kDPc/M+GdaSAp1ut+wXoLEg+LTnqZKrecORKEIDdw1d3DgWixENh7C4SkMYnrNCMlYuclpvloROEo2OWcgwBnEHAvzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qc7BAZLY; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Pu3Drpia; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770135642;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KhlncAUQMkbq0DxIaSpkvI2sfDCod5hPiXP+UVdbqP8=;
+	b=Qc7BAZLYTNGgPWKQ1Feuebd31Adz/BOD4SW0JnIXHQUaS4348402tMc9gNzlvde034qJLv
+	tBqNdkLe5+4iP9adunyhPezy3VZW1LV/8Sv6T+6pJPJOyyj+S4exdlvTaj1S3NR6xhmX86
+	nEQptJOtTtyN51lTQTY/MCYsoVuksqo=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-649-JwvtjEkbMO2EVxLzczkU2w-1; Tue, 03 Feb 2026 11:20:40 -0500
+X-MC-Unique: JwvtjEkbMO2EVxLzczkU2w-1
+X-Mimecast-MFC-AGG-ID: JwvtjEkbMO2EVxLzczkU2w_1770135640
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-659318dbb6fso1401345a12.3
+        for <linux-can@vger.kernel.org>; Tue, 03 Feb 2026 08:20:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770135639; x=1770740439; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KhlncAUQMkbq0DxIaSpkvI2sfDCod5hPiXP+UVdbqP8=;
+        b=Pu3DrpiaMwAWSozatanOCXur3dqnzhOrQOdqmyEI+aKwjBHi2EoUohlepWE9nHVfWz
+         gRUaFf7EyBA3Ko8hW4vEVxyXKgcca3r2WUqogbndGCoAP+RqOdSSc9o3WcRiJNWE/pGK
+         LeBgVZC73s38WSmLoU1c1BjzklJ85UcaQIXXYz6czM/W5FXrq8nnFLLg/vX+a6sFnNwO
+         NjeDt3WbuHg/LD+RO6G02GkTk3V3WtE7lr98xliovmn9eT/w+R96EybqHCqgzMPSbNL8
+         2d5D+GrAgYVLpEksufjxHENtqEdMixCf2DMY7ssEhig/1Nma3UdSsTkqSSde84lBlKdF
+         6Oig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770135640; x=1770740440;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KhlncAUQMkbq0DxIaSpkvI2sfDCod5hPiXP+UVdbqP8=;
+        b=bg0liHDWmcROFWbn6EKhA08jIyeTwkQsAiGmLFUmKSN0Y6B2eBRcZIXUCRGo++qshn
+         4m3rLpjU4Mx2X7IVQcP+vs9gpPaxNC9/kriYqJ1SSs/JBlxkzk3ZH+F9ezoLr0yVAPVf
+         FO7F+AeoC7wekp/oiiwc0UrORE+gw4WSt35SfEy6+Ts45ml7Mp3GE5a0KVrHoU3/wMvX
+         GvPW+IxjdV5/vJ8uGowPjPG2WT0twSYWEop0S2tcT9DU6WNYYCrBAr7Vx8FKYrUpG5kS
+         sWOfs9OhJa9nQGUJrKMrLdDHiPpEmtWibChcRlZSvd9GgSl0uUS+nFWLPeeIr/D2r6WT
+         GCUg==
+X-Forwarded-Encrypted: i=1; AJvYcCVzhftb7EvS8NYK6oB19bj54FU/Q737yJRRYtiqo1bkZygBmVZHTa1ei/rKXZvphL8na7k9sojf4rA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzq2urbLSQhC4umJ2cuMl+kRZbP/qoveXqs5hIfn/Gr6nSqXDe+
+	VHdB9shiZQFI8w8mF1OoERFkebLDOoauzlZl7wqBTw0Z9tu5xNhhtM/6obW+JphZw3JcwN6LV6q
+	IzGSot7FnnEzdgLOECYXfOlzw+r//0DcSSj77BPH6DOglP/d+BysGZmvathxcYw==
+X-Gm-Gg: AZuq6aKyY6Ju/ysGXu1JXjj7wKU/BDPvvdK9HLn+lEbYeCAePmhSJEsGQrE+d0ideWl
+	kPYCK9ibBpGvEMZUZF8TjT8AM0g34zvOgwZyu4lKecEFXqmDCXsOmD8KtZ6BSjnY/m0Y+HJ4Try
+	4i4MV6i2lPKCA9XfMczj8ssMFGBWu56tYm5VwOzuWVCPBwmh3mR331kh0WBPuUIN8ZCgULR+JTY
+	g4GmqzVo1aR9hOTLAXunobNZxRadaROA9qNkaEzLmjrp8AMS31bhTRJLOBaxn+TKegOIaFOvg4T
+	E8EMz5l7CdnW2c4rSYO+hfNQRQ1DRXqtRYIROHKu3+/PofRdHNMm6RwhRIlB9h3IpOLVPrMjjkQ
+	zG/9UDh++9ElWBnq1GCyABZm3LOOXse5xSQ==
+X-Received: by 2002:a05:6402:4413:b0:653:7bdc:9561 with SMTP id 4fb4d7f45d1cf-65949bb66d3mr133792a12.15.1770135639545;
+        Tue, 03 Feb 2026 08:20:39 -0800 (PST)
+X-Received: by 2002:a05:6402:4413:b0:653:7bdc:9561 with SMTP id 4fb4d7f45d1cf-65949bb66d3mr133772a12.15.1770135639048;
+        Tue, 03 Feb 2026 08:20:39 -0800 (PST)
+Received: from redhat.com (IGLD-80-230-34-155.inter.net.il. [80.230.34.155])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65949fd80a7sm49935a12.14.2026.02.03.08.20.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 08:20:38 -0800 (PST)
+Date: Tue, 3 Feb 2026 11:20:35 -0500
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Harald Mommer <harald.mommer@oss.qualcomm.com>
+Cc: Francesco Valla <francesco@valla.it>,
+	Matias Ezequiel Vara Larsen <mvaralar@redhat.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Stefano Garzarella <sgarzare@redhat.com>
+Subject: Re: [PATCH v7] can: virtio: Add virtio CAN driver
+Message-ID: <20260203111926-mutt-send-email-mst@kernel.org>
+References: <aVwGfOlvRqdv5xj7@fedora>
+ <aWE5duyvXCuwsMAn@bywater>
+ <eec1a83b-e36f-47bb-9a5b-6888b42e063a@oss.qualcomm.com>
+ <20260203070338-mutt-send-email-mst@kernel.org>
+ <5d9645ea-41b8-4904-abbf-3b201183e2fc@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -102,72 +124,91 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260120132156.746174-1-mkl@pengutronix.de>
+In-Reply-To: <5d9645ea-41b8-4904-abbf-3b201183e2fc@oss.qualcomm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kroah.com,none];
-	R_DKIM_ALLOW(-0.20)[kroah.com:s=fm3,messagingengine.com:s=fm3];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6482-lists,linux-can=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[redhat.com:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kroah.com:+,messagingengine.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_FROM(0.00)[bounces-6483-lists,linux-can=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[greg@kroah.com,linux-can@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mst@redhat.com,linux-can@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-can];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:email,messagingengine.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 13B5FDBCF4
+	NEURAL_HAM(-0.00)[-0.999];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: E084FDBE6A
 X-Rspamd-Action: no action
 
-On Tue, Jan 20, 2026 at 02:21:56PM +0100, Marc Kleine-Budde wrote:
-> In gs_can_open(), the URBs for USB-in transfers are allocated, added to the
-> parent->rx_submitted anchor and submitted. In the complete callback
-> gs_usb_receive_bulk_callback(), the URB is processed and resubmitted. In
-> gs_can_close() the URBs are freed by calling
-> usb_kill_anchored_urbs(parent->rx_submitted).
+On Tue, Feb 03, 2026 at 04:18:09PM +0100, Harald Mommer wrote:
 > 
-> However, this does not take into account that the USB framework unanchors
-> the URB before the complete function is called. This means that once an
-> in-URB has been completed, it is no longer anchored and is ultimately not
-> released in gs_can_close().
 > 
-> Fix the memory leak by anchoring the URB in the
-> gs_usb_receive_bulk_callback() to the parent->rx_submitted anchor.
+> On 2/3/26 13:05, Michael S. Tsirkin wrote:
+> > On Tue, Feb 03, 2026 at 12:55:07PM +0100, Harald Mommer wrote:
+> >>
+> >>
+> >> On 1/9/26 18:23, Francesco Valla wrote:
+> >>>> +static u8 virtio_can_send_ctrl_msg(struct net_device *ndev, u16 msg_type)
+> >>>> +{
+> >>>> +	struct scatterlist sg_out, sg_in, *sgs[2] = { &sg_out, &sg_in };
+> >>>> +	struct virtio_can_priv *priv = netdev_priv(ndev);
+> >>>> +	struct device *dev = &priv->vdev->dev;
+> >>>> +	struct virtqueue *vq;
+> >>>> +	unsigned int len;
+> >>>> +	int err;
+> >>>> +
+> >>>> +	vq = priv->vqs[VIRTIO_CAN_QUEUE_CONTROL];
+> >>> Nit: consider initializing this above, while declaring it.
+> >>
+> >> All those "Nit" regarding initialization cause problems. There is a reason why it was done the way it is.
+> >>
+> >> The network people require that the declaration lines are ordered by line length. longest line first. This is called "Reverse Christmas tree". Don't ask me why, this formatting style is what the network people require. Their subsystem, their rules.
+> >>
+> >> To initialize the vq you need now already the priv initialized. If now the vq line becomes longer than the priv line you will violate the special formatting requirements of the network subsystem.
+> >>
+> >> Solution was: What you see above.
+> >>
+> >> Regards
+> >> Harald
+> > 
+> > So you reorder it then:
+> > 
+> > 	struct scatterlist sg_out, sg_in, *sgs[2] = { &sg_out, &sg_in };
+> > 	struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_CONTROL]; // priv not initialized, will be done too late in the next line
+> > 	struct virtio_can_priv *priv = netdev_priv(ndev); // you see it?
+> > 	struct device *dev = &priv->vdev->dev;
+> > 	unsigned int len;
+> > 	int err;
+> > 
+> > 
+> > and where is the problem?
 > 
-> Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-> Cc: stable@vger.kernel.org
-> Link: https://patch.msgid.link/20260105-gs_usb-fix-memory-leak-v2-1-cc6ed6438034@pengutronix.de
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> (cherry picked from commit 7352e1d5932a0e777e39fa4b619801191f57e603)
-> ---
->  drivers/net/can/usb/gs_usb.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-> index ffa2a4d92d01..e36745fd2d3b 100644
-> --- a/drivers/net/can/usb/gs_usb.c
-> +++ b/drivers/net/can/usb/gs_usb.c
-> @@ -402,6 +402,8 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
->  			  usbcan
->  			  );
->  
-> +	usb_anchor_urb(urb, &parent->rx_submitted);
-> +
+> The problem is that you use priv here to initialize vq in the line before priv is initialized.
 
-Breaks the build :(
+
+Got it. Ignore the tree thing then. It's a guideline.
+
+
+> > 
+> > On the flip size, this guarantees we will not forget to initialize.
+> 
+> Static analysis is your friend.
+
+And then someone monkey patches it to = NULL or something else silly.
+I prefer correct by construction.
+
 
