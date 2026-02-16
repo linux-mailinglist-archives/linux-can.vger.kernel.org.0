@@ -1,55 +1,55 @@
-Return-Path: <linux-can+bounces-6569-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6572-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MHVSHKkik2kX1wEAu9opvQ
-	(envelope-from <linux-can+bounces-6569-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:59:05 +0100
+	id 0Jt8A7Ihk2lJ1wEAu9opvQ
+	(envelope-from <linux-can+bounces-6572-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:54:58 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2FB4144535
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:59:04 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0B681443D6
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:54:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 07034306642F
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 13:54:24 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id AD4B53012507
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 13:54:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98643314D13;
-	Mon, 16 Feb 2026 13:54:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9113161A0;
+	Mon, 16 Feb 2026 13:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="XZEnnFCe"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="QSBhIzc8"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2A83128AE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80B531352A;
 	Mon, 16 Feb 2026 13:54:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771250044; cv=none; b=OgGY5wtJ7fAyoaoL0hTzzqP3nUCTh6wBy097hZcVNnq96Z0GIE+7yGBoGtAOzisKRkXb/tT8q+RlPKVItrsZud4KLS4yotWrDJkd3A1BHClfJTOCgcrXrvZsvXKUIgDKwcW+ATn2+y4Fkze/RrheWte0Z5M1aAB9/yKT6DrRJZQ=
+	t=1771250044; cv=none; b=rmSRAVi8ecB3+uZRGJIn9nYD623H/wwaOKYxun9+vI2NJmZi5jvvKlwk6gdrpzSPWXyhw/mTtx4igvr857gMT4lPHtRe114cKlQQ84s5LscuBHii9V5CRe3r7xhzHPhhH1UQYbs1663Lkalb9vI74MFrv+/9rq+3oT/rONu2AYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771250044; c=relaxed/simple;
-	bh=B0GLMV3cesPSPsRvbU9Pd3edbTphbbQyXzi59Q1AC2Y=;
+	bh=ENUF8LMffyNJA2t5gNftVFGB/j2V20hOXd3R8Iv1v4I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M6xMtZOtRh97Yaln50rtw9mpd76oG9W3yKPM4n5XyYl1kNeiHunZTq55PjocJ87mdXTL06lyK96BgXee3TP8OQlpycq7frBIO22HM8i6hM3I3Zj7tJqLkDD3SLgAIKeobsKm5roq+9dpDxEWfQp+M6mD2AVZm/uBNOTnPRwU/QM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=XZEnnFCe reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+	 MIME-Version; b=NXH26poL/XflT2+k4ujFXGqvdvz3VX1X1eVLCHZRTk50yYcFI8EHg/fo8frE85RNZz4oV+xjscLH1KOYOk5vz+uJ8mJsbAcJcUcX00r5WwFuWKYToF92CJXq/jugGTDk3x10isIuhS3qowniwrmlDqi9t/c8iFLfBMpN46P3O9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=QSBhIzc8 reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
 Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4fF44c40V4z1Fbwj;
+	by smtp.simply.com (Simply.com) with ESMTP id 4fF44c5tfBz1Fbwd;
 	Mon, 16 Feb 2026 14:53:52 +0100 (CET)
 Received: from d-5xj5g74.got.gaisler.com.com (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	by smtp.simply.com (Simply.com) with ESMTPA id 4fF44c246Bz1FbwS;
+	by smtp.simply.com (Simply.com) with ESMTPA id 4fF44c3qllz1Fbwh;
 	Mon, 16 Feb 2026 14:53:52 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
 	s=simplycom2; t=1771250032;
-	bh=iRnFF5nLsoP6t6Q6GFyPF3u3sSqHl56MO1l7XvWk6zs=;
+	bh=BAwgA5B2Fkxxn4aVdYR5mOLyDs1iukIf1f2W8NScSDA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XZEnnFCegugmjAhmWYvjfJq6L9cuy2TamapUSg6hsr1ms5LcTWVSX8xTwrMZTyp+r
-	 n4z6jqVtG+XdXb26sPlrg6e1PNZbNPrYGyV81PVBHg0vGRD6zZ3cZUJ1PO4xx3I57e
-	 gk2xXnG75iP6RWyK88nwxUZ3TLiDaNmb0pyeMsmnDAikfTQvSTfY83JwaNPuGITSvY
-	 3Zwbb6i/RY6SFJHHFWgv5yvsTrGXE6igUR99B3e9MnvVbW2AWSAqHZH4r5wiU4xZG+
-	 jYMlm7I8DGyrFfIwA45/DO+9C8ia3ZpNBmYk+y97PSGWCEn+n+YWDuBT81PHF8lWMk
-	 ObWJbnft6WSKA==
+	b=QSBhIzc8FKYuQQqNJQXK+vzqxsXTkug0ozCObojgKO3sv57ruOfs80x1syddEUpbp
+	 DEaKQlC+ktGl4nqqQw765uwLf6mJRc8hTXFWZApOLBIrBYRycevaTOn7GGCqvq1pkp
+	 w3tiU19+L8og0EUDQOSwhUij1jPCW6mDFKKR38zejLjJISxED0UZ/XKv44ykhJ2ztq
+	 IG6mdBcWknpj6S3dEwiGNIhjHym+qSdgATXo9J9OblzO5JFDWT7RxtgQO6ouOZYHnl
+	 2OQgKMD1Kzm0NbtF30eHW0W9CZ3rDFJrwlCDUM+u1oF6U1KuiMlIEFHresLAkWDx5F
+	 s3Jw+sgwWqmPQ==
 From: Arun Muthusamy <arun.muthusamy@gaisler.com>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -60,9 +60,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-can@vger.kernel.org,
 	Arun Muthusamy <arun.muthusamy@gaisler.com>
-Subject: [PATCH v5 14/16] can: grcan: Add CANFD RX support alongside legacy CAN
-Date: Mon, 16 Feb 2026 14:53:42 +0100
-Message-ID: <20260216135344.23246-15-arun.muthusamy@gaisler.com>
+Subject: [PATCH v5 15/16] can: grcan: Update echo skb handling to match variable length CANFD frame
+Date: Mon, 16 Feb 2026 14:53:43 +0100
+Message-ID: <20260216135344.23246-16-arun.muthusamy@gaisler.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260216135344.23246-1-arun.muthusamy@gaisler.com>
 References: <20260216135344.23246-1-arun.muthusamy@gaisler.com>
@@ -79,19 +79,19 @@ X-Spamd-Result: default: False [1.64 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	DMARC_POLICY_SOFTFAIL(0.10)[gaisler.com : SPF not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6569-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6572-lists,linux-can=lfdr.de];
 	R_DKIM_PERMFAIL(0.00)[gaisler.com:s=simplycom2];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[gaisler.com:~];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[arun.muthusamy@gaisler.com,linux-can@vger.kernel.org];
@@ -101,153 +101,164 @@ X-Spamd-Result: default: False [1.64 / 15.00];
 	TAGGED_RCPT(0.00)[linux-can,dt];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,gaisler.com:mid,gaisler.com:email]
-X-Rspamd-Queue-Id: C2FB4144535
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,gaisler.com:mid,gaisler.com:email]
+X-Rspamd-Queue-Id: B0B681443D6
 X-Rspamd-Action: no action
 
-Include CANFD RX support with the legacy CAN support, enabling
-support for extended data payloads to provide higher bit rates.
+Refactor echo socket buffer management by introducing dedicated indices
+for current and next echo slots.
+
+- Introduce "echo_skb_idx" to keep track of the current packet index in
+  the echo buffer, and "next_echo_idx" for the next available slot.
+- Adjust memory allocation for echo skb to calculate the number of slots
+  based on slot size.
+- Enhance logic in catch_up_echo_skb() to correctly process and free echo
+  skbs.
+- Initialize "next_echo_idx" in grcan_set_mode() to ensure proper starting
+  conditions when the device enters proper modes.
+- Improve memory and index handling in grcan_start_xmit() and
+  added a check to stop the network queue when necessary.
 
 Signed-off-by: Arun Muthusamy <arun.muthusamy@gaisler.com>
 ---
- drivers/net/can/grcan.c | 89 +++++++++++++++++++++++++++--------------
- 1 file changed, 59 insertions(+), 30 deletions(-)
+ drivers/net/can/grcan.c | 56 ++++++++++++++++++++++++++++-------------
+ 1 file changed, 39 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
-index ae9f6fd4c8bf..e54214f6112d 100644
+index e54214f6112d..72bdea6d27cd 100644
 --- a/drivers/net/can/grcan.c
 +++ b/drivers/net/can/grcan.c
-@@ -235,6 +235,9 @@ struct grcan_registers {
- #define GRCAN_TX_BRS  BIT(25)
- #define GRCAN_TX_FDF  BIT(26)
+@@ -312,6 +312,15 @@ struct grcan_priv {
  
-+#define GRCAN_RX_BRS  BIT(25)
-+#define GRCAN_RX_FDF  BIT(26)
-+
- /* Hardware capabilities */
- struct grcan_hwcap {
- 	/* CAN-FD capable, indicates GRCANFD IP.
-@@ -1242,20 +1245,29 @@ static inline union grcan_msg_slot *grcan_tx_msg_slot(struct grcan_dma *dma, u32
- 	return (union grcan_msg_slot *)((u8 *)dma->tx.msg_slot + off);
- }
+ 	struct sk_buff **echo_skb;	/* We allocate this on our own */
  
-+static inline union grcan_msg_slot *grcan_rx_msg_slot(struct grcan_dma *dma, u32 off)
-+{
-+	return (union grcan_msg_slot *)((u8 *)dma->rx.msg_slot + off);
-+}
++	/*
++	 * Since the CAN FD frame has a variable length, this variable is used
++	 * to keep track of the index of the CAN echo skb (socket buffer) frame.
++	 */
++	u32 echo_skb_idx;
 +
- static int grcan_receive(struct net_device *dev, int budget)
- {
-+	struct net_device_stats *stats = &dev->stats;
- 	struct grcan_priv *priv = netdev_priv(dev);
--	struct grcan_registers __iomem *regs = priv->regs;
-+	struct grcan_registers __iomem *regs;
++	/* Next echo skb free slot index */
++	u32 next_echo_idx;
++
+ 	/* The echo skb pointer, pointing into echo_skb and indicating which
+ 	 * frames can be echoed back. See the "Notes on the tx cyclic buffer
+ 	 * handling"-comment for grcan_start_xmit for more details.
+@@ -581,7 +590,7 @@ static int catch_up_echo_skb(struct net_device *dev, int budget, bool echo)
+ 	struct grcan_registers __iomem *regs = priv->regs;
  	struct grcan_dma *dma = &priv->dma;
--	struct net_device_stats *stats = &dev->stats;
--	struct can_frame *cf;
-+	u32 bds, copy_len, payload_offset;
-+	union grcan_msg_slot *msg;
-+	u32 wr, rd, dlc, startrd;
-+	struct canfd_frame *cf;
-+	int i, work_done = 0;
- 	struct sk_buff *skb;
--	u32 wr, rd, startrd;
--	u32 *slot;
- 	u32 rtr, eff;
--	int work_done = 0;
-+	u8 *data;
+ 	struct net_device_stats *stats = &dev->stats;
+-	int i, work_done;
++	int work_done;
  
-+	regs = priv->regs;
- 	rd = grcan_read_reg(&regs->rxrd);
-+
- 	startrd = rd;
- 	for (work_done = 0; work_done < budget; work_done++) {
- 		/* Check for packet to receive */
-@@ -1263,43 +1275,60 @@ static int grcan_receive(struct net_device *dev, int budget)
- 		if (rd == wr)
+ 	/* Updates to priv->eskbp and wake-ups of the queue needs to
+ 	 * be atomic towards the reads of priv->eskbp and shut-downs
+@@ -592,19 +601,22 @@ static int catch_up_echo_skb(struct net_device *dev, int budget, bool echo)
+ 	for (work_done = 0; work_done < budget || budget < 0; work_done++) {
+ 		if (priv->eskbp == txrd)
  			break;
- 
--		/* Take care of packet */
--		skb = alloc_can_skb(dev, &cf);
--		if (skb == NULL) {
--			netdev_err(dev,
--				   "dropping frame: skb allocation failed\n");
-+		msg = grcan_rx_msg_slot(dma, rd);
-+		if (msg->header.ctrl & GRCAN_RX_FDF)
-+			skb = alloc_canfd_skb(dev, &cf);
-+		else
-+			skb = alloc_can_skb(dev, (struct can_frame **)&cf);
-+
-+		if (unlikely(!skb)) {
-+			netdev_err(dev, "dropping frame: skb allocation failed\n");
- 			stats->rx_dropped++;
- 			continue;
- 		}
- 
--		slot = (u32 *)((u8 *)dma->rx.msg_slot + rd);
--		eff = slot[0] & GRCAN_MSG_IDE;
--		rtr = slot[0] & GRCAN_MSG_RTR;
-+		dlc = FIELD_GET(GRCAN_MSG_DLC_MASK, msg->header.ctrl);
-+		if (msg->header.ctrl & GRCAN_RX_FDF)
-+			cf->len = can_fd_dlc2len(dlc);
-+		else
-+			cf->len = can_cc_dlc2len(dlc);
-+
-+		bds = grcan_numbds(cf->len);
-+		payload_offset = 0;
-+		data = cf->data;
-+
-+		eff = msg->header.id & GRCAN_MSG_IDE;
-+		rtr = msg->header.id & GRCAN_MSG_RTR;
-+
- 		if (eff) {
--			cf->can_id = ((slot[0] & GRCAN_MSG_EID)
--				      >> GRCAN_MSG_EID_BIT);
-+			cf->can_id = FIELD_GET(GRCAN_MSG_EID_MASK, msg->header.id);
- 			cf->can_id |= CAN_EFF_FLAG;
- 		} else {
--			cf->can_id = ((slot[0] & GRCAN_MSG_BID)
--				      >> GRCAN_MSG_BID_BIT);
-+			cf->can_id = FIELD_GET(GRCAN_MSG_BID_MASK, msg->header.id);
- 		}
--		cf->len = can_cc_dlc2len((slot[1] & GRCAN_MSG_DLC)
--					  >> GRCAN_MSG_DLC_BIT);
--		if (rtr) {
-+		if (rtr)
- 			cf->can_id |= CAN_RTR_FLAG;
+-		i = priv->eskbp / GRCAN_MSG_SIZE;
+-		if (echo) {
+-			/* Normal echo of messages */
+-			stats->tx_packets++;
+-			stats->tx_bytes += can_get_echo_skb(dev, i, NULL);
 -		} else {
--			if (cf->can_dlc > 0)
--				memcpy(cf->data, &slot[2], sizeof(u32));
--			if (cf->can_dlc > 4)
--				memcpy(cf->data + 4, &slot[3], sizeof(u32));
+-			/* For cleanup of untransmitted messages */
+-			can_free_echo_skb(dev, i, NULL);
+-		}
  
--			stats->rx_bytes += cf->len;
-+		copy_len = min_t(u32, cf->len, GRCAN_CLASSIC_DATA_SIZE);
-+		memcpy(data, msg->header.data, copy_len);
-+		payload_offset += copy_len;
+ 		priv->eskbp = grcan_ring_add(priv->eskbp, GRCAN_MSG_SIZE,
+ 					     dma->tx.size);
+ 		txrd = grcan_read_reg(&regs->txrd);
 +
-+		rd = grcan_ring_add(rd, GRCAN_MSG_SIZE, dma->rx.size);
-+
-+		for (i = 1; i < bds; i++) {
-+			msg = grcan_rx_msg_slot(dma, rd);
-+
-+			copy_len = min_t(u32, (u32)cf->len - payload_offset, (u32)GRCAN_MSG_SIZE);
-+			memcpy(data + payload_offset, msg->frags.data, copy_len);
-+			payload_offset += copy_len;
-+
-+			rd = grcan_ring_add(rd, GRCAN_MSG_SIZE, dma->rx.size);
++		/* Grab the packet once the packet is send or free untransmitted packet */
++		if (priv->eskbp == txrd) {
++			if (echo) {
++				/* Normal echo of messages */
++				stats->tx_packets++;
++				stats->tx_bytes += can_get_echo_skb(dev, priv->echo_skb_idx, NULL);
++			} else {
++				/* For cleanup of untransmitted messages */
++				can_free_echo_skb(dev, priv->echo_skb_idx, NULL);
++			}
++		}
+ 	}
+ 	return work_done;
+ }
+@@ -1112,6 +1124,7 @@ static int grcan_set_mode(struct net_device *dev, enum can_mode mode)
+ 			if (!(priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
+ 				netif_wake_queue(dev);
  		}
--		stats->rx_packets++;
++		priv->next_echo_idx = 0;
+ 		spin_unlock_irqrestore(&priv->lock, flags);
+ 		return err;
+ 	}
+@@ -1123,6 +1136,7 @@ static int grcan_open(struct net_device *dev)
+ 	struct grcan_priv *priv = netdev_priv(dev);
+ 	struct grcan_dma *dma = &priv->dma;
+ 	unsigned long flags;
++	u32 nr_echo_slots;
+ 	int err;
  
-+		/* Update statistics and read pointer */
-+		stats->rx_packets++;
-+		stats->rx_bytes += cf->len;
- 		netif_receive_skb(skb);
--
--		rd = grcan_ring_add(rd, GRCAN_MSG_SIZE, dma->rx.size);
+ 	/* Allocate memory */
+@@ -1133,13 +1147,15 @@ static int grcan_open(struct net_device *dev)
+ 		return err;
  	}
  
- 	/* Make sure everything is read before allowing hardware to
+-	priv->echo_skb = kcalloc(dma->tx.size, sizeof(*priv->echo_skb),
++	nr_echo_slots = dma->tx.size / GRCAN_MSG_SIZE;
++
++	priv->echo_skb = kcalloc(nr_echo_slots, sizeof(*priv->echo_skb),
+ 				 GFP_KERNEL);
+ 	if (!priv->echo_skb) {
+ 		err = -ENOMEM;
+ 		goto exit_free_dma_buffers;
+ 	}
+-	priv->can.echo_skb_max = dma->tx.size;
++	priv->can.echo_skb_max = nr_echo_slots;
+ 	priv->can.echo_skb = priv->echo_skb;
+ 
+ 	/* Get can device up */
+@@ -1463,7 +1479,6 @@ static netdev_tx_t grcan_start_xmit(struct sk_buff *skb,
+ 	struct can_frame *cf;
+ 	unsigned long flags;
+ 	u32 oneshotmode;
+-	int slotindex;
+ 	u8 *payload;
+ 	u8 len;
+ 	int i;
+@@ -1500,12 +1515,13 @@ static netdev_tx_t grcan_start_xmit(struct sk_buff *skb,
+ 
+ 	txwr = grcan_read_reg(&regs->txwr);
+ 	space = grcan_txspace(dma->tx.size, txwr, priv->eskbp);
+-
+-	slotindex = txwr / GRCAN_MSG_SIZE;
+ 	bds = grcan_numbds(len);
+ 
+-	if (unlikely(space == 1))
++	if (unlikely(space < bds || priv->can.echo_skb[priv->echo_skb_idx])) {
+ 		netif_stop_queue(dev);
++		spin_unlock_irqrestore(&priv->lock, flags);
++		return NETDEV_TX_BUSY;
++	}
+ 
+ 	spin_unlock_irqrestore(&priv->lock, flags);
+ 	/* End of critical section*/
+@@ -1589,7 +1605,13 @@ static netdev_tx_t grcan_start_xmit(struct sk_buff *skb,
+ 	 * can_put_echo_skb would be an error unless other measures are
+ 	 * taken.
+ 	 */
+-	can_put_echo_skb(skb, dev, slotindex, 0);
++
++	priv->echo_skb_idx = priv->next_echo_idx;
++
++	can_put_echo_skb(skb, dev, priv->next_echo_idx, 0);
++
++	/* Move to the next index in the echo skb buffer */
++	priv->next_echo_idx = (priv->next_echo_idx + 1) % priv->can.echo_skb_max;
+ 
+ 	/* Make sure everything is written before allowing hardware to
+ 	 * read from the memory
 -- 
 2.51.0
 
