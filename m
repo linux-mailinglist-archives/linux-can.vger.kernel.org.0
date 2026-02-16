@@ -1,51 +1,51 @@
-Return-Path: <linux-can+bounces-6574-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6575-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oF2HESUxk2mI2QEAu9opvQ
-	(envelope-from <linux-can+bounces-6574-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 16:00:53 +0100
+	id KH/vIqIyk2lx2gEAu9opvQ
+	(envelope-from <linux-can+bounces-6575-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 16:07:14 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 060E1144F31
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 16:00:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3848D14519C
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 16:07:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C4A3730269F2
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:59:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E7B93306F000
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 15:01:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7245C314B72;
-	Mon, 16 Feb 2026 14:59:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1177314B94;
+	Mon, 16 Feb 2026 15:01:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GEYYJGA6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z/iGQV7f"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E938314A9D;
-	Mon, 16 Feb 2026 14:59:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CDD8314B77;
+	Mon, 16 Feb 2026 15:01:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771253988; cv=none; b=hwPng8SLScIUmv0Qy8USd9A9Q1AHitjcHbwFSCPe4Tep2B/YPHJWRNoPN35/x6a5SDlWGXpDlgO1GGOiQG4zquMnJ/9qqZZFGh2IPRdRgXHU/aJwDrGljt7gieZYawSahbnYRyEzfhfJKH2N5E00WXVes0rx/35bB3XqNcZNGtM=
+	t=1771254098; cv=none; b=GfhsozWDDJ6RqRQHM+qSyiDDAzAHLh9GZS/VDiGCmJAFQnKDX5c+8ro8jGQGkipDP3sjEHyFagtxi8/lcPHAkvWAvJWIhqk3QQvQFwPszQXdXb1L4KO/OHi5id2NRpQ4uwD1GGB/LXMfCakxKmGyz7lRsM2geRXx4+WzqLQxuHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771253988; c=relaxed/simple;
-	bh=s45bBMuG8U8K7fnJRjSp5+IcN3tzMScPUcGkuruow9A=;
+	s=arc-20240116; t=1771254098; c=relaxed/simple;
+	bh=QhsZXk6pa4w7LWJsklEIS79UjHmgCkQoOAOMRxk3M2o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nuPguMl9lmchUEqQfXyLZE+YQkuOc1dggBqcVwQaUJx1jIeSkjDs//vNvbNns7I14oY7+WGcXPkwpJMzXlH8Ofbh9AiQMXtdpQB7lKbFTW6dRwEfaZHJlTHrHo8W8Zs+Gd5I8aZy8Wkmb51nU+41H0D6nQJKkFmVudXr8GXAtXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GEYYJGA6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4138C116C6;
-	Mon, 16 Feb 2026 14:59:45 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=aVzI7+yM888LMPHIJnu5j4cgoi0IuKpkWAy52fcCyC8cv8G7E358A3QAzyt7spvUXAWKELZwE6nZnsiIKVSHxZ/etedTuYSI+bpwoPf8N4/VT0ukCk1vs+rlTHW65J7bPv7vyFnX00wiq/9Nbdexa/r+jE3IR08ACKa9ER+81BM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z/iGQV7f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F1DC19424;
+	Mon, 16 Feb 2026 15:01:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771253987;
-	bh=s45bBMuG8U8K7fnJRjSp5+IcN3tzMScPUcGkuruow9A=;
+	s=k20201202; t=1771254098;
+	bh=QhsZXk6pa4w7LWJsklEIS79UjHmgCkQoOAOMRxk3M2o=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GEYYJGA6HbZkNKtydBRyDrd04cCl1fBtyz2dcje0v5tqX5Wu7bpZ3jbTJwWoedgQP
-	 9TPCgMrj6/b1Ajun3EwhMZAmiLyQxjgSnzUDpUDWjwTFmClal7aBz+jaKttasxfMF+
-	 XAURzMOwZoti4HjhpuRMbr9j4SJRiRizCvrn5ocYtVmVDMMrXkvgi23Vgidc5Xkmia
-	 PvMazMMsCbCw5FbfNPJQaQe95TsWQiiYT90QLyuoc2/1L5b9zJ4te8CPfgYvC9+4GR
-	 Pmz24FsrJiCXOLGOe9K3AGzDngOpULIXqcTKwvK07zTadHYYwuXLz+meqZMxBqPseB
-	 MPoCe30leONzA==
-Message-ID: <20fb1a19-7b1c-4520-91fc-50e21589b9ed@kernel.org>
-Date: Mon, 16 Feb 2026 15:59:44 +0100
+	b=Z/iGQV7flgz4LmCm9lHQDuDW04fHYEor7g6Y+unoHIAdp8q/8HFcasjqA+88Ipk6n
+	 FAX2gOv2w/4Se2oJ7a7OzGjWz5SkPsAeFocSlgFRT+YUD+cvfKQhNTDLFrgnhNhPPC
+	 eJCJsa1yxi7Lyqid3xh5vyoPnSckkMK9a9L3gLdUOw27hC8xljgfHbmBLEbE9mdf2N
+	 2ZWIRTeQO4fPvjXfRff7sDiixWbAtJwp0wHxlvPeY8OJLppl6E8RM+HO0HSNLvkGWz
+	 1YP/L7N68Fstw9gEiTE6CuFfFcgAnrJqgwduX/OnTkPgNMObs562soCS5CKtZSbbrA
+	 WW451sQc+I6yA==
+Message-ID: <fa473d32-ff7c-4ca1-8caa-57eff39f79a5@kernel.org>
+Date: Mon, 16 Feb 2026 16:01:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -53,14 +53,15 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 02/16] net: can: Convert gaisler,grcan to DT schema
+Subject: Re: [PATCH v5 05/16] can: grcan: Replace bit timing macros with
+ literal values
 To: Arun Muthusamy <arun.muthusamy@gaisler.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, mkl@pengutronix.de,
  mailhol@kernel.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-can@vger.kernel.org
+ linux-can@vger.kernel.org, Daniel Hellstrom <daniel@gaisler.com>
 References: <20260216135344.23246-1-arun.muthusamy@gaisler.com>
- <20260216135344.23246-3-arun.muthusamy@gaisler.com>
+ <20260216135344.23246-6-arun.muthusamy@gaisler.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,63 +107,50 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260216135344.23246-3-arun.muthusamy@gaisler.com>
+In-Reply-To: <20260216135344.23246-6-arun.muthusamy@gaisler.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6574-lists,linux-can=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-6575-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-can@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can,dt];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gaisler.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 060E1144F31
+	DBL_BLOCKED_OPENRESOLVER(0.00)[gaisler.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 3848D14519C
 X-Rspamd-Action: no action
 
 On 16/02/2026 14:53, Arun Muthusamy wrote:
-> Migrate device tree bindings for Gaisler GRCAN, GRHCAN
-> and GRCANFD CAN controllers from a text format to YAML format.
-> 
-> Additional changes:
->   - Remove stale systemid property
->     removed in commit 1e93ed26acf0 ("can: grcan: grcan_probe():
->     fix broken system id check for errata workaround needs")
->   - Make freq optional
->   - Add clocks
->   - Add compatible
->   - Add example
+> Refactor the bit timing constants in grcan_bittiming_const by replacing
+> macros with literal values.
 > 
 > Signed-off-by: Arun Muthusamy <arun.muthusamy@gaisler.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/net/can/gaisler,grcan.yaml       | 62 +++++++++++++++++++
->  .../devicetree/bindings/net/can/grcan.txt     | 28 ---------
+> Signed-off-by: Daniel Hellstrom <daniel@gaisler.com>
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching. For bindings, the preferred subjects are
-explained here:
-https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
+It's random DCO all over. One patch has this order, other patch has a
+reversed one.
+
+Please read submitting patches document to understand what you certify
+and THEN certify that in a way submitting patches asks you. Not other way.
 
 Best regards,
 Krzysztof
