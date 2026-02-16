@@ -1,168 +1,198 @@
-Return-Path: <linux-can+bounces-6555-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6559-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WPHaMBTrkmlSzwEAu9opvQ
-	(envelope-from <linux-can+bounces-6555-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 11:01:56 +0100
+	id QMPjIoQik2kX1wEAu9opvQ
+	(envelope-from <linux-can+bounces-6559-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:58:28 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id F15A81422E3
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 11:01:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ADE41444F2
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:58:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DA3353001A45
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 10:01:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DB48C303D651
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 13:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A44F927B4E8;
-	Mon, 16 Feb 2026 10:01:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 680593101B8;
+	Mon, 16 Feb 2026 13:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="kyElz9Ir"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521381D618E
-	for <linux-can@vger.kernel.org>; Mon, 16 Feb 2026 10:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5AD2C0F8E;
+	Mon, 16 Feb 2026 13:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771236105; cv=none; b=F3KHmOyzDSNfG9TFyc5Evdlww/6HTN1lGLni/dXZV+Cxk9xue3lHJJepMgy0lT/A66Ao3tNbw4vnU8jaQDicvloNWGRb5NaXK4Cj4VEqhoM/h+s93LYSCGd/tGvLki6XisxYqy3MJR2fQMahfMK8NRFSuf/KRTnhci5WSYPmXIg=
+	t=1771250039; cv=none; b=fghA6VUMCnwP0ETVBUZnW5HkQRIh5GWvSUnTpXjU/ooyTZQWGOItCEMM8OWYM+7kxitxwX8IBVjHiC7as0ttU/GFHrKCuYdxpbgpMoSIXTkLRwiEYHYBtaJvkSI8zQ3wd7pc8ziRlYcP8l5F4UCBnj0uEOIWG8+6RP16c4SErh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771236105; c=relaxed/simple;
-	bh=qIHY7cCiEnGtwkY7aFFwE/mZ8uiiY18ecDxBJTYhSwg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MkkIE0JfUh11qQafdpDaCz8/VbywMBkXU5YVk7KxMHkQm194crV/BaGvuNQRhu5JhR72slrl8T0fUK+jNzBb8naDzijemp5tLc6vzFZyi2qZo3guGl/Uh/hO20TQPaC+28mY3z+T232b1WRxvUfwz1pS7Lxtt+m4Lhck0Mxlklg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-566390e7db3so2245455e0c.1
-        for <linux-can@vger.kernel.org>; Mon, 16 Feb 2026 02:01:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771236103; x=1771840903;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8QwpdPffhWm62Ds9NyNo/SaQsJWiUgFomKDnAW7WiSg=;
-        b=POayVyzm+y4e08MSWaGixeoB2W5DKO7uWgfXKJ6wNug17/As17DmnDtxXk0PFkITh/
-         K6+1xdSuAY6cynNXHPB3AO4PugqFeRLhKqnMYng9RLeGz3zvARdG7AXZS0XEzSP/2mmj
-         t3STKsHlIYL6l/Iz7itqt15KEEC9zwvHbt6rRyG5GJ8Nnxet4W953tw7tCdF1I7Z6iuc
-         t0sbSHgDXRm1f6aZGLLeaGgJ4O2VQNNB7rrhz9v9wnfXrYq1Cc9Ilu1YyUgH4v18LXB2
-         riz5c8boJdfKte501w9gqXZgOoJSS79EWUhCyvnqdNEoqf+nDyECKxdsMzO72llJuxeY
-         MDhw==
-X-Forwarded-Encrypted: i=1; AJvYcCWgj7dfP6XBeFy3AUNBBiF2MqEN0u8M1Z3W+WGm1FEI5FpYgherd1DfKBDeg2Du+K4oaHzfFq7huAY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVD0OWbE0BifRRLWn1OrcyzLO1VH4tz9Y/uaGFwhAIQmp6PSUs
-	3NKiglbBtIguy5d2ZbtW/n+4PhPnDSKgrh5E77aoqcMjNuftZwWlDZzf0NhgkHjv
-X-Gm-Gg: AZuq6aKbcsf+DVMVNOkYFbgDD8W9Zj/nGTjcvCcY+Ac/sridDMPla+6Dj6lwQRLNpEv
-	ZOr/6YYeCM58uWZQSM+eY/+HpIxKoX4kmyV3e7QWmwK/5GqJ2IxSm3FJziOhry1XPzhQP2QJxq9
-	0z78Moi4E2QNKsoZ5gFzEZn5X8OAIzqZT8mOHBLfBzVmVKInYhX0HHOVhLYGPw0tcAXQPG67By9
-	eZHfgUEVHmm3NdvIxn5db36pJnC+GtDlvbgEaf4noWNSICGGKclUL8rP4wEFdEd/Tku/+3vhbFU
-	cXp+dSntI2zSejcDldapDimKIAaVbymnfqOyarOU1WOZnQHGlpJnOwtUkaB6uq3dni0OZBBfvBP
-	6NA8GHx+0OjfQReeyqyss9X+dZ1hryKOlBDHpoPAf91N3Wi/fG3lYjvtg/a29ieXxHSgU9JozhP
-	oHjmb4s0eD14kuuFqvIDEA0aE5opNZdcdqqaqYvJjj52K3cvxWSRQQt8+hfSL/
-X-Received: by 2002:a05:6122:178a:b0:566:3685:6ed0 with SMTP id 71dfb90a1353d-5676aa6e180mr3596936e0c.19.1771236103346;
-        Mon, 16 Feb 2026 02:01:43 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94afd1ab720sm6899434241.4.2026.02.16.02.01.40
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Feb 2026 02:01:41 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-9489d087bcfso1711947241.0
-        for <linux-can@vger.kernel.org>; Mon, 16 Feb 2026 02:01:40 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXWWwtlo5BBcgxTR9VN8GCuVwX7y0Qsrxoam+BHIC62jXLr/fiDBBMcxMYM646zgU49PnF2ETliLJY=@vger.kernel.org
-X-Received: by 2002:a05:6102:cd1:b0:5fd:f145:b88a with SMTP id
- ada2fe7eead31-5fe1afcd3b7mr3584435137.40.1771236100546; Mon, 16 Feb 2026
- 02:01:40 -0800 (PST)
+	s=arc-20240116; t=1771250039; c=relaxed/simple;
+	bh=76svMepMws1psyYqLqUARRvEQn7urbg4CaIm/JPtgWw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cVp8g/E2wOyEzfbRDTWFzPeZeELy7VlXaUwlx8aKiOqZ1f32oaPsb2QMMI5TJSyqJRu27PH1En5Q01rK8kRGvHarlMOoggysd2ZONq7oCfXoYaRf6TwBw3ZbPIUPX9Ds1vzBIbkGAH47qmr2hnBLVYGUUNxyRHEpezdqXEg99T4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=kyElz9Ir reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.simply.com (Simply.com) with ESMTP id 4fF44X04WJz1FbwG;
+	Mon, 16 Feb 2026 14:53:48 +0100 (CET)
+Received: from d-5xj5g74.got.gaisler.com.com (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
+	by smtp.simply.com (Simply.com) with ESMTPA id 4fF44W4mCvz1DPkL;
+	Mon, 16 Feb 2026 14:53:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
+	s=simplycom2; t=1771250027;
+	bh=/ldNGbzMFda1c7P28eD/pZ2C9Jcv9cbY2lY1aG2t0dU=;
+	h=From:To:Cc:Subject:Date;
+	b=kyElz9IrIctBKo0TA88BFrOzsClr9sullFRJ70ugKSm5ZXgY3nb9NTwrk93Ef/ucG
+	 SwDI21e6WMnPBIvo4waYc3+WbRNxQf+dlkOE+MCs++ilvD5JWZvcj60K/lTsxsKw2v
+	 npGNXSVrGflUFdrJAUnzkQnujJU8SesCL8UgztETI0lXRVLvd4eeCrHOz5Y8tduFdJ
+	 o/XvB6RC5FhAaUdK/QD87i8RUlsRwPHDAEjQgfuMTEApraLKKCOqQ9PQv040KYU7gp
+	 oWCpuZ80/2LxVbiRgOLONghg55ZkTFzdxxUGW7MrM71vlAl87AEWWliX2tOLelOkb8
+	 QIhuOSaWfs+Pg==
+From: Arun Muthusamy <arun.muthusamy@gaisler.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	mkl@pengutronix.de,
+	mailhol@kernel.org
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	Arun Muthusamy <arun.muthusamy@gaisler.com>
+Subject: [PATCH v5 00/16] can: grcan: Enhance driver with CANFD Support and Improvements
+Date: Mon, 16 Feb 2026 14:53:28 +0100
+Message-ID: <20260216135344.23246-1-arun.muthusamy@gaisler.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260208-rz-sdio-mux-v9-0-9a3be13c1280@solid-run.com>
- <20260208-rz-sdio-mux-v9-1-9a3be13c1280@solid-run.com> <20260212164823.mbeycqwzsy2dfq6e@skbuf>
- <CAMuHMdVOqovkugmCnR4FOfk8VkQyN_dmyKFzbsOSN0mPKQedeQ@mail.gmail.com>
- <f9ede0d3-6a37-449c-b62b-a5c761ece097@solid-run.com> <20260216092914.kmvl7aep7dantcsd@skbuf>
-In-Reply-To: <20260216092914.kmvl7aep7dantcsd@skbuf>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 16 Feb 2026 11:01:29 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUH4W9W2uNknr41AgVQfO7inwZP6BfuMatyEUvJtf+Ueg@mail.gmail.com>
-X-Gm-Features: AaiRm50a7dRj7dLKtMGILEQb14-VkaVzM5nFFHi-S8Lj08OYuJXTfF9bVPV6HRk
-Message-ID: <CAMuHMdUH4W9W2uNknr41AgVQfO7inwZP6BfuMatyEUvJtf+Ueg@mail.gmail.com>
-Subject: Re: [PATCH v9 1/7] phy: can-transceiver: rename temporary helper
- function to avoid conflict
-To: Vladimir Oltean <olteanv@gmail.com>
-Cc: Josua Mayer <josua@solid-run.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Peter Rosin <peda@axentia.se>, 
-	Aaro Koskinen <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, 
-	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, Vignesh R <vigneshr@ti.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Yazan Shhady <yazan.shhady@solid-run.com>, Jon Nettleton <jon@solid-run.com>, 
-	Mikhail Anikin <mikhail.anikin@solid-run.com>, 
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
-	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>, 
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, 
-	"linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [1.64 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[gaisler.com : SPF not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6555-lists,linux-can=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[33];
-	FREEMAIL_CC(0.00)[solid-run.com,pengutronix.de,kernel.org,linaro.org,axentia.se,iki.fi,kemnade.info,baylibre.com,atomide.com,gmail.com,ti.com,glider.be,sang-engineering.com,vger.kernel.org,lists.infradead.org];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6559-lists,linux-can=lfdr.de];
+	R_DKIM_PERMFAIL(0.00)[gaisler.com:s=simplycom2];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[gaisler.com:~];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-can@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[arun.muthusamy@gaisler.com,linux-can@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-can,dt,renesas];
-	R_DKIM_NA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-can,dt];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux-m68k.org:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: F15A81422E3
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,gaisler.com:mid]
+X-Rspamd-Queue-Id: 0ADE41444F2
 X-Rspamd-Action: no action
 
-Hi Vladimir,
+This patch series updates the GRCAN driver to support the GRCANFD core
+from the GRLIB IP core library.
 
-On Mon, 16 Feb 2026 at 10:29, Vladimir Oltean <olteanv@gmail.com> wrote:
-> Then there is the fact that local definitions of devm_mux_state_get_optional()
-> keep popping up, possibly in unrelated trees (not the case here). This seems
-> to be a bad practice which should be discouraged during review if caught.
+In addition to GRCANFD support, the updates include enhancements for
+compatibility with NOEL-V (RISC-V) systems, such as matching drivers
+using the 'compatible' identifier and adding support for reading clock
+frequency via the common clock framework where available. The series
+also includes improvements like functions for configuring
+nominal bit-timing and optimizations for DMA operations.
 
-This was done on purpose, to (1) avoid having to make too many changes
-to the file when a common helper would be introduced later, and (2) make
-it easy to find all locations where a future common helper could be used.
+This series also updates the driver documentation and bindings.
+The old text binding is converted to YAML, a new vendor prefix
+is added to reflect the updated ownership and an entry for the
+driver is added to the MAINTAINERS file.
 
-The alternative is to use a completely different name (which is thus harder
-to find), and having to fix up all the users of that name too.
+Arun Muthusamy (10):
+  net: can: Convert gaisler,grcan to DT schema
+  MAINTAINERS: Add maintainers for GRCAN CAN network driver
+  can: grcan: Replace bit timing macros with literal values
+  can: grcan: Simplify timing configuration
+  can: grcan: add FD capability detection and nominal bit-timing
+  can: grcan: Refactor GRCAN DMA buffer to use structured memory layout
+  can: grcan: Add CANFD TX support alongside legacy CAN
+  can: grcan: Add CANFD RX support alongside legacy CAN
+  can: grcan: Update echo skb handling to match variable length CANFD
+    frame
+  can: grcan: Advertise CANFD capability
 
-Gr{oetje,eeting}s,
+Daniel Hellstrom (5):
+  can: grcan: Add clock handling
+  can: grcan: optimize DMA by 32-bit accesses
+  can: grcan: set DMA mask for GRCAN and GRCANFD to 32-bit
+  can: grcan: Add saving and restoring of CAN FD baud-rate registers
+  can: grcan: Reserve space between cap and next register to align with
+    address layout
 
-                        Geert
+Ludwig Rydberg (1):
+  dt-bindings: Add vendor prefix for Frontgrade Gaisler AB
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Changes in v5:
+- can: Removed pointer arithmetic from opaque buffers.
+- can: Refactor GRCAN DMA buffer to use structured memory layout.
+- Link to v4: https://lore.kernel.org/all/20260128144921.5458-13-arun.muthusamy@gaisler.com/
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Changes in v4:
+- can: Removed unnecessary saving and restoring of registers.
+- can: Corrected spacing inconsistencies.
+- can: Revised how timing information is logged.
+- can: Eliminated redundant checks for platform data,
+- can: Recalculted the number fo descriptors needed for both CAN and
+    CANFD.
+- can: Eliminated multiple independent queue stop conditions.
+- can: Aligned the order of patches.
+- Link to v3: https://lore.kernel.org/all/20260122121038.7910-1-arun.muthusamy@gaisler.com/
+
+Changes in v3:
+- can: Replaced custom bit shifting with FIELD_PREP and GENMASK.
+- can: Factorized common elements of struct canfd_frame and
+    struct can_frame, excluding DLC assignment.
+- can: Split the patch to separate code refactoring from the
+    introduction of the new feature.
+- can: Remove Unused macros
+- Link to v2: https://lore.kernel.org/all/20251223105604.12675-1-arun.muthusamy@gaisler.com/
+
+Changes in v2:
+- bindings: Updated commit message to explain the removal of freq
+  and systemid in the new binding.
+- can: S-o-b is placed last in commit messages.
+- can: Add values are directly added to the struct can_bittiming_const.
+- can: Replaced custom bit shifting with FIELD_PREP and GENMASK for clarity.
+- can: Drop do_set_bittiming() callback
+- can: Remove forward declarations, unnecessary parentheses, redundant comments
+- can: Adjust line breaks according to new character limits
+- can: Eliminating unnecessary defines
+- can: Enhance code efficiency with memcpy, use standard API to fetch device specific data and
+  error handling.
+- Link to v1: https://lore.kernel.org/all/20251118092115.3455-1-arun.muthusamy@gaisler.com/
+
+ .../bindings/net/can/gaisler,grcan.yaml       |  62 +++
+ .../devicetree/bindings/net/can/grcan.txt     |  28 -
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   8 +
+ drivers/net/can/Kconfig                       |   6 +-
+ drivers/net/can/grcan.c                       | 519 +++++++++++++-----
+ 6 files changed, 448 insertions(+), 177 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/can/grcan.txt
+
+
+base-commit: 4001bda0cc911fcdd3dde36963a17f4eac173d7d
+--
+2.51.0
+
 
