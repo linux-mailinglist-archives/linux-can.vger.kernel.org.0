@@ -1,55 +1,55 @@
-Return-Path: <linux-can+bounces-6563-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6565-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cH2HOgMik2kX1wEAu9opvQ
-	(envelope-from <linux-can+bounces-6563-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:56:19 +0100
+	id wGn4ABsik2kX1wEAu9opvQ
+	(envelope-from <linux-can+bounces-6565-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:56:43 +0100
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 586B514444C
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE69144482
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 14:56:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 778A43046B98
-	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 13:54:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 18F5B304B4ED
+	for <lists+linux-can@lfdr.de>; Mon, 16 Feb 2026 13:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F74A310763;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EEBB312831;
 	Mon, 16 Feb 2026 13:54:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="G4rqTzCE"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="pYRH/vSp"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6196A3112DD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1B8311583;
 	Mon, 16 Feb 2026 13:54:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771250042; cv=none; b=b/QV1fsRgAJd2ompr7QrTYXP2nFdTT/4TMhRR/C+H4rapn3vNImBkXjLcGArAGq7vNlgSwF3XL9fZeS9mx0r4/89gRs7OhPXNP1O7NCwDFErVNT3ETzgPsD90Wv8yXkF03rDizq5PDn90f9jKs2Xq1mq77QFY7EOHRWG/fCnuAA=
+	t=1771250042; cv=none; b=c35ecP4bRoP2/BX0T3BOx9rwENGQNqDobiL6fzX5C80+fJMy7JSPM9pZ21GAfVWmDKzPJe/j+K+Vgijgcti7QjN8bNK720lR1nyGVhpEibjuUn+HSJJD3eTg6J4QAKLadcci6GRG2RNBTFn8xTtwtpc0LBK860q1Q0vshWO6Zxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771250042; c=relaxed/simple;
-	bh=uVrZ0pyVLCvHW7B+h0I/LjU5mAmaJJk1PFxAq/SUBqc=;
+	bh=llM/KzBhmu+L1VSf3YRy2olgNb3GA7BR8+7MG0A3LjY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uo7CxxYmCNgINnQebhEyd5pmC6EGJLLHPznZoohab8+YImYCqAmx8ns4lzZ3m9xyRttdl/0+DotYVHRVaUFJOr83rUciWVJdYtbYw6krr8GUsx3Q4Z7TldGR3FpUIHiN3uirQI3J+kzf2t/QkAXtmLhsKb2FN8odvqmFN1FhOq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=G4rqTzCE reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+	 MIME-Version; b=oerw3ctmWCrVOurKPy38sP6YFivvRmj316alhhK8e1X0udyp+eXDISL1ECPyXflNWCeNHTct8cb89/XhlTBJ4n7dzaeHroXmQPkz/k/dNMlCHTKa9HVEEcjh5Q7XBzs4+K6XnouvaEAF8m6B+qYSkXQGnZD3Gynk2bbDXfob0jY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=pYRH/vSp reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
 Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4fF44Z5t1dz1FbwW;
-	Mon, 16 Feb 2026 14:53:50 +0100 (CET)
+	by smtp.simply.com (Simply.com) with ESMTP id 4fF44b43LCz1Fbwb;
+	Mon, 16 Feb 2026 14:53:51 +0100 (CET)
 Received: from d-5xj5g74.got.gaisler.com.com (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	by smtp.simply.com (Simply.com) with ESMTPA id 4fF44Z2Plhz1FbbB;
+	by smtp.simply.com (Simply.com) with ESMTPA id 4fF44Z5c4yz1FbwS;
 	Mon, 16 Feb 2026 14:53:50 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
-	s=simplycom2; t=1771250030;
-	bh=Xu+Tx4YbRAuYDk68YZmjQXkVSfoxhaU2CbP0o4HeWPA=;
+	s=simplycom2; t=1771250031;
+	bh=jXQcjRcxsrRIpmX3uVmGRrYNnSd0R0YaXJGt3CFoZWY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=G4rqTzCE0divp3RKvveYok7EwCVXwZVtW8GoI7iJVJOBC2r5phPqGyGs0KVCAik5L
-	 fzsuV0hDTxoYVnGI5JQGnYlqGrLZKLN2g0nTPeWqMKS8JdDB5vQvVWJ1peoXaodFMK
-	 geqZn79+qASRalhcbVdnS+gte8SAtBwLdSL6S4N/YRN37HgAoUb6v5djZCSzu8sHmy
-	 r35LubN8L6Z7PSkLXg7Kr36VYtmk3/1XvJKrtxZH9JaStOxSLli06yrUY0zVR04al0
-	 YnJmkxnljDnPwOWUeJA0m26/xaj/UkQwOr5zYSr7QYl3e4S3qx5R5KUxJyJtFXT3Cz
-	 Y6Ray8m8G38+g==
+	b=pYRH/vSptesfA7htlh8anXgejD1p5X2YX2U1xpgucypt1gUq4dgSnAR0LXYL2TCIP
+	 k1wTmj/pTJ0TNUDcp0oZJs38NMg0g+uiMxV/VDW5kc77eNeJcYM4NIU8wRSqHgJwN/
+	 VjcZE5E/Uiheo6JuTJas7+EhcajoWth0F+eVaGSJp7xxtKhp87fVopZdHrkJntz1ZW
+	 SHjPufsHa+dHVPLfIlPao9G2Ch1L/P0QrwcFobHqBcnBZJlIeFU7/UAoZ3d71cubWs
+	 JKLL4EdEdip8en5KL0AY0BQUXLxlV50ocvB0mFAxGMDlZu3CB1s7kSFJRKguLxHfuq
+	 8vtUxDsxBT9eA==
 From: Arun Muthusamy <arun.muthusamy@gaisler.com>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -61,9 +61,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-can@vger.kernel.org,
 	Daniel Hellstrom <daniel@gaisler.com>,
 	Arun Muthusamy <arun.muthusamy@gaisler.com>
-Subject: [PATCH v5 09/16] can: grcan: set DMA mask for GRCAN and GRCANFD to 32-bit
-Date: Mon, 16 Feb 2026 14:53:37 +0100
-Message-ID: <20260216135344.23246-10-arun.muthusamy@gaisler.com>
+Subject: [PATCH v5 10/16] can: grcan: Add saving and restoring of CAN FD baud-rate registers
+Date: Mon, 16 Feb 2026 14:53:38 +0100
+Message-ID: <20260216135344.23246-11-arun.muthusamy@gaisler.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260216135344.23246-1-arun.muthusamy@gaisler.com>
 References: <20260216135344.23246-1-arun.muthusamy@gaisler.com>
@@ -89,7 +89,7 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	R_DKIM_PERMFAIL(0.00)[gaisler.com:s=simplycom2];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6563-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6565-lists,linux-can=lfdr.de];
 	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -101,40 +101,35 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gaisler.com:mid,gaisler.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 586B514444C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,gaisler.com:mid,gaisler.com:email]
+X-Rspamd-Queue-Id: 9EE69144482
 X-Rspamd-Action: no action
 
 From: Daniel Hellstrom <daniel@gaisler.com>
 
-Sets the DMA mask for GRCAN and GRCANFD devices to 32-bit.
-Setting the DMA mask and coherent DMA mask to 32-bit ensures proper
-memory addressing during DMA operations
+While reset the GRCAN baud-rates are preserved, since GRCANFD has the
+baud-rate in different registers we need to add saving of those
+registers too.
 
 Signed-off-by: Daniel Hellstrom <daniel@gaisler.com>
 Signed-off-by: Arun Muthusamy <arun.muthusamy@gaisler.com>
 ---
- drivers/net/can/grcan.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/can/grcan.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
-index 29247e9860c9..13dc4989f067 100644
+index 13dc4989f067..0ceda12335bc 100644
 --- a/drivers/net/can/grcan.c
 +++ b/drivers/net/can/grcan.c
-@@ -1741,6 +1741,13 @@ static int grcan_probe(struct platform_device *ofdev)
- 		goto exit_error;
- 	}
+@@ -525,6 +525,8 @@ static void grcan_reset(struct net_device *dev)
  
-+	/* On 64-bit systems.. GRCAN and GRCANFD can only address 32-bit */
-+	err = dma_set_mask_and_coherent(&ofdev->dev, DMA_BIT_MASK(32));
-+	if (err) {
-+		dev_err_probe(&ofdev->dev, err, "No usable DMA configuration.\n");
-+		goto exit_error;
-+	}
+ 	/* Turn off hardware filtering - regs->rxcode set to 0 by reset */
+ 	grcan_write_reg(&regs->rxmask, 0);
 +
- 	irq = irq_of_parse_and_map(np, GRCAN_IRQIX_IRQ);
- 	if (!irq) {
- 		dev_err(&ofdev->dev, "no irq found\n");
++	priv->hwcap->set_bittiming(dev);
+ }
+ 
+ /* stop device without changing any configurations */
 -- 
 2.51.0
 
