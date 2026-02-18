@@ -1,282 +1,206 @@
-Return-Path: <linux-can+bounces-6581-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6582-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +IUDOLkFlWl5KAIAu9opvQ
-	(envelope-from <linux-can+bounces-6581-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 18 Feb 2026 01:20:09 +0100
+	id KA8UGbiZlWk1SgIAu9opvQ
+	(envelope-from <linux-can+bounces-6582-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 18 Feb 2026 11:51:36 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84932152322
-	for <lists+linux-can@lfdr.de>; Wed, 18 Feb 2026 01:20:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8BA1155A99
+	for <lists+linux-can@lfdr.de>; Wed, 18 Feb 2026 11:51:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C67A1300E5AA
-	for <lists+linux-can@lfdr.de>; Wed, 18 Feb 2026 00:20:08 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8B8D43016D1D
+	for <lists+linux-can@lfdr.de>; Wed, 18 Feb 2026 10:51:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA432356C6;
-	Wed, 18 Feb 2026 00:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256472FF67A;
+	Wed, 18 Feb 2026 10:51:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="c48YLsYh";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="EjYpwg6C"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ImCfVtY0"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CB521A444
-	for <linux-can@vger.kernel.org>; Wed, 18 Feb 2026 00:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34822FF15B
+	for <linux-can@vger.kernel.org>; Wed, 18 Feb 2026 10:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771374006; cv=none; b=Y8uFAjHE6ZjcSGt++G5B0s8Xa7aWBEPE26LNSFO9/VorRFBldkwDDM0Oey2kwEFDj+0/ktAyTd95HNL+V8l8BEFpRk3HFOJZExlsgzpeTXl5n4BlXdnIorTvUnm7Fwwm54KeRnYeyN1fgLpR2VYFUPyMOrOp3freR/bN8d6tlNs=
+	t=1771411892; cv=none; b=khXdVk7rURi0oY5d6V+ekLOq297CxqzDuIUgP389ZLWOC4RE8ZcYgQYND3HFUAfZrnjc1lLFbzI920EDIb/b+SkvFgrovnQcwRYxh3gQ8AESMPxXWBipPB8lgw9UjDfLA/2/gSB/bNzz+25ssD6fxflEqG7JayIGsj0c9bYDDmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771374006; c=relaxed/simple;
-	bh=V6iozCQ95Dv8lEfZnTIZspabKB0b7mdXpPq2u4KB7ps=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KfNyrzTh9zzY+FwElIpuvpUqOtqSB87w8NJR/mCFumWtrxe8LfSmCIE/kogvaSuq46q2GPZ9Ex50Tw5G9ulte0ipzJKwf0iPuZIZt9KbzkQ+F2Y7dCdK1JJZnKGXzzYvclqWI+o3ZRA8PEs3mthuGU01ha1wwxAKZKutln7PU3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=c48YLsYh; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=EjYpwg6C; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61HJcjVM3380011
-	for <linux-can@vger.kernel.org>; Wed, 18 Feb 2026 00:20:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Y9+WLPnbb/gU5vgVspem/ETaRwxExKHepEAhHGJQALc=; b=c48YLsYh5eh4cWWT
-	1IlJGAdxTlgxZecvrVp8uWNzWWmQFl9akkFVqb6nCWLiUr9v+JQBeP1lIuEwEiHz
-	qSLz/FRIbaL1DbpXD/9vl5eVVoty8x3um8siIJ7cmcWwv5Dz1p4M7FoU3mr5gulk
-	MBsRsg1SaJW6EUFxiKt6pPN1QMUDfaIwgI+xFr41x4VLIH7scARaA7ROJTPycmmD
-	wxf2CCGvLOHSC1zICEVcmhkvUjNDQQxMBN7Z7DkrxjvYvUR6Kf2tLQTdjRXNAE96
-	d/go9tZd82KYHdHvRZhgjg0uXLPqqK56+VYc0P0w1G00137ese6iOXrd3A3Y48Uz
-	9W+Jxw==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ccxnygsfg-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-can@vger.kernel.org>; Wed, 18 Feb 2026 00:20:04 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-506afabb8d3so42112481cf.0
-        for <linux-can@vger.kernel.org>; Tue, 17 Feb 2026 16:20:03 -0800 (PST)
+	s=arc-20240116; t=1771411892; c=relaxed/simple;
+	bh=CydTGmiSH8XUrLBmcxjsPqCgbLAhWDUUfkZOVx5TpK0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=dEN1TyihVEEttwtXiN3u0oWus6cSMIk1pQGBNKUa+SHpYF3RizF9DlvZUf06lIbZK70pKUsc21YZUhF7s6kZT4J+80Gx0rCXlTHIs+vlIiYUfDnbjVEu09LyH8pBeVZE1TExwJ7FOazbHGabkmkpyhrbsKJwOY2nOLuEIJBwvGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ImCfVtY0; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-436356740e6so6070518f8f.2
+        for <linux-can@vger.kernel.org>; Wed, 18 Feb 2026 02:51:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1771374003; x=1771978803; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Y9+WLPnbb/gU5vgVspem/ETaRwxExKHepEAhHGJQALc=;
-        b=EjYpwg6CVQYgIv3hLM6zzjaB4LqxuivoZtoZ+TpfQ6biGoWmY11MsV1HZBjpi3VD4R
-         yVytFle0zgFnl24Pj0z5AJOQJNewdJaNewpKGmlg7eIWFq1Eq7KZVDk/YRUqeu/re9wq
-         Dv5mkvkO6AcQwk7DEkwUt7NczMX5Dmd9J0KO0jHQNw/WAxXQN5zbsM2a5cCLzCgvPYv1
-         7UYu+57U5zquKCNy9dnNv7L4eiZu2UmO/W/F/AhmEQZqjXbd6dp+GbezEPlWOB47jZ8L
-         +1BDnOLhsT3I4WcY/eW/lKCuNxBXvkzGPN08b1EX57vMH4/TCLCbsZyWRT7Pj0CJg8x8
-         6WJw==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1771411888; x=1772016688; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qVYKcEiiNIQD9l4I4W+E1mrWwoLh1UDUICRzH/s0zMU=;
+        b=ImCfVtY0yvKn285A9w+nd2MmGwemn6UeDgsQlEePaXFULaCq8Pv6LQ8vcCHlWQ28Ba
+         sewKvgB3xZ4Q4htb1IMsMSv52TviHb6FPfGEAeSo5mNQtUPjiB782SYSs1ljwIpgUuB8
+         w03T2KtYRjcNBvqI+tqVimTtelAeyOFRDo/9PZcWBlmxcBpiQOCKfv6Jj0mGqHVz6XTN
+         jzdKsQmBXyP4zHV70O2clyxdb5iqHmooFgrlL22BuHxvcMDV7S7diPQF+kKOeK91MXTv
+         Yks3ideseFfq5j0ajPc15v/fXPo2GDP7SsWfXrztVgs/vh0yHbSs8bShGQ5xyVga5Byp
+         w9MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771374003; x=1771978803;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y9+WLPnbb/gU5vgVspem/ETaRwxExKHepEAhHGJQALc=;
-        b=FGcumvSZoMi7ke/SlghvrkQ0Wb6EKtNDprcVtVZHH2ODALAj5wdW0eB5R+xmyxmFNS
-         9aFlIoMO7N68QOq/dU9wWNPP8nc4WLRJkL/+KITPy+gLiytK+zSt+TtBiKuyEhgAIrsj
-         lJsonTtOgb8wK7MP21rVjggY2g+KKZrpdmOEv2JuYwVAgGvlIJiaDk84cqMAUe8DGAWB
-         c8OrORY3TxNHlc2I/BbJ2SQhbTLn/5ZwaFggac9T3zlcBjAlsEO1rA0klNVUCRZx1xJD
-         V5VHKb8CqIaFbwEcN1Kl0rnmBj/B6DZV/imWeH1KOybKVgZM45QK+ssqYl2etL27vRkb
-         3gJA==
-X-Forwarded-Encrypted: i=1; AJvYcCXxZB1xRy71aeL7BQs7E6NLiSLZetO3Q7uhHh5XqHfnc1TN482OXgUasXTwaE8I3dqPMxn+1TQrm3k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwvWJHSi7rbKgq/hNRGopZBsEFNx6XU+C5jmRmPM+nVUGI9Jp+
-	JMezT4gRxSpSoOrzhaO5Bshm+QrgbtUdCKekZR/LTr3WEEtuGGbZcBQcrlrKLRYIOj2DksFxVHg
-	byG4KxavGKwIyz4o7MOWHLNCGrxLesbEfVn35GFrbhZCSTQnVKfN0bzYhzGY2o40=
-X-Gm-Gg: AZuq6aIjRMavEoyLPsGlKlCshuqKCO4e8Q6KseAif5BlPcFWDh1279ykkMazfaA6TYk
-	b8Iz80az2bJLHJFYAgWer0HShZRrjoegHnT3kID7O60dtHCkyfWuMKblo5PMmjrlCN/Pzr3g970
-	ocMJFhWmUinr7HW+ClWo5okWJtxGJzLEIgfmQ7cp5WJQs3gXR9mpBSoeOfRDuWiRzfTUgZbkZMh
-	0/dJBeccuNaYazuNb5ysm4GFrJZbAoRI/t/Dl8THhHUbiS/OzlrDgEb6rkeRpDTz2YNHfbR6ZYk
-	Oda5Fll5oxvaCiUiJCrIorxMol7kVy918G/Q38dVfb1oPL2tpkqeGS/uzUrOe08W4xrUuJrBMGl
-	x4c/uA9R+7zbEaq0dKJfKvO/2I6D6RA0reZbv/b9JqfRRkA/hpav20enEkeCO6Uq82+3PQBwGps
-	PelwnPYqHj7rFwcCvg25a8Vk/7rsxreWQryPg=
-X-Received: by 2002:a05:620a:2848:b0:8bb:7886:7e1f with SMTP id af79cd13be357-8cb741b65b2mr27020185a.36.1771374002980;
-        Tue, 17 Feb 2026 16:20:02 -0800 (PST)
-X-Received: by 2002:a05:620a:2848:b0:8bb:7886:7e1f with SMTP id af79cd13be357-8cb741b65b2mr27017985a.36.1771374002476;
-        Tue, 17 Feb 2026 16:20:02 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3870692b7b8sm37129591fa.44.2026.02.17.16.19.58
+        d=1e100.net; s=20230601; t=1771411888; x=1772016688;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qVYKcEiiNIQD9l4I4W+E1mrWwoLh1UDUICRzH/s0zMU=;
+        b=ME/ZODLT1dlTmqX0EbdfjbM9+tmG24O0bJACna5iqZiPrYsvbtWXvYliNwZ2/Jphb3
+         7H82hnBsrln7ZsndffeGilOHgiFQHXgcH5Se2pPPWcXdPYs//GrC9K3sXbdX3qv/SHkI
+         j2AJnJiFMnPe86KAu1NZq18NDVf4nR4QIpd37C8jxleTWOiiJsChViUmAE+KgVgme/6C
+         XNSkj/fcIdeD6MdDV2wxkyO0iYR70/NWes0zKRZlODRvQn7IpKMeQrMre+slk6aEnNBI
+         JthWpkBfLkK+uTbC/AGBTmGG8zCh3XipQcyf8TSh7RI3/xds4TGRvwLgBnSE59+QV1X/
+         D/Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCUpgb8YuBTeYTz2kZgfGhfKns21itfT/uy+3Lh8ud24r02FaAMHHYz/ImmXAWeeEHs4GZYFDeNH+BI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1DutAT5GZtUqvw89jmT6iOtDMwQn8r9C+Pargiy2vOEIxEgKc
+	fCGEWFT+0RJkGlEG5DtX44My7jyaWmaZX5cTHV46gsBiP+n7+vobvBI3J6fmRw+WNOE=
+X-Gm-Gg: AZuq6aJKsvXGBxzPSInxF9tfLqRct8Ys7cHhAULdqSnJoMj4eb9mQ/RDh/Osr5y0Ej6
+	ZorBhkFtbQbm3QtbV62xOCJb4g5qtBUyn4PifjqKeLXAFpaJ74yRGwe92ZUgRqoFmYPUmvNqeJU
+	gcIXxAbQumxok4ujH0hDKxu4qRn5OD7ATTJOc+rag5chzzWKRMCdWS52RuNfjf5ICfeQvwAUJiW
+	CwFAVyfPh5oYdjZxVhZit53aiAa0qxKWbyM+gZtlgexAtTpkdBGjEw8BCxOvVoNtaXgiIxRL80D
+	09pFffuABsuV2eoQhKKD+hPFUtT0TAOixXVyXurHNWQEB8mrc40ueIUnpW2CKNup0E9esMCHEiH
+	EJQVOhvIYGIfBY/9nF/nBvayqYJIdicq31/0lOyvuFnnEyg2HKuI9T9iZ/5zHwas+FyxII4W1tN
+	cqq0vk18oBLpY0708=
+X-Received: by 2002:a05:6000:1844:b0:434:32cc:6c86 with SMTP id ffacd0b85a97d-4379db61567mr23289999f8f.14.1771411888157;
+        Wed, 18 Feb 2026 02:51:28 -0800 (PST)
+Received: from localhost ([195.52.25.213])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796abc85csm40700127f8f.22.2026.02.18.02.51.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Feb 2026 16:20:00 -0800 (PST)
-Date: Wed, 18 Feb 2026 02:19:57 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>, mkl@pengutronix.de,
-        mani@kernel.org, thomas.kopp@microchip.com, mailhol@kernel.org,
-        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-        andersson@kernel.org, konradybcio@kernel.org,
-        linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        mukesh.savaliya@oss.qualcomm.com, anup.kulkarni@oss.qualcomm.com
-Subject: Re: [PATCH v1 2/2] arm64: dts: qcom: qcs6490-rb3gen2: Enable CAN bus
- controller
-Message-ID: <73nfsa3r3isf2shizemroctjpleya4wnnel634g7b5qyvvmze5@vre6wrdxxpet>
-References: <20260108125200.2803112-1-viken.dadhaniya@oss.qualcomm.com>
- <20260108125200.2803112-3-viken.dadhaniya@oss.qualcomm.com>
- <n6affntgff5wy4xmm255v5h2ejpepicpz2cybcuvsxmry5td6u@jucskv7zrzvv>
- <5cdfe5a5-3c78-45a2-886c-768b224ad776@oss.qualcomm.com>
- <wbx2qrkhpsntggzqkzkpi4sa6qv3buhkjbwmjoa7zgw2oc4b7u@qugyhcxb6qrh>
- <316fa702-6cd8-4842-aecf-c176a5a53e2e@oss.qualcomm.com>
- <qvuokwiqllm6zmlzj3pfvziylrr5krjya5rnf3ojeycdoutlro@fl5qukh4vorm>
- <5486697e-d02e-4b12-9a60-99d0de343515@oss.qualcomm.com>
- <2ho25tzct6t7gsuyufyg7m4a2ikmblhukb4uddwc7p35wd6yne@heippz3lh4kj>
- <465ab63f-3d0c-46f7-a08e-cdc5fc26b600@oss.qualcomm.com>
+        Wed, 18 Feb 2026 02:51:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <465ab63f-3d0c-46f7-a08e-cdc5fc26b600@oss.qualcomm.com>
-X-Proofpoint-ORIG-GUID: v6_lrfV-0Pb4cPK7BnxZ821g9l0OSYc9
-X-Authority-Analysis: v=2.4 cv=Do5bOW/+ c=1 sm=1 tr=0 ts=699505b4 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=zTQ9wGJK2aSo1zV0PnYA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-GUID: v6_lrfV-0Pb4cPK7BnxZ821g9l0OSYc9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE4MDAwMCBTYWx0ZWRfX5/4GJPz6rqFU
- h0iLmXnk5titUpsfamKxt8RR1/aBd53et6OWD5ExHHeN30uY79X9NV99y+27c0579Yn5osnRPID
- ct6M2zHB3cwEYBBuLXv0n7BxCoQKJSQ8TQ9HqstVcSJ70C9QZgdbg/SvEp013NkUZO71VBfYBET
- 86J1lwYTx3rY6ht4PDVBt4uRqvgeys2mBisTAUsapF1iWgpP/jxCPWeJjFJM3L8Jta82qsNYQni
- ZjeXCyCzbSEg/u6cBxpLzc/7LXk/UK4NoXN6rGJvL46ENp31xX5i/Hcq0UcZSq4FGpn29vzDhvz
- 6tA+ryP9XKtcsIZB9SGVtuXyBhhtUjaHI+8bWbnCiXCyUNtwAMg3N1GXmiNN7eabHbYIUTdxeyt
- bx9fu7KDbqZ63BXX0BvNTxCzdnGoDUzsVSv8pCdTxESZYyFE8hRF+Urna0AgIEp34xkwCo6eQGy
- c4GiODEgKKOzB8wf6Cw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-17_04,2026-02-16_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 impostorscore=0 phishscore=0 bulkscore=0 clxscore=1015
- priorityscore=1501 adultscore=0 malwarescore=0 suspectscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602180000
+Mime-Version: 1.0
+Content-Type: multipart/signed;
+ boundary=ab1547405f0fc9e8a57e2e08b4d29286d8d006d625bb9f2c77f8ee810dfc;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Wed, 18 Feb 2026 11:51:15 +0100
+Message-Id: <DGI13PI02XEN.3MNAWATF73XVL@baylibre.com>
+To: "Kendall Willis" <k-willis@ti.com>, "Markus Schneider-Pargmann"
+ <msp@baylibre.com>, "Marc Kleine-Budde" <mkl@pengutronix.de>, "Vincent
+ Mailhol" <mailhol@kernel.org>
+Cc: <sebin.francis@ti.com>, <d-gole@ti.com>, <vishalm@ti.com>,
+ <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] can: m_can: set out-of-band wakeup if wakeup pinctrl
+ exists
+From: "Markus Schneider-Pargmann" <msp@baylibre.com>
+X-Mailer: aerc 0.21.0-119-g0a449d4a7ff3
+References: <20260213-mcan-out-of-band-v1-1-af68d4c570b3@ti.com>
+In-Reply-To: <20260213-mcan-out-of-band-v1-1-af68d4c570b3@ti.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-3.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-6582-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6581-lists,linux-can=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,oss.qualcomm.com:dkim];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-can@vger.kernel.org];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	TAGGED_RCPT(0.00)[linux-can,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DMARC_NA(0.00)[baylibre.com];
+	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 84932152322
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[msp@baylibre.com,linux-can@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,ti.com:email,baylibre.com:mid]
+X-Rspamd-Queue-Id: C8BA1155A99
 X-Rspamd-Action: no action
 
-On Tue, Feb 17, 2026 at 12:15:12PM +0100, Konrad Dybcio wrote:
-> On 2/4/26 2:09 AM, Dmitry Baryshkov wrote:
-> > On Tue, Feb 03, 2026 at 05:07:11PM +0530, Viken Dadhaniya wrote:
-> >>
-> >>
-> >> On 1/19/2026 11:59 AM, Dmitry Baryshkov wrote:
-> >>> On Mon, Jan 19, 2026 at 10:21:37AM +0530, Viken Dadhaniya wrote:
-> >>>>
-> >>>>
-> >>>> On 1/9/2026 7:35 PM, Dmitry Baryshkov wrote:
-> >>>>> On Fri, Jan 09, 2026 at 06:23:39PM +0530, Viken Dadhaniya wrote:
-> >>>>>>
-> >>>>>>
-> >>>>>> On 1/8/2026 7:33 PM, Dmitry Baryshkov wrote:
-> >>>>>>> On Thu, Jan 08, 2026 at 06:22:00PM +0530, Viken Dadhaniya wrote:
-> >>>>>>>> Enable the MCP2518FD CAN controller on the QCS6490 RB3 Gen2 platform.
-> >>>>>>>> The controller is connected via SPI3 and uses a 40 MHz oscillator.
-> >>>>>>>> A GPIO hog for GPIO0 is included to configure the CAN transceiver in
-> >>>>>>>> Normal mode during boot.
-> >>>>>>>
-> >>>>>>> The main question is: what is so different between RB3 Gen2 and previous
-> >>>>>>> RB boards which also incorporated this CAN controller? Are there any
-> >>>>>>> board differences or is it that nobody tested the CAN beforehand?
-> >>>>>>>
-> >>>>>>
-> >>>>>> The behavior is consistent across platforms, but I do not have details on
-> >>>>>> how other platforms were tested.
-> >>>>>>
-> >>>>>> On the RB3Gen2 board, communication with the PCAN interface requires the
-> >>>>>> CAN transceiver to be in normal mode. Since the GPIO-controller support
-> >>>>>> was recently integrated into the driver, I configured the transceiver using a
-> >>>>>> GPIO hog property. Without this configuration, the transceiver is not set
-> >>>>>> to normal mode, and CAN communication does not work.
-> >>>>>
-> >>>>> How do we verify the mode on a running system? I have the boards, but I
-> >>>>> don't have anything connected to them over the CAN bus.
-> >>>>>
-> >>>>> BTW: can you recommend any simple setup to actually test the CAN bus on
-> >>>>> those devices?
-> >>>>>
-> >>>>
-> >>>> I tested the CAN controller using the following commands:
-> >>>>
-> >>>> 1. Loopback Mode Testing (GPIO hog not required)
-> >>>>
-> >>>> ip link set can0 down
-> >>>> ip link set can0 type can bitrate 500000 loopback on
-> >>>> ip link set can0 up
-> >>>> cansend can0 12345678#1122334455667788_B
-> >>>> candump can0
-> >>>>
-> >>>> 2. Testing with External CAN FD Adapter (PCAN-USB FD)
-> >>>
-> >>> Thanks! It's price doesn't make it esily available, but it answers the
-> >>> most imporant question: by the USB CAN adapter.
-> >>>
-> >>> Did you add
-> >>>
-> >>>> A GPIO hog was required to configure the transceiver in normal mode.
-> >>>
-> >>> I'd phrase it differently: to pull the transceiver out of standby mode.
-> >>> By using the GPIO pin you make it always stay in the normal mode. It is
-> >>> fine, but it is not optimal. Instead a proper solution would be to use
-> >>> the MCP251XFD_REG_IOCON_XSTBYEN bit. Could you please instead implement
-> >>> support for setting that bit, based on the DT property.
-> >>
-> >> Thanks for the suggestion.
-> >>
-> >> I tested enabling IOCON.XSTBYEN, but on this hardware it doesn’t bring
-> >> the transceiver out of standby by itself. With only XSTBYEN set, the bus
-> >> remains inactive and no frames reach the CAN adapter. Clearing LAT0
-> >> (driving GPIO0 low) is required to put the transceiver into normal mode;
-> >> data transfer works only after LAT0 is cleared.
-> > 
-> > Why? It should be doing exactly what is required. Could you please check
-> > the voltage on the pin with the XSTBYEN bit set?
-> 
-> If I'm interpreting the datasheet correctly, XSTBYEN only muxes the pin
-> into its function and does *not* actually impact the operating mode,
-> which would match what Viken is observing
+--ab1547405f0fc9e8a57e2e08b4d29286d8d006d625bb9f2c77f8ee810dfc
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-See the "Family Reference Manual":
+Hi Kendall,
 
-Setting the XSTBYEN bit configures the INT0/GPIO0/XSTBY pin to
-automatically control the standby pin of an external CAN transceiver.
-The pin is driven high when the MCP25XXFD enters Sleep mode and driven
-low when it exits Sleep mode. Standby pin control is not available in
-LPM.  IOCON is reset in LPM and GPIO0 will be configured as an input.
+On Fri Feb 13, 2026 at 7:08 PM CET, Kendall Willis wrote:
+> In TI AM62X, AM62A, and AM62P SoCs, the m_can pins can act as a wakeup
+> source in the deepest low power states. However, the m_can pins are a par=
+t
+> of the MCU domain which is OFF in deeper low power states. Since the m_ca=
+n
+> pins continue to be ON even if the MCU domain is turned off, set
+> out-of-band wakeup for CAN device if `wakeup` pinctrl state exists and
+> device may wakeup.
 
-> 
-> Konrad
+Thank you for your patch.
 
--- 
-With best wishes
-Dmitry
+>
+> Signed-off-by: Kendall Willis <k-willis@ti.com>
+> ---
+> Tested on CAN IO wakeup from DeepSleep low power mode on AM62P EVM.
+> ---
+>  drivers/net/can/m_can/m_can.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.=
+c
+> index eb856547ae7df27a844b236a0c1d4498cbb8b60f..8b277f5e208ffa634439b9ea8=
+495ed56f12cfccb 100644
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -2622,7 +2622,9 @@ int m_can_class_suspend(struct device *dev)
+>  		cdev->can.state =3D CAN_STATE_SLEEPING;
+>  	}
+> =20
+> -	if (!m_can_class_wakeup_pinctrl_enabled(cdev))
+> +	if (m_can_class_wakeup_pinctrl_enabled(cdev))
+> +		device_set_out_band_wakeup(dev);
+
+This will set out of band wakeup for every m_can that has a
+wakeup-pinctrl set. am62* is currently probably the only platform that
+uses the wakeup pinctrl setting but that may change at some point in the
+future. Can we narrow down setting the out of band wakeup to the
+platforms that support it?
+
+One idea could be to parse the supported system-idle-states from the
+list of wakeup-sources and see if deep states are supported that would
+require m_can to be off, e.g. mem-deep, off-wake. I think that would be
+a clear indicator that out of band wakeups are supported.
+
+For the list of state names you can have a look in the dtschema
+repository:
+  https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/sy=
+stem-idle-states.yaml
+
+What do you think?
+
+Best
+Markus
+
+--ab1547405f0fc9e8a57e2e08b4d29286d8d006d625bb9f2c77f8ee810dfc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaZWZpBsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMSwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlMH
+MAD/X+MceNaurc00f99Z7t+gTwagT/YGrv3upF62Ma0LPggA/iN4IA/KZyvjyPn6
+DthQJy5ZgCI3v1YX2jM40faUjCAD
+=y7Ft
+-----END PGP SIGNATURE-----
+
+--ab1547405f0fc9e8a57e2e08b4d29286d8d006d625bb9f2c77f8ee810dfc--
 
