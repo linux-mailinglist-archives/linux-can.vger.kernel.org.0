@@ -1,180 +1,240 @@
-Return-Path: <linux-can+bounces-6647-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6648-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +Bh+KiRXoGkNigQAu9opvQ
-	(envelope-from <linux-can+bounces-6647-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 26 Feb 2026 15:22:28 +0100
+	id cD8WFw2MoGkNkwQAu9opvQ
+	(envelope-from <linux-can+bounces-6648-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 26 Feb 2026 19:08:13 +0100
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 110031A76E1
-	for <lists+linux-can@lfdr.de>; Thu, 26 Feb 2026 15:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AFAA21AD456
+	for <lists+linux-can@lfdr.de>; Thu, 26 Feb 2026 19:08:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F3D4231C0D6B
-	for <lists+linux-can@lfdr.de>; Thu, 26 Feb 2026 14:12:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CF71A3533567
+	for <lists+linux-can@lfdr.de>; Thu, 26 Feb 2026 16:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 248A6361677;
-	Thu, 26 Feb 2026 14:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DB34449EB4;
+	Thu, 26 Feb 2026 16:39:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IZkrkJtf";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="k1Qp1yBq"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bwcGROu8"
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D75B13A1A27
-	for <linux-can@vger.kernel.org>; Thu, 26 Feb 2026 14:12:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C5A428824
+	for <linux-can@vger.kernel.org>; Thu, 26 Feb 2026 16:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772115122; cv=none; b=oGoGb1MgcpHkl9ROqz7EagiHlGKJZPt406JRsL32f2OBvBiT6B17E4C/q8XOcOPTjRyJbPKAmgn7uQ0Q2s1tAkxNVsTHxWU+0N601TrgVXwjXMbIvjk+97IINuZML28dE9MXva3mqii3wNEDXLXCzrJeMeoIoSmJf4icTH0/Y6w=
+	t=1772123965; cv=none; b=Bre/XZlilymQh4HIF3uX9OtkpR6ZeUHkMuoZWOeS2x8BM1wn9Yyt0PPB8duSgZJI04XgnLaRrKaQYI/oT676KObZ9wtqM9y7HhHrDEgbPls9dWoolnnwP2VO7eE4vlOZ2f+f1z14IZ+1rxnZuCwhDnb+1KYhaWj9Xvw/h2L/HvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772115122; c=relaxed/simple;
-	bh=Zdzhg1VvkirEy/QlmDB+qd7VezDSX0wFVid7IBJpags=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MG8Z3xXwx2xM5cnHjB601x5BRLfEJHKODU8+C88ykiKSXTYrnr2luDbrUmNqnDpOKh0PdAuaFiqb90lKLatS+3POOkeJQYLCiHHC9xUiBIVt/pNVCw5kjcLT7rb//Www0rKupVor9kZjfC4oV9FLk7oteYKRxr1mWInXMdE4lxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IZkrkJtf; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=k1Qp1yBq; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772115119;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eOpbM9M15EuxWd+IWwH8daRCpwecjuZ8you3Hh2pT5s=;
-	b=IZkrkJtfMjXar6/lo/Wbeu8FwoJHOZqhl9Unz7Dpo/yD7bcR6ztgjo/x4GvHwwiRqwPqOi
-	lm5RU2so7EPJeVAjdTQSax7S0ezD14Dm1kGkcvHgFPXafDKVJtBoJF0ngTVbjibnnW/m80
-	nO0YazlNy46vTtFZxo6Eu6LSPVP0pYY=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-324-lbfD0eGeO96QequmnYyMpw-1; Thu, 26 Feb 2026 09:11:58 -0500
-X-MC-Unique: lbfD0eGeO96QequmnYyMpw-1
-X-Mimecast-MFC-AGG-ID: lbfD0eGeO96QequmnYyMpw_1772115117
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-b936b6b4473so10044566b.0
-        for <linux-can@vger.kernel.org>; Thu, 26 Feb 2026 06:11:58 -0800 (PST)
+	s=arc-20240116; t=1772123965; c=relaxed/simple;
+	bh=RGWiSz0OZmp56vuOsH1lOEqi0n+JuVLSekK0RKtPb+k=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=mTWcnLoj5KQfqPDvlbKcZOBjM5g5IPVZ9RR8M+l9tjb+Lgww1jfOliGEdYvDCq27XfrwcMA+e7tytruC0EGddzNUQnoAMSMSKbybZzpZj+B9ufIgxZbNpspmdsC97Cr2bYru0q3imqUuIEX0krl4Dk4tP0xu50u+ecebxd1Q7EE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bwcGROu8; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-436e87589e8so1054867f8f.3
+        for <linux-can@vger.kernel.org>; Thu, 26 Feb 2026 08:39:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1772115117; x=1772719917; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eOpbM9M15EuxWd+IWwH8daRCpwecjuZ8you3Hh2pT5s=;
-        b=k1Qp1yBqIuEP5fPslOD629AHx2CsaNs8C3XOaXJqPVQH6Nq8Hmnh6rXPO+M2Z2oTPM
-         f8VLdFDpOZLssWvKP5afd3ZV/E4WJ75a/p427fSfNe+1f0VpKUB7fDuYZXbQBQonxqZa
-         A5lgjhrJy5X5G2lqo8GyN05MK1z9dgMWradsj1SxZwol0ucvWaRgy965ohc6SHfH7955
-         6I49YkBITrwDSmxcQHBOzgfMzoDCxlwpdOve69Kjs1BUv/JUQM3JhQKaWxWdhneVf+jX
-         LdIkJNKsDLL61Eb9pRoYLHW3+YXW6/f9s0eln9lekBscflEUJq5WGpqHVDbLhZtMOa0f
-         o4BQ==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1772123961; x=1772728761; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=T5B6phFCzYt+HE2CB08nF7/uTT/Fn+s/IX1ktent940=;
+        b=bwcGROu8ySlq6V8VV5fUlZS2BAQO4EwVTN7MGR+EKIKA9rPR39Oa7nYhkrBFMhO/zs
+         zeq5RZVMM7AVUr6fajkAMfZ164aRieMyR9GpGnoX+1jw5weALsVNKGDXhUVI0aqCENCS
+         j42ZUEB1hVcluGyz+IchK4YEYq74c8bhKcqRrfSLYX76spjJeKUV60u3vHDl2taIffx0
+         ZnKfggnJFxP9iStsykERxVo71pvjbZvYtm3qSMyirzSDMoLxE6WZ30izQSUwkUGTYVQ0
+         OaYFJvuDOPRAtRY+RRY95dGY/gIh8vT95t53ud0azuXxtqWOgrF7GBphP2HT+D0n+0XA
+         2p4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772115117; x=1772719917;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eOpbM9M15EuxWd+IWwH8daRCpwecjuZ8you3Hh2pT5s=;
-        b=k9CQKfZRVSRlHb5fCQXkgKdQTmAI5r/GALDQ6Zf6tF7nrx9TsnOLNrw/jFhpZYSExs
-         IWcYp4TAlN0u3uXy47BTh953Ri0yOZkc+ynI/oqUPa6L2QEb9c7RbxFy/fdS+oL8nAGP
-         oZYizdv1nJS6gHPxhiO6tmJy37OOBV6sAOaeP5hzwU9qQQOqCLljuhjBkI8cH/k3SVan
-         MNYxLLsGDNCScYcX9FpAjxq7kAU+Q/PHJbzJhqC/L3ulFGxdThRg+5Pa7uppYmmqmhYu
-         Qx4ynTScY3H2J3hYhXNwIR8YmezFwQiZe8q9FKG/CjArZr2rSlOXZVQQs9rLF09BgxnI
-         05WA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+oFM/bQ2PL43sCioQFu+CzABETT5NB91hjSZ6Pq603JcXwfDJIHdJIW2BA8gvoN91m7p6LvvZmiw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyqq//iVnt2XpPgByJZQfvTsXC/h7OxEM3rGouUiH4OxY81NbIr
-	tVf1kNnZFDL6bz/xW6bT19Mevd7s5k8haB9HXYzJSbGNmhpO0RDvlXFHPDfdQZ8nbwU4NY6x7mh
-	O8NXZkzKMqs5FL1iL+IG1y376tu/Aaroy7Dbe9o9R2PYUvdf9f0wnmRXjrS+vkA==
-X-Gm-Gg: ATEYQzzCmV4Psh9irr4zKgS0q04Ny0HiH7yTbB/ujq+J+1usCSUHUhSS4lnuzfLg8m2
-	g7P6+2nlJJ2Ux4NUw2SBaL3zw/dxMgda0ldmllk8EmfZngW1Zu7YJJUy+JrvEuDd2t0lAkDfGTe
-	GfZR9b/I456lUfvzpXqYL2FJKG3+zZHqeJUxvtG5fSyXGR5JDVzBgclbFqSHofFMrxuI4FpJuZn
-	oHPOUVY/ltLV7IStQSRgtNOCubkPhzy1cX+hxpXWrSYGOOU3SxBdRvFVd5jCur69yRu+0wmciWs
-	K8Zj8IjItI0I7rtT+5SUarO3r3VrW2bsQUoKOV/Oa4XRSlzYvEs0Sps20n5umtxiGD8LMPeZKkT
-	9D40T7ty8NdNbqRWmRDhDr1wErThzcQIBI+gABgFPVZZwzQ==
-X-Received: by 2002:a17:907:7fac:b0:b8f:a85c:95c5 with SMTP id a640c23a62f3a-b9356754254mr185007366b.37.1772115116988;
-        Thu, 26 Feb 2026 06:11:56 -0800 (PST)
-X-Received: by 2002:a17:907:7fac:b0:b8f:a85c:95c5 with SMTP id a640c23a62f3a-b9356754254mr185004466b.37.1772115116395;
-        Thu, 26 Feb 2026 06:11:56 -0800 (PST)
-Received: from redhat.com (IGLD-80-230-79-166.inter.net.il. [80.230.79.166])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935ab137a1sm63798266b.2.2026.02.26.06.11.53
+        d=1e100.net; s=20230601; t=1772123961; x=1772728761;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T5B6phFCzYt+HE2CB08nF7/uTT/Fn+s/IX1ktent940=;
+        b=r/Yo7nLVbdAPFlu9RIoEN0sGBJC2VEXDplqRbXaj6cuMfkwZ0/0tGbCn160Ti33+Hc
+         1RIyY0UXbz0FSLfUX+fzwy3hC1lBX1Xfxd/vCyGzcViDrLT+CDVD6pBK5k1JCrr//u9T
+         76m338qcYmh9knzhdcNrJju3IxOzcZwTFhsqN+2JDGt0N4THrYi1RZ+zb+evESKOknBW
+         zSFhgi7EqvU7I/9Q/ysjBuofkakr8H2KNek3NKlMZMJ0NEKp3k5ikvxNvACmVhi45SgY
+         KSy3x44GKMMDx8dfwWpPbrBOsqc+808HO+sRuE45u5YrLXCtXgl5BKhKD7wbZXPKAFB/
+         KeEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXKCJ/crtE3yHF2snAUHH7eTCkH00pyZwnFYhaR40NjEHcAMRNJd9WO+MjsK5PXv/VPxd7yA1i61HM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yygb+Q2g4N3eV3XPMiTWXt1rLPVU0mws1qtIJs3suwE+F5W5rQV
+	1zNXtdtGfU2/f+ul5NpiGxNgHfrw1ntX7LB3pmXY5xQJVkDPHj3RlM2kyy9sgq0Jm+E=
+X-Gm-Gg: ATEYQzw/vPM5uGu4IOxURlNWl3i0JNnMBy7Ok3yya77nGq0sVQAZ5WwNQdvRMHq3AiL
+	gcH0ydUmFM2sIM8HhsOgr1XLaPo8wfyABZelXmqI+zFIyRpMYndmVhIvXF0CnhTPbhZ/1u2kyfa
+	Jp2yL/GQmrbbjaFBIC9/dvVmxmfztdaQaPqDjj50bZwBmpEqF4l6LvH4wB/G/G5ctQGI8AMX1vC
+	9KtBa5J6ERoPOy0AWpBT20lHz2TWKc3ou/jNXzfX9yLdF50FzDhu9dmVYHkCLcUrWxd4BK3LHUO
+	RXTFWSJ6rehmlAeO28sCinTq0Hidx4Dk2hRiTEbmxr27tNIKy5vXi3RZ/9d8+vYbwtEF1UANE+y
+	pRNArrE0qdMoIkimgb6tILPQmPServyoqqxRan6svJr+y1TWCds3siQ4oUOLlPByrPNt7dBCh7y
+	095q9sT7PiqiYczgVxdkiy1I5fPg==
+X-Received: by 2002:a05:600c:37cc:b0:47e:e20e:bbbe with SMTP id 5b1f17b1804b1-483a95e9b65mr334329625e9.25.1772123961331;
+        Thu, 26 Feb 2026 08:39:21 -0800 (PST)
+Received: from localhost ([195.52.25.213])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483c3b770c2sm51360545e9.10.2026.02.26.08.39.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 06:11:55 -0800 (PST)
-Date: Thu, 26 Feb 2026 09:11:51 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Harald Mommer <harald.mommer@oss.qualcomm.com>
-Cc: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, linux-can@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>, francesco@valla.it
-Subject: Re: [PATCH v10] can: virtio: Add virtio CAN driver
-Message-ID: <20260226090956-mutt-send-email-mst@kernel.org>
-References: <aZRB7Reu/D6HvRcb@fedora>
- <76036b0d-fe61-4d19-a209-65e1a790c107@oss.qualcomm.com>
+        Thu, 26 Feb 2026 08:39:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76036b0d-fe61-4d19-a209-65e1a790c107@oss.qualcomm.com>
+Mime-Version: 1.0
+Content-Type: multipart/signed;
+ boundary=e79d1022041faa676f36278d4e8685f754cef59bbd011f58fe85541a5fd0;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Thu, 26 Feb 2026 17:39:10 +0100
+Message-Id: <DGP1IG1JH4NE.17BPCN6IDT2OR@baylibre.com>
+From: "Markus Schneider-Pargmann" <msp@baylibre.com>
+To: "Kendall Willis" <k-willis@ti.com>, "Markus Schneider-Pargmann"
+ <msp@baylibre.com>, "Marc Kleine-Budde" <mkl@pengutronix.de>, "Vincent
+ Mailhol" <mailhol@kernel.org>
+Cc: <sebin.francis@ti.com>, <d-gole@ti.com>, <vishalm@ti.com>,
+ <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] can: m_can: set out-of-band wakeup if wakeup pinctrl
+ exists
+X-Mailer: aerc 0.21.0
+References: <20260213-mcan-out-of-band-v1-1-af68d4c570b3@ti.com>
+ <DGI13PI02XEN.3MNAWATF73XVL@baylibre.com>
+ <b330487e-0564-47b8-95a3-c6c207964056@ti.com>
+In-Reply-To: <b330487e-0564-47b8-95a3-c6c207964056@ti.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-3.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	MV_CASE(0.50)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6647-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6648-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	MIME_TRACE(0.00)[0:+];
+	DMARC_NA(0.00)[baylibre.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mst@redhat.com,linux-can@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-can];
-	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 110031A76E1
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[msp@baylibre.com,linux-can@vger.kernel.org];
+	NEURAL_HAM(-0.00)[-0.997];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ti.com:email,baylibre.com:mid,baylibre-com.20230601.gappssmtp.com:dkim]
+X-Rspamd-Queue-Id: AFAA21AD456
 X-Rspamd-Action: no action
 
-On Thu, Feb 26, 2026 at 03:08:28PM +0100, Harald Mommer wrote:
-> Hello Matias,
-> 
-> On 2/17/26 11:24, Matias Ezequiel Vara Larsen wrote:
-> 
-> > +static int virtio_can_probe(struct virtio_device *vdev)
-> > +{
-> ...
-> > +	priv->rpkt = devm_kzalloc(&vdev->dev, priv->rpkt_len *
-> > +						priv->vqs[VIRTIO_CAN_QUEUE_RX]->num_free,
-> > +						GFP_KERNEL);
-> ...
-> We're here clearly beyond column 80 with something which is not a string or a comment. Elsewhere we are also sometimes beyond column 80 but then only 1 or 2 characters which may or may not be acceptable by the kernel community. No idea. You may re-check the formatting.
+--e79d1022041faa676f36278d4e8685f754cef59bbd011f58fe85541a5fd0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-it's relaxed recently - does not make sense to uglify code to fit
-in 80 chars.
+Hi Kendall,
 
-> Besides formatting:
-> 
-> I compared your actual v10 of the virtio CAN driver against my last v5 and and I saw nothing in your code which may cause a problem. Only learned doing the review this way that at some corners my old v5 code was not this bug free as I thought when I saw some changes. Nothing serious because in some "not expected to happen" corner case code paths but anyway I'll occasionally have to take over some of your changes into an internal project repository here.
-> 
-> We will see whether this virtio CAN device will be accepted in some near future for integration in the mainline kernel...
-> 
-> Regards
-> Harald
+On Thu Feb 19, 2026 at 9:31 PM CET, Kendall Willis wrote:
+> Hi Markus,
+> On 2/18/26 04:51, Markus Schneider-Pargmann wrote:
+>> Hi Kendall,
+>>=20
+>> On Fri Feb 13, 2026 at 7:08 PM CET, Kendall Willis wrote:
+>>> In TI AM62X, AM62A, and AM62P SoCs, the m_can pins can act as a wakeup
+>>> source in the deepest low power states. However, the m_can pins are a p=
+art
+>>> of the MCU domain which is OFF in deeper low power states. Since the m_=
+can
+>>> pins continue to be ON even if the MCU domain is turned off, set
+>>> out-of-band wakeup for CAN device if `wakeup` pinctrl state exists and
+>>> device may wakeup.
+>>=20
+>> Thank you for your patch.
+>>=20
+>>>
+>>> Signed-off-by: Kendall Willis <k-willis@ti.com>
+>>> ---
+>>> Tested on CAN IO wakeup from DeepSleep low power mode on AM62P EVM.
+>>> ---
+>>>   drivers/net/can/m_can/m_can.c | 4 +++-
+>>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_ca=
+n.c
+>>> index eb856547ae7df27a844b236a0c1d4498cbb8b60f..8b277f5e208ffa634439b9e=
+a8495ed56f12cfccb 100644
+>>> --- a/drivers/net/can/m_can/m_can.c
+>>> +++ b/drivers/net/can/m_can/m_can.c
+>>> @@ -2622,7 +2622,9 @@ int m_can_class_suspend(struct device *dev)
+>>>   		cdev->can.state =3D CAN_STATE_SLEEPING;
+>>>   	}
+>>>  =20
+>>> -	if (!m_can_class_wakeup_pinctrl_enabled(cdev))
+>>> +	if (m_can_class_wakeup_pinctrl_enabled(cdev))
+>>> +		device_set_out_band_wakeup(dev);
+>>=20
+>> This will set out of band wakeup for every m_can that has a
+>> wakeup-pinctrl set. am62* is currently probably the only platform that
+>> uses the wakeup pinctrl setting but that may change at some point in the
+>> future. Can we narrow down setting the out of band wakeup to the
+>> platforms that support it?
+>>=20
+>> One idea could be to parse the supported system-idle-states from the
+>> list of wakeup-sources and see if deep states are supported that would
+>> require m_can to be off, e.g. mem-deep, off-wake. I think that would be
+>> a clear indicator that out of band wakeups are supported.
+>>=20
+>> For the list of state names you can have a look in the dtschema
+>> repository:
+>>    https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schema=
+s/system-idle-states.yaml
+>>=20
+>> What do you think?
+>
+> I agree that we should narrow down setting the out of band wakeup to the=
+=20
+> platform, but I am unsure of parsing the supported system-idle-states as=
+=20
+> the solution. Since we don't know how the power domains in other=20
+> platforms are organized, it would be hard to say that if deeper idle=20
+> states are supported mcan has out of band wakeup logic. It could be the=
+=20
+> whole power domain was designed for the deeper power states.
+>
+> Additionally, without out of band wakeup for mcan on AM62 devices, mcan=
+=20
+> can only wakeup from mem-mcu-active idle state, and adding out of band=20
+> wakeup allows for wakeup from mem idle state and deeper. Checking for=20
+> mem idle state doesn't seem deep enough to warrant setting out of band=20
+> wakeup for all platforms since some platforms could have mcan in a power=
+=20
+> domain that is ON during the mem idle state.
+>
+> Another idea would be to add some sort of property to the device tree to=
+=20
+> denote the wakeup source is an out of band wakeup source.
 
+Sure, a generic DT property would be good as well. Do you already have
+something in mind?
+
+Best
+Markus
+
+--e79d1022041faa676f36278d4e8685f754cef59bbd011f58fe85541a5fd0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaaB3MBsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMSwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlMe
+VgD9Gjh9TrBAM9VIzW+ZXCPWjq0RhP/Cq0x/tDWE6Yws6psA/3Ju/Es4ea9yQkhw
+H2mtiB3MXzHE76zIt4Qrn74QLm4M
+=tFV9
+-----END PGP SIGNATURE-----
+
+--e79d1022041faa676f36278d4e8685f754cef59bbd011f58fe85541a5fd0--
 
