@@ -1,211 +1,140 @@
-Return-Path: <linux-can+bounces-6652-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6653-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oCqlAxHNomkj5gQAu9opvQ
-	(envelope-from <linux-can+bounces-6652-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sat, 28 Feb 2026 12:10:09 +0100
+	id KNrRITitpGmtowUAu9opvQ
+	(envelope-from <linux-can+bounces-6653-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sun, 01 Mar 2026 22:18:48 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 762E31C27CE
-	for <lists+linux-can@lfdr.de>; Sat, 28 Feb 2026 12:10:08 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CB901D19C1
+	for <lists+linux-can@lfdr.de>; Sun, 01 Mar 2026 22:18:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 254533014753
-	for <lists+linux-can@lfdr.de>; Sat, 28 Feb 2026 11:10:07 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A6BA7300460A
+	for <lists+linux-can@lfdr.de>; Sun,  1 Mar 2026 21:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28F974218B9;
-	Sat, 28 Feb 2026 11:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A15E430B9F;
+	Sun,  1 Mar 2026 21:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h1dKaVqe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ca72z6Yy"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487742857CC;
-	Sat, 28 Feb 2026 11:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D1F430B89;
+	Sun,  1 Mar 2026 21:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772277005; cv=none; b=m9/271aq0UQM2qgbgkIbuNYboI4pqduxU9q/rrxDnFkzJos7VRaTKP7IBeWHZi90CbhX8hq7tmiM5KM38xFjHT7l9A3n7pPwlQrWSdCjiBBEnQKBZU/q7JMjKoMyWebBR9OnZ/QNq3sGAsCn/RXp93HSNl6lJORG2QW8Yn+aU24=
+	t=1772399920; cv=none; b=Dqu7FLfzQTlX+EyRk3xExUiOjqVf4rWu6jnwHlZ3CciOEMOz/m2LBwqm+1rLAN3j/r7zCcXxsUva6ISFB0MJoBKQbHZTSSBcZeHqHIefnAuOf8c+WvK6qkDF0BkC8raDAGXyyx4//r9T1JWYHPds6JRILXCQ7Q/B4bsaMIK/G8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772277005; c=relaxed/simple;
-	bh=AxtK5aNDu+VdCrf2+LU5bZDcJ1M/wjN7Kf28wXjowmQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gEH3ABdJuIsfHkDPhhztckWDhGLiLw2F4pfYFQFZT9ZwXMPKajpS6M+/xkiubMpLUePpneqsSqgVQwEdbqEC37i5B9IKKussTk5fI3L6SPTyCGNtsmjK9nswe7lyBcocCxBwjIrFk5Pv5pSLtTCSowahYzbTLtzs5GIwy4iPLrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h1dKaVqe; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772277003; x=1803813003;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AxtK5aNDu+VdCrf2+LU5bZDcJ1M/wjN7Kf28wXjowmQ=;
-  b=h1dKaVqeDruUIjKP4JzqnEWlsNFEISUsXa2n46Bmw+HhTo0bwwy3vsYr
-   JfCp3+ZLwUmfAiDPWLVDc9TtIMYVIfVsD/vKSNYooq+XFrpcap9q7NX5L
-   P9IONCj1TRUbuAWUwgiLAQZjfTJKQlC6bxfyIDLrpHbltUenToNwN79ku
-   irWDvjIxMOtJQs1rKnE4qQTrJ8CLF3Fk24LX5SUK/LCu0pMh1OD545Y1Z
-   PK5usNxQXdiLZHbCz4OWUqaTPdx6WUKjL9WVwOEsT6Zx255s5dpoxEvGN
-   IuwTNBWF5CG/Br6QLYBDRaYrd4yn1n38sKLv6ZdG41AOLuswC1L3ft+3z
-   A==;
-X-CSE-ConnectionGUID: Kd9q1pyNTKaf3S4HqPzbaQ==
-X-CSE-MsgGUID: 7tw3v4fGTYGwO7XbiXLPKw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="72551841"
-X-IronPort-AV: E=Sophos;i="6.21,316,1763452800"; 
-   d="scan'208";a="72551841"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 03:10:03 -0800
-X-CSE-ConnectionGUID: ZUZ41NSPTU29uoTjC37wiw==
-X-CSE-MsgGUID: TzyD1p44TNSAvNSGE7MjYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,316,1763452800"; 
-   d="scan'208";a="254974712"
-Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.224])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 03:10:00 -0800
-Date: Sat, 28 Feb 2026 13:09:57 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Vladimir Oltean <olteanv@gmail.com>
-Cc: linux-can@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Josua Mayer <josua@solid-run.com>
-Subject: Re: [PATCH v1 1/4] phy: phy-can-transceiver: Convert to use device
- property API
-Message-ID: <aaLNBTZsUQ2vMfOW@ashevche-desk.local>
-References: <20260219202910.2304440-1-andriy.shevchenko@linux.intel.com>
- <20260219202910.2304440-1-andriy.shevchenko@linux.intel.com>
- <20260219202910.2304440-2-andriy.shevchenko@linux.intel.com>
- <20260219202910.2304440-2-andriy.shevchenko@linux.intel.com>
- <20260224162606.spnzzedvmvp2h7xd@skbuf>
- <aZ3X2J1rBq1pMkae@smile.fi.intel.com>
- <20260224183000.txlazzyw7z34nhsj@skbuf>
+	s=arc-20240116; t=1772399920; c=relaxed/simple;
+	bh=E3lqFJDzQ9T/4PeH5nrHAvyZ7JMPoAr/UsofvYY2bu0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tBmwyBO+OjbXhp9lPBFZBRhX+g0/4edMIXQiK0Us5P+q/ircRKRHYRthShu78jXo9LrLtLix2lBjknKuUZjojgiz1D3I5GfjfaHLRmQxOXxur1MJ6ozKYtmSvDy/zMeBlFDvQHlJXhuNrc0Vn/M/RYUyqzI/eVos8p05iOFmlHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ca72z6Yy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C8BC116C6;
+	Sun,  1 Mar 2026 21:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772399919;
+	bh=E3lqFJDzQ9T/4PeH5nrHAvyZ7JMPoAr/UsofvYY2bu0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Ca72z6Yyp6Akz9u5SNKg6OwqSrVly7ZCN75UHkaCoDB5XFDfDB/+uEU/pdX5MJLgD
+	 7MrvzuqAGvlRUpbi3kZ7Rto58jZjgNejCMeLdxWr8jwD5cFtrFExPIVYVHJJpiFwHv
+	 TCJmvprstYfkH7U3zsOzlbngKXPh8LLnzjbmefv/GzUNPS7RasOEv08+ET9bejzJ7Z
+	 Y0nv2cowmo7OgQVKpbn6yqZUMBuq3UVmAbkBRAx0OT5cuqhxRSvFRn9vly9o6krRnK
+	 /hVXuhaVl4sp6G0UNzzcUgSmEpBybfOPGu23vXjSbWfzXtVxEaOy5ONm3Y3MvzNU/w
+	 oWijP4drU6VAw==
+Message-ID: <2e05a4d5-b42c-4c3d-812a-8e8ddb94cec1@kernel.org>
+Date: Sun, 1 Mar 2026 22:18:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260224183000.txlazzyw7z34nhsj@skbuf>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] can: usb: etas_es58x: correctly anchor the urb in the
+ read bulk callback
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+ stable <stable@kernel.org>, linux-can@vger.kernel.org
+References: <2026022320-poser-stiffly-9d84@gregkh>
+From: Vincent Mailhol <mailhol@kernel.org>
+Content-Language: fr-FR, en-GB
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <2026022320-poser-stiffly-9d84@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6652-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-6653-lists,linux-can=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	HAS_ORG_HEADER(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-can@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-can@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ashevche-desk.local:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:dkim]
-X-Rspamd-Queue-Id: 762E31C27CE
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8CB901D19C1
 X-Rspamd-Action: no action
 
-On Tue, Feb 24, 2026 at 08:30:00PM +0200, Vladimir Oltean wrote:
-> On Tue, Feb 24, 2026 at 06:54:48PM +0200, Andy Shevchenko wrote:
-> > On Tue, Feb 24, 2026 at 06:26:06PM +0200, Vladimir Oltean wrote:
-> > > On Thu, Feb 19, 2026 at 09:26:19PM +0100, Andy Shevchenko wrote:
+On 23/02/2026 at 17:39, Greg Kroah-Hartman wrote:
+> When submitting an urb, that is using the anchor pattern, it needs to be
+> anchored before submitting it otherwise it could be leaked if
+> usb_kill_anchored_urbs() is called.  This logic is correctly done
+> elsewhere in the driver, except in the read bulk callback so do that
+> here also.
 
-...
+I can explain why this bug went through the cracks. When I wrote this
+driver, I was actually wondering whether I had to manually re-anchor the
+urbs. I checked the documentation of usb_submit_urb() and
+usb_fill_bulk_urb() but there was no mention that the urb will be
+unachored by the framework before calling urb->complete(). And so, I
+assumed that it would stay anchored. And I ended up just anchoring them
+once at creation and then reuse them without paying attention to the
+anchor any more.
 
-> > > > -	if (!of_property_present(dev->of_node, "mux-states"))
-> > > > +	if (!device_property_present(dev, "mux-states"))
-> > > 
-> > > There's an entire saga with this function - devm_mux_state_get_optional().
-> > > Josua Mayer is preparing to move it to the MUX core, which will be a cross-tree series.
-> > > Would you mind not touching this, to avoid complicating what is already
-> > > a complicated operation? It is going away anyway, and from what I can
-> > > see in Josua's last series, its implementation from drivers/mux/core.c
-> > > is already using device property APIs:
-> > > https://lore.kernel.org/linux-phy/20260208-rz-sdio-mux-v9-2-9a3be13c1280@solid-run.com/
-> > 
-> > Basically you ask me to postpone the series until that will be in. Since this
-> > file is a mess in terms of OF/fwnode API use in exchange I would like whoever
-> > is doing the other part to speed up a bit if possible.
-> > 
-> > I prefer to see cleaner solution to be applied sooner and last in a long distance,
-> > that's why I see either mine first but soon, or that first but also soon should
-> > be in. Can we try to achieve that?
-> 
-> The idea is that Ulf already expressed the availability to take the phy-can-transceiver
-> patch through the mmc tree and provide back a tag to be pulled into linux-phy:
-> https://lore.kernel.org/linux-phy/CAPDyKFrtTaJ5fqqbGrE_K6SAdTZYUfp-BycGjtWs4SabwBysKA@mail.gmail.com/
-> 
-> If linux-phy takes your patch first, there will be a conflict when pulling the
-> stable branch, and it won't be so fun, plus we can't even build-test Josua's
-> submission on linux-phy, so that's obviously not great.
-> 
-> So yeah, I'm not requesting you to postpone the entire series, just not
-> touch devm_mux_state_get_optional() and don't let it appear in your
-> patch context.
+Now that I see your patch, I had a look at the code source and can see
+that indeed __usb_hcd_giveback_urb() will unanchor the urbs.
 
-Thanks for explanation. I prefer that Ulf's staff settles down first as it seems
-more important.
+Anyway, thanks for the fix!
 
-> Somebody will have to remove "#include <linux/of.h>" at the end of the
-> whole process, but that's minor.
+> Cc: Vincent Mailhol <mailhol@kernel.org>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: stable <stable@kernel.org>
+> Assisted-by: gkh_clanker_2000
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-> > ...
-> > 
-> > > > -		phy = devm_phy_create(dev, dev->of_node, &can_transceiver_phy_ops);
-> > > > +		phy = devm_phy_create(dev, NULL, &can_transceiver_phy_ops);
-> > > 
-> > > It is not obvious why you replaced dev->of_node with NULL here.
-> > > It doesn't appear correct. You seem to be breaking OF-based PHY lookups.
-> > 
-> > It's the default. Yeah, I probably have to explain this in the commit message.
-> 
-> Ah, ok. Found the "phy->dev.of_node = node ?: dev->of_node;" assignment.
-> Sorry and noted, but please add it to the commit message too.
+Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
+Tested-by: Vincent Mailhol <mailhol@kernel.org>
 
-Sure.
 
-> > Basically all devm_phy_create(dev, dev->of_node, ...) for clarity should be
-> > converted to that approach. Or even better, a new (agnostic) API should take
-> > default fwnode from the same device.
-> > 
-> > 		phy = devm_phy_create_simple(dev, &..._phy_ops);
-> > 
-> > // name was quickly chosen and may be not the best we can come up with
-> 
-> I agree in principle. PHY drivers shouldn't be given a function where
-> they routinely have to set one of the arguments to NULL, but a simpler
-> function without that argument.
-> 
-> But the phy-core.c doesn't support fwnode at all yet, it uses OF
-> throughout. I think it would be preferable to leave this change to
-> somebody who has business in that area.
-> 
-> (are you interested in PHYs with a fwnode for any particular reason, or
-> just because the API is more "generic" just in case?)
-
-Because of inconsistency. This makes my mind blown and the code is not good
-for others to read and understand when it's inconsistent like this. That's it.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Yours sincerely,
+Vincent Mailhol
 
 
