@@ -1,189 +1,148 @@
-Return-Path: <linux-can+bounces-6868-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6869-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iLAQNCv8p2mlnAAAu9opvQ
-	(envelope-from <linux-can+bounces-6868-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 04 Mar 2026 10:32:27 +0100
+	id 0GTgIeAaqGmgnwAAu9opvQ
+	(envelope-from <linux-can+bounces-6869-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 04 Mar 2026 12:43:28 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74C081FDA1D
-	for <lists+linux-can@lfdr.de>; Wed, 04 Mar 2026 10:32:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E43291FF2EB
+	for <lists+linux-can@lfdr.de>; Wed, 04 Mar 2026 12:43:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1F5403109C8E
-	for <lists+linux-can@lfdr.de>; Wed,  4 Mar 2026 09:30:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 82976304289F
+	for <lists+linux-can@lfdr.de>; Wed,  4 Mar 2026 11:38:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7D339A051;
-	Wed,  4 Mar 2026 09:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b9sIRKFF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BE0A3451AE;
+	Wed,  4 Mar 2026 11:38:26 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0244C3988F2
-	for <linux-can@vger.kernel.org>; Wed,  4 Mar 2026 09:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7102A3368A0
+	for <linux-can@vger.kernel.org>; Wed,  4 Mar 2026 11:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772616641; cv=none; b=SqCQHKPm2P2Rf6mqNuP8vqnLFmpirrAOMPwHJ2FvGmW8XAFokLILRhzy19MXxfSO2pqqIUt/gaV5FTY5RwKuLVqiNB5jsNr0nnaAxjeOUDtboJ8pq3SkWgOD6OTnOzqxj8zqaD7vQxLcnfESFeJ4AZvOJUjEvyTAxjd6+09e8HA=
+	t=1772624306; cv=none; b=poI+UEiHn4r8sq3tN6M431R1v608n1fze9++9pzDAGYpj4376fy8XF63z/C3KRxmKD5b7bunzfu+tAwnswPsaOpyH+Bx6DIPhXsBBwp69QaRVHZFPKJRCCKBEt8QwKCak04Uw1vn8IrRNYzLweo6XPnsih87nzMx9Q7iRygocgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772616641; c=relaxed/simple;
-	bh=qyvL/iXE6+TakoKVVxVCaopqm1BpX+f7Q05dx5gBHDE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HDPr1OfTBfEcrwDuczZC8CdfD0X5RNhHccT7x0TQK26K1nH92n70iWFqAbUtQ/XNwi1eBgSHHxpSGlmraDPEj8jygOCOGtB4txkkqXediCY6VOEx22t1lVZ337M+v47H2gLV4YQ+QwVPaUYociOSoH9tazQe+WVe62CEQ6s+elQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b9sIRKFF; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48375f1defeso49603855e9.0
-        for <linux-can@vger.kernel.org>; Wed, 04 Mar 2026 01:30:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772616636; x=1773221436; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BUzQoESoh9/PqMSFbMpuw4Pmh5IPXiGP/qvOjxX4wwo=;
-        b=b9sIRKFFaokgkSrgeWrbA/ViOpJjWP1ViLK9R1Hc1//m2coegBzgKtpFqwevCmiACZ
-         C7afbaacWCHtjdaHICcRaatb9x6ZEJn6NhG6Zj9DIWESFWJ1Wfs22M1hBHSvsJT6ov0y
-         u+gbatvToXFWw4Ws1z6B810aDtF2H+NtjWSzWUXjnH2Uagh4gEk5+S1nkLp8lVzxzopS
-         A1lgIkzEEAlqX7ANlEMButL3162rmrsjjiFCTqL06qEr4gqfcdGAwI6S5Z1yvtqPS7rR
-         QeMeyyLIZ4ZsiMHZmsjBPBW/Gjz82S/2K6mHxq88plnIdodtUPQPjzOSR2cd/SZiIcXY
-         bgtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772616636; x=1773221436;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=BUzQoESoh9/PqMSFbMpuw4Pmh5IPXiGP/qvOjxX4wwo=;
-        b=V4BsuA5roaQCYtV52hwXHegKiXQo3+d/4d8tFr5Y7Kq32AQOYDn3uXA/+zofyT6ifc
-         lr+M0OTNGqurSSl3AJ2aiMqSe7HHD1QK68EK0OTJ24tIG1mA/4qPZ/jP0bdNpjx/SBtO
-         UoCgQqV9JH9mH+kiD8fnRREvUMSprcreg39j/EZgNwipJ6cvMMmgmkHwwE1FYWYUUrh6
-         vtL8su+Y10q8oMCvOWddD7Ldo52gTyHbc//gC9aa82DKiy32YDAbgXDEy5RjClev8Ejs
-         PSr2BthrHms/cApe7gk5RTPL1VX/0pK77ehvXk4c9tsvQnH7napc5Ub8gwhBAs5gEmVm
-         Wefw==
-X-Forwarded-Encrypted: i=1; AJvYcCWShELsrnI9j0bQLM3wt7ipn+LfjTaBWkuVOxY2l1nDnqnDYAaXbOMF+tKVNpjOedz7V3VnHFjVA78=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZa5h7kCm7AazpAeByrOjOC3ecdMsD28Ad1WxTOfNX8fYl+nu1
-	wNM7nWJbmjcpiBOMqSraW9l9qRvieMuRH+/W5yYkwcaOGW6AOsc37W19
-X-Gm-Gg: ATEYQzzIM+E9kiyGZjpL/g/wQfs/FnZlr5HUTJotFR12r82rcHCT8vlzDtzmR9S3+92
-	ofVxoCKnXHqwbQHrSt0SmYfDiG8nB8u0V6TnmMqaA6voGujATuZw+tZlUr5yugqbYa+RAXQ2zJw
-	Txw4lmoZVc94UiVzgGNHBF8fBkZHQZSXqZVqp11LOySId1rbGF3OsCrSABmSrDeXpISdFX8oafI
-	x7W6bGwcsl2L+eDCeKTCx+m4sF0jtuRxtUSEXgKEAn5y4DuuWDUaNjPiCSahlup6nmy8yy/ZQx/
-	kBweLNNNc8LILNw+6pJQpH2DsqLK4xVVqazzSA01W65ynpUoPE2cHmFMBBkt3qOH6gg2PwHTLgo
-	a5KN5OU2gLhRxtqMcND0Uk2VrD8hO6vi6liVvwRYUK3GMzq7u0CYCXSR+R/9Pcr1jTGQA/jzGsN
-	9AElHs3U09C1BIURro3l6BvbP9q82iREFFACEGY7eRGou/D1IRwAy/4GD44CmmIIFK
-X-Received: by 2002:a05:600c:8b53:b0:483:498f:7963 with SMTP id 5b1f17b1804b1-4851989024emr19550785e9.26.1772616636117;
-        Wed, 04 Mar 2026 01:30:36 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851884225asm38972555e9.6.2026.03.04.01.30.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 01:30:35 -0800 (PST)
-Date: Wed, 4 Mar 2026 09:30:33 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: NeilBrown <neilb@ownmail.net>
-Cc: "Jeff Layton" <jlayton@kernel.org>, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- nvdimm@lists.linux.dev, fsverity@lists.linux.dev, linux-mm@kvack.org,
- netfs@lists.linux.dev, linux-ext4@vger.kernel.org,
- linux-f2fs-devel@lists.sourceforge.net, linux-nfs@vger.kernel.org,
- linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
- linux-nilfs@vger.kernel.org, v9fs@lists.linux.dev,
- linux-afs@lists.infradead.org, autofs@vger.kernel.org,
- ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu,
- ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org,
- jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev,
- ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org,
- linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
- selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org,
- linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org,
- linux-x25@vger.kernel.org, audit@vger.kernel.org,
- linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
- linux-sctp@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 000/110] vfs: change inode->i_ino from unsigned long
- to u64
-Message-ID: <20260304092559.554ac9a9@pumpkin>
-In-Reply-To: <177260561903.7472.14075475865748618717@noble.neil.brown.name>
-References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
-	<1787281.1772535332@warthog.procyon.org.uk>
-	<1c28e34c7167acf4e20c3e201476504135aa44e8.camel@kernel.org>
-	<177260561903.7472.14075475865748618717@noble.neil.brown.name>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1772624306; c=relaxed/simple;
+	bh=XwgGHhmEmcfCEL4J1R5XN4zvCNr4OikXeGZzF6e38I0=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ELA26eB/D6jovqwIQ/AXqiTOdqSa0VBinATlHkdayxpHfMzU/Q8aIWaEdBLPmcXPxbSx+NuC2L7ByB8HHIF7nWl5ohNffAwau61SI390b5PNAzTveC4J7alJrld90PMUjIWN/AZ7UPuwqc+sarV178XtgSfJdU5Ozpi7KKj8J0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vxkYZ-0005Zn-SX
+	for linux-can@vger.kernel.org; Wed, 04 Mar 2026 12:38:23 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vxkYY-003hqu-14
+	for linux-can@vger.kernel.org;
+	Wed, 04 Mar 2026 12:38:23 +0100
+Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 6F1554F76F3
+	for <linux-can@vger.kernel.org>; Wed, 04 Mar 2026 11:38:23 +0000 (UTC)
+Date: Wed, 4 Mar 2026 12:38:23 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: linux-can@vger.kernel.org
+Subject: Linux-CAN Community Meetup at Embedded World 2026
+Message-ID: <20260304-comical-illustrious-chowchow-c972e2-mkl@pengutronix.de>
+X-AI: stop_reason: "refusal"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 74C081FDA1D
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5qzyd5xffycakyzm"
+Content-Disposition: inline
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Rspamd-Queue-Id: E43291FF2EB
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.56 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6868-lists,linux-can=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_TO(0.00)[ownmail.net];
-	RCPT_COUNT_TWELVE(0.00)[46];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TAGGED_FROM(0.00)[bounces-6869-lists,linux-can=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DMARC_NA(0.00)[pengutronix.de];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[davidlaightlinux@gmail.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-0.999];
+	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.022];
 	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ownmail.net:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:url,pengutronix.de:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Wed, 04 Mar 2026 17:26:59 +1100
-NeilBrown <neilb@ownmail.net> wrote:
 
-> On Tue, 03 Mar 2026, Jeff Layton wrote:
-> > On Tue, 2026-03-03 at 10:55 +0000, David Howells wrote:  
-> > > Jeff Layton <jlayton@kernel.org> wrote:
-> > >   
-> > > > This version splits the change up to be more bisectable. It first adds a
-> > > > new kino_t typedef and a new "PRIino" macro to hold the width specifier
-> > > > for format strings. The conversion is done, and then everything is
-> > > > changed to remove the new macro and typedef.  
-> > > 
-> > > Why remove the typedef?  It might be better to keep it.
-> > >   
-> > 
-> > Why? After this change, internel kernel inodes will be u64's -- full
-> > stop. I don't see what the macro or typedef will buy us at that point.  
-> 
-> Implicit documentation?
-> ktime_t is (now) always s64, but we still keep the typedef;
-> 
-> It would be cool if we could teach vsprintf to understand some new
-> specifier to mean "kinode_t" or "ktime_t" etc.  But that would trigger
-> gcc warnings.
+--5qzyd5xffycakyzm
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Linux-CAN Community Meetup at Embedded World 2026
+MIME-Version: 1.0
 
-A more interesting one would be something that made gcc re-write the
-format with the correct 'length modifier' for the parameter.
+Community meetup for Linux-CAN and related topics at Embedded World 2026
+in N=C3=BCrnberg
 
-That would save a lot of effort!
+We invite you to join us for a casual gathering to talk about this and
+related Open-Source projects. It's a good opportunity to meet fellow
+developers and users in the Linux-CAN community, exchange ideas, and
+discuss future directions.
 
-	David
+=F0=9F=93=85 Date: Wednesday, March 11th
+=F0=9F=95=92 Time: 13:00 @ Pengutronix booth (4-261)
 
-> 
-> NeilBrown
-> 
+We'll first meet at the Pengutronix booth and walk to a coffee area
+together.
 
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--5qzyd5xffycakyzm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCaagZrAAKCRDMOmT6rpmt
+0igUAQCtZdRBRRVgfsqVZyzW89RIEdezXGOLzbn4kCF4ustnrwD/V5F1wgU4LeTU
+UJkY5UfH0G9/4gaxbxvlZH9fm5XcMAk=
+=mTn3
+-----END PGP SIGNATURE-----
+
+--5qzyd5xffycakyzm--
 
