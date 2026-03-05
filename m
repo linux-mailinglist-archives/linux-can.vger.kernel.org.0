@@ -1,88 +1,89 @@
-Return-Path: <linux-can+bounces-6923-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6924-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IBWlL6Y0qWk73AAAu9opvQ
-	(envelope-from <linux-can+bounces-6923-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 05 Mar 2026 08:45:42 +0100
+	id kD3KF3M1qWlk3AAAu9opvQ
+	(envelope-from <linux-can+bounces-6924-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 05 Mar 2026 08:49:07 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EAFE20CD88
-	for <lists+linux-can@lfdr.de>; Thu, 05 Mar 2026 08:45:42 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7A3120CE75
+	for <lists+linux-can@lfdr.de>; Thu, 05 Mar 2026 08:49:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 36A93300A10E
-	for <lists+linux-can@lfdr.de>; Thu,  5 Mar 2026 07:45:41 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0B844303F5FC
+	for <lists+linux-can@lfdr.de>; Thu,  5 Mar 2026 07:48:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4634727E05E;
-	Thu,  5 Mar 2026 07:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA5832B989;
+	Thu,  5 Mar 2026 07:48:02 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BC9326D4A
-	for <linux-can@vger.kernel.org>; Thu,  5 Mar 2026 07:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F10423242B1
+	for <linux-can@vger.kernel.org>; Thu,  5 Mar 2026 07:48:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772696738; cv=none; b=teIVVOz7bLczrg1IHLAPvPr8oMiJJTnDzOhvHZVLGFJWDpcNVXwYWE3NZRd6tZBPeXB7GegSeAyZV9vDpKHyfe4EEDlxxpAFg5D/BfoGmyZNo2iSEh/RBJdJlrfYoyFkYXU/5By6QSYVjbcT1fDQaPBuSS8VQR7muIeYu/om31A=
+	t=1772696882; cv=none; b=eM5ynfbs2UkKRv/usTJ65ntqwbDcBsO2UWWyvEco1v6TXU94Pd2iULF/P4vACSV4D/FFQYxpF+RpphnMilftjs+aliakBFNOVrExSvo96d3YubD/oGn0dryveUCOsbS4lankxz3YdbkTmw6KvnpulAoJMWA75YczMGQrmZcbMXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772696738; c=relaxed/simple;
-	bh=1VrdyW7eBzn3eIzcJ/qwIsXSzypVzRQDxfUgekinKYA=;
+	s=arc-20240116; t=1772696882; c=relaxed/simple;
+	bh=urVD1xPdaF3hV5GqXqVqTidMinFWi7P2lc2J0G3o7gY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OX94XmptZoSnuM1oDnLJNQAFLiwUu4vgCO7tX+8P4sSSa/etfxj3pV4IG+1ZzvKkuOyYu1Kd9R1c3qNAQhE9V4F1t1gA7FWyy+R2gof3Oz503j6AiWc9e2QxGc9Eo+e/YUyCH7OfFPGoOrVAIn1hNbTy3gwiX+GHsO8ygzw/TJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.53
+	 To:Cc:Content-Type; b=FKOqp+lltY1vGsrUexwOfcaOhZpZ7wXeD/gvtSdJTFD+Gg3u47wUjdY/edc5ae50BOaD7Y9lRJ9BuqChuMQYWRaAPN1nxZ7fIIBCwQEInP4ejosgl6/VJ8III7mB0gGOf67wDl+2cuD+fRtiCWNhNDswHt2yusY+TkYi85qmels=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-94dda16ff9fso2323260241.1
-        for <linux-can@vger.kernel.org>; Wed, 04 Mar 2026 23:45:35 -0800 (PST)
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-56af4aad3e5so140113e0c.3
+        for <linux-can@vger.kernel.org>; Wed, 04 Mar 2026 23:48:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772696735; x=1773301535;
+        d=1e100.net; s=20230601; t=1772696880; x=1773301680;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KLWXJFRzKXYfvRWexgs1gCb/dTgnevi1M5AetCjur0g=;
-        b=GyoMZSqhzUUIAKdTpK2lVqKQ6z3GPpTjUj7MQGcISETTR2RZc/4Jg/hFHP1V9URxQK
-         dmE3OH+eo9cdPLMQdw9lbhZhsSAW2T1WlHf8QbAvq+tsqRTJYyWthrcysp2212PLwcLH
-         HipS7099slxrMyYMhnX6B7HZWz+IH1xpmd5sWRwZl5IHIhnd5uvZNSurrjEXgVExK3LL
-         27dM8p9pqlJBQuqJKInuMzGqML5wX4kTy4ISnOM8oj2QMnS0RhFHfAWJ5tznvekj9wH8
-         QnFVk9D/1RBjvRA+7NKiTJftCO34YW1nGFrdMkxsGLa5Ec4KcpWPgamnRZUptGrJFp9G
-         8eHg==
-X-Forwarded-Encrypted: i=1; AJvYcCX7M619WF5z8Q3WL6PUMyoTbq9beCW+XPF0wlsodoPzjMM/CJZ3O7IimktfE23uJ6+W2RRdHAJbZQ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywq+j5uatr8zGhdKJPGomhvtuiRx+GDp6rmtMA18nZQ4rdUP2Z1
-	csVtjrIah2Iz611+lg4kRZTTteX9wqo2KHlEgfQ+tGGernt0J28+ZQ0FoBpTPSx3
-X-Gm-Gg: ATEYQzzEbJ+/lY5B0AVm25h1GWbo2AfCFtUYGoHHBkDGmj0/Tv4BvPvBgeZol3xo26E
-	xJVEFcneFDR2O3BSkApOf8yqfAOVJ76yfAcqmWgZehiRtfJ88ctWS/rX5mXwTnQc2XsdTTn+RQq
-	nPQxQKVDqUVzjkydIfpj3QsKfE7qhWlPFa766qDiXlAaF92WVK0vh/Q/CEYPMc3z6HkZmJ18Hu7
-	xmlGif04aw8GEHonppbNGdZYB+kjk6665gWcYFtEnTShTw5qcMS63mxN6r2Q3wdEhnZkmk8c6xR
-	yUcjpzAoTucECuXQsiWqtEKAeIjfHvq1E+xyKYSs21Wl/JqyTAwE5vcBdce4znJCKGt65bE9PiT
-	44LEgK0OPZoRSrEOVZKupTVeFIZAZXuErlAAM3Mdfs6DYtugu1En0/22rADPKxTA9M3L4Mo3Z2X
-	IaSt3n2rydAeqjgKWiR5YLFTq7M+edp4IND8HchbzEoHRzyeX2+5Ww6AprPr/0LJherKdVxVA=
-X-Received: by 2002:a05:6102:6106:20b0:5ff:b684:f796 with SMTP id ada2fe7eead31-5ffb684fcb5mr1096788137.13.1772696734898;
-        Wed, 04 Mar 2026 23:45:34 -0800 (PST)
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94df645b877sm20365896241.8.2026.03.04.23.45.34
+        bh=7xyHjzGnphi32H4Bte19x6wQV76UaiJqzbc3zMkJKs8=;
+        b=MtWdmqSM3spbFrLL2vYscu/iLoM7KxLrEu6aU1YJCkO4XLSH4YIBuw3Kc+YnhljFiS
+         EGAMhrkItCvuHce5hA5s2ae9V+0KaxJ3usx5EbXM0Vk0XupqQi9Jiz85aykdFHuFAxXO
+         0noxQ0/XBEo4VeJSbDjiXFeQqDYJb3WOU/5IOJP+Pk2MIAb4p9w/Uhz8lTIFmR4OOT3t
+         fmtEb/07b77fGxL2d8BfyhzYDDU31eegtrRQaBzoO/xBjc8Xb8lVXg6rytowDHrDKHHF
+         vLIiMWiqsNtrj4MmhW74iXgX1HM2VJR5I8yviyLqf8GH2PnAMOI/kiM2MS/cJGHa7UcT
+         XX8A==
+X-Forwarded-Encrypted: i=1; AJvYcCW3lD5TDXINLFNaSmjfV18Xh4Usa0Pl5pq1WlmuLzcXM2sWY3DjI0ZO9fY/kfeGB6eHe9hCV2aA3fk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFTWgTwSAPcYGtfNK4m7QK5B8TXVaf5cn+dRddjMkauGam6X1J
+	XnvE+kf+KoFvjLWZeO0ubNoYcLIlnTMIKYWCrzEvJ4JnoEe2Al44jQrKipZHBtf1
+X-Gm-Gg: ATEYQzw3v7hEKBqqRIXQE7aWM1XdKVxf00E0wxftxHr6zelYVaCSR32Bc5yzaFeyhe5
+	ebJrBgQXzGPFLyyzSH2bzwgXseVsD4GQuH5GCppqkrl9JX1rj7Xj1j3LMbN8jMBnlc/h9cxWbOV
+	MqDhbU4bBwg9wA3l520Q5WPXhavyhP178ltjHSB+1Pyy+fHy1Jv8D7B6Z/uWiwjxmeIkCFum9/l
+	eY654OwrC1FNmcUywgEu6UNIOUZ6CF5/28uG8SWmLINSMn+D1aUPYCloJIDi8zuYb0Pu9pttrNI
+	DVEg7mp95y1zkzWZ1CS+D+kzNb+MSHyC1BX93QgSUyyxBuhvHulVZJ6o5CK9TzaDaqNg+GtlckZ
+	aH0YnrUHwheVqqUWGyJyeqerZhpG8FmZoLFBFzEX+pTCoCDoaMTEHCw4tHT1+GmMUPWsg+SyrM9
+	l2l/MMAxaysVfx/ydUoGnb8gKsP2ICAfpOKtar/hyYBgfOzbng5bG2LeGdB3wl
+X-Received: by 2002:a05:6122:35cd:b0:56a:f015:82ac with SMTP id 71dfb90a1353d-56af0158d54mr1223688e0c.7.1772696880091;
+        Wed, 04 Mar 2026 23:48:00 -0800 (PST)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56a91659421sm27674781e0c.0.2026.03.04.23.47.58
         for <linux-can@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 23:45:34 -0800 (PST)
-Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-5ffd57b6fc6so1136137.1
-        for <linux-can@vger.kernel.org>; Wed, 04 Mar 2026 23:45:34 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUXfhPtwNmnTew1pJFb/Kt88JOneK/uoKogo3gEnagZ8IxcDy06W/qC29eOwye2atkvWyPUg7TkuXk=@vger.kernel.org
-X-Received: by 2002:a05:6102:441c:b0:5f9:3a22:85a2 with SMTP id
- ada2fe7eead31-5ffaac72675mr2059267137.12.1772696734612; Wed, 04 Mar 2026
- 23:45:34 -0800 (PST)
+        Wed, 04 Mar 2026 23:47:58 -0800 (PST)
+Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-5ff1703cb9eso2132711137.3
+        for <linux-can@vger.kernel.org>; Wed, 04 Mar 2026 23:47:58 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXwORkCrFm56+4UeKXzZ+HbEvTo5Tv6NQ6McyMQAAwJnRuKxCpYvlC/6Qr/nR6Z7FwRKJqIc5h0Tf8=@vger.kernel.org
+X-Received: by 2002:a05:6102:32c1:b0:5ff:a16b:93f9 with SMTP id
+ ada2fe7eead31-5ffaae2d5b0mr1883200137.21.1772696877960; Wed, 04 Mar 2026
+ 23:47:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260304175735.2660419-1-vladimir.oltean@nxp.com> <20260304175735.2660419-6-vladimir.oltean@nxp.com>
-In-Reply-To: <20260304175735.2660419-6-vladimir.oltean@nxp.com>
+References: <20260304175735.2660419-1-vladimir.oltean@nxp.com> <20260304175735.2660419-14-vladimir.oltean@nxp.com>
+In-Reply-To: <20260304175735.2660419-14-vladimir.oltean@nxp.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 5 Mar 2026 08:45:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXA67BO8Umz8-4jRg1SLvtZUSEzK0p7WxSvomnBk+WiyA@mail.gmail.com>
-X-Gm-Features: AaiRm52ziEM93YxO07h7pOV0rTYZnULijxTOwLRm9EW_k_lOxLulmwK4PITV2jw
-Message-ID: <CAMuHMdXA67BO8Umz8-4jRg1SLvtZUSEzK0p7WxSvomnBk+WiyA@mail.gmail.com>
-Subject: Re: [PATCH phy-next 05/22] phy: add <linux/pm_runtime.h> where missing
+Date: Thu, 5 Mar 2026 08:47:47 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUNtqsui3ek1RYCTyiuDLRajpSBMnrdzED6wu6i7-QcuA@mail.gmail.com>
+X-Gm-Features: AaiRm514iMGAdfTBAVsgfVfK-GGHy9jHY4ezK-Lp3w09-JWpnENLQ0I4lkIFgvE
+Message-ID: <CAMuHMdUNtqsui3ek1RYCTyiuDLRajpSBMnrdzED6wu6i7-QcuA@mail.gmail.com>
+Subject: Re: [PATCH phy-next 13/22] phy: introduce phy_get_max_link_rate()
+ helper for consumers
 To: Vladimir Oltean <vladimir.oltean@nxp.com>
 Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
 	Neil Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org, 
@@ -95,27 +96,32 @@ Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
 	linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev, 
 	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org, 
 	netdev@vger.kernel.org, spacemit@lists.linux.dev, 
-	UNGLinuxDriver@microchip.com, Peter Griffin <peter.griffin@linaro.org>, 
-	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Magnus Damm <magnus.damm@gmail.com>, Heiko Stuebner <heiko@sntech.de>
+	UNGLinuxDriver@microchip.com, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Andy Yan <andy.yan@rock-chips.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Markus Schneider-Pargmann <msp@baylibre.com>, Magnus Damm <magnus.damm@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 4EAFE20CD88
+X-Rspamd-Queue-Id: A7A3120CE75
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[lists.infradead.org,kernel.org,linaro.org,lists.freedesktop.org,vger.kernel.org,lists.linux.dev,microchip.com,glider.be,gmail.com,sntech.de];
-	TAGGED_FROM(0.00)[bounces-6923-lists,linux-can=lfdr.de];
+	FREEMAIL_CC(0.00)[lists.infradead.org,kernel.org,linaro.org,lists.freedesktop.org,vger.kernel.org,lists.linux.dev,microchip.com,intel.com,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,rock-chips.com,pengutronix.de,bootlin.com,tuxon.dev,baylibre.com];
+	TAGGED_FROM(0.00)[bounces-6924-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[linux-m68k.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[30];
+	RCPT_COUNT_TWELVE(0.00)[42];
 	MIME_TRACE(0.00)[0:+];
 	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -123,30 +129,52 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	NEURAL_HAM(-0.00)[-0.959];
-	TAGGED_RCPT(0.00)[linux-can,renesas];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.960];
+	TAGGED_RCPT(0.00)[linux-can];
 	R_DKIM_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[glider.be:email,mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,nxp.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,linux-m68k.org:email,nxp.com:email,glider.be:email]
 X-Rspamd-Action: no action
 
+Hi Vladimir,
+
 On Wed, 4 Mar 2026 at 19:00, Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
-> It appears that the phy-mapphone-mdm6600, phy-qcom-snps-femto-v2,
-> phy-rcar-gen3-pcie, r8a779f0-ether-serdes and phy-rockchip-typec drivers
-> call runtime PM operations without including the proper header.
+> Consumer drivers shouldn't dereference struct phy, not even to get to
+> its attributes.
 >
-> This was provided by <linux/phy/phy.h> but no function exported by this
-> header directly needs it. So we need to drop it from there, and fix up
-> drivers that used to depend on that.
+> We have phy_get_bus_width() as a precedent for getting the bus_width
+> attribute, so let's add phy_get_max_link_rate() and use it in DRM and
+> CAN drivers.
 >
 > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
->  drivers/phy/renesas/phy-rcar-gen3-pcie.c       | 1 +
->  drivers/phy/renesas/r8a779f0-ether-serdes.c    | 1 +
+Thanks for your patch!
 
-For the Renesas parts:
+>  drivers/net/can/rcar/rcar_canfd.c                   | 2 +-
+
+For the Renesas part:
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+> --- a/drivers/phy/phy-core.c
+> +++ b/drivers/phy/phy-core.c
+> @@ -640,6 +640,12 @@ void phy_set_bus_width(struct phy *phy, int bus_width)
+>  }
+>  EXPORT_SYMBOL_GPL(phy_set_bus_width);
+>
+> +u32 phy_get_max_link_rate(struct phy *phy)
+> +{
+> +       return phy->attrs.max_link_rate;
+> +}
+> +EXPORT_SYMBOL_GPL(phy_get_max_link_rate);
+
+Any specific reason you are not making this a simple static inline
+function, like phy_get_bus_width()?
+
+> +
+>  /**
+>   * _of_phy_get() - lookup and obtain a reference to a phy by phandle
+>   * @np: device_node for which to get the phy
 
 Gr{oetje,eeting}s,
 
