@@ -1,251 +1,216 @@
-Return-Path: <linux-can+bounces-6963-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-6964-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EEicLn9FqmnxOQEAu9opvQ
-	(envelope-from <linux-can+bounces-6963-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 06 Mar 2026 04:09:51 +0100
+	id IIruKqGYqmkxUQEAu9opvQ
+	(envelope-from <linux-can+bounces-6964-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 06 Mar 2026 10:04:33 +0100
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23C4D21AE23
-	for <lists+linux-can@lfdr.de>; Fri, 06 Mar 2026 04:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 111D221D967
+	for <lists+linux-can@lfdr.de>; Fri, 06 Mar 2026 10:04:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CC947302BEA8
-	for <lists+linux-can@lfdr.de>; Fri,  6 Mar 2026 03:09:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A85B1302BE37
+	for <lists+linux-can@lfdr.de>; Fri,  6 Mar 2026 09:03:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9369336BCE3;
-	Fri,  6 Mar 2026 03:09:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4926C33A6F8;
+	Fri,  6 Mar 2026 09:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dAwPI33N"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="FHKDN+i8"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011048.outbound.protection.outlook.com [52.101.65.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4DA36AB64
-	for <linux-can@vger.kernel.org>; Fri,  6 Mar 2026 03:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75363264E1;
+	Fri,  6 Mar 2026 09:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772766569; cv=pass; b=uq04JZdTzIViaWoqV0UIxhkshDBwFjRLyUUwfoKuQjRnDTRmgMOWUPOftVXQhdgcmBQc49ptn/x/xImlzG3fscIjSjkwUy+bdeCVthbW+E2G2xvvcOGe8zLyqVjVGpw/dnNWrO3XwZUNZFjXq/GCUl5m8VZqJ3zposTuM/u3WRc=
+	t=1772787792; cv=fail; b=gtINPDkD/yt2/iX/HosnoSwcjm+GWV62YGqob4+1O7QnqAwGwIU7e59KFtI82fChXfZf+uYuwueTWIXSVaQzd3VTxoiPF4h6I0CEuDZXxOOCh+1XszJE6FGqHTDjfWimvO4z5gaEFRHeFoT79iinYrddSrTO8hyxSok8EeQorec=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772766569; c=relaxed/simple;
-	bh=bviOEAiclB40zHgWtMns3qOTI6tH10B4GOXwr6aNFqE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NObUJn+H+iwKdadKmQKVRPn5QqyboyZwBoayThy/v9u6mNxwsBEaybWF7XgZyRYQOwrLdDg7vn7Gx4UoUsYSJQaltMQGqXF4UQ1NMQoCnmDYyQjnOW6K6L6lpBIoUWdsxscnU8FOhcbD28Hntl/+XfOjqlPrNs/bPIuNqRHV9KE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=dAwPI33N; arc=pass smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3598b2318c2so3116575a91.3
-        for <linux-can@vger.kernel.org>; Thu, 05 Mar 2026 19:09:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772766565; cv=none;
-        d=google.com; s=arc-20240605;
-        b=PC1rUaAP+W3i76kO/qwuFPCUM6coim35qxXnAj5W4jw8dMbrrrEnD/ByKw4E35Q7yC
-         yGhvOUhTeMn4/XjGoW+ltrpnKKpR0tiI9JV4x4xZsX//k+GXWte1BicOvNtpFFudvm2u
-         pLO2iVAdw6hdmHKKjf8cZKu/RMujWRJGw8ijTY6Hl3b39w46LVEriv7BT6fEFKqvAMi4
-         3LsqL7+MoKh2B8TbtbDO2fW1A3C+VFW0Ib/f9h+HJuTywpbRGxLpq/V18nRqqcozLMTs
-         lNVs+s46DY4pUqI5ENnD5zdaPhbYH+ZGv5D73Z4rmF18JyEuIZ8rV2A1SjSRTACTOlFv
-         WbLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=a2wyFmqtgQuSSxu/y1lHXpYQVnaUEjD/9HUkzSu97q4=;
-        fh=ticcWbtrd22gJDsZ5OCOsjgZ4RnADOJd9y7liPQo9Ao=;
-        b=KL3zTuuWzkz1/9k+k0UGS3aBVR+7GIvwLrTGTAo9nuyHplapy99OXC+9R1O9r1fHmz
-         vmYLICQ1H6v9+VEouIbwwhzsMGbgv7EN722wqWpZMSDlKi7+Yo25h6NQrcY3AyFGXFpH
-         L/V2Yv0rdFLhc4nflYsi7N3R6KsexDtUNttstGbxg6VsO7hO8iiB5fv0dfB5yHvuOhuk
-         JdKo3MvHJ8xqCj1MkAS3k/L0BWnpkqmVGpP34J5vJLN5u1B7/z+5UMCV7+hs6wTZBfp6
-         0z13GsTIpdTs1W5RnyN7USDnIY9jLuAaA6JkCrsfy9zkJI7NSHRtNNAs5Y4TvW/Q5dVL
-         vSsA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1772766565; x=1773371365; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a2wyFmqtgQuSSxu/y1lHXpYQVnaUEjD/9HUkzSu97q4=;
-        b=dAwPI33NE0I1N7/Ob8GYMBqsbwtzcp+gp2GDnYiH04YPQzdL4RUvdUR0iBjC13xcQv
-         aMlFvamolK9EzpBi4IgqFSnNpby7fEcumrjWtlKePL62YAyLDCmP7hU8YhE4e5dTV4im
-         bxKYh3oOr1YE19tfvZlpSAD+OmVZB0B+qCCPL7+9ujo1/bE5Vg3GerBiI72kjcw8sVjb
-         lkjdL/w3VuY7xlT09hsIXHjJpUJEi/Ru/lQnfTbU8FKYq4PXRFBSV8fwkeEqIgfI8cIW
-         ZF0zTRPVDBbS2bScfd71WgeyHuBjROxPuT+4Rc9LFHrrJ3RGMuKypOfKDAdxE+j0N1PI
-         Ht5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772766565; x=1773371365;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=a2wyFmqtgQuSSxu/y1lHXpYQVnaUEjD/9HUkzSu97q4=;
-        b=CbdgG9RZPqOpK6bYqr0xKjYh1qleJDNuPgiT+Agqxqfprbi0RTToVqKVY3oMyqUvRz
-         jaKWW4QewtQZkxM4G4JWIP6n4AhECiCOh0uMBtcivJe2O3RX2gn6fuE+BfNLiGE3Ovkg
-         xzEknb7+k47vt7IZbdOzPFRxrJiRCxELid3z/ntpSnkwMmhT9wuzHxGDk6ohK+T0MgXI
-         vOucRdees7o1B1fDognwKjIgvE7SGFTzg8VW+APPLlXdfJnnZG/nsem28jjhmiDuUr0b
-         ErhpsAhIRQPvv1s1ZTPXRq8g8QNuw1f2P0gvREYMZis4GLFwX8WCCnoeEZHewy3rwr2s
-         e58g==
-X-Forwarded-Encrypted: i=1; AJvYcCVQ1aoqu2VNXiCymvIIE4nCpvFdjGx6z1tFcXS4VyMx6EtSfo7iFR0fznj7ZRFcuoXTXHqYI3HhCjU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVSjChIqZu51S5yXshj4vpZEs6mpyFLBB6z9/RDhXXLmGnbBlA
-	k3uBAQC8EfE4jQjzeEj8ltKlMuxNlvOh8h3xgp8+Vkldo6mqky64EY9N9sAM657X5+lfMlYzFQv
-	GIpcy5r6zLgGp7/L4xFO5Lfq5G03YQR7B+sbOppqk
-X-Gm-Gg: ATEYQzyIduJJfvTebkTzx+qA2Q5VSh6Inv1Oap8wuGdkH3VdikDN+LZwBcFBRUiyZXd
-	d30bKV/5sgx+u/Bj2FQewBgHFSkZx9xpml+T7fbvcVUhno+sJ56MFwkqEXOkODsC7mSaKvk+d7C
-	VJZFWicLC3JQQXks7ff4XK2fPLDqfaBkVI70xDwSEg3uQv5YuXKTiuX0Fb1KEO2aPfIH1g452nl
-	cQu7d69l4dm8QG3C8Ut0mEJfsIEU+WELf0b7ij23eeI9+ERojEHcpFTyuRv+772ufydleqAQNla
-	7S2MIbY=
-X-Received: by 2002:a17:90b:390a:b0:34c:35ce:3c5f with SMTP id
- 98e67ed59e1d1-359be28da81mr585228a91.5.1772766564424; Thu, 05 Mar 2026
- 19:09:24 -0800 (PST)
+	s=arc-20240116; t=1772787792; c=relaxed/simple;
+	bh=B9qG/2DjKap+UBB2rRp/93xS88l9UZlnoF0W0JX4mjg=;
+	h=From:Date:Subject:Content-Type:Message-Id:To:Cc:MIME-Version; b=prZIat9Pif6CHDWaOvnZZ96rsLcebO2M1NXdtqZvy7PMyn+QBKKWWfGSWSD6m4wPeqMvbjzwDmCom/oWS6KDG8boxpk6QQJ9YbAAJYaQUvnVVuXcUX3KG2SgLuIrE6mDVKC5k5QnXXPmoHeGP6ROCeoGBFG7Eib+rbkuaD9QyrA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=FHKDN+i8; arc=fail smtp.client-ip=52.101.65.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bA73YaXuIWJ+RLsWO/iihsadydJ/598f+i6GPW1k9SGdVeUq52/H/wdMxZZdg3zIvHb+QW8/zthlLTf3dChOQvPlWgFPXSEXm1qxMzN0xfhmmsOOmSqEukov2yIUZZIeidn8X/ocaG1jtrab6Vk8m41GIZzxDp//7ehJfYSx7Y/CvuQ5OYDjEnSkyqlwy8XDVCMO5LYjEY2YuvVpv3H+YxoA3IpLQpReRcVpOzpxH8n8ol6NL75FbAozdOzf5lMHxWbhY6txAqa2drUUcMm4GD55R4nC/YyasjEQjaISS0CKA9Q+JXz8Bqy7RxYXffI7MetIpQoB/0gaMmcWqoHYJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BFLXk3wespIWiBZVTzXiM9RjN1Vy6IQWlW1Lktd7Dpg=;
+ b=r48Hjs5QweLZaGaCuhuVKjtgtFN92eGUVO4RvreErFtThoQUSM6TB/URnL4nERgGuu5xdjZ2IUjG9Iz5gsanRxkPcOCyGL3e75RQ3SfgCHH7LWDM0qP6nXv3Ef32lthKZogNRlCoRrSnx3P2jmNqA6fUSANDbYQH+fl1STqrIzC0/BAMUYNQbVQSElzDPZknh3adBeSaRs7fcmzD8ZM49fAs2ksyRFLkdvDhMK593WzsQzl9HYA3UZOIeJCvGzH4RC+hz2XuNzCYSihP0fN/hHr1zFSTinNheNlQnZ4XJx4Otx9WK42XhCw81MQLbo0EjZcp+YupHlwWaab0i5zg6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BFLXk3wespIWiBZVTzXiM9RjN1Vy6IQWlW1Lktd7Dpg=;
+ b=FHKDN+i8HcpATb0FESvsPMxk7QOp8Dkw31dMAFz/dfSVszPKvyBQDs9newzJnj8l2pKJk3zv9F8DBHqFMGVZHHN3XAFu37sZwqAxx46Z/kks+K4trq3UfT/d8umXtyyvgkWe0Ae35+ev88wZDkCEELF1uYfGRQxcNGxEFD9EVo50sHVjD7E7hCv+sRdjXtJO0TUm/M2sDpYma3ysikG8m2+eDZzO1+QEfrjD+CYWBsyYzSIkTf1nHCsCMsVg1absL6qB9QGXCybieoqmq5Hu7oZr7uUFsFif8ngSwGMjAezuTl0rp0DSSLeUhP8Ql4ggNkeFHU3r2DCk6hnphJbLVw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from GV2PR04MB12272.eurprd04.prod.outlook.com
+ (2603:10a6:150:328::18) by GV1PR04MB10751.eurprd04.prod.outlook.com
+ (2603:10a6:150:20d::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.19; Fri, 6 Mar
+ 2026 09:03:07 +0000
+Received: from GV2PR04MB12272.eurprd04.prod.outlook.com
+ ([fe80::3c9e:6f28:93b5:b908]) by GV2PR04MB12272.eurprd04.prod.outlook.com
+ ([fe80::3c9e:6f28:93b5:b908%7]) with mapi id 15.20.9678.017; Fri, 6 Mar 2026
+ 09:03:07 +0000
+From: Haibo Chen <haibo.chen@nxp.com>
+Date: Fri, 06 Mar 2026 17:04:48 +0800
+Subject: [PATCH] can: dev: keep the max bitrate error to 5%
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260306-can-fix-v1-1-ac526cec6777@nxp.com>
+X-B4-Tracking: v=1; b=H4sIAK+YqmkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDYwMz3eTEPN20zApdU1NzUwNLC0NzE0szJaDqgqJUoDDYpOjY2loAhHY
+ IplkAAAA=
+X-Change-ID: 20260306-can-fix-557509817496
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol@kernel.org>, 
+ Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ imx@lists.linux.dev, Haibo Chen <haibo.chen@nxp.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772787913; l=1149;
+ i=haibo.chen@nxp.com; s=20250421; h=from:subject:message-id;
+ bh=B9qG/2DjKap+UBB2rRp/93xS88l9UZlnoF0W0JX4mjg=;
+ b=8lrryr47j/3MPtV/07LXMVb3rAU15F84GQNXWzEukui7KIE/ioUqf1/SimEz+ATXGIpZHBxuY
+ ftAfLxayu8SAIEHzmaMnzkjpUGtxX0NbrOmJ5FNvo3+fQaV8pkgSrNp
+X-Developer-Key: i=haibo.chen@nxp.com; a=ed25519;
+ pk=HR9LLTuVOg3BUNeAf4/FNOIkMaZvuwVJdNrGpvKDKaI=
+X-ClientProxiedBy: MA5PR01CA0184.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:1ac::10) To GV2PR04MB12272.eurprd04.prod.outlook.com
+ (2603:10a6:150:328::18)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260304-iino-u64-v3-0-2257ad83d372@kernel.org> <20260304-iino-u64-v3-2-2257ad83d372@kernel.org>
-In-Reply-To: <20260304-iino-u64-v3-2-2257ad83d372@kernel.org>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 5 Mar 2026 22:09:12 -0500
-X-Gm-Features: AaiRm51A9fGFpauPslQfX6LBJuSyutri4HG-shh7wAOHtGm4QDzvXC5jtThE_pI
-Message-ID: <CAHC9VhQix8opxrX--w-pw5vEAiLaYX=kPhnm4x+dEFEwHiVnfQ@mail.gmail.com>
-Subject: Re: [PATCH v3 02/12] audit: widen ino fields to u64
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Eric Biggers <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>, 
-	David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>, 
-	Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>, 
-	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Steve French <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-	Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>, 
-	Alexander Aring <alex.aring@gmail.com>, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
-	Viacheslav Dubeyko <slava@dubeyko.com>, Eric Van Hensbergen <ericvh@kernel.org>, 
-	Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>, 
-	Christian Schoenebeck <linux_oss@crudebyte.com>, David Sterba <dsterba@suse.com>, 
-	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>, 
-	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
-	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>, Ilya Dryomov <idryomov@gmail.com>, 
-	Alex Markuze <amarkuze@redhat.com>, Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, 
-	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, Amir Goldstein <amir73il@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Yangtao Li <frank.li@vivo.com>, 
-	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>, David Woodhouse <dwmw2@infradead.org>, 
-	Richard Weinberger <richard@nod.at>, Dave Kleikamp <shaggy@kernel.org>, 
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, 
-	Joel Becker <jlbec@evilplan.org>, Joseph Qi <joseph.qi@linux.alibaba.com>, 
-	Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg <martin@omnibond.com>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen <al@alarsen.net>, 
-	Zhihao Cheng <chengzhihao1@huawei.com>, Damien Le Moal <dlemoal@kernel.org>, 
-	Naohiro Aota <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, 
-	John Johansen <john.johansen@canonical.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, "Darrick J. Wong" <djwong@kernel.org>, 
-	Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>, Joerg Reuter <jreuter@yaina.de>, 
-	Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Oliver Hartkopp <socketcan@hartkopp.net>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, David Ahern <dsahern@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Remi Denis-Courmont <courmisch@gmail.com>, 
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
-	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
-	samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org, 
-	v9fs@lists.linux.dev, linux-afs@lists.infradead.org, autofs@vger.kernel.org, 
-	ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu, 
-	ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev, 
-	ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org, 
-	linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
-	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org, 
-	linux-x25@vger.kernel.org, audit@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org, 
-	linux-sctp@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 23C4D21AE23
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GV2PR04MB12272:EE_|GV1PR04MB10751:EE_
+X-MS-Office365-Filtering-Correlation-Id: abab40d8-b0f1-4520-9a71-08de7b5f2ecf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|376014|19092799006|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	xQDA0D6RTcsbBdnCbQKX10cAmYrggRYS7g7kaUTLxVd/5DgE1ysxLkiEFek/Y/U4FYPAoGi98FZCPOSb+aoTXVrOtRISvPkS8msyQ1AUuH3XjCUacH5PwkiPJbCIuKeXOZewJTRSRaAVbL/mE3RmbncJgVPFiIxL4wy+AOx/Poa6qDEsG5esOkK5xooqe7u1RRaN1YpYq7ubRiYGSOkr++cYPAU1UBka6yFh4ee8RPAW89fmlWgyEv+cLg9sg328gwqCFrkvvd0vSa8TziluP0m8bP/aet+sEoOPuan+I6/F+zlPz9v1lmaQMBPDk1u6RG018G2O0cPtoJ4fouXaf3yJisoEQ1QcvoP7DOdWN4iIKcM9tIUgAs+CSdQEowvkMrobSnG8r3Jb/Z7oBIhQ605T5yoKEyXgGvqSPNIL7at+iKBEGiLBdYza8Du7DoJf02+ODji86cifZLJNdKf8Sr0LMPVnxI36X0arkf/hgyXWxpae6Y0MaM/sMyN8UyeGBQNCclISA2/iC1bBaVBhCvzU7Zm+m5qzVJUeAy0GVdCUhb2RqVMgMVWz3jXz5Z8MKrH5R6K3S3nKPe8fqShd6pPHvPXZYtm8cGNWU3i6ctpXFvMXACb6nkf8PVc/0yuW5xa75GQnVecRaaimEYz0RP1A2fAUPaJe9I5qb9IKykv/uJj5+RSYFmv6FLIJ4ELqtgeNsJEu78lB66Tzp6k+5iqxppqOa5kqirrSIbm4SITqNJvLqwaN7OSQdGqoKN7OsGnvbvTZvulR9kpnGxLVo1FaL1U8viUrzUS78UHD5bE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR04MB12272.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(19092799006)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VlRvTUNWZStuWUI3NFpENjRleG9CZFBKUXJsRksyQlpTS2ZZV0pMTTBxSHpz?=
+ =?utf-8?B?QnRCUDl3VTNvZm1aaDc2clQzazVMUUh5cWNaZ3pFL3ljV1NOdnc0Ly8zSHJY?=
+ =?utf-8?B?NnlOTHJHWGo4ZTFOcU43WlBIbEd3V2R2K0FzZUJUQUtjU1BuRTgwcnFVSFlX?=
+ =?utf-8?B?NHFlWTFrZlU4S1hwK0R0THcxWml4MTNaektnK0s0M2VDdUpINTBlWkFLa05N?=
+ =?utf-8?B?aUZydS8wL0IwOERYcXpnVEFzaXJCSHM3WEVWSWl2dlJ1OEQrNHhRbUxmWVBj?=
+ =?utf-8?B?a25HbndXMDNNK2FvV24wVkJXK3RaMGJPSUdMQXpqa2R0V0dkeWlxdXJGdXU4?=
+ =?utf-8?B?cXBGSnBNbi83VU93dStzbnpTZGJkWHlSOEgvaXNZVkJ0OUVlOFpDOEdlT3Ji?=
+ =?utf-8?B?a3JaK1ArWWtVQnp6Q2FVQW1QSnJJZ2JpdFp4dEFUWm1mK1NscnNQR1g4enJw?=
+ =?utf-8?B?SDdZUGg5SVI3SXd5UVQ4UjJSYVdrcFNFcnBGUzdjSnlxd3dCR21ZWlBjYlJN?=
+ =?utf-8?B?QjhIRXF5cnh1dXk0ODFaclEwSXNMRys1L09ydGlKTm41V0xId2VPN0RRNVIr?=
+ =?utf-8?B?Qmg2bjhXWWQvVlFucVZGTnBGcVhSNnJOZWNCdmN4NHNVTEJIYkRDaVVydUxW?=
+ =?utf-8?B?Z1Zjb3ZXZFRHbzBlaC9odGMvTkh6cU5xelN3NkNLcGY5aDlURkJzeUtpUzNQ?=
+ =?utf-8?B?L25qczd0YW5kOXhvc3pDRnpLMEpoZitHcFNsbGQ0cldDNFMvbFkzWWZ5MkhG?=
+ =?utf-8?B?M0dDQ09udFZoL1E5SWlKVWZCc0RSWXFpU1ovRTlJbEYvcUlWRXc0SitWdFNt?=
+ =?utf-8?B?KzZzZUc5KzFqUWlTc3Vka0djMzIyT1lTeFh5ZlZRQUFBME5ZVnF6WU9NdjZ1?=
+ =?utf-8?B?M3JiY2l0bGJITGpHQlZUYWx0S2toNTZBVXc0d2Y0OTcvcjNLTkkyUTMxeGxR?=
+ =?utf-8?B?ZDJueEN2dXFNWkNxZjlDcU04RFl3VGNDZDdUSnF0eWJqOE1YbWFocitWblBP?=
+ =?utf-8?B?aG5tZVJGZ1ZsRGRrcSs4bURoYVo0a0JaYzB3ZENTdkNJSXp3ZFp4bTJwNzN2?=
+ =?utf-8?B?ZncvM3o1NDVHa3NvQ2duUG9kMGpaYnNuOHM0VTBoeVcrVUVBTTVqclU5MVlv?=
+ =?utf-8?B?eUpBVFdYS1RKdjBxbXJZWFByL0ZIZXZNazhDckk2Qk1XdWZoREFVWDdxZkpn?=
+ =?utf-8?B?ZVIvbThIcHNZTDJlWkQ1NFNvcjNaS3phdzZvcXljMVZZZy9vZnRhQTJrSFJK?=
+ =?utf-8?B?WVJTdVlaT0dwb3FmQndMdUovOHRpR1YxMElzbFk1anNaeVl3NjYwMXMzMFhS?=
+ =?utf-8?B?YzNyMkkzS2IxdGFPeW9UcjV5ZU5jZ21qQkNXa3lYRGxzM1JmM1NoWm5vaDBD?=
+ =?utf-8?B?S1Y1MDN4WnlPWXZiRFh1VDFMV0VEN1JWeHpFL3Z5cmZxNk84d1hLbUdRZVBW?=
+ =?utf-8?B?RWdRYk9MZmRjenByUUlQQU5GRXQzdmUvNC9YeWN2cWZqdm5nNWlPMDlqUHZp?=
+ =?utf-8?B?ZTJjUGRUQXFJMUk0SlVQSHk3bnJMMTlSaXhZYUtnSCt2bE80cmEvcWEzRUYw?=
+ =?utf-8?B?dmFpWElOVUhEcW8vbEQvU2k2Y0RDM3hhdDBySzI5QUdNblRmc1BiSjdPdmI0?=
+ =?utf-8?B?eUlIL0RZZjdJdG1jbzBTSmdhY0s1d3FITFZEc1AwaE9xeDVvdVlib3Z5VmRs?=
+ =?utf-8?B?b0MrZjJ4b05rVUw3QUJSd1VFc1NKY1phYVpsMmthUC94a1p6UTRxaTlaTXBw?=
+ =?utf-8?B?VERHL0pMSmdQZEJQdG5YTVNxellIK0Y3Y0g4cGtHL0w4TldzQWV5UmRyWEIr?=
+ =?utf-8?B?R0lnZGFtMFNXSGlObE4zOGJFQUNKYWVyZUdsbVNVV0hhSEJBN2dDTWJrczdH?=
+ =?utf-8?B?Y2VZdHcxTy85SXl2eHFaeERiWTQxMzJQWDYxU3FUWWFNakVucHB0akVSVHBZ?=
+ =?utf-8?B?bVlmVDZPM21zeUZEN1M4OEYySTA3V09qVFNRdkVKWjZpNlkySUJGUHVOZy9S?=
+ =?utf-8?B?TWZnWFpOd2lSbTJJSUgxL1lYdnI1QzBua0hzem9hVlZxc2E2bnJDRW1aa1dw?=
+ =?utf-8?B?em1FQTNkNzhzOVR5OG9lS0JUMWk1U1FsVWhTUkFaOUs4SXdKa21oM0lTM1lM?=
+ =?utf-8?B?cjAzOExQOGN5aTFpSUREMGtMdThSVUlmZldGVG9QYm1HUStXa1Y5azhXMEdD?=
+ =?utf-8?B?NmxUaU9lMW9PVFJOTHZOVHFQOUY4eE1xN0xLL1VjZTZqYUlycVFEVVpka05k?=
+ =?utf-8?B?QkMyd3pDWlhiT2NPdVNFSll5eFhjbW1wTGdHZ0VFa3FPMzBGL2RXOFVwTEZ5?=
+ =?utf-8?B?NlBCYVRPZUdKRCtidk5IMzd4RlFBK09TZERVSkFhb3k2OUFqcW15QT09?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: abab40d8-b0f1-4520-9a71-08de7b5f2ecf
+X-MS-Exchange-CrossTenant-AuthSource: GV2PR04MB12272.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2026 09:03:07.1738
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KwLu6SKmjChOrDccBNcQ/qYOYdELlFACzZz0RGY17QJKXGRqAnjjClWiiC0rBWGrTurY17PeD+5HPQlxZmM9SA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10751
+X-Rspamd-Queue-Id: 111D221D967
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[paul-moore.com,none];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[paul-moore.com:s=google];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[zeniv.linux.org.uk,kernel.org,suse.cz,goodmis.org,efficios.com,intel.com,mit.edu,linux.dev,suse.de,redhat.com,manguebit.org,dilger.ca,suse.com,oracle.com,brown.name,talpey.com,samba.org,gmail.com,microsoft.com,dubeyko.com,ionkov.net,codewreck.org,crudebyte.com,auristor.com,themaw.net,cs.cmu.edu,fluxnic.net,tyhicks.com,infradead.org,physik.fu-berlin.de,vivo.com,artax.karlin.mff.cuni.cz,nod.at,paragon-software.com,fasheh.com,evilplan.org,linux.alibaba.com,omnibond.com,szeredi.hu,alarsen.net,huawei.com,wdc.com,canonical.com,namei.org,hallyn.com,linux.ibm.com,schaufler-ca.com,amd.com,ffwll.ch,linaro.org,google.com,davemloft.net,arm.com,linux.intel.com,dev.tdt.de,yaina.de,holtmann.org,hartkopp.net,pengutronix.de,secunet.com,gondor.apana.org.au,fomichev.me,iogearbox.net,vger.kernel.org,lists.linux.dev,kvack.org,lists.sourceforge.net,lists.samba.org,lists.infradead.org,coda.cs.cmu.edu,lists.orangefs.org,lists.ubuntu.com,lists.freedesktop.org,lists.linaro.org];
-	TAGGED_FROM(0.00)[bounces-6963-lists,linux-can=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6964-lists,linux-can=lfdr.de];
+	DKIM_TRACE(0.00)[nxp.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[170];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[paul@paul-moore.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[paul-moore.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-can];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[haibo.chen@nxp.com,linux-can@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,nxp.com:dkim,nxp.com:email,nxp.com:mid]
 X-Rspamd-Action: no action
 
-On Wed, Mar 4, 2026 at 10:33=E2=80=AFAM Jeff Layton <jlayton@kernel.org> wr=
-ote:
->
-> inode->i_ino is being widened from unsigned long to u64. The audit
-> subsystem uses unsigned long ino in struct fields, function parameters,
-> and local variables that store inode numbers from arbitrary filesystems.
-> On 32-bit platforms this truncates inode numbers that exceed 32 bits,
-> which will cause incorrect audit log entries and broken watch/mark
-> comparisons.
->
-> Widen all audit ino fields, parameters, and locals to u64, and update
-> the inode format string from %lu to %llu to match.
->
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  include/linux/audit.h   |  2 +-
->  kernel/audit.h          | 13 ++++++-------
->  kernel/audit_fsnotify.c |  4 ++--
->  kernel/audit_watch.c    | 12 ++++++------
->  kernel/auditsc.c        |  4 ++--
->  5 files changed, 17 insertions(+), 18 deletions(-)
+Keeping the existing logic unchanged: Only when the bitrate error exceeds
+5% should an error be returned. Otherwise, simply output a warning log.
 
-Acked-by: Paul Moore <paul@paul-moore.com>
+Fixes: b360a13d44db ("can: dev: print bitrate error with two decimal digits")
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+---
+ drivers/net/can/dev/calc_bittiming.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-paul-moore.com
+diff --git a/drivers/net/can/dev/calc_bittiming.c b/drivers/net/can/dev/calc_bittiming.c
+index cc4022241553fa6389c2cde698456de723ef6929..42498e9d3f38dbe8b9389d250d2d53798963839f 100644
+--- a/drivers/net/can/dev/calc_bittiming.c
++++ b/drivers/net/can/dev/calc_bittiming.c
+@@ -8,7 +8,7 @@
+ #include <linux/units.h>
+ #include <linux/can/dev.h>
+ 
+-#define CAN_CALC_MAX_ERROR 50 /* in one-tenth of a percent */
++#define CAN_CALC_MAX_ERROR 500 /* max error 5% */
+ 
+ /* CiA recommended sample points for Non Return to Zero encoding. */
+ static int can_calc_sample_point_nrz(const struct can_bittiming *bt)
+
+---
+base-commit: 3f9cd19e764b782706dbaacc69e502099cb014ba
+change-id: 20260306-can-fix-557509817496
+
+Best regards,
+-- 
+Haibo Chen <haibo.chen@nxp.com>
+
 
