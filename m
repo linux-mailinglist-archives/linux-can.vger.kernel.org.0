@@ -1,264 +1,329 @@
-Return-Path: <linux-can+bounces-7052-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7054-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8AmrMiwkr2n6OQIAu9opvQ
-	(envelope-from <linux-can+bounces-7052-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 09 Mar 2026 20:49:00 +0100
+	id YGU1KHkgr2neOAIAu9opvQ
+	(envelope-from <linux-can+bounces-7054-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 09 Mar 2026 20:33:13 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34B8A240506
-	for <lists+linux-can@lfdr.de>; Mon, 09 Mar 2026 20:48:59 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7599F2400C3
+	for <lists+linux-can@lfdr.de>; Mon, 09 Mar 2026 20:33:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CACF7324D590
-	for <lists+linux-can@lfdr.de>; Mon,  9 Mar 2026 19:15:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C2AEC300DEF1
+	for <lists+linux-can@lfdr.de>; Mon,  9 Mar 2026 19:33:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D98F2438FF8;
-	Mon,  9 Mar 2026 19:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45EC340FD86;
+	Mon,  9 Mar 2026 19:33:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="GDCnNz2u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zcp0vPvG"
 X-Original-To: linux-can@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012026.outbound.protection.outlook.com [52.101.66.26])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9761436351;
-	Mon,  9 Mar 2026 19:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.26
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773083426; cv=fail; b=UVrUvPawHKijDS8y/CSFMXIRIyhxWSq/ki7i7dmWkO7D/5ApKvauEOu/5mtpgbZR51mmANMtwFDxRI5sJTlr3YfWuV8kEwUGT3G7864qX93qAB22Sx2hKFDn4XrgFQDMBSnTHlsV8j21yZMiwhakewRgm6BVxp07tZyXOFXPViY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773083426; c=relaxed/simple;
-	bh=U9a7c3sAXM2U6BESvZ0tz7DMkzHW1w8Q6JcymyQpwjY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bbB2zTME2gk8oAHrepyU5Cv1/9DC+dEsZLU3b8+PgPB3Bo04q+31JrI2Q8DvY6V0TqxRNMF41xLWJR9Gm4tniVu3UnDZ4NxT0wyfY/mpXx7fp7shBAaW4MUK7DstBfXCEGK1IW9UpBks9B2r+4ndlf8ghSSFSragJsF5529pcNY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=GDCnNz2u; arc=fail smtp.client-ip=52.101.66.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LnMwpcSgviLq/1WmSrqbgaOIiWEAcoKBcEAuddpiCLtpfUq0h3EqvlReJSKlfG6VhQIXEfEfOayKyXJHXtX3uL8yWIIW19OeCaYZcFAC6WAN13RwEZgiadD449IJdibXcKa1kda+8eBRrFvKWNd4KUl0KB1fmvtxtGjkQzmIUHmFJNC/QWTpCFfkl2e8ti/SDciDg54Ete8xyDSYZ6+JWcGNsmZHrDuL4JDfKA7DNpXEejbt7wzaTiH4kwFend0dQC5MSQd+HJeEk/9l+7LZjrfEBjG/PMO9KOdVMb+uXCeH/5HDfGfRo+3HW2P1lUkqYcTwiv6cS2S0oRSsnwPUCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G4sweO+IwDJ6Ua8w8EgyJVJt++1frmmbObWZL1QvIN4=;
- b=J5ro1Xbpnyo5WjarEekEnuTC7lFx95IU0HX/h3mY1ifSpLUrbrknlJ9cb0ic8h3Z4q4A09tiVyxL0i6rXcIdBuZFLH+uyiuUOH1WC5chpdMaa+UVsZuu9OP2PJ3TPrzvtyCHxj3ywnteblu+i/8Adiiy+MpbDyq/jniJxsB7domaW4HWk9LHEDQA3DlBGTplSiFrI8iJG+/C6gIXc0UhzF4LXv4HOEP5gd/FOgKGMQ1E3jntPAmraJ/zJGaXZlf6dN7/GLokjPumTr0FmLWrz4cZ0xXX8FyyJ/CNpcWpKulN3LzsqvwudgmH+yFvLe5nfzXr2Rlxcf7bCaRSQGDs9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G4sweO+IwDJ6Ua8w8EgyJVJt++1frmmbObWZL1QvIN4=;
- b=GDCnNz2uEM5AkeKzsGtjPsmYSh4Lg9QL524VRc5b8y17v1vOioCXVh971r5jmwkrMfh0QY73leskxS+2VJIy5KepWNFKKwelbdRRoPma4dp2FGp0maxZ5/+52wdrJw57UVLa4MTpEEEB3R9wH0Qcv1dPiC42s34MenLdEzW65pn8wQmJuQ+9g0NNvVZWmlwpbr7iK9EdysCz4Vkr+sSpQRfrnavzW9BBHs4EPv11tgi9lrzhXJEuoPKwH6w32K7Uot616VmqZPI0enLJhdCQfHhBgcJlaMHk8hW+QLdnXaMjdqg78dtr7RA7c31BzRcUEYxXQYC47iNDrvKaSGfWSQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
- by DB9PR04MB9841.eurprd04.prod.outlook.com (2603:10a6:10:4ec::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.25; Mon, 9 Mar
- 2026 19:10:21 +0000
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9678.023; Mon, 9 Mar 2026
- 19:10:21 +0000
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: linux-phy@lists.infradead.org
-Cc: Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	dri-devel@lists.freedesktop.org,
-	freedreno@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-ide@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	linux-sunxi@lists.linux.dev,
-	linux-tegra@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	spacemit@lists.linux.dev,
-	UNGLinuxDriver@microchip.com,
-	Joe Perches <joe@perches.com>
-Subject: [PATCH v3 phy-next 24/24] MAINTAINERS: add regexes for linux-phy
-Date: Mon,  9 Mar 2026 21:08:42 +0200
-Message-ID: <20260309190842.927634-25-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260309190842.927634-1-vladimir.oltean@nxp.com>
-References: <20260309190842.927634-1-vladimir.oltean@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1P190CA0048.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:800:1bb::19) To AM9PR04MB8585.eurprd04.prod.outlook.com
- (2603:10a6:20b:438::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0093CD8CF;
+	Mon,  9 Mar 2026 19:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773084790; cv=none; b=YrmcK+K48cMLg+lSiTXuEyZA2pFi/6CEfznC7jQ3TmzBB070Jaw1la8T4rtClcWya2jIu3j0QkFvWLGfkKjlLry4/fc/Tm6STwsZtjlyiKpVDxbbkUhecnl1kIGs+B8jFtvOPPVI7fU+Z1/Qx4vLvCw7IHBV4itS//Rapra7Fpk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773084790; c=relaxed/simple;
+	bh=pvOA7z7LAJ55Pql7T2iOG6EB9ez/gWB7V9MCZ/Zjlxo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=R10h2takzT4WfXB/HRJfaS2ovo4iEFbENGxwpJqY5Sqp+GpwnjoojMnnAkWl/pcbTtBdJnLVZUBYKjPhJln4/P/uQz218QoNPa7+z4WSYRBiYivk4zNeQ+fwi3rClHWMoiA3gYlOC5xjNdQls7unYiUyYfijHmuHJhCiL99SSzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zcp0vPvG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAE9C4CEF7;
+	Mon,  9 Mar 2026 19:33:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773084789;
+	bh=pvOA7z7LAJ55Pql7T2iOG6EB9ez/gWB7V9MCZ/Zjlxo=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=Zcp0vPvGFcZ64z2raW4wDIh6j/XTTVgNcxeU6VWNbEqd3gJuDkjSzkOpsspUcVCKQ
+	 lcc1XL1FP2pWRLr+NlaKDAMpjvtN9zBII7AcLdNk1bPWn1WQKp7bbcxfLC/m9pPB/N
+	 IEY6Fnduwj/32EH8XBInBsK25APHGZx6v+VZKXH5b9MOO4KRs2f/HfKETxZ6bQRWF5
+	 dtM/8cl3v/DJKwm6MrSDpPIxnE4JZ94CyZpQ5RFLZk1zEcO5rifdFzuz9yWMRlnl0P
+	 Cw7l0xykXbtHms2rm+pFvFKz7om9OVETWDWxVlg6TPC/S9c57HXwELizpEeZDVP7VL
+	 zdDmzqN6JLEqg==
+Message-ID: <dd3f9873c7939fba0ca2366effd24e4b6326f17b.camel@kernel.org>
+Subject: Re: [PATCH v3 00/12] vfs: change inode->i_ino from unsigned long to
+ u64
+From: Jeff Layton <jlayton@kernel.org>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
+	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev, 
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org, 
+	v9fs@lists.linux.dev, linux-afs@lists.infradead.org,
+ autofs@vger.kernel.org, 	ceph-devel@vger.kernel.org,
+ codalist@coda.cs.cmu.edu, ecryptfs@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, jfs-discussion@lists.sourceforge.net, 
+	ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
+ devel@lists.orangefs.org, 	linux-unionfs@vger.kernel.org,
+ apparmor@lists.ubuntu.com, 	linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, 	selinux@vger.kernel.org,
+ amd-gfx@lists.freedesktop.org, 	dri-devel@lists.freedesktop.org,
+ linux-media@vger.kernel.org, 	linaro-mm-sig@lists.linaro.org,
+ netdev@vger.kernel.org, 	linux-perf-users@vger.kernel.org,
+ linux-fscrypt@vger.kernel.org, 	linux-xfs@vger.kernel.org,
+ linux-hams@vger.kernel.org, linux-x25@vger.kernel.org, 
+	audit@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-can@vger.kernel.org, linux-sctp@vger.kernel.org, bpf@vger.kernel.org
+Date: Mon, 09 Mar 2026 15:33:03 -0400
+In-Reply-To: <c9500adc562665d44feaca9206f23a5ba07432c1.camel@linux.ibm.com>
+References: <20260304-iino-u64-v3-0-2257ad83d372@kernel.org>
+			 <05b5d55c49b5a1bbc43a5315e3c84872e7e634b3.camel@linux.ibm.com>
+		 <f22758116dabd3c135a833bcb5cfcd2ea4f6ecf4.camel@kernel.org>
+	 <c9500adc562665d44feaca9206f23a5ba07432c1.camel@linux.ibm.com>
+Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
+ keydata=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
+ QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|DB9PR04MB9841:EE_
-X-MS-Office365-Filtering-Correlation-Id: 24f93734-23b7-4266-5fba-08de7e0f8290
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|1800799024|376014|7416014|10070799003|366016;
-X-Microsoft-Antispam-Message-Info:
-	YodBqD4Iu6ev7iUPHLtRwmvYLTUOGYRoYNpb+g1HDbPqgfG9p+NZBFOK+50wRyRZCT/JQkOmYXAfXRvcTjr3oBtbrv4J7eYoWlfWz/XQWTwhPJcd8YhtVJprBWKi9n/6RK8tGDeEiTyOaSDd7SGjx6ka4Vub4q8Q/vsJUtzaWSdCxX6UgqlOCW8fJF8qMrWkNAlqzlue7PZy1bzibi5olxW9JHxMRTVMOqTUGULSRuOsDHRhOXwhk898LZ+Dx5iPD7WaVEEqgwsBpo+vyof83LojFX2QYmQXkJkGfoaEXuDIwqC7A1kqPcqQ9B7add6JsSYgQkMeTGlgCoTEJj8fKLmjZZ2xlk3Yi4YgCSAZ/AaTgCkChYe86OmR4HYo2XrqMjfunt8fOY9Qt/94hlVX/RcK0IbKJM8veA2CaVM43Qu+3ttWgrLvVppolnsHVP3qvDh/Jg5zjPCNA1a574oyG3Jbtv49KRaVkd0jgR2nLuqw2jvTOKV0/NL8+kCIcaFMIl/cb1PWaLKEce1N/7Y3inX5qJggjrEcMaSYzc7Rs6ntpHHLyo+xgSbWGcIN6FV6JC02UACX7vYIAMsZIztob/hAujYtj7dBZNkc476JRASKJ23OYNzcnJCTO2CC5sEYQTRWn3D6ufbI50Kdby0bbfmyHZS2bgGJccNBs0EmU2DWeHJatGC57DcD+0WfN3OFsDv0RRvebw03f1oEhGnBO8SY9/fuV4yV4I4RgDoLH+M=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(376014)(7416014)(10070799003)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?OgPvXvzXQx2wvsdRhLsSZNFyjENHW1WnSO2+mcYLMfH8X7ZgKtv9KaRFdkmM?=
- =?us-ascii?Q?qKVMDopQrlrP/Om1TGUWT+dK58IUZzLFjxGtRo8mGqiXs+cd1+PY8eDQt0hC?=
- =?us-ascii?Q?Wv9JyK/Gu8LSx6FQ+FLKAdMM1s/JhYIORXpMUKK9nGpOPIEDed4wfd88m929?=
- =?us-ascii?Q?TdsgFZU8zg67b4rTkRLTAmg3H/kpqG8zLx9/esjwakb3mBmj6BZChi1eh5bP?=
- =?us-ascii?Q?BuAqV60phU9cpV5zXeGTrgdtoXO4MeBGbyuHZP64TQLWRAfJUp1jcSGleXoB?=
- =?us-ascii?Q?S6Y8/2FOse+KQM6wiWZgCyoa8kExo1csrpQN6lnUNZFhE7BCEZQINOb8NdzZ?=
- =?us-ascii?Q?75JSPszT457Xm3W5YvSeg5kdZgWOM7WMzPNOPKImoBbQ9r5MqzBVr6MZ1z4m?=
- =?us-ascii?Q?Qdbj1LMl7vuTchD5ANKLcK1ISiAttv7gUxQ9z48ZGuItHYBqEKF9HuESmnGU?=
- =?us-ascii?Q?9ZZih1OVPTFn0Qo5kJfXusKjxMXeR6AlpYm8ag3AaMNgBZaBI+4GF/9yIgjE?=
- =?us-ascii?Q?6IGKD6NPLi9NThah4q+QQka9PiCfj87JmLrhSvBb6SMDiV2MqyJDNUAy4MWi?=
- =?us-ascii?Q?KEUwCzdHOm4hQwt65825x9vWNyUVnjfRjRaJMNlUmbCuiEYR1fFN2dysKN0w?=
- =?us-ascii?Q?j368DswaCCae0J7YzNdHoqQbjB+2oHL4+zGV1bTFsC7zi6lZphEg46JHZn3P?=
- =?us-ascii?Q?kgcdNhAT5qGF/zONr+GXae299irU00ZXx115TDUmSGt3ADopNmZ2SmTFc2IP?=
- =?us-ascii?Q?zywD5jePquF/bzKBTlLq1egTl21X01cQ2gsXeEJ3K0v2EpFKUv4N1yYvNi6e?=
- =?us-ascii?Q?azrqgseRw5xXLd/M+5cml8EpKFgy3O0n7BpL77NXTpf89a04Pk08AR++ykxt?=
- =?us-ascii?Q?lSZ0SJDMR99MRi5WM0hSiCSzNzXtTWMYaSVQFBvrs0h4z4qPDUD4NQJnz2PS?=
- =?us-ascii?Q?ZF0MdAu6wqRS3UP+U4r4S3Ys/FKZCaG2MfqmmVGRDbEftnA+miSksrORtZix?=
- =?us-ascii?Q?QmT7DW/tXwdlAhxhp4Rc+mKqj7v7WBfnTJCiK4y5Z9Yt5hKRLn5tig1j+O1l?=
- =?us-ascii?Q?f0IMRmuzNODJe3kqkcorbu98LWjCkj9l5j31u4mSdkO6pXc8FQ4e8sMioBm/?=
- =?us-ascii?Q?ik51Qvzv5eDihhK1mbTbrhO94+w1C058kfZvlq/W+gDorKYfkKMQVMrvFttY?=
- =?us-ascii?Q?TDw+uXXtTAVRR3NPfGqOLtUaEAzwX7lO3LxbVzko4Ec2qym4CTuo6aKlA2oq?=
- =?us-ascii?Q?npJTw5wKBnB+C5Pmami4/ZU/d2aVI6ZiKrLAsaNr1Y8MMTxVez3YEB12OLGJ?=
- =?us-ascii?Q?rLtr7v0ptDh1FKO3SFRP8cknFBPYEAatgRkDIvRYy/JaRruVMYeuny+n+lUA?=
- =?us-ascii?Q?EgcVvX474sZvDULCiL+qX7Rg5g8rkoK6Q5wT1Z7E/BTZ09TOV+rBMlX/qdHU?=
- =?us-ascii?Q?yd6vHL26exnLMzey98Wv1NttLpO4X86f9uFGJAxH1jKcG9Z0pohZfRm+fHoa?=
- =?us-ascii?Q?cO8Ghtw5+d+f4aJdOakkg67OH3iVNExswp6IhwYey9zQ5DY2ildhCg1CZ2Os?=
- =?us-ascii?Q?f050IUzEPu9EqtYBYx975Ov/9qRaM+xFy0FlF5WjKuJAXbBlkHT2Sls5HecE?=
- =?us-ascii?Q?DnfWGYGRx7hzjlDX/boDQM85maya5v6z6rqQRJG0lfVR/CvT95XR/yAkVGlr?=
- =?us-ascii?Q?M6n/jq6rYgOgEvEGtB37zkLAUEgUo+BkoW00jfWcVeqNqxFQZAeLRBQhz+Au?=
- =?us-ascii?Q?GcPwt03+CKhhSiyQ8KV9VvjMYi0FSKYWCars1nCUswAAYG+NmMg6EY0Cgxs8?=
-X-MS-Exchange-AntiSpam-MessageData-1: A0JbZHFZBGo58aq+2ElG+BY3gi3eEAlzoyA=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24f93734-23b7-4266-5fba-08de7e0f8290
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 19:10:21.4800
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BzAzcF7eG4iHNharFZvlsmrqc/lQCay1RuJzZa0WQQ2TZpifiiSPDT9Rut5eCG5e9GixLMiqP4ciQtbMFo3yew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9841
-X-Rspamd-Queue-Id: 34B8A240506
+X-Rspamd-Queue-Id: 7599F2400C3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [9.84 / 15.00];
-	URIBL_BLACK(7.50)[perches.com:email];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7052-lists,linux-can=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[25];
 	RCVD_TLS_LAST(0.00)[];
-	R_DKIM_ALLOW(0.00)[nxp.com:s=selector1];
+	TAGGED_FROM(0.00)[bounces-7054-lists,linux-can=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	GREYLIST(0.00)[pass,body];
-	DKIM_TRACE(0.00)[nxp.com:+];
+	RCPT_COUNT_TWELVE(0.00)[45];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[vladimir.oltean@nxp.com,linux-can@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DMARC_POLICY_ALLOW(0.00)[nxp.com,none];
-	NEURAL_HAM(-0.00)[-0.983];
-	R_SPF_ALLOW(0.00)[+ip4:172.234.253.10:c];
-	TAGGED_RCPT(0.00)[linux-can];
+	FROM_NEQ_ENVFROM(0.00)[jlayton@kernel.org,linux-can@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,perches.com:email,nxp.com:dkim,nxp.com:email,nxp.com:mid,sang-engineering.com:email]
-X-Rspamd-Action: add header
-X-Spam: Yes
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-can];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+X-Rspamd-Action: no action
 
-Some pragmatic shortcuts are being taken by PHY consumer driver authors,
-which put a burden on the framework. A lot of these can be caught during
-review.
+On Mon, 2026-03-09 at 15:00 -0400, Mimi Zohar wrote:
+> On Mon, 2026-03-09 at 13:59 -0400, Jeff Layton wrote:
+> > On Mon, 2026-03-09 at 13:47 -0400, Mimi Zohar wrote:
+> > > [ I/O socket time out.  Trimming the To list.]
+> > >=20
+> > > On Wed, 2026-03-04 at 10:32 -0500, Jeff Layton wrote:
+> > > > This version squashes all of the format-string changes and the i_in=
+o
+> > > > type change into the same patch. This results in a giant 600+ line =
+patch
+> > > > at the end of the series, but it does remain bisectable.  Because t=
+he
+> > > > patchset was reorganized (again) some of the R-b's and A-b's have b=
+een
+> > > > dropped.
+> > > >=20
+> > > > The entire pile is in the "iino-u64" branch of my tree, if anyone i=
+s
+> > > > interested in testing this.
+> > > >=20
+> > > >     https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.g=
+it/
+> > > >=20
+> > > > Original cover letter follows:
+> > > >=20
+> > > > ----------------------8<-----------------------
+> > > >=20
+> > > > Christian said [1] to "just do it" when I proposed this, so here we=
+ are!
+> > > >=20
+> > > > For historical reasons, the inode->i_ino field is an unsigned long,
+> > > > which means that it's 32 bits on 32 bit architectures. This has cau=
+sed a
+> > > > number of filesystems to implement hacks to hash a 64-bit identifie=
+r
+> > > > into a 32-bit field, and deprives us of a universal identifier fiel=
+d for
+> > > > an inode.
+> > > >=20
+> > > > This patchset changes the inode->i_ino field from an unsigned long =
+to a
+> > > > u64. This shouldn't make any material difference on 64-bit hosts, b=
+ut
+> > > > 32-bit hosts will see struct inode grow by at least 4 bytes. This c=
+ould
+> > > > have effects on slabcache sizes and field alignment.
+> > > >=20
+> > > > The bulk of the changes are to format strings and tracepoints, sinc=
+e the
+> > > > kernel itself doesn't care that much about the i_ino field. The fir=
+st
+> > > > patch changes some vfs function arguments, so check that one out
+> > > > carefully.
+> > > >=20
+> > > > With this change, we may be able to shrink some inode structures. F=
+or
+> > > > instance, struct nfs_inode has a fileid field that holds the 64-bit
+> > > > inode number. With this set of changes, that field could be elimina=
+ted.
+> > > > I'd rather leave that sort of cleanups for later just to keep this
+> > > > simple.
+> > > >=20
+> > > > Much of this set was generated by LLM, but I attributed it to mysel=
+f
+> > > > since I consider this to be in the "menial tasks" category of LLM u=
+sage.
+> > > >=20
+> > > > [1]: https://lore.kernel.org/linux-fsdevel/20260219-portrait-winkt-=
+959070cee42f@brauner/
+> > > >=20
+> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > >=20
+> > > Jeff, missing from this patch set is EVM.  In hmac_add_misc() EVM cop=
+ies the
+> > > i_ino and calculates either an HMAC or file meta-data hash, which is =
+then
+> > > signed.=20
+> > >=20
+> > >=20
+> >=20
+> > Thanks Mimi, good catch.
+> >=20
+> > It looks like we should just be able to change the ino field to a u64
+> > alongside everything else. Something like this:
+> >=20
+> > diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/e=
+vm/evm_crypto.c
+> > index c0ca4eedb0fe..77b6c2fa345e 100644
+> > --- a/security/integrity/evm/evm_crypto.c
+> > +++ b/security/integrity/evm/evm_crypto.c
+> > @@ -144,7 +144,7 @@ static void hmac_add_misc(struct shash_desc *desc, =
+struct inode *inode,
+> >                           char type, char *digest)
+> >  {
+> >         struct h_misc {
+> > -               unsigned long ino;
+> > +               u64 ino;
+> >                 __u32 generation;
+> >                 uid_t uid;
+> >                 gid_t gid;
+> >=20
+>=20
+> Agreed.
+>
+> >=20
+> > That should make no material difference on 64-bit hosts. What's the
+> > effect on 32-bit? Will they just need to remeasure everything or would
+> > the consequences be more dire? Do we have any clue whether anyone is
+> > using EVM in 32-bit environments?
+>=20
+> All good questions. Unfortunately I don't know the answer to most of them=
+. What
+> we do know: changing the size of the i_ino field would affect EVM file me=
+tadata
+> verification and would require relabeling the filesystem.  Even packages
+> containing EVM portable signatures, which don't include or verify the i_i=
+no
+> number, would be affected.
+>=20
 
-Make sure the linux-phy list is copied on as many keywords that regexes
-can reasonably catch.
+Ouch. Technically, I guess this is ABI...
 
-Some considerations that led to this solution and not a simpler one:
-- Consumers may be located anywhere, and their file naming provides no
-  indication whatsoever that they are PHY API consumers.
-- The network PHY API has similarly sounding API: phy_start(),
-  phy_connect(), etc. Similarly, matching on "phy" would hit
-  phys_addr_t, "cryptography", etc.
-- The header files themselves need attention to avoid matching on
-  include/linux/phy.h (network PHY), include/linux/usb/phy.h,
-  drivers/net/vendor/device/phy.h, etc.
-- At least for a transitional period, I suppose developers will still
-  try to add PHY providers outside the subsystem (which is discouraged).
+While converting to u64 seems like the ideal thing to do, the other
+option might be to just keep this as an unsigned long for now.
 
-So I used \b to try to match on actual word boundaries and I went for
-listing all markers of PHY API use as they may appear in patch contexts.
+No effect on 64-bit, but that could keep things working 32-bit when the
+i_ino casts properly to a u32. ext4 would be fine since they don't
+issue inode numbers larger than UINT_MAX. xfs and btrfs are a bit more
+iffy, but worst case they'd just need to be relabeled (which is what
+they'll need to do anyway).
 
-Bit rot is a valid concern. I will add a test to the build automation
-that newly introduced struct and function names in include/linux/phy.h,
-include/linux/phy-props.h and drivers/phy/phy-provider.h are matched by
-the MAINTAINERS entry K: patterns.
+If we do that, then we should probably add a comment to this function
+explaining why it's an unsigned long.
 
-The keyword patterns were written with great help from Joe Perches
-<joe@perches.com>.
-
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
-Cc: Joe Perches <joe@perches.com>
-
-v2->v3:
-- escape forward slash in linux/phy/phy.h in regex pattern:
-  https://lore.kernel.org/linux-phy/9fd14d166e860f26febfbc9061a6dcae6a166961.camel@perches.com/
-v1->v2:
-- split into multiple regex patterns
-- use matching-only (insted of capturing) regex patterns
-- adjust commit message to reflect the Q&A from v1
----
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 55af015174a5..cd920f14abde 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10713,6 +10713,17 @@ F:	Documentation/devicetree/bindings/phy/
- F:	drivers/phy/
- F:	include/dt-bindings/phy/
- F:	include/linux/phy/
-+K:	(?:linux\/phy\/phy\.h|phy-props\.h|phy-provider\.h)
-+K:	\b(?:__)?(?:devm_)?(?:of_)?phy_(?:create|destroy|provider_(?:un)?register)\b
-+K:	\bphy_(?:create|remove)_lookup\b
-+K:	\bphy_(?:get|set)_drvdata\b
-+K:	\b(?:devm_)?(?:of_)?phy_(?:optional_)?(?:get|put)(?:_by_index)?\b
-+K:	\bphy_pm_runtime_(?:get|put)(?:_sync)?\b
-+K:	\bphy_(?:init|exit|power_(?:on|off))\b
-+K:	\bphy_(?:get|set)_(?:mode(?:_ext)?|media|speed|bus_width|max_link_rate)\b
-+K:	\bphy_(?:reset|configure|validate|calibrate)\b
-+K:	\bphy_notify_(?:connect|disconnect|state)\b
-+K:	\bstruct\s+phy(?:_ops|_attrs|_lookup|_provider)?\b
- 
- GENERIC PINCTRL I2C DEMULTIPLEXER DRIVER
- M:	Wolfram Sang <wsa+renesas@sang-engineering.com>
--- 
-2.43.0
-
+Thoughts?
+--=20
+Jeff Layton <jlayton@kernel.org>
 
