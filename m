@@ -1,64 +1,64 @@
-Return-Path: <linux-can+bounces-7032-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7033-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OGL6KZ8br2lIOAIAu9opvQ
-	(envelope-from <linux-can+bounces-7032-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 09 Mar 2026 20:12:31 +0100
+	id iOD8NQwbr2lIOAIAu9opvQ
+	(envelope-from <linux-can+bounces-7033-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 09 Mar 2026 20:10:04 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 917B023F587
-	for <lists+linux-can@lfdr.de>; Mon, 09 Mar 2026 20:12:30 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CDD623F39E
+	for <lists+linux-can@lfdr.de>; Mon, 09 Mar 2026 20:10:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2F68E30F7FA8
-	for <lists+linux-can@lfdr.de>; Mon,  9 Mar 2026 19:09:30 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0B36F3025263
+	for <lists+linux-can@lfdr.de>; Mon,  9 Mar 2026 19:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 521933EF0A2;
-	Mon,  9 Mar 2026 19:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B6293603C9;
+	Mon,  9 Mar 2026 19:09:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="iMmhu3PG"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="TMiKeTqv"
 X-Original-To: linux-can@vger.kernel.org
 Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011064.outbound.protection.outlook.com [52.101.70.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9323EDAB8;
-	Mon,  9 Mar 2026 19:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B4E34DB54;
+	Mon,  9 Mar 2026 19:09:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.64
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773083361; cv=fail; b=aS4dhO4y8KB/dZK5M/7cSMXxRuPegPEuX4R/LAc75eiMdxBo7L2u1Cta5vFcZsOlxV2or7FsdwTtONb6TN1jq+wRkecIFQMWlmJgdHlDjINVEmTteeByae45HMUivD8EXKDsr+7IEGmPw0YrfeLnMjKVCBxF4lMxHUL5xTZ0T4o=
+	t=1773083377; cv=fail; b=Uz2pF+jsbeBkVP6uYUIm7OimAJiwyt8Ujx37XM2OUTztJrktCW0PKF1z403Xuo7Lps/0uTarpJynGeKBQq5T430nblEYspYmayA+OGmiTLDxVGxssZXxWJiCyhtG3LfhJ4O6n97OGqCvSJCXp2Qa1Y8+QJYJWuvaXveOsUR8O7w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773083361; c=relaxed/simple;
-	bh=d0h6faqHJnzRtBQDzOEdEGYQcboxKTQ+nAILWXbJsw8=;
+	s=arc-20240116; t=1773083377; c=relaxed/simple;
+	bh=I7+a1+X8Ak77TYLvxSUT7wfjgC51/Jfk9hDuNhjnU8w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pPzdvmk+zpIC9dOD8V2fBvjkPgz0uRHm+v0T4algCfaOGNeJcvmYI8IR/GniscVj5FIw3jwDHZu7VXg7Vjw3hYomrOymXA+I7m0pSEgcw3Jtgb8oUB5ITvyW9+HgN/PeM35rGtTZ7AFFpKKhsAIT5zUlSkaxGYd7dU6rBZ6x/NI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=iMmhu3PG; arc=fail smtp.client-ip=52.101.70.64
+	 Content-Type:MIME-Version; b=tMlywl5qMmOCcTnS81Aq+1EQ3rRLcXu8blRhb9h1dRjFDLCYws2dzCzbPzIGWujhsXOgswTZuvMZdDSd7DhdH04q+D+Sho4RnGr/7jnzeCp1J1rEckE0SyczDJ0a/+h9Qe3uqmIbulgs5ZPg1ZvO0Sj1YF8JzHzFk5I+9xRt8BU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=TMiKeTqv; arc=fail smtp.client-ip=52.101.70.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CIjXAxkWUSS0elGRGCjA9CRgS8hloBkSw2jRLSHfeu6YIZMPm6xJQ03jUBG0m5+n7WyJ8lzmCgmc0MaqsdyzdKrpBroTlMrdPeCkq5uA4iAbNS0O8QpcJYIk/yZgF7ccb9oohAG2PoRalrdpeaXEc/3wqR75lgKlSrwWDtoD3npAnfxanla0FePiCGdHFfcGrgRN1q4ZSHEFCDBfPzYbyxoJh8iyUgU2oHKDkeaIlww+2DruphEauSh/XxT5nWZXSurLzgkdx8GUpYTI2C7bLqFPgsIqiEURpog9tgybvyl1BqXR+Sa0oN99EAYC1nN3ICVPRAdD0CGZM4bQFRQZEg==
+ b=F3zAY4BMSrCd6ZQDcaRnQMXRIFBL60ObgaBeoU39+fQgVIB2tDpOWUaTsva4NpyJySXYTDjc8RO2IYk2GBhZf5C4nLjXKuyulsGYlRX+sxlpVguQw3yIcELTaTi1ibVjpZGogk5Qp8apX61YTTCeeKMDU9ZBBgMDIQ5alwwbDx+FAUouyv4E23aoWoKCX+jaIrOG7LKq5KTu+1CcH07dYWgPcawrCmJBDcKysPiIKxb+ko5xm8G8IIMgJOgEJRz6Sst3heYwtcQUgIkvX7cIrEe5yALxzm41ts2kwPXIElmaTeKKYeGlJ/4eF3feDxcnrkJ0hqq2KDVqPVQyqczeFw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2uFhWeR7lCpQrbld9SF+kqTYR7ZN4F8mmRE0hud9w8E=;
- b=llaVrfE9jLIxq60dHidn1IzJusD6fk8EtAQL3bitJF1d8lZrPv41TaUlSExy5iXzI7n+DpaWbFG4K9b/3H5JCkBAuE540TkkE27jN24V4v5eQWrrpBz2LZFU+lcLACocFbO24gXnq8g2BQ3WX8QK77eLvB4nsnWH/euLXIG4IZOinf6xvddf27ENPQR1W/w76T7mNOPPGq6tWfOdBZ9I+Y/kpGgJ7+MSlXMQpa8EmX8zQKWI8AfUYTsWNScqSKlrR7dVpnlJ5uBB6gd4DgjDKBHFeNsniZNNyHY9xrTV5VvqyOOH62KNfRP5TrhbObxc1+RkdZDx1N6XO/3kJAeiMg==
+ bh=g1ETKpW6hCG8drky/YBtHxhS4gzovJHKozanDVYhu+g=;
+ b=wLYismiSaKP0gW7BXlgYKAnCXpkhsPB+MqinptvPBO+HDGrOdLQDHej5aFeydFHS+6DTMr2n6E79acAhfEnBbUwTZIlyt0HLLybSzKpwJAZSsYkcdT53bIyq52RLRdJbqEOghDhvtJfxJOJgFXDtD44906EnewFmJDy4NQwNm+T5fc2LEPapu6QghqQjmNH4hF79IZOgjsNf2hjFnCGmSRFUKQButmZpXuWEogmmB5ZtR+AE20KDESmqOLmXLImrno7U0WPvFTJt+BBpN+USa15mDZkwIjWvWFCSYunqYyxgn5LI0pbQ17P2D9Pj4Z4m3XEO8MdTb9R3i8rCwhFbpw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2uFhWeR7lCpQrbld9SF+kqTYR7ZN4F8mmRE0hud9w8E=;
- b=iMmhu3PGWVugjvOWauAj9JltxLko8E7o9CgZW+ts+TejM1MCF2L1ptp391pOD5IEfJ+q8/BAPNUBHnOcDJR0SQT1Im8REdbUP0eNInLLL9ofGWHo60IzN+negvJdvVqFazB3ugT6RVrohGFjSr67EQ9g2aCOJcXirnYi4xKiGn2jqhu3FOBmqJj43VxGYxRWz1oKyMTJH6KOy1M6C8pXmHScg7Fk0J924qXy64J6AF0bhpqZmdMXXsLvDgscDpIZyiqZHqYv/Hp1eJT2l7e6Bk/+S1po3RIXPTZpTFBPUd6H/w8KYS4Y8pZaltb1f2ZaxlQ2DrrYOmGG3FQLX+othw==
+ bh=g1ETKpW6hCG8drky/YBtHxhS4gzovJHKozanDVYhu+g=;
+ b=TMiKeTqvlScXqeEsBBspYmkkQ4ahoxPGaUHyw2GbrkzZtudjQ+DlTrDVaBYD92+R62cg9hLAQM3WJrTt0GkZ3+VsU3cgGk/uZ5i7mSBWVOOb13MCXqxHu02XmXG1bvynoNAQjnSCxzW+vJRwUMftqMkzVilurym1a6vc63FdA0Q73f73yRStcEGZz6j1IHE74wERzsxSAqd7SKU+MeDJJMjXVfioeQp9E2dH+zVs2fQiClnl1rQrKAQfDpyN0Wsm8AasS49I4VhXzXcg7qEM5b+qz7dG/0TlwOPoVNafnyKOahcsc72stVKpaQEWfe7U0GiRMhnzBpqXX+TdGWZVdw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
  by AM9PR04MB7540.eurprd04.prod.outlook.com (2603:10a6:20b:283::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.25; Mon, 9 Mar
- 2026 19:09:12 +0000
+ 2026 19:09:15 +0000
 Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
  ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
  ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9678.023; Mon, 9 Mar 2026
- 19:09:12 +0000
+ 19:09:15 +0000
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 To: linux-phy@lists.infradead.org
 Cc: Vinod Koul <vkoul@kernel.org>,
@@ -84,23 +84,31 @@ Cc: Vinod Koul <vkoul@kernel.org>,
 	netdev@vger.kernel.org,
 	spacemit@lists.linux.dev,
 	UNGLinuxDriver@microchip.com,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Peter Chen <peter.chen@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Frank Li <Frank.Li@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v3 phy-next 03/24] usb: add missing headers transitively included by <linux/phy/phy.h>
-Date: Mon,  9 Mar 2026 21:08:21 +0200
-Message-ID: <20260309190842.927634-4-vladimir.oltean@nxp.com>
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Inki Dae <inki.dae@samsung.com>,
+	Jagan Teki <jagan@amarulasolutions.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Dmitry Baryshkov <lumag@kernel.org>
+Subject: [PATCH v3 phy-next 04/24] drm: add <linux/pm_runtime.h> where missing
+Date: Mon,  9 Mar 2026 21:08:22 +0200
+Message-ID: <20260309190842.927634-5-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260309190842.927634-1-vladimir.oltean@nxp.com>
 References: <20260309190842.927634-1-vladimir.oltean@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: VI1PR06CA0180.eurprd06.prod.outlook.com
- (2603:10a6:803:c8::37) To AM9PR04MB8585.eurprd04.prod.outlook.com
+X-ClientProxiedBy: WA0P291CA0016.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1::28) To AM9PR04MB8585.eurprd04.prod.outlook.com
  (2603:10a6:20b:438::13)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -110,178 +118,200 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|AM9PR04MB7540:EE_
-X-MS-Office365-Filtering-Correlation-Id: f0f452e2-9113-4f42-b970-08de7e0f597a
+X-MS-Office365-Filtering-Correlation-Id: f9b68e1b-dd93-4d6f-4646-08de7e0f5b3f
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|1800799024|366016|10070799003|7416014|376014;
+ BCL:0;ARA:13230040|19092799006|1800799024|366016|10070799003|7416014|376014;
 X-Microsoft-Antispam-Message-Info:
-	Qiqr1pvBcVi5RmI4GylUWRZg7Il0uomYm3SzlMGNP6sJYMJami5pAVO/eGF92VTyryBgrnywRIuCNUXKzUqdFwvqcaQ2pyhNfkoJ17JiOQadDFyqQU6iyDPyhChsW+SxFogyApabS93Lwx59JlMMekY1pmTIa6W+AMsib4ozW85+3FHjRyNtDC3hB4z/O+ucjXfSYXs99r8Y/400wUcACLMDxQnX7g9BloCTxzir8WwFhcL5ga3snPC4aG8Jib+vJ+iJvw1laJYp/Ba2WNTK5NTrLhDy14XV9rRixfuOcadzq4FWj0dkmO3MqIcul9VuhSdaO7vBxX5ILNj7nJizC8jWlmoa1orQyNVBkKx2m+VyzMZxK6TPdJ7KLWbJNliCK/iPdjtIPTUWGEUCWYW/WQpblVMpAbZgyF02QprUvrIJRRO95iJkHfP46x9kzBk9g4m2kggjDSDkVXtoTQoo239E/QvLMsvBal41i+RHtMQYT1KJ8fiCLFVzOee26sfY/pKHOzekRIF3UUHZxY+q8ScGWT2OXINQFQV5mUedY+ZU1LLfvknqJdE79DpI4ioxuFVjMkGQYTBXC6lWZsh1xe+Pi+n4yXajULfoYSwKPnh+fALssTNdX3ltzRN4xUgumRpIPFXwm1IgPwaHhrhF95nxaSScmDiCqxq1/33JcAa2hKx9LN1CJShA5Lbj4U7/PcTmhSPweVjXVJdChYNMKXRCQG97QIBQTiaQYvBXicc=
+ pD0yLTbFZGZedI8DEFZChbfBole3PiKPQcI7Si5DiKx3eMUkZiMpHZIGgF8ulXqtGl5XQ8APdlJ9xIFuC/F9aZDzle4I5LijeJBWQNOGLVMt5SEGp+pdVbZfhIcjwSOlW9S2yTCdJBNIJswn4d8VymyHHQXPtm5S/L9BE03X9LcbNaoP20m8iI73oPBaShTo1Aa6R3Qk2zFUJiJ8p6a05VHgeEMApiIAZVk8R6O3fjvmxUdTzIeKmsigp3Tk04w5nTdwAUWJqHFZC90gKK0aGBf+9uITqrrJPDAnqRX5JdAlTzO7hC10jgb3iuQ+PM5xWGOtYfL+DcjMeMeapyR1fSFBaR6RteZKTLzqIQtgf0aXPMLwYY03rTLHNllTXm7yqGupOJuxtnRqm8TzHQ6ZYO1NP5nYj4raCDVSvdWS0P6ehIOBiP4kNmP4FzUYAvhdnWJiWvmkdDFtCC0xxBTNyoXg8dcLXMJ+vVPnDs1YGnqC4xCYTEaIA1XDUmC5Ts6ISmoqOXvjiWxmCS091XX4qsN9GwUbIKw3y2DKMh2QhOpd7OKUjygc+l/0cn1cix9RYRhgSVIjFeJ2zIrv6jAe3Cl68/EsPMKjOcV9LWL1Xa/luXdVmfvkFJQkfLEp+DOFLJcU4BpQEZGHDkgbO3LClUnej2HDdZRy1H0xRO+8uCVOztZ4S+J2Q0y+ivn6TGQWzZ9+jv6Ws70Wf5MLtXWSceWOTOXqR7JzudWl8ay+P24=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(366016)(10070799003)(7416014)(376014);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(366016)(10070799003)(7416014)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?wlvR40iC4IpJ5iLQ+/oevHQ2hzXL3dNFjXXcEhYEdF6akR22HhfDlGMCzruY?=
- =?us-ascii?Q?wi55lRQOPWb/g/A2fBjPP+mar84olL/+Fa5yGjM0rnd5TImapW6YJsLSQe4L?=
- =?us-ascii?Q?TcmNAqX+1+EriCPF8BT3KocUWlfz1qWN0NF10aos62MJPZoQTi2WXAT2VniM?=
- =?us-ascii?Q?6+ZFCR2BVvmXLz1Qu0bXhQEYDFMwPFdPgsKeUAKtONyR14lTfxJhFCdHZiBs?=
- =?us-ascii?Q?nddrE4GvTXFlcU9pNnzaeoHt2BZ3ntKvi51CY7/gn9uXtSzhqksif8BHVF2M?=
- =?us-ascii?Q?CFxzG1r4gYOyDiywjQy2QH5LkG5TbSIIXwdbdNud5hM/5hcEiGXuYhu4Ga65?=
- =?us-ascii?Q?KDw5oFjKUu+Itm0bAwK9J4xhh3G7ytgh2hO89bCZvsL+81geidAm2wLRA5sm?=
- =?us-ascii?Q?FER6j7XPvgt486+jQBcVfSABIUXl5ke/EBl39FiNIxm0GF3QRnjSE41X0w1f?=
- =?us-ascii?Q?N/cYe7oZo2ViP9Y1KRmBZeUiCYrFOK9yIIsDK9PO2h4EpPlj0WFxq7eAL9r0?=
- =?us-ascii?Q?WSMhVDIHav1LfYHid3KpUfMWKqIeccNzREdot/AlmUuYcfIn7Iuj+FA6cDkQ?=
- =?us-ascii?Q?cMpswp93RAUJ2aPAOzde7vbBU50dnnM//VSNEFF/YGY6DmwWFJEfPus4QmW+?=
- =?us-ascii?Q?2IujF0WTa4arFWxUlBU30wwL0YpCGqSO1VYStBam+f1jFzHZYs6dGOyVJPiF?=
- =?us-ascii?Q?Ke9SuV67jIh9PsWQSAzXoXcVpIoIIcDx79CwBdzFAF5qUdQnU4hLyJkU3Xq7?=
- =?us-ascii?Q?uCGYaNQ7zo0/Rftwjf5F5+BOfGkn9yv5Dy0rOK8+kdVEliJvnCQZ9p1WL2ih?=
- =?us-ascii?Q?c4zBws8khbAfiz2F8j0jaFXwpCwkzDzj9MDQAs3tViquBletzDKlmf7dbhb4?=
- =?us-ascii?Q?ixoMSqF25G94nV0YJnSMXgf2HjdrNttXbzEWV9Qv2OP+MwL1NczQTxnWLy8C?=
- =?us-ascii?Q?oAT+5aMgw7mnal8iMGM1nJzqi88DLpEfusesETbQhzVw5sPySNkVbzsdtYCx?=
- =?us-ascii?Q?Dvwa+GE6UEIMVwldwLMQY9PSPVS7mvDlpIE8uw3X+G6a+x2+hIdRvN0IRv8y?=
- =?us-ascii?Q?qPykDbA/jPTTtLORJ7dsL45+aGv4EddwkLKLpQwyj9d+7YaI78ranjOGjEkr?=
- =?us-ascii?Q?ZbTpgy2eFVpl5wUhbVneYjVPEIhP0ThBs9ikmsR6SNI1qrAwGPtR+fSqPV6V?=
- =?us-ascii?Q?714luKrTgOxbqxjrscL3JbzvJShWr5SXOeJiExOQB+OrLlRf/lfIkqO0XU60?=
- =?us-ascii?Q?EzGWJC6C8P5p1l7KGj+R1UBJUBhJVbQpTHjFKJJg7te6/KTl87DiF8PoZUDQ?=
- =?us-ascii?Q?uV/4ygG24aPTXL0TUMH2+n+32EAay9kXuuQlMqbxQEfZcma+bIJy7SKjU3S+?=
- =?us-ascii?Q?42ul4f7Giz5zUJ3rVHOdnwoi5/1yo5Bg8h/MucIQf8r4QtrLIlN69+PNldYc?=
- =?us-ascii?Q?5R/C8vWrsYVhb8HEUCcu+TFPvWwtkkePPypEhXCWmSHXC9Z38OPe4dTIwIFb?=
- =?us-ascii?Q?uvgoY8e/bR0h3r+GPjj6Ij8XPiWcLlBdHypqEOvwf+jhxLY01IQqck79hvMv?=
- =?us-ascii?Q?6eyLowaFfsuWkc/ynXKqHAhs3Ie3BcoMVpmlDwhXNm9YV/qVXB9K1PdtfNVl?=
- =?us-ascii?Q?aPp+v9W7B1jvdvYQpmW8WfuGJ1eHRWhX/gYw5C0FoVa3PN2F5jJ1KgDuF0XP?=
- =?us-ascii?Q?nFm8ct4KbMXXiw+tEMFoSnLKIrmzKKY9koyZxlPEUC6iNP0XTDxRjesmRo+U?=
- =?us-ascii?Q?WJ12/6WVhxdpLOwC14A6CL0BJObewfKYVv85Iq2ZOyg2gZ7KwKoi3HVJULOW?=
-X-MS-Exchange-AntiSpam-MessageData-1: yPkXy6cnPhC20w==
+ =?us-ascii?Q?AevDH54PqvvwqwfmCiGkAAxq1DKC+moe4RIc3TUseuzWzhM7qZPrMa1bIZQD?=
+ =?us-ascii?Q?yhcSarEejHPyQME5Ct9pTSqGHVFCiqJOJmeqgFYm/yS0Fh1F5cyiBksqJQSa?=
+ =?us-ascii?Q?8tMKU4da4aNW/vN07ijIy69JmrTq1l3WAU/q8/6CJD7PCPZRcLrnu0Ew468w?=
+ =?us-ascii?Q?3cMUVtDSSOaM3lSIO1X4xU5Ycdh2mVF58pjK4RD6yy1//KAyqM1XO9YbUcJy?=
+ =?us-ascii?Q?hQVNR/pK0on8QZeVgAGBLNAV8k11JQ1jFXmBfBx7lQG5efwqFaRy5vFiBSBR?=
+ =?us-ascii?Q?0G0OWm2tktxwqjo6bCqq0oOg/+CXX2iNNwOAZ3Z661n36QIu5PIL+ttRpgtC?=
+ =?us-ascii?Q?Kd5/xAOE2Hiokw0LgaKKhq+UZ70qbCIwH7+zydXtW8J3AuUNoE52o3Ql49qL?=
+ =?us-ascii?Q?dD+ZrRiLE5apR6YYUsgHB6pmWFNtl9IkVFraXDDYnHMlY0ifoY9CsLZIRt9S?=
+ =?us-ascii?Q?/nvrif6kZto9XD6Jgs37cYE9i1Ys7nO8xmAZOUZFNmU3BPlvAoaBTaqfjtGy?=
+ =?us-ascii?Q?4IlMpZhMlxmePdjjxkupphkWlQoNxHxvXSvtPJco0Uro8SThn6fM9tXN0GDk?=
+ =?us-ascii?Q?Pm24zDJaZ5yYan4QBMdlU0LWPBgoJeJcOMNEoAwuObACUIanDnHttS5oSMlC?=
+ =?us-ascii?Q?n6iYrEay15cj4UNc5yjMjn2NdUBIGeL0IwFjJseTKkk3zLsxh8OxbrBIK5SA?=
+ =?us-ascii?Q?U30xtK2CvGSiTLa0I8rTyPHOsPIAiTA6tcrRGnDKDzsDFhm/EwJo0xY9UfX5?=
+ =?us-ascii?Q?zxnAXotLMSd4auKKFtgRki2t+KOW7KG/QR09kDn3EH9/y/7X3TMLFAYSCYja?=
+ =?us-ascii?Q?auH+5snsohthQq49OhzSDLjVAhZxGsSI1ON3wDtsrQUYsdbvpOcb8LYRKHVe?=
+ =?us-ascii?Q?a/iyRlVOcdlrYhN2ocXlZCzNDQfHw3YzTdS+qqUf4y/P5cBA0nh7yViZDRi+?=
+ =?us-ascii?Q?9tJXBCH6uXp1GRYCnGzhgvkHokhyPZ7Jd6EGvYNssfxtbLV0EnHk3U6VRIQI?=
+ =?us-ascii?Q?Dxlqr7q+LGN+D1E2Z6BPfp1ewpejKOUzhAvSYVje9xI0yGhNn2nClLnaLYyt?=
+ =?us-ascii?Q?so7ufju+5Qn8KHLswX7Dd+up+hLDJ9WqdKK88Ey9/a7FgwgTBTWeWRfgVNTs?=
+ =?us-ascii?Q?dlDwVfmRIXOTJ6uJGjsnBbLPmYT8QKzt+bhll1AUkpDGFSnhmrVdX1J9YG3T?=
+ =?us-ascii?Q?nge5kf82LvFuRUZJ+OyVV0Ro95hGZzSuXSa2sbLhAC/rTSBIb+ZANzs8ZxCz?=
+ =?us-ascii?Q?P+OM3Dur+BmPikAwxDjsXw4M21uXFg0Xih8sSfsZFGl1032Ucak9hhWglDHt?=
+ =?us-ascii?Q?9+1tPmHmXaNrJJhELhjjgTQtN5/5JlSCYuaaV28vGMrofpShq09DBtAr0P9U?=
+ =?us-ascii?Q?6ceUAqBvy/cyjakyqLpfLJkUA//ibuCv0U3A3dm5ZbwgWDM5I/A/wOaMDdMu?=
+ =?us-ascii?Q?kv8bqHNgFy+ZcqXZJi64QYp7GldBH+YnDIqSIcuO3PQf42ekBNbw2z2s/kFK?=
+ =?us-ascii?Q?ALC37ddhY1fzL08jJjVoOlNv9v0stBR/I280NHY4xBf7g5X8MPOCKNdd64aW?=
+ =?us-ascii?Q?VfpklXFcs1/DniLrvyLgzoTq3ee4JMFj6EXPp5O4Zw2AHq11zk2lyNzvqHks?=
+ =?us-ascii?Q?BrWahIRGRIQVDV1UNqXd1wpUnigvBtxzB4z/kOacDNKyg6H0zRitBtaZzRAR?=
+ =?us-ascii?Q?Ip2wT4YjBP1pv3vsNdoHahcQaLg3qW/k6uDPBE+VBMC7ZH8ZipOPgkOd334y?=
+ =?us-ascii?Q?X8FzMCdPIJklcnIS3b81noCBwvUsPavUJIXxYby1Z1FSPsahqm12dh3+9SvI?=
+X-MS-Exchange-AntiSpam-MessageData-1: JiwLuTh1QyVLfA==
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0f452e2-9113-4f42-b970-08de7e0f597a
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9b68e1b-dd93-4d6f-4646-08de7e0f5b3f
 X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 19:09:12.5093
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 19:09:15.5793
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TPbGv2UT6YG9/4O3IeAoCvMko1uJFE6C/7iB7cgTZPsS8hO8Ogm5BhZCDRDBLAhvYY5+iytTTR2DXb67fuw2VQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8W4wEUWP+cz1N/Hlu+w42uWMIkQSWHSictSEdHNRtYxmDJxK1GRvAfmpa4yrx4Gvkk328Bpy883NCDr5IQ4+ow==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7540
-X-Rspamd-Queue-Id: 917B023F587
+X-Rspamd-Queue-Id: 4CDD623F39E
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [2.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_MISSING_CHARSET(0.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
 	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,lists.freedesktop.org,lists.infradead.org,vger.kernel.org,lists.linux.dev,microchip.com,synopsys.com,linuxfoundation.org,nxp.com,pengutronix.de,gmail.com];
+	FREEMAIL_CC(0.00)[kernel.org,linaro.org,lists.freedesktop.org,lists.infradead.org,vger.kernel.org,lists.linux.dev,microchip.com,intel.com,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,samsung.com,amarulasolutions.com,oss.qualcomm.com];
+	RCPT_COUNT_TWELVE(0.00)[39];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7033-lists,linux-can=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7032-lists,linux-can=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[nxp.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[vladimir.oltean@nxp.com,linux-can@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[nxp.com:+];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-can];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,synopsys.com:email,nxp.com:dkim,nxp.com:email,nxp.com:mid,pengutronix.de:email]
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-The chipidea ci_hdrc_imx driver uses regulator consumer API like
-regulator_enable() but does not include <linux/regulator/consumer.h>.
+Multiple DRM bridge drivers use runtime PM operations without
+including the proper header, instead relying on transitive inclusion
+by <linux/phy/phy.h>.
 
-The core USB HCD driver calls invalidate_kernel_vmap_range() and
-flush_kernel_vmap_range(), but does not include <linux/highmem.h>.
-
-The DWC3 gadget driver calls:
-- device_property_present()
-- device_property_count_u8()
-- device_property_read_u8_array()
-but does not include <linux/property.h>
-
-The dwc3-generic-plat driver uses of_device_get_match_data() but does
-not include <linux/of.h>.
-
-In all these cases, the necessary includes were still provided somehow,
-directly or indirectly, through <linux/phy/phy.h>. The latter header
-wants to drop those includes, so fill in the required headers to avoid
-any breakage.
+The PHY subsystem wants to get rid of headers it provides for no reason,
+so modify these drivers to include what they need directly.
 
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com> # dwc3
 ---
-Cc: Peter Chen <peter.chen@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Frank Li <Frank.Li@nxp.com>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Robert Foss <rfoss@kernel.org>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Jonas Karlman <jonas@kwiboo.se>
+Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Simona Vetter <simona@ffwll.ch>
+Cc: Inki Dae <inki.dae@samsung.com>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Rob Clark <robin.clark@oss.qualcomm.com>
+Cc: Dmitry Baryshkov <lumag@kernel.org>
 
-v2->v3: none
-v1->v2: collect tag
+v1->v3: none
 ---
- drivers/usb/chipidea/ci_hdrc_imx.c   | 1 +
- drivers/usb/core/hcd.c               | 1 +
- drivers/usb/dwc3/dwc3-generic-plat.c | 1 +
- drivers/usb/dwc3/gadget.c            | 1 +
- 4 files changed, 4 insertions(+)
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c  | 1 +
+ drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c | 1 +
+ drivers/gpu/drm/bridge/nwl-dsi.c                    | 1 +
+ drivers/gpu/drm/bridge/samsung-dsim.c               | 1 +
+ drivers/gpu/drm/msm/dp/dp_aux.c                     | 1 +
+ drivers/gpu/drm/rockchip/cdn-dp-core.c              | 1 +
+ 6 files changed, 6 insertions(+)
 
-diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-index 56d2ba824a0b..0a21d7cc5f5a 100644
---- a/drivers/usb/chipidea/ci_hdrc_imx.c
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-@@ -17,6 +17,7 @@
- #include <linux/clk.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/pm_qos.h>
-+#include <linux/regulator/consumer.h>
- 
- #include "ci.h"
- #include "ci_hdrc_imx.h"
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index dee842ea6931..7a3261f72463 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -10,6 +10,7 @@
-  */
- 
- #include <linux/bcd.h>
-+#include <linux/highmem.h>
- #include <linux/module.h>
- #include <linux/version.h>
- #include <linux/kernel.h>
-diff --git a/drivers/usb/dwc3/dwc3-generic-plat.c b/drivers/usb/dwc3/dwc3-generic-plat.c
-index e846844e0023..2ee1bb9d7199 100644
---- a/drivers/usb/dwc3/dwc3-generic-plat.c
-+++ b/drivers/usb/dwc3/dwc3-generic-plat.c
-@@ -8,6 +8,7 @@
-  */
- 
- #include <linux/clk.h>
-+#include <linux/of.h>
+diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+index efe534977d12..9dfe790e6c14 100644
+--- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
++++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+@@ -18,6 +18,7 @@
+ #include <linux/of.h>
+ #include <linux/phy/phy.h>
  #include <linux/platform_device.h>
- #include <linux/reset.h>
- #include <linux/regmap.h>
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 0a688904ce8c..d06171af6870 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -10,6 +10,7 @@
++#include <linux/pm_runtime.h>
  
- #include <linux/kernel.h>
- #include <linux/delay.h>
-+#include <linux/property.h>
+ #include <drm/bridge/analogix_dp.h>
+ #include <drm/drm_atomic.h>
+diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+index 9392c226ff5b..a8b6ae58cb0a 100644
+--- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
++++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+@@ -32,6 +32,7 @@
+ #include <linux/phy/phy.h>
+ #include <linux/phy/phy-dp.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
  #include <linux/slab.h>
- #include <linux/spinlock.h>
+ #include <linux/wait.h>
+ 
+diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+index 2f7429b24fc2..9ac8796ae91e 100644
+--- a/drivers/gpu/drm/bridge/nwl-dsi.c
++++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+@@ -18,6 +18,7 @@
+ #include <linux/of.h>
+ #include <linux/phy/phy.h>
  #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+ #include <linux/sys_soc.h>
+diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+index 930aaa659c97..54bc148fc29d 100644
+--- a/drivers/gpu/drm/bridge/samsung-dsim.c
++++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+@@ -20,6 +20,7 @@
+ #include <linux/of.h>
+ #include <linux/phy/phy.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/units.h>
+ 
+ #include <video/mipi_display.h>
+diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c b/drivers/gpu/drm/msm/dp/dp_aux.c
+index 3825a2fb48e2..5ee22f88bd28 100644
+--- a/drivers/gpu/drm/msm/dp/dp_aux.c
++++ b/drivers/gpu/drm/msm/dp/dp_aux.c
+@@ -6,6 +6,7 @@
+ #include <linux/delay.h>
+ #include <linux/iopoll.h>
+ #include <linux/phy/phy.h>
++#include <linux/pm_runtime.h>
+ #include <drm/drm_print.h>
+ 
+ #include "dp_reg.h"
+diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
+index 177e30445ee8..68556daa54ae 100644
+--- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
++++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
+@@ -10,6 +10,7 @@
+ #include <linux/firmware.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/phy/phy.h>
++#include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+ 
 -- 
 2.43.0
 
