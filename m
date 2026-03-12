@@ -1,58 +1,104 @@
-Return-Path: <linux-can+bounces-7073-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7074-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oNEyFQqvsWmzEQAAu9opvQ
-	(envelope-from <linux-can+bounces-7073-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 11 Mar 2026 19:06:02 +0100
+	id AN0GJmtfsmlmMAAAu9opvQ
+	(envelope-from <linux-can+bounces-7074-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 12 Mar 2026 07:38:35 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA24E26867B
-	for <lists+linux-can@lfdr.de>; Wed, 11 Mar 2026 19:06:01 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1357326DF74
+	for <lists+linux-can@lfdr.de>; Thu, 12 Mar 2026 07:38:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 73AD03076531
-	for <lists+linux-can@lfdr.de>; Wed, 11 Mar 2026 18:05:51 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C5758304DC96
+	for <lists+linux-can@lfdr.de>; Thu, 12 Mar 2026 06:35:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A8B3E6DCC;
-	Wed, 11 Mar 2026 18:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309253A3801;
+	Thu, 12 Mar 2026 06:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="RWq+lXXh"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="fJUnzsgT";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="U6P/DtdB"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC1A31717B;
-	Wed, 11 Mar 2026 18:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2EE38C40D
+	for <linux-can@vger.kernel.org>; Thu, 12 Mar 2026 06:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773252350; cv=none; b=HF+++62HdNwJIzBas9qlB9dkFnPQJpIqv77z/vcU8v/sHkcuh5q2B/h07Zpf+ZWYC7zc2ZG9hnAg1kHv6H6E6f0fcWIxavHh/0bFJal8OJk3RGWpj8GRU+zKe9oMPChuzQvtjCB+Uq6cZtpml/RHjEAU1zNH38hlO0+WjmHCICs=
+	t=1773297298; cv=none; b=JrIK86QivRCOYGCD/KM4kbkzPm2rIwBmq2dQsneNTVnbC7zAFKKE+62L7IclJvD1VVL3Q+teENc05k+lye4MDM5kLUO7Oi4ny9JTN59pk4jkEyzyP/WsyErh59poYAhGE5zMQ5UIQcyvn0pkwsqhL07ndQ3RHGVliIpgZZatw38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773252350; c=relaxed/simple;
-	bh=Kl1QGKS/z5ipjt+wRLjUm6f/Z54fY8llcystlxLBd0Q=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=qJrr6o6eIJugsdwwYPC75evLrckFcCRfI94fJURNSGpcryaQ7D+ABPy6iyeJ/96BQeJ2JmtsG2hcg0mZ3fLZVtCNAN4cradgXDskIT1E3KJclzbphuZIKXSgC4N5MNa2UQKx0JhMWlgNesdW+jUg0UUqZ+ytzStiCrD/kkJXjvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=RWq+lXXh; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1773252326; x=1773857126; i=markus.elfring@web.de;
-	bh=2KRr+y5CORJ2XNlfWOQPJcOe7Uafynr72d6z/TyjkkI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=RWq+lXXhHvcFKMkhe2jFBNQ7L8Ft7c7V3vfYa6O45iHJNWL9R5l1Mh595gqoK9/H
-	 xU5sI7uEL9azAZ5aSjktYrX/zsXHg9BlMPy/UagIGgW252mLFgSo/x4xgGN0IFiEj
-	 /KDr/aLh+GTXbh99VYYcZ8EtcOG6jDWnoKcl7oTthASomvhv9c+qB4XWZNy8mB5Zn
-	 KEoQTf/7g2lT84s96hjI1I9JN24oSKEUFcVh1RFF9GJQRywFVERUdPQSCm52lZ7Yz
-	 BXixyltv2FkK/uaCNr7zE/ne45Jvg0AH1MoCWLF4qIY7qvmf4FzkgJC8exmqbx193
-	 czW5NaKieVyEVi7P9g==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from client.hidden.invalid by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MVrft-1wA2YF1ydB-00Njkw; Wed, 11
- Mar 2026 19:05:26 +0100
-Message-ID: <c032450b-8249-4415-b0e5-cc3e2c863120@web.de>
-Date: Wed, 11 Mar 2026 19:05:20 +0100
+	s=arc-20240116; t=1773297298; c=relaxed/simple;
+	bh=FUxUDh7qrm0oeEUmw+VjOZXnXxJtzKNzhMYElE8ggBE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tP+TKuhLz+NhxlXH7MKp+zGtF2CWWUvN4Hui5cip4+5XgPvBU9plRWIaebjrt52jHxImpAw038ll1uSVipgFV8VW6oIny+yjOtN+xLt0BeywzG65A8pONleGKN+CfWBVkM/lY0npM3bpA69HBKsMrhY+D1iXYLM22i8xGxG2+rQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=fJUnzsgT; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=U6P/DtdB; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62C2chud1594480
+	for <linux-can@vger.kernel.org>; Thu, 12 Mar 2026 06:34:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Gx9so5/H9hADS1SBta9ddxnmlLWWD5M+F9fr6sL/dgI=; b=fJUnzsgTR1TwQO7b
+	fRFP7fvPGypOcU9Mps1AUjaykGTNGki9KobVoX09LAwwxETI08UCbhhWDiwdYVeQ
+	U2NC+PwBhb66oMxrq6yTraQ91XQee4vmEuj66eB8Bhjt8PoR93CJynkuGdTqag24
+	flrQsP94HIA572XJR+kQ2Il1wk9vjM+GqpMPTLNsCkvMWnuSBHsyWwrhFqcBCFfU
+	qiXBWDYQgQNjTeSJ9IEJZgtyLEdDRdWh24QTZuKZkJUdgW3bniqwpcU4KFOOECbf
+	7Rsw77LKDF0T4DsFhawV2dDR0IIrZd1SCT+931qJGYo//rFLnK358aDdU0W2Pq9i
+	qaRLhQ==
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cumvq8h3j-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-can@vger.kernel.org>; Thu, 12 Mar 2026 06:34:55 +0000 (GMT)
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-b630753cc38so3677748a12.1
+        for <linux-can@vger.kernel.org>; Wed, 11 Mar 2026 23:34:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1773297295; x=1773902095; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gx9so5/H9hADS1SBta9ddxnmlLWWD5M+F9fr6sL/dgI=;
+        b=U6P/DtdB08TBVG+0qap4aKucdjVuGRa1dDzMx7flcKNQvze0jkoY9OP+vvWW3J5JzX
+         Sn/ERjwUHSu36uacF1w4SqFCI9HcYwowaJRs693/alshyNnQnJjGBumS1weixLwaVbyK
+         cUrbiBKojpxW5SWlP6PP/cpF3P+ZkeLN7xns5SZZrt0chKheCv+wM3hPOuFiM4uQ09cH
+         OVtGZfbjQ+VYIwAjXfWRWGExOEmPb/ba+ofNJwitpS7FkI9Ad9U3+HSfVg1oqvHgHICO
+         W4em+fXTja2lHb7eTWfzkEnI1EMEiZYCRMHH0Yep0mYDn0vbNIlEqS2F+52ZYWbzQBsI
+         7L+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773297295; x=1773902095;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gx9so5/H9hADS1SBta9ddxnmlLWWD5M+F9fr6sL/dgI=;
+        b=In7XgScjjlNUwZGZH5n2257AP04t9VPixqeFzMsS2fzaLj3vMKCYvPtfxY9Qk8WLi/
+         CqcwAIOV4V6cQD7WTSWRCkSCgQkTSe9F86lxbMXFKZGlAtq4jg8DuNLoLOpjaR6DtQl2
+         cTCsA6ZdGkRBjstw6QGtTO0CH5Er62dxryWc/5UDEjhQWj3PX0cFh4z3aZRxSJ3YKosh
+         REooo3jU/tz5sMoNg81xBFsPQ9Ipj395jv9JLK87GTs3r6mtQSk0a/nX37RD2hwdKzMQ
+         xRcAu6SaFvbdFcKrpNvWJ5Zyvg3v2E2N4t32REhAlICmtdi4gGEk1L0B/mX4uqELuu7t
+         Ti1w==
+X-Forwarded-Encrypted: i=1; AJvYcCWctc0MwgqJgQm3Y4auitgNPYExiyGgVywnYOumy880CWmxwqUStO5+9c2nDhVgvIrPZmvMOaiOdPI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzic/u2QDrUZ7XrD3GC8oJRpFuvKQN0g6VB5vv+LUy//75w5d4+
+	He3kYrc5KMhx/Y3cpttd8z5urWBxR38aNoFnqFPwPYH3+yNsvl+csF0nrOhK3ANVzU5eBRzDrOD
+	ibWsEYZJpmM0VTkqO6bYQdJUxH/gpkGxl62knihiaSaNQOHPW1SBEleMhLrnH3/Y=
+X-Gm-Gg: ATEYQzw5TDIV3spdxW3YnFNBCBKXEphQAHqG5aZ7kznI+kKscCNicy9iuXzX7tFle0o
+	uyFgfPEAYc3dZpooVBOTxAj/JDV1ydHf8O9xYMqFNBmquzxHNPviX0PY+DbD0h9bWNKMHXYQPa0
+	eJ/gWsfaTz4A9roTGFUdkmGlH0mstujM5oensLUKclH4ag2+Hk8HneYhwxPqdslcSUugtXkdi19
+	hNJ8KnPHDheYNLJqmNPZxqkSb1iB3x3/d1S2tljS9IuyoQZL7s1x92PUpxqKNBMuyMuueX34amv
+	Lv7Zhwq9eVHjVubn3gRdiaQ6VGgLgddZXTicGguTi/phsQEoWB0tHvbN7gBpOksnfoWOvlyxKMF
+	wuB4ogYwuXZUIaWqKLeTCuhHly952jAI6iULlAuPoU8CwCDOfEV/0S50=
+X-Received: by 2002:a05:6a00:1912:b0:81e:c5a:8c25 with SMTP id d2e1a72fcca58-829f7150647mr4231808b3a.44.1773297295223;
+        Wed, 11 Mar 2026 23:34:55 -0700 (PDT)
+X-Received: by 2002:a05:6a00:1912:b0:81e:c5a:8c25 with SMTP id d2e1a72fcca58-829f7150647mr4231790b3a.44.1773297294709;
+        Wed, 11 Mar 2026 23:34:54 -0700 (PDT)
+Received: from [192.168.1.8] ([106.222.235.28])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a072612e2sm2132526b3a.21.2026.03.11.23.34.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Mar 2026 23:34:54 -0700 (PDT)
+Message-ID: <0bf0a64c-0f05-49ea-b7a2-e1b1345a3d7f@oss.qualcomm.com>
+Date: Thu, 12 Mar 2026 12:04:47 +0530
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -60,186 +106,204 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Wenyuan Li <2063309626@qq.com>, linux-can@vger.kernel.org,
- Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
- Alban Bedel <alban.bedel@lht.dlh.de>, Bartosz Golaszewski <brgl@kernel.org>,
- gszhai@bjtu.edu.cn, Jakub Kicinski <kuba@kernel.org>,
- Marco Crivellari <marco.crivellari@suse.com>,
- Maud Spierings <maudspierings@gocontroll.com>,
- Vincent Mailhol <mailhol@kernel.org>, 23120469@bjtu.edu.cn,
- 25125332@bjtu.edu.cn, 25125283@bjtu.edu.cn
-References: <tencent_6A462B2C8A50BA55116D560D2FFE9EED2D09@qq.com>
-Subject: Re: [PATCH] can: mcp251x: add error handling for power enable in open
- and resume
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <tencent_6A462B2C8A50BA55116D560D2FFE9EED2D09@qq.com>
+Subject: Re: [PATCH v1 2/2] arm64: dts: qcom: qcs6490-rb3gen2: Enable CAN bus
+ controller
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: mkl@pengutronix.de, mani@kernel.org, thomas.kopp@microchip.com,
+        mailhol@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
+        linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        mukesh.savaliya@oss.qualcomm.com, anup.kulkarni@oss.qualcomm.com
+References: <20260108125200.2803112-1-viken.dadhaniya@oss.qualcomm.com>
+ <20260108125200.2803112-3-viken.dadhaniya@oss.qualcomm.com>
+ <n6affntgff5wy4xmm255v5h2ejpepicpz2cybcuvsxmry5td6u@jucskv7zrzvv>
+ <5cdfe5a5-3c78-45a2-886c-768b224ad776@oss.qualcomm.com>
+ <wbx2qrkhpsntggzqkzkpi4sa6qv3buhkjbwmjoa7zgw2oc4b7u@qugyhcxb6qrh>
+ <316fa702-6cd8-4842-aecf-c176a5a53e2e@oss.qualcomm.com>
+ <qvuokwiqllm6zmlzj3pfvziylrr5krjya5rnf3ojeycdoutlro@fl5qukh4vorm>
+ <5486697e-d02e-4b12-9a60-99d0de343515@oss.qualcomm.com>
+ <2ho25tzct6t7gsuyufyg7m4a2ikmblhukb4uddwc7p35wd6yne@heippz3lh4kj>
+ <465ab63f-3d0c-46f7-a08e-cdc5fc26b600@oss.qualcomm.com>
+ <73nfsa3r3isf2shizemroctjpleya4wnnel634g7b5qyvvmze5@vre6wrdxxpet>
+Content-Language: en-US
+From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+In-Reply-To: <73nfsa3r3isf2shizemroctjpleya4wnnel634g7b5qyvvmze5@vre6wrdxxpet>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:csBWvXvZeU+hVGcPXEjQMbzxBStxVyA8mVzuC3EqQkjCHMuK6N/
- d+3uUxpw2sU/xzQ/BWPoqVHvonWIkz6gWG+x7dUSt3Bs/fgXTssLvV/SxL0qRY8ok0Rd3SM
- myKXau+QTomQnzr9E2vNQ+pb26XU9W6DINYJ6sMbZlwXccfIzl6hsx8PpOMM6FLya88zPuD
- 4LKPqz9lA1DmPnDJC5qyQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:TLDlVu4F7MY=;g0oOS+CB1JUpCNG0wO3DKpRg3FN
- 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
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: 7EOp3ch8Big4cfH4WhR0xU-WmI8MXyGb
+X-Proofpoint-GUID: 7EOp3ch8Big4cfH4WhR0xU-WmI8MXyGb
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEyMDA1MCBTYWx0ZWRfXywGs9RfpOssL
+ ++upB93kSJOdvTALDxce6uzvNWH7h3az0PT7TvreIlv2d4zpuBXRFVb1QgfVtrSPf/xaQ8IILkn
+ IqaL173JBhxVf7sc8FJepa00j5d5yqTJ6dmN3zX3uiQdB+lRpv2GQZ14UxMr4y53pN90Pn6Qsv2
+ qKxvHwOvo465lpezurVyCDWRy56odmRH+qyOJuaLTRw5K2QLwHfQZa+HmTcPLEFRbA7sfI0MChw
+ fPRJ7+//nCtXKAWIpH0kZuE1Ki/6eX54DRC3jtqHehENMvNzC0I/P2u9oUS6FUPRMjwP1A8Yonf
+ /9yPisOHpUnuhvTg9gWXso5KJZIGlhBU1XjiEbvGwiTQQicvacgusto+458+DS3bGJolVkIU362
+ hsV87VVAPtEL5V70Zi/vNWruaWDsxH6Zm1Y+vgAbth6FFmIyI5GthksQTI5H23PFuXaDpSP8C74
+ lEMk+W5YCo5D7wyEGkA==
+X-Authority-Analysis: v=2.4 cv=ccHfb3DM c=1 sm=1 tr=0 ts=69b25e90 cx=c_pps
+ a=oF/VQ+ItUULfLr/lQ2/icg==:117 a=Kc38NYG6zNWDZ5XZA/lzmQ==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22
+ a=GPwEFdiLN6RVZEhl-y8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=3WC7DwWrALyhR5TkjVHa:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-11_02,2026-03-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 bulkscore=0 malwarescore=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 adultscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603120050
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[web.de,quarantine];
-	R_DKIM_ALLOW(-0.20)[web.de:s=s29768273];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7073-lists,linux-can=lfdr.de];
-	FREEMAIL_FROM(0.00)[web.de];
-	FREEMAIL_TO(0.00)[qq.com,vger.kernel.org,pengutronix.de];
-	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7074-lists,linux-can=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Markus.Elfring@web.de,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[web.de:+];
+	FROM_NEQ_ENVFROM(0.00)[viken.dadhaniya@oss.qualcomm.com,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-can,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: EA24E26867B
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 1357326DF74
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-> Add missing error handling for mcp251x_power_enable() calls in both
-> mcp251x_open() and mcp251x_can_resume() functions.
-=E2=80=A6
-> In mcp251x_can_resume(), if power enable fails during system resume,
-> propagate the error to PM framework and log the error with dev_err()
-> for debugging.
-=E2=80=A6
-
-How do you think about to add any tags (like =E2=80=9CFixes=E2=80=9D and =
-=E2=80=9CCc=E2=80=9D) accordingly?
 
 
-=E2=80=A6
-> @@ -1516,11 +1521,23 @@ static int __maybe_unused mcp251x_can_resume(str=
-uct device *dev)
->  {
->  	struct spi_device *spi =3D to_spi_device(dev);
->  	struct mcp251x_priv *priv =3D spi_get_drvdata(spi);
-> +	int ret =3D 0;
+On 2/18/2026 5:49 AM, Dmitry Baryshkov wrote:
+> On Tue, Feb 17, 2026 at 12:15:12PM +0100, Konrad Dybcio wrote:
+>> On 2/4/26 2:09 AM, Dmitry Baryshkov wrote:
+>>> On Tue, Feb 03, 2026 at 05:07:11PM +0530, Viken Dadhaniya wrote:
+>>>>
+>>>>
+>>>> On 1/19/2026 11:59 AM, Dmitry Baryshkov wrote:
+>>>>> On Mon, Jan 19, 2026 at 10:21:37AM +0530, Viken Dadhaniya wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 1/9/2026 7:35 PM, Dmitry Baryshkov wrote:
+>>>>>>> On Fri, Jan 09, 2026 at 06:23:39PM +0530, Viken Dadhaniya wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 1/8/2026 7:33 PM, Dmitry Baryshkov wrote:
+>>>>>>>>> On Thu, Jan 08, 2026 at 06:22:00PM +0530, Viken Dadhaniya wrote:
+>>>>>>>>>> Enable the MCP2518FD CAN controller on the QCS6490 RB3 Gen2 platform.
+>>>>>>>>>> The controller is connected via SPI3 and uses a 40 MHz oscillator.
+>>>>>>>>>> A GPIO hog for GPIO0 is included to configure the CAN transceiver in
+>>>>>>>>>> Normal mode during boot.
+>>>>>>>>>
+>>>>>>>>> The main question is: what is so different between RB3 Gen2 and previous
+>>>>>>>>> RB boards which also incorporated this CAN controller? Are there any
+>>>>>>>>> board differences or is it that nobody tested the CAN beforehand?
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> The behavior is consistent across platforms, but I do not have details on
+>>>>>>>> how other platforms were tested.
+>>>>>>>>
+>>>>>>>> On the RB3Gen2 board, communication with the PCAN interface requires the
+>>>>>>>> CAN transceiver to be in normal mode. Since the GPIO-controller support
+>>>>>>>> was recently integrated into the driver, I configured the transceiver using a
+>>>>>>>> GPIO hog property. Without this configuration, the transceiver is not set
+>>>>>>>> to normal mode, and CAN communication does not work.
+>>>>>>>
+>>>>>>> How do we verify the mode on a running system? I have the boards, but I
+>>>>>>> don't have anything connected to them over the CAN bus.
+>>>>>>>
+>>>>>>> BTW: can you recommend any simple setup to actually test the CAN bus on
+>>>>>>> those devices?
+>>>>>>>
+>>>>>>
+>>>>>> I tested the CAN controller using the following commands:
+>>>>>>
+>>>>>> 1. Loopback Mode Testing (GPIO hog not required)
+>>>>>>
+>>>>>> ip link set can0 down
+>>>>>> ip link set can0 type can bitrate 500000 loopback on
+>>>>>> ip link set can0 up
+>>>>>> cansend can0 12345678#1122334455667788_B
+>>>>>> candump can0
+>>>>>>
+>>>>>> 2. Testing with External CAN FD Adapter (PCAN-USB FD)
+>>>>>
+>>>>> Thanks! It's price doesn't make it esily available, but it answers the
+>>>>> most imporant question: by the USB CAN adapter.
+>>>>>
+>>>>> Did you add
+>>>>>
+>>>>>> A GPIO hog was required to configure the transceiver in normal mode.
+>>>>>
+>>>>> I'd phrase it differently: to pull the transceiver out of standby mode.
+>>>>> By using the GPIO pin you make it always stay in the normal mode. It is
+>>>>> fine, but it is not optimal. Instead a proper solution would be to use
+>>>>> the MCP251XFD_REG_IOCON_XSTBYEN bit. Could you please instead implement
+>>>>> support for setting that bit, based on the DT property.
+>>>>
+>>>> Thanks for the suggestion.
+>>>>
+>>>> I tested enabling IOCON.XSTBYEN, but on this hardware it doesn’t bring
+>>>> the transceiver out of standby by itself. With only XSTBYEN set, the bus
+>>>> remains inactive and no frames reach the CAN adapter. Clearing LAT0
+>>>> (driving GPIO0 low) is required to put the transceiver into normal mode;
+>>>> data transfer works only after LAT0 is cleared.
+>>>
+>>> Why? It should be doing exactly what is required. Could you please check
+>>> the voltage on the pin with the XSTBYEN bit set?
+>>
+>> If I'm interpreting the datasheet correctly, XSTBYEN only muxes the pin
+>> into its function and does *not* actually impact the operating mode,
+>> which would match what Viken is observing
+> 
+> See the "Family Reference Manual":
+> 
+> Setting the XSTBYEN bit configures the INT0/GPIO0/XSTBY pin to
+> automatically control the standby pin of an external CAN transceiver.
+> The pin is driven high when the MCP25XXFD enters Sleep mode and driven
+> low when it exits Sleep mode. Standby pin control is not available in
+> LPM.  IOCON is reset in LPM and GPIO0 will be configured as an input.
 
-How do you think about to use the return value at an other place
-(at the end)?
+I measured the standby pin voltage with only XSTBYEN=1 set
+(TRIS0 left at reset default of 1 = input): the pin is HIGH
+(~3.3V), meaning the transceiver remains in standby.
 
+The root cause is that after reset TRIS0=1 (input direction),
+so the pin is not driven. XSTBYEN=1 alone has no effect while
+the pin is configured as input.
 
-> =20
-> -	if (priv->after_suspend & AFTER_SUSPEND_POWER)
-> -		mcp251x_power_enable(priv->power, 1);
-> -	if (priv->after_suspend & AFTER_SUSPEND_UP)
-> -		mcp251x_power_enable(priv->transceiver, 1);
-=E2=80=A6
-> +	if (priv->after_suspend & AFTER_SUSPEND_UP) {
-> +		ret =3D mcp251x_power_enable(priv->power, 1);
-> +		if (ret) {
-> +			dev_err(dev, "Failed to restore power: %d\n", ret);
-> +			goto out;
-> +		}
-> +	}
-> =20
->  	if (priv->after_suspend & (AFTER_SUSPEND_POWER | AFTER_SUSPEND_UP))
->  		queue_work(priv->wq, &priv->restart_work);
-> @@ -1529,6 +1546,7 @@ static int __maybe_unused mcp251x_can_resume(struc=
-t device *dev)
-> =20
->  	priv->force_quit =3D 0;
->  	enable_irq(spi->irq);
-> +out:
->  	return 0;
-> }
+Clearing TRIS0=0 (output) atomically with XSTBYEN=1 fixes this:
 
-Would you like to avoid duplicate source code here?
+  regmap_update_bits(priv->map_reg, MCP251XFD_REG_IOCON,
+                     MCP251XFD_REG_IOCON_XSTBYEN |
+                     MCP251XFD_REG_IOCON_TRIS0   |
+                     MCP251XFD_REG_IOCON_LAT0,
+                     MCP251XFD_REG_IOCON_XSTBYEN);
 
-Regards,
-Markus
+After the above change: pin is LOW (~0V), IOCON = 0x03020042,
+transceiver active, CAN communication works. Verified on RB3
+Gen2 with PCAN-USB FD.
+
+Should I send a patch implementing this, gated on a DT property
+such as "microchip,xstbyen"?
+
+> 
+>>
+>> Konrad
+> 
 
