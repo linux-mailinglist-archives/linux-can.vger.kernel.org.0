@@ -1,217 +1,211 @@
-Return-Path: <linux-can+bounces-7086-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7087-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WEovJLnXtmlfJgEAu9opvQ
-	(envelope-from <linux-can+bounces-7086-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sun, 15 Mar 2026 17:00:57 +0100
+	id oNutHL8FuGkWYQEAu9opvQ
+	(envelope-from <linux-can+bounces-7087-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 16 Mar 2026 14:29:35 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED157291520
-	for <lists+linux-can@lfdr.de>; Sun, 15 Mar 2026 17:00:56 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 290F529A5EF
+	for <lists+linux-can@lfdr.de>; Mon, 16 Mar 2026 14:29:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5C0F03031CD7
-	for <lists+linux-can@lfdr.de>; Sun, 15 Mar 2026 16:00:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6775A3048052
+	for <lists+linux-can@lfdr.de>; Mon, 16 Mar 2026 13:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC7AE371D08;
-	Sun, 15 Mar 2026 16:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70277397680;
+	Mon, 16 Mar 2026 13:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="OcIQeyeM"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dge2AQAK";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="aZ9l9Yu/"
 X-Original-To: linux-can@vger.kernel.org
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FD120F067;
-	Sun, 15 Mar 2026 16:00:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA53396B67
+	for <linux-can@vger.kernel.org>; Mon, 16 Mar 2026 13:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773590443; cv=none; b=s5np7ctqmWOEfyVxbLRnfu4OU6fg0v0vDu0tlRrySTBA8ocFSVJYT/plpzpnqXJO+m7kah/sZ0eGLqy9+nyRYhb39D/ExXNYrY/Uu+HG+QEbIw3deLxu6MOA51279+7mZp/NKeiZWbMGEsVO+bi4LcXI9e3AX1HxcRH/RD8JsF4=
+	t=1773667202; cv=none; b=dCgc5y7PYzTZIjoU5WqCgDy3o9+FSqzsRbhBXOBDaTa0jR154D2JpUubmzxadm1FPXfvStL7SnDvZjk7sTHXLTsp5CcP7F6pkL2hzhi/r2AcdXYBVLndP/C6TU5wZWGdLWN4m0EoPS4uydtvGCNwwB9wdYD8iNAOpeqh4vBtXr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773590443; c=relaxed/simple;
-	bh=8G40OCQgplRJmsLZCqvY+SqvdoddbK2f911JGeeQnOs=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=mY1AmcBs5VzciQ+LRf3+itrZS65kfTnY7TV5ha9xfUWQQPavE8NeqJwH4i/VccA2MMlpttxgzAlxS4dqKwfjhu5S/Pswa7xP6FxANtBDHTiIcHeTf5mg6QC3y+AyTWuSEnfvCK9NeBTXAv0U4IAzyIsfzo2oGiaGy90erFtQkPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=OcIQeyeM; arc=none smtp.client-ip=162.62.57.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1773590429; bh=DeNphzXrIWqC+f0pK/OMpMj3if5YA040WlRIO2rbttc=;
-	h=From:To:Cc:Subject:Date;
-	b=OcIQeyeM7Ur16Bgb3VSNYRYazf5tBX1XEr6wVtZppE43E6iVvYuwxMt7NdvXj+IRV
-	 8dOoRIxIN9FcYDHGDNnHhnupdL56NSJYi3CbZ5RnRDJoWZTUS2YeJit5CcPHby/4hH
-	 xm/pZyvEbEegjVMYKBzH5bxEQEVFsnOKOyhTUi8s=
-Received: from LAPTOP-KQCD4QBN.localdomain ([183.242.199.70])
-	by newxmesmtplogicsvrsza56-0.qq.com (NewEsmtp) with SMTP
-	id 191487F; Mon, 16 Mar 2026 00:00:25 +0800
-X-QQ-mid: xmsmtpt1773590425t4furour6
-Message-ID: <tencent_F3EFC5D7738AC548857B91657715E2D3AA06@qq.com>
-X-QQ-XMAILINFO: NnBlO8MsmACrE77YzQTmHsvBxpkgvdXTSuYuXRSFLTK76ZEm4eVffcq4iJrwLp
-	 driGZ4q1x8YiaogvHctU3waZsb/CkDh4LE7a8qdA7IB90aphhj/iG+3dDzt2SGbM2J7729Lxmh49
-	 Z+DtfTxFqPk5hQ3nAWEl1hbsQhlx8ekVsmFaYuwl/6cH+Gg/teAvewrhj1TOFJSniW53I4v44OlP
-	 D46G0O2G61/XmxqLKOI7DCyiWyEaz0Wtm1uVNBoIk9/eYIS/q2kNh1HMd5jlnQ/IdPwC6gSM7O/m
-	 AEGShhv9seOPdrtv5Crdls06xt7FFJVr07TlCsJgeWLhFmcQWHXBFBRtAEWJ9S1MgiTPZZFTn+V8
-	 i7DH0hzm7kOr16ZNn9uky+4VRm0c0MqIRCPD/hHQfH9w79NT0zCRflVmyqGNudS5M4ImJzKivlo1
-	 L2+IjVvFpJzV/jVi0U+aK/J9RAADUVByJ/UoQWBQMDzTshPd6yZDyMMus4Tkn1BiYxg0Pq4DZOM2
-	 qayfo8Kcx4Tts2YAN7Xnn/fA08APs7raPUMNLFep3bjNuPQqIHMDFwL+wQIxQyI3Dg5SybviVzI6
-	 qi1cIWy6Mo4aS/Tti0W4cPuphQ8PAUybHEYZQlYuZInr9h5HIe/BgUi71Rr1nJ9pYAqM5a6q95Jp
-	 gU75mAK49QG1jpIyBO6eOOEaAImDChH+j7abxmyJDS47kO+91RN60HE/2UwELDY3Oj1CL/k9Zo6C
-	 5L5fNS4MDaJH0lZa94xzUSE5j7mzacPmZXW0zt1eildIoLlp6JUsZJ3ddaMrUlk3XvDAMDT46RTc
-	 RI7APtF7Whn3MZ26ICRykohg0D9o04r/+gFpsGA+K3ner86KGF8ZKq1H/2r528Jae4yKSJAFfNH2
-	 M3IW3+BU96WPrUNFUr3pE3yZMRCL2u8X3baP+ZuI7kzAkFbGkkHeK14wRq4+BiyFJ4tjFg4yEyB/
-	 2E0mYZxTI8NbVelb0VDovR6GEYUa6TDEbfRAP6HsGLn2V81BR2EfzjAvCcX3/F7L4yaf17Ey8ZDq
-	 nwayN/ZHacPN5suLqh+fTBrtd29KUDM4/9OwaxDe0z4XaUmNXE
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
-From: Wenyuan Li <2063309626@qq.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Vincent Mailhol <mailhol@kernel.org>,
-	gszhai@bjtu.edu.cn,
-	25125332@bjtu.edu.cn,
-	25125283@bjtu.edu.cn,
-	23120469@bjtu.edu.cn,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Wenyuan Li <2063309626@qq.com>
-Subject: [PATCH v4]can: mcp251x: add error handling for power enable in open and resume
-Date: Mon, 16 Mar 2026 00:00:22 +0800
-X-OQ-MSGID: <20260315160022.10510-1-2063309626@qq.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1773667202; c=relaxed/simple;
+	bh=QlyRtyj6riE8FuflIvfBiM4ASu5Sv7E5TNQKsnxXv80=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=tvIRILvTrxmFj/0ORfAGFq+cHfhmA/ENyGSNMMmMuReBkgUocqNY2pyePGQBUCPUEaPJjaO6fUGEFHqnfHJDDr7Ptgh7MssCMQ7/QpVrSZj19E6rCZRo6J10gwuGzvxxushoIF8Gl7knuabdc4k++/nuqUbv9cjMydiYAuZaYsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dge2AQAK; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=aZ9l9Yu/; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62GBjOnJ1724715
+	for <linux-can@vger.kernel.org>; Mon, 16 Mar 2026 13:20:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=7SGS5jQKh5vFco8jAnNdL8
+	iZz9tDRrOLuUjo/nn5l2Y=; b=dge2AQAKPfXtrrGa1DhDkKG1atwaUlv1wCxMnh
+	pZfX4RIcW0Awv9rrObrEi/3sgtlVsus/TqvDGX0hzzykXJfG8vRso8Z1VBvAYKEt
+	QABcYA3cMuESMVSGkU55YnF7Nombpr8xkjtPdXV5eQdwFo7nxO49UafRh0GLFbhG
+	vC3Q9txyhbWWQBzg1QAcAERc8fmcnumy0vxOqCwTEBVeMj9Bvq1IHEkr+Wu08a2+
+	mS+YHiLUkRIScdlvMoxeiZrMfxUP81Qj5lxXx1p4pr1ZZxOKy4XhIDXkdAV2gQsi
+	nD1QJyVOIvsv8Rt4ticdCW5zaVCSedx8wJC0D7NTKZtEcZ/w==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cw0udnsey-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-can@vger.kernel.org>; Mon, 16 Mar 2026 13:20:00 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-35b901d542bso14301061a91.3
+        for <linux-can@vger.kernel.org>; Mon, 16 Mar 2026 06:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1773667200; x=1774272000; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7SGS5jQKh5vFco8jAnNdL8iZz9tDRrOLuUjo/nn5l2Y=;
+        b=aZ9l9Yu/Z210n6+gSnmMv+jOhzlyXtKC19XvQD/kznQ4fzDwAiL+aYcS/9kbOR6rm1
+         0L62qudBSMQXlngHEPbK27kpwhgnCNUITbTxPLfscuEG3/Dnyjmgr+nYXtMP4DpxKlyF
+         jdx1P2WjW/iGPnG0n2Djxq3tPEQom+EDaGAyVuWQPtFnOSQKSx4aJbDc3dnrs1D7kAvr
+         29nT3fG0zr1Jn2UhtPlS5rBvNtEWfX3ci0iHVL65CsuRE8i/iXq+75JPDqVjvAFfkl6H
+         geRCQ+XFiSpwG50d/Z6quEyNT7l5Zz9r1+3inchsOJkayBiuKxwfqJnKpK45PhNslG87
+         dqiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773667200; x=1774272000;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7SGS5jQKh5vFco8jAnNdL8iZz9tDRrOLuUjo/nn5l2Y=;
+        b=NQEZEvUU4t2pDuftfhnP171tUKMoCpkQjI38T+x1BQR6W2YxKoPXhpTGDyR+NPbQXf
+         +8nN8+RNnxXhdlF1J9IcUTWL1TZMVJDMUrUabQklz/4Ot/9ilS0yqM7f55AaazbRj4we
+         8/wGMXBFG1zaYwgNN0bAZHf0dYb5eBBMi1DjJgNJbQjwU9ON+JAUR1UyYaf3/S/92fpN
+         AEtyQ+C6nTwsiDU7zX2v2g77Bz7/MCCncslD7wOU1Cba2UH6nOI1pznH6gcyKeINIR+P
+         gtCDDfIFYCZfiT4CsiklOZYHSU40xgPvycXU2STscNNPhokeKxZwowsu0+D1u8S13UUo
+         2DGA==
+X-Forwarded-Encrypted: i=1; AJvYcCVcnoWhUbZlMBAzycxyGP3R36Ggn9yTRI7EEj8TKQvsdKkiUuGSTu6kv2jVOdTlDxV0y/qoVYkR8x4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3P8SLYRzJxnpS68cza7OLizb2MaSGE5HD5H7FB6lqPRiqgqkh
+	nmcI5cje58nvHYK1xHS6NH7nAGAL164PGwHfTAm1wpCdcMWK227C/pJyZBVRjSpHUr4qnW5GssE
+	x3IhK3b+YoE/bN971YA0UCcEqkvfekG40S7vXvb8iV0hOblN2aGILovU/dXfovRg=
+X-Gm-Gg: ATEYQzzzMBP3lIalGXljPy3ZaQGtMRiXxn3cdRBxnDHxyG2oGNw3N1hP8Rk4LPTYICQ
+	3Kagz0Cz2svl3/BkovoOvVKa5R+vz4a6TH5cIAm5atTzqfPjzUzqnldnkYXt4hzLHlpM9byCA3V
+	b4JRiT6Zlffn4QA2ZQHvupwQECDH8s0CYx4S4FfjXBLzfzyjd1SqhGFN2nMOxGtJuy6sjkdvfjt
+	DGmHZmWRAWSfE/7LfRIaroqF6nnv5FXBGFMhHk79kJN5kCx+GfCzsVbwW6hsSyZT65N3V4vUMsm
+	dwcBm+d5ExJILVcF8WnGK+uSi+GA/WJ/qavdNnJHdAH4bpwcEF/se+Wo/Xu499nUCdSCbbOD+4O
+	yJPrZirj+EZYb51hWWpT9gsYzAY8Rsj+a2YjfKIVIcWKhPZFxcf36VK4CjQ==
+X-Received: by 2002:a17:90b:5306:b0:359:ff8a:ee4f with SMTP id 98e67ed59e1d1-35a21e2fcedmr12435836a91.7.1773667199479;
+        Mon, 16 Mar 2026 06:19:59 -0700 (PDT)
+X-Received: by 2002:a17:90b:5306:b0:359:ff8a:ee4f with SMTP id 98e67ed59e1d1-35a21e2fcedmr12435811a91.7.1773667199067;
+        Mon, 16 Mar 2026 06:19:59 -0700 (PDT)
+Received: from hu-vdadhani-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35b9303eb9bsm5209648a91.8.2026.03.16.06.19.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2026 06:19:58 -0700 (PDT)
+From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+To: mkl@pengutronix.de, mani@kernel.org, thomas.kopp@microchip.com,
+        mailhol@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
+        linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc: mukesh.savaliya@oss.qualcomm.com, anup.kulkarni@oss.qualcomm.com,
+        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Subject: [PATCH v2 0/3] can: mcp251xfd: add XSTBYEN transceiver standby control
+Date: Mon, 16 Mar 2026 18:49:47 +0530
+Message-Id: <20260316131950.859748-1-viken.dadhaniya@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Authority-Analysis: v=2.4 cv=BJ2+bVQG c=1 sm=1 tr=0 ts=69b80380 cx=c_pps
+ a=vVfyC5vLCtgYJKYeQD43oA==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=BLoY-fwtqX9uGLcRELsA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=rl5im9kqc5Lf4LNbBjHf:22
+X-Proofpoint-GUID: 8gJ3l9iqukPGRATpp3pQ5R6yDWrONrEH
+X-Proofpoint-ORIG-GUID: 8gJ3l9iqukPGRATpp3pQ5R6yDWrONrEH
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE2MDEwMSBTYWx0ZWRfXyObv7weU0y9g
+ RNUXCP2J0lXrtKpe4pUbfltrleevzmIYYpIZ3HyAqCQy+UaPlFvEkR17AUtJW+kHnlInYue1czn
+ 9Ee/C36oJB+5UtVhWHATCeb9Ahfhm8p4LkdgcX/b2fzLzVG62cViQ3Eu1b1g5gkWx1tXMvcSSmQ
+ aZkPu9mmNudANehkXTbFBD9Sq6RkauPZUHp7QE3Q4MNlJU7vuYZ1th9Wb89lgj639AnL3jjM0Cn
+ CJYnQolU5KYsOCjBfStkcgf+pW093+UoFwtcKHlJTTzqr3K0FcngdEA1qUZNy1h6ZogA+/pT+Vb
+ HLG4q8gNF12rboXgN4dNEpdqRyj/OD4oCxuWHK7a19Vi6Ey0pyMYzI4KwaHjADdYlBvUwE1dFet
+ 2zdqiH7M+MSe/EYSuFbMh4RXGEVTViHCQk07dF6sXP++93VGp04PYjAsT4C7ikPfy0VPiP+dDpq
+ Ak4GIbg0aftnN1g88Iw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-16_04,2026-03-16_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 lowpriorityscore=0 adultscore=0 priorityscore=1501 phishscore=0
+ bulkscore=0 impostorscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603160101
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,bjtu.edu.cn,vger.kernel.org,qq.com];
-	TAGGED_FROM(0.00)[bounces-7086-lists,linux-can=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7087-lists,linux-can=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qq.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FREEMAIL_FROM(0.00)[qq.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[2063309626@qq.com,linux-can@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[viken.dadhaniya@oss.qualcomm.com,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qq.com:dkim,qq.com:email,qq.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: ED157291520
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can,dt];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 290F529A5EF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add missing error handling for mcp251x_power_enable() calls in both
-mcp251x_open() and mcp251x_can_resume() functions.
+This series adds support for the MCP251xFD's dedicated transceiver standby
+control function via the XSTBYEN bit, and enables it on the QCS6490 RB3
+Gen2 board.
 
-In mcp251x_open(), if power enable fails, the driver should not continue
-with device initialization. Add proper error checking and jump to
-existing out_close label.
+The MCP251xFD has a hardware-managed transceiver standby control on the
+INT0/GPIO0/XSTBY pin. When XSTBYEN is enabled, the hardware automatically
+drives the pin low when the controller is active and high when it enters
+Sleep mode, providing automatic standby control of an external CAN
+transceiver without software intervention.
 
-In mcp251x_can_resume(), if power enable fails during system resume,
-propagate the error to PM framework and log the error with dev_err()
-for debugging.
+Testing was performed on the QCS6490 RB3 Gen2 board with a PCAN-USB FD
+adapter, confirming that:
+- The transceiver is active (pin LOW) when the controller is in
+  normal mode
+- CAN communication works correctly
+- The pin is automatically managed on sleep/wake transitions
 
-This ensures the driver properly handles power control failures and
-maintains correct device state.
-Signed-off-by: Wenyuan Li <2063309626@qq.com>
-
-Add missing error handling for mcp251x_power_enable() calls in both
-mcp251x_open() and mcp251x_can_resume() functions.
-
-In mcp251x_open(), if power enable fails, jump to error path to close
-candev without attempting to disable power again.
-
-In mcp251x_can_resume(), properly check return values of power enable
-calls for both power and transceiver regulators. If any fails, return
-the error code to the PM framework and log the failure.
-
-This ensures the driver properly handles power control failures and
-maintains correct device state.
-
-Signed-off-by: Wenyuan Li <2063309626@qq.com>
 ---
- drivers/net/can/spi/mcp251x.c | 32 ++++++++++++++++++++++++++------
- 1 file changed, 26 insertions(+), 6 deletions(-)
+v1 -> v2:
 
-diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-index bb7782582f40..e59220aa70ed 100644
---- a/drivers/net/can/spi/mcp251x.c
-+++ b/drivers/net/can/spi/mcp251x.c
-@@ -1225,7 +1225,11 @@ static int mcp251x_open(struct net_device *net)
- 	}
- 
- 	mutex_lock(&priv->mcp_lock);
--	mcp251x_power_enable(priv->transceiver, 1);
-+	ret = mcp251x_power_enable(priv->transceiver, 1);
-+	if (ret) {
-+		dev_err(&spi->dev, "failed to enable transceiver power: %pe\n", ERR_PTR(ret));
-+		goto out_close_candev;
-+	}
- 
- 	priv->force_quit = 0;
- 	priv->tx_skb = NULL;
-@@ -1272,6 +1276,7 @@ static int mcp251x_open(struct net_device *net)
- 	mcp251x_hw_sleep(spi);
- out_close:
- 	mcp251x_power_enable(priv->transceiver, 0);
-+out_close_candev:
- 	close_candev(net);
- 	mutex_unlock(&priv->mcp_lock);
- 	if (release_irq)
-@@ -1516,11 +1521,25 @@ static int __maybe_unused mcp251x_can_resume(struct device *dev)
- {
- 	struct spi_device *spi = to_spi_device(dev);
- 	struct mcp251x_priv *priv = spi_get_drvdata(spi);
-+	int ret = 0;
-+
-+	if (priv->after_suspend & AFTER_SUSPEND_POWER) {
-+		ret = mcp251x_power_enable(priv->power, 1);
-+		if (ret) {
-+			dev_err(dev, "failed to restore power: %pe\n", ERR_PTR(ret));
-+			return ret;
-+		}
-+	}
- 
--	if (priv->after_suspend & AFTER_SUSPEND_POWER)
--		mcp251x_power_enable(priv->power, 1);
--	if (priv->after_suspend & AFTER_SUSPEND_UP)
--		mcp251x_power_enable(priv->transceiver, 1);
-+	if (priv->after_suspend & AFTER_SUSPEND_UP) {
-+		ret = mcp251x_power_enable(priv->transceiver, 1);
-+		if (ret) {
-+			dev_err(dev, "failed to restore transceiver power: %pe\n", ERR_PTR(ret));
-+			if (priv->after_suspend & AFTER_SUSPEND_POWER)
-+				mcp251x_power_enable(priv->power, 0);
-+			goto out;
-+		}
-+	}
- 
- 	if (priv->after_suspend & (AFTER_SUSPEND_POWER | AFTER_SUSPEND_UP))
- 		queue_work(priv->wq, &priv->restart_work);
-@@ -1529,7 +1548,8 @@ static int __maybe_unused mcp251x_can_resume(struct device *dev)
- 
- 	priv->force_quit = 0;
- 	enable_irq(spi->irq);
--	return 0;
-+out:
-+	return ret;
- }
- 
- static SIMPLE_DEV_PM_OPS(mcp251x_can_pm_ops, mcp251x_can_suspend,
+- Drop the gpio-hog approach as suggested by Dmitry.
+- Enable hardware‑managed transceiver standby control via the appropriate
+  Device Tree property.
+
+v1 Link: https://lore.kernel.org/all/20260108125200.2803112-1-viken.dadhaniya@oss.qualcomm.com/
+---
+
+Viken Dadhaniya (3):
+  dt-bindings: can: mcp251xfd: add microchip,xstbyen property
+  can: mcp251xfd: add support for XSTBYEN transceiver standby control
+  arm64: dts: qcom: qcs6490-rb3gen2: Enable CAN bus controller
+
+ .../bindings/net/can/microchip,mcp251xfd.yaml |  8 +++++
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts  | 22 ++++++++++++++
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 30 +++++++++++++++++++
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  1 +
+ 4 files changed, 61 insertions(+)
+
 -- 
-2.43.0
+2.34.1
 
 
