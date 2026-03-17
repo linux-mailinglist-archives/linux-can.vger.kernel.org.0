@@ -1,64 +1,64 @@
-Return-Path: <linux-can+bounces-7110-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7111-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yLopJhHguWk7PAIAu9opvQ
-	(envelope-from <linux-can+bounces-7110-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 18 Mar 2026 00:13:21 +0100
+	id cL46Cr3euWnNOwIAu9opvQ
+	(envelope-from <linux-can+bounces-7111-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 18 Mar 2026 00:07:41 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D73E2B3EEC
-	for <lists+linux-can@lfdr.de>; Wed, 18 Mar 2026 00:13:21 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 051972B39CE
+	for <lists+linux-can@lfdr.de>; Wed, 18 Mar 2026 00:07:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 66C0B317525C
-	for <lists+linux-can@lfdr.de>; Tue, 17 Mar 2026 23:07:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7F982301DF73
+	for <lists+linux-can@lfdr.de>; Tue, 17 Mar 2026 23:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCF963FB7DA;
-	Tue, 17 Mar 2026 23:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1E63FB7F4;
+	Tue, 17 Mar 2026 23:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="nImkZ/F3"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Cwn4DMXh"
 X-Original-To: linux-can@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013056.outbound.protection.outlook.com [40.107.159.56])
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013002.outbound.protection.outlook.com [52.101.83.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E218F3F99D2;
-	Tue, 17 Mar 2026 23:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE643F9F46;
+	Tue, 17 Mar 2026 23:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.2
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773788753; cv=fail; b=tMPgltrOelmuIhSFJxDXyuvvSmPYcquU7AJvstUWV7jHjtoom5t+kVX5Gl41CsX4ogcN00onPsHVH5Qg8I/PsfR734RjQ2dxOeBLtBgdOhWtjuKh8uqjyvy5qc7n9z+qhWPwImyQ0oF7y4KFvnlwBag4C8ak9fFAVeI6qFk61V8=
+	t=1773788756; cv=fail; b=dDZdyy1xp2r6/6U5jVynfk2TuXKOIHFbtawDxR17SS2gs96czt1QXpAQyAINCD/DfqFf9cHR313M6UUSbXTcSfV9JCL/z5Fd8F/cnC22L8X2bq7cY4XlB6x2NF4VHMCeESmIYYkHoxATPyLMPX/RNFShpQjy0K16BaycV2Z/omc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773788753; c=relaxed/simple;
-	bh=hUbnx62M66gldjJA6+O0dQIpR2colqe1dKRM7JqbIUg=;
+	s=arc-20240116; t=1773788756; c=relaxed/simple;
+	bh=6NMU/SRrhXE/MiL6JHSCNEjH8NOC7WS2T3Jyi9wd6Yc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ciSn9MlUBupvxZeRVxRZ/xs7O9C8yFsm3OOsEmTssHF2PCM55FdH83AyNP4vGwFQ6KyIMxMchao1lf3mV3x4n3lJCoj8dydYyt20c2c5Aj9aM0QQc0BI1xMXMpH3aPu42eqMoqRQgIJZdVPhWh/syw8oaBMdkNy+3a7yDzB2eXk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=nImkZ/F3; arc=fail smtp.client-ip=40.107.159.56
+	 Content-Type:MIME-Version; b=W5wT/jP95/ST+mzAfT9LT5Vn9AVVPQKH7QPMpV6KX7TO3AsMLf8LZydZI4PikCJiEzr02Aiv/1LrFD8EuErs6s4dVQmp+jQvvR2Z8T1LYVtymPBesBQyNEu0E/YHTIjxPT37aXmHblhnkcnteJghq2fXPRFXRmoC7LcQQ9Elvks=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Cwn4DMXh; arc=fail smtp.client-ip=52.101.83.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OxCgNEuwZSLsScz4tKxhUmwScYiWkJ0S8mmKsRned9J+6qvSegZFgO66TpE03ajXf57DwxKfeKuBDcjllpFlU4laPhSx/9vZQngpIxQ11x/BbOxoCaB0Xu0eBSKAkRLDRJzQGPkmG6R1vFRcLPia5xJz8fcju0EjrAs3CGVc7bhBu7sgHuIc07iHFOa4LqSUAFkjkZUYls5Gsh3UquikdnZDMf38IwT51SqIfXts9lgz1RPqME1tKzfQU969iMYl4fC0m490pMkkeYNUWxKj0TwsrepqGn3vDHZmJ9gxDHdMcMwESFt5veLTaVVWkWQ4IayQ/1g/VwSZuFbxC6yyDg==
+ b=kgjaNVdqYTJ1kYQd8cH6dYNVVqFyRMJuYkOBlmwsaFXgxtrnaIkYFRVw9b5ZBG0yR39dqMHRopCVVEM909zCjoZI8BY0pQ64Ho4w1Pq9YayrkFaLF81zFs34ByITtusAB/PO+kwO9mwdGqLnc9akvr/Qmpncc1cjQ16l21EtEGj6OYrLctj8Qq1Y+E8TuwWCRkcqy1YqenSEorWnG6+eW1bZGlFTSnZ4J32wEeFHT21RwGCuLgJe01hfGu4FgnuxL3J/C3/Gc0O0dVgI2o9v2Pk8MPpk35T7CwN+4YG5n5FZErhrLdauY3ebTwVrMgs8roxBGrloJFMlCWsVHq/7xQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dojJxYIcHAWaavMLLA54EwTbGG86Ri0c/DPsrBQcGPo=;
- b=RnyqQa7CmJunmtA5L4YVflShiGCNHPSrw3nZJTrhgTe3VTqvebVXao1NI4n/RjRu5BUBQ5/6H9OiW8R1k79OobxdctKcL2CMWzSqy53rggqYnTM/lmjLvrac5xmaIx0ZMLzoCiLwLe9XyTVcKyqpLb83apsqh8SzNv7RS95fs1jBMV3bPCsJyD36HQ7JY9rgO1FrMRsqTjB69qzQ5oO7mJkKBv9zlBK/HesRvRhqcNH4zHL2QJpDR5OqU4Spu8nxoqkcA51zY/WEwMtC7rFek7dPRfOFTGs06njzIEQoCwDAKI7jT0GlP46p09pfXUhyO9k9Iv6rp1h3o55KIbpqzA==
+ bh=KoRmlaBKq/HTgxcz7UdBU/a6FayMfH+6d7e1R8P1Rbs=;
+ b=oh1s3nfPQMxukZnWudTsWSdfnnVTzG3TD49Vv7tEbtf4ijfItUnWPAH/Ujl8TUaDFbeIT/aqVr5tLsKQG64oK/2DulQS/RN5EYesX/oBUaMq9PRtwNO1Twn5xJ/X0d4ZqhokWh2+6PgOQ9i47VhCbOMeLsJry2LKVwJ/eZwCFcjgrOe+jcD25RBIQ1rlGd7JvllUwuSPP5g9U3531r2GlZz5ohRcG8U+ZZbu45053JjFfN1ylWPfjf5Rat07ZTqusqvQhPCWI6X4tMT1/J9i5NjIdbnsDFrjyadf723iCfCRscnWNmApVudwLolJfN6l6+QOtErl1AmoAU/TlSpnAA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dojJxYIcHAWaavMLLA54EwTbGG86Ri0c/DPsrBQcGPo=;
- b=nImkZ/F3pyBUWn1GHlJ4c2z2NB2hvEZyovtkc99uSZnp4dh484tEaZIBa7I6wVQdXD1Z0s3awbmfsSroOqcYp2cW+Kf1VR1dqExKXoxBRUNpM3pxwj3O+ZSf3A6MSryAYXVWAIUkWEYE0gklUdJdYHEsJgxk7x69EYEaWFwi8zW9iEOcx0ZWGPTAjCfxqvaTenYxv/tzKDY1KoNOJa82lET0Nv2DMxiPOHWvUQz4K3kiRBJ4lH9rMvVt8/xW+GZgwXjG0VH7iQi3icE+sAknggGV1icvuSP20l66ehagdXJKQ7s9OlpRSOFf+T/5k5/n+oJMX3c2ZT2ZBeQZliNBrQ==
+ bh=KoRmlaBKq/HTgxcz7UdBU/a6FayMfH+6d7e1R8P1Rbs=;
+ b=Cwn4DMXhNya4QmdjF83P88UHVSajJah9Xu7r6cxxpFjBAolHqxPgALr0wPn3yhEeRM4DXOwk+sNUU5fYlWH8bKJrbryNRcVWYkqVYpwwCrbNV+LXDRJTj6mb6ic2+Q8bOU3jPTEx0pTBuGNGrpmtPp/qp4CiNHPoXxvTV5Xnm04/+vcv8j4TLYNgQSEHqrmSNOGdlHVjD6Hpnbssp7sXWNkjKToqiJ+gxclfFKWQ595vDbTxZ4Fptmmzb7f+NHAQEeAZqsJ84gIjbB1p/CLO+3BqnXY/sn6WXsIVjRz/LyPeYuTHSqGlQYzu8eZRyfh5zA/tSfLleEyKz1hQZUxiXQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
  by VI0PR04MB12032.eurprd04.prod.outlook.com (2603:10a6:800:311::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.27; Tue, 17 Mar
- 2026 23:05:27 +0000
+ 2026 23:05:30 +0000
 Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
  ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
  ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9700.022; Tue, 17 Mar 2026
- 23:05:25 +0000
+ 23:05:27 +0000
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 To: linux-phy@lists.infradead.org
 Cc: Vinod Koul <vkoul@kernel.org>,
@@ -84,23 +84,23 @@ Cc: Vinod Koul <vkoul@kernel.org>,
 	netdev@vger.kernel.org,
 	spacemit@lists.linux.dev,
 	UNGLinuxDriver@microchip.com,
-	Daniel Machon <daniel.machon@microchip.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>
-Subject: [PATCH v4 phy-next 07/24] net: lan969x: include missing <linux/of.h>
-Date: Wed, 18 Mar 2026 01:04:43 +0200
-Message-ID: <20260317230500.2056077-8-vladimir.oltean@nxp.com>
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>
+Subject: [PATCH v4 phy-next 08/24] PCI: Remove device links to PHY
+Date: Wed, 18 Mar 2026 01:04:44 +0200
+Message-ID: <20260317230500.2056077-9-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260317230500.2056077-1-vladimir.oltean@nxp.com>
 References: <20260317230500.2056077-1-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BE1P281CA0440.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:81::11) To AM9PR04MB8585.eurprd04.prod.outlook.com
+X-ClientProxiedBy: VI1PR0102CA0003.eurprd01.prod.exchangelabs.com
+ (2603:10a6:802::16) To AM9PR04MB8585.eurprd04.prod.outlook.com
  (2603:10a6:20b:438::13)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -110,123 +110,388 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|VI0PR04MB12032:EE_
-X-MS-Office365-Filtering-Correlation-Id: 07e6ec25-c44e-42fa-4da7-08de8479ac22
+X-MS-Office365-Filtering-Correlation-Id: 36f4548c-169b-4db6-25ee-08de8479ad98
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|10070799003|376014|19092799006|7416014|366016|18002099003|56012099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	2+XlJLDg7k2aO+SnOteEZSzPF6LAs3Lg2WnIgHyVolVG9WUYQ2Au/FbzrttkG37VOUiJs2G0aZ/xgUMvFaDq1NsRda0tidHNMh5K4b6Jpkzg0a3Ecia/aqUE6qxNytwqZSijMoH8AYq2y1n+fDoo9L6Sw+W44QueWjZs3NsW9pv5EnQN2PluyjRR6j+q6L9EqBHPBf9CE0SrAVU9PhcEBHil+59S8YSbnbkSkBm0Ti9aMo7tCV+iGt0D4u/Xi8tGxi4sxv2RlmZekWapxH29wDcf4S3Kh4WHfvgZbfh1lmbcF0/6xNns45Nz67AOTFGeVgvI/zlnSbPDhYor7/VHrCqoZkU3oS4EVLE8nE/WqPEXgx90n/+aQRKLNPo42ljNLEoMPvOcipTA8tElOv/8/Tr+uGfK77wFk8EW4+8OoPkmBtjit3wPa7Mhy2md2eiuGanwPbspdx6L26idKzjfTL1YTbWXRtbHTyYoetbFsQw9dV2ak3JguG4DnzCnfjtpaz5NzUwZYNx5dkRCyietM6BptrJGE1CRKgx8y7oeqNv2Ck5mNCpePQ7U/xuGhoTdFRMiNVAz6Z0muunuSAFl6j9KMwjzhLIeq/lpVqF2coQI1pqloykEpe5Uq2IEDPFJu34bauvUhA+QS9uxQ9BmOPRE2aY19TADnl739KGUXZ5VBrAJ1b+gT295eNL40GKd47Qgj/cN8wZypBKY0zwZa8TyXiRupvexm8U5PGAR5FA=
+	XaTTd6/QTujM+hP53P61rUv/YaYJUA7q+4Wd1V+TGRoE++uCoDDk6uScEuYTjGefTiH0q1EfLetVp3H+C1lWPG06L7cbsA6kD9tlYV+cITLBTNkgH1JJeGlSDDslHhVnlO41aD0JzYMyCYWU7YNGS2Z4/NP3mxLtR8UlKVp7KS7z3fxoSQqwpZPMs1Se/O4izIt8Hxxxcp2EepooJfhjhRZGfLg8w+AapyunobGwQscCsfg2sat8agr1H7H16dBVBIjatc1LnwWnYkipeoJ4KjZM7BcY/h3rPAlqNcvyKzNL+9uHHqNV95xz63QizpVQXoqMGXIabVwUnWUdh+YEffiLAZylx0trPK/0zSEpunyJIQ75chjYPDwDUg4XEbTBOtL9xYY4a5WI8VU3q0UkLRJHPhMECb8lQfPnx6qA8DAxw3Qpx9U96V+BCAUorW5h8rH8Hmqhx7n8lfbcrrcpHf0hAJUzykpmRkVWRY8FoPze5xChONJlXH3B+ollviUA4nnN1wNRulzZuoTVGSusTKu0eG5+YQiUjnhBXW+T1VMOqUDdK+wUanHlUiU60nVdDmvSchI8fvlOEfY1+9Jaf2yQldTqKmPnmRSJXd+FtG7WzJcLvNoV95/r+w50/LFMiMNQ+AhmogXWgWFciql0SQunfalgPDooS6ZlKa4eUUpZLH0F1tOxQUL6QUXwfK+UnxGbUfXX4bvPyLfmlSmLZnqa6VLV/vSvhLLfoENtOSg=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(10070799003)(376014)(19092799006)(7416014)(366016)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?XHKeTKS8j12NTZUsufnOgv9pj265DvSKTEaYUtdvHh08kGImILahxcae/iya?=
- =?us-ascii?Q?Aw3IZev2/6j5xaO9jL6+MMxDQJkwFG/ORBLQjD2M2BrhQ5REIbeNKTlyxZyH?=
- =?us-ascii?Q?Oi+7E4PhDcMZLtRVaQ48CUNGJgaXJ7aBONStGc6t1WEhTdZuPAQu67u82Ce7?=
- =?us-ascii?Q?FXLd/BOcBILIDGVGI7qG//nEf9Azn/5a+HBS9GLmMYaZNUhNR+AVavKBxFN4?=
- =?us-ascii?Q?nlVz50YVbVjnyiz572K2zaYmyJ6Ut78sT5EykN0IsHPoHmShXPFhpLxLtmr9?=
- =?us-ascii?Q?4mR6kWne7+TtzpU6wPfVVHyU+qCeUTQzlL/JSUImhaND2rwdKxz0umelu1Tg?=
- =?us-ascii?Q?N/4cCOAVP7hemEfL88v4vkHm0OQILYW+XuGXHacS5buRrzmhEYFmbJ9V+YMK?=
- =?us-ascii?Q?145f4F3fEmrLOpMAY16xbWan9mHDcINwTJmrw6bWyB9ys7Bsx/8BOqHvPcd8?=
- =?us-ascii?Q?uhBmHy1MrdOpKrO8FltBFoME8oOU7yTfSqoTlvYOOxOxqAKLKCSk6pBq7XKR?=
- =?us-ascii?Q?GlqBRF354fVt5/JBaLxTDnxxAJw8tA1jkPKOnWEupUYm1KDKnnobVRQri3K0?=
- =?us-ascii?Q?o1aQL4v8oP621asOVV6jrtCdoAvwCsXzP9kKuqDgK+WKSbAXfPtsLy+SEtUf?=
- =?us-ascii?Q?gnqBduEZHomymszEgBdrFo7PaYBZc/vI9sBOg7BCJBgQdBafHkrWBNwbTwZb?=
- =?us-ascii?Q?YV/Sie/Crdw7+vJ19uCHpBwQQgqK0CuIrilgawayMkzFUSWDk9GQ/As2Ji9y?=
- =?us-ascii?Q?AadxBH7Eo6jzxx4ZI3/sMXW7TWqusoZKdMg4L85Yl1KrQc/ik8nwyXC3xmgc?=
- =?us-ascii?Q?8AV3aNLeOUnMOFT17HEH3S3eGFdzMMfRcX3OQqn3tuouJ6bzAcNkDAiXpmFK?=
- =?us-ascii?Q?T48VeJKzJ7E5wwSLsAqsp8LJaNfeDuG72LPM5brmKRYw+jMsNJCkgK/nSIcF?=
- =?us-ascii?Q?yzwbIhtmRdpTtBTurBUkZ41eYHcSAwNRvJEFM+TA/Jcp8rk8ACHrmNTQjDDo?=
- =?us-ascii?Q?AEpkIy3NlU0GyF8sX7pTfp1tvAIszcW4Afba4XaPBEVQS0PVHyt2T38h8/m1?=
- =?us-ascii?Q?9069q3XMN3/HNtUwlliBw1DjLzcvMP7MgmoDKsCv6Mly0/X3kI/nPHT4b1Kz?=
- =?us-ascii?Q?3E+sG/OFhaJyMCI13iGgLsxo7Fy0XJOezT0BTECVDx3KYKiCANoud8Igud9R?=
- =?us-ascii?Q?eu3eAS5CBmFnyaDVUBQBUTtwUdlCcht5ccDOw4jqSfVItW2B4pD8QMIFQaal?=
- =?us-ascii?Q?0R75yGsGZ0hHVLlBctOZvsjddBVVStidZcybISkjbDsedNk3e6YV+KJe6l2I?=
- =?us-ascii?Q?laB3u4HK4FGEr3SMxCpr16FJCBJ0CFxZWbHX5pFaBx7tf2hbor3lL/VlQDEv?=
- =?us-ascii?Q?4Tu4tnsp1sYQ9sskn08Lq++6Oeo3YiJda/cPYrLusqVIS19v4Kz6S1D2SQP9?=
- =?us-ascii?Q?qDwaC+/ha+7f7SlfhNS1GZ0427YF4f9QQzsWCmTql29hskHh703lMFfpa15N?=
- =?us-ascii?Q?lBaP1TQaxfS7xJzr/xB7/IP7AXibC64kirdOuccJ+r1pT3d9ImicyUckBrV6?=
- =?us-ascii?Q?YV5Zuh/Q/QKeITl/xM4SRAoNKl4b53AKFH6EWCNZdWBKOocEp1ZThY13z7DA?=
- =?us-ascii?Q?6w8pWrGMQWgd1zLLMFi3fnKlbZz1GCBcx/Dq4yyBzweNQ/IjY+IMrB4HCYjt?=
- =?us-ascii?Q?MWnzE/NrrnCtCrNRj15c+gYm9NEKBg/kOvdTH9Csf23uTjiomFBFFPVtfJtm?=
- =?us-ascii?Q?jtNH18Ssy8J6T9HPAQIptfTLrHPGUUB7vYlHpmW1EtYn2TKD/GqOHH22n43y?=
-X-MS-Exchange-AntiSpam-MessageData-1: vXcWKUGNPu0K/4r+vY8zjbyv6ypOtyW+FHI=
+	=?utf-8?B?TjVEODdkcUZHR2pBM0tKOE9VZWJ0L2pKS2ZiNzVxQll4NDZqZ3lqc3hxWVhl?=
+ =?utf-8?B?K0dLMFZhZWJZUFdIK3BJVzI2QmVZUlVwNmRYWm5IQkU1SkpPbkFsRTk2L3BE?=
+ =?utf-8?B?bDU2Y0tScTdEbi83S2JzdFdMZWsxTWF4UTNkK3FYY0pPU1BBblFQNnllUjJS?=
+ =?utf-8?B?STFjMlVGbU9PbjI0OW50eUd1R1BtR050ZkNCdS9hUlpEYSsrM25PRGtWQWVn?=
+ =?utf-8?B?dVNwV24wUE1XT3FScVJ0R0tBekx1WTc2d1lXTThqZGFuNUxSaUw2dktCcjho?=
+ =?utf-8?B?RVUzczFPMDYrTmIvZGJDaGVteERUQ0VtcnYvRVAyY3dKYmdNY2pxYzNTTEdn?=
+ =?utf-8?B?UlV4dHBnOWZuRW9CUEd2ODJOSHlqVFJhUGYxYnJpblFQMHZnc1BjNXBkTG9Y?=
+ =?utf-8?B?alpvMDE5Wk91dGtodnBzR25HTUh1UyszRUQ5TWdTMlFPN0gwYURIQzVabitD?=
+ =?utf-8?B?dGhXYTVWTWRBeHZyRnRkTTdubUt2UkRwYjJkMmRoN2p1MXdod0FudmdhMnNW?=
+ =?utf-8?B?SXMzMEVQTFVRVEhpMHlTd2tGVVlRTzRKWGZBakxHazhCY0FPVXNXNmN5dUEx?=
+ =?utf-8?B?WTU3dEVDSVpEc2srTDZuVm9HVnZvUkpLcVk2bTZSY3ljZ2hoQmpkN3pFdG9Q?=
+ =?utf-8?B?UW5xa0tIRDhTazVNK2FmSFh1UmpscVFTcmY2WnZoMm90VERFdGZEUUxDalRQ?=
+ =?utf-8?B?OEpIWjRMeXRBeEdIamVHaDV6cldWbjJldDRvWk4zMEsxc1BJbmpzeDg0b3Ra?=
+ =?utf-8?B?VUF1dzdXR2VXbmU0elVFWFJyK0JwWUI0S0ErSzIzR29tMVE3Q280dkc0dzll?=
+ =?utf-8?B?c3JZR0lCdWFLMkJGUDFWZGhzSnVxNGd2L0JGYmUxVy94SzNtdUtRazdUQkw4?=
+ =?utf-8?B?TEZxUERLQXdkc25EQWZPWDVWYWNTNkQwaVZ2WlBTNXJ3WkdKeFgzRlNWb25n?=
+ =?utf-8?B?R1ZZZ2ZXa0Z5VmhhMUxYNUgvWmlzS2ZkU2p0VW5OdDFZQWVhUDJYRXNORW1x?=
+ =?utf-8?B?MXpZZno3QzN6dlJQc2w0RFRxRlBWclk0Wi9SUnovZG9HVGFydGNySU11OEla?=
+ =?utf-8?B?emlCamVVc0lFZ1EyUEpJaXBhbFlFWVhUcWJDdVl1aHE2UGNJa2hvK3J5K2p1?=
+ =?utf-8?B?azJlaWZIbTNWK0oxOG15VjBBV2txZHd2UUZqNVJUdHl0TzV0UmlzR1QrWFlh?=
+ =?utf-8?B?RmVDenFEMVJGaDd6eEs4TjJhYW5vZ0NyTWpZeGRiTGdJY2tOenhuZ2ZWMmxh?=
+ =?utf-8?B?WTFyM1lBanc5S0tMRnAxUlNrVWNrclY5bGdBaEsrK2pWWWVsZEpWaFluMEZW?=
+ =?utf-8?B?Rk9WcVo2NXRKS1NlNkJJblFPekFoVEpkRGVCT2xiZGJyck1TNGpiYVF5UEpm?=
+ =?utf-8?B?NGpvYmMwMUt0MnpKZE5lMllvRHFKZkdxOXo2OGc4L21hZ2Q2U2xFOGNsSGxN?=
+ =?utf-8?B?bnBMbmN5UVdwYjI2bWVkaStqSjVKaFFwM05DYjNsUnZRTG9tRUMwMTY5aENZ?=
+ =?utf-8?B?QnIybkJ6bVlmdFR5MjljN3NEZCtBTjQrVDYvOVZZWjBxaUIyMUtmTXBkcjVL?=
+ =?utf-8?B?L01xdisyODM5RGpPeU5JVWt1RG5iZnJCdGZvbTY2VmUxR2tYeGtUUTZxMFRo?=
+ =?utf-8?B?YzNEVHdydU1Ic3JER0ZFazBtQVk4RTByNmNUcHEvZzd2aDN6aVBPNGI5ZnNY?=
+ =?utf-8?B?M29DUFpaQmtmR1FhZ2lldzVPcEp2emZYNmgvV1RMR2JmOHU0MnAvQXdybGZq?=
+ =?utf-8?B?MXgyczlwZGk5dE1UQStpV3ExS09jVWo3OUhyaDRNeTJjOUlGdWEvcGVQQW04?=
+ =?utf-8?B?R1R1VFM3VFRNWE0wWmFXZHFHQS9uSkFDdC93QWtWL202b1hhUU02cnRCZitE?=
+ =?utf-8?B?dnB5RXJsdU1IYmg3Z1lLMzJIdEtHNGZqV0x5b1hoZTlNdUpUQVl4NzdCQVUv?=
+ =?utf-8?B?amJmd0hqeEJJSUFncEhLRHlGMmxRNk04OTI0MG1LUUxlYzluSE9aQnFlU2k5?=
+ =?utf-8?B?UUZrOTAwc29qNHVYVThicnlLZSt3Y3Fwa0FUcWYzUzlMcGJsMTRURi9OLytN?=
+ =?utf-8?B?MFJ6SVB6TGdjRFQ1THJoRDF2eDdNU2k3WmpGZ0FNRENTZlJ2NXVUcnFDbk56?=
+ =?utf-8?B?RGtmdC9pZFZnSGcyZ1hLUjhNeW03SmFzY0VhQ0tEZ3F0M1lzK2xGN0x3UXc5?=
+ =?utf-8?B?RUxiVVh5V3l0SnVlbG1aSzRxMVlxdXZEd2ExWnhHUXdHSllJSzBhR1dJVlY3?=
+ =?utf-8?B?ZUptaDdVWVpRQ0dBZDBtZ0J2OXVPU09qek5uejFPWHNXWEVPTm52ajBqTWFk?=
+ =?utf-8?B?dTc5bzNGcU1oSmxHWnFtM3pxMVExQWhjaW55Z29XM3YzK01TaUxxWE43dGxG?=
+ =?utf-8?Q?nvIUbXYXkYUp97AIhOt4V+laXCr8nepFvLPM/EKvUEeRn?=
+X-MS-Exchange-AntiSpam-MessageData-1: HJhtuuIyKarmlGxGQV4QLVjq9Pr5YJtMzlI=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07e6ec25-c44e-42fa-4da7-08de8479ac22
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36f4548c-169b-4db6-25ee-08de8479ad98
 X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 23:05:24.9407
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 23:05:27.3325
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i7yGhrGSepKsYUIQf2vFYOQUoZn0JQ800Pd2LW4KdCW5D08Ar+9ldQkyneZ11lcViZijqcBBuQoBxm6owllpeA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: v7H/BIM5Ty+Xdbq88DoSugEXL7KR8cOnHmBmHTDHrmjFViXwskamPyGlOIWPQE0WYJ5axJWNbdtHrddUm00l1w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB12032
-X-Spamd-Result: default: False [2.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
 	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
 	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7111-lists,linux-can=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[31];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-7110-lists,linux-can=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[vladimir.oltean@nxp.com,linux-can@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[nxp.com:+];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-can,netdev];
+	TAGGED_RCPT(0.00)[linux-can];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:dkim,nxp.com:email,nxp.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lunn.ch:email,davemloft.net:email,microchip.com:email]
-X-Rspamd-Queue-Id: 1D73E2B3EEC
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:dkim,nxp.com:email,nxp.com:mid,ti.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 051972B39CE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-This file is calling of_property_read_u32() without including the proper
-header for it. It is provided by <linux/phy/phy.h>, which wants to get
-rid of it.
+This is practically a full revert of commit
+7a4db656a635 ("PCI: dra7xx: Create functional dependency between PCIe and PHY")
+and a partial revert of the device link pieces from commits
+dfb80534692d ("PCI: cadence: Add generic PHY support to host and EP drivers")
+49229238ab47 ("PCI: keystone: Cleanup PHY handling")
+
+The trouble with these commits is that they dereference fields inside
+struct phy from a consumer driver, which will become no longer possible.
+
+Since commit 987351e1ea77 ("phy: core: Add consumer device link
+support") from 2019, the PHY core also adds a device link to order PHY
+provider and consumer suspend/resume operations. All reverted commits
+are from 2017-2018, and what they do should actually be redundant now.
 
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Acked-by: Daniel Machon <daniel.machon@microchip.com>
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 ---
-Cc: Daniel Machon <daniel.machon@microchip.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Steen Hegelund <Steen.Hegelund@microchip.com>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: "Krzysztof Wilczyński" <kwilczynski@kernel.org>
+Cc: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Siddharth Vadapalli <s-vadapalli@ti.com>
 
-v2->v4: none
-v1->v2: collect tag
+v3->v4: none
+v2->v3:
+- remove dangling set but unused phy_count local variable in
+  cdns_plat_pcie_probe()
+v1->v2:
+- fully remove struct device link **link from struct cdns_pcie and from
+  cdns_plat_pcie_probe() error path
+- collect tag
+- adjust commit title
 ---
- drivers/net/ethernet/microchip/sparx5/lan969x/lan969x_rgmii.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../controller/cadence/pcie-cadence-plat.c    |  4 ---
+ drivers/pci/controller/cadence/pcie-cadence.c | 16 +---------
+ drivers/pci/controller/cadence/pcie-cadence.h |  2 --
+ drivers/pci/controller/dwc/pci-dra7xx.c       | 16 ----------
+ drivers/pci/controller/dwc/pci-keystone.c     | 31 +++----------------
+ 5 files changed, 5 insertions(+), 64 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/sparx5/lan969x/lan969x_rgmii.c b/drivers/net/ethernet/microchip/sparx5/lan969x/lan969x_rgmii.c
-index 4e422ca50828..249114b40c42 100644
---- a/drivers/net/ethernet/microchip/sparx5/lan969x/lan969x_rgmii.c
-+++ b/drivers/net/ethernet/microchip/sparx5/lan969x/lan969x_rgmii.c
-@@ -4,6 +4,7 @@
-  * Copyright (c) 2024 Microchip Technology Inc. and its subsidiaries.
-  */
+diff --git a/drivers/pci/controller/cadence/pcie-cadence-plat.c b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+index b067a3296dd3..fc39c01b7964 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence-plat.c
++++ b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+@@ -41,7 +41,6 @@ static int cdns_plat_pcie_probe(struct platform_device *pdev)
+ 	struct pci_host_bridge *bridge;
+ 	struct cdns_pcie_ep *ep;
+ 	struct cdns_pcie_rc *rc;
+-	int phy_count;
+ 	bool is_rc;
+ 	int ret;
  
-+#include <linux/of.h>
- #include "lan969x.h"
+@@ -122,9 +121,6 @@ static int cdns_plat_pcie_probe(struct platform_device *pdev)
+ 	pm_runtime_put_sync(dev);
+ 	pm_runtime_disable(dev);
+ 	cdns_pcie_disable_phy(cdns_plat_pcie->pcie);
+-	phy_count = cdns_plat_pcie->pcie->phy_count;
+-	while (phy_count--)
+-		device_link_del(cdns_plat_pcie->pcie->link[phy_count]);
  
- /* Tx clock selectors */
+ 	return 0;
+ }
+diff --git a/drivers/pci/controller/cadence/pcie-cadence.c b/drivers/pci/controller/cadence/pcie-cadence.c
+index a1eada56edba..0ac980249941 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence.c
++++ b/drivers/pci/controller/cadence/pcie-cadence.c
+@@ -222,7 +222,6 @@ int cdns_pcie_init_phy(struct device *dev, struct cdns_pcie *pcie)
+ 	struct device_node *np = dev->of_node;
+ 	int phy_count;
+ 	struct phy **phy;
+-	struct device_link **link;
+ 	int i;
+ 	int ret;
+ 	const char *name;
+@@ -238,10 +237,6 @@ int cdns_pcie_init_phy(struct device *dev, struct cdns_pcie *pcie)
+ 	if (!phy)
+ 		return -ENOMEM;
+ 
+-	link = devm_kcalloc(dev, phy_count, sizeof(*link), GFP_KERNEL);
+-	if (!link)
+-		return -ENOMEM;
+-
+ 	for (i = 0; i < phy_count; i++) {
+ 		of_property_read_string_index(np, "phy-names", i, &name);
+ 		phy[i] = devm_phy_get(dev, name);
+@@ -249,17 +244,10 @@ int cdns_pcie_init_phy(struct device *dev, struct cdns_pcie *pcie)
+ 			ret = PTR_ERR(phy[i]);
+ 			goto err_phy;
+ 		}
+-		link[i] = device_link_add(dev, &phy[i]->dev, DL_FLAG_STATELESS);
+-		if (!link[i]) {
+-			devm_phy_put(dev, phy[i]);
+-			ret = -EINVAL;
+-			goto err_phy;
+-		}
+ 	}
+ 
+ 	pcie->phy_count = phy_count;
+ 	pcie->phy = phy;
+-	pcie->link = link;
+ 
+ 	ret =  cdns_pcie_enable_phy(pcie);
+ 	if (ret)
+@@ -268,10 +256,8 @@ int cdns_pcie_init_phy(struct device *dev, struct cdns_pcie *pcie)
+ 	return 0;
+ 
+ err_phy:
+-	while (--i >= 0) {
+-		device_link_del(link[i]);
++	while (--i >= 0)
+ 		devm_phy_put(dev, phy[i]);
+-	}
+ 
+ 	return ret;
+ }
+diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
+index 443033c607d7..35b0b33bc6fb 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence.h
++++ b/drivers/pci/controller/cadence/pcie-cadence.h
+@@ -82,7 +82,6 @@ struct cdns_plat_pcie_of_data {
+  * @is_rc: tell whether the PCIe controller mode is Root Complex or Endpoint.
+  * @phy_count: number of supported PHY devices
+  * @phy: list of pointers to specific PHY control blocks
+- * @link: list of pointers to corresponding device link representations
+  * @ops: Platform-specific ops to control various inputs from Cadence PCIe
+  *       wrapper
+  * @cdns_pcie_reg_offsets: Register bank offsets for different SoC
+@@ -95,7 +94,6 @@ struct cdns_pcie {
+ 	bool			             is_rc;
+ 	int			             phy_count;
+ 	struct phy		             **phy;
+-	struct device_link	             **link;
+ 	const  struct cdns_pcie_ops          *ops;
+ 	const  struct cdns_plat_pcie_of_data *cdns_pcie_reg_offsets;
+ };
+diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
+index d5d26229063f..b91ab37845c9 100644
+--- a/drivers/pci/controller/dwc/pci-dra7xx.c
++++ b/drivers/pci/controller/dwc/pci-dra7xx.c
+@@ -9,7 +9,6 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+-#include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
+@@ -683,7 +682,6 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
+ 	int i;
+ 	int phy_count;
+ 	struct phy **phy;
+-	struct device_link **link;
+ 	void __iomem *base;
+ 	struct dw_pcie *pci;
+ 	struct dra7xx_pcie *dra7xx;
+@@ -731,10 +729,6 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
+ 	if (!phy)
+ 		return -ENOMEM;
+ 
+-	link = devm_kcalloc(dev, phy_count, sizeof(*link), GFP_KERNEL);
+-	if (!link)
+-		return -ENOMEM;
+-
+ 	dra7xx->clk = devm_clk_get_optional(dev, NULL);
+ 	if (IS_ERR(dra7xx->clk))
+ 		return dev_err_probe(dev, PTR_ERR(dra7xx->clk),
+@@ -749,12 +743,6 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
+ 		phy[i] = devm_phy_get(dev, name);
+ 		if (IS_ERR(phy[i]))
+ 			return PTR_ERR(phy[i]);
+-
+-		link[i] = device_link_add(dev, &phy[i]->dev, DL_FLAG_STATELESS);
+-		if (!link[i]) {
+-			ret = -EINVAL;
+-			goto err_link;
+-		}
+ 	}
+ 
+ 	dra7xx->base = base;
+@@ -856,10 +844,6 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
+ 	pm_runtime_disable(dev);
+ 	dra7xx_pcie_disable_phy(dra7xx);
+ 
+-err_link:
+-	while (--i >= 0)
+-		device_link_del(link[i]);
+-
+ 	return ret;
+ }
+ 
+diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
+index 642e4c45eefc..07698c645e02 100644
+--- a/drivers/pci/controller/dwc/pci-keystone.c
++++ b/drivers/pci/controller/dwc/pci-keystone.c
+@@ -130,7 +130,6 @@ struct keystone_pcie {
+ 	int			num_lanes;
+ 	u32			num_viewport;
+ 	struct phy		**phy;
+-	struct device_link	**link;
+ 	struct			device_node *msi_intc_np;
+ 	struct irq_domain	*intx_irq_domain;
+ 	struct device_node	*np;
+@@ -1118,7 +1117,6 @@ static int ks_pcie_probe(struct platform_device *pdev)
+ 	enum dw_pcie_device_mode mode;
+ 	struct dw_pcie *pci;
+ 	struct keystone_pcie *ks_pcie;
+-	struct device_link **link;
+ 	struct gpio_desc *gpiod;
+ 	struct resource *res;
+ 	void __iomem *base;
+@@ -1189,31 +1187,17 @@ static int ks_pcie_probe(struct platform_device *pdev)
+ 	if (!phy)
+ 		return -ENOMEM;
+ 
+-	link = devm_kcalloc(dev, num_lanes, sizeof(*link), GFP_KERNEL);
+-	if (!link)
+-		return -ENOMEM;
+-
+ 	for (i = 0; i < num_lanes; i++) {
+ 		snprintf(name, sizeof(name), "pcie-phy%d", i);
+ 		phy[i] = devm_phy_optional_get(dev, name);
+ 		if (IS_ERR(phy[i])) {
+ 			ret = PTR_ERR(phy[i]);
+-			goto err_link;
+-		}
+-
+-		if (!phy[i])
+-			continue;
+-
+-		link[i] = device_link_add(dev, &phy[i]->dev, DL_FLAG_STATELESS);
+-		if (!link[i]) {
+-			ret = -EINVAL;
+-			goto err_link;
++			goto err;
+ 		}
+ 	}
+ 
+ 	ks_pcie->np = np;
+ 	ks_pcie->pci = pci;
+-	ks_pcie->link = link;
+ 	ks_pcie->num_lanes = num_lanes;
+ 	ks_pcie->phy = phy;
+ 
+@@ -1223,7 +1207,7 @@ static int ks_pcie_probe(struct platform_device *pdev)
+ 		ret = PTR_ERR(gpiod);
+ 		if (ret != -EPROBE_DEFER)
+ 			dev_err(dev, "Failed to get reset GPIO\n");
+-		goto err_link;
++		goto err;
+ 	}
+ 
+ 	/* Obtain references to the PHYs */
+@@ -1238,7 +1222,7 @@ static int ks_pcie_probe(struct platform_device *pdev)
+ 
+ 	if (ret) {
+ 		dev_err(dev, "failed to enable phy\n");
+-		goto err_link;
++		goto err;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, ks_pcie);
+@@ -1325,25 +1309,18 @@ static int ks_pcie_probe(struct platform_device *pdev)
+ 	pm_runtime_disable(dev);
+ 	ks_pcie_disable_phy(ks_pcie);
+ 
+-err_link:
+-	while (--i >= 0 && link[i])
+-		device_link_del(link[i]);
+-
++err:
+ 	return ret;
+ }
+ 
+ static void ks_pcie_remove(struct platform_device *pdev)
+ {
+ 	struct keystone_pcie *ks_pcie = platform_get_drvdata(pdev);
+-	struct device_link **link = ks_pcie->link;
+-	int num_lanes = ks_pcie->num_lanes;
+ 	struct device *dev = &pdev->dev;
+ 
+ 	pm_runtime_put(dev);
+ 	pm_runtime_disable(dev);
+ 	ks_pcie_disable_phy(ks_pcie);
+-	while (num_lanes--)
+-		device_link_del(link[num_lanes]);
+ }
+ 
+ static struct platform_driver ks_pcie_driver = {
 -- 
 2.43.0
 
