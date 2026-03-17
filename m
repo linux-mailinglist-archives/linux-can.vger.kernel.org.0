@@ -1,253 +1,215 @@
-Return-Path: <linux-can+bounces-7093-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7094-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CCIvOBVKuGlTbgEAu9opvQ
-	(envelope-from <linux-can+bounces-7093-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 16 Mar 2026 19:21:09 +0100
+	id QLK0Em4xuWn4uAEAu9opvQ
+	(envelope-from <linux-can+bounces-7094-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 17 Mar 2026 11:48:14 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 725FF29EF5F
-	for <lists+linux-can@lfdr.de>; Mon, 16 Mar 2026 19:21:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A184F2A839B
+	for <lists+linux-can@lfdr.de>; Tue, 17 Mar 2026 11:48:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5960D3015D23
-	for <lists+linux-can@lfdr.de>; Mon, 16 Mar 2026 18:21:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 13CDA30A0885
+	for <lists+linux-can@lfdr.de>; Tue, 17 Mar 2026 10:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37A993DBD4D;
-	Mon, 16 Mar 2026 18:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A50D3A6B7E;
+	Tue, 17 Mar 2026 10:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gK8Vb02B"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1FAA3D9028
-	for <linux-can@vger.kernel.org>; Mon, 16 Mar 2026 18:20:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C3837CD37;
+	Tue, 17 Mar 2026 10:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773685266; cv=none; b=NGBEP2i/JZyZRZRf5EIzeZ3q/krlGVHjSVp+TwEoLix9gOg8gvDwdfpiOLyQMnuh/FAccKCBFfH2e3+CdxdBh8Yetb5XLB3JxcZ7M1E1xXpNk0ih7OJ5T7iL8LC+IfTcXj6XoHTTZuxXdQnKYQd3KcIOwaggZnN+l9yOgZ73TaQ=
+	t=1773744081; cv=none; b=s+r+XwjVwhpXgczS4yEj5U53OJyvUnPly5bCQT4P4omDKf6uIzu/jab537U55DBTqtK2U/4ZIw3+9XgqTEnmkYGMY4KQQYdftvh6UsNrTpe4qXImQm7UaMX+l+zBd3JL33GjVfSIb0DSQBxj6LEFiXzKzMzp6A5ULPrdgNTqV1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773685266; c=relaxed/simple;
-	bh=JTXLB81Ni5gBSmMJkHcRQAN8PgPeI3ihUICk9TKreB0=;
+	s=arc-20240116; t=1773744081; c=relaxed/simple;
+	bh=Dbl1hVcVYzfpW21Jtsv0luFSpk+liEUbOSW4lCmscL4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F7XBodxvYITSxEY3ZjaEJ6DZmqog2eF1sNqfmnUU8xTd4+XaOmDOWkKvynmVOIZBnKvF+IB6W4WeH19AGwEEKTlDW2hHKUklIR93YbS81cX7G//5hVwfxfAQhCCA8k2QWX81iGNNFXZokN+u4t34Bg3u92rPdBfUQcJaeLAReMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w2CYX-0004PM-08; Mon, 16 Mar 2026 19:20:45 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w2CYR-000c94-0a;
-	Mon, 16 Mar 2026 19:20:39 +0100
-Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id E99A7505359;
-	Mon, 16 Mar 2026 18:20:38 +0000 (UTC)
-Date: Mon, 16 Mar 2026 19:20:38 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Wenyuan Li <2063309626@qq.com>
-Cc: Vincent Mailhol <mailhol@kernel.org>, gszhai@bjtu.edu.cn, 
-	25125332@bjtu.edu.cn, 25125283@bjtu.edu.cn, 23120469@bjtu.edu.cn, 
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4]can: mcp251x: add error handling for power enable in
- open and resume
-Message-ID: <20260316-succinct-colorful-nightingale-2284c3-mkl@pengutronix.de>
-X-AI: stop_reason: "refusal"
-References: <tencent_F3EFC5D7738AC548857B91657715E2D3AA06@qq.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FzNY7LxnTYAOsbulZNm0KmV8yyszqXXwD/T7UkhtnyDzDpJgths/3ZK+UxY8KcaaNKYuWsv1BcY0RiKq8i9yG9LLUYoC0feWIv/Px5sfugFWK53ORprTgkh6GhPYbtqrRveQLiuVZ+ZkpltRY2fdmWa5gy36qEYbI0NbpfdR2zY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gK8Vb02B; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773744081; x=1805280081;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Dbl1hVcVYzfpW21Jtsv0luFSpk+liEUbOSW4lCmscL4=;
+  b=gK8Vb02B5a+YB0ZDet5damVCHLGnvjJ4h9k1GCSJBZHuz1w0OgmnLLmc
+   E7B9mLGtrVmtS7J85fEhDm9q/HBkIcbBmPu0AC/8jwGMv6Y4Y6GAa/wI/
+   sxpPfseytVtNSg5BtAZfUhyuuXZ7B2kxHPF3j8JPes+e6l1emheS8vU1S
+   daMRhGWVrRSLHaIM08N5U2Q7xCXxRQ/hx2v9KAUBHb7WjlQJDv/RbUwp1
+   obTAnbUkKs9UTNPO1s9e0OfQaLV/BmBRpBR38+UQD9uIKxPSVaErobhOs
+   Jm7n3KaxU77ZwXGDCyPMya+jJj9ttATtNNC7MEhB1s29lhStIxakUJYxz
+   g==;
+X-CSE-ConnectionGUID: R4vyzIUvRuC8FARTjprwlg==
+X-CSE-MsgGUID: xBnmDC7ISdSOmYgGfz1jHQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="97380538"
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="97380538"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 03:41:20 -0700
+X-CSE-ConnectionGUID: 7/q2Rk6UTSqf+lE852KxhQ==
+X-CSE-MsgGUID: 9cOaF8SCRtKxfKijxKrMAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="221266227"
+Received: from abityuts-desk.ger.corp.intel.com (HELO localhost) ([10.245.245.97])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 03:41:17 -0700
+Date: Tue, 17 Mar 2026 12:41:14 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Vladimir Oltean <olteanv@gmail.com>
+Cc: linux-can@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Josua Mayer <josua@solid-run.com>
+Subject: Re: [PATCH v1 1/4] phy: phy-can-transceiver: Convert to use device
+ property API
+Message-ID: <abkvyrkkqKRffVUr@ashevche-desk.local>
+References: <20260219202910.2304440-1-andriy.shevchenko@linux.intel.com>
+ <20260219202910.2304440-1-andriy.shevchenko@linux.intel.com>
+ <20260219202910.2304440-2-andriy.shevchenko@linux.intel.com>
+ <20260219202910.2304440-2-andriy.shevchenko@linux.intel.com>
+ <20260224162606.spnzzedvmvp2h7xd@skbuf>
+ <aZ3X2J1rBq1pMkae@smile.fi.intel.com>
+ <20260224183000.txlazzyw7z34nhsj@skbuf>
+ <aaLNBTZsUQ2vMfOW@ashevche-desk.local>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="t5gc4yd3mbvyk42r"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_F3EFC5D7738AC548857B91657715E2D3AA06@qq.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spamd-Result: default: False [-2.56 / 15.00];
-	SIGNED_PGP(-2.00)[];
+In-Reply-To: <aaLNBTZsUQ2vMfOW@ashevche-desk.local>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7093-lists,linux-can=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[qq.com];
-	DMARC_NA(0.00)[pengutronix.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7094-lists,linux-can=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.998];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	R_DKIM_NA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qq.com:email,pengutronix.de:mid,pengutronix.de:url]
-X-Rspamd-Queue-Id: 725FF29EF5F
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ashevche-desk.local:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim]
+X-Rspamd-Queue-Id: A184F2A839B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On Sat, Feb 28, 2026 at 01:10:02PM +0200, Andy Shevchenko wrote:
+> On Tue, Feb 24, 2026 at 08:30:00PM +0200, Vladimir Oltean wrote:
+> > On Tue, Feb 24, 2026 at 06:54:48PM +0200, Andy Shevchenko wrote:
+> > > On Tue, Feb 24, 2026 at 06:26:06PM +0200, Vladimir Oltean wrote:
+> > > > On Thu, Feb 19, 2026 at 09:26:19PM +0100, Andy Shevchenko wrote:
 
---t5gc4yd3mbvyk42r
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4]can: mcp251x: add error handling for power enable in
- open and resume
-MIME-Version: 1.0
+...
 
-On 16.03.2026 00:00:22, Wenyuan Li wrote:
-> Add missing error handling for mcp251x_power_enable() calls in both
-> mcp251x_open() and mcp251x_can_resume() functions.
->
-> In mcp251x_open(), if power enable fails, the driver should not continue
-> with device initialization. Add proper error checking and jump to
-> existing out_close label.
->
-> In mcp251x_can_resume(), if power enable fails during system resume,
-> propagate the error to PM framework and log the error with dev_err()
-> for debugging.
->
-> This ensures the driver properly handles power control failures and
-> maintains correct device state.
-> Signed-off-by: Wenyuan Li <2063309626@qq.com>
->
-> Add missing error handling for mcp251x_power_enable() calls in both
-> mcp251x_open() and mcp251x_can_resume() functions.
->
-> In mcp251x_open(), if power enable fails, jump to error path to close
-> candev without attempting to disable power again.
->
-> In mcp251x_can_resume(), properly check return values of power enable
-> calls for both power and transceiver regulators. If any fails, return
-> the error code to the PM framework and log the failure.
->
-> This ensures the driver properly handles power control failures and
-> maintains correct device state.
->
-> Signed-off-by: Wenyuan Li <2063309626@qq.com>
+> > > > > -	if (!of_property_present(dev->of_node, "mux-states"))
+> > > > > +	if (!device_property_present(dev, "mux-states"))
+> > > > 
+> > > > There's an entire saga with this function - devm_mux_state_get_optional().
+> > > > Josua Mayer is preparing to move it to the MUX core, which will be a cross-tree series.
+> > > > Would you mind not touching this, to avoid complicating what is already
+> > > > a complicated operation? It is going away anyway, and from what I can
+> > > > see in Josua's last series, its implementation from drivers/mux/core.c
+> > > > is already using device property APIs:
+> > > > https://lore.kernel.org/linux-phy/20260208-rz-sdio-mux-v9-2-9a3be13c1280@solid-run.com/
+> > > 
+> > > Basically you ask me to postpone the series until that will be in. Since this
+> > > file is a mess in terms of OF/fwnode API use in exchange I would like whoever
+> > > is doing the other part to speed up a bit if possible.
+> > > 
+> > > I prefer to see cleaner solution to be applied sooner and last in a long distance,
+> > > that's why I see either mine first but soon, or that first but also soon should
+> > > be in. Can we try to achieve that?
+> > 
+> > The idea is that Ulf already expressed the availability to take the phy-can-transceiver
+> > patch through the mmc tree and provide back a tag to be pulled into linux-phy:
+> > https://lore.kernel.org/linux-phy/CAPDyKFrtTaJ5fqqbGrE_K6SAdTZYUfp-BycGjtWs4SabwBysKA@mail.gmail.com/
+> > 
+> > If linux-phy takes your patch first, there will be a conflict when pulling the
+> > stable branch, and it won't be so fun, plus we can't even build-test Josua's
+> > submission on linux-phy, so that's obviously not great.
+> > 
+> > So yeah, I'm not requesting you to postpone the entire series, just not
+> > touch devm_mux_state_get_optional() and don't let it appear in your
+> > patch context.
+> 
+> Thanks for explanation. I prefer that Ulf's staff settles down first as it seems
+> more important.
 
-Something strange happened to your patch description. Please use "git
-send-email" or "b4" for sending patches.
+Any news on that front?
 
-> ---
->  drivers/net/can/spi/mcp251x.c | 32 ++++++++++++++++++++++++++------
->  1 file changed, 26 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-> index bb7782582f40..e59220aa70ed 100644
-> --- a/drivers/net/can/spi/mcp251x.c
-> +++ b/drivers/net/can/spi/mcp251x.c
-> @@ -1225,7 +1225,11 @@ static int mcp251x_open(struct net_device *net)
->  	}
->
->  	mutex_lock(&priv->mcp_lock);
-> -	mcp251x_power_enable(priv->transceiver, 1);
-> +	ret =3D mcp251x_power_enable(priv->transceiver, 1);
-> +	if (ret) {
-> +		dev_err(&spi->dev, "failed to enable transceiver power: %pe\n", ERR_PT=
-R(ret));
-> +		goto out_close_candev;
-> +	}
->
->  	priv->force_quit =3D 0;
->  	priv->tx_skb =3D NULL;
-> @@ -1272,6 +1276,7 @@ static int mcp251x_open(struct net_device *net)
->  	mcp251x_hw_sleep(spi);
->  out_close:
->  	mcp251x_power_enable(priv->transceiver, 0);
-> +out_close_candev:
->  	close_candev(net);
->  	mutex_unlock(&priv->mcp_lock);
->  	if (release_irq)
-> @@ -1516,11 +1521,25 @@ static int __maybe_unused mcp251x_can_resume(stru=
-ct device *dev)
->  {
->  	struct spi_device *spi =3D to_spi_device(dev);
->  	struct mcp251x_priv *priv =3D spi_get_drvdata(spi);
-> +	int ret =3D 0;
-> +
-> +	if (priv->after_suspend & AFTER_SUSPEND_POWER) {
-> +		ret =3D mcp251x_power_enable(priv->power, 1);
-> +		if (ret) {
-> +			dev_err(dev, "failed to restore power: %pe\n", ERR_PTR(ret));
-> +			return ret;
-> +		}
-> +	}
->
-> -	if (priv->after_suspend & AFTER_SUSPEND_POWER)
-> -		mcp251x_power_enable(priv->power, 1);
-> -	if (priv->after_suspend & AFTER_SUSPEND_UP)
-> -		mcp251x_power_enable(priv->transceiver, 1);
-> +	if (priv->after_suspend & AFTER_SUSPEND_UP) {
-> +		ret =3D mcp251x_power_enable(priv->transceiver, 1);
-> +		if (ret) {
-> +			dev_err(dev, "failed to restore transceiver power: %pe\n", ERR_PTR(re=
-t));
-> +			if (priv->after_suspend & AFTER_SUSPEND_POWER)
-> +				mcp251x_power_enable(priv->power, 0);
-> +			goto out;
+> > Somebody will have to remove "#include <linux/of.h>" at the end of the
+> > whole process, but that's minor.
+> 
+> > > ...
+> > > 
+> > > > > -		phy = devm_phy_create(dev, dev->of_node, &can_transceiver_phy_ops);
+> > > > > +		phy = devm_phy_create(dev, NULL, &can_transceiver_phy_ops);
+> > > > 
+> > > > It is not obvious why you replaced dev->of_node with NULL here.
+> > > > It doesn't appear correct. You seem to be breaking OF-based PHY lookups.
+> > > 
+> > > It's the default. Yeah, I probably have to explain this in the commit message.
+> > 
+> > Ah, ok. Found the "phy->dev.of_node = node ?: dev->of_node;" assignment.
+> > Sorry and noted, but please add it to the commit message too.
+> 
+> Sure.
+> 
+> > > Basically all devm_phy_create(dev, dev->of_node, ...) for clarity should be
+> > > converted to that approach. Or even better, a new (agnostic) API should take
+> > > default fwnode from the same device.
+> > > 
+> > > 		phy = devm_phy_create_simple(dev, &..._phy_ops);
+> > > 
+> > > // name was quickly chosen and may be not the best we can come up with
+> > 
+> > I agree in principle. PHY drivers shouldn't be given a function where
+> > they routinely have to set one of the arguments to NULL, but a simpler
+> > function without that argument.
+> > 
+> > But the phy-core.c doesn't support fwnode at all yet, it uses OF
+> > throughout. I think it would be preferable to leave this change to
+> > somebody who has business in that area.
+> > 
+> > (are you interested in PHYs with a fwnode for any particular reason, or
+> > just because the API is more "generic" just in case?)
+> 
+> Because of inconsistency. This makes my mind blown and the code is not good
+> for others to read and understand when it's inconsistent like this. That's it.
 
-Why have you kept this goto out? I've replaced it by a return.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> +		}
-> +	}
->
->  	if (priv->after_suspend & (AFTER_SUSPEND_POWER | AFTER_SUSPEND_UP))
->  		queue_work(priv->wq, &priv->restart_work);
-> @@ -1529,7 +1548,8 @@ static int __maybe_unused mcp251x_can_resume(struct=
- device *dev)
->
->  	priv->force_quit =3D 0;
->  	enable_irq(spi->irq);
-> -	return 0;
-> +out:
-> +	return ret;
->  }
->
->  static SIMPLE_DEV_PM_OPS(mcp251x_can_pm_ops, mcp251x_can_suspend,
 
-Applied with changes to linux-can
-
-regards,
-Marc
-
---
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---t5gc4yd3mbvyk42r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCabhJ9AAKCRDMOmT6rpmt
-0ncfAPsFnLQYl+uhUYKguWqFV9vWqQ7fHxXFERmvV7lGs2FDQAD/YrhMtkh4w7W1
-TR9S/KsTeTKB0/pphntouJ0UiBNJrAk=
-=r74f
------END PGP SIGNATURE-----
-
---t5gc4yd3mbvyk42r--
 
